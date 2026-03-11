@@ -141,11 +141,6 @@
             <option value="nu">Nữ</option>
           </select>
         </div>
-        <div class="form-group full">
-          <label>Claude API Key</label>
-          <input type="password" id="apikey" placeholder="sk-ant-api03-..." />
-          <p class="api-notice">Lấy API key tại <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> → API Keys</p>
-        </div>
       </div>
       <button class="btn-submit" onclick="luanGiai()">✦ An Sao & Luận Giải ✦</button>
       <div class="error-msg" id="error-msg"></div>
@@ -173,6 +168,25 @@
   </div>
 
   <script>
+    function buildKabalaUrl(hoten, ngay, thang, nam, gio, phut, gt, namXem) {
+      const ten = hoten.trim().replace(/\s+/g, '-') || 'Kabala';
+      const g = gt === 'nam' ? 'nam' : 'nu';
+      const pad = n => String(n).padStart(2,'0');
+      return `https://tuvi.kabala.vn/la-so-tu-vi/${ten}-${pad(gio)}-gio-${pad(phut)}-phut-ngay-${pad(ngay)}-thang-${pad(thang)}-nam-${nam}-gt-${g}-lich-duong-han-${namXem}.ls`;
+    }
+
+    function parseKabalaHtml(html) {
+      // Try extract raw laso text block
+      const m = html.match(/Luận giải Lá số tử vi[\s\S]*?(?=Click để copy|Sử dụng App)/);
+      if (m) {
+        return m[0].replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&#\d+;/g, '').replace(/\n{3,}/g, '\n\n').trim();
+      }
+      // Fallback: grab cung lines
+      const cungs = [...html.matchAll(/Cung\s+\w+\s+tại\s+\w+[^\n<]{10,200}/g)].map(x => x[0]);
+      if (cungs.length) return cungs.join('\n');
+      return null;
+    }
+
     async function luanGiai() {
       const hoten    = document.getElementById('hoten').value.trim();
       const ngay     = parseInt(document.getElementById('ngay').value);
@@ -180,16 +194,11 @@
       const nam      = parseInt(document.getElementById('nam').value);
       const gio      = document.getElementById('gio').value;
       const gioitinh = document.getElementById('gioitinh').value;
-      const apiKey   = document.getElementById('apikey').value.trim();
       const errEl    = document.getElementById('error-msg');
       errEl.classList.remove('active');
 
-      if (!hoten || !ngay || !thang || !nam || gio === '' || !apiKey) {
+      if (!hoten || !ngay || !thang || !nam || gio === '') {
         errEl.textContent = 'Vui lòng điền đầy đủ tất cả các thông tin.';
-        errEl.classList.add('active'); return;
-      }
-      if (!apiKey.startsWith('sk-ant-')) {
-        errEl.textContent = 'API key không hợp lệ. Phải bắt đầu bằng "sk-ant-"';
         errEl.classList.add('active'); return;
       }
 
@@ -199,30 +208,45 @@
       document.getElementById('result-section').classList.remove('active');
 
       const namXem = new Date().getFullYear();
+      const kabalaUrl = buildKabalaUrl(hoten, ngay, thang, nam, parseInt(gio), 0, gioitinh, namXem);
 
       try {
+        // Step 1: fetch kabala từ browser (tránh bị chặn server-side)
         document.getElementById('loader-text').textContent = 'Đang lấy lá số từ Kabala.vn...';
+        let laSoText = null;
+        try {
+          const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(kabalaUrl);
+          const kResp = await fetch(proxyUrl);
+          const kData = await kResp.json();
+          laSoText = parseKabalaHtml(kData.contents || '');
+        } catch(e) {
+          // nếu proxy lỗi, thử fetch trực tiếp
+          try {
+            const kResp = await fetch(kabalaUrl);
+            const html = await kResp.text();
+            laSoText = parseKabalaHtml(html);
+          } catch(e2) { /* sẽ báo lỗi bên dưới */ }
+        }
 
+        if (!laSoText) throw new Error('Không thể lấy dữ liệu từ Kabala.vn. Vui lòng thử lại.');
+
+        // Step 2: gửi lên API để Claude luận giải
+        document.getElementById('loader-text').textContent = 'Đang luận giải bằng AI...';
         const resp = await fetch('/api/lasotuvi', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            apiKey,
-            hoTen: hoten,
-            ngay, thang, nam,
-            gio: parseInt(gio),
-            phut: 0,
-            gioiTinh: gioitinh,
-            namXem
+            hoTen: hoten, ngay, thang, nam,
+            gio: parseInt(gio), phut: 0,
+            gioiTinh: gioitinh, namXem,
+            laSoText, kabalaUrl
           })
         });
 
-        document.getElementById('loader-text').textContent = 'Đang luận giải bằng AI...';
         const data = await resp.json();
-
         if (data.error) throw new Error(data.error);
 
-        displayResult(hoten, ngay, thang, nam, gioitinh, namXem, data.luanGiai, data.kabalaUrl);
+        displayResult(hoten, ngay, thang, nam, gioitinh, namXem, data.luanGiai, kabalaUrl);
       } catch(e) {
         errEl.textContent = 'Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.');
         errEl.classList.add('active');
