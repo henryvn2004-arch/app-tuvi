@@ -198,19 +198,31 @@
       document.querySelector('.btn-submit').disabled = true;
       document.getElementById('result-section').classList.remove('active');
 
+      const namXem = new Date().getFullYear();
+
       try {
-        document.getElementById('loader-text').textContent = 'Đang an sao & luận giải lá số...';
+        document.getElementById('loader-text').textContent = 'Đang lấy lá số từ Kabala.vn...';
 
         const resp = await fetch('/api/lasotuvi', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ hoten, ngay, thang, nam, gio: parseInt(gio), gioi_tinh: gioitinh, api_key: apiKey })
+          body: JSON.stringify({
+            apiKey,
+            hoTen: hoten,
+            ngay, thang, nam,
+            gio: parseInt(gio),
+            phut: 0,
+            gioiTinh: gioitinh,
+            namXem
+          })
         });
+
+        document.getElementById('loader-text').textContent = 'Đang luận giải bằng AI...';
         const data = await resp.json();
 
-        if (!data.success) throw new Error(data.error);
+        if (data.error) throw new Error(data.error);
 
-        displayResult(hoten, ngay, thang, nam, gioitinh, data.la_so, data.luan_giai);
+        displayResult(hoten, ngay, thang, nam, gioitinh, namXem, data.luanGiai, data.kabalaUrl);
       } catch(e) {
         errEl.textContent = 'Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.');
         errEl.classList.add('active');
@@ -220,32 +232,31 @@
       }
     }
 
-    function displayResult(hoten, ngay, thang, nam, gioitinh, laSo, luanGiai) {
+    function displayResult(hoten, ngay, thang, nam, gioitinh, namXem, luanGiai, kabalaUrl) {
       document.getElementById('result-name').textContent = hoten;
       document.getElementById('result-meta').textContent =
-        `${ngay}/${thang}/${nam} (ÂL: ${laSo.lunar}) • ${gioitinh === 'nam' ? 'Nam' : 'Nữ'} • Mệnh ${laSo.nap_am} • Cung Mệnh: ${laSo.cung_menh} • ${laSo.ten_cuc}`;
+        `${ngay}/${thang}/${nam} • ${gioitinh === 'nam' ? 'Nam' : 'Nữ'} • Xem hạn năm ${namXem}`;
 
-      const grid = document.getElementById('sao-grid');
-      grid.innerHTML = '';
-      const saoOrder = ['Tử Vi','Thiên Cơ','Thái Dương','Vũ Khúc','Thiên Đồng','Liêm Trinh',
-                        'Thiên Phủ','Thái Âm','Tham Lang','Cự Môn','Thiên Tướng','Thiên Lương','Thất Sát','Phá Quân'];
-      for (const s of saoOrder) {
-        if (laSo.chinh_tinh[s]) {
-          const chi = laSo.chinh_tinh[s];
-          const ten = laSo.cung_names[chi] || '';
-          const el = document.createElement('div');
-          el.className = 'sao-item';
-          el.innerHTML = `<div class="sao-name">${s}</div><div class="sao-cung">${chi} · ${ten}</div>`;
-          grid.appendChild(el);
-        }
-      }
+      // Hide sao-grid vì dữ liệu sao nằm trong luanGiai text
+      document.getElementById('sao-grid').style.display = 'none';
 
+      // Render luận giải
       const html = luanGiai
         .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+        .replace(/^### (.+)$/gm, '<h3>$1</h3>')
         .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
         .split('\n').filter(l => l.trim())
-        .map(l => l.startsWith('<h2>') ? l : `<p>${l}</p>`).join('');
+        .map(l => (l.startsWith('<h') || l.startsWith('---')) ? l : `<p>${l}</p>`).join('');
       document.getElementById('result-body').innerHTML = html;
+
+      // Thêm link xem lá số gốc trên Kabala
+      if (kabalaUrl) {
+        const linkDiv = document.createElement('div');
+        linkDiv.style.cssText = 'margin-top:24px;padding-top:16px;border-top:1px solid #c5a96040;font-size:14px;color:#6b5533;font-style:italic;';
+        linkDiv.innerHTML = `📜 Xem lá số đầy đủ tại: <a href="${kabalaUrl}#show_la_so" target="_blank" style="color:#8b1a1a;">${kabalaUrl.split('/').pop().split('.ls')[0]}</a>`;
+        document.getElementById('result-body').appendChild(linkDiv);
+      }
 
       document.getElementById('result-section').classList.add('active');
       document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
