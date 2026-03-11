@@ -1,12 +1,7 @@
 {
   "version": 2,
-  "functions": {
-    "api/lasotuvi.py": {
-      "maxDuration": 60
-    }
-  },
   "routes": [
-    { "src": "/api/lasotuvi", "dest": "/api/lasotuvi.py" },
+    { "src": "/api/lasotuvi", "dest": "/api/lasotuvi.js" },
     { "src": "/(.*)", "dest": "/public/$1" }
   ]
 }
