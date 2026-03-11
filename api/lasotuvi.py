@@ -165,31 +165,77 @@ def call_claude(la_so_text, ho_ten, nam_sinh, gioi_tinh, nam_xem):
     api_key = ANTHROPIC_API_KEY
     gioi = 'nam' if gioi_tinh == 'nam' else 'nữ'
 
-    user_prompt = f"""Luận giải lá số tử vi: {ho_ten}, sinh năm {nam_sinh}, {gioi}, xem hạn năm {nam_xem}.
+    user_prompt = f"""Luận giải lá số tử vi cho: {ho_ten}, sinh năm {nam_sinh}, {gioi}.
 
 DỮ LIỆU LÁ SỐ:
 {la_so_text}
 
-Output theo cấu trúc (mỗi mục 3-4 câu, súc tích):
-
-## 🌟 TỔNG QUAN VẬN MỆNH
-**Bản Chất & Tính Cách** — khí chất, ưu khuyết bẩm sinh từ cung Mệnh
-**Sự Nghiệp & Tiền Tài** — con đường phù hợp, cách tích lũy
-**Tình Duyên & Hôn Nhân** — duyên phận, điều cần lưu ý
-**Sức Khỏe & Tinh Thần** — điểm cần chú ý
+Thực hiện lần lượt các phần sau. Luận dựa trên sao cụ thể, không viết chung chung.
 
 ---
 
-## 📅 VẬN HẠN NĂM {nam_xem}
-**Thiên Thời – Địa Lợi – Nhân Hòa** — đánh giá 3 yếu tố, ghi điểm từng yếu tố
-**SCORE: X/10 | FLAG: 🟢/🟠/🔴** — kết luận ngắn gọn
-**Tiểu Hạn Chi Tiết** — công việc, tài chính, tình cảm, sức khỏe, tháng cần lưu ý
-**⚠️ Cần Thận Trọng** — rủi ro cụ thể
-**✨ Lời Khuyên** — hướng đi tốt, cách hóa giải thực tế"""
+## PHẦN 1 — TỔNG QUAN LÁ SỐ
+
+Phân tích:
+- Mệnh và cục
+- Chính tinh tại cung mệnh
+- Tam hợp Mệnh – Tài – Quan
+- Các cách cục nổi bật
+
+Đánh giá:
+- Khí chất con người
+- Xu hướng cuộc đời
+- Điểm mạnh
+- Điểm yếu
+
+---
+
+## PHẦN 2 — LUẬN GIẢI 12 CUNG
+
+Phân tích lần lượt 12 cung: Mệnh, Phụ Mẫu, Phúc Đức, Điền Trạch, Quan Lộc, Nô Bộc, Thiên Di, Tật Ách, Tài Bạch, Tử Tức, Phu Thê, Huynh Đệ.
+
+Với mỗi cung:
+1. Liệt kê các chính tinh
+2. Liệt kê phụ tinh quan trọng
+3. Phân tích tam hợp và xung chiếu
+4. Đánh giá cát hung
+5. Kết luận ý nghĩa thực tế trong đời sống
+
+---
+
+## PHẦN 3 — PHÂN TÍCH ĐẠI VẬN
+
+Liệt kê toàn bộ đại vận từ 0 đến 100 tuổi (mỗi vận 10 năm).
+Với mỗi đại vận phân tích:
+- Cung đại vận
+- Các sao trong cung đại vận
+- Tam hợp chiếu đến
+- Đánh giá tổng thể vận trình
+
+Chấm điểm theo thang 0–10:
+9–10: vận cực tốt | 7–8: vận tốt | 5–6: trung bình | 3–4: xấu | 0–2: rất xấu
+
+---
+
+## PHẦN 4 — BẢNG SO SÁNH ĐẠI VẬN
+
+| Đại vận | Tuổi | Cung | Đánh giá | Điểm |
+|---------|------|------|----------|------|
+[điền đầy đủ tất cả các đại vận]
+
+---
+
+## PHẦN 5 — TỔNG KẾT CUỘC ĐỜI
+
+1. Ba đại vận tốt nhất
+2. Ba đại vận khó khăn nhất
+3. Thời kỳ phát triển mạnh
+4. Thời kỳ nên thận trọng
+5. Tổng quan vận trình cuộc đời"""
 
     payload = json.dumps({
-        "model": "claude-haiku-4-5",
-        "max_tokens": 2000,
+        "model": "claude-sonnet-4-5",
+        "max_tokens": 8000,
         "system": SYSTEM_PROMPT,
         "messages": [{"role": "user", "content": user_prompt}]
     }).encode('utf-8')
