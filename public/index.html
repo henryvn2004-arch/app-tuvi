@@ -89,6 +89,9 @@
     .error-msg.active { display: block; }
 
     @media (max-width: 520px) { .card { padding: 28px 20px; } .form-grid { grid-template-columns: 1fr; } .form-group.full { grid-column: 1; } }
+    .btn-next { display: none; margin: 20px auto 0; background: linear-gradient(135deg,#1a3a5c,#2a5a8c); color: #c9a84c; border: 1px solid #c9a84c55; padding: 12px 32px; border-radius: 6px; font-size: 15px; cursor: pointer; letter-spacing: 1px; }
+    .btn-next:hover { background: linear-gradient(135deg,#2a5a8c,#3a7abc); }
+    .phan-label { text-align:center; font-size: 13px; color: var(--muted); margin-top: 16px; }
     @media print { .starfield, header, .form-section, .btn-submit, .btn-pdf { display: none !important; } body { background: white; } .card { box-shadow: none; border: none; } #result-section { display: block !important; } }
   </style>
 </head>
@@ -167,6 +170,8 @@
         <div class="section-title">Luận Giải</div>
         <div class="result-body" id="result-body"></div>
         <button class="btn-pdf" onclick="window.print()">⬇ Tải Xuống PDF</button>
+        <div class="phan-label" id="phan-label"></div>
+        <button class="btn-next" id="btn-next" onclick="loadNextPhan()">➜ Phần Tiếp Theo</button>
       </div>
     </div>
   </div>
@@ -174,6 +179,13 @@
   <script src="https://cdn.jsdelivr.net/npm/iztro/dist/iztro.min.js"></script>
   <script>
     // iztro: thư viện an sao Tử Vi JS, chạy hoàn toàn trên browser
+    // State cho multi-part loading
+    let _laSoText = null;
+    let _hoTen = null, _ngay = null, _thang = null, _nam = null;
+    let _gioitinh = null, _namXem = null, _astrolabe = null;
+    let _currentPhan = 0;
+    const TONG_PHAN = 5;
+    const PHAN_LABELS = ['','Phần 1: Tổng Quan Lá Số','Phần 2: Luận Giải 12 Cung','Phần 3: Phân Tích Đại Vận','Phần 4: Bảng So Sánh Đại Vận','Phần 5: Tổng Kết Cuộc Đời'];
     // Múi giờ: iztro dùng chuẩn TQ (UTC+8), VN là UTC+7 → trừ 1 giờ khi truyền vào
 
     function getIztroHour(timeIndex) {
@@ -239,23 +251,17 @@
 
         const laSoText = formatLaSo(astrolabe);
 
-        // Bước 2: Gửi lên API để Claude luận giải
-        document.getElementById('loader-text').textContent = 'Đang luận giải bằng AI...';
-        const resp = await fetch('/api/lasotuvi', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            hoTen: hoten, ngay, thang, nam,
-            gio: parseInt(gio), phut: 0,
-            gioiTinh: gioitinh, namXem,
-            laSoText
-          })
-        });
+        // Lưu state để dùng cho các phần tiếp
+        _laSoText = laSoText; _hoTen = hoten; _ngay = ngay; _thang = thang;
+        _nam = nam; _gioitinh = gioitinh; _namXem = namXem; _astrolabe = astrolabe;
+        _currentPhan = 0;
 
-        const data = await resp.json();
-        if (data.error) throw new Error(data.error);
+        // Reset result area
+        document.getElementById('result-body').innerHTML = '';
+        document.getElementById('result-section').classList.remove('active');
 
-        displayResult(hoten, ngay, thang, nam, gioitinh, namXem, data.luanGiai, astrolabe);
+        // Load phần 1 đầu tiên
+        await loadNextPhan();
       } catch(e) {
         errEl.textContent = 'Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.');
         errEl.classList.add('active');
@@ -265,7 +271,79 @@
       }
     }
 
-    function displayResult(hoten, ngay, thang, nam, gioitinh, namXem, luanGiai, astrolabe) {
+    async function loadNextPhan() {
+      if (_currentPhan >= TONG_PHAN) return;
+      _currentPhan++;
+
+      const btnNext = document.getElementById('btn-next');
+      const loaderText = document.getElementById('loader-text');
+      const loader = document.getElementById('loader');
+      btnNext.style.display = 'none';
+      loader.classList.add('active');
+      loaderText.textContent = `Đang luận giải ${PHAN_LABELS[_currentPhan]}...`;
+
+      try {
+        const resp = await fetch('/api/lasotuvi', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            hoTen: _hoTen, ngay: _ngay, thang: _thang, nam: _nam,
+            gio: 0, phut: 0, gioiTinh: _gioitinh, namXem: _namXem,
+            laSoText: _laSoText, phan: _currentPhan
+          })
+        });
+        const data = await resp.json();
+        if (data.error) throw new Error(data.error);
+
+        // Append kết quả phần mới vào result-body
+        const body = document.getElementById('result-body');
+        const html = renderMarkdown(data.luanGiai);
+        const section = document.createElement('div');
+        section.className = 'phan-section';
+        section.innerHTML = html;
+        body.appendChild(section);
+
+        // Cập nhật label và nút
+        document.getElementById('phan-label').textContent = `✦ ${PHAN_LABELS[_currentPhan]} / ${TONG_PHAN} phần ✦`;
+        if (_currentPhan < TONG_PHAN) {
+          btnNext.textContent = `➜ ${PHAN_LABELS[_currentPhan + 1]}`;
+          btnNext.style.display = 'block';
+        } else {
+          btnNext.style.display = 'none';
+          document.getElementById('phan-label').textContent = '✦ Đã hoàn thành tất cả 5 phần ✦';
+        }
+
+        // Show result section lần đầu
+        if (_currentPhan === 1) {
+          displayResult(_hoTen, _ngay, _thang, _nam, _gioitinh, _namXem, _astrolabe);
+        }
+
+        // Scroll xuống phần mới
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch(e) {
+        document.getElementById('error-msg').textContent = 'Lỗi: ' + e.message;
+        document.getElementById('error-msg').classList.add('active');
+      } finally {
+        loader.classList.remove('active');
+        document.querySelector('.btn-submit').disabled = false;
+      }
+    }
+
+    function renderMarkdown(text) {
+      return text
+        .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+        .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        .replace(/^\|(.+)$/gm, (m) => m) // keep table rows
+        .split('\n').filter(l => l.trim())
+        .map(l => {
+          if (l.startsWith('<h') || l.startsWith('---') || l.startsWith('|')) return l;
+          return `<p>${l}</p>`;
+        }).join('');
+    }
+
+    function displayResult(hoten, ngay, thang, nam, gioitinh, namXem, astrolabe) {
       document.getElementById('result-name').textContent = hoten;
       document.getElementById('result-meta').textContent =
         `${ngay}/${thang}/${nam} • ${gioitinh === 'nam' ? 'Nam' : 'Nữ'} • ${astrolabe.chineseDate} • Xem hạn năm ${namXem}`;
@@ -283,16 +361,6 @@
           ${stars || '<span class="star-name" style="opacity:0.4">—</span>'}
         </div>`;
       }).join('');
-
-      // Render luận giải markdown → HTML
-      const html = luanGiai
-        .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-        .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.+?)\*/g, '<em>$1</em>')
-        .split('\n').filter(l => l.trim())
-        .map(l => (l.startsWith('<h') || l.startsWith('---')) ? l : `<p>${l}</p>`).join('');
-      document.getElementById('result-body').innerHTML = html;
 
       document.getElementById('result-section').classList.add('active');
       document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
