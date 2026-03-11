@@ -28,7 +28,7 @@ def scrape_kabala(url):
             'Accept-Language': 'vi-VN,vi;q=0.9',
         }
     )
-    with urllib.request.urlopen(req, timeout=15) as resp:
+    with urllib.request.urlopen(req, timeout=10) as resp:
         html = resp.read().decode('utf-8', errors='replace')
 
     raw_match = re.search(
@@ -222,7 +222,7 @@ Yêu cầu output theo cấu trúc:
         },
         method="POST"
     )
-    with urllib.request.urlopen(req, timeout=60) as resp:
+    with urllib.request.urlopen(req, timeout=55) as resp:
         result = json.loads(resp.read().decode('utf-8'))
     return result['content'][0]['text']
 
