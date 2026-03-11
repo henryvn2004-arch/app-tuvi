@@ -124,18 +124,18 @@
           <label>Giờ sinh</label>
           <select id="gio">
             <option value="">-- Chọn giờ --</option>
-            <option value="23">Tý (23:00–01:00)</option>
+            <option value="0">Tý (23:00–01:00)</option>
             <option value="1">Sửu (01:00–03:00)</option>
-            <option value="3">Dần (03:00–05:00)</option>
-            <option value="5">Mão (05:00–07:00)</option>
-            <option value="7">Thìn (07:00–09:00)</option>
-            <option value="9">Tỵ (09:00–11:00)</option>
-            <option value="11">Ngọ (11:00–13:00)</option>
-            <option value="13">Mùi (13:00–15:00)</option>
-            <option value="15">Thân (15:00–17:00)</option>
-            <option value="17">Dậu (17:00–19:00)</option>
-            <option value="19">Tuất (19:00–21:00)</option>
-            <option value="21">Hợi (21:00–23:00)</option>
+            <option value="2">Dần (03:00–05:00)</option>
+            <option value="3">Mão (05:00–07:00)</option>
+            <option value="4">Thìn (07:00–09:00)</option>
+            <option value="5">Tỵ (09:00–11:00)</option>
+            <option value="6">Ngọ (11:00–13:00)</option>
+            <option value="7">Mùi (13:00–15:00)</option>
+            <option value="8">Thân (15:00–17:00)</option>
+            <option value="9">Dậu (17:00–19:00)</option>
+            <option value="10">Tuất (19:00–21:00)</option>
+            <option value="11">Hợi (21:00–23:00)</option>
           </select>
         </div>
         <div class="form-group">
@@ -176,12 +176,10 @@
     // iztro: thư viện an sao Tử Vi JS, chạy hoàn toàn trên browser
     // Múi giờ: iztro dùng chuẩn TQ (UTC+8), VN là UTC+7 → trừ 1 giờ khi truyền vào
 
-    function getIztroHour(gioVN) {
-      // gioVN là giờ bắt đầu của giờ địa chi theo VN
-      // iztro nhận giờ dương lịch thực tế (0-23), cần +1 để ra UTC+8
-      let h = parseInt(gioVN) + 1;
-      if (h >= 24) h = 0;
-      return h;
+    function getIztroHour(timeIndex) {
+      // iztro nhận timeIndex 0-11 (index giờ địa chi)
+      // 0=Tý, 1=Sửu, 2=Dần, 3=Mão, 4=Thìn, 5=Tỵ, 6=Ngọ, 7=Mùi, 8=Thân, 9=Dậu, 10=Tuất, 11=Hợi
+      return parseInt(timeIndex);
     }
 
     function formatLaSo(astrolabe) {
