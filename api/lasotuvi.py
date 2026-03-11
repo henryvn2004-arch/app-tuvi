@@ -235,16 +235,11 @@ class handler(BaseHTTPRequestHandler):
                 self._json(500, {"error": "Server chưa cấu hình API key. Liên hệ admin."})
                 return
 
-            kabala_url = build_kabala_url(ho_ten, ngay, thang, nam, gio, phut, gioi_tinh, nam_xem)
-
-            try:
-                la_so_text = scrape_kabala(kabala_url)
-            except Exception as e:
-                self._json(500, {"error": f"Không thể lấy dữ liệu từ Kabala.vn: {str(e)}"})
-                return
+            la_so_text = body.get('laSoText', '').strip()
+            kabala_url = body.get('kabalaUrl', '')
 
             if not la_so_text:
-                self._json(500, {"error": "Không tìm thấy dữ liệu lá số từ Kabala.vn"})
+                self._json(400, {"error": "Không có dữ liệu lá số. Vui lòng thử lại."})
                 return
 
             try:
