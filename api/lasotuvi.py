@@ -206,7 +206,7 @@ Yêu cầu output theo cấu trúc:
 [Hướng đi tốt, cách hóa giải nếu vận xấu — thực tế, hành động được ngay]"""
 
     payload = json.dumps({
-        "model": "claude-sonnet-4-5-20251022",
+        "model": "claude-sonnet-4-5",
         "max_tokens": 3000,
         "system": SYSTEM_PROMPT,
         "messages": [{"role": "user", "content": user_prompt}]
