@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luận Giải Lá Số Tử Vi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold: #c9a84c; --gold-light: #e8c97a; --gold-dim: #7a5f28;
+      --ink: #0e0b07; --paper: #f5efe4; --red: #8b1a1a;
+      --text: #2a1f0e; --muted: #6b5533;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--ink); color: var(--text); font-family: 'Crimson Text', Georgia, serif; min-height: 100vh; overflow-x: hidden; }
+
+    .starfield { position: fixed; inset: 0; z-index: 0;
+      background: radial-gradient(ellipse at 20% 30%, #1a1205 0%, #0e0b07 60%, #050302 100%); }
+    .starfield::before { content: ''; position: absolute; inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, rgba(201,168,76,.6) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 55% 15%, rgba(232,201,122,.7) 0%, transparent 100%),
+        radial-gradient(1px 1px at 75% 45%, rgba(201,168,76,.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 90% 80%, rgba(201,168,76,.3) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 40% 85%, rgba(232,201,122,.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 15% 90%, rgba(201,168,76,.4) 0%, transparent 100%),
+        radial-gradient(2px 2px at 50% 40%, rgba(255,220,100,.3) 0%, transparent 100%); }
+
+    .wrapper { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
+
+    header { text-align: center; padding: 50px 0 40px; border-bottom: 1px solid var(--gold-dim); margin-bottom: 48px; }
+    .header-ornament { font-size: 28px; letter-spacing: 16px; color: var(--gold-dim); margin-bottom: 16px; display: block; }
+    header h1 { font-family: 'Cinzel', serif; font-size: clamp(22px,5vw,38px); font-weight: 600; color: var(--gold-light); letter-spacing: 4px; text-transform: uppercase; line-height: 1.3; }
+    header p { margin-top: 14px; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 17px; color: #9c8455; letter-spacing: 1px; }
+
+    .card { background: linear-gradient(160deg, #faf3e8 0%, #f0e6d0 100%); border: 1px solid var(--gold-dim); border-radius: 4px; padding: 40px 44px; box-shadow: 0 8px 48px rgba(0,0,0,.6); position: relative; }
+    .card::before, .card::after { content: '✦'; position: absolute; color: var(--gold-dim); font-size: 18px; }
+    .card::before { top: 14px; left: 18px; } .card::after { top: 14px; right: 18px; }
+
+    .section-title { font-family: 'Cinzel', serif; font-size: 13px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 24px; display: flex; align-items: center; gap: 12px; }
+    .section-title::before, .section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-dim)); }
+    .section-title::after { background: linear-gradient(90deg, var(--gold-dim), transparent); }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 28px; margin-bottom: 32px; }
+    .form-group { display: flex; flex-direction: column; gap: 7px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-family: 'Cormorant Garamond', serif; font-size: 13px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+    input, select { background: rgba(255,255,255,.7); border: 1px solid #c5a96040; border-bottom: 1px solid var(--gold-dim); border-radius: 2px; padding: 10px 14px; font-family: 'Cormorant Garamond', serif; font-size: 17px; color: var(--text); outline: none; transition: border-color .2s, box-shadow .2s; width: 100%; }
+    input:focus, select:focus { border-color: var(--gold); box-shadow: 0 2px 12px rgba(201,168,76,.15); background: rgba(255,255,255,.9); }
+    .api-notice { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 14px; color: var(--muted); margin-top: 6px; }
+    .api-notice a { color: var(--gold-dim); }
+
+    .btn-submit { width: 100%; margin-top: 8px; padding: 16px; background: linear-gradient(135deg, #8b6b1a 0%, #c9a84c 50%, #8b6b1a 100%); background-size: 200% 200%; border: none; border-radius: 2px; font-family: 'Cinzel', serif; font-size: 14px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #fff8e7; cursor: pointer; transition: background-position .4s, box-shadow .3s, transform .15s; box-shadow: 0 4px 20px rgba(201,168,76,.3); }
+    .btn-submit:hover { background-position: right center; box-shadow: 0 6px 28px rgba(201,168,76,.5); transform: translateY(-1px); }
+    .btn-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+    .loader { display: none; text-align: center; padding: 48px 0; }
+    .loader.active { display: block; }
+    .loader-ring { width: 60px; height: 60px; border: 2px solid rgba(201,168,76,.15); border-top-color: var(--gold); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loader p { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 16px; color: var(--muted); animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:.5} 50%{opacity:1} }
+
+    #result-section { display: none; margin-top: 40px; }
+    #result-section.active { display: block; }
+    .result-header { text-align: center; margin-bottom: 32px; }
+    .result-header .name { font-family: 'Cinzel', serif; font-size: 22px; color: var(--gold); letter-spacing: 2px; }
+    .result-header .meta { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 15px; color: var(--muted); margin-top: 6px; }
+
+    .sao-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; margin: 20px 0 28px; }
+    .sao-item { background: rgba(201,168,76,.08); border: 1px solid rgba(201,168,76,.2); border-radius: 3px; padding: 10px 14px; }
+    .sao-name { font-weight: 600; color: var(--red); font-size: 15px; }
+    .sao-cung { font-size: 13px; color: var(--muted); }
+
+    .result-body { font-family: 'Crimson Text', serif; font-size: 18px; line-height: 1.85; color: var(--text); }
+    .result-body h2 { font-family: 'Cinzel', serif; font-size: 15px; letter-spacing: 3px; color: var(--gold-dim); font-weight: 600; text-transform: uppercase; margin: 32px 0 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(201,168,76,.2); }
+    .result-body p { margin-bottom: 14px; }
+
+    .divider { text-align: center; margin: 36px 0; color: var(--gold-dim); font-size: 20px; letter-spacing: 12px; }
+
+    .btn-pdf { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; margin-top: 36px; padding: 14px; background: transparent; border: 1px solid var(--gold-dim); border-radius: 2px; font-family: 'Cinzel', serif; font-size: 13px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); cursor: pointer; transition: background .2s, color .2s; }
+    .btn-pdf:hover { background: var(--gold); color: var(--ink); }
+
+    .error-msg { display: none; background: #3d0e0e; border: 1px solid #8b1a1a; border-radius: 3px; padding: 14px 18px; color: #e89090; font-size: 15px; margin-top: 16px; }
+    .error-msg.active { display: block; }
+
+    @media (max-width: 520px) { .card { padding: 28px 20px; } .form-grid { grid-template-columns: 1fr; } .form-group.full { grid-column: 1; } }
+    @media print { .starfield, header, .form-section, .btn-submit, .btn-pdf { display: none !important; } body { background: white; } .card { box-shadow: none; border: none; } #result-section { display: block !important; } }
+  </style>
+</head>
+<body>
+  <div class="starfield"></div>
+  <div class="wrapper">
+    <header>
+      <span class="header-ornament">☽ ✦ ☾</span>
+      <h1>Luận Giải Lá Số Tử Vi</h1>
+      <p>Nhập thông tin để khám phá vận mệnh theo Tử Vi Đẩu Số</p>
+    </header>
+
+    <div class="card form-section">
+      <div class="section-title">Thông Tin Bản Mệnh</div>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label>Họ và Tên</label>
+          <input type="text" id="hoten" placeholder="Nguyễn Văn A" />
+        </div>
+        <div class="form-group">
+          <label>Ngày sinh (Dương lịch)</label>
+          <input type="number" id="ngay" min="1" max="31" placeholder="9" />
+        </div>
+        <div class="form-group">
+          <label>Tháng sinh</label>
+          <input type="number" id="thang" min="1" max="12" placeholder="5" />
+        </div>
+        <div class="form-group">
+          <label>Năm sinh</label>
+          <input type="number" id="nam" min="1900" max="2099" placeholder="1984" />
+        </div>
+        <div class="form-group">
+          <label>Giờ sinh</label>
+          <select id="gio">
+            <option value="">-- Chọn giờ --</option>
+            <option value="23">Tý (23:00–01:00)</option>
+            <option value="1">Sửu (01:00–03:00)</option>
+            <option value="3">Dần (03:00–05:00)</option>
+            <option value="5">Mão (05:00–07:00)</option>
+            <option value="7">Thìn (07:00–09:00)</option>
+            <option value="9">Tỵ (09:00–11:00)</option>
+            <option value="11">Ngọ (11:00–13:00)</option>
+            <option value="13">Mùi (13:00–15:00)</option>
+            <option value="15">Thân (15:00–17:00)</option>
+            <option value="17">Dậu (17:00–19:00)</option>
+            <option value="19">Tuất (19:00–21:00)</option>
+            <option value="21">Hợi (21:00–23:00)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Giới tính</label>
+          <select id="gioitinh">
+            <option value="nam">Nam</option>
+            <option value="nu">Nữ</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Claude API Key</label>
+          <input type="password" id="apikey" placeholder="sk-ant-api03-..." />
+          <p class="api-notice">Lấy API key tại <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> → API Keys</p>
+        </div>
+      </div>
+      <button class="btn-submit" onclick="luanGiai()">✦ An Sao & Luận Giải ✦</button>
+      <div class="error-msg" id="error-msg"></div>
+      <div class="loader" id="loader">
+        <div class="loader-ring"></div>
+        <p id="loader-text">Đang an sao lá số...</p>
+      </div>
+    </div>
+
+    <div id="result-section">
+      <div class="card">
+        <div class="result-header">
+          <div class="name" id="result-name"></div>
+          <div class="meta" id="result-meta"></div>
+        </div>
+        <div class="divider">✦ ✦ ✦</div>
+        <div class="section-title">Các Sao Chính Tinh</div>
+        <div class="sao-grid" id="sao-grid"></div>
+        <div class="divider">✦</div>
+        <div class="section-title">Luận Giải</div>
+        <div class="result-body" id="result-body"></div>
+        <button class="btn-pdf" onclick="window.print()">⬇ Tải Xuống PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function luanGiai() {
+      const hoten    = document.getElementById('hoten').value.trim();
+      const ngay     = parseInt(document.getElementById('ngay').value);
+      const thang    = parseInt(document.getElementById('thang').value);
+      const nam      = parseInt(document.getElementById('nam').value);
+      const gio      = document.getElementById('gio').value;
+      const gioitinh = document.getElementById('gioitinh').value;
+      const apiKey   = document.getElementById('apikey').value.trim();
+      const errEl    = document.getElementById('error-msg');
+      errEl.classList.remove('active');
+
+      if (!hoten || !ngay || !thang || !nam || gio === '' || !apiKey) {
+        errEl.textContent = 'Vui lòng điền đầy đủ tất cả các thông tin.';
+        errEl.classList.add('active'); return;
+      }
+      if (!apiKey.startsWith('sk-ant-')) {
+        errEl.textContent = 'API key không hợp lệ. Phải bắt đầu bằng "sk-ant-"';
+        errEl.classList.add('active'); return;
+      }
+
+      const loader = document.getElementById('loader');
+      loader.classList.add('active');
+      document.querySelector('.btn-submit').disabled = true;
+      document.getElementById('result-section').classList.remove('active');
+
+      try {
+        document.getElementById('loader-text').textContent = 'Đang an sao & luận giải lá số...';
+
+        const resp = await fetch('/api/lasotuvi', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ hoten, ngay, thang, nam, gio: parseInt(gio), gioi_tinh: gioitinh, api_key: apiKey })
+        });
+        const data = await resp.json();
+
+        if (!data.success) throw new Error(data.error);
+
+        displayResult(hoten, ngay, thang, nam, gioitinh, data.la_so, data.luan_giai);
+      } catch(e) {
+        errEl.textContent = 'Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.');
+        errEl.classList.add('active');
+      } finally {
+        loader.classList.remove('active');
+        document.querySelector('.btn-submit').disabled = false;
+      }
+    }
+
+    function displayResult(hoten, ngay, thang, nam, gioitinh, laSo, luanGiai) {
+      document.getElementById('result-name').textContent = hoten;
+      document.getElementById('result-meta').textContent =
+        `${ngay}/${thang}/${nam} (ÂL: ${laSo.lunar}) • ${gioitinh === 'nam' ? 'Nam' : 'Nữ'} • Mệnh ${laSo.nap_am} • Cung Mệnh: ${laSo.cung_menh} • ${laSo.ten_cuc}`;
+
+      const grid = document.getElementById('sao-grid');
+      grid.innerHTML = '';
+      const saoOrder = ['Tử Vi','Thiên Cơ','Thái Dương','Vũ Khúc','Thiên Đồng','Liêm Trinh',
+                        'Thiên Phủ','Thái Âm','Tham Lang','Cự Môn','Thiên Tướng','Thiên Lương','Thất Sát','Phá Quân'];
+      for (const s of saoOrder) {
+        if (laSo.chinh_tinh[s]) {
+          const chi = laSo.chinh_tinh[s];
+          const ten = laSo.cung_names[chi] || '';
+          const el = document.createElement('div');
+          el.className = 'sao-item';
+          el.innerHTML = `<div class="sao-name">${s}</div><div class="sao-cung">${chi} · ${ten}</div>`;
+          grid.appendChild(el);
+        }
+      }
+
+      const html = luanGiai
+        .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .split('\n').filter(l => l.trim())
+        .map(l => l.startsWith('<h2>') ? l : `<p>${l}</p>`).join('');
+      document.getElementById('result-body').innerHTML = html;
+
+      document.getElementById('result-section').classList.add('active');
+      document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
