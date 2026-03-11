@@ -165,49 +165,31 @@ def call_claude(la_so_text, ho_ten, nam_sinh, gioi_tinh, nam_xem):
     api_key = ANTHROPIC_API_KEY
     gioi = 'nam' if gioi_tinh == 'nam' else 'nữ'
 
-    user_prompt = f"""Hãy luận giải lá số tử vi cho: {ho_ten}, sinh năm {nam_sinh}, {gioi}, xem hạn năm {nam_xem}.
+    user_prompt = f"""Luận giải lá số tử vi: {ho_ten}, sinh năm {nam_sinh}, {gioi}, xem hạn năm {nam_xem}.
 
-DỮ LIỆU LÁ SỐ (từ Kabala.vn):
+DỮ LIỆU LÁ SỐ:
 {la_so_text}
 
-Yêu cầu output theo cấu trúc:
+Output theo cấu trúc (mỗi mục 3-4 câu, súc tích):
 
 ## 🌟 TỔNG QUAN VẬN MỆNH
-
-**Bản Chất & Tính Cách**
-[Từ cung Mệnh, chính tinh, cục, Lục thập hoa giáp — vẽ chân dung khí chất, ưu khuyết bẩm sinh]
-
-**Sự Nghiệp & Tiền Tài**
-[Cung Quan Lộc + Tài Bạch + tam hợp — con đường phù hợp, cách tích lũy]
-
-**Tình Duyên & Hôn Nhân**
-[Cung Phu Thê + xung chiếu — duyên phận, điều cần lưu ý]
-
-**Sức Khỏe & Tinh Thần**
-[Cung Tật Ách + Phúc Đức — điểm cần chú ý]
+**Bản Chất & Tính Cách** — khí chất, ưu khuyết bẩm sinh từ cung Mệnh
+**Sự Nghiệp & Tiền Tài** — con đường phù hợp, cách tích lũy
+**Tình Duyên & Hôn Nhân** — duyên phận, điều cần lưu ý
+**Sức Khỏe & Tinh Thần** — điểm cần chú ý
 
 ---
 
 ## 📅 VẬN HẠN NĂM {nam_xem}
-
-**Thiên Thời – Địa Lợi – Nhân Hòa**
-[Đánh giá 3 yếu tố theo đúng khung bắt buộc, ghi rõ điểm từng yếu tố]
-
-**SCORE: X/10 | FLAG: 🟢/🟠/🔴**
-[Kết luận ngắn gọn mức độ thuận/nghịch của năm]
-
-**Tiểu Hạn Năm {nam_xem} — Chi Tiết**
-[Công việc, tài chính, tình cảm, sức khỏe — dự báo cụ thể, tháng nào cần lưu ý]
-
-**⚠️ Cần Thận Trọng**
-[Rủi ro cụ thể, điều nên tránh]
-
-**✨ Lời Khuyên Từ Lá Số**
-[Hướng đi tốt, cách hóa giải nếu vận xấu — thực tế, hành động được ngay]"""
+**Thiên Thời – Địa Lợi – Nhân Hòa** — đánh giá 3 yếu tố, ghi điểm từng yếu tố
+**SCORE: X/10 | FLAG: 🟢/🟠/🔴** — kết luận ngắn gọn
+**Tiểu Hạn Chi Tiết** — công việc, tài chính, tình cảm, sức khỏe, tháng cần lưu ý
+**⚠️ Cần Thận Trọng** — rủi ro cụ thể
+**✨ Lời Khuyên** — hướng đi tốt, cách hóa giải thực tế"""
 
     payload = json.dumps({
-        "model": "claude-sonnet-4-5",
-        "max_tokens": 3000,
+        "model": "claude-haiku-4-5",
+        "max_tokens": 2000,
         "system": SYSTEM_PROMPT,
         "messages": [{"role": "user", "content": user_prompt}]
     }).encode('utf-8')
