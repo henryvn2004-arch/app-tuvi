@@ -161,21 +161,17 @@ Giọng điềm đạm, ấm áp. Không phán xét, không gieo sợ hãi.
 """
 
 
-def call_claude(la_so_text, ho_ten, nam_sinh, gioi_tinh, nam_xem):
+def call_claude(la_so_text, ho_ten, nam_sinh, gioi_tinh, nam_xem, phan=1):
     api_key = ANTHROPIC_API_KEY
     gioi = 'nam' if gioi_tinh == 'nam' else 'nữ'
+    ctx = f"Lá số của: {ho_ten}, sinh năm {nam_sinh}, {gioi}.\n\nDỮ LIỆU LÁ SỐ:\n{la_so_text}"
 
-    user_prompt = f"""Luận giải lá số tử vi cho: {ho_ten}, sinh năm {nam_sinh}, {gioi}.
+    prompts = {
+        1: f"""{ctx}
 
-DỮ LIỆU LÁ SỐ:
-{la_so_text}
-
-Thực hiện lần lượt các phần sau. Luận dựa trên sao cụ thể, không viết chung chung.
-
----
+Chỉ thực hiện PHẦN 1. Luận dựa trên sao cụ thể, không viết chung chung.
 
 ## PHẦN 1 — TỔNG QUAN LÁ SỐ
-
 Phân tích:
 - Mệnh và cục
 - Chính tinh tại cung mệnh
@@ -186,56 +182,59 @@ Phân tích:
 - Khí chất con người
 - Xu hướng cuộc đời
 - Điểm mạnh
-- Điểm yếu
+- Điểm yếu""",
 
----
+        2: f"""{ctx}
+
+Chỉ thực hiện PHẦN 2. Luận dựa trên sao cụ thể, không viết chung chung.
 
 ## PHẦN 2 — LUẬN GIẢI 12 CUNG
-
 Phân tích lần lượt 12 cung: Mệnh, Phụ Mẫu, Phúc Đức, Điền Trạch, Quan Lộc, Nô Bộc, Thiên Di, Tật Ách, Tài Bạch, Tử Tức, Phu Thê, Huynh Đệ.
-
 Với mỗi cung:
-1. Liệt kê các chính tinh
-2. Liệt kê phụ tinh quan trọng
-3. Phân tích tam hợp và xung chiếu
-4. Đánh giá cát hung
-5. Kết luận ý nghĩa thực tế trong đời sống
+1. Liệt kê chính tinh và phụ tinh quan trọng
+2. Phân tích tam hợp và xung chiếu
+3. Đánh giá cát hung
+4. Kết luận ý nghĩa thực tế""",
 
----
+        3: f"""{ctx}
+
+Chỉ thực hiện PHẦN 3. Luận dựa trên sao cụ thể, không viết chung chung.
 
 ## PHẦN 3 — PHÂN TÍCH ĐẠI VẬN
-
-Liệt kê toàn bộ đại vận từ 0 đến 100 tuổi (mỗi vận 10 năm).
-Với mỗi đại vận phân tích:
+Liệt kê toàn bộ đại vận từ 0–100 tuổi (mỗi vận 10 năm).
+Với mỗi đại vận:
 - Cung đại vận
 - Các sao trong cung đại vận
 - Tam hợp chiếu đến
 - Đánh giá tổng thể vận trình
+Chấm điểm 0–10: 9–10 cực tốt | 7–8 tốt | 5–6 trung bình | 3–4 xấu | 0–2 rất xấu""",
 
-Chấm điểm theo thang 0–10:
-9–10: vận cực tốt | 7–8: vận tốt | 5–6: trung bình | 3–4: xấu | 0–2: rất xấu
+        4: f"""{ctx}
 
----
+Chỉ thực hiện PHẦN 4. Luận dựa trên sao cụ thể, không viết chung chung.
 
 ## PHẦN 4 — BẢNG SO SÁNH ĐẠI VẬN
-
+Lập bảng đầy đủ tất cả đại vận:
 | Đại vận | Tuổi | Cung | Đánh giá | Điểm |
-|---------|------|------|----------|------|
-[điền đầy đủ tất cả các đại vận]
+|---------|------|------|----------|------|""",
 
----
+        5: f"""{ctx}
+
+Chỉ thực hiện PHẦN 5. Luận dựa trên sao cụ thể, không viết chung chung.
 
 ## PHẦN 5 — TỔNG KẾT CUỘC ĐỜI
-
 1. Ba đại vận tốt nhất
 2. Ba đại vận khó khăn nhất
 3. Thời kỳ phát triển mạnh
 4. Thời kỳ nên thận trọng
-5. Tổng quan vận trình cuộc đời"""
+5. Tổng quan vận trình cuộc đời""",
+    }
+
+    user_prompt = prompts.get(phan, prompts[1])
 
     payload = json.dumps({
         "model": "claude-sonnet-4-5",
-        "max_tokens": 8000,
+        "max_tokens": 4000,
         "system": SYSTEM_PROMPT,
         "messages": [{"role": "user", "content": user_prompt}]
     }).encode('utf-8')
@@ -282,14 +281,14 @@ class handler(BaseHTTPRequestHandler):
                 return
 
             la_so_text = body.get('laSoText', '').strip()
-            kabala_url = body.get('kabalaUrl', '')
+            phan = int(body.get('phan', 1))
 
             if not la_so_text:
                 self._json(400, {"error": "Không có dữ liệu lá số. Vui lòng thử lại."})
                 return
 
             try:
-                luan_giai = call_claude(la_so_text, ho_ten, nam, gioi_tinh, nam_xem)
+                luan_giai = call_claude(la_so_text, ho_ten, nam, gioi_tinh, nam_xem, phan)
             except urllib.error.HTTPError as e:
                 err_body = e.read().decode('utf-8')
                 if 'overloaded' in err_body.lower():
