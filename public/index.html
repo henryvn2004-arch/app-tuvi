@@ -91,9 +91,23 @@
     @media (max-width: 520px) { .card { padding: 28px 20px; } .form-grid { grid-template-columns: 1fr; } .form-group.full { grid-column: 1; } }
     .btn-next { display: none; margin: 20px auto 0; background: linear-gradient(135deg,#1a3a5c,#2a5a8c); color: #c9a84c; border: 1px solid #c9a84c55; padding: 12px 32px; border-radius: 6px; font-size: 15px; cursor: pointer; letter-spacing: 1px; }
     .btn-next:hover { background: linear-gradient(135deg,#2a5a8c,#3a7abc); }
+    .btn-next:disabled { opacity: 0.6; cursor: not-allowed; background: linear-gradient(135deg,#1a3a5c,#2a5a8c); }
+    .inline-loader { display: none; text-align: center; margin: 12px 0 0; color: var(--gold); font-style: italic; font-size: 14px; letter-spacing: 1px; }
+    .inline-loader.active { display: block; }
     .phan-label { text-align:center; font-size: 13px; color: var(--muted); margin-top: 16px; }
     @media print { .starfield, header, .form-section, .btn-submit, .btn-pdf { display: none !important; } body { background: white; } .card { box-shadow: none; border: none; } #result-section { display: block !important; } }
-  </style>
+  
+    .md-table-wrap { overflow-x: auto; margin: 16px 0; }
+    .md-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .md-table th { background: rgba(212,175,55,0.15); color: #d4af37; padding: 8px 12px; text-align: left; border-bottom: 1px solid rgba(212,175,55,0.3); font-weight: 600; }
+    .md-table td { padding: 7px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); color: #ccc; vertical-align: top; }
+    .md-table tr:last-child td { border-bottom: none; }
+    .md-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .phan-section h2 { color: #d4af37; font-size: 17px; margin: 20px 0 10px; border-bottom: 1px solid rgba(212,175,55,0.2); padding-bottom: 6px; }
+    .phan-section h3 { color: #b8a060; font-size: 15px; margin: 16px 0 8px; }
+    .phan-section p { color: #ccc; line-height: 1.7; margin: 8px 0; font-size: 15px; }
+
+    </style>
 </head>
 <body>
   <div class="starfield"></div>
@@ -171,6 +185,7 @@
         <div class="result-body" id="result-body"></div>
         <button class="btn-pdf" onclick="window.print()">⬇ Tải Xuống PDF</button>
         <div class="phan-label" id="phan-label"></div>
+        <div class="inline-loader" id="inline-loader">⟳ Đang luận giải, xin chờ...</div>
         <button class="btn-next" id="btn-next" onclick="loadNextPhan()">➜ Phần Tiếp Theo</button>
       </div>
     </div>
@@ -185,7 +200,14 @@
     let _gioitinh = null, _namXem = null, _astrolabe = null;
     let _currentPhan = 0;
     const TONG_PHAN = 5;
-    const PHAN_LABELS = ['','Phần 1: Tổng Quan Lá Số','Phần 2: Luận Giải 12 Cung','Phần 3: Phân Tích Đại Vận','Phần 4: Bảng So Sánh Đại Vận','Phần 5: Tổng Kết Cuộc Đời'];
+    const PHAN_LABELS = ['','Tổng Quan Lá Số','Luận 12 Cung','Đại Vận Toàn Đời','Vận Hiện Tại','Tổng Kết'];
+    const QUERIES = {
+      1: () => `lục thập hoa giáp tinh hệ tổng quan mệnh cục chính tinh khí chất cách cục pre-check`,
+      2: () => `luận giải 12 cung mệnh phụ mẫu phúc đức điền trạch quan lộc tài bạch phu thê tử tức`,
+      3: () => `đại vận thiên thời địa lợi nhân hòa scoring vận hạn VDTTL giai đoạn`,
+      4: () => `vận hiện tại tiểu hạn lưu niên lưu thái tuế sao lưu động`,
+      5: () => `tổng kết cuộc đời đại vận tốt xấu khuyến nghị hành động`,
+    };
     // Múi giờ: iztro dùng chuẩn TQ (UTC+8), VN là UTC+7 → trừ 1 giờ khi truyền vào
 
     function getIztroHour(timeIndex) {
@@ -278,18 +300,39 @@
       const btnNext = document.getElementById('btn-next');
       const loaderText = document.getElementById('loader-text');
       const loader = document.getElementById('loader');
+      const inlineLoader = document.getElementById('inline-loader');
       btnNext.style.display = 'none';
+      inlineLoader.classList.add('active');
+      inlineLoader.textContent = `⟳ Đang luận giải ${PHAN_LABELS[_currentPhan]}...`;
       loader.classList.add('active');
       loaderText.textContent = `Đang luận giải ${PHAN_LABELS[_currentPhan]}...`;
 
       try {
+        // Bước 1: RAG — tìm tài liệu liên quan
+        loaderText.textContent = `Đang tìm tài liệu... (1/2)`;
+        let docs = '';
+        try {
+          const searchResp = await fetch('/api/search', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query: QUERIES[_currentPhan](), matchCount: _currentPhan <= 2 ? 8 : 5 })
+          });
+          const searchData = await searchResp.json();
+          docs = searchData.docs || '';
+        } catch(e) {
+          // RAG fail → vẫn tiếp tục không có docs
+          console.warn('RAG failed:', e.message);
+        }
+
+        // Bước 2: Claude luận giải
+        loaderText.textContent = `Đang luận giải ${PHAN_LABELS[_currentPhan]}... (2/2)`;
         const resp = await fetch('/api/lasotuvi', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             hoTen: _hoTen, ngay: _ngay, thang: _thang, nam: _nam,
             gio: 0, phut: 0, gioiTinh: _gioitinh, namXem: _namXem,
-            laSoText: _laSoText, phan: _currentPhan
+            laSoText: _laSoText, phan: _currentPhan, docs: docs
           })
         });
         const data = await resp.json();
@@ -330,17 +373,42 @@
     }
 
     function renderMarkdown(text) {
-      return text
-        .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-        .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.+?)\*/g, '<em>$1</em>')
-        .replace(/^\|(.+)$/gm, (m) => m) // keep table rows
-        .split('\n').filter(l => l.trim())
-        .map(l => {
-          if (l.startsWith('<h') || l.startsWith('---') || l.startsWith('|')) return l;
-          return `<p>${l}</p>`;
-        }).join('');
+      const lines = text.split('\n');
+      let result = '';
+      let inTable = false;
+      let tableRows = [];
+
+      function flushTable() {
+        if (!tableRows.length) return;
+        result += '<div class="md-table-wrap"><table class="md-table">';
+        tableRows.forEach((row, i) => {
+          if (i === 1 && row.match(/^\|[-| ]+\|$/)) return; // skip separator
+          const cells = row.split('|').filter((_, ci) => ci > 0 && ci < row.split('|').length - 1);
+          const tag = i === 0 ? 'th' : 'td';
+          result += '<tr>' + cells.map(c => `<${tag}>${c.trim()}</${tag}>`).join('') + '</tr>';
+        });
+        result += '</table></div>';
+        tableRows = [];
+        inTable = false;
+      }
+
+      for (const line of lines) {
+        if (line.trim().startsWith('|')) {
+          inTable = true;
+          tableRows.push(line.trim());
+        } else {
+          if (inTable) flushTable();
+          const l = line
+            .replace(/^## (.+)$/, '<h2>$1</h2>')
+            .replace(/^### (.+)$/, '<h3>$1</h3>')
+            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.+?)\*/g, '<em>$1</em>');
+          if (l.startsWith('<h') ) result += l;
+          else if (l.trim()) result += `<p>${l}</p>`;
+        }
+      }
+      if (inTable) flushTable();
+      return result;
     }
 
     function displayResult(hoten, ngay, thang, nam, gioitinh, namXem, astrolabe) {
