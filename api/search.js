@@ -1,21 +1,19 @@
-export const config = { runtime: 'edge' };
-
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 
-export default async function handler(req) {
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Content-Type': 'application/json',
+module.exports = async function handler(req, res) {
+  const setHeaders = (res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
   };
-  if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
+  if (req.method === 'OPTIONS') { setHeaders(res); return res.status(200).end(); }
 
   try {
-    const { query, matchCount = 6 } = await req.json();
-    if (!query) return new Response(JSON.stringify({ docs: '' }), { headers: corsHeaders });
+    const { query, matchCount = 6 } = req.body;
+    if (!query) setHeaders(res); return res.status(200).json({ docs: '' });
 
     // Embed query
     const embResp = await fetch('https://api.openai.com/v1/embeddings', {
@@ -41,10 +39,10 @@ export default async function handler(req) {
     const results = await searchResp.json();
     const docs = results.map(r => `[${r.source}]\n${r.content}`).join('\n\n---\n\n');
 
-    return new Response(JSON.stringify({ docs }), { headers: corsHeaders });
+    setHeaders(res); return res.status(200).json({ docs });
 
   } catch (e) {
     // On error, return empty docs (Claude will still work, just without RAG)
-    return new Response(JSON.stringify({ docs: '', error: e.message }), { headers: corsHeaders });
+    setHeaders(res); return res.status(200).json({ docs: '', error: e.message });
   }
 }
