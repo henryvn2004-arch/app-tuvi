@@ -1,9 +1,14 @@
 {
   "version": 2,
+  "functions": {
+    "api/lasotuvi.js": { "maxDuration": 60 },
+    "api/search.js":   { "maxDuration": 30 },
+    "api/embed.js":    { "maxDuration": 60 }
+  },
   "routes": [
     { "src": "/api/lasotuvi", "dest": "/api/lasotuvi.js" },
-    { "src": "/api/search", "dest": "/api/search.js" },
-    { "src": "/api/embed", "dest": "/api/embed.js" },
-    { "src": "/(.*)", "dest": "/public/$1" }
+    { "src": "/api/search",   "dest": "/api/search.js"   },
+    { "src": "/api/embed",    "dest": "/api/embed.js"    },
+    { "src": "/(.*)",         "dest": "/public/$1"       }
   ]
 }
