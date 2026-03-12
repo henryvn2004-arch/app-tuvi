@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tử Vi RAG — Upload Tài Liệu</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root {
+    --bg: #0d0d0f; --surface: #141418; --border: #2a2a35;
+    --gold: #c8a96e; --gold-dim: #8a7048; --text: #e8e4dc;
+    --text-dim: #8a8680; --green: #4caf7d; --red: #e05c5c; --blue: #6b9fd4;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Crimson Pro', serif; font-size: 18px;
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; padding: 48px 24px;
+  }
+  .container { position: relative; z-index: 1; width: 100%; max-width: 720px; }
+  header { text-align: center; margin-bottom: 48px; }
+  .title-cn { font-size: 13px; letter-spacing: 6px; color: var(--gold-dim); font-family: 'JetBrains Mono', monospace; text-transform: uppercase; margin-bottom: 16px; }
+  h1 { font-size: 36px; font-weight: 300; color: var(--gold); line-height: 1.2; margin-bottom: 8px; }
+  .subtitle { font-style: italic; color: var(--text-dim); font-size: 16px; }
+  .divider { width: 120px; height: 1px; background: linear-gradient(to right, transparent, var(--gold-dim), transparent); margin: 24px auto; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 28px 32px; margin-bottom: 20px; }
+  .card-title { font-size: 11px; letter-spacing: 4px; color: var(--gold-dim); font-family: 'JetBrains Mono', monospace; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+  .card-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  label { display: block; font-size: 13px; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; letter-spacing: 1px; margin-bottom: 8px; }
+  input[type="text"] { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 3px; padding: 10px 14px; color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 16px; }
+  input:focus { outline: none; border-color: var(--gold-dim); }
+  .drop-zone { border: 1px dashed var(--border); border-radius: 4px; padding: 40px 24px; text-align: center; cursor: pointer; transition: all 0.2s; position: relative; }
+  .drop-zone:hover, .drop-zone.drag-over { border-color: var(--gold-dim); background: rgba(200,169,110,0.04); }
+  .drop-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .drop-icon { font-size: 32px; margin-bottom: 12px; opacity: 0.5; }
+  .drop-text { color: var(--text-dim); font-size: 15px; margin-bottom: 6px; }
+  .drop-sub { font-size: 13px; color: var(--gold-dim); font-family: 'JetBrains Mono', monospace; }
+  .file-list { margin-top: 16px; }
+  .file-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 3px; margin-bottom: 6px; font-size: 14px; font-family: 'JetBrains Mono', monospace; }
+  .file-item .fname { flex: 1; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .file-item .fsize { color: var(--text-dim); font-size: 12px; }
+  .file-item .fstatus { font-size: 12px; min-width: 80px; text-align: right; }
+  .btn { width: 100%; padding: 14px 24px; background: transparent; border: 1px solid var(--gold-dim); border-radius: 3px; color: var(--gold); font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; margin-top: 8px; }
+  .btn:hover:not(:disabled) { background: rgba(200,169,110,0.1); border-color: var(--gold); }
+  .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .progress-wrap { margin-top: 20px; display: none; }
+  .progress-wrap.visible { display: block; }
+  .progress-bar-bg { height: 3px; background: var(--border); border-radius: 2px; margin-bottom: 12px; }
+  .progress-bar { height: 100%; background: linear-gradient(to right, var(--gold-dim), var(--gold)); border-radius: 2px; transition: width 0.3s; width: 0%; }
+  .progress-text { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-dim); margin-bottom: 12px; }
+  .log { background: var(--bg); border: 1px solid var(--border); border-radius: 3px; padding: 14px; max-height: 280px; overflow-y: auto; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.8; }
+  .log-line { color: var(--text-dim); } .log-ok { color: var(--green); } .log-err { color: var(--red); }
+  .log-info { color: var(--gold); } .log-done { color: var(--green); font-weight: 500; }
+  .stat-row { display: flex; gap: 16px; margin-top: 16px; }
+  .stat { flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 3px; padding: 12px 16px; text-align: center; }
+  .stat-val { font-size: 28px; font-weight: 300; color: var(--gold); font-family: 'JetBrains Mono', monospace; }
+  .stat-label { font-size: 11px; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; }
+  .tip { font-size: 14px; color: var(--text-dim); font-style: italic; line-height: 1.7; padding: 12px 0; }
+  .tip strong { color: var(--gold-dim); font-style: normal; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="title-cn">紫微斗數 · Tri Thức Nội Bộ</div>
+    <h1>Upload Tài Liệu RAG</h1>
+    <p class="subtitle">Nhúng tài liệu vào Supabase để luận giải chính xác hơn</p>
+    <div class="divider"></div>
+  </header>
+
+  <div class="card">
+    <div class="card-title">Cấu hình</div>
+    <label>VERCEL EMBED URL</label>
+    <input type="text" id="embedUrl" value="https://app-tuvi-git-main-henryvn2004-5000s-projects.vercel.app/api/embed" />
+    <p class="tip" style="margin-bottom:0"><strong>Lưu ý:</strong> Tool này gọi qua Vercel server — không bị CORS, không bị block.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Chọn tài liệu</div>
+    <div class="drop-zone" id="dropZone">
+      <input type="file" id="fileInput" multiple accept=".pdf,.json,.txt" />
+      <div class="drop-icon">⭐</div>
+      <div class="drop-text">Kéo thả hoặc click để chọn file</div>
+      <div class="drop-sub">.pdf · .json · .txt</div>
+    </div>
+    <div class="file-list" id="fileList"></div>
+    <p class="tip" style="margin-top:16px">
+      <strong>Chọn tất cả file tài liệu</strong> (trừ D_CASE — tự động bỏ qua): Lục thập hoa giáp, VDTTL vận hạn, 6 cung chi tiết, bảng quy ước...
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Thực thi</div>
+    <button class="btn" id="btnUpload" onclick="startUpload()">✦ Bắt đầu Embed & Upload</button>
+    <div class="progress-wrap" id="progressWrap">
+      <div style="margin-top:16px">
+        <div class="progress-bar-bg"><div class="progress-bar" id="progressBar"></div></div>
+        <div class="progress-text" id="progressText">Đang khởi động...</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="stat-val" id="statTotal">0</div><div class="stat-label">Tổng chunks</div></div>
+        <div class="stat"><div class="stat-val" id="statOk" style="color:var(--green)">0</div><div class="stat-label">Đã upload</div></div>
+        <div class="stat"><div class="stat-val" id="statErr" style="color:var(--red)">0</div><div class="stat-label">Lỗi</div></div>
+      </div>
+      <div class="log" id="log"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let selectedFiles = [];
+const SKIP = (name) => name.includes('D_CASE') || name.includes('Tap_ch');
+const CHUNK_SIZE = 600, OVERLAP = 80, BATCH_SIZE = 5;
+
+document.getElementById('fileInput').addEventListener('change', (e) => {
+  selectedFiles = Array.from(e.target.files).filter(f => !SKIP(f.name));
+  renderFileList();
+});
+
+const dropZone = document.getElementById('dropZone');
+dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', (e) => {
+  e.preventDefault(); dropZone.classList.remove('drag-over');
+  selectedFiles = Array.from(e.dataTransfer.files).filter(f =>
+    (f.name.endsWith('.pdf') || f.name.endsWith('.json') || f.name.endsWith('.txt')) && !SKIP(f.name)
+  );
+  renderFileList();
+});
+
+function renderFileList() {
+  const list = document.getElementById('fileList');
+  if (!selectedFiles.length) { list.innerHTML = ''; return; }
+  list.innerHTML = selectedFiles.map((f, i) => `
+    <div class="file-item" id="file-${i}">
+      <span>${f.name.endsWith('.pdf') ? '📄' : f.name.endsWith('.json') ? '📋' : '📝'}</span>
+      <span class="fname">${f.name}</span>
+      <span class="fsize">${(f.size/1024).toFixed(0)}KB</span>
+      <span class="fstatus" id="status-${i}" style="color:var(--text-dim)">—</span>
+    </div>`).join('');
+}
+
+async function extractText(file) {
+  if (file.name.endsWith('.txt') || file.name.endsWith('.json')) return await file.text();
+  if (file.name.endsWith('.pdf')) {
+    if (!window.pdfjsLib) {
+      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+    const pdf = await window.pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
+    let text = '';
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      text += content.items.map(s => s.str).join(' ') + '\n';
+    }
+    return text;
+  }
+  return '';
+}
+
+function loadScript(src) {
+  return new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = src; s.onload = res; s.onerror = rej;
+    document.head.appendChild(s);
+  });
+}
+
+function chunkText(text, source) {
+  text = text.replace(/\s+/g, ' ').trim();
+  const words = text.split(' ');
+  const chunks = [];
+  let i = 0;
+  while (i < words.length) {
+    const chunk = words.slice(i, i + CHUNK_SIZE).join(' ');
+    if (chunk.length > 50) chunks.push({ content: chunk, source });
+    i += CHUNK_SIZE - OVERLAP;
+  }
+  return chunks;
+}
+
+function log(msg, type = 'line') {
+  const div = document.getElementById('log');
+  const line = document.createElement('div');
+  line.className = `log-${type}`; line.textContent = msg;
+  div.appendChild(line); div.scrollTop = div.scrollHeight;
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function startUpload() {
+  const embedUrl = document.getElementById('embedUrl').value.trim();
+  if (!embedUrl) { alert('Điền Vercel Embed URL'); return; }
+  if (!selectedFiles.length) { alert('Chưa chọn file'); return; }
+
+  const btn = document.getElementById('btnUpload');
+  btn.disabled = true; btn.textContent = '⟳ Đang xử lý...';
+  document.getElementById('progressWrap').classList.add('visible');
+  document.getElementById('log').innerHTML = '';
+
+  // Extract & chunk
+  log('Đang đọc tài liệu...', 'info');
+  let allChunks = [];
+  for (let i = 0; i < selectedFiles.length; i++) {
+    const file = selectedFiles[i];
+    const st = document.getElementById(`status-${i}`);
+    try {
+      st.textContent = '⟳'; st.style.color = 'var(--blue)';
+      const text = await extractText(file);
+      const source = file.name.replace(/\.[^.]+$/, '');
+      const chunks = chunkText(text, source);
+      allChunks.push(...chunks);
+      st.textContent = `${chunks.length} ch`; st.style.color = 'var(--green)';
+      log(`✓ ${file.name}: ${chunks.length} chunks`, 'ok');
+    } catch(e) {
+      st.textContent = 'ERR'; st.style.color = 'var(--red)';
+      log(`✗ ${file.name}: ${e.message}`, 'err');
+    }
+  }
+
+  log(`\nTổng: ${allChunks.length} chunks. Gửi lên Vercel để embed...`, 'info');
+  document.getElementById('statTotal').textContent = allChunks.length;
+
+  let success = 0, errors = 0;
+
+  for (let i = 0; i < allChunks.length; i += BATCH_SIZE) {
+    const batch = allChunks.slice(i, i + BATCH_SIZE);
+    try {
+      const resp = await fetch(embedUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chunks: batch }),
+      });
+      const result = await resp.json();
+      if (!resp.ok) throw new Error(result.error || resp.statusText);
+      success += result.ok;
+      if (result.errors?.length) {
+        result.errors.forEach(e => log(`✗ ${e}`, 'err'));
+        errors += result.errors.length;
+      }
+    } catch(e) {
+      errors += batch.length;
+      log(`✗ Batch ${i}-${i+BATCH_SIZE}: ${e.message}`, 'err');
+      await sleep(2000);
+    }
+
+    document.getElementById('statOk').textContent = success;
+    document.getElementById('statErr').textContent = errors;
+    const pct = Math.round((i + BATCH_SIZE) / allChunks.length * 100);
+    document.getElementById('progressBar').style.width = Math.min(pct,100) + '%';
+    document.getElementById('progressText').textContent = `${Math.min(i+BATCH_SIZE, allChunks.length)} / ${allChunks.length} chunks — ${Math.min(pct,100)}%`;
+
+    await sleep(200);
+  }
+
+  if (errors === 0) {
+    log(`\n✅ HOÀN TẤT! ${success} chunks đã upload lên Supabase.`, 'done');
+    log(`App Tử Vi giờ sẽ tra cứu tài liệu này khi luận giải.`, 'done');
+    btn.textContent = '✅ Hoàn tất';
+    btn.style.borderColor = 'var(--green)'; btn.style.color = 'var(--green)';
+  } else {
+    log(`\n⚠ Xong với ${errors} lỗi. ${success} chunks OK.`, 'info');
+    btn.disabled = false; btn.textContent = '↺ Chạy lại';
+  }
+}
+</script>
+</body>
+</html>
