@@ -1,3 +1,4 @@
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 
@@ -122,8 +123,8 @@ module.exports = async function handler(req, res) {
     const body = req.body;
     const { hoTen = 'Bạn', nam, gioiTinh, namXem, laSoText, phan = 1, docs = '' } = body;
 
-    const apiKey = process.env.ANTHROPIC_API_KEY;
-    if (!apiKey) setHeaders(res); return res.status(500).json({ error: 'Thiếu ANTHROPIC_API_KEY.' });
+    const apiKey = ANTHROPIC_API_KEY;
+    if (!apiKey) { setHeaders(res); return res.status(500).json({ error: 'Thiếu ANTHROPIC_API_KEY.' }); }
     if (!laSoText) setHeaders(res); return res.status(400).json({ error: 'Không có dữ liệu lá số.' });
 
     const gioi = gioiTinh === 'nam' ? 'nam' : 'nữ';
