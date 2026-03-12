@@ -19,92 +19,88 @@ const PROMPTS = {
 === TÀI LIỆU THAM KHẢO ===
 ${docs}
 
-Thực hiện PHẦN 1 — TỔNG QUAN LÁ SỐ (~400-500 từ).
-Trình bày: bảng tóm tắt + đoạn văn giải thích.
+PHẦN 1 — TỔNG QUAN LÁ SỐ
 
-## Bảng PRE-CHECK
-| Mục | Kết quả | Đánh giá |
-|-----|---------|---------|
-| Thuận/Nghịch lý | ... | ... |
-| Ngũ hành chuỗi | ... | ... |
-| Mệnh vs Cục | ... | ... |
-| Chính tinh Mệnh | ... | ... |
-| Cung Phúc Đức | ... | ... |
+Phân tích tổng thể lá số, bao gồm:
+- Bản Mệnh – Cục
+- Cung Mệnh và Cung Thân
+- Chính tinh thủ Mệnh
+- Khí chất con người
+- Ưu điểm nổi bật
+- Nhược điểm dễ gặp
+- Xu hướng cuộc đời (an ổn, biến động, bôn ba, phú quý, v.v.)
 
-## Khí chất & Tinh hệ
-Dựa trên Lục Thập Hoa Giáp, viết 1 đoạn văn ~200 từ về bản chất, khí chất, ưu khuyết cố hữu của tinh hệ này.
-
-## Cách cục nổi bật
-Liệt kê ngắn gọn (nếu có).`,
+Mục tiêu: giúp người đọc hiểu bản chất con người và đường đời tổng quát. Không đi quá chi tiết từng cung.`,
 
   2: (ctx, docs) => `${ctx}
 
 === TÀI LIỆU THAM KHẢO ===
 ${docs}
 
-Thực hiện PHẦN 2 — LUẬN GIẢI 12 CUNG (~400-500 từ).
-Trình bày: bảng tóm tắt 12 cung + đoạn văn phân tích 3 cung quan trọng nhất.
+PHẦN 2 — LUẬN GIẢI 12 CUNG
 
-## Bảng 12 Cung
-| Cung | Chính tinh | Đánh giá nhanh |
-|------|-----------|----------------|
-(liệt kê đủ 12 cung, đánh giá 1-3 từ: Rất tốt / Tốt / Trung / Kém / Xấu)
+Luận giải lần lượt 12 cung theo thứ tự: Mệnh, Phụ Mẫu, Phúc Đức, Điền Trạch, Quan Lộc, Nô Bộc, Thiên Di, Tật Ách, Tài Bạch, Tử Tức, Phu Thê, Huynh Đệ.
 
-## Phân tích chi tiết 3 cung quan trọng nhất
-Chọn 3 cung ảnh hưởng lớn nhất → mỗi cung 1 đoạn ngắn ~50 từ, luận hệ thống 4 cung.`,
+Với mỗi cung phân tích:
+- Ý nghĩa chính của cung đó trong lá số
+- Tính chất các sao chính
+- Tác động tốt – xấu
+- Những khuynh hướng dễ xảy ra trong đời
+
+Luận giải dễ hiểu, thực tế, không dùng quá nhiều thuật ngữ khó.`,
 
   3: (ctx, docs) => `${ctx}
 
 === TÀI LIỆU THAM KHẢO ===
 ${docs}
 
-Thực hiện PHẦN 3 — ĐẠI VẬN TOÀN ĐỜI (~400-500 từ).
-Trình bày: bảng scoring tất cả vận + đoạn văn luận 3 vận đáng chú ý nhất.
+PHẦN 3 — ĐẠI VẬN TOÀN ĐỜI
+
+Lập bảng so sánh tốt/xấu theo thang điểm 10 cho từng đại vận (tính toán scoring theo Thiên Thời / Địa Lợi / Nhân Hòa).
 
 ## Bảng Đại Vận
-| Vận | Tuổi | Cung | Thiên Thời | Địa Lợi | Nhân Hòa | Tổng | Flag |
-|-----|------|------|-----------|---------|---------|------|------|
-(chạy đủ scoring engine cho từng vận theo system prompt)
+| Đại vận | Tuổi | Cung | Thiên Thời | Địa Lợi | Nhân Hòa | Tổng /10 | Flag |
+|---------|------|------|-----------|---------|---------|---------|------|
 
-## Luận 3 vận đáng chú ý
-Chọn 3 vận quan trọng nhất (tốt nhất hoặc xấu nhất) → mỗi vận 1 đoạn ~60 từ, kết hợp Lục Thập Hoa Giáp.`,
+Sau bảng, với mỗi đại vận nêu:
+- Xu hướng vận trình (tốt / trung bình / thử thách)
+- Công việc, tài chính, tình cảm, sức khỏe
+- Cơ hội và điều cần thận trọng
+
+Mục tiêu: giúp người đọc nhìn được dòng chảy cuộc đời theo từng giai đoạn.`,
 
   4: (ctx, docs) => `${ctx}
 
 === TÀI LIỆU THAM KHẢO ===
 ${docs}
 
-Thực hiện PHẦN 4 — VẬN HIỆN TẠI & SẮP TỚI (~400-500 từ).
-Trình bày: bảng tóm tắt + đoạn văn phân tích chi tiết.
+PHẦN 4 — ĐẠI VẬN & TIỂU VẬN HIỆN TẠI
 
-## Bảng Vận Đang Đi
-| Mục | Chi tiết | Đánh giá |
-|-----|---------|---------|
-| Đại vận hiện tại | ... | ... |
-| Tiểu hạn năm xem | ... | ... |
-| Lưu Thái Tuế | ... | ... |
-| Sao lưu động đáng chú ý | ... | ... |
+Xác định đại vận (10 năm) và tiểu vận (1 năm) đang đi dựa trên năm xem. Phân tích bao gồm:
+- Xu hướng vận khí năm nay
+- Công việc – tài chính
+- Quan hệ – gia đình
+- Sức khỏe
+- Những điều nên làm
+- Những điều nên tránh
 
-## Phân tích chi tiết
-Viết 1 đoạn văn ~250 từ về vận đang đi: cơ hội, thách thức, khuyến nghị hành động cụ thể.`,
+Phần này cụ thể và thực tế hơn các phần trước.`,
 
   5: (ctx, docs) => `${ctx}
 
 === TÀI LIỆU THAM KHẢO ===
 ${docs}
 
-Thực hiện PHẦN 5 — TỔNG KẾT (~400-500 từ).
-Trình bày: bảng so sánh + đoạn văn tổng kết.
+PHẦN 5 — TỔNG KẾT & LỜI KHUYÊN
 
-## Bảng Tổng Kết Vận Trình
-| Giai đoạn | Tuổi | Tính chất | Khuyến nghị |
-|-----------|------|-----------|------------|
-| Tốt nhất | ... | ... | ... |
-| Khó nhất | ... | ... | ... |
-| Bước ngoặt | ... | ... | ... |
+Tổng hợp lại toàn bộ lá số:
+- Những điểm mạnh lớn của cuộc đời
+- Những thử thách nghiệp duyên
+- Bài học nhân sinh cần hiểu
 
-## Tổng kết cuộc đời
-Viết 1 đoạn văn ~250 từ theo lối kể chuyện: vận trình tổng thể, điểm sáng, thách thức lớn, lời khuyên sống.`,
+Sau đó đưa ra lời khuyên theo tinh thần Phật giáo: sống thiện, buông chấp, tích phúc, tu tâm dưỡng tính, làm việc thiện.
+
+Giọng văn nhẹ nhàng, mang tính khai mở nhận thức, không gây sợ hãi.`,
 };
 
 module.exports = async function handler(req, res) {
