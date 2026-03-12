@@ -362,13 +362,29 @@ select.form-input { cursor: pointer; }
     lines.push(`Sinh năm: ${a.chineseDate} | Giờ: ${a.time}`);
     lines.push('');
     for (const p of a.palaces) {
-      const stars = p.majorStars.map(s=>`${s.name}(${s.brightness||''}${s.mutagen?'/'+s.mutagen:''})`).join(' ');
-      const minor = p.minorStars.map(s=>s.name).join(' ');
-      const adjo  = p.adjectiveStars.map(s=>s.name).join(' ');
-      lines.push(`[${p.name}] cung ${p.earthlyBranch} | ${p.decadal?.range||''}`);
-      lines.push(`  Chính tinh: ${stars||'(trống)'}`);
-      if (minor) lines.push(`  Phụ tinh: ${minor}`);
-      if (adjo)  lines.push(`  Tạp tinh: ${adjo}`);
+      const fmtStar = s => {
+        let txt = s.name;
+        if (s.brightness) txt += `(${s.brightness})`;
+        if (s.mutagen)    txt += `[${s.mutagen}]`;
+        return txt;
+      };
+      const major  = (p.majorStars||[]).map(fmtStar).join(' ');
+      const minor  = (p.minorStars||[]).map(fmtStar).join(' ');
+      const adjo   = (p.adjectiveStars||[]).map(s=>s.name).join(' ');
+      const yearly = (p.yearlyDecStar||p.yearlyStars||[]).map(s=>s.name||s).join(' ');
+      const decStar= (p.decadalStars||[]).map(s=>s.name||s).join(' ');
+
+      const vanInfo = [];
+      if (p.decadal?.range) vanInfo.push(`Đại vận: ${p.decadal.range[0]}–${p.decadal.range[1]}`);
+      if (p.ages) vanInfo.push(`Tiểu hạn: ${Array.isArray(p.ages)?p.ages.join(','):p.ages}`);
+      if (p.isBodyPalace) vanInfo.push('THÂN CUNG');
+
+      lines.push(`[${p.name}] ${p.earthlyBranch}${vanInfo.length?' | '+vanInfo.join(' | '):''}`);
+      lines.push(`  Chính tinh: ${major||'(vô chính diệu)'}`);
+      if (minor)   lines.push(`  Phụ tinh: ${minor}`);
+      if (adjo)    lines.push(`  Tạp tinh: ${adjo}`);
+      if (yearly)  lines.push(`  Sao năm: ${yearly}`);
+      if (decStar) lines.push(`  Sao vận: ${decStar}`);
     }
     return lines.join('\n');
   }
@@ -537,13 +553,14 @@ select.form-input { cursor: pointer; }
       if (!dc) return `<div class="cung-cell empty"></div>`;
       const p = palaces.find(x => x.earthlyBranch === dc) || {};
       const main  = (p.majorStars||[]).map(s=>`<strong>${s.name}</strong>${s.mutagen?` <em>${s.mutagen}</em>`:''}`).join(' ');
-      const minor = (p.minorStars||[]).slice(0,4).map(s=>s.name).join(' · ');
+      const minor = (p.minorStars||[]).map(s=>s.name).join(' · ');
+      const adjo  = (p.adjectiveStars||[]).map(s=>s.name).join(' · ');
       const van   = p.decadal?.range ? `${p.decadal.range[0]}–${p.decadal.range[1]}` : '';
       return `<div class="cung-cell">
         <div class="cung-name">${p.name||''}${p.isBodyPalace?' · THÂN':''}</div>
         <div class="cung-diachi">${dc}</div>
         ${van?`<div class="cung-van">${van}</div>`:''}
-        <div class="cung-stars">${main}${minor?`<br><span class="cung-minor">${minor}</span>`:''}</div>
+        <div class="cung-stars">${main}${minor?`<br><span class="cung-minor">${minor}</span>`:''}${adjo?`<br><span class="cung-minor" style="color:var(--text-lt)">${adjo}</span>`:''}</div>
       </div>`;
     }).join('');
 
