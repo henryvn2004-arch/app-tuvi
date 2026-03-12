@@ -19,7 +19,7 @@ const PROMPTS = {
 === TÀI LIỆU THAM KHẢO ===
 ${docs}
 
-PHẦN 1 — TỔNG QUAN LÁ SỐ
+PHẦN 1 — TỔNG QUAN LÁ SỐ (300-400 từ)
 
 Phân tích tổng thể lá số, bao gồm:
 - Bản Mệnh – Cục
@@ -28,24 +28,21 @@ Phân tích tổng thể lá số, bao gồm:
 - Khí chất con người
 - Ưu điểm nổi bật
 - Nhược điểm dễ gặp
-- Xu hướng cuộc đời (an ổn, biến động, bôn ba, phú quý, v.v.)
 
-Mục tiêu: giúp người đọc hiểu bản chất con người và đường đời tổng quát. Không đi quá chi tiết từng cung.`,
+Mục tiêu: giúp người đọc hiểu bản chất con người và đường đời tổng quát. Không đi chi tiết từng cung.`,
 
   2: (ctx, docs) => `${ctx}
 
 === TÀI LIỆU THAM KHẢO ===
 ${docs}
 
-PHẦN 2 — LUẬN GIẢI 12 CUNG
+PHẦN 2 — LUẬN GIẢI 12 CUNG (300-400 từ)
 
 Luận giải lần lượt 12 cung theo thứ tự: Mệnh, Phụ Mẫu, Phúc Đức, Điền Trạch, Quan Lộc, Nô Bộc, Thiên Di, Tật Ách, Tài Bạch, Tử Tức, Phu Thê, Huynh Đệ.
 
-Với mỗi cung phân tích:
-- Ý nghĩa chính của cung đó trong lá số
+Với mỗi cung phân tích ngắn gọn (30-40 từ):
 - Tính chất các sao chính
 - Tác động tốt – xấu
-- Những khuynh hướng dễ xảy ra trong đời
 
 Luận giải dễ hiểu, thực tế, không dùng quá nhiều thuật ngữ khó.`,
 
@@ -54,18 +51,15 @@ Luận giải dễ hiểu, thực tế, không dùng quá nhiều thuật ngữ 
 === TÀI LIỆU THAM KHẢO ===
 ${docs}
 
-PHẦN 3 — ĐẠI VẬN TOÀN ĐỜI
+PHẦN 3 — ĐẠI VẬN TOÀN ĐỜI (300-400 từ)
 
-Lập bảng so sánh tốt/xấu theo thang điểm 10 cho từng đại vận (tính toán scoring theo Thiên Thời / Địa Lợi / Nhân Hòa).
+Với từng đại vận, trình bày theo format:
 
-## Bảng Đại Vận
-| Đại vận | Tuổi | Cung | Thiên Thời | Địa Lợi | Nhân Hòa | Tổng /10 | Flag |
-|---------|------|------|-----------|---------|---------|---------|------|
-
-Sau bảng, với mỗi đại vận nêu:
-- Xu hướng vận trình (tốt / trung bình / thử thách)
-- Công việc, tài chính, tình cảm, sức khỏe
-- Cơ hội và điều cần thận trọng
+**[Đại vận tuổi X–Y] — Cung [tên cung]**
+- Thiên Thời / Địa Lợi / Nhân Hòa: [đánh giá sinh khắc, tốt/xấu]
+- Điểm: [X/10] | Xu hướng: Tốt / Trung bình / Thử thách
+- Công việc, tài chính, tình cảm, sức khỏe: [tóm tắt]
+- Cơ hội & thận trọng: [1-2 điểm]
 
 Mục tiêu: giúp người đọc nhìn được dòng chảy cuộc đời theo từng giai đoạn.`,
 
@@ -74,9 +68,9 @@ Mục tiêu: giúp người đọc nhìn được dòng chảy cuộc đời the
 === TÀI LIỆU THAM KHẢO ===
 ${docs}
 
-PHẦN 4 — ĐẠI VẬN & TIỂU VẬN HIỆN TẠI
+PHẦN 4 — ĐẠI VẬN & TIỂU VẬN HIỆN TẠI (300-400 từ)
 
-Xác định đại vận (10 năm) và tiểu vận (1 năm) đang đi dựa trên năm xem. Phân tích bao gồm:
+Xác định đại vận (10 năm) và tiểu vận (1 năm) đang đi dựa trên năm xem. Phân tích:
 - Xu hướng vận khí năm nay
 - Công việc – tài chính
 - Quan hệ – gia đình
@@ -91,7 +85,7 @@ Phần này cụ thể và thực tế hơn các phần trước.`,
 === TÀI LIỆU THAM KHẢO ===
 ${docs}
 
-PHẦN 5 — TỔNG KẾT & LỜI KHUYÊN
+PHẦN 5 — TỔNG KẾT & LỜI KHUYÊN (300-400 từ)
 
 Tổng hợp lại toàn bộ lá số:
 - Những điểm mạnh lớn của cuộc đời
