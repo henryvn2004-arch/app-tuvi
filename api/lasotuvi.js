@@ -1,5 +1,3 @@
-export const config = { runtime: 'edge' };
-
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 
@@ -108,25 +106,25 @@ Trình bày: bảng so sánh + đoạn văn tổng kết.
 Viết 1 đoạn văn ~250 từ theo lối kể chuyện: vận trình tổng thể, điểm sáng, thách thức lớn, lời khuyên sống.`,
 };
 
-export default async function handler(req) {
+module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') {
-    return new Response(null, {
-      headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type' },
-    });
+    return res.status(200).end();
   }
 
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Content-Type': 'application/json; charset=utf-8',
+  const setHeaders = (res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
   };
 
   try {
-    const body = await req.json();
+    const body = req.body;
     const { hoTen = 'Bạn', nam, gioiTinh, namXem, laSoText, phan = 1, docs = '' } = body;
 
     const apiKey = process.env.ANTHROPIC_API_KEY;
-    if (!apiKey) return new Response(JSON.stringify({ error: 'Thiếu ANTHROPIC_API_KEY.' }), { status: 500, headers: corsHeaders });
-    if (!laSoText) return new Response(JSON.stringify({ error: 'Không có dữ liệu lá số.' }), { status: 400, headers: corsHeaders });
+    if (!apiKey) setHeaders(res); return res.status(500).json({ error: 'Thiếu ANTHROPIC_API_KEY.' });
+    if (!laSoText) setHeaders(res); return res.status(400).json({ error: 'Không có dữ liệu lá số.' });
 
     const gioi = gioiTinh === 'nam' ? 'nam' : 'nữ';
     const ctx = `Lá số của: ${hoTen}, sinh năm ${nam}, ${gioi}, năm xem: ${namXem || new Date().getFullYear()}.\n\nDỮ LIỆU LÁ SỐ:\n${laSoText}`;
@@ -147,14 +145,14 @@ export default async function handler(req) {
 
     if (!resp.ok) {
       const err = await resp.text();
-      if (err.includes('overloaded')) return new Response(JSON.stringify({ error: 'Claude đang bận, thử lại sau 30 giây.' }), { status: 503, headers: corsHeaders });
-      return new Response(JSON.stringify({ error: `Lỗi Claude API: ${err.slice(0, 200)}` }), { status: 500, headers: corsHeaders });
+      if (err.includes('overloaded')) setHeaders(res); return res.status(503).json({ error: 'Claude đang bận, thử lại sau 30 giây.' });
+      setHeaders(res); return res.status(500).json({ error: `Lỗi Claude API: ${err.slice(0, 200)}` });
     }
 
     const data = await resp.json();
-    return new Response(JSON.stringify({ luanGiai: data.content[0].text }), { status: 200, headers: corsHeaders });
+    setHeaders(res); return res.status(200).json({ luanGiai: data.content[0].text });
 
   } catch (e) {
-    return new Response(JSON.stringify({ error: `Lỗi server: ${e.message}` }), { status: 500, headers: corsHeaders });
+    setHeaders(res); return res.status(500).json({ error: `Lỗi server: ${e.message}` });
   }
 }
