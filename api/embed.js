@@ -1,22 +1,20 @@
-export const config = { runtime: 'edge' };
-
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
-export default async function handler(req) {
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Content-Type': 'application/json',
+module.exports = async function handler(req, res) {
+  const setHeaders = (res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
   };
 
-  if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
+  if (req.method === 'OPTIONS') { setHeaders(res); return res.status(200).end(); }
 
   try {
-    const { chunks } = await req.json();
-    if (!chunks || !chunks.length) return new Response(JSON.stringify({ error: 'No chunks' }), { status: 400, headers: corsHeaders });
+    const { chunks } = req.body;
+    if (!chunks || !chunks.length) setHeaders(res); return res.status(400).json({ error: 'No chunks' });
 
     const results = { ok: 0, errors: [] };
 
@@ -58,9 +56,9 @@ export default async function handler(req) {
       }
     }
 
-    return new Response(JSON.stringify(results), { status: 200, headers: corsHeaders });
+    setHeaders(res); return res.status(200).json(results);
 
   } catch (e) {
-    return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsHeaders });
+    setHeaders(res); return res.status(500).json({ error: e.message });
   }
 }
