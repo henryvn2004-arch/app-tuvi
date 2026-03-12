@@ -435,16 +435,19 @@ select.form-input { cursor: pointer; }
     updateMucLuc(_currentPhan, 'loading');
 
     try {
-      loaderText.textContent = `Tìm tài liệu liên quan... (1/2)`;
-      document.getElementById('progress-fill').style.width = '40%';
       let docs = '';
-      try {
-        const sr = await fetch('/api/search', {
-          method: 'POST', headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({ query: QUERIES[_currentPhan](), matchCount: _currentPhan <= 2 ? 8 : 5 })
-        });
-        docs = (await sr.json()).docs || '';
-      } catch(e) { console.warn('RAG:', e.message); }
+      if (_currentPhan <= 2) {
+        // RAG chỉ cho phần 1-2 (quan trọng nhất — cần tra Lục Thập Hoa Giáp)
+        loaderText.textContent = `Tìm tài liệu liên quan... (1/2)`;
+        document.getElementById('progress-fill').style.width = '40%';
+        try {
+          const sr = await fetch('/api/search', {
+            method: 'POST', headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({ query: QUERIES[_currentPhan](), matchCount: 6 })
+          });
+          docs = (await sr.json()).docs || '';
+        } catch(e) { console.warn('RAG:', e.message); }
+      }
 
       loaderText.textContent = `Đang luận giải: ${PHAN_LABELS[_currentPhan]}... (2/2)`;
       document.getElementById('progress-fill').style.width = '70%';
