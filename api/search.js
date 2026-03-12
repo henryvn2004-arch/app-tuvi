@@ -12,7 +12,7 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') { setHeaders(res); return res.status(200).end(); }
 
   try {
-    const { query, matchCount = 6 } = req.body;
+    const { query, matchCount = 6 } = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
     if (!query) setHeaders(res); return res.status(200).json({ docs: '' });
 
     // Embed query

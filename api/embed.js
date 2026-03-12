@@ -13,7 +13,7 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') { setHeaders(res); return res.status(200).end(); }
 
   try {
-    const { chunks } = req.body;
+    const { chunks } = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
     if (!chunks || !chunks.length) setHeaders(res); return res.status(400).json({ error: 'No chunks' });
 
     const results = { ok: 0, errors: [] };
