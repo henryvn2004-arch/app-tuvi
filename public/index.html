@@ -547,11 +547,14 @@ select.form-input { cursor: pointer; }
         <span class="result-info-item">Xem vận năm ${namXem}</span>
       </div>`;
 
-    const ORDER = ['Tị','Ngọ','Mùi','Thân','Thìn',null,null,'Dậu','Mão',null,null,'Tuất','Dần','Sửu','Tý','Hợi'];
+    const ORDER = ['Tỵ','Ngọ','Mùi','Thân','Thìn',null,null,'Dậu','Mão',null,null,'Tuất','Dần','Sửu','Tý','Hợi'];
     const palaces = a.palaces || [];
     document.getElementById('laso-grid').innerHTML = ORDER.map(dc => {
       if (!dc) return `<div class="cung-cell empty"></div>`;
-      const p = palaces.find(x => x.earthlyBranch === dc) || {};
+      const p = palaces.find(x => x.earthlyBranch === dc
+        || x.earthlyBranch?.toLowerCase() === dc.toLowerCase()
+        || x.earthlyBranch === dc.replace('ỵ','ị').replace('ị','ỵ')
+      ) || {};
       const main  = (p.majorStars||[]).map(s=>`<strong>${s.name}</strong>${s.mutagen?` <em>${s.mutagen}</em>`:''}`).join(' ');
       const minor = (p.minorStars||[]).map(s=>s.name).join(' · ');
       const adjo  = (p.adjectiveStars||[]).map(s=>s.name).join(' · ');
@@ -565,6 +568,7 @@ select.form-input { cursor: pointer; }
     }).join('');
 
     document.getElementById('result-section').classList.add('active');
+    console.log('Palaces:', palaces.map(p => `${p.name}=${p.earthlyBranch}`));
   }
 
   function renderMarkdown(text) {
