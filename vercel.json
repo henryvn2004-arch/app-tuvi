@@ -2,6 +2,7 @@
   "version": 2,
   "routes": [
     { "src": "/api/lasotuvi", "dest": "/api/lasotuvi.js" },
+    { "src": "/api/embed", "dest": "/api/embed.js" },
     { "src": "/(.*)", "dest": "/public/$1" }
   ]
 }
