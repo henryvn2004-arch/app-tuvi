@@ -4,8 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tử Vi Luận Giải</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -24,11 +23,11 @@
   --red:       #C0392B;
   --green:     #1E6B3C;
 }
-body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 
 /* NAV */
 .topnav { position: sticky; top: 0; z-index: 200; background: var(--navy); display: flex; align-items: center; height: 60px; padding: 0 56px; }
-.nav-logo { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 400; color: #fff; flex: 1; }
+.nav-logo { font-family: Arial, sans-serif; font-size: 18px; font-weight: 400; color: #fff; flex: 1; }
 .nav-logo em { font-style: italic; color: #8BAACC; font-size: 14px; margin-left: 10px; }
 .nav-tag { font-size: 10px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #8BAACC; }
 
@@ -39,13 +38,13 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .hero { padding: 80px 0 64px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 1fr 380px; gap: 80px; align-items: start; }
 .hero-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--blue); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
 .hero-eyebrow::after { content: ''; width: 32px; height: 1px; background: var(--blue); }
-.hero h1 { font-family: 'Playfair Display', serif; font-size: 54px; font-weight: 400; line-height: 1.07; color: var(--navy); margin-bottom: 28px; letter-spacing: -0.5px; }
+.hero h1 { font-family: Arial, sans-serif; font-size: 54px; font-weight: 400; line-height: 1.07; color: var(--navy); margin-bottom: 28px; letter-spacing: -0.5px; }
 .hero h1 em { font-style: italic; color: var(--gold); }
-.hero-desc { font-family: 'Source Serif 4', serif; font-size: 18px; color: var(--text-mid); line-height: 1.8; font-weight: 300; max-width: 480px; }
+.hero-desc { font-family: Arial, sans-serif; font-size: 18px; color: var(--text-mid); line-height: 1.8; font-weight: 300; max-width: 480px; }
 .hero-right { background: var(--bg-soft); border: 1px solid var(--border); padding: 32px 28px; }
 .hero-stat { padding-bottom: 20px; margin-bottom: 20px; border-bottom: 1px solid var(--border); }
 .hero-stat:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-.hero-stat-num { font-family: 'Playfair Display', serif; font-size: 34px; color: var(--navy); font-weight: 400; }
+.hero-stat-num { font-family: Arial, sans-serif; font-size: 34px; color: var(--navy); font-weight: 400; }
 .hero-stat-label { font-size: 12px; color: var(--text-lt); margin-top: 3px; line-height: 1.4; }
 
 /* FORM */
@@ -58,12 +57,12 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .form-col-title { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--navy); margin-bottom: 28px; padding-bottom: 14px; border-bottom: 2px solid var(--navy); }
 .form-group { margin-bottom: 24px; }
 .form-label { display: block; font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 8px; }
-.form-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--border); padding: 10px 0; font-size: 16px; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s; }
+.form-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--border); padding: 10px 0; font-size: 16px; color: var(--text); font-family: Arial, sans-serif; outline: none; transition: border-color 0.2s; }
 .form-input:focus { border-color: var(--navy); }
 .form-input::placeholder { color: #C4C4C4; }
 select.form-input { cursor: pointer; }
 .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-.btn-submit { width: 100%; background: var(--navy); color: white; border: none; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; cursor: pointer; transition: background 0.2s; margin-top: 4px; }
+.btn-submit { width: 100%; background: var(--navy); color: white; border: none; padding: 16px; font-family: Arial, sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; cursor: pointer; transition: background 0.2s; margin-top: 4px; }
 .btn-submit:hover { background: var(--navy-mid); }
 .btn-submit:disabled { background: #aaa; cursor: not-allowed; }
 
@@ -84,7 +83,7 @@ select.form-input { cursor: pointer; }
 
 .result-header { padding: 60px 0 40px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
 .result-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--blue); margin-bottom: 16px; }
-.result-name { font-family: 'Playfair Display', serif; font-size: 44px; font-weight: 400; color: var(--navy); margin-bottom: 14px; }
+.result-name { font-family: Arial, sans-serif; font-size: 44px; font-weight: 400; color: var(--navy); margin-bottom: 14px; }
 .result-info { display: flex; gap: 0; flex-wrap: wrap; }
 .result-info-item { font-size: 14px; color: var(--text-lt); padding-right: 20px; margin-right: 20px; border-right: 1px solid var(--border); }
 .result-info-item:last-child { border-right: none; }
@@ -128,10 +127,10 @@ select.form-input { cursor: pointer; }
 .phan-section { border-top: 1px solid var(--border); padding: 56px 0; }
 .phan-section:first-child { border-top: 2px solid var(--navy); }
 .phan-num { font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--blue); margin-bottom: 12px; }
-.phan-section h2 { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 400; color: var(--navy); margin-bottom: 28px; }
-.phan-section h3 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 500; color: var(--navy); margin: 36px 0 16px; padding-top: 28px; border-top: 1px solid var(--border-lt); }
-.phan-section p { font-family: 'Source Serif 4', serif; font-size: 17px; line-height: 1.85; color: var(--text-mid); margin-bottom: 18px; font-weight: 300; max-width: 760px; }
-.phan-section strong { color: var(--text); font-weight: 600; font-family: 'DM Sans', sans-serif; }
+.phan-section h2 { font-family: Arial, sans-serif; font-size: 30px; font-weight: 400; color: var(--navy); margin-bottom: 28px; }
+.phan-section h3 { font-family: Arial, sans-serif; font-size: 20px; font-weight: 500; color: var(--navy); margin: 36px 0 16px; padding-top: 28px; border-top: 1px solid var(--border-lt); }
+.phan-section p { font-family: Arial, sans-serif; font-size: 17px; line-height: 1.85; color: var(--text-mid); margin-bottom: 18px; font-weight: 300; max-width: 760px; }
+.phan-section strong { color: var(--text); font-weight: 600; font-family: Arial, sans-serif; }
 .phan-section em { font-style: italic; color: var(--gold); }
 .phan-anchor { display: block; height: 0; scroll-margin-top: 76px; }
 
@@ -146,10 +145,18 @@ select.form-input { cursor: pointer; }
 
 /* ACTIONS */
 .result-actions { display: none; align-items: center; gap: 16px; padding: 40px 0 72px; border-top: 1px solid var(--border); margin-top: 8px; }
-.btn-next-phan { display: none; background: var(--navy); color: white; border: none; padding: 14px 32px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
-.btn-next-phan:hover { background: var(--navy-mid); }
-.btn-next-phan:disabled { background: #ccc; cursor: not-allowed; }
-.btn-pdf { display: none; background: transparent; color: var(--navy); border: 1.5px solid var(--navy); padding: 13px 28px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
+.btn-next-phan { display: none; background: var(--navy); color: white; border: none; padding: 14px 32px; font-family: Arial, sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: background 0.2s; align-items: center; gap: 10px; }
+.btn-next-phan:hover:not(:disabled) { background: var(--navy-mid); }
+.btn-next-phan:disabled { background: #999; cursor: not-allowed; }
+.btn-next-phan.loading { display: flex !important; }
+.spinner { display: none; width: 15px; height: 15px; border: 2px solid rgba(255,255,255,0.35); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
+.btn-next-phan.loading .spinner { display: inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.phan-loading { display: none; align-items: center; gap: 16px; padding: 48px 0; border-top: 2px solid var(--navy); }
+.phan-loading.active { display: flex; }
+.phan-loading-spinner { width: 28px; height: 28px; border: 3px solid var(--border-lt); border-top-color: var(--navy); border-radius: 50%; animation: spin 0.8s linear infinite; }
+.phan-loading-text { font-size: 14px; color: var(--text-lt); letter-spacing: 0.5px; }
+.btn-pdf { display: none; background: transparent; color: var(--navy); border: 1.5px solid var(--navy); padding: 13px 28px; font-family: Arial, sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
 .btn-pdf:hover { background: var(--navy); color: white; }
 .btn-pdf.visible { display: inline-block; }
 .phan-label-text { font-size: 13px; color: var(--text-lt); display: none; }
@@ -321,10 +328,11 @@ select.form-input { cursor: pointer; }
       </div>
     </div>
 
+    <div class="phan-loading" id="phan-loading"><div class="phan-loading-spinner"></div><div class="phan-loading-text" id="phan-loading-text">Đang tải...</div></div>
     <div class="result-body" id="result-body"></div>
 
     <div class="result-actions" id="result-actions">
-      <button class="btn-next-phan" id="btn-next" onclick="loadNextPhan()">Tiếp theo →</button>
+      <button class="btn-next-phan" id="btn-next" onclick="loadNextPhan()"><span class="spinner"></span><span id="btn-next-label">Tiếp theo →</span></button>
       <button class="btn-pdf" id="btn-pdf" onclick="window.print()">Tải PDF</button>
       <span class="phan-label-text" id="phan-label"></span>
     </div>
@@ -444,9 +452,17 @@ select.form-input { cursor: pointer; }
     _currentPhan++;
 
     const btnNext    = document.getElementById('btn-next');
+    const btnLabel   = document.getElementById('btn-next-label');
     const loaderText = document.getElementById('loader-text');
     const loader     = document.getElementById('loader');
+    const phanLoading = document.getElementById('phan-loading');
+    const phanLoadingText = document.getElementById('phan-loading-text');
+
+    // Show loading state
     btnNext.style.display = 'none';
+    btnNext.classList.remove('loading');
+    phanLoading.classList.add('active');
+    phanLoadingText.textContent = `Đang tải: ${PHAN_LABELS[_currentPhan]}...`;
     loader.classList.add('active');
     updateMucLuc(_currentPhan, 'loading');
 
@@ -497,10 +513,12 @@ select.form-input { cursor: pointer; }
         document.getElementById('muc-luc').classList.add('visible');
       }
 
+      phanLoading.classList.remove('active');
       document.getElementById('result-actions').style.display = 'flex';
       if (_currentPhan < TONG_PHAN) {
-        btnNext.textContent = `Phần ${_currentPhan + 1}: ${PHAN_LABELS[_currentPhan + 1]} →`;
-        btnNext.style.display = 'inline-block';
+        const label = `Phần ${_currentPhan + 1}: ${PHAN_LABELS[_currentPhan + 1]} →`;
+        btnLabel.textContent = label;
+        btnNext.style.display = 'inline-flex';
       } else {
         btnNext.style.display = 'none';
         document.getElementById('phan-label').textContent = 'Đã hoàn thành tất cả 5 phần';
@@ -510,6 +528,7 @@ select.form-input { cursor: pointer; }
       section.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     } catch(e) {
+      phanLoading.classList.remove('active');
       document.getElementById('error-msg').textContent = 'Lỗi: ' + e.message;
       document.getElementById('error-msg').classList.add('active');
     } finally {
