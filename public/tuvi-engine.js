@@ -14,13 +14,42 @@ const TAM_HOP_MAP = {
   'Tỵ':  'Kim',  'Dậu': 'Kim',  'Sửu': 'Kim',
 };
 
-// Ngũ hành của địa chi (cho Địa Lợi)
+// Ngũ hành của địa chi (hành cung — dùng cho Địa Lợi)
 const DIA_CHI_HANH = {
   'Tý': 'Thủy', 'Hợi': 'Thủy',
-  'Dần': 'Mộc', 'Mão': 'Mộc',
-  'Tỵ': 'Hỏa',  'Ngọ': 'Hỏa',
-  'Thìn': 'Thổ','Tuất': 'Thổ', 'Sửu': 'Thổ', 'Mùi': 'Thổ',
-  'Thân': 'Kim', 'Dậu': 'Kim',
+  'Dần': 'Mộc',  'Mão': 'Mộc',
+  'Tỵ':  'Hỏa',  'Ngọ': 'Hỏa',
+  'Thìn': 'Thổ', 'Tuất': 'Thổ', 'Sửu': 'Thổ', 'Mùi': 'Thổ',
+  'Thân': 'Kim',  'Dậu': 'Kim',
+};
+
+// Bảng Nạp Âm — mệnh hành theo can chi năm sinh
+const NAP_AM = {
+  'Kim': [
+    'Giáp Tý','Ất Sửu','Giáp Ngọ','Ất Mùi',
+    'Nhâm Thân','Quý Dậu','Nhâm Dần','Quý Mão',
+    'Canh Thìn','Tân Tỵ','Canh Tuất','Tân Hợi',
+  ],
+  'Mộc': [
+    'Mậu Thìn','Kỷ Tỵ','Mậu Tuất','Kỷ Hợi',
+    'Nhâm Ngọ','Quý Mùi','Nhâm Tý','Quý Sửu',
+    'Canh Dần','Tân Mão','Canh Thân','Tân Dậu',
+  ],
+  'Thủy': [
+    'Bính Tý','Đinh Sửu','Bính Ngọ','Đinh Mùi',
+    'Giáp Thân','Ất Dậu','Giáp Dần','Ất Mão',
+    'Nhâm Thìn','Quý Tỵ','Nhâm Tuất','Quý Hợi',
+  ],
+  'Hỏa': [
+    'Bính Dần','Đinh Mão','Bính Thân','Đinh Dậu',
+    'Giáp Tuất','Ất Hợi','Giáp Thìn','Ất Tỵ',
+    'Mậu Ngọ','Kỷ Mùi','Mậu Tý','Kỷ Sửu',
+  ],
+  'Thổ': [
+    'Canh Ngọ','Tân Mùi','Canh Tý','Tân Sửu',
+    'Mậu Dần','Kỷ Mão','Mậu Thân','Kỷ Dậu',
+    'Bính Tuất','Đinh Hợi','Bính Thìn','Đinh Tỵ',
+  ],
 };
 
 // Ngũ hành sinh khắc
@@ -164,12 +193,20 @@ function getBoChinh(stars) {
 }
 
 /**
- * Lấy hành bản mệnh từ fiveElementsClass
- * VD: "Mộc Tam Cục" → "Mộc"
+ * Lấy hành bản mệnh theo Nạp Âm từ can chi năm sinh
+ * VD: "Giáp Tý" → "Kim" (Hải Trung Kim)
+ * chineseDate format: "Giáp Tý - ..." → lấy phần đầu
  */
-function getMenhHanh(fiveElementsClass) {
-  const match = (fiveElementsClass || '').match(/(Mộc|Hỏa|Thổ|Kim|Thủy)/);
-  return match ? match[1] : null;
+function getMenhHanh(chineseDate) {
+  if (!chineseDate) return null;
+  // Lấy can chi năm sinh (phần đầu trước dấu -)
+  const namSinh = (chineseDate.split(/[-–]/)[0] || '').trim();
+  for (const [hanh, danhSach] of Object.entries(NAP_AM)) {
+    if (danhSach.some(cc => namSinh.includes(cc) || cc.includes(namSinh))) {
+      return hanh;
+    }
+  }
+  return null;
 }
 
 /**
@@ -338,10 +375,10 @@ function getDiaLoiMoTa(quan_he) {
 
 /**
  * Tính Nhân Hòa
- * So bộ chính tinh cung Mệnh vs bộ chính tinh cung đại vận
+ * So bộ chính tinh tam hợp cung Mệnh vs bộ chính tinh tam hợp cung đại vận
  */
-function tinhNhanHoa(menhPalace, daiVanTamPhuong) {
-  const menhStars = getAllStars(menhPalace);
+function tinhNhanHoa(menhTamPhuong, daiVanTamPhuong) {
+  const menhStars = menhTamPhuong.all.flatMap(getAllStars);
   const vanStars = daiVanTamPhuong.all.flatMap(getAllStars);
 
   const boCungMenh = getBoChinh(menhStars);
@@ -468,7 +505,7 @@ function tinhTuoi(namSinh, namXem) {
 function analyzeLaSo(astrolabe, cachCucDB, namXem) {
   const { palaces, fiveElementsClass, chineseDate } = astrolabe;
 
-  const menhHanh  = getMenhHanh(fiveElementsClass);
+  const menhHanh  = getMenhHanh(chineseDate); // Nạp Âm từ can chi năm sinh
   const namSinhDiaChi = getNamSinhDiaChi(chineseDate);
 
   // Lấy năm sinh
@@ -518,7 +555,7 @@ function analyzeLaSo(astrolabe, cachCucDB, namXem) {
       const dvTamPhuong = getTamPhuongTuChinh(palaces, daiVanPalace.earthlyBranch);
       const thienThoi = tinhThienThoi(daiVanPalace.earthlyBranch, namSinhDiaChi);
       const diaLoi    = tinhDiaLoi(daiVanPalace.earthlyBranch, menhHanh);
-      const nhanHoa   = tinhNhanHoa(menhPalace, dvTamPhuong);
+      const nhanHoa   = tinhNhanHoa(menhTamPhuong, dvTamPhuong);
       const score     = scoringDaiVan(thienThoi, diaLoi, nhanHoa);
 
       const dvCachCuc = findActiveCachCuc(cachCucDB, 'Vận Hạn', daiVanPalace, dvTamPhuong);
@@ -537,7 +574,7 @@ function analyzeLaSo(astrolabe, cachCucDB, namXem) {
     if (tieuVanPalace) {
       const tvTamPhuong = getTamPhuongTuChinh(palaces, tieuVanPalace.earthlyBranch);
       const diaLoi  = tinhDiaLoi(tieuVanPalace.earthlyBranch, menhHanh);
-      const nhanHoa = tinhNhanHoa(menhPalace, tvTamPhuong);
+      const nhanHoa = tinhNhanHoa(menhTamPhuong, tvTamPhuong);
 
       const tvCachCuc = findActiveCachCuc(cachCucDB, 'Vận Hạn', tieuVanPalace, tvTamPhuong);
 
