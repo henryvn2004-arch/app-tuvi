@@ -107,8 +107,8 @@ select.form-input { cursor: pointer; }
 .muc-luc { display: none; margin-bottom: 56px; border: 1px solid var(--border); }
 .muc-luc.visible { display: block; }
 .muc-luc-header { background: var(--navy); color: white; padding: 14px 24px; font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; }
-.muc-luc-items { display: grid; grid-template-columns: repeat(5, 1fr); }
-.muc-luc-btn { display: flex; flex-direction: column; gap: 8px; padding: 20px 18px 16px; background: white; border: none; border-right: 1px solid var(--border-lt); cursor: pointer; transition: background 0.15s; text-align: left; }
+.muc-luc-items { display: grid; grid-template-columns: repeat(5, 1fr); flex-wrap: wrap; }
+.muc-luc-btn { display: flex; flex-direction: column; gap: 8px; padding: 16px 14px 12px; background: white; border: none; border-right: 1px solid var(--border-lt); border-bottom: 1px solid var(--border-lt); cursor: pointer; transition: background 0.15s; text-align: left; }
 .muc-luc-btn:last-child { border-right: none; }
 .muc-luc-btn:hover:not(.loading) { background: var(--bg-soft); }
 .muc-luc-btn.active { background: var(--gold-lt); }
@@ -302,28 +302,78 @@ select.form-input { cursor: pointer; }
       <div class="muc-luc-items">
         <button class="muc-luc-btn" id="ml-1" onclick="jumpToPhan(1)">
           <div class="ml-num">1</div>
-          <div class="ml-label">Tổng Quan Lá Số</div>
+          <div class="ml-label">Tổng Quan</div>
           <div class="ml-status" id="ml-status-1">—</div>
         </button>
         <button class="muc-luc-btn" id="ml-2" onclick="jumpToPhan(2)">
           <div class="ml-num">2</div>
-          <div class="ml-label">Luận 12 Cung</div>
+          <div class="ml-label">Cung Mệnh</div>
           <div class="ml-status" id="ml-status-2">—</div>
         </button>
         <button class="muc-luc-btn" id="ml-3" onclick="jumpToPhan(3)">
           <div class="ml-num">3</div>
-          <div class="ml-label">Đại Vận Toàn Đời</div>
+          <div class="ml-label">Phụ Mẫu</div>
           <div class="ml-status" id="ml-status-3">—</div>
         </button>
         <button class="muc-luc-btn" id="ml-4" onclick="jumpToPhan(4)">
           <div class="ml-num">4</div>
-          <div class="ml-label">Vận Hiện Tại</div>
+          <div class="ml-label">Phúc Đức</div>
           <div class="ml-status" id="ml-status-4">—</div>
         </button>
         <button class="muc-luc-btn" id="ml-5" onclick="jumpToPhan(5)">
           <div class="ml-num">5</div>
-          <div class="ml-label">Tổng Kết</div>
+          <div class="ml-label">Điền Trạch</div>
           <div class="ml-status" id="ml-status-5">—</div>
+        </button>
+        <button class="muc-luc-btn" id="ml-6" onclick="jumpToPhan(6)">
+          <div class="ml-num">6</div>
+          <div class="ml-label">Quan Lộc</div>
+          <div class="ml-status" id="ml-status-6">—</div>
+        </button>
+        <button class="muc-luc-btn" id="ml-7" onclick="jumpToPhan(7)">
+          <div class="ml-num">7</div>
+          <div class="ml-label">Nô Bộc</div>
+          <div class="ml-status" id="ml-status-7">—</div>
+        </button>
+        <button class="muc-luc-btn" id="ml-8" onclick="jumpToPhan(8)">
+          <div class="ml-num">8</div>
+          <div class="ml-label">Thiên Di</div>
+          <div class="ml-status" id="ml-status-8">—</div>
+        </button>
+        <button class="muc-luc-btn" id="ml-9" onclick="jumpToPhan(9)">
+          <div class="ml-num">9</div>
+          <div class="ml-label">Tật Ách</div>
+          <div class="ml-status" id="ml-status-9">—</div>
+        </button>
+        <button class="muc-luc-btn" id="ml-10" onclick="jumpToPhan(10)">
+          <div class="ml-num">10</div>
+          <div class="ml-label">Tài Bạch</div>
+          <div class="ml-status" id="ml-status-10">—</div>
+        </button>
+        <button class="muc-luc-btn" id="ml-11" onclick="jumpToPhan(11)">
+          <div class="ml-num">11</div>
+          <div class="ml-label">Tử Tức</div>
+          <div class="ml-status" id="ml-status-11">—</div>
+        </button>
+        <button class="muc-luc-btn" id="ml-12" onclick="jumpToPhan(12)">
+          <div class="ml-num">12</div>
+          <div class="ml-label">Phu Thê</div>
+          <div class="ml-status" id="ml-status-12">—</div>
+        </button>
+        <button class="muc-luc-btn" id="ml-13" onclick="jumpToPhan(13)">
+          <div class="ml-num">13</div>
+          <div class="ml-label">Huynh Đệ</div>
+          <div class="ml-status" id="ml-status-13">—</div>
+        </button>
+        <button class="muc-luc-btn" id="ml-14" onclick="jumpToPhan(14)">
+          <div class="ml-num">14</div>
+          <div class="ml-label">Đại Vận</div>
+          <div class="ml-status" id="ml-status-14">—</div>
+        </button>
+        <button class="muc-luc-btn" id="ml-15" onclick="jumpToPhan(15)">
+          <div class="ml-num">15</div>
+          <div class="ml-label">Vận Nay</div>
+          <div class="ml-status" id="ml-status-15">—</div>
         </button>
       </div>
     </div>
@@ -362,14 +412,41 @@ select.form-input { cursor: pointer; }
   let _hoTen = null, _ngay = null, _thang = null, _nam = null;
   let _gioitinh = null, _namXem = null, _astrolabe = null;
   let _currentPhan = 0;
-  const TONG_PHAN = 5;
-  const PHAN_LABELS = ['','Tổng Quan Lá Số','Luận 12 Cung','Đại Vận Toàn Đời','Vận Hiện Tại','Tổng Kết'];
+  const TONG_PHAN = 15;
+  const PHAN_LABELS = [
+  '',
+  'Tổng Quan Lá Số',
+  'Cung Mệnh',
+  'Cung Phụ Mẫu',
+  'Cung Phúc Đức',
+  'Cung Điền Trạch',
+  'Cung Quan Lộc',
+  'Cung Nô Bộc',
+  'Cung Thiên Di',
+  'Cung Tật Ách',
+  'Cung Tài Bạch',
+  'Cung Tử Tức',
+  'Cung Phu Thê',
+  'Cung Huynh Đệ',
+  'Các Đại Vận',
+  'Vận Hiện Tại',
+];
   const QUERIES = {
-    1: () => `lục thập hoa giáp tinh hệ tổng quan mệnh cục chính tinh khí chất cách cục pre-check`,
-    2: () => `luận giải 12 cung mệnh phụ mẫu phúc đức điền trạch quan lộc tài bạch phu thê tử tức`,
-    3: () => `đại vận thiên thời địa lợi nhân hòa scoring vận hạn VDTTL giai đoạn`,
-    4: () => `vận hiện tại tiểu hạn lưu niên lưu thái tuế sao lưu động`,
-    5: () => `tổng kết cuộc đời đại vận tốt xấu khuyến nghị hành động`,
+    1:  () => `lục thập hoa giáp tinh hệ tổng quan mệnh cục chính tinh khí chất cách cục`,
+    2:  () => `cung mệnh chính tinh cách cục ý nghĩa luận giải`,
+    3:  () => `cung phụ mẫu cha mẹ ý nghĩa luận giải`,
+    4:  () => `cung phúc đức phúc khí tâm linh ý nghĩa luận giải`,
+    5:  () => `cung điền trạch nhà đất bất động sản ý nghĩa luận giải`,
+    6:  () => `cung quan lộc sự nghiệp công danh ý nghĩa luận giải`,
+    7:  () => `cung nô bộc bạn bè nhân viên ý nghĩa luận giải`,
+    8:  () => `cung thiên di xuất ngoại xa nhà ý nghĩa luận giải`,
+    9:  () => `cung tật ách sức khỏe bệnh tật ý nghĩa luận giải`,
+    10: () => `cung tài bạch tiền bạc tài chính ý nghĩa luận giải`,
+    11: () => `cung tử tức con cái ý nghĩa luận giải`,
+    12: () => `cung phu thê hôn nhân vợ chồng ý nghĩa luận giải`,
+    13: () => `cung huynh đệ anh chị em ý nghĩa luận giải`,
+    14: () => `đại vận thiên thời địa lợi nhân hòa scoring vận hạn giai đoạn`,
+    15: () => `vận hiện tại tiểu hạn lưu niên lưu thái tuế sao lưu động`,
   };
 
   function getIztroHour(t) { return parseInt(t); }
@@ -478,18 +555,17 @@ select.form-input { cursor: pointer; }
 
     try {
       let docs = '';
-      if (_currentPhan <= 2) {
-        // RAG chỉ cho phần 1-2 (quan trọng nhất — cần tra Lục Thập Hoa Giáp)
-        loaderText.textContent = `Tìm tài liệu liên quan... (1/2)`;
-        document.getElementById('progress-fill').style.width = '40%';
-        try {
-          const sr = await fetch('/api/search', {
-            method: 'POST', headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({ query: QUERIES[_currentPhan](), matchCount: 6 })
-          });
-          docs = (await sr.json()).docs || '';
-        } catch(e) { console.warn('RAG:', e.message); }
-      }
+      // RAG cho phần 1, 2-13 (từng cung), 14-15 (vận hạn)
+      loaderText.textContent = `Tìm tài liệu... (1/2)`;
+      document.getElementById('progress-fill').style.width = '40%';
+      try {
+        const matchCount = _currentPhan === 1 ? 8 : 5;
+        const sr = await fetch('/api/search', {
+          method: 'POST', headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ query: QUERIES[_currentPhan](), matchCount })
+        });
+        docs = (await sr.json()).docs || '';
+      } catch(e) { console.warn('RAG:', e.message); }
 
       loaderText.textContent = `Đang luận giải: ${PHAN_LABELS[_currentPhan]}... (2/2)`;
       document.getElementById('progress-fill').style.width = '70%';
