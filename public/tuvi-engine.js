@@ -82,6 +82,22 @@ const TAM_HOP_GROUPS = [
   ['Tỵ','Dậu','Sửu'],
 ];
 
+// Tam phương theo TÊN CUNG (đúng theo Tử Vi)
+const TAM_PHUONG_BY_NAME = {
+  'Mệnh':      { tamHop: ['Tài Bạch', 'Quan Lộc'],    xungChieu: 'Thiên Di' },
+  'Phụ Mẫu':  { tamHop: ['Nô Bộc', 'Tử Tức'],        xungChieu: 'Tật Ách' },
+  'Phúc Đức': { tamHop: ['Thiên Di', 'Phu Thê'],      xungChieu: 'Tài Bạch' },
+  'Điền Trạch':{ tamHop: ['Tật Ách', 'Huynh Đệ'],    xungChieu: 'Tử Tức' },
+  'Quan Lộc': { tamHop: ['Mệnh', 'Tài Bạch'],         xungChieu: 'Phu Thê' },
+  'Nô Bộc':   { tamHop: ['Phụ Mẫu', 'Tử Tức'],       xungChieu: 'Huynh Đệ' },
+  'Thiên Di':  { tamHop: ['Phúc Đức', 'Phu Thê'],     xungChieu: 'Mệnh' },
+  'Tật Ách':   { tamHop: ['Điền Trạch', 'Huynh Đệ'], xungChieu: 'Phụ Mẫu' },
+  'Tài Bạch':  { tamHop: ['Mệnh', 'Quan Lộc'],        xungChieu: 'Phúc Đức' },
+  'Tử Tức':   { tamHop: ['Phụ Mẫu', 'Nô Bộc'],       xungChieu: 'Điền Trạch' },
+  'Phu Thê':  { tamHop: ['Phúc Đức', 'Thiên Di'],     xungChieu: 'Quan Lộc' },
+  'Huynh Đệ': { tamHop: ['Điền Trạch', 'Tật Ách'],   xungChieu: 'Nô Bộc' },
+};
+
 // 14 Chính tinh + 6 Sát tinh
 const CHINH_TINH = [
   'Tử Vi','Thiên Cơ','Thái Dương','Vũ Khúc','Thiên Đồng',
@@ -141,30 +157,43 @@ function getCungXungChieu(palaces, targetDiaChi) {
 }
 
 /**
- * Lấy tam phương tứ chính của 1 cung
- * Returns: { main, tamHop1, tamHop2, xungChieu }
+ * Lấy tam phương tứ chính theo TÊN CUNG (đúng Tử Vi)
  */
 function getTamPhuongTuChinh(palaces, diaChi) {
+  // Tìm palace theo địa chi
   const mainPalace = palaces.find(p => p.earthlyBranch === diaChi);
   if (!mainPalace) return null;
 
-  // Tìm nhóm tam hợp
-  const tamHopGroup = TAM_HOP_GROUPS.find(g => g.includes(diaChi));
-  const tamHopPalaces = tamHopGroup
-    ? tamHopGroup
-        .filter(dc => dc !== diaChi)
-        .map(dc => palaces.find(p => p.earthlyBranch === dc))
-        .filter(Boolean)
-    : [];
+  // Lấy tên cung
+  const cungName = mainPalace.name;
+  const mapping = TAM_PHUONG_BY_NAME[cungName];
 
-  const xungChieu = getCungXungChieu(palaces, diaChi);
+  if (!mapping) {
+    // fallback: dùng địa chi tam hợp nếu không có trong map
+    const tamHopGroup = TAM_HOP_GROUPS.find(g => g.includes(diaChi));
+    const tamHopPalaces = tamHopGroup
+      ? tamHopGroup.filter(dc => dc !== diaChi).map(dc => palaces.find(p => p.earthlyBranch === dc)).filter(Boolean)
+      : [];
+    const xungChieu = getCungXungChieu(palaces, diaChi);
+    return {
+      main: mainPalace,
+      tamHop1: tamHopPalaces[0] || null,
+      tamHop2: tamHopPalaces[1] || null,
+      xungChieu,
+      all: [mainPalace, ...tamHopPalaces, xungChieu].filter(Boolean),
+    };
+  }
+
+  const tamHop1 = palaces.find(p => p.name === mapping.tamHop[0]) || null;
+  const tamHop2 = palaces.find(p => p.name === mapping.tamHop[1]) || null;
+  const xungChieu = palaces.find(p => p.name === mapping.xungChieu) || null;
 
   return {
     main: mainPalace,
-    tamHop1: tamHopPalaces[0] || null,
-    tamHop2: tamHopPalaces[1] || null,
+    tamHop1,
+    tamHop2,
     xungChieu,
-    all: [mainPalace, ...tamHopPalaces, xungChieu].filter(Boolean),
+    all: [mainPalace, tamHop1, tamHop2, xungChieu].filter(Boolean),
   };
 }
 
