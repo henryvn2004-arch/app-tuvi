@@ -801,14 +801,17 @@ module.exports = async function handler(req, res) {
 
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-    const { hoTen = 'Bạn', nam, gioiTinh, namXem, laSoText, phan = 1, docs = '' } = body;
+    const { hoTen = 'Bạn', nam, gioiTinh, namXem, laSoText, phan = 1, docs = '', engineResult = '' } = body;
 
     const apiKey = ANTHROPIC_API_KEY;
     if (!apiKey) { setHeaders(res); return res.status(500).json({ error: 'Thiếu ANTHROPIC_API_KEY.' }); }
     if (!laSoText) { setHeaders(res); return res.status(400).json({ error: 'Không có dữ liệu lá số.' }); }
 
     const gioi = gioiTinh === 'nam' ? 'nam' : 'nữ';
-    const ctx = `Lá số của: ${hoTen}, sinh năm ${nam}, ${gioi}, năm xem: ${namXem || new Date().getFullYear()}.\n\nDỮ LIỆU LÁ SỐ:\n${laSoText}`;
+    const ctx = `Lá số của: ${hoTen}, sinh năm ${nam}, ${gioi}, năm xem: ${namXem || new Date().getFullYear()}.
+
+DỮ LIỆU LÁ SỐ:
+${laSoText}${engineResult ? '\n\n' + engineResult : ''}`;
 
     const promptFn = PROMPTS[phan] || PROMPTS[1];
     const userPrompt = promptFn(ctx, docs || '(Không có tài liệu tham khảo)');
