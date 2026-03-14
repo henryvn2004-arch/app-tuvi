@@ -643,67 +643,89 @@ function formatForClaude(result, phan) {
   const lines = [];
 
   lines.push(`=== ENGINE OUTPUT ===`);
-  lines.push(`Mệnh: ${meta.fiveElementsClass} | Năm sinh: ${meta.namSinhDiaChi} | Tuổi xem: ${meta.tuoiXem}`);
+  lines.push(`Mệnh hành: ${meta.menhHanh || '?'} | Năm sinh: ${meta.namSinhDiaChi || '?'} | Ngũ hành cục: ${meta.fiveElementsClass || '?'} | Tuổi xem: ${meta.tuoiXem || '?'} | Năm xem: ${meta.namXem}`);
   lines.push('');
 
+  // Phần 1: Tổng quan — cung Mệnh + 3 vòng
   if (phan === 1) {
-    // Phần 1: Tổng quan — cung Mệnh
     const menh = cungAnalysis['Mệnh'];
     if (menh) {
       lines.push(`CUNG MỆNH (${menh.diaChi}):`);
       lines.push(`Chính tinh: ${menh.chinhTinh.map(s => `${s.name}(${s.brightness||''}${s.mutagen?'/'+s.mutagen:''})`).join(', ') || '(vô chính diệu)'}`);
-      lines.push(`Cách cục active (${menh.cachCucCount}):`);
-      menh.cachCucActive.forEach(cc => {
-        lines.push(`  [${cc.loai.toUpperCase()}/${cc.doManh}⭐] ${cc.ten} — ${cc.tomTat}`);
-      });
-    }
-  }
-
-  if (phan === 2) {
-    // Phần 2: 12 cung
-    for (const [cungName, data] of Object.entries(cungAnalysis)) {
-      lines.push(`\n${cungName} (${data.diaChi}):`);
-      lines.push(`  Chính tinh: ${data.chinhTinh.map(s => s.name).join(', ') || '(vô chính diệu)'}`);
-      if (data.cachCucActive.length > 0) {
-        lines.push(`  Cách cục (${data.cachCucActive.length}):`);
-        data.cachCucActive.slice(0, 5).forEach(cc => {
-          lines.push(`    [${cc.loai}/${cc.doManh}⭐] ${cc.ten} — ${cc.tomTat}`);
-        });
+      const vong = menh.cachCucActive.filter(cc => cc.ten && cc.ten.startsWith('VONG_'));
+      const cachCuc = menh.cachCucActive.filter(cc => !cc.ten || !cc.ten.startsWith('VONG_'));
+      if (vong.length > 0) {
+        lines.push(`3 Vòng active:`);
+        vong.forEach(cc => lines.push(`  [${cc.ten.split('__')[0]}] ${cc.sao[0]} — ${cc.tomTat}`));
+      }
+      if (cachCuc.length > 0) {
+        lines.push(`Cách cục Mệnh (${cachCuc.length}):`);
+        cachCuc.forEach(cc => lines.push(`  [${cc.loai}/${cc.doManh}⭐] ${cc.ten} — ${cc.tomTat}`));
       }
     }
   }
 
-  if (phan === 3 && daiVanAnalysis) {
-    // Phần 3: Đại vận scoring
-    const dv = daiVanAnalysis;
-    lines.push(`ĐẠI VẬN (${dv.diaChi}) tuổi ${dv.range?.[0]}–${dv.range?.[1]}:`);
-    lines.push(`  Thiên Thời: ${dv.thienThoi.score}/5 — ${dv.thienThoi.moTa}`);
-    lines.push(`  Địa Lợi:   ${dv.diaLoi.score}/2 — ${dv.diaLoi.moTa}`);
-    lines.push(`  Nhân Hòa:  ${dv.nhanHoa.score}/3 — ${dv.nhanHoa.moTa}`);
-    lines.push(`  Tổng: ${dv.tongDiem}/10 ${dv.flag} — ${dv.ketLuan}`);
-    if (dv.cachCucActive.length > 0) {
-      lines.push(`  Cách cục vận:`);
-      dv.cachCucActive.forEach(cc => {
-        lines.push(`    [${cc.loai}/${cc.doManh}⭐] ${cc.ten} — ${cc.tomTat}`);
-      });
+  // Phần 2-13: từng cung
+  const CUNG_BY_PHAN = {
+    2:'Mệnh', 3:'Phụ Mẫu', 4:'Phúc Đức', 5:'Điền Trạch',
+    6:'Quan Lộc', 7:'Nô Bộc', 8:'Thiên Di', 9:'Tật Ách',
+    10:'Tài Bạch', 11:'Tử Tức', 12:'Phu Thê', 13:'Huynh Đệ',
+  };
+  if (phan >= 2 && phan <= 13) {
+    const cungName = CUNG_BY_PHAN[phan];
+    const data = cungAnalysis[cungName];
+    if (data) {
+      lines.push(`CUNG ${cungName.toUpperCase()} (${data.diaChi}):`);
+      lines.push(`Chính tinh: ${data.chinhTinh.map(s => s.name + (s.mutagen ? '/'+s.mutagen : '')).join(', ') || '(vô chính diệu)'}`);
+      if (data.cachCucActive.length > 0) {
+        lines.push(`Cách cục active (${data.cachCucActive.length}):`);
+        data.cachCucActive.forEach(cc => {
+          lines.push(`  [${cc.loai}/${cc.doManh}⭐] ${cc.ten} — ${cc.tomTat}`);
+        });
+      } else {
+        lines.push(`Không có cách cục đặc biệt.`);
+      }
     }
   }
 
-  if (phan === 4 && tieuVanAnalysis) {
-    // Phần 4: Tiểu vận năm hiện tại
-    const tv = tieuVanAnalysis;
-    lines.push(`TIỂU VẬN năm ${meta.namXem} (cung ${tv.diaChi}, tuổi ${tv.tuoiXem}):`);
-    lines.push(`  Địa Lợi:  ${tv.diaLoi.score}/2 — ${tv.diaLoi.moTa}`);
-    lines.push(`  Nhân Hòa: ${tv.nhanHoa.score}/3 — ${tv.nhanHoa.moTa}`);
-    lines.push(`  Tiểu vận: ${tv.tieuVanScore} ${tv.tieuVanFlag}`);
-    if (tv.ketLuanTongHop) {
-      lines.push(`  Tổng hợp (70% đại vận + 30% tiểu vận): ${tv.ketLuanTongHop.diem} ${tv.ketLuanTongHop.flag} — ${tv.ketLuanTongHop.moTa}`);
+  // Phần 14: Tất cả đại vận
+  if (phan === 14) {
+    lines.push(`TẤT CẢ ĐẠI VẬN:`);
+    if (daiVanAnalysis) {
+      lines.push(`Đại vận hiện tại: cung ${daiVanAnalysis.diaChi}, tuổi ${daiVanAnalysis.range?.[0]}–${daiVanAnalysis.range?.[1]}`);
+      lines.push(`  TT: ${daiVanAnalysis.thienThoi.score}/5 (${daiVanAnalysis.thienThoi.quan_he}) | ĐL: ${daiVanAnalysis.diaLoi.score}/2 (${daiVanAnalysis.diaLoi.quan_he}) | NH: ${daiVanAnalysis.nhanHoa.score}/3 | Tổng: ${daiVanAnalysis.tongDiem}/10 ${daiVanAnalysis.flag}`);
     }
-    if (tv.cachCucActive.length > 0) {
-      lines.push(`  Cách cục năm:`);
-      tv.cachCucActive.forEach(cc => {
-        lines.push(`    [${cc.loai}/${cc.doManh}⭐] ${cc.ten} — ${cc.tomTat}`);
-      });
+    lines.push(`(Dựa vào laSoText để luận đủ tất cả đại vận)`);
+  }
+
+  // Phần 15: Đại vận + tiểu vận hiện tại
+  if (phan === 15) {
+    if (daiVanAnalysis) {
+      const dv = daiVanAnalysis;
+      lines.push(`ĐẠI VẬN HIỆN TẠI (cung ${dv.diaChi}, tuổi ${dv.range?.[0]}–${dv.range?.[1]}):`);
+      lines.push(`  Thiên Thời: ${dv.thienThoi.score}/5 — ${dv.thienThoi.moTa}`);
+      lines.push(`  Địa Lợi:   ${dv.diaLoi.score}/2 — ${dv.diaLoi.moTa}`);
+      lines.push(`  Nhân Hòa:  ${dv.nhanHoa.score}/3 — ${dv.nhanHoa.moTa}`);
+      lines.push(`  Tổng: ${dv.tongDiem}/10 ${dv.flag} — ${dv.ketLuan}`);
+      if (dv.cachCucActive.length > 0) {
+        lines.push(`  Cách cục vận:`);
+        dv.cachCucActive.forEach(cc => lines.push(`    [${cc.loai}/${cc.doManh}⭐] ${cc.ten} — ${cc.tomTat}`));
+      }
+    }
+    if (tieuVanAnalysis) {
+      const tv = tieuVanAnalysis;
+      lines.push(`
+TIỂU VẬN năm ${meta.namXem} (cung ${tv.diaChi}, tuổi ${tv.tuoiXem}):`);
+      lines.push(`  Địa Lợi:  ${tv.diaLoi.score}/2 — ${tv.diaLoi.moTa}`);
+      lines.push(`  Nhân Hòa: ${tv.nhanHoa.score}/3 — ${tv.nhanHoa.moTa}`);
+      lines.push(`  Tiểu vận: ${tv.tieuVanScore} ${tv.tieuVanFlag}`);
+      if (tv.ketLuanTongHop) {
+        lines.push(`  Tổng hợp: ${tv.ketLuanTongHop.diem} ${tv.ketLuanTongHop.flag} — ${tv.ketLuanTongHop.moTa}`);
+      }
+      if (tv.cachCucActive.length > 0) {
+        lines.push(`  Cách cục năm:`);
+        tv.cachCucActive.forEach(cc => lines.push(`    [${cc.loai}/${cc.doManh}⭐] ${cc.ten} — ${cc.tomTat}`));
+      }
     }
   }
 
