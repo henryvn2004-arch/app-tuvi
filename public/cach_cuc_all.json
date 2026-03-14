@@ -12714,5 +12714,313 @@
     "doManh": 3,
     "tomTat": "Ra ngoài tất bít lợi, hay gặp những tai ương bất kỳ, nhất là về hình ngục hay kiện tụng.",
     "nguon": "Vân Đằng Thái Thứ Lang Tử Vi đẩu số tân biên"
+  },
+  {
+    "ten": "VONG_THAI_TUE__Thai_Tue_thu_Menh",
+    "sao": [
+      "Thái Tuế"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thái Tuế thuộc vòng Thái Tuế tọa thủ cung Mệnh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "trung",
+    "doManh": 3,
+    "tomTat": "Khí thế mạnh, có xu hướng lãnh đạo và đứng đầu nhưng dễ vướng tranh chấp thị phi.",
+    "nguon": "Tử Vi Đẩu Số cổ điển"
+  },
+  {
+    "ten": "VONG_THAI_TUE__Thieu_Duong_thu_Menh",
+    "sao": [
+      "Thiếu Dương"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thiếu Dương thuộc vòng Thái Tuế tọa thủ cung Mệnh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Thông minh sáng dạ, học nhanh và dễ được quý mến.",
+    "nguon": "Tử Vi Đẩu Số cổ điển"
+  },
+  {
+    "ten": "VONG_THAI_TUE__Tang_Mon_thu_Menh",
+    "sao": [
+      "Tang Môn"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Tang Môn thuộc vòng Thái Tuế tọa thủ cung Mệnh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "trung",
+    "doManh": 2,
+    "tomTat": "Người sâu sắc nhưng nhiều suy tư, dễ ưu phiền.",
+    "nguon": "Tử Vi Đẩu Số cổ điển"
+  },
+  {
+    "ten": "VONG_THAI_TUE__Thieu_Am_thu_Menh",
+    "sao": [
+      "Thiếu Âm"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thiếu Âm thuộc vòng Thái Tuế tọa thủ cung Mệnh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Tính hiền hòa, tinh tế, giao tiếp khéo léo.",
+    "nguon": "Tử Vi Đẩu Số cổ điển"
+  },
+  {
+    "ten": "VONG_THAI_TUE__Quan_Phu_thu_Menh",
+    "sao": [
+      "Quan Phù"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Quan Phù thuộc vòng Thái Tuế tọa thủ cung Mệnh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "trung",
+    "doManh": 3,
+    "tomTat": "Có tài tranh luận và biện luận nhưng dễ dính pháp lý hoặc tranh chấp.",
+    "nguon": "Tử Vi Đẩu Số cổ điển"
+  },
+  {
+    "ten": "VONG_THAI_TUE__Tu_Phu_thu_Menh",
+    "sao": [
+      "Tử Phù"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Tử Phù thuộc vòng Thái Tuế tọa thủ cung Mệnh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 2,
+    "tomTat": "Hay gặp thị phi nhỏ, dễ bị hiểu lầm.",
+    "nguon": "Tử Vi Đẩu Số cổ điển"
+  },
+  {
+    "ten": "VONG_THAI_TUE__Tue_Pha_thu_Menh",
+    "sao": [
+      "Tuế Phá"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Tuế Phá thuộc vòng Thái Tuế tọa thủ cung Mệnh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "trung",
+    "doManh": 3,
+    "tomTat": "Tính phản biện mạnh, thích phá vỡ khuôn mẫu.",
+    "nguon": "Tử Vi Đẩu Số cổ điển"
+  },
+  {
+    "ten": "VONG_THAI_TUE__Long_Duc_thu_Menh",
+    "sao": [
+      "Long Đức"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Long Đức thuộc vòng Thái Tuế tọa thủ cung Mệnh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Tâm thiện, hay giúp người, dễ gặp quý nhân.",
+    "nguon": "Tử Vi Đẩu Số cổ điển"
+  },
+  {
+    "ten": "VONG_THAI_TUE__Bach_Ho_thu_Menh",
+    "sao": [
+      "Bạch Hổ"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Bạch Hổ thuộc vòng Thái Tuế tọa thủ cung Mệnh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "trung",
+    "doManh": 3,
+    "tomTat": "Tính mạnh mẽ quyết liệt nhưng dễ va chạm.",
+    "nguon": "Tử Vi Đẩu Số cổ điển"
+  },
+  {
+    "ten": "VONG_THAI_TUE__Phuc_Duc_thu_Menh",
+    "sao": [
+      "Phúc Đức"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Phúc Đức thuộc vòng Thái Tuế tọa thủ cung Mệnh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Có phúc khí, nhân hậu, đời sống ít cực đoan.",
+    "nguon": "Tử Vi Đẩu Số cổ điển"
+  },
+  {
+    "ten": "VONG_THAI_TUE__Dieu_Khach_thu_Menh",
+    "sao": [
+      "Điếu Khách"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Điếu Khách thuộc vòng Thái Tuế tọa thủ cung Mệnh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "trung",
+    "doManh": 3,
+    "tomTat": "Khả năng giao tiếp tốt, dễ nổi tiếng.",
+    "nguon": "Tử Vi Đẩu Số cổ điển"
+  },
+  {
+    "ten": "VONG_THAI_TUE__Truc_Phu_thu_Menh",
+    "sao": [
+      "Trực Phù"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Trực Phù thuộc vòng Thái Tuế tọa thủ cung Mệnh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "trung",
+    "doManh": 2,
+    "tomTat": "Người thẳng thắn, chính trực nhưng thiếu linh hoạt.",
+    "nguon": "Tử Vi Đẩu Số cổ điển"
+  },
+  {
+    "ten": "VONG_LOC_TON__Loc_Ton_thu_Menh",
+    "sao": [
+      "Lộc Tồn"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Lộc Tồn thuộc vòng Lộc Tồn tọa thủ cung Mệnh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Có khả năng tích lũy tiền bạc, tài chính ổn định.",
+    "nguon": "Tử Vi Đẩu Số cổ điển"
+  },
+  {
+    "ten": "VONG_LOC_TON__Bac_Si_thu_Menh",
+    "sao": [
+      "Bác Sĩ"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Bác Sĩ thuộc vòng Lộc Tồn tọa thủ cung Mệnh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Thiên về học vấn và tri thức.",
+    "nguon": "Tử Vi Đẩu Số cổ điển"
+  },
+  {
+    "ten": "VONG_LOC_TON__Luc_Si_thu_Menh",
+    "sao": [
+      "Lực Sĩ"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Lực Sĩ thuộc vòng Lộc Tồn tọa thủ cung Mệnh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Nghị lực mạnh, chịu khó và bền bỉ.",
+    "nguon": "Tử Vi Đẩu Số cổ điển"
+  },
+  {
+    "ten": "VONG_LOC_TON__Thanh_Long_thu_Menh",
+    "sao": [
+      "Thanh Long"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thanh Long thuộc vòng Lộc Tồn tọa thủ cung Mệnh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Dễ gặp cơ hội và may mắn.",
+    "nguon": "Tử Vi Đẩu Số cổ điển"
+  },
+  {
+    "ten": "VONG_LOC_TON__Tieu_Hao_thu_Menh",
+    "sao": [
+      "Tiểu Hao"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Tiểu Hao thuộc vòng Lộc Tồn tọa thủ cung Mệnh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "trung",
+    "doManh": 2,
+    "tomTat": "Tiền bạc ra vào thường xuyên.",
+    "nguon": "Tử Vi Đẩu Số cổ điển"
+  },
+  {
+    "ten": "VONG_LOC_TON__Tuong_Quan_thu_Menh",
+    "sao": [
+      "Tướng Quân"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Tướng Quân thuộc vòng Lộc Tồn tọa thủ cung Mệnh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Khí chất lãnh đạo, có uy quyền.",
+    "nguon": "Tử Vi Đẩu Số cổ điển"
+  },
+  {
+    "ten": "VONG_TRANG_SINH__Trang_Sinh_thu_Menh",
+    "sao": [
+      "Tràng Sinh"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Tràng Sinh thuộc vòng Tràng Sinh tọa thủ cung Mệnh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Sinh lực mạnh, dễ phát triển.",
+    "nguon": "Tử Vi Đẩu Số cổ điển"
+  },
+  {
+    "ten": "VONG_TRANG_SINH__Lam_Quan_thu_Menh",
+    "sao": [
+      "Lâm Quan"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Lâm Quan thuộc vòng Tràng Sinh tọa thủ cung Mệnh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Sự nghiệp mạnh, dễ có địa vị.",
+    "nguon": "Tử Vi Đẩu Số cổ điển"
+  },
+  {
+    "ten": "VONG_TRANG_SINH__De_Vuong_thu_Menh",
+    "sao": [
+      "Đế Vượng"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Đế Vượng thuộc vòng Tràng Sinh tọa thủ cung Mệnh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 5,
+    "tomTat": "Khí thế cực thịnh, dễ đạt thành công lớn.",
+    "nguon": "Tử Vi Đẩu Số cổ điển"
+  },
+  {
+    "ten": "VONG_TRANG_SINH__Suy_thu_Menh",
+    "sao": [
+      "Suy"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Suy thuộc vòng Tràng Sinh tọa thủ cung Mệnh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "trung",
+    "doManh": 2,
+    "tomTat": "Năng lượng giảm, đời sống bình ổn.",
+    "nguon": "Tử Vi Đẩu Số cổ điển"
   }
 ]
