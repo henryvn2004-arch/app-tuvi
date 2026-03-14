@@ -83,19 +83,23 @@ const TAM_HOP_GROUPS = [
 ];
 
 // Tam phương theo TÊN CUNG (đúng theo Tử Vi)
+// Tam hợp: Mệnh-Tài Bạch-Quan Lộc | Phụ Mẫu-Nô Bộc-Tử Tức
+//          Phúc Đức-Thiên Di-Phu Thê | Điền Trạch-Tật Ách-Huynh Đệ
+// Xung chiếu: Mệnh-Thiên Di | Phụ Mẫu-Tật Ách | Phúc Đức-Tài Bạch
+//             Điền Trạch-Tử Tức | Quan Lộc-Phu Thê | Nô Bộc-Huynh Đệ
 const TAM_PHUONG_BY_NAME = {
-  'Mệnh':      { tamHop: ['Tài Bạch', 'Quan Lộc'],    xungChieu: 'Thiên Di' },
-  'Phụ Mẫu':  { tamHop: ['Nô Bộc', 'Tử Tức'],        xungChieu: 'Tật Ách' },
-  'Phúc Đức': { tamHop: ['Thiên Di', 'Phu Thê'],      xungChieu: 'Tài Bạch' },
-  'Điền Trạch':{ tamHop: ['Tật Ách', 'Huynh Đệ'],    xungChieu: 'Tử Tức' },
-  'Quan Lộc': { tamHop: ['Mệnh', 'Tài Bạch'],         xungChieu: 'Phu Thê' },
-  'Nô Bộc':   { tamHop: ['Phụ Mẫu', 'Tử Tức'],       xungChieu: 'Huynh Đệ' },
-  'Thiên Di':  { tamHop: ['Phúc Đức', 'Phu Thê'],     xungChieu: 'Mệnh' },
-  'Tật Ách':   { tamHop: ['Điền Trạch', 'Huynh Đệ'], xungChieu: 'Phụ Mẫu' },
-  'Tài Bạch':  { tamHop: ['Mệnh', 'Quan Lộc'],        xungChieu: 'Phúc Đức' },
-  'Tử Tức':   { tamHop: ['Phụ Mẫu', 'Nô Bộc'],       xungChieu: 'Điền Trạch' },
-  'Phu Thê':  { tamHop: ['Phúc Đức', 'Thiên Di'],     xungChieu: 'Quan Lộc' },
-  'Huynh Đệ': { tamHop: ['Điền Trạch', 'Tật Ách'],   xungChieu: 'Nô Bộc' },
+  'Mệnh':       { tamHop: ['Tài Bạch', 'Quan Lộc'],   xungChieu: 'Thiên Di'  },
+  'Phụ Mẫu':   { tamHop: ['Nô Bộc',   'Tử Tức'],     xungChieu: 'Tật Ách'   },
+  'Phúc Đức':  { tamHop: ['Thiên Di', 'Phu Thê'],     xungChieu: 'Tài Bạch'  },
+  'Điền Trạch': { tamHop: ['Tật Ách', 'Huynh Đệ'],   xungChieu: 'Tử Tức'   },
+  'Quan Lộc':  { tamHop: ['Mệnh',     'Tài Bạch'],    xungChieu: 'Phu Thê'   },
+  'Nô Bộc':    { tamHop: ['Phụ Mẫu',  'Tử Tức'],     xungChieu: 'Huynh Đệ' },
+  'Thiên Di':  { tamHop: ['Phúc Đức', 'Phu Thê'],     xungChieu: 'Mệnh'      },
+  'Tật Ách':   { tamHop: ['Điền Trạch','Huynh Đệ'],  xungChieu: 'Phụ Mẫu'  },
+  'Tài Bạch':  { tamHop: ['Mệnh',     'Quan Lộc'],    xungChieu: 'Phúc Đức'  },
+  'Tử Tức':    { tamHop: ['Phụ Mẫu',  'Nô Bộc'],     xungChieu: 'Điền Trạch'},
+  'Phu Thê':   { tamHop: ['Phúc Đức', 'Thiên Di'],    xungChieu: 'Quan Lộc'  },
+  'Huynh Đệ':  { tamHop: ['Điền Trạch','Tật Ách'],   xungChieu: 'Nô Bộc'   },
 };
 
 // 14 Chính tinh + 6 Sát tinh
