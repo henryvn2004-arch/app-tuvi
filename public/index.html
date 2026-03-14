@@ -376,7 +376,7 @@ select.form-input { cursor: pointer; }
 
   function formatLaSo(a) {
     const lines = [];
-    lines.push(`Mệnh ${a.earthlyBranch}${a.heavenlyStem} | Cục: ${a.fiveElementsClass} | Thân cung: ${a.bodyPalace}`);
+    lines.push(`Mệnh: ${a.earthlyBranchOfSoulPalace || '?'} | Thân: ${a.earthlyBranchOfBodyPalace || '?'} | Cục: ${a.fiveElementsClass || '?'} | Mệnh chủ: ${a.soul || '?'} | Thân chủ: ${a.body || '?'}`);
     lines.push(`Sinh năm: ${a.chineseDate} | Giờ: ${a.time}`);
     lines.push('');
     for (const p of a.palaces) {
