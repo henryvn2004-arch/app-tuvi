@@ -347,8 +347,18 @@ select.form-input { cursor: pointer; }
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/iztro/dist/iztro.min.js"></script>
+<script src="/tuvi-engine.js"></script>
+<script>
+  // Load cach cuc DB
+  let CACH_CUC_DB = [];
+  fetch('/cach_cuc_all.json')
+    .then(r => r.json())
+    .then(data => { CACH_CUC_DB = data; console.log('Loaded', data.length, 'cach cuc'); })
+    .catch(e => console.warn('Cannot load cach_cuc_all.json:', e));
+</script>
 <script>
   let _laSoText = null;
+  let _engineResult_global = null;
   let _hoTen = null, _ngay = null, _thang = null, _nam = null;
   let _gioitinh = null, _namXem = null, _astrolabe = null;
   let _currentPhan = 0;
