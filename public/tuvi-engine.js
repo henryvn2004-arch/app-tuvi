@@ -280,9 +280,11 @@ function findActiveCachCuc(cachCucDB, cungName, mainPalace, tamPhuong, options =
     .filter(cc => cc.cung === cungName)
     .filter(cc => cc.doManh >= minDoManh)
     .filter(cc => {
-      // Phải có chính tinh hoặc sát tinh trong sao cốt lõi
       if (cc.daoNguoc) return true;
       if (!cc.sao || cc.sao.length === 0) return false;
+      // Cách cục 3 vòng (ten bắt đầu bằng VONG_) → cho qua luôn
+      if (cc.ten && cc.ten.startsWith('VONG_')) return true;
+      // Còn lại phải có chính tinh hoặc sát tinh
       return cc.sao.some(s => CHINH_VA_SAT.includes(s));
     })
     .filter(cc => checkCachCuc(cc, mainPalace, tamPhuong))
