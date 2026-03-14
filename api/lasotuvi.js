@@ -19,772 +19,211 @@ const PROMPTS = {
 === TÀI LIỆU THAM KHẢO ===
 ${docs}
 
-MỤC ĐÍCH
-Phân tích tổng thể cấu trúc lá số để xác định:
-- khí thế cuộc đời
-- bản chất con người
-- xu hướng phát triển
-- điểm mạnh và điểm yếu của lá số
+PHẦN 1 — TỔNG QUAN LÁ SỐ (300-400 từ)
 
-Đây là bước định hình toàn bộ lá số trước khi đi vào từng cung và vận hạn.
+Phân tích tổng thể lá số, bao gồm:
+- Bản Mệnh – Cục (Nạp Âm)
+- Cung Mệnh và Cung Thân
+- Chính tinh thủ Mệnh
+- Khí chất con người (dựa vào 3 vòng Thái Tuế, Lộc Tồn, Tràng Sinh nếu có trong engine output)
+- Ưu điểm nổi bật
+- Nhược điểm dễ gặp
 
---------------------------------
-
-PHƯƠNG PHÁP LUẬN
-
-NGUYÊN TẮC CỐT LÕI
-
-Không luận sao rời rạc.
-Mọi nhận định phải dựa trên tổng thể cách cục.
-
-Thứ tự phân tích:
-
-1. Thế đứng cung Mệnh trong 3 vòng:
-   - vòng Thái Tuế
-   - vòng Lộc Tồn
-   - vòng Tràng Sinh
-
-2. Cách cục / bộ sao
-
-3. Chính tinh
-
-4. Hóa tinh
-
-5. Sát tinh
-
-6. Phụ tinh
-
---------------------------------
-
-Ý NGHĨA CUNG MỆNH TRONG 3 VÒNG
-
-Ba vòng dùng để xác định:
-- khí chất con người
-- khí thế cuộc đời
-- mức độ thuận nghịch của lá số
-
-PHẢI xét ba vòng trước khi luận chính tinh.
-
---------------------------------
-
-VÒNG THÁI TUẾ
-
-Chia 4 bộ:
-
-TUẾ – HỔ – PHÙ
-(Thái Tuế, Bạch Hổ, Quan Phù)
-→ khí cương, mạnh mẽ, dễ đứng đầu.
-
-ÂM – LONG – TRỰC
-(Thiếu Âm, Long Đức, Trực Phù)
-→ khí hòa, mềm mỏng, dễ gặp quý nhân.
-
-ĐÀO – KHÔNG – SÁT
-(Đào Hoa, Thiên Không, Kiếp Sát)
-→ khí động, cuộc đời nhiều biến động.
-
-TANG – TUẾ – ĐIẾU
-(Tang Môn, Tuế Phá, Điếu Khách)
-→ khí trầm, nhiều thử thách.
-
---------------------------------
-
-VÒNG LỘC TỒN
-
-Chỉ phát huy đầy đủ với các tuổi:
-
-Giáp Dần, Giáp Ngọ, Giáp Tuất
-Ất Hợi, Ất Mão, Ất Mùi
-Canh Thân, Canh Tý, Canh Thìn
-Tân Tị, Tân Dậu, Tân Sửu
-
-Nếu không thuộc các tuổi này
-→ ảnh hưởng Lộc Tồn giảm.
-
---------------------------------
-
-VÒNG TRÀNG SINH
-
-Chia 4 nhóm:
-
-SINH – VƯỢNG – MỘ
-(Tràng Sinh, Đế Vượng, Mộ)
-→ khí lực mạnh.
-
-MỘC – SUY – TUYỆT
-(Mộc Dục, Suy, Tuyệt)
-→ khí lực yếu.
-
-THAI – ĐỚI – BỆNH
-(Thai, Quan Đới, Bệnh)
-→ khí lực trung bình.
-
-LÂM – TỬ – DƯỠNG
-(Lâm Quan, Tử, Dưỡng)
-→ cuộc đời nhiều biến chuyển.
-
---------------------------------
-
-TAM PHƯƠNG TỨ CHÍNH
-
-Khi luận một cung phải xét 4 cung:
-
-- cung đang xét
-- 2 cung tam hợp
-- 1 cung xung chiếu
-
-Tam hợp:
-
-Mệnh – Tài Bạch – Quan Lộc
-Phụ Mẫu – Nô Bộc – Tử Tức
-Phúc Đức – Thiên Di – Phu Thê
-Điền Trạch – Tật Ách – Huynh Đệ
-
-Xung chiếu:
-
-Mệnh – Thiên Di
-Phụ Mẫu – Tật Ách
-Phúc Đức – Tài Bạch
-Điền Trạch – Tử Tức
-Quan Lộc – Phu Thê
-Nô Bộc – Huynh Đệ
-
-Sai cấu trúc → không kết luận.
-
---------------------------------
-
-QUY TRÌNH LUẬN
-
-1. gom sao của 4 cung liên quan
-2. tìm bộ sao / cách cục
-3. xét chính tinh
-4. xét hóa tinh
-5. xét sát tinh
-6. xét phụ tinh
-7. đánh giá mạnh / trung / yếu
-
---------------------------------
-
-ĐIỀU CHỈNH
-
-Khi kết luận phải xét:
-
-- âm dương
-- ngũ hành
-- mệnh và thân
-- sinh khắc của sao
-
-Gia giảm bằng:
-
-- hóa tinh
-- sát tinh
-
---------------------------------
-
-OUTPUT
-
-AI phải trả ra:
-
-1. Tổng quan khí vận của lá số
-2. Khí chất và bản chất con người
-3. Xu hướng cuộc đời
-4. Điểm mạnh của lá số
-5. Điểm yếu và thử thách`,
+Mục tiêu: giúp người đọc hiểu bản chất con người và đường đời tổng quát.`,
 
   2: (ctx, docs) => `${ctx}
 
 === TÀI LIỆU THAM KHẢO ===
 ${docs}
 
-MỤC ĐÍCH
-Phân tích chi tiết 12 cung trong lá số để hiểu các lĩnh vực của cuộc đời
-Luận từng cung riêng nhưng phải đặt trong tổng thể lá số.
+PHẦN 2 — CUNG MỆNH (200-300 từ)
 
---------------------------------
+Luận giải cung Mệnh dựa trên engine output và tài liệu tham khảo:
+- Ý nghĩa chính tinh tại cung Mệnh
+- Cách cục active tại cung Mệnh và tam phương tứ chính
+- Tác động tốt – xấu lên cuộc đời tổng thể
+- Khuynh hướng tính cách và số phận
 
-DANH SÁCH 12 CUNG CẦN LUẬN
-
-1. Cung Mệnh
-2. Cung Phụ Mẫu
-3. Cung Phúc Đức
-4. Cung Điền Trạch
-5. Cung Quan Lộc
-6. Cung Nô Bộc
-7. Cung Thiên Di
-8. Cung Tật Ách
-9. Cung Tài Bạch
-10. Cung Tử Tức
-11. Cung Phu Thê
-12. Cung Huynh Đệ
-
-Phải luận từng cung theo thứ tự.
-
---------------------------------
-
-PHƯƠNG PHÁP LUẬN
-
-Không luận sao riêng lẻ.
-Mọi nhận định phải dựa trên tổng thể cách cục.
-
-Khi luận một cung phải xét hệ thống 4 cung:
-
-- cung đang xét
-- 2 cung tam hợp
-- 1 cung xung chiếu
-
---------------------------------
-
-TAM HỢP
-
-Mệnh – Tài Bạch – Quan Lộc  
-Phụ Mẫu – Nô Bộc – Tử Tức  
-Phúc Đức – Thiên Di – Phu Thê  
-Điền Trạch – Tật Ách – Huynh Đệ  
-
---------------------------------
-
-XUNG CHIẾU
-
-Mệnh – Thiên Di  
-Phụ Mẫu – Tật Ách  
-Phúc Đức – Tài Bạch  
-Điền Trạch – Tử Tức  
-Quan Lộc – Phu Thê  
-Nô Bộc – Huynh Đệ  
-
-Nếu xác định sai cấu trúc cung → không kết luận.
-
---------------------------------
-
-QUY TRÌNH LUẬN
-
-1. gom toàn bộ sao của 4 cung liên quan
-2. tìm bộ sao / cách cục
-3. xét chính tinh
-4. xét hóa tinh
-5. xét sát tinh
-6. xét phụ tinh
-7. đánh giá mức độ:
-
-- tốt
-- trung bình
-- yếu
-
---------------------------------
-
-ĐIỀU CHỈNH
-
-Khi kết luận phải xét:
-
-- âm dương
-- ngũ hành
-- quan hệ mệnh – thân
-- sinh khắc của sao
-
-Gia giảm bằng:
-
-- hóa tinh
-- sát tinh
-
---------------------------------
-
-OUTPUT
-
-Với mỗi cung phải trả ra:
-
-1. ý nghĩa của cung đó trong lá số
-2. mức độ tốt / trung / yếu
-3. ảnh hưởng tới cuộc đời
-4. lời khuyên thực tế`,
+Luận giải dễ hiểu, thực tế.`,
 
   3: (ctx, docs) => `${ctx}
 
 === TÀI LIỆU THAM KHẢO ===
 ${docs}
 
-MỤC ĐÍCH
-Phân tích toàn bộ các đại vận (mỗi vận 10 năm) để xác định:
-- giai đoạn thuận lợi của cuộc đời
-- giai đoạn khó khăn
-- xu hướng thăng trầm theo thời gian
+PHẦN 3 — CUNG PHỤ MẪU (200-300 từ)
 
-Luận từng đại vận nhưng luôn so sánh với cung Mệnh.
-
-------------------------------------------------
-
-PHƯƠNG PHÁP LUẬN
-
-Đánh giá mỗi đại vận theo 3 tiêu chí:
-
-1. THIÊN THỜI
-2. ĐỊA LỢI
-3. NHÂN HÒA
-
-------------------------------------------------
-
-1. THIÊN THỜI (chỉ xét TAM HỢP + NGŨ HÀNH)
-
-Lấy HÀNH của TAM HỢP CUNG ĐẠI VẬN so với HÀNH của TAM HỢP TUỔI.
-
-Quy tắc tam hợp → hành:
-
-Thân – Tí – Thìn → Thủy  
-Dần – Ngọ – Tuất → Hỏa  
-Tỵ – Dậu – Sửu → Kim  
-Hợi – Mão – Mùi → Mộc  
-
-So sánh hành:
-
-Đồng hành → ĐẮC Thiên Thời (5/5)
-
-Sinh nhập → ĐẮC Thiên Thời (4/5)
-
-Khắc xuất → Thiên Thời kém (3/5)
-
-Sinh xuất → Thiên Thời kém (2/5)
-
-Khắc nhập → MẤT Thiên Thời (1/5)
-
-Thiên Thời chỉ xét cơ hội và xu hướng vận.
-Không xét sao.
-
-------------------------------------------------
-
-2. ĐỊA LỢI
-
-So sánh:
-
-HÀNH CUNG ĐẠI VẬN ↔ HÀNH BẢN MỆNH
-
-Quy tắc:
-
-Mệnh sinh Cung / Cung sinh Mệnh  
-→ ĐẮC Địa Lợi
-
-Đồng hành  
-→ Có Địa Lợi
-
-Sinh xuất  
-→ Hao lực
-
-Khắc xuất  
-→ Vất vả nhưng có thể thắng
-
-Khắc nhập  
-→ MẤT Địa Lợi
-
-Địa Lợi thể hiện vị thế của bản thân trong vận.
-Không xét sao.
-
-------------------------------------------------
-
-3. NHÂN HÒA (YẾU TỐ QUYẾT ĐỊNH)
-
-So sánh BỘ CHÍNH TINH của:
-
-(Mệnh + tam hợp)  
-với  
-(Đại vận + tam hợp)
-
-Phân loại bộ sao:
-
-Sát Phá Tham Liêm  
-→ 100% thực hành
-
-Tử Phủ Vũ Tướng Liêm  
-→ 60% hành động / 40% lý thuyết
-
-Cơ Nguyệt Đồng Lương  
-→ 40% hành động / 60% lý thuyết
-
-Cự Nhật  
-→ 100% lý thuyết
-
-Sau đó xét toàn bộ sao của:
-
-- cung đại vận
-- 2 cung tam hợp
-- cung xung chiếu
-
-Theo thứ tự:
-
-Cách cục → Chính tinh → Hóa tinh → Sát tinh → Phụ tinh
-
-Tra cứu ý nghĩa vận trong:
-[A_LUAT_GOC] GIAI DOAN VAN HAN THEO VDTTL
-
-Lưu ý:
-
-Sau 30 tuổi:
-- sao Triệt giảm tác dụng
-- sao Tuần phát huy tác dụng
-
-Triệt đóng cung Kim → Triệt đáo Kim cung (có thể tốt)
-
-Tuần đóng cung Hỏa → Tuần lâm Hỏa địa (có thể tốt)
-
-Kết luận Nhân Hòa:
-
-Cùng bộ / gần tỷ lệ  
-→ Nhân Hòa tốt
-
-Chênh lệch vừa  
-→ Nhân Hòa trung bình
-
-Chênh lệch cực đoan  
-→ Nhân Hòa xấu
-
-Nếu Nhân Hòa xấu  
-→ không được kết luận vận tốt dù Thiên Thời và Địa Lợi đẹp.
-
-------------------------------------------------
-
-SCORE & FLAG
-
-Mỗi đại vận phải:
-
-Chấm điểm vận:  
-0 – 10
-
-Gắn cảnh báo:
-
-GREEN → vận tốt  
-ORANGE → vận trung bình  
-RED → vận khó khăn
-
-Không dùng từ trung tính để che vận xấu.
-
-------------------------------------------------
-
-OUTPUT
-
-Lập bảng đánh giá tốt/ xấu từng đại vận, gồm:
-
-1. Đánh giá Thiên Thời – Địa Lợi – Nhân Hòa
-2. SCORE (0–10)
-3. FLAG (GREEN / ORANGE / RED)
-4. Kết luận vận tốt / xấu / mức độ
-5. Giải thích các sự kiện chính xảy ra trong đại vận đó: công danh, sự nghiệp, tài chính, gia đình, sức khỏe,...`,
+Luận giải cung Phụ Mẫu:
+- Ý nghĩa sao tại cung
+- Cách cục active
+- Mối quan hệ với cha mẹ, người bề trên, thầy cô
+- Khuynh hướng dễ xảy ra`,
 
   4: (ctx, docs) => `${ctx}
 
 === TÀI LIỆU THAM KHẢO ===
 ${docs}
 
-MỤC ĐÍCH
-Phân tích chi tiết đại vận hiện tại (10 năm đang trải qua) để hiểu:
-- bản chất vận đang sống
-- cơ hội và khó khăn của giai đoạn này
-- ảnh hưởng của vận đến tài chính, công danh, gia đình, sức khỏe và các mối quan hệ.
+PHẦN 4 — CUNG PHÚC ĐỨC (200-300 từ)
 
-------------------------------------------------
-
-PHƯƠNG PHÁP LUẬN
-
-Đánh giá đại vận theo ba tiêu chí:
-
-1. THIÊN THỜI
-2. ĐỊA LỢI
-3. NHÂN HÒA
-
-------------------------------------------------
-
-1. THIÊN THỜI
-
-So sánh HÀNH của TAM HỢP CUNG ĐẠI VẬN với HÀNH của TAM HỢP TUỔI.
-
-Quy tắc tam hợp → hành:
-
-Thân – Tí – Thìn → Thủy  
-Dần – Ngọ – Tuất → Hỏa  
-Tỵ – Dậu – Sửu → Kim  
-Hợi – Mão – Mùi → Mộc  
-
-Kết luận:
-
-Đồng hành → ĐẮC Thiên Thời (5/5)  
-Sinh nhập → ĐẮC Thiên Thời (4/5)  
-Khắc xuất → Thiên Thời kém (3/5)  
-Sinh xuất → Thiên Thời kém (2/5)  
-Khắc nhập → MẤT Thiên Thời (1/5)
-
-Thiên Thời chỉ xét cơ hội và xu hướng vận.
-Không xét sao.
-
-------------------------------------------------
-
-2. ĐỊA LỢI
-
-So sánh:
-
-HÀNH CUNG ĐẠI VẬN ↔ HÀNH BẢN MỆNH
-
-Quy tắc:
-
-Mệnh sinh Cung / Cung sinh Mệnh → ĐẮC Địa Lợi  
-Đồng hành → Có Địa Lợi  
-Sinh xuất → Hao lực  
-Khắc xuất → Vất vả nhưng có thể thắng  
-Khắc nhập → MẤT Địa Lợi
-
-Địa Lợi phản ánh vị thế và sức chịu đựng của bản thân trong vận.
-Không xét sao.
-
-------------------------------------------------
-
-3. NHÂN HÒA (QUYẾT ĐỊNH KẾT QUẢ)
-
-So sánh bộ chính tinh của:
-
-(Mệnh + tam hợp)  
-với  
-(Đại vận + tam hợp)
-
-Phân loại bộ sao:
-
-Sát Phá Tham Liêm → thiên về hành động mạnh  
-Tử Phủ Vũ Tướng Liêm → cân bằng hành động và chiến lược  
-Cơ Nguyệt Đồng Lương → thiên về tư duy và kế hoạch  
-Cự Nhật → thiên về lý luận và học thuật
-
-------------------------------------------------
-
-PHÂN TÍCH CÁCH CỤC SAO CỦA ĐẠI VẬN
-
-Phải xét toàn bộ sao của 4 cung:
-
-- cung đại vận
-- 2 cung tam hợp
-- 1 cung xung chiếu
-
-Quy trình:
-
-1. gom toàn bộ sao của 4 cung
-2. xác định bộ sao / cách cục
-3. xét chính tinh
-4. xét hóa tinh
-5. xét sát tinh
-6. xét phụ tinh
-
-Sau đó xác định cách cục của vận đang hình thành.
-
-------------------------------------------------
-
-LUẬN ẢNH HƯỞNG CỦA CÁCH CỤC VẬN
-
-Dựa vào tổ hợp sao để đánh giá tác động của vận lên các lĩnh vực:
-
-Tài chính  
-→ khả năng kiếm tiền, tích lũy, hao tán.
-
-Công danh / sự nghiệp  
-→ cơ hội thăng tiến, thay đổi nghề nghiệp.
-
-Gia đình / hôn nhân  
-→ ổn định, biến động hay mâu thuẫn.
-
-Quan hệ xã hội  
-→ quý nhân, bạn bè, đối tác.
-
-Sức khỏe  
-→ áp lực, bệnh tật, hoặc cải thiện thể chất.
-
-------------------------------------------------
-
-LƯU Ý
-
-Sau 30 tuổi:
-
-- sao Triệt giảm tác dụng
-- sao Tuần phát huy tác dụng
-
-Triệt đóng cung Kim → có thể hóa giải xấu  
-Tuần đóng cung Hỏa → có thể giảm hung.
-
-------------------------------------------------
-
-SCORE & FLAG
-
-Chấm điểm đại vận:
-
-0 – 10
-
-Gắn cảnh báo:
-
-GREEN → vận tốt  
-ORANGE → vận trung bình  
-RED → vận khó khăn
-
-Nếu Nhân Hòa xấu → không kết luận vận tốt dù Thiên Thời và Địa Lợi đẹp.
-
-------------------------------------------------
-
-OUTPUT
-
-Phải trả ra:
-
-1. bản chất của đại vận hiện tại
-2. đánh giá Thiên Thời – Địa Lợi – Nhân Hòa
-3. phân tích cách cục sao của vận
-4. ảnh hưởng của vận tới:
-   - tài chính
-   - công danh
-   - gia đình
-   - sức khỏe
-5. SCORE (0–10)
-6. FLAG (GREEN / ORANGE / RED)
-7. khuyến nghị hành động (nên / không nên)`,
+Luận giải cung Phúc Đức:
+- Ý nghĩa sao tại cung
+- Cách cục active
+- Phúc khí, tâm linh, đức hạnh tổ tiên để lại
+- Đời sống tinh thần, tín ngưỡng`,
 
   5: (ctx, docs) => `${ctx}
 
 === TÀI LIỆU THAM KHẢO ===
 ${docs}
 
-MỤC ĐÍCH
-Phân tích vận khí của năm hiện tại (tiểu vận / lưu niên) để xác định:
-- xu hướng tốt xấu của năm
-- lĩnh vực cuộc sống dễ thay đổi
-- cơ hội và rủi ro trong năm
+PHẦN 5 — CUNG ĐIỀN TRẠCH (200-300 từ)
 
-------------------------------------------------
+Luận giải cung Điền Trạch:
+- Ý nghĩa sao tại cung
+- Cách cục active
+- Nhà đất, bất động sản, tài sản cố định
+- Khả năng tích lũy và giữ tài sản`,
 
-NGUYÊN TẮC CHUNG
+  6: (ctx, docs) => `${ctx}
 
-Tính chất của năm chịu ảnh hưởng chủ yếu bởi đại vận.
+=== TÀI LIỆU THAM KHẢO ===
+${docs}
 
-Quy tắc:
+PHẦN 6 — CUNG QUAN LỘC (200-300 từ)
 
-80% → tính chất đại vận đang đi  
-20% → ảnh hưởng của tiểu vận (lưu niên)
+Luận giải cung Quan Lộc:
+- Ý nghĩa sao tại cung
+- Cách cục active
+- Sự nghiệp, công danh, nghề nghiệp phù hợp
+- Cơ hội thăng tiến và thách thức`,
 
-Do đó phải xét:
+  7: (ctx, docs) => `${ctx}
 
-1. đại vận đang sống
-2. cung tiểu vận của năm
-3. cách cục sao của tiểu vận
+=== TÀI LIỆU THAM KHẢO ===
+${docs}
 
-------------------------------------------------
+PHẦN 7 — CUNG NÔ BỘC (200-300 từ)
 
-BƯỚC 1 – XÁC ĐỊNH ĐẠI VẬN
+Luận giải cung Nô Bộc:
+- Ý nghĩa sao tại cung
+- Cách cục active
+- Bạn bè, đồng nghiệp, nhân viên, đối tác
+- Khả năng được giúp đỡ hay bị phản`,
 
-Xác định năm hiện tại nằm trong đại vận nào.
+  8: (ctx, docs) => `${ctx}
 
-Phân tích bản chất của đại vận đó:
+=== TÀI LIỆU THAM KHẢO ===
+${docs}
 
-- tốt / trung bình / khó khăn
-- xu hướng chung của giai đoạn
+PHẦN 8 — CUNG THIÊN DI (200-300 từ)
 
-Kết luận:
+Luận giải cung Thiên Di:
+- Ý nghĩa sao tại cung
+- Cách cục active
+- Xuất ngoại, xa nhà, di chuyển
+- Vận may khi ở xa, quý nhân nơi xa`,
 
-Đại vận quyết định phần lớn tính tốt xấu của năm.
+  9: (ctx, docs) => `${ctx}
 
-------------------------------------------------
+=== TÀI LIỆU THAM KHẢO ===
+${docs}
 
-BƯỚC 2 – XÁC ĐỊNH TIỂU VẬN
+PHẦN 9 — CUNG TẬT ÁCH (200-300 từ)
 
-Xác định cung của năm (lưu niên).
+Luận giải cung Tật Ách:
+- Ý nghĩa sao tại cung
+- Cách cục active
+- Sức khỏe, bệnh tật dễ gặp
+- Những điều cần chú ý để bảo vệ sức khỏe`,
 
-Ví dụ:
+  10: (ctx, docs) => `${ctx}
 
-năm Giáp Tý  
-→ tiểu vận nằm tại cung Tý.
+=== TÀI LIỆU THAM KHẢO ===
+${docs}
 
-Cung đó chính là **cung tiểu vận của năm**.
+PHẦN 10 — CUNG TÀI BẠCH (200-300 từ)
 
-------------------------------------------------
+Luận giải cung Tài Bạch:
+- Ý nghĩa sao tại cung
+- Cách cục active
+- Khả năng kiếm tiền, tích lũy
+- Nguồn thu nhập và rủi ro tài chính`,
 
-BƯỚC 3 – TAM PHƯƠNG TỨ CHÍNH
+  11: (ctx, docs) => `${ctx}
 
-Khi xét tiểu vận phải xét 4 cung:
+=== TÀI LIỆU THAM KHẢO ===
+${docs}
 
-- cung tiểu vận
-- 2 cung tam hợp
-- 1 cung xung chiếu
+PHẦN 11 — CUNG TỬ TỨC (200-300 từ)
 
-Tam hợp:
+Luận giải cung Tử Tức:
+- Ý nghĩa sao tại cung
+- Cách cục active
+- Con cái, học trò, người dưới
+- Duyên con cái và mối quan hệ`,
 
-Mệnh – Tài Bạch – Quan Lộc  
-Phụ Mẫu – Nô Bộc – Tử Tức  
-Phúc Đức – Thiên Di – Phu Thê  
-Điền Trạch – Tật Ách – Huynh Đệ  
+  12: (ctx, docs) => `${ctx}
 
-Xung chiếu:
+=== TÀI LIỆU THAM KHẢO ===
+${docs}
 
-Mệnh – Thiên Di  
-Phụ Mẫu – Tật Ách  
-Phúc Đức – Tài Bạch  
-Điền Trạch – Tử Tức  
-Quan Lộc – Phu Thê  
-Nô Bộc – Huynh Đệ  
+PHẦN 12 — CUNG PHU THÊ (200-300 từ)
 
-------------------------------------------------
+Luận giải cung Phu Thê:
+- Ý nghĩa sao tại cung
+- Cách cục active
+- Hôn nhân, vợ/chồng, tình duyên
+- Duyên phận và những điều cần lưu ý`,
 
-BƯỚC 4 – PHÂN TÍCH SAO
+  13: (ctx, docs) => `${ctx}
 
-Gom toàn bộ sao của:
+=== TÀI LIỆU THAM KHẢO ===
+${docs}
 
-- cung tiểu vận
-- 2 cung tam hợp
-- cung xung chiếu
+PHẦN 13 — CUNG HUYNH ĐỆ (200-300 từ)
 
-Sau đó phân tích theo thứ tự:
+Luận giải cung Huynh Đệ:
+- Ý nghĩa sao tại cung
+- Cách cục active
+- Anh chị em, bạn bè thân thiết
+- Mối quan hệ huynh đệ và hỗ trợ`,
 
-1. cách cục / bộ sao
-2. chính tinh
-3. hóa tinh
-4. sát tinh
-5. phụ tinh
+  14: (ctx, docs) => `${ctx}
 
-Xác định cách cục của năm.
+=== TÀI LIỆU THAM KHẢO ===
+${docs}
 
-------------------------------------------------
+PHẦN 14 — CÁC ĐẠI VẬN TOÀN ĐỜI (300-400 từ)
 
-BƯỚC 5 – LUẬN BIẾN ĐỘNG CỦA NĂM
+Dựa vào engine output (scoring Thiên Thời / Địa Lợi / Nhân Hòa từng đại vận), lập bảng tổng hợp:
 
-Dựa trên cách cục sao để xác định các thay đổi có thể xảy ra:
+| Đại vận | Tuổi | Cung | Thiên Thời | Địa Lợi | Nhân Hòa | Tổng | Flag |
+|---------|------|------|-----------|---------|---------|------|------|
 
-Tài chính  
-→ kiếm tiền, hao tán, đầu tư.
+Sau bảng, luận ngắn gọn 3 đại vận quan trọng nhất (tốt nhất hoặc xấu nhất).
+Mục tiêu: người đọc nhìn được dòng chảy vận trình toàn đời.`,
 
-Công danh / công việc  
-→ thăng tiến, thay đổi, áp lực.
+  15: (ctx, docs) => `${ctx}
 
-Gia đình / hôn nhân  
-→ ổn định hoặc mâu thuẫn.
+=== TÀI LIỆU THAM KHẢO ===
+${docs}
 
-Quan hệ xã hội  
-→ quý nhân hoặc tiểu nhân.
+PHẦN 15 — VẬN HIỆN TẠI (300-400 từ)
 
-Sức khỏe  
-→ áp lực, bệnh tật hoặc cải thiện.
+Dựa vào engine output, phân tích chi tiết:
 
-------------------------------------------------
+1. Đại vận hiện tại (10 năm):
+   - Thiên Thời / Địa Lợi / Nhân Hòa
+   - Bản chất vận, cơ hội và thách thức
+   - Công việc, tài chính, gia đình, sức khỏe
 
-KẾT LUẬN
+2. Tiểu vận năm xem (1 năm):
+   - Tính chất năm (70% đại vận + 30% tiểu vận)
+   - Những điều nên làm
+   - Những điều nên tránh
 
-Phải kết hợp:
-
-- tính chất của đại vận
-- cách cục sao của tiểu vận
-
-để đưa ra kết luận cuối cùng về vận năm.
-
-------------------------------------------------
-
-OUTPUT
-
-AI phải trả ra:
-
-1. tổng quan vận năm
-2. ảnh hưởng của đại vận lên năm
-3. cách cục sao của tiểu vận
-4. lĩnh vực dễ biến động:
-   - tài chính
-   - công danh
-   - gia đình
-   - sức khỏe
-5. mức độ thuận lợi của năm
-6. lời khuyên nên / không nên trong năm`,
+Phần này cụ thể và thực tế nhất.`,
 };
 
 module.exports = async function handler(req, res) {
