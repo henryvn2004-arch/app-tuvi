@@ -557,7 +557,7 @@ select.form-input { cursor: pointer; }
       document.getElementById('progress-fill').style.width = '20%';
 
       // Convert DL → AL + an sao bằng engine v2
-      const conv = convertDuongToAm(ngay, thang, nam, parseInt(gio) * 2 + 1); // giờ giữa khung
+      const conv = convertDuongToAm(ngay, thang, nam, parseInt(gio) * 2); // gioIdx*2 = giờ đầu khung
       const ls = anSaoLaSo({
         ngayAL:   conv.amLich.day,
         thangAL:  conv.amLich.month,
