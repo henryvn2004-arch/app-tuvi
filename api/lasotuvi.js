@@ -102,14 +102,16 @@ Dựa vào engine output, thực hiện 2 việc:
     return `${ctx}
 PHẦN ${phan} — ĐẠI VẬN ${dvNum} (200-300 từ)
 
-Luận giải đại vận ${dvNum} dựa trên engine output:
-- Thiên Thời / Địa Lợi / Nhân Hòa → điểm scoring và flag
+Trong phần "=== 9 ĐẠI VẬN ===" của lá số, hãy tìm dòng bắt đầu bằng "ĐV${dvNum}:" và luận giải ĐẠI VẬN ĐÓ.
+
+Cấu trúc luận:
+- Tuổi và cung đại vận ${dvNum} (lấy từ dòng ĐV${dvNum})
 - Ý nghĩa chính tinh tại cung đại vận
 - Cách cục active tại cung đó và tam phương tứ chính
 - Các tổ hợp sao hình thành cách cục và ý nghĩa
 - Xu hướng tốt/xấu của đại vận
 - Ảnh hưởng lên tài chính, công việc, gia đình, sức khỏe, cơ hội, rủi ro
-- Những điểm cần lưu ý (xu hướng đại vận so với tính cách cung Mệnh)
+- Những điểm cần lưu ý so với tính cách cung Mệnh
 Luận giải dễ hiểu, thực tế.`;
   }
 
