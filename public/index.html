@@ -247,6 +247,7 @@ select.form-input { cursor: pointer; }
   .phan-section { break-inside: avoid; border-top: 1px solid #ccc; padding: 24px 0; }
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 </head>
 <body>
 
@@ -366,7 +367,7 @@ select.form-input { cursor: pointer; }
         </button>
         <button class="muc-luc-btn" id="ml-2" onclick="jumpToPhan(2)">
           <div class="ml-num">2</div>
-          <div class="ml-label">Cung Mệnh</div>
+          <div class="ml-label">Mệnh</div>
           <div class="ml-status" id="ml-status-2">—</div>
         </button>
         <button class="muc-luc-btn" id="ml-3" onclick="jumpToPhan(3)">
@@ -426,13 +427,58 @@ select.form-input { cursor: pointer; }
         </button>
         <button class="muc-luc-btn" id="ml-14" onclick="jumpToPhan(14)">
           <div class="ml-num">14</div>
-          <div class="ml-label">Đại Vận</div>
+          <div class="ml-label">Các ĐV</div>
           <div class="ml-status" id="ml-status-14">—</div>
         </button>
         <button class="muc-luc-btn" id="ml-15" onclick="jumpToPhan(15)">
           <div class="ml-num">15</div>
-          <div class="ml-label">Vận Nay</div>
+          <div class="ml-label">ĐV 1</div>
           <div class="ml-status" id="ml-status-15">—</div>
+        </button>
+        <button class="muc-luc-btn" id="ml-16" onclick="jumpToPhan(16)">
+          <div class="ml-num">16</div>
+          <div class="ml-label">ĐV 2</div>
+          <div class="ml-status" id="ml-status-16">—</div>
+        </button>
+        <button class="muc-luc-btn" id="ml-17" onclick="jumpToPhan(17)">
+          <div class="ml-num">17</div>
+          <div class="ml-label">ĐV 3</div>
+          <div class="ml-status" id="ml-status-17">—</div>
+        </button>
+        <button class="muc-luc-btn" id="ml-18" onclick="jumpToPhan(18)">
+          <div class="ml-num">18</div>
+          <div class="ml-label">ĐV 4</div>
+          <div class="ml-status" id="ml-status-18">—</div>
+        </button>
+        <button class="muc-luc-btn" id="ml-19" onclick="jumpToPhan(19)">
+          <div class="ml-num">19</div>
+          <div class="ml-label">ĐV 5</div>
+          <div class="ml-status" id="ml-status-19">—</div>
+        </button>
+        <button class="muc-luc-btn" id="ml-20" onclick="jumpToPhan(20)">
+          <div class="ml-num">20</div>
+          <div class="ml-label">ĐV 6</div>
+          <div class="ml-status" id="ml-status-20">—</div>
+        </button>
+        <button class="muc-luc-btn" id="ml-21" onclick="jumpToPhan(21)">
+          <div class="ml-num">21</div>
+          <div class="ml-label">ĐV 7</div>
+          <div class="ml-status" id="ml-status-21">—</div>
+        </button>
+        <button class="muc-luc-btn" id="ml-22" onclick="jumpToPhan(22)">
+          <div class="ml-num">22</div>
+          <div class="ml-label">ĐV 8</div>
+          <div class="ml-status" id="ml-status-22">—</div>
+        </button>
+        <button class="muc-luc-btn" id="ml-23" onclick="jumpToPhan(23)">
+          <div class="ml-num">23</div>
+          <div class="ml-label">ĐV 9</div>
+          <div class="ml-status" id="ml-status-23">—</div>
+        </button>
+        <button class="muc-luc-btn" id="ml-24" onclick="jumpToPhan(24)">
+          <div class="ml-num">24</div>
+          <div class="ml-label">Tiểu Vận</div>
+          <div class="ml-status" id="ml-status-24">—</div>
         </button>
       </div>
     </div><!-- end muc-luc -->
@@ -475,42 +521,44 @@ select.form-input { cursor: pointer; }
   let _hoTen = null, _ngay = null, _thang = null, _nam = null;
   let _gioitinh = null, _namXem = null, _astrolabe = null;
   let _currentPhan = 0;
-  const TONG_PHAN = 15;
+  const TONG_PHAN = 24;
   const PHAN_LABELS = [
   '',
   'Tổng Quan Lá Số',
-  'Cung Mệnh',
-  'Cung Phụ Mẫu',
-  'Cung Phúc Đức',
-  'Cung Điền Trạch',
-  'Cung Quan Lộc',
-  'Cung Nô Bộc',
-  'Cung Thiên Di',
-  'Cung Tật Ách',
-  'Cung Tài Bạch',
-  'Cung Tử Tức',
-  'Cung Phu Thê',
-  'Cung Huynh Đệ',
-  'Các Đại Vận',
-  'Vận Hiện Tại',
+  'Cung Mệnh','Cung Phụ Mẫu','Cung Phúc Đức','Cung Điền Trạch',
+  'Cung Quan Lộc','Cung Nô Bộc','Cung Thiên Di','Cung Tật Ách',
+  'Cung Tài Bạch','Cung Tử Tức','Cung Phu Thê','Cung Huynh Đệ',
+  'Tổng Quan Đại Vận',
+  'Đại Vận 1','Đại Vận 2','Đại Vận 3','Đại Vận 4','Đại Vận 5',
+  'Đại Vận 6','Đại Vận 7','Đại Vận 8','Đại Vận 9',
+  'Tiểu Vận Năm Xem',
 ];
   const QUERIES = {
-    1:  () => `lục thập hoa giáp tinh hệ tổng quan mệnh cục chính tinh khí chất cách cục`,
-    2:  () => `cung mệnh chính tinh cách cục ý nghĩa luận giải`,
-    3:  () => `cung phụ mẫu cha mẹ ý nghĩa luận giải`,
-    4:  () => `cung phúc đức phúc khí tâm linh ý nghĩa luận giải`,
-    5:  () => `cung điền trạch nhà đất bất động sản ý nghĩa luận giải`,
-    6:  () => `cung quan lộc sự nghiệp công danh ý nghĩa luận giải`,
-    7:  () => `cung nô bộc bạn bè nhân viên ý nghĩa luận giải`,
-    8:  () => `cung thiên di xuất ngoại xa nhà ý nghĩa luận giải`,
-    9:  () => `cung tật ách sức khỏe bệnh tật ý nghĩa luận giải`,
-    10: () => `cung tài bạch tiền bạc tài chính ý nghĩa luận giải`,
-    11: () => `cung tử tức con cái ý nghĩa luận giải`,
-    12: () => `cung phu thê hôn nhân vợ chồng ý nghĩa luận giải`,
-    13: () => `cung huynh đệ anh chị em ý nghĩa luận giải`,
-    14: () => `đại vận thiên thời địa lợi nhân hòa scoring vận hạn giai đoạn`,
-    15: () => `vận hiện tại tiểu hạn lưu niên lưu thái tuế sao lưu động`,
-  };
+  1:  () => `lục thập hoa giáp tinh hệ tổng quan mệnh cục chính tinh khí chất`,
+  2:  () => `cung mệnh chính tinh cách cục ý nghĩa`,
+  3:  () => `cung phụ mẫu cha mẹ ý nghĩa`,
+  4:  () => `cung phúc đức phúc khí tổ tiên ý nghĩa`,
+  5:  () => `cung điền trạch nhà đất bất động sản`,
+  6:  () => `cung quan lộc sự nghiệp công danh`,
+  7:  () => `cung nô bộc bạn bè nhân viên`,
+  8:  () => `cung thiên di xuất ngoại giao thiệp`,
+  9:  () => `cung tật ách sức khỏe bệnh tật`,
+  10: () => `cung tài bạch tiền bạc tài chính`,
+  11: () => `cung tử tức con cái`,
+  12: () => `cung phu thê hôn nhân vợ chồng`,
+  13: () => `cung huynh đệ anh chị em`,
+  14: () => `đại vận thiên thời địa lợi nhân hòa scoring vận hạn`,
+  15: () => `đại vận cung sao ý nghĩa vận hạn`,
+  16: () => `đại vận cung sao ý nghĩa vận hạn`,
+  17: () => `đại vận cung sao ý nghĩa vận hạn`,
+  18: () => `đại vận cung sao ý nghĩa vận hạn`,
+  19: () => `đại vận cung sao ý nghĩa vận hạn`,
+  20: () => `đại vận cung sao ý nghĩa vận hạn`,
+  21: () => `đại vận cung sao ý nghĩa vận hạn`,
+  22: () => `đại vận cung sao ý nghĩa vận hạn`,
+  23: () => `đại vận cung sao ý nghĩa vận hạn`,
+  24: () => `tiểu hạn lưu niên vận hiện tại`,
+};
 
   function formatLaSoV2(ls, conv) {
     const lines = [];
@@ -642,9 +690,48 @@ select.form-input { cursor: pointer; }
       const section = document.createElement('div');
       section.className = 'phan-section';
       section.id = `phan-section-${_currentPhan}`;
+      const chartHtml = (data.chartData && _currentPhan === 14)
+        ? `<div style="max-width:700px;margin:24px 0"><canvas id="chart-daivan"></canvas></div>`
+        : '';
       section.innerHTML = `<a id="phan-anchor-${_currentPhan}" class="phan-anchor"></a>
-        <div class="phan-num">Phần ${_currentPhan} / ${TONG_PHAN} — ${PHAN_LABELS[_currentPhan]}</div>` 
-        + renderMarkdown(data.luanGiai);
+        <div class="phan-num">Phần ${_currentPhan} / ${TONG_PHAN} — ${PHAN_LABELS[_currentPhan]}</div>`
+        + renderMarkdown(data.luanGiai) + chartHtml;
+
+      if (data.chartData && _currentPhan === 14) {
+        setTimeout(() => {
+          const ctx = document.getElementById('chart-daivan');
+          if (!ctx) return;
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: data.chartData.labels,
+              datasets: [{
+                label: 'Điểm Vận',
+                data: data.chartData.scores,
+                borderColor: '#1455A4',
+                backgroundColor: 'rgba(20,85,164,0.08)',
+                pointBackgroundColor: data.chartData.scores.map(s =>
+                  s >= 7 ? '#1E6B3C' : s >= 5 ? '#1455A4' : '#C0392B'
+                ),
+                pointRadius: 6,
+                tension: 0.4,
+                fill: true,
+              }]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: { display: false },
+                title: { display: true, text: 'Vận Trình Toàn Đời', font: { size: 15, weight: 'bold' }, color: '#061A2E' }
+              },
+              scales: {
+                y: { min: 0, max: 10, title: { display: true, text: 'Điểm vận' } },
+                x: { title: { display: true, text: 'Đại vận' } }
+              }
+            }
+          });
+        }, 150);
+      }
       body.appendChild(section);
 
       updateMucLuc(_currentPhan, 'done');
