@@ -700,40 +700,79 @@ select.form-input { cursor: pointer; }
     if (phan === _currentPhan + 1) loadNextPhan();
   }
 
-  function displayResult(hoten, ngay, thang, nam, gioitinh, namXem, a) {
+  function displayResult(hoten, ngay, thang, nam, gioitinh, namXem, ls) {
+    const conv = ls._conv || {};
     document.getElementById('result-header').innerHTML = `
       <div class="result-eyebrow">Lá Số Tử Vi</div>
       <div class="result-name">${hoten}</div>
       <div class="result-info">
-        <span class="result-info-item">${ngay}/${thang}/${nam}</span>
+        <span class="result-info-item">${ngay}/${thang}/${nam} DL</span>
+        <span class="result-info-item">${conv.amLich ? conv.amLich.day+'/'+conv.amLich.month+'/'+conv.amLich.year+' ÂL' : ''}</span>
         <span class="result-info-item">${gioitinh === 'nam' ? 'Nam' : 'Nữ'}</span>
-        <span class="result-info-item">${a.chineseDate || ''}</span>
-        <span class="result-info-item">Mệnh ${a.fiveElementsClass || ''}</span>
-        <span class="result-info-item">Xem vận năm ${namXem}</span>
+        <span class="result-info-item">${ls.canChiNam}</span>
+        <span class="result-info-item">Mệnh ${ls.napAm} · ${ls.cuc}</span>
+        <span class="result-info-item">Xem năm ${namXem}</span>
       </div>`;
 
-    const ORDER = ['Tỵ','Ngọ','Mùi','Thân','Thìn',null,null,'Dậu','Mão',null,null,'Tuất','Dần','Sửu','Tý','Hợi'];
-    const palaces = a.palaces || [];
-    document.getElementById('laso-grid').innerHTML = ORDER.map(dc => {
-      if (!dc) return `<div class="cung-cell empty"></div>`;
-      const p = palaces.find(x => x.earthlyBranch === dc
-        || x.earthlyBranch?.toLowerCase() === dc.toLowerCase()
-        || x.earthlyBranch === dc.replace('ỵ','ị').replace('ị','ỵ')
-      ) || {};
-      const main  = (p.majorStars||[]).map(s=>`<strong>${s.name}</strong>${s.mutagen?` <em>${s.mutagen}</em>`:''}`).join(' ');
-      const minor = (p.minorStars||[]).map(s=>s.name).join(' · ');
-      const adjo  = (p.adjectiveStars||[]).map(s=>s.name).join(' · ');
-      const van   = p.decadal?.range ? `${p.decadal.range[0]}–${p.decadal.range[1]}` : '';
-      return `<div class="cung-cell">
-        <div class="cung-name">${p.name||''}${p.isBodyPalace?' · THÂN':''}</div>
-        <div class="cung-diachi">${dc}</div>
-        ${van?`<div class="cung-van">${van}</div>`:''}
-        <div class="cung-stars">${main}${minor?`<br><span class="cung-minor">${minor}</span>`:''}${adjo?`<br><span class="cung-minor" style="color:var(--text-lt)">${adjo}</span>`:''}</div>
+    const LAYOUT = [5,6,7,8, 4,-1,-1,9, 3,-1,-1,10, 2,1,0,11];
+    const BAD_TYPES = new Set(['sát tinh','hung tinh','bại tinh']);
+    const EC = {hỏa:'e-hoa',kim:'e-kim',thổ:'e-tho',mộc:'e-moc',thủy:'e-thuy'};
+    const BC_MAP = {Miếu:'M',Vượng:'V',Đắc:'Đ',Bình:'B',Hãm:'H'};
+    const ec = ten => EC[(STAR_DATA[ten]||{}).element] || '';
+    const bc = b => BC_MAP[b] ? `<span class="bright">(${BC_MAP[b]})</span>` : '';
+    const isBad = ten => BAD_TYPES.has((STAR_DATA[ten]||{}).type);
+    const fmt = (s, cls) => `<span class="${cls} ${ec(s.ten)}">${s.ten}${bc(s.brightness)}${s.hoa?`<span class="hoa">[${s.hoa}]</span>`:''}</span>`;
+
+    const dvHT = ls.daiVanHienTai;
+    const tvCung = ls.palaces[ls.tieuHanIdx];
+    const ldh = ls.palaces[ls.luuNienDaiHanIdx];
+
+    let centerDone = false;
+    const centerHTML = `<div class="cung-center">
+      <div class="center-la-so">
+        <div class="center-title">✦ ${hoten.toUpperCase()} ✦</div>
+        <div class="center-row">📅 ${conv.amLich ? conv.amLich.day+'/'+conv.amLich.month+'/'+conv.amLich.year+' ÂL' : ''} · ${conv.gioChi||''}</div>
+        <hr class="center-divider">
+        <div class="center-row">Năm: <b style="color:var(--navy)">${ls.canChiNam}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${ls.napAm}</b></div>
+        <div class="center-row">Cục: <b style="color:var(--navy)">${ls.cuc}</b></div>
+        <div class="center-row">Mệnh: <b style="color:var(--navy)">${ls.menhDC}</b> &nbsp;·&nbsp; Thân: <b style="color:var(--navy)">${ls.thanDC}</b></div>
+        <hr class="center-divider">
+        <div class="center-row">Tuổi ${ls.tuoiXem} — Năm <b style="color:var(--blue)">${ls.chiNamXem||''}</b></div>
+        <div class="center-row">Đại vận: <b style="color:var(--green, #1E6B3C)">${dvHT?.diaChi||'?'}</b> (${dvHT?.tuoiStart}–${dvHT?.tuoiEnd}t)</div>
+        <div class="center-row">Tiểu hạn: <b style="color:var(--green, #1E6B3C)">${tvCung?.diaChi||'?'}</b> · ${tvCung?.cungName||''}</div>
+        <div class="center-row">Lưu đại hạn: <b style="color:var(--gold)">${ldh?.diaChi||'?'}</b> · ${ldh?.cungName||''}</div>
+      </div>
+    </div>`;
+
+    document.getElementById('laso-grid').innerHTML = LAYOUT.map(dcI => {
+      if (dcI === -1) {
+        if (!centerDone) { centerDone = true; return centerHTML; }
+        return '';
+      }
+      const p = ls.palaces[dcI];
+      if (!p) return '<div class="cung-cell"></div>';
+      const isCurVan = dvHT?.cungIdx === dcI;
+      const isTH = ls.tieuHanIdx === dcI;
+      const van = p.decadal ? `${p.decadal.range[0]}–${p.decadal.range[1]}` : '';
+      const chinh = p.majorStars.map(s => fmt(s,'star-chinh')).join('<br>');
+      const totStars = p.stars.filter(s => s.nhom!=='chinh' && s.nhom!=='trang_sinh' && s.nhom!=='tuan_triet' && !isBad(s.ten));
+      const xauStars = p.stars.filter(s => s.nhom!=='chinh' && s.nhom!=='trang_sinh' && isBad(s.ten));
+      const tot = totStars.map(s => fmt(s,'star-phu')).join('<br>');
+      const xau = xauStars.map(s => fmt(s,'star-phu')).join('<br>');
+      const vong = p.stars.filter(s=>s.nhom==='trang_sinh').map(s=>`<span class="star-vong ${ec(s.ten)}">${s.ten}${bc(s.brightness)}</span>`).join(' ');
+      const tt = p.stars.filter(s=>s.nhom==='tuan_triet').map(s=>`<span class="star-tt">${s.ten}</span>`).join(' ');
+      return `<div class="cung-cell ${p.isMenh?'is-menh':''} ${isCurVan?'cur-van':''}">
+        <div class="c-can-chi">${p.diaChi}</div>
+        <div class="c-cung-name">${p.cungName}${p.isThan?' ·T':''}${isCurVan?' ◆':''}${isTH?' ★':''}</div>
+        <div class="c-dai-van">${van}</div>
+        <div class="c-chinh">${chinh}</div>
+        <div class="c-tot">${tot}${tt?'<br>'+tt:''}</div>
+        <div class="c-xau">${xau}</div>
+        <div class="c-trang-sinh">${vong}</div>
       </div>`;
     }).join('');
 
     document.getElementById('result-section').classList.add('active');
-    console.log('Palaces:', palaces.map(p => `${p.name}=${p.earthlyBranch}`));
   }
 
   function renderMarkdown(text) {
