@@ -93,33 +93,90 @@ select.form-input { cursor: pointer; }
 .laso-label { font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 16px; display: flex; align-items: center; gap: 16px; }
 .laso-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 .laso-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--border); border-left: 1px solid var(--border); }
-.cung-cell { border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 14px 12px; min-height: 96px; }
+
+/* Cung cell — layout mới */
+.cung-cell {
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  min-height: 130px;
+  display: grid;
+  grid-template-areas:
+    "can-chi   cung-name  dai-van"
+    "chinh     chinh      chinh"
+    "tot       tot        xau"
+    "trang-sinh trang-sinh trang-sinh";
+  grid-template-columns: 1fr auto 1fr;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 1px; padding: 5px;
+  font-size: 11px;
+}
 .cung-cell.empty { background: var(--bg-soft); }
-.cung-name { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 3px; }
-.cung-diachi { font-size: 12px; color: var(--gold); font-weight: 600; margin-bottom: 3px; }
-.cung-van { font-size: 10px; color: var(--blue); margin-bottom: 5px; }
-.cung-stars { font-size: 12px; color: var(--text); line-height: 1.55; }
-.cung-stars strong { color: var(--navy); font-weight: 700; }
-.cung-stars em { color: var(--gold); font-style: normal; font-size: 11px; }
-.cung-minor { font-size: 11px; color: var(--text-lt); }
+.cung-cell.is-menh { border: 2px solid var(--gold); }
+.cung-cell.cur-van { border: 2px solid var(--green, #1E6B3C); }
+
+.c-can-chi   { grid-area: can-chi;     font-size: 9px; color: var(--gold); font-weight: 700; }
+.c-cung-name { grid-area: cung-name;   font-size: 9px; color: var(--text-lt); text-transform: uppercase; letter-spacing: 1px; text-align: center; white-space: nowrap; }
+.c-dai-van   { grid-area: dai-van;     font-size: 9px; color: var(--blue); text-align: right; }
+.c-chinh     { grid-area: chinh;       text-align: center; border-bottom: 1px solid var(--border-lt); padding-bottom: 2px; margin-bottom: 1px; }
+.c-tot       { grid-area: tot; }
+.c-xau       { grid-area: xau;         text-align: right; }
+.c-trang-sinh { grid-area: trang-sinh; text-align: center; border-top: 1px solid var(--border-lt); padding-top: 2px; font-size: 10px; color: var(--gold); }
+
+/* Star colors by element */
+.star-chinh  { font-weight: 700; font-size: 12px; display: block; }
+.star-phu    { font-size: 10px; display: block; }
+.star-vong   { font-size: 10px; }
+.bright      { font-size: 9px; opacity: 0.8; }
+.hoa         { font-size: 9px; color: #9A7B3A; margin-left: 1px; }
+.e-hoa  { color: #C0392B; }
+.e-kim  { color: #555; }
+.e-tho  { color: #9A7B3A; }
+.e-moc  { color: #1E6B3C; }
+.e-thuy { color: #1455A4; }
+.star-tt { font-size: 10px; color: #1E6B3C; }
+
+/* Center info */
+.cung-center {
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  grid-column: span 2; grid-row: span 2;
+  background: var(--bg-soft);
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+}
+.center-la-so { width: 100%; display: flex; flex-direction: column; align-items: center; }
+.center-title { color: var(--navy); font-weight: 700; font-size: 13px; margin-bottom: 10px; text-align: center; letter-spacing: 1px; }
+.center-row { font-size: 12px; color: var(--text-mid); margin: 3px 0; width: 100%; text-align: left; padding-left: 4px; line-height: 1.7; }
+.center-row b { color: var(--text-lt); font-weight: normal; }
+.center-divider { width: 80%; border: none; border-top: 1px solid var(--border); margin: 5px 0; }
 
 /* MỤC LỤC */
-.muc-luc { display: none; margin-bottom: 56px; border: 1px solid var(--border); }
-.muc-luc.visible { display: block; }
-.muc-luc-header { background: var(--navy); color: white; padding: 14px 24px; font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; }
-.muc-luc-items { display: grid; grid-template-columns: repeat(5, 1fr); flex-wrap: wrap; }
-.muc-luc-btn { display: flex; flex-direction: column; gap: 8px; padding: 16px 14px 12px; background: white; border: none; border-right: 1px solid var(--border-lt); border-bottom: 1px solid var(--border-lt); cursor: pointer; transition: background 0.15s; text-align: left; }
-.muc-luc-btn:last-child { border-right: none; }
+/* Sidebar layout */
+.result-layout { display: flex; gap: 32px; align-items: flex-start; }
+.result-sidebar {
+  display: none; width: 200px; flex-shrink: 0;
+  position: sticky; top: 76px;
+  max-height: calc(100vh - 96px); overflow-y: auto;
+}
+.result-sidebar.visible { display: block; }
+.result-main { flex: 1; min-width: 0; }
+
+.muc-luc { border: 1px solid var(--border); }
+.muc-luc.visible { }
+.muc-luc-header { background: var(--navy); color: white; padding: 12px 16px; font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+.muc-luc-items { display: flex; flex-direction: column; }
+.muc-luc-btn { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: white; border: none; border-bottom: 1px solid var(--border-lt); cursor: pointer; transition: background 0.15s; text-align: left; width: 100%; }
+.muc-luc-btn:last-child { border-bottom: none; }
 .muc-luc-btn:hover:not(.loading) { background: var(--bg-soft); }
 .muc-luc-btn.active { background: var(--gold-lt); }
 .muc-luc-btn.loading { cursor: not-allowed; background: #F0F5FF; }
-.ml-num { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: var(--text-lt); transition: all 0.2s; }
+.ml-num { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: var(--text-lt); flex-shrink: 0; transition: all 0.2s; }
 .muc-luc-btn.active .ml-num { border-color: var(--gold); color: var(--gold); }
 .muc-luc-btn.done .ml-num { background: var(--navy); border-color: var(--navy); color: white; }
 .muc-luc-btn.loading .ml-num { border-color: var(--blue); color: var(--blue); }
-.ml-label { font-size: 12px; font-weight: 500; color: var(--text); line-height: 1.35; }
-.ml-status { font-size: 11px; color: var(--text-lt); }
-.ml-status.done { color: var(--green); font-weight: 600; }
+.ml-label { font-size: 12px; font-weight: 500; color: var(--text); line-height: 1.3; flex: 1; }
+.ml-status { font-size: 11px; color: var(--text-lt); flex-shrink: 0; }
+.ml-status.done { color: var(--green); font-weight: 700; }
 .ml-status.loading { color: var(--blue); }
 
 /* LUẬN GIẢI */
@@ -204,7 +261,7 @@ select.form-input { cursor: pointer; }
     <div class="hero-left">
       <div class="hero-eyebrow">Tử Vi Đẩu Số</div>
       <h1>Luận giải<br>vận mệnh<br><em>cổ điển</em></h1>
-      <p class="hero-desc">An sao theo iztro, luận giải theo Lục Thập Hoa Giáp và trường phái Vân Đằng Thái Thứ Lang — Thiên Thời, Địa Lợi, Nhân Hòa.</p>
+      <p class="hero-desc">An sao theo engine riêng (100+ sao), luận giải theo Lục Thập Hoa Giáp và trường phái Vân Đằng Thái Thứ Lang — Thiên Thời, Địa Lợi, Nhân Hòa.</p>
     </div>
     <div class="hero-right">
       <div class="hero-stat">
@@ -297,8 +354,10 @@ select.form-input { cursor: pointer; }
       <div class="laso-grid" id="laso-grid"></div>
     </div>
 
+    <div class="result-layout">
+    <div class="result-sidebar" id="result-sidebar">
     <div class="muc-luc" id="muc-luc">
-      <div class="muc-luc-header">Nội Dung Luận Giải — Chọn Phần</div>
+      <div class="muc-luc-header">Nội Dung</div>
       <div class="muc-luc-items">
         <button class="muc-luc-btn" id="ml-1" onclick="jumpToPhan(1)">
           <div class="ml-num">1</div>
@@ -381,6 +440,9 @@ select.form-input { cursor: pointer; }
     <div class="phan-loading" id="phan-loading"><div class="phan-loading-spinner"></div><div class="phan-loading-text" id="phan-loading-text">Đang tải...</div></div>
     <div class="result-body" id="result-body"></div>
 
+    </div><!-- end result-main -->
+    </div><!-- end result-layout -->
+
     <div class="result-actions" id="result-actions">
       <button class="btn-next-phan" id="btn-next" onclick="loadNextPhan()"><span class="spinner"></span><span id="btn-next-label">Tiếp theo →</span></button>
       <button class="btn-pdf" id="btn-pdf" onclick="window.print()">Tải PDF</button>
@@ -396,8 +458,7 @@ select.form-input { cursor: pointer; }
   <span>Trường phái VDTTL · Lục Thập Hoa Giáp</span>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/iztro/dist/iztro.min.js"></script>
-<script src="/tuvi-engine.js"></script>
+<script src="/tuvi-ansao-engine.js"></script>
 <script>
   // Load cach cuc DB
   let CACH_CUC_DB = [];
@@ -449,37 +510,23 @@ select.form-input { cursor: pointer; }
     15: () => `vận hiện tại tiểu hạn lưu niên lưu thái tuế sao lưu động`,
   };
 
-  function getIztroHour(t) { return parseInt(t); }
-
-  function formatLaSo(a) {
+  function formatLaSoV2(ls, conv) {
     const lines = [];
-    lines.push(`Mệnh: ${a.earthlyBranchOfSoulPalace || '?'} | Thân: ${a.earthlyBranchOfBodyPalace || '?'} | Cục: ${a.fiveElementsClass || '?'} | Mệnh chủ: ${a.soul || '?'} | Thân chủ: ${a.body || '?'}`);
-    lines.push(`Sinh năm: ${a.chineseDate} | Giờ: ${a.time}`);
+    lines.push(`=== LÁ SỐ TỬ VI ===`);
+    lines.push(`Năm sinh: ${ls.canChiNam} | Bản mệnh: ${ls.napAm} | Cục: ${ls.cuc}`);
+    lines.push(`Cung Mệnh: ${ls.menhDC} | Cung Thân: ${ls.thanDC}`);
+    lines.push(`Tuổi xem: ${ls.tuoiXem} | Năm xem: ${ls.chiNamXem}`);
+    const dvHT = ls.daiVanHienTai;
+    if (dvHT) lines.push(`Đại vận: ${dvHT.diaChi} (${dvHT.tuoiStart}–${dvHT.tuoiEnd}t)`);
+    lines.push(`Tiểu hạn: ${ls.palaces[ls.tieuHanIdx]?.diaChi} | Lưu đại hạn: ${ls.palaces[ls.luuNienDaiHanIdx]?.diaChi}`);
     lines.push('');
-    for (const p of a.palaces) {
-      const fmtStar = s => {
-        let txt = s.name;
-        if (s.brightness) txt += `(${s.brightness})`;
-        if (s.mutagen)    txt += `[${s.mutagen}]`;
-        return txt;
-      };
-      const major  = (p.majorStars||[]).map(fmtStar).join(' ');
-      const minor  = (p.minorStars||[]).map(fmtStar).join(' ');
-      const adjo   = (p.adjectiveStars||[]).map(s=>s.name).join(' ');
-      const yearly = (p.yearlyDecStar||p.yearlyStars||[]).map(s=>s.name||s).join(' ');
-      const decStar= (p.decadalStars||[]).map(s=>s.name||s).join(' ');
-
-      const vanInfo = [];
-      if (p.decadal?.range) vanInfo.push(`Đại vận: ${p.decadal.range[0]}–${p.decadal.range[1]}`);
-      if (p.ages) vanInfo.push(`Tiểu hạn: ${Array.isArray(p.ages)?p.ages.join(','):p.ages}`);
-      if (p.isBodyPalace) vanInfo.push('THÂN CUNG');
-
-      lines.push(`[${p.name}] ${p.earthlyBranch}${vanInfo.length?' | '+vanInfo.join(' | '):''}`);
-      lines.push(`  Chính tinh: ${major||'(vô chính diệu)'}`);
-      if (minor)   lines.push(`  Phụ tinh: ${minor}`);
-      if (adjo)    lines.push(`  Tạp tinh: ${adjo}`);
-      if (yearly)  lines.push(`  Sao năm: ${yearly}`);
-      if (decStar) lines.push(`  Sao vận: ${decStar}`);
+    for (const p of ls.palaces) {
+      const van = p.decadal ? `ĐV:${p.decadal.range[0]}-${p.decadal.range[1]}` : '';
+      const chinh = p.majorStars.map(s => s.ten + (s.brightness?`(${s.brightness})`:'') + (s.hoa?`[${s.hoa}]`:'')).join(' ');
+      const phu = p.stars.filter(s=>s.nhom!=='chinh').map(s => s.ten + (s.brightness?`(${s.brightness})`:'')).join(' ');
+      lines.push(`[${p.cungName}] ${p.diaChi}${p.isThan?' THÂN':''}${p.isMenh?' MỆNH':''} ${van}`);
+      lines.push(`  Chính tinh: ${chinh||'(vô chính diệu)'}`);
+      if (phu) lines.push(`  Phụ tinh: ${phu}`);
     }
     return lines.join('\n');
   }
@@ -509,16 +556,23 @@ select.form-input { cursor: pointer; }
       document.getElementById('loader-text').textContent = 'Đang an sao lá số...';
       document.getElementById('progress-fill').style.width = '20%';
 
-      const dateStr = `${nam}-${String(thang).padStart(2,'0')}-${String(ngay).padStart(2,'0')}`;
-      const gender = gioitinh === 'nam' ? '男' : '女';
-      let astrolabe;
-      try {
-        astrolabe = iztro.astro.bySolar(dateStr, getIztroHour(gio), gender, true, 'vi-VN');
-      } catch(e) { throw new Error('Lỗi an sao: ' + e.message); }
+      // Convert DL → AL + an sao bằng engine v2
+      const conv = convertDuongToAm(ngay, thang, nam, parseInt(gio) * 2 + 1); // giờ giữa khung
+      const ls = anSaoLaSo({
+        ngayAL:   conv.amLich.day,
+        thangAL:  conv.amLich.month,
+        namAL:    nam,
+        canNam:   conv.canNam,
+        chiNam:   conv.chiNam,
+        gioIdx:   conv.gioIdx,
+        gioitinh,
+        namXem,
+      });
+      ls._conv = conv; ls._hoTen = hoten;
 
-      _laSoText = formatLaSo(astrolabe);
+      _laSoText = formatLaSoV2(ls, conv);
       _hoTen = hoten; _ngay = ngay; _thang = thang; _nam = nam;
-      _gioitinh = gioitinh; _namXem = namXem; _astrolabe = astrolabe;
+      _gioitinh = gioitinh; _namXem = namXem; _astrolabe = ls;
       _currentPhan = 0;
 
       document.getElementById('result-body').innerHTML = '';
@@ -597,6 +651,7 @@ select.form-input { cursor: pointer; }
       if (_currentPhan === 1) {
         displayResult(_hoTen, _ngay, _thang, _nam, _gioitinh, _namXem, _astrolabe);
         document.getElementById('muc-luc').classList.add('visible');
+        document.getElementById('result-sidebar').classList.add('visible');
       }
 
       phanLoading.classList.remove('active');
@@ -612,6 +667,11 @@ select.form-input { cursor: pointer; }
         document.getElementById('btn-pdf').classList.add('visible');
       }
       section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // Auto-load phần tiếp theo sau 800ms
+      if (_currentPhan < TONG_PHAN) {
+        setTimeout(() => loadNextPhan(), 800);
+      }
 
     } catch(e) {
       phanLoading.classList.remove('active');
