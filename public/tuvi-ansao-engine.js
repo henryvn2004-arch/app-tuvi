@@ -81,7 +81,11 @@ function solarToLunar(dd, mm, yy, tz=7) {
     const nm2 = _getNewMoonDay(leapOff + i + 1, tz);
     if (_sunLongitude(nm1) === _sunLongitude(nm2)) { leapM = i; break; }
   }
-  if (leapM > 0 && diff >= leapM) {
+  // Fix: leapOff có thể trỏ trước a11 1 bước → cần điều chỉnh
+  const nmA11Check = _getNewMoonDay(leapOff, tz);
+  const offsetFix = nmA11Check < a11 ? 1 : 0;
+  const leapMAdj = leapM - offsetFix;
+  if (leapMAdj > 0 && diff >= leapMAdj) {
     lunarMonth = diff + 10;
     if (lunarMonth > 12) lunarMonth -= 12;
   }
