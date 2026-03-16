@@ -609,15 +609,25 @@ select.form-input { cursor: pointer; }
     lines.push(`Tiểu hạn: ${ls.palaces[ls.tieuHanIdx]?.diaChi} (${ls.palaces[ls.tieuHanIdx]?.cungName}) | Lưu đại hạn: ${ls.palaces[ls.luuNienDaiHanIdx]?.diaChi} (${ls.palaces[ls.luuNienDaiHanIdx]?.cungName})`);
     lines.push('');
 
-    // 12 cung
+    // 12 cung + tam phương tứ chính
     lines.push('=== 12 CUNG ===');
     for (const p of ls.palaces) {
       const van = p.decadal ? `ĐV:${p.decadal.range[0]}-${p.decadal.range[1]}` : '';
       const chinh = p.majorStars.map(s => s.ten + (s.brightness?`(${s.brightness})`:'') + (s.hoa?`[${s.hoa}]`:'')).join(' ');
-      const phu = p.stars.filter(s=>s.nhom!=='chinh').map(s => s.ten + (s.brightness?`(${s.brightness})`:'')).join(' ');
+      const phu = p.stars.filter(s=>s.nhom!=='chinh').map(s => s.ten + (s.hoa?`[${s.hoa}]`:'')).join(' ');
       lines.push(`[${p.cungName}] ${p.diaChi}${p.isThan?' THÂN':''}${p.isMenh?' MỆNH':''} ${van}`);
       lines.push(`  Chính tinh: ${chinh||'(vô chính diệu)'}`);
       if (phu) lines.push(`  Phụ tinh: ${phu}`);
+      // Tam phương tứ chính
+      if (p.tamHopCungs && p.tamHopCungs.length) {
+        const tamHopStr = p.tamHopCungs.map(c => {
+          const cs = c.majorStars.map(s=>s.ten+(s.hoa?`[${s.hoa}]`:'')).join(' ');
+          return `${c.cungName}(${c.diaChi}):${cs||'trống'}`;
+        }).join(' | ');
+        const xungCs = p.xungChieuCung?.majorStars.map(s=>s.ten+(s.hoa?`[${s.hoa}]`:'')).join(' ') || 'trống';
+        lines.push(`  Tam hợp: ${tamHopStr}`);
+        lines.push(`  Xung chiếu: ${p.xungChieuCung?.cungName}(${p.xungChieuCung?.diaChi}):${xungCs}`);
+      }
     }
 
     // 9 đại vận với scoring JS thực tế
