@@ -620,7 +620,7 @@ select.form-input { cursor: pointer; }
       if (phu) lines.push(`  Phụ tinh: ${phu}`);
     }
 
-    // 9 đại vận đầy đủ để Claude tính scoring
+    // 9 đại vận với scoring JS thực tế
     lines.push('');
     lines.push('=== 9 ĐẠI VẬN ===');
     const BAD_T = new Set(['sát tinh','hung tinh','bại tinh']);
@@ -631,7 +631,10 @@ select.form-input { cursor: pointer; }
       const chinh = p.majorStars.map(s => s.ten + (s.brightness?`(${s.brightness})`:'') + (s.hoa?`[${s.hoa}]`:'')).join(' ');
       const tot = p.stars.filter(s=>s.nhom!=='chinh'&&!BAD_T.has((STAR_DATA[s.ten]||{}).type)).map(s=>s.ten+(s.hoa?`[${s.hoa}]`:'')).join(' ');
       const xau = p.stars.filter(s=>s.nhom!=='chinh'&&BAD_T.has((STAR_DATA[s.ten]||{}).type)).map(s=>s.ten).join(' ');
+      const sc = dv.scoring;
+      const scStr = sc ? `TT=${sc.thienThoi} ĐL=${sc.diaLoi} NH=${sc.nhanHoa} Tổng=${sc.tong} ${sc.flag}` : '';
       lines.push(`ĐV${i+1}: ${dv.diaChi} (${dv.tuoiStart}–${dv.tuoiEnd}t) cung=${p.cungName}${isCur?' ← ĐANG XEM':''}`);
+      if (scStr) lines.push(`  Scoring: ${scStr}`);
       lines.push(`  Chính tinh: ${chinh||'(vô chính diệu)'}`);
       if (tot) lines.push(`  Sao tốt: ${tot}`);
       if (xau) lines.push(`  Sao xấu: ${xau}`);
@@ -890,7 +893,7 @@ select.form-input { cursor: pointer; }
         <div class="center-row">Mệnh: <b style="color:var(--navy)">${ls.menhDC}</b> &nbsp;·&nbsp; Thân: <b style="color:var(--navy)">${ls.thanDC}</b></div>
         <hr class="center-divider">
         <div class="center-row">Tuổi ${ls.tuoiXem} — Năm <b style="color:var(--blue)">${ls.chiNamXem||''}</b></div>
-        <div class="center-row">Đại vận: <b style="color:var(--green, #1E6B3C)">${dvHT?.diaChi||'?'}</b> (${dvHT?.tuoiStart}–${dvHT?.tuoiEnd}t)</div>
+        <div class="center-row">Đại vận: <b style="color:var(--green, #1E6B3C)">${dvHT?.diaChi||'?'}</b> (${dvHT?.tuoiStart}–${dvHT?.tuoiEnd}t) ${dvHT?.scoring ? dvHT.scoring.flag + ' ' + dvHT.scoring.tong + 'đ' : ''}</div>
         <div class="center-row">Tiểu hạn: <b style="color:var(--green, #1E6B3C)">${tvCung?.diaChi||'?'}</b> · ${tvCung?.cungName||''}</div>
         <div class="center-row">Lưu đại hạn: <b style="color:var(--gold)">${ldh?.diaChi||'?'}</b> · ${ldh?.cungName||''}</div>
       </div>
