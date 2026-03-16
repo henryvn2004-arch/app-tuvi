@@ -729,18 +729,18 @@ function tinhScoringAllDaiVan(daiVans, palaces, canChiNam, chiNam, napAm) {
 
 // ─── TAM PHƯƠNG TỨ CHÍNH (theo tên cung) ────────────────────
 const TAM_PHUONG_TU_CHINH = {
-  'Mệnh':     { tamHop: ['Tài Bạch','Quan Lộc'],       xung: 'Thiên Di' },
-  'Huynh Đệ': { tamHop: ['Tật Ách','Điền Trạch'],      xung: 'Nô Bộc' },
-  'Phu Thê':  { tamHop: ['Quan Lộc','Phúc Đức'],       xung: 'Thiên Di' },
-  'Tử Tức':   { tamHop: ['Điền Trạch','Phúc Đức'],     xung: 'Phụ Mẫu' },
-  'Tài Bạch': { tamHop: ['Mệnh','Quan Lộc'],            xung: 'Phúc Đức' },
-  'Tật Ách':  { tamHop: ['Huynh Đệ','Điền Trạch'],     xung: 'Phụ Mẫu' },
-  'Thiên Di': { tamHop: ['Mệnh','Phu Thê'],             xung: 'Tật Ách' },
-  'Nô Bộc':   { tamHop: ['Huynh Đệ','Tử Tức'],         xung: 'Quan Lộc' },
-  'Quan Lộc': { tamHop: ['Mệnh','Tài Bạch'],            xung: 'Nô Bộc' },
-  'Điền Trạch':{ tamHop: ['Huynh Đệ','Tật Ách'],       xung: 'Tử Tức' },
-  'Phúc Đức': { tamHop: ['Phu Thê','Tài Bạch'],         xung: 'Tử Tức' },
-  'Phụ Mẫu':  { tamHop: ['Tử Tức','Tật Ách'],          xung: 'Mệnh' },
+  'Mệnh':      { tamHop: ['Tài Bạch','Quan Lộc'],       xung: 'Thiên Di' },
+  'Huynh Đệ':  { tamHop: ['Điền Trạch','Tật Ách'],      xung: 'Nô Bộc' },
+  'Phu Thê':   { tamHop: ['Phúc Đức','Thiên Di'],        xung: 'Quan Lộc' },
+  'Tử Tức':    { tamHop: ['Phụ Mẫu','Nô Bộc'],          xung: 'Điền Trạch' },
+  'Tài Bạch':  { tamHop: ['Mệnh','Quan Lộc'],            xung: 'Phúc Đức' },
+  'Tật Ách':   { tamHop: ['Huynh Đệ','Điền Trạch'],     xung: 'Phụ Mẫu' },
+  'Thiên Di':  { tamHop: ['Phúc Đức','Phu Thê'],         xung: 'Mệnh' },
+  'Nô Bộc':    { tamHop: ['Phụ Mẫu','Tử Tức'],          xung: 'Huynh Đệ' },
+  'Quan Lộc':  { tamHop: ['Mệnh','Tài Bạch'],            xung: 'Phu Thê' },
+  'Điền Trạch':{ tamHop: ['Huynh Đệ','Tật Ách'],        xung: 'Tử Tức' },
+  'Phúc Đức':  { tamHop: ['Thiên Di','Phu Thê'],         xung: 'Tài Bạch' },
+  'Phụ Mẫu':   { tamHop: ['Nô Bộc','Tử Tức'],           xung: 'Tật Ách' },
 };
 
 // ─── MAIN ENGINE ─────────────────────────────────────────────
