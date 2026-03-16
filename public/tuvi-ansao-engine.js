@@ -598,6 +598,147 @@ function tinhLuuDaiHan(daiVanCungIdx, ageIndex, amDuong, gioitinh) {
   }
 }
 
+
+// ─── SCORING ENGINE ──────────────────────────────────────────
+
+const TAM_HOP_HANH = {
+  'Thân':'Thủy','Tý':'Thủy','Thìn':'Thủy',
+  'Hợi':'Mộc', 'Mão':'Mộc', 'Mùi':'Mộc',
+  'Dần':'Hỏa', 'Ngọ':'Hỏa', 'Tuất':'Hỏa',
+  'Tỵ':'Kim',  'Dậu':'Kim', 'Sửu':'Kim',
+};
+
+const DC_HANH = {
+  'Tý':'Thủy','Hợi':'Thủy',
+  'Dần':'Mộc','Mão':'Mộc',
+  'Tỵ':'Hỏa','Ngọ':'Hỏa',
+  'Thìn':'Thổ','Tuất':'Thổ','Sửu':'Thổ','Mùi':'Thổ',
+  'Thân':'Kim','Dậu':'Kim',
+};
+
+const NGU_HANH_SINH = {'Mộc':'Hỏa','Hỏa':'Thổ','Thổ':'Kim','Kim':'Thủy','Thủy':'Mộc'};
+const NGU_HANH_KHAC = {'Kim':'Mộc','Mộc':'Thổ','Thổ':'Thủy','Thủy':'Hỏa','Hỏa':'Kim'};
+
+// Nạp Âm bản mệnh
+
+const BO_CHINH_TINH = {
+  'SPTL': ['Thất Sát','Phá Quân','Tham Lang','Liêm Trinh'],
+  'TPVT': ['Tử Vi','Thiên Phủ','Vũ Khúc','Thiên Tướng'],
+  'CNDL': ['Cự Môn','Thái Dương'],
+  'CMDL': ['Thiên Cơ','Thái Âm','Thiên Đồng','Thiên Lương'],
+};
+
+function getNapAm(canChi) {
+  if (!canChi) return null;
+  const key = canChi.trim();
+  // Direct lookup: NAP_AM['Giáp Tý'] = 'Kim'
+  if (NAP_AM[key]) return NAP_AM[key];
+  // Fallback: try partial match
+  for (const [cc, hanh] of Object.entries(NAP_AM)) {
+    if (key.includes(cc) || cc.includes(key)) return hanh;
+  }
+  return null;
+}
+
+function soSanhHanh(hanhA, hanhB) {
+  // hanhB tác động lên hanhA
+  if (!hanhA || !hanhB) return 0;
+  if (hanhA === hanhB) return 'dong_hanh';
+  if (NGU_HANH_SINH[hanhB] === hanhA) return 'sinh_nhap';   // B sinh A
+  if (NGU_HANH_SINH[hanhA] === hanhB) return 'sinh_xuat';   // A sinh B
+  if (NGU_HANH_KHAC[hanhA] === hanhB) return 'khac_xuat';   // A khắc B
+  if (NGU_HANH_KHAC[hanhB] === hanhA) return 'khac_nhap';   // B khắc A
+  return 'unknown';
+}
+
+function tinhThienThoi(daiVanDC, chiNamSinh) {
+  const hDV = TAM_HOP_HANH[daiVanDC];
+  const hNS = TAM_HOP_HANH[chiNamSinh];
+  const qh = soSanhHanh(hNS, hDV);
+  const scoreMap = {dong_hanh:5, sinh_nhap:4, khac_xuat:2, sinh_xuat:1, khac_nhap:0, unknown:0};
+  return { score: scoreMap[qh] ?? 0, qh, hDV, hNS };
+}
+
+function tinhDiaLoi(daiVanDC, napAmHanh) {
+  const hCung = DC_HANH[daiVanDC];
+  const hMenh = napAmHanh;
+  if (!hCung || !hMenh) return { score: 1, qh: 'unknown' };
+  let score, qh;
+  if (hCung === hMenh)                        { score=1.5; qh='dong_hanh'; }
+  else if (NGU_HANH_SINH[hCung] === hMenh)   { score=2;   qh='cung_sinh_menh'; }
+  else if (NGU_HANH_SINH[hMenh] === hCung)   { score=1;   qh='menh_sinh_cung'; }
+  else if (NGU_HANH_KHAC[hMenh] === hCung)   { score=0.5; qh='menh_khac_cung'; }
+  else if (NGU_HANH_KHAC[hCung] === hMenh)   { score=0;   qh='cung_khac_menh'; }
+  else                                         { score=1;   qh='unknown'; }
+  return { score, qh, hCung, hMenh };
+}
+
+function getBoSao(palaceStars) {
+  const names = palaceStars.map(s => s.ten);
+  for (const [bo, list] of Object.entries(BO_CHINH_TINH)) {
+    if (list.some(s => names.includes(s))) return bo;
+  }
+  return null;
+}
+
+function tinhNhanHoa(menhStars, vanStars) {
+  const boMenh = getBoSao(menhStars);
+  const boVan  = getBoSao(vanStars);
+  if (!boMenh || !boVan) return { score: 1.5, qh: 'unknown', boMenh, boVan };
+  if (boMenh === boVan)  return { score: 3,   qh: 'hop_tot', boMenh, boVan };
+  if (boMenh === 'TPVT' || boVan === 'TPVT') return { score: 2, qh: 'buffer', boMenh, boVan };
+  if ((boMenh === 'CMDL' && boVan === 'SPTL') || (boMenh === 'SPTL' && boVan === 'CMDL'))
+    return { score: 1, qh: 'nguy_hiem', boMenh, boVan };
+  return { score: 1.5, qh: 'trung_binh', boMenh, boVan };
+}
+
+function scoreDaiVan(tt, dl, nh) {
+  let total = tt.score + dl.score + nh.score;
+  if (nh.score < 1.5) total = Math.min(total, 6);
+  const flag = total >= 7 ? '🟢' : total >= 4 ? '🟡' : '🔴';
+  return { thienThoi: tt.score, diaLoi: dl.score, nhanHoa: nh.score,
+           tong: Math.round(total * 10) / 10, flag,
+           qhTT: tt.qh, qhDL: dl.qh, qhNH: nh.qh,
+           boMenh: nh.boMenh, boVan: nh.boVan };
+}
+
+function tinhScoringAllDaiVan(daiVans, palaces, canChiNam, chiNam, napAm) {
+  // Lấy sao cung Mệnh (tam phương: mệnh + 2 tam hợp)
+  const menhPalace = palaces.find(p => p.isMenh);
+  if (!menhPalace) return daiVans;
+
+  // Tam hợp cung Mệnh
+  const TAM_HOP_GROUPS = [
+    ['Dần','Ngọ','Tuất'],['Thân','Tý','Thìn'],
+    ['Hợi','Mão','Mùi'],['Tỵ','Dậu','Sửu'],
+  ];
+  const menhDC = menhPalace.diaChi;
+  const menhGroup = TAM_HOP_GROUPS.find(g => g.includes(menhDC)) || [];
+  const menhStars = palaces
+    .filter(p => menhGroup.includes(p.diaChi) || p.diaChi === menhDC)
+    .flatMap(p => p.majorStars);
+
+  return daiVans.map((dv, i) => {
+    if (i >= 9) return dv; // chỉ tính 9 đại vận đầu
+    const dvPalace = palaces[dv.cungIdx];
+    if (!dvPalace) return dv;
+
+    // Tam hợp cung đại vận
+    const dvDC = dv.diaChi;
+    const dvGroup = TAM_HOP_GROUPS.find(g => g.includes(dvDC)) || [];
+    const dvStars = palaces
+      .filter(p => dvGroup.includes(p.diaChi) || p.diaChi === dvDC)
+      .flatMap(p => p.majorStars);
+
+    const tt = tinhThienThoi(dvDC, chiNam);
+    const dl = tinhDiaLoi(dvDC, napAm);
+    const nh = tinhNhanHoa(menhStars, dvStars);
+    const sc = scoreDaiVan(tt, dl, nh);
+
+    return { ...dv, scoring: sc };
+  });
+}
+
 // ─── MAIN ENGINE ─────────────────────────────────────────────
 function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, namXem }) {
   const amDuong = ['Giáp','Bính','Mậu','Canh','Nhâm'].includes(canNam) ? 'dương' : 'âm';
@@ -695,16 +836,21 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
     };
   });
 
+  // Tính scoring cho 9 đại vận
+  const napAmHanh = getNapAm(canChiNam);
+  const daiVansScored = tinhScoringAllDaiVan(daiVans, palaces, canChiNam, chiNam, napAmHanh);
+
   return {
     canChiNam, napAm, amDuong, cuc, canMenh,
     menhDC, thanDC, menhIdx, thanIdx,
+    napAmHanh,
     fiveElementsClass: cuc,
     earthlyBranchOfSoulPalace: menhDC,
     earthlyBranchOfBodyPalace: thanDC,
     chineseDate: canChiNam,
     palaces,
-    daiVans,
-    daiVanHienTai,
+    daiVans: daiVansScored,
+    daiVanHienTai: daiVansScored.find(v => tuoiXem >= v.tuoiStart && tuoiXem <= v.tuoiEnd) || daiVanHienTai,
     tieuHanIdx,
     tuoiXem,
     chiNamXem,
