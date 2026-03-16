@@ -227,27 +227,63 @@ select.form-input { cursor: pointer; }
 
 /* RESPONSIVE */
 @media (max-width: 900px) {
-  .page { padding: 0 20px; }
-  .topnav { padding: 0 20px; }
+  .page { padding: 0 12px; }
+  .topnav { padding: 0 12px; }
   .footer { padding: 20px; flex-direction: column; gap: 8px; text-align: center; }
-  .hero { grid-template-columns: 1fr; gap: 0; }
-  .hero { padding: 48px 0 40px; }
-  .hero h1 { font-size: 36px; }
+  .hero { grid-template-columns: 1fr; gap: 0; padding: 32px 0 24px; }
+  .hero h1 { font-size: 30px; }
   .hero-right { display: none; }
   .form-grid { grid-template-columns: 1fr; }
   .form-col { border-right: none; border-bottom: 1px solid var(--border); }
   .form-col:last-child { border-bottom: none; }
-  .muc-luc-items { grid-template-columns: 1fr 1fr; }
-  .muc-luc-btn { border-bottom: 1px solid var(--border-lt); }
-  .laso-grid { grid-template-columns: repeat(2, 1fr); }
-  .result-info { flex-direction: column; gap: 6px; }
+  .result-layout { flex-direction: column; }
+  .result-sidebar { display: none !important; }
+  .result-info { flex-direction: column; gap: 4px; }
   .result-info-item { border-right: none; padding-right: 0; margin-right: 0; }
+
+  /* Lá số mobile: 4 cột nhỏ */
+  .laso-grid { grid-template-columns: repeat(4, 1fr); font-size: 9px; }
+  .cung-cell { min-height: 80px; padding: 2px 3px; }
+  .star-chinh { font-size: 9px; }
+  .star-phu { font-size: 8px; }
+  .c-can-chi, .c-dai-van, .c-cung-name { font-size: 7px; }
+  .cung-center { padding: 8px; }
+  .center-title { font-size: 11px; }
+  .center-row { font-size: 10px; }
+  .bright { display: none; }
+  .hoa { font-size: 8px; }
+}
+
+@media (max-width: 480px) {
+  /* Lá số rất nhỏ: ẩn phụ tinh, chỉ giữ chính tinh */
+  .c-tot, .c-xau { display: none; }
+  .c-trang-sinh { display: none; }
+  .cung-cell { min-height: 60px; }
 }
 @media print {
-  .topnav, .hero, .form-section, .status-bar, .result-actions, .muc-luc, .footer { display: none !important; }
+  .topnav, .hero, .form-section, .status-bar, .result-actions,
+  .result-sidebar, .footer, .phan-loading { display: none !important; }
   .result-section.active { display: block !important; }
-  .page { padding: 0 24px; }
-  .phan-section { break-inside: avoid; border-top: 1px solid #ccc; padding: 24px 0; }
+  .result-layout { display: block !important; }
+  .result-main { width: 100% !important; }
+  .page { padding: 0 16px; max-width: 100%; }
+  .phan-section { break-inside: avoid; border-top: 1px solid #ccc; padding: 16px 0; }
+  .phan-section p { font-size: 13px; line-height: 1.6; }
+
+  /* Lá số print: 4 cột, gọn */
+  .laso-wrap { break-inside: avoid; }
+  .laso-grid { grid-template-columns: repeat(4, 1fr); border: 1px solid #999; }
+  .cung-cell { min-height: 90px; padding: 3px 4px; border-color: #ccc; }
+  .cung-center { padding: 8px; background: #f5f5f5; }
+  .center-row { font-size: 10px; }
+  .star-chinh { font-size: 10px; }
+  .star-phu { font-size: 8px; }
+  .c-tot, .c-xau { font-size: 8px; }
+  .c-trang-sinh { font-size: 8px; }
+  .bright { font-size: 7px; }
+  .hoa { font-size: 7px; }
+  .result-header { padding: 20px 0; }
+  .result-name { font-size: 28px; }
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
