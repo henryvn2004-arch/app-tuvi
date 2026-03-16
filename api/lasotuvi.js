@@ -36,7 +36,7 @@ function buildPrompt(phan, laSoText, docs) {
   }
 
   if (phan === 14) {
-    return ctx + '\n\nPHẦN 14 — TỔNG QUAN CÁC ĐẠI VẬN\n\nBước 1 — Xuất JSON chart data NGAY ĐẦU TIÊN (bắt buộc):\n```chartdata\n{"labels":["ĐV1","ĐV2","ĐV3","ĐV4","ĐV5","ĐV6","ĐV7","ĐV8","ĐV9"],"scores":[s1,s2,s3,s4,s5,s6,s7,s8,s9]}\n```\nThay s1-s9 bằng điểm tổng thực tế từng đại vận trong lá số.\n\nBước 2 — Bảng tổng hợp:\n| ĐV | Tuổi | Cung | TT | ĐL | NH | Tổng | Flag |\n\nBước 3 — Nhận xét ngắn (80-100 từ): giai đoạn đẹp, khó khăn, xu hướng tổng thể.';
+    return ctx + '\n\nPHẦN 14 — TỔNG QUAN CÁC ĐẠI VẬN\n\nBước 1 — Bảng tổng hợp 9 đại vận (tính điểm TT/ĐL/NH từ lá số):\n| ĐV | Tuổi | Cung | TT | ĐL | NH | Tổng | Flag |\n\nBước 2 — Xuất JSON chart data (BẮT BUỘC, dựa trên cột Tổng ở bước 1):\n```chartdata\n{"labels":["ĐV1 x-y","ĐV2 x-y","ĐV3 x-y","ĐV4 x-y","ĐV5 x-y","ĐV6 x-y","ĐV7 x-y","ĐV8 x-y","ĐV9 x-y"],"scores":[s1,s2,s3,s4,s5,s6,s7,s8,s9]}\n```\nThay x-y bằng khung tuổi, s1-s9 bằng điểm Tổng thực tế từng đại vận.\n\nBước 3 — Nhận xét ngắn (80-100 từ): giai đoạn đẹp, khó khăn, xu hướng tổng thể.';
   }
 
   if (phan >= 15 && phan <= 23) {
