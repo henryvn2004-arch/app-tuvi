@@ -381,10 +381,10 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
   // Bát Tọa: từ Hữu Bật - ngày
   const batToa = mod12(huuBat - ngayAL + 1);
   // Ân Quang: từ Văn Xương + ngày - 1
-  const anQuang = mod12(vanXuong + ngayAL - 1);
-  // Thiên Quý: từ Văn Khúc - ngày + 1
+  const anQuang = mod12(vanXuong + ngayAL - 2);  // Văn Xương=ngày1, thuận tới ngày, -1
+  // Thiên Quý: Văn Khúc=ngày1, nghịch tới ngày, +1
   const THIEN_QUY_MAP = {'Thân':'Thìn','Tý':'Thìn','Thìn':'Thìn','Dần':'Tuất','Ngọ':'Tuất','Tuất':'Tuất','Tỵ':'Sửu','Dậu':'Sửu','Sửu':'Sửu','Hợi':'Mùi','Mão':'Mùi','Mùi':'Mùi'};
-  const thienQuy = mod12(vanKhuc - ngayAL + 1);  // từ Văn Khúc đếm nghịch tới ngày
+  const thienQuy = mod12(vanKhuc - ngayAL + 2);  // Văn Khúc=ngày1, nghịch tới ngày, +1
 
   // Thiên Khôi & Thiên Việt
   const KHOI = {'Giáp':'Sửu','Ất':'Tý','Bính':'Hợi','Đinh':'Hợi','Mậu':'Sửu','Kỷ':'Tý','Canh':'Ngọ','Tân':'Ngọ','Nhâm':'Mão','Quý':'Mão'};
@@ -401,11 +401,11 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
   const thienMa = dcIdx(THIEN_MA[chiNam] || 'Tý');
 
   // Kiếp Sát
-  const KIEP_SAT = {'Tý':'Tỵ','Ngọ':'Tỵ','Mão':'Thân','Dậu':'Thân','Dần':'Hợi','Thân':'Hợi','Tỵ':'Dần','Hợi':'Dần','Thìn':'Tỵ','Tuất':'Tỵ','Sửu':'Thân','Mùi':'Thân'};
+  const KIEP_SAT = {'Tỵ':'Dần','Dậu':'Dần','Sửu':'Dần','Dần':'Hợi','Ngọ':'Hợi','Tuất':'Hợi','Hợi':'Thân','Mão':'Thân','Mùi':'Thân','Thân':'Tỵ','Tý':'Tỵ','Thìn':'Tỵ'};
   const kiepSat = dcIdx(KIEP_SAT[chiNam] || 'Tý');
 
   // Phá Toái
-  const PHA_TOAI = {'Tý':'Sửu','Ngọ':'Sửu','Mão':'Thìn','Dậu':'Thìn','Dần':'Mùi','Thân':'Mùi','Tỵ':'Tuất','Hợi':'Tuất','Thìn':'Sửu','Tuất':'Sửu','Sửu':'Thìn','Mùi':'Thìn'};
+  const PHA_TOAI = {'Tý':'Tỵ','Ngọ':'Tỵ','Mão':'Tỵ','Dậu':'Tỵ','Dần':'Dậu','Thân':'Dậu','Tỵ':'Dậu','Hợi':'Dậu','Thìn':'Sửu','Tuất':'Sửu','Sửu':'Sửu','Mùi':'Sửu'};
   const phaToai = dcIdx(PHA_TOAI[chiNam] || 'Tý');
 
   // Hoa Cái
@@ -473,7 +473,8 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
   const giaiThan = phuongCac;  // đồng cung Phượng Các
   const QUOC_AN_MAP = {'Thân':'Tuất','Tý':'Tuất','Thìn':'Tuất','Dần':'Thìn','Ngọ':'Thìn','Tuất':'Thìn','Tỵ':'Mùi','Dậu':'Mùi','Sửu':'Mùi','Hợi':'Sửu','Mão':'Sửu','Mùi':'Sửu'};
   const quocAn     = dcIdx(QUOC_AN_MAP[chiNam] || 'Tuất');
-  const duongPhu = mod12(locTonIdx + 1);  // sau Lộc Tồn 1 cung (= Kình Dương vị trí)
+  const duongPhu = mod12(locTonIdx - 7);  // Lộc Tồn=T1, đếm nghịch tới T8
+  const bacSy    = locTonIdx;             // Bác Sỹ = cùng cung Lộc Tồn
 
   // ── Sao cố định ──
   const thienLa    = dcIdx('Thìn');  // cố định tại Thìn
@@ -493,7 +494,7 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
     'Thiên Giải':thienGiai,'Địa Giải':diaGiai,'Giải Thần':giaiThan,
     'Thiên Hình':thienHinh,'Thiên Riêu':thienRieu,'Thiên Y':thienY,
     'Thai Phụ':thaiPhu,'Phong Cáo':phongCao,
-    'Quốc Ấn':quocAn,'Đường Phù':duongPhu,
+    'Quốc Ấn':quocAn,'Đường Phù':duongPhu,'Bác Sỹ':bacSy,
     'Thiên La':thienLa,'Địa Võng':diaVong,
   };
 }
