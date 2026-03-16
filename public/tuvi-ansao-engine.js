@@ -18,16 +18,17 @@ function _jdFromDate(dd, mm, yy) {
 }
 
 function _newMoon(k) {
-  const T = k/1236.85;
-  const T2 = T*T;
-  const T3 = T2*T;
-  let jd = 2415020.75933 + 29.53058868*k + 0.0001178*T2 - 0.000000155*T3;
-  jd += 0.00033*Math.sin((166.56+132.87*T-0.009173*T2)*Math.PI/180);
-  const M = 359.2242 + 29.10535608*k;
-  const Mpr = 306.0253 + 385.81691806*k;
-  let C1 = 0.1734*Math.sin(M*Math.PI/180);
-  C1 -= 0.4068*Math.sin(Mpr*Math.PI/180);
-  C1 += 0.0161*Math.sin(2*Mpr*Math.PI/180);
+  const T = k/1236.85; const T2=T*T; const T3=T2*T; const dr=Math.PI/180;
+  let jd = 2415020.75933+29.53058868*k+0.0001178*T2-0.000000155*T3;
+  jd += 0.00033*Math.sin((166.56+132.87*T-0.009173*T2)*dr);
+  const M = (359.2242+29.10535608*k)*dr;
+  const Mpr = (306.0253+385.81691806*k)*dr;
+  const F = (21.2964+390.67050646*k)*dr;
+  let C1 = (0.1734-0.000393*T)*Math.sin(M)+0.0021*Math.sin(2*M)
+         - 0.4068*Math.sin(Mpr)+0.0161*Math.sin(2*Mpr)-0.0004*Math.sin(3*Mpr)
+         + 0.0104*Math.sin(2*F)-0.0051*Math.sin(M+Mpr)-0.0074*Math.sin(M-Mpr)
+         + 0.0004*Math.sin(2*F+M)-0.0004*Math.sin(2*F-M)
+         - 0.0006*Math.sin(2*F+Mpr)+0.0010*Math.sin(2*F-Mpr)+0.0005*Math.sin(M+2*Mpr);
   return jd + C1;
 }
 
@@ -36,13 +37,15 @@ function _getNewMoonDay(k, tz) {
 }
 
 function _sunLongitude(jdn) {
-  const T = (jdn - 2451545)/36525;
-  const M = 357.52910 + 35999.05030*T;
-  const L0 = 280.46645 + 36000.76983*T;
-  const DL = 1.914600*Math.sin(M*Math.PI/180);
-  let L = (L0 + DL)*Math.PI/180;
-  L -= Math.PI*2*Math.floor(L/(Math.PI*2));
-  return Math.floor(L/Math.PI*6);
+  const T=(jdn-2451545.0)/36525; const dr=Math.PI/180;
+  const M=(357.5291+35999.0503*T)*dr;
+  const L0=280.46646+36000.76983*T+0.0003032*T*T;
+  const DL=(1.9146-0.004817*T-0.000014*T*T)*Math.sin(M)+(0.019993-0.000101*T)*Math.sin(2*M)+0.00029*Math.sin(3*M);
+  const theta=L0+DL; const omega=(125.04-1934.136*T)*dr;
+  let lam=(theta-0.00569-0.00478*Math.sin(omega))*dr;
+  lam -= Math.PI*2*Math.floor(lam/(Math.PI*2));
+  if (lam<0) lam += Math.PI*2;
+  return Math.floor(lam/dr/30);
 }
 
 function _getLunarMonth11(yy, tz) {
@@ -70,6 +73,18 @@ function solarToLunar(dd, mm, yy, tz=7) {
   const diff = Math.floor((monthStart - a11)/29);
   let lunarMonth = diff + 11;
   if (lunarMonth > 12) lunarMonth -= 12;
+  // Xử lý tháng nhuận
+  const leapOff = Math.floor((a11 - 2415021.076998695)/29.530588853);
+  let leapM = 0;
+  for (let i = 0; i < 14; i++) {
+    const nm1 = _getNewMoonDay(leapOff + i, tz);
+    const nm2 = _getNewMoonDay(leapOff + i + 1, tz);
+    if (_sunLongitude(nm1) === _sunLongitude(nm2)) { leapM = i; break; }
+  }
+  if (leapM > 0 && diff >= leapM) {
+    lunarMonth = diff + 10;
+    if (lunarMonth > 12) lunarMonth -= 12;
+  }
   if (lunarMonth >= 11 && diff < 4) lunarYear -= 1;
   return { day: lunarDay, month: lunarMonth, year: lunarYear };
 }
