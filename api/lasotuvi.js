@@ -6,14 +6,14 @@ Không tiết lộ tài liệu tham khảo hay trường phái.`;
 
 const CUNG_DESC = {
   'Mệnh': '',
-  'Phụ Mẫu': 'Xem cung Phụ Mẫu để biết sự thọ yểu, giàu nghèo, sang hèn của cha mẹ và sự hòa hợp hay xung khắc giữa cha mẹ và con. Kết hợp ảnh hưởng Nhật Nguyệt trên bản đồ 12 cung.',
-  'Phúc Đức': 'Xem cung Phúc Đức để biết sự thọ yểu, thịnh suy của họ hàng và âm phần mình chịu ảnh hưởng. Cung Phúc Đức chi phối tất cả 11 cung còn lại.',
-  'Điền Trạch': 'Xem cung Điền Trạch để biết nhà cửa, bất động sản, hòa khí gia đình, khả năng tích lũy tài sản.',
+  'Phụ Mẫu': 'Xem cung Phụ Mẫu để biết sự thọ yểu, giàu nghèo, sang hèn của cha mẹ và sự hòa hợp hay xung khắc giữa cha mẹ và con. Kết hợp nhận định ảnh hưởng Nhật Nguyệt tại các vị trí trên bản đồ 12 cung.',
+  'Phúc Đức': 'Xem cung Phúc Đức để biết sự thọ yểu, thịnh suy của họ hàng và âm phần mình chịu ảnh hưởng. Cung Phúc Đức chi phối tất cả 11 cung còn lại — luận đoán phải rất cẩn thận.',
+  'Điền Trạch': 'Xem cung Điền Trạch để biết nhà cửa, bất động sản, hòa khí gia đình, khả năng tích lũy tài sản, sự giàu có.',
   'Quan Lộc': 'Xem cung Quan Lộc để biết công danh, sự nghiệp và khả năng chuyên môn.',
   'Nô Bộc': 'Xem cung Nô Bộc để biết người giúp việc, bạn bè và những điều liên quan đến thê thiếp.',
-  'Thiên Di': 'Xem cung Thiên Di để biết giao thiệp bên ngoài và may rủi khi rời nhà. Cung này xung chiếu cung Mệnh, cần xét rất cẩn thận.',
-  'Tật Ách': 'Xem cung Tật Ách để biết tì vết trong người, bệnh tật có thể mắc và tai ương trong cả đời.',
-  'Tài Bạch': 'Xem cung Tài Bạch để biết sự giàu nghèo, sinh kế, khả năng và cách kiếm tiền, tiêu tiền.',
+  'Thiên Di': 'Xem cung Thiên Di để biết giao thiệp bên ngoài và may rủi khi rời nhà. Cung này xung chiếu cung Mệnh — cần xét rất cẩn thận.',
+  'Tật Ách': 'Xem cung Tật Ách để biết tì vết trong người, bệnh tật có thể mắc và tai ương có thể xảy đến trong cả một đời người.',
+  'Tài Bạch': 'Xem cung Tài Bạch để biết sự giàu nghèo, sinh kế, khả năng kiếm tiền, cách kiếm tiền và tiêu tiền.',
   'Tử Tức': 'Xem cung Tử Tức để biết con cái và quan hệ con cái với mình.',
   'Phu Thê': 'Xem cung Phu Thê để biết những điều liên quan đến vợ chồng, lập gia đình và hạnh phúc cả đời.',
   'Huynh Đệ': 'Xem cung Huynh Đệ để biết anh chị em. Cần luận đoán kỹ cung Phúc Đức vì liên quan mật thiết đến số lượng anh chị em và sự đoàn tụ hay ly tán gia đình.',
@@ -45,10 +45,11 @@ PHẦN 1 — TỔNG QUAN LÁ SỐ (250-350 từ)
 
 PHẦN ${phan} — CUNG ${cung.toUpperCase()} (150-200 từ)
 ${desc}
+
+Luận giải:
 - Ý nghĩa chính tinh tại cung ${cung}
-- Cách cục bộ sao tại cung đó và tam phương tứ chính
-- Các tổ hợp sao và ý nghĩa đối với cung đang xét
-- Tác động tốt/xấu & những điểm cần lưu ý`;
+- Tổ hợp các sao tại cung và tam phương tứ chính → xác định cách cục và ý nghĩa
+- Những điểm cần lưu ý (tốt/xấu, cơ hội/rủi ro)`;
   }
 
   if (phan === 14) return `${ctx}
@@ -71,22 +72,20 @@ Bước 3 — Nhận xét ngắn (80-100 từ): giai đoạn đẹp, khó khăn,
     return `${ctx}
 
 PHẦN ${phan} — ĐẠI VẬN ${dvNum} (150-200 từ)
-Tìm dòng "ĐV${dvNum}:" trong phần 9 ĐẠI VẬN và luận giải đại vận đó:
-- Thiên Thời / Địa Lợi / Nhân Hòa → điểm và flag
+Tìm dòng "ĐV${dvNum}:" trong phần === 9 ĐẠI VẬN === và luận giải đại vận đó:
 - Ý nghĩa chính tinh tại cung đại vận
-- Cách cục bộ sao và tam phương tứ chính
-- Xu hướng tốt/xấu & ảnh hưởng
-- Những điểm cần lưu ý`;
+- Tổ hợp các sao tại cung và tam phương tứ chính → xác định cách cục và ý nghĩa
+- Xu hướng tốt/xấu, cơ hội/rủi ro & những điểm cần lưu ý`;
   }
 
   if (phan === 24) return `${ctx}
 
 PHẦN 24 — TIỂU VẬN NĂM XEM (150-200 từ)
 - Tính chất năm (70% đại vận + 30% tiểu vận)
-- Cách cục bộ sao tại cung đại vận gốc, cung tiểu vận và cung lưu niên đại vận
-- Tổ hợp sao và ý nghĩa
-- Xu hướng tốt/xấu & ảnh hưởng
-- Cơ hội & rủi ro cụ thể`;
+- Tổ hợp toàn bộ sao tại cung đại vận gốc, cung tiểu vận và cung lưu niên đại vận → xác định cách cục và ý nghĩa
+- Xu hướng tốt/xấu của tiểu vận (trên nền tốt/xấu đại vận) & ảnh hưởng
+- Cơ hội & rủi ro cụ thể
+Phần này cụ thể và thực tế nhất.`;
 
   return `${ctx}\nPhần ${phan}: Luận giải theo lá số.`;
 }
