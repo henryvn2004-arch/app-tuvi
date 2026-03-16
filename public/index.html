@@ -748,17 +748,20 @@ select.form-input { cursor: pointer; }
       const section = document.createElement('div');
       section.className = 'phan-section';
       section.id = `phan-section-${_currentPhan}`;
-      const chartHtml = (data.chartData && _currentPhan === 14)
-        ? `<div style="max-width:700px;margin:24px 0"><canvas id="chart-daivan"></canvas></div>`
+      const chartHtml = (_currentPhan === 14)
+        ? `<div style="max-width:700px;margin:24px 0 8px"><canvas id="chart-daivan"></canvas>${!data.chartData ? '<p style="color:#aaa;font-size:12px">Đang tải biểu đồ...</p>' : ''}</div>`
         : '';
       section.innerHTML = `<a id="phan-anchor-${_currentPhan}" class="phan-anchor"></a>
         <div class="phan-num">Phần ${_currentPhan} / ${TONG_PHAN} — ${PHAN_LABELS[_currentPhan]}</div>`
         + renderMarkdown(data.luanGiai) + chartHtml;
 
+      if (_currentPhan === 14) {
+        console.log('chartData received:', data.chartData);
+      }
       if (data.chartData && _currentPhan === 14) {
         setTimeout(() => {
           const ctx = document.getElementById('chart-daivan');
-          if (!ctx) return;
+          if (!ctx) { console.warn('canvas not found'); return; }
           new Chart(ctx, {
             type: 'line',
             data: {
