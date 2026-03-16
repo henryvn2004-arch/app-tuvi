@@ -704,41 +704,44 @@ function scoreDaiVan(tt, dl, nh) {
 }
 
 function tinhScoringAllDaiVan(daiVans, palaces, canChiNam, chiNam, napAm) {
-  // Lấy sao cung Mệnh (tam phương: mệnh + 2 tam hợp)
   const menhPalace = palaces.find(p => p.isMenh);
   if (!menhPalace) return daiVans;
 
-  // Tam hợp cung Mệnh
-  const TAM_HOP_GROUPS = [
-    ['Dần','Ngọ','Tuất'],['Thân','Tý','Thìn'],
-    ['Hợi','Mão','Mùi'],['Tỵ','Dậu','Sửu'],
-  ];
-  const menhDC = menhPalace.diaChi;
-  const menhGroup = TAM_HOP_GROUPS.find(g => g.includes(menhDC)) || [];
-  const menhStars = palaces
-    .filter(p => menhGroup.includes(p.diaChi) || p.diaChi === menhDC)
-    .flatMap(p => p.majorStars);
+  // Dùng tuChinhStars đã tính sẵn lúc an sao
+  const menhStars = menhPalace.tuChinhStars || menhPalace.majorStars;
 
   return daiVans.map((dv, i) => {
-    if (i >= 9) return dv; // chỉ tính 9 đại vận đầu
+    if (i >= 9) return dv;
     const dvPalace = palaces[dv.cungIdx];
     if (!dvPalace) return dv;
 
-    // Tam hợp cung đại vận
-    const dvDC = dv.diaChi;
-    const dvGroup = TAM_HOP_GROUPS.find(g => g.includes(dvDC)) || [];
-    const dvStars = palaces
-      .filter(p => dvGroup.includes(p.diaChi) || p.diaChi === dvDC)
-      .flatMap(p => p.majorStars);
+    const dvStars = dvPalace.tuChinhStars || dvPalace.majorStars;
 
-    const tt = tinhThienThoi(dvDC, chiNam);
-    const dl = tinhDiaLoi(dvDC, napAm);
+    const tt = tinhThienThoi(dv.diaChi, chiNam);
+    const dl = tinhDiaLoi(dv.diaChi, napAm);
     const nh = tinhNhanHoa(menhStars, dvStars);
     const sc = scoreDaiVan(tt, dl, nh);
 
     return { ...dv, scoring: sc };
   });
 }
+
+
+// ─── TAM PHƯƠNG TỨ CHÍNH (theo tên cung) ────────────────────
+const TAM_PHUONG_TU_CHINH = {
+  'Mệnh':     { tamHop: ['Tài Bạch','Quan Lộc'],       xung: 'Thiên Di' },
+  'Huynh Đệ': { tamHop: ['Tật Ách','Điền Trạch'],      xung: 'Nô Bộc' },
+  'Phu Thê':  { tamHop: ['Quan Lộc','Phúc Đức'],       xung: 'Thiên Di' },
+  'Tử Tức':   { tamHop: ['Điền Trạch','Phúc Đức'],     xung: 'Phụ Mẫu' },
+  'Tài Bạch': { tamHop: ['Mệnh','Quan Lộc'],            xung: 'Phúc Đức' },
+  'Tật Ách':  { tamHop: ['Huynh Đệ','Điền Trạch'],     xung: 'Phụ Mẫu' },
+  'Thiên Di': { tamHop: ['Mệnh','Phu Thê'],             xung: 'Tật Ách' },
+  'Nô Bộc':   { tamHop: ['Huynh Đệ','Tử Tức'],         xung: 'Quan Lộc' },
+  'Quan Lộc': { tamHop: ['Mệnh','Tài Bạch'],            xung: 'Nô Bộc' },
+  'Điền Trạch':{ tamHop: ['Huynh Đệ','Tật Ách'],       xung: 'Tử Tức' },
+  'Phúc Đức': { tamHop: ['Phu Thê','Tài Bạch'],         xung: 'Tử Tức' },
+  'Phụ Mẫu':  { tamHop: ['Tử Tức','Tật Ách'],          xung: 'Mệnh' },
+};
 
 // ─── MAIN ENGINE ─────────────────────────────────────────────
 function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, namXem }) {
@@ -836,6 +839,21 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
       name: cungName,
     };
   });
+
+  // Gắn tam phương tứ chính vào từng cung
+  for (const p of palaces) {
+    const tp = TAM_PHUONG_TU_CHINH[p.cungName];
+    if (tp) {
+      p.tamHopCungs = tp.tamHop
+        .map(name => palaces.find(x => x.cungName === name))
+        .filter(Boolean);
+      p.xungChieuCung = palaces.find(x => x.cungName === tp.xung) || null;
+      // Tất cả sao trong 4 cung (chính + 2 tam hợp + 1 xung)
+      p.tuChinhStars = [p, ...p.tamHopCungs, p.xungChieuCung]
+        .filter(Boolean)
+        .flatMap(c => c.majorStars);
+    }
+  }
 
   // Tính scoring cho 9 đại vận
   const napAmHanh = getNapAm(canChiNam);
