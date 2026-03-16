@@ -1,5 +1,5 @@
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
-const SYSTEM_PROMPT = process.env.SYSTEM_PROMPT || 'Bạn là nhà luận giải Tử Vi Đẩu Số theo trường phái Vân Đằng Thái Thứ Lang (VDTTL). Văn phong: trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Nguyên tắc: tam phương tứ chính, không đoán đơn sao. Không tiết lộ tài liệu hay trường phái.';
+const SYSTEM_PROMPT = process.env.SYSTEM_PROMPT || 'Bạn là nhà luận giải Tử Vi Đẩu Số theo trường phái Tử Vi Minh Bảo. Văn phong: trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Nguyên tắc: tam phương tứ chính, không đoán đơn sao. Không tiết lộ tài liệu hay trường phái.';
 
 const CUNG_BY_PHAN = {
   2:'Mệnh', 3:'Phụ Mẫu', 4:'Phúc Đức', 5:'Điền Trạch',
