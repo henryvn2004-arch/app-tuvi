@@ -620,18 +620,21 @@ select.form-input { cursor: pointer; }
       if (phu) lines.push(`  Phụ tinh: ${phu}`);
     }
 
-    // 9 đại vận với scoring
+    // 9 đại vận đầy đủ để Claude tính scoring
     lines.push('');
     lines.push('=== 9 ĐẠI VẬN ===');
+    const BAD_T = new Set(['sát tinh','hung tinh','bại tinh']);
     const dvs = ls.daiVans.slice(0, 9);
     dvs.forEach((dv, i) => {
       const p = ls.palaces[dv.cungIdx];
       const isCur = ls.daiVanHienTai?.cungIdx === dv.cungIdx;
       const chinh = p.majorStars.map(s => s.ten + (s.brightness?`(${s.brightness})`:'') + (s.hoa?`[${s.hoa}]`:'')).join(' ');
-      const phu = p.stars.filter(s=>s.nhom!=='chinh').map(s => s.ten).join(' ');
-      lines.push(`ĐV${i+1}: ${dv.diaChi} (${dv.tuoiStart}–${dv.tuoiEnd}t) ${isCur?'← ĐANG XEM':''}`);
-      lines.push(`  Cung: ${p.cungName} | Chính tinh: ${chinh||'(vô chính diệu)'}`);
-      if (phu) lines.push(`  Phụ tinh: ${phu.slice(0,80)}`);
+      const tot = p.stars.filter(s=>s.nhom!=='chinh'&&!BAD_T.has((STAR_DATA[s.ten]||{}).type)).map(s=>s.ten+(s.hoa?`[${s.hoa}]`:'')).join(' ');
+      const xau = p.stars.filter(s=>s.nhom!=='chinh'&&BAD_T.has((STAR_DATA[s.ten]||{}).type)).map(s=>s.ten).join(' ');
+      lines.push(`ĐV${i+1}: ${dv.diaChi} (${dv.tuoiStart}–${dv.tuoiEnd}t) cung=${p.cungName}${isCur?' ← ĐANG XEM':''}`);
+      lines.push(`  Chính tinh: ${chinh||'(vô chính diệu)'}`);
+      if (tot) lines.push(`  Sao tốt: ${tot}`);
+      if (xau) lines.push(`  Sao xấu: ${xau}`);
     });
 
     return lines.join('\n');
