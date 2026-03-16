@@ -124,13 +124,13 @@ select.form-input { cursor: pointer; }
 .c-trang-sinh { grid-area: trang-sinh; text-align: center; border-top: 1px solid var(--border-lt); padding-top: 1px; font-size: 9px; color: var(--gold); }
 
 /* Star colors by element */
-.star-chinh  { font-weight: 700; font-size: 11px; display: block; }
-.star-phu    { font-size: 9px; display: block; }
+.star-chinh { font-weight: 700; font-size: 12px; display: block; }
+.star-phu { font-size: 10px; display: block; }
 .star-vong   { font-size: 10px; }
 .bright      { font-size: 9px; opacity: 0.8; }
 .hoa         { font-size: 9px; color: #9A7B3A; margin-left: 1px; }
 .e-hoa  { color: #C0392B; }
-.e-kim  { color: #555; }
+.e-kim  { color: #000000; }
 .e-tho  { color: #9A7B3A; }
 .e-moc  { color: #1E6B3C; }
 .e-thuy { color: #1455A4; }
@@ -244,8 +244,8 @@ select.form-input { cursor: pointer; }
   /* Lá số mobile: 4 cột nhỏ */
   .laso-grid { grid-template-columns: repeat(4, 1fr); font-size: 9px; }
   .cung-cell { min-height: 80px; padding: 2px 3px; }
-  .star-chinh { font-size: 9px; }
-  .star-phu { font-size: 8px; }
+  .star-chinh { font-weight: 700; font-size: 12px; display: block; }
+  .star-phu { font-size: 10px; display: block; }
   .c-can-chi, .c-dai-van, .c-cung-name { font-size: 7px; }
   .cung-center { padding: 8px; }
   .center-title { font-size: 11px; }
@@ -276,8 +276,8 @@ select.form-input { cursor: pointer; }
   .cung-cell { min-height: 90px; padding: 3px 4px; border-color: #ccc; }
   .cung-center { padding: 8px; background: #f5f5f5; }
   .center-row { font-size: 10px; }
-  .star-chinh { font-size: 10px; }
-  .star-phu { font-size: 8px; }
+  .star-chinh { font-weight: 700; font-size: 12px; display: block; }
+  .star-phu { font-size: 10px; display: block; }
   .c-tot, .c-xau { font-size: 8px; }
   .c-trang-sinh { font-size: 8px; }
   .bright { font-size: 7px; }
@@ -670,6 +670,7 @@ select.form-input { cursor: pointer; }
 
       // Convert DL → AL + an sao bằng engine v2
       const conv = convertDuongToAm(ngay, thang, nam, parseInt(gio) * 2); // gioIdx*2 = giờ đầu khung
+      conv._dl = { day: ngay, month: thang, year: nam };
       const ls = anSaoLaSo({
         ngayAL:   conv.amLich.day,
         thangAL:  conv.amLich.month,
@@ -876,7 +877,7 @@ select.form-input { cursor: pointer; }
     const ec = ten => EC[(STAR_DATA[ten]||{}).element] || '';
     const bc = b => BC_MAP[b] ? `<span class="bright">(${BC_MAP[b]})</span>` : '';
     const isBad = ten => BAD_TYPES.has((STAR_DATA[ten]||{}).type);
-    const fmt = (s, cls) => `<span class="${cls} ${ec(s.ten)}">${s.ten}${bc(s.brightness)}${s.hoa?`<span class="hoa">[${s.hoa}]</span>`:''}</span>`;
+    const fmt = (s, cls) => `<span class="${cls} ${ec(s.ten)}">${s.ten.toUpperCase()}${bc(s.brightness)}${s.hoa?`<span class="hoa">[${s.hoa}]</span>`:''}</span>`;
 
     const dvHT = ls.daiVanHienTai;
     const tvCung = ls.palaces[ls.tieuHanIdx];
@@ -886,16 +887,21 @@ select.form-input { cursor: pointer; }
     const centerHTML = `<div class="cung-center">
       <div class="center-la-so">
         <div class="center-title">✦ ${hoten.toUpperCase()} ✦</div>
-        <div class="center-row">📅 ${conv.amLich ? conv.amLich.day+'/'+conv.amLich.month+'/'+conv.amLich.year+' ÂL' : ''} · ${conv.gioChi||''}</div>
+        <hr class="center-divider">
+        ${conv._dl ? `<div class="center-row">📅 ${conv._dl.day}/${conv._dl.month}/${conv._dl.year} (Dương Lịch) · giờ ${conv.gioChi||''}</div>` : ''}
+        <div class="center-row">📅 ${conv.amLich ? conv.amLich.day+'/'+conv.amLich.month+'/'+conv.amLich.year : ''} (Âm Lịch) · giờ ${conv.gioChi||''}</div>
+        <div class="center-row">🎂 ${ls.tuoiXem} tuổi (âm lịch)</div>
         <hr class="center-divider">
         <div class="center-row">Năm: <b style="color:var(--navy)">${ls.canChiNam}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${ls.napAm}</b></div>
-        <div class="center-row">Cục: <b style="color:var(--navy)">${ls.cuc}</b></div>
-        <div class="center-row">Mệnh: <b style="color:var(--navy)">${ls.menhDC}</b> &nbsp;·&nbsp; Thân: <b style="color:var(--navy)">${ls.thanDC}</b></div>
+        <div class="center-row">Cục: <b style="color:var(--navy)">${ls.cuc}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${ls.menhDC}</b> · Thân: <b style="color:var(--navy)">${ls.thanDC}</b></div>
         <hr class="center-divider">
-        <div class="center-row">Tuổi ${ls.tuoiXem} — Năm <b style="color:var(--blue)">${ls.chiNamXem||''}</b></div>
-        <div class="center-row">Đại vận: <b style="color:var(--green, #1E6B3C)">${dvHT?.diaChi||'?'}</b> (${dvHT?.tuoiStart}–${dvHT?.tuoiEnd}t) ${dvHT?.scoring ? dvHT.scoring.flag + ' ' + dvHT.scoring.tong + 'đ' : ''}</div>
-        <div class="center-row">Tiểu hạn: <b style="color:var(--green, #1E6B3C)">${tvCung?.diaChi||'?'}</b> · ${tvCung?.cungName||''}</div>
+        <div class="center-row">Năm <b style="color:var(--blue)">${ls.chiNamXem||''}</b> — Tuổi ${ls.tuoiXem}</div>
+        <div class="center-row">Đại vận: <b style="color:#1E6B3C">${dvHT?.diaChi||'?'}</b> (${dvHT?.tuoiStart}–${dvHT?.tuoiEnd}t)${dvHT?.scoring ? ' ' + dvHT.scoring.flag + ' ' + dvHT.scoring.tong + 'đ' : ''}</div>
+        <div class="center-row">Tiểu hạn: <b style="color:#1E6B3C">${tvCung?.diaChi||'?'}</b> · ${tvCung?.cungName||''}</div>
         <div class="center-row">Lưu đại hạn: <b style="color:var(--gold)">${ldh?.diaChi||'?'}</b> · ${ldh?.cungName||''}</div>
+        <hr class="center-divider">
+        <div class="center-row" style="font-size:10px;color:var(--text-lt)">🗓 Lập lá số: ${(()=>{const n=new Date(),p=x=>String(x).padStart(2,'0');return p(n.getDate())+'/'+p(n.getMonth()+1)+'/'+n.getFullYear()+' '+p(n.getHours())+':'+p(n.getMinutes());})()}</div>
+        <div class="center-row" style="font-size:10px;color:var(--text-lt)">© 2026 紫微明寶 | Tử Vi Minh Bảo</div>
       </div>
     </div>`;
 
@@ -914,8 +920,8 @@ select.form-input { cursor: pointer; }
       const xauStars = p.stars.filter(s => s.nhom!=='chinh' && s.nhom!=='trang_sinh' && isBad(s.ten));
       const tot = totStars.map(s => fmt(s,'star-phu')).join('<br>');
       const xau = xauStars.map(s => fmt(s,'star-phu')).join('<br>');
-      const vong = p.stars.filter(s=>s.nhom==='trang_sinh').map(s=>`<span class="star-vong ${ec(s.ten)}">${s.ten}${bc(s.brightness)}</span>`).join(' ');
-      const tt = p.stars.filter(s=>s.nhom==='tuan_triet').map(s=>`<span class="star-tt">${s.ten}</span>`).join(' ');
+      const vong = p.stars.filter(s=>s.nhom==='trang_sinh').map(s=>`<span class="star-vong ${ec(s.ten)}">${s.ten.toUpperCase()}${bc(s.brightness)}</span>`).join(' ');
+      const tt = p.stars.filter(s=>s.nhom==='tuan_triet').map(s=>`<span class="star-tt">${s.ten.toUpperCase()}</span>`).join(' ');
       return `<div class="cung-cell ${p.isMenh?'is-menh':''} ${isCurVan?'cur-van':''}">
         <div class="c-can-chi">${p.diaChi}</div>
         <div class="c-cung-name">${p.cungName}${p.isThan?' ·T':''}${isCurVan?' ◆':''}${isTH?' ★':''}</div>
