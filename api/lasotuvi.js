@@ -55,15 +55,16 @@ ${desc}
 
 PHẦN 14 — TỔNG QUAN CÁC ĐẠI VẬN
 
-1. Bảng tổng hợp 9 đại vận:
-| Đại vận | Tuổi | Cung | Thiên Thời | Địa Lợi | Nhân Hòa | Tổng | Flag |
+Bước 1 — Xuất JSON chart data NGAY ĐẦU TIÊN (bắt buộc):
+```chartdata
+{"labels":["ĐV1","ĐV2","ĐV3","ĐV4","ĐV5","ĐV6","ĐV7","ĐV8","ĐV9"],"scores":[s1,s2,s3,s4,s5,s6,s7,s8,s9]}
+```
+Thay s1-s9 bằng điểm tổng thực tế từng đại vận.
 
-2. JSON chart data (BẮT BUỘC, đặt trong block \`\`\`chartdata):
-\`\`\`chartdata
-{"labels":["x-y",...], "scores":[n,...]}
-\`\`\`
+Bước 2 — Bảng tổng hợp:
+| ĐV | Tuổi | Cung | TT | ĐL | NH | Tổng | Flag |
 
-3. Nhận xét ngắn (100-150 từ): giai đoạn đẹp nhất, khó khăn nhất, xu hướng tổng thể.`;
+Bước 3 — Nhận xét ngắn (80-100 từ): giai đoạn đẹp, khó khăn, xu hướng.\`;
 
   if (phan >= 15 && phan <= 23) {
     const dvNum = phan - 14;
@@ -108,7 +109,7 @@ module.exports = async (req, res) => {
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 1200,
+        max_tokens: phan === 14 ? 1500 : 1200,
         system: SYSTEM_PROMPT,
         messages: [{ role: 'user', content: prompt }],
       }),
