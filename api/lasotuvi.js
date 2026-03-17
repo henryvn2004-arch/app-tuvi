@@ -26,13 +26,14 @@ function buildPrompt(phan, laSoText, docs) {
   const ctx = '=== LÁ SỐ ===\n' + laSoText + (docs ? '\n\n=== TÀI LIỆU ===\n' + docs : '');
 
   if (phan === 1) {
-    return ctx + '\n\nPHẦN 1 — TỔNG QUAN LÁ SỐ (250-350 từ)\n- Thuận lý âm dương mệnh và cung an mệnh\n- Bản Mệnh – Cục (Nạp Âm)\n- Cung Mệnh và Cung Thân\n- Chính tinh thủ Mệnh\n- Khí chất con người (3 vòng Thái Tuế, Lộc Tồn, Tràng Sinh)\n- Ưu điểm nổi bật & nhược điểm dễ gặp';
+    return ctx + '\n\nPHẦN 1 — TỔNG QUAN LÁ SỐ (300-400 từ)\n- Thuận lý/nghịch lý âm dương cung Mệnh\n- Sinh địa/Vượng địa/Bại địa/Tuyệt địa của bản mệnh\n- Bản Mệnh – Cục (Nạp Âm)\n- Cung Mệnh và Cung Thân: sáng sủa hay mờ ám, Mệnh Thân đồng cung hay không\n- Chính tinh thủ Mệnh (vô chính diệu nếu có)\n- Khí chất con người qua 3 vòng: Thái Tuế (nhóm mấy), Lộc Tồn (sao tại Mệnh), Tràng Sinh (vị trí)\n- Cách cục nổi bật (Phú cục/Quý cục/Bần tiện cục nếu có — đã liệt kê trong phần CÁCH CỤC & NHẬN ĐỊNH)\n- Ưu điểm nổi bật & nhược điểm dễ gặp\n\nLƯU Ý: Phần CÁCH CỤC & NHẬN ĐỊNH trong lá số đã tính sẵn rule-based — hãy dùng trực tiếp để luận, không tính lại.';
   }
 
   if (phan >= 2 && phan <= 13) {
     const cung = CUNG_BY_PHAN[phan];
     const desc = CUNG_DESC[cung] || '';
-    return ctx + '\n\nPHẦN ' + phan + ' — CUNG ' + cung.toUpperCase() + ' (150-200 từ)\n' + desc + '\n\nLuận giải:\n- Ý nghĩa chính tinh tại cung ' + cung + '\n- Tổ hợp các sao tại cung và tam phương tứ chính → xác định cách cục và ý nghĩa\n- Những điểm cần lưu ý (tốt/xấu, cơ hội/rủi ro)';
+    const cachCucNote = (phan === 2) ? '\n- Cách cục & nhận định đặc biệt (xem phần CÁCH CỤC & NHẬN ĐỊNH trong lá số — đã tính sẵn, dùng trực tiếp để luận)' : '';
+    return ctx + '\n\nPHẦN ' + phan + ' — CUNG ' + cung.toUpperCase() + ' (150-200 từ)\n' + desc + '\n\nLuận giải:\n- Ý nghĩa chính tinh tại cung ' + cung + ' (độ sáng Miếu/Vượng/Đắc/Bình/Hãm)\n- Tổ hợp các sao tại cung và tam phương tứ chính → xác định cách cục và ý nghĩa' + cachCucNote\n- Những điểm cần lưu ý (tốt/xấu, cơ hội/rủi ro)';
   }
 
   if (phan === 14) {
