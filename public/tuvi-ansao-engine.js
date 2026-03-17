@@ -878,10 +878,10 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
     }
   }
 
-  // Vòng Thái Tuế tại cung Mệnh — tính bằng offset (chi năm xem vs địa chi Mệnh)
+  // Vòng Thái Tuế tại cung Mệnh — tính bằng offset (chi năm SINH vs địa chi Mệnh)
   const menhP = palaces.find(p => p.isMenh);
   if (menhP) {
-    const startIdx = DIA_CHI.indexOf(chiNamXem);
+    const startIdx = DIA_CHI.indexOf(chiNam); // năm sinh, không phải năm xem
     const menhDcIdx = DIA_CHI.indexOf(menhP.diaChi);
     const offset = ((menhDcIdx - startIdx) % 12 + 12) % 12;
     const saoTaiMenh = THAI_TUE_SEQ[offset];
@@ -1184,10 +1184,10 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
     }
   }
 
-  // Vòng Thái Tuế tại cung Mệnh — tính bằng offset (chi năm xem vs địa chi Mệnh)
+  // Vòng Thái Tuế tại cung Mệnh — tính bằng offset (chi năm SINH vs địa chi Mệnh)
   const menhP = palaces.find(p => p.isMenh);
   if (menhP) {
-    const startIdx = DIA_CHI.indexOf(chiNamXem);
+    const startIdx = DIA_CHI.indexOf(chiNam); // năm sinh, không phải năm xem
     const menhDcIdx = DIA_CHI.indexOf(menhP.diaChi);
     const offset = ((menhDcIdx - startIdx) % 12 + 12) % 12;
     const saoTaiMenh = THAI_TUE_SEQ[offset];
