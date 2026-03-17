@@ -612,6 +612,12 @@ select.form-input { cursor: pointer; }
       lines.push(`Vòng Thái Tuế tại Mệnh: ${ttn.sao} (${ttn.ten})`);
       lines.push(`  → ${ttn.yNghia}`);
     }
+    const thanP = ls.palaces.find(p => p.diaChi === ls.thanDC);
+    if (thanP?.thaiTueNhom) {
+      const ttn = thanP.thaiTueNhom;
+      lines.push(`Vòng Thái Tuế tại Thân (cung ${thanP.cungName}): ${ttn.sao} (${ttn.ten})`);
+      lines.push(`  → ${ttn.yNghia}`);
+    }
     lines.push(`Tiểu hạn: ${ls.palaces[ls.tieuHanIdx]?.diaChi} (${ls.palaces[ls.tieuHanIdx]?.cungName}) | Lưu đại hạn: ${ls.palaces[ls.luuNienDaiHanIdx]?.diaChi} (${ls.palaces[ls.luuNienDaiHanIdx]?.cungName})`);
     lines.push('');
 
