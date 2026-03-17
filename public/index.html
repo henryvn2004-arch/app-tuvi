@@ -622,6 +622,13 @@ select.form-input { cursor: pointer; }
       const chinh = p.majorStars.map(s => s.ten + (s.brightness?`(${s.brightness})`:'') + (s.hoa?`[${s.hoa}]`:'')).join(' ');
       const phu = p.stars.filter(s=>s.nhom!=='chinh').map(s => s.ten + (s.hoa?`[${s.hoa}]`:'')).join(' ');
       lines.push(`[${p.cungName}] ${p.diaChi}${p.isThan?' THÂN':''}${p.isMenh?' MỆNH':''} ${van}`);
+      // Cách cục liên quan đến cung này
+      if (ls.cachCuc) {
+        const cc = ls.cachCuc.filter(r => r.cung === p.cungName || r.cung === '' || r.cung === 'Thân');
+        if (cc.length > 0) {
+          cc.forEach(r => lines.push(`  [CÁCH CỤC] ${r.ten}: ${r.moTa}`));
+        }
+      }
       if (p.majorStars.length === 0) {
         // Vô chính diệu — mượn chính tinh cung xung chiếu để luận giải
         const xung = p.xungChieuCung;
@@ -666,9 +673,10 @@ select.form-input { cursor: pointer; }
     // Cách cục phân tích
     if (ls.cachCuc && ls.cachCuc.length > 0) {
       lines.push('');
-      lines.push('=== CÁCH CỤC & NHẬN ĐỊNH ===');
+      lines.push('=== CÁCH CỤC & NHẬN ĐỊNH (toàn bộ lá số) ===');
       ls.cachCuc.forEach(r => {
-        lines.push(`[${r.loai.toUpperCase()}] ${r.ten}`);
+        const cungStr = r.cung ? ` [Cung ${r.cung}]` : ' [Tổng quát]';
+        lines.push(`[${r.loai.toUpperCase()}]${cungStr} ${r.ten}`);
         lines.push(`  ${r.moTa}`);
         if (r.chiTiet) lines.push(`  Chi tiết: ${r.chiTiet}`);
       });
