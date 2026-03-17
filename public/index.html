@@ -663,6 +663,17 @@ select.form-input { cursor: pointer; }
       if (xau) lines.push(`  Sao xấu: ${xau}`);
     });
 
+    // Cách cục phân tích
+    if (ls.cachCuc && ls.cachCuc.length > 0) {
+      lines.push('');
+      lines.push('=== CÁCH CỤC & NHẬN ĐỊNH ===');
+      ls.cachCuc.forEach(r => {
+        lines.push(`[${r.loai.toUpperCase()}] ${r.ten}`);
+        lines.push(`  ${r.moTa}`);
+        if (r.chiTiet) lines.push(`  Chi tiết: ${r.chiTiet}`);
+      });
+    }
+
     return lines.join('\n');
   }
 
