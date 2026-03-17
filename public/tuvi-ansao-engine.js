@@ -282,6 +282,27 @@ function anChinhTinh(ngayAL, cuc) {
 const THAI_TUE_SEQ = ['Thái Tuế','Thiếu Dương','Tang Môn','Thiếu Âm','Quan Phù',
   'Tử Phù','Tuế Phá','Long Đức','Bạch Hổ','Phúc Đức','Điếu Khách','Trực Phù'];
 
+
+
+const THAI_TUE_NHOM = {
+  'Thái Tuế':    1, 'Quan Phù':   1, 'Bạch Hổ':    1,
+  'Thiếu Dương': 2, 'Tử Phù':     2, 'Phúc Đức':   2,
+  'Tang Môn':    3, 'Tuế Phá':    3, 'Điếu Khách': 3,
+  'Thiếu Âm':   4, 'Long Đức':   4, 'Trực Phù':   4,
+};
+
+const THAI_TUE_NHOM_Y_NGHIA = {
+  1: { ten: 'Nhóm 1 — Thái Tuế · Quan Phù · Bạch Hổ',
+       yNghia: 'Người có lý tưởng, tính tình ngay thẳng, đàng hoàng, có tư cách. Dễ thành đạt, làm được việc hợp sở thích. Được người xung quanh yêu chuộng, mến trọng.' },
+  2: { ten: 'Nhóm 2 — Thiếu Dương · Tử Phù · Phúc Đức',
+       yNghia: 'Sáng suốt nhưng hay cạnh tranh lấn át người khác. Nếu dùng thủ đoạn để thắng thì dù thành công cũng dễ hỏng, thậm chí mắc họa. Có Phúc Đức khuyên nhủ làm việc lành — nếu làm được vậy thì vận mạng yên ổn.' },
+  3: { ten: 'Nhóm 3 — Tang Môn · Tuế Phá · Điếu Khách',
+       yNghia: 'Xung phá, đối kháng với Thái Tuế. Gặp khó khăn trong việc đạt chí nguyện, thường làm công việc không đúng sở nguyện. Bù lại thông minh, tháo vát, hoạt bát — mạng ở thế đối kháng Thái Tuế thường có Thiên Mã.' },
+  4: { ten: 'Nhóm 4 — Thiếu Âm · Long Đức · Trực Phù',
+       yNghia: 'Thế của người làm công hoặc phụ thuộc người khác. Thường làm thành công nhưng không được hưởng lợi xứng đáng, dễ bị bạc đãi. Tuy nhiên được hưởng phúc, an lành nhờ Long Đức — một số còn được hưởng cả Lộc Tồn.' },
+};
+
+
 function anThaiTue(chiNam) {
   const start = dcIdx(chiNam);
   const r = {};
@@ -743,7 +764,9 @@ const TAM_PHUONG_TU_CHINH = {
   'Phụ Mẫu':   { tamHop: ['Nô Bộc','Tử Tức'],           xung: 'Tật Ách' },
 };
 
-// ─── MAIN ENGINE ─────────────────────────────────────────────
+
+// ─── VÒNG THÁI TUẾ — PHÂN NHÓM TẠI CUNG MỆNH ───────────────
+
 function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, namXem }) {
   const amDuong = ['Giáp','Bính','Mậu','Canh','Nhâm'].includes(canNam) ? 'dương' : 'âm';
   const canChiNam = `${canNam} ${chiNam}`;
@@ -855,6 +878,40 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
     }
   }
 
+  // Vòng Thái Tuế tại cung Mệnh — tính bằng offset (chi năm xem vs địa chi Mệnh)
+  const menhP = palaces.find(p => p.isMenh);
+  if (menhP) {
+    const startIdx = DIA_CHI.indexOf(chiNamXem);
+    const menhDcIdx = DIA_CHI.indexOf(menhP.diaChi);
+    const offset = ((menhDcIdx - startIdx) % 12 + 12) % 12;
+    const saoTaiMenh = THAI_TUE_SEQ[offset];
+    const nhom = THAI_TUE_NHOM[saoTaiMenh];
+    if (nhom !== undefined) {
+      menhP.thaiTueNhom = {
+        sao: saoTaiMenh,
+        nhom,
+        ...THAI_TUE_NHOM_Y_NGHIA[nhom],
+      };
+    }
+  }
+
+  // Vị trí cung Mệnh trong vòng Thái Tuế
+  const menhPalaceRef = palaces.find(p => p.isMenh);
+  let menhThaiTue = null;
+  if (menhPalaceRef) {
+    const thaiTueSaoTaiMenh = menhPalaceRef.stars.find(s => s.nhom === 'thai_tue');
+    if (thaiTueSaoTaiMenh) {
+      const info = THAI_TUE_NHOM[thaiTueSaoTaiMenh.ten];
+      if (info) {
+        menhThaiTue = {
+          sao: thaiTueSaoTaiMenh.ten,
+          nhom: info.nhom,
+          y_nghia: info.y_nghia,
+        };
+      }
+    }
+  }
+
   // Tính scoring cho 9 đại vận
   const napAmHanh = getNapAm(canChiNam);
   const daiVansScored = tinhScoringAllDaiVan(daiVans, palaces, canChiNam, chiNam, napAmHanh);
@@ -868,6 +925,7 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
     earthlyBranchOfBodyPalace: thanDC,
     chineseDate: canChiNam,
     palaces,
+    menhThaiTue,
     daiVans: daiVansScored,
     daiVanHienTai: daiVansScored.find(v => tuoiXem >= v.tuoiStart && tuoiXem <= v.tuoiEnd) || daiVanHienTai,
     tieuHanIdx,
@@ -1011,6 +1069,180 @@ function getStarBrightness(tenSao, diaChi) {
   if (data.positions.ham?.includes(diaChi))   return 'Hãm';
   return 'Bình';
 }
+
+// Export
+if (typeof module !== 'undefined') module.exports = { anSaoLaSo, STAR_DATA, getStarData, getStarBrightness };
+// ─── MAIN ENGINE ─────────────────────────────────────────────
+function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, namXem }) {
+  const amDuong = ['Giáp','Bính','Mậu','Canh','Nhâm'].includes(canNam) ? 'dương' : 'âm';
+  const canChiNam = `${canNam} ${chiNam}`;
+  const napAm = NAP_AM[canChiNam] || '?';
+
+  // 1. Cung Mệnh & Thân
+  const menhIdx = dinhCungMenh(thangAL, gioIdx);
+  const thanIdx = dinhCungThan(thangAL, gioIdx);
+  const menhDC = DIA_CHI[menhIdx];
+  const thanDC = DIA_CHI[thanIdx];
+
+  // 2. Lập cục
+  const { cuc, canMenh } = lapCuc(canNam, menhDC);
+
+  // 3. An sao
+  const chinhTinh = anChinhTinh(ngayAL, cuc);
+  if (!chinhTinh) throw new Error(`Không tìm thấy bảng Tử Vi ngày ${ngayAL} cục ${cuc}`);
+
+  const thaiTue = anThaiTue(chiNam);
+  const locTon = anLocTon(canNam, amDuong, gioitinh);
+  const trangSinh = anTrangSinh(cuc, amDuong, gioitinh);
+  const locTonIdx = locTon['Lộc Tồn'];
+  const lucSat = anLucSat(canNam, chiNam, gioIdx, locTonIdx, amDuong, gioitinh);
+  const phuTinh = anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx);
+
+  // 4. Tứ hóa
+  const tuHoa = TU_HOA[canNam] || {};
+
+  // 5. Tuần Triệt
+  const tuanTriet = getTuanTriet(canChiNam, canNam);
+
+  // 6. Đại vận
+  const daiVans = tinhDaiVan(menhIdx, cuc, amDuong, gioitinh);
+
+  // 7. Tiểu hạn & tuổi xem
+  const namSinhDL = namAL; // placeholder
+  const tuoiXem = namXem - namSinhDL + 1;
+  // Chi năm xem
+  const chiNamXem = DIA_CHI[(namXem + 8) % 12];
+  const tieuHanIdx = tinhTieuHan(chiNam, gioitinh, tuoiXem);
+  // Lưu niên đại hạn: từ cung ĐV hiện tại đếm tới chi năm xem
+  const daiVanHienTaiObj = daiVans.find(v => tuoiXem >= v.tuoiStart && tuoiXem <= v.tuoiEnd);
+  const ageIndex = daiVanHienTaiObj ? tuoiXem - daiVanHienTaiObj.tuoiStart : 0;
+  const luuNienDaiHanIdx = daiVanHienTaiObj
+    ? tinhLuuDaiHan(daiVanHienTaiObj.cungIdx, ageIndex, amDuong, gioitinh)
+    : 0;
+  const daiVanHienTai = daiVans.find(v => tuoiXem >= v.tuoiStart && tuoiXem <= v.tuoiEnd);
+
+  // 8. Build palaces
+  const allStars = { ...chinhTinh, ...thaiTue, ...locTon, ...trangSinh, ...lucSat, ...phuTinh };
+
+  // Apply tứ hóa labels
+  const tuHoaMap = {}; // starName → hoa
+  for (const [hoa, star] of Object.entries(tuHoa)) tuHoaMap[star] = hoa;
+
+  const palaces = DIA_CHI.map((dc, idx) => {
+    const offset = mod12(idx - menhIdx);
+    const cungName = TEN_CUNG[offset];
+    const stars = [];
+    for (const [ten, cidx] of Object.entries(allStars)) {
+      if (cidx === idx) {
+        const hoa = tuHoaMap[ten];
+        const nhom = chinhTinh[ten] !== undefined ? 'chinh' :
+                thaiTue[ten] !== undefined ? 'thai_tue' :
+                locTon[ten] !== undefined ? 'loc_ton' :
+                trangSinh[ten] !== undefined ? 'trang_sinh' :
+                lucSat[ten] !== undefined ? 'luc_sat' : 'phu';
+        const brightness = getStarBrightness(ten, dc);
+        stars.push({ ten, hoa: hoa || null, nhom, brightness });
+      }
+    }
+    // Tuần Triệt — mỗi cung chỉ push 1 lần
+    const hasTuan = tuanTriet.tuan.includes(idx);
+    const hasTriet = tuanTriet.triet.includes(idx);
+    if (hasTuan && hasTriet) stars.push({ ten:'Tuần+Triệt', nhom:'tuan_triet', brightness:'' });
+    else if (hasTuan)  stars.push({ ten:'Tuần',  nhom:'tuan_triet', brightness:'' });
+    else if (hasTriet) stars.push({ ten:'Triệt', nhom:'tuan_triet', brightness:'' });
+
+    // Đại vận range
+    const van = daiVans[offset];
+
+    return {
+      idx, diaChi: dc, cungName,
+      isMenh: idx === menhIdx,
+      isThan: idx === thanIdx,
+      isBodyPalace: idx === thanIdx,
+      stars,
+      majorStars: stars.filter(s=>s.nhom==='chinh'),
+      minorStars: stars.filter(s=>['loc_ton','luc_sat','phu'].includes(s.nhom)),
+      adjectiveStars: stars.filter(s=>['thai_tue','trang_sinh','tuan_triet'].includes(s.nhom)),
+      decadal: van ? { range: [van.tuoiStart, van.tuoiEnd] } : null,
+      earthlyBranch: dc,
+      name: cungName,
+    };
+  });
+
+  // Gắn tam phương tứ chính vào từng cung
+  for (const p of palaces) {
+    const tp = TAM_PHUONG_TU_CHINH[p.cungName];
+    if (tp) {
+      p.tamHopCungs = tp.tamHop
+        .map(name => palaces.find(x => x.cungName === name))
+        .filter(Boolean);
+      p.xungChieuCung = palaces.find(x => x.cungName === tp.xung) || null;
+      // Tất cả sao trong 4 cung (chính + 2 tam hợp + 1 xung)
+      p.tuChinhStars = [p, ...p.tamHopCungs, p.xungChieuCung]
+        .filter(Boolean)
+        .flatMap(c => c.majorStars);
+    }
+  }
+
+  // Vòng Thái Tuế tại cung Mệnh — tính bằng offset (chi năm xem vs địa chi Mệnh)
+  const menhP = palaces.find(p => p.isMenh);
+  if (menhP) {
+    const startIdx = DIA_CHI.indexOf(chiNamXem);
+    const menhDcIdx = DIA_CHI.indexOf(menhP.diaChi);
+    const offset = ((menhDcIdx - startIdx) % 12 + 12) % 12;
+    const saoTaiMenh = THAI_TUE_SEQ[offset];
+    const nhom = THAI_TUE_NHOM[saoTaiMenh];
+    if (nhom !== undefined) {
+      menhP.thaiTueNhom = {
+        sao: saoTaiMenh,
+        nhom,
+        ...THAI_TUE_NHOM_Y_NGHIA[nhom],
+      };
+    }
+  }
+
+  // Vị trí cung Mệnh trong vòng Thái Tuế
+  const menhPalaceRef = palaces.find(p => p.isMenh);
+  let menhThaiTue = null;
+  if (menhPalaceRef) {
+    const thaiTueSaoTaiMenh = menhPalaceRef.stars.find(s => s.nhom === 'thai_tue');
+    if (thaiTueSaoTaiMenh) {
+      const info = THAI_TUE_NHOM[thaiTueSaoTaiMenh.ten];
+      if (info) {
+        menhThaiTue = {
+          sao: thaiTueSaoTaiMenh.ten,
+          nhom: info.nhom,
+          y_nghia: info.y_nghia,
+        };
+      }
+    }
+  }
+
+  // Tính scoring cho 9 đại vận
+  const napAmHanh = getNapAm(canChiNam);
+  const daiVansScored = tinhScoringAllDaiVan(daiVans, palaces, canChiNam, chiNam, napAmHanh);
+
+  return {
+    canChiNam, napAm, amDuong, cuc, canMenh,
+    menhDC, thanDC, menhIdx, thanIdx,
+    napAmHanh,
+    fiveElementsClass: cuc,
+    earthlyBranchOfSoulPalace: menhDC,
+    earthlyBranchOfBodyPalace: thanDC,
+    chineseDate: canChiNam,
+    palaces,
+    menhThaiTue,
+    daiVans: daiVansScored,
+    daiVanHienTai: daiVansScored.find(v => tuoiXem >= v.tuoiStart && tuoiXem <= v.tuoiEnd) || daiVanHienTai,
+    tieuHanIdx,
+    tuoiXem,
+    chiNamXem,
+    luuNienDaiHanIdx,
+  };
+}
+
+
+// ─── TÍNH CHẤT SAO ───────────────────────────────────────────
 
 // Export
 if (typeof module !== 'undefined') module.exports = { anSaoLaSo, STAR_DATA, getStarData, getStarBrightness };
