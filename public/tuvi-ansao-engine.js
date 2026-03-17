@@ -621,6 +621,660 @@ function tinhLuuDaiHan(daiVanCungIdx, ageIndex, amDuong, gioitinh) {
 }
 
 
+// ─── CÁCH CỤC ENGINE ─────────────────────────────────────────
+// Rule-based analysis chạy sau anSaoLaSo()
+// Trả về array các nhận định để feed cho Claude
+
+// ── Helper functions ──────────────────────────────────────────
+
+function hasSao(palace, tenSao) {
+  if (!palace) return false;
+  return palace.stars.some(s => s.ten === tenSao);
+}
+
+function hasSaoNhom(palace, nhom) {
+  if (!palace) return false;
+  return palace.stars.some(s => s.nhom === nhom);
+}
+
+function getSaoChinh(palace) {
+  if (!palace) return [];
+  return palace.majorStars.map(s => s.ten);
+}
+
+function getSaoAll(palace) {
+  if (!palace) return [];
+  return palace.stars.map(s => s.ten);
+}
+
+function getBrightness(palace, tenSao) {
+  if (!palace) return '';
+  const s = palace.stars.find(s => s.ten === tenSao);
+  return s?.brightness || '';
+}
+
+function isSangSua(palace, tenSao) {
+  // Sáng sủa = Miếu hoặc Vượng hoặc Đắc
+  const b = getBrightness(palace, tenSao);
+  return ['Miếu','Vượng','Đắc'].includes(b);
+}
+
+function isMoAm(palace, tenSao) {
+  return getBrightness(palace, tenSao) === 'Hãm';
+}
+
+function hasTuan(palace) {
+  return palace?.stars.some(s => s.nhom === 'tuan_triet' && s.ten === 'Tuần');
+}
+
+function hasTriet(palace) {
+  return palace?.stars.some(s => s.nhom === 'tuan_triet' && s.ten === 'Triệt');
+}
+
+function hasTuanOrTriet(palace) {
+  return hasTuan(palace) || hasTriet(palace);
+}
+
+function isVoChinhDieu(palace) {
+  return !palace || palace.majorStars.length === 0;
+}
+
+function getPalace(ls, cungName) {
+  return ls.palaces.find(p => p.cungName === cungName);
+}
+
+function getMenh(ls) { return ls.palaces.find(p => p.isMenh); }
+function getThan(ls)  { return ls.palaces.find(p => p.isThan); }
+
+// Sat tinh & Bai tinh sets
+const SAT_TINH = new Set(['Kình Dương','Đà La','Hỏa Tinh','Linh Tinh','Địa Không','Địa Kiếp']);
+const BAI_TINH = new Set(['Kiếp Sát','Phá Toái','Đại Hao','Tiểu Hao','Bệnh Phù','Phục Binh',
+  'Quan Phù','Thiên Hình','Thiên Riêu','Thiên Khốc','Thiên Hư']);
+const VAN_TINH = new Set(['Văn Xương','Văn Khúc','Thiên Khôi','Thiên Việt','Tả Phụ','Hữu Bật',
+  'Long Trì','Phượng Các']);
+const TAM_KHONG = new Set(['Địa Không','Địa Kiếp','Tuần','Triệt']);
+
+function countSatTinh(palace) {
+  return palace?.stars.filter(s => SAT_TINH.has(s.ten)).length || 0;
+}
+
+function hasSatTinh(palace) { return countSatTinh(palace) > 0; }
+
+function hasSatTinhSangSua(palace) {
+  return palace?.stars.some(s => SAT_TINH.has(s.ten) && isSangSua(palace, s.ten));
+}
+
+function isAmDuong(diaChi) {
+  // Dương: Tý Dần Thìn Ngọ Thân Tuất (chẵn trong DIA_CHI)
+  const DUONG_DC = new Set(['Tý','Dần','Thìn','Ngọ','Thân','Tuất']);
+  return DUONG_DC.has(diaChi) ? 'dương' : 'âm';
+}
+
+function isGiapCung(ls, cungName, sao1, sao2) {
+  // Kiểm tra sao1 và sao2 giáp 2 bên cungName
+  const p = getPalace(ls, cungName);
+  if (!p) return false;
+  const DIA_CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+  const idx = DIA_CHI.indexOf(p.diaChi);
+  const left  = ls.palaces.find(x => x.diaChi === DIA_CHI[(idx+11)%12]);
+  const right = ls.palaces.find(x => x.diaChi === DIA_CHI[(idx+1)%12]);
+  return (hasSao(left,sao1) && hasSao(right,sao2)) ||
+         (hasSao(left,sao2) && hasSao(right,sao1));
+}
+
+function getNhiHop(ls, diaChi) {
+  // Nhị hợp: Tý-Sửu, Dần-Hợi, Mão-Tuất, Thìn-Dậu, Tỵ-Thân, Ngọ-Mùi
+  const NHI_HOP = {
+    'Tý':'Sửu','Sửu':'Tý','Dần':'Hợi','Hợi':'Dần','Mão':'Tuất','Tuất':'Mão',
+    'Thìn':'Dậu','Dậu':'Thìn','Tỵ':'Thân','Thân':'Tỵ','Ngọ':'Mùi','Mùi':'Ngọ'
+  };
+  const dc2 = NHI_HOP[diaChi];
+  return dc2 ? ls.palaces.find(p => p.diaChi === dc2) : null;
+}
+
+// ── MAIN FUNCTION ─────────────────────────────────────────────
+
+function phanTichCachCuc(ls, gioitinh) {
+  const results = [];
+  const add = (loai, ten, moTa, chiTiet) => results.push({ loai, ten, moTa, chiTiet });
+
+  const menh = getMenh(ls);
+  const than = getThan(ls);
+  const menhDC = ls.menhDC;
+  const thanDC = ls.thanDC;
+  const napAmHanh = ls.napAmHanh;
+
+  const p_menh    = getPalace(ls, 'Mệnh');
+  const p_than    = than;
+  const p_quan    = getPalace(ls, 'Quan Lộc');
+  const p_tai     = getPalace(ls, 'Tài Bạch');
+  const p_dien    = getPalace(ls, 'Điền Trạch');
+  const p_phuc    = getPalace(ls, 'Phúc Đức');
+  const p_phu     = getPalace(ls, 'Phụ Mẫu');
+  const p_huynh   = getPalace(ls, 'Huynh Đệ');
+  const p_phuThe  = getPalace(ls, 'Phu Thê');
+  const p_tuTuc   = getPalace(ls, 'Tử Tức');
+  const p_tat     = getPalace(ls, 'Tật Ách');
+  const p_thienDi = getPalace(ls, 'Thiên Di');
+  const p_no      = getPalace(ls, 'Nô Bộc');
+
+  // ═══════════════════════════════════════════════
+  // 1. NHẬN ĐỊNH CƠ BẢN CUNG MỆNH / THÂN
+  // ═══════════════════════════════════════════════
+
+  // Thuận/Nghịch lý (Âm Dương cư vị)
+  const menhAmDuong = isAmDuong(menhDC);
+  const namSinhAmDuong = ls.amDuong; // âm/dương của năm sinh
+  if (namSinhAmDuong === menhAmDuong) {
+    add('menh_co_ban','Thuận Lý — Dương cư Dương vị / Âm cư Âm vị',
+      'Năm sinh và cung Mệnh cùng âm dương → thuận lý, độ số gia tăng.',
+      `Năm sinh ${namSinhAmDuong}, cung Mệnh ${menhDC} cũng ${menhAmDuong}.`);
+  } else {
+    add('menh_co_ban','Nghịch Lý — Dương cư Âm vị / Âm cư Dương vị',
+      'Năm sinh và cung Mệnh trái âm dương → nghịch lý, độ số giảm thiểu.',
+      `Năm sinh ${namSinhAmDuong}, cung Mệnh ${menhDC} lại ${menhAmDuong}.`);
+  }
+
+  // Sinh/Vượng/Bại/Tuyệt địa
+  const SINH_VUONG_BAI_TUYET = {
+    'Kim':  { sinh:'Tỵ', vuong:'Dậu', bai:'Ngọ', tuyet:'Dần' },
+    'Mộc':  { sinh:'Hợi', vuong:'Mão', bai:'Tý', tuyet:'Thân' },
+    'Hỏa':  { sinh:'Dần', vuong:'Ngọ', bai:'Mão', tuyet:'Hợi' },
+    'Thủy': { sinh:'Thân', vuong:'Tý', bai:'Dậu', tuyet:'Tỵ' },
+    'Thổ':  { sinh:'Thân', vuong:'Tý', bai:'Dậu', tuyet:'Tỵ' },
+  };
+  const svbt = SINH_VUONG_BAI_TUYET[napAmHanh];
+  if (svbt) {
+    if (menhDC === svbt.sinh) {
+      add('menh_co_ban','Sinh Địa',
+        `Cung Mệnh là Sinh địa của bản mệnh → rất tốt, phát triển bền vững.`,
+        `Mệnh ${napAmHanh} tại ${menhDC} = Sinh địa.`);
+    } else if (menhDC === svbt.vuong) {
+      add('menh_co_ban','Vượng Địa',
+        `Cung Mệnh là Vượng địa của bản mệnh → được nhiều lợi ích.`,
+        `Mệnh ${napAmHanh} tại ${menhDC} = Vượng địa.`);
+    } else if (menhDC === svbt.bai) {
+      add('menh_co_ban','Bại Địa',
+        `Cung Mệnh là Bại địa → dù gặp vận tốt cũng chẳng bền lâu, như hoa sớm nở tối tàn.`,
+        `Mệnh ${napAmHanh} tại ${menhDC} = Bại địa.`);
+    } else if (menhDC === svbt.tuyet) {
+      // Kiểm tra có chính tinh sinh được bản mệnh không (Tuyệt xứ phùng sinh)
+      const NGU_HANH_SINH = {'Mộc':'Hỏa','Hỏa':'Thổ','Thổ':'Kim','Kim':'Thủy','Thủy':'Mộc'};
+      const STAR_HANH = {
+        'Tử Vi':'Thổ','Thiên Cơ':'Mộc','Thái Dương':'Hỏa','Vũ Khúc':'Kim',
+        'Thiên Đồng':'Thủy','Liêm Trinh':'Hỏa','Thiên Phủ':'Thổ','Thái Âm':'Thủy',
+        'Tham Lang':'Mộc','Cự Môn':'Thủy','Thiên Tướng':'Thủy','Thiên Lương':'Thổ',
+        'Thất Sát':'Kim','Phá Quân':'Thủy',
+      };
+      const cinhTinhCuuGiai = getSaoChinh(p_menh).find(s => {
+        const starHanh = STAR_HANH[s];
+        return starHanh && NGU_HANH_SINH[starHanh] === napAmHanh;
+      });
+      if (cinhTinhCuuGiai) {
+        add('menh_co_ban','Tuyệt Xứ Phùng Sinh',
+          `Cung Mệnh là Tuyệt địa nhưng có chính tinh sinh được bản mệnh → như cành hoa tuy mong manh nhưng lâu tàn, không đáng lo ngại nhiều.`,
+          `Mệnh ${napAmHanh} tại ${menhDC} (Tuyệt địa), được ${cinhTinhCuuGiai} cứu giải.`);
+      } else {
+        const hoaKhoa = hasSao(p_menh,'Hóa Khoa')||hasSao(p_menh,'Hóa Quyền')||hasSao(p_menh,'Hóa Lộc');
+        add('menh_co_ban','Tuyệt Địa',
+          `Cung Mệnh là Tuyệt địa → rất đáng lo ngại. Cần chính tinh sáng sủa hoặc Hóa Khoa/Quyền/Lộc cứu giải.`,
+          `Mệnh ${napAmHanh} tại ${menhDC} = Tuyệt địa. ${hoaKhoa?'Có Hóa tinh cứu giải phần nào.':'Chưa có cứu giải.'}`);
+      }
+    }
+  }
+
+  // Vô chính diệu
+  if (isVoChinhDieu(p_menh)) {
+    const coTuanTriet = hasTuanOrTriet(p_menh);
+    const coDiaKhong = hasSao(p_menh,'Địa Không') || hasSao(p_menh,'Thiên Không');
+    add('menh_co_ban','Mệnh Vô Chính Diệu',
+      'Cung Mệnh không có chính tinh tọa thủ. Người rất khôn ngoan sắc sảo, thường hay đau yếu sức khỏe suy kém lúc thiếu thời, dễ phiêu bạt vô sở định.',
+      `${coTuanTriet?'Có Tuần/Triệt án ngữ cứu giải.':'Cần Tuần/Triệt hoặc nhiều chính tinh sáng sủa hội chiếu.'} ${coDiaKhong?'Có Địa Không/Thiên Không hội hợp.':''}`);
+  }
+
+  // Mệnh Thân đồng cung
+  if (menhDC === thanDC) {
+    const TU_MO = new Set(['Thìn','Tuất','Sửu','Mùi']);
+    const voChinhDieu = isVoChinhDieu(p_menh);
+    if (TU_MO.has(menhDC) && voChinhDieu) {
+      add('menh_co_ban','Mệnh Thân Đồng Cung — Tứ Mộ Vô Chính Diệu',
+        'Mệnh Thân đồng cung tại Tứ Mộ vô chính diệu → cùng khổ và giảm thọ. Cần Tuần/Triệt án ngữ hoặc sao sáng sủa cứu giải.',
+        `Mệnh Thân tại ${menhDC}.`);
+    } else if ((menhDC==='Tý'||menhDC==='Ngọ') && voChinhDieu) {
+      const hoaLoc = hasSao(p_menh,'Hóa Lộc');
+      add('menh_co_ban','Mệnh Thân Đồng Cung — Tý/Ngọ Vô Chính Diệu',
+        hoaLoc ? 'Mệnh Thân đồng cung tại Tý/Ngọ vô chính diệu, có Hóa Lộc → giàu nhưng giảm thọ.'
+                : 'Mệnh Thân đồng cung tại Tý/Ngọ vô chính diệu → cần đề phòng nghèo khổ hoặc chết non nếu nhiều sát tinh hội hợp.',
+        `Mệnh Thân tại ${menhDC}.`);
+    } else {
+      add('menh_co_ban','Mệnh Thân Đồng Cung',
+        'Mệnh và Thân đồng cung → cần xem xét kỹ tổng thể sao hội hợp.',
+        `Mệnh Thân tại ${menhDC}.`);
+    }
+  }
+
+  // Mệnh Tuần Thân Triệt / Mệnh Triệt Thân Tuần
+  const menhTuan = hasTuan(p_menh), menhTriet = hasTriet(p_menh);
+  const thanTuan = hasTuan(p_than), thanTriet = hasTriet(p_than);
+  if (menhTuan && thanTriet) {
+    add('menh_co_ban','Mệnh Tuần Thân Triệt',
+      'Cần Cơ/Nguyệt/Đồng/Lương sáng sủa hội hợp mới xứng ý toại lòng. Về già mới có danh giá an nhàn.',
+      'Mệnh có Tuần, Thân có Triệt án ngữ.');
+  }
+  if (menhTriet && thanTuan) {
+    add('menh_co_ban','Mệnh Triệt Thân Tuần',
+      'Cung Mệnh và Thân cần vô chính diệu mới được xứng ý toại lòng, tăng thọ và về già sung sướng.',
+      'Mệnh có Triệt, Thân có Tuần án ngữ.');
+  }
+
+  // Mệnh Không Thân Kiếp / Mệnh Kiếp Thân Không
+  const menhKhong = hasSao(p_menh,'Địa Không');
+  const menhKiep  = hasSao(p_menh,'Địa Kiếp');
+  const thanKhong = hasSao(p_than,'Địa Không');
+  const thanKiep  = hasSao(p_than,'Địa Kiếp');
+  if (menhKhong && thanKiep) {
+    add('menh_co_ban','Mệnh Không Thân Kiếp',
+      'Người rất khôn ngoan sắc sảo. Vui ít buồn nhiều, mưu sự thành bại thất thường, làm gì cũng chẳng lâu bền.',
+      'Địa Không tại Mệnh, Địa Kiếp tại Thân.');
+  }
+  if (menhKiep && thanKhong) {
+    add('menh_co_ban','Mệnh Kiếp Thân Không',
+      'Người rất khôn ngoan sắc sảo. Vui ít buồn nhiều, mưu sự thành bại bất thường, làm gì cũng chẳng lâu bền.',
+      'Địa Kiếp tại Mệnh, Địa Không tại Thân.');
+  }
+
+  // Thân cư Thiên Di
+  if (thanDC === p_thienDi?.diaChi) {
+    if (!hasSatTinh(p_thienDi) && !hasTuanOrTriet(p_thienDi)) {
+      add('than_cu','Thân Cư Thiên Di — Lập Nghiệp Phương Xa',
+        'Nhiều sao sáng sủa hội hợp → lập nghiệp ở phương xa, rất thịnh vượng.','');
+    } else if (hasTuanOrTriet(p_thienDi) || countSatTinh(p_thienDi) >= 2) {
+      add('than_cu','Thân Cư Thiên Di — Chết Xa Nhà',
+        'Tuần/Triệt hoặc nhiều sát tinh hội hợp → có khả năng chết ở xa nhà.','');
+    }
+  }
+
+  // Thân cư Phu Thê
+  if (thanDC === p_phuThe?.diaChi) {
+    if (hasSao(p_phuThe,'Thái Âm')) {
+      add('than_cu','Thân Cư Phu Thê — Sợ Vợ',
+        'Thái Âm tọa thủ → sợ vợ, thường phải nhờ vả nhà vợ.','');
+    }
+    if (hasTuanOrTriet(p_phuThe)) {
+      add('than_cu','Thân Cư Phu Thê — Trắc Trở Hôn Phối',
+        'Tuần/Triệt án ngữ → trắc trở về hôn phối.','');
+    }
+  }
+
+  // Thân cư Phúc Đức
+  if (thanDC === p_phuc?.diaChi) {
+    const satTinh = hasSatTinh(p_phuc);
+    if (!satTinh) {
+      add('than_cu','Thân Cư Phúc Đức — Phúc Thọ',
+        'Phúc Đức sáng sủa tốt đẹp → được hưởng phúc, sống lâu, tránh được nhiều tai họa.','');
+    } else {
+      add('than_cu','Thân Cư Phúc Đức — Giảm Thọ',
+        'Phúc Đức mờ ám xấu xa → khó tránh tai họa, giảm thọ dù cung Mệnh có sáng sủa.','');
+    }
+  }
+
+  // ═══════════════════════════════════════════════
+  // 2. PHÚ CỤC (19.1)
+  // ═══════════════════════════════════════════════
+  const PHU_QUAN = [p_menh, p_dien, p_tai]; // Phú cục check Mệnh, Điền, Tài
+
+  // 19.1.1 Tài Ấm Giáp Ấn
+  for (const p of PHU_QUAN) {
+    if (!p) continue;
+    if (hasSao(p,'Thiên Tướng') && isSangSua(p,'Thiên Tướng') && isGiapCung(ls,p.cungName,'Thiên Lương','Thiên Lương')) {
+      add('phu_cuc','Tài Ấm Giáp Ấn',
+        'Thiên Tướng sáng sủa tọa thủ, có Thiên Lương giáp cung → phú quý song toàn.',
+        `Tại cung ${p.cungName}.`); break;
+    }
+  }
+
+  // 19.1.2 Phủ Ấn Củng Thân  
+  if (p_than && (hasSao(p_than,'Thiên Phủ')||hasSao(p_than?.xungChieuCung,'Thiên Phủ'))) {
+    const xung = p_than?.xungChieuCung;
+    if ((hasSao(p_than,'Thiên Phủ')&&hasSao(xung,'Thiên Tướng')) ||
+        (hasSao(p_than,'Thiên Tướng')&&hasSao(xung,'Thiên Phủ')) ||
+        (hasSao(p_than,'Thiên Phủ')&&hasSao(p_than,'Thiên Tướng'))) {
+      add('phu_cuc','Phủ Ấn Củng Thân',
+        'Cung Thân có Thiên Phủ và Thiên Tướng hội chiếu → giàu có bền vững.',
+        `Tại cung Thân (${thanDC}).`);
+    }
+  }
+
+  // 19.1.3 Kim Sán Quang Huy
+  for (const p of PHU_QUAN) {
+    if (p?.diaChi==='Ngọ' && hasSao(p,'Thái Dương') && isSangSua(p,'Thái Dương')) {
+      add('phu_cuc','Kim Sán Quang Huy',
+        'Thái Dương sáng sủa tọa thủ tại Ngọ → rực rỡ như vàng sáng, phú quý hiển hách.',
+        `Tại cung ${p.cungName}(Ngọ).`); break;
+    }
+  }
+
+  // 19.1.4 Nhật Nguyệt Giáp Tài
+  for (const p of PHU_QUAN) {
+    if (p?.diaChi==='Sửu' && hasSao(p,'Tham Lang') && hasSao(p,'Vũ Khúc')) {
+      add('phu_cuc','Nhật Nguyệt Giáp Tài',
+        'Tham Lang và Vũ Khúc đồng cung tại Sửu, có Nhật Nguyệt giáp cung → đại phú.',
+        `Tại cung ${p.cungName}(Sửu).`); break;
+    }
+    if (p?.diaChi==='Mùi' && hasSao(p,'Thiên Phủ') && isGiapCung(ls,p.cungName,'Thái Dương','Thái Âm')) {
+      add('phu_cuc','Nhật Nguyệt Giáp Tài',
+        'Thiên Phủ tại Mùi có Nhật Nguyệt giáp cung → đại phú.',
+        `Tại cung ${p.cungName}(Mùi).`); break;
+    }
+  }
+
+  // 19.1.5 Nhật Nguyệt Chiếu Bích
+  for (const p of PHU_QUAN) {
+    if (!p) continue;
+    const xung = p.xungChieuCung;
+    if ((p.diaChi==='Sửu'&&hasSao(p,'Thái Dương')&&hasSao(p,'Thái Âm')&&xung?.diaChi==='Mùi') ||
+        (p.diaChi==='Mùi'&&hasSao(p,'Thái Dương')&&hasSao(p,'Thái Âm')&&xung?.diaChi==='Sửu')) {
+      add('phu_cuc','Nhật Nguyệt Chiếu Bích',
+        'Nhật Nguyệt đồng cung xung chiếu nhau tại Sửu/Mùi → giàu có, sáng láng.',
+        `Tại cung ${p.cungName}.`); break;
+    }
+  }
+
+  // 19.1.6 Tài Lộc Giáp Mã
+  for (const p of PHU_QUAN) {
+    if (!p || !hasSao(p,'Vũ Khúc')) continue;
+    if (isGiapCung(ls,p.cungName,'Lộc Tồn','Thiên Mã') || isGiapCung(ls,p.cungName,'Hóa Lộc','Thiên Mã')) {
+      add('phu_cuc','Tài Lộc Giáp Mã',
+        'Vũ Khúc tọa thủ có Lộc/Mã giáp cung → tài lộc dồi dào, giàu có lâu bền.',
+        `Tại cung ${p.cungName}.`); break;
+    }
+  }
+
+  // ═══════════════════════════════════════════════
+  // 3. QUÝ CỤC (19.2)
+  // ═══════════════════════════════════════════════
+  const QUY_QUAN = [p_menh, p_quan]; // Quý cục check Mệnh và Quan Lộc
+
+  // 19.2.1 Kim Dư Phù Giá
+  for (const p of QUY_QUAN) {
+    if (!p || !hasSao(p,'Tử Vi') || !isSangSua(p,'Tử Vi')) continue;
+    const DIA_CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+    const idx = DIA_CHI.indexOf(p.diaChi);
+    const left  = ls.palaces.find(x=>x.diaChi===DIA_CHI[(idx+11)%12]);
+    const right = ls.palaces.find(x=>x.diaChi===DIA_CHI[(idx+1)%12]);
+    const hasThieuDuong = hasSao(left,'Thiếu Dương')||hasSao(right,'Thiếu Dương');
+    const hasThieuAm    = hasSao(left,'Thiếu Âm')||hasSao(right,'Thiếu Âm');
+    const hasTaPhu = hasSao(left,'Tả Phụ')||hasSao(right,'Tả Phụ')||hasSao(left,'Hữu Bật')||hasSao(right,'Hữu Bật');
+    if (hasThieuDuong && hasThieuAm || hasTaPhu) {
+      add('quy_cuc','Kim Dư Phù Giá',
+        'Tử Vi sáng sủa có Tả/Hữu, Thiếu Dương/Âm giáp cung → như xe vàng phò vua, quyền quý hiển hách.',
+        `Tại cung ${p.cungName}.`); break;
+    }
+  }
+
+  // 19.2.2 Tử Phủ Triều Viên
+  for (const p of QUY_QUAN) {
+    if (!p) continue;
+    const xung = p.xungChieuCung;
+    if ((hasSao(p,'Tử Vi')&&isSangSua(p,'Tử Vi')&&hasSao(xung,'Thiên Phủ')) ||
+        (hasSao(p,'Thiên Phủ')&&isSangSua(p,'Thiên Phủ')&&hasSao(xung,'Tử Vi'))) {
+      add('quy_cuc','Tử Phủ Triều Viên',
+        'Tử Vi và Thiên Phủ triều viên → địa vị cao sang, quyền quý.',
+        `Tại cung ${p.cungName}.`); break;
+    }
+  }
+
+  // 19.2.3 Phụ Bật Củng Chủ
+  for (const p of QUY_QUAN) {
+    if (!p||!hasSao(p,'Tử Vi')||!isSangSua(p,'Tử Vi')) continue;
+    const xung = p.xungChieuCung;
+    const DIA_CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+    const idx = DIA_CHI.indexOf(p.diaChi);
+    const left  = ls.palaces.find(x=>x.diaChi===DIA_CHI[(idx+11)%12]);
+    const right = ls.palaces.find(x=>x.diaChi===DIA_CHI[(idx+1)%12]);
+    const allPalaces = [p, xung, left, right, ...p.tamHopCungs||[]].filter(Boolean);
+    const hasTa  = allPalaces.some(x=>hasSao(x,'Tả Phụ'));
+    const hasHuu = allPalaces.some(x=>hasSao(x,'Hữu Bật'));
+    if (hasTa && hasHuu) {
+      add('quy_cuc','Phụ Bật Củng Chủ',
+        'Tử Vi sáng sủa có Tả Phụ và Hữu Bật hội chiếu → được phò tá đắc lực, quyền quý.',
+        `Tại cung ${p.cungName}.`); break;
+    }
+  }
+
+  // 19.2.5 Phủ Tướng Triều Viên
+  for (const p of QUY_QUAN) {
+    if (!p) continue;
+    const xung = p.xungChieuCung;
+    if ((hasSao(p,'Thiên Phủ')&&isSangSua(p,'Thiên Phủ')&&hasSao(xung,'Thiên Tướng')) ||
+        (hasSao(p,'Thiên Tướng')&&isSangSua(p,'Thiên Tướng')&&hasSao(xung,'Thiên Phủ'))) {
+      add('quy_cuc','Phủ Tướng Triều Viên',
+        'Thiên Phủ và Thiên Tướng triều viên → phú quý song toàn, địa vị cao.',
+        `Tại cung ${p.cungName}.`); break;
+    }
+  }
+
+  // 19.2.6 Vũ Khúc Thủ Viên
+  if (p_menh?.diaChi==='Mão' && hasSao(p_menh,'Vũ Khúc')) {
+    add('quy_cuc','Vũ Khúc Thủ Viên','Vũ Khúc thủ Mệnh tại Mão → quyền quý, quan chức.','');
+  }
+
+  // 19.2.7 Cự Cơ Mão Dậu
+  for (const p of QUY_QUAN) {
+    if (!p) continue;
+    if ((p.diaChi==='Mão'||p.diaChi==='Dậu') && hasSao(p,'Cự Môn') && hasSao(p,'Thiên Cơ')) {
+      add('quy_cuc','Cự Cơ Mão Dậu','Cự Môn và Thiên Cơ đồng cung tại Mão/Dậu → quyền quý, thông minh, nổi tiếng.',
+        `Tại cung ${p.cungName}(${p.diaChi}).`); break;
+    }
+  }
+
+  // 19.2.8 Thất Sát Triều Đẩu
+  for (const p of QUY_QUAN) {
+    if (!p) continue;
+    const xung = p.xungChieuCung;
+    if ((p.diaChi==='Dần'||p.diaChi==='Thân') && hasSao(p,'Thất Sát') &&
+        xung && hasSao(xung,'Tử Vi') && hasSao(xung,'Thiên Phủ')) {
+      add('quy_cuc','Thất Sát Triều Đẩu','Thất Sát tại Dần/Thân, Tử Phủ đồng cung xung chiếu → uy quyền lớn, chỉ huy xuất sắc.',
+        `Tại cung ${p.cungName}(${p.diaChi}).`); break;
+    }
+  }
+
+  // 19.2.9 Tham Hỏa Tương Phùng
+  const TU_MO = new Set(['Thìn','Tuất','Sửu','Mùi']);
+  for (const p of QUY_QUAN) {
+    if (!p) continue;
+    if (TU_MO.has(p.diaChi) && hasSao(p,'Tham Lang') && hasSao(p,'Hỏa Tinh')) {
+      add('quy_cuc','Tham Hỏa Tương Phùng','Tham Lang gặp Hỏa Tinh đồng cung tại Tứ Mộ → bạo phát, giàu to, quan chức lớn.',
+        `Tại cung ${p.cungName}(${p.diaChi}).`); break;
+    }
+  }
+
+  // 19.2.10 Nhật Xuất Phù Tang
+  for (const p of QUY_QUAN) {
+    if (p?.diaChi==='Mão' && hasSao(p,'Thái Dương')) {
+      add('quy_cuc','Nhật Xuất Phù Tang','Thái Dương tọa thủ tại Mão → như mặt trời mọc, sáng láng quyền quý.',
+        `Tại cung ${p.cungName}(Mão).`); break;
+    }
+  }
+
+  // 19.2.11 Nguyệt Lãng Thiên Môn
+  for (const p of QUY_QUAN) {
+    if (p?.diaChi==='Hợi' && hasSao(p,'Thái Âm')) {
+      add('quy_cuc','Nguyệt Lãng Thiên Môn','Thái Âm tọa thủ tại Hợi → như trăng sáng trên thiên môn, thanh cao quyền quý.',
+        `Tại cung ${p.cungName}(Hợi).`); break;
+    }
+  }
+
+  // 19.2.13 Nguyệt Sinh Thương Hải
+  for (const p of QUY_QUAN) {
+    if (p?.diaChi==='Tý' && hasSao(p,'Thái Âm')) {
+      add('quy_cuc','Nguyệt Sinh Thương Hải','Thái Âm tọa thủ tại Tý → như trăng sinh trên biển, quyền quý hiển đạt.',
+        `Tại cung ${p.cungName}(Tý).`); break;
+    }
+  }
+
+  // 19.2.17 Lộc Mã Bội Ấn
+  for (const p of QUY_QUAN) {
+    if (!p||!hasSao(p,'Thiên Tướng')||!isSangSua(p,'Thiên Tướng')) continue;
+    if (isGiapCung(ls,p.cungName,'Lộc Tồn','Thiên Mã') || isGiapCung(ls,p.cungName,'Hóa Lộc','Thiên Mã')) {
+      add('quy_cuc','Lộc Mã Bội Ấn','Thiên Tướng sáng sủa có Lộc/Mã giáp cung → lộc quyền cùng phát, hiển hách.',
+        `Tại cung ${p.cungName}.`); break;
+    }
+  }
+
+  // 19.2.19 Mã Đầu Đới Kiếm
+  for (const p of QUY_QUAN) {
+    if (!p||p.diaChi!=='Ngọ'||!hasSao(p,'Kình Dương')) continue;
+    const xung = p.xungChieuCung;
+    const DIA_CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+    const idx = DIA_CHI.indexOf(p.diaChi);
+    const left  = ls.palaces.find(x=>x.diaChi===DIA_CHI[(idx+11)%12]);
+    const right = ls.palaces.find(x=>x.diaChi===DIA_CHI[(idx+1)%12]);
+    const allNearby = [xung,left,right,...p.tamHopCungs||[]].filter(Boolean);
+    if (allNearby.some(x=>hasSao(x,'Thiên Hình')) && allNearby.some(x=>hasSao(x,'Thiên Mã'))) {
+      add('quy_cuc','Mã Đầu Đới Kiếm','Kình Dương tại Ngọ có Thiên Hình và Thiên Mã hội chiếu → võ công lừng lẫy, uy quyền.',
+        `Tại cung ${p.cungName}(Ngọ).`); break;
+    }
+  }
+
+  // 19.2.20 Kình Dương Nhập Mệnh
+  for (const p of QUY_QUAN) {
+    if (!p||!TU_MO.has(p.diaChi)||!hasSao(p,'Kình Dương')) continue;
+    const tuoiTuMo = TU_MO.has(ls.chiNam);
+    add('quy_cuc','Kình Dương Nhập Mệnh',
+      tuoiTuMo ? 'Kình Dương tại Tứ Mộ, tuổi Tứ Mộ → rất tốt, quyền quý hiển hách.'
+               : 'Kình Dương tại Tứ Mộ → có chức quyền, nhưng tốt nhất với tuổi Tứ Mộ.',
+      `Tại cung ${p.cungName}(${p.diaChi}).`); break;
+  }
+
+  // 19.2.21 Tọa Quý Hưởng Quý
+  for (const p of QUY_QUAN) {
+    if (!p) continue;
+    const xung = p.xungChieuCung;
+    if ((hasSao(p,'Thiên Khôi')&&hasSao(xung,'Thiên Việt')) ||
+        (hasSao(p,'Thiên Việt')&&hasSao(xung,'Thiên Khôi'))) {
+      add('quy_cuc','Tọa Quý Hưởng Quý','Thiên Khôi và Thiên Việt chiếu nhau → quý nhân phù trợ, danh vọng hiển đạt.',
+        `Tại cung ${p.cungName}.`); break;
+    }
+  }
+
+  // 19.2.22 Văn Tinh Ám Củng
+  for (const p of QUY_QUAN) {
+    if (!p) continue;
+    const xung = p.xungChieuCung;
+    if ((hasSao(p,'Văn Xương')&&hasSao(xung,'Văn Khúc')) ||
+        (hasSao(p,'Văn Khúc')&&hasSao(xung,'Văn Xương'))) {
+      add('quy_cuc','Văn Tinh Ám Củng','Văn Xương và Văn Khúc chiếu nhau → văn chương xuất sắc, công danh rực rỡ.',
+        `Tại cung ${p.cungName}.`); break;
+    }
+  }
+
+  // 19.2.23 Khoa Quyền Lộc Củng
+  for (const p of QUY_QUAN) {
+    if (!p) continue;
+    const allStars = [...getSaoAll(p), ...(p.tamHopCungs||[]).flatMap(getSaoAll), ...getSaoAll(p.xungChieuCung)];
+    if (allStars.includes('Hóa Khoa') && allStars.includes('Hóa Quyền') && allStars.includes('Hóa Lộc')) {
+      add('quy_cuc','Khoa Quyền Lộc Củng','Hóa Khoa, Hóa Quyền, Hóa Lộc hội chiếu → tam hóa tốt, công danh phú quý tột đỉnh.',
+        `Tại cung ${p.cungName}.`); break;
+    }
+  }
+
+  // 19.2.26 Minh Lộc Ám Lộc
+  for (const p of QUY_QUAN) {
+    if (!p) continue;
+    const nhiHop = getNhiHop(ls, p.diaChi);
+    if ((hasSao(p,'Hóa Lộc')&&hasSao(nhiHop,'Lộc Tồn')) ||
+        (hasSao(p,'Lộc Tồn')&&hasSao(nhiHop,'Hóa Lộc'))) {
+      add('quy_cuc','Minh Lộc Ám Lộc','Hóa Lộc và Lộc Tồn nhị hợp → lộc song trùng, tài lộc vượng phát.',
+        `Tại cung ${p.cungName}.`); break;
+    }
+  }
+
+  // ═══════════════════════════════════════════════
+  // 4. BẦN TIỆN CỤC (19.3)
+  // ═══════════════════════════════════════════════
+
+  // 19.3.1 Sinh Bất Phùng Thời
+  if (p_menh && hasSao(p_menh,'Liêm Trinh') &&
+      (p_menh.diaChi==='Dần'||p_menh.diaChi==='Thân') && hasTuanOrTriet(p_menh)) {
+    add('ban_tien_cuc','Sinh Bất Phùng Thời',
+      'Liêm Trinh thủ Mệnh tại Dần/Thân gặp Tuần/Triệt → tài năng nhưng không gặp thời.','');
+  }
+
+  // 19.3.2 Nhất Sinh Cô Bần
+  if (p_menh && hasSao(p_menh,'Phá Quân') &&
+      (p_menh.diaChi==='Dần'||p_menh.diaChi==='Thân') && hasSatTinh(p_menh)) {
+    add('ban_tien_cuc','Nhất Sinh Cô Bần',
+      'Phá Quân thủ Mệnh tại Dần/Thân gặp nhiều sát tinh mờ ám → suốt đời cô độc nghèo khổ.','');
+  }
+
+  // 19.3.3 Tài Dữ Tù Cừu
+  if (p_menh) {
+    const vuLiem = getSaoChinh(p_menh).filter(s=>s==='Vũ Khúc'||s==='Liêm Trinh');
+    if (vuLiem.length > 0 && vuLiem.every(s=>isMoAm(p_menh,s)) && hasSatTinh(p_menh)) {
+      add('ban_tien_cuc','Tài Dữ Tù Cừu',
+        'Vũ Khúc hoặc Liêm Trinh mờ ám thủ Mệnh, gặp nhiều sát tinh → tiền tài như kẻ thù, tài lộc bị phá.','');
+    }
+  }
+
+  // 19.3.4 Nhật Nguyệt Tàng Hung
+  if (p_menh) {
+    const nhat = hasSao(p_menh,'Thái Dương'), nguyet = hasSao(p_menh,'Thái Âm');
+    if ((nhat&&isMoAm(p_menh,'Thái Dương')) || (nguyet&&isMoAm(p_menh,'Thái Âm'))) {
+      add('ban_tien_cuc','Nhật Nguyệt Tàng Hung',
+        'Thái Dương hoặc Thái Âm mờ ám thủ Mệnh → vận trình tối tăm, tiền đồ trắc trở.','');
+    }
+  }
+
+  // 19.3.6 Lộc Phùng Lưỡng Sát
+  if (p_menh) {
+    const hasLoc = hasSao(p_menh,'Lộc Tồn')||hasSao(p_menh,'Hóa Lộc');
+    if (hasLoc && hasSao(p_menh,'Địa Không') && hasSao(p_menh,'Địa Kiếp')) {
+      add('ban_tien_cuc','Lộc Phùng Lưỡng Sát',
+        'Lộc Tồn/Hóa Lộc thủ Mệnh gặp Địa Không và Địa Kiếp đồng cung → lộc bị phá, tài lộc hao tán.','');
+    }
+  }
+
+  // 19.3.8 Mã Lạc Không Vong
+  if (p_menh && hasSao(p_menh,'Thiên Mã') && hasTuanOrTriet(p_menh)) {
+    add('ban_tien_cuc','Mã Lạc Không Vong',
+      'Thiên Mã thủ Mệnh gặp Tuần/Triệt án ngữ → ngựa sa vào chỗ không, bôn ba vô ích.','');
+  }
+
+  // ═══════════════════════════════════════════════
+  // 5. TẠP CỤC (19.4) - Tính từ đại vận scoring
+  // ═══════════════════════════════════════════════
+  const dvs = ls.daiVans?.slice(0,9) || [];
+  const menhXau = hasSatTinh(p_menh) && countSatTinh(p_menh) >= 2;
+  const menhTot = getSaoChinh(p_menh).length > 0 && !menhXau;
+
+  // 19.4.1 Cẩm Thượng Thiêm Hoa — Mệnh Thân tốt + đại vận hiện tại tốt
+  const dvHT = ls.daiVanHienTai;
+  if (dvHT?.scoring?.tong >= 7 && menhTot) {
+    add('tap_cuc','Cẩm Thượng Thiêm Hoa',
+      'Cung Mệnh/Thân sáng sủa, vận hạn lại rực rỡ → như gấm thêu hoa, vận trình viên mãn.',
+      `Đại vận hiện tại ${dvHT.scoring.tong}đ.`);
+  }
+  // 19.4.2/3 Phong Vân Tế Hội / Khô Mộc Phùng Xuân
+  if (dvHT?.scoring?.tong >= 7 && menhXau) {
+    add('tap_cuc','Phong Vân Tế Hội',
+      'Cung Mệnh/Thân mờ ám nhưng vận hạn tốt → như rồng mây gặp hội, vận đến bù đắp.',
+      `Đại vận hiện tại ${dvHT.scoring.tong}đ.`);
+  }
+  // 19.3.8 Lộc Xung Mã Khổn
+  if (dvHT?.scoring) {
+    const dvPalace = ls.palaces[dvHT.cungIdx];
+    if (dvPalace && hasSao(dvPalace,'Thiên Mã') &&
+        (hasSao(dvPalace,'Địa Không')||hasSao(dvPalace,'Địa Kiếp')||hasTuanOrTriet(dvPalace))) {
+      add('tap_cuc','Lộc Xung Mã Khổn',
+        'Đại vận gặp Sát/Lộc/Mã hội hợp cùng Tam Không → Lộc Mã bị nguy khốn, hạn xấu cần đề phòng.',
+        `Đại vận ${dvHT.diaChi}.`);
+    }
+  }
+
+  return results;
+}
+
 // ─── SCORING ENGINE ──────────────────────────────────────────
 
 const TAM_HOP_HANH = {
@@ -932,6 +1586,13 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
     tuoiXem,
     chiNamXem,
     luuNienDaiHanIdx,
+    cachCuc: (() => {
+      const _ls = { palaces, menhDC, thanDC, amDuong, napAmHanh, chiNam,
+        daiVans: daiVansScored,
+        daiVanHienTai: daiVansScored.find(v => tuoiXem >= v.tuoiStart && tuoiXem <= v.tuoiEnd),
+      };
+      return phanTichCachCuc(_ls, gioitinh);
+    })(),
   };
 }
 
@@ -1240,6 +1901,13 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
     tuoiXem,
     chiNamXem,
     luuNienDaiHanIdx,
+    cachCuc: (() => {
+      const _ls = { palaces, menhDC, thanDC, amDuong, napAmHanh, chiNam,
+        daiVans: daiVansScored,
+        daiVanHienTai: daiVansScored.find(v => tuoiXem >= v.tuoiStart && tuoiXem <= v.tuoiEnd),
+      };
+      return phanTichCachCuc(_ls, gioitinh);
+    })(),
   };
 }
 
