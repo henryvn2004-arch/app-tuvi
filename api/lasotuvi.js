@@ -26,13 +26,13 @@ function buildPrompt(phan, laSoText, docs) {
   const ctx = '=== LÁ SỐ ===\n' + laSoText + (docs ? '\n\n=== TÀI LIỆU ===\n' + docs : '');
 
   if (phan === 1) {
-    return ctx + '\n\nPHẦN 1 — TỔNG QUAN LÁ SỐ (300-400 từ)\n- Thuận lý/nghịch lý âm dương cung Mệnh\n- Sinh địa/Vượng địa/Bại địa/Tuyệt địa của bản mệnh\n- Bản Mệnh – Cục (Nạp Âm)\n- Cung Mệnh và Cung Thân: sáng sủa hay mờ ám, Mệnh Thân đồng cung hay không\n- Chính tinh thủ Mệnh (vô chính diệu nếu có)\n- Khí chất con người qua 3 vòng: Thái Tuế (nhóm mấy), Lộc Tồn (sao tại Mệnh), Tràng Sinh (vị trí)\n- Liệt kê và luận giải TẤT CẢ cách cục đặc biệt của lá số (ở mọi cung) từ phần CÁCH CỤC & NHẬN ĐỊNH — ghi rõ cách cục đó ở cung nào, ý nghĩa gì, tốt hay xấu\n- Ưu điểm nổi bật & nhược điểm dễ gặp của toàn bộ lá số\n\nLƯU Ý QUAN TRỌNG: Phần CÁCH CỤC & NHẬN ĐỊNH đã được tính sẵn bằng engine rule-based — liệt kê đầy đủ, không bỏ sót, không tính lại.';
+    return ctx + '\n\nPHẦN 1 — TỔNG QUAN LÁ SỐ (250-350 từ)\n1. Bản mệnh & cục: thuận/nghịch lý âm dương; sinh/vượng/bại/tuyệt địa\n2. Cung Mệnh: chính tinh (vô chính diệu?), Mệnh Thân đồng cung?\n3. Khí chất: so sánh nhóm Thái Tuế Mệnh vs Thân (nội tâm vs biểu hiện); Lộc Tồn tại Mệnh; Tràng Sinh\n4. Cách cục: liệt kê tất cả từ CÁCH CỤC & NHẬN ĐỊNH (tốt/xấu, cung nào) — dùng trực tiếp, không tính lại\n5. Nhận định chung: ưu/nhược điểm nổi bật';
   }
 
   if (phan >= 2 && phan <= 13) {
     const cung = CUNG_BY_PHAN[phan];
     const desc = CUNG_DESC[cung] || '';
-    return ctx + '\n\nPHẦN ' + phan + ' — CUNG ' + cung.toUpperCase() + ' (150-200 từ)\n' + desc + '\n\nLuận giải:\n- Ý nghĩa chính tinh tại cung ' + cung + ' (độ sáng Miếu/Vượng/Đắc/Bình/Hãm)\n- Tổ hợp các sao tại cung và tam phương tứ chính → xác định cách cục và ý nghĩa\n- Nếu có [CÁCH CỤC] nào được liệt kê tại cung này trong lá số → nêu tên cách cục và luận giải ý nghĩa, không tính lại\n- Những điểm cần lưu ý (tốt/xấu, cơ hội/rủi ro)';
+    return ctx + '\n\nPHẦN ' + phan + ' — CUNG ' + cung.toUpperCase() + ' (120-180 từ)\n' + desc + '\nLuận: chính tinh (Miếu/Vượng/Đắc/Bình/Hãm) + tam phương tứ chính → cách cục, ý nghĩa. [CÁCH CỤC] đã liệt kê → dùng luôn. Điểm tốt/xấu chính.';
   }
 
   if (phan === 14) {
