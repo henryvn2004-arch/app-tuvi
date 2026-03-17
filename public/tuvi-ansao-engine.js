@@ -6,120 +6,140 @@
 const _CAN = ['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
 const _CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
 
+// ─── LUNAR CALENDAR (Ho Ngoc Duc algorithm) ─────────────────
 function _jdFromDate(dd, mm, yy) {
-  const a = Math.floor((14-mm)/12);
+  const a = Math.floor((14 - mm) / 12);
   const y = yy + 4800 - a;
-  const m = mm + 12*a - 3;
-  let jd = dd + Math.floor((153*m+2)/5) + 365*y + Math.floor(y/4) - Math.floor(y/100) + Math.floor(y/400) - 32045;
-  if (jd < 2299161) {
-    jd = dd + Math.floor((153*m+2)/5) + 365*y + Math.floor(y/4) - 32083;
-  }
+  const m = mm + 12 * a - 3;
+  let jd = dd + Math.floor((153 * m + 2) / 5) + 365 * y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) - 32045;
+  if (jd < 2299161) jd = dd + Math.floor((153 * m + 2) / 5) + 365 * y + Math.floor(y / 4) - 32083;
   return jd;
 }
 
-function _newMoon(k) {
-  const T = k/1236.85; const T2=T*T; const T3=T2*T; const dr=Math.PI/180;
-  let jd = 2415020.75933+29.53058868*k+0.0001178*T2-0.000000155*T3;
-  jd += 0.00033*Math.sin((166.56+132.87*T-0.009173*T2)*dr);
-  const M = (359.2242+29.10535608*k)*dr;
-  const Mpr = (306.0253+385.81691806*k)*dr;
-  const F = (21.2964+390.67050646*k)*dr;
-  let C1 = (0.1734-0.000393*T)*Math.sin(M)+0.0021*Math.sin(2*M)
-         - 0.4068*Math.sin(Mpr)+0.0161*Math.sin(2*Mpr)-0.0004*Math.sin(3*Mpr)
-         + 0.0104*Math.sin(2*F)-0.0051*Math.sin(M+Mpr)-0.0074*Math.sin(M-Mpr)
-         + 0.0004*Math.sin(2*F+M)-0.0004*Math.sin(2*F-M)
-         - 0.0006*Math.sin(2*F+Mpr)+0.0010*Math.sin(2*F-Mpr)+0.0005*Math.sin(M+2*Mpr);
-  return jd + C1;
+function _sunLongitude(jdn) {
+  const T = (jdn - 2451545.0) / 36525.0;
+  const T2 = T * T;
+  const dr = Math.PI / 180.0;
+  const M = 357.52910 + 35999.05030 * T - 0.0001559 * T2 - 0.00000048 * T * T2;
+  const L0 = 280.46646 + 36000.76983 * T + 0.0003032 * T2;
+  const DL = (1.914600 - 0.004817 * T - 0.000014 * T2) * Math.sin(dr * M)
+           + (0.019993 - 0.000101 * T) * Math.sin(dr * 2 * M)
+           + 0.000290 * Math.sin(dr * 3 * M);
+  let L = L0 + DL;
+  const omega = 125.04 - 1934.136 * T;
+  L = L - 0.00569 - 0.00478 * Math.sin(omega * dr);
+  L = L - Math.floor(L / 360) * 360;
+  if (L < 0) L += 360;
+  return Math.floor(L / 30);
+}
+
+function _newMoonD(k) {
+  const T = k / 1236.85;
+  const T2 = T * T;
+  const T3 = T2 * T;
+  const dr = Math.PI / 180.0;
+  let Jd = 2415020.75933 + 29.53058868 * k + 0.0001178 * T2 - 0.000000155 * T3;
+  Jd += 0.00033 * Math.sin((166.56 + 132.87 * T - 0.009173 * T2) * dr);
+  const M = 359.2242 + 29.10535608 * k - 0.0000333 * T2 - 0.00000347 * T3;
+  const Mpr = 306.0253 + 385.81691806 * k + 0.0107306 * T2 + 0.00001236 * T3;
+  const F = 21.2964 + 390.67050646 * k - 0.0016528 * T2 - 0.00000239 * T3;
+  Jd += (0.1734 - 0.000393 * T) * Math.sin(M * dr)
+      + 0.0021 * Math.sin(2 * M * dr)
+      - 0.4068 * Math.sin(Mpr * dr)
+      + 0.0161 * Math.sin(2 * Mpr * dr)
+      - 0.0004 * Math.sin(3 * Mpr * dr)
+      + 0.0104 * Math.sin(2 * F * dr)
+      - 0.0051 * Math.sin((M + Mpr) * dr)
+      - 0.0074 * Math.sin((M - Mpr) * dr)
+      + 0.0004 * Math.sin((2 * F + M) * dr)
+      - 0.0004 * Math.sin((2 * F - M) * dr)
+      - 0.0006 * Math.sin((2 * F + Mpr) * dr)
+      + 0.0010 * Math.sin((2 * F - Mpr) * dr)
+      + 0.0005 * Math.sin((M + 2 * Mpr) * dr);
+  return Jd;
 }
 
 function _getNewMoonDay(k, tz) {
-  return Math.floor(_newMoon(k) + 0.5 + tz/24);
-}
-
-function _sunLongitude(jdn) {
-  const T=(jdn-2451545.0)/36525; const dr=Math.PI/180;
-  const M=(357.5291+35999.0503*T)*dr;
-  const L0=280.46646+36000.76983*T+0.0003032*T*T;
-  const DL=(1.9146-0.004817*T-0.000014*T*T)*Math.sin(M)+(0.019993-0.000101*T)*Math.sin(2*M)+0.00029*Math.sin(3*M);
-  const theta=L0+DL; const omega=(125.04-1934.136*T)*dr;
-  let lam=(theta-0.00569-0.00478*Math.sin(omega))*dr;
-  lam -= Math.PI*2*Math.floor(lam/(Math.PI*2));
-  if (lam<0) lam += Math.PI*2;
-  return Math.floor(lam/dr/30);
+  return Math.floor(_newMoonD(k) + 0.5 + tz / 24);
 }
 
 function _getLunarMonth11(yy, tz) {
-  const off = _jdFromDate(31,12,yy) - 2415021;
-  const k = Math.floor(off/29.530588853);
+  const off = _jdFromDate(31, 12, yy) - 2415021;
+  const k = Math.floor(off / 29.530588853);
   let nm = _getNewMoonDay(k, tz);
-  if (_sunLongitude(nm) >= 9) nm = _getNewMoonDay(k-1, tz);
+  const sunLong = _sunLongitude(nm);
+  if (sunLong >= 9) nm = _getNewMoonDay(k - 1, tz);
   return nm;
 }
 
-function solarToLunar(dd, mm, yy, tz=7) {
+function solarToLunar(dd, mm, yy, tz = 7) {
   const dayNumber = _jdFromDate(dd, mm, yy);
-  const k = Math.floor((dayNumber - 2415021.076998695)/29.530588853);
-  let monthStart = _getNewMoonDay(k+1, tz);
+  const k = Math.floor((dayNumber - 2415021.076998695) / 29.530588853);
+  let monthStart = _getNewMoonDay(k + 1, tz);
   if (monthStart > dayNumber) monthStart = _getNewMoonDay(k, tz);
+
   let a11 = _getLunarMonth11(yy, tz);
+  let b11;
   let lunarYear;
   if (a11 >= monthStart) {
     lunarYear = yy;
-    a11 = _getLunarMonth11(yy-1, tz);
+    a11 = _getLunarMonth11(yy - 1, tz);
+    b11 = _getLunarMonth11(yy, tz);
   } else {
     lunarYear = yy + 1;
+    b11 = _getLunarMonth11(yy + 1, tz);
   }
+
   const lunarDay = dayNumber - monthStart + 1;
-  const diff = Math.floor((monthStart - a11)/29);
+  const diff = Math.floor((monthStart - a11) / 29);
   let lunarMonth = diff + 11;
   if (lunarMonth > 12) lunarMonth -= 12;
-  // Xử lý tháng nhuận
-  const leapOff = Math.floor((a11 - 2415021.076998695)/29.530588853);
-  let leapM = 0;
-  for (let i = 0; i < 14; i++) {
-    const nm1 = _getNewMoonDay(leapOff + i, tz);
-    const nm2 = _getNewMoonDay(leapOff + i + 1, tz);
-    if (_sunLongitude(nm1) === _sunLongitude(nm2)) { leapM = i; break; }
+
+  // Detect leap month
+  const leapOff = Math.floor((a11 - 2415021.076998695) / 29.530588853);
+  let leapMonth = 0;
+  const hasLeap = Math.floor((b11 - a11) / 29) === 13; // 13 tháng âm = có tháng nhuận
+  if (hasLeap) {
+    for (let i = 0; i < 14; i++) {
+      const nm1 = _getNewMoonDay(leapOff + i, tz);
+      if (nm1 < a11) continue;
+      if (nm1 >= b11) break;
+      const nm2 = _getNewMoonDay(leapOff + i + 1, tz);
+      // Tháng nhuận không chứa trung khí: sunLong(nm1) === sunLong(nm2-1)
+      if (_sunLongitude(nm1) === _sunLongitude(nm2 - 1)) {
+        leapMonth = i;
+        break;
+      }
+    }
+    if (leapMonth > 0 && diff >= leapMonth) {
+      lunarMonth = diff + 10;
+      if (lunarMonth > 12) lunarMonth -= 12;
+    }
   }
-  // Fix: leapOff có thể trỏ trước a11 1 bước → cần điều chỉnh
-  const nmA11Check = _getNewMoonDay(leapOff, tz);
-  const offsetFix = nmA11Check < a11 ? 1 : 0;
-  const leapMAdj = leapM - offsetFix;
-  if (leapMAdj > 0 && diff >= leapMAdj) {
-    lunarMonth = diff + 10;
-    if (lunarMonth > 12) lunarMonth -= 12;
-  }
+
   if (lunarMonth >= 11 && diff < 4) lunarYear -= 1;
   return { day: lunarDay, month: lunarMonth, year: lunarYear };
 }
 
 function hourToChi(hour) {
-  return _CHI[Math.floor((hour+1)/2) % 12];
+  return _CHI[Math.floor((hour + 1) / 2) % 12];
 }
 
 function yearCanChi(year) {
-  return _CAN[(year+6)%10] + ' ' + _CHI[(year+8)%12];
+  return _CAN[(year + 6) % 10] + ' ' + _CHI[(year + 8) % 12];
 }
 
 function dayCanChi(dd, mm, yy) {
   const jd = _jdFromDate(dd, mm, yy);
-  return _CAN[(jd+9)%10] + ' ' + _CHI[(jd+1)%12];
+  return _CAN[(jd + 9) % 10] + ' ' + _CHI[(jd + 1) % 12];
 }
 
 function hourCanChi(hour, dayCanStr) {
-  const chiIndex = Math.floor((hour+1)/2) % 12;
-  const canIndex = (_CAN.indexOf(dayCanStr.split(' ')[0])*2 + chiIndex) % 10;
+  const chiIndex = Math.floor((hour + 1) / 2) % 12;
+  const canIndex = (_CAN.indexOf(dayCanStr.split(' ')[0]) * 2 + chiIndex) % 10;
   return _CAN[canIndex] + ' ' + _CHI[chiIndex];
 }
 
-/**
- * Convert dương lịch → đầy đủ thông tin
- * @param {number} dd - ngày
- * @param {number} mm - tháng  
- * @param {number} yy - năm
- * @param {number} hour - giờ (0-23)
- * @returns {{ amLich, canChi, gioChi, gioIdx }}
- */
 function convertDuongToAm(dd, mm, yy, hour) {
   const amLich = solarToLunar(dd, mm, yy);
   const gioChi = hourToChi(hour);
