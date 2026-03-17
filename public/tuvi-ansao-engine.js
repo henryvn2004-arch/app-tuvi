@@ -632,6 +632,24 @@ function hasSao(palace, tenSao) {
   return palace.stars.some(s => s.ten === tenSao);
 }
 
+function hasHoa(palace, loaiHoa) {
+  // loaiHoa: 'Lộc', 'Quyền', 'Khoa', 'Kỵ' (viết hoa đúng theo s.hoa field)
+  if (!palace) return false;
+  return palace.stars.some(s => s.hoa === loaiHoa);
+}
+
+function hasHoaInTuChinh(palace) {
+  // Check Hóa Lộc, Khoa, Quyền trong palace và tamHopCungs + xung chiếu
+  const all = [palace, ...(palace?.tamHopCungs||[]), palace?.xungChieuCung].filter(Boolean);
+  return {
+    loc:    all.some(p => hasHoa(p, 'Lộc')),
+    quyen:  all.some(p => hasHoa(p, 'Quyền')),
+    khoa:   all.some(p => hasHoa(p, 'Khoa')),
+    ky:     all.some(p => hasHoa(p, 'Kỵ')),
+    locTon: all.some(p => hasSao(p, 'Lộc Tồn')),
+  };
+}
+
 function hasSaoNhom(palace, nhom) {
   if (!palace) return false;
   return palace.stars.some(s => s.nhom === nhom);
@@ -739,13 +757,13 @@ function phanTichCachCuc(ls, gioitinh) {
   const add = (loai, ten, moTa, chiTiet, cung='') => results.push({ loai, ten, moTa, chiTiet, cung });
 
   const menh = getMenh(ls);
-  const than = getThan(ls);
   const menhDC = ls.menhDC;
   const thanDC = ls.thanDC;
   const napAmHanh = ls.napAmHanh;
 
   const p_menh    = getPalace(ls, 'Mệnh');
-  const p_than    = than;
+  // p_than: dùng thanDC để tìm đúng cung Thân (không dùng isThan vì chỉ set khi Mệnh=Thân)
+  const p_than    = ls.palaces.find(p => p.diaChi === thanDC) || null;
   const p_quan    = getPalace(ls, 'Quan Lộc');
   const p_tai     = getPalace(ls, 'Tài Bạch');
   const p_dien    = getPalace(ls, 'Điền Trạch');
@@ -926,7 +944,13 @@ function phanTichCachCuc(ls, gioitinh) {
   // 19.1.1 Tài Ấm Giáp Ấn
   for (const p of PHU_QUAN) {
     if (!p) continue;
-    if (hasSao(p,'Thiên Tướng') && isSangSua(p,'Thiên Tướng') && isGiapCung(ls,p.cungName,'Thiên Lương','Thiên Lương')) {
+    // Thiên Tướng tọa thủ, có Thiên Lương ở 1 trong 2 cung kề
+    const DIA_CHI_TAIA = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+    const taia_idx = DIA_CHI_TAIA.indexOf(p.diaChi);
+    const taia_L = ls.palaces.find(x=>x.diaChi===DIA_CHI_TAIA[(taia_idx+11)%12]);
+    const taia_R = ls.palaces.find(x=>x.diaChi===DIA_CHI_TAIA[(taia_idx+1)%12]);
+    if (hasSao(p,'Thiên Tướng') && isSangSua(p,'Thiên Tướng') &&
+        (hasSao(taia_L,'Thiên Lương') || hasSao(taia_R,'Thiên Lương'))) {
       add('phu_cuc','Tài Ấm Giáp Ấn',
         'Thiên Tướng sáng sủa tọa thủ, có Thiên Lương giáp cung → phú quý song toàn.',
         `Tại cung ${p.cungName}.`, p.cungName); break;
@@ -934,11 +958,12 @@ function phanTichCachCuc(ls, gioitinh) {
   }
 
   // 19.1.2 Phủ Ấn Củng Thân  
-  if (p_than && (hasSao(p_than,'Thiên Phủ')||hasSao(p_than?.xungChieuCung,'Thiên Phủ'))) {
-    const xung = p_than?.xungChieuCung;
-    if ((hasSao(p_than,'Thiên Phủ')&&hasSao(xung,'Thiên Tướng')) ||
-        (hasSao(p_than,'Thiên Tướng')&&hasSao(xung,'Thiên Phủ')) ||
-        (hasSao(p_than,'Thiên Phủ')&&hasSao(p_than,'Thiên Tướng'))) {
+  if (p_than) {
+    const xungThan = p_than.xungChieuCung;
+    // Phủ và Tướng hội chiếu: cùng cung Thân, hoặc Phủ tại Thân Tướng tại xung, hoặc ngược lại
+    // Hoặc Phủ và Tướng nằm trong tam phương tứ chính của cung Thân
+    const thanAllStars = [p_than, ...(p_than.tamHopCungs||[]), xungThan].filter(Boolean).flatMap(p=>p.majorStars.map(s=>s.ten));
+    if (thanAllStars.includes('Thiên Phủ') && thanAllStars.includes('Thiên Tướng')) {
       add('phu_cuc','Phủ Ấn Củng Thân',
         'Cung Thân có Thiên Phủ và Thiên Tướng hội chiếu → giàu có bền vững.',
         `Tại cung Thân (${thanDC}).`, 'Thân');
@@ -972,11 +997,13 @@ function phanTichCachCuc(ls, gioitinh) {
   for (const p of PHU_QUAN) {
     if (!p) continue;
     const xung = p.xungChieuCung;
-    if ((p.diaChi==='Sửu'&&hasSao(p,'Thái Dương')&&hasSao(p,'Thái Âm')&&xung?.diaChi==='Mùi') ||
-        (p.diaChi==='Mùi'&&hasSao(p,'Thái Dương')&&hasSao(p,'Thái Âm')&&xung?.diaChi==='Sửu')) {
+    // Mệnh/Điền/Tài tại Sửu, cung xung (Mùi) có cả Nhật lẫn Nguyệt đồng cung
+    // Mệnh/Điền/Tài tại Mùi, cung xung (Sửu) có cả Nhật lẫn Nguyệt đồng cung
+    if ((p.diaChi==='Sửu'&&xung?.diaChi==='Mùi'&&hasSao(xung,'Thái Dương')&&hasSao(xung,'Thái Âm')) ||
+        (p.diaChi==='Mùi'&&xung?.diaChi==='Sửu'&&hasSao(xung,'Thái Dương')&&hasSao(xung,'Thái Âm'))) {
       add('phu_cuc','Nhật Nguyệt Chiếu Bích',
-        'Nhật Nguyệt đồng cung xung chiếu nhau tại Sửu/Mùi → giàu có, sáng láng.',
-        `Tại cung ${p.cungName}.`, p.cungName); break;
+        'Nhật và Nguyệt đồng cung tại cung xung chiếu → sáng như nhật nguyệt chiếu bích, phú quý hiển hách.',
+        `Cung ${p.cungName}(${p.diaChi}), Nhật Nguyệt đồng cung tại ${xung?.diaChi}.`, p.cungName); break;
     }
   }
 
@@ -1046,8 +1073,13 @@ function phanTichCachCuc(ls, gioitinh) {
   for (const p of QUY_QUAN) {
     if (!p) continue;
     const xung = p.xungChieuCung;
-    if ((hasSao(p,'Thiên Phủ')&&isSangSua(p,'Thiên Phủ')&&hasSao(xung,'Thiên Tướng')) ||
-        (hasSao(p,'Thiên Tướng')&&isSangSua(p,'Thiên Tướng')&&hasSao(xung,'Thiên Phủ'))) {
+    // Phủ và Tướng trong tam phương tứ chính của cung (không nhất thiết trực xung)
+    const allPTV = [p, ...(p.tamHopCungs||[]), xung].filter(Boolean);
+    const hasPhu = allPTV.some(x=>hasSao(x,'Thiên Phủ'));
+    const hasTuong = allPTV.some(x=>hasSao(x,'Thiên Tướng'));
+    const phuSangSua = allPTV.some(x=>hasSao(x,'Thiên Phủ')&&isSangSua(x,'Thiên Phủ'));
+    const tuongSangSua = allPTV.some(x=>hasSao(x,'Thiên Tướng')&&isSangSua(x,'Thiên Tướng'));
+    if (hasPhu && hasTuong && (phuSangSua || tuongSangSua)) {
       add('quy_cuc','Phủ Tướng Triều Viên',
         'Thiên Phủ và Thiên Tướng triều viên → phú quý song toàn, địa vị cao.',
         `Tại cung ${p.cungName}.`, p.cungName); break;
@@ -1172,8 +1204,8 @@ function phanTichCachCuc(ls, gioitinh) {
   // 19.2.23 Khoa Quyền Lộc Củng
   for (const p of QUY_QUAN) {
     if (!p) continue;
-    const allStars = [...getSaoAll(p), ...(p.tamHopCungs||[]).flatMap(getSaoAll), ...getSaoAll(p.xungChieuCung)];
-    if (allStars.includes('Hóa Khoa') && allStars.includes('Hóa Quyền') && allStars.includes('Hóa Lộc')) {
+    const h = hasHoaInTuChinh(p);
+    if (h.khoa && h.quyen && h.loc) {
       add('quy_cuc','Khoa Quyền Lộc Củng','Hóa Khoa, Hóa Quyền, Hóa Lộc hội chiếu → tam hóa tốt, công danh phú quý tột đỉnh.',
         `Tại cung ${p.cungName}.`, p.cungName); break;
     }
@@ -1183,8 +1215,8 @@ function phanTichCachCuc(ls, gioitinh) {
   for (const p of QUY_QUAN) {
     if (!p) continue;
     const nhiHop = getNhiHop(ls, p.diaChi);
-    if ((hasSao(p,'Hóa Lộc')&&hasSao(nhiHop,'Lộc Tồn')) ||
-        (hasSao(p,'Lộc Tồn')&&hasSao(nhiHop,'Hóa Lộc'))) {
+    if ((hasHoa(p,'Lộc')&&hasSao(nhiHop,'Lộc Tồn')) ||
+        (hasSao(p,'Lộc Tồn')&&hasHoa(nhiHop,'Lộc'))) {
       add('quy_cuc','Minh Lộc Ám Lộc','Hóa Lộc và Lộc Tồn nhị hợp → lộc song trùng, tài lộc vượng phát.',
         `Tại cung ${p.cungName}.`, p.cungName); break;
     }
