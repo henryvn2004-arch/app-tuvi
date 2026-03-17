@@ -736,7 +736,7 @@ function getNhiHop(ls, diaChi) {
 
 function phanTichCachCuc(ls, gioitinh) {
   const results = [];
-  const add = (loai, ten, moTa, chiTiet) => results.push({ loai, ten, moTa, chiTiet });
+  const add = (loai, ten, moTa, chiTiet, cung='') => results.push({ loai, ten, moTa, chiTiet, cung });
 
   const menh = getMenh(ls);
   const than = getThan(ls);
@@ -768,11 +768,11 @@ function phanTichCachCuc(ls, gioitinh) {
   if (namSinhAmDuong === menhAmDuong) {
     add('menh_co_ban','Thuận Lý — Dương cư Dương vị / Âm cư Âm vị',
       'Năm sinh và cung Mệnh cùng âm dương → thuận lý, độ số gia tăng.',
-      `Năm sinh ${namSinhAmDuong}, cung Mệnh ${menhDC} cũng ${menhAmDuong}.`);
+      `Năm sinh ${namSinhAmDuong}, cung Mệnh ${menhDC} cũng ${menhAmDuong}.`, 'Mệnh');
   } else {
     add('menh_co_ban','Nghịch Lý — Dương cư Âm vị / Âm cư Dương vị',
       'Năm sinh và cung Mệnh trái âm dương → nghịch lý, độ số giảm thiểu.',
-      `Năm sinh ${namSinhAmDuong}, cung Mệnh ${menhDC} lại ${menhAmDuong}.`);
+      `Năm sinh ${namSinhAmDuong}, cung Mệnh ${menhDC} lại ${menhAmDuong}.`, 'Mệnh');
   }
 
   // Sinh/Vượng/Bại/Tuyệt địa
@@ -788,15 +788,15 @@ function phanTichCachCuc(ls, gioitinh) {
     if (menhDC === svbt.sinh) {
       add('menh_co_ban','Sinh Địa',
         `Cung Mệnh là Sinh địa của bản mệnh → rất tốt, phát triển bền vững.`,
-        `Mệnh ${napAmHanh} tại ${menhDC} = Sinh địa.`);
+        `Mệnh ${napAmHanh} tại ${menhDC} = Sinh địa.`, 'Mệnh');
     } else if (menhDC === svbt.vuong) {
       add('menh_co_ban','Vượng Địa',
         `Cung Mệnh là Vượng địa của bản mệnh → được nhiều lợi ích.`,
-        `Mệnh ${napAmHanh} tại ${menhDC} = Vượng địa.`);
+        `Mệnh ${napAmHanh} tại ${menhDC} = Vượng địa.`, 'Mệnh');
     } else if (menhDC === svbt.bai) {
       add('menh_co_ban','Bại Địa',
         `Cung Mệnh là Bại địa → dù gặp vận tốt cũng chẳng bền lâu, như hoa sớm nở tối tàn.`,
-        `Mệnh ${napAmHanh} tại ${menhDC} = Bại địa.`);
+        `Mệnh ${napAmHanh} tại ${menhDC} = Bại địa.`, 'Mệnh');
     } else if (menhDC === svbt.tuyet) {
       // Kiểm tra có chính tinh sinh được bản mệnh không (Tuyệt xứ phùng sinh)
       const NGU_HANH_SINH = {'Mộc':'Hỏa','Hỏa':'Thổ','Thổ':'Kim','Kim':'Thủy','Thủy':'Mộc'};
@@ -813,12 +813,12 @@ function phanTichCachCuc(ls, gioitinh) {
       if (cinhTinhCuuGiai) {
         add('menh_co_ban','Tuyệt Xứ Phùng Sinh',
           `Cung Mệnh là Tuyệt địa nhưng có chính tinh sinh được bản mệnh → như cành hoa tuy mong manh nhưng lâu tàn, không đáng lo ngại nhiều.`,
-          `Mệnh ${napAmHanh} tại ${menhDC} (Tuyệt địa), được ${cinhTinhCuuGiai} cứu giải.`);
+          `Mệnh ${napAmHanh} tại ${menhDC} (Tuyệt địa), được ${cinhTinhCuuGiai} cứu giải.`, 'Mệnh');
       } else {
         const hoaKhoa = hasSao(p_menh,'Hóa Khoa')||hasSao(p_menh,'Hóa Quyền')||hasSao(p_menh,'Hóa Lộc');
         add('menh_co_ban','Tuyệt Địa',
           `Cung Mệnh là Tuyệt địa → rất đáng lo ngại. Cần chính tinh sáng sủa hoặc Hóa Khoa/Quyền/Lộc cứu giải.`,
-          `Mệnh ${napAmHanh} tại ${menhDC} = Tuyệt địa. ${hoaKhoa?'Có Hóa tinh cứu giải phần nào.':'Chưa có cứu giải.'}`);
+          `Mệnh ${napAmHanh} tại ${menhDC} = Tuyệt địa. ${hoaKhoa?'Có Hóa tinh cứu giải phần nào.':'Chưa có cứu giải.'}`, 'Mệnh');
       }
     }
   }
@@ -829,7 +829,7 @@ function phanTichCachCuc(ls, gioitinh) {
     const coDiaKhong = hasSao(p_menh,'Địa Không') || hasSao(p_menh,'Thiên Không');
     add('menh_co_ban','Mệnh Vô Chính Diệu',
       'Cung Mệnh không có chính tinh tọa thủ. Người rất khôn ngoan sắc sảo, thường hay đau yếu sức khỏe suy kém lúc thiếu thời, dễ phiêu bạt vô sở định.',
-      `${coTuanTriet?'Có Tuần/Triệt án ngữ cứu giải.':'Cần Tuần/Triệt hoặc nhiều chính tinh sáng sủa hội chiếu.'} ${coDiaKhong?'Có Địa Không/Thiên Không hội hợp.':''}`);
+      `${coTuanTriet?'Có Tuần/Triệt án ngữ cứu giải.':'Cần Tuần/Triệt hoặc nhiều chính tinh sáng sủa hội chiếu.'} ${coDiaKhong?'Có Địa Không/Thiên Không hội hợp.':''}`, 'Mệnh');
   }
 
   // Mệnh Thân đồng cung
@@ -839,17 +839,17 @@ function phanTichCachCuc(ls, gioitinh) {
     if (TU_MO.has(menhDC) && voChinhDieu) {
       add('menh_co_ban','Mệnh Thân Đồng Cung — Tứ Mộ Vô Chính Diệu',
         'Mệnh Thân đồng cung tại Tứ Mộ vô chính diệu → cùng khổ và giảm thọ. Cần Tuần/Triệt án ngữ hoặc sao sáng sủa cứu giải.',
-        `Mệnh Thân tại ${menhDC}.`);
+        `Mệnh Thân tại ${menhDC}.`, 'Mệnh');
     } else if ((menhDC==='Tý'||menhDC==='Ngọ') && voChinhDieu) {
       const hoaLoc = hasSao(p_menh,'Hóa Lộc');
       add('menh_co_ban','Mệnh Thân Đồng Cung — Tý/Ngọ Vô Chính Diệu',
         hoaLoc ? 'Mệnh Thân đồng cung tại Tý/Ngọ vô chính diệu, có Hóa Lộc → giàu nhưng giảm thọ.'
                 : 'Mệnh Thân đồng cung tại Tý/Ngọ vô chính diệu → cần đề phòng nghèo khổ hoặc chết non nếu nhiều sát tinh hội hợp.',
-        `Mệnh Thân tại ${menhDC}.`);
+        `Mệnh Thân tại ${menhDC}.`, 'Mệnh');
     } else {
       add('menh_co_ban','Mệnh Thân Đồng Cung',
         'Mệnh và Thân đồng cung → cần xem xét kỹ tổng thể sao hội hợp.',
-        `Mệnh Thân tại ${menhDC}.`);
+        `Mệnh Thân tại ${menhDC}.`, 'Mệnh');
     }
   }
 
@@ -859,12 +859,12 @@ function phanTichCachCuc(ls, gioitinh) {
   if (menhTuan && thanTriet) {
     add('menh_co_ban','Mệnh Tuần Thân Triệt',
       'Cần Cơ/Nguyệt/Đồng/Lương sáng sủa hội hợp mới xứng ý toại lòng. Về già mới có danh giá an nhàn.',
-      'Mệnh có Tuần, Thân có Triệt án ngữ.');
+      'Mệnh có Tuần, Thân có Triệt án ngữ.', 'Mệnh');
   }
   if (menhTriet && thanTuan) {
     add('menh_co_ban','Mệnh Triệt Thân Tuần',
       'Cung Mệnh và Thân cần vô chính diệu mới được xứng ý toại lòng, tăng thọ và về già sung sướng.',
-      'Mệnh có Triệt, Thân có Tuần án ngữ.');
+      'Mệnh có Triệt, Thân có Tuần án ngữ.', 'Mệnh');
   }
 
   // Mệnh Không Thân Kiếp / Mệnh Kiếp Thân Không
@@ -875,22 +875,22 @@ function phanTichCachCuc(ls, gioitinh) {
   if (menhKhong && thanKiep) {
     add('menh_co_ban','Mệnh Không Thân Kiếp',
       'Người rất khôn ngoan sắc sảo. Vui ít buồn nhiều, mưu sự thành bại thất thường, làm gì cũng chẳng lâu bền.',
-      'Địa Không tại Mệnh, Địa Kiếp tại Thân.');
+      'Địa Không tại Mệnh, Địa Kiếp tại Thân.', 'Mệnh');
   }
   if (menhKiep && thanKhong) {
     add('menh_co_ban','Mệnh Kiếp Thân Không',
       'Người rất khôn ngoan sắc sảo. Vui ít buồn nhiều, mưu sự thành bại bất thường, làm gì cũng chẳng lâu bền.',
-      'Địa Kiếp tại Mệnh, Địa Không tại Thân.');
+      'Địa Kiếp tại Mệnh, Địa Không tại Thân.', 'Mệnh');
   }
 
   // Thân cư Thiên Di
   if (thanDC === p_thienDi?.diaChi) {
     if (!hasSatTinh(p_thienDi) && !hasTuanOrTriet(p_thienDi)) {
       add('than_cu','Thân Cư Thiên Di — Lập Nghiệp Phương Xa',
-        'Nhiều sao sáng sủa hội hợp → lập nghiệp ở phương xa, rất thịnh vượng.','');
+        'Nhiều sao sáng sủa hội hợp → lập nghiệp ở phương xa, rất thịnh vượng.','', 'Thiên Di');
     } else if (hasTuanOrTriet(p_thienDi) || countSatTinh(p_thienDi) >= 2) {
       add('than_cu','Thân Cư Thiên Di — Chết Xa Nhà',
-        'Tuần/Triệt hoặc nhiều sát tinh hội hợp → có khả năng chết ở xa nhà.','');
+        'Tuần/Triệt hoặc nhiều sát tinh hội hợp → có khả năng chết ở xa nhà.','', 'Thiên Di');
     }
   }
 
@@ -898,11 +898,11 @@ function phanTichCachCuc(ls, gioitinh) {
   if (thanDC === p_phuThe?.diaChi) {
     if (hasSao(p_phuThe,'Thái Âm')) {
       add('than_cu','Thân Cư Phu Thê — Sợ Vợ',
-        'Thái Âm tọa thủ → sợ vợ, thường phải nhờ vả nhà vợ.','');
+        'Thái Âm tọa thủ → sợ vợ, thường phải nhờ vả nhà vợ.','', 'Phu Thê');
     }
     if (hasTuanOrTriet(p_phuThe)) {
       add('than_cu','Thân Cư Phu Thê — Trắc Trở Hôn Phối',
-        'Tuần/Triệt án ngữ → trắc trở về hôn phối.','');
+        'Tuần/Triệt án ngữ → trắc trở về hôn phối.','', 'Phu Thê');
     }
   }
 
@@ -911,10 +911,10 @@ function phanTichCachCuc(ls, gioitinh) {
     const satTinh = hasSatTinh(p_phuc);
     if (!satTinh) {
       add('than_cu','Thân Cư Phúc Đức — Phúc Thọ',
-        'Phúc Đức sáng sủa tốt đẹp → được hưởng phúc, sống lâu, tránh được nhiều tai họa.','');
+        'Phúc Đức sáng sủa tốt đẹp → được hưởng phúc, sống lâu, tránh được nhiều tai họa.','', 'Phúc Đức');
     } else {
       add('than_cu','Thân Cư Phúc Đức — Giảm Thọ',
-        'Phúc Đức mờ ám xấu xa → khó tránh tai họa, giảm thọ dù cung Mệnh có sáng sủa.','');
+        'Phúc Đức mờ ám xấu xa → khó tránh tai họa, giảm thọ dù cung Mệnh có sáng sủa.','', 'Phúc Đức');
     }
   }
 
@@ -929,7 +929,7 @@ function phanTichCachCuc(ls, gioitinh) {
     if (hasSao(p,'Thiên Tướng') && isSangSua(p,'Thiên Tướng') && isGiapCung(ls,p.cungName,'Thiên Lương','Thiên Lương')) {
       add('phu_cuc','Tài Ấm Giáp Ấn',
         'Thiên Tướng sáng sủa tọa thủ, có Thiên Lương giáp cung → phú quý song toàn.',
-        `Tại cung ${p.cungName}.`); break;
+        `Tại cung ${p.cungName}.`, p.cungName); break;
     }
   }
 
@@ -941,7 +941,7 @@ function phanTichCachCuc(ls, gioitinh) {
         (hasSao(p_than,'Thiên Phủ')&&hasSao(p_than,'Thiên Tướng'))) {
       add('phu_cuc','Phủ Ấn Củng Thân',
         'Cung Thân có Thiên Phủ và Thiên Tướng hội chiếu → giàu có bền vững.',
-        `Tại cung Thân (${thanDC}).`);
+        `Tại cung Thân (${thanDC}).`, 'Thân');
     }
   }
 
@@ -950,7 +950,7 @@ function phanTichCachCuc(ls, gioitinh) {
     if (p?.diaChi==='Ngọ' && hasSao(p,'Thái Dương') && isSangSua(p,'Thái Dương')) {
       add('phu_cuc','Kim Sán Quang Huy',
         'Thái Dương sáng sủa tọa thủ tại Ngọ → rực rỡ như vàng sáng, phú quý hiển hách.',
-        `Tại cung ${p.cungName}(Ngọ).`); break;
+        `Tại cung ${p.cungName}(Ngọ).`, p.cungName); break;
     }
   }
 
@@ -959,12 +959,12 @@ function phanTichCachCuc(ls, gioitinh) {
     if (p?.diaChi==='Sửu' && hasSao(p,'Tham Lang') && hasSao(p,'Vũ Khúc')) {
       add('phu_cuc','Nhật Nguyệt Giáp Tài',
         'Tham Lang và Vũ Khúc đồng cung tại Sửu, có Nhật Nguyệt giáp cung → đại phú.',
-        `Tại cung ${p.cungName}(Sửu).`); break;
+        `Tại cung ${p.cungName}(Sửu).`, p.cungName); break;
     }
     if (p?.diaChi==='Mùi' && hasSao(p,'Thiên Phủ') && isGiapCung(ls,p.cungName,'Thái Dương','Thái Âm')) {
       add('phu_cuc','Nhật Nguyệt Giáp Tài',
         'Thiên Phủ tại Mùi có Nhật Nguyệt giáp cung → đại phú.',
-        `Tại cung ${p.cungName}(Mùi).`); break;
+        `Tại cung ${p.cungName}(Mùi).`, p.cungName); break;
     }
   }
 
@@ -976,7 +976,7 @@ function phanTichCachCuc(ls, gioitinh) {
         (p.diaChi==='Mùi'&&hasSao(p,'Thái Dương')&&hasSao(p,'Thái Âm')&&xung?.diaChi==='Sửu')) {
       add('phu_cuc','Nhật Nguyệt Chiếu Bích',
         'Nhật Nguyệt đồng cung xung chiếu nhau tại Sửu/Mùi → giàu có, sáng láng.',
-        `Tại cung ${p.cungName}.`); break;
+        `Tại cung ${p.cungName}.`, p.cungName); break;
     }
   }
 
@@ -986,7 +986,7 @@ function phanTichCachCuc(ls, gioitinh) {
     if (isGiapCung(ls,p.cungName,'Lộc Tồn','Thiên Mã') || isGiapCung(ls,p.cungName,'Hóa Lộc','Thiên Mã')) {
       add('phu_cuc','Tài Lộc Giáp Mã',
         'Vũ Khúc tọa thủ có Lộc/Mã giáp cung → tài lộc dồi dào, giàu có lâu bền.',
-        `Tại cung ${p.cungName}.`); break;
+        `Tại cung ${p.cungName}.`, p.cungName); break;
     }
   }
 
@@ -1008,7 +1008,7 @@ function phanTichCachCuc(ls, gioitinh) {
     if (hasThieuDuong && hasThieuAm || hasTaPhu) {
       add('quy_cuc','Kim Dư Phù Giá',
         'Tử Vi sáng sủa có Tả/Hữu, Thiếu Dương/Âm giáp cung → như xe vàng phò vua, quyền quý hiển hách.',
-        `Tại cung ${p.cungName}.`); break;
+        `Tại cung ${p.cungName}.`, p.cungName); break;
     }
   }
 
@@ -1020,7 +1020,7 @@ function phanTichCachCuc(ls, gioitinh) {
         (hasSao(p,'Thiên Phủ')&&isSangSua(p,'Thiên Phủ')&&hasSao(xung,'Tử Vi'))) {
       add('quy_cuc','Tử Phủ Triều Viên',
         'Tử Vi và Thiên Phủ triều viên → địa vị cao sang, quyền quý.',
-        `Tại cung ${p.cungName}.`); break;
+        `Tại cung ${p.cungName}.`, p.cungName); break;
     }
   }
 
@@ -1038,7 +1038,7 @@ function phanTichCachCuc(ls, gioitinh) {
     if (hasTa && hasHuu) {
       add('quy_cuc','Phụ Bật Củng Chủ',
         'Tử Vi sáng sủa có Tả Phụ và Hữu Bật hội chiếu → được phò tá đắc lực, quyền quý.',
-        `Tại cung ${p.cungName}.`); break;
+        `Tại cung ${p.cungName}.`, p.cungName); break;
     }
   }
 
@@ -1050,7 +1050,7 @@ function phanTichCachCuc(ls, gioitinh) {
         (hasSao(p,'Thiên Tướng')&&isSangSua(p,'Thiên Tướng')&&hasSao(xung,'Thiên Phủ'))) {
       add('quy_cuc','Phủ Tướng Triều Viên',
         'Thiên Phủ và Thiên Tướng triều viên → phú quý song toàn, địa vị cao.',
-        `Tại cung ${p.cungName}.`); break;
+        `Tại cung ${p.cungName}.`, p.cungName); break;
     }
   }
 
@@ -1064,7 +1064,7 @@ function phanTichCachCuc(ls, gioitinh) {
     if (!p) continue;
     if ((p.diaChi==='Mão'||p.diaChi==='Dậu') && hasSao(p,'Cự Môn') && hasSao(p,'Thiên Cơ')) {
       add('quy_cuc','Cự Cơ Mão Dậu','Cự Môn và Thiên Cơ đồng cung tại Mão/Dậu → quyền quý, thông minh, nổi tiếng.',
-        `Tại cung ${p.cungName}(${p.diaChi}).`); break;
+        `Tại cung ${p.cungName}(${p.diaChi}).`, p.cungName); break;
     }
   }
 
@@ -1075,7 +1075,7 @@ function phanTichCachCuc(ls, gioitinh) {
     if ((p.diaChi==='Dần'||p.diaChi==='Thân') && hasSao(p,'Thất Sát') &&
         xung && hasSao(xung,'Tử Vi') && hasSao(xung,'Thiên Phủ')) {
       add('quy_cuc','Thất Sát Triều Đẩu','Thất Sát tại Dần/Thân, Tử Phủ đồng cung xung chiếu → uy quyền lớn, chỉ huy xuất sắc.',
-        `Tại cung ${p.cungName}(${p.diaChi}).`); break;
+        `Tại cung ${p.cungName}(${p.diaChi}).`, p.cungName); break;
     }
   }
 
@@ -1085,7 +1085,7 @@ function phanTichCachCuc(ls, gioitinh) {
     if (!p) continue;
     if (TU_MO.has(p.diaChi) && hasSao(p,'Tham Lang') && hasSao(p,'Hỏa Tinh')) {
       add('quy_cuc','Tham Hỏa Tương Phùng','Tham Lang gặp Hỏa Tinh đồng cung tại Tứ Mộ → bạo phát, giàu to, quan chức lớn.',
-        `Tại cung ${p.cungName}(${p.diaChi}).`); break;
+        `Tại cung ${p.cungName}(${p.diaChi}).`, p.cungName); break;
     }
   }
 
@@ -1093,7 +1093,7 @@ function phanTichCachCuc(ls, gioitinh) {
   for (const p of QUY_QUAN) {
     if (p?.diaChi==='Mão' && hasSao(p,'Thái Dương')) {
       add('quy_cuc','Nhật Xuất Phù Tang','Thái Dương tọa thủ tại Mão → như mặt trời mọc, sáng láng quyền quý.',
-        `Tại cung ${p.cungName}(Mão).`); break;
+        `Tại cung ${p.cungName}(Mão).`, p.cungName); break;
     }
   }
 
@@ -1101,7 +1101,7 @@ function phanTichCachCuc(ls, gioitinh) {
   for (const p of QUY_QUAN) {
     if (p?.diaChi==='Hợi' && hasSao(p,'Thái Âm')) {
       add('quy_cuc','Nguyệt Lãng Thiên Môn','Thái Âm tọa thủ tại Hợi → như trăng sáng trên thiên môn, thanh cao quyền quý.',
-        `Tại cung ${p.cungName}(Hợi).`); break;
+        `Tại cung ${p.cungName}(Hợi).`, p.cungName); break;
     }
   }
 
@@ -1109,7 +1109,7 @@ function phanTichCachCuc(ls, gioitinh) {
   for (const p of QUY_QUAN) {
     if (p?.diaChi==='Tý' && hasSao(p,'Thái Âm')) {
       add('quy_cuc','Nguyệt Sinh Thương Hải','Thái Âm tọa thủ tại Tý → như trăng sinh trên biển, quyền quý hiển đạt.',
-        `Tại cung ${p.cungName}(Tý).`); break;
+        `Tại cung ${p.cungName}(Tý).`, p.cungName); break;
     }
   }
 
@@ -1118,7 +1118,7 @@ function phanTichCachCuc(ls, gioitinh) {
     if (!p||!hasSao(p,'Thiên Tướng')||!isSangSua(p,'Thiên Tướng')) continue;
     if (isGiapCung(ls,p.cungName,'Lộc Tồn','Thiên Mã') || isGiapCung(ls,p.cungName,'Hóa Lộc','Thiên Mã')) {
       add('quy_cuc','Lộc Mã Bội Ấn','Thiên Tướng sáng sủa có Lộc/Mã giáp cung → lộc quyền cùng phát, hiển hách.',
-        `Tại cung ${p.cungName}.`); break;
+        `Tại cung ${p.cungName}.`, p.cungName); break;
     }
   }
 
@@ -1133,7 +1133,7 @@ function phanTichCachCuc(ls, gioitinh) {
     const allNearby = [xung,left,right,...p.tamHopCungs||[]].filter(Boolean);
     if (allNearby.some(x=>hasSao(x,'Thiên Hình')) && allNearby.some(x=>hasSao(x,'Thiên Mã'))) {
       add('quy_cuc','Mã Đầu Đới Kiếm','Kình Dương tại Ngọ có Thiên Hình và Thiên Mã hội chiếu → võ công lừng lẫy, uy quyền.',
-        `Tại cung ${p.cungName}(Ngọ).`); break;
+        `Tại cung ${p.cungName}(Ngọ).`, p.cungName); break;
     }
   }
 
@@ -1144,7 +1144,7 @@ function phanTichCachCuc(ls, gioitinh) {
     add('quy_cuc','Kình Dương Nhập Mệnh',
       tuoiTuMo ? 'Kình Dương tại Tứ Mộ, tuổi Tứ Mộ → rất tốt, quyền quý hiển hách.'
                : 'Kình Dương tại Tứ Mộ → có chức quyền, nhưng tốt nhất với tuổi Tứ Mộ.',
-      `Tại cung ${p.cungName}(${p.diaChi}).`); break;
+      `Tại cung ${p.cungName}(${p.diaChi}).`, p.cungName); break;
   }
 
   // 19.2.21 Tọa Quý Hưởng Quý
@@ -1154,7 +1154,7 @@ function phanTichCachCuc(ls, gioitinh) {
     if ((hasSao(p,'Thiên Khôi')&&hasSao(xung,'Thiên Việt')) ||
         (hasSao(p,'Thiên Việt')&&hasSao(xung,'Thiên Khôi'))) {
       add('quy_cuc','Tọa Quý Hưởng Quý','Thiên Khôi và Thiên Việt chiếu nhau → quý nhân phù trợ, danh vọng hiển đạt.',
-        `Tại cung ${p.cungName}.`); break;
+        `Tại cung ${p.cungName}.`, p.cungName); break;
     }
   }
 
@@ -1165,7 +1165,7 @@ function phanTichCachCuc(ls, gioitinh) {
     if ((hasSao(p,'Văn Xương')&&hasSao(xung,'Văn Khúc')) ||
         (hasSao(p,'Văn Khúc')&&hasSao(xung,'Văn Xương'))) {
       add('quy_cuc','Văn Tinh Ám Củng','Văn Xương và Văn Khúc chiếu nhau → văn chương xuất sắc, công danh rực rỡ.',
-        `Tại cung ${p.cungName}.`); break;
+        `Tại cung ${p.cungName}.`, p.cungName); break;
     }
   }
 
@@ -1175,7 +1175,7 @@ function phanTichCachCuc(ls, gioitinh) {
     const allStars = [...getSaoAll(p), ...(p.tamHopCungs||[]).flatMap(getSaoAll), ...getSaoAll(p.xungChieuCung)];
     if (allStars.includes('Hóa Khoa') && allStars.includes('Hóa Quyền') && allStars.includes('Hóa Lộc')) {
       add('quy_cuc','Khoa Quyền Lộc Củng','Hóa Khoa, Hóa Quyền, Hóa Lộc hội chiếu → tam hóa tốt, công danh phú quý tột đỉnh.',
-        `Tại cung ${p.cungName}.`); break;
+        `Tại cung ${p.cungName}.`, p.cungName); break;
     }
   }
 
@@ -1186,7 +1186,7 @@ function phanTichCachCuc(ls, gioitinh) {
     if ((hasSao(p,'Hóa Lộc')&&hasSao(nhiHop,'Lộc Tồn')) ||
         (hasSao(p,'Lộc Tồn')&&hasSao(nhiHop,'Hóa Lộc'))) {
       add('quy_cuc','Minh Lộc Ám Lộc','Hóa Lộc và Lộc Tồn nhị hợp → lộc song trùng, tài lộc vượng phát.',
-        `Tại cung ${p.cungName}.`); break;
+        `Tại cung ${p.cungName}.`, p.cungName); break;
     }
   }
 
@@ -1198,14 +1198,14 @@ function phanTichCachCuc(ls, gioitinh) {
   if (p_menh && hasSao(p_menh,'Liêm Trinh') &&
       (p_menh.diaChi==='Dần'||p_menh.diaChi==='Thân') && hasTuanOrTriet(p_menh)) {
     add('ban_tien_cuc','Sinh Bất Phùng Thời',
-      'Liêm Trinh thủ Mệnh tại Dần/Thân gặp Tuần/Triệt → tài năng nhưng không gặp thời.','');
+      'Liêm Trinh thủ Mệnh tại Dần/Thân gặp Tuần/Triệt → tài năng nhưng không gặp thời.','', 'Mệnh');
   }
 
   // 19.3.2 Nhất Sinh Cô Bần
   if (p_menh && hasSao(p_menh,'Phá Quân') &&
       (p_menh.diaChi==='Dần'||p_menh.diaChi==='Thân') && hasSatTinh(p_menh)) {
     add('ban_tien_cuc','Nhất Sinh Cô Bần',
-      'Phá Quân thủ Mệnh tại Dần/Thân gặp nhiều sát tinh mờ ám → suốt đời cô độc nghèo khổ.','');
+      'Phá Quân thủ Mệnh tại Dần/Thân gặp nhiều sát tinh mờ ám → suốt đời cô độc nghèo khổ.','', 'Mệnh');
   }
 
   // 19.3.3 Tài Dữ Tù Cừu
@@ -1213,7 +1213,7 @@ function phanTichCachCuc(ls, gioitinh) {
     const vuLiem = getSaoChinh(p_menh).filter(s=>s==='Vũ Khúc'||s==='Liêm Trinh');
     if (vuLiem.length > 0 && vuLiem.every(s=>isMoAm(p_menh,s)) && hasSatTinh(p_menh)) {
       add('ban_tien_cuc','Tài Dữ Tù Cừu',
-        'Vũ Khúc hoặc Liêm Trinh mờ ám thủ Mệnh, gặp nhiều sát tinh → tiền tài như kẻ thù, tài lộc bị phá.','');
+        'Vũ Khúc hoặc Liêm Trinh mờ ám thủ Mệnh, gặp nhiều sát tinh → tiền tài như kẻ thù, tài lộc bị phá.','', 'Mệnh');
     }
   }
 
@@ -1222,7 +1222,7 @@ function phanTichCachCuc(ls, gioitinh) {
     const nhat = hasSao(p_menh,'Thái Dương'), nguyet = hasSao(p_menh,'Thái Âm');
     if ((nhat&&isMoAm(p_menh,'Thái Dương')) || (nguyet&&isMoAm(p_menh,'Thái Âm'))) {
       add('ban_tien_cuc','Nhật Nguyệt Tàng Hung',
-        'Thái Dương hoặc Thái Âm mờ ám thủ Mệnh → vận trình tối tăm, tiền đồ trắc trở.','');
+        'Thái Dương hoặc Thái Âm mờ ám thủ Mệnh → vận trình tối tăm, tiền đồ trắc trở.','', 'Mệnh');
     }
   }
 
@@ -1231,14 +1231,14 @@ function phanTichCachCuc(ls, gioitinh) {
     const hasLoc = hasSao(p_menh,'Lộc Tồn')||hasSao(p_menh,'Hóa Lộc');
     if (hasLoc && hasSao(p_menh,'Địa Không') && hasSao(p_menh,'Địa Kiếp')) {
       add('ban_tien_cuc','Lộc Phùng Lưỡng Sát',
-        'Lộc Tồn/Hóa Lộc thủ Mệnh gặp Địa Không và Địa Kiếp đồng cung → lộc bị phá, tài lộc hao tán.','');
+        'Lộc Tồn/Hóa Lộc thủ Mệnh gặp Địa Không và Địa Kiếp đồng cung → lộc bị phá, tài lộc hao tán.','', 'Mệnh');
     }
   }
 
   // 19.3.8 Mã Lạc Không Vong
   if (p_menh && hasSao(p_menh,'Thiên Mã') && hasTuanOrTriet(p_menh)) {
     add('ban_tien_cuc','Mã Lạc Không Vong',
-      'Thiên Mã thủ Mệnh gặp Tuần/Triệt án ngữ → ngựa sa vào chỗ không, bôn ba vô ích.','');
+      'Thiên Mã thủ Mệnh gặp Tuần/Triệt án ngữ → ngựa sa vào chỗ không, bôn ba vô ích.','', 'Mệnh');
   }
 
   // ═══════════════════════════════════════════════
