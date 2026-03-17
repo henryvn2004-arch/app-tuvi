@@ -606,6 +606,12 @@ select.form-input { cursor: pointer; }
     lines.push(`Năm sinh: ${ls.canChiNam} | Bản mệnh: ${ls.napAm} | Cục: ${ls.cuc}`);
     lines.push(`Cung Mệnh: ${ls.menhDC} | Cung Thân: ${ls.thanDC}`);
     lines.push(`Tuổi xem: ${ls.tuoiXem} | Năm xem: ${ls.chiNamXem}`);
+    const menhP = ls.palaces.find(p => p.isMenh);
+    if (menhP?.thaiTueNhom) {
+      const ttn = menhP.thaiTueNhom;
+      lines.push(`Vòng Thái Tuế tại Mệnh: ${ttn.sao} (${ttn.ten})`);
+      lines.push(`  → ${ttn.yNghia}`);
+    }
     lines.push(`Tiểu hạn: ${ls.palaces[ls.tieuHanIdx]?.diaChi} (${ls.palaces[ls.tieuHanIdx]?.cungName}) | Lưu đại hạn: ${ls.palaces[ls.luuNienDaiHanIdx]?.diaChi} (${ls.palaces[ls.luuNienDaiHanIdx]?.cungName})`);
     lines.push('');
 
@@ -616,7 +622,14 @@ select.form-input { cursor: pointer; }
       const chinh = p.majorStars.map(s => s.ten + (s.brightness?`(${s.brightness})`:'') + (s.hoa?`[${s.hoa}]`:'')).join(' ');
       const phu = p.stars.filter(s=>s.nhom!=='chinh').map(s => s.ten + (s.hoa?`[${s.hoa}]`:'')).join(' ');
       lines.push(`[${p.cungName}] ${p.diaChi}${p.isThan?' THÂN':''}${p.isMenh?' MỆNH':''} ${van}`);
-      lines.push(`  Chính tinh: ${chinh||'(vô chính diệu)'}`);
+      if (p.majorStars.length === 0) {
+        // Vô chính diệu — mượn chính tinh cung xung chiếu để luận giải
+        const xung = p.xungChieuCung;
+        const muon = xung ? xung.majorStars.map(s => s.ten + (s.hoa?`[${s.hoa}]`:'')).join(' ') : '';
+        lines.push(`  Chính tinh: (vô chính diệu — mượn từ ${xung?.cungName||'?'}(${xung?.diaChi||'?'}): ${muon||'trống'})`);
+      } else {
+        lines.push(`  Chính tinh: ${chinh}`);
+      }
       if (phu) lines.push(`  Phụ tinh: ${phu}`);
       // Tam phương tứ chính
       if (p.tamHopCungs && p.tamHopCungs.length) {
