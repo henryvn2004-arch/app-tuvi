@@ -1564,20 +1564,27 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
     }
   }
 
-  // Vòng Thái Tuế tại cung Mệnh — tính bằng offset (chi năm SINH vs địa chi Mệnh)
+  // Vòng Thái Tuế tại cung Mệnh và cung Thân — tính bằng offset (chi năm SINH)
   const menhP = palaces.find(p => p.isMenh);
+  const thanP  = palaces.find(p => p.diaChi === thanDC);
+  const startIdxTT = DIA_CHI.indexOf(chiNam);
+
   if (menhP) {
-    const startIdx = DIA_CHI.indexOf(chiNam); // năm sinh, không phải năm xem
-    const menhDcIdx = DIA_CHI.indexOf(menhP.diaChi);
-    const offset = ((menhDcIdx - startIdx) % 12 + 12) % 12;
-    const saoTaiMenh = THAI_TUE_SEQ[offset];
-    const nhom = THAI_TUE_NHOM[saoTaiMenh];
+    const offset = ((DIA_CHI.indexOf(menhP.diaChi) - startIdxTT) % 12 + 12) % 12;
+    const sao = THAI_TUE_SEQ[offset];
+    const nhom = THAI_TUE_NHOM[sao];
     if (nhom !== undefined) {
-      menhP.thaiTueNhom = {
-        sao: saoTaiMenh,
-        nhom,
-        ...THAI_TUE_NHOM_Y_NGHIA[nhom],
-      };
+      menhP.thaiTueNhom = { sao, nhom, ...THAI_TUE_NHOM_Y_NGHIA[nhom] };
+    }
+  }
+
+  // Thân cung (cung an Thân, không phải địa chi Thân) trong vòng Thái Tuế
+  if (thanP) {
+    const offset = ((DIA_CHI.indexOf(thanP.diaChi) - startIdxTT) % 12 + 12) % 12;
+    const sao = THAI_TUE_SEQ[offset];
+    const nhom = THAI_TUE_NHOM[sao];
+    if (nhom !== undefined) {
+      thanP.thaiTueNhom = { sao, nhom, ...THAI_TUE_NHOM_Y_NGHIA[nhom] };
     }
   }
 
@@ -1879,20 +1886,27 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
     }
   }
 
-  // Vòng Thái Tuế tại cung Mệnh — tính bằng offset (chi năm SINH vs địa chi Mệnh)
+  // Vòng Thái Tuế tại cung Mệnh và cung Thân — tính bằng offset (chi năm SINH)
   const menhP = palaces.find(p => p.isMenh);
+  const thanP  = palaces.find(p => p.diaChi === thanDC);
+  const startIdxTT = DIA_CHI.indexOf(chiNam);
+
   if (menhP) {
-    const startIdx = DIA_CHI.indexOf(chiNam); // năm sinh, không phải năm xem
-    const menhDcIdx = DIA_CHI.indexOf(menhP.diaChi);
-    const offset = ((menhDcIdx - startIdx) % 12 + 12) % 12;
-    const saoTaiMenh = THAI_TUE_SEQ[offset];
-    const nhom = THAI_TUE_NHOM[saoTaiMenh];
+    const offset = ((DIA_CHI.indexOf(menhP.diaChi) - startIdxTT) % 12 + 12) % 12;
+    const sao = THAI_TUE_SEQ[offset];
+    const nhom = THAI_TUE_NHOM[sao];
     if (nhom !== undefined) {
-      menhP.thaiTueNhom = {
-        sao: saoTaiMenh,
-        nhom,
-        ...THAI_TUE_NHOM_Y_NGHIA[nhom],
-      };
+      menhP.thaiTueNhom = { sao, nhom, ...THAI_TUE_NHOM_Y_NGHIA[nhom] };
+    }
+  }
+
+  // Thân cung (cung an Thân, không phải địa chi Thân) trong vòng Thái Tuế
+  if (thanP) {
+    const offset = ((DIA_CHI.indexOf(thanP.diaChi) - startIdxTT) % 12 + 12) % 12;
+    const sao = THAI_TUE_SEQ[offset];
+    const nhom = THAI_TUE_NHOM[sao];
+    if (nhom !== undefined) {
+      thanP.thaiTueNhom = { sao, nhom, ...THAI_TUE_NHOM_Y_NGHIA[nhom] };
     }
   }
 
