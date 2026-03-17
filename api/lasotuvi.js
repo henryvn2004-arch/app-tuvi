@@ -26,7 +26,7 @@ function buildPrompt(phan, laSoText, docs) {
   const ctx = '=== LÁ SỐ ===\n' + laSoText + (docs ? '\n\n=== TÀI LIỆU ===\n' + docs : '');
 
   if (phan === 1) {
-    return ctx + '\n\nPHẦN 1 — TỔNG QUAN LÁ SỐ (300-400 từ)\n- Thuận lý/nghịch lý âm dương cung Mệnh\n- Sinh địa/Vượng địa/Bại địa/Tuyệt địa của bản mệnh\n- Bản Mệnh – Cục (Nạp Âm)\n- Cung Mệnh và Cung Thân: sáng sủa hay mờ ám, Mệnh Thân đồng cung hay không\n- Chính tinh thủ Mệnh (vô chính diệu nếu có)\n- Khí chất con người qua 3 vòng: Thái Tuế (nhóm mấy), Lộc Tồn (sao tại Mệnh), Tràng Sinh (vị trí)\n- Cách cục nổi bật (Phú cục/Quý cục/Bần tiện cục nếu có — đã liệt kê trong phần CÁCH CỤC & NHẬN ĐỊNH)\n- Ưu điểm nổi bật & nhược điểm dễ gặp\n\nLƯU Ý: Phần CÁCH CỤC & NHẬN ĐỊNH trong lá số đã tính sẵn rule-based — hãy dùng trực tiếp để luận, không tính lại.';
+    return ctx + '\n\nPHẦN 1 — TỔNG QUAN LÁ SỐ (300-400 từ)\n- Thuận lý/nghịch lý âm dương cung Mệnh\n- Sinh địa/Vượng địa/Bại địa/Tuyệt địa của bản mệnh\n- Bản Mệnh – Cục (Nạp Âm)\n- Cung Mệnh và Cung Thân: sáng sủa hay mờ ám, Mệnh Thân đồng cung hay không\n- Chính tinh thủ Mệnh (vô chính diệu nếu có)\n- Khí chất con người qua 3 vòng: Thái Tuế (nhóm mấy), Lộc Tồn (sao tại Mệnh), Tràng Sinh (vị trí)\n- Liệt kê và luận giải TẤT CẢ cách cục đặc biệt của lá số (ở mọi cung) từ phần CÁCH CỤC & NHẬN ĐỊNH — ghi rõ cách cục đó ở cung nào, ý nghĩa gì, tốt hay xấu\n- Ưu điểm nổi bật & nhược điểm dễ gặp của toàn bộ lá số\n\nLƯU Ý QUAN TRỌNG: Phần CÁCH CỤC & NHẬN ĐỊNH đã được tính sẵn bằng engine rule-based — liệt kê đầy đủ, không bỏ sót, không tính lại.';
   }
 
   if (phan >= 2 && phan <= 13) {
