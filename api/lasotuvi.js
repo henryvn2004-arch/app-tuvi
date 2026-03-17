@@ -32,8 +32,7 @@ function buildPrompt(phan, laSoText, docs) {
   if (phan >= 2 && phan <= 13) {
     const cung = CUNG_BY_PHAN[phan];
     const desc = CUNG_DESC[cung] || '';
-    const cachCucNote = (phan === 2) ? '\n- Cách cục & nhận định đặc biệt (xem phần CÁCH CỤC & NHẬN ĐỊNH trong lá số — đã tính sẵn, dùng trực tiếp để luận)' : '';
-    return ctx + '\n\nPHẦN ' + phan + ' — CUNG ' + cung.toUpperCase() + ' (150-200 từ)\n' + desc + '\n\nLuận giải:\n- Ý nghĩa chính tinh tại cung ' + cung + ' (độ sáng Miếu/Vượng/Đắc/Bình/Hãm)\n- Tổ hợp các sao tại cung và tam phương tứ chính → xác định cách cục và ý nghĩa' + cachCucNote + '\n- Những điểm cần lưu ý (tốt/xấu, cơ hội/rủi ro)';
+    return ctx + '\n\nPHẦN ' + phan + ' — CUNG ' + cung.toUpperCase() + ' (150-200 từ)\n' + desc + '\n\nLuận giải:\n- Ý nghĩa chính tinh tại cung ' + cung + ' (độ sáng Miếu/Vượng/Đắc/Bình/Hãm)\n- Tổ hợp các sao tại cung và tam phương tứ chính → xác định cách cục và ý nghĩa\n- Nếu có [CÁCH CỤC] nào được liệt kê tại cung này trong lá số → nêu tên cách cục và luận giải ý nghĩa, không tính lại\n- Những điểm cần lưu ý (tốt/xấu, cơ hội/rủi ro)';
   }
 
   if (phan === 14) {
