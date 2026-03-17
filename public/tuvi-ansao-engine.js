@@ -1599,7 +1599,7 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
 
 // ─── TÍNH CHẤT SAO ───────────────────────────────────────────
 const STAR_DATA = {
-  'Tử Vi':       { type:'chính tinh', element:'thổ',   yin_yang:'dương', weight:10, traits:['uy quyền','tài lộc','phúc đức'],    positions:{dac:['Dần','Thân','Tỵ','Hợi'],ham:['Tý','Sửu','Mão','Thìn','Ngọ','Mùi','Dậu','Tuất']} },
+  'Tử Vi':       { type:'chính tinh', element:'thổ',   yin_yang:'dương', weight:10, traits:['uy quyền','tài lộc','phúc đức'],    positions:{mien:['Tỵ','Ngọ','Dần','Thân'],vuong:['Thìn','Tuất'],dac:['Sửu','Mùi'],binh:['Hợi','Tý','Mão','Dậu']} },
   'Liêm Trinh':  { type:'chính tinh', element:'hỏa',   yin_yang:'âm',    weight:8,  traits:['quan lộc','hình ngục','đào hoa'],   positions:{mien:['Thìn','Tuất'],vuong:['Tý','Ngọ','Dần','Thân'],dac:['Sửu','Mùi'],ham:['Tỵ','Hợi','Mão','Dậu']} },
   'Thiên Đồng':  { type:'chính tinh', element:'thủy',  yin_yang:'dương', weight:7,  traits:['phúc thọ','hiền hòa'],              positions:{mien:['Dần','Thân'],vuong:['Tý'],dac:['Mão','Tỵ','Hợi'],ham:['Ngọ','Dậu','Thìn','Tuất','Sửu','Mùi']} },
   'Vũ Khúc':     { type:'chính tinh', element:'kim',   yin_yang:'âm',    weight:9,  traits:['tài lộc','cương nghị'],             positions:{mien:['Thìn','Tuất','Sửu','Mùi'],vuong:['Dần','Thân','Tý','Ngọ'],dac:['Mão','Dậu'],ham:['Tỵ','Hợi']} },
