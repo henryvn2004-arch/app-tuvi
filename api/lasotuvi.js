@@ -26,22 +26,22 @@ function buildPrompt(phan, laSoText, docs) {
   const ctx = '=== LÁ SỐ ===\n' + laSoText + (docs ? '\n\n=== TÀI LIỆU ===\n' + docs : '');
 
   if (phan === 1) {
-    return ctx + '\n\nPHẦN 1 — TỔNG QUAN LÁ SỐ (250-350 từ)\n1. Bản mệnh & cục: thuận/nghịch lý âm dương; sinh/vượng/bại/tuyệt địa\n2. Cung Mệnh: chính tinh (vô chính diệu?), Mệnh Thân đồng cung?\n3. Khí chất: so sánh nhóm Thái Tuế Mệnh vs Thân (nội tâm vs biểu hiện); Lộc Tồn tại Mệnh; Tràng Sinh\n4. Cách cục & ý nghĩa cung Mệnh: liệt kê tất cả từ [CÁCH CỤC] và [Ý NGHĨA] tại cung Mệnh — dùng trực tiếp, không tính lại\n5. Nhận định chung: ưu/nhược điểm nổi bật';
+    return ctx + '\n\nPHẦN 1 — TỔNG QUAN LÁ SỐ (250-350 từ)\n1. Bản mệnh & cục: thuận/nghịch lý âm dương; sinh/vượng/bại/tuyệt địa\n2. Khí chất: so sánh nhóm Thái Tuế Mệnh vs Thân (nội tâm vs biểu hiện); Lộc Tồn tại Mệnh; Tràng Sinh\n3. Cách cục & ý nghĩa cung Mệnh: liệt kê tất cả từ [CÁCH CỤC] và [Ý NGHĨA] tại cung Mệnh — dùng trực tiếp, không tính lại\n4. Nhận định chung: ưu/nhược điểm nổi bật';
   }
 
   if (phan >= 2 && phan <= 13) {
     const cung = CUNG_BY_PHAN[phan];
     const desc = CUNG_DESC[cung] || '';
-    return ctx + '\n\nPHẦN ' + phan + ' — CUNG ' + cung.toUpperCase() + ' (120-180 từ)\n' + desc + '\nLuận: chính tinh (Miếu/Vượng/Đắc/Bình/Hãm) + tam phương tứ chính → cách cục, ý nghĩa.\n- [CÁCH CỤC] đã liệt kê → dùng trực tiếp, không tính lại\n- [Ý NGHĨA] đã liệt kê → đây là kết quả rule-based pre-computed, dùng làm nền luận giải, diễn giải súc tích theo văn phong trí thức — không chép lại nguyên văn\n- Điểm tốt/xấu chính, kết hợp tam phương tứ chính nếu có ảnh hưởng đáng kể';
+    return ctx + '\n\nPHẦN ' + phan + ' — CUNG ' + cung.toUpperCase() + ' (120-180 từ)\n' + desc + '\nLuận:\n- [CÁCH CỤC] đã liệt kê → dùng trực tiếp, không tính lại\n- [Ý NGHĨA] đã liệt kê → kết quả rule-based pre-computed, dùng làm nền luận giải, diễn giải súc tích theo văn phong trí thức — không chép lại nguyên văn\n- Điểm tốt/xấu chính, kết hợp tam phương tứ chính nếu có ảnh hưởng đáng kể';
   }
 
   if (phan === 14) {
-    return ctx + '\n\nPHẦN 14 — TỔNG QUAN CÁC ĐẠI VẬN\n\nDựa vào phần === 9 ĐẠI VẬN === trong lá số, tính điểm cho TẤT CẢ 9 đại vận (không bỏ sót đại vận nào):\n- TT (Thiên Thời) 0-5: dựa vào chính tinh và ngũ hành cung\n- ĐL (Địa Lợi) 0-2: sao tốt nhiều/ít\n- NH (Nhân Hòa) 0-3: sao xấu ít/nhiều\n\nBước 1 — Bảng tổng hợp ĐV1 đến ĐV9:\n| ĐV | Tuổi | Cung | TT | ĐL | NH | Tổng | Flag |\n\nBước 2 — JSON chart (BẮT BUỘC, đủ 9 điểm):\n```chartdata\n{"labels":["ĐV1 x-y","ĐV2 x-y","ĐV3 x-y","ĐV4 x-y","ĐV5 x-y","ĐV6 x-y","ĐV7 x-y","ĐV8 x-y","ĐV9 x-y"],"scores":[s1,s2,s3,s4,s5,s6,s7,s8,s9]}\n```\nThay x-y bằng khung tuổi thực tế, s1-s9 bằng điểm Tổng tương ứng.\n\nBước 3 — Nhận xét ngắn (80-100 từ): giai đoạn đẹp, khó khăn, xu hướng tổng thể.';
+    return ctx + '\n\nPHẦN 14 — TỔNG QUAN CÁC ĐẠI VẬN\n\nDựa vào phần === 9 ĐẠI VẬN ===, tính điểm TẤT CẢ 9 đại vận:\n- TT (Thiên Thời) 0-5: dựa vào chính tinh và ngũ hành cung\n- ĐL (Địa Lợi) 0-2: sao tốt nhiều/ít\n- NH (Nhân Hòa) 0-3: sao xấu ít/nhiều\n\nBảng tổng hợp ĐV1 đến ĐV9:\n| ĐV | Tuổi | Cung | TT | ĐL | NH | Tổng | Flag |\n\nJSON chart (BẮT BUỘC, đủ 9 điểm):\n```chartdata\n{"labels":["ĐV1 x-y","ĐV2 x-y","ĐV3 x-y","ĐV4 x-y","ĐV5 x-y","ĐV6 x-y","ĐV7 x-y","ĐV8 x-y","ĐV9 x-y"],"scores":[s1,s2,s3,s4,s5,s6,s7,s8,s9]}\n```\nThay x-y bằng khung tuổi thực tế, s1-s9 bằng điểm Tổng tương ứng.\n\nNhận xét ngắn (80-100 từ): giai đoạn đẹp, khó khăn, xu hướng tổng thể.';
   }
 
   if (phan >= 15 && phan <= 23) {
     const dvNum = phan - 14;
-    return ctx + '\n\nPHẦN ' + phan + ' — ĐẠI VẬN ' + dvNum + ' (150-200 từ)\nTìm dòng "ĐV' + dvNum + ':" trong phần === 9 ĐẠI VẬN === và luận giải đại vận đó:\n- Ý nghĩa chính tinh tại cung đại vận\n- Tổ hợp các sao tại cung và tam phương tứ chính → xác định cách cục và ý nghĩa\n- Xu hướng tốt/xấu, cơ hội/rủi ro & những điểm cần lưu ý';
+    return ctx + '\n\nPHẦN ' + phan + ' — ĐẠI VẬN ' + dvNum + ' (150-200 từ)\nTìm dòng "ĐV' + dvNum + ':" trong phần === 9 ĐẠI VẬN === và luận giải đại vận đó:\n- [LUẬN ĐOÁN] và [CẢNH BÁO] đã liệt kê → đây là kết quả rule-based pre-computed, dùng trực tiếp làm nền luận giải, không tính lại, không chép nguyên văn — diễn giải súc tích theo văn phong trí thức\n- Ý nghĩa chính tinh tại cung đại vận (sáng/mờ, hóa nếu có)\n- Xu hướng tốt/xấu tổng thể, cơ hội & những điểm cần lưu ý';
   }
 
   if (phan === 24) {
