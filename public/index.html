@@ -720,6 +720,16 @@ select.form-input { cursor: pointer; }
       lines.push(`  Chính tinh: ${chinh||'(vô chính diệu)'}`);
       if (tot) lines.push(`  Sao tốt: ${tot}`);
       if (xau) lines.push(`  Sao xấu: ${xau}`);
+      if (dv.rules && dv.rules.length > 0) {
+        const rTot  = dv.rules.filter(r=>r.type==='tot').map(r=>r.text);
+        const rXau  = dv.rules.filter(r=>r.type==='xau').map(r=>r.text);
+        const rCB   = dv.rules.filter(r=>r.type==='canh_bao').map(r=>r.text);
+        const rTrung= dv.rules.filter(r=>r.type==='trung').map(r=>r.text);
+        if (rTot.length)  lines.push(`  [LUẬN ĐOÁN - TỐT]: ${rTot.join(' | ')}`);
+        if (rTrung.length)lines.push(`  [LUẬN ĐOÁN - TRUNG]: ${rTrung.join(' | ')}`);
+        if (rXau.length)  lines.push(`  [LUẬN ĐOÁN - XẤU]: ${rXau.join(' | ')}`);
+        if (rCB.length)   lines.push(`  [CẢNH BÁO]: ${rCB.join(' | ')}`);
+      }
     });
 
     // Cách cục phân tích
