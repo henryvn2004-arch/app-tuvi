@@ -634,6 +634,10 @@ select.form-input { cursor: pointer; }
         if (cc.length > 0) {
           cc.forEach(r => lines.push(`  [CÁCH CỤC] ${r.ten}: ${r.moTa}`));
         }
+        // Ý nghĩa từng cung từ phanTichCungYNghia
+        if (ls.cachCucTungCung && ls.cachCucTungCung[p.cungName]) {
+          ls.cachCucTungCung[p.cungName].forEach(y => lines.push(`  [Ý NGHĨA] ${y}`));
+        }
       }
       if (p.majorStars.length === 0) {
         // Vô chính diệu — mượn chính tinh cung xung chiếu để luận giải
