@@ -958,8 +958,8 @@ select.form-input { cursor: pointer; }
       }
 
       const divider = preGenHtml ? `<div class="pregen-divider"><span>Luận giải</span></div>` : '';
-      section.innerHTML = \`<a id="phan-anchor-\${_currentPhan}" class="phan-anchor"></a>
-        <div class="phan-num">Phần \${_currentPhan} / \${TONG_PHAN} — \${PHAN_LABELS[_currentPhan]}</div>\`
+      section.innerHTML = `<a id="phan-anchor-${_currentPhan}" class="phan-anchor"></a>
+        <div class="phan-num">Phần ${_currentPhan} / ${TONG_PHAN} — ${PHAN_LABELS[_currentPhan]}</div>`
         + preGenHtml + chartHtml + divider
         + renderMarkdown(data.luanGiai);
 
