@@ -26,13 +26,13 @@ function buildPrompt(phan, laSoText, docs) {
   const ctx = '=== LÁ SỐ ===\n' + laSoText + (docs ? '\n\n=== TÀI LIỆU ===\n' + docs : '');
 
   if (phan === 1) {
-    return ctx + '\n\nPHẦN 1 — TỔNG QUAN LÁ SỐ (250-350 từ)\n1. Bản mệnh & cục: thuận/nghịch lý âm dương; sinh/vượng/bại/tuyệt địa\n2. Cung Mệnh: chính tinh (vô chính diệu?), Mệnh Thân đồng cung?\n3. Khí chất: so sánh nhóm Thái Tuế Mệnh vs Thân (nội tâm vs biểu hiện); Lộc Tồn tại Mệnh; Tràng Sinh\n4. Cách cục: liệt kê tất cả từ CÁCH CỤC & NHẬN ĐỊNH (tốt/xấu, cung nào) — dùng trực tiếp, không tính lại\n5. Nhận định chung: ưu/nhược điểm nổi bật';
+    return ctx + '\n\nPHẦN 1 — TỔNG QUAN LÁ SỐ (250-350 từ)\n1. Bản mệnh & cục: thuận/nghịch lý âm dương; sinh/vượng/bại/tuyệt địa\n2. Cung Mệnh: chính tinh (vô chính diệu?), Mệnh Thân đồng cung?\n3. Khí chất: so sánh nhóm Thái Tuế Mệnh vs Thân (nội tâm vs biểu hiện); Lộc Tồn tại Mệnh; Tràng Sinh\n4. Cách cục & ý nghĩa cung Mệnh: liệt kê tất cả từ [CÁCH CỤC] và [Ý NGHĨA] tại cung Mệnh — dùng trực tiếp, không tính lại\n5. Nhận định chung: ưu/nhược điểm nổi bật';
   }
 
   if (phan >= 2 && phan <= 13) {
     const cung = CUNG_BY_PHAN[phan];
     const desc = CUNG_DESC[cung] || '';
-    return ctx + '\n\nPHẦN ' + phan + ' — CUNG ' + cung.toUpperCase() + ' (120-180 từ)\n' + desc + '\nLuận: chính tinh (Miếu/Vượng/Đắc/Bình/Hãm) + tam phương tứ chính → cách cục, ý nghĩa. [CÁCH CỤC] đã liệt kê → dùng luôn. Điểm tốt/xấu chính.';
+    return ctx + '\n\nPHẦN ' + phan + ' — CUNG ' + cung.toUpperCase() + ' (120-180 từ)\n' + desc + '\nLuận: chính tinh (Miếu/Vượng/Đắc/Bình/Hãm) + tam phương tứ chính → cách cục, ý nghĩa.\n- [CÁCH CỤC] đã liệt kê → dùng trực tiếp, không tính lại\n- [Ý NGHĨA] đã liệt kê → đây là kết quả rule-based pre-computed, dùng làm nền luận giải, diễn giải súc tích theo văn phong trí thức — không chép lại nguyên văn\n- Điểm tốt/xấu chính, kết hợp tam phương tứ chính nếu có ảnh hưởng đáng kể';
   }
 
   if (phan === 14) {
