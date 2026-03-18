@@ -1485,9 +1485,10 @@ function scoreDaiVan(tt, dl, nh) {
   };
 }
 
-function tinhScoringAllDaiVan(daiVans, palaces, canChiNam, chiNam, napAm) {
+function tinhScoringAllDaiVan(daiVans, palaces, canChiNam, chiNam, napAm, chiNamSinh) {
   const menhPalace = palaces.find(p => p.isMenh);
   if (!menhPalace) return daiVans;
+  const ls_ctx = { palaces, napAmHanh: napAm, chiNamSinh };
 
   // Dùng tuChinhStars đã tính sẵn lúc an sao
   const menhStars = menhPalace.tuChinhStars || menhPalace.majorStars;
@@ -1504,7 +1505,8 @@ function tinhScoringAllDaiVan(daiVans, palaces, canChiNam, chiNam, napAm) {
     const nh = tinhNhanHoa(menhStars, dvStars, dvPalace, dv.tuoiStart, dv.tuoiEnd);
     const sc = scoreDaiVan(tt, dl, nh);
 
-    return { ...dv, scoring: sc };
+    const dvRules = phanTichDaiVanRules(dvPalace, menhPalace, { ...ls_ctx, napAmHanh: napAm });
+    return { ...dv, scoring: sc, rules: dvRules };
   });
 }
 
@@ -1682,7 +1684,7 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
 
   // Tính scoring cho 9 đại vận
   const napAmHanh = getNapAm(canChiNam);
-  const daiVansScored = tinhScoringAllDaiVan(daiVans, palaces, canChiNam, chiNam, napAmHanh);
+  const daiVansScored = tinhScoringAllDaiVan(daiVans, palaces, canChiNam, chiNam, napAmHanh, chiNam);
 
   return {
     canChiNam, napAm, amDuong, cuc, canMenh,
@@ -2025,7 +2027,7 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
 
   // Tính scoring cho 9 đại vận
   const napAmHanh = getNapAm(canChiNam);
-  const daiVansScored = tinhScoringAllDaiVan(daiVans, palaces, canChiNam, chiNam, napAmHanh);
+  const daiVansScored = tinhScoringAllDaiVan(daiVans, palaces, canChiNam, chiNam, napAmHanh, chiNam);
 
   return {
     canChiNam, napAm, amDuong, cuc, canMenh,
@@ -3353,6 +3355,488 @@ function tinhCungScores(ls, napAmHanh, tuoiXem) {
 
 
 
+
+
+
+
+// ================================================================
+// PHÂN TÍCH ĐẠI VẬN RULES — text labels cho phần A pre-generated
+// Input: dvPalace (cung đại vận), menhPalace, ls (lá số đầy đủ)
+// Output: array of { text, type } — type: 'tot'|'xau'|'trung'|'canh_bao'
+// ================================================================
+
+function phanTichDaiVanRules(dvPalace, menhPalace, ls) {
+  if (!dvPalace || !menhPalace) return [];
+
+  const results = [];
+  function add(text, type='trung') { results.push({ text, type }); }
+
+  // ─── STAR NAME ALIASES (rules shortcode → engine name) ──────
+  const ALIAS = {
+    'tu':'Tử Vi','phu':'Thiên Phủ','co':'Thiên Cơ','nhat':'Thái Dương',
+    'nguyet':'Thái Âm','dong':'Thiên Đồng','liem':'Liêm Trinh',
+    'tham':'Tham Lang','cu':'Cự Môn','tuong':'Thiên Tướng',
+    'luong':'Thiên Lương','sat':'Thất Sát','pha':'Phá Quân','vu':'Vũ Khúc',
+    'kinh':'Kình Dương','da':'Đà La','hoa':'Hỏa Tinh','linh':'Linh Tinh',
+    'khong':'Địa Không','kiep':'Địa Kiếp',
+    'ta':'Tả Phụ','huu':'Hữu Bật','khoi':'Thiên Khôi','viet':'Thiên Việt',
+    'xuong':'Văn Xương','khuc':'Văn Khúc','loc':'Lộc Tồn','ma':'Thiên Mã',
+    'hinh':'Thiên Hình','rieu':'Thiên Riêu',
+    'hoa_loc':'Hóa Lộc','quyen':'Hóa Quyền','khoa':'Hóa Khoa','ky':'Hóa Kỵ',
+    'tang':'Tang Môn','ho':'Bạch Hổ','khoc':'Thiên Khốc','hu':'Thiên Hư',
+    'long':'Long Trì','phuong':'Phượng Các','hong':'Hồng Loan','dao':'Đào Hoa',
+    'hi':'Thiên Hỷ','thai':'Thai','tue':'Thái Tuế','dieu':'Điếu Khách',
+    'moc':'Mộc Dục','tuyet':'Tuyệt','suy':'Suy','benh':'Bệnh',
+    'phu_benh':'Bệnh Phù','phi':'Phi Liêm','tau':'Tấu Thư',
+    'quang':'Ân Quang','quy':'Thiên Quý',
+    'giai':'Thiên Giải','dia_giai':'Địa Giải','giai_than':'Giải Thần',
+    'thien_khong':'Thiên Không',
+    'hao':'Đại Hao','tieu_hao':'Tiểu Hao',
+    'thanh_long':'Thanh Long','thai_toa':'Thái Tọa',
+    'tuong_quan':'Tướng Quân','phuc_binh':'Phục Binh',
+    'quoc_an':'Quốc Ấn','duong_phu':'Đường Phù',
+    'thai_cao':'Thái Cao','la':'Đà La',
+    'vuong':'Đế Vượng','sinh':'Tràng Sinh',
+    'phuong_cac':'Phượng Các',
+    'an':'Ân Quang', 'khach':'Điếu Khách',
+    'phuc':'Phục Binh','thuong':'Thiên Thương',
+    'qua':'Quả Tú','rieu':'Thiên Riêu',
+  };
+
+  // ─── HELPERS ────────────────────────────────────────────────
+  const DC_HANH_LOCAL = {
+    'Tý':'Thủy','Hợi':'Thủy','Dần':'Mộc','Mão':'Mộc',
+    'Tỵ':'Hỏa','Ngọ':'Hỏa','Thìn':'Thổ','Tuất':'Thổ','Sửu':'Thổ','Mùi':'Thổ',
+    'Thân':'Kim','Dậu':'Kim',
+  };
+  const NGU_HANH_SINH_LOCAL = {'Mộc':'Hỏa','Hỏa':'Thổ','Thổ':'Kim','Kim':'Thủy','Thủy':'Mộc'};
+  const NGU_HANH_KHAC_LOCAL = {'Kim':'Mộc','Mộc':'Thổ','Thổ':'Thủy','Thủy':'Hỏa','Hỏa':'Kim'};
+
+  // All TPTC stars (tam phương tứ chính) of dvPalace
+  const tptcPalaces = [dvPalace, ...(dvPalace.tamHopCungs||[]), dvPalace.xungChieuCung].filter(Boolean);
+  const tptcStarNames = tptcPalaces.flatMap(p => (p.stars||[]).map(s => s.ten));
+  const ownStarNames  = (dvPalace.stars||[]).map(s => s.ten);
+
+  function hasSao(name) { return tptcStarNames.includes(ALIAS[name] || name); }
+  function hasSaoOwn(name) { return ownStarNames.includes(ALIAS[name] || name); }
+  function hasAny(arr) { return arr.some(n => hasSao(n)); }
+  function hasAll(arr) { return arr.every(n => hasSao(n)); }
+
+  // Sao tốt / sao xấu in TPTC
+  const SAT_TINH = ['Kình Dương','Đà La','Hỏa Tinh','Linh Tinh','Địa Không','Địa Kiếp'];
+  const BAI_TINH = ['Thiên Khốc','Thiên Hư','Tang Môn','Bạch Hổ','Đại Hao','Tiểu Hao','Hóa Kỵ'];
+  const CAT_TINH = ['Tả Phụ','Hữu Bật','Thiên Khôi','Thiên Việt','Văn Xương','Văn Khúc',
+                    'Lộc Tồn','Hóa Lộc','Hóa Quyền','Hóa Khoa','Thiên Mã'];
+  const satCount = SAT_TINH.filter(s => tptcStarNames.includes(s)).length;
+  const baiCount = BAI_TINH.filter(s => tptcStarNames.includes(s)).length;
+  const catCount = CAT_TINH.filter(s => tptcStarNames.includes(s)).length;
+  const nhieuSaoTot = catCount >= 3;
+  const nhieuSaoXau = (satCount + baiCount) >= 3;
+
+  // Chính tinh đại vận
+  const dvMajor = dvPalace.majorStars || [];
+  const dvMainStar = dvMajor[0];
+  const dvStarName = dvMainStar?.ten;
+  const dvBright = dvMainStar?.brightness;
+  const isSang = ['Miếu','Vượng','Đắc'].includes(dvBright);
+  const isMoAm = ['Hãm'].includes(dvBright);
+  const isVCD = dvMajor.length === 0;
+
+  // Chính tinh Mệnh
+  const menhMajor = menhPalace.majorStars || [];
+  const menhMainStar = menhMajor[0];
+  const menhStarName = menhMainStar?.ten;
+  const menhBright = menhMainStar?.brightness;
+  const isMenhSang = ['Miếu','Vượng','Đắc'].includes(menhBright);
+  const isMenhMoAm = menhBright === 'Hãm';
+  const isMenhVCD = menhMajor.length === 0;
+
+  // Tuần/Triệt in dvPalace
+  const hasTuan = ownStarNames.includes('Tuần');
+  const hasTriet = ownStarNames.includes('Triệt');
+  const hasTuanTriet = hasTuan || hasTriet;
+  const dvDC = dvPalace.diaChi;
+  const tuanLamHoa = hasTuan && (dvDC === 'Tỵ' || dvDC === 'Ngọ');
+  const trietKimCung = hasTriet && (dvDC === 'Thân' || dvDC === 'Dậu');
+
+  // Ngũ hành
+  const dvHanh = DC_HANH_LOCAL[dvDC];
+  const menhHanh = ls.napAmHanh;
+  const chiNamSinh = ls.chiNamSinh || ls._conv?.chiNam;
+
+  // Tứ Mộ
+  const TU_MO = ['Thìn','Tuất','Sửu','Mùi'];
+  const isDVTuMo = TU_MO.includes(dvDC);
+
+  // Bộ sao groups
+  const BO_MAP = {
+    TPVT: ['Tử Vi','Thiên Phủ','Vũ Khúc','Thiên Tướng'],
+    CNDL: ['Thiên Cơ','Thái Âm','Thiên Đồng','Thiên Lương'],
+    SPT:  ['Thất Sát','Phá Quân','Tham Lang','Liêm Trinh'],
+    CN:   ['Cự Môn','Thái Dương'],
+  };
+  function getBo(starName) {
+    for (const [bo, list] of Object.entries(BO_MAP)) {
+      if (list.includes(starName)) return bo;
+    }
+    return null;
+  }
+  const menhBo = getBo(menhStarName);
+  const dvBo = getBo(dvStarName);
+
+  // Tương sinh/khắc TPTC vs bản mệnh ngũ hành
+  let tuongSinhCount = 0, tuongKhacCount = 0;
+  for (const p of tptcPalaces) {
+    const h = DC_HANH_LOCAL[p.diaChi];
+    if (!h || !menhHanh) continue;
+    if (NGU_HANH_SINH_LOCAL[h] === menhHanh || NGU_HANH_SINH_LOCAL[menhHanh] === h) tuongSinhCount++;
+    if (NGU_HANH_KHAC_LOCAL[h] === menhHanh || NGU_HANH_KHAC_LOCAL[menhHanh] === h) tuongKhacCount++;
+  }
+
+  // ─── FILE 1: ĐÁNH GIÁ TỔNG QUAN VẬN HẠN ────────────────────
+  if (tuongSinhCount >= 2 && tuongKhacCount === 0) add('Tam phương tứ chính tương sinh nhiều — đại vận tốt đẹp', 'tot');
+  if (tuongKhacCount >= 2) add('Tam phương tứ chính tương khắc nhiều — đại vận xấu xa', 'xau');
+
+  // Ngũ hành cung nhập hạn sinh chính diệu nhập hạn & chính diệu sinh bản mệnh
+  if (dvHanh && dvStarName && menhHanh) {
+    const STAR_HANH_LOCAL = {
+      'Tử Vi':'Thổ','Thiên Cơ':'Mộc','Thái Dương':'Hỏa','Vũ Khúc':'Kim',
+      'Thiên Đồng':'Thủy','Liêm Trinh':'Hỏa','Thiên Phủ':'Thổ','Thái Âm':'Thủy',
+      'Tham Lang':'Thủy','Cự Môn':'Thổ','Thiên Tướng':'Thủy','Thiên Lương':'Mộc',
+      'Thất Sát':'Kim','Phá Quân':'Thủy',
+    };
+    const starH = STAR_HANH_LOCAL[dvStarName];
+    if (NGU_HANH_SINH_LOCAL[dvHanh] === starH && NGU_HANH_SINH_LOCAL[starH] === menhHanh) {
+      add('Cung nhập hạn sinh chính diệu, chính diệu sinh bản mệnh — thuận lý', 'tot');
+    }
+  }
+
+  // Tỉ lệ sao tốt/xấu
+  if (nhieuSaoTot && !nhieuSaoXau) add('Sao tốt vượng trội trong tam phương tứ chính — hạn tốt', 'tot');
+  if (nhieuSaoXau && !nhieuSaoTot) add('Sao xấu áp đảo trong tam phương tứ chính — hạn xấu', 'xau');
+
+  // ─── FILE 2: QUAN HỆ BẢN MỆNH VS CUNG NHẬP HẠN ─────────────
+  // Ngũ hành bản mệnh vs cung nhập hạn (R5-R9)
+  if (menhHanh && dvDC) {
+    if (menhHanh === 'Kim' && dvDC === 'Tý')
+      add('Bản mệnh Kim — hạn đến cung Tý (Thủy): hao tổn thương, tai ương đáng lo', 'canh_bao');
+    if (menhHanh === 'Mộc' && dvDC === 'Ngọ')
+      add('Bản mệnh Mộc — hạn đến cung Ngọ (Hỏa): sáng sủa nhưng không lâu bền, khó tránh tai ương', 'canh_bao');
+    if (menhHanh === 'Thủy' && dvDC === 'Dần')
+      add('Bản mệnh Thủy — hạn đến cung Dần (Mộc): bế tắc, mọi việc trắc trở không xứng ý', 'xau');
+    if (menhHanh === 'Hỏa' && dvDC === 'Dậu')
+      add('Bản mệnh Hỏa — hạn đến cung Dậu (Kim): nguy khốn, khó tránh tai ương khủng khiếp', 'canh_bao');
+    if (menhHanh === 'Thổ' && dvDC === 'Mão')
+      add('Bản mệnh Thổ — hạn đến cung Mão (Mộc): suy nhược, bị hoài thương, dễ mắc bệnh nguy hiểm', 'canh_bao');
+  }
+
+  // Tuần/Triệt hoặc nhiều sao tốt giải trừ
+  if (hasTuanTriet && nhieuSaoTot)
+    add('Tuần/Triệt cùng nhiều sao tốt: giải trừ một phần lớn sự chẳng lành', 'tot');
+
+  // ─── FILE 2: NHÓM SAO MỆNH vs NHÓM SAO ĐẠI VẬN ─────────────
+  if (menhBo && dvBo) {
+    const TPVT_CNDL = ['TPVT','CNDL','CN'];
+    const SPT_GROUP = ['SPT'];
+    const isM_TPVT_CN = TPVT_CNDL.includes(menhBo);
+    const isM_SPT = menhBo === 'SPT';
+    const isV_TPVT_CN = TPVT_CNDL.includes(dvBo);
+    const isV_SPT = dvBo === 'SPT';
+
+    if (isM_TPVT_CN && isV_TPVT_CN)
+      add(`Mệnh ${menhBo} — Hạn ${dvBo}: hiển hách xứng ý toại lòng`, 'tot');
+    if (isM_SPT && isV_SPT)
+      add('Mệnh Sát Phá Tham — Hạn cùng bộ: hanh thông danh tài hưng vượng', 'tot');
+    if (isM_TPVT_CN && isV_SPT)
+      add(`Mệnh ${menhBo} — Hạn Sát Phá Tham: trong may có rủi, cần đề phòng`, 'canh_bao');
+    if (isM_SPT && isV_TPVT_CN)
+      add(`Mệnh Sát Phá Tham — Hạn ${dvBo}: khá giả nhưng chưa toại nguyện`, 'trung');
+  }
+
+  // R19-R20: Vũ Tướng
+  const menhHasVuTuong = menhMajor.some(s => ['Vũ Khúc','Thiên Tướng'].includes(s.ten));
+  const dvHasVuTuong = dvMajor.some(s => ['Vũ Khúc','Thiên Tướng'].includes(s.ten));
+  if (menhHasVuTuong && isSang)
+    add('Mệnh Vũ/Tướng — Hạn sao tốt: phát đạt tài quan sống mỹ', 'tot');
+  if (dvHasVuTuong && isMenhSang)
+    add('Hạn Vũ/Tướng — Mệnh tốt: danh tài hoạnh phát', 'tot');
+
+  // R21-R24: vô chính diệu
+  if (isMenhVCD && dvBo === 'SPT')
+    add('Mệnh vô chính diệu — Hạn Sát Phá Tham: trước khó sau dễ', 'trung');
+  if (isMenhVCD && isVCD)
+    add('Cả Mệnh lẫn Hạn vô chính diệu: bế tắc thành ít bại nhiều', 'xau');
+  if (isVCD && hasTuanTriet)
+    add('Hạn vô chính diệu có Tuần/Triệt: hanh thông danh tài hưng vượng', 'tot');
+
+  // ─── FILE 3: RULES THEO TUỔI CHI ────────────────────────────
+  if (chiNamSinh) {
+    const chi = chiNamSinh;
+    if (chi === 'Tý' && (dvDC === 'Dần' || dvDC === 'Thân'))
+      add('Tuổi Tý — hạn đến Dần/Thân: kỵ năm hạn và năm xung', 'canh_bao');
+    if ((chi === 'Sửu' || chi === 'Ngọ') && (dvDC === 'Sửu' || dvDC === 'Ngọ') && nhieuSaoXau)
+      add('Tuổi Sửu/Ngọ — hạn đến Sửu/Ngọ: rất đáng lo ngại nếu có sát nhập hạn', 'canh_bao');
+    if ((chi === 'Dần' || chi === 'Mão') && (dvDC === 'Tý' || dvDC === 'Hợi'))
+      add('Tuổi Dần/Mão — hạn đến Tý/Hợi: kỵ năm hạn và năm xung', 'canh_bao');
+    if (chi === 'Thìn' && (dvDC === 'Thìn' || dvDC === 'Tuất'))
+      add('Tuổi Thìn — hạn đến Thìn/Tuất: rất kỵ, cần xem xét cung An Thân', 'canh_bao');
+    if (chi === 'Tỵ' && (dvDC === 'Tỵ' || dvDC === 'Hợi'))
+      add('Tuổi Tỵ — hạn đến Tỵ/Hợi: rất kỵ, cần xem xét cung An Thân', 'canh_bao');
+    if (chi === 'Mùi' && (dvDC === 'Dậu' || dvDC === 'Hợi') && nhieuSaoXau)
+      add('Tuổi Mùi — hạn đến Dậu/Hợi: rất đáng lo ngại', 'canh_bao');
+    if (chi === 'Thân' && (dvDC === 'Ngọ') && nhieuSaoXau)
+      add('Tuổi Thân — hạn đến Ngọ: rất kỵ gặp Hỏa Linh nhập hạn', 'canh_bao');
+    if (chi === 'Dậu' && (dvDC === 'Dậu' || dvDC === 'Mão') && nhieuSaoXau)
+      add('Tuổi Dậu — hạn đến Dậu/Mão: rất kỵ gặp Kình Đà nhập hạn', 'canh_bao');
+    if (chi === 'Tuất' && (dvDC === 'Tý') && nhieuSaoXau)
+      add('Tuổi Tuất — hạn đến Tý: rất kỵ, cần xem cung Thìn/Tuất và An Thân', 'canh_bao');
+    if (chi === 'Hợi' && (dvDC === 'Hợi' || dvDC === 'Tỵ') && nhieuSaoXau)
+      add('Tuổi Hợi — hạn đến Hợi/Tỵ: rất kỵ gặp Kình Đà nhập hạn', 'canh_bao');
+  }
+
+  // ─── FILE 4: CHÍNH TINH CUNG ĐẠI VẬN ───────────────────────
+
+  // THAM LANG
+  if (dvStarName === 'Tham Lang') {
+    if (isSang) add('Tham Lang sáng — hạn hanh thông, có công danh, có hoạnh tài', 'tot');
+    if (isSang && isDVTuMo) add('Tham Lang sáng ở Tứ Mộ — phát đạt hiển hách', 'tot');
+    if (isSang && hasAny(['hoa','linh'])) add('Tham Lang sáng hội Hỏa/Linh — hoạnh phát danh tài', 'tot');
+    if (isMoAm) add('Tham Lang mờ — hao tài phóng đãng, bế tắc, truất quan', 'xau');
+    if (hasAll(['vu','loc','ma'])) add('Tham Lang hội Vũ Lộc Mã — có danh chức tài lộc', 'tot');
+    if (hasAny(['hong','dao'])) add('Tham Lang hội Hồng/Đào — thành gia thất', 'trung');
+    if (hasAll(['luong','ky'])) add('Tham Lang hội Lương Kỵ — vật rơi gây thương tích', 'canh_bao');
+    if (hasAll(['rieu','ky'])) add('Tham Lang hội Thiên Riêu Hóa Kỵ — tai nạn sông nước, khẩu thiệt kiện tụng', 'canh_bao');
+    if (hasAny(['khong','kiep'])) add('Tham Lang hội Không/Kiếp — bế tắc hao tài truất quan', 'xau');
+    if (hasSao('ho')) add('Tham Lang hội Bạch Hổ — bị súc vật cắn hoặc tai nạn xe cộ', 'canh_bao');
+  }
+
+  // CỰ MÔN
+  if (dvStarName === 'Cự Môn') {
+    if (isSang) add('Cự Môn sáng — toại lòng, hoạnh phát danh tài, thắng tranh chấp', 'tot');
+    if (isSang && dvDC === 'Hợi' && hasSao('loc')) add('Cự Môn sáng ở Hợi hội Lộc — không nên mưu việc lớn để tránh thất bại', 'canh_bao');
+    if (isMoAm) add('Cự Môn mờ — phiền lòng thị phi kiện cáo hao tài đau ốm có tang', 'xau');
+    if (isMoAm && isDVTuMo && nhieuSaoXau) add('Cự Môn mờ ở Tứ Mộ hạn xấu — nguy hiểm tính mạng', 'canh_bao');
+    if (hasSao('ky')) add('Cự Môn hội Hóa Kỵ — tai nạn sông nước, thị phi', 'canh_bao');
+    if (hasSao('tang')) add('Cự Môn hội Tang Môn — đau ốm nặng, có tang lớn', 'xau');
+    if (hasAll(['tang','hoa','linh'])) add('Cự Môn hội Tang Hỏa Linh — đau ốm tán tài, có tang hoặc cháy nhà', 'canh_bao');
+  }
+
+  // THIÊN TƯỚNG
+  if (dvStarName === 'Thiên Tướng') {
+    if (isSang) add('Thiên Tướng sáng — toại lòng danh tài hưng vượng, có hoạnh tài', 'tot');
+    if (isMoAm && nhieuSaoXau) add('Thiên Tướng mờ hội sát tinh — kiện cáo đau ốm, mắc lừa', 'xau');
+    if (isMoAm && nhieuSaoXau && nhieuSaoXau) add('Thiên Tướng mờ hội sát tinh hạn xấu — tính mạng lâm nguy', 'canh_bao');
+    if (hasAny(['khong','kiep'])) add('Thiên Tướng hội Không/Kiếp — rắc rối bị ám hại, không đáng lo', 'trung');
+    if (hasAll(['khoi','hinh'])) add('Thiên Tướng hội Khôi Hình — tai nạn đao thương, đau mắt bệnh', 'canh_bao');
+    if (hasTuanTriet) add('Thiên Tướng gặp Tuần/Triệt — đau ốm, tai nạn xe cộ, đao thương, công danh trắc trở', 'canh_bao');
+  }
+
+  // THIÊN LƯƠNG
+  if (dvStarName === 'Thiên Lương') {
+    add('Thiên Lương — có khả năng giải trừ tai họa', 'tot');
+    if (isSang) add('Thiên Lương sáng — danh tài hưng vượng, gặp quý nhân', 'tot');
+    if (isMoAm) add('Thiên Lương mờ — hao tài, sức khỏe kém', 'xau');
+    if (isMoAm && (dvDC === 'Tý' || dvDC === 'Hợi')) add('Thiên Lương mờ ở Tý/Hợi — đi xa hoặc thay đổi công việc', 'trung');
+    if (nhieuSaoXau) add('Thiên Lương hội nhiều sát tinh — khuynh gia bại sản', 'canh_bao');
+  }
+
+  // THẤT SÁT
+  if (dvStarName === 'Thất Sát') {
+    if (isSang) add('Thất Sát sáng — hòa khí danh tài hưng vượng', 'tot');
+    if (isSang && (dvDC === 'Dần' || dvDC === 'Thân')) add('Thất Sát sáng ở Dần/Thân — tài quan sống mỹ, mưu sự nhanh thành', 'tot');
+    if (isMoAm) add('Thất Sát mờ — buồn bực đau ốm có tang, thất bại', 'xau');
+    if (isMoAm && nhieuSaoXau) add('Thất Sát mờ hội sát tinh — tai nạn xe cộ đao thương', 'canh_bao');
+    if (isDVTuMo && nhieuSaoXau) add('Thất Sát ở Tứ Mộ hạn xấu — nguy hiểm tính mạng', 'canh_bao');
+    if (hasAll(['liem','tham','phuong'])) add('Thất Sát hội Liêm Tham Phượng — bị trách oan', 'xau');
+    if (hasAll(['pha','hinh'])) add('Thất Sát hội Phá Quân Hình — tù tội', 'canh_bao');
+    if (hasAll(['pha','hao'])) add('Thất Sát hội Phá Mộc Dục Hóa Kỵ — ung thư mụn nhọt, phẫu thuật', 'canh_bao');
+    if (hasAll(['kinh','khong','hoa','linh','ky','kiep'])) add('Thất Sát hội đủ sát tinh — tính mạng lâm nguy', 'canh_bao');
+    if (hasSao('ky')) add('Thất Sát hội Hóa Kỵ — đau đớn nhục nhã', 'xau');
+  }
+
+  // PHÁ QUÂN
+  if (dvStarName === 'Phá Quân') {
+    if (isSang) add('Phá Quân sáng — tài lộc công danh hiển đạt', 'tot');
+    if (isSang && hasAll(['xuong','khuc','khoi','viet'])) add('Phá Quân sáng hội Xương Khúc Khôi Việt — tài quan sống mỹ phú quý', 'tot');
+    if (isMoAm) add('Phá Quân mờ — đau ốm tù tội có tang, truất quan', 'xau');
+    if (isMoAm && nhieuSaoXau) add('Phá Quân mờ hội sát tinh hạn xấu — tính mạng lâm nguy', 'canh_bao');
+    if (hasAll(['liem','hoa'])) add('Phá Quân hội Liêm Hỏa — hao tài tù tội', 'canh_bao');
+    if (hasAll(['hinh','linh','hoa','viet'])) add('Phá Quân hội Hình Linh Hỏa Việt — điện giật, sét đánh, đao thương', 'canh_bao');
+    if (hasSao('phuong')) add('Phá Quân hội Phượng Các — bị trách oan', 'xau');
+    if (hasSao('tue')) add('Phá Quân hội Thái Tuế — kiện tụng', 'xau');
+    if (hasSao('qua')) add('Phá Quân hội Quả Tú — tai nạn đơn độc trên đường', 'canh_bao');
+    if (hasAll(['phuc','tuong','rieu','thai'])) add('Phá Quân hội Phục/Tướng/Riêu/Thai — rắc rối tình duyên', 'trung');
+  }
+
+  // ─── FILE 5: PHỤ TINH ───────────────────────────────────────
+
+  // LINH TINH
+  if (hasSao('linh')) {
+    if (isSang || nhieuSaoTot) add('Linh Tinh sáng — danh tài hưng vượng nổi tiếng xa gần', 'tot');
+    else add('Linh Tinh mờ — đau yếu phát điên, tai nạn đao súng điện lửa, kiện tụng có tang', 'xau');
+    if (hasAll(['xuong','vu','la'])) add('Linh Tinh hội Xương Vũ Đà — chết đuối hoặc tù tội', 'canh_bao');
+    if (hasAll(['sat','pha'])) add('Linh Tinh hội Thất Sát Phá Quân — tù tội', 'canh_bao');
+    if (hasSao('viet')) add('Linh Tinh hội Thiên Việt — sét đánh', 'canh_bao');
+  }
+
+  // KHÔNG/KIẾP
+  if (hasAny(['khong','kiep'])) {
+    if (nhieuSaoTot) add('Địa Không/Kiếp hội nhiều sao tốt — mưu sự nhanh thành, hoạnh phát danh tài, dễ đau yếu mụn nhọt', 'trung');
+    else add('Địa Không/Kiếp hội sao xấu — bệnh khí huyết, mất của, truất quan', 'xau');
+    if (hasSao('tham')) add('Không/Kiếp hội Tham Lang — bế tắc hao tài', 'xau');
+    if (hasAny(['ta','huu'])) add('Không/Kiếp hội Tả/Hữu — bị lừa bởi người khác', 'canh_bao');
+    if (hasAll(['hoa','linh','ky','tue'])) add('Không/Kiếp hội Hỏa Linh Kỵ Tuế — tai nạn nguy hiểm hoặc bị giết', 'canh_bao');
+    if (hasSao('quyen')) add('Không/Kiếp hội Hóa Quyền — công danh trắc trở bị gièm pha', 'xau');
+  }
+
+  // LỘC TỒN
+  if (hasSao('loc')) {
+    add('Lộc Tồn — hanh thông danh tài hưng vượng, gặp quý nhân', 'tot');
+    if (hasAll(['khoa','quyen','ta','huu'])) add('Lộc Tồn hội Khoa Quyền Tả Hữu — hoạnh phát phú quý', 'tot');
+    if (hasSao('hoa_loc')) add('Lộc Tồn hội Hóa Lộc cùng cung — tốt đẹp bị chiết giảm', 'trung');
+    if (hasSao('ma')) add('Lộc Tồn hội Thiên Mã — mưu sự toại lòng, buôn bán phát đạt', 'tot');
+    if (hasAny(['khong','kiep'])) add('Lộc Tồn hội Không/Kiếp — đau yếu mất của', 'xau');
+    if (hasAll(['khong','kiep','tue'])) add('Lộc Tồn hội Không Kiếp Tuế — tính mạng lâm nguy hoặc tù tội', 'canh_bao');
+  }
+
+  // TẢ/HỮU
+  if (hasAny(['ta','huu'])) {
+    if (nhieuSaoTot) add('Tả Phụ/Hữu Bật hội nhiều sao tốt — hanh thông hoạnh phát gặp quý nhân', 'tot');
+    if (nhieuSaoXau) add('Tả Phụ/Hữu Bật hội nhiều sao xấu — nhân ly tài tán đau yếu buồn phiền', 'xau');
+    if (hasAll(['khoa','quyen','loc'])) add('Tả/Hữu hội Khoa Quyền Lộc — cao thăng gần nguyên thủ, tài lộc phong túc', 'tot');
+    if (nhieuSaoXau) add('Tả/Hữu hội sát tinh — có tang mất của bế tắc', 'xau');
+  }
+
+  // XƯƠNG/KHÚC
+  if (hasAny(['xuong','khuc'])) {
+    if (isSang || nhieuSaoTot) add('Văn Xương/Khúc sáng — toại lòng, đỗ đạt cao', 'tot');
+    else add('Văn Xương/Khúc mờ — sức khỏe kém, hao tài kiện tụng', 'xau');
+    if (hasAll(['dong','ta','huu'])) add('Xương/Khúc hội Đồng Tả Hữu — tài lộc dồi dào', 'tot');
+    if (hasAll(['liem','kinh','da'])) add('Xương/Khúc hội Liêm Kình Đà — tai nạn khủng khiếp hoặc tù tội', 'canh_bao');
+    if (hasSao('ky')) add('Xương/Khúc hội Hóa Kỵ — công danh trắc trở có tang', 'xau');
+    if (hasSao('tue')) add('Xương/Khúc hội Thái Tuế — có quan chức lớn', 'tot');
+    if (nhieuSaoXau) add('Xương/Khúc hội sát tinh — tai nạn hoặc kiện cáo hao tài', 'canh_bao');
+  }
+
+  // HÓA LỘC
+  if (hasSao('hoa_loc')) {
+    add('Hóa Lộc — giải trừ tai họa, tài lộc phong túc', 'tot');
+    if (hasAny(['tham','vu'])) add('Hóa Lộc hội Tham/Vũ — hanh thông phát đạt', 'tot');
+  }
+
+  // HÓA QUYỀN
+  if (hasSao('quyen')) {
+    if (nhieuSaoTot) add('Hóa Quyền hội nhiều sao tốt — khỏe mạnh hoạnh phát có uy quyền', 'tot');
+    if (nhieuSaoXau) add('Hóa Quyền hội nhiều sao xấu — tai họa liên miên, công danh trắc trở', 'xau');
+    if (hasAny(['tham','vu'])) add('Hóa Quyền hội Tham/Vũ — toại lòng có uy quyền', 'tot');
+    if (hasTuanTriet) add('Hóa Quyền gặp Tuần/Triệt — công danh trắc trở bị gièm pha', 'canh_bao');
+  }
+
+  // HÓA KHOA
+  if (hasSao('khoa')) {
+    add('Hóa Khoa — giải trừ tai họa, hanh thông', 'tot');
+    if (hasAll(['khoi','viet','xuong','khuc'])) add('Hóa Khoa hội Khôi Việt Xương Khúc — đỗ đạt cao, cao thăng', 'tot');
+  }
+
+  // HÓA KỴ
+  if (hasSao('ky')) {
+    if (isSang || nhieuSaoTot) add('Hóa Kỵ sáng cung — hanh thông nhưng kém sức khỏe, thị phi', 'trung');
+    else add('Hóa Kỵ mờ — đau yếu mất của kiện cáo truất quan', 'xau');
+    if (hasAll(['pha','tue'])) add('Hóa Kỵ hội Phá Quân Thái Tuế — cãi nhau đánh lộn', 'xau');
+    if (hasAll(['pha','kinh'])) add('Hóa Kỵ hội Phá Kình — đánh lộn bị thương', 'canh_bao');
+    if (hasAll(['sat','da'])) add('Hóa Kỵ hội Thất Sát Đà La — đau yếu nhục nhã', 'xau');
+    if (hasAll(['da','ho'])) add('Hóa Kỵ hội Đà Bạch Hổ — tai nạn khủng khiếp', 'canh_bao');
+    if (hasAll(['hinh','kiep'])) add('Hóa Kỵ hội Hình Kiếp — đao thương mổ xe', 'canh_bao');
+    if (hasAny(['hong','dao'])) add('Hóa Kỵ hội Hồng/Đào — tình duyên rắc rối', 'trung');
+    if (hasAny(['khong','kiep'])) add('Hóa Kỵ hội Không/Kiếp — tai nạn liên miên mất của truất quan', 'canh_bao');
+  }
+
+  // SONG HAO (Đại Hao + Tiểu Hao)
+  if (hasSao('hao')) {
+    add('Song Hao — thay đổi chỗ ở, công việc hoặc xa nhà', 'trung');
+    if (nhieuSaoTot) add('Song Hao hội nhiều sao tốt — hoạnh phát dễ kiếm tiền', 'tot');
+    if (nhieuSaoXau) add('Song Hao hội nhiều sao xấu — mất của đau yếu buồn phiền', 'xau');
+    if (hasSao('pha')) add('Song Hao hội Phá Quân — hao tài tung thiếu', 'xau');
+    if (hasAll(['hinh','kiep'])) add('Song Hao hội Hình Kiếp — đau yếu mổ xe hoặc mất cắp', 'canh_bao');
+    if (hasSao('tuyet')) add('Song Hao hội Tuyệt — phá sản', 'canh_bao');
+  }
+
+  // TANG MÔN
+  if (hasSao('tang')) {
+    add('Tang Môn — có tang, đau yếu, mất của, tù tội', 'xau');
+    if (hasAll(['ho','khoc'])) add('Tang Môn hội Bạch Hổ Thiên Khốc — người chết hao tài', 'xau');
+    if (hasAll(['ho','khoc','hu'])) add('Tang Môn hội Hổ Khốc Hư — bệnh phổi buồn phiền', 'xau');
+    if (hasAll(['hinh','dieu'])) add('Tang Môn hội Hình Điếu Khách — tang lớn tai nạn xe cộ', 'canh_bao');
+    if (hasSao('hoa')) add('Tang Môn hội Hỏa Tinh — cháy nhà', 'canh_bao');
+  }
+
+  // ─── FILE 6: PHỤ TINH TIẾP ──────────────────────────────────
+
+  // BẠCH HỔ
+  if (hasSao('ho')) {
+    add('Bạch Hổ — có tang, mất của, đau yếu, bệnh khí huyết xương cốt', 'xau');
+    if (hasSao('tham')) add('Bạch Hổ hội Tham Lang — tai nạn xe cộ hoặc bị ác thú cắn', 'canh_bao');
+    if (hasSao('sat')) add('Bạch Hổ hội Thất Sát — tai nạn đao thương hoặc tù tội', 'canh_bao');
+    if (hasAll(['hinh','kiep'])) add('Bạch Hổ hội Hình Kiếp — tai nạn xe cộ hoặc ngã đầu', 'canh_bao');
+    if (hasSao('khoc')) add('Bạch Hổ hội Thiên Khốc — chó cắn', 'canh_bao');
+    if (hasSao('phi')) add('Bạch Hổ hội Phi Liêm — hanh thông hoạnh tài có việc vui', 'tot');
+    if (hasSao('tau')) add('Bạch Hổ hội Tấu Thư — toại lòng cao thăng đỗ đạt', 'tot');
+  }
+
+  // LONG TRÌ / PHƯỢNG CÁC
+  if (hasAny(['long','phuong'])) {
+    add('Long Trì/Phượng Các — có việc vui', 'tot');
+    if (hasSao('hi')) add('Long/Phượng hội Thiên Hỷ — nên duyên vợ chồng', 'tot');
+    if (hasAll(['ma'])) add('Long/Phượng hội Thiên Mã — có con', 'tot');
+    if (hasSao('thai')) add('Long/Phượng hội Thai — có tin mang thai', 'tot');
+    if (hasAll(['rieu','hi'])) add('Long/Phượng hội Thiên Riêu Hỷ — hanh thông hỷ khí đầy nhà', 'tot');
+    if (hasAll(['long','khong','kiep'])) add('Long Trì hội Không/Kiếp — nạn sông nước', 'canh_bao');
+    if (hasAll(['long','dieu'])) add('Long Trì hội Điếu Khách — ngã xuống sông ao', 'canh_bao');
+    if (hasAll(['phuong','khong','kiep'])) add('Phượng Các hội Không/Kiếp — bị trách oan hoặc bệnh tai', 'xau');
+  }
+
+  // ĐÀO HOA
+  if (hasSao('dao')) {
+    if (nhieuSaoTot) add('Đào Hoa hội nhiều sao tốt — hanh thông danh tài hỷ khí', 'tot');
+    if (nhieuSaoXau) add('Đào Hoa hội nhiều sao xấu — có tang đau yếu tình duyên rắc rối', 'xau');
+    if (hasAll(['sat','pha','liem','tham','hong'])) add('Đào Hoa hội Sát Phá Liêm Tham Hồng — nên duyên vợ chồng', 'tot');
+    if (hasAll(['hong','hi','rieu'])) add('Đào Hoa hội Hồng Hỷ Riêu — có nhân tình', 'trung');
+    if (hasAll(['khong','kiep','benh'])) add('Đào Hoa hội Không Kiếp Bệnh Phù — bệnh phong tình', 'canh_bao');
+  }
+
+  // HỒNG LOAN
+  if (hasSao('hong')) {
+    if (nhieuSaoTot) add('Hồng Loan hội nhiều sao tốt — hanh thông thăng tiến hỷ khí', 'tot');
+    if (nhieuSaoXau) add('Hồng Loan hội nhiều sao xấu — đau yếu buồn phiền có tang', 'xau');
+    if (hasAll(['ta','huu','long','phuong','rieu'])) add('Hồng Loan hội Tả Hữu Long Phượng Riêu — hoạnh phát có việc mừng', 'tot');
+    if (hasSao('thanh_long')) add('Hồng Loan hội Thanh Long — tai nạn bất ngờ', 'canh_bao');
+  }
+
+  // THIÊN MÃ
+  if (hasSao('ma')) {
+    add('Thiên Mã — thay đổi chỗ ở, công việc', 'trung');
+    if (hasAll(['tu','phu'])) add('Thiên Mã hội Tử Phủ — phú quý', 'tot');
+    if (hasAll(['khong','kiep','tue'])) add('Thiên Mã hội Không Kiếp Tuế — tai nạn nghiêm trọng hoặc chết', 'canh_bao');
+    if (hasAll(['da','thai'])) add('Thiên Mã hội Đà La Thai — bôn ba tai nạn thương tích', 'canh_bao');
+    if (hasAll(['hinh'])) add('Thiên Mã hội Thiên Hình — tai nạn xe cộ đao thương', 'canh_bao');
+    if (hasSao('tuyet')) add('Thiên Mã hội Tuyệt — bế tắc đau yếu mất của', 'xau');
+    if (hasTuanTriet) add('Thiên Mã gặp Tuần/Triệt — bế tắc truất quan tai nạn', 'canh_bao');
+  }
+
+  // TUẦN/TRIỆT trong cung đại vận
+  if (hasTuan) {
+    if (nhieuSaoTot) add('Tuần án ngữ hội nhiều sao tốt — hạn xấu, bế tắc', 'xau');
+    if (nhieuSaoXau) add('Tuần án ngữ hội nhiều sao xấu — hạn tốt gặp trở ngại đầu', 'trung');
+    if (tuanLamHoa) add('Tuần lâm Hỏa địa (Tỵ/Ngọ) — đặc cách tốt, giảm tính xấu, tăng tính tốt', 'tot');
+  }
+  if (hasTriet) {
+    if (nhieuSaoTot) add('Triệt án ngữ hội nhiều sao tốt — hạn xấu thất bại', 'xau');
+    if (nhieuSaoXau) add('Triệt án ngữ hội nhiều sao xấu — hạn tốt gặp trở ngại đầu', 'trung');
+    if (trietKimCung) add('Triệt đáo Kim cung (Thân/Dậu) — đặc cách tốt, giảm tính xấu, tăng tính tốt', 'tot');
+  }
+
+  return results;
+}
 
 
 if (typeof module !== 'undefined') module.exports = { anSaoLaSo, convertDuongToAm, STAR_DATA, getStarData, getStarBrightness };
