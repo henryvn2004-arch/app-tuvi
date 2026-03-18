@@ -3248,33 +3248,28 @@ function tinhCungScores(ls, napAmHanh, tuoiXem) {
     if (p.majorStars.some(s=>s.brightness==='Hãm')) benVung -= 1;
     benVung = r1(clamp(benVung));
 
-    // ── 3. RỦI RO (0-10, thấp = tốt) ────────────────────────────
-    let ruiRo = 2;
-    // Sát tinh trong TPTC
+    // ── 3. AN TOÀN (0-10, cao = tốt) ───────────────────────────
+    // Tính ngược từ Rủi Ro: anToan = 10 - ruiRo
+    let _ruiRo = 2;
     for (const s of SAT_TINH) {
-      if (allTPTC.includes(s)) ruiRo += 1.2;
+      if (allTPTC.includes(s)) _ruiRo += 1.2;
     }
-    // Bại tinh
     for (const s of BAI_TINH) {
-      if (ownStars.includes(s)) ruiRo += 0.7;
+      if (ownStars.includes(s)) _ruiRo += 0.7;
     }
-    // Hóa Kỵ
-    if (allTPTC.includes('Hóa Kỵ')) ruiRo += 1.5;
-    if (allTPTC.includes('Thiên Hình')) ruiRo += 1;
-    // Giảm rủi ro
-    if (p.majorStars.some(s=>['Thiên Phủ','Thiên Tướng'].includes(s.ten))) ruiRo -= 1;
-    if (allTPTC.includes('Lộc Tồn')) ruiRo -= 1;
-    // cachCuc tốt giảm rủi ro
+    if (allTPTC.includes('Hóa Kỵ')) _ruiRo += 1.5;
+    if (allTPTC.includes('Thiên Hình')) _ruiRo += 1;
+    if (p.majorStars.some(s=>['Thiên Phủ','Thiên Tướng'].includes(s.ten))) _ruiRo -= 1;
+    if (allTPTC.includes('Lộc Tồn')) _ruiRo -= 1;
     for (const cc of ccList) {
-      if (['quy_cuc','phu_cuc'].includes(cc.loai)) ruiRo -= 0.5;
+      if (['quy_cuc','phu_cuc'].includes(cc.loai)) _ruiRo -= 0.5;
     }
-    ruiRo += ynTags.hungScore * 0.4;
-    ruiRo -= ynTags.catScore * 0.2;
-    // Tuần/Triệt
-    if (trietOn) ruiRo *= 0.3; // Triệt chặn sát tinh TPTC
-    else if (tuanOn && !tuanHoa) ruiRo *= 0.5;
-    if (tuanHoa || trietKim) ruiRo *= 0.7;
-    ruiRo = r1(clamp(ruiRo));
+    _ruiRo += ynTags.hungScore * 0.4;
+    _ruiRo -= ynTags.catScore * 0.2;
+    if (trietOn) _ruiRo *= 0.3;
+    else if (tuanOn && !tuanHoa) _ruiRo *= 0.5;
+    if (tuanHoa || trietKim) _ruiRo *= 0.7;
+    const anToan = r1(clamp(10 - _ruiRo));
 
     // ── 4. QUÝ NHÂN (0-10) ───────────────────────────────────────
     let quyNhan = 2;
@@ -3346,7 +3341,7 @@ function tinhCungScores(ls, napAmHanh, tuoiXem) {
     scores[cungName] = {
       tiemNang,
       benVung,
-      ruiRo,
+      anToan,
       quyNhan,
       minhBach,
       tuongHop,
