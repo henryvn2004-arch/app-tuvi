@@ -1448,15 +1448,16 @@ function tinhNhanHoa(menhStars, vanStars, dvPalace) {
 }
 
 function scoreDaiVan(tt, dl, nh) {
-  // TT: 0-5, DL: 0-1, NH: 0-4 → total max 10
-  let total = tt.score + dl.score + nh.score;
-  // Cap nếu nhân hòa rất xấu
-  if (nh.score < 1) total = Math.min(total, 5);
+  // Nhân Hòa là điều kiện tiên quyết:
+  // Tổng = NH + (NH/4)*DL + (NH/4)*TT
+  // Max: 4 + (4/4)*1 + (4/4)*5 = 10
+  const nhRatio = nh.score / 4;
+  const total = nh.score + nhRatio * dl.score + nhRatio * tt.score;
   const flag = total >= 7 ? '🟢' : total >= 4 ? '🟡' : '🔴';
   return {
     thienThoi: { score: tt.score, qh: tt.qh },
     diaLoi:    { score: dl.score, qh: dl.qh },
-    nhanHoa:   { score: nh.score, scoreBo: nh.scoreBo, scoreSat: nh.scoreSat, boMenh: nh.boMenh, boVan: nh.boVan, countXau: nh.countXau },
+    nhanHoa:   { score: nh.score, scoreBo: nh.scoreBo, scoreSat: nh.scoreSat, boMenh: nh.boMenh, boVan: nh.boVan },
     tong: Math.round(total * 10) / 10, flag,
   };
 }
