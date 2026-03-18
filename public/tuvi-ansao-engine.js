@@ -1350,10 +1350,10 @@ const NGU_HANH_KHAC = {'Kim':'Mộc','Mộc':'Thổ','Thổ':'Thủy','Thủy':'
 // Nạp Âm bản mệnh
 
 const BO_CHINH_TINH = {
-  'SPTL': ['Thất Sát','Phá Quân','Tham Lang','Liêm Trinh'],
   'TPVT': ['Tử Vi','Thiên Phủ','Vũ Khúc','Thiên Tướng'],
-  'CNDL': ['Cự Môn','Thái Dương'],
-  'CMDL': ['Thiên Cơ','Thái Âm','Thiên Đồng','Thiên Lương'],
+  'CNDL': ['Thiên Cơ','Thái Âm','Thiên Đồng','Thiên Lương'],
+  'SPT':  ['Thất Sát','Phá Quân','Tham Lang','Liêm Trinh'],
+  'CN':   ['Cự Môn','Thái Dương'],
 };
 
 function getNapAm(canChi) {
@@ -1390,14 +1390,14 @@ function tinhThienThoi(daiVanDC, chiNamSinh) {
 function tinhDiaLoi(daiVanDC, napAmHanh) {
   const hCung = DC_HANH[daiVanDC];
   const hMenh = napAmHanh;
-  if (!hCung || !hMenh) return { score: 1, qh: 'unknown' };
+  if (!hCung || !hMenh) return { score: 0.5, qh: 'unknown' };
   let score, qh;
-  if (hCung === hMenh)                        { score=1.5; qh='dong_hanh'; }
-  else if (NGU_HANH_SINH[hCung] === hMenh)   { score=2;   qh='cung_sinh_menh'; }
-  else if (NGU_HANH_SINH[hMenh] === hCung)   { score=1;   qh='menh_sinh_cung'; }
-  else if (NGU_HANH_KHAC[hMenh] === hCung)   { score=0.5; qh='menh_khac_cung'; }
-  else if (NGU_HANH_KHAC[hCung] === hMenh)   { score=0;   qh='cung_khac_menh'; }
-  else                                         { score=1;   qh='unknown'; }
+  if (hCung === hMenh)                        { score=0.75; qh='dong_hanh'; }
+  else if (NGU_HANH_SINH[hCung] === hMenh)   { score=1;    qh='cung_sinh_menh'; }
+  else if (NGU_HANH_SINH[hMenh] === hCung)   { score=0.5;  qh='menh_sinh_cung'; }
+  else if (NGU_HANH_KHAC[hMenh] === hCung)   { score=0.25; qh='menh_khac_cung'; }
+  else if (NGU_HANH_KHAC[hCung] === hMenh)   { score=0;    qh='cung_khac_menh'; }
+  else                                         { score=0.5;  qh='unknown'; }
   return { score, qh, hCung, hMenh };
 }
 
@@ -1409,25 +1409,56 @@ function getBoSao(palaceStars) {
   return null;
 }
 
-function tinhNhanHoa(menhStars, vanStars) {
+function tinhNhanHoa(menhStars, vanStars, dvPalace) {
   const boMenh = getBoSao(menhStars);
   const boVan  = getBoSao(vanStars);
-  if (!boMenh || !boVan) return { score: 1.5, qh: 'unknown', boMenh, boVan };
-  if (boMenh === boVan)  return { score: 3,   qh: 'hop_tot', boMenh, boVan };
-  if (boMenh === 'TPVT' || boVan === 'TPVT') return { score: 2, qh: 'buffer', boMenh, boVan };
-  if ((boMenh === 'CMDL' && boVan === 'SPTL') || (boMenh === 'SPTL' && boVan === 'CMDL'))
-    return { score: 1, qh: 'nguy_hiem', boMenh, boVan };
-  return { score: 1.5, qh: 'trung_binh', boMenh, boVan };
+
+  // ── Phần 1: So sánh bộ Mệnh vs bộ Đại Vận (max 2 điểm) ──
+  const SCORE_BO = {
+    'TPVT:TPVT':2, 'CNDL:CNDL':2, 'SPT:SPT':2, 'CN:CN':2,
+    'TPVT:SPT':1.5, 'SPT:TPVT':1.5,
+    'TPVT:CNDL':1,  'CNDL:TPVT':1.5,
+    'TPVT:CN':0,    'CN:TPVT':1,
+    'CNDL:SPT':0.5, 'SPT:CNDL':0.5,
+    'CNDL:CN':0.5,  'CN:CNDL':1.5,
+    'SPT:CN':0,     'CN:SPT':0,
+  };
+  const key = boMenh && boVan ? boMenh + ':' + boVan : null;
+  const scoreBo = key ? (SCORE_BO[key] ?? 1) : 1;
+
+  // ── Phần 2: Sát/Bại tinh trong tam phương tứ chính cung ĐV (max 2 điểm) ──
+  const SAT_TINH  = ['Địa Không','Địa Kiếp','Kình Dương','Đà La','Linh Tinh','Hỏa Tinh'];
+  const BAI_TINH  = ['Thiên Khốc','Thiên Hư','Tang Môn','Bạch Hổ','Đại Hao','Tiểu Hao'];
+  const ALL_BAD   = [...SAT_TINH, ...BAI_TINH];
+
+  let scoreSat = 2;
+  if (dvPalace) {
+    const allStars = [dvPalace, ...(dvPalace.tamHopCungs||[]), dvPalace.xungChieuCung]
+      .filter(Boolean).flatMap(c => c.stars.map(s => s.ten));
+    const badCount = ALL_BAD.filter(s => allStars.includes(s)).length;
+    scoreSat = Math.max(0, 2 - badCount * 0.15);
+    scoreSat = Math.round(scoreSat * 100) / 100;
+  }
+
+  const total = Math.round((scoreBo + scoreSat) * 100) / 100;
+  const countXau = dvPalace ? ALL_BAD.filter(s =>
+    [dvPalace,...(dvPalace.tamHopCungs||[]),dvPalace.xungChieuCung]
+    .filter(Boolean).flatMap(c=>c.stars.map(x=>x.ten)).includes(s)).length : 0;
+  return { score: total, scoreBo, scoreSat, boMenh, boVan, countXau };
 }
 
 function scoreDaiVan(tt, dl, nh) {
+  // TT: 0-5, DL: 0-1, NH: 0-4 → total max 10
   let total = tt.score + dl.score + nh.score;
-  if (nh.score < 1.5) total = Math.min(total, 6);
+  // Cap nếu nhân hòa rất xấu
+  if (nh.score < 1) total = Math.min(total, 5);
   const flag = total >= 7 ? '🟢' : total >= 4 ? '🟡' : '🔴';
-  return { thienThoi: tt.score, diaLoi: dl.score, nhanHoa: nh.score,
-           tong: Math.round(total * 10) / 10, flag,
-           qhTT: tt.qh, qhDL: dl.qh, qhNH: nh.qh,
-           boMenh: nh.boMenh, boVan: nh.boVan };
+  return {
+    thienThoi: { score: tt.score, qh: tt.qh },
+    diaLoi:    { score: dl.score, qh: dl.qh },
+    nhanHoa:   { score: nh.score, scoreBo: nh.scoreBo, scoreSat: nh.scoreSat, boMenh: nh.boMenh, boVan: nh.boVan, countXau: nh.countXau },
+    tong: Math.round(total * 10) / 10, flag,
+  };
 }
 
 function tinhScoringAllDaiVan(daiVans, palaces, canChiNam, chiNam, napAm) {
@@ -1446,7 +1477,7 @@ function tinhScoringAllDaiVan(daiVans, palaces, canChiNam, chiNam, napAm) {
 
     const tt = tinhThienThoi(dv.diaChi, chiNam);
     const dl = tinhDiaLoi(dv.diaChi, napAm);
-    const nh = tinhNhanHoa(menhStars, dvStars);
+    const nh = tinhNhanHoa(menhStars, dvStars, dvPalace);
     const sc = scoreDaiVan(tt, dl, nh);
 
     return { ...dv, scoring: sc };
@@ -1652,6 +1683,10 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
       };
       return phanTichCachCuc(_ls, gioitinh);
     })(),
+    cachCucTungCung: phanTichCungYNghia(
+      { palaces, menhDC, thanDC, amDuong, napAmHanh, chiNam },
+      gioitinh, gioIdx, canNam, chiNam
+    ),
   };
 }
 
@@ -1974,6 +2009,10 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
       };
       return phanTichCachCuc(_ls, gioitinh);
     })(),
+    cachCucTungCung: phanTichCungYNghia(
+      { palaces, menhDC, thanDC, amDuong, napAmHanh, chiNam },
+      gioitinh, gioIdx, canNam, chiNam
+    ),
   };
 }
 
@@ -1981,4 +2020,917 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
 // ─── TÍNH CHẤT SAO ───────────────────────────────────────────
 
 // Export
+
+// ================================================================
+// PHÂN TÍCH CUNG Ý NGHĨA — Rule-based module
+// Gắn vào anSaoLaSo, chạy sau an sao
+// Output: ls.cachCucTungCung[] → feed vào formatLaSoV2 → Claude
+// ================================================================
+
+function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam) {
+  const { palaces } = ls;
+
+  // ─── HELPERS ──────────────────────────────────────────────────
+
+  const DIA_CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+  const TU_MO   = ['Thìn','Tuất','Sửu','Mùi'];
+  const TU_SINH = ['Dần','Thân','Tỵ','Hợi'];
+
+  const SAT_TINH = ['Kình Dương','Đà La','Hỏa Tinh','Linh Tinh','Địa Không','Địa Kiếp'];
+  const CAT_TINH = ['Văn Xương','Văn Khúc','Thiên Khôi','Thiên Việt','Tả Phù','Hữu Bật',
+                    'Hóa Khoa','Hóa Quyền','Hóa Lộc','Thiên Phủ','Tử Vi'];
+
+  // Normalize tên sao (handle aliases)
+  const ALIAS = {
+    'Tả Phụ':'Tả Phù','Hữu Bật':'Hữu Bật',
+    'Văn Xương':'Văn Xương','Văn Khúc':'Văn Khúc',
+  };
+  function normName(n) { return ALIAS[n] || n; }
+
+  // Lấy tất cả sao trong cung (tên chuẩn)
+  function getAllStars(p) {
+    return p.stars.map(s => normName(s.ten));
+  }
+
+  // Check sao có trong cung không (đồng cung)
+  function hasSao(p, name) {
+    return getAllStars(p).includes(normName(name));
+  }
+
+  // Check có ít nhất 1 trong nhóm sao
+  function hasAny(p, names) {
+    const allS = getAllStars(p);
+    return names.some(n => allS.includes(normName(n)));
+  }
+
+  // Brightness của sao
+  function getBrightness(p, starName) {
+    const s = p.stars.find(s => normName(s.ten) === normName(starName));
+    return s ? s.brightness : null;
+  }
+
+  // Check sao sáng (Miếu/Vượng/Đắc)
+  function isSang(p, starName) {
+    return ['Miếu','Vượng','Đắc'].includes(getBrightness(p, starName));
+  }
+
+  // Check sao hãm
+  function isHam(p, starName) {
+    return getBrightness(p, starName) === 'Hãm';
+  }
+
+  // Check có sát tinh
+  function hasSatTinh(p) {
+    return SAT_TINH.some(s => hasSao(p, s));
+  }
+
+  // Check có cát tinh
+  function hasCatTinh(p) {
+    return CAT_TINH.some(s => hasSao(p, s));
+  }
+
+  // Địa chi của cung
+  function getDC(p) { return p.diaChi; }
+
+  // Check địa chi
+  function inDC(p, dcs) { return dcs.includes(getDC(p)); }
+
+  // Check đơn thủ (1 chính tinh)
+  function isDonThu(p) {
+    return p.majorStars.length === 1;
+  }
+
+  // Check đồng cung nhiều sao
+  function dongCung(p, names) {
+    return names.every(n => hasSao(p, n));
+  }
+
+  // Check có bất kỳ sao trong nhóm (tam phương tứ chính)
+  function hasAnyInTPTC(p, names) {
+    const allS = [p, ...(p.tamHopCungs||[]), p.xungChieuCung]
+      .filter(Boolean).flatMap(c => getAllStars(c));
+    return names.some(n => allS.includes(normName(n)));
+  }
+
+  // Sinh ban đêm: gioIdx 0-5 = Tý(0),Sửu(1),Dần(2) là ban đêm
+  // Đêm: Tý(0),Sửu(1),Hợi(11),Tuất(10) → gioIdx 0,1,10,11
+  function isSinhDem() {
+    return [0,1,10,11].includes(gioIdx);
+  }
+
+  // Giáp: 2 cung kề 2 bên đều có sao X
+  function giapCung(p, name) {
+    const idx = p.idx;
+    const left  = palaces[(idx - 1 + 12) % 12];
+    const right = palaces[(idx + 1) % 12];
+    return hasSao(left, name) || hasSao(right, name);
+  }
+
+  // Vô chính diệu
+  function isVoChinhDieu(p) {
+    return p.majorStars.length === 0;
+  }
+
+  // Lấy cung by name
+  function getCungByName(name) {
+    return palaces.find(p => p.cungName === name);
+  }
+
+  // Nhật Nguyệt sáng/mờ
+  function nhatSang()   { const p2=getCungByName('Phụ Mẫu'); return p2 && isSang(p2,'Thái Dương'); }
+  function nguyetSang() { const p2=getCungByName('Phụ Mẫu'); return p2 && isSang(p2,'Thái Âm'); }
+
+  // Collect results
+  const results = {};
+
+  // ─── CUNG MỆNH ────────────────────────────────────────────────
+  (function() {
+    const p = palaces.find(x => x.isMenh);
+    if (!p) return;
+    const out = [];
+
+    // ── Tử Vi ──
+    if (hasSao(p,'Tử Vi')) {
+      if (isSang(p,'Tử Vi')) out.push('Tử Vi sáng: thân hình đẫy đà, thông minh, phúc thọ');
+      if (getBrightness(p,'Tử Vi')==='Bình hòa') out.push('Tử Vi bình hòa: cuộc đời ổn định, sống lâu');
+      if (hasAny(p,['Tuần','Triệt'])) out.push('Tử Vi gặp Tuần/Triệt: thiếu thời khó khăn, dễ bệnh');
+      if (hasAny(p,['Địa Không','Địa Kiếp'])) out.push('Tử Vi gặp Không/Kiếp: lao tâm, công danh trắc trở');
+      if (hasSao(p,'Tham Lang') && inDC(p,['Mão','Dậu'])) out.push('Tử Vi Tham tại Mão/Dậu: yếm thế, thiên hướng tu hành');
+      if (hasAny(p,['Văn Xương','Văn Khúc'])) out.push('Tử Vi gặp Xương/Khúc: giàu sang');
+      if (dongCung(p,['Tử Vi','Tả Phù','Hữu Bật'])||dongCung(p,['Tử Vi','Tả Phù'])||dongCung(p,['Tử Vi','Hữu Bật'])) out.push('Tử Vi Tả/Hữu: uy quyền lớn');
+      if (hasAny(p,['Hóa Khoa','Hóa Quyền','Hóa Lộc'])) out.push('Tử Vi gặp Khoa/Quyền/Lộc: phú quý');
+    }
+
+    // ── Tử Phủ ──
+    if (hasSao(p,'Tử Vi') && hasSao(p,'Thiên Phủ')) {
+      if (!hasSatTinh(p)) out.push('Tử Phủ đồng cung vô sát: phú quý hưởng phúc trọn đời');
+      if (hasSao(p,'Kình Dương')) out.push('Tử Phủ gặp Kình: giàu do kinh doanh');
+    }
+
+    // ── Liêm Trinh ──
+    if (hasSao(p,'Liêm Trinh')) {
+      if (isSang(p,'Liêm Trinh')) out.push('Liêm Trinh sáng: liêm khiết, thẳng thắn, giàu sang, sống lâu');
+      if (isHam(p,'Liêm Trinh')) {
+        out.push('Liêm Trinh hãm: vất vả, bệnh tật, dễ gặp tai nạn');
+        if (hasSatTinh(p)) out.push('Liêm Trinh hãm + sát: cùng khốn, cô đơn, nhiều tai nạn');
+        if (hasAny(p,['Phá Quân','Hỏa Tinh'])) out.push('Liêm Phá Hỏa hãm: tự tử hoặc chết thê thảm [hung nặng]');
+      }
+      if (hasAny(p,['Kình Dương','Đà La','Hỏa Tinh','Linh Tinh'])) out.push('Liêm Trinh gặp tứ sát: dễ tù tội, ám sát');
+      if (hasSao(p,'Bạch Hổ')) out.push('Liêm Trinh Bạch Hổ: khó tránh hình ngục');
+      if (hasSao(p,'Thiên Tướng')) out.push('Liêm Trinh Thiên Tướng: dũng mãnh');
+      if (dongCung(p,['Liêm Trinh','Văn Khúc'])) out.push('Liêm Trinh Văn Khúc: bôn ba, di chuyển nhiều');
+      if (inDC(p,['Thân','Mùi']) && !hasSatTinh(p)) out.push('Liêm Trinh tại Thân/Mùi vô sát: phú quý lớn');
+    }
+
+    // ── Thiên Đồng ──
+    if (hasSao(p,'Thiên Đồng')) {
+      if (isSang(p,'Thiên Đồng')) out.push('Thiên Đồng sáng: thông minh, nhân hậu, giàu sang, sống lâu');
+      if (isHam(p,'Thiên Đồng')) {
+        out.push('Thiên Đồng hãm: vất vả, hay thay đổi, dễ thị phi');
+        if (hasSatTinh(p)) out.push('Thiên Đồng hãm + sát: lang bạt, bệnh tật, tai nạn, giảm thọ');
+        if (hasCatTinh(p)) out.push('Thiên Đồng hãm + cát: vẫn có công danh tiền tài');
+      }
+      if (hasSatTinh(p)) out.push('Thiên Đồng + sát: lao tâm, sức khỏe kém, bệnh mắt/tiêu hóa');
+      if (dongCung(p,['Thiên Đồng','Thiên Lương'])) out.push('Đồng Lương đồng cung: phú quý, phúc thọ');
+      if (hasCatTinh(p) && !isHam(p,'Thiên Đồng')) out.push('Thiên Đồng + cát tinh: phú quý, uy danh');
+      if (canNam === 'Đinh') {
+        if (inDC(p,['Tuất'])) out.push('Thiên Đồng tại Tuất tuổi Đinh: quý hiển');
+        if (isHam(p,'Thiên Đồng') && inDC(p,['Ngọ','Tuất'])) out.push('Thiên Đồng hãm Ngọ/Tuất tuổi Đinh: khá giả');
+      }
+    }
+
+    // ── Vũ Khúc ──
+    if (hasSao(p,'Vũ Khúc')) {
+      if (isSang(p,'Vũ Khúc')) out.push('Vũ Khúc sáng: thông minh, có chí, giỏi kinh doanh, giàu sang, sống lâu');
+      if (inDC(p,['Sửu','Mùi']) && isSang(p,'Vũ Khúc')) out.push('Vũ Khúc miếu Sửu/Mùi: tiền vận trắc trở, hậu vận giàu');
+      if (isHam(p,'Vũ Khúc')) {
+        out.push('Vũ Khúc hãm: khó khăn, tham lận, ly tổ, giảm thọ');
+        if (hasSatTinh(p)) out.push('Vũ Khúc hãm + sát: cùng khổ, tai nạn, tù tội, yểu');
+        if (hasCatTinh(p)) out.push('Vũ Khúc hãm + cát: chuyển kinh doanh/kỹ nghệ, khá giả');
+        if (hasAny(p,['Địa Kiếp','Kình Dương'])) out.push('Vũ Khúc hãm + Kiếp/Kình: nguy hiểm vì tiền, hung ác');
+      }
+      if (dongCung(p,['Vũ Khúc','Phá Quân'])) {
+        out.push('Vũ Phá: phá sản, ly tổ, lao khổ');
+        if (hasAny(p,['Văn Xương','Văn Khúc'])) out.push('Vũ Phá + Xương/Khúc: thông minh, khéo tay, kỹ nghệ');
+      }
+      if (hasSao(p,'Văn Khúc')) out.push('Vũ Khúc + Văn Khúc: học rộng, đa tài');
+      if (isSang(p,'Vũ Khúc') && hasAny(p,['Thiên Khôi','Thiên Việt'])) out.push('Vũ Khúc sáng + Khôi/Việt: quan tài chính');
+      if (hasAny(p,['Hóa Lộc','Thiên Mã'])) out.push('Vũ Khúc + Lộc Mã: lập nghiệp xa, giàu');
+      if (inDC(p,['Dần','Thân']) && hasAny(p,['Hóa Lộc','Hóa Quyền'])) out.push('Vũ Khúc Dần/Thân + Lộc/Quyền: rất giàu');
+    }
+
+    // ── Thái Dương ──
+    if (hasSao(p,'Thái Dương')) {
+      if (isSang(p,'Thái Dương')) {
+        out.push('Thái Dương sáng: thông minh, uy nghi, giàu sang, sống lâu');
+        if (isSinhDem()) out.push('Thái Dương sáng nhưng sinh ban đêm: kém tốt đẹp');
+      }
+      if (isHam(p,'Thái Dương')) {
+        out.push('Thái Dương hãm: yếu, bệnh tật, khó khăn');
+        if (hasSatTinh(p)) out.push('Thái Dương hãm + sát: cùng khốn, bệnh nặng, dễ mù, yểu');
+        if (hasCatTinh(p)) out.push('Thái Dương hãm + cát: có công danh, tăng thọ');
+        if (inDC(p,['Hợi','Tý'])) out.push('Thái Dương hãm Hợi/Tý: thanh cao, thích triết lý');
+      }
+      if (hasSao(p,'Thiên Hình')) out.push('Thái Dương + Thiên Hình: mắt có tật');
+      if (inDC(p,['Ngọ'])) out.push('Thái Dương tại Ngọ: rất sáng, phú quý');
+      if (hasCatTinh(p) && !isHam(p,'Thái Dương')) out.push('Thái Dương + nhiều cát tinh: phú quý, uy quyền, danh tiếng');
+      if (hasAny(p,['Tuần','Triệt'])) {
+        if (isSang(p,'Thái Dương')) out.push('Thái Dương sáng + Tuần/Triệt: sức khỏe kém, công danh khó');
+        else out.push('Thái Dương đắc + Tuần/Triệt: có bệnh nhưng vẫn phú quý');
+      }
+    }
+
+    // ── Thiên Cơ ──
+    if (hasSao(p,'Thiên Cơ')) {
+      if (isSang(p,'Thiên Cơ')) out.push('Thiên Cơ sáng: thông minh, mưu trí, giàu sang, sống lâu');
+      if (isHam(p,'Thiên Cơ')) {
+        out.push('Thiên Cơ hãm: gian xảo, vất vả, buôn bán');
+        if (hasSatTinh(p)) out.push('Thiên Cơ hãm + sát: tàn tật, tai họa, yểu');
+      }
+      if (hasAny(p,['Tuần','Triệt'])) out.push('Thiên Cơ gặp Tuần/Triệt: ly tổ, vất vả, tai nạn');
+      if (dongCung(p,['Thiên Cơ','Thiên Lương']) && inDC(p,['Thìn','Tuất'])) out.push('Cơ Lương Thìn/Tuất: phúc thọ, nhân hậu');
+      if (inDC(p,['Mão','Dậu']) && hasSao(p,'Song Hao')) out.push('Thiên Cơ Mão/Dậu + Song Hao: đa tài, phú quý');
+    }
+
+    // ── Thiên Phủ ──
+    if (hasSao(p,'Thiên Phủ')) {
+      out.push('Thiên Phủ thủ Mệnh: nhân hậu, giàu sang, sống lâu');
+      if (hasAny(p,['Tuần','Triệt','Địa Không','Địa Kiếp'])) out.push('Thiên Phủ + Tuần/Triệt/Không/Kiếp: túng thiếu, giảm thọ');
+      if (hasSatTinh(p)) out.push('Thiên Phủ + sát: gian trá');
+      if (hasSao(p,'Thiên Tướng')) out.push('Thiên Phủ + Thiên Tướng: có chức quyền, sung túc');
+      if (hasCatTinh(p)) out.push('Thiên Phủ + cát tinh: phú quý, sống lâu');
+    }
+
+    // ── Thái Âm ──
+    if (hasSao(p,'Thái Âm')) {
+      if (isSang(p,'Thái Âm')) {
+        out.push('Thái Âm sáng: thông minh, nhân hậu, giàu sang, sống lâu');
+        if (isSinhDem()) out.push('Thái Âm sáng + sinh đêm: rất tốt, toàn mỹ');
+        else out.push('Thái Âm sáng + sinh ngày: kém tốt');
+      }
+      if (isHam(p,'Thái Âm')) {
+        out.push('Thái Âm hãm: vất vả, bệnh tật, ly tổ');
+        if (hasSatTinh(p)) out.push('Thái Âm hãm + sát: cùng khổ, bệnh nặng, dễ mù, yểu');
+      }
+      if (hasSao(p,'Thiên Hình')) out.push('Thái Âm + Thiên Hình: mắt có tật');
+      if (inDC(p,['Hợi'])) out.push('Thái Âm tại Hợi: quyền lớn, phú quý');
+      if (getBrightness(p,'Thái Âm')==='Đắc' && hasSao(p,'Hóa Kỵ') && !hasSatTinh(p)) out.push('Thái Âm đắc + Kỵ vô sát: phú quý lớn');
+    }
+
+    // ── Tham Lang ──
+    if (hasSao(p,'Tham Lang')) {
+      if (isSang(p,'Tham Lang')) out.push('Tham Lang sáng: giàu sang, sống lâu — tiền vận vất vả hậu vận giàu');
+      if (isHam(p,'Tham Lang')) {
+        out.push('Tham Lang hãm: gian tham, vất vả, nhiều dục');
+        if (hasSatTinh(p)) out.push('Tham Lang hãm + sát: cùng khổ, bệnh tật, tai họa, yểu');
+        if (inDC(p,['Mão','Dậu'])) out.push('Tham Lang hãm Mão/Dậu: yếm thế, nên tu hành');
+      }
+      if (isSang(p,'Tham Lang') && hasAny(p,['Hỏa Tinh','Linh Tinh'])) out.push('Tham Lang sáng + Hỏa/Linh: rất giàu, có quyền');
+      if (dongCung(p,['Tham Lang','Liêm Trinh'])) out.push('Liêm Tham đồng cung: phong lưu, dâm');
+      if (inDC(p,['Tỵ','Hợi'])) out.push('Tham Lang tại Tỵ/Hợi: dễ tù tội');
+      if (hasAny(p,['Hóa Kỵ','Thiên Riêu'])) out.push('Tham Lang + Kỵ/Riêu: dễ tù tội hoặc tai nạn sông nước');
+      if (dongCung(p,['Tham Lang','Vũ Khúc']) && inDC(p,['Sửu','Mùi'])) out.push('Tham Vũ Sửu/Mùi: tiền nghèo hậu giàu');
+    }
+
+    // ── Cự Môn ──
+    if (hasSao(p,'Cự Môn')) {
+      if (isSang(p,'Cự Môn')) out.push('Cự Môn sáng: thông minh, giỏi lý luận, giàu sang, sống lâu');
+      if (isHam(p,'Cự Môn')) {
+        out.push('Cự Môn hãm: gian quyệt, thị phi, vất vả');
+        if (hasSatTinh(p)) out.push('Cự Môn hãm + sát: cùng khổ, tù tội, tai nạn nặng, yểu');
+      }
+      if (hasSatTinh(p)) out.push('Cự Môn + sát: thị phi, kiện cáo, bệnh tật');
+      if (hasSao(p,'Hóa Kỵ')) out.push('Cự Môn + Kỵ: tai nạn sông nước hoặc xe cộ');
+      if (inDC(p,['Tý','Ngọ'])) out.push('Cự Môn Tý/Ngọ: học rộng tài cao');
+      if (dongCung(p,['Cự Môn','Thái Dương'])) out.push('Nhật Cự đồng cung: gia đình danh giá, có phúc');
+      if (hasAny(p,['Văn Xương','Văn Khúc','Thiên Khôi','Thiên Việt','Hóa Khoa'])) out.push('Cự Môn + văn tinh: văn tài, hùng biện, hợp chính trị/tư pháp');
+    }
+
+    // ── Thiên Lương ──
+    if (hasSao(p,'Thiên Lương')) {
+      out.push('Thiên Lương thủ Mệnh: khoan hòa, sống lâu');
+      if (isSang(p,'Thiên Lương')) out.push('Thiên Lương sáng: thông minh, nhân hậu, giàu sang');
+      if (isHam(p,'Thiên Lương')) {
+        out.push('Thiên Lương hãm: bôn ba, bất ổn, dễ gặp tai họa');
+        if (inDC(p,['Tỵ','Hợi'])) out.push('Thiên Lương hãm Tỵ/Hợi: kém thông minh, ăn chơi, phiêu bạt');
+        if (hasAny(p,['Hỏa Tinh','Linh Tinh'])) out.push('Thiên Lương hãm + Hỏa/Linh: tật bệnh, cùng khổ, yểu');
+      }
+      if (hasSao(p,'Thiên Mã')) out.push('Thiên Lương + Thiên Mã: phiêu bạt, thay đổi liên tục');
+      if (inDC(p,['Ngọ'])) out.push('Thiên Lương tại Ngọ: quý hiển, có chức quyền');
+    }
+
+    // ── Thất Sát ──
+    if (hasSao(p,'Thất Sát')) {
+      out.push('Thất Sát thủ Mệnh: nóng nảy, cương, thân hình thô');
+      if (isSang(p,'Thất Sát')) out.push('Thất Sát sáng: dũng mãnh, thông minh, giàu sang nhưng thăng trầm');
+      if (inDC(p,['Dần','Thân']) && isSang(p,'Thất Sát')) out.push('Thất Sát miếu Dần/Thân: quý hiển');
+      if (isHam(p,'Thất Sát')) {
+        out.push('Thất Sát hãm: hung bạo, gian quyệt, nghề thấp, khó sống lâu');
+        if (hasSao(p,'Thiên Hình')) out.push('Thất Sát hãm + Hình: tù tội hoặc chết vì tai nạn');
+        if (hasSatTinh(p)) out.push('Thất Sát hãm + sát: cùng khổ, tù tội, tai nạn, yểu tử');
+      }
+      if (hasAny(p,['Kình Dương','Đà La','Hỏa Tinh','Linh Tinh'])) out.push('Thất Sát + tứ sát: tật lưng, nguy hiểm, dễ chết trận');
+      if (hasSao(p,'Thiên Hình') && !isHam(p,'Thất Sát')) out.push('Thất Sát + Thiên Hình: có tài quân sự, uy võ');
+      if (dongCung(p,['Thất Sát','Liêm Trinh']) && inDC(p,['Sửu','Mùi'])) out.push('Thất Sát Liêm Trinh Sửu/Mùi: chết vì tai nạn [đại hung]');
+    }
+
+    // ── Phá Quân ──
+    if (hasSao(p,'Phá Quân')) {
+      out.push('Phá Quân thủ Mệnh: cương, hiếu thắng, thích biến động');
+      if (isSang(p,'Phá Quân')) {
+        out.push('Phá Quân sáng: thông minh, dũng mãnh, giàu sang nhưng thăng trầm');
+        if (hasAny(p,['Văn Xương','Văn Khúc','Tả Phù','Hữu Bật','Hóa Khoa','Hóa Quyền','Hóa Lộc','Kình Dương','Đà La','Địa Không','Địa Kiếp'])) out.push('Phá Quân sáng + cát/sát: đại phú quý, uy quyền lớn');
+      }
+      if (isHam(p,'Phá Quân')) {
+        out.push('Phá Quân hãm: hung ác, vất vả, nhiều tai ách');
+        if (hasSatTinh(p)) out.push('Phá Quân hãm + sát nặng: cùng khổ, tàn tật, tù tội, yểu tử');
+      }
+      if (isDonThu(p)) out.push('Phá Quân độc thủ: không sáng suốt, dễ bị nịnh');
+      if (inDC(p,['Tý','Ngọ'])) out.push('Phá Quân tại Tý/Ngọ: phú quý nhưng cô độc, khắc thân');
+      if (dongCung(p,['Phá Quân','Kình Dương']) && inDC(p,['Mão','Dậu'])) out.push('Phá Quân Kình Mão/Dậu: độc ác [đại hung]');
+      if (inDC(p,TU_MO)) out.push('Phá Quân tại Tứ Mộ: cương quả, gặp thời loạn phát');
+    }
+
+    // ── Phụ tinh: Văn Xương / Văn Khúc ──
+    if (hasAny(p,['Văn Xương','Văn Khúc'])) {
+      out.push('Xương/Khúc thủ Mệnh: diện mạo thanh tú, thông minh, năng khiếu văn chương/âm nhạc');
+      if (isSang(p,'Văn Xương')||isSang(p,'Văn Khúc')) out.push('Xương/Khúc đắc địa: tài văn học, uy danh, sống lâu');
+      if (hasAny(p,['Hỏa Tinh','Linh Tinh','Địa Không','Địa Kiếp'])||hasAny(p,['Tuần','Triệt'])) out.push('Xương/Khúc + sát/Tuần/Triệt: công danh trắc trở, tai họa, tù tội');
+      if (dongCung(p,['Phá Quân','Văn Xương'])||dongCung(p,['Phá Quân','Văn Khúc'])) out.push('Xương/Khúc + Phá Quân: đời nhiều khổ tâm, dễ bị bắt bớ');
+      const giapMenh = palaces[(p.idx-1+12)%12].stars.concat(palaces[(p.idx+1)%12].stars).map(s=>s.ten);
+      if (giapMenh.includes('Văn Xương')||giapMenh.includes('Văn Khúc')) out.push('Xương/Khúc giáp Mệnh: rất thông minh, được quý mến, gặp quý nhân');
+    }
+
+    // ── Thiên Khôi / Thiên Việt ──
+    if (hasAny(p,['Thiên Khôi','Thiên Việt'])) {
+      out.push('Khôi/Việt thủ Mệnh: thường trưởng tử, diện mạo thanh tú, thông minh, cao thượng');
+      if (hasCatTinh(p)) out.push('Khôi/Việt + cát tinh: tài văn võ, lãnh đạo giỏi, sớm hiển đạt, phú quý sống lâu');
+      if (hasSatTinh(p)||hasAny(p,['Tuần','Triệt'])) out.push('Khôi/Việt + sát/Tuần/Triệt: công danh trắc trở, tai họa, giảm thọ');
+    }
+
+    // ── Lộc Tồn ──
+    if (hasSao(p,'Lộc Tồn')) {
+      out.push('Lộc Tồn thủ Mệnh: thông minh, nhân hậu, tài tổ chức, giàu sang, được kính trọng, sống lâu');
+      if (hasCatTinh(p)) out.push('Lộc Tồn + cát tinh: phú quý trọn đời, uy quyền, tăng thọ');
+      if (hasAny(p,['Địa Không','Địa Kiếp','Đại Hao','Hóa Kỵ'])) out.push('Lộc Tồn + hung tinh: ích kỷ, ly tổ, công danh trắc trở, dễ mất tiền');
+      if (hasSao(p,'Hóa Lộc')) out.push('Song Lộc thủ Mệnh: giàu sang trọn đời, quyền lực, lãnh đạo');
+      if (hasSao(p,'Thiên Mã')) out.push('Lộc Mã giao trì: dễ kiếm tiền, giàu sang, được yêu mến');
+    }
+
+    // ── Tả Phù / Hữu Bật ──
+    if (hasAny(p,['Tả Phù','Hữu Bật'])) {
+      out.push('Tả/Hữu thủ Mệnh: nhân hậu, khoan hòa, thẳng thắn, có mưu trí — sớm ly tổ tự lập');
+      if (hasCatTinh(p)) out.push('Tả/Hữu + cát tinh: phú quý trọn đời, danh tiếng, tăng thọ');
+      if (hasSatTinh(p)) out.push('Tả/Hữu + hung tinh: nhiều rỗ sẹo, gian trá, cô đơn, tai họa');
+      if (inDC(p,TU_MO)) out.push('Tả/Hữu tại Tứ Mộ: rất quý hiển');
+    }
+
+    // ── Kình Dương ──
+    if (hasSao(p,'Kình Dương')) {
+      if (isSang(p,'Kình Dương')) out.push('Kình Dương đắc: cương cường, dũng mãnh, quyết đoán, nhiều mưu');
+      if (isHam(p,'Kình Dương')) out.push('Kình Dương hãm: hung bạo, liều lĩnh, bướng bỉnh, gian trá');
+      if (inDC(p,TU_MO) && hasCatTinh(p)) out.push('Kình Dương Tứ Mộ + cát: phú quý, danh tiếng');
+      if (hasAny(p,['Đà La','Hỏa Tinh','Linh Tinh'])) out.push('Kình Đà Hỏa Linh hội: tật lưng, cô độc, nguy hiểm');
+      if (inDC(p,['Ngọ'])) out.push('Kình Dương tại Ngọ (Mã đầu đới kiếm): nguy hiểm lớn — nếu cát: võ nghiệp hiển đạt');
+      if (gioitinh === 'nu') {
+        if (isSang(p,'Kình Dương')) out.push('Nữ mệnh Kình đắc: giàu có, vượng phu ích tử');
+        else out.push('Nữ mệnh Kình hãm: hạ tiện, dâm dật, khắc chồng con');
+      } else {
+        if (isSang(p,'Kình Dương')) out.push('Nam mệnh Kình đắc: hợp quân sự, uy quyền lớn');
+        else out.push('Nam mệnh Kình hãm: nhiều tai họa, đời khổ, giảm thọ');
+      }
+    }
+
+    // ── Đà La ──
+    if (hasSao(p,'Đà La')) {
+      if (isSang(p,'Đà La')) out.push('Đà La đắc: can đảm, thâm trầm, có mưu cơ');
+      if (isHam(p,'Đà La')) {
+        out.push('Đà La hãm: hung bạo, gian hiểm, độc ác');
+        if (hasSatTinh(p)) out.push('Đà La hãm + hung tinh: cùng khổ, lang thang, đau răng/mắt, tù tội, tai nạn, yểu');
+      }
+    }
+
+    // ── Hỏa Tinh / Linh Tinh ──
+    if (hasAny(p,['Hỏa Tinh','Linh Tinh'])) {
+      if (isSang(p,'Hỏa Tinh')||isSang(p,'Linh Tinh')) {
+        out.push('Hỏa/Linh đắc: can đảm, dũng mãnh, chí khí hiên ngang');
+        if (hasCatTinh(p)) out.push('Hỏa/Linh đắc + cát tinh: giàu sang trọn đời');
+      }
+      if (isHam(p,'Hỏa Tinh')||isHam(p,'Linh Tinh')) {
+        out.push('Hỏa/Linh hãm: thâm hiểm, bệnh thần kinh, cùng khổ, dễ tai họa, tật/yểu');
+      }
+      if (dongCung(p,['Hỏa Tinh','Linh Tinh']) && inDC(p,TU_MO) && hasAny(p,['Tham Lang','Vũ Khúc'])) {
+        out.push('Hỏa/Linh Tứ Mộ + Tham/Vũ: văn võ toàn tài, uy quyền, phú quý trọn đời');
+      }
+    }
+
+    // ── Địa Không / Địa Kiếp ──
+    if (hasAny(p,['Địa Không','Địa Kiếp'])) {
+      if (isSang(p,'Địa Không')||isSang(p,'Địa Kiếp')) out.push('Không/Kiếp đắc: kín đáo, có mưu trí, can đảm — sự nghiệp thăng trầm');
+      if (isHam(p,'Địa Không')||isHam(p,'Địa Kiếp')) out.push('Không/Kiếp hãm: gian tà, ích kỷ, cuộc đời bất như ý, mang tật');
+      if (dongCung(p,['Địa Không','Địa Kiếp']) && inDC(p,['Tỵ','Hợi'])) out.push('Không Kiếp đồng cung Tỵ/Hợi: sớm thành công nhưng không bền');
+      if (hasAny(p,['Đào Hoa','Hồng Loan'])) out.push('Không/Kiếp + Đào/Hồng: tình duyên dang dở, dễ kết hôn nhiều lần, giảm thọ');
+      if (gioitinh === 'nu' && hasAny(p,['Đào Hoa','Hồng Loan'])) out.push('Nữ mệnh Không/Kiếp + Đào/Hồng: khó giữ danh tiết, hồng nhan bạc mệnh');
+    }
+
+    // ── Hóa Lộc ──
+    if (hasSao(p,'Hóa Lộc')) {
+      out.push('Hóa Lộc thủ Mệnh: thông minh, lương thiện, thích hưởng thụ');
+      if (hasCatTinh(p)) out.push('Hóa Lộc + cát tinh: giàu sang trọn đời');
+      if (hasAny(p,['Đại Hao','Tiểu Hao'])) out.push('Hóa Lộc + Song Hao: tiêu xài hoang phí, khó giữ tiền');
+    }
+
+    // ── Hóa Quyền ──
+    if (hasSao(p,'Hóa Quyền')) {
+      out.push('Hóa Quyền thủ Mệnh: tính kiêu căng, có uy thế');
+      if (hasAny(p,['Tử Vi','Thiên Phủ'])) out.push('Hóa Quyền + Tử/Phủ: có chức quyền, uy thế lớn');
+      if (hasSatTinh(p)) out.push('Hóa Quyền + sát: liều lĩnh, dễ thất bại, tai họa, kiện tụng');
+    }
+
+    // ── Hóa Khoa ──
+    if (hasSao(p,'Hóa Khoa')) {
+      out.push('Hóa Khoa thủ Mệnh: thanh tú, nhân hậu, thông minh');
+      if (hasCatTinh(p)) out.push('Hóa Khoa + cát tinh: thi đỗ cao, có chức quyền, danh tiếng');
+    }
+
+    // ── Hóa Kỵ ──
+    if (hasSao(p,'Hóa Kỵ')) {
+      out.push('Hóa Kỵ thủ Mệnh: dễ tật chân/tay/mắt, tính nông nổi, hay sai lầm, thị phi');
+      if (hasAny(p,['Thái Dương','Thái Âm'])) out.push('Hóa Kỵ + Nhật/Nguyệt: mắt kém, hay đau mắt');
+      if (hasAny(p,['Cự Môn','Tham Lang'])) out.push('Hóa Kỵ + Cự/Tham: tai nạn sông nước, tù tội');
+      if (hasSatTinh(p)) out.push('Hóa Kỵ + sát: phát nhanh rồi phá, bôn ba');
+    }
+
+    // ── Tam Hoa (Khoa Quyền Lộc) ──
+    if (hasAny(p,['Hóa Khoa','Hóa Quyền']) && hasSao(p,'Hóa Lộc')) {
+      out.push('Khoa Quyền Lộc hội Mệnh: phú quý song toàn');
+      if (hasCatTinh(p)) out.push('Khoa Quyền Lộc + cát tinh: uy quyền lớn, danh tiếng lừng lẫy');
+    }
+
+    // ── Song Hao ──
+    if (hasAny(p,['Đại Hao','Tiểu Hao'])) {
+      out.push('Song Hao thủ Mệnh: tiêu hóa kém, thích chơi bời, tiêu tiền nhiều, túng thiếu, ly tổ');
+      if (isSang(p,'Đại Hao')||isSang(p,'Tiểu Hao')) out.push('Song Hao đắc: thông minh, ham học, thích khám phá');
+    }
+
+    // ── Tang Môn / Bạch Hổ ──
+    if (hasAny(p,['Tang Môn','Bạch Hổ'])) {
+      out.push('Tang Môn/Bạch Hổ thủ Mệnh: can đảm, cương nghị, bệnh khí huyết/xương khớp');
+      if (isSang(p,'Bạch Hổ')||isSang(p,'Tang Môn')) out.push('Tang Hổ đắc: tài thao lược, giỏi lý luận, thích chính trị');
+      if (hasSatTinh(p)) out.push('Tang Hổ + sát: bạo ngược, cô đơn, khắc gia đình, tai họa, tù tội, giảm thọ');
+    }
+
+    // ── Thiên Khốc / Thiên Hư ──
+    if (hasAny(p,['Thiên Khốc','Thiên Hư'])) {
+      out.push('Khốc/Hư thủ Mệnh: đa sầu đa cảm, ưu phiền');
+      if (isSang(p,'Thiên Khốc')||isSang(p,'Thiên Hư')) out.push('Khốc/Hư đắc: chí lớn, văn tài, hùng biện, thích chính trị');
+      if (isHam(p,'Thiên Khốc')||isHam(p,'Thiên Hư')) out.push('Khốc/Hư hãm: khốn khổ, buồn nhiều hơn vui');
+    }
+
+    if (out.length > 0) results['Mệnh'] = out;
+  })();
+
+  // ─── CUNG PHỤ MẪU ─────────────────────────────────────────────
+  (function() {
+    const p = getCungByName('Phụ Mẫu');
+    if (!p) return;
+    const out = [];
+
+    // Nhật/Nguyệt
+    const nhat = hasSao(p,'Thái Dương');
+    const nguyet = hasSao(p,'Thái Âm');
+    if (nhat && nguyet) {
+      const ns = isSang(p,'Thái Dương'), ngs = isSang(p,'Thái Âm');
+      if (ns && !ngs) out.push('Nhật sáng Nguyệt mờ: mẹ mất trước cha');
+      else if (!ns && ngs) out.push('Nhật mờ Nguyệt sáng: cha mất trước mẹ');
+      else if (ns && ngs) out.push(isSinhDem() ? 'Nhật Nguyệt đều sáng + sinh đêm: mẹ mất trước cha' : 'Nhật Nguyệt đều sáng + sinh ngày: cha mất trước mẹ');
+      else out.push(isSinhDem() ? 'Nhật Nguyệt đều mờ + sinh đêm: cha mất trước mẹ' : 'Nhật Nguyệt đều mờ + sinh ngày: mẹ mất trước cha');
+    } else if (nhat) {
+      out.push(isSang(p,'Thái Dương') ? 'Thái Dương sáng: cha mẹ giàu sang, quý hiển, sống lâu — lợi từ cha' : 'Thái Dương mờ: cha mẹ vất vả, sớm xa cách — nên làm con nuôi');
+    } else if (nguyet) {
+      out.push(isSang(p,'Thái Âm') ? 'Thái Âm sáng: cha mẹ giàu sang' : 'Thái Âm mờ: cha mẹ vất vả');
+    }
+
+    // Tử Vi
+    if (hasSao(p,'Tử Vi')) {
+      if (inDC(p,['Ngọ'])) out.push('Tử Vi tại Ngọ: cha mẹ giàu, quý hiển, sống lâu');
+      if (dongCung(p,['Tử Vi','Thiên Phủ'])) out.push('Tử Phủ tại Phụ Mẫu: cha mẹ giàu sang, được thừa hưởng');
+      if (hasSao(p,'Phá Quân')) out.push('Tử Vi + Phá Quân tại Phụ Mẫu: bất hòa, sớm xa cách');
+    }
+
+    // Liêm Trinh
+    if (hasSao(p,'Liêm Trinh')) {
+      if (inDC(p,['Dần','Thân'])) out.push('Liêm Trinh Dần/Thân tại Phụ Mẫu: cha mẹ nghèo, có đức, sớm xa cách');
+      if (dongCung(p,['Liêm Trinh','Thiên Phủ'])) out.push('Liêm Phủ tại Phụ Mẫu: cha mẹ giàu nhưng bất hòa');
+      if (hasSao(p,'Thất Sát')) out.push('Liêm Trinh + Thất Sát tại Phụ Mẫu: sớm khắc thân, bất hòa, tai họa');
+    }
+
+    // Hóa sao
+    if (hasSao(p,'Hóa Lộc')) out.push('Hóa Lộc tại Phụ Mẫu: cha mẹ có của');
+    if (hasSao(p,'Hóa Quyền')) out.push('Hóa Quyền tại Phụ Mẫu: cha mẹ có quyền');
+    if (hasSao(p,'Hóa Khoa')) out.push('Hóa Khoa tại Phụ Mẫu: cha mẹ thông minh, có danh');
+    if (hasSao(p,'Hóa Kỵ')) out.push('Hóa Kỵ tại Phụ Mẫu: bất hòa, không hợp tình');
+    if (hasAny(p,['Tuần','Triệt'])) out.push('Tuần/Triệt tại Phụ Mẫu: sớm khắc thân, xa cách, có thể con nuôi');
+    if (isVoChinhDieu(p)) out.push('Phụ Mẫu vô chính diệu: lấy chiếu từ cung xung');
+
+    if (out.length > 0) results['Phụ Mẫu'] = out;
+  })();
+
+  // ─── CUNG PHÚC ĐỨC ────────────────────────────────────────────
+  (function() {
+    const p = getCungByName('Phúc Đức');
+    if (!p) return;
+    const out = [];
+
+    if (hasSao(p,'Tử Vi')) {
+      if (inDC(p,['Ngọ']) && isDonThu(p)) out.push('Tử Vi đơn thủ Ngọ: hưởng phúc lâu dài, họ hàng quý hiển');
+      if (dongCung(p,['Tử Vi','Thiên Phủ'])||dongCung(p,['Tử Vi','Thiên Tướng'])) out.push('Tử Vi + Phủ/Tướng: xứng ý toại lòng, sống lâu, nhiều người giàu sang');
+      if (hasSao(p,'Phá Quân')) out.push('Tử Vi + Phá Quân: lao tâm khổ tứ, phải xa quê — họ hàng ly tán');
+    }
+
+    if (hasSao(p,'Liêm Trinh')) {
+      if (dongCung(p,['Liêm Trinh','Thiên Phủ'])) out.push('Liêm Phủ tại Phúc Đức: sung sướng, phúc thọ song toàn');
+      if (dongCung(p,['Liêm Trinh','Phá Quân'])) out.push('Liêm Phá tại Phúc Đức: vất vả, phải xa quê mới sống lâu');
+    }
+
+    if (hasSao(p,'Thiên Đồng')) {
+      if (inDC(p,['Mão'])) out.push('Thiên Đồng tại Mão Phúc Đức: hưởng phúc sống lâu, họ hàng có thần đồng');
+      if (inDC(p,['Dậu'])) out.push('Thiên Đồng tại Dậu Phúc Đức: giảm thọ, lao tâm, ly tán');
+    }
+
+    if (hasSao(p,'Thái Dương')) {
+      if (isSang(p,'Thái Dương')) out.push('Thái Dương sáng tại Phúc Đức: hưởng phúc, sống lâu, họ hàng quý hiển');
+      else out.push('Thái Dương mờ tại Phúc Đức: bạc phúc, giảm thọ, họ hàng sa sút');
+    }
+
+    if (hasSao(p,'Hóa Lộc')) out.push('Hóa Lộc tại Phúc Đức: được hưởng phúc, không lo túng thiếu, họ hàng giàu có');
+    if (hasSao(p,'Hóa Kỵ')) out.push('Hóa Kỵ tại Phúc Đức: giảm thọ, họ hàng ly tán tranh chấp');
+    if (hasAny(p,['Đại Hao','Tiểu Hao'])) out.push('Song Hao tại Phúc Đức: giảm thọ, phải xa gia đình, họ hàng nghèo ly tán');
+    if (hasSao(p,'Thiên Mã')) out.push('Thiên Mã tại Phúc Đức: tăng thọ, xa quê càng tốt');
+    if (hasAny(p,['Tuần','Triệt'])) out.push('Tuần/Triệt án ngữ Phúc Đức: xa quê lập nghiệp, họ hàng ly tán');
+    if (isVoChinhDieu(p)) {
+      if (hasAny(p,['Địa Không','Địa Kiếp'])) out.push('Phúc Đức vô chính diệu + Không/Kiếp: hưởng phúc sống lâu');
+      else out.push('Phúc Đức vô chính diệu: kém phúc');
+    }
+
+    if (out.length > 0) results['Phúc Đức'] = out;
+  })();
+
+  // ─── CUNG ĐIỀN TRẠCH ──────────────────────────────────────────
+  (function() {
+    const p = getCungByName('Điền Trạch');
+    if (!p) return;
+    const out = [];
+
+    if (hasSao(p,'Tử Vi')) {
+      if (dongCung(p,['Tử Vi','Thiên Phủ'])||dongCung(p,['Tử Vi','Thiên Tướng'])) out.push('Tử Vi + Phủ/Tướng tại Điền Trạch: rất nhiều nhà đất, cơ nghiệp thịnh vượng');
+      if (hasSao(p,'Phá Quân')) out.push('Tử Phá tại Điền Trạch: phá tan tổ nghiệp, lập nghiệp xa quê');
+      if (hasSao(p,'Tham Lang')) out.push('Tử Tham tại Điền Trạch: không giữ được tổ nghiệp, về sau sa sút');
+    }
+
+    if (hasSao(p,'Liêm Trinh')) {
+      if (inDC(p,['Dần','Thân'])) out.push('Liêm Trinh Dần/Thân tại Điền Trạch: phá tan tổ nghiệp, không được thụ hưởng');
+      if (dongCung(p,['Liêm Trinh','Thiên Tướng'])) out.push('Liêm Tướng tại Điền Trạch: nhà đất trước ít sau nhiều');
+      if (hasSao(p,'Phá Quân')) out.push('Liêm Phá tại Điền Trạch: lập nghiệp đầu thất bại, sau bền');
+    }
+
+    if (hasSao(p,'Thiên Đồng')) {
+      if (inDC(p,['Mão'])) out.push('Thiên Đồng tại Mão Điền Trạch: giàu có lớn');
+      if (inDC(p,['Dậu'])) out.push('Thiên Đồng tại Dậu Điền Trạch: thành bại thất thường');
+      if (dongCung(p,['Thiên Đồng','Thiên Lương'])) out.push('Đồng Lương tại Điền Trạch: về sau có nhiều nhà đất');
+    }
+
+    if (hasSao(p,'Vũ Khúc')) {
+      if (inDC(p,['Thìn','Tuất'])) out.push('Vũ Khúc Thìn/Tuất tại Điền Trạch: tổ nghiệp lớn, ngày càng thịnh');
+      if (dongCung(p,['Vũ Khúc','Thiên Phủ'])) out.push('Vũ Phủ tại Điền Trạch: giữ được tổ nghiệp, phát đạt');
+      if (hasSao(p,'Phá Quân')) out.push('Vũ Phá tại Điền Trạch: phá tan rồi mới ổn định');
+    }
+
+    if (hasSao(p,'Thái Dương')) {
+      if (isSang(p,'Thái Dương')) out.push('Thái Dương sáng tại Điền Trạch: tổ nghiệp lớn nhưng giảm dần');
+      else out.push('Thái Dương mờ tại Điền Trạch: không có nhà đất');
+      if (hasSao(p,'Thái Âm')) out.push('Nhật Nguyệt hội Điền Trạch: rất nhiều nhà đất');
+    }
+
+    if (hasSao(p,'Thiên Phủ')) {
+      out.push('Thiên Phủ tại Điền Trạch: được hưởng tổ nghiệp');
+      if (dongCung(p,['Thiên Phủ','Tử Vi'])) out.push('Tử Phủ tại Điền Trạch: rất nhiều nhà đất');
+      if (dongCung(p,['Thiên Phủ','Vũ Khúc'])) out.push('Vũ Phủ tại Điền Trạch: phát đạt mạnh');
+    }
+
+    if (hasSao(p,'Thái Âm')) {
+      if (isSang(p,'Thái Âm')) out.push('Thái Âm sáng tại Điền Trạch: tự lập nghiệp thành công');
+      else out.push('Thái Âm mờ tại Điền Trạch: không có nhà đất');
+    }
+
+    if (out.length > 0) results['Điền Trạch'] = out;
+  })();
+
+  // ─── CUNG QUAN LỘC ────────────────────────────────────────────
+  (function() {
+    const p = getCungByName('Quan Lộc');
+    if (!p) return;
+    const out = [];
+
+    if (hasSao(p,'Tử Vi')) {
+      if (dongCung(p,['Tử Vi','Thiên Tướng'])) out.push('Tử Vi Thiên Tướng: văn võ toàn tài, tổ chức giỏi, lắm quyền');
+      if (hasSao(p,'Thất Sát')) out.push('Tử Sát: có uy quyền, phù hợp quân sự');
+      if (hasSao(p,'Phá Quân')) out.push('Tử Phá: võ nghiệp thành công, thăng giáng thất thường, kinh doanh tốt');
+      if (hasSao(p,'Tham Lang')) out.push('Tử Tham: công danh bình thường, nếu rực rỡ dễ gặp họa');
+    }
+
+    if (hasSao(p,'Liêm Trinh')) {
+      if (inDC(p,['Dần','Thân'])) out.push('Liêm Trinh Dần/Thân: võ nghiệp hiển đạt, có uy quyền, chính trị');
+      if (dongCung(p,['Liêm Trinh','Thiên Phủ'])) out.push('Liêm Phủ: phú quý song toàn, lập chiến công, uy quyền');
+      if (hasSao(p,'Thất Sát')) out.push('Liêm Sát: quân sự thăng giáng thất thường, nhiều rủi ro');
+      if (hasSao(p,'Tham Lang')) out.push('Liêm Tham: võ chức nhỏ, công danh trở ngại, nhiều tai họa');
+    }
+
+    if (hasSao(p,'Thiên Đồng')) {
+      if (inDC(p,['Mão'])) out.push('Thiên Đồng Mão: văn võ kiêm toàn, hay thay đổi công việc');
+      if (inDC(p,['Dậu'])) out.push('Thiên Đồng Dậu: công danh muộn nhỏ, hay thay đổi, hợp thương mại');
+    }
+
+    if (hasSao(p,'Vũ Khúc')) {
+      if (inDC(p,['Thìn','Tuất'])) out.push('Vũ Khúc Thìn/Tuất: võ nghiệp hiển đạt, kinh doanh tốt');
+      if (dongCung(p,['Vũ Khúc','Thiên Phủ'])) out.push('Vũ Phủ: công danh hoành đạt, văn võ kiêm toàn, tài chính');
+      if (hasSao(p,'Tham Lang')) out.push('Vũ Tham: giàu có, kinh doanh từ 30 tuổi mới tốt');
+    }
+
+    if (hasAny(p,['Văn Xương','Văn Khúc'])) out.push('Xương/Khúc tại Quan Lộc: công danh hiển đạt, văn tài lỗi lạc');
+    if (hasAny(p,['Thiên Khôi','Thiên Việt'])) out.push('Khôi/Việt tại Quan Lộc: có danh chức lớn, lãnh đạo');
+    if (hasAny(p,['Tả Phù','Hữu Bật'])) out.push('Tả/Hữu tại Quan Lộc: được nhiều người giúp đỡ công danh');
+    if (hasSao(p,'Lộc Tồn')) out.push('Lộc Tồn tại Quan Lộc: có danh chức và tài lộc, tổ chức tốt');
+    if (hasSao(p,'Hóa Kỵ')) out.push('Hóa Kỵ tại Quan Lộc: công danh trắc trở, dễ gặp phiền lòng');
+    if (hasAny(p,['Hóa Khoa','Hóa Quyền','Hóa Lộc'])) out.push('Khoa/Quyền/Lộc tại Quan Lộc: tài lộc, uy quyền, danh chức tăng mạnh');
+    if (hasSao(p,'Thiên Mã')) out.push('Thiên Mã tại Quan Lộc: công danh hiển đạt, công việc lưu động');
+    if (dongCung(p,['Lộc Tồn','Thiên Mã'])) out.push('Lộc Mã Quan Lộc: danh chức lớn, tài lộc tăng tiến, kinh doanh tốt');
+    if (isVoChinhDieu(p)) {
+      if (hasSao(p,'Thái Dương')||hasSao(p,'Thái Âm')) out.push('Quan Lộc vô chính diệu có Nhật/Nguyệt: công danh rực rỡ, uy quyền hiển hách');
+      else if (hasAny(p,['Tuần','Triệt'])) out.push('Quan Lộc vô chính diệu + Tuần/Triệt: khó đầu sau hiển đạt nhưng không bền');
+      else out.push('Quan Lộc vô chính diệu: công danh bình thường, không hiển đạt');
+    }
+
+    if (out.length > 0) results['Quan Lộc'] = out;
+  })();
+
+  // ─── CUNG NÔ BỘC ──────────────────────────────────────────────
+  (function() {
+    const p = getCungByName('Nô Bộc');
+    if (!p) return;
+    const out = [];
+
+    const menhP = palaces.find(x => x.isMenh);
+    const menhGood = menhP && (menhP.majorStars.some(s => ['Tử Vi','Thiên Phủ','Cự Môn','Thái Dương','Thiên Cơ','Thái Âm','Thiên Đồng','Thiên Lương'].includes(s.ten)));
+
+    if (hasAny(p,['Văn Xương','Văn Khúc','Thiên Khôi','Thiên Việt'])) {
+      if (isSang(p,'Văn Xương')||isSang(p,'Văn Khúc')||isSang(p,'Thiên Khôi')||isSang(p,'Thiên Việt')) out.push('Xương/Khúc/Khôi/Việt sáng tại Nô Bộc: bạn bè có danh chức, kết giao người quyền thế');
+      else out.push('Xương/Khúc/Khôi/Việt mờ tại Nô Bộc: người có danh giá dễ làm hại');
+    }
+
+    if (hasAny(p,['Tả Phù','Hữu Bật'])) {
+      if (isSang(p,'Tả Phù')||isSang(p,'Hữu Bật')) out.push('Tả/Hữu sáng tại Nô Bộc: người giúp việc đắc lực, bạn bè tốt');
+      else out.push('Tả/Hữu mờ tại Nô Bộc: người giúp việc lừa đảo, bạn bè gian');
+    }
+
+    if (hasSao(p,'Lộc Tồn')) out.push('Lộc Tồn tại Nô Bộc: ít người giúp việc, ít bạn bè');
+    if (hasAny(p,['Hóa Khoa','Hóa Quyền','Hóa Lộc'])) out.push('Khoa/Quyền/Lộc tại Nô Bộc: người giúp việc lắm quyền, bạn bè quý hiển');
+    if (hasSao(p,'Hóa Kỵ')) out.push('Hóa Kỵ tại Nô Bộc: bị nói xấu, oan trách');
+    if (hasAny(p,['Đại Hao','Tiểu Hao'])) out.push('Song Hao tại Nô Bộc: người giúp việc gian giảo, bạn bè du đãng');
+    if (hasAny(p,['Thiên Khốc','Thiên Hư'])) out.push('Khốc/Hư tại Nô Bộc: bị người giúp việc oan trách');
+    if (hasAny(p,['Tuần','Triệt'])) out.push('Tuần/Triệt tại Nô Bộc: trước khó sau dễ, không bền');
+    if (hasSao(p,'Đào Hoa')) out.push('Đào Hoa tại Nô Bộc: mang lụy vì tình');
+    if (dongCung(p,['Tả Phù','Hữu Bật','Địa Không','Địa Kiếp'])) out.push('Tả/Hữu + Không/Kiếp: gian quyệt, lừa đảo');
+
+    if (out.length > 0) results['Nô Bộc'] = out;
+  })();
+
+  // ─── CUNG THIÊN DI ────────────────────────────────────────────
+  (function() {
+    const p = getCungByName('Thiên Di');
+    if (!p) return;
+    const out = [];
+
+    if (hasSao(p,'Tử Vi')) {
+      if (dongCung(p,['Tử Vi','Thiên Phủ']) && inDC(p,['Ngọ'])) out.push('Tử Phủ Ngọ tại Thiên Di: gặp quý nhân, hành thông, xa nhà tốt hơn');
+      if (hasSao(p,'Phá Quân')) out.push('Tử Phá tại Thiên Di: hay ra ngoài, gặp quý nhân nhưng chết xa nhà');
+      if (hasSao(p,'Tham Lang')) out.push('Tử Tham tại Thiên Di: phiền lòng, tiểu nhân quấy rối, may ít rủi nhiều');
+      if (hasAny(p,['Thiên Tướng','Thất Sát'])) out.push('Tử Vi + Tướng/Sát tại Thiên Di: được kính nể, gần quyền quý, có tài lộc');
+    }
+
+    if (hasSao(p,'Liêm Trinh')) {
+      if (inDC(p,['Dần','Thân'])) out.push('Liêm Trinh Dần/Thân tại Thiên Di: gặp quý nhân, được kính trọng, hành thông');
+      if (hasSao(p,'Phá Quân')) out.push('Liêm Phá tại Thiên Di: xa nhà bất lợi, may ít rủi nhiều, chết xa nhà');
+      if (hasSao(p,'Thất Sát')) out.push('Liêm Sát tại Thiên Di: tai nạn đường xa, nguy hiểm vũ khí, chết nơi tạm');
+      if (hasSao(p,'Tham Lang')) out.push('Liêm Tham tại Thiên Di: tai họa, hình ngục, kiện tụng, ít gặp quý nhân');
+    }
+
+    if (hasSao(p,'Thiên Đồng')) {
+      if (inDC(p,['Mão'])) out.push('Thiên Đồng Mão tại Thiên Di: xa nhà hành thông, gặp quý nhân, không ổn định nơi ở');
+      if (inDC(p,['Dậu'])) out.push('Thiên Đồng Dậu tại Thiên Di: xa nhà phiền lòng, chết xa nhà');
+    }
+
+    if (hasAny(p,['Lộc Tồn','Hóa Lộc'])) out.push('Lộc tại Thiên Di: dễ kiếm tiền, gặp may mắn, buôn bán phát tài');
+    if (hasAny(p,['Hóa Khoa','Hóa Quyền'])) out.push('Khoa/Quyền tại Thiên Di: có danh giá, được kính trọng, gần quyền quý');
+    if (hasSao(p,'Hóa Kỵ')) out.push('Hóa Kỵ tại Thiên Di: thị phi, phiền lòng khi ra ngoài');
+    if (hasSao(p,'Thiên Mã')) out.push('Thiên Mã tại Thiên Di: di chuyển nhiều, được yêu thích');
+    if (hasAny(p,['Địa Không','Địa Kiếp'])) out.push('Không/Kiếp tại Thiên Di: bị lừa đảo, bị hãm hại, chết xa nhà');
+    if (hasAny(p,['Tả Phù','Hữu Bật'])) out.push('Tả/Hữu tại Thiên Di: được giúp đỡ khi ra ngoài');
+    if (hasAny(p,['Kình Dương','Đà La'])) out.push('Kình/Đà tại Thiên Di: tai nạn, chết xa nhà');
+    if (hasAny(p,['Tuần','Triệt'])) out.push('Tuần/Triệt tại Thiên Di: phiền lòng, chết xa nhà');
+    if (isVoChinhDieu(p)) out.push('Thiên Di vô chính diệu: lấy chiếu từ cung xung');
+
+    if (out.length > 0) results['Thiên Di'] = out;
+  })();
+
+  // ─── CUNG TẬT ÁCH ─────────────────────────────────────────────
+  (function() {
+    const p = getCungByName('Tật Ách');
+    if (!p) return;
+    const out = [];
+
+    // Giải trừ
+    if (hasSao(p,'Hóa Khoa')) out.push('Hóa Khoa tại Tật Ách: giảm nguy hiểm, gặp người cứu/thầy thuốc');
+    if (hasAny(p,['Tuần','Triệt'])) out.push('Tuần/Triệt tại Tật Ách: ít bệnh tật suốt đời');
+    if (hasAny(p,['Tả Phù','Hữu Bật']) && hasCatTinh(p)) out.push('Tả/Hữu + cát tại Tật Ách: có người giúp lúc nguy');
+    if (hasAny(p,['Tả Phù','Hữu Bật']) && hasSatTinh(p)) out.push('Tả/Hữu + sát tại Tật Ách: rất nguy nan');
+
+    // Bệnh theo sao
+    if (hasSao(p,'Liêm Trinh')) out.push('Liêm Trinh tại Tật Ách: tỳ vết chân tay lưng');
+    if (dongCung(p,['Liêm Trinh','Tham Lang'])) {
+      out.push('Liêm Tham tại Tật Ách: mắt kém, tự tối');
+      if (hasAny(p,['Địa Không','Địa Kiếp'])) out.push('Liêm Tham + Không/Kiếp tại Tật Ách: chết thảm khốc');
+    }
+    if (hasSao(p,'Thiên Đồng')) out.push('Thiên Đồng tại Tật Ách: bệnh tiêu hóa');
+    if (dongCung(p,['Thiên Đồng','Cự Môn'])) out.push('Đồng Cự tại Tật Ách: bệnh tâm khí');
+    if (hasSao(p,'Vũ Khúc')) out.push('Vũ Khúc tại Tật Ách: bệnh da, tỳ vết chân tay');
+    if (hasSao(p,'Thái Dương')) out.push('Thái Dương tại Tật Ách: đau đầu, căng mạch máu');
+    if (hasSao(p,'Thiên Cơ')) out.push('Thiên Cơ tại Tật Ách: bệnh da, tê thấp');
+    if (hasSao(p,'Thái Âm') && isHam(p,'Thái Âm')) out.push('Thái Âm mờ tại Tật Ách: bệnh phổi');
+    if (hasSao(p,'Tham Lang') && inDC(p,['Dần','Thân'])) out.push('Tham Lang Dần/Thân tại Tật Ách: bệnh chân');
+    if (hasSao(p,'Cự Môn')) out.push('Cự Môn tại Tật Ách: bệnh hạ bộ, mụn nhọt');
+    if (hasSao(p,'Thất Sát')) out.push('Thất Sát tại Tật Ách: mặt có vết, sức khỏe kém');
+    if (hasSao(p,'Phá Quân')) out.push('Phá Quân tại Tật Ách: mụn nhọt, tai nạn xe cộ, tự tối');
+    if (hasSao(p,'Kình Dương')) out.push('Kình Dương tại Tật Ách: bệnh tai, trĩ, tỳ vết chân');
+    if (hasSao(p,'Đà La')) out.push('Đà La tại Tật Ách: đau răng, tỳ vết đầu mặt');
+    if ((hasSao(p,'Hỏa Tinh')||hasSao(p,'Linh Tinh')) && (isHam(p,'Hỏa Tinh')||isHam(p,'Linh Tinh'))) out.push('Hỏa/Linh mờ tại Tật Ách: bệnh nóng lạnh');
+    if (hasAny(p,['Địa Không','Địa Kiếp'])) out.push('Không/Kiếp tại Tật Ách: mụn nhọt chốc lở');
+    if (hasSao(p,'Hóa Kỵ')) out.push('Hóa Kỵ tại Tật Ách: đau bụng, khó sinh');
+    if (dongCung(p,['Thiên Mã','Thiên Hình'])) out.push('Mã Hình tại Tật Ách: tai nạn xe cộ');
+    if (hasAny(p,['Đại Hao','Tiểu Hao'])) out.push('Song Hao tại Tật Ách: bệnh tiêu hóa');
+    if (hasSao(p,'Tang Môn')) out.push('Tang Môn tại Tật Ách: bệnh khí huyết, tim yếu');
+    if (hasSao(p,'Bạch Hổ')) out.push('Bạch Hổ tại Tật Ách: máu xấu, đau xương');
+    if (hasSao(p,'Thiên Hình')) out.push('Thiên Hình tại Tật Ách: bệnh phong, dao kéo');
+
+    if (out.length > 0) results['Tật Ách'] = out;
+  })();
+
+  // ─── CUNG TÀI BẠCH ────────────────────────────────────────────
+  (function() {
+    const p = getCungByName('Tài Bạch');
+    if (!p) return;
+    const out = [];
+
+    if (hasSao(p,'Tử Vi')) {
+      if (dongCung(p,['Tử Vi','Thiên Phủ'])) out.push('Tử Phủ tại Tài Bạch: rất nhiều của cải, giữ kho tài chính');
+      if (hasSao(p,'Thất Sát')) out.push('Tử Sát tại Tài Bạch: kiếm tiền nhanh, làm giàu nhanh');
+      if (hasSao(p,'Phá Quân')) out.push('Tử Phá tại Tài Bạch: đầu khổ sau dễ kiếm tiền, sung túc');
+      if (hasSao(p,'Tham Lang')) out.push('Tử Tham tại Tài Bạch: bình thường, hưởng thừa kế, suy giảm về sau');
+    }
+
+    if (hasSao(p,'Liêm Trinh')) {
+      if (dongCung(p,['Liêm Trinh','Thiên Phủ'])) out.push('Liêm Phủ tại Tài Bạch: giàu lớn, giữ của bền');
+      if (hasSao(p,'Thất Sát')) out.push('Liêm Sát tại Tài Bạch: kiếm tiền thời loạn, tai họa đi kèm');
+      if (hasSao(p,'Phá Quân')) out.push('Liêm Phá tại Tài Bạch: tiền thất thường, hao tán');
+      if (hasSao(p,'Tham Lang')) out.push('Liêm Tham tại Tài Bạch: túng thiếu, khổ sở vì tiền, kiện tụng hình ngục');
+    }
+
+    if (hasSao(p,'Vũ Khúc')) {
+      if (inDC(p,['Thìn','Tuất'])) out.push('Vũ Khúc Thìn/Tuất tại Tài Bạch: giàu lớn');
+      if (dongCung(p,['Vũ Khúc','Thiên Phủ'])) out.push('Vũ Phủ tại Tài Bạch: rất giàu, giữ của bền');
+      if (dongCung(p,['Vũ Khúc','Thiên Tướng'])) out.push('Vũ Tướng tại Tài Bạch: của cải chồng chất, gặp quý nhân');
+    }
+
+    if (hasSao(p,'Thái Dương')) {
+      if (isSang(p,'Thái Dương')) out.push('Thái Dương sáng tại Tài Bạch: giàu lớn, dễ kiếm tiền');
+      else out.push('Thái Dương mờ tại Tài Bạch: kiếm tiền khó, về già sung túc');
+    }
+
+    if (hasSao(p,'Thái Âm')) {
+      if (isSang(p,'Thái Âm')) out.push('Thái Âm sáng tại Tài Bạch: tự lập nghiệp thành công');
+      else out.push('Thái Âm mờ tại Tài Bạch: không có nhà đất');
+    }
+
+    if (dongCung(p,['Lộc Tồn','Hóa Lộc'])) out.push('Song Lộc tại Tài Bạch: dễ kiếm tiền, sung túc');
+    if (hasSao(p,'Hóa Kỵ')) out.push('Hóa Kỵ tại Tài Bạch: tán tài');
+    if (hasSao(p,'Thiên Mã')) out.push('Thiên Mã tại Tài Bạch: kiếm tiền phương xa');
+    if (hasAny(p,['Đại Hao','Tiểu Hao'])) out.push('Song Hao tại Tài Bạch: tiêu hoang, hao tán, thích cờ bạc');
+    if (isSang(p,'Địa Không')||isSang(p,'Địa Kiếp')) out.push('Không/Kiếp đắc tại Tài Bạch: hoạnh phát hoạnh phá');
+    else if (hasSao(p,'Địa Không')||hasSao(p,'Địa Kiếp')) out.push('Không/Kiếp tại Tài Bạch: túng thiếu, cùng khốn');
+    if (dongCung(p,['Lộc Tồn','Thiên Mã'])) out.push('Lộc Mã giao trì Tài Bạch: của đến tận tay, kinh doanh phát đạt');
+    if (dongCung(p,['Lộc Tồn','Đại Hao'])) out.push('Lộc + Hao tại Tài Bạch: kiếm tiền ít, tiêu nhiều, hao tán');
+    if (isVoChinhDieu(p)) {
+      if (hasSao(p,'Thái Dương')||hasSao(p,'Thái Âm')) out.push('Tài Bạch vô chính diệu có Nhật/Nguyệt sáng: giàu lớn');
+      else if (hasAny(p,['Tuần','Triệt'])) out.push('Tài Bạch vô chính diệu + Tuần/Triệt: đầu khổ sau sung túc');
+      else out.push('Tài Bạch vô chính diệu: phụ thuộc cung xung chiếu');
+    }
+
+    if (out.length > 0) results['Tài Bạch'] = out;
+  })();
+
+  // ─── CUNG TỬ TỨC ──────────────────────────────────────────────
+  // (Không có data riêng — skip, Claude tự luận từ laSoText)
+
+  // ─── CUNG PHU THÊ ─────────────────────────────────────────────
+  (function() {
+    const p = getCungByName('Phu Thê');
+    if (!p) return;
+    const out = [];
+
+    if (hasSao(p,'Tử Vi')) {
+      if (dongCung(p,['Tử Vi','Thiên Phủ']) && inDC(p,['Ngọ'])) out.push('Tử Phủ Ngọ: vợ chồng hòa hợp đến bạc đầu, giàu sang');
+      if (dongCung(p,['Tử Vi','Thiên Tướng'])) out.push('Tử Tướng: vợ chồng cứng cỏi, dễ xích mích về sau — nên chênh lệch tuổi');
+      if (hasSao(p,'Thất Sát')) out.push('Tử Sát: trước trở sau thành, nên muộn hôn nhân, tránh chia ly');
+      if (hasSao(p,'Phá Quân')) out.push('Tử Phá: hình khắc, chia ly, bất hòa — nên lấy người lớn tuổi hơn');
+      if (hasSao(p,'Tham Lang')) out.push('Tử Tham: nên muộn hôn nhân, dễ ghen tuông, bất hòa');
+    }
+
+    if (hasSao(p,'Liêm Trinh')) {
+      if (dongCung(p,['Liêm Trinh','Thiên Phủ'])) out.push('Liêm Phủ: nên muộn hôn nhân, vợ chồng cương cường, sống đến bạc đầu, gia đình sung túc');
+      if (dongCung(p,['Liêm Trinh','Thiên Tướng'])) out.push('Liêm Tướng: bất hòa, sinh ly hoặc tử biệt');
+      if (inDC(p,['Dần','Thân'])) out.push('Liêm Trinh Dần/Thân: nhiều lần hôn nhân, nam khó lấy vợ, nữ lấy chồng nghèo');
+    }
+
+    if (hasSao(p,'Thiên Đồng')) {
+      if (inDC(p,['Mão'])) out.push('Thiên Đồng Mão: nên muộn hôn nhân, vợ đẹp hiền, sống đến bạc đầu');
+      if (inDC(p,['Dậu'])) out.push('Thiên Đồng Dậu: bất hòa, xa cách');
+    }
+
+    if (hasSao(p,'Vũ Khúc') && inDC(p,['Thìn','Tuất'])) out.push('Vũ Khúc Thìn/Tuất: nên muộn hôn nhân, vợ chồng gần tuổi, giàu sang');
+    if (hasSao(p,'Thái Dương')) {
+      if (isSang(p,'Thái Dương')) out.push('Thái Dương sáng: phú quý, vinh hiển, sống đến bạc đầu');
+      else out.push('Thái Dương mờ: hôn nhân trở ngại, nên muộn hôn nhân');
+    }
+    if (hasSao(p,'Thái Âm')) {
+      if (isSang(p,'Thái Âm')) out.push('Thái Âm sáng: vợ chồng quý hiển, hòa thuận, giàu sang');
+      else out.push('Thái Âm mờ: bất hòa, hôn nhân trở ngại, dễ chia ly');
+    }
+    if (hasSao(p,'Thiên Phủ') && inDC(p,['Tỵ','Hợi'])) out.push('Thiên Phủ Tỵ/Hợi: vợ chồng hòa thuận, khá giả, sống đến bạc đầu');
+    if (hasSao(p,'Tham Lang') && inDC(p,['Thìn','Tuất'])) out.push('Tham Lang Thìn/Tuất: vợ chồng tài giỏi, dễ ghen tuông, nên muộn');
+    if (hasSao(p,'Thất Sát') && inDC(p,['Dần','Thân'])) out.push('Thất Sát Dần/Thân: nên muộn, vợ chồng cứng cỏi, dễ ghen — nên chênh lệch tuổi');
+    if (hasSao(p,'Phá Quân') && inDC(p,['Tý','Ngọ'])) out.push('Phá Quân Tý/Ngọ: khá giả, nên muộn hôn nhân, dễ xa cách');
+
+    if (hasSao(p,'Hóa Kỵ')) out.push('Hóa Kỵ tại Phu Thê: vợ chồng bất hòa');
+    if (hasSao(p,'Lộc Tồn')) out.push('Lộc Tồn tại Phu Thê: nên muộn hôn nhân, tránh bất hòa');
+    if (hasSao(p,'Thiên Mã')) out.push('Thiên Mã tại Phu Thê: gặp nhau nơi xa, kết hôn xa quê');
+    if (hasAny(p,['Cô Thần','Quả Tú'])) out.push('Cô Thần/Quả Tú: bất hòa, xa cách');
+    if (hasAny(p,['Đào Hoa','Hồng Loan'])) out.push('Đào Hoa/Hồng Loan tại Phu Thê: vợ đẹp, ngoại tình, tình cảm phức tạp');
+    if (hasAny(p,['Tuần','Triệt'])) out.push('Tuần/Triệt tại Phu Thê: nên muộn hôn nhân, dễ chia ly, nhiều lần trắc trở');
+
+    if (out.length > 0) results['Phu Thê'] = out;
+  })();
+
+  // ─── CUNG HUYNH ĐỆ ────────────────────────────────────────────
+  (function() {
+    const p = getCungByName('Huynh Đệ');
+    if (!p) return;
+    const out = [];
+
+    // Tính nam/nữ nhiều hơn theo chính diệu
+    const namGroup = ['Thiên Phủ','Thiên Tướng','Thiên Lương','Thất Sát','Thiên Đồng','Thái Dương','Thiên Cơ'];
+    const nuGroup  = ['Thái Âm','Tham Lang','Cự Môn','Liêm Trinh','Vũ Khúc','Phá Quân'];
+    if (p.majorStars.some(s => namGroup.includes(s.ten))) out.push('Huynh Đệ có nhiều sao dương: anh/em trai nhiều hơn chị/em gái');
+    else if (p.majorStars.some(s => nuGroup.includes(s.ten))) out.push('Huynh Đệ có nhiều sao âm: chị/em gái nhiều hơn anh/em trai');
+
+    if (hasSao(p,'Tử Vi')) {
+      if (inDC(p,['Ngọ']) && isDonThu(p)) out.push('Tử Vi đơn Ngọ tại Huynh Đệ: có anh trên, anh chị em khá giả');
+      if (dongCung(p,['Tử Vi','Thiên Phủ'])) out.push('Tử Phủ tại Huynh Đệ: >=3 anh chị em, nhiều người quý hiển');
+      if (hasSao(p,'Phá Quân')) out.push('Tử Phá tại Huynh Đệ: <=3 anh chị em, di bào, xa cách sớm, bất hòa');
+      if (hasSao(p,'Tham Lang')) out.push('Tử Tham tại Huynh Đệ: <=3 anh chị em, ly tán, vất vả');
+    }
+
+    if (hasAny(p,['Văn Xương','Văn Khúc'])) {
+      if (isSang(p,'Văn Xương')||isSang(p,'Văn Khúc')) out.push('Xương/Khúc sáng tại Huynh Đệ: +3 anh chị em, thông minh, quý hiển');
+      else out.push('Xương/Khúc mờ tại Huynh Đệ: không có anh chị em');
+    }
+    if (hasAny(p,['Thiên Khôi','Thiên Việt'])) out.push('Khôi/Việt tại Huynh Đệ: anh chị em quý hiển');
+    if (hasAny(p,['Tả Phù','Hữu Bật'])) {
+      if (isSang(p,'Tả Phù')||isSang(p,'Hữu Bật')) out.push('Tả/Hữu sáng tại Huynh Đệ: +3 anh chị em, hỗ trợ nhau');
+      else out.push('Tả/Hữu mờ tại Huynh Đệ: +1 anh chị em');
+    }
+    if (hasSao(p,'Lộc Tồn')) out.push('Lộc Tồn tại Huynh Đệ: ít anh chị em, xa cách sớm, bất hòa');
+    if (hasAny(p,['Hóa Khoa','Hóa Quyền','Hóa Lộc'])) out.push('Khoa/Quyền/Lộc tại Huynh Đệ: anh chị em giàu quý, thông minh');
+    if (hasSao(p,'Hóa Kỵ')) out.push('Hóa Kỵ tại Huynh Đệ: bất hòa, xa cách');
+    if (hasAny(p,['Đại Hao','Tiểu Hao'])) out.push('Song Hao tại Huynh Đệ: giảm số anh chị em, bất hòa, xa cách');
+    if (hasAny(p,['Tuần','Triệt'])) out.push('Tuần/Triệt tại Huynh Đệ: anh cả chết non, bất hòa, xa cách');
+    if (hasSatTinh(p)) out.push('Sát tinh tại Huynh Đệ: giảm số anh chị em, bất hòa, có tật');
+    if (isVoChinhDieu(p)) out.push('Huynh Đệ vô chính diệu: lấy chiếu từ cung xung');
+
+    if (out.length > 0) results['Huynh Đệ'] = out;
+  })();
+
+  return results;
+}
+
+
 if (typeof module !== 'undefined') module.exports = { anSaoLaSo, STAR_DATA, getStarData, getStarBrightness };
