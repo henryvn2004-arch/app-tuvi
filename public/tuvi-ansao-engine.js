@@ -1409,7 +1409,7 @@ function getBoSao(palaceStars) {
   return null;
 }
 
-function tinhNhanHoa(menhStars, vanStars, dvPalace) {
+function tinhNhanHoa(menhStars, vanStars, dvPalace, dvTuoiStart, dvTuoiEnd) {
   const boMenh = getBoSao(menhStars);
   const boVan  = getBoSao(vanStars);
 
@@ -1433,9 +1433,32 @@ function tinhNhanHoa(menhStars, vanStars, dvPalace) {
 
   let scoreSat = 2;
   if (dvPalace) {
-    const allStars = [dvPalace, ...(dvPalace.tamHopCungs||[]), dvPalace.xungChieuCung]
-      .filter(Boolean).flatMap(c => c.stars.map(s => s.ten));
-    const badCount = ALL_BAD.filter(s => allStars.includes(s)).length;
+    // Check Triệt trong cung đại vận — nếu active thì sát tinh tam hợp/xung không tác dụng
+    const dvHasTriet = dvPalace.stars.some(s => s.ten === 'Triệt');
+    const dvHasTuan  = dvPalace.stars.some(s => s.ten === 'Tuần');
+    // Triệt active khi dvTuoiEnd <= 30 (đại vận kết thúc trước 30)
+    // Tuần active khi dvTuoiStart >= 30 (đại vận bắt đầu sau 30)
+    const trietActive = dvHasTriet && dvTuoiEnd != null && dvTuoiEnd <= 30;
+    const tuanActive  = dvHasTuan  && dvTuoiStart != null && dvTuoiStart >= 30;
+
+    let allStars;
+    if (trietActive) {
+      // Triệt chặn sát tinh từ tam hợp/xung chiếu — chỉ tính sao trong cung DV
+      allStars = dvPalace.stars.map(s => s.ten);
+    } else {
+      allStars = [dvPalace, ...(dvPalace.tamHopCungs||[]), dvPalace.xungChieuCung]
+        .filter(Boolean).flatMap(c => c.stars.map(s => s.ten));
+    }
+
+    let badCount = ALL_BAD.filter(s => allStars.includes(s)).length;
+
+    // Tuần lâm hỏa địa (Tỵ/Ngọ) hoặc Triệt đáo kim cung (Thân/Dậu) — giảm tác hại sát tinh
+    const dc = dvPalace.diaChi;
+    if ((tuanActive && (dc === 'Tỵ' || dc === 'Ngọ')) ||
+        (trietActive && (dc === 'Thân' || dc === 'Dậu'))) {
+      badCount = Math.floor(badCount / 2); // giảm 50% số sao xấu tính
+    }
+
     scoreSat = Math.max(0, 2 - badCount * 0.15);
     scoreSat = Math.round(scoreSat * 100) / 100;
   }
@@ -1478,7 +1501,7 @@ function tinhScoringAllDaiVan(daiVans, palaces, canChiNam, chiNam, napAm) {
 
     const tt = tinhThienThoi(dv.diaChi, chiNam);
     const dl = tinhDiaLoi(dv.diaChi, napAm);
-    const nh = tinhNhanHoa(menhStars, dvStars, dvPalace);
+    const nh = tinhNhanHoa(menhStars, dvStars, dvPalace, dv.tuoiStart, dv.tuoiEnd);
     const sc = scoreDaiVan(tt, dl, nh);
 
     return { ...dv, scoring: sc };
@@ -1686,7 +1709,7 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
     })(),
     cachCucTungCung: phanTichCungYNghia(
       { palaces, menhDC, thanDC, amDuong, napAmHanh, chiNam },
-      gioitinh, gioIdx, canNam, chiNam
+      gioitinh, gioIdx, canNam, chiNam, tuoiXem
     ),
   };
 }
@@ -2012,7 +2035,7 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
     })(),
     cachCucTungCung: phanTichCungYNghia(
       { palaces, menhDC, thanDC, amDuong, napAmHanh, chiNam },
-      gioitinh, gioIdx, canNam, chiNam
+      gioitinh, gioIdx, canNam, chiNam, tuoiXem
     ),
   };
 }
@@ -2028,7 +2051,7 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
 // Output: ls.cachCucTungCung[] → feed vào formatLaSoV2 → Claude
 // ================================================================
 
-function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam) {
+function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam, tuoiXem) {
   const { palaces } = ls;
 
   // ─── HELPERS ──────────────────────────────────────────────────
@@ -2140,6 +2163,63 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam) {
   // Nhật Nguyệt sáng/mờ
   function nhatSang()   { const p2=getCungByName('Phụ Mẫu'); return p2 && isSang(p2,'Thái Dương'); }
   function nguyetSang() { const p2=getCungByName('Phụ Mẫu'); return p2 && isSang(p2,'Thái Âm'); }
+
+  // ─── TUẦN / TRIỆT HELPERS ────────────────────────────────────
+
+  // Check cung có Tuần không
+  function hasTuan(p) {
+    return p.stars.some(s => s.ten === 'Tuần');
+  }
+  // Check cung có Triệt không
+  function hasTriet(p) {
+    return p.stars.some(s => s.ten === 'Triệt');
+  }
+
+  // Tuần/Triệt có đang active không theo tuổi xem
+  // tuoiXem = 0 → không xét active (bản mệnh), chỉ dùng cho cung đại vận
+  function tuanActive(tuoiStart, tuoiEnd) {
+    // Tuần tác dụng sau 30 tuổi
+    if (!tuoiXem) return true; // bản mệnh: luôn note
+    return tuoiXem > 30;
+  }
+  function trietActive(tuoiStart, tuoiEnd) {
+    // Triệt tác dụng 0-30 tuổi
+    if (!tuoiXem) return true; // bản mệnh: luôn note
+    return tuoiXem <= 30;
+  }
+
+  // Annotation Tuần/Triệt cho 1 cung (bản mệnh — không có tuổi đại vận)
+  function tuanTrietNote(p, tuoiStart, tuoiEnd) {
+    const notes = [];
+    const dc = getDC(p);
+    const isVCD = isVoChinhDieu(p);
+
+    if (hasTuan(p)) {
+      const active = tuanActive(tuoiStart, tuoiEnd);
+      if (dc === 'Tỵ' || dc === 'Ngọ') {
+        // Tuần lâm hỏa địa — đặc biệt tốt
+        notes.push(`Tuần lâm hỏa địa (${dc})${active ? '' : ' [chưa tác dụng — dưới 30 tuổi]'}: giảm tính xấu của sao xấu, tăng tính tốt của sao tốt trong cung`);
+      } else {
+        notes.push(`Tuần án ngữ${active ? '' : ' [chưa tác dụng — dưới 30 tuổi]'}: giảm tính chất tốt/xấu các sao trong cung 50%${active ? ' (đang tác dụng)' : ''}`);
+      }
+      if (isVCD) notes.push('Vô chính diệu có Tuần: rất tốt — Tuần giải trừ cung trống');
+    }
+
+    if (hasTriet(p)) {
+      const active = trietActive(tuoiStart, tuoiEnd);
+      if (dc === 'Thân' || dc === 'Dậu') {
+        // Triệt đáo kim cung — đặc biệt tốt
+        notes.push(`Triệt đáo kim cung (${dc})${active ? '' : ' [hết tác dụng — trên 30 tuổi]'}: giảm tính xấu của sao xấu, tăng tính tốt của sao tốt trong cung`);
+      } else {
+        notes.push(`Triệt án ngữ${active ? '' : ' [hết tác dụng — trên 30 tuổi]'}: giảm tính chất tốt/xấu các sao trong cung 80%${active ? ' (đang tác dụng)' : ''}`);
+      }
+      if (isVCD) notes.push('Vô chính diệu có Triệt: rất tốt — Triệt giải trừ cung trống');
+    }
+
+    return notes;
+  }
+
+  // ──────────────────────────────────────────────────────────────
 
   // Collect results
   const results = {};
@@ -2488,6 +2568,7 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam) {
       if (isHam(p,'Thiên Khốc')||isHam(p,'Thiên Hư')) out.push('Khốc/Hư hãm: khốn khổ, buồn nhiều hơn vui');
     }
 
+    tuanTrietNote(p).forEach(n => out.push(n));
     if (out.length > 0) results['Mệnh'] = out;
   })();
 
@@ -2534,6 +2615,7 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam) {
     if (hasAny(p,['Tuần','Triệt'])) out.push('Tuần/Triệt tại Phụ Mẫu: sớm khắc thân, xa cách, có thể con nuôi');
     if (isVoChinhDieu(p)) out.push('Phụ Mẫu vô chính diệu: lấy chiếu từ cung xung');
 
+    tuanTrietNote(p).forEach(n => out.push(n));
     if (out.length > 0) results['Phụ Mẫu'] = out;
   })();
 
@@ -2574,6 +2656,7 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam) {
       else out.push('Phúc Đức vô chính diệu: kém phúc');
     }
 
+    tuanTrietNote(p).forEach(n => out.push(n));
     if (out.length > 0) results['Phúc Đức'] = out;
   })();
 
@@ -2624,6 +2707,7 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam) {
       else out.push('Thái Âm mờ tại Điền Trạch: không có nhà đất');
     }
 
+    tuanTrietNote(p).forEach(n => out.push(n));
     if (out.length > 0) results['Điền Trạch'] = out;
   })();
 
@@ -2672,6 +2756,7 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam) {
       else out.push('Quan Lộc vô chính diệu: công danh bình thường, không hiển đạt');
     }
 
+    tuanTrietNote(p).forEach(n => out.push(n));
     if (out.length > 0) results['Quan Lộc'] = out;
   })();
 
@@ -2703,6 +2788,7 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam) {
     if (hasSao(p,'Đào Hoa')) out.push('Đào Hoa tại Nô Bộc: mang lụy vì tình');
     if (dongCung(p,['Tả Phù','Hữu Bật','Địa Không','Địa Kiếp'])) out.push('Tả/Hữu + Không/Kiếp: gian quyệt, lừa đảo');
 
+    tuanTrietNote(p).forEach(n => out.push(n));
     if (out.length > 0) results['Nô Bộc'] = out;
   })();
 
@@ -2741,6 +2827,7 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam) {
     if (hasAny(p,['Tuần','Triệt'])) out.push('Tuần/Triệt tại Thiên Di: phiền lòng, chết xa nhà');
     if (isVoChinhDieu(p)) out.push('Thiên Di vô chính diệu: lấy chiếu từ cung xung');
 
+    tuanTrietNote(p).forEach(n => out.push(n));
     if (out.length > 0) results['Thiên Di'] = out;
   })();
 
@@ -2783,6 +2870,7 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam) {
     if (hasSao(p,'Bạch Hổ')) out.push('Bạch Hổ tại Tật Ách: máu xấu, đau xương');
     if (hasSao(p,'Thiên Hình')) out.push('Thiên Hình tại Tật Ách: bệnh phong, dao kéo');
 
+    tuanTrietNote(p).forEach(n => out.push(n));
     if (out.length > 0) results['Tật Ách'] = out;
   })();
 
@@ -2836,6 +2924,7 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam) {
       else out.push('Tài Bạch vô chính diệu: phụ thuộc cung xung chiếu');
     }
 
+    tuanTrietNote(p).forEach(n => out.push(n));
     if (out.length > 0) results['Tài Bạch'] = out;
   })();
 
@@ -2888,6 +2977,7 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam) {
     if (hasAny(p,['Đào Hoa','Hồng Loan'])) out.push('Đào Hoa/Hồng Loan tại Phu Thê: vợ đẹp, ngoại tình, tình cảm phức tạp');
     if (hasAny(p,['Tuần','Triệt'])) out.push('Tuần/Triệt tại Phu Thê: nên muộn hôn nhân, dễ chia ly, nhiều lần trắc trở');
 
+    tuanTrietNote(p).forEach(n => out.push(n));
     if (out.length > 0) results['Phu Thê'] = out;
   })();
 
@@ -2927,6 +3017,7 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam) {
     if (hasSatTinh(p)) out.push('Sát tinh tại Huynh Đệ: giảm số anh chị em, bất hòa, có tật');
     if (isVoChinhDieu(p)) out.push('Huynh Đệ vô chính diệu: lấy chiếu từ cung xung');
 
+    tuanTrietNote(p).forEach(n => out.push(n));
     if (out.length > 0) results['Huynh Đệ'] = out;
   })();
 
