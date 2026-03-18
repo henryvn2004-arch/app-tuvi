@@ -285,6 +285,46 @@ select.form-input { cursor: pointer; }
   .result-header { padding: 20px 0; }
   .result-name { font-size: 28px; }
 }
+
+.radar-btn {
+  padding: 5px 12px; font-size: 11px; cursor: pointer;
+  background: #1a1a1a; color: #aaa; border: 1px solid #333;
+  border-radius: 4px; transition: all 0.15s;
+}
+.radar-btn:hover { background: #252525; color: #ddd; }
+.radar-btn.active { background: #c9a84c22; color: #c9a84c; border-color: #c9a84c; }
+.pregen-block { background:#141e2e; border:1px solid #1e2e42; border-radius:8px; padding:12px 16px; margin:12px 0; }
+.pregen-title { font-size:11px; font-weight:600; color:#5588cc; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:8px; }
+.pregen-item { font-size:12px; color:#ccc; margin:4px 0; }
+.pregen-yn { font-size:12.5px; line-height:1.6; padding:2px 0; }
+.yn-great-cat { color:#4ade80; }
+.yn-cat { color:#86efac; }
+.yn-great-hung { color:#f87171; }
+.yn-hung { color:#fca5a5; }
+.yn-tuan { color:#fcd34d; }
+.yn-neutral { color:#cbd5e1; }
+.pregen-row { font-size:12px; margin:3px 0; }
+.pregen-good { color:#4ade80; }
+.pregen-bad { color:#f87171; }
+.cc-label { font-size:11px; font-weight:600; padding:2px 6px; border-radius:3px; margin-right:6px; }
+.cc-quy_cuc { background:#2a1f5e; color:#a78bfa; }
+.cc-phu_cuc { background:#1f3a2a; color:#4ade80; }
+.cc-ban_tien_cuc { background:#1e2e42; color:#60a5fa; }
+.cc-tap_cuc { background:#1e2e42; color:#94a3b8; }
+.cc-than_cu { background:#1e1e1e; color:#94a3b8; }
+.cc-menh_co_ban { background:#1e1e1e; color:#94a3b8; }
+.cc-mota { font-size:11px; color:#888; }
+.pregen-divider { display:flex; align-items:center; gap:10px; margin:20px 0 12px; }
+.pregen-divider::before, .pregen-divider::after { content:''; flex:1; border-top:1px solid #2a3a4a; }
+.pregen-divider span { font-size:11px; color:#5588cc; font-weight:600; letter-spacing:0.8px; text-transform:uppercase; white-space:nowrap; }
+.pregen-scores { }
+.score-bars { display:flex; flex-direction:column; gap:6px; margin-top:4px; }
+.score-bar-row { display:flex; align-items:center; gap:8px; }
+.score-label { font-size:11px; color:#aaa; width:80px; flex-shrink:0; }
+.score-bar-bg { flex:1; height:8px; background:#1e2e42; border-radius:4px; overflow:hidden; }
+.score-bar-fill { height:100%; border-radius:4px; transition:width 0.5s; }
+.score-val { font-size:11px; color:#ccc; width:24px; text-align:right; flex-shrink:0; }
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 </head>
@@ -817,16 +857,111 @@ select.form-input { cursor: pointer; }
       if (_currentPhan === 14) {
         chartHtml = `<div style="max-width:700px;margin:24px 0 8px"><canvas id="chart-daivan"></canvas>${!data.chartData ? '<p style="color:#aaa;font-size:12px">Đang tải biểu đồ...</p>' : ''}</div>`;
       } else if (_currentPhan === 1 && _astrolabe?.cungScores) {
-        chartHtml = `<div style="margin:24px 0 8px"><canvas id="chart-radar-all" style="max-height:420px"></canvas></div>`;
+        chartHtml = `
+<div id="radar-all-wrap" style="margin:24px 0 16px">
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center">
+    <span style="font-size:12px;color:#888;margin-right:4px">Hiển thị:</span>
+    <button class="radar-btn active" data-metric="total" onclick="switchRadarMetric('total',this)">Tổng điểm</button>
+    <button class="radar-btn" data-metric="tiemNang" onclick="switchRadarMetric('tiemNang',this)">Tiềm Năng</button>
+    <button class="radar-btn" data-metric="benVung" onclick="switchRadarMetric('benVung',this)">Bền Vững</button>
+    <button class="radar-btn" data-metric="anToan" onclick="switchRadarMetric('anToan',this)">An Toàn</button>
+    <button class="radar-btn" data-metric="quyNhan" onclick="switchRadarMetric('quyNhan',this)">Quý Nhân</button>
+    <button class="radar-btn" data-metric="minhBach" onclick="switchRadarMetric('minhBach',this)">Minh Bạch</button>
+    <button class="radar-btn" data-metric="tuongHop" onclick="switchRadarMetric('tuongHop',this)">Tương Hợp</button>
+  </div>
+  <canvas id="chart-radar-all" style="max-height:460px"></canvas>
+  <div id="radar-legend" style="margin-top:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:12px"></div>
+</div>`;
       } else if (_currentPhan >= 2 && _currentPhan <= 13 && _astrolabe?.cungScores) {
         const _cungName = PHAN_TO_CUNG[_currentPhan];
         if (_astrolabe.cungScores[_cungName]) {
           chartHtml = `<div style="max-width:360px;margin:24px 0 8px"><canvas id="chart-radar-cung-${_currentPhan}"></canvas></div>`;
         }
       }
-      section.innerHTML = `<a id="phan-anchor-${_currentPhan}" class="phan-anchor"></a>
-        <div class="phan-num">Phần ${_currentPhan} / ${TONG_PHAN} — ${PHAN_LABELS[_currentPhan]}</div>`
-        + renderMarkdown(data.luanGiai) + chartHtml;
+      // ── Pre-generated JS section (cách cục, ý nghĩa)
+      let preGenHtml = '';
+      if (_astrolabe) {
+        const PHAN_TO_CUNG_MAP = {
+          1: null, // tổng quan
+          2:'Mệnh',3:'Phụ Mẫu',4:'Phúc Đức',5:'Điền Trạch',
+          6:'Quan Lộc',7:'Nô Bộc',8:'Thiên Di',9:'Tật Ách',
+          10:'Tài Bạch',11:'Tử Tức',12:'Phu Thê',13:'Huynh Đệ',
+        };
+        const cungForPhan = PHAN_TO_CUNG_MAP[_currentPhan];
+
+        if (_currentPhan === 1) {
+          // Tổng quan: liệt kê cách cục đặc biệt
+          const cc = _astrolabe.cachCuc || [];
+          if (cc.length > 0) {
+            preGenHtml += `<div class="pregen-block"><div class="pregen-title">⚙ Cách cục đặc biệt</div>`;
+            cc.forEach(c => {
+              preGenHtml += `<div class="pregen-item"><span class="cc-label cc-${c.loai}">${c.ten}</span><span class="cc-mota">${c.moTa}</span></div>`;
+            });
+            preGenHtml += `</div>`;
+          }
+          // Scores tổng quan
+          if (_astrolabe.cungScores) {
+            const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
+            const MV = {tiemNang:'Tiềm Năng',benVung:'Bền Vững',anToan:'An Toàn',quyNhan:'Quý Nhân',minhBach:'Minh Bạch',tuongHop:'Tương Hợp'};
+            const top3 = Object.entries(_astrolabe.cungScores)
+              .map(([c,sc]) => [c, METRICS.reduce((s,m) => s+sc[m],0)])
+              .sort((a,b) => b[1]-a[1]).slice(0,3);
+            const bot3 = Object.entries(_astrolabe.cungScores)
+              .map(([c,sc]) => [c, METRICS.reduce((s,m) => s+sc[m],0)])
+              .sort((a,b) => a[1]-b[1]).slice(0,3);
+            preGenHtml += `<div class="pregen-block"><div class="pregen-title">📊 Điểm mạnh / yếu nổi bật</div>`;
+            preGenHtml += `<div class="pregen-row"><span class="pregen-good">Mạnh nhất: ${top3.map(([c,s])=>`${c} (${s.toFixed(0)})`).join(', ')}</span></div>`;
+            preGenHtml += `<div class="pregen-row"><span class="pregen-bad">Yếu nhất: ${bot3.map(([c,s])=>`${c} (${s.toFixed(0)})`).join(', ')}</span></div>`;
+            preGenHtml += `</div>`;
+          }
+        } else if (cungForPhan && _astrolabe.cachCucTungCung?.[cungForPhan]) {
+          // Từng cung: hiển thị cách cục + ý nghĩa pre-computed
+          const ynItems = _astrolabe.cachCucTungCung[cungForPhan];
+          const ccItems = (_astrolabe.cachCuc||[]).filter(c => c.cung === cungForPhan);
+          const sc = _astrolabe.cungScores?.[cungForPhan];
+
+          if (ccItems.length > 0) {
+            preGenHtml += `<div class="pregen-block"><div class="pregen-title">⚙ Cách cục đặc biệt</div>`;
+            ccItems.forEach(c => {
+              preGenHtml += `<div class="pregen-item"><span class="cc-label cc-${c.loai}">${c.ten}</span></div>`;
+            });
+            preGenHtml += `</div>`;
+          }
+
+          if (ynItems.length > 0) {
+            preGenHtml += `<div class="pregen-block"><div class="pregen-title">📋 Phân tích sao</div>`;
+            ynItems.forEach(y => {
+              const cls = y.includes('đại cát') || y.includes('đại phú') ? 'yn-great-cat'
+                : y.includes('[cát]') || y.includes('phú quý') || y.includes('giàu sang') ? 'yn-cat'
+                : y.includes('đại hung') ? 'yn-great-hung'
+                : y.includes('hung') || y.includes('vất vả') || y.includes('tai') ? 'yn-hung'
+                : y.includes('Tuần') || y.includes('Triệt') ? 'yn-tuan'
+                : 'yn-neutral';
+              preGenHtml += `<div class="pregen-yn ${cls}">• ${y}</div>`;
+            });
+            preGenHtml += `</div>`;
+          }
+
+          if (sc) {
+            const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
+            const MV = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
+            preGenHtml += `<div class="pregen-block pregen-scores"><div class="pregen-title">📈 Đánh giá 6 chiều</div><div class="score-bars">`;
+            METRICS.forEach((m,i) => {
+              const v = sc[m];
+              const pct = v * 10;
+              const col = v >= 7 ? '#1E6B3C' : v >= 5 ? '#1455A4' : v >= 3 ? '#B8860B' : '#C0392B';
+              preGenHtml += `<div class="score-bar-row"><span class="score-label">${MV[i]}</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${pct}%;background:${col}"></div></div><span class="score-val">${v}</span></div>`;
+            });
+            preGenHtml += `</div></div>`;
+          }
+        }
+      }
+
+      const divider = preGenHtml ? `<div class="pregen-divider"><span>Luận giải</span></div>` : '';
+      section.innerHTML = \`<a id="phan-anchor-\${_currentPhan}" class="phan-anchor"></a>
+        <div class="phan-num">Phần \${_currentPhan} / \${TONG_PHAN} — \${PHAN_LABELS[_currentPhan]}</div>\`
+        + preGenHtml + chartHtml + divider
+        + renderMarkdown(data.luanGiai);
 
       if (_currentPhan === 14) {
         console.log('chartData received:', data.chartData);
@@ -838,8 +973,8 @@ select.form-input { cursor: pointer; }
           if (!ctx) return;
           const scores = _astrolabe.cungScores;
           const cungNames = Object.keys(scores);
-          const METRICS = ['tiemNang','benVung','ruiRo','quyNhan','minhBach','tuongHop'];
-          const METRIC_LABELS = ['Tiềm Năng','Bền Vững','Rủi Ro','Quý Nhân','Minh Bạch','Tương Hợp'];
+          const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
+          const METRIC_LABELS = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
           const COLORS = [
             '#1455A4','#1E6B3C','#C0392B','#7B2FBE','#B8860B','#0E7490',
             '#1455A4','#1E6B3C','#C0392B','#7B2FBE','#B8860B','#0E7490',
@@ -875,8 +1010,8 @@ select.form-input { cursor: pointer; }
           setTimeout(() => {
             const ctx = document.getElementById(`chart-radar-cung-${_currentPhan}`);
             if (!ctx) return;
-            const METRICS = ['tiemNang','benVung','ruiRo','quyNhan','minhBach','tuongHop'];
-            const METRIC_LABELS = ['Tiềm Năng','Bền Vững','Rủi Ro','Quý Nhân','Minh Bạch','Tương Hợp'];
+            const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
+            const METRIC_LABELS = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
             new Chart(ctx, {
               type: 'radar',
               data: {
@@ -884,7 +1019,7 @@ select.form-input { cursor: pointer; }
                 datasets: [{
                   label: _cungForChart,
                   data: METRICS.map(m => _sc[m]),
-                  borderColor: '#1455A4',
+                  borderColor: '#c9a84c',
                   backgroundColor: 'rgba(20,85,164,0.12)',
                   pointBackgroundColor: '#1455A4',
                   pointRadius: 4,
