@@ -1726,7 +1726,8 @@ select.form-input { cursor: pointer; }
       const data = await resp.json();
       if (data.error) throw new Error(data.error);
 
-      document.getElementById('nhanh-luangiai').innerHTML = renderMarkdown(data.luanGiai);
+      document.getElementById('nhanh-luangiai').innerHTML = renderMarkdown(data.luanGiai)
+        + `<div style="margin-top:20px"><button style="display:inline-block;background:transparent;color:#c9a84c;border:1.5px solid #c9a84c;padding:10px 24px;font-size:13px;cursor:pointer;border-radius:4px;font-family:inherit" onclick="window.print()">⬇ Tải PDF</button></div>`;
       document.getElementById('progress-fill').style.width = '100%';
 
     } catch(e) {
