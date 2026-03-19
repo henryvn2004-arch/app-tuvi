@@ -75,7 +75,13 @@ function buildPrompt(phan, laSoText, docs) {
     return ctx + '\n\nPHẦN 1 — TỔNG QUAN LÁ SỐ (200-250 từ)\nViết văn xuôi, không dùng bullet:\n1. Bản mệnh & khí chất: cục, thuận/nghịch lý, Tràng Sinh, nhóm Thái Tuế Mệnh vs Thân\n2. Cung Mệnh: dựa trên [CÁCH CỤC] và [Ý NGHĨA] — diễn giải, không liệt kê lại\n3. Một câu nhận định tổng: điểm mạnh/yếu nổi bật nhất';
   }
 
-  if (phan >= 2 && phan <= 13) {
+  if (phan === 2) {
+    const cung = CUNG_BY_PHAN[phan];
+    const desc = CUNG_DESC[cung] || '';
+    return ctx + '\n\nPHẦN 2 — CUNG MỆNH (200-250 từ)\n' + desc + '\nDựa trên [CÁCH CỤC] và [Ý NGHĨA] đã có — viết văn xuôi súc tích: bản chất chính tinh, cách cục nổi bật, điểm mạnh/yếu, khí chất và tác động thực tế lên cuộc đời. Không liệt kê lại data.';
+  }
+
+  if (phan >= 3 && phan <= 13) {
     const cung = CUNG_BY_PHAN[phan];
     const desc = CUNG_DESC[cung] || '';
     return ctx + '\n\nPHẦN ' + phan + ' — CUNG ' + cung.toUpperCase() + ' (80-120 từ)\n' + desc + '\nDựa trên [CÁCH CỤC] và [Ý NGHĨA] đã có — viết 2-3 đoạn văn xuôi súc tích: ý nghĩa chính, điểm nổi bật tốt/xấu, tác động thực tế. Không liệt kê lại data.';
