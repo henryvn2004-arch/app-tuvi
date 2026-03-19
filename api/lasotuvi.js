@@ -23,7 +23,51 @@ const CUNG_DESC = {
 };
 
 function buildPrompt(phan, laSoText, docs) {
-  const ctx = '=== LÁ SỐ ===\n' + laSoText + (docs ? '\n\n=== TÀI LIỆU ===\n' + docs : '');
+  // Trim laSoText theo phan để giảm token input
+  function trimLaSo(text, phan) {
+    if (!text) return text;
+    const lines = text.split('\n');
+    // Phan 1-13: chỉ cần phần đầu (bản mệnh + 12 cung + cách cục), bỏ đại vận
+    if (phan >= 1 && phan <= 13) {
+      const dvIdx = lines.findIndex(l => l.includes('=== 9 ĐẠI VẬN ==='));
+      if (dvIdx > 0) return lines.slice(0, dvIdx).join('\n');
+    }
+    // Phan 14: chỉ cần đại vận section
+    if (phan === 14) {
+      const dvIdx = lines.findIndex(l => l.includes('=== 9 ĐẠI VẬN ==='));
+      if (dvIdx > 0) return lines.slice(0, 30).join('\n') + '\n' + lines.slice(dvIdx).join('\n');
+    }
+    // Phan 15-23: phần đầu ngắn + section đại vận + chỉ ĐVn liên quan
+    if (phan >= 15 && phan <= 23) {
+      const dvNum = phan - 14;
+      const dvIdx = lines.findIndex(l => l.includes('=== 9 ĐẠI VẬN ==='));
+      const header = lines.slice(0, 20).join('\n'); // bản mệnh cơ bản
+      if (dvIdx > 0) {
+        const dvLines = lines.slice(dvIdx);
+        // Lấy chỉ ĐVn và ĐVn±1 cho context
+        const target = 'ĐV' + dvNum + ':';
+        const targetIdx = dvLines.findIndex(l => l.startsWith(target));
+        if (targetIdx >= 0) {
+          // Lấy từ ĐVn đến ĐVn+1 (khoảng 10 dòng)
+          const nextDvIdx = dvLines.findIndex((l, i) => i > targetIdx && /^ĐV\d+:/.test(l));
+          const dvSection = nextDvIdx > 0
+            ? dvLines.slice(0, 2).concat(dvLines.slice(targetIdx, nextDvIdx)).join('\n')
+            : dvLines.slice(0, 2).concat(dvLines.slice(targetIdx, targetIdx + 15)).join('\n');
+          return header + '\n' + dvSection;
+        }
+        return header + '\n' + dvLines.join('\n');
+      }
+    }
+    // Phan 24: tiểu vận — phần đầu + toàn bộ đại vận
+    if (phan === 24) {
+      const dvIdx = lines.findIndex(l => l.includes('=== 9 ĐẠI VẬN ==='));
+      if (dvIdx > 0) return lines.slice(0, 25).join('\n') + '\n' + lines.slice(dvIdx).join('\n');
+    }
+    return text;
+  }
+
+  const trimmedLaSo = trimLaSo(laSoText, phan);
+  const ctx = '=== LÁ SỐ ===\n' + trimmedLaSo + (docs ? '\n\n=== TÀI LIỆU ===\n' + docs : '');
 
   if (phan === 1) {
     return ctx + '\n\nPHẦN 1 — TỔNG QUAN LÁ SỐ (250-350 từ)\n1. Bản mệnh & cục: thuận/nghịch lý âm dương; sinh/vượng/bại/tuyệt địa\n2. Khí chất: so sánh nhóm Thái Tuế Mệnh vs Thân (nội tâm vs biểu hiện); Lộc Tồn tại Mệnh; Tràng Sinh\n3. Cách cục & ý nghĩa cung Mệnh: liệt kê tất cả từ [CÁCH CỤC] và [Ý NGHĨA] tại cung Mệnh — dùng trực tiếp, không tính lại\n4. Nhận định chung: ưu/nhược điểm nổi bật';
