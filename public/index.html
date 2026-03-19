@@ -1455,6 +1455,39 @@ select.form-input { cursor: pointer; }
     if (phan === _currentPhan + 1) loadNextPhan();
   }
 
+
+  const NAP_AM_FULL = {
+    'Giáp Tý':'Hải Trung Kim (Vàng dưới biển)','Ất Sửu':'Hải Trung Kim (Vàng dưới biển)',
+    'Bính Dần':'Lô Trung Hỏa (Lửa trong lò)','Đinh Mão':'Lô Trung Hỏa (Lửa trong lò)',
+    'Mậu Thìn':'Đại Lâm Mộc (Cây trong rừng lớn)','Kỷ Tỵ':'Đại Lâm Mộc (Cây trong rừng lớn)',
+    'Canh Ngọ':'Lộ Bàng Thổ (Đất giữa đường)','Tân Mùi':'Lộ Bàng Thổ (Đất giữa đường)',
+    'Nhâm Thân':'Kiếm Phong Kim (Vàng ở mũi kiếm)','Quý Dậu':'Kiếm Phong Kim (Vàng ở mũi kiếm)',
+    'Giáp Tuất':'Sơn Đầu Hỏa (Lửa trên núi)','Ất Hợi':'Sơn Đầu Hỏa (Lửa trên núi)',
+    'Bính Tý':'Giản Hạ Thủy (Nước dưới khe)','Đinh Sửu':'Giản Hạ Thủy (Nước dưới khe)',
+    'Mậu Dần':'Thành Đầu Thổ (Đất trên mặt thành)','Kỷ Mão':'Thành Đầu Thổ (Đất trên mặt thành)',
+    'Canh Thìn':'Bạch Lạp Kim (Vàng trong nến trắng)','Tân Tỵ':'Bạch Lạp Kim (Vàng trong nến trắng)',
+    'Nhâm Ngọ':'Dương Liễu Mộc (Gỗ cây liễu)','Quý Mùi':'Dương Liễu Mộc (Gỗ cây liễu)',
+    'Giáp Thân':'Tuyền Trung Thủy (Nước dưới suối)','Ất Dậu':'Tuyền Trung Thủy (Nước dưới suối)',
+    'Bính Tuất':'Ốc Thượng Thổ (Đất trên nóc nhà)','Đinh Hợi':'Ốc Thượng Thổ (Đất trên nóc nhà)',
+    'Mậu Tý':'Tích Lịch Hỏa (Lửa sấm sét)','Kỷ Sửu':'Tích Lịch Hỏa (Lửa sấm sét)',
+    'Canh Dần':'Tùng Bách Mộc (Gỗ cây tùng, bách)','Tân Mão':'Tùng Bách Mộc (Gỗ cây tùng, bách)',
+    'Nhâm Thìn':'Trường Lưu Thủy (Nước chảy giống lớn)','Quý Tỵ':'Trường Lưu Thủy (Nước chảy giống lớn)',
+    'Giáp Ngọ':'Sa Trung Kim (Vàng trong cát)','Ất Mùi':'Sa Trung Kim (Vàng trong cát)',
+    'Bính Thân':'Sơn Hạ Hỏa (Lửa dưới chân núi)','Đinh Dậu':'Sơn Hạ Hỏa (Lửa dưới chân núi)',
+    'Mậu Tuất':'Bình Địa Mộc (Cây ở đồng bằng)','Kỷ Hợi':'Bình Địa Mộc (Cây ở đồng bằng)',
+    'Canh Tý':'Bích Thượng Thổ (Đất trên vách)','Tân Sửu':'Bích Thượng Thổ (Đất trên vách)',
+    'Nhâm Dần':'Kim Bạch Kim (Vàng pha loài kim sắc trắng)','Quý Mão':'Kim Bạch Kim (Vàng pha loài kim sắc trắng)',
+    'Giáp Thìn':'Phú Đăng Hỏa (Lửa ngọn đèn lớn)','Ất Tỵ':'Phú Đăng Hỏa (Lửa ngọn đèn lớn)',
+    'Bính Ngọ':'Thiên Hà Thủy (Nước ở sông trên trời)','Đinh Mùi':'Thiên Hà Thủy (Nước ở sông trên trời)',
+    'Mậu Thân':'Đại Dịch Thổ (Đất thuộc một khu lớn)','Kỷ Dậu':'Đại Dịch Thổ (Đất thuộc một khu lớn)',
+    'Canh Tuất':'Thoa Xuyến Kim (Vàng làm trang sức)','Tân Hợi':'Thoa Xuyến Kim (Vàng làm trang sức)',
+    'Nhâm Tý':'Tang Đố Mộc (Gỗ cây dâu)','Quý Sửu':'Tang Đố Mộc (Gỗ cây dâu)',
+    'Giáp Dần':'Đại Khê Thủy (Nước dưới khe lớn)','Ất Mão':'Đại Khê Thủy (Nước dưới khe lớn)',
+    'Bính Thìn':'Sa Trung Thổ (Đất lẫn trong cát)','Đinh Tỵ':'Sa Trung Thổ (Đất lẫn trong cát)',
+    'Mậu Ngọ':'Thiên Thượng Hỏa (Lửa trên trời)','Kỷ Mùi':'Thiên Thượng Hỏa (Lửa trên trời)',
+    'Canh Thân':'Thạch Lựu Mộc (Gỗ cây thạch lựu)','Tân Dậu':'Thạch Lựu Mộc (Gỗ cây thạch lựu)',
+    'Nhâm Tuất':'Đại Hải Thủy (Nước trong biển lớn)','Quý Hợi':'Đại Hải Thủy (Nước trong biển lớn)',
+  };
   function displayResult(hoten, ngay, thang, nam, gioitinh, namXem, ls) {
     const conv = ls._conv || {};
     document.getElementById('result-header').innerHTML = `
@@ -1492,7 +1525,7 @@ select.form-input { cursor: pointer; }
         <div class="center-row">🎂 ${ls.tuoiXem} tuổi (âm lịch)</div>
         <div class="center-row">⚧ Giới tính: ${gioitinh === 'nam' ? 'Nam' : 'Nữ'}</div>
         <hr class="center-divider">
-        <div class="center-row">Năm: <b style="color:var(--navy)">${ls.canChiNam}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${ls.napAm}</b></div>
+        <div class="center-row">Năm: <b style="color:var(--navy)">${ls.canChiNam}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${NAP_AM_FULL[ls.canChiNam] || ls.napAm}</b></div>
         <div class="center-row">Cục: <b style="color:var(--navy)">${ls.cuc}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${ls.menhDC}</b> · Thân: <b style="color:var(--navy)">${ls.thanDC}</b></div>
         <hr class="center-divider">
         <div class="center-row">Năm <b style="color:var(--blue)">${ls.chiNamXem||''}</b> — Tuổi ${ls.tuoiXem}</div>
