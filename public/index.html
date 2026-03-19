@@ -330,7 +330,7 @@ select.form-input { cursor: pointer; }
 .btn-group-label { font-size:11px; color:#888; letter-spacing:0.5px; text-transform:uppercase; }
 .btn-group-label-paid { margin-top:4px; }
 .btn-quick-row { display:flex; gap:8px; flex-wrap:wrap; }
-.btn-quick { padding:9px 14px; background:#1a2535; color:#c9a84c; border:1px solid #2a3a4a; border-radius:6px; font-size:13px; cursor:pointer; transition:all 0.15s; font-family:inherit; }
+.btn-quick { padding:9px 14px; background:#1a2535; color:#ffffff; border:1px solid #2a3a4a; border-radius:6px; font-size:13px; cursor:pointer; transition:all 0.15s; font-family:inherit; }
 .btn-quick:hover { background:#1e2e42; border-color:#c9a84c55; color:#e8c060; }
 .btn-quick:disabled { opacity:0.5; cursor:not-allowed; }
 .nhanh-badge { font-size:16px; font-weight:600; color:#c9a84c; margin-bottom:16px; letter-spacing:0.5px; }
@@ -1660,12 +1660,16 @@ select.form-input { cursor: pointer; }
         <div class="laso-wrap"><div class="laso-label">Lá Số — 12 Cung</div><div class="laso-grid" id="laso-grid-nhanh"></div></div>
         ${preGenHtml}${chartHtml}${divider}
         <div id="nhanh-luangiai" class="nhanh-loading">Đang luận giải...</div>`;
+      body.appendChild(section);
       document.getElementById('result-section').classList.add('active');
       document.getElementById('result-section').scrollIntoView({behavior:'smooth'});
 
-      // Render lá số grid
-      if (typeof renderLasoGrid === 'function') renderLasoGrid(ls, 'laso-grid-nhanh');
-      else if (typeof _renderGrid !== 'undefined') document.getElementById('laso-grid-nhanh').innerHTML = _renderGrid(ls);
+      // Render lá số grid — reuse displayResult grid logic
+      displayResult(hoten, ngay, thang, nam, gioitinh, namXem, ls);
+      // Move grid into nhanh container
+      const mainGrid = document.getElementById('laso-grid');
+      const nanhGrid2 = document.getElementById('laso-grid-nhanh');
+      if (mainGrid && nanhGrid2) nanhGrid2.innerHTML = mainGrid.innerHTML;
 
       // Render charts
       if (cfg.phan === 1) {
