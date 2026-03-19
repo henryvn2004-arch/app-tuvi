@@ -68,6 +68,8 @@ function buildPrompt(phan, laSoText, docs) {
 
   const trimmedLaSo = trimLaSo(laSoText, phan);
   const ctx = '=== LÁ SỐ ===\n' + trimmedLaSo + (docs ? '\n\n=== TÀI LIỆU ===\n' + docs : '');
+  // Export ctx for caching
+  buildPrompt._lastCtx = ctx;
 
   if (phan === 1) {
     return ctx + '\n\nPHẦN 1 — TỔNG QUAN LÁ SỐ (350-450 từ)\n1. Bản mệnh & cục: thuận/nghịch lý âm dương; sinh/vượng/bại/tuyệt địa\n2. Khí chất: so sánh nhóm Thái Tuế Mệnh vs Thân (nội tâm vs biểu hiện); Lộc Tồn tại Mệnh; Tràng Sinh\n3. Cách cục & ý nghĩa cung Mệnh: liệt kê tất cả từ [CÁCH CỤC] và [Ý NGHĨA] tại cung Mệnh — dùng trực tiếp, không tính lại\n4. Nhận định chung: ưu/nhược điểm nổi bật';
@@ -109,18 +111,49 @@ module.exports = async (req, res) => {
   }
 
   try {
+    // Model: Sonnet cho phần tổng quan/đại vận, Haiku cho từng cung
+    const useHaiku = (phan >= 2 && phan <= 13) || (phan >= 15 && phan <= 23);
+    const model = useHaiku ? 'claude-haiku-4-5-20251001' : 'claude-sonnet-4-5';
+    const maxTok = phan === 1 ? 1800
+      : phan === 14 ? 1800
+      : phan === 24 ? 1500
+      : useHaiku && phan >= 2 && phan <= 13 ? 700
+      : useHaiku && phan >= 15 && phan <= 23 ? 900
+      : 1200;
+
+    // Prompt caching: cache system prompt + laSoText (lặp lại 24 lần)
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': ANTHROPIC_API_KEY,
         'anthropic-version': '2023-06-01',
+        'anthropic-beta': 'prompt-caching-2024-07-31',
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-5',
-        max_tokens: phan === 1 ? 2000 : phan === 14 ? 2000 : phan === 24 ? 2000 : 1500,
-        system: SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: prompt }],
+        model,
+        max_tokens: maxTok,
+        system: [
+          {
+            type: 'text',
+            text: SYSTEM_PROMPT,
+            cache_control: { type: 'ephemeral' },
+          },
+        ],
+        messages: [{
+          role: 'user',
+          content: [
+            {
+              type: 'text',
+              text: buildPrompt._lastCtx || '',
+              cache_control: { type: 'ephemeral' },
+            },
+            {
+              type: 'text',
+              text: prompt.replace(buildPrompt._lastCtx || '', '').trim(),
+            },
+          ],
+        }],
       }),
     });
 
