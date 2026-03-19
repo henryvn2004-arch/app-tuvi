@@ -1664,12 +1664,17 @@ select.form-input { cursor: pointer; }
       document.getElementById('result-section').classList.add('active');
       document.getElementById('result-section').scrollIntoView({behavior:'smooth'});
 
-      // Render lá số grid — reuse displayResult grid logic
-      displayResult(hoten, ngay, thang, nam, gioitinh, namXem, ls);
-      // Move grid into nhanh container
-      const mainGrid = document.getElementById('laso-grid');
-      const nanhGrid2 = document.getElementById('laso-grid-nhanh');
-      if (mainGrid && nanhGrid2) nanhGrid2.innerHTML = mainGrid.innerHTML;
+      // Render lá số grid — copy từ laso-grid đã render sẵn
+      const _mainGrid = document.getElementById('laso-grid');
+      const _nahnGrid = document.getElementById('laso-grid-nhanh');
+      if (_mainGrid && _nahnGrid) {
+        _nahnGrid.innerHTML = _mainGrid.innerHTML;
+      } else if (_nahnGrid) {
+        // Nếu chưa có laso-grid (chưa chạy full), render mới
+        displayResult(hoten, ngay, thang, nam, gioitinh, namXem, ls);
+        const _g = document.getElementById('laso-grid');
+        if (_g) _nahnGrid.innerHTML = _g.innerHTML;
+      }
 
       // Render charts
       if (cfg.phan === 1) {
