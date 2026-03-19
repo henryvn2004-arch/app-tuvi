@@ -406,7 +406,7 @@ select.form-input { cursor: pointer; }
         </div>
         <div class="form-group">
           <label class="form-label">Năm xem vận</label>
-          <input class="form-input" type="number" id="namXem" placeholder="2025" />
+          <input class="form-input" type="number" id="namXem" />
         </div>
       </div>
 
@@ -635,6 +635,12 @@ select.form-input { cursor: pointer; }
     .catch(e => console.warn('Cannot load cach_cuc_all.json:', e));
 </script>
 <script>
+  // Set default năm xem = năm hiện tại
+  (function() {
+    const el = document.getElementById('namXem');
+    if (el && !el.value) el.value = new Date().getFullYear();
+  })();
+
   let _laSoText = null;
   let _engineResult_global = null;
   let _hoTen = null, _ngay = null, _thang = null, _nam = null;
@@ -797,6 +803,26 @@ select.form-input { cursor: pointer; }
 
     if (!hoten || !ngay || !thang || !nam || gio === '') {
       errEl.textContent = 'Vui lòng điền đầy đủ tất cả thông tin.';
+      errEl.classList.add('active'); return;
+    }
+
+    // Validate ngày tháng năm
+    const currentYear = new Date().getFullYear();
+    if (nam < 1900 || nam > currentYear) {
+      errEl.textContent = `Năm sinh không hợp lệ (phải từ 1900 đến ${currentYear}).`;
+      errEl.classList.add('active'); return;
+    }
+    if (thang < 1 || thang > 12) {
+      errEl.textContent = 'Tháng sinh không hợp lệ (1-12).';
+      errEl.classList.add('active'); return;
+    }
+    const daysInMonth = new Date(nam, thang, 0).getDate();
+    if (ngay < 1 || ngay > daysInMonth) {
+      errEl.textContent = `Ngày sinh không hợp lệ (tháng ${thang}/${nam} có ${daysInMonth} ngày).`;
+      errEl.classList.add('active'); return;
+    }
+    if (gio === '' || gio === undefined || gio === null) {
+      errEl.textContent = 'Giờ sinh là bắt buộc — ảnh hưởng trực tiếp đến cung Mệnh.';
       errEl.classList.add('active'); return;
     }
 
@@ -1464,6 +1490,7 @@ select.form-input { cursor: pointer; }
         ${conv._dl ? `<div class="center-row">📅 ${conv._dl.day}/${conv._dl.month}/${conv._dl.year} (Dương Lịch) · giờ ${conv.gioChi||''}</div>` : ''}
         <div class="center-row">📅 ${conv.amLich ? conv.amLich.day+'/'+conv.amLich.month+'/'+conv.amLich.year : ''} (Âm Lịch) · giờ ${conv.gioChi||''}</div>
         <div class="center-row">🎂 ${ls.tuoiXem} tuổi (âm lịch)</div>
+        <div class="center-row">⚧ Giới tính: ${gioitinh === 'nam' ? 'Nam' : 'Nữ'}</div>
         <hr class="center-divider">
         <div class="center-row">Năm: <b style="color:var(--navy)">${ls.canChiNam}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${ls.napAm}</b></div>
         <div class="center-row">Cục: <b style="color:var(--navy)">${ls.cuc}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${ls.menhDC}</b> · Thân: <b style="color:var(--navy)">${ls.thanDC}</b></div>
@@ -1572,6 +1599,25 @@ select.form-input { cursor: pointer; }
 
     if (!hoten || !ngay || !thang || !nam || gio === '') {
       errEl.textContent = 'Vui lòng điền đầy đủ thông tin.';
+      errEl.classList.add('active'); return;
+    }
+
+    const currentYear2 = new Date().getFullYear();
+    if (nam < 1900 || nam > currentYear2) {
+      errEl.textContent = `Năm sinh không hợp lệ (1900–${currentYear2}).`;
+      errEl.classList.add('active'); return;
+    }
+    if (thang < 1 || thang > 12) {
+      errEl.textContent = 'Tháng sinh không hợp lệ (1-12).';
+      errEl.classList.add('active'); return;
+    }
+    const daysInMonth2 = new Date(nam, thang, 0).getDate();
+    if (ngay < 1 || ngay > daysInMonth2) {
+      errEl.textContent = `Ngày sinh không hợp lệ (tháng ${thang}/${nam} có ${daysInMonth2} ngày).`;
+      errEl.classList.add('active'); return;
+    }
+    if (gio === '' || gio === undefined || gio === null) {
+      errEl.textContent = 'Giờ sinh là bắt buộc — ảnh hưởng trực tiếp đến cung Mệnh.';
       errEl.classList.add('active'); return;
     }
 
