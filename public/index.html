@@ -1657,24 +1657,14 @@ select.form-input { cursor: pointer; }
       const divider = preGenHtml ? `<div class="pregen-divider"><span>Luận giải</span></div>` : '';
       section.innerHTML = `
         <div class="phan-num nhanh-badge">${cfg.icon} ${cfg.label} — Luận giải nhanh</div>
-        <div class="laso-wrap"><div class="laso-label">Lá Số — 12 Cung</div><div class="laso-grid" id="laso-grid-nhanh"></div></div>
         ${preGenHtml}${chartHtml}${divider}
         <div id="nhanh-luangiai" class="nhanh-loading">Đang luận giải...</div>`;
       body.appendChild(section);
       document.getElementById('result-section').classList.add('active');
       document.getElementById('result-section').scrollIntoView({behavior:'smooth'});
 
-      // Render lá số grid — copy từ laso-grid đã render sẵn
-      const _mainGrid = document.getElementById('laso-grid');
-      const _nahnGrid = document.getElementById('laso-grid-nhanh');
-      if (_mainGrid && _nahnGrid) {
-        _nahnGrid.innerHTML = _mainGrid.innerHTML;
-      } else if (_nahnGrid) {
-        // Nếu chưa có laso-grid (chưa chạy full), render mới
-        displayResult(hoten, ngay, thang, nam, gioitinh, namXem, ls);
-        const _g = document.getElementById('laso-grid');
-        if (_g) _nahnGrid.innerHTML = _g.innerHTML;
-      }
+      // Render lá số grid chung
+      displayResult(hoten, ngay, thang, nam, gioitinh, namXem, ls);
 
       // Render charts
       if (cfg.phan === 1) {
