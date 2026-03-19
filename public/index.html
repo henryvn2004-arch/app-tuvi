@@ -714,7 +714,7 @@ select.form-input { cursor: pointer; }
       const tot = p.stars.filter(s=>s.nhom!=='chinh'&&!BAD_T.has((STAR_DATA[s.ten]||{}).type)).map(s=>s.ten+(s.hoa?`[${s.hoa}]`:'')).join(' ');
       const xau = p.stars.filter(s=>s.nhom!=='chinh'&&BAD_T.has((STAR_DATA[s.ten]||{}).type)).map(s=>s.ten).join(' ');
       const sc = dv.scoring;
-      const scStr = sc ? `TT=${sc.thienThoi} ĐL=${sc.diaLoi} NH=${sc.nhanHoa} Tổng=${sc.tong} ${sc.flag}` : '';
+      const scStr = sc ? `TT=${sc.thienThoi?.score??sc.thienThoi} ĐL=${sc.diaLoi?.score??sc.diaLoi} NH=${sc.nhanHoa?.score??sc.nhanHoa} Tổng=${sc.tong} ${sc.flag}` : '';
       lines.push(`ĐV${i+1}: ${dv.diaChi} (${dv.tuoiStart}–${dv.tuoiEnd}t) cung=${p.cungName}${isCur?' ← ĐANG XEM':''}`);
       if (scStr) lines.push(`  Scoring: ${scStr}`);
       lines.push(`  Chính tinh: ${chinh||'(vô chính diệu)'}`);
@@ -842,6 +842,12 @@ select.form-input { cursor: pointer; }
 
       loaderText.textContent = `Đang luận giải: ${PHAN_LABELS[_currentPhan]}... (2/2)`;
       document.getElementById('progress-fill').style.width = '70%';
+      // Delay để tránh rate limit — đặc biệt cho phần đại vận
+      if (_currentPhan > 1) {
+        const delay = _currentPhan >= 15 ? 2500 : 1000;
+        await new Promise(r => setTimeout(r, delay));
+      }
+
       const resp = await fetch('/api/lasotuvi', {
         method: 'POST', headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
