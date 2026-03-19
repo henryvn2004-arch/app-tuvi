@@ -70,7 +70,7 @@ function buildPrompt(phan, laSoText, docs) {
   const ctx = '=== LÁ SỐ ===\n' + trimmedLaSo + (docs ? '\n\n=== TÀI LIỆU ===\n' + docs : '');
 
   if (phan === 1) {
-    return ctx + '\n\nPHẦN 1 — TỔNG QUAN LÁ SỐ (250-350 từ)\n1. Bản mệnh & cục: thuận/nghịch lý âm dương; sinh/vượng/bại/tuyệt địa\n2. Khí chất: so sánh nhóm Thái Tuế Mệnh vs Thân (nội tâm vs biểu hiện); Lộc Tồn tại Mệnh; Tràng Sinh\n3. Cách cục & ý nghĩa cung Mệnh: liệt kê tất cả từ [CÁCH CỤC] và [Ý NGHĨA] tại cung Mệnh — dùng trực tiếp, không tính lại\n4. Nhận định chung: ưu/nhược điểm nổi bật';
+    return ctx + '\n\nPHẦN 1 — TỔNG QUAN LÁ SỐ (350-450 từ)\n1. Bản mệnh & cục: thuận/nghịch lý âm dương; sinh/vượng/bại/tuyệt địa\n2. Khí chất: so sánh nhóm Thái Tuế Mệnh vs Thân (nội tâm vs biểu hiện); Lộc Tồn tại Mệnh; Tràng Sinh\n3. Cách cục & ý nghĩa cung Mệnh: liệt kê tất cả từ [CÁCH CỤC] và [Ý NGHĨA] tại cung Mệnh — dùng trực tiếp, không tính lại\n4. Nhận định chung: ưu/nhược điểm nổi bật';
   }
 
   if (phan >= 2 && phan <= 13) {
@@ -80,7 +80,7 @@ function buildPrompt(phan, laSoText, docs) {
   }
 
   if (phan === 14) {
-    return ctx + '\n\nPHẦN 14 — TỔNG QUAN CÁC ĐẠI VẬN\n\nDựa vào phần === 9 ĐẠI VẬN ===, tính điểm TẤT CẢ 9 đại vận:\n- TT (Thiên Thời) 0-5: ngũ hành địa chi cung ĐV vs chi năm sinh\n- ĐL (Địa Lợi) 0-1: ngũ hành cung ĐV vs nạp âm bản mệnh\n- NH (Nhân Hòa) 0-4: bộ sao Mệnh vs bộ ĐV + sát tinh TPTC\nCông thức: Tổng = NH + (NH/4)×ĐL + (NH/4)×TT (max 10)\n\nBảng tổng hợp ĐV1 đến ĐV9:\n| ĐV | Tuổi | Cung | TT | ĐL | NH | Tổng | Flag |\n\nJSON chart (BẮT BUỘC, đủ 9 điểm):\n```chartdata\n{"labels":["ĐV1 x-y","ĐV2 x-y","ĐV3 x-y","ĐV4 x-y","ĐV5 x-y","ĐV6 x-y","ĐV7 x-y","ĐV8 x-y","ĐV9 x-y"],"scores":[s1,s2,s3,s4,s5,s6,s7,s8,s9]}\n```\nThay x-y bằng khung tuổi thực tế, s1-s9 bằng điểm Tổng.\n\nNhận xét ngắn (80-100 từ): giai đoạn đẹp, khó khăn, xu hướng tổng thể.';
+    return ctx + '\n\nPHẦN 14 — TỔNG QUAN CÁC ĐẠI VẬN\n\nDựa vào phần === 9 ĐẠI VẬN ===, tính điểm TẤT CẢ 9 đại vận:\n- TT (Thiên Thời) 0-5: ngũ hành địa chi cung ĐV vs chi năm sinh\n- ĐL (Địa Lợi) 0-1: ngũ hành cung ĐV vs nạp âm bản mệnh\n- NH (Nhân Hòa) 0-4: bộ sao Mệnh vs bộ ĐV + sát tinh TPTC\nCông thức: Tổng = NH + (NH/4)×ĐL + (NH/4)×TT (max 10)\n\nBảng tổng hợp ĐV1 đến ĐV9:\n| ĐV | Tuổi | Cung | TT | ĐL | NH | Tổng | Flag |\n\nJSON chart (BẮT BUỘC, đủ 9 điểm):\n```chartdata\n{"labels":["ĐV1 x-y","ĐV2 x-y","ĐV3 x-y","ĐV4 x-y","ĐV5 x-y","ĐV6 x-y","ĐV7 x-y","ĐV8 x-y","ĐV9 x-y"],"scores":[s1,s2,s3,s4,s5,s6,s7,s8,s9]}\n```\nThay x-y bằng khung tuổi thực tế, s1-s9 bằng điểm Tổng.\n\nNhận xét (350-450 từ tổng cả bảng lẫn nhận xét): giai đoạn đẹp, khó khăn, xu hướng tổng thể.';
   }
 
     if (phan >= 15 && phan <= 23) {
@@ -89,7 +89,7 @@ function buildPrompt(phan, laSoText, docs) {
   }
 
   if (phan === 24) {
-    return ctx + '\n\nPHẦN 24 — TIỂU VẬN NĂM XEM (150-200 từ)\n- Tính chất năm (70% đại vận + 30% tiểu vận)\n- Tổ hợp sao cung đại vận gốc, cung tiểu vận, cung lưu niên đại vận → cách cục và ý nghĩa\n- Xu hướng tốt/xấu\n- Cơ hội & rủi ro\nPhần này cụ thể và thực tế nhất.';
+    return ctx + '\n\nPHẦN 24 — TIỂU VẬN NĂM XEM (300-400 từ)\n- Tính chất năm (70% đại vận + 30% tiểu vận)\n- Tổ hợp sao cung đại vận gốc, cung tiểu vận, cung lưu niên đại vận → cách cục và ý nghĩa\n- Xu hướng tốt/xấu\n- Cơ hội & rủi ro\nPhần này cụ thể và thực tế nhất.';
   }
 
   return ctx + '\nPhần ' + phan + ': Luận giải theo lá số.';
@@ -118,7 +118,7 @@ module.exports = async (req, res) => {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-5',
-        max_tokens: phan === 14 ? 2000 : 1500,
+        max_tokens: phan === 1 ? 2000 : phan === 14 ? 2000 : phan === 24 ? 2000 : 1500,
         system: SYSTEM_PROMPT,
         messages: [{ role: 'user', content: prompt }],
       }),
