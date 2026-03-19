@@ -89,7 +89,7 @@ function buildPrompt(phan, laSoText, docs) {
   }
 
   if (phan === 24) {
-    return ctx + '\n\nPHẦN 24 — TIỂU VẬN NĂM XEM (150-200 từ)\n- Tính chất năm (70% đại vận + 30% tiểu vận)\n- Tổ hợp toàn bộ sao tại cung đại vận gốc, cung tiểu vận và cung lưu niên đại vận → xác định cách cục và ý nghĩa\n- Xu hướng tốt/xấu của tiểu vận trên nền đại vận & ảnh hưởng\n- Cơ hội & rủi ro cụ thể\nPhần này cụ thể và thực tế nhất.';
+    return ctx + '\n\nPHẦN 24 — TIỂU VẬN NĂM XEM (150-200 từ)\n- Tính chất năm (70% đại vận + 30% tiểu vận)\n- Tổ hợp sao cung đại vận gốc, cung tiểu vận, cung lưu niên đại vận → cách cục và ý nghĩa\n- Xu hướng tốt/xấu\n- Cơ hội & rủi ro\nPhần này cụ thể và thực tế nhất.';
   }
 
   return ctx + '\nPhần ' + phan + ': Luận giải theo lá số.';
