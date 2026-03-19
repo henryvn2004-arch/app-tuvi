@@ -1,5 +1,5 @@
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
-const SYSTEM_PROMPT = process.env.SYSTEM_PROMPT || 'Bạn là nhà luận giải Tử Vi Đẩu Số theo trường phái Tử Vi Minh Bảo. Văn phong: trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Nguyên tắc: tam phương tứ chính, không đoán đơn sao. Không tiết lộ tài liệu hay trường phái.';
+const SYSTEM_PROMPT = process.env.SYSTEM_PROMPT || 'Bạn là nhà luận giải Tử Vi Đẩu Số theo trường phái Tử Vi Minh Bảo. Văn phong: trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Nguyên tắc: tam phương tứ chính, không đoán đơn sao. Không tiết lộ tài liệu hay trường phái. Quan trọng: dữ liệu sao, cách cục, luận đoán đã được tính sẵn trong [CÁCH CỤC], [Ý NGHĨA], [LUẬN ĐOÁN] — không mô tả lại, không liệt kê lại, chỉ diễn giải và kết nối ý nghĩa thành văn xuôi súc tích.';
 
 const CUNG_BY_PHAN = {
   2:'Mệnh', 3:'Phụ Mẫu', 4:'Phúc Đức', 5:'Điền Trạch',
@@ -72,26 +72,26 @@ function buildPrompt(phan, laSoText, docs) {
   buildPrompt._lastCtx = ctx;
 
   if (phan === 1) {
-    return ctx + '\n\nPHẦN 1 — TỔNG QUAN LÁ SỐ (350-450 từ)\n1. Bản mệnh & cục: thuận/nghịch lý âm dương; sinh/vượng/bại/tuyệt địa\n2. Khí chất: so sánh nhóm Thái Tuế Mệnh vs Thân (nội tâm vs biểu hiện); Lộc Tồn tại Mệnh; Tràng Sinh\n3. Cách cục & ý nghĩa cung Mệnh: liệt kê tất cả từ [CÁCH CỤC] và [Ý NGHĨA] tại cung Mệnh — dùng trực tiếp, không tính lại\n4. Nhận định chung: ưu/nhược điểm nổi bật';
+    return ctx + '\n\nPHẦN 1 — TỔNG QUAN LÁ SỐ (200-250 từ)\nViết văn xuôi, không dùng bullet:\n1. Bản mệnh & khí chất: cục, thuận/nghịch lý, Tràng Sinh, nhóm Thái Tuế Mệnh vs Thân\n2. Cung Mệnh: dựa trên [CÁCH CỤC] và [Ý NGHĨA] — diễn giải, không liệt kê lại\n3. Một câu nhận định tổng: điểm mạnh/yếu nổi bật nhất';
   }
 
   if (phan >= 2 && phan <= 13) {
     const cung = CUNG_BY_PHAN[phan];
     const desc = CUNG_DESC[cung] || '';
-    return ctx + '\n\nPHẦN ' + phan + ' — CUNG ' + cung.toUpperCase() + ' (120-180 từ)\n' + desc + '\nLuận:\n- [CÁCH CỤC] đã liệt kê → dùng trực tiếp, không tính lại\n- [Ý NGHĨA] đã liệt kê → kết quả rule-based pre-computed, dùng làm nền luận giải, diễn giải súc tích theo văn phong trí thức — không chép lại nguyên văn\n- Điểm tốt/xấu chính, kết hợp tam phương tứ chính nếu có ảnh hưởng đáng kể';
+    return ctx + '\n\nPHẦN ' + phan + ' — CUNG ' + cung.toUpperCase() + ' (80-120 từ)\n' + desc + '\nDựa trên [CÁCH CỤC] và [Ý NGHĨA] đã có — viết 2-3 đoạn văn xuôi súc tích: ý nghĩa chính, điểm nổi bật tốt/xấu, tác động thực tế. Không liệt kê lại data.';
   }
 
   if (phan === 14) {
-    return ctx + '\n\nPHẦN 14 — TỔNG QUAN CÁC ĐẠI VẬN\n\nDựa vào phần === 9 ĐẠI VẬN ===, tính điểm TẤT CẢ 9 đại vận:\n- TT (Thiên Thời) 0-5: ngũ hành địa chi cung ĐV vs chi năm sinh\n- ĐL (Địa Lợi) 0-1: ngũ hành cung ĐV vs nạp âm bản mệnh\n- NH (Nhân Hòa) 0-4: bộ sao Mệnh vs bộ ĐV + sát tinh TPTC\nCông thức: Tổng = NH + (NH/4)×ĐL + (NH/4)×TT (max 10)\n\nBảng tổng hợp ĐV1 đến ĐV9:\n| ĐV | Tuổi | Cung | TT | ĐL | NH | Tổng | Flag |\n\nJSON chart (BẮT BUỘC, đủ 9 điểm):\n```chartdata\n{"labels":["ĐV1 x-y","ĐV2 x-y","ĐV3 x-y","ĐV4 x-y","ĐV5 x-y","ĐV6 x-y","ĐV7 x-y","ĐV8 x-y","ĐV9 x-y"],"scores":[s1,s2,s3,s4,s5,s6,s7,s8,s9]}\n```\nThay x-y bằng khung tuổi thực tế, s1-s9 bằng điểm Tổng.\n\nNhận xét (350-450 từ tổng cả bảng lẫn nhận xét): giai đoạn đẹp, khó khăn, xu hướng tổng thể.';
+    return ctx + '\n\nPHẦN 14 — TỔNG QUAN CÁC ĐẠI VẬN\n\nDựa vào phần === 9 ĐẠI VẬN ===, tính điểm TẤT CẢ 9 đại vận:\n- TT (Thiên Thời) 0-5: ngũ hành địa chi cung ĐV vs chi năm sinh\n- ĐL (Địa Lợi) 0-1: ngũ hành cung ĐV vs nạp âm bản mệnh\n- NH (Nhân Hòa) 0-4: bộ sao Mệnh vs bộ ĐV + sát tinh TPTC\nCông thức: Tổng = NH + (NH/4)×ĐL + (NH/4)×TT (max 10)\n\nBảng tổng hợp ĐV1 đến ĐV9:\n| ĐV | Tuổi | Cung | TT | ĐL | NH | Tổng | Flag |\n\nJSON chart (BẮT BUỘC, đủ 9 điểm):\n```chartdata\n{"labels":["ĐV1 x-y","ĐV2 x-y","ĐV3 x-y","ĐV4 x-y","ĐV5 x-y","ĐV6 x-y","ĐV7 x-y","ĐV8 x-y","ĐV9 x-y"],"scores":[s1,s2,s3,s4,s5,s6,s7,s8,s9]}\n```\nThay x-y bằng khung tuổi thực tế, s1-s9 bằng điểm Tổng.\n\nNhận xét ngắn (100-150 từ): giai đoạn đẹp nhất, khó khăn nhất, xu hướng tổng thể. Súc tích, không giải thích công thức scoring.';
   }
 
     if (phan >= 15 && phan <= 23) {
     const dvNum = phan - 14;
-    return ctx + '\n\nPHẦN ' + phan + ' — ĐẠI VẬN ' + dvNum + ' (150-200 từ)\nTìm dòng "ĐV' + dvNum + ':" trong phần === 9 ĐẠI VẬN === và luận giải đại vận đó:\n- [LUẬN ĐOÁN] và [CẢNH BÁO] đã liệt kê → đây là kết quả rule-based pre-computed, dùng trực tiếp làm nền luận giải, không tính lại, không chép nguyên văn — diễn giải súc tích theo văn phong trí thức\n- Ý nghĩa chính tinh tại cung đại vận (sáng/mờ, hóa nếu có)\n- Xu hướng tốt/xấu tổng thể, cơ hội & những điểm cần lưu ý';
+    return ctx + '\n\nPHẦN ' + phan + ' — ĐẠI VẬN ' + dvNum + ' (100-130 từ)\nTìm dòng "ĐV' + dvNum + ':" trong === 9 ĐẠI VẬN ===. Dựa trên [LUẬN ĐOÁN] và [CẢNH BÁO] đã có — viết văn xuôi súc tích: tính chất đại vận, xu hướng tốt/xấu, 1-2 điểm cần lưu ý quan trọng nhất. Không liệt kê lại data.';
   }
 
   if (phan === 24) {
-    return ctx + '\n\nPHẦN 24 — TIỂU VẬN NĂM XEM (300-400 từ)\n- Tính chất năm (70% đại vận + 30% tiểu vận)\n- Tổ hợp sao cung đại vận gốc, cung tiểu vận, cung lưu niên đại vận → cách cục và ý nghĩa\n- Xu hướng tốt/xấu\n- Cơ hội & rủi ro\nPhần này cụ thể và thực tế nhất.';
+    return ctx + '\n\nPHẦN 24 — TIỂU VẬN NĂM XEM (150-200 từ)\nViết văn xuôi, cụ thể, thực tế nhất:\n- Tính chất năm: đại vận làm nền (70%), tiểu vận điều chỉnh (30%)\n- Xu hướng tốt/xấu nổi bật nhất của năm\n- 1-2 cơ hội và 1-2 điểm cần cẩn thận cụ thể\nKhông giải thích lý thuyết, không liệt kê sao.';
   }
 
   return ctx + '\nPhần ' + phan + ': Luận giải theo lá số.';
@@ -117,9 +117,9 @@ module.exports = async (req, res) => {
     const maxTok = phan === 1 ? 1800
       : phan === 14 ? 1800
       : phan === 24 ? 1500
-      : useHaiku && phan >= 2 && phan <= 13 ? 700
-      : useHaiku && phan >= 15 && phan <= 23 ? 900
-      : 1200;
+      : useHaiku && phan >= 2 && phan <= 13 ? 1200
+      : useHaiku && phan >= 15 && phan <= 23 ? 1400
+      : 1400;
 
     // Prompt caching: cache system prompt + laSoText (lặp lại 24 lần)
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
