@@ -36,10 +36,10 @@ function buildPrompt(phan, laSoText, docs) {
   }
 
   if (phan === 14) {
-    return ctx + '\n\nPHẦN 14 — TỔNG QUAN CÁC ĐẠI VẬN\n\nDựa vào phần === 9 ĐẠI VẬN ===, tính điểm TẤT CẢ 9 đại vận:\n- TT (Thiên Thời) 0-5: dựa vào chính tinh và ngũ hành cung\n- ĐL (Địa Lợi) 0-2: sao tốt nhiều/ít\n- NH (Nhân Hòa) 0-3: sao xấu ít/nhiều\n\nBảng tổng hợp ĐV1 đến ĐV9:\n| ĐV | Tuổi | Cung | TT | ĐL | NH | Tổng | Flag |\n\nJSON chart (BẮT BUỘC, đủ 9 điểm):\n```chartdata\n{"labels":["ĐV1 x-y","ĐV2 x-y","ĐV3 x-y","ĐV4 x-y","ĐV5 x-y","ĐV6 x-y","ĐV7 x-y","ĐV8 x-y","ĐV9 x-y"],"scores":[s1,s2,s3,s4,s5,s6,s7,s8,s9]}\n```\nThay x-y bằng khung tuổi thực tế, s1-s9 bằng điểm Tổng tương ứng.\n\nNhận xét ngắn (80-100 từ): giai đoạn đẹp, khó khăn, xu hướng tổng thể.';
+    return ctx + '\n\nPHẦN 14 — TỔNG QUAN CÁC ĐẠI VẬN\n\nDựa vào phần === 9 ĐẠI VẬN ===, tính điểm TẤT CẢ 9 đại vận:\n- TT (Thiên Thời) 0-5: ngũ hành địa chi cung ĐV vs chi năm sinh\n- ĐL (Địa Lợi) 0-1: ngũ hành cung ĐV vs nạp âm bản mệnh\n- NH (Nhân Hòa) 0-4: bộ sao Mệnh vs bộ ĐV + sát tinh TPTC\nCông thức: Tổng = NH + (NH/4)×ĐL + (NH/4)×TT (max 10)\n\nBảng tổng hợp ĐV1 đến ĐV9:\n| ĐV | Tuổi | Cung | TT | ĐL | NH | Tổng | Flag |\n\nJSON chart (BẮT BUỘC, đủ 9 điểm):\n```chartdata\n{"labels":["ĐV1 x-y","ĐV2 x-y","ĐV3 x-y","ĐV4 x-y","ĐV5 x-y","ĐV6 x-y","ĐV7 x-y","ĐV8 x-y","ĐV9 x-y"],"scores":[s1,s2,s3,s4,s5,s6,s7,s8,s9]}\n```\nThay x-y bằng khung tuổi thực tế, s1-s9 bằng điểm Tổng.\n\nNhận xét ngắn (80-100 từ): giai đoạn đẹp, khó khăn, xu hướng tổng thể.';
   }
 
-  if (phan >= 15 && phan <= 23) {
+    if (phan >= 15 && phan <= 23) {
     const dvNum = phan - 14;
     return ctx + '\n\nPHẦN ' + phan + ' — ĐẠI VẬN ' + dvNum + ' (150-200 từ)\nTìm dòng "ĐV' + dvNum + ':" trong phần === 9 ĐẠI VẬN === và luận giải đại vận đó:\n- [LUẬN ĐOÁN] và [CẢNH BÁO] đã liệt kê → đây là kết quả rule-based pre-computed, dùng trực tiếp làm nền luận giải, không tính lại, không chép nguyên văn — diễn giải súc tích theo văn phong trí thức\n- Ý nghĩa chính tinh tại cung đại vận (sáng/mờ, hóa nếu có)\n- Xu hướng tốt/xấu tổng thể, cơ hội & những điểm cần lưu ý';
   }
@@ -57,7 +57,12 @@ module.exports = async (req, res) => {
   const { laSoText, phan, docs } = req.body;
   if (!laSoText || !phan) return res.status(400).json({ error: 'Thiếu dữ liệu' });
 
-  const prompt = buildPrompt(phan, laSoText, docs);
+  let prompt;
+  try {
+    prompt = buildPrompt(phan, laSoText, docs);
+  } catch(e) {
+    return res.status(500).json({ error: 'buildPrompt error: ' + e.message });
+  }
 
   try {
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
@@ -68,7 +73,7 @@ module.exports = async (req, res) => {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
+        model: 'claude-sonnet-4-5',
         max_tokens: phan === 14 ? 2000 : 1500,
         system: SYSTEM_PROMPT,
         messages: [{ role: 'user', content: prompt }],
@@ -90,7 +95,7 @@ module.exports = async (req, res) => {
     if (chartMatch) {
       try { chartData = JSON.parse(chartMatch[1].trim()); } catch(e) {}
     }
-    const luanGiai = text.replace(/```chartdata[\s\S]*?```/, '').trim();
+    const luanGiai = text ? text.replace(/```chartdata[\s\S]*?```/, '').trim() : '';
 
     return res.status(200).json({ luanGiai, chartData, phan });
   } catch(e) {
