@@ -323,19 +323,19 @@ select.form-input { cursor: pointer; }
 }
 .radar-btn:hover { background: #252525; color: #ddd; }
 .radar-btn.active { background: #c9a84c22; color: #c9a84c; border-color: #c9a84c; }
-.pregen-block { background:#181818; border:1px solid #2a2a2a; border-radius:8px; padding:12px 16px; margin:12px 0; }
+.pregen-block { background:#0e1a2a; border:1px solid #1a2d42; border-radius:8px; padding:12px 16px; margin:12px 0; }
 .pregen-title { font-size:11px; font-weight:600; color:#5FA8D3; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:8px; }
 .pregen-item { font-size:12px; color:#ccc; margin:4px 0; }
 .pregen-yn { font-size:12.5px; line-height:1.6; padding:2px 0; }
 .yn-great-cat { color:#7EC8E3; }
 .yn-cat { color:#5FA8D3; }
-.yn-great-hung { color:#142B7A; }
-.yn-hung { color:#233E99; }
+.yn-great-hung { color:#C0392B; }
+.yn-hung { color:#E57373; }
 .yn-tuan { color:#2F5BEA; }
 .yn-neutral { color:#d0dce8; }
 .pregen-row { font-size:12px; margin:3px 0; }
 .pregen-good { color:#7EC8E3; }
-.pregen-bad { color:#142B7A; }
+.pregen-bad { color:#C0392B; }
 .cc-label { font-size:11px; font-weight:600; padding:2px 6px; border-radius:3px; margin-right:6px; }
 .cc-quy_cuc { background:#2a1f5e; color:#a78bfa; }
 .cc-phu_cuc { background:#1f3a2a; color:#4ade80; }
@@ -351,11 +351,11 @@ select.form-input { cursor: pointer; }
 .score-bars { display:flex; flex-direction:column; gap:6px; margin-top:4px; }
 .score-bar-row { display:flex; align-items:center; gap:8px; }
 .score-label { font-size:11px; color:#bbb; width:80px; flex-shrink:0; }
-.score-bar-bg { flex:1; height:8px; background:#252525; border-radius:4px; overflow:hidden; }
+.score-bar-bg { flex:1; height:8px; background:#162030; border-radius:4px; overflow:hidden; }
 .score-bar-fill { height:100%; border-radius:4px; transition:width 0.5s; }
 .score-val { font-size:11px; color:#ccc; width:24px; text-align:right; flex-shrink:0; }
 .rules-group { margin: 4px 0; }
-.rules-canh-bao { background:#1f0e0e; border-radius:4px; padding:4px 6px; margin:4px 0; border-left:2px solid #f87171; }
+.rules-canh-bao { background:#1a0808; border-radius:4px; padding:4px 6px; margin:4px 0; border-left:2px solid #f87171; }
 .candle-wrap { overflow-x:auto; padding-bottom:8px; }
 .candle-svg { display:block; }
 .candle-wick { stroke-width:1.5; }
@@ -1027,7 +1027,7 @@ select.form-input { cursor: pointer; }
           const _tuoiNow = _astrolabe.tuoiXem || 0;
           const _dvProgress = _dvTuoiEnd > _dvTuoiStart ? Math.min(100, Math.max(0, (_tuoiNow - _dvTuoiStart) / (_dvTuoiEnd - _dvTuoiStart) * 100)).toFixed(0) : 0;
           const _dvConLai = Math.max(0, _dvTuoiEnd - _tuoiNow);
-          const _dvSocol = _dvSc?.tong >= 7 ? '#1FA3D6' : _dvSc?.tong >= 4 ? '#2F5BEA' : '#0B1F4B';
+          const _dvSocol = _dvSc?.tong >= 7 ? '#1FA3D6' : _dvSc?.tong >= 4 ? '#2F5BEA' : '#C0392BB';
           const _dvFlag = _dvSc?.tong >= 7 ? '🟢' : _dvSc?.tong >= 4 ? '🟡' : '🔴';
           chartHtml = `
 <div style="margin:16px 0 8px">
@@ -1038,7 +1038,7 @@ select.form-input { cursor: pointer; }
         } else if (_currentPhan === 24 && _astrolabe) {
           const _dvHT24 = _astrolabe.daiVanHienTai;
           const _dvTong24 = _dvHT24?.scoring?.tong || 0;
-          const _dvCol24 = _dvTong24 >= 7 ? '#1FA3D6' : _dvTong24 >= 4 ? '#C9A84C' : '#0B1F4B';
+          const _dvCol24 = _dvTong24 >= 7 ? '#1FA3D6' : _dvTong24 >= 4 ? '#C9A84C' : '#C0392B';
           chartHtml = `
 <div style="display:grid;grid-template-columns:180px 1fr;gap:24px;align-items:center;margin:20px 0">
   <canvas id="chart-donut-24" width="180" height="180"></canvas>
@@ -1142,7 +1142,7 @@ select.form-input { cursor: pointer; }
             METRICS.forEach((m,i) => {
               const v = sc[m];
               const pct = v * 10;
-              const col = v >= 7 ? '#1FA3D6' : v >= 5 ? '#2F5BEA' : v >= 3 ? '#142B7A' : '#0B1F4B';
+              const col = v >= 7 ? '#1FA3D6' : v >= 5 ? '#2F5BEA' : v >= 3 ? '#233E99' : '#C0392B';
               preGenHtml += `<div class="score-bar-row"><span class="score-label">${MV[i]}</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${pct}%;background:${col}"></div></div><span class="score-val">${v}</span></div>`;
             });
             preGenHtml += `</div></div>`;
@@ -1300,7 +1300,7 @@ select.form-input { cursor: pointer; }
               .sort((a,b)=>b[1]-a[1]);
             barEl.innerHTML = sorted.map(([cung, total]) => {
               const pct = (total/60*100).toFixed(1);
-              const col = total>=40?'#1FA3D6':total>=33?'#2F5BEA':'#0B1F4B';
+              const col = total>=40?'#1FA3D6':total>=33?'#2F5BEA':'#C0392B';
               return `<div style="display:flex;align-items:center;gap:8px">
                 <span style="font-size:11px;color:#aaa;width:80px;text-align:right;flex-shrink:0">${cung}</span>
                 <div style="flex:1;height:18px;background:#1e2e42;border-radius:3px;overflow:hidden">
@@ -1321,7 +1321,7 @@ select.form-input { cursor: pointer; }
             {name:'Sức khỏe', cung:'Tật Ách',    color:'#2F5BEA'},
             {name:'Gia đình',  cung:'Phụ Mẫu',    color:'#233E99'},
             {name:'Bạn bè',    cung:'Nô Bộc',     color:'#142B7A'},
-            {name:'Tâm linh',  cung:'Phúc Đức',   color:'#0B1F4B'},
+            {name:'Tâm linh',  cung:'Phúc Đức',   color:'#C0392B'},
             {name:'Tài sản',   cung:'Điền Trạch', color:'#071A2E'},
           ];
           const wheelCtx = document.getElementById('chart-wheel-life');
@@ -1381,7 +1381,7 @@ select.form-input { cursor: pointer; }
               const span = (dv.tuoiEnd - dv.tuoiStart) || 10;
               const sc = dv.scoring?.tong || 0;
               const h = 22 + (sc/10)*44;
-              const col = sc>=7 ? '#1FA3D6' : sc>=4 ? '#2F5BEA' : sc>=0 ? '#0B1F4B' : '#071A2E';
+              const col = sc>=7 ? '#1FA3D6' : sc>=4 ? '#2F5BEA' : sc>=0 ? '#C0392B' : '#071A2E';
               const isCur = tuoiNow >= dv.tuoiStart && tuoiNow <= dv.tuoiEnd;
               const flag = sc>=7?'🟢':sc>=4?'🟡':'🔴';
               const block = document.createElement('div');
@@ -1419,7 +1419,7 @@ select.form-input { cursor: pointer; }
           const ctx24 = document.getElementById('chart-donut-24');
           if (!ctx24) return;
           const dvTong = _astrolabe.daiVanHienTai?.scoring?.tong || 5;
-          const col24 = dvTong>=7?'#1FA3D6':dvTong>=4?'#2F5BEA':'#0B1F4B';
+          const col24 = dvTong>=7?'#1FA3D6':dvTong>=4?'#2F5BEA':'#C0392B';
           new Chart(ctx24, {
             type:'doughnut',
             data:{
@@ -1637,7 +1637,7 @@ select.form-input { cursor: pointer; }
                 borderColor: '#2F5BEA',
                 backgroundColor: 'rgba(20,85,164,0.08)',
                 pointBackgroundColor: data.chartData.scores.map(s =>
-                  s >= 7 ? '#1FA3D6' : s >= 5 ? '#1A3A5C' : '#0B1F4B'
+                  s >= 7 ? '#1FA3D6' : s >= 5 ? '#1A3A5C' : '#C0392B'
                 ),
                 pointRadius: 6,
                 tension: 0.4,
@@ -2011,7 +2011,7 @@ select.form-input { cursor: pointer; }
           preGenHtml += `<div class="pregen-block pregen-scores"><div class="pregen-title">📈 Đánh giá 6 chiều</div><div class="score-bars">`;
           METRICS.forEach((m,i) => {
             const v = sc[m]; const pct = v*10;
-            const col = v>=7?'#1FA3D6':v>=5?'#2F5BEA':v>=3?'#142B7A':'#0B1F4B';
+            const col = v>=7?'#1FA3D6':v>=5?'#2F5BEA':v>=3?'#233E99':'#C0392B';
             preGenHtml += `<div class="score-bar-row"><span class="score-label">${MV[i]}</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${pct}%;background:${col}"></div></div><span class="score-val">${v}</span></div>`;
           });
           preGenHtml += `</div></div>`;
@@ -2107,74 +2107,80 @@ select.form-input { cursor: pointer; }
     const el = document.getElementById(containerId);
     if (!el || !data?.length) return;
 
-    const W = opts.width  || Math.min(data.length * (opts.candleW||7) + 60, 900);
-    const H = opts.height || 160;
-    const PAD = { top:20, right:10, bottom:28, left:30 };
-    const cw   = opts.candleW || Math.max(4, Math.floor((W - PAD.left - PAD.right) / data.length) - 1);
-    const plotW = W - PAD.left - PAD.right;
-    const plotH = H - PAD.top  - PAD.bottom;
+    const W    = opts.width  || Math.min(data.length * (opts.candleW ? opts.candleW+3 : 9) + 60, 920);
+    const H    = opts.height || 180;
+    const PAD  = { top:28, right:14, bottom:32, left:34 };
+    const cw   = opts.candleW || Math.max(4, Math.floor((W - PAD.left - PAD.right) / data.length) - 2);
+    const plotH = H - PAD.top - PAD.bottom;
 
-    const minVal = Math.max(0, Math.min(...data.map(d=>d.minScore)) - 0.5);
-    const maxVal = Math.min(10, Math.max(...data.map(d=>d.maxScore)) + 0.5);
-    const range  = maxVal - minVal || 1;
+    const allVals = data.flatMap(d => [d.high ?? d.maxScore ?? 10, d.low ?? d.minScore ?? 0]);
+    const minVal  = Math.max(0, Math.min(...allVals) - 0.3);
+    const maxVal  = Math.min(10, Math.max(...allVals) + 0.3);
+    const range   = maxVal - minVal || 1;
 
-    function y(v) { return PAD.top + plotH - ((v - minVal) / range * plotH); }
-    function x(i) { return PAD.left + i * (cw + 1) + cw/2; }
+    function yv(v) { return PAD.top + plotH - ((v - minVal) / range * plotH); }
+    function xc(i) { return PAD.left + i * (cw + 2) + cw / 2; }
 
     // Grid lines
-    let gridLines = '';
-    for (let v = Math.ceil(minVal); v <= Math.floor(maxVal); v++) {
-      const yv = y(v);
-      gridLines += `<line class="candle-grid" x1="${PAD.left}" y1="${yv}" x2="${W-PAD.right}" y2="${yv}"/>`;
-      gridLines += `<text x="${PAD.left-4}" y="${yv+3}" font-size="8" fill="#444" text-anchor="end">${v}</text>`;
+    let grid = '';
+    const step = (maxVal - minVal) > 6 ? 2 : 1;
+    for (let v = Math.ceil(minVal); v <= Math.floor(maxVal); v += step) {
+      const gy = yv(v);
+      grid += `<line x1="${PAD.left}" y1="${gy}" x2="${W-PAD.right}" y2="${gy}" stroke="#1a2535" stroke-width="0.5" stroke-dasharray="3,3"/>`;
+      grid += `<text x="${PAD.left-5}" y="${gy+3}" font-size="8" fill="#4a5a6a" text-anchor="end">${v}</text>`;
     }
 
-    // Candles
+    // Candles — proper OHLC
     let candles = '';
     data.forEach((d, i) => {
-      const cx    = x(i);
-      const yMain = y(d.mainScore);
-      const yMax  = y(d.maxScore);
-      const yMin  = y(d.minScore);
-      const bodyH = Math.max(2, Math.abs(yMax - yMin));
-      const col   = d.direction === 'up' ? '#5FA8D3'
-                  : d.direction === 'down' ? '#0B1F4B' : '#C9A84C';
-      const colDim = d.direction === 'up' ? '#1A4030'
-                   : d.direction === 'down' ? '#071A2E' : '#7A6030';
+      const open  = d.open  !== undefined ? d.open  : d.mainScore;
+      const close = d.close !== undefined ? d.close : d.mainScore;
+      const high  = d.high  !== undefined ? d.high  : d.maxScore;
+      const low   = d.low   !== undefined ? d.low   : d.minScore;
 
-      // Wick
-      candles += `<line class="candle-wick" x1="${cx}" y1="${yMax}" x2="${cx}" y2="${yMin}" stroke="${colDim}"/>`;
+      const bullish  = close >= open;
+      const bodyCol  = bullish ? '#5FA8D3' : '#C0392B';
+      const wickCol  = bullish ? '#2F5BEA' : '#922B21';
+
+      const yOpen  = yv(open);
+      const yClose = yv(close);
+      const yHigh  = yv(high);
+      const yLow   = yv(low);
+      const cx     = xc(i);
+
+      const bodyTop = Math.min(yOpen, yClose);
+      const bodyHt  = Math.max(1.5, Math.abs(yOpen - yClose));
+
+      // Upper wick
+      candles += `<line x1="${cx}" y1="${yHigh}" x2="${cx}" y2="${bodyTop}" stroke="${wickCol}" stroke-width="1.2"/>`;
+      // Lower wick
+      candles += `<line x1="${cx}" y1="${bodyTop + bodyHt}" x2="${cx}" y2="${yLow}" stroke="${wickCol}" stroke-width="1.2"/>`;
       // Body
-      candles += `<rect class="candle-body" x="${cx-cw/2}" y="${Math.min(yMax,yMain)}" width="${cw}" height="${Math.max(2,Math.abs(yMain-yMax))}" fill="${col}" opacity="0.9"/>`;
-      // Main dot
-      candles += `<circle cx="${cx}" cy="${yMain}" r="1.5" fill="#fff" opacity="0.6"/>`;
+      candles += `<rect x="${cx - cw/2}" y="${bodyTop}" width="${cw}" height="${bodyHt}" fill="${bodyCol}" rx="1" opacity="0.92"/>`;
 
-      // Label every 5 or 10 years
-      if (data.length <= 15 || i % (data.length > 50 ? 10 : 5) === 0) {
-        const lbl = d.diaChi || (d.tuoi ? d.tuoi+'t' : '');
-        candles += `<text class="candle-label" x="${cx}" y="${H-PAD.bottom+12}" fill="#555">${lbl}</text>`;
-        if (d.tuoi && data.length <= 15) {
-          candles += `<text class="candle-label" x="${cx}" y="${H-PAD.bottom+20}" fill="#444">${d.tuoi}t</text>`;
-        }
+      // X-axis label = tuổi
+      const labelStep = data.length > 60 ? 10 : data.length > 20 ? 5 : 1;
+      if (d.tuoi % labelStep === 0 || data.length <= 5) {
+        candles += `<text x="${cx}" y="${H - PAD.bottom + 14}" font-size="8" fill="#4a5a6a" text-anchor="middle">${d.tuoi}</text>`;
       }
     });
 
-    // Current year marker
-    let curMarker = '';
-    const curIdx = data.findIndex(d => d.tuoi === (_astrolabe?.tuoiXem));
+    // Current age marker
+    let marker = '';
+    const tuoiNow = _astrolabe?.tuoiXem;
+    const curIdx  = tuoiNow ? data.findIndex(d => d.tuoi === tuoiNow) : -1;
     if (curIdx >= 0) {
-      const cx = x(curIdx);
-      curMarker = `<line x1="${cx}" y1="${PAD.top}" x2="${cx}" y2="${H-PAD.bottom}" stroke="#5FA8D3" stroke-width="1" stroke-dasharray="3,2" opacity="0.8"/>
-        <text x="${cx}" y="${PAD.top-5}" font-size="8" fill="#5FA8D3" text-anchor="middle">◆</text>`;
+      const cx = xc(curIdx);
+      marker = `<line x1="${cx}" y1="${PAD.top}" x2="${cx}" y2="${H-PAD.bottom}" stroke="#5FA8D3" stroke-width="1" stroke-dasharray="3,2" opacity="0.7"/>
+                <text x="${cx}" y="${PAD.top - 7}" font-size="8" fill="#5FA8D3" text-anchor="middle">▼${tuoiNow}t</text>`;
     }
 
-    el.innerHTML = `<svg class="candle-svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
-      <line class="candle-axis" x1="${PAD.left}" y1="${PAD.top}" x2="${PAD.left}" y2="${H-PAD.bottom}"/>
-      <line class="candle-axis" x1="${PAD.left}" y1="${H-PAD.bottom}" x2="${W-PAD.right}" y2="${H-PAD.bottom}"/>
-      ${gridLines}${candles}${curMarker}
+    el.innerHTML = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:block;max-width:100%">
+      <line x1="${PAD.left}" y1="${PAD.top-4}" x2="${PAD.left}" y2="${H-PAD.bottom}" stroke="#1e2d42" stroke-width="1"/>
+      <line x1="${PAD.left}" y1="${H-PAD.bottom}" x2="${W-PAD.right}" y2="${H-PAD.bottom}" stroke="#1e2d42" stroke-width="1"/>
+      ${grid}${candles}${marker}
     </svg>`;
   }
-
 
 </script>
 </body>
