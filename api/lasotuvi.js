@@ -151,12 +151,8 @@ module.exports = async (req, res) => {
           content: [
             {
               type: 'text',
-              text: buildPrompt._lastCtx || '',
+              text: prompt,
               cache_control: { type: 'ephemeral' },
-            },
-            {
-              type: 'text',
-              text: prompt.replace(buildPrompt._lastCtx || '', '').trim(),
             },
           ],
         }],
