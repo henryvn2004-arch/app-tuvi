@@ -686,6 +686,13 @@ select.form-input { cursor: pointer; }
   'Đại Vận 6','Đại Vận 7','Đại Vận 8','Đại Vận 9',
   'Tiểu Vận Năm Xem',
 ];
+  // Patch DV labels with age ranges from daiVans data
+  if (_astrolabe?.daiVans) {
+    for (let _di = 0; _di < 9; _di++) {
+      const _dv = _astrolabe.daiVans[_di];
+      if (_dv) PHAN_LABELS[15 + _di] = 'Đại Vận ' + (_di+1) + ' (' + _dv.tuoiStart + '–' + _dv.tuoiEnd + 't)';
+    }
+  }
   const QUERIES = {
   1:  () => `lục thập hoa giáp tinh hệ tổng quan mệnh cục chính tinh khí chất`,
   2:  () => `cung mệnh chính tinh cách cục ý nghĩa`,
@@ -1663,14 +1670,14 @@ select.form-input { cursor: pointer; }
       // ── Render candlestick charts (after section in DOM) ────────
       if (_currentPhan === 14 && _astrolabe?.tieuVanScores?.length) {
         setTimeout(() => {
-          renderCandlestick('candle-90yr', _astrolabe.tieuVanScores, {candleW:6, height:180});
+          renderCandlestick('candle-90yr', _astrolabe.tieuVanScores, {candleW:9, height:260});
         }, 100);
       }
       if (_currentPhan >= 15 && _currentPhan <= 23 && _astrolabe?.tieuVanScores) {
         setTimeout(() => {
           const _dvN = _currentPhan - 14;
           const _dvData = _astrolabe.tieuVanScores.filter(tv => tv.dvIdx === _dvN - 1);
-          renderCandlestick('candle-dv' + _dvN, _dvData, {candleW:18, height:160});
+          renderCandlestick('candle-dv' + _dvN, _dvData, {candleW:32, height:260});
         }, 100);
       }
       if (_currentPhan === 24 && _astrolabe?.tieuVanScores) {
@@ -1678,7 +1685,7 @@ select.form-input { cursor: pointer; }
           const _tuoiNow = _astrolabe.tuoiXem || 0;
           const _next3 = _astrolabe.tieuVanScores
             .filter(tv => tv.tuoi >= _tuoiNow && tv.tuoi < _tuoiNow + 3);
-          renderCandlestick('candle-3yr', _next3, {candleW:40, height:160, width:200});
+          renderCandlestick('candle-3yr', _next3, {candleW:70, height:260, width:280});
         }, 100);
       }
 
@@ -2133,10 +2140,15 @@ select.form-input { cursor: pointer; }
     // Candles — proper OHLC
     let candles = '';
     data.forEach((d, i) => {
-      const open  = d.open  !== undefined ? d.open  : d.mainScore;
-      const close = d.close !== undefined ? d.close : d.mainScore;
+      const _rawOpen  = d.open  !== undefined ? d.open  : d.mainScore;
+      const _rawClose = d.close !== undefined ? d.close : d.mainScore;
       const high  = d.high  !== undefined ? d.high  : d.maxScore;
       const low   = d.low   !== undefined ? d.low   : d.minScore;
+      // Exaggerate body × 2.5 around mainScore for visibility
+      const _mid  = (_rawOpen + _rawClose) / 2;
+      const _exFactor = 3.5;
+      const open  = Math.max(low,  Math.min(high, _mid + (_rawOpen  - _mid) * _exFactor));
+      const close = Math.max(low,  Math.min(high, _mid + (_rawClose - _mid) * _exFactor));
 
       const bullish  = close >= open;
       const bodyCol  = bullish ? '#5FA8D3' : '#C0392B';
