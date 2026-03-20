@@ -1730,6 +1730,10 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
       },
       napAmHanh, tuoiXem
     ),
+    tieuVanScores: tinhTieuVanScores(
+      { palaces, daiVans: daiVansScored },
+      gioitinh, amDuong, chiNam, namSinhDL
+    ),
   };
 }
 
@@ -2072,6 +2076,10 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
         ),
       },
       napAmHanh, tuoiXem
+    ),
+    tieuVanScores: tinhTieuVanScores(
+      { palaces, daiVans: daiVansScored },
+      gioitinh, amDuong, chiNam, namSinhDL
     ),
   };
 }
@@ -3834,6 +3842,179 @@ function phanTichDaiVanRules(dvPalace, menhPalace, ls) {
     if (nhieuSaoXau) add('Triệt án ngữ hội nhiều sao xấu — hạn tốt gặp trở ngại đầu', 'trung');
     if (trietKimCung) add('Triệt đáo Kim cung (Thân/Dậu) — đặc cách tốt, giảm tính xấu, tăng tính tốt', 'tot');
   }
+
+  return results;
+}
+
+
+
+
+// ================================================================
+// TÍNH TIỂU VẬN SCORE — candlestick data cho từng năm
+// Output: ls.tieuVanScores = array of {
+//   nam, tuoi, diaChi, dvIdx,
+//   mainScore, maxScore, minScore,
+//   direction: 'up'|'down'|'flat',
+//   satCount, catCount
+// }
+// ================================================================
+
+function tinhTieuVanScores(ls, gioitinh, amDuong, chiNam, namSinhDL) {
+  const { palaces, daiVans } = ls;
+  if (!daiVans || !palaces) return [];
+
+  const DIA_CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+  function mod12(n) { return ((n % 12) + 12) % 12; }
+  function dcIdx(dc) { return DIA_CHI.indexOf(dc); }
+
+  // ── Star lists ────────────────────────────────────────────────
+  const CAT_TINH = ['Tả Phụ','Hữu Bật','Thiên Khôi','Thiên Việt','Văn Xương','Văn Khúc',
+                    'Lộc Tồn','Hóa Lộc','Hóa Quyền','Hóa Khoa','Thiên Mã','Thiên Lương',
+                    'Thiên Phúc','Thiên Thọ','Long Trì','Phượng Các','Ân Quang','Thiên Quý'];
+  const SAT_BAI  = ['Kình Dương','Đà La','Hỏa Tinh','Linh Tinh','Địa Không','Địa Kiếp',
+                    'Thiên Khốc','Thiên Hư','Tang Môn','Bạch Hổ','Đại Hao','Tiểu Hao',
+                    'Hóa Kỵ','Thiên Hình','Thiên Riêu'];
+
+  // ── Spline helper: cubic hermite interpolation ─────────────────
+  // Given extrema at midpoints of each DV, interpolate score for any year
+  function buildSplinePoints(dvs) {
+    // Each DV: extrema at year 5 (0-based: tuoiStart+4)
+    // Boundary between DVs: avg of adjacent DV scores
+    const pts = []; // {tuoi, score}
+
+    dvs.forEach((dv, i) => {
+      const mid = dv.tuoiStart + 4;
+      pts.push({ tuoi: mid, score: dv.scoring?.tong || 5 });
+    });
+
+    // Add boundary points (avg of adjacent)
+    const boundaries = [];
+    for (let i = 0; i < dvs.length - 1; i++) {
+      const boundaryTuoi = dvs[i].tuoiEnd;
+      const boundaryScore = ((dvs[i].scoring?.tong || 5) + (dvs[i+1].scoring?.tong || 5)) / 2;
+      boundaries.push({ tuoi: boundaryTuoi, score: boundaryScore });
+    }
+
+    // Merge and sort all control points
+    const allPts = [...pts, ...boundaries].sort((a,b) => a.tuoi - b.tuoi);
+    return allPts;
+  }
+
+  function interpolate(allPts, tuoi) {
+    if (allPts.length === 0) return 5;
+    if (tuoi <= allPts[0].tuoi) return allPts[0].score;
+    if (tuoi >= allPts[allPts.length-1].tuoi) return allPts[allPts.length-1].score;
+
+    // Find surrounding points
+    let i = 0;
+    while (i < allPts.length - 1 && allPts[i+1].tuoi < tuoi) i++;
+    const p0 = allPts[Math.max(0, i-1)];
+    const p1 = allPts[i];
+    const p2 = allPts[i+1];
+    const p3 = allPts[Math.min(allPts.length-1, i+2)];
+
+    // Catmull-Rom spline
+    const t = (tuoi - p1.tuoi) / (p2.tuoi - p1.tuoi);
+    const t2 = t*t, t3 = t2*t;
+    const score =
+      0.5 * ((2*p1.score) +
+      (-p0.score + p2.score) * t +
+      (2*p0.score - 5*p1.score + 4*p2.score - p3.score) * t2 +
+      (-p0.score + 3*p1.score - 3*p2.score + p3.score) * t3);
+
+    return Math.max(0, Math.min(10, score));
+  }
+
+  // ── Lưu niên đại hạn cung index per year ─────────────────────
+  function getLuuNienCungIdx(dvCungIdx, ageIndex) {
+    const s = dvCungIdx;
+    const x = mod12(s + 6);
+    const duongNam_amNu = (amDuong === 'dương' && gioitinh === 'nam') ||
+                          (amDuong === 'âm'    && gioitinh === 'nu');
+    const ai = Math.min(ageIndex, 9);
+    if (duongNam_amNu) {
+      const map = [s, x, mod12(x-1), x, mod12(x+1), mod12(x+2), mod12(x+3), mod12(x+4), mod12(x+5), mod12(x+6)];
+      return map[ai];
+    } else {
+      const map = [s, x, mod12(x+1), x, mod12(x-1), mod12(x-2), mod12(x-3), mod12(x-4), mod12(x-5), mod12(x-6)];
+      return map[ai];
+    }
+  }
+
+  // Tiểu hạn cung per year
+  const TIEU_HAN_KHOI = {
+    'nam': { 'Tý':'Dần','Sửu':'Sửu','Dần':'Tý','Mão':'Hợi','Thìn':'Tuất','Tỵ':'Dậu',
+             'Ngọ':'Thân','Mùi':'Mùi','Thân':'Ngọ','Dậu':'Tỵ','Tuất':'Thìn','Hợi':'Mão' },
+    'nu':  { 'Tý':'Thân','Sửu':'Dậu','Dần':'Tuất','Mão':'Hợi','Thìn':'Tý','Tỵ':'Sửu',
+             'Ngọ':'Dần','Mùi':'Mão','Thân':'Thìn','Dậu':'Tỵ','Tuất':'Ngọ','Hợi':'Mùi' },
+  };
+  function getTieuHanCungIdx(tuoi) {
+    const startDC = TIEU_HAN_KHOI[gioitinh]?.[chiNam] || 'Dần';
+    const startI  = dcIdx(startDC);
+    const offset  = (tuoi - 1) % 12;
+    return gioitinh === 'nam' ? mod12(startI + offset) : mod12(startI - offset);
+  }
+
+  // ── Build spline ──────────────────────────────────────────────
+  const dvs = daiVans.slice(0, 9);
+  const splinePts = buildSplinePoints(dvs);
+
+  // ── Build tiểu vận scores ─────────────────────────────────────
+  const results = [];
+
+  dvs.forEach((dv, dvIdx) => {
+    const dvPalace = palaces[dv.cungIdx];
+    if (!dvPalace) return;
+
+    for (let yr = 0; yr < 10; yr++) {
+      const tuoi = dv.tuoiStart + yr;
+      const nam  = namSinhDL + tuoi - 1;
+      const ageIndex = yr;
+
+      // Main score from spline
+      const mainScore = Math.round(interpolate(splinePts, tuoi) * 10) / 10;
+
+      // Tiểu hạn cung
+      const tieuHanIdx  = getTieuHanCungIdx(tuoi);
+      const tieuHanP    = palaces[tieuHanIdx];
+
+      // Lưu niên đại hạn cung
+      const luuNienIdx  = getLuuNienCungIdx(dv.cungIdx, ageIndex);
+      const luuNienP    = palaces[luuNienIdx];
+
+      // Collect all stars from 3 cung: dvPalace + tieuHanP + luuNienP
+      const allStarNames = new Set();
+      [dvPalace, tieuHanP, luuNienP].filter(Boolean).forEach(p => {
+        (p.stars || []).forEach(s => allStarNames.add(s.ten));
+      });
+
+      const catCount = CAT_TINH.filter(s => allStarNames.has(s)).length;
+      const satCount = SAT_BAI.filter(s => allStarNames.has(s)).length;
+      const total    = catCount + satCount;
+
+      // Volatility — cap at 5 stars each
+      const catCapped = Math.min(catCount, 5);
+      const satCapped = Math.min(satCount, 5);
+      const upAdj   = catCapped / 5 * 0.30 * 10;  // max +3 points (30% of scale 10)
+      const downAdj = satCapped / 5 * 0.30 * 10;
+
+      const maxScore = Math.min(10, Math.round((mainScore + upAdj) * 10) / 10);
+      const minScore = Math.max(0,  Math.round((mainScore - downAdj) * 10) / 10);
+
+      const direction = catCount > satCount ? 'up' : catCount < satCount ? 'down' : 'flat';
+
+      // DiaChị năm (chi năm dương lịch)
+      const diaChi = DIA_CHI[(nam + 8) % 12];
+
+      results.push({
+        nam, tuoi, dvIdx, diaChi,
+        mainScore, maxScore, minScore, direction,
+        catCount, satCount,
+        tieuHanCung: tieuHanP?.cungName || '',
+        luuNienCung: luuNienP?.cungName || '',
+      });
+    }
+  });
 
   return results;
 }
