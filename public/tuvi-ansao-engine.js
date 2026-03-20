@@ -4006,8 +4006,15 @@ function tinhTieuVanScores(ls, gioitinh, amDuong, chiNam, namSinhDL) {
       // DiaChị năm (chi năm dương lịch)
       const diaChi = DIA_CHI[(nam + 8) % 12];
 
+      // open = mainScore this year, close = mainScore next year
+      const closeScore = Math.round(interpolate(splinePts, tuoi + 1) * 10) / 10;
+
       results.push({
         nam, tuoi, dvIdx, diaChi,
+        open: mainScore,
+        close: closeScore,
+        high: maxScore,
+        low: minScore,
         mainScore, maxScore, minScore, direction,
         catCount, satCount,
         tieuHanCung: tieuHanP?.cungName || '',
