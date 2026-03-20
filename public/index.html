@@ -356,6 +356,14 @@ select.form-input { cursor: pointer; }
 .score-val { font-size:11px; color:#ccc; width:24px; text-align:right; flex-shrink:0; }
 .rules-group { margin: 4px 0; }
 .rules-canh-bao { background:#1f0e0e; border-radius:4px; padding:4px 6px; margin:4px 0; border-left:2px solid #f87171; }
+.candle-wrap { overflow-x:auto; padding-bottom:8px; }
+.candle-svg { display:block; }
+.candle-wick { stroke-width:1.5; }
+.candle-body { rx:1; }
+.candle-label { font-size:8px; fill:#555; text-anchor:middle; }
+.candle-axis { stroke:#1e2d42; stroke-width:1; }
+.candle-grid  { stroke:#1a2535; stroke-width:0.5; stroke-dasharray:3,3; }
+
 .btn-group-submit { display:flex; flex-direction:column; gap:10px; }
 .btn-group-label { font-size:11px; color:#888; letter-spacing:0.5px; text-transform:uppercase; }
 .btn-group-label-paid { margin-top:4px; }
@@ -981,6 +989,11 @@ select.form-input { cursor: pointer; }
       <span><span style="display:inline-block;width:10px;height:10px;background:#6b1a1a;border-radius:2px;margin-right:4px;vertical-align:middle"></span>Khó khăn</span>
     </div>
   </div>
+</div>
+<div style="margin:20px 0 8px">
+  <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Tiểu Vận — Toàn Bộ 90 Năm (Candlestick)</div>
+  <div style="font-size:11px;color:#666;margin-bottom:8px">Mỗi nến = 1 năm · Thân nến = dao động · Xanh = nhiều sao tốt · Đỏ = nhiều sao xấu</div>
+  <div class="candle-wrap"><div id="candle-90yr"></div></div>
 </div>`;
       } else if (_currentPhan === 1 && _astrolabe?.cungScores) {
         chartHtml = `
@@ -1061,6 +1074,10 @@ select.form-input { cursor: pointer; }
     </div>
   </div>
 </div>
+<div style="margin:16px 0 8px">
+  <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 Tiểu Vận 10 Năm — Đại Vận ${_dvNum15}</div>
+  <div class="candle-wrap"><div id="candle-dv${_dvNum15}"></div></div>
+</div>
 <div style="max-width:360px;margin:8px 0"><canvas id="chart-radar-cung-${_currentPhan}"></canvas><div id="radar-legend-cung-${_currentPhan}" style="margin-top:12px;display:grid;grid-template-columns:repeat(2,1fr);gap:6px;font-size:11px"></div></div>`;
         } else if (_currentPhan === 24 && _astrolabe) {
           const _dvHT24 = _astrolabe.daiVanHienTai;
@@ -1091,6 +1108,10 @@ select.form-input { cursor: pointer; }
       Đại vận quyết định <b style="color:#ddd">nền tảng</b> của năm, tiểu vận mang tính chất <b style="color:#ddd">điều chỉnh ngắn hạn</b>.
     </div>
   </div>
+</div>
+<div style="margin:16px 0 8px">
+  <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 3 Năm Kế Tiếp — Tiểu Vận</div>
+  <div class="candle-wrap"><div id="candle-3yr"></div></div>
 </div>`;
         }
       }
@@ -2123,6 +2144,105 @@ select.form-input { cursor: pointer; }
       document.querySelectorAll('.btn-quick, .btn-submit').forEach(b => b.disabled = false);
       document.getElementById('progress-fill').style.width = '0%';
     }
+  }
+
+  // ── CANDLESTICK RENDERER ────────────────────────────────────────
+  function renderCandlestick(containerId, data, opts={}) {
+    const el = document.getElementById(containerId);
+    if (!el || !data?.length) return;
+
+    const W = opts.width  || Math.min(data.length * (opts.candleW||7) + 60, 900);
+    const H = opts.height || 160;
+    const PAD = { top:20, right:10, bottom:28, left:30 };
+    const cw   = opts.candleW || Math.max(4, Math.floor((W - PAD.left - PAD.right) / data.length) - 1);
+    const plotW = W - PAD.left - PAD.right;
+    const plotH = H - PAD.top  - PAD.bottom;
+
+    const minVal = Math.max(0, Math.min(...data.map(d=>d.minScore)) - 0.5);
+    const maxVal = Math.min(10, Math.max(...data.map(d=>d.maxScore)) + 0.5);
+    const range  = maxVal - minVal || 1;
+
+    function y(v) { return PAD.top + plotH - ((v - minVal) / range * plotH); }
+    function x(i) { return PAD.left + i * (cw + 1) + cw/2; }
+
+    // Grid lines
+    let gridLines = '';
+    for (let v = Math.ceil(minVal); v <= Math.floor(maxVal); v++) {
+      const yv = y(v);
+      gridLines += `<line class="candle-grid" x1="${PAD.left}" y1="${yv}" x2="${W-PAD.right}" y2="${yv}"/>`;
+      gridLines += `<text x="${PAD.left-4}" y="${yv+3}" font-size="8" fill="#444" text-anchor="end">${v}</text>`;
+    }
+
+    // Candles
+    let candles = '';
+    data.forEach((d, i) => {
+      const cx    = x(i);
+      const yMain = y(d.mainScore);
+      const yMax  = y(d.maxScore);
+      const yMin  = y(d.minScore);
+      const bodyH = Math.max(2, Math.abs(yMax - yMin));
+      const col   = d.direction === 'up' ? '#27ae60'
+                  : d.direction === 'down' ? '#c0392b' : '#c9a84c';
+      const colDim = d.direction === 'up' ? '#1a5c2e'
+                   : d.direction === 'down' ? '#7a1a10' : '#8a6e2e';
+
+      // Wick
+      candles += `<line class="candle-wick" x1="${cx}" y1="${yMax}" x2="${cx}" y2="${yMin}" stroke="${colDim}"/>`;
+      // Body
+      candles += `<rect class="candle-body" x="${cx-cw/2}" y="${Math.min(yMax,yMain)}" width="${cw}" height="${Math.max(2,Math.abs(yMain-yMax))}" fill="${col}" opacity="0.9"/>`;
+      // Main dot
+      candles += `<circle cx="${cx}" cy="${yMain}" r="1.5" fill="#fff" opacity="0.6"/>`;
+
+      // Label every 5 or 10 years
+      if (data.length <= 15 || i % (data.length > 50 ? 10 : 5) === 0) {
+        const lbl = d.diaChi || (d.tuoi ? d.tuoi+'t' : '');
+        candles += `<text class="candle-label" x="${cx}" y="${H-PAD.bottom+12}" fill="#555">${lbl}</text>`;
+        if (d.tuoi && data.length <= 15) {
+          candles += `<text class="candle-label" x="${cx}" y="${H-PAD.bottom+20}" fill="#444">${d.tuoi}t</text>`;
+        }
+      }
+    });
+
+    // Current year marker
+    let curMarker = '';
+    const curIdx = data.findIndex(d => d.tuoi === (_astrolabe?.tuoiXem));
+    if (curIdx >= 0) {
+      const cx = x(curIdx);
+      curMarker = `<line x1="${cx}" y1="${PAD.top}" x2="${cx}" y2="${H-PAD.bottom}" stroke="#c9a84c" stroke-width="1" stroke-dasharray="3,2" opacity="0.8"/>
+        <text x="${cx}" y="${PAD.top-5}" font-size="8" fill="#c9a84c" text-anchor="middle">◆</text>`;
+    }
+
+    el.innerHTML = `<svg class="candle-svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+      <line class="candle-axis" x1="${PAD.left}" y1="${PAD.top}" x2="${PAD.left}" y2="${H-PAD.bottom}"/>
+      <line class="candle-axis" x1="${PAD.left}" y1="${H-PAD.bottom}" x2="${W-PAD.right}" y2="${H-PAD.bottom}"/>
+      ${gridLines}${candles}${curMarker}
+    </svg>`;
+  }
+
+  // ── Render candles phan 14 (90 năm) ─────────────────────────────
+  if (_currentPhan === 14 && _astrolabe?.tieuVanScores?.length) {
+    setTimeout(() => {
+      renderCandlestick('candle-90yr', _astrolabe.tieuVanScores, {candleW:6, height:180});
+    }, 300);
+  }
+
+  // ── Render candles phan 15-23 (10 năm đại vận đó) ────────────────
+  if (_currentPhan >= 15 && _currentPhan <= 23 && _astrolabe?.tieuVanScores) {
+    setTimeout(() => {
+      const dvN = _currentPhan - 14;
+      const dvData = _astrolabe.tieuVanScores.filter(tv => tv.dvIdx === dvN - 1);
+      renderCandlestick(`candle-dv${dvN}`, dvData, {candleW:18, height:160});
+    }, 300);
+  }
+
+  // ── Render candles phan 24 (3 năm kế tiếp) ───────────────────────
+  if (_currentPhan === 24 && _astrolabe?.tieuVanScores) {
+    setTimeout(() => {
+      const tuoiNow = _astrolabe.tuoiXem || 0;
+      const next3 = _astrolabe.tieuVanScores
+        .filter(tv => tv.tuoi >= tuoiNow && tv.tuoi < tuoiNow + 3);
+      renderCandlestick('candle-3yr', next3, {candleW:40, height:160, width:200});
+    }, 300);
   }
 
 </script>
