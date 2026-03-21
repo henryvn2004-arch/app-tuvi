@@ -30,10 +30,10 @@ module.exports = async (req, res) => {
 
   try {
     const {
-      canChiNam, gioiTinh, namSinh, thangSinh, ngaySinh, gioChi,
+      canChiNam, gioiTinh, namSinh, thangSinh, ngaySinh,
+      gioIdx, gioChi, canNam, chiNam, namXem,
       cungMenh, chinhTinh, napAm, cuc,
-      luanGiai,   // object: { 1: "...", 2: "...", ... }
-      laSoText,   // raw text
+      luanGiai, laSoText,
     } = req.body;
 
     if (!canChiNam || !namSinh) {
@@ -66,7 +66,11 @@ module.exports = async (req, res) => {
         nam_sinh:     parseInt(namSinh),
         thang_sinh:   parseInt(thangSinh) || null,
         ngay_sinh:    parseInt(ngaySinh) || null,
+        gio_idx:      gioIdx !== undefined ? parseInt(gioIdx) : null,
         gio_chi:      gioChi || null,
+        can_nam:      canNam || null,
+        chi_nam:      chiNam || null,
+        nam_xem:      parseInt(namXem) || null,
         cung_menh:    cungMenh || null,
         chinh_tinh:   chinhTinh || null,
         nap_am:       napAm || null,
