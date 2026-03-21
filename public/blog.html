@@ -127,6 +127,8 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
   .page-body { padding: 24px 16px 48px; }
 }
 </style>
+<script src="/share.js"></script>
+<script src="/auth.js"></script>
 </head>
 <body>
 
@@ -143,6 +145,7 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
     <a class="nav-link" href="/menh-kho.html">Mệnh Khố</a>
     <a class="nav-link" href="/contact.html">Liên Hệ</a>
   </div>
+  <div id="nav-auth-area" style="margin-left:8px"></div>
   <button class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')">☰</button>
 </nav>
 
@@ -158,6 +161,7 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
   <div class="featured-grid" id="featured-grid"></div>
 </div>
 
+<div id="share-page-bar" style="padding:10px 40px;background:#f8f9fa;border-bottom:1px solid #eee"></div>
 <div class="controls">
   <input class="search-input" type="text" id="search-input" placeholder="Tìm khảo luận..." oninput="filterArticles()">
   <select class="filter-select" id="filter-cat" onchange="filterArticles()">
@@ -328,6 +332,13 @@ function render() {
 function goPage(p) { currentPage = p; render(); window.scrollTo({top:0,behavior:'smooth'}); }
 
 loadAll();
+if (window.ShareButtons) {
+  ShareButtons.render('share-page-bar', {
+    url: window.location.href,
+    title: document.title,
+    text: 'Tử Vi Minh Bảo — ' + document.title
+  });
+}
 </script>
 </body>
 </html>
