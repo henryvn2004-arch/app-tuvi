@@ -2,10 +2,11 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="apple-touch-icon" href="/seal.webp">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Liên Hệ — Tử Vi Minh Bảo</title>
 <meta name="description" content="Tử Vi Minh Bảo — Liên hệ và trao đổi về Tử Vi Đẩu Số. 紫微斗數 · Tri Mệnh Lý · Thuận Thế Hành">
-<meta property="og:url" content="https://www.tuviminhbao.com/contact.html">
 <link rel="canonical" href="https://www.tuviminhbao.com/contact.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
@@ -21,7 +22,10 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 
 /* ── NAV ── */
 .topnav { position: sticky; top: 0; z-index: 200; background: var(--navy); display: flex; align-items: center; height: 60px; padding: 0 40px; gap: 32px; }
-.nav-logo { font-family: 'Noto Serif SC', serif; font-size: 17px; color: #fff; flex: 1; }
+.nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.nav-logo img { width:38px; height:38px; object-fit:contain; border-radius:5px; }
+.nav-logo .name { font-size:16px; font-weight:700; color:#CC2200; font-family:Georgia,serif; }
+.nav-logo .url  { font-size:10px; color:#aaa; letter-spacing:0.07em; text-transform:uppercase; }
 .nav-logo em { font-style: italic; color: #8BAACC; font-size: 14px; margin-left: 8px; font-family: 'Noto Serif', serif; }
 .nav-links { display: flex; align-items: center; gap: 4px; }
 .nav-link { color: #8BAACC; font-size: 13px; text-decoration: none; padding: 6px 12px; border-radius: 6px; transition: all 0.15s; }
@@ -196,14 +200,37 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
   .contact-card.primary { grid-column: auto; }
   .footer { flex-direction: column; gap: 4px; }
 }
+.site-footer { background:#1A1210; color:rgba(255,255,255,0.5); padding:36px 32px 24px; }
+.footer-top  { display:flex; justify-content:space-between; align-items:flex-start; gap:32px; flex-wrap:wrap; padding-bottom:24px; border-bottom:1px solid rgba(255,255,255,0.08); margin-bottom:20px; }
+.footer-brand { display:flex; align-items:center; gap:10px; }
+.footer-brand img { width:36px; height:36px; object-fit:contain; border-radius:5px; opacity:0.9; }
+.footer-brand-text .name { font-size:14px; font-weight:700; color:rgba(255,255,255,0.85); font-family:Georgia,serif; }
+.footer-brand-text .zh   { font-size:12px; color:#C9A84C; }
+.footer-tagline { font-size:12px; margin-top:8px; color:rgba(255,255,255,0.35); line-height:1.6; }
+.footer-bottom  { display:flex; justify-content:space-between; align-items:center; font-size:11px; color:rgba(255,255,255,0.25); }
+.footer-bottom img { width:20px; height:20px; object-fit:contain; opacity:0.3; border-radius:3px; }
 </style>
+<meta property="og:title" content="Tử Vi Minh Bảo – Lá số tử vi chính xác">
+<meta property="og:description" content="Luận giải tử vi chuyên sâu, kết hợp AI — tuviminhbao.com">
+<meta property="og:image" content="https://tuviminhbao.com/seal.webp">
+<meta property="og:url" content="https://tuviminhbao.com/contact.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tuviminhbao.com/seal.webp">
 </head>
 <body>
 
 <nav class="topnav">
-  <div class="nav-logo">紫微明寶 <em>Tử Vi Minh Bảo</em></div>
+  <a class="nav-logo" href="/">
+  <img src="/seal.webp" alt="Tử Vi Minh Bảo">
+  <div>
+    <div class="name">Tử Vi Minh Bảo</div>
+    <div class="url">tuviminhbao.com</div>
+  </div>
+</a>
   <div class="nav-links" id="nav-links">
     <a class="nav-link" href="/">Trang Chủ</a>
+    <a class="nav-link" href="/menh-kho.html">Mệnh Khố</a>
     <a class="nav-link" href="/about.html">Giới Thiệu</a>
     <a class="nav-link" href="/resources.html">Tài Nguyên</a>
     <a class="nav-link" href="/blog.html">Blog</a>
@@ -231,7 +258,7 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
     <div class="contact-card primary">
       <div class="card-icon">✉</div>
       <div class="card-label">Thư điện tử</div>
-      <a class="card-value" href="mailto:contact@tuviminhbao.com">contact@tuviminhbao.com</a>
+      <a class="card-value" href="/cdn-cgi/l/email-protection#8cefe3e2f8edeff8ccf8f9fae5e1e5e2e4eeede3a2efe3e1"><span class="__cf_email__" data-cfemail="6704080913060413271312110e0a0e090f0506084904080a">[email&#160;protected]</span></a>
       <div class="card-note">Kênh liên hệ chính — phản hồi trong vòng 24–48 giờ làm việc</div>
     </div>
 
@@ -286,9 +313,3 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 </div>
 
 <div class="footer">
-  <span>紫微明寶 · Tử Vi Minh Bảo</span>
-  <span>紫微斗數 · Tri Mệnh Lý · Thuận Thế Hành</span>
-</div>
-
-</body>
-</html>
