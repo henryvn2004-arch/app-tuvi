@@ -858,6 +858,10 @@ select.form-input { cursor: pointer; }
   }
 
   async function luanGiai() {
+    if (typeof Auth !== 'undefined' && !Auth.isLoggedIn()) {
+      Auth.require(() => luanGiai());
+      return;
+    }
     const hoten    = document.getElementById('hoten').value.trim();
     const ngay     = parseInt(document.getElementById('ngay').value);
     const thang    = parseInt(document.getElementById('thang').value);
@@ -2000,6 +2004,10 @@ select.form-input { cursor: pointer; }
   };
 
   async function luanGiaiNhanh(loai) {
+    if (typeof Auth !== 'undefined' && !Auth.isLoggedIn()) {
+      Auth.require(() => luanGiaiNhanh(loai));
+      return;
+    }
     const cfg = NHANH_CONFIG[loai];
     if (!cfg) return;
 
