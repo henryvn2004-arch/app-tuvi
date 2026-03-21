@@ -157,6 +157,8 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://tuviminhbao.com/seal.webp">
+<script src="/share.js"></script>
+<script src="/auth.js"></script>
 </head>
 <body>
 
@@ -170,12 +172,13 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 </a>
   <div class="nav-links" id="nav-links">
     <a class="nav-link" href="/">Trang Chủ</a>
-    <a class="nav-link active" href="/menh-kho.html">Mệnh Khố</a>
     <a class="nav-link" href="/about.html">Giới Thiệu</a>
-    <a class="nav-link" href="/resources.html">Tài Nguyên</a>
-    <a class="nav-link" href="/blog.html">Blog</a>
+    <a class="nav-link" href="/resources.html">Tài Liệu</a>
+    <a class="nav-link" href="/blog.html">Khảo Luận</a>
+    <a class="nav-link active" href="/menh-kho.html">Mệnh Khố</a>
     <a class="nav-link" href="/contact.html">Liên Hệ</a>
   </div>
+  <div id="nav-auth-area" style="margin-left:8px"></div>
   <button class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')">☰</button>
 </nav>
 
@@ -311,6 +314,18 @@ function render() {
       </div>
     </a>`;
   }).join('');
+      // Render share buttons on each card
+      setTimeout(() => {
+        (allData.length > 0 ? filtered.slice(start, start + PAGE_SIZE) : []).forEach(d => {
+          if (window.ShareButtons && d.slug) {
+            ShareButtons.render('share-card-' + d.slug, {
+              url: window.location.origin + '/la-so.html?slug=' + d.slug,
+              title: 'Lá số ' + (d.can_chi_nam||'') + ' — Tử Vi Minh Bảo',
+              text: 'Xem lá số Tử Vi tại Tử Vi Minh Bảo'
+            });
+          }
+        });
+      }, 200);
 
   // Pagination
   const totalPages = Math.ceil(total / PAGE_SIZE);
