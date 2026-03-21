@@ -139,6 +139,8 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://tuviminhbao.com/seal.webp">
+<script src="/share.js"></script>
+<script src="/auth.js"></script>
 </head>
 <body>
 
@@ -152,9 +154,13 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 </a>
   <div class="nav-links" id="nav-links">
     <a class="nav-link" href="/">Trang Chủ</a>
-    <a class="nav-link" href="/menh-kho.html">Mệnh Khố</a>
     <a class="nav-link" href="/about.html">Giới Thiệu</a>
+    <a class="nav-link" href="/resources.html">Tài Liệu</a>
+    <a class="nav-link" href="/blog.html">Khảo Luận</a>
+    <a class="nav-link" href="/menh-kho.html">Mệnh Khố</a>
+    <a class="nav-link" href="/contact.html">Liên Hệ</a>
   </div>
+  <div id="nav-auth-area" style="margin-left:8px"></div>
   <button class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')">☰</button>
 </nav>
 
@@ -265,6 +271,20 @@ function render(d) {
   body.appendChild(div);
 
   // PDF download button
+  const dlBtn = document.createElement('div');
+  dlBtn.style.cssText = 'margin:0 0 24px';
+  // Share buttons
+  const shareDiv = document.createElement('div');
+  shareDiv.id = 'share-laso';
+  shareDiv.style.cssText = 'margin:0 0 16px';
+  body.appendChild(shareDiv);
+  if (window.ShareButtons) {
+    ShareButtons.render('share-laso', {
+      url: window.location.href,
+      title: 'Lá số ' + (d.can_chi_nam||'') + ' — Tử Vi Minh Bảo',
+      text: 'Xem luận giải lá số Tử Vi Đẩu Số'
+    });
+  }
   const dlBtn = document.createElement('div');
   dlBtn.style.cssText = 'margin:0 0 24px';
   dlBtn.innerHTML = `<button onclick="window.print()" style="display:inline-flex;align-items:center;gap:8px;padding:10px 22px;background:var(--navy);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">⬇ Tải PDF lá số này</button>`;
