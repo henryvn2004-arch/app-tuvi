@@ -390,6 +390,7 @@ select.form-input { cursor: pointer; }
   <div class="nav-logo">紫微明寶 <em>Tử Vi Minh Bảo</em></div>
   <div class="nav-links" id="nav-links">
     <a class="nav-link active" href="/">Trang Chủ</a>
+    <a class="nav-link" href="/menh-kho.html">Mệnh Khố</a>
     <a class="nav-link" href="/about.html">Giới Thiệu</a>
     <a class="nav-link" href="/resources.html">Tài Nguyên</a>
     <a class="nav-link" href="/blog.html">Blog</a>
@@ -676,6 +677,7 @@ select.form-input { cursor: pointer; }
   })();
 
   let _laSoText = null;
+  let _luanGiaiStore = {};  // accumulate luận giải per phan
   let _engineResult_global = null;
   let _hoTen = null, _ngay = null, _thang = null, _nam = null;
   let _gioitinh = null, _namXem = null, _astrolabe = null;
@@ -1292,6 +1294,8 @@ select.form-input { cursor: pointer; }
         <div class="phan-num">Phần ${_currentPhan} / ${TONG_PHAN} — ${PHAN_LABELS[_currentPhan]}</div>`
         + preGenHtml + chartHtml + divider
         + renderMarkdown(data.luanGiai);
+      // Store luận giải for this phan
+      _luanGiaiStore[_currentPhan] = data.luanGiai || '';
 
       if (_currentPhan === 14) {
         console.log('chartData received:', data.chartData);
@@ -1697,6 +1701,42 @@ select.form-input { cursor: pointer; }
 
       updateMucLuc(_currentPhan, 'done');
       if (_currentPhan < TONG_PHAN) updateMucLuc(_currentPhan + 1, 'active');
+
+      // After final phan — save lá số to Supabase
+      if (_currentPhan === TONG_PHAN && _astrolabe) {
+        try {
+          fetch('/api/save-laso', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              canChiNam:  _astrolabe.canChiNam,
+              gioiTinh:   _gioitinh,
+              namSinh:    _nam,
+              thangSinh:  _thang,
+              ngaySinh:   _ngay,
+              gioChi:     _astrolabe._conv?.gioChi || '',
+              cungMenh:   _astrolabe.menhDC,
+              chinhTinh:  _astrolabe.palaces?.find(p=>p.isMenh)?.majorStars?.map(s=>s.ten).join(', ') || '',
+              napAm:      _astrolabe.napAm,
+              cuc:        _astrolabe.cuc,
+              luanGiai:   _luanGiaiStore,
+              laSoText:   _laSoText,
+            }),
+          })
+          .then(r => r.json())
+          .then(d => {
+            if (d.slug) {
+              // Show shareable link
+              const shareUrl = `https://www.tuviminhbao.com/la-so.html?slug=${d.slug}`;
+              const shareEl = document.createElement('div');
+              shareEl.style.cssText = 'margin:16px 0;padding:14px 18px;background:#f0f7ff;border:1px solid #c0d8f0;border-radius:8px;font-size:13px';
+              shareEl.innerHTML = `🔗 <b>Link lá số của bạn:</b> <a href="${shareUrl}" target="_blank" style="color:#1455A4">${shareUrl}</a>`;
+              document.getElementById('result-body')?.appendChild(shareEl);
+            }
+          })
+          .catch(() => {}); // silent fail
+        } catch(e) {}
+      }
 
       if (_currentPhan === 1) {
         displayResult(_hoTen, _ngay, _thang, _nam, _gioitinh, _namXem, _astrolabe);
