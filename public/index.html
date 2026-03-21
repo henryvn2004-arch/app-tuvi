@@ -1714,7 +1714,11 @@ select.form-input { cursor: pointer; }
               namSinh:    _nam,
               thangSinh:  _thang,
               ngaySinh:   _ngay,
+              gioIdx:     _astrolabe._conv?.gioIdx ?? null,
               gioChi:     _astrolabe._conv?.gioChi || '',
+              canNam:     _astrolabe._conv?.canNam || '',
+              chiNam:     _astrolabe._conv?.chiNam || '',
+              namXem:     _namXem,
               cungMenh:   _astrolabe.menhDC,
               chinhTinh:  _astrolabe.palaces?.find(p=>p.isMenh)?.majorStars?.map(s=>s.ten).join(', ') || '',
               napAm:      _astrolabe.napAm,
@@ -1725,6 +1729,7 @@ select.form-input { cursor: pointer; }
           })
           .then(r => r.json())
           .then(d => {
+            console.log('[save-laso response]', d);
             if (d.slug) {
               // Show shareable link
               const shareUrl = `https://www.tuviminhbao.com/la-so.html?slug=${d.slug}`;
@@ -1734,7 +1739,7 @@ select.form-input { cursor: pointer; }
               document.getElementById('result-body')?.appendChild(shareEl);
             }
           })
-          .catch(() => {}); // silent fail
+          .catch(e => console.error('[save-laso error]', e)); // log errors
         } catch(e) {}
       }
 
