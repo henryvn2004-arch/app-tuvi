@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Đang xác thực — Tử Vi Minh Bảo</title>
+<style>
+body { font-family: sans-serif; display:flex; align-items:center; justify-content:center; min-height:100vh; background:#061A2E; color:#fff; flex-direction:column; gap:16px; }
+.spinner { width:36px; height:36px; border:3px solid rgba(255,255,255,0.2); border-top-color:#c9a84c; border-radius:50%; animation:spin 0.8s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+</style>
+</head>
+<body>
+<div class="spinner"></div>
+<div style="font-size:14px;color:#8BAACC">Đang xác thực...</div>
+<script>
+// Handle OAuth callback — extract tokens from URL hash/params
+(function() {
+  const SESSION_KEY = 'tuvi_session';
+  const USER_KEY    = 'tuvi_user';
+
+  // Supabase returns tokens in URL hash after OAuth
+  const hash   = window.location.hash.substring(1);
+  const params = new URLSearchParams(hash || window.location.search);
+
+  const access_token  = params.get('access_token');
+  const refresh_token = params.get('refresh_token');
+  const expires_in    = params.get('expires_in');
+  const token_type    = params.get('token_type');
+
+  if (access_token) {
+    const session = {
+      access_token,
+      refresh_token,
+      token_type,
+      expires_at: Math.floor(Date.now() / 1000) + parseInt(expires_in || 3600),
+    };
+    // Fetch user
+    fetch('https://dciwkfdqhhddeymlisey.supabase.co/auth/v1/user', {
+      headers: {
+        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I',
+        'Authorization': 'Bearer ' + access_token,
+      }
+    })
+    .then(r => r.json())
+    .then(user => {
+      session.user = user;
+      localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+      localStorage.setItem(USER_KEY, JSON.stringify(user));
+      window.location.href = '/';
+    })
+    .catch(() => { window.location.href = '/'; });
+  } else {
+    // No token — redirect home
+    window.location.href = '/';
+  }
+})();
+</script>
+</body>
+</html>
