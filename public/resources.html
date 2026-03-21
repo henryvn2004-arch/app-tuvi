@@ -2,43 +2,99 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tài Liệu Tử Vi Đẩu Số — Tử Vi Minh Bảo</title>
+<meta name="description" content="Kho tài liệu học thuật về Tử Vi Đẩu Số — tinh hệ, cách cục, cung vị, vận hạn. 紫微斗數 · Tri Mệnh Lý · Thuận Thế Hành">
+<meta property="og:title" content="Tử Vi Minh Bảo – Lá số tử vi chính xác">
+<meta property="og:description" content="Luận giải tử vi chuyên sâu, kết hợp AI — tuviminhbao.com">
+<meta property="og:image" content="https://tuviminhbao.com/seal.webp">
+<meta property="og:url" content="https://tuviminhbao.com/resources.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tuviminhbao.com/seal.webp">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="apple-touch-icon" href="/seal.webp">
-<meta name="description" content="Tử Vi Minh Bảo — An sao Tử Vi Đẩu Số theo cổ pháp, luận giải bằng trí tuệ nhân tạo. 紫微斗數 · Tri Mệnh Lý · Thuận Thế Hành">
-<meta name="keywords" content="tử vi, tử vi đẩu số, an sao tử vi, luận giải tử vi, tử vi minh bảo">
-<link rel="canonical" href="https://www.tuviminhbao.com">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tài Nguyên — Tử Vi Minh Bảo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --navy: #061A2E; --navy-mid: #0A2540; --blue: #1455A4;
-  --gold: #C9A84C; --text: #E8E0D4;
+  --navy: #061A2E; --blue: #1455A4; --gold: #9A7B3A; --gold-lt: #F9F4EB;
+  --text: #1a1a1a; --text-mid: #444; --text-lt: #777;
+  --border: #CCCCCC; --bg: #FFFFFF; --bg-soft: #F5F4F0;
 }
-body { background: #080d14; color: #e2d9c8; font-family: Arial, sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+
+/* NAV */
 .topnav { position: sticky; top: 0; z-index: 200; background: var(--navy); display: flex; align-items: center; height: 60px; padding: 0 40px; gap: 32px; }
 .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
 .nav-logo img { width:38px; height:38px; object-fit:contain; border-radius:5px; }
 .nav-logo .name { font-size:16px; font-weight:700; color:#CC2200; font-family:Georgia,serif; }
 .nav-logo .url  { font-size:10px; color:#aaa; letter-spacing:0.07em; text-transform:uppercase; }
-.nav-logo em { font-style: italic; color: #8BAACC; font-size: 15px; margin-left: 8px; }
 .nav-links { display: flex; align-items: center; gap: 4px; }
 .nav-link { color: #8BAACC; font-size: 13px; text-decoration: none; padding: 6px 12px; border-radius: 6px; transition: all 0.15s; }
 .nav-link:hover { color: #fff; background: rgba(255,255,255,0.07); }
 .nav-link.active { color: #c9a84c; }
 .nav-hamburger { display: none; background: none; border: none; color: #8BAACC; cursor: pointer; padding: 8px; font-size: 20px; }
-.page-content { flex: 1; padding: 64px 40px; max-width: 960px; margin: 0 auto; width: 100%; }
-.page-eyebrow { font-size: 11px; letter-spacing: 3px; color: #c9a84c; text-transform: uppercase; margin-bottom: 10px; }
-.page-heading { font-size: 36px; font-weight: 600; margin-bottom: 40px; }
-.footer { background: var(--navy); padding: 20px 40px; display: flex; justify-content: space-between; font-size: 12px; color: #4a6080; flex-shrink: 0; }
-@media (max-width: 700px) {
-  .topnav { padding: 0 16px; }
-  .nav-links { display: none; position: absolute; top: 60px; left: 0; right: 0; background: var(--navy); flex-direction: column; padding: 8px 0 16px; gap: 0; border-bottom: 1px solid #1a2a3a; }
-  .nav-links.open { display: flex; }
-  .nav-link { padding: 10px 24px; border-radius: 0; width: 100%; }
-  .nav-hamburger { display: block; margin-left: auto; }
-  .page-content { padding: 40px 20px; }
+
+/* HERO */
+.hero { background: var(--navy); padding: 56px 40px 44px; position: relative; overflow: hidden; }
+.hero::before { content: '典'; position: absolute; font-family: 'Noto Serif SC', serif; font-size: 300px; color: rgba(255,255,255,0.025); top: 50%; right: 5%; transform: translateY(-50%); pointer-events: none; }
+.hero-eyebrow { font-size: 11px; letter-spacing: 4px; color: #c9a84c; text-transform: uppercase; margin-bottom: 12px; opacity:0; animation: fadeUp 0.6s ease 0.1s forwards; }
+.hero-title { font-family: 'Noto Serif', serif; font-size: 38px; color: #fff; font-weight: 400; margin-bottom: 10px; opacity:0; animation: fadeUp 0.6s ease 0.2s forwards; }
+.hero-sub { font-size: 14px; color: #8BAACC; font-weight: 300; line-height: 1.7; max-width: 560px; opacity:0; animation: fadeUp 0.6s ease 0.3s forwards; }
+
+/* CONTROLS */
+.controls { background: var(--bg-soft); border-bottom: 1px solid var(--border); padding: 16px 40px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.search-input { flex: 1; min-width: 200px; max-width: 400px; padding: 9px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; font-family: inherit; outline: none; transition: border-color 0.15s; }
+.search-input:focus { border-color: var(--navy); }
+.filter-select { padding: 9px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; font-family: inherit; background: #fff; outline: none; cursor: pointer; }
+.count-badge { margin-left: auto; font-size: 12px; color: var(--text-lt); }
+
+/* CATEGORIES */
+.cat-strip { padding: 14px 40px; border-bottom: 1px solid var(--border); display: flex; gap: 8px; flex-wrap: wrap; }
+.cat-btn { padding: 5px 14px; border: 1px solid var(--border); border-radius: 20px; font-size: 12px; cursor: pointer; background: #fff; font-family: inherit; transition: all 0.15s; color: var(--text-mid); }
+.cat-btn:hover, .cat-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+/* CONTENT */
+.page-body { flex: 1; max-width: 1060px; margin: 0 auto; padding: 36px 40px 72px; width: 100%; }
+
+/* ARTICLE GRID */
+.article-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+
+.article-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+  text-decoration: none;
+  color: inherit;
+  display: flex; flex-direction: column; gap: 8px;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+  opacity: 0; animation: fadeUp 0.4s ease forwards;
 }
+.article-card:hover { border-color: var(--navy); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(6,26,46,0.08); }
+
+.card-cat { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
+.card-title { font-family: 'Noto Serif', serif; font-size: 16px; color: var(--navy); line-height: 1.5; font-weight: 600; }
+.card-excerpt { font-size: 13px; color: var(--text-lt); line-height: 1.65; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-weight: 300; }
+.card-meta { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
+.card-tag { font-size: 10px; background: var(--bg-soft); color: var(--text-lt); padding: 2px 8px; border-radius: 4px; }
+.card-date { font-size: 10px; color: var(--text-lt); margin-left: auto; }
+
+/* EMPTY STATE */
+.state-empty { text-align: center; padding: 80px 20px; }
+.state-loading { text-align: center; padding: 60px 20px; }
+.spinner { width: 32px; height: 32px; border: 3px solid #e0e0e0; border-top-color: var(--navy); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+
+/* PAGINATION */
+.pagination { display: flex; justify-content: center; gap: 8px; margin-top: 40px; }
+.page-btn { padding: 7px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; cursor: pointer; background: #fff; color: var(--text); font-family: inherit; transition: all 0.15s; }
+.page-btn:hover { border-color: var(--navy); color: var(--navy); }
+.page-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+.page-btn:disabled { opacity: 0.4; cursor: default; }
+
+/* FOOTER */
 .site-footer { background:#1A1210; color:rgba(255,255,255,0.5); padding:36px 32px 24px; }
 .footer-top  { display:flex; justify-content:space-between; align-items:flex-start; gap:32px; flex-wrap:wrap; padding-bottom:24px; border-bottom:1px solid rgba(255,255,255,0.08); margin-bottom:20px; }
 .footer-brand { display:flex; align-items:center; gap:10px; }
@@ -48,70 +104,82 @@ body { background: #080d14; color: #e2d9c8; font-family: Arial, sans-serif; min-
 .footer-tagline { font-size:12px; margin-top:8px; color:rgba(255,255,255,0.35); line-height:1.6; }
 .footer-bottom  { display:flex; justify-content:space-between; align-items:center; font-size:11px; color:rgba(255,255,255,0.25); }
 .footer-bottom img { width:20px; height:20px; object-fit:contain; opacity:0.3; border-radius:3px; }
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+@media (max-width:700px) {
+  .topnav { padding: 0 16px; }
+  .nav-links { display:none; position:absolute; top:60px; left:0; right:0; background:var(--navy); flex-direction:column; padding:8px 0 16px; border-bottom:1px solid #1a2a3a; }
+  .nav-links.open { display:flex; }
+  .nav-link { padding:10px 24px; border-radius:0; width:100%; }
+  .nav-hamburger { display:block; margin-left:auto; }
+  .hero { padding: 40px 20px 32px; }
+  .controls, .cat-strip { padding: 12px 16px; }
+  .page-body { padding: 24px 16px 48px; }
+}
 </style>
-<meta property="og:title" content="Tử Vi Minh Bảo – Lá số tử vi chính xác">
-<meta property="og:description" content="Luận giải tử vi chuyên sâu, kết hợp AI — tuviminhbao.com">
-<meta property="og:image" content="https://tuviminhbao.com/seal.webp">
-<meta property="og:url" content="https://tuviminhbao.com/resources.html">
-<meta property="og:type" content="website">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://tuviminhbao.com/seal.webp">
 </head>
 <body>
+
 <nav class="topnav">
   <a class="nav-logo" href="/">
-  <img src="/seal.webp" alt="Tử Vi Minh Bảo">
-  <div>
-    <div class="name">Tử Vi Minh Bảo</div>
-    <div class="url">tuviminhbao.com</div>
-  </div>
-</a>
+    <img src="/seal.webp" alt="Tử Vi Minh Bảo">
+    <div><div class="name">Tử Vi Minh Bảo</div><div class="url">tuviminhbao.com</div></div>
+  </a>
   <div class="nav-links" id="nav-links">
     <a class="nav-link" href="/">Trang Chủ</a>
-    <a class="nav-link" href="/menh-kho.html">Mệnh Khố</a>
     <a class="nav-link" href="/about.html">Giới Thiệu</a>
-    <a class="nav-link  active" href="/resources.html">Tài Nguyên</a>
-    <a class="nav-link" href="/blog.html">Blog</a>
+    <a class="nav-link active" href="/resources.html">Tài Liệu</a>
+    <a class="nav-link" href="/blog.html">Khảo Luận</a>
+    <a class="nav-link" href="/menh-kho.html">Mệnh Khố</a>
     <a class="nav-link" href="/contact.html">Liên Hệ</a>
   </div>
   <button class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')">☰</button>
 </nav>
-<div class="page-content">
-  <div class="page-eyebrow">紫微明寶</div>
-  <div class="page-heading">Tài Nguyên</div>
-  
-        <div style="max-width:680px;margin:0 auto">
-          <p style="font-size:15px;line-height:1.8;color:#aaa;margin-bottom:32px">
-            Kho tài liệu về Tử Vi Đẩu Số — từ cơ bản đến nâng cao, giúp bạn hiểu sâu hơn về lá số của mình.
-          </p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-            <div style="background:#111827;border:1px solid #1e2d42;border-radius:10px;padding:20px;opacity:0.5">
-              <div style="color:#c9a84c;margin-bottom:8px">📖 Cơ bản về Tử Vi</div>
-              <div style="color:#7a8ba8;font-size:13px">12 cung, chính tinh, phụ tinh — sắp ra mắt</div>
-            </div>
-            <div style="background:#111827;border:1px solid #1e2d42;border-radius:10px;padding:20px;opacity:0.5">
-              <div style="color:#c9a84c;margin-bottom:8px">🌟 Ý nghĩa 14 chính tinh</div>
-              <div style="color:#7a8ba8;font-size:13px">Tử Vi, Thiên Phủ, Thất Sát... — sắp ra mắt</div>
-            </div>
-            <div style="background:#111827;border:1px solid #1e2d42;border-radius:10px;padding:20px;opacity:0.5">
-              <div style="color:#c9a84c;margin-bottom:8px">🔄 Đại vận & tiểu vận</div>
-              <div style="color:#7a8ba8;font-size:13px">Cách luận vận hạn — sắp ra mắt</div>
-            </div>
-            <div style="background:#111827;border:1px solid #1e2d42;border-radius:10px;padding:20px;opacity:0.5">
-              <div style="color:#c9a84c;margin-bottom:8px">⚙️ Cách cục đặc biệt</div>
-              <div style="color:#7a8ba8;font-size:13px">54 cách cục quan trọng — sắp ra mắt</div>
-            </div>
-          </div>
-        </div>
+
+<div class="hero">
+  <div class="hero-eyebrow">學典 · Tài Liệu Học Thuật</div>
+  <div class="hero-title">Tài Liệu Tử Vi Đẩu Số</div>
+  <div class="hero-sub">Kho tài liệu học thuật về Tử Vi Đẩu Số — tinh hệ, cách cục, cung vị, vận hạn — biên soạn theo cổ pháp, đối chiếu thực chứng.</div>
 </div>
 
-<script>
-  // Mark active link
-  document.querySelectorAll('.nav-link').forEach(a => {
-    if (a.href === window.location.href) a.classList.add('active');
-    else a.classList.remove('active');
-  });
-</script>
+<div class="controls">
+  <input class="search-input" type="text" id="search-input" placeholder="Tìm tài liệu — tên sao, cách cục, cung vị..." oninput="filterArticles()">
+  <select class="filter-select" id="filter-cat" onchange="filterArticles()">
+    <option value="">Tất cả chủ đề</option>
+    <option value="tinh-he">Tinh hệ</option>
+    <option value="cach-cuc">Cách cục</option>
+    <option value="cung-vi">Cung vị</option>
+    <option value="van-han">Vận hạn</option>
+    <option value="co-phap">Cổ pháp</option>
+  </select>
+  <div class="count-badge" id="count-badge">Đang tải...</div>
+</div>
+
+<div class="cat-strip" id="cat-strip">
+  <button class="cat-btn active" onclick="setCategory('', this)">Tất cả</button>
+  <button class="cat-btn" onclick="setCategory('tinh-he', this)">Tinh hệ</button>
+  <button class="cat-btn" onclick="setCategory('cach-cuc', this)">Cách cục</button>
+  <button class="cat-btn" onclick="setCategory('cung-vi', this)">Cung vị</button>
+  <button class="cat-btn" onclick="setCategory('van-han', this)">Vận hạn</button>
+  <button class="cat-btn" onclick="setCategory('co-phap', this)">Cổ pháp</button>
+</div>
+
+<div class="page-body">
+  <div id="state-loading" class="state-loading">
+    <div class="spinner"></div>
+    <div style="font-size:14px;color:#aaa">Đang tải tài liệu...</div>
+  </div>
+  <div id="state-empty" class="state-empty" style="display:none">
+    <div style="font-size:48px;margin-bottom:16px">📚</div>
+    <div style="font-family:'Noto Serif',serif;font-size:20px;color:var(--navy);margin-bottom:8px">Chưa có tài liệu</div>
+    <div style="font-size:14px;color:var(--text-lt)">Kho tài liệu đang được biên soạn. Hãy quay lại sớm.</div>
+  </div>
+  <div id="article-grid" class="article-grid"></div>
+  <div id="pagination" class="pagination"></div>
+</div>
+
 <footer class="site-footer">
   <div class="footer-top">
     <div>
@@ -130,5 +198,103 @@ body { background: #080d14; color: #e2d9c8; font-family: Arial, sans-serif; min-
     <img src="/seal.webp" alt="">
   </div>
 </footer>
+
+<script>
+const SUPABASE_URL = 'https://dciwkfdqhhddeymlisey.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
+const PAGE_SIZE = 24;
+
+const CAT_LABEL = { 'tinh-he':'Tinh hệ', 'cach-cuc':'Cách cục', 'cung-vi':'Cung vị', 'van-han':'Vận hạn', 'co-phap':'Cổ pháp' };
+
+let allData = [], filtered = [], currentPage = 1, currentCat = '';
+
+async function loadAll() {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/tai_lieu?select=id,slug,title,excerpt,category,tags,created_at&order=created_at.desc&limit=1000`,
+      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+    );
+    if (!res.ok) throw new Error();
+    allData = await res.json();
+    filtered = [...allData];
+    render();
+  } catch(e) {
+    // Table not yet created — show empty state
+    document.getElementById('state-loading').style.display = 'none';
+    document.getElementById('state-empty').style.display = 'block';
+    document.getElementById('count-badge').textContent = '0 bài';
+  }
+}
+
+function setCategory(cat, btn) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('filter-cat').value = cat;
+  filterArticles();
+}
+
+function filterArticles() {
+  const q   = document.getElementById('search-input').value.toLowerCase();
+  const cat = document.getElementById('filter-cat').value || currentCat;
+  filtered = allData.filter(d => {
+    if (cat && d.category !== cat) return false;
+    if (q) {
+      const hay = [d.title, d.excerpt, d.category, ...(d.tags||[])].join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+  currentPage = 1;
+  render();
+}
+
+function render() {
+  document.getElementById('state-loading').style.display = 'none';
+  const grid = document.getElementById('article-grid');
+  const total = filtered.length;
+  document.getElementById('count-badge').textContent = `${total} bài`;
+
+  if (total === 0) {
+    grid.innerHTML = '';
+    document.getElementById('state-empty').style.display = 'block';
+    document.getElementById('pagination').innerHTML = '';
+    return;
+  }
+  document.getElementById('state-empty').style.display = 'none';
+
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const page  = filtered.slice(start, start + PAGE_SIZE);
+
+  grid.innerHTML = page.map((d, i) => {
+    const cat  = CAT_LABEL[d.category] || d.category || '';
+    const date = d.created_at ? new Date(d.created_at).toLocaleDateString('vi-VN') : '';
+    const tags = (d.tags||[]).slice(0,3).map(t => `<span class="card-tag">${t}</span>`).join('');
+    return `<a class="article-card" href="/tai-lieu/${d.slug || d.id}" style="animation-delay:${i*0.02}s">
+      <div class="card-cat">${cat}</div>
+      <div class="card-title">${d.title||'—'}</div>
+      ${d.excerpt ? `<div class="card-excerpt">${d.excerpt}</div>` : ''}
+      <div class="card-meta">${tags}<span class="card-date">${date}</span></div>
+    </a>`;
+  }).join('');
+
+  const totalPages = Math.ceil(total / PAGE_SIZE);
+  const pag = document.getElementById('pagination');
+  if (totalPages <= 1) { pag.innerHTML = ''; return; }
+  let btns = `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>←</button>`;
+  for (let p = 1; p <= totalPages; p++) {
+    if (p===1||p===totalPages||Math.abs(p-currentPage)<=1)
+      btns += `<button class="page-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`;
+    else if (Math.abs(p-currentPage)===2)
+      btns += `<span style="padding:7px 4px;color:#aaa">…</span>`;
+  }
+  btns += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>→</button>`;
+  pag.innerHTML = btns;
+}
+
+function goPage(p) { currentPage = p; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+
+loadAll();
+</script>
 </body>
 </html>
