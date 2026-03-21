@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="description" content="Tử Vi Minh Bảo — An sao Tử Vi Đẩu Số theo cổ pháp, luận giải bằng trí tuệ nhân tạo. 紫微斗數 · Tri Mệnh Lý · Thuận Thế Hành">
+<meta name="keywords" content="tử vi, tử vi đẩu số, an sao tử vi, luận giải tử vi, tử vi minh bảo">
+<meta property="og:title" content="Tử Vi Minh Bảo — 紫微明寶">
+<meta property="og:description" content="紫微斗數 · Tri Mệnh Lý · Thuận Thế Hành">
+<meta property="og:url" content="https://www.tuviminhbao.com">
+<link rel="canonical" href="https://www.tuviminhbao.com">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Giới Thiệu — Tử Vi Minh Bảo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy: #061A2E; --navy-mid: #0D3B5E; --blue: #1455A4;
+  --gold: #9A7B3A; --gold-lt: #F9F4EB;
+  --text: #1a1a1a; --text-mid: #444; --text-lt: #777;
+  --border: #CCCCCC; --bg: #FFFFFF; --bg-soft: #F5F4F0;
+}
+body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+
+.topnav { position: sticky; top: 0; z-index: 200; background: var(--navy); display: flex; align-items: center; height: 60px; padding: 0 40px; gap: 32px; }
+.nav-logo { font-family: 'Noto Serif SC', serif; font-size: 17px; color: #fff; flex: 1; }
+.nav-logo em { font-style: italic; color: #8BAACC; font-size: 14px; margin-left: 8px; font-family: 'Noto Serif', serif; }
+.nav-links { display: flex; align-items: center; gap: 4px; }
+.nav-link { color: #8BAACC; font-size: 13px; text-decoration: none; padding: 6px 12px; border-radius: 6px; transition: all 0.15s; }
+.nav-link:hover { color: #fff; background: rgba(255,255,255,0.07); }
+.nav-link.active { color: #c9a84c; }
+.nav-hamburger { display: none; background: none; border: none; color: #8BAACC; cursor: pointer; padding: 8px; font-size: 20px; }
+
+.hero { background: var(--navy); padding: 72px 40px 56px; text-align: center; position: relative; overflow: hidden; }
+.hero::before { content: '紫微明寶'; position: absolute; font-family: 'Noto Serif SC', serif; font-size: 160px; color: rgba(255,255,255,0.03); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; white-space: nowrap; }
+.hero-eyebrow { font-size: 11px; letter-spacing: 4px; color: #c9a84c; text-transform: uppercase; margin-bottom: 16px; opacity: 0; animation: fadeUp 0.6s ease 0.1s forwards; }
+.hero-title { font-family: 'Noto Serif', serif; font-size: 42px; color: #fff; font-weight: 400; line-height: 1.3; margin-bottom: 16px; opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards; }
+.hero-sub { font-size: 15px; color: #8BAACC; max-width: 520px; margin: 0 auto; line-height: 1.7; font-weight: 300; opacity: 0; animation: fadeUp 0.6s ease 0.3s forwards; }
+
+.page-body { flex: 1; max-width: 760px; margin: 0 auto; padding: 72px 40px 96px; width: 100%; }
+
+.section { margin-bottom: 64px; opacity: 0; transform: translateY(16px); animation: fadeUp 0.6s ease forwards; }
+.section:nth-child(1) { animation-delay: 0.05s; }
+.section:nth-child(2) { animation-delay: 0.10s; }
+.section:nth-child(3) { animation-delay: 0.15s; }
+.section:nth-child(4) { animation-delay: 0.20s; }
+.section:nth-child(5) { animation-delay: 0.25s; }
+.section:nth-child(6) { animation-delay: 0.30s; }
+.section:nth-child(7) { animation-delay: 0.35s; }
+.section:nth-child(8) { animation-delay: 0.40s; }
+
+.section-label { font-size: 10px; font-weight: 600; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; }
+.section-title { font-family: 'Noto Serif', serif; font-size: 24px; font-weight: 600; color: var(--navy); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.section-body { font-size: 15px; line-height: 1.9; color: var(--text-mid); font-weight: 300; }
+.section-body p + p { margin-top: 16px; }
+
+.principles { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+.principle-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 10px; padding: 20px; border-top: 3px solid var(--navy); }
+.principle-num { font-size: 10px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+.principle-title { font-family: 'Noto Serif', serif; font-size: 15px; font-weight: 600; color: var(--navy); margin-bottom: 8px; }
+.principle-text { font-size: 13px; color: var(--text-mid); line-height: 1.7; font-weight: 300; }
+
+.quote-block { border-left: 3px solid var(--gold); padding: 16px 20px; background: var(--gold-lt); border-radius: 0 8px 8px 0; margin: 28px 0; }
+.quote-text { font-family: 'Noto Serif', serif; font-size: 16px; font-style: italic; color: var(--navy); line-height: 1.8; }
+
+.limits-list { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+.limit-item { display: flex; gap: 14px; align-items: flex-start; }
+.limit-num { width: 24px; height: 24px; background: var(--navy); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; margin-top: 1px; }
+.limit-text { font-size: 14px; color: var(--text-mid); line-height: 1.7; font-weight: 300; }
+
+.contact-box { background: var(--navy); border-radius: 12px; padding: 32px; display: flex; align-items: center; gap: 24px; margin-top: 24px; }
+.contact-icon { font-size: 32px; flex-shrink: 0; }
+.contact-label { font-size: 11px; color: #8BAACC; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+.contact-email { font-family: 'Noto Serif', serif; font-size: 18px; color: #c9a84c; text-decoration: none; }
+.contact-email:hover { text-decoration: underline; }
+.contact-note { font-size: 12px; color: #8BAACC; margin-top: 4px; font-weight: 300; }
+
+.footer { background: var(--navy); padding: 20px 40px; display: flex; justify-content: space-between; font-size: 12px; color: #4a6080; }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 700px) {
+  .topnav { padding: 0 16px; }
+  .nav-links { display: none; position: absolute; top: 60px; left: 0; right: 0; background: var(--navy); flex-direction: column; padding: 8px 0 16px; border-bottom: 1px solid #1a2a3a; }
+  .nav-links.open { display: flex; }
+  .nav-link { padding: 10px 24px; border-radius: 0; width: 100%; }
+  .nav-hamburger { display: block; margin-left: auto; }
+  .hero { padding: 48px 20px 40px; }
+  .hero-title { font-size: 28px; }
+  .page-body { padding: 48px 20px 64px; }
+  .principles { grid-template-columns: 1fr; }
+  .contact-box { flex-direction: column; text-align: center; }
+  .footer { flex-direction: column; gap: 4px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-logo">紫微明寶 <em>Tử Vi Minh Bảo</em></div>
+  <div class="nav-links" id="nav-links">
+    <a class="nav-link" href="/">Trang Chủ</a>
+    <a class="nav-link active" href="/about.html">Giới Thiệu</a>
+    <a class="nav-link" href="/resources.html">Tài Nguyên</a>
+    <a class="nav-link" href="/blog.html">Blog</a>
+    <a class="nav-link" href="/contact.html">Liên Hệ</a>
+  </div>
+  <button class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')">☰</button>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">紫微斗數 · Tri Mệnh Lý · Thuận Thế Hành · Tử Vi Đẩu Số</div>
+  <div class="hero-title">Giới Thiệu</div>
+  <div class="hero-sub">Về phương pháp, tinh thần và những giới hạn của hệ thống luận giải Tử Vi Minh Bảo</div>
+</div>
+
+<div class="page-body">
+
+  <div class="section">
+    <div class="section-label">Mở đầu</div>
+    <div class="section-title">Tử Vi Đẩu Số</div>
+    <div class="section-body">
+      <p>Tử vi đẩu số là một môn cổ học phương Đông, qua đó người ta có thể dò xét phần nào lẽ vận hành của đời người, từ trước đến sau, trong khuôn khổ của định số. Học Tử vi, cốt để hiểu mình, và cũng là để hiểu người.</p>
+      <p>Theo truyền thống lưu truyền, môn này do Hi Di Tử Trần Đoàn, một bậc lý học uyên thâm đời Tống, khởi lập. Về sau, qua nhiều thế hệ, các học giả tiếp tục bổ sung, diễn giải và hệ thống hóa, khiến Tử vi đẩu số trở thành một ngành học có quy củ, mạch lạc.</p>
+      <p>Ở nước ta, việc nghiên cứu Tử vi đã có từ lâu đời. Bởi lẽ đó, chúng tôi cho rằng cần trở về với nguyên lý căn bản, khảo xét một cách thận trọng và có hệ thống.</p>
+    </div>
+    <div class="quote-block">
+      <div class="quote-text">Biết mệnh, không phải để phó mặc, mà là để thuận theo thời thế, tránh điều bất lợi và phát huy điều khả dĩ.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Về chúng tôi</div>
+    <div class="section-title">Nhóm Nghiên Cứu</div>
+    <div class="section-body">
+      <p>Chúng tôi là một nhóm những người nghiên cứu Tử vi đẩu số theo khuynh hướng cổ điển, lấy kinh điển làm nền tảng, lấy thực chứng làm tiêu chuẩn, và luôn giữ thái độ thận trọng trước mọi diễn giải.</p>
+      <p>Trên cơ sở đó, chúng tôi tìm cách kết hợp những tri thức truyền thống với phương pháp luận hiện đại, đặc biệt là sự trợ giúp của công nghệ trí tuệ nhân tạo, hầu mong mở rộng khả năng khảo cứu và kiểm nghiệm.</p>
+      <p>Việc xây dựng công cụ luận giải này không nhằm thay thế con người, mà trước hết là để hệ thống hóa các nguyên lý, cách cục và quy tắc vốn tản mạn trong nhiều thư tịch khác nhau; đồng thời đối chiếu với những trường hợp thực tế đã được ghi nhận qua thời gian.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Phương pháp</div>
+    <div class="section-title">Phương Pháp Luận</div>
+    <div class="section-body">
+      <p>Việc luận giải Tử vi đẩu số, theo thiển ý của chúng tôi, trước hết cần đặt trên nền tảng của kinh điển, sau nữa mới xét đến biến hóa trong thực tế. Nếu rời bỏ nguyên lý mà chỉ dựa vào cảm đoán, thì dễ rơi vào võ đoán; ngược lại, nếu chỉ câu nệ văn tự mà không xét nghiệm thực chứng, thì khó tránh khỏi chỗ cứng nhắc.</p>
+      <p>Do đó, phương pháp mà chúng tôi theo đuổi là sự kết hợp giữa hai phương diện: hệ thống hóa các nguyên tắc cổ truyền và đối chiếu với những trường hợp thực tế đã được ghi nhận. Công nghệ trí tuệ nhân tạo được sử dụng như một công cụ hỗ trợ — không phải thay thế sự suy xét của con người.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Nguyên tắc</div>
+    <div class="section-title">Nguyên Tắc Luận Giải</div>
+    <div class="principles">
+      <div class="principle-card">
+        <div class="principle-num">01</div>
+        <div class="principle-title">Không tuyệt đối hóa</div>
+        <div class="principle-text">Lá số chỉ phản ánh những khuynh hướng có thể xảy ra, chứ không phải sự định đoạt bất di bất dịch.</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-num">02</div>
+        <div class="principle-title">Không gây hoang mang</div>
+        <div class="principle-text">Mọi nhận định đều nhằm giúp người xem hiểu rõ hơn hoàn cảnh của mình để có sự lựa chọn phù hợp.</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-num">03</div>
+        <div class="principle-title">Không phán xét</div>
+        <div class="principle-text">Tử vi là công cụ quan sát và phân tích, không phải thước đo phẩm giá hay cơ sở xét đoán con người.</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-num">04</div>
+        <div class="principle-title">Liên tục hiệu chỉnh</div>
+        <div class="principle-text">Mọi mô hình luận giải được rà soát và kiểm nghiệm lại dựa trên dữ liệu tích lũy và phản hồi thực tế.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Thành thật mà nói</div>
+    <div class="section-title">Giới Hạn Của Hệ Thống</div>
+    <div class="section-body">
+      <p>Bất kỳ hệ thống luận giải nào, dù được xây dựng công phu đến đâu, cũng đều có những giới hạn nhất định.</p>
+    </div>
+    <div class="limits-list">
+      <div class="limit-item">
+        <div class="limit-num">1</div>
+        <div class="limit-text">Sai lệch có thể phát sinh từ dữ liệu đầu vào — giờ sinh không chính xác, hoặc sự khác biệt trong cách an sao giữa các truyền thống.</div>
+      </div>
+      <div class="limit-item">
+        <div class="limit-num">2</div>
+        <div class="limit-text">Các kinh điển về Tử vi tồn tại nhiều dị bản, cách diễn giải không hoàn toàn đồng nhất, nên việc hệ thống hóa tất yếu phải có sự lựa chọn và quy chiếu.</div>
+      </div>
+      <div class="limit-item">
+        <div class="limit-num">3</div>
+        <div class="limit-text">Trí tuệ nhân tạo chỉ xử lý được dựa trên dữ liệu và quy tắc đã được cung cấp. Những điều vượt ra ngoài phạm vi ấy vẫn cần đến sự cân nhắc của con người.</div>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top:24px">
+      <div class="quote-text">Các kết quả luận giải nên được xem như một nguồn tham khảo có cơ sở, hơn là một kết luận sau cùng.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Quan điểm</div>
+    <div class="section-title">Ý Nghĩa Của Tử Vi</div>
+    <div class="section-body">
+      <p>Giá trị của Tử vi đẩu số không nằm ở chỗ tiên đoán một cách tuyệt đối, mà ở khả năng gợi mở để con người hiểu rõ hơn về chính mình.</p>
+      <p>Sự biến chuyển của đời người, suy cho cùng, vẫn là kết quả của nhiều yếu tố đan xen, trong đó có cả lựa chọn và hành động của mỗi cá nhân. Việc nghiên cứu và ứng dụng Tử vi, nếu có ý nghĩa, thì chính là ở chỗ giúp con người thêm phần tỉnh táo khi đứng trước những bước ngoặt của cuộc đời.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Liên hệ</div>
+    <div class="section-title">Trao Đổi & Góp Ý</div>
+    <div class="section-body">
+      <p>Mọi ý kiến trao đổi, góp ý hay câu hỏi liên quan đến nội dung luận giải, phương pháp nghiên cứu, hoặc việc sử dụng hệ thống, xin vui lòng liên hệ. Chúng tôi trân trọng mọi phản hồi và sẽ cố gắng hồi đáp trong khả năng có thể.</p>
+    </div>
+    <div class="contact-box">
+      <div class="contact-icon">✉</div>
+      <div>
+        <div class="contact-label">Thư điện tử</div>
+        <a class="contact-email" href="mailto:contact@tuviminhbao.com">contact@tuviminhbao.com</a>
+        <div class="contact-note">Phản hồi trong vòng 24–48 giờ làm việc</div>
+      </div>
+    </div>
+  </div>
+
+</
