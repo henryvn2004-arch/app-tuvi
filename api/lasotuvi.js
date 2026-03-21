@@ -27,42 +27,72 @@ function buildPrompt(phan, laSoText, docs) {
   function trimLaSo(text, phan) {
     if (!text) return text;
     const lines = text.split('\n');
-    // Phan 1-13: chỉ cần phần đầu (bản mệnh + 12 cung + cách cục), bỏ đại vận
-    if (phan >= 1 && phan <= 13) {
-      const dvIdx = lines.findIndex(l => l.includes('=== 9 ĐẠI VẬN ==='));
-      if (dvIdx > 0) return lines.slice(0, dvIdx).join('\n');
+
+    // Tìm vị trí các section markers
+    const dvIdx  = lines.findIndex(l => l.includes('=== 9 ĐẠI VẬN ==='));
+    const ccIdx  = lines.findIndex(l => l.includes('=== CÁCH CỤC & NHẬN ĐỊNH'));
+    const cungIdx = lines.findIndex(l => l.includes('=== 12 CUNG ==='));
+
+    // Header cơ bản: dòng 0 đến trước === 12 CUNG === (~8 dòng)
+    const headerLines = cungIdx > 0 ? lines.slice(0, cungIdx) : lines.slice(0, 8);
+
+    // PHẦN 1 — tổng quan: header + 12 cung + cách cục tổng (bỏ ĐV)
+    if (phan === 1) {
+      const end = dvIdx > 0 ? dvIdx : lines.length;
+      return lines.slice(0, end).join('\n');
     }
-    // Phan 14: chỉ cần đại vận section
+
+    // PHẦN 2 — cung Mệnh: header + cung Mệnh + cách cục tổng (không cần ĐV)
+    if (phan === 2) {
+      const end = dvIdx > 0 ? dvIdx : lines.length;
+      return lines.slice(0, end).join('\n');
+    }
+
+    // PHẦN 3-13 — từng cung: header + CHỈ cung đó (không ĐV, không cách cục tổng)
+    if (phan >= 3 && phan <= 13) {
+      const CUNG_NAME = ['','','Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc',
+        'Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'][phan];
+      // Lấy header
+      const result = [...headerLines, ''];
+      // Lấy block cung từ === 12 CUNG === đến trước ĐV hoặc cách cục tổng
+      const cutEnd = dvIdx > 0 ? dvIdx : (ccIdx > 0 ? ccIdx : lines.length);
+      const cungLines = lines.slice(cungIdx > 0 ? cungIdx : 0, cutEnd);
+      // Tìm block của cung này: từ [CungName] đến [CungName tiếp theo]
+      const startI = cungLines.findIndex(l => l.startsWith(`[${CUNG_NAME}]`));
+      if (startI >= 0) {
+        const endI = cungLines.findIndex((l, i) => i > startI && l.startsWith('[') && !l.startsWith('[CÁCH') && !l.startsWith('[Ý') && !l.startsWith('[LUẬN'));
+        const block = endI > 0 ? cungLines.slice(startI, endI) : cungLines.slice(startI, startI + 25);
+        return result.concat(block).join('\n');
+      }
+      // Fallback: toàn bộ 12 cung bỏ ĐV
+      return lines.slice(0, cutEnd).join('\n');
+    }
+
+    // PHẦN 14 — tổng quan ĐV: header ngắn + TOÀN BỘ 9 ĐV (không cần 12 cung)
     if (phan === 14) {
-      const dvIdx = lines.findIndex(l => l.includes('=== 9 ĐẠI VẬN ==='));
-      if (dvIdx > 0) return lines.slice(0, 30).join('\n') + '\n' + lines.slice(dvIdx).join('\n');
+      if (dvIdx > 0) return headerLines.join('\n') + '\n' + lines.slice(dvIdx).join('\n');
     }
-    // Phan 15-23: phần đầu ngắn + section đại vận + chỉ ĐVn liên quan
+
+    // PHẦN 15-23 — từng ĐV: header ngắn + CHỈ ĐVn đó (không 12 cung, không ĐV khác)
     if (phan >= 15 && phan <= 23) {
       const dvNum = phan - 14;
-      const dvIdx = lines.findIndex(l => l.includes('=== 9 ĐẠI VẬN ==='));
-      const header = lines.slice(0, 20).join('\n'); // bản mệnh cơ bản
       if (dvIdx > 0) {
         const dvLines = lines.slice(dvIdx);
-        // Lấy chỉ ĐVn và ĐVn±1 cho context
         const target = 'ĐV' + dvNum + ':';
-        const targetIdx = dvLines.findIndex(l => l.startsWith(target));
-        if (targetIdx >= 0) {
-          // Lấy từ ĐVn đến ĐVn+1 (khoảng 10 dòng)
-          const nextDvIdx = dvLines.findIndex((l, i) => i > targetIdx && /^ĐV\d+:/.test(l));
-          const dvSection = nextDvIdx > 0
-            ? dvLines.slice(0, 2).concat(dvLines.slice(targetIdx, nextDvIdx)).join('\n')
-            : dvLines.slice(0, 2).concat(dvLines.slice(targetIdx, targetIdx + 15)).join('\n');
-          return header + '\n' + dvSection;
+        const startI = dvLines.findIndex(l => l.startsWith(target));
+        if (startI >= 0) {
+          const endI = dvLines.findIndex((l, i) => i > startI && /^ĐV\d+:/.test(l));
+          const dvBlock = endI > 0 ? dvLines.slice(startI, endI) : dvLines.slice(startI, startI + 20);
+          return headerLines.join('\n') + '\n\n' + dvBlock.join('\n');
         }
-        return header + '\n' + dvLines.join('\n');
       }
     }
-    // Phan 24: tiểu vận — phần đầu + toàn bộ đại vận
+
+    // PHẦN 24 — tiểu vận: header + ĐV hiện tại + tiếp theo
     if (phan === 24) {
-      const dvIdx = lines.findIndex(l => l.includes('=== 9 ĐẠI VẬN ==='));
-      if (dvIdx > 0) return lines.slice(0, 25).join('\n') + '\n' + lines.slice(dvIdx).join('\n');
+      if (dvIdx > 0) return headerLines.join('\n') + '\n' + lines.slice(dvIdx).join('\n');
     }
+
     return text;
   }
 
@@ -118,14 +148,15 @@ module.exports = async (req, res) => {
 
   try {
     // Model: Sonnet cho phần tổng quan/đại vận, Haiku cho từng cung
-    const useHaiku = (phan >= 2 && phan <= 13) || (phan >= 15 && phan <= 23);
-    const model = useHaiku ? 'claude-haiku-4-5-20251001' : 'claude-sonnet-4-5';
-    const maxTok = phan === 1 ? 1800
-      : phan === 14 ? 1800
-      : phan === 24 ? 1500
-      : useHaiku && phan >= 2 && phan <= 13 ? 1200
-      : useHaiku && phan >= 15 && phan <= 23 ? 1400
-      : 1400;
+    // Haiku cho tất cả phần — tiết kiệm chi phí tối đa
+    // Sonnet chỉ dùng khi user yêu cầu premium (future)
+    const model = 'claude-haiku-4-5-20251001';
+    const maxTok = phan === 1 ? 1400
+      : phan === 14 ? 1400
+      : phan === 24 ? 1200
+      : phan >= 2 && phan <= 13 ? 1000
+      : phan >= 15 && phan <= 23 ? 1100
+      : 1000;
 
     // Prompt caching: cache system prompt + laSoText (lặp lại 24 lần)
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
