@@ -401,6 +401,8 @@ select.form-input { cursor: pointer; }
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://tuviminhbao.com/seal.webp">
+<script src="/auth.js"></script>
+<script src="/share.js"></script>
 </head>
 <body>
 
@@ -420,6 +422,7 @@ select.form-input { cursor: pointer; }
     <a class="nav-link" href="/menh-kho.html">Mệnh Khố</a>
     <a class="nav-link" href="/contact.html">Liên Hệ</a>
   </div>
+  <div id="nav-auth-area" style="margin-left:8px"></div>
   <button class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')">☰</button>
 </nav>
 
@@ -987,6 +990,14 @@ select.form-input { cursor: pointer; }
       if (data.error) throw new Error(data.error);
 
       document.getElementById('progress-fill').style.width = '100%';
+      if (window.ShareButtons) {
+        const _slug = window.location.search.includes('slug') ? window.location.href : window.location.origin;
+        ShareButtons.render('share-nhanh', {
+          url: window.location.href,
+          title: 'Lá số Tử Vi — Tử Vi Minh Bảo',
+          text: 'Xem luận giải lá số Tử Vi tại Tử Vi Minh Bảo'
+        });
+      }
 
       const body = document.getElementById('result-body');
       const section = document.createElement('div');
@@ -1725,6 +1736,18 @@ select.form-input { cursor: pointer; }
 
       // After final phan — save lá số to Supabase
       if (_currentPhan === TONG_PHAN && _astrolabe) {
+        // Add share buttons
+        if (window.ShareButtons) {
+          const shareDiv = document.createElement('div');
+          shareDiv.style.cssText = 'margin:24px 0;padding:16px;background:#f8f9fa;border-radius:8px';
+          shareDiv.id = 'share-full-result';
+          document.getElementById('result-body')?.appendChild(shareDiv);
+          ShareButtons.render('share-full-result', {
+            url: window.location.href,
+            title: 'Lá số Tử Vi đầy đủ — Tử Vi Minh Bảo',
+            text: 'Xem luận giải lá số Tử Vi đầy đủ 24 phần'
+          });
+        }
         try {
           fetch('/api/save-laso', {
             method: 'POST',
@@ -2166,7 +2189,7 @@ select.form-input { cursor: pointer; }
       if (data.error) throw new Error(data.error);
 
       document.getElementById('nhanh-luangiai').innerHTML = renderMarkdown(data.luanGiai)
-        + `<div style="margin-top:20px"><button style="display:inline-block;background:transparent;color:#5FA8D3;border:1.5px solid #c9a84c;padding:10px 24px;font-size:13px;cursor:pointer;border-radius:4px;font-family:inherit" onclick="window.print()">⬇ Tải PDF</button></div>`;
+        + `<div style="margin-top:20px"><div id="share-nhanh" style="margin-bottom:12px"></div><button style="display:inline-block;background:transparent;color:#5FA8D3;border:1.5px solid #c9a84c;padding:10px 24px;font-size:13px;cursor:pointer;border-radius:4px;font-family:inherit" onclick="window.print()">⬇ Tải PDF</button></div>`;
       document.getElementById('progress-fill').style.width = '100%';
 
     } catch(e) {
