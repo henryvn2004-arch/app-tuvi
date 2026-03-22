@@ -1084,6 +1084,13 @@ select.form-input { cursor: pointer; }
           const _dvFlag = _dvSc?.tong >= 7 ? '🟢' : _dvSc?.tong >= 4 ? '🟡' : '🔴';
           chartHtml = `
 <div style="max-width:360px;margin:8px 0"><canvas id="chart-radar-cung-${_currentPhan}"></canvas><div id="radar-legend-cung-${_currentPhan}" style="margin-top:12px;display:grid;grid-template-columns:repeat(2,1fr);gap:6px;font-size:11px"></div></div>`;
+        } else if (_currentPhan >= 15 && _currentPhan <= 23 && _astrolabe) {
+          const _dvNum = _currentPhan - 14;
+          chartHtml = `
+<div style="margin:16px 0 8px">
+  <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 Tiểu Vận 10 Năm</div>
+  <div class="candle-wrap"><div id="candle-dv${_currentPhan - 14}"></div></div>
+</div>`;
         } else if (_currentPhan === 24 && _astrolabe) {
           const _dvHT24 = _astrolabe.daiVanHienTai;
           const _dvTong24 = _dvHT24?.scoring?.tong || 0;
@@ -1689,7 +1696,7 @@ select.form-input { cursor: pointer; }
           const _dvN = _currentPhan - 14;
           const _dvData = _astrolabe.tieuVanScores.filter(tv => tv.dvIdx === _dvN - 1);
           renderCandlestick('candle-dv' + _dvN, _dvData, {candleW:32, height:260});
-        }, 100);
+        }, 200);
       }
       if (_currentPhan === 24 && _astrolabe?.tieuVanScores) {
         setTimeout(() => {
