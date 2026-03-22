@@ -33,7 +33,7 @@ module.exports = async (req, res) => {
       canChiNam, gioiTinh, namSinh, thangSinh, ngaySinh,
       gioIdx, gioChi, canNam, chiNam, namXem,
       cungMenh, chinhTinh, napAm, cuc,
-      luanGiai, laSoText,
+      luanGiai, laSoText, renderedHtml,
     } = req.body;
 
     if (!canChiNam || !namSinh) {
@@ -77,6 +77,8 @@ module.exports = async (req, res) => {
         cuc:          cuc || null,
         luan_giai:    luanGiai || {},
         la_so_text:   laSoText || null,
+        rendered_html: renderedHtml || null,
+        rendered_html: renderedHtml || null,
       })
       .select('slug')
       .single();
