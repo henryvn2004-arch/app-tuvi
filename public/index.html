@@ -271,7 +271,7 @@ select.form-input { cursor: pointer; }
   .cung-center { padding: 8px; }
   .center-title { font-size: 11px; }
   .center-row { font-size: 10px; }
-  .bright { display: none; }
+  .bright { font-size: 7px; }
   .hoa { font-size: 8px; }
 }
 
@@ -284,6 +284,8 @@ select.form-input { cursor: pointer; }
 @media print {
   .topnav, .hero, .form-section, .status-bar, .result-actions,
   .result-sidebar, .footer, .phan-loading { display: none !important; }
+  .bright { display: inline !important; font-size: 7px !important; opacity: 1 !important; color: #000 !important; }
+  .hoa { display: inline !important; font-size: 8px !important; }
   .result-section.active { display: block !important; }
   .result-layout { display: block !important; }
   .result-main { width: 100% !important; }
