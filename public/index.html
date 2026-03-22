@@ -1435,7 +1435,7 @@ select.form-input { cursor: pointer; }
             dvs.forEach((dv, i) => {
               const span = (dv.tuoiEnd - dv.tuoiStart) || 10;
               const sc = dv.scoring?.tong || 0;
-              const h = 22 + (sc/10)*44;
+              const h = Math.round(16 + (sc/10)*144); // scale to full 160px container
               const col = sc>=7 ? '#1FA3D6' : sc>=4 ? '#2F5BEA' : sc>=0 ? '#C0392B' : '#071A2E';
               const isCur = tuoiNow >= dv.tuoiStart && tuoiNow <= dv.tuoiEnd;
               const flag = sc>=7?'🟢':sc>=4?'🟡':'🔴';
@@ -1678,20 +1678,28 @@ select.form-input { cursor: pointer; }
         }
       }
 
-      if (data.chartData && _currentPhan === 14) {
+      if (_currentPhan === 14 && _astrolabe?.daiVans) {
+        // Build chartData từ daiVans scoring (fallback nếu Claude không trả về chartdata)
+        const _dvs14 = _astrolabe.daiVans.slice(0,9);
+        const _chartDataFinal = (data.chartData && data.chartData.scores?.length === 9)
+          ? data.chartData
+          : {
+              labels: _dvs14.map((dv,i) => `ĐV${i+1} ${dv.tuoiStart}-${dv.tuoiEnd}`),
+              scores: _dvs14.map(dv => dv.scoring?.tong ?? 5),
+            };
         setTimeout(() => {
           const ctx = document.getElementById('chart-daivan');
           if (!ctx) { console.warn('canvas not found'); return; }
           new Chart(ctx, {
             type: 'line',
             data: {
-              labels: data.chartData.labels,
+              labels: _chartDataFinal.labels,
               datasets: [{
                 label: 'Điểm Vận',
-                data: data.chartData.scores,
+                data: _chartDataFinal.scores,
                 borderColor: '#2F5BEA',
                 backgroundColor: 'rgba(20,85,164,0.08)',
-                pointBackgroundColor: data.chartData.scores.map(s =>
+                pointBackgroundColor: _chartDataFinal.scores.map(s =>
                   s >= 7 ? '#1FA3D6' : s >= 5 ? '#1A3A5C' : '#C0392B'
                 ),
                 pointRadius: 6,
