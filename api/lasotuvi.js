@@ -102,7 +102,7 @@ function buildPrompt(phan, laSoText, docs) {
   buildPrompt._lastCtx = ctx;
 
   if (phan === 1) {
-    return ctx + '\n\nPHẦN 1 — TỔNG QUAN LÁ SỐ (200-250 từ)\nViết văn xuôi, không dùng bullet:\n1. Bản mệnh & khí chất: cục, thuận/nghịch lý, Tràng Sinh, nhóm Thái Tuế Mệnh vs Thân\n2. Cung Mệnh: dựa trên [CÁCH CỤC] và [Ý NGHĨA] — diễn giải, không liệt kê lại\n3. Một câu nhận định tổng: điểm mạnh/yếu nổi bật nhất';
+    return ctx + '\n\nPHẦN 1 — TỔNG QUAN LÁ SỐ (200-250 từ)\nViết văn xuôi, không dùng bullet. KHÔNG đề cập đến đại vận trong phần này.\n1. Bản mệnh & khí chất: cục, thuận/nghịch lý, vị trí cung Mệnh trong vòng Tràng Sinh (Trường Sinh/Mộc Dục/Quan Đới...), vị trí trong vòng Lộc Tồn, nhóm Thái Tuế Mệnh vs Thân\n2. Cung Mệnh: dựa trên [CÁCH CỤC] và [Ý NGHĨA] — diễn giải, không liệt kê lại\n3. Một câu nhận định tổng: điểm mạnh/yếu nổi bật nhất';
   }
 
   if (phan === 2) {
