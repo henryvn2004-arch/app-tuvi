@@ -151,8 +151,8 @@ module.exports = async (req, res) => {
     // Haiku cho tất cả phần — tiết kiệm chi phí tối đa
     // Sonnet chỉ dùng khi user yêu cầu premium (future)
     const model = 'claude-haiku-4-5-20251001';
-    const maxTok = phan === 1 ? 1400
-      : phan === 14 ? 1400
+    const maxTok = phan === 1 ? 2000
+      : phan === 14 ? 3000
       : phan === 24 ? 1200
       : phan >= 2 && phan <= 13 ? 1000
       : phan >= 15 && phan <= 23 ? 1100
