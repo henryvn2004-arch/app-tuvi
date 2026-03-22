@@ -352,7 +352,7 @@ function renderPregenP1(ls) {
 }
 
 // ── Chart phan 1 (interactive radar) ──
-function renderChartP1(ls) {
+function renderChartP1(ls, pending) {
   if (!ls.cungScores) return '';
   const uid = 'radar-all-' + Date.now();
   const wheelUid = 'wheel-' + Date.now();
@@ -450,7 +450,7 @@ function renderPregenCung(ls, n) {
   }
   return html;
 }
-function renderChartCung(ls, n) {
+function renderChartCung(ls, n, pending) {
   const cung = PHAN_TO_CUNG[n];
   const sc = ls.cungScores?.[cung];
   if (!sc) return '';
@@ -497,7 +497,7 @@ function renderPregenDV(ls, dvNum) {
 }
 
 // ── Chart phan 14 ──
-function renderChartP14(ls) {
+function renderChartP14(ls, pending) {
   const dvs = ls.daiVans||[];
   const tvs = ls.tieuVanScores||[];
   const cdUid='cd-'+Date.now(), tlUid='tl-'+Date.now(), c90='c90-'+Date.now();
@@ -522,7 +522,10 @@ function renderChartP14(ls) {
       });
     }
     // Candlestick 90yr
-    if(tvs.length){renderCandlestick(c90,tvs,{candleW:9,height:360});}
+    if(tvs.length){
+      if(pending) pending.push(()=>renderCandlestick(c90,tvs,{candleW:9,height:360}));
+      else renderCandlestick(c90,tvs,{candleW:9,height:360});
+    }
   },200);
   return `<div style="margin:16px 0">
     <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Xu hướng điểm 9 Đại Vận</div>
@@ -539,11 +542,12 @@ function renderChartP14(ls) {
 }
 
 // ── Chart từng ĐV ──
-function renderChartDV(ls, dvNum) {
+function renderChartDV(ls, dvNum, pending) {
   const tvs = (ls.tieuVanScores||[]).filter(tv=>tv.dvIdx===dvNum-1);
   if (!tvs.length) return '';
   const uid='cdv-'+dvNum+'-'+Date.now();
-  setTimeout(()=>{ renderCandlestick(uid,tvs,{candleW:32,height:260}); },200);
+  if (pending) pending.push(()=>renderCandlestick(uid,tvs,{candleW:32,height:260}));
+  else setTimeout(()=>renderCandlestick(uid,tvs,{candleW:32,height:260}),200);
   return `<div style="margin:16px 0 8px">
     <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 Tiểu Vận 10 Năm</div>
     <div class="candle-wrap"><div id="${uid}"></div></div>
@@ -551,14 +555,13 @@ function renderChartDV(ls, dvNum) {
 }
 
 // ── Chart phan 24 ──
-function renderChartP24(ls) {
+function renderChartP24(ls, pending) {
   const tvs = ls.tieuVanScores||[];
   const tuoiNow = ls.tuoiXem||0;
   const next3 = tvs.filter(tv=>tv.tuoi>=tuoiNow&&tv.tuoi<tuoiNow+3);
   const c3='c3yr-'+Date.now();
-  setTimeout(()=>{
-    if(next3.length){renderCandlestick(c3,next3,{candleW:70,height:260,width:280});}
-  },200);
+  if (pending) pending.push(()=>{ if(next3.length) renderCandlestick(c3,next3,{candleW:70,height:260,width:280}); });
+  else setTimeout(()=>{ if(next3.length) renderCandlestick(c3,next3,{candleW:70,height:260,width:280}); },200);
   return `<div style="margin:16px 0 8px">
     <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 3 Năm Kế Tiếp — Tiểu Vận</div>
     <div class="candle-wrap"><div id="${c3}"></div></div>
@@ -670,6 +673,9 @@ function renderFromHTML(d) {
     body.appendChild(noticeDiv);
   }
 
+  // Collect pending chart renders to run AFTER all sections are in DOM
+  const _pendingCharts = [];
+
   phans.forEach(n => {
     const text = luan[n] || luan[String(n)] || '';
     if (!text) return;
@@ -677,11 +683,11 @@ function renderFromHTML(d) {
     sec.className = 'phan-section';
 
     let preHtml = '', chartHtml = '';
-    if (n === 1 && _ls) { preHtml = renderPregenP1(_ls); chartHtml = renderChartP1(_ls); }
-    else if (n >= 2 && n <= 13 && _ls) { preHtml = renderPregenCung(_ls, n); chartHtml = renderChartCung(_ls, n); }
-    else if (n === 14 && _ls) { chartHtml = renderChartP14(_ls); }
-    else if (n >= 15 && n <= 23 && _ls) { preHtml = renderPregenDV(_ls, n-14); chartHtml = renderChartDV(_ls, n-14); }
-    else if (n === 24 && _ls) { chartHtml = renderChartP24(_ls); }
+    if (n === 1 && _ls) { preHtml = renderPregenP1(_ls); chartHtml = renderChartP1(_ls, _pendingCharts); }
+    else if (n >= 2 && n <= 13 && _ls) { preHtml = renderPregenCung(_ls, n); chartHtml = renderChartCung(_ls, n, _pendingCharts); }
+    else if (n === 14 && _ls) { chartHtml = renderChartP14(_ls, _pendingCharts); }
+    else if (n >= 15 && n <= 23 && _ls) { preHtml = renderPregenDV(_ls, n-14); chartHtml = renderChartDV(_ls, n-14, _pendingCharts); }
+    else if (n === 24 && _ls) { chartHtml = renderChartP24(_ls, _pendingCharts); }
 
     const divider = preHtml ? `<div style="border-top:1px solid #eee;margin:12px 0 10px;display:flex;align-items:center;gap:8px;font-size:10px;color:#aaa;letter-spacing:2px;text-transform:uppercase"><div style="flex:1;height:1px;background:#eee"></div>Luận giải<div style="flex:1;height:1px;background:#eee"></div></div>` : '';
 
@@ -692,6 +698,9 @@ function renderFromHTML(d) {
       <div class="phan-body">${renderMarkdown(text)}</div>`;
     body.appendChild(sec);
   });
+
+  // NOW run all pending chart renders — elements are in DOM
+  setTimeout(() => { _pendingCharts.forEach(fn => fn()); }, 300);
 
   // CTA
   const cta = document.createElement('div');
