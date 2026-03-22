@@ -2,214 +2,9 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="icon" type="image/webp" href="/seal.webp">
-<link rel="apple-touch-icon" href="/seal.webp">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Liên Hệ — Tử Vi Minh Bảo</title>
-<meta name="description" content="Tử Vi Minh Bảo — Liên hệ và trao đổi về Tử Vi Đẩu Số. Tri mệnh lý – Thuận thế hành">
-<link rel="canonical" href="https://www.tuviminhbao.com/contact.html">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --navy: #061A2E; --navy-mid: #0D3B5E; --blue: #1455A4;
-  --gold: #9A7B3A; --gold-lt: #F9F4EB;
-  --text: #1a1a1a; --text-mid: #444; --text-lt: #777;
-  --border: #CCCCCC; --bg: #FFFFFF; --bg-soft: #F5F4F0;
-}
-body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
-
-/* ── NAV ── */
-.topnav { position: sticky; top: 0; z-index: 200; background: var(--navy); display: flex; align-items: center; height: 60px; padding: 0 40px; gap: 32px; }
-.nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
-.nav-logo img { width:38px; height:38px; object-fit:contain; border-radius:5px; }
-.nav-logo .name { font-size:16px; font-weight:700; color:#CC2200; font-family:Georgia,serif; }
-.nav-logo .url  { font-size:10px; color:#aaa; letter-spacing:0.07em; text-transform:uppercase; }
-.nav-logo em { font-style: italic; color: #8BAACC; font-size: 14px; margin-left: 8px; font-family: 'Noto Serif', serif; }
-.nav-links { display: flex; align-items: center; gap: 4px; }
-.nav-link { color: #8BAACC; font-size: 13px; text-decoration: none; padding: 6px 12px; border-radius: 6px; transition: all 0.15s; }
-.nav-link:hover { color: #fff; background: rgba(255,255,255,0.07); }
-.nav-link.active { color: #c9a84c; }
-.nav-hamburger { display: none; background: none; border: none; color: #8BAACC; cursor: pointer; padding: 8px; font-size: 20px; }
-
-/* ── HERO ── */
-.hero {
-  background: var(--navy);
-  padding: 72px 40px 56px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-.hero::before {
-  content: '联';
-  position: absolute;
-  font-family: 'Noto Serif SC', serif;
-  font-size: 320px;
-  color: rgba(255,255,255,0.025);
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  line-height: 1;
-}
-.hero-eyebrow { font-size: 11px; letter-spacing: 4px; color: #c9a84c; text-transform: uppercase; margin-bottom: 16px; opacity: 0; animation: fadeUp 0.6s ease 0.1s forwards; }
-.hero-title { font-family: 'Noto Serif', serif; font-size: 42px; color: #fff; font-weight: 400; margin-bottom: 16px; opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards; }
-.hero-sub { font-size: 15px; color: #8BAACC; max-width: 480px; margin: 0 auto; line-height: 1.7; font-weight: 300; opacity: 0; animation: fadeUp 0.6s ease 0.3s forwards; }
-
-/* ── BODY ── */
-.page-body { flex: 1; max-width: 800px; margin: 0 auto; padding: 72px 40px 96px; width: 100%; }
-
-/* ── INTRO ── */
-.intro {
-  text-align: center;
-  margin-bottom: 56px;
-  opacity: 0;
-  animation: fadeUp 0.6s ease 0.2s forwards;
-}
-.intro-text {
-  font-family: 'Noto Serif', serif;
-  font-size: 17px;
-  color: var(--text-mid);
-  line-height: 1.9;
-  font-weight: 400;
-  font-style: italic;
-  max-width: 560px;
-  margin: 0 auto;
-}
-
-/* ── CONTACT GRID ── */
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-bottom: 48px;
-}
-
-.contact-card {
-  background: var(--bg-soft);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  opacity: 0;
-  animation: fadeUp 0.6s ease forwards;
-  transition: border-color 0.2s, transform 0.2s;
-}
-.contact-card:hover { border-color: var(--navy); transform: translateY(-2px); }
-.contact-card:nth-child(1) { animation-delay: 0.15s; }
-.contact-card:nth-child(2) { animation-delay: 0.22s; }
-
-.contact-card.primary {
-  background: #D9D9D9;
-  border-color: #b0b0b0;
-  grid-column: 1 / -1;
-}
-.contact-card.primary:hover { border-color: var(--navy); }
-
-.card-icon { font-size: 28px; line-height: 1; }
-.card-label { font-size: 10px; font-weight: 600; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; }
-.card-value {
-  font-family: 'Noto Serif', serif;
-  font-size: 20px;
-  color: var(--navy);
-  text-decoration: none;
-  line-height: 1.3;
-  transition: color 0.15s;
-}
-.card-value:hover { color: var(--blue); }
-.contact-card.primary .card-label { color: #666; }
-.contact-card.primary .card-value { color: var(--navy); font-size: 22px; }
-.contact-card.primary .card-value:hover { color: var(--blue); }
-.card-note { font-size: 13px; color: var(--text-lt); line-height: 1.6; font-weight: 300; }
-.contact-card.primary .card-note { color: #555; }
-
-/* ── DIVIDER ── */
-.divider {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin: 48px 0;
-  opacity: 0;
-  animation: fadeUp 0.6s ease 0.4s forwards;
-}
-.divider-line { flex: 1; height: 1px; background: var(--border); }
-.divider-text { font-size: 11px; letter-spacing: 3px; color: var(--text-lt); text-transform: uppercase; white-space: nowrap; }
-
-/* ── GUIDELINES ── */
-.guidelines {
-  opacity: 0;
-  animation: fadeUp 0.6s ease 0.45s forwards;
-}
-.guidelines-title {
-  font-family: 'Noto Serif', serif;
-  font-size: 20px;
-  color: var(--navy);
-  margin-bottom: 24px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--border);
-}
-.guideline-list { display: flex; flex-direction: column; gap: 16px; }
-.guideline-item { display: flex; gap: 16px; align-items: flex-start; }
-.guideline-num {
-  width: 28px; height: 28px;
-  background: var(--navy);
-  color: #fff;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 600;
-  flex-shrink: 0; margin-top: 1px;
-}
-.guideline-text { font-size: 14px; color: var(--text-mid); line-height: 1.7; font-weight: 300; }
-.guideline-text b { color: var(--text); font-weight: 500; }
-
-/* ── QUOTE ── */
-.quote-block {
-  border-left: 3px solid var(--gold);
-  padding: 18px 22px;
-  background: var(--gold-lt);
-  border-radius: 0 8px 8px 0;
-  margin: 48px 0 0;
-  opacity: 0;
-  animation: fadeUp 0.6s ease 0.55s forwards;
-}
-.quote-text {
-  font-family: 'Noto Serif', serif;
-  font-size: 15px;
-  font-style: italic;
-  color: var(--navy);
-  line-height: 1.85;
-}
-
-/* ── FOOTER ── */
-.footer { background: var(--navy); padding: 20px 40px; display: flex; justify-content: space-between; font-size: 12px; color: #4a6080; }
-
-@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-
-@media (max-width: 700px) {
-  .topnav { padding: 0 16px; }
-  .nav-links { display: none; position: absolute; top: 60px; left: 0; right: 0; background: var(--navy); flex-direction: column; padding: 8px 0 16px; border-bottom: 1px solid #1a2a3a; }
-  .nav-links.open { display: flex; }
-  .nav-link { padding: 10px 24px; border-radius: 0; width: 100%; }
-  .nav-hamburger { display: block; margin-left: auto; }
-  .hero { padding: 48px 20px 40px; }
-  .hero-title { font-size: 28px; }
-  .page-body { padding: 48px 20px 64px; }
-  .contact-grid { grid-template-columns: 1fr; }
-  .contact-card.primary { grid-column: auto; }
-  .footer { flex-direction: column; gap: 4px; }
-}
-.site-footer { background:#1A1210; color:rgba(255,255,255,0.5); padding:36px 32px 24px; }
-.footer-top  { display:flex; justify-content:space-between; align-items:flex-start; gap:32px; flex-wrap:wrap; padding-bottom:24px; border-bottom:1px solid rgba(255,255,255,0.08); margin-bottom:20px; }
-.footer-brand { display:flex; align-items:center; gap:10px; }
-.footer-brand img { width:36px; height:36px; object-fit:contain; border-radius:5px; opacity:0.9; }
-.footer-brand-text .name { font-size:14px; font-weight:700; color:rgba(255,255,255,0.85); font-family:Georgia,serif; }
-.footer-brand-text .zh   { font-size:12px; color:#C9A84C; }
-.footer-tagline { font-size:12px; margin-top:8px; color:rgba(255,255,255,0.35); line-height:1.6; }
-.footer-bottom  { display:flex; justify-content:space-between; align-items:center; font-size:11px; color:rgba(255,255,255,0.25); }
-.footer-bottom img { width:20px; height:20px; object-fit:contain; opacity:0.3; border-radius:3px; }
-</style>
+<meta name="description" content="Liên hệ với Tử Vi Minh Bảo — Tri mệnh lý, Thuận thế hành.">
 <meta property="og:title" content="Tử Vi Minh Bảo – Lá số tử vi chính xác">
 <meta property="og:description" content="Tri mệnh lý – Thuận thế hành. Tử vi đẩu số theo cổ pháp, luận giải bằng trí tuệ nhân tạo.">
 <meta property="og:image" content="https://tuviminhbao.com/seal.webp">
@@ -217,17 +12,93 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://tuviminhbao.com/seal.webp">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="apple-touch-icon" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="/auth.js"></script>
+<script src="/share.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy: #061A2E; --blue: #1455A4; --gold: #9A7B3A; --gold-lt: #F9F4EB;
+  --text: #1a1a1a; --text-mid: #444; --text-lt: #777;
+  --border: #CCCCCC; --bg: #FFFFFF; --bg-soft: #F5F4F0;
+}
+body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+.topnav { position: sticky; top: 0; z-index: 200; background: var(--navy); display: flex; align-items: center; height: 60px; padding: 0 40px; gap: 32px; }
+.nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.nav-logo img { width:38px; height:38px; object-fit:contain; border-radius:5px; }
+.nav-logo .name { font-size:16px; font-weight:700; color:#CC2200; font-family:Georgia,serif; }
+.nav-logo .url { font-size:10px; color:#aaa; letter-spacing:0.07em; }
+.nav-links { display:flex; align-items:center; gap:4px; }
+.nav-link { color:#8BAACC; font-size:13px; text-decoration:none; padding:6px 12px; border-radius:6px; transition:all 0.15s; }
+.nav-link:hover { color:#fff; background:rgba(255,255,255,0.07); }
+.nav-link.active { color:#c9a84c; }
+.nav-hamburger { display:none; background:none; border:none; color:#8BAACC; cursor:pointer; padding:8px; font-size:20px; }
+.hero { background:var(--navy); padding:56px 40px 44px; position:relative; overflow:hidden; }
+.hero::before { content:'联'; position:absolute; font-family:'Noto Serif SC',serif; font-size:300px; color:rgba(255,255,255,0.025); top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none; }
+.hero-eyebrow { font-size:11px; letter-spacing:4px; color:#c9a84c; text-transform:uppercase; margin-bottom:12px; opacity:0; animation:fadeUp 0.6s ease 0.1s forwards; }
+.hero-title { font-family:'Noto Serif',serif; font-size:38px; color:#fff; font-weight:400; margin-bottom:10px; opacity:0; animation:fadeUp 0.6s ease 0.2s forwards; }
+.hero-sub { font-size:14px; color:#8BAACC; font-weight:300; line-height:1.7; opacity:0; animation:fadeUp 0.6s ease 0.3s forwards; }
+.page-body { flex:1; max-width:800px; margin:0 auto; padding:64px 40px 96px; width:100%; }
+.intro { text-align:center; margin-bottom:48px; }
+.intro-text { font-family:'Noto Serif',serif; font-size:16px; color:var(--text-mid); line-height:1.9; font-style:italic; max-width:520px; margin:0 auto; }
+.contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:48px; }
+.contact-card { background:var(--bg-soft); border:1px solid var(--border); border-radius:12px; padding:28px; display:flex; flex-direction:column; gap:12px; transition:border-color 0.2s, transform 0.2s; }
+.contact-card:hover { border-color:var(--navy); transform:translateY(-2px); }
+.contact-card.primary { background:#D9D9D9; border-color:#b0b0b0; grid-column:1 / -1; }
+.contact-card.primary:hover { border-color:var(--navy); }
+.card-icon { font-size:28px; line-height:1; }
+.card-label { font-size:10px; font-weight:600; letter-spacing:3px; color:var(--gold); text-transform:uppercase; }
+.contact-card.primary .card-label { color:#666; }
+.card-value { font-family:'Noto Serif',serif; font-size:20px; color:var(--navy); text-decoration:none; line-height:1.3; transition:color 0.15s; cursor:pointer; }
+.card-value:hover { color:var(--blue); }
+.card-note { font-size:13px; color:var(--text-lt); line-height:1.6; font-weight:300; }
+.contact-card.primary .card-note { color:#555; }
+.divider { display:flex; align-items:center; gap:16px; margin:48px 0; }
+.divider-line { flex:1; height:1px; background:var(--border); }
+.divider-text { font-size:11px; letter-spacing:3px; color:var(--text-lt); text-transform:uppercase; white-space:nowrap; }
+.guidelines { }
+.guidelines-title { font-family:'Noto Serif',serif; font-size:20px; color:var(--navy); margin-bottom:24px; padding-bottom:12px; border-bottom:1px solid var(--border); }
+.guideline-list { display:flex; flex-direction:column; gap:16px; }
+.guideline-item { display:flex; gap:16px; align-items:flex-start; }
+.guideline-num { width:28px; height:28px; background:var(--navy); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; flex-shrink:0; margin-top:1px; }
+.guideline-text { font-size:14px; color:var(--text-mid); line-height:1.7; font-weight:300; }
+.guideline-text b { color:var(--text); font-weight:500; }
+.quote-block { border-left:3px solid var(--gold); padding:18px 22px; background:var(--gold-lt); border-radius:0 8px 8px 0; margin:48px 0 0; }
+.quote-text { font-family:'Noto Serif',serif; font-size:15px; font-style:italic; color:var(--navy); line-height:1.85; }
+.site-footer { background:#1A1210; color:rgba(255,255,255,0.5); padding:36px 32px 24px; }
+.footer-top { display:flex; justify-content:space-between; align-items:flex-start; gap:32px; flex-wrap:wrap; padding-bottom:24px; border-bottom:1px solid rgba(255,255,255,0.08); margin-bottom:20px; }
+.footer-brand { display:flex; align-items:center; gap:10px; }
+.footer-brand img { width:36px; height:36px; object-fit:contain; border-radius:5px; opacity:0.9; }
+.footer-brand-text .name { font-size:14px; font-weight:700; color:rgba(255,255,255,0.85); font-family:Georgia,serif; }
+.footer-brand-text .zh { font-size:12px; color:#C9A84C; }
+.footer-tagline { font-size:12px; margin-top:8px; color:rgba(255,255,255,0.35); line-height:1.6; }
+.footer-bottom { display:flex; justify-content:space-between; align-items:center; font-size:11px; color:rgba(255,255,255,0.25); }
+.footer-bottom img { width:20px; height:20px; object-fit:contain; opacity:0.3; border-radius:3px; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+@media (max-width:700px) {
+  .topnav { padding:0 16px; }
+  .nav-links { display:none; position:absolute; top:60px; left:0; right:0; background:var(--navy); flex-direction:column; padding:8px 0 16px; border-bottom:1px solid #1a2a3a; }
+  .nav-links.open { display:flex; }
+  .nav-link { padding:10px 24px; border-radius:0; width:100%; }
+  .nav-hamburger { display:block; margin-left:auto; }
+  .hero { padding:40px 20px 32px; }
+  .page-body { padding:40px 20px 64px; }
+  .contact-grid { grid-template-columns:1fr; }
+  .contact-card.primary { grid-column:auto; }
+  .footer-bottom { flex-direction:column; gap:4px; }
+}
+</style>
 </head>
 <body>
 
 <nav class="topnav">
   <a class="nav-logo" href="/">
-  <img src="/seal.webp" alt="Tử Vi Minh Bảo">
-  <div>
-    <div class="name">Tử Vi Minh Bảo</div>
-    <div class="url">Tri mệnh lý – Thuận thế hành</div>
-  </div>
-</a>
+    <img src="/seal.webp" alt="Tử Vi Minh Bảo">
+    <div><div class="name">Tử Vi Minh Bảo</div><div class="url">Tri mệnh lý – Thuận thế hành</div></div>
+  </a>
   <div class="nav-links" id="nav-links">
     <a class="nav-link" href="/">Trang Chủ</a>
     <a class="nav-link" href="/about.html">Giới Thiệu</a>
@@ -236,6 +107,7 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
     <a class="nav-link" href="/menh-kho.html">Mệnh Khố</a>
     <a class="nav-link active" href="/contact.html">Liên Hệ</a>
   </div>
+  <div id="nav-auth-area" style="margin-left:auto"></div>
   <button class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')">☰</button>
 </nav>
 
@@ -248,9 +120,7 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 <div class="page-body">
 
   <div class="intro">
-    <div class="intro-text">
-      Mọi ý kiến trao đổi, góp ý hay câu hỏi liên quan đến nội dung luận giải, phương pháp nghiên cứu, hoặc việc sử dụng hệ thống — đều được chúng tôi trân trọng đón nhận.
-    </div>
+    <div class="intro-text">Mọi ý kiến trao đổi, góp ý hay câu hỏi liên quan đến nội dung luận giải, phương pháp nghiên cứu, hoặc việc sử dụng hệ thống — đều được chúng tôi trân trọng đón nhận.</div>
   </div>
 
   <div class="contact-grid">
@@ -258,7 +128,7 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
     <div class="contact-card primary">
       <div class="card-icon">✉</div>
       <div class="card-label">Thư điện tử</div>
-      <span id="ct-email-link"></span>
+      <span id="ct-email" class="card-value"></span>
       <div class="card-note">Kênh liên hệ chính — phản hồi trong vòng 24–48 giờ làm việc</div>
     </div>
 
@@ -272,7 +142,7 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
     <div class="contact-card">
       <div class="card-icon">⏱</div>
       <div class="card-label">Thời gian phản hồi</div>
-      <div class="card-value" style="text-decoration:none;cursor:default">24 – 48 giờ</div>
+      <div class="card-value" style="cursor:default">24 – 48 giờ</div>
       <div class="card-note">Trong các ngày làm việc. Những góp ý xác đáng sẽ được ghi nhận vào quá trình cải thiện hệ thống.</div>
     </div>
 
@@ -307,4 +177,41 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
   </div>
 
   <div class="quote-block">
-    <div class="quote-text">Những ý kiến đóng góp xác đáng không những giúp hoàn thiện hệ thống, mà còn góp phần làm sáng t�
+    <div class="quote-text">Những ý kiến đóng góp xác đáng không những giúp hoàn thiện hệ thống, mà còn góp phần làm sáng tỏ thêm những vấn đề còn tồn nghi trong quá trình nghiên cứu Tử vi đẩu số.</div>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand">
+        <img src="/seal.webp" alt="">
+        <div class="footer-brand-text">
+          <div class="name">Tử Vi Minh Bảo</div>
+          <div class="zh">紫微明寶</div>
+        </div>
+      </div>
+      <p class="footer-tagline">Tri mệnh lý – Thuận thế hành<br>Kết hợp kinh điển &amp; công nghệ hiện đại.</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 tuviminhbao.com — All rights reserved</span>
+    <img src="/seal.webp" alt="">
+  </div>
+</footer>
+
+<script>
+(function(){
+  var a='contact',b='tuviminhbao',c='com';
+  var e=a+'@'+b+'.'+c;
+  var el=document.getElementById('ct-email');
+  if(el){
+    el.textContent=e;
+    el.onclick=function(){ window.location='mai'+'lto:'+e; };
+    el.title='Gửi email';
+  }
+})();
+</script>
+</body>
+</html>
