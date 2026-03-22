@@ -1083,10 +1083,6 @@ select.form-input { cursor: pointer; }
           const _dvSocol = _dvSc?.tong >= 7 ? '#1FA3D6' : _dvSc?.tong >= 4 ? '#2F5BEA' : '#C0392BB';
           const _dvFlag = _dvSc?.tong >= 7 ? '🟢' : _dvSc?.tong >= 4 ? '🟡' : '🔴';
           chartHtml = `
-<div style="margin:16px 0 8px">
-  <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 Tiểu Vận 10 Năm — Đại Vận ${_dvNum15}</div>
-  <div class="candle-wrap"><div id="candle-dv${_dvNum15}"></div></div>
-</div>
 <div style="max-width:360px;margin:8px 0"><canvas id="chart-radar-cung-${_currentPhan}"></canvas><div id="radar-legend-cung-${_currentPhan}" style="margin-top:12px;display:grid;grid-template-columns:repeat(2,1fr);gap:6px;font-size:11px"></div></div>`;
         } else if (_currentPhan === 24 && _astrolabe) {
           const _dvHT24 = _astrolabe.daiVanHienTai;
