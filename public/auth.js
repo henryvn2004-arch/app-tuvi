@@ -29,7 +29,12 @@ let _user    = null;
       }
     }
   } catch(e) {}
-  updateNavUI();
+  // Run after DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateNavUI);
+  } else {
+    updateNavUI();
+  }
 })();
 
 // ── Public API ──
@@ -94,6 +99,11 @@ async function signInGoogle() {
   window.location.href = `${SUPA_URL}/auth/v1/authorize?provider=google&redirect_to=${redirectTo}`;
 }
 
+async function signInFacebook() {
+  const redirectTo = encodeURIComponent(window.location.origin + '/auth-callback.html');
+  window.location.href = `${SUPA_URL}/auth/v1/authorize?provider=facebook&redirect_to=${redirectTo}`;
+}
+
 // ── Save session ──
 function saveSession(data) {
   _session = data;
@@ -109,11 +119,39 @@ function updateNavUI() {
   if (!navEl) return;
   if (_session && _user) {
     const email = _user.email || '';
-    const initial = email.charAt(0).toUpperCase();
+    const name  = _user.user_metadata?.full_name || _user.user_metadata?.name || '';
+    const avatar= _user.user_metadata?.avatar_url || '';
+    const initial = (name || email).charAt(0).toUpperCase();
     navEl.innerHTML = `
-      <div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="Auth.signOut()" title="Đăng xuất (${email})">
-        <div style="width:30px;height:30px;background:#c9a84c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#061A2E">${initial}</div>
+      <div style="position:relative;display:inline-block" id="nav-profile-wrap">
+        <div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="document.getElementById('nav-profile-menu').style.display=document.getElementById('nav-profile-menu').style.display==='block'?'none':'block'">
+          ${avatar
+            ? `<img src="${avatar}" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid #c9a84c">`
+            : `<div style="width:30px;height:30px;background:#c9a84c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#061A2E">${initial}</div>`
+          }
+        </div>
+        <div id="nav-profile-menu" style="display:none;position:absolute;right:0;top:40px;background:#fff;border:1px solid #ddd;border-radius:8px;padding:8px 0;min-width:180px;box-shadow:0 8px 24px rgba(0,0,0,0.12);z-index:1000">
+          <div style="padding:10px 16px;border-bottom:1px solid #f0f0f0">
+            <div style="font-size:12px;font-weight:600;color:#333">${name || 'Tài khoản'}</div>
+            <div style="font-size:11px;color:#888;margin-top:2px">${email}</div>
+          </div>
+          <a href="/profile.html" style="display:block;padding:9px 16px;font-size:13px;color:#333;text-decoration:none" onmouseover="this.style.background='#f8f8f8'" onmouseout="this.style.background=''">Hồ sơ của tôi</a>
+          <a href="/menh-kho.html" style="display:block;padding:9px 16px;font-size:13px;color:#333;text-decoration:none" onmouseover="this.style.background='#f8f8f8'" onmouseout="this.style.background=''">Mệnh Khố</a>
+          <div style="border-top:1px solid #f0f0f0;margin-top:4px"></div>
+          <button onclick="Auth.signOut()" style="display:block;width:100%;padding:9px 16px;font-size:13px;color:#C0392B;background:none;border:none;text-align:left;cursor:pointer;font-family:inherit" onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background=''">Đăng xuất</button>
+        </div>
       </div>`;
+    // Close menu when clicking outside
+    setTimeout(() => {
+      document.addEventListener('click', function closeMenu(e) {
+        const wrap = document.getElementById('nav-profile-wrap');
+        if (wrap && !wrap.contains(e.target)) {
+          const menu = document.getElementById('nav-profile-menu');
+          if (menu) menu.style.display = 'none';
+          document.removeEventListener('click', closeMenu);
+        }
+      });
+    }, 100);
   } else {
     navEl.innerHTML = `
       <button onclick="showAuthModal(null)" style="padding:6px 14px;background:transparent;color:#c9a84c;border:1px solid #c9a84c;border-radius:5px;font-size:12px;cursor:pointer;font-family:inherit;transition:all 0.15s" onmouseover="this.style.background='rgba(201,168,76,0.1)'" onmouseout="this.style.background='transparent'">Đăng nhập</button>`;
@@ -150,9 +188,13 @@ function showAuthModal(callback) {
       </div>
 
       <!-- Google OAuth -->
-      <button onclick="signInGoogle()" style="width:100%;padding:11px;border:1.5px solid #ddd;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-size:13px;cursor:pointer;font-family:inherit;margin-bottom:16px;transition:border-color 0.15s" onmouseover="this.style.borderColor='#4285f4'" onmouseout="this.style.borderColor='#ddd'">
+      <button onclick="signInGoogle()" style="width:100%;padding:11px;border:1.5px solid #ddd;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-size:13px;cursor:pointer;font-family:inherit;margin-bottom:8px;transition:border-color 0.15s" onmouseover="this.style.borderColor='#4285f4'" onmouseout="this.style.borderColor='#ddd'">
         <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
         Tiếp tục với Google
+      </button>
+      <button onclick="signInFacebook()" style="width:100%;padding:11px;border:1.5px solid #ddd;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-size:13px;cursor:pointer;font-family:inherit;margin-bottom:16px;transition:border-color 0.15s" onmouseover="this.style.borderColor='#1877F2'" onmouseout="this.style.borderColor='#ddd'">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        Tiếp tục với Facebook
       </button>
 
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
@@ -246,3 +288,4 @@ window.closeAuthModal = closeAuthModal;
 window.switchTab      = switchTab;
 window.submitAuth     = submitAuth;
 window.signInGoogle   = signInGoogle;
+window.signInFacebook = signInFacebook;
