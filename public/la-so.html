@@ -394,7 +394,29 @@ function render(d) {
     body.appendChild(renderedDiv);
 
     // Re-init Chart.js charts inside rendered HTML
-    reInitCharts(renderedDiv);
+    // Parse astrolabe data for chart re-draw
+  let _astroData = null;
+  try { if (d.astrolabe_data) _astroData = JSON.parse(d.astrolabe_data); } catch(e) {}
+  // Wait for Chart.js to load then re-draw
+  setTimeout(() => reInitCharts(renderedDiv, _astroData), 300);
+
+  // Re-render bar 12 cung from data
+  if (_astroData?.cungScores) {
+    setTimeout(() => {
+      const sc = _astroData.cungScores;
+      const CUNG_ORDER = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
+      const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
+      const barEl = document.getElementById('chart-bar-12cung');
+      if (barEl) {
+        const sorted = CUNG_ORDER.filter(c=>sc[c]).map(c=>[c,METRICS.reduce((s,m)=>s+(sc[c][m]||0),0)]).sort((a,b)=>b[1]-a[1]);
+        barEl.innerHTML = sorted.map(([cung,total])=>{
+          const pct=(total/60*100).toFixed(1);
+          const col=total>=40?'#1FA3D6':total>=33?'#2F5BEA':'#C0392B';
+          return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px"><span style="font-size:11px;color:#aaa;width:80px;text-align:right;flex-shrink:0">${cung}</span><div style="flex:1;height:18px;background:#1e2e42;border-radius:3px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${col};border-radius:3px;display:flex;align-items:center;padding-left:6px"><span style="font-size:10px;color:#fff;font-weight:600">${total.toFixed(1)}</span></div></div><span style="font-size:10px;color:#666;width:32px;text-align:right">${pct}%</span></div>`;
+        }).join('');
+      }
+    }, 400);
+  }
 
     // CTA
     const cta = document.createElement('div');
@@ -509,19 +531,105 @@ function renderCharts(container, ls) {
 
 load();
 
-// Re-initialize Chart.js canvases in rendered HTML
-// (innerHTML loses event listeners + Chart.js instances)
-function reInitCharts(container) {
-  // Charts in rendered HTML are already rendered as canvas elements
-  // They won't re-draw since Chart.js instances are gone
-  // Best effort: show a "View in app" note for interactive charts
-  const canvases = container.querySelectorAll('canvas');
-  canvases.forEach(c => {
-    const note = document.createElement('div');
-    note.style.cssText = 'padding:12px;background:#f8f9fa;border-radius:6px;font-size:12px;color:#888;text-align:center;margin:8px 0';
-    note.textContent = '📊 Biểu đồ tương tác — xem đầy đủ trong app';
-    c.parentNode.replaceChild(note, c);
+function reInitCharts(container, astroData) {
+  if (!astroData || typeof Chart === 'undefined') {
+    // No data — just clear canvases
+    container.querySelectorAll('canvas').forEach(c => {
+      const note = document.createElement('div');
+      note.style.cssText = 'padding:12px;background:#f8f9fa;border-radius:6px;font-size:12px;color:#888;text-align:center;margin:8px 0';
+      note.textContent = '📊 Biểu đồ tương tác — xem đầy đủ trong app';
+      c.parentNode.replaceChild(note, c);
+    });
+    return;
+  }
+
+  const sc = astroData.cungScores || {};
+  const dvs = astroData.daiVans || [];
+  const tvs = astroData.tieuVanScores || [];
+  const CUNG_ORDER = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
+  const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
+  const WHEEL = [{name:'Sự nghiệp',cung:'Quan Lộc'},{name:'Tài chính',cung:'Tài Bạch'},{name:'Tình duyên',cung:'Phu Thê'},{name:'Sức khỏe',cung:'Tật Ách'},{name:'Gia đình',cung:'Phụ Mẫu'},{name:'Bạn bè',cung:'Nô Bộc'},{name:'Tâm linh',cung:'Phúc Đức'},{name:'Tài sản',cung:'Điền Trạch'}];
+
+  const CHART_OPTS = {
+    'chart-radar-all': () => ({
+      type:'radar',
+      data:{ labels:CUNG_ORDER, datasets:[{ data:CUNG_ORDER.map(c=>sc[c]?METRICS.reduce((s,m)=>s+(sc[c][m]||0),0)/6:0), borderColor:'#5FA8D3', backgroundColor:'rgba(95,168,211,0.1)', pointBackgroundColor:'#5FA8D3', pointRadius:4, borderWidth:2 }] },
+      options:{ responsive:true, scales:{r:{min:0,max:10, ticks:{stepSize:2,color:'#aaa',backdropColor:'transparent',font:{size:8}}, pointLabels:{color:'#444',font:{size:10}}, grid:{color:'#e0e0e0'}, angleLines:{color:'#e0e0e0'}}}, plugins:{legend:{display:false}} }
+    }),
+    'chart-wheel-life': () => ({
+      type:'radar',
+      data:{ labels:WHEEL.map(d=>d.name), datasets:[{ data:WHEEL.map(d=>sc[d.cung]?METRICS.reduce((s,m)=>s+(sc[d.cung][m]||0),0)/6:0), borderColor:'#2F5BEA', backgroundColor:'rgba(47,91,234,0.08)', pointBackgroundColor:'#2F5BEA', pointRadius:4, borderWidth:2 }] },
+      options:{ responsive:true, scales:{r:{min:0,max:10, ticks:{stepSize:2,color:'#aaa',backdropColor:'transparent',font:{size:8}}, pointLabels:{color:'#444',font:{size:10}}, grid:{color:'#e0e0e0'}, angleLines:{color:'#e0e0e0'}}}, plugins:{legend:{display:false}} }
+    }),
+    'chart-daivan': () => ({
+      type:'line',
+      data:{ labels:dvs.map((dv,i)=>`ĐV${i+1}
+${dv.tuoiStart}-${dv.tuoiEnd}t`), datasets:[{ data:dvs.map(dv=>dv.scoring?.tong||0), borderColor:'#2F5BEA', backgroundColor:'rgba(47,91,234,0.08)', pointBackgroundColor:dvs.map(dv=>dv.scoring?.tong>=7?'#1FA3D6':dv.scoring?.tong>=4?'#2F5BEA':'#C0392B'), pointRadius:6, borderWidth:2, tension:0.4, fill:true }] },
+      options:{ responsive:true, scales:{y:{min:0,max:10,ticks:{color:'#888'},grid:{color:'#eee'}},x:{ticks:{color:'#888'},grid:{color:'#eee'}}}, plugins:{legend:{display:false}} }
+    }),
+  };
+
+  // Re-draw each known canvas
+  container.querySelectorAll('canvas').forEach(canvas => {
+    const id = canvas.id;
+    const cfgFn = CHART_OPTS[id] ||
+      (id?.startsWith('chart-radar-cung-') ? () => ({
+        type:'radar',
+        data:{ labels:['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'],
+          datasets:[{data:[5,5,5,5,5,5],borderColor:'#5FA8D3',backgroundColor:'rgba(95,168,211,0.1)',borderWidth:2}]},
+        options:{responsive:true,scales:{r:{min:0,max:10,ticks:{stepSize:2,color:'#aaa',backdropColor:'transparent',font:{size:8}},pointLabels:{color:'#444',font:{size:10}},grid:{color:'#e0e0e0'},angleLines:{color:'#e0e0e0'}}},plugins:{legend:{display:false}}}
+      }) : null);
+
+    if (cfgFn) {
+      try { new Chart(canvas, cfgFn()); } catch(e) {}
+    } else {
+      // Unknown canvas — render candlestick SVG or placeholder
+      if (id === 'candle-90yr' && tvs.length) {
+        renderCandlestickInEl(canvas.parentElement, tvs, {candleW:7,height:200});
+        canvas.style.display = 'none';
+      } else {
+        canvas.style.display = 'none';
+      }
+    }
   });
+}
+
+// Inline candlestick renderer (same as main app)
+function renderCandlestickInEl(el, data, opts={}) {
+  if (!el || !data?.length) return;
+  const W=opts.width||Math.min(data.length*(opts.candleW?opts.candleW+3:9)+60,920);
+  const H=opts.height||180, PAD={top:28,right:14,bottom:32,left:34};
+  const cw=opts.candleW||Math.max(4,Math.floor((W-PAD.left-PAD.right)/data.length)-2);
+  const plotH=H-PAD.top-PAD.bottom;
+  const allVals=data.flatMap(d=>[d.high||10,d.low||0]);
+  const minVal=Math.max(0,Math.min(...allVals)-0.3),maxVal=Math.min(10,Math.max(...allVals)+0.3);
+  const range=maxVal-minVal||1;
+  function yv(v){return PAD.top+plotH-((v-minVal)/range*plotH);}
+  function xc(i){return PAD.left+i*(cw+2)+cw/2;}
+  let grid='',candles='';
+  for(let v=Math.ceil(minVal);v<=Math.floor(maxVal);v+=(maxVal-minVal)>6?2:1){
+    const gy=yv(v);
+    grid+=`<line x1="${PAD.left}" y1="${gy}" x2="${W-PAD.right}" y2="${gy}" stroke="#1a2535" stroke-width="0.5" stroke-dasharray="3,3"/>`;
+    grid+=`<text x="${PAD.left-5}" y="${gy+3}" font-size="8" fill="#4a5a6a" text-anchor="end">${v}</text>`;
+  }
+  data.forEach((d,i)=>{
+    const open=d.open??d.mainScore,close=d.close??d.mainScore,high=d.high??d.maxScore,low=d.low??d.minScore;
+    const bull=close>=open,bc=bull?'#5FA8D3':'#C0392B',wc=bull?'#2F5BEA':'#922B21';
+    const yO=yv(open),yC=yv(close),yH=yv(high),yL=yv(low),cx=xc(i);
+    const bTop=Math.min(yO,yC),bHt=Math.max(1.5,Math.abs(yO-yC));
+    candles+=`<line x1="${cx}" y1="${yH}" x2="${cx}" y2="${bTop}" stroke="${wc}" stroke-width="1.2"/>`;
+    candles+=`<line x1="${cx}" y1="${bTop+bHt}" x2="${cx}" y2="${yL}" stroke="${wc}" stroke-width="1.2"/>`;
+    candles+=`<rect x="${cx-cw/2}" y="${bTop}" width="${cw}" height="${bHt}" fill="${bc}" rx="1" opacity="0.92"/>`;
+    const step=data.length>60?10:data.length>20?5:1;
+    if(d.tuoi%step===0||data.length<=5)
+      candles+=`<text x="${cx}" y="${H-PAD.bottom+14}" font-size="8" fill="#4a5a6a" text-anchor="middle">${d.tuoi}</text>`;
+  });
+  const svg=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:block;max-width:100%">
+    <line x1="${PAD.left}" y1="${PAD.top-4}" x2="${PAD.left}" y2="${H-PAD.bottom}" stroke="#1e2d42" stroke-width="1"/>
+    <line x1="${PAD.left}" y1="${H-PAD.bottom}" x2="${W-PAD.right}" y2="${H-PAD.bottom}" stroke="#1e2d42" stroke-width="1"/>
+    ${grid}${candles}</svg>`;
+  const div=document.createElement('div');div.innerHTML=svg;
+  el.appendChild(div);
 }
 </script>
 <footer class="site-footer">
