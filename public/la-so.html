@@ -114,6 +114,12 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
   .footer { flex-direction:column; gap:4px; }
 }
 
+.rendered-laso-content { font-family: Arial, sans-serif; }
+.rendered-laso-content .phan-section { margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid #eee; }
+.rendered-laso-content .phan-num { font-size: 10px; color: #9A7B3A; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
+.rendered-laso-content .result-actions { display: none !important; }
+.rendered-laso-content .muc-luc { display: none !important; }
+.rendered-laso-content .nhanh-badge { display: none !important; }
 @media print {
   .topnav, .cta-box, button { display: none !important; }
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
@@ -131,6 +137,27 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 .footer-tagline { font-size:12px; margin-top:8px; color:rgba(255,255,255,0.35); line-height:1.6; }
 .footer-bottom  { display:flex; justify-content:space-between; align-items:center; font-size:11px; color:rgba(255,255,255,0.25); }
 .footer-bottom img { width:20px; height:20px; object-fit:contain; opacity:0.3; border-radius:3px; }
+
+/* ── Styles for injected rendered_html content ── */
+.phan-section { margin-bottom:28px; padding-bottom:20px; border-bottom:1px solid #eee; }
+.phan-num { font-size:10px; letter-spacing:2px; color:#9A7B3A; text-transform:uppercase; margin-bottom:4px; }
+.pregen-block { background:#D9D9D9; border:1px solid #c0c0c0; border-radius:8px; padding:12px 14px; margin-bottom:10px; font-size:13px; }
+.pregen-title { font-size:11px; font-weight:600; color:#1a3a6a; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+.score-bar-row { display:flex; align-items:center; gap:8px; margin-bottom:4px; font-size:11px; }
+.score-bar-bg { flex:1; height:8px; background:#ddd; border-radius:4px; overflow:hidden; }
+.score-bar-fill { height:100%; border-radius:4px; }
+.score-label { width:80px; color:#666; } .score-val { width:28px; text-align:right; font-weight:600; }
+.yn-great-cat,.pregen-good { color:#1a6b3a; } .yn-cat { color:#2a5a7a; }
+.yn-great-hung,.pregen-bad { color:#C0392B; } .yn-hung { color:#9B2020; }
+.yn-tuan { color:#1a3a8a; } .yn-neutral { color:#2a3a4a; }
+.pregen-item { font-size:12px; color:#333; margin-bottom:3px; }
+.cc-label { display:inline-block; padding:2px 8px; border:1px solid #aaa; border-radius:4px; font-size:10px; margin-right:4px; }
+.rules-canh-bao { background:#f5d9d9; border-radius:4px; padding:4px 6px; margin:4px 0; border-left:2px solid #C0392B; font-size:11px; }
+.pregen-divider { display:flex; align-items:center; gap:10px; margin:16px 0; color:#999; font-size:11px; }
+.pregen-divider::before,.pregen-divider::after { content:''; flex:1; height:1px; background:#ddd; }
+.chart-label { font-size:11px; font-weight:600; color:#5FA8D3; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:10px; }
+.nhanh-loading { font-size:14px; color:#444; line-height:1.8; }
+.laso-wrap,.result-header,.result-info-bar { margin-bottom:16px; }
 </style>
 <meta property="og:title" content="Tử Vi Minh Bảo – Lá số tử vi chính xác">
 <meta property="og:description" content="Luận giải tử vi chuyên sâu, kết hợp AI — tuviminhbao.com">
@@ -221,10 +248,104 @@ function showError() {
   document.getElementById('error-state').style.display = 'flex';
 }
 
+function renderFromHTML(d) {
+  // Build hero + info bar same way
+  const gt = d.gioi_tinh === 'nu' ? 'Nữ mệnh' : 'Nam mệnh';
+  document.title = `Lá Số ${d.can_chi_nam} · ${gt} · ${d.nam_sinh} — Tử Vi Minh Bảo`;
+  document.getElementById('hero-title').textContent = `Lá Số ${d.can_chi_nam}`;
+  document.getElementById('hero-sub').textContent =
+    `${gt} · Năm sinh ${d.nam_sinh}${d.gio_chi ? ' · Giờ '+d.gio_chi : ''}${d.nam_xem ? ' · Năm xem '+d.nam_xem : ''}`;
+
+  const infos = [
+    {label:'Can Chi Năm', value:d.can_chi_nam},
+    {label:'Bản mệnh',    value:d.nap_am||'—'},
+    {label:'Cung Mệnh',   value:d.cung_menh||'—'},
+    {label:'Chính Tinh',  value:d.chinh_tinh||'—'},
+    {label:'Cục',         value:d.cuc||'—'},
+    {label:'Giới tính',   value:d.gioi_tinh==='nu'?'Nữ':'Nam'},
+  ];
+  document.getElementById('info-bar').innerHTML = infos.map(i =>
+    `<div class="info-item"><div class="info-label">${i.label}</div><div class="info-value">${i.value}</div></div>`
+  ).join('');
+
+  // Inject rendered HTML
+  const body = document.getElementById('main-body');
+  body.innerHTML = d.rendered_html;
+
+  // Re-init charts (Chart.js canvases need re-draw after innerHTML inject)
+  // Load engine and re-render charts if data available
+  if (d.ngay_sinh && d.thang_sinh && d.nam_sinh && d.gio_idx !== null &&
+      typeof convertDuongToAm === 'function' && typeof anSaoLaSo === 'function') {
+    try {
+      const conv = convertDuongToAm(d.ngay_sinh, d.thang_sinh, d.nam_sinh, d.gio_idx);
+      const ls = anSaoLaSo({
+        ngayAL: conv.amLich.day, thangAL: conv.amLich.month, namAL: conv.amLich.year,
+        canNam: conv.canNam, chiNam: conv.chiNam, gioIdx: conv.gioIdx,
+        gioitinh: d.gioi_tinh, namXem: d.nam_xem || new Date().getFullYear(),
+      });
+      // Re-render all Chart.js canvases
+      reRenderCharts(body, ls);
+    } catch(e) { console.warn('Chart re-render failed:', e); }
+  }
+
+  // Share + PDF buttons
+  addShareAndPDF(body, d);
+}
+
+function addShareAndPDF(body, d) {
+  const shareDiv = document.createElement('div');
+  shareDiv.id = 'share-laso';
+  shareDiv.style.cssText = 'margin:24px 0 12px';
+  body.insertBefore(shareDiv, body.firstChild);
+  if (window.ShareButtons) {
+    ShareButtons.render('share-laso', {
+      url: window.location.href,
+      title: 'Lá số ' + (d.can_chi_nam||'') + ' — Tử Vi Minh Bảo',
+      text: 'Xem luận giải lá số Tử Vi Đẩu Số'
+    });
+  }
+  const dlDiv = document.createElement('div');
+  dlDiv.style.cssText = 'margin:0 0 24px';
+  dlDiv.innerHTML = `<button onclick="window.print()" style="display:inline-flex;align-items:center;gap:8px;padding:10px 22px;background:var(--navy);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">⬇ Tải PDF lá số này</button>`;
+  body.insertBefore(dlDiv, shareDiv.nextSibling);
+}
+
+function reRenderCharts(container, ls) {
+  // Re-render radar + wheel charts
+  const radarEl = container.querySelector('#pub-radar');
+  const wheelEl = container.querySelector('#pub-wheel');
+  if (!radarEl && !wheelEl) return;
+  if (!ls.cungScores) return;
+
+  const CUNG_ORDER = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
+  const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
+  const sc = ls.cungScores;
+
+  setTimeout(() => {
+    if (radarEl) new Chart(radarEl, {
+      type:'radar',
+      data:{ labels:CUNG_ORDER, datasets:[{ data:CUNG_ORDER.map(c=>sc[c]?METRICS.reduce((s,m)=>s+(sc[c][m]||0),0)/6:0), borderColor:'#5FA8D3', backgroundColor:'rgba(95,168,211,0.1)', pointBackgroundColor:'#5FA8D3', pointRadius:4, borderWidth:2 }] },
+      options:{ responsive:false, scales:{r:{min:0,max:10, ticks:{stepSize:2,color:'#aaa',backdropColor:'transparent',font:{size:8}}, pointLabels:{color:'#444',font:{size:10}}, grid:{color:'#e0e0e0'}, angleLines:{color:'#e0e0e0'}}}, plugins:{legend:{display:false}} }
+    });
+    const WHEEL = [{name:'Sự nghiệp',cung:'Quan Lộc'},{name:'Tài chính',cung:'Tài Bạch'},{name:'Tình duyên',cung:'Phu Thê'},{name:'Sức khỏe',cung:'Tật Ách'},{name:'Gia đình',cung:'Phụ Mẫu'},{name:'Bạn bè',cung:'Nô Bộc'},{name:'Tâm linh',cung:'Phúc Đức'},{name:'Tài sản',cung:'Điền Trạch'}];
+    if (wheelEl) new Chart(wheelEl, {
+      type:'radar',
+      data:{ labels:WHEEL.map(d=>d.name), datasets:[{ data:WHEEL.map(d=>sc[d.cung]?METRICS.reduce((s,m)=>s+(sc[d.cung][m]||0),0)/6:0), borderColor:'#2F5BEA', backgroundColor:'rgba(47,91,234,0.08)', pointBackgroundColor:'#2F5BEA', pointRadius:4, borderWidth:2 }] },
+      options:{ responsive:false, scales:{r:{min:0,max:10, ticks:{stepSize:2,color:'#aaa',backdropColor:'transparent',font:{size:8}}, pointLabels:{color:'#444',font:{size:10}}, grid:{color:'#e0e0e0'}, angleLines:{color:'#e0e0e0'}}}, plugins:{legend:{display:false}} }
+    });
+  }, 100);
+}
+
 function render(d) {
   document.getElementById('loading-state').style.display = 'none';
   const main = document.getElementById('main-content');
   main.style.display = 'flex';
+
+  // ── If we have full rendered HTML, inject it directly ──
+  if (d.rendered_html) {
+    renderFromHTML(d);
+    return;
+  }
 
   const gt = d.gioi_tinh === 'nu' ? 'Nữ mệnh' : 'Nam mệnh';
   document.title = `Lá Số ${d.can_chi_nam} · ${gt} · ${d.nam_sinh} — Tử Vi Minh Bảo`;
@@ -248,6 +369,40 @@ function render(d) {
   ).join('');
 
   const body = document.getElementById('main-body');
+
+  // ── Nếu có rendered HTML — hiển thị nguyên xi ──
+  if (d.rendered_html) {
+    // Share + PDF buttons
+    const actionsDiv = document.createElement('div');
+    actionsDiv.style.cssText = 'margin:0 0 20px;display:flex;gap:10px;flex-wrap:wrap;align-items:center';
+    actionsDiv.innerHTML = `
+      <button onclick="window.print()" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#061A2E;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">⬇ Tải PDF</button>
+      <div id="share-laso-top" style="display:inline-flex"></div>`;
+    body.appendChild(actionsDiv);
+    if (window.ShareButtons) {
+      ShareButtons.render('share-laso-top', {
+        url: window.location.href,
+        title: 'Lá số ' + (d.can_chi_nam||'') + ' — Tử Vi Minh Bảo',
+        text: 'Xem luận giải lá số Tử Vi Đẩu Số'
+      });
+    }
+
+    // Rendered content
+    const renderedDiv = document.createElement('div');
+    renderedDiv.className = 'rendered-laso-content';
+    renderedDiv.innerHTML = d.rendered_html;
+    body.appendChild(renderedDiv);
+
+    // Re-init Chart.js charts inside rendered HTML
+    reInitCharts(renderedDiv);
+
+    // CTA
+    const cta = document.createElement('div');
+    cta.className = 'cta-box';
+    cta.innerHTML = `<div style="color:#8BAACC;font-size:14px;font-weight:300"><b style="color:#fff">Muốn xem lá số của bạn?</b><br>An sao Tử Vi Đẩu Số theo cổ pháp, luận giải bằng trí tuệ nhân tạo.</div><a class="cta-btn" href="/">Xem lá số của tôi →</a>`;
+    body.appendChild(cta);
+    return; // skip the re-render below
+  }
 
   // ── An sao lại nếu có đủ data ──
   if (d.ngay_sinh && d.thang_sinh && d.nam_sinh && d.gio_idx !== null &&
@@ -415,6 +570,21 @@ function renderCharts(container, ls) {
 }
 
 load();
+
+// Re-initialize Chart.js canvases in rendered HTML
+// (innerHTML loses event listeners + Chart.js instances)
+function reInitCharts(container) {
+  // Charts in rendered HTML are already rendered as canvas elements
+  // They won't re-draw since Chart.js instances are gone
+  // Best effort: show a "View in app" note for interactive charts
+  const canvases = container.querySelectorAll('canvas');
+  canvases.forEach(c => {
+    const note = document.createElement('div');
+    note.style.cssText = 'padding:12px;background:#f8f9fa;border-radius:6px;font-size:12px;color:#888;text-align:center;margin:8px 0';
+    note.textContent = '📊 Biểu đồ tương tác — xem đầy đủ trong app';
+    c.parentNode.replaceChild(note, c);
+  });
+}
 </script>
 <footer class="site-footer">
   <div class="footer-top">
