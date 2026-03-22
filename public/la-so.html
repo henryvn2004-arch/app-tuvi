@@ -271,9 +271,6 @@ function render(d) {
   div.innerHTML = '<div class="divider"></div><div class="chart-label">📖 Luận Giải 24 Phần</div>';
   body.appendChild(div);
 
-  // PDF download button
-  const dlBtn = document.createElement('div');
-  dlBtn.style.cssText = 'margin:0 0 24px';
   // Share buttons
   const shareDiv = document.createElement('div');
   shareDiv.id = 'share-laso';
@@ -286,6 +283,7 @@ function render(d) {
       text: 'Xem luận giải lá số Tử Vi Đẩu Số'
     });
   }
+  // PDF download button
   const dlBtn = document.createElement('div');
   dlBtn.style.cssText = 'margin:0 0 24px';
   dlBtn.innerHTML = `<button onclick="window.print()" style="display:inline-flex;align-items:center;gap:8px;padding:10px 22px;background:var(--navy);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">⬇ Tải PDF lá số này</button>`;
