@@ -588,7 +588,7 @@ function showError() {
 }
 
 function renderFromHTML(d) {
-  // Build hero + info bar same way
+  // Use astrolabe_data for full re-render (not rendered_html)
   const gt = d.gioi_tinh === 'nu' ? 'Nữ mệnh' : 'Nam mệnh';
   document.title = `Lá Số ${d.can_chi_nam} · ${gt} · ${d.nam_sinh} — Tử Vi Minh Bảo`;
   document.getElementById('hero-title').textContent = `Lá Số ${d.can_chi_nam}`;
@@ -607,28 +607,67 @@ function renderFromHTML(d) {
     `<div class="info-item"><div class="info-label">${i.label}</div><div class="info-value">${i.value}</div></div>`
   ).join('');
 
-  // Inject rendered HTML
   const body = document.getElementById('main-body');
-  body.innerHTML = d.rendered_html;
 
-  // Re-init charts (Chart.js canvases need re-draw after innerHTML inject)
-  // Load engine and re-render charts if data available
-  if (d.ngay_sinh && d.thang_sinh && d.nam_sinh && d.gio_idx !== null &&
-      typeof convertDuongToAm === 'function' && typeof anSaoLaSo === 'function') {
-    try {
-      const conv = convertDuongToAm(d.ngay_sinh, d.thang_sinh, d.nam_sinh, d.gio_idx);
-      const ls = anSaoLaSo({
-        ngayAL: conv.amLich.day, thangAL: conv.amLich.month, namAL: conv.amLich.year,
-        canNam: conv.canNam, chiNam: conv.chiNam, gioIdx: conv.gioIdx,
-        gioitinh: d.gioi_tinh, namXem: d.nam_xem || new Date().getFullYear(),
-      });
-      // Re-render all Chart.js canvases
-      reRenderCharts(body, ls);
-    } catch(e) { console.warn('Chart re-render failed:', e); }
+  // Parse astrolabe_data
+  let _ls = null;
+  try { if (d.astrolabe_data) _ls = JSON.parse(d.astrolabe_data); } catch(e) {}
+
+  // Actions bar
+  const actDiv = document.createElement('div');
+  actDiv.style.cssText = 'margin:0 0 20px;display:flex;gap:10px;flex-wrap:wrap;align-items:center';
+  actDiv.innerHTML = `<button onclick="window.print()" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#061A2E;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">⬇ Tải PDF</button><div id="share-laso-top"></div>`;
+  body.appendChild(actDiv);
+  if (window.ShareButtons) {
+    ShareButtons.render('share-laso-top', {
+      url: window.location.href,
+      title: 'Lá số ' + (d.can_chi_nam||'') + ' — Tử Vi Minh Bảo',
+      text: 'Xem luận giải lá số Tử Vi Đẩu Số'
+    });
   }
 
-  // Share + PDF buttons
-  addShareAndPDF(body, d);
+  // Lá số grid
+  if (_ls?.palaces) renderLaSoGrid(body, _ls, d);
+
+  // Render từng phần
+  const luan = d.luan_giai || {};
+  const phans = Object.keys(luan).map(Number).filter(n=>!isNaN(n)&&n>0).sort((a,b)=>a-b);
+
+  if (phans.length === 0) {
+    const noticeDiv = document.createElement('div');
+    noticeDiv.style.cssText = 'text-align:center;padding:60px 20px';
+    noticeDiv.innerHTML = `<div style="font-size:40px;margin-bottom:16px">📜</div><div style="font-size:20px;color:#061A2E;margin-bottom:10px">Lá số đang được cập nhật</div><a href="/" style="padding:10px 24px;background:#061A2E;color:#fff;border-radius:8px;font-size:13px;text-decoration:none">An sao lá số của bạn →</a>`;
+    body.appendChild(noticeDiv);
+  }
+
+  phans.forEach(n => {
+    const text = luan[n] || luan[String(n)] || '';
+    if (!text) return;
+    const sec = document.createElement('div');
+    sec.className = 'phan-section';
+
+    let preHtml = '', chartHtml = '';
+    if (n === 1 && _ls) { preHtml = renderPregenP1(_ls); chartHtml = renderChartP1(_ls); }
+    else if (n >= 2 && n <= 13 && _ls) { preHtml = renderPregenCung(_ls, n); chartHtml = renderChartCung(_ls, n); }
+    else if (n === 14 && _ls) { chartHtml = renderChartP14(_ls); }
+    else if (n >= 15 && n <= 23 && _ls) { preHtml = renderPregenDV(_ls, n-14); chartHtml = renderChartDV(_ls, n-14); }
+    else if (n === 24 && _ls) { chartHtml = renderChartP24(_ls); }
+
+    const divider = preHtml ? `<div style="border-top:1px solid #eee;margin:12px 0 10px;display:flex;align-items:center;gap:8px;font-size:10px;color:#aaa;letter-spacing:2px;text-transform:uppercase"><div style="flex:1;height:1px;background:#eee"></div>Luận giải<div style="flex:1;height:1px;background:#eee"></div></div>` : '';
+
+    sec.innerHTML = `
+      <div class="phan-num">Phần ${n} / 24</div>
+      <div class="phan-title">${PHAN_LABELS[n]||'Luận giải'}</div>
+      ${preHtml}${chartHtml}${divider}
+      <div class="phan-body">${renderMarkdown(text)}</div>`;
+    body.appendChild(sec);
+  });
+
+  // CTA
+  const cta = document.createElement('div');
+  cta.className = 'cta-box';
+  cta.innerHTML = `<div style="color:#8BAACC;font-size:14px;font-weight:300"><b style="color:#fff">Muốn xem lá số của bạn?</b><br>An sao Tử Vi Đẩu Số theo cổ pháp, luận giải bằng trí tuệ nhân tạo.</div><a class="cta-btn" href="/">Xem lá số của tôi →</a>`;
+  body.appendChild(cta);
 }
 
 function addShareAndPDF(body, d) {
@@ -677,122 +716,8 @@ function reRenderCharts(container, ls) {
 
 function render(d) {
   document.getElementById('loading-state').style.display = 'none';
-  const main = document.getElementById('main-content');
-  main.style.display = 'flex';
-
-  // ── If we have full rendered HTML, inject it directly ──
-  if (d.rendered_html) {
-    renderFromHTML(d);
-    return;
-  }
-
-  const gt = d.gioi_tinh === 'nu' ? 'Nữ mệnh' : 'Nam mệnh';
-  document.title = `Lá Số ${d.can_chi_nam} · ${gt} · ${d.nam_sinh} — Tử Vi Minh Bảo`;
-  document.querySelector('meta[name="description"]').content =
-    `Luận giải lá số Tử Vi: ${d.can_chi_nam}, ${gt}, năm ${d.nam_sinh}${d.gio_chi ? ', giờ '+d.gio_chi : ''}. Cung Mệnh: ${d.cung_menh}. ${d.chinh_tinh}.`;
-
-  document.getElementById('hero-title').textContent = `Lá Số ${d.can_chi_nam}`;
-  document.getElementById('hero-sub').textContent =
-    `${gt} · Năm sinh ${d.nam_sinh}${d.gio_chi ? ' · Giờ '+d.gio_chi : ''}${d.nam_xem ? ' · Năm xem '+d.nam_xem : ''}`;
-
-  const infos = [
-    {label:'Can Chi Năm', value:d.can_chi_nam},
-    {label:'Bản mệnh',    value:d.nap_am||'—'},
-    {label:'Cung Mệnh',   value:d.cung_menh||'—'},
-    {label:'Chính Tinh',  value:d.chinh_tinh||'—'},
-    {label:'Cục',         value:d.cuc||'—'},
-    {label:'Giới tính',   value:d.gioi_tinh==='nu'?'Nữ':'Nam'},
-  ];
-  document.getElementById('info-bar').innerHTML = infos.map(i =>
-    `<div class="info-item"><div class="info-label">${i.label}</div><div class="info-value">${i.value}</div></div>`
-  ).join('');
-
-  const body = document.getElementById('main-body');
-
-  // ── Parse astrolabe_data ──
-  let _ls = null;
-  try { if (d.astrolabe_data) _ls = JSON.parse(d.astrolabe_data); } catch(e) {}
-
-  // ── Actions bar ──
-  const actDiv = document.createElement('div');
-  actDiv.style.cssText = 'margin:0 0 20px;display:flex;gap:10px;flex-wrap:wrap;align-items:center';
-  actDiv.innerHTML = `<button onclick="window.print()" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#061A2E;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">⬇ Tải PDF</button><div id="share-laso-top"></div>`;
-  body.appendChild(actDiv);
-  if (window.ShareButtons) {
-    ShareButtons.render('share-laso-top', {
-      url: window.location.href,
-      title: 'Lá số ' + (d.can_chi_nam||'') + ' — Tử Vi Minh Bảo',
-      text: 'Xem luận giải lá số Tử Vi Đẩu Số'
-    });
-  }
-
-  // ── Lá số grid ──
-  if (_ls?.palaces) {
-    renderLaSoGrid(body, _ls, d);
-  }
-
-  // ── Phần 1: Charts tổng quan + luận giải ──
-  const luan = d.luan_giai || {};
-  const phans = Object.keys(luan).map(Number).filter(n=>!isNaN(n)&&n>0).sort((a,b)=>a-b);
-
-  phans.forEach(n => {
-    const text = luan[n] || luan[String(n)] || '';
-    if (!text) return;
-    const sec = document.createElement('div');
-    sec.className = 'phan-section';
-    sec.id = 'phan-' + n;
-
-    // Pre-gen + charts per phan
-    let preHtml = '';
-    let chartHtml = '';
-
-    if (n === 1 && _ls) {
-      preHtml = renderPregenP1(_ls);
-      chartHtml = renderChartP1(_ls);
-    } else if (n >= 2 && n <= 13 && _ls) {
-      preHtml = renderPregenCung(_ls, n);
-      chartHtml = renderChartCung(_ls, n);
-    } else if (n === 14 && _ls) {
-      chartHtml = renderChartP14(_ls);
-    } else if (n >= 15 && n <= 23 && _ls) {
-      preHtml = renderPregenDV(_ls, n-14);
-      chartHtml = renderChartDV(_ls, n-14);
-    } else if (n === 24 && _ls) {
-      chartHtml = renderChartP24(_ls);
-    }
-
-    const divider = preHtml ? `<div style="border-top:1px solid rgba(255,255,255,0.08);margin:12px 0 10px;display:flex;align-items:center;gap:8px;font-size:10px;color:#556;letter-spacing:2px;text-transform:uppercase"><div style="flex:1;height:1px;background:rgba(255,255,255,0.06)"></div>Luận giải<div style="flex:1;height:1px;background:rgba(255,255,255,0.06)"></div></div>` : '';
-
-    sec.innerHTML = `
-      <div class="phan-num">Phần ${n} / 24</div>
-      <div class="phan-title">${PHAN_LABELS[n]||'Luận giải'}</div>
-      ${preHtml}${chartHtml}${divider}
-      <div class="phan-body">${renderMarkdown(text)}</div>`;
-    body.appendChild(sec);
-  });
-
-  if (phans.length === 0) {
-    const noticeDiv = document.createElement('div');
-    noticeDiv.style.cssText = 'text-align:center;padding:60px 20px';
-    noticeDiv.innerHTML = `<div style="font-size:40px;margin-bottom:16px">📜</div><div style="font-family:'Noto Serif',serif;font-size:20px;color:#061A2E;margin-bottom:10px">Lá số đang được cập nhật</div><div style="font-size:14px;color:#777;margin-bottom:24px">Nội dung luận giải chi tiết sẽ sớm được hiển thị tại đây.</div><a href="/" style="padding:10px 24px;background:#061A2E;color:#fff;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none">An sao lá số của bạn →</a>`;
-    body.appendChild(noticeDiv);
-  }
-
-  // CTA
-  const cta = document.createElement('div');
-  cta.className = 'cta-box';
-  cta.innerHTML = `<div style="color:#8BAACC;font-size:14px;font-weight:300"><b style="color:#fff">Muốn xem lá số của bạn?</b><br>An sao Tử Vi Đẩu Số theo cổ pháp, luận giải bằng trí tuệ nhân tạo.</div><a class="cta-btn" href="/">Xem lá số của tôi →</a>`;
-  body.appendChild(cta);
-
-  // Không có rendered_html — hiển thị thông báo
-  const noticeDiv = document.createElement('div');
-  noticeDiv.style.cssText = 'text-align:center;padding:60px 20px';
-  noticeDiv.innerHTML = `
-    <div style="font-size:40px;margin-bottom:16px">📜</div>
-    <div style="font-size:20px;color:#061A2E;margin-bottom:10px">Lá số đang được cập nhật</div>
-    <div style="font-size:14px;color:#777;margin-bottom:24px">Nội dung luận giải chi tiết sẽ sớm được hiển thị tại đây.</div>
-    <a href="/" style="padding:10px 24px;background:#061A2E;color:#fff;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none">An sao lá số của bạn →</a>`;
-  body.appendChild(noticeDiv);
+  document.getElementById('main-content').style.display = 'flex';
+  renderFromHTML(d);
 }
 
 // ── Render lá số grid ──
