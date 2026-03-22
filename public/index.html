@@ -1070,37 +1070,21 @@ select.form-input { cursor: pointer; }
       } else if (_currentPhan >= 2 && _currentPhan <= 13 && _astrolabe?.cungScores) {
         const _cungName = PHAN_TO_CUNG[_currentPhan];
         if (_astrolabe.cungScores[_cungName]) {
-          // Gauge + Countdown for daivan
-          const _dvNum15 = _currentPhan - 14;
-          const _dv15 = _astrolabe.daiVans?.[_dvNum15 - 1];
-          const _dvSc = _dv15?.scoring;
-          const _dvTuoiStart = _dv15?.tuoiStart || 0;
-          const _dvTuoiEnd = _dv15?.tuoiEnd || 0;
-          const _namXemNow = _namXem || new Date().getFullYear();
-          const _tuoiNow = _astrolabe.tuoiXem || 0;
-          const _dvProgress = _dvTuoiEnd > _dvTuoiStart ? Math.min(100, Math.max(0, (_tuoiNow - _dvTuoiStart) / (_dvTuoiEnd - _dvTuoiStart) * 100)).toFixed(0) : 0;
-          const _dvConLai = Math.max(0, _dvTuoiEnd - _tuoiNow);
-          const _dvSocol = _dvSc?.tong >= 7 ? '#1FA3D6' : _dvSc?.tong >= 4 ? '#2F5BEA' : '#C0392BB';
-          const _dvFlag = _dvSc?.tong >= 7 ? '🟢' : _dvSc?.tong >= 4 ? '🟡' : '🔴';
           chartHtml = `
 <div style="max-width:360px;margin:8px 0"><canvas id="chart-radar-cung-${_currentPhan}"></canvas><div id="radar-legend-cung-${_currentPhan}" style="margin-top:12px;display:grid;grid-template-columns:repeat(2,1fr);gap:6px;font-size:11px"></div></div>`;
-        } else if (_currentPhan >= 15 && _currentPhan <= 23 && _astrolabe) {
-          const _dvNum = _currentPhan - 14;
+        }
+      } else if (_currentPhan >= 15 && _currentPhan <= 23 && _astrolabe) {
           chartHtml = `
 <div style="margin:16px 0 8px">
   <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 Tiểu Vận 10 Năm</div>
   <div class="candle-wrap"><div id="candle-dv${_currentPhan - 14}"></div></div>
 </div>`;
-        } else if (_currentPhan === 24 && _astrolabe) {
-          const _dvHT24 = _astrolabe.daiVanHienTai;
-          const _dvTong24 = _dvHT24?.scoring?.tong || 0;
-          const _dvCol24 = _dvTong24 >= 7 ? '#1FA3D6' : _dvTong24 >= 4 ? '#C9A84C' : '#C0392B';
+      } else if (_currentPhan === 24 && _astrolabe) {
           chartHtml = `
 <div style="margin:16px 0 8px">
   <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 3 Năm Kế Tiếp — Tiểu Vận</div>
   <div class="candle-wrap"><div id="candle-3yr"></div></div>
 </div>`;
-        }
       }
       // ── Pre-generated JS section (cách cục, ý nghĩa)
       let preGenHtml = '';
