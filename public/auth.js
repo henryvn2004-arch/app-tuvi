@@ -117,6 +117,8 @@ function saveSession(data) {
 function updateNavUI() {
   const navEl = document.getElementById('nav-auth-area');
   if (!navEl) return;
+  // Always fix to top-right
+  navEl.style.cssText = 'position:fixed;top:0;right:56px;height:60px;display:flex;align-items:center;z-index:300';
   if (_session && _user) {
     const email = _user.email || '';
     const name  = _user.user_metadata?.full_name || _user.user_metadata?.name || '';
@@ -184,7 +186,7 @@ function showAuthModal(callback) {
       <!-- Logo -->
       <div style="text-align:center;margin-bottom:20px">
         <img src="/seal.webp" style="width:48px;height:48px;border-radius:6px;margin-bottom:8px">
-        <div style="font-family:Georgia,serif;font-size:16px;font-weight:700;color:#CC2200">Tử Vi Minh Bảo</div>
+        <div style="font-family:Georgia,serif;font-size:16px;font-weight:700;color:#CC2200">Tử Vi Minh Bảo</div><div style="font-size:11px;color:#999;margin-top:2px;font-style:italic">Tri mệnh lý – Thuận thế hành</div>
       </div>
 
       <!-- Google OAuth -->
