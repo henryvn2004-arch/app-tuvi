@@ -315,13 +315,15 @@ function renderLaSoGrid(container, ls, d) {
     const vong = (p.stars||[]).filter(s=>s.nhom==='trang_sinh').map(s=>`<span style="font-size:9px;color:#9A7B3A;display:block">${s.ten}</span>`).join('');
     const border = p.isMenh ? '2px solid #9A7B3A' : isCurVan ? '2px solid #1455A4' : '1px solid #ccc';
     grid.insertAdjacentHTML('beforeend', `
-      <div style="border-right:${border};border-bottom:${border};display:grid;grid-template-columns:1fr auto 1fr;grid-template-rows:17px 34px 150px 16px;padding:4px 5px;font-size:10px;overflow:hidden">
-        <div style="font-size:9px;color:#777">${p.diaChi}</div>
-        <div style="font-size:9px;font-weight:600;color:#061A2E;text-align:center">${p.cungName}</div>
-        <div style="font-size:8px;color:#1455A4;text-align:right">${van}</div>
-        <div style="grid-column:1/-1;text-align:center;border-bottom:1px solid #eee;overflow:hidden">${chinh}</div>
-        <div style="grid-column:1/-1;overflow:hidden">${tot}</div>
-        <div style="grid-column:1/-1;text-align:center;border-top:1px solid #eee;overflow:hidden">${vong}</div>
+      <div style="border-right:${border};border-bottom:${border};padding:3px 4px;font-size:10px;overflow:hidden;display:flex;flex-direction:column;min-height:217px">
+        <div style="display:flex;justify-content:space-between;align-items:center;height:17px;flex-shrink:0">
+          <span style="font-size:9px;color:#777">${p.diaChi}</span>
+          <span style="font-size:9px;font-weight:600;color:#061A2E">${p.cungName}</span>
+          <span style="font-size:8px;color:#1455A4">${van}</span>
+        </div>
+        <div style="height:34px;text-align:center;border-bottom:1px solid #eee;overflow:hidden;flex-shrink:0">${chinh}</div>
+        <div style="flex:1;overflow:hidden">${tot}</div>
+        <div style="height:16px;text-align:center;border-top:1px solid #eee;overflow:hidden;flex-shrink:0;font-size:9px;color:#9A7B3A">${vong}</div>
       </div>`);
   });
 
