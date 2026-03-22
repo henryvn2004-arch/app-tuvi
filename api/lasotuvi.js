@@ -36,15 +36,15 @@ function buildPrompt(phan, laSoText, docs) {
     // Header cơ bản: dòng 0 đến trước === 12 CUNG === (~8 dòng)
     const headerLines = cungIdx > 0 ? lines.slice(0, cungIdx) : lines.slice(0, 8);
 
-    // PHẦN 1 — tổng quan: header + 12 cung + cách cục tổng (bỏ ĐV)
+    // PHẦN 1 — tổng quan: header + 12 cung (bỏ ĐV, bỏ cách cục tổng quát)
     if (phan === 1) {
-      const end = dvIdx > 0 ? dvIdx : lines.length;
+      const end = dvIdx > 0 ? dvIdx : (ccIdx > 0 ? ccIdx : lines.length);
       return lines.slice(0, end).join('\n');
     }
 
-    // PHẦN 2 — cung Mệnh: header + cung Mệnh + cách cục tổng (không cần ĐV)
+    // PHẦN 2 — cung Mệnh: header + 12 cung (bỏ ĐV, bỏ cách cục tổng quát)
     if (phan === 2) {
-      const end = dvIdx > 0 ? dvIdx : lines.length;
+      const end = dvIdx > 0 ? dvIdx : (ccIdx > 0 ? ccIdx : lines.length);
       return lines.slice(0, end).join('\n');
     }
 
@@ -68,16 +68,21 @@ function buildPrompt(phan, laSoText, docs) {
       return lines.slice(0, cutEnd).join('\n');
     }
 
-    // PHẦN 14 — tổng quan ĐV: header ngắn + TOÀN BỘ 9 ĐV (không cần 12 cung)
+    // PHẦN 14 — tổng quan ĐV: header ngắn + CHỈ 9 ĐẠI VẬN (bỏ CÁCH CỤC & NHẬN ĐỊNH)
     if (phan === 14) {
-      if (dvIdx > 0) return headerLines.join('\n') + '\n' + lines.slice(dvIdx).join('\n');
+      if (dvIdx > 0) {
+        // Chỉ lấy từ === 9 ĐẠI VẬN === đến trước === CÁCH CỤC ===
+        const dvEnd = ccIdx > dvIdx ? ccIdx : lines.length;
+        return headerLines.join('\n') + '\n' + lines.slice(dvIdx, dvEnd).join('\n');
+      }
     }
 
-    // PHẦN 15-23 — từng ĐV: header ngắn + CHỈ ĐVn đó (không 12 cung, không ĐV khác)
+    // PHẦN 15-23 — từng ĐV: header ngắn + CHỈ ĐVn đó (không 12 cung, không ĐV khác, không CÁCH CỤC)
     if (phan >= 15 && phan <= 23) {
       const dvNum = phan - 14;
       if (dvIdx > 0) {
-        const dvLines = lines.slice(dvIdx);
+        const dvEnd = ccIdx > dvIdx ? ccIdx : lines.length;
+        const dvLines = lines.slice(dvIdx, dvEnd);
         const target = 'ĐV' + dvNum + ':';
         const startI = dvLines.findIndex(l => l.startsWith(target));
         if (startI >= 0) {
@@ -88,9 +93,12 @@ function buildPrompt(phan, laSoText, docs) {
       }
     }
 
-    // PHẦN 24 — tiểu vận: header + ĐV hiện tại + tiếp theo
+    // PHẦN 24 — tiểu vận: header + ĐV hiện tại (bỏ CÁCH CỤC)
     if (phan === 24) {
-      if (dvIdx > 0) return headerLines.join('\n') + '\n' + lines.slice(dvIdx).join('\n');
+      if (dvIdx > 0) {
+        const dvEnd = ccIdx > dvIdx ? ccIdx : lines.length;
+        return headerLines.join('\n') + '\n' + lines.slice(dvIdx, dvEnd).join('\n');
+      }
     }
 
     return text;
