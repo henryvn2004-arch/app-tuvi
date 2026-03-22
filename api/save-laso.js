@@ -33,7 +33,7 @@ module.exports = async (req, res) => {
       canChiNam, gioiTinh, namSinh, thangSinh, ngaySinh,
       gioIdx, gioChi, canNam, chiNam, namXem,
       cungMenh, chinhTinh, napAm, cuc,
-      luanGiai, laSoText, renderedHtml,
+      luanGiai, laSoText, renderedHtml, astrolabeData,
     } = req.body;
 
     if (!canChiNam || !namSinh) {
@@ -78,7 +78,9 @@ module.exports = async (req, res) => {
         luan_giai:    luanGiai || {},
         la_so_text:   laSoText || null,
         rendered_html: renderedHtml || null,
+        astrolabe_data: astrolabeData || null,
         rendered_html: renderedHtml || null,
+        astrolabe_data: astrolabeData || null,
       })
       .select('slug')
       .single();
