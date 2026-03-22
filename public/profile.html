@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hồ Sơ — Tử Vi Minh Bảo</title>
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="apple-touch-icon" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&family=Noto+Serif+SC:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="/auth.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy: #061A2E; --blue: #1455A4; --gold: #9A7B3A;
+  --text: #1a1a1a; --text-mid: #444; --text-lt: #777;
+  --border: #CCCCCC; --bg: #FFFFFF; --bg-soft: #F5F4F0;
+}
+body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg-soft); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+.topnav { position: sticky; top: 0; z-index: 200; background: var(--navy); display: flex; align-items: center; height: 60px; padding: 0 40px; gap: 32px; }
+.nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.nav-logo img { width:38px; height:38px; object-fit:contain; border-radius:5px; }
+.nav-logo .name { font-size:16px; font-weight:700; color:#CC2200; font-family:Georgia,serif; }
+.nav-logo .url  { font-size:10px; color:#aaa; letter-spacing:0.07em; text-transform:uppercase; }
+.nav-links { display: flex; align-items: center; gap: 4px; }
+.nav-link { color: #8BAACC; font-size: 13px; text-decoration: none; padding: 6px 12px; border-radius: 6px; transition: all 0.15s; }
+.nav-link:hover { color: #fff; background: rgba(255,255,255,0.07); }
+.nav-hamburger { display: none; background: none; border: none; color: #8BAACC; cursor: pointer; padding: 8px; font-size: 20px; }
+
+.page-body { flex: 1; max-width: 800px; margin: 0 auto; padding: 40px; width: 100%; }
+
+/* Profile header */
+.profile-header {
+  background: var(--navy);
+  border-radius: 14px;
+  padding: 32px;
+  display: flex; align-items: center; gap: 24px;
+  margin-bottom: 24px;
+  position: relative; overflow: hidden;
+}
+.profile-header::before { content: '命'; font-family: 'Noto Serif SC', serif; font-size: 200px; color: rgba(255,255,255,0.03); position: absolute; right: 20px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+.profile-avatar { width: 72px; height: 72px; border-radius: 50%; border: 3px solid #c9a84c; object-fit: cover; flex-shrink: 0; }
+.profile-avatar-placeholder { width: 72px; height: 72px; border-radius: 50%; background: #c9a84c; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700; color: var(--navy); flex-shrink: 0; border: 3px solid #c9a84c; }
+.profile-name { font-family: 'Noto Serif', serif; font-size: 22px; color: #fff; margin-bottom: 4px; }
+.profile-email { font-size: 13px; color: #8BAACC; margin-bottom: 8px; }
+.profile-badge { display: inline-block; padding: 3px 10px; background: rgba(201,168,76,0.15); color: #c9a84c; border: 1px solid rgba(201,168,76,0.3); border-radius: 20px; font-size: 11px; }
+
+/* Cards */
+.card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
+.card-label { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.card-value { font-family: 'Noto Serif', serif; font-size: 28px; font-weight: 600; color: var(--navy); }
+.card-sub { font-size: 12px; color: var(--text-lt); margin-top: 4px; }
+
+/* Lá số list */
+.section-title { font-family: 'Noto Serif', serif; font-size: 18px; color: var(--navy); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.laso-list { display: flex; flex-direction: column; gap: 10px; }
+.laso-item { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; display: flex; align-items: center; gap: 16px; text-decoration: none; color: inherit; transition: border-color 0.15s; }
+.laso-item:hover { border-color: var(--navy); }
+.laso-item-can-chi { font-family: 'Noto Serif', serif; font-size: 16px; font-weight: 600; color: var(--navy); min-width: 80px; }
+.laso-item-meta { flex: 1; font-size: 13px; color: var(--text-lt); }
+.laso-item-date { font-size: 11px; color: var(--text-lt); }
+.laso-item-arrow { color: var(--text-lt); }
+
+.empty-state { text-align: center; padding: 48px 20px; background: #fff; border: 1px solid var(--border); border-radius: 12px; }
+.empty-icon { font-size: 40px; margin-bottom: 12px; }
+.empty-title { font-family: 'Noto Serif', serif; font-size: 18px; color: var(--navy); margin-bottom: 8px; }
+.empty-sub { font-size: 14px; color: var(--text-lt); margin-bottom: 16px; }
+.btn-primary { padding: 10px 24px; background: var(--navy); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; font-family: inherit; display: inline-block; }
+
+.btn-signout { padding: 8px 18px; background: transparent; color: #C0392B; border: 1px solid #C0392B; border-radius: 7px; font-size: 13px; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+.btn-signout:hover { background: #C0392B; color: #fff; }
+
+.site-footer { background:#1A1210; color:rgba(255,255,255,0.5); padding:24px 32px; display:flex; justify-content:space-between; font-size:12px; }
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+@media (max-width:700px) {
+  .topnav { padding:0 16px; }
+  .nav-hamburger { display:block; margin-left:auto; }
+  .nav-links { display:none; position:absolute; top:60px; left:0; right:0; background:var(--navy); flex-direction:column; padding:8px 0 16px; border-bottom:1px solid #1a2a3a; }
+  .nav-links.open { display:flex; }
+  .nav-link { padding:10px 24px; border-radius:0; width:100%; }
+  .page-body { padding:24px 16px; }
+  .card-grid { grid-template-columns:1fr; }
+  .profile-header { flex-direction:column; text-align:center; }
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a class="nav-logo" href="/">
+    <img src="/seal.webp" alt="Tử Vi Minh Bảo">
+    <div><div class="name">Tử Vi Minh Bảo</div><div class="url">tuviminhbao.com</div></div>
+  </a>
+  <div class="nav-links" id="nav-links">
+    <a class="nav-link" href="/">Trang Chủ</a>
+    <a class="nav-link" href="/menh-kho.html">Mệnh Khố</a>
+  </div>
+  <div id="nav-auth-area" style="margin-left:auto"></div>
+  <button class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')">☰</button>
+</nav>
+
+<div class="page-body">
+
+  <!-- Redirect nếu chưa login -->
+  <div id="not-logged-in" style="display:none;text-align:center;padding:80px 20px">
+    <div style="font-size:48px;margin-bottom:16px">🔒</div>
+    <div style="font-family:'Noto Serif',serif;font-size:22px;color:var(--navy);margin-bottom:8px">Vui lòng đăng nhập</div>
+    <div style="font-size:14px;color:var(--text-lt);margin-bottom:20px">Bạn cần đăng nhập để xem hồ sơ.</div>
+    <button onclick="showAuthModal(null)" class="btn-primary">Đăng nhập</button>
+  </div>
+
+  <div id="profile-content" style="display:none">
+
+    <!-- Profile header -->
+    <div class="profile-header">
+      <div id="profile-avatar-wrap"></div>
+      <div>
+        <div class="profile-name" id="profile-name">—</div>
+        <div class="profile-email" id="profile-email">—</div>
+        <div class="profile-badge" id="profile-provider">—</div>
+      </div>
+      <button class="btn-signout" style="margin-left:auto" onclick="Auth.signOut()">Đăng xuất</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-label">Lá số đã luận giải</div>
+        <div class="card-value" id="stat-laso">—</div>
+        <div class="card-sub">trong Mệnh Khố của bạn</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Thành viên từ</div>
+        <div class="card-value" id="stat-joined" style="font-size:18px;padding-top:6px">—</div>
+        <div class="card-sub" id="stat-provider">—</div>
+      </div>
+    </div>
+
+    <!-- Lá số gần đây -->
+    <div class="section-title">Lá số gần đây</div>
+    <div id="laso-list"></div>
+
+  </div>
+</div>
+
+<footer class="site-footer">
+  <span>紫微明寶 · Tử Vi Minh Bảo</span>
+  <span>紫微斗數 · Tri Mệnh Lý · Thuận Thế Hành</span>
+</footer>
+
+<script>
+const SUPABASE_URL = 'https://dciwkfdqhhddeymlisey.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
+
+document.addEventListener('DOMContentLoaded', async () => {
+  if (!Auth.isLoggedIn()) {
+    document.getElementById('not-logged-in').style.display = 'block';
+    return;
+  }
+
+  document.getElementById('profile-content').style.display = 'block';
+  const user = Auth.getUser();
+
+  // Avatar
+  const avatarWrap = document.getElementById('profile-avatar-wrap');
+  const avatar = user.user_metadata?.avatar_url || user.user_metadata?.picture || '';
+  const name   = user.user_metadata?.full_name || user.user_metadata?.name || '';
+  const email  = user.email || '';
+  const initial = (name || email).charAt(0).toUpperCase();
+  const provider = user.app_metadata?.provider || 'email';
+
+  if (avatar) {
+    avatarWrap.innerHTML = `<img src="${avatar}" class="profile-avatar" alt="">`;
+  } else {
+    avatarWrap.innerHTML = `<div class="profile-avatar-placeholder">${initial}</div>`;
+  }
+
+  document.getElementById('profile-name').textContent  = name || email.split('@')[0];
+  document.getElementById('profile-email').textContent = email;
+  document.getElementById('profile-provider').textContent =
+    provider === 'google' ? '🔵 Google Account' :
+    provider === 'facebook' ? '🔵 Facebook Account' : '✉ Email';
+
+  // Joined date
+  const created = user.created_at ? new Date(user.created_at).toLocaleDateString('vi-VN', {year:'numeric',month:'long',day:'numeric'}) : '—';
+  document.getElementById('stat-joined').textContent = created;
+  document.getElementById('stat-provider').textContent = `Đăng nhập qua ${provider}`;
+
+  // Load lá số from Supabase
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/laso_public?select=slug,can_chi_nam,gioi_tinh,nam_sinh,cung_menh,chinh_tinh,created_at&order=created_at.desc&limit=20`,
+      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+    );
+    const rows = await res.json();
+    document.getElementById('stat-laso').textContent = Array.isArray(rows) ? rows.length : 0;
+
+    const listEl = document.getElementById('laso-list');
+    if (!rows || rows.length === 0) {
+      listEl.innerHTML = `<div class="empty-state">
+        <div class="empty-icon">📜</div>
+        <div class="empty-title">Chưa có lá số nào</div>
+        <div class="empty-sub">Hãy luận giải lá số đầu tiên của bạn.</div>
+        <a href="/" class="btn-primary">An sao ngay →</a>
+      </div>`;
+    } else {
+      listEl.innerHTML = `<div class="laso-list">${rows.map(d => {
+        const gt   = d.gioi_tinh === 'nu' ? 'Nữ' : 'Nam';
+        const date = d.created_at ? new Date(d.created_at).toLocaleDateString('vi-VN') : '';
+        return `<a class="laso-item" href="/la-so.html?slug=${d.slug}">
+          <div class="laso-item-can-chi">${d.can_chi_nam||'—'}</div>
+          <div class="laso-item-meta">${gt} · ${d.nam_sinh||''} · Cung Mệnh: ${d.cung_menh||'—'} · ${d.chinh_tinh||''}</div>
+          <div class="laso-item-date">${date}</div>
+          <div class="laso-item-arrow">→</div>
+        </a>`;
+      }).join('')}</div>`;
+    }
+  } catch(e) {
+    document.getElementById('stat-laso').textContent = '—';
+  }
+});
+</script>
+</body>
+</html>
