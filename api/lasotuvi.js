@@ -158,7 +158,9 @@ module.exports = async (req, res) => {
     // Model: Sonnet cho phần tổng quan/đại vận, Haiku cho từng cung
     // Haiku cho tất cả phần — tiết kiệm chi phí tối đa
     // Sonnet chỉ dùng khi user yêu cầu premium (future)
-    const model = 'claude-haiku-4-5-20251001';
+    const model = (phan === 1 || phan === 14)
+      ? 'claude-sonnet-4-5'
+      : 'claude-haiku-4-5-20251001';
     const maxTok = phan === 1 ? 2000
       : phan === 14 ? 3000
       : phan === 24 ? 1200
