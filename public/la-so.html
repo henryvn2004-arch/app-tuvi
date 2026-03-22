@@ -316,18 +316,19 @@ function renderLaSoGrid(container, ls, d) {
   const grid = document.createElement('div');
   grid.style.cssText = 'display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #ccc;border-left:1px solid #ccc';
 
-  const centerHTML = `<div style="border-right:1px solid #ccc;border-bottom:1px solid #ccc;background:#f5f4f0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;text-align:center;font-size:11px;color:#444;overflow:auto">
-    <div style="font-size:11px;color:#777;margin-bottom:2px">${d.gioi_tinh==='nu'?'Nữ mệnh':'Nam mệnh'}</div>
-    <div style="font-size:11px;color:#555">${d.ngay_sinh||''}/${d.thang_sinh||''}/${d.nam_sinh||''} DL</div>
-    ${d.gio_chi ? `<div style="font-size:11px;color:#555">Giờ ${d.gio_chi}</div>` : ''}
-    <hr style="width:80%;border:none;border-top:1px solid #ccc;margin:4px 0">
-    <div style="font-weight:600;color:#061A2E;font-size:12px">${ls.canChiNam||''}</div>
-    <div style="font-size:10px;color:#444">${NAP_AM_FULL[ls.canChiNam]||ls.napAm||''}</div>
-    <div style="font-size:10px">Cục: <b>${ls.cuc||''}</b></div>
-    <div style="font-size:10px">Mệnh: <b>${ls.menhDC||''}</b> · Thân: <b>${ls.thanDC||''}</b></div>
-    <hr style="width:80%;border:none;border-top:1px solid #ccc;margin:4px 0">
-    <div style="font-size:10px;color:#1455A4">Tuổi: ${ls.tuoiXem||''}</div>
-    <div style="font-size:10px;color:#1455A4">Năm xem: ${d.nam_xem||''}</div>
+  const centerHTML = `<div style="border-right:1px solid #ccc;border-bottom:1px solid #ccc;grid-column:span 2;grid-row:span 2;background:#f5f4f0;display:flex;align-items:center;justify-content:center;padding:12px;overflow:auto">
+    <div style="width:100%;display:flex;flex-direction:column;align-items:center">
+      <div style="font-size:11px;color:#777;margin-bottom:6px;text-align:center">${d.gioi_tinh==='nu'?'Nữ mệnh':'Nam mệnh'}</div>
+      ${d.ngay_sinh ? `<div style="font-size:11px;color:#555">${d.ngay_sinh}/${d.thang_sinh}/${d.nam_sinh} DL${d.gio_chi?' · Giờ '+d.gio_chi:''}</div>` : ''}
+      <hr style="width:80%;border:none;border-top:1px solid #ccc;margin:6px 0">
+      <div style="font-size:12px;color:#061A2E;margin:2px 0">Năm: <b>${ls.canChiNam||''}</b></div>
+      <div style="font-size:11px;color:#444;margin:2px 0">Mệnh: ${NAP_AM_FULL[ls.canChiNam]||ls.napAm||''}</div>
+      <div style="font-size:11px;color:#444;margin:2px 0">Cục: ${ls.cuc||''}</div>
+      <div style="font-size:11px;color:#444;margin:2px 0">Mệnh: <b>${ls.menhDC||''}</b> · Thân: <b>${ls.thanDC||''}</b></div>
+      <hr style="width:80%;border:none;border-top:1px solid #ccc;margin:6px 0">
+      <div style="font-size:11px;color:#1455A4;margin:2px 0">Tuổi: ${ls.tuoiXem||''} · Năm ${ls.chiNamXem||''}</div>
+      ${dvHT ? `<div style="font-size:11px;color:#1E6B3C;margin:2px 0">ĐV: ${dvHT.diaChi} (${dvHT.tuoiStart}–${dvHT.tuoiEnd}t)</div>` : ''}
+    </div>
   </div>`;
 
   let centerDone = false;
@@ -822,9 +823,8 @@ function renderLaSoGrid(container, ls) {
       if (!centerDone.v) {
         centerDone.v = true;
         grid.insertAdjacentHTML('beforeend', centerHTML);
-      } else {
-        grid.insertAdjacentHTML('beforeend', '<div class="cung-center"></div>');
-      }
+      } // second -1 slot: span 2x2 center already covers it
+      
       return;
     }
     const p = ls.palaces[dcI];
