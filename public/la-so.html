@@ -230,9 +230,34 @@ const PHAN_LABELS = ['','Tổng Quan Lá Số','Cung Mệnh','Cung Phụ Mẫu',
 
 function renderMarkdown(t) {
   if (!t) return '';
-  return t.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>')
-    .replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>')
-    .split('\n\n').map(p => p.startsWith('<h') ? p : `<p>${p}</p>`).join('');
+  const lines = t.split('\n');
+  let out = '', inTable = false, rows = [];
+  function flushTable() {
+    if (!rows.length) return;
+    out += '<div style="overflow-x:auto;margin:12px 0"><table style="border-collapse:collapse;width:100%;font-size:13px">';
+    rows.forEach((row,i) => {
+      if (i===1 && /^\|[-| :]+\|$/.test(row.trim())) return;
+      const cells = row.split('|').filter((_,ci,a)=>ci>0&&ci<a.length-1);
+      const t2=i===0?'th':'td';
+      const sty=i===0?'background:#f0f0f0;font-weight:600;padding:8px 10px;border:1px solid #ccc':'padding:7px 10px;border:1px solid #ccc';
+      out += '<tr>'+cells.map(c=>`<${t2} style="${sty}">${c.trim()}</${t2}>`).join('')+'</tr>';
+    });
+    out += '</table></div>';
+    rows=[]; inTable=false;
+  }
+  for (const line of lines) {
+    if (line.trim().startsWith('|')) { inTable=true; rows.push(line.trim()); continue; }
+    if (inTable) flushTable();
+    const l = line
+      .replace(/^## (.+)$/, '<h2 style="font-size:18px;color:#061A2E;margin:16px 0 8px;font-family:serif">$1</h2>')
+      .replace(/^### (.+)$/, '<h3 style="font-size:15px;color:#1455A4;margin:12px 0 6px">$1</h3>')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>');
+    if (l.startsWith('<h')) out += l;
+    else if (l.trim()) out += `<p style="margin-bottom:10px;line-height:1.85">${l}</p>`;
+  }
+  if (inTable) flushTable();
+  return out;
 }
 
 // ── PHAN LABELS ──
@@ -475,9 +500,12 @@ function renderChartP14(ls) {
   const tvs = ls.tieuVanScores||[];
   const cdUid='cd-'+Date.now(), tlUid='tl-'+Date.now(), c90='c90-'+Date.now();
   setTimeout(()=>{
-    // Line chart
+    // Line chart — fallback to daiVans scoring if chartData null
+    const _chartFallback = ls.chartData?.scores?.length
+      ? ls.chartData
+      : { labels: dvs.map((dv,i)=>`ĐV${i+1} ${dv.tuoiStart}-${dv.tuoiEnd}`), scores: dvs.map(dv=>dv.scoring?.tong??5) };
     const ctx=document.getElementById(cdUid);
-    if(ctx&&ls.chartData){new Chart(ctx,{type:'line',data:{labels:ls.chartData.labels,datasets:[{data:ls.chartData.scores,borderColor:'#2F5BEA',backgroundColor:'rgba(20,85,164,0.08)',pointBackgroundColor:ls.chartData.scores.map(s=>s>=7?'#1FA3D6':s>=5?'#1A3A5C':'#C0392B'),pointRadius:6,tension:0.4,fill:true}]},options:{responsive:true,plugins:{legend:{display:false},title:{display:true,text:'Vận Trình Toàn Đời',font:{size:15,weight:'bold'},color:'#061A2E'}},scales:{y:{min:0,max:10},x:{}}}})}
+    if(ctx){new Chart(ctx,{type:'line',data:{labels:_chartFallback.labels,datasets:[{data:_chartFallback.scores,borderColor:'#2F5BEA',backgroundColor:'rgba(20,85,164,0.08)',pointBackgroundColor:_chartFallback.scores.map(s=>s>=7?'#1FA3D6':s>=5?'#1A3A5C':'#C0392B'),pointRadius:6,tension:0.4,fill:true}]},options:{responsive:true,plugins:{legend:{display:false},title:{display:true,text:'Vận Trình Toàn Đời',font:{size:15,weight:'bold'},color:'#061A2E'}},scales:{y:{min:0,max:10},x:{}}}})}
     // Timeline
     const tl=document.getElementById(tlUid);
     if(tl&&ls.tuoiXem){
@@ -514,7 +542,10 @@ function renderChartDV(ls, dvNum) {
   if (!tvs.length) return '';
   const uid='cdv-'+dvNum+'-'+Date.now();
   setTimeout(()=>{ renderCandlestick(uid,tvs,{candleW:32,height:260}); },200);
-  return `<div style="margin:12px 0"><div class="candle-wrap"><div id="${uid}"></div></div></div>`;
+  return `<div style="margin:16px 0 8px">
+    <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 Tiểu Vận 10 Năm</div>
+    <div class="candle-wrap"><div id="${uid}"></div></div>
+  </div>`;
 }
 
 // ── Chart phan 24 ──
@@ -522,17 +553,14 @@ function renderChartP24(ls) {
   const tvs = ls.tieuVanScores||[];
   const tuoiNow = ls.tuoiXem||0;
   const next3 = tvs.filter(tv=>tv.tuoi>=tuoiNow&&tv.tuoi<tuoiNow+3);
-  const dUid='donut-'+Date.now(), c3='c3yr-'+Date.now();
+  const c3='c3yr-'+Date.now();
   setTimeout(()=>{
-    const ctx=document.getElementById(dUid);
-    if(ctx){const dvTong=ls.daiVanHienTai?.scoring?.tong||5;const col=dvTong>=7?'#1FA3D6':dvTong>=4?'#2F5BEA':'#C0392B';new Chart(ctx,{type:'doughnut',data:{datasets:[{data:[70,30],backgroundColor:[col,'#2980b9'],borderColor:['#eee','#eee'],borderWidth:2}]},options:{responsive:false,cutout:'65%',plugins:{legend:{display:false}}}});}
     if(next3.length){renderCandlestick(c3,next3,{candleW:70,height:260,width:280});}
   },200);
-  return `<div style="display:grid;grid-template-columns:180px 1fr;gap:24px;align-items:center;margin:16px 0">
-    <canvas id="${dUid}" width="180" height="180"></canvas>
-    <div style="font-size:13px;color:#666">Đại vận: <b>70%</b> · Tiểu vận: <b>30%</b></div>
-  </div>
-  <div style="margin:12px 0"><div class="candle-wrap"><div id="${c3}"></div></div></div>`;
+  return `<div style="margin:16px 0 8px">
+    <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 3 Năm Kế Tiếp — Tiểu Vận</div>
+    <div class="candle-wrap"><div id="${c3}"></div></div>
+  </div>`;
 }
 
 // ── Candlestick renderer ──
