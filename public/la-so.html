@@ -120,6 +120,14 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 .rendered-laso-content .result-actions { display: none !important; }
 .rendered-laso-content .muc-luc { display: none !important; }
 .rendered-laso-content .nhanh-badge { display: none !important; }
+.laso-radar-btn { padding:5px 12px;border:1px solid #ccc;border-radius:16px;font-size:11px;cursor:pointer;background:#fff;font-family:inherit;transition:all 0.15s;color:#444; }
+.laso-radar-btn:hover { border-color:#061A2E;color:#061A2E; }
+.laso-radar-btn.active { background:#061A2E;color:#fff;border-color:#061A2E; }
+.phan-section { margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid #eee; }
+.phan-num { font-size:10px;letter-spacing:2px;color:#9A7B3A;text-transform:uppercase;margin-bottom:6px; }
+.phan-title { font-family:'Noto Serif',serif;font-size:20px;color:#061A2E;margin-bottom:14px; }
+.phan-body { font-size:15px;line-height:1.9;color:#444;font-weight:300; }
+.candle-wrap { overflow-x:auto; }
 @media print {
   .topnav, .cta-box, button { display: none !important; }
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
@@ -227,6 +235,337 @@ function renderMarkdown(t) {
     .split('\n\n').map(p => p.startsWith('<h') ? p : `<p>${p}</p>`).join('');
 }
 
+// ── PHAN LABELS ──
+// PHAN_LABELS already declared above
+const PHAN_TO_CUNG = {2:'Mệnh',3:'Phụ Mẫu',4:'Phúc Đức',5:'Điền Trạch',6:'Quan Lộc',7:'Nô Bộc',8:'Thiên Di',9:'Tật Ách',10:'Tài Bạch',11:'Tử Tức',12:'Phu Thê',13:'Huynh Đệ'};
+const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
+const METRIC_LABELS = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
+const METRIC_COLORS = {tiemNang:'#c9a84c',benVung:'#1E6B3C',anToan:'#0E7490',quyNhan:'#7B2FBE',minhBach:'#1455A4',tuongHop:'#B04020'};
+const METRIC_DESC = {tiemNang:'Tiềm năng phát đạt',benVung:'Bền vững ổn định',anToan:'An toàn ít rủi ro',quyNhan:'Quý nhân hỗ trợ',minhBach:'Cung rõ ràng',tuongHop:'Hài hòa bản mệnh'};
+const CUNG_ORDER = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
+const WHEEL_MAP = [{name:'Sự nghiệp',cung:'Quan Lộc',color:'#7EC8E3'},{name:'Tài chính',cung:'Tài Bạch',color:'#5FA8D3'},{name:'Tình duyên',cung:'Phu Thê',color:'#1FA3D6'},{name:'Sức khỏe',cung:'Tật Ách',color:'#2F5BEA'},{name:'Gia đình',cung:'Phụ Mẫu',color:'#233E99'},{name:'Bạn bè',cung:'Nô Bộc',color:'#142B7A'},{name:'Tâm linh',cung:'Phúc Đức',color:'#C0392B'},{name:'Tài sản',cung:'Điền Trạch',color:'#071A2E'}];
+
+// ── Lá số grid ──
+function renderLaSoGrid(container, ls, d) {
+  const BC_MAP = {Miếu:'M',Vượng:'V',Đắc:'Đ',Bình:'B',Hãm:'H'};
+  const bc = b => BC_MAP[b] ? `<span style="font-size:8px;opacity:1;color:#7EC8E3;margin-left:1px">(${BC_MAP[b]})</span>` : '';
+  const fmt = (s,cls) => `<span style="font-size:${cls==='chinh'?'11':'9'}px;font-weight:${cls==='chinh'?700:400};display:block;line-height:1.3">${s.ten.toUpperCase()}${bc(s.brightness)}${s.hoa?`<span style="font-size:9px;color:#9A7B3A">[${s.hoa}]</span>`:''}</span>`;
+  const LAYOUT = [5,6,7,8,-1,4,-1,9,3,-1,-1,10,2,1,0,11];
+  const dvHT = ls.daiVanHienTai;
+  const NAP_AM_FULL = {'Giáp Tý':'Hải Trung Kim','Ất Sửu':'Hải Trung Kim','Bính Dần':'Lô Trung Hỏa','Đinh Mão':'Lô Trung Hỏa','Mậu Thìn':'Đại Lâm Mộc','Kỷ Tỵ':'Đại Lâm Mộc','Canh Ngọ':'Lộ Bàng Thổ','Tân Mùi':'Lộ Bàng Thổ','Nhâm Thân':'Kiếm Phong Kim','Quý Dậu':'Kiếm Phong Kim','Giáp Tuất':'Sơn Đầu Hỏa','Ất Hợi':'Sơn Đầu Hỏa','Bính Tý':'Giản Hạ Thủy','Đinh Sửu':'Giản Hạ Thủy','Mậu Dần':'Thành Đầu Thổ','Kỷ Mão':'Thành Đầu Thổ','Canh Thìn':'Bạch Lạp Kim','Tân Tỵ':'Bạch Lạp Kim','Nhâm Ngọ':'Dương Liễu Mộc','Quý Mùi':'Dương Liễu Mộc','Giáp Thân':'Tuyền Trung Thủy','Ất Dậu':'Tuyền Trung Thủy','Bính Tuất':'Ốc Thượng Thổ','Đinh Hợi':'Ốc Thượng Thổ','Mậu Tý':'Tích Lịch Hỏa','Kỷ Sửu':'Tích Lịch Hỏa','Canh Dần':'Tùng Bách Mộc','Tân Mão':'Tùng Bách Mộc','Nhâm Thìn':'Trường Lưu Thủy','Quý Tỵ':'Trường Lưu Thủy','Giáp Ngọ':'Sa Trung Kim','Ất Mùi':'Sa Trung Kim','Bính Thân':'Sơn Hạ Hỏa','Đinh Dậu':'Sơn Hạ Hỏa','Mậu Tuất':'Bình Địa Mộc','Kỷ Hợi':'Bình Địa Mộc','Canh Tý':'Bích Thượng Thổ','Tân Sửu':'Bích Thượng Thổ','Nhâm Dần':'Kim Bạch Kim','Quý Mão':'Kim Bạch Kim','Giáp Thìn':'Phú Đăng Hỏa','Ất Tỵ':'Phú Đăng Hỏa','Bính Ngọ':'Thiên Hà Thủy','Đinh Mùi':'Thiên Hà Thủy','Mậu Thân':'Đại Dịch Thổ','Kỷ Dậu':'Đại Dịch Thổ','Canh Tuất':'Thoa Xuyến Kim','Tân Hợi':'Thoa Xuyến Kim','Nhâm Tý':'Tang Đố Mộc','Quý Sửu':'Tang Đố Mộc','Giáp Dần':'Đại Khê Thủy','Ất Mão':'Đại Khê Thủy','Bính Thìn':'Sa Trung Thổ','Đinh Tỵ':'Sa Trung Thổ','Mậu Ngọ':'Thiên Thượng Hỏa','Kỷ Mùi':'Thiên Thượng Hỏa','Canh Thân':'Thạch Lựu Mộc','Tân Dậu':'Thạch Lựu Mộc','Nhâm Tuất':'Đại Hải Thủy','Quý Hợi':'Đại Hải Thủy'};
+
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'margin-bottom:32px';
+  const label = document.createElement('div');
+  label.style.cssText = 'font-size:11px;font-weight:600;color:#1455A4;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px';
+  label.textContent = 'Lá Số — 12 Cung';
+  wrap.appendChild(label);
+
+  const grid = document.createElement('div');
+  grid.style.cssText = 'display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #ccc;border-left:1px solid #ccc';
+
+  const centerHTML = `<div style="border-right:1px solid #ccc;border-bottom:1px solid #ccc;background:#f5f4f0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;text-align:center;font-size:11px;color:#444">
+    <div style="font-weight:600;color:#061A2E;font-size:13px">${ls.canChiNam||''}</div>
+    <div style="margin:3px 0;font-size:11px">${NAP_AM_FULL[ls.canChiNam]||ls.napAm||''}</div>
+    <div>Cục: ${ls.cuc||''}</div>
+    <div>Mệnh: ${ls.menhDC||''} · Thân: ${ls.thanDC||''}</div>
+    <div style="margin-top:4px;color:#1455A4">Tuổi: ${ls.tuoiXem||''}</div>
+    <div style="color:#1455A4">Năm: ${ls.chiNamXem||''}</div>
+  </div>`;
+
+  let centerDone = false;
+  LAYOUT.forEach(dcI => {
+    if (dcI === -1) {
+      if (!centerDone) { centerDone=true; grid.insertAdjacentHTML('beforeend', centerHTML); }
+      else grid.insertAdjacentHTML('beforeend', '<div style="border-right:1px solid #ccc;border-bottom:1px solid #ccc"></div>');
+      return;
+    }
+    const p = ls.palaces[dcI];
+    if (!p) { grid.insertAdjacentHTML('beforeend','<div style="border-right:1px solid #ccc;border-bottom:1px solid #ccc"></div>'); return; }
+    const isCurVan = dvHT?.cungIdx === dcI;
+    const van = p.decadal ? `${p.decadal.range[0]}–${p.decadal.range[1]}` : '';
+    const BAD = new Set(['sát tinh','hung tinh','bại tinh']);
+    const chinh = (p.majorStars||[]).map(s=>fmt(s,'chinh')).join('');
+    const tot = (p.stars||[]).filter(s=>s.nhom!=='chinh'&&s.nhom!=='trang_sinh').map(s=>fmt(s,'phu')).join('');
+    const vong = (p.stars||[]).filter(s=>s.nhom==='trang_sinh').map(s=>`<span style="font-size:9px;color:#9A7B3A;display:block">${s.ten}</span>`).join('');
+    const border = p.isMenh ? '2px solid #9A7B3A' : isCurVan ? '2px solid #1455A4' : '1px solid #ccc';
+    grid.insertAdjacentHTML('beforeend', `
+      <div style="border-right:${border};border-bottom:${border};display:grid;grid-template-columns:1fr auto 1fr;grid-template-rows:17px 34px 150px 16px;padding:4px 5px;font-size:10px;overflow:hidden">
+        <div style="font-size:9px;color:#777">${p.diaChi}</div>
+        <div style="font-size:9px;font-weight:600;color:#061A2E;text-align:center">${p.cungName}</div>
+        <div style="font-size:8px;color:#1455A4;text-align:right">${van}</div>
+        <div style="grid-column:1/-1;text-align:center;border-bottom:1px solid #eee;overflow:hidden">${chinh}</div>
+        <div style="grid-column:1/-1;overflow:hidden">${tot}</div>
+        <div style="grid-column:1/-1;text-align:center;border-top:1px solid #eee;overflow:hidden">${vong}</div>
+      </div>`);
+  });
+
+  wrap.appendChild(grid);
+  container.appendChild(wrap);
+}
+
+// ── Pre-gen phan 1 ──
+function renderPregenP1(ls) {
+  let html = '';
+  const cc = ls.cachCuc || [];
+  if (cc.length > 0) {
+    html += `<div style="background:#f8f9fa;border-radius:8px;padding:14px 16px;margin-bottom:12px"><div style="font-size:10px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">⚙ Cách cục đặc biệt</div>`;
+    cc.forEach(c => { html += `<div style="margin-bottom:6px"><span style="display:inline-block;padding:2px 8px;background:#061A2E;color:#c9a84c;font-size:10px;border-radius:3px;margin-right:6px">${c.ten}</span><span style="font-size:12px;color:#555">${c.moTa||''}</span></div>`; });
+    html += '</div>';
+  }
+  if (ls.cungScores) {
+    const top3 = CUNG_ORDER.filter(c=>ls.cungScores[c]).map(c=>[c,METRICS.reduce((s,m)=>s+(ls.cungScores[c][m]||0),0)]).sort((a,b)=>b[1]-a[1]).slice(0,3);
+    const bot3 = CUNG_ORDER.filter(c=>ls.cungScores[c]).map(c=>[c,METRICS.reduce((s,m)=>s+(ls.cungScores[c][m]||0),0)]).sort((a,b)=>a[1]-b[1]).slice(0,3);
+    html += `<div style="background:#f8f9fa;border-radius:8px;padding:14px 16px;margin-bottom:12px"><div style="font-size:10px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">📊 Điểm mạnh / yếu</div>`;
+    html += `<div style="font-size:12px;color:#1E6B3C;margin-bottom:4px">Mạnh nhất: ${top3.map(([c,s])=>`${c} (${s.toFixed(0)})`).join(', ')}</div>`;
+    html += `<div style="font-size:12px;color:#C0392B">Yếu nhất: ${bot3.map(([c,s])=>`${c} (${s.toFixed(0)})`).join(', ')}</div>`;
+    html += '</div>';
+  }
+  return html;
+}
+
+// ── Chart phan 1 (interactive radar) ──
+function renderChartP1(ls) {
+  if (!ls.cungScores) return '';
+  const uid = 'radar-all-' + Date.now();
+  const wheelUid = 'wheel-' + Date.now();
+  const barUid = 'bar12-' + Date.now();
+  setTimeout(() => {
+    // Radar 12 cung interactive
+    const ctx = document.getElementById(uid);
+    if (ctx) {
+      window._radarScores = ls.cungScores;
+      window._radarChart = null;
+      window.switchRadarMetric = function(metric, btn) {
+        document.querySelectorAll('.laso-radar-btn').forEach(b=>b.classList.remove('active'));
+        if(btn) btn.classList.add('active');
+        const sc = window._radarScores;
+        const isTotal = metric==='total';
+        const labels = CUNG_ORDER.filter(c=>sc[c]);
+        const data = labels.map(c=>isTotal?METRICS.reduce((s,m)=>s+(sc[c][m]||0),0):sc[c][metric]||0);
+        const color = isTotal?'#c9a84c':METRIC_COLORS[metric];
+        if (window._radarChart) {
+          window._radarChart.data.labels=labels;
+          window._radarChart.data.datasets[0].data=data;
+          window._radarChart.data.datasets[0].borderColor=color;
+          window._radarChart.data.datasets[0].backgroundColor=color+'25';
+          window._radarChart.data.datasets[0].pointBackgroundColor=color;
+          window._radarChart.options.scales.r.max=isTotal?60:10;
+          window._radarChart.options.scales.r.ticks.stepSize=isTotal?10:2;
+          window._radarChart.update();
+        }
+      };
+      const labels = CUNG_ORDER.filter(c=>ls.cungScores[c]);
+      const data = labels.map(c=>METRICS.reduce((s,m)=>s+(ls.cungScores[c][m]||0),0));
+      window._radarChart = new Chart(ctx, {
+        type:'radar',
+        data:{labels,datasets:[{data,borderColor:'#c9a84c',backgroundColor:'#c9a84c25',pointBackgroundColor:'#c9a84c',pointRadius:4,borderWidth:2}]},
+        options:{responsive:true,scales:{r:{min:0,max:60,ticks:{stepSize:10,font:{size:9},color:'#888',backdropColor:'transparent'},pointLabels:{font:{size:11,weight:'600'}},grid:{color:'rgba(0,0,0,0.08)'},angleLines:{color:'rgba(0,0,0,0.1)'}}},plugins:{legend:{display:false},title:{display:true,text:'Tổng điểm 12 cung',font:{size:13,weight:'500'},padding:{bottom:12}}}},
+      });
+    }
+    // Wheel of Life
+    const wctx = document.getElementById(wheelUid);
+    if (wctx) {
+      new Chart(wctx, {
+        type:'radar',
+        data:{labels:WHEEL_MAP.map(d=>d.name),datasets:[{data:WHEEL_MAP.map(d=>ls.cungScores[d.cung]?METRICS.reduce((s,m)=>s+(ls.cungScores[d.cung][m]||0),0)/6:0),borderColor:'#5FA8D3',backgroundColor:'rgba(95,168,211,0.08)',pointBackgroundColor:WHEEL_MAP.map(d=>d.color),pointRadius:5,borderWidth:2}]},
+        options:{responsive:false,scales:{r:{min:0,max:10,ticks:{stepSize:2,font:{size:9},color:'#888',backdropColor:'transparent'},pointLabels:{font:{size:11,weight:'600'}},grid:{color:'rgba(0,0,0,0.08)'},angleLines:{color:'rgba(0,0,0,0.1)'}}},plugins:{legend:{display:false}}},
+      });
+    }
+    // Bar 12 cung
+    const barEl = document.getElementById(barUid);
+    if (barEl && ls.cungScores) {
+      const sorted = CUNG_ORDER.filter(c=>ls.cungScores[c]).map(c=>[c,METRICS.reduce((s,m)=>s+(ls.cungScores[c][m]||0),0)]).sort((a,b)=>b[1]-a[1]);
+      barEl.innerHTML = sorted.map(([cung,total])=>{const pct=(total/60*100).toFixed(1);const col=total>=40?'#1FA3D6':total>=33?'#2F5BEA':'#C0392B';return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px"><span style="font-size:11px;color:#888;width:80px;text-align:right;flex-shrink:0">${cung}</span><div style="flex:1;height:18px;background:#f0f0f0;border-radius:3px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${col};border-radius:3px;display:flex;align-items:center;padding-left:6px"><span style="font-size:10px;color:#fff;font-weight:600">${total.toFixed(1)}</span></div></div><span style="font-size:10px;color:#666;width:32px;text-align:right">${pct}%</span></div>`;}).join('');
+    }
+  }, 200);
+
+  return `<div style="margin-bottom:16px">
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center">
+      <span style="font-size:11px;color:#888">Hiển thị:</span>
+      <button class="laso-radar-btn active" data-metric="total" onclick="switchRadarMetric('total',this)">Tổng điểm</button>
+      ${METRICS.map(m=>`<button class="laso-radar-btn" data-metric="${m}" onclick="switchRadarMetric('${m}',this)">${METRIC_LABELS[METRICS.indexOf(m)]}</button>`).join('')}
+    </div>
+    <canvas id="${uid}" style="max-height:460px"></canvas>
+  </div>
+  <div style="margin:20px 0 16px">
+    <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Wheel of Life — 8 Lĩnh Vực</div>
+    <canvas id="${wheelUid}" width="300" height="300"></canvas>
+  </div>
+  <div style="margin:20px 0 16px">
+    <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Xếp hạng 12 Cung</div>
+    <div id="${barUid}" style="display:flex;flex-direction:column;gap:5px"></div>
+  </div>`;
+}
+
+// ── Pre-gen & chart từng cung ──
+function renderPregenCung(ls, n) {
+  const cung = PHAN_TO_CUNG[n];
+  if (!cung) return '';
+  let html = '';
+  const ynItems = ls.cachCucTungCung?.[cung] || [];
+  const ccItems = (ls.cachCuc||[]).filter(c=>c.cung===cung);
+  const sc = ls.cungScores?.[cung];
+  if (ccItems.length) {
+    html += `<div style="background:#f8f9fa;border-radius:8px;padding:14px 16px;margin-bottom:10px"><div style="font-size:10px;font-weight:600;color:#9A7B3A;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">⚙ Cách cục đặc biệt</div>`;
+    ccItems.forEach(c=>{ html+=`<div style="margin-bottom:4px"><span style="display:inline-block;padding:2px 8px;background:#061A2E;color:#c9a84c;font-size:10px;border-radius:3px">${c.ten}</span></div>`; });
+    html += '</div>';
+  }
+  if (ynItems.length) {
+    html += `<div style="background:#f8f9fa;border-radius:8px;padding:14px 16px;margin-bottom:10px"><div style="font-size:10px;font-weight:600;color:#9A7B3A;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">📋 Phân tích sao</div>`;
+    ynItems.forEach(y=>{const col=y.includes('đại cát')||y.includes('phú quý')?'#1E6B3C':y.includes('hung')||y.includes('tai')?'#C0392B':'#444';html+=`<div style="font-size:12px;color:${col};margin-bottom:4px;line-height:1.5">• ${y}</div>`;});
+    html += '</div>';
+  }
+  if (sc) {
+    html += `<div style="background:#f8f9fa;border-radius:8px;padding:14px 16px;margin-bottom:10px"><div style="font-size:10px;font-weight:600;color:#9A7B3A;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">📈 Đánh giá 6 chiều</div>`;
+    METRICS.forEach((m,i)=>{const v=sc[m];const pct=v*10;const col=v>=7?'#1FA3D6':v>=5?'#2F5BEA':v>=3?'#233E99':'#C0392B';html+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px"><span style="font-size:11px;color:#888;width:80px;flex-shrink:0">${METRIC_LABELS[i]}</span><div style="flex:1;height:12px;background:#e8e8e8;border-radius:3px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${col};border-radius:3px"></div></div><span style="font-size:11px;color:#444;width:20px;text-align:right">${v}</span></div>`;});
+    html += '</div>';
+  }
+  return html;
+}
+function renderChartCung(ls, n) {
+  const cung = PHAN_TO_CUNG[n];
+  const sc = ls.cungScores?.[cung];
+  if (!sc) return '';
+  const uid = 'radar-cung-' + n + '-' + Date.now();
+  setTimeout(() => {
+    const ctx = document.getElementById(uid);
+    if (!ctx) return;
+    new Chart(ctx, {
+      type:'radar',
+      data:{labels:METRIC_LABELS,datasets:[{data:METRICS.map(m=>sc[m]),borderColor:'#c9a84c',backgroundColor:'#c9a84c18',pointBackgroundColor:METRICS.map(m=>METRIC_COLORS[m]),pointRadius:5,borderWidth:2}]},
+      options:{responsive:true,scales:{r:{min:0,max:10,ticks:{stepSize:2,font:{size:9},color:'#888',backdropColor:'transparent'},pointLabels:{font:{size:11,weight:'600'}},grid:{color:'rgba(0,0,0,0.08)'},angleLines:{color:'rgba(0,0,0,0.1)'}}},plugins:{legend:{display:false},title:{display:true,text:`Cung ${cung} — 6 chiều đánh giá`,font:{size:12},padding:{bottom:8}}}},
+    });
+  }, 200);
+  return `<div style="max-width:360px;margin:12px 0"><canvas id="${uid}"></canvas></div>`;
+}
+
+// ── Pre-gen đại vận ──
+function renderPregenDV(ls, dvNum) {
+  const dv = (ls.daiVans||[])[dvNum-1];
+  if (!dv) return '';
+  const p = (ls.palaces||[])[dv.cungIdx];
+  if (!p) return '';
+  let html = '';
+  const sc = dv.scoring;
+  if (sc) {
+    const totCol=sc.tong>=7?'#1FA3D6':sc.tong>=4?'#2F5BEA':'#C0392B';
+    html += `<div style="background:#f8f9fa;border-radius:8px;padding:14px 16px;margin-bottom:10px">
+      <div style="font-size:10px;font-weight:600;color:#9A7B3A;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">📊 Scoring — Cung ${p.cungName} (${p.diaChi})</div>`;
+    [['Thiên Thời',sc.thienThoi?.score??sc.thienThoi,5,'#c9a84c'],['Địa Lợi',sc.diaLoi?.score??sc.diaLoi,1,'#0E7490'],['Nhân Hòa',sc.nhanHoa?.score??sc.nhanHoa,4,'#7B2FBE']].forEach(([name,val,max,col])=>{
+      html+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px"><span style="font-size:11px;color:#888;width:80px;flex-shrink:0">${name}</span><div style="flex:1;height:12px;background:#e8e8e8;border-radius:3px;overflow:hidden"><div style="height:100%;width:${val/max*100}%;background:${col};border-radius:3px"></div></div><span style="font-size:11px;width:30px;text-align:right">${val}/${max}</span></div>`;
+    });
+    html += `<div style="font-size:13px;font-weight:600;color:${totCol};margin-top:6px">Tổng: ${sc.tong}/10 ${sc.flag||''}</div></div>`;
+  }
+  const rules = dv.rules||[];
+  if (rules.length) {
+    html += `<div style="background:#f8f9fa;border-radius:8px;padding:14px 16px;margin-bottom:10px"><div style="font-size:10px;font-weight:600;color:#9A7B3A;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">🔮 Luận đoán</div>`;
+    rules.filter(r=>r.type==='tot').forEach(r=>{ html+=`<div style="font-size:12px;color:#1E6B3C;margin-bottom:4px">✦ ${r.text}</div>`; });
+    rules.filter(r=>r.type==='trung').forEach(r=>{ html+=`<div style="font-size:12px;color:#666;margin-bottom:4px">◆ ${r.text}</div>`; });
+    rules.filter(r=>r.type==='xau').forEach(r=>{ html+=`<div style="font-size:12px;color:#C0392B;margin-bottom:4px">▼ ${r.text}</div>`; });
+    rules.filter(r=>r.type==='canh_bao').forEach(r=>{ html+=`<div style="font-size:12px;color:#C0392B;font-weight:600;margin-bottom:4px">⚠ ${r.text}</div>`; });
+    html += '</div>';
+  }
+  return html;
+}
+
+// ── Chart phan 14 ──
+function renderChartP14(ls) {
+  const dvs = ls.daiVans||[];
+  const tvs = ls.tieuVanScores||[];
+  const cdUid='cd-'+Date.now(), tlUid='tl-'+Date.now(), c90='c90-'+Date.now();
+  setTimeout(()=>{
+    // Line chart
+    const ctx=document.getElementById(cdUid);
+    if(ctx&&ls.chartData){new Chart(ctx,{type:'line',data:{labels:ls.chartData.labels,datasets:[{data:ls.chartData.scores,borderColor:'#2F5BEA',backgroundColor:'rgba(20,85,164,0.08)',pointBackgroundColor:ls.chartData.scores.map(s=>s>=7?'#1FA3D6':s>=5?'#1A3A5C':'#C0392B'),pointRadius:6,tension:0.4,fill:true}]},options:{responsive:true,plugins:{legend:{display:false},title:{display:true,text:'Vận Trình Toàn Đời',font:{size:15,weight:'bold'},color:'#061A2E'}},scales:{y:{min:0,max:10},x:{}}}})}
+    // Timeline
+    const tl=document.getElementById(tlUid);
+    if(tl&&ls.tuoiXem){
+      dvs.slice(0,9).forEach((dv,i)=>{
+        const span=dv.tuoiEnd-dv.tuoiStart||10;const sc=dv.scoring?.tong||0;
+        const h=22+(sc/10)*138;const col=sc>=7?'#1FA3D6':sc>=4?'#2F5BEA':'#C0392B';
+        const isCur=ls.tuoiXem>=dv.tuoiStart&&ls.tuoiXem<=dv.tuoiEnd;
+        const b=document.createElement('div');
+        b.style.cssText=`flex:${span};background:${col};height:${h}px;border-radius:3px 3px 0 0;cursor:pointer;title="${dv.cungName} ${sc}đ"${isCur?';outline:2px solid #c9a84c;outline-offset:2px':''}`;
+        b.title=`ĐV${i+1}: ${dv.tuoiStart}-${dv.tuoiEnd}t · ${dv.cungName} · ${sc}đ`;
+        tl.appendChild(b);
+      });
+    }
+    // Candlestick 90yr
+    if(tvs.length){renderCandlestick(c90,tvs,{candleW:9,height:360});}
+  },200);
+  return `<div style="margin:16px 0">
+    <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Xu hướng điểm 9 Đại Vận</div>
+    <canvas id="${cdUid}"></canvas>
+  </div>
+  <div style="margin:20px 0">
+    <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Timeline Cuộc Đời</div>
+    <div id="${tlUid}" style="display:flex;gap:2px;align-items:flex-end;height:160px"></div>
+  </div>
+  <div style="margin:20px 0">
+    <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 Tiểu Vận — Toàn Bộ 90 Năm (Candlestick)</div>
+    <div class="candle-wrap"><div id="${c90}"></div></div>
+  </div>`;
+}
+
+// ── Chart từng ĐV ──
+function renderChartDV(ls, dvNum) {
+  const tvs = (ls.tieuVanScores||[]).filter(tv=>tv.dvIdx===dvNum-1);
+  if (!tvs.length) return '';
+  const uid='cdv-'+dvNum+'-'+Date.now();
+  setTimeout(()=>{ renderCandlestick(uid,tvs,{candleW:32,height:260}); },200);
+  return `<div style="margin:12px 0"><div class="candle-wrap"><div id="${uid}"></div></div></div>`;
+}
+
+// ── Chart phan 24 ──
+function renderChartP24(ls) {
+  const tvs = ls.tieuVanScores||[];
+  const tuoiNow = ls.tuoiXem||0;
+  const next3 = tvs.filter(tv=>tv.tuoi>=tuoiNow&&tv.tuoi<tuoiNow+3);
+  const dUid='donut-'+Date.now(), c3='c3yr-'+Date.now();
+  setTimeout(()=>{
+    const ctx=document.getElementById(dUid);
+    if(ctx){const dvTong=ls.daiVanHienTai?.scoring?.tong||5;const col=dvTong>=7?'#1FA3D6':dvTong>=4?'#2F5BEA':'#C0392B';new Chart(ctx,{type:'doughnut',data:{datasets:[{data:[70,30],backgroundColor:[col,'#2980b9'],borderColor:['#eee','#eee'],borderWidth:2}]},options:{responsive:false,cutout:'65%',plugins:{legend:{display:false}}}});}
+    if(next3.length){renderCandlestick(c3,next3,{candleW:70,height:260,width:280});}
+  },200);
+  return `<div style="display:grid;grid-template-columns:180px 1fr;gap:24px;align-items:center;margin:16px 0">
+    <canvas id="${dUid}" width="180" height="180"></canvas>
+    <div style="font-size:13px;color:#666">Đại vận: <b>70%</b> · Tiểu vận: <b>30%</b></div>
+  </div>
+  <div style="margin:12px 0"><div class="candle-wrap"><div id="${c3}"></div></div></div>`;
+}
+
+// ── Candlestick renderer ──
+function renderCandlestick(containerId, data, opts={}) {
+  const el=document.getElementById(containerId);
+  if(!el||!data?.length) return;
+  const W=opts.width||Math.min(data.length*(opts.candleW?opts.candleW+3:9)+60,920);
+  const H=opts.height||260,PAD={top:28,right:14,bottom:32,left:34};
+  const cw=opts.candleW||Math.max(4,Math.floor((W-PAD.left-PAD.right)/data.length)-2);
+  const plotH=H-PAD.top-PAD.bottom;
+  const allVals=data.flatMap(d=>[d.high??10,d.low??0]);
+  const minVal=Math.max(0,Math.min(...allVals)-0.3),maxVal=Math.min(10,Math.max(...allVals)+0.3);
+  const range=maxVal-minVal||1;
+  function yv(v){return PAD.top+plotH-((v-minVal)/range*plotH);}
+  function xc(i){return PAD.left+i*(cw+2)+cw/2;}
+  let grid='',candles='';
+  const step=(maxVal-minVal)>6?2:1;
+  for(let v=Math.ceil(minVal);v<=Math.floor(maxVal);v+=step){const gy=yv(v);grid+=`<line x1="${PAD.left}" y1="${gy}" x2="${W-PAD.right}" y2="${gy}" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,3"/><text x="${PAD.left-5}" y="${gy+3}" font-size="8" fill="#999" text-anchor="end">${v}</text>`;}
+  data.forEach((d,i)=>{
+    const rO=d.open??d.mainScore,rC=d.close??d.mainScore,high=d.high??10,low=d.low??0;
+    const mid=(rO+rC)/2,ex=3.5;
+    const open=Math.max(low,Math.min(high,mid+(rO-mid)*ex));
+    const close=Math.max(low,Math.min(high,mid+(rC-mid)*ex));
+    const bull=close>=open,bc2=bull?'#5FA8D3':'#C0392B',wc=bull?'#2F5BEA':'#922B21';
+    const yO=yv(open),yC=yv(close),yH=yv(high),yL=yv(low),cx=xc(i);
+    const bTop=Math.min(yO,yC),bHt=Math.max(1.5,Math.abs(yO-yC));
+    candles+=`<line x1="${cx}" y1="${yH}" x2="${cx}" y2="${bTop}" stroke="${wc}" stroke-width="1.2"/><line x1="${cx}" y1="${bTop+bHt}" x2="${cx}" y2="${yL}" stroke="${wc}" stroke-width="1.2"/><rect x="${cx-cw/2}" y="${bTop}" width="${cw}" height="${bHt}" fill="${bc2}" rx="1" opacity="0.92"/>`;
+    const step2=data.length>60?10:data.length>20?5:1;
+    if(d.tuoi%step2===0||data.length<=5)candles+=`<text x="${cx}" y="${H-PAD.bottom+14}" font-size="8" fill="#999" text-anchor="middle">${d.tuoi}</text>`;
+  });
+  el.innerHTML=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:block;max-width:100%"><line x1="${PAD.left}" y1="${PAD.top-4}" x2="${PAD.left}" y2="${H-PAD.bottom}" stroke="#ccc" stroke-width="1"/><line x1="${PAD.left}" y1="${H-PAD.bottom}" x2="${W-PAD.right}" y2="${H-PAD.bottom}" stroke="#ccc" stroke-width="1"/>${grid}${candles}</svg>`;
+}
+
 async function load() {
   const slug = new URLSearchParams(window.location.search).get('slug');
   if (!slug) { showError(); return; }
@@ -317,8 +656,8 @@ function reRenderCharts(container, ls) {
   if (!radarEl && !wheelEl) return;
   if (!ls.cungScores) return;
 
-  const CUNG_ORDER = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
-  const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
+  // CUNG_ORDER already declared above
+  // METRICS already declared above
   const sc = ls.cungScores;
 
   setTimeout(() => {
@@ -370,68 +709,87 @@ function render(d) {
 
   const body = document.getElementById('main-body');
 
-  // ── Nếu có rendered HTML — hiển thị nguyên xi ──
-  if (d.rendered_html) {
-    // Share + PDF buttons
-    const actionsDiv = document.createElement('div');
-    actionsDiv.style.cssText = 'margin:0 0 20px;display:flex;gap:10px;flex-wrap:wrap;align-items:center';
-    actionsDiv.innerHTML = `
-      <button onclick="window.print()" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#061A2E;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">⬇ Tải PDF</button>
-      <div id="share-laso-top" style="display:inline-flex"></div>`;
-    body.appendChild(actionsDiv);
-    if (window.ShareButtons) {
-      ShareButtons.render('share-laso-top', {
-        url: window.location.href,
-        title: 'Lá số ' + (d.can_chi_nam||'') + ' — Tử Vi Minh Bảo',
-        text: 'Xem luận giải lá số Tử Vi Đẩu Số'
-      });
+  // ── Parse astrolabe_data ──
+  let _ls = null;
+  try { if (d.astrolabe_data) _ls = JSON.parse(d.astrolabe_data); } catch(e) {}
+
+  // ── Actions bar ──
+  const actDiv = document.createElement('div');
+  actDiv.style.cssText = 'margin:0 0 20px;display:flex;gap:10px;flex-wrap:wrap;align-items:center';
+  actDiv.innerHTML = `<button onclick="window.print()" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#061A2E;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">⬇ Tải PDF</button><div id="share-laso-top"></div>`;
+  body.appendChild(actDiv);
+  if (window.ShareButtons) {
+    ShareButtons.render('share-laso-top', {
+      url: window.location.href,
+      title: 'Lá số ' + (d.can_chi_nam||'') + ' — Tử Vi Minh Bảo',
+      text: 'Xem luận giải lá số Tử Vi Đẩu Số'
+    });
+  }
+
+  // ── Lá số grid ──
+  if (_ls?.palaces) {
+    renderLaSoGrid(body, _ls, d);
+  }
+
+  // ── Phần 1: Charts tổng quan + luận giải ──
+  const luan = d.luan_giai || {};
+  const phans = Object.keys(luan).map(Number).filter(n=>!isNaN(n)&&n>0).sort((a,b)=>a-b);
+
+  phans.forEach(n => {
+    const text = luan[n] || luan[String(n)] || '';
+    if (!text) return;
+    const sec = document.createElement('div');
+    sec.className = 'phan-section';
+    sec.id = 'phan-' + n;
+
+    // Pre-gen + charts per phan
+    let preHtml = '';
+    let chartHtml = '';
+
+    if (n === 1 && _ls) {
+      preHtml = renderPregenP1(_ls);
+      chartHtml = renderChartP1(_ls);
+    } else if (n >= 2 && n <= 13 && _ls) {
+      preHtml = renderPregenCung(_ls, n);
+      chartHtml = renderChartCung(_ls, n);
+    } else if (n === 14 && _ls) {
+      chartHtml = renderChartP14(_ls);
+    } else if (n >= 15 && n <= 23 && _ls) {
+      preHtml = renderPregenDV(_ls, n-14);
+      chartHtml = renderChartDV(_ls, n-14);
+    } else if (n === 24 && _ls) {
+      chartHtml = renderChartP24(_ls);
     }
 
-    // Rendered content
-    const renderedDiv = document.createElement('div');
-    renderedDiv.className = 'rendered-laso-content';
-    renderedDiv.innerHTML = d.rendered_html;
-    body.appendChild(renderedDiv);
+    const divider = preHtml ? `<div style="border-top:1px solid rgba(255,255,255,0.08);margin:12px 0 10px;display:flex;align-items:center;gap:8px;font-size:10px;color:#556;letter-spacing:2px;text-transform:uppercase"><div style="flex:1;height:1px;background:rgba(255,255,255,0.06)"></div>Luận giải<div style="flex:1;height:1px;background:rgba(255,255,255,0.06)"></div></div>` : '';
 
-    // Re-init Chart.js charts inside rendered HTML
-    // Parse astrolabe data for chart re-draw
-  let _astroData = null;
-  try { if (d.astrolabe_data) _astroData = JSON.parse(d.astrolabe_data); } catch(e) {}
-  // Wait for Chart.js to load then re-draw
-  setTimeout(() => reInitCharts(renderedDiv, _astroData), 300);
+    sec.innerHTML = `
+      <div class="phan-num">Phần ${n} / 24</div>
+      <div class="phan-title">${PHAN_LABELS[n]||'Luận giải'}</div>
+      ${preHtml}${chartHtml}${divider}
+      <div class="phan-body">${renderMarkdown(text)}</div>`;
+    body.appendChild(sec);
+  });
 
-  // Re-render bar 12 cung from data
-  if (_astroData?.cungScores) {
-    setTimeout(() => {
-      const sc = _astroData.cungScores;
-      const CUNG_ORDER = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
-      const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
-      const barEl = document.getElementById('chart-bar-12cung');
-      if (barEl) {
-        const sorted = CUNG_ORDER.filter(c=>sc[c]).map(c=>[c,METRICS.reduce((s,m)=>s+(sc[c][m]||0),0)]).sort((a,b)=>b[1]-a[1]);
-        barEl.innerHTML = sorted.map(([cung,total])=>{
-          const pct=(total/60*100).toFixed(1);
-          const col=total>=40?'#1FA3D6':total>=33?'#2F5BEA':'#C0392B';
-          return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px"><span style="font-size:11px;color:#aaa;width:80px;text-align:right;flex-shrink:0">${cung}</span><div style="flex:1;height:18px;background:#1e2e42;border-radius:3px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${col};border-radius:3px;display:flex;align-items:center;padding-left:6px"><span style="font-size:10px;color:#fff;font-weight:600">${total.toFixed(1)}</span></div></div><span style="font-size:10px;color:#666;width:32px;text-align:right">${pct}%</span></div>`;
-        }).join('');
-      }
-    }, 400);
+  if (phans.length === 0) {
+    const noticeDiv = document.createElement('div');
+    noticeDiv.style.cssText = 'text-align:center;padding:60px 20px';
+    noticeDiv.innerHTML = `<div style="font-size:40px;margin-bottom:16px">📜</div><div style="font-family:'Noto Serif',serif;font-size:20px;color:#061A2E;margin-bottom:10px">Lá số đang được cập nhật</div><div style="font-size:14px;color:#777;margin-bottom:24px">Nội dung luận giải chi tiết sẽ sớm được hiển thị tại đây.</div><a href="/" style="padding:10px 24px;background:#061A2E;color:#fff;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none">An sao lá số của bạn →</a>`;
+    body.appendChild(noticeDiv);
   }
 
-    // CTA
-    const cta = document.createElement('div');
-    cta.className = 'cta-box';
-    cta.innerHTML = `<div style="color:#8BAACC;font-size:14px;font-weight:300"><b style="color:#fff">Muốn xem lá số của bạn?</b><br>An sao Tử Vi Đẩu Số theo cổ pháp, luận giải bằng trí tuệ nhân tạo.</div><a class="cta-btn" href="/">Xem lá số của tôi →</a>`;
-    body.appendChild(cta);
-    return; // skip the re-render below
-  }
+  // CTA
+  const cta = document.createElement('div');
+  cta.className = 'cta-box';
+  cta.innerHTML = `<div style="color:#8BAACC;font-size:14px;font-weight:300"><b style="color:#fff">Muốn xem lá số của bạn?</b><br>An sao Tử Vi Đẩu Số theo cổ pháp, luận giải bằng trí tuệ nhân tạo.</div><a class="cta-btn" href="/">Xem lá số của tôi →</a>`;
+  body.appendChild(cta);
 
   // Không có rendered_html — hiển thị thông báo
   const noticeDiv = document.createElement('div');
   noticeDiv.style.cssText = 'text-align:center;padding:60px 20px';
   noticeDiv.innerHTML = `
     <div style="font-size:40px;margin-bottom:16px">📜</div>
-    <div style="font-family:\'Noto Serif\',serif;font-size:20px;color:#061A2E;margin-bottom:10px">Lá số đang được cập nhật</div>
+    <div style="font-size:20px;color:#061A2E;margin-bottom:10px">Lá số đang được cập nhật</div>
     <div style="font-size:14px;color:#777;margin-bottom:24px">Nội dung luận giải chi tiết sẽ sớm được hiển thị tại đây.</div>
     <a href="/" style="padding:10px 24px;background:#061A2E;color:#fff;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none">An sao lá số của bạn →</a>`;
   body.appendChild(noticeDiv);
@@ -508,8 +866,8 @@ function renderCharts(container, ls) {
   wrap.innerHTML = '<div class="chart-label">📊 Biểu Đồ Lá Số</div><div class="chart-row"><canvas id="pub-radar" width="300" height="300"></canvas><canvas id="pub-wheel" width="300" height="300"></canvas></div>';
   container.appendChild(wrap);
 
-  const CUNG_ORDER = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
-  const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
+  //const CUNG_ORDER = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
+  //const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
   const sc = ls.cungScores;
 
   setTimeout(() => {
@@ -546,8 +904,8 @@ function reInitCharts(container, astroData) {
   const sc = astroData.cungScores || {};
   const dvs = astroData.daiVans || [];
   const tvs = astroData.tieuVanScores || [];
-  const CUNG_ORDER = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
-  const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
+//  const CUNG_ORDER = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
+//  const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
   const WHEEL = [{name:'Sự nghiệp',cung:'Quan Lộc'},{name:'Tài chính',cung:'Tài Bạch'},{name:'Tình duyên',cung:'Phu Thê'},{name:'Sức khỏe',cung:'Tật Ách'},{name:'Gia đình',cung:'Phụ Mẫu'},{name:'Bạn bè',cung:'Nô Bộc'},{name:'Tâm linh',cung:'Phúc Đức'},{name:'Tài sản',cung:'Điền Trạch'}];
 
   const CHART_OPTS = {
