@@ -120,6 +120,33 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 .rendered-laso-content .result-actions { display: none !important; }
 .rendered-laso-content .muc-luc { display: none !important; }
 .rendered-laso-content .nhanh-badge { display: none !important; }
+.cung-cell-ls {
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  display: grid;
+  grid-template-areas:
+    "can-chi   cung-name  dai-van"
+    "chinh     chinh      chinh"
+    "tot       tot        tot"
+    "trang-sinh trang-sinh trang-sinh";
+  grid-template-columns: 1fr auto 1fr;
+  grid-template-rows: 17px 34px 150px 16px;
+  gap: 0px; padding: 4px 5px;
+  font-size: 10px;
+  overflow: hidden;
+}
+.cung-cell-ls.is-menh { border: 2px solid #9A7B3A; }
+.cung-cell-ls.cur-van { border: 2px solid #1455A4; }
+.cls-can-chi    { grid-area: can-chi;    font-size: 8px; color: #9A7B3A; font-weight: 700; }
+.cls-cung-name  { grid-area: cung-name;  font-size: 8px; color: #777; text-transform: uppercase; letter-spacing: 0.5px; text-align: center; white-space: nowrap; }
+.cls-dai-van    { grid-area: dai-van;    font-size: 8px; color: #1455A4; text-align: right; }
+.cls-chinh      { grid-area: chinh;      text-align: center; border-bottom: 1px solid #eee; padding-bottom: 1px; overflow: hidden; }
+.cls-tot        { grid-area: tot;        overflow: hidden; }
+.cls-trang-sinh { grid-area: trang-sinh; text-align: center; border-top: 1px solid #eee; padding-top: 1px; font-size: 9px; color: #9A7B3A; }
+.laso-star-chinh { font-weight: 700; font-size: 11px; display: block; line-height: 1.3; }
+.laso-star-phu   { font-size: 9px; display: block; line-height: 1.3; }
+.laso-bright     { font-size: 8px; color: #7EC8E3; margin-left: 1px; }
+.laso-hoa        { font-size: 9px; color: #9A7B3A; margin-left: 1px; }
 .laso-radar-btn { padding:5px 12px;border:1px solid #ccc;border-radius:16px;font-size:11px;cursor:pointer;background:#fff;font-family:inherit;transition:all 0.15s;color:#444; }
 .laso-radar-btn:hover { border-color:#061A2E;color:#061A2E; }
 .laso-radar-btn.active { background:#061A2E;color:#fff;border-color:#061A2E; }
@@ -273,8 +300,8 @@ const WHEEL_MAP = [{name:'Sự nghiệp',cung:'Quan Lộc',color:'#7EC8E3'},{nam
 // ── Lá số grid ──
 function renderLaSoGrid(container, ls, d) {
   const BC_MAP = {Miếu:'M',Vượng:'V',Đắc:'Đ',Bình:'B',Hãm:'H'};
-  const bc = b => BC_MAP[b] ? `<span style="font-size:8px;opacity:1;color:#7EC8E3;margin-left:1px">(${BC_MAP[b]})</span>` : '';
-  const fmt = (s,cls) => `<span style="font-size:${cls==='chinh'?'11':'9'}px;font-weight:${cls==='chinh'?700:400};display:block;line-height:1.3">${s.ten.toUpperCase()}${bc(s.brightness)}${s.hoa?`<span style="font-size:9px;color:#9A7B3A">[${s.hoa}]</span>`:''}</span>`;
+  const bc = b => BC_MAP[b] ? `<span class="laso-bright">(${BC_MAP[b]})</span>` : '';
+  const fmt = (s,cls) => `<span class="${cls==='chinh'?'laso-star-chinh':'laso-star-phu'}">${s.ten.toUpperCase()}${bc(s.brightness)}${s.hoa?`<span class="laso-hoa">[${s.hoa}]</span>`:''}</span>`;
   const LAYOUT = [5,6,7,8,-1,4,-1,9,3,-1,-1,10,2,1,0,11];
   const dvHT = ls.daiVanHienTai;
   const NAP_AM_FULL = {'Giáp Tý':'Hải Trung Kim','Ất Sửu':'Hải Trung Kim','Bính Dần':'Lô Trung Hỏa','Đinh Mão':'Lô Trung Hỏa','Mậu Thìn':'Đại Lâm Mộc','Kỷ Tỵ':'Đại Lâm Mộc','Canh Ngọ':'Lộ Bàng Thổ','Tân Mùi':'Lộ Bàng Thổ','Nhâm Thân':'Kiếm Phong Kim','Quý Dậu':'Kiếm Phong Kim','Giáp Tuất':'Sơn Đầu Hỏa','Ất Hợi':'Sơn Đầu Hỏa','Bính Tý':'Giản Hạ Thủy','Đinh Sửu':'Giản Hạ Thủy','Mậu Dần':'Thành Đầu Thổ','Kỷ Mão':'Thành Đầu Thổ','Canh Thìn':'Bạch Lạp Kim','Tân Tỵ':'Bạch Lạp Kim','Nhâm Ngọ':'Dương Liễu Mộc','Quý Mùi':'Dương Liễu Mộc','Giáp Thân':'Tuyền Trung Thủy','Ất Dậu':'Tuyền Trung Thủy','Bính Tuất':'Ốc Thượng Thổ','Đinh Hợi':'Ốc Thượng Thổ','Mậu Tý':'Tích Lịch Hỏa','Kỷ Sửu':'Tích Lịch Hỏa','Canh Dần':'Tùng Bách Mộc','Tân Mão':'Tùng Bách Mộc','Nhâm Thìn':'Trường Lưu Thủy','Quý Tỵ':'Trường Lưu Thủy','Giáp Ngọ':'Sa Trung Kim','Ất Mùi':'Sa Trung Kim','Bính Thân':'Sơn Hạ Hỏa','Đinh Dậu':'Sơn Hạ Hỏa','Mậu Tuất':'Bình Địa Mộc','Kỷ Hợi':'Bình Địa Mộc','Canh Tý':'Bích Thượng Thổ','Tân Sửu':'Bích Thượng Thổ','Nhâm Dần':'Kim Bạch Kim','Quý Mão':'Kim Bạch Kim','Giáp Thìn':'Phú Đăng Hỏa','Ất Tỵ':'Phú Đăng Hỏa','Bính Ngọ':'Thiên Hà Thủy','Đinh Mùi':'Thiên Hà Thủy','Mậu Thân':'Đại Dịch Thổ','Kỷ Dậu':'Đại Dịch Thổ','Canh Tuất':'Thoa Xuyến Kim','Tân Hợi':'Thoa Xuyến Kim','Nhâm Tý':'Tang Đố Mộc','Quý Sửu':'Tang Đố Mộc','Giáp Dần':'Đại Khê Thủy','Ất Mão':'Đại Khê Thủy','Bính Thìn':'Sa Trung Thổ','Đinh Tỵ':'Sa Trung Thổ','Mậu Ngọ':'Thiên Thượng Hỏa','Kỷ Mùi':'Thiên Thượng Hỏa','Canh Thân':'Thạch Lựu Mộc','Tân Dậu':'Thạch Lựu Mộc','Nhâm Tuất':'Đại Hải Thủy','Quý Hợi':'Đại Hải Thủy'};
@@ -289,13 +316,18 @@ function renderLaSoGrid(container, ls, d) {
   const grid = document.createElement('div');
   grid.style.cssText = 'display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #ccc;border-left:1px solid #ccc';
 
-  const centerHTML = `<div style="border-right:1px solid #ccc;border-bottom:1px solid #ccc;background:#f5f4f0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;text-align:center;font-size:11px;color:#444">
-    <div style="font-weight:600;color:#061A2E;font-size:13px">${ls.canChiNam||''}</div>
-    <div style="margin:3px 0;font-size:11px">${NAP_AM_FULL[ls.canChiNam]||ls.napAm||''}</div>
-    <div>Cục: ${ls.cuc||''}</div>
-    <div>Mệnh: ${ls.menhDC||''} · Thân: ${ls.thanDC||''}</div>
-    <div style="margin-top:4px;color:#1455A4">Tuổi: ${ls.tuoiXem||''}</div>
-    <div style="color:#1455A4">Năm: ${ls.chiNamXem||''}</div>
+  const centerHTML = `<div style="border-right:1px solid #ccc;border-bottom:1px solid #ccc;background:#f5f4f0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;text-align:center;font-size:11px;color:#444;overflow:auto">
+    <div style="font-size:11px;color:#777;margin-bottom:2px">${d.gioi_tinh==='nu'?'Nữ mệnh':'Nam mệnh'}</div>
+    <div style="font-size:11px;color:#555">${d.ngay_sinh||''}/${d.thang_sinh||''}/${d.nam_sinh||''} DL</div>
+    ${d.gio_chi ? `<div style="font-size:11px;color:#555">Giờ ${d.gio_chi}</div>` : ''}
+    <hr style="width:80%;border:none;border-top:1px solid #ccc;margin:4px 0">
+    <div style="font-weight:600;color:#061A2E;font-size:12px">${ls.canChiNam||''}</div>
+    <div style="font-size:10px;color:#444">${NAP_AM_FULL[ls.canChiNam]||ls.napAm||''}</div>
+    <div style="font-size:10px">Cục: <b>${ls.cuc||''}</b></div>
+    <div style="font-size:10px">Mệnh: <b>${ls.menhDC||''}</b> · Thân: <b>${ls.thanDC||''}</b></div>
+    <hr style="width:80%;border:none;border-top:1px solid #ccc;margin:4px 0">
+    <div style="font-size:10px;color:#1455A4">Tuổi: ${ls.tuoiXem||''}</div>
+    <div style="font-size:10px;color:#1455A4">Năm xem: ${d.nam_xem||''}</div>
   </div>`;
 
   let centerDone = false;
@@ -315,15 +347,13 @@ function renderLaSoGrid(container, ls, d) {
     const vong = (p.stars||[]).filter(s=>s.nhom==='trang_sinh').map(s=>`<span style="font-size:9px;color:#9A7B3A;display:block">${s.ten}</span>`).join('');
     const border = p.isMenh ? '2px solid #9A7B3A' : isCurVan ? '2px solid #1455A4' : '1px solid #ccc';
     grid.insertAdjacentHTML('beforeend', `
-      <div style="border-right:${border};border-bottom:${border};padding:4px 5px;font-size:10px;overflow:hidden;min-height:217px">
-        <div style="display:grid;grid-template-columns:1fr auto 1fr;height:17px;overflow:hidden">
-          <span style="font-size:9px;color:#777">${p.diaChi}</span>
-          <span style="font-size:9px;font-weight:600;color:#061A2E;text-align:center">${p.cungName}</span>
-          <span style="font-size:8px;color:#1455A4;text-align:right">${van}</span>
-        </div>
-        <div style="height:34px;text-align:center;border-bottom:1px solid #eee;padding-bottom:1px;overflow:hidden">${chinh}</div>
-        <div style="height:150px;overflow:hidden">${tot}</div>
-        <div style="height:16px;text-align:center;border-top:1px solid #eee;padding-top:1px;overflow:hidden;font-size:9px;color:#9A7B3A">${vong}</div>
+      <div class="cung-cell-ls ${p.isMenh?'is-menh':''} ${dvHT?.cungIdx===dcI?'cur-van':''}">
+        <div class="cls-can-chi">${p.diaChi}</div>
+        <div class="cls-cung-name">${p.cungName}</div>
+        <div class="cls-dai-van">${van}</div>
+        <div class="cls-chinh">${chinh}</div>
+        <div class="cls-tot">${tot}</div>
+        <div class="cls-trang-sinh">${vong}</div>
       </div>`);
   });
 
