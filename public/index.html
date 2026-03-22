@@ -713,7 +713,7 @@ select.form-input { cursor: pointer; }
   'Cung Mệnh','Cung Phụ Mẫu','Cung Phúc Đức','Cung Điền Trạch',
   'Cung Quan Lộc','Cung Nô Bộc','Cung Thiên Di','Cung Tật Ách',
   'Cung Tài Bạch','Cung Tử Tức','Cung Phu Thê','Cung Huynh Đệ',
-  'Tổng Quan Đại Vận',
+  'Tổng quan đại vận',
   'Đại Vận 1','Đại Vận 2','Đại Vận 3','Đại Vận 4','Đại Vận 5',
   'Đại Vận 6','Đại Vận 7','Đại Vận 8','Đại Vận 9',
   'Tiểu Vận Năm Xem',
@@ -1017,14 +1017,14 @@ select.form-input { cursor: pointer; }
       if (_currentPhan === 14) {
         chartHtml = `
 <div style="margin:24px 0 8px">
-  <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Xu hướng điểm 9 Đại Vận</div>
+  
   <div style="max-width:700px"><canvas id="chart-daivan"></canvas></div>
 </div>
 
 <div style="margin:20px 0 8px">
   <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Timeline Cuộc Đời</div>
   <div id="chart-timeline-wrap" style="position:relative;padding-top:32px">
-    <div id="chart-timeline-blocks" style="display:flex;gap:2px;align-items:flex-end;height:70px"></div>
+    <div id="chart-timeline-blocks" style="display:flex;gap:2px;align-items:flex-end;height:160px"></div>
     <div id="chart-timeline-labels" style="display:flex;margin-top:6px;border-top:1px solid #1e2d42;padding-top:6px"></div>
     <div style="display:flex;gap:12px;margin-top:12px;font-size:11px;color:#666">
       <span><span style="display:inline-block;width:10px;height:10px;background:#1a6b3c;border-radius:2px;margin-right:4px;vertical-align:middle"></span>Tốt (≥7)</span>
@@ -1716,7 +1716,7 @@ select.form-input { cursor: pointer; }
       // ── Render candlestick charts (after section in DOM) ────────
       if (_currentPhan === 14 && _astrolabe?.tieuVanScores?.length) {
         setTimeout(() => {
-          renderCandlestick('candle-90yr', _astrolabe.tieuVanScores, {candleW:9, height:260});
+          renderCandlestick('candle-90yr', _astrolabe.tieuVanScores, {candleW:9, height:360});
         }, 100);
       }
       if (_currentPhan >= 15 && _currentPhan <= 23 && _astrolabe?.tieuVanScores) {
