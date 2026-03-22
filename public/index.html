@@ -1093,31 +1093,6 @@ select.form-input { cursor: pointer; }
           const _dvTong24 = _dvHT24?.scoring?.tong || 0;
           const _dvCol24 = _dvTong24 >= 7 ? '#1FA3D6' : _dvTong24 >= 4 ? '#C9A84C' : '#C0392B';
           chartHtml = `
-<div style="display:grid;grid-template-columns:180px 1fr;gap:24px;align-items:center;margin:20px 0">
-  <canvas id="chart-donut-24" width="180" height="180"></canvas>
-  <div style="display:flex;flex-direction:column;gap:12px;font-size:13px">
-    <div style="font-size:10px;color:#666;letter-spacing:2px;text-transform:uppercase">Tỉ lệ ảnh hưởng năm xem</div>
-    <div style="display:flex;align-items:center;gap:10px">
-      <div style="width:12px;height:12px;background:#2F5BEA;border-radius:2px;flex-shrink:0"></div>
-      <div>
-        <div style="color:#ddd">Đại vận hiện tại</div>
-        <div style="font-size:11px;color:#666">${_dvHT24 ? 'ĐV' + (_astrolabe.daiVans?.indexOf(_dvHT24)+1) + ' · ' + _astrolabe.palaces?.[_dvHT24.cungIdx]?.cungName : ''} · ${_dvTong24}/10 ${_dvHT24?.scoring?.flag||''}</div>
-      </div>
-      <div style="margin-left:auto;font-size:20px;font-weight:700;color:#5FA8D3">70%</div>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px">
-      <div style="width:12px;height:12px;background:#2F5BEA;border-radius:2px;flex-shrink:0"></div>
-      <div>
-        <div style="color:#ddd">Tiểu vận năm xem</div>
-        <div style="font-size:11px;color:#666">Điều chỉnh trong năm</div>
-      </div>
-      <div style="margin-left:auto;font-size:20px;font-weight:700;color:#2A5A7A">30%</div>
-    </div>
-    <div style="padding:10px 12px;background:#F5F5F5;border-radius:8px;border-left:3px solid #c9a84c;font-size:11px;color:#888;line-height:1.6">
-      Đại vận quyết định <b style="color:#ddd">nền tảng</b> của năm, tiểu vận mang tính chất <b style="color:#ddd">điều chỉnh ngắn hạn</b>.
-    </div>
-  </div>
-</div>
 <div style="margin:16px 0 8px">
   <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 3 Năm Kế Tiếp — Tiểu Vận</div>
   <div class="candle-wrap"><div id="candle-3yr"></div></div>
@@ -1468,23 +1443,7 @@ select.form-input { cursor: pointer; }
         }, 200);
       }
 
-      // ── Render Donut phan 24 ──────────────────────────────────────
-      if (_currentPhan === 24 && _astrolabe) {
-        setTimeout(() => {
-          const ctx24 = document.getElementById('chart-donut-24');
-          if (!ctx24) return;
-          const dvTong = _astrolabe.daiVanHienTai?.scoring?.tong || 5;
-          const col24 = dvTong>=7?'#1FA3D6':dvTong>=4?'#2F5BEA':'#C0392B';
-          new Chart(ctx24, {
-            type:'doughnut',
-            data:{
-              labels:['Đại vận (70%)', 'Tiểu vận (30%)'],
-              datasets:[{data:[70,30], backgroundColor:[col24,'#2980b9'], borderColor:['#1e2d42','#1e2d42'], borderWidth:2, hoverOffset:4}],
-            },
-            options:{responsive:false, cutout:'65%', plugins:{legend:{display:false},tooltip:{callbacks:{label:(c)=>` ${c.label}`}}}},
-          });
-        }, 100);
-      }
+      // Donut chart removed
       // Render radar chart phan 1 — 12 góc (mỗi cung 1 góc), tổng điểm
       if (_currentPhan === 1 && _astrolabe?.cungScores) {
         setTimeout(() => {
