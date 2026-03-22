@@ -1780,6 +1780,23 @@ select.form-input { cursor: pointer; }
               chinhTinh:    _astrolabe.palaces?.find(p=>p.isMenh)?.majorStars?.map(s=>s.ten).join(', ') || '',
               napAm:        _astrolabe.napAm,
               renderedHtml: _renderedHtml,
+              astrolabeData: JSON.stringify({
+                cungScores:     _astrolabe.cungScores || null,
+                daiVans:        (_astrolabe.daiVans||[]).slice(0,9).map(dv => ({
+                  diaChi:    dv.diaChi,
+                  tuoiStart: dv.tuoiStart,
+                  tuoiEnd:   dv.tuoiEnd,
+                  cungName:  _astrolabe.palaces?.[dv.cungIdx]?.cungName || '',
+                  scoring:   dv.scoring || null,
+                })),
+                chartData:      _astrolabe._chartData || null,
+                tieuVanScores:  (_astrolabe.tieuVanScores||[]).map(tv => ({
+                  tuoi: tv.tuoi, dvIdx: tv.dvIdx,
+                  open: tv.open, close: tv.close,
+                  high: tv.high, low: tv.low,
+                  direction: tv.direction,
+                })),
+              }),
               cuc:        _astrolabe.cuc,
               luanGiai:   _luanGiaiStore,
               laSoText:   _laSoText,
