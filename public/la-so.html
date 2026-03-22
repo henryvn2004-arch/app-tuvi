@@ -335,7 +335,7 @@ function renderLaSoGrid(container, ls, d) {
   LAYOUT.forEach(dcI => {
     if (dcI === -1) {
       if (!centerDone) { centerDone=true; grid.insertAdjacentHTML('beforeend', centerHTML); }
-      else grid.insertAdjacentHTML('beforeend', '<div style="border-right:1px solid #ccc;border-bottom:1px solid #ccc"></div>');
+      // else: do nothing — center spans 2x2, covers remaining -1 slots
       return;
     }
     const p = ls.palaces[dcI];
