@@ -1753,23 +1753,33 @@ select.form-input { cursor: pointer; }
           });
         }
         try {
+          // Capture rendered HTML — remove sensitive name field
+          const _resultBody = document.getElementById('result-body');
+          let _renderedHtml = '';
+          if (_resultBody) {
+            // Clone and sanitize — remove any input values
+            const _clone = _resultBody.cloneNode(true);
+            _renderedHtml = _clone.innerHTML;
+          }
+
           fetch('/api/save-laso', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              canChiNam:  _astrolabe.canChiNam,
-              gioiTinh:   _gioitinh,
-              namSinh:    _nam,
-              thangSinh:  _thang,
-              ngaySinh:   _ngay,
-              gioIdx:     _astrolabe._conv?.gioIdx ?? null,
-              gioChi:     _astrolabe._conv?.gioChi || '',
-              canNam:     _astrolabe._conv?.canNam || '',
-              chiNam:     _astrolabe._conv?.chiNam || '',
-              namXem:     _namXem,
-              cungMenh:   _astrolabe.menhDC,
-              chinhTinh:  _astrolabe.palaces?.find(p=>p.isMenh)?.majorStars?.map(s=>s.ten).join(', ') || '',
-              napAm:      _astrolabe.napAm,
+              canChiNam:    _astrolabe.canChiNam,
+              gioiTinh:     _gioitinh,
+              namSinh:      _nam,
+              thangSinh:    _thang,
+              ngaySinh:     _ngay,
+              gioIdx:       _astrolabe._conv?.gioIdx ?? null,
+              gioChi:       _astrolabe._conv?.gioChi || '',
+              canNam:       _astrolabe._conv?.canNam || '',
+              chiNam:       _astrolabe._conv?.chiNam || '',
+              namXem:       _namXem,
+              cungMenh:     _astrolabe.menhDC,
+              chinhTinh:    _astrolabe.palaces?.find(p=>p.isMenh)?.majorStars?.map(s=>s.ten).join(', ') || '',
+              napAm:        _astrolabe.napAm,
+              renderedHtml: _renderedHtml,
               cuc:        _astrolabe.cuc,
               luanGiai:   _luanGiaiStore,
               laSoText:   _laSoText,
