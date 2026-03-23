@@ -1080,9 +1080,16 @@ select.form-input { cursor: pointer; }
       let html = `<a id="phan-anchor-${phan}" class="phan-anchor"></a>
         <div class="phan-num">Phần ${phan} / ${TONG_PHAN} — ${PHAN_LABELS[phan]}</div>`;
 
-      // Pre-gen charts HTML (charts riêng theo phan)
+      // Pre-gen charts HTML — đầy đủ cho tất cả 24 phần
+      const PHAN_TO_CUNG_CHART = {
+        2:'Mệnh',3:'Phụ Mẫu',4:'Phúc Đức',5:'Điền Trạch',
+        6:'Quan Lộc',7:'Nô Bộc',8:'Thiên Di',9:'Tật Ách',
+        10:'Tài Bạch',11:'Tử Tức',12:'Phu Thê',13:'Huynh Đệ',
+      };
       let chartHtml = '';
+
       if (phan === 1 && _astrolabe?.cungScores) {
+        // Radar tổng quan + Wheel of Life + Bar 12 cung
         chartHtml = `
         <div id="radar-all-wrap" style="margin:24px 0 16px">
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center">
@@ -1109,9 +1116,24 @@ select.form-input { cursor: pointer; }
           <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Xếp hạng 12 Cung</div>
           <div id="chart-bar-12cung" style="display:flex;flex-direction:column;gap:5px"></div>
         </div>`;
-      } else if (phan === 14 && _astrolabe?.daiVans) {
+
+      } else if (phan >= 2 && phan <= 13 && _astrolabe?.cungScores?.[PHAN_TO_CUNG_CHART[phan]]) {
+        // Radar 6 chiều từng cung + legend
         chartHtml = `
-        <div style="margin:16px 0 8px"><div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Vận Trình Toàn Đời</div>
+        <div style="max-width:360px;margin:16px 0 8px">
+          <canvas id="chart-radar-cung-${phan}"></canvas>
+          <div id="radar-legend-cung-${phan}" style="margin-top:12px;display:grid;grid-template-columns:repeat(2,1fr);gap:6px;font-size:11px"></div>
+        </div>`;
+
+      } else if (phan === 14 && _astrolabe?.daiVans) {
+        // Line chart đại vận + timeline + candlestick 90 năm
+        chartHtml = `
+        <div style="margin:16px 0 8px">
+          <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Vận Trình Toàn Đời</div>
+          <div style="max-width:700px"><canvas id="chart-daivan"></canvas></div>
+        </div>
+        <div style="margin:16px 0 8px">
+          <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Timeline Cuộc Đời</div>
           <div id="chart-timeline-wrap" style="position:relative;padding-top:32px">
             <div id="chart-timeline-blocks" style="display:flex;gap:2px;align-items:flex-end;height:160px"></div>
             <div id="chart-timeline-labels" style="display:flex;margin-top:6px;border-top:1px solid #eee;padding-top:6px"></div>
@@ -1122,15 +1144,25 @@ select.form-input { cursor: pointer; }
             </div>
           </div>
         </div>
-        <div style="margin:20px 0 8px"><div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Tiểu Vận — Toàn Bộ 90 Năm</div>
+        <div style="margin:20px 0 8px">
+          <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Tiểu Vận — Toàn Bộ 90 Năm (Candlestick)</div>
+          <div style="font-size:11px;color:#666;margin-bottom:8px">Mỗi nến = 1 năm · Xanh = nhiều sao tốt · Đỏ = nhiều sao xấu</div>
           <div class="candle-wrap"><div id="candle-90yr"></div></div>
         </div>`;
+
       } else if (phan >= 15 && phan <= 23 && _astrolabe) {
-        chartHtml = `<div style="margin:16px 0 8px"><div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 Tiểu Vận 10 Năm</div>
+        // Candlestick tiểu vận từng đại vận
+        chartHtml = `
+        <div style="margin:16px 0 8px">
+          <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 Tiểu Vận 10 Năm</div>
           <div class="candle-wrap"><div id="candle-dv${phan-14}"></div></div>
         </div>`;
+
       } else if (phan === 24 && _astrolabe) {
-        chartHtml = `<div style="margin:16px 0 8px"><div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 3 Năm Kế Tiếp</div>
+        // Candlestick 3 năm kế tiếp
+        chartHtml = `
+        <div style="margin:16px 0 8px">
+          <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 3 Năm Kế Tiếp — Tiểu Vận</div>
           <div class="candle-wrap"><div id="candle-3yr"></div></div>
         </div>`;
       }
@@ -1170,10 +1202,85 @@ select.form-input { cursor: pointer; }
       body.appendChild(section);
     }
 
-    // Trigger charts sau khi DOM ready
+    // Trigger tất cả charts sau khi DOM ready
     setTimeout(() => {
+      // Phan 1: Radar tổng quan + Wheel of Life + Bar 12 cung
       renderChartsPhan1(_astrolabe);
-      renderTimelinePhan14(_astrolabe);
+
+      // Phan 2–13: Radar 6 chiều từng cung
+      const PHAN_TO_CUNG_R = {
+        2:'Mệnh',3:'Phụ Mẫu',4:'Phúc Đức',5:'Điền Trạch',
+        6:'Quan Lộc',7:'Nô Bộc',8:'Thiên Di',9:'Tật Ách',
+        10:'Tài Bạch',11:'Tử Tức',12:'Phu Thê',13:'Huynh Đệ',
+      };
+      if (_astrolabe?.cungScores) {
+        const METRICS_R = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
+        const METRIC_LABELS_R = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
+        const METRIC_COLORS_R = {tiemNang:'#7EC8E3',benVung:'#5FA8D3',anToan:'#1FA3D6',quyNhan:'#2F5BEA',minhBach:'#233E99',tuongHop:'#142B7A'};
+        const METRIC_DESC_R = {tiemNang:'Tiềm năng phát đạt',benVung:'Bền vững ổn định',anToan:'An toàn ít rủi ro',quyNhan:'Quý nhân hỗ trợ',minhBach:'Cung rõ ràng',tuongHop:'Hài hòa bản mệnh'};
+        for (let p = 2; p <= 13; p++) {
+          const cungName = PHAN_TO_CUNG_R[p];
+          const sc = _astrolabe.cungScores[cungName];
+          if (!sc) continue;
+          const ctx = document.getElementById(`chart-radar-cung-${p}`);
+          if (!ctx) continue;
+          new Chart(ctx, {
+            type:'radar',
+            data:{ labels:METRIC_LABELS_R, datasets:[{
+              label:cungName, data:METRICS_R.map(m=>sc[m]),
+              borderColor:'#c9a84c', backgroundColor:'#c9a84c18',
+              pointBackgroundColor:METRICS_R.map(m=>METRIC_COLORS_R[m]),
+              pointRadius:5, pointHoverRadius:7, borderWidth:2,
+            }]},
+            options:{ responsive:true,
+              scales:{r:{min:0,max:10,ticks:{stepSize:2,font:{size:10},color:'#888',backdropColor:'transparent'},
+                pointLabels:{font:{size:11,weight:'600'},color:'#444'},grid:{color:'#e0e0e0'},angleLines:{color:'#e0e0e0'}}},
+              plugins:{legend:{display:false},
+                title:{display:true,text:`Cung ${cungName} — 6 chiều đánh giá (thang 0-10)`,font:{size:12,weight:'500'},color:'#5FA8D3',padding:{bottom:8}},
+                tooltip:{callbacks:{title:(items)=>METRIC_DESC_R[METRICS_R[items[0].dataIndex]]||items[0].label, label:(ctx)=>` ${ctx.raw}/10 điểm`}}
+              }
+            }
+          });
+          const legendEl = document.getElementById(`radar-legend-cung-${p}`);
+          if (legendEl) {
+            legendEl.innerHTML = METRICS_R.map(m=>`
+              <div style="display:flex;gap:5px;align-items:flex-start;padding:5px 7px;background:#F5F5F5;border-radius:5px;border-left:2px solid ${METRIC_COLORS_R[m]}">
+                <div>
+                  <div style="font-weight:700;color:${METRIC_COLORS_R[m]};font-size:11px">${m==='tiemNang'?'Tiềm Năng':m==='benVung'?'Bền Vững':m==='anToan'?'An Toàn':m==='quyNhan'?'Quý Nhân':m==='minhBach'?'Minh Bạch':'Tương Hợp'} <span style="color:#888;font-weight:400">${sc[m]}/10</span></div>
+                  <div style="font-size:10px;color:#555;margin-top:1px">${METRIC_DESC_R[m]}</div>
+                </div>
+              </div>`).join('');
+          }
+        }
+      }
+
+      // Phan 14: Line chart đại vận + Timeline
+      if (_astrolabe?.daiVans) {
+        const dvs14 = _astrolabe.daiVans.slice(0,9);
+        const chartDvCtx = document.getElementById('chart-daivan');
+        if (chartDvCtx && typeof Chart !== 'undefined') {
+          new Chart(chartDvCtx, {
+            type:'line',
+            data:{
+              labels: dvs14.map((dv,i)=>`ĐV${i+1}
+${dv.tuoiStart}-${dv.tuoiEnd}t`),
+              datasets:[{
+                label:'Điểm Vận', data:dvs14.map(dv=>dv.scoring?.tong||0),
+                borderColor:'#2F5BEA', backgroundColor:'rgba(20,85,164,0.08)',
+                pointBackgroundColor:dvs14.map(dv=>dv.scoring?.tong>=7?'#1FA3D6':dv.scoring?.tong>=5?'#1A3A5C':'#C0392B'),
+                pointRadius:6, tension:0.4, fill:true,
+              }]
+            },
+            options:{
+              responsive:true,
+              plugins:{legend:{display:false},title:{display:true,text:'Vận Trình Toàn Đời',font:{size:15,weight:'bold'},color:'#061A2E'}},
+              scales:{y:{min:0,max:10,title:{display:true,text:'Điểm vận'}},x:{title:{display:true,text:'Đại vận'}}}
+            }
+          });
+        }
+        renderTimelinePhan14(_astrolabe);
+      }
+
       // Candlestick charts
       if (_astrolabe?.tieuVanScores?.length) {
         renderCandlestick('candle-90yr', _astrolabe.tieuVanScores, {candleW:9, height:360});
