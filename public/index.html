@@ -2732,6 +2732,9 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     if (!ls?.cungScores) return;
     const CUNG_ORDER = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
     const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
+    const METRIC_COLORS = {tiemNang:'#c9a84c',benVung:'#1E6B3C',anToan:'#0E7490',quyNhan:'#7B2FBE',minhBach:'#1455A4',tuongHop:'#B04020'};
+    const METRIC_LABELS_VI = {tiemNang:'Tiềm Năng',benVung:'Bền Vững',anToan:'An Toàn',quyNhan:'Quý Nhân',minhBach:'Minh Bạch',tuongHop:'Tương Hợp'};
+    const METRIC_DESC = {tiemNang:'Tiềm năng phát đạt',benVung:'Bền vững ổn định',anToan:'An toàn ít rủi ro',quyNhan:'Quý nhân hỗ trợ',minhBach:'Cung rõ ràng',tuongHop:'Hài hòa bản mệnh'};
     const WHEEL_MAP = [
       {name:'Sự nghiệp',cung:'Quan Lộc',color:'#7EC8E3'},{name:'Tài chính',cung:'Tài Bạch',color:'#5FA8D3'},
       {name:'Tình duyên',cung:'Phu Thê',color:'#1FA3D6'},{name:'Sức khỏe',cung:'Tật Ách',color:'#2F5BEA'},
@@ -2740,7 +2743,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     ];
     const sc = ls.cungScores;
 
-    // Bar 12 cung
+    // ── Bar 12 cung ──
     const barEl = document.getElementById('chart-bar-12cung');
     if (barEl) {
       const sorted = CUNG_ORDER.filter(c=>sc[c]).map(c=>[c,METRICS.reduce((s,m)=>s+(sc[c][m]||0),0)]).sort((a,b)=>b[1]-a[1]);
@@ -2750,7 +2753,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       }).join('');
     }
 
-    // Wheel of Life
+    // ── Wheel of Life ──
     const wheelCtx = document.getElementById('chart-wheel-life');
     if (wheelCtx && typeof Chart !== 'undefined') {
       new Chart(wheelCtx, {
@@ -2772,15 +2775,70 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       }).join('');
     }
 
-    // Radar 12 cung (init với total score)
+    // ── Radar 12 cung — interactive switchMetric ──
     window._radarAllScores = sc;
+
+    // Define switchRadarMetric global tại đây để button onclick hoạt động ngay
+    window.switchRadarMetric = function(metric, btn) {
+      document.querySelectorAll('.radar-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      const _sc = window._radarAllScores;
+      if (!_sc || !window._radarAllChart) return;
+      const isTotal = metric === 'total';
+      const labels = CUNG_ORDER.filter(c => _sc[c]);
+      const data = labels.map(c => isTotal
+        ? METRICS.reduce((s,m) => s+(_sc[c][m]||0), 0)
+        : (_sc[c][metric] || 0)
+      );
+      const maxVal = isTotal ? 60 : 10;
+      const color = isTotal ? '#c9a84c' : METRIC_COLORS[metric];
+      const titleText = isTotal
+        ? 'Tổng điểm 12 cung (max 60 — cao = tốt)'
+        : METRIC_LABELS_VI[metric] + ' — ' + METRIC_DESC[metric];
+      window._radarAllChart.data.labels = labels;
+      window._radarAllChart.data.datasets[0].data = data;
+      window._radarAllChart.data.datasets[0].borderColor = color;
+      window._radarAllChart.data.datasets[0].backgroundColor = color + '25';
+      window._radarAllChart.data.datasets[0].pointBackgroundColor = color;
+      window._radarAllChart.options.scales.r.max = maxVal;
+      window._radarAllChart.options.scales.r.ticks.stepSize = isTotal ? 10 : 2;
+      window._radarAllChart.options.plugins.title.text = titleText;
+      window._radarAllChart.update();
+    };
+
     const radarCtx = document.getElementById('chart-radar-all');
     if (radarCtx && typeof Chart !== 'undefined') {
+      const labels = CUNG_ORDER.filter(c => sc[c]);
+      const totalData = labels.map(c => METRICS.reduce((s,m) => s+(sc[c][m]||0), 0));
       window._radarAllChart = new Chart(radarCtx, {
         type:'radar',
-        data:{ labels:CUNG_ORDER, datasets:[{ data:CUNG_ORDER.map(c=>sc[c]?METRICS.reduce((s,m)=>s+(sc[c][m]||0),0)/6:0), borderColor:'#5FA8D3', backgroundColor:'rgba(95,168,211,0.08)', pointBackgroundColor:'#5FA8D3', pointRadius:4, borderWidth:2 }] },
-        options:{ responsive:true, scales:{r:{min:0,max:10,ticks:{stepSize:2,color:'#aaa',backdropColor:'transparent',font:{size:8}}, pointLabels:{color:'#444',font:{size:10}},grid:{color:'#e0e0e0'},angleLines:{color:'#e0e0e0'}}}, plugins:{legend:{display:false}} }
+        data:{ labels, datasets:[{
+          label:'Tổng điểm', data:totalData,
+          borderColor:'#c9a84c', backgroundColor:'#c9a84c25',
+          pointBackgroundColor:'#c9a84c', pointRadius:4, pointHoverRadius:6, borderWidth:2,
+        }]},
+        options:{ responsive:true,
+          scales:{r:{min:0, max:60, ticks:{stepSize:10,font:{size:10},color:'#888',backdropColor:'transparent'},
+            pointLabels:{font:{size:12,weight:'600'}}, grid:{color:'rgba(0,0,0,0.08)'}, angleLines:{color:'rgba(0,0,0,0.1)'}}},
+          plugins:{legend:{display:false},
+            title:{display:true, text:'Tổng điểm 12 cung (max 60 — cao = tốt)', font:{size:13,weight:'500'}, padding:{bottom:12}},
+            tooltip:{callbacks:{label:(ctx)=>` ${ctx.label}: ${ctx.raw.toFixed(1)} điểm`}}
+          }
+        }
       });
+
+      // Legend 6 metrics — clickable
+      const legendEl = document.getElementById('radar-legend');
+      if (legendEl) {
+        legendEl.innerHTML = METRICS.map(m => `
+          <div style="display:flex;gap:8px;align-items:flex-start;padding:10px 12px;background:#f9f7f2;border-radius:8px;border-left:4px solid ${METRIC_COLORS[m]};cursor:pointer"
+            onclick="switchRadarMetric('${m}', document.querySelector('[data-metric=\'${m}\']'))">
+            <div style="flex:1">
+              <div style="font-weight:600;color:${METRIC_COLORS[m]};font-size:12px">${METRIC_LABELS_VI[m]}</div>
+              <div style="font-size:11px;color:#666;margin-top:3px;line-height:1.4">${METRIC_DESC[m]}</div>
+            </div>
+          </div>`).join('');
+      }
     }
   }
 
