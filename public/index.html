@@ -809,6 +809,19 @@ select.form-input { cursor: pointer; }
   let _gioitinh = null, _namXem = null, _astrolabe = null;
   let _currentPhan = 0;
   let _pendingSlug = null;  // slug tạm trước khi save
+
+  // Chuẩn hóa slug — strip dấu tiếng Việt, chỉ giữ ASCII (dùng nhất quán mọi chỗ)
+  function toSlugAscii(str) {
+    return String(str||'')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')   // strip diacritics
+      .replace(/[đĐ]/g, 'd')
+      .replace(/[^a-z0-9\-]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '')
+      .slice(0, 100);
+  }
   const TONG_PHAN = 24;
   const PHAN_LABELS = [
   '',
@@ -1303,11 +1316,11 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
   // ── Check payment — lock boxes đã render sẵn, chỉ cần unlock nếu đã mua ──
   async function checkAndRenderPaywall() {
     // Tạo slug tạm
-    const tempSlug = [
-      (_astrolabe.canChiNam||'').toLowerCase().replace(/\s+/g,'-'),
+    const tempSlug = toSlugAscii([
+      _astrolabe.canChiNam||'',
       _gioitinh, _nam,
-      'gio-' + (_astrolabe._conv?.gioChi?.toLowerCase() || 'unknown')
-    ].join('-');
+      'gio-' + (_astrolabe._conv?.gioChi || 'unknown')
+    ].join('-'));
     _pendingSlug = tempSlug;
 
     // Check từ URL param (return từ PayPal)
@@ -1375,6 +1388,21 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
   async function initiatePayment() {
     const btn = document.getElementById('btn-paywall-pay');
     if (btn) { btn.disabled = true; btn.innerHTML = '<span>Đang kết nối PayPal...</span>'; }
+
+    // Lưu form data vào sessionStorage — để restore sau khi return từ PayPal
+    try {
+      sessionStorage.setItem('tuvi_pending', JSON.stringify({
+        ngay:     _ngay,
+        thang:    _thang,
+        nam:      _nam,
+        gioIdx:   _astrolabe._conv?.gioIdx ?? null,
+        gioChi:   _astrolabe._conv?.gioChi || '',
+        gioitinh: _gioitinh,
+        namXem:   _namXem,
+        hoTen:    _hoTen || '',
+        slug:     _pendingSlug,
+      }));
+    } catch(e) { console.warn('sessionStorage save failed:', e); }
 
     // Save lá số trước khi redirect (không có luận giải Claude)
     let slug = _pendingSlug;
@@ -3338,92 +3366,83 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
   }
 
   // ── Auto-unlock khi return từ PayPal ──────────────────────────
-  // Nếu URL có ?slug=...&unlocked=1, fetch lá số từ Supabase rồi restore + unlock
+  // Dùng sessionStorage để restore form data, không cần fetch DB
   (async function checkReturnFromPayPal() {
     const p = new URLSearchParams(window.location.search);
-    if (p.get('unlocked') !== '1' || !p.get('slug')) return;
+    if (p.get('unlocked') !== '1') return;
 
-    const slug = p.get('slug');
+    // Lấy form data từ sessionStorage
+    let pending;
+    try {
+      const raw = sessionStorage.getItem('tuvi_pending');
+      if (!raw) {
+        document.getElementById('error-msg').textContent = 'Phiên làm việc đã hết hạn. Vui lòng an sao lại — thanh toán của bạn đã được ghi nhận.';
+        document.getElementById('error-msg').classList.add('active');
+        return;
+      }
+      pending = JSON.parse(raw);
+      sessionStorage.removeItem('tuvi_pending'); // dùng 1 lần
+    } catch(e) { return; }
 
-    // Verify payment trước
+    const slug = toSlugAscii(pending.slug || p.get('slug') || '');
+
+    // Verify payment
     try {
       const r = await fetch(`/api/payment-check?slug=${encodeURIComponent(slug)}`);
       const d = await r.json();
       if (!d.purchased) {
-        // Payment chưa xác nhận — show thông báo
         document.getElementById('error-msg').textContent = 'Đang xác nhận thanh toán, vui lòng chờ 30 giây rồi thử lại...';
         document.getElementById('error-msg').classList.add('active');
         return;
       }
     } catch(e) { return; }
 
-    // Fetch lá số từ Supabase
-    const SUPABASE_URL = 'https://dciwkfdqhhddeymlisey.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
-
-    let row;
+    // Restore state từ sessionStorage và rebuild astrolabe
     try {
-      const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/laso_public?select=*&slug=eq.${encodeURIComponent(slug)}&limit=1`,
-        { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-      );
-      const rows = await res.json();
-      if (!rows?.length) {
-        document.getElementById('error-msg').textContent = 'Không tìm thấy lá số. Vui lòng an sao lại và thanh toán sẽ được nhận ra tự động.';
-        document.getElementById('error-msg').classList.add('active');
-        return;
-      }
-      row = rows[0];
-    } catch(e) { return; }
+      const { ngay, thang, nam, gioIdx, gioChi, gioitinh, namXem, hoTen } = pending;
 
-    // Restore state từ DB
-    try {
-      const astro = JSON.parse(row.astrolabe_data || '{}');
+      // Fill form để user thấy
+      document.getElementById('ngay').value     = ngay  || '';
+      document.getElementById('thang').value    = thang || '';
+      document.getElementById('nam').value      = nam   || '';
+      if (gioIdx !== null) document.getElementById('gio').value = Math.floor(gioIdx / 2);
+      document.getElementById('gioitinh').value = gioitinh || 'nam';
 
-      // Fill form
-      if (row.ngay_sinh) document.getElementById('ngay').value = row.ngay_sinh;
-      if (row.thang_sinh) document.getElementById('thang').value = row.thang_sinh;
-      if (row.nam_sinh) document.getElementById('nam').value = row.nam_sinh;
-      if (row.gio_idx !== null) document.getElementById('gio').value = Math.floor(row.gio_idx / 2);
-      if (row.gioi_tinh) document.getElementById('gioitinh').value = row.gioi_tinh;
-
-      // Rebuild astrolabe từ engine
-      const conv = convertDuongToAm(
-        row.ngay_sinh, row.thang_sinh, row.nam_sinh,
-        row.gio_idx !== null ? row.gio_idx : 0
-      );
-      conv._dl = { day: row.ngay_sinh, month: row.thang_sinh, year: row.nam_sinh };
+      // Rebuild astrolabe từ engine (giống luanGiai())
+      const conv = convertDuongToAm(ngay, thang, nam, gioIdx !== null ? gioIdx : 0);
+      conv._dl = { day: ngay, month: thang, year: nam };
       const ls = anSaoLaSo({
-        ngayAL: conv.amLich.day, thangAL: conv.amLich.month, namAL: row.nam_sinh,
-        canNam: conv.canNam, chiNam: conv.chiNam, gioIdx: conv.gioIdx,
-        gioitinh: row.gioi_tinh, namXem: row.nam_xem || new Date().getFullYear(),
+        ngayAL:   conv.amLich.day,
+        thangAL:  conv.amLich.month,
+        namAL:    nam,
+        canNam:   conv.canNam,
+        chiNam:   conv.chiNam,
+        gioIdx:   conv.gioIdx,
+        gioitinh: gioitinh,
+        namXem:   namXem || new Date().getFullYear(),
       });
       ls._conv = conv;
-      ls._hoTen = '';
+      ls._hoTen = hoTen || '';
 
       // Set global state
-      _hoTen = ''; _ngay = row.ngay_sinh; _thang = row.thang_sinh; _nam = row.nam_sinh;
-      _gioitinh = row.gioi_tinh; _namXem = row.nam_xem || new Date().getFullYear();
+      _hoTen = hoTen || ''; _ngay = ngay; _thang = thang; _nam = nam;
+      _gioitinh = gioitinh; _namXem = namXem || new Date().getFullYear();
       _astrolabe = ls; _pendingSlug = slug;
       _laSoText = formatLaSoV2(ls, conv);
       _currentPhan = 0;
 
-      // Clear result body
+      // Clear result + render
       document.getElementById('result-body').innerHTML = '';
-
-      // Render pre-gen + unlock
       await renderPreGenFree();
       await startClaudeluanGiai();
 
-      // Scroll xuống result
-      document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
-
-      // Clean URL
+      // Scroll + clean URL
+      setTimeout(() => document.getElementById('result-section')?.scrollIntoView({ behavior: 'smooth' }), 300);
       window.history.replaceState({}, '', '/');
 
     } catch(e) {
       console.error('[auto-unlock]', e);
-      document.getElementById('error-msg').textContent = 'Lỗi khôi phục lá số: ' + e.message + '. Vui lòng an sao lại.';
+      document.getElementById('error-msg').textContent = 'Lỗi khôi phục lá số: ' + e.message + '. Vui lòng an sao lại — thanh toán đã được ghi nhận.';
       document.getElementById('error-msg').classList.add('active');
     }
   })();
