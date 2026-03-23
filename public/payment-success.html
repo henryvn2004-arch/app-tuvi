@@ -92,7 +92,7 @@ async function capture() {
     }
 
     // Capture payment
-    const res = await fetch('/api/payment-capture', {
+    const res = await fetch('/api/payment?action=capture', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ orderId: token, slug, userId }),
