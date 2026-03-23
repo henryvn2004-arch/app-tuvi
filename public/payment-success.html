@@ -78,9 +78,21 @@ const payerId = params.get('PayerID'); // PayPal payer ID
 async function capture() {
   const card = document.getElementById('card');
 
+  // Debug: log tất cả URL params
+  console.log('[payment-success] params:', Object.fromEntries(params));
+  console.log('[payment-success] token:', token, 'slug:', slug);
+
   if (!token || !slug) {
-    showError('Thiếu thông tin thanh toán. Vui lòng thử lại.');
-    return;
+    // Fallback: PayPal đôi khi dùng 'orderID' thay vì 'token'
+    const orderID = params.get('orderID') || params.get('order_id');
+    if (orderID && slug) {
+      console.log('[payment-success] Using orderID fallback:', orderID);
+      // reassign token
+      window._paypalToken = orderID;
+    } else {
+      showError('Thiếu thông tin thanh toán. URL params: ' + window.location.search);
+      return;
+    }
   }
 
   try {
@@ -95,7 +107,7 @@ async function capture() {
     const res = await fetch('/api/payment?action=capture', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ orderId: token, slug, userId }),
+      body: JSON.stringify({ orderId: window._paypalToken || token, slug, userId }),
     });
 
     const data = await res.json();
