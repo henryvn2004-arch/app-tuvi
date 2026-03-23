@@ -1858,51 +1858,51 @@ select.form-input { cursor: pointer; }
       const gridEl = document.getElementById('laso-grid');
       if (!gridEl) return;
 
-      // Temporarily hide tên (center-title) for privacy
+      // Temporarily hide tên (center-title) for privacy — done via onclone
       const titleEl = gridEl.querySelector('.center-title');
-      const titleText = titleEl ? titleEl.textContent : '';
-      if (titleEl) titleEl.style.visibility = 'hidden';
 
       const canvas = await html2canvas(gridEl, {
         scale: 2,
         backgroundColor: '#ffffff',
         useCORS: true,
         logging: false,
+        onclone: (doc) => {
+          // Hide tên in cloned doc
+          const t = doc.querySelector('.center-title');
+          if (t) t.style.visibility = 'hidden';
+        }
       });
 
-      // Restore tên
+      // Restore tên (already hidden only in clone)
       if (titleEl) titleEl.style.visibility = '';
 
-      // Add watermark: logo + website
+      // Add watermark bar at bottom
       const ctx = canvas.getContext('2d');
       const W = canvas.width, H = canvas.height;
+      const BAR_H = 56;
 
-      // Watermark bar at bottom
-      ctx.fillStyle = 'rgba(6,26,46,0.88)';
-      ctx.fillRect(0, H - 52, W, 52);
+      // Dark bar
+      ctx.fillStyle = 'rgba(6,26,46,0.92)';
+      ctx.fillRect(0, H - BAR_H, W, BAR_H);
 
-      // Load seal icon
-      const sealImg = new Image();
-      sealImg.crossOrigin = 'anonymous';
-      await new Promise(res => { sealImg.onload = res; sealImg.onerror = res; sealImg.src = '/seal.webp'; });
-      if (sealImg.complete && sealImg.naturalWidth) {
-        ctx.drawImage(sealImg, 16, H - 46, 36, 36);
-      }
-
-      // Website text
+      // Gold text - site name
       ctx.fillStyle = '#c9a84c';
-      ctx.font = 'bold 22px serif';
-      ctx.fillText('紫微明寶', 62, H - 26);
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '18px sans-serif';
-      ctx.fillText('www.tuviminhbao.com', 62, H - 10);
+      ctx.font = `bold ${Math.round(W * 0.022)}px serif`;
+      ctx.textBaseline = 'middle';
+      ctx.fillText('紫微明寶 · Tử Vi Minh Bảo', 20, H - BAR_H + 18);
 
-      // Slug/info at right
-      ctx.fillStyle = 'rgba(255,255,255,0.5)';
-      ctx.font = '14px sans-serif';
+      // White text - URL
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `${Math.round(W * 0.016)}px sans-serif`;
+      ctx.fillText('www.tuviminhbao.com', 20, H - BAR_H + 38);
+
+      // Right side tagline
+      ctx.fillStyle = 'rgba(255,255,255,0.55)';
+      ctx.font = `${Math.round(W * 0.013)}px sans-serif`;
       ctx.textAlign = 'right';
-      ctx.fillText('Tử Vi Minh Bảo — Tri mệnh lý, Thuận thế hành', W - 16, H - 22);
+      ctx.fillText('Tri mệnh lý – Thuận thế hành', W - 16, H - BAR_H + 28);
       ctx.textAlign = 'left';
+      ctx.textBaseline = 'alphabetic';
 
       // Convert to blob and upload
       canvas.toBlob(async (blob) => {
