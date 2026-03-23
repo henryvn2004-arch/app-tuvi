@@ -1026,8 +1026,21 @@ select.form-input { cursor: pointer; }
     let html = `<a id="phan-anchor-free" class="phan-anchor"></a>
       <div class="phan-num">Tổng Quan Lá Số</div>`;
 
-    // Lá số grid
-    html += renderLaSoGrid(_astrolabe);
+    // Render lá số grid dùng displayResult() gốc — đây là function chính xác
+    displayResult(_hoTen, _ngay, _thang, _nam, _gioitinh, _namXem, _astrolabe);
+    // Clone #laso-grid vào section
+    const _lasoGridEl = document.getElementById('laso-grid');
+    if (_lasoGridEl) {
+      const _lasoClone = _lasoGridEl.cloneNode(true);
+      const _lasoWrap = document.createElement('div');
+      _lasoWrap.style.marginBottom = '24px';
+      const _lasoLabel = document.createElement('div');
+      _lasoLabel.className = 'laso-label';
+      _lasoLabel.textContent = 'Lá Số — 12 Cung';
+      _lasoWrap.appendChild(_lasoLabel);
+      _lasoWrap.appendChild(_lasoClone);
+      section.appendChild(_lasoWrap);
+    }
 
     // Charts HTML (phan 1 charts)
     if (_astrolabe?.cungScores) {
@@ -1086,7 +1099,8 @@ select.form-input { cursor: pointer; }
       html += '</div>';
     }
 
-    section.innerHTML = html;
+    // Append charts + cách cục sau lá số grid (đã appendChild ở trên)
+    section.insertAdjacentHTML("beforeend", html);
     body.appendChild(section);
 
     // Trigger charts (reuse existing chart render logic từ loadNextPhan phan 1)
@@ -1097,6 +1111,9 @@ select.form-input { cursor: pointer; }
     }, 150);
 
     document.getElementById('result-section').classList.add('active');
+    document.getElementById('muc-luc')?.classList.add('visible');
+    document.getElementById('result-sidebar')?.classList.add('visible');
+    document.getElementById('result-actions').style.display = 'flex';
   }
 
   // ── Check payment và render paywall hoặc unlock ──
