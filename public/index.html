@@ -1338,7 +1338,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       userId = session?.user?.id || null;
     }
     try {
-      const r = await fetch(`/api/payment-check?slug=${encodeURIComponent(tempSlug)}${userId?'&userId='+userId:''}`);
+      const r = await fetch(`/api/payment?action=check&slug=${encodeURIComponent(tempSlug)}${userId?'&userId='+userId:''}`);
       const d = await r.json();
       if (d.purchased) { await startClaudeluanGiai(); return; }
     } catch(e) {}
@@ -1347,7 +1347,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 
   async function verifyPayment(slug) {
     try {
-      const r = await fetch(`/api/payment-check?slug=${encodeURIComponent(slug)}`);
+      const r = await fetch(`/api/payment?action=check&slug=${encodeURIComponent(slug)}`);
       const d = await r.json();
       return d.purchased === true;
     } catch(e) { return false; }
@@ -1448,7 +1448,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 
     // Tạo PayPal order
     try {
-      const res = await fetch('/api/payment-create', {
+      const res = await fetch('/api/payment?action=create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ slug }),
@@ -3416,7 +3416,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 
     // Verify payment
     try {
-      const r = await fetch(`/api/payment-check?slug=${encodeURIComponent(slug)}`);
+      const r = await fetch(`/api/payment?action=check&slug=${encodeURIComponent(slug)}`);
       const d = await r.json();
       if (!d.purchased) {
         document.getElementById('error-msg').textContent = 'Đang xác nhận thanh toán, vui lòng chờ 30 giây rồi thử lại...';
