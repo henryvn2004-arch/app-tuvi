@@ -51,6 +51,10 @@
     {
       "src": "/(.*)",
       "dest": "/public/$1"
+    },
+    {
+      "src": "/api/upload-laso-image",
+      "dest": "/api/upload-laso-image.js"
     }
   ]
 }
