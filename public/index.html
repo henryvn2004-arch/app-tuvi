@@ -3337,6 +3337,98 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     </svg>`;
   }
 
+  // ── Auto-unlock khi return từ PayPal ──────────────────────────
+  // Nếu URL có ?slug=...&unlocked=1, fetch lá số từ Supabase rồi restore + unlock
+  (async function checkReturnFromPayPal() {
+    const p = new URLSearchParams(window.location.search);
+    if (p.get('unlocked') !== '1' || !p.get('slug')) return;
+
+    const slug = p.get('slug');
+
+    // Verify payment trước
+    try {
+      const r = await fetch(`/api/payment-check?slug=${encodeURIComponent(slug)}`);
+      const d = await r.json();
+      if (!d.purchased) {
+        // Payment chưa xác nhận — show thông báo
+        document.getElementById('error-msg').textContent = 'Đang xác nhận thanh toán, vui lòng chờ 30 giây rồi thử lại...';
+        document.getElementById('error-msg').classList.add('active');
+        return;
+      }
+    } catch(e) { return; }
+
+    // Fetch lá số từ Supabase
+    const SUPABASE_URL = 'https://dciwkfdqhhddeymlisey.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
+
+    let row;
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/laso_public?select=*&slug=eq.${encodeURIComponent(slug)}&limit=1`,
+        { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+      );
+      const rows = await res.json();
+      if (!rows?.length) {
+        document.getElementById('error-msg').textContent = 'Không tìm thấy lá số. Vui lòng an sao lại và thanh toán sẽ được nhận ra tự động.';
+        document.getElementById('error-msg').classList.add('active');
+        return;
+      }
+      row = rows[0];
+    } catch(e) { return; }
+
+    // Restore state từ DB
+    try {
+      const astro = JSON.parse(row.astrolabe_data || '{}');
+
+      // Fill form
+      if (row.ngay_sinh) document.getElementById('ngay').value = row.ngay_sinh;
+      if (row.thang_sinh) document.getElementById('thang').value = row.thang_sinh;
+      if (row.nam_sinh) document.getElementById('nam').value = row.nam_sinh;
+      if (row.gio_idx !== null) document.getElementById('gio').value = Math.floor(row.gio_idx / 2);
+      if (row.gioi_tinh) document.getElementById('gioitinh').value = row.gioi_tinh;
+
+      // Rebuild astrolabe từ engine
+      const conv = convertDuongToAm(
+        row.ngay_sinh, row.thang_sinh, row.nam_sinh,
+        row.gio_idx !== null ? row.gio_idx : 0
+      );
+      conv._dl = { day: row.ngay_sinh, month: row.thang_sinh, year: row.nam_sinh };
+      const ls = anSaoLaSo({
+        ngayAL: conv.amLich.day, thangAL: conv.amLich.month, namAL: row.nam_sinh,
+        canNam: conv.canNam, chiNam: conv.chiNam, gioIdx: conv.gioIdx,
+        gioitinh: row.gioi_tinh, namXem: row.nam_xem || new Date().getFullYear(),
+      });
+      ls._conv = conv;
+      ls._hoTen = '';
+
+      // Set global state
+      _hoTen = ''; _ngay = row.ngay_sinh; _thang = row.thang_sinh; _nam = row.nam_sinh;
+      _gioitinh = row.gioi_tinh; _namXem = row.nam_xem || new Date().getFullYear();
+      _astrolabe = ls; _pendingSlug = slug;
+      _laSoText = formatLaSoV2(ls, conv);
+      _currentPhan = 0;
+
+      // Clear result body
+      document.getElementById('result-body').innerHTML = '';
+
+      // Render pre-gen + unlock
+      await renderPreGenFree();
+      await startClaudeluanGiai();
+
+      // Scroll xuống result
+      document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
+
+      // Clean URL
+      window.history.replaceState({}, '', '/');
+
+    } catch(e) {
+      console.error('[auto-unlock]', e);
+      document.getElementById('error-msg').textContent = 'Lỗi khôi phục lá số: ' + e.message + '. Vui lòng an sao lại.';
+      document.getElementById('error-msg').classList.add('active');
+    }
+  })();
+
+
 </script>
 <footer class="site-footer">
   <div class="footer-top">
