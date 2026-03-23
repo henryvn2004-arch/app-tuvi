@@ -405,6 +405,7 @@ select.form-input { cursor: pointer; }
 <meta name="twitter:image" content="https://tuviminhbao.com/seal.webp">
 <script src="/auth.js"></script>
 <script src="/share.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
@@ -1807,6 +1808,9 @@ select.form-input { cursor: pointer; }
               shareEl.style.cssText = 'margin:16px 0;padding:14px 18px;background:#f0f7ff;border:1px solid #c0d8f0;border-radius:8px;font-size:13px';
               shareEl.innerHTML = `🔗 <b>Link lá số của bạn:</b> <a href="${shareUrl}" target="_blank" style="color:#1455A4">${shareUrl}</a>`;
               document.getElementById('result-body')?.appendChild(shareEl);
+
+              // Capture lá số grid as image
+              _captureLaSoImage(d.slug);
             }
           })
           .catch(e => console.error('[save-laso error]', e)); // log errors
@@ -1846,6 +1850,73 @@ select.form-input { cursor: pointer; }
       document.querySelector('.btn-submit').disabled = false;
       document.getElementById('progress-fill').style.width = '0%';
     }
+  }
+
+  async function _captureLaSoImage(slug) {
+    try {
+      if (typeof html2canvas !== 'function') return;
+      const gridEl = document.getElementById('laso-grid');
+      if (!gridEl) return;
+
+      // Temporarily hide tên (center-title) for privacy
+      const titleEl = gridEl.querySelector('.center-title');
+      const titleText = titleEl ? titleEl.textContent : '';
+      if (titleEl) titleEl.style.visibility = 'hidden';
+
+      const canvas = await html2canvas(gridEl, {
+        scale: 2,
+        backgroundColor: '#ffffff',
+        useCORS: true,
+        logging: false,
+      });
+
+      // Restore tên
+      if (titleEl) titleEl.style.visibility = '';
+
+      // Add watermark: logo + website
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width, H = canvas.height;
+
+      // Watermark bar at bottom
+      ctx.fillStyle = 'rgba(6,26,46,0.88)';
+      ctx.fillRect(0, H - 52, W, 52);
+
+      // Load seal icon
+      const sealImg = new Image();
+      sealImg.crossOrigin = 'anonymous';
+      await new Promise(res => { sealImg.onload = res; sealImg.onerror = res; sealImg.src = '/seal.webp'; });
+      if (sealImg.complete && sealImg.naturalWidth) {
+        ctx.drawImage(sealImg, 16, H - 46, 36, 36);
+      }
+
+      // Website text
+      ctx.fillStyle = '#c9a84c';
+      ctx.font = 'bold 22px serif';
+      ctx.fillText('紫微明寶', 62, H - 26);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '18px sans-serif';
+      ctx.fillText('www.tuviminhbao.com', 62, H - 10);
+
+      // Slug/info at right
+      ctx.fillStyle = 'rgba(255,255,255,0.5)';
+      ctx.font = '14px sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText('Tử Vi Minh Bảo — Tri mệnh lý, Thuận thế hành', W - 16, H - 22);
+      ctx.textAlign = 'left';
+
+      // Convert to blob and upload
+      canvas.toBlob(async (blob) => {
+        if (!blob) return;
+        const formData = new FormData();
+        formData.append('image', blob, slug + '.png');
+        formData.append('slug', slug);
+        try {
+          await fetch('/api/upload-laso-image', { method: 'POST', body: formData });
+          console.log('[laso-image] uploaded');
+        } catch(e) { console.warn('[laso-image] upload failed:', e); }
+      }, 'image/png');
+
+    } catch(e) { console.warn('[laso-image] capture failed:', e); }
   }
 
   function updateMucLuc(phan, status) {
