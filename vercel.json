@@ -1,5 +1,11 @@
 {
   "version": 2,
+  "crons": [
+    { "path": "/api/cron-tai-lieu", "schedule": "0 14 * * *" },
+    { "path": "/api/cron-tai-lieu", "schedule": "15 14 * * *" },
+    { "path": "/api/cron-tai-lieu", "schedule": "30 14 * * *" },
+    { "path": "/api/cron-tai-lieu", "schedule": "45 14 * * *" }
+  ],
   "functions": {
     "api/lasotuvi.js": {
       "maxDuration": 60
@@ -8,6 +14,9 @@
       "maxDuration": 30
     },
     "api/embed.js": {
+      "maxDuration": 60
+    },
+    "api/cron-tai-lieu.js": {
       "maxDuration": 60
     }
   },
@@ -23,6 +32,10 @@
     {
       "src": "/api/embed",
       "dest": "/api/embed.js"
+    },
+    {
+      "src": "/api/cron-tai-lieu",
+      "dest": "/api/cron-tai-lieu.js"
     },
     {
       "src": "/cach_cuc_all.json",
@@ -49,12 +62,12 @@
       "dest": "/public/auth-callback.html"
     },
     {
-      "src": "/(.*)",
-      "dest": "/public/$1"
-    },
-    {
       "src": "/api/upload-laso-image",
       "dest": "/api/upload-laso-image.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/$1"
     }
   ]
 }
