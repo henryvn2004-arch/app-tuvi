@@ -1139,13 +1139,30 @@ select.form-input { cursor: pointer; }
       const preGenHtml = buildPreGenHtml(phan);
       const divider = preGenHtml ? `<div class="pregen-divider"><span>Luận giải</span></div>` : '';
 
-      // Lock box — placeholder cho Claude luận giải
+      // Lock box — paywall box đẹp cho mỗi phần
       const lockBox = `
-        <div class="phan-lock-box" id="lock-box-${phan}">
-          <div class="phan-lock-icon">🔒</div>
-          <div class="phan-lock-title">Mở khóa luận giải phần này</div>
-          <div class="phan-lock-desc">Phân tích chuyên sâu bởi AI Tử Vi Minh Bảo</div>
-          <button class="btn-lock-unlock" onclick="initiatePayment()">Mở khóa đầy đủ 24 phần — $19 →</button>
+        <div class="paywall-gate" id="lock-box-${phan}" style="margin:24px 0 0">
+          <div class="paywall-eyebrow">紫微明寶 · Luận Giải Đầy Đủ</div>
+          <div class="paywall-title">Mở khóa 24 phần luận giải chuyên sâu</div>
+          <div class="paywall-desc">
+            Phân tích toàn diện 12 cung, vận hạn đại vận – tiểu vận, và luận đoán chi tiết
+            được tạo ra riêng cho lá số của bạn bởi AI Tử Vi Minh Bảo.
+          </div>
+          <div class="paywall-features">
+            <div class="paywall-feature">Luận giải 12 cung chi tiết</div>
+            <div class="paywall-feature">Phân tích đại vận toàn đời</div>
+            <div class="paywall-feature">Tiểu vận từng năm</div>
+            <div class="paywall-feature">Cách cục &amp; ý nghĩa sâu</div>
+            <div class="paywall-feature">Lưu vĩnh viễn trong tài khoản</div>
+            <div class="paywall-feature">Chia sẻ lá số với người thân</div>
+          </div>
+          <div class="paywall-price">$19</div>
+          <div class="paywall-price-note">Thanh toán một lần · Truy cập vĩnh viễn</div>
+          <button class="btn-paywall" onclick="initiatePayment()">
+            <span>Xem Luận Giải Đầy Đủ</span>
+            <span style="font-size:16px">→</span>
+          </button>
+          <div class="paywall-secure">🔒 Thanh toán bảo mật qua PayPal · Hoàn tiền nếu lỗi kỹ thuật</div>
         </div>
         <div class="phan-claude-content" id="claude-content-${phan}" style="display:none"></div>`;
 
@@ -1315,12 +1332,16 @@ select.form-input { cursor: pointer; }
 
   // ── Sau khi paid — unlock tất cả lock boxes và load Claude từng phần ──
   async function startClaudeluanGiai() {
-    // Ẩn tất cả lock boxes, show loading placeholder
+    // Ẩn tất cả lock boxes, show loading state
     for (let p = 1; p <= TONG_PHAN; p++) {
       const lockBox = document.getElementById(`lock-box-${p}`);
       if (lockBox) {
-        lockBox.innerHTML = `<div class="phan-lock-icon">⏳</div><div class="phan-lock-title" style="color:#1455A4">Đang tải luận giải phần ${p}...</div>`;
-        lockBox.classList.add('unlocking');
+        lockBox.innerHTML = `
+          <div class="paywall-eyebrow" style="color:#1455A4">Đang xử lý...</div>
+          <div class="paywall-title" style="font-size:18px">⏳ Đang tải luận giải phần ${p}</div>
+          <div class="paywall-desc">AI đang phân tích lá số của bạn, vui lòng chờ...</div>`;
+        lockBox.style.opacity = '0.7';
+        lockBox.style.pointerEvents = 'none';
       }
     }
     // Load Claude lần lượt từng phần
@@ -1379,8 +1400,17 @@ select.form-input { cursor: pointer; }
       document.getElementById('phan-progress').textContent = `Phần ${_currentPhan} / ${TONG_PHAN}`;
 
     } catch(e) {
-      if (lockBox) lockBox.innerHTML = `<div class="phan-lock-icon">❌</div><div class="phan-lock-title" style="color:#C0392B">Lỗi phần ${_currentPhan}: ${e.message}</div><button class="btn-lock-unlock" onclick="retryPhan(${_currentPhan})">Thử lại</button>`;
-      lockBox?.classList.remove('unlocking');
+      if (lockBox) {
+        lockBox.innerHTML = `
+          <div class="paywall-eyebrow" style="color:#C0392B">Lỗi kết nối</div>
+          <div class="paywall-title" style="font-size:18px">❌ Không tải được phần ${_currentPhan}</div>
+          <div class="paywall-desc">${e.message}</div>
+          <button class="btn-paywall" style="margin-top:8px" onclick="retryPhan(${_currentPhan})">
+            <span>Thử lại</span><span style="font-size:16px">↻</span>
+          </button>`;
+        lockBox.style.opacity = '1';
+        lockBox.style.pointerEvents = '';
+      }
     }
 
     // Load phần tiếp theo
