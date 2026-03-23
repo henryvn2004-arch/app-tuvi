@@ -1467,18 +1467,31 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 
   // ── Sau khi paid — unlock tất cả lock boxes và load Claude từng phần ──
   async function startClaudeluanGiai() {
-    // Ẩn tất cả lock boxes, show loading state
+    // Ẩn tất cả lock boxes, show loading state nhẹ
     for (let p = 1; p <= TONG_PHAN; p++) {
       const lockBox = document.getElementById(`lock-box-${p}`);
       if (lockBox) {
         lockBox.innerHTML = `
-          <div class="paywall-eyebrow" style="color:#1455A4">Đang xử lý...</div>
-          <div class="paywall-title" style="font-size:18px">⏳ Đang tải luận giải phần ${p}</div>
-          <div class="paywall-desc">AI đang phân tích lá số của bạn, vui lòng chờ...</div>`;
-        lockBox.style.opacity = '0.7';
+          <div class="paywall-eyebrow" style="color:#1455A4">Chờ luận giải...</div>
+          <div class="paywall-title" style="font-size:16px">⏳ Phần ${p} — đang trong hàng đợi</div>`;
+        lockBox.style.opacity = '0.5';
         lockBox.style.pointerEvents = 'none';
+        lockBox.style.padding = '14px 24px';
       }
     }
+
+    // Show result-actions bar (có nút PDF) — ẩn PDF cho đến khi xong
+    const actionsBar = document.getElementById('result-actions');
+    if (actionsBar) actionsBar.style.display = 'flex';
+    const btnPdf = document.getElementById('btn-pdf');
+    if (btnPdf) btnPdf.style.display = 'none'; // ẩn PDF cho đến khi xong
+
+    // Scroll xuống phần 1 ngay lập tức để user thấy đang load
+    setTimeout(() => {
+      const anchor = document.getElementById('phan-anchor-1');
+      if (anchor) anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 200);
+
     // Load Claude lần lượt từng phần
     _currentPhan = 0;
     await loadNextPhanUnlocked();
@@ -1487,13 +1500,26 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
   // ── Load Claude từng phần sau khi unlock — điền vào claude-content-N ──
   async function loadNextPhanUnlocked() {
     if (_currentPhan >= TONG_PHAN) {
-      // Tất cả xong — save lá số
+      // Tất cả xong
       _saveLaSoAfterUnlock();
+      // Show nút PDF + ẩn progress
+      document.getElementById('btn-pdf').style.display = 'inline-flex';
+      document.getElementById('phan-progress').textContent = '✓ Luận giải hoàn tất';
       return;
     }
     _currentPhan++;
-    const lockBox = document.getElementById(`lock-box-${_currentPhan}`);
+    const lockBox  = document.getElementById(`lock-box-${_currentPhan}`);
     const claudeBox = document.getElementById(`claude-content-${_currentPhan}`);
+
+    // ── 1. Update mục lục: loading ──
+    updateMucLuc(_currentPhan, 'loading');
+    document.getElementById('phan-progress').textContent = `Đang luận giải phần ${_currentPhan} / ${TONG_PHAN}...`;
+
+    // ── 2. Scroll tới phần đang load (chỉ phần 1 scroll mạnh, còn lại smooth nhẹ) ──
+    const anchor = document.getElementById(`phan-anchor-${_currentPhan}`);
+    if (anchor) {
+      anchor.scrollIntoView({ behavior: _currentPhan === 1 ? 'smooth' : 'smooth', block: 'start' });
+    }
 
     try {
       // RAG search
@@ -1523,18 +1549,20 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 
       _luanGiaiStore[_currentPhan] = data.luanGiai || '';
 
-      // Điền content vào claude-box, ẩn lock box
+      // Điền content, ẩn lock box
       if (claudeBox) {
         claudeBox.innerHTML = renderMarkdown(data.luanGiai);
         claudeBox.style.display = '';
       }
       if (lockBox) lockBox.style.display = 'none';
 
-      // Update mục lục
+      // Update mục lục: done + next loading
       updateMucLuc(_currentPhan, 'done');
+      if (_currentPhan < TONG_PHAN) updateMucLuc(_currentPhan + 1, 'active');
       document.getElementById('phan-progress').textContent = `Phần ${_currentPhan} / ${TONG_PHAN}`;
 
     } catch(e) {
+      updateMucLuc(_currentPhan, 'done'); // reset loading icon dù lỗi
       if (lockBox) {
         lockBox.innerHTML = `
           <div class="paywall-eyebrow" style="color:#C0392B">Lỗi kết nối</div>
