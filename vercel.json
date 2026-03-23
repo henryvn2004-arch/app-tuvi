@@ -1,11 +1,12 @@
 {
   "version": 2,
   "crons": [
-    { "path": "/api/cron-tai-lieu",  "schedule": "0 14 * * *" },
-    { "path": "/api/cron-tai-lieu",  "schedule": "15 14 * * *" },
-    { "path": "/api/cron-tai-lieu",  "schedule": "30 14 * * *" },
-    { "path": "/api/cron-tai-lieu",  "schedule": "45 14 * * *" },
-    { "path": "/api/cron-khao-luan", "schedule": "0 15 * * *" }
+    { "path": "/api/cron-tai-lieu",   "schedule": "0 14 * * *" },
+    { "path": "/api/cron-tai-lieu",   "schedule": "15 14 * * *" },
+    { "path": "/api/cron-tai-lieu",   "schedule": "30 14 * * *" },
+    { "path": "/api/cron-tai-lieu",   "schedule": "45 14 * * *" },
+    { "path": "/api/cron-khao-luan",  "schedule": "0 15 * * *" },
+    { "path": "/api/embed-tai-lieu",  "schedule": "30 15 * * *" }
   ],
   "functions": {
     "api/lasotuvi.js":        { "maxDuration": 60 },
@@ -13,6 +14,7 @@
     "api/embed.js":           { "maxDuration": 60 },
     "api/cron-tai-lieu.js":   { "maxDuration": 60 },
     "api/cron-khao-luan.js":  { "maxDuration": 60 },
+    "api/embed-tai-lieu.js":  { "maxDuration": 60 },
     "api/sitemap.js":         { "maxDuration": 15 },
     "api/payment-create.js":  { "maxDuration": 15 },
     "api/payment-capture.js": { "maxDuration": 15 },
@@ -26,6 +28,7 @@
     { "src": "/api/embed",             "dest": "/api/embed.js" },
     { "src": "/api/cron-tai-lieu",     "dest": "/api/cron-tai-lieu.js" },
     { "src": "/api/cron-khao-luan",    "dest": "/api/cron-khao-luan.js" },
+    { "src": "/api/embed-tai-lieu",    "dest": "/api/embed-tai-lieu.js" },
     { "src": "/api/sitemap",           "dest": "/api/sitemap.js" },
     { "src": "/api/payment-create",    "dest": "/api/payment-create.js" },
     { "src": "/api/payment-capture",   "dest": "/api/payment-capture.js" },
