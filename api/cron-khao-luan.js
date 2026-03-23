@@ -55,36 +55,61 @@ async function updateTopicStatus(id, status) {
   });
 }
 
-// RAG: tìm nội dung liên quan trong tai_lieu bằng full-text search
-// (Dùng ilike thay vì pgvector để đơn giản — nếu có embeddings thì upgrade sau)
+// RAG: tìm nội dung liên quan trong tai_lieu bằng pgvector
 async function ragSearch(topic) {
-  // Extract keywords từ topic (lấy các từ dài > 3 ký tự)
-  const keywords = topic
-    .replace(/[?!.,]/g, '')
-    .split(/\s+/)
-    .filter(w => w.length > 3)
-    .slice(0, 5);
+  const OPENAI_KEY = process.env.OPENAI_API_KEY;
 
-  const results = [];
+  // Nếu có OpenAI key → dùng pgvector similarity search
+  if (OPENAI_KEY) {
+    try {
+      // Embed topic query
+      const embedRes = await fetch('https://api.openai.com/v1/embeddings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${OPENAI_KEY}`,
+        },
+        body: JSON.stringify({
+          model: 'text-embedding-3-small',
+          input: topic.slice(0, 8000),
+        }),
+      });
+      if (!embedRes.ok) throw new Error('OpenAI embed failed');
+      const embedData = await embedRes.json();
+      const queryEmbedding = embedData.data[0].embedding;
 
-  for (const kw of keywords.slice(0, 3)) {
-    const r = await sbFetch(
-      `/tai_lieu?content=ilike.*${encodeURIComponent(kw)}*&select=title,excerpt,content&limit=3`
-    );
-    if (r.ok && r.body?.length) {
-      results.push(...r.body);
+      // RPC search_tai_lieu
+      const searchRes = await fetch(`${SUPABASE_URL}/rest/v1/rpc/search_tai_lieu`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+        },
+        body: JSON.stringify({
+          query_embedding: queryEmbedding,
+          match_count: 5,
+          match_threshold: 0.3,
+        }),
+      });
+      if (searchRes.ok) {
+        const results = await searchRes.json();
+        if (results?.length) return results;
+      }
+    } catch(e) {
+      console.warn('[ragSearch] pgvector failed, fallback to ilike:', e.message);
     }
   }
 
-  // Deduplicate by title, lấy tối đa 5 bài
+  // Fallback: ilike keyword search nếu chưa có embeddings
+  const keywords = topic.replace(/[?!.,]/g, '').split(/\s+/).filter(w => w.length > 3).slice(0, 3);
+  const results = [];
+  for (const kw of keywords) {
+    const r = await sbFetch(`/tai_lieu?content=ilike.*${encodeURIComponent(kw)}*&select=title,excerpt,content&limit=3`);
+    if (r.ok && r.body?.length) results.push(...r.body);
+  }
   const seen = new Set();
-  const unique = results.filter(r => {
-    if (seen.has(r.title)) return false;
-    seen.add(r.title);
-    return true;
-  }).slice(0, 5);
-
-  return unique;
+  return results.filter(r => { if (seen.has(r.title)) return false; seen.add(r.title); return true; }).slice(0, 5);
 }
 
 // Generate topic tự động từ tai_lieu nếu queue trống
