@@ -713,8 +713,29 @@ function renderFromHTML(d) {
     });
   }
 
-  // Lá số grid
-  if (_ls?.palaces) renderLaSoGrid(body, _ls, d);
+  // Lá số grid — ưu tiên hiện image nếu có, fallback render từ data
+  if (d.laso_image) {
+    const imgWrap = document.createElement('div');
+    imgWrap.style.cssText = 'margin-bottom:28px';
+    imgWrap.innerHTML = `
+      <div style="font-size:11px;font-weight:600;color:#1455A4;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Lá Số — 12 Cung</div>
+      <img src="${d.laso_image}" alt="Lá số ${d.can_chi_nam}" style="width:100%;max-width:800px;border:1px solid #ccc;border-radius:4px;display:block">
+    `;
+    body.appendChild(imgWrap);
+  } else if (_ls?.palaces) {
+    renderLaSoGrid(body, _ls, d);
+  } else if (_ls) {
+    // Rebuild palaces from engine
+    try {
+      if (d.ngay_sinh && typeof convertDuongToAm === 'function') {
+        const _c = convertDuongToAm(d.ngay_sinh, d.thang_sinh, d.nam_sinh, d.gio_idx);
+        const _e = anSaoLaSo({ ngayAL:_c.amLich.day, thangAL:_c.amLich.month, namAL:d.nam_sinh, canNam:_c.canNam, chiNam:_c.chiNam, gioIdx:_c.gioIdx, gioitinh:d.gioi_tinh, namXem:d.nam_xem||new Date().getFullYear() });
+        _ls.palaces = _e.palaces;
+        _ls.daiVanHienTai = _ls.daiVanHienTai || _e.daiVanHienTai;
+        renderLaSoGrid(body, _ls, d);
+      }
+    } catch(e) { console.warn('Engine fallback:', e); }
+  }
 
   // Render từng phần
   const luan = d.luan_giai || {};
