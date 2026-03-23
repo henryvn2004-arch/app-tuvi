@@ -12,6 +12,18 @@ const SITE_URL      = 'https://www.tuviminhbao.com';
 const PRICE         = '19.00';
 const CURRENCY      = 'USD';
 
+// PayPal chỉ chấp nhận ASCII — strip toàn bộ ký tự non-ASCII
+function toAsciiSlug(str) {
+  return str
+    .normalize('NFD')                          // tách dấu ra khỏi chữ
+    .replace(/[\u0300-\u036f]/g, '')           // xóa dấu
+    .replace(/[đĐ]/g, 'd')                     // đ → d
+    .replace(/[^a-zA-Z0-9\-_]/g, '-')         // ký tự lạ → gạch
+    .replace(/-+/g, '-')                       // gộp nhiều gạch
+    .replace(/^-|-$/g, '')                     // trim gạch đầu/cuối
+    .slice(0, 127);                            // PayPal giới hạn 127 chars
+}
+
 async function getAccessToken() {
   const res = await fetch(`${PAYPAL_BASE}/v1/oauth2/token`, {
     method: 'POST',
@@ -32,6 +44,10 @@ export default async function handler(req, res) {
   const { slug } = req.body || {};
   if (!slug) return res.status(400).json({ error: 'Missing slug' });
 
+  // Sanitize slug — PayPal header/body chỉ chấp nhận ASCII
+  const safeSlug = toAsciiSlug(slug);
+  const idempotencyKey = `tuvi-${safeSlug}-${Date.now()}`;
+
   try {
     const token = await getAccessToken();
 
@@ -40,21 +56,21 @@ export default async function handler(req, res) {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
-        'PayPal-Request-Id': `tuvi-${slug}-${Date.now()}`, // idempotency key
+        'PayPal-Request-Id': idempotencyKey,
       },
       body: JSON.stringify({
         intent: 'CAPTURE',
         purchase_units: [{
-          reference_id: slug,
-          description: `Luận giải Tử Vi đầy đủ — ${slug}`,
+          reference_id: safeSlug,
+          description: `Luan giai Tu Vi day du - ${safeSlug}`,  // ASCII only
           amount: {
             currency_code: CURRENCY,
             value: PRICE,
           },
-          custom_id: slug,
+          custom_id: slug,  // lưu slug gốc (UTF-8) vào custom_id để dùng sau
         }],
         application_context: {
-          brand_name: 'Tử Vi Minh Bảo',
+          brand_name: 'Tu Vi Minh Bao',  // ASCII only
           locale: 'vi-VN',
           landing_page: 'NO_PREFERENCE',
           user_action: 'PAY_NOW',
@@ -66,20 +82,15 @@ export default async function handler(req, res) {
 
     if (!orderRes.ok) {
       const err = await orderRes.json();
-      console.error('[payment-create] PayPal error:', err);
-      throw new Error(err.message || 'PayPal order creation failed');
+      console.error('[payment-create] PayPal error:', JSON.stringify(err));
+      throw new Error(err.details?.[0]?.description || err.message || 'PayPal order creation failed');
     }
 
     const order = await orderRes.json();
-
-    // Lấy approval URL để redirect user
     const approvalUrl = order.links?.find(l => l.rel === 'approve')?.href;
     if (!approvalUrl) throw new Error('No approval URL from PayPal');
 
-    return res.status(200).json({
-      orderId: order.id,
-      approvalUrl,
-    });
+    return res.status(200).json({ orderId: order.id, approvalUrl });
 
   } catch (e) {
     console.error('[payment-create]', e.message);
