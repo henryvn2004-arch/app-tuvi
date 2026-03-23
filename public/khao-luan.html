@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khảo Luận Tử Vi — Tử Vi Minh Bảo</title>
+<meta name="description" content="Bài viết khảo luận về Tử Vi Đẩu Số — Tử Vi Minh Bảo">
+<meta property="og:title" content="Khảo Luận Tử Vi — Tử Vi Minh Bảo">
+<meta property="og:description" content="Bài viết khảo luận về Tử Vi Đẩu Số">
+<meta property="og:image" content="https://www.tuviminhbao.com/seal.webp">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tử Vi Minh Bảo">
+<meta property="og:locale" content="vi_VN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.tuviminhbao.com/seal.webp">
+<link rel="canonical" href="https://www.tuviminhbao.com/khao-luan/">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="apple-touch-icon" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy: #061A2E; --blue: #1455A4; --gold: #9A7B3A; --gold-lt: #F9F4EB;
+  --text: #1a1a1a; --text-mid: #444; --text-lt: #777;
+  --border: #CCCCCC; --bg: #FFFFFF; --bg-soft: #F5F4F0;
+}
+body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+
+/* NAV */
+.topnav { position: sticky; top: 0; z-index: 200; background: var(--navy); display: flex; align-items: center; height: 60px; padding: 0 40px; gap: 32px; }
+.nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.nav-logo img { width:38px; height:38px; object-fit:contain; border-radius:5px; }
+.nav-logo .name { font-size:16px; font-weight:700; color:#CC2200; font-family:Georgia,serif; }
+.nav-logo .url  { font-size:10px; color:#aaa; letter-spacing:0.07em; text-transform:uppercase; }
+.nav-links { display: flex; align-items: center; gap: 4px; }
+.nav-link { color: #8BAACC; font-size: 13px; text-decoration: none; padding: 6px 12px; border-radius: 6px; transition: all 0.15s; }
+.nav-link:hover { color: #fff; background: rgba(255,255,255,0.07); }
+.nav-link.active { color: #c9a84c; }
+.nav-hamburger { display: none; background: none; border: none; color: #8BAACC; cursor: pointer; padding: 8px; font-size: 20px; }
+
+/* BREADCRUMB */
+.breadcrumb { background: var(--bg-soft); border-bottom: 1px solid var(--border); padding: 12px 40px; font-size: 12px; color: var(--text-lt); display: flex; gap: 8px; align-items: center; }
+.breadcrumb a { color: var(--text-lt); text-decoration: none; }
+.breadcrumb a:hover { color: var(--navy); }
+.breadcrumb span { color: var(--border); }
+
+/* LOADING / ERROR */
+.state-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 80px 20px; text-align: center; }
+.spinner { width: 32px; height: 32px; border: 3px solid #e0e0e0; border-top-color: var(--navy); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+
+/* ARTICLE */
+.article-wrap { flex: 1; max-width: 760px; margin: 0 auto; padding: 48px 40px 80px; width: 100%; }
+
+.article-meta { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
+.meta-cat { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); }
+.meta-date { font-size: 11px; color: var(--text-lt); }
+.meta-tag { font-size: 10px; background: var(--bg-soft); color: var(--text-lt); padding: 2px 8px; border-radius: 4px; }
+
+.article-title { font-family: 'Noto Serif', serif; font-size: 32px; color: var(--navy); font-weight: 600; line-height: 1.3; margin-bottom: 14px; }
+.article-excerpt { font-size: 16px; color: var(--text-lt); line-height: 1.75; font-weight: 300; font-style: italic; margin-bottom: 32px; padding-bottom: 32px; border-bottom: 2px solid var(--border); }
+
+/* Markdown content */
+.article-body { font-size: 16px; line-height: 1.9; color: var(--text-mid); font-weight: 300; }
+.article-body h1, .article-body h2 { font-family: 'Noto Serif', serif; color: var(--navy); font-weight: 600; margin: 36px 0 14px; }
+.article-body h1 { font-size: 26px; }
+.article-body h2 { font-size: 21px; padding-top: 24px; border-top: 1px solid var(--border); }
+.article-body h3 { font-size: 17px; font-weight: 600; color: var(--text); margin: 24px 0 10px; }
+.article-body p { margin-bottom: 16px; }
+.article-body strong { color: var(--text); font-weight: 600; }
+.article-body em { color: var(--gold); font-style: italic; }
+.article-body ul, .article-body ol { margin: 12px 0 16px 24px; }
+.article-body li { margin-bottom: 6px; line-height: 1.7; }
+.article-body blockquote { border-left: 3px solid var(--gold); padding: 12px 20px; margin: 20px 0; background: var(--gold-lt); color: var(--text-mid); font-style: italic; border-radius: 0 6px 6px 0; }
+.article-body code { background: var(--bg-soft); padding: 2px 6px; border-radius: 3px; font-family: monospace; font-size: 13px; color: var(--blue); }
+.article-body hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+.article-body a { color: var(--blue); text-decoration: underline; }
+
+/* NAV BOTTOM */
+.article-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); gap: 16px; flex-wrap: wrap; }
+.article-nav a { font-size: 13px; color: var(--blue); text-decoration: none; display: flex; align-items: center; gap: 6px; }
+.article-nav a:hover { color: var(--navy); }
+
+/* FOOTER */
+.site-footer { background:#1A1210; color:rgba(255,255,255,0.5); padding:36px 32px 24px; }
+.footer-top  { display:flex; justify-content:space-between; align-items:flex-start; gap:32px; flex-wrap:wrap; padding-bottom:24px; border-bottom:1px solid rgba(255,255,255,0.08); margin-bottom:20px; }
+.footer-brand { display:flex; align-items:center; gap:10px; }
+.footer-brand img { width:36px; height:36px; object-fit:contain; border-radius:5px; opacity:0.9; }
+.footer-brand-text .name { font-size:14px; font-weight:700; color:rgba(255,255,255,0.85); font-family:Georgia,serif; }
+.footer-brand-text .zh   { font-size:12px; color:#C9A84C; }
+.footer-tagline { font-size:12px; margin-top:8px; color:rgba(255,255,255,0.35); line-height:1.6; }
+.footer-bottom  { display:flex; justify-content:space-between; align-items:center; font-size:11px; color:rgba(255,255,255,0.25); }
+.footer-bottom img { width:20px; height:20px; object-fit:contain; opacity:0.3; border-radius:3px; }
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+@media (max-width:700px) {
+  .topnav { padding: 0 16px; }
+  .nav-links { display:none; position:absolute; top:60px; left:0; right:0; background:var(--navy); flex-direction:column; padding:8px 0 16px; border-bottom:1px solid #1a2a3a; }
+  .nav-links.open { display:flex; }
+  .nav-link { padding:10px 24px; border-radius:0; width:100%; }
+  .nav-hamburger { display:block; margin-left:auto; }
+  .breadcrumb, .article-wrap { padding-left: 16px; padding-right: 16px; }
+}
+</style>
+<script src="/share.js"></script>
+<script src="/auth.js"></script>
+</head>
+<body>
+
+<nav class="topnav">
+  <a class="nav-logo" href="/">
+    <img src="/seal.webp" alt="Tử Vi Minh Bảo">
+    <div><div class="name">Tử Vi Minh Bảo</div><div class="url">Tri mệnh lý – Thuận thế hành</div></div>
+  </a>
+  <div class="nav-links" id="nav-links">
+    <a class="nav-link" href="/">Trang Chủ</a>
+    <a class="nav-link" href="/about.html">Giới Thiệu</a>
+    <a class="nav-link" href="/resources.html">Khảo Luận</a>
+    <a class="nav-link active" href="/blog.html">Khảo Luận</a>
+    <a class="nav-link" href="/menh-kho.html">Mệnh Khố</a>
+    <a class="nav-link" href="/contact.html">Liên Hệ</a>
+  </div>
+  <div id="nav-auth-area" style="margin-left:auto"></div>
+  <button class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')">☰</button>
+</nav>
+
+<div class="breadcrumb" id="breadcrumb">
+  <a href="/">Trang Chủ</a>
+  <span>›</span>
+  <a href="/blog.html">Khảo Luận</a>
+  <span>›</span>
+  <span id="breadcrumb-title">Đang tải...</span>
+</div>
+
+<div id="state-loading" class="state-wrap">
+  <div><div class="spinner"></div><div style="font-size:14px;color:#aaa">Đang tải bài viết...</div></div>
+</div>
+
+<div id="state-error" class="state-wrap" style="display:none">
+  <div>
+    <div style="font-size:40px;margin-bottom:16px">📄</div>
+    <div style="font-family:'Noto Serif',serif;font-size:22px;color:var(--navy);margin-bottom:10px">Không tìm thấy bài viết</div>
+    <div style="font-size:14px;color:var(--text-lt);margin-bottom:24px">Bài viết không tồn tại hoặc đã bị xóa.</div>
+    <a href="/blog.html" style="padding:10px 24px;background:var(--navy);color:#fff;border-radius:6px;font-size:13px;text-decoration:none">← Về Khảo Luận</a>
+  </div>
+</div>
+
+<article class="article-wrap" id="article" style="display:none">
+  <div class="article-meta" id="article-meta"></div>
+  <h1 class="article-title" id="article-title"></h1>
+  <div class="article-excerpt" id="article-excerpt"></div>
+  <div class="article-body" id="article-body"></div>
+  <div class="article-nav">
+    <a href="/blog.html">← Về Khảo Luận</a>
+    <div id="share-article"></div>
+  </div>
+</article>
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand">
+        <img src="/seal.webp" alt="">
+        <div class="footer-brand-text">
+          <div class="name">Tử Vi Minh Bảo</div>
+          <div class="zh">紫微明寶</div>
+        </div>
+      </div>
+      <p class="footer-tagline">Tri mệnh lý – Thuận thế hành<br>Kết hợp kinh điển &amp; công nghệ hiện đại.</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 tuviminhbao.com — All rights reserved</span>
+    <img src="/seal.webp" alt="">
+  </div>
+</footer>
+
+<script>
+const SUPABASE_URL = 'https://dciwkfdqhhddeymlisey.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
+
+// Lấy slug từ path: /khao-luan/slug-bai-viet
+function getSlug() {
+  const path = window.location.pathname;
+  const parts = path.split('/').filter(Boolean);
+  return parts[parts.length - 1] || '';
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleDateString('vi-VN', { year:'numeric', month:'long', day:'numeric' });
+}
+
+function renderMarkdown(text) {
+  if (!text) return '';
+  return text
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/`(.+?)`/g, '<code>$1</code>')
+    .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+    .replace(/^---$/gm, '<hr>')
+    .replace(/^\* (.+)$/gm, '<li>$1</li>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/^(\d+)\. (.+)$/gm, '<li>$2</li>')
+    .replace(/(<li>.*<\/li>\n?)+/g, m => `<ul>${m}</ul>`)
+    .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .split('\n\n')
+    .map(p => p.trim())
+    .filter(p => p && !p.startsWith('<h') && !p.startsWith('<ul') && !p.startsWith('<blockquote') && !p.startsWith('<hr'))
+    .map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`)
+    .join('\n')
+    + text.match(/(<h[123]>.*<\/h[123]>|<ul>.*<\/ul>|<blockquote>.*<\/blockquote>|<hr>)/gs)?.join('\n') || '';
+}
+
+function renderMarkdownFull(text) {
+  if (!text) return '<p>Nội dung đang được cập nhật.</p>';
+  let html = text;
+  // Headers
+  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+  // Bold, italic, code
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  html = html.replace(/`(.+?)`/g, '<code>$1</code>');
+  // Blockquote
+  html = html.replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>');
+  // HR
+  html = html.replace(/^---$/gm, '<hr>');
+  // Links
+  html = html.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  // Lists
+  html = html.replace(/^[\*\-] (.+)$/gm, '<li>$1</li>');
+  html = html.replace(/^(\d+)\. (.+)$/gm, '<li>$2</li>');
+  html = html.replace(/(<li>[\s\S]*?<\/li>)(\n<li>)/g, '$1$2');
+  html = html.replace(/((?:<li>.*<\/li>\n?)+)/g, '<ul>$1</ul>');
+  // Paragraphs — wrap lines not already in block tags
+  const lines = html.split('\n');
+  const result = [];
+  let inBlock = false;
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) { if (!inBlock) result.push(''); continue; }
+    if (/^<(h[123]|ul|ol|li|blockquote|hr|div)/.test(trimmed)) {
+      result.push(trimmed);
+    } else {
+      result.push(`<p>${trimmed}</p>`);
+    }
+  }
+  return result.join('\n');
+}
+
+function updateSEO(article) {
+  const url = `https://www.tuviminhbao.com/khao-luan/${article.slug}`;
+  document.title = `${article.title} — Tử Vi Minh Bảo`;
+  document.querySelector('meta[name="description"]')?.setAttribute('content', article.excerpt || article.title);
+  document.querySelector('meta[property="og:title"]')?.setAttribute('content', article.title);
+  document.querySelector('meta[property="og:description"]')?.setAttribute('content', article.excerpt || article.title);
+  document.querySelector('meta[property="og:url"]')?.setAttribute('content', url);
+  document.querySelector('link[rel="canonical"]')?.setAttribute('href', url);
+
+  // JSON-LD
+  const ld = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    'headline': article.title,
+    'description': article.excerpt || '',
+    'url': url,
+    'datePublished': article.created_at,
+    'inLanguage': 'vi',
+    'author': { '@type': 'Organization', 'name': 'Tử Vi Minh Bảo', 'url': 'https://www.tuviminhbao.com' },
+    'publisher': { '@type': 'Organization', 'name': 'Tử Vi Minh Bảo', 'logo': { '@type': 'ImageObject', 'url': 'https://www.tuviminhbao.com/seal.webp' } },
+    'keywords': (article.tags || []).join(', '),
+  };
+  let ldScript = document.querySelector('script[type="application/ld+json"]');
+  if (!ldScript) { ldScript = document.createElement('script'); ldScript.type = 'application/ld+json'; document.head.appendChild(ldScript); }
+  ldScript.textContent = JSON.stringify(ld);
+}
+
+async function load() {
+  const slug = getSlug();
+  if (!slug || slug === 'khao-luan') {
+    window.location.href = '/blog.html';
+    return;
+  }
+
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/khao_luan?select=*&slug=eq.${encodeURIComponent(slug)}&limit=1`,
+      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+    );
+    const rows = await res.json();
+    if (!rows?.length) { showError(); return; }
+    render(rows[0]);
+  } catch(e) { showError(); }
+}
+
+function showError() {
+  document.getElementById('state-loading').style.display = 'none';
+  document.getElementById('state-error').style.display = 'flex';
+}
+
+function render(d) {
+  document.getElementById('state-loading').style.display = 'none';
+  document.getElementById('article').style.display = 'block';
+
+  // Breadcrumb
+  document.getElementById('breadcrumb-title').textContent = d.title;
+
+  // Meta
+  document.getElementById('article-meta').innerHTML = [
+    d.category ? `<span class="meta-cat">${d.category}</span>` : '',
+    d.created_at ? `<span class="meta-date">${formatDate(d.created_at)}</span>` : '',
+    ...(d.tags || []).slice(0, 3).map(t => `<span class="meta-tag">${t}</span>`),
+  ].filter(Boolean).join('');
+
+  document.getElementById('article-title').textContent = d.title;
+  if (d.excerpt) document.getElementById('article-excerpt').textContent = d.excerpt;
+  else document.getElementById('article-excerpt').style.display = 'none';
+
+  document.getElementById('article-body').innerHTML = renderMarkdownFull(d.content || '');
+
+  // Share
+  if (window.ShareButtons) {
+    ShareButtons.render('share-article', {
+      url: window.location.href,
+      title: d.title + ' — Tử Vi Minh Bảo',
+      text: d.excerpt || d.title,
+    });
+  }
+
+  // SEO
+  updateSEO(d);
+}
+
+load();
+</script>
+</body>
+</html>
