@@ -1,45 +1,150 @@
 {
   "version": 2,
   "crons": [
-    { "path": "/api/cron-tai-lieu",  "schedule": "0 14 * * *" },
-    { "path": "/api/cron-tai-lieu",  "schedule": "15 14 * * *" },
-    { "path": "/api/cron-tai-lieu",  "schedule": "30 14 * * *" },
-    { "path": "/api/cron-tai-lieu",  "schedule": "45 14 * * *" },
-    { "path": "/api/cron-khao-luan", "schedule": "0 15 * * *" },
-    { "path": "/api/embed-tai-lieu", "schedule": "30 15 * * *" }
+    {
+      "path": "/api/cron-tai-lieu",
+      "schedule": "0 14 * * *"
+    },
+    {
+      "path": "/api/cron-tai-lieu",
+      "schedule": "15 14 * * *"
+    },
+    {
+      "path": "/api/cron-tai-lieu",
+      "schedule": "30 14 * * *"
+    },
+    {
+      "path": "/api/cron-tai-lieu",
+      "schedule": "45 14 * * *"
+    },
+    {
+      "path": "/api/cron-khao-luan",
+      "schedule": "0 15 * * *"
+    },
+    {
+      "path": "/api/embed-tai-lieu",
+      "schedule": "30 15 * * *"
+    }
   ],
   "functions": {
-    "api/lasotuvi.js":       { "maxDuration": 60 },
-    "api/search.js":         { "maxDuration": 30 },
-    "api/embed.js":          { "maxDuration": 60 },
-    "api/save-laso.js":      { "maxDuration": 30 },
-    "api/get-laso.js":       { "maxDuration": 10 },
-    "api/upload-laso-image.js": { "maxDuration": 30 },
-    "api/cron-tai-lieu.js":  { "maxDuration": 60 },
-    "api/cron-khao-luan.js": { "maxDuration": 60 },
-    "api/embed-tai-lieu.js": { "maxDuration": 60 },
-    "api/sitemap.js":        { "maxDuration": 15 },
-    "api/payment.js":        { "maxDuration": 15 }
+    "api/lasotuvi.js": {
+      "maxDuration": 60
+    },
+    "api/search.js": {
+      "maxDuration": 30
+    },
+    "api/embed.js": {
+      "maxDuration": 60
+    },
+    "api/save-laso.js": {
+      "maxDuration": 30
+    },
+    "api/get-laso.js": {
+      "maxDuration": 10
+    },
+    "api/upload-laso-image.js": {
+      "maxDuration": 30
+    },
+    "api/cron-tai-lieu.js": {
+      "maxDuration": 60
+    },
+    "api/cron-khao-luan.js": {
+      "maxDuration": 60
+    },
+    "api/embed-tai-lieu.js": {
+      "maxDuration": 60
+    },
+    "api/sitemap.js": {
+      "maxDuration": 15
+    },
+    "api/payment.js": {
+      "maxDuration": 15
+    }
   },
   "routes": [
-    { "src": "/sitemap.xml",           "dest": "/api/sitemap.js" },
-    { "src": "/robots.txt",            "dest": "/public/robots.txt" },
-    { "src": "/api/lasotuvi",          "dest": "/api/lasotuvi.js" },
-    { "src": "/api/search",            "dest": "/api/search.js" },
-    { "src": "/api/embed",             "dest": "/api/embed.js" },
-    { "src": "/api/cron-tai-lieu",     "dest": "/api/cron-tai-lieu.js" },
-    { "src": "/api/cron-khao-luan",    "dest": "/api/cron-khao-luan.js" },
-    { "src": "/api/embed-tai-lieu",    "dest": "/api/embed-tai-lieu.js" },
-    { "src": "/api/sitemap",           "dest": "/api/sitemap.js" },
-    { "src": "/api/payment",           "dest": "/api/payment.js" },
-    { "src": "/payment-success",       "dest": "/public/payment-success.html" },
-    { "src": "/cach_cuc_all.json",     "dest": "/public/cach_cuc_all.json" },
-    { "src": "/tuvi-ansao-engine.js",  "dest": "/public/tuvi-ansao-engine.js" },
-    { "src": "/tuvi-engine.js",        "dest": "/public/tuvi-engine.js" },
-    { "src": "/api/save-laso",         "dest": "/api/save-laso.js" },
-    { "src": "/api/get-laso",          "dest": "/api/get-laso.js" },
-    { "src": "/auth-callback",         "dest": "/public/auth-callback.html" },
-    { "src": "/api/upload-laso-image", "dest": "/api/upload-laso-image.js" },
-    { "src": "/(.*)",                  "dest": "/public/$1" }
+    {
+      "src": "/sitemap.xml",
+      "dest": "/api/sitemap.js"
+    },
+    {
+      "src": "/robots.txt",
+      "dest": "/public/robots.txt"
+    },
+    {
+      "src": "/api/lasotuvi",
+      "dest": "/api/lasotuvi.js"
+    },
+    {
+      "src": "/api/search",
+      "dest": "/api/search.js"
+    },
+    {
+      "src": "/api/embed",
+      "dest": "/api/embed.js"
+    },
+    {
+      "src": "/api/cron-tai-lieu",
+      "dest": "/api/cron-tai-lieu.js"
+    },
+    {
+      "src": "/api/cron-khao-luan",
+      "dest": "/api/cron-khao-luan.js"
+    },
+    {
+      "src": "/api/embed-tai-lieu",
+      "dest": "/api/embed-tai-lieu.js"
+    },
+    {
+      "src": "/api/sitemap",
+      "dest": "/api/sitemap.js"
+    },
+    {
+      "src": "/api/payment",
+      "dest": "/api/payment.js"
+    },
+    {
+      "src": "/payment-success",
+      "dest": "/public/payment-success.html"
+    },
+    {
+      "src": "/cach_cuc_all.json",
+      "dest": "/public/cach_cuc_all.json"
+    },
+    {
+      "src": "/tuvi-ansao-engine.js",
+      "dest": "/public/tuvi-ansao-engine.js"
+    },
+    {
+      "src": "/tuvi-engine.js",
+      "dest": "/public/tuvi-engine.js"
+    },
+    {
+      "src": "/api/save-laso",
+      "dest": "/api/save-laso.js"
+    },
+    {
+      "src": "/api/get-laso",
+      "dest": "/api/get-laso.js"
+    },
+    {
+      "src": "/auth-callback",
+      "dest": "/public/auth-callback.html"
+    },
+    {
+      "src": "/api/upload-laso-image",
+      "dest": "/api/upload-laso-image.js"
+    },
+    {
+      "src": "/tai-lieu/(.*)",
+      "dest": "/public/tai-lieu.html"
+    },
+    {
+      "src": "/khao-luan/(.*)",
+      "dest": "/public/khao-luan.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/$1"
+    }
   ]
 }
