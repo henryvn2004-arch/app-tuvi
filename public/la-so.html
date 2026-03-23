@@ -194,13 +194,23 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 .nhanh-loading { font-size:14px; color:#444; line-height:1.8; }
 .laso-wrap,.result-header,.result-info-bar { margin-bottom:16px; }
 </style>
-<meta property="og:title" content="Tử Vi Minh Bảo – Lá số tử vi chính xác">
-<meta property="og:description" content="Tri mệnh lý – Thuận thế hành. Tử vi đẩu số theo cổ pháp, luận giải bằng trí tuệ nhân tạo.">
-<meta property="og:image" content="https://tuviminhbao.com/seal.webp">
-<meta property="og:url" content="https://tuviminhbao.com/la-so.html">
-<meta property="og:type" content="website">
+<!-- SEO: static fallback — sẽ được override bởi updateSEOMeta() sau khi fetch data -->
+<meta name="description" content="Luận giải lá số Tử Vi Đẩu Số chuyên sâu — Tử Vi Minh Bảo. Tri mệnh lý – Thuận thế hành.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.tuviminhbao.com/la-so.html">
+<meta property="og:title" content="Lá Số Tử Vi — Tử Vi Minh Bảo">
+<meta property="og:description" content="Luận giải lá số Tử Vi Đẩu Số chuyên sâu. Tri mệnh lý – Thuận thế hành.">
+<meta property="og:image" content="https://www.tuviminhbao.com/seal.webp">
+<meta property="og:image:width" content="400">
+<meta property="og:image:height" content="400">
+<meta property="og:url" content="https://www.tuviminhbao.com/la-so.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Tử Vi Minh Bảo">
+<meta property="og:locale" content="vi_VN">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://tuviminhbao.com/seal.webp">
+<meta name="twitter:title" content="Lá Số Tử Vi — Tử Vi Minh Bảo">
+<meta name="twitter:description" content="Luận giải lá số Tử Vi Đẩu Số chuyên sâu.">
+<meta name="twitter:image" content="https://www.tuviminhbao.com/seal.webp">
 <script src="/share.js"></script>
 <script src="/auth.js"></script>
 </head>
@@ -651,7 +661,112 @@ function showError() {
   document.getElementById('error-state').style.display = 'flex';
 }
 
+// ── Dynamic SEO meta injection ──────────────────────────────────
+function updateSEOMeta(d) {
+  const gt = d.gioi_tinh === 'nu' ? 'Nữ mệnh' : 'Nam mệnh';
+  const canChi = d.can_chi_nam || '';
+  const cungMenh = d.cung_menh || '';
+  const chinhTinh = d.chinh_tinh || '';
+  const napAm = d.nap_am || '';
+  const namSinh = d.nam_sinh || '';
+  const gioChi = d.gio_chi ? ` · Giờ ${d.gio_chi}` : '';
+  const slug = d.slug || '';
+
+  // Canonical URL
+  const canonicalUrl = `https://www.tuviminhbao.com/la-so.html?slug=${encodeURIComponent(slug)}`;
+
+  // Title: tên can chi + cung mệnh + chính tinh
+  const pageTitle = `Lá Số ${canChi} – ${gt} ${namSinh}${gioChi} | Cung Mệnh ${cungMenh}, ${chinhTinh} — Tử Vi Minh Bảo`;
+
+  // Description: trích từ luan_giai phần 1 nếu có, fallback generic
+  let desc = `Luận giải lá số Tử Vi ${canChi} · ${gt} · Năm sinh ${namSinh}${gioChi}. Cung Mệnh ${cungMenh}, Chính Tinh ${chinhTinh}, Bản Mệnh ${napAm}. Phân tích chuyên sâu bởi Tử Vi Minh Bảo.`;
+  if (d.luan_giai) {
+    try {
+      const lg = typeof d.luan_giai === 'string' ? JSON.parse(d.luan_giai) : d.luan_giai;
+      const p1 = lg['1'] || lg[1] || '';
+      if (p1 && p1.length > 60) {
+        // Lấy 155 ký tự đầu, cắt ở word boundary
+        const raw = p1.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+        desc = raw.length > 155 ? raw.slice(0, 152) + '…' : raw;
+      }
+    } catch(e) {}
+  }
+
+  // OG image: dùng laso_image nếu có, fallback seal
+  const ogImage = d.laso_image
+    ? d.laso_image
+    : 'https://www.tuviminhbao.com/seal.webp';
+
+  // ── Update title ──
+  document.title = pageTitle;
+
+  // ── Helper: upsert meta tag ──
+  function setMeta(sel, attr, val) {
+    let el = document.querySelector(sel);
+    if (!el) { el = document.createElement('meta'); document.head.appendChild(el); }
+    el.setAttribute(attr, val);
+  }
+  function setProp(prop, val) { setMeta(`meta[property="${prop}"]`, 'content', val); }
+  function setName(name, val) { setMeta(`meta[name="${name}"]`, 'content', val); }
+
+  // ── Standard meta ──
+  setName('description', desc);
+  setName('robots', 'index, follow');
+
+  // ── Canonical ──
+  let canonical = document.querySelector('link[rel="canonical"]');
+  if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
+  canonical.href = canonicalUrl;
+
+  // ── Open Graph ──
+  setProp('og:title', pageTitle);
+  setProp('og:description', desc);
+  setProp('og:image', ogImage);
+  setProp('og:image:width', '800');
+  setProp('og:image:height', '800');
+  setProp('og:url', canonicalUrl);
+  setProp('og:type', 'article');
+  setProp('og:site_name', 'Tử Vi Minh Bảo');
+  setProp('og:locale', 'vi_VN');
+
+  // ── Twitter Card ──
+  setName('twitter:card', d.laso_image ? 'summary_large_image' : 'summary');
+  setName('twitter:title', pageTitle);
+  setName('twitter:description', desc);
+  setName('twitter:image', ogImage);
+
+  // ── JSON-LD Structured Data (AEO) ──
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    'headline': pageTitle,
+    'description': desc,
+    'url': canonicalUrl,
+    'image': ogImage,
+    'inLanguage': 'vi',
+    'author': {
+      '@type': 'Organization',
+      'name': 'Tử Vi Minh Bảo',
+      'url': 'https://www.tuviminhbao.com'
+    },
+    'publisher': {
+      '@type': 'Organization',
+      'name': 'Tử Vi Minh Bảo',
+      'logo': { '@type': 'ImageObject', 'url': 'https://www.tuviminhbao.com/seal.webp' }
+    },
+    'mainEntityOfPage': { '@type': 'WebPage', '@id': canonicalUrl },
+    'keywords': [canChi, cungMenh, chinhTinh, napAm, 'tử vi đẩu số', 'lá số tử vi', 'luận giải tử vi'].filter(Boolean).join(', ')
+  };
+
+  let ldScript = document.querySelector('script[type="application/ld+json"]');
+  if (!ldScript) { ldScript = document.createElement('script'); ldScript.type = 'application/ld+json'; document.head.appendChild(ldScript); }
+  ldScript.textContent = JSON.stringify(jsonLd);
+}
+
 function renderFromHTML(d) {
+  // Update dynamic SEO meta tags
+  updateSEOMeta(d);
+
   // Use astrolabe_data for full re-render (not rendered_html)
   const gt = d.gioi_tinh === 'nu' ? 'Nữ mệnh' : 'Nam mệnh';
   document.title = `Lá Số ${d.can_chi_nam} · ${gt} · ${d.nam_sinh} — Tử Vi Minh Bảo`;
