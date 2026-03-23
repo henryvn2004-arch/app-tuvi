@@ -21,21 +21,52 @@ let _user    = null;
     if (raw) {
       const s = JSON.parse(raw);
       if (s && s.access_token && s.expires_at > Date.now() / 1000) {
+        // Session còn hạn
         _session = s;
         _user = JSON.parse(localStorage.getItem(USER_KEY) || 'null');
+      } else if (s && s.refresh_token) {
+        // Hết hạn nhưng có refresh token — tự gia hạn ngầm
+        _refreshSession(s.refresh_token);
       } else {
         localStorage.removeItem(SESSION_KEY);
         localStorage.removeItem(USER_KEY);
       }
     }
   } catch(e) {}
-  // Run after DOM ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', updateNavUI);
   } else {
     updateNavUI();
   }
 })();
+
+// ── Refresh session silently ──
+  async function _refreshSession(refreshToken) {
+    try {
+      const res = await fetch(SUPA_URL + '/auth/v1/token?grant_type=refresh_token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'apikey': SUPA_KEY },
+        body: JSON.stringify({ refresh_token: refreshToken }),
+      });
+      if (!res.ok) {
+        localStorage.removeItem(SESSION_KEY);
+        localStorage.removeItem(USER_KEY);
+        updateNavUI();
+        return;
+      }
+      const data = await res.json();
+      if (data.access_token) {
+        _session = data;
+        _user = data.user || null;
+        localStorage.setItem(SESSION_KEY, JSON.stringify(data));
+        if (_user) localStorage.setItem(USER_KEY, JSON.stringify(_user));
+        updateNavUI();
+        // Auto-refresh 5 min before next expiry
+        const msLeft = (data.expires_at - Date.now() / 1000 - 300) * 1000;
+        if (msLeft > 0) setTimeout(() => _refreshSession(data.refresh_token), msLeft);
+      }
+    } catch(e) { console.warn('[auth] refresh failed:', e); }
+  }
 
 // ── Public API ──
 window.Auth = {
