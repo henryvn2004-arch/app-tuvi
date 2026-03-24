@@ -17,7 +17,7 @@ const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
 // Tổng số trang list trên cohoc.net
 const TOTAL_PAGES = 846;
 // Số bài xử lý mỗi lần cron trigger
-const BATCH_SIZE = 4;
+const BATCH_SIZE = 2; // Giảm xuống 2 để fit trong 60s maxDuration
 
 // ── Supabase helpers ──────────────────────────────────────────────
 
@@ -211,7 +211,7 @@ export default async function handler(req, res) {
     // 4. Xử lý từng bài tuần tự (tránh timeout do parallel)
     for (const item of shuffled) {
       // Check timeout: còn < 3s thì dừng
-      if (Date.now() - startTime > 7000) {
+      if (Date.now() - startTime > 50000) {
         console.log('[cron-tai-lieu] Near timeout, stopping early');
         break;
       }
@@ -260,8 +260,8 @@ export default async function handler(req, res) {
         results.processed++;
 
       } catch (e) {
-        console.error(`[cron-tai-lieu] Bài lỗi: ${e.message}`);
-        results.errors.push(e.message.slice(0, 100));
+        console.error(`[cron-tai-lieu] Bài lỗi (${item?.url}): ${e.message}`);
+        results.errors.push(`${item?.title?.slice(0,30)}: ${e.message.slice(0, 80)}`);
       }
     }
 
