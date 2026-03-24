@@ -37,7 +37,7 @@ async function supabaseFetch(path, options = {}) {
 
 // Lấy cursor hiện tại (trang nào đang crawl đến)
 async function getCursor() {
-  const r = await supabaseFetch('/cron_state?key=eq.taili eu_cursor&select=value&limit=1');
+  const r = await supabaseFetch('/cron_state?key=eq.tailieu_cursor&select=value&limit=1');
   if (r.ok && r.body && r.body.length > 0) {
     return parseInt(r.body[0].value) || 1;
   }
@@ -49,7 +49,7 @@ async function saveCursor(page) {
   await supabaseFetch('/cron_state', {
     method: 'POST',
     headers: { 'Prefer': 'resolution=merge-duplicates' },
-    body: JSON.stringify({ key: 'taili eu_cursor', value: String(page) }),
+    body: JSON.stringify({ key: 'tailieu_cursor', value: String(page) }),
   });
 }
 
@@ -79,13 +79,20 @@ async function insertArticle(article) {
 // ── Crawl helpers ─────────────────────────────────────────────────
 
 async function fetchHtml(url) {
-  // Thử direct fetch trước (Vercel server-side không cần CORS proxy)
-  const res = await fetch(url, {
-    headers: { 'User-Agent': 'Mozilla/5.0 (compatible; TuviMinhBao/1.0)' },
-    signal: AbortSignal.timeout(5000),
-  });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return await res.text();
+  // Dùng proxy để bypass firewall cohoc.net
+  const proxies = [
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+    `https://corsproxy.io/?${encodeURIComponent(url)}`,
+  ];
+  for (const proxyUrl of proxies) {
+    try {
+      const res = await fetch(proxyUrl, {
+        signal: AbortSignal.timeout(8000),
+      });
+      if (res.ok) return await res.text();
+    } catch(e) { /* try next */ }
+  }
+  throw new Error(`All proxies failed for: ${url}`);
 }
 
 function parseListPage(html) {
