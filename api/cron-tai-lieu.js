@@ -95,12 +95,25 @@ async function fetchHtml(url) {
   throw new Error(`All proxies failed for: ${url}`);
 }
 
-function parseListPage(html) {
-  // Extract h3 > a links từ list page
+function parseListPage(text) {
   const links = [];
-  const regex = /<h3[^>]*><a[^>]+href="([^"]+)"[^>]*>([^<]+)<\/a>/gi;
+
+  // Format 1: Markdown ### [title](url) — từ proxy text
+  const mdRegex = /###\s+\[([^\]]+)\]\(([^)]+)\)/g;
   let m;
-  while ((m = regex.exec(html)) !== null) {
+  while ((m = mdRegex.exec(text)) !== null) {
+    const title = m[1].trim();
+    const href = m[2].trim();
+    if (href.includes('-nid-') || href.includes('cohoc.net')) {
+      const url = href.startsWith('http') ? href : `${COHOC_BASE}/${href.replace(/^\//, '')}`;
+      links.push({ url, title });
+    }
+  }
+  if (links.length > 0) return links;
+
+  // Format 2: Raw HTML <h3><a href="...">title</a></h3>
+  const htmlRegex = /<h3[^>]*><a[^>]+href="([^"]+)"[^>]*>([^<]+)<\/a>/gi;
+  while ((m = htmlRegex.exec(text)) !== null) {
     const href = m[1].trim();
     const title = m[2].trim();
     if (href.includes('-nid-')) {
@@ -111,16 +124,30 @@ function parseListPage(html) {
   return links;
 }
 
-function parseArticleContent(html) {
-  // Strip tags, lấy nội dung text
-  const noScript = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
-  const noStyle = noScript.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
-  // Try get main content block
-  const contentMatch = noStyle.match(/<div[^>]+class="[^"]*(?:article|content|entry|post)[^"]*"[^>]*>([\s\S]+?)<\/div>/i);
-  let raw = contentMatch ? contentMatch[1] : noStyle;
-  // Strip remaining tags
-  raw = raw.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-  return raw.slice(0, 5000);
+function parseArticleContent(text) {
+  // Proxy trả về plain text/markdown — không cần strip HTML
+  // Xóa navigation, header, footer thường gặp
+  let content = text
+    .replace(/^.*?TỬ VI CỔ HỌC.*?\n/gis, '')  // strip header
+    .replace(/Copyright.*?cohoc\.net.*/gis, '')  // strip footer
+    .replace(/\[.*?\]\(tel:.*?\)/g, '')        // strip phone links
+    .replace(/\[.*?\]\(mailto:.*?\)/g, '')     // strip email links
+    .replace(/^[*\-].*?(Đặt lịch|Ủng hộ|Xem tử vi|Học tử vi|Lịch|Lập|Nam phái|Bắc phái|Giới thiệu|Trang chủ|Lấy lá số).*$/gm, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
+  // Lấy phần nội dung chính — sau heading đầu tiên
+  const lines = content.split('\n');
+  let startIdx = 0;
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].startsWith('#') || lines[i].length > 80) {
+      startIdx = i;
+      break;
+    }
+  }
+  content = lines.slice(startIdx).join('\n').trim();
+
+  return content.slice(0, 5000);
 }
 
 // ── Claude Haiku rewrite ──────────────────────────────────────────
