@@ -2,22 +2,6 @@
   "version": 2,
   "crons": [
     {
-      "path": "/api/cron-tai-lieu",
-      "schedule": "0 14 * * *"
-    },
-    {
-      "path": "/api/cron-tai-lieu",
-      "schedule": "15 14 * * *"
-    },
-    {
-      "path": "/api/cron-tai-lieu",
-      "schedule": "30 14 * * *"
-    },
-    {
-      "path": "/api/cron-tai-lieu",
-      "schedule": "45 14 * * *"
-    },
-    {
       "path": "/api/cron-khao-luan",
       "schedule": "0 15 * * *"
     },
@@ -44,9 +28,6 @@
     },
     "api/upload-laso-image.js": {
       "maxDuration": 30
-    },
-    "api/cron-tai-lieu.js": {
-      "maxDuration": 60
     },
     "api/cron-khao-luan.js": {
       "maxDuration": 60
@@ -81,10 +62,6 @@
     {
       "src": "/api/embed",
       "dest": "/api/embed.js"
-    },
-    {
-      "src": "/api/cron-tai-lieu",
-      "dest": "/api/cron-tai-lieu.js"
     },
     {
       "src": "/api/cron-khao-luan",
