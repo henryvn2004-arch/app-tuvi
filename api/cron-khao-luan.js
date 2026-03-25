@@ -1,20 +1,12 @@
 // api/cron-khao-luan.js
-// Vercel Cron — chạy 22:00 VN (15:00 UTC) mỗi ngày
-// Flow: lấy topic → RAG tai_lieu → Sonnet viết → insert khao_luan
-//
-// Thêm vào vercel.json crons:
-//   { "path": "/api/cron-khao-luan", "schedule": "0 15 * * *" }
+// Vercel Cron 22:00 VN (15:00 UTC)
+// Flow: topic_queue → embed → RAG tuvi_docs → Claude viết → tai_lieu / khao_luan
 
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
+const SUPABASE_URL  = process.env.SUPABASE_URL;
+const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY;
 const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
-const BASE_URL = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : 'https://www.tuviminhbao.com';
-
-const ARTICLES_PER_RUN = 2; // 2 bài/ngày, Sonnet đắt hơn Haiku
-
-// ── Supabase helpers ──────────────────────────────────────────────
+const OPENAI_KEY    = process.env.OPENAI_API_KEY;
+const ARTICLES_PER_RUN = 5;
 
 async function sbFetch(path, options = {}) {
   const res = await fetch(`${SUPABASE_URL}/rest/v1${path}`, {
@@ -30,24 +22,17 @@ async function sbFetch(path, options = {}) {
   return { ok: res.ok, status: res.status, body: text ? JSON.parse(text) : null };
 }
 
-// Lấy topic từ queue (pending, ưu tiên priority thấp = cao hơn)
-async function popTopic() {
-  const r = await sbFetch(
-    '/topic_queue?status=eq.pending&order=priority.asc,created_at.asc&limit=1&select=id,topic'
-  );
-  if (!r.ok || !r.body?.length) return null;
-  const item = r.body[0];
-
-  // Mark processing
-  await sbFetch(`/topic_queue?id=eq.${item.id}`, {
+async function popTopics(count) {
+  const r = await sbFetch(`/topic_queue?status=eq.pending&order=priority.asc,created_at.asc&limit=${count}&select=id,topic,type,priority`);
+  if (!r.ok || !r.body?.length) return [];
+  const ids = r.body.map(t => t.id);
+  await sbFetch(`/topic_queue?id=in.(${ids.join(',')})`, {
     method: 'PATCH',
     body: JSON.stringify({ status: 'processing' }),
   });
-
-  return item;
+  return r.body;
 }
 
-// Mark topic done/error
 async function updateTopicStatus(id, status) {
   await sbFetch(`/topic_queue?id=eq.${id}`, {
     method: 'PATCH',
@@ -55,276 +40,151 @@ async function updateTopicStatus(id, status) {
   });
 }
 
-// RAG: tìm nội dung liên quan trong tai_lieu bằng pgvector
-async function ragSearch(topic) {
-  const OPENAI_KEY = process.env.OPENAI_API_KEY;
-
-  // Nếu có OpenAI key → dùng pgvector similarity search
-  if (OPENAI_KEY) {
-    try {
-      // Embed topic query
-      const embedRes = await fetch('https://api.openai.com/v1/embeddings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${OPENAI_KEY}`,
-        },
-        body: JSON.stringify({
-          model: 'text-embedding-3-small',
-          input: topic.slice(0, 8000),
-        }),
-      });
-      if (!embedRes.ok) throw new Error('OpenAI embed failed');
-      const embedData = await embedRes.json();
-      const queryEmbedding = embedData.data[0].embedding;
-
-      // RPC search_tai_lieu
-      const searchRes = await fetch(`${SUPABASE_URL}/rest/v1/rpc/search_tai_lieu`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-        },
-        body: JSON.stringify({
-          query_embedding: queryEmbedding,
-          match_count: 5,
-          match_threshold: 0.3,
-        }),
-      });
-      if (searchRes.ok) {
-        const results = await searchRes.json();
-        if (results?.length) return results;
-      }
-    } catch(e) {
-      console.warn('[ragSearch] pgvector failed, fallback to ilike:', e.message);
-    }
-  }
-
-  // Fallback: ilike keyword search nếu chưa có embeddings
-  const keywords = topic.replace(/[?!.,]/g, '').split(/\s+/).filter(w => w.length > 3).slice(0, 3);
-  const results = [];
-  for (const kw of keywords) {
-    const r = await sbFetch(`/tai_lieu?content=ilike.*${encodeURIComponent(kw)}*&select=title,excerpt,content&limit=3`);
-    if (r.ok && r.body?.length) results.push(...r.body);
-  }
-  const seen = new Set();
-  return results.filter(r => { if (seen.has(r.title)) return false; seen.add(r.title); return true; }).slice(0, 5);
-}
-
-// Generate topic tự động từ tai_lieu nếu queue trống
-async function generateTopicFromDB() {
-  // Lấy 20 bài tai_lieu random, chọn 1 bài chưa có bài khảo luận
-  const r = await sbFetch('/tai_lieu?select=title,category&order=created_at.desc&limit=20');
-  if (!r.ok || !r.body?.length) return null;
-
-  // Check bài nào chưa có khảo luận tương ứng
-  const titles = r.body.map(b => b.title);
-  for (const item of r.body) {
-    const check = await sbFetch(
-      `/khao_luan?title=ilike.*${encodeURIComponent(item.title.slice(0, 20))}*&select=id&limit=1`
-    );
-    if (check.ok && (!check.body || check.body.length === 0)) {
-      // Chuyển title thành câu hỏi khảo luận
-      return {
-        id: null,
-        topic: `Khảo luận về "${item.title}" trong Tử Vi Đẩu Số — ý nghĩa thực tiễn và ứng dụng`,
-        autoGenerated: true,
-      };
-    }
-  }
-
-  // Fallback: generate topic generic
-  const templates = [
-    'Luận về ý nghĩa của các hung tinh trong lá số Tử Vi',
-    'Cách đọc vận hạn đại vận và tiểu vận trong Tử Vi Đẩu Số',
-    'Mối quan hệ giữa cung Mệnh và cung Thân trong Tử Vi',
-    'Vai trò của tứ hóa (Hóa Lộc, Quyền, Khoa, Kỵ) trong luận giải lá số',
-    'Ảnh hưởng của Thiên Can và Địa Chi đến cung Mệnh',
-  ];
-  return {
-    id: null,
-    topic: templates[Math.floor(Math.random() * templates.length)],
-    autoGenerated: true,
-  };
-}
-
-// Tạo slug từ title tiếng Việt
 function toSlug(str) {
-  return str
-    .toLowerCase()
-    .replace(/[àáạảãăắặẳẵâấậẩẫ]/g, 'a')
-    .replace(/[èéẹẻẽêếệểễ]/g, 'e')
-    .replace(/[ìíịỉĩ]/g, 'i')
-    .replace(/[òóọỏõôốộổỗơớợởỡ]/g, 'o')
-    .replace(/[ùúụủũưứựửữ]/g, 'u')
-    .replace(/[ỳýỵỷỹ]/g, 'y')
-    .replace(/đ/g, 'd')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .trim()
-    .replace(/\s+/g, '-')
-    .slice(0, 80);
+  return String(str || '').toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[đĐ]/g, 'd').replace(/[^a-z0-9\-]/g, '-')
+    .replace(/-+/g, '-').replace(/^-|-$/g, '').slice(0, 80);
 }
 
-// Check slug duplicate
-async function slugExists(slug) {
-  const r = await sbFetch(`/khao_luan?slug=eq.${slug}&select=slug&limit=1`);
+async function slugExists(table, slug) {
+  const r = await sbFetch(`/${table}?slug=eq.${encodeURIComponent(slug)}&select=slug&limit=1`);
   return r.ok && r.body?.length > 0;
 }
 
-// Claude Sonnet viết bài khảo luận
-async function writeKhaoLuan(topic, ragContext) {
-  const contextText = ragContext.length > 0
-    ? ragContext.map((r, i) =>
-        `[Tài liệu ${i + 1}] ${r.title}\n${(r.content || r.excerpt || '').slice(0, 800)}`
-      ).join('\n\n---\n\n')
-    : 'Không tìm thấy tài liệu liên quan — viết dựa trên kiến thức Tử Vi Đẩu Số.';
+async function embedText(text) {
+  const res = await fetch('https://api.openai.com/v1/embeddings', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_KEY}` },
+    body: JSON.stringify({ model: 'text-embedding-3-small', input: text.slice(0, 8000) }),
+    signal: AbortSignal.timeout(10000),
+  });
+  if (!res.ok) throw new Error(`OpenAI embed ${res.status}`);
+  return (await res.json()).data[0].embedding;
+}
 
-  const prompt = `Bạn là học giả Tử Vi Đẩu Số của "Tử Vi Minh Bảo". Hãy viết một bài khảo luận ngắn (~500 từ) về chủ đề sau, dựa trên các tài liệu tham khảo được cung cấp.
+async function ragSearch(topic) {
+  if (!OPENAI_KEY) return '';
+  try {
+    const embedding = await embedText(topic);
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/search_tuvi_docs`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` },
+      body: JSON.stringify({ query_embedding: embedding, match_count: 6, match_threshold: 0.25 }),
+    });
+    if (!res.ok) return '';
+    const docs = await res.json();
+    if (!docs?.length) return '';
+    console.log(`[cron] RAG: ${docs.length} docs cho "${topic.slice(0,40)}"`);
+    return docs.map(d => `[${d.source}]\n${d.content}`).join('\n\n---\n\n');
+  } catch(e) {
+    console.warn('[cron] RAG failed:', e.message);
+    return '';
+  }
+}
+
+async function writeArticle(topic, type, ctx) {
+  const isTL = type === 'tai-lieu';
+  const model = isTL ? 'claude-haiku-4-5-20251001' : 'claude-sonnet-4-20250514';
+  const ctxBlock = ctx || '(Dùng kiến thức Tử Vi Đẩu Số tổng quát)';
+
+  const prompt = isTL
+    ? `Bạn là biên tập viên từ điển Tử Vi "Tử Vi Minh Bảo". Viết bài từ điển dễ hiểu về chủ đề sau.
 
 Chủ đề: ${topic}
+Tài liệu tham khảo:\n${ctxBlock}
 
-Tài liệu tham khảo:
-${contextText}
+Yêu cầu: giọng thân thiện, dễ hiểu, ứng dụng thực tế, markdown, 250-400 từ.
 
-Yêu cầu bài viết:
-- Giọng văn: học thuật nhưng dễ đọc, có chiều sâu, không hoa mỹ
-- Cấu trúc: mở bài → luận điểm chính (2-3 ý) → kết luận thực tiễn
-- Có dẫn chứng cụ thể từ tài liệu nếu có
-- Không lặp lại chủ đề quá nhiều lần
-- Dùng markdown (heading ##, bold **) cho cấu trúc rõ ràng
-- Kết bài bằng 1 câu ứng dụng thực tế cho người đọc lá số
+Trả về JSON thuần (KHÔNG backtick):
+{"title":"Tiêu đề SEO-friendly","slug":"slug-ascii","excerpt":"Tóm tắt dưới 155 ký tự","category":"sao-chinh|sao-phu|cung|cach-cuc|van-han|luan-giai|khai-niem","tags":["tag1","tag2","tag3"],"content":"markdown 250-400 từ"}`
+    : `Bạn là học giả Tử Vi Đẩu Số của "Tử Vi Minh Bảo". Viết bài khảo luận học thuật về chủ đề sau.
 
-Trả về JSON thuần (KHÔNG markdown backtick):
-{
-  "title": "Tiêu đề bài viết hấp dẫn, SEO-friendly (không phải câu hỏi)",
-  "slug": "slug-khong-dau",
-  "excerpt": "Tóm tắt 1-2 câu dưới 155 ký tự",
-  "category": "một trong: chiêm-tinh|triết-học|thực-hành|vận-hạn|nhân-vật|so-sánh",
-  "tags": ["tag1","tag2","tag3"],
-  "featured": false,
-  "content": "Nội dung bài viết markdown ~500 từ"
-}`;
+Chủ đề: ${topic}
+Tài liệu tham khảo:\n${ctxBlock}
+
+Yêu cầu: học thuật nhưng dễ đọc, chiều sâu phân tích, markdown, ~500 từ.
+
+Trả về JSON thuần (KHÔNG backtick):
+{"title":"Tiêu đề khảo luận (không phải câu hỏi)","slug":"slug-ascii","excerpt":"Tóm tắt dưới 155 ký tự","category":"chiem-tinh|triet-hoc|thuc-hanh|van-han|nhan-vat|so-sanh","tags":["tag1","tag2","tag3"],"featured":false,"content":"markdown ~500 từ"}`;
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': ANTHROPIC_KEY,
-      'anthropic-version': '2023-06-01',
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 2000,
-      messages: [{ role: 'user', content: prompt }],
-    }),
-    signal: AbortSignal.timeout(25000),
+    headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_KEY, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({ model, max_tokens: 2000, messages: [{ role: 'user', content: prompt }] }),
+    signal: AbortSignal.timeout(30000),
   });
-
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.error?.message || `Claude ${res.status}`);
   }
-
   const data = await res.json();
-  const text = data.content[0].text.trim()
-    .replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
+  const text = data.content[0].text.trim().replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
   return JSON.parse(text);
 }
 
-// Insert bài vào khao_luan
-async function insertKhaoLuan(article) {
-  return await sbFetch('/khao_luan', {
+async function insertArticle(table, article) {
+  const row = table === 'khao_luan'
+    ? { slug:article.slug, title:article.title, excerpt:article.excerpt, category:article.category, tags:article.tags, featured:article.featured||false, content:article.content, created_at:new Date().toISOString() }
+    : { slug:article.slug, title:article.title, excerpt:article.excerpt, category:article.category, tags:article.tags, content:article.content, created_at:new Date().toISOString() };
+  return await sbFetch(`/${table}`, {
     method: 'POST',
     headers: { 'Prefer': 'resolution=ignore-duplicates' },
-    body: JSON.stringify({
-      slug: article.slug,
-      title: article.title,
-      excerpt: article.excerpt,
-      category: article.category,
-      tags: article.tags,
-      featured: article.featured || false,
-      content: article.content,
-      created_at: new Date().toISOString(),
-    }),
+    body: JSON.stringify(row),
   });
 }
 
-// ── Main handler ──────────────────────────────────────────────────
-
 export default async function handler(req, res) {
-  const authHeader = req.headers['authorization'];
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (req.headers['authorization'] !== `Bearer ${process.env.CRON_SECRET}`) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
   const results = { written: 0, saved: 0, errors: [] };
   const startTime = Date.now();
 
-  for (let i = 0; i < ARTICLES_PER_RUN; i++) {
-    // Check timeout
-    if (Date.now() - startTime > 50000) {
-      console.log('[cron-khao-luan] Near timeout, stopping');
+  const topics = await popTopics(ARTICLES_PER_RUN);
+  if (!topics.length) {
+    console.log('[cron-khao-luan] topic_queue trống');
+    return res.status(200).json({ message: 'No pending topics', results });
+  }
+
+  console.log(`[cron-khao-luan] ${topics.length} topics`);
+
+  for (const t of topics) {
+    if (Date.now() - startTime > 55000) {
+      await updateTopicStatus(t.id, 'pending');
       break;
     }
 
+    const table = t.type === 'tai-lieu' ? 'tai_lieu' : 'khao_luan';
+    console.log(`[cron-khao-luan] "${t.topic.slice(0,50)}" → ${table}`);
+
     try {
-      // 1. Lấy topic — ưu tiên queue, fallback auto-generate
-      let topicItem = await popTopic();
-      let autoGenerated = false;
-
-      if (!topicItem) {
-        topicItem = await generateTopicFromDB();
-        autoGenerated = true;
-        if (!topicItem) {
-          console.log('[cron-khao-luan] Không tìm được topic');
-          break;
-        }
-      }
-
-      console.log(`[cron-khao-luan] Topic: ${topicItem.topic} (auto: ${autoGenerated})`);
-
-      // 2. RAG search
-      const ragContext = await ragSearch(topicItem.topic);
-      console.log(`[cron-khao-luan] RAG: ${ragContext.length} tài liệu liên quan`);
-
-      // 3. Viết bài
-      const article = await writeKhaoLuan(topicItem.topic, ragContext);
+      const ctx = await ragSearch(t.topic);
+      const article = await writeArticle(t.topic, t.type || 'khao-luan', ctx);
       results.written++;
 
-      // 4. Đảm bảo slug unique
       let slug = article.slug || toSlug(article.title);
-      if (await slugExists(slug)) {
-        slug = slug + '-' + Date.now().toString().slice(-4);
-        article.slug = slug;
-      }
+      if (await slugExists(table, slug)) slug = slug + '-' + Date.now().toString().slice(-4);
+      article.slug = slug;
 
-      // 5. Save
-      const saveRes = await insertKhaoLuan(article);
-      if (saveRes.ok) {
+      const saved = await insertArticle(table, article);
+      if (saved.ok) {
         results.saved++;
-        console.log(`[cron-khao-luan] ✅ Saved: "${article.title}"`);
+        console.log(`[cron-khao-luan] ✅ ${table}: "${article.title.slice(0,50)}"`);
+        await updateTopicStatus(t.id, 'done');
       } else {
-        results.errors.push(`DB: ${JSON.stringify(saveRes.body).slice(0, 80)}`);
+        results.errors.push(`DB: ${JSON.stringify(saved.body).slice(0,80)}`);
+        await updateTopicStatus(t.id, 'error');
       }
-
-      // 6. Mark topic done
-      if (topicItem.id) {
-        await updateTopicStatus(topicItem.id, 'done');
-      }
-
-    } catch (e) {
-      console.error(`[cron-khao-luan] Lỗi: ${e.message}`);
-      results.errors.push(e.message.slice(0, 100));
+    } catch(e) {
+      console.error(`[cron-khao-luan] ❌ ${e.message}`);
+      results.errors.push(`${t.topic.slice(0,30)}: ${e.message.slice(0,60)}`);
+      await updateTopicStatus(t.id, 'error');
     }
 
-    // Pause giữa 2 bài để tránh rate limit
-    await new Promise(r => setTimeout(r, 2000));
+    await new Promise(r => setTimeout(r, 1500));
   }
 
-  return res.status(200).json({
-    message: 'OK',
-    duration_ms: Date.now() - startTime,
-    ...results,
-  });
+  return res.status(200).json({ message: 'OK', duration_ms: Date.now() - startTime, ...results });
 }
