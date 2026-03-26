@@ -655,6 +655,14 @@ select.form-input { cursor: pointer; }
         <div class="btn-group-submit">
           <button class="btn-submit" onclick="luanGiai()">Luận Giải Lá Số →</button>
         </div>
+        <div style="margin-top:14px;text-align:center">
+          <a href="https://drive.google.com/file/d/SAMPLE_FILE_ID/view" target="_blank" rel="noopener" id="sample-link"
+             style="font-size:11px;color:var(--text-lt);text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--border);border-radius:3px;transition:all .15s;letter-spacing:.5px"
+             onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'"
+             onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-lt)'">
+            ⬇ &nbsp;Xem mẫu luận giải PDF
+          </a>
+        </div>
       </div>
     </div>
 
@@ -3515,6 +3523,43 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 
 
 </script>
+<!-- REVIEWS SECTION -->
+<section style="background:var(--bg-soft);border-top:1px solid var(--border);padding:64px 0">
+  <div class="page">
+    <div class="section-eyebrow">Đánh Giá Của Khách Hàng</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:8px">
+
+      <div style="background:#fff;border:1px solid var(--border);padding:28px 24px">
+        <div style="display:flex;gap:3px;margin-bottom:14px;color:#c9a84c;font-size:15px">★★★★★</div>
+        <p style="font-size:14px;color:var(--text-mid);line-height:1.8;font-style:italic;margin-bottom:20px">"Tôi đã thử nhiều dịch vụ tử vi nhưng đây là lần đầu tiên nhận được luận giải chi tiết đến từng giai đoạn đại vận. Rất chính xác với những gì đã xảy ra."</p>
+        <div style="font-size:12px;color:var(--text-lt)">
+          <div style="font-weight:600;color:var(--text);margin-bottom:2px">Nguyễn T.H. — Hà Nội</div>
+          <div>Tháng 2, 2026</div>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid var(--border);padding:28px 24px">
+        <div style="display:flex;gap:3px;margin-bottom:14px;color:#c9a84c;font-size:15px">★★★★★</div>
+        <p style="font-size:14px;color:var(--text-mid);line-height:1.8;font-style:italic;margin-bottom:20px">"Luận giải sâu sắc, phân tích rõ ràng về cung Quan Lộc và Tài Bạch. Tôi dùng thông tin này để đưa ra quyết định chuyển việc và kết quả rất tốt."</p>
+        <div style="font-size:12px;color:var(--text-lt)">
+          <div style="font-weight:600;color:var(--text);margin-bottom:2px">Trần M.K. — TP.HCM</div>
+          <div>Tháng 1, 2026</div>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid var(--border);padding:28px 24px">
+        <div style="display:flex;gap:3px;margin-bottom:14px;color:#c9a84c;font-size:15px">★★★★☆</div>
+        <p style="font-size:14px;color:var(--text-mid);line-height:1.8;font-style:italic;margin-bottom:20px">"Ứng dụng an sao chuẩn theo cổ pháp, không bị sai lệch như nhiều website khác. Phần luận giải đại vận rất hữu ích, tôi đã chia sẻ cho cả gia đình cùng dùng."</p>
+        <div style="font-size:12px;color:var(--text-lt)">
+          <div style="font-weight:600;color:var(--text);margin-bottom:2px">Lê Q.B. — Đà Nẵng</div>
+          <div>Tháng 3, 2026</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <footer class="site-footer">
   <div class="footer-top">
     <div>
@@ -3526,6 +3571,26 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         </div>
       </div>
       <p class="footer-tagline">Tri mệnh lý – Thuận thế hành<br>Kết hợp kinh điển &amp; công nghệ hiện đại.</p>
+    </div>
+    <div style="display:flex;gap:48px;flex-wrap:wrap">
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:12px">Chính Sách</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="/chinh-sach-bao-mat.html" style="font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Chính sách bảo mật</a>
+          <a href="/dieu-khoan-dich-vu.html" style="font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Điều khoản dịch vụ</a>
+          <a href="/huong-dan-thanh-toan.html" style="font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Hướng dẫn thanh toán</a>
+          <a href="/faqs.html" style="font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">FAQs</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:12px">Khám Phá</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="/resources.html" style="font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Thư viện tài liệu</a>
+          <a href="/blog.html" style="font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Khảo luận</a>
+          <a href="/about.html" style="font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Giới thiệu</a>
+          <a href="/contact.html" style="font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Liên hệ</a>
+        </div>
+      </div>
     </div>
   </div>
   <div class="footer-bottom">
