@@ -3530,7 +3530,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     <div style="position:relative;margin-top:8px">
 
       <!-- Slider track -->
-      <div id="rv-track" style="display:flex;gap:24px;transition:transform .4s cubic-bezier(.4,0,.2,1);will-change:transform">
+      <div id="rv-track" style="display:flex;gap:24px;transition:transform .4s cubic-bezier(.4,0,.2,1);will-change:transform;align-items:stretch">
 
         <div class="rv-card">
           <div class="rv-stars">★★★★★</div>
@@ -3581,9 +3581,9 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 </section>
 
 <style>
-.rv-card{background:#fff;border:1px solid var(--border);padding:28px 24px;width:calc(33.333% - 16px);flex:0 0 calc(33.333% - 16px);box-sizing:border-box}
+.rv-card{background:#fff;border:1px solid var(--border);padding:28px 24px;width:calc(33.333% - 16px);flex:0 0 calc(33.333% - 16px);box-sizing:border-box;display:flex;flex-direction:column}
 .rv-stars{color:#c9a84c;font-size:15px;margin-bottom:14px;letter-spacing:2px}
-.rv-text{font-size:14px;color:var(--text-mid);line-height:1.75;font-style:italic;margin-bottom:20px;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.rv-text{font-size:14px;color:var(--text-mid);line-height:1.75;font-style:italic;margin-bottom:20px;flex:1}
 .rv-meta{}
 .rv-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px}
 .rv-date{font-size:11px;color:var(--text-lt)}
