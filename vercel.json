@@ -112,15 +112,15 @@
       "dest": "/api/upload-laso-image.js"
     },
     {
-      "src": "/tai-lieu/sach/(.*)",
+      "src": "/tai-lieu/sach/([^/]+)",
       "dest": "/public/sach-detail.html"
     },
     {
-      "src": "/tai-lieu/(.*)",
+      "src": "/tai-lieu/([^/]+)",
       "dest": "/public/tai-lieu.html"
     },
     {
-      "src": "/khao-luan/(.*)",
+      "src": "/khao-luan/([^/]+)",
       "dest": "/public/khao-luan.html"
     },
     {
