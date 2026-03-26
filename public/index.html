@@ -3581,13 +3581,13 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 </section>
 
 <style>
-.rv-card{background:#fff;border:1px solid var(--border);padding:28px 24px;min-width:calc(33.333% - 16px);flex-shrink:0}
+.rv-card{background:#fff;border:1px solid var(--border);padding:28px 24px;width:calc(33.333% - 16px);flex:0 0 calc(33.333% - 16px);box-sizing:border-box}
 .rv-stars{color:#c9a84c;font-size:15px;margin-bottom:14px;letter-spacing:2px}
-.rv-text{font-size:14px;color:var(--text-mid);line-height:1.85;font-style:italic;margin-bottom:20px}
+.rv-text{font-size:14px;color:var(--text-mid);line-height:1.75;font-style:italic;margin-bottom:20px;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
 .rv-meta{}
 .rv-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px}
 .rv-date{font-size:11px;color:var(--text-lt)}
-@media(max-width:700px){.rv-card{min-width:calc(100% - 0px)}}
+@media(max-width:700px){.rv-card{width:100% !important;flex:0 0 100% !important}}
 </style>
 
 <script>
