@@ -254,6 +254,7 @@ select.form-input { cursor: pointer; }
   .hero { grid-template-columns: 1fr; gap: 0; padding: 32px 0 24px; }
   .hero h1 { font-size: 30px; }
   .hero-right { display: none; }
+  .intro-section > div > div:last-child, .intro-section > div { grid-template-columns: 1fr !important; gap: 32px !important; }
   .form-grid { grid-template-columns: 1fr; }
   .form-col { border-right: none; border-bottom: 1px solid var(--border); }
   .form-col:last-child { border-bottom: none; }
@@ -552,6 +553,52 @@ select.form-input { cursor: pointer; }
     </div>
   </div>
 
+  <!-- ── INTRO + FLOW ──────────────────────────────────── -->
+  <div class="intro-section" style="padding:56px 0;border-bottom:1px solid var(--border)">
+    <div class="section-eyebrow">Tử Vi Minh Bảo là gì?</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start">
+      <div>
+        <h2 style="font-family:Arial,sans-serif;font-size:28px;font-weight:400;color:var(--navy);margin-bottom:20px;line-height:1.3">Luận giải lá số Tử Vi<br>bằng trí tuệ nhân tạo</h2>
+        <p style="font-size:16px;color:var(--text-mid);line-height:1.85;font-weight:300;margin-bottom:16px">Tử Vi Đẩu Số là hệ thống chiêm tinh cổ đại của người Á Đông — an sao dựa trên ngày giờ sinh, luận giải 12 cung để soi tường bản mệnh, tài lộc, sự nghiệp, hôn nhân và vận trình cuộc đời.</p>
+        <p style="font-size:16px;color:var(--text-mid);line-height:1.85;font-weight:300;margin-bottom:16px">Tử Vi Minh Bảo kết hợp phương pháp an sao theo cổ pháp với công nghệ AI hiện đại — mang đến luận giải chuyên sâu, rõ ràng và thực tiễn cho người Việt ở khắp nơi trên thế giới.</p>
+        <p style="font-size:14px;color:var(--text-lt);line-height:1.7;font-style:italic">Phù hợp với người Việt tại Việt Nam, Mỹ, Úc, châu Âu và toàn cầu.</p>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-lt);margin-bottom:24px">Cách xem lá số</div>
+        <div style="display:flex;flex-direction:column;gap:0">
+          <div style="display:flex;gap:20px;padding-bottom:24px;border-bottom:1px solid var(--border-lt)">
+            <div style="width:32px;height:32px;background:var(--navy);color:#c9a84c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">1</div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px">Nhập thông tin ngày sinh</div>
+              <div style="font-size:13px;color:var(--text-lt);line-height:1.6">Điền ngày, tháng, năm sinh dương lịch và giờ sinh. Giờ sinh ảnh hưởng trực tiếp đến cung Mệnh — càng chính xác, luận giải càng sát thực.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:20px;padding:24px 0;border-bottom:1px solid var(--border-lt)">
+            <div style="width:32px;height:32px;background:var(--navy);color:#c9a84c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">2</div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px">Xem lá số và phân tích miễn phí</div>
+              <div style="font-size:13px;color:var(--text-lt);line-height:1.6">Hệ thống an sao, hiển thị lá số 12 cung, biểu đồ điểm số, đại vận và phân tích sao tự động — hoàn toàn miễn phí.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:20px;padding:24px 0;border-bottom:1px solid var(--border-lt)">
+            <div style="width:32px;height:32px;background:var(--gold);color:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">3</div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px">Mở khóa 24 phần luận giải AI</div>
+              <div style="font-size:13px;color:var(--text-lt);line-height:1.6">Thanh toán một lần $19 để nhận đầy đủ 24 phần luận giải chuyên sâu — từ tổng quan mệnh cục đến từng cung, đại vận và luận đoán cá nhân hóa.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:20px;padding-top:24px">
+            <div style="width:32px;height:32px;background:var(--gold);color:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">4</div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px">Lưu & chia sẻ lá số</div>
+              <div style="font-size:13px;color:var(--text-lt);line-height:1.6">Lá số được lưu vĩnh viễn trong tài khoản, có thể chia sẻ với người thân hoặc tải xuống PDF.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="form-section">
     <div class="section-eyebrow">Nhập Thông Tin</div>
     <div class="form-grid">
@@ -605,17 +652,9 @@ select.form-input { cursor: pointer; }
 
       <div class="form-col">
         <div class="form-col-title">Thực Thi</div>
-        <p style="font-size:14px;color:var(--text-lt);line-height:1.7;margin-bottom:28px;font-family:'Source Serif 4',serif;font-style:italic">Điền đầy đủ thông tin bên trái, sau đó bấm để an sao và bắt đầu luận giải từng phần.</p>
+        <p style="font-size:14px;color:var(--text-lt);line-height:1.7;margin-bottom:28px;font-family:'Source Serif 4',serif;font-style:italic">Điền đầy đủ thông tin bên trái — ngày tháng năm sinh dương lịch và giờ sinh — rồi bấm luận giải.</p>
         <div class="btn-group-submit">
-          <div class="btn-group-label">Luận giải nhanh (miễn phí):</div>
-          <div class="btn-quick-row">
-            <button class="btn-quick" onclick="luanGiaiNhanh('su_nghiep')">💼 Sự nghiệp</button>
-            <button class="btn-quick" onclick="luanGiaiNhanh('tai_chinh')">💰 Tài chính</button>
-            <button class="btn-quick" onclick="luanGiaiNhanh('tinh_duyen')">❤️ Tình duyên</button>
-            <button class="btn-quick" onclick="luanGiaiNhanh('tong_quan')">✦ Tổng quan</button>
-          </div>
-          <div class="btn-group-label btn-group-label-paid">Luận giải đầy đủ:</div>
-          <button class="btn-submit" onclick="luanGiai()">An Sao & Xem Lá Số (Miễn Phí) →</button>
+          <button class="btn-submit" onclick="luanGiai()">Luận Giải Lá Số →</button>
         </div>
       </div>
     </div>
