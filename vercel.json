@@ -112,6 +112,10 @@
       "dest": "/api/upload-laso-image.js"
     },
     {
+      "src": "/tai-lieu/sach/(.*)",
+      "dest": "/public/sach-detail.html"
+    },
+    {
       "src": "/tai-lieu/(.*)",
       "dest": "/public/tai-lieu.html"
     },
