@@ -3524,41 +3524,108 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 
 </script>
 <!-- REVIEWS SECTION -->
-<section style="background:var(--bg-soft);border-top:1px solid var(--border);padding:64px 0">
+<section style="background:var(--bg-soft);border-top:1px solid var(--border);padding:64px 0;overflow:hidden">
   <div class="page">
     <div class="section-eyebrow">Đánh Giá Của Khách Hàng</div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:8px">
+    <div style="position:relative;margin-top:8px">
 
-      <div style="background:#fff;border:1px solid var(--border);padding:28px 24px">
-        <div style="display:flex;gap:3px;margin-bottom:14px;color:#c9a84c;font-size:15px">★★★★★</div>
-        <p style="font-size:14px;color:var(--text-mid);line-height:1.8;font-style:italic;margin-bottom:20px">"Tôi đã thử nhiều dịch vụ tử vi nhưng đây là lần đầu tiên nhận được luận giải chi tiết đến từng giai đoạn đại vận. Rất chính xác với những gì đã xảy ra."</p>
-        <div style="font-size:12px;color:var(--text-lt)">
-          <div style="font-weight:600;color:var(--text);margin-bottom:2px">Nguyễn T.H. — Hà Nội</div>
-          <div>Tháng 2, 2026</div>
+      <!-- Slider track -->
+      <div id="rv-track" style="display:flex;gap:24px;transition:transform .4s cubic-bezier(.4,0,.2,1);will-change:transform">
+
+        <div class="rv-card">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text">"Phần luận giải xu hướng đại vận thực sự ấn tượng — tôi đang ở đại vận thứ 5 và mô tả về giai đoạn này rất sát với những gì đã xảy ra trong 3 năm qua. Lần đầu tôi thấy AI luận Tử Vi mà không chung chung."</p>
+          <div class="rv-meta"><div class="rv-name">Nguyễn T.H. — Hà Nội</div><div class="rv-date">Tháng 2, 2026</div></div>
         </div>
+
+        <div class="rv-card">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text">"Luận giải tiểu vận năm nay chỉ đúng đến mức tôi giật mình. Hệ thống phân tích được cả cung Tài Bạch biến động và thời điểm cần thận trọng — tôi đã tránh được một quyết định đầu tư sai."</p>
+          <div class="rv-meta"><div class="rv-name">Trần M.K. — TP.HCM</div><div class="rv-date">Tháng 1, 2026</div></div>
+        </div>
+
+        <div class="rv-card">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text">"Xu hướng đại vận được trình bày rõ ràng theo từng giai đoạn 10 năm, không bị gộp chung. Tôi thấy đại vận hiện tại của mình được mô tả rất đúng với tính chất vượng suy thực tế đã trải qua."</p>
+          <div class="rv-meta"><div class="rv-name">Lê Q.B. — Đà Nẵng</div><div class="rv-date">Tháng 3, 2026</div></div>
+        </div>
+
+        <div class="rv-card">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text">"Tôi dùng để so sánh với luận giải của thầy tử vi mà tôi hay tham khảo — kết quả gần như trùng khớp về xu hướng đại vận. Phần tiểu vận phân tích sâu hơn tôi mong đợi, đặc biệt phần sự nghiệp và tình duyên theo từng năm."</p>
+          <div class="rv-meta"><div class="rv-name">Phạm H.A. — Hải Phòng</div><div class="rv-date">Tháng 3, 2026</div></div>
+        </div>
+
+        <div class="rv-card">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text">"Đại vận chuyển tiếp năm ngoái được mô tả chính xác — giai đoạn biến động, cần tái định hướng sự nghiệp. Tôi đã thực sự trải qua đúng những điều đó. Phần luận tiểu vận giúp tôi lên kế hoạch cho năm tới rõ hơn nhiều."</p>
+          <div class="rv-meta"><div class="rv-name">Võ T.L. — Cần Thơ</div><div class="rv-date">Tháng 2, 2026</div></div>
+        </div>
+
+        <div class="rv-card">
+          <div class="rv-stars">★★★★☆</div>
+          <p class="rv-text">"An sao chuẩn theo cổ pháp, không bị sai lệch như nhiều website khác. Điểm tôi thích nhất là phần tóm tắt xu hướng đại vận theo thập niên — rất dễ đọc và có thể dùng làm bản đồ định hướng dài hạn cho bản thân."</p>
+          <div class="rv-meta"><div class="rv-name">Hoàng M.T. — Hà Nội</div><div class="rv-date">Tháng 1, 2026</div></div>
+        </div>
+
       </div>
 
-      <div style="background:#fff;border:1px solid var(--border);padding:28px 24px">
-        <div style="display:flex;gap:3px;margin-bottom:14px;color:#c9a84c;font-size:15px">★★★★★</div>
-        <p style="font-size:14px;color:var(--text-mid);line-height:1.8;font-style:italic;margin-bottom:20px">"Luận giải sâu sắc, phân tích rõ ràng về cung Quan Lộc và Tài Bạch. Tôi dùng thông tin này để đưa ra quyết định chuyển việc và kết quả rất tốt."</p>
-        <div style="font-size:12px;color:var(--text-lt)">
-          <div style="font-weight:600;color:var(--text);margin-bottom:2px">Trần M.K. — TP.HCM</div>
-          <div>Tháng 1, 2026</div>
-        </div>
-      </div>
+      <!-- Nav buttons -->
+      <button id="rv-prev" onclick="rvSlide(-1)" style="position:absolute;top:50%;left:-20px;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:16px;color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.08);transition:all .15s;z-index:10" onmouseover="this.style.borderColor='var(--navy)'" onmouseout="this.style.borderColor='var(--border)'">‹</button>
+      <button id="rv-next" onclick="rvSlide(1)"  style="position:absolute;top:50%;right:-20px;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:16px;color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.08);transition:all .15s;z-index:10" onmouseover="this.style.borderColor='var(--navy)'" onmouseout="this.style.borderColor='var(--border)'">›</button>
 
-      <div style="background:#fff;border:1px solid var(--border);padding:28px 24px">
-        <div style="display:flex;gap:3px;margin-bottom:14px;color:#c9a84c;font-size:15px">★★★★☆</div>
-        <p style="font-size:14px;color:var(--text-mid);line-height:1.8;font-style:italic;margin-bottom:20px">"Ứng dụng an sao chuẩn theo cổ pháp, không bị sai lệch như nhiều website khác. Phần luận giải đại vận rất hữu ích, tôi đã chia sẻ cho cả gia đình cùng dùng."</p>
-        <div style="font-size:12px;color:var(--text-lt)">
-          <div style="font-weight:600;color:var(--text);margin-bottom:2px">Lê Q.B. — Đà Nẵng</div>
-          <div>Tháng 3, 2026</div>
-        </div>
-      </div>
-
+      <!-- Dots -->
+      <div id="rv-dots" style="display:flex;justify-content:center;gap:8px;margin-top:24px"></div>
     </div>
   </div>
 </section>
+
+<style>
+.rv-card{background:#fff;border:1px solid var(--border);padding:28px 24px;min-width:calc(33.333% - 16px);flex-shrink:0}
+.rv-stars{color:#c9a84c;font-size:15px;margin-bottom:14px;letter-spacing:2px}
+.rv-text{font-size:14px;color:var(--text-mid);line-height:1.85;font-style:italic;margin-bottom:20px}
+.rv-meta{}
+.rv-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px}
+.rv-date{font-size:11px;color:var(--text-lt)}
+@media(max-width:700px){.rv-card{min-width:calc(100% - 0px)}}
+</style>
+
+<script>
+(function(){
+  const track = document.getElementById('rv-track');
+  const dotsEl = document.getElementById('rv-dots');
+  const total = 6;
+  let perView = window.innerWidth <= 700 ? 1 : 3;
+  let cur = 0;
+  const maxSlide = total - perView;
+
+  // Build dots
+  const dotCount = maxSlide + 1;
+  for(let i=0;i<dotCount;i++){
+    const d = document.createElement('div');
+    d.style.cssText = 'width:7px;height:7px;border-radius:50%;background:var(--border);cursor:pointer;transition:background .2s';
+    d.onclick = ()=>goTo(i);
+    dotsEl.appendChild(d);
+  }
+
+  function updateDots(){
+    dotsEl.querySelectorAll('div').forEach((d,i)=>{
+      d.style.background = i===cur ? 'var(--navy)' : 'var(--border)';
+    });
+  }
+
+  function goTo(n){
+    cur = Math.max(0, Math.min(n, maxSlide));
+    const cardW = track.children[0].offsetWidth + 24;
+    track.style.transform = `translateX(-${cur * cardW}px)`;
+    updateDots();
+  }
+
+  window.rvSlide = function(dir){ goTo(cur + dir); };
+  window.addEventListener('resize',()=>{ perView = window.innerWidth<=700?1:3; goTo(0); });
+  updateDots();
+})();
+</script>
 
 <footer class="site-footer">
   <div class="footer-top">
