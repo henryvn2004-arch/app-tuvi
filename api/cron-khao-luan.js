@@ -98,15 +98,23 @@ Yêu cầu: giọng thân thiện, dễ hiểu, ứng dụng thực tế, markdo
 
 Trả về JSON thuần (KHÔNG backtick):
 {"title":"Tiêu đề SEO-friendly","slug":"slug-ascii","excerpt":"Tóm tắt dưới 155 ký tự","category":"sao-chinh|sao-phu|cung|cach-cuc|van-han|luan-giai|khai-niem","tags":["tag1","tag2","tag3"],"content":"markdown 250-400 từ"}`
-    : `Bạn là học giả Tử Vi Đẩu Số của "Tử Vi Minh Bảo". Viết bài khảo luận học thuật về chủ đề sau.
+    : `Đóng vai nhà nghiên cứu Tử Vi theo văn phong tạp chí Khoa học Huyền Bí Việt Nam trước 1975. Viết bài khảo luận ngắn gọn, học thuật, dùng thuật ngữ Hán–Việt, lập luận rõ ràng theo cấu trúc: dẫn nhập → lý thuyết → phân tích → kết luận.
 
 Chủ đề: ${topic}
 Tài liệu tham khảo:\n${ctxBlock}
 
-Yêu cầu: học thuật nhưng dễ đọc, chiều sâu phân tích, markdown, ~500 từ.
+Yêu cầu SEO & AEO:
+- Tiêu đề chứa từ khóa chính + ý định tìm kiếm
+- Đoạn mở đầu trả lời trực tiếp câu hỏi (featured snippet)
+- Dùng heading H2, H3 rõ ràng
+- Chèn từ khóa chính + liên quan tự nhiên (không nhồi nhét)
+- Có bullet points hoặc tóm tắt nhanh
+- Cuối bài có đoạn FAQ 2–3 câu hỏi liên quan
+- Văn phong rõ nghĩa, dễ trích dẫn cho AI (AEO-friendly)
+- Độ dài ~500 từ, markdown
 
 Trả về JSON thuần (KHÔNG backtick):
-{"title":"Tiêu đề khảo luận (không phải câu hỏi)","slug":"slug-ascii","excerpt":"Tóm tắt dưới 155 ký tự","category":"chiem-tinh|triet-hoc|thuc-hanh|van-han|nhan-vat|so-sanh","tags":["tag1","tag2","tag3"],"featured":false,"content":"markdown ~500 từ"}`;
+{"title":"Tiêu đề khảo luận có từ khóa (không phải câu hỏi)","slug":"slug-ascii","excerpt":"Tóm tắt dưới 155 ký tự, trả lời trực tiếp câu hỏi chính","category":"chiem-tinh|triet-hoc|thuc-hanh|van-han|nhan-vat|so-sanh","tags":["tag1","tag2","tag3"],"featured":false,"content":"markdown ~500 từ"}`;
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
