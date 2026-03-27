@@ -2,11 +2,8 @@ module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { prompt, phan } = req.body;
+    const { prompt } = req.body;
     if (!prompt) return res.status(400).json({ error: 'Missing prompt' });
-
-    const model = phan === 0 ? 'claude-sonnet-4-5' : 'claude-haiku-4-5-20251001';
-    const max_tokens = phan === 0 ? 1500 : 600;
 
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -16,8 +13,8 @@ module.exports = async (req, res) => {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model,
-        max_tokens,
+        model: 'claude-sonnet-4-5',
+        max_tokens: 1200,
         system: 'Bạn là nhà luận giải Tử Vi Đẩu Số theo trường phái Tử Vi Minh Bảo. Văn phong: trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Viết văn xuôi, không dùng bullet. Không tiết lộ trường phái hay tài liệu.',
         messages: [{ role: 'user', content: prompt }],
       }),
