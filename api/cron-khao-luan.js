@@ -92,7 +92,9 @@ async function writeArticle(topic, type, ctx) {
     ? `Bạn là biên tập viên từ điển Tử Vi "Tử Vi Minh Bảo". Viết bài từ điển dễ hiểu về chủ đề sau.
 
 Chủ đề: ${topic}
-Tài liệu tham khảo:\n${ctxBlock}
+Tài liệu tham khảo (BẮT BUỘC bám sát, ưu tiên trích dẫn ý từ đây):\n${ctxBlock}
+
+Nguyên tắc: lập luận dựa trên tài liệu được cung cấp — không bịa dẫn chứng, không thêm ý ngoài tài liệu.
 
 Yêu cầu: giọng thân thiện, dễ hiểu, ứng dụng thực tế, markdown, 250-400 từ.
 
@@ -101,7 +103,12 @@ Trả về JSON thuần (KHÔNG backtick):
     : `Đóng vai nhà nghiên cứu Tử Vi theo văn phong tạp chí Khoa học Huyền Bí Việt Nam trước 1975. Viết bài khảo luận ngắn gọn, học thuật, dùng thuật ngữ Hán–Việt, lập luận rõ ràng theo cấu trúc: dẫn nhập → lý thuyết → phân tích → kết luận.
 
 Chủ đề: ${topic}
-Tài liệu tham khảo:\n${ctxBlock}
+Tài liệu tham khảo (BẮT BUỘC bám sát, ưu tiên trích dẫn ý từ đây, không bịa thêm ngoài tài liệu):\n${ctxBlock}
+
+Nguyên tắc sử dụng tài liệu:
+- Lập luận phải dựa trên tài liệu được cung cấp — không dùng kiến thức chung nếu tài liệu đã đề cập
+- Có thể diễn giải, tổng hợp ý từ nhiều đoạn tài liệu nhưng không được bịa dẫn chứng
+- Nếu tài liệu không đủ để luận về một khía cạnh, bỏ qua khía cạnh đó thay vì phỏng đoán
 
 Yêu cầu SEO & AEO:
 - Tiêu đề chứa từ khóa chính + ý định tìm kiếm
