@@ -1549,22 +1549,31 @@ async function checkPaymentOnLoad(product) {
   if (urlParams.get('unlocked') === '1' && urlParams.get('slug')) {
     const slug = urlParams.get('slug');
     _pendingSlug = slug;
-    // Restore from sessionStorage
     try {
-      const pending = JSON.parse(sessionStorage.getItem('tuvi_pending_'+product)||'{}');
-      if (pending.nameA && pending.result) {
-        _savedResult = pending.result;
-        const paid = await verifyPaymentTuoi(slug);
-        if (paid) {
-          // Re-render and unlock
-          renderAllSections(_savedResult);
-          document.getElementById('result-section').style.display='block';
-          // Clean URL
-          window.history.replaceState({}, '', window.location.pathname);
-          return true;
-        }
+      // Restore form inputs from sessionStorage
+      const pending = JSON.parse(sessionStorage.getItem('tuvi_pending_form_'+product)||'{}');
+      if (pending.ngayA) {
+        // Restore form fields
+        document.getElementById('hoten-a').value = pending.nameA||'';
+        document.getElementById('gt-a').value = pending.gtA||'nam';
+        document.getElementById('ngay-a').value = pending.ngayA||'';
+        document.getElementById('thang-a').value = pending.thangA||'';
+        document.getElementById('nam-a').value = pending.namA||'';
+        document.getElementById('gio-a').value = pending.gioA||'0';
+        document.getElementById('hoten-b').value = pending.nameB||'';
+        document.getElementById('gt-b').value = pending.gtB||'nu';
+        document.getElementById('ngay-b').value = pending.ngayB||'';
+        document.getElementById('thang-b').value = pending.thangB||'';
+        document.getElementById('nam-b').value = pending.namB||'';
+        document.getElementById('gio-b').value = pending.gioB||'0';
+        document.getElementById('nam-xem').value = pending.namXem||'2026';
+        // Re-run analyze and auto-unlock
+        window._autoUnlock = slug;
+        await analyze();
+        window.history.replaceState({}, '', window.location.pathname);
+        return true;
       }
-    } catch(e) {}
+    } catch(e) { console.warn('Restore failed:', e); }
   }
   return false;
 }
@@ -1576,11 +1585,22 @@ async function initiatePaymentTuoi(result, product) {
   const slug = buildSlug(result, product);
   _pendingSlug = slug;
 
-  // Save to sessionStorage for restore
+  // Save form fields to sessionStorage (lightweight, no circular refs)
   try {
-    sessionStorage.setItem('tuvi_pending_'+product, JSON.stringify({
-      nameA: result.nameA, nameB: result.nameB,
-      result: result,
+    sessionStorage.setItem('tuvi_pending_form_'+product, JSON.stringify({
+      nameA: document.getElementById('hoten-a')?.value||'',
+      gtA:   document.getElementById('gt-a')?.value||'nam',
+      ngayA: document.getElementById('ngay-a')?.value||'',
+      thangA:document.getElementById('thang-a')?.value||'',
+      namA:  document.getElementById('nam-a')?.value||'',
+      gioA:  document.getElementById('gio-a')?.value||'0',
+      nameB: document.getElementById('hoten-b')?.value||'',
+      gtB:   document.getElementById('gt-b')?.value||'nu',
+      ngayB: document.getElementById('ngay-b')?.value||'',
+      thangB:document.getElementById('thang-b')?.value||'',
+      namB:  document.getElementById('nam-b')?.value||'',
+      gioB:  document.getElementById('gio-b')?.value||'0',
+      namXem:document.getElementById('nam-xem')?.value||'2026',
     }));
   } catch(e) {}
 
@@ -1604,30 +1624,15 @@ async function initiatePaymentTuoi(result, product) {
 }
 
 function showPaywall(result, product, productLabel) {
-  // Add paywall lock box after result header
-  const body = document.getElementById('result-body');
-  if (!body) return;
-  const lock = document.createElement('div');
-  lock.id = 'paywall-lock-box';
-  lock.className = 'paywall-lock';
-  lock.innerHTML = `
-    <div class="paywall-lock-icon">🔒</div>
-    <div class="paywall-lock-title">Mở Khóa Luận Giải AI</div>
-    <div class="paywall-lock-desc">An sao và tính điểm hoàn toàn miễn phí. Để nhận 9 phần luận giải AI chuyên sâu theo Tử Vi Đẩu Số cổ pháp, vui lòng thanh toán một lần.</div>
-    <div class="paywall-lock-price">$9</div>
-    <div class="paywall-lock-price-note">Thanh toán một lần · Truy cập vĩnh viễn cho cặp lá số này</div>
-    <button class="btn-paywall-tuoi" id="btn-paywall-main" onclick="initiatePaymentTuoi(_savedResult,'${product}')">
-      <span>Mở Khóa Luận Giải</span><span style="font-size:16px">→</span>
-    </button>
-    <div class="paywall-secure">🔒 Thanh toán bảo mật qua PayPal · Hoàn tiền nếu lỗi kỹ thuật</div>
-  `;
-  // Insert before result-layout (sidebar+main), i.e. between header and content
-  const layout = document.querySelector('.result-layout-tuoi');
-  if (layout && layout.parentNode) {
-    layout.parentNode.insertBefore(lock, layout);
-  } else {
-    const rs = document.getElementById('result-section');
-    if (rs) rs.insertBefore(lock, rs.children[1] || rs.firstChild);
+  // Put paywall lock inside each luangiai div (0 to 8)
+  for (let i = 0; i <= 8; i++) {
+    const el = document.getElementById('luangiai-'+i);
+    if (!el) continue;
+    const isFirst = i === 0;
+    el.innerHTML = `
+      <div class="paywall-lock" style="text-align:center;padding:${isFirst?'28px 24px':'16px 24px'};margin-top:8px">
+        ${isFirst ? '<div class="paywall-lock-icon">🔒</div><div class="paywall-lock-title">Mở Khóa Luận Giải AI</div><div class="paywall-lock-desc">An sao và tính điểm hoàn toàn miễn phí. Để nhận 9 phần luận giải AI chuyên sâu, thanh toán một lần.</div><div class="paywall-lock-price">$9</div><div class="paywall-lock-price-note">Thanh toán một lần · Truy cập vĩnh viễn</div><button class="btn-paywall-tuoi" onclick="initiatePaymentTuoi(_savedResult,\'xem-tuoi\')" style="margin-bottom:8px"><span>Mở Khóa Luận Giải</span><span style=\"font-size:16px\">→</span></button><div class="paywall-secure">🔒 Thanh toán bảo mật qua PayPal</div>' : '<div style=\"font-size:13px;color:#aaa;padding:4px 0\">🔒 Mở khóa để xem luận giải phần này</div>' }
+      </div>`;
   }
 }
 
@@ -1673,8 +1678,14 @@ async function analyze(){
     renderAllSections(result);
     document.getElementById('result-section').scrollIntoView({behavior:'smooth'});
     // Check if already paid
-    const alreadyPaid = await verifyPaymentTuoi(_pendingSlug);
-    if (alreadyPaid) { luanGiaiAll(result); } else { showPaywall(result, 'xem-tuoi', 'Xem Tuổi Vợ Chồng'); }
+    // If returning from PayPal with _autoUnlock, skip re-checking
+    if (window._autoUnlock && window._autoUnlock === _pendingSlug) {
+      window._autoUnlock = null;
+      luanGiaiAll(result);
+    } else {
+      const alreadyPaid = await verifyPaymentTuoi(_pendingSlug);
+      if (alreadyPaid) { luanGiaiAll(result); } else { showPaywall(result, 'xem-tuoi', 'Xem Tuổi Vợ Chồng'); }
+    }
   }catch(e){
     errEl.textContent='Lỗi: '+(e.message||'Không thể tính toán.');
     errEl.classList.add('active');console.error(e);
