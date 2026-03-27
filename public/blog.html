@@ -73,22 +73,21 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 .cat-btn:hover, .cat-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
 
 /* MAIN GRID — editorial list style */
-.page-body { flex: 1; max-width: 1060px; margin: 0 auto; padding: 36px 40px 72px; width: 100%; }
+.page-body { flex: 1; max-width: 860px; margin: 0 auto; padding: 36px 40px 72px; width: 100%; }
 
-.article-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
-.article-card {
-  background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 20px;
-  text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 8px;
-  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
-  opacity: 0; animation: fadeUp 0.4s ease forwards;
-}
-.article-card:hover { border-color: var(--navy); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(6,26,46,0.08); }
-.card-cat { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--blue); }
-.card-title { font-family: 'Noto Serif', serif; font-size: 16px; color: var(--navy); line-height: 1.5; font-weight: 600; }
-.card-excerpt { font-size: 13px; color: var(--text-lt); line-height: 1.65; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-weight: 300; }
-.card-meta { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
+.article-list { list-style: none; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.article-item { border-bottom: 1px solid var(--border); transition: background .12s; }
+.article-item:last-child { border-bottom: none; }
+.article-item:hover { background: var(--bg-soft); }
+.article-link { display: flex; align-items: baseline; justify-content: space-between; padding: 13px 18px; text-decoration: none; color: inherit; gap: 16px; }
+.article-left { display: flex; align-items: baseline; gap: 12px; flex: 1; min-width: 0; }
+.card-cat { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); white-space: nowrap; flex-shrink: 0; }
+.card-title { font-size: 14px; color: var(--navy); line-height: 1.5; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.article-link:hover .card-title { color: var(--blue); text-decoration: underline; }
+.card-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
 .card-tag { font-size: 10px; background: var(--bg-soft); color: var(--text-lt); padding: 2px 8px; border-radius: 4px; }
-.card-date { font-size: 10px; color: var(--text-lt); margin-left: auto; }
+.card-date { font-size: 11px; color: var(--text-lt); white-space: nowrap; }
+@media(max-width:700px){.card-cat{display:none}.card-tag{display:none}}
 
 .state-empty { text-align: center; padding: 80px 20px; }
 .state-loading { text-align: center; padding: 60px 20px; }
@@ -303,17 +302,20 @@ function render() {
   const start = (currentPage - 1) * PAGE_SIZE;
   const page  = filtered.slice(start, start + PAGE_SIZE);
 
-  grid.innerHTML = page.map((d, i) => {
+  grid.innerHTML = '<ul class="article-list">' + page.map((d) => {
     const cat  = CAT_LABEL[d.category] || d.category || '';
-    const date = d.created_at ? new Date(d.created_at).toLocaleDateString('vi-VN') : '';
-    const tags = (d.tags||[]).slice(0,3).map(t=>`<span class="card-tag">${t}</span>`).join('');
-    return `<a class="article-card" href="/khao-luan/${d.slug||d.id}" style="animation-delay:${i*0.02}s">
-      <div class="card-cat">${cat}</div>
-      <div class="card-title">${d.title||'—'}</div>
-      ${d.excerpt ? `<div class="card-excerpt">${d.excerpt}</div>` : ''}
-      <div class="card-meta">${tags}<span class="card-date">${date}</span></div>
-    </a>`;
-  }).join('');
+    const date = d.created_at ? new Date(d.created_at).toLocaleDateString('vi-VN',{year:'numeric',month:'short',day:'numeric'}) : '';
+    const tag  = (d.tags||[])[0] ? `<span class="card-tag">${(d.tags||[])[0]}</span>` : '';
+    return `<li class="article-item">
+      <a class="article-link" href="/khao-luan/${d.slug||d.id}">
+        <div class="article-left">
+          ${cat ? `<span class="card-cat">${cat}</span>` : ''}
+          <span class="card-title">${d.title||'—'}</span>
+        </div>
+        <div class="card-right">${tag}<span class="card-date">${date}</span></div>
+      </a>
+    </li>`;
+  }).join('') + '</ul>';
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
   const pag = document.getElementById('pagination');
