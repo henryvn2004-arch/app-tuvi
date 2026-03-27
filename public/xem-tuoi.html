@@ -12,159 +12,539 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/auth.js"></script>
-
 <style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --navy:     #061A2E;
-  --navy-mid: #0D3B5E;
-  --blue:     #1455A4;
-  --gold:     #9A7B3A;
-  --gold-lt:  #F9F4EB;
-  --red:      #C0392B;
-  --green:    #1E6B3C;
-  --text:     #1a1a1a;
-  --text-mid: #444;
-  --text-lt:  #777;
-  --border:   #CCCCCC;
-  --bg:       #FFFFFF;
-  --bg-soft:  #F5F4F0;
-  --a-color:  #FF6B6B;
-  --b-color:  #4A90D9;
+  --navy:      #061A2E;
+  --navy-mid:  #0D3B5E;
+  --blue:      #1455A4;
+  --text:      #1a1a1a;
+  --text-mid:  #444;
+  --text-lt:   #777;
+  --border:    #CCCCCC;
+  --border-lt: #E8E8E8;
+  --bg:        #FFFFFF;
+  --bg-soft:   #F5F4F0;
+  --gold:      #9A7B3A;
+  --gold-lt:   #F9F4EB;
+  --red:       #C0392B;
+  --green:     #1E6B3C;
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 
 /* NAV */
-.topnav{position:sticky;top:0;z-index:200;background:var(--navy);display:flex;align-items:center;height:60px;padding:0 40px;gap:32px}
-.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
-.nav-logo img{width:32px;height:32px;object-fit:contain}
-.nav-logo .name{color:#fff;font-size:14px;font-weight:700;font-family:'Noto Serif',serif}
-.nav-logo .url{color:#8BAACC;font-size:10px}
-.nav-links{display:flex;align-items:center;gap:4px}
-.nav-link{color:#8BAACC;font-size:13px;text-decoration:none;padding:6px 12px;border-radius:6px;transition:all 0.15s;white-space:nowrap}
-.nav-link:hover,.nav-link.active{color:#fff;background:rgba(255,255,255,0.08)}
-.nav-hamburger{display:none;background:none;border:none;color:#fff;font-size:20px;cursor:pointer;margin-left:auto}
-@media(max-width:768px){
-  .topnav{padding:0 16px}
-  .nav-links{display:none;position:absolute;top:60px;left:0;right:0;background:var(--navy);flex-direction:column;padding:12px;gap:4px;z-index:100}
-  .nav-links.open{display:flex}
-  .nav-hamburger{display:block}
+.topnav { position: sticky; top: 0; z-index: 200; background: var(--navy); display: flex; align-items: center; height: 60px; padding: 0 40px; gap: 32px; }
+.nav-links { display: flex; align-items: center; gap: 4px; }
+.nav-link { color: #8BAACC; font-size: 13px; text-decoration: none; padding: 6px 12px; border-radius: 6px; transition: all 0.15s; white-space: nowrap; }
+.nav-link:hover { color: #fff; background: rgba(255,255,255,0.07); }
+.nav-link.active { color: #c9a84c; }
+.nav-hamburger { display: none; background: none; border: none; color: #8BAACC; cursor: pointer; padding: 8px; font-size: 20px; }
+@media (max-width: 700px) {
+  .topnav { padding: 0 16px; }
+  .nav-links { display: none; position: absolute; top: 60px; left: 0; right: 0; background: var(--navy); flex-direction: column; padding: 8px 0 16px; gap: 0; border-bottom: 1px solid #1a2a3a; }
+  .nav-links.open { display: flex; }
+  .nav-link { padding: 10px 24px; border-radius: 0; width: 100%; }
+  .nav-hamburger { display: block; margin-left: auto; }
+  .nav-tag { display: none; }
 }
+.nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.nav-logo img { width:38px; height:38px; object-fit:contain; border-radius:5px; }
+.nav-logo .name { font-size:16px; font-weight:700; color:#CC2200; font-family:Georgia,serif; }
+.nav-logo .url  { font-size:10px; color:#aaa; letter-spacing:0.07em; text-transform:uppercase; }
+.nav-logo em { font-style: italic; color: #8BAACC; font-size: 14px; margin-left: 10px; }
+.nav-tag { font-size: 10px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #8BAACC; }
+
+/* LAYOUT */
+.page { max-width: 1100px; margin: 0 auto; padding: 0 56px; }
 
 /* HERO */
-.hero-tuoi{background:var(--navy);padding:56px 40px 40px;text-align:center}
-.hero-tuoi .eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#8BAACC;margin-bottom:12px}
-.hero-tuoi h1{font-family:'Noto Serif',serif;font-size:clamp(28px,5vw,44px);color:#fff;margin-bottom:12px;line-height:1.2}
-.hero-tuoi p{color:#8BAACC;font-size:15px;max-width:560px;margin:0 auto}
+.hero { padding: 80px 0 64px; display: grid; grid-template-columns: 1fr 380px; gap: 80px; align-items: start; }
+.hero-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--blue); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+.hero-eyebrow::after { content: ''; width: 32px; height: 1px; background: var(--blue); }
+.hero h1 { font-family: Arial, sans-serif; font-size: 54px; font-weight: 400; line-height: 1.07; color: var(--navy); margin-bottom: 28px; letter-spacing: -0.5px; }
+.hero h1 em { font-style: italic; color: var(--gold); }
+.hero-desc { font-family: Arial, sans-serif; font-size: 18px; color: var(--text-mid); line-height: 1.8; font-weight: 300; max-width: 480px; }
+.hero-right { background: var(--bg-soft); border: 1px solid var(--border); padding: 32px 28px; }
+.hero-stat { padding-bottom: 20px; margin-bottom: 20px; border-bottom: 1px solid var(--border); }
+.hero-stat:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.hero-stat-num { font-family: Arial, sans-serif; font-size: 34px; color: var(--navy); font-weight: 400; }
+.hero-stat-label { font-size: 12px; color: var(--text-lt); margin-top: 3px; line-height: 1.4; }
 
-/* FORM GRID */
-.xemtuoi-wrap{max-width:960px;margin:0 auto;padding:40px 24px}
+/* FORM */
+.form-section { padding: 64px 0; border-bottom: 1px solid var(--border); }
+.section-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 36px; display: flex; align-items: center; gap: 16px; }
+.section-eyebrow::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; border: 1px solid var(--border); }
+.form-col { padding: 32px 32px 36px; border-right: 1px solid var(--border); }
+.form-col:last-child { border-right: none; }
+.form-col-title { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--navy); margin-bottom: 28px; padding-bottom: 14px; border-bottom: 2px solid var(--navy); }
+.form-group { margin-bottom: 24px; }
+.form-label { display: block; font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 8px; }
+.form-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--border); padding: 10px 0; font-size: 16px; color: var(--text); font-family: Arial, sans-serif; outline: none; transition: border-color 0.2s; }
+.form-input:focus { border-color: var(--navy); }
+.form-input::placeholder { color: #C4C4C4; }
+select.form-input { cursor: pointer; }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.btn-submit { width: 100%; background: var(--navy); color: white; border: none; padding: 16px; font-family: Arial, sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; cursor: pointer; transition: background 0.2s; margin-top: 4px; }
+.btn-submit:hover { background: var(--navy-mid); }
+.btn-submit:disabled { background: #aaa; cursor: not-allowed; }
 
-.pair-forms{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px}
-@media(max-width:640px){.pair-forms{grid-template-columns:1fr}}
-
-.person-card{background:var(--bg-soft);border:2px solid var(--border);border-radius:12px;padding:24px}
-.person-card.card-a{border-color:var(--a-color)}
-.person-card.card-b{border-color:var(--b-color)}
-.person-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.person-label .dot{width:10px;height:10px;border-radius:50%}
-.dot-a{background:var(--a-color)}
-.dot-b{background:var(--b-color)}
-.form-group{margin-bottom:14px}
-.form-label{display:block;font-size:12px;color:var(--text-lt);margin-bottom:4px;font-weight:600;letter-spacing:0.3px}
-.form-input{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:13px;background:#fff;font-family:inherit}
-.form-input:focus{outline:none;border-color:var(--blue)}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-
-.btn-analyze{width:100%;padding:14px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;font-family:'Noto Serif',serif;cursor:pointer;letter-spacing:0.5px;transition:all 0.2s;margin-bottom:8px}
-.btn-analyze:hover{background:#0D3B5E}
-.btn-analyze:disabled{opacity:0.5;cursor:not-allowed}
-.analyze-note{font-size:11px;color:var(--text-lt);text-align:center}
+/* STATUS */
+.status-bar { display: none; align-items: center; gap: 16px; padding: 16px 32px; background: var(--bg-soft); border: 1px solid var(--border); border-top: none; }
+.status-bar.active { display: flex; }
+.phan-progress { font-size: 11px; color: var(--blue); font-weight: 600; letter-spacing: 1px; white-space: nowrap; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); animation: blink 1.2s ease-in-out infinite; flex-shrink: 0; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
+#loader-text { font-size: 13px; color: var(--text-mid); font-weight: 500; flex: 1; }
+.progress-wrap { width: 160px; height: 2px; background: var(--border); flex-shrink: 0; }
+.progress-fill { height: 100%; background: var(--blue); width: 0%; transition: width 0.4s; }
+.error-msg { display: none; background: #FFF5F5; border-left: 3px solid var(--red); padding: 14px 20px; font-size: 14px; color: var(--red); margin-top: 16px; }
+.error-msg.active { display: block; }
 
 /* RESULT */
-#result-section{display:none}
-.result-header-tuoi{background:var(--navy);color:#fff;padding:24px 32px;border-radius:12px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
-.score-main{text-align:center}
-.score-number{font-family:'Noto Serif',serif;font-size:56px;font-weight:700;line-height:1;color:#fff}
-.score-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8BAACC;margin-top:4px}
-.score-stars{font-size:24px;margin-top:6px}
-.pair-names{font-size:14px;color:#8BAACC}
-.pair-names b{color:#fff}
+.result-section { display: none; }
+.result-section.active { display: block; }
 
-/* SECTION BLOCKS */
-.tuoi-section{margin-bottom:40px}
-.tuoi-section-title{font-family:'Noto Serif',serif;font-size:20px;color:var(--navy);margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gold);display:flex;align-items:center;gap:8px}
-.tuoi-section-score{font-size:13px;font-weight:700;padding:3px 10px;border-radius:12px;background:var(--bg-soft)}
+.result-header { padding: 60px 0 40px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+.result-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--blue); margin-bottom: 16px; }
+.result-name { font-family: Arial, sans-serif; font-size: 44px; font-weight: 400; color: var(--navy); margin-bottom: 14px; }
+.result-info { display: flex; gap: 0; flex-wrap: wrap; }
+.result-info-item { font-size: 14px; color: var(--text-lt); padding-right: 20px; margin-right: 20px; border-right: 1px solid var(--border); }
+.result-info-item:last-child { border-right: none; }
 
-/* METRICS TABLE */
-.metrics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:20px}
-.metric-card{background:#fff;border:1px solid var(--border);border-radius:8px;padding:14px 16px}
-.metric-card-title{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-lt);margin-bottom:8px}
-.metric-card-score{font-size:22px;font-weight:700;font-family:'Noto Serif',serif;margin-bottom:6px}
-.metric-card-desc{font-size:12px;color:var(--text-lt);line-height:1.5}
-.metric-bar{height:4px;background:#eee;border-radius:2px;margin-top:8px;overflow:hidden}
-.metric-bar-fill{height:100%;border-radius:2px;transition:width 0.6s ease}
+/* LA SO GRID */
+.laso-wrap { margin-bottom: 56px; }
+.laso-label { font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 16px; display: flex; align-items: center; gap: 16px; }
+.laso-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.laso-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--border); border-left: 1px solid var(--border); }
 
-/* COMPARISON ROW */
-.compare-row{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;margin-bottom:10px;padding:10px 14px;background:#fff;border:1px solid var(--border);border-radius:8px;font-size:13px}
-.compare-a{color:var(--a-color);font-weight:600;text-align:left}
-.compare-b{color:var(--b-color);font-weight:600;text-align:right}
-.compare-mid{font-size:18px;text-align:center;min-width:40px}
-.compare-label{font-size:10px;color:var(--text-lt);text-align:center;margin-top:2px}
+/* Cung cell — layout mới */
+.cung-cell {
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-areas:
+    "can-chi   cung-name  dai-van"
+    "chinh     chinh      chinh"
+    "tot       tot        xau"
+    "trang-sinh trang-sinh trang-sinh";
+  grid-template-columns: 1fr auto 1fr;
+  grid-template-rows: 17px 34px 150px 16px;
+  gap: 0px; padding: 4px 5px;
+  font-size: 10px;
+  overflow: hidden;
+}
+.cung-cell.empty { background: var(--bg-soft); }
+.cung-cell.is-menh { border: 2px solid var(--gold); }
+.cung-cell.cur-van { border: 2px solid var(--green, #1E6B3C); }
 
-/* RADAR CHART */
-.chart-wrap{margin:16px 0}
-.chart-title{font-size:11px;font-weight:700;color:var(--text-lt);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
-.chart-buttons{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
-.radar-btn{padding:5px 12px;font-size:11px;cursor:pointer;background:#f0f0f0;color:#666;border:1px solid #ddd;border-radius:4px;font-family:inherit;transition:all 0.15s}
-.radar-btn:hover{border-color:var(--navy);color:var(--navy)}
-.radar-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.c-can-chi   { grid-area: can-chi;     font-size: 8px; color: var(--gold); font-weight: 700; }
+.c-cung-name { grid-area: cung-name;   font-size: 8px; color: var(--text-lt); text-transform: uppercase; letter-spacing: 0.5px; text-align: center; white-space: nowrap; }
+.c-dai-van   { grid-area: dai-van;     font-size: 8px; color: var(--blue); text-align: right; }
+.c-chinh     { grid-area: chinh;       text-align: center; border-bottom: 1px solid var(--border-lt); padding-bottom: 1px; overflow: hidden; }
+.c-tot       { grid-area: tot; overflow: hidden; }
+.c-xau       { grid-area: xau;         text-align: right; overflow: hidden; }
+.c-trang-sinh { grid-area: trang-sinh; text-align: center; border-top: 1px solid var(--border-lt); padding-top: 1px; font-size: 9px; color: var(--gold); }
+
+/* Star colors by element */
+.star-chinh { font-weight: 700; font-size: 11px; display: block; line-height: 1.3; }
+.star-phu { font-size: 9px; display: block; line-height: 1.3; }
+.star-vong   { font-size: 10px; }
+.bright      { font-size: 8px; opacity: 1; color: #7EC8E3; margin-left:1px; }
+.hoa         { font-size: 9px; color: #9A7B3A; margin-left: 1px; }
+.e-hoa  { color: #C0392B; }
+.e-kim  { color: #000000; }
+.e-tho  { color: #9A7B3A; }
+.e-moc  { color: #1E6B3C; }
+.e-thuy { color: #1455A4; }
+.star-tt { font-size: 10px; color: #1E6B3C; }
+
+/* Center info */
+.cung-center {
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  grid-column: span 2; grid-row: span 2;
+  background: var(--bg-soft);
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+}
+.center-la-so { width: 100%; display: flex; flex-direction: column; align-items: center; }
+.center-title { color: var(--navy); font-weight: 700; font-size: 13px; margin-bottom: 10px; text-align: center; letter-spacing: 1px; }
+.center-row { font-size: 12px; color: var(--text-mid); margin: 3px 0; width: 100%; text-align: left; padding-left: 4px; line-height: 1.7; }
+.center-row b { color: var(--text-lt); font-weight: normal; }
+.center-divider { width: 80%; border: none; border-top: 1px solid var(--border); margin: 5px 0; }
+
+/* MỤC LỤC */
+/* Sidebar layout */
+.result-layout { display: flex; gap: 32px; align-items: flex-start; }
+.result-sidebar {
+  display: none; width: 200px; flex-shrink: 0;
+  position: sticky; top: 76px;
+  max-height: calc(100vh - 96px); overflow-y: auto;
+}
+.result-sidebar.visible { display: block; }
+.result-main { flex: 1; min-width: 0; }
+
+.muc-luc { border: 1px solid var(--border); }
+.muc-luc.visible { }
+.muc-luc-header { background: var(--navy); color: white; padding: 12px 16px; font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+.muc-luc-items { display: flex; flex-direction: column; }
+.muc-luc-btn { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: white; border: none; border-bottom: 1px solid var(--border-lt); cursor: pointer; transition: background 0.15s; text-align: left; width: 100%; }
+.muc-luc-btn:last-child { border-bottom: none; }
+.muc-luc-btn:hover:not(.loading) { background: var(--bg-soft); }
+.muc-luc-btn.active { background: var(--gold-lt); }
+.muc-luc-btn.loading { cursor: not-allowed; background: #EBF3FF; }
+.muc-luc-btn.loading .ml-num { animation: spin 1s linear infinite; border-color: var(--blue); color: var(--blue); }
+.ml-status.loading::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); animation: blink 0.8s ease-in-out infinite; margin-right: 3px; }
+.ml-num { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: var(--text-lt); flex-shrink: 0; transition: all 0.2s; }
+.muc-luc-btn.active .ml-num { border-color: var(--gold); color: var(--gold); }
+.muc-luc-btn.done .ml-num { background: var(--navy); border-color: var(--navy); color: white; }
+.muc-luc-btn.loading .ml-num { border-color: var(--blue); color: var(--blue); }
+.ml-label { font-size: 12px; font-weight: 500; color: var(--text); line-height: 1.3; flex: 1; }
+.ml-status { font-size: 11px; color: var(--text-lt); flex-shrink: 0; }
+.ml-status.done { color: var(--green); font-weight: 700; }
+.ml-status.loading { color: var(--blue); }
 
 /* LUẬN GIẢI */
-.luangiai-box{background:#fff;border:1px solid var(--border);border-radius:8px;padding:20px 24px;font-size:15px;line-height:1.9;color:var(--text-mid);font-weight:300}
-.luangiai-loading{color:var(--text-lt);font-style:italic;font-size:14px}
+.result-body {}
+.phan-section { border-top: 1px solid var(--border); padding: 56px 0; }
+.phan-section:first-child { border-top: 2px solid var(--navy); }
+.phan-num { font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--blue); margin-bottom: 12px; }
+.phan-section h2 { font-family: Arial, sans-serif; font-size: 30px; font-weight: 400; color: var(--navy); margin-bottom: 28px; }
+.phan-section h3 { font-family: Arial, sans-serif; font-size: 20px; font-weight: 500; color: var(--navy); margin: 36px 0 16px; padding-top: 28px; border-top: 1px solid var(--border-lt); }
+.phan-section p { font-family: Arial, sans-serif; font-size: 17px; line-height: 1.85; color: var(--text-mid); margin-bottom: 18px; font-weight: 300; max-width: 760px; }
+.phan-section strong { color: var(--text); font-weight: 600; font-family: Arial, sans-serif; }
+.phan-section em { font-style: italic; color: var(--gold); }
+.phan-anchor { display: block; height: 0; scroll-margin-top: 76px; }
 
-/* TAG */
-.tag-hop{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700}
-.tag-xung{background:#fef2f2;color:var(--red)}
-.tag-hop-tot{background:#f0fdf4;color:var(--green)}
-.tag-trung{background:#fafaf0;color:#777}
+/* TABLES */
+.md-table-wrap { overflow-x: auto; margin: 20px 0 32px; }
+.md-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.md-table th { background: var(--navy); color: white; padding: 12px 16px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+.md-table td { padding: 11px 16px; border-bottom: 1px solid var(--border-lt); color: var(--text-mid); vertical-align: top; }
+.md-table tr:nth-child(even) td { background: var(--bg-soft); }
+.md-table tr:last-child td { border-bottom: none; }
+.md-table tr:hover td { background: var(--gold-lt); }
 
-/* SCORE COLOR */
-.score-great{color:var(--green)}
-.score-good{color:var(--blue)}
-.score-med{color:#9A7B3A}
-.score-bad{color:var(--red)}
+/* ACTIONS */
+.result-actions { display: none; align-items: center; gap: 16px; padding: 40px 0 72px; border-top: 1px solid var(--border); margin-top: 8px; }
+.btn-next-phan { display: none; background: var(--navy); color: white; border: none; padding: 14px 32px; font-family: Arial, sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: background 0.2s; align-items: center; gap: 10px; }
+.btn-next-phan:hover:not(:disabled) { background: var(--navy-mid); }
+.btn-next-phan:disabled { background: #999; cursor: not-allowed; }
+.btn-next-phan.loading { display: flex !important; }
+.spinner { display: none; width: 15px; height: 15px; border: 2px solid rgba(255,255,255,0.35); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
+.btn-next-phan.loading .spinner { display: inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.phan-loading { display: none; align-items: center; gap: 16px; padding: 48px 0; border-top: 2px solid var(--navy); }
+.phan-loading.active { display: flex; }
+.phan-loading-spinner { width: 28px; height: 28px; border: 3px solid var(--border-lt); border-top-color: var(--navy); border-radius: 50%; animation: spin 0.8s linear infinite; }
+.phan-loading-text { font-size: 14px; color: var(--text-lt); letter-spacing: 0.5px; }
+.btn-pdf { display: none; background: transparent; color: var(--navy); border: 1.5px solid var(--navy); padding: 13px 28px; font-family: Arial, sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
+.btn-pdf:hover { background: var(--navy); color: white; }
+.btn-pdf.visible { display: inline-block; }
+.phan-label-text { font-size: 13px; color: var(--text-lt); display: none; }
+.phan-label-text.visible { display: block; }
 
 /* FOOTER */
-.site-footer{background:#1A1210;color:rgba(255,255,255,0.5);padding:36px 32px 24px}
-.footer-brand{display:flex;align-items:center;gap:12px;margin-bottom:8px}
-.footer-brand img{width:28px;height:28px;opacity:0.7}
-.footer-brand .name{color:#fff;font-weight:700;font-size:14px}
-.footer-brand .zh{color:#9A7B3A;font-size:11px}
-.footer-tagline{font-size:12px;line-height:1.7;margin-top:4px}
-.footer-bottom{border-top:1px solid rgba(255,255,255,0.08);margin-top:24px;padding-top:16px;display:flex;justify-content:space-between;align-items:center;font-size:11px}
-.footer-bottom img{width:20px;height:20px;opacity:0.3}
+.footer { background: var(--navy); padding: 28px 56px; margin-top: 80px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #8BAACC; letter-spacing: 1px; }
 
-/* LOADER */
-.loader-bar{height:3px;background:linear-gradient(90deg,var(--gold),var(--blue),var(--gold));background-size:200%;animation:shimmer 1.5s infinite;display:none;border-radius:3px;margin-bottom:16px}
-.loader-bar.active{display:block}
-@keyframes shimmer{0%{background-position:200%}100%{background-position:-200%}}
-.error-msg{color:var(--red);font-size:13px;padding:10px;background:#fef2f2;border-radius:6px;margin-bottom:12px;display:none}
-.error-msg.active{display:block}
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .page { padding: 0 12px; }
+  .topnav { padding: 0 12px; }
+  .footer { padding: 20px; flex-direction: column; gap: 8px; text-align: center; }
+  .hero { grid-template-columns: 1fr; gap: 0; padding: 32px 0 24px; }
+  .hero h1 { font-size: 30px; }
+  .hero-right { display: none; }
+  .intro-section > div > div:last-child, .intro-section > div { grid-template-columns: 1fr !important; gap: 32px !important; }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-col { border-right: none; border-bottom: 1px solid var(--border); }
+  .form-col:last-child { border-bottom: none; }
+  .result-layout { flex-direction: column; }
+  .result-sidebar { display: none !important; }
+  .result-info { flex-direction: column; gap: 4px; }
+  .result-info-item { border-right: none; padding-right: 0; margin-right: 0; }
+
+  /* Lá số mobile: 4 cột nhỏ */
+  .laso-grid { grid-template-columns: repeat(4, 1fr); font-size: 9px; }
+  .cung-cell { min-height: 80px; padding: 2px 3px; }
+  .star-chinh { font-weight: 700; font-size: 11px; display: block; line-height: 1.3; }
+  .star-phu { font-size: 9px; display: block; line-height: 1.3; }
+  .c-can-chi, .c-dai-van, .c-cung-name { font-size: 7px; }
+  .cung-center { padding: 8px; }
+  .center-title { font-size: 11px; }
+  .center-row { font-size: 10px; }
+  .bright { font-size: 7px; }
+  .hoa { font-size: 8px; }
+}
+
+@media (max-width: 480px) {
+  /* Lá số rất nhỏ: ẩn phụ tinh, chỉ giữ chính tinh */
+  .c-tot, .c-xau { display: none; }
+  .c-trang-sinh { display: none; }
+  .cung-cell { min-height: 60px; }
+}
+@media print {
+  .topnav, .hero, .form-section, .status-bar, .result-actions,
+  .result-sidebar, .footer, .phan-loading { display: none !important; }
+  .bright { display: inline !important; font-size: 7px !important; opacity: 1 !important; color: #000 !important; }
+  .hoa { display: inline !important; font-size: 8px !important; }
+  .result-section.active { display: block !important; }
+  .result-layout { display: block !important; }
+  .result-main { width: 100% !important; }
+  .page { padding: 0 16px; max-width: 100%; }
+  .phan-section { break-inside: avoid; border-top: 1px solid #ccc; padding: 16px 0; }
+  .phan-section p { font-size: 13px; line-height: 1.6; }
+
+  /* Lá số print: 4 cột, gọn */
+  .laso-wrap { break-inside: avoid; }
+  .laso-grid { grid-template-columns: repeat(4, 1fr); border: 1px solid #999; }
+  .cung-cell { min-height: 90px; padding: 3px 4px; border-color: #ccc; }
+  .cung-center { padding: 8px; background: #f5f5f5; }
+  .center-row { font-size: 10px; }
+  .star-chinh { font-weight: 700; font-size: 11px; display: block; line-height: 1.3; }
+  .star-phu { font-size: 9px; display: block; line-height: 1.3; }
+  .c-tot, .c-xau { font-size: 8px; }
+  .c-trang-sinh { font-size: 8px; }
+  .bright { font-size: 7px; }
+  .hoa { font-size: 7px; }
+  .result-header { padding: 20px 0; }
+  .result-name { font-size: 28px; }
+
+  /* Force background colors khi in — thanh progress bar & pregen blocks */
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+  .score-bar-fill { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .score-bar-bg { background: #e0e0e0 !important; }
+  .pregen-block { background: #f8f8f8 !important; border: 1px solid #ddd !important; }
+  .pregen-title { color: #2255aa !important; }
+  .yn-great-cat { color: #1a7a3a !important; }
+  .yn-cat { color: #2d6a4f !important; }
+  .yn-great-hung { color: #c0392b !important; }
+  .yn-hung { color: #A07070 !important; }
+  .yn-tuan { color: #8a6000 !important; }
+  .yn-neutral { color: #333 !important; }
+  .pregen-good { color: #1a7a3a !important; }
+  .pregen-bad { color: #c0392b !important; }
+  .cc-label { border: 1px solid #aaa !important; }
+  .rules-canh-bao { background: #fff0f0 !important; border-left: 2px solid #c0392b !important; }
+}
+
+.radar-btn {
+  padding: 5px 12px; font-size: 11px; cursor: pointer;
+  background: #1a1a1a; color: #aaa; border: 1px solid #333;
+  border-radius: 4px; transition: all 0.15s;
+}
+.radar-btn:hover { background: #252525; color: #ddd; }
+.radar-btn.active { background: #c9a84c22; color: #c9a84c; border-color: #c9a84c; }
+.pregen-block { background:#F5F5F5; border:1px solid #e0e0e0; border-radius:8px; padding:12px 16px; margin:12px 0; }
+.pregen-title { font-size:11px; font-weight:600; color:#1a3a6a; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:8px; }
+.pregen-item { font-size:12px; color:#333; margin:4px 0; }
+.pregen-yn { font-size:12.5px; line-height:1.6; padding:2px 0; }
+.yn-great-cat { color:#1a6b3a; }
+.yn-cat { color:#2a5a7a; }
+.yn-great-hung { color:#C0392B; }
+.yn-hung { color:#9B2020; }
+.yn-tuan { color:#1a3a8a; }
+.yn-neutral { color:#2a3a4a; }
+.pregen-row { font-size:12px; margin:3px 0; }
+.pregen-good { color:#1a6b3a; }
+.pregen-bad { color:#C0392B; }
+.cc-label { font-size:11px; font-weight:600; padding:2px 6px; border-radius:3px; margin-right:6px; }
+.cc-quy_cuc { background:#2a1f5e; color:#a78bfa; }
+.cc-phu_cuc { background:#1f3a2a; color:#4ade80; }
+.cc-ban_tien_cuc { background:#1a2535; color:#7bb8f8; }
+.cc-tap_cuc { background:#222222; color:#a8b8c8; }
+.cc-than_cu { background:#1e1e1e; color:#94a3b8; }
+.cc-menh_co_ban { background:#1e1e1e; color:#94a3b8; }
+.cc-mota { font-size:11px; color:#555; }
+.pregen-divider { display:flex; align-items:center; gap:10px; margin:20px 0 12px; }
+.pregen-divider::before, .pregen-divider::after { content:''; flex:1; border-top:1px solid #383838; }
+.pregen-divider span { font-size:11px; color:#5588cc; font-weight:600; letter-spacing:0.8px; text-transform:uppercase; white-space:nowrap; }
+.pregen-scores { }
+.score-bars { display:flex; flex-direction:column; gap:6px; margin-top:4px; }
+.score-bar-row { display:flex; align-items:center; gap:8px; }
+.score-label { font-size:11px; color:#444; width:80px; flex-shrink:0; }
+.score-bar-bg { flex:1; height:8px; background:#d0d8e0; border-radius:4px; overflow:hidden; }
+.score-bar-fill { height:100%; border-radius:4px; transition:width 0.5s; }
+.score-val { font-size:11px; color:#333; width:24px; text-align:right; flex-shrink:0; }
+.rules-group { margin: 4px 0; }
+.rules-canh-bao { background:#fff0f0; border-radius:4px; padding:4px 6px; margin:4px 0; border-left:2px solid #f87171; }
+.candle-wrap { overflow-x:auto; padding-bottom:8px; }
+.candle-svg { display:block; }
+.candle-wick { stroke-width:1.5; }
+.candle-body { rx:1; }
+.candle-label { font-size:8px; fill:#555; text-anchor:middle; }
+.candle-axis { stroke:#1e2d42; stroke-width:1; }
+.candle-grid  { stroke:#1a2535; stroke-width:0.5; stroke-dasharray:3,3; }
+
+.btn-group-submit { display:flex; flex-direction:column; gap:10px; }
+.btn-group-label { font-size:11px; color:#888; letter-spacing:0.5px; text-transform:uppercase; }
+.btn-group-label-paid { margin-top:4px; }
+.btn-quick-row { display:flex; gap:8px; flex-wrap:wrap; }
+.btn-quick { padding:9px 14px; background:#1a2535; color:#ffffff; border:1px solid #2a3a4a; border-radius:6px; font-size:13px; cursor:pointer; transition:all 0.15s; font-family:inherit; }
+.btn-quick:hover { background:#1e2e42; border-color:#c9a84c55; color:#e8c060; }
+.btn-quick:disabled { opacity:0.5; cursor:not-allowed; }
+.nhanh-badge { font-size:16px; font-weight:600; color:#c9a84c; margin-bottom:16px; letter-spacing:0.5px; }
+.nhanh-loading { color:#888; font-style:italic; font-size:13px; margin:12px 0; }
+
+
+/* ── PHAN LOCK BOX ── */
+.phan-lock-box {
+  border: 1px solid #e8e0d0;
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin: 16px 0 0;
+  background: #fafaf7;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.phan-lock-icon { font-size: 20px; flex-shrink: 0; }
+.phan-lock-title { font-size: 13px; font-weight: 600; color: #444; flex: 1; min-width: 160px; }
+.phan-lock-desc { font-size: 12px; color: #999; }
+.btn-lock-unlock {
+  padding: 8px 18px;
+  background: #061A2E;
+  color: #c9a84c;
+  border: 1px solid #c9a84c;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.btn-lock-unlock:hover { background: #c9a84c; color: #061A2E; }
+.phan-lock-box.unlocking { opacity: 0.6; pointer-events: none; }
+
+/* ── PAYWALL ── */
+.paywall-gate {
+  border: 2px solid #c9a84c;
+  border-radius: 12px;
+  padding: 40px 36px;
+  margin: 48px 0 32px;
+  background: linear-gradient(135deg, #fdf6e9 0%, #fff9ef 100%);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.paywall-gate::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(201,168,76,0.03) 10px, rgba(201,168,76,0.03) 20px);
+  pointer-events: none;
+}
+.paywall-eyebrow {
+  font-size: 10px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: #c9a84c; margin-bottom: 12px;
+}
+.paywall-title {
+  font-family: Arial, sans-serif; font-size: 26px; font-weight: 400;
+  color: #061A2E; margin-bottom: 10px; line-height: 1.3;
+}
+.paywall-desc {
+  font-size: 15px; color: #666; line-height: 1.7;
+  margin-bottom: 28px; max-width: 480px; margin-left: auto; margin-right: auto;
+}
+.paywall-features {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 8px; margin-bottom: 28px; max-width: 480px;
+  margin-left: auto; margin-right: auto; text-align: left;
+}
+.paywall-feature {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 13px; color: #444; line-height: 1.4;
+}
+.paywall-feature::before { content: '✦'; color: #c9a84c; flex-shrink: 0; font-size: 11px; margin-top: 1px; }
+.paywall-price {
+  font-size: 38px; font-weight: 700; color: #061A2E;
+  margin-bottom: 4px; font-family: Arial, sans-serif;
+}
+.paywall-price-note { font-size: 12px; color: #999; margin-bottom: 24px; }
+.btn-paywall {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 40px; background: #061A2E; color: #c9a84c;
+  border: 2px solid #c9a84c; border-radius: 4px; font-size: 13px;
+  font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  cursor: pointer; font-family: inherit; transition: all 0.2s;
+}
+.btn-paywall:hover:not(:disabled) { background: #c9a84c; color: #061A2E; }
+.btn-paywall:disabled { opacity: 0.6; cursor: not-allowed; }
+.paywall-secure { font-size: 11px; color: #aaa; margin-top: 12px; }
+.paywall-blur-preview {
+  position: relative; margin-bottom: 0;
+  max-height: 180px; overflow: hidden;
+}
+.paywall-blur-preview::after {
+  content: '';
+  position: absolute; left: 0; right: 0; bottom: 0; height: 140px;
+  background: linear-gradient(to bottom, transparent, #fafafa);
+  pointer-events: none;
+}
+
+.site-footer { background:#1A1210; color:rgba(255,255,255,0.5); padding:36px 32px 24px; }
+.footer-top  { display:flex; justify-content:space-between; align-items:flex-start; gap:32px; flex-wrap:wrap; padding-bottom:24px; border-bottom:1px solid rgba(255,255,255,0.08); margin-bottom:20px; }
+.footer-brand { display:flex; align-items:center; gap:10px; }
+.footer-brand img { width:36px; height:36px; object-fit:contain; border-radius:5px; opacity:0.9; }
+.footer-brand-text .name { font-size:14px; font-weight:700; color:rgba(255,255,255,0.85); font-family:Georgia,serif; }
+.footer-brand-text .zh   { font-size:12px; color:#C9A84C; }
+.footer-tagline { font-size:12px; margin-top:8px; color:rgba(255,255,255,0.35); line-height:1.6; }
+.footer-bottom  { display:flex; justify-content:space-between; align-items:center; font-size:11px; color:rgba(255,255,255,0.25); }
+.footer-bottom img { width:20px; height:20px; object-fit:contain; opacity:0.3; border-radius:3px; }
+</style>
+
+<style>
+:root { --color-a: #E05555; --color-b: #3B7DD8; }
+.hero-tuoi { background: var(--navy); padding: 48px 40px 36px; text-align: center; }
+.hero-tuoi .eyebrow { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #8BAACC; margin-bottom: 12px; }
+.hero-tuoi h1 { font-family: 'Noto Serif', serif; font-size: clamp(26px,4vw,40px); color: #fff; margin-bottom: 10px; line-height: 1.25; }
+.hero-tuoi p { color: #8BAACC; font-size: 14px; max-width: 520px; margin: 0 auto; }
+.xemtuoi-wrap { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+.pair-forms { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+@media(max-width:640px) { .pair-forms { grid-template-columns: 1fr; } }
+.person-card { background: var(--bg-soft); border: 2px solid var(--border); border-radius: 10px; padding: 20px; }
+.person-card.card-a { border-color: var(--color-a); }
+.person-card.card-b { border-color: var(--color-b); }
+.person-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px; display: flex; align-items: center; gap: 7px; }
+.dot-a { width:9px; height:9px; border-radius:50%; background:var(--color-a); }
+.dot-b { width:9px; height:9px; border-radius:50%; background:var(--color-b); }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+.btn-analyze { width:100%; padding:14px; background:var(--navy); color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:700; font-family:'Noto Serif',serif; cursor:pointer; letter-spacing:0.5px; transition:all 0.2s; margin-bottom:6px; }
+.btn-analyze:hover { background: #0D3B5E; }
+.btn-analyze:disabled { opacity:0.5; cursor:not-allowed; }
+.result-layout-tuoi { display:flex; gap:32px; align-items:flex-start; }
+.result-sidebar-tuoi { display:none; width:200px; flex-shrink:0; position:sticky; top:76px; max-height:calc(100vh - 96px); overflow-y:auto; }
+.result-sidebar-tuoi.visible { display:block; }
+.result-main-tuoi { flex:1; min-width:0; }
+.result-header-tuoi { background:var(--navy); color:#fff; padding:24px 28px; border-radius:10px; margin-bottom:28px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; }
+.score-number { font-family:'Noto Serif',serif; font-size:58px; font-weight:700; line-height:1; }
+.score-label { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#8BAACC; }
+.score-stars { font-size:22px; margin-top:4px; }
+.meter-wrap { margin:12px 0 20px; }
+.meter-track { height:12px; background:#eee; border-radius:6px; overflow:hidden; }
+.meter-fill { height:100%; border-radius:6px; transition:width 0.8s cubic-bezier(.4,0,.2,1); }
+.loader-tuoi { height:3px; background:linear-gradient(90deg,var(--gold),var(--blue),var(--gold)); background-size:200%; animation:shimmer 1.5s infinite; display:none; border-radius:3px; margin-bottom:12px; }
+.loader-tuoi.active { display:block; }
+@keyframes shimmer { 0%{background-position:200%} 100%{background-position:-200%} }
+.error-msg { color:var(--red); font-size:13px; padding:10px; background:#fef2f2; border-radius:6px; margin-bottom:12px; display:none; }
+.error-msg.active { display:block; }
 </style>
 </head>
 <body>
 
 <nav class="topnav">
   <a class="nav-logo" href="/">
-    <img src="/seal.webp" alt="Tử Vi Minh Bảo">
-    <div>
-      <div class="name">Tử Vi Minh Bảo</div>
-      <div class="url">Tri mệnh lý – Thuận thế hành</div>
-    </div>
-  </a>
+  <img src="/seal.webp" alt="Tử Vi Minh Bảo">
+  <div>
+    <div class="name">Tử Vi Minh Bảo</div>
+    <div class="url">Tri mệnh lý – Thuận thế hành</div>
+  </div>
+</a>
   <div class="nav-links" id="nav-links">
     <a class="nav-link" href="/">Trang Chủ</a>
     <a class="nav-link" href="/about.html">Giới Thiệu</a>
@@ -172,6 +552,8 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);line-he
     <a class="nav-link" href="/blog.html">Khảo Luận</a>
     <a class="nav-link" href="/menh-kho.html">Mệnh Khố</a>
     <a class="nav-link active" href="/xem-tuoi.html">Xem Tuổi</a>
+    <a class="nav-link active" href="/xem-tuoi.html">Xem Tuổi</a>
+    <a class="nav-link" href="/xem-tuoi.html">Xem Tuổi</a>
     <a class="nav-link" href="/contact.html">Liên Hệ</a>
   </div>
   <div id="nav-auth-area" style="margin-left:auto"></div>
@@ -181,687 +563,602 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);line-he
 <div class="hero-tuoi">
   <div class="eyebrow">Tử Vi Minh Bảo</div>
   <h1>Xem Tuổi Vợ Chồng</h1>
-  <p>Phân tích tương quan hợp khắc giữa hai lá số theo Tử Vi Đẩu Số cổ pháp — cung Mệnh, Phu Thê, Tài Bạch, Tử Tức và đại vận hiện tại.</p>
+  <p>Phân tích tương quan hợp khắc giữa hai lá số theo Tử Vi Đẩu Số cổ pháp.</p>
 </div>
 
 <div class="xemtuoi-wrap">
-
-  <!-- FORM -->
   <div class="pair-forms">
-    <!-- Person A -->
     <div class="person-card card-a">
-      <div class="person-label">
-        <div class="dot dot-a"></div>
-        <span style="color:var(--a-color)">Người Thứ Nhất</span>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Họ và tên</label>
-        <input class="form-input" type="text" id="hoten-a" placeholder="Nguyễn Văn A">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Giới tính</label>
-        <select class="form-input" id="gt-a">
-          <option value="nam">Nam</option>
-          <option value="nu">Nữ</option>
-        </select>
-      </div>
+      <div class="person-label"><div class="dot-a"></div><span style="color:var(--color-a)">Người Thứ Nhất</span></div>
+      <div class="form-group"><label class="form-label">Họ và tên</label><input class="form-input" type="text" id="hoten-a" placeholder="Nguyễn Văn A"></div>
+      <div class="form-group"><label class="form-label">Giới tính</label><select class="form-input" id="gt-a"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
       <div class="form-row-3 form-group">
-        <div>
-          <label class="form-label">Ngày</label>
-          <input class="form-input" type="number" id="ngay-a" placeholder="1" min="1" max="31">
-        </div>
-        <div>
-          <label class="form-label">Tháng</label>
-          <input class="form-input" type="number" id="thang-a" placeholder="1" min="1" max="12">
-        </div>
-        <div>
-          <label class="form-label">Năm</label>
-          <input class="form-input" type="number" id="nam-a" placeholder="1990" min="1900" max="2010">
-        </div>
+        <div><label class="form-label">Ngày</label><input class="form-input" type="number" id="ngay-a" placeholder="1" min="1" max="31"></div>
+        <div><label class="form-label">Tháng</label><input class="form-input" type="number" id="thang-a" placeholder="1" min="1" max="12"></div>
+        <div><label class="form-label">Năm DL</label><input class="form-input" type="number" id="nam-a" placeholder="1990" min="1900" max="2010"></div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Giờ sinh (dương lịch)</label>
-        <select class="form-input" id="gio-a">
-          <option value="0">Tý (23h–1h)</option>
-          <option value="1">Sửu (1h–3h)</option>
-          <option value="2">Dần (3h–5h)</option>
-          <option value="3">Mão (5h–7h)</option>
-          <option value="4">Thìn (7h–9h)</option>
-          <option value="5">Tỵ (9h–11h)</option>
-          <option value="6">Ngọ (11h–13h)</option>
-          <option value="7">Mùi (13h–15h)</option>
-          <option value="8">Thân (15h–17h)</option>
-          <option value="9">Dậu (17h–19h)</option>
-          <option value="10">Tuất (19h–21h)</option>
-          <option value="11">Hợi (21h–23h)</option>
-        </select>
-      </div>
+      <div class="form-group"><label class="form-label">Giờ sinh</label><select class="form-input" id="gio-a"><option value="0">Tý (23h–1h)</option>
+<option value="1">Sửu (1h–3h)</option>
+<option value="2">Dần (3h–5h)</option>
+<option value="3">Mão (5h–7h)</option>
+<option value="4">Thìn (7h–9h)</option>
+<option value="5">Tỵ (9h–11h)</option>
+<option value="6">Ngọ (11h–13h)</option>
+<option value="7">Mùi (13h–15h)</option>
+<option value="8">Thân (15h–17h)</option>
+<option value="9">Dậu (17h–19h)</option>
+<option value="10">Tuất (19h–21h)</option>
+<option value="11">Hợi (21h–23h)</option></select></div>
     </div>
-
-    <!-- Person B -->
     <div class="person-card card-b">
-      <div class="person-label">
-        <div class="dot dot-b"></div>
-        <span style="color:var(--b-color)">Người Thứ Hai</span>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Họ và tên</label>
-        <input class="form-input" type="text" id="hoten-b" placeholder="Trần Thị B">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Giới tính</label>
-        <select class="form-input" id="gt-b">
-          <option value="nu">Nữ</option>
-          <option value="nam">Nam</option>
-        </select>
-      </div>
+      <div class="person-label"><div class="dot-b"></div><span style="color:var(--color-b)">Người Thứ Hai</span></div>
+      <div class="form-group"><label class="form-label">Họ và tên</label><input class="form-input" type="text" id="hoten-b" placeholder="Trần Thị B"></div>
+      <div class="form-group"><label class="form-label">Giới tính</label><select class="form-input" id="gt-b"><option value="nu">Nữ</option><option value="nam">Nam</option></select></div>
       <div class="form-row-3 form-group">
-        <div>
-          <label class="form-label">Ngày</label>
-          <input class="form-input" type="number" id="ngay-b" placeholder="1" min="1" max="31">
-        </div>
-        <div>
-          <label class="form-label">Tháng</label>
-          <input class="form-input" type="number" id="thang-b" placeholder="1" min="1" max="12">
-        </div>
-        <div>
-          <label class="form-label">Năm</label>
-          <input class="form-input" type="number" id="nam-b" placeholder="1992" min="1900" max="2010">
-        </div>
+        <div><label class="form-label">Ngày</label><input class="form-input" type="number" id="ngay-b" placeholder="1" min="1" max="31"></div>
+        <div><label class="form-label">Tháng</label><input class="form-input" type="number" id="thang-b" placeholder="1" min="1" max="12"></div>
+        <div><label class="form-label">Năm DL</label><input class="form-input" type="number" id="nam-b" placeholder="1992" min="1900" max="2010"></div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Giờ sinh (dương lịch)</label>
-        <select class="form-input" id="gio-b">
-          <option value="0">Tý (23h–1h)</option>
-          <option value="1">Sửu (1h–3h)</option>
-          <option value="2">Dần (3h–5h)</option>
-          <option value="3">Mão (5h–7h)</option>
-          <option value="4">Thìn (7h–9h)</option>
-          <option value="5">Tỵ (9h–11h)</option>
-          <option value="6">Ngọ (11h–13h)</option>
-          <option value="7">Mùi (13h–15h)</option>
-          <option value="8">Thân (15h–17h)</option>
-          <option value="9">Dậu (17h–19h)</option>
-          <option value="10">Tuất (19h–21h)</option>
-          <option value="11">Hợi (21h–23h)</option>
-        </select>
-      </div>
+      <div class="form-group"><label class="form-label">Giờ sinh</label><select class="form-input" id="gio-b"><option value="0">Tý (23h–1h)</option>
+<option value="1">Sửu (1h–3h)</option>
+<option value="2">Dần (3h–5h)</option>
+<option value="3">Mão (5h–7h)</option>
+<option value="4">Thìn (7h–9h)</option>
+<option value="5">Tỵ (9h–11h)</option>
+<option value="6">Ngọ (11h–13h)</option>
+<option value="7">Mùi (13h–15h)</option>
+<option value="8">Thân (15h–17h)</option>
+<option value="9">Dậu (17h–19h)</option>
+<option value="10">Tuất (19h–21h)</option>
+<option value="11">Hợi (21h–23h)</option></select></div>
     </div>
   </div>
-
-  <div class="form-group">
-    <label class="form-label">Năm xem</label>
-    <input class="form-input" type="number" id="nam-xem" value="2026" min="2020" max="2040" style="max-width:160px">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+    <label class="form-label" style="white-space:nowrap;margin:0">Năm xem</label>
+    <input class="form-input" type="number" id="nam-xem" value="2026" min="2020" max="2040" style="max-width:120px">
   </div>
-
   <div id="error-msg" class="error-msg"></div>
-  <div id="loader-bar" class="loader-bar"></div>
-
+  <div id="loader-tuoi" class="loader-tuoi"></div>
   <button class="btn-analyze" id="btn-analyze" onclick="analyze()">⚖ Phân Tích Tương Quan</button>
-  <div class="analyze-note">Kết quả tính toán theo cổ pháp Tử Vi Đẩu Số + luận giải bằng AI</div>
+  <div style="font-size:11px;color:var(--text-lt);text-align:center;margin-bottom:32px">9 phần phân tích · Luận giải bằng AI cho từng yếu tố</div>
 
-  <!-- RESULT -->
-  <div id="result-section">
-
-    <!-- Score header -->
-    <div class="result-header-tuoi" id="result-header-tuoi"></div>
-
-    <!-- 8 metrics -->
-    <div class="tuoi-section">
-      <div class="tuoi-section-title">📊 Điểm Tương Hợp 8 Yếu Tố</div>
-      <div class="metrics-grid" id="metrics-grid"></div>
-    </div>
-
-    <!-- Radar overlay -->
-    <div class="tuoi-section">
-      <div class="tuoi-section-title">📊 So Sánh 6 Chiều — Cung Mệnh</div>
-      <div class="chart-wrap">
-        <div class="chart-buttons" id="radar-btns"></div>
-        <canvas id="chart-radar-overlay" style="max-height:420px"></canvas>
+  <div id="result-section" style="display:none">
+    <div id="result-header-tuoi" class="result-header-tuoi"></div>
+    <div class="result-layout-tuoi">
+      <div class="result-sidebar-tuoi" id="result-sidebar-tuoi">
+        <div class="muc-luc">
+          <div class="muc-luc-header">Nội Dung</div>
+          <div class="muc-luc-items">
+        <button class="muc-luc-btn" id="ml-0" onclick="jumpTo(0)">
+          <div class="ml-num" id="ml-num-0">0</div>
+          <div class="ml-label">Tổng Quan</div>
+          <div class="ml-status" id="ml-status-0"></div>
+        </button>
+        <button class="muc-luc-btn" id="ml-1" onclick="jumpTo(1)">
+          <div class="ml-num" id="ml-num-1">1</div>
+          <div class="ml-label">Địa Chi Năm Sinh</div>
+          <div class="ml-status" id="ml-status-1"></div>
+        </button>
+        <button class="muc-luc-btn" id="ml-2" onclick="jumpTo(2)">
+          <div class="ml-num" id="ml-num-2">2</div>
+          <div class="ml-label">Ngũ Hành Nạp Âm</div>
+          <div class="ml-status" id="ml-status-2"></div>
+        </button>
+        <button class="muc-luc-btn" id="ml-3" onclick="jumpTo(3)">
+          <div class="ml-num" id="ml-num-3">3</div>
+          <div class="ml-label">Cung Mệnh</div>
+          <div class="ml-status" id="ml-status-3"></div>
+        </button>
+        <button class="muc-luc-btn" id="ml-4" onclick="jumpTo(4)">
+          <div class="ml-num" id="ml-num-4">4</div>
+          <div class="ml-label">Cung Phu Thê</div>
+          <div class="ml-status" id="ml-status-4"></div>
+        </button>
+        <button class="muc-luc-btn" id="ml-5" onclick="jumpTo(5)">
+          <div class="ml-num" id="ml-num-5">5</div>
+          <div class="ml-label">Cung Tử Tức</div>
+          <div class="ml-status" id="ml-status-5"></div>
+        </button>
+        <button class="muc-luc-btn" id="ml-6" onclick="jumpTo(6)">
+          <div class="ml-num" id="ml-num-6">6</div>
+          <div class="ml-label">Cung Tài Bạch</div>
+          <div class="ml-status" id="ml-status-6"></div>
+        </button>
+        <button class="muc-luc-btn" id="ml-7" onclick="jumpTo(7)">
+          <div class="ml-num" id="ml-num-7">7</div>
+          <div class="ml-label">Chính Tinh Mệnh</div>
+          <div class="ml-status" id="ml-status-7"></div>
+        </button>
+        <button class="muc-luc-btn" id="ml-8" onclick="jumpTo(8)">
+          <div class="ml-num" id="ml-num-8">8</div>
+          <div class="ml-label">Đại Vận</div>
+          <div class="ml-status" id="ml-status-8"></div>
+        </button></div>
+        </div>
       </div>
+      <div class="result-main-tuoi" id="result-body"></div>
     </div>
-
-    <!-- Spline DV overlay -->
-    <div class="tuoi-section">
-      <div class="tuoi-section-title">📊 Vận Trình Toàn Đời — Đối Chiếu</div>
-      <div class="chart-wrap">
-        <canvas id="chart-daivan-overlay"></canvas>
-      </div>
-    </div>
-
-    <!-- Cung comparisons -->
-    <div class="tuoi-section" id="cung-compare-section">
-      <div class="tuoi-section-title">🔍 So Sánh Từng Cung</div>
-      <div id="cung-compare-rows"></div>
-    </div>
-
-    <!-- Claude luận giải -->
-    <div class="tuoi-section">
-      <div class="tuoi-section-title">✦ Luận Giải Tương Quan</div>
-      <div class="luangiai-box" id="luangiai-box">
-        <div class="luangiai-loading">Đang phân tích...</div>
-      </div>
-    </div>
-
-  </div><!-- end result-section -->
+  </div>
 </div>
 
 <footer class="site-footer">
-  <div style="max-width:960px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px">
+  <div class="footer-top">
     <div>
       <div class="footer-brand">
         <img src="/seal.webp" alt="">
-        <div>
+        <div class="footer-brand-text">
           <div class="name">Tử Vi Minh Bảo</div>
           <div class="zh">紫微明寶</div>
         </div>
       </div>
       <p class="footer-tagline">Tri mệnh lý – Thuận thế hành<br>Kết hợp kinh điển &amp; công nghệ hiện đại.</p>
     </div>
+    <div style="display:flex;gap:48px;flex-wrap:wrap">
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:12px">Chính Sách</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="/chinh-sach-bao-mat.html" style="font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Chính sách bảo mật</a>
+          <a href="/dieu-khoan-dich-vu.html" style="font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Điều khoản dịch vụ</a>
+          <a href="/huong-dan-thanh-toan.html" style="font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Hướng dẫn thanh toán</a>
+          <a href="/faqs.html" style="font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">FAQs</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:12px">Khám Phá</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="/resources.html" style="font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Thư viện tài liệu</a>
+          <a href="/blog.html" style="font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Khảo luận</a>
+          <a href="/about.html" style="font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Giới thiệu</a>
+          <a href="/contact.html" style="font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Liên hệ</a>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="footer-bottom" style="max-width:960px;margin:0 auto">
+  <div class="footer-bottom">
     <span>© 2026 tuviminhbao.com — All rights reserved</span>
     <img src="/seal.webp" alt="">
   </div>
 </footer>
 
 <script>
-// ─── CONSTANTS (dùng từ engine nếu có, hoặc khai báo local) ─────
-const _DC = typeof DIA_CHI !== 'undefined' ? DIA_CHI : ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
-const _dcIdx = dc => _DC.indexOf(dc);
 
-const LUC_HOP = {
-  'Tý':'Sửu','Sửu':'Tý','Dần':'Hợi','Hợi':'Dần',
-  'Mão':'Tuất','Tuất':'Mão','Thìn':'Dậu','Dậu':'Thìn',
-  'Tỵ':'Thân','Thân':'Tỵ','Ngọ':'Mùi','Mùi':'Ngọ'
-};
-const TAM_HOP_GROUPS = [
-  ['Dần','Ngọ','Tuất'],['Tỵ','Dậu','Sửu'],
-  ['Thân','Tý','Thìn'],['Hợi','Mão','Mùi']
-];
-const TU_XUNG = {
-  'Tý':'Ngọ','Ngọ':'Tý','Sửu':'Mùi','Mùi':'Sửu',
-  'Dần':'Thân','Thân':'Dần','Mão':'Dậu','Dậu':'Mão',
-  'Thìn':'Tuất','Tuất':'Thìn','Tỵ':'Hợi','Hợi':'Tỵ'
-};
-const TAM_HINH = {
-  'Dần':['Tỵ','Thân'],'Tỵ':['Dần','Thân'],'Thân':['Dần','Tỵ'],
-  'Sửu':['Tuất','Mùi'],'Tuất':['Sửu','Mùi'],'Mùi':['Sửu','Tuất'],
-  'Tý':['Mão'],'Mão':['Tý']
-};
-const _NH_SINH = typeof NGU_HANH_SINH_MAP !== 'undefined' ? NGU_HANH_SINH_MAP : {'Mộc':'Hỏa','Hỏa':'Thổ','Thổ':'Kim','Kim':'Thủy','Thủy':'Mộc'};
-const _NH_KHAC = typeof NGU_HANH_KHAC_MAP !== 'undefined' ? NGU_HANH_KHAC_MAP : {'Mộc':'Thổ','Thổ':'Thủy','Thủy':'Hỏa','Hỏa':'Kim','Kim':'Mộc'};
+// ═══════════════════════════════════════════════════
+// DATA & HELPERS
+// ═══════════════════════════════════════════════════
+const LUC_HOP = {'Tý':'Sửu','Sửu':'Tý','Dần':'Hợi','Hợi':'Dần','Mão':'Tuất','Tuất':'Mão','Thìn':'Dậu','Dậu':'Thìn','Tỵ':'Thân','Thân':'Tỵ','Ngọ':'Mùi','Mùi':'Ngọ'};
+const TAM_HOP_G = [['Dần','Ngọ','Tuất'],['Tỵ','Dậu','Sửu'],['Thân','Tý','Thìn'],['Hợi','Mão','Mùi']];
+const TU_XUNG = {'Tý':'Ngọ','Ngọ':'Tý','Sửu':'Mùi','Mùi':'Sửu','Dần':'Thân','Thân':'Dần','Mão':'Dậu','Dậu':'Mão','Thìn':'Tuất','Tuất':'Thìn','Tỵ':'Hợi','Hợi':'Tỵ'};
+const TAM_HINH = {'Dần':['Tỵ','Thân'],'Tỵ':['Dần','Thân'],'Thân':['Dần','Tỵ'],'Sửu':['Tuất','Mùi'],'Tuất':['Sửu','Mùi'],'Mùi':['Sửu','Tuất'],'Tý':['Mão'],'Mão':['Tý']};
+const _NH_SINH = typeof NGU_HANH_SINH_MAP!=='undefined'?NGU_HANH_SINH_MAP:{'Mộc':'Hỏa','Hỏa':'Thổ','Thổ':'Kim','Kim':'Thủy','Thủy':'Mộc'};
+const _NH_KHAC = typeof NGU_HANH_KHAC_MAP!=='undefined'?NGU_HANH_KHAC_MAP:{'Mộc':'Thổ','Thổ':'Thủy','Thủy':'Hỏa','Hỏa':'Kim','Kim':'Mộc'};
+const _TTN = typeof THAI_TUE_NHOM!=='undefined'?THAI_TUE_NHOM:{'Thái Tuế':1,'Quan Phù':1,'Bạch Hổ':1,'Thiếu Dương':2,'Tử Phù':2,'Phúc Đức':2,'Tang Môn':3,'Tuế Phá':3,'Điếu Khách':3,'Thiếu Âm':4,'Long Đức':4,'Trực Phù':4};
+const _NA = {'Giáp Tý':'Kim','Ất Sửu':'Kim','Bính Dần':'Hỏa','Đinh Mão':'Hỏa','Mậu Thìn':'Mộc','Kỷ Tỵ':'Mộc','Canh Ngọ':'Thổ','Tân Mùi':'Thổ','Nhâm Thân':'Kim','Quý Dậu':'Kim','Giáp Tuất':'Hỏa','Ất Hợi':'Hỏa','Bính Tý':'Thủy','Đinh Sửu':'Thủy','Mậu Dần':'Thổ','Kỷ Mão':'Thổ','Canh Thìn':'Kim','Tân Tỵ':'Kim','Nhâm Ngọ':'Mộc','Quý Mùi':'Mộc','Giáp Thân':'Thủy','Ất Dậu':'Thủy','Bính Tuất':'Thổ','Đinh Hợi':'Thổ','Mậu Tý':'Hỏa','Kỷ Sửu':'Hỏa','Canh Dần':'Mộc','Tân Mão':'Mộc','Nhâm Thìn':'Thủy','Quý Tỵ':'Thủy','Giáp Ngọ':'Kim','Ất Mùi':'Kim','Bính Thân':'Hỏa','Đinh Dậu':'Hỏa','Mậu Tuất':'Mộc','Kỷ Hợi':'Mộc','Canh Tý':'Thổ','Tân Sửu':'Thổ','Nhâm Dần':'Kim','Quý Mão':'Kim','Giáp Thìn':'Hỏa','Ất Tỵ':'Hỏa','Bính Ngọ':'Thủy','Đinh Mùi':'Thủy','Mậu Thân':'Thổ','Kỷ Dậu':'Thổ','Canh Tuất':'Kim','Tân Hợi':'Kim','Nhâm Tý':'Mộc','Quý Sửu':'Mộc','Giáp Dần':'Thủy','Ất Mão':'Thủy','Bính Thìn':'Thổ','Đinh Tỵ':'Thổ','Mậu Ngọ':'Hỏa','Kỷ Mùi':'Hỏa','Canh Thân':'Mộc','Tân Dậu':'Mộc','Nhâm Tuất':'Thủy','Quý Hợi':'Thủy'};
 
-const _NAP_AM = {
-  'Giáp Tý':'Kim','Ất Sửu':'Kim','Bính Dần':'Hỏa','Đinh Mão':'Hỏa',
-  'Mậu Thìn':'Mộc','Kỷ Tỵ':'Mộc','Canh Ngọ':'Thổ','Tân Mùi':'Thổ',
-  'Nhâm Thân':'Kim','Quý Dậu':'Kim','Giáp Tuất':'Hỏa','Ất Hợi':'Hỏa',
-  'Bính Tý':'Thủy','Đinh Sửu':'Thủy','Mậu Dần':'Thổ','Kỷ Mão':'Thổ',
-  'Canh Thìn':'Kim','Tân Tỵ':'Kim','Nhâm Ngọ':'Mộc','Quý Mùi':'Mộc',
-  'Giáp Thân':'Thủy','Ất Dậu':'Thủy','Bính Tuất':'Thổ','Đinh Hợi':'Thổ',
-  'Mậu Tý':'Hỏa','Kỷ Sửu':'Hỏa','Canh Dần':'Mộc','Tân Mão':'Mộc',
-  'Nhâm Thìn':'Thủy','Quý Tỵ':'Thủy','Giáp Ngọ':'Kim','Ất Mùi':'Kim',
-  'Bính Thân':'Hỏa','Đinh Dậu':'Hỏa','Mậu Tuất':'Mộc','Kỷ Hợi':'Mộc',
-  'Canh Tý':'Thổ','Tân Sửu':'Thổ','Nhâm Dần':'Kim','Quý Mão':'Kim',
-  'Giáp Thìn':'Hỏa','Ất Tỵ':'Hỏa','Bính Ngọ':'Thủy','Đinh Mùi':'Thủy',
-  'Mậu Thân':'Thổ','Kỷ Dậu':'Thổ','Canh Tuất':'Kim','Tân Hợi':'Kim',
-  'Nhâm Tý':'Mộc','Quý Sửu':'Mộc','Giáp Dần':'Thủy','Ất Mão':'Thủy',
-  'Bính Thìn':'Thổ','Đinh Tỵ':'Thổ','Mậu Ngọ':'Hỏa','Kỷ Mùi':'Hỏa',
-  'Canh Thân':'Mộc','Tân Dậu':'Mộc','Nhâm Tuất':'Thủy','Quý Hợi':'Thủy',
-};
-const _THAI_TUE_NHOM = typeof THAI_TUE_NHOM !== 'undefined' ? THAI_TUE_NHOM : {
-  'Thái Tuế':1,'Quan Phù':1,'Bạch Hổ':1,
-  'Thiếu Dương':2,'Tử Phù':2,'Phúc Đức':2,
-  'Tang Môn':3,'Tuế Phá':3,'Điếu Khách':3,
-  'Thiếu Âm':4,'Long Đức':4,'Trực Phù':4,
-};
+const PHAN_LABELS = ['Tổng Quan','Địa Chi Năm Sinh','Ngũ Hành Nạp Âm','Cung Mệnh','Cung Phu Thê','Cung Tử Tức','Cung Tài Bạch','Chính Tinh Mệnh','Đại Vận'];
+const WEIGHTS = [0,0.10,0.10,0.20,0.20,0.10,0.15,0.10,0.05];
+const CUNG_MAP = [null,null,null,'Mệnh','Phu Thê','Tử Tức','Tài Bạch',null,null];
+const METRICS_VI = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
+const METRICS_KEY = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
 
-const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
-const METRIC_VI = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
-
-// ─── HELPER FUNCTIONS ───────────────────────────────────────────
 function clamp(v,lo=0,hi=10){return Math.max(lo,Math.min(hi,v));}
 function r1(v){return Math.round(v*10)/10;}
-
-function chiRelation(dc1, dc2) {
-  if (dc1 === dc2) return {type:'same', score:8, label:'Cùng chi'};
-  if (LUC_HOP[dc1] === dc2) return {type:'luchop', score:9, label:'Lục Hợp ✓'};
-  if (TU_XUNG[dc1] === dc2) return {type:'tuxung', score:1, label:'Tứ Xung ✗'};
-  const tg1 = TAM_HOP_GROUPS.find(g=>g.includes(dc1));
-  const tg2 = TAM_HOP_GROUPS.find(g=>g.includes(dc2));
-  if (tg1 && tg2 && tg1===tg2) return {type:'tamhop', score:9, label:'Tam Hợp ✓'};
-  if (TAM_HINH[dc1]?.includes(dc2)) return {type:'tamhinh', score:3, label:'Tam Hình ⚠'};
-  // Bán hợp (cùng 2/3 tam hợp)
-  if (tg1 && tg2 && tg1!==tg2) return {type:'neutral', score:5, label:'Bình thường'};
-  return {type:'neutral', score:5, label:'Bình thường'};
+function scoreColor(s){
+  if(s>=8)return'var(--green)';if(s>=6)return'var(--blue)';
+  if(s>=4)return'var(--gold)';return'var(--red)';
+}
+function meterColor(s100){
+  if(s100>=75)return'var(--green)';if(s100>=55)return'var(--blue)';
+  if(s100>=35)return'var(--gold)';return'var(--red)';
 }
 
-function nguHanhRelation(hanhA, hanhB) {
-  if (!hanhA || !hanhB) return {score:5, label:'Không xác định'};
-  if (hanhA === hanhB) return {score:8, label:'Đồng hành'};
-  if (_NH_SINH[hanhB] === hanhA) return {score:9, label:`${hanhB} sinh ${hanhA} ✓`};
-  if (_NH_SINH[hanhA] === hanhB) return {score:6, label:`${hanhA} sinh ${hanhB}`};
-  if (_NH_KHAC[hanhB] === hanhA) return {score:1, label:`${hanhB} khắc ${hanhA} ✗`};
-  if (_NH_KHAC[hanhA] === hanhB) return {score:4, label:`${hanhA} khắc ${hanhB}`};
-  return {score:5, label:'Bình thường'};
+function chiRelation(dc1,dc2){
+  if(dc1===dc2)return{score:8,label:'Cùng chi',type:'same'};
+  if(LUC_HOP[dc1]===dc2)return{score:9,label:'Lục Hợp ✓',type:'luchop'};
+  if(TU_XUNG[dc1]===dc2)return{score:1,label:'Tứ Xung ✗',type:'tuxung'};
+  const g1=TAM_HOP_G.find(g=>g.includes(dc1)),g2=TAM_HOP_G.find(g=>g.includes(dc2));
+  if(g1&&g2&&g1===g2)return{score:9,label:'Tam Hợp ✓',type:'tamhop'};
+  if(TAM_HINH[dc1]?.includes(dc2))return{score:3,label:'Tam Hình ⚠',type:'tamhinh'};
+  return{score:5,label:'Bình thường',type:'neutral'};
 }
-
-function thaiTueRelation(nhomA, nhomB) {
-  if (!nhomA || !nhomB) return {score:5, delta:0, label:''};
-  if (nhomA === nhomB) return {score:7, delta:2, label:'Cùng nhóm Thái Tuế'};
-  const oppPairs = [[1,3],[3,1],[2,4],[4,2]];
-  const suppPairs = [[1,2],[2,1],[3,4],[4,3]];
-  if (oppPairs.some(([a,b])=>a===nhomA&&b===nhomB)) return {score:4, delta:-1, label:'Nhóm đối lập'};
-  if (suppPairs.some(([a,b])=>a===nhomA&&b===nhomB)) return {score:6, delta:1, label:'Nhóm bổ trợ'};
-  return {score:5, delta:0, label:'Nhóm trung tính'};
+function nguHanhRel(hA,hB){
+  if(!hA||!hB)return{score:5,label:'?'};
+  if(hA===hB)return{score:8,label:'Đồng hành'};
+  if(_NH_SINH[hB]===hA)return{score:9,label:hB+' sinh '+hA+' ✓'};
+  if(_NH_SINH[hA]===hB)return{score:6,label:hA+' sinh '+hB};
+  if(_NH_KHAC[hB]===hA)return{score:1,label:hB+' khắc '+hA+' ✗'};
+  if(_NH_KHAC[hA]===hB)return{score:4,label:hA+' khắc '+hB};
+  return{score:5,label:'Bình thường'};
 }
-
-function cungRelationScore(palA, palB, lsA, lsB) {
-  if (!palA || !palB) return {score:5, details:[]};
-  const dcA = palA.diaChi, dcB = palB.diaChi;
-  const chiRel = chiRelation(dcA, dcB);
-  let score = chiRel.score * 0.6 + 5 * 0.4; // weighted with base 5
-  const details = [chiRel.label];
-
-  // Sao TPTC interaction: Hóa Kỵ A chiếu B
-  const allStarsA = (palA.stars||[]).map(s=>s.ten);
-  const allStarsB = (palB.stars||[]).map(s=>s.ten);
-  const CAT = ['Hóa Lộc','Lộc Tồn','Hóa Quyền','Thiên Khôi','Thiên Việt','Tả Phù','Hữu Bật'];
-  const HUNG = ['Hóa Kỵ','Kình Dương','Đà La','Địa Không','Địa Kiếp'];
-
-  if (allStarsA.includes('Hóa Kỵ')) { score -= 1.5; details.push('Hóa Kỵ A → B ✗'); }
-  if (allStarsB.includes('Hóa Kỵ')) { score -= 1.5; details.push('Hóa Kỵ B → A ✗'); }
-  if (allStarsA.includes('Hóa Lộc')||allStarsA.includes('Lộc Tồn')) { score += 1; details.push('Lộc A ✓'); }
-  if (allStarsB.includes('Hóa Lộc')||allStarsB.includes('Lộc Tồn')) { score += 1; details.push('Lộc B ✓'); }
-
-  return {score: r1(clamp(score)), chiRel, details};
+function ttNhomRel(nA,nB){
+  if(!nA||!nB)return{delta:0,label:''};
+  if(nA===nB)return{delta:2,label:'Cùng nhóm Thái Tuế'};
+  if([[1,3],[3,1],[2,4],[4,2]].some(([a,b])=>a===nA&&b===nB))return{delta:-1,label:'Nhóm đối lập'};
+  if([[1,2],[2,1],[3,4],[4,3]].some(([a,b])=>a===nA&&b===nB))return{delta:1,label:'Nhóm bổ trợ'};
+  return{delta:0,label:'Nhóm trung tính'};
 }
-
-function mainStarRelation(palA, palB) {
-  const PAIRS_HOP = [
-    ['Tử Vi','Thiên Phủ'],['Thái Dương','Thái Âm'],
-    ['Thiên Cơ','Thiên Lương'],['Vũ Khúc','Tham Lang'],
-    ['Liêm Trinh','Thiên Tướng'],
-  ];
-  const starsA = (palA?.majorStars||[]).map(s=>s.ten);
-  const starsB = (palB?.majorStars||[]).map(s=>s.ten);
-  for (const [s1,s2] of PAIRS_HOP) {
-    if ((starsA.includes(s1)&&starsB.includes(s2))||(starsA.includes(s2)&&starsB.includes(s1)))
-      return {score:9, label:`${s1} × ${s2} — Cặp hòa hợp ✓`};
+function cungScore(palA,palB){
+  if(!palA||!palB)return{score:5,chiRel:{label:'?'},details:[]};
+  const cr=chiRelation(palA.diaChi,palB.diaChi);
+  let s=cr.score*0.6+5*0.4;
+  const details=[cr.label];
+  const stA=(palA.stars||[]).map(s=>s.ten);
+  const stB=(palB.stars||[]).map(s=>s.ten);
+  if(stA.includes('Hóa Kỵ')){s-=1.5;details.push('Hóa Kỵ cung A ✗');}
+  if(stB.includes('Hóa Kỵ')){s-=1.5;details.push('Hóa Kỵ cung B ✗');}
+  if(stA.includes('Hóa Lộc')||stA.includes('Lộc Tồn')){s+=1;details.push('Lộc cung A ✓');}
+  if(stB.includes('Hóa Lộc')||stB.includes('Lộc Tồn')){s+=1;details.push('Lộc cung B ✓');}
+  return{score:r1(clamp(s)),chiRel:cr,details};
+}
+function mainStarRel(palA,palB){
+  const PAIRS=[['Tử Vi','Thiên Phủ'],['Thái Dương','Thái Âm'],['Thiên Cơ','Thiên Lương'],['Vũ Khúc','Tham Lang'],['Liêm Trinh','Thiên Tướng']];
+  const sA=(palA?.majorStars||[]).map(s=>s.ten);
+  const sB=(palB?.majorStars||[]).map(s=>s.ten);
+  for(const [s1,s2] of PAIRS){
+    if((sA.includes(s1)&&sB.includes(s2))||(sA.includes(s2)&&sB.includes(s1)))
+      return{score:9,label:`${s1} × ${s2} — Cặp hòa hợp ✓`};
   }
-  // Cùng chính tinh
-  for (const s of starsA) if (starsB.includes(s)) return {score:8, label:`Cùng ${s} — Đồng khí`};
-  // Sát tinh vs sát tinh
-  const SAT = ['Thất Sát','Phá Quân','Tham Lang'];
-  if (starsA.some(s=>SAT.includes(s)) && starsB.some(s=>SAT.includes(s)))
-    return {score:4, label:'Cả 2 cung có sao cứng — dễ xung đột'};
-  return {score:6, label:'Bình thường'};
+  for(const s of sA)if(sB.includes(s))return{score:8,label:`Cùng ${s} — Đồng khí`};
+  const SAT=['Thất Sát','Phá Quân'];
+  if(sA.some(s=>SAT.includes(s))&&sB.some(s=>SAT.includes(s)))
+    return{score:4,label:'Cả 2 cung có sao cứng — dễ xung đột'};
+  return{score:6,label:'Bình thường'};
 }
 
-function dvScore(ls) {
-  return ls?.daiVanHienTai?.scoring?.tong ?? 5;
+function calcTuongHop(lsA,lsB,nameA,nameB){
+  const ccA=lsA.canChiNam||'',ccB=lsB.canChiNam||'';
+  const naA=_NA[ccA]||lsA.napAmHanh||'',naB=_NA[ccB]||lsB.napAmHanh||'';
+  const chiNamA=lsA.chiNam||'',chiNamB=lsB.chiNam||'';
+  const pMenhA=lsA.palaces?.find(p=>p.isMenh),pMenhB=lsB.palaces?.find(p=>p.isMenh);
+  const pPTA=lsA.palaces?.find(p=>p.cungName==='Phu Thê'),pPTB=lsB.palaces?.find(p=>p.cungName==='Phu Thê');
+  const pTTA=lsA.palaces?.find(p=>p.cungName==='Tử Tức'),pTTB=lsB.palaces?.find(p=>p.cungName==='Tử Tức');
+  const pTBA=lsA.palaces?.find(p=>p.cungName==='Tài Bạch'),pTBB=lsB.palaces?.find(p=>p.cungName==='Tài Bạch');
+
+  const cr1=chiRelation(chiNamA,chiNamB);
+  const s1={score:cr1.score,w:0.10,label:'Địa Chi Năm Sinh',detail:cr1.label,a:`${ccA} (${chiNamA})`,b:`${ccB} (${chiNamB})`,chiRel:cr1};
+  const nr=nguHanhRel(naA,naB);
+  const s2={score:nr.score,w:0.10,label:'Ngũ Hành Nạp Âm',detail:nr.label,a:`${ccA} — ${naA}`,b:`${ccB} — ${naB}`};
+  const mc=cungScore(pMenhA,pMenhB);
+  const ttA=pMenhA?.thaiTueNhom?.nhom,ttB=pMenhB?.thaiTueNhom?.nhom;
+  const ttr=ttNhomRel(ttA,ttB);
+  const ttSaoA=pMenhA?.thaiTueNhom?.sao||'',ttSaoB=pMenhB?.thaiTueNhom?.sao||'';
+  const mScore=r1(clamp(mc.score*0.7+(5+ttr.delta)*0.3));
+  const s3={score:mScore,w:0.20,label:'Cung Mệnh',detail:[mc.chiRel?.label,ttr.label].filter(Boolean).join(' · '),
+    a:`${pMenhA?.diaChi||'?'} · ${(pMenhA?.majorStars||[]).map(s=>s.ten).join(',')||'VCD'}`,
+    b:`${pMenhB?.diaChi||'?'} · ${(pMenhB?.majorStars||[]).map(s=>s.ten).join(',')||'VCD'}`,
+    palA:pMenhA,palB:pMenhB,mc,ttr,ttSaoA,ttSaoB,ttNhomA:ttA,ttNhomB:ttB};
+  const ptc=cungScore(pPTA,pPTB);
+  const s4={score:ptc.score,w:0.20,label:'Cung Phu Thê',detail:ptc.chiRel?.label||'',
+    a:`${pPTA?.diaChi||'?'} · ${(pPTA?.majorStars||[]).map(s=>s.ten).join(',')||'VCD'}`,
+    b:`${pPTB?.diaChi||'?'} · ${(pPTB?.majorStars||[]).map(s=>s.ten).join(',')||'VCD'}`,
+    palA:pPTA,palB:pPTB,mc:ptc};
+  const ttc=cungScore(pTTA,pTTB);
+  const s5={score:ttc.score,w:0.10,label:'Cung Tử Tức',detail:ttc.chiRel?.label||'',
+    a:`${pTTA?.diaChi||'?'}`,b:`${pTTB?.diaChi||'?'}`,palA:pTTA,palB:pTTB,mc:ttc};
+  const tbc=cungScore(pTBA,pTBB);
+  const s6={score:tbc.score,w:0.15,label:'Cung Tài Bạch',detail:tbc.chiRel?.label||'',
+    a:`${pTBA?.diaChi||'?'}`,b:`${pTBB?.diaChi||'?'}`,palA:pTBA,palB:pTBB,mc:tbc};
+  const sr=mainStarRel(pMenhA,pMenhB);
+  const s7={score:sr.score,w:0.10,label:'Chính Tinh Mệnh',detail:sr.label,
+    a:(pMenhA?.majorStars||[]).map(s=>s.ten).join(', ')||'VCD',
+    b:(pMenhB?.majorStars||[]).map(s=>s.ten).join(', ')||'VCD'};
+  const dvA=lsA.daiVanHienTai?.scoring?.tong??5,dvB=lsB.daiVanHienTai?.scoring?.tong??5;
+  const s8={score:r1((dvA+dvB)/2),w:0.05,label:'Đại Vận Hiện Tại',
+    detail:`ĐV ${nameA}: ${dvA}/10 · ĐV ${nameB}: ${dvB}/10`,
+    a:`${dvA}/10 ${dvA>=7?'🟢':dvA>=4?'🟡':'🔴'}`,b:`${dvB}/10 ${dvB>=7?'🟢':dvB>=4?'🟡':'🔴'}`};
+
+  const items=[s1,s2,s3,s4,s5,s6,s7,s8];
+  const total=r1(items.reduce((sum,m)=>sum+m.score*m.w*10,0));
+  return{items,total,lsA,lsB,nameA,nameB,naA,naB};
 }
 
-// ─── MAIN SCORING ───────────────────────────────────────────────
-function calcTuongHop(lsA, lsB, hotenA, hotenB, namXem) {
-  const chiNamA = lsA.chiNam || '';
-  const chiNamB = lsB.chiNam || '';
-  const canChiA = lsA.canChiNam || '';
-  const canChiB = lsB.canChiNam || '';
-  const napAmA = _NAP_AM[canChiA] || lsA.napAmHanh || '';
-  const napAmB = _NAP_AM[canChiB] || lsB.napAmHanh || '';
-
-  const palMenhA = lsA.palaces?.find(p=>p.isMenh);
-  const palMenhB = lsB.palaces?.find(p=>p.isMenh);
-  const palPhuTheA = lsA.palaces?.find(p=>p.cungName==='Phu Thê');
-  const palPhuTheB = lsB.palaces?.find(p=>p.cungName==='Phu Thê');
-  const palTuTucA = lsA.palaces?.find(p=>p.cungName==='Tử Tức');
-  const palTuTucB = lsB.palaces?.find(p=>p.cungName==='Tử Tức');
-  const palTaiBachA = lsA.palaces?.find(p=>p.cungName==='Tài Bạch');
-  const palTaiBachB = lsB.palaces?.find(p=>p.cungName==='Tài Bạch');
-
-  // ① Địa chi năm sinh
-  const chiRel = chiRelation(chiNamA, chiNamB);
-  const s1 = {score: chiRel.score, weight:0.10, label:'Địa chi năm sinh', detail: chiRel.label,
-    a: canChiA, b: canChiB};
-
-  // ② Ngũ hành nạp âm
-  const nhRel = nguHanhRelation(napAmA, napAmB);
-  const s2 = {score: nhRel.score, weight:0.10, label:'Ngũ hành nạp âm', detail: nhRel.label,
-    a: `${canChiA} (${napAmA})`, b: `${canChiB} (${napAmB})`};
-
-  // ③ Cung Mệnh
-  const menhRel = cungRelationScore(palMenhA, palMenhB, lsA, lsB);
-  const thaiTueA = palMenhA?.thaiTueNhom?.nhom;
-  const thaiTueB = palMenhB?.thaiTueNhom?.nhom;
-  const ttRel = thaiTueRelation(thaiTueA, thaiTueB);
-  const menhScore = r1(clamp(menhRel.score * 0.7 + (5 + ttRel.delta) * 0.3));
-  const s3 = {score: menhScore, weight:0.20, label:'Cung Mệnh', 
-    detail: [menhRel.chiRel?.label, ttRel.label].filter(Boolean).join(' · '),
-    a: `${palMenhA?.diaChi||'?'} — ${(palMenhA?.majorStars||[]).map(s=>s.ten).join(', ')||'VCD'}`,
-    b: `${palMenhB?.diaChi||'?'} — ${(palMenhB?.majorStars||[]).map(s=>s.ten).join(', ')||'VCD'}`};
-
-  // ④ Cung Phu Thê
-  const phuTheRel = cungRelationScore(palPhuTheA, palPhuTheB, lsA, lsB);
-  const s4 = {score: phuTheRel.score, weight:0.20, label:'Cung Phu Thê',
-    detail: phuTheRel.chiRel?.label || '',
-    a: `${palPhuTheA?.diaChi||'?'} — ${(palPhuTheA?.majorStars||[]).map(s=>s.ten).join(', ')||'VCD'}`,
-    b: `${palPhuTheB?.diaChi||'?'} — ${(palPhuTheB?.majorStars||[]).map(s=>s.ten).join(', ')||'VCD'}`};
-
-  // ⑤ Cung Tử Tức
-  const tuTucRel = cungRelationScore(palTuTucA, palTuTucB, lsA, lsB);
-  const s5 = {score: tuTucRel.score, weight:0.10, label:'Cung Tử Tức',
-    detail: tuTucRel.chiRel?.label || '',
-    a: `${palTuTucA?.diaChi||'?'}`, b: `${palTuTucB?.diaChi||'?'}`};
-
-  // ⑥ Cung Tài Bạch
-  const taiBachRel = cungRelationScore(palTaiBachA, palTaiBachB, lsA, lsB);
-  const s6 = {score: taiBachRel.score, weight:0.15, label:'Cung Tài Bạch',
-    detail: taiBachRel.chiRel?.label || '',
-    a: `${palTaiBachA?.diaChi||'?'}`, b: `${palTaiBachB?.diaChi||'?'}`};
-
-  // ⑦ Chính tinh cung Mệnh
-  const starRel = mainStarRelation(palMenhA, palMenhB);
-  const s7 = {score: starRel.score, weight:0.10, label:'Chính tinh cung Mệnh',
-    detail: starRel.label,
-    a: (palMenhA?.majorStars||[]).map(s=>s.ten).join(', ')||'VCD',
-    b: (palMenhB?.majorStars||[]).map(s=>s.ten).join(', ')||'VCD'};
-
-  // ⑧ Đại vận hiện tại
-  const dvA = dvScore(lsA), dvB = dvScore(lsB);
-  const dvAvg = (dvA + dvB) / 2;
-  const s8 = {score: r1(dvAvg), weight:0.05, label:'Đại vận hiện tại',
-    detail: `ĐV ${hotenA}: ${dvA}/10 · ĐV ${hotenB}: ${dvB}/10`,
-    a: `${dvA}/10 ${dvA>=7?'🟢':dvA>=4?'🟡':'🔴'}`,
-    b: `${dvB}/10 ${dvB>=7?'🟢':dvB>=4?'🟡':'🔴'}`};
-
-  const metrics = [s1,s2,s3,s4,s5,s6,s7,s8];
-  const total = r1(metrics.reduce((sum,m) => sum + m.score * m.weight * 10, 0));
-
-  return {metrics, total,
-    lsA, lsB, hotenA, hotenB, napAmA, napAmB, chiNamA, chiNamB};
+// ── PREGEN ──
+function pregenCung(pal,lsObj,name,colorVar){
+  if(!pal)return '';
+  let html=`<div style="margin-bottom:6px"><span style="display:inline-block;padding:1px 8px;background:${colorVar};color:#fff;border-radius:3px;font-size:10px;font-weight:700">${name}</span> <span style="font-size:12px;color:var(--text-lt)">${pal.cungName} · ${pal.diaChi}</span></div>`;
+  const cc=(lsObj.cachCuc||[]).filter(c=>c.cung===pal.cungName||c.cung==='');
+  if(cc.length){
+    html+=`<div class="pregen-block" style="padding:10px 12px;border-radius:6px;margin:4px 0">
+      <div class="pregen-title" style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">⚙ Cách cục</div>`;
+    cc.forEach(c=>{
+      html+=`<div class="pregen-item"><span class="cc-label cc-${c.loai}" style="display:inline-block;padding:1px 7px;font-size:10px;border-radius:3px;margin-right:5px">${c.ten}</span><span class="cc-mota">${c.moTa||''}</span></div>`;
+    });
+    html+='</div>';
+  }
+  const yn=((lsObj.cachCucTungCung||{})[pal.cungName]||[]);
+  if(yn.length){
+    html+=`<div class="pregen-block" style="padding:10px 12px;border-radius:6px;margin:4px 0">
+      <div class="pregen-title" style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">📋 Phân tích sao</div>`;
+    yn.slice(0,4).forEach(y=>{
+      const cls=y.includes('đại cát')||y.includes('phú quý')?'yn-cat':y.includes('hung')||y.includes('tai')?'yn-hung':'yn-neutral';
+      html+=`<div class="pregen-yn ${cls}">• ${y}</div>`;
+    });
+    html+='</div>';
+  }
+  const sc=(lsObj.cungScores||{})[pal.cungName];
+  if(sc){
+    html+=`<div class="pregen-block" style="padding:10px 12px;border-radius:6px;margin:4px 0">
+      <div class="pregen-title" style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">📈 6 chiều</div>
+      <div class="score-bars">`;
+    METRICS_KEY.forEach((m,i)=>{
+      const v=sc[m]||0,pct=v*10;
+      const col=v>=7?'#1FA3D6':v>=5?'#2F5BEA':v>=3?'#233E99':'#C0392B';
+      html+=`<div class="score-bar-row"><span class="score-label">${METRICS_VI[i]}</span><div class="score-bar-bg" style="flex:1;height:8px;border-radius:4px;background:#e0e0e0;overflow:hidden"><div class="score-bar-fill" style="width:${pct}%;height:100%;background:${col}"></div></div><span class="score-val">${v}</span></div>`;
+    });
+    html+='</div></div>';
+  }
+  return html;
 }
 
-function scoreColor(s) {
-  if (s>=8) return 'var(--green)';
-  if (s>=6) return 'var(--blue)';
-  if (s>=4) return '#9A7B3A';
-  return 'var(--red)';
-}
-
-function scoreStars(total) {
-  if (total>=80) return '★★★★★';
-  if (total>=65) return '★★★★☆';
-  if (total>=50) return '★★★☆☆';
-  if (total>=35) return '★★☆☆☆';
-  return '★☆☆☆☆';
-}
-
-function scoreLabel(total) {
-  if (total>=80) return 'Rất tương hợp';
-  if (total>=65) return 'Tương hợp tốt';
-  if (total>=50) return 'Trung bình';
-  if (total>=35) return 'Có nhiều điểm xung';
-  return 'Khắc khá nhiều';
-}
-
-// ─── RENDER ─────────────────────────────────────────────────────
-function renderResult(result) {
-  const {metrics, total, lsA, lsB, hotenA, hotenB} = result;
-
-  // Header
-  const col = scoreColor(total/10);
-  document.getElementById('result-header-tuoi').innerHTML = `
-    <div class="score-main">
-      <div class="score-number" style="color:${col}">${total}</div>
-      <div class="score-label">/ 100 — Tổng tương hợp</div>
-      <div class="score-stars">${scoreStars(total)}</div>
+function meterHtml(score10){
+  const pct=score10*10;
+  const col=meterColor(pct);
+  return `<div class="meter-wrap">
+    <div style="font-size:32px;font-weight:700;font-family:'Noto Serif',serif;color:${col};margin-bottom:6px">${score10}<span style="font-size:16px;color:#ccc">/10</span></div>
+    <div class="meter-track" style="height:14px;background:#eee;border-radius:7px;overflow:hidden">
+      <div class="meter-fill" style="width:${pct}%;height:100%;background:${col};border-radius:7px;transition:width 0.8s"></div>
     </div>
-    <div>
-      <div class="pair-names" style="font-size:18px;font-family:'Noto Serif',serif;color:#fff;margin-bottom:6px">${scoreLabel(total)}</div>
-      <div class="pair-names"><span style="color:var(--a-color)">■</span> <b>${hotenA}</b> &nbsp;×&nbsp; <span style="color:var(--b-color)">■</span> <b>${hotenB}</b></div>
-    </div>`;
-
-  // Metrics grid
-  const mgEl = document.getElementById('metrics-grid');
-  mgEl.innerHTML = metrics.map((m,i) => {
-    const col2 = scoreColor(m.score);
-    const pct = m.score * 10;
-    return `<div class="metric-card">
-      <div class="metric-card-title">${['①','②','③','④','⑤','⑥','⑦','⑧'][i]} ${m.label} <span style="font-size:10px;color:#999">(${Math.round(m.weight*100)}%)</span></div>
-      <div class="metric-card-score" style="color:${col2}">${m.score}<span style="font-size:14px;color:#ccc">/10</span></div>
-      <div class="metric-card-desc">${m.detail||''}</div>
-      <div class="metric-bar"><div class="metric-bar-fill" style="width:${pct}%;background:${col2}"></div></div>
-    </div>`;
-  }).join('');
-
-  // Cung compare rows
-  const compareEl = document.getElementById('cung-compare-rows');
-  const CUNGS = [
-    {label:'Cung Mệnh', idx:3},
-    {label:'Cung Phu Thê', idx:4},
-    {label:'Cung Tử Tức', idx:5},
-    {label:'Cung Tài Bạch', idx:6},
-    {label:'Chính tinh Mệnh', idx:7},
-  ];
-  compareEl.innerHTML = CUNGS.map(c => {
-    const m = metrics[c.idx-1];
-    const mid = m.score >= 7 ? '🟢' : m.score >= 5 ? '🟡' : '🔴';
-    return `<div class="compare-row">
-      <div class="compare-a">${m.a||''}</div>
-      <div style="text-align:center">
-        <div class="compare-mid">${mid}</div>
-        <div class="compare-label">${c.label}</div>
-        <div style="font-size:11px;font-weight:700;color:${scoreColor(m.score)}">${m.score}/10</div>
-      </div>
-      <div class="compare-b">${m.b||''}</div>
-    </div>`;
-  }).join('');
-
-  // Radar overlay
-  renderRadarOverlay(lsA, lsB, hotenA, hotenB);
-
-  // Spline DV overlay
-  renderDvOverlay(lsA, lsB, hotenA, hotenB);
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-lt);margin-top:3px"><span>0 — Khắc nhiều</span><span>10 — Rất hợp</span></div>
+  </div>`;
 }
 
-function renderRadarOverlay(lsA, lsB, hotenA, hotenB) {
-  const scA = lsA.cungScores || {};
-  const scB = lsB.cungScores || {};
-  const CUNG_ORDER = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
-
-  const btnEl = document.getElementById('radar-btns');
-  btnEl.innerHTML = ['Tổng điểm',...METRIC_VI].map((l,i) => 
-    `<button class="radar-btn${i===0?' active':''}" data-idx="${i}" onclick="switchRadar(${i},this)">${l}</button>`
-  ).join('');
-
-  const labels = CUNG_ORDER.filter(c => scA[c] || scB[c]);
-
-  function getData(idx) {
-    const m = idx === 0 ? null : METRICS[idx-1];
-    const dA = labels.map(c => m ? (scA[c]?.[m]||0) : METRICS.reduce((s,x)=>s+(scA[c]?.[x]||0),0));
-    const dB = labels.map(c => m ? (scB[c]?.[m]||0) : METRICS.reduce((s,x)=>s+(scB[c]?.[x]||0),0));
-    return {dA, dB, max: idx===0?60:10, step: idx===0?10:2};
+function renderRadar(lsA,lsB,nameA,nameB){
+  const scA=lsA.cungScores||{},scB=lsB.cungScores||{};
+  const CUNGS=['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
+  const labels=CUNGS.filter(c=>scA[c]||scB[c]);
+  const btnEl=document.getElementById('radar-btns');
+  if(btnEl) btnEl.innerHTML=['Tổng điểm',...METRICS_VI].map((l,i)=>
+    `<button class="radar-btn${i===0?' active':''}" onclick="switchRadar(${i},this)">${l}</button>`).join('');
+  function getData(idx){
+    const m=idx===0?null:METRICS_KEY[idx-1];
+    const dA=labels.map(c=>m?(scA[c]?.[m]||0):METRICS_KEY.reduce((s,x)=>s+(scA[c]?.[x]||0),0));
+    const dB=labels.map(c=>m?(scB[c]?.[m]||0):METRICS_KEY.reduce((s,x)=>s+(scB[c]?.[x]||0),0));
+    return{dA,dB,max:idx===0?60:10,step:idx===0?10:2};
   }
-
-  const {dA, dB, max, step} = getData(0);
-
-  window._radarOverlayChart = new Chart(document.getElementById('chart-radar-overlay'), {
-    type: 'radar',
-    data: {
-      labels,
-      datasets: [
-        {label:hotenA, data:dA, borderColor:'var(--a-color)', backgroundColor:'rgba(255,107,107,0.1)', pointBackgroundColor:'var(--a-color)', pointRadius:4, borderWidth:2},
-        {label:hotenB, data:dB, borderColor:'var(--b-color)', backgroundColor:'rgba(74,144,217,0.1)', pointBackgroundColor:'var(--b-color)', pointRadius:4, borderWidth:2},
-      ]
-    },
-    options: {
-      responsive:true,
+  const {dA,dB,max,step}=getData(0);
+  const ctx=document.getElementById('chart-radar-overlay');
+  if(!ctx)return;
+  window._radarOverlay=new Chart(ctx,{
+    type:'radar',
+    data:{labels,datasets:[
+      {label:nameA,data:dA,borderColor:'var(--color-a)',backgroundColor:'rgba(224,85,85,0.08)',pointBackgroundColor:'var(--color-a)',pointRadius:4,borderWidth:2},
+      {label:nameB,data:dB,borderColor:'var(--color-b)',backgroundColor:'rgba(59,125,216,0.08)',pointBackgroundColor:'var(--color-b)',pointRadius:4,borderWidth:2},
+    ]},
+    options:{responsive:true,
       scales:{r:{min:0,max,ticks:{stepSize:step,font:{size:9},backdropColor:'transparent',color:'#888'},
         pointLabels:{font:{size:11,weight:'600'}},grid:{color:'rgba(0,0,0,0.08)'},angleLines:{color:'rgba(0,0,0,0.1)'}}},
-      plugins:{legend:{display:true,labels:{font:{size:12}}},title:{display:true,text:'Tổng điểm 12 cung',font:{size:13}}},
+      plugins:{legend:{display:true},title:{display:true,text:'Tổng điểm 12 cung',font:{size:13}}},
     }
   });
-
-  window.switchRadar = function(idx, btn) {
+  window.switchRadar=function(idx,btn){
     document.querySelectorAll('.radar-btn').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
-    const {dA,dB,max,step} = getData(idx);
-    const ch = window._radarOverlayChart;
-    ch.data.datasets[0].data = dA;
-    ch.data.datasets[1].data = dB;
-    ch.options.scales.r.max = max;
-    ch.options.scales.r.ticks.stepSize = step;
-    ch.options.plugins.title.text = idx===0?'Tổng điểm 12 cung':METRIC_VI[idx-1]+' — 12 cung';
-    ch.update();
+    const {dA,dB,max,step}=getData(idx);
+    window._radarOverlay.data.datasets[0].data=dA;
+    window._radarOverlay.data.datasets[1].data=dB;
+    window._radarOverlay.options.scales.r.max=max;
+    window._radarOverlay.options.scales.r.ticks.stepSize=step;
+    window._radarOverlay.options.plugins.title.text=idx===0?'Tổng điểm 12 cung':METRICS_VI[idx-1]+' — 12 cung';
+    window._radarOverlay.update();
   };
 }
 
-function renderDvOverlay(lsA, lsB, hotenA, hotenB) {
-  const dvsA = lsA.daiVans?.slice(0,9) || [];
-  const dvsB = lsB.daiVans?.slice(0,9) || [];
-  if (!dvsA.length || !dvsB.length) return;
-
-  const labelsA = dvsA.map((dv,i)=>`ĐV${i+1}\n${dv.tuoiStart}-${dv.tuoiEnd}`);
-  const scoresA = dvsA.map(dv=>dv.scoring?.tong??5);
-  const scoresB = dvsB.map(dv=>dv.scoring?.tong??5);
-
-  new Chart(document.getElementById('chart-daivan-overlay'), {
+function renderDvOverlay(lsA,lsB,nameA,nameB){
+  const dvA=(lsA.daiVans||[]).slice(0,9),dvB=(lsB.daiVans||[]).slice(0,9);
+  if(!dvA.length||!dvB.length)return;
+  const labels=dvA.map((dv,i)=>`ĐV${i+1} ${dv.tuoiStart}-${dv.tuoiEnd}`);
+  const ctx=document.getElementById('chart-dv-overlay');
+  if(!ctx)return;
+  new Chart(ctx,{
     type:'line',
-    data:{
-      labels: labelsA,
-      datasets:[
-        {label:hotenA,data:scoresA,borderColor:'var(--a-color)',backgroundColor:'rgba(255,107,107,0.05)',
-          pointBackgroundColor:scoresA.map(s=>s>=7?'var(--a-color)':'rgba(255,107,107,0.4)'),
-          pointRadius:6,tension:0.4,fill:true},
-        {label:hotenB,data:scoresB,borderColor:'var(--b-color)',backgroundColor:'rgba(74,144,217,0.05)',
-          pointBackgroundColor:scoresB.map(s=>s>=7?'var(--b-color)':'rgba(74,144,217,0.4)'),
-          pointRadius:6,tension:0.4,fill:true},
-      ]
-    },
-    options:{
-      responsive:true,
-      plugins:{legend:{display:true},title:{display:true,text:'Vận Trình Toàn Đời — Đối Chiếu',font:{size:13,weight:'bold'}}},
-      scales:{y:{min:0,max:10,title:{display:true,text:'Điểm vận'}},x:{ticks:{font:{size:10}}}},
-    }
+    data:{labels,datasets:[
+      {label:nameA,data:dvA.map(d=>d.scoring?.tong??5),borderColor:'var(--color-a)',backgroundColor:'rgba(224,85,85,0.05)',pointRadius:5,tension:0.4,fill:true},
+      {label:nameB,data:dvB.map(d=>d.scoring?.tong??5),borderColor:'var(--color-b)',backgroundColor:'rgba(59,125,216,0.05)',pointRadius:5,tension:0.4,fill:true},
+    ]},
+    options:{responsive:true,plugins:{legend:{display:true},title:{display:true,text:'Vận Trình Toàn Đời — Đối Chiếu',font:{size:13,weight:'bold'}}},scales:{y:{min:0,max:10}}},
   });
 }
 
-// ─── CLAUDE LUẬN GIẢI ───────────────────────────────────────────
-async function callClaudeLuanGiai(result) {
-  const {metrics, total, hotenA, hotenB, napAmA, napAmB, chiNamA, chiNamB} = result;
-  const palMenhA = result.lsA.palaces?.find(p=>p.isMenh);
-  const palMenhB = result.lsB.palaces?.find(p=>p.isMenh);
+function buildTongQuan(result){
+  const {total,items,nameA,nameB}=result;
+  const col=meterColor(total);
+  const stars=total>=80?'★★★★★':total>=65?'★★★★☆':total>=50?'★★★☆☆':total>=35?'★★☆☆☆':'★☆☆☆☆';
+  const slabel=total>=80?'Rất tương hợp':total>=65?'Tương hợp tốt':total>=50?'Trung bình':total>=35?'Có nhiều điểm xung':'Khắc khá nhiều';
+  let html=`<div style="font-family:'Noto Serif',serif;font-size:20px;font-weight:700;color:${col};margin-bottom:4px">${slabel}</div>
+    <div style="font-size:44px;font-weight:700;color:${col};font-family:'Noto Serif',serif;line-height:1;margin-bottom:4px">${total}<span style="font-size:18px;color:#ccc">/100</span></div>
+    <div style="font-size:20px;margin-bottom:20px">${stars}</div>
+    <div class="meter-track" style="max-width:400px;height:14px;background:#eee;border-radius:7px;overflow:hidden;margin-bottom:24px">
+      <div class="meter-fill" style="width:${total}%;height:100%;background:${col};transition:width 0.8s"></div>
+    </div>
+    <table style="font-size:12px;border-collapse:collapse;width:100%;max-width:520px;margin-bottom:28px">
+      <tr style="background:var(--bg-soft)">
+        <th style="padding:6px 10px;text-align:left;border:1px solid var(--border)">Yếu tố</th>
+        <th style="padding:6px 10px;border:1px solid var(--border);width:55px">Điểm</th>
+        <th style="padding:6px 10px;border:1px solid var(--border);width:60px">Trọng số</th>
+      </tr>`;
+  items.forEach((m,i)=>{
+    const col2=scoreColor(m.score);
+    html+=`<tr><td style="padding:5px 10px;border:1px solid var(--border)">${i+1}. ${m.label}</td>
+      <td style="padding:5px 10px;border:1px solid var(--border);text-align:center;font-weight:700;color:${col2}">${m.score}</td>
+      <td style="padding:5px 10px;border:1px solid var(--border);text-align:center;color:var(--text-lt)">${Math.round(m.w*100)}%</td></tr>`;
+  });
+  html+=`</table>
+    <div style="margin-bottom:20px">
+      <div style="font-size:11px;font-weight:700;color:var(--text-lt);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">📊 So Sánh 6 Chiều — 12 Cung</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px" id="radar-btns"></div>
+      <canvas id="chart-radar-overlay" style="max-height:400px"></canvas>
+    </div>
+    <div>
+      <div style="font-size:11px;font-weight:700;color:var(--text-lt);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">📊 Vận Trình Toàn Đời — Đối Chiếu</div>
+      <canvas id="chart-dv-overlay"></canvas>
+    </div>`;
+  return html;
+}
 
-  const prompt = `Bạn là nhà luận giải Tử Vi Đẩu Số theo trường phái Tử Vi Minh Bảo. Văn phong: điềm đạm, súc tích, sâu sắc.
+function buildYeuTo(idx,m,nameA,nameB,lsA,lsB){
+  const col=scoreColor(m.score);
+  let html=`<div style="display:grid;grid-template-columns:1fr 48px 1fr;gap:10px;align-items:center;padding:10px 14px;background:#fff;border:1px solid var(--border);border-radius:8px;margin-bottom:12px;font-size:13px">
+    <div style="color:var(--color-a);font-weight:600">${nameA}<br><span style="font-size:11px;font-weight:400">${m.a||''}</span></div>
+    <div style="text-align:center;font-size:20px">${m.score>=7?'🟢':m.score>=5?'🟡':'🔴'}</div>
+    <div style="color:var(--color-b);font-weight:600;text-align:right">${nameB}<br><span style="font-size:11px;font-weight:400">${m.b||''}</span></div>
+  </div>`;
+  if(m.detail){
+    html+=`<div style="margin:8px 0 16px;font-size:13px;color:var(--text-mid);padding:8px 12px;background:var(--bg-soft);border-radius:6px;border-left:3px solid ${col}">${m.detail}</div>`;
+  }
+  html+=meterHtml(m.score);
+  if(m.palA||m.palB){
+    html+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px">
+      <div>${pregenCung(m.palA,lsA,nameA,'var(--color-a)')}</div>
+      <div>${pregenCung(m.palB,lsB,nameB,'var(--color-b)')}</div>
+    </div>`;
+  }
+  if(idx===2&&(m.ttSaoA||m.ttSaoB)){
+    html+=`<div class="pregen-block" style="padding:10px 12px;border-radius:6px;margin-top:10px">
+      <div class="pregen-title" style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">🔯 Vòng Thái Tuế</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px">
+        <div><span style="color:var(--color-a);font-weight:700">${nameA}</span><br>Sao: <b>${m.ttSaoA||'?'}</b> · Nhóm <b>${m.ttNhomA||'?'}</b></div>
+        <div><span style="color:var(--color-b);font-weight:700">${nameB}</span><br>Sao: <b>${m.ttSaoB||'?'}</b> · Nhóm <b>${m.ttNhomB||'?'}</b></div>
+      </div>
+      <div style="margin-top:6px;font-size:12px;color:var(--text-mid)">${m.ttr?.label||''}</div>
+    </div>`;
+  }
+  return html;
+}
 
-HAI LÁ SỐ CẦN PHÂN TÍCH TƯƠNG QUAN:
+let _result=null;
+function renderAllSections(result){
+  _result=result;
+  const body=document.getElementById('result-body');
+  body.innerHTML='';
+  const {items,total,nameA,nameB,lsA,lsB}=result;
+  const col=meterColor(total);
+  const stars=total>=80?'★★★★★':total>=65?'★★★★☆':total>=50?'★★★☆☆':total>=35?'★★☆☆☆':'★☆☆☆☆';
+  document.getElementById('result-header-tuoi').innerHTML=`
+    <div><div class="score-number" style="color:${col}">${total}</div>
+    <div class="score-label">/ 100 — Tổng tương hợp</div>
+    <div class="score-stars">${stars}</div></div>
+    <div style="text-align:right">
+      <div style="font-size:18px;font-family:'Noto Serif',serif;color:#fff;margin-bottom:4px">${total>=80?'Rất tương hợp':total>=65?'Tương hợp tốt':total>=50?'Trung bình':total>=35?'Có nhiều điểm xung':'Khắc khá nhiều'}</div>
+      <div style="font-size:14px;color:#8BAACC"><span style="color:var(--color-a)">■</span> <b>${nameA}</b> &nbsp;×&nbsp; <span style="color:var(--color-b)">■</span> <b>${nameB}</b></div>
+    </div>`;
+  appendSection(0,buildTongQuan(result),body);
+  setTimeout(()=>{renderRadar(lsA,lsB,nameA,nameB);renderDvOverlay(lsA,lsB,nameA,nameB);},200);
+  items.forEach((m,i)=>appendSection(i+1,buildYeuTo(i,m,nameA,nameB,lsA,lsB),body));
+  document.getElementById('result-sidebar-tuoi').classList.add('visible');
+  luanGiaiAll(result);
+}
 
-Người A (${hotenA}): Năm ${chiNamA} · Mệnh ${napAmA} · Cung Mệnh ${palMenhA?.diaChi||'?'} · Chính tinh: ${(palMenhA?.majorStars||[]).map(s=>s.ten).join(', ')||'VCD'}
-Người B (${hotenB}): Năm ${chiNamB} · Mệnh ${napAmB} · Cung Mệnh ${palMenhB?.diaChi||'?'} · Chính tinh: ${(palMenhB?.majorStars||[]).map(s=>s.ten).join(', ')||'VCD'}
+function appendSection(idx,contentHtml,body){
+  const sec=document.createElement('div');
+  sec.className='phan-section';
+  sec.id=`section-${idx}`;
+  const num=idx===0?'Tổng Quan':`Yếu Tố ${idx} / 8`;
+  const wb=idx>0?`<span style="display:inline-block;padding:1px 7px;background:var(--bg-soft);border:1px solid var(--border);border-radius:10px;font-size:10px;color:var(--text-lt);margin-left:6px">${Math.round(WEIGHTS[idx]*100)}%</span>`:'';
+  sec.innerHTML=`<a id="anchor-${idx}" class="phan-anchor"></a>
+    <div class="phan-num">${num}${wb} — ${PHAN_LABELS[idx]}</div>
+    ${contentHtml}
+    <div id="luangiai-${idx}" style="margin-top:20px;font-size:15px;line-height:1.9;color:var(--text-mid);font-weight:300">
+      <div style="color:var(--text-lt);font-style:italic;font-size:13px">Đang luận giải...</div>
+    </div>`;
+  body.appendChild(sec);
+}
 
-KẾT QUẢ TÍNH TOÁN (${total}/100 — ${scoreLabel(total)}):
-${metrics.map((m,i)=>`${i+1}. ${m.label}: ${m.score}/10 — ${m.detail}`).join('\n')}
+function jumpTo(idx){
+  const a=document.getElementById(`anchor-${idx}`);
+  if(a)a.scrollIntoView({behavior:'smooth',block:'start'});
+}
 
-Viết 300-400 từ văn xuôi, không dùng bullet. Phân tích:
-1. Nhận định tổng quan về sự tương hợp
-2. Điểm mạnh nổi bật trong mối quan hệ
-3. Điểm cần lưu ý hoặc điều chỉnh
-4. Một câu kết luận ngắn gọn và thực tiễn`;
-
-  try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-5',
-        max_tokens:1000,
-        system:'Bạn là nhà luận giải Tử Vi Đẩu Số. Văn phong: trí thức, điềm đạm, súc tích.',
-        messages:[{role:'user',content:prompt}]
-      })
-    });
-    const data = await resp.json();
-    const text = data.content?.[0]?.text || '';
-    document.getElementById('luangiai-box').innerHTML = text
-      .split('\n\n').filter(Boolean)
-      .map(p=>`<p style="margin-bottom:14px">${p}</p>`).join('');
-  } catch(e) {
-    document.getElementById('luangiai-box').innerHTML = '<span style="color:#C0392B">Không thể kết nối AI luận giải.</span>';
+async function luanGiaiSection(idx,m,result){
+  const {nameA,nameB,naA,naB,lsA,lsB}=result;
+  const palMenhA=lsA.palaces?.find(p=>p.isMenh),palMenhB=lsB.palaces?.find(p=>p.isMenh);
+  let prompt='';
+  if(idx===0){
+    prompt=`Phân tích tương quan lá số vợ chồng:
+Người A (${nameA}): ${lsA.canChiNam} · Mệnh ${naA} · Cung Mệnh ${palMenhA?.diaChi||'?'} · ${(palMenhA?.majorStars||[]).map(s=>s.ten).join(', ')||'VCD'}
+Người B (${nameB}): ${lsB.canChiNam} · Mệnh ${naB} · Cung Mệnh ${palMenhB?.diaChi||'?'} · ${(palMenhB?.majorStars||[]).map(s=>s.ten).join(', ')||'VCD'}
+Kết quả:
+${result.items.map((item,i)=>`${i+1}. ${item.label}: ${item.score}/10 — ${item.detail}`).join('\n')}
+Tổng: ${result.total}/100
+Viết 350-450 từ văn xuôi. Nhận định tổng quan, điểm mạnh, điểm cần lưu ý, lời khuyên thực tiễn.`;
+  } else {
+    const cungName=CUNG_MAP[idx];
+    const palA=cungName?lsA.palaces?.find(p=>p.cungName===cungName):null;
+    const palB=cungName?lsB.palaces?.find(p=>p.cungName===cungName):null;
+    const ccA=palA?(lsA.cachCuc||[]).filter(c=>c.cung===palA.cungName):[];
+    const ccB=palB?(lsB.cachCuc||[]).filter(c=>c.cung===palB.cungName):[];
+    const ynA=palA?((lsA.cachCucTungCung||{})[palA.cungName]||[]):[];
+    const ynB=palB?((lsB.cachCucTungCung||{})[palB.cungName]||[]):[];
+    prompt=`Luận giải yếu tố "${m.label}" trong tương quan 2 lá số:
+Người A (${nameA}): ${m.a||''}
+Người B (${nameB}): ${m.b||''}
+Tương quan: ${m.detail||''} → Điểm: ${m.score}/10
+${ccA.length?`Cách cục A: ${ccA.map(c=>c.ten).join(', ')}`:''}
+${ccB.length?`Cách cục B: ${ccB.map(c=>c.ten).join(', ')}`:''}
+${ynA.length?`Sao A: ${ynA.slice(0,3).join(' | ')}`:''}
+${ynB.length?`Sao B: ${ynB.slice(0,3).join(' | ')}`:''}
+Viết 130-180 từ văn xuôi. Diễn giải ý nghĩa tương quan, tác động thực tế, 1 câu lưu ý.`;
+  }
+  try{
+    const resp=await fetch('/api/xem-tuoi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt,phan:idx})});
+    const data=await resp.json();
+    const text=data.luanGiai||'';
+    const el=document.getElementById(`luangiai-${idx}`);
+    if(el)el.innerHTML=text.split('\n\n').filter(Boolean).map(p=>`<p style="margin-bottom:12px">${p}</p>`).join('');
+  }catch(e){
+    const el=document.getElementById(`luangiai-${idx}`);
+    if(el)el.innerHTML='<span style="color:var(--text-lt);font-size:12px">Không thể kết nối luận giải.</span>';
   }
 }
 
-// ─── MAIN ANALYZE ───────────────────────────────────────────────
-async function analyze() {
-  const errEl = document.getElementById('error-msg');
+async function luanGiaiAll(result){
+  await luanGiaiSection(0,null,result);
+  await Promise.all(result.items.map((m,i)=>luanGiaiSection(i+1,m,result)));
+}
+
+async function analyze(){
+  const errEl=document.getElementById('error-msg');
   errEl.classList.remove('active');
-
-  // Validate
-  const hotenA = document.getElementById('hoten-a').value.trim() || 'Người A';
-  const gtA = document.getElementById('gt-a').value;
-  const ngayA = parseInt(document.getElementById('ngay-a').value);
-  const thangA = parseInt(document.getElementById('thang-a').value);
-  const namA = parseInt(document.getElementById('nam-a').value);
-  const gioA = parseInt(document.getElementById('gio-a').value);
-
-  const hotenB = document.getElementById('hoten-b').value.trim() || 'Người B';
-  const gtB = document.getElementById('gt-b').value;
-  const ngayB = parseInt(document.getElementById('ngay-b').value);
-  const thangB = parseInt(document.getElementById('thang-b').value);
-  const namB = parseInt(document.getElementById('nam-b').value);
-  const gioB = parseInt(document.getElementById('gio-b').value);
-
-  const namXem = parseInt(document.getElementById('nam-xem').value) || 2026;
-
-  if (!ngayA||!thangA||!namA||!ngayB||!thangB||!namB) {
-    errEl.textContent = 'Vui lòng nhập đầy đủ ngày tháng năm sinh cho cả hai người.';
-    errEl.classList.add('active'); return;
+  const nameA=document.getElementById('hoten-a').value.trim()||'Người A';
+  const gtA=document.getElementById('gt-a').value;
+  const ngayA=parseInt(document.getElementById('ngay-a').value);
+  const thangA=parseInt(document.getElementById('thang-a').value);
+  const namA=parseInt(document.getElementById('nam-a').value);
+  const gioA=parseInt(document.getElementById('gio-a').value);
+  const nameB=document.getElementById('hoten-b').value.trim()||'Người B';
+  const gtB=document.getElementById('gt-b').value;
+  const ngayB=parseInt(document.getElementById('ngay-b').value);
+  const thangB=parseInt(document.getElementById('thang-b').value);
+  const namB=parseInt(document.getElementById('nam-b').value);
+  const gioB=parseInt(document.getElementById('gio-b').value);
+  const namXem=parseInt(document.getElementById('nam-xem').value)||2026;
+  if(!ngayA||!thangA||!namA||!ngayB||!thangB||!namB){
+    errEl.textContent='Vui lòng nhập đầy đủ ngày tháng năm sinh cho cả hai người.';
+    errEl.classList.add('active');return;
   }
-
-  const btn = document.getElementById('btn-analyze');
-  btn.disabled = true;
-  document.getElementById('loader-bar').classList.add('active');
-  document.getElementById('result-section').style.display = 'none';
-
-  try {
-    // An sao lá số A
-    const convA = convertDuongToAm(ngayA, thangA, namA, gioA * 2);
-    const lsA = anSaoLaSo({
-      ngayAL:convA.amLich.day, thangAL:convA.amLich.month, namAL:convA.amLich.year,
-      canNam:convA.canNam, chiNam:convA.chiNam, gioIdx:convA.gioIdx,
-      gioitinh:gtA, namXem,
-    });
-    lsA.chiNam = convA.chiNam;
-
-    // An sao lá số B
-    const convB = convertDuongToAm(ngayB, thangB, namB, gioB * 2);
-    const lsB = anSaoLaSo({
-      ngayAL:convB.amLich.day, thangAL:convB.amLich.month, namAL:convB.amLich.year,
-      canNam:convB.canNam, chiNam:convB.chiNam, gioIdx:convB.gioIdx,
-      gioitinh:gtB, namXem,
-    });
-    lsB.chiNam = convB.chiNam;
-
-    // Tính tương hợp
-    const result = calcTuongHop(lsA, lsB, hotenA, hotenB, namXem);
-
-    // Render
-    document.getElementById('result-section').style.display = 'block';
+  const btn=document.getElementById('btn-analyze');
+  btn.disabled=true;
+  document.getElementById('loader-tuoi').classList.add('active');
+  document.getElementById('result-section').style.display='none';
+  try{
+    if(window._radarOverlay){window._radarOverlay.destroy();window._radarOverlay=null;}
+    const convA=convertDuongToAm(ngayA,thangA,namA,gioA*2);
+    const lsA=anSaoLaSo({ngayAL:convA.amLich.day,thangAL:convA.amLich.month,namAL:convA.amLich.year,canNam:convA.canNam,chiNam:convA.chiNam,gioIdx:convA.gioIdx,gioitinh:gtA,namXem});
+    lsA.chiNam=convA.chiNam;
+    const convB=convertDuongToAm(ngayB,thangB,namB,gioB*2);
+    const lsB=anSaoLaSo({ngayAL:convB.amLich.day,thangAL:convB.amLich.month,namAL:convB.amLich.year,canNam:convB.canNam,chiNam:convB.chiNam,gioIdx:convB.gioIdx,gioitinh:gtB,namXem});
+    lsB.chiNam=convB.chiNam;
+    const result=calcTuongHop(lsA,lsB,nameA,nameB);
+    document.getElementById('result-section').style.display='block';
+    renderAllSections(result);
     document.getElementById('result-section').scrollIntoView({behavior:'smooth'});
-    renderResult(result);
-
-    // Claude luận giải
-    document.getElementById('luangiai-box').innerHTML = '<div class="luangiai-loading">Đang luận giải tương quan...</div>';
-    await callClaudeLuanGiai(result);
-
-  } catch(e) {
-    errEl.textContent = 'Lỗi: ' + (e.message || 'Không thể tính toán.');
-    errEl.classList.add('active');
-    console.error(e);
-  } finally {
-    btn.disabled = false;
-    document.getElementById('loader-bar').classList.remove('active');
+  }catch(e){
+    errEl.textContent='Lỗi: '+(e.message||'Không thể tính toán.');
+    errEl.classList.add('active');console.error(e);
+  }finally{
+    btn.disabled=false;
+    document.getElementById('loader-tuoi').classList.remove('active');
   }
 }
+
 </script>
 </body>
 </html>
