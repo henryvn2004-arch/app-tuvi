@@ -1210,7 +1210,7 @@ function renderAllSections(result){
     renderRadar(lsA,lsB,nameA,nameB);
     renderCompactLaso(lsA,lsB,nameA,nameB);
   },400);
-  items.forEach((m,i)=>appendSection(i+1,buildYeuTo(i,m,nameA,nameB,lsA,lsB),body));
+  items.forEach((m,i)=>appendSection(i+1,buildYeuTo(i+1,m,nameA,nameB,lsA,lsB),body));
   // Bottom download button
   const dlBottom=document.createElement('div');
   dlBottom.style.cssText='text-align:center;margin:32px 0 8px';
