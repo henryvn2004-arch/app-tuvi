@@ -1068,15 +1068,7 @@ function buildYeuTo(idx,m,nameA,nameB,lsA,lsB){
     // Radar chart 2 lines for cung sections
     html+=buildCungRadar(m,lsA,lsB,nameA,nameB);
   }
-  // DV spline for Vận Hành (idx 8)
-  if(idx===8){
-    const dvUid='dv-overlay-'+Date.now();
-    setTimeout(()=>renderDvOverlay2(lsA,lsB,nameA,nameB,dvUid),200);
-    html+=`<div style="margin-top:20px">
-      <div style="font-size:11px;font-weight:700;color:#6699dd;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">📊 Vận Trình Toàn Đời — Đối Chiếu</div>
-      <canvas id="${dvUid}"></canvas>
-    </div>`;
-  }
+
   if(idx===2&&(m.ttSaoA||m.ttSaoB)){
     html+=`<div class="pregen-block" style="padding:10px 12px;border-radius:6px;margin-top:10px">
       <div class="pregen-title" style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">🔯 Vòng Thái Tuế</div>
