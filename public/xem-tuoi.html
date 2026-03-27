@@ -1089,7 +1089,7 @@ function buildYeuTo(idx,m,nameA,nameB,lsA,lsB){
   }
   // DV spline for Vận Hành (idx 8)
   if(idx===8){
-    const dvUid='dv-'+Date.now();
+    const dvUid='dv-idx8-'+Date.now();
     setTimeout(()=>renderDvOverlay2(lsA,lsB,nameA,nameB,dvUid),500);
     html+=`<div style="margin-top:20px">
       <div style="font-size:11px;font-weight:700;color:#6699dd;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">📊 Vận Trình Toàn Đời — Đối Chiếu</div>
@@ -1161,8 +1161,9 @@ function renderCompactLaso(lsA,lsB,nameA,nameB){
 function buildCungRadar(m,lsA,lsB,nameA,nameB){
   const cungA=m.palA?.cungName,cungB=m.palB?.cungName;
   if(!cungA&&!cungB)return '';
-  const uid='cung-radar-'+Date.now();
-  // Use longer timeout to ensure section is in DOM
+  const uid='cung-radar-'+(m.palA?.cungName||'x').replace(/\s/g,'')+'-'+Date.now();
+  // Stagger timeouts per cung to avoid collision
+  const delay=300+((['Mệnh','Phu Thê','Tử Tức','Tài Bạch'].indexOf(cungA||cungB))*100);
   setTimeout(()=>{
     const ctx=document.getElementById(uid);
     if(!ctx){console.warn('radar canvas not found:',uid);return;}
@@ -1257,7 +1258,7 @@ Kết quả 8 yếu tố:
 ${itemsText}
 Tổng điểm tương hợp: ${result.total}/100
 
-Viết 500-600 từ văn xuôi. Phân tích tổng quan mối quan hệ, điểm mạnh nổi bật, điểm cần lưu ý, lời khuyên thực tiễn. Dùng tên ${nameA} và ${nameB} (không dùng Người A/B).`;
+Viết 300-350 từ văn xuôi. Nhận định tổng quan, điểm mạnh, điểm cần lưu ý, 1 lời khuyên thực tiễn. Dùng tên ${nameA} và ${nameB}.`;
   } else {
     const cungName=CUNG_MAP[idx];
     const palA=cungName?lsA.palaces?.find(p=>p.cungName===cungName):null;
@@ -1301,7 +1302,7 @@ ${ccB.length?`Cách cục ${nameB}: ${ccB.map(c=>c.ten).join(', ')}`:''}
 ${ynA.length?`Phân tích sao ${nameA}: ${ynA.slice(0,3).join(' | ')}`:''}
 ${ynB.length?`Phân tích sao ${nameB}: ${ynB.slice(0,3).join(' | ')}`:''}
 
-Viết 220-300 từ văn xuôi. Diễn giải ý nghĩa tương quan theo cổ pháp, tác động thực tế, điểm cần lưu ý. Dùng tên ${nameA} và ${nameB} (không dùng Người A/B).`;
+Viết 150-200 từ văn xuôi. Diễn giải ý nghĩa tương quan, tác động thực tế, 1 điểm lưu ý. Dùng tên ${nameA} và ${nameB}.`;
   }
   try{
     const resp=await fetch('/api/xem-tuoi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
