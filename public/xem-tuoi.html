@@ -1096,54 +1096,52 @@ let _result=null;
 function renderCompactLaso(lsA,lsB,nameA,nameB){
   const wrap=document.getElementById('compact-laso-wrap');
   if(!wrap)return;
+  const DC_LAYOUT=[5,6,7,8,4,-1,-1,9,3,-1,-1,10,2,1,0,11];
   const BC_MAP={Miếu:'M',Vượng:'V',Đắc:'Đ',Bình:'B',Hãm:'H'};
-  const bc=b=>BC_MAP[b]?`<span style="font-size:7px;color:#7EC8E3">(${BC_MAP[b]})</span>`:'';
-  const fmt=(s,chinh)=>`<span style="font-size:${chinh?10:8}px;font-weight:${chinh?700:400};display:block;line-height:1.2">${s.ten.toUpperCase()}${bc(s.brightness)}</span>`;
-  const LAYOUT=[5,6,7,8,-1,4,-1,9,3,-1,-1,10,2,1,0,11];
+  const bc=b=>BC_MAP[b]?` <span style="font-size:6px;color:#7EC8E3">${BC_MAP[b]}</span>`:'';
 
   function buildGrid(ls,name,col){
-    const dvHT=ls.daiVanHienTai;
-    let centerDone=false;
-    const center=`<div style="grid-column:span 2;grid-row:span 2;background:#f5f4f0;border:1px solid #ccc;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 4px;font-size:9px;text-align:center;line-height:1.6">
-      <div style="font-weight:700;color:${col};font-size:11px;margin-bottom:3px;letter-spacing:0.5px">${name}</div>
+    // Build a map from diaChi index → palace
+    const palMap={};
+    (ls.palaces||[]).forEach(p=>{
+      const idx=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'].indexOf(p.diaChi);
+      if(idx>=0) palMap[idx]=p;
+    });
+    const center=`<div style="grid-column:span 2;grid-row:span 2;background:#f5f4f0;border:1px solid #ddd;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 4px;font-size:9px;text-align:center;line-height:1.7">
+      <div style="font-weight:700;color:${col};font-size:11px;margin-bottom:2px">${name}</div>
       <div style="color:#555">${ls.canChiNam||''}</div>
-      <div style="color:#777">${ls.napAm||''}</div>
+      <div style="color:#888">${ls.napAm||''}</div>
       <div style="color:#555">Mệnh: <b>${ls.menhDC||''}</b></div>
       <div style="color:${col};font-weight:600">Tuổi ${ls.tuoiXem||''}</div>
     </div>`;
-    let cells='';
-    LAYOUT.forEach(dcI=>{
+    let cells='',centerInserted=false;
+    DC_LAYOUT.forEach(dcI=>{
       if(dcI===-1){
-        if(!centerDone){centerDone=true;cells+=center;}
+        if(!centerInserted){centerInserted=true;cells+=center;}
         return;
       }
-      const p=ls.palaces?.[dcI];
-      if(!p){cells+='<div style="border:1px solid #ccc"></div>';return;}
-      const isMenh=p.isMenh;
-      const border=isMenh?`2px solid ${col}`:'1px solid #ccc';
-      const van=p.decadal?`${p.decadal.range[0]}-${p.decadal.range[1]}`:'';
-      const chinh=(p.majorStars||[]).map(s=>fmt(s,true)).join('');
-      const phu=(p.stars||[]).filter(s=>s.nhom==='trang_sinh').map(s=>`<span style="font-size:7px;color:#9A7B3A;display:block">${s.ten}</span>`).join('');
-      cells+=`<div style="border:${border};padding:2px 3px;overflow:hidden;display:grid;grid-template-rows:14px 28px 1fr 12px;font-size:8px">
-        <div style="display:flex;justify-content:space-between;align-items:center">
+      const p=palMap[dcI];
+      if(!p){cells+=`<div style="border:1px solid #ddd;min-height:60px"></div>`;return;}
+      const border=p.isMenh?`2px solid ${col}`:'1px solid #ddd';
+      const chinh=(p.majorStars||[]).map(s=>`<span style="font-size:9px;font-weight:700;display:block;line-height:1.3">${s.ten}${bc(s.brightness)}</span>`).join('');
+      const phu=(p.stars||[]).filter(s=>!['chinh','trang_sinh'].includes(s.nhom)).slice(0,3).map(s=>`<span style="font-size:7px;display:block;line-height:1.2;color:#555">${s.ten}</span>`).join('');
+      const ts=(p.stars||[]).filter(s=>s.nhom==='trang_sinh').map(s=>`<span style="font-size:6px;color:#9A7B3A">${s.ten}</span>`).join('');
+      cells+=`<div style="border:${border};padding:2px 3px;overflow:hidden;font-size:8px;min-height:60px;display:flex;flex-direction:column;justify-content:space-between">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1px">
           <span style="color:#9A7B3A;font-size:7px;font-weight:700">${p.diaChi}</span>
-          <span style="color:#777;font-size:6px;text-transform:uppercase;letter-spacing:0.5px">${p.cungName}</span>
-          <span style="color:#1455A4;font-size:6px">${van}</span>
+          <span style="color:#aaa;font-size:6px">${p.cungName}</span>
         </div>
-        <div style="text-align:center;border-bottom:1px solid #eee;overflow:hidden">${chinh}</div>
-        <div style="overflow:hidden;font-size:7px">
-          ${(p.stars||[]).filter(s=>s.nhom!=='chinh'&&s.nhom!=='trang_sinh').slice(0,4).map(s=>`<span style="display:block;line-height:1.2">${s.ten}</span>`).join('')}
-        </div>
-        <div style="border-top:1px solid #eee;text-align:center;overflow:hidden">${phu}</div>
+        <div style="text-align:center;flex:1;overflow:hidden">${chinh}</div>
+        <div style="overflow:hidden">${phu}${ts}</div>
       </div>`;
     });
-    return `<div style="flex:1;min-width:0">
+    return `<div style="flex:1;min-width:240px">
       <div style="font-size:10px;font-weight:700;color:${col};margin-bottom:4px">${name} — Lá Số</div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #ccc;border-left:1px solid #ccc;font-size:8px">${cells}</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #ccc;border-left:1px solid #ccc">${cells}</div>
     </div>`;
   }
 
-  wrap.innerHTML=`<div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px">
+  wrap.innerHTML=`<div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:24px">
     ${buildGrid(lsA,nameA,'var(--color-a)')}
     ${buildGrid(lsB,nameB,'var(--color-b)')}
   </div>`;
