@@ -590,15 +590,18 @@ select.form-input { cursor: pointer; }
 </a>
   <div class="nav-links" id="nav-links">
     <a class="nav-link" href="/">Trang Chủ</a>
+    <div class="nav-dropdown">
+      <button class="nav-link nav-dropdown-btn" onclick="toggleDropdown(this)">Luận Giải ▾</button>
+      <div class="nav-dropdown-menu">
+        <a href="/" class="nav-dropdown-item">📜 Luận Giải Lá Số</a>
+        <a href="/xem-tuoi.html" class="nav-dropdown-item">💑 Xem Tuổi Vợ Chồng</a>
+        <a href="/xem-lam-an.html" class="nav-dropdown-item">🤝 Xem Tuổi Làm Ăn</a>
+      </div>
+    </div>
     <a class="nav-link" href="/about.html">Giới Thiệu</a>
     <a class="nav-link" href="/resources.html">Tài Liệu</a>
     <a class="nav-link" href="/blog.html">Khảo Luận</a>
     <a class="nav-link" href="/menh-kho.html">Mệnh Khố</a>
-    <a class="nav-link" href="/xem-tuoi.html">Xem Tuổi</a>
-    <a class="nav-link active" href="/xem-lam-an.html">Xem Làm Ăn</a>
-    <a class="nav-link" href="/xem-tuoi.html">Xem Tuổi</a>
-    <a class="nav-link active" href="/xem-lam-an.html">Xem Làm Ăn</a>
-    <a class="nav-link" href="/xem-tuoi.html">Xem Tuổi</a>
     <a class="nav-link" href="/contact.html">Liên Hệ</a>
   </div>
   <div id="nav-auth-area" style="margin-left:auto"></div>
