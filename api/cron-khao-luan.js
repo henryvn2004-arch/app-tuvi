@@ -115,8 +115,6 @@ Yêu cầu SEO & AEO:
 - Đoạn mở đầu trả lời trực tiếp câu hỏi (featured snippet)
 - Dùng heading H2, H3 rõ ràng
 - Chèn từ khóa chính + liên quan tự nhiên (không nhồi nhét)
-- Có bullet points hoặc tóm tắt nhanh
-- Cuối bài có đoạn FAQ 2–3 câu hỏi liên quan
 - Văn phong rõ nghĩa, dễ trích dẫn cho AI (AEO-friendly)
 - Độ dài ~500 từ, markdown
 
