@@ -496,6 +496,15 @@ select.form-input { cursor: pointer; }
 .footer-tagline { font-size:12px; margin-top:8px; color:rgba(255,255,255,0.35); line-height:1.6; }
 .footer-bottom  { display:flex; justify-content:space-between; align-items:center; font-size:11px; color:rgba(255,255,255,0.25); }
 .footer-bottom img { width:20px; height:20px; object-fit:contain; opacity:0.3; border-radius:3px; }
+
+.nav-dropdown { position: relative; }
+.nav-dropdown-btn { background:none;border:none;cursor:pointer;font-family:inherit;color:#8BAACC;font-size:13px;padding:6px 12px;border-radius:6px;transition:all 0.15s;white-space:nowrap; }
+.nav-dropdown-btn:hover,.nav-dropdown-btn.open{color:#fff;background:rgba(255,255,255,0.08);}
+.nav-dropdown-menu{display:none;position:absolute;top:calc(100% + 8px);left:0;background:#0D1F35;border:1px solid rgba(255,255,255,0.1);border-radius:8px;min-width:210px;padding:6px;box-shadow:0 8px 24px rgba(0,0,0,0.3);z-index:300;}
+.nav-dropdown-menu.open{display:block;}
+.nav-dropdown-item{display:block;padding:9px 12px;color:#8BAACC;text-decoration:none;font-size:13px;border-radius:5px;transition:all 0.12s;}
+.nav-dropdown-item:hover{background:rgba(255,255,255,0.07);color:#fff;}
+@media(max-width:768px){.nav-dropdown-menu{position:static;box-shadow:none;border:none;background:transparent;padding:0 0 0 16px;}.nav-dropdown-menu.open{display:block;}}
 </style>
 
 <style>
@@ -1451,6 +1460,10 @@ async function analyze(){
   }
 }
 
+</script>
+<script>
+function toggleDropdown(btn){const menu=btn.nextElementSibling;const isOpen=menu.classList.contains('open');document.querySelectorAll('.nav-dropdown-menu').forEach(m=>m.classList.remove('open'));document.querySelectorAll('.nav-dropdown-btn').forEach(b=>b.classList.remove('open'));if(!isOpen){menu.classList.add('open');btn.classList.add('open');}}
+document.addEventListener('click',e=>{if(!e.target.closest('.nav-dropdown')){document.querySelectorAll('.nav-dropdown-menu').forEach(m=>m.classList.remove('open'));document.querySelectorAll('.nav-dropdown-btn').forEach(b=>b.classList.remove('open'));}});
 </script>
 </body>
 </html>
