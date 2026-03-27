@@ -40,24 +40,29 @@ function urlEntry({ loc, lastmod, changefreq, priority }) {
   ].filter(Boolean).join('\n');
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   const today = new Date().toISOString().slice(0, 10);
 
   // ── 1. Static pages ──────────────────────────────────────────
   const staticPages = [
-    { path: '/',                changefreq: 'daily',   priority: '1.0' },
-    { path: '/about.html',      changefreq: 'monthly', priority: '0.5' },
-    { path: '/resources.html',  changefreq: 'daily',   priority: '0.8' },
-    { path: '/blog.html',       changefreq: 'daily',   priority: '0.8' },
-    { path: '/menh-kho.html',   changefreq: 'daily',   priority: '0.8' },
-    { path: '/contact.html',    changefreq: 'monthly', priority: '0.4' },
+    { path: '/',                         changefreq: 'daily',   priority: '1.0' },
+    { path: '/about.html',               changefreq: 'monthly', priority: '0.5' },
+    { path: '/resources.html',           changefreq: 'daily',   priority: '0.8' },
+    { path: '/blog.html',                changefreq: 'daily',   priority: '0.8' },
+    { path: '/menh-kho.html',            changefreq: 'daily',   priority: '0.8' },
+    { path: '/xem-tuoi.html',            changefreq: 'monthly', priority: '0.7' },
+    { path: '/xem-lam-an.html',          changefreq: 'monthly', priority: '0.7' },
+    { path: '/faqs.html',                changefreq: 'monthly', priority: '0.6' },
+    { path: '/huong-dan-thanh-toan.html',changefreq: 'monthly', priority: '0.5' },
+    { path: '/contact.html',             changefreq: 'monthly', priority: '0.4' },
   ];
 
   // ── 2. Fetch slugs từ Supabase (parallel) ───────────────────
-  const [lasoRows, taiLieuRows, khaoLuanRows] = await Promise.all([
-    fetchSlugs('laso_public', 'slug,created_at'),
-    fetchSlugs('tai_lieu',    'slug,created_at'),
-    fetchSlugs('khao_luan',   'slug,created_at'),
+  const [lasoRows, taiLieuRows, khaoLuanRows, sachRows] = await Promise.all([
+    fetchSlugs('laso_public',  'slug,created_at'),
+    fetchSlugs('tai_lieu',     'slug,created_at'),
+    fetchSlugs('khao_luan',    'slug,created_at'),
+    fetchSlugs('sach_library', 'slug,created_at'),
   ]);
 
   // ── 3. Build XML entries ──────────────────────────────────────
@@ -88,10 +93,21 @@ export default async function handler(req, res) {
   for (const row of taiLieuRows) {
     if (!row.slug) continue;
     entries.push(urlEntry({
-      loc: `${BASE_URL}/resources.html?slug=${encodeURIComponent(row.slug)}`,
+      loc: `${BASE_URL}/tai-lieu/${encodeURIComponent(row.slug)}`,
       lastmod: row.created_at ? row.created_at.slice(0, 10) : today,
       changefreq: 'monthly',
       priority: '0.6',
+    }));
+  }
+
+  // Sách library
+  for (const row of sachRows) {
+    if (!row.slug) continue;
+    entries.push(urlEntry({
+      loc: `${BASE_URL}/tai-lieu/sach/${encodeURIComponent(row.slug)}`,
+      lastmod: row.created_at ? row.created_at.slice(0, 10) : today,
+      changefreq: 'monthly',
+      priority: '0.65',
     }));
   }
 
@@ -99,10 +115,10 @@ export default async function handler(req, res) {
   for (const row of khaoLuanRows) {
     if (!row.slug) continue;
     entries.push(urlEntry({
-      loc: `${BASE_URL}/blog.html?slug=${encodeURIComponent(row.slug)}`,
+      loc: `${BASE_URL}/khao-luan/${encodeURIComponent(row.slug)}`,
       lastmod: row.created_at ? row.created_at.slice(0, 10) : today,
       changefreq: 'weekly',
-      priority: '0.65',
+      priority: '0.7',
     }));
   }
 
