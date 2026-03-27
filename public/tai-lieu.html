@@ -94,6 +94,15 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 
 @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
 @keyframes spin { to { transform:rotate(360deg); } }
+.related-section{margin-top:48px;padding-top:32px;border-top:2px solid var(--border)}
+.related-title{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-lt);margin-bottom:16px}
+.related-list{list-style:none;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.related-item{border-bottom:1px solid var(--border)}
+.related-item:last-child{border-bottom:none}
+.related-item a{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;text-decoration:none;font-size:13px;color:var(--navy);transition:background .12s;gap:12px}
+.related-item a:hover{background:var(--bg-soft);color:var(--blue)}
+.related-item .rel-title{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.related-item .rel-cat{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);flex-shrink:0}
 
 @media (max-width:700px) {
   .topnav { padding: 0 16px; }
@@ -155,6 +164,10 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
   <div class="article-nav">
     <a href="/resources.html">← Về Tài Liệu</a>
     <div id="share-article"></div>
+  </div>
+  <div class="related-section" id="related-section" style="display:none">
+    <div class="related-title">Bài Viết Liên Quan</div>
+    <ul class="related-list" id="related-list"></ul>
   </div>
 </article>
 
@@ -337,6 +350,36 @@ function render(d) {
 
   // SEO
   updateSEO(d);
+
+  // Related
+  loadRelated(d.slug, d.category, d.tags || []);
+}
+
+async function loadRelated(currentSlug, category, tags) {
+  try {
+    // Lấy bài cùng category, loại bài hiện tại
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/tai_lieu?select=slug,title,category&order=created_at.desc&limit=20`,
+      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+    );
+    const rows = await res.json();
+    if (!rows?.length) return;
+
+    // Ưu tiên cùng category, sau đó theo thứ tự mới nhất
+    const same = rows.filter(r => r.slug !== currentSlug && r.category === category);
+    const other = rows.filter(r => r.slug !== currentSlug && r.category !== category);
+    const related = [...same, ...other].slice(0, 5);
+    if (!related.length) return;
+
+    const CAT = {'sao-chinh':'Sao Chính','sao-phu':'Sao Phụ','cung':'Cung Vị','cach-cuc':'Cách Cục','van-han':'Vận Hạn','luan-giai':'Luận Giải','khai-niem':'Khái Niệm'};
+    document.getElementById('related-list').innerHTML = related.map(r =>
+      `<li class="related-item"><a href="/tai-lieu/${r.slug}">
+        <span class="rel-title">${r.title}</span>
+        ${r.category ? `<span class="rel-cat">${CAT[r.category]||r.category}</span>` : ''}
+      </a></li>`
+    ).join('');
+    document.getElementById('related-section').style.display = 'block';
+  } catch(e) {}
 }
 
 load();
