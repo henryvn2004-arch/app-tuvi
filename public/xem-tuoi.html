@@ -366,38 +366,33 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);line-he
 </footer>
 
 <script>
-// ─── CONSTANTS ───────────────────────────────────────────────────
-const DIA_CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
-const dcIdx = dc => DIA_CHI.indexOf(dc);
+// ─── CONSTANTS (dùng từ engine nếu có, hoặc khai báo local) ─────
+const _DC = typeof DIA_CHI !== 'undefined' ? DIA_CHI : ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+const _dcIdx = dc => _DC.indexOf(dc);
 
-// Lục hợp (nhị hợp)
 const LUC_HOP = {
   'Tý':'Sửu','Sửu':'Tý','Dần':'Hợi','Hợi':'Dần',
   'Mão':'Tuất','Tuất':'Mão','Thìn':'Dậu','Dậu':'Thìn',
   'Tỵ':'Thân','Thân':'Tỵ','Ngọ':'Mùi','Mùi':'Ngọ'
 };
-// Tam hợp
 const TAM_HOP_GROUPS = [
   ['Dần','Ngọ','Tuất'],['Tỵ','Dậu','Sửu'],
   ['Thân','Tý','Thìn'],['Hợi','Mão','Mùi']
 ];
-// Tứ xung
 const TU_XUNG = {
   'Tý':'Ngọ','Ngọ':'Tý','Sửu':'Mùi','Mùi':'Sửu',
   'Dần':'Thân','Thân':'Dần','Mão':'Dậu','Dậu':'Mão',
   'Thìn':'Tuất','Tuất':'Thìn','Tỵ':'Hợi','Hợi':'Tỵ'
 };
-// Tam hình
 const TAM_HINH = {
   'Dần':['Tỵ','Thân'],'Tỵ':['Dần','Thân'],'Thân':['Dần','Tỵ'],
   'Sửu':['Tuất','Mùi'],'Tuất':['Sửu','Mùi'],'Mùi':['Sửu','Tuất'],
   'Tý':['Mão'],'Mão':['Tý']
 };
-// Ngũ hành
-const NGU_HANH_SINH = {'Mộc':'Hỏa','Hỏa':'Thổ','Thổ':'Kim','Kim':'Thủy','Thủy':'Mộc'};
-const NGU_HANH_KHAC = {'Mộc':'Thổ','Thổ':'Thủy','Thủy':'Hỏa','Hỏa':'Kim','Kim':'Mộc'};
+const _NH_SINH = typeof NGU_HANH_SINH_MAP !== 'undefined' ? NGU_HANH_SINH_MAP : {'Mộc':'Hỏa','Hỏa':'Thổ','Thổ':'Kim','Kim':'Thủy','Thủy':'Mộc'};
+const _NH_KHAC = typeof NGU_HANH_KHAC_MAP !== 'undefined' ? NGU_HANH_KHAC_MAP : {'Mộc':'Thổ','Thổ':'Thủy','Thủy':'Hỏa','Hỏa':'Kim','Kim':'Mộc'};
 
-const NAP_AM = {
+const _NAP_AM = {
   'Giáp Tý':'Kim','Ất Sửu':'Kim','Bính Dần':'Hỏa','Đinh Mão':'Hỏa',
   'Mậu Thìn':'Mộc','Kỷ Tỵ':'Mộc','Canh Ngọ':'Thổ','Tân Mùi':'Thổ',
   'Nhâm Thân':'Kim','Quý Dậu':'Kim','Giáp Tuất':'Hỏa','Ất Hợi':'Hỏa',
@@ -414,8 +409,7 @@ const NAP_AM = {
   'Bính Thìn':'Thổ','Đinh Tỵ':'Thổ','Mậu Ngọ':'Hỏa','Kỷ Mùi':'Hỏa',
   'Canh Thân':'Mộc','Tân Dậu':'Mộc','Nhâm Tuất':'Thủy','Quý Hợi':'Thủy',
 };
-
-const THAI_TUE_NHOM = {
+const _THAI_TUE_NHOM = typeof THAI_TUE_NHOM !== 'undefined' ? THAI_TUE_NHOM : {
   'Thái Tuế':1,'Quan Phù':1,'Bạch Hổ':1,
   'Thiếu Dương':2,'Tử Phù':2,'Phúc Đức':2,
   'Tang Môn':3,'Tuế Phá':3,'Điếu Khách':3,
@@ -445,10 +439,10 @@ function chiRelation(dc1, dc2) {
 function nguHanhRelation(hanhA, hanhB) {
   if (!hanhA || !hanhB) return {score:5, label:'Không xác định'};
   if (hanhA === hanhB) return {score:8, label:'Đồng hành'};
-  if (NGU_HANH_SINH[hanhB] === hanhA) return {score:9, label:`${hanhB} sinh ${hanhA} ✓`};
-  if (NGU_HANH_SINH[hanhA] === hanhB) return {score:6, label:`${hanhA} sinh ${hanhB}`};
-  if (NGU_HANH_KHAC[hanhB] === hanhA) return {score:1, label:`${hanhB} khắc ${hanhA} ✗`};
-  if (NGU_HANH_KHAC[hanhA] === hanhB) return {score:4, label:`${hanhA} khắc ${hanhB}`};
+  if (_NH_SINH[hanhB] === hanhA) return {score:9, label:`${hanhB} sinh ${hanhA} ✓`};
+  if (_NH_SINH[hanhA] === hanhB) return {score:6, label:`${hanhA} sinh ${hanhB}`};
+  if (_NH_KHAC[hanhB] === hanhA) return {score:1, label:`${hanhB} khắc ${hanhA} ✗`};
+  if (_NH_KHAC[hanhA] === hanhB) return {score:4, label:`${hanhA} khắc ${hanhB}`};
   return {score:5, label:'Bình thường'};
 }
 
@@ -514,8 +508,8 @@ function calcTuongHop(lsA, lsB, hotenA, hotenB, namXem) {
   const chiNamB = lsB.chiNam || '';
   const canChiA = lsA.canChiNam || '';
   const canChiB = lsB.canChiNam || '';
-  const napAmA = NAP_AM[canChiA] || lsA.napAmHanh || '';
-  const napAmB = NAP_AM[canChiB] || lsB.napAmHanh || '';
+  const napAmA = _NAP_AM[canChiA] || lsA.napAmHanh || '';
+  const napAmB = _NAP_AM[canChiB] || lsB.napAmHanh || '';
 
   const palMenhA = lsA.palaces?.find(p=>p.isMenh);
   const palMenhB = lsB.palaces?.find(p=>p.isMenh);
