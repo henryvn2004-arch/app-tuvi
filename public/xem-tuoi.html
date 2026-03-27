@@ -657,27 +657,27 @@ select.form-input { cursor: pointer; }
         </button>
         <button class="muc-luc-btn" id="ml-4" onclick="jumpTo(4)">
           <div class="ml-num" id="ml-num-4">4</div>
-          <div class="ml-label">Quan Hệ</div>
+          <div class="ml-label">Tính Cách</div>
           <div class="ml-status" id="ml-status-4"></div>
         </button>
         <button class="muc-luc-btn" id="ml-5" onclick="jumpTo(5)">
           <div class="ml-num" id="ml-num-5">5</div>
-          <div class="ml-label">Con Cái</div>
+          <div class="ml-label">Quan Hệ</div>
           <div class="ml-status" id="ml-status-5"></div>
         </button>
         <button class="muc-luc-btn" id="ml-6" onclick="jumpTo(6)">
           <div class="ml-num" id="ml-num-6">6</div>
-          <div class="ml-label">Tài Chính</div>
+          <div class="ml-label">Con Cái</div>
           <div class="ml-status" id="ml-status-6"></div>
         </button>
         <button class="muc-luc-btn" id="ml-7" onclick="jumpTo(7)">
           <div class="ml-num" id="ml-num-7">7</div>
-          <div class="ml-label">Suy Nghĩ</div>
+          <div class="ml-label">Tài Chính</div>
           <div class="ml-status" id="ml-status-7"></div>
         </button>
         <button class="muc-luc-btn" id="ml-8" onclick="jumpTo(8)">
           <div class="ml-num" id="ml-num-8">8</div>
-          <div class="ml-label">Đại Vận</div>
+          <div class="ml-label">Vận Hành</div>
           <div class="ml-status" id="ml-status-8"></div>
         </button></div>
         </div>
@@ -897,29 +897,51 @@ function pregenCung(pal,lsObj,name,colorVar){
 
 function gaugeHtml(score, maxScore, label1, label2){
   const pct = score/maxScore;
-  const col = meterColor(score/maxScore*100);
-  // SVG semicircle gauge
-  const R=70, cx=90, cy=90;
-  const startAngle=Math.PI, endAngle=2*Math.PI;
-  const angle = startAngle + pct*(endAngle-startAngle);
-  const x1=cx+R*Math.cos(startAngle), y1=cy+R*Math.sin(startAngle);
-  const x2=cx+R*Math.cos(angle), y2=cy+R*Math.sin(angle);
-  const large=pct>0.5?1:0;
-  const bgX2=cx+R*Math.cos(endAngle), bgY2=cy+R*Math.sin(endAngle);
-  return `<div style="text-align:center;margin:8px 0 16px">
-    <svg width="180" height="100" viewBox="0 0 180 100" style="overflow:visible">
-      <!-- BG arc -->
-      <path d="M ${x1} ${y1} A ${R} ${R} 0 1 1 ${bgX2} ${bgY2}" fill="none" stroke="#eee" stroke-width="14" stroke-linecap="round"/>
-      <!-- Fill arc -->
-      ${pct>0?`<path d="M ${x1} ${y1} A ${R} ${R} 0 ${large} 1 ${x2} ${y2}" fill="none" stroke="${col}" stroke-width="14" stroke-linecap="round"/>`:''}
-      <!-- Score text -->
-      <text x="${cx}" y="${cy-8}" text-anchor="middle" font-size="22" font-weight="700" fill="${col}" font-family="'Noto Serif',serif">${score}</text>
-      <text x="${cx}" y="${cy+10}" text-anchor="middle" font-size="12" fill="#aaa">/ ${maxScore}</text>
-      <!-- Labels -->
-      <text x="14" y="${cy+2}" text-anchor="middle" font-size="9" fill="#aaa">${label1}</text>
-      <text x="${2*cx-14}" y="${cy+2}" text-anchor="middle" font-size="9" fill="#aaa">${label2}</text>
-    </svg>
-  </div>`;
+  const col = meterColor(pct*100);
+  // Needle gauge: semicircle with needle
+  const W=200, H=110, cx=100, cy=100, R=80, r=60;
+  // Color zones: red→yellow→green
+  const zones=[
+    {from:0,to:0.33,c:'#E05555'},
+    {from:0.33,to:0.67,c:'#c9a84c'},
+    {from:0.67,to:1,c:'#1E6B3C'},
+  ];
+  function pt(angle,radius){
+    return [cx+radius*Math.cos(Math.PI+angle*Math.PI), cy+radius*Math.sin(Math.PI+angle*Math.PI)];
+  }
+  // Draw zone arcs
+  let zoneSvg='';
+  zones.forEach(z=>{
+    const a1=z.from, a2=z.to;
+    const [x1,y1]=pt(a1,R),[x2,y2]=pt(a2,R);
+    const large=a2-a1>0.5?1:0;
+    zoneSvg+=`<path d="M ${x1.toFixed(1)} ${y1.toFixed(1)} A ${R} ${R} 0 ${large} 1 ${x2.toFixed(1)} ${y2.toFixed(1)}" fill="none" stroke="${z.c}" stroke-width="16" stroke-linecap="butt"/>`;
+    // inner zone
+    const [ix1,iy1]=pt(a1,r),[ix2,iy2]=pt(a2,r);
+    zoneSvg+=`<path d="M ${ix1.toFixed(1)} ${iy1.toFixed(1)} A ${r} ${r} 0 ${large} 1 ${ix2.toFixed(1)} ${iy2.toFixed(1)}" fill="none" stroke="${z.c}" stroke-width="1" stroke-linecap="butt" opacity="0.3"/>`;
+  });
+  // Needle
+  const nAngle=Math.PI+pct*Math.PI;
+  const nLen=70;
+  const nx=cx+nLen*Math.cos(nAngle), ny=cy+nLen*Math.sin(nAngle);
+  const svg=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+    <defs><filter id="gs"><feGaussianBlur stdDeviation="1"/></filter></defs>
+    <!-- BG track -->
+    <path d="M ${cx-R} ${cy} A ${R} ${R} 0 0 1 ${cx+R} ${cy}" fill="none" stroke="#f0f0f0" stroke-width="18"/>
+    <path d="M ${cx-r} ${cy} A ${r} ${r} 0 0 1 ${cx+r} ${cy}" fill="none" stroke="#f5f5f5" stroke-width="6"/>
+    ${zoneSvg}
+    <!-- Needle -->
+    <line x1="${cx}" y1="${cy}" x2="${nx.toFixed(1)}" y2="${ny.toFixed(1)}" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="${cx}" cy="${cy}" r="5" fill="#333"/>
+    <circle cx="${cx}" cy="${cy}" r="3" fill="#fff"/>
+    <!-- Score -->
+    <text x="${cx}" y="${cy-14}" text-anchor="middle" font-size="20" font-weight="700" fill="${col}" font-family="sans-serif">${score}</text>
+    <text x="${cx}" y="${cy-1}" text-anchor="middle" font-size="10" fill="#aaa">/ ${maxScore}</text>
+    <!-- Labels -->
+    <text x="${cx-R+2}" y="${cy+14}" text-anchor="middle" font-size="9" fill="#E05555">${label1}</text>
+    <text x="${cx+R-2}" y="${cy+14}" text-anchor="middle" font-size="9" fill="#1E6B3C">${label2}</text>
+  </svg>`;
+  return '<div style="text-align:center;margin:8px 0 12px">'+svg+'</div>';
 }
 function meterHtml(score10){ return gaugeHtml(score10,10,'Khắc','Hợp'); }
 
@@ -1131,9 +1153,10 @@ function buildCungRadar(m,lsA,lsB,nameA,nameB){
   const cungA=m.palA?.cungName,cungB=m.palB?.cungName;
   if(!cungA&&!cungB)return '';
   const uid='cung-radar-'+Date.now();
+  // Use longer timeout to ensure section is in DOM
   setTimeout(()=>{
     const ctx=document.getElementById(uid);
-    if(!ctx)return;
+    if(!ctx){console.warn('radar canvas not found:',uid);return;}
     const scA=lsA.cungScores?.[cungA]||{},scB=lsB.cungScores?.[cungB]||{};
     new Chart(ctx,{
       type:'radar',
@@ -1176,8 +1199,13 @@ function renderAllSections(result){
   setTimeout(()=>{
     renderRadar(lsA,lsB,nameA,nameB);
     renderCompactLaso(lsA,lsB,nameA,nameB);
-  },200);
+  },400);
   items.forEach((m,i)=>appendSection(i+1,buildYeuTo(i,m,nameA,nameB,lsA,lsB),body));
+  // Bottom download button
+  const dlBottom=document.createElement('div');
+  dlBottom.style.cssText='text-align:center;margin:32px 0 8px';
+  dlBottom.innerHTML='<button onclick="window.print()" style="padding:10px 24px;background:#061A2E;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">⬇ Tải PDF</button>';
+  body.appendChild(dlBottom);
   document.getElementById('result-sidebar-tuoi').classList.add('visible');
   luanGiaiAll(result);
 }
@@ -1211,12 +1239,13 @@ async function luanGiaiSection(idx,m,result){
   const palMenhA=lsA.palaces?.find(p=>p.isMenh),palMenhB=lsB.palaces?.find(p=>p.isMenh);
   let prompt='';
   if(idx===0){
+    const itemsText=result.items.map((item,i)=>(i+1)+'. '+item.label+': '+item.score+'/10 — '+item.detail).join('\n');
     prompt=`Phân tích tương quan lá số vợ chồng theo Tử Vi Đẩu Số cổ pháp:
 ${nameA}: ${lsA.canChiNam} · Nạp Âm ${naA} · Cung Mệnh ${palMenhA?.diaChi||'?'} · Chính tinh: ${(palMenhA?.majorStars||[]).map(s=>s.ten).join(', ')||'VCD'}
 ${nameB}: ${lsB.canChiNam} · Nạp Âm ${naB} · Cung Mệnh ${palMenhB?.diaChi||'?'} · Chính tinh: ${(palMenhB?.majorStars||[]).map(s=>s.ten).join(', ')||'VCD'}
 
 Kết quả 8 yếu tố:
-${result.items.map((item,i)=>`${i+1}. ${item.label}: ${item.score}/10 — ${item.detail}`).join('\n')}
+${itemsText}
 Tổng điểm tương hợp: ${result.total}/100
 
 Viết 500-600 từ văn xuôi. Phân tích tổng quan mối quan hệ, điểm mạnh nổi bật, điểm cần lưu ý, lời khuyên thực tiễn. Dùng tên ${nameA} và ${nameB} (không dùng Người A/B).`;
@@ -1281,8 +1310,11 @@ Viết 220-300 từ văn xuôi. Diễn giải ý nghĩa tương quan theo cổ p
 }
 
 async function luanGiaiAll(result){
+  // Sequential: section 0 first, then 1-8 one by one
   await luanGiaiSection(0,null,result);
-  await Promise.all(result.items.map((m,i)=>luanGiaiSection(i+1,m,result)));
+  for(let i=0;i<result.items.length;i++){
+    await luanGiaiSection(i+1,result.items[i],result);
+  }
 }
 
 async function analyze(){
