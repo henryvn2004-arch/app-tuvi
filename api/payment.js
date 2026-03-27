@@ -13,7 +13,7 @@ const CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET;
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
 const SITE_URL     = 'https://www.tuviminhbao.com';
-const PRICE        = '19.00';
+// PRICE read from request body (default 19.00)
 const CURRENCY     = 'USD';
 
 // ── Helpers ───────────────────────────────────────────────────────
@@ -65,10 +65,17 @@ async function savePurchase({ orderId, slug, userId, email, amount, currency }) 
 
 // ── Action: create ────────────────────────────────────────────────
 
+function getCancelUrl(slug) {
+  if (slug.startsWith('xem-tuoi-')) return `${SITE_URL}/xem-tuoi.html?payment=cancelled`;
+  if (slug.startsWith('xem-lam-an-')) return `${SITE_URL}/xem-lam-an.html?payment=cancelled`;
+  return `${SITE_URL}/la-so.html?slug=${encodeURIComponent(slug)}&payment=cancelled`;
+}
+
 async function handleCreate(req, res) {
-  const { slug } = req.body || {};
+  const { slug, amount } = req.body || {};
   if (!slug) return res.status(400).json({ error: 'Missing slug' });
 
+  const price = amount || '19.00';
   const safeSlug = toAsciiSlug(slug);
 
   try {
@@ -84,8 +91,8 @@ async function handleCreate(req, res) {
         intent: 'CAPTURE',
         purchase_units: [{
           reference_id: safeSlug,
-          description: `Luan giai Tu Vi day du - ${safeSlug}`,
-          amount: { currency_code: CURRENCY, value: PRICE },
+          description: `${slug.startsWith('xem-tuoi-') ? 'Xem Tuoi Vo Chong' : slug.startsWith('xem-lam-an-') ? 'Xem Tuoi Lam An' : 'Luan giai Tu Vi'} - ${safeSlug}`,
+          amount: { currency_code: CURRENCY, value: price },
           custom_id: slug,
         }],
         application_context: {
@@ -94,7 +101,7 @@ async function handleCreate(req, res) {
           landing_page: 'NO_PREFERENCE',
           user_action: 'PAY_NOW',
           return_url: `${SITE_URL}/payment-success.html?slug=${encodeURIComponent(slug)}`,
-          cancel_url: `${SITE_URL}/la-so.html?slug=${encodeURIComponent(slug)}&payment=cancelled`,
+          cancel_url: getCancelUrl(safeSlug),
         },
       }),
     });
