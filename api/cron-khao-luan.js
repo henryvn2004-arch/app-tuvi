@@ -85,7 +85,7 @@ async function ragSearch(topic) {
 
 async function writeArticle(topic, type, ctx) {
   const isTL = type === 'tai-lieu';
-  const model = isTL ? 'claude-haiku-4-5-20251001' : 'claude-sonnet-4-5';
+  const model = 'claude-haiku-4-5-20251001';
   const ctxBlock = ctx || '(Dùng kiến thức Tử Vi Đẩu Số tổng quát)';
 
   const prompt = isTL
