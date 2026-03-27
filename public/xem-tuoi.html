@@ -539,6 +539,32 @@ select.form-input { cursor: pointer; }
 /* note */
 .xt-note { display: flex; gap: 12px; align-items: flex-start; background: var(--gold-lt); border: 1px solid #e8d9b0; border-radius: 8px; padding: 14px 16px; margin: 32px 0 40px; font-size: 13px; color: var(--text-mid); line-height: 1.6; }
 .xt-note-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+/* ── PAYWALL ── */
+.paywall-lock {
+  border: 1px solid var(--border); border-radius: 12px;
+  padding: 32px 28px; text-align: center;
+  background: #fff; margin-top: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+.paywall-lock-icon { font-size: 28px; margin-bottom: 12px; }
+.paywall-lock-title {
+  font-family: 'Noto Serif', serif; font-size: 18px; font-weight: 700;
+  color: var(--navy); margin-bottom: 8px;
+}
+.paywall-lock-desc { font-size: 13px; color: var(--text-lt); line-height: 1.6; margin-bottom: 20px; max-width: 360px; margin-left: auto; margin-right: auto; }
+.paywall-lock-price { font-size: 36px; font-weight: 700; color: var(--navy); font-family: 'Noto Serif', serif; }
+.paywall-lock-price-note { font-size: 12px; color: #999; margin-bottom: 24px; }
+.btn-paywall-tuoi {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 36px; background: var(--navy); color: #c9a84c;
+  border: 2px solid #c9a84c; border-radius: 4px; font-size: 13px;
+  font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  cursor: pointer; font-family: inherit; transition: all 0.2s;
+}
+.btn-paywall-tuoi:hover { background: #c9a84c; color: var(--navy); }
+.btn-paywall-tuoi:disabled { opacity: 0.6; cursor: not-allowed; }
+.paywall-secure { font-size: 11px; color: #aaa; margin-top: 12px; }
 </style>
 
 <style>
@@ -1330,7 +1356,7 @@ function renderAllSections(result){
   dlBottom.innerHTML='<button onclick="window.print()" style="padding:10px 24px;background:#061A2E;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">⬇ Tải PDF</button>';
   body.appendChild(dlBottom);
   document.getElementById('result-sidebar-tuoi').classList.add('visible');
-  luanGiaiAll(result);
+  // luanGiaiAll called after payment check
 }
 
 function appendSection(idx,contentHtml,body){
@@ -1487,6 +1513,126 @@ async function luanGiaiAll(result){
   }
 }
 
+
+// ── PAYMENT FLOW ─────────────────────────────────────────
+let _pendingSlug = null;
+let _savedResult = null;
+
+function toSlugAscii(str) {
+  return String(str||'').toLowerCase().normalize('NFD')
+    .replace(/[\u0300-\u036f]/g,'').replace(/[đĐ]/g,'d')
+    .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+}
+
+function buildSlug(result, product) {
+  const a = result.lsA, b = result.lsB;
+  const parts = [
+    product,
+    toSlugAscii(result.nameA||'a'),
+    a.canChiNam||'',
+    toSlugAscii(result.nameB||'b'),
+    b.canChiNam||'',
+  ];
+  return parts.join('-').replace(/-+/g,'-').slice(0,80);
+}
+
+async function verifyPaymentTuoi(slug) {
+  try {
+    const r = await fetch('/api/payment?action=check&slug='+encodeURIComponent(slug));
+    const d = await r.json();
+    return d.purchased === true;
+  } catch(e) { return false; }
+}
+
+async function checkPaymentOnLoad(product) {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('unlocked') === '1' && urlParams.get('slug')) {
+    const slug = urlParams.get('slug');
+    _pendingSlug = slug;
+    // Restore from sessionStorage
+    try {
+      const pending = JSON.parse(sessionStorage.getItem('tuvi_pending_'+product)||'{}');
+      if (pending.nameA && pending.result) {
+        _savedResult = pending.result;
+        const paid = await verifyPaymentTuoi(slug);
+        if (paid) {
+          // Re-render and unlock
+          renderAllSections(_savedResult);
+          document.getElementById('result-section').style.display='block';
+          // Clean URL
+          window.history.replaceState({}, '', window.location.pathname);
+          return true;
+        }
+      }
+    } catch(e) {}
+  }
+  return false;
+}
+
+async function initiatePaymentTuoi(result, product) {
+  const btn = document.getElementById('btn-paywall-main');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span>Đang kết nối PayPal...</span>'; }
+
+  const slug = buildSlug(result, product);
+  _pendingSlug = slug;
+
+  // Save to sessionStorage for restore
+  try {
+    sessionStorage.setItem('tuvi_pending_'+product, JSON.stringify({
+      nameA: result.nameA, nameB: result.nameB,
+      result: result,
+    }));
+  } catch(e) {}
+
+  // Create PayPal order
+  try {
+    const res = await fetch('/api/payment?action=create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ slug, product, amount: '9.00' }),
+    });
+    const data = await res.json();
+    if (data.approvalUrl) {
+      window.location.href = data.approvalUrl;
+    } else {
+      throw new Error(data.error || 'Không tạo được đơn PayPal');
+    }
+  } catch(e) {
+    if (btn) { btn.disabled = false; btn.innerHTML = '<span>Mở Khóa Luận Giải</span><span>→</span>'; }
+    alert('Lỗi: ' + e.message);
+  }
+}
+
+function showPaywall(result, product, productLabel) {
+  // Add paywall lock box after result header
+  const body = document.getElementById('result-body');
+  if (!body) return;
+  const lock = document.createElement('div');
+  lock.id = 'paywall-lock-box';
+  lock.className = 'paywall-lock';
+  lock.innerHTML = `
+    <div class="paywall-lock-icon">🔒</div>
+    <div class="paywall-lock-title">Mở Khóa Luận Giải AI</div>
+    <div class="paywall-lock-desc">An sao và tính điểm hoàn toàn miễn phí. Để nhận 9 phần luận giải AI chuyên sâu theo Tử Vi Đẩu Số cổ pháp, vui lòng thanh toán một lần.</div>
+    <div class="paywall-lock-price">$9</div>
+    <div class="paywall-lock-price-note">Thanh toán một lần · Truy cập vĩnh viễn cho cặp lá số này</div>
+    <button class="btn-paywall-tuoi" id="btn-paywall-main" onclick="initiatePaymentTuoi(_savedResult,'${product}')">
+      <span>Mở Khóa Luận Giải</span><span style="font-size:16px">→</span>
+    </button>
+    <div class="paywall-secure">🔒 Thanh toán bảo mật qua PayPal · Hoàn tiền nếu lỗi kỹ thuật</div>
+  `;
+  // Insert after result header
+  const header = document.getElementById('result-header-tuoi');
+  if (header && header.nextSibling) {
+    body.parentNode.insertBefore(lock, document.querySelector('.result-layout-tuoi'));
+  } else {
+    body.prepend(lock);
+  }
+}
+
+// Check payment on page load (return from PayPal)
+window.addEventListener('DOMContentLoaded', () => checkPaymentOnLoad('xem-tuoi'));
+
 async function analyze(){
   const errEl=document.getElementById('error-msg');
   errEl.classList.remove('active');
@@ -1520,9 +1666,14 @@ async function analyze(){
     const lsB=anSaoLaSo({ngayAL:convB.amLich.day,thangAL:convB.amLich.month,namAL:convB.amLich.year,canNam:convB.canNam,chiNam:convB.chiNam,gioIdx:convB.gioIdx,gioitinh:gtB,namXem});
     lsB.chiNam=convB.chiNam;
     const result=calcTuongHop(lsA,lsB,nameA,nameB);
+    _savedResult = result;
+    _pendingSlug = buildSlug(result, 'xem-tuoi');
     document.getElementById('result-section').style.display='block';
     renderAllSections(result);
     document.getElementById('result-section').scrollIntoView({behavior:'smooth'});
+    // Check if already paid
+    const alreadyPaid = await verifyPaymentTuoi(_pendingSlug);
+    if (alreadyPaid) { luanGiaiAll(result); } else { showPaywall(result, 'xem-tuoi', 'Xem Tuổi Vợ Chồng'); }
   }catch(e){
     errEl.textContent='Lỗi: '+(e.message||'Không thể tính toán.');
     errEl.classList.add('active');console.error(e);
