@@ -88,7 +88,7 @@ function buildSchemas(article, url) {
   return schemas.map(s => `<script type="application/ld+json">${JSON.stringify(s)}</script>`).join('\n');
 }
 
-function buildHTML(article, slug) {
+function buildHTML(article, slug, related = []) {
   const url = `${BASE_URL}/khao-luan/${slug}`;
   const title = escHtml(article.title);
   const desc  = escHtml(article.excerpt || article.title);
@@ -157,6 +157,15 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .article-nav{display:flex;justify-content:space-between;align-items:center;margin-top:48px;padding-top:24px;border-top:1px solid var(--border);gap:16px;flex-wrap:wrap}
 .article-nav a{font-size:13px;color:var(--blue);text-decoration:none}
 .article-nav a:hover{color:var(--navy)}
+.related-section{margin-top:48px;padding-top:32px;border-top:2px solid var(--border)}
+.related-title{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-lt);margin-bottom:16px}
+.related-list{list-style:none;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.related-item{border-bottom:1px solid var(--border)}
+.related-item:last-child{border-bottom:none}
+.related-item a{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;text-decoration:none;font-size:13px;color:var(--navy);transition:background .12s;gap:12px}
+.related-item a:hover{background:var(--bg-soft);color:var(--blue)}
+.related-item .rel-title{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.related-item .rel-cat{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);flex-shrink:0}
 .site-footer{background:#1A1210;color:rgba(255,255,255,.5);padding:36px 32px 24px;margin-top:auto}
 .footer-bottom{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(255,255,255,.25)}
 .footer-bottom img{width:20px;height:20px;object-fit:contain;opacity:.3;border-radius:3px}
@@ -210,6 +219,19 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
   <div class="article-nav">
     <a href="/blog.html">← Về Khảo Luận</a>
   </div>
+  ${related.length ? `
+  <div class="related-section">
+    <div class="related-title">Bài Viết Liên Quan</div>
+    <ul class="related-list">
+      ${related.map(r => {
+        const CAT = {'chiem-tinh':'Chiêm Tinh','triet-hoc':'Triết Học','thuc-hanh':'Thực Hành','van-han':'Vận Hạn','nhan-vat':'Nhân Vật','so-sanh':'So Sánh'};
+        return `<li class="related-item"><a href="/khao-luan/${r.slug}">
+          <span class="rel-title">${escHtml(r.title)}</span>
+          ${r.category ? `<span class="rel-cat">${CAT[r.category]||r.category}</span>` : ''}
+        </a></li>`;
+      }).join('')}
+    </ul>
+  </div>` : ''}
 </article>
 
 <footer class="site-footer">
@@ -241,7 +263,21 @@ module.exports = async (req, res) => {
       return res.status(404).send(buildNotFound());
     }
 
-    const html = buildHTML(rows[0], slug);
+    // Fetch related — cùng category, loại bài hiện tại
+    let related = [];
+    try {
+      const cat = rows[0].category || '';
+      const rRes = await fetch(
+        `${SUPABASE_URL}/rest/v1/khao_luan?select=slug,title,category&order=created_at.desc&limit=20`,
+        { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+      );
+      const rRows = await rRes.json();
+      const same  = rRows.filter(r => r.slug !== slug && r.category === cat);
+      const other = rRows.filter(r => r.slug !== slug && r.category !== cat);
+      related = [...same, ...other].slice(0, 5);
+    } catch(e) {}
+
+    const html = buildHTML(rows[0], slug, related);
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
     return res.status(200).send(html);
