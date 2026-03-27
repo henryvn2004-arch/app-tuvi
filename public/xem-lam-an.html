@@ -1371,11 +1371,7 @@ function appendSection(idx,contentHtml,body){
       <div style="color:var(--text-lt);font-style:italic;font-size:13px">Đang luận giải...</div>
     </div>`;
   body.appendChild(sec);
-  // Loading indicator in muc-luc
-  const mlBtn=document.getElementById('ml-'+idx);
-  const mlNum=document.getElementById('ml-num-'+idx);
-  if(mlBtn){mlBtn.classList.add('loading','active');}
-  if(mlNum){mlNum.style.animation='spin 1s linear infinite';}
+  // Loading state will be set by luanGiaiSection when it starts
 }
 
 function jumpTo(idx){
@@ -1524,6 +1520,12 @@ Viết 300-350 từ văn xuôi. Nhận định tổng quan về tiềm năng h�
 
     prompt='Luận giải "'+m.label+'" — tương quan hợp tác kinh doanh '+nameA+' và '+nameB+':\n'+lines.join('\n')+'\n\nViết 150-200 từ văn xuôi. Tác động thực tế trong hợp tác kinh doanh, 1 điểm lưu ý. Dùng tên thật.';
   }
+  // Mark muc-luc as loading NOW (when actually calling AI)
+  const _mlBtn=document.getElementById('ml-'+idx);
+  const _mlNum=document.getElementById('ml-num-'+idx);
+  if(_mlBtn){_mlBtn.classList.add('loading','active');}
+  if(_mlNum){_mlNum.style.animation='spin 1s linear infinite';}
+
   try{
     const resp=await fetch('/api/xem-tuoi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
     const data=await resp.json();
@@ -1661,15 +1663,20 @@ async function initiatePaymentTuoi(result, product) {
 }
 
 function showPaywall(result, product, productLabel) {
-  // Put paywall lock inside each luangiai div (0 to 8)
-  for (let i = 0; i <= 8; i++) {
-    const el = document.getElementById('luangiai-'+i);
-    if (!el) continue;
-    const isFirst = i === 0;
-    el.innerHTML = `
-      <div class="paywall-lock" style="text-align:center;padding:${isFirst?'28px 24px':'16px 24px'};margin-top:8px">
-        ${isFirst ? '<div class="paywall-lock-icon">🔒</div><div class="paywall-lock-title">Mở Khóa Luận Giải AI</div><div class="paywall-lock-desc">An sao và tính điểm hoàn toàn miễn phí. Để nhận 9 phần luận giải AI chuyên sâu, thanh toán một lần.</div><div class="paywall-lock-price">$9</div><div class="paywall-lock-price-note">Thanh toán một lần · Truy cập vĩnh viễn</div><button class="btn-paywall-tuoi" onclick="initiatePaymentTuoi(_savedResult,\'xem-lam-an\')" style="margin-bottom:8px"><span>Mở Khóa Luận Giải</span><span style=\"font-size:16px\">→</span></button><div class="paywall-secure">🔒 Thanh toán bảo mật qua PayPal</div>' : '<div style=\"font-size:13px;color:#aaa;padding:4px 0\">🔒 Mở khóa để xem luận giải phần này</div>' }
-      </div>`;
+  var lockHtml = '<div class="paywall-lock" style="text-align:center;padding:20px 24px;margin-top:8px">'
+    + '<div class="paywall-lock-icon">&#128274;</div>'
+    + '<div class="paywall-lock-title">M&#7903; Kh&#243;a Lu&#7853;n Gi&#7843;i AI</div>'
+    + '<div class="paywall-lock-desc">An sao v&#224; t&#237;nh &#273;i&#7875;m mi&#7877;n ph&#237;. Thanh to&#225;n m&#7897;t l&#7847;n &#273;&#7875; nh&#7853;n 9 ph&#7847;n lu&#7853;n gi&#7843;i AI.</div>'
+    + '<div class="paywall-lock-price">$9</div>'
+    + '<div class="paywall-lock-price-note">Thanh to&#225;n m&#7897;t l&#7847;n &middot; Tr&#7843;i nghi&#7879;m v&#297;nh vi&#7877;n</div>'
+    + '<button class="btn-paywall-tuoi" onclick="initiatePaymentTuoi(_savedResult,&quot;xem-lam-an&quot;)">'
+    + '<span>M&#7903; Kh&#243;a Lu&#7853;n Gi&#7843;i</span><span style="font-size:16px">&#8594;</span>'
+    + '</button>'
+    + '<div class="paywall-secure">&#128274; Thanh to&#225;n b&#7843;o m&#7853;t qua PayPal</div>'
+    + '</div>';
+  for (var i = 0; i <= 8; i++) {
+    var el = document.getElementById('luangiai-'+i);
+    if (el) el.innerHTML = lockHtml;
   }
 }
 
