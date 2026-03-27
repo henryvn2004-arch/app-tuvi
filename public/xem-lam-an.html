@@ -505,6 +505,40 @@ select.form-input { cursor: pointer; }
 .nav-dropdown-item{display:block;padding:9px 12px;color:#8BAACC;text-decoration:none;font-size:13px;border-radius:5px;transition:all 0.12s;}
 .nav-dropdown-item:hover{background:rgba(255,255,255,0.07);color:#fff;}
 @media(max-width:768px){.nav-dropdown-menu{position:static;box-shadow:none;border:none;background:transparent;padding:0 0 0 16px;}.nav-dropdown-menu.open{display:block;}}
+
+/* ── INTRO SECTION ── */
+.xemtuoi-intro { border-bottom: 1px solid var(--border); margin-bottom: 40px; }
+.xt-section { padding: 52px 0; border-bottom: 1px solid var(--border-lt); }
+.xt-section:last-child { border-bottom: none; }
+.xt-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 20px; }
+.xt-h2 { font-family: 'Noto Serif', serif; font-size: clamp(22px,3vw,30px); color: var(--navy); font-weight: 600; line-height: 1.3; margin-bottom: 16px; }
+.xt-body { font-size: 15px; color: var(--text-mid); line-height: 1.85; font-weight: 300; margin-bottom: 14px; }
+.xt-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 52px; align-items: start; }
+@media(max-width:720px) { .xt-grid-2 { grid-template-columns: 1fr; gap: 32px; } }
+
+/* factors */
+.xt-factors { background: var(--bg-soft); border-radius: 10px; padding: 24px; }
+.xt-factor-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 14px; }
+.xt-factor-list { display: flex; flex-direction: column; gap: 0; }
+.xt-factor-item { display: flex; align-items: baseline; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border-lt); }
+.xt-factor-item:last-child { border-bottom: none; }
+.xt-factor-num { font-size: 13px; color: var(--gold); font-weight: 700; flex-shrink: 0; width: 20px; }
+.xt-factor-label { font-size: 13px; font-weight: 600; color: var(--navy); width: 90px; flex-shrink: 0; }
+.xt-factor-desc { font-size: 12px; color: var(--text-lt); line-height: 1.5; }
+
+/* steps */
+.xt-steps { display: flex; align-items: flex-start; gap: 0; flex-wrap: wrap; }
+@media(max-width:640px) { .xt-steps { flex-direction: column; } .xt-step-arrow { transform: rotate(90deg); margin: 0 auto; } }
+.xt-step { flex: 1; min-width: 180px; display: flex; gap: 14px; padding: 4px; }
+.xt-step-num { width: 36px; height: 36px; background: var(--navy); color: #c9a84c; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+.xt-step-body { flex: 1; }
+.xt-step-title { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+.xt-step-desc { font-size: 13px; color: var(--text-lt); line-height: 1.6; }
+.xt-step-arrow { font-size: 20px; color: var(--border); padding: 8px 12px; flex-shrink: 0; align-self: center; }
+
+/* note */
+.xt-note { display: flex; gap: 12px; align-items: flex-start; background: var(--gold-lt); border: 1px solid #e8d9b0; border-radius: 8px; padding: 14px 16px; margin: 32px 0 40px; font-size: 13px; color: var(--text-mid); line-height: 1.6; }
+.xt-note-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
 </style>
 
 <style>
@@ -574,10 +608,82 @@ select.form-input { cursor: pointer; }
 <div class="hero-tuoi">
   <div class="eyebrow">Tử Vi Minh Bảo</div>
   <h1>Xem Tuổi Làm Ăn</h1>
-  <p>Phân tích tương quan hợp tác kinh doanh giữa hai lá số theo Tử Vi Đẩu Số cổ pháp.</p>
+  <p>Phân tích tiềm năng hợp tác kinh doanh giữa hai lá số — an sao, tính điểm 8 yếu tố và luận giải AI 9 phần theo góc độ kinh doanh.</p>
+  <div style="display:flex;gap:24px;justify-content:center;margin-top:20px;flex-wrap:wrap">
+    <div style="text-align:center"><div style="font-size:22px;font-family:'Noto Serif',serif;color:#fff;font-weight:700">8</div><div style="font-size:11px;color:#8BAACC;letter-spacing:1px">Yếu tố</div></div>
+    <div style="width:1px;background:rgba(255,255,255,0.15)"></div>
+    <div style="text-align:center"><div style="font-size:22px;font-family:'Noto Serif',serif;color:#fff;font-weight:700">9</div><div style="font-size:11px;color:#8BAACC;letter-spacing:1px">Phần luận giải</div></div>
+    <div style="width:1px;background:rgba(255,255,255,0.15)"></div>
+    <div style="text-align:center"><div style="font-size:22px;font-family:'Noto Serif',serif;color:#fff;font-weight:700">AI</div><div style="font-size:11px;color:#8BAACC;letter-spacing:1px">Cổ pháp + Sonnet</div></div>
+  </div>
 </div>
 
 <div class="xemtuoi-wrap">
+  <!-- ══ INTRO + HOW IT WORKS ══════════════════════════════ -->
+  <div class="xemtuoi-intro">
+
+    <div class="xt-section xt-what">
+      <div class="xt-eyebrow">Công cụ này là gì?</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">Xem Tuổi Làm Ăn<br>theo Tử Vi Đẩu Số</h2>
+          <p class="xt-body">Trong hợp tác kinh doanh, sự tương hợp giữa hai người không chỉ là duyên phận — mà còn thể hiện qua tương quan cung Mệnh, cung Nô Bộc, cung Tài Bạch và cung Thân của từng lá số. Cổ nhân xem cung Nô Bộc là nơi thể hiện khả năng hợp tác, quản lý đối tác và nhân sự; cung Thân phản ánh cá tính thực sự và phong cách giao tiếp trong công việc.</p>
+          <p class="xt-body">Công cụ an sao đầy đủ cho cả hai lá số, tính điểm tương hợp theo 8 yếu tố có trọng số, và dùng AI luận giải từng chiều theo góc độ hợp tác kinh doanh — để bạn nhận diện rõ tiềm năng và những điểm cần lưu ý trước khi bước vào hợp tác.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">8 Yếu Tố Phân Tích</div>
+          <div class="xt-factor-list">
+            <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">Xét Tuổi</span><span class="xt-factor-desc">Tương quan địa chi năm sinh</span></div>
+            <div class="xt-factor-item"><span class="xt-factor-num">②</span><span class="xt-factor-label">Ngũ Hành</span><span class="xt-factor-desc">Nạp âm sinh khắc</span></div>
+            <div class="xt-factor-item"><span class="xt-factor-num">③</span><span class="xt-factor-label">Tư Tưởng</span><span class="xt-factor-desc">Cung Mệnh — cách tiếp cận, quan điểm</span></div>
+            <div class="xt-factor-item"><span class="xt-factor-num">④</span><span class="xt-factor-label">Tính Cách</span><span class="xt-factor-desc">Chính tinh — phong cách lãnh đạo, làm việc</span></div>
+            <div class="xt-factor-item"><span class="xt-factor-num">⑤</span><span class="xt-factor-label">Đối Tác</span><span class="xt-factor-desc">Cung Nô Bộc — khả năng hợp tác, đối tác</span></div>
+            <div class="xt-factor-item"><span class="xt-factor-num">⑥</span><span class="xt-factor-label">Giao Tiếp</span><span class="xt-factor-desc">Cung Thân — cá tính thực, phong cách biểu đạt</span></div>
+            <div class="xt-factor-item"><span class="xt-factor-num">⑦</span><span class="xt-factor-label">Tài Chính</span><span class="xt-factor-desc">Cung Tài Bạch — tiềm năng tài lộc chung</span></div>
+            <div class="xt-factor-item"><span class="xt-factor-num">⑧</span><span class="xt-factor-label">Vận Hạn</span><span class="xt-factor-desc">Đại vận hiện tại — thời cơ và thách thức</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="xt-section xt-how">
+      <div class="xt-eyebrow">Cách sử dụng</div>
+      <div class="xt-steps">
+        <div class="xt-step">
+          <div class="xt-step-num">1</div>
+          <div class="xt-step-body">
+            <div class="xt-step-title">Nhập thông tin 2 đối tác</div>
+            <div class="xt-step-desc">Điền đầy đủ họ tên, giới tính, ngày tháng năm sinh dương lịch và giờ sinh cho cả hai. Giờ sinh ảnh hưởng đến cung Mệnh và cung Thân — càng chính xác càng tốt.</div>
+          </div>
+        </div>
+        <div class="xt-step-arrow">→</div>
+        <div class="xt-step">
+          <div class="xt-step-num">2</div>
+          <div class="xt-step-body">
+            <div class="xt-step-title">Hệ thống an sao & tính điểm</div>
+            <div class="xt-step-desc">An sao cổ pháp, tính điểm tương hợp 8 yếu tố theo trọng số kinh doanh, hiển thị lá số, biểu đồ gauge và radar 6 chiều.</div>
+          </div>
+        </div>
+        <div class="xt-step-arrow">→</div>
+        <div class="xt-step">
+          <div class="xt-step-num">3</div>
+          <div class="xt-step-body">
+            <div class="xt-step-title">AI luận giải 9 phần</div>
+            <div class="xt-step-desc">Từng yếu tố được phân tích theo góc độ hợp tác — từ tư tưởng, tính cách, năng lực đối tác đến tài chính và vận hạn hiện tại.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="xt-note">
+      <span class="xt-note-icon">💡</span>
+      <div><strong>Lưu ý:</strong> Kết quả mang tính tham khảo theo Tử Vi Đẩu Số cổ pháp. Quyết định hợp tác cần cân nhắc thêm năng lực thực tế, điều khoản pháp lý và nhiều yếu tố kinh doanh khác.</div>
+    </div>
+
+  </div>
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+
   <div class="pair-forms">
     <div class="person-card card-a">
       <div class="person-label"><div class="dot-a"></div><span style="color:var(--color-a)">Đối Tác 1</span></div>
