@@ -1621,12 +1621,13 @@ function showPaywall(result, product, productLabel) {
     </button>
     <div class="paywall-secure">🔒 Thanh toán bảo mật qua PayPal · Hoàn tiền nếu lỗi kỹ thuật</div>
   `;
-  // Insert after result header
-  const header = document.getElementById('result-header-tuoi');
-  if (header && header.nextSibling) {
-    body.parentNode.insertBefore(lock, document.querySelector('.result-layout-tuoi'));
+  // Insert before result-layout (sidebar+main), i.e. between header and content
+  const layout = document.querySelector('.result-layout-tuoi');
+  if (layout && layout.parentNode) {
+    layout.parentNode.insertBefore(lock, layout);
   } else {
-    body.prepend(lock);
+    const rs = document.getElementById('result-section');
+    if (rs) rs.insertBefore(lock, rs.children[1] || rs.firstChild);
   }
 }
 
