@@ -740,9 +740,9 @@ const _NH_KHAC = typeof NGU_HANH_KHAC_MAP!=='undefined'?NGU_HANH_KHAC_MAP:{'Mộ
 const _TTN = typeof THAI_TUE_NHOM!=='undefined'?THAI_TUE_NHOM:{'Thái Tuế':1,'Quan Phù':1,'Bạch Hổ':1,'Thiếu Dương':2,'Tử Phù':2,'Phúc Đức':2,'Tang Môn':3,'Tuế Phá':3,'Điếu Khách':3,'Thiếu Âm':4,'Long Đức':4,'Trực Phù':4};
 const _NA = {'Giáp Tý':'Kim','Ất Sửu':'Kim','Bính Dần':'Hỏa','Đinh Mão':'Hỏa','Mậu Thìn':'Mộc','Kỷ Tỵ':'Mộc','Canh Ngọ':'Thổ','Tân Mùi':'Thổ','Nhâm Thân':'Kim','Quý Dậu':'Kim','Giáp Tuất':'Hỏa','Ất Hợi':'Hỏa','Bính Tý':'Thủy','Đinh Sửu':'Thủy','Mậu Dần':'Thổ','Kỷ Mão':'Thổ','Canh Thìn':'Kim','Tân Tỵ':'Kim','Nhâm Ngọ':'Mộc','Quý Mùi':'Mộc','Giáp Thân':'Thủy','Ất Dậu':'Thủy','Bính Tuất':'Thổ','Đinh Hợi':'Thổ','Mậu Tý':'Hỏa','Kỷ Sửu':'Hỏa','Canh Dần':'Mộc','Tân Mão':'Mộc','Nhâm Thìn':'Thủy','Quý Tỵ':'Thủy','Giáp Ngọ':'Kim','Ất Mùi':'Kim','Bính Thân':'Hỏa','Đinh Dậu':'Hỏa','Mậu Tuất':'Mộc','Kỷ Hợi':'Mộc','Canh Tý':'Thổ','Tân Sửu':'Thổ','Nhâm Dần':'Kim','Quý Mão':'Kim','Giáp Thìn':'Hỏa','Ất Tỵ':'Hỏa','Bính Ngọ':'Thủy','Đinh Mùi':'Thủy','Mậu Thân':'Thổ','Kỷ Dậu':'Thổ','Canh Tuất':'Kim','Tân Hợi':'Kim','Nhâm Tý':'Mộc','Quý Sửu':'Mộc','Giáp Dần':'Thủy','Ất Mão':'Thủy','Bính Thìn':'Thổ','Đinh Tỵ':'Thổ','Mậu Ngọ':'Hỏa','Kỷ Mùi':'Hỏa','Canh Thân':'Mộc','Tân Dậu':'Mộc','Nhâm Tuất':'Thủy','Quý Hợi':'Thủy'};
 
-const PHAN_LABELS = ['Tổng Quan','Xét Tuổi','Ngũ Hành','Tư Tưởng','Quan Hệ','Con Cái','Tài Chính','Suy Nghĩ','Vận Hành'];
-const WEIGHTS = [0,0.10,0.10,0.20,0.20,0.10,0.15,0.10,0.05];
-const CUNG_MAP = [null,null,null,'Mệnh','Phu Thê','Tử Tức','Tài Bạch',null,null];
+const PHAN_LABELS = ['Tổng Quan','Xét Tuổi','Ngũ Hành','Tư Tưởng','Tính Cách','Quan Hệ','Con Cái','Tài Chính','Vận Hành'];
+const WEIGHTS = [0,0.10,0.10,0.20,0.10,0.20,0.10,0.15,0.05];
+const CUNG_MAP = [null,null,null,'Mệnh',null,'Phu Thê','Tử Tức','Tài Bạch',null];
 const METRICS_VI = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
 const METRICS_KEY = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
 
@@ -844,7 +844,7 @@ function calcTuongHop(lsA,lsB,nameA,nameB){
   const s6={score:tbc.score,w:0.15,label:'Tài Chính',detail:tbc.chiRel?.label||'',
     a:`${pTBA?.diaChi||'?'}`,b:`${pTBB?.diaChi||'?'}`,palA:pTBA,palB:pTBB,mc:tbc};
   const sr=mainStarRel(pMenhA,pMenhB);
-  const s7={score:sr.score,w:0.10,label:'Suy Nghĩ',detail:sr.label,
+  const s7={score:sr.score,w:0.10,label:'Tính Cách',detail:sr.label,
     a:(pMenhA?.majorStars||[]).map(s=>s.ten).join(', ')||'VCD',
     b:(pMenhB?.majorStars||[]).map(s=>s.ten).join(', ')||'VCD'};
   const dvA=lsA.daiVanHienTai?.scoring?.tong??5,dvB=lsB.daiVanHienTai?.scoring?.tong??5;
@@ -852,7 +852,7 @@ function calcTuongHop(lsA,lsB,nameA,nameB){
     detail:`ĐV ${nameA}: ${dvA}/10 · ĐV ${nameB}: ${dvB}/10`,
     a:`${dvA}/10 ${dvA>=7?'🟢':dvA>=4?'🟡':'🔴'}`,b:`${dvB}/10 ${dvB>=7?'🟢':dvB>=4?'🟡':'🔴'}`};
 
-  const items=[s1,s2,s3,s4,s5,s6,s7,s8];
+  const items=[s1,s2,s3,s7,s4,s5,s6,s8]; // reordered: Tư Tưởng, Tính Cách, Quan Hệ, Con Cái, Tài Chính
   const total=r1(items.reduce((sum,m)=>sum+m.score*m.w*10,0));
   return{items,total,lsA,lsB,nameA,nameB,naA,naB};
 }
@@ -895,17 +895,33 @@ function pregenCung(pal,lsObj,name,colorVar){
   return html;
 }
 
-function meterHtml(score10){
-  const pct=score10*10;
-  const col=meterColor(pct);
-  return `<div class="meter-wrap">
-    <div style="font-size:32px;font-weight:700;font-family:'Noto Serif',serif;color:${col};margin-bottom:6px">${score10}<span style="font-size:16px;color:#ccc">/10</span></div>
-    <div class="meter-track" style="height:14px;background:#eee;border-radius:7px;overflow:hidden">
-      <div class="meter-fill" style="width:${pct}%;height:100%;background:${col};border-radius:7px;transition:width 0.8s"></div>
-    </div>
-    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-lt);margin-top:3px"><span>0 — Khắc nhiều</span><span>10 — Rất hợp</span></div>
+function gaugeHtml(score, maxScore, label1, label2){
+  const pct = score/maxScore;
+  const col = meterColor(score/maxScore*100);
+  // SVG semicircle gauge
+  const R=70, cx=90, cy=90;
+  const startAngle=Math.PI, endAngle=2*Math.PI;
+  const angle = startAngle + pct*(endAngle-startAngle);
+  const x1=cx+R*Math.cos(startAngle), y1=cy+R*Math.sin(startAngle);
+  const x2=cx+R*Math.cos(angle), y2=cy+R*Math.sin(angle);
+  const large=pct>0.5?1:0;
+  const bgX2=cx+R*Math.cos(endAngle), bgY2=cy+R*Math.sin(endAngle);
+  return `<div style="text-align:center;margin:8px 0 16px">
+    <svg width="180" height="100" viewBox="0 0 180 100" style="overflow:visible">
+      <!-- BG arc -->
+      <path d="M ${x1} ${y1} A ${R} ${R} 0 1 1 ${bgX2} ${bgY2}" fill="none" stroke="#eee" stroke-width="14" stroke-linecap="round"/>
+      <!-- Fill arc -->
+      ${pct>0?`<path d="M ${x1} ${y1} A ${R} ${R} 0 ${large} 1 ${x2} ${y2}" fill="none" stroke="${col}" stroke-width="14" stroke-linecap="round"/>`:''}
+      <!-- Score text -->
+      <text x="${cx}" y="${cy-8}" text-anchor="middle" font-size="22" font-weight="700" fill="${col}" font-family="'Noto Serif',serif">${score}</text>
+      <text x="${cx}" y="${cy+10}" text-anchor="middle" font-size="12" fill="#aaa">/ ${maxScore}</text>
+      <!-- Labels -->
+      <text x="14" y="${cy+2}" text-anchor="middle" font-size="9" fill="#aaa">${label1}</text>
+      <text x="${2*cx-14}" y="${cy+2}" text-anchor="middle" font-size="9" fill="#aaa">${label2}</text>
+    </svg>
   </div>`;
 }
+function meterHtml(score10){ return gaugeHtml(score10,10,'Khắc','Hợp'); }
 
 function renderRadar(lsA,lsB,nameA,nameB){
   const scA=lsA.cungScores||{},scB=lsB.cungScores||{};
@@ -948,6 +964,22 @@ function renderRadar(lsA,lsB,nameA,nameB){
   };
 }
 
+function renderDvOverlay2(lsA,lsB,nameA,nameB,canvasId){
+  const dvA=(lsA.daiVans||[]).slice(0,9),dvB=(lsB.daiVans||[]).slice(0,9);
+  if(!dvA.length||!dvB.length)return;
+  const labels=dvA.map((dv,i)=>`ĐV${i+1} ${dv.tuoiStart}-${dv.tuoiEnd}`);
+  const ctx=document.getElementById(canvasId);
+  if(!ctx)return;
+  new Chart(ctx,{
+    type:'line',
+    data:{labels,datasets:[
+      {label:nameA,data:dvA.map(d=>d.scoring?.tong??5),borderColor:'var(--color-a)',backgroundColor:'rgba(224,85,85,0.05)',pointRadius:5,tension:0.4,fill:true},
+      {label:nameB,data:dvB.map(d=>d.scoring?.tong??5),borderColor:'var(--color-b)',backgroundColor:'rgba(59,125,216,0.05)',pointRadius:5,tension:0.4,fill:true},
+    ]},
+    options:{responsive:true,plugins:{legend:{display:true},title:{display:true,text:'Vận Trình Toàn Đời — Đối Chiếu',font:{size:13,weight:'bold'}}},scales:{y:{min:0,max:10}}},
+  });
+}
+
 function renderDvOverlay(lsA,lsB,nameA,nameB){
   const dvA=(lsA.daiVans||[]).slice(0,9),dvB=(lsB.daiVans||[]).slice(0,9);
   if(!dvA.length||!dvB.length)return;
@@ -972,14 +1004,7 @@ function buildTongQuan(result){
   let html=`<div style="font-family:'Noto Serif',serif;font-size:20px;font-weight:700;color:${col};margin-bottom:4px">${slabel}</div>
     <div style="font-size:44px;font-weight:700;color:${col};font-family:'Noto Serif',serif;line-height:1;margin-bottom:4px">${total}<span style="font-size:18px;color:#ccc">/100</span></div>
     <div style="font-size:20px;margin-bottom:20px">${stars}</div>
-    <div style="max-width:460px;margin-bottom:6px">
-      <div style="height:20px;background:#eee;border-radius:10px;overflow:hidden;position:relative">
-        <div style="width:${total}%;height:100%;background:${col};border-radius:10px;transition:width 1s"></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-lt);margin-top:3px">
-        <span>0 — Khắc nhiều</span><span>100 — Rất tương hợp</span>
-      </div>
-    </div>
+    ${gaugeHtml(total,100,'Khắc','Hợp')}
     <table style="font-size:12px;border-collapse:collapse;width:100%;max-width:520px;margin-bottom:28px">
       <tr style="background:var(--bg-soft)">
         <th style="padding:6px 10px;text-align:left;border:1px solid var(--border)">Yếu tố</th>
@@ -998,10 +1023,7 @@ function buildTongQuan(result){
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px" id="radar-btns"></div>
       <canvas id="chart-radar-overlay" style="max-height:400px"></canvas>
     </div>
-    <div>
-      <div style="font-size:11px;font-weight:700;color:var(--text-lt);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">📊 Vận Trình Toàn Đời — Đối Chiếu</div>
-      <canvas id="chart-dv-overlay"></canvas>
-    </div>`;
+  `;  // DV chart added to section 8
   return html;
 }
 
@@ -1021,8 +1043,17 @@ function buildYeuTo(idx,m,nameA,nameB,lsA,lsB){
       <div>${pregenCung(m.palA,lsA,nameA,'var(--color-a)')}</div>
       <div>${pregenCung(m.palB,lsB,nameB,'var(--color-b)')}</div>
     </div>`;
-    // Radar chart 2 lines for cung sections (idx 2-5 = Tư Tưởng, Quan Hệ, Con Cái, Tài Chính)
+    // Radar chart 2 lines for cung sections
     html+=buildCungRadar(m,lsA,lsB,nameA,nameB);
+  }
+  // DV spline for Vận Hành (idx 8)
+  if(idx===8){
+    const dvUid='dv-overlay-'+Date.now();
+    setTimeout(()=>renderDvOverlay2(lsA,lsB,nameA,nameB,dvUid),200);
+    html+=`<div style="margin-top:20px">
+      <div style="font-size:11px;font-weight:700;color:#6699dd;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">📊 Vận Trình Toàn Đời — Đối Chiếu</div>
+      <canvas id="${dvUid}"></canvas>
+    </div>`;
   }
   if(idx===2&&(m.ttSaoA||m.ttSaoB)){
     html+=`<div class="pregen-block" style="padding:10px 12px;border-radius:6px;margin-top:10px">
@@ -1050,12 +1081,12 @@ function renderCompactLaso(lsA,lsB,nameA,nameB){
   function buildGrid(ls,name,col){
     const dvHT=ls.daiVanHienTai;
     let centerDone=false;
-    const center=`<div style="grid-column:span 2;grid-row:span 2;background:#f5f4f0;border:1px solid #ccc;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px;font-size:9px;text-align:center">
-      <div style="font-weight:700;color:${col};font-size:10px;margin-bottom:2px">${name}</div>
-      <div>${ls.canChiNam||''}</div>
-      <div>${ls.napAm||''}</div>
-      <div>Mệnh: ${ls.menhDC||''}</div>
-      <div style="color:${col}">Tuổi: ${ls.tuoiXem||''}</div>
+    const center=`<div style="grid-column:span 2;grid-row:span 2;background:#f5f4f0;border:1px solid #ccc;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 4px;font-size:9px;text-align:center;line-height:1.6">
+      <div style="font-weight:700;color:${col};font-size:11px;margin-bottom:3px;letter-spacing:0.5px">${name}</div>
+      <div style="color:#555">${ls.canChiNam||''}</div>
+      <div style="color:#777">${ls.napAm||''}</div>
+      <div style="color:#555">Mệnh: <b>${ls.menhDC||''}</b></div>
+      <div style="color:${col};font-weight:600">Tuổi ${ls.tuoiXem||''}</div>
     </div>`;
     let cells='';
     LAYOUT.forEach(dcI=>{
@@ -1144,7 +1175,6 @@ function renderAllSections(result){
   appendSection(0,buildTongQuan(result),body);
   setTimeout(()=>{
     renderRadar(lsA,lsB,nameA,nameB);
-    renderDvOverlay(lsA,lsB,nameA,nameB);
     renderCompactLaso(lsA,lsB,nameA,nameB);
   },200);
   items.forEach((m,i)=>appendSection(i+1,buildYeuTo(i,m,nameA,nameB,lsA,lsB),body));
@@ -1205,12 +1235,19 @@ Viết 500-600 từ văn xuôi. Phân tích tổng quan mối quan hệ, điểm
       const napAmFullA=result.lsA.napAm||naA,napAmFullB=result.lsB.napAm||naB;
       extraCtx=`\nNạp Âm đầy đủ: ${nameA} — ${napAmFullA} · ${nameB} — ${napAmFullB}\nXét tương quan ngũ hành nạp âm của 2 tuổi theo cổ pháp (Hải Trung Kim, Thiên Thượng Hỏa,...).`;
     } else if(idx===3){
-      const ttA=palA?.thaiTueNhom,ttB=palB?.thaiTueNhom;
-      const tsA=(palA?.stars||[]).find(s=>s.nhom==='trang_sinh');
-      const tsB=(palB?.stars||[]).find(s=>s.nhom==='trang_sinh');
-      const locA=(palA?.stars||[]).find(s=>s.ten==='Lộc Tồn');
-      const locB=(palB?.stars||[]).find(s=>s.ten==='Lộc Tồn');
-      extraCtx=`\nVòng Thái Tuế: ${nameA} — ${ttA?.sao||'?'} (Nhóm ${ttA?.nhom||'?'}) · ${nameB} — ${ttB?.sao||'?'} (Nhóm ${ttB?.nhom||'?'})\nTrường Sinh: ${nameA} — ${tsA?.ten||'không có'} · ${nameB} — ${tsB?.ten||'không có'}\nLộc Tồn: ${nameA} — ${locA?'Có':'Không'} · ${nameB} — ${locB?'Có':'Không'}\nTập trung phân tích 3 vòng Thái Tuế, Lộc Tồn, Trường Sinh và cách cục cung Mệnh.`;
+      // Tư Tưởng: xét cách cục đặc biệt + cách cục cung Mệnh
+      extraCtx=`\nTập trung phân tích: cách cục đặc biệt toàn lá số và cách cục cung Mệnh của hai người, tác động đến tư tưởng và cách tiếp cận cuộc sống.`;
+    } else if(idx===4){
+      // Tính Cách: xét 3 vòng Thái Tuế, Lộc Tồn, Trường Sinh
+      const ttA=lsA.palaces?.find(p=>p.isMenh)?.thaiTueNhom;
+      const ttB=lsB.palaces?.find(p=>p.isMenh)?.thaiTueNhom;
+      const menhA=lsA.palaces?.find(p=>p.isMenh);
+      const menhB=lsB.palaces?.find(p=>p.isMenh);
+      const tsA=(menhA?.stars||[]).find(s=>s.nhom==='trang_sinh');
+      const tsB=(menhB?.stars||[]).find(s=>s.nhom==='trang_sinh');
+      const locA=(menhA?.stars||[]).find(s=>s.ten==='Lộc Tồn');
+      const locB=(menhB?.stars||[]).find(s=>s.ten==='Lộc Tồn');
+      extraCtx=`\nVòng Thái Tuế: ${nameA} — ${ttA?.sao||'?'} (Nhóm ${ttA?.nhom||'?'}) · ${nameB} — ${ttB?.sao||'?'} (Nhóm ${ttB?.nhom||'?'})\nTrường Sinh: ${nameA} — ${tsA?.ten||'không có'} · ${nameB} — ${tsB?.ten||'không có'}\nLộc Tồn: ${nameA} — ${locA?'Có':'Không'} · ${nameB} — ${locB?'Có':'Không'}\nTập trung phân tích tương quan 3 vòng Thái Tuế, Lộc Tồn, Trường Sinh — ảnh hưởng đến tính cách, khí chất của hai người.`;
     }
 
     prompt=`Luận giải yếu tố "${m.label}" trong tương quan lá số của ${nameA} và ${nameB}:
