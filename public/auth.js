@@ -149,7 +149,10 @@ function updateNavUI() {
   const navEl = document.getElementById('nav-auth-area');
   if (!navEl) return;
   // Always fix to top-right
-  navEl.style.cssText = 'position:fixed;top:0;right:56px;height:60px;display:flex;align-items:center;z-index:300';
+  const isMobile = window.innerWidth <= 700;
+  navEl.style.cssText = isMobile
+    ? 'position:fixed;top:12px;right:16px;height:36px;display:flex;align-items:center;z-index:300'
+    : 'position:fixed;top:0;right:56px;height:60px;display:flex;align-items:center;z-index:300';
   if (_session && _user) {
     const email = _user.email || '';
     const name  = _user.user_metadata?.full_name || _user.user_metadata?.name || '';
