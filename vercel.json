@@ -3,11 +3,11 @@
   "crons": [
     {
       "path": "/api/cron-khao-luan",
-      "schedule": "0 15 * * *"
+      "schedule": "0 3 * * *"
     },
     {
-      "path": "/api/embed-tai-lieu",
-      "schedule": "30 15 * * *"
+      "path": "/api/cron-khao-luan",
+      "schedule": "0 15 * * *"
     }
   ],
   "functions": {
@@ -41,11 +41,15 @@
     "api/payment.js": {
       "maxDuration": 15
     },
-    "api/xem-tuoi.js": {
-      "maxDuration": 60
+    "api/khao-luan.js": {
+      "maxDuration": 15
     }
   },
   "rewrites": [
+    {
+      "source": "/khao-luan/:slug",
+      "destination": "/api/khao-luan?slug=$slug"
+    },
     {
       "source": "/sitemap.xml",
       "destination": "/api/sitemap"
@@ -57,10 +61,6 @@
     {
       "source": "/tai-lieu/:slug",
       "destination": "/tai-lieu.html"
-    },
-    {
-      "source": "/khao-luan/:slug",
-      "destination": "/khao-luan.html"
     },
     {
       "source": "/payment-success",
