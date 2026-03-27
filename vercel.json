@@ -42,7 +42,7 @@
       "maxDuration": 15
     },
     "api/xem-tuoi.js": {
-      "maxDuration": 30
+      "maxDuration": 60
     }
   },
   "rewrites": [
