@@ -1,10 +1,11 @@
 User-agent: *
 Allow: /
 
-# Không index trang auth và API
+# Không index trang auth, API, policy pages không cần SEO
 Disallow: /api/
 Disallow: /auth-callback.html
 Disallow: /profile.html
+Disallow: /payment-success.html
 
 # Sitemap
 Sitemap: https://www.tuviminhbao.com/sitemap.xml
