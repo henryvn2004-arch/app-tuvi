@@ -6,7 +6,7 @@ const SUPABASE_URL  = process.env.SUPABASE_URL;
 const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY;
 const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
 const OPENAI_KEY    = process.env.OPENAI_API_KEY;
-const ARTICLES_PER_RUN = 3;
+const ARTICLES_PER_RUN = 2;
 
 async function sbFetch(path, options = {}) {
   const res = await fetch(`${SUPABASE_URL}/rest/v1${path}`, {
@@ -85,7 +85,7 @@ async function ragSearch(topic) {
 
 async function writeArticle(topic, type, ctx) {
   const isTL = type === 'tai-lieu';
-  const model = 'claude-haiku-4-5-20251001';
+  const model = isTL ? 'claude-haiku-4-5-20251001' : 'claude-sonnet-4-5';
   const ctxBlock = ctx || '(Dùng kiến thức Tử Vi Đẩu Số tổng quát)';
 
   const prompt = isTL
@@ -100,32 +100,40 @@ Yêu cầu: giọng thân thiện, dễ hiểu, ứng dụng thực tế, markdo
 
 Trả về JSON thuần (KHÔNG backtick):
 {"title":"Tiêu đề SEO-friendly","slug":"slug-ascii","excerpt":"Tóm tắt dưới 155 ký tự","category":"sao-chinh|sao-phu|cung|cach-cuc|van-han|luan-giai|khai-niem","tags":["tag1","tag2","tag3"],"content":"markdown 250-400 từ"}`
-    : `Đóng vai nhà nghiên cứu Tử Vi theo văn phong tạp chí Khoa học Huyền Bí Việt Nam trước 1975. Viết bài khảo luận ngắn gọn, học thuật, dùng thuật ngữ Hán–Việt, lập luận rõ ràng theo cấu trúc: dẫn nhập → lý thuyết → phân tích → kết luận.
+    : `Đóng vai **nhà nghiên cứu Tử Vi** theo văn phong tạp chí Khoa học Huyền Bí Việt Nam trước 1975. Giọng văn nho nhã, điềm đạm, lập luận mạch lạc, súc tích.
 
-Chủ đề: ${topic}
+Bối cảnh:
+- Đây là chuyên mục **Vấn đáp**.
+- Người đọc gửi câu hỏi liên quan đến đời sống (hôn nhân, tài chính, sự nghiệp, nhân sinh).
+- Nhiệm vụ: dùng kiến thức và kinh nghiệm Tử Vi (dựa trên tài liệu tham khảo) để giải đáp.
+
+Câu hỏi: ${topic}
 Tài liệu tham khảo (BẮT BUỘC bám sát, ưu tiên trích dẫn ý từ đây, không bịa thêm ngoài tài liệu):\n${ctxBlock}
 
 Nguyên tắc sử dụng tài liệu:
 - Lập luận phải dựa trên tài liệu được cung cấp — không dùng kiến thức chung nếu tài liệu đã đề cập
-- Có thể diễn giải, tổng hợp ý từ nhiều đoạn tài liệu nhưng không được bịa dẫn chứng
+- Có thể diễn giải, tổng hợp ý từ nhiều đoạn tài liệu
 - Nếu tài liệu không đủ để luận về một khía cạnh, bỏ qua khía cạnh đó thay vì phỏng đoán
 
 Yêu cầu SEO & AEO:
+- Trả lời **trực tiếp vào trọng tâm câu hỏi ngay từ 1–2 câu đầu** (AEO / featured snippet)
+- Tổng độ dài: **≤ 300 từ**
+- Văn phong: học thuật nhưng dễ hiểu, tránh lan man
+- BẮT BUỘC:
+  - Dẫn chiếu ít nhất **1–2 luận điểm từ tài liệu** (không bịa)
+  - Có **1 ví dụ thực tế / tình huống giả định** để minh họa
+  - Không suy đoán ngoài phạm vi tài liệu
+  - Trả lời như kể chuyện, không dùng bullet points
 - Tiêu đề chứa từ khóa chính + ý định tìm kiếm
-- Đoạn mở đầu trả lời trực tiếp câu hỏi (featured snippet)
-- Dùng heading H2, H3 rõ ràng
-- Chèn từ khóa chính + liên quan tự nhiên (không nhồi nhét)
-- Văn phong rõ nghĩa, dễ trích dẫn cho AI (AEO-friendly)
-- Độ dài ~500 từ, markdown
 
 Trả về JSON thuần (KHÔNG backtick):
-{"title":"Tiêu đề khảo luận có từ khóa (không phải câu hỏi)","slug":"slug-ascii","excerpt":"Tóm tắt dưới 155 ký tự, trả lời trực tiếp câu hỏi chính","category":"chiem-tinh|triet-hoc|thuc-hanh|van-han|nhan-vat|so-sanh","tags":["tag1","tag2","tag3"],"featured":false,"content":"markdown ~500 từ"}`;
+{"title":"Tiêu đề có từ khóa + ý định tìm kiếm","slug":"slug-ascii","excerpt":"Tóm tắt dưới 155 ký tự, trả lời trực tiếp câu hỏi chính","category":"chiem-tinh|triet-hoc|thuc-hanh|van-han|nhan-vat|so-sanh","tags":["tag1","tag2","tag3"],"featured":false,"content":"markdown ≤ 300 từ"}`;
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_KEY, 'anthropic-version': '2023-06-01' },
     body: JSON.stringify({ model, max_tokens: 2000, messages: [{ role: 'user', content: prompt }] }),
-    signal: AbortSignal.timeout(30000),
+    signal: AbortSignal.timeout(50000),
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
@@ -169,7 +177,12 @@ module.exports = async function handler(req, res) {
       break;
     }
 
-    const table = t.type === 'tai-lieu' ? 'tai_lieu' : 'khao_luan';
+    // Chỉ xử lý khao-luan, bỏ qua tai-lieu
+    if (t.type === 'tai-lieu') {
+      await updateTopicStatus(t.id, 'pending');
+      continue;
+    }
+    const table = 'khao_luan';
     console.log(`[cron-khao-luan] "${t.topic.slice(0,50)}" → ${table}`);
 
     try {
