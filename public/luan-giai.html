@@ -611,6 +611,39 @@ select.form-input { cursor: pointer; }
 </div>
 <div class="page">
 
+<style>
+/* ── INTRO SECTION ── */
+.lg-intro { border-bottom: 1px solid var(--border); margin-bottom: 0; }
+.xt-section { padding: 52px 0; border-bottom: 1px solid #eee; }
+.xt-section:last-child { border-bottom: none; }
+.xt-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 20px; }
+.xt-h2 { font-family: Arial, sans-serif; font-size: clamp(22px,3vw,30px); color: var(--navy); font-weight: 400; line-height: 1.3; margin-bottom: 16px; }
+.xt-body { font-size: 15px; color: var(--text-mid); line-height: 1.85; font-weight: 300; margin-bottom: 14px; }
+.xt-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 52px; align-items: start; }
+.xt-factors { background: var(--bg-soft); border-radius: 10px; padding: 24px; }
+.xt-factor-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 14px; }
+.xt-factor-list { display: flex; flex-direction: column; }
+.xt-factor-item { display: flex; align-items: baseline; gap: 10px; padding: 9px 0; border-bottom: 1px solid #eee; }
+.xt-factor-item:last-child { border-bottom: none; }
+.xt-factor-num { font-size: 13px; color: var(--gold); font-weight: 700; flex-shrink: 0; width: 28px; }
+.xt-factor-label { font-size: 13px; font-weight: 600; color: var(--navy); width: 110px; flex-shrink: 0; }
+.xt-factor-desc { font-size: 12px; color: var(--text-lt); line-height: 1.5; }
+.xt-steps { display: flex; align-items: flex-start; gap: 0; flex-wrap: wrap; }
+.xt-step { flex: 1; min-width: 160px; display: flex; gap: 14px; padding: 4px; }
+.xt-step-num { width: 36px; height: 36px; background: var(--navy); color: #c9a84c; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+.xt-step-body { flex: 1; }
+.xt-step-title { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+.xt-step-desc { font-size: 13px; color: var(--text-lt); line-height: 1.6; }
+.xt-step-arrow { font-size: 20px; color: var(--border); padding: 8px 12px; flex-shrink: 0; align-self: center; }
+.xt-note { display: flex; gap: 12px; align-items: flex-start; background: var(--gold-lt); border: 1px solid #e8d9b0; border-radius: 8px; padding: 14px 16px; margin: 32px 0 0; font-size: 13px; color: var(--text-mid); line-height: 1.6; }
+.xt-note-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+@media(max-width:720px) {
+  .xt-grid-2 { grid-template-columns: 1fr; gap: 32px; }
+  .xt-steps { flex-direction: column; }
+  .xt-step-arrow { transform: rotate(90deg); margin: 0 auto; }
+  .xt-step { min-width: 100%; }
+}
+</style>
 <div class="lg-intro">
 
   <!-- What is it -->
