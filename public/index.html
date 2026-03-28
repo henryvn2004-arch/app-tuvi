@@ -630,15 +630,49 @@ select.form-input { cursor: pointer; }
     <div class="section-eyebrow">Luận Giải</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
 
-      <!-- 01: Luận giải lá số -->
-      <a href="#" onclick="document.querySelector('.form-section').scrollIntoView({behavior:'smooth'});return false"
-         style="background:#fff;border:1px solid var(--border);border-left:4px solid var(--navy);padding:22px 24px;display:flex;flex-direction:column;gap:10px;text-decoration:none;color:inherit;transition:box-shadow .15s"
-         onmouseover="this.style.boxShadow='0 4px 16px rgba(6,26,46,.1)'" onmouseout="this.style.boxShadow=''">
-        <div style="display:flex;align-items:center;gap:12px">
-          <div style="font-size:24px;flex-shrink:0">🔮</div>
-          <div style="font-size:14px;font-weight:700;color:var(--navy)">Luận Giải Lá Số</div>
-          <div style="margin-left:auto;color:var(--text-lt);font-size:16px">→</div>
+      <div style="background:#fff;border:1px solid var(--border);padding:24px;display:flex;flex-direction:column;gap:10px;border-left:4px solid var(--navy)">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:22px">🔮</span>
+          <span style="font-size:14px;font-weight:700;color:var(--navy)">Luận Giải Lá Số</span>
         </div>
+        <p style="font-size:12px;color:var(--text-mid);line-height:1.65;margin:0">Xem lá số cá nhân — luận đoán 12 cung, 9 đại vận và tiểu vận từng năm. Biết mình đang ở giai đoạn nào, năm tới nên làm gì.</p>
+        <div style="font-size:11px;color:var(--text-lt)">12 cung · 9 đại vận · Tiểu vận · PDF</div>
+        <a href="#" onclick="document.querySelector('.form-section').scrollIntoView({behavior:'smooth'});return false" style="display:block;padding:9px 0;background:var(--navy);color:#fff;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;border-radius:2px;text-align:center;transition:background .2s"
+           onmouseover="this.style.background='#0D3B5E'" onmouseout="this.style.background='var(--navy)'">Luận Giải Ngay →</a>
+        <a href="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/samples/mau-luan-giai-la-so.pdf" target="_blank" rel="noopener"
+           style="display:inline-flex;align-items:center;justify-content:center;gap:5px;font-size:11px;color:var(--text-lt);text-decoration:none;padding:4px 0;transition:color .15s"
+           onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--text-lt)'">⬇ Xem mẫu luận giải PDF</a>
+      </div>
+
+      <div style="background:#fff;border:1px solid var(--border);padding:24px;display:flex;flex-direction:column;gap:10px;border-left:4px solid var(--gold)">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:22px">💑</span>
+          <span style="font-size:14px;font-weight:700;color:var(--navy)">Xem Tuổi Vợ Chồng</span>
+        </div>
+        <p style="font-size:12px;color:var(--text-mid);line-height:1.65;margin:0">Trước khi cưới, người Việt mình thường xem hai người có hợp không. Ở đây xét bằng lá số Tử Vi — sâu hơn chỉ so tuổi thông thường.</p>
+        <div style="font-size:11px;color:var(--text-lt)">Phu Thê · Tương hợp · 2 lá số</div>
+        <a href="/xem-tuoi.html"  style="display:block;padding:9px 0;background:var(--navy);color:#fff;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;border-radius:2px;text-align:center;transition:background .2s"
+           onmouseover="this.style.background='#0D3B5E'" onmouseout="this.style.background='var(--navy)'">Xem Tuổi Vợ Chồng →</a>
+        <a href="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/samples/mau-xem-tuoi-vo-chong.pdf" target="_blank" rel="noopener"
+           style="display:inline-flex;align-items:center;justify-content:center;gap:5px;font-size:11px;color:var(--text-lt);text-decoration:none;padding:4px 0;transition:color .15s"
+           onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--text-lt)'">⬇ Xem mẫu luận giải PDF</a>
+      </div>
+
+      <div style="background:#fff;border:1px solid var(--border);padding:24px;display:flex;flex-direction:column;gap:10px;border-left:4px solid #1E6B3C">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:22px">🤝</span>
+          <span style="font-size:14px;font-weight:700;color:var(--navy)">Xem Tuổi Làm Ăn</span>
+        </div>
+        <p style="font-size:12px;color:var(--text-mid);line-height:1.65;margin:0">Góp vốn, hợp tác, hay tuyển người — xem lá số hai bên có hợp không trước khi quyết định, tránh rắc rối về sau.</p>
+        <div style="font-size:11px;color:var(--text-lt)">Quan Lộc · Tài Bạch · Đối tác</div>
+        <a href="/xem-lam-an.html"  style="display:block;padding:9px 0;background:var(--navy);color:#fff;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;border-radius:2px;text-align:center;transition:background .2s"
+           onmouseover="this.style.background='#0D3B5E'" onmouseout="this.style.background='var(--navy)'">Xem Tuổi Làm Ăn →</a>
+        <a href="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/samples/mau-xem-tuoi-lam-an.pdf" target="_blank" rel="noopener"
+           style="display:inline-flex;align-items:center;justify-content:center;gap:5px;font-size:11px;color:var(--text-lt);text-decoration:none;padding:4px 0;transition:color .15s"
+           onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--text-lt)'">⬇ Xem mẫu luận giải PDF</a>
+      </div>
+
+    </div>
         <div style="font-size:12px;color:var(--text-mid);line-height:1.6">Xem lá số cá nhân — luận đoán 12 cung, 9 đại vận và tiểu vận từng năm. Biết mình đang ở giai đoạn nào, năm tới nên làm gì.</div>
         <div style="font-size:11px;color:var(--text-lt)">12 cung · 9 đại vận · Tiểu vận · PDF</div>
         <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px">
