@@ -836,6 +836,80 @@ select.form-input { cursor: pointer; }
   </div>
 </div>
 
+
+<style>
+.rv-card{background:#fff;border:1px solid var(--border);padding:28px 24px;width:calc(33.333% - 16px);flex:0 0 calc(33.333% - 16px);box-sizing:border-box;display:flex;flex-direction:column}
+.rv-stars{color:#c9a84c;font-size:15px;margin-bottom:14px;letter-spacing:2px}
+.rv-text{font-size:14px;color:var(--text-mid);line-height:1.75;font-style:italic;margin-bottom:20px;flex:1}
+.rv-meta{}
+.rv-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px}
+.rv-date{font-size:11px;color:var(--text-lt)}
+@media(max-width:700px){.rv-card{width:100% !important;flex:0 0 100% !important}}
+</style>
+
+<!-- REVIEWS SECTION -->
+<section style="background:var(--bg-soft);border-top:1px solid var(--border);padding:64px 0;overflow:hidden">
+  <div style="max-width:1100px;margin:0 auto;padding:0 56px">
+    <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-lt);margin-bottom:8px;display:flex;align-items:center;gap:16px">Đánh Giá Của Khách Hàng<span style="flex:1;height:1px;background:var(--border);display:block"></span></div>
+    <div style="position:relative;margin-top:8px">
+      <div id="rv-track-tuoi" style="display:flex;gap:24px;transition:transform .4s cubic-bezier(.4,0,.2,1);will-change:transform;align-items:stretch">
+        <div class="rv-card">
+  <div class="rv-stars">★★★★★</div>
+  <p class="rv-text">"Tôi và chồng có lá số khá khác nhau nhưng hệ thống chỉ ra rất rõ điểm bổ trợ lẫn nhau ở cung Phu Thê — đặc biệt là phân tích về giai đoạn đại vận chuyển tiếp, chúng tôi đã trải qua đúng như mô tả."</p>
+  <div class="rv-meta"><div class="rv-name">Nguyễn T.M. — Hà Nội</div><div class="rv-date">Tháng 3, 2026</div></div>
+</div>
+<div class="rv-card">
+  <div class="rv-stars">★★★★★</div>
+  <p class="rv-text">"Phần phân tích cung Tử Tức của hai vợ chồng rất thú vị — hệ thống giải thích tại sao chúng tôi có quan điểm khác nhau về việc nuôi dạy con và cách dung hòa. Rất thực tế và ứng dụng được ngay."</p>
+  <div class="rv-meta"><div class="rv-name">Lê H.P. — TP.HCM</div><div class="rv-date">Tháng 2, 2026</div></div>
+</div>
+<div class="rv-card">
+  <div class="rv-stars">★★★★★</div>
+  <p class="rv-text">"Tôi xem cho hai vợ chồng trước khi kết hôn. Phần luận về giai đoạn đại vận giao thoa giữa hai người rất sâu — chỉ ra được những năm cần đặc biệt lưu tâm và cách hai người hỗ trợ nhau vượt qua."</p>
+  <div class="rv-meta"><div class="rv-name">Trần Q.A. — Đà Nẵng</div><div class="rv-date">Tháng 3, 2026</div></div>
+</div>
+<div class="rv-card">
+  <div class="rv-stars">★★★★★</div>
+  <p class="rv-text">"Luận giải cung Mệnh của hai người và tương quan tính cách rất chính xác. Chồng tôi đọc xong cũng phải công nhận là đúng. Điểm hợp 8/10 với giải thích cụ thể — không chung chung như các tool khác."</p>
+  <div class="rv-meta"><div class="rv-name">Phạm T.L. — Cần Thơ</div><div class="rv-date">Tháng 1, 2026</div></div>
+</div>
+<div class="rv-card">
+  <div class="rv-stars">★★★★★</div>
+  <p class="rv-text">"Tôi thích nhất phần phân tích xu hướng hôn nhân theo từng giai đoạn 10 năm — biết trước giai đoạn nào sẽ thuận, giai đoạn nào cần cẩn thận để hai vợ chồng chuẩn bị tâm thế. Rất hữu ích."</p>
+  <div class="rv-meta"><div class="rv-name">Võ M.H. — Hải Phòng</div><div class="rv-date">Tháng 2, 2026</div></div>
+</div>
+<div class="rv-card">
+  <div class="rv-stars">★★★★☆</div>
+  <p class="rv-text">"An sao chuẩn, phân tích cung Phu Thê chi tiết hơn nhiều so với các trang xem tuổi thông thường chỉ dựa vào nạp âm. Tử Vi Minh Bảo xét thêm cả bộ sao và hóa tinh nên kết quả thuyết phục hơn nhiều."</p>
+  <div class="rv-meta"><div class="rv-name">Hoàng T.B. — Hà Nội</div><div class="rv-date">Tháng 3, 2026</div></div>
+</div>
+      </div>
+      <button id="rv-prev-tuoi" onclick="rvSlide_tuoi(-1)" style="position:absolute;top:50%;left:-20px;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:16px;color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:10">‹</button>
+      <button id="rv-next-tuoi" onclick="rvSlide_tuoi(1)"  style="position:absolute;top:50%;right:-20px;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:16px;color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:10">›</button>
+      <div id="rv-dots-tuoi" style="display:flex;justify-content:center;gap:8px;margin-top:24px"></div>
+    </div>
+  </div>
+</section>
+<script>
+(function(){
+  const track = document.getElementById('rv-track-tuoi');
+  const dotsEl = document.getElementById('rv-dots-tuoi');
+  const total = 6; let cur = 0;
+  let perView = window.innerWidth <= 700 ? 1 : 3;
+  const maxSlide = total - perView;
+  for(let i=0;i<maxSlide+1;i++){
+    const d=document.createElement('div');
+    d.style.cssText='width:7px;height:7px;border-radius:50%;background:var(--border);cursor:pointer;transition:background .2s';
+    d.onclick=()=>goTo_tuoi(i); dotsEl.appendChild(d);
+  }
+  function updateDots(){ dotsEl.querySelectorAll('div').forEach((d,i)=>{ d.style.background=i===cur?'var(--navy)':'var(--border)'; }); }
+  function goTo_tuoi(n){ cur=Math.max(0,Math.min(n,maxSlide)); const w=track.children[0].offsetWidth+24; track.style.transform=`translateX(${-cur*w}px)`; updateDots(); }
+  window.rvSlide_tuoi=function(dir){ goTo_tuoi(cur+dir); };
+  window.addEventListener('resize',()=>{ perView=window.innerWidth<=700?1:3; goTo_tuoi(0); });
+  updateDots();
+})();
+</script>
+
 <footer class="site-footer">
   <div class="footer-top">
     <div>

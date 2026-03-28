@@ -833,6 +833,80 @@ select.form-input { cursor: pointer; }
   </div>
 </div>
 
+
+<style>
+.rv-card{background:#fff;border:1px solid var(--border);padding:28px 24px;width:calc(33.333% - 16px);flex:0 0 calc(33.333% - 16px);box-sizing:border-box;display:flex;flex-direction:column}
+.rv-stars{color:#c9a84c;font-size:15px;margin-bottom:14px;letter-spacing:2px}
+.rv-text{font-size:14px;color:var(--text-mid);line-height:1.75;font-style:italic;margin-bottom:20px;flex:1}
+.rv-meta{}
+.rv-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px}
+.rv-date{font-size:11px;color:var(--text-lt)}
+@media(max-width:700px){.rv-card{width:100% !important;flex:0 0 100% !important}}
+</style>
+
+<!-- REVIEWS SECTION -->
+<section style="background:var(--bg-soft);border-top:1px solid var(--border);padding:64px 0;overflow:hidden">
+  <div style="max-width:1100px;margin:0 auto;padding:0 56px">
+    <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-lt);margin-bottom:8px;display:flex;align-items:center;gap:16px">Đánh Giá Của Khách Hàng<span style="flex:1;height:1px;background:var(--border);display:block"></span></div>
+    <div style="position:relative;margin-top:8px">
+      <div id="rv-track-laman" style="display:flex;gap:24px;transition:transform .4s cubic-bezier(.4,0,.2,1);will-change:transform;align-items:stretch">
+        <div class="rv-card">
+  <div class="rv-stars">★★★★★</div>
+  <p class="rv-text">"Tôi xem trước khi quyết định hợp tác kinh doanh với một người bạn. Phần phân tích cung Quan Lộc và Tài Bạch của hai người chỉ ra rất rõ ai phù hợp với vai trò gì — chúng tôi phân công đúng theo đó và kết quả rất tốt."</p>
+  <div class="rv-meta"><div class="rv-name">Nguyễn V.H. — TP.HCM</div><div class="rv-date">Tháng 3, 2026</div></div>
+</div>
+<div class="rv-card">
+  <div class="rv-stars">★★★★★</div>
+  <p class="rv-text">"Phần luận về giai đoạn đại vận giao thoa giữa hai đối tác rất thực tế — chỉ ra được năm nào công việc chung sẽ thuận lợi, năm nào cần thận trọng trong các quyết định lớn. Tôi dùng để lên kế hoạch kinh doanh."</p>
+  <div class="rv-meta"><div class="rv-name">Trần T.K. — Hà Nội</div><div class="rv-date">Tháng 2, 2026</div></div>
+</div>
+<div class="rv-card">
+  <div class="rv-stars">★★★★★</div>
+  <p class="rv-text">"Tôi xem cho 3 đối tác tiềm năng. Hệ thống phân tích cung Nô Bộc rất sâu — chỉ ra mức độ tin cậy và khả năng duy trì cam kết dài hạn của từng người. Cuối cùng chọn đúng người như luận giải gợi ý."</p>
+  <div class="rv-meta"><div class="rv-name">Lê Q.M. — Đà Nẵng</div><div class="rv-date">Tháng 1, 2026</div></div>
+</div>
+<div class="rv-card">
+  <div class="rv-stars">★★★★★</div>
+  <p class="rv-text">"Luận giải điểm mạnh yếu bổ trợ giữa hai lá số rất cụ thể — người này mạnh về khai phá cơ hội, người kia mạnh về duy trì và quản lý. Đúng với thực tế phân vai trong công ty chúng tôi."</p>
+  <div class="rv-meta"><div class="rv-name">Phạm H.A. — Hải Phòng</div><div class="rv-date">Tháng 3, 2026</div></div>
+</div>
+<div class="rv-card">
+  <div class="rv-stars">★★★★★</div>
+  <p class="rv-text">"Tôi là người hay do dự trong việc chọn đối tác. Sau khi dùng Tử Vi Minh Bảo xem tương quan lá số, tôi có thêm một góc nhìn khác để đưa ra quyết định — không thay thế phán đoán nhưng bổ sung rất tốt."</p>
+  <div class="rv-meta"><div class="rv-name">Võ T.N. — Cần Thơ</div><div class="rv-date">Tháng 2, 2026</div></div>
+</div>
+<div class="rv-card">
+  <div class="rv-stars">★★★★☆</div>
+  <p class="rv-text">"An sao chuẩn cổ pháp, phân tích cung Tài Bạch của cả hai người và sự tương tác giữa chúng rất chi tiết. Khác hẳn với các tool xem tuổi thông thường — ở đây xét thực sự bằng lá số Tử Vi Đẩu Số."</p>
+  <div class="rv-meta"><div class="rv-name">Hoàng V.L. — TP.HCM</div><div class="rv-date">Tháng 1, 2026</div></div>
+</div>
+      </div>
+      <button id="rv-prev-laman" onclick="rvSlide_laman(-1)" style="position:absolute;top:50%;left:-20px;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:16px;color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:10">‹</button>
+      <button id="rv-next-laman" onclick="rvSlide_laman(1)"  style="position:absolute;top:50%;right:-20px;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:16px;color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:10">›</button>
+      <div id="rv-dots-laman" style="display:flex;justify-content:center;gap:8px;margin-top:24px"></div>
+    </div>
+  </div>
+</section>
+<script>
+(function(){
+  const track = document.getElementById('rv-track-laman');
+  const dotsEl = document.getElementById('rv-dots-laman');
+  const total = 6; let cur = 0;
+  let perView = window.innerWidth <= 700 ? 1 : 3;
+  const maxSlide = total - perView;
+  for(let i=0;i<maxSlide+1;i++){
+    const d=document.createElement('div');
+    d.style.cssText='width:7px;height:7px;border-radius:50%;background:var(--border);cursor:pointer;transition:background .2s';
+    d.onclick=()=>goTo_laman(i); dotsEl.appendChild(d);
+  }
+  function updateDots(){ dotsEl.querySelectorAll('div').forEach((d,i)=>{ d.style.background=i===cur?'var(--navy)':'var(--border)'; }); }
+  function goTo_laman(n){ cur=Math.max(0,Math.min(n,maxSlide)); const w=track.children[0].offsetWidth+24; track.style.transform=`translateX(${-cur*w}px)`; updateDots(); }
+  window.rvSlide_laman=function(dir){ goTo_laman(cur+dir); };
+  window.addEventListener('resize',()=>{ perView=window.innerWidth<=700?1:3; goTo_laman(0); });
+  updateDots();
+})();
+</script>
+
 <footer class="site-footer">
   <div class="footer-top">
     <div>
