@@ -102,7 +102,7 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
 .nav-link { color: #8BAACC; font-size: 13px; text-decoration: none; padding: 6px 12px; border-radius: 6px; transition: all 0.15s; white-space: nowrap; }
 .nav-link:hover { color: #fff; background: rgba(255,255,255,0.07); }
 .nav-link.active { color: #c9a84c; }
-.nav-hamburger { display: none; background: none; border: none; color: #8BAACC; cursor: pointer; padding: 8px; font-size: 20px; }
+.nav-hamburger { display: none; background: none; border: none; color: #8BAACC; cursor: pointer; padding: 8px; font-size: 20px; position: relative; z-index: 400; }
 @media (max-width: 700px) {
   .topnav { padding: 0 16px; }
   .nav-links { display: none; position: absolute; top: 60px; left: 0; right: 0; background: var(--navy); flex-direction: column; padding: 8px 0 16px; gap: 0; border-bottom: 1px solid #1a2a3a; }
@@ -321,6 +321,7 @@ select.form-input { cursor: pointer; }
   .hero h1 { font-size: 30px; }
   .hero-right { display: none; }
   .intro-section > div > div:last-child, .intro-section > div { grid-template-columns: 1fr !important; gap: 32px !important; }
+  #luan-giai .page > div:last-child { grid-template-columns: 1fr !important; }
   .form-grid { grid-template-columns: 1fr; }
   .form-col { border-right: none; border-bottom: 1px solid var(--border); }
   .form-col:last-child { border-bottom: none; }
@@ -627,60 +628,43 @@ select.form-input { cursor: pointer; }
 <section id="luan-giai" style="background:var(--bg-soft);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:64px 0">
   <div class="page">
     <div class="section-eyebrow">Luận Giải</div>
-    <h2 style="font-family:Arial,sans-serif;font-size:24px;font-weight:400;color:var(--navy);margin-bottom:36px;line-height:1.3">Ba hướng luận giải — mỗi góc nhìn một chiều vận mệnh</h2>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
 
       <!-- 01: Luận giải lá số -->
-      <div style="background:#fff;border:1px solid var(--border);border-top:3px solid var(--navy);padding:28px 24px;display:flex;flex-direction:column;gap:12px">
-        <div style="font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-lt)">Luận Giải 01</div>
-        <div style="font-family:Arial,sans-serif;font-size:18px;font-weight:600;color:var(--navy);line-height:1.3">Luận Giải Lá Số Tử Vi</div>
-        <p style="font-size:14px;color:var(--text-mid);line-height:1.75;font-weight:300;flex:1">An sao Tử Vi Đẩu Số theo cổ pháp, luận giải chuyên sâu 24 phần bằng AI — bao gồm 12 cung, 9 đại vận và luận đoán tiểu vận theo từng năm. Nhận báo cáo PDF cá nhân hóa.</p>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px">
-          <span style="font-size:11px;background:var(--bg-soft);color:var(--text-lt);padding:3px 10px;border-radius:20px">12 Cung</span>
-          <span style="font-size:11px;background:var(--bg-soft);color:var(--text-lt);padding:3px 10px;border-radius:20px">9 Đại Vận</span>
-          <span style="font-size:11px;background:var(--bg-soft);color:var(--text-lt);padding:3px 10px;border-radius:20px">Tiểu Vận</span>
-          <span style="font-size:11px;background:var(--bg-soft);color:var(--text-lt);padding:3px 10px;border-radius:20px">PDF</span>
+      <a href="#" onclick="document.querySelector('.form-section').scrollIntoView({behavior:'smooth'});return false"
+         style="background:#fff;border:1px solid var(--border);border-left:4px solid var(--navy);padding:20px 22px;display:flex;align-items:center;gap:16px;text-decoration:none;color:inherit;transition:box-shadow .15s"
+         onmouseover="this.style.boxShadow='0 4px 16px rgba(6,26,46,.1)'" onmouseout="this.style.boxShadow=''">
+        <div style="font-size:28px;flex-shrink:0">🔮</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px">Luận Giải Lá Số</div>
+          <div style="font-size:12px;color:var(--text-lt);line-height:1.5">12 cung · 9 đại vận · Tiểu vận · PDF</div>
         </div>
-        <a href="#" onclick="document.querySelector('.form-section').scrollIntoView({behavior:'smooth'});return false"
-           style="display:inline-block;padding:10px 20px;background:var(--navy);color:#fff;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;border-radius:2px;text-align:center;transition:background .2s"
-           onmouseover="this.style.background='#0D3B5E'" onmouseout="this.style.background='var(--navy)'">
-          Xem Lá Số →
-        </a>
-      </div>
+        <div style="margin-left:auto;color:var(--text-lt);font-size:18px;flex-shrink:0">→</div>
+      </a>
 
       <!-- 02: Xem tuổi vợ chồng -->
-      <div style="background:#fff;border:1px solid var(--border);border-top:3px solid var(--gold);padding:28px 24px;display:flex;flex-direction:column;gap:12px">
-        <div style="font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-lt)">Luận Giải 02</div>
-        <div style="font-family:Arial,sans-serif;font-size:18px;font-weight:600;color:var(--navy);line-height:1.3">Xem Tuổi Vợ Chồng</div>
-        <p style="font-size:14px;color:var(--text-mid);line-height:1.75;font-weight:300;flex:1">Xét tương quan giữa hai lá số — phân tích cung Phu Thê, cung Mệnh và cung Tử Tức của cả hai người để luận đoán sự tương hợp, điểm mạnh và những giai đoạn cần lưu ý trong hôn nhân.</p>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px">
-          <span style="font-size:11px;background:var(--bg-soft);color:var(--text-lt);padding:3px 10px;border-radius:20px">Phu Thê</span>
-          <span style="font-size:11px;background:var(--bg-soft);color:var(--text-lt);padding:3px 10px;border-radius:20px">Tương Hợp</span>
-          <span style="font-size:11px;background:var(--bg-soft);color:var(--text-lt);padding:3px 10px;border-radius:20px">2 Lá Số</span>
+      <a href="/xem-tuoi.html"
+         style="background:#fff;border:1px solid var(--border);border-left:4px solid var(--gold);padding:20px 22px;display:flex;align-items:center;gap:16px;text-decoration:none;color:inherit;transition:box-shadow .15s"
+         onmouseover="this.style.boxShadow='0 4px 16px rgba(6,26,46,.1)'" onmouseout="this.style.boxShadow=''">
+        <div style="font-size:28px;flex-shrink:0">💑</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px">Xem Tuổi Vợ Chồng</div>
+          <div style="font-size:12px;color:var(--text-lt);line-height:1.5">Phu Thê · Tương hợp · 2 lá số</div>
         </div>
-        <a href="/xem-tuoi.html"
-           style="display:inline-block;padding:10px 20px;background:var(--navy);color:#fff;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;border-radius:2px;text-align:center;transition:background .2s"
-           onmouseover="this.style.background='#0D3B5E'" onmouseout="this.style.background='var(--navy)'">
-          Xem Tuổi Vợ Chồng →
-        </a>
-      </div>
+        <div style="margin-left:auto;color:var(--text-lt);font-size:18px;flex-shrink:0">→</div>
+      </a>
 
       <!-- 03: Xem tuổi làm ăn -->
-      <div style="background:#fff;border:1px solid var(--border);border-top:3px solid #1E6B3C;padding:28px 24px;display:flex;flex-direction:column;gap:12px">
-        <div style="font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-lt)">Luận Giải 03</div>
-        <div style="font-family:Arial,sans-serif;font-size:18px;font-weight:600;color:var(--navy);line-height:1.3">Xem Tuổi Làm Ăn</div>
-        <p style="font-size:14px;color:var(--text-mid);line-height:1.75;font-weight:300;flex:1">Xét tương quan lá số giữa hai đối tác kinh doanh — phân tích cung Quan Lộc, Tài Bạch và Nô Bộc để luận đoán mức độ hợp tác, phân vai phù hợp và những rủi ro cần cân nhắc.</p>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px">
-          <span style="font-size:11px;background:var(--bg-soft);color:var(--text-lt);padding:3px 10px;border-radius:20px">Quan Lộc</span>
-          <span style="font-size:11px;background:var(--bg-soft);color:var(--text-lt);padding:3px 10px;border-radius:20px">Tài Bạch</span>
-          <span style="font-size:11px;background:var(--bg-soft);color:var(--text-lt);padding:3px 10px;border-radius:20px">Đối Tác</span>
+      <a href="/xem-lam-an.html"
+         style="background:#fff;border:1px solid var(--border);border-left:4px solid #1E6B3C;padding:20px 22px;display:flex;align-items:center;gap:16px;text-decoration:none;color:inherit;transition:box-shadow .15s"
+         onmouseover="this.style.boxShadow='0 4px 16px rgba(6,26,46,.1)'" onmouseout="this.style.boxShadow=''">
+        <div style="font-size:28px;flex-shrink:0">🤝</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px">Xem Tuổi Làm Ăn</div>
+          <div style="font-size:12px;color:var(--text-lt);line-height:1.5">Quan Lộc · Tài Bạch · Đối tác</div>
         </div>
-        <a href="/xem-lam-an.html"
-           style="display:inline-block;padding:10px 20px;background:var(--navy);color:#fff;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;border-radius:2px;text-align:center;transition:background .2s"
-           onmouseover="this.style.background='#0D3B5E'" onmouseout="this.style.background='var(--navy)'">
-          Xem Tuổi Làm Ăn →
-        </a>
-      </div>
+        <div style="margin-left:auto;color:var(--text-lt);font-size:18px;flex-shrink:0">→</div>
+      </a>
 
     </div>
   </div>
