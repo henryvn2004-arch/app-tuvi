@@ -109,23 +109,6 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 </head>
 <body>
 
-<nav class="topnav">
-  <a class="nav-logo" href="/">
-    <img src="/seal.webp" alt="Tử Vi Minh Bảo">
-    <div><div class="name">Tử Vi Minh Bảo</div><div class="url">Tri mệnh lý – Thuận thế hành</div></div>
-  </a>
-  <div class="nav-links" id="nav-links">
-    <a class="nav-link" href="/">Trang Chủ</a>
-    <a class="nav-link" href="/about.html">Giới Thiệu</a>
-    <a class="nav-link" href="/resources.html">Tài Liệu</a>
-    <a class="nav-link active" href="/blog.html">Khảo Luận</a>
-    <a class="nav-link" href="/menh-kho.html">Mệnh Khố</a>
-    <a class="nav-link" href="/contact.html">Liên Hệ</a>
-  </div>
-  <div id="nav-auth-area" style="margin-left:auto"></div>
-  <button class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')">☰</button>
-</nav>
-
 <div class="breadcrumb" id="breadcrumb">
   <a href="/">Trang Chủ</a>
   <span>›</span>
@@ -383,5 +366,6 @@ function render(d) {
 
 load();
 </script>
+<script src="/nav.js"></script>
 </body>
 </html>
