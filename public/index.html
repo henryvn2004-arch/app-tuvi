@@ -116,10 +116,12 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
   .nav-link { padding: 10px 24px; border-radius: 0; width: 100%; }
   .nav-hamburger { display: block; margin-left: auto; }
   .nav-tag { display: none; }
-  .nav-dropdown-menu { position: static; border: none; box-shadow: none; background: rgba(255,255,255,.05); display: none; }
+  .nav-dropdown { width: 100%; }
+  .nav-dropdown > .nav-link { width: 100%; display: block; }
+  .nav-dropdown-menu { position: static; border: none; box-shadow: none; background: rgba(255,255,255,.05); display: none; width: 100%; }
   .nav-dropdown-menu.open { display: block; }
   .nav-dropdown:hover .nav-dropdown-menu { display: none; }
-  .nav-dropdown-item { color: #8BAACC; padding: 9px 32px; border-bottom: 1px solid rgba(255,255,255,.05); }
+  .nav-dropdown-item { color: #8BAACC; padding: 9px 32px; border-bottom: 1px solid rgba(255,255,255,.05); width: 100%; }
   .nav-dropdown-item:hover { background: rgba(255,255,255,.05); color: #fff; }
 }
 .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
@@ -3809,12 +3811,18 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 <script>
 (function(){
   var toggle = document.querySelector('.nav-dropdown .nav-link');
-  if (toggle) toggle.addEventListener('click', function(e){
-    if (window.innerWidth <= 700) {
-      e.preventDefault();
-      document.getElementById('nav-luan-giai-menu').classList.toggle('open');
+  var menu = document.getElementById('nav-luan-giai-menu');
+  if (toggle && menu) {
+    function handleToggle(e) {
+      if (window.innerWidth <= 700) {
+        e.preventDefault();
+        e.stopPropagation();
+        menu.classList.toggle('open');
+      }
     }
-  });
+    toggle.addEventListener('click', handleToggle);
+    toggle.addEventListener('touchstart', handleToggle, { passive: false });
+  }
 })();
 </script>
 </body>
