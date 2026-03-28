@@ -585,6 +585,7 @@ select.form-input { cursor: pointer; }
 </a>
   <div class="nav-links" id="nav-links">
     <a class="nav-link active" href="/">Trang Chủ</a>
+    <a class="nav-link" href="#luan-giai">Luận Giải</a>
     <a class="nav-link" href="/about.html">Giới Thiệu</a>
     <a class="nav-link" href="/resources.html">Tài Liệu</a>
     <a class="nav-link" href="/blog.html">Khảo Luận</a>
@@ -661,6 +662,67 @@ select.form-input { cursor: pointer; }
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- TOOLS SECTION -->
+  <div id="luan-giai" style="padding:56px 0;border-bottom:1px solid var(--border);background:var(--bg-soft)">
+    <div class="section-eyebrow">Công Cụ Luận Giải</div>
+    <h2 style="font-family:Arial,sans-serif;font-size:24px;font-weight:400;color:var(--navy);margin-bottom:36px;line-height:1.3">Ba công cụ luận giải — mỗi công cụ một góc nhìn về vận mệnh</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+
+      <!-- Tool 1: Luận giải lá số -->
+      <div style="background:#fff;border:1px solid var(--border);border-top:3px solid var(--navy);padding:28px 24px;display:flex;flex-direction:column;gap:12px">
+        <div style="font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold)">Công Cụ 01</div>
+        <div style="font-family:Arial,sans-serif;font-size:18px;font-weight:600;color:var(--navy);line-height:1.3">Luận Giải Lá Số Tử Vi</div>
+        <p style="font-size:14px;color:var(--text-mid);line-height:1.75;font-weight:300;flex:1">An sao Tử Vi Đẩu Số theo cổ pháp, luận giải chuyên sâu 24 phần bằng AI — bao gồm 12 cung, 9 đại vận và luận đoán tiểu vận theo từng năm. Nhận báo cáo PDF cá nhân hóa.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px">
+          <span style="font-size:11px;background:var(--bg-soft);color:var(--text-lt);padding:3px 10px;border-radius:20px">12 Cung</span>
+          <span style="font-size:11px;background:var(--bg-soft);color:var(--text-lt);padding:3px 10px;border-radius:20px">9 Đại Vận</span>
+          <span style="font-size:11px;background:var(--bg-soft);color:var(--text-lt);padding:3px 10px;border-radius:20px">Tiểu Vận</span>
+          <span style="font-size:11px;background:var(--bg-soft);color:var(--text-lt);padding:3px 10px;border-radius:20px">PDF</span>
+        </div>
+        <a href="#form-section" onclick="document.querySelector('.form-section').scrollIntoView({behavior:'smooth'});return false"
+           style="display:inline-block;padding:10px 20px;background:var(--navy);color:#fff;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;border-radius:2px;text-align:center;transition:background .2s"
+           onmouseover="this.style.background='#0D3B5E'" onmouseout="this.style.background='var(--navy)'">
+          Xem Lá Số →
+        </a>
+      </div>
+
+      <!-- Tool 2: Xem tuổi vợ chồng -->
+      <div style="background:#fff;border:1px solid var(--border);border-top:3px solid var(--gold);padding:28px 24px;display:flex;flex-direction:column;gap:12px">
+        <div style="font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold)">Công Cụ 02</div>
+        <div style="font-family:Arial,sans-serif;font-size:18px;font-weight:600;color:var(--navy);line-height:1.3">Xem Tuổi Vợ Chồng</div>
+        <p style="font-size:14px;color:var(--text-mid);line-height:1.75;font-weight:300;flex:1">Xét tương quan giữa hai lá số — phân tích cung Phu Thê, cung Mệnh và cung Tử Tức của cả hai người để luận đoán sự tương hợp, điểm mạnh và những giai đoạn cần lưu ý trong hôn nhân.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px">
+          <span style="font-size:11px;background:var(--bg-soft);color:var(--text-lt);padding:3px 10px;border-radius:20px">Phu Thê</span>
+          <span style="font-size:11px;background:var(--bg-soft);color:var(--text-lt);padding:3px 10px;border-radius:20px">Tương Hợp</span>
+          <span style="font-size:11px;background:var(--bg-soft);color:var(--text-lt);padding:3px 10px;border-radius:20px">2 Lá Số</span>
+        </div>
+        <a href="/xem-tuoi.html"
+           style="display:inline-block;padding:10px 20px;background:var(--navy);color:#fff;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;border-radius:2px;text-align:center;transition:background .2s"
+           onmouseover="this.style.background='#0D3B5E'" onmouseout="this.style.background='var(--navy)'">
+          Xem Tuổi Vợ Chồng →
+        </a>
+      </div>
+
+      <!-- Tool 3: Xem tuổi làm ăn -->
+      <div style="background:#fff;border:1px solid var(--border);border-top:3px solid #1E6B3C;padding:28px 24px;display:flex;flex-direction:column;gap:12px">
+        <div style="font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#1E6B3C">Công Cụ 03</div>
+        <div style="font-family:Arial,sans-serif;font-size:18px;font-weight:600;color:var(--navy);line-height:1.3">Xem Tuổi Làm Ăn</div>
+        <p style="font-size:14px;color:var(--text-mid);line-height:1.75;font-weight:300;flex:1">Xét tương quan lá số giữa hai đối tác kinh doanh — phân tích cung Quan Lộc, Tài Bạch và Nô Bộc để luận đoán mức độ hợp tác, phân vai phù hợp và những rủi ro cần cân nhắc.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px">
+          <span style="font-size:11px;background:var(--bg-soft);color:var(--text-lt);padding:3px 10px;border-radius:20px">Quan Lộc</span>
+          <span style="font-size:11px;background:var(--bg-soft);color:var(--text-lt);padding:3px 10px;border-radius:20px">Tài Bạch</span>
+          <span style="font-size:11px;background:var(--bg-soft);color:var(--text-lt);padding:3px 10px;border-radius:20px">Đối Tác</span>
+        </div>
+        <a href="/xem-lam-an.html"
+           style="display:inline-block;padding:10px 20px;background:var(--navy);color:#fff;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;border-radius:2px;text-align:center;transition:background .2s"
+           onmouseover="this.style.background='#0D3B5E'" onmouseout="this.style.background='var(--navy)'">
+          Xem Tuổi Làm Ăn →
+        </a>
+      </div>
+
     </div>
   </div>
 
