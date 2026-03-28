@@ -65,7 +65,7 @@ function buildSchemas(article, url) {
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Trang Chủ', item: BASE_URL + '/' },
-        { '@type': 'ListItem', position: 2, name: 'Khảo Luận', item: BASE_URL + '/blog.html' },
+        { '@type': 'ListItem', position: 2, name: 'Vấn Đáp', item: BASE_URL + '/blog.html' },
         { '@type': 'ListItem', position: 3, name: article.title, item: url },
       ],
     },
@@ -191,7 +191,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
     <a class="nav-link" href="/">Trang Chủ</a>
     <a class="nav-link" href="/about.html">Giới Thiệu</a>
     <a class="nav-link" href="/resources.html">Tài Liệu</a>
-    <a class="nav-link active" href="/blog.html">Khảo Luận</a>
+    <a class="nav-link active" href="/blog.html">Vấn Đáp</a>
     <a class="nav-link" href="/menh-kho.html">Mệnh Khố</a>
     <a class="nav-link" href="/contact.html">Liên Hệ</a>
   </div>
@@ -202,7 +202,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 <div class="breadcrumb">
   <a href="/">Trang Chủ</a>
   <span>›</span>
-  <a href="/blog.html">Khảo Luận</a>
+  <a href="/blog.html">Vấn Đáp</a>
   <span>›</span>
   <span>${title}</span>
 </div>
@@ -217,7 +217,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
   ${article.excerpt ? `<div class="article-excerpt">${escHtml(article.excerpt)}</div>` : ''}
   <div class="article-body">${contentHtml}</div>
   <div class="article-nav">
-    <a href="/blog.html">← Về Khảo Luận</a>
+    <a href="/blog.html">← Về Vấn Đáp</a>
   </div>
   ${related.length ? `
   <div class="related-section">
@@ -290,6 +290,6 @@ function buildNotFound() {
   return `<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><title>Không tìm thấy — Tử Vi Minh Bảo</title></head>
 <body style="font-family:sans-serif;text-align:center;padding:80px">
 <h1 style="color:#061A2E">Không tìm thấy bài viết</h1>
-<a href="/blog.html" style="color:#1455A4">← Về Khảo Luận</a>
+<a href="/blog.html" style="color:#1455A4">← Về Vấn Đáp</a>
 </body></html>`;
 }
