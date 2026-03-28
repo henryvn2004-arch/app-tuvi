@@ -34,7 +34,7 @@
     '<div><div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:12px">Kh\u00e1m Ph\u00e1</div>',
     '<div style="display:flex;flex-direction:column;gap:8px">',
     '<a class="footer-link" href="/resources.html">Th\u01b0 vi\u1ec7n t\u00e0i li\u1ec7u</a>',
-    '<a class="footer-link" href="/blog.html">Kh\u1ea3o lu\u1eadn</a>',
+    '<a class="footer-link" href="/blog.html">V\u1ea5n \u0111\u00e1p</a>',
     '<a class="footer-link" href="/about.html">Gi\u1edbi thi\u1ec7u</a>',
     '<a class="footer-link" href="/contact.html">Li\u00ean h\u1ec7</a>',
     '</div></div>',

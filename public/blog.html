@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Khảo Luận Tử Vi Đẩu Số — Nghiên Cứu & Học Thuật | Tử Vi Minh Bảo</title>
-<meta name="description" content="Khảo luận học thuật về Tử Vi Đẩu Số — phân tích chính tinh, cách cục, vận hạn, tứ hóa phi tinh. Văn phong tạp chí Khoa học Huyền bí. Cập nhật thường xuyên.">
-<meta property="og:title" content="Khảo Luận Tử Vi Đẩu Số — Tử Vi Minh Bảo">
-<meta property="og:description" content="Khảo luận học thuật về Tử Vi Đẩu Số — phân tích chính tinh, cách cục, vận hạn theo phong cách học thuật cổ điển.">
+<title>Vấn Đáp Tử Vi Đẩu Số — Câu Hỏi Thường Gặp | Tử Vi Minh Bảo</title>
+<meta name="description" content="Vấn đáp Tử Vi Đẩu Số — giải đáp các câu hỏi về hôn nhân, tài chính, sự nghiệp, vận hạn theo quan điểm Tử Vi cổ pháp. Cập nhật thường xuyên.">
+<meta property="og:title" content="Vấn Đáp Tử Vi Đẩu Số — Tử Vi Minh Bảo">
+<meta property="og:description" content="Giải đáp các câu hỏi về hôn nhân, tài chính, sự nghiệp theo quan điểm Tử Vi Đẩu Số cổ pháp.">
 <meta property="og:image" content="https://www.tuviminhbao.com/seal.webp">
 <meta property="og:url" content="https://www.tuviminhbao.com/blog.html">
 <meta property="og:type" content="website">
@@ -41,7 +41,7 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 
 /* HERO — khác với Tài Liệu: tone đậm hơn, editorial */
 .hero { background: var(--navy); padding: 56px 40px 44px; position: relative; overflow: hidden; }
-.hero::before { content: '論'; position: absolute; font-family: 'Noto Serif SC', serif; font-size: 300px; color: rgba(255,255,255,0.025); top: 50%; right: 5%; transform: translateY(-50%); pointer-events: none; }
+.hero::before { content: '問'; position: absolute; font-family: 'Noto Serif SC', serif; font-size: 300px; color: rgba(255,255,255,0.025); top: 50%; right: 5%; transform: translateY(-50%); pointer-events: none; }
 .hero-eyebrow { font-size: 11px; letter-spacing: 4px; color: #c9a84c; text-transform: uppercase; margin-bottom: 12px; opacity:0; animation: fadeUp 0.6s ease 0.1s forwards; }
 .hero-title { font-family: 'Noto Serif', serif; font-size: 38px; color: #fff; font-weight: 400; margin-bottom: 10px; opacity:0; animation: fadeUp 0.6s ease 0.2s forwards; }
 .hero-sub { font-size: 14px; color: #8BAACC; font-weight: 300; line-height: 1.7; max-width: 560px; opacity:0; animation: fadeUp 0.6s ease 0.3s forwards; }
@@ -135,8 +135,8 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 <body>
 
 <div class="hero">
-  <div class="hero-eyebrow">考論 · Khảo Luận</div>
-  <div class="hero-title">Khảo Luận Tử Vi</div>
+  <div class="hero-eyebrow">考論 · Vấn Đáp</div>
+  <div class="hero-title">Vấn Đáp Tử Vi</div>
   <div class="hero-sub">Các vấn đề học thuật, tranh biện và ứng dụng Tử Vi Đẩu Số trong bối cảnh hiện đại — nhìn từ kinh điển, đối chiếu thực chứng.</div>
 </div>
 
@@ -151,7 +151,7 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
   <input class="search-input" type="text" id="search-input" placeholder="Tìm khảo luận..." oninput="filterArticles()">
   <select class="filter-select" id="filter-cat" onchange="filterArticles()">
     <option value="">Tất cả chủ đề</option>
-    <option value="khao-luan">Khảo luận</option>
+    <option value="khao-luan">Vấn đáp</option>
     <option value="tranh-bien">Tranh biện</option>
     <option value="ung-dung">Ứng dụng</option>
     <option value="lich-su">Lịch sử</option>
@@ -162,7 +162,7 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 
 <div class="cat-strip">
   <button class="cat-btn active" onclick="setCategory('', this)">Tất cả</button>
-  <button class="cat-btn" onclick="setCategory('khao-luan', this)">Khảo luận</button>
+  <button class="cat-btn" onclick="setCategory('khao-luan', this)">Vấn đáp</button>
   <button class="cat-btn" onclick="setCategory('tranh-bien', this)">Tranh biện</button>
   <button class="cat-btn" onclick="setCategory('ung-dung', this)">Ứng dụng</button>
   <button class="cat-btn" onclick="setCategory('lich-su', this)">Lịch sử</button>
@@ -187,7 +187,7 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 const SUPABASE_URL = 'https://dciwkfdqhhddeymlisey.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 const PAGE_SIZE = 24;
-const CAT_LABEL = { 'khao-luan':'Khảo luận', 'tranh-bien':'Tranh biện', 'ung-dung':'Ứng dụng', 'lich-su':'Lịch sử', 'phuong-phap':'Phương pháp' };
+const CAT_LABEL = { 'khao-luan':'Vấn đáp', 'tranh-bien':'Tranh biện', 'ung-dung':'Ứng dụng', 'lich-su':'Lịch sử', 'phuong-phap':'Phương pháp' };
 
 let allData = [], filtered = [], currentPage = 1, currentCat = '';
 

@@ -75,7 +75,7 @@
     + '</div></div>'
     + navLink('/about.html', 'Gi\u1edbi Thi\u1ec7u')
     + navLink('/resources.html', 'T\u00e0i Li\u1ec7u')
-    + navLink('/blog.html', 'Kh\u1ea3o Lu\u1eadn')
+    + navLink('/blog.html', 'V\u1ea5n \u0110\u00e1p')
     + navLink('/menh-kho.html', 'M\u1ec7nh Kh\u1ed1')
     + navLink('/contact.html', 'Li\u00ean H\u1ec7')
     + '</div>'
