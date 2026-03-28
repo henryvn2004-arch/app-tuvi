@@ -108,14 +108,24 @@
   // Mobile dropdown toggle
   var ddToggle = document.getElementById('nav-luan-giai-toggle');
   var ddMenu   = document.getElementById('nav-luan-giai-menu');
-  function handleDD(e) {
+  var touched  = false;
+
+  ddToggle.addEventListener('touchend', function(e) {
     if (window.innerWidth <= 700) {
+      e.preventDefault();
+      e.stopPropagation();
+      touched = true;
+      ddMenu.classList.toggle('open');
+    }
+  });
+
+  ddToggle.addEventListener('click', function(e) {
+    if (window.innerWidth <= 700) {
+      if (touched) { touched = false; return; } // đã xử lý bởi touchend
       e.preventDefault();
       e.stopPropagation();
       ddMenu.classList.toggle('open');
     }
-  }
-  ddToggle.addEventListener('click', handleDD);
-  ddToggle.addEventListener('touchstart', handleDD, { passive: false });
+  });
 
 })();
