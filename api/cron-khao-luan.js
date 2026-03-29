@@ -127,7 +127,7 @@ Yêu cầu SEO & AEO:
 - Tiêu đề chứa từ khóa chính + ý định tìm kiếm
 
 Trả về JSON thuần (KHÔNG backtick):
-{"title":"Tiêu đề có từ khóa + ý định tìm kiếm","slug":"slug-ascii","excerpt":"Tóm tắt dưới 155 ký tự, trả lời trực tiếp câu hỏi chính","category":"chiem-tinh|triet-hoc|thuc-hanh|van-han|nhan-vat|so-sanh","tags":["tag1","tag2","tag3"],"featured":false,"content":"markdown ≤ 300 từ"}`;
+{"title":"Tiêu đề có từ khóa + ý định tìm kiếm","slug":"slug-ascii","excerpt":"Tóm tắt dưới 155 ký tự, trả lời trực tiếp câu hỏi chính","category":"hon-nhan|gia-dinh|tai-chinh|cong-viec|tinh-cach|dien-san|quan-he|benh-tat|con-cai","tags":["tag1","tag2","tag3"],"featured":false,"content":"markdown ≤ 300 từ"}`;
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
