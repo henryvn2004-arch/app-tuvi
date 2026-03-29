@@ -189,7 +189,7 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 const SUPABASE_URL = 'https://dciwkfdqhhddeymlisey.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 const PAGE_SIZE = 24;
-const CAT_LABEL = { 'hon-nhan':'Hôn Nhân', 'gia-dinh':'Gia Đình', 'tai-chinh':'Tài Chính', 'cong-viec':'Công Việc', 'tinh-cach':'Tính Cách', 'dien-san':'Điền Sản', 'quan-he':'Quan Hệ', 'benh-tat':'Bệnh Tật', 'con-cai':'Con Cái', 'chiem-tinh':'Chiêm Tinh', 'triet-hoc':'Triết Học', 'thuc-hanh':'Thực Hành', 'van-han':'Vận Hạn', 'nhan-vat':'Nhân Vật', 'so-sanh':'So Sánh' };
+
 
 let allData = [], filtered = [], currentPage = 1, currentCat = '';
 
@@ -253,16 +253,20 @@ function render() {
   const page  = filtered.slice(start, start + PAGE_SIZE);
 
   grid.innerHTML = '<ul class="article-list">' + page.map((d) => {
-    const cat  = CAT_LABEL[d.category] || d.category || '';
+    const tags = d.tags || [];
+    const firstTag  = tags[0] || '';
+    const secondTag = tags[1] || '';
+    const TAG_LABEL = { 'hôn-nhân':'Hôn Nhân','gia-đình':'Gia Đình','tài-chính':'Tài Chính','công-việc':'Công Việc','tính-cách':'Tính Cách','vận-hạn':'Vận Hạn','điền-sản':'Điền Sản','quan-hệ':'Quan Hệ','bệnh-tật':'Bệnh Tật','con-cái':'Con Cái' };
+    const catLabel  = TAG_LABEL[firstTag] || firstTag || '';
     const date = d.created_at ? new Date(d.created_at).toLocaleDateString('vi-VN',{year:'numeric',month:'short',day:'numeric'}) : '';
-    const tag  = (d.tags||[])[0] ? `<span class="card-tag">${(d.tags||[])[0]}</span>` : '';
+    const tag2 = secondTag ? `<span class="card-tag">${TAG_LABEL[secondTag] || secondTag}</span>` : '';
     return `<li class="article-item">
       <a class="article-link" href="/khao-luan/${d.slug||d.id}">
         <div class="article-left">
-          ${cat ? `<span class="card-cat">${cat}</span>` : ''}
+          ${catLabel ? `<span class="card-cat">${catLabel}</span>` : ''}
           <span class="card-title">${d.title||'—'}</span>
         </div>
-        <div class="card-right">${tag}<span class="card-date">${date}</span></div>
+        <div class="card-right">${tag2}<span class="card-date">${date}</span></div>
       </a>
     </li>`;
   }).join('') + '</ul>';
