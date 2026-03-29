@@ -46,8 +46,6 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 .hero-title { font-family: 'Noto Serif', serif; font-size: 38px; color: #fff; font-weight: 400; margin-bottom: 10px; opacity:0; animation: fadeUp 0.6s ease 0.2s forwards; }
 .hero-sub { font-size: 14px; color: #8BAACC; font-weight: 300; line-height: 1.7; max-width: 560px; opacity:0; animation: fadeUp 0.6s ease 0.3s forwards; }
 
-/* FEATURED — bài nổi bật đầu trang, to hơn */
-.featured-wrap { background: var(--bg-soft); border-bottom: 1px solid var(--border); padding: 28px 40px; }
 .featured-label { font-size: 10px; font-weight: 600; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; margin-bottom: 14px; }
 .featured-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 16px; }
 .featured-card {
@@ -115,7 +113,6 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
 @keyframes spin { to { transform:rotate(360deg); } }
 
-@media (max-width:900px) { .featured-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width:700px) {
   .topnav { padding: 0 16px; }
   .nav-links { display:none; position:absolute; top:60px; left:0; right:0; background:var(--navy); flex-direction:column; padding:8px 0 16px; border-bottom:1px solid #1a2a3a; }
@@ -123,8 +120,6 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
   .nav-link { padding:10px 24px; border-radius:0; width:100%; }
   .nav-hamburger { display:block; margin-left:auto; }
   .hero { padding: 40px 20px 32px; }
-  .featured-wrap { padding: 20px 16px; }
-  .featured-grid { grid-template-columns: 1fr; }
   .controls, .cat-strip { padding: 12px 16px; }
   .page-body { padding: 24px 16px 48px; }
 }
@@ -141,9 +136,6 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 </div>
 
 <!-- Featured section — hiện khi có data -->
-<div class="featured-wrap" id="featured-wrap" style="display:none">
-  <div class="featured-label">Bài nổi bật</div>
-  <div class="featured-grid" id="featured-grid"></div>
 </div>
 
 <div id="share-page-bar" style="padding:10px 40px;background:#f8f9fa;border-bottom:1px solid #eee"></div>
@@ -162,11 +154,15 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 
 <div class="cat-strip">
   <button class="cat-btn active" onclick="setCategory('', this)">Tất cả</button>
-  <button class="cat-btn" onclick="setCategory('khao-luan', this)">Vấn đáp</button>
-  <button class="cat-btn" onclick="setCategory('tranh-bien', this)">Tranh biện</button>
-  <button class="cat-btn" onclick="setCategory('ung-dung', this)">Ứng dụng</button>
-  <button class="cat-btn" onclick="setCategory('lich-su', this)">Lịch sử</button>
-  <button class="cat-btn" onclick="setCategory('phuong-phap', this)">Phương pháp</button>
+  <button class="cat-btn" onclick="setCategory('hon-nhan', this)">Hôn Nhân</button>
+  <button class="cat-btn" onclick="setCategory('gia-dinh', this)">Gia Đình</button>
+  <button class="cat-btn" onclick="setCategory('tai-chinh', this)">Tài Chính</button>
+  <button class="cat-btn" onclick="setCategory('cong-viec', this)">Công Việc</button>
+  <button class="cat-btn" onclick="setCategory('tinh-cach', this)">Tính Cách</button>
+  <button class="cat-btn" onclick="setCategory('dien-san', this)">Điền Sản</button>
+  <button class="cat-btn" onclick="setCategory('quan-he', this)">Quan Hệ</button>
+  <button class="cat-btn" onclick="setCategory('benh-tat', this)">Bệnh Tật</button>
+  <button class="cat-btn" onclick="setCategory('con-cai', this)">Con Cái</button>
 </div>
 
 <div class="page-body">
@@ -187,7 +183,7 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 const SUPABASE_URL = 'https://dciwkfdqhhddeymlisey.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 const PAGE_SIZE = 24;
-const CAT_LABEL = { 'khao-luan':'Vấn đáp', 'tranh-bien':'Tranh biện', 'ung-dung':'Ứng dụng', 'lich-su':'Lịch sử', 'phuong-phap':'Phương pháp' };
+const CAT_LABEL = { 'hon-nhan':'Hôn Nhân', 'gia-dinh':'Gia Đình', 'tai-chinh':'Tài Chính', 'cong-viec':'Công Việc', 'tinh-cach':'Tính Cách', 'dien-san':'Điền Sản', 'quan-he':'Quan Hệ', 'benh-tat':'Bệnh Tật', 'con-cai':'Con Cái', 'chiem-tinh':'Chiêm Tinh', 'triet-hoc':'Triết Học', 'thuc-hanh':'Thực Hành', 'van-han':'Vận Hạn', 'nhan-vat':'Nhân Vật', 'so-sanh':'So Sánh' };
 
 let allData = [], filtered = [], currentPage = 1, currentCat = '';
 
@@ -200,10 +196,6 @@ async function loadAll() {
     if (!res.ok) throw new Error();
     allData = await res.json();
 
-    // Featured
-    const featured = allData.filter(d => d.featured).slice(0, 3);
-    if (featured.length > 0) renderFeatured(featured);
-
     filtered = [...allData];
     render();
   } catch(e) {
@@ -213,21 +205,6 @@ async function loadAll() {
   }
 }
 
-function renderFeatured(items) {
-  const wrap = document.getElementById('featured-wrap');
-  const grid = document.getElementById('featured-grid');
-  wrap.style.display = 'block';
-  grid.innerHTML = items.map((d, i) => {
-    const cat = CAT_LABEL[d.category] || d.category || '';
-    const date = d.created_at ? new Date(d.created_at).toLocaleDateString('vi-VN') : '';
-    return `<a class="featured-card${i===0?' main':''}" href="/khao-luan/${d.slug||d.id}">
-      <div class="fc-cat">${cat}</div>
-      <div class="fc-title">${d.title||'—'}</div>
-      ${d.excerpt ? `<div class="fc-excerpt">${d.excerpt}</div>` : ''}
-      <div class="fc-meta">${date}</div>
-    </a>`;
-  }).join('');
-}
 
 function setCategory(cat, btn) {
   currentCat = cat;
