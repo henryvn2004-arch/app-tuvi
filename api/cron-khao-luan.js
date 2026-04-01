@@ -127,7 +127,7 @@ Yêu cầu SEO & AEO:
 - Tiêu đề chứa từ khóa chính + ý định tìm kiếm
 
 Trả về JSON thuần (KHÔNG backtick):
-{"title":"Tiêu đề có từ khóa + ý định tìm kiếm","slug":"slug-ascii","excerpt":"Tóm tắt dưới 155 ký tự, trả lời trực tiếp câu hỏi chính","category":"hon-nhan|gia-dinh|tai-chinh|cong-viec|tinh-cach|dien-san|quan-he|benh-tat|con-cai","tags":["tag1","tag2","tag3"],"featured":false,"content":"markdown ≤ 300 từ"}`;
+{"title":"Tiêu đề có từ khóa + ý định tìm kiếm","slug":"slug-ascii","excerpt":"Tóm tắt dưới 155 ký tự, trả lời trực tiếp câu hỏi chính","category":"CHỌN ĐÚNG 1 TRONG 10 GIÁ TRỊ SAU (chép nguyên xi, không thay đổi): hon-nhan | gia-dinh | tai-chinh | cong-viec | tinh-cach | van-han | dien-san | quan-he | benh-tat | con-cai","tags":["tag1","tag2","tag3"],"featured":false,"content":"markdown ≤ 300 từ"}`;
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -141,7 +141,16 @@ Trả về JSON thuần (KHÔNG backtick):
   }
   const data = await res.json();
   const text = data.content[0].text.trim().replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
-  return JSON.parse(text);
+  const article = JSON.parse(text);
+
+  // Validate category — chỉ cho phép đúng 10 slug hợp lệ của khảo luận
+  const VALID_KL_CATS = ['hon-nhan','gia-dinh','tai-chinh','cong-viec','tinh-cach','van-han','dien-san','quan-he','benh-tat','con-cai'];
+  if (!isTL && !VALID_KL_CATS.includes(article.category)) {
+    console.warn(`[cron] category không hợp lệ: "${article.category}" → fallback tinh-cach`);
+    article.category = 'tinh-cach';
+  }
+
+  return article;
 }
 
 async function insertArticle(table, article) {
