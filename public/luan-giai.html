@@ -1501,8 +1501,9 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     try {
       const r = await fetch(`/api/payment?action=check&slug=${encodeURIComponent(tempSlug)}${userId?'&userId='+userId:''}`);
       const d = await r.json();
-      if (d.purchased) { await startClaudeluanGiai(); return; }
-    } catch(e) {}
+      console.log('[paywall check]', tempSlug, d);
+      if (d.purchased === true) { await startClaudeluanGiai(); return; }
+    } catch(e) { console.warn('[paywall check error]', e); }
     // Chưa mua — lock boxes đã hiển thị, không cần làm gì thêm
   }
 
@@ -3627,7 +3628,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 
       // Scroll + clean URL
       setTimeout(() => document.getElementById('result-section')?.scrollIntoView({ behavior: 'smooth' }), 300);
-      window.history.replaceState({}, '', '/');
+      window.history.replaceState({}, '', '/luan-giai.html');
 
     } catch(e) {
       console.error('[auto-unlock]', e);
