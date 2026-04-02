@@ -429,7 +429,12 @@
 
     const av = document.createElement('div');
     av.className = 'tvc-av';
-    av.textContent = role === 'bot' ? '✦' : 'Bạn';
+    if (role === 'bot') {
+      av.innerHTML = '<img src="/thay-tuvi.webp" style="width:28px;height:28px;border-radius:50%;object-fit:cover;display:block;">';
+      av.style.background = 'transparent';
+    } else {
+      av.textContent = 'Bạn';
+    }
 
     const bub = document.createElement('div');
     bub.className = 'tvc-bub';
