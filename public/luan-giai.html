@@ -553,6 +553,67 @@ select.form-input { cursor: pointer; }
 .btn-paywall:hover:not(:disabled) { background: #c9a84c; color: #061A2E; }
 .btn-paywall:disabled { opacity: 0.6; cursor: not-allowed; }
 .paywall-secure { font-size: 11px; color: #aaa; margin-top: 12px; }
+
+    /* ── Chat Paywall ── */
+    .tvc-paywall-overlay {
+      position: absolute; inset: 0;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      padding: 32px 24px;
+    }
+    .tvc-paywall-inner {
+      text-align: center;
+      max-width: 380px;
+    }
+    .tvc-paywall-icon { font-size: 32px; margin-bottom: 14px; }
+    .tvc-paywall-eyebrow {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: #9A7B3A; margin-bottom: 10px;
+    }
+    .tvc-paywall-title {
+      font-family: 'Noto Serif', Georgia, serif;
+      font-size: 20px; font-weight: 600; color: #061A2E;
+      margin-bottom: 10px; line-height: 1.3;
+    }
+    .tvc-paywall-desc {
+      font-size: 13px; color: #666; line-height: 1.7;
+      margin-bottom: 18px;
+    }
+    .tvc-paywall-features {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 6px; margin-bottom: 20px; text-align: left;
+    }
+    .tvc-paywall-feature {
+      display: flex; align-items: flex-start; gap: 6px;
+      font-size: 12px; color: #444; line-height: 1.4;
+    }
+    .tvc-paywall-feature::before {
+      content: '✦'; color: #c9a84c; flex-shrink: 0;
+      font-size: 10px; margin-top: 2px;
+    }
+    .tvc-paywall-price {
+      font-size: 34px; font-weight: 700; color: #061A2E;
+      font-family: Arial, sans-serif; margin-bottom: 4px;
+    }
+    .tvc-paywall-price-note { font-size: 11px; color: #999; margin-bottom: 18px; }
+    .tvc-paywall-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 28px; background: #061A2E; color: #c9a84c;
+      border: 2px solid #c9a84c; border-radius: 4px;
+      font-size: 12px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; cursor: pointer;
+      font-family: inherit; transition: all 0.2s; width: 100%;
+      justify-content: center;
+    }
+    .tvc-paywall-btn:hover { background: #c9a84c; color: #061A2E; }
+    .tvc-paywall-secure { font-size: 10px; color: #aaa; margin-top: 10px; }
+
 .paywall-blur-preview {
   position: relative; margin-bottom: 0;
   max-height: 180px; overflow: hidden;
@@ -941,7 +1002,34 @@ select.form-input { cursor: pointer; }
       <span class="phan-label-text" id="phan-label"></span>
     </div>
 
-    <div id="tuvi-chat-section" style="display:none; margin-top:40px;"></div>
+    <div id="tuvi-chat-section" style="display:block; margin-top:40px; position:relative;">
+      <div id="tvc-paywall-overlay" class="tvc-paywall-overlay">
+        <div class="tvc-paywall-inner">
+          <div class="tvc-paywall-icon">💬</div>
+          <div class="tvc-paywall-eyebrow">紫微明寶 · Vấn Đáp AI</div>
+          <div class="tvc-paywall-title">Hỏi đáp trực tiếp với lá số của bạn</div>
+          <div class="tvc-paywall-desc">
+            Sau khi mở khóa luận giải, bạn có thể đặt câu hỏi trực tiếp về bất kỳ
+            cung vị, sao tinh hay giai đoạn vận hạn nào — AI sẽ trả lời dựa trên
+            chính lá số của bạn.
+          </div>
+          <div class="tvc-paywall-features">
+            <div class="tvc-paywall-feature">Hỏi về từng cung vị</div>
+            <div class="tvc-paywall-feature">Phân tích đại vận</div>
+            <div class="tvc-paywall-feature">Tư vấn tiểu vận năm xem</div>
+            <div class="tvc-paywall-feature">Hỏi không giới hạn</div>
+            <div class="tvc-paywall-feature">Câu trả lời cá nhân hóa</div>
+            <div class="tvc-paywall-feature">Dựa trên lá số thực tế</div>
+          </div>
+          <div class="tvc-paywall-price">$19</div>
+          <div class="tvc-paywall-price-note">Bao gồm 24 phần luận giải + Vấn đáp không giới hạn</div>
+          <button class="tvc-paywall-btn" onclick="initiatePayment()">
+            Mở Khóa Luận Giải &amp; Vấn Đáp →
+          </button>
+          <div class="tvc-paywall-secure">🔒 Thanh toán bảo mật qua PayPal · Hoàn tiền nếu lỗi kỹ thuật</div>
+        </div>
+      </div>
+    </div>
 
   </div>
 
@@ -1212,16 +1300,7 @@ select.form-input { cursor: pointer; }
       // ── Render pre-generated JS section (free, no Claude) ──
       await renderPreGenFree();
       // Show chatbot with lá số data
-      const _chatEl = document.getElementById('tuvi-chat-section');
-      if (_chatEl) {
-        _chatEl.style.display = 'block';
-        if (typeof TuviChatbot !== 'undefined') {
-          TuviChatbot.init({
-            getLasoData: () => window._lasoResult || null,
-            apiPath: '/api/lasotuvi?action=chat',
-          });
-        }
-      }
+      // chatbot unlocks after payment via startClaudeluanGiai()
       document.getElementById('progress-fill').style.width = '100%';
 
       // ── Check payment status ──
@@ -1643,6 +1722,15 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 
   // ── Sau khi paid — unlock tất cả lock boxes và load Claude từng phần ──
   async function startClaudeluanGiai() {
+    // Unlock chatbot — user đã paid
+    const _overlay = document.getElementById('tvc-paywall-overlay');
+    if (_overlay) _overlay.style.display = 'none';
+    if (typeof TuviChatbot !== 'undefined') {
+      TuviChatbot.init({
+        getLasoData: () => window._lasoResult || null,
+        apiPath: '/api/lasotuvi?action=chat',
+      });
+    }
     // Ẩn tất cả lock boxes, show loading state nhẹ
     for (let p = 1; p <= TONG_PHAN; p++) {
       const lockBox = document.getElementById(`lock-box-${p}`);
