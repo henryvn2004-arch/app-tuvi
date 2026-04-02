@@ -1201,6 +1201,8 @@ select.form-input { cursor: pointer; }
       _laSoText = formatLaSoV2(ls, conv);
       _hoTen = hoten; _ngay = ngay; _thang = thang; _nam = nam;
       _gioitinh = gioitinh; _namXem = namXem; _astrolabe = ls;
+      window._lasoResult = lasoObj; // lasoObj = kết quả anSaoLaSo()
+TuviChatbot.reset();
       _currentPhan = 0;
 
       document.getElementById('result-body').innerHTML = '';
