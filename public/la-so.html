@@ -311,7 +311,14 @@ const WHEEL_MAP = [{name:'Sự nghiệp',cung:'Quan Lộc',color:'#7EC8E3'},{nam
 function renderLaSoGrid(container, ls, d) {
   const BC_MAP = {Miếu:'M',Vượng:'V',Đắc:'Đ',Bình:'B',Hãm:'H'};
   const bc = b => BC_MAP[b] ? `<span class="laso-bright">(${BC_MAP[b]})</span>` : '';
-  const fmt = (s,cls) => `<span class="${cls==='chinh'?'laso-star-chinh':'laso-star-phu'}">${s.ten.toUpperCase()}${bc(s.brightness)}${s.hoa?`<span class="laso-hoa">[${s.hoa}]</span>`:''}</span>`;
+  // Chính tinh: không hiển thị hoa inline
+  const fmtChinh = s => `<span class="laso-star-chinh">${s.ten.toUpperCase()}${bc(s.brightness)}</span>`;
+  // Phụ tinh: in đậm
+  const fmtPhu = s => `<span class="laso-star-phu"><b>${s.ten}</b></span>`;
+  // Hóa tinh: render như phụ tinh với tên đầy đủ
+  const HOA_FULL = {Lộc:'Hóa Lộc', Quyền:'Hóa Quyền', Khoa:'Hóa Khoa', Kỵ:'Hóa Kỵ'};
+  const fmtHoa = hoaLabel => `<span class="laso-star-phu"><b style="color:#9A7B3A">${HOA_FULL[hoaLabel]||('Hóa '+hoaLabel)}</b></span>`;
+  const fmt = (s,cls) => cls==='chinh' ? fmtChinh(s) : fmtPhu(s);
   const LAYOUT = [5,6,7,8,-1,4,-1,9,3,-1,-1,10,2,1,0,11];
   const dvHT = ls.daiVanHienTai;
   const NAP_AM_FULL = {'Giáp Tý':'Hải Trung Kim','Ất Sửu':'Hải Trung Kim','Bính Dần':'Lô Trung Hỏa','Đinh Mão':'Lô Trung Hỏa','Mậu Thìn':'Đại Lâm Mộc','Kỷ Tỵ':'Đại Lâm Mộc','Canh Ngọ':'Lộ Bàng Thổ','Tân Mùi':'Lộ Bàng Thổ','Nhâm Thân':'Kiếm Phong Kim','Quý Dậu':'Kiếm Phong Kim','Giáp Tuất':'Sơn Đầu Hỏa','Ất Hợi':'Sơn Đầu Hỏa','Bính Tý':'Giản Hạ Thủy','Đinh Sửu':'Giản Hạ Thủy','Mậu Dần':'Thành Đầu Thổ','Kỷ Mão':'Thành Đầu Thổ','Canh Thìn':'Bạch Lạp Kim','Tân Tỵ':'Bạch Lạp Kim','Nhâm Ngọ':'Dương Liễu Mộc','Quý Mùi':'Dương Liễu Mộc','Giáp Thân':'Tuyền Trung Thủy','Ất Dậu':'Tuyền Trung Thủy','Bính Tuất':'Ốc Thượng Thổ','Đinh Hợi':'Ốc Thượng Thổ','Mậu Tý':'Tích Lịch Hỏa','Kỷ Sửu':'Tích Lịch Hỏa','Canh Dần':'Tùng Bách Mộc','Tân Mão':'Tùng Bách Mộc','Nhâm Thìn':'Trường Lưu Thủy','Quý Tỵ':'Trường Lưu Thủy','Giáp Ngọ':'Sa Trung Kim','Ất Mùi':'Sa Trung Kim','Bính Thân':'Sơn Hạ Hỏa','Đinh Dậu':'Sơn Hạ Hỏa','Mậu Tuất':'Bình Địa Mộc','Kỷ Hợi':'Bình Địa Mộc','Canh Tý':'Bích Thượng Thổ','Tân Sửu':'Bích Thượng Thổ','Nhâm Dần':'Kim Bạch Kim','Quý Mão':'Kim Bạch Kim','Giáp Thìn':'Phú Đăng Hỏa','Ất Tỵ':'Phú Đăng Hỏa','Bính Ngọ':'Thiên Hà Thủy','Đinh Mùi':'Thiên Hà Thủy','Mậu Thân':'Đại Dịch Thổ','Kỷ Dậu':'Đại Dịch Thổ','Canh Tuất':'Thoa Xuyến Kim','Tân Hợi':'Thoa Xuyến Kim','Nhâm Tý':'Tang Đố Mộc','Quý Sửu':'Tang Đố Mộc','Giáp Dần':'Đại Khê Thủy','Ất Mão':'Đại Khê Thủy','Bính Thìn':'Sa Trung Thổ','Đinh Tỵ':'Sa Trung Thổ','Mậu Ngọ':'Thiên Thượng Hỏa','Kỷ Mùi':'Thiên Thượng Hỏa','Canh Thân':'Thạch Lựu Mộc','Tân Dậu':'Thạch Lựu Mộc','Nhâm Tuất':'Đại Hải Thủy','Quý Hợi':'Đại Hải Thủy'};
@@ -352,9 +359,13 @@ function renderLaSoGrid(container, ls, d) {
     if (!p) { grid.insertAdjacentHTML('beforeend','<div style="border-right:1px solid #ccc;border-bottom:1px solid #ccc"></div>'); return; }
     const isCurVan = dvHT?.cungIdx === dcI;
     const van = p.decadal ? `${p.decadal.range[0]}–${p.decadal.range[1]}` : '';
-    const BAD = new Set(['sát tinh','hung tinh','bại tinh']);
-    const chinh = (p.majorStars||[]).map(s=>fmt(s,'chinh')).join('');
-    const tot = (p.stars||[]).filter(s=>s.nhom!=='chinh'&&s.nhom!=='trang_sinh').map(s=>fmt(s,'phu')).join('');
+    // Chính tinh (không hoa inline)
+    const chinh = (p.majorStars||[]).map(s=>fmtChinh(s)).join('');
+    // Hóa tinh từ chính tinh — render đầu tiên trong vùng phụ tinh
+    const hoaStars = (p.majorStars||[]).filter(s=>s.hoa).map(s=>fmtHoa(s.hoa)).join('');
+    // Phụ tinh thường (bỏ chinh + trang_sinh)
+    const phuStars = (p.stars||[]).filter(s=>s.nhom!=='chinh'&&s.nhom!=='trang_sinh').map(s=>fmtPhu(s)).join('');
+    const tot = hoaStars + phuStars;
     const vong = (p.stars||[]).filter(s=>s.nhom==='trang_sinh').map(s=>`<span style="font-size:9px;color:#9A7B3A;display:block">${s.ten}</span>`).join('');
     const border = p.isMenh ? '2px solid #9A7B3A' : isCurVan ? '2px solid #1455A4' : '1px solid #ccc';
     grid.insertAdjacentHTML('beforeend', `
@@ -955,7 +966,11 @@ function renderLaSoGrid(container, ls) {
   const STAR_DATA_ELEM = {};
   const BC_MAP = {Miếu:'M',Vượng:'V',Đắc:'Đ',Bình:'B',Hãm:'H'};
   const bc = b => BC_MAP[b] ? `<span class="bright">(${BC_MAP[b]})</span>` : '';
-  const fmt = (s, cls) => `<span class="${cls}">${s.ten.toUpperCase()}${bc(s.brightness)}${s.hoa?`<span class="hoa">[${s.hoa}]</span>`:''}</span>`;
+  const HOA_FULL2 = {Lộc:'Hóa Lộc', Quyền:'Hóa Quyền', Khoa:'Hóa Khoa', Kỵ:'Hóa Kỵ'};
+  const fmtChinh2 = s => `<span class="star-chinh">${s.ten.toUpperCase()}${bc(s.brightness)}</span>`;
+  const fmtPhu2 = s => `<span class="star-phu"><b>${s.ten}</b></span>`;
+  const fmtHoa2 = h => `<span class="star-phu"><b style="color:#9A7B3A">${HOA_FULL2[h]||('Hóa '+h)}</b></span>`;
+  const fmt = (s, cls) => cls==='star-chinh' ? fmtChinh2(s) : fmtPhu2(s);
 
   const dvHT = ls.daiVanHienTai;
   const NAP_AM_FULL = {'Giáp Tý':'Hải Trung Kim','Ất Sửu':'Hải Trung Kim','Bính Dần':'Lô Trung Hỏa','Đinh Mão':'Lô Trung Hỏa','Mậu Thìn':'Đại Lâm Mộc','Kỷ Tỵ':'Đại Lâm Mộc','Canh Ngọ':'Lộ Bàng Thổ','Tân Mùi':'Lộ Bàng Thổ','Nhâm Thân':'Kiếm Phong Kim','Quý Dậu':'Kiếm Phong Kim','Giáp Tuất':'Sơn Đầu Hỏa','Ất Hợi':'Sơn Đầu Hỏa','Bính Tý':'Giản Hạ Thủy','Đinh Sửu':'Giản Hạ Thủy','Mậu Dần':'Thành Đầu Thổ','Kỷ Mão':'Thành Đầu Thổ','Canh Thìn':'Bạch Lạp Kim','Tân Tỵ':'Bạch Lạp Kim','Nhâm Ngọ':'Dương Liễu Mộc','Quý Mùi':'Dương Liễu Mộc','Giáp Thân':'Tuyền Trung Thủy','Ất Dậu':'Tuyền Trung Thủy','Bính Tuất':'Ốc Thượng Thổ','Đinh Hợi':'Ốc Thượng Thổ','Mậu Tý':'Tích Lịch Hỏa','Kỷ Sửu':'Tích Lịch Hỏa','Canh Dần':'Tùng Bách Mộc','Tân Mão':'Tùng Bách Mộc','Nhâm Thìn':'Trường Lưu Thủy','Quý Tỵ':'Trường Lưu Thủy','Giáp Ngọ':'Sa Trung Kim','Ất Mùi':'Sa Trung Kim','Bính Thân':'Sơn Hạ Hỏa','Đinh Dậu':'Sơn Hạ Hỏa','Mậu Tuất':'Bình Địa Mộc','Kỷ Hợi':'Bình Địa Mộc','Canh Tý':'Bích Thượng Thổ','Tân Sửu':'Bích Thượng Thổ','Nhâm Dần':'Kim Bạch Kim','Quý Mão':'Kim Bạch Kim','Giáp Thìn':'Phú Đăng Hỏa','Ất Tỵ':'Phú Đăng Hỏa','Bính Ngọ':'Thiên Hà Thủy','Đinh Mùi':'Thiên Hà Thủy','Mậu Thân':'Đại Dịch Thổ','Kỷ Dậu':'Đại Dịch Thổ','Canh Tuất':'Thoa Xuyến Kim','Tân Hợi':'Thoa Xuyến Kim','Nhâm Tý':'Tang Đố Mộc','Quý Sửu':'Tang Đố Mộc','Giáp Dần':'Đại Khê Thủy','Ất Mão':'Đại Khê Thủy','Bính Thìn':'Sa Trung Thổ','Đinh Tỵ':'Sa Trung Thổ','Mậu Ngọ':'Thiên Thượng Hỏa','Kỷ Mùi':'Thiên Thượng Hỏa','Canh Thân':'Thạch Lựu Mộc','Tân Dậu':'Thạch Lựu Mộc','Nhâm Tuất':'Đại Hải Thủy','Quý Hợi':'Đại Hải Thủy'};
@@ -990,10 +1005,11 @@ function renderLaSoGrid(container, ls) {
     if (!p) { grid.insertAdjacentHTML('beforeend','<div class="cung-cell"></div>'); return; }
     const isCurVan = dvHT?.cungIdx === dcI;
     const van = p.decadal ? `${p.decadal.range[0]}–${p.decadal.range[1]}` : '';
-    const chinh = p.majorStars.map(s => fmt(s,'star-chinh')).join('');
-    const BAD = new Set(['sát tinh','hung tinh','bại tinh']);
+    const chinh = p.majorStars.map(s => fmtChinh2(s)).join('');
+    // Hóa tinh từ chính tinh — render đầu tiên trong phụ tinh
+    const hoaStars2 = p.majorStars.filter(s=>s.hoa).map(s=>fmtHoa2(s.hoa)).join('');
     const totStars = p.stars.filter(s=>s.nhom!=='chinh'&&s.nhom!=='trang_sinh');
-    const tot = totStars.map(s=>fmt(s,'star-phu')).join('');
+    const tot = hoaStars2 + totStars.map(s=>fmtPhu2(s)).join('');
     const vong = p.stars.filter(s=>s.nhom==='trang_sinh').map(s=>`<span class="star-vong">${s.ten}</span>`).join('');
     const cls = ['cung-cell', p.isMenh?'is-menh':'', isCurVan?'cur-van':''].filter(Boolean).join(' ');
     grid.insertAdjacentHTML('beforeend', `
