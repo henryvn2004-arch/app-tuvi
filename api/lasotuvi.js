@@ -148,7 +148,10 @@ async function handleChat(req, res) {
   if (!messages?.length) return res.status(400).json({ error: 'Missing messages' });
 
   const lastQ = messages[messages.length - 1]?.content || '';
-  const hasLaso = !!(lasoData?.palaces?.length);
+  const hasLaso = !!(
+    lasoData?.palaces?.length ||    // single laso
+    lasoData?._lsA?.palaces?.length // dual mode
+  );
 
   let systemPrompt;
   if (hasLaso) {
