@@ -805,7 +805,7 @@ select.form-input { cursor: pointer; }
   </div>
 </div>
 <style>
-  <div id="tuvi-chat-section"></div>
+  <div id="tuvi-chat-section" style="display:none; padding: 0 24px;"></div>
   </div>
 </div>
 <style>
@@ -1727,6 +1727,7 @@ async function analyze(){
     window._lasoA = lsA;
     window._lasoB = lsB;
     TuviChatbot.reset();
+    document.getElementById('tuvi-chat-section').style.display = 'block';
     const result=calcTuongHop(lsA,lsB,nameA,nameB);
     _savedResult = result;
     _pendingSlug = buildSlug(result, 'xem-lam-an');
@@ -1758,11 +1759,12 @@ document.addEventListener('click',e=>{if(!e.target.closest('.nav-dropdown')){doc
 </script>
 <script src="/nav.js"></script>
 <script src="/footer.js"></script>
-  <script src="/chatbot.js"></script>
+<script src="/chatbot.js"></script>
 <script>
   TuviChatbot.init({
-    scenario: 'laso',
-    getLasoData: () => window._lasoA ? { ...window._lasoA, _partnerLaso: window._lasoB } : null,
+    getLasoData: () => window._lasoA
+      ? { ...window._lasoA, _partnerLaso: window._lasoB }
+      : null,
     apiPath: '/api/xem-tuoi?action=chat',
   });
 </script>
