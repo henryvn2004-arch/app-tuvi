@@ -80,6 +80,24 @@ function extractLasoContext(lasoData, question) {
     });
   }
 
+  // Context người B (xem-tuoi / xem-lam-an)
+  if (lasoData._partnerLaso) {
+    const b = lasoData._partnerLaso;
+    ctx += '\n=== LÁ SỐ NGƯỜI KIA ===\n';
+    if (b.canChiNam) ctx += `Can Chi: ${b.canChiNam}\n`;
+    if (b.napAmHanh) ctx += `Nạp Âm Hành: ${b.napAmHanh}\n`;
+    if (b.cachCuc?.length) ctx += `Cách cục: ${b.cachCuc.join(', ')}\n`;
+    const menh = (b.palaces||[]).find(p => p.isMenh);
+    if (menh) {
+      ctx += `Cung Mệnh (${menh.diaChi||''}): ${(menh.majorStars||[]).map(s=>s.ten||s).join(', ')}\n`;
+      if (menh.thaiTueNhom) ctx += `Nhóm Thái Tuế: ${JSON.stringify(menh.thaiTueNhom)}\n`;
+    }
+    if (b.daiVanHienTai) {
+      const dv = b.daiVanHienTai;
+      ctx += `Đại Vận hiện tại: ${dv.can||''}${dv.chi||''} (${dv.startAge||''}–${dv.endAge||''} tuổi)\n`;
+    }
+  }
+
   return ctx;
 }
 
