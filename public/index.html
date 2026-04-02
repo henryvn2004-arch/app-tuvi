@@ -3707,5 +3707,13 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 
 <script src="/nav.js"></script>
 <script src="/footer.js"></script>
+  <script src="/chatbot.js"></script>
+<script>
+  TuviChatbot.init({
+    scenario: 'laso',
+    getLasoData: () => window._lasoResult || null,
+    apiPath: '/api/lasotuvi?action=chat',
+  });
+</script>
 </body>
 </html>
