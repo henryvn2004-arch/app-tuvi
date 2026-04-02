@@ -317,6 +317,7 @@
         ten: p.thaiTueNhom.ten, yNghia: p.thaiTueNhom.yNghia
       } : null,
       cungScores: p.cungScores || null,
+      // tamHopCungs và xungChieuCung bị BỎ — circular reference gây crash JSON.stringify
     }));
 
     const daiVans = (ls.daiVans || []).slice(0, 9).map(dv => ({
@@ -361,8 +362,8 @@
       _nameB: lsA._nameB || 'Người B',
       _lsA:   slimLaso(lsA),
       _lsB:   slimLaso(lsB),
-      // palaces của lsA để API detect hasLaso
-      palaces: (lsA.palaces || []).slice(0, 1),
+      // 1 palace slim để API detect hasLaso (không dùng raw object — circular ref)
+      palaces: (lsA.palaces || []).slice(0, 1).map(p => ({ cungName: p.cungName, diaChi: p.diaChi })),
     };
   }
 
