@@ -129,6 +129,9 @@ function convertDuongToAm(dd, mm, yy, hour) {
   const gioCanChi = hourCanChi(hour, ngayCanChi);
   const canNam = namCanChi.split(' ')[0];
   const chiNam = namCanChi.split(' ')[1];
+  // Phân âm dương theo can năm
+  const _DUONG_CAN = new Set(['Giáp','Bính','Mậu','Canh','Nhâm']);
+  const amDuongNam = _DUONG_CAN.has(canNam) ? 'dương' : 'âm';
   return {
     amLich,
     canChi: { year: namCanChi, day: ngayCanChi, hour: gioCanChi },
@@ -136,6 +139,7 @@ function convertDuongToAm(dd, mm, yy, hour) {
     gioIdx,
     canNam,
     chiNam,
+    amDuongNam, // 'dương' hoặc 'âm' — dùng để display 'Dương Nam'/'Âm Nam'/'Dương Nữ'/'Âm Nữ'
   };
 }
 
@@ -317,7 +321,7 @@ const LOC_TON_START = {
   'Nhâm':'Hợi','Quý':'Tý',
 };
 const LOC_TON_SEQ = ['Lộc Tồn','Lực Sỹ','Thanh Long','Tiểu Hao','Tướng Quân',
-  'Tấu Thư','Phi Liêm','Hỷ Thần','Bệnh Phù','Đại Hao','Phục Binh','Quan Phù'];
+  'Tấu Thư','Phi Liêm','Hỷ Thần','Bệnh Phù','Đại Hao','Phục Binh','Quan Phủ'];
 
 function anLocTon(canNam, amDuong, gioitinh) {
   const start = dcIdx(LOC_TON_START[canNam]);
@@ -349,26 +353,30 @@ function anTrangSinh(cuc, amDuong, gioitinh) {
 
 // ─── LỤC SÁT TINH ───────────────────────────────────────────
 const HOA_LINH_KHOI = {
-  'Tý':{'hoa':'Dần','linh':'Tuất'},'Sửu':{'hoa':'Mão','linh':'Dậu'},
-  'Dần':{'hoa':'Sửu','linh':'Mão'},'Mão':{'hoa':'Dần','linh':'Tuất'},
-  'Thìn':{'hoa':'Tỵ','linh':'Hợi'},'Tỵ':{'hoa':'Ngọ','linh':'Tý'},
-  'Ngọ':{'hoa':'Thân','linh':'Dần'},'Mùi':{'hoa':'Mùi','linh':'Sửu'},
-  'Thân':{'hoa':'Tuất','linh':'Thìn'},'Dậu':{'hoa':'Dậu','linh':'Mão'},
-  'Tuất':{'hoa':'Hợi','linh':'Tỵ'},'Hợi':{'hoa':'Tý','linh':'Ngọ'},
+  // Dần Ngọ Tuất: Hỏa khởi Sửu, Linh khởi Thìn (dương nam/âm nữ: Hỏa thuận, Linh nghịch)
+  'Dần':{'hoa':'Sửu','linh':'Thìn'},'Ngọ':{'hoa':'Sửu','linh':'Thìn'},'Tuất':{'hoa':'Sửu','linh':'Thìn'},
+  // Thân Tý Thìn: Hỏa khởi Dần, Linh khởi Tuất
+  'Thân':{'hoa':'Dần','linh':'Tuất'},'Tý':{'hoa':'Dần','linh':'Tuất'},'Thìn':{'hoa':'Dần','linh':'Tuất'},
+  // Hợi Mão Mùi: Hỏa khởi Tý, Linh khởi Dậu
+  'Hợi':{'hoa':'Tý','linh':'Dậu'},'Mão':{'hoa':'Tý','linh':'Dậu'},'Mùi':{'hoa':'Tý','linh':'Dậu'},
+  // Tỵ Dậu Sửu: Hỏa khởi Mão, Linh khởi Tuất
+  'Tỵ':{'hoa':'Mão','linh':'Tuất'},'Dậu':{'hoa':'Mão','linh':'Tuất'},'Sửu':{'hoa':'Mão','linh':'Tuất'},
 };
 
 function anLucSat(canNam, chiNam, gioIdx, locTonIdx, amDuong, gioitinh) {
   const thuận = (amDuong==='dương'&&gioitinh==='nam')||(amDuong==='âm'&&gioitinh==='nu');
 
-  // Kình Dương: trước Lộc Tồn 1
-  const kinhDuong = mod12(locTonIdx + 1);
-  // Đà La: sau Lộc Tồn 1
-  const daLa = mod12(locTonIdx - 1);
+  // Kình Dương: sau Lộc Tồn 1 (thuận chiều)
+  const kinhDuong = mod12(locTonIdx - 1);
+  // Đà La: trước Lộc Tồn 1 (nghịch chiều)
+  const daLa = mod12(locTonIdx + 1);
   // Địa Kiếp: Hợi=Tý, đếm thuận đến giờ
   const diaKiep = mod12(dcIdx('Hợi') + gioIdx);
   // Địa Không: Hợi=Tý, đếm nghịch đến giờ
   const diaKhong = mod12(dcIdx('Hợi') - gioIdx);  // Hợi=Tý đếm nghịch ✅
   // Hỏa Tinh & Linh Tinh từ bảng khởi theo chi năm
+  // Dương nam / Âm nữ: Hỏa thuận, Linh nghịch
+  // Âm nam / Dương nữ: Hỏa nghịch, Linh thuận
   const hoaStart = dcIdx(HOA_LINH_KHOI[chiNam].hoa);
   const linhStart = dcIdx(HOA_LINH_KHOI[chiNam].linh);
   const hoaTinh = thuận ? mod12(hoaStart + gioIdx) : mod12(hoaStart - gioIdx);
@@ -414,7 +422,7 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
   const thienViet = dcIdx(VIET[canNam]);
 
   // Đào Hoa
-  const DAO_HOA = {'Tý':'Dậu','Ngọ':'Mão','Mão':'Tý','Dậu':'Ngọ','Dần':'Mão','Thân':'Dậu','Tỵ':'Ngọ','Hợi':'Tý','Thìn':'Sửu','Tuất':'Mùi','Sửu':'Tuất','Mùi':'Thìn'};
+  const DAO_HOA = {'Tý':'Dậu','Ngọ':'Mão','Mão':'Tý','Dậu':'Ngọ','Dần':'Mão','Thân':'Dậu','Tỵ':'Ngọ','Hợi':'Tý','Thìn':'Dậu','Tuất':'Mão','Sửu':'Tuất','Mùi':'Tý'};
   const daoHoa = dcIdx(DAO_HOA[chiNam] || 'Tý');
 
   // Thiên Mã
@@ -430,15 +438,15 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
   const phaToai = dcIdx(PHA_TOAI[chiNam] || 'Tý');
 
   // Hoa Cái
-  const HOA_CAI = {'Tý':'Thìn','Ngọ':'Thìn','Mão':'Mùi','Dậu':'Mùi','Dần':'Tuất','Thân':'Tuất','Tỵ':'Sửu','Hợi':'Sửu','Thìn':'Thìn','Tuất':'Thìn','Sửu':'Mùi','Mùi':'Mùi'};
+  const HOA_CAI = {'Tý':'Thìn','Ngọ':'Tuất','Mão':'Mùi','Dậu':'Sửu','Dần':'Ngọ','Thân':'Tý','Tỵ':'Sửu','Hợi':'Mão','Thìn':'Thân','Tuất':'Dần','Sửu':'Tỵ','Mùi':'Hợi'};
   const hoaCai = dcIdx(HOA_CAI[chiNam] || 'Tý');
 
   // Lưu Hà
-  const LUU_HA = {'Giáp':'Dậu','Ất':'Tuất','Bính':'Mùi','Đinh':'Thân','Mậu':'Tỵ','Kỷ':'Ngọ','Canh':'Thìn','Tân':'Mão','Nhâm':'Tý','Quý':'Hợi'};
+  const LUU_HA = {'Giáp':'Dậu','Ất':'Tuất','Bính':'Mùi','Đinh':'Thân','Mậu':'Tỵ','Kỷ':'Ngọ','Canh':'Thìn','Tân':'Mão','Nhâm':'Hợi','Quý':'Tý'};
   const luuHa = dcIdx(LUU_HA[canNam] || 'Tý');
 
   // Thiên Trù
-  const THIEN_TRU = {'Giáp':'Tỵ','Ất':'Ngọ','Bính':'Mùi','Đinh':'Thân','Mậu':'Dậu','Kỷ':'Tuất','Canh':'Hợi','Tân':'Tý','Nhâm':'Sửu','Quý':'Dần'};
+  const THIEN_TRU = {'Giáp':'Tỵ','Ất':'Ngọ','Bính':'Mùi','Đinh':'Thân','Mậu':'Dậu','Kỷ':'Thân','Canh':'Hợi','Tân':'Tý','Nhâm':'Sửu','Quý':'Dần'};
   const thienTru = dcIdx(THIEN_TRU[canNam] || 'Tý');
 
 
@@ -462,7 +470,7 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
   const THIEN_PHUC = {'Giáp':'Dậu','Ất':'Dậu','Bính':'Thân','Đinh':'Hợi','Mậu':'Mão','Kỷ':'Dần','Canh':'Ngọ','Tân':'Tỵ','Nhâm':'Ngọ','Quý':'Tỵ'};
   const thienQuan  = dcIdx(THIEN_QUAN[canNam] || 'Tý');
   const thienPhuc  = dcIdx(THIEN_PHUC[canNam] || 'Tý');
-  const thienKhong = mod12(dcIdx('Hợi') + dcIdx(chiNam));  // Hợi=Tý đếm thuận tới năm sinh
+  const thienKhong = mod12(dcIdx('Tý') + gioIdx);  // Tý=Tý đếm thuận tới giờ sinh
 
   // ── Sao theo cung Mệnh/Thân ──
   // Thiên Tài: xung chiếu với cung Mệnh (menhIdx)
@@ -492,7 +500,7 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
 
   // ── Sao theo Lộc Tồn ──
   const giaiThan = phuongCac;  // đồng cung Phượng Các
-  const QUOC_AN_MAP = {'Thân':'Tuất','Tý':'Tuất','Thìn':'Tuất','Dần':'Thìn','Ngọ':'Thìn','Tuất':'Thìn','Tỵ':'Mùi','Dậu':'Mùi','Sửu':'Mùi','Hợi':'Sửu','Mão':'Sửu','Mùi':'Sửu'};
+  const QUOC_AN_MAP = {'Thân':'Tuất','Tý':'Tuất','Thìn':'Tuất','Dần':'Thìn','Ngọ':'Thìn','Tuất':'Mùi','Tỵ':'Mùi','Dậu':'Mùi','Sửu':'Dần','Hợi':'Sửu','Mão':'Sửu','Mùi':'Dậu'};
   const quocAn     = dcIdx(QUOC_AN_MAP[chiNam] || 'Tuất');
   const duongPhu = mod12(locTonIdx - 7);  // Lộc Tồn=T1, đếm nghịch tới T8
   const bacSy    = locTonIdx;             // Bác Sỹ = cùng cung Lộc Tồn
@@ -1735,7 +1743,7 @@ const STAR_DATA = {
   'Thất Sát':    { type:'chính tinh', element:'kim',   yin_yang:'dương', weight:9,  traits:['sát phạt','quyền lực'],             positions:{mien:['Dần','Thân','Tý','Ngọ'],vuong:['Tỵ','Hợi'],dac:['Sửu','Mùi'],ham:['Mão','Dậu','Thìn','Tuất']} },
   'Phá Quân':    { type:'chính tinh', element:'thủy',  yin_yang:'âm',    weight:9,  traits:['phá tán','biến động'],              positions:{mien:['Tý','Ngọ'],vuong:['Sửu','Mùi'],dac:['Thìn','Tuất'],ham:['Mão','Dậu','Dần','Thân','Tỵ','Hợi']} },
   'Kình Dương':  { type:'sát tinh',   element:'kim',   yin_yang:'dương', weight:10, traits:['sát phạt','bạo lực'],               positions:{dac:['Thìn','Tuất','Sửu','Mùi'],ham:['Tý','Dần','Mão','Tỵ','Ngọ','Thân','Dậu','Hợi']} },
-  'Đà La':       { type:'sát tinh',   element:'kim',   yin_yang:'âm',    weight:10, traits:['tai họa','bệnh tật'],               positions:{dac:['Thìn','Tuất','Sửu','Mùi'],ham:['Tý','Dần','Mão','Tỵ','Ngọ','Thân','Dậu','Hợi']} },
+  'Đà La':       { type:'sát tinh',   element:'kim',   yin_yang:'âm',    weight:10, traits:['tai họa','bệnh tật'],               positions:{dac:['Thìn','Sửu','Mùi'],ham:['Tý','Dần','Mão','Tỵ','Ngọ','Thân','Dậu','Tuất','Hợi']} },
   'Hỏa Tinh':    { type:'sát tinh',   element:'hỏa',   yin_yang:'dương', weight:9,  traits:['bạo phát','tai họa'],               positions:{dac:['Dần','Mão','Thìn','Tỵ','Ngọ'],ham:['Tý','Sửu','Mùi','Thân','Dậu','Tuất','Hợi']} },
   'Linh Tinh':   { type:'sát tinh',   element:'hỏa',   yin_yang:'âm',    weight:9,  traits:['đột biến','tai họa'],               positions:{dac:['Dần','Mão','Thìn','Tỵ','Ngọ'],ham:['Tý','Sửu','Mùi','Thân','Dậu','Tuất','Hợi']} },
   'Kiếp Sát':    { type:'sát tinh',   element:'hỏa',   weight:9,  traits:['đâm chém','tai họa'],     positions:{dac:['Dần','Thân','Tỵ','Hợi'],ham:['Tý','Sửu','Mão','Thìn','Ngọ','Mùi','Dậu','Tuất']} },
