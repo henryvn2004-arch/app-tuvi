@@ -1753,5 +1753,13 @@ document.addEventListener('click',e=>{if(!e.target.closest('.nav-dropdown')){doc
 </script>
 <script src="/nav.js"></script>
 <script src="/footer.js"></script>
+  <script src="/chatbot.js"></script>
+<script>
+  TuviChatbot.init({
+    scenario: 'laso',
+    getLasoData: () => window._lasoA || null,
+    apiPath: '/api/xem-tuoi?action=chat',
+  });
+</script>
 </body>
 </html>
