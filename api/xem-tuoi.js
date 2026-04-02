@@ -20,85 +20,112 @@ Nguyên tắc:
 - Dẫn chiếu nguyên lý cổ pháp, nêu ví dụ sao tinh, cung vị cụ thể khi minh họa
 - Không hứa hẹn tuyệt đối, không tiết lộ trường phái`;
 
-function extractLasoContext(lasoData, question) {
-  if (!lasoData) return null;
-  const q = (question || '').toLowerCase();
-  const palaces = lasoData.palaces || [];
+// ── Helper: format 1 lá số thành text context cho AI ──────────────────────────
+function fmtLaso(ls, label, q) {
+  if (!ls) return '';
+  const palaces = ls.palaces || [];
 
   const topics = {
     'tài chính|tài lộc|tiền|thu nhập|làm giàu|tài bạch': ['Tài Bạch', 'Phúc Đức'],
-    'sự nghiệp|công việc|nghề|quan lộc|thăng tiến': ['Quan Lộc', 'Mệnh'],
-    'tình duyên|hôn nhân|vợ chồng|tình cảm|phu thê': ['Phu Thê', 'Mệnh'],
-    'con cái|con cháu|tử tức': ['Tử Tức'],
-    'sức khỏe|bệnh|thân thể|tật ách': ['Tật Ách'],
-    'nhà đất|bất động sản|điền|điền trạch': ['Điền Trạch'],
-    'anh em|huynh đệ': ['Huynh Đệ'],
-    'bạn bè|nô bộc|nhân viên|đối tác': ['Nô Bộc'],
-    'du lịch|di chuyển|thiên di|nước ngoài': ['Thiên Di'],
-    'cha mẹ|phụ mẫu': ['Phụ Mẫu'],
-    'đại vận|tiểu vận|vận hạn|vận trình': ['__daiVan__'],
+    'sự nghiệp|công việc|nghề|quan lộc|thăng tiến':       ['Quan Lộc', 'Mệnh'],
+    'tình duyên|hôn nhân|vợ chồng|tình cảm|phu thê':      ['Phu Thê', 'Mệnh'],
+    'con cái|con cháu|tử tức':                             ['Tử Tức'],
+    'sức khỏe|bệnh|thân thể|tật ách':                     ['Tật Ách'],
+    'nhà đất|bất động sản|điền trạch':                    ['Điền Trạch'],
+    'anh em|huynh đệ':                                     ['Huynh Đệ'],
+    'bạn bè|nô bộc|nhân viên|đối tác':                    ['Nô Bộc'],
+    'du lịch|di chuyển|thiên di|nước ngoài':               ['Thiên Di'],
+    'cha mẹ|phụ mẫu':                                      ['Phụ Mẫu'],
+    'đại vận|tiểu vận|vận hạn|vận trình':                 ['__daiVan__'],
   };
-
   const relevant = new Set(['Mệnh']);
   for (const [pattern, names] of Object.entries(topics)) {
-    if (new RegExp(pattern).test(q)) names.forEach(n => relevant.add(n));
+    if (new RegExp(pattern, 'i').test(q)) names.forEach(n => relevant.add(n));
+  }
+  if (relevant.size === 1) {
+    ['Quan Lộc', 'Tài Bạch', 'Phu Thê'].forEach(n => relevant.add(n));
   }
 
-  let ctx = '';
-  if (lasoData.canChiNam) ctx += `Can Chi: ${lasoData.canChiNam}\n`;
-  if (lasoData.napAm)     ctx += `Nạp Âm: ${lasoData.napAm} (${lasoData.napAmHanh})\n`;
-  if (lasoData.menhDC)    ctx += `Mệnh DC: ${lasoData.menhDC}\n`;
-  if (lasoData.thanDC)    ctx += `Thân DC: ${lasoData.thanDC}\n`;
-  if (lasoData.tuoiXem)   ctx += `Tuổi xem: ${lasoData.tuoiXem}\n`;
-  if (lasoData.cachCuc?.length) ctx += `Cách cục: ${lasoData.cachCuc.join(', ')}\n`;
+  const starFmt = s => {
+    if (!s) return '';
+    if (typeof s !== 'object') return String(s);
+    let t = s.ten || '';
+    if (s.brightness) t += '(' + s.brightness + ')';
+    if (s.hoa)        t += '[Hóa ' + s.hoa + ']';
+    return t;
+  };
+  const starName = s => (typeof s === 'object' ? s.ten || '' : s || '');
 
-  if (lasoData.daiVanHienTai) {
-    const dv = lasoData.daiVanHienTai;
-    ctx += `\nĐại Vận hiện tại: ${dv.can||''}${dv.chi||''} (${dv.startAge||''}–${dv.endAge||''} tuổi)`;
-    if (dv.stars?.length) ctx += ` — Sao: ${dv.stars.join(', ')}`;
+  let ctx = '\n=== ' + label + ' ===\n';
+  ctx += 'Năm sinh: ' + (ls.canChiNam||'') + ' | Nạp Âm: ' + (ls.napAm||'') + ' (' + (ls.napAmHanh||ls.napAm||'') + ')\n';
+  ctx += 'Cung Mệnh: ' + (ls.menhDC||'') + ' | Cung Thân: ' + (ls.thanDC||'') + '\n';
+  if (ls.tuoiXem) ctx += 'Tuổi xem: ' + ls.tuoiXem + '\n';
+
+  if (ls.cachCuc && ls.cachCuc.length) {
+    const cc = ls.cachCuc.map(c => typeof c === 'object' ? c.ten : c).filter(Boolean);
+    if (cc.length) ctx += 'Cách cục: ' + cc.join(', ') + '\n';
+  }
+
+  if (ls.daiVanHienTai) {
+    const dv = ls.daiVanHienTai;
+    const dvCung = palaces[dv.cungIdx] || {};
+    ctx += 'Đại Vận hiện tại: ' + (dv.diaChi||'') + ' (' + (dv.tuoiStart||'') + '–' + (dv.tuoiEnd||'') + ' tuổi)';
+    if (dvCung.cungName) ctx += ' — Cung ' + dvCung.cungName;
+    const dvStars = (dvCung.majorStars||[]).map(starName).filter(Boolean);
+    if (dvStars.length) ctx += ' — Sao: ' + dvStars.join(', ');
+    if (dv.scoring && dv.scoring.tong != null) ctx += ' — Điểm vận: ' + dv.scoring.tong + '/10 ' + (dv.scoring.flag||'');
     ctx += '\n';
   }
 
-  ctx += '\n=== CUNG LIÊN QUAN ===\n';
+  ctx += '\nCác cung liên quan:\n';
   for (const p of palaces) {
     const pName = p.cungName || '';
-    if (!relevant.has(pName) && !p.isMenh) continue;
-    ctx += `\nCung ${pName} (${p.diaChi||''}):\n`;
-    if (p.majorStars?.length) ctx += `  Chính tinh: ${p.majorStars.join(', ')}\n`;
-    if (p.stars?.length)      ctx += `  Phụ tinh: ${p.stars.join(', ')}\n`;
-    if (p.thaiTueNhom)        ctx += `  Nhóm Thái Tuế: ${p.thaiTueNhom}\n`;
+    if (!relevant.has(pName) && !p.isMenh && !p.isThan) continue;
+    ctx += '\n  [' + pName + '] ' + (p.diaChi||'') + (p.isMenh?' ★MỆNH':'') + (p.isThan?' ◆THÂN':'') + '\n';
+    const chinh = (p.majorStars||[]).map(starFmt).filter(Boolean);
+    if (chinh.length) ctx += '    Chính tinh: ' + chinh.join(', ') + '\n';
+    const phu = (p.stars||[]).filter(s => typeof s === 'object' ? s.nhom !== 'chinh' : true).map(starFmt).filter(Boolean);
+    if (phu.length) ctx += '    Phụ tinh: ' + phu.slice(0,8).join(', ') + '\n';
+    if (p.thaiTueNhom && p.thaiTueNhom.ten) ctx += '    Thái Tuế: ' + p.thaiTueNhom.ten + ' — ' + (p.thaiTueNhom.yNghia||'') + '\n';
     if (p.cungScores) {
       const s = p.cungScores;
-      ctx += `  Điểm: Tiềm Năng ${s.tiemNang||0} · Bền Vững ${s.benVung||0} · An Toàn ${s.anToan||0}\n`;
+      ctx += '    Điểm: TN=' + (s.tiemNang||0) + ' BV=' + (s.benVung||0) + ' AT=' + (s.anToan||0) + ' QN=' + (s.quyNhan||0) + '\n';
     }
   }
 
-  if (relevant.has('__daiVan__') && lasoData.daiVans?.length) {
-    ctx += '\n=== ĐẠI VẬN ===\n';
-    lasoData.daiVans.slice(0, 6).forEach(dv => {
-      ctx += `${dv.can||''}${dv.chi||''} (${dv.startAge}–${dv.endAge} tuổi): ${(dv.stars||[]).join(', ')}\n`;
+  if (relevant.has('__daiVan__') && ls.daiVans && ls.daiVans.length) {
+    ctx += '\nDanh sách Đại Vận:\n';
+    ls.daiVans.slice(0,9).forEach(function(dv, i) {
+      const dvP = palaces[dv.cungIdx] || {};
+      const stars = (dvP.majorStars||[]).map(starName).filter(Boolean);
+      ctx += '  ĐV' + (i+1) + ': ' + (dv.diaChi||'') + ' ' + dv.tuoiStart + '–' + dv.tuoiEnd + 't cung=' + (dvP.cungName||'?');
+      if (stars.length) ctx += ' sao=' + stars.join(',');
+      if (dv.scoring && dv.scoring.tong != null) ctx += ' điểm=' + dv.scoring.tong + '/10';
+      ctx += '\n';
     });
   }
 
-  // Context người B (xem-tuoi / xem-lam-an)
-  if (lasoData._partnerLaso) {
-    const b = lasoData._partnerLaso;
-    ctx += '\n=== LÁ SỐ NGƯỜI KIA ===\n';
-    if (b.canChiNam) ctx += `Can Chi: ${b.canChiNam}\n`;
-    if (b.napAmHanh) ctx += `Nạp Âm Hành: ${b.napAmHanh}\n`;
-    if (b.cachCuc?.length) ctx += `Cách cục: ${b.cachCuc.join(', ')}\n`;
-    const menh = (b.palaces||[]).find(p => p.isMenh);
-    if (menh) {
-      ctx += `Cung Mệnh (${menh.diaChi||''}): ${(menh.majorStars||[]).map(s=>s.ten||s).join(', ')}\n`;
-      if (menh.thaiTueNhom) ctx += `Nhóm Thái Tuế: ${JSON.stringify(menh.thaiTueNhom)}\n`;
-    }
-    if (b.daiVanHienTai) {
-      const dv = b.daiVanHienTai;
-      ctx += `Đại Vận hiện tại: ${dv.can||''}${dv.chi||''} (${dv.startAge||''}–${dv.endAge||''} tuổi)\n`;
-    }
+  return ctx;
+}
+
+function extractLasoContext(lasoData, question) {
+  if (!lasoData) return null;
+  const q = (question || '').toLowerCase();
+
+  // Chế độ tương hợp 2 lá số
+  if (lasoData._mode === 'tuongHop' || lasoData._partnerLaso) {
+    const lsA = lasoData._lsA || lasoData;
+    const lsB = lasoData._lsB || lasoData._partnerLaso;
+    const nameA = lasoData._nameA || lsA._nameA || 'Người A';
+    const nameB = lasoData._nameB || lsA._nameB || 'Người B';
+    let ctx = 'CHẾ ĐỘ: So sánh tương hợp 2 lá số\n';
+    ctx += fmtLaso(lsA, nameA, q);
+    ctx += fmtLaso(lsB, nameB, q);
+    return ctx;
   }
 
-  return ctx;
+  // Chế độ 1 lá số thông thường
+  return fmtLaso(lasoData, 'Lá Số', q);
 }
 
 async function handleChat(req, res) {
@@ -106,12 +133,26 @@ async function handleChat(req, res) {
   if (!messages?.length) return res.status(400).json({ error: 'Missing messages' });
 
   const lastQ = messages[messages.length - 1]?.content || '';
-  const hasLaso = !!(lasoData?.palaces?.length);
+  const hasLaso = !!(
+    lasoData?.palaces?.length ||        // single laso
+    lasoData?._lsA?.palaces?.length ||  // dual mode wrapped
+    (lasoData?._partnerLaso && lasoData?.palaces?.length) // dual mode spread
+  );
+
+  const lasoCtx = hasLaso ? extractLasoContext(lasoData, lastQ) : null;
+  const isTuongHop = !!(lasoData?._mode === 'tuongHop' || lasoData?._partnerLaso);
 
   let systemPrompt;
-  if (hasLaso) {
-    const ctx = extractLasoContext(lasoData, lastQ);
-    systemPrompt = CHAT_SYSTEM_LASO(ctx);
+  if (hasLaso && isTuongHop) {
+    systemPrompt = CHAT_SYSTEM_LASO(lasoCtx) + `
+
+Lưu ý đặc biệt: Đây là chế độ so sánh tương hợp 2 lá số. Khi trả lời, hãy:
+- Phân tích mối tương quan giữa 2 lá số, không chỉ 1 người
+- Dẫn chứng cụ thể từ cả 2 cung vị liên quan
+- Nêu rõ điểm tương hợp, xung khắc nếu có
+- Gợi ý thực tiễn cho cả 2 người`;
+  } else if (hasLaso) {
+    systemPrompt = CHAT_SYSTEM_LASO(lasoCtx);
   } else {
     systemPrompt = CHAT_SYSTEM_GENERAL;
   }
