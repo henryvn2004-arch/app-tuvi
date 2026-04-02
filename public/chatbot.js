@@ -299,29 +299,70 @@
   }
 
   // Build full context string gửi lên API — gộp cả 2 lá số nếu có
+  // Slim down 1 lá số thành object gọn cho API (~10KB thay vì ~500KB)
+  function slimLaso(ls) {
+    if (!ls) return null;
+    const palaces = (ls.palaces || []).map(p => ({
+      cungName:   p.cungName,
+      diaChi:     p.diaChi,
+      isMenh:     p.isMenh || false,
+      isThan:     p.isThan || false,
+      majorStars: (p.majorStars || []).map(s => ({
+        ten: s.ten, brightness: s.brightness, hoa: s.hoa
+      })),
+      stars: (p.stars || []).slice(0, 12).map(s => ({
+        ten: s.ten, nhom: s.nhom, hoa: s.hoa
+      })),
+      thaiTueNhom: p.thaiTueNhom ? {
+        ten: p.thaiTueNhom.ten, yNghia: p.thaiTueNhom.yNghia
+      } : null,
+      cungScores: p.cungScores || null,
+    }));
+
+    const daiVans = (ls.daiVans || []).slice(0, 9).map(dv => ({
+      diaChi: dv.diaChi, tuoiStart: dv.tuoiStart, tuoiEnd: dv.tuoiEnd,
+      cungIdx: dv.cungIdx,
+      scoring: dv.scoring ? { tong: dv.scoring.tong, flag: dv.scoring.flag } : null,
+    }));
+
+    const dvHT = ls.daiVanHienTai;
+    return {
+      canChiNam:     ls.canChiNam,
+      napAm:         ls.napAm,
+      napAmHanh:     ls.napAmHanh,
+      menhDC:        ls.menhDC,
+      thanDC:        ls.thanDC,
+      tuoiXem:       ls.tuoiXem,
+      cachCuc:       (ls.cachCuc || []).map(c => ({ ten: typeof c === 'object' ? c.ten : c })),
+      palaces,
+      daiVans,
+      daiVanHienTai: dvHT ? {
+        diaChi: dvHT.diaChi, tuoiStart: dvHT.tuoiStart, tuoiEnd: dvHT.tuoiEnd,
+        cungIdx: dvHT.cungIdx,
+        scoring: dvHT.scoring ? { tong: dvHT.scoring.tong, flag: dvHT.scoring.flag } : null,
+      } : null,
+    };
+  }
+
   function buildLasoContext() {
     const lsA = getLaso();
     if (!lsA) return null;
     const lsB = getPartner();
 
     if (!lsB) {
-      // Single lá số — trả về nguyên
-      return lsA;
+      // Single lá số — slim down trước khi gửi
+      return slimLaso(lsA);
     }
 
-    // Dual lá số — build summary tương hợp để AI có đủ context
-    const sumA = summarizeLaso(lsA, lsA._nameA || 'Người A');
-    const sumB = summarizeLaso(lsB, lsA._nameB || 'Người B');
-
+    // Dual lá số — gửi cả 2 slim objects
     return {
-      _mode: 'tuongHop',
+      _mode:  'tuongHop',
       _nameA: lsA._nameA || 'Người A',
       _nameB: lsA._nameB || 'Người B',
-      _summaryA: sumA,
-      _summaryB: sumB,
-      // Truyền toàn bộ data để API tự dùng nếu cần
-      _lsA: lsA,
-      _lsB: lsB,
+      _lsA:   slimLaso(lsA),
+      _lsB:   slimLaso(lsB),
+      // palaces của lsA để API detect hasLaso
+      palaces: (lsA.palaces || []).slice(0, 1),
     };
   }
 
