@@ -941,6 +941,8 @@ select.form-input { cursor: pointer; }
       <span class="phan-label-text" id="phan-label"></span>
     </div>
 
+    <div id="tuvi-chat-section" style="display:none; margin-top:40px;"></div>
+
   </div>
 
 </div>
@@ -1208,6 +1210,17 @@ select.form-input { cursor: pointer; }
 
       // ── Render pre-generated JS section (free, no Claude) ──
       await renderPreGenFree();
+      // Show chatbot with lá số data
+      const _chatEl = document.getElementById('tuvi-chat-section');
+      if (_chatEl) {
+        _chatEl.style.display = 'block';
+        if (typeof TuviChatbot !== 'undefined') {
+          TuviChatbot.init({
+            getLasoData: () => window._lasoResult || null,
+            apiPath: '/api/lasotuvi?action=chat',
+          });
+        }
+      }
       document.getElementById('progress-fill').style.width = '100%';
 
       // ── Check payment status ──
@@ -3617,7 +3630,8 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       // Set global state
       _hoTen = hoTen || ''; _ngay = ngay; _thang = thang; _nam = nam;
       _gioitinh = gioitinh; _namXem = namXem || new Date().getFullYear();
-      _astrolabe = ls; _pendingSlug = slug;
+      _astrolabe = ls;
+      window._lasoResult = ls; _pendingSlug = slug;
       _laSoText = formatLaSoV2(ls, conv);
       _currentPhan = 0;
 
@@ -3790,6 +3804,13 @@ document.querySelector('.nav-dropdown .nav-link')?.addEventListener('click', fun
     menu.classList.toggle('open');
   }
 });
+</script>
+<script src="/chatbot.js"></script>
+<script>
+  window._tuviChatConfig = {
+    getLasoData: () => window._lasoResult || null,
+    apiPath: '/api/lasotuvi?action=chat',
+  };
 </script>
 </body>
 </html>
