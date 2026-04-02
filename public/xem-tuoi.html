@@ -567,16 +567,21 @@ select.form-input { cursor: pointer; }
 
     /* ── Chat Paywall ── */
     .tvc-paywall-overlay {
-      position: absolute; inset: 0;
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(3px);
-      -webkit-backdrop-filter: blur(3px);
-      border-radius: 14px;
+      background: linear-gradient(135deg, #fdf6e9 0%, #fff9ef 100%);
+      border: 2px solid #c9a84c;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 10;
-      padding: 32px 24px;
+      padding: 40px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .tvc-paywall-overlay::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(201,168,76,0.03) 10px, rgba(201,168,76,0.03) 20px);
+      pointer-events: none;
     }
     .tvc-paywall-inner {
       text-align: center;
@@ -880,7 +885,7 @@ select.form-input { cursor: pointer; }
 </style>
 
 <div style="max-width:1100px;margin:0 auto;padding:0 56px">
-  <div id="tuvi-chat-section" style="display:block; margin-top:40px; margin-bottom:40px; position:relative;">
+  <div id="tuvi-chat-section" style="display:block; margin-top:40px; margin-bottom:40px;">
     <div id="tvc-paywall-overlay" class="tvc-paywall-overlay">
       <div class="tvc-paywall-inner">
         <div class="tvc-paywall-icon">💬</div>
