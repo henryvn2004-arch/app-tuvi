@@ -805,10 +805,6 @@ select.form-input { cursor: pointer; }
   </div>
 </div>
 <style>
-  <div id="tuvi-chat-section" style="display:none; padding: 0 24px;"></div>
-  </div>
-</div>
-<style>
 .rv-card{background:#fff;border:1px solid var(--border);padding:28px 24px;width:calc(33.333% - 16px);flex:0 0 calc(33.333% - 16px);box-sizing:border-box;display:flex;flex-direction:column}
 .rv-stars{color:#c9a84c;font-size:15px;margin-bottom:14px;letter-spacing:2px}
 .rv-text{font-size:14px;color:var(--text-mid);line-height:1.75;font-style:italic;margin-bottom:20px;flex:1}
@@ -817,6 +813,10 @@ select.form-input { cursor: pointer; }
 .rv-date{font-size:11px;color:var(--text-lt)}
 @media(max-width:700px){.rv-card{width:100% !important;flex:0 0 100% !important}}
 </style>
+
+<div style="max-width:1100px;margin:0 auto;padding:0 56px">
+  <div id="tuvi-chat-section" style="display:none; margin-top:40px; margin-bottom:40px;"></div>
+</div>
 
 <!-- REVIEWS SECTION -->
 <section style="background:var(--bg-soft);border-top:1px solid var(--border);padding:64px 0;overflow:hidden">
@@ -1724,12 +1724,10 @@ async function analyze(){
     const convB=convertDuongToAm(ngayB,thangB,namB,gioB*2);
     const lsB=anSaoLaSo({ngayAL:convB.amLich.day,thangAL:convB.amLich.month,namAL:convB.amLich.year,canNam:convB.canNam,chiNam:convB.chiNam,gioIdx:convB.gioIdx,gioitinh:gtB,namXem});
     lsB.chiNam=convB.chiNam;
-    // Gắn tên vào lsA để chatbot hiển thị đúng context
     lsA._nameA = nameA;
     lsA._nameB = nameB;
     window._lasoA = lsA;
     window._lasoB = lsB;
-    // Init chatbot với cả 2 lá số
     const _chatEl = document.getElementById('tuvi-chat-section');
     if (_chatEl) {
       _chatEl.style.display = 'block';
@@ -1775,12 +1773,12 @@ document.addEventListener('click',e=>{if(!e.target.closest('.nav-dropdown')){doc
 <script src="/footer.js"></script>
 <script src="/chatbot.js"></script>
 <script>
-  TuviChatbot.init({
+  window._tuviChatConfig = {
     getLasoData: () => window._lasoA
       ? { ...window._lasoA, _partnerLaso: window._lasoB }
       : null,
     apiPath: '/api/xem-tuoi?action=chat',
-  });
+  };
 </script>
 </body>
 </html>
