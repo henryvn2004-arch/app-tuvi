@@ -3,18 +3,20 @@
 // POST /api/payment?action=create   { slug }
 // POST /api/payment?action=capture  { orderId, slug, userId? }
 // GET  /api/payment?action=check    ?slug=xxx&userId=xxx
+//
+// Env vars:
+//   PAYWALL_DISABLED=true  → bypass toàn bộ paywall (dùng khi test)
 
 const PAYPAL_BASE = process.env.PAYPAL_MODE === 'live'
   ? 'https://api-m.paypal.com'
   : 'https://api-m.sandbox.paypal.com';
 
-const CLIENT_ID    = process.env.PAYPAL_CLIENT_ID;
+const CLIENT_ID     = process.env.PAYPAL_CLIENT_ID;
 const CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET;
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
-const SITE_URL     = 'https://www.tuviminhbao.com';
-// PRICE read from request body (default 19.00)
-const CURRENCY     = 'USD';
+const SUPABASE_URL  = process.env.SUPABASE_URL;
+const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY;
+const SITE_URL      = 'https://www.tuviminhbao.com';
+const CURRENCY      = 'USD';
 
 // ── Helpers ───────────────────────────────────────────────────────
 
@@ -66,7 +68,7 @@ async function savePurchase({ orderId, slug, userId, email, amount, currency }) 
 // ── Action: create ────────────────────────────────────────────────
 
 function getCancelUrl(slug) {
-  if (slug.startsWith('xem-tuoi-')) return `${SITE_URL}/xem-tuoi.html?payment=cancelled`;
+  if (slug.startsWith('xem-tuoi-'))   return `${SITE_URL}/xem-tuoi.html?payment=cancelled`;
   if (slug.startsWith('xem-lam-an-')) return `${SITE_URL}/xem-lam-an.html?payment=cancelled`;
   return `${SITE_URL}/la-so.html?slug=${encodeURIComponent(slug)}&payment=cancelled`;
 }
@@ -75,11 +77,11 @@ async function handleCreate(req, res) {
   const { slug, amount } = req.body || {};
   if (!slug) return res.status(400).json({ error: 'Missing slug' });
 
-  const price = amount || '19.00';
+  const price    = amount || '19.00';
   const safeSlug = toAsciiSlug(slug);
 
   try {
-    const token = await getPayPalToken();
+    const token    = await getPayPalToken();
     const orderRes = await fetch(`${PAYPAL_BASE}/v2/checkout/orders`, {
       method: 'POST',
       headers: {
@@ -111,7 +113,7 @@ async function handleCreate(req, res) {
       throw new Error(err.details?.[0]?.description || err.message || 'PayPal order failed');
     }
 
-    const order = await orderRes.json();
+    const order       = await orderRes.json();
     const approvalUrl = order.links?.find(l => l.rel === 'approve')?.href;
     if (!approvalUrl) throw new Error('No approval URL');
 
@@ -139,12 +141,12 @@ async function handleCapture(req, res) {
     const order = await verifyRes.json();
 
     if (order.status === 'COMPLETED') {
-      const unit = order.purchase_units?.[0];
+      const unit    = order.purchase_units?.[0];
       const capture = unit?.payments?.captures?.[0];
       await savePurchase({
         orderId, slug: unit?.custom_id || slug, userId,
         email: order.payer?.email_address,
-        amount: capture?.amount?.value || PRICE,
+        amount: capture?.amount?.value || '19.00',
         currency: capture?.amount?.currency_code || CURRENCY,
       });
       return res.status(200).json({ success: true, status: 'already_completed' });
@@ -165,8 +167,8 @@ async function handleCapture(req, res) {
     }
 
     const captured = await captureRes.json();
-    const unit = captured.purchase_units?.[0];
-    const capture = unit?.payments?.captures?.[0];
+    const unit     = captured.purchase_units?.[0];
+    const capture  = unit?.payments?.captures?.[0];
 
     if (captured.status !== 'COMPLETED' || capture?.status !== 'COMPLETED') {
       throw new Error(`Capture incomplete: ${captured.status}`);
@@ -192,11 +194,28 @@ async function handleCheck(req, res) {
   const { slug, userId } = req.query;
   if (!slug) return res.status(400).json({ error: 'Missing slug' });
 
+  // ── Dev mode: bypass paywall hoàn toàn ──
+  // Bật: thêm PAYWALL_DISABLED=true vào Vercel Environment Variables
+  // Tắt: xóa hoặc đổi thành false, redeploy
+  if (process.env.PAYWALL_DISABLED === 'true') {
+    return res.status(200).json({ purchased: true, purchasedAt: null, _dev: 'paywall_disabled' });
+  }
+
+  // Bắt buộc phải có userId — không check theo slug chung
+  // Tránh: người khác nhập đúng ngày sinh của người đã mua → bypass paywall
+  if (!userId) {
+    return res.status(200).json({ purchased: false, purchasedAt: null });
+  }
+
   const safeSlug = toAsciiSlug(slug);
 
   try {
-    let url = `${SUPABASE_URL}/rest/v1/purchases?slug=eq.${encodeURIComponent(safeSlug)}&status=eq.completed&limit=1&select=id,email,user_id,created_at`;
-    if (userId) url += `&user_id=eq.${encodeURIComponent(userId)}`;
+    // Check slug + userId phải khớp cùng lúc
+    const url = `${SUPABASE_URL}/rest/v1/purchases`
+      + `?slug=eq.${encodeURIComponent(safeSlug)}`
+      + `&status=eq.completed`
+      + `&user_id=eq.${encodeURIComponent(userId)}`
+      + `&limit=1&select=id,email,user_id,created_at`;
 
     const r = await fetch(url, {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` },
@@ -219,9 +238,9 @@ async function handleCheck(req, res) {
 export default async function handler(req, res) {
   const action = req.query.action;
 
-  if (action === 'create' && req.method === 'POST') return handleCreate(req, res);
+  if (action === 'create'  && req.method === 'POST') return handleCreate(req, res);
   if (action === 'capture' && req.method === 'POST') return handleCapture(req, res);
-  if (action === 'check') return handleCheck(req, res);
+  if (action === 'check')                            return handleCheck(req, res);
 
   return res.status(400).json({ error: 'Invalid action. Use ?action=create|capture|check' });
 }
