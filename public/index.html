@@ -1198,16 +1198,15 @@ select.form-input { cursor: pointer; }
       });
       ls._conv = conv; ls._hoTen = hoten;
 
-      _laSoText = formatLaSoV2(ls, conv);
+  _laSoText = formatLaSoV2(ls, conv);
       _hoTen = hoten; _ngay = ngay; _thang = thang; _nam = nam;
       _gioitinh = gioitinh; _namXem = namXem; _astrolabe = ls;
-      window._lasoResult = lasoObj; // lasoObj = kết quả anSaoLaSo()
-TuviChatbot.reset();
+      window._lasoResult = ls;
+      TuviChatbot.reset();
+      document.getElementById('tuvi-chat-section').style.display = 'block';
       _currentPhan = 0;
-
       document.getElementById('result-body').innerHTML = '';
       document.getElementById('progress-fill').style.width = '60%';
-
       // ── Render pre-generated JS section (free, no Claude) ──
       await renderPreGenFree();
       document.getElementById('progress-fill').style.width = '100%';
@@ -3706,11 +3705,10 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 .rv-date{font-size:11px;color:var(--text-lt)}
 @media(max-width:700px){.rv-card{width:100% !important;flex:0 0 100% !important}}
 </style>
-
 <script src="/nav.js"></script>
 <script src="/footer.js"></script>
-<div id="tuvi-chat-section"></div>
-<div id="tuvi-chat-section" style="padding: 0 56px;"></div>
+
+<div id="tuvi-chat-section" style="display:none; padding: 0 56px;"></div>
 
 <script src="/chatbot.js"></script>
 <script>
