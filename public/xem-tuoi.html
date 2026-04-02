@@ -1682,6 +1682,8 @@ async function analyze(){
     const convA=convertDuongToAm(ngayA,thangA,namA,gioA*2);
     const lsA=anSaoLaSo({ngayAL:convA.amLich.day,thangAL:convA.amLich.month,namAL:convA.amLich.year,canNam:convA.canNam,chiNam:convA.chiNam,gioIdx:convA.gioIdx,gioitinh:gtA,namXem});
     lsA.chiNam=convA.chiNam;
+    window._lasoA = lsA; 
+    TuviChatbot.reset();
     const convB=convertDuongToAm(ngayB,thangB,namB,gioB*2);
     const lsB=anSaoLaSo({ngayAL:convB.amLich.day,thangAL:convB.amLich.month,namAL:convB.amLich.year,canNam:convB.canNam,chiNam:convB.chiNam,gioIdx:convB.gioIdx,gioitinh:gtB,namXem});
     lsB.chiNam=convB.chiNam;
