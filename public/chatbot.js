@@ -359,7 +359,7 @@
   let _config = {
     scenario: 'auto', // 'laso' | 'general' | 'auto'
     getLasoData: null, // function returning lasoData object
-    apiPath: '/api/chatbot',
+    apiPath: '/api/lasotuvi?action=chat', // default: luận giải page
   };
 
   // Suggestions per scenario
