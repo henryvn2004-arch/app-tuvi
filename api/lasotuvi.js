@@ -51,56 +51,92 @@ function extractLasoContext(lasoData, question) {
 
   const topics = {
     'tài chính|tài lộc|tiền|thu nhập|làm giàu|tài bạch': ['Tài Bạch', 'Phúc Đức'],
-    'sự nghiệp|công việc|nghề|quan lộc|thăng tiến': ['Quan Lộc', 'Mệnh'],
-    'tình duyên|hôn nhân|vợ chồng|tình cảm|phu thê': ['Phu Thê', 'Mệnh'],
-    'con cái|con cháu|tử tức': ['Tử Tức'],
-    'sức khỏe|bệnh|thân thể|tật ách': ['Tật Ách'],
-    'nhà đất|bất động sản|điền|điền trạch': ['Điền Trạch'],
-    'anh em|huynh đệ': ['Huynh Đệ'],
-    'bạn bè|nô bộc|nhân viên': ['Nô Bộc'],
-    'du lịch|di chuyển|thiên di|nước ngoài': ['Thiên Di'],
-    'cha mẹ|phụ mẫu': ['Phụ Mẫu'],
-    'đại vận|tiểu vận|vận hạn|vận trình': ['__daiVan__'],
+    'sự nghiệp|công việc|nghề|quan lộc|thăng tiến':       ['Quan Lộc', 'Mệnh'],
+    'tình duyên|hôn nhân|vợ chồng|tình cảm|phu thê':      ['Phu Thê', 'Mệnh'],
+    'con cái|con cháu|tử tức':                             ['Tử Tức'],
+    'sức khỏe|bệnh|thân thể|tật ách':                     ['Tật Ách'],
+    'nhà đất|bất động sản|điền trạch':                    ['Điền Trạch'],
+    'anh em|huynh đệ':                                     ['Huynh Đệ'],
+    'bạn bè|nô bộc|nhân viên':                            ['Nô Bộc'],
+    'du lịch|di chuyển|thiên di|nước ngoài':               ['Thiên Di'],
+    'cha mẹ|phụ mẫu':                                      ['Phụ Mẫu'],
+    'đại vận|tiểu vận|vận hạn|vận trình':                 ['__daiVan__'],
   };
 
   const relevant = new Set(['Mệnh']);
   for (const [pattern, names] of Object.entries(topics)) {
-    if (new RegExp(pattern).test(q)) names.forEach(n => relevant.add(n));
+    if (new RegExp(pattern, 'i').test(q)) names.forEach(n => relevant.add(n));
+  }
+  // Nếu không match gì thêm — lấy thêm cung quan trọng mặc định
+  if (relevant.size === 1) {
+    ['Quan Lộc', 'Tài Bạch', 'Phu Thê'].forEach(n => relevant.add(n));
   }
 
-  let ctx = '';
-  if (lasoData.canChiNam) ctx += `Can Chi: ${lasoData.canChiNam}\n`;
-  if (lasoData.napAm)     ctx += `Nạp Âm: ${lasoData.napAm} (${lasoData.napAmHanh})\n`;
-  if (lasoData.menhDC)    ctx += `Mệnh DC: ${lasoData.menhDC}\n`;
-  if (lasoData.thanDC)    ctx += `Thân DC: ${lasoData.thanDC}\n`;
-  if (lasoData.tuoiXem)   ctx += `Tuổi xem: ${lasoData.tuoiXem}\n`;
-  if (lasoData.cachCuc?.length) ctx += `Cách cục: ${lasoData.cachCuc.join(', ')}\n`;
+  // Helper format sao từ object hoặc string
+  const starFmt = s => {
+    if (!s) return '';
+    if (typeof s !== 'object') return String(s);
+    let t = s.ten || '';
+    if (s.brightness) t += '(' + s.brightness + ')';
+    if (s.hoa)        t += '[Hóa ' + s.hoa + ']';
+    return t;
+  };
+  const starName = s => (typeof s === 'object' ? s.ten || '' : s || '');
 
+  let ctx = '';
+  if (lasoData.canChiNam) ctx += 'Can Chi: ' + lasoData.canChiNam + '\n';
+  if (lasoData.napAm)     ctx += 'Nạp Âm: ' + lasoData.napAm + ' (' + (lasoData.napAmHanh || '') + ')\n';
+  if (lasoData.menhDC)    ctx += 'Mệnh DC: ' + lasoData.menhDC + '\n';
+  if (lasoData.thanDC)    ctx += 'Thân DC: ' + lasoData.thanDC + '\n';
+  if (lasoData.tuoiXem)   ctx += 'Tuổi xem: ' + lasoData.tuoiXem + '\n';
+
+  // cachCuc — engine trả [{ten, moTa, loai}] không phải strings
+  if (lasoData.cachCuc && lasoData.cachCuc.length) {
+    const cc = lasoData.cachCuc.map(c => typeof c === 'object' ? c.ten : c).filter(Boolean);
+    if (cc.length) ctx += 'Cách cục: ' + cc.join(', ') + '\n';
+  }
+
+  // daiVanHienTai — engine dùng diaChi, tuoiStart, tuoiEnd, cungIdx
   if (lasoData.daiVanHienTai) {
     const dv = lasoData.daiVanHienTai;
-    ctx += `\nĐại Vận hiện tại: ${dv.can||''}${dv.chi||''} (${dv.startAge||''}–${dv.endAge||''} tuổi)`;
-    if (dv.stars?.length) ctx += ` — Sao: ${dv.stars.join(', ')}`;
+    const dvCung = palaces[dv.cungIdx] || {};
+    ctx += '\nĐại Vận hiện tại: ' + (dv.diaChi||'') + ' (' + (dv.tuoiStart||'') + '–' + (dv.tuoiEnd||'') + ' tuổi)';
+    if (dvCung.cungName) ctx += ' — Cung ' + dvCung.cungName;
+    const dvStars = (dvCung.majorStars||[]).map(starName).filter(Boolean);
+    if (dvStars.length) ctx += ' — Sao: ' + dvStars.join(', ');
+    if (dv.scoring && dv.scoring.tong != null) ctx += ' — Điểm vận: ' + dv.scoring.tong + '/10 ' + (dv.scoring.flag||'');
     ctx += '\n';
   }
 
   ctx += '\n=== CUNG LIÊN QUAN ===\n';
   for (const p of palaces) {
     const pName = p.cungName || '';
-    if (!relevant.has(pName) && !p.isMenh) continue;
-    ctx += `\nCung ${pName} (${p.diaChi||''}):\n`;
-    if (p.majorStars?.length) ctx += `  Chính tinh: ${p.majorStars.join(', ')}\n`;
-    if (p.stars?.length)      ctx += `  Phụ tinh: ${p.stars.join(', ')}\n`;
-    if (p.thaiTueNhom)        ctx += `  Nhóm Thái Tuế: ${p.thaiTueNhom}\n`;
+    if (!relevant.has(pName) && !p.isMenh && !p.isThan) continue;
+    ctx += '\nCung ' + pName + ' (' + (p.diaChi||'') + ')' + (p.isMenh?' ★MỆNH':'') + (p.isThan?' ◆THÂN':'') + ':\n';
+    // majorStars là [{ten, brightness, hoa}]
+    const chinh = (p.majorStars||[]).map(starFmt).filter(Boolean);
+    if (chinh.length) ctx += '  Chính tinh: ' + chinh.join(', ') + '\n';
+    // stars là [{ten, nhom, brightness, hoa}]
+    const phu = (p.stars||[]).filter(s => typeof s === 'object' ? s.nhom !== 'chinh' : true).map(starFmt).filter(Boolean);
+    if (phu.length) ctx += '  Phụ tinh: ' + phu.slice(0,8).join(', ') + '\n';
+    // thaiTueNhom là {nhom, ten, sao, yNghia}
+    if (p.thaiTueNhom && p.thaiTueNhom.ten) ctx += '  Thái Tuế: ' + p.thaiTueNhom.ten + ' — ' + (p.thaiTueNhom.yNghia||'') + '\n';
     if (p.cungScores) {
       const s = p.cungScores;
-      ctx += `  Điểm: Tiềm Năng ${s.tiemNang||0} · Bền Vững ${s.benVung||0} · An Toàn ${s.anToan||0}\n`;
+      ctx += '  Điểm: TN=' + (s.tiemNang||0) + ' BV=' + (s.benVung||0) + ' AT=' + (s.anToan||0) + ' QN=' + (s.quyNhan||0) + '\n';
     }
   }
 
-  if (relevant.has('__daiVan__') && lasoData.daiVans?.length) {
+  // daiVans — engine dùng diaChi, tuoiStart, tuoiEnd, cungIdx
+  if (relevant.has('__daiVan__') && lasoData.daiVans && lasoData.daiVans.length) {
     ctx += '\n=== ĐẠI VẬN ===\n';
-    lasoData.daiVans.slice(0, 6).forEach(dv => {
-      ctx += `${dv.can||''}${dv.chi||''} (${dv.startAge}–${dv.endAge} tuổi): ${(dv.stars||[]).join(', ')}\n`;
+    lasoData.daiVans.slice(0, 9).forEach(function(dv, i) {
+      const dvP = palaces[dv.cungIdx] || {};
+      const stars = (dvP.majorStars||[]).map(starName).filter(Boolean);
+      ctx += 'ĐV' + (i+1) + ': ' + (dv.diaChi||'') + ' (' + dv.tuoiStart + '–' + dv.tuoiEnd + 't) cung=' + (dvP.cungName||'?');
+      if (stars.length) ctx += ' sao=' + stars.join(',');
+      if (dv.scoring && dv.scoring.tong != null) ctx += ' điểm=' + dv.scoring.tong + '/10';
+      ctx += '\n';
     });
   }
 
