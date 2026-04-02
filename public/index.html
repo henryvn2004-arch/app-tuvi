@@ -1203,15 +1203,7 @@ select.form-input { cursor: pointer; }
       _gioitinh = gioitinh; _namXem = namXem; _astrolabe = ls;
       window._lasoResult = ls;
       document.getElementById('tuvi-chat-section').style.display = 'block';
-if (!window._tuviChatInited) {
-  TuviChatbot.init({
-    getLasoData: () => window._lasoResult || null,
-    apiPath: '/api/lasotuvi?action=chat',
-  });
-  window._tuviChatInited = true;
-} else {
-  TuviChatbot.reset();
-}
+      TuviChatbot.reset();
       _currentPhan = 0;
       document.getElementById('result-body').innerHTML = '';
       document.getElementById('progress-fill').style.width = '60%';
@@ -3719,5 +3711,11 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 <div id="tuvi-chat-section" style="display:none; padding: 0 56px;"></div>
 
 <script src="/chatbot.js"></script>
+<script>
+  TuviChatbot.init({
+    getLasoData: () => window._lasoResult || null,
+    apiPath: '/api/lasotuvi?action=chat',
+  });
+</script>
 </body>
 </html>
