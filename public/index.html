@@ -1202,8 +1202,14 @@ select.form-input { cursor: pointer; }
       _hoTen = hoten; _ngay = ngay; _thang = thang; _nam = nam;
       _gioitinh = gioitinh; _namXem = namXem; _astrolabe = ls;
       window._lasoResult = ls;
-      document.getElementById('tuvi-chat-section').style.display = 'block';
-      TuviChatbot.reset();
+      const _chatSection = document.getElementById('tuvi-chat-section');
+      _chatSection.style.display = 'block';
+      if (typeof TuviChatbot !== 'undefined') {
+        TuviChatbot.init({
+          getLasoData: () => window._lasoResult || null,
+          apiPath: '/api/lasotuvi?action=chat',
+        });
+      }
       _currentPhan = 0;
       document.getElementById('result-body').innerHTML = '';
       document.getElementById('progress-fill').style.width = '60%';
@@ -3708,14 +3714,15 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 <script src="/nav.js"></script>
 <script src="/footer.js"></script>
 
-<div id="tuvi-chat-section" style="display:none; padding: 0 56px;"></div>
+<div id="tuvi-chat-section" style="display:none;" class="page"></div>
 
 <script src="/chatbot.js"></script>
 <script>
-  TuviChatbot.init({
+  // TuviChatbot.init() is called inside luanGiai() after lá số is ready.
+  window._tuviChatConfig = {
     getLasoData: () => window._lasoResult || null,
     apiPath: '/api/lasotuvi?action=chat',
-  });
+  };
 </script>
 </body>
 </html>
