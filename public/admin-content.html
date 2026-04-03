@@ -1884,7 +1884,7 @@ function toast(msg, type = 'info') {
 // ────────────────────────────────────────────────
 // AUTH — Supabase login gate
 // ────────────────────────────────────────────────
-const ADMIN_EMAIL = 'admin@tuviminhbao.com'; // phải khớp với account tạo trong Supabase
+const ADMIN_EMAIL = null; // null = chấp nhận mọi account đăng nhập được vào Supabase
 
 async function doLogin() {
   const email    = document.getElementById('login-email').value.trim();
@@ -1912,17 +1912,6 @@ async function doLogin() {
 
     if (!resp.ok || data.error) {
       showLoginError(data.error_description || data.error || 'Đăng nhập thất bại');
-      return;
-    }
-
-    // Kiểm tra đúng admin email
-    if (data.user?.email !== ADMIN_EMAIL) {
-      showLoginError('Tài khoản này không có quyền truy cập');
-      // Sign out ngay
-      await fetch(`${SUPABASE_URL}/auth/v1/logout`, {
-        method: 'POST',
-        headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${data.access_token}` }
-      });
       return;
     }
 
