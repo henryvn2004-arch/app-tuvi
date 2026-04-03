@@ -1670,6 +1670,8 @@ function updateTTSTab(item) {
   if (item.tts_status === 'done' && audioUrl) {
     progressEl.style.display = 'none';
     document.getElementById('btn-mix').disabled = false;
+    const ytBtn = document.getElementById('btn-yt-upload');
+    if (ytBtn) ytBtn.disabled = false;
     previewArea.innerHTML = `
       <div class="audio-preview">
         <span class="audio-icon">🎵</span>
@@ -1858,15 +1860,55 @@ async function retryPendingTTS() {
 // YOUTUBE (stub)
 // ────────────────────────────────────────────────
 async function scheduleYTUpload() {
-  toast('📤 YouTube upload sẽ gọi /api/youtube (sắp build)', 'info');
+  if (!currentEditId) { toast('Không có item nào', 'error'); return; }
+  await uploadToYT(currentEditId);
 }
 
 async function uploadToYT(id) {
-  toast('📤 Upload YT cho item ' + id + ' (sắp build)', 'info');
+  const item = allItems.find(i => i.id === id);
+  if (!item) return;
+
+  const audioUrl = item.audio_final_url || item.audio_hoi_url;
+  if (!audioUrl) { toast('Chưa có audio. Chạy TTS trước.', 'error'); return; }
+
+  const btn = document.getElementById('btn-yt-upload');
+  const statusEl = document.getElementById('yt-upload-status');
+  if (btn) btn.disabled = true;
+  if (statusEl) statusEl.textContent = '⏳ Đang upload...';
+
+  try {
+    const resp = await fetch(
+      'https://dciwkfdqhhddeymlisey.supabase.co/functions/v1/youtube-upload',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      }
+    );
+    const data = await resp.json();
+    if (data.success) {
+      toast('🎬 Đã upload YouTube! ' + data.url, 'success');
+      if (statusEl) statusEl.innerHTML = '✅ Live: <a href="' + data.url + '" target="_blank" style="color:var(--blue)">' + data.url + '</a>';
+      // Refresh list
+      allItems = await getItems();
+      renderRecentTable(allItems.slice(0, 10));
+      renderListTable(allItems);
+    } else {
+      throw new Error(data.error || 'unknown');
+    }
+  } catch (e) {
+    toast('Lỗi upload: ' + e.message, 'error');
+    if (statusEl) statusEl.textContent = '❌ ' + e.message;
+  } finally {
+    if (btn) btn.disabled = false;
+  }
 }
 
 async function processYTQueue() {
-  toast('Đang xử lý queue YouTube...', 'info');
+  const ready = allItems.filter(i => (i.audio_final_url || i.audio_hoi_url) && i.yt_status === 'pending');
+  if (!ready.length) { toast('Không có video nào sẵn sàng', 'info'); return; }
+  toast('Đang upload ' + ready.length + ' video...', 'info');
+  for (const item of ready) await uploadToYT(item.id);
 }
 
 async function processTTSQueue() {
