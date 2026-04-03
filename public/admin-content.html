@@ -1509,8 +1509,36 @@ async function saveItem() {
 // ────────────────────────────────────────────────
 async function runTTS() {
   if (!scriptLines.length) { toast('Chưa có kịch bản', 'error'); return; }
-  toast('🔊 TTS sẽ được xử lý qua API route /api/tts (sắp build)', 'info');
-  // TODO: POST /api/tts với {id, lines: scriptLines, voiceFemale, voiceMale}
+  if (!currentEditId) { toast('Lưu nội dung trước đã', 'error'); return; }
+
+  const btn = document.getElementById('btn-run-tts');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Đang gửi Vbee...';
+
+  try {
+    const resp = await fetch(
+      'https://dciwkfdqhhddeymlisey.supabase.co/functions/v1/tts',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: currentEditId, lines: scriptLines }),
+      }
+    );
+    const data = await resp.json();
+    if (data.success) {
+      toast(`🔊 Đã gửi ${data.sent} dòng lên Vbee. Đợi 10-30s rồi F5 kiểm tra...`, 'success');
+      document.getElementById('tts-progress').style.display = '';
+      document.getElementById('tts-progress-label').textContent = `Đã gửi ${data.sent} dòng — đang chờ Vbee render...`;
+      document.getElementById('tts-progress-fill').style.width = '30%';
+    } else {
+      toast('Lỗi: ' + (data.error || 'unknown'), 'error');
+    }
+  } catch (e) {
+    toast('Lỗi kết nối: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '🔊 Chạy TTS';
+  }
 }
 
 async function runTTSForItem(id) {
