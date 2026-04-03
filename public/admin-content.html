@@ -1004,10 +1004,17 @@ audio { height: 32px; flex: 1; }
             <textarea class="form-control" id="f-notes" rows="2" placeholder="Ghi chú cho team..."></textarea>
           </div>
         </div>
-        <div style="margin-top:16px; display:flex; gap:10px">
-          <button class="btn btn-outline" onclick="generateScriptAI()">✨ Sinh kịch bản bằng AI</button>
+        <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+          <select class="form-control" id="khao-luan-select" style="max-width:360px; flex:1"
+            onchange="previewKhaoLuan(this.value)">
+            <option value="">📚 Chọn bài từ Khảo Luận...</option>
+          </select>
+          <button class="btn btn-primary" onclick="importKhaoLuan()" id="btn-import-kl" disabled>
+            📥 Nhập vào script
+          </button>
           <span id="gen-status" style="font-size:12px; color:var(--text-lt); align-self:center"></span>
         </div>
+        <div id="kl-preview" style="display:none; margin-top:12px; background:var(--bg-soft); border:1px solid var(--border-lt); border-radius:6px; padding:14px 16px; font-size:12px; color:var(--text-mid); max-height:120px; overflow-y:auto; line-height:1.6"></div>
       </div>
 
       <!-- Script tab -->
@@ -1438,6 +1445,111 @@ function previewScript() {
 // ────────────────────────────────────────────────
 // AI GENERATE SCRIPT
 // ────────────────────────────────────────────────
+// ────────────────────────────────────────────────
+// KHẢO LUẬN — Import bài viết thành script
+// ────────────────────────────────────────────────
+let khaoLuanCache = []; // cache danh sách bài
+
+async function loadKhaoLuanList() {
+  try {
+    const data = await sbFetch('khao_luan?select=id,title,excerpt,category&order=created_at.desc&limit=100');
+    khaoLuanCache = data || [];
+    const sel = document.getElementById('khao-luan-select');
+    sel.innerHTML = '<option value="">📚 Chọn bài từ Khảo Luận...</option>';
+    khaoLuanCache.forEach(item => {
+      const opt = document.createElement('option');
+      opt.value = item.id;
+      opt.textContent = `${item.category ? '[' + item.category + '] ' : ''}${item.title}`;
+      sel.appendChild(opt);
+    });
+  } catch (e) {
+    console.error('loadKhaoLuanList error:', e);
+  }
+}
+
+function previewKhaoLuan(id) {
+  const btn = document.getElementById('btn-import-kl');
+  const preview = document.getElementById('kl-preview');
+  if (!id) {
+    btn.disabled = true;
+    preview.style.display = 'none';
+    return;
+  }
+  btn.disabled = false;
+  const item = khaoLuanCache.find(i => String(i.id) === String(id));
+  if (item?.excerpt) {
+    preview.style.display = '';
+    preview.textContent = item.excerpt;
+  }
+}
+
+async function importKhaoLuan() {
+  const id = document.getElementById('khao-luan-select').value;
+  if (!id) return;
+
+  const status = document.getElementById('gen-status');
+  status.textContent = 'Đang tải bài...';
+
+  try {
+    const data = await sbFetch(`khao_luan?id=eq.${id}&select=id,title,content`);
+    const item = data?.[0];
+    if (!item) { toast('Không tìm thấy bài viết', 'error'); return; }
+
+    // Auto-fill tiêu đề nếu chưa có
+    const titleEl = document.getElementById('f-title');
+    if (!titleEl.value) titleEl.value = item.title;
+
+    // Parse content → script lines
+    const lines = parseContentToLines(item.title, item.content);
+    scriptLines = lines;
+    renderScriptEditor();
+    switchTab('script');
+
+    status.textContent = `✓ Đã nhập ${lines.length} dòng`;
+    toast(`📥 Đã nhập bài "${item.title.substring(0,40)}..."`, 'success');
+  } catch (e) {
+    toast('Lỗi tải bài: ' + e.message, 'error');
+    status.textContent = '';
+  }
+}
+
+// Parse markdown content thành script hỏi/đáp
+// title → 1 dòng hỏi | các đoạn content → dòng trả lời
+function parseContentToLines(title, content) {
+  const lines = [];
+
+  // Câu hỏi = title (làm sạch)
+  const cleanTitle = title.replace(/^#+\s*/, '').trim();
+  lines.push({ role: 'hoi', text: cleanTitle + '?' });
+
+  if (!content) return lines;
+
+  // Tách content thành các đoạn, bỏ heading ## và dòng trống
+  const paragraphs = content
+    .split(/
+{2,}/)                        // tách theo 2+ dòng trống
+    .map(p => p
+      .replace(/^#{1,3}\s+.+$/m, '')        // bỏ dòng heading đầu đoạn
+      .replace(/\*\*/g, '')                 // bỏ bold markdown
+      .replace(/\*/g, '')                   // bỏ italic
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // bỏ link, giữ text
+      .replace(/`[^`]+`/g, '')              // bỏ inline code
+      .trim()
+    )
+    .filter(p => p.length > 30);           // chỉ giữ đoạn đủ dài
+
+  // Mỗi 1-2 đoạn thành 1 dòng tra_loi
+  const CHUNK = 2; // ghép 2 đoạn/dòng — đổi thành 1 nếu muốn ngắn hơn
+  for (let i = 0; i < paragraphs.length; i += CHUNK) {
+    const chunk = paragraphs.slice(i, i + CHUNK).join(' ').trim();
+    if (chunk.length > 30) {
+      lines.push({ role: 'tra_loi', text: chunk });
+    }
+  }
+
+  return lines;
+}
+
 async function generateScriptAI() {
   const title = document.getElementById('f-title').value.trim();
   if (!title) { toast('Nhập tiêu đề trước', 'error'); return; }
@@ -1523,6 +1635,7 @@ function openCreateModal() {
   renderScriptEditor();
   switchTab('info');
   document.getElementById('create-modal').classList.add('open');
+  loadKhaoLuanList();
 }
 
 async function editItem(id) {
