@@ -1526,8 +1526,7 @@ function parseContentToLines(title, content) {
 
   // Tách content thành các đoạn, bỏ heading ## và dòng trống
   const paragraphs = content
-    .split(/
-{2,}/)                        // tách theo 2+ dòng trống
+    .split(/\n{2,}/)  // tách theo 2+ dòng trống
     .map(p => p
       .replace(/^#{1,3}\s+.+$/m, '')        // bỏ dòng heading đầu đoạn
       .replace(/\*\*/g, '')                 // bỏ bold markdown
