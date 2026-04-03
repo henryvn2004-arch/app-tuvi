@@ -1690,12 +1690,22 @@ function filterList() {
 // ────────────────────────────────────────────────
 // TABS
 // ────────────────────────────────────────────────
-const tabIds = ['info', 'script', 'tts-tab', 'yt'];
+// tab button IDs: tab-info, tab-script, tab-tts, tab-yt
+// tab content IDs: tab-content-info, tab-content-script, tab-content-tts-tab, tab-content-yt
+const tabIds = [
+  { btn: 'info',    content: 'info'    },
+  { btn: 'script',  content: 'script'  },
+  { btn: 'tts',     content: 'tts-tab' },
+  { btn: 'yt',      content: 'yt'      },
+];
 function switchTab(tab) {
+  // tab param là content key: 'info','script','tts-tab','yt'
+  // map ngược về btn key nếu cần
+  const btnKey = tab === 'tts-tab' ? 'tts' : tab;
   currentTab = tab;
   tabIds.forEach(t => {
-    document.getElementById(`tab-content-${t}`).style.display = t === tab ? '' : 'none';
-    document.getElementById(`tab-${t}`).classList.toggle('active', t === tab);
+    document.getElementById(`tab-content-${t.content}`).style.display = t.content === tab ? '' : 'none';
+    document.getElementById(`tab-${t.btn}`).classList.toggle('active', t.btn === btnKey);
   });
   if (tab === 'script') renderScriptEditor();
 }
