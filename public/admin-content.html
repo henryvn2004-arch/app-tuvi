@@ -1657,17 +1657,47 @@ async function editItem(id) {
 }
 
 function updateTTSTab(item) {
-  if (item?.tts_status === 'done') {
+  const previewArea = document.getElementById('tts-preview-area');
+  const progressEl  = document.getElementById('tts-progress');
+  const progressFill = document.getElementById('tts-progress-fill');
+  const progressLabel = document.getElementById('tts-progress-label');
+
+  if (!item) return;
+
+  const lines = item.noi_dung || [];
+  const withAudio = lines.filter(l => l.audio_url);
+  const total = lines.filter(l => l.request_id || l.audio_url);
+
+  if (item.tts_status === 'done') {
+    // Ẩn progress bar
+    progressEl.style.display = 'none';
     document.getElementById('btn-mix').disabled = false;
-    document.getElementById('tts-preview-area').innerHTML = `
-      <div class="audio-preview">
-        <span class="audio-icon">🎵</span>
-        <div class="audio-info">
-          <div class="name">Audio final</div>
-          <div class="meta">${item.tts_provider || 'google'} · Mix xong</div>
+
+    // Hiện từng dòng audio
+    if (withAudio.length) {
+      previewArea.innerHTML = withAudio.map((l, i) => `
+        <div class="audio-preview" style="margin-bottom:8px">
+          <span class="role-badge ${l.role === 'hoi' ? 'hoi' : 'tra-loi'}" style="flex-shrink:0">
+            ${l.role === 'hoi' ? '🎙 Hỏi' : '🧧 TL'}
+          </span>
+          <div class="audio-info" style="flex:1; min-width:0">
+            <div class="name" style="font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${escHtml(l.text?.substring(0,60) || '')}...</div>
+          </div>
+          <audio controls src="${l.audio_url}" style="height:28px; flex-shrink:0"></audio>
         </div>
-        ${item.audio_final_url ? `<audio controls src="${item.audio_final_url}"></audio>` : '<span style="color:var(--text-lt);font-size:12px">Chưa có file mix</span>'}
-      </div>`;
+      `).join('');
+    }
+    toast('✅ TTS hoàn thành! ' + withAudio.length + ' dòng audio sẵn sàng.', 'success');
+
+  } else if (item.tts_status === 'processing') {
+    const pct = total.length ? Math.round((withAudio.length / total.length) * 70) + 10 : 20;
+    progressEl.style.display = '';
+    progressFill.style.width = pct + '%';
+    progressLabel.textContent = `Đang render... ${withAudio.length}/${total.length} dòng xong`;
+
+  } else if (item.tts_status === 'error') {
+    progressEl.style.display = 'none';
+    previewArea.innerHTML = `<div style="color:var(--red);font-size:13px;padding:12px">❌ Lỗi TTS: ${escHtml(item.tts_error || 'unknown')}</div>`;
   }
 }
 
@@ -1711,6 +1741,8 @@ async function saveItem() {
 // ────────────────────────────────────────────────
 // TTS (stub — sẽ gọi /api/tts khi build route)
 // ────────────────────────────────────────────────
+let _ttsPoller = null; // interval ID cho auto-poll
+
 async function runTTS() {
   if (!scriptLines.length) { toast('Chưa có kịch bản', 'error'); return; }
   if (!currentEditId) { toast('Lưu nội dung trước đã', 'error'); return; }
@@ -1730,10 +1762,12 @@ async function runTTS() {
     );
     const data = await resp.json();
     if (data.success) {
-      toast(`🔊 Đã gửi ${data.sent} dòng lên Vbee. Đợi 10-30s rồi F5 kiểm tra...`, 'success');
+      toast(`🔊 Đã gửi ${data.sent} dòng lên Vbee. Đang chờ render...`, 'success');
       document.getElementById('tts-progress').style.display = '';
-      document.getElementById('tts-progress-label').textContent = `Đã gửi ${data.sent} dòng — đang chờ Vbee render...`;
-      document.getElementById('tts-progress-fill').style.width = '30%';
+      document.getElementById('tts-progress-label').textContent = `Đã gửi ${data.sent} dòng — đang chờ Vbee...`;
+      document.getElementById('tts-progress-fill').style.width = '15%';
+      // Bắt đầu auto-poll
+      startTTSPoller(currentEditId);
     } else {
       toast('Lỗi: ' + (data.error || 'unknown'), 'error');
     }
@@ -1743,6 +1777,39 @@ async function runTTS() {
     btn.disabled = false;
     btn.innerHTML = '🔊 Chạy TTS';
   }
+}
+
+// Poll DB mỗi 5 giây cho đến khi tts_status = done/error
+function startTTSPoller(id) {
+  if (_ttsPoller) clearInterval(_ttsPoller);
+  let attempts = 0;
+  const MAX = 36; // tối đa 3 phút (36 × 5s)
+
+  _ttsPoller = setInterval(async () => {
+    attempts++;
+    try {
+      const data = await sbFetch(`van_dap?id=eq.${id}&select=id,tts_status,tts_error,noi_dung,audio_hoi_url,audio_tl_url,tts_provider`);
+      const item = data?.[0];
+      if (!item) return;
+
+      // Cập nhật UI
+      updateTTSTab(item);
+
+      // Nếu xong hoặc lỗi hoặc quá thời gian → dừng poll
+      if (item.tts_status === 'done' || item.tts_status === 'error' || attempts >= MAX) {
+        clearInterval(_ttsPoller);
+        _ttsPoller = null;
+        // Cập nhật lại scriptLines với audio_url mới
+        if (item.noi_dung) scriptLines = item.noi_dung;
+        // Refresh list
+        allItems = await getItems();
+        renderRecentTable(allItems.slice(0, 10));
+        renderListTable(allItems);
+      }
+    } catch (e) {
+      console.error('Poll error:', e);
+    }
+  }, 5000); // mỗi 5 giây
 }
 
 async function runTTSForItem(id) {
