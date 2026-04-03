@@ -1050,6 +1050,7 @@ audio { height: 32px; flex: 1; }
         <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap">
           <button class="btn btn-primary" onclick="runTTS()" id="btn-run-tts">🔊 Chạy TTS</button>
           <button class="btn btn-outline" onclick="mixAudio()" id="btn-mix" disabled>🎵 Mix + Lồng nhạc</button>
+          <button class="btn btn-outline" onclick="retryPendingTTS()" id="btn-retry-tts" style="display:none">🔄 Retry dòng lỗi</button>
           <select class="form-control" id="tts-music-select" style="max-width:180px">
             <option value="">Không có nhạc</option>
             <option value="calm">Nhạc thiền</option>
@@ -1657,43 +1658,33 @@ async function editItem(id) {
 }
 
 function updateTTSTab(item) {
-  const previewArea = document.getElementById('tts-preview-area');
-  const progressEl  = document.getElementById('tts-progress');
-  const progressFill = document.getElementById('tts-progress-fill');
+  const previewArea   = document.getElementById('tts-preview-area');
+  const progressEl    = document.getElementById('tts-progress');
+  const progressFill  = document.getElementById('tts-progress-fill');
   const progressLabel = document.getElementById('tts-progress-label');
-
   if (!item) return;
 
-  const lines = item.noi_dung || [];
-  const withAudio = lines.filter(l => l.audio_url);
-  const total = lines.filter(l => l.request_id || l.audio_url);
+  // Audio URL nằm ở audio_final_url hoặc audio_hoi_url
+  const audioUrl = item.audio_final_url || item.audio_hoi_url || null;
 
-  if (item.tts_status === 'done') {
-    // Ẩn progress bar
+  if (item.tts_status === 'done' && audioUrl) {
     progressEl.style.display = 'none';
     document.getElementById('btn-mix').disabled = false;
-
-    // Hiện từng dòng audio
-    if (withAudio.length) {
-      previewArea.innerHTML = withAudio.map((l, i) => `
-        <div class="audio-preview" style="margin-bottom:8px">
-          <span class="role-badge ${l.role === 'hoi' ? 'hoi' : 'tra-loi'}" style="flex-shrink:0">
-            ${l.role === 'hoi' ? '🎙 Hỏi' : '🧧 TL'}
-          </span>
-          <div class="audio-info" style="flex:1; min-width:0">
-            <div class="name" style="font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${escHtml(l.text?.substring(0,60) || '')}...</div>
-          </div>
-          <audio controls src="${l.audio_url}" style="height:28px; flex-shrink:0"></audio>
+    previewArea.innerHTML = `
+      <div class="audio-preview">
+        <span class="audio-icon">🎵</span>
+        <div class="audio-info">
+          <div class="name">Audio hoàn chỉnh</div>
+          <div class="meta">Vbee · Nguyễn Ngọc Ngạn · MP3</div>
         </div>
-      `).join('');
-    }
-    toast('✅ TTS hoàn thành! ' + withAudio.length + ' dòng audio sẵn sàng.', 'success');
+        <audio controls src="${audioUrl}" style="flex:1; height:32px"></audio>
+      </div>`;
+    toast('✅ TTS xong! Nghe thử rồi upload YouTube.', 'success');
 
   } else if (item.tts_status === 'processing') {
-    const pct = total.length ? Math.round((withAudio.length / total.length) * 70) + 10 : 20;
     progressEl.style.display = '';
-    progressFill.style.width = pct + '%';
-    progressLabel.textContent = `Đang render... ${withAudio.length}/${total.length} dòng xong`;
+    progressFill.style.width = '50%';
+    progressLabel.textContent = 'Vbee đang render audio...';
 
   } else if (item.tts_status === 'error') {
     progressEl.style.display = 'none';
@@ -1743,9 +1734,20 @@ async function saveItem() {
 // ────────────────────────────────────────────────
 let _ttsPoller = null; // interval ID cho auto-poll
 
+// Gộp toàn bộ script thành 1 đoạn text để gửi Vbee 1 lần
+function buildTTSText(lines) {
+  return lines
+    .filter(l => l.text?.trim())
+    .map(l => l.text.trim())
+    .join('\n\n');
+}
+
 async function runTTS() {
   if (!scriptLines.length) { toast('Chưa có kịch bản', 'error'); return; }
   if (!currentEditId) { toast('Lưu nội dung trước đã', 'error'); return; }
+
+  const text = buildTTSText(scriptLines);
+  if (!text) { toast('Không có nội dung để đọc', 'error'); return; }
 
   const btn = document.getElementById('btn-run-tts');
   btn.disabled = true;
@@ -1757,16 +1759,15 @@ async function runTTS() {
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: currentEditId, lines: scriptLines }),
+        body: JSON.stringify({ id: currentEditId, text }),
       }
     );
     const data = await resp.json();
     if (data.success) {
-      toast(`🔊 Đã gửi ${data.sent} dòng lên Vbee. Đang chờ render...`, 'success');
+      toast('🔊 Đã gửi Vbee. Đang chờ render...', 'success');
       document.getElementById('tts-progress').style.display = '';
-      document.getElementById('tts-progress-label').textContent = `Đã gửi ${data.sent} dòng — đang chờ Vbee...`;
+      document.getElementById('tts-progress-label').textContent = 'Đang render audio — chờ 15-60s...';
       document.getElementById('tts-progress-fill').style.width = '15%';
-      // Bắt đầu auto-poll
       startTTSPoller(currentEditId);
     } else {
       toast('Lỗi: ' + (data.error || 'unknown'), 'error');
@@ -1799,13 +1800,15 @@ function startTTSPoller(id) {
       if (item.tts_status === 'done' || item.tts_status === 'error' || attempts >= MAX) {
         clearInterval(_ttsPoller);
         _ttsPoller = null;
-        // Cập nhật lại scriptLines với audio_url mới
         if (item.noi_dung) scriptLines = item.noi_dung;
-        // Refresh list
         allItems = await getItems();
         renderRecentTable(allItems.slice(0, 10));
         renderListTable(allItems);
       }
+      // Sau 3 lần poll (15s) mà vẫn còn pending → hiện nút Retry
+      const pendingLines = (item.noi_dung || []).filter(l => l.status === 'pending');
+      const retryBtn = document.getElementById('btn-retry-tts');
+      if (retryBtn) retryBtn.style.display = pendingLines.length > 0 && attempts >= 3 ? '' : 'none';
     } catch (e) {
       console.error('Poll error:', e);
     }
@@ -1821,7 +1824,34 @@ async function runTTSForItem(id) {
 
 async function mixAudio() {
   toast('🎵 Mix audio sẽ xử lý qua Railway service (sắp build)', 'info');
-  // TODO: POST đến Railway mix service
+}
+
+// Retry dòng pending: gọi Vbee Get Request API lấy audio_link rồi upload Storage
+async function retryPendingTTS() {
+  if (!currentEditId) return;
+  const btn = document.getElementById('btn-retry-tts');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Đang retry...';
+
+  try {
+    const resp = await fetch(
+      'https://dciwkfdqhhddeymlisey.supabase.co/functions/v1/tts-callback?action=retry&id=' + currentEditId,
+      { method: 'POST', headers: { 'Content-Type': 'application/json' } }
+    );
+    const data = await resp.json();
+    if (data.ok) {
+      toast(`🔄 Retry xong: ${data.done}/${data.retried} dòng lấy được audio`, data.done > 0 ? 'success' : 'info');
+      // Poll lại ngay
+      startTTSPoller(currentEditId);
+    } else {
+      toast('Retry lỗi: ' + (data.error || 'unknown'), 'error');
+    }
+  } catch(e) {
+    toast('Lỗi: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '🔄 Retry dòng lỗi';
+  }
 }
 
 // ────────────────────────────────────────────────
