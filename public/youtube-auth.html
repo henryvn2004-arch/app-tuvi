@@ -2,89 +2,24 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YouTube Auth — Tử Vi Minh Bảo</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: Arial, sans-serif;
-  background: #061A2E;
-  color: #fff;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.box {
-  background: #0D3B5E;
-  border: 1px solid rgba(154,123,58,0.3);
-  border-radius: 10px;
-  padding: 40px 36px;
-  width: 100%;
-  max-width: 500px;
-  text-align: center;
-}
-h1 { font-size: 20px; color: #9A7B3A; margin-bottom: 8px; }
-p  { font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 24px; line-height: 1.6; }
-.btn {
-  display: inline-block;
-  padding: 12px 28px;
-  background: #cc0000;
-  color: #fff;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-  transition: background 0.15s;
-  font-family: Arial, sans-serif;
-}
-.btn:hover { background: #aa0000; }
-.btn:disabled { background: #555; cursor: not-allowed; }
-.result {
-  margin-top: 24px;
-  background: rgba(0,0,0,0.3);
-  border-radius: 6px;
-  padding: 16px;
-  text-align: left;
-  display: none;
-}
-.result label { font-size: 11px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; }
-.token-box {
-  display: block;
-  margin-top: 8px;
-  font-size: 11px;
-  color: #4ade80;
-  word-break: break-all;
-  background: rgba(0,0,0,0.4);
-  padding: 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  border: 1px solid rgba(74,222,128,0.2);
-}
-.token-box:hover { background: rgba(0,0,0,0.6); }
-.copy-hint { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 4px; }
-.status { font-size: 13px; margin-top: 16px; min-height: 20px; }
-.success { color: #4ade80; }
-.error-msg { color: #ff6b6b; }
-.steps {
-  background: rgba(154,123,58,0.08);
-  border: 1px solid rgba(154,123,58,0.2);
-  border-radius: 6px;
-  padding: 14px 16px;
-  margin-top: 20px;
-  font-size: 12px;
-  color: rgba(255,255,255,0.55);
-  text-align: left;
-  line-height: 2;
-}
-.steps strong { color: #9A7B3A; }
-code {
-  background: rgba(0,0,0,0.3);
-  padding: 2px 6px;
-  border-radius: 3px;
-  font-size: 11px;
-}
+body { font-family: Arial, sans-serif; background:#061A2E; color:#fff; display:flex; align-items:center; justify-content:center; min-height:100vh; margin:0; }
+.box { background:#0D3B5E; border:1px solid rgba(154,123,58,0.3); border-radius:10px; padding:40px 36px; width:100%; max-width:500px; text-align:center; }
+h1 { color:#9A7B3A; margin-bottom:8px; font-size:20px; }
+p { color:rgba(255,255,255,0.55); font-size:13px; margin-bottom:24px; line-height:1.6; }
+.btn { padding:12px 28px; background:#cc0000; color:#fff; border:none; border-radius:6px; font-size:14px; font-weight:600; cursor:pointer; }
+.btn:hover { background:#aa0000; }
+#token-section { display:none; margin-top:24px; text-align:left; }
+#token-section label { font-size:11px; color:rgba(255,255,255,0.45); text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:6px; }
+#token-box { width:100%; padding:12px; background:#000; border:1px solid #4ade80; border-radius:6px; color:#4ade80; font-family:monospace; font-size:12px; word-break:break-all; resize:none; height:100px; }
+.copy-btn { margin-top:8px; padding:8px 20px; background:#1E6B3C; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:13px; width:100%; }
+.copy-btn:hover { background:#155230; }
+#msg { margin-top:16px; font-size:13px; min-height:20px; }
+.ok { color:#4ade80; } .err { color:#ff6b6b; }
+.steps { background:rgba(154,123,58,0.08); border:1px solid rgba(154,123,58,0.2); border-radius:6px; padding:14px; margin-top:20px; font-size:12px; color:rgba(255,255,255,0.55); text-align:left; line-height:2; }
+.steps strong { color:#9A7B3A; }
+code { background:rgba(0,0,0,0.4); padding:2px 6px; border-radius:3px; }
 </style>
 </head>
 <body>
@@ -94,105 +29,77 @@ code {
 
   <button class="btn" onclick="startAuth()" id="btn-auth">🔗 Authorize với Google</button>
 
-  <div id="result" class="result">
-    <label>✅ Refresh Token — Copy và lưu vào Supabase Secrets</label>
-    <textarea id="token-display" onclick="this.select()" readonly
-      style="width:100%;margin-top:8px;padding:10px;background:rgba(0,0,0,0.4);
-             border:1px solid rgba(74,222,128,0.3);border-radius:4px;color:#4ade80;
-             font-size:11px;word-break:break-all;resize:none;height:80px;cursor:pointer;
-             font-family:monospace;outline:none"></textarea>
-    <div class="copy-hint">👆 Click vào ô trên → Ctrl+A → Ctrl+C để copy toàn bộ</div>
-    <button onclick="copyToken()" style="margin-top:8px;padding:6px 16px;background:#1E6B3C;
-      color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:12px">📋 Copy</button>
+  <div id="token-section">
+    <label>✅ Refresh Token của mày — copy hết vào Supabase Secrets</label>
+    <textarea id="token-box" readonly onclick="this.select()"></textarea>
+    <button class="copy-btn" onclick="copyToken()">📋 Copy Token</button>
   </div>
 
-  <div id="status" class="status"></div>
+  <div id="msg"></div>
 
   <div class="steps">
     <strong>Sau khi có token:</strong><br>
-    1. Copy refresh token ở trên<br>
+    1. Copy token ở trên<br>
     2. Vào <strong>Supabase → Settings → Edge Functions → Secrets</strong><br>
-    3. Thêm: <code>YOUTUBE_REFRESH_TOKEN = [token]</code><br>
-    4. Xong — YouTube upload sẽ dùng token này tự động
+    3. Thêm: <code>YOUTUBE_REFRESH_TOKEN = [token]</code>
   </div>
 </div>
 
 <script>
-const CLIENT_ID    = '258887890362-lvn4v7v1u2vkibfgb0i6a17e9i2kt1vt.apps.googleusercontent.com';
-const REDIRECT_URI = 'https://www.tuviminhbao.com/youtube-auth.html';
-const SCOPE        = [
-  'https://www.googleapis.com/auth/youtube.upload',
-  'https://www.googleapis.com/auth/youtube'
-].join(' ');
-const EDGE_URL     = 'https://dciwkfdqhhddeymlisey.supabase.co/functions/v1/youtube-auth';
+const CLIENT_ID   = '258887890362-lvn4v7v1u2vkibfgb0i6a17e9i2kt1vt.apps.googleusercontent.com';
+const REDIRECT    = 'https://www.tuviminhbao.com/youtube-auth.html';
+const EDGE        = 'https://dciwkfdqhhddeymlisey.supabase.co/functions/v1/youtube-auth';
 
 function startAuth() {
-  const params = new URLSearchParams({
-    client_id:     CLIENT_ID,
-    redirect_uri:  REDIRECT_URI,
-    response_type: 'code',
-    scope:         SCOPE,
-    access_type:   'offline',
-    prompt:        'consent',
+  const p = new URLSearchParams({
+    client_id: CLIENT_ID, redirect_uri: REDIRECT,
+    response_type: 'code', access_type: 'offline', prompt: 'consent',
+    scope: 'https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube'
   });
-  window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' + params;
+  location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' + p;
 }
 
-function setStatus(msg, type = '') {
-  const el = document.getElementById('status');
-  el.textContent = msg;
-  el.className = 'status ' + type;
+function setMsg(txt, cls) {
+  const el = document.getElementById('msg');
+  el.textContent = txt; el.className = cls || '';
 }
 
 function copyToken() {
-  const token = document.getElementById('token-display').textContent;
-  navigator.clipboard.writeText(token).then(() => {
-    setStatus('✅ Đã copy vào clipboard!', 'success');
-  }).catch(() => {
-    setStatus('Copy thủ công: Ctrl+A rồi Ctrl+C', '');
-  });
+  const ta = document.getElementById('token-box');
+  ta.select();
+  document.execCommand('copy');
+  navigator.clipboard.writeText(ta.value).catch(()=>{});
+  setMsg('✅ Đã copy!', 'ok');
 }
 
 async function handleCallback() {
-  const params = new URLSearchParams(window.location.search);
-  const code   = params.get('code');
-  const error  = params.get('error');
+  const code = new URLSearchParams(location.search).get('code');
+  const err  = new URLSearchParams(location.search).get('error');
+  if (err) { setMsg('❌ ' + err, 'err'); return; }
+  if (!code) return;
 
-  if (error) {
-    setStatus('❌ Lỗi: ' + error, 'error-msg');
-    return;
-  }
-
-  if (!code) return; // chưa redirect về, hiển thị bình thường
-
-  // Ẩn nút auth, hiện đang xử lý
   document.getElementById('btn-auth').style.display = 'none';
-  setStatus('⏳ Đang lấy refresh token...', '');
+  setMsg('⏳ Đang lấy token...', '');
 
   try {
-    const resp = await fetch(EDGE_URL + '?code=' + encodeURIComponent(code));
+    const resp = await fetch(EDGE + '?code=' + encodeURIComponent(code));
     const data = await resp.json();
 
-    if (!resp.ok || data.error) throw new Error(data.error || 'unknown error');
-    if (!data.refresh_token) throw new Error('Google không trả về refresh_token — thử lại từ đầu');
+    if (data.error) throw new Error(data.error);
+    if (!data.refresh_token) throw new Error('Không có refresh_token trong response');
 
     // Hiện token
-    const tokenEl = document.getElementById('token-display');
-    tokenEl.textContent = data.refresh_token;
-    tokenEl.value = data.refresh_token; // cho textarea
-    document.getElementById('result').style.display = '';
-    setStatus('✅ Thành công! Copy token bên dưới vào Supabase Secrets.', 'success');
+    document.getElementById('token-box').value = data.refresh_token;
+    document.getElementById('token-section').style.display = 'block';
+    setMsg('✅ Lấy token thành công! Copy và lưu vào Supabase Secrets.', 'ok');
 
-    // Xóa code khỏi URL
-    window.history.replaceState({}, document.title, window.location.pathname);
-
-  } catch (e) {
-    setStatus('❌ Lỗi: ' + e.message, 'error-msg');
+    history.replaceState({}, '', location.pathname);
+  } catch(e) {
+    setMsg('❌ Lỗi: ' + e.message, 'err');
     document.getElementById('btn-auth').style.display = '';
   }
 }
 
-// Chạy khi load page
 handleCallback();
 </script>
 </body>
