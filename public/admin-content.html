@@ -1825,7 +1825,41 @@ async function runTTSForItem(id) {
 }
 
 async function mixAudio() {
-  toast('🎵 Mix audio sẽ xử lý qua Railway service (sắp build)', 'info');
+  if (!currentEditId) { toast('Không có item nào', 'error'); return; }
+
+  const item = allItems.find(i => i.id === currentEditId);
+  const audioUrl = item?.audio_final_url || item?.audio_hoi_url;
+  if (!audioUrl) { toast('Chưa có audio. Chạy TTS trước.', 'error'); return; }
+
+  const mixUrl = 'https://tuvi-mix-service-production.up.railway.app/mix';
+  const btn = document.getElementById('btn-mix');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Đang mix...';
+
+  try {
+    const resp = await fetch(mixUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ audio_url: audioUrl, item_id: currentEditId }),
+    });
+    const data = await resp.json();
+    if (data.success) {
+      toast('🎵 Mix xong! Video sẵn sàng upload YouTube.', 'success');
+      // Reload item để lấy video_url mới
+      allItems = await getItems();
+      const updated = allItems.find(i => i.id === currentEditId);
+      if (updated) updateTTSTab(updated);
+      const ytBtn = document.getElementById('btn-yt-upload');
+      if (ytBtn) ytBtn.disabled = false;
+    } else {
+      throw new Error(data.error || 'unknown');
+    }
+  } catch (e) {
+    toast('Lỗi mix: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '🎵 Mix + Lồng nhạc';
+  }
 }
 
 // Retry dòng pending: gọi Vbee Get Request API lấy audio_link rồi upload Storage
