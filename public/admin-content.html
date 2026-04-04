@@ -1506,7 +1506,7 @@ async function importKhaoLuan() {
     renderScriptEditor();
     switchTab('script');
 
-    status.textContent = `✓ Đã nhập ${lines.length} dòng`;
+    status.textContent = `✓ Đã nhập 1 đoạn (${lines[0].text.length} ký tự)`;
     toast(`📥 Đã nhập bài "${item.title.substring(0,40)}..."`, 'success');
   } catch (e) {
     toast('Lỗi tải bài: ' + e.message, 'error');
@@ -1514,40 +1514,26 @@ async function importKhaoLuan() {
   }
 }
 
-// Parse markdown content thành script hỏi/đáp
-// title → 1 dòng hỏi | các đoạn content → dòng trả lời
+// Parse markdown content → 1 dòng duy nhất (title + content gộp)
 function parseContentToLines(title, content) {
-  const lines = [];
-
-  // Câu hỏi = title (làm sạch)
+  // Làm sạch title
   const cleanTitle = title.replace(/^#+\s*/, '').trim();
-  lines.push({ role: 'hoi', text: cleanTitle + '?' });
 
-  if (!content) return lines;
+  // Làm sạch content: bỏ markdown formatting
+  const cleanContent = (content || '')
+    .replace(/^#{1,3}\s+.+$/gm, '')          // bỏ headings
+    .replace(/\*\*/g, '')                    // bỏ bold
+    .replace(/\*/g, '')                      // bỏ italic
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // bỏ links
+    .replace(/`[^`]+`/g, '')                 // bỏ code
+    .replace(/\n{2,}/g, ' ')                 // gộp xuống dòng thành space
+    .replace(/\s+/g, ' ')                    // normalize spaces
+    .trim();
 
-  // Tách content thành các đoạn, bỏ heading ## và dòng trống
-  const paragraphs = content
-    .split(/\n{2,}/)  // tách theo 2+ dòng trống
-    .map(p => p
-      .replace(/^#{1,3}\s+.+$/m, '')        // bỏ dòng heading đầu đoạn
-      .replace(/\*\*/g, '')                 // bỏ bold markdown
-      .replace(/\*/g, '')                   // bỏ italic
-      .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // bỏ link, giữ text
-      .replace(/`[^`]+`/g, '')              // bỏ inline code
-      .trim()
-    )
-    .filter(p => p.length > 30);           // chỉ giữ đoạn đủ dài
+  // Gộp title + content thành 1 dòng duy nhất
+  const fullText = cleanTitle + '. ' + cleanContent;
 
-  // Mỗi 1-2 đoạn thành 1 dòng tra_loi
-  const CHUNK = 2; // ghép 2 đoạn/dòng — đổi thành 1 nếu muốn ngắn hơn
-  for (let i = 0; i < paragraphs.length; i += CHUNK) {
-    const chunk = paragraphs.slice(i, i + CHUNK).join(' ').trim();
-    if (chunk.length > 30) {
-      lines.push({ role: 'tra_loi', text: chunk });
-    }
-  }
-
-  return lines;
+  return [{ role: 'tra_loi', text: fullText }];
 }
 
 async function generateScriptAI() {
