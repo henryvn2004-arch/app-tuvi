@@ -6,7 +6,7 @@ const SUPABASE_URL  = process.env.SUPABASE_URL;
 const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY;
 const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
 const OPENAI_KEY    = process.env.OPENAI_API_KEY;
-const ARTICLES_PER_RUN = 2;
+const ARTICLES_PER_RUN = 1;
 
 async function sbFetch(path, options = {}) {
   const res = await fetch(`${SUPABASE_URL}/rest/v1${path}`, {
@@ -143,11 +143,21 @@ Trả về JSON thuần (KHÔNG backtick):
   const text = data.content[0].text.trim().replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
   const article = JSON.parse(text);
 
-  // Validate category — chỉ cho phép đúng 10 slug hợp lệ của khảo luận
+  // Hard-clamp category & tags — chỉ cho phép đúng 10 slug hợp lệ
   const VALID_KL_CATS = ['hon-nhan','gia-dinh','tai-chinh','cong-viec','tinh-cach','van-han','dien-san','quan-he','benh-tat','con-cai'];
-  if (!isTL && !VALID_KL_CATS.includes(article.category)) {
-    console.warn(`[cron] category không hợp lệ: "${article.category}" → fallback tinh-cach`);
-    article.category = 'tinh-cach';
+  if (!isTL) {
+    // Clamp category
+    if (!VALID_KL_CATS.includes(article.category)) {
+      console.warn(`[cron] category không hợp lệ: "${article.category}" → fallback tinh-cach`);
+      article.category = 'tinh-cach';
+    }
+    // Clamp tags — chỉ giữ tag nằm trong 10 slug hợp lệ, bỏ hết tag tự chế
+    const rawTags = Array.isArray(article.tags) ? article.tags : [];
+    article.tags = rawTags.filter(t => VALID_KL_CATS.includes(t));
+    // Đảm bảo category luôn có trong tags
+    if (!article.tags.includes(article.category)) article.tags.unshift(article.category);
+    if (article.tags.length === 0) article.tags = [article.category];
+    console.log(`[cron] category: ${article.category} | tags: [${article.tags.join(', ')}]`);
   }
 
   return article;
