@@ -1,6 +1,5 @@
-export const dynamic = 'force-dynamic';
-export const maxDuration = 15;
 // app/api/sitemap/route.ts
+export const dynamic = 'force-dynamic';
 export const maxDuration = 15;
 import { NextResponse } from 'next/server';
 
@@ -29,14 +28,14 @@ export async function GET() {
   const today = new Date().toISOString().slice(0,10);
 
   const staticPages = [
-    { path:'/',                          cf:'daily',   p:'1.0' },
-    { path:'/about.html',                cf:'monthly', p:'0.5' },
-    { path:'/resources.html',            cf:'daily',   p:'0.8' },
-    { path:'/blog.html',                 cf:'daily',   p:'0.8' },
-    { path:'/menh-kho.html',             cf:'daily',   p:'0.8' },
-    { path:'/xem-tuoi.html',             cf:'monthly', p:'0.7' },
-    { path:'/xem-lam-an.html',           cf:'monthly', p:'0.7' },
-    { path:'/contact.html',              cf:'monthly', p:'0.4' },
+    { path:'/',               cf:'daily',   p:'1.0' },
+    { path:'/about.html',     cf:'monthly', p:'0.5' },
+    { path:'/resources.html', cf:'daily',   p:'0.8' },
+    { path:'/blog.html',      cf:'daily',   p:'0.8' },
+    { path:'/menh-kho.html',  cf:'daily',   p:'0.8' },
+    { path:'/xem-tuoi.html',  cf:'monthly', p:'0.7' },
+    { path:'/xem-lam-an.html',cf:'monthly', p:'0.7' },
+    { path:'/contact.html',   cf:'monthly', p:'0.4' },
   ];
 
   const [lasoRows, taiLieuRows, khaoLuanRows, sachRows] = await Promise.all([
