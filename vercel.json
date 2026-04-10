@@ -1,78 +1,8 @@
 {
   "version": 2,
   "crons": [
-    {
-      "path": "/api/cron-khao-luan",
-      "schedule": "0 3 * * *"
-    },
-    {
-      "path": "/api/cron-khao-luan",
-      "schedule": "0 11 * * *"
-    },
-    {
-      "path": "/api/cron-khao-luan",
-      "schedule": "0 15 * * *"
-    }
-  ],
-  "functions": {
-    "api/lasotuvi.js": {
-      "maxDuration": 60
-    },
-    "api/search.js": {
-      "maxDuration": 30
-    },
-    "api/embed.js": {
-      "maxDuration": 60
-    },
-    "api/save-laso.js": {
-      "maxDuration": 30
-    },
-    "api/get-laso.js": {
-      "maxDuration": 10
-    },
-    "api/upload-laso-image.js": {
-      "maxDuration": 30
-    },
-    "api/cron-khao-luan.js": {
-      "maxDuration": 60
-    },
-    "api/embed-tai-lieu.js": {
-      "maxDuration": 60
-    },
-    "api/sitemap.js": {
-      "maxDuration": 15
-    },
-    "api/payment.js": {
-      "maxDuration": 15
-    },
-    "api/khao-luan.js": {
-      "maxDuration": 15
-    }
-  },
-  "rewrites": [
-    {
-      "source": "/khao-luan/:slug",
-      "destination": "/api/khao-luan?slug=$slug"
-    },
-    {
-      "source": "/sitemap.xml",
-      "destination": "/api/sitemap"
-    },
-    {
-      "source": "/tai-lieu/sach/:slug",
-      "destination": "/sach-detail.html"
-    },
-    {
-      "source": "/tai-lieu/:slug",
-      "destination": "/tai-lieu.html"
-    },
-    {
-      "source": "/payment-success",
-      "destination": "/payment-success.html"
-    },
-    {
-      "source": "/auth-callback",
-      "destination": "/auth-callback.html"
-    }
+    { "path": "/api/cron-khao-luan", "schedule": "0 3 * * *"  },
+    { "path": "/api/cron-khao-luan", "schedule": "0 11 * * *" },
+    { "path": "/api/cron-khao-luan", "schedule": "0 15 * * *" }
   ]
 }
