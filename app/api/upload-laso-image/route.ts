@@ -1,13 +1,30 @@
-// TODO: Port full logic from api/upload-laso-image.js — see MIGRATION.md
-export const maxDuration = 60;
+// app/api/upload-laso-image/route.ts
+export const maxDuration = 30;
 import { NextRequest } from 'next/server';
-import { err, options } from '@/lib/cors';
+import { createClient } from '@supabase/supabase-js';
+import { ok, err, options } from '@/lib/cors';
+
+const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_KEY!);
+
 export async function OPTIONS() { return options(); }
-export async function GET(request: NextRequest) {
-  void request;
-  return err('Not yet migrated — keep api/upload-laso-image.js active', 501);
-}
+
 export async function POST(request: NextRequest) {
-  void request;
-  return err('Not yet migrated — keep api/upload-laso-image.js active', 501);
+  try {
+    const formData = await request.formData();
+    const slug  = String(formData.get('slug') || '');
+    const image = formData.get('image') as File | null;
+    if (!image || !slug) return err('Missing image or slug', 400);
+
+    const buffer = Buffer.from(await image.arrayBuffer());
+    const filePath = `laso/${slug}.png`;
+
+    const { error: uploadError } = await supabase.storage.from('laso-images').upload(filePath, buffer, { contentType: 'image/png', upsert: true });
+    if (uploadError) return err(uploadError.message);
+
+    const { data: urlData } = supabase.storage.from('laso-images').getPublicUrl(filePath);
+    const publicUrl = urlData?.publicUrl;
+
+    await supabase.from('laso_public').update({ laso_image: publicUrl }).eq('slug', slug);
+    return ok({ success: true, url: publicUrl });
+  } catch(e:unknown) { return err((e as Error).message); }
 }
