@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+export const maxDuration = 15;
 // app/api/sitemap/route.ts
 export const maxDuration = 15;
 import { NextResponse } from 'next/server';
