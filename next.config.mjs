@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  trailingSlash: false,
   async rewrites() {
     return [
       { source: '/',                    destination: '/index.html'           },
