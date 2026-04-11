@@ -222,22 +222,22 @@ select.form-input { cursor: pointer; }
 .hoa-Quyền { color: #7B3FA0; font-weight: 700; }
 .hoa-Khoa { color: #1455A4; font-weight: 700; }
 .hoa-Kỵ { color: #C0392B; font-weight: 700; }
-.e-hoa  { color: #EF4444; }
-.e-kim  { color: #D3D3D3; }
-.e-tho  { color: #ffd500; }
-.e-moc  { color: #90EE90; }
-.e-thuy { color: #000000; }
+.e-hoa  { color: #C0392B; }
+.e-kim  { color: #8B6914; }
+.e-tho  { color: #6B3E1A; }
+.e-moc  { color: #1B6B2B; }
+.e-thuy { color: #1A4E8C; }
 /* Star colors — ngũ hành đúng */
-.sc-hoa  { color: #EF4444; }          /* Hỏa — đỏ tươi */
-.sc-kim  { color: #D3D3D3; }          /* Kim — xám nhẹ */
-.sc-thuy { color: #000000; }          /* Thủy — đen */
-.sc-moc  { color: #90EE90; }          /* Mộc — xanh lá */
-.sc-tho  { color: #ffd500; }          /* Thổ — vàng tươi */
+.sc-hoa  { color: #C0392B; }          /* Đỏ — Hỏa */
+.sc-kim  { color: #7F8C8D; }          /* Xám — Kim */
+.sc-thuy { color: #1a1a1a; }          /* Đen — Thủy */
+.sc-moc  { color: #1E6B3C; }          /* Xanh lá — Mộc */
+.sc-tho  { color: #8B6914; }          /* Vàng — Thổ */
 .sc-neutral { color: #333; }
 .sc-hoa-loc    { color: #1E6B3C; font-weight: 700; }
 .sc-hoa-quyen  { color: #7B3FA0; font-weight: 700; }
 .sc-hoa-khoa   { color: #1455A4; font-weight: 700; }
-.sc-hoa-ky     { color: #EF4444; font-weight: 700; }
+.sc-hoa-ky     { color: #C0392B; font-weight: 700; }
 /* Legacy — kept for non-grid parts */
 .star-chinh { font-weight: 700; font-size: 11px; display: block; line-height: 1.3; }
 .star-phu { font-size: 9px; display: block; line-height: 1.3; }
@@ -810,11 +810,11 @@ select.form-input { cursor: pointer; }
         <span style="font-weight:700;color:#555;margin-right:8px">Độ sáng:</span>
         (M) Miếu địa &nbsp;·&nbsp; (V) Vượng địa &nbsp;·&nbsp; (Đ) Đắc địa &nbsp;·&nbsp; (B) Bình hòa &nbsp;·&nbsp; (H) Hãm địa
         <span style="margin-left:16px;font-weight:700;color:#555">Ngũ hành:</span>
-        <span style="color:#EF4444;font-weight:700">■</span> Hỏa &nbsp;
-        <span style="color:#D3D3D3;font-weight:700">■</span> Kim &nbsp;
-        <span style="color:#000000;font-weight:700">■</span> Thủy &nbsp;
-        <span style="color:#90EE90;font-weight:700">■</span> Mộc &nbsp;
-        <span style="color:#ffd500;font-weight:700">■</span> Thổ
+        <span style="color:#C0392B;font-weight:700">■</span> Hỏa &nbsp;
+        <span style="color:#7F8C8D;font-weight:700">■</span> Kim &nbsp;
+        <span style="color:#1a1a1a;font-weight:700">■</span> Thủy &nbsp;
+        <span style="color:#1E6B3C;font-weight:700">■</span> Mộc &nbsp;
+        <span style="color:#8B6914;font-weight:700">■</span> Thổ
       </div>
     </div>
 
@@ -997,6 +997,7 @@ select.form-input { cursor: pointer; }
 
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tuvi-form.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
   // Load cach cuc DB
   let CACH_CUC_DB = [];
@@ -1214,10 +1215,14 @@ select.form-input { cursor: pointer; }
       errEl.textContent = `Ngày sinh không hợp lệ (tháng ${thang}/${nam} có ${daysInMonth} ngày).`;
       errEl.classList.add('active'); return;
     }
+    if (gio === '' || gio === undefined || gio === null) {
+      errEl.textContent = 'Giờ sinh là bắt buộc — ảnh hưởng trực tiếp đến cung Mệnh.';
+      errEl.classList.add('active'); return;
+    }
 
     const loader = document.getElementById('loader');
     loader.classList.add('active');
-    document.querySelectorAll('.btn-submit, #tvf-submit-btn').forEach(b => b.disabled = true);
+    document.querySelector('.btn-submit').disabled = true;
     document.getElementById('result-section').classList.remove('active');
 
     try {
@@ -1262,7 +1267,7 @@ select.form-input { cursor: pointer; }
       errEl.classList.add('active');
     } finally {
       loader.classList.remove('active');
-      document.querySelectorAll('.btn-submit, #tvf-submit-btn').forEach(b => b.disabled = false);
+      document.querySelector('.btn-submit').disabled = false;
       document.getElementById('progress-fill').style.width = '0%';
     }
   }
@@ -2719,7 +2724,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       document.getElementById('error-msg').classList.add('active');
     } finally {
       loader.classList.remove('active');
-      document.querySelectorAll('.btn-submit, #tvf-submit-btn').forEach(b => b.disabled = false);
+      document.querySelector('.btn-submit').disabled = false;
       document.getElementById('progress-fill').style.width = '0%';
     }
   }
@@ -3713,20 +3718,14 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 
   // Auto-fill + run nếu redirect từ index.html
   if (new URLSearchParams(window.location.search).get('autorun') === '1') {
-    window.addEventListener('DOMContentLoaded', () => {
-      try {
-        const d = JSON.parse(sessionStorage.getItem('tuvi_form_data') || '{}');
-        if (d.nam) {
-          TuviForm.setData(d);
-          sessionStorage.removeItem('tuvi_form_data');
-          // Scroll to form section first
-          const formEl = document.getElementById('tuvi-form-container') || document.querySelector('.form-section');
-          if (formEl) formEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          // Run luanGiai after scroll settles
-          setTimeout(() => { luanGiai(); }, 600);
-        }
-      } catch(e) { console.warn('autorun error:', e); }
-    });
+    try {
+      const d = JSON.parse(sessionStorage.getItem('tuvi_form_data') || '{}');
+      if (d.nam) {
+        TuviForm.setData(d);
+        sessionStorage.removeItem('tuvi_form_data');
+        setTimeout(() => { luanGiai(); }, 300);
+      }
+    } catch(e) { console.warn('autorun error:', e); }
   }
 
 </script>
