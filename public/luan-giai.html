@@ -224,7 +224,7 @@ select.form-input { cursor: pointer; }
 .hoa-Kỵ { color: #C0392B; font-weight: 700; }
 .e-hoa  { color: #EF4444; }
 .e-kim  { color: #D3D3D3; }
-.e-tho  { color: #faef15; }
+.e-tho  { color: #ffd500; }
 .e-moc  { color: #90EE90; }
 .e-thuy { color: #000000; }
 /* Star colors — ngũ hành đúng */
@@ -232,7 +232,7 @@ select.form-input { cursor: pointer; }
 .sc-kim  { color: #D3D3D3; }          /* Kim — xám nhẹ */
 .sc-thuy { color: #000000; }          /* Thủy — đen */
 .sc-moc  { color: #90EE90; }          /* Mộc — xanh lá */
-.sc-tho  { color: #faef15; }          /* Thổ — vàng tươi */
+.sc-tho  { color: #ffd500; }          /* Thổ — vàng tươi */
 .sc-neutral { color: #333; }
 .sc-hoa-loc    { color: #1E6B3C; font-weight: 700; }
 .sc-hoa-quyen  { color: #7B3FA0; font-weight: 700; }
@@ -814,7 +814,7 @@ select.form-input { cursor: pointer; }
         <span style="color:#D3D3D3;font-weight:700">■</span> Kim &nbsp;
         <span style="color:#000000;font-weight:700">■</span> Thủy &nbsp;
         <span style="color:#90EE90;font-weight:700">■</span> Mộc &nbsp;
-        <span style="color:#faef15;font-weight:700">■</span> Thổ
+        <span style="color:#ffd500;font-weight:700">■</span> Thổ
       </div>
     </div>
 
@@ -3713,14 +3713,20 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 
   // Auto-fill + run nếu redirect từ index.html
   if (new URLSearchParams(window.location.search).get('autorun') === '1') {
-    try {
-      const d = JSON.parse(sessionStorage.getItem('tuvi_form_data') || '{}');
-      if (d.nam) {
-        TuviForm.setData(d);
-        sessionStorage.removeItem('tuvi_form_data');
-        setTimeout(() => { luanGiai(); }, 300);
-      }
-    } catch(e) { console.warn('autorun error:', e); }
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        const d = JSON.parse(sessionStorage.getItem('tuvi_form_data') || '{}');
+        if (d.nam) {
+          TuviForm.setData(d);
+          sessionStorage.removeItem('tuvi_form_data');
+          // Scroll to form section first
+          const formEl = document.getElementById('tuvi-form-container') || document.querySelector('.form-section');
+          if (formEl) formEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          // Run luanGiai after scroll settles
+          setTimeout(() => { luanGiai(); }, 600);
+        }
+      } catch(e) { console.warn('autorun error:', e); }
+    });
   }
 
 </script>
