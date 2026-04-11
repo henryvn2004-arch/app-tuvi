@@ -192,47 +192,46 @@ select.form-input { cursor: pointer; }
 .laso-wrap { margin-bottom: 56px; }
 .laso-label { font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 16px; display: flex; align-items: center; gap: 16px; }
 .laso-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-.laso-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--border); border-left: 1px solid var(--border); }
+/* ── LASO GRID V2 ── */
+.laso-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, auto); border: 2px solid #333; background: #fff; }
+.cung-cell { border: 1px solid #888; padding: 7px 7px 20px; min-height: 170px; position: relative; display: flex; flex-direction: column; background: #fff; overflow: hidden; }
+.cung-cell:hover { background: #FFFDF7; }
+.cung-cell.cur-van { outline: 2px solid var(--green, #1E6B3C); outline-offset: -2px; }
+.v2-cell-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 4px; gap: 2px; }
+.v2-can-chi { font-size: 9px; color: #777; font-weight: 500; text-transform: uppercase; width: 100%; text-align: left; }
+.v2-cung-name { font-size: 10px; color: #222; font-weight: 700; text-transform: uppercase; text-align: center; width: 100%; letter-spacing: .5px; }
+.v2-badge-menh, .v2-badge-than { display: inline-block; padding: 1px 6px; font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; border-radius: 2px; margin-bottom: 3px; }
+.v2-badge-menh { border: 1.5px solid var(--blue); color: var(--blue); }
+.v2-badge-than { border: 1.5px solid #7B3FA0; color: #7B3FA0; }
+.v2-chinh-area { margin-bottom: 4px; }
+.v2-chinh-item { font-family: 'Noto Serif', Georgia, serif; font-size: 12.5px; font-weight: 700; line-height: 1.4; }
+.v2-phu-area { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 1px 4px; align-content: start; }
+.v2-phu-item { font-size: 9.5px; line-height: 1.45; font-weight: 500; }
+.v2-footer { display: flex; justify-content: space-between; align-items: flex-end; position: absolute; bottom: 3px; left: 7px; right: 7px; border-top: 1px solid #ddd; padding-top: 2px; }
+.v2-trang-sinh { font-size: 9px; color: #777; font-weight: 500; text-transform: uppercase; letter-spacing: .5px; }
+.v2-dai-van { font-size: 10px; color: #333; font-weight: 700; }
+.v2-tuan-tag, .v2-triet-tag { display: inline-block; padding: 0 5px; font-size: 8px; font-weight: 700; letter-spacing: 1px; border-radius: 2px; text-transform: uppercase; position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%); z-index: 5; }
+.v2-tuan-tag { background: #2c4a00; color: #fff; }
+.v2-triet-tag { background: #4a0000; color: #fff; }
 
-/* Cung cell — layout mới */
-.cung-cell {
-  border-right: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  display: grid;
-  grid-template-areas:
-    "can-chi   cung-name  dai-van"
-    "chinh     chinh      chinh"
-    "tot       tot        xau"
-    "trang-sinh trang-sinh trang-sinh";
-  grid-template-columns: 1fr auto 1fr;
-  grid-template-rows: 17px 34px 150px 16px;
-  gap: 0px; padding: 4px 5px;
-  font-size: 10px;
-  overflow: hidden;
-}
-.cung-cell.empty { background: var(--bg-soft); }
-.cung-cell.is-menh { border: 2px solid var(--gold); }
-.cung-cell.cur-van { border: 2px solid var(--green, #1E6B3C); }
-
-.c-can-chi   { grid-area: can-chi;     font-size: 8px; color: var(--gold); font-weight: 700; }
-.c-cung-name { grid-area: cung-name;   font-size: 8px; color: var(--text-lt); text-transform: uppercase; letter-spacing: 0.5px; text-align: center; white-space: nowrap; }
-.c-dai-van   { grid-area: dai-van;     font-size: 8px; color: var(--blue); text-align: right; }
-.c-chinh     { grid-area: chinh;       text-align: center; border-bottom: 1px solid var(--border-lt); padding-bottom: 1px; overflow: hidden; }
-.c-tot       { grid-area: tot; overflow: hidden; }
-.c-xau       { grid-area: xau;         text-align: right; overflow: hidden; }
-.c-trang-sinh { grid-area: trang-sinh; text-align: center; border-top: 1px solid var(--border-lt); padding-top: 1px; font-size: 9px; color: var(--gold); }
-
-/* Star colors by element */
+/* Star colors v2 */
+.bright { font-size: 8px; opacity: 1; color: #7EC8E3; margin-left: 1px; }
+.hoa { font-size: 9px; margin-left: 1px; }
+.hoa-Lộc { color: #1E6B3C; font-weight: 700; }
+.hoa-Quyền { color: #7B3FA0; font-weight: 700; }
+.hoa-Khoa { color: #1455A4; font-weight: 700; }
+.hoa-Kỵ { color: #C0392B; font-weight: 700; }
+.e-hoa  { color: #C0392B; }
+.e-kim  { color: #8B6914; }
+.e-tho  { color: #6B3E1A; }
+.e-moc  { color: #1B6B2B; }
+.e-thuy { color: #1A4E8C; }
+.sc-kim { color: #8B6914; } .sc-moc { color: #1B6B2B; } .sc-thuy { color: #1A4E8C; } .sc-hoa { color: #B82020; } .sc-tho { color: #6B3E1A; } .sc-neutral { color: #333; }
+.sc-hoa-loc { color: #1E6B3C; font-weight: 700; } .sc-hoa-quyen { color: #7B3FA0; font-weight: 700; } .sc-hoa-khoa { color: #1455A4; font-weight: 700; } .sc-hoa-ky { color: #C0392B; font-weight: 700; }
+/* Legacy — kept for non-grid parts */
 .star-chinh { font-weight: 700; font-size: 11px; display: block; line-height: 1.3; }
 .star-phu { font-size: 9px; display: block; line-height: 1.3; }
-.star-vong   { font-size: 10px; }
-.bright      { font-size: 8px; opacity: 1; color: #7EC8E3; margin-left:1px; }
-.hoa         { font-size: 9px; color: #9A7B3A; margin-left: 1px; }
-.e-hoa  { color: #C0392B; }
-.e-kim  { color: #000000; }
-.e-tho  { color: #9A7B3A; }
-.e-moc  { color: #1E6B3C; }
-.e-thuy { color: #1455A4; }
+.star-vong { font-size: 10px; }
 .star-tt { font-size: 10px; color: #1E6B3C; }
 
 /* Center info */
@@ -347,7 +346,7 @@ select.form-input { cursor: pointer; }
   .cung-cell { min-height: 80px; padding: 2px 3px; }
   .star-chinh { font-weight: 700; font-size: 11px; display: block; line-height: 1.3; }
   .star-phu { font-size: 9px; display: block; line-height: 1.3; }
-  .c-can-chi, .c-dai-van, .c-cung-name { font-size: 7px; }
+
   .cung-center { padding: 8px; }
   .center-title { font-size: 11px; }
   .center-row { font-size: 10px; }
@@ -356,10 +355,8 @@ select.form-input { cursor: pointer; }
 }
 
 @media (max-width: 480px) {
-  /* Lá số rất nhỏ: ẩn phụ tinh, chỉ giữ chính tinh */
-  .c-tot, .c-xau { display: none; }
-  .c-trang-sinh { display: none; }
-  .cung-cell { min-height: 60px; }
+  .v2-phu-area { grid-template-columns: 1fr; }
+  .cung-cell { min-height: 100px; padding: 5px 5px 18px; }
 }
 @media print {
   .topnav, .hero, .form-section, .status-bar, .result-actions,
@@ -381,7 +378,7 @@ select.form-input { cursor: pointer; }
   .center-row { font-size: 10px; }
   .star-chinh { font-weight: 700; font-size: 11px; display: block; line-height: 1.3; }
   .star-phu { font-size: 9px; display: block; line-height: 1.3; }
-  .c-tot, .c-xau { font-size: 8px; }
+
   .c-trang-sinh { font-size: 8px; }
   .bright { font-size: 7px; }
   .hoa { font-size: 7px; }
@@ -2908,6 +2905,56 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     'Canh Thân':'Thạch Lựu Mộc (Gỗ cây thạch lựu)','Tân Dậu':'Thạch Lựu Mộc (Gỗ cây thạch lựu)',
     'Nhâm Tuất':'Đại Hải Thủy (Nước trong biển lớn)','Quý Hợi':'Đại Hải Thủy (Nước trong biển lớn)',
   };
+  // ── V2 Grid helpers ──────────────────────────────────────────
+  const _CAN_V2 = ['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
+  const _CHI_V2 = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+  const _CHINH_COLOR = {'Tử Vi':'hoa','Thiên Cơ':'moc','Thái Dương':'hoa','Vũ Khúc':'kim','Thiên Đồng':'thuy','Liêm Trinh':'hoa','Thiên Phủ':'kim','Thái Âm':'thuy','Tham Lang':'moc','Cự Môn':'thuy','Thiên Tướng':'thuy','Thiên Lương':'moc','Thất Sát':'hoa','Phá Quân':'thuy'};
+  const _SAT_SET = new Set(['Kình Dương','Đà La','Hỏa Tinh','Linh Tinh','Địa Không','Địa Kiếp','Thiên Không','Đại Hao','Tiểu Hao','Bệnh Phù','Phục Binh','Quan Phù','Bạch Hổ','Tang Môn','Điếu Khách','Kiếp Sát','Phá Toái','Thiên Hình','Thiên Riêu']);
+  const _TRANG_SINH_SET = new Set(['Tràng Sinh','Mộc Dục','Quan Đới','Lâm Quan','Đế Vượng','Suy','Bệnh','Tử','Mộ','Tuyệt','Thai','Dưỡng']);
+  const _BC_MAP = {Miếu:'M',Vượng:'V',Đắc:'Đ',Bình:'B',Hãm:'H'};
+  function _bShort(b){return _BC_MAP[b]||''}
+  function _getElemClass(n){const d=(typeof STAR_DATA!=='undefined')?STAR_DATA[n]:null;if(!d?.element)return'sc-neutral';return{'kim':'sc-kim','mộc':'sc-moc','thủy':'sc-thuy','hỏa':'sc-hoa','thổ':'sc-tho'}[d.element.toLowerCase()]||'sc-neutral'}
+  function _getStarCls(s){if(s.nhom==='chinh')return'sc-'+(_CHINH_COLOR[s.ten]||'neutral');if(s.hoa==='Lộc')return'sc-hoa-loc';if(s.hoa==='Quyền')return'sc-hoa-quyen';if(s.hoa==='Khoa')return'sc-hoa-khoa';if(s.hoa==='Kỵ')return'sc-hoa-ky';return _getElemClass(s.ten)}
+  function _getCungCan(ci,di){return(((ci%5)*2+di)%10)}
+  function _renderV2Cell(p, dvTuoi, canNamIdx, isCurVan) {
+    const di=_CHI_V2.indexOf(p.diaChi),ci=_getCungCan(canNamIdx,di);
+    const canChi=_CAN_V2[ci]+' '+_CHI_V2[di];
+    let badges='';
+    if(p.isMenh)badges+='<span class="v2-badge-menh">MỆNH</span> ';
+    if(p.isThan)badges+='<span class="v2-badge-than">THÂN</span> ';
+    const tsS=p.stars.find(s=>_TRANG_SINH_SET.has(s.ten));
+    let tt='';
+    const tuanS=p.stars.find(s=>s.ten==='Tuần'||s.ten==='Tuần+Triệt');
+    const trietS=p.stars.find(s=>s.ten==='Triệt'||s.ten==='Tuần+Triệt');
+    if(tuanS&&trietS)tt='<span class="v2-tuan-tag">TUẦN+TRIỆT</span>';
+    else if(tuanS)tt='<span class="v2-tuan-tag">TUẦN</span>';
+    else if(trietS)tt='<span class="v2-triet-tag">TRIỆT</span>';
+    let chinhH='';
+    for(const s of p.majorStars){
+      const cls='sc-'+(_CHINH_COLOR[s.ten]||'neutral');
+      const b=s.brightness?` <span style="font-size:10px">(${_bShort(s.brightness)})</span>`:'';
+      const h=s.hoa?` <span class="sc-hoa-${s.hoa==='Lộc'?'loc':s.hoa==='Quyền'?'quyen':s.hoa==='Khoa'?'khoa':'ky'}" style="font-size:10px">[${s.hoa.charAt(0)}]</span>`:'';
+      chinhH+=`<div class="v2-chinh-item ${cls}">${s.ten.toUpperCase()}${b}${h}</div>`;
+    }
+    const phuStars=p.stars.filter(s=>s.nhom!=='chinh'&&!_TRANG_SINH_SET.has(s.ten)&&s.ten!=='Tuần'&&s.ten!=='Triệt'&&s.ten!=='Tuần+Triệt');
+    let phuH='';
+    for(const s of phuStars){
+      const cls=_getStarCls(s),isSat=_SAT_SET.has(s.ten);
+      const b=(isSat&&s.brightness)?` <span style="font-size:8.5px">(${_bShort(s.brightness)})</span>`:'';
+      let nm=s.ten.toUpperCase();
+      if(s.hoa){const hc=s.hoa==='Lộc'?'sc-hoa-loc':s.hoa==='Quyền'?'sc-hoa-quyen':s.hoa==='Khoa'?'sc-hoa-khoa':'sc-hoa-ky';nm+=` <span class="${hc}" style="font-size:8px">[${s.hoa.charAt(0)}]</span>`;}
+      phuH+=`<div class="v2-phu-item ${cls}" style="${isSat?'font-weight:600':''}">${nm}${b}</div>`;
+    }
+    return `<div class="cung-cell${isCurVan?' cur-van':''}">
+      <div class="v2-cell-header"><span class="v2-can-chi">${canChi.toUpperCase()}</span><span class="v2-cung-name">${p.cungName.toUpperCase()}</span></div>
+      ${badges?`<div style="margin-bottom:3px">${badges}</div>`:''}
+      <div class="v2-chinh-area">${chinhH}</div>
+      <div class="v2-phu-area">${phuH}</div>
+      <div class="v2-footer"><span class="v2-trang-sinh">${tsS?tsS.ten.toUpperCase():''}</span><span class="v2-dai-van">${dvTuoi??''}</span></div>
+      ${tt}
+    </div>`;
+  }
+
   function displayResult(hoten, ngay, thang, nam, gioitinh, namXem, ls) {
     const conv = ls._conv || {};
     document.getElementById('result-header').innerHTML = `
@@ -2929,7 +2976,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     const ec = ten => EC[(STAR_DATA[ten]||{}).element] || '';
     const bc = b => BC_MAP[b] ? `<span class="bright">(${BC_MAP[b]})</span>` : '';
     const isBad = ten => BAD_TYPES.has((STAR_DATA[ten]||{}).type);
-    const fmt = (s, cls) => `<span class="${cls} ${ec(s.ten)}">${s.ten.toUpperCase()}${bc(s.brightness)}${s.hoa?`<span class="hoa">[${s.hoa}]</span>`:''}</span>`;
+    const fmt = (s, cls) => `<span class="${cls} ${ec(s.ten)}">${s.ten.toUpperCase()}${bc(s.brightness)}${s.hoa?`<span class="hoa hoa-${s.hoa}">[${s.hoa}]</span>`:''}</span>`;
 
     const dvHT = ls.daiVanHienTai;
     const tvCung = ls.palaces[ls.tieuHanIdx];
@@ -2958,33 +3005,22 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       </div>
     </div>`;
 
-    document.getElementById('laso-grid').innerHTML = LAYOUT.map(dcI => {
-      if (dcI === -1) {
-        if (!centerDone) { centerDone = true; return centerHTML; }
-        return '';
-      }
-      const p = ls.palaces[dcI];
-      if (!p) return '<div class="cung-cell"></div>';
-      const isCurVan = dvHT?.cungIdx === dcI;
-      const isTH = ls.tieuHanIdx === dcI;
-      const van = p.decadal ? `${p.decadal.range[0]}–${p.decadal.range[1]}` : '';
-      const chinh = p.majorStars.map(s => fmt(s,'star-chinh')).join('');
-      const totStars = p.stars.filter(s => s.nhom!=='chinh' && s.nhom!=='trang_sinh' && s.nhom!=='tuan_triet' && !isBad(s.ten));
-      const xauStars = p.stars.filter(s => s.nhom!=='chinh' && s.nhom!=='trang_sinh' && isBad(s.ten));
-      const tot = totStars.map(s => fmt(s,'star-phu')).join('');
-      const xau = xauStars.map(s => fmt(s,'star-phu')).join('');
-      const vong = p.stars.filter(s=>s.nhom==='trang_sinh').map(s=>`<span class="star-vong ${ec(s.ten)}">${s.ten.toUpperCase()}${bc(s.brightness)}</span>`).join(' ');
-      const tt = p.stars.filter(s=>s.nhom==='tuan_triet').map(s=>`<span class="star-tt">${s.ten.toUpperCase()}</span>`).join(' ');
-      return `<div class="cung-cell ${p.isMenh?'is-menh':''} ${isCurVan?'cur-van':''}">
-        <div class="c-can-chi">${p.diaChi}</div>
-        <div class="c-cung-name">${p.cungName}${p.isThan?' ·T':''}${isCurVan?' ◆':''}${isTH?' ★':''}</div>
-        <div class="c-dai-van">${van}</div>
-        <div class="c-chinh">${chinh}</div>
-        <div class="c-tot">${tot}${tt?'<br>'+tt:''}</div>
-        <div class="c-xau">${xau}</div>
-        <div class="c-trang-sinh">${vong}</div>
-      </div>`;
-    }).join('');
+    const canNamIdx = _CAN_V2.indexOf(ls.canChiNam.split(' ')[0]);
+    const byDC = {};
+    for (const p of ls.palaces) byDC[_CHI_V2.indexOf(p.diaChi)] = p;
+    const GRID_DC_V2 = [[5,6,7,8],[4,-1,-1,9],[3,-1,-1,10],[2,1,0,11]];
+    let centerDone = false;
+    let gridHTML = '';
+    for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) {
+      const di = GRID_DC_V2[r][c];
+      if (di === -1) { if (!centerDone) { centerDone = true; gridHTML += centerHTML; } continue; }
+      const p = byDC[di];
+      if (!p) { gridHTML += '<div class="cung-cell"></div>'; continue; }
+      const isCurVan = dvHT?.cungIdx === _CHI_V2.indexOf(p.diaChi) || dvHT?.cungIdx === p.idx;
+      const dv = ls.daiVans.find(d => d.cungIdx === p.idx);
+      gridHTML += _renderV2Cell(p, dv?.tuoiStart, canNamIdx, isCurVan);
+    }
+    document.getElementById('laso-grid').innerHTML = gridHTML;
 
     // Update mục lục labels cho đại vận
     ls.daiVans.slice(0,9).forEach((dv, i) => {
@@ -3022,30 +3058,20 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       </div>
     </div>`;
 
-    let cells = '';
-    let centerDone = false;
-    LAYOUT.forEach(dcI => {
-      if (dcI === -1) {
-        if (!centerDone) { centerDone = true; cells += centerHTML; }
-        return;
-      }
-      const p = ls.palaces[dcI];
-      if (!p) { cells += '<div style="border-right:1px solid var(--border);border-bottom:1px solid var(--border)"></div>'; return; }
-      const isCurVan = dvHT?.cungIdx === dcI;
-      const van = p.decadal ? `${p.decadal.range[0]}–${p.decadal.range[1]}` : '';
-      const chinh = (p.majorStars||[]).map(s=>fmt(s,'chinh')).join('');
-      const tot = (p.stars||[]).filter(s=>s.nhom!=='chinh'&&s.nhom!=='trang_sinh').map(s=>fmt(s,'phu')).join('');
-      const vong = (p.stars||[]).filter(s=>s.nhom==='trang_sinh').map(s=>`<span style="font-size:9px;color:var(--gold);display:block">${s.ten}</span>`).join('');
-      const border = p.isMenh ? '2px solid var(--gold)' : isCurVan ? '2px solid var(--blue)' : '1px solid var(--border)';
-      cells += `<div class="cung-cell${p.isMenh?' is-menh':''}${isCurVan?' cur-van':''}" style="border:${border}">
-        <div class="c-can-chi">${p.diaChi}</div>
-        <div class="c-cung-name">${p.cungName}</div>
-        <div class="c-dai-van">${van}</div>
-        <div class="c-chinh">${chinh}</div>
-        <div class="c-tot">${tot}</div>
-        <div class="c-trang-sinh">${vong}</div>
-      </div>`;
-    });
+    const canNamIdx2 = _CAN_V2.indexOf(ls.canChiNam.split(' ')[0]);
+    const byDC2 = {};
+    for (const p of ls.palaces) byDC2[_CHI_V2.indexOf(p.diaChi)] = p;
+    const GRID_DC_V2b = [[5,6,7,8],[4,-1,-1,9],[3,-1,-1,10],[2,1,0,11]];
+    let cells = '', centerDone2 = false;
+    for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) {
+      const di = GRID_DC_V2b[r][c];
+      if (di === -1) { if (!centerDone2) { centerDone2 = true; cells += centerHTML; } continue; }
+      const p = byDC2[di];
+      if (!p) { cells += '<div class="cung-cell"></div>'; continue; }
+      const isCurVan2 = dvHT?.cungIdx === p.idx;
+      const dv2 = ls.daiVans.find(d => d.cungIdx === p.idx);
+      cells += _renderV2Cell(p, dv2?.tuoiStart, canNamIdx2, isCurVan2);
+    }
     return `<div style="margin-bottom:24px">
       <div class="laso-label">Lá Số — 12 Cung</div>
       <div class="laso-grid">${cells}</div>
