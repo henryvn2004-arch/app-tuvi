@@ -96,6 +96,14 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
 <div class="grid-wrap" id="grid-wrap" style="display:none">
   <div class="grid-section-title" id="grid-title"></div>
   <div id="laso-grid-container"></div>
+  <div id="grid-actions" style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+    <button onclick="exportPNG()" id="btn-export" style="background:var(--navy);color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:6px">
+      ⬇ Tải PNG
+    </button>
+    <button onclick="window.print()" style="background:transparent;color:var(--navy);border:1px solid var(--border);border-radius:6px;padding:8px 18px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">
+      🖨 In lá số
+    </button>
+  </div>
   <div class="legend">
     <strong style="color:#555">Ngũ Hành:</strong>
     <span class="legend-item"><span class="legend-dot" style="background:#B82020"></span><span class="sc-hoa">Hỏa</span></span>
@@ -108,6 +116,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
   </div>
 </div>
 <script src="/tuvi-ansao-engine.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 const CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
 const CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
@@ -246,6 +255,46 @@ function doAnSao(){
     console.error(e);
   }
   btn.disabled=false;btn.textContent='Lấy Lá Số';
+}
+
+
+async function exportPNG() {
+  const btn = document.getElementById('btn-export');
+  const grid = document.querySelector('#laso-grid-container .laso-grid');
+  if (!grid) return;
+
+  btn.disabled = true;
+  btn.textContent = '⏳ Đang xuất...';
+
+  try {
+    // Temporarily expand cells for better quality
+    const canvas = await html2canvas(grid, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: '#ffffff',
+      logging: false,
+      onclone: (doc) => {
+        // Ensure fonts load in clone
+        const cells = doc.querySelectorAll('.cung-cell, .cell-center');
+        cells.forEach(c => { c.style.overflow = 'visible'; });
+      }
+    });
+
+    // Download
+    const link = document.createElement('a');
+    const name = document.getElementById('grid-title').textContent
+      .replace(/[^a-zA-Z0-9À-ỹ\s]/g, '').trim().replace(/\s+/g, '-') || 'la-so-tu-vi';
+    link.download = name + '.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  } catch(e) {
+    alert('Xuất PNG thất bại: ' + e.message);
+    console.error(e);
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '⬇ Tải PNG';
 }
 
 buildDropdowns();updateGioAm();
