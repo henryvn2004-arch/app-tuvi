@@ -1215,7 +1215,11 @@ select.form-input { cursor: pointer; }
       errEl.textContent = `Ngày sinh không hợp lệ (tháng ${thang}/${nam} có ${daysInMonth} ngày).`;
       errEl.classList.add('active'); return;
     }
-    
+    if (gio === '' || gio === undefined || gio === null) {
+      errEl.textContent = 'Giờ sinh là bắt buộc — ảnh hưởng trực tiếp đến cung Mệnh.';
+      errEl.classList.add('active'); return;
+    }
+
     const loader = document.getElementById('loader');
     loader.classList.add('active');
     document.querySelector('.btn-submit').disabled = true;
@@ -3640,28 +3644,37 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 
     const slug = toSlugAscii(pending.slug || p.get('slug') || '');
 
-    // Verify payment
-    try {
-      let userId = null;
-      if (window.supabaseClient) {
-        const { data: { session } } = await window.supabaseClient.auth.getSession().catch(() => ({data:{session:null}}));
-        userId = session?.user?.id || null;
-      }
-      const checkUrl = `/api/payment?action=check&slug=${encodeURIComponent(slug)}${userId?'&userId='+userId:''}`;
-      const r = await fetch(checkUrl);
-      const d = await r.json();
-      if (!d.purchased) {
-        document.getElementById('error-msg').textContent = 'Đang xác nhận thanh toán, vui lòng chờ 30 giây rồi thử lại...';
-        document.getElementById('error-msg').classList.add('active');
-        return;
-      }
-    } catch(e) { return; }
+    // Verify payment — retry up to 5x waiting for supabase session
+    let purchased = false;
+    for (let attempt = 0; attempt < 5; attempt++) {
+      try {
+        let userId = null;
+        if (window.supabaseClient) {
+          const { data: { session } } = await window.supabaseClient.auth.getSession().catch(() => ({data:{session:null}}));
+          userId = session?.user?.id || null;
+        }
+        if (!userId && attempt < 4) {
+          await new Promise(r => setTimeout(r, 1500));
+          continue;
+        }
+        const checkUrl = `/api/payment?action=check&slug=${encodeURIComponent(slug)}${userId?'&userId='+userId:''}`;
+        const r = await fetch(checkUrl);
+        const d = await r.json();
+        if (d.purchased) { purchased = true; break; }
+        if (attempt < 4) await new Promise(r => setTimeout(r, 1500));
+      } catch(e) { if (attempt < 4) await new Promise(r => setTimeout(r, 1500)); }
+    }
+    if (!purchased) {
+      document.getElementById('error-msg').textContent = 'Không xác nhận được thanh toán. Nếu đã thanh toán, vui lòng liên hệ hỗ trợ.';
+      document.getElementById('error-msg').classList.add('active');
+      return;
+    }
 
     // Restore state từ sessionStorage và rebuild astrolabe
     try {
       const { ngay, thang, nam, gioIdx, gioChi, gioitinh, namXem, hoTen } = pending;
 
-      // Fill form để user thấy
+      // Fill form via TuviForm
       if (typeof TuviForm !== 'undefined') {
         TuviForm.setData({ hoten: hoTen||'', ngay, thang, nam, gioIdx, gioitinh, namXem: namXem||new Date().getFullYear() });
       }
