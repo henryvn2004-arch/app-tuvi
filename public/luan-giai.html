@@ -1214,14 +1214,10 @@ select.form-input { cursor: pointer; }
       errEl.textContent = `Ngày sinh không hợp lệ (tháng ${thang}/${nam} có ${daysInMonth} ngày).`;
       errEl.classList.add('active'); return;
     }
-    if (gio === '' || gio === undefined || gio === null) {
-      errEl.textContent = 'Giờ sinh là bắt buộc — ảnh hưởng trực tiếp đến cung Mệnh.';
-      errEl.classList.add('active'); return;
-    }
 
     const loader = document.getElementById('loader');
     loader.classList.add('active');
-    document.querySelector('.btn-submit').disabled = true;
+    document.querySelectorAll('.btn-submit, #tvf-submit-btn').forEach(b => b.disabled = true);
     document.getElementById('result-section').classList.remove('active');
 
     try {
@@ -1266,7 +1262,7 @@ select.form-input { cursor: pointer; }
       errEl.classList.add('active');
     } finally {
       loader.classList.remove('active');
-      document.querySelector('.btn-submit').disabled = false;
+      document.querySelectorAll('.btn-submit, #tvf-submit-btn').forEach(b => b.disabled = false);
       document.getElementById('progress-fill').style.width = '0%';
     }
   }
@@ -2723,7 +2719,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       document.getElementById('error-msg').classList.add('active');
     } finally {
       loader.classList.remove('active');
-      document.querySelector('.btn-submit').disabled = false;
+      document.querySelectorAll('.btn-submit, #tvf-submit-btn').forEach(b => b.disabled = false);
       document.getElementById('progress-fill').style.width = '0%';
     }
   }
