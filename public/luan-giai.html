@@ -1325,20 +1325,6 @@ select.form-input { cursor: pointer; }
     // Render lá số grid (dùng displayResult gốc)
     displayResult(_hoTen, _ngay, _thang, _nam, _gioitinh, _namXem, _astrolabe);
 
-    // Clone lá số vào result-body
-    const _lasoGridEl = document.getElementById('laso-grid');
-    if (_lasoGridEl) {
-      const lasoSection = document.createElement('div');
-      lasoSection.className = 'phan-section';
-      lasoSection.id = 'phan-section-laso';
-      const lasoLabel = document.createElement('div');
-      lasoLabel.className = 'laso-label';
-      lasoLabel.textContent = 'Lá Số — 12 Cung';
-      lasoSection.appendChild(lasoLabel);
-      lasoSection.appendChild(_lasoGridEl.cloneNode(true));
-      body.appendChild(lasoSection);
-    }
-
     // ── Render tất cả 24 phần: pre-gen + lock box ──
     for (let phan = 1; phan <= TONG_PHAN; phan++) {
       const section = document.createElement('div');
@@ -2920,7 +2906,6 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     const di=_CHI_V2.indexOf(p.diaChi),ci=_getCungCan(canNamIdx,di);
     const canChi=_CAN_V2[ci]+' '+_CHI_V2[di];
     let badges='';
-    if(p.isMenh)badges+='<span class="v2-badge-menh">MỆNH</span> ';
     if(p.isThan)badges+='<span class="v2-badge-than">THÂN</span> ';
     const tsS=p.stars.find(s=>_TRANG_SINH_SET.has(s.ten));
     let tt='';
@@ -2930,22 +2915,27 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     else if(tuanS)tt='<span class="v2-tuan-tag">TUẦN</span>';
     else if(trietS)tt='<span class="v2-triet-tag">TRIỆT</span>';
     let chinhH='';
+    const hoaFromChinh = []; // collect tứ hóa to render as phu tinh
     for(const s of p.majorStars){
       const cls='sc-'+(_CHINH_COLOR[s.ten]||'neutral');
       const b=s.brightness?` <span style="font-size:10px">(${_bShort(s.brightness)})</span>`:'';
-      const h=s.hoa?` <span class="sc-hoa-${s.hoa==='Lộc'?'loc':s.hoa==='Quyền'?'quyen':s.hoa==='Khoa'?'khoa':'ky'}" style="font-size:10px">[${s.hoa.charAt(0)}]</span>`:'';
-      chinhH+=`<div class="v2-chinh-item ${cls}">${s.ten.toUpperCase()}${b}${h}</div>`;
+      if(s.hoa) hoaFromChinh.push(s); // save hoa star for separate rendering
+      chinhH+=`<div class="v2-chinh-item ${cls}">${s.ten.toUpperCase()}${b}</div>`;
     }
     const phuStars=p.stars.filter(s=>s.nhom!=='chinh'&&!_TRANG_SINH_SET.has(s.ten)&&s.ten!=='Tuần'&&s.ten!=='Triệt'&&s.ten!=='Tuần+Triệt');
     let phuH='';
+    // Render tứ hóa của chính tinh trước
+    for(const s of hoaFromChinh){
+      const hc=s.hoa==='Lộc'?'sc-hoa-loc':s.hoa==='Quyền'?'sc-hoa-quyen':s.hoa==='Khoa'?'sc-hoa-khoa':'sc-hoa-ky';
+      phuH+=`<div class="v2-phu-item ${hc}" style="font-weight:700">HÓA ${s.hoa.toUpperCase()} (${s.ten})</div>`;
+    }
     for(const s of phuStars){
       const cls=_getStarCls(s),isSat=_SAT_SET.has(s.ten);
       const b=(isSat&&s.brightness)?` <span style="font-size:8.5px">(${_bShort(s.brightness)})</span>`:'';
       let nm=s.ten.toUpperCase();
       if(s.hoa){const hc=s.hoa==='Lộc'?'sc-hoa-loc':s.hoa==='Quyền'?'sc-hoa-quyen':s.hoa==='Khoa'?'sc-hoa-khoa':'sc-hoa-ky';nm+=` <span class="${hc}" style="font-size:8px">[${s.hoa.charAt(0)}]</span>`;}
       phuH+=`<div class="v2-phu-item ${cls}" style="${isSat?'font-weight:600':''}">${nm}${b}</div>`;
-    }
-    return `<div class="cung-cell${isCurVan?' cur-van':''}">
+    }    return `<div class="cung-cell${isCurVan?' cur-van':''}">
       <div class="v2-cell-header"><span class="v2-can-chi">${canChi.toUpperCase()}</span><span class="v2-cung-name">${p.cungName.toUpperCase()}</span></div>
       ${badges?`<div style="margin-bottom:3px">${badges}</div>`:''}
       <div class="v2-chinh-area">${chinhH}</div>
