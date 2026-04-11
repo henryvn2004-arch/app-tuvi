@@ -54,7 +54,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
 .center-title{font-family:'Noto Serif',serif;font-size:14px;font-weight:700;color:var(--navy);text-align:center;margin-bottom:6px;letter-spacing:.5px}
 .center-divider{border:none;border-top:1px solid var(--border-lt);margin:5px 0}
 .center-row{margin:2px 0;font-size:11px}
-.sc-kim{color:#8B6914}.sc-moc{color:#1B6B2B}.sc-thuy{color:#1A4E8C}.sc-hoa{color:#B82020}.sc-tho{color:#6B3E1A}.sc-neutral{color:#333}
+.sc-kim{color:#808080}.sc-moc{color:#1B6B2B}.sc-thuy{color:#1A4E8C}.sc-hoa{color:#B82020}.sc-tho{color:#6B3E1A}.sc-neutral{color:#333}
 .sc-hoa-loc{color:#1E6B3C;font-weight:700}.sc-hoa-quyen{color:#7B3FA0;font-weight:700}.sc-hoa-khoa{color:#1455A4;font-weight:700}.sc-hoa-ky{color:#C0392B;font-weight:700}
 .legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:10.5px;color:#555;padding-left:2px}
 .legend-item{display:flex;align-items:center;gap:4px}
@@ -96,6 +96,10 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
 <div class="grid-wrap" id="grid-wrap" style="display:none">
   <div class="grid-section-title" id="grid-title"></div>
   <div id="laso-grid-container"></div>
+  <div id="grid-actions" style="display:none;gap:10px;margin:10px 0;flex-wrap:wrap">
+    <button onclick="exportPNG()" id="btn-export" style="background:var(--navy);color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:6px">⬇ Tải PNG</button>
+    <button onclick="window.print()" style="background:transparent;color:var(--navy);border:1px solid var(--border);border-radius:6px;padding:8px 18px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">🖨 In lá số</button>
+  </div>
   <div class="legend">
     <strong style="color:#555">Ngũ Hành:</strong>
     <span class="legend-item"><span class="legend-dot" style="background:#B82020"></span><span class="sc-hoa">Hỏa</span></span>
@@ -108,6 +112,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
   </div>
 </div>
 <script src="/tuvi-ansao-engine.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 const CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
 const CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
@@ -240,12 +245,27 @@ function doAnSao(){
     document.getElementById('grid-title').textContent=`Lá Số: ${name||'—'} — ${dd}/${mm}/${yyyy} ${String(hh).padStart(2,'0')}:${String(pp).padStart(2,'0')} (Giờ ${gioChi})`;
     document.getElementById('grid-wrap').style.display='block';
     document.getElementById('grid-wrap').scrollIntoView({behavior:'smooth',block:'start'});
+    document.getElementById('grid-actions').style.display='flex';
   }catch(e){
     document.getElementById('laso-grid-container').innerHTML=`<div class="error-msg">Lỗi: ${esc(e.message)}</div>`;
     document.getElementById('grid-wrap').style.display='block';
     console.error(e);
   }
   btn.disabled=false;btn.textContent='Lấy Lá Số';
+}
+
+async function exportPNG(){
+  const btn=document.getElementById('btn-export');
+  const grid=document.querySelector('#laso-grid-container .laso-grid');
+  if(!grid)return;
+  btn.disabled=true;btn.textContent='⏳ Đang xuất...';
+  try{
+    const canvas=await html2canvas(grid,{scale:2,useCORS:true,backgroundColor:'#ffffff',logging:false});
+    const link=document.createElement('a');
+    const title=document.getElementById('grid-title').textContent.replace(/[^a-zA-Z0-9À-ỹ\s]/g,'').trim().replace(/\s+/g,'-')||'la-so-tu-vi';
+    link.download=title+'.png';link.href=canvas.toDataURL('image/png');link.click();
+  }catch(e){alert('Xuất thất bại: '+e.message);}
+  btn.disabled=false;btn.innerHTML='⬇ Tải PNG';
 }
 
 buildDropdowns();updateGioAm();
