@@ -7,6 +7,7 @@ const nextConfig = {
       { source: '/xem-tuoi',            destination: '/xem-tuoi.html'        },
       { source: '/xem-lam-an',          destination: '/xem-lam-an.html'      },
       { source: '/la-so',               destination: '/la-so.html'           },
+      { source: '/la-so-v2',            destination: '/la-so-v2.html'        },
       { source: '/menh-kho',            destination: '/menh-kho.html'        },
       { source: '/profile',             destination: '/profile.html'         },
       { source: '/about',               destination: '/about.html'           },
