@@ -353,12 +353,12 @@ function anTrangSinh(cuc, amDuong, gioitinh) {
 
 // ─── LỤC SÁT TINH ───────────────────────────────────────────
 const HOA_LINH_KHOI = {
-  // Dần Ngọ Tuất: Hỏa khởi Sửu, Linh khởi Thìn (dương nam/âm nữ: Hỏa thuận, Linh nghịch)
-  'Dần':{'hoa':'Sửu','linh':'Thìn'},'Ngọ':{'hoa':'Sửu','linh':'Thìn'},'Tuất':{'hoa':'Sửu','linh':'Thìn'},
+  // Dần Ngọ Tuất: Hỏa khởi Sửu, Linh khởi Mão
+  'Dần':{'hoa':'Sửu','linh':'Mão'},'Ngọ':{'hoa':'Sửu','linh':'Mão'},'Tuất':{'hoa':'Sửu','linh':'Mão'},
   // Thân Tý Thìn: Hỏa khởi Dần, Linh khởi Tuất
   'Thân':{'hoa':'Dần','linh':'Tuất'},'Tý':{'hoa':'Dần','linh':'Tuất'},'Thìn':{'hoa':'Dần','linh':'Tuất'},
-  // Hợi Mão Mùi: Hỏa khởi Tý, Linh khởi Dậu
-  'Hợi':{'hoa':'Tý','linh':'Dậu'},'Mão':{'hoa':'Tý','linh':'Dậu'},'Mùi':{'hoa':'Tý','linh':'Dậu'},
+  // Hợi Mão Mùi: Hỏa khởi Dậu, Linh khởi Tuất
+  'Hợi':{'hoa':'Dậu','linh':'Tuất'},'Mão':{'hoa':'Dậu','linh':'Tuất'},'Mùi':{'hoa':'Dậu','linh':'Tuất'},
   // Tỵ Dậu Sửu: Hỏa khởi Mão, Linh khởi Tuất
   'Tỵ':{'hoa':'Mão','linh':'Tuất'},'Dậu':{'hoa':'Mão','linh':'Tuất'},'Sửu':{'hoa':'Mão','linh':'Tuất'},
 };
