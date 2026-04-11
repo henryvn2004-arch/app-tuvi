@@ -61,7 +61,7 @@ async function savePurchase(p: { orderId: string; slug: string; userId?: string;
 function getCancelUrl(slug: string): string {
   if (slug.startsWith('xem-tuoi-'))   return `${SITE_URL}/xem-tuoi.html?payment=cancelled`;
   if (slug.startsWith('xem-lam-an-')) return `${SITE_URL}/xem-lam-an.html?payment=cancelled`;
-  return `${SITE_URL}/la-so.html?slug=${encodeURIComponent(slug)}&payment=cancelled`;
+  return `${SITE_URL}/luan-giai.html?payment=cancelled`;
 }
 
 // ── Handlers ──────────────────────────────────────────────────
@@ -151,19 +151,29 @@ async function handleCheck(searchParams: URLSearchParams): Promise<Response> {
   if (process.env.PAYWALL_DISABLED === 'true') {
     return ok({ purchased: true, purchasedAt: null, _dev: 'paywall_disabled' });
   }
-  if (!userId) return ok({ purchased: false, purchasedAt: null });
 
   const safeSlug = toAsciiSlug(slug);
   try {
-    const url = `${SUPABASE_URL}/rest/v1/purchases`
-      + `?slug=eq.${encodeURIComponent(safeSlug)}`
-      + `&status=eq.completed`
-      + `&user_id=eq.${encodeURIComponent(userId)}`
-      + `&limit=1&select=id,email,user_id,created_at`;
-    const r = await fetch(url, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } });
-    if (!r.ok) throw new Error('Supabase query failed');
-    const rows = await r.json();
-    return ok({ purchased: rows.length > 0, purchasedAt: rows[0]?.created_at || null });
+    const headers = { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` };
+    const base = `${SUPABASE_URL}/rest/v1/purchases`;
+
+    // 1. Check by slug + userId (if userId provided)
+    if (userId) {
+      const r = await fetch(`${base}?slug=eq.${encodeURIComponent(safeSlug)}&status=eq.completed&user_id=eq.${encodeURIComponent(userId)}&limit=1&select=id,created_at`, { headers });
+      if (r.ok) {
+        const rows = await r.json();
+        if (rows.length > 0) return ok({ purchased: true, purchasedAt: rows[0].created_at });
+      }
+    }
+
+    // 2. Fallback: check by slug + null user_id (payment captured without session)
+    const r2 = await fetch(`${base}?slug=eq.${encodeURIComponent(safeSlug)}&status=eq.completed&user_id=is.null&limit=1&select=id,created_at`, { headers });
+    if (r2.ok) {
+      const rows2 = await r2.json();
+      if (rows2.length > 0) return ok({ purchased: true, purchasedAt: rows2[0].created_at });
+    }
+
+    return ok({ purchased: false, purchasedAt: null });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
