@@ -9,17 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;
-  --gold:#9A7B3A;--gold-lt:#F9F4EB;
-  --text:#1a1a1a;--text-mid:#444;--text-lt:#777;
-  --border:#CCCCCC;--border-lt:#E8E8E8;
-  --bg:#FFFFFF;--bg-soft:#F5F4F0;
-  --red:#C0392B;--green:#1E6B3C;
-}
+:root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0;--red:#C0392B;--green:#1E6B3C}
 body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh}
-
-/* ── NAV ── */
 .topnav{position:sticky;top:0;z-index:200;background:var(--navy);display:flex;align-items:center;height:56px;padding:0 32px;gap:24px}
 .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
 .nav-logo img{width:34px;height:34px;object-fit:contain;border-radius:4px}
@@ -27,236 +18,81 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
 .nav-links{display:flex;gap:2px}
 .nav-link{color:#8BAACC;font-size:13px;text-decoration:none;padding:5px 10px;border-radius:5px;transition:.15s}
 .nav-link:hover{color:#fff;background:rgba(255,255,255,.07)}
-
-/* ── FORM ── */
 .form-wrap{max-width:860px;margin:28px auto 0;padding:0 16px}
 .form-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:24px 28px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
 .form-title{font-family:'Noto Serif',serif;font-size:18px;color:var(--navy);font-weight:600;margin-bottom:20px}
 .form-row{display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap;align-items:flex-end}
 .form-group{display:flex;flex-direction:column;gap:5px}
 .form-group label{font-size:11px;font-weight:600;color:var(--text-lt);letter-spacing:.5px;text-transform:uppercase}
-.form-group input,.form-group select{
-  border:1px solid var(--border);border-radius:6px;padding:8px 10px;
-  font-size:13px;font-family:inherit;color:var(--text);background:#fff;
-  outline:none;transition:.15s;
-}
+.form-group input,.form-group select{border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:13px;font-family:inherit;color:var(--text);background:#fff;outline:none;transition:.15s}
 .form-group input:focus,.form-group select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.1)}
-.fg-name{flex:2;min-width:180px}
-.fg-gender{width:90px}
-.fg-dd,.fg-mm{width:70px}
-.fg-yyyy{width:90px}
-.fg-hh,.fg-pp{width:70px}
-.fg-namxem{width:90px}
-.btn-anlaso{
-  background:var(--blue);color:#fff;border:none;border-radius:6px;
-  padding:9px 22px;font-size:13px;font-weight:600;font-family:inherit;
-  cursor:pointer;transition:.15s;white-space:nowrap;align-self:flex-end;
-}
-.btn-anlaso:hover{background:#0f3f87}
-.btn-anlaso:disabled{opacity:.6;cursor:not-allowed}
+.fg-name{flex:2;min-width:180px}.fg-gender{width:90px}.fg-dd,.fg-mm,.fg-hh,.fg-pp{width:70px}.fg-namxem{width:90px}
+.btn-anlaso{background:var(--blue);color:#fff;border:none;border-radius:6px;padding:9px 22px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:.15s;white-space:nowrap;align-self:flex-end}
+.btn-anlaso:hover{background:#0f3f87}.btn-anlaso:disabled{opacity:.6;cursor:not-allowed}
 .gio-info{font-size:12px;color:var(--text-lt);align-self:center;padding-bottom:4px}
-
-/* ── GRID WRAPPER ── */
-.grid-wrap{max-width:960px;margin:24px auto 40px;padding:0 16px}
+.grid-wrap{max-width:980px;margin:24px auto 40px;padding:0 16px}
 .grid-section-title{font-size:12px;font-weight:600;color:var(--text-lt);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
-
-/* ── LASO GRID ── */
-.laso-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  grid-template-rows:repeat(4,auto);
-  border:2px solid #333;
-  background:#fff;
-  font-family:'Be Vietnam Pro',sans-serif;
-}
-.cung-cell{
-  border:1px solid #888;
-  padding:7px 7px 5px;
-  min-height:160px;
-  position:relative;
-  display:flex;flex-direction:column;
-  background:#fff;
-  overflow:hidden;
-}
+.laso-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,auto);border:2px solid #333;background:#fff}
+.cung-cell{border:1px solid #888;padding:7px 7px 20px;min-height:170px;position:relative;display:flex;flex-direction:column;background:#fff;overflow:hidden}
 .cung-cell:hover{background:#FFFDF7}
-
-/* center 2×2 merged cell */
-.cell-center{
-  grid-column:2/4;grid-row:2/4;
-  border:1px solid #888;
-  padding:16px 20px;
-  display:flex;flex-direction:column;justify-content:center;
-  background:#fff;
-}
-
-/* ── CELL HEADER ── */
-.cell-header{
-  display:flex;flex-direction:column;align-items:center;
-  margin-bottom:5px;gap:2px;
-}
-.can-chi-label{font-size:9px;color:#777;font-weight:500;letter-spacing:.3px;text-transform:uppercase;width:100%;text-align:left}
+.cell-center{grid-column:2/4;grid-row:2/4;border:1px solid #888;padding:14px 16px;display:flex;flex-direction:column;justify-content:center;background:#fff;overflow:auto}
+.cell-header{display:flex;flex-direction:column;align-items:center;margin-bottom:4px;gap:2px}
+.can-chi-label{font-size:9px;color:#777;font-weight:500;text-transform:uppercase;width:100%;text-align:left}
 .cung-name-label{font-size:10px;color:#222;font-weight:700;text-transform:uppercase;text-align:center;width:100%;letter-spacing:.5px}
-
-/* ── BADGES ── */
-.badge-menh,.badge-than{
-  display:inline-block;padding:1px 6px;font-size:9px;font-weight:700;
-  letter-spacing:1px;text-transform:uppercase;border-radius:2px;margin-bottom:4px;
-}
-.badge-menh{border:1.5px solid var(--blue);color:var(--blue)}
-.badge-than{border:1.5px solid #7B3FA0;color:#7B3FA0}
-
-/* ── CHINH TINH ── */
-.chinh-tinh-area{margin-bottom:5px}
-.chinh-tinh-item{
-  font-family:'Noto Serif',serif;font-size:12.5px;font-weight:700;
-  line-height:1.4;letter-spacing:.2px;
-}
-.star-brightness{font-size:10px;font-weight:600;opacity:.9}
-.star-hoa{font-size:10px;font-weight:700;margin-left:3px;opacity:.95}
-
-/* ── PHU TINH ── */
-.phu-tinh-area{
-  flex:1;display:grid;grid-template-columns:1fr 1fr;
-  gap:1px 4px;align-content:start;
-}
+.badge-menh,.badge-than{display:inline-block;padding:1px 6px;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:2px;margin-bottom:3px}
+.badge-menh{border:1.5px solid var(--blue);color:var(--blue)}.badge-than{border:1.5px solid #7B3FA0;color:#7B3FA0}
+.chinh-tinh-area{margin-bottom:4px}
+.chinh-tinh-item{font-family:'Noto Serif',serif;font-size:12.5px;font-weight:700;line-height:1.4}
+.phu-tinh-area{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:1px 4px;align-content:start}
 .phu-tinh-item{font-size:9.5px;line-height:1.45;font-weight:500}
-
-/* ── CELL FOOTER ── */
-.cell-footer{
-  display:flex;justify-content:space-between;align-items:flex-end;
-  margin-top:5px;border-top:1px solid #ddd;padding-top:3px;
-}
+.cell-footer{display:flex;justify-content:space-between;align-items:flex-end;position:absolute;bottom:3px;left:7px;right:7px;border-top:1px solid #ddd;padding-top:2px}
 .trang-sinh-label{font-size:9px;color:#777;font-weight:500;text-transform:uppercase;letter-spacing:.5px}
 .dai-van-num{font-size:10px;color:#333;font-weight:700}
-
-/* ── INNER LABEL (tiểu vận tuổi) ── */
-
-/* ── TUAN TRIET tags ── */
-.tuan-tag,.triet-tag{
-  display:inline-block;padding:0 5px;font-size:8px;font-weight:700;
-  letter-spacing:1px;border-radius:2px;text-transform:uppercase;
-  position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);
-  z-index:5;
-}
-.tuan-tag{background:#2c4a00;color:#fff}
-.triet-tag{background:#4a0000;color:#fff}
-
-/* ── CENTER INFO ── */
-.center-name{font-family:'Noto Serif',serif;font-size:16px;font-weight:700;color:var(--navy);margin-bottom:3px}
-.center-tag{font-size:11px;font-weight:600;color:var(--text-mid);margin-bottom:2px}
-.center-row{display:flex;gap:24px;margin:6px 0;flex-wrap:wrap}
-.center-field{font-size:11px;color:var(--text-mid)}
-.center-field span{font-weight:600;color:var(--text)}
-.center-divider{border:none;border-top:1px solid var(--border-lt);margin:8px 0}
-.center-highlight{font-size:12px;font-weight:700;color:var(--navy);margin:4px 0}
-.center-print{font-size:10px;color:var(--blue);text-decoration:none;display:block;margin-top:8px;text-align:center}
-.center-copy{font-size:9.5px;color:var(--text-lt);text-align:center;margin-top:4px}
-
-/* ── LEGEND ── */
+.tuan-tag,.triet-tag{display:inline-block;padding:0 5px;font-size:8px;font-weight:700;letter-spacing:1px;border-radius:2px;text-transform:uppercase;position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);z-index:5}
+.tuan-tag{background:#2c4a00;color:#fff}.triet-tag{background:#4a0000;color:#fff}
+.cung-center{font-size:11px;line-height:1.65;color:var(--text)}
+.center-title{font-family:'Noto Serif',serif;font-size:14px;font-weight:700;color:var(--navy);text-align:center;margin-bottom:6px;letter-spacing:.5px}
+.center-divider{border:none;border-top:1px solid var(--border-lt);margin:5px 0}
+.center-row{margin:2px 0;font-size:11px}
+.sc-kim{color:#8B6914}.sc-moc{color:#1B6B2B}.sc-thuy{color:#1A4E8C}.sc-hoa{color:#B82020}.sc-tho{color:#6B3E1A}.sc-neutral{color:#333}
+.sc-hoa-loc{color:#1E6B3C;font-weight:700}.sc-hoa-quyen{color:#7B3FA0;font-weight:700}.sc-hoa-khoa{color:#1455A4;font-weight:700}.sc-hoa-ky{color:#C0392B;font-weight:700}
 .legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:10.5px;color:#555;padding-left:2px}
 .legend-item{display:flex;align-items:center;gap:4px}
 .legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
-
-/* ── STAR COLORS ── */
-.sc-kim{color:#8B6914}
-.sc-moc{color:#1B6B2B}
-.sc-thuy{color:#1A4E8C}
-.sc-hoa{color:#B82020}
-.sc-tho{color:#6B3E1A}
-.sc-sat{color:#CC0000;font-weight:600}
-.sc-loc{color:#8B6914;font-weight:600}
-.sc-cat{color:#1A4E8C}
-.sc-hoa-loc{color:#1B6B2B;font-weight:700}
-.sc-hoa-quyen{color:#7B3FA0;font-weight:700}
-.sc-hoa-khoa{color:#1A4E8C;font-weight:700}
-.sc-hoa-ky{color:#CC0000;font-weight:700}
-.sc-neutral{color:#333}
-
-/* ── PRINT ── */
-@media print{
-  .topnav,.form-wrap,.btn-anlaso,.grid-section-title,.legend{display:none!important}
-  .grid-wrap{margin:0;padding:0;max-width:100%}
-  .laso-grid{border:1.5px solid #000}
-  .cung-cell,.cell-center{border:1px solid #666}
-}
-
-/* ── RESPONSIVE ── */
-@media(max-width:700px){
-  .topnav{padding:0 12px}
-  .laso-grid{font-size:85%}
-  .cung-cell{min-height:120px;padding:5px}
-}
-
-/* ── LOADING ── */
-.loading-msg{text-align:center;padding:40px;color:var(--text-lt);font-size:14px}
 .error-msg{text-align:center;padding:20px;color:var(--red);font-size:13px;background:#fff9f9;border:1px solid #fcc;border-radius:6px}
+@media print{.topnav,.form-wrap,.grid-section-title,.legend{display:none!important}.grid-wrap{margin:0;padding:0;max-width:100%}.laso-grid{border:1.5px solid #000}.cung-cell,.cell-center{border:1px solid #666}}
+@media(max-width:700px){.topnav{padding:0 12px}.laso-grid{font-size:85%}.cung-cell{min-height:120px;padding:5px 5px 18px}}
 </style>
 </head>
 <body>
-
-<!-- NAV -->
 <nav class="topnav">
-  <a class="nav-logo" href="/">
-    <img src="/seal.webp" alt="Tử Vi Minh Bảo">
-    <div><div class="name">Tử Vi Minh Bảo</div></div>
-  </a>
+  <a class="nav-logo" href="/"><img src="/seal.webp" alt="Tử Vi Minh Bảo"><div><div class="name">Tử Vi Minh Bảo</div></div></a>
   <div class="nav-links">
     <a class="nav-link" href="/">Trang Chủ</a>
-    <a class="nav-link" href="/la-so.html">Lá Số</a>
+    <a class="nav-link" href="/luan-giai.html">Lá Số</a>
     <a class="nav-link" href="/about.html">Giới Thiệu</a>
     <a class="nav-link" href="/blog.html">Vấn Đáp</a>
   </div>
 </nav>
-
-<!-- FORM -->
 <div class="form-wrap">
   <div class="form-card">
     <div class="form-title">An Sao Lá Số Tử Vi</div>
     <div class="form-row">
-      <div class="form-group fg-name">
-        <label>Họ và Tên</label>
-        <input type="text" id="inp-name" placeholder="Nguyễn Văn A" value="">
-      </div>
-      <div class="form-group fg-gender">
-        <label>Giới Tính</label>
-        <select id="inp-gender">
-          <option value="nam">Nam</option>
-          <option value="nu">Nữ</option>
-        </select>
-      </div>
-      <div class="form-group fg-namxem">
-        <label>Năm Xem</label>
-        <input type="number" id="inp-namxem" value="2026" min="1900" max="2100">
-      </div>
+      <div class="form-group fg-name"><label>Họ và Tên</label><input type="text" id="inp-name" placeholder="Nguyễn Văn A"></div>
+      <div class="form-group fg-gender"><label>Giới Tính</label><select id="inp-gender"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
+      <div class="form-group fg-namxem"><label>Năm Xem</label><input type="number" id="inp-namxem" value="2026" min="1900" max="2100"></div>
     </div>
     <div class="form-row">
-      <div class="form-group fg-dd">
-        <label>Ngày (DL)</label>
-        <select id="inp-dd"></select>
-      </div>
-      <div class="form-group fg-mm">
-        <label>Tháng (DL)</label>
-        <select id="inp-mm"></select>
-      </div>
-      <div class="form-group" style="width:110px">
-        <label>Năm (DL)</label>
-        <input type="number" id="inp-yyyy" value="1990" min="1900" max="2099">
-      </div>
-      <div class="form-group fg-hh">
-        <label>Giờ</label>
-        <select id="inp-hh"></select>
-      </div>
-      <div class="form-group fg-pp">
-        <label>Phút</label>
-        <select id="inp-pp"></select>
-      </div>
+      <div class="form-group fg-dd"><label>Ngày (DL)</label><select id="inp-dd"></select></div>
+      <div class="form-group fg-mm"><label>Tháng (DL)</label><select id="inp-mm"></select></div>
+      <div class="form-group" style="width:110px"><label>Năm (DL)</label><input type="number" id="inp-yyyy" value="1990" min="1900" max="2099"></div>
+      <div class="form-group fg-hh"><label>Giờ</label><select id="inp-hh"></select></div>
+      <div class="form-group fg-pp"><label>Phút</label><select id="inp-pp"></select></div>
       <div class="gio-info" id="gio-chi-display">Giờ âm: —</div>
       <button class="btn-anlaso" id="btn-anlaso" onclick="doAnSao()">Lấy Lá Số</button>
     </div>
   </div>
 </div>
-
-<!-- GRID OUTPUT -->
 <div class="grid-wrap" id="grid-wrap" style="display:none">
   <div class="grid-section-title" id="grid-title"></div>
   <div id="laso-grid-container"></div>
@@ -267,25 +103,153 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
     <span class="legend-item"><span class="legend-dot" style="background:#1A4E8C"></span><span class="sc-thuy">Thủy</span></span>
     <span class="legend-item"><span class="legend-dot" style="background:#8B6914"></span><span class="sc-kim">Kim</span></span>
     <span class="legend-item"><span class="legend-dot" style="background:#6B3E1A"></span><span class="sc-tho">Thổ</span></span>
-    &nbsp;&nbsp;
-    <strong style="color:#555">Độ Sáng:</strong>
+    &nbsp;&nbsp;<strong style="color:#555">Độ Sáng:</strong>
     <span>(M)Miếu &nbsp;(V)Vượng &nbsp;(Đ)Đắc &nbsp;(B)Bình &nbsp;(H)Hãm</span>
   </div>
 </div>
-
 <script src="/tuvi-ansao-engine.js"></script>
 <script>
-// ── Constants ─────────────────────────────────────────────────
-const CAN  = ['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
-const CHI  = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
-const CHI_SHORT = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+const CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
+const CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+const GRID_DC=[[5,6,7,8],[4,-1,-1,9],[3,-1,-1,10],[2,1,0,11]];
+const NAP_AM_FULL={'Giáp Tý':'Hải Trung Kim (Vàng dưới biển)','Ất Sửu':'Hải Trung Kim (Vàng dưới biển)','Bính Dần':'Lô Trung Hỏa (Lửa trong lò)','Đinh Mão':'Lô Trung Hỏa (Lửa trong lò)','Mậu Thìn':'Đại Lâm Mộc (Cây trong rừng lớn)','Kỷ Tỵ':'Đại Lâm Mộc (Cây trong rừng lớn)','Canh Ngọ':'Lộ Bàng Thổ (Đất giữa đường)','Tân Mùi':'Lộ Bàng Thổ (Đất giữa đường)','Nhâm Thân':'Kiếm Phong Kim (Vàng ở mũi kiếm)','Quý Dậu':'Kiếm Phong Kim (Vàng ở mũi kiếm)','Giáp Tuất':'Sơn Đầu Hỏa (Lửa trên núi)','Ất Hợi':'Sơn Đầu Hỏa (Lửa trên núi)','Bính Tý':'Giản Hạ Thủy (Nước dưới khe)','Đinh Sửu':'Giản Hạ Thủy (Nước dưới khe)','Mậu Dần':'Thành Đầu Thổ (Đất trên mặt thành)','Kỷ Mão':'Thành Đầu Thổ (Đất trên mặt thành)','Canh Thìn':'Bạch Lạp Kim (Vàng trong nến trắng)','Tân Tỵ':'Bạch Lạp Kim (Vàng trong nến trắng)','Nhâm Ngọ':'Dương Liễu Mộc (Gỗ cây liễu)','Quý Mùi':'Dương Liễu Mộc (Gỗ cây liễu)','Giáp Thân':'Tuyền Trung Thủy (Nước dưới suối)','Ất Dậu':'Tuyền Trung Thủy (Nước dưới suối)','Bính Tuất':'Ốc Thượng Thổ (Đất trên nóc nhà)','Đinh Hợi':'Ốc Thượng Thổ (Đất trên nóc nhà)','Mậu Tý':'Tích Lịch Hỏa (Lửa sấm sét)','Kỷ Sửu':'Tích Lịch Hỏa (Lửa sấm sét)','Canh Dần':'Tùng Bách Mộc (Gỗ cây tùng, bách)','Tân Mão':'Tùng Bách Mộc (Gỗ cây tùng, bách)','Nhâm Thìn':'Trường Lưu Thủy (Nước chảy giống lớn)','Quý Tỵ':'Trường Lưu Thủy (Nước chảy giống lớn)','Giáp Ngọ':'Sa Trung Kim (Vàng trong cát)','Ất Mùi':'Sa Trung Kim (Vàng trong cát)','Bính Thân':'Sơn Hạ Hỏa (Lửa dưới chân núi)','Đinh Dậu':'Sơn Hạ Hỏa (Lửa dưới chân núi)','Mậu Tuất':'Bình Địa Mộc (Cây ở đồng bằng)','Kỷ Hợi':'Bình Địa Mộc (Cây ở đồng bằng)','Canh Tý':'Bích Thượng Thổ (Đất trên vách)','Tân Sửu':'Bích Thượng Thổ (Đất trên vách)','Nhâm Dần':'Kim Bạch Kim (Vàng pha loài kim sắc trắng)','Quý Mão':'Kim Bạch Kim (Vàng pha loài kim sắc trắng)','Giáp Thìn':'Phú Đăng Hỏa (Lửa ngọn đèn lớn)','Ất Tỵ':'Phú Đăng Hỏa (Lửa ngọn đèn lớn)','Bính Ngọ':'Thiên Hà Thủy (Nước ở sông trên trời)','Đinh Mùi':'Thiên Hà Thủy (Nước ở sông trên trời)','Mậu Thân':'Đại Dịch Thổ (Đất thuộc một khu lớn)','Kỷ Dậu':'Đại Dịch Thổ (Đất thuộc một khu lớn)','Canh Tuất':'Thoa Xuyến Kim (Vàng làm trang sức)','Tân Hợi':'Thoa Xuyến Kim (Vàng làm trang sức)','Nhâm Tý':'Tang Đố Mộc (Gỗ cây dâu)','Quý Sửu':'Tang Đố Mộc (Gỗ cây dâu)','Giáp Dần':'Đại Khê Thủy (Nước dưới khe lớn)','Ất Mão':'Đại Khê Thủy (Nước dưới khe lớn)','Bính Thìn':'Sa Trung Thổ (Đất lẫn trong cát)','Đinh Tỵ':'Sa Trung Thổ (Đất lẫn trong cát)','Mậu Ngọ':'Thiên Thượng Hỏa (Lửa trên trời)','Kỷ Mùi':'Thiên Thượng Hỏa (Lửa trên trời)','Canh Thân':'Thạch Lựu Mộc (Gỗ cây thạch lựu)','Tân Dậu':'Thạch Lựu Mộc (Gỗ cây thạch lựu)','Nhâm Tuất':'Đại Hải Thủy (Nước trong biển lớn)','Quý Hợi':'Đại Hải Thủy (Nước trong biển lớn)'};
+const CHINH_TINH_COLOR={'Tử Vi':'hoa','Thiên Cơ':'moc','Thái Dương':'hoa','Vũ Khúc':'kim','Thiên Đồng':'thuy','Liêm Trinh':'hoa','Thiên Phủ':'kim','Thái Âm':'thuy','Tham Lang':'moc','Cự Môn':'thuy','Thiên Tướng':'thuy','Thiên Lương':'moc','Thất Sát':'hoa','Phá Quân':'thuy'};
+const SAT_TINH_SET=new Set(['Kình Dương','Đà La','Hỏa Tinh','Linh Tinh','Địa Không','Địa Kiếp','Thiên Không']);
+const BAI_SAO_SET=new Set(['Đại Hao','Tiểu Hao','Bệnh Phù','Phục Binh','Quan Phù','Bạch Hổ','Tang Môn','Điếu Khách','Kiếp Sát','Phá Toái','Thiên Hình','Thiên Riêu']);
+const TRANG_SINH_SET=new Set(['Tràng Sinh','Mộc Dục','Quan Đới','Lâm Quan','Đế Vượng','Suy','Bệnh','Tử','Mộ','Tuyệt','Thai','Dưỡng']);
+function bShort(b){return{Miếu:'M',Vượng:'V',Đắc:'Đ',Bình:'B',Hãm:'H'}[b]||''}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function getStarElementClass(n){const d=(typeof STAR_DATA!=='undefined')?STAR_DATA[n]:null;if(!d?.element)return'sc-neutral';return{'kim':'sc-kim','mộc':'sc-moc','thủy':'sc-thuy','hỏa':'sc-hoa','thổ':'sc-tho'}[d.element.toLowerCase()]||'sc-neutral'}
+function getStarClass(s){if(s.nhom==='chinh')return'sc-'+(CHINH_TINH_COLOR[s.ten]||'neutral');if(s.hoa==='Lộc')return'sc-hoa-loc';if(s.hoa==='Quyền')return'sc-hoa-quyen';if(s.hoa==='Khoa')return'sc-hoa-khoa';if(s.hoa==='Kỵ')return'sc-hoa-ky';return getStarElementClass(s.ten)}
+function getCungCan(ci,di){return((ci%5)*2+di)%10}
+function hourMinToGioAm(h,m){return Math.floor(((h*60+m+60)%(24*60))/120)%12}
 
-// Grid layout: grid[row][col] = diaChiIndex (-1 = center)
-const GRID_DC = [
-  [5, 6, 7, 8],
-  [4,-1,-1, 9],
-  [3,-1,-1,10],
-  [2, 1, 0,11],
-];
+function renderCungCell(palace, dvTuoi, canNamIdx) {
+  const dcIdx=CHI.indexOf(palace.diaChi),canIdx=getCungCan(canNamIdx,dcIdx);
+  const canChi=CAN[canIdx]+' '+CHI[dcIdx];
+  let badges='';
+  if(palace.isMenh)badges+='<span class="badge-menh">MỆNH</span> ';
+  if(palace.isThan)badges+='<span class="badge-than">THÂN</span> ';
+  const tsS=palace.stars.find(s=>TRANG_SINH_SET.has(s.ten));
+  let tuanTriet='';
+  const tuanS=palace.stars.find(s=>s.ten==='Tuần'||s.ten==='Tuần+Triệt');
+  const trietS=palace.stars.find(s=>s.ten==='Triệt'||s.ten==='Tuần+Triệt');
+  if(tuanS&&trietS)tuanTriet='<span class="tuan-tag">TUẦN+TRIỆT</span>';
+  else if(tuanS)tuanTriet='<span class="tuan-tag">TUẦN</span>';
+  else if(trietS)tuanTriet='<span class="triet-tag">TRIỆT</span>';
+  let chinhHTML='';
+  for(const s of palace.majorStars){
+    const cls='sc-'+(CHINH_TINH_COLOR[s.ten]||'neutral');
+    const b=s.brightness?` <span style="font-size:10px">(${bShort(s.brightness)})</span>`:'';
+    const h=s.hoa?` <span class="sc-hoa-${s.hoa==='Lộc'?'loc':s.hoa==='Quyền'?'quyen':s.hoa==='Khoa'?'khoa':'ky'}" style="font-size:10px">[${s.hoa.charAt(0)}]</span>`:'';
+    chinhHTML+=`<div class="chinh-tinh-item ${cls}">${esc(s.ten.toUpperCase())}${b}${h}</div>`;
+  }
+  const phuStars=palace.stars.filter(s=>s.nhom!=='chinh'&&!TRANG_SINH_SET.has(s.ten)&&s.ten!=='Tuần'&&s.ten!=='Triệt'&&s.ten!=='Tuần+Triệt');
+  let phuHTML='';
+  for(const s of phuStars){
+    const cls=getStarClass(s),isSat=SAT_TINH_SET.has(s.ten)||BAI_SAO_SET.has(s.ten);
+    const b=(isSat&&s.brightness)?` <span style="font-size:8.5px">(${bShort(s.brightness)})</span>`:'';
+    let nm=s.ten.toUpperCase();
+    if(s.hoa){const hc=s.hoa==='Lộc'?'sc-hoa-loc':s.hoa==='Quyền'?'sc-hoa-quyen':s.hoa==='Khoa'?'sc-hoa-khoa':'sc-hoa-ky';nm+=` <span class="${hc}" style="font-size:8px">[${s.hoa.charAt(0)}]</span>`;}
+    phuHTML+=`<div class="phu-tinh-item ${cls}" style="${isSat?'font-weight:600':''}">${nm}${b}</div>`;
+  }
+  return `<div class="cung-cell">
+    <div class="cell-header"><span class="can-chi-label">${esc(canChi.toUpperCase())}</span><span class="cung-name-label">${esc(palace.cungName.toUpperCase())}</span></div>
+    ${badges?`<div style="margin-bottom:3px">${badges}</div>`:''}
+    <div class="chinh-tinh-area">${chinhHTML}</div>
+    <div class="phu-tinh-area">${phuHTML}</div>
+    <div class="cell-footer"><span class="trang-sinh-label">${tsS?tsS.ten.toUpperCase():''}</span><span class="dai-van-num">${dvTuoi??''}</span></div>
+    ${tuanTriet}
+  </div>`;
+}
 
-// Outer edge position for each grid cell
+function renderCenter(ls, fd) {
+  const dvHT=ls.daiVanHienTai,tvCung=ls.palaces[ls.tieuHanIdx],ldh=ls.palaces[ls.luuNienDaiHanIdx];
+  const nowStr=(()=>{const n=new Date(),p=x=>String(x).padStart(2,'0');return p(n.getDate())+'/'+p(n.getMonth()+1)+'/'+n.getFullYear()+' '+p(n.getHours())+':'+p(n.getMinutes());})();
+  return `<div class="cell-center"><div class="cung-center">
+    <div class="center-title">✦ ${esc((fd.name||'—').toUpperCase())} ✦</div>
+    <hr class="center-divider">
+    <div class="center-row">📅 ${fd.dd}/${fd.mm}/${fd.yyyy} (Dương Lịch) · giờ ${fd.gioChi}</div>
+    <div class="center-row">📅 ${fd.amLich?fd.amLich.day+'/'+fd.amLich.month+'/'+fd.amLich.year:''} (Âm Lịch) · giờ ${fd.gioChi}</div>
+    <div class="center-row">🎂 ${ls.tuoiXem} tuổi (âm lịch)</div>
+    <div class="center-row">⚧ Giới tính: ${fd.gioitinh==='nam'?'Nam':'Nữ'}</div>
+    <hr class="center-divider">
+    <div class="center-row">Năm: <b style="color:var(--navy)">${ls.canChiNam}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${NAP_AM_FULL[ls.canChiNam]||ls.napAm}</b></div>
+    <div class="center-row">Cục: <b style="color:var(--navy)">${ls.cuc}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${ls.menhDC}</b> · Thân: <b style="color:var(--navy)">${ls.thanDC}</b></div>
+    <hr class="center-divider">
+    <div class="center-row">Năm <b style="color:var(--blue)">${ls.chiNamXem||''}</b> — Tuổi ${ls.tuoiXem}</div>
+    <div class="center-row">Đại vận: <b style="color:#1E6B3C">${dvHT?.diaChi||'?'}</b> (${dvHT?.tuoiStart}–${dvHT?.tuoiEnd}t)${dvHT?.scoring?' '+dvHT.scoring.flag+' '+dvHT.scoring.tong+'đ':''}</div>
+    <div class="center-row">Tiểu hạn: <b style="color:#1E6B3C">${tvCung?.diaChi||'?'}</b> · ${tvCung?.cungName||''}</div>
+    <div class="center-row">Lưu đại hạn: <b style="color:var(--gold)">${ldh?.diaChi||'?'}</b> · ${ldh?.cungName||''}</div>
+    <hr class="center-divider">
+    <div class="center-row" style="font-size:10px;color:var(--text-lt)">🗓 Lập lá số: ${nowStr}</div>
+    <div class="center-row" style="font-size:10px;color:var(--text-lt)">© 2026 紫微明寶 | Tử Vi Minh Bảo</div>
+    <div style="text-align:center;margin-top:6px"><a href="javascript:window.print()" style="font-size:10px;color:var(--blue);text-decoration:none">🖨 In lá số</a></div>
+  </div></div>`;
+}
+
+function renderGrid(ls, fd) {
+  const canNamIdx=CAN.indexOf(ls.canChiNam.split(' ')[0]);
+  const byDC={};for(const p of ls.palaces)byDC[CHI.indexOf(p.diaChi)]=p;
+  let html='<div class="laso-grid">';
+  for(let r=0;r<4;r++)for(let c=0;c<4;c++){
+    const di=GRID_DC[r][c];
+    if(di===-1){if(r===1&&c===1)html+=renderCenter(ls,fd);continue;}
+    const p=byDC[di];
+    if(!p){html+='<div class="cung-cell"></div>';continue;}
+    const dv=ls.daiVans.find(d=>d.cungIdx===p.idx);
+    html+=renderCungCell(p,dv?.tuoiStart,canNamIdx);
+  }
+  return html+'</div>';
+}
+
+function buildDropdowns(){
+  const dd=document.getElementById('inp-dd'),mm=document.getElementById('inp-mm');
+  const hh=document.getElementById('inp-hh'),pp=document.getElementById('inp-pp');
+  for(let i=1;i<=31;i++)dd.innerHTML+=`<option value="${i}"${i===1?' selected':''}>${i}</option>`;
+  for(let i=1;i<=12;i++)mm.innerHTML+=`<option value="${i}"${i===1?' selected':''}>${i}</option>`;
+  for(let i=0;i<=23;i++)hh.innerHTML+=`<option value="${i}"${i===0?' selected':''}>${String(i).padStart(2,'0')}</option>`;
+  for(let i=0;i<=59;i++)pp.innerHTML+=`<option value="${i}"${i===0?' selected':''}>${String(i).padStart(2,'0')}</option>`;
+  document.getElementById('inp-hh').addEventListener('change',updateGioAm);
+  document.getElementById('inp-pp').addEventListener('change',updateGioAm);
+}
+
+function updateGioAm(){
+  const h=parseInt(document.getElementById('inp-hh').value)||0,p=parseInt(document.getElementById('inp-pp').value)||0;
+  document.getElementById('gio-chi-display').textContent='Giờ âm: '+CHI[hourMinToGioAm(h,p)];
+}
+
+function doAnSao(){
+  const btn=document.getElementById('btn-anlaso');
+  btn.disabled=true;btn.textContent='Đang an sao...';
+  try{
+    const name=document.getElementById('inp-name').value.trim();
+    const gioitinh=document.getElementById('inp-gender').value;
+    const namxem=parseInt(document.getElementById('inp-namxem').value)||2026;
+    const dd=parseInt(document.getElementById('inp-dd').value);
+    const mm=parseInt(document.getElementById('inp-mm').value);
+    const yyyy=parseInt(document.getElementById('inp-yyyy').value);
+    const hh=parseInt(document.getElementById('inp-hh').value);
+    const pp=parseInt(document.getElementById('inp-pp').value);
+    const gioAmIdx=hourMinToGioAm(hh,pp),gioChi=CHI[gioAmIdx];
+    const conv=convertDuongToAm(dd,mm,yyyy,hh);conv.gioIdx=gioAmIdx;
+    const{amLich,canNam,chiNam,canChi}=conv;
+    const ls=anSaoLaSo({ngayAL:amLich.day,thangAL:amLich.month,namAL:amLich.year,canNam,chiNam,gioIdx:gioAmIdx,gioitinh,namXem:namxem});
+    const fd={name,gioitinh,dd,mm,yyyy,hh,pp,gioChi,amLich,canChi};
+    document.getElementById('laso-grid-container').innerHTML=renderGrid(ls,fd);
+    document.getElementById('grid-title').textContent=`Lá Số: ${name||'—'} — ${dd}/${mm}/${yyyy} ${String(hh).padStart(2,'0')}:${String(pp).padStart(2,'0')} (Giờ ${gioChi})`;
+    document.getElementById('grid-wrap').style.display='block';
+    document.getElementById('grid-wrap').scrollIntoView({behavior:'smooth',block:'start'});
+  }catch(e){
+    document.getElementById('laso-grid-container').innerHTML=`<div class="error-msg">Lỗi: ${esc(e.message)}</div>`;
+    document.getElementById('grid-wrap').style.display='block';
+    console.error(e);
+  }
+  btn.disabled=false;btn.textContent='Lấy Lá Số';
+}
+
+buildDropdowns();updateGioAm();
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.tagName!=='BUTTON')doAnSao();});
+</script>
+</body>
+</html>
