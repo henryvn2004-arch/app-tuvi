@@ -785,71 +785,7 @@ select.form-input { cursor: pointer; }
 
   <div class="form-section">
     <div class="section-eyebrow">Nhập Thông Tin</div>
-    <div class="form-grid">
-      <div class="form-col">
-        <div class="form-col-title">Cá Nhân</div>
-        <div class="form-group">
-          <label class="form-label">Họ và tên</label>
-          <input class="form-input" type="text" id="hoten" placeholder="Nguyễn Văn A" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Giới tính</label>
-          <select class="form-input" id="gioitinh">
-            <option value="nam">Nam</option>
-            <option value="nu">Nữ</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Năm xem vận</label>
-          <input class="form-input" type="number" id="namXem" />
-        </div>
-      </div>
-
-      <div class="form-col">
-        <div class="form-col-title">Ngày Sinh Dương Lịch</div>
-        <div class="form-group">
-          <label class="form-label">Ngày / Tháng / Năm</label>
-          <div class="form-row-3">
-            <input class="form-input" type="number" id="ngay" placeholder="15" min="1" max="31" />
-            <input class="form-input" type="number" id="thang" placeholder="6" min="1" max="12" />
-            <input class="form-input" type="number" id="nam" placeholder="1990" />
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Giờ sinh</label>
-          <select class="form-input" id="gio">
-            <option value="0">Tý — 23:00 đến 01:00</option>
-            <option value="1">Sửu — 01:00 đến 03:00</option>
-            <option value="2">Dần — 03:00 đến 05:00</option>
-            <option value="3">Mão — 05:00 đến 07:00</option>
-            <option value="4">Thìn — 07:00 đến 09:00</option>
-            <option value="5">Tỵ — 09:00 đến 11:00</option>
-            <option value="6">Ngọ — 11:00 đến 13:00</option>
-            <option value="7">Mùi — 13:00 đến 15:00</option>
-            <option value="8">Thân — 15:00 đến 17:00</option>
-            <option value="9">Dậu — 17:00 đến 19:00</option>
-            <option value="10">Tuất — 19:00 đến 21:00</option>
-            <option value="11">Hợi — 21:00 đến 23:00</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-col">
-        <div class="form-col-title">Thực Thi</div>
-        <p style="font-size:14px;color:var(--text-lt);line-height:1.7;margin-bottom:28px;font-family:'Source Serif 4',serif;font-style:italic">Điền đầy đủ thông tin bên trái — ngày tháng năm sinh dương lịch và giờ sinh — rồi bấm luận giải.</p>
-        <div class="btn-group-submit">
-          <button class="btn-submit" onclick="luanGiai()">Luận Giải Lá Số →</button>
-        </div>
-        <div style="margin-top:14px;text-align:center">
-          <a href="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/samples/mau-luan-giai-la-so.pdf" target="_blank" rel="noopener" id="sample-link"
-             style="font-size:11px;color:var(--text-lt);text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--border);border-radius:3px;transition:all .15s;letter-spacing:.5px"
-             onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'"
-             onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-lt)'">
-            ⬇ &nbsp;Xem mẫu luận giải PDF
-          </a>
-        </div>
-      </div>
-    </div>
+    <div id="tuvi-form-container"></div>
 
     <div class="status-bar" id="loader">
       <div class="status-dot"></div>
@@ -1047,6 +983,7 @@ select.form-input { cursor: pointer; }
 
 
 <script src="/tuvi-ansao-engine.js"></script>
+<script src="/tuvi-form.js"></script>
 <script>
   // Load cach cuc DB
   let CACH_CUC_DB = [];
@@ -3743,6 +3680,25 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       document.getElementById('error-msg').classList.add('active');
     }
   })();
+
+  // Redirect sang luan-giai.html với form data
+  window.redirectToLuanGiai = function() {
+    const d = TuviForm.getData();
+    if (!d.ngay || !d.thang || !d.nam) {
+      alert('Vui lòng nhập đầy đủ ngày tháng năm sinh.');
+      return;
+    }
+    sessionStorage.setItem('tuvi_form_data', JSON.stringify(d));
+    window.location.href = '/luan-giai.html?autorun=1';
+  };
+
+  // Init form — submit button sẽ redirect sang luan-giai
+  TuviForm.render('tuvi-form-container', {
+    submitLabel: 'Luận Giải Lá Số →',
+    onSubmit: window.redirectToLuanGiai,
+  });
+
+  window.luanGiaiNhanh = luanGiaiNhanh;
 
 
 </script>

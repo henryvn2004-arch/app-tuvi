@@ -788,71 +788,7 @@ select.form-input { cursor: pointer; }
 
   <div class="form-section">
     <div class="section-eyebrow">Nhập Thông Tin</div>
-    <div class="form-grid">
-      <div class="form-col">
-        <div class="form-col-title">Cá Nhân</div>
-        <div class="form-group">
-          <label class="form-label">Họ và tên</label>
-          <input class="form-input" type="text" id="hoten" placeholder="Nguyễn Văn A" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Giới tính</label>
-          <select class="form-input" id="gioitinh">
-            <option value="nam">Nam</option>
-            <option value="nu">Nữ</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Năm xem vận</label>
-          <input class="form-input" type="number" id="namXem" />
-        </div>
-      </div>
-
-      <div class="form-col">
-        <div class="form-col-title">Ngày Sinh Dương Lịch</div>
-        <div class="form-group">
-          <label class="form-label">Ngày / Tháng / Năm</label>
-          <div class="form-row-3">
-            <input class="form-input" type="number" id="ngay" placeholder="15" min="1" max="31" />
-            <input class="form-input" type="number" id="thang" placeholder="6" min="1" max="12" />
-            <input class="form-input" type="number" id="nam" placeholder="1990" />
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Giờ sinh</label>
-          <select class="form-input" id="gio">
-            <option value="0">Tý — 23:00 đến 01:00</option>
-            <option value="1">Sửu — 01:00 đến 03:00</option>
-            <option value="2">Dần — 03:00 đến 05:00</option>
-            <option value="3">Mão — 05:00 đến 07:00</option>
-            <option value="4">Thìn — 07:00 đến 09:00</option>
-            <option value="5">Tỵ — 09:00 đến 11:00</option>
-            <option value="6">Ngọ — 11:00 đến 13:00</option>
-            <option value="7">Mùi — 13:00 đến 15:00</option>
-            <option value="8">Thân — 15:00 đến 17:00</option>
-            <option value="9">Dậu — 17:00 đến 19:00</option>
-            <option value="10">Tuất — 19:00 đến 21:00</option>
-            <option value="11">Hợi — 21:00 đến 23:00</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-col">
-        <div class="form-col-title">Thực Thi</div>
-        <p style="font-size:14px;color:var(--text-lt);line-height:1.7;margin-bottom:28px;font-family:'Source Serif 4',serif;font-style:italic">Điền đầy đủ thông tin bên trái — ngày tháng năm sinh dương lịch và giờ sinh — rồi bấm luận giải.</p>
-        <div class="btn-group-submit">
-          <button class="btn-submit" onclick="luanGiai()">Luận Giải Lá Số →</button>
-        </div>
-        <div style="margin-top:14px;text-align:center">
-          <a href="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/samples/mau-luan-giai-la-so.pdf" target="_blank" rel="noopener" id="sample-link"
-             style="font-size:11px;color:var(--text-lt);text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--border);border-radius:3px;transition:all .15s;letter-spacing:.5px"
-             onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'"
-             onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-lt)'">
-            ⬇ &nbsp;Xem mẫu luận giải PDF
-          </a>
-        </div>
-      </div>
-    </div>
+    <div id="tuvi-form-container"></div>
 
     <div class="status-bar" id="loader">
       <div class="status-dot"></div>
@@ -1060,6 +996,7 @@ select.form-input { cursor: pointer; }
 
 
 <script src="/tuvi-ansao-engine.js"></script>
+<script src="/tuvi-form.js"></script>
 <script>
   // Load cach cuc DB
   let CACH_CUC_DB = [];
@@ -1251,17 +1188,13 @@ select.form-input { cursor: pointer; }
       Auth.require(() => luanGiai());
       return;
     }
-    const hoten    = document.getElementById('hoten').value.trim();
-    const ngay     = parseInt(document.getElementById('ngay').value);
-    const thang    = parseInt(document.getElementById('thang').value);
-    const nam      = parseInt(document.getElementById('nam').value);
-    const gio      = document.getElementById('gio').value;
-    const gioitinh = document.getElementById('gioitinh').value;
-    const namXem   = parseInt(document.getElementById('namXem').value) || new Date().getFullYear();
-    const errEl    = document.getElementById('error-msg');
+
+    const { hoten, ngay, thang, nam, gioIdx, gioHour, gioPhut, gioitinh, namXem } = TuviForm.getData();
+
+    const errEl = document.getElementById('error-msg');
     errEl.classList.remove('active');
 
-    if (!hoten || !ngay || !thang || !nam || gio === '') {
+    if (!hoten || !ngay || !thang || !nam) {
       errEl.textContent = 'Vui lòng điền đầy đủ tất cả thông tin.';
       errEl.classList.add('active'); return;
     }
@@ -1296,7 +1229,7 @@ select.form-input { cursor: pointer; }
       document.getElementById('progress-fill').style.width = '20%';
 
       // Convert DL → AL + an sao bằng engine v2
-      const conv = convertDuongToAm(ngay, thang, nam, parseInt(gio) * 2);
+      const conv = convertDuongToAm(ngay, thang, nam, gioHour);
       conv._dl = { day: ngay, month: thang, year: nam };
       const ls = anSaoLaSo({
         ngayAL:   conv.amLich.day,
@@ -1304,7 +1237,7 @@ select.form-input { cursor: pointer; }
         namAL:    nam,
         canNam:   conv.canNam,
         chiNam:   conv.chiNam,
-        gioIdx:   conv.gioIdx,
+        gioIdx:   gioIdx,
         gioitinh,
         namXem,
       });
@@ -3426,37 +3359,14 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     const cfg = NHANH_CONFIG[loai];
     if (!cfg) return;
 
-    const hoten    = document.getElementById('hoten').value.trim();
-    const ngay     = parseInt(document.getElementById('ngay').value);
-    const thang    = parseInt(document.getElementById('thang').value);
-    const nam      = parseInt(document.getElementById('nam').value);
-    const gio      = document.getElementById('gio').value;
-    const gioitinh = document.getElementById('gioitinh').value;
-    const namXem   = parseInt(document.getElementById('namXem').value) || new Date().getFullYear();
-    const errEl    = document.getElementById('error-msg');
+
+    const { hoten, ngay, thang, nam, gioIdx, gioHour, gioPhut, gioitinh, namXem } = TuviForm.getData();
+
+    const errEl = document.getElementById('error-msg');
     errEl.classList.remove('active');
 
-    if (!hoten || !ngay || !thang || !nam || gio === '') {
+    if (!hoten || !ngay || !thang || !nam) {
       errEl.textContent = 'Vui lòng điền đầy đủ thông tin.';
-      errEl.classList.add('active'); return;
-    }
-
-    const currentYear2 = new Date().getFullYear();
-    if (nam < 1900 || nam > currentYear2) {
-      errEl.textContent = `Năm sinh không hợp lệ (1900–${currentYear2}).`;
-      errEl.classList.add('active'); return;
-    }
-    if (thang < 1 || thang > 12) {
-      errEl.textContent = 'Tháng sinh không hợp lệ (1-12).';
-      errEl.classList.add('active'); return;
-    }
-    const daysInMonth2 = new Date(nam, thang, 0).getDate();
-    if (ngay < 1 || ngay > daysInMonth2) {
-      errEl.textContent = `Ngày sinh không hợp lệ (tháng ${thang}/${nam} có ${daysInMonth2} ngày).`;
-      errEl.classList.add('active'); return;
-    }
-    if (gio === '' || gio === undefined || gio === null) {
-      errEl.textContent = 'Giờ sinh là bắt buộc — ảnh hưởng trực tiếp đến cung Mệnh.';
       errEl.classList.add('active'); return;
     }
 
@@ -3469,11 +3379,11 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       document.getElementById('loader-text').textContent = 'Đang an sao lá số...';
       document.getElementById('progress-fill').style.width = '20%';
 
-      const conv = convertDuongToAm(ngay, thang, nam, parseInt(gio) * 2);
+      const conv = convertDuongToAm(ngay, thang, nam, gioHour);
       conv._dl = { day: ngay, month: thang, year: nam };
       const ls = anSaoLaSo({
         ngayAL: conv.amLich.day, thangAL: conv.amLich.month, namAL: nam,
-        canNam: conv.canNam, chiNam: conv.chiNam, gioIdx: conv.gioIdx,
+        canNam: conv.canNam, chiNam: conv.chiNam, gioIdx: gioIdx,
         gioitinh, namXem,
       });
       ls._conv = conv; ls._hoTen = hoten;
@@ -3798,6 +3708,24 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
   // Expose functions to global scope for onclick handlers
   window.luanGiai = luanGiai;
   window.luanGiaiNhanh = luanGiaiNhanh;
+
+  // Init form
+  TuviForm.render('tuvi-form-container', {
+    submitLabel: 'Luận Giải Lá Số →',
+    onSubmit: luanGiai,
+  });
+
+  // Auto-fill + run nếu redirect từ index.html
+  if (new URLSearchParams(window.location.search).get('autorun') === '1') {
+    try {
+      const d = JSON.parse(sessionStorage.getItem('tuvi_form_data') || '{}');
+      if (d.nam) {
+        TuviForm.setData(d);
+        sessionStorage.removeItem('tuvi_form_data');
+        setTimeout(() => { luanGiai(); }, 300);
+      }
+    } catch(e) { console.warn('autorun error:', e); }
+  }
 
 </script>
 <!-- REVIEWS SECTION -->
