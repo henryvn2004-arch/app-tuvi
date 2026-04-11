@@ -130,15 +130,12 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
 .dai-van-num{font-size:10px;color:#333;font-weight:700}
 
 /* ── INNER LABEL (tiểu vận tuổi) ── */
-.dc-inner{position:absolute;font-size:8.5px;color:#888;font-weight:600;letter-spacing:.5px;pointer-events:none;line-height:1.3;text-align:center;white-space:nowrap}
-.dc-inner.b{bottom:18px;left:50%;transform:translateX(-50%)}
-.dc-inner.t{top:18px;left:50%;transform:translateX(-50%)}
-.dc-inner.r{right:2px;top:50%;transform:translateY(-50%);writing-mode:vertical-rl}
-.dc-inner.l{left:2px;top:50%;transform:translateY(-50%);writing-mode:vertical-rl}
-.dc-inner.br{bottom:22px;right:4px}
-.dc-inner.bl{bottom:22px;left:4px}
-.dc-inner.tr{top:22px;right:4px}
-.dc-inner.tl{top:22px;left:4px}
+/* ── OUTER LABEL (tiểu vận tuổi) ── */
+.dc-outer{position:absolute;font-size:8px;color:#777;font-weight:700;letter-spacing:.3px;pointer-events:none;white-space:nowrap;line-height:1.2}
+.dc-outer.t{top:2px;left:50%;transform:translateX(-50%)}
+.dc-outer.b{bottom:2px;left:50%;transform:translateX(-50%)}
+.dc-outer.l{left:1px;top:50%;transform:translateY(-50%);writing-mode:vertical-rl;text-align:center}
+.dc-outer.r{right:1px;top:50%;transform:translateY(-50%);writing-mode:vertical-rl;text-align:center}
 
 /* ── TUAN TRIET tags ── */
 .tuan-tag,.triet-tag{
@@ -297,37 +294,28 @@ const GRID_DC = [
   [2, 1, 0,11],
 ];
 
-// Inner edge position for each grid cell (facing center)
-const INNER_POS = {
-  '0,0':'br','0,1':'b','0,2':'b','0,3':'bl',
-  '1,0':'r',                    '1,3':'l',
-  '2,0':'r',                    '2,3':'l',
-  '3,0':'tr','3,1':'t','3,2':'t','3,3':'tl',
+// Outer edge position for each grid cell
+const OUTER_POS = {
+  '0,0':'t','0,1':'t','0,2':'t','0,3':'t',
+  '1,0':'l',                    '1,3':'r',
+  '2,0':'l',                    '2,3':'r',
+  '3,0':'b','3,1':'b','3,2':'b','3,3':'b',
 };
 
-// Compute tiểu vận tuổi list for a given palace dcIdx
-function getTieuVanTuoi(dcIdx, chiNamSinh, gioitinh) {
-  const TIEU_HAN_KHOI_LOCAL = {
-    nam:{'Tý':'Tuất','Sửu':'Dậu','Dần':'Thân','Mão':'Mùi','Thìn':'Ngọ','Tỵ':'Tỵ',
-         'Ngọ':'Thìn','Mùi':'Mão','Thân':'Dần','Dậu':'Sửu','Tuất':'Tý','Hợi':'Hợi'},
-    nu: {'Tý':'Thìn','Sửu':'Tỵ','Dần':'Ngọ','Mão':'Mùi','Thìn':'Thân','Tỵ':'Dậu',
-         'Ngọ':'Tuất','Mùi':'Hợi','Thân':'Tý','Dậu':'Sửu','Tuất':'Dần','Hợi':'Mão'},
+// Compute tiểu vận tuổi for a given palace dcIdx based on tam hợp cục năm sinh
+function getTieuVanTuoi(dcIdx, chiNamSinh) {
+  const KHOI = {
+    'Dần':'Thân','Ngọ':'Thân','Tuất':'Thân',
+    'Tỵ':'Tỵ',  'Dậu':'Tỵ',  'Sửu':'Tỵ',
+    'Thân':'Dần','Tý':'Dần',  'Thìn':'Dần',
+    'Hợi':'Hợi','Mão':'Hợi',  'Mùi':'Hợi',
   };
-  const startDC  = TIEU_HAN_KHOI_LOCAL[gioitinh]?.[chiNamSinh];
+  const startDC = KHOI[chiNamSinh];
   if (!startDC) return '';
   const startIdx = CHI.indexOf(startDC);
-  // Find first tuổi where this dcIdx is the tiểu vận cung
-  let firstTuoi = -1;
-  for (let t = 1; t <= 12; t++) {
-    const offset = (t - 1) % 12;
-    const cungIdx = gioitinh === 'nam'
-      ? (startIdx + offset + 12) % 12
-      : (startIdx - offset + 12) % 12;
-    if (cungIdx === dcIdx) { firstTuoi = t; break; }
-  }
-  if (firstTuoi === -1) return CHI[dcIdx]; // fallback: just show diaChi
-  // Return first 3 cycles: e.g. "1  13  25"
-  return [firstTuoi, firstTuoi+12, firstTuoi+24].join('·');
+  const offset   = (dcIdx - startIdx + 12) % 12;
+  const first    = offset + 1;
+  return [first, first+12, first+24].join('·');
 }
 
 // Chính tinh custom colors (matched to mẫu image)
@@ -453,14 +441,12 @@ function renderCungCell(palace, daiVanTuoi, canNamIdx, ls, row, col) {
     phuHTML += `<div class="phu-tinh-item ${cls}" style="${bold}">${displayName}${bStr}</div>`;
   }
 
-  // Inner edge label (tiểu vận tuổi)
-  const innerPos  = INNER_POS[`${row},${col}`] || '';
+  // Outer edge label (tiểu vận tuổi)
+  const outerPos   = OUTER_POS[`${row},${col}`] || '';
   const chiNamSinh = ls.canChiNam ? ls.canChiNam.split(' ')[1] : '';
-  const tvLabel = innerPos
-    ? getTieuVanTuoi(CHI.indexOf(palace.diaChi), chiNamSinh, ls._gioitinh || 'nam')
-    : '';
-  const innerLabelHTML = innerPos && tvLabel
-    ? `<div class="dc-inner ${innerPos}">${tvLabel}</div>` : '';
+  const tvLabel    = outerPos ? getTieuVanTuoi(CHI.indexOf(palace.diaChi), chiNamSinh) : '';
+  const outerLabelHTML = outerPos && tvLabel
+    ? `<div class="dc-outer ${outerPos}">${tvLabel}</div>` : '';
 
   return `<div class="cung-cell" style="position:relative">
     <div class="cell-header">
@@ -475,7 +461,7 @@ function renderCungCell(palace, daiVanTuoi, canNamIdx, ls, row, col) {
       <span class="dai-van-num">${daiVanTuoi ?? ''}</span>
     </div>
     ${tuanTrietTag}
-    ${innerLabelHTML}
+    ${outerLabelHTML}
   </div>`;
 }
 
