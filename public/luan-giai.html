@@ -1215,6 +1215,10 @@ select.form-input { cursor: pointer; }
       errEl.textContent = `Ngày sinh không hợp lệ (tháng ${thang}/${nam} có ${daysInMonth} ngày).`;
       errEl.classList.add('active'); return;
     }
+    if (gio === '' || gio === undefined || gio === null) {
+      errEl.textContent = 'Giờ sinh là bắt buộc — ảnh hưởng trực tiếp đến cung Mệnh.';
+      errEl.classList.add('active'); return;
+    }
 
     const loader = document.getElementById('loader');
     loader.classList.add('active');
@@ -3642,7 +3646,13 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 
     // Verify payment
     try {
-      const r = await fetch(`/api/payment?action=check&slug=${encodeURIComponent(slug)}`);
+      let userId = null;
+      if (window.supabaseClient) {
+        const { data: { session } } = await window.supabaseClient.auth.getSession().catch(() => ({data:{session:null}}));
+        userId = session?.user?.id || null;
+      }
+      const checkUrl = `/api/payment?action=check&slug=${encodeURIComponent(slug)}${userId?'&userId='+userId:''}`;
+      const r = await fetch(checkUrl);
       const d = await r.json();
       if (!d.purchased) {
         document.getElementById('error-msg').textContent = 'Đang xác nhận thanh toán, vui lòng chờ 30 giây rồi thử lại...';
@@ -3656,11 +3666,9 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       const { ngay, thang, nam, gioIdx, gioChi, gioitinh, namXem, hoTen } = pending;
 
       // Fill form để user thấy
-      document.getElementById('ngay').value     = ngay  || '';
-      document.getElementById('thang').value    = thang || '';
-      document.getElementById('nam').value      = nam   || '';
-      if (gioIdx !== null) document.getElementById('gio').value = Math.floor(gioIdx / 2);
-      document.getElementById('gioitinh').value = gioitinh || 'nam';
+      if (typeof TuviForm !== 'undefined') {
+        TuviForm.setData({ hoten: hoTen||'', ngay, thang, nam, gioIdx, gioitinh, namXem: namXem||new Date().getFullYear() });
+      }
 
       // Rebuild astrolabe từ engine (giống luanGiai())
       const conv = convertDuongToAm(ngay, thang, nam, gioIdx !== null ? gioIdx : 0);
