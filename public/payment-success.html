@@ -127,7 +127,7 @@ function getReturnUrl(slug) {
   // Detect product from slug prefix
   if (slug.startsWith('xem-tuoi-')) return '/xem-tuoi.html';
   if (slug.startsWith('xem-lam-an-')) return '/xem-lam-an.html';
-  return '/';  // default: lá số cá nhân
+  return '/luan-giai.html';  // default: lá số cá nhân
 }
 
 function getProductLabel(slug) {
@@ -168,8 +168,15 @@ function showError(msg) {
   `;
 }
 
-// Chạy capture ngay khi load
-capture();
+// Chờ auth.js init xong rồi mới capture
+async function waitForAuth(timeout = 3000) {
+  const start = Date.now();
+  while (Date.now() - start < timeout) {
+    if (window.supabaseClient) return;
+    await new Promise(r => setTimeout(r, 100));
+  }
+}
+waitForAuth().then(() => capture());
 </script>
 </body>
 </html>
