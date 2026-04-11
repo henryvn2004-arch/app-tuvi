@@ -1215,10 +1215,6 @@ select.form-input { cursor: pointer; }
       errEl.textContent = `Ngày sinh không hợp lệ (tháng ${thang}/${nam} có ${daysInMonth} ngày).`;
       errEl.classList.add('active'); return;
     }
-    if (gio === '' || gio === undefined || gio === null) {
-      errEl.textContent = 'Giờ sinh là bắt buộc — ảnh hưởng trực tiếp đến cung Mệnh.';
-      errEl.classList.add('active'); return;
-    }
 
     const loader = document.getElementById('loader');
     loader.classList.add('active');
