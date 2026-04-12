@@ -190,6 +190,14 @@ const TuviForm = (() => {
     </p>
     <div class="btn-group-submit">
       <button class="btn-submit" id="tvf-submit-btn">${submitLabel}</button>
+      <div style="text-align:center;margin-top:10px">
+        <a href="https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/samples/mau-luan-giai-la-so.pdf"
+           target="_blank" rel="noopener"
+           style="font-size:12px;color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:5px;opacity:0.8;transition:opacity 0.15s"
+           onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">
+          <span>⬇</span><span>Xem mẫu luận giải PDF</span>
+        </a>
+      </div>
     </div>
   </div>
 </div>`;
