@@ -1271,6 +1271,12 @@ select.form-input { cursor: pointer; }
       // ── Task #1: P1 Tổng Quan free (non-blocking) ──
       _loadP1Free();
 
+      // Auto-scroll xuống kết quả sau khi lá số hiện
+      setTimeout(() => {
+        const el = document.getElementById('result-header') || document.getElementById('result-section');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 400);
+
       // ── Check payment status ──
       await checkAndRenderPaywall();
 
