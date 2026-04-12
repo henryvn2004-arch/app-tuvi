@@ -359,23 +359,14 @@ async function loadFromSlug(){
   loader.classList.add('active');
   try{
     const res=await fetch(
-      `${_SB_URL}/rest/v1/laso_data?select=ngay_sinh,thang_sinh,nam_sinh,gioi_tinh,gio_idx,hoten,nam_xem&slug=eq.${encodeURIComponent(slug)}&limit=1`,
+      `${_SB_URL}/rest/v1/laso_public?select=*&slug=eq.${encodeURIComponent(slug)}&limit=1`,
       {headers:{'apikey':_SB_KEY,'Authorization':'Bearer '+_SB_KEY}}
     );
+    if(!res.ok) throw new Error('HTTP '+res.status);
     const rows=await res.json();
-    const d=rows?.[0];
-    if(!d){
-      // Try laso_public view as fallback
-      const res2=await fetch(
-        `${_SB_URL}/rest/v1/laso_public?select=ngay_sinh,thang_sinh,nam_sinh,gioi_tinh,gio_idx,hoten,nam_xem&slug=eq.${encodeURIComponent(slug)}&limit=1`,
-        {headers:{'apikey':_SB_KEY,'Authorization':'Bearer '+_SB_KEY}}
-      );
-      const rows2=await res2.json();
-      if(rows2?.[0]) return fillAndRender(rows2[0]);
-      loader.classList.remove('active');
-      return;
-    }
-    fillAndRender(d);
+    if(rows?.[0]) { fillAndRender(rows[0]); return; }
+    // No data found — just hide loader, leave form empty
+    loader.classList.remove('active');
   }catch(e){
     console.warn('Slug load error:',e);
     loader.classList.remove('active');
@@ -384,16 +375,23 @@ async function loadFromSlug(){
 
 function fillAndRender(d){
   document.getElementById('slug-loading').classList.remove('active');
-  // Fill form
-  if(d.hoten)  document.getElementById('inp-name').value   = d.hoten;
+  // Name: try multiple possible column names
+  const name = d.hoten || d.ten_nguoi || d.name || d.ho_ten || '';
+  if(name) document.getElementById('inp-name').value = name;
   if(d.gioi_tinh) document.getElementById('inp-gender').value = d.gioi_tinh;
-  if(d.ngay_sinh) document.getElementById('inp-dd').value   = d.ngay_sinh;
-  if(d.thang_sinh)document.getElementById('inp-mm').value   = d.thang_sinh;
+  // Ngày/tháng sinh (fallback to 1/1 if not in view)
+  document.getElementById('inp-dd').value   = d.ngay_sinh  || 1;
+  document.getElementById('inp-mm').value   = d.thang_sinh || 1;
   if(d.nam_sinh)  document.getElementById('inp-yyyy').value = d.nam_sinh;
   if(d.nam_xem)   document.getElementById('inp-namxem').value = d.nam_xem;
-  // gio_idx → hour (idx * 2, Tý=0)
-  const gioIdx = d.gio_idx ?? 0;
-  const gioHour = gioIdx * 2;  // Tý→0, Sửu→2, Dần→4...
+  // gio_chi (string "Mão") or gio_idx (number)
+  let gioHour = 0;
+  if(d.gio_chi) {
+    const idx = CHI.indexOf(d.gio_chi);
+    gioHour = idx >= 0 ? idx * 2 : 0;
+  } else if(d.gio_idx != null) {
+    gioHour = d.gio_idx * 2;
+  }
   document.getElementById('inp-hh').value = gioHour;
   document.getElementById('inp-pp').value = 0;
   updateGioAm();
