@@ -350,14 +350,23 @@ Viết văn xuôi, 2-3 đoạn:
   if (phan === 24) return ctx + `
 
 PHẦN 24 — TIỂU VẬN & NĂM XEM (180-220 từ)
-Viết văn xuôi cụ thể về năm đang xem:
+Quan sát 3 lớp hạn cùng lúc: gốc đại vận (10 năm) + tiểu hạn năm đó + lưu niên đại vận.
+Dữ liệu có sẵn: Tiểu hạn (cung + sao), Lưu đại hạn (cung + sao), Đại vận hiện tại.
 
-① Tiểu hạn và Lưu đại hạn: Hai cung này đang ở đâu, có sao gì nổi bật?
-② Tính chất năm: Năm này thuộc khí gì (xét can chi năm xem)? Hòa hay xung với Mệnh/Thân?
-③ Cơ hội và rủi ro: 1-2 điểm thuận lợi và 1-2 điểm cần cẩn thận cụ thể.
-④ Lời khuyên ngắn gọn cho năm này.
+Viết văn xuôi, đi thẳng vào thực tế:
+① Tổng hợp 3 lớp hạn: Đếm sao tốt/xấu trong cả 3 cung — xu hướng chung là thuận hay nghịch?
+② Quan hệ với Mệnh: Cung tiểu hạn sinh hay khắc Mệnh? Sao nhập hạn hợp hay đối lập bản mệnh?
+③ Đại hạn vs tiểu hạn: Đại hạn tốt thì tiểu hạn xấu cũng đỡ nặng; đại hạn xấu thì tiểu hạn tốt cũng bị giảm.
+④ Cơ hội và rủi ro: 1-2 điểm thuận + 1-2 điểm cần cẩn thận cụ thể.
+⑤ Lời khuyên ngắn cho năm này.
 
-Không giải thích lý thuyết. Đi thẳng vào tác động với người này trong năm cụ thể.`;
+Lưu ý khi nhận định:
+- Mệnh sinh cung hạn → hao tổn, dễ gặp vấn đề.
+- Mệnh khắc cung hạn → căng thẳng, nguy hiểm.
+- Có sao tốt hoặc Tuần/Triệt → giảm xấu (nhưng cũng giảm tốt).
+- Sát/Bại tinh mạnh → phải cảnh báo rõ.
+
+Không giải thích lý thuyết. Đi thẳng vào tác động với người này.\`;
 
   return ctx + `\nPhần ${phan}: Luận giải theo lá số.`;
 }
