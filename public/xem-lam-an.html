@@ -665,6 +665,19 @@ select.form-input { cursor: pointer; }
 .meter-fill { height:100%; border-radius:6px; transition:width 0.8s cubic-bezier(.4,0,.2,1); }
 .loader-tuoi { height:3px; background:linear-gradient(90deg,var(--gold),var(--blue),var(--gold)); background-size:200%; animation:shimmer 1.5s infinite; display:none; border-radius:3px; margin-bottom:12px; }
 .loader-tuoi.active { display:block; }
+
+#loader-msg-tuoi {
+  display: none;
+  font-size: 13px;
+  color: var(--gold);
+  font-style: italic;
+  text-align: center;
+  margin-bottom: 8px;
+  min-height: 20px;
+  transition: opacity 0.3s;
+}
+#loader-msg-tuoi.active { display: block; }
+
 @keyframes shimmer { 0%{background-position:200%} 100%{background-position:-200%} }
 .error-msg { color:var(--red); font-size:13px; padding:10px; background:#fef2f2; border-radius:6px; margin-bottom:12px; display:none; }
 .error-msg.active { display:block; }
@@ -974,6 +987,47 @@ select.form-input { cursor: pointer; }
 </script>
 
 <script>
+
+
+// ── EVOCATIVE LOADER MESSAGES ──
+const _LOADER_MSGS_TUOI = [
+  'Đang xem thiên bàn cho hai lá số...',
+  'An sao cổ pháp, tính tương quan...',
+  'Xét ngũ hành, lục hợp, tứ xung...',
+  'Đối chiếu cung Mệnh — cung đối cung...',
+  'Tính điểm 8 yếu tố theo trọng số...',
+  'Xem vận trình đại vận hiện tại...',
+  'Sắp có kết quả rồi...',
+];
+let _loaderMsgInterval = null;
+function _startLoaderMsgs() {
+  const el = document.getElementById('loader-msg-tuoi');
+  if (!el) return;
+  el.classList.add('active');
+  let i = 0;
+  el.textContent = _LOADER_MSGS_TUOI[0];
+  _loaderMsgInterval = setInterval(() => {
+    i = (i + 1) % _LOADER_MSGS_TUOI.length;
+    el.style.opacity = '0';
+    setTimeout(() => { el.textContent = _LOADER_MSGS_TUOI[i]; el.style.opacity = '1'; }, 200);
+  }, 1800);
+}
+function _stopLoaderMsgs() {
+  clearInterval(_loaderMsgInterval);
+  const el = document.getElementById('loader-msg-tuoi');
+  if (el) { el.classList.remove('active'); el.textContent = ''; }
+}
+
+
+function _showSuccessBannerTuoi() {
+  const banner = document.createElement('div');
+  banner.id = 'success-banner-tuoi';
+  banner.style.cssText = 'position:fixed;top:72px;left:50%;transform:translateX(-50%);background:#1E6B3C;color:#fff;padding:12px 28px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,0.2);letter-spacing:0.3px;text-align:center;';
+  banner.textContent = '✓ Thanh toán thành công — Đang luận giải...';
+  document.body.appendChild(banner);
+  setTimeout(() => { banner.style.opacity = '0'; banner.style.transition = 'opacity 0.6s'; }, 7000);
+  setTimeout(() => banner.remove(), 7700);
+}
 
 // ═══════════════════════════════════════════════════
 // DATA & HELPERS
@@ -1785,6 +1839,16 @@ function showPaywall(result, product, productLabel) {
     + '<span>M&#7903; Kh&#243;a Lu&#7853;n Gi&#7843;i</span><span style="font-size:16px">&#8594;</span>'
     + '</button>'
     + '<div class="paywall-secure">&#128274; Thanh to&#225;n b&#7843;o m&#7853;t qua PayPal</div>'
+    + '<div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;justify-content:center">'
+    + '<div style="background:#f8f6f0;border:1px solid #e8d9b0;border-radius:8px;padding:12px 14px;max-width:220px;text-align:left">'
+    + '<div style="color:#c9a84c;font-size:12px;margin-bottom:6px">★★★★★</div>'
+    + '<div style="font-size:12px;color:#444;font-style:italic;line-height:1.6">"An sao cẩn thận, luận giải rõ ràng — đúng hơn mấy trang so tuổi thông thường nhiều."</div>'
+    + '<div style="font-size:11px;color:#888;margin-top:6px">Lê H.P. — TP.HCM</div></div>'
+    + '<div style="background:#f8f6f0;border:1px solid #e8d9b0;border-radius:8px;padding:12px 14px;max-width:220px;text-align:left">'
+    + '<div style="color:#c9a84c;font-size:12px;margin-bottom:6px">★★★★★</div>'
+    + '<div style="font-size:12px;color:#444;font-style:italic;line-height:1.6">"Xem xong hai vợ chồng hiểu nhau hơn — biết chỗ nào nên nhường, chỗ nào bổ trợ được cho nhau."</div>'
+    + '<div style="font-size:11px;color:#888;margin-top:6px">Nguyễn T.M. — Hà Nội</div></div>'
+    + '</div>'
     + '</div>';
   for (var i = 0; i <= 8; i++) {
     var el = document.getElementById('luangiai-'+i);
@@ -1818,6 +1882,7 @@ async function analyze(){
   const btn=document.getElementById('btn-analyze');
   btn.disabled=true;
   document.getElementById('loader-tuoi').classList.add('active');
+  _startLoaderMsgs();
   document.getElementById('result-section').style.display='none';
   try{
     if(window._radarOverlay){window._radarOverlay.destroy();window._radarOverlay=null;}
@@ -1837,11 +1902,20 @@ async function analyze(){
     _pendingSlug = buildSlug(result, 'xem-lam-an');
     document.getElementById('result-section').style.display='block';
     renderAllSections(result);
-    document.getElementById('result-section').scrollIntoView({behavior:'smooth'});
+    // Scroll to result area
+    setTimeout(() => {
+      const _el = document.getElementById('result-header-tuoi') || document.getElementById('result-section');
+      if (_el) _el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 300);
     // Check if already paid
     // If returning from PayPal with _autoUnlock, skip re-checking
     if (window._autoUnlock && window._autoUnlock === _pendingSlug) {
       window._autoUnlock = null;
+      _showSuccessBannerTuoi();
+      setTimeout(() => {
+        const _el2 = document.getElementById('section-0');
+        if (_el2) _el2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 800);
       luanGiaiAll(result);
     } else {
       const alreadyPaid = await verifyPaymentTuoi(_pendingSlug);
@@ -1853,6 +1927,7 @@ async function analyze(){
   }finally{
     btn.disabled=false;
     document.getElementById('loader-tuoi').classList.remove('active');
+    _stopLoaderMsgs();
   }
 }
 
