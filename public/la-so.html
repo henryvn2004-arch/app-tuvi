@@ -71,12 +71,12 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-soft);color:var
 .cell-header{display:flex;flex-direction:column;align-items:center;margin-bottom:4px;gap:2px}
 .can-chi-label{font-size:9px;color:#777;font-weight:500;text-transform:uppercase;width:100%;text-align:left}
 .cung-name-label{font-size:10px;color:#222;font-weight:700;text-transform:uppercase;text-align:center;width:100%;letter-spacing:.5px}
-.badge-menh,.badge-than{display:inline-block;padding:1px 6px;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:2px;margin-bottom:3px}
-.badge-menh{border:1.5px solid var(--blue);color:var(--blue)}.badge-than{border:1.5px solid #7B3FA0;color:#7B3FA0}
-.chinh-tinh-area{margin-bottom:4px}
-.chinh-tinh-item{font-family:'Noto Serif',serif;font-size:12.5px;font-weight:700;line-height:1.4}
-.phu-tinh-area{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:1px 4px;align-content:start}
-.phu-tinh-item{font-size:9.5px;line-height:1.45;font-weight:500}
+.badge-than{display:inline-block;padding:1px 5px;font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:2px;margin-left:4px;border:1.5px solid #7B3FA0;color:#7B3FA0;vertical-align:middle}
+.chinh-tinh-area{margin-bottom:4px;text-align:center}
+.chinh-tinh-item{font-family:'Noto Serif',serif;font-size:12.5px;font-weight:700;line-height:1.4;text-align:center}
+.phu-tinh-area{flex:1;display:flex;gap:3px;align-items:flex-start;overflow:hidden}
+.phu-col{flex:1;display:flex;flex-direction:column;gap:1px;min-width:0}
+.phu-tinh-item{font-size:9px;line-height:1.4;font-weight:500;word-break:break-word}
 .cell-footer{display:flex;justify-content:space-between;align-items:flex-end;position:absolute;bottom:3px;left:7px;right:7px;border-top:1px solid #ddd;padding-top:2px}
 .trang-sinh-label{font-size:9px;color:#777;font-weight:500;text-transform:uppercase;letter-spacing:.5px}
 .dai-van-num{font-size:10px;color:#333;font-weight:700}
@@ -205,7 +205,7 @@ const TRANG_SINH_SET=new Set(['Tràng Sinh','Mộc Dục','Quan Đới','Lâm Qu
 
 function bShort(b){return{Miếu:'M',Vượng:'V',Đắc:'Đ',Bình:'B',Hãm:'H'}[b]||''}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function getStarElementClass(n){const d=(typeof STAR_DATA!=='undefined')?STAR_DATA[n]:null;if(!d?.element)return'sc-neutral';return{'kim':'sc-kim','mộc':'sc-moc','thủy':'sc-thuy','hỏa':'sc-hoa','thổ':'sc-tho'}[d.element.toLowerCase()]||'sc-neutral'}
+function getStarElementClass(n){const d=(typeof STAR_DATA!=='undefined')?STAR_DATA[n]:null;if(!d?.element)return'sc-neutral';const m={'kim':'sc-kim','moc':'sc-moc','mộc':'sc-moc','thuy':'sc-thuy','thủy':'sc-thuy','hoa':'sc-hoa','hỏa':'sc-hoa','tho':'sc-tho','thổ':'sc-tho'};return m[d.element.toLowerCase()]||'sc-neutral'}
 function getStarClass(s){if(s.nhom==='chinh')return'sc-'+(CHINH_TINH_COLOR[s.ten]||'neutral');if(s.hoa==='Lộc')return'sc-hoa-loc';if(s.hoa==='Quyền')return'sc-hoa-quyen';if(s.hoa==='Khoa')return'sc-hoa-khoa';if(s.hoa==='Kỵ')return'sc-hoa-ky';return getStarElementClass(s.ten)}
 function getCungCan(ci,di){return((ci%5)*2+di)%10}
 function hourMinToGioAm(h,m){return Math.floor(((h*60+m+60)%(24*60))/120)%12}
@@ -214,9 +214,8 @@ function hourMinToGioAm(h,m){return Math.floor(((h*60+m+60)%(24*60))/120)%12}
 function renderCungCell(palace, dvTuoi, canNamIdx) {
   const dcIdx=CHI.indexOf(palace.diaChi),canIdx=getCungCan(canNamIdx,dcIdx);
   const canChi=CAN[canIdx]+' '+CHI[dcIdx];
-  let badges='';
-  if(palace.isMenh)badges+='<span class="badge-menh">MỆNH</span> ';
-  if(palace.isThan)badges+='<span class="badge-than">THÂN</span> ';
+  // Cung name + THÂN badge inline
+  const thanBadge=palace.isThan?` <span class="badge-than">THÂN</span>`:'';
   const tsS=palace.stars.find(s=>TRANG_SINH_SET.has(s.ten));
   const tuanS=palace.stars.find(s=>s.ten==='Tuần'||s.ten==='Tuần+Triệt');
   const trietS=palace.stars.find(s=>s.ten==='Triệt'||s.ten==='Tuần+Triệt');
@@ -224,6 +223,7 @@ function renderCungCell(palace, dvTuoi, canNamIdx) {
   if(tuanS&&trietS)tuanTriet='<span class="tuan-tag">TUẦN+TRIỆT</span>';
   else if(tuanS)tuanTriet='<span class="tuan-tag">TUẦN</span>';
   else if(trietS)tuanTriet='<span class="triet-tag">TRIỆT</span>';
+  // Chinh tinh
   let chinhHTML='';
   for(const s of palace.majorStars){
     const cls='sc-'+(CHINH_TINH_COLOR[s.ten]||'neutral');
@@ -231,20 +231,29 @@ function renderCungCell(palace, dvTuoi, canNamIdx) {
     const h=s.hoa?` <span class="sc-hoa-${s.hoa==='Lộc'?'loc':s.hoa==='Quyền'?'quyen':s.hoa==='Khoa'?'khoa':'ky'}" style="font-size:10px">[${s.hoa.charAt(0)}]</span>`:'';
     chinhHTML+=`<div class="chinh-tinh-item ${cls}">${esc(s.ten.toUpperCase())}${b}${h}</div>`;
   }
+  // Phu tinh: split cat tinh (left) vs hung/bai tinh (right)
   const phuStars=palace.stars.filter(s=>s.nhom!=='chinh'&&!TRANG_SINH_SET.has(s.ten)&&s.ten!=='Tuần'&&s.ten!=='Triệt'&&s.ten!=='Tuần+Triệt');
-  let phuHTML='';
-  for(const s of phuStars){
-    const cls=getStarClass(s),isSat=SAT_TINH_SET.has(s.ten)||BAI_SAO_SET.has(s.ten);
-    const b=(isSat&&s.brightness)?` <span style="font-size:8.5px">(${bShort(s.brightness)})</span>`:'';
+  const catTinh=phuStars.filter(s=>!SAT_TINH_SET.has(s.ten)&&!BAI_SAO_SET.has(s.ten));
+  const hungTinh=phuStars.filter(s=>SAT_TINH_SET.has(s.ten)||BAI_SAO_SET.has(s.ten));
+  function renderPhuStar(s){
+    const cls=getStarClass(s);
+    const b=s.brightness?` <span style="font-size:8px">(${bShort(s.brightness)})</span>`:'';
     let nm=s.ten.toUpperCase();
     if(s.hoa){const hc=s.hoa==='Lộc'?'sc-hoa-loc':s.hoa==='Quyền'?'sc-hoa-quyen':s.hoa==='Khoa'?'sc-hoa-khoa':'sc-hoa-ky';nm+=` <span class="${hc}" style="font-size:8px">[${s.hoa.charAt(0)}]</span>`;}
-    phuHTML+=`<div class="phu-tinh-item ${cls}" style="${isSat?'font-weight:600':''}">${nm}${b}</div>`;
+    return `<div class="phu-tinh-item ${cls}">${nm}${b}</div>`;
   }
+  const catHTML=catTinh.map(renderPhuStar).join('');
+  const hungHTML=hungTinh.map(s=>{
+    const cls=getStarClass(s);
+    const b=s.brightness?` <span style="font-size:8px">(${bShort(s.brightness)})</span>`:'';
+    let nm=s.ten.toUpperCase();
+    if(s.hoa){const hc=s.hoa==='Lộc'?'sc-hoa-loc':s.hoa==='Quyền'?'sc-hoa-quyen':s.hoa==='Khoa'?'sc-hoa-khoa':'sc-hoa-ky';nm+=` <span class="${hc}" style="font-size:8px">[${s.hoa.charAt(0)}]</span>`;}
+    return `<div class="phu-tinh-item ${cls}" style="font-weight:600">${nm}${b}</div>`;
+  }).join('');
   return `<div class="cung-cell">
-    <div class="cell-header"><span class="can-chi-label">${esc(canChi.toUpperCase())}</span><span class="cung-name-label">${esc(palace.cungName.toUpperCase())}</span></div>
-    ${badges?`<div style="margin-bottom:3px">${badges}</div>`:''}
+    <div class="cell-header"><span class="can-chi-label">${esc(canChi.toUpperCase())}</span><span class="cung-name-label">${esc(palace.cungName.toUpperCase())}${thanBadge}</span></div>
     <div class="chinh-tinh-area">${chinhHTML}</div>
-    <div class="phu-tinh-area">${phuHTML}</div>
+    <div class="phu-tinh-area"><div class="phu-col">${catHTML}</div><div class="phu-col" style="text-align:right">${hungHTML}</div></div>
     <div class="cell-footer"><span class="trang-sinh-label">${tsS?tsS.ten.toUpperCase():''}</span><span class="dai-van-num">${dvTuoi??''}</span></div>
     ${tuanTriet}
   </div>`;
