@@ -1391,30 +1391,75 @@ select.form-input { cursor: pointer; }
 
       // Lock box — paywall box đẹp cho mỗi phần
       const lockBox = `
-        <div class="paywall-gate" id="lock-box-${phan}" style="margin:24px 0 0">
-          <div class="paywall-eyebrow">紫微明寶 · Luận Giải Đầy Đủ</div>
-          <div class="paywall-title">Mở khóa 24 phần luận giải chuyên sâu</div>
-          <div class="paywall-desc">
-            Phân tích toàn diện 12 cung, vận hạn đại vận – tiểu vận, và luận đoán chi tiết
-            được tạo ra riêng cho lá số của bạn bởi AI Tử Vi Minh Bảo.
+
+        <div class="ux-teaser-wrap" id="lock-box-${phan}" style="margin:24px 0 0">
+
+          <div class="ux-teaser-blur">
+
+            <p style="font-size:16px;line-height:1.85;color:var(--text-mid);font-family:Arial,sans-serif">Với cách cục này, bạn có xu hướng phát triển rõ nét khi được làm đúng việc. Điều ít người nhận ra là chính tinh tại đây không hoạt động đơn độc — phải xét cả tam phương mới thấy hết lực...</p>
+
+            <p style="font-size:16px;line-height:1.85;color:var(--text-mid);font-family:Arial,sans-serif">Điểm đáng chú ý nhất là tổ hợp sao ở cung này kết hợp với vận hạn hiện tại — tạo ra một giai đoạn mà nếu biết cách...</p>
+
           </div>
-          <div class="paywall-features">
-            <div class="paywall-feature">Luận giải 12 cung chi tiết</div>
-            <div class="paywall-feature">Phân tích đại vận toàn đời</div>
-            <div class="paywall-feature">Tiểu vận từng năm</div>
-            <div class="paywall-feature">Cách cục &amp; ý nghĩa sâu</div>
-            <div class="paywall-feature">Lưu vĩnh viễn trong tài khoản</div>
-            <div class="paywall-feature">Chia sẻ lá số với người thân</div>
+
+          <div class="ux-paywall-overlay">
+
+            <div class="paywall-eyebrow">紫微明寶 · Luận Giải Đầy Đủ</div>
+
+            <div class="paywall-title">Đọc tiếp phần luận giải này</div>
+
+            <div class="paywall-desc">Phân tích riêng cho lá số của bạn — 24 phần, từ bản mệnh đến từng năm vận hạn.</div>
+
+            <div class="paywall-features">
+
+              <div class="paywall-feature">12 cung luận giải chi tiết</div>
+
+              <div class="paywall-feature">9 đại vận + tiểu vận từng năm</div>
+
+              <div class="paywall-feature">Cách cục &amp; ý nghĩa sâu</div>
+
+              <div class="paywall-feature">Lưu &amp; xem lại mọi lúc</div>
+
+            </div>
+
+            <div style="display:flex;align-items:baseline;justify-content:center;gap:8px;margin-bottom:4px">
+
+              <div class="paywall-price">$19</div>
+
+              <span style="font-size:13px;color:#999;text-decoration:line-through">$49</span>
+
+            </div>
+
+            <div class="paywall-price-note">Bằng 1 ly cà phê · Thanh toán một lần · Truy cập vĩnh viễn</div>
+
+            <button class="btn-paywall" onclick="initiatePayment()">
+
+              <span>Mở Khóa Luận Giải →</span>
+
+            </button>
+
+            <div style="margin-top:20px;border-top:1px solid rgba(201,168,76,0.2);padding-top:16px">
+
+              <div style="font-size:11px;color:#888;margin-bottom:10px;letter-spacing:1px;text-transform:uppercase">Người dùng nói gì</div>
+
+              <div style="display:flex;flex-direction:column;gap:10px">
+
+                <div style="background:rgba(255,255,255,0.7);border-radius:6px;padding:10px 12px;text-align:left"><div style="font-size:13px;color:#444;line-height:1.5;font-style:italic">"Phần Quan Lộc nói đúng y chang tình huống tao đang gặp."</div><div style="font-size:11px;color:#999;margin-top:4px">— Minh T., TP.HCM</div></div>
+
+                <div style="background:rgba(255,255,255,0.7);border-radius:6px;padding:10px 12px;text-align:left"><div style="font-size:13px;color:#444;line-height:1.5;font-style:italic">"Phần đại vận phân tích đúng giai đoạn khó nhất của mình."</div><div style="font-size:11px;color:#999;margin-top:4px">— Lan H., Hà Nội</div></div>
+
+              </div>
+
+            </div>
+
+            <div class="paywall-secure">🔒 Thanh toán bảo mật qua PayPal · Hoàn tiền nếu lỗi kỹ thuật</div>
+
           </div>
-          <div class="paywall-price">$19</div>
-          <div class="paywall-price-note">Thanh toán một lần · Truy cập vĩnh viễn</div>
-          <button class="btn-paywall" onclick="initiatePayment()">
-            <span>Xem Luận Giải Đầy Đủ</span>
-            <span style="font-size:16px">→</span>
-          </button>
-          <div class="paywall-secure">🔒 Thanh toán bảo mật qua PayPal · Hoàn tiền nếu lỗi kỹ thuật</div>
+
         </div>
+
         <div class="phan-claude-content" id="claude-content-${phan}" style="display:none"></div>`;
+
 
       section.innerHTML = html + preGenHtml + chartHtml + divider + lockBox;
       body.appendChild(section);
@@ -1766,7 +1811,10 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 
       // Điền content, ẩn lock box
       if (claudeBox) {
-        claudeBox.innerHTML = renderMarkdown(data.luanGiai);
+        claudeBox.innerHTML = renderMarkdown(data.luanGiai)
+          + `<div class="ux-share-bar">
+              <button onclick="uxCopySection(this, ${_currentPhan})" class="ux-share-btn">📋 Sao chép phần này</button>
+            </div>`;
         claudeBox.style.display = '';
       }
       if (lockBox) lockBox.style.display = 'none';
@@ -1843,7 +1891,8 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     btnNext.style.display = 'none';
     btnNext.classList.remove('loading');
     phanLoading.classList.add('active');
-    phanLoadingText.textContent = `Đang tải: ${PHAN_LABELS[_currentPhan]}...`;
+    const _hints=['Đang đọc vị trí các sao...','Đang xét tam phương tứ chính...','Đang phân tích cách cục...','Đang luận đoán ý nghĩa...'];
+    phanLoadingText.textContent = _hints[_currentPhan % _hints.length] + ' — ' + PHAN_LABELS[_currentPhan];
     document.getElementById('phan-progress').textContent = `Phần ${_currentPhan} / ${TONG_PHAN}`;
     loader.classList.add('active');
     loader.classList.add('active');
@@ -1852,7 +1901,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     try {
       let docs = '';
       // RAG cho phần 1, 2-13 (từng cung), 14-15 (vận hạn)
-      loaderText.textContent = `Tìm tài liệu... (1/2)`;
+      loaderText.textContent = `Đang tra cổ thư... (${_currentPhan}/${TONG_PHAN})`;
       document.getElementById('progress-fill').style.width = '40%';
       try {
         const matchCount = _currentPhan === 1 ? 8 : 5;
@@ -1863,7 +1912,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         docs = (await sr.json()).docs || '';
       } catch(e) { console.warn('RAG:', e.message); }
 
-      loaderText.textContent = `Đang luận giải: ${PHAN_LABELS[_currentPhan]}... (2/2)`;
+      loaderText.textContent = `Đang luận giải ${PHAN_LABELS[_currentPhan]}...`;
       document.getElementById('progress-fill').style.width = '70%';
       // Delay để tránh rate limit — đặc biệt cho phần đại vận
       if (_currentPhan > 1) {
@@ -3729,6 +3778,39 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
   })();
 
   // Expose functions to global scope for onclick handlers
+
+  // ── Exit intent ──────────────────────────────────────────────
+  let _exitShown = false;
+  document.addEventListener('mouseleave', function(e) {
+    if (e.clientY > 5 || _exitShown) return;
+    if (!_astrolabe || document.getElementById('lock-box-1')?.style.display === 'none') return;
+    _exitShown = true;
+    const modal = document.createElement('div');
+    modal.id = 'ux-exit-modal';
+    modal.innerHTML = `
+      <div style="position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px">
+        <div style="background:#fff;border-radius:12px;padding:36px 40px;max-width:420px;width:100%;text-align:center;position:relative">
+          <button onclick="document.getElementById('ux-exit-modal').remove()" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:#999">×</button>
+          <div style="font-size:32px;margin-bottom:12px">🔮</div>
+          <div style="font-family:'Noto Serif',serif;font-size:20px;color:#061A2E;margin-bottom:10px">Lá số của bạn đã sẵn sàng</div>
+          <div style="font-size:14px;color:#666;line-height:1.6;margin-bottom:24px">Luận giải 24 phần đang chờ — bao gồm vận hạn năm ${new Date().getFullYear()} và các đại vận quan trọng nhất.</div>
+          <button onclick="initiatePayment();document.getElementById('ux-exit-modal').remove()" style="width:100%;padding:14px;background:#061A2E;color:#c9a84c;border:2px solid #c9a84c;border-radius:4px;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:inherit">Mở Khóa $19 →</button>
+          <div style="font-size:11px;color:#aaa;margin-top:10px">Bằng 1 ly cà phê · Thanh toán một lần</div>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+  });
+
+  // ── UX helpers ───────────────────────────────────────────────
+  window.uxCopySection = function(btn, phan) {
+    const box = document.getElementById('claude-content-' + phan);
+    const text = box ? box.innerText.replace(/📋.*$/, '').trim() : '';
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✓ Đã sao chép';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = '📋 Sao chép phần này'; btn.classList.remove('copied'); }, 2000);
+    });
+  };
   window.luanGiai = luanGiai;
   window.luanGiaiNhanh = luanGiaiNhanh;
 
@@ -3816,6 +3898,16 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 .rv-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px}
 .rv-date{font-size:11px;color:var(--text-lt)}
 @media(max-width:700px){.rv-card{width:100% !important;flex:0 0 100% !important}}
+
+/* ── UX IMPROVEMENTS ── */
+.ux-teaser-wrap { position: relative; }
+.ux-teaser-blur { filter: blur(4px); user-select: none; pointer-events: none; max-height: 120px; overflow: hidden; opacity: 0.6; padding: 0 4px; position: relative; }
+.ux-teaser-blur::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 80px; background: linear-gradient(transparent, #fff); }
+.ux-paywall-overlay { background: linear-gradient(135deg, #fdf6e9 0%, #fff9ef 100%); border: 2px solid #c9a84c; border-radius: 12px; padding: 32px 36px; margin-top: 0; text-align: center; }
+.ux-share-bar { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-lt); display: flex; gap: 10px; flex-wrap: wrap; }
+.ux-share-btn { background: none; border: 1px solid var(--border); border-radius: 4px; padding: 6px 14px; font-size: 11px; color: var(--text-lt); cursor: pointer; font-family: inherit; transition: all .15s; }
+.ux-share-btn:hover { border-color: var(--navy); color: var(--navy); }
+.ux-share-btn.copied { border-color: var(--green); color: var(--green); }
 </style>
 
 <script>

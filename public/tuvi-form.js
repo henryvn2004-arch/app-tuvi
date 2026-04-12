@@ -155,10 +155,14 @@ const TuviForm = (() => {
       </div>
     </div>
     <div class="form-group">
-      <label class="form-label" style="display:flex;align-items:center;gap:4px">
-        Múi giờ nơi sinh
+      <label class="form-label" style="display:flex;align-items:center;gap:6px;cursor:pointer">
+        <input type="checkbox" id="tvf-foreign" onchange="TuviForm._toggleUtc()" style="cursor:pointer">
+        <span>Sinh ở ngoài Việt Nam?</span>
       </label>
-      <select class="form-input" id="tvf-utc" oninput="TuviForm._update()">${utcOpts}</select>
+      <div id="tvf-utc-wrap" style="display:none;margin-top:6px">
+        <label class="form-label">Múi giờ nơi sinh</label>
+        <select class="form-input" id="tvf-utc" oninput="TuviForm._update()">${utcOpts}</select>
+      </div>
     </div>
     <div class="form-group">
       <label class="form-label" style="display:flex;align-items:center;gap:4px">
@@ -236,10 +240,22 @@ const TuviForm = (() => {
     updateGioAmDisplay();
   }
 
+  function toggleUtc() {
+    const cb = document.getElementById('tvf-foreign');
+    const wrap = document.getElementById('tvf-utc-wrap');
+    if (wrap) wrap.style.display = cb?.checked ? 'block' : 'none';
+    if (!cb?.checked) {
+      const sel = document.getElementById('tvf-utc');
+      if (sel) sel.value = '420';
+    }
+    updateGioAmDisplay();
+  }
+
   return {
     render,
     getData,
     setData,
     _update: updateGioAmDisplay,
+    _toggleUtc: toggleUtc,
   };
 })();
