@@ -366,7 +366,7 @@ Lưu ý khi nhận định:
 - Có sao tốt hoặc Tuần/Triệt → giảm xấu (nhưng cũng giảm tốt).
 - Sát/Bại tinh mạnh → phải cảnh báo rõ.
 
-Không giải thích lý thuyết. Đi thẳng vào tác động với người này.\`;
+Không giải thích lý thuyết. Đi thẳng vào tác động với người này.`;
 
   return ctx + `\nPhần ${phan}: Luận giải theo lá số.`;
 }
