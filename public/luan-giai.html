@@ -646,6 +646,16 @@ select.form-input { cursor: pointer; }
 .footer-tagline { font-size:12px; margin-top:8px; color:rgba(255,255,255,0.35); line-height:1.6; }
 .footer-bottom  { display:flex; justify-content:space-between; align-items:center; font-size:11px; color:rgba(255,255,255,0.25); }
 .footer-bottom img { width:20px; height:20px; object-fit:contain; opacity:0.3; border-radius:3px; }
+/* Task #9: Exit intent */
+.exit-intent-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:9999; align-items:center; justify-content:center; }
+.exit-intent-overlay.show { display:flex; }
+.exit-intent-box { background:#fff; border-top:3px solid #c9a84c; padding:32px 28px; max-width:380px; width:90%; border-radius:4px; text-align:center; position:relative; }
+.exit-intent-close { position:absolute; top:10px; right:14px; background:none; border:none; font-size:18px; cursor:pointer; color:#999; }
+.exit-intent-title { font-size:20px; font-weight:400; color:#061A2E; margin-bottom:10px; }
+.exit-intent-desc { font-size:14px; color:#666; line-height:1.6; margin-bottom:20px; }
+.exit-intent-btn { display:inline-block; padding:12px 28px; background:#061A2E; color:#c9a84c; border:1.5px solid #c9a84c; font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; font-family:inherit; border-radius:2px; }
+.exit-intent-btn:hover { background:#c9a84c; color:#061A2E; }
+.exit-intent-skip { display:block; margin-top:12px; font-size:12px; color:#aaa; cursor:pointer; background:none; border:none; font-family:inherit; }
 </style>
 <body>
 
@@ -3426,6 +3436,23 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     return preGenHtml;
   }
 
+  // Task #10: stream paragraphs vào element với delay nhỏ
+  function streamIntoEl(el, htmlContent, onDone) {
+    el.innerHTML = htmlContent;
+    const paras = el.querySelectorAll('p, h2, h3');
+    if (!paras.length) { if (onDone) onDone(); return; }
+    paras.forEach(p => { p.style.opacity = '0'; p.style.transform = 'translateY(6px)'; p.style.transition = 'opacity 0.3s ease, transform 0.3s ease'; });
+    let i = 0;
+    function next() {
+      if (i >= paras.length) { if (onDone) onDone(); return; }
+      paras[i].style.opacity = '1';
+      paras[i].style.transform = 'translateY(0)';
+      i++;
+      setTimeout(next, 60);
+    }
+    setTimeout(next, 50);
+  }
+
   function renderMarkdown(text) {
     const lines = text.split('\n');
     let out = '', inTable = false, rows = [];
@@ -3868,6 +3895,33 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
   };
   window.luanGiai = luanGiai;
   window.luanGiaiNhanh = luanGiaiNhanh;
+
+  // Task #9: Exit intent
+  (function() {
+    let _triggered = false;
+    let _paywallSeen = false;
+
+    // Mark paywall seen khi result-section active
+    const _obs = new MutationObserver(() => {
+      if (document.getElementById('result-section')?.classList.contains('active')) {
+        setTimeout(() => { _paywallSeen = true; }, 3000); // chờ 3s mới arm
+      }
+    });
+    const _rs = document.getElementById('result-section');
+    if (_rs) _obs.observe(_rs, { attributes: true, attributeFilter: ['class'] });
+
+    document.addEventListener('mouseleave', (e) => {
+      if (e.clientY > 10) return; // chỉ trigger khi mouse ra top
+      if (_triggered || !_paywallSeen) return;
+      if (sessionStorage.getItem('exit_intent_shown')) return;
+      // Không show nếu đã paid (overlay ẩn = đã paid)
+      const overlay = document.getElementById('tvc-paywall-overlay');
+      if (overlay && overlay.style.display === 'none') return;
+      _triggered = true;
+      sessionStorage.setItem('exit_intent_shown', '1');
+      document.getElementById('exit-intent-overlay')?.classList.add('show');
+    });
+  })();
 
   // Init form
   TuviForm.render('tuvi-form-container', {
