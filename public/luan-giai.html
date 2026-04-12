@@ -3902,11 +3902,24 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 
       // Clear result + render
       document.getElementById('result-body').innerHTML = '';
-      await renderPreGenFree();
-      await startClaudeluanGiai();
 
-      // Scroll + clean URL
-      setTimeout(() => document.getElementById('result-section')?.scrollIntoView({ behavior: 'smooth' }), 300);
+      // Success notification
+      const _successBar = document.createElement('div');
+      _successBar.id = 'payment-success-bar';
+      _successBar.style.cssText = 'background:#1E6B3C;color:#fff;padding:14px 24px;text-align:center;font-size:14px;font-weight:500;position:sticky;top:60px;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px';
+      _successBar.innerHTML = '<span>✓</span><span>Thanh toán thành công — đang tải luận giải 24 phần...</span>';
+      document.body.insertBefore(_successBar, document.body.firstChild);
+      setTimeout(() => _successBar.remove(), 8000);
+
+      await renderPreGenFree();
+
+      // Scroll xuống result-header sau khi có content
+      setTimeout(() => {
+        const el = document.getElementById('result-header');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 400);
+
+      await startClaudeluanGiai();
       window.history.replaceState({}, '', '/luan-giai.html');
 
     } catch(e) {
@@ -3922,7 +3935,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
   let _exitShown = false;
   document.addEventListener('mouseleave', function(e) {
     if (e.clientY > 5 || _exitShown) return;
-    if (!_astrolabe || document.getElementById('lock-box-1')?.style.display === 'none') return;
+    if (!_astrolabe || _isPaid) return;
     _exitShown = true;
     const modal = document.createElement('div');
     modal.id = 'ux-exit-modal';
@@ -3971,7 +3984,8 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       if (e.clientY > 10) return; // chỉ trigger khi mouse ra top
       if (_triggered || !_paywallSeen) return;
       if (sessionStorage.getItem('exit_intent_shown')) return;
-      // Không show nếu đã paid (overlay ẩn = đã paid)
+      // Không show nếu đã paid
+      if (typeof _isPaid !== 'undefined' && _isPaid) return;
       const overlay = document.getElementById('tvc-paywall-overlay');
       if (overlay && overlay.style.display === 'none') return;
       _triggered = true;
