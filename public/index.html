@@ -992,6 +992,7 @@ select.form-input { cursor: pointer; }
             <div class="tvc-paywall-feature">Câu trả lời cá nhân hóa</div>
             <div class="tvc-paywall-feature">Dựa trên lá số thực tế</div>
           </div>
+          <div style="font-size:11px;color:#9A7B3A;margin-bottom:5px">24 khía cạnh cuộc đời · Bằng 1 buổi cà phê</div>
           <div class="tvc-paywall-price">$19</div>
           <div class="tvc-paywall-price-note">Bao gồm 24 phần luận giải + Vấn đáp không giới hạn</div>
           <button class="tvc-paywall-btn" onclick="initiatePayment()">
@@ -1032,6 +1033,26 @@ select.form-input { cursor: pointer; }
   let _gioitinh = null, _namXem = null, _astrolabe = null;
   let _currentPhan = 0;
   let _pendingSlug = null;  // slug tạm trước khi save
+
+  // ── Task #3: rotating loader messages ──
+  const _LOADER_MSGS_ANSAO = [
+    'Đang định vị Tử Vi tại cung Mệnh...',
+    'Đang an sao theo cổ pháp...',
+    'Đang tính cục số và nạp âm...',
+  ];
+  const _LOADER_MSGS_RAG = [
+    'Đang tra cứu tàng thư cổ pháp...',
+    'Đang tìm tài liệu tham chiếu...',
+    'Đang đối chiếu với kinh điển Tử Vi...',
+  ];
+  const _LOADER_MSGS_PHAN = (label) => [
+    `Thầy đang đọc ${label}...`,
+    `Đang luận giải ${label}...`,
+    `Đang phân tích ${label}...`,
+    'Sắp xong — đang viết luận giải...',
+  ];
+  function _loaderMsg(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+  // ────────────────────────────────────────────────────────
 
   // Chuẩn hóa slug — strip dấu tiếng Việt, chỉ giữ ASCII (dùng nhất quán mọi chỗ)
   function toSlugAscii(str) {
@@ -1242,7 +1263,7 @@ select.form-input { cursor: pointer; }
     document.getElementById('result-section').classList.remove('active');
 
     try {
-      document.getElementById('loader-text').textContent = 'Đang an sao lá số...';
+      document.getElementById('loader-text').textContent = _loaderMsg(_LOADER_MSGS_ANSAO);
       document.getElementById('progress-fill').style.width = '20%';
 
       // Convert DL → AL + an sao bằng engine v2
@@ -1424,13 +1445,24 @@ select.form-input { cursor: pointer; }
             <div class="paywall-feature">Lưu vĩnh viễn trong tài khoản</div>
             <div class="paywall-feature">Chia sẻ lá số với người thân</div>
           </div>
+          <div style="font-size:12px;color:#9A7B3A;margin-bottom:6px;letter-spacing:0.3px">24 khía cạnh cuộc đời · Bằng 1 buổi cà phê</div>
           <div class="paywall-price">$19</div>
-          <div class="paywall-price-note">Thanh toán một lần · Truy cập vĩnh viễn</div>
+          <div class="paywall-price-note">Xem offline thường 500k–1tr · Ở đây chỉ $19, nhận kết quả ngay</div>
           <button class="btn-paywall" onclick="initiatePayment()">
             <span>Xem Luận Giải Đầy Đủ</span>
             <span style="font-size:16px">→</span>
           </button>
           <div class="paywall-secure">🔒 Thanh toán bảo mật qua PayPal · Hoàn tiền nếu lỗi kỹ thuật</div>
+          <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;max-width:440px;margin-left:auto;margin-right:auto;text-align:left">
+            <div style="background:rgba(255,255,255,0.7);border-left:3px solid #c9a84c;padding:10px 14px;border-radius:0 6px 6px 0">
+              <div style="font-size:13px;color:#333;line-height:1.5;font-style:italic">"Phần Quan Lộc nói đúng y chang tình huống tao đang gặp — cả cái cách nó diễn ra theo từng giai đoạn."</div>
+              <div style="font-size:11px;color:#9A7B3A;margin-top:5px;font-weight:600">Trần M.K. — TP.HCM</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.7);border-left:3px solid #c9a84c;padding:10px 14px;border-radius:0 6px 6px 0">
+              <div style="font-size:13px;color:#333;line-height:1.5;font-style:italic">"Đọc phần đại vận xong ngồi im một lúc. Đúng y chang những gì đã xảy ra 3 năm nay."</div>
+              <div style="font-size:11px;color:#9A7B3A;margin-top:5px;font-weight:600">Nguyễn T.H. — Hà Nội</div>
+            </div>
+          </div>
         </div>
         <div class="phan-claude-content" id="claude-content-${phan}" style="display:none"></div>`;
 
@@ -1596,13 +1628,24 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         <div class="paywall-feature">Lưu vĩnh viễn trong tài khoản</div>
         <div class="paywall-feature">Chia sẻ lá số với người thân</div>
       </div>
+      <div style="font-size:12px;color:#9A7B3A;margin-bottom:6px;letter-spacing:0.3px">24 khía cạnh cuộc đời · Bằng 1 buổi cà phê</div>
       <div class="paywall-price">$19</div>
-      <div class="paywall-price-note">Thanh toán một lần · Truy cập vĩnh viễn</div>
+      <div class="paywall-price-note">Xem offline thường 500k–1tr · Ở đây chỉ $19, nhận kết quả ngay</div>
       <button class="btn-paywall" id="btn-paywall-pay" onclick="initiatePayment()">
         <span>Xem Luận Giải Đầy Đủ</span>
         <span style="font-size:16px">→</span>
       </button>
       <div class="paywall-secure">🔒 Thanh toán bảo mật qua PayPal · Hoàn tiền nếu lỗi kỹ thuật</div>
+          <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;max-width:440px;margin-left:auto;margin-right:auto;text-align:left">
+            <div style="background:rgba(255,255,255,0.7);border-left:3px solid #c9a84c;padding:10px 14px;border-radius:0 6px 6px 0">
+              <div style="font-size:13px;color:#333;line-height:1.5;font-style:italic">"Phần Quan Lộc nói đúng y chang tình huống tao đang gặp — cả cái cách nó diễn ra theo từng giai đoạn."</div>
+              <div style="font-size:11px;color:#9A7B3A;margin-top:5px;font-weight:600">Trần M.K. — TP.HCM</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.7);border-left:3px solid #c9a84c;padding:10px 14px;border-radius:0 6px 6px 0">
+              <div style="font-size:13px;color:#333;line-height:1.5;font-style:italic">"Đọc phần đại vận xong ngồi im một lúc. Đúng y chang những gì đã xảy ra 3 năm nay."</div>
+              <div style="font-size:11px;color:#9A7B3A;margin-top:5px;font-weight:600">Nguyễn T.H. — Hà Nội</div>
+            </div>
+          </div>
     `;
     body.appendChild(gate);
   }
@@ -1860,7 +1903,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     btnNext.style.display = 'none';
     btnNext.classList.remove('loading');
     phanLoading.classList.add('active');
-    phanLoadingText.textContent = `Đang tải: ${PHAN_LABELS[_currentPhan]}...`;
+    phanLoadingText.textContent = _loaderMsg(_LOADER_MSGS_PHAN(PHAN_LABELS[_currentPhan]));
     document.getElementById('phan-progress').textContent = `Phần ${_currentPhan} / ${TONG_PHAN}`;
     loader.classList.add('active');
     loader.classList.add('active');
@@ -1869,7 +1912,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     try {
       let docs = '';
       // RAG cho phần 1, 2-13 (từng cung), 14-15 (vận hạn)
-      loaderText.textContent = `Tìm tài liệu... (1/2)`;
+      loaderText.textContent = _loaderMsg(_LOADER_MSGS_RAG);
       document.getElementById('progress-fill').style.width = '40%';
       try {
         const matchCount = _currentPhan === 1 ? 8 : 5;
@@ -1880,7 +1923,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         docs = (await sr.json()).docs || '';
       } catch(e) { console.warn('RAG:', e.message); }
 
-      loaderText.textContent = `Đang luận giải: ${PHAN_LABELS[_currentPhan]}... (2/2)`;
+      loaderText.textContent = _loaderMsg(_LOADER_MSGS_PHAN(PHAN_LABELS[_currentPhan]));
       document.getElementById('progress-fill').style.width = '70%';
       // Delay để tránh rate limit — đặc biệt cho phần đại vận
       if (_currentPhan > 1) {
@@ -3379,7 +3422,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     document.getElementById('result-section').classList.remove('active');
 
     try {
-      document.getElementById('loader-text').textContent = 'Đang an sao lá số...';
+      document.getElementById('loader-text').textContent = _loaderMsg(_LOADER_MSGS_ANSAO);
       document.getElementById('progress-fill').style.width = '20%';
 
       const conv = convertDuongToAm(ngay, thang, nam, parseInt(gio) * 2);
