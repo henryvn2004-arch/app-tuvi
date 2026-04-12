@@ -3912,11 +3912,11 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 
       await renderPreGenFree();
 
-      // Scroll xuống result-header sau khi có content
+      // Scroll xuống lá số sau khi renderPreGenFree xong
       setTimeout(() => {
-        const el = document.getElementById('result-header');
+        const el = document.getElementById('phan-section-1') || document.getElementById('result-section');
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 400);
+      }, 600);
 
       await startClaudeluanGiai();
       window.history.replaceState({}, '', '/luan-giai.html');
