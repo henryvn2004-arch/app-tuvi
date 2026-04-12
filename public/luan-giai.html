@@ -1052,32 +1052,45 @@ select.form-input { cursor: pointer; }
       if (_dv) PHAN_LABELS[15 + _di] = 'Đại Vận ' + (_di+1) + ' (' + _dv.tuoiStart + '–' + _dv.tuoiEnd + 't)';
     }
   }
+  // QUERIES động — dùng dữ liệu lá số thực để RAG tìm tài liệu relevant hơn
+  function _getStarNames(cungName) {
+    if (!_astrolabe) return '';
+    const p = _astrolabe.palaces.find(p => p.cungName === cungName);
+    return p ? p.majorStars.map(s => s.ten).join(' ') : '';
+  }
+  function _getDvInfo(dvNum) {
+    if (!_astrolabe) return '';
+    const dv = _astrolabe.daiVans[dvNum - 1];
+    if (!dv) return '';
+    const p = _astrolabe.palaces[dv.cungIdx];
+    return `${dv.diaChi} ${p ? p.majorStars.map(s => s.ten).join(' ') : ''}`;
+  }
   const QUERIES = {
-  1:  () => `lục thập hoa giáp tinh hệ tổng quan mệnh cục chính tinh khí chất`,
-  2:  () => `cung mệnh chính tinh cách cục ý nghĩa`,
-  3:  () => `cung phụ mẫu cha mẹ ý nghĩa`,
-  4:  () => `cung phúc đức phúc khí tổ tiên ý nghĩa`,
-  5:  () => `cung điền trạch nhà đất bất động sản`,
-  6:  () => `cung quan lộc sự nghiệp công danh`,
-  7:  () => `cung nô bộc bạn bè nhân viên`,
-  8:  () => `cung thiên di xuất ngoại giao thiệp`,
-  9:  () => `cung tật ách sức khỏe bệnh tật`,
-  10: () => `cung tài bạch tiền bạc tài chính`,
-  11: () => `cung tử tức con cái`,
-  12: () => `cung phu thê hôn nhân vợ chồng`,
-  13: () => `cung huynh đệ anh chị em`,
-  14: () => `đại vận thiên thời địa lợi nhân hòa scoring vận hạn`,
-  15: () => `đại vận cung sao ý nghĩa vận hạn`,
-  16: () => `đại vận cung sao ý nghĩa vận hạn`,
-  17: () => `đại vận cung sao ý nghĩa vận hạn`,
-  18: () => `đại vận cung sao ý nghĩa vận hạn`,
-  19: () => `đại vận cung sao ý nghĩa vận hạn`,
-  20: () => `đại vận cung sao ý nghĩa vận hạn`,
-  21: () => `đại vận cung sao ý nghĩa vận hạn`,
-  22: () => `đại vận cung sao ý nghĩa vận hạn`,
-  23: () => `đại vận cung sao ý nghĩa vận hạn`,
-  24: () => `tiểu hạn lưu niên vận hiện tại`,
-};
+    1:  () => `tổng quan lá số ${_astrolabe?.napAm||''} cục ${_astrolabe?.cuc||''} ${_getStarNames('Mệnh')} khí chất bản mệnh`,
+    2:  () => `cung mệnh ${_getStarNames('Mệnh')} cách cục ý nghĩa chính tinh`,
+    3:  () => `cung phụ mẫu ${_getStarNames('Phụ Mẫu')} cha mẹ ý nghĩa`,
+    4:  () => `cung phúc đức ${_getStarNames('Phúc Đức')} phúc khí tổ tiên`,
+    5:  () => `cung điền trạch ${_getStarNames('Điền Trạch')} nhà đất bất động sản`,
+    6:  () => `cung quan lộc ${_getStarNames('Quan Lộc')} sự nghiệp công danh`,
+    7:  () => `cung nô bộc ${_getStarNames('Nô Bộc')} bạn bè cộng sự`,
+    8:  () => `cung thiên di ${_getStarNames('Thiên Di')} xuất ngoại giao thiệp`,
+    9:  () => `cung tật ách ${_getStarNames('Tật Ách')} sức khỏe bệnh tật`,
+    10: () => `cung tài bạch ${_getStarNames('Tài Bạch')} tiền bạc tài chính`,
+    11: () => `cung tử tức ${_getStarNames('Tử Tức')} con cái`,
+    12: () => `cung phu thê ${_getStarNames('Phu Thê')} hôn nhân vợ chồng`,
+    13: () => `cung huynh đệ ${_getStarNames('Huynh Đệ')} anh chị em`,
+    14: () => `đại vận thiên thời địa lợi nhân hòa scoring ${_astrolabe?.daiVanHienTai?.diaChi||''}`,
+    15: () => `đại vận ${_getDvInfo(1)} vận hạn ý nghĩa`,
+    16: () => `đại vận ${_getDvInfo(2)} vận hạn ý nghĩa`,
+    17: () => `đại vận ${_getDvInfo(3)} vận hạn ý nghĩa`,
+    18: () => `đại vận ${_getDvInfo(4)} vận hạn ý nghĩa`,
+    19: () => `đại vận ${_getDvInfo(5)} vận hạn ý nghĩa`,
+    20: () => `đại vận ${_getDvInfo(6)} vận hạn ý nghĩa`,
+    21: () => `đại vận ${_getDvInfo(7)} vận hạn ý nghĩa`,
+    22: () => `đại vận ${_getDvInfo(8)} vận hạn ý nghĩa`,
+    23: () => `đại vận ${_getDvInfo(9)} vận hạn ý nghĩa`,
+    24: () => `tiểu hạn lưu niên ${_astrolabe?.chiNamXem||''} ${_astrolabe?.palaces[_astrolabe?.tieuHanIdx]?.cungName||''} vận hiện tại`,
+  };
 
   function formatLaSoV2(ls, conv) {
     const lines = [];
