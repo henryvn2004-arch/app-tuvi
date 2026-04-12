@@ -1605,6 +1605,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       const lockBox   = document.getElementById('lock-box-1');
       const claudeBox = document.getElementById('claude-content-1');
       if (!lockBox || !claudeBox) return;
+      if (_isPaid) return; // đã paid, startClaudeluanGiai() xử lý rồi
 
       // Show loading nhẹ trong lock box
       lockBox.innerHTML =
@@ -1812,7 +1813,10 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
   }
 
   // ── Sau khi paid — unlock tất cả lock boxes và load Claude từng phần ──
+  let _isPaid = false; // flag: đã paid, _loadP1Free() không ghi đè
+
   async function startClaudeluanGiai() {
+    _isPaid = true;
     // Unlock chatbot — user đã paid
     const _overlay = document.getElementById('tvc-paywall-overlay');
     if (_overlay) _overlay.style.display = 'none';
