@@ -1268,6 +1268,9 @@ select.form-input { cursor: pointer; }
       // chatbot unlocks after payment via startClaudeluanGiai()
       document.getElementById('progress-fill').style.width = '100%';
 
+      // ── Task #1: P1 Tổng Quan free (non-blocking) ──
+      _loadP1Free();
+
       // ── Check payment status ──
       await checkAndRenderPaywall();
 
@@ -1564,6 +1567,52 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
   }
 
   // ── Check payment — lock boxes đã render sẵn, chỉ cần unlock nếu đã mua ──
+
+  // ── Task #1: Load P1 Tổng Quan free, không cần thanh toán ──
+  async function _loadP1Free() {
+    try {
+      const lockBox   = document.getElementById('lock-box-1');
+      const claudeBox = document.getElementById('claude-content-1');
+      if (!lockBox || !claudeBox) return;
+
+      // Show loading nhẹ trong lock box
+      lockBox.innerHTML = '<div style="padding:20px;text-align:center;font-size:13px;color:var(--text-lt)">Đang tải tổng quan lá số...</div>';
+
+      let docs = '';
+      try {
+        const sr = await fetch('/api/search', {
+          method: 'POST', headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ query: QUERIES[1](), matchCount: 5 })
+        });
+        docs = (await sr.json()).docs || '';
+      } catch(e) {}
+
+      const resp = await fetch('/api/lasotuvi', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          hoTen: _hoTen, ngay: _ngay, thang: _thang, nam: _nam,
+          gioiTinh: _gioitinh, namXem: _namXem,
+          laSoText: _laSoText, phan: 1, docs
+        })
+      });
+      const data = await resp.json();
+      if (data.error || !data.luanGiai) {
+        lockBox.style.display = 'none';
+        return;
+      }
+
+      // Show full P1, ẩn lock box
+      claudeBox.innerHTML = renderMarkdown(data.luanGiai)
+        + `<div class="ux-share-bar">
+            <button onclick="uxCopySection(this, 1)" class="ux-share-btn">📋 Sao chép phần này</button>
+          </div>`;
+      claudeBox.style.display = '';
+      lockBox.style.display = 'none';
+      updateMucLuc(1, 'done');
+
+    } catch(e) { /* silent fail — lock box vẫn hiện như cũ */ }
+  }
+
   async function checkAndRenderPaywall() {
     // Tạo slug tạm
     const tempSlug = toSlugAscii([
