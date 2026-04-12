@@ -168,6 +168,7 @@ function renderCungCell(palace, dvTuoi, canNamIdx) {
   </div>`;
 }
 
+  
 function renderCenter(ls, fd) {
   const dvHT=ls.daiVanHienTai,tvCung=ls.palaces[ls.tieuHanIdx],ldh=ls.palaces[ls.luuNienDaiHanIdx];
   const nowStr=(()=>{const n=new Date(),p=x=>String(x).padStart(2,'0');return p(n.getDate())+'/'+p(n.getMonth()+1)+'/'+n.getFullYear()+' '+p(n.getHours())+':'+p(n.getMinutes());})();
