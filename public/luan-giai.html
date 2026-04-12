@@ -656,6 +656,21 @@ select.form-input { cursor: pointer; }
 .exit-intent-btn { display:inline-block; padding:12px 28px; background:#061A2E; color:#c9a84c; border:1.5px solid #c9a84c; font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; font-family:inherit; border-radius:2px; }
 .exit-intent-btn:hover { background:#c9a84c; color:#061A2E; }
 .exit-intent-skip { display:block; margin-top:12px; font-size:12px; color:#aaa; cursor:pointer; background:none; border:none; font-family:inherit; }
+@keyframes tvm-dot{0%,80%,100%{transform:scale(0.6);opacity:0.4}40%{transform:scale(1);opacity:1}}
+@keyframes tvm-bar{0%{width:5%}50%{width:80%}100%{width:95%}}
+.tvm-wrap{padding:24px;background:#f9f7f2;border:1px solid #e8dfc8;border-radius:8px}
+.tvm-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.tvm-avatar{width:36px;height:36px;border-radius:50%;background:#e8dfc8;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px}
+.tvm-name{font-size:13px;font-weight:600;color:#061A2E}
+.tvm-sub{font-size:11px;color:#9A7B3A;margin-top:2px}
+.tvm-dots{display:flex;gap:5px;align-items:center;padding:12px 16px;background:#fff;border-radius:6px;border:1px solid #e8dfc8}
+.tvm-dot{width:8px;height:8px;border-radius:50%;background:#c9a84c;display:inline-block}
+.tvm-dot:nth-child(1){animation:tvm-dot 1.2s ease-in-out infinite}
+.tvm-dot:nth-child(2){animation:tvm-dot 1.2s ease-in-out 0.2s infinite}
+.tvm-dot:nth-child(3){animation:tvm-dot 1.2s ease-in-out 0.4s infinite}
+.tvm-label{font-size:12px;color:#999;margin-left:8px}
+.tvm-bar-wrap{margin-top:10px;height:3px;background:#f0ebe0;border-radius:2px;overflow:hidden}
+.tvm-bar-fill{height:100%;background:#c9a84c;border-radius:2px;animation:tvm-bar 2.5s ease-in-out infinite}
 </style>
 <body>
 
@@ -1463,9 +1478,9 @@ select.form-input { cursor: pointer; }
 
               <div style="display:flex;flex-direction:column;gap:10px">
 
-                <div style="background:rgba(255,255,255,0.7);border-radius:6px;padding:10px 12px;text-align:left"><div style="font-size:13px;color:#444;line-height:1.5;font-style:italic">"Phần Quan Lộc nói đúng y chang tình huống tao đang gặp."</div><div style="font-size:11px;color:#999;margin-top:4px">— Minh T., TP.HCM</div></div>
+                <div style="background:rgba(255,255,255,0.7);border-radius:6px;padding:10px 12px;text-align:left"><div style="font-size:13px;color:#444;line-height:1.5;font-style:italic">"Phần Quan Lộc phân tích đúng tình huống tôi đang gặp phải — chi tiết đến mức bất ngờ."</div><div style="font-size:11px;color:#999;margin-top:4px">— Minh T., TP.HCM</div></div>
 
-                <div style="background:rgba(255,255,255,0.7);border-radius:6px;padding:10px 12px;text-align:left"><div style="font-size:13px;color:#444;line-height:1.5;font-style:italic">"Phần đại vận phân tích đúng giai đoạn khó nhất của mình."</div><div style="font-size:11px;color:#999;margin-top:4px">— Lan H., Hà Nội</div></div>
+                <div style="background:rgba(255,255,255,0.7);border-radius:6px;padding:10px 12px;text-align:left"><div style="font-size:13px;color:#444;line-height:1.5;font-style:italic">"Phần đại vận mô tả chính xác giai đoạn khó khăn nhất trong cuộc đời tôi."</div><div style="font-size:11px;color:#999;margin-top:4px">— Lan H., Hà Nội</div></div>
 
               </div>
 
@@ -1592,7 +1607,22 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       if (!lockBox || !claudeBox) return;
 
       // Show loading nhẹ trong lock box
-      lockBox.innerHTML = '<div style="padding:20px;text-align:center;font-size:13px;color:var(--text-lt)">Đang tải tổng quan lá số...</div>';
+      lockBox.innerHTML =
+      '<div class="tvm-wrap">' +
+      '<div class="tvm-header">' +
+      '<div class="tvm-avatar">✦</div>' +
+      '<div>' +
+      '<div class="tvm-name">Tử Vi Minh Bảo</div>' +
+      '<div class="tvm-sub">Đang luận giải Phần 1 — Tổng Quan Lá Số</div>' +
+      '</div></div>' +
+      '<div class="tvm-dots">' +
+      '<span class="tvm-dot"></span>' +
+      '<span class="tvm-dot"></span>' +
+      '<span class="tvm-dot"></span>' +
+      '<span class="tvm-label">Đang phân tích cách cục và khí chất bản mệnh...</span>' +
+      '</div>' +
+      '<div class="tvm-bar-wrap"><div class="tvm-bar-fill"></div></div>' +
+      '</div>';
 
       let docs = '';
       try {
