@@ -14,6 +14,7 @@
 <script src="/auth.js"></script>
 <script src="/tuvi-form.js"></script>
 <script src="/tuvi-grid.js"></script>
+<script src="/tuvi-paywall.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -1688,99 +1689,27 @@ async function verifyPaymentTuoi(slug) {
 }
 
 async function checkPaymentOnLoad(product) {
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('unlocked') === '1' && urlParams.get('slug')) {
-    const slug = urlParams.get('slug');
+  const ret = await TuviPaywall.onReturn();
+  if (!ret) return false;
+  const { pending, slug } = ret;
+  if (pending?.ngayA) {
     _pendingSlug = slug;
-    try {
-      // Restore form inputs from sessionStorage
-      const pending = JSON.parse(sessionStorage.getItem('tuvi_pending_form_'+product)||'{}');
-      if (pending.ngayA) {
-        // Restore form fields
-        TuviForm.setData({hoten:pending.nameA||'',gioitinh:pending.gtA||'nam',
-          ngay:pending.ngayA||'',thang:pending.thangA||'',nam:pending.namA||'',
-          gioHour:pending.gioHourA||(pending.gioA?pending.gioA*2:0), gioPhut:pending.gioPhutA||0},'a');
-        TuviForm.setData({hoten:pending.nameB||'',gioitinh:pending.gtB||'nu',
-          ngay:pending.ngayB||'',thang:pending.thangB||'',nam:pending.namB||'',
-          gioHour:pending.gioHourB||(pending.gioB?pending.gioB*2:0), gioPhut:pending.gioPhutB||0},'b');
-        document.getElementById('nam-xem').value = pending.namXem||'2026';
-        // Re-run analyze and auto-unlock
-        window._autoUnlock = slug;
-        await analyze();
-        window.history.replaceState({}, '', window.location.pathname);
-        return true;
-      }
-    } catch(e) { console.warn('Restore failed:', e); }
+    window._autoUnlock = slug;
+    await analyze();
+    window.history.replaceState({}, '', window.location.pathname);
+    return true;
   }
   return false;
 }
 
 async function initiatePaymentTuoi(result, product) {
-  const btn = document.getElementById('btn-paywall-main');
-  if (btn) { btn.disabled = true; btn.innerHTML = '<span>Đang kết nối PayPal...</span>'; }
-
-  const slug = buildSlug(result, product);
-  _pendingSlug = slug;
-
-  // Save form fields to sessionStorage (lightweight, no circular refs)
-  try {
-    const _ssA = TuviForm.getData('a'), _ssB = TuviForm.getData('b');
-    sessionStorage.setItem('tuvi_pending_form_'+product, JSON.stringify({
-      nameA:_ssA.hoten||'', gtA:_ssA.gioitinh||'nam',
-      ngayA:_ssA.ngay||'', thangA:_ssA.thang||'', namA:_ssA.nam||'',
-      gioHourA:_ssA.gioHour||0, gioPhutA:_ssA.gioPhut||0,
-      nameB:_ssB.hoten||'', gtB:_ssB.gioitinh||'nu',
-      ngayB:_ssB.ngay||'', thangB:_ssB.thang||'', namB:_ssB.nam||'',
-      gioHourB:_ssB.gioHour||0, gioPhutB:_ssB.gioPhut||0,
-      namXem:document.getElementById('nam-xem')?.value||'2026',
-    }));
-  } catch(e) {}
-
-  // Create PayPal order
-  try {
-    const res = await fetch('/api/payment?action=create', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ slug, product, amount: '9.00' }),
-    });
-    const data = await res.json();
-    if (data.approvalUrl) {
-      window.location.href = data.approvalUrl;
-    } else {
-      throw new Error(data.error || 'Không tạo được đơn PayPal');
-    }
-  } catch(e) {
-    if (btn) { btn.disabled = false; btn.innerHTML = '<span>Mở Khóa Luận Giải</span><span>→</span>'; }
-    alert('Lỗi: ' + e.message);
-  }
+  // Delegate sang TuviPaywall
+  _pendingSlug = buildSlug(result, product);
+  TuviPaywall._initiate();
 }
 
 function showPaywall(result, product, productLabel) {
-  var lockHtml = '<div class="paywall-lock" style="text-align:center;padding:20px 24px;margin-top:8px">'
-    + '<div class="paywall-lock-icon">&#128274;</div>'
-    + '<div class="paywall-lock-title">M&#7903; Kh&#243;a Lu&#7853;n Gi&#7843;i AI</div>'
-    + '<div class="paywall-lock-desc">An sao v&#224; t&#237;nh &#273;i&#7875;m mi&#7877;n ph&#237;. Thanh to&#225;n m&#7897;t l&#7847;n &#273;&#7875; nh&#7853;n 9 ph&#7847;n lu&#7853;n gi&#7843;i AI.</div>'
-    + '<div class="paywall-lock-price">$9</div>'
-    + '<div class="paywall-lock-price-note">Thanh to&#225;n m&#7897;t l&#7847;n &middot; Tr&#7843;i nghi&#7879;m v&#297;nh vi&#7877;n</div>'
-    + '<button class="btn-paywall-tuoi" onclick="initiatePaymentTuoi(_savedResult,&quot;xem-tuoi&quot;)">'
-    + '<span>M&#7903; Kh&#243;a Lu&#7853;n Gi&#7843;i</span><span style="font-size:16px">&#8594;</span>'
-    + '</button>'
-    + '<div class="paywall-secure">&#128274; Thanh to&#225;n b&#7843;o m&#7853;t qua PayPal</div>'
-    + '<div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;justify-content:center">'
-    + '<div style="background:#f8f6f0;border:1px solid #e8d9b0;border-radius:8px;padding:12px 14px;max-width:220px;text-align:left">'
-    + '<div style="color:#c9a84c;font-size:12px;margin-bottom:6px">★★★★★</div>'
-    + '<div style="font-size:12px;color:#444;font-style:italic;line-height:1.6">"An sao cẩn thận, luận giải rõ ràng — đúng hơn mấy trang so tuổi thông thường nhiều."</div>'
-    + '<div style="font-size:11px;color:#888;margin-top:6px">Lê H.P. — TP.HCM</div></div>'
-    + '<div style="background:#f8f6f0;border:1px solid #e8d9b0;border-radius:8px;padding:12px 14px;max-width:220px;text-align:left">'
-    + '<div style="color:#c9a84c;font-size:12px;margin-bottom:6px">★★★★★</div>'
-    + '<div style="font-size:12px;color:#444;font-style:italic;line-height:1.6">"Xem xong hai vợ chồng hiểu nhau hơn — biết chỗ nào nên nhường, chỗ nào bổ trợ được cho nhau."</div>'
-    + '<div style="font-size:11px;color:#888;margin-top:6px">Nguyễn T.M. — Hà Nội</div></div>'
-    + '</div>'
-    + '</div>';
-  for (var i = 0; i <= 8; i++) {
-    var el = document.getElementById('luangiai-'+i);
-    if (el) el.innerHTML = lockHtml;
-  }
+  TuviPaywall.show();
 }
 
 // Check payment on page load (return from PayPal)
@@ -1801,6 +1730,36 @@ function showPaywall(result, product, productLabel) {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _initForms);
   else _initForms();
 })();
+
+// Init TuviPaywall
+TuviPaywall.init({
+  product:  'xem-tuoi',
+  price:    '$9',
+  slug:     () => _pendingSlug,
+  sessionKey: 'tuvi_pending_form_xem-tuoi',
+  getFormData: () => {
+    const a = TuviForm.getData('a'), b = TuviForm.getData('b');
+    return {
+      nameA:a.hoten||'', gtA:a.gioitinh||'nam',
+      ngayA:a.ngay||'', thangA:a.thang||'', namA:a.nam||'',
+      gioHourA:a.gioHour||0, gioPhutA:a.gioPhut||0,
+      nameB:b.hoten||'', gtB:b.gioitinh||'nu',
+      ngayB:b.ngay||'', thangB:b.thang||'', namB:b.nam||'',
+      gioHourB:b.gioHour||0, gioPhutB:b.gioPhut||0,
+      namXem: document.getElementById('nam-xem')?.value||'2026',
+    };
+  },
+  restoreFormData: (d) => {
+    TuviForm.setData({hoten:d.nameA||'',gioitinh:d.gtA||'nam',
+      ngay:d.ngayA||'',thang:d.thangA||'',nam:d.namA||'',
+      gioHour:d.gioHourA||(d.gioA?d.gioA*2:0),gioPhut:d.gioPhutA||0},'a');
+    TuviForm.setData({hoten:d.nameB||'',gioitinh:d.gtB||'nu',
+      ngay:d.ngayB||'',thang:d.thangB||'',nam:d.namB||'',
+      gioHour:d.gioHourB||(d.gioB?d.gioB*2:0),gioPhut:d.gioPhutB||0},'b');
+    document.getElementById('nam-xem').value = d.namXem||'2026';
+  },
+  onUnlock: () => luanGiaiAll(_savedResult),
+});
 
 window.addEventListener('DOMContentLoaded', () => checkPaymentOnLoad('xem-tuoi'));
 
@@ -1852,14 +1811,14 @@ async function analyze(){
     // If returning from PayPal with _autoUnlock, skip re-checking
     if (window._autoUnlock && window._autoUnlock === _pendingSlug) {
       window._autoUnlock = null;
-      _showSuccessBannerTuoi();
+      TuviPaywall.showSuccessBanner();
       setTimeout(() => {
         const _el2 = document.getElementById('section-0');
         if (_el2) _el2.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 800);
       luanGiaiAll(result);
     } else {
-      const alreadyPaid = await verifyPaymentTuoi(_pendingSlug);
+      const alreadyPaid = await TuviPaywall.check();
       if (alreadyPaid) { luanGiaiAll(result); } else { showPaywall(result, 'xem-tuoi', 'Xem Tuổi Vợ Chồng'); }
     }
   }catch(e){
