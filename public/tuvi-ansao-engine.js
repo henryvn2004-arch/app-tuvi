@@ -494,7 +494,7 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
   const diaGiai = mod12(dcIdx('Mùi') + thangAL - 1);  // Mùi=T1 đếm thuận tới tháng
   const thienHinh  = mod12(dcIdx('Dậu') + thangAL - 1);   // Dậu=T1 thuận
   const thienRieu  = mod12(dcIdx('Sửu') + thangAL - 1);  // Sửu=T1 đếm thuận tới tháng
-  const thienY     = mod12(dcIdx('Sửu') + thangAL - 1);  // Sửu=T1 thuận, đồng cung Thiên Riêu
+  const thienY     = mod12(dcIdx('Sửu') + thangAL - 2);  // Thiên Y trước Thiên Riêu 1 cung (tháng -1)
   const thaiPhu = mod12(dcIdx('Ngọ') + gioIdx);  // Ngọ=Tý đếm thuận tới giờ
   const phongCao   = mod12(dcIdx('Dần') + gioIdx);  // Dần=Tý đếm thuận tới giờ
 
