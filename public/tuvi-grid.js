@@ -297,23 +297,60 @@ const TuviGrid = (() => {
     if (document.getElementById('tuvi-grid-css')) return;
     const s = document.createElement('style');
     s.id = 'tuvi-grid-css';
-    s.textContent = `
-@keyframes tvm-dot{0%,80%,100%{transform:scale(0.6);opacity:0.4}40%{transform:scale(1);opacity:1}}
-@keyframes tvm-bar{0%{width:5%}50%{width:80%}100%{width:95%}}
-.tvm-wrap{padding:20px 24px;background:#f9f7f2;border:1px solid #e8dfc8;border-radius:8px}
-.tvm-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.tvm-avatar{width:34px;height:34px;border-radius:50%;background:#e8dfc8;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px}
-.tvm-name{font-size:13px;font-weight:600;color:#061A2E}
-.tvm-sub{font-size:11px;color:#9A7B3A;margin-top:2px}
-.tvm-dots{display:flex;gap:5px;align-items:center;padding:10px 14px;background:#fff;border-radius:6px;border:1px solid #e8dfc8}
-.tvm-dot{width:8px;height:8px;border-radius:50%;background:#c9a84c;display:inline-block}
-.tvm-dot:nth-child(1){animation:tvm-dot 1.2s ease-in-out infinite}
-.tvm-dot:nth-child(2){animation:tvm-dot 1.2s ease-in-out 0.2s infinite}
-.tvm-dot:nth-child(3){animation:tvm-dot 1.2s ease-in-out 0.4s infinite}
-.tvm-label{font-size:12px;color:#999;margin-left:8px}
-.tvm-bar-wrap{margin-top:10px;height:3px;background:#f0ebe0;border-radius:2px;overflow:hidden}
-.tvm-bar-fill{height:100%;background:#c9a84c;border-radius:2px;animation:tvm-bar 2.5s ease-in-out infinite}
-`;
+    s.textContent = [
+      // TVM Loading
+      "@keyframes tvm-dot{0%,80%,100%{transform:scale(0.6);opacity:0.4}40%{transform:scale(1);opacity:1}}",
+      "@keyframes tvm-bar{0%{width:5%}50%{width:80%}100%{width:95%}}",
+      "@keyframes spin{to{transform:rotate(360deg)}}",
+      ".tvm-wrap{padding:20px 24px;background:#f9f7f2;border:1px solid #e8dfc8;border-radius:8px}",
+      ".tvm-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}",
+      ".tvm-avatar{width:34px;height:34px;border-radius:50%;background:#e8dfc8;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px}",
+      ".tvm-name{font-size:13px;font-weight:600;color:#061A2E}",
+      ".tvm-sub{font-size:11px;color:#9A7B3A;margin-top:2px}",
+      ".tvm-dots{display:flex;gap:5px;align-items:center;padding:10px 14px;background:#fff;border-radius:6px;border:1px solid #e8dfc8}",
+      ".tvm-dot{width:8px;height:8px;border-radius:50%;background:#c9a84c;display:inline-block}",
+      ".tvm-dot:nth-child(1){animation:tvm-dot 1.2s ease-in-out infinite}",
+      ".tvm-dot:nth-child(2){animation:tvm-dot 1.2s ease-in-out 0.2s infinite}",
+      ".tvm-dot:nth-child(3){animation:tvm-dot 1.2s ease-in-out 0.4s infinite}",
+      ".tvm-label{font-size:12px;color:#999;margin-left:8px}",
+      ".tvm-bar-wrap{margin-top:10px;height:3px;background:#f0ebe0;border-radius:2px;overflow:hidden}",
+      ".tvm-bar-fill{height:100%;background:#c9a84c;border-radius:2px;animation:tvm-bar 2.5s ease-in-out infinite}",
+      // V2 Grid
+      ".laso-grid{display:grid;grid-template-columns:repeat(4,1fr);border:2px solid #333;background:#fff}",
+      ".cung-cell{border:1px solid #888;padding:7px 7px 20px;min-height:140px;position:relative;display:flex;flex-direction:column;background:#fff;overflow:hidden}",
+      ".cung-cell:hover{background:#FFFDF7}",
+      ".cung-cell.cur-van{outline:2px solid #1E6B3C;outline-offset:-2px}",
+      ".v2-cell-header{display:flex;flex-direction:column;align-items:center;margin-bottom:4px;gap:2px}",
+      ".v2-can-chi{font-size:9px;color:#777;font-weight:500;text-transform:uppercase;width:100%;text-align:left}",
+      ".v2-cung-name{font-size:10px;color:#222;font-weight:700;text-transform:uppercase;text-align:center;width:100%;letter-spacing:.5px;display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap}",
+      ".v2-badge-than{display:inline-block;padding:0 5px;font-size:8px;font-weight:700;letter-spacing:1px;border-radius:2px;border:1.5px solid #7B3FA0;color:#7B3FA0}",
+      ".v2-chinh-area{margin-bottom:4px;text-align:center}",
+      ".v2-chinh-item{font-family:'Noto Serif',Georgia,serif;font-size:12.5px;font-weight:700;line-height:1.4;text-align:center}",
+      ".v2-phu-area{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:0 4px;align-content:start}",
+      ".v2-phu-col{display:flex;flex-direction:column;gap:1px}",
+      ".v2-phu-col-right{text-align:right}",
+      ".v2-phu-item{font-size:9.5px;line-height:1.45;font-weight:700}",
+      ".v2-footer{display:flex;justify-content:space-between;align-items:flex-end;position:absolute;bottom:3px;left:7px;right:7px;border-top:1px solid #ddd;padding-top:2px}",
+      ".v2-trang-sinh{font-size:9px;color:#777;font-weight:500;text-transform:uppercase;letter-spacing:.5px}",
+      ".v2-dai-van{font-size:10px;color:#333;font-weight:700}",
+      ".v2-tuan-tag,.v2-triet-tag{display:inline-block;padding:0 5px;font-size:8px;font-weight:700;letter-spacing:1px;border-radius:2px;text-transform:uppercase;position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);z-index:5}",
+      ".v2-tuan-tag{background:#2c4a00;color:#fff}",
+      ".v2-triet-tag{background:#4a0000;color:#fff}",
+      // Star colors
+      ".sc-hoa{color:#C0392B}.sc-kim{color:#7F8C8D}.sc-thuy{color:#1a1a1a}.sc-moc{color:#1E6B3C}.sc-tho{color:#8B6914}.sc-neutral{color:#333}",
+      ".sc-hoa-loc{color:#1E6B3C;font-weight:700}.sc-hoa-quyen{color:#7B3FA0;font-weight:700}.sc-hoa-khoa{color:#1455A4;font-weight:700}.sc-hoa-ky{color:#C0392B;font-weight:700}",
+      ".bright{font-size:8px;opacity:1;color:#7EC8E3;margin-left:1px}",
+      ".hoa{font-size:9px;margin-left:1px}",
+      // Center panel
+      ".cung-center{border-right:1px solid #ccc;border-bottom:1px solid #ccc;grid-column:span 2;grid-row:span 2;background:#F5F4F0;display:flex;align-items:center;justify-content:center;padding:12px}",
+      ".center-la-so{width:100%;display:flex;flex-direction:column;align-items:center}",
+      ".center-title{color:#061A2E;font-weight:700;font-size:12px;margin-bottom:6px;text-align:center;letter-spacing:1px}",
+      ".center-row{font-size:11px;color:#444;margin:2px 0;width:100%;text-align:left;padding-left:4px;line-height:1.6}",
+      ".center-divider{width:80%;border:none;border-top:1px solid #ccc;margin:4px 0}",
+      // Responsive
+      "@media(max-width:700px){.cung-cell{min-height:80px;padding:2px 3px}.v2-chinh-item{font-size:10px}.v2-phu-item{font-size:8px}.cung-center{padding:6px}.center-title{font-size:10px}.center-row{font-size:9px}}",
+      "@media(max-width:480px){.v2-phu-area{grid-template-columns:1fr}.cung-cell{min-height:90px;padding:4px 4px 18px}}",
+    ].join('\n');
     document.head.appendChild(s);
   }
 
