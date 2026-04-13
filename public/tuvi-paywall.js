@@ -209,7 +209,7 @@ const TuviPaywall = (() => {
 
   // ── Public: check if already paid ────────────────────────────
   async function check() {
-    if (process?.env?.PAYWALL_DISABLED === 'true') return true;
+    if (typeof window !== 'undefined' && window.__PAYWALL_DISABLED) return true;
     try {
       const slug = typeof _cfg.slug === 'function' ? _cfg.slug() : _cfg.slug;
       if (!slug) return false;
