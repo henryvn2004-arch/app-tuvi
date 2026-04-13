@@ -1830,6 +1830,14 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         const rows = await r.json();
         if (rows?.[0]?.luan_giai && Object.keys(rows[0].luan_giai).length > 0) {
           // Đã có luận giải — redirect sang trang lá số
+          const _lnkTok = window.Auth?.isLoggedIn() ? window.Auth.getSession()?.access_token : null;
+          if (_lnkTok) {
+            fetch('/api/history?action=link_laso', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _lnkTok },
+              body: JSON.stringify({ slug })
+            }).catch(() => {});
+          }
           window.location.href = '/la-so.html?slug=' + encodeURIComponent(slug);
           return;
         }
