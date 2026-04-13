@@ -1800,7 +1800,8 @@ async function analyze(){
     // chatbot unlocks after payment via luanGiaiAll()
     const result=calcTuongHop(lsA,lsB,nameA,nameB);
     _savedResult = result;
-    _pendingSlug = buildSlug(result, 'xem-lam-an');
+    // Giữ URL slug nếu đang return từ PayPal, tránh mismatch
+    _pendingSlug = window._autoUnlock || buildSlug(result, 'xem-lam-an');
     document.getElementById('result-section').style.display='block';
     renderAllSections(result);
     // Scroll to result area
