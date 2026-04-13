@@ -1687,17 +1687,31 @@ async function verifyPaymentTuoi(slug) {
 }
 
 async function checkPaymentOnLoad(product) {
-  const ret = await TuviPaywall.onReturn();
-  if (!ret) return false;
-  const { pending, slug } = ret;
-  if (pending?.ngayA) {
+  const p = new URLSearchParams(window.location.search);
+  if (p.get('unlocked') !== '1') return false;
+  const slug = p.get('slug') || '';
+  console.log('[paywall] return from PayPal, slug=', slug);
+  try {
+    const raw = sessionStorage.getItem('tuvi_pending_form_' + product);
+    console.log('[paywall] sessionStorage raw=', raw ? 'exists' : 'EMPTY');
+    if (!raw) return false;
+    const pending = JSON.parse(raw);
+    sessionStorage.removeItem('tuvi_pending_form_' + product);
+    // Restore form
+    TuviForm.setData({hoten:pending.nameA||'',gioitinh:pending.gtA||'nam',
+      ngay:pending.ngayA||0,thang:pending.thangA||0,nam:pending.namA||0,
+      gioHour:pending.gioHourA||0,gioPhut:pending.gioPhutA||0},'a');
+    TuviForm.setData({hoten:pending.nameB||'',gioitinh:pending.gtB||'nu',
+      ngay:pending.ngayB||0,thang:pending.thangB||0,nam:pending.namB||0,
+      gioHour:pending.gioHourB||0,gioPhut:pending.gioPhutB||0},'b');
+    if (document.getElementById('nam-xem')) document.getElementById('nam-xem').value = pending.namXem||'2026';
+    console.log('[paywall] form restored, ngayA=', pending.ngayA);
     _pendingSlug = slug;
     window._autoUnlock = slug;
     await analyze();
     window.history.replaceState({}, '', window.location.pathname);
     return true;
-  }
-  return false;
+  } catch(e) { console.error('[paywall] restore error', e); return false; }
 }
 
 async function initiatePaymentTuoi(result, product) {
