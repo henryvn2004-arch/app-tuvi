@@ -1706,8 +1706,8 @@ async function checkPaymentOnLoad(product) {
       gioHour:pending.gioHourB||0,gioPhut:pending.gioPhutB||0},'b');
     if (document.getElementById('nam-xem')) document.getElementById('nam-xem').value = pending.namXem||'2026';
     console.log('[paywall] form restored, ngayA=', pending.ngayA);
-    _pendingSlug = slug;
-    window._autoUnlock = slug;
+    _pendingSlug = toSlugAscii(slug);
+    window._autoUnlock = toSlugAscii(slug);
     await analyze();
     window.history.replaceState({}, '', window.location.pathname);
     return true;
