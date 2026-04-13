@@ -17,8 +17,19 @@ export async function OPTIONS() { return options(); }
 export async function POST(request: NextRequest) {
   const b = await parseBody(request) as Record<string,unknown>;
   if (!b.canChiNam || !b.namSinh) return err('Thiếu thông tin cơ bản', 400);
+
+  // Lấy user_id từ auth token nếu user đang login
+  let userId: string | null = null;
+  const authToken = (request.headers.get('authorization') || '').replace('Bearer ', '').trim();
+
   try {
     const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    if (authToken) {
+      const { data: { user } } = await sb.auth.getUser(authToken);
+      if (user) userId = user.id;
+    }
+
     let slug = makeSlug(String(b.canChiNam), String(b.gioiTinh||''), String(b.namSinh), String(b.gioChi||''));
     const { data: ex } = await sb.from('laso_public').select('slug').eq('slug', slug).maybeSingle();
     if (ex) slug = slug + '-' + Date.now().toString(36);
@@ -34,6 +45,8 @@ export async function POST(request: NextRequest) {
       nap_am:b.napAm||null, cuc:b.cuc||null,
       luan_giai:b.luanGiai||{}, la_so_text:b.laSoText||null,
       rendered_html:b.renderedHtml||null, astrolabe_data:b.astrolabeData||null,
+      user_id: userId,
+      person_name: b.personName ? String(b.personName) : null,
     }).select('slug').single();
     if (error) throw error;
     return ok({ slug: data.slug, url: `/la-so.html?slug=${data.slug}` });
