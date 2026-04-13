@@ -1673,9 +1673,10 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     // Save lá số trước khi redirect (không có luận giải Claude)
     let slug = _pendingSlug;
     try {
+      const _authTok = window.Auth?.isLoggedIn() ? window.Auth.getSession()?.access_token : null;
       const saveRes = await fetch('/api/save-laso', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...(_authTok ? {'Authorization': 'Bearer ' + _authTok} : {}) },
         body: JSON.stringify({
           canChiNam:    _astrolabe.canChiNam,
           gioiTinh:     _gioitinh,
@@ -1863,8 +1864,9 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
   async function _saveLaSoAfterUnlock() {
     try {
       const _resultBody = document.getElementById('result-body');
+      const _authTok2 = window.Auth?.isLoggedIn() ? window.Auth.getSession()?.access_token : null;
       fetch('/api/save-laso', {
-        method:'POST', headers:{'Content-Type':'application/json'},
+        method:'POST', headers:{'Content-Type':'application/json',...(_authTok2?{'Authorization':'Bearer '+_authTok2}:{})},
         body: JSON.stringify({
           canChiNam: _astrolabe.canChiNam, gioiTinh: _gioitinh,
           namSinh: _nam, thangSinh: _thang, ngaySinh: _ngay,
