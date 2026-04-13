@@ -1724,6 +1724,8 @@ function showPaywall(result, product, productLabel) {
       label: 'Người Thứ Hai',
       gioitinh: 'nu',
     });
+    // Chạy sau khi form đã render xong
+    checkPaymentOnLoad('xem-tuoi');
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _initForms);
   else _initForms();
@@ -1759,7 +1761,6 @@ TuviPaywall.init({
   onUnlock: () => luanGiaiAll(_savedResult),
 });
 
-window.addEventListener('DOMContentLoaded', () => checkPaymentOnLoad('xem-tuoi'));
 
 async function analyze(){
   const errEl=document.getElementById('error-msg');
