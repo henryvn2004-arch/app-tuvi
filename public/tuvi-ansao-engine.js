@@ -367,9 +367,9 @@ function anLucSat(canNam, chiNam, gioIdx, locTonIdx, amDuong, gioitinh) {
   const thuận = (amDuong==='dương'&&gioitinh==='nam')||(amDuong==='âm'&&gioitinh==='nu');
 
   // Kình Dương: sau Lộc Tồn 1 (thuận chiều)
-  const kinhDuong = mod12(locTonIdx - 1);
+  const kinhDuong = mod12(locTonIdx + 1);
   // Đà La: trước Lộc Tồn 1 (nghịch chiều)
-  const daLa = mod12(locTonIdx + 1);
+  const daLa = mod12(locTonIdx - 1);
   // Địa Kiếp: Hợi=Tý, đếm thuận đến giờ
   const diaKiep = mod12(dcIdx('Hợi') + gioIdx);
   // Địa Không: Hợi=Tý, đếm nghịch đến giờ
