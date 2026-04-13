@@ -1,226 +1,843 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hồ Sơ — Tử Vi Minh Bảo</title>
-<link rel="icon" type="image/webp" href="/seal.webp">
-<link rel="apple-touch-icon" href="/seal.webp">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&family=Noto+Serif+SC:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
-<script src="/auth.js"></script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Hồ Sơ Của Tôi — Tử Vi Minh Bảo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
+<!-- marked.js for markdown rendering -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --navy: #061A2E; --blue: #1455A4; --gold: #9A7B3A;
-  --text: #1a1a1a; --text-mid: #444; --text-lt: #777;
-  --border: #CCCCCC; --bg: #FFFFFF; --bg-soft: #F5F4F0;
+:root{
+  --navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;
+  --gold:#9A7B3A;--gold-lt:#F9F4EB;
+  --text:#1a1a1a;--text-mid:#444;--text-lt:#777;
+  --border:#CCCCCC;--border-lt:#E8E8E8;
+  --bg:#FFFFFF;--bg-soft:#F5F4F0;
+  --red:#C0392B;--green:#1E6B3C;
+  --radius:8px;
 }
-body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg-soft); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
-.topnav { position: sticky; top: 0; z-index: 200; background: var(--navy); display: flex; align-items: center; height: 60px; padding: 0 40px; gap: 32px; }
-.nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
-.nav-logo img { width:38px; height:38px; object-fit:contain; border-radius:5px; }
-.nav-logo .name { font-size:16px; font-weight:700; color:#CC2200; font-family:Georgia,serif; }
-.nav-logo .url  { font-size:10px; color:#aaa; letter-spacing:0.07em; text-transform:uppercase; }
-.nav-links { display: flex; align-items: center; gap: 4px; }
-.nav-link { color: #8BAACC; font-size: 13px; text-decoration: none; padding: 6px 12px; border-radius: 6px; transition: all 0.15s; }
-.nav-link:hover { color: #fff; background: rgba(255,255,255,0.07); }
-.nav-hamburger { display: none; background: none; border: none; color: #8BAACC; cursor: pointer; padding: 8px; font-size: 20px; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh}
 
-.page-body { flex: 1; max-width: 800px; margin: 0 auto; padding: 40px; width: 100%; }
+/* ── NAV ── */
+nav{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
+.nav-logo{color:#fff;font-family:'Noto Serif',serif;font-size:1.15rem;font-weight:700;text-decoration:none;letter-spacing:.02em}
+.nav-links{display:flex;align-items:center;gap:.1rem}
+.nav-links a{color:rgba(255,255,255,.85);text-decoration:none;font-size:.82rem;padding:.5rem .7rem;border-radius:4px;transition:background .2s}
+.nav-links a:hover{background:rgba(255,255,255,.1)}
+.nav-dropdown{position:relative}
+.nav-dropdown .dropdown-menu{display:none;position:absolute;top:100%;left:0;background:var(--navy);border:1px solid rgba(255,255,255,.15);border-radius:4px;min-width:180px;z-index:200;padding:.4rem 0}
+.nav-dropdown:hover .dropdown-menu{display:block}
+.dropdown-menu a{display:block;color:rgba(255,255,255,.85);font-size:.82rem;padding:.5rem 1rem;text-decoration:none}
+.dropdown-menu a:hover{background:rgba(255,255,255,.1)}
 
-/* Profile header */
-.profile-header {
-  background: var(--navy);
-  border-radius: 14px;
-  padding: 32px;
-  display: flex; align-items: center; gap: 24px;
-  margin-bottom: 24px;
-  position: relative; overflow: hidden;
-}
-.profile-header::before { content: '命'; font-family: 'Noto Serif SC', serif; font-size: 200px; color: rgba(255,255,255,0.03); position: absolute; right: 20px; top: 50%; transform: translateY(-50%); pointer-events: none; }
-.profile-avatar { width: 72px; height: 72px; border-radius: 50%; border: 3px solid #c9a84c; object-fit: cover; flex-shrink: 0; }
-.profile-avatar-placeholder { width: 72px; height: 72px; border-radius: 50%; background: #c9a84c; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700; color: var(--navy); flex-shrink: 0; border: 3px solid #c9a84c; }
-.profile-name { font-family: 'Noto Serif', serif; font-size: 22px; color: #fff; margin-bottom: 4px; }
-.profile-email { font-size: 13px; color: #8BAACC; margin-bottom: 8px; }
-.profile-badge { display: inline-block; padding: 3px 10px; background: rgba(201,168,76,0.15); color: #c9a84c; border: 1px solid rgba(201,168,76,0.3); border-radius: 20px; font-size: 11px; }
+/* ── LAYOUT ── */
+.page-wrap{max-width:960px;margin:0 auto;padding:2rem 1.5rem}
 
-/* Cards */
-.card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
-.card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
-.card-label { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
-.card-value { font-family: 'Noto Serif', serif; font-size: 28px; font-weight: 600; color: var(--navy); }
-.card-sub { font-size: 12px; color: var(--text-lt); margin-top: 4px; }
+/* ── PROFILE HEADER ── */
+.profile-header{background:var(--navy);border-radius:12px;padding:2rem 2.5rem;display:flex;align-items:center;gap:1.5rem;margin-bottom:1.75rem}
+.avatar{width:64px;height:64px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Noto Serif',serif;font-size:1.75rem;color:#fff;font-weight:700;flex-shrink:0}
+.profile-info{flex:1}
+.profile-email{color:rgba(255,255,255,.7);font-size:.85rem;margin-bottom:.25rem}
+.profile-name{color:#fff;font-family:'Noto Serif',serif;font-size:1.25rem;font-weight:700}
+.profile-since{color:rgba(255,255,255,.45);font-size:.78rem;margin-top:.3rem}
+.profile-signout{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);padding:.5rem 1.1rem;border-radius:6px;cursor:pointer;font-size:.82rem;transition:all .2s}
+.profile-signout:hover{background:rgba(255,255,255,.18)}
 
-/* Lá số list */
-.section-title { font-family: 'Noto Serif', serif; font-size: 18px; color: var(--navy); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-.laso-list { display: flex; flex-direction: column; gap: 10px; }
-.laso-item { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; display: flex; align-items: center; gap: 16px; text-decoration: none; color: inherit; transition: border-color 0.15s; }
-.laso-item:hover { border-color: var(--navy); }
-.laso-item-can-chi { font-family: 'Noto Serif', serif; font-size: 16px; font-weight: 600; color: var(--navy); min-width: 80px; }
-.laso-item-meta { flex: 1; font-size: 13px; color: var(--text-lt); }
-.laso-item-date { font-size: 11px; color: var(--text-lt); }
-.laso-item-arrow { color: var(--text-lt); }
+/* ── TABS ── */
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:1.75rem;background:var(--bg);border-radius:8px 8px 0 0;overflow:hidden}
+.tab-btn{flex:1;padding:.85rem .5rem;font-size:.85rem;font-weight:600;border:none;background:transparent;cursor:pointer;color:var(--text-lt);transition:all .2s;border-bottom:3px solid transparent;position:relative;top:2px}
+.tab-btn:hover{color:var(--navy);background:var(--bg-soft)}
+.tab-btn.active{color:var(--navy);border-bottom-color:var(--gold);background:#fff}
+.tab-content{display:none}
+.tab-content.active{display:block}
 
-.empty-state { text-align: center; padding: 48px 20px; background: #fff; border: 1px solid var(--border); border-radius: 12px; }
-.empty-icon { font-size: 40px; margin-bottom: 12px; }
-.empty-title { font-family: 'Noto Serif', serif; font-size: 18px; color: var(--navy); margin-bottom: 8px; }
-.empty-sub { font-size: 14px; color: var(--text-lt); margin-bottom: 16px; }
-.btn-primary { padding: 10px 24px; background: var(--navy); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; font-family: inherit; display: inline-block; }
+/* ── EMPTY STATE ── */
+.empty-state{text-align:center;padding:3rem 1rem}
+.empty-state .icon{font-size:2.5rem;margin-bottom:.75rem;opacity:.4}
+.empty-state p{color:var(--text-lt);font-size:.9rem;margin-bottom:1.25rem}
+.btn-primary{display:inline-block;background:var(--navy);color:#fff;padding:.65rem 1.5rem;border-radius:6px;text-decoration:none;font-size:.88rem;font-weight:600;border:none;cursor:pointer;transition:background .2s}
+.btn-primary:hover{background:var(--navy-mid)}
+.btn-gold{background:var(--gold);color:#fff}
+.btn-gold:hover{background:#7d6230}
+.btn-sm{padding:.45rem 1rem;font-size:.8rem}
 
-.btn-signout { padding: 8px 18px; background: transparent; color: #C0392B; border: 1px solid #C0392B; border-radius: 7px; font-size: 13px; cursor: pointer; font-family: inherit; transition: all 0.15s; }
-.btn-signout:hover { background: #C0392B; color: #fff; }
+/* ── LASO CARDS ── */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+.laso-card{background:#fff;border:1px solid var(--border-lt);border-radius:var(--radius);overflow:hidden;transition:box-shadow .2s;cursor:pointer}
+.laso-card:hover{box-shadow:0 4px 16px rgba(6,26,46,.1)}
+.card-top{background:var(--navy);padding:1rem 1.2rem;display:flex;align-items:center;gap:.75rem}
+.card-avatar{width:40px;height:40px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Noto Serif',serif;font-size:1.1rem;color:#fff;font-weight:700;flex-shrink:0}
+.card-title{color:#fff;font-family:'Noto Serif',serif;font-size:.95rem;font-weight:700;line-height:1.3}
+.card-subtitle{color:rgba(255,255,255,.6);font-size:.76rem;margin-top:.15rem}
+.card-body{padding:1rem 1.2rem}
+.card-badges{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.85rem}
+.badge{background:var(--gold-lt);color:var(--gold);border:1px solid #e8d9b0;font-size:.72rem;padding:.2rem .55rem;border-radius:20px;font-weight:600}
+.badge.blue{background:#EEF4FF;color:var(--blue);border-color:#C7D9F5}
+.card-date{color:var(--text-lt);font-size:.75rem;margin-bottom:.85rem}
+.card-actions{display:flex;gap:.5rem}
+.btn-outline{flex:1;padding:.5rem;font-size:.78rem;font-weight:600;border:1px solid var(--border);border-radius:5px;background:#fff;cursor:pointer;text-align:center;color:var(--text-mid);transition:all .2s;text-decoration:none;display:inline-block}
+.btn-outline:hover{border-color:var(--navy);color:var(--navy);background:var(--bg-soft)}
+.btn-outline.navy{border-color:var(--navy);color:var(--navy)}
+.btn-outline.gold{border-color:var(--gold);color:var(--gold)}
+.btn-outline.gold:hover{background:var(--gold-lt)}
 
-.site-footer { background:#1A1210; color:rgba(255,255,255,0.5); padding:24px 32px; display:flex; justify-content:space-between; font-size:12px; }
+/* ── XEM TUOI LIST ── */
+.xem-list{display:flex;flex-direction:column;gap:.75rem}
+.xem-item{background:#fff;border:1px solid var(--border-lt);border-radius:var(--radius);padding:1rem 1.4rem;display:flex;align-items:center;gap:1rem;transition:box-shadow .2s}
+.xem-item:hover{box-shadow:0 2px 12px rgba(6,26,46,.08)}
+.xem-score{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif',serif;font-size:1rem;font-weight:700;flex-shrink:0;border:2px solid}
+.xem-score.high{color:var(--green);border-color:var(--green);background:#F0FAF4}
+.xem-score.mid{color:#856404;border-color:#F0C040;background:#FFFBEB}
+.xem-score.low{color:var(--red);border-color:var(--red);background:#FFF5F5}
+.xem-info{flex:1}
+.xem-type{font-size:.72rem;color:var(--text-lt);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.2rem}
+.xem-names{font-weight:700;font-size:.95rem;color:var(--navy);font-family:'Noto Serif',serif}
+.xem-date{font-size:.76rem;color:var(--text-lt);margin-top:.2rem}
 
-@keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-@media (max-width:700px) {
-  .topnav { padding:0 16px; }
-  .nav-hamburger { display:block; margin-left:auto; }
-  .nav-links { display:none; position:absolute; top:60px; left:0; right:0; background:var(--navy); flex-direction:column; padding:8px 0 16px; border-bottom:1px solid #1a2a3a; }
-  .nav-links.open { display:flex; }
-  .nav-link { padding:10px 24px; border-radius:0; width:100%; }
-  .page-body { padding:24px 16px; }
-  .card-grid { grid-template-columns:1fr; }
-  .profile-header { flex-direction:column; text-align:center; }
+/* ── CHAT LIST ── */
+.chat-list{display:flex;flex-direction:column;gap:.6rem}
+.chat-item{background:#fff;border:1px solid var(--border-lt);border-radius:var(--radius);padding:.9rem 1.2rem;display:flex;align-items:center;gap:1rem;cursor:pointer;transition:all .2s}
+.chat-item:hover{border-color:var(--navy);box-shadow:0 2px 10px rgba(6,26,46,.06)}
+.chat-icon{font-size:1.4rem;opacity:.7}
+.chat-info{flex:1}
+.chat-slug{font-size:.82rem;color:var(--text-mid);margin-bottom:.2rem}
+.chat-meta{font-size:.76rem;color:var(--text-lt)}
+.chat-count{background:var(--navy);color:#fff;border-radius:20px;padding:.15rem .55rem;font-size:.72rem;font-weight:700}
+
+/* ── ACCOUNT TAB ── */
+.account-section{background:#fff;border:1px solid var(--border-lt);border-radius:var(--radius);padding:1.5rem 1.75rem;margin-bottom:1rem}
+.account-section h3{font-family:'Noto Serif',serif;font-size:1rem;color:var(--navy);margin-bottom:1.1rem;padding-bottom:.6rem;border-bottom:1px solid var(--border-lt)}
+.form-row{margin-bottom:1rem}
+.form-row label{display:block;font-size:.8rem;color:var(--text-mid);font-weight:600;margin-bottom:.35rem}
+.form-row input{width:100%;padding:.6rem .85rem;border:1px solid var(--border);border-radius:5px;font-size:.88rem;color:var(--text)}
+.form-row input:focus{outline:2px solid var(--gold);border-color:var(--gold)}
+.form-row input:disabled{background:var(--bg-soft);color:var(--text-lt)}
+.purchase-list{display:flex;flex-direction:column;gap:.5rem}
+.purchase-item{display:flex;align-items:center;gap:.75rem;font-size:.83rem;padding:.5rem 0;border-bottom:1px solid var(--border-lt)}
+.purchase-item:last-child{border-bottom:none}
+.purchase-slug{flex:1;color:var(--text-mid)}
+.purchase-amount{font-weight:700;color:var(--navy)}
+.purchase-status{font-size:.72rem;padding:.2rem .5rem;border-radius:20px;font-weight:600}
+.purchase-status.completed{background:#F0FAF4;color:var(--green)}
+.purchase-date{color:var(--text-lt);font-size:.75rem}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(6,26,46,.7);z-index:500;display:none;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:12px;max-width:800px;width:100%;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;position:relative}
+.modal-header{background:var(--navy);padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-header h2{color:#fff;font-family:'Noto Serif',serif;font-size:1.05rem;font-weight:700}
+.modal-close{background:rgba(255,255,255,.15);border:none;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:rgba(255,255,255,.3)}
+.modal-body{flex:1;overflow-y:auto;padding:1.5rem}
+
+/* ── LUAN GIAI MODAL ── */
+.luan-tabs{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1.5rem}
+.luan-tab{padding:.35rem .7rem;font-size:.75rem;font-weight:600;border:1px solid var(--border);border-radius:20px;background:#fff;cursor:pointer;color:var(--text-lt);transition:all .2s}
+.luan-tab:hover{border-color:var(--navy);color:var(--navy)}
+.luan-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.luan-content{font-size:.9rem;line-height:1.8;color:var(--text)}
+.luan-content h1,.luan-content h2,.luan-content h3{font-family:'Noto Serif',serif;color:var(--navy);margin-top:1.25rem;margin-bottom:.6rem}
+.luan-content h1{font-size:1.1rem}
+.luan-content h2{font-size:1rem}
+.luan-content h3{font-size:.92rem}
+.luan-content p{margin-bottom:.75rem}
+.luan-content strong{color:var(--navy)}
+.luan-content hr{border:none;border-top:1px solid var(--border-lt);margin:1rem 0}
+
+/* ── CHAT MODAL ── */
+.chat-messages{display:flex;flex-direction:column;gap:.75rem;min-height:200px;margin-bottom:1rem}
+.msg{max-width:82%;padding:.7rem 1rem;border-radius:10px;font-size:.87rem;line-height:1.6}
+.msg.user{background:var(--navy);color:#fff;align-self:flex-end;border-radius:10px 10px 2px 10px}
+.msg.assistant{background:var(--bg-soft);color:var(--text);align-self:flex-start;border-radius:10px 10px 10px 2px}
+.msg.assistant .msg-sender{font-size:.72rem;color:var(--gold);font-weight:700;margin-bottom:.25rem}
+.chat-input-row{display:flex;gap:.5rem;align-items:flex-end;flex-shrink:0;padding-top:.75rem;border-top:1px solid var(--border-lt)}
+.chat-input{flex:1;border:1px solid var(--border);border-radius:8px;padding:.6rem .9rem;font-size:.87rem;resize:none;font-family:Arial,sans-serif;min-height:40px;max-height:120px}
+.chat-input:focus{outline:2px solid var(--gold);border-color:var(--gold)}
+.chat-send{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:.6rem 1.1rem;cursor:pointer;font-size:.82rem;font-weight:600;transition:background .2s;white-space:nowrap}
+.chat-send:hover{background:var(--navy-mid)}
+.chat-send:disabled{opacity:.5;cursor:not-allowed}
+.typing-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--gold);animation:blink 1s infinite}
+.typing-dot:nth-child(2){animation-delay:.2s}
+.typing-dot:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,100%{opacity:.2}50%{opacity:1}}
+
+/* ── LOADING ── */
+.skeleton{background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px;height:16px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.loading-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+.loading-card{background:#fff;border:1px solid var(--border-lt);border-radius:var(--radius);overflow:hidden}
+.loading-card-top{background:#e8edf2;height:72px}
+.loading-card-body{padding:1rem 1.2rem}
+
+.alert{padding:.75rem 1rem;border-radius:6px;font-size:.85rem;margin-bottom:.75rem}
+.alert.success{background:#F0FAF4;color:var(--green);border:1px solid #C3E6D0}
+.alert.error{background:#FFF5F5;color:var(--red);border:1px solid #F5C6C6}
+
+@media(max-width:600px){
+  .profile-header{flex-direction:column;text-align:center;gap:1rem;padding:1.5rem}
+  .tabs{overflow-x:auto;flex-nowrap:nowrap}
+  .tab-btn{min-width:100px;font-size:.78rem;padding:.7rem .4rem}
+  .card-grid{grid-template-columns:1fr}
+  .xem-item{flex-wrap:wrap}
 }
 </style>
 </head>
 <body>
 
-<nav class="topnav">
-  <a class="nav-logo" href="/">
-    <img src="/seal.webp" alt="Tử Vi Minh Bảo">
-    <div><div class="name">Tử Vi Minh Bảo</div><div class="url">Tri mệnh lý – Thuận thế hành</div></div>
-  </a>
-  <div class="nav-links" id="nav-links">
-    <a class="nav-link" href="/">Trang Chủ</a>
-    <a class="nav-link" href="/menh-kho.html">Mệnh Khố</a>
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="/">☽ Tử Vi Minh Bảo</a>
+  <div class="nav-links">
+    <a href="/">Trang Chủ</a>
+    <div class="nav-dropdown">
+      <a href="#">Luận Giải ▾</a>
+      <div class="dropdown-menu">
+        <a href="/">Luận Giải Lá Số</a>
+        <a href="/xem-tuoi.html">Xem Tuổi Vợ Chồng</a>
+        <a href="/xem-lam-an.html">Xem Tuổi Làm Ăn</a>
+      </div>
+    </div>
+    <a href="/about.html">Giới Thiệu</a>
+    <a href="/resources.html">Tài Liệu</a>
+    <a href="/blog.html">Khảo Luận</a>
+    <a href="/menh-kho.html">Mệnh Khố</a>
+    <a href="/contact.html">Liên Hệ</a>
   </div>
-  <div id="nav-auth-area" style="margin-left:auto"></div>
-  <button class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')">☰</button>
 </nav>
 
-<div class="page-body">
+<!-- PAGE -->
+<div class="page-wrap">
 
-  <!-- Redirect nếu chưa login -->
-  <div id="not-logged-in" style="display:none;text-align:center;padding:80px 20px">
-    <div style="font-size:48px;margin-bottom:16px">🔒</div>
-    <div style="font-family:'Noto Serif',serif;font-size:22px;color:var(--navy);margin-bottom:8px">Vui lòng đăng nhập</div>
-    <div style="font-size:14px;color:var(--text-lt);margin-bottom:20px">Bạn cần đăng nhập để xem hồ sơ.</div>
-    <button onclick="showAuthModal(null)" class="btn-primary">Đăng nhập</button>
+  <!-- LOADING STATE -->
+  <div id="authLoading" style="text-align:center;padding:4rem;color:var(--text-lt)">Đang tải...</div>
+
+  <!-- NOT LOGGED IN -->
+  <div id="notLoggedIn" style="display:none;text-align:center;padding:4rem 1rem">
+    <div style="font-size:2.5rem;margin-bottom:1rem">🔮</div>
+    <h2 style="font-family:'Noto Serif',serif;color:var(--navy);margin-bottom:.75rem">Đăng nhập để xem hồ sơ</h2>
+    <p style="color:var(--text-lt);margin-bottom:1.5rem">Hồ sơ giúp bạn xem lại lá số, kết quả xem tuổi và lịch sử trò chuyện.</p>
+    <a href="/la-so.html" class="btn-primary">Đăng Nhập</a>
   </div>
 
-  <div id="profile-content" style="display:none">
+  <!-- MAIN DASHBOARD -->
+  <div id="dashboard" style="display:none">
 
-    <!-- Profile header -->
+    <!-- Profile Header -->
     <div class="profile-header">
-      <div id="profile-avatar-wrap"></div>
-      <div>
-        <div class="profile-name" id="profile-name">—</div>
-        <div class="profile-email" id="profile-email">—</div>
-        <div class="profile-badge" id="profile-provider">—</div>
+      <div class="avatar" id="avatarLetter">?</div>
+      <div class="profile-info">
+        <div class="profile-email" id="userEmail"></div>
+        <div class="profile-name" id="userDisplayName">Người Dùng</div>
+        <div class="profile-since" id="userSince"></div>
       </div>
-      <button class="btn-signout" style="margin-left:auto" onclick="Auth.signOut()">Đăng xuất</button>
+      <button class="profile-signout" id="btnSignout">Đăng Xuất</button>
     </div>
 
-    <!-- Stats -->
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-label">Lá số đã luận giải</div>
-        <div class="card-value" id="stat-laso">—</div>
-        <div class="card-sub">trong Mệnh Khố của bạn</div>
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="lasos">🔮 Lá Số <span id="countLasos" class="chat-count" style="margin-left:.35rem;display:none"></span></button>
+      <button class="tab-btn" data-tab="xemtuoi">💑 Xem Tuổi <span id="countXemTuoi" class="chat-count" style="margin-left:.35rem;display:none"></span></button>
+      <button class="tab-btn" data-tab="chat">💬 Lịch Sử Chat <span id="countChat" class="chat-count" style="margin-left:.35rem;display:none"></span></button>
+      <button class="tab-btn" data-tab="account">👤 Tài Khoản</button>
+    </div>
+
+    <!-- Tab: Lá Số -->
+    <div class="tab-content active" id="tab-lasos">
+      <div id="lasosLoading" class="loading-cards">
+        <div class="loading-card"><div class="loading-card-top"></div><div class="loading-card-body"><div class="skeleton" style="width:70%;margin-bottom:.5rem"></div><div class="skeleton" style="width:50%"></div></div></div>
+        <div class="loading-card"><div class="loading-card-top"></div><div class="loading-card-body"><div class="skeleton" style="width:60%;margin-bottom:.5rem"></div><div class="skeleton" style="width:40%"></div></div></div>
       </div>
-      <div class="card">
-        <div class="card-label">Thành viên từ</div>
-        <div class="card-value" id="stat-joined" style="font-size:18px;padding-top:6px">—</div>
-        <div class="card-sub" id="stat-provider">—</div>
+      <div id="lasosContent" style="display:none"></div>
+    </div>
+
+    <!-- Tab: Xem Tuổi/Làm Ăn -->
+    <div class="tab-content" id="tab-xemtuoi">
+      <div id="xemTuoiLoading" style="text-align:center;padding:2rem;color:var(--text-lt)">Đang tải...</div>
+      <div id="xemTuoiContent" style="display:none"></div>
+    </div>
+
+    <!-- Tab: Chat -->
+    <div class="tab-content" id="tab-chat">
+      <div id="chatListLoading" style="text-align:center;padding:2rem;color:var(--text-lt)">Đang tải...</div>
+      <div id="chatListContent" style="display:none"></div>
+    </div>
+
+    <!-- Tab: Tài Khoản -->
+    <div class="tab-content" id="tab-account">
+      <div id="accountContent">
+        <div class="account-section">
+          <h3>Thông tin tài khoản</h3>
+          <div class="form-row">
+            <label>Email</label>
+            <input type="email" id="accEmail" disabled/>
+          </div>
+          <div class="form-row">
+            <label>Tên hiển thị</label>
+            <input type="text" id="accName" placeholder="Nhập tên của bạn"/>
+          </div>
+          <button class="btn-primary" onclick="saveDisplayName()" style="margin-top:.25rem">Lưu Tên</button>
+          <div id="nameAlert"></div>
+        </div>
+
+        <div class="account-section">
+          <h3>Đổi mật khẩu</h3>
+          <div class="form-row">
+            <label>Mật khẩu mới</label>
+            <input type="password" id="newPwd" placeholder="Nhập mật khẩu mới"/>
+          </div>
+          <div class="form-row">
+            <label>Xác nhận mật khẩu</label>
+            <input type="password" id="confirmPwd" placeholder="Nhập lại mật khẩu"/>
+          </div>
+          <button class="btn-primary" onclick="changePassword()">Đổi Mật Khẩu</button>
+          <div id="pwdAlert"></div>
+        </div>
+
+        <div class="account-section">
+          <h3>Lịch sử thanh toán</h3>
+          <div id="purchaseList"><div style="color:var(--text-lt);font-size:.85rem">Đang tải...</div></div>
+        </div>
       </div>
     </div>
 
-    <!-- Lá số gần đây -->
-    <div class="section-title">Lá số gần đây</div>
-    <div id="laso-list"></div>
+  </div><!-- /dashboard -->
+</div>
 
+<!-- ===== MODAL: Xem Lại Luận Giải ===== -->
+<div class="modal-overlay" id="luanModal">
+  <div class="modal" style="max-width:860px">
+    <div class="modal-header">
+      <h2 id="luanModalTitle">Luận Giải Lá Số</h2>
+      <button class="modal-close" onclick="closeModal('luanModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="luan-tabs" id="luanTabBtns"></div>
+      <div class="luan-content" id="luanContentArea">
+        <div style="text-align:center;padding:2rem;color:var(--text-lt)">Đang tải luận giải...</div>
+      </div>
+    </div>
   </div>
 </div>
 
-<footer class="site-footer">
-  <span>紫微明寶 · Tử Vi Minh Bảo</span>
-  <span>Tri mệnh lý – Thuận thế hành</span>
-</footer>
+<!-- ===== MODAL: Chat ===== -->
+<div class="modal-overlay" id="chatModal">
+  <div class="modal" style="max-width:680px;height:80vh">
+    <div class="modal-header">
+      <div>
+        <h2 id="chatModalTitle">Vấn Đáp Lá Số</h2>
+        <div id="chatModalSub" style="color:rgba(255,255,255,.5);font-size:.75rem;margin-top:.2rem"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('chatModal')">✕</button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;overflow:hidden;padding:1rem 1.25rem">
+      <div id="chatMessages" class="chat-messages" style="flex:1;overflow-y:auto;padding-right:.25rem"></div>
+      <div class="chat-input-row">
+        <textarea class="chat-input" id="chatInput" placeholder="Hỏi thầy Tử Vi về lá số của bạn..." rows="1"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"></textarea>
+        <button class="chat-send" id="chatSendBtn" onclick="sendChat()">Gửi ↑</button>
+      </div>
+    </div>
+  </div>
+</div>
 
+<script src="/auth.js"></script>
 <script>
-const SUPABASE_URL = 'https://dciwkfdqhhddeymlisey.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
+const SUPABASE_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 
-document.addEventListener('DOMContentLoaded', async () => {
-  if (!Auth.isLoggedIn()) {
-    document.getElementById('not-logged-in').style.display = 'block';
+let _user = null;
+let _token = null;
+let _historyData = null;
+let _chatState = { slug: null, product: 'laso', messages: [], lasoContext: null };
+
+// ── AUTH INIT ──
+async function initProfile() {
+  // Wait for auth.js session
+  await new Promise(r => setTimeout(r, 600));
+  
+  // Try to get session from Supabase
+  try {
+    const resp = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+      headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${getStoredToken()}` }
+    });
+    if (resp.ok) {
+      _user = await resp.json();
+      _token = getStoredToken();
+    }
+  } catch(e) {}
+
+  // Fallback: try window.supabaseClient if auth.js exposes it
+  if (!_user && window._supabaseSession) {
+    _user = window._supabaseSession.user;
+    _token = window._supabaseSession.access_token;
+  }
+
+  document.getElementById('authLoading').style.display = 'none';
+
+  if (!_user) {
+    document.getElementById('notLoggedIn').style.display = 'block';
     return;
   }
 
-  document.getElementById('profile-content').style.display = 'block';
-  const user = Auth.getUser();
+  renderProfileHeader();
+  document.getElementById('dashboard').style.display = 'block';
+  loadHistory();
+  setupTabs();
+}
 
-  // Avatar
-  const avatarWrap = document.getElementById('profile-avatar-wrap');
-  const avatar = user.user_metadata?.avatar_url || user.user_metadata?.picture || '';
-  const name   = user.user_metadata?.full_name || user.user_metadata?.name || '';
-  const email  = user.email || '';
-  const initial = (name || email).charAt(0).toUpperCase();
-  const provider = user.app_metadata?.provider || 'email';
-
-  if (avatar) {
-    avatarWrap.innerHTML = `<img src="${avatar}" class="profile-avatar" alt="">`;
-  } else {
-    avatarWrap.innerHTML = `<div class="profile-avatar-placeholder">${initial}</div>`;
-  }
-
-  document.getElementById('profile-name').textContent  = name || email.split('@')[0];
-  document.getElementById('profile-email').textContent = email;
-  document.getElementById('profile-provider').textContent =
-    provider === 'google' ? '🔵 Google Account' :
-    provider === 'facebook' ? '🔵 Facebook Account' : '✉ Email';
-
-  // Joined date
-  const created = user.created_at ? new Date(user.created_at).toLocaleDateString('vi-VN', {year:'numeric',month:'long',day:'numeric'}) : '—';
-  document.getElementById('stat-joined').textContent = created;
-  document.getElementById('stat-provider').textContent = `Đăng nhập qua ${provider}`;
-
-  // Load lá số from Supabase
-  try {
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/laso_public?select=slug,can_chi_nam,gioi_tinh,nam_sinh,cung_menh,chinh_tinh,created_at&order=created_at.desc&limit=20`,
-      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-    );
-    const rows = await res.json();
-    document.getElementById('stat-laso').textContent = Array.isArray(rows) ? rows.length : 0;
-
-    const listEl = document.getElementById('laso-list');
-    if (!rows || rows.length === 0) {
-      listEl.innerHTML = `<div class="empty-state">
-        <div class="empty-icon">📜</div>
-        <div class="empty-title">Chưa có lá số nào</div>
-        <div class="empty-sub">Hãy luận giải lá số đầu tiên của bạn.</div>
-        <a href="/" class="btn-primary">An sao ngay →</a>
-      </div>`;
-    } else {
-      listEl.innerHTML = `<div class="laso-list">${rows.map(d => {
-        const gt   = d.gioi_tinh === 'nu' ? 'Nữ' : 'Nam';
-        const date = d.created_at ? new Date(d.created_at).toLocaleDateString('vi-VN') : '';
-        return `<a class="laso-item" href="/la-so.html?slug=${d.slug}">
-          <div class="laso-item-can-chi">${d.can_chi_nam||'—'}</div>
-          <div class="laso-item-meta">${gt} · ${d.nam_sinh||''} · Cung Mệnh: ${d.cung_menh||'—'} · ${d.chinh_tinh||''}</div>
-          <div class="laso-item-date">${date}</div>
-          <div class="laso-item-arrow">→</div>
-        </a>`;
-      }).join('')}</div>`;
+function getStoredToken() {
+  // Check common storage patterns used by Supabase
+  for (const key of Object.keys(localStorage)) {
+    if (key.includes('auth-token') || key.includes('supabase')) {
+      try {
+        const val = JSON.parse(localStorage.getItem(key));
+        if (val?.access_token) return val.access_token;
+        if (val?.session?.access_token) return val.session.access_token;
+        if (typeof val === 'string') return val;
+      } catch(e) {}
     }
-  } catch(e) {
-    document.getElementById('stat-laso').textContent = '—';
   }
-});
+  return null;
+}
+
+function renderProfileHeader() {
+  const email = _user.email || '';
+  const displayName = _user.user_metadata?.display_name || _user.user_metadata?.full_name || '';
+  const createdAt = _user.created_at ? new Date(_user.created_at).toLocaleDateString('vi-VN',{year:'numeric',month:'long'}) : '';
+  const letter = (displayName || email || '?')[0].toUpperCase();
+
+  document.getElementById('avatarLetter').textContent = letter;
+  document.getElementById('userEmail').textContent = email;
+  document.getElementById('userDisplayName').textContent = displayName || 'Người Dùng';
+  document.getElementById('userSince').textContent = createdAt ? `Thành viên từ ${createdAt}` : '';
+  document.getElementById('accEmail').value = email;
+  document.getElementById('accName').value = displayName;
+}
+
+document.getElementById('btnSignout').onclick = async () => {
+  await fetch(`${SUPABASE_URL}/auth/v1/logout`, {
+    method: 'POST',
+    headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${_token}` }
+  });
+  localStorage.clear();
+  window.location.href = '/';
+};
+
+// ── TABS ──
+function setupTabs() {
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+}
+
+// ── LOAD HISTORY ──
+async function loadHistory() {
+  const resp = await fetch('/api/history?action=list', {
+    headers: { Authorization: `Bearer ${_token}` }
+  });
+  if (!resp.ok) { console.error('history load failed'); return; }
+  _historyData = await resp.json();
+
+  renderLasos(_historyData.lasos || []);
+  renderXemTuoi(_historyData.xemTuoi || []);
+  renderChatList(_historyData.chatList || []);
+  renderPurchases(_historyData.purchases || []);
+}
+
+// ── RENDER LÁ SỐ ──
+const GIO_MAP = {Tý:'Tý',Sửu:'Sửu',Dần:'Dần',Mão:'Mão',Thìn:'Thìn',Tỵ:'Tỵ',Ngọ:'Ngọ',Mùi:'Mùi',Thân:'Thân',Dậu:'Dậu',Tuất:'Tuất',Hợi:'Hợi'};
+const PHAN_LABELS = {
+  '1':'Tổng Quan','2':'Cung Mệnh','3':'Tâm Tính','4':'Học Vấn',
+  '5':'Phụ Mẫu','6':'Phúc Đức','7':'Điền Trạch','8':'Quan Lộc',
+  '9':'Nô Bộc','10':'Thiên Di','11':'Tật Ách','12':'Tài Bạch',
+  '13':'Tử Tức','14':'Phu Thê','15':'Huynh Đệ','16':'Đại Vận',
+  '17':'Tiểu Hạn','18':'Lưu Niên','19':'Cách Cục','20':'Sự Nghiệp',
+  '21':'Tình Cảm','22':'Sức Khoẻ','23':'Tài Lộc','24':'Vận Mệnh'
+};
+
+function renderLasos(lasos) {
+  document.getElementById('lasosLoading').style.display = 'none';
+  document.getElementById('lasosContent').style.display = 'block';
+
+  const count = lasos.length;
+  if (count > 0) {
+    const badge = document.getElementById('countLasos');
+    badge.textContent = count; badge.style.display = '';
+  }
+
+  const el = document.getElementById('lasosContent');
+  if (count === 0) {
+    el.innerHTML = `<div class="empty-state">
+      <div class="icon">🔮</div>
+      <p>Bạn chưa có lá số nào được lưu.<br>Hãy lập lá số và đăng nhập để lưu lịch sử.</p>
+      <a href="/" class="btn-primary">Lập Lá Số Ngay</a>
+    </div>`;
+    return;
+  }
+
+  el.innerHTML = `<div class="card-grid">${lasos.map(l => lasoCard(l)).join('')}</div>`;
+}
+
+function lasoCard(l) {
+  const date = new Date(l.created_at).toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});
+  const name = l.person_name || l.slug;
+  const letter = name[0].toUpperCase();
+  const gioi = l.gioi_tinh === 'nam' ? '♂ Nam' : '♀ Nữ';
+  const ngaySinh = `${l.ngay_sinh}/${l.thang_sinh}/${l.nam_sinh}`;
+  return `<div class="laso-card" onclick="openLuanModal('${l.slug}','${escHtml(name)}')">
+    <div class="card-top">
+      <div class="card-avatar">${letter}</div>
+      <div>
+        <div class="card-title">${escHtml(name)}</div>
+        <div class="card-subtitle">${ngaySinh} · Giờ ${l.gio_chi} · ${gioi}</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-badges">
+        ${l.cung_menh ? `<span class="badge">Mệnh ${l.cung_menh}</span>` : ''}
+        ${l.chinh_tinh ? `<span class="badge blue">${l.chinh_tinh}</span>` : ''}
+        ${l.cuc ? `<span class="badge">${l.cuc}</span>` : ''}
+      </div>
+      <div class="card-date">📅 ${date}</div>
+      <div class="card-actions">
+        <button class="btn-outline navy" onclick="event.stopPropagation();openLuanModal('${l.slug}','${escHtml(name)}')">📖 Xem Lại</button>
+        <button class="btn-outline gold" onclick="event.stopPropagation();openChatModal('${l.slug}','${escHtml(name)}','laso')">💬 Chat</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── RENDER XEM TUOI ──
+function renderXemTuoi(list) {
+  document.getElementById('xemTuoiLoading').style.display = 'none';
+  document.getElementById('xemTuoiContent').style.display = 'block';
+
+  if (list.length > 0) {
+    const badge = document.getElementById('countXemTuoi');
+    badge.textContent = list.length; badge.style.display = '';
+  }
+
+  const el = document.getElementById('xemTuoiContent');
+  if (list.length === 0) {
+    el.innerHTML = `<div class="empty-state">
+      <div class="icon">💑</div>
+      <p>Chưa có kết quả xem tuổi nào được lưu.</p>
+      <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap">
+        <a href="/xem-tuoi.html" class="btn-primary">Xem Tuổi Vợ Chồng</a>
+        <a href="/xem-lam-an.html" class="btn-primary btn-gold">Xem Tuổi Làm Ăn</a>
+      </div>
+    </div>`;
+    return;
+  }
+
+  el.innerHTML = `<div class="xem-list">${list.map(x => xemItem(x)).join('')}</div>`;
+}
+
+function xemItem(x) {
+  const date = new Date(x.created_at).toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});
+  const score = x.total_score || 0;
+  const cls = score >= 75 ? 'high' : score >= 50 ? 'mid' : 'low';
+  const typeLabel = x.product_type === 'xem-lam-an' ? 'Xem tuổi làm ăn' : 'Xem tuổi vợ chồng';
+  const icon = x.product_type === 'xem-lam-an' ? '💼' : '💑';
+  return `<div class="xem-item">
+    <div class="xem-score ${cls}">${score}</div>
+    <div class="xem-info">
+      <div class="xem-type">${icon} ${typeLabel}</div>
+      <div class="xem-names">${escHtml(x.person_a || '')} × ${escHtml(x.person_b || '')}</div>
+      <div class="xem-date">📅 ${date}</div>
+    </div>
+    <button class="btn-outline navy btn-sm" onclick="openXemTuoiModal('${x.id}','${escHtml(x.person_a||'')}','${escHtml(x.person_b||'')}')">Xem Lại</button>
+  </div>`;
+}
+
+// ── RENDER CHAT LIST ──
+function renderChatList(list) {
+  document.getElementById('chatListLoading').style.display = 'none';
+  document.getElementById('chatListContent').style.display = 'block';
+
+  if (list.length > 0) {
+    const badge = document.getElementById('countChat');
+    badge.textContent = list.length; badge.style.display = '';
+  }
+
+  const el = document.getElementById('chatListContent');
+  if (list.length === 0) {
+    el.innerHTML = `<div class="empty-state">
+      <div class="icon">💬</div>
+      <p>Chưa có lịch sử trò chuyện nào.</p>
+    </div>`;
+    return;
+  }
+
+  el.innerHTML = `<div class="chat-list">${list.map(c => chatListItem(c)).join('')}</div>`;
+}
+
+function chatListItem(c) {
+  const date = new Date(c.updated_at).toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});
+  const icon = c.product === 'xem-tuoi' ? '💑' : c.product === 'xem-lam-an' ? '💼' : '🔮';
+  return `<div class="chat-item" onclick="openChatModal('${c.laso_slug}','${c.laso_slug}','${c.product}')">
+    <div class="chat-icon">${icon}</div>
+    <div class="chat-info">
+      <div class="chat-slug">${c.laso_slug}</div>
+      <div class="chat-meta">💬 Cập nhật ${date}</div>
+    </div>
+    <span style="color:var(--gold);font-size:.8rem">Tiếp tục →</span>
+  </div>`;
+}
+
+// ── RENDER PURCHASES ──
+function renderPurchases(list) {
+  const el = document.getElementById('purchaseList');
+  if (!list || list.length === 0) {
+    el.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Chưa có lịch sử thanh toán.</div>';
+    return;
+  }
+  el.innerHTML = `<div class="purchase-list">${list.map(p => {
+    const date = new Date(p.created_at).toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});
+    const status = p.status === 'completed' ? 'completed' : '';
+    const label = p.status === 'completed' ? 'Hoàn thành' : p.status;
+    return `<div class="purchase-item">
+      <div class="purchase-slug">${p.slug}</div>
+      <div class="purchase-amount">$${p.amount}</div>
+      <span class="purchase-status ${status}">${label}</span>
+      <div class="purchase-date">${date}</div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+// ── OPEN LUAN GIAI MODAL ──
+async function openLuanModal(slug, name) {
+  document.getElementById('luanModalTitle').textContent = `Luận Giải — ${name}`;
+  document.getElementById('luanTabBtns').innerHTML = '';
+  document.getElementById('luanContentArea').innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-lt)">Đang tải...</div>';
+  openModal('luanModal');
+
+  const resp = await fetch(`/api/history?action=laso&slug=${encodeURIComponent(slug)}`, {
+    headers: { Authorization: `Bearer ${_token}` }
+  });
+  const data = await resp.json();
+  if (!data || !data.luan_giai) {
+    document.getElementById('luanContentArea').innerHTML = '<div style="color:var(--red);padding:1rem">Không tìm thấy luận giải.</div>';
+    return;
+  }
+
+  const keys = Object.keys(data.luan_giai).sort((a,b) => parseInt(a)-parseInt(b));
+  
+  // Build tab buttons
+  const tabsHtml = keys.map(k => `<button class="luan-tab ${k==='1'?'active':''}" onclick="switchLuanTab('${k}',this)">${PHAN_LABELS[k]||('P'+k)}</button>`).join('');
+  document.getElementById('luanTabBtns').innerHTML = tabsHtml;
+
+  // Store data and show first
+  window._luanData = data.luan_giai;
+  showLuanSection('1');
+}
+
+function showLuanSection(key) {
+  const text = window._luanData?.[key] || '';
+  document.getElementById('luanContentArea').innerHTML = `<div class="luan-content">${marked.parse(text)}</div>`;
+}
+
+function switchLuanTab(key, btn) {
+  document.querySelectorAll('.luan-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  showLuanSection(key);
+}
+
+// ── OPEN XEM TUOI MODAL (reuse luan modal) ──
+async function openXemTuoiModal(id, personA, personB) {
+  document.getElementById('luanModalTitle').textContent = `${personA} × ${personB}`;
+  document.getElementById('luanTabBtns').innerHTML = '';
+  document.getElementById('luanContentArea').innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-lt)">Đang tải...</div>';
+  openModal('luanModal');
+
+  const resp = await fetch(`/api/history?action=xem_tuoi&id=${id}`, {
+    headers: { Authorization: `Bearer ${_token}` }
+  });
+  const data = await resp.json();
+  if (!data || !data.result_json) {
+    document.getElementById('luanContentArea').innerHTML = '<div style="color:var(--red);padding:1rem">Không tìm thấy kết quả.</div>';
+    return;
+  }
+
+  const rj = data.result_json;
+  const sectionKeys = Object.keys(rj).filter(k => k !== 'total' && k !== 'summary');
+  const SECTION_LABELS = ['Xét Tuổi','Ngũ Hành','Tư Tưởng','Tính Cách','Quan Hệ','Con Cái / Đối Tác','Tài Chính','Vận Hạn'];
+
+  if (sectionKeys.length > 0) {
+    const tabsHtml = sectionKeys.map((k,i) => `<button class="luan-tab ${i===0?'active':''}" onclick="switchXemTab('${k}',this)">${SECTION_LABELS[i]||k}</button>`).join('');
+    document.getElementById('luanTabBtns').innerHTML = tabsHtml;
+    window._xemData = rj;
+    showXemSection(sectionKeys[0]);
+  } else {
+    document.getElementById('luanContentArea').innerHTML = `<div class="luan-content">${marked.parse(JSON.stringify(rj,null,2))}</div>`;
+  }
+}
+
+function showXemSection(key) {
+  const text = window._xemData?.[key] || '';
+  document.getElementById('luanContentArea').innerHTML = `<div class="luan-content">${marked.parse(typeof text === 'string' ? text : JSON.stringify(text,null,2))}</div>`;
+}
+function switchXemTab(key, btn) {
+  document.querySelectorAll('.luan-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  showXemSection(key);
+}
+
+// ── CHAT MODAL ──
+async function openChatModal(slug, name, product) {
+  _chatState.slug = slug;
+  _chatState.product = product || 'laso';
+  _chatState.messages = [];
+
+  document.getElementById('chatModalTitle').textContent = `Vấn Đáp — ${name}`;
+  document.getElementById('chatModalSub').textContent = slug;
+  document.getElementById('chatMessages').innerHTML = '';
+  openModal('chatModal');
+
+  // Load existing chat history
+  const resp = await fetch(`/api/history?action=chat&slug=${encodeURIComponent(slug)}`, {
+    headers: { Authorization: `Bearer ${_token}` }
+  });
+  const data = await resp.json();
+  _chatState.messages = data.messages || [];
+
+  if (_chatState.messages.length > 0) {
+    _chatState.messages.forEach(m => appendMessage(m.role, m.content));
+  } else {
+    appendMessage('assistant', 'Kính chào quý vị. Tôi đã xem qua lá số của bạn. Bạn muốn hỏi điều gì?');
+  }
+}
+
+function appendMessage(role, content) {
+  const el = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  if (role === 'assistant') div.innerHTML = `<div class="msg-sender">☽ Thầy Tử Vi</div>${marked.parse(content)}`;
+  else div.textContent = content;
+  el.appendChild(div);
+  el.scrollTop = el.scrollHeight;
+}
+
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = '';
+  appendMessage('user', text);
+  _chatState.messages.push({ role: 'user', content: text });
+
+  const btn = document.getElementById('chatSendBtn');
+  btn.disabled = true;
+
+  // Typing indicator
+  const typing = document.createElement('div');
+  typing.className = 'msg assistant';
+  typing.id = 'typingIndicator';
+  typing.innerHTML = `<div class="msg-sender">☽ Thầy Tử Vi</div><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>`;
+  document.getElementById('chatMessages').appendChild(typing);
+  document.getElementById('chatMessages').scrollTop = 99999;
+
+  try {
+    // Build messages array for API (last 10 messages for context)
+    const history = _chatState.messages.slice(-10);
+
+    const resp = await fetch('/api/lasotuvi?action=chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: history,
+        slug: _chatState.slug,
+        product: _chatState.product
+      })
+    });
+    const data = await resp.json();
+    const reply = data.content || data.text || data.reply || 'Xin lỗi, có lỗi xảy ra.';
+
+    typing.remove();
+    _chatState.messages.push({ role: 'assistant', content: reply });
+    appendMessage('assistant', reply);
+
+    // Save to DB
+    await fetch('/api/history?action=save_chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${_token}` },
+      body: JSON.stringify({
+        slug: _chatState.slug,
+        product: _chatState.product,
+        messages: _chatState.messages.slice(-30)  // keep last 30 messages
+      })
+    });
+  } catch(e) {
+    typing.remove();
+    appendMessage('assistant', 'Xin lỗi, có lỗi kết nối. Vui lòng thử lại.');
+  }
+  btn.disabled = false;
+}
+
+// ── ACCOUNT ACTIONS ──
+async function saveDisplayName() {
+  const name = document.getElementById('accName').value.trim();
+  const alert = document.getElementById('nameAlert');
+  try {
+    const resp = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+      method: 'PUT',
+      headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${_token}`, 'Content-Type':'application/json' },
+      body: JSON.stringify({ data: { display_name: name } })
+    });
+    if (resp.ok) {
+      alert.innerHTML = '<div class="alert success">✓ Đã lưu tên hiển thị.</div>';
+      document.getElementById('userDisplayName').textContent = name || 'Người Dùng';
+      document.getElementById('avatarLetter').textContent = (name || 'N')[0].toUpperCase();
+    } else throw new Error();
+  } catch {
+    alert.innerHTML = '<div class="alert error">✗ Lưu thất bại. Thử lại.</div>';
+  }
+  setTimeout(() => { alert.innerHTML = ''; }, 3000);
+}
+
+async function changePassword() {
+  const pwd = document.getElementById('newPwd').value;
+  const confirm = document.getElementById('confirmPwd').value;
+  const alert = document.getElementById('pwdAlert');
+  if (pwd !== confirm) { alert.innerHTML = '<div class="alert error">Mật khẩu không khớp.</div>'; return; }
+  if (pwd.length < 6) { alert.innerHTML = '<div class="alert error">Mật khẩu tối thiểu 6 ký tự.</div>'; return; }
+  try {
+    const resp = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+      method: 'PUT',
+      headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${_token}`, 'Content-Type':'application/json' },
+      body: JSON.stringify({ password: pwd })
+    });
+    if (resp.ok) {
+      alert.innerHTML = '<div class="alert success">✓ Đã đổi mật khẩu thành công.</div>';
+      document.getElementById('newPwd').value = '';
+      document.getElementById('confirmPwd').value = '';
+    } else throw new Error();
+  } catch {
+    alert.innerHTML = '<div class="alert error">✗ Đổi mật khẩu thất bại.</div>';
+  }
+  setTimeout(() => { alert.innerHTML = ''; }, 3000);
+}
+
+// ── MODAL HELPERS ──
+function openModal(id) { document.getElementById(id).classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow = ''; }
+document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click', function(e) { if (e.target === this) closeModal(this.id); }));
+
+// ── UTILS ──
+function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+// ── BOOT ──
+initProfile();
 </script>
 </body>
 </html>
