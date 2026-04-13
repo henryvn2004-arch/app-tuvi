@@ -32,10 +32,12 @@ const TuviGrid = (() => {
   }
   function _getStarCls(s) {
     if (s.nhom === 'chinh') return 'sc-' + (_CHINH_COLOR[s.ten] || 'neutral');
-    if (s.hoa === 'Lộc')    return 'sc-hoa-loc';
-    if (s.hoa === 'Quyền')  return 'sc-hoa-quyen';
-    if (s.hoa === 'Khoa')   return 'sc-hoa-khoa';
-    if (s.hoa === 'Kỵ')     return 'sc-hoa-ky';
+    if (s.hoa) {
+      // Tứ Hóa: dùng màu ngũ hành của sao, không màu cố định
+      const d = (typeof STAR_DATA !== 'undefined') ? STAR_DATA[s.ten] : null;
+      const ec = d?.element ? ({'kim':'sc-kim','mộc':'sc-moc','thủy':'sc-thuy','hỏa':'sc-hoa','thổ':'sc-tho'}[d.element.toLowerCase()]||'sc-neutral') : 'sc-neutral';
+      return ec + ' sc-tu-hoa';
+    }
     return _getElemClass(s.ten);
   }
   function _getCungCan(ci, di) { return (((ci % 5) * 2 + di) % 10); }
@@ -80,7 +82,7 @@ const TuviGrid = (() => {
       const b = (hung && s.brightness) ? ` <span style="font-size:8px">(${_bShort(s.brightness)})</span>` : '';
       let nm = s.ten.toUpperCase();
       if (s.hoa) {
-        const hc = s.hoa==='Lộc'?'sc-hoa-loc':s.hoa==='Quyền'?'sc-hoa-quyen':s.hoa==='Khoa'?'sc-hoa-khoa':'sc-hoa-ky';
+        const d=STAR_DATA?.[s.ten];const ec=d?.element?({'kim':'sc-kim','mộc':'sc-moc','thủy':'sc-thuy','hỏa':'sc-hoa','thổ':'sc-tho'}[d.element.toLowerCase()]||'sc-neutral'):'sc-neutral';const hc=ec+' sc-tu-hoa';
         nm += ` <span class="${hc}" style="font-size:8px">[${s.hoa.charAt(0)}]</span>`;
       }
       return `<div class="v2-phu-item ${cls}" style="${hung?'font-weight:600':''}">${nm}${b}</div>`;
@@ -89,7 +91,7 @@ const TuviGrid = (() => {
     let catH  = phuStars.filter(s => !_isHung(s)).map(renderPhu).join('');
     const hungH = phuStars.filter(s =>  _isHung(s)).map(renderPhu).join('');
     for (const s of hoaFromChinh) {
-      const hc = s.hoa==='Lộc'?'sc-hoa-loc':s.hoa==='Quyền'?'sc-hoa-quyen':s.hoa==='Khoa'?'sc-hoa-khoa':'sc-hoa-ky';
+      const d=STAR_DATA?.[s.ten];const ec=d?.element?({'kim':'sc-kim','mộc':'sc-moc','thủy':'sc-thuy','hỏa':'sc-hoa','thổ':'sc-tho'}[d.element.toLowerCase()]||'sc-neutral'):'sc-neutral';const hc=ec+' sc-tu-hoa';
       catH += `<div class="v2-phu-item ${hc}" style="font-weight:700">HÓA ${s.hoa.toUpperCase()}</div>`;
     }
 
@@ -352,7 +354,7 @@ const TuviGrid = (() => {
       ".v2-triet-tag{background:#4a0000;color:#fff}",
       // Star colors
       ".sc-hoa{color:#C0392B}.sc-kim{color:#7F8C8D}.sc-thuy{color:#1a1a1a}.sc-moc{color:#1E6B3C}.sc-tho{color:#8B6914}.sc-neutral{color:#333}",
-      ".sc-hoa-loc{color:#1E6B3C;font-weight:700}.sc-hoa-quyen{color:#7B3FA0;font-weight:700}.sc-hoa-khoa{color:#1455A4;font-weight:700}.sc-hoa-ky{color:#C0392B;font-weight:700}",
+      ".sc-tu-hoa{font-weight:700;text-decoration:underline dotted 1px}",
       ".bright{font-size:8px;opacity:1;color:#7EC8E3;margin-left:1px}",
       ".hoa{font-size:9px;margin-left:1px}",
       // Center panel
