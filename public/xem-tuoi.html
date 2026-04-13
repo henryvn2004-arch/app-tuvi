@@ -1832,8 +1832,9 @@ async function analyze(){
     const convB=convertDuongToAm(ngayB,thangB,namB,_fdB.gioHour);
     const lsB=anSaoLaSo({ngayAL:convB.amLich.day,thangAL:convB.amLich.month,namAL:convB.amLich.year,canNam:convB.canNam,chiNam:convB.chiNam,gioIdx:convB.gioIdx,gioitinh:gtB,namXem});
     lsB.chiNam=convB.chiNam;
-    lsA._nameA = nameA;
-    lsA._nameB = nameB;
+    lsA._nameA = nameA; lsA._nameB = nameB;
+    lsA._hoTen = nameA; lsA._gioitinh = gtA; lsA._conv = convA;
+    lsB._hoTen = nameB; lsB._gioitinh = gtB; lsB._conv = convB;
     window._lasoA = lsA;
     window._lasoB = lsB;
     // chatbot unlocks after payment via luanGiaiAll()

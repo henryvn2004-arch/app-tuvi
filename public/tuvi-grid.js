@@ -239,15 +239,29 @@ const TuviGrid = (() => {
   function renderCompact(ls, label, accentColor = 'var(--navy)') {
     if (!ls?.palaces) return '';
     const canNamIdx = _CAN.indexOf((ls.canChiNam || '').split(' ')[0]);
-    const dvHT = ls.daiVanHienTai;
+    const dvHT  = ls.daiVanHienTai;
+    const conv  = ls._conv || {};
+    const tvCung = ls.palaces[ls.tieuHanIdx];
+    const ldh    = ls.palaces[ls.luuNienDaiHanIdx];
+    const hoten  = ls._hoTen || label;
 
-    const centerHtml = `<div style="border-right:1px solid var(--border);border-bottom:1px solid var(--border);grid-column:span 2;grid-row:span 2;background:var(--bg-soft);display:flex;align-items:center;justify-content:center;padding:8px;overflow:auto">
-      <div style="width:100%;text-align:center;font-size:10px;line-height:1.7;color:var(--text-mid)">
-        <div style="font-size:11px;font-weight:700;color:${accentColor};margin-bottom:4px">${label}</div>
-        <div>${ls.canChiNam} · ${ls.cuc||''}</div>
-        <div>Mệnh <b>${ls.menhDC||''}</b></div>
-        ${dvHT ? `<div style="color:#1E6B3C;font-weight:600">ĐV: ${dvHT.diaChi} ${dvHT.tuoiStart}–${dvHT.tuoiEnd}t</div>` : ''}
-        <div>Tuổi ${ls.tuoiXem||''}</div>
+    const centerHtml = `<div class="cung-center">
+      <div class="center-la-so">
+        <div class="center-title" style="color:${accentColor}">✦ ${hoten.toUpperCase()} ✦</div>
+        <hr class="center-divider">
+        ${conv._dl ? `<div class="center-row">📅 ${conv._dl.day}/${conv._dl.month}/${conv._dl.year} DL · ${conv.gioChi||''}</div>` : ''}
+        <div class="center-row">📅 ${conv.amLich ? conv.amLich.day+'/'+conv.amLich.month+'/'+conv.amLich.year : ''} ÂL · ${conv.gioChi||''}</div>
+        <div class="center-row">🎂 ${ls.tuoiXem||''} tuổi · ${ls._gioitinh==='nu'?'Nữ':'Nam'}</div>
+        <hr class="center-divider">
+        <div class="center-row">Năm: <b>${ls.canChiNam||''}</b></div>
+        <div class="center-row">Mệnh: <b>${NAP_AM_FULL[ls.canChiNam]||ls.napAm||''}</b></div>
+        <div class="center-row">Cục: <b>${ls.cuc||''}</b></div>
+        <div class="center-row">Mệnh: <b>${ls.menhDC||''}</b> · Thân: <b>${ls.thanDC||''}</b></div>
+        <hr class="center-divider">
+        <div class="center-row">Năm <b style="color:var(--blue)">${ls.chiNamXem||''}</b> — Tuổi ${ls.tuoiXem||''}</div>
+        ${dvHT ? `<div class="center-row">ĐV: <b style="color:#1E6B3C">${dvHT.diaChi}</b> (${dvHT.tuoiStart}–${dvHT.tuoiEnd}t)${dvHT.scoring?' '+dvHT.scoring.flag+' '+dvHT.scoring.tong+'đ':''}</div>` : ''}
+        ${tvCung ? `<div class="center-row">Tiểu hạn: <b>${tvCung.diaChi||''}</b> · ${tvCung.cungName||''}</div>` : ''}
+        ${ldh    ? `<div class="center-row">LĐH: <b style="color:var(--gold)">${ldh.diaChi||''}</b> · ${ldh.cungName||''}</div>` : ''}
       </div>
     </div>`;
 
