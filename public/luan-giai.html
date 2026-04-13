@@ -1023,6 +1023,7 @@ select.form-input { cursor: pointer; }
 
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tuvi-form.js"></script>
+<script src="/tuvi-paywall.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
   // Load cach cuc DB
@@ -1702,115 +1703,12 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
   }
 
   function renderPaywall() {
-    const body = document.getElementById('result-body');
-    const gate = document.createElement('div');
-    gate.className = 'paywall-gate';
-    gate.id = 'paywall-gate';
-    gate.innerHTML = `
-      <div class="paywall-eyebrow">紫微明寶 · Luận Giải Đầy Đủ</div>
-      <div class="paywall-title">Mở khóa 24 phần luận giải chuyên sâu</div>
-      <div class="paywall-desc">
-        Phân tích toàn diện 12 cung, vận hạn đại vận – tiểu vận, và luận đoán chi tiết
-        được tạo ra riêng cho lá số của bạn bởi AI Tử Vi Minh Bảo.
-      </div>
-      <div class="paywall-features">
-        <div class="paywall-feature">Luận giải 12 cung chi tiết</div>
-        <div class="paywall-feature">Phân tích đại vận toàn đời</div>
-        <div class="paywall-feature">Tiểu vận từng năm</div>
-        <div class="paywall-feature">Cách cục & ý nghĩa sâu</div>
-        <div class="paywall-feature">Lưu vĩnh viễn trong tài khoản</div>
-        <div class="paywall-feature">Chia sẻ lá số với người thân</div>
-      </div>
-      <div class="paywall-price">$19</div>
-      <div class="paywall-price-note">Thanh toán một lần · Truy cập vĩnh viễn</div>
-      <button class="btn-paywall" id="btn-paywall-pay" onclick="initiatePayment()">
-        <span>Xem Luận Giải Đầy Đủ</span>
-        <span style="font-size:16px">→</span>
-      </button>
-      <div class="paywall-secure">🔒 Thanh toán bảo mật qua PayPal · Hoàn tiền nếu lỗi kỹ thuật</div>
-    `;
-    body.appendChild(gate);
+    TuviPaywall.show();
   }
 
   // ── Khởi tạo PayPal payment ──
   async function initiatePayment() {
-    const btn = document.getElementById('btn-paywall-pay');
-    if (btn) { btn.disabled = true; btn.innerHTML = '<span>Đang kết nối PayPal...</span>'; }
-
-    // Lưu form data vào sessionStorage — để restore sau khi return từ PayPal
-    try {
-      sessionStorage.setItem('tuvi_pending', JSON.stringify({
-        ngay:     _ngay,
-        thang:    _thang,
-        nam:      _nam,
-        gioIdx:   _astrolabe._conv?.gioIdx ?? null,
-        gioChi:   _astrolabe._conv?.gioChi || '',
-        gioitinh: _gioitinh,
-        namXem:   _namXem,
-        hoTen:    _hoTen || '',
-        slug:     _pendingSlug,
-      }));
-    } catch(e) { console.warn('sessionStorage save failed:', e); }
-
-    // Save lá số trước khi redirect (không có luận giải Claude)
-    let slug = _pendingSlug;
-    try {
-      const saveRes = await fetch('/api/save-laso', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...(window.Auth?.isLoggedIn() ? { 'Authorization': 'Bearer ' + window.Auth.getSession().access_token } : {}) },
-        body: JSON.stringify({
-          canChiNam:    _astrolabe.canChiNam,
-          gioiTinh:     _gioitinh,
-          namSinh:      _nam,
-          thangSinh:    _thang,
-          ngaySinh:     _ngay,
-          gioIdx:       _astrolabe._conv?.gioIdx ?? null,
-          gioChi:       _astrolabe._conv?.gioChi || '',
-          canNam:       _astrolabe._conv?.canNam || '',
-          chiNam:       _astrolabe._conv?.chiNam || '',
-          namXem:       _namXem,
-          cungMenh:     _astrolabe.menhDC,
-          chinhTinh:    _astrolabe.palaces?.find(p=>p.isMenh)?.majorStars?.map(s=>s.ten).join(', ') || '',
-          napAm:        _astrolabe.napAm,
-          astrolabeData: JSON.stringify({
-            cungScores:    _astrolabe.cungScores || null,
-            cachCuc:       _astrolabe.cachCuc || [],
-            canChiNam:     _astrolabe.canChiNam,
-            napAm:         _astrolabe.napAm,
-            cuc:           _astrolabe.cuc,
-            menhDC:        _astrolabe.menhDC,
-            thanDC:        _astrolabe.thanDC,
-            tuoiXem:       _astrolabe.tuoiXem,
-            chiNamXem:     _astrolabe.chiNamXem,
-            daiVans:       _astrolabe.daiVans || [],
-            daiVanHienTai: _astrolabe.daiVanHienTai || null,
-            tieuVanScores: _astrolabe.tieuVanScores || [],
-            palaces:       _astrolabe.palaces || [],
-          }),
-        }),
-      });
-      const saved = await saveRes.json();
-      if (saved.slug) slug = saved.slug;
-      _pendingSlug = slug;
-    } catch(e) { console.warn('Pre-save failed:', e.message); }
-
-    // Tạo PayPal order
-    try {
-      const res = await fetch('/api/payment?action=create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slug }),
-      });
-      const data = await res.json();
-      if (data.approvalUrl) {
-        window.location.href = data.approvalUrl;
-      } else {
-        throw new Error(data.error || 'Không tạo được đơn PayPal');
-      }
-    } catch(e) {
-      if (btn) { btn.disabled = false; btn.innerHTML = '<span>Xem Luận Giải Đầy Đủ</span><span style="font-size:16px">→</span>'; }
-      alert('Lỗi kết nối PayPal: ' + e.message + '\nVui lòng thử lại.');
-    }
+    TuviPaywall._initiate();
   }
 
   // ── Sau khi paid — unlock tất cả lock boxes và load Claude từng phần ──
@@ -3849,7 +3747,21 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 
   // ── Auto-unlock khi return từ PayPal ──────────────────────────
   // Dùng sessionStorage để restore form data, không cần fetch DB
-  (async function checkReturnFromPayPal() {
+  
+TuviPaywall.init({
+  product:  'laso',
+  price:    '$19',
+  slug:     () => _pendingSlug,
+  sessionKey: 'tuvi_pending',
+  getFormData: () => {
+    const { hoten, ngay, thang, nam, gioHour, gioPhut, gioitinh, namXem } = (typeof TuviForm !== 'undefined' ? TuviForm.getData() : {});
+    return { ngay, thang, nam, gioHour:gioHour||0, gioPhut:gioPhut||0, gioitinh, namXem, hoTen:hoten, slug:_pendingSlug };
+  },
+  restoreFormData: (d) => { if (typeof TuviForm !== 'undefined') TuviForm.setData(d); },
+  onUnlock: async () => { await startClaudeOrLoadCache(_pendingSlug); },
+});
+
+(async function checkReturnFromPayPal() {
     const p = new URLSearchParams(window.location.search);
     if (p.get('unlocked') !== '1') return;
 
