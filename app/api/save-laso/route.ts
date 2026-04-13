@@ -18,7 +18,6 @@ export async function POST(request: NextRequest) {
   const b = await parseBody(request) as Record<string,unknown>;
   if (!b.canChiNam || !b.namSinh) return err('Thiếu thông tin cơ bản', 400);
 
-  // Lấy user_id từ auth token nếu user đang login
   let userId: string | null = null;
   const authToken = (request.headers.get('authorization') || '').replace('Bearer ', '').trim();
 
@@ -30,25 +29,52 @@ export async function POST(request: NextRequest) {
       if (user) userId = user.id;
     }
 
-    let slug = makeSlug(String(b.canChiNam), String(b.gioiTinh||''), String(b.namSinh), String(b.gioChi||''));
-    const { data: ex } = await sb.from('laso_public').select('slug').eq('slug', slug).maybeSingle();
-    if (ex) slug = slug + '-' + Date.now().toString(36);
-    const { data, error } = await sb.from('laso_public').insert({
-      slug, can_chi_nam:b.canChiNam, gioi_tinh:b.gioiTinh,
-      nam_sinh:parseInt(String(b.namSinh)),
-      thang_sinh:b.thangSinh?parseInt(String(b.thangSinh)):null,
-      ngay_sinh:b.ngaySinh?parseInt(String(b.ngaySinh)):null,
-      gio_idx:b.gioIdx!==undefined?parseInt(String(b.gioIdx)):null,
-      gio_chi:b.gioChi||null, can_nam:b.canNam||null, chi_nam:b.chiNam||null,
-      nam_xem:b.namXem?parseInt(String(b.namXem)):null,
-      cung_menh:b.cungMenh||null, chinh_tinh:b.chinhTinh||null,
-      nap_am:b.napAm||null, cuc:b.cuc||null,
-      luan_giai:b.luanGiai||{}, la_so_text:b.laSoText||null,
-      rendered_html:b.renderedHtml||null, astrolabe_data:b.astrolabeData||null,
-      user_id: userId,
-      person_name: b.personName ? String(b.personName) : null,
-    }).select('slug').single();
-    if (error) throw error;
-    return ok({ slug: data.slug, url: `/la-so.html?slug=${data.slug}` });
+    const slug = makeSlug(String(b.canChiNam), String(b.gioiTinh||''), String(b.namSinh), String(b.gioChi||''));
+
+    const payload: Record<string, unknown> = {
+      slug,
+      can_chi_nam:    b.canChiNam,
+      gioi_tinh:      b.gioiTinh,
+      nam_sinh:       parseInt(String(b.namSinh)),
+      thang_sinh:     b.thangSinh  ? parseInt(String(b.thangSinh))  : null,
+      ngay_sinh:      b.ngaySinh   ? parseInt(String(b.ngaySinh))   : null,
+      gio_idx:        b.gioIdx !== undefined ? parseInt(String(b.gioIdx)) : null,
+      gio_chi:        b.gioChi     || null,
+      can_nam:        b.canNam     || null,
+      chi_nam:        b.chiNam     || null,
+      nam_xem:        b.namXem     ? parseInt(String(b.namXem))     : null,
+      cung_menh:      b.cungMenh   || null,
+      chinh_tinh:     b.chinhTinh  || null,
+      nap_am:         b.napAm      || null,
+      cuc:            b.cuc        || null,
+      luan_giai:      b.luanGiai   || {},
+      la_so_text:     b.laSoText   || null,
+      rendered_html:  b.renderedHtml  || null,
+      astrolabe_data: b.astrolabeData || null,
+      person_name:    b.personName ? String(b.personName) : null,
+    };
+    if (userId) payload.user_id = userId;
+
+    // Check slug đã tồn tại chưa
+    const { data: ex } = await sb.from('laso_public')
+      .select('slug, user_id').eq('slug', slug).maybeSingle();
+
+    let finalSlug = slug;
+
+    if (ex) {
+      // Slug đã tồn tại — UPDATE tại chỗ, không tạo slug mới
+      const updatePayload = { ...payload };
+      if (ex.user_id) delete updatePayload.user_id; // giữ owner cũ nếu đã có
+      const { error } = await sb.from('laso_public').update(updatePayload).eq('slug', slug);
+      if (error) throw error;
+      finalSlug = slug;
+    } else {
+      // INSERT mới
+      const { data, error } = await sb.from('laso_public').insert(payload).select('slug').single();
+      if (error) throw error;
+      finalSlug = data.slug;
+    }
+
+    return ok({ slug: finalSlug, url: `/la-so.html?slug=${finalSlug}` });
   } catch(e:unknown) { return err((e as Error).message); }
 }
