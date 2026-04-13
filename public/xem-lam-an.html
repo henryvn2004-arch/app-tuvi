@@ -1825,20 +1825,16 @@ async function analyze(){
     }, 300);
     // Check if already paid
     // If returning from PayPal with _autoUnlock, skip re-checking
-    if (window._autoUnlock && window._autoUnlock === _pendingSlug) {
+    if (window._autoUnlock) {
+      // Return từ PayPal — unlock thẳng, không cần check slug
       window._autoUnlock = null;
       TuviPaywall.showSuccessBanner();
-      setTimeout(() => {
-        const _el2 = document.getElementById('section-0');
-        if (_el2) _el2.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 800);
       luanGiaiAll(result);
     } else {
       const alreadyPaid = await TuviPaywall.check();
       if (alreadyPaid) {
         luanGiaiAll(result);
       } else {
-        // Chạy section 0 free trước, rồi mới show paywall — giống luan-giai
         await luanGiaiSection(0, null, result);
         showPaywall(result, 'xem-lam-an', 'Xem Tuổi Làm Ăn');
       }
