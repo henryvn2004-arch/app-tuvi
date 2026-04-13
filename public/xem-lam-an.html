@@ -1843,7 +1843,7 @@ async function analyze(){
       } else {
         await luanGiaiSection(0, null, result);
         // Cho user 4 giây đọc section 0 trước khi hiện paywall
-        await new Promise(r => setTimeout(r, 4000));
+        await new Promise(r => setTimeout(r, 15000));
         showPaywall(result, 'xem-lam-an', 'Xem Tuổi Làm Ăn');
       }
     }
