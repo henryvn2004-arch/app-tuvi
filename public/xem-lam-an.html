@@ -1716,6 +1716,25 @@ async function luanGiaiAll(result){
   for(let i=0;i<result.items.length;i++){
     await luanGiaiSection(i+1,result.items[i],result);
   }
+
+  // Save kết quả vào profile history
+  try {
+    const _saveTok = window.Auth?.isLoggedIn() ? window.Auth.getSession()?.access_token : null;
+    if (_saveTok && _pendingSlug) {
+      fetch('/api/history?action=save_xem_tuoi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _saveTok },
+        body: JSON.stringify({
+          slug: _pendingSlug,
+          product_type: 'xem-lam-an',
+          person_a: result.nameA,
+          person_b: result.nameB,
+          total_score: result.total,
+          result_json: { total: result.total, items: result.items.map(i=>({label:i.label,score:i.score,w:i.w})) }
+        })
+      }).catch(()=>{});
+    }
+  } catch(e) {}
 }
 
 
