@@ -1675,7 +1675,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     if (urlParams.get('unlocked') === '1' && urlParams.get('slug')) {
       _pendingSlug = urlParams.get('slug');
       const paid = await verifyPayment(_pendingSlug);
-      if (paid) { await startClaudeluanGiai(); return; }
+      if (paid) { await startClaudeOrLoadCache(_pendingSlug); return; }
     }
 
     // Check Supabase purchases
@@ -1688,7 +1688,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       const r = await fetch(`/api/payment?action=check&slug=${encodeURIComponent(tempSlug)}${userId?'&userId='+userId:''}`);
       const d = await r.json();
       console.log('[paywall check]', tempSlug, d);
-      if (d.purchased === true) { await startClaudeluanGiai(); return; }
+      if (d.purchased === true) { await startClaudeOrLoadCache(tempSlug || _pendingSlug); return; }
     } catch(e) { console.warn('[paywall check error]', e); }
     // Chưa mua — lock boxes đã hiển thị, không cần làm gì thêm
   }
@@ -1815,6 +1815,28 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 
   // ── Sau khi paid — unlock tất cả lock boxes và load Claude từng phần ──
   let _isPaid = false; // flag: đã paid, _loadP1Free() không ghi đè
+
+
+  async function startClaudeOrLoadCache(slug) {
+    // Nếu lá số đã được luận giải rồi → redirect thẳng, không generate lại
+    if (slug) {
+      try {
+        const r = await fetch(
+          'https://dciwkfdqhhddeymlisey.supabase.co/rest/v1/laso_public' +
+          '?slug=eq.' + encodeURIComponent(slug) +
+          '&select=slug,luan_giai&limit=1',
+          { headers: { 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I' } }
+        );
+        const rows = await r.json();
+        if (rows?.[0]?.luan_giai && Object.keys(rows[0].luan_giai).length > 0) {
+          // Đã có luận giải — redirect sang trang lá số
+          window.location.href = '/la-so.html?slug=' + encodeURIComponent(slug);
+          return;
+        }
+      } catch(e) {}
+    }
+    await startClaudeluanGiai();
+  }
 
   async function startClaudeluanGiai() {
     _isPaid = true;
@@ -3916,7 +3938,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 600);
 
-      await startClaudeluanGiai();
+      await startClaudeOrLoadCache(slug);
       window.history.replaceState({}, '', '/luan-giai.html');
 
     } catch(e) {

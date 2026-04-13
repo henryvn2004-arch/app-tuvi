@@ -1583,7 +1583,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     if (urlParams.get('unlocked') === '1' && urlParams.get('slug')) {
       _pendingSlug = urlParams.get('slug');
       const paid = await verifyPayment(_pendingSlug);
-      if (paid) { await startClaudeluanGiai(); return; }
+      if (paid) { await startClaudeOrLoadCache(_pendingSlug); return; }
     }
 
     // Check Supabase purchases
@@ -1595,7 +1595,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     try {
       const r = await fetch(`/api/payment?action=check&slug=${encodeURIComponent(tempSlug)}${userId?'&userId='+userId:''}`);
       const d = await r.json();
-      if (d.purchased) { await startClaudeluanGiai(); return; }
+      if (d.purchased) { await startClaudeOrLoadCache(tempSlug || _pendingSlug); return; }
     } catch(e) {}
     // Chưa mua — lock boxes đã hiển thị, không cần làm gì thêm
   }
@@ -1733,6 +1733,28 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
   }
 
   // ── Sau khi paid — unlock tất cả lock boxes và load Claude từng phần ──
+
+  async function startClaudeOrLoadCache(slug) {
+    // Nếu lá số đã được luận giải rồi → redirect thẳng, không generate lại
+    if (slug) {
+      try {
+        const r = await fetch(
+          'https://dciwkfdqhhddeymlisey.supabase.co/rest/v1/laso_public' +
+          '?slug=eq.' + encodeURIComponent(slug) +
+          '&select=slug,luan_giai&limit=1',
+          { headers: { 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I' } }
+        );
+        const rows = await r.json();
+        if (rows?.[0]?.luan_giai && Object.keys(rows[0].luan_giai).length > 0) {
+          // Đã có luận giải — redirect sang trang lá số
+          window.location.href = '/la-so.html?slug=' + encodeURIComponent(slug);
+          return;
+        }
+      } catch(e) {}
+    }
+    await startClaudeluanGiai();
+  }
+
   async function startClaudeluanGiai() {
     // Unlock chatbot — user đã paid
     const _overlay = document.getElementById('tvc-paywall-overlay');
@@ -3739,7 +3761,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       // Clear result + render
       document.getElementById('result-body').innerHTML = '';
       await renderPreGenFree();
-      await startClaudeluanGiai();
+      await startClaudeOrLoadCache(slug);
 
       // Scroll + clean URL
       setTimeout(() => document.getElementById('result-section')?.scrollIntoView({ behavior: 'smooth' }), 300);
