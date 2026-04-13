@@ -6,247 +6,201 @@
 <title>So Sánh An Sao</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#061A2E;--blue:#1455A4;--gold:#9A7B3A;--border:#E8E8E8;--bg:#F5F4F0;--green:#1E6B3C;--red:#C0392B}
+:root{--navy:#061A2E;--blue:#1455A4;--border:#E8E8E8;--bg:#F5F4F0;--green:#1E6B3C;--red:#C0392B}
 body{font-family:Arial,sans-serif;font-size:13px;background:var(--bg);color:#1a1a1a;padding:1.5rem}
-h1{font-family:'Noto Serif',serif;font-size:1.2rem;color:var(--navy);margin-bottom:1rem}
-.form-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;background:#fff;padding:1rem;border-radius:8px;border:1px solid var(--border)}
+h1{font-size:1.1rem;color:var(--navy);margin-bottom:1rem}
+.form-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;background:#fff;padding:1rem;border-radius:8px;border:1px solid var(--border);align-items:flex-end}
 .field{display:flex;flex-direction:column;gap:3px}
-.field label{font-size:11px;color:#777;text-transform:uppercase;letter-spacing:.05em}
-.field input,.field select{padding:5px 8px;border:1px solid var(--border);border-radius:5px;font-size:13px;width:100px}
+.field label{font-size:11px;color:#777;text-transform:uppercase}
+.field input,.field select{padding:5px 8px;border:1px solid var(--border);border-radius:5px;font-size:13px;width:90px}
 .btn{padding:8px 20px;background:var(--navy);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600}
-.btn:hover{background:#0D3B5E}
 .btn-sm{padding:5px 12px;background:#fff;border:1px solid var(--border);border-radius:5px;cursor:pointer;font-size:12px}
-.btn-sm:hover{background:var(--bg)}
 .stats{display:flex;gap:10px;flex-wrap:wrap;margin:1rem 0}
 .stat{background:#fff;border:1px solid var(--border);border-radius:6px;padding:8px 16px;text-align:center}
-.stat-val{font-size:1.5rem;font-weight:700;color:var(--navy)}
+.stat-val{font-size:1.4rem;font-weight:700;color:var(--navy)}
 .stat-label{font-size:11px;color:#777}
 .stat.red .stat-val{color:var(--red)}
 .stat.green .stat-val{color:var(--green)}
-.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
-.search{padding:5px 10px;border:1px solid var(--border);border-radius:5px;font-size:12px;width:200px}
+.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+.search{padding:5px 10px;border:1px solid var(--border);border-radius:5px;font-size:12px;width:180px}
 .fbtn{padding:4px 12px;border:1px solid var(--border);border-radius:20px;cursor:pointer;font-size:11px;background:#fff;color:#777}
 .fbtn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
 .table-wrap{background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden}
 table{width:100%;border-collapse:collapse}
-th{background:var(--navy);color:rgba(255,255,255,.85);padding:7px 12px;text-align:left;font-size:11px;letter-spacing:.06em;font-weight:600}
+th{background:var(--navy);color:rgba(255,255,255,.85);padding:7px 12px;text-align:left;font-size:11px;font-weight:600}
 td{padding:6px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:#fafafa}
 tr.diff td{background:#fff5f5!important}
-.ok{color:var(--green);font-weight:600}
-.err{color:var(--red);font-weight:600}
-.pending{color:#999}
-.ref-input{padding:4px 7px;border:1px solid var(--border);border-radius:4px;font-size:12px;width:85px}
+.ref-input{padding:4px 7px;border:1px solid var(--border);border-radius:4px;font-size:12px;width:80px}
 .ref-input:focus{outline:none;border-color:var(--blue)}
-.bright{font-size:10px;color:#999;margin-left:4px}
-.nhom-badge{font-size:10px;padding:1px 6px;border-radius:10px;background:#f0f0f0;color:#555}
-.nhom-chinh{background:#FEF9EC;color:#8B6914}
-.nhom-sat{background:#fff0f0;color:var(--red)}
-.nhom-phu{background:#f0f4ff;color:var(--blue)}
-#status{font-size:12px;color:#777;margin-left:10px}
+#status{font-size:12px;color:#777;margin-left:8px}
 </style>
 </head>
 <body>
-<h1>🔭 So Sánh An Sao — Tử Vi Minh Bảo vs Thienluong.net</h1>
-
+<h1>🔭 So Sánh An Sao — App vs Thienluong.net</h1>
 <div class="form-row">
-  <div class="field"><label>Ngày DL</label><input type="number" id="ngay" value="9" min="1" max="31"></div>
-  <div class="field"><label>Tháng DL</label><input type="number" id="thang" value="5" min="1" max="12"></div>
-  <div class="field"><label>Năm DL</label><input type="number" id="nam" value="1984" min="1900" max="2030" style="width:80px"></div>
-  <div class="field"><label>Giờ (0-23)</label><input type="number" id="gio" value="1" min="0" max="23"></div>
+  <div class="field"><label>Ngày DL</label><input type="number" id="c_ngay" value="9" min="1" max="31"></div>
+  <div class="field"><label>Tháng DL</label><input type="number" id="c_thang" value="5" min="1" max="12"></div>
+  <div class="field"><label>Năm DL</label><input type="number" id="c_nam" value="1984" min="1900" max="2030"></div>
+  <div class="field"><label>Giờ (0-23)</label><input type="number" id="c_gio" value="1" min="0" max="23"></div>
   <div class="field"><label>Giới tính</label>
-    <select id="gt"><option value="nam">Nam</option><option value="nu">Nữ</option></select>
+    <select id="c_gt"><option value="nam">Nam</option><option value="nu">Nữ</option></select>
   </div>
-  <div class="field"><label>Năm xem</label><input type="number" id="namxem" value="2026" style="width:80px"></div>
-  <div class="field" style="justify-content:flex-end">
-    <button class="btn" onclick="runEngine()">▶ An Sao</button>
-    <span id="status"></span>
+  <div class="field"><label>Năm xem</label><input type="number" id="c_namxem" value="2026"></div>
+  <div class="field">
+    <button class="btn" id="c_btn">▶ An Sao</button>
   </div>
+  <span id="status"></span>
 </div>
-
 <div id="result-area" style="display:none">
-  <div class="stats" id="stats"></div>
-
+  <div class="stats" id="c_stats"></div>
   <div class="controls">
-    <input class="search" type="text" id="search" placeholder="Tìm sao..." oninput="filterTable()">
-    <button class="fbtn active" onclick="setFilter(this,'all')">Tất cả</button>
-    <button class="fbtn" onclick="setFilter(this,'diff')">Sai ❌</button>
-    <button class="fbtn" onclick="setFilter(this,'chinh')">Chính tinh</button>
-    <button class="fbtn" onclick="setFilter(this,'sat')">Sát tinh</button>
-    <button class="fbtn" onclick="setFilter(this,'phu')">Phụ tinh</button>
-    <button class="btn-sm" onclick="copyDiff()">📋 Copy sao sai</button>
+    <input class="search" type="text" id="c_search" placeholder="Tìm sao...">
+    <button class="fbtn active" id="fb_all">Tất cả</button>
+    <button class="fbtn" id="fb_diff">Sai ❌</button>
+    <button class="fbtn" id="fb_chinh">Chính tinh</button>
+    <button class="fbtn" id="fb_sat">Sát tinh</button>
+    <button class="fbtn" id="fb_phu">Phụ tinh</button>
+    <button class="btn-sm" id="c_copy">📋 Copy sao sai</button>
   </div>
-
-  <div style="font-size:12px;color:#777;margin-bottom:8px">
-    👉 Nhập <b>cung đúng</b> từ thienluong.net vào cột "Ref" — để trống nếu chưa kiểm tra
-  </div>
-
+  <div style="font-size:12px;color:#777;margin-bottom:8px">👉 Nhập cung đúng từ thienluong.net vào cột <b>Ref</b></div>
   <div class="table-wrap">
     <table>
-      <thead>
-        <tr>
-          <th style="width:160px">Sao</th>
-          <th style="width:100px">Loại</th>
-          <th style="width:140px">App (cung)</th>
-          <th style="width:110px">Ref (thienluong)</th>
-          <th style="width:80px">Kết quả</th>
-        </tr>
-      </thead>
-      <tbody id="star-tbody"></tbody>
+      <thead><tr><th>Sao</th><th>Loại</th><th>App (cung)</th><th style="width:110px">Ref</th><th>Kết quả</th></tr></thead>
+      <tbody id="c_tbody"></tbody>
     </table>
   </div>
 </div>
-
+<datalist id="c_dclist"></datalist>
 <script src="/tuvi-ansao-engine.js"></script>
 <script>
-const DIA_CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
-let _rows=[];
-let _filter='all';
+(function(){
+  var _rows=[];
+  var _filter='all';
+  var _DC=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
 
-function runEngine(){
-  const ngay=+document.getElementById('ngay').value;
-  const thang=+document.getElementById('thang').value;
-  const nam=+document.getElementById('nam').value;
-  const gio=+document.getElementById('gio').value;
-  const gt=document.getElementById('gt').value;
-  const namXem=+document.getElementById('namxem').value;
-  try{
-    const conv=convertDuongToAm(ngay,thang,nam,gio*2);
-    const ls=anSaoLaSo({
-      ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,
-      canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:conv.gioIdx,
-      gioitinh:gt,namXem
-    });
-    // Preserve ref values if re-running same person
-    const oldRefs={};
-    _rows.forEach(r=>oldRefs[r.tenBase]=r.ref);
+  // populate datalist
+  var dl=document.getElementById('c_dclist');
+  _DC.forEach(function(d){var o=document.createElement('option');o.value=d;dl.appendChild(o);});
 
-    _rows=[];
-    ls.palaces.forEach(p=>{
-      p.stars.forEach(s=>{
-        if(s.nhom==='tuan_triet')return;
-        const sd=typeof STAR_DATA!=='undefined'?STAR_DATA[s.ten]:null;
-        _rows.push({
-          ten: s.ten+(s.hoa?'['+s.hoa+']':''),
-          tenBase: s.ten,
-          loai: sd?sd.type:'phụ tinh',
-          nhom: s.nhom,
-          cung: p.diaChi,
-          cungName: p.cungName,
-          bright: s.brightness||'',
-          ref: oldRefs[s.ten]||''
+  document.getElementById('c_btn').addEventListener('click', run);
+  document.getElementById('c_search').addEventListener('input', renderTable);
+  document.getElementById('fb_all').addEventListener('click',function(){setFilter(this,'all')});
+  document.getElementById('fb_diff').addEventListener('click',function(){setFilter(this,'diff')});
+  document.getElementById('fb_chinh').addEventListener('click',function(){setFilter(this,'chinh')});
+  document.getElementById('fb_sat').addEventListener('click',function(){setFilter(this,'sat')});
+  document.getElementById('fb_phu').addEventListener('click',function(){setFilter(this,'phu')});
+  document.getElementById('c_copy').addEventListener('click', copyDiff);
+
+  function run(){
+    var ngay=+document.getElementById('c_ngay').value;
+    var thang=+document.getElementById('c_thang').value;
+    var nam=+document.getElementById('c_nam').value;
+    var gio=+document.getElementById('c_gio').value;
+    var gt=document.getElementById('c_gt').value;
+    var namXem=+document.getElementById('c_namxem').value;
+    try{
+      var conv=convertDuongToAm(ngay,thang,nam,gio*2);
+      var ls=anSaoLaSo({
+        ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,
+        canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:conv.gioIdx,
+        gioitinh:gt,namXem:namXem
+      });
+      var oldRefs={};
+      _rows.forEach(function(r){oldRefs[r.tenBase]=r.ref;});
+      _rows=[];
+      ls.palaces.forEach(function(p){
+        p.stars.forEach(function(s){
+          if(s.nhom==='tuan_triet')return;
+          var sd=(typeof STAR_DATA!=='undefined')?STAR_DATA[s.ten]:null;
+          _rows.push({
+            ten:s.ten+(s.hoa?'['+s.hoa+']':''),
+            tenBase:s.ten,
+            loai:sd?sd.type:'phụ tinh',
+            nhom:s.nhom,
+            cung:p.diaChi,
+            cungName:p.cungName,
+            bright:s.brightness||'',
+            ref:oldRefs[s.ten]||''
+          });
         });
       });
-    });
-
-    document.getElementById('status').textContent='✓ '+conv.canNam+' '+conv.chiNam+' · Giờ '+conv.gioChi;
-    document.getElementById('result-area').style.display='block';
-    renderStats();
-    renderTable();
-  }catch(e){
-    document.getElementById('status').textContent='Lỗi: '+e.message;
-    console.error(e);
+      document.getElementById('status').textContent='✓ '+conv.canNam+' '+conv.chiNam;
+      document.getElementById('result-area').style.display='block';
+      renderStats();
+      renderTable();
+    }catch(e){
+      document.getElementById('status').textContent='Lỗi: '+e.message;
+      console.error(e);
+    }
   }
-}
 
-function renderStats(){
-  const total=_rows.length;
-  const chinh=_rows.filter(r=>r.nhom==='chinh').length;
-  const sat=_rows.filter(r=>r.nhom==='luc_sat').length;
-  const diff=_rows.filter(r=>r.ref&&r.ref.trim()&&r.ref.trim()!==r.cung).length;
-  const checked=_rows.filter(r=>r.ref&&r.ref.trim()).length;
-  document.getElementById('stats').innerHTML=`
-    <div class="stat"><div class="stat-val">${total}</div><div class="stat-label">Tổng sao</div></div>
-    <div class="stat"><div class="stat-val">${chinh}</div><div class="stat-label">Chính tinh</div></div>
-    <div class="stat"><div class="stat-val">${sat}</div><div class="stat-label">Sát tinh</div></div>
-    <div class="stat"><div class="stat-val">${checked}</div><div class="stat-label">Đã kiểm tra</div></div>
-    <div class="stat ${diff>0?'red':'green'}"><div class="stat-val" id="diff-count">${diff}</div><div class="stat-label">Sao sai</div></div>
-  `;
-}
-
-function getNhomClass(nhom){
-  if(nhom==='chinh')return'nhom-chinh';
-  if(nhom==='luc_sat')return'nhom-sat';
-  return'nhom-phu';
-}
-
-function renderTable(){
-  const q=document.getElementById('search').value.toLowerCase();
-  const rows=_rows.filter(r=>{
-    if(q&&!r.ten.toLowerCase().includes(q))return false;
-    if(_filter==='diff')return r.ref&&r.ref.trim()&&r.ref.trim()!==r.cung;
-    if(_filter==='chinh')return r.nhom==='chinh';
-    if(_filter==='sat')return r.nhom==='luc_sat';
-    if(_filter==='phu')return r.nhom!=='chinh'&&r.nhom!=='luc_sat';
-    return true;
-  });
-
-  document.getElementById('star-tbody').innerHTML=rows.map(r=>{
-    const idx=_rows.indexOf(r);
-    const isDiff=r.ref&&r.ref.trim()&&r.ref.trim()!==r.cung;
-    const status=!r.ref||!r.ref.trim()
-      ?'<span class="pending">—</span>'
-      :isDiff
-        ?`<span class="err">✗ sai</span>`
-        :`<span class="ok">✓ đúng</span>`;
-    return`<tr class="${isDiff?'diff':''}">
-      <td><b>${r.ten}</b></td>
-      <td><span class="nhom-badge ${getNhomClass(r.nhom)}">${r.loai}</span></td>
-      <td><b>${r.cung}</b> · <span style="color:#777;font-size:11px">${r.cungName}</span>${r.bright?`<span class="bright">(${r.bright})</span>`:''}</td>
-      <td>
-        <input class="ref-input" type="text" value="${r.ref}" placeholder="VD: Mão"
-          oninput="_rows[${idx}].ref=this.value.trim();updateAfterRef()" list="dc-list">
-      </td>
-      <td>${status}</td>
-    </tr>`;
-  }).join('');
-}
-
-function updateAfterRef(){
-  renderStats();
-  // Update status cells without full re-render
-  document.querySelectorAll('#star-tbody tr').forEach((tr,i)=>{
-    const q=document.getElementById('search').value.toLowerCase();
-    const visRows=_rows.filter(r=>{
-      if(q&&!r.ten.toLowerCase().includes(q))return false;
-      if(_filter==='diff')return r.ref&&r.ref.trim()&&r.ref.trim()!==r.cung;
+  function getVisible(){
+    var q=document.getElementById('c_search').value.toLowerCase();
+    return _rows.filter(function(r){
+      if(q&&r.ten.toLowerCase().indexOf(q)<0)return false;
+      if(_filter==='diff')return r.ref&&r.ref!==r.cung;
       if(_filter==='chinh')return r.nhom==='chinh';
       if(_filter==='sat')return r.nhom==='luc_sat';
       if(_filter==='phu')return r.nhom!=='chinh'&&r.nhom!=='luc_sat';
       return true;
     });
-    const r=visRows[i];
-    if(!r)return;
-    const isDiff=r.ref&&r.ref.trim()&&r.ref.trim()!==r.cung;
-    tr.className=isDiff?'diff':'';
-    const statusCell=tr.lastElementChild;
-    statusCell.innerHTML=!r.ref||!r.ref.trim()
-      ?'<span class="pending">—</span>'
-      :isDiff?'<span class="err">✗ sai</span>':'<span class="ok">✓ đúng</span>';
-  });
-}
+  }
 
-function filterTable(){renderTable();}
-function setFilter(btn,f){
-  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  _filter=f;
-  renderTable();
-}
+  function renderTable(){
+    var rows=getVisible();
+    document.getElementById('c_tbody').innerHTML=rows.map(function(r){
+      var idx=_rows.indexOf(r);
+      var isDiff=r.ref&&r.ref!==r.cung;
+      var status=!r.ref?'<span style="color:#999">—</span>'
+        :isDiff?'<span style="color:#C0392B;font-weight:600">✗ sai</span>'
+        :'<span style="color:#1E6B3C;font-weight:600">✓ đúng</span>';
+      return '<tr class="'+(isDiff?'diff':'')+'"><td><b>'+r.ten+'</b></td>'
+        +'<td style="font-size:11px;color:#777">'+r.loai+'</td>'
+        +'<td><b>'+r.cung+'</b> <span style="color:#999;font-size:11px">'+r.cungName+'</span></td>'
+        +'<td><input class="ref-input" type="text" value="'+r.ref+'" placeholder="VD: Mão" list="c_dclist" data-idx="'+idx+'"></td>'
+        +'<td>'+status+'</td></tr>';
+    }).join('');
+    // attach input listeners
+    document.querySelectorAll('.ref-input').forEach(function(inp){
+      inp.addEventListener('input',function(){
+        var i=+this.getAttribute('data-idx');
+        _rows[i].ref=this.value.trim();
+        var tr=this.closest('tr');
+        var isDiff=_rows[i].ref&&_rows[i].ref!==_rows[i].cung;
+        tr.className=isDiff?'diff':'';
+        tr.lastElementChild.innerHTML=!_rows[i].ref?'<span style="color:#999">—</span>'
+          :isDiff?'<span style="color:#C0392B;font-weight:600">✗ sai</span>'
+          :'<span style="color:#1E6B3C;font-weight:600">✓ đúng</span>';
+        renderStats();
+      });
+    });
+  }
 
-function copyDiff(){
-  const diffs=_rows.filter(r=>r.ref&&r.ref.trim()&&r.ref.trim()!==r.cung);
-  if(!diffs.length){alert('Chưa có sao sai nào!');return;}
-  const text=diffs.map(r=>`${r.ten}: app=${r.cung}, đúng=${r.ref}`).join('\n');
-  navigator.clipboard.writeText(text).then(()=>alert('Đã copy '+diffs.length+' sao sai!'));
-}
+  function renderStats(){
+    var diff=_rows.filter(function(r){return r.ref&&r.ref!==r.cung;}).length;
+    var checked=_rows.filter(function(r){return r.ref;}).length;
+    document.getElementById('c_stats').innerHTML=
+      '<div class="stat"><div class="stat-val">'+_rows.length+'</div><div class="stat-label">Tổng sao</div></div>'
+      +'<div class="stat"><div class="stat-val">'+_rows.filter(function(r){return r.nhom==='chinh';}).length+'</div><div class="stat-label">Chính tinh</div></div>'
+      +'<div class="stat"><div class="stat-val">'+checked+'</div><div class="stat-label">Đã kiểm tra</div></div>'
+      +'<div class="stat '+(diff>0?'red':'green')+'"><div class="stat-val">'+diff+'</div><div class="stat-label">Sao sai</div></div>';
+  }
 
-// Datalist cho địa chi
-const dl=document.createElement('datalist');
-dl.id='dc-list';
-DIA_CHI.forEach(d=>{const o=document.createElement('option');o.value=d;dl.appendChild(o);});
-document.body.appendChild(dl);
+  function setFilter(btn,f){
+    document.querySelectorAll('.fbtn').forEach(function(b){b.classList.remove('active');});
+    btn.classList.add('active');
+    _filter=f;
+    renderTable();
+  }
+
+  function copyDiff(){
+    var diffs=_rows.filter(function(r){return r.ref&&r.ref!==r.cung;});
+    if(!diffs.length){alert('Chưa có sao sai!');return;}
+    var text=diffs.map(function(r){return r.ten+': app='+r.cung+', đúng='+r.ref;}).join('\n');
+    navigator.clipboard.writeText(text).then(function(){alert('Đã copy '+diffs.length+' sao sai!');});
+  }
+})();
 </script>
 </body>
 </html>
