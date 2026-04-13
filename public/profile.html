@@ -220,7 +220,7 @@ nav{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justif
     <div style="font-size:2.5rem;margin-bottom:1rem">🔮</div>
     <h2 style="font-family:'Noto Serif',serif;color:var(--navy);margin-bottom:.75rem">Đăng nhập để xem hồ sơ</h2>
     <p style="color:var(--text-lt);margin-bottom:1.5rem">Hồ sơ giúp bạn xem lại lá số, kết quả xem tuổi và lịch sử trò chuyện.</p>
-    <a href="/la-so.html" class="btn-primary">Đăng Nhập</a>
+    <button class="btn-primary" onclick="showAuthModal(function(){ location.reload(); })">Đăng Nhập</button>
   </div>
 
   <!-- MAIN DASHBOARD -->
@@ -356,52 +356,26 @@ let _pChatState = { slug: null, product: 'laso', messages: [], lasoContext: null
 
 // ── AUTH INIT ──
 async function initProfile() {
-  // Wait for auth.js session
-  await new Promise(r => setTimeout(r, 600));
-  
-  // Try to get session from Supabase
-  try {
-    const resp = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-      headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${getStoredToken()}` }
-    });
-    if (resp.ok) {
-      _pUser = await resp.json();
-      _pToken = getStoredToken();
-    }
-  } catch(e) {}
-
-  // Fallback: try window.supabaseClient if auth.js exposes it
-  if (!_pUser && window._supabaseSession) {
-    _pUser = window._supabaseSession.user;
-    _pToken = window._supabaseSession.access_token;
+  // auth.js có thể đang refresh async — đợi tối đa 1.5s
+  const deadline = Date.now() + 1500;
+  while (!window.Auth?.isLoggedIn() && Date.now() < deadline) {
+    await new Promise(r => setTimeout(r, 100));
   }
 
   document.getElementById('authLoading').style.display = 'none';
 
-  if (!_pUser) {
+  if (!window.Auth?.isLoggedIn()) {
     document.getElementById('notLoggedIn').style.display = 'block';
     return;
   }
+
+  _pUser  = window.Auth.getUser();
+  _pToken = window.Auth.getSession()?.access_token || null;
 
   renderProfileHeader();
   document.getElementById('dashboard').style.display = 'block';
   loadHistory();
   setupTabs();
-}
-
-function getStoredToken() {
-  // Check common storage patterns used by Supabase
-  for (const key of Object.keys(localStorage)) {
-    if (key.includes('auth-token') || key.includes('supabase')) {
-      try {
-        const val = JSON.parse(localStorage.getItem(key));
-        if (val?.access_token) return val.access_token;
-        if (val?.session?.access_token) return val.session.access_token;
-        if (typeof val === 'string') return val;
-      } catch(e) {}
-    }
-  }
-  return null;
 }
 
 function renderProfileHeader() {
@@ -418,14 +392,7 @@ function renderProfileHeader() {
   document.getElementById('accName').value = displayName;
 }
 
-document.getElementById('btnSignout').onclick = async () => {
-  await fetch(`${SUPABASE_URL}/auth/v1/logout`, {
-    method: 'POST',
-    headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${_pToken}` }
-  });
-  localStorage.clear();
-  window.location.href = '/';
-};
+document.getElementById('btnSignout').onclick = () => Auth.signOut();
 
 // ── TABS ──
 function setupTabs() {
