@@ -12,6 +12,8 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/auth.js"></script>
+<script src="/tuvi-form.js"></script>
+<script src="/tuvi-grid.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -767,60 +769,25 @@ select.form-input { cursor: pointer; }
   <!-- ═══════════════════════════════════════════════════════ -->
 
 
-  <div class="pair-forms">
-    <div class="person-card card-a">
-      <div class="person-label"><div class="dot-a"></div><span style="color:var(--color-a)">Người Thứ Nhất</span></div>
-      <div class="form-group"><label class="form-label">Họ và tên</label><input class="form-input" type="text" id="hoten-a" placeholder="Nguyễn Văn A"></div>
-      <div class="form-group"><label class="form-label">Giới tính</label><select class="form-input" id="gt-a"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
-      <div class="form-row-3 form-group">
-        <div><label class="form-label">Ngày</label><input class="form-input" type="number" id="ngay-a" placeholder="1" min="1" max="31"></div>
-        <div><label class="form-label">Tháng</label><input class="form-input" type="number" id="thang-a" placeholder="1" min="1" max="12"></div>
-        <div><label class="form-label">Năm DL</label><input class="form-input" type="number" id="nam-a" placeholder="1990" min="1900" max="2010"></div>
+  <!-- Form — dùng chung TuviForm với prefix -->
+  <div class="form-grid" style="grid-template-columns:1fr 1fr 1fr">
+    <div id="tuvi-form-a"></div>
+    <div id="tuvi-form-b"></div>
+    <div class="form-col">
+      <div class="form-col-title">Thiết Lập</div>
+      <div class="form-group">
+        <label class="form-label">Năm xem vận</label>
+        <input class="form-input" type="number" id="nam-xem" value="2026" min="2020" max="2040">
       </div>
-      <div class="form-group"><label class="form-label">Giờ sinh</label><select class="form-input" id="gio-a"><option value="0">Tý (23h–1h)</option>
-<option value="1">Sửu (1h–3h)</option>
-<option value="2">Dần (3h–5h)</option>
-<option value="3">Mão (5h–7h)</option>
-<option value="4">Thìn (7h–9h)</option>
-<option value="5">Tỵ (9h–11h)</option>
-<option value="6">Ngọ (11h–13h)</option>
-<option value="7">Mùi (13h–15h)</option>
-<option value="8">Thân (15h–17h)</option>
-<option value="9">Dậu (17h–19h)</option>
-<option value="10">Tuất (19h–21h)</option>
-<option value="11">Hợi (21h–23h)</option></select></div>
-    </div>
-    <div class="person-card card-b">
-      <div class="person-label"><div class="dot-b"></div><span style="color:var(--color-b)">Người Thứ Hai</span></div>
-      <div class="form-group"><label class="form-label">Họ và tên</label><input class="form-input" type="text" id="hoten-b" placeholder="Trần Thị B"></div>
-      <div class="form-group"><label class="form-label">Giới tính</label><select class="form-input" id="gt-b"><option value="nu">Nữ</option><option value="nam">Nam</option></select></div>
-      <div class="form-row-3 form-group">
-        <div><label class="form-label">Ngày</label><input class="form-input" type="number" id="ngay-b" placeholder="1" min="1" max="31"></div>
-        <div><label class="form-label">Tháng</label><input class="form-input" type="number" id="thang-b" placeholder="1" min="1" max="12"></div>
-        <div><label class="form-label">Năm DL</label><input class="form-input" type="number" id="nam-b" placeholder="1992" min="1900" max="2010"></div>
-      </div>
-      <div class="form-group"><label class="form-label">Giờ sinh</label><select class="form-input" id="gio-b"><option value="0">Tý (23h–1h)</option>
-<option value="1">Sửu (1h–3h)</option>
-<option value="2">Dần (3h–5h)</option>
-<option value="3">Mão (5h–7h)</option>
-<option value="4">Thìn (7h–9h)</option>
-<option value="5">Tỵ (9h–11h)</option>
-<option value="6">Ngọ (11h–13h)</option>
-<option value="7">Mùi (13h–15h)</option>
-<option value="8">Thân (15h–17h)</option>
-<option value="9">Dậu (17h–19h)</option>
-<option value="10">Tuất (19h–21h)</option>
-<option value="11">Hợi (21h–23h)</option></select></div>
+      <p style="font-size:14px;color:var(--text-lt);line-height:1.7;margin-bottom:28px;font-style:italic">
+        Điền thông tin cả hai người rồi bấm phân tích tương quan.
+      </p>
+      <button class="btn-submit" id="btn-analyze" onclick="analyze()">&#9878; Phân Tích Tương Quan</button>
+      <div style="font-size:11px;color:var(--text-lt);text-align:center;margin-top:10px">9 phần phân tích · Luận giải bằng AI</div>
     </div>
   </div>
-  <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
-    <label class="form-label" style="white-space:nowrap;margin:0">Năm xem</label>
-    <input class="form-input" type="number" id="nam-xem" value="2026" min="2020" max="2040" style="max-width:120px">
-  </div>
-  <div id="error-msg" class="error-msg"></div>
-  <div id="loader-tuoi" class="loader-tuoi"></div>
-  <button class="btn-analyze" id="btn-analyze" onclick="analyze()">⚖ Phân Tích Tương Quan</button>
-  <div style="font-size:11px;color:var(--text-lt);text-align:center;margin-bottom:32px">9 phần phân tích · Luận giải bằng AI cho từng yếu tố</div>
+  <div id="error-msg" class="error-msg" style="margin-top:12px"></div>
+  <div id="loader-tuoi" style="margin-top:12px"></div>
 
   <div id="result-section" style="display:none">
     <!-- Compact laso grids -->
@@ -1502,7 +1469,12 @@ function renderAllSections(result){
   appendSection(0,buildTongQuan(result),body);
   setTimeout(()=>{
     renderRadar(lsA,lsB,nameA,nameB);
-    renderCompactLaso(lsA,lsB,nameA,nameB);
+    const _cw = document.getElementById('compact-laso-wrap');
+    if (_cw) _cw.innerHTML =
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">' +
+      '<div><div style="font-size:11px;font-weight:700;color:var(--color-a);margin-bottom:6px">' + nameA + '</div>' + TuviGrid.renderCompact(lsA, nameA, 'var(--color-a)') + '</div>' +
+      '<div><div style="font-size:11px;font-weight:700;color:var(--color-b);margin-bottom:6px">' + nameB + '</div>' + TuviGrid.renderCompact(lsB, nameB, 'var(--color-b)') + '</div>' +
+      '</div>';
   },400);
   items.forEach((m,i)=>appendSection(i+1,buildYeuTo(i+1,m,nameA,nameB,lsA,lsB),body));
   // Bottom download button
@@ -1522,9 +1494,7 @@ function appendSection(idx,contentHtml,body){
   sec.innerHTML=`<a id="anchor-${idx}" class="phan-anchor"></a>
     <div class="phan-num">${num} — ${PHAN_LABELS[idx]}</div>
     ${contentHtml}
-    <div id="luangiai-${idx}" style="margin-top:20px;font-size:15px;line-height:1.9;color:var(--text-mid);font-weight:300">
-      <div style="color:var(--text-lt);font-style:italic;font-size:13px">Đang luận giải...</div>
-    </div>`;
+    <div id="luangiai-${idx}" style="margin-top:20px"></div>`;
   body.appendChild(sec);
   // Loading state will be set by luanGiaiSection when it starts
 }
@@ -1643,6 +1613,11 @@ Viết 300-350 từ văn xuôi. Nhận định tổng quan, điểm mạnh, đi�
   const _mlNum=document.getElementById('ml-num-'+idx);
   if(_mlBtn){_mlBtn.classList.add('loading','active');}
   if(_mlNum){_mlNum.style.animation='spin 1s linear infinite';}
+  // Show TuviGrid loading in section
+  const _lgEl = document.getElementById('luangiai-'+idx);
+  if (_lgEl) _lgEl.innerHTML = TuviGrid.loadingHtml(
+    (PHAN_LABELS[idx]||'') + ' — đang luận giải...', 'AI đang phân tích tương quan...'
+  );
 
   try{
     const resp=await fetch('/api/xem-tuoi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
@@ -1679,25 +1654,6 @@ async function luanGiaiAll(result){
   for(let i=0;i<result.items.length;i++){
     await luanGiaiSection(i+1,result.items[i],result);
   }
-
-  // Save kết quả vào profile history
-  try {
-    const _saveTok = window.Auth?.isLoggedIn() ? window.Auth.getSession()?.access_token : null;
-    if (_saveTok && _pendingSlug) {
-      fetch('/api/history?action=save_xem_tuoi', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _saveTok },
-        body: JSON.stringify({
-          slug: _pendingSlug,
-          product_type: 'xem-tuoi',
-          person_a: result.nameA,
-          person_b: result.nameB,
-          total_score: result.total,
-          result_json: { total: result.total, items: result.items.map(i=>({label:i.label,score:i.score,w:i.w})) }
-        })
-      }).catch(()=>{});
-    }
-  } catch(e) {}
 }
 
 
@@ -1741,18 +1697,12 @@ async function checkPaymentOnLoad(product) {
       const pending = JSON.parse(sessionStorage.getItem('tuvi_pending_form_'+product)||'{}');
       if (pending.ngayA) {
         // Restore form fields
-        document.getElementById('hoten-a').value = pending.nameA||'';
-        document.getElementById('gt-a').value = pending.gtA||'nam';
-        document.getElementById('ngay-a').value = pending.ngayA||'';
-        document.getElementById('thang-a').value = pending.thangA||'';
-        document.getElementById('nam-a').value = pending.namA||'';
-        document.getElementById('gio-a').value = pending.gioA||'0';
-        document.getElementById('hoten-b').value = pending.nameB||'';
-        document.getElementById('gt-b').value = pending.gtB||'nu';
-        document.getElementById('ngay-b').value = pending.ngayB||'';
-        document.getElementById('thang-b').value = pending.thangB||'';
-        document.getElementById('nam-b').value = pending.namB||'';
-        document.getElementById('gio-b').value = pending.gioB||'0';
+        TuviForm.setData({hoten:pending.nameA||'',gioitinh:pending.gtA||'nam',
+          ngay:pending.ngayA||'',thang:pending.thangA||'',nam:pending.namA||'',
+          gioHour:pending.gioHourA||(pending.gioA?pending.gioA*2:0), gioPhut:pending.gioPhutA||0},'a');
+        TuviForm.setData({hoten:pending.nameB||'',gioitinh:pending.gtB||'nu',
+          ngay:pending.ngayB||'',thang:pending.thangB||'',nam:pending.namB||'',
+          gioHour:pending.gioHourB||(pending.gioB?pending.gioB*2:0), gioPhut:pending.gioPhutB||0},'b');
         document.getElementById('nam-xem').value = pending.namXem||'2026';
         // Re-run analyze and auto-unlock
         window._autoUnlock = slug;
@@ -1774,19 +1724,14 @@ async function initiatePaymentTuoi(result, product) {
 
   // Save form fields to sessionStorage (lightweight, no circular refs)
   try {
+    const _ssA = TuviForm.getData('a'), _ssB = TuviForm.getData('b');
     sessionStorage.setItem('tuvi_pending_form_'+product, JSON.stringify({
-      nameA: document.getElementById('hoten-a')?.value||'',
-      gtA:   document.getElementById('gt-a')?.value||'nam',
-      ngayA: document.getElementById('ngay-a')?.value||'',
-      thangA:document.getElementById('thang-a')?.value||'',
-      namA:  document.getElementById('nam-a')?.value||'',
-      gioA:  document.getElementById('gio-a')?.value||'0',
-      nameB: document.getElementById('hoten-b')?.value||'',
-      gtB:   document.getElementById('gt-b')?.value||'nu',
-      ngayB: document.getElementById('ngay-b')?.value||'',
-      thangB:document.getElementById('thang-b')?.value||'',
-      namB:  document.getElementById('nam-b')?.value||'',
-      gioB:  document.getElementById('gio-b')?.value||'0',
+      nameA:_ssA.hoten||'', gtA:_ssA.gioitinh||'nam',
+      ngayA:_ssA.ngay||'', thangA:_ssA.thang||'', namA:_ssA.nam||'',
+      gioHourA:_ssA.gioHour||0, gioPhutA:_ssA.gioPhut||0,
+      nameB:_ssB.hoten||'', gtB:_ssB.gioitinh||'nu',
+      ngayB:_ssB.ngay||'', thangB:_ssB.thang||'', namB:_ssB.nam||'',
+      gioHourB:_ssB.gioHour||0, gioPhutB:_ssB.gioPhut||0,
       namXem:document.getElementById('nam-xem')?.value||'2026',
     }));
   } catch(e) {}
@@ -1839,39 +1784,52 @@ function showPaywall(result, product, productLabel) {
 }
 
 // Check payment on page load (return from PayPal)
+// Init TuviForm cho 2 người ngay khi DOM ready
+(function() {
+  function _initForms() {
+    TuviForm.render('tuvi-form-a', {
+      prefix: 'a', mode: 'person',
+      label: 'Người Thứ Nhất',
+      gioitinh: 'nam',
+    });
+    TuviForm.render('tuvi-form-b', {
+      prefix: 'b', mode: 'person',
+      label: 'Người Thứ Hai',
+      gioitinh: 'nu',
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _initForms);
+  else _initForms();
+})();
+
 window.addEventListener('DOMContentLoaded', () => checkPaymentOnLoad('xem-tuoi'));
 
 async function analyze(){
   const errEl=document.getElementById('error-msg');
   errEl.classList.remove('active');
-  const nameA=document.getElementById('hoten-a').value.trim()||'Người A';
-  const gtA=document.getElementById('gt-a').value;
-  const ngayA=parseInt(document.getElementById('ngay-a').value);
-  const thangA=parseInt(document.getElementById('thang-a').value);
-  const namA=parseInt(document.getElementById('nam-a').value);
-  const gioA=parseInt(document.getElementById('gio-a').value);
-  const nameB=document.getElementById('hoten-b').value.trim()||'Người B';
-  const gtB=document.getElementById('gt-b').value;
-  const ngayB=parseInt(document.getElementById('ngay-b').value);
-  const thangB=parseInt(document.getElementById('thang-b').value);
-  const namB=parseInt(document.getElementById('nam-b').value);
-  const gioB=parseInt(document.getElementById('gio-b').value);
-  const namXem=parseInt(document.getElementById('nam-xem').value)||2026;
+  const _fdA = TuviForm.getData('a');
+  const _fdB = TuviForm.getData('b');
+  const nameA = _fdA.hoten || 'Người A';
+  const gtA   = _fdA.gioitinh;
+  const ngayA = _fdA.ngay, thangA = _fdA.thang, namA = _fdA.nam;
+  const nameB = _fdB.hoten || 'Người B';
+  const gtB   = _fdB.gioitinh;
+  const ngayB = _fdB.ngay, thangB = _fdB.thang, namB = _fdB.nam;
+  const namXem = parseInt(document.getElementById('nam-xem').value) || 2026;
   if(!ngayA||!thangA||!namA||!ngayB||!thangB||!namB){
     errEl.textContent='Vui lòng nhập đầy đủ ngày tháng năm sinh cho cả hai người.';
     errEl.classList.add('active');return;
   }
   const btn=document.getElementById('btn-analyze');
   btn.disabled=true;
-  document.getElementById('loader-tuoi').classList.add('active');
-  _startLoaderMsgs();
+  document.getElementById('loader-tuoi').innerHTML = TuviGrid.loadingHtml('Đang an sao lá số...', 'Tính điểm 8 yếu tố theo trọng số');
   document.getElementById('result-section').style.display='none';
   try{
     if(window._radarOverlay){window._radarOverlay.destroy();window._radarOverlay=null;}
-    const convA=convertDuongToAm(ngayA,thangA,namA,gioA*2);
+    const convA=convertDuongToAm(ngayA,thangA,namA,_fdA.gioHour);
     const lsA=anSaoLaSo({ngayAL:convA.amLich.day,thangAL:convA.amLich.month,namAL:convA.amLich.year,canNam:convA.canNam,chiNam:convA.chiNam,gioIdx:convA.gioIdx,gioitinh:gtA,namXem});
     lsA.chiNam=convA.chiNam;
-    const convB=convertDuongToAm(ngayB,thangB,namB,gioB*2);
+    const convB=convertDuongToAm(ngayB,thangB,namB,_fdB.gioHour);
     const lsB=anSaoLaSo({ngayAL:convB.amLich.day,thangAL:convB.amLich.month,namAL:convB.amLich.year,canNam:convB.canNam,chiNam:convB.chiNam,gioIdx:convB.gioIdx,gioitinh:gtB,namXem});
     lsB.chiNam=convB.chiNam;
     lsA._nameA = nameA;
@@ -1908,8 +1866,7 @@ async function analyze(){
     errEl.classList.add('active');console.error(e);
   }finally{
     btn.disabled=false;
-    document.getElementById('loader-tuoi').classList.remove('active');
-    _stopLoaderMsgs();
+    document.getElementById('loader-tuoi').innerHTML = '';
   }
 }
 
