@@ -1673,9 +1673,9 @@ function buildSlug(result, product) {
   const parts = [
     product,
     toSlugAscii(result.nameA||'a'),
-    a.canChiNam||'',
+    toSlugAscii(a.canChiNam||''),
     toSlugAscii(result.nameB||'b'),
-    b.canChiNam||'',
+    toSlugAscii(b.canChiNam||''),
   ];
   return parts.join('-').replace(/-+/g,'-').slice(0,80);
 }
@@ -1835,7 +1835,13 @@ async function analyze(){
       luanGiaiAll(result);
     } else {
       const alreadyPaid = await TuviPaywall.check();
-      if (alreadyPaid) { luanGiaiAll(result); } else { showPaywall(result, 'xem-lam-an', 'Xem Tuổi Làm Ăn'); }
+      if (alreadyPaid) {
+        luanGiaiAll(result);
+      } else {
+        // Chạy section 0 free trước, rồi mới show paywall — giống luan-giai
+        await luanGiaiSection(0, null, result);
+        showPaywall(result, 'xem-lam-an', 'Xem Tuổi Làm Ăn');
+      }
     }
   }catch(e){
     errEl.textContent='Lỗi: '+(e.message||'Không thể tính toán.');
