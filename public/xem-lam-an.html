@@ -1639,6 +1639,7 @@ Viết 300-350 từ văn xuôi. Nhận định tổng quan, điểm mạnh, đi�
 }
 
 async function luanGiaiAll(result){
+  console.log('[luanGiaiAll] called, items=', result?.items?.length);
   // Unlock chatbot — user đã paid
   const _overlay = document.getElementById('tvc-paywall-overlay');
   if (_overlay) _overlay.style.display = 'none';
@@ -1825,9 +1826,11 @@ async function analyze(){
     }, 300);
     // Check if already paid
     // If returning from PayPal with _autoUnlock, skip re-checking
+    console.log('[analyze] _autoUnlock=', window._autoUnlock, '_pendingSlug=', _pendingSlug);
     if (window._autoUnlock) {
       // Return từ PayPal — unlock thẳng, không cần check slug
       window._autoUnlock = null;
+      console.log('[analyze] calling luanGiaiAll...');
       TuviPaywall.showSuccessBanner();
       luanGiaiAll(result);
     } else {
