@@ -1624,6 +1624,7 @@ Viết 300-350 từ văn xuôi. Nhận định tổng quan, điểm mạnh, đi�
     const resp=await fetch('/api/xem-tuoi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
     console.log('[section'+idx+'] status=', resp.status);
     const data=await resp.json();
+    console.log('[section'+idx+'] data=', JSON.stringify(data).slice(0,200));
     const text=data.luanGiai||'';
     const el=document.getElementById('luangiai-'+idx);
     if(el)el.innerHTML=text.split('\n\n').filter(Boolean).map(p=>`<p style="margin-bottom:12px">${p}</p>`).join('');
