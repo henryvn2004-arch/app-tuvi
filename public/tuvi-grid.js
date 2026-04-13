@@ -353,7 +353,7 @@ const TuviGrid = (() => {
       ".v2-tuan-tag{background:#2c4a00;color:#fff}",
       ".v2-triet-tag{background:#4a0000;color:#fff}",
       // Star colors
-      ".sc-hoa{color:#C0392B}.sc-kim{color:#7F8C8D}.sc-thuy{color:#1a1a1a}.sc-moc{color:#1E6B3C}.sc-tho{color:#8B6914}.sc-neutral{color:#333}",
+      ".sc-hoa{color:#E74C3C}.sc-kim{color:#7F8C8D}.sc-thuy{color:#1a1a1a}.sc-moc{color:#27AE60}.sc-tho{color:#D4A017}.sc-neutral{color:#333}",
       ".sc-tu-hoa{font-weight:700;text-decoration:underline dotted 1px}",
       ".bright{font-size:8px;opacity:1;color:#7EC8E3;margin-left:1px}",
       ".hoa{font-size:9px;margin-left:1px}",
