@@ -349,10 +349,10 @@ nav{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justif
 const SUPABASE_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 
-let _user = null;
-let _token = null;
-let _historyData = null;
-let _chatState = { slug: null, product: 'laso', messages: [], lasoContext: null };
+let _pUser = null;
+let _pToken = null;
+let _pHistoryData = null;
+let _pChatState = { slug: null, product: 'laso', messages: [], lasoContext: null };
 
 // ── AUTH INIT ──
 async function initProfile() {
@@ -365,20 +365,20 @@ async function initProfile() {
       headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${getStoredToken()}` }
     });
     if (resp.ok) {
-      _user = await resp.json();
-      _token = getStoredToken();
+      _pUser = await resp.json();
+      _pToken = getStoredToken();
     }
   } catch(e) {}
 
   // Fallback: try window.supabaseClient if auth.js exposes it
-  if (!_user && window._supabaseSession) {
-    _user = window._supabaseSession.user;
-    _token = window._supabaseSession.access_token;
+  if (!_pUser && window._supabaseSession) {
+    _pUser = window._supabaseSession.user;
+    _pToken = window._supabaseSession.access_token;
   }
 
   document.getElementById('authLoading').style.display = 'none';
 
-  if (!_user) {
+  if (!_pUser) {
     document.getElementById('notLoggedIn').style.display = 'block';
     return;
   }
@@ -405,9 +405,9 @@ function getStoredToken() {
 }
 
 function renderProfileHeader() {
-  const email = _user.email || '';
-  const displayName = _user.user_metadata?.display_name || _user.user_metadata?.full_name || '';
-  const createdAt = _user.created_at ? new Date(_user.created_at).toLocaleDateString('vi-VN',{year:'numeric',month:'long'}) : '';
+  const email = _pUser.email || '';
+  const displayName = _pUser.user_metadata?.display_name || _pUser.user_metadata?.full_name || '';
+  const createdAt = _pUser.created_at ? new Date(_pUser.created_at).toLocaleDateString('vi-VN',{year:'numeric',month:'long'}) : '';
   const letter = (displayName || email || '?')[0].toUpperCase();
 
   document.getElementById('avatarLetter').textContent = letter;
@@ -421,7 +421,7 @@ function renderProfileHeader() {
 document.getElementById('btnSignout').onclick = async () => {
   await fetch(`${SUPABASE_URL}/auth/v1/logout`, {
     method: 'POST',
-    headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${_token}` }
+    headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${_pToken}` }
   });
   localStorage.clear();
   window.location.href = '/';
@@ -442,15 +442,15 @@ function setupTabs() {
 // ── LOAD HISTORY ──
 async function loadHistory() {
   const resp = await fetch('/api/history?action=list', {
-    headers: { Authorization: `Bearer ${_token}` }
+    headers: { Authorization: `Bearer ${_pToken}` }
   });
   if (!resp.ok) { console.error('history load failed'); return; }
-  _historyData = await resp.json();
+  _pHistoryData = await resp.json();
 
-  renderLasos(_historyData.lasos || []);
-  renderXemTuoi(_historyData.xemTuoi || []);
-  renderChatList(_historyData.chatList || []);
-  renderPurchases(_historyData.purchases || []);
+  renderLasos(_pHistoryData.lasos || []);
+  renderXemTuoi(_pHistoryData.xemTuoi || []);
+  renderChatList(_pHistoryData.chatList || []);
+  renderPurchases(_pHistoryData.purchases || []);
 }
 
 // ── RENDER LÁ SỐ ──
@@ -622,7 +622,7 @@ async function openLuanModal(slug, name) {
   openModal('luanModal');
 
   const resp = await fetch(`/api/history?action=laso&slug=${encodeURIComponent(slug)}`, {
-    headers: { Authorization: `Bearer ${_token}` }
+    headers: { Authorization: `Bearer ${_pToken}` }
   });
   const data = await resp.json();
   if (!data || !data.luan_giai) {
@@ -660,7 +660,7 @@ async function openXemTuoiModal(id, personA, personB) {
   openModal('luanModal');
 
   const resp = await fetch(`/api/history?action=xem_tuoi&id=${id}`, {
-    headers: { Authorization: `Bearer ${_token}` }
+    headers: { Authorization: `Bearer ${_pToken}` }
   });
   const data = await resp.json();
   if (!data || !data.result_json) {
@@ -694,9 +694,9 @@ function switchXemTab(key, btn) {
 
 // ── CHAT MODAL ──
 async function openChatModal(slug, name, product) {
-  _chatState.slug = slug;
-  _chatState.product = product || 'laso';
-  _chatState.messages = [];
+  _pChatState.slug = slug;
+  _pChatState.product = product || 'laso';
+  _pChatState.messages = [];
 
   document.getElementById('chatModalTitle').textContent = `Vấn Đáp — ${name}`;
   document.getElementById('chatModalSub').textContent = slug;
@@ -705,13 +705,13 @@ async function openChatModal(slug, name, product) {
 
   // Load existing chat history
   const resp = await fetch(`/api/history?action=chat&slug=${encodeURIComponent(slug)}`, {
-    headers: { Authorization: `Bearer ${_token}` }
+    headers: { Authorization: `Bearer ${_pToken}` }
   });
   const data = await resp.json();
-  _chatState.messages = data.messages || [];
+  _pChatState.messages = data.messages || [];
 
-  if (_chatState.messages.length > 0) {
-    _chatState.messages.forEach(m => appendMessage(m.role, m.content));
+  if (_pChatState.messages.length > 0) {
+    _pChatState.messages.forEach(m => appendMessage(m.role, m.content));
   } else {
     appendMessage('assistant', 'Kính chào quý vị. Tôi đã xem qua lá số của bạn. Bạn muốn hỏi điều gì?');
   }
@@ -734,7 +734,7 @@ async function sendChat() {
 
   input.value = '';
   appendMessage('user', text);
-  _chatState.messages.push({ role: 'user', content: text });
+  _pChatState.messages.push({ role: 'user', content: text });
 
   const btn = document.getElementById('chatSendBtn');
   btn.disabled = true;
@@ -749,32 +749,32 @@ async function sendChat() {
 
   try {
     // Build messages array for API (last 10 messages for context)
-    const history = _chatState.messages.slice(-10);
+    const history = _pChatState.messages.slice(-10);
 
     const resp = await fetch('/api/lasotuvi?action=chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         messages: history,
-        slug: _chatState.slug,
-        product: _chatState.product
+        slug: _pChatState.slug,
+        product: _pChatState.product
       })
     });
     const data = await resp.json();
     const reply = data.content || data.text || data.reply || 'Xin lỗi, có lỗi xảy ra.';
 
     typing.remove();
-    _chatState.messages.push({ role: 'assistant', content: reply });
+    _pChatState.messages.push({ role: 'assistant', content: reply });
     appendMessage('assistant', reply);
 
     // Save to DB
     await fetch('/api/history?action=save_chat', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${_token}` },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${_pToken}` },
       body: JSON.stringify({
-        slug: _chatState.slug,
-        product: _chatState.product,
-        messages: _chatState.messages.slice(-30)  // keep last 30 messages
+        slug: _pChatState.slug,
+        product: _pChatState.product,
+        messages: _pChatState.messages.slice(-30)  // keep last 30 messages
       })
     });
   } catch(e) {
@@ -791,7 +791,7 @@ async function saveDisplayName() {
   try {
     const resp = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
       method: 'PUT',
-      headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${_token}`, 'Content-Type':'application/json' },
+      headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${_pToken}`, 'Content-Type':'application/json' },
       body: JSON.stringify({ data: { display_name: name } })
     });
     if (resp.ok) {
@@ -814,7 +814,7 @@ async function changePassword() {
   try {
     const resp = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
       method: 'PUT',
-      headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${_token}`, 'Content-Type':'application/json' },
+      headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${_pToken}`, 'Content-Type':'application/json' },
       body: JSON.stringify({ password: pwd })
     });
     if (resp.ok) {
