@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
 const SB_URL  = process.env.SUPABASE_URL!;
-const SB_SERV = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const SB_SERV = process.env.SUPABASE_SERVICE_KEY!;
 
 function cors(res: NextResponse) {
   res.headers.set('Access-Control-Allow-Origin', '*');
