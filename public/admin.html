@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Admin — Tử Vi Minh Bảo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;
+  --gold:#9A7B3A;--gold-lt:#F9F4EB;
+  --text:#1a1a1a;--text-mid:#444;--text-lt:#777;
+  --border:#E8E8E8;--bg:#F5F4F0;--bg-card:#fff;
+  --red:#C0392B;--green:#1E6B3C;--orange:#D97706;
+  --radius:8px;
+}
+body{font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text);min-height:100vh;font-size:13px}
+
+/* TOPBAR */
+.topbar{background:var(--navy);padding:0 2rem;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.topbar-logo{color:#fff;font-family:'Noto Serif',serif;font-size:1rem;font-weight:700;letter-spacing:.05em}
+.topbar-logo span{color:var(--gold);margin-left:.5rem;font-size:.7rem;letter-spacing:.15em;text-transform:uppercase}
+.topbar-user{color:rgba(255,255,255,.6);font-size:.75rem;display:flex;align-items:center;gap:1rem}
+.topbar-user button{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);padding:.3rem .8rem;border-radius:4px;cursor:pointer;font-size:.72rem;font-family:inherit}
+
+/* LAYOUT */
+.wrap{max-width:1200px;margin:0 auto;padding:2rem 1.5rem}
+
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--navy)}
+.login-box{background:#fff;border-radius:12px;padding:2.5rem;width:100%;max-width:380px;text-align:center}
+.login-logo{font-family:'Noto Serif',serif;font-size:1.4rem;font-weight:700;color:var(--navy);margin-bottom:.5rem}
+.login-sub{color:var(--text-lt);font-size:.8rem;margin-bottom:2rem;font-family:Arial,sans-serif}
+.login-input{width:100%;padding:.7rem 1rem;border:1.5px solid var(--border);border-radius:6px;font-size:.9rem;font-family:inherit;margin-bottom:.75rem;outline:none}
+.login-input:focus{border-color:var(--navy)}
+.login-btn{width:100%;padding:.75rem;background:var(--navy);color:#fff;border:none;border-radius:6px;font-size:.85rem;font-weight:600;cursor:pointer;font-family:inherit}
+.login-btn:hover{background:var(--navy-mid)}
+.login-err{color:var(--red);font-size:.78rem;margin-top:.5rem}
+
+/* STATS GRID */
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
+.stat-card{background:var(--bg-card);border-radius:var(--radius);padding:1.25rem 1.5rem;border:1px solid var(--border)}
+.stat-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-lt);margin-bottom:.5rem}
+.stat-value{font-family:'Noto Serif',serif;font-size:2rem;font-weight:700;color:var(--navy);line-height:1}
+.stat-sub{font-size:.72rem;color:var(--text-lt);margin-top:.4rem}
+.stat-card.green .stat-value{color:var(--green)}
+.stat-card.gold .stat-value{color:var(--gold)}
+.stat-card.blue .stat-value{color:var(--blue)}
+
+/* SECTION */
+.section{margin-bottom:2rem}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.section-title{font-family:'Noto Serif',serif;font-size:1rem;color:var(--navy);font-weight:700}
+.section-count{font-size:.72rem;color:var(--text-lt);background:var(--bg);border:1px solid var(--border);padding:.2rem .6rem;border-radius:20px}
+
+/* TABLE */
+.table-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+table{width:100%;border-collapse:collapse}
+th{background:var(--navy);color:rgba(255,255,255,.8);padding:.6rem 1rem;text-align:left;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+td{padding:.7rem 1rem;border-bottom:1px solid var(--border);font-size:.78rem;color:var(--text-mid);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafafa}
+.badge{display:inline-block;padding:.15rem .5rem;border-radius:20px;font-size:.68rem;font-weight:600}
+.badge-green{background:#f0faf4;color:var(--green);border:1px solid #c3e6d0}
+.badge-gold{background:var(--gold-lt);color:var(--gold);border:1px solid #e8d9b0}
+.badge-red{background:#fff5f5;color:var(--red);border:1px solid #f5c6c6}
+.badge-blue{background:#eef4ff;color:var(--blue);border:1px solid #c7d9f5}
+.mono{font-family:'JetBrains Mono',monospace;font-size:.72rem}
+
+/* TABS */
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:1.5rem}
+.tab-btn{padding:.65rem 1.25rem;font-size:.8rem;font-weight:600;border:none;background:transparent;cursor:pointer;color:var(--text-lt);border-bottom:2px solid transparent;margin-bottom:-2px;font-family:inherit;transition:all .15s}
+.tab-btn:hover{color:var(--navy)}
+.tab-btn.active{color:var(--navy);border-bottom-color:var(--gold)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* LOADING */
+.loading{text-align:center;padding:3rem;color:var(--text-lt)}
+.spin{display:inline-block;width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:.5rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* SEARCH */
+.search-bar{display:flex;gap:.75rem;margin-bottom:1rem}
+.search-input{flex:1;padding:.55rem .9rem;border:1.5px solid var(--border);border-radius:6px;font-size:.8rem;font-family:inherit;outline:none}
+.search-input:focus{border-color:var(--navy)}
+
+/* REFRESH */
+.refresh-btn{background:var(--navy);color:#fff;border:none;padding:.5rem 1rem;border-radius:6px;cursor:pointer;font-size:.75rem;font-family:inherit;font-weight:600}
+.refresh-btn:hover{background:var(--navy-mid)}
+
+.empty{text-align:center;padding:2rem;color:var(--text-lt);font-size:.8rem}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-page">
+  <div class="login-wrap">
+    <div class="login-box">
+      <div class="login-logo">紫微明寶</div>
+      <div class="login-sub">Admin Dashboard</div>
+      <input class="login-input" type="email" id="login-email" placeholder="admin@tuviminhbao.com"/>
+      <input class="login-input" type="password" id="login-pwd" placeholder="Mật khẩu" onkeydown="if(event.key==='Enter')doLogin()"/>
+      <button class="login-btn" onclick="doLogin()">Đăng Nhập</button>
+      <div class="login-err" id="login-err"></div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" style="display:none">
+  <div class="topbar">
+    <div class="topbar-logo">紫微明寶 <span>Admin</span></div>
+    <div class="topbar-user">
+      <span id="admin-email-display"></span>
+      <button onclick="doLogout()">Đăng Xuất</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <!-- Stats -->
+    <div class="stats" id="stats-grid">
+      <div class="loading"><span class="spin"></span>Đang tải...</div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="purchases">💳 Giao Dịch</button>
+      <button class="tab-btn" data-tab="users">👤 Users</button>
+      <button class="tab-btn" data-tab="lasos">🔮 Lá Số</button>
+    </div>
+
+    <!-- Tab: Purchases -->
+    <div class="tab-content active" id="tab-purchases">
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">Lịch Sử Giao Dịch</div>
+          <button class="refresh-btn" onclick="loadPurchases()">↻ Refresh</button>
+        </div>
+        <div class="search-bar">
+          <input class="search-input" id="search-purchases" placeholder="Tìm slug, email..." oninput="filterPurchases()"/>
+        </div>
+        <div class="table-wrap" id="purchases-table">
+          <div class="loading"><span class="spin"></span>Đang tải...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Users -->
+    <div class="tab-content" id="tab-users">
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">Danh Sách Users</div>
+          <button class="refresh-btn" onclick="loadUsers()">↻ Refresh</button>
+        </div>
+        <div class="table-wrap" id="users-table">
+          <div class="loading"><span class="spin"></span>Đang tải...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Lá Số -->
+    <div class="tab-content" id="tab-lasos">
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">Lá Số Đã Tạo</div>
+          <button class="refresh-btn" onclick="loadLasos()">↻ Refresh</button>
+        </div>
+        <div class="search-bar">
+          <input class="search-input" id="search-lasos" placeholder="Tìm slug, cung mệnh..." oninput="filterLasos()"/>
+        </div>
+        <div class="table-wrap" id="lasos-table">
+          <div class="loading"><span class="spin"></span>Đang tải...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/auth.js"></script>
+<script>
+const SB_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
+const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
+const ADMIN_EMAIL = 'admin@tuviminhbao.com';
+
+let _token = null;
+let _allPurchases = [];
+let _allLasos = [];
+
+// ── AUTH ──
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pwd   = document.getElementById('login-pwd').value;
+  const err   = document.getElementById('login-err');
+  err.textContent = '';
+
+  if (email !== ADMIN_EMAIL) {
+    err.textContent = 'Không có quyền truy cập.'; return;
+  }
+
+  try {
+    const res = await fetch(`${SB_URL}/auth/v1/token?grant_type=password`, {
+      method: 'POST',
+      headers: { apikey: SB_ANON, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pwd }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error_description || 'Sai mật khẩu');
+    _token = data.access_token;
+    document.getElementById('admin-email-display').textContent = email;
+    document.getElementById('login-page').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadAll();
+  } catch(e) {
+    err.textContent = e.message;
+  }
+}
+
+function doLogout() {
+  _token = null;
+  document.getElementById('login-page').style.display = 'block';
+  document.getElementById('dashboard').style.display = 'none';
+}
+
+// Check if already logged in via auth.js
+(function() {
+  setTimeout(() => {
+    if (window.Auth?.isLoggedIn()) {
+      const user = window.Auth.getUser();
+      if (user?.email === ADMIN_EMAIL) {
+        _token = window.Auth.getSession()?.access_token;
+        document.getElementById('admin-email-display').textContent = user.email;
+        document.getElementById('login-page').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        loadAll();
+      }
+    }
+  }, 800);
+})();
+
+// ── SUPABASE FETCH ──
+async function sbFetch(path, params = '') {
+  const res = await fetch(`${SB_URL}/rest/v1/${path}${params}`, {
+    headers: { apikey: SB_ANON, Authorization: `Bearer ${_token}` }
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
+async function sbRpc(fn, body = {}) {
+  const res = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, {
+    method: 'POST',
+    headers: { apikey: SB_ANON, Authorization: `Bearer ${_token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  return res.json();
+}
+
+// ── LOAD ALL ──
+function loadAll() {
+  loadStats();
+  loadPurchases();
+  loadUsers();
+  loadLasos();
+}
+
+// ── STATS ──
+async function loadStats() {
+  try {
+    const [purchases, lasos] = await Promise.all([
+      sbFetch('purchases', '?status=eq.completed&select=amount,created_at'),
+      sbFetch('laso_public', '?select=slug,created_at,luan_giai'),
+    ]);
+
+    const totalRev = purchases.reduce((s, p) => s + parseFloat(p.amount || 0), 0);
+    const last7d   = purchases.filter(p => new Date(p.created_at) > new Date(Date.now() - 7*24*3600*1000));
+    const rev7d    = last7d.reduce((s, p) => s + parseFloat(p.amount || 0), 0);
+    const withLG   = lasos.filter(l => l.luan_giai && Object.keys(l.luan_giai).length > 0);
+
+    document.getElementById('stats-grid').innerHTML = `
+      <div class="stat-card gold">
+        <div class="stat-label">Tổng Doanh Thu</div>
+        <div class="stat-value">$${totalRev.toFixed(0)}</div>
+        <div class="stat-sub">${purchases.length} giao dịch</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-label">Doanh Thu 7 Ngày</div>
+        <div class="stat-value">$${rev7d.toFixed(0)}</div>
+        <div class="stat-sub">${last7d.length} giao dịch gần đây</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-label">Lá Số Đã Tạo</div>
+        <div class="stat-value">${lasos.length}</div>
+        <div class="stat-sub">${withLG.length} có luận giải AI</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Tổng Giao Dịch</div>
+        <div class="stat-value">${purchases.length}</div>
+        <div class="stat-sub">Trung bình $${purchases.length ? (totalRev/purchases.length).toFixed(1) : 0}/đơn</div>
+      </div>
+    `;
+  } catch(e) {
+    document.getElementById('stats-grid').innerHTML = `<div class="empty">Lỗi tải stats: ${e.message}</div>`;
+  }
+}
+
+// ── PURCHASES ──
+async function loadPurchases() {
+  document.getElementById('purchases-table').innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
+  try {
+    _allPurchases = await sbFetch('purchases', '?order=created_at.desc&limit=200&select=*');
+    renderPurchases(_allPurchases);
+  } catch(e) {
+    document.getElementById('purchases-table').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
+  }
+}
+
+function renderPurchases(data) {
+  if (!data.length) { document.getElementById('purchases-table').innerHTML = '<div class="empty">Không có dữ liệu</div>'; return; }
+  const rows = data.map(p => {
+    const d = new Date(p.created_at).toLocaleDateString('vi-VN', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    const type = p.slug?.startsWith('xem-tuoi') ? '<span class="badge badge-blue">Xem Tuổi</span>' :
+                 p.slug?.startsWith('xem-lam-an') ? '<span class="badge badge-gold">Làm Ăn</span>' :
+                 '<span class="badge badge-green">Lá Số</span>';
+    const status = p.status === 'completed' ? '<span class="badge badge-green">✓</span>' : `<span class="badge badge-red">${p.status}</span>`;
+    return `<tr>
+      <td>${d}</td>
+      <td>${status}</td>
+      <td>${type}</td>
+      <td class="mono" style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${p.slug}">${p.slug||'-'}</td>
+      <td>${p.email||'<span style="color:var(--text-lt)">—</span>'}</td>
+      <td style="font-weight:700;color:var(--green)">$${p.amount}</td>
+      <td class="mono" style="color:var(--text-lt);font-size:.65rem">${p.order_id?.slice(0,12)||'-'}...</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('purchases-table').innerHTML = `<table>
+    <thead><tr><th>Thời Gian</th><th>TT</th><th>Loại</th><th>Slug</th><th>Email</th><th>Số Tiền</th><th>Order ID</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+function filterPurchases() {
+  const q = document.getElementById('search-purchases').value.toLowerCase();
+  renderPurchases(_allPurchases.filter(p =>
+    (p.slug||'').toLowerCase().includes(q) ||
+    (p.email||'').toLowerCase().includes(q) ||
+    (p.order_id||'').toLowerCase().includes(q)
+  ));
+}
+
+// ── USERS ──
+async function loadUsers() {
+  document.getElementById('users-table').innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
+  try {
+    // Query via purchases + laso to get user activity (no admin API needed)
+    const [purchases, lasos] = await Promise.all([
+      sbFetch('purchases', '?status=eq.completed&select=user_id,email,amount,created_at'),
+      sbFetch('laso_public', '?select=user_id,slug,created_at&order=created_at.desc'),
+    ]);
+
+    // Aggregate by email (since user_id often null)
+    const emailMap = {};
+    purchases.forEach(p => {
+      const key = p.email || p.user_id || 'unknown';
+      if (!emailMap[key]) emailMap[key] = { email: p.email, purchases: 0, revenue: 0, lastPurchase: null };
+      emailMap[key].purchases++;
+      emailMap[key].revenue += parseFloat(p.amount || 0);
+      if (!emailMap[key].lastPurchase || new Date(p.created_at) > new Date(emailMap[key].lastPurchase)) {
+        emailMap[key].lastPurchase = p.created_at;
+      }
+    });
+
+    const sorted = Object.values(emailMap).sort((a, b) => b.revenue - a.revenue);
+
+    if (!sorted.length) {
+      document.getElementById('users-table').innerHTML = '<div class="empty">Chưa có user nào mua hàng</div>';
+      return;
+    }
+
+    const rows = sorted.map(u => {
+      const d = u.lastPurchase ? new Date(u.lastPurchase).toLocaleDateString('vi-VN') : '-';
+      return `<tr>
+        <td>${u.email || '<span style="color:var(--text-lt)">guest</span>'}</td>
+        <td style="font-weight:700;color:var(--green)">$${u.revenue.toFixed(0)}</td>
+        <td>${u.purchases}</td>
+        <td>${d}</td>
+      </tr>`;
+    }).join('');
+
+    document.getElementById('users-table').innerHTML = `<table>
+      <thead><tr><th>Email</th><th>Tổng Chi</th><th>Số Đơn</th><th>Mua Gần Nhất</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+  } catch(e) {
+    document.getElementById('users-table').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
+  }
+}
+
+// ── LÁ SỐ ──
+async function loadLasos() {
+  document.getElementById('lasos-table').innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
+  try {
+    _allLasos = await sbFetch('laso_public', '?order=created_at.desc&limit=200&select=slug,gioi_tinh,nam_sinh,gio_chi,cung_menh,chinh_tinh,nap_am,cuc,luan_giai,laso_image,created_at');
+    renderLasos(_allLasos);
+  } catch(e) {
+    document.getElementById('lasos-table').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
+  }
+}
+
+function renderLasos(data) {
+  if (!data.length) { document.getElementById('lasos-table').innerHTML = '<div class="empty">Không có dữ liệu</div>'; return; }
+  const rows = data.map(l => {
+    const d = new Date(l.created_at).toLocaleDateString('vi-VN', {day:'2-digit',month:'2-digit',year:'numeric'});
+    const hasLG = l.luan_giai && Object.keys(l.luan_giai).length > 0;
+    const hasImg = !!l.laso_image;
+    const gender = l.gioi_tinh === 'nam' ? '♂' : '♀';
+    return `<tr>
+      <td>${d}</td>
+      <td class="mono" style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.7rem" title="${l.slug}">${l.slug}</td>
+      <td>${gender} ${l.nam_sinh||''}</td>
+      <td>${l.cung_menh||'-'}</td>
+      <td style="font-size:.75rem;color:var(--text-mid)">${l.chinh_tinh||'-'}</td>
+      <td>${hasLG ? '<span class="badge badge-green">✓ AI</span>' : '<span class="badge badge-red">–</span>'}</td>
+      <td>${hasImg ? '<span class="badge badge-blue">📷</span>' : '–'}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('lasos-table').innerHTML = `<table>
+    <thead><tr><th>Ngày</th><th>Slug</th><th>Sinh</th><th>Cung Mệnh</th><th>Chính Tinh</th><th>Luận Giải</th><th>Ảnh</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+function filterLasos() {
+  const q = document.getElementById('search-lasos').value.toLowerCase();
+  renderLasos(_allLasos.filter(l =>
+    (l.slug||'').toLowerCase().includes(q) ||
+    (l.cung_menh||'').toLowerCase().includes(q) ||
+    (l.chinh_tinh||'').toLowerCase().includes(q)
+  ));
+}
+
+// ── TABS ──
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
