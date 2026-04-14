@@ -442,7 +442,7 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
   const hoaCai = dcIdx(HOA_CAI[chiNam] || 'Tý');
 
   // Lưu Hà
-  const LUU_HA = {'Giáp':'Dậu','Ất':'Tuất','Bính':'Mùi','Đinh':'Thân','Mậu':'Tỵ','Kỷ':'Ngọ','Canh':'Thìn','Tân':'Mão','Nhâm':'Hợi','Quý':'Tý'};
+  const LUU_HA = {'Giáp':'Dậu','Ất':'Tuất','Bính':'Mùi','Đinh':'Thân','Mậu':'Tý','Kỷ':'Ngọ','Canh':'Mão','Tân':'Thìn','Nhâm':'Hợi','Quý':'Dần'};
   const luuHa = dcIdx(LUU_HA[canNam] || 'Tý');
 
   // Thiên Trù
@@ -470,7 +470,8 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
   const THIEN_PHUC = {'Giáp':'Dậu','Ất':'Dậu','Bính':'Thân','Đinh':'Hợi','Mậu':'Mão','Kỷ':'Dần','Canh':'Ngọ','Tân':'Tỵ','Nhâm':'Ngọ','Quý':'Tỵ'};
   const thienQuan  = dcIdx(THIEN_QUAN[canNam] || 'Tý');
   const thienPhuc  = dcIdx(THIEN_PHUC[canNam] || 'Tý');
-  const thienKhong = mod12(dcIdx('Tý') + gioIdx);  // Tý=Tý đếm thuận tới giờ sinh
+  // Thiên Không = cùng cung Thiếu Dương trong vòng Thái Tuế (offset 1 từ Thái Tuế)
+  const thienKhong = mod12(dcIdx(chiNam) + 1);
 
   // ── Sao theo cung Mệnh/Thân ──
   // Thiên Tài: xung chiếu với cung Mệnh (menhIdx)
