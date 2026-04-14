@@ -1,4 +1,4 @@
-// nav.js — Shared navigation component v4
+// nav.js — Shared navigation component v4 (+ Công Cụ dropdown)
 (function () {
   var path = window.location.pathname;
 
@@ -12,8 +12,17 @@
     return '<a class="' + cls + '" href="' + href + '">' + label + '</a>';
   }
 
+  function ddItem(href, icon, label) {
+    var active = path === href ? ' active' : '';
+    return '<a class="nav-dd-item' + active + '" href="' + href + '"><span>' + icon + '</span> ' + label + '</a>';
+  }
+
+  function ddSection(label) {
+    return '<div class="nav-dd-section">' + label + '</div>';
+  }
+
   var isLuanGiai = ['/luan-giai.html','/xem-tuoi.html','/xem-lam-an.html'].indexOf(path) >= 0;
-  var isCongCu   = path.startsWith('/tools/');
+  var isTool = path.indexOf('/tools/') === 0;
 
   // ── CSS ──────────────────────────────────────────────────────────────────
   var css = [
@@ -27,14 +36,16 @@
     '.nav-link:hover{color:#fff;background:rgba(255,255,255,.07)}',
     '.nav-link.active{color:#c9a84c}',
     '.nav-hamburger{display:none;background:none;border:none;color:#8BAACC;cursor:pointer;padding:8px;font-size:20px;z-index:400;position:relative}',
-    // Dropdown desktop
+    // Dropdown
     '.nav-dd{position:relative}',
-    '.nav-dd-menu{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid #ccc;border-top:3px solid #c9a84c;min-width:210px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:500}',
+    '.nav-dd-menu{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid #ccc;border-top:3px solid #c9a84c;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:500;max-height:80vh;overflow-y:auto}',
     '.nav-dd:hover .nav-dd-menu{display:block}',
-    '.nav-dd-item{display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:13px;color:#1a1a1a;text-decoration:none;border-bottom:1px solid #f0f0f0;transition:background .12s}',
+    '.nav-dd-item{display:flex;align-items:center;gap:10px;padding:10px 16px;font-size:13px;color:#1a1a1a;text-decoration:none;border-bottom:1px solid #f0f0f0;transition:background .12s}',
     '.nav-dd-item:last-child{border-bottom:none}',
     '.nav-dd-item:hover{background:#F5F4F0;color:#061A2E}',
     '.nav-dd-item.active{color:#9A7B3A;font-weight:600}',
+    '.nav-dd-section{padding:8px 16px 4px;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#9A7B3A;background:#fdfaf5;border-bottom:1px solid #efe8d8;margin-top:2px}',
+    '.nav-dd-section:first-child{margin-top:0}',
     // Mobile
     '@media(max-width:700px){',
     '.topnav{padding:0 16px}',
@@ -44,11 +55,12 @@
     '.nav-hamburger{display:block;margin-left:auto}',
     '.nav-dd{width:100%}',
     '.nav-dd:hover .nav-dd-menu{display:none}',
-    '.nav-dd-menu{position:static;border:none;box-shadow:none;background:rgba(255,255,255,.06);width:100%}',
+    '.nav-dd-menu{position:static;border:none;box-shadow:none;background:rgba(255,255,255,.06);width:100%;max-height:none}',
     '.nav-dd-menu.open{display:block !important}',
     '.nav-dd-item{color:#8BAACC;padding:9px 36px;border-bottom:1px solid rgba(255,255,255,.05)}',
     '.nav-dd-item:hover{background:rgba(255,255,255,.05);color:#fff}',
     '.nav-dd-item.active{color:#c9a84c}',
+    '.nav-dd-section{background:rgba(201,168,76,.1);color:#c9a84c;padding:7px 24px 4px}',
     '}'
   ].join('');
 
@@ -59,49 +71,68 @@
     document.head.appendChild(s);
   }
 
-  // ── HTML ─────────────────────────────────────────────────────────────────
-  var ddActiveClass   = isLuanGiai ? ' active' : '';
-  var dd2ActiveClass  = isCongCu   ? ' active' : '';
+  // ── Build HTML ────────────────────────────────────────────────────────────
+  var lgActive  = isLuanGiai ? ' active' : '';
+  var toolActive = isTool    ? ' active' : '';
+
+  var luanGiaiDD = '<div class="nav-dd" id="nav-dd">'
+    + '<span class="nav-link' + lgActive + '" id="nav-dd-toggle" role="button" tabindex="0">Lu\u1eadn Gi\u1ea3i \u25be</span>'
+    + '<div class="nav-dd-menu" id="nav-dd-menu">'
+    + ddItem('/luan-giai.html',  '\ud83d\udd2e', 'Lu\u1eadn Gi\u1ea3i L\u00e1 S\u1ed1')
+    + ddItem('/xem-tuoi.html',   '\ud83d\udc91', 'Xem Tu\u1ed5i V\u1ee3 Ch\u1ed3ng')
+    + ddItem('/xem-lam-an.html', '\ud83e\udd1d', 'Xem Tu\u1ed5i L\u00e0m \u0102n')
+    + '</div></div>';
+
+  var congCuDD = '<div class="nav-dd" id="nav-dd2">'
+    + '<span class="nav-link' + toolActive + '" id="nav-dd2-toggle" role="button" tabindex="0">C\u00f4ng C\u1ee5 \u25be</span>'
+    + '<div class="nav-dd-menu" id="nav-dd2-menu">'
+
+    + ddSection('T\u1eed Vi \u0110\u1ea9u S\u1ed1')
+    + ddItem('/tools/an-sao.html',    '\ud83d\udcca', 'An Sao L\u00e1 S\u1ed1')
+    + ddItem('/tools/sao-nam.html',   '\u2609',       'T\u1ed5ng Quan L\u00e1 S\u1ed1')
+    + ddItem('/tools/cach-cuc.html',  '\u26e7',       'C\u00e1ch C\u1ee5c & C\u00e1c Cung')
+    + ddItem('/tools/dai-van.html',   '\ud83d\udcc8', '\u0110\u1ea1i V\u1eadn & V\u1eadn Tr\u00ecnh')
+    + ddItem('/tools/van-thang.html', '\ud83d\uddd3', 'V\u1eadn Th\u00e1ng')
+
+    + ddSection('L\u1ecbch S\u1ed1 & Ng\u00e0y Gi\u1edd')
+    + ddItem('/tools/hoang-dao.html', '\u2600\ufe0f',  'Gi\u1edd Ho\u00e0ng \u0110\u1ea1o')
+    + ddItem('/tools/ngay-tot.html',  '\ud83d\udcc5',  'Ng\u00e0y T\u1ed1t Trong Th\u00e1ng')
+    + ddItem('/tools/luc-nham.html',  '\u26b8',        'L\u1ee5c Nh\u00e2m Gi\u1ea3n')
+    + ddItem('/tools/han-nam.html',   '\ud83d\udd04',  'H\u1ea1n N\u0103m')
+
+    + ddSection('M\u1ec7nh L\u00fd & Phong Th\u1ee7y')
+    + ddItem('/tools/bat-trach.html',       '\ud83e\uddad', 'H\u01b0\u1edbng B\u00e1t Tr\u1ea1ch')
+    + ddItem('/tools/nap-am.html',          '\ud83c\udf00', 'N\u1ea1p \u00c2m Ng\u0169 H\u00e0nh')
+    + ddItem('/tools/tuong-hop.html',       '\u2764\ufe0f', 'T\u01b0\u01a1ng H\u1ee3p Tu\u1ed5i')
+    + ddItem('/tools/kim-lau.html',         '\ud83c\udfe0', 'Kim L\u00e2u & Tam Tai')
+    + ddItem('/tools/ngu-hanh-ten.html',    '\u270d\ufe0f', 'Ng\u0169 H\u00e0nh T\u00ean')
+    + ddItem('/tools/tu-tru.html',          '\ud83d\udcdc', 'T\u1ee9 Tr\u1ee5 B\u00e1t T\u1ef1')
+    + ddItem('/tools/tu-tru-mo-rong.html',  '\u2728',       'T\u1ee9 Tr\u1ee5 M\u1edf R\u1ed9ng')
+
+    + ddSection('Huy\u1ec1n H\u1ecdc & Ph\u01b0\u01a1ng T\u00e2y')
+    + ddItem('/tools/kinh-dich.html',   '\u262f',       'Kinh D\u1ecbch 64 Qu\u1ebb')
+    + ddItem('/tools/than-so-hoc.html', '\ud83d\udd22', 'Th\u1ea7n S\u1ed1 H\u1ecdc')
+
+    + '</div></div>';
 
   var html = '<nav class="topnav">'
     + '<a class="nav-logo" href="/"><img src="/seal.webp" alt="">'
     + '<div><div class="name">T\u1eed Vi Minh B\u1ea3o</div><div class="url">Tri m\u1ec7nh l\u00fd \u2013 Thu\u1eadn th\u1ebf h\u00e0nh</div></div></a>'
     + '<div class="nav-links" id="nav-links">'
     + navLink('/', 'Trang Ch\u1ee7')
-
-    // ── Luận Giải dropdown ──
-    + '<div class="nav-dd" id="nav-dd">'
-    + '<span class="nav-link' + ddActiveClass + '" id="nav-dd-toggle" role="button" tabindex="0">Lu\u1eadn Gi\u1ea3i \u25be</span>'
-    + '<div class="nav-dd-menu" id="nav-dd-menu">'
-    + '<a class="nav-dd-item' + (path==='/luan-giai.html'?' active':'') + '" href="/luan-giai.html"><span>\ud83d\udd2e</span> Lu\u1eadn Gi\u1ea3i L\u00e1 S\u1ed1</a>'
-    + '<a class="nav-dd-item' + (path==='/xem-tuoi.html'?' active':'') + '" href="/xem-tuoi.html"><span>\ud83d\udc91</span> Xem Tu\u1ed5i V\u1ee3 Ch\u1ed3ng</a>'
-    + '<a class="nav-dd-item' + (path==='/xem-lam-an.html'?' active':'') + '" href="/xem-lam-an.html"><span>\ud83e\udd1d</span> Xem Tu\u1ed5i L\u00e0m \u0102n</a>'
-    + '</div></div>'
-
-    // ── Công Cụ dropdown ──
-    + '<div class="nav-dd" id="nav-dd2">'
-    + '<span class="nav-link' + dd2ActiveClass + '" id="nav-dd2-toggle" role="button" tabindex="0">C\u00f4ng C\u1ee5 \u25be</span>'
-    + '<div class="nav-dd-menu" id="nav-dd2-menu">'
-    + '<a class="nav-dd-item' + (path==='/tools/nap-am.html'?' active':'') + '" href="/tools/nap-am.html"><span>\ud83d\udd51</span> N\u1ea1p \u00c2m &amp; Can Chi</a>'
-    + '<a class="nav-dd-item' + (path==='/tools/dai-van.html'?' active':'') + '" href="/tools/dai-van.html"><span>\ud83d\udcc5</span> Xem \u0110\u1ea1i V\u1eadn</a>'
-    + '<a class="nav-dd-item' + (path==='/tools/sao-nam.html'?' active':'') + '" href="/tools/sao-nam.html"><span>\u2b50</span> Sao N\u0103m Hi\u1ec7n T\u1ea1i</a>'
-    + '<a class="nav-dd-item' + (path==='/tools/cach-cuc.html'?' active':'') + '" href="/tools/cach-cuc.html"><span>\ud83c\udfc6</span> C\u00e1ch C\u1ee5c \u0110\u1eb7c Bi\u1ec7t</a>'
-    + '<a class="nav-dd-item' + (path==='/tools/tuong-hop.html'?' active':'') + '" href="/tools/tuong-hop.html"><span>\ud83d\udc95</span> T\u01b0\u01a1ng H\u1ee3p Tu\u1ed5i</a>'
-    + '<a class="nav-dd-item' + (path==='/tools/kim-lau.html'?' active':'') + '" href="/tools/kim-lau.html"><span>\ud83c\udfe0</span> Kim L\u00e2u / Tam Tai</a>'
-    + '<a class="nav-dd-item' + (path==='/tools/tu-tru.html'?' active':'') + '" href="/tools/tu-tru.html"><span>\ud83d\udcdc</span> T\u1ee9 Tr\u1ee5 B\u00e1t T\u1ef1</a>'
-    + '</div></div>'
-
-    + navLink('/about.html', 'Gi\u1edbi Thi\u1ec7u')
+    + luanGiaiDD
+    + congCuDD
+    + navLink('/about.html',     'Gi\u1edbi Thi\u1ec7u')
     + navLink('/resources.html', 'T\u00e0i Li\u1ec7u')
-    + navLink('/blog.html', 'V\u1ea5n \u0110\u00e1p')
-    + navLink('/menh-kho.html', 'M\u1ec7nh Kh\u1ed1')
-    + navLink('/contact.html', 'Li\u00ean H\u1ec7')
+    + navLink('/blog.html',      'Kh\u1ea3o Lu\u1eadn')
+    + navLink('/menh-kho.html',  'M\u1ec7nh Kh\u1ed1')
+    + navLink('/contact.html',   'Li\u00ean H\u1ec7')
     + '</div>'
     + '<div id="nav-auth-area"></div>'
     + '<button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">\u2630</button>'
     + '</nav>';
 
-  // Xóa nav cũ, inject mới
+  // Inject
   var old = document.querySelector('nav.topnav');
   if (old) old.remove();
   var tmp = document.createElement('div');
@@ -109,40 +140,45 @@
   document.body.insertBefore(tmp.firstChild, document.body.firstChild);
 
   // ── Events ───────────────────────────────────────────────────────────────
+  var ddMenu  = document.getElementById('nav-dd-menu');
+  var ddMenu2 = document.getElementById('nav-dd2-menu');
+
   // Hamburger
   document.getElementById('nav-hamburger').addEventListener('click', function(e) {
     e.stopPropagation();
     document.getElementById('nav-links').classList.toggle('open');
   });
 
-  // Helper: setup dropdown toggle (mobile only)
-  function setupDropdown(toggleId, menuId) {
-    var toggle = document.getElementById(toggleId);
-    var menu   = document.getElementById(menuId);
-    toggle.addEventListener('click', function(e) {
-      if (window.innerWidth <= 700) {
-        e.preventDefault();
-        e.stopPropagation();
-        // Đóng dropdown khác trước
-        document.querySelectorAll('.nav-dd-menu').forEach(function(m) {
-          if (m !== menu) m.classList.remove('open');
-        });
-        menu.classList.toggle('open');
-      }
-    });
-    toggle.style.cursor = 'pointer';
-    toggle.style.webkitTapHighlightColor = 'transparent';
-    toggle.setAttribute('ontouchstart', '');
-  }
+  // DD1: Luận Giải (mobile toggle)
+  var ddToggle = document.getElementById('nav-dd-toggle');
+  ddToggle.style.cursor = 'pointer';
+  ddToggle.style.webkitTapHighlightColor = 'transparent';
+  ddToggle.setAttribute('ontouchstart', '');
+  ddToggle.addEventListener('click', function(e) {
+    if (window.innerWidth <= 700) {
+      e.preventDefault(); e.stopPropagation();
+      ddMenu.classList.toggle('open');
+      ddMenu2.classList.remove('open');
+    }
+  });
 
-  setupDropdown('nav-dd-toggle',  'nav-dd-menu');
-  setupDropdown('nav-dd2-toggle', 'nav-dd2-menu');
+  // DD2: Công Cụ (mobile toggle)
+  var ddToggle2 = document.getElementById('nav-dd2-toggle');
+  ddToggle2.style.cursor = 'pointer';
+  ddToggle2.style.webkitTapHighlightColor = 'transparent';
+  ddToggle2.setAttribute('ontouchstart', '');
+  ddToggle2.addEventListener('click', function(e) {
+    if (window.innerWidth <= 700) {
+      e.preventDefault(); e.stopPropagation();
+      ddMenu2.classList.toggle('open');
+      ddMenu.classList.remove('open');
+    }
+  });
 
-  // Click ngoài thì đóng tất cả
+  // Click outside → đóng cả 2
   document.addEventListener('click', function() {
-    document.querySelectorAll('.nav-dd-menu').forEach(function(m) {
-      m.classList.remove('open');
-    });
+    ddMenu.classList.remove('open');
+    ddMenu2.classList.remove('open');
   });
 
 })();
