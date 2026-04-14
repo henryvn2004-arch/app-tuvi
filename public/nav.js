@@ -1,4 +1,4 @@
-// nav.js — Shared navigation component v3
+// nav.js — Shared navigation component v4
 (function () {
   var path = window.location.pathname;
 
@@ -13,6 +13,7 @@
   }
 
   var isLuanGiai = ['/luan-giai.html','/xem-tuoi.html','/xem-lam-an.html'].indexOf(path) >= 0;
+  var isCongCu   = path.startsWith('/tools/');
 
   // ── CSS ──────────────────────────────────────────────────────────────────
   var css = [
@@ -42,7 +43,6 @@
     '.nav-link{padding:10px 24px;border-radius:0;width:100%;display:block}',
     '.nav-hamburger{display:block;margin-left:auto}',
     '.nav-dd{width:100%}',
-    // QUAN TRỌNG: tắt hover trên mobile
     '.nav-dd:hover .nav-dd-menu{display:none}',
     '.nav-dd-menu{position:static;border:none;box-shadow:none;background:rgba(255,255,255,.06);width:100%}',
     '.nav-dd-menu.open{display:block !important}',
@@ -60,12 +60,16 @@
   }
 
   // ── HTML ─────────────────────────────────────────────────────────────────
-  var ddActiveClass = isLuanGiai ? ' active' : '';
+  var ddActiveClass   = isLuanGiai ? ' active' : '';
+  var dd2ActiveClass  = isCongCu   ? ' active' : '';
+
   var html = '<nav class="topnav">'
     + '<a class="nav-logo" href="/"><img src="/seal.webp" alt="">'
     + '<div><div class="name">T\u1eed Vi Minh B\u1ea3o</div><div class="url">Tri m\u1ec7nh l\u00fd \u2013 Thu\u1eadn th\u1ebf h\u00e0nh</div></div></a>'
     + '<div class="nav-links" id="nav-links">'
     + navLink('/', 'Trang Ch\u1ee7')
+
+    // ── Luận Giải dropdown ──
     + '<div class="nav-dd" id="nav-dd">'
     + '<span class="nav-link' + ddActiveClass + '" id="nav-dd-toggle" role="button" tabindex="0">Lu\u1eadn Gi\u1ea3i \u25be</span>'
     + '<div class="nav-dd-menu" id="nav-dd-menu">'
@@ -73,6 +77,20 @@
     + '<a class="nav-dd-item' + (path==='/xem-tuoi.html'?' active':'') + '" href="/xem-tuoi.html"><span>\ud83d\udc91</span> Xem Tu\u1ed5i V\u1ee3 Ch\u1ed3ng</a>'
     + '<a class="nav-dd-item' + (path==='/xem-lam-an.html'?' active':'') + '" href="/xem-lam-an.html"><span>\ud83e\udd1d</span> Xem Tu\u1ed5i L\u00e0m \u0102n</a>'
     + '</div></div>'
+
+    // ── Công Cụ dropdown ──
+    + '<div class="nav-dd" id="nav-dd2">'
+    + '<span class="nav-link' + dd2ActiveClass + '" id="nav-dd2-toggle" role="button" tabindex="0">C\u00f4ng C\u1ee5 \u25be</span>'
+    + '<div class="nav-dd-menu" id="nav-dd2-menu">'
+    + '<a class="nav-dd-item' + (path==='/tools/nap-am.html'?' active':'') + '" href="/tools/nap-am.html"><span>\ud83d\udd51</span> N\u1ea1p \u00c2m &amp; Can Chi</a>'
+    + '<a class="nav-dd-item' + (path==='/tools/dai-van.html'?' active':'') + '" href="/tools/dai-van.html"><span>\ud83d\udcc5</span> Xem \u0110\u1ea1i V\u1eadn</a>'
+    + '<a class="nav-dd-item' + (path==='/tools/sao-nam.html'?' active':'') + '" href="/tools/sao-nam.html"><span>\u2b50</span> Sao N\u0103m Hi\u1ec7n T\u1ea1i</a>'
+    + '<a class="nav-dd-item' + (path==='/tools/cach-cuc.html'?' active':'') + '" href="/tools/cach-cuc.html"><span>\ud83c\udfc6</span> C\u00e1ch C\u1ee5c \u0110\u1eb7c Bi\u1ec7t</a>'
+    + '<a class="nav-dd-item' + (path==='/tools/tuong-hop.html'?' active':'') + '" href="/tools/tuong-hop.html"><span>\ud83d\udc95</span> T\u01b0\u01a1ng H\u1ee3p Tu\u1ed5i</a>'
+    + '<a class="nav-dd-item' + (path==='/tools/kim-lau.html'?' active':'') + '" href="/tools/kim-lau.html"><span>\ud83c\udfe0</span> Kim L\u00e2u / Tam Tai</a>'
+    + '<a class="nav-dd-item' + (path==='/tools/tu-tru.html'?' active':'') + '" href="/tools/tu-tru.html"><span>\ud83d\udcdc</span> T\u1ee9 Tr\u1ee5 B\u00e1t T\u1ef1</a>'
+    + '</div></div>'
+
     + navLink('/about.html', 'Gi\u1edbi Thi\u1ec7u')
     + navLink('/resources.html', 'T\u00e0i Li\u1ec7u')
     + navLink('/blog.html', 'V\u1ea5n \u0110\u00e1p')
@@ -97,27 +115,34 @@
     document.getElementById('nav-links').classList.toggle('open');
   });
 
-  // Dropdown toggle — chỉ hoạt động trên mobile (<=700px)
-  var ddToggle = document.getElementById('nav-dd-toggle');
-  var ddMenu   = document.getElementById('nav-dd-menu');
+  // Helper: setup dropdown toggle (mobile only)
+  function setupDropdown(toggleId, menuId) {
+    var toggle = document.getElementById(toggleId);
+    var menu   = document.getElementById(menuId);
+    toggle.addEventListener('click', function(e) {
+      if (window.innerWidth <= 700) {
+        e.preventDefault();
+        e.stopPropagation();
+        // Đóng dropdown khác trước
+        document.querySelectorAll('.nav-dd-menu').forEach(function(m) {
+          if (m !== menu) m.classList.remove('open');
+        });
+        menu.classList.toggle('open');
+      }
+    });
+    toggle.style.cursor = 'pointer';
+    toggle.style.webkitTapHighlightColor = 'transparent';
+    toggle.setAttribute('ontouchstart', '');
+  }
 
-  ddToggle.addEventListener('click', function(e) {
-    if (window.innerWidth <= 700) {
-      e.preventDefault();
-      e.stopPropagation();
-      ddMenu.classList.toggle('open');
-    }
-  });
+  setupDropdown('nav-dd-toggle',  'nav-dd-menu');
+  setupDropdown('nav-dd2-toggle', 'nav-dd2-menu');
 
-  // iPhone Safari: cần pointer-events và cursor
-  ddToggle.style.cursor = 'pointer';
-  ddToggle.style.webkitTapHighlightColor = 'transparent';
-  // Safari iOS fix: thêm empty ontouchstart để element nhận click
-  ddToggle.setAttribute('ontouchstart', '');
-
-  // Click ngoài thì đóng
+  // Click ngoài thì đóng tất cả
   document.addEventListener('click', function() {
-    ddMenu.classList.remove('open');
+    document.querySelectorAll('.nav-dd-menu').forEach(function(m) {
+      m.classList.remove('open');
+    });
   });
 
 })();
