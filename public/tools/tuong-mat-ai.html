@@ -138,9 +138,9 @@
         <div class="preview-badge">✓ Ảnh đã chọn</div>
       </div>
       <div class="zone-legend">
-        <span class="zone-tag" style="background:#1455A420;color:#1455A4">☯ Thiên Đình (15–30t)</span>
-        <span class="zone-tag" style="background:#9A7B3A20;color:#9A7B3A">◈ Nhân Trung (31–50t)</span>
-        <span class="zone-tag" style="background:#1E6B3C20;color:#1E6B3C">▣ Địa Các (50t+)</span>
+        <span class="zone-tag" style="background:#1455A420;color:#1455A4">▬ Thượng Đình — trán→chân mày</span>
+        <span class="zone-tag" style="background:#9A7B3A20;color:#9A7B3A">▬ Trung Đình — chân mày→sóng mũi</span>
+        <span class="zone-tag" style="background:#1E6B3C20;color:#1E6B3C">▬ Hạ Đình — sóng mũi→cằm</span>
       </div>
       <button class="remove-btn" onclick="removePhoto()">✕ Xoá ảnh</button>
     </div>
@@ -265,52 +265,92 @@ function drawFaceZones() {
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, w, h);
 
-  // Đường trung ấn (vertical center)
+  // Ước lượng vị trí khuôn mặt trong ảnh chân dung điển hình:
+  // - Đỉnh trán ≈ 8% chiều cao ảnh
+  // - Chân mày ≈ 38% (chia Thượng Đình / Trung Đình)
+  // - Cuối sóng mũi ≈ 63% (chia Trung Đình / Hạ Đình)
+  // - Cuối cằm ≈ 90%
+  // (đây là ước lượng cho ảnh selfie thẳng mặt — không có face detection)
+  const y1 = h * 0.38; // chân mày
+  const y2 = h * 0.63; // cuối sóng mũi
+
+  // Đường trung ấn (dọc giữa mặt)
   ctx.save();
-  ctx.setLineDash([6, 5]);
+  ctx.setLineDash([5, 5]);
   ctx.lineWidth = 1.5;
-  ctx.strokeStyle = 'rgba(255,255,255,0.7)';
-  ctx.shadowColor = 'rgba(0,0,0,0.5)';
+  ctx.strokeStyle = 'rgba(255,255,255,0.65)';
+  ctx.shadowColor = 'rgba(0,0,0,0.6)';
   ctx.shadowBlur = 3;
   ctx.beginPath();
-  ctx.moveTo(w / 2, h * 0.08);
+  ctx.moveTo(w / 2, h * 0.06);
   ctx.lineTo(w / 2, h * 0.92);
   ctx.stroke();
   ctx.restore();
 
-  // Ba vùng — phân chia đều theo chiều cao ảnh (xấp xỉ)
-  const zones = [
-    { y: h * 0.33, color: 'rgba(20,85,164,0.75)', label: 'THIÊN ĐÌNH', labelY: h * 0.17 },
-    { y: h * 0.66, color: 'rgba(154,123,58,0.75)', label: 'NHÂN TRUNG', labelY: h * 0.50 },
-    { color: 'rgba(30,107,60,0.75)',  label: 'ĐỊA CÁC',    labelY: h * 0.82 },
+  // 2 đường ngang phân vùng Tam Đình
+  const lines = [
+    { y: y1, color: 'rgba(20,85,164,0.85)' },
+    { y: y2, color: 'rgba(154,123,58,0.85)' },
   ];
-
-  zones.forEach((z, i) => {
-    // Horizontal dividers
-    if (z.y) {
-      ctx.save();
-      ctx.setLineDash([0]);
-      ctx.lineWidth = 1.5;
-      ctx.strokeStyle = z.color;
-      ctx.shadowColor = 'rgba(0,0,0,0.4)';
-      ctx.shadowBlur = 2;
-      ctx.beginPath();
-      ctx.moveTo(w * 0.05, z.y);
-      ctx.lineTo(w * 0.95, z.y);
-      ctx.stroke();
-      ctx.restore();
-    }
-
-    // Zone label (left side)
+  lines.forEach(({ y, color }) => {
     ctx.save();
-    ctx.font = `bold ${Math.max(9, w * 0.038)}px Arial`;
-    ctx.fillStyle = z.color;
-    ctx.shadowColor = 'rgba(0,0,0,0.8)';
-    ctx.shadowBlur = 4;
-    ctx.textAlign = 'left';
-    ctx.fillText(z.label, w * 0.04, z.labelY);
+    ctx.setLineDash([0]);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = color;
+    ctx.shadowColor = 'rgba(0,0,0,0.5)';
+    ctx.shadowBlur = 3;
+    ctx.beginPath();
+    ctx.moveTo(w * 0.04, y);
+    ctx.lineTo(w * 0.96, y);
+    ctx.stroke();
     ctx.restore();
   });
+
+  // Labels + vận tuổi
+  const fontSize = Math.max(10, Math.round(w * 0.042));
+  const labels = [
+    { y: h * 0.08 + (y1 - h * 0.08) / 2, text: 'THƯỢNG ĐÌNH', sub: 'Trán → Chân mày', color: 'rgba(20,85,164,0.95)' },
+    { y: y1 + (y2 - y1) / 2,              text: 'TRUNG ĐÌNH',  sub: 'Chân mày → Sóng mũi', color: 'rgba(154,123,58,0.95)' },
+    { y: y2 + (h * 0.90 - y2) / 2,        text: 'HẠ ĐÌNH',    sub: 'Sóng mũi → Cằm', color: 'rgba(30,107,60,0.95)' },
+  ];
+
+  labels.forEach(({ y, text, sub, color }) => {
+    // Nền mờ cho label
+    ctx.save();
+    ctx.font = `bold ${fontSize}px Arial`;
+    const tw = ctx.measureText(text).width;
+    ctx.fillStyle = 'rgba(0,0,0,0.35)';
+    ctx.fillRect(w * 0.03 - 3, y - fontSize - 2, tw + 8, fontSize + 4);
+    ctx.restore();
+
+    // Text chính
+    ctx.save();
+    ctx.font = `bold ${fontSize}px Arial`;
+    ctx.fillStyle = color;
+    ctx.shadowColor = 'rgba(0,0,0,0.9)';
+    ctx.shadowBlur = 4;
+    ctx.textAlign = 'left';
+    ctx.fillText(text, w * 0.04, y);
+    ctx.restore();
+
+    // Sub text
+    ctx.save();
+    ctx.font = `${Math.max(8, fontSize - 2)}px Arial`;
+    ctx.fillStyle = 'rgba(255,255,255,0.75)';
+    ctx.shadowColor = 'rgba(0,0,0,0.8)';
+    ctx.shadowBlur = 3;
+    ctx.textAlign = 'left';
+    ctx.fillText(sub, w * 0.04, y + fontSize + 1);
+    ctx.restore();
+  });
+
+  // Chú thích nhỏ góc dưới
+  ctx.save();
+  ctx.font = `${Math.max(8, fontSize - 3)}px Arial`;
+  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  ctx.textAlign = 'right';
+  ctx.fillText('* đường ước lượng', w * 0.97, h * 0.97);
+  ctx.restore();
 }
 
 function removePhoto() {
