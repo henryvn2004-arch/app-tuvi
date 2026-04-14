@@ -19,10 +19,6 @@
 .preview-wrap{position:relative;display:inline-block;margin:0 auto}
 .preview-img{max-width:300px;max-height:350px;width:100%;border-radius:12px;display:block;object-fit:cover}
 .preview-badge{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;font-size:11px;padding:4px 10px;border-radius:20px}
-.preview-canvas{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;pointer-events:none}
-/* Zone legend */
-.zone-legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;justify-content:center}
-.zone-tag{font-size:11px;padding:3px 10px;border-radius:4px;font-weight:600}
 .remove-btn{display:block;margin:10px auto 0;background:none;border:1px solid var(--border);border-radius:4px;padding:6px 16px;font-size:12px;color:var(--text-mid);cursor:pointer;font-family:inherit}
 .remove-btn:hover{background:var(--bg-soft)}
 /* Camera btn */
@@ -134,13 +130,7 @@
     <div id="previewSection" style="display:none;text-align:center;margin:20px 0">
       <div class="preview-wrap">
         <img id="previewImg" class="preview-img" alt="Ảnh đã chọn">
-        <canvas id="zoneCanvas" class="preview-canvas"></canvas>
         <div class="preview-badge">✓ Ảnh đã chọn</div>
-      </div>
-      <div class="zone-legend">
-        <span class="zone-tag" style="background:#1455A420;color:#1455A4">▬ Thượng Đình — trán→chân mày</span>
-        <span class="zone-tag" style="background:#9A7B3A20;color:#9A7B3A">▬ Trung Đình — chân mày→sóng mũi</span>
-        <span class="zone-tag" style="background:#1E6B3C20;color:#1E6B3C">▬ Hạ Đình — sóng mũi→cằm</span>
       </div>
       <button class="remove-btn" onclick="removePhoto()">✕ Xoá ảnh</button>
     </div>
@@ -252,106 +242,8 @@ function showPreview(dataUrl) {
   document.getElementById('previewSection').style.display = 'block';
   document.getElementById('uploadArea').style.display = 'none';
   document.getElementById('analyzeBtn').disabled = false;
-  // Draw zone overlay after image loads
-  document.getElementById('previewImg').onload = drawFaceZones;
-  if (document.getElementById('previewImg').complete) drawFaceZones();
 }
 
-function drawFaceZones() {
-  const img = document.getElementById('previewImg');
-  const canvas = document.getElementById('zoneCanvas');
-  const w = img.clientWidth, h = img.clientHeight;
-  canvas.width = w; canvas.height = h;
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, w, h);
-
-  // Ước lượng vị trí khuôn mặt trong ảnh chân dung điển hình:
-  // - Đỉnh trán ≈ 8% chiều cao ảnh
-  // - Chân mày ≈ 38% (chia Thượng Đình / Trung Đình)
-  // - Cuối sóng mũi ≈ 63% (chia Trung Đình / Hạ Đình)
-  // - Cuối cằm ≈ 90%
-  // (đây là ước lượng cho ảnh selfie thẳng mặt — không có face detection)
-  const y1 = h * 0.38; // chân mày
-  const y2 = h * 0.63; // cuối sóng mũi
-
-  // Đường trung ấn (dọc giữa mặt)
-  ctx.save();
-  ctx.setLineDash([5, 5]);
-  ctx.lineWidth = 1.5;
-  ctx.strokeStyle = 'rgba(255,255,255,0.65)';
-  ctx.shadowColor = 'rgba(0,0,0,0.6)';
-  ctx.shadowBlur = 3;
-  ctx.beginPath();
-  ctx.moveTo(w / 2, h * 0.06);
-  ctx.lineTo(w / 2, h * 0.92);
-  ctx.stroke();
-  ctx.restore();
-
-  // 2 đường ngang phân vùng Tam Đình
-  const lines = [
-    { y: y1, color: 'rgba(20,85,164,0.85)' },
-    { y: y2, color: 'rgba(154,123,58,0.85)' },
-  ];
-  lines.forEach(({ y, color }) => {
-    ctx.save();
-    ctx.setLineDash([0]);
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = color;
-    ctx.shadowColor = 'rgba(0,0,0,0.5)';
-    ctx.shadowBlur = 3;
-    ctx.beginPath();
-    ctx.moveTo(w * 0.04, y);
-    ctx.lineTo(w * 0.96, y);
-    ctx.stroke();
-    ctx.restore();
-  });
-
-  // Labels + vận tuổi
-  const fontSize = Math.max(10, Math.round(w * 0.042));
-  const labels = [
-    { y: h * 0.08 + (y1 - h * 0.08) / 2, text: 'THƯỢNG ĐÌNH', sub: 'Trán → Chân mày', color: 'rgba(20,85,164,0.95)' },
-    { y: y1 + (y2 - y1) / 2,              text: 'TRUNG ĐÌNH',  sub: 'Chân mày → Sóng mũi', color: 'rgba(154,123,58,0.95)' },
-    { y: y2 + (h * 0.90 - y2) / 2,        text: 'HẠ ĐÌNH',    sub: 'Sóng mũi → Cằm', color: 'rgba(30,107,60,0.95)' },
-  ];
-
-  labels.forEach(({ y, text, sub, color }) => {
-    // Nền mờ cho label
-    ctx.save();
-    ctx.font = `bold ${fontSize}px Arial`;
-    const tw = ctx.measureText(text).width;
-    ctx.fillStyle = 'rgba(0,0,0,0.35)';
-    ctx.fillRect(w * 0.03 - 3, y - fontSize - 2, tw + 8, fontSize + 4);
-    ctx.restore();
-
-    // Text chính
-    ctx.save();
-    ctx.font = `bold ${fontSize}px Arial`;
-    ctx.fillStyle = color;
-    ctx.shadowColor = 'rgba(0,0,0,0.9)';
-    ctx.shadowBlur = 4;
-    ctx.textAlign = 'left';
-    ctx.fillText(text, w * 0.04, y);
-    ctx.restore();
-
-    // Sub text
-    ctx.save();
-    ctx.font = `${Math.max(8, fontSize - 2)}px Arial`;
-    ctx.fillStyle = 'rgba(255,255,255,0.75)';
-    ctx.shadowColor = 'rgba(0,0,0,0.8)';
-    ctx.shadowBlur = 3;
-    ctx.textAlign = 'left';
-    ctx.fillText(sub, w * 0.04, y + fontSize + 1);
-    ctx.restore();
-  });
-
-  // Chú thích nhỏ góc dưới
-  ctx.save();
-  ctx.font = `${Math.max(8, fontSize - 3)}px Arial`;
-  ctx.fillStyle = 'rgba(255,255,255,0.5)';
-  ctx.textAlign = 'right';
-  ctx.fillText('* đường ước lượng', w * 0.97, h * 0.97);
-  ctx.restore();
-}
 
 function removePhoto() {
   _imageData = null;
