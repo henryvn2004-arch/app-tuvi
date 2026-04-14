@@ -111,10 +111,11 @@
     + ddSection('Huy\u1ec1n H\u1ecdc & Ph\u01b0\u01a1ng T\u00e2y')
     + ddItem('/tools/kinh-dich.html',   '\u262f',       'Kinh D\u1ecbch 64 Qu\u1ebb')
     + ddItem('/tools/than-so-hoc.html', '\ud83d\udd22', 'Th\u1ea7n S\u1ed1 H\u1ecdc')
-    + ddSection('B\u00f3i B\u00e0i')
+    + ddSection('B\u00f3i B\u00e0i & T\u01b0\u1edbng S\u1ed1')
     + ddItem('/tools/tarot.html',       '\ud83c\udccf', 'Tarot 78 L\u00e1')
     + ddItem('/tools/oracle.html',      '\u2728',       'Oracle Ph\u01b0\u01a1ng \u0110\u00f4ng')
     + ddItem('/tools/boi-bai-tay.html', '\ud83c\udca0', 'B\u00f3i B\u00e0i T\u00e2y')
+    + ddItem('/tools/tuong-mat-ai.html', '\ud83d\udc64', 'Xem T\u01b0\u1edbng M\u1eb7t (AI)')
 
     + '</div></div>';
 
