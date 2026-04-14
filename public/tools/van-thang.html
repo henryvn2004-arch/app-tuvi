@@ -79,6 +79,20 @@ const CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','D
 const THANG_CAN_START=[2,4,6,8,0,2,4,6,8,0]; // canNam → can tháng 1 (Dần)
 const THANG_CHI_START=2; // tháng 1 âm = Dần (chi 2)
 const CURRENT_YEAR=2026;
+const CUNG_MEAN={
+  'Mệnh':     {acc:'#1455A4', txt:'Vận an cung Mệnh — tập trung vào bản thân và quyết định lớn. Năng lượng cá nhân cao.'},
+  'Phụ Mẫu':  {acc:'#1E6B3C', txt:'Thuận cho việc gia đình, bề trên, học hành, ký văn bản.'},
+  'Phúc Đức': {acc:'#7B2FBE', txt:'Phúc đức bảo hộ, tâm linh thuận. Tốt cho tâm linh và bình yên nội tâm.'},
+  'Điền Trạch':{acc:'#9A7B3A', txt:'Liên quan nhà đất, bất động sản. Tốt để mua/sửa nhà nếu sao cung tốt.'},
+  'Quan Lộc': {acc:'#0E7490', txt:'Tháng quan trọng nhất cho sự nghiệp, thăng tiến, thi cử — cung công việc.'},
+  'Nô Bộc':   {acc:'#2F5BEA', txt:'Liên quan cộng sự, nhân viên, bạn bè. Kiểm tra hợp tác và quan hệ hỗ trợ.'},
+  'Thiên Di':  {acc:'#5FA8D3', txt:'Vận di chuyển, xuất ngoại. Tốt để đi lại và mở rộng địa bàn.'},
+  'Tật Ách':   {acc:'#C0392B', txt:'Cần chú ý sức khỏe. Sao tốt thì ổn, sao hung thì giữ gìn thể chất.'},
+  'Tài Bạch':  {acc:'#c9a84c', txt:'Tháng quan trọng nhất về tài chính — thu nhập, chi tiêu, đầu tư.'},
+  'Tử Tức':   {acc:'#1E6B3C', txt:'Liên quan con cái, sáng tạo, dự án mới. Tốt cho khởi đầu ý tưởng.'},
+  'Phu Thê':   {acc:'#E91E8C', txt:'Tháng vận tình cảm, hôn nhân. Quan trọng nhất cho quan hệ đôi lứa.'},
+  'Huynh Đệ': {acc:'#7F8C8D', txt:'Liên quan bạn bè cùng vai, anh em, cạnh tranh ngang hàng.'}
+};
 
 function luanGiai(){
   const {hoten,ngay,thang,nam,gioIdx,gioHour,gioitinh,namXem}=TuviForm.getData();
@@ -113,12 +127,14 @@ function luanGiai(){
       const tot=score?Object.values(score).reduce((a,b)=>a+b,0)/6:5;
       const col=tot>=7?'#1FA3D6':tot>=5?'#2F5BEA':'#C0392B';
       const isCur=m===((now.getMonth()+1-1+12)%12); // rough
+      const mean=CUNG_MEAN[cungName];
       cards.push(`<div class="thang-card${isCur?' cur':''}">
         <div class="thang-num">Tháng ${m+1} âm lịch</div>
         <div class="thang-canchi">${CAN[mCan]} ${CHI[mChi]}</div>
-        <div class="thang-cung">Cung: ${cungName}</div>
+        <div class="thang-cung" style="color:${mean?.acc||'var(--navy)'};font-weight:600">Cung: ${cungName}</div>
         <div class="thang-stars">${stars}</div>
-        <div class="score-mini" style="background:#e0e8f0"><div style="height:100%;width:${(tot/10*100).toFixed(0)}%;background:${col};border-radius:2px"></div></div>
+        ${mean?`<div style="font-size:11px;color:var(--text-mid);line-height:1.5;margin-top:6px;padding-top:6px;border-top:1px solid var(--border-lt)">${mean.txt}</div>`:''}
+        <div class="score-mini" style="background:#e0e8f0;margin-top:8px"><div style="height:100%;width:${(tot/10*100).toFixed(0)}%;background:${col};border-radius:2px"></div></div>
       </div>`);
     }
     document.getElementById('thangGrid').innerHTML=cards.join('');

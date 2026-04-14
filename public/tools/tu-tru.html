@@ -3,54 +3,74 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Tứ Trụ Bát Tự – Tử Vi Minh Bảo</title>
-<meta name="description" content="Tra Can Chi bốn trụ Năm Tháng Ngày Giờ sinh (Bát Tự). Xem cân bằng ngũ hành trong Tứ Trụ. Miễn phí.">
+<title>Tứ Trụ Bát Tự – Thần Sát & Ý Nghĩa – Tử Vi Minh Bảo</title>
+<meta name="description" content="Xem Tứ Trụ Bát Tự đầy đủ: 4 trụ can chi, nạp âm, Thần Sát (Quý Nhân, Văn Xương, Dịch Mã, Đào Hoa, Dương Nhẫn), cân bằng ngũ hành và ý nghĩa từng trụ.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="stylesheet" href="/tools/tools.css">
 <style>
-.hanh-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;padding-top:16px;border-top:1px solid var(--border-lt)}
-.hanh-box{flex:1;min-width:80px;background:var(--bg-soft);border:1px solid var(--border-lt);padding:12px;text-align:center}
-.hanh-name{font-size:13px;font-weight:700;margin-bottom:4px}
-.hanh-count{font-size:11px;color:var(--text-lt)}
-.hanh-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle}
+.pillars-wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-radius:8px;overflow:hidden;margin-bottom:24px}
+.pillar{background:#fff;padding:24px 12px;text-align:center}
+.pillar.is-day{background:#f5f7fa;border-top:3px solid var(--navy)}
+.pillar-lbl{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);margin-bottom:12px}
+.pillar-can{font-size:30px;font-weight:700;line-height:1;margin-bottom:6px}
+.pillar-chi{font-size:28px;font-weight:400;line-height:1}
+.pillar-na{font-size:11px;color:var(--text-lt);margin-top:8px;line-height:1.5}
+.pillar-shen{margin-top:10px;display:flex;flex-direction:column;gap:4px;align-items:center}
+.shen-tag{font-size:9px;font-weight:700;padding:2px 7px;border-radius:2px;white-space:nowrap}
+.st-cat{background:#c3e0cc;color:#1E6B3C}
+.st-warn{background:#e8d9b0;color:#9A7B3A}
+.st-hung{background:#f5c0bc;color:#C0392B}
+.nh-balance{display:flex;border-radius:6px;overflow:hidden;height:36px;margin-bottom:12px}
+.nh-seg{display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;transition:flex .5s;white-space:nowrap;overflow:hidden}
+.hanh-boxes{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.hanh-box{flex:1;min-width:70px;background:var(--bg-soft);border:1px solid var(--border-lt);padding:12px 8px;text-align:center;border-radius:6px}
+.h-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.h-bar-label{font-size:11px;width:48px;flex-shrink:0}
+.h-bar-bg{flex:1;height:8px;background:var(--border-lt);border-radius:4px;overflow:hidden}
+.h-bar-fill{height:100%;border-radius:4px}
+.h-bar-val{font-size:11px;width:20px;text-align:right;flex-shrink:0}
+.pm-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.pm-card{padding:16px 18px;border:1px solid var(--border-lt);border-radius:8px;border-left:4px solid var(--border)}
+.pm-header{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-lt);margin-bottom:10px}
+.pm-canchi{font-size:17px;font-weight:700;margin-bottom:4px}
+.pm-na{font-size:12px;margin-bottom:10px}
+.pm-role{font-size:12px;color:var(--blue);font-weight:600;margin-bottom:6px;padding:4px 8px;background:#e8f0fe;border-radius:4px;display:inline-block}
+.pm-txt{font-size:13px;color:var(--text-mid);line-height:1.7;margin-bottom:6px}
+.pm-shen{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+@media(max-width:600px){.pillars-wrap{grid-template-columns:repeat(2,1fr)}.pm-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <script src="/nav.js"></script>
-
 <div class="hero-tool">
   <div class="page">
     <div class="eyebrow">Công Cụ Miễn Phí</div>
-    <h1>Tứ Trụ <em>Bát Tự</em></h1>
-    <p>Tra Can Chi của bốn trụ Năm – Tháng – Ngày – Giờ sinh và cân bằng ngũ hành trong bát tự.</p>
+    <h1>Tứ Trụ Bát Tự —<br><em>Thần Sát &amp; Ý Nghĩa</em></h1>
+    <p>4 trụ can chi đầy đủ, nạp âm ngũ hành, Thần Sát ẩn trong từng trụ, cân bằng ngũ hành tổng thể và giải thích ý nghĩa mỗi trụ.</p>
   </div>
 </div>
-
 <div class="page">
   <div class="tool-intro">
     <div class="xt-section">
       <div class="xt-eyebrow">Tứ Trụ Bát Tự là gì?</div>
       <div class="xt-grid-2">
         <div>
-          <h2 class="xt-h2">Bốn Trụ, Tám Chữ<br>của Ngày Giờ Sinh</h2>
-          <p class="xt-body">Tứ Trụ (hay Bát Tự — Bazi trong tiếng Hán) là hệ thống mệnh lý dựa trên bốn cặp Can-Chi của: Năm sinh, Tháng sinh, Ngày sinh và Giờ sinh. Mỗi trụ gồm 1 Thiên Can + 1 Địa Chi, tổng cộng 8 chữ.</p>
-          <p class="xt-body">Tám chữ này phản ánh Ngũ Hành tổng hòa của một người — biết thiếu hành nào, vượng hành nào giúp định hướng bổ trợ qua màu sắc, nghề nghiệp, phương hướng và mối quan hệ.</p>
+          <h2 class="xt-h2">8 Chữ —<br>4 Tầng Thời Gian Sinh</h2>
+          <p class="xt-body">Tứ Trụ (四柱) ghi lại năm–tháng–ngày–giờ sinh bằng 4 cặp Can-Chi, tổng cộng 8 chữ. Mỗi trụ phản ánh một tầng khác nhau: trụ năm (gốc rễ, tổ tiên), trụ tháng (môi trường lớn lên), trụ ngày (bản thân — quan trọng nhất), trụ giờ (tương lai, con cái).</p>
+          <p class="xt-body"><strong>Nhật Chủ</strong> là can ngày — ngũ hành bản thân, dùng để xác định hành vượng/suy và định hướng Dụng Thần (hành cần bổ sung). Ngoài 8 chữ, mỗi trụ còn ẩn <strong>Thần Sát</strong> — thần phù hay hung ẩn cho biết thêm về quý nhân, học vấn, di chuyển, tình cảm.</p>
         </div>
         <div class="xt-factors">
-          <div class="xt-factor-title">Bốn trụ và nguồn gốc</div>
-          <div class="xt-factor-item"><span class="xt-factor-num">年</span><span class="xt-factor-label">Trụ Năm</span><span class="xt-factor-desc">Can Chi năm sinh — nền tảng xuất thân, bối cảnh gia đình</span></div>
-          <div class="xt-factor-item"><span class="xt-factor-num">月</span><span class="xt-factor-label">Trụ Tháng</span><span class="xt-factor-desc">Can Chi tháng sinh — tính khí, năng lực chủ đạo</span></div>
-          <div class="xt-factor-item"><span class="xt-factor-num">日</span><span class="xt-factor-label">Trụ Ngày</span><span class="xt-factor-desc">Can Chi ngày sinh — bản ngã, cá tính riêng tư</span></div>
-          <div class="xt-factor-item"><span class="xt-factor-num">時</span><span class="xt-factor-label">Trụ Giờ</span><span class="xt-factor-desc">Can Chi giờ sinh — tương lai, con cái, sự nghiệp cuối đời</span></div>
+          <div class="xt-factor-title">6 Thần Sát Chính</div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1E6B3C">✦</span><span class="xt-factor-label">Thiên Ất Quý Nhân</span><span class="xt-factor-desc">Gặp khó được giúp, hay gặp quý nhân trong đời</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1E6B3C">✦</span><span class="xt-factor-label">Văn Xương</span><span class="xt-factor-desc">Học vấn xuất sắc, thi cử thuận, thiên tư sáng tạo</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1E6B3C">✦</span><span class="xt-factor-label">Thiên Đức</span><span class="xt-factor-desc">Phúc đức hóa giải hung sát (trụ tháng)</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#9A7B3A">◆</span><span class="xt-factor-label">Dịch Mã</span><span class="xt-factor-desc">Hay di chuyển, xuất ngoại, thay đổi lớn trong đời</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#9A7B3A">◆</span><span class="xt-factor-label">Đào Hoa</span><span class="xt-factor-desc">Duyên tình, hấp dẫn — tốt hay xấu tùy vị trí</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#C0392B">✗</span><span class="xt-factor-label">Dương Nhẫn</span><span class="xt-factor-desc">Sát tinh — quyết đoán nhưng dễ xung đột, nóng nảy</span></div>
         </div>
-      </div>
-      <div class="xt-note">
-        <span class="xt-note-icon">⚠️</span>
-        <div><strong>Lưu ý:</strong> Trụ Ngày và Trụ Tháng tính theo lịch dương (không qua tiết khí). Để có kết quả chính xác hoàn toàn, cần dùng lịch vạn niên có đánh dấu các tiết khí. Kết quả có thể sai ±1 ngày quanh ngày đổi tháng tiết khí.</div>
       </div>
     </div>
   </div>
-
   <div class="form-section">
     <div class="section-eyebrow">Nhập Ngày Giờ Sinh</div>
     <div class="form-grid cols-2">
@@ -65,92 +85,182 @@
       <div class="form-col">
         <div class="form-col-title">Giờ Sinh</div>
         <div class="form-group">
-          <label class="form-label">Giờ sinh (chi)</label>
+          <label class="form-label">Giờ sinh (chi) — bỏ trống nếu không biết</label>
           <select class="form-input" id="chiGio">
-            <option value="0">Giờ Tý (23:00–01:00)</option><option value="1">Giờ Sửu (01:00–03:00)</option>
-            <option value="2">Giờ Dần (03:00–05:00)</option><option value="3">Giờ Mão (05:00–07:00)</option>
-            <option value="4">Giờ Thìn (07:00–09:00)</option><option value="5">Giờ Tỵ (09:00–11:00)</option>
-            <option value="6">Giờ Ngọ (11:00–13:00)</option><option value="7">Giờ Mùi (13:00–15:00)</option>
-            <option value="8">Giờ Thân (15:00–17:00)</option><option value="9">Giờ Dậu (17:00–19:00)</option>
-            <option value="10">Giờ Tuất (19:00–21:00)</option><option value="11">Giờ Hợi (21:00–23:00)</option>
+            <option value="">Không biết giờ sinh</option>
+            <option value="0">Giờ Tý (23–01h)</option><option value="1">Giờ Sửu (01–03h)</option>
+            <option value="2">Giờ Dần (03–05h)</option><option value="3">Giờ Mão (05–07h)</option>
+            <option value="4">Giờ Thìn (07–09h)</option><option value="5">Giờ Tỵ (09–11h)</option>
+            <option value="6">Giờ Ngọ (11–13h)</option><option value="7">Giờ Mùi (13–15h)</option>
+            <option value="8">Giờ Thân (15–17h)</option><option value="9">Giờ Dậu (17–19h)</option>
+            <option value="10">Giờ Tuất (19–21h)</option><option value="11">Giờ Hợi (21–23h)</option>
           </select>
         </div>
-        <button class="btn-submit" onclick="calculate()">Tra Tứ Trụ</button>
+        <button class="btn-submit" onclick="calculate()">Xem Tứ Trụ</button>
       </div>
     </div>
     <div class="error-msg" id="error-msg"></div>
   </div>
-
   <div class="result-section" id="result-section">
-    <div class="res-block">
-      <div class="res-block-header"><span class="res-block-title">Bát Tự — 8 Chữ</span></div>
+    <div class="res-block" style="margin-bottom:24px">
+      <div class="res-block-header"><span class="res-block-title" id="resTitle">Bát Tự &amp; Thần Sát</span></div>
       <div class="res-block-body">
-        <div class="pillars-grid" id="pillarsGrid"></div>
-        <div class="hanh-row" id="hanhRow"></div>
+        <div class="pillars-wrap" id="pillarsWrap"></div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);margin-bottom:8px">Cân Bằng Ngũ Hành (8 chữ)</div>
+        <div class="nh-balance" id="nhBalance"></div>
+        <div class="hanh-boxes" id="hanhBoxes"></div>
+        <div id="hanhBars"></div>
+        <div id="dungThan" style="margin-top:12px;padding:14px 16px;background:var(--bg-soft);border-radius:8px;font-size:13px;color:var(--text-mid);line-height:1.7"></div>
       </div>
     </div>
+    <div class="res-block" style="margin-bottom:24px">
+      <div class="res-block-header"><span class="res-block-title">Ý Nghĩa Từng Trụ</span></div>
+      <div class="res-block-body"><div class="pm-grid" id="pmGrid"></div></div>
+    </div>
   </div>
-
   <div class="tool-cta">
-    <div class="tool-cta-eyebrow">Phân Tích Sâu Hơn</div>
-    <div class="tool-cta-title">Luận Giải Lá Số Tử Vi Đẩu Số</div>
-    <div class="tool-cta-desc">Bát Tự và Tử Vi Đẩu Số là hai hệ thống bổ sung cho nhau. Lá số Tử Vi phân tích chi tiết hơn qua 12 cung, sao tinh và đại vận — luận giải AI theo cổ pháp, chỉ $19.</div>
-    <a class="tool-cta-btn" href="/luan-giai.html">Luận Giải Lá Số ($19) →</a>
+    <div class="tool-cta-eyebrow">Kết Hợp Với Tử Vi Đẩu Số</div>
+    <div class="tool-cta-title">Tứ Trụ + Lá Số = Góc Nhìn Toàn Diện</div>
+    <div class="tool-cta-desc">Tứ Trụ phân tích cấu trúc cơ bản từ 8 chữ. Tử Vi Đẩu Số bổ sung vận trình chi tiết từng giai đoạn — hai hệ thống cổ đại phương Đông bổ trợ nhau rất tốt.</div>
+    <a class="tool-cta-btn" href="/luan-giai.html">Xem Lá Số Tử Vi ($19) →</a>
   </div>
 </div>
-
 <footer class="site-footer">
   <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
   <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
 </footer>
-
 <script>
 const CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
 const CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
 const CAN_H=['Mộc','Mộc','Hỏa','Hỏa','Thổ','Thổ','Kim','Kim','Thủy','Thủy'];
 const CHI_H=['Thủy','Thổ','Mộc','Mộc','Thổ','Hỏa','Hỏa','Thổ','Kim','Kim','Thổ','Thủy'];
-const H_COLOR={Kim:'#9A7B3A',Hỏa:'#C0392B',Mộc:'#1E6B3C',Thủy:'#1455A4',Thổ:'#8B6914'};
-const NAP_AM=['Hải Trung Kim','Lô Trung Hỏa','Đại Lâm Mộc','Lộ Bàng Thổ','Kiếm Phong Kim','Sơn Đầu Hỏa','Giản Hạ Thủy','Thành Đầu Thổ','Bạch Lạp Kim','Dương Liễu Mộc','Tuyền Trung Thủy','Ốc Thượng Thổ','Tích Lịch Hỏa','Tùng Bách Mộc','Trường Lưu Thủy','Sa Trung Kim','Sơn Hạ Hỏa','Bình Địa Mộc','Bích Thượng Thổ','Kim Bạch Kim','Phú Đăng Hỏa','Thiên Hà Thủy','Đại Trạch Thổ','Xoa Xuyến Kim','Tang Đố Mộc','Đại Khê Thủy','Sa Trung Thổ','Thiên Thượng Hỏa','Thạch Lựu Mộc','Đại Hải Thủy'];
-const TSC=[2,4,6,8,0,2,4,6,8,0]; // thang start can, indexed by canNam
-function namP(y){const i=((y-4)%60+60)%60;return{can:i%10,chi:i%12,naIdx:Math.floor(i/2)};}
-function thangP(y,m){const cN=((y-4)%10+10)%10;const chiT=(m+1)%12;const off=((chiT-2)+12)%12;return{can:(TSC[cN]+off)%10,chi:chiT};}
-function toJDN(y,m,d){const a=Math.floor((14-m)/12);const yr=y+4800-a;const mn=m+12*a-3;return d+Math.floor((153*mn+2)/5)+365*yr+Math.floor(yr/4)-Math.floor(yr/100)+Math.floor(yr/400)-32045;}
-function ngayP(y,m,d){
-  // Anchor: determined empirically. Using 60-day cycle from known reference.
-  // Oct 4 1952 known as Giáp Tý (can=0, chi=0); JDN=2434290
-  const jdn=toJDN(y,m,d);
-  const ANCHOR=2434290;
-  const diff=((jdn-ANCHOR)%60+600)%60;
-  return{can:diff%10,chi:diff%12};
+const H_COLOR={Mộc:'#1E6B3C',Hỏa:'#C0392B',Thổ:'#9A7B3A',Kim:'#7F8C8D',Thủy:'#1455A4'};
+const SINH_MAP={Mộc:'Hỏa',Hỏa:'Thổ',Thổ:'Kim',Kim:'Thủy',Thủy:'Mộc'};
+const NA_TEN=['Hải Trung Kim','Lô Trung Hỏa','Đại Lâm Mộc','Lộ Bàng Thổ','Kiếm Phong Kim','Sơn Đầu Hỏa','Giản Hạ Thủy','Thành Đầu Thổ','Bạch Lạp Kim','Dương Liễu Mộc','Tuyền Trung Thủy','Ốc Thượng Thổ','Tích Lịch Hỏa','Tùng Bách Mộc','Trường Lưu Thủy','Sa Trung Kim','Sơn Hạ Hỏa','Bình Địa Mộc','Bích Thượng Thổ','Kim Bạch Kim','Phú Đăng Hỏa','Thiên Hà Thủy','Đại Trạch Thổ','Xoa Xuyến Kim','Tang Đố Mộc','Đại Khê Thủy','Sa Trung Thổ','Thiên Thượng Hỏa','Thạch Lựu Mộc','Đại Hải Thủy'];
+const NA_H=['Kim','Hỏa','Mộc','Thổ','Kim','Hỏa','Thủy','Thổ','Kim','Mộc','Thủy','Thổ','Hỏa','Mộc','Thủy','Kim','Hỏa','Mộc','Thổ','Kim','Hỏa','Thủy','Thổ','Kim','Mộc','Thủy','Thổ','Hỏa','Mộc','Thủy'];
+function getNa(can,chi){const idx=Math.floor(((can%10)*12+(chi%12))/2)%30;return{ten:NA_TEN[idx],hanh:NA_H[idx]};}
+const QNHAN={0:[1,7],1:[0,8],2:[11,9],3:[11,9],4:[1,7],5:[0,8],6:[3,5],7:[5,3],8:[5,11],9:[6,4]};
+const VAN_XUONG={0:9,1:8,2:11,3:10,4:1,5:0,6:3,7:2,8:5,9:4};
+const DICH_MA={0:6,4:6,8:6,1:9,5:9,9:9,2:0,6:0,10:0,3:3,7:3,11:3};
+const DAO_HOA={0:9,4:9,8:9,1:6,5:6,9:6,2:3,6:3,10:3,3:0,7:0,11:0};
+const DUONG_NHAN={0:2,1:3,2:4,3:5,4:6,5:7,6:8,7:9,8:10,9:11};
+const TD_THANG=[null,'Đinh','Thân','Nhâm','Tân','Hợi','Giáp','Quý','Dần','Bính','Ất','Ngọ','Canh'];
+const CAN_DESC={
+  'Giáp':'Mộc dương — cứng rắn như cây lớn. Tính lãnh đạo, độc lập, ý chí mạnh nhưng đôi khi cứng đầu.',
+  'Ất':'Mộc âm — linh hoạt như dây leo. Kiên nhẫn, thích nghi tốt, khéo léo trong quan hệ.',
+  'Bính':'Hỏa dương — rực như mặt trời. Nhiệt tình, hào phóng, thẳng thắn, dễ nổi nóng.',
+  'Đinh':'Hỏa âm — ấm như ngọn nến. Tinh tế, nhạy cảm, sáng tạo, kiên trì âm thầm.',
+  'Mậu':'Thổ dương — vững như núi. Thực tế, đáng tin, ổn định, đôi khi bảo thủ.',
+  'Kỷ':'Thổ âm — mềm như đất vườn. Nuôi dưỡng, cẩn thận, giỏi chăm sóc người xung quanh.',
+  'Canh':'Kim dương — sắc như kiếm. Quyết đoán, dũng cảm, nguyên tắc, đôi khi cứng nhắc.',
+  'Tân':'Kim âm — sáng như trang sức. Tinh tế, thẩm mỹ cao, cầu toàn trong mọi việc.',
+  'Nhâm':'Thủy dương — mạnh như sông. Thông minh, tham vọng, linh hoạt, nhìn xa.',
+  'Quý':'Thủy âm — tinh như sương. Trực giác cao, nhạy cảm, sâu sắc, hay lo lắng.'
+};
+const CHI_DESC={
+  'Tý':'Thông minh, năng động, tư duy nhanh. Sinh lực mạnh nhất ở những thời điểm ẩn khuất.',
+  'Sửu':'Kiên nhẫn, chịu đựng, cần cù thực tế. Chậm mà chắc, không vội vàng.',
+  'Dần':'Dũng cảm, quyết đoán, khởi đầu tốt. Bình minh của sức mạnh và hành động.',
+  'Mão':'Tinh tế, sáng tạo, dễ gần. Hấp dẫn tự nhiên và nhạy bén với thẩm mỹ.',
+  'Thìn':'Tham vọng, thực tế, đáng tin. Đất của vạn vật phát triển — mùa xuân đỉnh cao.',
+  'Tỵ':'Thông minh, sắc sảo, khéo léo. Biết quan sát và tính toán trước khi hành động.',
+  'Ngọ':'Nhiệt huyết, bộc trực, cởi mở. Năng lượng rực rỡ và ý chí cao nhất trong ngày.',
+  'Mùi':'Nhẹ nhàng, nghệ thuật, tình cảm. Hướng vào nội tâm, gia đình và vẻ đẹp.',
+  'Thân':'Lanh lợi, linh hoạt, đa tài. Nhiều thay đổi và cơ hội bất ngờ trong đời.',
+  'Dậu':'Tinh tế, cẩn thận, thẩm mỹ cao. Tập trung vào chi tiết và sự hoàn hảo.',
+  'Tuất':'Trung thành, thực tế, bảo vệ. Hướng về sự an toàn và ổn định lâu dài.',
+  'Hợi':'Rộng lượng, tự do, trực giác mạnh. Năng lượng kết thúc chu kỳ và tái sinh.'
+};
+const PILLAR_ROLE=['Trụ Năm — gốc rễ, tổ tiên, hoàn cảnh gia đình','Trụ Tháng — môi trường lớn lên, sự nghiệp, anh chị em','Trụ Ngày ★ — bản thân, hôn nhân (Nhật Chủ)','Trụ Giờ — con cái, tương lai, sự nghiệp về sau'];
+const TSC=[2,4,6,8,0,2,4,6,8,0];
+function toJDN(y,m,d){const a=Math.floor((14-m)/12),yr=y+4800-a,mn=m+12*a-3;return d+Math.floor((153*mn+2)/5)+365*yr+Math.floor(yr/4)-Math.floor(yr/100)+Math.floor(yr/400)-32045;}
+
+function getThienSat(can,chi,dayNgay,yearChi,thangDL){
+  const tags=[];
+  const qn=QNHAN[dayNgay.can]||[];
+  if(qn.includes(chi))tags.push({n:'Quý Nhân',t:'cat'});
+  if(VAN_XUONG[dayNgay.can]===chi)tags.push({n:'Văn Xương',t:'cat'});
+  if(DICH_MA[yearChi]===chi)tags.push({n:'Dịch Mã',t:'warn'});
+  if(DAO_HOA[yearChi]===chi)tags.push({n:'Đào Hoa',t:'warn'});
+  if(DUONG_NHAN[can]===chi)tags.push({n:'Dương Nhẫn',t:'hung'});
+  return tags;
 }
-const GIO_SC=[0,2,4,6,8,0,2,4,6,8];
-function gioP(canNgay,chiGio){return{can:(GIO_SC[canNgay]+chiGio)%10,chi:chiGio};}
+
 function calculate(){
   const ngay=parseInt(document.getElementById('ngay').value);
   const thang=parseInt(document.getElementById('thang').value);
   const nam=parseInt(document.getElementById('nam').value);
-  const chiGio=parseInt(document.getElementById('chiGio').value);
+  const chiGioVal=document.getElementById('chiGio').value;
+  const chiGio=chiGioVal===''?-1:parseInt(chiGioVal);
   const err=document.getElementById('error-msg');
   err.classList.remove('active');
-  if(!ngay||ngay<1||ngay>31||!thang||thang<1||thang>12||!nam||nam<1900||nam>2010){err.textContent='Vui lòng nhập đầy đủ ngày/tháng/năm hợp lệ.';err.classList.add('active');return;}
-  const pN=namP(nam),pT=thangP(nam,thang),pNg=ngayP(nam,thang,ngay),pG=gioP(pNg.can,chiGio);
-  const pillars=[{label:'Trụ Năm 年',p:pN,na:NAP_AM[pN.naIdx]},{label:'Trụ Tháng 月',p:pT},{label:'Trụ Ngày 日 *',p:pNg},{label:'Trụ Giờ 時',p:pG}];
-  const hCount={Kim:0,Hỏa:0,Mộc:0,Thủy:0,Thổ:0};
-  pillars.forEach(({p})=>{hCount[CAN_H[p.can]]++;hCount[CHI_H[p.chi]]++;});
-  document.getElementById('pillarsGrid').innerHTML=pillars.map(({label,p,na})=>{
+  if(!ngay||ngay<1||ngay>31||!thang||thang<1||thang>12||!nam||nam<1900||nam>2010){
+    err.textContent='Vui lòng nhập ngày/tháng/năm hợp lệ (1900–2010).';err.classList.add('active');return;
+  }
+  // Tứ trụ
+  const yIdx=((nam-4)%60+60)%60; const pN={can:yIdx%10,chi:yIdx%12};
+  const mChi=(thang+1)%12; const off=(mChi-2+12)%12; const pT={can:(TSC[pN.can]+off)%10,chi:mChi};
+  const jdn=toJDN(nam,thang,ngay); const ANCHOR=2434290; const diff=((jdn-ANCHOR)%60+600)%60;
+  const pNg={can:diff%10,chi:diff%12};
+  const pG=chiGio>=0?{can:(TSC[pNg.can]+chiGio)%10,chi:chiGio}:null;
+  const pillars=[
+    {idx:0,p:pN},{idx:1,p:pT},{idx:2,p:pNg,isDay:true},...(pG?[{idx:3,p:pG}]:[])
+  ];
+  document.getElementById('resTitle').textContent=
+    `Bát Tự — Nhật Chủ ${CAN[pNg.can]} ${CHI[pNg.chi]} (${CAN_H[pNg.can]})`;
+
+  // Pillars
+  document.getElementById('pillarsWrap').innerHTML=pillars.map(({idx,p,isDay})=>{
     const cH=CAN_H[p.can],chiH=CHI_H[p.chi];
-    return`<div class="pillar-cell">
-      <div class="pillar-label">${label}</div>
+    const na=getNa(p.can,p.chi);
+    const tags=getThienSat(p.can,p.chi,pNg,pN.chi,thang);
+    const hasTD=TD_THANG[thang]&&idx===1;
+    if(hasTD)tags.push({n:'Thiên Đức',t:'cat'});
+    const shenHTML=tags.length?`<div class="pillar-shen">${tags.map(t=>`<span class="shen-tag st-${t.t}">${t.n}</span>`).join('')}</div>`:'';
+    return`<div class="pillar${isDay?' is-day':''}">
+      <div class="pillar-lbl">${['TRỤ NĂM','TRỤ THÁNG','TRỤ NGÀY ★','TRỤ GIỜ'][idx]}</div>
       <div class="pillar-can" style="color:${H_COLOR[cH]}">${CAN[p.can]}</div>
       <div class="pillar-chi" style="color:${H_COLOR[chiH]}">${CHI[p.chi]}</div>
-      <div class="pillar-sub">${na||''}<br><span style="color:${H_COLOR[cH]}">${cH}</span> / <span style="color:${H_COLOR[chiH]}">${chiH}</span></div>
+      <div class="pillar-na"><span style="color:${H_COLOR[na.hanh]};font-weight:600">${na.hanh}</span><br>${na.ten}</div>
+      ${shenHTML}
     </div>`;
   }).join('');
-  document.getElementById('hanhRow').innerHTML=Object.entries(hCount).map(([h,c])=>`
-    <div class="hanh-box">
-      <div class="hanh-name"><span class="hanh-dot" style="background:${H_COLOR[h]}"></span><span style="color:${H_COLOR[h]}">${h}</span></div>
-      <div class="hanh-count">${c} chữ</div>
-    </div>`).join('');
+
+  // Ngũ hành
+  const hCount={Mộc:0,Hỏa:0,Thổ:0,Kim:0,Thủy:0};
+  pillars.forEach(({p})=>{hCount[CAN_H[p.can]]++;hCount[CHI_H[p.chi]]++;});
+  const total=Object.values(hCount).reduce((a,b)=>a+b,0)||1;
+  document.getElementById('nhBalance').innerHTML=
+    Object.entries(hCount).map(([h,c])=>`<div class="nh-seg" style="flex:${c||0.3};background:${H_COLOR[h]};min-width:${c?24:4}px">${c>0?h:''}</div>`).join('');
+  document.getElementById('hanhBoxes').innerHTML=
+    Object.entries(hCount).map(([h,c])=>`<div class="hanh-box"><div style="font-size:13px;font-weight:700;color:${H_COLOR[h]};margin-bottom:4px">${h}</div><div style="font-size:22px;font-weight:700;color:${H_COLOR[h]}">${c}</div></div>`).join('');
+  document.getElementById('hanhBars').innerHTML=
+    Object.entries(hCount).map(([h,c])=>`<div class="h-bar-row"><span class="h-bar-label" style="color:${H_COLOR[h]}">${h}</span><div class="h-bar-bg"><div class="h-bar-fill" style="width:${(c/total*100).toFixed(0)}%;background:${H_COLOR[h]}"></div></div><span class="h-bar-val">${c}</span></div>`).join('');
+  const sorted=Object.entries(hCount).sort((a,b)=>a[1]-b[1]);
+  const weak=sorted[0][0],strong=sorted[sorted.length-1][0],dayMaster=CAN_H[pNg.can];
+  document.getElementById('dungThan').innerHTML=
+    `<strong>Nhật Chủ:</strong> ${CAN[pNg.can]} — ngũ hành <span style="color:${H_COLOR[dayMaster]};font-weight:700">${dayMaster}</span><br>`+
+    `<strong>Vượng nhất:</strong> <span style="color:${H_COLOR[strong]}">${strong} (${hCount[strong]})</span> &nbsp;|&nbsp; `+
+    `<strong>Yếu nhất:</strong> <span style="color:${H_COLOR[weak]}">${weak} (${hCount[weak]})</span><br>`+
+    `<span style="color:var(--text-lt);font-size:12px">Sơ bộ: cân nhắc bổ sung hành <strong>${weak}</strong> qua màu sắc, nghề nghiệp hoặc phong thủy liên quan ${weak}. Phân tích Dụng Thần đầy đủ cần xét thêm quan hệ sinh khắc giữa các trụ.</span>`;
+
+  // Ý nghĩa từng trụ
+  document.getElementById('pmGrid').innerHTML=pillars.map(({idx,p,isDay})=>{
+    const cH=CAN_H[p.can],chiH=CHI_H[p.chi];
+    const na=getNa(p.can,p.chi);
+    const tags=getThienSat(p.can,p.chi,pNg,pN.chi,thang);
+    if(TD_THANG[thang]&&idx===1)tags.push({n:'Thiên Đức',t:'cat'});
+    return`<div class="pm-card" style="border-left-color:${H_COLOR[cH]}">
+      <div class="pm-header">${['Trụ Năm','Trụ Tháng','Trụ Ngày ★','Trụ Giờ'][idx]}</div>
+      <div class="pm-canchi"><span style="color:${H_COLOR[cH]}">${CAN[p.can]}</span> <span style="color:${H_COLOR[chiH]}">${CHI[p.chi]}</span></div>
+      <div class="pm-na">Nạp âm: <strong style="color:${H_COLOR[na.hanh]}">${na.ten} (${na.hanh})</strong></div>
+      <div class="pm-role">${PILLAR_ROLE[idx]}</div>
+      <div class="pm-txt"><strong>${CAN[p.can]}:</strong> ${CAN_DESC[CAN[p.can]]||''}</div>
+      <div class="pm-txt"><strong>${CHI[p.chi]}:</strong> ${CHI_DESC[CHI[p.chi]]||''}</div>
+      ${tags.length?`<div class="pm-shen">${tags.map(t=>`<span class="shen-tag st-${t.t}">${t.n}</span>`).join('')}</div>`:''}
+    </div>`;
+  }).join('');
+
   document.getElementById('result-section').classList.add('active');
   document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
 }
