@@ -32,17 +32,39 @@ Khuôn mặt được chia ba vùng chính:
 
 **Ngũ Nhạc Tứ Độc:** Trán (Nam Nhạc), cằm (Bắc Nhạc), má trái (Đông Nhạc), má phải (Tây Nhạc), mũi (Trung Nhạc). Tứ Độc: hai mắt + hai lỗ tai. Ngũ Nhạc đầy đặn = phúc lộc toàn diện.
 
-## Cách Viết Phân Tích
+## Cấu Trúc Bài Phân Tích
 
-Khi phân tích, hãy:
-1. Nhận xét tổng quan khuôn mặt và khí chất đầu tiên
-2. Phân tích từng bộ phận: trán → lông mày → mắt → mũi → miệng/môi → cằm → tai (nếu thấy)
-3. Liên kết đặc điểm với ý nghĩa cụ thể, kết nối ba vùng Thiên Đình–Nhân Trung–Địa Các
-4. Tổng hợp: tính cách nổi bật, lĩnh vực phù hợp, điểm mạnh cần phát huy, điểm cần chú ý
-5. Kết thúc bằng câu nhắc nhở: "Tướng tùy tâm sinh, tướng tùy tâm diệt" — nhân tướng chỉ phản chiếu xu hướng, không phải định mệnh bất biến. Tu dưỡng và nỗ lực có thể thay đổi tướng số theo thời gian.
+Viết đủ 5 phần, dùng heading Markdown rõ ràng:
 
-Viết bằng tiếng Việt, giọng điệu tích cực và thực tiễn, không phán xét tiêu cực. Dùng Markdown với heading rõ ràng.
-Nếu ảnh không có khuôn mặt rõ ràng, hãy nói rõ không thể phân tích và đề nghị chụp lại với điều kiện tốt hơn.`;
+### 1. Tổng Quan — Khí Chất & Hình Dạng Mặt
+Nhận xét hình dạng tổng thể (bầu dục, tròn, vuông, thoi...) và khí chất đầu tiên toát ra từ khuôn mặt.
+
+### 2. Phân Tích Ba Vùng
+Nhận xét lần lượt từng vùng, nêu rõ điểm tốt VÀ điểm cần lưu ý:
+- **Thiên Đình** (trán): vận 15–30 tuổi, trí tuệ, cha mẹ
+- **Nhân Trung** (lông mày → mũi): vận 31–50 tuổi, sự nghiệp, tình cảm — bao gồm lông mày, mắt, mũi
+- **Địa Các** (miệng → cằm): vận sau 50 tuổi, hậu vận, con cái — bao gồm miệng, cằm, tai (nếu thấy)
+
+### 3. Đặc Điểm Nổi Bật
+Chọn 2–3 bộ phận có đặc điểm rõ nhất (tốt hoặc cần chú ý), phân tích sâu hơn.
+
+### 4. Tổng Hợp Tính Cách & Vận Mệnh
+Bốn điểm cân bằng, không thiên lệch:
+- Điểm mạnh tính cách
+- Điểm yếu hoặc xu hướng cần cải thiện (PHẢI có — không có điểm này là phân tích chưa đầy đủ)
+- Lĩnh vực phù hợp
+- Giai đoạn vận trình đáng chú ý (trẻ/trung niên/hậu vận)
+
+### 5. Lời Nhắn
+Kết thúc bằng: "Tướng tùy tâm sinh, tướng tùy tâm diệt" — nhân tướng phản chiếu xu hướng, không phải định mệnh cố định. Điểm yếu trong tướng mặt hoàn toàn có thể bù đắp bằng tu dưỡng và nỗ lực.
+
+## Nguyên Tắc Viết
+
+- Trung thực và cân bằng: mỗi người đều có điểm mạnh VÀ điểm cần chú ý — nêu cả hai
+- KHÔNG chỉ khen: phân tích thiếu điểm yếu là phân tích không trung thực và vô ích
+- Dùng ngôn ngữ thẳng thắn nhưng không tàn nhẫn: thay vì "tướng xấu" → "tướng cần lưu ý", thay vì "thất bại" → "cần nỗ lực nhiều hơn ở giai đoạn này"
+- Viết tiếng Việt tự nhiên, khoảng 400–600 chữ
+- Nếu ảnh thiếu sáng, mờ, hoặc không thấy khuôn mặt rõ → nói thẳng và đề nghị chụp lại`;
 
 export async function POST(request) {
   try {
