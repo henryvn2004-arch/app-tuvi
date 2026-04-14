@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Bói Bài Tarot – Tử Vi Minh Bảo</title>
+<meta name="description" content="Bói bài Tarot 78 lá đầy đủ — rút 1 lá, trải 3 lá Quá Khứ-Hiện Tại-Tương Lai hoặc Celtic Cross 10 lá. Ý nghĩa xuôi và ngược bằng tiếng Việt.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<style>
+/* ── Card visuals ── */
+.card-scene{width:90px;height:150px;perspective:600px;cursor:pointer;flex-shrink:0}
+.card-scene.lg{width:110px;height:180px}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.4,0,.2,1)}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-inner.reversed{transform:rotateY(180deg) rotateZ(180deg)}
+.card-face,.card-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.card-back{background:linear-gradient(135deg,#061A2E 0%,#0D3B5E 50%,#061A2E 100%);border:2px solid #c9a84c}
+.card-back::after{content:'✦';font-size:28px;color:#c9a84c;opacity:.7}
+.card-face{transform:rotateY(180deg);background:#fff;border:2px solid #e8d9b0;flex-direction:column;padding:6px 4px}
+.card-face .cf-num{font-size:9px;font-weight:700;color:#9A7B3A;letter-spacing:1px;text-transform:uppercase;text-align:center}
+.card-face .cf-symbol{font-size:36px;line-height:1.1;margin:4px 0}
+.card-face .cf-name{font-size:9px;font-weight:700;color:#061A2E;text-align:center;line-height:1.3;padding:0 2px}
+.card-face .cf-suit{font-size:8px;color:#9A7B3A;margin-top:2px}
+.card-face.major .cf-symbol{font-size:42px}
+.card-face.major{background:linear-gradient(180deg,#fdf8f0 0%,#fff 100%);border-color:#c9a84c}
+/* Reversed overlay */
+.card-face.is-reversed::before{content:'↕ Ngược';position:absolute;top:4px;right:4px;font-size:7px;background:#f5c0bc;color:#C0392B;padding:1px 4px;border-radius:2px;font-weight:700}
+/* Spread layouts */
+.spread-1{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin:24px 0}
+.spread-3{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin:24px 0}
+.spread-celtic{display:grid;grid-template-areas:
+  '. . c5 . .'
+  'c4 c3 c1 c2 c6'
+  '. . c7 . .'
+  '. . c8 . .'
+  'c10 . c9 . .'
+  'c10 . . . .';
+gap:8px;width:fit-content;margin:24px auto}
+.cc1{grid-area:c1}.cc2{grid-area:c2;transform:rotate(90deg);transform-origin:center}.cc3{grid-area:c3}.cc4{grid-area:c4}.cc5{grid-area:c5}.cc6{grid-area:c6}.cc7{grid-area:c7}.cc8{grid-area:c8}.cc9{grid-area:c9}.cc10{grid-area:c10}
+/* Card slot with label */
+.card-slot{display:flex;flex-direction:column;align-items:center;gap:8px}
+.slot-label{font-size:10px;font-weight:700;color:var(--text-lt);letter-spacing:1px;text-transform:uppercase;text-align:center;max-width:90px;line-height:1.4}
+/* Result panel */
+.reading-result{margin-top:32px}
+.card-meaning{padding:20px 24px;border:1px solid var(--border-lt);border-radius:8px;margin-bottom:16px;border-left:4px solid var(--gold)}
+.cm-header{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.cm-symbol{font-size:36px;line-height:1}
+.cm-info{}
+.cm-name{font-size:15px;font-weight:700;color:var(--navy)}
+.cm-sub{font-size:11px;color:var(--text-lt);margin-top:2px}
+.cm-pos{font-size:11px;font-weight:700;padding:2px 8px;border-radius:2px;margin-top:4px;display:inline-block}
+.pos-upright{background:#eaf4ed;color:#1E6B3C}
+.pos-reversed{background:#fef0ef;color:#C0392B}
+.cm-body{font-size:14px;color:var(--text-mid);line-height:1.8}
+.cm-keywords{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.cm-kw{font-size:11px;padding:2px 8px;border-radius:2px;background:var(--bg-soft);border:1px solid var(--border-lt);color:var(--text-mid)}
+/* Spread selector */
+.spread-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:24px}
+.spread-btn{padding:10px 20px;background:var(--bg-soft);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:13px;font-family:inherit;color:var(--text-mid);transition:all .15s}
+.spread-btn:hover{background:var(--gold-lt);border-color:var(--gold)}
+.spread-btn.active{background:#c9a84c22;border-color:#c9a84c;color:#9A7B3A;font-weight:600}
+.draw-btn{display:block;margin:0 auto;padding:14px 40px;background:var(--navy);color:#c9a84c;border:2px solid #c9a84c;font-size:15px;font-weight:700;border-radius:6px;cursor:pointer;font-family:inherit;letter-spacing:.5px;transition:all .2s}
+.draw-btn:hover{background:#0D3B5E}
+.draw-btn:disabled{opacity:.5;cursor:default}
+/* Shuffle animation */
+@keyframes shuffle{0%{transform:translateX(0) rotate(0)}25%{transform:translateX(-20px) rotate(-5deg)}50%{transform:translateX(20px) rotate(5deg)}75%{transform:translateX(-10px) rotate(-2deg)}100%{transform:translateX(0) rotate(0)}}
+.shuffling .card-scene{animation:shuffle .6s ease-in-out}
+@media(max-width:600px){
+  .spread-celtic{transform:scale(.75);transform-origin:top center}
+  .card-slot{min-width:70px}
+}
+</style>
+</head>
+<body>
+<script src="/nav.js"></script>
+
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Miễn Phí</div>
+    <h1>Bói Bài <em>Tarot</em><br>78 Lá Đầy Đủ</h1>
+    <p>Rút 1 lá, trải 3 lá hoặc Celtic Cross 10 lá — ý nghĩa xuôi và ngược bằng tiếng Việt, đầy đủ 22 Major Arcana và 56 Minor Arcana.</p>
+  </div>
+</div>
+
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Tarot là gì?</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">78 Lá Bài — Tấm Gương<br>Phản Chiếu Nội Tâm</h2>
+          <p class="xt-body">Tarot ra đời ở châu Âu từ thế kỷ 15, ban đầu là bộ bài chơi game, sau trở thành công cụ chiêm nghiệm và hướng dẫn nội tâm. 78 lá chia thành 22 lá <strong>Major Arcana</strong> (bí ẩn lớn — các nguyên mẫu cuộc đời) và 56 lá <strong>Minor Arcana</strong> (4 chất: Gậy, Cốc, Kiếm, Tiền).</p>
+          <p class="xt-body">Tarot không phán quyết số phận — Tarot phản chiếu năng lượng hiện tại và những khả năng phía trước. Lá bài xuất hiện phản ánh trạng thái tâm lý và hoàn cảnh của người hỏi tại thời điểm đó.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">3 Kiểu Trải Bài</div>
+          <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">1 Lá</span><span class="xt-factor-desc">Thông điệp của ngày, câu trả lời ngắn cho 1 câu hỏi cụ thể</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">②</span><span class="xt-factor-label">3 Lá</span><span class="xt-factor-desc">Quá Khứ · Hiện Tại · Tương Lai — cái nhìn tổng thể theo dòng thời gian</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">③</span><span class="xt-factor-label">Celtic Cross</span><span class="xt-factor-desc">10 lá — trải bài sâu nhất, xét tình huống từ nhiều góc độ</span></div>
+          <div class="xt-note" style="margin-top:12px">
+            <span class="xt-note-icon">💡</span>
+            <div>Trước khi rút bài, hãy hít thở sâu, định tâm và nghĩ rõ câu hỏi muốn hỏi. Tarot cho kết quả sâu sắc nhất khi người hỏi có câu hỏi cụ thể trong tâm trí.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOL -->
+  <div class="form-section">
+    <div class="section-eyebrow">Chọn Kiểu Trải Bài</div>
+    <div class="spread-btns">
+      <button class="spread-btn active" onclick="setSpread(1,this)">✦ 1 Lá — Thông Điệp Hôm Nay</button>
+      <button class="spread-btn" onclick="setSpread(3,this)">⊹ 3 Lá — Quá Khứ · Hiện Tại · Tương Lai</button>
+      <button class="spread-btn" onclick="setSpread(10,this)">✺ Celtic Cross — 10 Lá</button>
+    </div>
+    <div class="form-group" style="max-width:500px;margin:0 auto 24px">
+      <label class="form-label">Câu hỏi (tuỳ chọn — nghĩ trong tâm hoặc ghi ra đây)</label>
+      <input class="form-input" type="text" id="question" placeholder="VD: Tình trạng sự nghiệp của tôi hiện tại thế nào?" maxlength="120">
+    </div>
+    <div style="text-align:center">
+      <button class="draw-btn" id="drawBtn" onclick="draw()">✦ Xáo Bài &amp; Rút</button>
+    </div>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result-section" id="result-section">
+    <div id="questionDisplay" style="text-align:center;font-style:italic;color:var(--text-lt);font-size:13px;margin-bottom:20px"></div>
+    <div id="spreadArea"></div>
+    <div class="reading-result" id="readingResult"></div>
+  </div>
+
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Kết Hợp Đông Tây</div>
+    <div class="tool-cta-title">Tarot + Tử Vi Đẩu Số</div>
+    <div class="tool-cta-desc">Tarot cho thấy năng lượng hiện tại và thông điệp ngắn hạn. Tử Vi Đẩu Số phân tích vận trình dài hạn theo lá số cá nhân — hai hệ thống bổ trợ nhau, không mâu thuẫn.</div>
+    <a class="tool-cta-btn" href="/luan-giai.html">Xem Lá Số Tử Vi ($19) →</a>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// 78 TAROT CARDS — Major (0–21) + Minor (22–77)
+// ═══════════════════════════════════════════════════════════
+const CARDS = [
+// ── MAJOR ARCANA (0–21) ─────────────────────────────────────
+{id:0,name:'Kẻ Khờ',en:'The Fool',type:'major',sym:'🌟',num:'0',
+ up:'Khởi đầu mới, tự do, tinh thần phiêu lưu, tiềm năng vô hạn. Bước vào hành trình mới với lòng tin và trái tim rộng mở. Đây là thời điểm của những khả năng vô tận.',
+ rev:'Liều lĩnh thiếu suy nghĩ, bất cẩn, bỏ lỡ cơ hội. Đang do dự quá mức hoặc ngược lại hành động mà không có kế hoạch.',
+ kw:['Khởi đầu','Tự do','Phiêu lưu','Tiềm năng']},
+{id:1,name:'Pháp Sư',en:'The Magician',type:'major',sym:'⚡',num:'I',
+ up:'Ý chí, tập trung, tài năng, nguồn lực. Bạn có đủ công cụ để thực hiện mục tiêu. Thời điểm hành động và thể hiện khả năng.',
+ rev:'Thao túng, lãng phí tài năng, thiếu tập trung. Có thể đang sử dụng kỹ năng sai mục đích hoặc chưa phát huy hết tiềm năng.',
+ kw:['Ý chí','Tài năng','Hành động','Thể hiện']},
+{id:2,name:'Nữ Tư Tế',en:'The High Priestess',type:'major',sym:'🌙',num:'II',
+ up:'Trực giác, bí ẩn, nội tâm, tiềm thức. Lắng nghe tiếng nói bên trong. Có điều gì đó chưa được tiết lộ — hãy kiên nhẫn và quan sát.',
+ rev:'Bí mật bị che giấu, ngắt kết nối với bản thân, bỏ qua trực giác. Đang bỏ qua những dấu hiệu quan trọng từ nội tâm.',
+ kw:['Trực giác','Bí ẩn','Tiềm thức','Nội tâm']},
+{id:3,name:'Hoàng Hậu',en:'The Empress',type:'major',sym:'🌸',num:'III',
+ up:'Nữ tính, phong phú, nuôi dưỡng, sáng tạo, thiên nhiên. Thời kỳ sinh sôi và phát triển. Năng lượng yêu thương và chăm sóc đang tỏa sáng.',
+ rev:'Phụ thuộc, sáng tạo bị chặn, thiếu tự chăm sóc. Có thể đang cho đi quá nhiều mà không nhận lại, hoặc bỏ bê bản thân.',
+ kw:['Nữ tính','Phong phú','Sáng tạo','Nuôi dưỡng']},
+{id:4,name:'Hoàng Đế',en:'The Emperor',type:'major',sym:'👑',num:'IV',
+ up:'Thẩm quyền, cấu trúc, ổn định, kỷ luật. Thời điểm thiết lập nền tảng vững chắc. Lãnh đạo và kiểm soát tình huống một cách có trách nhiệm.',
+ rev:'Độc đoán, kiểm soát quá mức, thiếu linh hoạt. Đang dùng quyền lực sai cách hoặc bị người khác kiểm soát.',
+ kw:['Quyền lực','Cấu trúc','Lãnh đạo','Kỷ luật']},
+{id:5,name:'Giáo Hoàng',en:'The Hierophant',type:'major',sym:'⛪',num:'V',
+ up:'Truyền thống, tôn giáo, giáo dục, chuẩn mực xã hội. Đi theo con đường đã được thiết lập, tìm kiếm sự hướng dẫn từ những gì đã được chứng minh.',
+ rev:'Cứng nhắc, giáo điều, phá vỡ quy tắc. Đang thách thức các giá trị truyền thống hoặc bị ràng buộc bởi kỳ vọng của người khác.',
+ kw:['Truyền thống','Giáo dục','Tôn giáo','Chuẩn mực']},
+{id:6,name:'Người Yêu',en:'The Lovers',type:'major',sym:'❤️',num:'VI',
+ up:'Tình yêu, sự lựa chọn, sự hoà hợp, giá trị cá nhân. Một lựa chọn quan trọng đang đến. Sự kết nối tâm hồn và liên minh dựa trên giá trị chung.',
+ rev:'Bất hoà, lựa chọn sai, mất cân bằng. Có thể đang lựa chọn dựa trên lý do sai hoặc tránh né một quyết định quan trọng.',
+ kw:['Tình yêu','Lựa chọn','Hài hoà','Kết nối']},
+{id:7,name:'Cỗ Xe',en:'The Chariot',type:'major',sym:'🏆',num:'VII',
+ up:'Ý chí, kiểm soát, chiến thắng, quyết tâm. Tiến về phía trước với sự kiên định. Chiến thắng nhờ vào ý chí và kỷ luật cá nhân.',
+ rev:'Thiếu kiểm soát, hung hăng, thất bại. Đang bị kéo theo nhiều hướng khác nhau hoặc sử dụng sức lực sai cách.',
+ kw:['Quyết tâm','Chiến thắng','Ý chí','Tiến về phía trước']},
+{id:8,name:'Sức Mạnh',en:'Strength',type:'major',sym:'🦁',num:'VIII',
+ up:'Can đảm, kiên nhẫn, lòng trắc ẩn, kiểm soát nội tâm. Sức mạnh thực sự đến từ bên trong, từ lòng tốt và sự kiên nhẫn chứ không phải vũ lực.',
+ rev:'Yếu đuối, tự nghi ngờ, thiếu can đảm. Đang để nỗi sợ chi phối hoặc ngược lại đang dùng sức mạnh một cách tàn nhẫn.',
+ kw:['Can đảm','Kiên nhẫn','Nội tâm','Lòng tốt']},
+{id:9,name:'Ẩn Sĩ',en:'The Hermit',type:'major',sym:'🕯️',num:'IX',
+ up:'Nội tâm, cô đơn có ý nghĩa, tìm kiếm sự thật, hướng dẫn nội tâm. Thời gian rút lui để suy ngẫm và tìm kiếm sự sáng suốt bên trong.',
+ rev:'Cô lập, cô đơn không mong muốn, tránh né xã hội. Đang tự giam cầm hoặc bỏ lỡ sự kết nối có ý nghĩa với người khác.',
+ kw:['Nội tâm','Suy ngẫm','Cô đơn','Sáng suốt']},
+{id:10,name:'Bánh Xe Số Phận',en:'Wheel of Fortune',type:'major',sym:'☸️',num:'X',
+ up:'Vận may, thay đổi, chu kỳ, bước ngoặt. Bánh xe đang quay theo hướng tốt. Đón nhận sự thay đổi vì cuộc sống luôn vận động theo chu kỳ.',
+ rev:'Vận xui, kháng cự thay đổi, chu kỳ tiêu cực. Đang chống lại những thay đổi không thể tránh khỏi hoặc bị mắc kẹt trong vòng lặp cũ.',
+ kw:['Vận may','Thay đổi','Chu kỳ','Bước ngoặt']},
+{id:11,name:'Công Lý',en:'Justice',type:'major',sym:'⚖️',num:'XI',
+ up:'Công bằng, sự thật, nhân quả, pháp luật. Mọi hành động đều có hậu quả. Sự cân bằng và công bằng sẽ được phục hồi.',
+ rev:'Bất công, thiếu trách nhiệm, tránh né hậu quả. Đang né tránh trách nhiệm hoặc đang bị đối xử bất công.',
+ kw:['Công bằng','Sự thật','Nhân quả','Cân bằng']},
+{id:12,name:'Kẻ Treo Ngược',en:'The Hanged Man',type:'major',sym:'🙃',num:'XII',
+ up:'Tạm dừng, buông bỏ, hiến tế, góc nhìn mới. Đôi khi cần dừng lại để nhìn nhận mọi thứ từ góc độ khác. Buông bỏ kiểm soát để đạt được sự khai sáng.',
+ rev:'Trì hoãn, kháng cự, hy sinh vô ích. Đang từ chối buông bỏ điều gì đó đang kìm hãm bạn.',
+ kw:['Tạm dừng','Buông bỏ','Góc nhìn mới','Hy sinh']},
+{id:13,name:'Cái Chết',en:'Death',type:'major',sym:'🌑',num:'XIII',
+ up:'Kết thúc, chuyển hoá, thay đổi tất yếu, khởi đầu mới. Không phải cái chết thể xác — đây là sự kết thúc của một giai đoạn và sự tái sinh của điều mới.',
+ rev:'Kháng cự thay đổi, trì trệ, sợ hãi kết thúc. Đang bám víu vào điều không còn phục vụ bạn nữa.',
+ kw:['Kết thúc','Chuyển hoá','Tái sinh','Thay đổi']},
+{id:14,name:'Điều Độ',en:'Temperance',type:'major',sym:'🌊',num:'XIV',
+ up:'Cân bằng, kiên nhẫn, mục đích, hoà hợp. Đi theo con đường trung dung, hoà hợp các yếu tố đối lập trong cuộc sống.',
+ rev:'Mất cân bằng, thái quá, thiếu kiên nhẫn. Đang làm quá nhiều hoặc quá ít, thiếu sự điều độ trong cuộc sống.',
+ kw:['Cân bằng','Kiên nhẫn','Hoà hợp','Điều độ']},
+{id:15,name:'Ác Quỷ',en:'The Devil',type:'major',sym:'🔗',num:'XV',
+ up:'Ràng buộc, vật chất, ám ảnh, bóng tối nội tâm. Đang bị ràng buộc bởi điều gì đó — tiền bạc, mối quan hệ độc hại, hay thói quen xấu. Nhận ra ràng buộc là bước đầu tiên để thoát khỏi.',
+ rev:'Giải phóng, thoát khỏi ràng buộc, nhận thức. Bắt đầu nhận ra và cắt đứt những ràng buộc không lành mạnh.',
+ kw:['Ràng buộc','Ám ảnh','Bóng tối','Vật chất']},
+{id:16,name:'Tháp',en:'The Tower',type:'major',sym:'⚡',num:'XVI',
+ up:'Hỗn loạn đột ngột, đổ vỡ, khải thị, thức tỉnh. Một cú sốc đột ngột phá vỡ cấu trúc cũ. Đau đớn nhưng cần thiết để xây dựng điều tốt đẹp hơn.',
+ rev:'Tránh né thảm họa, sợ thay đổi, trì hoãn không thể tránh khỏi. Đang né tránh sự sụp đổ cần thiết.',
+ kw:['Đổ vỡ','Hỗn loạn','Thức tỉnh','Khải thị']},
+{id:17,name:'Ngôi Sao',en:'The Star',type:'major',sym:'⭐',num:'XVII',
+ up:'Hy vọng, cảm hứng, bình an, đổi mới. Sau bóng tối là ánh sáng. Thời điểm chữa lành và tin tưởng vào tương lai.',
+ rev:'Vô vọng, mất niềm tin, thất vọng. Đang gặp khó khăn trong việc tin tưởng vào tương lai hoặc cảm thấy mất kết nối với nguồn cảm hứng.',
+ kw:['Hy vọng','Bình an','Chữa lành','Cảm hứng']},
+{id:18,name:'Mặt Trăng',en:'The Moon',type:'major',sym:'🌕',num:'XVIII',
+ up:'Ảo giác, sợ hãi, tiềm thức, giấc mơ. Không phải mọi thứ đều như vẻ ngoài. Hãy cẩn thận với những gì đang ẩn giấu trong bóng tối.',
+ rev:'Nỗi sợ được giải phóng, sự thật được tiết lộ, sáng suốt. Dần dần nhìn thấu qua ảo giác và tìm thấy sự thật.',
+ kw:['Ảo giác','Tiềm thức','Sợ hãi','Giấc mơ']},
+{id:19,name:'Mặt Trời',en:'The Sun',type:'major',sym:'☀️',num:'XIX',
+ up:'Niềm vui, thành công, sức sống, sự lạc quan. Ánh sáng rọi chiếu vào mọi góc tối. Thời kỳ hạnh phúc, rõ ràng và thành công.',
+ rev:'Bi quan tạm thời, thiếu năng lượng, tự nghi ngờ. Ánh sáng vẫn ở đó — chỉ cần bước ra khỏi bóng tối.',
+ kw:['Niềm vui','Thành công','Sức sống','Lạc quan']},
+{id:20,name:'Phán Xét',en:'Judgement',type:'major',sym:'📯',num:'XX',
+ up:'Phản ánh, đánh giá, sự thức tỉnh, tha thứ. Một giai đoạn đang kết thúc và bạn được kêu gọi. Thời điểm để đánh giá quá khứ và bước lên tầm cao mới.',
+ rev:'Tự phán xét quá mức, nghi ngờ bản thân, bỏ qua lời kêu gọi. Đang quá khắt khe với bản thân hoặc chưa sẵn sàng lắng nghe sự thức tỉnh.',
+ kw:['Đánh giá','Thức tỉnh','Tha thứ','Kêu gọi']},
+{id:21,name:'Thế Giới',en:'The World',type:'major',sym:'🌍',num:'XXI',
+ up:'Hoàn chỉnh, thành tích, hội nhập, hành trình kết thúc. Chu kỳ đã hoàn thành. Thời điểm ăn mừng thành tựu và chuẩn bị cho hành trình mới.',
+ rev:'Chưa hoàn chỉnh, thiếu kết thúc, trì hoãn. Gần đến đích nhưng vẫn còn điều gì đó chưa được giải quyết trước khi tiến lên.',
+ kw:['Hoàn chỉnh','Thành tích','Chu kỳ kết thúc','Hội nhập']},
+// ── MINOR ARCANA — WANDS (Gậy) ──────────────────────────────
+{id:22,name:'Át Gậy',en:'Ace of Wands',type:'wands',sym:'🔥',num:'Át',
+ up:'Cảm hứng mới, tiềm năng sáng tạo, khởi đầu đầy nhiệt huyết. Hạt giống của một dự án mới hay ý tưởng sáng tạo đang nảy mầm.',
+ rev:'Sự trì hoãn, thiếu động lực, năng lượng bị chặn. Ý tưởng chưa sẵn sàng hoặc thiếu môi trường để phát triển.',
+ kw:['Cảm hứng','Sáng tạo','Nhiệt huyết','Khởi đầu']},
+{id:23,name:'Hai Gậy',en:'Two of Wands',type:'wands',sym:'🔥🔥',num:'Hai',
+ up:'Kế hoạch tương lai, quyết định, tiến về phía trước. Đứng ở ngã tư với thế giới rộng lớn trước mặt. Thời điểm lập kế hoạch và lựa chọn hướng đi.',
+ rev:'Sợ thay đổi, kế hoạch tệ, thiếu tầm nhìn. Đang do dự không dám bước ra khỏi vùng an toàn.',
+ kw:['Kế hoạch','Tầm nhìn','Quyết định','Tiến lên']},
+{id:24,name:'Ba Gậy',en:'Three of Wands',type:'wands',sym:'⛵',num:'Ba',
+ up:'Mở rộng, tầm nhìn xa, cơ hội đang đến. Những kế hoạch đã được gieo trồng đang bắt đầu kết trái. Nhìn về phía chân trời với sự tự tin.',
+ rev:'Trì hoãn, thiếu tầm nhìn, cơ hội bị bỏ lỡ. Những kế hoạch không tiến triển như mong đợi.',
+ kw:['Mở rộng','Cơ hội','Tầm nhìn xa','Thành quả']},
+{id:25,name:'Bốn Gậy',en:'Four of Wands',type:'wands',sym:'🎉',num:'Bốn',
+ up:'Ăn mừng, hài hoà, thư giãn, ổn định. Thời điểm ăn mừng những thành tựu. Một nền tảng vững chắc đã được xây dựng.',
+ rev:'Mâu thuẫn gia đình, thiếu cộng đồng, lễ kỷ niệm bị hoãn. Có rắc rối ở nhà hoặc trong cộng đồng gần gũi.',
+ kw:['Ăn mừng','Hài hoà','Ổn định','Nền tảng']},
+{id:26,name:'Năm Gậy',en:'Five of Wands',type:'wands',sym:'⚔️',num:'Năm',
+ up:'Xung đột, cạnh tranh, bất đồng, thử thách. Mọi người đều có ý kiến riêng. Cạnh tranh lành mạnh hoặc sự hỗn loạn tạm thời.',
+ rev:'Tránh né xung đột, căng thẳng bên trong, giải quyết bất đồng. Tìm cách để mọi người cùng hướng về một phía.',
+ kw:['Xung đột','Cạnh tranh','Bất đồng','Thử thách']},
+{id:27,name:'Sáu Gậy',en:'Six of Wands',type:'wands',sym:'🏅',num:'Sáu',
+ up:'Thành công, công nhận, tự tin, sự tiến bộ. Đang nhận được sự công nhận xứng đáng cho những nỗ lực. Chiến thắng sau thử thách.',
+ rev:'Ngã mạn, không được công nhận, thiếu tự tin. Thành công không được ghi nhận hoặc đang để thành công làm bạn kiêu ngạo.',
+ kw:['Thành công','Công nhận','Tự tin','Chiến thắng']},
+{id:28,name:'Bảy Gậy',en:'Seven of Wands',type:'wands',sym:'🛡️',num:'Bảy',
+ up:'Phòng thủ, bền vững, kiên định, đấu tranh cho vị trí. Phải đứng vững trước áp lực và thách thức từ bên ngoài.',
+ rev:'Kiệt sức, từ bỏ, áp đảo. Cảm thấy bị tấn công từ nhiều phía và khó giữ vững lập trường.',
+ kw:['Phòng thủ','Kiên định','Bền vững','Đấu tranh']},
+{id:29,name:'Tám Gậy',en:'Eight of Wands',type:'wands',sym:'💨',num:'Tám',
+ up:'Tốc độ, hành động nhanh, tin tức, chuyển động. Mọi thứ đang di chuyển rất nhanh. Tin tức sắp đến, sự kiện đang diễn ra ồ ạt.',
+ rev:'Chậm trễ, hỗn loạn, thiếu kiên nhẫn. Kế hoạch bị trì hoãn hoặc thông tin đang bị hỗn loạn.',
+ kw:['Tốc độ','Hành động','Tin tức','Chuyển động']},
+{id:30,name:'Chín Gậy',en:'Nine of Wands',type:'wands',sym:'🩹',num:'Chín',
+ up:'Kiên cường, kháng cự, bảo vệ bản thân. Đã trải qua nhiều thử thách nhưng vẫn đứng vững. Cẩn thận nhưng không từ bỏ.',
+ rev:'Kiệt sức, bướng bỉnh, từ chối nhận giúp đỡ. Đang bảo vệ quá mức hoặc kiệt sức sau trận chiến dài.',
+ kw:['Kiên cường','Bảo vệ','Không từ bỏ','Thận trọng']},
+{id:31,name:'Mười Gậy',en:'Ten of Wands',type:'wands',sym:'😓',num:'Mười',
+ up:'Gánh nặng, trách nhiệm quá mức, áp lực. Đang gánh chịu quá nhiều. Cần đặt xuống những gì không còn cần thiết.',
+ rev:'Trút bỏ gánh nặng, uỷ quyền, học buông bỏ. Đang bắt đầu nhận ra không thể ôm đồm tất cả một mình.',
+ kw:['Gánh nặng','Trách nhiệm','Áp lực','Quá tải']},
+{id:32,name:'Trang Gậy',en:'Page of Wands',type:'wands',sym:'🌱',num:'Trang',
+ up:'Khám phá, nhiệt tình, ý tưởng mới, tự do. Năng lượng trẻ trung và háo hức. Sẵn sàng khám phá lãnh thổ mới.',
+ rev:'Thiếu hướng dẫn, bồn chồn, trì hoãn. Có nhiều ý tưởng nhưng thiếu kế hoạch thực hiện.',
+ kw:['Khám phá','Nhiệt tình','Tươi mới','Tự do']},
+{id:33,name:'Kỵ Sĩ Gậy',en:'Knight of Wands',type:'wands',sym:'⚡',num:'Kỵ Sĩ',
+ up:'Năng lượng, đam mê, phiêu lưu, hành động táo bạo. Lao về phía trước với nhiệt huyết và quyết tâm. Thời điểm hành động dứt khoát.',
+ rev:'Nóng vội, hung hăng, liều lĩnh thiếu suy nghĩ. Đang hành động quá nhanh mà không lập kế hoạch.',
+ kw:['Đam mê','Phiêu lưu','Táo bạo','Nhiệt huyết']},
+{id:34,name:'Hoàng Hậu Gậy',en:'Queen of Wands',type:'wands',sym:'🦁',num:'HH',
+ up:'Tự tin, can đảm, xác định, năng lượng xã hội. Lôi cuốn và nhiệt tình, truyền cảm hứng cho người xung quanh.',
+ rev:'Kiêu ngạo, ganh tị, bất an. Ẩn giấu sự không chắc chắn sau lớp vỏ tự tin.',
+ kw:['Tự tin','Can đảm','Lôi cuốn','Truyền cảm hứng']},
+{id:35,name:'Vua Gậy',en:'King of Wands',type:'wands',sym:'👑',num:'Vua',
+ up:'Lãnh đạo tầm nhìn, doanh nghiệp, danh dự, quyết đoán. Lãnh đạo bằng tầm nhìn và cảm hứng. Thành công trong kinh doanh và lãnh đạo.',
+ rev:'Độc đoán, bốc đồng, kỳ vọng cao. Đang lãnh đạo theo kiểu ép buộc thay vì truyền cảm hứng.',
+ kw:['Lãnh đạo','Tầm nhìn','Doanh nghiệp','Quyết đoán']},
+// ── CUPS (Cốc) ────────────────────────────────────────────────
+{id:36,name:'Át Cốc',en:'Ace of Cups',type:'cups',sym:'💧',num:'Át',
+ up:'Tình yêu mới, trực giác, tâm linh, bắt đầu cảm xúc. Trái tim rộng mở để đón nhận tình yêu và kết nối mới.',
+ rev:'Cảm xúc bị chặn, trái tim khép kín, tình yêu bị từ chối. Đang khó cho đi hay nhận lấy tình yêu.',
+ kw:['Tình yêu mới','Cảm xúc','Trực giác','Tâm linh']},
+{id:37,name:'Hai Cốc',en:'Two of Cups',type:'cups',sym:'💑',num:'Hai',
+ up:'Liên minh, hợp tác, mối quan hệ, thu hút lẫn nhau. Kết nối sâu sắc và cân bằng giữa hai người.',
+ rev:'Mất kết nối, mất cân bằng, không hoà hợp. Mối quan hệ đang gặp vấn đề hoặc thiếu sự tôn trọng lẫn nhau.',
+ kw:['Liên minh','Tình yêu','Hợp tác','Kết nối']},
+{id:38,name:'Ba Cốc',en:'Three of Cups',type:'cups',sym:'🥂',num:'Ba',
+ up:'Tình bạn, cộng đồng, ăn mừng, sáng tạo. Niềm vui chia sẻ với bạn bè và người thân. Thời gian tụ họp và kỷ niệm.',
+ rev:'Thái quá, cô đơn, xung đột nhóm. Sự ăn mừng đang bị lạm dụng hoặc có căng thẳng trong nhóm bạn.',
+ kw:['Tình bạn','Ăn mừng','Cộng đồng','Chia sẻ']},
+{id:39,name:'Bốn Cốc',en:'Four of Cups',type:'cups',sym:'😑',num:'Bốn',
+ up:'Suy nghĩ nội tâm, thờ ơ, đánh giá lại, chán ghét. Đang mải nghĩ và bỏ qua cơ hội đang ở ngay trước mặt.',
+ rev:'Thoát khỏi thờ ơ, chọn lọc được cải thiện, động lực mới. Bắt đầu thoát ra khỏi trạng thái thụ động.',
+ kw:['Thờ ơ','Nội tâm','Đánh giá lại','Bỏ qua cơ hội']},
+{id:40,name:'Năm Cốc',en:'Five of Cups',type:'cups',sym:'😢',num:'Năm',
+ up:'Mất mát, hối tiếc, đau buồn, tập trung vào tiêu cực. Đang than thở về những gì đã mất mà không nhìn thấy những gì vẫn còn.',
+ rev:'Tiến về phía trước, chấp nhận, tha thứ. Dần dần chữa lành và tìm cách tiến lên từ tổn thương.',
+ kw:['Mất mát','Hối tiếc','Đau buồn','Chữa lành']},
+{id:41,name:'Sáu Cốc',en:'Six of Cups',type:'cups',sym:'🌷',num:'Sáu',
+ up:'Hoài niệm, tuổi thơ, kỷ niệm, những ký ức tốt đẹp. Nhìn lại quá khứ với tình cảm. Kết nối với trẻ con nội tâm.',
+ rev:'Sống trong quá khứ, thiếu trưởng thành, mắc kẹt. Đang không thể tiến về phía trước vì quá gắn bó với quá khứ.',
+ kw:['Hoài niệm','Tuổi thơ','Kỷ niệm','Tình cảm']},
+{id:42,name:'Bảy Cốc',en:'Seven of Cups',type:'cups',sym:'🌈',num:'Bảy',
+ up:'Ảo tưởng, lựa chọn, giấc mơ, tưởng tượng. Có quá nhiều lựa chọn gây choáng ngợp. Cẩn thận đừng mắc kẹt trong ảo tưởng.',
+ rev:'Sự rõ ràng sau hỗn loạn, lựa chọn sáng suốt, thực tế. Đang bắt đầu nhìn rõ và đưa ra quyết định thực tế.',
+ kw:['Ảo tưởng','Lựa chọn','Mơ mộng','Choáng ngợp']},
+{id:43,name:'Tám Cốc',en:'Eight of Cups',type:'cups',sym:'🚶',num:'Tám',
+ up:'Từ bỏ, rút lui, tìm kiếm điều sâu sắc hơn. Bỏ lại điều đã không còn đáp ứng nhu cầu để tìm kiếm điều có ý nghĩa hơn.',
+ rev:'Sợ từ bỏ, trì trệ, sợ thay đổi. Biết cần phải rời đi nhưng không dám bước ra.',
+ kw:['Từ bỏ','Tìm kiếm','Ý nghĩa','Rút lui']},
+{id:44,name:'Chín Cốc',en:'Nine of Cups',type:'cups',sym:'😊',num:'Chín',
+ up:'Ước muốn thành hiện thực, hài lòng, hạnh phúc, thịnh vượng. Lá bài "ước muốn" — điều bạn mong muốn đang đến gần.',
+ rev:'Tham lam, vật chất hoá hạnh phúc, thiếu hài lòng. Tìm kiếm hạnh phúc ở sai chỗ.',
+ kw:['Ước muốn','Hài lòng','Hạnh phúc','Thịnh vượng']},
+{id:45,name:'Mười Cốc',en:'Ten of Cups',type:'cups',sym:'🏡',num:'Mười',
+ up:'Hạnh phúc gia đình, hài hoà, thoả mãn lâu dài. Hạnh phúc đích thực và sự hoàn chỉnh trong các mối quan hệ.',
+ rev:'Rạn nứt gia đình, mâu thuẫn, bất hoà. Có căng thẳng ở nhà hay trong các mối quan hệ gần gũi.',
+ kw:['Hạnh phúc gia đình','Hài hoà','Thoả mãn','Hoàn chỉnh']},
+{id:46,name:'Trang Cốc',en:'Page of Cups',type:'cups',sym:'🐟',num:'Trang',
+ up:'Thông điệp sáng tạo, trực giác, nhạy cảm, tin tức cảm xúc. Một người trẻ hoặc tin tức mới có thể đến một cách bất ngờ.',
+ rev:'Cảm xúc thất thường, nhạy cảm quá mức, tin đồn. Thông điệp không đáng tin hoặc đang xúc động quá dễ dàng.',
+ kw:['Sáng tạo','Trực giác','Nhạy cảm','Bất ngờ']},
+{id:47,name:'Kỵ Sĩ Cốc',en:'Knight of Cups',type:'cups',sym:'🌊',num:'Kỵ Sĩ',
+ up:'Lãng mạn, quyến rũ, trí tưởng tượng, theo đuổi trái tim. Người lãng mạn và mơ mộng đang đến.',
+ rev:'Bốc đồng cảm xúc, không thực tế, lừa dối. Để cảm xúc chi phối quá mức hoặc bị sự lãng mạn mù quáng.',
+ kw:['Lãng mạn','Quyến rũ','Theo đuổi','Mơ mộng']},
+{id:48,name:'Hoàng Hậu Cốc',en:'Queen of Cups',type:'cups',sym:'🔮',num:'HH',
+ up:'Lòng trắc ẩn, trực giác, chữa lành, cảm xúc sâu sắc. Người có trái tim nhân hậu và trực giác mạnh.',
+ rev:'Phụ thuộc cảm xúc, bất an, lấy cảm xúc của người khác. Đang bị cuốn vào cảm xúc của người khác hoặc mất đi sự cân bằng nội tâm.',
+ kw:['Trắc ẩn','Trực giác','Chữa lành','Nhân hậu']},
+{id:49,name:'Vua Cốc',en:'King of Cups',type:'cups',sym:'🌊',num:'Vua',
+ up:'Thông thái cảm xúc, ngoại giao, cân bằng, từ bi. Kiểm soát cảm xúc trong khi vẫn giữ được lòng trắc ẩn.',
+ rev:'Thao túng cảm xúc, bất ổn, lạnh lùng. Đang dùng trí tuệ cảm xúc để thao túng người khác.',
+ kw:['Cân bằng cảm xúc','Ngoại giao','Từ bi','Thông thái']},
+// ── SWORDS (Kiếm) ────────────────────────────────────────────
+{id:50,name:'Át Kiếm',en:'Ace of Swords',type:'swords',sym:'⚔️',num:'Át',
+ up:'Rõ ràng, sự thật, đột phá, trí tuệ. Nhận thức mới và tư duy sắc bén. Thời điểm cắt bỏ sự mơ hồ.',
+ rev:'Hỗn loạn, thiếu rõ ràng, nói dối. Tư duy bị mù quáng bởi cảm xúc hoặc thông tin sai lệch.',
+ kw:['Rõ ràng','Sự thật','Trí tuệ','Đột phá']},
+{id:51,name:'Hai Kiếm',en:'Two of Swords',type:'swords',sym:'🙈',num:'Hai',
+ up:'Bế tắc, tránh né, không quyết định, cân bằng mong manh. Đang tránh một quyết định khó khăn bằng cách bịt mắt trước sự thật.',
+ rev:'Bế tắc phá vỡ, thông tin xuất hiện, lựa chọn khó. Cuối cùng phải đối mặt với thực tế đã tránh né.',
+ kw:['Bế tắc','Tránh né','Không quyết định','Mù quáng']},
+{id:52,name:'Ba Kiếm',en:'Three of Swords',type:'swords',sym:'💔',num:'Ba',
+ up:'Đau buồn, từ chối, nỗi đau, tổn thương trái tim. Đau đớn và tổn thương là một phần của quá trình chữa lành.',
+ rev:'Tha thứ, chữa lành, tiến lên. Đang dần dần chữa lành từ nỗi đau và tìm đường tiến về phía trước.',
+ kw:['Đau buồn','Từ chối','Tổn thương','Chữa lành']},
+{id:53,name:'Bốn Kiếm',en:'Four of Swords',type:'swords',sym:'😴',num:'Bốn',
+ up:'Nghỉ ngơi, thư giãn, phục hồi, thiền định. Cần thời gian để phục hồi và chuẩn bị cho những gì sắp đến.',
+ rev:'Không nghỉ ngơi được, áp lực, sợ không hoạt động. Bị dồn vào trạng thái bất động trong khi cần phải hành động.',
+ kw:['Nghỉ ngơi','Phục hồi','Thiền định','Nạp năng lượng']},
+{id:54,name:'Năm Kiếm',en:'Five of Swords',type:'swords',sym:'😈',num:'Năm',
+ up:'Xung đột, mất mát danh dự, tự phụ, thất bại. Chiến thắng với cái giá quá đắt hoặc tham gia vào cuộc chiến không đáng.',
+ rev:'Hoà giải, hối hận, giải quyết xung đột. Đang học từ sai lầm và tìm cách sửa chữa.',
+ kw:['Xung đột','Tự phụ','Mất mát','Bài học']},
+{id:55,name:'Sáu Kiếm',en:'Six of Swords',type:'swords',sym:'⛵',num:'Sáu',
+ up:'Chuyển đổi, rời đi, tiến về phía trước, bình yên hơn. Rời xa khó khăn hướng đến bình yên.',
+ rev:'Kháng cự rời đi, không tiến được, quay trở lại. Biết cần phải thay đổi nhưng không thể rời bỏ tình huống cũ.',
+ kw:['Chuyển đổi','Rời đi','Bình yên','Tiến về phía trước']},
+{id:56,name:'Bảy Kiếm',en:'Seven of Swords',type:'swords',sym:'🦊',num:'Bảy',
+ up:'Lừa dối, mưu mẹo, chiến lược, tránh né. Cần phải khéo léo và chiến lược trong tình huống hiện tại.',
+ rev:'Trả lại vật bị lấy, thú nhận, nghĩ lại chiến lược. Đang bắt đầu đối mặt trung thực với hành động không chính đáng.',
+ kw:['Lừa dối','Mưu mẹo','Chiến lược','Thận trọng']},
+{id:57,name:'Tám Kiếm',en:'Eight of Swords',type:'swords',sym:'🔒',num:'Tám',
+ up:'Tù túng, hạn chế, nạn nhân, tự giam cầm. Cảm thấy bị mắc kẹt nhưng thực ra ràng buộc chỉ là ảo giác trong tâm trí.',
+ rev:'Tự giải phóng, đối mặt nỗi sợ, tiếp nhận trách nhiệm. Bắt đầu nhận ra mình có quyền năng để thay đổi tình huống.',
+ kw:['Tù túng','Hạn chế','Ảo giác','Tự giam cầm']},
+{id:58,name:'Chín Kiếm',en:'Nine of Swords',type:'swords',sym:'😨',num:'Chín',
+ up:'Lo lắng, ác mộng, tuyệt vọng, căng thẳng tinh thần. Lo lắng đang kiểm soát cuộc sống — hầu hết nỗi sợ tệ hơn thực tế.',
+ rev:'Phục hồi từ lo lắng, nhận ra nỗi sợ, tìm kiếm giúp đỡ. Dần dần tìm được sự bình yên sau thời gian lo âu.',
+ kw:['Lo lắng','Ác mộng','Căng thẳng','Tìm kiếm bình yên']},
+{id:59,name:'Mười Kiếm',en:'Ten of Swords',type:'swords',sym:'🌅',num:'Mười',
+ up:'Kết thúc đau đớn, mất mát, phản bội, nhưng là điểm cuối. Chu kỳ đen tối nhất đã đến điểm kết thúc — chỉ có thể đi lên từ đây.',
+ rev:'Phục hồi, không thể tránh khỏi, kháng cự cái kết. Từ chối chấp nhận sự kết thúc không thể tránh khỏi.',
+ kw:['Kết thúc','Mất mát','Bình minh','Phục hồi']},
+{id:60,name:'Trang Kiếm',en:'Page of Swords',type:'swords',sym:'🔍',num:'Trang',
+ up:'Tò mò, cảnh giác, thông tin mới, tư duy nhạy bén. Tinh thần tìm kiếm sự thật và học hỏi không ngừng.',
+ rev:'Thô lỗ, thiếu kế hoạch, nói nhiều làm ít. Đang sử dụng trí thông minh một cách tiêu cực hoặc thiếu chiều sâu.',
+ kw:['Tò mò','Cảnh giác','Thông tin','Tư duy sắc bén']},
+{id:61,name:'Kỵ Sĩ Kiếm',en:'Knight of Swords',type:'swords',sym:'⚡',num:'Kỵ Sĩ',
+ up:'Tham vọng, hành động quyết đoán, thẳng thắn, dũng cảm. Lao về phía mục tiêu với quyết tâm sắt đá.',
+ rev:'Bốc đồng, hung hãn, xung đột không cần thiết. Đang hành động quá nhanh và gây ra hậu quả không mong muốn.',
+ kw:['Tham vọng','Quyết đoán','Dũng cảm','Thẳng thắn']},
+{id:62,name:'Hoàng Hậu Kiếm',en:'Queen of Swords',type:'swords',sym:'👸',num:'HH',
+ up:'Độc lập, sắc bén, trực tiếp, kinh nghiệm. Người thông minh và trực tiếp, không bị cảm xúc làm mờ nhận xét.',
+ rev:'Lạnh lùng, chua ngoa, cô đơn. Đang dùng trí tuệ sắc bén để tấn công hay che giấu nỗi đau.',
+ kw:['Độc lập','Sắc bén','Trực tiếp','Kinh nghiệm']},
+{id:63,name:'Vua Kiếm',en:'King of Swords',type:'swords',sym:'⚖️',num:'Vua',
+ up:'Thẩm quyền trí tuệ, sự thật, đạo đức, quyết định sáng suốt. Tư duy rõ ràng và phán quyết công bằng.',
+ rev:'Độc đoán, lạm dụng quyền lực, thao túng. Đang sử dụng trí tuệ để kiểm soát thay vì hướng dẫn.',
+ kw:['Trí tuệ','Sự thật','Đạo đức','Phán quyết']},
+// ── PENTACLES (Tiền) ─────────────────────────────────────────
+{id:64,name:'Át Tiền',en:'Ace of Pentacles',type:'pentacles',sym:'💰',num:'Át',
+ up:'Cơ hội mới về tài chính, thịnh vượng, sự ổn định, nền tảng vật chất. Hạt giống của sự thịnh vượng và ổn định vật chất.',
+ rev:'Cơ hội bị bỏ lỡ, thiếu quy hoạch tài chính, lãng phí. Cơ hội có nhưng chưa được tận dụng đúng cách.',
+ kw:['Tài chính','Thịnh vượng','Cơ hội','Ổn định']},
+{id:65,name:'Hai Tiền',en:'Two of Pentacles',type:'pentacles',sym:'🤹',num:'Hai',
+ up:'Cân bằng, thích nghi, quản lý thời gian. Đang tung hứng nhiều việc cùng lúc — cần linh hoạt để giữ cân bằng.',
+ rev:'Mất kiểm soát, căng thẳng tài chính, thiếu tổ chức. Đang cố gắng làm quá nhiều và mọi thứ bắt đầu rơi vỡ.',
+ kw:['Cân bằng','Thích nghi','Đa nhiệm','Linh hoạt']},
+{id:66,name:'Ba Tiền',en:'Three of Pentacles',type:'pentacles',sym:'🏗️',num:'Ba',
+ up:'Làm việc nhóm, hợp tác, kỹ năng, xây dựng nền tảng. Làm việc cùng nhau để tạo ra điều gì đó có giá trị lâu dài.',
+ rev:'Thiếu đồng đội, tranh cãi, thất vọng. Không làm việc được với người khác hoặc không nhận được sự công nhận.',
+ kw:['Hợp tác','Kỹ năng','Xây dựng','Công nhận']},
+{id:67,name:'Bốn Tiền',en:'Four of Pentacles',type:'pentacles',sym:'💎',num:'Bốn',
+ up:'Bảo tồn, ổn định, an toàn, kiểm soát. Đang giữ chặt tài nguyên — đôi khi cần thiết nhưng đừng để trở nên keo kiệt.',
+ rev:'Hào phóng, buông bỏ, mở cửa cho sự phong phú. Bắt đầu buông bỏ sự bám víu vào vật chất.',
+ kw:['Bảo tồn','Ổn định','An toàn','Kiểm soát']},
+{id:68,name:'Năm Tiền',en:'Five of Pentacles',type:'pentacles',sym:'🥶',num:'Năm',
+ up:'Khó khăn tài chính, bất an, cô đơn, nghịch cảnh. Đang trải qua giai đoạn khó khăn — nhưng sự giúp đỡ luôn có sẵn nếu bạn tìm kiếm.',
+ rev:'Phục hồi tài chính, cải thiện, nhận giúp đỡ. Đang dần vượt qua giai đoạn khó khăn.',
+ kw:['Khó khăn','Bất an','Nghịch cảnh','Tìm kiếm giúp đỡ']},
+{id:69,name:'Sáu Tiền',en:'Six of Pentacles',type:'pentacles',sym:'🤲',num:'Sáu',
+ up:'Cho đi, nhận lấy, quào phúc, trao đổi. Có sự cân bằng trong việc cho và nhận. Lòng hào phóng đang tỏa sáng.',
+ rev:'Nợ nần, lòng tốt giả tạo, quyền lực bất bình đẳng. Sự hào phóng có điều kiện hoặc đang trao đổi với mục đích sai.',
+ kw:['Hào phóng','Chia sẻ','Cân bằng','Lòng tốt']},
+{id:70,name:'Bảy Tiền',en:'Seven of Pentacles',type:'pentacles',sym:'🌱',num:'Bảy',
+ up:'Đánh giá, kiên nhẫn, đầu tư dài hạn, chờ đợi kết quả. Đang chờ hạt giống đã gieo nảy mầm — cần kiên nhẫn.',
+ rev:'Thiếu tầm nhìn dài hạn, sốt ruột, tổn thất đầu tư. Đang mất kiên nhẫn hoặc đầu tư vào sai hướng.',
+ kw:['Kiên nhẫn','Đầu tư','Chờ đợi','Đánh giá']},
+{id:71,name:'Tám Tiền',en:'Eight of Pentacles',type:'pentacles',sym:'🔨',num:'Tám',
+ up:'Chăm chỉ, học kỹ năng, tỉ mỉ, cam kết với công việc. Đang hoc hỏi và hoàn thiện kỹ năng với sự tập trung cao độ.',
+ rev:'Thiếu kết quả từ công sức, chủ nghĩa hoàn hảo, công việc kém chất lượng. Đang làm việc chăm chỉ nhưng thiếu phương hướng.',
+ kw:['Chăm chỉ','Kỹ năng','Tỉ mỉ','Học hỏi']},
+{id:72,name:'Chín Tiền',en:'Nine of Pentacles',type:'pentacles',sym:'🌿',num:'Chín',
+ up:'Độc lập tài chính, tự túc, sang trọng, hoàn chỉnh. Đã đạt được sự ổn định và tự chủ. Tận hưởng thành quả lao động.',
+ rev:'Phụ thuộc tài chính, thất bại dự án, ngắn hạn. Chưa đạt được sự tự chủ mong muốn hoặc đang chi tiêu quá mức.',
+ kw:['Độc lập','Tự túc','Sang trọng','Hoàn chỉnh']},
+{id:73,name:'Mười Tiền',en:'Ten of Pentacles',type:'pentacles',sym:'🏰',num:'Mười',
+ up:'Giàu có, di sản, hạnh phúc gia đình, hoàn chỉnh vật chất. Thịnh vượng lâu dài được chia sẻ với gia đình và thế hệ sau.',
+ rev:'Mất mát tài sản, rắc rối gia đình, thế chấp. Có rủi ro tài chính liên quan đến gia đình hoặc di sản.',
+ kw:['Di sản','Giàu có','Gia đình','Thịnh vượng lâu dài']},
+{id:74,name:'Trang Tiền',en:'Page of Pentacles',type:'pentacles',sym:'📚',num:'Trang',
+ up:'Cơ hội mới, học hỏi thực tế, tập trung, tin tức về tiền. Tinh thần ham học hỏi trong các vấn đề thực tế.',
+ rev:'Thiếu tập trung, trì hoãn, thiếu kỹ năng thực tế. Có ý định học nhưng thiếu kiên nhẫn để thực hiện.',
+ kw:['Học hỏi','Thực tế','Tập trung','Cơ hội']},
+{id:75,name:'Kỵ Sĩ Tiền',en:'Knight of Pentacles',type:'pentacles',sym:'🐂',num:'Kỵ Sĩ',
+ up:'Chăm chỉ, đáng tin, kiên nhẫn, phương pháp luận. Chậm mà chắc, tin tưởng vào quá trình và không bỏ cuộc.',
+ rev:'Bướng bỉnh, chậm chạp, không có kết quả. Đang mắc kẹt trong thói quen và từ chối thích nghi.',
+ kw:['Chăm chỉ','Đáng tin','Kiên nhẫn','Phương pháp']},
+{id:76,name:'Hoàng Hậu Tiền',en:'Queen of Pentacles',type:'pentacles',sym:'🌻',num:'HH',
+ up:'Người mẹ nuôi dưỡng, thực tế, giàu có, công việc nhà. Chăm sóc người khác trong khi vẫn xây dựng sự ổn định vật chất.',
+ rev:'Phụ thuộc, thiếu sự cân bằng, lơ là công việc. Bị mất cân bằng giữa chăm sóc người khác và chăm sóc bản thân.',
+ kw:['Nuôi dưỡng','Thực tế','Giàu có','Chăm sóc']},
+{id:77,name:'Vua Tiền',en:'King of Pentacles',type:'pentacles',sym:'🏦',num:'Vua',
+ up:'Sự thịnh vượng, kinh doanh, lãnh đạo, ổn định. Đã xây dựng được nền tảng vật chất vững chắc và lãnh đạo với sự khôn ngoan.',
+ rev:'Tham lam, tham nhũng, quản lý kém, bảo thủ. Đang dùng tiền bạc và quyền lực một cách không chính đáng.',
+ kw:['Thịnh vượng','Kinh doanh','Lãnh đạo','Ổn định']},
+];
+
+// ── Spread configs ──────────────────────────────────────────
+const SPREADS = {
+  1: [{pos:'Thông Điệp',desc:'Năng lượng và thông điệp chính cho câu hỏi của bạn'}],
+  3: [
+    {pos:'Quá Khứ',desc:'Nền tảng và những gì đã dẫn đến tình huống hiện tại'},
+    {pos:'Hiện Tại',desc:'Tình trạng hiện tại và những gì đang ảnh hưởng đến bạn'},
+    {pos:'Tương Lai',desc:'Xu hướng và kết quả có thể nếu tiếp tục theo hướng này'},
+  ],
+  10: [
+    {pos:'Tình Huống',desc:'Trung tâm — tình huống hay câu hỏi hiện tại'},
+    {pos:'Thách Thức',desc:'Điều đang cản trở hay thách thức bạn'},
+    {pos:'Quá Khứ Gần',desc:'Điều gì đó vừa qua ảnh hưởng đến tình huống'},
+    {pos:'Quá Khứ Xa',desc:'Nền tảng xa hơn của tình huống này'},
+    {pos:'Khả Năng Tốt Nhất',desc:'Điều tốt nhất có thể đạt được'},
+    {pos:'Tương Lai Gần',desc:'Điều sắp xảy ra trong thời gian ngắn'},
+    {pos:'Bản Thân',desc:'Cách bạn nhìn nhận tình huống'},
+    {pos:'Môi Trường',desc:'Những người và năng lượng xung quanh bạn'},
+    {pos:'Hy Vọng & Lo Sợ',desc:'Hy vọng sâu nhất hoặc nỗi lo sợ nhất của bạn'},
+    {pos:'Kết Quả',desc:'Kết quả có khả năng xảy ra nhất'},
+  ]
+};
+
+const SUIT_COLORS = {major:'#c9a84c',wands:'#E74C3C',cups:'#1455A4',swords:'#7F8C8D',pentacles:'#1E6B3C'};
+const SUIT_VI = {major:'Bí Ẩn Lớn',wands:'Gậy ♦ Lửa',cups:'Cốc ♦ Nước',swords:'Kiếm ♦ Gió',pentacles:'Tiền ♦ Đất'};
+
+let _spread = 1;
+let _drawn = [];
+
+function setSpread(n, btn) {
+  _spread = n;
+  document.querySelectorAll('.spread-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('result-section').classList.remove('active');
+}
+
+function draw() {
+  const btn = document.getElementById('drawBtn');
+  btn.disabled = true;
+  btn.textContent = '✦ Đang xáo bài...';
+  _drawn = [];
+  document.getElementById('result-section').classList.remove('active');
+
+  setTimeout(() => {
+    // Pick random cards
+    const count = _spread;
+    const picked = [];
+    const used = new Set();
+    while (picked.length < count) {
+      const idx = Math.floor(Math.random() * CARDS.length);
+      if (!used.has(idx)) { used.add(idx); picked.push(CARDS[idx]); }
+    }
+    // Randomly reversed (~35%)
+    _drawn = picked.map(c => ({ ...c, reversed: Math.random() < 0.35 }));
+
+    renderSpread();
+    btn.disabled = false;
+    btn.textContent = '✦ Xáo Bài & Rút Lại';
+  }, 800);
+}
+
+function renderSpread() {
+  const q = document.getElementById('question').value.trim();
+  document.getElementById('questionDisplay').textContent = q ? `"${q}"` : '';
+
+  const spread = SPREADS[_spread];
+  const area = document.getElementById('spreadArea');
+
+  // Build card slots
+  if (_spread === 1) {
+    area.innerHTML = `<div class="spread-1">${_drawn.map((c,i) => cardSlotHTML(c, spread[i], i, 'lg')).join('')}</div>`;
+  } else if (_spread === 3) {
+    area.innerHTML = `<div class="spread-3">${_drawn.map((c,i) => cardSlotHTML(c, spread[i], i)).join('')}</div>`;
+  } else {
+    // Celtic cross
+    const classes = ['cc1','cc2','cc3','cc4','cc5','cc6','cc7','cc8','cc9','cc10'];
+    area.innerHTML = `<div class="spread-celtic">${_drawn.map((c,i) => `<div class="card-slot ${classes[i]}">${cardBack(i)}<div class="slot-label">${spread[i].pos}</div></div>`).join('')}</div>`;
+  }
+
+  // Animate flip after render
+  setTimeout(() => {
+    _drawn.forEach((c, i) => flipCard(i, c));
+  }, 300);
+
+  // Render meanings
+  renderMeanings();
+  document.getElementById('result-section').classList.add('active');
+  setTimeout(() => document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' }), 400);
+}
+
+function cardBack(i) {
+  return `<div class="card-scene" id="scene-${i}" onclick="flipCard(${i})">
+    <div class="card-inner" id="inner-${i}">
+      <div class="card-back"></div>
+      <div class="card-face${_drawn[i]?.type==='major'?' major':''}" id="face-${i}"></div>
+    </div>
+  </div>`;
+}
+
+function cardSlotHTML(c, sp, i, size='') {
+  return `<div class="card-slot">${cardBack(i)}<div class="slot-label">${sp.pos}</div></div>`;
+}
+
+function flipCard(i) {
+  const c = _drawn[i]; if (!c) return;
+  const inner = document.getElementById(`inner-${i}`);
+  const face = document.getElementById(`face-${i}`);
+  if (!inner || !face) return;
+  const col = SUIT_COLORS[c.type] || '#c9a84c';
+  face.innerHTML = `<div class="cf-num" style="color:${col}">${c.num}</div><div class="cf-symbol" style="color:${col}">${c.sym}</div><div class="cf-name">${c.name}</div><div class="cf-suit">${SUIT_VI[c.type]}</div>`;
+  if (c.reversed) {
+    face.classList.add('is-reversed');
+    inner.classList.add('reversed');
+  } else {
+    inner.classList.add('flipped');
+  }
+}
+
+function renderMeanings() {
+  const spread = SPREADS[_spread];
+  document.getElementById('readingResult').innerHTML = `
+    <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);margin-bottom:16px">✦ Luận Giải Từng Lá</div>
+    ${_drawn.map((c, i) => {
+      const col = SUIT_COLORS[c.type] || '#c9a84c';
+      const meaning = c.reversed ? c.rev : c.up;
+      return `<div class="card-meaning" style="border-left-color:${col}">
+        <div class="cm-header">
+          <div class="cm-symbol" style="color:${col}">${c.sym}</div>
+          <div class="cm-info">
+            <div class="cm-name">${c.name} <span style="font-size:12px;color:var(--text-lt);font-weight:400">(${c.en})</span></div>
+            <div class="cm-sub">${SUIT_VI[c.type]} · ${spread[i].pos}</div>
+            <span class="cm-pos ${c.reversed ? 'pos-reversed' : 'pos-upright'}">${c.reversed ? '↕ Ngược' : '↑ Xuôi'}</span>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--text-lt);margin-bottom:8px;font-style:italic">${spread[i].desc}</div>
+        <div class="cm-body">${meaning}</div>
+        <div class="cm-keywords">${c.kw.map(k => `<span class="cm-kw">${k}</span>`).join('')}</div>
+      </div>`;
+    }).join('')}`;
+}
+</script>
+</body>
+</html>

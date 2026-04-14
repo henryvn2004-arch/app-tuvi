@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Bói Bài Tây – Tử Vi Minh Bảo</title>
+<meta name="description" content="Bói bài Tây 52 lá đầy đủ — rút 1, 3 hoặc 5 lá. Ý nghĩa theo chủ đề: tình yêu, sự nghiệp, tài chính và tổng quan. Đơn giản, trực quan, miễn phí.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<style>
+/* ── Playing Card ── */
+.pc-scene{width:80px;height:120px;perspective:600px;cursor:pointer;flex-shrink:0}
+.pc-scene.lg{width:100px;height:150px}
+.pc-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .6s ease}
+.pc-inner.flipped{transform:rotateY(180deg)}
+.pc-front,.pc-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:8px;border:2px solid var(--border)}
+.pc-back{background:repeating-linear-gradient(45deg,#061A2E 0px,#061A2E 4px,#0D3B5E 4px,#0D3B5E 8px);display:flex;align-items:center;justify-content:center}
+.pc-back::after{content:'🂠';font-size:32px;filter:grayscale(1);opacity:.3}
+.pc-front{transform:rotateY(180deg);background:#fff;display:flex;flex-direction:column;padding:6px;position:relative}
+.pc-corner-tl,.pc-corner-br{position:absolute;line-height:1;font-weight:700}
+.pc-corner-tl{top:5px;left:7px;font-size:14px}
+.pc-corner-br{bottom:5px;right:7px;font-size:14px;transform:rotate(180deg)}
+.pc-center{flex:1;display:flex;align-items:center;justify-content:center;font-size:32px}
+.suit-hearts,.suit-diamonds{color:#CC2200}
+.suit-spades,.suit-clubs{color:#1a1a1a}
+.card-slot{display:flex;flex-direction:column;align-items:center;gap:8px}
+.slot-label{font-size:10px;font-weight:700;color:var(--text-lt);letter-spacing:1px;text-transform:uppercase;text-align:center;max-width:80px;line-height:1.4}
+.spread-area{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin:24px 0}
+/* Topic tabs */
+.topic-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;justify-content:center}
+.topic-tab{padding:6px 14px;font-size:12px;border:1px solid var(--border);border-radius:20px;cursor:pointer;background:var(--bg-soft);color:var(--text-mid);transition:all .15s;font-family:inherit}
+.topic-tab:hover,.topic-tab.active{background:#c9a84c22;border-color:#c9a84c;color:#9A7B3A;font-weight:600}
+/* Meaning card */
+.pc-meaning{padding:20px 24px;border-radius:8px;margin-bottom:14px;border:1px solid var(--border-lt)}
+.pcm-header{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.pcm-symbol{font-size:44px;line-height:1;width:56px;text-align:center;flex-shrink:0}
+.pcm-info{}
+.pcm-name{font-size:15px;font-weight:700;color:var(--navy)}
+.pcm-sub{font-size:11px;color:var(--text-lt);margin-top:2px}
+.pcm-body{font-size:14px;color:var(--text-mid);line-height:1.8;margin-bottom:10px}
+.pcm-topics{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pcm-topic{padding:10px 12px;border-radius:6px;border:1px solid var(--border-lt)}
+.pcm-topic-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.pcm-topic-text{font-size:12px;color:var(--text-mid);line-height:1.6}
+.spread-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:24px}
+.spread-btn{padding:10px 20px;background:var(--bg-soft);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:13px;font-family:inherit;color:var(--text-mid);transition:all .15s}
+.spread-btn:hover,.spread-btn.active{background:#c9a84c22;border-color:#c9a84c;color:#9A7B3A;font-weight:600}
+.draw-btn{display:block;margin:0 auto;padding:14px 40px;background:var(--navy);color:#c9a84c;border:2px solid #c9a84c;font-size:15px;font-weight:700;border-radius:6px;cursor:pointer;font-family:inherit;transition:all .2s}
+.draw-btn:hover{background:#0D3B5E}
+@media(max-width:480px){.pcm-topics{grid-template-columns:1fr}.pc-scene{width:66px;height:100px}.pc-scene.lg{width:80px;height:120px}}
+</style>
+</head>
+<body>
+<script src="/nav.js"></script>
+
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Miễn Phí</div>
+    <h1>Bói <em>Bài Tây</em><br>52 Lá Đầy Đủ</h1>
+    <p>Bộ bài 52 lá quen thuộc — rút 1, 3 hoặc 5 lá với ý nghĩa chi tiết theo chủ đề tình yêu, sự nghiệp, tài chính. Đơn giản và trực quan.</p>
+  </div>
+</div>
+
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Bói Bài Tây hoạt động thế nào?</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">52 Lá — 4 Chất<br>Phản Chiếu 4 Lĩnh Vực Cuộc Đời</h2>
+          <p class="xt-body">Bộ bài Tây 52 lá được sử dụng để bói từ thế kỷ 15. Bốn chất tương ứng với bốn lĩnh vực: <strong>Cơ ♥</strong> (tình cảm, gia đình), <strong>Rô ♦</strong> (tiền bạc, vật chất), <strong>Bích ♠</strong> (thách thức, tư duy), <strong>Nhép ♣</strong> (sự nghiệp, hành động).</p>
+          <p class="xt-body">Số lá từ A đến K tương ứng với các giai đoạn từ khởi đầu đến hoàn chỉnh. Bộ bài đơn giản nhưng lại phản chiếu đầy đủ các mặt của cuộc sống khi được diễn giải đúng cách.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">Ý Nghĩa 4 Chất Bài</div>
+          <div class="xt-factor-item"><span style="color:#CC2200;font-size:18px">♥</span><span class="xt-factor-label">Cơ (Hearts)</span><span class="xt-factor-desc">Tình cảm, tình yêu, gia đình, cảm xúc và mối quan hệ</span></div>
+          <div class="xt-factor-item"><span style="color:#CC2200;font-size:18px">♦</span><span class="xt-factor-label">Rô (Diamonds)</span><span class="xt-factor-desc">Tiền bạc, tài chính, vật chất và giá trị thực tế</span></div>
+          <div class="xt-factor-item"><span style="color:#1a1a1a;font-size:18px">♠</span><span class="xt-factor-label">Bích (Spades)</span><span class="xt-factor-desc">Thách thức, trí tuệ, xung đột và những quyết định khó</span></div>
+          <div class="xt-factor-item"><span style="color:#1a1a1a;font-size:18px">♣</span><span class="xt-factor-label">Nhép (Clubs)</span><span class="xt-factor-desc">Sự nghiệp, hành động, sáng tạo và tăng trưởng</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-eyebrow">Chọn Kiểu Rút Bài</div>
+    <div class="spread-btns">
+      <button class="spread-btn active" onclick="setSpread(1,this)">1 Lá — Thông Điệp Hôm Nay</button>
+      <button class="spread-btn" onclick="setSpread(3,this)">3 Lá — Tình Trạng · Thách Thức · Kết Quả</button>
+      <button class="spread-btn" onclick="setSpread(5,this)">5 Lá — Trải Bài Ngũ Hành</button>
+    </div>
+    <div class="form-group" style="max-width:500px;margin:0 auto 24px">
+      <label class="form-label">Câu hỏi (tùy chọn)</label>
+      <input class="form-input" type="text" id="question" placeholder="VD: Tình hình tài chính của tôi thời gian tới?" maxlength="120">
+    </div>
+    <div style="text-align:center">
+      <button class="draw-btn" id="drawBtn" onclick="draw()">🂠 Xáo Bài &amp; Rút</button>
+    </div>
+  </div>
+
+  <div class="result-section" id="result-section">
+    <div id="questionDisplay" style="text-align:center;font-style:italic;color:var(--text-lt);font-size:13px;margin-bottom:20px"></div>
+    <div class="spread-area" id="spreadArea"></div>
+    <div id="readingResult" style="margin-top:24px"></div>
+  </div>
+
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Kết Hợp Nhiều Hệ Thống</div>
+    <div class="tool-cta-title">Bài Tây + Tarot + Tử Vi</div>
+    <div class="tool-cta-desc">Bài Tây cho câu trả lời nhanh hàng ngày. Tarot cho chiều sâu hơn. Tử Vi Đẩu Số cho vận trình dài hạn theo lá số cá nhân — ba công cụ bổ trợ nhau hoàn hảo.</div>
+    <a class="tool-cta-btn" href="/tools/tarot.html">Thử Tarot 78 Lá →</a>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
+
+<script>
+// ── 4 suits ──────────────────────────────────────────────────
+const SUITS = [
+  {id:'h',sym:'♥',name:'Cơ',cls:'suit-hearts',color:'#CC2200'},
+  {id:'d',sym:'♦',name:'Rô',cls:'suit-diamonds',color:'#CC2200'},
+  {id:'s',sym:'♠',name:'Bích',cls:'suit-spades',color:'#1a1a1a'},
+  {id:'c',sym:'♣',name:'Nhép',cls:'suit-clubs',color:'#1a1a1a'},
+];
+// ── Rank meanings ─────────────────────────────────────────────
+const RANKS = [
+  {r:'A',label:'Át',gen:'Khởi đầu mạnh mẽ, cơ hội lớn, sức mạnh tuyệt đỉnh. Lá Át là lá mạnh nhất — đại diện cho sức mạnh thuần túy và tiềm năng vô hạn.',
+   love:'Tình yêu mới và nồng nhiệt, hoặc sự tái sinh trong mối quan hệ hiện tại. Cơ hội tuyệt vời cho tình cảm.',
+   career:'Dự án mới hoặc cơ hội nghề nghiệp lớn đang đến. Đây là thời điểm để bắt đầu điều gì đó mới.',
+   finance:'Tài lộc bất ngờ, đầu tư sinh lợi cao. Cơ hội tài chính tốt đang xuất hiện.'},
+  {r:'2',label:'Hai',gen:'Duality, đối tác, cân bằng, hợp tác. Hai người hoặc hai lực đang ảnh hưởng đến tình huống.',
+   love:'Mối quan hệ hai chiều đang phát triển. Cần sự cân bằng và đồng thuận từ cả hai phía.',
+   career:'Hợp tác và làm việc nhóm quan trọng hơn lúc nào hết. Cần người đồng hành để thành công.',
+   finance:'Chia sẻ chi phí hoặc đầu tư chung. Tránh quyết định tài chính một mình.'},
+  {r:'3',label:'Ba',gen:'Phát triển, sáng tạo, biểu đạt, cộng đồng. Tam giác — ba chiều của tình huống đang hoạt động.',
+   love:'Tình cảm đang phát triển tốt. Có thể có sự tham gia của bên thứ ba — người mai mối, bạn bè chung.',
+   career:'Dự án sáng tạo đang triển khai. Kết nối với cộng đồng và mạng lưới để mở rộng cơ hội.',
+   finance:'Tăng trưởng tài chính dần dần. Đầu tư vào sự phát triển dài hạn.'},
+  {r:'4',label:'Bốn',gen:'Ổn định, nền tảng, an toàn, trật tự. Bốn góc vững chắc — cần xây dựng nền tảng trước khi mở rộng.',
+   love:'Mối quan hệ ổn định và an toàn. Đây là lúc xây dựng cam kết lâu dài.',
+   career:'Ổn định công việc nhưng có thể thiếu thú vị. Tập trung vào việc xây dựng kỹ năng và nền tảng.',
+   finance:'Tài chính ổn định, không nhiều biến động. Đây là lúc tiết kiệm và tích lũy.'},
+  {r:'5',label:'Năm',gen:'Thay đổi, xung đột, thử thách, không ổn định. Năm là con số của sự đột biến và thách thức.',
+   love:'Có mâu thuẫn hoặc thách thức trong tình cảm. Cần giao tiếp thẳng thắn để giải quyết.',
+   career:'Giai đoạn khó khăn hoặc cạnh tranh cao. Cần thích nghi và linh hoạt hơn.',
+   finance:'Biến động tài chính, rủi ro. Cẩn thận với các quyết định chi tiêu lớn.'},
+  {r:'6',label:'Sáu',gen:'Hài hoà, hỗ trợ, trách nhiệm, cân bằng. Sáu là con số của tình yêu và trách nhiệm.',
+   love:'Mối quan hệ hài hoà và ổn định. Cả hai đang hỗ trợ lẫn nhau tốt.',
+   career:'Được đồng nghiệp và cấp trên hỗ trợ. Môi trường làm việc hài hoà.',
+   finance:'Thu nhập ổn định và cân bằng chi tiêu tốt. Có thể hỗ trợ tài chính cho người khác.'},
+  {r:'7',label:'Bảy',gen:'Trực giác, bí ẩn, chiêm nghiệm, may mắn. Bảy là con số của trực giác và vận may.',
+   love:'Tình cảm có yếu tố bí ẩn hoặc chưa rõ ràng. Hãy lắng nghe trực giác trong tình yêu.',
+   career:'Cơ hội bất ngờ hoặc cần dựa vào trực giác để quyết định. Tin vào linh cảm của bạn.',
+   finance:'Vận may bất ngờ có thể đến. Nhưng cũng cần cẩn thận với những đầu tư mạo hiểm.'},
+  {r:'8',label:'Tám',gen:'Quyền lực, sức mạnh, thành tích, tái tạo. Tám là con số của sức mạnh và thịnh vượng.',
+   love:'Sức mạnh và đam mê trong tình cảm. Mối quan hệ đang ở giai đoạn mạnh mẽ và sâu sắc.',
+   career:'Thành tích và được công nhận. Đây là thời điểm thể hiện năng lực và lấy lại quyền kiểm soát.',
+   finance:'Tài chính mạnh và có tiềm năng tăng trưởng lớn. Đây là lúc đầu tư táo bạo hơn.'},
+  {r:'9',label:'Chín',gen:'Hoàn thành, trí tuệ, nhân đạo, bài học. Chín là gần đến đích — nhưng hành trình chưa xong.',
+   love:'Mối quan hệ đã trưởng thành và sâu sắc. Đây là lúc nhìn lại và củng cố những gì đã xây dựng.',
+   career:'Gần hoàn thành một giai đoạn. Bài học quan trọng cần được rút ra trước khi chuyển sang chương tiếp theo.',
+   finance:'Tài chính tốt, có thể chia sẻ với người khác. Đây là lúc đầu tư vào điều có ý nghĩa lâu dài.'},
+  {r:'10',label:'Mười',gen:'Hoàn chỉnh, chu kỳ kết thúc, khởi đầu mới. Mười là điểm hoàn chỉnh và chuẩn bị cho chu kỳ tiếp theo.',
+   love:'Một giai đoạn trong tình cảm đang kết thúc để bắt đầu giai đoạn mới tốt đẹp hơn.',
+   career:'Dự án hoặc giai đoạn công việc hoàn chỉnh. Chuẩn bị cho thử thách và cơ hội mới.',
+   finance:'Chu kỳ tài chính hoàn chỉnh — có thể là trả xong nợ, hoàn thành đầu tư, hay kết thúc hợp đồng.'},
+  {r:'J',label:'Bồi',gen:'Người trẻ tuổi, năng lượng tươi mới, thông điệp, người đưa tin. Bồi đại diện cho một người trẻ hoặc tin tức mới.',
+   love:'Người mới vào cuộc sống hoặc tin tức về tình cảm. Có thể là người có cảm tình với bạn.',
+   career:'Đồng nghiệp trẻ hoặc nhân viên mới. Cũng có thể là cơ hội từ người trẻ tuổi hơn.',
+   finance:'Tin tức về tài chính đang đến. Người trẻ tuổi có thể ảnh hưởng đến tài chính của bạn.'},
+  {r:'Q',label:'Đầm',gen:'Người phụ nữ, trực giác, sáng tạo, chăm sóc. Đầm đại diện cho một người phụ nữ hoặc năng lượng nữ tính.',
+   love:'Người phụ nữ quan trọng trong tình cảm. Hoặc bạn cần thể hiện sự nhạy cảm và quan tâm hơn.',
+   career:'Người phụ nữ ảnh hưởng đến sự nghiệp. Cần sử dụng trực giác và kỹ năng giao tiếp.',
+   finance:'Người phụ nữ liên quan đến quyết định tài chính. Dựa vào trực giác trong đầu tư.'},
+  {r:'K',label:'Già',gen:'Người có quyền lực, trưởng thành, thẩm quyền, lãnh đạo. Già đại diện cho lãnh đạo hoặc người có ảnh hưởng.',
+   love:'Người đàn ông quan trọng hoặc năng lượng lãnh đạo trong tình cảm. Ổn định và trưởng thành.',
+   career:'Sếp hoặc người có quyền lực ảnh hưởng. Thể hiện sự chín chắn và khả năng lãnh đạo.',
+   finance:'Người có kinh nghiệm tài chính hoặc cố vấn quan trọng. Đây là lúc tư vấn chuyên gia.'},
+];
+
+// Build 52 cards
+const CARDS = [];
+SUITS.forEach(suit => {
+  RANKS.forEach(rank => {
+    CARDS.push({ id: `${rank.r}${suit.id}`, suit, rank,
+      display: rank.r === '10' ? '10' : rank.r });
+  });
+});
+
+const SPREAD_LABELS = {
+  1: [{pos:'Thông Điệp',desc:'Năng lượng và thông điệp chính của ngày'}],
+  3: [{pos:'Tình Trạng',desc:'Tình huống hiện tại của bạn'},{pos:'Thách Thức',desc:'Điều đang cản trở hoặc thử thách bạn'},{pos:'Kết Quả',desc:'Hướng đi có thể nếu tiếp tục'}],
+  5: [
+    {pos:'Trung Tâm',desc:'Trọng tâm của tình huống'},
+    {pos:'Quá Khứ',desc:'Điều đã ảnh hưởng đến hiện tại'},
+    {pos:'Tương Lai',desc:'Xu hướng sắp xảy ra'},
+    {pos:'Bên Trong',desc:'Suy nghĩ và cảm xúc của bạn'},
+    {pos:'Bên Ngoài',desc:'Ảnh hưởng từ môi trường xung quanh'},
+  ]
+};
+
+let _spread = 1, _drawn = [];
+
+function setSpread(n, btn) {
+  _spread = n;
+  document.querySelectorAll('.spread-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('result-section').classList.remove('active');
+}
+
+function draw() {
+  const btn = document.getElementById('drawBtn');
+  btn.disabled = true; btn.textContent = '🂠 Đang xáo bài...';
+  setTimeout(() => {
+    const used = new Set(); const picked = [];
+    while (picked.length < _spread) {
+      const i = Math.floor(Math.random() * CARDS.length);
+      if (!used.has(i)) { used.add(i); picked.push(CARDS[i]); }
+    }
+    _drawn = picked;
+    renderResult();
+    btn.disabled = false; btn.textContent = '🂠 Xáo Bài & Rút Lại';
+  }, 600);
+}
+
+function renderResult() {
+  const q = document.getElementById('question').value.trim();
+  document.getElementById('questionDisplay').textContent = q ? `"${q}"` : '';
+  const spread = SPREAD_LABELS[_spread];
+
+  document.getElementById('spreadArea').innerHTML = _drawn.map((c, i) =>
+    `<div class="card-slot">
+      <div class="pc-scene${_spread === 1 ? ' lg' : ''}" id="pscene-${i}">
+        <div class="pc-inner" id="pinner-${i}">
+          <div class="pc-back"></div>
+          <div class="pc-front">
+            <div class="pc-corner-tl ${c.suit.cls}">${c.display}<br>${c.suit.sym}</div>
+            <div class="pc-center ${c.suit.cls}">${c.suit.sym}</div>
+            <div class="pc-corner-br ${c.suit.cls}">${c.display}<br>${c.suit.sym}</div>
+          </div>
+        </div>
+      </div>
+      <div class="slot-label">${spread[i].pos}</div>
+    </div>`
+  ).join('');
+
+  // Stagger flip
+  setTimeout(() => _drawn.forEach((_, i) => {
+    setTimeout(() => {
+      const el = document.getElementById(`pinner-${i}`);
+      if (el) el.classList.add('flipped');
+    }, i * 250);
+  }), 200);
+
+  // Meanings
+  document.getElementById('readingResult').innerHTML =
+    `<div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);margin-bottom:16px">Luận Giải Từng Lá</div>`+
+    _drawn.map((c, i) => {
+      const col = c.suit.color;
+      const r = c.rank; const s = c.suit;
+      return `<div class="pc-meaning" style="border-left:4px solid ${col}">
+        <div class="pcm-header">
+          <div class="pcm-symbol ${s.cls}">${s.sym}</div>
+          <div class="pcm-info">
+            <div class="pcm-name">${r.label} ${s.name} <span style="font-size:12px;font-weight:400;color:var(--text-lt)">(${r.r} of ${s.name === 'Cơ' ? 'Hearts' : s.name === 'Rô' ? 'Diamonds' : s.name === 'Bích' ? 'Spades' : 'Clubs'})</span></div>
+            <div class="pcm-sub">${s.name} · ${spread[i].pos}</div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--text-lt);margin-bottom:10px;font-style:italic">${spread[i].desc}</div>
+        <div class="pcm-body">${r.gen}</div>
+        <div class="pcm-topics">
+          <div class="pcm-topic" style="border-color:${col}33;background:${col}08">
+            <div class="pcm-topic-label" style="color:${col}">❤ Tình Cảm</div>
+            <div class="pcm-topic-text">${r.love}</div>
+          </div>
+          <div class="pcm-topic" style="border-color:#1E6B3C33;background:#1E6B3C08">
+            <div class="pcm-topic-label" style="color:#1E6B3C">💼 Sự Nghiệp</div>
+            <div class="pcm-topic-text">${r.career}</div>
+          </div>
+          <div class="pcm-topic" style="border-color:#c9a84c33;background:#c9a84c08">
+            <div class="pcm-topic-label" style="color:#9A7B3A">💰 Tài Chính</div>
+            <div class="pcm-topic-text">${r.finance}</div>
+          </div>
+          <div class="pcm-topic" style="border-color:var(--border)">
+            <div class="pcm-topic-label" style="color:var(--text-lt)">🃏 Chất Bài</div>
+            <div class="pcm-topic-text">${s.name === 'Cơ' ? 'Tình cảm, cảm xúc và các mối quan hệ' : s.name === 'Rô' ? 'Vật chất, tiền bạc và giá trị thực' : s.name === 'Bích' ? 'Thách thức, trí tuệ và xung đột' : 'Sự nghiệp, hành động và tăng trưởng'}</div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+
+  document.getElementById('result-section').classList.add('active');
+  setTimeout(() => document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' }), 500);
+}
+</script>
+</body>
+</html>

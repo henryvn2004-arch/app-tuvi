@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Oracle Minh Triết Phương Đông – Tử Vi Minh Bảo</title>
+<meta name="description" content="Bộ bài Oracle 40 lá theo triết học phương Đông — Âm Dương, Ngũ Hành, Bát Quái, Kinh Dịch, Thiên Can Địa Chi. Rút 1, 3 hoặc 5 lá.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<style>
+.oracle-grid{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin:24px 0}
+.o-card-scene{width:120px;height:200px;perspective:700px;cursor:pointer;flex-shrink:0}
+.o-card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.4,0,.2,1)}
+.o-card-inner.flipped{transform:rotateY(180deg)}
+.o-face,.o-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 8px}
+.o-back{background:linear-gradient(135deg,#061A2E,#1455A4,#061A2E);border:2px solid #c9a84c;text-align:center}
+.o-back-seal{font-size:36px;margin-bottom:8px}
+.o-back-brand{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#c9a84c;opacity:.8}
+.o-face{transform:rotateY(180deg);border:2px solid var(--border-lt);text-align:center}
+.o-face .of-symbol{font-size:48px;line-height:1;margin-bottom:8px}
+.o-face .of-name{font-size:12px;font-weight:700;color:var(--navy);line-height:1.3;margin-bottom:4px}
+.o-face .of-sub{font-size:10px;color:var(--text-lt)}
+/* Category color bands */
+.cat-am-duong .o-face{background:linear-gradient(180deg,#fdfcf8 0%,#fff 100%);border-color:#c9a84c}
+.cat-ngu-hanh .o-face{background:linear-gradient(180deg,#f0fff4 0%,#fff 100%);border-color:#1E6B3C}
+.cat-bat-quai .o-face{background:linear-gradient(180deg,#f0f4ff 0%,#fff 100%);border-color:#1455A4}
+.cat-can-chi .o-face{background:linear-gradient(180deg,#fff8f0 0%,#fff 100%);border-color:#9A7B3A}
+.cat-cuoc-doi .o-face{background:linear-gradient(180deg,#fef0ef 0%,#fff 100%);border-color:#C0392B}
+/* Result */
+.oracle-meaning{padding:24px;border-radius:12px;margin-bottom:16px;border:1px solid var(--border-lt)}
+.om-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:16px}
+.om-symbol{font-size:52px;line-height:1;flex-shrink:0}
+.om-meta{}
+.om-name{font-size:18px;font-weight:700;color:var(--navy)}
+.om-sub{font-size:12px;color:var(--text-lt);margin-top:2px}
+.om-pos{font-size:10px;font-weight:700;padding:2px 8px;border-radius:2px;display:inline-block;margin-top:6px;letter-spacing:1px}
+.om-body{font-size:14px;color:var(--text-mid);line-height:1.85;margin-bottom:12px}
+.om-guidance{font-size:13px;color:var(--text-mid);line-height:1.8;padding:12px 16px;background:var(--bg-soft);border-radius:6px;border-left:3px solid var(--gold);margin-bottom:12px}
+.om-kw{display:flex;gap:6px;flex-wrap:wrap}
+.kw-tag{font-size:11px;padding:2px 8px;border-radius:2px;background:var(--gold-lt);border:1px solid #e8d9b0;color:#9A7B3A}
+.spread-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:24px}
+.spread-btn{padding:10px 20px;background:var(--bg-soft);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:13px;font-family:inherit;color:var(--text-mid);transition:all .15s}
+.spread-btn:hover,.spread-btn.active{background:#c9a84c22;border-color:#c9a84c;color:#9A7B3A;font-weight:600}
+.draw-btn{display:block;margin:0 auto;padding:14px 40px;background:var(--navy);color:#c9a84c;border:2px solid #c9a84c;font-size:15px;font-weight:700;border-radius:6px;cursor:pointer;font-family:'Noto Serif',Georgia,serif;letter-spacing:1px;transition:all .2s}
+.draw-btn:hover{background:#0D3B5E}
+.card-slot{display:flex;flex-direction:column;align-items:center;gap:8px}
+.slot-label{font-size:10px;font-weight:700;color:var(--text-lt);letter-spacing:1px;text-transform:uppercase;text-align:center;max-width:110px;line-height:1.4}
+</style>
+</head>
+<body>
+<script src="/nav.js"></script>
+
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Miễn Phí</div>
+    <h1>Oracle<br><em>Minh Triết Phương Đông</em></h1>
+    <p>Bộ bài Oracle 40 lá theo triết học phương Đông — Âm Dương, Ngũ Hành, Bát Quái, Thiên Can Địa Chi và các nguyên lý vũ trụ. Thông điệp sâu sắc, ngôn ngữ Tử Vi.</p>
+  </div>
+</div>
+
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Oracle Phương Đông là gì?</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">40 Lá Minh Triết —<br>Ngôn Ngữ Của Vũ Trụ Phương Đông</h2>
+          <p class="xt-body">Khác với Tarot có nguồn gốc phương Tây, bộ Oracle này được thiết kế riêng theo các nguyên lý phương Đông: <strong>Âm Dương</strong> (cân bằng đối lập), <strong>Ngũ Hành</strong> (năm nguyên tố), <strong>Bát Quái</strong> (tám lực lượng), <strong>Thiên Can Địa Chi</strong> (thời gian và vận mệnh) và các nguyên lý của cuộc đời.</p>
+          <p class="xt-body">Mỗi lá bài chứa đựng một nguyên lý triết học sâu sắc và được dịch thành thông điệp thực tiễn cho cuộc sống hiện đại.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">5 Nhóm Lá Bài</div>
+          <div class="xt-factor-item"><span style="font-size:16px">☯</span><span class="xt-factor-label">Âm Dương (8 lá)</span><span class="xt-factor-desc">Nguyên lý cân bằng và đối lập trong mọi sự vật</span></div>
+          <div class="xt-factor-item"><span style="font-size:16px">🌿</span><span class="xt-factor-label">Ngũ Hành (10 lá)</span><span class="xt-factor-desc">Mộc · Hỏa · Thổ · Kim · Thủy và tương sinh khắc</span></div>
+          <div class="xt-factor-item"><span style="font-size:16px">☵</span><span class="xt-factor-label">Bát Quái (8 lá)</span><span class="xt-factor-desc">Tám lực lượng vũ trụ từ Kinh Dịch</span></div>
+          <div class="xt-factor-item"><span style="font-size:16px">🌀</span><span class="xt-factor-label">Thiên Can & Địa Chi (8 lá)</span><span class="xt-factor-desc">Vận trình, thời gian và năng lượng chu kỳ</span></div>
+          <div class="xt-factor-item"><span style="font-size:16px">🌸</span><span class="xt-factor-label">Triết Lý Cuộc Đời (6 lá)</span><span class="xt-factor-desc">Nhân Quả, Vô Thường, Trung Đạo, Thuận Thế...</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-eyebrow">Chọn Kiểu Rút Bài</div>
+    <div class="spread-btns">
+      <button class="spread-btn active" onclick="setSpread(1,this)">✦ 1 Lá — Thông Điệp Hiện Tại</button>
+      <button class="spread-btn" onclick="setSpread(3,this)">⊹ 3 Lá — Nhân · Duyên · Quả</button>
+      <button class="spread-btn" onclick="setSpread(5,this)">✺ 5 Lá — Ngũ Hành Cuộc Đời</button>
+    </div>
+    <div class="form-group" style="max-width:500px;margin:0 auto 24px">
+      <label class="form-label">Câu hỏi hoặc chủ đề muốn chiêm nghiệm (tùy chọn)</label>
+      <input class="form-input" type="text" id="question" placeholder="VD: Tôi cần nhận ra điều gì trong giai đoạn này?" maxlength="120">
+    </div>
+    <div style="text-align:center">
+      <button class="draw-btn" id="drawBtn" onclick="draw()">✦ Định Tâm &amp; Rút Bài</button>
+    </div>
+  </div>
+
+  <div class="result-section" id="result-section">
+    <div id="questionDisplay" style="text-align:center;font-style:italic;color:var(--text-lt);font-size:13px;margin-bottom:20px"></div>
+    <div class="oracle-grid" id="spreadArea"></div>
+    <div id="readingResult" style="margin-top:24px"></div>
+  </div>
+
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Kết Hợp Oracle &amp; Tử Vi</div>
+    <div class="tool-cta-title">Thông Điệp Hôm Nay + Vận Trình Dài Hạn</div>
+    <div class="tool-cta-desc">Oracle cho thông điệp ngắn hạn và sự chiêm nghiệm. Lá số Tử Vi cho thấy vận trình dài hạn cá nhân — kết hợp hai công cụ để có bức tranh toàn diện.</div>
+    <a class="tool-cta-btn" href="/luan-giai.html">Xem Lá Số Tử Vi ($19) →</a>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// 40 ORACLE CARDS — Minh Triết Phương Đông
+// ═══════════════════════════════════════════════════════════
+const CARDS = [
+// ── ÂM DƯƠNG (8 lá) ─────────────────────────────────────────
+{id:0,sym:'☯',name:'Âm Dương',cat:'am-duong',catVI:'Âm Dương',
+ msg:'Vạn vật tồn tại trong sự đối lập hài hoà. Điều mà bạn cho là tối tăm đang chứa đựng mầm sáng; điều sáng chói đang mang trong mình hạt nhân của bóng tối. Đừng cưỡng lại sự đối lập — hãy tìm sự cân bằng trong đó.',
+ guide:'Nhìn nhận lại tình huống từ góc độ đối lập. Điều gì bạn đang phủ nhận có thể chính là bài học quan trọng nhất.',
+ kw:['Cân bằng','Đối lập','Hài hoà','Dung hoà']},
+{id:1,sym:'🌓',name:'Thái Cực',cat:'am-duong',catVI:'Âm Dương',
+ msg:'Từ Thái Cực sinh Lưỡng Nghi — từ cái một nảy sinh cái hai, rồi vạn vật. Bạn đang đứng ở điểm khởi đầu của một chu kỳ mới. Mọi tiềm năng đang nằm trong trạng thái tĩnh lặng, chờ thời điểm chín muồi.',
+ guide:'Đây là thời điểm để quan sát, không phải hành động vội. Nguyên nhân đang được gieo; kết quả sẽ đến đúng lúc.',
+ kw:['Khởi đầu','Tiềm năng','Chu kỳ','Nguồn gốc']},
+{id:2,sym:'🌑',name:'Âm',cat:'am-duong',catVI:'Âm Dương',
+ msg:'Năng lượng Âm — tiếp nhận, nội tâm, nghỉ ngơi, nuôi dưỡng. Đây là lúc lắng đọng, thu về, nạp năng lượng. Hành động nhiều không bằng lắng nghe sâu.',
+ guide:'Dành thời gian một mình. Lắng nghe trực giác. Đừng ép bản thân phải tỏa sáng ngay lúc này — hãy để năng lượng tích lũy tự nhiên.',
+ kw:['Nội tâm','Nghỉ ngơi','Tiếp nhận','Nuôi dưỡng']},
+{id:3,sym:'☀',name:'Dương',cat:'am-duong',catVI:'Âm Dương',
+ msg:'Năng lượng Dương — toả ra, hành động, sáng tạo, biểu hiện. Đây là thời điểm của sức mạnh và sự thể hiện. Ánh sáng trong bạn đang muốn được chia sẻ với thế giới.',
+ guide:'Đây là lúc hành động. Chia sẻ ý tưởng, dẫn dắt, tạo ra. Năng lượng của bạn đang ở đỉnh cao — hãy sử dụng nó một cách khôn ngoan.',
+ kw:['Hành động','Toả sáng','Sáng tạo','Thể hiện']},
+{id:4,sym:'🔄',name:'Chuyển Hoá',cat:'am-duong',catVI:'Âm Dương',
+ msg:'Âm cực tắc Dương, Dương cực tắc Âm. Khi mọi thứ đạt đến đỉnh điểm, sự chuyển hoá tất yếu bắt đầu. Đừng sợ sự thay đổi — nó là bằng chứng rằng bạn đang sống và phát triển.',
+ guide:'Điều gì trong cuộc sống của bạn đang ở đỉnh và sắp chuyển hoá? Hãy chuẩn bị tinh thần để đón nhận sự thay đổi tất yếu này.',
+ kw:['Chuyển hoá','Thay đổi','Đỉnh cao','Chu kỳ']},
+{id:5,sym:'⚖',name:'Cân Bằng',cat:'am-duong',catVI:'Âm Dương',
+ msg:'Sức mạnh không phải là chiến thắng một phía — mà là khả năng duy trì cân bằng giữa các lực đối lập. Bạn đang được kêu gọi tìm lại trung tâm của chính mình.',
+ guide:'Xem xét đâu là những điều mất cân bằng trong cuộc sống. Công việc/nghỉ ngơi, cho đi/nhận lại, hành động/suy ngẫm — điều chỉnh lại.',
+ kw:['Cân bằng','Trung tâm','Điều chỉnh','Hài hoà']},
+{id:6,sym:'🌊',name:'Nhu Thuận',cat:'am-duong',catVI:'Âm Dương',
+ msg:'Nước mềm nhưng thắng đá cứng. Sức mạnh của nước không nằm ở lực ép mà ở sự kiên trì và linh hoạt. Đôi khi cách tốt nhất để tiến lên là nhường đường.',
+ guide:'Thay vì đối đầu trực tiếp, hãy tìm cách uyển chuyển hơn. Linh hoạt không phải yếu đuối — đó là trí tuệ.',
+ kw:['Mềm mỏng','Linh hoạt','Kiên trì','Trí tuệ']},
+{id:7,sym:'🌀',name:'Vô Vi',cat:'am-duong',catVI:'Âm Dương',
+ msg:'Vô vi nhi vô bất vi — không làm gì mà không gì không được làm. Hành động tự nhiên, không cưỡng cầu, thuận theo lẽ tự nhiên của sự vật. Đây là loại sức mạnh cao nhất.',
+ guide:'Bạn có đang cố quá không? Hãy thử buông bỏ và xem điều gì tự nhiên xảy ra khi bạn không cố ép buộc.',
+ kw:['Vô vi','Tự nhiên','Buông bỏ','Thuận lẽ']},
+// ── NGŨ HÀNH (10 lá) ────────────────────────────────────────
+{id:8,sym:'🌿',name:'Mộc — Sinh Trưởng',cat:'ngu-hanh',catVI:'Ngũ Hành',
+ msg:'Hành Mộc đại diện cho sự sinh trưởng, linh hoạt và hy vọng. Như cây non vươn lên từ mặt đất, trong bạn đang có điều gì đó mới đang nảy mầm. Nuôi dưỡng nó với sự kiên nhẫn và ánh sáng.',
+ guide:'Điều gì đang nảy mầm trong cuộc sống của bạn? Hãy tạo điều kiện cho nó phát triển — đừng vội vàng.',
+ kw:['Sinh trưởng','Linh hoạt','Hy vọng','Nảy mầm']},
+{id:9,sym:'🔥',name:'Hỏa — Nhiệt Huyết',cat:'ngu-hanh',catVI:'Ngũ Hành',
+ msg:'Hành Hỏa mang năng lượng của đam mê, nhiệt tình và ánh sáng. Ngọn lửa trong bạn đang cháy — hãy cho nó toả sáng nhưng đừng để nó đốt cháy những điều quan trọng.',
+ guide:'Nhiệt huyết là món quà, nhưng cần kiểm soát. Hãy sử dụng đam mê của bạn một cách có chủ đích, không bốc đồng.',
+ kw:['Đam mê','Nhiệt huyết','Toả sáng','Năng lượng']},
+{id:10,sym:'🏔',name:'Thổ — Vững Chắc',cat:'ngu-hanh',catVI:'Ngũ Hành',
+ msg:'Hành Thổ là nền tảng của vạn vật — ổn định, đáng tin, nuôi dưỡng. Đây là lúc xây dựng nền tảng chắc chắn thay vì vươn cao quá nhanh. Sự bền vững quan trọng hơn tốc độ.',
+ guide:'Đâu là nền tảng trong cuộc sống của bạn? Gia đình, sức khoẻ, tài chính — hãy củng cố những điều này trước khi mở rộng.',
+ kw:['Ổn định','Nền tảng','Bền vững','Nuôi dưỡng']},
+{id:11,sym:'🪙',name:'Kim — Quyết Đoán',cat:'ngu-hanh',catVI:'Ngũ Hành',
+ msg:'Hành Kim — sắc bén, quyết đoán, tinh tế và có giá trị. Như lưỡi kiếm cần được rèn giũa, bạn cần cắt bỏ những gì không cần thiết và giữ lại những gì có giá trị thực sự.',
+ guide:'Điều gì cần được loại bỏ khỏi cuộc sống của bạn? Quyết định khó khăn nào đang chờ đợi? Đây là lúc để dứt khoát.',
+ kw:['Sắc bén','Quyết đoán','Tinh tế','Cắt bỏ']},
+{id:12,sym:'💧',name:'Thủy — Trí Tuệ',cat:'ngu-hanh',catVI:'Ngũ Hành',
+ msg:'Hành Thủy — thích nghi, thâm sâu, trí tuệ và trực giác. Nước chảy theo địa hình, không chống lại nó. Trí tuệ thực sự là biết khi nào nên chảy mạnh, khi nào nên lắng đọng.',
+ guide:'Lắng nghe trực giác sâu sắc của bạn. Đừng chống lại dòng chảy hiện tại — hãy thích nghi và tìm đường đi của riêng bạn.',
+ kw:['Trí tuệ','Thích nghi','Trực giác','Thâm sâu']},
+{id:13,sym:'🌱',name:'Tương Sinh',cat:'ngu-hanh',catVI:'Ngũ Hành',
+ msg:'Thủy sinh Mộc, Mộc sinh Hỏa... Sự hỗ trợ lẫn nhau là bản chất của vũ trụ. Bạn đang nhận được sự hỗ trợ từ người khác, hoặc đang được kêu gọi trở thành nguồn nuôi dưỡng cho ai đó.',
+ guide:'Ai đang hỗ trợ bạn mà bạn chưa biết ơn? Bạn có thể nuôi dưỡng ai trong cuộc sống của bạn không?',
+ kw:['Tương sinh','Hỗ trợ','Nuôi dưỡng','Biết ơn']},
+{id:14,sym:'⚡',name:'Tương Khắc',cat:'ngu-hanh',catVI:'Ngũ Hành',
+ msg:'Kim khắc Mộc, Mộc khắc Thổ... Tương khắc không phải là phá huỷ mà là kiểm soát cần thiết để giữ cân bằng. Có điều gì đó trong cuộc sống đang thách thức bạn — hãy nhìn nó như một cơ hội để trưởng thành.',
+ guide:'Thách thức bạn đang đối mặt là để kiểm soát và cân bằng một khía cạnh khác trong cuộc sống. Đừng kháng cự, hãy học từ nó.',
+ kw:['Thách thức','Kiểm soát','Cân bằng','Trưởng thành']},
+{id:15,sym:'🔄',name:'Ngũ Hành Hoà',cat:'ngu-hanh',catVI:'Ngũ Hành',
+ msg:'Khi năm hành vận hành hài hoà, vạn vật phồn thịnh. Bạn đang ở thời điểm mọi yếu tố trong cuộc sống đang cân bằng — tận dụng thời kỳ thuận lợi này để tiến lên.',
+ guide:'Đây là thời điểm vàng. Những dự án đã dừng có thể khởi động lại, những mối quan hệ rạn nứt có thể được hàn gắn.',
+ kw:['Hài hoà','Phồn thịnh','Thời điểm vàng','Cơ hội']},
+{id:16,sym:'🌊',name:'Hành Thủy Sâu',cat:'ngu-hanh',catVI:'Ngũ Hành',
+ msg:'Nước sâu không sóng lớn. Trí tuệ thực sự thường yên lặng. Đây là lúc đi vào chiều sâu — nghiên cứu, suy ngẫm, khám phá nội tâm thay vì biểu diễn bên ngoài.',
+ guide:'Dành thời gian học hỏi và suy ngẫm. Câu trả lời bạn đang tìm kiếm nằm trong chiều sâu, không phải bề mặt.',
+ kw:['Chiều sâu','Trí tuệ','Học hỏi','Nội tâm']},
+{id:17,sym:'🌲',name:'Hành Mộc Vươn',cat:'ngu-hanh',catVI:'Ngũ Hành',
+ msg:'Cây lớn bắt đầu từ hạt giống nhỏ. Kiên nhẫn và bền bỉ là chìa khoá. Những gì bạn đang xây dựng có thể chưa nhìn thấy ngay, nhưng đang âm thầm phát triển mỗi ngày.',
+ guide:'Tin tưởng vào quá trình. Những nỗ lực âm thầm của bạn đang tích lũy. Đừng bỏ cuộc chỉ vì chưa thấy kết quả ngay.',
+ kw:['Kiên nhẫn','Bền bỉ','Phát triển','Tin tưởng']},
+// ── BÁT QUÁI (8 lá) ─────────────────────────────────────────
+{id:18,sym:'☰',name:'Càn — Trời',cat:'bat-quai',catVI:'Bát Quái',
+ msg:'Quẻ Càn — Trời, Dương thuần, sức mạnh sáng tạo. Năng lượng dẫn dắt và tạo ra đang hiện diện mạnh mẽ. Đây là lúc dẫn đường, khởi xướng và thể hiện ý chí mạnh nhất của bạn.',
+ guide:'Hành động như một nhà lãnh đạo. Bạn có tầm nhìn — hãy chia sẻ và dẫn dắt người khác theo.',
+ kw:['Trời','Lãnh đạo','Sáng tạo','Dương thuần']},
+{id:19,sym:'☷',name:'Khôn — Đất',cat:'bat-quai',catVI:'Bát Quái',
+ msg:'Quẻ Khôn — Đất, Âm thuần, sự tiếp nhận và nuôi dưỡng. Đây là lúc hỗ trợ, phục vụ và nuôi dưỡng điều đang phát triển. Sức mạnh của Đất nằm ở khả năng chứa đựng và nuôi sống vạn vật.',
+ guide:'Hãy là người hỗ trợ, không phải người dẫn đầu lúc này. Nuôi dưỡng những điều và người xung quanh — đó là sức mạnh thực sự.',
+ kw:['Đất','Nuôi dưỡng','Tiếp nhận','Hỗ trợ']},
+{id:20,sym:'☵',name:'Khảm — Nước',cat:'bat-quai',catVI:'Bát Quái',
+ msg:'Quẻ Khảm — Nước, nguy hiểm và chiều sâu. Đang đi qua vùng nước sâu và nguy hiểm. Cần trí tuệ, cẩn thận và tin tưởng vào khả năng vượt qua của bản thân.',
+ guide:'Đây không phải lúc liều lĩnh. Hãy thận trọng, đánh giá kỹ lưỡng và dựa vào trực giác để vượt qua giai đoạn thử thách này.',
+ kw:['Nguy hiểm','Chiều sâu','Thận trọng','Vượt qua']},
+{id:21,sym:'☲',name:'Ly — Lửa',cat:'bat-quai',catVI:'Bát Quái',
+ msg:'Quẻ Ly — Lửa, sự sáng tỏ và vẻ đẹp. Ánh sáng của nhận thức đang soi chiếu. Điều gì đó được làm rõ — sự thật, một ý tưởng hay một con người đang toả sáng trong cuộc sống của bạn.',
+ guide:'Hãy chú ý đến những gì đang trở nên rõ ràng. Tin tưởng vào những gì bạn thấy được soi chiếu bởi ánh sáng của sự thật.',
+ kw:['Sáng tỏ','Vẻ đẹp','Nhận thức','Ánh sáng']},
+{id:22,sym:'☳',name:'Chấn — Sấm',cat:'bat-quai',catVI:'Bát Quái',
+ msg:'Quẻ Chấn — Sấm sét, sự thức tỉnh đột ngột. Tiếng sét đánh thức. Có thể có sự kiện bất ngờ, hay một nhận thức đột nhiên làm thay đổi cách nhìn của bạn.',
+ guide:'Đừng sợ tiếng sấm — nó đến để thức tỉnh. Sau cú sốc, hãy tự hỏi: điều gì cần phải thay đổi?',
+ kw:['Thức tỉnh','Bất ngờ','Thay đổi','Sấm sét']},
+{id:23,sym:'☴',name:'Tốn — Gió',cat:'bat-quai',catVI:'Bát Quái',
+ msg:'Quẻ Tốn — Gió, sự thấm dần và kiên trì. Gió không phá vỡ bằng lực mạnh mà bằng sự kiên trì thấm vào mọi nơi. Ảnh hưởng của bạn đang lan rộng một cách nhẹ nhàng và bền vững.',
+ guide:'Hãy kiên trì và nhẹ nhàng. Ảnh hưởng bền vững đến từ sự nhất quán, không phải từ sức mạnh cưỡng bức.',
+ kw:['Kiên trì','Thấm dần','Ảnh hưởng','Nhẹ nhàng']},
+{id:24,sym:'☶',name:'Cấn — Núi',cat:'bat-quai',catVI:'Bát Quái',
+ msg:'Quẻ Cấn — Núi, sự dừng lại và kiên định. Biết khi nào phải dừng lại là trí tuệ lớn. Đây là lúc tạm dừng, không tiến thêm — hãy ở lại với hiện tại và nhìn rõ trước khi bước tiếp.',
+ guide:'Dừng lại và quan sát. Không phải mọi hành động đều cần thiết ngay lúc này. Đôi khi đứng yên là bước đi khôn ngoan nhất.',
+ kw:['Dừng lại','Kiên định','Tĩnh lặng','Quan sát']},
+{id:25,sym:'☱',name:'Đoài — Hồ',cat:'bat-quai',catVI:'Bát Quái',
+ msg:'Quẻ Đoài — Hồ, niềm vui và sự giao tiếp. Năng lượng của sự vui vẻ, kết nối và biểu đạt. Chia sẻ niềm vui nhân đôi; chia sẻ nỗi buồn giảm đi một nửa — đây là lúc kết nối.',
+ guide:'Kết nối với người khác. Chia sẻ điều bạn đang trải qua. Lời nói chân thành có thể tạo ra những kết nối quý báu.',
+ kw:['Niềm vui','Giao tiếp','Kết nối','Chia sẻ']},
+// ── THIÊN CAN & ĐỊA CHI (8 lá) ─────────────────────────────
+{id:26,sym:'🌿',name:'Giáp Mộc',cat:'can-chi',catVI:'Thiên Can',
+ msg:'Giáp là Can đầu tiên — khởi đầu, tiên phong, cứng rắn như cây to. Thời điểm của những khởi đầu mạnh mẽ. Bạn đang được kêu gọi trở thành người tiên phong.',
+ guide:'Đừng ngần ngại đi trước. Con đường chưa có ai đi không có nghĩa là sai — đôi khi đó chính là con đường của bạn.',
+ kw:['Tiên phong','Khởi đầu','Cứng rắn','Dẫn đầu']},
+{id:27,sym:'🌸',name:'Nhâm Thủy',cat:'can-chi',catVI:'Thiên Can',
+ msg:'Nhâm là Can Thủy Dương — mạnh mẽ như sông lớn, tham vọng và trí tuệ. Sức mạnh của bạn là khả năng dự đoán, lên kế hoạch và thích nghi linh hoạt.',
+ guide:'Nhìn xa hơn tình huống trước mắt. Bạn có khả năng thấy những gì người khác không thấy — hãy sử dụng tầm nhìn đó.',
+ kw:['Tham vọng','Trí tuệ','Tầm nhìn','Thích nghi']},
+{id:28,sym:'🐉',name:'Thìn Long',cat:'can-chi',catVI:'Địa Chi',
+ msg:'Địa Chi Thìn — năm Rồng, khí thế hào hùng, đất trời giao nhau. Năng lượng của sự biến đổi mạnh mẽ đang hiện diện. Đây là thời điểm bứt phá, không phải thời điểm bình ổn.',
+ guide:'Hãy táo bạo hơn bình thường. Thìn mang năng lượng của sự biến đổi vĩ đại — đừng bỏ lỡ cơ hội bứt phá.',
+ kw:['Bứt phá','Biến đổi','Hào hùng','Táo bạo']},
+{id:29,sym:'🌟',name:'Tý — Khởi Nguyên',cat:'can-chi',catVI:'Địa Chi',
+ msg:'Địa Chi Tý — nửa đêm, điểm khởi đầu của chu kỳ mới, âm cực sinh dương. Trong bóng tối sâu nhất chứa đựng mầm sống mạnh nhất. Bạn đang ở điểm cuối của một chu kỳ và bắt đầu của chu kỳ mới.',
+ guide:'Đừng sợ khoảng tối này — nó là tiền đề cho bình minh mới. Hãy gieo những hạt giống trong im lặng và kiên nhẫn chờ mùa xuân.',
+ kw:['Khởi nguyên','Chu kỳ mới','Tiềm năng','Hy vọng']},
+{id:30,sym:'🦊',name:'Dần Hổ',cat:'can-chi',catVI:'Địa Chi',
+ msg:'Địa Chi Dần — Hổ, dũng mãnh và quyết đoán, bình minh đang ló dạng. Năng lượng mạnh mẽ đang trỗi dậy. Hành động táo bạo nhưng có kế hoạch — như Hổ không xuất kích khi chưa chắc thắng.',
+ guide:'Đây là lúc hành động dứt khoát. Bạn đã chuẩn bị đủ rồi — hãy tin vào sức mạnh của mình và bước ra.',
+ kw:['Dũng mãnh','Quyết đoán','Hành động','Bình minh']},
+{id:31,sym:'🌾',name:'Mùi Dê',cat:'can-chi',catVI:'Địa Chi',
+ msg:'Địa Chi Mùi — Dê, ôn hoà, nghệ thuật, tình cảm sâu sắc. Năng lượng của sự nhẹ nhàng, sáng tạo và tình yêu. Đây là lúc nuôi dưỡng những mối quan hệ và dự án sáng tạo.',
+ guide:'Đầu tư vào các mối quan hệ và sáng tạo. Sự ôn hoà và tình cảm là điểm mạnh của bạn lúc này, không phải sức mạnh cứng rắn.',
+ kw:['Ôn hoà','Sáng tạo','Tình cảm','Nuôi dưỡng']},
+{id:32,sym:'🌺',name:'Ngọ Mã',cat:'can-chi',catVI:'Địa Chi',
+ msg:'Địa Chi Ngọ — Ngựa, tự do, tốc độ, nhiệt huyết và đam mê. Năng lượng của sự di chuyển, thay đổi và tiến về phía trước không ngừng.',
+ guide:'Đây là lúc tăng tốc. Đừng để những trở ngại nhỏ kìm hãm — hãy tiến về phía trước với nhiệt huyết.',
+ kw:['Tự do','Tốc độ','Di chuyển','Nhiệt huyết']},
+{id:33,sym:'✨',name:'Lưu Niên',cat:'can-chi',catVI:'Vận Trình',
+ msg:'Vận lưu niên — vận khí của năm hiện tại đang ảnh hưởng mạnh đến mọi quyết định. Hãy xem xét vận trình tổng thể trước khi hành động. Thuận thế là khôn ngoan nhất.',
+ guide:'Tìm hiểu vận khí năm nay của bạn. Hành động thuận theo thời, không cưỡng lại dòng chảy của vận mệnh.',
+ kw:['Vận trình','Thời cơ','Thuận thế','Thời tiết']},
+// ── TRIẾT LÝ CUỘC ĐỜI (6 lá) ───────────────────────────────
+{id:34,sym:'🔁',name:'Nhân Quả',cat:'cuoc-doi',catVI:'Triết Lý',
+ msg:'Nhân nào quả ấy — hạt giống nào gieo sẽ cho trái ấy. Những gì bạn đang trải qua hôm nay là kết quả của những gì đã gieo trong quá khứ. Và hành động của bạn hôm nay đang gieo hạt giống cho tương lai.',
+ guide:'Nhìn lại những nguyên nhân dẫn đến tình huống hiện tại. Hành động nào hôm nay sẽ tạo ra tương lai bạn muốn?',
+ kw:['Nhân quả','Gieo hạt','Trách nhiệm','Nghiệp']},
+{id:35,sym:'🍃',name:'Vô Thường',cat:'cuoc-doi',catVI:'Triết Lý',
+ msg:'Vạn vật đều vô thường — không có gì tồn tại mãi mãi, kể cả nỗi đau hay hạnh phúc. Điều đang làm khổ bạn sẽ qua đi; điều đang làm bạn vui cũng sẽ thay đổi. Hãy sống trọn vẹn trong khoảnh khắc này.',
+ guide:'Thay vì bám víu hay đẩy lui, hãy quan sát và trải nghiệm đầy đủ khoảnh khắc hiện tại. Đây là bài học về sự buông bỏ.',
+ kw:['Vô thường','Buông bỏ','Hiện tại','Trọn vẹn']},
+{id:36,sym:'🛤',name:'Trung Đạo',cat:'cuoc-doi',catVI:'Triết Lý',
+ msg:'Con đường giữa — không quá cứng, không quá mềm; không quá chặt, không quá lỏng. Trung đạo không phải là sự tầm thường mà là sự cân bằng tinh tế giữa các cực đối lập.',
+ guide:'Bạn có đang đi quá một phía nào đó không? Hãy tìm con đường giữa — không cực đoan, không buông lơi.',
+ kw:['Cân bằng','Trung dung','Không cực đoan','Tinh tế']},
+{id:37,sym:'🌺',name:'Thuận Thế',cat:'cuoc-doi',catVI:'Triết Lý',
+ msg:'Thuận thiên giả tồn, nghịch thiên giả vong — thuận lẽ trời thì tồn tại, nghịch lẽ trời thì tiêu vong. Đừng cưỡng lại những gì là tự nhiên và tất yếu. Tìm cách làm việc với thế cuộc, không phải chống lại nó.',
+ guide:'Điều gì đang xảy ra tự nhiên trong cuộc sống của bạn? Hãy đi theo chiều dòng đó thay vì bơi ngược.',
+ kw:['Thuận thế','Tự nhiên','Khôn ngoan','Dòng chảy']},
+{id:38,sym:'🙏',name:'Tri Túc',cat:'cuoc-doi',catVI:'Triết Lý',
+ msg:'Tri túc — biết đủ thì thường vui. Không phải ai có nhiều nhất là hạnh phúc nhất. Người biết trân trọng những gì đang có mới là người thực sự giàu có.',
+ guide:'Dừng lại và đếm những điều tốt đẹp bạn đang có. Hạnh phúc không đến từ việc có thêm, mà từ việc trân trọng điều đang có.',
+ kw:['Biết đủ','Trân trọng','Hạnh phúc','Tri ân']},
+{id:39,sym:'💫',name:'Tự Tri',cat:'cuoc-doi',catVI:'Triết Lý',
+ msg:'Tri nhân giả trí, tự tri giả minh — biết người là có trí, biết mình là có minh. Sự hiểu biết cao nhất là hiểu chính mình — điểm mạnh, điểm yếu, động lực và nỗi sợ thực sự của mình.',
+ guide:'Hãy dành thời gian tự vấn: Điều gì thực sự thúc đẩy bạn? Điều gì bạn đang tránh né? Sự thật về bản thân là món quà lớn nhất.',
+ kw:['Tự nhận thức','Minh triết','Bản thân','Hiểu mình']},
+];
+
+const CAT_COLORS = {'am-duong':'#c9a84c','ngu-hanh':'#1E6B3C','bat-quai':'#1455A4','can-chi':'#9A7B3A','cuoc-doi':'#C0392B'};
+const SPREAD_LABELS = {
+  1: [{pos:'Thông Điệp',desc:'Điều vũ trụ muốn bạn biết lúc này'}],
+  3: [{pos:'Nhân',desc:'Nguyên nhân gốc rễ của tình huống'},{pos:'Duyên',desc:'Hoàn cảnh và điều kiện hiện tại'},{pos:'Quả',desc:'Hướng đi và kết quả nếu tiếp tục'}],
+  5: [
+    {pos:'Kim — Hiện Tại',desc:'Trạng thái thực tế bây giờ'},
+    {pos:'Mộc — Tăng Trưởng',desc:'Điều đang phát triển và cần nuôi dưỡng'},
+    {pos:'Hỏa — Năng Lượng',desc:'Năng lượng cần kích hoạt'},
+    {pos:'Thủy — Chiều Sâu',desc:'Điều ẩn sâu cần chú ý'},
+    {pos:'Thổ — Nền Tảng',desc:'Nền tảng cần củng cố'},
+  ]
+};
+
+let _spread = 1, _drawn = [];
+
+function setSpread(n, btn) {
+  _spread = n;
+  document.querySelectorAll('.spread-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('result-section').classList.remove('active');
+}
+
+function draw() {
+  const btn = document.getElementById('drawBtn');
+  btn.disabled = true; btn.textContent = '✦ Đang định tâm...';
+  setTimeout(() => {
+    const used = new Set(); const picked = [];
+    while (picked.length < _spread) {
+      const i = Math.floor(Math.random() * CARDS.length);
+      if (!used.has(i)) { used.add(i); picked.push(CARDS[i]); }
+    }
+    _drawn = picked;
+    renderResult();
+    btn.disabled = false; btn.textContent = '✦ Định Tâm & Rút Lại';
+  }, 700);
+}
+
+function renderResult() {
+  const q = document.getElementById('question').value.trim();
+  document.getElementById('questionDisplay').textContent = q ? `"${q}"` : '';
+  const spread = SPREAD_LABELS[_spread];
+
+  // Cards
+  document.getElementById('spreadArea').innerHTML = _drawn.map((c, i) => {
+    const col = CAT_COLORS[c.cat];
+    return `<div class="card-slot">
+      <div class="o-card-scene cat-${c.cat}">
+        <div class="o-card-inner" id="oc-${i}">
+          <div class="o-back"><div class="o-back-seal">紫微</div><div class="o-back-brand">Minh Triết<br>Phương Đông</div></div>
+          <div class="o-face">
+            <div class="of-symbol">${c.sym}</div>
+            <div class="of-name">${c.name}</div>
+            <div class="of-sub">${c.catVI}</div>
+          </div>
+        </div>
+      </div>
+      <div class="slot-label">${spread[i].pos}</div>
+    </div>`;
+  }).join('');
+
+  // Flip
+  setTimeout(() => _drawn.forEach((_, i) => {
+    const el = document.getElementById(`oc-${i}`);
+    if (el) setTimeout(() => el.classList.add('flipped'), i * 300);
+  }), 200);
+
+  // Meanings
+  document.getElementById('readingResult').innerHTML =
+    `<div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);margin-bottom:16px">✦ Minh Triết Từng Lá</div>`+
+    _drawn.map((c, i) => {
+      const col = CAT_COLORS[c.cat];
+      return `<div class="oracle-meaning" style="border-left:4px solid ${col}">
+        <div class="om-header">
+          <div class="om-symbol">${c.sym}</div>
+          <div class="om-meta">
+            <div class="om-name">${c.name}</div>
+            <div class="om-sub">${c.catVI} · ${spread[i].pos}</div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--text-lt);margin-bottom:10px;font-style:italic">${spread[i].desc}</div>
+        <div class="om-body">${c.msg}</div>
+        <div class="om-guidance">💡 <strong>Hướng dẫn thực hành:</strong> ${c.guide}</div>
+        <div class="om-kw">${c.kw.map(k => `<span class="kw-tag">${k}</span>`).join('')}</div>
+      </div>`;
+    }).join('');
+
+  document.getElementById('result-section').classList.add('active');
+  setTimeout(() => document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' }), 600);
+}
+</script>
+</body>
+</html>
