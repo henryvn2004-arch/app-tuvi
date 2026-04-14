@@ -107,7 +107,6 @@
     + ddItem('/tools/kim-lau.html',         '\ud83c\udfe0', 'Kim L\u00e2u & Tam Tai')
     + ddItem('/tools/ngu-hanh-ten.html',    '\u270d\ufe0f', 'Ng\u0169 H\u00e0nh T\u00ean')
     + ddItem('/tools/tu-tru.html',          '\ud83d\udcdc', 'T\u1ee9 Tr\u1ee5 B\u00e1t T\u1ef1')
-    + ddItem('/tools/tu-tru-mo-rong.html',  '\u2728',       'T\u1ee9 Tr\u1ee5 M\u1edf R\u1ed9ng')
 
     + ddSection('Huy\u1ec1n H\u1ecdc & Ph\u01b0\u01a1ng T\u00e2y')
     + ddItem('/tools/kinh-dich.html',   '\u262f',       'Kinh D\u1ecbch 64 Qu\u1ebb')
