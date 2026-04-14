@@ -295,16 +295,45 @@ async function analyze() {
   document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   try {
-    const res = await fetch('https://dciwkfdqhhddeymlisey.supabase.co/functions/v1/tuong-mat', {
+    const res = await fetch('/api/tuong-mat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ image: _imageData, mediaType: _mediaType })
     });
 
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      throw new Error(data.error || `Lỗi ${res.status}`);
+    }
 
-    document.getElementById('aiResult').innerHTML = renderMarkdown(data.result);
+    // Đọc SSE stream, tích luỹ text rồi render dần
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let fullText = '';
+    let buf = '';
+    const resultEl = document.getElementById('aiResult');
+    resultEl.innerHTML = '<div class="md-result" style="color:var(--text-lt);font-style:italic">Đang phân tích...</div>';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
+      const lines = buf.split('\n');
+      buf = lines.pop() || '';
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const raw = line.slice(6).trim();
+        if (raw === '[DONE]') break;
+        try {
+          const json = JSON.parse(raw);
+          if (json.err) throw new Error(json.err);
+          if (json.t) { fullText += json.t; resultEl.innerHTML = renderMarkdown(fullText); }
+        } catch(e) { if (e.message && e.message !== 'Unexpected end of JSON input') throw e; }
+      }
+    }
+
+    if (!fullText) throw new Error('AI không trả về kết quả.');
+    resultEl.innerHTML = renderMarkdown(fullText);
     btn.disabled = false;
 
   } catch(e) {
