@@ -295,7 +295,7 @@ async function analyze() {
   document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   try {
-    const res = await fetch('/api/tuong-mat', {
+    const res = await fetch('https://dciwkfdqhhddeymlisey.supabase.co/functions/v1/tuong-mat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ image: _imageData, mediaType: _mediaType })
