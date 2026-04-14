@@ -244,6 +244,81 @@ function showPreview(dataUrl) {
   document.getElementById('analyzeBtn').disabled = false;
 }
 
+// Vẽ Tam Đình dựa trên tọa độ Claude trả về
+function drawFaceZones(coords) {
+  const img = document.getElementById('previewImg');
+  // Tạo canvas overlay nếu chưa có
+  let canvas = document.getElementById('zoneCanvas');
+  if (!canvas) {
+    canvas = document.createElement('canvas');
+    canvas.id = 'zoneCanvas';
+    canvas.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;pointer-events:none';
+    img.parentNode.insertBefore(canvas, img.nextSibling);
+  }
+  const w = img.clientWidth, h = img.clientHeight;
+  canvas.width = w; canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, w, h);
+
+  // Tọa độ từ Claude (% → px)
+  const yEyebrow  = h * coords.chan_may / 100;
+  const yNoseTip  = h * coords.cuoi_song_mui / 100;
+  const yHairline = h * coords.chan_toc / 100;
+  const yChin     = h * coords.cuoi_cam / 100;
+
+  // Đường trung ấn
+  ctx.save();
+  ctx.setLineDash([5,5]);
+  ctx.lineWidth = 1.5;
+  ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+  ctx.shadowColor = 'rgba(0,0,0,0.6)';
+  ctx.shadowBlur = 3;
+  ctx.beginPath();
+  ctx.moveTo(w/2, yHairline);
+  ctx.lineTo(w/2, yChin);
+  ctx.stroke();
+  ctx.restore();
+
+  // 2 đường chia Tam Đình
+  const dividers = [
+    {y: yEyebrow, color: 'rgba(20,85,164,0.9)'},
+    {y: yNoseTip, color: 'rgba(154,123,58,0.9)'},
+  ];
+  dividers.forEach(({y, color}) => {
+    ctx.save();
+    ctx.setLineDash([0]);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = color;
+    ctx.shadowColor = 'rgba(0,0,0,0.5)';
+    ctx.shadowBlur = 3;
+    ctx.beginPath();
+    ctx.moveTo(w*0.04, y);
+    ctx.lineTo(w*0.96, y);
+    ctx.stroke();
+    ctx.restore();
+  });
+
+  // Labels
+  const fs = Math.max(10, Math.round(w*0.04));
+  const zones = [
+    {y: yHairline + (yEyebrow-yHairline)/2, text:'THƯỢNG ĐÌNH', color:'rgba(20,85,164,0.95)'},
+    {y: yEyebrow  + (yNoseTip-yEyebrow)/2,  text:'TRUNG ĐÌNH',  color:'rgba(154,123,58,0.95)'},
+    {y: yNoseTip  + (yChin-yNoseTip)/2,     text:'HẠ ĐÌNH',     color:'rgba(30,107,60,0.95)'},
+  ];
+  zones.forEach(({y, text, color}) => {
+    ctx.save();
+    ctx.font = `bold ${fs}px Arial`;
+    const tw = ctx.measureText(text).width;
+    ctx.fillStyle = 'rgba(0,0,0,0.4)';
+    ctx.fillRect(w*0.04-3, y-fs, tw+8, fs+4);
+    ctx.fillStyle = color;
+    ctx.shadowColor = 'rgba(0,0,0,0.9)';
+    ctx.shadowBlur = 4;
+    ctx.fillText(text, w*0.05, y);
+    ctx.restore();
+  });
+}
+
 
 function removePhoto() {
   _imageData = null;
@@ -348,7 +423,20 @@ async function analyze() {
     }
 
     if (!fullText) throw new Error('AI không trả về kết quả.');
-    resultEl.innerHTML = renderMarkdown(fullText);
+
+    // Parse COORDS từ dòng đầu, tách ra phần phân tích
+    let analysisText = fullText;
+    const coordsMatch = fullText.match(/^COORDS:(\{[^}]+\}|null)/);
+    if (coordsMatch) {
+      analysisText = fullText.replace(/^COORDS:[^\n]+\n---\n?/, '');
+      if (coordsMatch[1] !== 'null') {
+        try {
+          const coords = JSON.parse(coordsMatch[1]);
+          drawFaceZones(coords);
+        } catch(_) {}
+      }
+    }
+    resultEl.innerHTML = renderMarkdown(analysisText);
     btn.disabled = false;
 
   } catch(e) {
