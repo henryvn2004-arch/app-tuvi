@@ -3,12 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Cách Cục Đặc Biệt trong Lá Số Tử Vi – Tử Vi Minh Bảo</title>
-<meta name="description" content="Tra cách cục đặc biệt trong lá số Tử Vi — biết lá số thiên về hướng nào và có cách cục quý hay hung nào. Miễn phí.">
+<title>Cách Cục & Phân Tích Cung Tử Vi – Tử Vi Minh Bảo</title>
+<meta name="description" content="Xem cách cục đặc biệt, phân tích sao và điểm 6 chiều của từng cung trong lá số Tử Vi. Miễn phí, không AI.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="stylesheet" href="/tools/tools.css">
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tuvi-form.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+.pregen-block{background:#F5F5F5;border:1px solid #e0e0e0;border-radius:8px;padding:12px 16px;margin:12px 0}
+.pregen-title{font-size:11px;font-weight:600;color:#1a3a6a;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.pregen-item{font-size:12px;color:#333;margin:4px 0}
+.pregen-yn{font-size:12.5px;line-height:1.6;padding:2px 0}
+.yn-great-cat{color:#1a6b3a}.yn-cat{color:#2a5a7a}.yn-great-hung{color:#C0392B}.yn-hung{color:#9B2020}.yn-tuan{color:#1a3a8a}.yn-neutral{color:#2a3a4a}
+.cc-label{font-size:11px;font-weight:600;padding:2px 6px;border-radius:3px;margin-right:6px}
+.cc-quy_cuc{background:#2a1f5e;color:#a78bfa}.cc-phu_cuc{background:#1f3a2a;color:#4ade80}.cc-ban_tien_cuc{background:#1a2535;color:#7bb8f8}.cc-tap_cuc,.cc-than_cu,.cc-menh_co_ban{background:#222;color:#a8b8c8}
+.cc-mota{font-size:11px;color:#555}
+.score-bars{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.score-bar-row{display:flex;align-items:center;gap:8px}
+.score-label{font-size:11px;color:#444;width:80px;flex-shrink:0}
+.score-bar-bg{flex:1;height:8px;background:#d0d8e0;border-radius:4px;overflow:hidden}
+.score-bar-fill{height:100%;border-radius:4px;transition:width .5s}
+.score-val{font-size:11px;color:#333;width:28px;text-align:right;flex-shrink:0}
+/* Cung section */
+.cung-section{margin-bottom:32px;border:1px solid var(--border-lt);border-radius:8px;overflow:hidden}
+.cung-section-header{background:var(--navy);color:#fff;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.cung-section-name{font-size:13px;font-weight:700;letter-spacing:1px}
+.cung-section-stars{font-size:11px;color:#8BAACC}
+.cung-section-body{padding:20px}
+.cung-no-data{padding:20px;color:var(--text-lt);font-size:13px;font-style:italic}
+</style>
 </head>
 <body>
 <script src="/nav.js"></script>
@@ -16,31 +40,32 @@
 <div class="hero-tool">
   <div class="page">
     <div class="eyebrow">Công Cụ Miễn Phí</div>
-    <h1>Cách Cục <em>Đặc Biệt</em><br>trong Lá Số</h1>
-    <p>Khám phá các cách cục quý và hung trong lá số Tử Vi — biết lá số thiên về hướng nào trong cuộc đời.</p>
+    <h1>Cách Cục &amp; Phân Tích<br><em>Từng Cung</em></h1>
+    <p>Cách cục đặc biệt, phân tích sao và điểm 6 chiều của từng cung trong lá số — phần pre-gen miễn phí của luận giải.</p>
   </div>
 </div>
 
 <div class="page">
   <div class="tool-intro">
     <div class="xt-section">
-      <div class="xt-eyebrow">Cách Cục là gì?</div>
+      <div class="xt-eyebrow">Công cụ này cho bạn thấy gì?</div>
       <div class="xt-grid-2">
         <div>
-          <h2 class="xt-h2">Cách Cục — Mô Hình<br>Đặc Biệt Trong Lá Số</h2>
-          <p class="xt-body">Cách cục là những mô hình đặc biệt hình thành khi sao tinh, cung vị và địa chi sắp xếp theo tổ hợp mang ý nghĩa đặc định trong Tử Vi cổ pháp. Không phải lá số nào cũng có cách cục.</p>
-          <p class="xt-body">Cách cục quý (phú quý, khoa bảng, lộc vị...) chỉ xu hướng phát triển thuận lợi. Cách cục hung (cô độc, khắc hao...) chỉ những điều cần lưu ý. Phát huy hay hóa giải phụ thuộc vào đại vận và nỗ lực bản thân.</p>
+          <h2 class="xt-h2">Cách Cục &amp; Phân Tích Sao —<br>Từng Cung, Không Cần AI</h2>
+          <p class="xt-body">Nhập ngày giờ sinh là có ngay: danh sách toàn bộ cách cục trong lá số, và với mỗi cung có dữ liệu đặc biệt — phân tích sao tinh theo tổ hợp cổ pháp, điểm 6 chiều kèm biểu đồ radar.</p>
+          <p class="xt-body">Chỉ các cung <strong>có cách cục hoặc nhận định đặc biệt</strong> mới hiển thị — cung bình thường ẩn đi để tập trung vào những điểm thực sự đáng đọc. Đây là dữ liệu nền; để hiểu <em>ý nghĩa cụ thể</em> trong cuộc đời bạn, cần luận giải AI.</p>
         </div>
         <div class="xt-factors">
-          <div class="xt-factor-title">Các loại cách cục chính</div>
-          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1E6B3C">✦</span><span class="xt-factor-label">Cát Cục</span><span class="xt-factor-desc">Phú quý, quan lộc, khoa bảng — xu hướng phát đạt</span></div>
-          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#C0392B">✗</span><span class="xt-factor-label">Hung Cục</span><span class="xt-factor-desc">Cô độc, bại tài, khắc hao — cần lưu ý và hóa giải</span></div>
-          <div class="xt-factor-item"><span class="xt-factor-num">○</span><span class="xt-factor-label">Trung Bình</span><span class="xt-factor-desc">Không đặc biệt nổi trội — phụ thuộc vào đại vận</span></div>
+          <div class="xt-factor-title">Bạn nhận được ngay</div>
+          <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">Tổng quan cách cục</span><span class="xt-factor-desc">Liệt kê tất cả cách cục trong lá số — tên, loại, mô tả ngắn</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">②</span><span class="xt-factor-label">Phân tích sao</span><span class="xt-factor-desc">Nhận định từng sao tinh tại cung theo tổ hợp cổ pháp — cát/hung/trung</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">③</span><span class="xt-factor-label">Điểm 6 chiều</span><span class="xt-factor-desc">Tiềm Năng · Bền Vững · An Toàn · Quý Nhân · Minh Bạch · Tương Hợp cho từng cung</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">④</span><span class="xt-factor-label">Radar từng cung</span><span class="xt-factor-desc">Biểu đồ 6 chiều nhỏ kèm theo mỗi cung có dữ liệu</span></div>
         </div>
       </div>
       <div class="xt-note">
         <span class="xt-note-icon">💡</span>
-        <div>Cách cục cho thấy xu hướng tiềm năng, không phải số phận cố định. Cần xem toàn bộ lá số và đại vận để luận đoán chính xác.</div>
+        <div>Không phải lá số nào cũng có cách cục đặc biệt — lá số bình thường vẫn rất có giá trị. Phân tích sao và điểm 6 chiều luôn có cho tất cả lá số dù không có cách cục.</div>
       </div>
     </div>
   </div>
@@ -53,20 +78,20 @@
   </div>
 
   <div class="result-section" id="result-section">
+    <!-- Summary -->
     <div class="res-block" style="margin-bottom:24px">
-      <div class="res-block-header">
-        <span class="res-block-title">Cách Cục Phát Hiện Được</span>
-        <span id="ccSummary" style="font-size:12px;color:var(--text-lt)"></span>
-      </div>
-      <div id="ccList"></div>
+      <div class="res-block-header"><span class="res-block-title">Tổng Quan Cách Cục</span><span id="ccSummary" style="font-size:11px;color:var(--text-lt)"></span></div>
+      <div class="res-block-body" id="ccOverview"></div>
     </div>
+    <!-- Per-cung sections -->
+    <div id="cungSections"></div>
   </div>
 
   <div class="tool-cta">
-    <div class="tool-cta-eyebrow">Luận Giải Sâu Hơn</div>
-    <div class="tool-cta-title">Hiểu Ý Nghĩa Cách Cục Trong Thực Tế</div>
-    <div class="tool-cta-desc">Biết tên cách cục là bước đầu — luận giải đầy đủ sẽ giải thích cách cục ảnh hưởng đến sự nghiệp, tài lộc, hôn nhân trong từng giai đoạn đại vận như thế nào.</div>
-    <a class="tool-cta-btn" href="/luan-giai.html">Luận Giải 24 Phần ($19) →</a>
+    <div class="tool-cta-eyebrow">Luận Giải Chuyên Sâu</div>
+    <div class="tool-cta-title">AI Phân Tích Từng Cung — 24 Phần</div>
+    <div class="tool-cta-desc">Dữ liệu pre-gen cho thấy các con số và sao tinh — luận giải AI sẽ giải thích ý nghĩa cụ thể trong cuộc đời bạn theo cổ pháp.</div>
+    <a class="tool-cta-btn" href="/luan-giai.html">Mở Khóa Luận Giải ($19) →</a>
   </div>
 </div>
 
@@ -76,15 +101,55 @@
 </footer>
 
 <script>
-const QUY_KW=['phú','quý','đế','vương','khoa','quyền','lộc','tài','quan','thọ','cát','hội','tụ'];
-const HUNG_KW=['sát','hình','phá','thoái','tiêu','bại','cô','quả','tù','hao','khắc','bệnh','tán','hư'];
-function getLoai(name){
-  const n=String(name||'').toLowerCase();
-  if(QUY_KW.some(k=>n.includes(k)))return'quy';
-  if(HUNG_KW.some(k=>n.includes(k)))return'hung';
-  return'trung';
+const CUNGS = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
+const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
+const MV = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
+const METRIC_COLORS = {tiemNang:'#c9a84c',benVung:'#1E6B3C',anToan:'#0E7490',quyNhan:'#7B2FBE',minhBach:'#1455A4',tuongHop:'#B04020'};
+const METRIC_DESC = {tiemNang:'Tiềm năng phát đạt',benVung:'Bền vững ổn định',anToan:'An toàn ít rủi ro',quyNhan:'Quý nhân hỗ trợ',minhBach:'Cung rõ ràng',tuongHop:'Hài hòa bản mệnh'};
+
+// buildPreGenHtml cho từng cung (adapted từ luan-giai.html)
+function buildCungHtml(ls, cungName) {
+  const ynItems=ls.cachCucTungCung?.[cungName]||[];
+  const ccItems=(ls.cachCuc||[]).filter(c=>c.cung===cungName);
+  const sc=ls.cungScores?.[cungName];
+  if (!ynItems.length && !ccItems.length && !sc) return '';
+
+  let h='';
+  if (ccItems.length>0) {
+    h+=`<div class="pregen-block"><div class="pregen-title">⚙ Cách cục đặc biệt</div>`;
+    ccItems.forEach(c=>{h+=`<div class="pregen-item"><span class="cc-label cc-${c.loai||''}">${String(c.ten||'')}</span><span class="cc-mota">${String(c.moTa||'')}</span></div>`;});
+    h+=`</div>`;
+  }
+  if (ynItems.length>0) {
+    h+=`<div class="pregen-block"><div class="pregen-title">📋 Phân tích sao</div>`;
+    ynItems.forEach(y=>{
+      const ys=String(y||'');
+      const cls=ys.includes('đại cát')||ys.includes('đại phú')?'yn-great-cat':ys.includes('[cát]')||ys.includes('phú quý')||ys.includes('giàu sang')?'yn-cat':ys.includes('đại hung')?'yn-great-hung':ys.includes('hung')||ys.includes('vất vả')||ys.includes('tai')?'yn-hung':ys.includes('Tuần')||ys.includes('Triệt')?'yn-tuan':'yn-neutral';
+      h+=`<div class="pregen-yn ${cls}">• ${ys}</div>`;
+    });
+    h+=`</div>`;
+  }
+  if (sc) {
+    h+=`<div class="pregen-block" id="scores-${cungName}"><div class="pregen-title">📈 Đánh giá 6 chiều</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:12px"><canvas id="radar-${cungName}" style="max-width:180px;max-height:180px"></canvas><div class="score-bars" style="margin-top:0">`;
+    METRICS.forEach((m,i)=>{const v=sc[m],pct=v*10,col=v>=7?'#1FA3D6':v>=5?'#2F5BEA':v>=3?'#233E99':'#C0392B';h+=`<div class="score-bar-row"><span class="score-label">${MV[i]}</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${pct}%;background:${col}"></div></div><span class="score-val">${v}</span></div>`;});
+    h+=`</div></div></div>`;
+  }
+  return h;
 }
-function luanGiai(){
+
+function renderCungRadar(ls, cungName) {
+  const sc=ls.cungScores?.[cungName];
+  if (!sc) return;
+  const ctx=document.getElementById(`radar-${cungName}`);
+  if (!ctx) return;
+  new Chart(ctx,{
+    type:'radar',
+    data:{labels:MV,datasets:[{label:cungName,data:METRICS.map(m=>sc[m]),borderColor:'#c9a84c',backgroundColor:'#c9a84c18',pointBackgroundColor:METRICS.map(m=>METRIC_COLORS[m]),pointRadius:4,borderWidth:2}]},
+    options:{responsive:true,scales:{r:{min:0,max:10,ticks:{stepSize:2,font:{size:8},color:'#888',backdropColor:'transparent'},pointLabels:{font:{size:9,weight:'600'}},grid:{color:'#e0e0e0'},angleLines:{color:'#e0e0e0'}}},plugins:{legend:{display:false},title:{display:true,text:cungName,font:{size:11},padding:{bottom:4}}}}
+  });
+}
+
+function luanGiai() {
   const {hoten,ngay,thang,nam,gioIdx,gioHour,gioitinh,namXem}=TuviForm.getData();
   const err=document.getElementById('error-msg');
   err.classList.remove('active');
@@ -94,68 +159,52 @@ function luanGiai(){
   loader.classList.add('active');
   document.querySelector('.btn-submit').disabled=true;
   document.getElementById('result-section').classList.remove('active');
-  try{
+
+  try {
     const conv=convertDuongToAm(ngay,thang,nam,gioHour);
-    const ls=anSaoLaSo({
-      ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:nam,
-      canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:conv.gioIdx,
-      gioitinh,namXem:namXem||new Date().getFullYear()
-    });
-    // Thu thập cách cục, tránh trùng, đảm bảo name luôn là string
-    const seen=new Set();
-    const all=[];
-    if(Array.isArray(ls.cachCuc)){
-      ls.cachCuc.forEach(r=>{
-        const key=String(r.ten||r.name||'');
-        if(key&&!seen.has(key)){seen.add(key);all.push(r);}
-      });
-    }
-    if(ls.cachCucTungCung){
-      Object.entries(ls.cachCucTungCung).forEach(([cung,items])=>{
-        if(!Array.isArray(items))return;
-        items.forEach(r=>{
-          const key=String(r&&typeof r==='object'?(r.ten||r.name||''):(r||''));
-          if(key&&!seen.has(key)){
-            seen.add(key);
-            all.push(typeof r==='object'?{...r,_cung:cung}:{ten:key,_cung:cung});
-          }
-        });
-      });
-    }
-    const qCount=all.filter(c=>getLoai(c.ten||c.name||c)==='quy').length;
-    const hCount=all.filter(c=>getLoai(c.ten||c.name||c)==='hung').length;
-    document.getElementById('ccSummary').textContent=
-      all.length?`${all.length} cách cục — ${qCount} cát, ${hCount} hung`:'Không phát hiện cách cục đặc biệt';
-    if(!all.length){
-      document.getElementById('ccList').innerHTML=`<div style="padding:32px 24px;text-align:center;color:var(--text-lt)"><div style="font-size:28px;margin-bottom:10px">◎</div><div style="font-size:14px">Lá số không có cách cục đặc biệt nổi bật.<br>Vận trình phụ thuộc chủ yếu vào đại vận và tiểu vận từng giai đoạn.</div></div>`;
-    }else{
-      document.getElementById('ccList').innerHTML=all.map(cc=>{
-        const name=String(cc.ten||cc.name||(typeof cc==='string'?cc:'')||'Cách cục');
-        const cung=String(cc._cung||cc.cung||cc.cungName||'');
-        const desc=String(cc.moTa||cc.desc||cc.description||'');
-        const loai=getLoai(name);
-        const color=loai==='quy'?'var(--green)':loai==='hung'?'var(--red)':'var(--text-mid)';
-        const bg=loai==='quy'?'#eaf4ed':loai==='hung'?'#fef0ef':'var(--bg-soft)';
-        return`<div style="padding:16px 24px;border-bottom:1px solid var(--border-lt);background:${bg}">
-          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:${desc?'6':'0'}px">
-            <span style="font-size:13px;font-weight:700;color:${color}">${name}</span>
-            <span class="res-tag ${loai==='quy'?'res-tag-good':loai==='hung'?'res-tag-bad':'res-tag-neu'}">${loai==='quy'?'Cát Cục':loai==='hung'?'Hung Cục':'Trung Bình'}</span>
-            ${cung?`<span style="font-size:11px;color:var(--text-lt)">cung ${cung}</span>`:''}
-          </div>
-          ${desc?`<div style="font-size:13px;color:var(--text-mid);line-height:1.6">${desc}</div>`:''}
-        </div>`;
+    const ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:nam,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:conv.gioIdx,gioitinh,namXem:namXem||2026});
+
+    // Overview — all cachCuc
+    const allCc=ls.cachCuc||[];
+    const qCount=allCc.filter(c=>['quy_cuc','phu_cuc'].includes(c.loai||'')).length;
+    document.getElementById('ccSummary').textContent=allCc.length?`${allCc.length} cách cục — ${qCount} quý, ${allCc.length-qCount} khác`:'Không có cách cục đặc biệt';
+    if (allCc.length) {
+      document.getElementById('ccOverview').innerHTML=allCc.map(c=>{
+        const name=String(c.ten||''),mota=String(c.moTa||''),loai=String(c.loai||''),cung=String(c.cung||'');
+        const color=loai.includes('quy')||loai.includes('phu')?'var(--green)':loai.includes('hung')||loai.includes('sat')?'var(--red)':'var(--text-mid)';
+        return`<div style="padding:10px 0;border-bottom:1px solid var(--border-lt);display:flex;align-items:flex-start;gap:10px"><span class="cc-label cc-${loai}">${name}</span><span class="cc-mota">${mota}${cung?` — cung ${cung}`:''}</span></div>`;
       }).join('');
+    } else {
+      document.getElementById('ccOverview').innerHTML='<div style="color:var(--text-lt);font-size:13px;padding:8px 0;font-style:italic">Lá số không có cách cục đặc biệt nổi bật.</div>';
     }
+
+    // Per-cung sections
+    const container=document.getElementById('cungSections');
+    container.innerHTML='';
+    const radarQueue=[];
+    CUNGS.forEach(cungName=>{
+      const palace=ls.palaces?.find(p=>p.cungName===cungName);
+      const majorStars=(palace?.majorStars||[]).map(s=>String(s.ten||'')).filter(Boolean).join(', ')||'(vô chính diệu)';
+      const html=buildCungHtml(ls,cungName);
+      if (!html) return; // skip empty cungs
+      const sec=document.createElement('div');
+      sec.className='cung-section';
+      sec.innerHTML=`<div class="cung-section-header"><span class="cung-section-name">${cungName}${palace?.isMenh?' — MỆNH':palace?.isThan?' — THÂN':''}</span><span class="cung-section-stars">${majorStars}</span></div><div class="cung-section-body">${html}</div>`;
+      container.appendChild(sec);
+      if (ls.cungScores?.[cungName]) radarQueue.push(cungName);
+    });
+
     document.getElementById('result-section').classList.add('active');
+    setTimeout(()=>{radarQueue.forEach(c=>renderCungRadar(ls,c));},200);
     setTimeout(()=>document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'}),300);
-  }catch(e){
+  } catch(e) {
     err.textContent='Lỗi: '+e.message;err.classList.add('active');
-  }finally{
+  } finally {
     loader.classList.remove('active');document.querySelector('.btn-submit').disabled=false;
   }
 }
 window.luanGiai=luanGiai;
-TuviForm.render('tuvi-form-container', { onSubmit: luanGiai, submitLabel: 'Xem Kết Quả →' });
+TuviForm.render('tuvi-form-container',{onSubmit:luanGiai,submitLabel:'Phân Tích Cách Cục →'});
 </script>
 </body>
 </html>

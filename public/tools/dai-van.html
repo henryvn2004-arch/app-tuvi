@@ -3,12 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Xem Đại Vận – Tử Vi Minh Bảo</title>
-<meta name="description" content="Tra bảng đại vận 10 năm từ lá số Tử Vi Đẩu Số. Biết giai đoạn thuận lợi và cần thận trọng trong cuộc đời. Miễn phí.">
+<title>Xem Đại Vận Tử Vi – Tử Vi Minh Bảo</title>
+<meta name="description" content="Xem bảng đại vận, biểu đồ vận trình, timeline cuộc đời và candlestick tiểu vận từ lá số Tử Vi. Miễn phí, không AI.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="stylesheet" href="/tools/tools.css">
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tuvi-form.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+.pregen-block{background:#F5F5F5;border:1px solid #e0e0e0;border-radius:8px;padding:12px 16px;margin:12px 0}
+.pregen-title{font-size:11px;font-weight:600;color:#1a3a6a;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.pregen-yn{font-size:12.5px;line-height:1.6;padding:2px 0}
+.yn-great-cat{color:#1a6b3a}.yn-cat{color:#2a5a7a}.yn-great-hung{color:#C0392B}.yn-hung{color:#9B2020}.yn-tuan{color:#1a3a8a}.yn-neutral{color:#2a3a4a}
+.cc-label{font-size:11px;font-weight:600;padding:2px 6px;border-radius:3px;margin-right:6px}
+.cc-quy_cuc{background:#2a1f5e;color:#a78bfa}.cc-phu_cuc{background:#1f3a2a;color:#4ade80}.cc-ban_tien_cuc{background:#1a2535;color:#7bb8f8}.cc-tap_cuc,.cc-than_cu,.cc-menh_co_ban{background:#222;color:#a8b8c8}
+.cc-mota{font-size:11px;color:#555}
+.score-bars{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.score-bar-row{display:flex;align-items:center;gap:8px}
+.score-label{font-size:11px;color:#444;width:80px;flex-shrink:0}
+.score-bar-bg{flex:1;height:8px;background:#d0d8e0;border-radius:4px;overflow:hidden}
+.score-bar-fill{height:100%;border-radius:4px;transition:width .5s}
+.score-val{font-size:11px;color:#333;width:36px;text-align:right;flex-shrink:0}
+.rules-group{margin:4px 0}
+.rules-canh-bao{background:#fff0f0;border-radius:4px;padding:4px 6px;margin:4px 0;border-left:2px solid #f87171}
+.candle-wrap{overflow-x:auto;padding-bottom:8px}
+/* Bảng scoring đại vận */
+.dv-score-table{width:100%;border-collapse:collapse;font-size:12px}
+.dv-score-table th{background:var(--navy);color:#fff;padding:8px 12px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-align:left}
+.dv-score-table td{padding:10px 12px;border-bottom:1px solid var(--border-lt);vertical-align:middle}
+.dv-score-table tr.cur-row td{background:var(--gold-lt);font-weight:600}
+.dv-score-table tr:hover td{background:var(--bg-soft)}
+.flag-tot{color:#1a6b3a;font-weight:700}.flag-trung{color:#1455A4;font-weight:700}.flag-kho{color:#C0392B;font-weight:700}
+</style>
 </head>
 <body>
 <script src="/nav.js"></script>
@@ -16,26 +42,28 @@
 <div class="hero-tool">
   <div class="page">
     <div class="eyebrow">Công Cụ Miễn Phí</div>
-    <h1>Xem <em>Đại Vận</em> Tử Vi</h1>
-    <p>An sao và hiển thị bảng đại vận 10 năm từ lá số cổ pháp — biết đang chạy vận nào, vận nào tiếp theo.</p>
+    <h1>Xem <em>Đại Vận</em> &amp;<br>Vận Trình Toàn Đời</h1>
+    <p>Biểu đồ vận trình, timeline cuộc đời, candlestick tiểu vận 90 năm và bảng scoring 9 đại vận — phần pre-gen miễn phí.</p>
   </div>
 </div>
 
 <div class="page">
   <div class="tool-intro">
     <div class="xt-section">
-      <div class="xt-eyebrow">Đại Vận là gì?</div>
+      <div class="xt-eyebrow">Công cụ này cho bạn thấy gì?</div>
       <div class="xt-grid-2">
         <div>
-          <h2 class="xt-h2">Đại Vận — Chu Kỳ<br>10 Năm Vận Mệnh</h2>
-          <p class="xt-body">Trong Tử Vi Đẩu Số, mỗi người trải qua 9 đại vận, mỗi vận kéo dài khoảng 10 năm. Mỗi đại vận an tại một cung trong lá số — cung đó và các sao tại đó phản ánh bối cảnh vận khí chủ đạo của 10 năm đó.</p>
-          <p class="xt-body">Biết mình đang ở đại vận nào và cung nào đang vận là bước đầu để hiểu tại sao một giai đoạn lại thuận hay nghịch hơn giai đoạn khác. Đây là phần <strong>hoàn toàn miễn phí</strong> — không cần AI.</p>
+          <h2 class="xt-h2">Vận Trình Toàn Đời —<br>Charts &amp; Scoring, Không Cần AI</h2>
+          <p class="xt-body">Nhập ngày giờ sinh là có ngay toàn bộ dữ liệu đại vận: biểu đồ đường điểm 9 vận, timeline visual theo tuổi, bảng scoring chi tiết Thiên Thời/Địa Lợi/Nhân Hòa, candlestick tiểu vận 90 năm và phân tích chính tinh + luận đoán vận hạn của vận đang chạy.</p>
+          <p class="xt-body">Mọi thứ tính thuần từ engine cổ pháp, không tốn tiền. Nếu muốn đọc <em>ý nghĩa</em> từng đại vận — tại sao giai đoạn đó thuận hay nghịch, nên làm gì trong từng vận — hãy mở khóa 24 phần luận giải AI.</p>
         </div>
         <div class="xt-factors">
-          <div class="xt-factor-title">Bạn sẽ thấy gì</div>
-          <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">9 đại vận</span><span class="xt-factor-desc">Can chi, tuổi bắt đầu và cung vận của từng vận</span></div>
-          <div class="xt-factor-item"><span class="xt-factor-num">②</span><span class="xt-factor-label">Vận hiện tại</span><span class="xt-factor-desc">Đại vận đang chạy được đánh dấu nổi bật</span></div>
-          <div class="xt-factor-item"><span class="xt-factor-num">③</span><span class="xt-factor-label">Cung vận</span><span class="xt-factor-desc">Đại vận đang an tại cung nào trong lá số</span></div>
+          <div class="xt-factor-title">Bạn nhận được ngay</div>
+          <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">Biểu đồ vận trình</span><span class="xt-factor-desc">Line chart điểm số 9 đại vận — thấy ngay giai đoạn nào cao thấp</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">②</span><span class="xt-factor-label">Timeline visual</span><span class="xt-factor-desc">Blocks màu theo tuổi — vận đang chạy được highlight vàng</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">③</span><span class="xt-factor-label">Bảng scoring</span><span class="xt-factor-desc">Thiên Thời · Địa Lợi · Nhân Hòa · Tổng điểm /10 cho 9 đại vận</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">④</span><span class="xt-factor-label">Vận hiện tại</span><span class="xt-factor-desc">Chính tinh, sao tam phương tứ chính, luận đoán cát/hung/cảnh báo</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">⑤</span><span class="xt-factor-label">Candlestick 90 năm</span><span class="xt-factor-desc">Mỗi nến = 1 năm tiểu vận — xanh/đỏ theo mật độ sao tốt/xấu</span></div>
         </div>
       </div>
     </div>
@@ -49,19 +77,56 @@
   </div>
 
   <div class="result-section" id="result-section">
-    <div class="res-block">
-      <div class="res-block-header">
-        <span class="res-block-title">9 Đại Vận</span>
-        <span id="curDvLabel" style="font-size:11px;color:var(--text-lt)"></span>
-      </div>
-      <div id="dvList"></div>
+
+    <!-- Line chart vận trình -->
+    <div class="res-block" style="margin-bottom:24px">
+      <div class="res-block-header"><span class="res-block-title">📊 Vận Trình Toàn Đời</span></div>
+      <div class="res-block-body"><div style="max-width:700px"><canvas id="chart-daivan"></canvas></div></div>
     </div>
+
+    <!-- Timeline -->
+    <div class="res-block" style="margin-bottom:24px">
+      <div class="res-block-header"><span class="res-block-title">📊 Timeline Cuộc Đời</span></div>
+      <div class="res-block-body">
+        <div id="chart-timeline-wrap" style="position:relative;padding-top:32px">
+          <div id="chart-timeline-blocks" style="display:flex;gap:2px;align-items:flex-end;height:160px"></div>
+          <div id="chart-timeline-labels" style="display:flex;margin-top:6px;border-top:1px solid #eee;padding-top:6px"></div>
+          <div style="display:flex;gap:12px;margin-top:12px;font-size:11px;color:#666">
+            <span><span style="display:inline-block;width:10px;height:10px;background:#1FA3D6;border-radius:2px;margin-right:4px;vertical-align:middle"></span>Tốt (≥7)</span>
+            <span><span style="display:inline-block;width:10px;height:10px;background:#2F5BEA;border-radius:2px;margin-right:4px;vertical-align:middle"></span>Trung bình</span>
+            <span><span style="display:inline-block;width:10px;height:10px;background:#C0392B;border-radius:2px;margin-right:4px;vertical-align:middle"></span>Khó khăn</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bảng scoring -->
+    <div class="res-block" style="margin-bottom:24px">
+      <div class="res-block-header"><span class="res-block-title">Bảng Scoring 9 Đại Vận</span><span id="curDvLabel" style="font-size:11px;color:var(--text-lt)"></span></div>
+      <div style="overflow-x:auto"><table class="dv-score-table" id="dvTable"><thead><tr><th>Đại Vận</th><th>Tuổi</th><th>Cung</th><th>Chính Tinh</th><th>Thiên Thời</th><th>Địa Lợi</th><th>Nhân Hòa</th><th>Tổng</th></tr></thead><tbody id="dvTableBody"></tbody></table></div>
+    </div>
+
+    <!-- Pre-gen scoring chi tiết vận hiện tại -->
+    <div class="res-block" style="margin-bottom:24px">
+      <div class="res-block-header"><span class="res-block-title">Chi Tiết Đại Vận Hiện Tại</span></div>
+      <div class="res-block-body" id="curDvDetail"></div>
+    </div>
+
+    <!-- Candlestick 90 năm -->
+    <div class="res-block" style="margin-bottom:24px">
+      <div class="res-block-header"><span class="res-block-title">📊 Tiểu Vận 90 Năm (Candlestick)</span></div>
+      <div class="res-block-body">
+        <div style="font-size:11px;color:#666;margin-bottom:8px">Mỗi nến = 1 năm · Xanh = nhiều sao tốt · Đỏ = nhiều sao xấu</div>
+        <div class="candle-wrap"><div id="candle-90yr"></div></div>
+      </div>
+    </div>
+
   </div>
 
   <div class="tool-cta">
     <div class="tool-cta-eyebrow">Luận Giải Chuyên Sâu</div>
-    <div class="tool-cta-title">Hiểu ý nghĩa từng đại vận</div>
-    <div class="tool-cta-desc">Biết đại vận là bước đầu — luận giải đầy đủ sẽ cho bạn hiểu tính chất, điểm mạnh yếu và những giai đoạn cần chú ý trong từng vận theo cổ pháp và AI.</div>
+    <div class="tool-cta-title">Hiểu Ý Nghĩa Từng Đại Vận</div>
+    <div class="tool-cta-desc">Biểu đồ cho thấy xu hướng — luận giải đầy đủ giải thích tại sao, điểm tốt/xấu và những quyết định quan trọng trong từng giai đoạn 10 năm.</div>
     <a class="tool-cta-btn" href="/luan-giai.html">Luận Giải 24 Phần ($19) →</a>
   </div>
 </div>
@@ -72,8 +137,150 @@
 </footer>
 
 <script>
-const CURRENT_YEAR=2026;
-function luanGiai(){
+const CURRENT_YEAR = 2026;
+
+// ── renderCandlestick (copied from luan-giai.html, _astrolabe → ls param) ──
+function renderCandlestick(containerId, data, opts, ls) {
+  const el = document.getElementById(containerId);
+  if (!el || !data?.length) return;
+  const W=opts.width||Math.min(data.length*(opts.candleW?opts.candleW+3:9)+60,920);
+  const H=opts.height||180;
+  const PAD={top:28,right:14,bottom:32,left:34};
+  const cw=opts.candleW||Math.max(4,Math.floor((W-PAD.left-PAD.right)/data.length)-2);
+  const plotH=H-PAD.top-PAD.bottom;
+  const allVals=data.flatMap(d=>[d.high??d.maxScore??10,d.low??d.minScore??0]);
+  const minVal=Math.max(0,Math.min(...allVals)-0.3);
+  const maxVal=Math.min(10,Math.max(...allVals)+0.3);
+  const range=maxVal-minVal||1;
+  function yv(v){return PAD.top+plotH-((v-minVal)/range*plotH);}
+  function xc(i){return PAD.left+i*(cw+2)+cw/2;}
+  let grid='';
+  const step=(maxVal-minVal)>6?2:1;
+  for(let v=Math.ceil(minVal);v<=Math.floor(maxVal);v+=step){const gy=yv(v);grid+=`<line x1="${PAD.left}" y1="${gy}" x2="${W-PAD.right}" y2="${gy}" stroke="#1a2535" stroke-width="0.5" stroke-dasharray="3,3"/><text x="${PAD.left-5}" y="${gy+3}" font-size="8" fill="#4a5a6a" text-anchor="end">${v}</text>`;}
+  let candles='';
+  data.forEach((d,i)=>{
+    const _rawOpen=d.open!==undefined?d.open:d.mainScore;
+    const _rawClose=d.close!==undefined?d.close:d.mainScore;
+    const high=d.high!==undefined?d.high:d.maxScore;
+    const low=d.low!==undefined?d.low:d.minScore;
+    const _mid=(_rawOpen+_rawClose)/2,_exFactor=3.5;
+    const open=Math.max(low,Math.min(high,_mid+(_rawOpen-_mid)*_exFactor));
+    const close=Math.max(low,Math.min(high,_mid+(_rawClose-_mid)*_exFactor));
+    const bullish=close>=open,bodyCol=bullish?'#5FA8D3':'#C0392B',wickCol=bullish?'#2F5BEA':'#922B21';
+    const yOpen=yv(open),yClose=yv(close),yHigh=yv(high),yLow=yv(low),cx=xc(i);
+    const bodyTop=Math.min(yOpen,yClose),bodyHt=Math.max(1.5,Math.abs(yOpen-yClose));
+    candles+=`<line x1="${cx}" y1="${yHigh}" x2="${cx}" y2="${bodyTop}" stroke="${wickCol}" stroke-width="1.2"/><line x1="${cx}" y1="${bodyTop+bodyHt}" x2="${cx}" y2="${yLow}" stroke="${wickCol}" stroke-width="1.2"/><rect x="${cx-cw/2}" y="${bodyTop}" width="${cw}" height="${bodyHt}" fill="${bodyCol}" rx="1" opacity="0.92"/>`;
+    const labelStep=data.length>60?10:data.length>20?5:1;
+    if(d.tuoi%labelStep===0||data.length<=5)candles+=`<text x="${cx}" y="${H-PAD.bottom+14}" font-size="8" fill="#4a5a6a" text-anchor="middle">${d.tuoi}</text>`;
+  });
+  const tuoiNow=ls?.tuoiXem;
+  const curIdx=tuoiNow?data.findIndex(d=>d.tuoi===tuoiNow):-1;
+  let marker='';
+  if(curIdx>=0){const cx=xc(curIdx);marker=`<line x1="${cx}" y1="${PAD.top}" x2="${cx}" y2="${H-PAD.bottom}" stroke="#5FA8D3" stroke-width="1" stroke-dasharray="3,2" opacity="0.7"/><text x="${cx}" y="${PAD.top-7}" font-size="8" fill="#5FA8D3" text-anchor="middle">▼${tuoiNow}t</text>`;}
+  el.innerHTML=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:block;max-width:100%"><line x1="${PAD.left}" y1="${PAD.top-4}" x2="${PAD.left}" y2="${H-PAD.bottom}" stroke="#1e2d42" stroke-width="1"/><line x1="${PAD.left}" y1="${H-PAD.bottom}" x2="${W-PAD.right}" y2="${H-PAD.bottom}" stroke="#1e2d42" stroke-width="1"/>${grid}${candles}${marker}</svg>`;
+}
+
+// ── renderTimelinePhan14 (adapted) ──
+function renderTimelinePhan14(ls) {
+  if (!ls?.daiVans) return;
+  const dvs=ls.daiVans.slice(0,9);
+  const tlBlocks=document.getElementById('chart-timeline-blocks');
+  const tlLabels=document.getElementById('chart-timeline-labels');
+  const tlWrap=document.getElementById('chart-timeline-wrap');
+  if (!tlBlocks) return;
+  const tuoiNow=ls.tuoiXem||0;
+  dvs.forEach((dv,i)=>{
+    const span=(dv.tuoiEnd-dv.tuoiStart)||10;
+    const sc2=dv.scoring?.tong||0;
+    const h=Math.round(16+(sc2/10)*144);
+    const col=sc2>=7?'#1FA3D6':sc2>=4?'#2F5BEA':'#C0392B';
+    const isCur=tuoiNow>=dv.tuoiStart&&tuoiNow<=dv.tuoiEnd;
+    const block=document.createElement('div');
+    block.style.cssText=`flex:${span};background:${col};height:${h}px;border-radius:3px 3px 0 0;cursor:pointer;transition:filter .15s;position:relative${isCur?';outline:2px solid #c9a84c;outline-offset:2px':''}`;
+    block.title=`ĐV${i+1}: ${dv.tuoiStart}–${dv.tuoiEnd}t · ${ls.palaces?.[dv.cungIdx]?.cungName||''} · ${sc2}đ`;
+    block.onmouseenter=()=>block.style.filter='brightness(1.3)';
+    block.onmouseleave=()=>block.style.filter='';
+    tlBlocks.appendChild(block);
+    const lbl=document.createElement('div');
+    lbl.style.cssText=`flex:${span};font-size:9px;color:#555;text-align:center`;
+    lbl.textContent=dv.tuoiStart;
+    tlLabels.appendChild(lbl);
+    if (isCur) {
+      const pctPassed=(tuoiNow-dv.tuoiStart)/span;
+      setTimeout(()=>{
+        const totalW=tlBlocks.offsetWidth;
+        const prevSpan=dvs.slice(0,i).reduce((s,d)=>(d.tuoiEnd-d.tuoiStart||10)+s,0);
+        const totalSpan=dvs.reduce((s,d)=>(d.tuoiEnd-d.tuoiStart||10)+s,0);
+        const leftPct=(prevSpan+pctPassed*span)/totalSpan;
+        const marker=document.createElement('div');
+        marker.style.cssText=`position:absolute;bottom:22px;left:${leftPct*100}%;width:1px;background:#c9a84c;height:${h+16}px;pointer-events:none`;
+        marker.innerHTML=`<div style="position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:9px;color:#5FA8D3;font-weight:600;background:#fff;padding:1px 5px;border-radius:3px;border:1px solid #c9a84c;white-space:nowrap">◆ ${tuoiNow}t</div>`;
+        tlWrap.appendChild(marker);
+      },50);
+    }
+  });
+}
+
+// ── buildPreGenHtml for a single dv (adapted) ──
+function buildDvDetailHtml(ls, dv) {
+  if (!dv||!ls.palaces) return '';
+  const dvPalace=ls.palaces[dv.cungIdx];
+  if (!dvPalace) return '';
+  let h='';
+  const dvCungName=dvPalace.cungName, dvDC=dvPalace.diaChi, sc=dv.scoring;
+  if (sc) {
+    const ttScore=sc.thienThoi?.score??sc.thienThoi,dlScore=sc.diaLoi?.score??sc.diaLoi,nhScore=sc.nhanHoa?.score??sc.nhanHoa;
+    const ttBar=(ttScore/5*100).toFixed(0),dlBar=(dlScore/1*100).toFixed(0),nhBar=(nhScore/4*100).toFixed(0),totBar=(sc.tong/10*100).toFixed(0);
+    const totCol=sc.tong>=7?'#1a6b3a':sc.tong>=4?'#1455A4':'#C0392B';
+    h+=`<div class="pregen-block"><div class="pregen-title">📊 Scoring — Cung ${dvCungName} (${dvDC})</div><div class="score-bars">
+      <div class="score-bar-row"><span class="score-label">Thiên Thời</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${ttBar}%;background:#c9a84c"></div></div><span class="score-val">${ttScore}/5</span></div>
+      <div class="score-bar-row"><span class="score-label">Địa Lợi</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${dlBar}%;background:#0E7490"></div></div><span class="score-val">${dlScore}/1</span></div>
+      <div class="score-bar-row"><span class="score-label">Nhân Hòa</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${nhBar}%;background:#7B2FBE"></div></div><span class="score-val">${nhScore}/4</span></div>
+      <div class="score-bar-row" style="border-top:1px solid #e0e0e0;padding-top:6px;margin-top:2px"><span class="score-label" style="font-weight:600">Tổng ${sc.flag||''}</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${totBar}%;background:${totCol}"></div></div><span class="score-val" style="color:${totCol};font-weight:600">${sc.tong}/10</span></div>
+    </div></div>`;
+  }
+  const majorStars=dvPalace.majorStars||[], allStars=dvPalace.stars||[];
+  const SAT=['Kình Dương','Đà La','Hỏa Tinh','Linh Tinh','Địa Không','Địa Kiếp'];
+  const BAI=['Thiên Khốc','Thiên Hư','Tang Môn','Bạch Hổ','Đại Hao','Tiểu Hao'];
+  const CAT=['Văn Xương','Văn Khúc','Thiên Khôi','Thiên Việt','Tả Phù','Hữu Bật','Lộc Tồn','Hóa Lộc','Hóa Quyền','Hóa Khoa'];
+  h+=`<div class="pregen-block"><div class="pregen-title">⭐ Chính tinh cung đại vận</div>`;
+  if (!majorStars.length) {
+    const xung=dvPalace.xungChieuCung,xungStars=xung?(xung.majorStars||[]).map(s=>`${s.ten}(${s.brightness||''})`).join(', '):'';
+    h+=`<div class="pregen-yn yn-neutral">Vô chính diệu${xungStars?` — mượn từ cung xung: ${xungStars}`:''}</div>`;
+  } else {
+    majorStars.forEach(s=>{
+      const bCol=s.brightness==='Miếu'||s.brightness==='Vượng'?'#1a6b3a':s.brightness==='Đắc'?'#2a8a4a':s.brightness==='Bình hòa'||s.brightness==='Bình'?'#1455A4':'#C0392B';
+      h+=`<div class="pregen-yn yn-neutral"><strong>${s.ten}</strong> <span style="color:${bCol};font-size:11px">(${s.brightness||''})</span>${s.hoa?` <span style="color:#5FA8D3">[Hóa ${s.hoa}]</span>`:''}</div>`;
+    });
+  }
+  h+=`</div>`;
+  const tptcPalaces=[dvPalace,...(dvPalace.tamHopCungs||[]),dvPalace.xungChieuCung].filter(Boolean);
+  const tptcNames=tptcPalaces.flatMap(p=>(p.stars||[]).map(s=>s.ten));
+  const satIn=SAT.filter(s=>tptcNames.includes(s)),baiIn=BAI.filter(s=>tptcNames.includes(s)),catIn=CAT.filter(s=>tptcNames.includes(s));
+  const hasTuan=allStars.some(s=>s.ten==='Tuần'),hasTriet=allStars.some(s=>s.ten==='Triệt');
+  if (catIn.length||satIn.length||baiIn.length||hasTuan||hasTriet) {
+    h+=`<div class="pregen-block"><div class="pregen-title">🔍 Sao tam phương tứ chính</div>`;
+    if (catIn.length) h+=`<div class="pregen-yn yn-cat">Cát tinh: ${catIn.join(', ')}</div>`;
+    if (satIn.length) h+=`<div class="pregen-yn yn-hung">Sát tinh: ${satIn.join(', ')}</div>`;
+    if (baiIn.length) h+=`<div class="pregen-yn yn-hung" style="color:#fca5a5">Bại tinh: ${baiIn.join(', ')}</div>`;
+    if (hasTuan) h+=`<div class="pregen-yn yn-tuan">Tuần án ngữ cung đại vận</div>`;
+    if (hasTriet) h+=`<div class="pregen-yn yn-tuan">Triệt án ngữ cung đại vận</div>`;
+    h+=`</div>`;
+  }
+  const dvRules=dv.rules||[];
+  if (dvRules.length) {
+    const tot=dvRules.filter(r=>r.type==='tot'),xau=dvRules.filter(r=>r.type==='xau'),cb=dvRules.filter(r=>r.type==='canh_bao'),trung=dvRules.filter(r=>r.type==='trung');
+    h+=`<div class="pregen-block"><div class="pregen-title">🔮 Luận đoán vận hạn</div>`;
+    if (tot.length){h+=`<div class="rules-group">`;tot.forEach(r=>h+=`<div class="pregen-yn yn-cat">✦ ${r.text}</div>`);h+=`</div>`;}
+    if (trung.length){h+=`<div class="rules-group">`;trung.forEach(r=>h+=`<div class="pregen-yn yn-neutral">◆ ${r.text}</div>`);h+=`</div>`;}
+    if (xau.length){h+=`<div class="rules-group">`;xau.forEach(r=>h+=`<div class="pregen-yn yn-hung">▼ ${r.text}</div>`);h+=`</div>`;}
+    if (cb.length){h+=`<div class="rules-group rules-canh-bao">`;cb.forEach(r=>h+=`<div class="pregen-yn yn-great-hung">⚠ ${r.text}</div>`);h+=`</div>`;}
+    h+=`</div>`;
+  }
+  return h;
+}
+
+function luanGiai() {
   const {hoten,ngay,thang,nam,gioIdx,gioHour,gioitinh,namXem}=TuviForm.getData();
   const err=document.getElementById('error-msg');
   err.classList.remove('active');
@@ -83,48 +290,68 @@ function luanGiai(){
   loader.classList.add('active');
   document.querySelector('.btn-submit').disabled=true;
   document.getElementById('result-section').classList.remove('active');
-  try{
+  // Clear chart-timeline
+  document.getElementById('chart-timeline-blocks').innerHTML='';
+  document.getElementById('chart-timeline-labels').innerHTML='';
+
+  try {
     const conv=convertDuongToAm(ngay,thang,nam,gioHour);
-    const ls=anSaoLaSo({
-      ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:nam,
-      canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:conv.gioIdx,
-      gioitinh,namXem:namXem||CURRENT_YEAR
-    });
+    const ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:nam,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:conv.gioIdx,gioitinh,namXem:namXem||CURRENT_YEAR});
     const dvs=ls.daiVans||[];
     const curDv=ls.daiVanHienTai;
     const tuoiTa=(namXem||CURRENT_YEAR)-nam+1;
-    if(curDv&&curDv.diaChi){
-      document.getElementById('curDvLabel').textContent=`Tuổi ${tuoiTa} — đang chạy: ${curDv.diaChi}`;
-    }
-    document.getElementById('dvList').innerHTML=dvs.slice(0,9).map((dv,i)=>{
+    if (curDv?.diaChi) document.getElementById('curDvLabel').textContent=`Tuổi ${tuoiTa} — đang chạy: ${curDv.diaChi}`;
+
+    // Bảng scoring
+    document.getElementById('dvTableBody').innerHTML=dvs.slice(0,9).map((dv,i)=>{
       const canChi=String(dv.diaChi||'—');
-      const tuoiStart=dv.tuoiStart??dv.tuoi??'?';
-      const tuoiEnd=dv.tuoiEnd??(dvs[i+1]?.tuoiStart??'?');
-      const fromY=typeof tuoiStart==='number'?nam+tuoiStart-1:'?';
-      const toY=typeof tuoiEnd==='number'?nam+tuoiEnd-2:'?';
+      const cungName=ls.palaces?.[dv.cungIdx]?.cungName||'';
+      const majorStars=(ls.palaces?.[dv.cungIdx]?.majorStars||[]).map(s=>String(s.ten||'')).filter(Boolean).join(', ')||'(vô)';
+      const sc=dv.scoring;
       const isCur=curDv&&dv.cungIdx!=null&&curDv.cungIdx===dv.cungIdx;
-      const cungName=ls.palaces&&dv.cungIdx!=null?String(ls.palaces[dv.cungIdx]?.cungName||''):'';
-      const majorStars=ls.palaces&&dv.cungIdx!=null?(ls.palaces[dv.cungIdx]?.majorStars||[]).map(s=>String(s.ten||s||'')).filter(Boolean).join(', '):'';
-      return`<div class="dv-item${isCur?' current':''}">
-        <div class="dv-age">${tuoiStart}<small>tuổi</small></div>
-        <div style="flex:1">
-          <div class="dv-canchi">${canChi}${cungName?' — cung '+cungName:''}</div>
-          <div class="dv-years">${fromY}${typeof toY==='number'?'–'+toY:''}</div>
-          ${majorStars?`<div style="font-size:11px;color:var(--text-lt);margin-top:3px">${majorStars}</div>`:''}
-        </div>
-        ${isCur?'<div class="dv-badge">Hiện tại</div>':''}
-      </div>`;
+      const tot=sc?.tong??'—';
+      const flagCls=typeof tot==='number'?tot>=7?'flag-tot':tot>=4?'flag-trung':'flag-kho':'';
+      return`<tr${isCur?' class="cur-row"':''}>
+        <td>${canChi}${isCur?' ◆':''}</td>
+        <td>${dv.tuoiStart??''}–${dv.tuoiEnd??''}t</td>
+        <td>${cungName}</td>
+        <td style="font-size:11px">${majorStars}</td>
+        <td>${sc?.thienThoi?.score??sc?.thienThoi??'—'}/5</td>
+        <td>${sc?.diaLoi?.score??sc?.diaLoi??'—'}/1</td>
+        <td>${sc?.nhanHoa?.score??sc?.nhanHoa??'—'}/4</td>
+        <td><span class="${flagCls}">${tot}${sc?.flag?' '+sc.flag:''}</span></td>
+      </tr>`;
     }).join('');
+
+    // Chi tiết vận hiện tại
+    document.getElementById('curDvDetail').innerHTML = buildDvDetailHtml(ls, curDv) || '<div style="color:var(--text-lt);font-size:13px;padding:8px 0">Không xác định được đại vận hiện tại.</div>';
+
     document.getElementById('result-section').classList.add('active');
-    setTimeout(()=>document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'}),300);
-  }catch(e){
+
+    setTimeout(()=>{
+      // Line chart
+      const ctx=document.getElementById('chart-daivan');
+      if (ctx&&typeof Chart!=='undefined') {
+        const dvs9=dvs.slice(0,9);
+        new Chart(ctx,{
+          type:'line',
+          data:{labels:dvs9.map((dv,i)=>`ĐV${i+1}\n${dv.tuoiStart}–${dv.tuoiEnd}t`),datasets:[{label:'Điểm Vận',data:dvs9.map(dv=>dv.scoring?.tong||0),borderColor:'#2F5BEA',backgroundColor:'rgba(20,85,164,0.08)',pointBackgroundColor:dvs9.map(dv=>(dv.scoring?.tong||0)>=7?'#1FA3D6':(dv.scoring?.tong||0)>=5?'#1A3A5C':'#C0392B'),pointRadius:6,tension:.4,fill:true}]},
+          options:{responsive:true,plugins:{legend:{display:false},title:{display:true,text:'Vận Trình Toàn Đời',font:{size:15,weight:'bold'},color:'#061A2E'}},scales:{y:{min:0,max:10,title:{display:true,text:'Điểm vận'}},x:{title:{display:true,text:'Đại vận'}}}}
+        });
+      }
+      renderTimelinePhan14(ls);
+      if (ls.tieuVanScores?.length) renderCandlestick('candle-90yr', ls.tieuVanScores, {candleW:9,height:360}, ls);
+    }, 200);
+
+    setTimeout(()=>document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'}), 300);
+  } catch(e) {
     err.textContent='Lỗi: '+e.message;err.classList.add('active');
-  }finally{
+  } finally {
     loader.classList.remove('active');document.querySelector('.btn-submit').disabled=false;
   }
 }
 window.luanGiai=luanGiai;
-TuviForm.render('tuvi-form-container', { onSubmit: luanGiai, submitLabel: 'Xem Kết Quả →' });
+TuviForm.render('tuvi-form-container',{onSubmit:luanGiai,submitLabel:'Xem Đại Vận →'});
 </script>
 </body>
 </html>
