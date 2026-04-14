@@ -595,10 +595,8 @@ function tinhDaiVan(menhIdx, cuc, amDuong, gioitinh) {
 // ─── TIỂU HẠN ────────────────────────────────────────────────
 // Lưu niên tiểu vận
 const TIEU_HAN_KHOI = {
-  'nam': {'Tý':'Tuất','Sửu':'Dậu','Dần':'Thân','Mão':'Mùi','Thìn':'Ngọ','Tỵ':'Tỵ',
-          'Ngọ':'Thìn','Mùi':'Mão','Thân':'Dần','Dậu':'Sửu','Tuất':'Tý','Hợi':'Hợi'},
-  'nu':  {'Tý':'Thìn','Sửu':'Tỵ','Dần':'Ngọ','Mão':'Mùi','Thìn':'Thân','Tỵ':'Dậu',
-          'Ngọ':'Tuất','Mùi':'Hợi','Thân':'Tý','Dậu':'Sửu','Tuất':'Dần','Hợi':'Mão'},
+  'nam': {'Dần':'Thìn','Ngọ':'Thìn','Tuất':'Thìn','Tỵ':'Mùi','Dậu':'Mùi','Sửu':'Mùi','Thân':'Tuất','Tý':'Tuất','Thìn':'Tuất','Hợi':'Sửu','Mão':'Sửu','Mùi':'Sửu'},
+  'nu':  {'Dần':'Thìn','Ngọ':'Thìn','Tuất':'Thìn','Tỵ':'Mùi','Dậu':'Mùi','Sửu':'Mùi','Thân':'Tuất','Tý':'Tuất','Thìn':'Tuất','Hợi':'Sửu','Mão':'Sửu','Mùi':'Sửu'},
 };
 
 function tinhTieuHan(chiNamSinh, gioitinh, tuoiXem) {
