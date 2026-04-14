@@ -1,152 +1,356 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Ngũ Hành Trong Tên – Tử Vi Minh Bảo</title>
-<meta name="description" content="Tra ngũ hành của từng chữ trong tên Hán-Việt theo số nét. Biết tên bổ sung hay xung khắc với mệnh cục. Miễn phí.">
+<meta name="description" content="Tra ngũ hành của từng chữ trong tên người Việt. Chỉ cần nhập tên tiếng Việt có dấu — hệ thống tự tra chữ Hán, đếm số nét và xác định ngũ hành.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="stylesheet" href="/tools/tools.css">
 <style>
-.ten-chars{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin:24px 0}
-.char-card{width:100px;padding:20px 12px;border-radius:8px;text-align:center;border:1px solid var(--border-lt)}
-.char-word{font-size:32px;font-weight:700;margin-bottom:8px}
-.char-net{font-size:11px;color:var(--text-lt);margin-bottom:6px}
-.char-hanh{font-size:14px;font-weight:700}
-.hanh-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.hanh-name{width:60px;font-size:12px;color:var(--text-mid);flex-shrink:0}
-.hanh-bar{flex:1;height:10px;border-radius:5px;background:var(--border-lt);overflow:hidden}
-.hanh-fill{height:100%;border-radius:5px}
-.hanh-count{font-size:12px;width:20px;text-align:right;flex-shrink:0;color:var(--text-mid)}
-.net-input{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.syl-cards{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin:24px 0 16px}
+.syl-card{min-width:88px;padding:16px 12px 14px;border-radius:10px;text-align:center;border:2px solid transparent}
+.syl-viet{font-size:20px;font-weight:700;margin-bottom:4px;color:var(--navy)}
+.syl-han{font-size:30px;line-height:1;margin-bottom:6px;font-family:'Noto Serif',Georgia,serif}
+.syl-net{font-size:10px;color:var(--text-lt);margin-bottom:6px}
+.syl-hanh{font-size:14px;font-weight:700}
+.syl-unknown{background:var(--bg-soft);border-color:var(--border)}
+.syl-unknown .syl-hanh{color:var(--text-lt);font-size:11px}
+.hanh-Mộc{background:#eaf4ed;border-color:#c3e0cc}.hanh-Mộc .syl-hanh{color:#1E6B3C}
+.hanh-Hỏa{background:#fff0ef;border-color:#f5c0bc}.hanh-Hỏa .syl-hanh{color:#C0392B}
+.hanh-Thổ{background:#fdf6e9;border-color:#e8d9b0}.hanh-Thổ .syl-hanh{color:#9A7B3A}
+.hanh-Kim{background:#f3f4f5;border-color:#ccc}.hanh-Kim .syl-hanh{color:#5a6a72}
+.hanh-Thủy{background:#e8f0fe;border-color:#c0d0f0}.hanh-Thủy .syl-hanh{color:#1455A4}
+.nh-balance{display:flex;border-radius:6px;overflow:hidden;height:32px;margin:12px 0 6px}
+.nh-seg{display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;overflow:hidden;white-space:nowrap;transition:flex .4s}
+.nh-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;margin-bottom:12px}
+.nh-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;display:inline-block;margin-right:4px}
+.rel-box{margin-top:12px;padding:14px 18px;border-radius:8px;font-size:13px;line-height:1.8}
+.rel-tot{background:#eaf4ed;border-left:4px solid #1E6B3C;color:#1E6B3C}
+.rel-xau{background:#fef0ef;border-left:4px solid #C0392B;color:#C0392B}
+.rel-trun{background:var(--bg-soft);border-left:4px solid var(--border);color:var(--text-mid)}
+.unk-wrap{margin:8px 0 20px;padding:16px;background:var(--bg-soft);border-radius:8px;border:1px solid var(--border-lt)}
 </style>
 </head>
 <body>
 <script src="/nav.js"></script>
+
 <div class="hero-tool">
   <div class="page">
     <div class="eyebrow">Công Cụ Miễn Phí</div>
     <h1>Ngũ Hành<br><em>Trong Tên</em></h1>
-    <p>Tra ngũ hành của từng chữ trong tên Hán-Việt theo tổng số nét — biết tên bổ sung hay xung khắc với mệnh cục của bạn.</p>
+    <p>Nhập tên tiếng Việt đầy đủ — hệ thống tự tra chữ Hán tương ứng, số nét và ngũ hành. Không cần biết chữ Hán.</p>
   </div>
 </div>
+
 <div class="page">
   <div class="tool-intro">
     <div class="xt-section">
-      <div class="xt-eyebrow">Ngũ Hành tên là gì?</div>
+      <div class="xt-eyebrow">Ngũ hành tên hoạt động thế nào?</div>
       <div class="xt-grid-2">
         <div>
-          <h2 class="xt-h2">Số Nét Chữ →<br>Ngũ Hành Mỗi Chữ</h2>
-          <p class="xt-body">Trong phong thủy đặt tên, mỗi chữ Hán có một số nét nhất định. Tổng số nét (sau khi rút gọn về chữ số đơn) quy định ngũ hành của chữ đó: số 1–2 = Mộc, 3–4 = Hỏa, 5–6 = Thổ, 7–8 = Kim, 9–0 = Thủy.</p>
-          <p class="xt-body">Tên lý tưởng nên có ngũ hành bổ trợ hoặc tương sinh với ngũ hành bản mệnh. Ví dụ: người mệnh Thổ cần thêm Hỏa (Hỏa sinh Thổ) hoặc Kim (Thổ sinh Kim).</p>
+          <h2 class="xt-h2">Tên Việt → Chữ Hán →<br>Số Nét → Ngũ Hành</h2>
+          <p class="xt-body">Tên người Việt phần lớn có gốc Hán-Việt — mỗi âm tiết ứng với một chữ Hán có số nét nhất định. Trong phong thủy đặt tên, <strong>chữ số hàng đơn vị của số nét</strong> xác định ngũ hành: 1–2 = Mộc, 3–4 = Hỏa, 5–6 = Thổ, 7–8 = Kim, 9–0 = Thủy.</p>
+          <p class="xt-body">Công cụ có sẵn bảng tra ~400 âm tiết tên phổ biến. Âm tiết không tìm thấy sẽ được đánh dấu để nhập tay — mày có thể tra số nét tại <strong>hanzii.net</strong>.</p>
         </div>
         <div class="xt-factors">
-          <div class="xt-factor-title">Quy Tắc Ngũ Hành Tên</div>
-          <div class="xt-factor-item"><span class="xt-factor-num">1–2</span><span class="xt-factor-label">Mộc</span><span class="xt-factor-desc">Nét lẻ 1 hoặc chữ số cuối là 1, 2</span></div>
-          <div class="xt-factor-item"><span class="xt-factor-num">3–4</span><span class="xt-factor-label">Hỏa</span><span class="xt-factor-desc">Chữ số cuối là 3, 4</span></div>
-          <div class="xt-factor-item"><span class="xt-factor-num">5–6</span><span class="xt-factor-label">Thổ</span><span class="xt-factor-desc">Chữ số cuối là 5, 6</span></div>
-          <div class="xt-factor-item"><span class="xt-factor-num">7–8</span><span class="xt-factor-label">Kim</span><span class="xt-factor-desc">Chữ số cuối là 7, 8</span></div>
-          <div class="xt-factor-item"><span class="xt-factor-num">9–0</span><span class="xt-factor-label">Thủy</span><span class="xt-factor-desc">Chữ số cuối là 9, 0</span></div>
+          <div class="xt-factor-title">Ngũ Hành Theo Số Nét</div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1E6B3C;font-weight:700">1–2</span><span class="xt-factor-label">Mộc</span><span class="xt-factor-desc">VD: Đinh (2 nét), Nhất (1 nét)</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#C0392B;font-weight:700">3–4</span><span class="xt-factor-label">Hỏa</span><span class="xt-factor-desc">VD: Văn (4), Tâm (4), Sơn (3)</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#9A7B3A;font-weight:700">5–6</span><span class="xt-factor-label">Thổ</span><span class="xt-factor-desc">VD: An (6), Ngọc (5), Quang (6)</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#5a6a72;font-weight:700">7–8</span><span class="xt-factor-label">Kim</span><span class="xt-factor-desc">VD: Nguyễn (7), Minh (8), Trung (8)</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1455A4;font-weight:700">9–0</span><span class="xt-factor-label">Thủy</span><span class="xt-factor-desc">VD: Tuấn (9), Nam (9), Hương (9)</span></div>
+          <div class="xt-note" style="margin-top:12px">
+            <span class="xt-note-icon">💡</span>
+            <div>Một số âm đồng âm dị nghĩa — cùng cách đọc nhưng nhiều chữ Hán khác nhau (số nét khác). Công cụ dùng chữ phổ biến nhất. Bố mẹ đặt tên con nên đối chiếu với chữ Hán thực tế.</div>
+          </div>
         </div>
-      </div>
-      <div class="xt-note">
-        <span class="xt-note-icon">💡</span>
-        <div>Nhập tên từng chữ và số nét thực của chữ đó (tra từ từ điển Hán-Việt). Công cụ này tính ngũ hành dựa trên số nét bạn nhập. Nên kiểm tra số nét từ nguồn đáng tin cậy.</div>
       </div>
     </div>
   </div>
+
   <div class="form-section">
-    <div class="section-eyebrow">Nhập Tên &amp; Số Nét</div>
+    <div class="section-eyebrow">Nhập Tên</div>
     <div class="form-grid cols-2">
       <div class="form-col">
-        <div class="form-col-title">Tên (từng chữ)</div>
-        <div id="charInputs" class="net-input">
-          <div class="form-group"><label class="form-label">Họ</label><input class="form-input" type="text" id="c0" placeholder="Nguyễn" maxlength="20"></div>
-          <div class="form-group"><label class="form-label">Chữ đệm</label><input class="form-input" type="text" id="c1" placeholder="Văn" maxlength="10"></div>
-          <div class="form-group"><label class="form-label">Tên</label><input class="form-input" type="text" id="c2" placeholder="An" maxlength="10"></div>
+        <div class="form-col-title">Họ Và Tên Đầy Đủ</div>
+        <div class="form-group">
+          <label class="form-label">Nhập đủ họ + tên, có dấu, cách nhau bằng dấu cách</label>
+          <input class="form-input" type="text" id="tenInput" placeholder="VD: Nguyễn Văn An" maxlength="60">
         </div>
-      </div>
-      <div class="form-col">
-        <div class="form-col-title">Số Nét (chữ Hán tương ứng)</div>
-        <div class="net-input">
-          <div class="form-group"><label class="form-label">Nét Họ</label><input class="form-input" type="number" id="n0" placeholder="VD: 12" min="1" max="64"></div>
-          <div class="form-group"><label class="form-label">Nét Đệm</label><input class="form-input" type="number" id="n1" placeholder="VD: 8" min="1" max="64"></div>
-          <div class="form-group"><label class="form-label">Nét Tên</label><input class="form-input" type="number" id="n2" placeholder="VD: 7" min="1" max="64"></div>
-        </div>
-        <div class="form-group" style="margin-top:16px"><label class="form-label">Ngũ hành bản mệnh (nạp âm)</label>
-          <select class="form-input" id="menh"><option value="">Không rõ</option><option value="Mộc">Mộc</option><option value="Hỏa">Hỏa</option><option value="Thổ">Thổ</option><option value="Kim">Kim</option><option value="Thủy">Thủy</option></select>
+        <div class="form-group" style="margin-top:8px">
+          <label class="form-label">Ngũ hành bản mệnh (tùy chọn — để so sánh)</label>
+          <select class="form-input" id="menhInput">
+            <option value="">Không rõ / Bỏ qua</option>
+            <option value="Mộc">Mộc</option>
+            <option value="Hỏa">Hỏa</option>
+            <option value="Thổ">Thổ</option>
+            <option value="Kim">Kim</option>
+            <option value="Thủy">Thủy</option>
+          </select>
         </div>
         <button class="btn-submit" onclick="calculate()">Tra Ngũ Hành Tên</button>
+      </div>
+      <div class="form-col">
+        <div class="form-col-title">Tương Sinh / Tương Khắc</div>
+        <div style="font-size:12px;color:var(--text-mid);line-height:2">
+          <div><span style="color:#1E6B3C;font-weight:600">Tương sinh ✦</span> Thủy→Mộc · Mộc→Hỏa · Hỏa→Thổ · Thổ→Kim · Kim→Thủy</div>
+          <div><span style="color:#C0392B;font-weight:600">Tương khắc ✗</span> Mộc↔Thổ · Thổ↔Thủy · Thủy↔Hỏa · Hỏa↔Kim · Kim↔Mộc</div>
+          <div style="margin-top:8px;color:var(--text-lt)">Chữ tên chính (chữ cuối) <em>sinh</em> hoặc <em>cùng hành</em> với mệnh cục là lý tưởng nhất theo dân gian.</div>
+        </div>
       </div>
     </div>
     <div class="error-msg" id="error-msg"></div>
   </div>
+
   <div class="result-section" id="result-section">
     <div class="res-block">
       <div class="res-block-header"><span class="res-block-title" id="resTitle">—</span></div>
       <div class="res-block-body">
-        <div class="ten-chars" id="tenChars"></div>
-        <div style="border-top:1px solid var(--border-lt);padding-top:20px" id="hanhBalance"></div>
-        <div id="menhBox" style="margin-top:16px"></div>
+        <div class="syl-cards" id="sylCards"></div>
+        <div id="unknownSection" class="unk-wrap" style="display:none">
+          <div style="font-size:12px;font-weight:600;color:var(--text-mid);margin-bottom:10px">⚠ Chưa tìm thấy chữ Hán cho các chữ dưới — nhập số nét thủ công (tra tại <a href="https://hanzii.net" target="_blank" style="color:var(--blue)">hanzii.net</a>):</div>
+          <div id="unknownInputs" style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end"></div>
+        </div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);margin-bottom:4px">Cân Bằng Ngũ Hành</div>
+        <div class="nh-balance" id="nhBalance"></div>
+        <div class="nh-legend" id="nhLegend"></div>
+        <div id="menhResult"></div>
       </div>
     </div>
   </div>
+
   <div class="tool-cta">
-    <div class="tool-cta-eyebrow">Kết Hợp Với Mệnh Cục</div>
-    <div class="tool-cta-title">Biết Ngũ Hành Bản Mệnh Chính Xác</div>
-    <div class="tool-cta-desc">Để biết tên bổ hay xung mệnh, cần biết ngũ hành nạp âm chính xác từ lá số Tử Vi. Luận giải lá số sẽ cho biết rõ mệnh cục và nạp âm từ ngày giờ sinh.</div>
-    <a class="tool-cta-btn" href="/tools/nap-am.html">Tra Nạp Âm Ngũ Hành Miễn Phí →</a>
+    <div class="tool-cta-eyebrow">Biết Ngũ Hành Bản Mệnh Chính Xác</div>
+    <div class="tool-cta-title">Tra Nạp Âm Theo Năm Sinh</div>
+    <div class="tool-cta-desc">Ngũ hành bản mệnh lấy từ nạp âm can chi năm sinh — không phải ngũ hành của can năm. Tra đúng để đối chiếu với ngũ hành tên chính xác hơn.</div>
+    <a class="tool-cta-btn" href="/tools/nap-am.html">Tra Nạp Âm Miễn Phí →</a>
   </div>
 </div>
+
 <footer class="site-footer">
   <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
   <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
 </footer>
+
 <script>
-const HANH=['','Mộc','Mộc','Hỏa','Hỏa','Thổ','Thổ','Kim','Kim','Thủy','Thủy'];
-const H_COLOR={Mộc:'#1E6B3C',Hỏa:'#C0392B',Thổ:'#9A7B3A',Kim:'#7F8C8D',Thủy:'#1455A4'};
-const SINH={Mộc:'Hỏa',Hỏa:'Thổ',Thổ:'Kim',Kim:'Thủy',Thủy:'Mộc'};
-const KHAC={Mộc:'Thổ',Hỏa:'Kim',Thổ:'Thủy',Kim:'Mộc',Thủy:'Hỏa'};
-function getHanh(net){const d=net%10||10;return HANH[d]||'Thủy';}
-function calculate(){
-  const chars=[document.getElementById('c0').value.trim(),document.getElementById('c1').value.trim(),document.getElementById('c2').value.trim()].filter(Boolean);
-  const nets=[parseInt(document.getElementById('n0').value),parseInt(document.getElementById('n1').value),parseInt(document.getElementById('n2').value)];
-  const menh=document.getElementById('menh').value;
-  const err=document.getElementById('error-msg');
+// Bảng tra: âm tiết Việt thường gặp trong tên → {h: chữ Hán, n: số nét}
+const DB = {
+  // ── Họ ──────────────────────────────────────────────────────
+  'nguyễn':{h:'阮',n:7},'trần':{h:'陳',n:11},'lê':{h:'黎',n:15},'phạm':{h:'范',n:9},
+  'hoàng':{h:'黃',n:11},'huỳnh':{h:'黃',n:11},'phan':{h:'潘',n:15},'vũ':{h:'武',n:8},
+  'võ':{h:'武',n:8},'đặng':{h:'鄧',n:15},'bùi':{h:'裴',n:13},'đỗ':{h:'杜',n:7},
+  'hồ':{h:'胡',n:9},'ngô':{h:'吳',n:7},'dương':{h:'楊',n:13},'lý':{h:'李',n:7},
+  'đinh':{h:'丁',n:2},'lưu':{h:'劉',n:15},'hà':{h:'何',n:7},'cao':{h:'高',n:10},
+  'thái':{h:'蔡',n:14},'tô':{h:'蘇',n:20},'quách':{h:'郭',n:11},'châu':{h:'周',n:8},
+  'đoàn':{h:'段',n:9},'triệu':{h:'趙',n:14},'kiều':{h:'喬',n:12},'trịnh':{h:'鄭',n:15},
+  'tống':{h:'宋',n:7},'trương':{h:'張',n:11},'lâm':{h:'林',n:8},'kim':{h:'金',n:8},
+  'hứa':{h:'許',n:11},'thạch':{h:'石',n:5},'giang':{h:'江',n:6},'tăng':{h:'曾',n:12},
+  'bạch':{h:'白',n:5},'diệp':{h:'葉',n:13},'phùng':{h:'馮',n:12},'mai':{h:'梅',n:11},
+  'lại':{h:'賴',n:16},'tạ':{h:'謝',n:17},'dư':{h:'余',n:7},'vương':{h:'王',n:4},
+  'mạc':{h:'莫',n:10},'khổng':{h:'孔',n:4},'tần':{h:'秦',n:10},'lục':{h:'陸',n:11},
+  'ân':{h:'恩',n:10},'âu':{h:'歐',n:15},'bảo':{h:'鮑',n:16},'cam':{h:'甘',n:5},
+  'cát':{h:'葛',n:12},'chiêm':{h:'詹',n:13},'cù':{h:'瞿',n:18},'cung':{h:'龔',n:22},
+  'doãn':{h:'尹',n:4},'đàm':{h:'譚',n:20},'đào':{h:'陶',n:11},'giản':{h:'簡',n:18},
+  'giáp':{h:'甲',n:5},'hình':{h:'邢',n:6},'hổ':{h:'虎',n:8},'liêu':{h:'廖',n:14},
+  'liễu':{h:'柳',n:9},'la':{h:'羅',n:19},'lộ':{h:'路',n:13},'mẫn':{h:'閔',n:11},
+  'mộ':{h:'牧',n:8},'nhan':{h:'顏',n:18},'nhậm':{h:'任',n:6},'nhiếp':{h:'聶',n:22},
+  'nông':{h:'農',n:13},'ôn':{h:'溫',n:13},'ông':{h:'翁',n:10},'phó':{h:'傅',n:12},
+  'quan':{h:'關',n:19},'sử':{h:'史',n:5},'tăng':{h:'增',n:15},'tân':{h:'辛',n:7},
+  'thang':{h:'湯',n:12},'tiêu':{h:'蕭',n:17},'tịch':{h:'席',n:10},'tiền':{h:'錢',n:16},
+  'toàn':{h:'全',n:6},'trang':{h:'莊',n:10},'từ':{h:'徐',n:10},'tưởng':{h:'蔣',n:15},
+  'vi':{h:'韋',n:9},'viên':{h:'袁',n:10},'vũ':{h:'宇',n:6},'xương':{h:'昌',n:8},
+
+  // ── Chữ đệm ─────────────────────────────────────────────────
+  'văn':{h:'文',n:4},'thị':{h:'氏',n:4},'hữu':{h:'有',n:6},'đức':{h:'德',n:15},
+  'minh':{h:'明',n:8},'tuấn':{h:'俊',n:9},'thanh':{h:'清',n:11},'quang':{h:'光',n:6},
+  'hồng':{h:'紅',n:9},'công':{h:'公',n:4},'thành':{h:'成',n:7},'xuân':{h:'春',n:9},
+  'thu':{h:'秋',n:9},'đình':{h:'廷',n:7},'gia':{h:'家',n:10},'như':{h:'如',n:6},
+  'tài':{h:'才',n:3},'huy':{h:'輝',n:15},'nhật':{h:'日',n:4},'khắc':{h:'克',n:7},
+  'thế':{h:'世',n:5},'việt':{h:'越',n:12},'trung':{h:'忠',n:8},'quốc':{h:'國',n:11},
+  'tiến':{h:'進',n:12},'hải':{h:'海',n:10},'long':{h:'龍',n:16},'sơn':{h:'山',n:3},
+  'tùng':{h:'松',n:8},'anh':{h:'英',n:9},'lan':{h:'蘭',n:21},'linh':{h:'玲',n:9},
+  'phúc':{h:'福',n:13},'lợi':{h:'利',n:7},'khải':{h:'凱',n:12},'kiên':{h:'堅',n:12},
+  'cường':{h:'強',n:11},'hùng':{h:'雄',n:12},'dũng':{h:'勇',n:9},'tâm':{h:'心',n:4},
+  'nhân':{h:'仁',n:4},'nghĩa':{h:'義',n:13},'trí':{h:'智',n:12},'tín':{h:'信',n:9},
+  'hòa':{h:'和',n:8},'bình':{h:'平',n:5},'an':{h:'安',n:6},'phong':{h:'豐',n:13},
+  'thịnh':{h:'盛',n:11},'vượng':{h:'旺',n:8},'khánh':{h:'慶',n:15},'phú':{h:'富',n:12},
+  'thọ':{h:'壽',n:14},'hiền':{h:'賢',n:15},'mỹ':{h:'美',n:9},'thiện':{h:'善',n:12},
+  'trọng':{h:'重',n:9},'đoan':{h:'端',n:14},'tĩnh':{h:'靜',n:16},'nhã':{h:'雅',n:13},
+
+  // ── Tên chính ────────────────────────────────────────────────
+  'nam':{h:'南',n:9},'duy':{h:'維',n:14},'khoa':{h:'科',n:9},'hoa':{h:'花',n:7},
+  'nga':{h:'娥',n:10},'ngân':{h:'銀',n:14},'nhung':{h:'絨',n:12},'uyên':{h:'鳶',n:16},
+  'vân':{h:'雲',n:12},'yến':{h:'燕',n:16},'quỳnh':{h:'瓊',n:18},'lộc':{h:'祿',n:13},
+  'thảo':{h:'草',n:9},'thủy':{h:'水',n:4},'tú':{h:'秀',n:7},'hiếu':{h:'孝',n:7},
+  'vinh':{h:'榮',n:14},'đạt':{h:'達',n:12},'hưng':{h:'興',n:16},'mạnh':{h:'孟',n:8},
+  'thắng':{h:'勝',n:12},'chiến':{h:'戰',n:16},'liên':{h:'蓮',n:15},'tiên':{h:'仙',n:5},
+  'chi':{h:'枝',n:8},'diên':{h:'延',n:7},'kỳ':{h:'奇',n:8},'lạc':{h:'樂',n:15},
+  'hỷ':{h:'喜',n:12},'quân':{h:'君',n:7},'thi':{h:'詩',n:13},'tân':{h:'新',n:13},
+  'hồng':{h:'鴻',n:17},'hạc':{h:'鶴',n:21},'phụng':{h:'鳳',n:14},'loan':{h:'鸞',n:30},
+  'ninh':{h:'寧',n:14},'hạnh':{h:'幸',n:8},'ái':{h:'愛',n:13},'tình':{h:'情',n:11},
+  'ngọc':{h:'玉',n:5},'phương':{h:'芳',n:7},'bích':{h:'碧',n:14},'nghi':{h:'宜',n:8},
+  'nhi':{h:'兒',n:8},'thư':{h:'書',n:10},'diệu':{h:'妙',n:7},'chính':{h:'正',n:5},
+  'đồng':{h:'同',n:6},'nhất':{h:'一',n:1},'vạn':{h:'萬',n:15},'thiên':{h:'天',n:4},
+  'địa':{h:'地',n:6},'nhân':{h:'人',n:2},'thánh':{h:'聖',n:13},'hiển':{h:'顯',n:23},
+  'tuệ':{h:'慧',n:15},'bảo':{h:'寶',n:20},'châu':{h:'珠',n:10},'oanh':{h:'鶯',n:21},
+  'trà':{h:'茶',n:9},'quế':{h:'桂',n:10},'cúc':{h:'菊',n:11},'đào':{h:'桃',n:10},
+  'nhài':{h:'茉',n:8},'trang':{h:'莊',n:10},'hương':{h:'香',n:9},'hoa':{h:'華',n:10},
+  'phát':{h:'發',n:12},'thái':{h:'泰',n:10},'khiêm':{h:'謙',n:17},'nhường':{h:'讓',n:24},
+  'siêu':{h:'超',n:12},'tuyệt':{h:'絕',n:12},'cực':{h:'極',n:13},'đại':{h:'大',n:3},
+  'tiểu':{h:'小',n:3},'thái':{h:'太',n:4},'quý':{h:'貴',n:12},'lành':{h:'良',n:7},
+  'khỏe':{h:'健',n:11},'chăm':{h:'勤',n:13},'giỏi':{h:'巧',n:5},'khôn':{h:'坤',n:8},
+  'sáng':{h:'亮',n:9},'rạng':{h:'朗',n:11},'tươi':{h:'茂',n:8},'đẹp':{h:'美',n:9},
+  'ngoan':{h:'良',n:7},'thật':{h:'誠',n:14},'thẳng':{h:'直',n:8},'thơm':{h:'芬',n:7},
+  'khải':{h:'啟',n:11},'hải':{h:'凱',n:12},'khang':{h:'康',n:11},'khiết':{h:'潔',n:15},
+  'khâm':{h:'欽',n:12},'khuyến':{h:'勸',n:20},'kỵ':{h:'騎',n:18},'lãm':{h:'覽',n:21},
+  'lãng':{h:'朗',n:11},'lạnh':{h:'冷',n:7},'lâu':{h:'樓',n:15},'lẫm':{h:'稟',n:13},
+  'lẽ':{h:'理',n:11},'lịch':{h:'歷',n:16},'liệt':{h:'烈',n:10},'linh':{h:'靈',n:24},
+  'lưu':{h:'留',n:10},'lữ':{h:'旅',n:10},'lực':{h:'力',n:2},'mẫn':{h:'敏',n:11},
+  'mặc':{h:'默',n:16},'mỏng':{h:'薄',n:16},'mơ':{h:'夢',n:14},'mộng':{h:'夢',n:14},
+  'muôn':{h:'萬',n:15},'mực':{h:'墨',n:15},'nét':{h:'清',n:11},'ngạn':{h:'岸',n:8},
+  'ngát':{h:'馨',n:20},'nghiêm':{h:'嚴',n:20},'ngoạn':{h:'玩',n:8},'nhiên':{h:'然',n:12},
+  'phận':{h:'分',n:4},'phẩm':{h:'品',n:9},'phẩn':{h:'奮',n:16},'phổ':{h:'普',n:12},
+  'quán':{h:'貫',n:11},'quảng':{h:'廣',n:15},'quyên':{h:'涓',n:10},'quyền':{h:'權',n:22},
+  'rực':{h:'熾',n:16},'sang':{h:'爽',n:11},'sinh':{h:'生',n:5},'sĩ':{h:'士',n:3},
+  'sính':{h:'勝',n:12},'tài':{h:'財',n:10},'tâm':{h:'潭',n:15},'tầm':{h:'尋',n:12},
+  'tấm':{h:'心',n:4},'tâng':{h:'騰',n:20},'tập':{h:'習',n:11},'tề':{h:'齊',n:14},
+  'tế':{h:'濟',n:17},'tiết':{h:'節',n:13},'tinh':{h:'精',n:14},'tộc':{h:'族',n:11},
+  'tối':{h:'最',n:12},'tổng':{h:'總',n:17},'trác':{h:'卓',n:8},'trạch':{h:'澤',n:16},
+  'trần':{h:'塵',n:14},'trầm':{h:'沈',n:7},'trắng':{h:'白',n:5},'trị':{h:'治',n:8},
+  'trinh':{h:'貞',n:9},'trình':{h:'程',n:12},'tùy':{h:'隨',n:16},'ưu':{h:'優',n:17},
+  'uyên':{h:'淵',n:12},'vẻ':{h:'美',n:9},'vĩnh':{h:'永',n:5},'vô':{h:'無',n:12},
+  'vọng':{h:'望',n:11},'vui':{h:'歡',n:21},'vũ':{h:'羽',n:6},'xanh':{h:'青',n:8},
+  'xuất':{h:'出',n:5},'xuống':{h:'降',n:9},'yêu':{h:'愛',n:13},'ý':{h:'意',n:13},
+};
+
+const H_COLOR = {Mộc:'#1E6B3C',Hỏa:'#C0392B',Thổ:'#9A7B3A',Kim:'#5a6a72',Thủy:'#1455A4'};
+const SINH = {Mộc:'Hỏa',Hỏa:'Thổ',Thổ:'Kim',Kim:'Thủy',Thủy:'Mộc'};
+const SINH_REV = {Hỏa:'Mộc',Thổ:'Hỏa',Kim:'Thổ',Thủy:'Kim',Mộc:'Thủy'};
+const KHAC = {Mộc:'Thổ',Thổ:'Thủy',Thủy:'Hỏa',Hỏa:'Kim',Kim:'Mộc'};
+
+function netToHanh(n) {
+  const d = n % 10 || 10;
+  return d<=2?'Mộc':d<=4?'Hỏa':d<=6?'Thổ':d<=8?'Kim':'Thủy';
+}
+
+let _syls = [];
+
+function calculate() {
+  const raw = document.getElementById('tenInput').value.trim();
+  const err = document.getElementById('error-msg');
   err.classList.remove('active');
-  const valid=chars.filter((_,i)=>chars[i]&&nets[i]&&nets[i]>0);
-  if(valid.length===0){err.textContent='Nhập ít nhất 1 chữ và số nét tương ứng.';err.classList.add('active');return;}
-  document.getElementById('resTitle').textContent='Ngũ Hành: '+chars.filter(Boolean).join(' ');
-  const hCount={Mộc:0,Hỏa:0,Thổ:0,Kim:0,Thủy:0};
-  const cardHTML=chars.map((c,i)=>{
-    if(!c||!nets[i])return'';
-    const h=getHanh(nets[i]);
-    hCount[h]=(hCount[h]||0)+1;
-    const col=H_COLOR[h]||'#666';
-    return`<div class="char-card" style="border-color:${col}22;background:${col}10">
-      <div class="char-word" style="color:${col}">${c}</div>
-      <div class="char-net">${nets[i]} nét</div>
-      <div class="char-hanh" style="color:${col}">${h}</div>
+  if (!raw) { err.textContent='Vui lòng nhập họ và tên.'; err.classList.add('active'); return; }
+  const parts = raw.split(/\s+/).filter(Boolean);
+  if (parts.length > 6) { err.textContent='Tối đa 6 âm tiết.'; err.classList.add('active'); return; }
+
+  _syls = parts.map(p => {
+    const key = p.toLowerCase().normalize('NFC');
+    const entry = DB[key];
+    return { display: p, key, ...(entry || {}) };
+  });
+
+  render();
+}
+
+function render() {
+  const menh = document.getElementById('menhInput').value;
+  const orig = _syls.map(s => s.display);
+  document.getElementById('resTitle').textContent = orig.join(' ') + ' — Ngũ Hành Từng Chữ';
+
+  const unknowns = [];
+  document.getElementById('sylCards').innerHTML = _syls.map((s, i) => {
+    if (!s.n) {
+      unknowns.push(i);
+      return `<div class="syl-card syl-unknown" id="scard-${i}">
+        <div class="syl-viet">${s.display}</div>
+        <div class="syl-han" style="color:#ccc;font-size:22px">?</div>
+        <div class="syl-net">Chưa có trong bảng</div>
+        <div class="syl-hanh">Nhập nét thủ công</div>
+      </div>`;
+    }
+    const hanh = netToHanh(s.n);
+    const d = s.n % 10 || 10;
+    return `<div class="syl-card hanh-${hanh}" id="scard-${i}">
+      <div class="syl-viet">${s.display}</div>
+      <div class="syl-han">${s.h}</div>
+      <div class="syl-net">${s.n} nét (đơn vị: ${d})</div>
+      <div class="syl-hanh">${hanh}</div>
     </div>`;
   }).join('');
-  document.getElementById('tenChars').innerHTML=cardHTML;
-  const total=Object.values(hCount).reduce((a,b)=>a+b,0)||1;
-  const balHTML=`<div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);margin-bottom:12px">Cân Bằng Ngũ Hành Trong Tên</div>`+
-    Object.entries(hCount).map(([h,c])=>`<div class="hanh-bar-row"><span class="hanh-name" style="color:${H_COLOR[h]}">${h}</span><div class="hanh-bar"><div class="hanh-fill" style="width:${(c/total*100).toFixed(0)}%;background:${H_COLOR[h]}"></div></div><span class="hanh-count">${c}</span></div>`).join('');
-  document.getElementById('hanhBalance').innerHTML=balHTML;
-  if(menh&&hCount){
-    const dominant=Object.entries(hCount).sort((a,b)=>b[1]-a[1])[0][0];
-    const isSinh=SINH[menh]===dominant||SINH[dominant]===menh;
-    const isKhac=KHAC[menh]===dominant||KHAC[dominant]===menh;
-    const isSame=menh===dominant;
-    let msg='',cls='';
-    if(isSame){msg=`Tên mang hành <strong>${dominant}</strong> — cùng hành với mệnh <strong>${menh}</strong>. Bổ trợ tốt, tăng cường khí mệnh.`;cls='#eaf4ed';}
-    else if(isSinh){msg=`Tên mang hành <strong>${dominant}</strong> — tương sinh với mệnh <strong>${menh}</strong>. Tốt, tên giúp nuôi dưỡng hoặc phát huy mệnh cục.`;cls='#eaf4ed';}
-    else if(isKhac){msg=`Tên mang hành <strong>${dominant}</strong> — tương khắc với mệnh <strong>${menh}</strong>. Cần xem xét thêm, đặc biệt khi đặt tên trẻ em.`;cls='#fef0ef';}
-    else{msg=`Tên mang hành <strong>${dominant}</strong> — không tương sinh cũng không tương khắc với mệnh <strong>${menh}</strong>. Trung tính.`;cls='var(--bg-soft)';}
-    document.getElementById('menhBox').innerHTML=`<div style="background:${cls};border-radius:8px;padding:14px 18px;font-size:13px;color:var(--text-mid);line-height:1.7">${msg}</div>`;
+
+  // Unknown manual inputs
+  const uSec = document.getElementById('unknownSection');
+  if (unknowns.length > 0) {
+    uSec.style.display = 'block';
+    document.getElementById('unknownInputs').innerHTML = unknowns.map(i => `
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <label style="font-size:12px;font-weight:600;color:var(--navy)">"${_syls[i].display}"</label>
+        <input type="number" class="form-input" id="unk-${i}" placeholder="Số nét" min="1" max="64"
+          style="width:88px;padding:6px 10px;font-size:13px" oninput="applyManual(${i})">
+        <a href="https://hanzii.net/search/word/${encodeURIComponent(_syls[i].display)}" target="_blank"
+          style="font-size:10px;color:var(--blue)">Tra tại hanzii.net →</a>
+      </div>`).join('');
+  } else {
+    uSec.style.display = 'none';
   }
+
+  renderBalance(menh);
   document.getElementById('result-section').classList.add('active');
-  document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
+  document.getElementById('result-section').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function applyManual(idx) {
+  const inp = document.getElementById(`unk-${idx}`);
+  const v = parseInt(inp?.value);
+  if (!v || v < 1) return;
+  _syls[idx].n = v; _syls[idx].h = '?';
+  const hanh = netToHanh(v);
+  const card = document.getElementById(`scard-${idx}`);
+  if (card) {
+    card.className = `syl-card hanh-${hanh}`;
+    card.querySelector('.syl-han').textContent = '?';
+    card.querySelector('.syl-net').textContent = `${v} nét (đơn vị: ${v%10||10})`;
+    card.querySelector('.syl-hanh').textContent = hanh;
+  }
+  renderBalance(document.getElementById('menhInput').value);
+}
+
+function renderBalance(menh) {
+  const hCount = {Mộc:0,Hỏa:0,Thổ:0,Kim:0,Thủy:0};
+  _syls.forEach(s => { if (s.n) hCount[netToHanh(s.n)]++; });
+  const total = Object.values(hCount).reduce((a,b)=>a+b,0) || 1;
+
+  document.getElementById('nhBalance').innerHTML = Object.entries(hCount)
+    .map(([h,c]) => `<div class="nh-seg" style="flex:${c||0.2};background:${H_COLOR[h]};min-width:${c?18:3}px">${c>0?h:''}</div>`).join('');
+  document.getElementById('nhLegend').innerHTML = Object.entries(hCount)
+    .map(([h,c]) => `<span class="nh-dot" style="background:${H_COLOR[h]}"></span><span style="color:${H_COLOR[h]};font-weight:600">${h}</span><span style="color:var(--text-lt);margin-right:10px"> ×${c}</span>`).join('');
+
+  if (!menh) { document.getElementById('menhResult').innerHTML=''; return; }
+
+  const lastName = [..._syls].reverse().find(s => s.n);
+  if (!lastName) { document.getElementById('menhResult').innerHTML=''; return; }
+  const tenHanh = netToHanh(lastName.n);
+
+  let rel='', cls='rel-trun', icon='◆';
+  if (tenHanh === menh) {
+    rel=`Chữ tên chính "<strong>${lastName.display}</strong>" mang hành <strong>${tenHanh}</strong> — <strong>cùng hành</strong> với mệnh <strong>${menh}</strong>. Bổ trợ tốt, củng cố khí mệnh.`;
+    cls='rel-tot'; icon='✦';
+  } else if (SINH_REV[menh] === tenHanh) {
+    rel=`Chữ tên chính "<strong>${lastName.display}</strong>" mang hành <strong>${tenHanh}</strong> — <strong>sinh mệnh ${menh}</strong> (${tenHanh}→${menh}). Tốt, tên nuôi dưỡng mệnh cục.`;
+    cls='rel-tot'; icon='✦';
+  } else if (SINH[menh] === tenHanh) {
+    rel=`Chữ tên chính "<strong>${lastName.display}</strong>" mang hành <strong>${tenHanh}</strong> — mệnh ${menh} sinh ra hành tên (${menh}→${tenHanh}). Trung bình, không có hại.`;
+  } else if (KHAC[tenHanh] === menh) {
+    rel=`Chữ tên chính "<strong>${lastName.display}</strong>" mang hành <strong>${tenHanh}</strong> — <strong>khắc mệnh ${menh}</strong> (${tenHanh} khắc ${menh}). Theo dân gian nên cân nhắc điều chỉnh.`;
+    cls='rel-xau'; icon='⚠';
+  } else if (KHAC[menh] === tenHanh) {
+    rel=`Chữ tên chính "<strong>${lastName.display}</strong>" mang hành <strong>${tenHanh}</strong> — mệnh ${menh} khắc hành tên (${menh} khắc ${tenHanh}). Theo dân gian nên cân nhắc điều chỉnh.`;
+    cls='rel-xau'; icon='⚠';
+  } else {
+    rel=`Chữ tên chính "<strong>${lastName.display}</strong>" mang hành <strong>${tenHanh}</strong>, mệnh <strong>${menh}</strong> — không tương sinh cũng không tương khắc trực tiếp. Trung tính.`;
+  }
+  document.getElementById('menhResult').innerHTML = `<div class="rel-box ${cls}">${icon} ${rel}</div>`;
 }
 </script>
 </body>
