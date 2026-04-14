@@ -286,7 +286,7 @@ function luanGiai() {
     ls._hoTen = hoten;
     window._lasoResult = ls;
 
-    displayResult(hoten, ngay, thang, nam, gioitinh, namXem || new Date().getFullYear(), ls);
+    TuviGrid.displayResult(hoten, ngay, thang, nam, gioitinh, namXem || new Date().getFullYear(), ls);
     document.getElementById('laso-legend').style.display = 'block';
     document.getElementById('result-section').classList.add('active');
 
