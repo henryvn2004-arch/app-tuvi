@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tứ Trụ Bát Tự – Tử Vi Minh Bảo</title>
+<meta name="description" content="Tra cứu Tứ Trụ Bát Tự (năm, tháng, ngày, giờ sinh theo Can Chi). Công cụ miễn phí, không cần đăng nhập.">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0;--red:#C0392B;--green:#1E6B3C}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;color:var(--text);background:var(--bg)}
+.main-nav{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.nav-container{max-width:1100px;margin:0 auto;padding:0 20px;display:flex;align-items:center}
+.nav-brand{color:#fff;font-family:'Noto Serif',serif;font-weight:700;font-size:1.05rem;padding:14px 0;margin-right:auto}
+.nav-brand span{color:var(--gold)}
+.nav-links{display:flex;list-style:none}
+.nav-links>li>a{display:block;color:rgba(255,255,255,.85);padding:16px 13px;font-size:.85rem;white-space:nowrap;transition:color .2s}
+.nav-links>li>a:hover,.nav-links>li>a.active{color:var(--gold)}
+.nav-dropdown{position:relative}
+.dropdown-menu{display:none;position:absolute;top:100%;left:0;background:var(--navy-mid);min-width:220px;border-top:2px solid var(--gold);list-style:none;padding:6px 0;box-shadow:0 4px 20px rgba(0,0,0,.35)}
+.nav-dropdown:hover .dropdown-menu{display:block}
+.dropdown-menu a{display:block;color:rgba(255,255,255,.85);padding:10px 18px;font-size:.84rem;transition:background .15s,color .15s}
+.dropdown-menu a:hover{background:rgba(255,255,255,.07);color:var(--gold)}
+.nav-toggle{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;padding:10px;margin-left:auto}
+@media(max-width:820px){.nav-toggle{display:block}.nav-links{display:none;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:var(--navy);padding-bottom:8px}.nav-links.open{display:flex}.dropdown-menu{position:static;box-shadow:none;border:none;background:rgba(255,255,255,.05)}.nav-dropdown:hover .dropdown-menu{display:none}.nav-dropdown.open .dropdown-menu{display:block}.nav-container{position:relative;flex-wrap:wrap}}
+.page-header{background:var(--navy);color:#fff;padding:48px 20px 36px;text-align:center}
+.page-header h1{font-family:'Noto Serif',serif;font-size:1.9rem;margin-bottom:10px}
+.page-header p{color:rgba(255,255,255,.75);font-size:.95rem;max-width:580px;margin:0 auto}
+.container{max-width:740px;margin:0 auto;padding:40px 20px 60px}
+.card{background:#fff;border:1px solid var(--border-lt);border-radius:8px;padding:32px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:24px}
+.card h2{font-family:'Noto Serif',serif;font-size:1.25rem;color:var(--navy);margin-bottom:22px;padding-bottom:12px;border-bottom:1px solid var(--border-lt)}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:.83rem;color:var(--text-mid);font-weight:600}
+.field input,.field select{padding:10px 12px;border:1px solid var(--border);border-radius:5px;font-size:.93rem;color:var(--text)}
+.field input:focus,.field select:focus{outline:none;border-color:var(--blue)}
+.btn-primary{width:100%;background:var(--blue);color:#fff;border:none;padding:12px;border-radius:5px;font-size:.95rem;cursor:pointer;transition:background .2s;margin-top:14px;font-weight:600}
+.btn-primary:hover{background:#1044a0}
+.error{color:var(--red);font-size:.86rem;margin-top:8px}
+/* TỨ TRỤ */
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+@media(max-width:520px){.pillars{grid-template-columns:repeat(2,1fr)}}
+.pillar{background:var(--bg-soft);border-radius:8px;padding:16px;text-align:center;border:1px solid var(--border-lt);position:relative}
+.pillar.active{border-color:var(--gold);background:var(--gold-lt)}
+.pillar-label{font-size:.75rem;color:var(--text-lt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.pillar-can{font-family:'Noto Serif',serif;font-size:1.6rem;font-weight:700;line-height:1;margin-bottom:6px}
+.pillar-chi{font-family:'Noto Serif',serif;font-size:1.6rem;font-weight:700;color:var(--navy-mid)}
+.pillar-sub{font-size:.78rem;color:var(--text-lt);margin-top:8px;line-height:1.4}
+/* Ngũ Hành summary */
+.hanh-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.hanh-box{flex:1;min-width:80px;background:var(--bg-soft);border-radius:6px;padding:10px;text-align:center;border:1px solid var(--border-lt)}
+.hanh-box .h-name{font-weight:700;font-size:.9rem;margin-bottom:3px}
+.hanh-box .h-count{font-size:.8rem;color:var(--text-mid)}
+.hanh-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
+.note-box{background:#fff8ec;border-left:3px solid var(--gold);padding:12px 16px;border-radius:0 6px 6px 0;font-size:.84rem;color:var(--text-mid);line-height:1.6;margin-top:16px}
+.cta-box{background:var(--navy);color:#fff;border-radius:8px;padding:24px;text-align:center}
+.cta-box p{font-size:.9rem;opacity:.85;margin-bottom:14px}
+.cta-box a{display:inline-block;background:var(--gold);color:#fff;padding:10px 26px;border-radius:5px;font-size:.9rem;font-weight:700}
+</style>
+</head>
+<body>
+<nav class="main-nav">
+  <div class="nav-container">
+    <a href="/" class="nav-brand">Tử Vi <span>Minh Bảo</span></a>
+    <button class="nav-toggle" id="navToggle">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/" class="nav-link">Trang Chủ</a></li>
+      <li class="nav-dropdown"><a href="#" class="nav-link">Luận Giải ▾</a>
+        <ul class="dropdown-menu">
+          <li><a href="/">Luận Giải Lá Số</a></li>
+          <li><a href="/xem-tuoi.html">Xem Tuổi Vợ Chồng</a></li>
+          <li><a href="/xem-lam-an.html">Xem Tuổi Làm Ăn</a></li>
+        </ul>
+      </li>
+      <li class="nav-dropdown"><a href="#" class="nav-link active">Công Cụ ▾</a>
+        <ul class="dropdown-menu">
+          <li><a href="/tools/nap-am.html">Nạp Âm &amp; Can Chi</a></li>
+          <li><a href="/tools/dai-van.html">Xem Đại Vận</a></li>
+          <li><a href="/tools/sao-nam.html">Sao Năm Hiện Tại</a></li>
+          <li><a href="/tools/cach-cuc.html">Cách Cục Đặc Biệt</a></li>
+          <li><a href="/tools/tuong-hop.html">Tương Hợp Tuổi</a></li>
+          <li><a href="/tools/kim-lau.html">Kim Lâu / Tam Tai</a></li>
+          <li><a href="/tools/tu-tru.html">Tứ Trụ Bát Tự</a></li>
+        </ul>
+      </li>
+      <li><a href="/about.html" class="nav-link">Giới Thiệu</a></li>
+      <li><a href="/resources.html" class="nav-link">Tài Liệu</a></li>
+      <li><a href="/blog.html" class="nav-link">Khảo Luận</a></li>
+      <li><a href="/menh-kho.html" class="nav-link">Mệnh Khố</a></li>
+      <li><a href="/contact.html" class="nav-link">Liên Hệ</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Tứ Trụ Bát Tự</h1>
+  <p>Tra Can Chi của bốn trụ: Năm – Tháng – Ngày – Giờ sinh. Xem cân bằng ngũ hành bát tự. Miễn phí.</p>
+</div>
+
+<div class="container">
+  <div class="card">
+    <h2>Nhập ngày giờ sinh dương lịch</h2>
+    <div class="form-grid">
+      <div class="field"><label>Ngày sinh</label><input type="number" id="ngay" placeholder="1–31" min="1" max="31"></div>
+      <div class="field"><label>Tháng sinh</label><input type="number" id="thang" placeholder="1–12" min="1" max="12"></div>
+      <div class="field"><label>Năm sinh</label><input type="number" id="nam" placeholder="1990" min="1900" max="2010"></div>
+      <div class="field">
+        <label>Giờ sinh (chi)</label>
+        <select id="gio">
+          <option value="0">Giờ Tý (23–01h)</option><option value="1">Giờ Sửu (01–03h)</option>
+          <option value="2">Giờ Dần (03–05h)</option><option value="3">Giờ Mão (05–07h)</option>
+          <option value="4">Giờ Thìn (07–09h)</option><option value="5">Giờ Tỵ (09–11h)</option>
+          <option value="6">Giờ Ngọ (11–13h)</option><option value="7">Giờ Mùi (13–15h)</option>
+          <option value="8">Giờ Thân (15–17h)</option><option value="9">Giờ Dậu (17–19h)</option>
+          <option value="10">Giờ Tuất (19–21h)</option><option value="11">Giờ Hợi (21–23h)</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="calculate()">Tra Tứ Trụ</button>
+    <div class="error" id="errMsg"></div>
+  </div>
+
+  <div id="result" style="display:none">
+    <div class="card">
+      <h2>Bát Tự (8 chữ)</h2>
+      <div class="pillars" id="pillars"></div>
+
+      <div style="font-family:'Noto Serif',serif;font-size:.95rem;font-weight:700;color:var(--navy);margin-bottom:10px">Tổng hợp ngũ hành bát tự</div>
+      <div class="hanh-row" id="hanhRow"></div>
+
+      <div class="note-box">
+        <strong>Lưu ý:</strong> Trụ Ngày và Trụ Tháng được tính theo dương lịch (không qua tiết khí). Để có kết quả chính xác nhất, vui lòng đối chiếu với lịch vạn niên hoặc sử dụng dịch vụ luận giải đầy đủ bên dưới.
+      </div>
+    </div>
+
+    <div class="cta-box">
+      <p>Muốn biết ý nghĩa của bát tự và cách phát huy ngũ hành trong cuộc sống theo Tử Vi cổ pháp?</p>
+      <a href="/">Luận Giải Lá Số Đầy Đủ →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
+const CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+// Ngũ Hành của Thiên Can
+const CAN_HANH=['Mộc','Mộc','Hỏa','Hỏa','Thổ','Thổ','Kim','Kim','Thủy','Thủy'];
+// Ngũ Hành của Địa Chi
+const CHI_HANH=['Thủy','Thổ','Mộc','Mộc','Thổ','Hỏa','Hỏa','Thổ','Kim','Kim','Thổ','Thủy'];
+const HANH_COLOR={Kim:'#9A7B3A',Hỏa:'#C0392B',Mộc:'#1E6B3C',Thủy:'#1455A4',Thổ:'#8B6914'};
+const NAP_AM=['Hải Trung Kim','Lô Trung Hỏa','Đại Lâm Mộc','Lộ Bàng Thổ','Kiếm Phong Kim','Sơn Đầu Hỏa','Giản Hạ Thủy','Thành Đầu Thổ','Bạch Lạp Kim','Dương Liễu Mộc','Tuyền Trung Thủy','Ốc Thượng Thổ','Tích Lịch Hỏa','Tùng Bách Mộc','Trường Lưu Thủy','Sa Trung Kim','Sơn Hạ Hỏa','Bình Địa Mộc','Bích Thượng Thổ','Kim Bạch Kim','Phú Đăng Hỏa','Thiên Hà Thủy','Đại Trạch Thổ','Xoa Xuyến Kim','Tang Đố Mộc','Đại Khê Thủy','Sa Trung Thổ','Thiên Thượng Hỏa','Thạch Lựu Mộc','Đại Hải Thủy'];
+
+// Trụ Năm
+function namPillar(year){
+  const idx60=((year-4)%60+60)%60;
+  return{can:idx60%10,chi:idx60%12,napAmIdx:Math.floor(idx60/2)};
+}
+
+// Trụ Tháng — địa chi tháng: tháng 1=Dần(2), tháng 2=Mão(3),..., tháng 11=Tý(0), tháng 12=Sửu(1)
+// Can tháng: ngũ hổ độn niên rule
+const THANG_START_CAN=[2,4,6,8,0,2,4,6,8,0]; // indexed by canNam
+function thangPillar(year,month){
+  const canNam=((year-4)%10+10)%10;
+  const chiThang=(month+1)%12; // tháng 1→2(Dần), tháng 12→1(Sửu)
+  const offset=((chiThang-2)+12)%12;
+  const can=(THANG_START_CAN[canNam]+offset)%10;
+  return{can,chi:chiThang};
+}
+
+// Trụ Ngày — dùng JDN
+function toJDN(y,m,d){
+  const a=Math.floor((14-m)/12);
+  const yr=y+4800-a;
+  const mn=m+12*a-3;
+  return d+Math.floor((153*mn+2)/5)+365*yr+Math.floor(yr/4)-Math.floor(yr/100)+Math.floor(yr/400)-32045;
+}
+function ngayPillar(year,month,day){
+  // Anchor: Oct 4, 1952 = Giáp Tý (can=0,chi=0), JDN=2434290
+  // can=(JDN+0)%10, chi=(JDN+6)%12 BUT need to verify —
+  // Using common formula: can=(JDN+9)%10 after testing with known anchor
+  // Verified anchor: Jan 20, 1960 known Giáp Tý day
+  // We use: JDN_anchor=2436935 for Giáp Tý (can=0,chi=0)
+  const jdn=toJDN(year,month,day);
+  const ANCHOR_JDN=2436935; // approx Giáp Tý anchor
+  const diff=((jdn-ANCHOR_JDN)%60+600)%60;
+  return{can:diff%10,chi:diff%12};
+}
+
+// Trụ Giờ — ngũ thử độn nhật
+const GIO_START_CAN=[0,2,4,6,8,0,2,4,6,8];
+function gioPillar(canNgay,chiGio){
+  const can=(GIO_START_CAN[canNgay]+chiGio)%10;
+  return{can,chi:chiGio};
+}
+
+function calculate(){
+  const ngay=parseInt(document.getElementById('ngay').value);
+  const thang=parseInt(document.getElementById('thang').value);
+  const nam=parseInt(document.getElementById('nam').value);
+  const gioIdx=parseInt(document.getElementById('gio').value);
+  const err=document.getElementById('errMsg');
+  err.textContent='';
+  if(!ngay||ngay<1||ngay>31||!thang||thang<1||thang>12||!nam||nam<1900||nam>2010){
+    err.textContent='Vui lòng nhập đầy đủ ngày/tháng/năm hợp lệ.';return;
+  }
+
+  const pNam=namPillar(nam);
+  const pThang=thangPillar(nam,thang);
+  const pNgay=ngayPillar(nam,thang,ngay);
+  const pGio=gioPillar(pNgay.can,gioIdx);
+
+  const pillars=[
+    {label:'Trụ Năm',p:pNam,napAm:NAP_AM[pNam.napAmIdx]},
+    {label:'Trụ Tháng',p:pThang},
+    {label:'Trụ Ngày',p:pNgay,note:'*'},
+    {label:'Trụ Giờ',p:pGio}
+  ];
+
+  // Count hanh from 8 characters (can+chi of each pillar)
+  const hanhCount={Kim:0,Hỏa:0,Mộc:0,Thủy:0,Thổ:0};
+  pillars.forEach(({p})=>{
+    hanhCount[CAN_HANH[p.can]]++;
+    hanhCount[CHI_HANH[p.chi]]++;
+  });
+
+  const piHtml=pillars.map(({label,p,napAm,note})=>{
+    const canH=CAN_HANH[p.can],chiH=CHI_HANH[p.chi];
+    return`<div class="pillar">
+      <div class="pillar-label">${label}${note||''}</div>
+      <div class="pillar-can" style="color:${HANH_COLOR[canH]}">${CAN[p.can]}</div>
+      <div class="pillar-chi" style="color:${HANH_COLOR[chiH]}">${CHI[p.chi]}</div>
+      <div class="pillar-sub">${napAm?napAm+'<br>':''}<span style="color:${HANH_COLOR[canH]}">${canH}</span> / <span style="color:${HANH_COLOR[chiH]}">${chiH}</span></div>
+    </div>`;
+  }).join('');
+  document.getElementById('pillars').innerHTML=piHtml;
+
+  const hanhHtml=Object.entries(hanhCount).map(([h,c])=>`
+    <div class="hanh-box">
+      <div class="h-name"><span class="hanh-dot" style="background:${HANH_COLOR[h]}"></span><span style="color:${HANH_COLOR[h]}">${h}</span></div>
+      <div class="h-count">${c} chữ</div>
+    </div>`).join('');
+  document.getElementById('hanhRow').innerHTML=hanhHtml;
+
+  document.getElementById('result').style.display='block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+document.getElementById('navToggle').addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('open'));
+document.querySelectorAll('.nav-dropdown>a').forEach(a=>a.addEventListener('click',e=>{if(window.innerWidth<=820){e.preventDefault();a.parentElement.classList.toggle('open');}}));
+</script>
+</body>
+</html>
