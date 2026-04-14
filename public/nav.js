@@ -37,7 +37,7 @@
     '.nav-link.active{color:#c9a84c}',
     '.nav-hamburger{display:none;background:none;border:none;color:#8BAACC;cursor:pointer;padding:8px;font-size:20px;z-index:400;position:relative}',
     // Dropdown
-    '.nav-dd{position:relative}',
+    '.nav-dd{position:relative;display:flex;align-items:center}',
     '.nav-dd-menu{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid #ccc;border-top:3px solid #c9a84c;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:500;max-height:80vh;overflow-y:auto}',
     '.nav-dd:hover .nav-dd-menu{display:block}',
     '.nav-dd-item{display:flex;align-items:center;gap:10px;padding:10px 16px;font-size:13px;color:#1a1a1a;text-decoration:none;border-bottom:1px solid #f0f0f0;transition:background .12s}',
@@ -49,11 +49,11 @@
     // Mobile
     '@media(max-width:700px){',
     '.topnav{padding:0 16px}',
-    '.nav-links{display:none;position:absolute;top:60px;left:0;right:0;background:#061A2E;flex-direction:column;padding:8px 0 16px;gap:0;border-bottom:1px solid #1a2a3a;z-index:199}',
+    '.nav-links{display:none;position:absolute;top:60px;left:0;right:0;background:#061A2E;flex-direction:column;padding:8px 0 16px;gap:0;border-bottom:1px solid #1a2a3a;z-index:199;overflow-y:auto;max-height:calc(100vh - 60px)}',
     '.nav-links.open{display:flex}',
     '.nav-link{padding:10px 24px;border-radius:0;width:100%;display:block}',
     '.nav-hamburger{display:block;margin-left:auto}',
-    '.nav-dd{width:100%}',
+    '.nav-dd{width:100%;display:block}',
     '.nav-dd:hover .nav-dd-menu{display:none}',
     '.nav-dd-menu{position:static;border:none;box-shadow:none;background:rgba(255,255,255,.06);width:100%;max-height:none}',
     '.nav-dd-menu.open{display:block !important}',
@@ -111,6 +111,10 @@
     + ddSection('Huy\u1ec1n H\u1ecdc & Ph\u01b0\u01a1ng T\u00e2y')
     + ddItem('/tools/kinh-dich.html',   '\u262f',       'Kinh D\u1ecbch 64 Qu\u1ebb')
     + ddItem('/tools/than-so-hoc.html', '\ud83d\udd22', 'Th\u1ea7n S\u1ed1 H\u1ecdc')
+    + ddSection('B\u00f3i B\u00e0i')
+    + ddItem('/tools/tarot.html',       '\ud83c\udccf', 'Tarot 78 L\u00e1')
+    + ddItem('/tools/oracle.html',      '\u2728',       'Oracle Ph\u01b0\u01a1ng \u0110\u00f4ng')
+    + ddItem('/tools/boi-bai-tay.html', '\ud83c\udca0', 'B\u00f3i B\u00e0i T\u00e2y')
 
     + '</div></div>';
 
@@ -153,9 +157,11 @@
   ddToggle.style.cursor = 'pointer';
   ddToggle.style.webkitTapHighlightColor = 'transparent';
   ddToggle.setAttribute('ontouchstart', '');
+  var _dd1Busy = false;
   ddToggle.addEventListener('click', function(e) {
     if (window.innerWidth <= 700) {
       e.preventDefault(); e.stopPropagation();
+      if (_dd1Busy) return; _dd1Busy = true; setTimeout(function(){_dd1Busy=false;},300);
       ddMenu.classList.toggle('open');
       ddMenu2.classList.remove('open');
     }
@@ -166,9 +172,11 @@
   ddToggle2.style.cursor = 'pointer';
   ddToggle2.style.webkitTapHighlightColor = 'transparent';
   ddToggle2.setAttribute('ontouchstart', '');
+  var _dd2Busy = false;
   ddToggle2.addEventListener('click', function(e) {
     if (window.innerWidth <= 700) {
       e.preventDefault(); e.stopPropagation();
+      if (_dd2Busy) return; _dd2Busy = true; setTimeout(function(){_dd2Busy=false;},300);
       ddMenu2.classList.toggle('open');
       ddMenu.classList.remove('open');
     }
