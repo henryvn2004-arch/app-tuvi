@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Xem Tướng Mặt bằng AI – Tử Vi Minh Bảo</title>
+<meta name="description" content="Chụp hoặc tải ảnh khuôn mặt — AI phân tích nhân tướng học theo truyền thống phương Đông: trán, mắt, mũi, miệng, cằm, lông mày, tai. Miễn phí.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<style>
+/* Upload area */
+.upload-area{border:2px dashed var(--border);border-radius:12px;padding:40px 24px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg-soft);position:relative}
+.upload-area:hover,.upload-area.dragover{border-color:#c9a84c;background:#c9a84c08}
+.upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{font-size:48px;margin-bottom:12px;display:block}
+.upload-title{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.upload-sub{font-size:13px;color:var(--text-lt)}
+/* Preview */
+.preview-wrap{position:relative;display:inline-block;margin:0 auto}
+.preview-img{max-width:300px;max-height:350px;width:100%;border-radius:12px;display:block;object-fit:cover}
+.preview-badge{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;font-size:11px;padding:4px 10px;border-radius:20px}
+.remove-btn{display:block;margin:10px auto 0;background:none;border:1px solid var(--border);border-radius:4px;padding:6px 16px;font-size:12px;color:var(--text-mid);cursor:pointer;font-family:inherit}
+.remove-btn:hover{background:var(--bg-soft)}
+/* Camera btn */
+.camera-btn{display:flex;align-items:center;gap:8px;padding:12px 24px;background:var(--navy);color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;margin:12px auto 0}
+.camera-btn:hover{background:#0D3B5E}
+/* Result markdown */
+.md-result{font-size:14px;line-height:1.85;color:var(--text-mid)}
+.md-result h2{font-size:16px;font-weight:700;color:var(--navy);margin:20px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border-lt)}
+.md-result h3{font-size:14px;font-weight:700;color:var(--navy);margin:14px 0 6px}
+.md-result strong{color:var(--navy);font-weight:700}
+.md-result em{color:#9A7B3A}
+.md-result ul{padding-left:20px;margin:8px 0}
+.md-result li{margin:4px 0}
+.md-result p{margin:0 0 10px}
+.md-result blockquote{border-left:3px solid #c9a84c;padding:8px 16px;margin:12px 0;background:#fdf8f0;border-radius:0 6px 6px 0;color:#9A7B3A;font-style:italic}
+/* Loading */
+.ai-loading{display:flex;flex-direction:column;align-items:center;gap:16px;padding:40px 0}
+.ai-loading-icon{font-size:48px;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.95)}}
+.ai-loading-text{font-size:14px;color:var(--text-lt);text-align:center}
+/* Privacy notice */
+.privacy-notice{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;background:#e8f0fe;border-radius:8px;border-left:3px solid #1455A4;font-size:12px;color:#1455A4;margin-top:16px}
+/* Tabs */
+.input-tabs{display:flex;gap:0;border-bottom:2px solid var(--border-lt);margin-bottom:20px}
+.input-tab{padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text-lt);border-bottom:2px solid transparent;margin-bottom:-2px;font-family:inherit;background:none;border-top:none;border-left:none;border-right:none;transition:all .15s}
+.input-tab.active{color:var(--navy);border-bottom-color:#c9a84c}
+.input-pane{display:none}
+.input-pane.active{display:block}
+</style>
+</head>
+<body>
+<script src="/nav.js"></script>
+
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Miễn Phí · AI Vision</div>
+    <h1>Xem Tướng Mặt<br><em>Bằng AI</em></h1>
+    <p>Chụp hoặc tải ảnh khuôn mặt — Claude AI phân tích theo nhân tướng học phương Đông: trán, mắt, mũi, miệng, cằm, lông mày, tai.</p>
+  </div>
+</div>
+
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">AI + Nhân Tướng Học</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">Claude Đọc Tướng Mặt<br>Theo Cổ Pháp Phương Đông</h2>
+          <p class="xt-body">Không chỉ là nhận diện khuôn mặt thông thường — AI được hướng dẫn theo <strong>Ma Y Thần Tướng</strong> và cổ pháp nhân tướng học phương Đông, phân tích từng đặc điểm và liên kết với ý nghĩa tướng pháp cụ thể.</p>
+          <p class="xt-body">Cho kết quả tốt nhất với ảnh chụp thẳng mặt, ánh sáng đủ, không đeo kính hay khẩu trang. Bạn có thể dùng ảnh của mình hoặc ảnh bất kỳ người nào.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">AI Phân Tích 8 Bộ Phận</div>
+          <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">Tổng Quan</span><span class="xt-factor-desc">Hình dạng khuôn mặt, khí chất tổng thể</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">②③</span><span class="xt-factor-label">Trán & Lông Mày</span><span class="xt-factor-desc">Trí tuệ, vận 15–30, quan hệ anh chị em</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">④</span><span class="xt-factor-label">Mắt</span><span class="xt-factor-desc">Tâm hồn, cảm xúc, vận trung niên</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">⑤</span><span class="xt-factor-label">Mũi</span><span class="xt-factor-desc">Tài lộc, sức khoẻ, vận 41–50</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">⑥⑦⑧</span><span class="xt-factor-label">Miệng, Cằm, Tai</span><span class="xt-factor-desc">Giao tiếp, hậu vận, tuổi thọ</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOL -->
+  <div class="form-section" id="inputSection">
+    <div class="section-eyebrow">Tải Ảnh Lên</div>
+
+    <!-- Privacy notice -->
+    <div class="privacy-notice">
+      <span>🔒</span>
+      <div><strong>Quyền riêng tư:</strong> Ảnh chỉ được gửi đến Claude AI để phân tích và không được lưu trữ trên máy chủ của chúng tôi. Không dùng ảnh của người khác khi chưa được đồng ý.</div>
+    </div>
+
+    <!-- Input tabs -->
+    <div class="input-tabs" style="margin-top:20px">
+      <button class="input-tab active" onclick="switchTab('upload',this)">📁 Tải Ảnh Lên</button>
+      <button class="input-tab" onclick="switchTab('camera',this)">📷 Chụp Ảnh</button>
+    </div>
+
+    <!-- Upload pane -->
+    <div class="input-pane active" id="pane-upload">
+      <div id="uploadArea" class="upload-area" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+        <input type="file" id="fileInput" accept="image/*" onchange="onFileSelect(event)">
+        <span class="upload-icon">🖼️</span>
+        <div class="upload-title">Kéo thả ảnh vào đây hoặc click để chọn</div>
+        <div class="upload-sub">JPG, PNG, WebP — tối đa 5MB · Tốt nhất: ảnh chụp thẳng mặt, đủ sáng</div>
+      </div>
+    </div>
+
+    <!-- Camera pane -->
+    <div class="input-pane" id="pane-camera">
+      <div style="text-align:center;padding:20px">
+        <div style="font-size:14px;color:var(--text-mid);margin-bottom:16px;line-height:1.7">
+          Bấm nút bên dưới để mở camera. Chụp thẳng mặt, ánh sáng đủ, không che mặt.
+        </div>
+        <button class="camera-btn" onclick="openCamera()">
+          <span>📷</span> Mở Camera
+        </button>
+        <video id="camVideo" style="display:none;max-width:300px;width:100%;border-radius:12px;margin:16px auto;display:none" autoplay playsinline></video>
+        <div id="camBtns" style="display:none;margin-top:12px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <button class="btn-submit" onclick="capturePhoto()" style="margin:0">📸 Chụp</button>
+          <button class="btn-prev" onclick="stopCamera()">✕ Huỷ</button>
+        </div>
+        <canvas id="camCanvas" style="display:none"></canvas>
+      </div>
+    </div>
+
+    <!-- Preview -->
+    <div id="previewSection" style="display:none;text-align:center;margin:20px 0">
+      <div class="preview-wrap">
+        <img id="previewImg" class="preview-img" alt="Ảnh đã chọn">
+        <div class="preview-badge">✓ Ảnh đã chọn</div>
+      </div>
+      <button class="remove-btn" onclick="removePhoto()">✕ Xoá ảnh</button>
+    </div>
+
+    <div style="text-align:center;margin-top:20px">
+      <button class="btn-submit" id="analyzeBtn" onclick="analyze()" disabled style="padding:14px 40px;font-size:15px">
+        🔮 Phân Tích Tướng Mặt
+      </button>
+    </div>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result-section" id="result-section">
+    <div class="res-block" style="margin-bottom:16px">
+      <div class="res-block-header">
+        <span class="res-block-title">Phân Tích Nhân Tướng Học</span>
+        <span style="font-size:11px;color:var(--text-lt)">bởi Claude AI · Ma Y Thần Tướng cổ pháp</span>
+      </div>
+      <div class="res-block-body">
+        <div id="aiResult" class="md-result"></div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:8px">
+      <button class="btn-secondary" onclick="reset()" style="padding:10px 24px">Phân Tích Ảnh Khác</button>
+    </div>
+  </div>
+
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Tướng + Số + Vận</div>
+    <div class="tool-cta-title">Kết Hợp Nhân Tướng Với Lá Số Tử Vi</div>
+    <div class="tool-cta-desc">Tướng mặt phản chiếu khí chất bẩm sinh. Lá số Tử Vi phân tích vận trình từng giai đoạn — hai phương pháp cổ đại bổ trợ nhau để cho bức tranh toàn diện nhất.</div>
+    <a class="tool-cta-btn" href="/luan-giai.html">Xem Lá Số Tử Vi ($19) →</a>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
+
+<script>
+let _imageData = null;  // base64 string (no prefix)
+let _mediaType = 'image/jpeg';
+let _camStream = null;
+
+// ── Tab switching ─────────────────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.input-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.input-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(`pane-${id}`).classList.add('active');
+  if (id !== 'camera') stopCamera();
+}
+
+// ── Drag & drop ───────────────────────────────────────────────
+function onDragOver(e) { e.preventDefault(); document.getElementById('uploadArea').classList.add('dragover'); }
+function onDragLeave() { document.getElementById('uploadArea').classList.remove('dragover'); }
+function onDrop(e) {
+  e.preventDefault();
+  document.getElementById('uploadArea').classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file) processFile(file);
+}
+
+function onFileSelect(e) {
+  const file = e.target.files[0];
+  if (file) processFile(file);
+}
+
+function processFile(file) {
+  const err = document.getElementById('error-msg');
+  err.classList.remove('active');
+  if (!file.type.startsWith('image/')) {
+    err.textContent = 'Vui lòng chọn file ảnh (JPG, PNG, WebP).';
+    err.classList.add('active'); return;
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    err.textContent = 'Ảnh quá lớn. Vui lòng chọn ảnh nhỏ hơn 5MB.';
+    err.classList.add('active'); return;
+  }
+  _mediaType = file.type || 'image/jpeg';
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    _imageData = dataUrl.split(',')[1]; // strip prefix
+    showPreview(dataUrl);
+  };
+  reader.readAsDataURL(file);
+}
+
+function showPreview(dataUrl) {
+  document.getElementById('previewImg').src = dataUrl;
+  document.getElementById('previewSection').style.display = 'block';
+  document.getElementById('uploadArea').style.display = 'none';
+  document.getElementById('analyzeBtn').disabled = false;
+}
+
+function removePhoto() {
+  _imageData = null;
+  document.getElementById('previewSection').style.display = 'none';
+  document.getElementById('uploadArea').style.display = 'block';
+  document.getElementById('analyzeBtn').disabled = true;
+  document.getElementById('fileInput').value = '';
+  stopCamera();
+}
+
+// ── Camera ────────────────────────────────────────────────────
+async function openCamera() {
+  try {
+    _camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 640, height: 480 } });
+    const vid = document.getElementById('camVideo');
+    vid.srcObject = _camStream;
+    vid.style.display = 'block';
+    document.getElementById('camBtns').style.display = 'flex';
+    document.querySelector('.camera-btn').style.display = 'none';
+  } catch(e) {
+    const err = document.getElementById('error-msg');
+    err.textContent = 'Không thể mở camera. Vui lòng tải ảnh lên thay thế.';
+    err.classList.add('active');
+  }
+}
+
+function capturePhoto() {
+  const vid = document.getElementById('camVideo');
+  const canvas = document.getElementById('camCanvas');
+  canvas.width = vid.videoWidth;
+  canvas.height = vid.videoHeight;
+  canvas.getContext('2d').drawImage(vid, 0, 0);
+  const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+  _imageData = dataUrl.split(',')[1];
+  _mediaType = 'image/jpeg';
+  stopCamera();
+  showPreview(dataUrl);
+}
+
+function stopCamera() {
+  if (_camStream) { _camStream.getTracks().forEach(t => t.stop()); _camStream = null; }
+  const vid = document.getElementById('camVideo');
+  vid.style.display = 'none'; vid.srcObject = null;
+  document.getElementById('camBtns').style.display = 'none';
+  const camBtn = document.querySelector('.camera-btn');
+  if (camBtn) camBtn.style.display = 'inline-flex';
+}
+
+// ── Analyze ───────────────────────────────────────────────────
+async function analyze() {
+  if (!_imageData) return;
+  const err = document.getElementById('error-msg');
+  err.classList.remove('active');
+  const btn = document.getElementById('analyzeBtn');
+  btn.disabled = true;
+
+  // Show loading
+  document.getElementById('result-section').classList.add('active');
+  document.getElementById('aiResult').innerHTML = `
+    <div class="ai-loading">
+      <span class="ai-loading-icon">🔮</span>
+      <div class="ai-loading-text">AI đang phân tích tướng mặt...<br><span style="font-size:12px;opacity:.7">Thường mất 10–20 giây</span></div>
+    </div>`;
+  document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  try {
+    const res = await fetch('/api/tuong-mat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: _imageData, mediaType: _mediaType })
+    });
+
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    document.getElementById('aiResult').innerHTML = renderMarkdown(data.result);
+    btn.disabled = false;
+
+  } catch(e) {
+    document.getElementById('aiResult').innerHTML = '';
+    document.getElementById('result-section').classList.remove('active');
+    err.textContent = 'Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.');
+    err.classList.add('active');
+    btn.disabled = false;
+  }
+}
+
+function reset() {
+  removePhoto();
+  document.getElementById('result-section').classList.remove('active');
+  document.getElementById('aiResult').innerHTML = '';
+  document.getElementById('inputSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── Simple Markdown renderer ──────────────────────────────────
+function renderMarkdown(md) {
+  return md
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>')
+    .replace(/^- (.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>.*<\/li>(\n|$))+/g, s => '<ul>' + s + '</ul>')
+    .replace(/\n\n/g,'</p><p>')
+    .replace(/^(?!<[hublp])(.+)$/gm,'<p>$1</p>')
+    .replace(/<p><\/p>/g,'')
+    .replace(/<p>(<[hul])/g,'$1')
+    .replace(/(<\/[hul][^>]*>)<\/p>/g,'$1');
+}
+</script>
+</body>
+</html>
