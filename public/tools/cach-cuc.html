@@ -2,237 +2,154 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Cách Cục Đặc Biệt – Tử Vi Minh Bảo</title>
-<meta name="description" content="Tra cứu các cách cục đặc biệt trong lá số Tử Vi của bạn. Biết lá số có cách cục quý hay hung. Miễn phí.">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
-<style>
-:root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0;--red:#C0392B;--green:#1E6B3C}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;color:var(--text);background:var(--bg)}
-.main-nav{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.4)}
-.nav-container{max-width:1100px;margin:0 auto;padding:0 20px;display:flex;align-items:center}
-.nav-brand{color:#fff;font-family:'Noto Serif',serif;font-weight:700;font-size:1.05rem;padding:14px 0;margin-right:auto}
-.nav-brand span{color:var(--gold)}
-.nav-links{display:flex;list-style:none}
-.nav-links>li>a{display:block;color:rgba(255,255,255,.85);padding:16px 13px;font-size:.85rem;white-space:nowrap;transition:color .2s}
-.nav-links>li>a:hover,.nav-links>li>a.active{color:var(--gold)}
-.nav-dropdown{position:relative}
-.dropdown-menu{display:none;position:absolute;top:100%;left:0;background:var(--navy-mid);min-width:220px;border-top:2px solid var(--gold);list-style:none;padding:6px 0;box-shadow:0 4px 20px rgba(0,0,0,.35)}
-.nav-dropdown:hover .dropdown-menu{display:block}
-.dropdown-menu a{display:block;color:rgba(255,255,255,.85);padding:10px 18px;font-size:.84rem;transition:background .15s,color .15s}
-.dropdown-menu a:hover{background:rgba(255,255,255,.07);color:var(--gold)}
-.nav-toggle{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;padding:10px;margin-left:auto}
-@media(max-width:820px){.nav-toggle{display:block}.nav-links{display:none;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:var(--navy);padding-bottom:8px}.nav-links.open{display:flex}.dropdown-menu{position:static;box-shadow:none;border:none;background:rgba(255,255,255,.05)}.nav-dropdown:hover .dropdown-menu{display:none}.nav-dropdown.open .dropdown-menu{display:block}.nav-container{position:relative;flex-wrap:wrap}}
-.page-header{background:var(--navy);color:#fff;padding:48px 20px 36px;text-align:center}
-.page-header h1{font-family:'Noto Serif',serif;font-size:1.9rem;margin-bottom:10px}
-.page-header p{color:rgba(255,255,255,.75);font-size:.95rem;max-width:580px;margin:0 auto}
-.container{max-width:760px;margin:0 auto;padding:40px 20px 60px}
-.card{background:#fff;border:1px solid var(--border-lt);border-radius:8px;padding:32px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:24px}
-.card h2{font-family:'Noto Serif',serif;font-size:1.25rem;color:var(--navy);margin-bottom:22px;padding-bottom:12px;border-bottom:1px solid var(--border-lt)}
-.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px}
-.field{display:flex;flex-direction:column;gap:6px}
-.field label{font-size:.83rem;color:var(--text-mid);font-weight:600}
-.field input,.field select{padding:10px 12px;border:1px solid var(--border);border-radius:5px;font-size:.93rem;color:var(--text)}
-.field input:focus,.field select:focus{outline:none;border-color:var(--blue)}
-.btn-primary{width:100%;background:var(--blue);color:#fff;border:none;padding:12px;border-radius:5px;font-size:.95rem;cursor:pointer;transition:background .2s;margin-top:14px;font-weight:600}
-.btn-primary:hover{background:#1044a0}
-.error{color:var(--red);font-size:.86rem;margin-top:8px}
-/* CÁCH CỤC */
-.cc-summary{display:flex;align-items:center;gap:16px;background:var(--bg-soft);border-radius:7px;padding:16px 20px;margin-bottom:20px}
-.cc-count{font-family:'Noto Serif',serif;font-size:2rem;font-weight:700;color:var(--navy);line-height:1}
-.cc-count span{font-size:.8rem;font-weight:400;color:var(--text-lt);display:block}
-.cc-summary p{font-size:.9rem;color:var(--text-mid);line-height:1.55}
-.cc-list{display:flex;flex-direction:column;gap:12px}
-.cc-item{border-radius:7px;padding:16px 20px;border-left:4px solid transparent}
-.cc-item.quy{background:#eaf4ed;border-color:var(--green)}
-.cc-item.hung{background:#fef0ef;border-color:var(--red)}
-.cc-item.trung{background:var(--bg-soft);border-color:var(--border)}
-.cc-item .cc-name{font-family:'Noto Serif',serif;font-weight:700;font-size:1rem;margin-bottom:4px;display:flex;align-items:center;gap:8px}
-.cc-item .cc-cung{font-size:.8rem;color:var(--text-lt);margin-bottom:6px}
-.cc-item .cc-desc{font-size:.86rem;color:var(--text-mid);line-height:1.55}
-.cc-badge{font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:8px}
-.badge-quy{background:var(--green);color:#fff}
-.badge-hung{background:var(--red);color:#fff}
-.badge-trung{background:var(--text-mid);color:#fff}
-.empty-box{text-align:center;padding:30px 20px;color:var(--text-mid)}
-.empty-box .icon{font-size:2rem;margin-bottom:10px}
-.empty-box p{font-size:.9rem}
-.cta-box{background:var(--navy);color:#fff;border-radius:8px;padding:24px;text-align:center}
-.cta-box p{font-size:.9rem;opacity:.85;margin-bottom:14px}
-.cta-box a{display:inline-block;background:var(--gold);color:#fff;padding:10px 26px;border-radius:5px;font-size:.9rem;font-weight:700}
-</style>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Cách Cục Đặc Biệt trong Lá Số Tử Vi – Tử Vi Minh Bảo</title>
+<meta name="description" content="Tra cách cục đặc biệt trong lá số Tử Vi — biết lá số thiên về hướng nào và có cách cục quý hay hung nào. Miễn phí.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<script src="/tuvi-ansao-engine.js"></script>
 </head>
 <body>
-<nav class="main-nav">
-  <div class="nav-container">
-    <a href="/" class="nav-brand">Tử Vi <span>Minh Bảo</span></a>
-    <button class="nav-toggle" id="navToggle">☰</button>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="/" class="nav-link">Trang Chủ</a></li>
-      <li class="nav-dropdown"><a href="#" class="nav-link">Luận Giải ▾</a>
-        <ul class="dropdown-menu">
-          <li><a href="/">Luận Giải Lá Số</a></li>
-          <li><a href="/xem-tuoi.html">Xem Tuổi Vợ Chồng</a></li>
-          <li><a href="/xem-lam-an.html">Xem Tuổi Làm Ăn</a></li>
-        </ul>
-      </li>
-      <li class="nav-dropdown"><a href="#" class="nav-link active">Công Cụ ▾</a>
-        <ul class="dropdown-menu">
-          <li><a href="/tools/nap-am.html">Nạp Âm &amp; Can Chi</a></li>
-          <li><a href="/tools/dai-van.html">Xem Đại Vận</a></li>
-          <li><a href="/tools/sao-nam.html">Sao Năm Hiện Tại</a></li>
-          <li><a href="/tools/cach-cuc.html">Cách Cục Đặc Biệt</a></li>
-          <li><a href="/tools/tuong-hop.html">Tương Hợp Tuổi</a></li>
-          <li><a href="/tools/kim-lau.html">Kim Lâu / Tam Tai</a></li>
-          <li><a href="/tools/tu-tru.html">Tứ Trụ Bát Tự</a></li>
-        </ul>
-      </li>
-      <li><a href="/about.html" class="nav-link">Giới Thiệu</a></li>
-      <li><a href="/resources.html" class="nav-link">Tài Liệu</a></li>
-      <li><a href="/blog.html" class="nav-link">Khảo Luận</a></li>
-      <li><a href="/menh-kho.html" class="nav-link">Mệnh Khố</a></li>
-      <li><a href="/contact.html" class="nav-link">Liên Hệ</a></li>
-    </ul>
-  </div>
-</nav>
+<script src="/nav.js"></script>
 
-<div class="page-header">
-  <h1>Cách Cục Đặc Biệt</h1>
-  <p>Khám phá các cách cục quý và hung trong lá số Tử Vi của bạn — biết lá số thiên về hướng nào trong cuộc đời.</p>
-</div>
-
-<div class="container">
-  <div class="card">
-    <h2>Nhập ngày sinh</h2>
-    <div class="form-grid">
-      <div class="field"><label>Ngày sinh DL</label><input type="number" id="ngay" placeholder="1–31" min="1" max="31"></div>
-      <div class="field"><label>Tháng sinh DL</label><input type="number" id="thang" placeholder="1–12" min="1" max="12"></div>
-      <div class="field"><label>Năm sinh DL</label><input type="number" id="nam" placeholder="1990" min="1900" max="2010"></div>
-      <div class="field">
-        <label>Giờ sinh</label>
-        <select id="gio">
-          <option value="0">Giờ Tý (23–01h)</option><option value="1">Giờ Sửu (01–03h)</option>
-          <option value="2">Giờ Dần (03–05h)</option><option value="3">Giờ Mão (05–07h)</option>
-          <option value="4">Giờ Thìn (07–09h)</option><option value="5">Giờ Tỵ (09–11h)</option>
-          <option value="6">Giờ Ngọ (11–13h)</option><option value="7">Giờ Mùi (13–15h)</option>
-          <option value="8">Giờ Thân (15–17h)</option><option value="9">Giờ Dậu (17–19h)</option>
-          <option value="10">Giờ Tuất (19–21h)</option><option value="11">Giờ Hợi (21–23h)</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Giới tính</label>
-        <select id="gioitinh"><option value="nam">Nam</option><option value="nu">Nữ</option></select>
-      </div>
-    </div>
-    <button class="btn-primary" onclick="calculate()">Tra cách cục</button>
-    <div class="error" id="errMsg"></div>
-  </div>
-
-  <div id="result" style="display:none">
-    <div class="card">
-      <h2>Cách cục trong lá số</h2>
-      <div class="cc-summary">
-        <div class="cc-count" id="ccCount">0<span>cách cục</span></div>
-        <p id="ccSummaryText">—</p>
-      </div>
-      <div class="cc-list" id="ccList"></div>
-    </div>
-    <div class="cta-box">
-      <p>Muốn hiểu ý nghĩa sâu của từng cách cục và cách phát huy / hóa giải trong thực tế cuộc sống?</p>
-      <a href="/">Luận Giải Lá Số Đầy Đủ →</a>
-    </div>
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Miễn Phí</div>
+    <h1>Cách Cục <em>Đặc Biệt</em><br>trong Lá Số</h1>
+    <p>Khám phá các cách cục quý và hung trong lá số Tử Vi — biết lá số thiên về hướng nào trong cuộc đời.</p>
   </div>
 </div>
 
-<script src="/tuvi-ansao-engine.js"></script>
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Cách Cục là gì?</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">Cách Cục — Mô Hình<br>Đặc Biệt Trong Lá Số</h2>
+          <p class="xt-body">Cách cục (hay cục cách) là những mô hình đặc biệt hình thành khi các sao tinh, cung vị và địa chi sắp xếp theo những tổ hợp mang ý nghĩa đặc định trong Tử Vi cổ pháp.</p>
+          <p class="xt-body">Cách cục quý (phú quý, khoa bảng, lộc vị...) thường chỉ xu hướng phát triển thuận lợi. Cách cục hung (cô độc, khắc hao...) chỉ những điều cần lưu ý và hóa giải. Không phải lá số nào cũng có cách cục đặc biệt.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">Các loại cách cục chính</div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1E6B3C">✦</span><span class="xt-factor-label">Cát Cục</span><span class="xt-factor-desc">Phú quý, quan lộc, khoa bảng — xu hướng phát đạt</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#C0392B">✗</span><span class="xt-factor-label">Hung Cục</span><span class="xt-factor-desc">Cô độc, bại tài, khắc hao — cần lưu ý và hóa giải</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">○</span><span class="xt-factor-label">Trung Bình</span><span class="xt-factor-desc">Không đặc biệt nổi trội — phụ thuộc vào đại vận</span></div>
+        </div>
+      </div>
+      <div class="xt-note">
+        <span class="xt-note-icon">💡</span>
+        <div>Cách cục cho thấy xu hướng tiềm năng, không phải số phận cố định. Phát huy hay hóa giải phụ thuộc vào bản thân và từng giai đoạn đại vận cụ thể.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-eyebrow">Nhập Ngày Sinh</div>
+    <div class="form-grid cols-2">
+      <div class="form-col">
+        <div class="form-col-title">Ngày Sinh Dương Lịch</div>
+        <div class="form-row-3">
+          <div class="form-group"><label class="form-label">Ngày</label><input class="form-input" type="number" id="ngay" placeholder="1–31" min="1" max="31"></div>
+          <div class="form-group"><label class="form-label">Tháng</label><input class="form-input" type="number" id="thang" placeholder="1–12" min="1" max="12"></div>
+          <div class="form-group"><label class="form-label">Năm</label><input class="form-input" type="number" id="nam" placeholder="1990" min="1900" max="2010"></div>
+        </div>
+      </div>
+      <div class="form-col">
+        <div class="form-col-title">Giờ &amp; Giới Tính</div>
+        <div class="form-group">
+          <label class="form-label">Giờ sinh</label>
+          <select class="form-input" id="gio">
+            <option value="0">Giờ Tý (23–01h)</option><option value="2">Giờ Sửu (01–03h)</option>
+            <option value="4">Giờ Dần (03–05h)</option><option value="6">Giờ Mão (05–07h)</option>
+            <option value="8">Giờ Thìn (07–09h)</option><option value="10">Giờ Tỵ (09–11h)</option>
+            <option value="12">Giờ Ngọ (11–13h)</option><option value="14">Giờ Mùi (13–15h)</option>
+            <option value="16">Giờ Thân (15–17h)</option><option value="18">Giờ Dậu (17–19h)</option>
+            <option value="20">Giờ Tuất (19–21h)</option><option value="22">Giờ Hợi (21–23h)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Giới tính</label>
+          <select class="form-input" id="gioitinh"><option value="nam">Nam</option><option value="nu">Nữ</option></select>
+        </div>
+        <button class="btn-submit" onclick="calculate()">Tra Cách Cục</button>
+      </div>
+    </div>
+    <div class="status-bar" id="loader"><div class="status-dot"></div><div id="loader-text">Đang an sao...</div></div>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+
+  <div class="result-section" id="result-section">
+    <div class="res-block" style="margin-bottom:24px">
+      <div class="res-block-header">
+        <span class="res-block-title">Tổng Kết Cách Cục</span>
+        <span id="ccSummary" style="font-size:12px;color:var(--text-lt)"></span>
+      </div>
+      <div id="ccList"></div>
+    </div>
+  </div>
+
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Luận Giải Sâu Hơn</div>
+    <div class="tool-cta-title">Hiểu Ý Nghĩa Cách Cục Trong Thực Tế</div>
+    <div class="tool-cta-desc">Biết tên cách cục là bước đầu — luận giải đầy đủ sẽ giải thích cách cục ảnh hưởng đến sự nghiệp, tài lộc, hôn nhân trong từng giai đoạn đại vận như thế nào.</div>
+    <a class="tool-cta-btn" href="/luan-giai.html">Luận Giải 24 Phần ($19) →</a>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
+
 <script>
-// Keyword classify cách cục
-const QUY_KEYWORDS = ['phú','quý','đế','vương','khoa','quyền','lộc','tài','quan','thọ','minh','cát'];
-const HUNG_KEYWORDS = ['sát','hình','phá','thoái','tiêu','bại','cô','quả','tù','hao','khắc','bệnh'];
-
-function classifyCC(name) {
-  const n = (name||'').toLowerCase();
-  if (QUY_KEYWORDS.some(k => n.includes(k))) return 'quy';
-  if (HUNG_KEYWORDS.some(k => n.includes(k))) return 'hung';
-  return 'trung';
-}
-
-function calculate() {
+const QUY=['phú','quý','đế','vương','khoa','quyền','lộc','tài','quan','thọ','minh','cát'];
+const HUNG=['sát','hình','phá','thoái','tiêu','bại','cô','quả','tù','hao','khắc','bệnh'];
+function cls(name){const n=(name||'').toLowerCase();if(QUY.some(k=>n.includes(k)))return'quy';if(HUNG.some(k=>n.includes(k)))return'hung';return'trung';}
+function calculate(){
   const ngay=parseInt(document.getElementById('ngay').value);
   const thang=parseInt(document.getElementById('thang').value);
   const nam=parseInt(document.getElementById('nam').value);
-  const gioIdx=parseInt(document.getElementById('gio').value);
+  const gioHour=parseInt(document.getElementById('gio').value);
   const gioitinh=document.getElementById('gioitinh').value;
-  const err=document.getElementById('errMsg');
-  err.textContent='';
-  if(!ngay||ngay<1||ngay>31||!thang||thang<1||thang>12||!nam||nam<1900||nam>2010){
-    err.textContent='Vui lòng nhập đầy đủ ngày/tháng/năm hợp lệ.';return;
-  }
-  let am,laso;
+  const err=document.getElementById('error-msg');
+  err.classList.remove('active');
+  if(!ngay||ngay<1||ngay>31||!thang||thang<1||thang>12||!nam||nam<1900||nam>2010){err.textContent='Vui lòng nhập đầy đủ ngày/tháng/năm.';err.classList.add('active');return;}
+  const loader=document.getElementById('loader');loader.classList.add('active');document.querySelector('.btn-submit').disabled=true;
   try{
-    am=convertDuongToAm(ngay,thang,nam,gioIdx*2);
-    laso=anSaoLaSo({ngayAL:am.amLich.ngay,thangAL:am.amLich.thang,namAL:am.amLich.nam,canNam:am.canNam,chiNam:am.chiNam,gioIdx:am.gioIdx,gioitinh,namXem:2026});
-  }catch(e){err.textContent='Lỗi tính toán: '+e.message;return;}
-
-  // Collect cách cục — try multiple property names
-  let cachCuc = [];
-  if (Array.isArray(laso.cachCuc)) cachCuc = laso.cachCuc;
-  else if (Array.isArray(laso.cachCucList)) cachCuc = laso.cachCucList;
-  else if (Array.isArray(laso.cach)) cachCuc = laso.cach;
-
-  // Also check per-cung cách cục
-  const perCung = [];
-  if (laso.cachCucTungCung) {
-    Object.entries(laso.cachCucTungCung).forEach(([cung,cc])=>{
-      if(Array.isArray(cc))cc.forEach(c=>perCung.push({...c,_cung:cung}));
-      else if(cc&&typeof cc==='object')perCung.push({...cc,_cung:cung});
-    });
-  }
-
-  const allCC = [...cachCuc, ...perCung];
-  document.getElementById('ccCount').innerHTML = `${allCC.length}<span>cách cục</span>`;
-
-  if (!allCC.length) {
-    document.getElementById('ccSummaryText').textContent = 'Không phát hiện cách cục đặc biệt trong lá số này.';
-    document.getElementById('ccList').innerHTML = `
-      <div class="empty-box">
-        <div class="icon">◎</div>
-        <p>Không có cách cục đặc biệt được ghi nhận.<br>Lá số bình thường, phụ thuộc vào đại vận và tiểu vận.</p>
-      </div>`;
-  } else {
-    const quy = allCC.filter(c=>classifyCC(c.name||c.ten||c)!=='hung').length;
-    const hung = allCC.length - quy;
-    document.getElementById('ccSummaryText').textContent =
-      `Lá số có ${quy} cách cục cát (quý/tốt) và ${hung} cách cục hung. ` +
-      (quy>hung ? 'Lá số nghiêng về cát, có nền tảng phát triển tốt.' :
-       hung>quy ? 'Lá số có nhiều hung cách, cần chú ý hóa giải.' :
-       'Lá số cân bằng giữa cát và hung cách.');
-
-    document.getElementById('ccList').innerHTML = allCC.map(cc=>{
-      const name = cc.name||cc.ten||(typeof cc==='string'?cc:'Cách cục');
-      const cung = cc._cung||cc.cung||cc.cungName||'';
-      const desc = cc.moTa||cc.desc||cc.description||'';
-      const cls = classifyCC(name);
-      const badgeTxt = cls==='quy'?'Cát':'Hung';
-      const badgeCls = cls==='quy'?'badge-quy':'badge-hung';
-      return `<div class="cc-item ${cls}">
-        <div class="cc-name">
-          ${name}
-          <span class="cc-badge ${badgeCls}">${badgeTxt}</span>
-        </div>
-        ${cung?`<div class="cc-cung">Tại cung: ${cung}</div>`:''}
-        ${desc?`<div class="cc-desc">${desc}</div>`:''}
-      </div>`;
-    }).join('');
-  }
-
-  document.getElementById('result').style.display='block';
-  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
+    const conv=convertDuongToAm(ngay,thang,nam,gioHour);
+    conv._dl={day:ngay,month:thang,year:nam};
+    const ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:nam,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:conv.gioIdx,gioitinh,namXem:2026});
+    let all=[];
+    if(Array.isArray(ls.cachCuc))all=[...ls.cachCuc];
+    if(ls.cachCucTungCung)Object.entries(ls.cachCucTungCung).forEach(([cung,cc])=>{if(Array.isArray(cc))cc.forEach(c=>all.push({...c,_cung:cung}));});
+    const qCount=all.filter(c=>cls(c.ten||c.name||c)!=='hung').length;
+    document.getElementById('ccSummary').textContent=all.length?`${all.length} cách cục — ${qCount} cát, ${all.length-qCount} hung`:'Không phát hiện cách cục đặc biệt';
+    if(!all.length){
+      document.getElementById('ccList').innerHTML=`<div style="padding:32px 24px;text-align:center;color:var(--text-lt)"><div style="font-size:28px;margin-bottom:10px">◎</div><div style="font-size:14px">Lá số không có cách cục đặc biệt — vận trình phụ thuộc chủ yếu vào đại vận và tiểu vận.</div></div>`;
+    }else{
+      document.getElementById('ccList').innerHTML=all.map(cc=>{
+        const name=cc.ten||cc.name||(typeof cc==='string'?cc:'Cách cục');
+        const cung=cc._cung||cc.cung||cc.cungName||'';
+        const desc=cc.moTa||cc.desc||cc.description||'';
+        const c=cls(name);
+        const color=c==='quy'?'var(--green)':c==='hung'?'var(--red)':'var(--text-mid)';
+        const bg=c==='quy'?'#eaf4ed':c==='hung'?'#fef0ef':'var(--bg-soft)';
+        return`<div style="padding:16px 24px;border-bottom:1px solid var(--border-lt);background:${bg}">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:${desc?6:0}px">
+            <span style="font-size:13px;font-weight:700;color:${color}">${name}</span>
+            <span class="res-tag ${c==='quy'?'res-tag-good':c==='hung'?'res-tag-bad':'res-tag-neu'}">${c==='quy'?'Cát Cục':c==='hung'?'Hung Cục':'Trung Bình'}</span>
+            ${cung?`<span style="font-size:11px;color:var(--text-lt)">— cung ${cung}</span>`:''}
+          </div>
+          ${desc?`<div style="font-size:13px;color:var(--text-mid);line-height:1.6">${desc}</div>`:''}
+        </div>`;
+      }).join('');
+    }
+    document.getElementById('result-section').classList.add('active');
+    document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
+  }catch(e){err.textContent='Lỗi: '+e.message;err.classList.add('active');}
+  finally{loader.classList.remove('active');document.querySelector('.btn-submit').disabled=false;}
 }
-
-document.getElementById('navToggle').addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('open'));
-document.querySelectorAll('.nav-dropdown>a').forEach(a=>a.addEventListener('click',e=>{if(window.innerWidth<=820){e.preventDefault();a.parentElement.classList.toggle('open');}}));
 </script>
 </body>
 </html>

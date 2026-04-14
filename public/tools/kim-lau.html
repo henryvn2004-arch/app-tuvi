@@ -2,251 +2,151 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Tra Kim Lâu, Tam Tai, Hoang Ốc – Tử Vi Minh Bảo</title>
-<meta name="description" content="Tra cứu các năm Kim Lâu, Hoang Ốc, Tam Tai theo tuổi âm. Biết năm nào cần kiêng cưới hỏi, xây nhà, khởi công. Miễn phí.">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
-<style>
-:root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0;--red:#C0392B;--green:#1E6B3C}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;color:var(--text);background:var(--bg)}
-.main-nav{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.4)}
-.nav-container{max-width:1100px;margin:0 auto;padding:0 20px;display:flex;align-items:center}
-.nav-brand{color:#fff;font-family:'Noto Serif',serif;font-weight:700;font-size:1.05rem;padding:14px 0;margin-right:auto}
-.nav-brand span{color:var(--gold)}
-.nav-links{display:flex;list-style:none}
-.nav-links>li>a{display:block;color:rgba(255,255,255,.85);padding:16px 13px;font-size:.85rem;white-space:nowrap;transition:color .2s}
-.nav-links>li>a:hover,.nav-links>li>a.active{color:var(--gold)}
-.nav-dropdown{position:relative}
-.dropdown-menu{display:none;position:absolute;top:100%;left:0;background:var(--navy-mid);min-width:220px;border-top:2px solid var(--gold);list-style:none;padding:6px 0;box-shadow:0 4px 20px rgba(0,0,0,.35)}
-.nav-dropdown:hover .dropdown-menu{display:block}
-.dropdown-menu a{display:block;color:rgba(255,255,255,.85);padding:10px 18px;font-size:.84rem;transition:background .15s,color .15s}
-.dropdown-menu a:hover{background:rgba(255,255,255,.07);color:var(--gold)}
-.nav-toggle{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;padding:10px;margin-left:auto}
-@media(max-width:820px){.nav-toggle{display:block}.nav-links{display:none;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:var(--navy);padding-bottom:8px}.nav-links.open{display:flex}.dropdown-menu{position:static;box-shadow:none;border:none;background:rgba(255,255,255,.05)}.nav-dropdown:hover .dropdown-menu{display:none}.nav-dropdown.open .dropdown-menu{display:block}.nav-container{position:relative;flex-wrap:wrap}}
-.page-header{background:var(--navy);color:#fff;padding:48px 20px 36px;text-align:center}
-.page-header h1{font-family:'Noto Serif',serif;font-size:1.9rem;margin-bottom:10px}
-.page-header p{color:rgba(255,255,255,.75);font-size:.95rem;max-width:560px;margin:0 auto}
-.container{max-width:720px;margin:0 auto;padding:40px 20px 60px}
-.card{background:#fff;border:1px solid var(--border-lt);border-radius:8px;padding:32px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:24px}
-.card h2{font-family:'Noto Serif',serif;font-size:1.25rem;color:var(--navy);margin-bottom:22px;padding-bottom:12px;border-bottom:1px solid var(--border-lt)}
-.form-row{display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap}
-.field{display:flex;flex-direction:column;gap:6px;flex:1;min-width:140px}
-.field label{font-size:.85rem;color:var(--text-mid);font-weight:600}
-.field input,.field select{padding:10px 14px;border:1px solid var(--border);border-radius:5px;font-size:.95rem;color:var(--text)}
-.field input:focus,.field select:focus{outline:none;border-color:var(--blue)}
-.btn-primary{background:var(--blue);color:#fff;border:none;padding:11px 28px;border-radius:5px;font-size:.95rem;cursor:pointer;transition:background .2s;white-space:nowrap}
-.btn-primary:hover{background:#1044a0}
-.error{color:var(--red);font-size:.86rem;margin-top:8px}
-/* RESULT */
-.tuoi-info{display:flex;align-items:center;gap:16px;background:var(--bg-soft);border-radius:7px;padding:16px 20px;margin-bottom:24px;flex-wrap:wrap}
-.tuoi-can-chi{font-family:'Noto Serif',serif;font-size:1.4rem;font-weight:700;color:var(--navy)}
-.tuoi-detail{font-size:.88rem;color:var(--text-mid)}
-.current-year-box{border-radius:7px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px}
-.cyb-good{background:#eaf4ed;border-left:4px solid var(--green)}
-.cyb-warn{background:#fff8ec;border-left:4px solid var(--gold)}
-.cyb-bad{background:#fef0ef;border-left:4px solid var(--red)}
-.cyb-icon{font-size:1.5rem}
-.cyb-title{font-weight:700;font-size:1rem;margin-bottom:3px}
-.cyb-desc{font-size:.87rem;color:var(--text-mid)}
-.table-title{font-family:'Noto Serif',serif;font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:12px}
-table{width:100%;border-collapse:collapse;font-size:.88rem}
-thead th{background:var(--navy);color:#fff;padding:9px 12px;text-align:left;font-weight:600}
-tbody tr:nth-child(even){background:var(--bg-soft)}
-tbody td{padding:9px 12px;border-bottom:1px solid var(--border-lt)}
-.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.78rem;font-weight:700;margin:1px}
-.tag-kl{background:#fef0ef;color:var(--red)}
-.tag-ho{background:#fff8ec;color:#8B6914}
-.tag-tt{background:#e8f0fe;color:var(--blue)}
-.tag-ok{background:#eaf4ed;color:var(--green)}
-.legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;font-size:.82rem}
-.legend-item{display:flex;align-items:center;gap:5px}
-.cta-box{background:var(--navy);color:#fff;border-radius:8px;padding:24px;text-align:center}
-.cta-box p{font-size:.9rem;opacity:.85;margin-bottom:14px}
-.cta-box a{display:inline-block;background:var(--gold);color:#fff;padding:10px 26px;border-radius:5px;font-size:.9rem;font-weight:700}
-</style>
+<meta name="description" content="Biết năm nào là Kim Lâu, Hoang Ốc, Tam Tai theo tuổi âm. Hỗ trợ quyết định cưới hỏi, xây nhà, khởi công. Miễn phí.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
 </head>
 <body>
-<nav class="main-nav">
-  <div class="nav-container">
-    <a href="/" class="nav-brand">Tử Vi <span>Minh Bảo</span></a>
-    <button class="nav-toggle" id="navToggle">☰</button>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="/" class="nav-link">Trang Chủ</a></li>
-      <li class="nav-dropdown"><a href="#" class="nav-link">Luận Giải ▾</a>
-        <ul class="dropdown-menu">
-          <li><a href="/">Luận Giải Lá Số</a></li>
-          <li><a href="/xem-tuoi.html">Xem Tuổi Vợ Chồng</a></li>
-          <li><a href="/xem-lam-an.html">Xem Tuổi Làm Ăn</a></li>
-        </ul>
-      </li>
-      <li class="nav-dropdown"><a href="#" class="nav-link active">Công Cụ ▾</a>
-        <ul class="dropdown-menu">
-          <li><a href="/tools/nap-am.html">Nạp Âm &amp; Can Chi</a></li>
-          <li><a href="/tools/dai-van.html">Xem Đại Vận</a></li>
-          <li><a href="/tools/sao-nam.html">Sao Năm Hiện Tại</a></li>
-          <li><a href="/tools/cach-cuc.html">Cách Cục Đặc Biệt</a></li>
-          <li><a href="/tools/tuong-hop.html">Tương Hợp Tuổi</a></li>
-          <li><a href="/tools/kim-lau.html">Kim Lâu / Tam Tai</a></li>
-          <li><a href="/tools/tu-tru.html">Tứ Trụ Bát Tự</a></li>
-        </ul>
-      </li>
-      <li><a href="/about.html" class="nav-link">Giới Thiệu</a></li>
-      <li><a href="/resources.html" class="nav-link">Tài Liệu</a></li>
-      <li><a href="/blog.html" class="nav-link">Khảo Luận</a></li>
-      <li><a href="/menh-kho.html" class="nav-link">Mệnh Khố</a></li>
-      <li><a href="/contact.html" class="nav-link">Liên Hệ</a></li>
-    </ul>
-  </div>
-</nav>
+<script src="/nav.js"></script>
 
-<div class="page-header">
-  <h1>Tra Kim Lâu, Tam Tai &amp; Hoang Ốc</h1>
-  <p>Biết năm nào cần thận trọng trong cưới hỏi, xây nhà, khởi công theo tuổi âm. Miễn phí.</p>
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Miễn Phí</div>
+    <h1>Tra <em>Kim Lâu</em>, Tam Tai &amp; Hoang Ốc</h1>
+    <p>Biết năm nào cần thận trọng trong cưới hỏi, xây dựng và khởi sự theo tuổi âm. Hiển thị bảng 20 năm tới.</p>
+  </div>
 </div>
 
-<div class="container">
-  <div class="card">
-    <h2>Nhập thông tin</h2>
-    <div class="form-row">
-      <div class="field">
-        <label>Năm sinh dương lịch</label>
-        <input type="number" id="birthYear" placeholder="Ví dụ: 1990" min="1900" max="2010">
-      </div>
-      <div class="field">
-        <label>Giới tính</label>
-        <select id="gender">
-          <option value="nam">Nam</option>
-          <option value="nu">Nữ</option>
-        </select>
-      </div>
-      <button class="btn-primary" onclick="calculate()">Tra cứu</button>
-    </div>
-    <div class="error" id="errMsg"></div>
-  </div>
-
-  <div id="result" style="display:none">
-    <div class="card">
-      <h2>Thông tin tuổi</h2>
-      <div class="tuoi-info">
-        <div class="tuoi-can-chi" id="canChi">—</div>
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Kim Lâu, Tam Tai, Hoang Ốc là gì?</div>
+      <div class="xt-grid-2">
         <div>
-          <div class="tuoi-detail" id="tuoiDetail">—</div>
-          <div class="tuoi-detail" id="napAmDetail">—</div>
+          <h2 class="xt-h2">Ba Hạn Tuổi Quan Trọng<br>Trong Mệnh Lý Dân Gian</h2>
+          <p class="xt-body">Trong truyền thống mệnh lý Việt Nam, trước khi tiến hành các việc hệ trọng như cưới hỏi, xây nhà, khởi sự, người ta thường kiểm tra tuổi có gặp các hạn đặc biệt hay không.</p>
+          <p class="xt-body"><strong>Kim Lâu</strong> (tuổi 1, 3, 6, 8... theo chu kỳ 5) — không thuận cho cưới hỏi và xây dựng. <strong>Hoang Ốc</strong> (tuổi 5, 10, 15...) — không thuận cho mua bán và xây nhà. <strong>Tam Tai</strong> — vận hạn kéo dài 3 năm theo nhóm địa chi năm sinh.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">Giải thích từng hạn</div>
+          <div class="xt-factor-item"><span class="xt-factor-num">🔴</span><span class="xt-factor-label">Kim Lâu</span><span class="xt-factor-desc">Tuổi ta chia 5 dư 1 hoặc 3 — kiêng cưới, xây nhà, khởi công lớn</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">🟡</span><span class="xt-factor-label">Hoang Ốc</span><span class="xt-factor-desc">Tuổi ta chia hết cho 5 — kiêng mua/xây nhà, di chuyển nhà ở</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">🔵</span><span class="xt-factor-label">Tam Tai</span><span class="xt-factor-desc">Vận hạn 3 năm theo nhóm địa chi — tránh việc hệ trọng trong cả ba năm</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">✅</span><span class="xt-factor-label">Bình thường</span><span class="xt-factor-desc">Không có hạn đặc biệt — thuận lợi cho các việc hệ trọng</span></div>
         </div>
       </div>
-
-      <div id="currentYearBox"></div>
-
-      <div class="table-title">Bảng tra 20 năm tới</div>
-      <table>
-        <thead><tr><th>Năm DL</th><th>Tuổi ta</th><th>Can Chi</th><th>Tình trạng</th></tr></thead>
-        <tbody id="tableBody"></tbody>
-      </table>
-
-      <div class="legend">
-        <div class="legend-item"><span class="tag tag-kl">Kim Lâu</span><span>Kiêng cưới hỏi, xây nhà</span></div>
-        <div class="legend-item"><span class="tag tag-ho">Hoang Ốc</span><span>Kiêng xây dựng, mua nhà</span></div>
-        <div class="legend-item"><span class="tag tag-tt">Tam Tai</span><span>Vận hạn 3 năm, cần cẩn thận</span></div>
-        <div class="legend-item"><span class="tag tag-ok">Bình thường</span><span>Không có hạn đặc biệt</span></div>
+      <div class="xt-note">
+        <span class="xt-note-icon">💡</span>
+        <div>Đây là tra cứu hạn theo tuổi âm dân gian — mang tính tham khảo. Luận giải đầy đủ từ lá số Tử Vi cổ pháp sẽ cho kết quả chính xác và toàn diện hơn.</div>
       </div>
     </div>
+  </div>
 
-    <div class="cta-box">
-      <p>Muốn biết thêm về vận hạn đại vận, tiểu vận và luận giải lá số Tử Vi đầy đủ?</p>
-      <a href="/">Luận Giải Lá Số Đầy Đủ →</a>
+  <div class="form-section">
+    <div class="section-eyebrow">Nhập Thông Tin</div>
+    <div class="form-grid cols-1">
+      <div class="form-col">
+        <div class="form-col-title">Thông Tin Cơ Bản</div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label">Năm sinh dương lịch</label>
+            <input class="form-input" type="number" id="birthYear" placeholder="1990" min="1900" max="2010">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Giới tính</label>
+            <select class="form-input" id="gender">
+              <option value="nam">Nam</option>
+              <option value="nu">Nữ</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn-submit" onclick="calculate()">Tra Cứu</button>
+      </div>
+    </div>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+
+  <div class="result-section" id="result-section">
+    <div class="res-block" style="margin-bottom:24px">
+      <div class="res-block-header"><span class="res-block-title" id="resTitle">—</span></div>
+      <div class="res-block-body">
+        <div id="currentBox"></div>
+      </div>
+    </div>
+    <div class="res-block">
+      <div class="res-block-header"><span class="res-block-title">Bảng Tra 20 Năm Tới</span></div>
+      <table class="kl-table" id="klTable">
+        <thead><tr><th>Năm DL</th><th>Tuổi Ta</th><th>Can Chi</th><th>Tình Trạng</th></tr></thead>
+        <tbody id="klBody"></tbody>
+      </table>
     </div>
   </div>
+
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Xem Vận Hạn Toàn Diện</div>
+    <div class="tool-cta-title">Luận Giải Lá Số Tử Vi Đầy Đủ</div>
+    <div class="tool-cta-desc">Ngoài Kim Lâu và Tam Tai, lá số Tử Vi phân tích đại vận, tiểu vận từng năm và các giai đoạn thuận/nghịch theo sao tinh — chính xác và cá nhân hóa hơn nhiều.</div>
+    <a class="tool-cta-btn" href="/luan-giai.html">Luận Giải Lá Số ($19) →</a>
+  </div>
 </div>
+
+<footer class="site-footer">
+  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
 
 <script>
 const CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
 const CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
 const NAP_AM=['Hải Trung Kim','Lô Trung Hỏa','Đại Lâm Mộc','Lộ Bàng Thổ','Kiếm Phong Kim','Sơn Đầu Hỏa','Giản Hạ Thủy','Thành Đầu Thổ','Bạch Lạp Kim','Dương Liễu Mộc','Tuyền Trung Thủy','Ốc Thượng Thổ','Tích Lịch Hỏa','Tùng Bách Mộc','Trường Lưu Thủy','Sa Trung Kim','Sơn Hạ Hỏa','Bình Địa Mộc','Bích Thượng Thổ','Kim Bạch Kim','Phú Đăng Hỏa','Thiên Hà Thủy','Đại Trạch Thổ','Xoa Xuyến Kim','Tang Đố Mộc','Đại Khê Thủy','Sa Trung Thổ','Thiên Thượng Hỏa','Thạch Lựu Mộc','Đại Hải Thủy'];
-
-// Kim Lâu: tuổi ta % 5 == 1 hoặc 3
-function isKimLau(tuoi){const t=((tuoi%5)+5)%5;return t===1||t===3;}
-// Hoang Ốc: tuổi ta % 5 == 0
-function isHoangOc(tuoi){return tuoi>0&&tuoi%5===0;}
-
-// Tam Tai group: based on địa chi năm sinh
-// Nhóm Thân-Tý-Thìn → Tam Tai at Dần(2),Mão(3),Thìn(4)
-// Nhóm Tỵ-Dậu-Sửu  → Tam Tai at Hợi(11),Tý(0),Sửu(1)
-// Nhóm Dần-Ngọ-Tuất → Tam Tai at Thân(8),Dậu(9),Tuất(10)
-// Nhóm Hợi-Mão-Mùi  → Tam Tai at Tỵ(5),Ngọ(6),Mùi(7)
-const TAM_TAI_GROUP={
-  8:[2,3,4],0:[2,3,4],4:[2,3,4],  // Thân,Tý,Thìn
-  5:[11,0,1],9:[11,0,1],1:[11,0,1], // Tỵ,Dậu,Sửu
-  2:[8,9,10],6:[8,9,10],10:[8,9,10], // Dần,Ngọ,Tuất
-  11:[5,6,7],3:[5,6,7],7:[5,6,7]   // Hợi,Mão,Mùi
-};
-
-function isTamTai(birthChi,yearChi){
-  const group=TAM_TAI_GROUP[birthChi];
-  return group&&group.includes(yearChi);
+const TAM_TAI={8:[2,3,4],0:[2,3,4],4:[2,3,4],5:[11,0,1],9:[11,0,1],1:[11,0,1],2:[8,9,10],6:[8,9,10],10:[8,9,10],11:[5,6,7],3:[5,6,7],7:[5,6,7]};
+const CURRENT_YEAR=2026;
+function isKimLau(t){const r=((t%5)+5)%5;return r===1||r===3;}
+function isHoangOc(t){return t>0&&t%5===0;}
+function isTamTai(bChi,yChi){const g=TAM_TAI[bChi];return g&&g.includes(yChi);}
+function getStatusHTML(kl,ho,tt){
+  const tags=[];
+  if(kl)tags.push('<span class="res-tag res-tag-bad">Kim Lâu</span>');
+  if(ho)tags.push('<span class="res-tag res-tag-warn">Hoang Ốc</span>');
+  if(tt)tags.push('<span class="res-tag res-tag-bad" style="background:#e8f0fe;color:#1455A4;border-color:#c5d4f5">Tam Tai</span>');
+  if(!tags.length)return '<span class="res-tag res-tag-good">Bình thường</span>';
+  return tags.join(' ');
 }
-
 function calculate(){
-  const birthYear=parseInt(document.getElementById('birthYear').value);
-  const err=document.getElementById('errMsg');
-  err.textContent='';
-  if(!birthYear||birthYear<1900||birthYear>2010){
-    err.textContent='Vui lòng nhập năm sinh hợp lệ (1900–2010).';return;
-  }
-  const idx60=((birthYear-4)%60+60)%60;
-  const birthCan=idx60%10,birthChi=idx60%12;
-  const napAm=NAP_AM[Math.floor(idx60/2)];
-  const currentYear=2026;
-  const tuoiTa=currentYear-birthYear+1; // tuổi âm (đếm từ 1)
-
-  document.getElementById('canChi').textContent=CAN[birthCan]+' '+CHI[birthChi];
-  document.getElementById('tuoiDetail').textContent='Năm sinh: '+birthYear+' | Tuổi ta năm '+currentYear+': '+tuoiTa;
-  document.getElementById('napAmDetail').textContent='Nạp Âm: '+napAm;
-
-  // Current year status
-  const cyTuoi=tuoiTa;
-  const cyYear60=((currentYear-4)%60+60)%60;
-  const cyChi=cyYear60%12;
-  const kl=isKimLau(cyTuoi),ho=isHoangOc(cyTuoi),tt=isTamTai(birthChi,cyChi);
-  const cyBox=document.getElementById('currentYearBox');
+  const by=parseInt(document.getElementById('birthYear').value);
+  const err=document.getElementById('error-msg');
+  err.classList.remove('active');
+  if(!by||by<1900||by>2010){err.textContent='Vui lòng nhập năm sinh hợp lệ (1900–2010).';err.classList.add('active');return;}
+  const idx60=((by-4)%60+60)%60;
+  const bCan=idx60%10,bChi=idx60%12;
+  const na=NAP_AM[Math.floor(idx60/2)];
+  const tuoiTa=CURRENT_YEAR-by+1;
+  document.getElementById('resTitle').textContent=CAN[bCan]+' '+CHI[bChi]+' ('+by+') — '+na+' · Tuổi ta năm '+CURRENT_YEAR+': '+tuoiTa;
+  const y60=((CURRENT_YEAR-4)%60+60)%60;
+  const yChi=y60%12;
+  const kl=isKimLau(tuoiTa),ho=isHoangOc(tuoiTa),tt=isTamTai(bChi,yChi);
+  let curHtml='';
   if(kl||ho||tt){
-    const tags=[];
-    if(kl)tags.push('<span class="tag tag-kl">Kim Lâu</span>');
-    if(ho)tags.push('<span class="tag tag-ho">Hoang Ốc</span>');
-    if(tt)tags.push('<span class="tag tag-tt">Tam Tai</span>');
-    let desc='';
-    if(kl&&tt)desc='Năm nay trùng Kim Lâu và Tam Tai — cần đặc biệt thận trọng trong cưới hỏi, xây nhà và các quyết định lớn.';
-    else if(kl)desc='Năm nay là tuổi Kim Lâu — kiêng cưới hỏi, xây nhà, khởi công. Nên chờ sang năm.';
-    else if(ho)desc='Năm nay là tuổi Hoang Ốc — không thuận cho việc mua/xây nhà, di chuyển nhà ở.';
-    else if(tt)desc='Năm nay đang trong vận Tam Tai — 3 năm vận hạn, cần tránh những việc hệ trọng.';
-    cyBox.innerHTML=`<div class="current-year-box cyb-warn"><span class="cyb-icon">⚠</span><div><div class="cyb-title">Năm ${currentYear} (Tuổi ${cyTuoi}) ${tags.join(' ')}</div><div class="cyb-desc">${desc}</div></div></div>`;
-  } else {
-    cyBox.innerHTML=`<div class="current-year-box cyb-good"><span class="cyb-icon">✓</span><div><div class="cyb-title">Năm ${currentYear} (Tuổi ${cyTuoi}) — Bình thường</div><div class="cyb-desc">Năm nay không có Kim Lâu, Hoang Ốc hay Tam Tai. Vận hành bình ổn.</div></div></div>`;
-  }
-
-  // Table: next 20 years
+    const desc=kl&&tt?'Năm nay trùng Kim Lâu và Tam Tai — cần thận trọng đặc biệt với cưới hỏi và việc hệ trọng.':kl?'Năm nay là tuổi Kim Lâu — kiêng cưới hỏi, xây dựng, khởi công lớn.':ho?'Năm nay là tuổi Hoang Ốc — kiêng mua bán và xây nhà.':'Năm nay đang trong vận Tam Tai — cẩn thận với các quyết định lớn.';
+    curHtml=`<div style="background:#fef0ef;border-left:3px solid #c9a84c;padding:14px 16px;border-radius:0 6px 6px 0;margin-bottom:12px"><div style="font-size:13px;font-weight:700;margin-bottom:4px">Năm ${CURRENT_YEAR} (Tuổi ${tuoiTa}) — ${getStatusHTML(kl,ho,tt)}</div><div style="font-size:13px;color:var(--text-mid)">${desc}</div></div>`;
+  }else{curHtml=`<div style="background:#eaf4ed;border-left:3px solid #1E6B3C;padding:14px 16px;border-radius:0 6px 6px 0;margin-bottom:12px"><div style="font-size:13px;font-weight:700;margin-bottom:4px">Năm ${CURRENT_YEAR} (Tuổi ${tuoiTa}) — <span class="res-tag res-tag-good">Bình thường</span></div><div style="font-size:13px;color:var(--text-mid)">Năm nay không có Kim Lâu, Hoang Ốc hay Tam Tai.</div></div>`;}
+  document.getElementById('currentBox').innerHTML=curHtml;
   const rows=[];
-  for(let y=currentYear;y<currentYear+20;y++){
-    const t=y-birthYear+1;
-    const y60=((y-4)%60+60)%60;
-    const yChi=y60%12,yCan=y60%10;
-    const kl2=isKimLau(t),ho2=isHoangOc(t),tt2=isTamTai(birthChi,yChi);
-    let tags='';
-    if(kl2)tags+='<span class="tag tag-kl">Kim Lâu</span> ';
-    if(ho2)tags+='<span class="tag tag-ho">Hoang Ốc</span> ';
-    if(tt2)tags+='<span class="tag tag-tt">Tam Tai</span>';
-    if(!tags)tags='<span class="tag tag-ok">Bình thường</span>';
-    const bold=y===currentYear?'font-weight:700':'';
-    rows.push(`<tr style="${bold}"><td>${y}${y===currentYear?' (nay)':''}</td><td>${t}</td><td>${CAN[yCan]} ${CHI[yChi]}</td><td>${tags}</td></tr>`);
+  for(let y=CURRENT_YEAR;y<CURRENT_YEAR+20;y++){
+    const t=y-by+1;
+    const y60b=((y-4)%60+60)%60;
+    const yC=y60b%12,yN=y60b%10;
+    const kl2=isKimLau(t),ho2=isHoangOc(t),tt2=isTamTai(bChi,yC);
+    const bold=y===CURRENT_YEAR?'font-weight:700':'';
+    rows.push(`<tr${(kl2||ho2||tt2)?` class="highlight"`:''} style="${bold}"><td>${y}${y===CURRENT_YEAR?' ▶':''}</td><td>${t}</td><td>${CAN[yN]} ${CHI[yC]}</td><td>${getStatusHTML(kl2,ho2,tt2)}</td></tr>`);
   }
-  document.getElementById('tableBody').innerHTML=rows.join('');
-  document.getElementById('result').style.display='block';
-  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
+  document.getElementById('klBody').innerHTML=rows.join('');
+  document.getElementById('result-section').classList.add('active');
+  document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
 }
-
 document.getElementById('birthYear').addEventListener('keydown',e=>{if(e.key==='Enter')calculate();});
-document.getElementById('navToggle').addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('open'));
-document.querySelectorAll('.nav-dropdown>a').forEach(a=>a.addEventListener('click',e=>{if(window.innerWidth<=820){e.preventDefault();a.parentElement.classList.toggle('open');}}));
 </script>
 </body>
 </html>

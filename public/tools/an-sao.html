@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>An Sao Lá Số Tử Vi Miễn Phí – Tử Vi Minh Bảo</title>
+<meta name="description" content="An sao lá số Tử Vi Đẩu Số theo cổ pháp hoàn toàn miễn phí — xem 12 cung, đại vận và cách cục tức thì, không cần đăng ký.">
+<link rel="canonical" href="https://www.tuviminhbao.com/tools/an-sao.html">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<script src="/tuvi-ansao-engine.js"></script>
+<script src="/tuvi-form.js"></script>
+<script src="/tuvi-grid.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0;--gold:#9A7B3A;--gold-lt:#F9F4EB;--red:#C0392B;--green:#1E6B3C}
+body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+
+/* LAYOUT */
+.page{max-width:1100px;margin:0 auto;padding:0 56px}
+@media(max-width:900px){.page{padding:0 16px}}
+
+/* HERO */
+.hero-tool{background:var(--navy);padding:52px 0 40px;text-align:center}
+.hero-tool .eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#8BAACC;margin-bottom:14px}
+.hero-tool h1{font-size:clamp(24px,4vw,40px);color:#fff;margin-bottom:12px;font-weight:400;line-height:1.2}
+.hero-tool h1 em{font-style:italic;color:#c9a84c}
+.hero-tool p{color:#8BAACC;font-size:14px;max-width:560px;margin:0 auto}
+.hero-stats{display:flex;gap:24px;justify-content:center;margin-top:24px;flex-wrap:wrap}
+.hero-stat-item{text-align:center}
+.hero-stat-item .n{font-size:22px;color:#fff;font-weight:700}
+.hero-stat-item .l{font-size:11px;color:#8BAACC;letter-spacing:1px}
+.stat-div{width:1px;background:rgba(255,255,255,.15)}
+
+/* INTRO */
+.xt-section{padding:52px 0;border-bottom:1px solid var(--border-lt)}
+.xt-section:last-child{border-bottom:none}
+.xt-eyebrow{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-lt);margin-bottom:20px}
+.xt-h2{font-size:clamp(20px,3vw,28px);color:var(--navy);font-weight:400;line-height:1.3;margin-bottom:16px}
+.xt-body{font-size:15px;color:var(--text-mid);line-height:1.85;font-weight:300;margin-bottom:14px}
+.xt-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:start}
+@media(max-width:720px){.xt-grid-2{grid-template-columns:1fr;gap:32px}}
+.xt-factors{background:var(--bg-soft);border-radius:10px;padding:24px}
+.xt-factor-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);margin-bottom:14px}
+.xt-factor-item{display:flex;align-items:baseline;gap:10px;padding:9px 0;border-bottom:1px solid var(--border-lt)}
+.xt-factor-item:last-child{border-bottom:none}
+.xt-factor-num{font-size:13px;color:var(--gold);font-weight:700;flex-shrink:0;width:20px}
+.xt-factor-label{font-size:13px;font-weight:600;color:var(--navy);width:100px;flex-shrink:0}
+.xt-factor-desc{font-size:12px;color:var(--text-lt);line-height:1.5}
+.xt-steps{display:flex;align-items:flex-start;gap:0;flex-wrap:wrap}
+.xt-step{flex:1;min-width:180px;display:flex;gap:14px;padding:4px}
+.xt-step-num{width:36px;height:36px;background:var(--navy);color:#c9a84c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.xt-step-body{flex:1}
+.xt-step-title{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:6px}
+.xt-step-desc{font-size:13px;color:var(--text-lt);line-height:1.6}
+.xt-step-arrow{font-size:20px;color:var(--border);padding:8px 12px;flex-shrink:0;align-self:center}
+.xt-note{display:flex;gap:12px;align-items:flex-start;background:var(--gold-lt);border:1px solid #e8d9b0;border-radius:8px;padding:14px 16px;margin:32px 0 0;font-size:13px;color:var(--text-mid);line-height:1.6}
+.xt-note-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+
+/* FORM — same as luan-giai */
+.form-section{padding:64px 0;border-bottom:1px solid var(--border)}
+.section-eyebrow{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--text-lt);margin-bottom:36px;display:flex;align-items:center;gap:16px}
+.section-eyebrow::after{content:'';flex:1;height:1px;background:var(--border)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid var(--border)}
+.form-col{padding:32px 32px 36px;border-right:1px solid var(--border)}
+.form-col:last-child{border-right:none}
+.form-col-title{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--navy);margin-bottom:28px;padding-bottom:14px;border-bottom:2px solid var(--navy)}
+.form-group{margin-bottom:24px}
+.form-label{display:block;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-lt);margin-bottom:8px}
+.form-input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--border);padding:10px 0;font-size:16px;color:var(--text);font-family:Arial,sans-serif;outline:none;transition:border-color .2s}
+.form-input:focus{border-color:var(--navy)}
+.form-input::placeholder{color:#C4C4C4}
+select.form-input{cursor:pointer}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.btn-submit{width:100%;background:var(--navy);color:#fff;border:none;padding:16px;font-family:Arial,sans-serif;font-size:12px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;transition:background .2s;margin-top:4px}
+.btn-submit:hover{background:var(--navy-mid)}
+.btn-submit:disabled{background:#aaa;cursor:not-allowed}
+@media(max-width:900px){.form-grid{grid-template-columns:1fr}.form-col{border-right:none;border-bottom:1px solid var(--border)}.form-col:last-child{border-bottom:none}}
+
+/* STATUS */
+.status-bar{display:none;align-items:center;gap:16px;padding:16px 32px;background:var(--bg-soft);border:1px solid var(--border);border-top:none}
+.status-bar.active{display:flex}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--blue);animation:blink 1.2s ease-in-out infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+#loader-text{font-size:13px;color:var(--text-mid);font-weight:500;flex:1}
+.error-msg{display:none;background:#FFF5F5;border-left:3px solid var(--red);padding:14px 20px;font-size:14px;color:var(--red);margin-top:16px}
+.error-msg.active{display:block}
+
+/* RESULT */
+.result-section{display:none}
+.result-section.active{display:block}
+.result-header{padding:60px 0 40px;border-bottom:1px solid var(--border);margin-bottom:48px}
+.result-eyebrow{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--blue);margin-bottom:16px}
+.result-name{font-family:Arial,sans-serif;font-size:44px;font-weight:400;color:var(--navy);margin-bottom:14px}
+.result-info{display:flex;gap:0;flex-wrap:wrap}
+.result-info-item{font-size:14px;color:var(--text-lt);padding-right:20px;margin-right:20px;border-right:1px solid var(--border)}
+.result-info-item:last-child{border-right:none}
+@media(max-width:900px){.result-name{font-size:28px}.result-info{flex-direction:column;gap:4px}.result-info-item{border-right:none}}
+
+/* GRID */
+.laso-wrap{margin-bottom:56px}
+.laso-label{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--text-lt);margin-bottom:16px;display:flex;align-items:center;gap:16px}
+.laso-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.laso-legend{font-size:11px;color:#555;padding:8px 4px;line-height:1.8;border-top:1px solid var(--border-lt);margin-top:4px}
+
+/* PAYWALL CTA */
+.paywall-gate{border:2px solid #c9a84c;border-radius:12px;padding:40px 36px;margin:48px 0 32px;background:linear-gradient(135deg,#fdf6e9 0%,#fff9ef 100%);text-align:center;position:relative;overflow:hidden}
+.paywall-gate::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(201,168,76,.03) 10px,rgba(201,168,76,.03) 20px);pointer-events:none}
+.paywall-eyebrow{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#c9a84c;margin-bottom:12px}
+.paywall-title{font-family:Arial,sans-serif;font-size:26px;font-weight:400;color:#061A2E;margin-bottom:10px;line-height:1.3}
+.paywall-desc{font-size:15px;color:#666;line-height:1.7;margin-bottom:28px;max-width:480px;margin-left:auto;margin-right:auto}
+.paywall-features{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:28px;max-width:480px;margin-left:auto;margin-right:auto;text-align:left}
+.paywall-feature{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#444;line-height:1.4}
+.paywall-feature::before{content:'✦';color:#c9a84c;flex-shrink:0;font-size:11px;margin-top:1px}
+.paywall-price{font-size:38px;font-weight:700;color:#061A2E;margin-bottom:4px}
+.paywall-price-note{font-size:12px;color:#999;margin-bottom:24px}
+.btn-paywall{display:inline-flex;align-items:center;gap:10px;padding:16px 40px;background:#061A2E;color:#c9a84c;border:2px solid #c9a84c;border-radius:4px;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:inherit;transition:all .2s;text-decoration:none}
+.btn-paywall:hover{background:#c9a84c;color:#061A2E}
+
+/* FOOTER */
+.site-footer{background:#1A1210;color:rgba(255,255,255,.5);padding:36px 32px 24px}
+.footer-top{display:flex;justify-content:space-between;align-items:flex-start;gap:32px;flex-wrap:wrap;padding-bottom:24px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:20px}
+.footer-brand{display:flex;align-items:center;gap:10px}
+.footer-brand img{width:36px;height:36px;object-fit:contain;border-radius:5px;opacity:.9}
+.footer-brand-text .name{font-size:14px;font-weight:700;color:rgba(255,255,255,.85);font-family:Georgia,serif}
+.footer-brand-text .zh{font-size:12px;color:#C9A84C}
+.footer-tagline{font-size:12px;margin-top:8px;color:rgba(255,255,255,.35);line-height:1.6}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(255,255,255,.25)}
+.footer-bottom img{width:20px;height:20px;object-fit:contain;opacity:.3;border-radius:3px}
+</style>
+</head>
+<body>
+
+<script src="/nav.js"></script>
+
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Miễn Phí</div>
+    <h1>An Sao Lá Số <em>Tử Vi</em> Miễn Phí</h1>
+    <p>An sao theo cổ pháp, hiển thị đầy đủ 12 cung, đại vận, cách cục và điểm số — không cần đăng ký, không cần thanh toán.</p>
+    <div class="hero-stats">
+      <div class="hero-stat-item"><div class="n">12</div><div class="l">Cung</div></div>
+      <div class="stat-div"></div>
+      <div class="hero-stat-item"><div class="n">9</div><div class="l">Đại Vận</div></div>
+      <div class="stat-div"></div>
+      <div class="hero-stat-item"><div class="n">Miễn Phí</div><div class="l">Không cần TK</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- INTRO -->
+  <div style="border-bottom:1px solid var(--border);margin-bottom:0">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Công cụ này là gì?</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">An Sao Tử Vi Đẩu Số<br>theo Cổ Pháp</h2>
+          <p class="xt-body">Tử Vi Đẩu Số an sao dựa trên ngày giờ sinh âm lịch — mỗi lá số là bản đồ vận mệnh riêng, phản ánh bản chất và vận trình cuộc đời qua 12 cung.</p>
+          <p class="xt-body">Công cụ này an sao theo cổ pháp, hiển thị toàn bộ lá số 12 cung, đại vận hiện tại và cách cục — <strong>hoàn toàn miễn phí</strong>, không cần đăng ký. Muốn luận giải chuyên sâu thì mở khóa thêm.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">Bạn sẽ thấy gì</div>
+          <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">Lá số 12 cung</span><span class="xt-factor-desc">Chính tinh, phụ tinh, độ sáng và Tứ Hóa</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">②</span><span class="xt-factor-label">Thông tin cơ bản</span><span class="xt-factor-desc">Can Chi, Nạp Âm, cục số, cung Mệnh/Thân</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">③</span><span class="xt-factor-label">Đại vận</span><span class="xt-factor-desc">Bảng 9 đại vận, vận đang chạy được đánh dấu</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">④</span><span class="xt-factor-label">Điểm số 12 cung</span><span class="xt-factor-desc">Biểu đồ radar và điểm tiềm năng 6 chiều</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">⑤</span><span class="xt-factor-label">Cách cục</span><span class="xt-factor-desc">Danh sách cách cục đặc biệt phát hiện được</span></div>
+        </div>
+      </div>
+      <div class="xt-note">
+        <span class="xt-note-icon">💡</span>
+        <div>Để nhận 24 phần luận giải chuyên sâu (tổng quan bản mệnh, từng cung, từng đại vận, tiểu vận năm nay), hãy mở khóa sau khi an sao xong. Chỉ $19, thanh toán một lần.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORM — injected by tuvi-form.js -->
+  <div class="form-section">
+    <div class="section-eyebrow">Nhập Thông Tin</div>
+    <div id="tuvi-form-container"></div>
+    <div class="status-bar" id="loader">
+      <div class="status-dot"></div>
+      <div id="loader-text">Đang an sao lá số...</div>
+    </div>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result-section" id="result-section">
+    <div class="result-header" id="result-header"></div>
+    <div class="laso-wrap">
+      <div class="laso-label">Lá Số — 12 Cung</div>
+      <div class="laso-grid" id="laso-grid"></div>
+      <div class="laso-legend" id="laso-legend" style="display:none">
+        <span style="font-weight:700;color:#555;margin-right:8px">Độ sáng:</span>
+        (M) Miếu &nbsp;·&nbsp; (V) Vượng &nbsp;·&nbsp; (Đ) Đắc &nbsp;·&nbsp; (B) Bình hòa &nbsp;·&nbsp; (H) Hãm
+        <span style="margin-left:16px;font-weight:700;color:#555">Ngũ hành:</span>
+        <span style="color:#C0392B;font-weight:700">■</span> Hỏa &nbsp;
+        <span style="color:#7F8C8D;font-weight:700">■</span> Kim &nbsp;
+        <span style="color:#1a1a1a;font-weight:700">■</span> Thủy &nbsp;
+        <span style="color:#1E6B3C;font-weight:700">■</span> Mộc &nbsp;
+        <span style="color:#8B6914;font-weight:700">■</span> Thổ
+      </div>
+    </div>
+
+    <!-- Paywall CTA -->
+    <div class="paywall-gate">
+      <div class="paywall-eyebrow">Luận Giải Chuyên Sâu</div>
+      <div class="paywall-title">Mở khóa 24 phần luận giải AI</div>
+      <div class="paywall-desc">Từ tổng quan bản mệnh, từng cung, 9 đại vận đến tiểu vận năm nay — phân tích chuyên sâu theo cổ pháp, viết bằng AI.</div>
+      <div class="paywall-features">
+        <div class="paywall-feature">Tổng quan bản mệnh & khí chất</div>
+        <div class="paywall-feature">Phân tích 12 cung chi tiết</div>
+        <div class="paywall-feature">Luận giải 9 đại vận</div>
+        <div class="paywall-feature">Tiểu vận năm hiện tại</div>
+        <div class="paywall-feature">Vấn đáp AI không giới hạn</div>
+        <div class="paywall-feature">Xuất PDF, lưu mãi</div>
+      </div>
+      <div class="paywall-price">$19</div>
+      <div class="paywall-price-note">Một lần duy nhất · Không subscription</div>
+      <a class="btn-paywall" href="/luan-giai.html">Xem Đầy Đủ & Mở Khóa Luận Giải →</a>
+      <div style="font-size:11px;color:#aaa;margin-top:12px">🔒 Thanh toán bảo mật qua PayPal</div>
+    </div>
+  </div>
+
+</div><!-- .page -->
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div>
+      <p class="footer-tagline">Tri mệnh lý – Thuận thế hành<br>Kết hợp kinh điển &amp; công nghệ hiện đại.</p>
+    </div>
+    <div style="display:flex;gap:48px;flex-wrap:wrap">
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:12px">Công Cụ</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="/tools/an-sao.html" style="font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none">An Sao Miễn Phí</a>
+          <a href="/tools/dai-van.html" style="font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none">Xem Đại Vận</a>
+          <a href="/tools/tuong-hop.html" style="font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none">Tương Hợp Tuổi</a>
+          <a href="/tools/kim-lau.html" style="font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none">Kim Lâu / Tam Tai</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com — All rights reserved</span><img src="/seal.webp" alt=""></div>
+</footer>
+
+<script>
+// luanGiai() is called by the submit button injected by tuvi-form.js
+function luanGiai() {
+  const { hoten, ngay, thang, nam, gioIdx, gioHour, gioitinh, namXem } = TuviForm.getData();
+  const errEl = document.getElementById('error-msg');
+  errEl.classList.remove('active');
+
+  if (!hoten || !ngay || !thang || !nam) {
+    errEl.textContent = 'Vui lòng điền đầy đủ thông tin.';
+    errEl.classList.add('active'); return;
+  }
+  if (nam < 1900 || nam > new Date().getFullYear()) {
+    errEl.textContent = 'Năm sinh không hợp lệ.';
+    errEl.classList.add('active'); return;
+  }
+
+  const loader = document.getElementById('loader');
+  loader.classList.add('active');
+  document.querySelector('.btn-submit').disabled = true;
+  document.getElementById('result-section').classList.remove('active');
+
+  try {
+    const conv = convertDuongToAm(ngay, thang, nam, gioHour);
+    conv._dl = { day: ngay, month: thang, year: nam };
+    const ls = anSaoLaSo({
+      ngayAL:  conv.amLich.day,
+      thangAL: conv.amLich.month,
+      namAL:   nam,
+      canNam:  conv.canNam,
+      chiNam:  conv.chiNam,
+      gioIdx:  gioIdx,
+      gioitinh,
+      namXem:  namXem || new Date().getFullYear(),
+    });
+    ls._conv = conv;
+    ls._hoTen = hoten;
+    window._lasoResult = ls;
+
+    displayResult(hoten, ngay, thang, nam, gioitinh, namXem || new Date().getFullYear(), ls);
+    document.getElementById('laso-legend').style.display = 'block';
+    document.getElementById('result-section').classList.add('active');
+
+    setTimeout(() => {
+      document.getElementById('result-header').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 300);
+  } catch(e) {
+    errEl.textContent = 'Lỗi an sao: ' + e.message;
+    errEl.classList.add('active');
+  } finally {
+    loader.classList.remove('active');
+    document.querySelector('.btn-submit').disabled = false;
+  }
+}
+window.luanGiai = luanGiai;
+</script>
+</body>
+</html>

@@ -2,226 +2,120 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Tra Nạp Âm & Can Chi Năm – Tử Vi Minh Bảo</title>
-<meta name="description" content="Tra cứu Can Chi, Nạp Âm và Ngũ Hành của bất kỳ năm sinh nào. Công cụ tử vi miễn phí.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<meta name="description" content="Tra cứu Can Chi, Nạp Âm và Ngũ Hành mệnh của bất kỳ năm sinh nào theo Tử Vi Đẩu Số. Miễn phí, tức thì.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
 <style>
-:root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0;--red:#C0392B;--green:#1E6B3C}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;color:var(--text);background:var(--bg);min-height:100vh}
-a{color:var(--blue);text-decoration:none}
-/* NAV */
-.main-nav{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.4)}
-.nav-container{max-width:1100px;margin:0 auto;padding:0 20px;display:flex;align-items:center}
-.nav-brand{color:#fff;font-family:'Noto Serif',serif;font-weight:700;font-size:1.05rem;padding:14px 0;margin-right:auto;white-space:nowrap}
-.nav-brand span{color:var(--gold)}
-.nav-links{display:flex;list-style:none;gap:0}
-.nav-links>li>a{display:block;color:rgba(255,255,255,.85);padding:16px 13px;font-size:.85rem;white-space:nowrap;transition:color .2s}
-.nav-links>li>a:hover,.nav-links>li>a.active{color:var(--gold)}
-.nav-dropdown{position:relative}
-.dropdown-menu{display:none;position:absolute;top:100%;left:0;background:var(--navy-mid);min-width:220px;border-top:2px solid var(--gold);list-style:none;padding:6px 0;box-shadow:0 4px 20px rgba(0,0,0,.35)}
-.nav-dropdown:hover .dropdown-menu{display:block}
-.dropdown-menu a{display:block;color:rgba(255,255,255,.85);padding:10px 18px;font-size:.84rem;transition:background .15s,color .15s}
-.dropdown-menu a:hover{background:rgba(255,255,255,.07);color:var(--gold)}
-.nav-toggle{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;padding:10px;margin-left:auto}
-@media(max-width:820px){
-  .nav-toggle{display:block}
-  .nav-links{display:none;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:var(--navy);padding-bottom:8px}
-  .nav-links.open{display:flex}
-  .dropdown-menu{position:static;box-shadow:none;border:none;background:rgba(255,255,255,.05);min-width:unset}
-  .nav-dropdown:hover .dropdown-menu{display:none}
-  .nav-dropdown.open .dropdown-menu{display:block}
-  .nav-container{position:relative;flex-wrap:wrap}
-}
-/* MAIN */
-.page-header{background:var(--navy);color:#fff;padding:48px 20px 36px;text-align:center}
-.page-header h1{font-family:'Noto Serif',serif;font-size:1.9rem;margin-bottom:10px}
-.page-header p{color:rgba(255,255,255,.75);font-size:.95rem;max-width:560px;margin:0 auto}
-.container{max-width:700px;margin:0 auto;padding:40px 20px 60px}
-.card{background:#fff;border:1px solid var(--border-lt);border-radius:8px;padding:32px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
-.card h2{font-family:'Noto Serif',serif;font-size:1.25rem;color:var(--navy);margin-bottom:22px;padding-bottom:12px;border-bottom:1px solid var(--border-lt)}
-.form-row{display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap}
-.field{display:flex;flex-direction:column;gap:6px;flex:1;min-width:120px}
-.field label{font-size:.85rem;color:var(--text-mid);font-weight:600}
-.field input,.field select{padding:10px 14px;border:1px solid var(--border);border-radius:5px;font-size:1rem;color:var(--text);background:#fff;transition:border .2s}
-.field input:focus,.field select:focus{outline:none;border-color:var(--blue)}
-.btn-primary{background:var(--blue);color:#fff;border:none;padding:11px 28px;border-radius:5px;font-size:.95rem;cursor:pointer;transition:background .2s;white-space:nowrap;align-self:flex-end}
-.btn-primary:hover{background:#1044a0}
-/* RESULT */
-.result{margin-top:28px;display:none}
-.result.show{display:block}
-.result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:20px}
-.result-item{background:var(--bg-soft);border-radius:7px;padding:16px;text-align:center}
-.result-item .label{font-size:.78rem;color:var(--text-lt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
-.result-item .value{font-family:'Noto Serif',serif;font-size:1.3rem;font-weight:700;color:var(--navy)}
-.nap-am-box{background:var(--gold-lt);border:1px solid var(--gold);border-radius:7px;padding:18px 20px;text-align:center;margin-bottom:16px}
-.nap-am-box .label{font-size:.8rem;color:var(--gold);font-weight:700;letter-spacing:.5px;margin-bottom:6px}
-.nap-am-box .main{font-family:'Noto Serif',serif;font-size:1.5rem;font-weight:700}
-.nap-am-box .sub{font-size:.9rem;color:var(--text-mid);margin-top:4px}
-.hanh-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
-.info-box{background:var(--bg-soft);border-left:3px solid var(--blue);padding:14px 18px;border-radius:0 6px 6px 0;font-size:.88rem;color:var(--text-mid);line-height:1.6;margin-top:16px}
-.cta-box{margin-top:32px;background:var(--navy);color:#fff;border-radius:8px;padding:24px;text-align:center}
-.cta-box p{font-size:.9rem;opacity:.85;margin-bottom:14px}
-.cta-box a{display:inline-block;background:var(--gold);color:#fff;padding:10px 26px;border-radius:5px;font-size:.9rem;font-weight:700;text-decoration:none;transition:opacity .2s}
-.cta-box a:hover{opacity:.85}
-.error{color:var(--red);font-size:.88rem;margin-top:8px}
+.nap-am-result { display: grid; grid-template-columns: repeat(3,1fr) 2fr; gap: 1px; background: var(--border); margin-bottom: 0; }
+.na-cell { background: #fff; padding: 28px 24px; }
+.na-cell-label { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 10px; }
+.na-cell-val { font-size: 30px; font-weight: 400; color: var(--navy); line-height: 1; }
+.na-hanh-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+.na-info { font-size: 13px; color: var(--text-mid); line-height: 1.7; padding-top: 8px; border-top: 1px solid var(--border-lt); margin-top: 12px; }
+@media(max-width:700px){ .nap-am-result{grid-template-columns:1fr 1fr} }
+@media(max-width:480px){ .nap-am-result{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
+<script src="/nav.js"></script>
 
-<nav class="main-nav">
-  <div class="nav-container">
-    <a href="/" class="nav-brand">Tử Vi <span>Minh Bảo</span></a>
-    <button class="nav-toggle" id="navToggle">☰</button>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="/" class="nav-link">Trang Chủ</a></li>
-      <li class="nav-dropdown">
-        <a href="#" class="nav-link">Luận Giải ▾</a>
-        <ul class="dropdown-menu">
-          <li><a href="/">Luận Giải Lá Số</a></li>
-          <li><a href="/xem-tuoi.html">Xem Tuổi Vợ Chồng</a></li>
-          <li><a href="/xem-lam-an.html">Xem Tuổi Làm Ăn</a></li>
-        </ul>
-      </li>
-      <li class="nav-dropdown">
-        <a href="#" class="nav-link active">Công Cụ ▾</a>
-        <ul class="dropdown-menu">
-          <li><a href="/tools/nap-am.html">Nạp Âm &amp; Can Chi</a></li>
-          <li><a href="/tools/dai-van.html">Xem Đại Vận</a></li>
-          <li><a href="/tools/sao-nam.html">Sao Năm Hiện Tại</a></li>
-          <li><a href="/tools/cach-cuc.html">Cách Cục Đặc Biệt</a></li>
-          <li><a href="/tools/tuong-hop.html">Tương Hợp Tuổi</a></li>
-          <li><a href="/tools/kim-lau.html">Kim Lâu / Tam Tai</a></li>
-          <li><a href="/tools/tu-tru.html">Tứ Trụ Bát Tự</a></li>
-        </ul>
-      </li>
-      <li><a href="/about.html" class="nav-link">Giới Thiệu</a></li>
-      <li><a href="/resources.html" class="nav-link">Tài Liệu</a></li>
-      <li><a href="/blog.html" class="nav-link">Khảo Luận</a></li>
-      <li><a href="/menh-kho.html" class="nav-link">Mệnh Khố</a></li>
-      <li><a href="/contact.html" class="nav-link">Liên Hệ</a></li>
-    </ul>
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Miễn Phí</div>
+    <h1>Tra Nạp Âm &amp; <em>Can Chi</em> Năm Sinh</h1>
+    <p>Nhập năm sinh dương lịch — xem ngay Can Chi, Nạp Âm và Ngũ Hành mệnh. Không cần đăng ký.</p>
   </div>
-</nav>
-
-<div class="page-header">
-  <h1>Tra Nạp Âm &amp; Can Chi Năm</h1>
-  <p>Nhập năm sinh dương lịch để xem Can Chi, Nạp Âm và Ngũ Hành mệnh. Miễn phí, không cần đăng nhập.</p>
 </div>
 
-<div class="container">
-  <div class="card">
-    <h2>Nhập năm sinh</h2>
-    <div class="form-row">
-      <div class="field" style="flex:2">
-        <label for="year">Năm sinh dương lịch</label>
-        <input type="number" id="year" placeholder="Ví dụ: 1990" min="1900" max="2100">
-      </div>
-      <button class="btn-primary" onclick="calculate()">Tra cứu</button>
-    </div>
-    <div class="error" id="errMsg"></div>
-
-    <div class="result" id="result">
-      <div class="result-grid">
-        <div class="result-item">
-          <div class="label">Thiên Can</div>
-          <div class="value" id="rCan">—</div>
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Công cụ này là gì?</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">Nạp Âm & Can Chi<br>trong Tử Vi Đẩu Số</h2>
+          <p class="xt-body">Mỗi năm trong chu kỳ 60 hoa giáp mang một cặp Can-Chi và một Nạp Âm riêng. Nạp Âm phản ánh Ngũ Hành tiềm ẩn của năm sinh — nó khác với Ngũ Hành bề mặt của Can hoặc Chi và có vai trò quan trọng trong nhiều luận đoán mệnh lý.</p>
+          <p class="xt-body">Ví dụ: năm Canh Ngọ 1990 có Nạp Âm là <strong>Lộ Bàng Thổ</strong> — hành Thổ, ngụ ý bền vững nhưng cần điều kiện để phát huy. Điều này ảnh hưởng trực tiếp đến cách xét tương sinh khắc trong xem tuổi kết hôn và hợp tác làm ăn.</p>
         </div>
-        <div class="result-item">
-          <div class="label">Địa Chi</div>
-          <div class="value" id="rChi">—</div>
-        </div>
-        <div class="result-item">
-          <div class="label">Can Chi</div>
-          <div class="value" id="rCanChi">—</div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">Thông tin bạn nhận được</div>
+          <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">Thiên Can</span><span class="xt-factor-desc">Giáp, Ất, Bính... và ý nghĩa hành</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">②</span><span class="xt-factor-label">Địa Chi</span><span class="xt-factor-desc">Tý, Sửu, Dần... và con giáp tương ứng</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">③</span><span class="xt-factor-label">Nạp Âm</span><span class="xt-factor-desc">30 cặp nạp âm cổ pháp (Hải Trung Kim, Lô Trung Hỏa...)</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">④</span><span class="xt-factor-label">Ngũ Hành</span><span class="xt-factor-desc">Kim / Hỏa / Mộc / Thủy / Thổ và đặc tính cơ bản</span></div>
         </div>
       </div>
-
-      <div class="nap-am-box">
-        <div class="label">NẠP ÂM</div>
-        <div class="main" id="rNapAm">—</div>
-        <div class="sub" id="rHanh">—</div>
-      </div>
-
-      <div class="info-box" id="rInfo"></div>
     </div>
   </div>
 
-  <div class="cta-box" style="margin-top:28px">
-    <p>Muốn biết đầy đủ 24 phần luận giải lá số Tử Vi của bạn, bao gồm tính cách, sự nghiệp, tình duyên và vận hạn?</p>
-    <a href="/">Luận Giải Lá Số Đầy Đủ →</a>
+  <div class="form-section">
+    <div class="section-eyebrow">Nhập Thông Tin</div>
+    <div class="form-grid cols-1">
+      <div class="form-col">
+        <div class="form-col-title">Năm Sinh Dương Lịch</div>
+        <div class="form-group">
+          <label class="form-label">Năm sinh</label>
+          <input class="form-input" type="number" id="year" placeholder="Ví dụ: 1990" min="1900" max="2100">
+        </div>
+        <button class="btn-submit" onclick="calculate()">Tra Cứu Ngay</button>
+      </div>
+    </div>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+
+  <div class="result-section" id="result-section">
+    <div class="result-eyebrow" id="res-eyebrow"></div>
+    <div class="nap-am-result" id="nap-am-result"></div>
+  </div>
+
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Luận Giải Sâu Hơn</div>
+    <div class="tool-cta-title">An sao đầy đủ lá số Tử Vi</div>
+    <div class="tool-cta-desc">Nạp Âm chỉ là một trong nhiều yếu tố. Lá số đầy đủ phân tích 12 cung, 9 đại vận và vận hạn năm nay — luận giải bằng AI theo cổ pháp.</div>
+    <a class="tool-cta-btn" href="/luan-giai.html">Luận Giải Lá Số ($19) →</a>
   </div>
 </div>
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div>
+      <p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p>
+    </div>
+  </div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
 
 <script>
-const CAN = ['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
-const CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
-const NAP_AM = [
-  'Hải Trung Kim','Lô Trung Hỏa','Đại Lâm Mộc','Lộ Bàng Thổ','Kiếm Phong Kim',
-  'Sơn Đầu Hỏa','Giản Hạ Thủy','Thành Đầu Thổ','Bạch Lạp Kim','Dương Liễu Mộc',
-  'Tuyền Trung Thủy','Ốc Thượng Thổ','Tích Lịch Hỏa','Tùng Bách Mộc','Trường Lưu Thủy',
-  'Sa Trung Kim','Sơn Hạ Hỏa','Bình Địa Mộc','Bích Thượng Thổ','Kim Bạch Kim',
-  'Phú Đăng Hỏa','Thiên Hà Thủy','Đại Trạch Thổ','Xoa Xuyến Kim','Tang Đố Mộc',
-  'Đại Khê Thủy','Sa Trung Thổ','Thiên Thượng Hỏa','Thạch Lựu Mộc','Đại Hải Thủy'
-];
-const HANH_COLOR = {Kim:'#9A7B3A',Hỏa:'#C0392B',Mộc:'#1E6B3C',Thủy:'#1455A4',Thổ:'#8B6914'};
-const HANH_INFO = {
-  Kim: 'Người mệnh Kim thường cứng rắn, quyết đoán, công minh. Hành Kim tương sinh với Thủy, tương khắc với Mộc.',
-  Hỏa: 'Người mệnh Hỏa thường nhiệt tình, nhanh nhẹn, có khả năng lãnh đạo. Hành Hỏa tương sinh với Thổ, tương khắc với Kim.',
-  Mộc: 'Người mệnh Mộc thường nhân từ, ngay thẳng, có chí tiến thủ. Hành Mộc tương sinh với Hỏa, tương khắc với Thổ.',
-  Thủy: 'Người mệnh Thủy thường thông minh, linh hoạt, có khả năng giao tiếp tốt. Hành Thủy tương sinh với Mộc, tương khắc với Hỏa.',
-  Thổ: 'Người mệnh Thổ thường trung thực, bền bỉ, đáng tin cậy. Hành Thổ tương sinh với Kim, tương khắc với Thủy.'
-};
-
-function getHanh(napAm) {
-  for (const h of ['Kim','Hỏa','Mộc','Thủy','Thổ']) {
-    if (napAm.includes(h)) return h;
-  }
-  return '';
+const CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
+const CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+const CON_GIAP=['Chuột','Trâu','Hổ','Mèo','Rồng','Rắn','Ngựa','Dê','Khỉ','Gà','Chó','Lợn'];
+const NAP_AM=['Hải Trung Kim','Lô Trung Hỏa','Đại Lâm Mộc','Lộ Bàng Thổ','Kiếm Phong Kim','Sơn Đầu Hỏa','Giản Hạ Thủy','Thành Đầu Thổ','Bạch Lạp Kim','Dương Liễu Mộc','Tuyền Trung Thủy','Ốc Thượng Thổ','Tích Lịch Hỏa','Tùng Bách Mộc','Trường Lưu Thủy','Sa Trung Kim','Sơn Hạ Hỏa','Bình Địa Mộc','Bích Thượng Thổ','Kim Bạch Kim','Phú Đăng Hỏa','Thiên Hà Thủy','Đại Trạch Thổ','Xoa Xuyến Kim','Tang Đố Mộc','Đại Khê Thủy','Sa Trung Thổ','Thiên Thượng Hỏa','Thạch Lựu Mộc','Đại Hải Thủy'];
+const HANH_COLOR={Kim:'#9A7B3A',Hỏa:'#C0392B',Mộc:'#1E6B3C',Thủy:'#1455A4',Thổ:'#8B6914'};
+const HANH_DESC={Kim:'Ngũ hành Kim — cứng rắn, quyết đoán, có chính kiến. Kim tương sinh với Thủy, tương khắc với Mộc.',Hỏa:'Ngũ hành Hỏa — nhiệt tình, nhanh nhẹn, có sức lôi cuốn. Hỏa tương sinh với Thổ, tương khắc với Kim.',Mộc:'Ngũ hành Mộc — nhân từ, ngay thẳng, chí tiến thủ. Mộc tương sinh với Hỏa, tương khắc với Thổ.',Thủy:'Ngũ hành Thủy — thông minh, linh hoạt, nhạy bén. Thủy tương sinh với Mộc, tương khắc với Hỏa.',Thổ:'Ngũ hành Thổ — trung thực, bền bỉ, đáng tin cậy. Thổ tương sinh với Kim, tương khắc với Thủy.'};
+function getHanh(na){for(const h of ['Kim','Hỏa','Mộc','Thủy','Thổ'])if(na.includes(h))return h;return'';}
+function calculate(){
+  const y=parseInt(document.getElementById('year').value);
+  const err=document.getElementById('error-msg');
+  err.classList.remove('active');
+  if(!y||y<1900||y>2100){err.textContent='Vui lòng nhập năm hợp lệ (1900–2100).';err.classList.add('active');return;}
+  const idx60=((y-4)%60+60)%60;
+  const canIdx=idx60%10,chiIdx=idx60%12;
+  const na=NAP_AM[Math.floor(idx60/2)];
+  const hanh=getHanh(na);
+  const color=HANH_COLOR[hanh]||'#444';
+  document.getElementById('res-eyebrow').textContent='Kết quả — Năm '+y;
+  document.getElementById('nap-am-result').innerHTML=`
+    <div class="na-cell"><div class="na-cell-label">Thiên Can</div><div class="na-cell-val" style="color:${color}">${CAN[canIdx]}</div></div>
+    <div class="na-cell"><div class="na-cell-label">Địa Chi</div><div class="na-cell-val">${CHI[chiIdx]}</div><div style="font-size:12px;color:var(--text-lt);margin-top:6px">Năm ${CON_GIAP[chiIdx]}</div></div>
+    <div class="na-cell"><div class="na-cell-label">Can Chi</div><div class="na-cell-val">${CAN[canIdx]} ${CHI[chiIdx]}</div></div>
+    <div class="na-cell"><div class="na-cell-label">Nạp Âm</div><div class="na-cell-val" style="font-size:22px"><span class="na-hanh-dot" style="background:${color}"></span>${na}</div><div class="na-info">${HANH_DESC[hanh]||''}</div></div>`;
+  document.getElementById('result-section').classList.add('active');
+  document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
 }
-
-function calculate() {
-  const year = parseInt(document.getElementById('year').value);
-  const err = document.getElementById('errMsg');
-  err.textContent = '';
-  if (!year || year < 1900 || year > 2100) {
-    err.textContent = 'Vui lòng nhập năm hợp lệ (1900–2100).';
-    return;
-  }
-  const idx60 = ((year - 4) % 60 + 60) % 60;
-  const canIdx = idx60 % 10;
-  const chiIdx = idx60 % 12;
-  const napAmIdx = Math.floor(idx60 / 2);
-  const napAm = NAP_AM[napAmIdx];
-  const hanh = getHanh(napAm);
-  const color = HANH_COLOR[hanh] || '#444';
-
-  document.getElementById('rCan').textContent = CAN[canIdx];
-  document.getElementById('rChi').textContent = CHI[chiIdx];
-  document.getElementById('rCanChi').textContent = CAN[canIdx] + ' ' + CHI[chiIdx];
-  document.getElementById('rNapAm').innerHTML = `<span class="hanh-dot" style="background:${color}"></span>${napAm}`;
-  document.getElementById('rHanh').innerHTML = `Ngũ Hành: <strong style="color:${color}">${hanh}</strong>`;
-  document.getElementById('rInfo').textContent = HANH_INFO[hanh] || '';
-
-  document.getElementById('result').classList.add('show');
-}
-
-document.getElementById('year').addEventListener('keydown', e => { if (e.key === 'Enter') calculate(); });
-
-// Nav mobile
-document.getElementById('navToggle').addEventListener('click', () => {
-  document.getElementById('navLinks').classList.toggle('open');
-});
-document.querySelectorAll('.nav-dropdown>a').forEach(a => {
-  a.addEventListener('click', e => {
-    if (window.innerWidth <= 820) {
-      e.preventDefault();
-      a.parentElement.classList.toggle('open');
-    }
-  });
-});
+document.getElementById('year').addEventListener('keydown',e=>{if(e.key==='Enter')calculate();});
 </script>
 </body>
 </html>

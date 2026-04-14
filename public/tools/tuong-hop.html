@@ -2,295 +2,178 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Xem Tương Hợp Tuổi – Tử Vi Minh Bảo</title>
-<meta name="description" content="Xem tương hợp giữa hai người theo tuổi: Lục Hợp, Tam Hợp, Tứ Xung, Tam Hình, Lục Hại. Công cụ tử vi miễn phí.">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
+<meta name="description" content="Xem tương hợp giữa hai tuổi theo Lục Hợp, Tam Hợp, Tứ Xung, Tam Hình và Nạp Âm tương sinh khắc. Miễn phí.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
 <style>
-:root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0;--red:#C0392B;--green:#1E6B3C}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;color:var(--text);background:var(--bg)}
-a{color:var(--blue);text-decoration:none}
-.main-nav{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.4)}
-.nav-container{max-width:1100px;margin:0 auto;padding:0 20px;display:flex;align-items:center}
-.nav-brand{color:#fff;font-family:'Noto Serif',serif;font-weight:700;font-size:1.05rem;padding:14px 0;margin-right:auto}
-.nav-brand span{color:var(--gold)}
-.nav-links{display:flex;list-style:none}
-.nav-links>li>a{display:block;color:rgba(255,255,255,.85);padding:16px 13px;font-size:.85rem;white-space:nowrap;transition:color .2s}
-.nav-links>li>a:hover,.nav-links>li>a.active{color:var(--gold)}
-.nav-dropdown{position:relative}
-.dropdown-menu{display:none;position:absolute;top:100%;left:0;background:var(--navy-mid);min-width:220px;border-top:2px solid var(--gold);list-style:none;padding:6px 0;box-shadow:0 4px 20px rgba(0,0,0,.35)}
-.nav-dropdown:hover .dropdown-menu{display:block}
-.dropdown-menu a{display:block;color:rgba(255,255,255,.85);padding:10px 18px;font-size:.84rem;transition:background .15s,color .15s}
-.dropdown-menu a:hover{background:rgba(255,255,255,.07);color:var(--gold)}
-.nav-toggle{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;padding:10px;margin-left:auto}
-@media(max-width:820px){.nav-toggle{display:block}.nav-links{display:none;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:var(--navy);padding-bottom:8px}.nav-links.open{display:flex}.dropdown-menu{position:static;box-shadow:none;border:none;background:rgba(255,255,255,.05);min-width:unset}.nav-dropdown:hover .dropdown-menu{display:none}.nav-dropdown.open .dropdown-menu{display:block}.nav-container{position:relative;flex-wrap:wrap}}
-.page-header{background:var(--navy);color:#fff;padding:48px 20px 36px;text-align:center}
-.page-header h1{font-family:'Noto Serif',serif;font-size:1.9rem;margin-bottom:10px}
-.page-header p{color:rgba(255,255,255,.75);font-size:.95rem;max-width:560px;margin:0 auto}
-.container{max-width:760px;margin:0 auto;padding:40px 20px 60px}
-.card{background:#fff;border:1px solid var(--border-lt);border-radius:8px;padding:32px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:24px}
-.card h2{font-family:'Noto Serif',serif;font-size:1.25rem;color:var(--navy);margin-bottom:22px;padding-bottom:12px;border-bottom:1px solid var(--border-lt)}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-@media(max-width:540px){.two-col{grid-template-columns:1fr}}
-.person-box{background:var(--bg-soft);border-radius:7px;padding:18px}
-.person-box h3{font-size:.85rem;font-weight:700;color:var(--text-mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px}
-.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
-.field label{font-size:.83rem;color:var(--text-mid);font-weight:600}
-.field input{padding:9px 13px;border:1px solid var(--border);border-radius:5px;font-size:.95rem;color:var(--text)}
-.field input:focus{outline:none;border-color:var(--blue)}
-.btn-primary{width:100%;background:var(--blue);color:#fff;border:none;padding:12px;border-radius:5px;font-size:1rem;cursor:pointer;transition:background .2s;margin-top:6px;font-weight:600}
-.btn-primary:hover{background:#1044a0}
-.error{color:var(--red);font-size:.86rem;margin-top:8px;text-align:center}
-/* SCORE */
-.score-wrap{text-align:center;margin-bottom:24px}
-.score-circle{display:inline-flex;align-items:center;justify-content:center;width:90px;height:90px;border-radius:50%;font-family:'Noto Serif',serif;font-size:1.8rem;font-weight:700;color:#fff;margin:0 auto 10px}
-.score-label{font-family:'Noto Serif',serif;font-size:1.15rem;font-weight:700}
-.score-desc{font-size:.88rem;color:var(--text-mid);margin-top:6px}
-/* ITEMS */
-.compat-list{display:flex;flex-direction:column;gap:10px}
-.compat-item{display:flex;align-items:flex-start;gap:12px;padding:13px 16px;border-radius:6px;font-size:.9rem}
-.compat-item.good{background:#eaf4ed;border-left:3px solid var(--green)}
-.compat-item.bad{background:#fef0ef;border-left:3px solid var(--red)}
-.compat-item.neutral{background:var(--bg-soft);border-left:3px solid var(--border)}
-.compat-item .icon{font-size:1.1rem;flex-shrink:0;margin-top:1px}
-.compat-item .name{font-weight:700;margin-bottom:2px}
-.compat-item .desc{color:var(--text-mid);font-size:.86rem}
-.people-header{display:flex;justify-content:center;gap:30px;margin-bottom:20px}
-.ph-item{text-align:center}
-.ph-item .can-chi{font-family:'Noto Serif',serif;font-size:1.1rem;font-weight:700;color:var(--navy)}
-.ph-item .nap-am{font-size:.8rem;color:var(--text-lt);margin-top:2px}
-.vs{font-size:1.3rem;color:var(--text-lt);align-self:center}
-.cta-box{background:var(--navy);color:#fff;border-radius:8px;padding:24px;text-align:center}
-.cta-box p{font-size:.9rem;opacity:.85;margin-bottom:14px}
-.cta-box a{display:inline-block;background:var(--gold);color:#fff;padding:10px 26px;border-radius:5px;font-size:.9rem;font-weight:700}
-.cta-box a:hover{opacity:.85}
+.score-circle{width:80px;height:80px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#fff;flex-shrink:0}
+.res-score-header{display:flex;align-items:center;gap:20px;padding:24px;background:var(--bg-soft);border-bottom:1px solid var(--border-lt)}
+.res-score-info .verdict{font-size:18px;font-weight:600;color:var(--navy);margin-bottom:4px}
+.res-score-info .verdict-desc{font-size:13px;color:var(--text-mid);line-height:1.6}
+.people-header{display:flex;align-items:center;gap:16px;padding:16px 24px;background:#fff;border-bottom:1px solid var(--border-lt)}
+.ph-item{flex:1;text-align:center}
+.ph-canchi{font-size:18px;font-weight:600;color:var(--navy)}
+.ph-na{font-size:12px;color:var(--text-lt);margin-top:3px}
+.ph-vs{font-size:18px;color:var(--border)}
 </style>
 </head>
 <body>
-<nav class="main-nav">
-  <div class="nav-container">
-    <a href="/" class="nav-brand">Tử Vi <span>Minh Bảo</span></a>
-    <button class="nav-toggle" id="navToggle">☰</button>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="/" class="nav-link">Trang Chủ</a></li>
-      <li class="nav-dropdown"><a href="#" class="nav-link">Luận Giải ▾</a>
-        <ul class="dropdown-menu">
-          <li><a href="/">Luận Giải Lá Số</a></li>
-          <li><a href="/xem-tuoi.html">Xem Tuổi Vợ Chồng</a></li>
-          <li><a href="/xem-lam-an.html">Xem Tuổi Làm Ăn</a></li>
-        </ul>
-      </li>
-      <li class="nav-dropdown"><a href="#" class="nav-link active">Công Cụ ▾</a>
-        <ul class="dropdown-menu">
-          <li><a href="/tools/nap-am.html">Nạp Âm &amp; Can Chi</a></li>
-          <li><a href="/tools/dai-van.html">Xem Đại Vận</a></li>
-          <li><a href="/tools/sao-nam.html">Sao Năm Hiện Tại</a></li>
-          <li><a href="/tools/cach-cuc.html">Cách Cục Đặc Biệt</a></li>
-          <li><a href="/tools/tuong-hop.html">Tương Hợp Tuổi</a></li>
-          <li><a href="/tools/kim-lau.html">Kim Lâu / Tam Tai</a></li>
-          <li><a href="/tools/tu-tru.html">Tứ Trụ Bát Tự</a></li>
-        </ul>
-      </li>
-      <li><a href="/about.html" class="nav-link">Giới Thiệu</a></li>
-      <li><a href="/resources.html" class="nav-link">Tài Liệu</a></li>
-      <li><a href="/blog.html" class="nav-link">Khảo Luận</a></li>
-      <li><a href="/menh-kho.html" class="nav-link">Mệnh Khố</a></li>
-      <li><a href="/contact.html" class="nav-link">Liên Hệ</a></li>
-    </ul>
-  </div>
-</nav>
+<script src="/nav.js"></script>
 
-<div class="page-header">
-  <h1>Xem Tương Hợp Tuổi</h1>
-  <p>Nhập năm sinh của hai người để xem mức độ tương hợp theo địa chi và nạp âm. Miễn phí.</p>
-</div>
-
-<div class="container">
-  <div class="card">
-    <h2>Nhập thông tin hai người</h2>
-    <div class="two-col">
-      <div class="person-box">
-        <h3>Người thứ nhất</h3>
-        <div class="field"><label>Tên / Ký hiệu</label><input type="text" id="nameA" placeholder="Ví dụ: Anh / Chồng"></div>
-        <div class="field"><label>Năm sinh dương lịch</label><input type="number" id="yearA" placeholder="1990" min="1900" max="2100"></div>
-      </div>
-      <div class="person-box">
-        <h3>Người thứ hai</h3>
-        <div class="field"><label>Tên / Ký hiệu</label><input type="text" id="nameB" placeholder="Ví dụ: Em / Vợ"></div>
-        <div class="field"><label>Năm sinh dương lịch</label><input type="number" id="yearB" placeholder="1993" min="1900" max="2100"></div>
-      </div>
-    </div>
-    <button class="btn-primary" onclick="calculate()">Xem tương hợp</button>
-    <div class="error" id="errMsg"></div>
-  </div>
-
-  <div class="card" id="result" style="display:none">
-    <h2>Kết quả tương hợp</h2>
-    <div class="people-header">
-      <div class="ph-item">
-        <div class="can-chi" id="ccA">—</div>
-        <div class="nap-am" id="naA">—</div>
-        <div style="font-size:.8rem;color:var(--text-lt);margin-top:2px" id="lblA">—</div>
-      </div>
-      <div class="vs">⟷</div>
-      <div class="ph-item">
-        <div class="can-chi" id="ccB">—</div>
-        <div class="nap-am" id="naB">—</div>
-        <div style="font-size:.8rem;color:var(--text-lt);margin-top:2px" id="lblB">—</div>
-      </div>
-    </div>
-
-    <div class="score-wrap">
-      <div class="score-circle" id="scoreCircle">0</div>
-      <div class="score-label" id="scoreLbl">—</div>
-      <div class="score-desc" id="scoreDesc">—</div>
-    </div>
-
-    <div class="compat-list" id="compatList"></div>
-  </div>
-
-  <div class="cta-box">
-    <p>Muốn phân tích sâu hơn về tương hợp vợ chồng theo 8 tiêu chí Tử Vi (tư tưởng, tính cách, tài chính, quan hệ...)? Xem dịch vụ đầy đủ chỉ $9.</p>
-    <a href="/xem-tuoi.html">Xem Tuổi Vợ Chồng Chi Tiết →</a>
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Miễn Phí</div>
+    <h1>Xem <em>Tương Hợp</em> Tuổi</h1>
+    <p>Kiểm tra nhanh tương quan địa chi và nạp âm giữa hai người — Lục Hợp, Tam Hợp, Tứ Xung, Tam Hình, Lục Hại.</p>
   </div>
 </div>
+
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Công cụ này là gì?</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">Tương Hợp Tuổi<br>theo Địa Chi &amp; Nạp Âm</h2>
+          <p class="xt-body">Trong dân gian Việt Nam, xem tuổi kết hôn hay hợp tác thường bắt đầu bằng việc xét quan hệ địa chi (Lục Hợp, Tam Hợp, Tứ Xung, Tam Hình, Lục Hại) và tương sinh khắc của Nạp Âm.</p>
+          <p class="xt-body">Đây là bước sơ khởi — nhanh, miễn phí. Để phân tích đầy đủ theo lá số Tử Vi cổ pháp (tương quan cung Phu Thê, cung Quan Lộc, đại vận hai người...), hãy dùng dịch vụ <strong>Xem Tuổi Vợ Chồng</strong> bên dưới.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">Các yếu tố được xét</div>
+          <div class="xt-factor-item"><span class="xt-factor-num">✦</span><span class="xt-factor-label">Lục Hợp</span><span class="xt-factor-desc">6 cặp địa chi hợp nhau — vận trơn tru</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">✦</span><span class="xt-factor-label">Tam Hợp</span><span class="xt-factor-desc">Nhóm 3 chi cùng hướng — bền vững</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">✗</span><span class="xt-factor-label">Tứ Xung</span><span class="xt-factor-desc">6 cặp xung nhau — hay bất đồng</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">✗</span><span class="xt-factor-label">Tam Hình</span><span class="xt-factor-desc">Nhóm hình phạt — rắc rối tiềm ẩn</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">✗</span><span class="xt-factor-label">Lục Hại</span><span class="xt-factor-desc">6 cặp hại nhau — tổn hại tinh thần</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">○</span><span class="xt-factor-label">Nạp Âm</span><span class="xt-factor-desc">Tương sinh / tương khắc / đồng hành</span></div>
+        </div>
+      </div>
+      <div class="xt-note">
+        <span class="xt-note-icon">ℹ️</span>
+        <div>Kết quả này chỉ xét tuổi địa chi — chưa phản ánh toàn bộ lá số. Hai người có tuổi xung vẫn có thể hợp nhau theo lá số, và ngược lại. Để phân tích đúng cần xem lá số đầy đủ.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-eyebrow">Nhập Thông Tin</div>
+    <div class="form-grid cols-2">
+      <div class="form-col">
+        <div class="form-col-title">Người Thứ Nhất</div>
+        <div class="form-group">
+          <label class="form-label">Tên / ký hiệu</label>
+          <input class="form-input" type="text" id="nameA" placeholder="Anh / Chồng / Đối tác A">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Năm sinh dương lịch</label>
+          <input class="form-input" type="number" id="yearA" placeholder="Ví dụ: 1990" min="1900" max="2010">
+        </div>
+      </div>
+      <div class="form-col">
+        <div class="form-col-title">Người Thứ Hai</div>
+        <div class="form-group">
+          <label class="form-label">Tên / ký hiệu</label>
+          <input class="form-input" type="text" id="nameB" placeholder="Em / Vợ / Đối tác B">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Năm sinh dương lịch</label>
+          <input class="form-input" type="number" id="yearB" placeholder="Ví dụ: 1993" min="1900" max="2010">
+        </div>
+        <button class="btn-submit" onclick="calculate()">Xem Tương Hợp</button>
+      </div>
+    </div>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+
+  <div class="result-section" id="result-section">
+    <div class="res-block">
+      <div class="people-header">
+        <div class="ph-item"><div class="ph-canchi" id="ccA">—</div><div class="ph-na" id="naA">—</div><div style="font-size:11px;color:var(--text-lt);margin-top:2px" id="lblA">—</div></div>
+        <div class="ph-vs">⟷</div>
+        <div class="ph-item"><div class="ph-canchi" id="ccB">—</div><div class="ph-na" id="naB">—</div><div style="font-size:11px;color:var(--text-lt);margin-top:2px" id="lblB">—</div></div>
+      </div>
+      <div class="res-score-header">
+        <div class="score-circle" id="scoreCircle">—</div>
+        <div class="res-score-info"><div class="verdict" id="verdict">—</div><div class="verdict-desc" id="verdictDesc">—</div></div>
+      </div>
+      <div id="compatList"></div>
+    </div>
+  </div>
+
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Phân Tích Sâu Hơn</div>
+    <div class="tool-cta-title">Xem Tuổi Vợ Chồng theo Lá Số</div>
+    <div class="tool-cta-desc">Phân tích 8 yếu tố từ hai lá số Tử Vi đầy đủ — tương quan cung Mệnh, Phu Thê, Tài Bạch, Tử Tức và đại vận. Luận giải AI 9 phần, chỉ $9.</div>
+    <a class="tool-cta-btn" href="/xem-tuoi.html">Xem Tuổi Vợ Chồng Đầy Đủ →</a>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
 
 <script>
 const CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
 const CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
 const NAP_AM=['Hải Trung Kim','Lô Trung Hỏa','Đại Lâm Mộc','Lộ Bàng Thổ','Kiếm Phong Kim','Sơn Đầu Hỏa','Giản Hạ Thủy','Thành Đầu Thổ','Bạch Lạp Kim','Dương Liễu Mộc','Tuyền Trung Thủy','Ốc Thượng Thổ','Tích Lịch Hỏa','Tùng Bách Mộc','Trường Lưu Thủy','Sa Trung Kim','Sơn Hạ Hỏa','Bình Địa Mộc','Bích Thượng Thổ','Kim Bạch Kim','Phú Đăng Hỏa','Thiên Hà Thủy','Đại Trạch Thổ','Xoa Xuyến Kim','Tang Đố Mộc','Đại Khê Thủy','Sa Trung Thổ','Thiên Thượng Hỏa','Thạch Lựu Mộc','Đại Hải Thủy'];
-
-// Lục Hợp pairs [a,b] (chi indices)
+const NA_H=['Kim','Hỏa','Mộc','Thổ','Kim','Hỏa','Thủy','Thổ','Kim','Mộc','Thủy','Thổ','Hỏa','Mộc','Thủy','Kim','Hỏa','Mộc','Thổ','Kim','Hỏa','Thủy','Thổ','Kim','Mộc','Thủy','Thổ','Hỏa','Mộc','Thủy'];
 const LUC_HOP=[[0,1],[2,11],[3,10],[4,9],[5,8],[6,7]];
-// Tam Hợp groups
-const TAM_HOP=[[7,0,4],[2,6,10],[5,9,1],[11,3,7]]; // [Thân,Tý,Thìn],[Dần,Ngọ,Tuất],[Tỵ,Dậu,Sửu],[Hợi,Mão,Mùi]
-// Tứ Xung pairs
+const TAM_HOP=[[8,0,4],[2,6,10],[5,9,1],[11,3,7]];
 const TU_XUNG=[[0,6],[1,7],[2,8],[3,9],[4,10],[5,11]];
-// Tam Hình
-const TAM_HINH=[[2,5,8],[1,10,7]]; // [Dần,Tỵ,Thân],[Sửu,Tuất,Mùi]
-const TU_HINH=[[0,3],[4,6],[9,11]]; // Tý-Mão tương hình, Thìn/Ngọ tự hình, Dậu/Hợi tự hình... simplified as pairs
-// Lục Hại pairs
+const TAM_HINH_PAIRS=[[2,5],[5,8],[2,8],[1,10],[10,7],[1,7]];
 const LUC_HAI=[[0,7],[1,6],[2,5],[3,4],[8,11],[9,10]];
-// Nạp âm sinh khắc
-const NA_HANH=['Kim','Hỏa','Mộc','Thổ','Kim','Hỏa','Thủy','Thổ','Kim','Mộc','Thủy','Thổ','Hỏa','Mộc','Thủy','Kim','Hỏa','Mộc','Thổ','Kim','Hỏa','Thủy','Thổ','Kim','Mộc','Thủy','Thổ','Hỏa','Mộc','Thủy'];
-const SINH=[{s:'Kim',t:'Thủy'},{s:'Thủy',t:'Mộc'},{s:'Mộc',t:'Hỏa'},{s:'Hỏa',t:'Thổ'},{s:'Thổ',t:'Kim'}];
-const KHAC=[{s:'Kim',t:'Mộc'},{s:'Mộc',t:'Thổ'},{s:'Thổ',t:'Thủy'},{s:'Thủy',t:'Hỏa'},{s:'Hỏa',t:'Kim'}];
+const SINH_PAIRS=[['Kim','Thủy'],['Thủy','Mộc'],['Mộc','Hỏa'],['Hỏa','Thổ'],['Thổ','Kim']];
+const KHAC_PAIRS=[['Kim','Mộc'],['Mộc','Thổ'],['Thổ','Thủy'],['Thủy','Hỏa'],['Hỏa','Kim']];
 
-function yearInfo(y){
-  const idx60=((y-4)%60+60)%60;
-  return{can:idx60%10,chi:idx60%12,napAmIdx:Math.floor(idx60/2)};
-}
-function hanhOf(napAmIdx){return NA_HANH[napAmIdx];}
-function checkLucHop(cA,cB){return LUC_HOP.some(p=>(p[0]===cA&&p[1]===cB)||(p[1]===cA&&p[0]===cB));}
-function checkTamHop(cA,cB){return TAM_HOP.some(g=>g.includes(cA)&&g.includes(cB));}
-function checkXung(cA,cB){return TU_XUNG.some(p=>(p[0]===cA&&p[1]===cB)||(p[1]===cA&&p[0]===cB));}
-function checkHinh(cA,cB){
-  if(cA===cB&&[4,6,9,11].includes(cA))return true;
-  if([cA,cB].sort().join()===([0,3]).sort().join())return true;
-  return TAM_HINH.some(g=>g.includes(cA)&&g.includes(cB));
-}
-function checkHai(cA,cB){return LUC_HAI.some(p=>(p[0]===cA&&p[1]===cB)||(p[1]===cA&&p[0]===cB));}
-function checkNapAmSinh(hA,hB){
-  // A sinh B hoặc B sinh A
-  return SINH.some(r=>(r.s===hA&&r.t===hB)||(r.s===hB&&r.t===hA));
-}
-function checkNapAmKhac(hA,hB){
-  return KHAC.some(r=>(r.s===hA&&r.t===hB)||(r.s===hB&&r.t===hA));
-}
-function checkNapAmDong(hA,hB){return hA===hB;}
-
+function yearInfo(y){const i=((y-4)%60+60)%60;return{can:i%10,chi:i%12,naIdx:Math.floor(i/2)};}
 function calculate(){
   const yA=parseInt(document.getElementById('yearA').value);
   const yB=parseInt(document.getElementById('yearB').value);
   const nA=document.getElementById('nameA').value||'Người A';
   const nB=document.getElementById('nameB').value||'Người B';
-  const err=document.getElementById('errMsg');
-  err.textContent='';
-  if(!yA||yA<1900||yA>2100||!yB||yB<1900||yB>2100){
-    err.textContent='Vui lòng nhập năm sinh hợp lệ cho cả hai người.';return;
-  }
+  const err=document.getElementById('error-msg');
+  err.classList.remove('active');
+  if(!yA||yA<1900||yA>2100||!yB||yB<1900||yB>2100){err.textContent='Vui lòng nhập năm sinh hợp lệ cho cả hai người.';err.classList.add('active');return;}
   const iA=yearInfo(yA),iB=yearInfo(yB);
-  const hA=hanhOf(iA.napAmIdx),hB=hanhOf(iB.napAmIdx);
-  const naA=NAP_AM[iA.napAmIdx],naB=NAP_AM[iB.napAmIdx];
-
-  // Display headers
+  const hA=NA_H[iA.naIdx],hB=NA_H[iB.naIdx];
   document.getElementById('ccA').textContent=CAN[iA.can]+' '+CHI[iA.chi];
-  document.getElementById('naA').textContent=naA+' ('+hA+')';
-  document.getElementById('lblA').textContent=nA+' – '+yA;
+  document.getElementById('naA').textContent=NAP_AM[iA.naIdx]+' ('+hA+')';
+  document.getElementById('lblA').textContent=nA+' · '+yA;
   document.getElementById('ccB').textContent=CAN[iB.can]+' '+CHI[iB.chi];
-  document.getElementById('naB').textContent=naB+' ('+hB+')';
-  document.getElementById('lblB').textContent=nB+' – '+yB;
-
-  // Check relationships
-  const checks=[];
-  let score=50;
-
-  if(checkLucHop(iA.chi,iB.chi)){
-    checks.push({type:'good',icon:'✦',name:'Lục Hợp',desc:`${CHI[iA.chi]} và ${CHI[iB.chi]} lục hợp — hai người dễ hòa hợp, bổ trợ nhau tự nhiên, cuộc sống chung êm ấm.`});
-    score+=25;
-  }
-  if(checkTamHop(iA.chi,iB.chi)){
-    checks.push({type:'good',icon:'✦',name:'Tam Hợp',desc:`${CHI[iA.chi]} và ${CHI[iB.chi]} tam hợp — mối quan hệ bền vững, cùng chí hướng, hỗ trợ nhau phát triển.`});
-    score+=20;
-  }
-  if(checkXung(iA.chi,iB.chi)){
-    checks.push({type:'bad',icon:'✗',name:'Tứ Xung (Lục Xung)',desc:`${CHI[iA.chi]} xung ${CHI[iB.chi]} — hai người dễ xảy ra bất đồng, va chạm tư tưởng, cần nhường nhịn nhau nhiều.`});
-    score-=20;
-  }
-  if(checkHinh(iA.chi,iB.chi)){
-    checks.push({type:'bad',icon:'✗',name:'Tam Hình',desc:`${CHI[iA.chi]} và ${CHI[iB.chi]} tương hình — có thể gây ra những rắc rối, hiểu lầm trong cuộc sống chung.`});
-    score-=15;
-  }
-  if(checkHai(iA.chi,iB.chi)){
-    checks.push({type:'bad',icon:'✗',name:'Lục Hại',desc:`${CHI[iA.chi]} và ${CHI[iB.chi]} lục hại — hai bên dễ bị tổn hại lẫn nhau về tinh thần, cần chú ý giữ gìn tình cảm.`});
-    score-=15;
-  }
-
-  // Nạp âm
-  if(hA===hB){
-    checks.push({type:'neutral',icon:'○',name:'Nạp Âm đồng hành ('+hA+')',desc:'Hai người cùng hành nạp âm — suy nghĩ tương đồng, dễ đồng cảm nhưng có thể thiếu bổ trợ cho nhau.'});
-    score+=5;
-  } else if(checkNapAmSinh(hA,hB)){
-    const direction=SINH.find(r=>(r.s===hA&&r.t===hB)||(r.s===hB&&r.t===hA));
-    checks.push({type:'good',icon:'✦',name:`Nạp Âm tương sinh (${hA} ↔ ${hB})`,desc:`Hành ${direction.s} sinh ${direction.t} — nạp âm hai người tương sinh, bổ trợ và nâng đỡ lẫn nhau về vận khí.`});
-    score+=15;
-  } else if(checkNapAmKhac(hA,hB)){
-    const direction=KHAC.find(r=>(r.s===hA&&r.t===hB)||(r.s===hB&&r.t===hA));
-    checks.push({type:'bad',icon:'✗',name:`Nạp Âm tương khắc (${hA} ↔ ${hB})`,desc:`Hành ${direction.s} khắc ${direction.t} — nạp âm tương khắc, dễ gây mâu thuẫn, tiêu hao sinh lực nhau.`});
-    score-=10;
-  }
-
-  if(checks.length===0){
-    checks.push({type:'neutral',icon:'○',name:'Không có quan hệ đặc biệt',desc:'Hai tuổi không có lục hợp, tam hợp, tứ xung, tam hình hay lục hại — quan hệ trung bình, phụ thuộc nhiều vào nỗ lực cá nhân.'});
-  }
-
+  document.getElementById('naB').textContent=NAP_AM[iB.naIdx]+' ('+hB+')';
+  document.getElementById('lblB').textContent=nB+' · '+yB;
+  const cA=iA.chi,cB=iB.chi;
+  let score=50;const items=[];
+  if(LUC_HOP.some(p=>(p[0]===cA&&p[1]===cB)||(p[1]===cA&&p[0]===cB))){items.push({good:true,icon:'✦',name:'Lục Hợp',desc:`${CHI[cA]} và ${CHI[cB]} lục hợp — hai người dễ hòa hợp tự nhiên, cuộc sống chung êm ả.`});score+=25;}
+  if(TAM_HOP.some(g=>g.includes(cA)&&g.includes(cB))){items.push({good:true,icon:'✦',name:'Tam Hợp',desc:`${CHI[cA]} và ${CHI[cB]} tam hợp — cùng chí hướng, mối quan hệ bền vững lâu dài.`});score+=20;}
+  if(TU_XUNG.some(p=>(p[0]===cA&&p[1]===cB)||(p[1]===cA&&p[0]===cB))){items.push({good:false,icon:'✗',name:'Tứ Xung',desc:`${CHI[cA]} xung ${CHI[cB]} — dễ bất đồng, va chạm tư tưởng. Cần nhường nhịn nhau.`});score-=20;}
+  if(TAM_HINH_PAIRS.some(p=>(p[0]===cA&&p[1]===cB)||(p[1]===cA&&p[0]===cB))||((cA===cB)&&[4,6,9,11].includes(cA))){items.push({good:false,icon:'✗',name:'Tam Hình',desc:`${CHI[cA]} và ${CHI[cB]} tương hình — có thể nảy sinh hiểu lầm, rắc rối tiềm ẩn.`});score-=15;}
+  if(LUC_HAI.some(p=>(p[0]===cA&&p[1]===cB)||(p[1]===cA&&p[0]===cB))){items.push({good:false,icon:'✗',name:'Lục Hại',desc:`${CHI[cA]} và ${CHI[cB]} lục hại — dễ tổn hại lẫn nhau về tinh thần.`});score-=15;}
+  if(hA===hB){items.push({good:true,icon:'○',name:`Nạp Âm đồng hành (${hA})`,desc:'Cùng ngũ hành nạp âm — suy nghĩ tương đồng, dễ thấu hiểu nhau.'});score+=5;}
+  else if(SINH_PAIRS.some(r=>(r[0]===hA&&r[1]===hB)||(r[1]===hA&&r[0]===hB))){items.push({good:true,icon:'✦',name:`Nạp Âm tương sinh (${hA}↔${hB})`,desc:'Nạp âm hai người bổ trợ nhau — vận khí nâng đỡ lẫn nhau.'});score+=15;}
+  else if(KHAC_PAIRS.some(r=>(r[0]===hA&&r[1]===hB)||(r[1]===hA&&r[0]===hB))){items.push({good:false,icon:'✗',name:`Nạp Âm tương khắc (${hA}↔${hB})`,desc:'Nạp âm tương khắc — dễ tiêu hao sinh lực của nhau.'});score-=10;}
+  if(!items.length)items.push({good:true,icon:'○',name:'Không có quan hệ đặc biệt',desc:'Hai tuổi không có lục hợp, xung, hình hay hại — trung tính, phụ thuộc vào nỗ lực cá nhân.'});
   score=Math.max(10,Math.min(95,score));
-  const scoreEl=document.getElementById('scoreCircle');
-  let bg,lbl,desc2;
-  if(score>=75){bg='#1E6B3C';lbl='Tương hợp tốt';desc2='Hai tuổi có nhiều yếu tố tương hỗ nhau. Đây là cơ sở tốt cho mối quan hệ bền vững.';}
-  else if(score>=50){bg='#1455A4';lbl='Tương đối hợp';desc2='Có những điểm hòa hợp nhưng cũng cần chú ý một số điểm xung khắc nhỏ.';}
-  else if(score>=30){bg='#9A7B3A';lbl='Cần lưu ý';desc2='Hai tuổi có một số xung khắc. Cần thêm sự nhường nhịn và thấu hiểu lẫn nhau.';}
-  else{bg='#C0392B';lbl='Nhiều xung khắc';desc2='Hai tuổi có nhiều điểm bất hợp. Cần tư vấn thêm về cách hóa giải và bổ trợ.';}
-
-  scoreEl.textContent=score;
-  scoreEl.style.background=bg;
-  document.getElementById('scoreLbl').textContent=lbl;
-  document.getElementById('scoreDesc').textContent=desc2;
-
-  const list=document.getElementById('compatList');
-  list.innerHTML=checks.map(c=>`
-    <div class="compat-item ${c.type}">
-      <span class="icon">${c.icon}</span>
-      <div><div class="name">${c.name}</div><div class="desc">${c.desc}</div></div>
+  let bg,verdict,vdesc;
+  if(score>=75){bg='#1E6B3C';verdict='Tương hợp tốt';vdesc='Hai tuổi có nhiều điểm hòa hợp. Nền tảng thuận lợi cho mối quan hệ lâu dài.';}
+  else if(score>=50){bg='#1455A4';verdict='Tương đối hợp';vdesc='Có điểm hòa hợp nhưng cũng có một số điểm cần chú ý và nhường nhịn nhau.';}
+  else if(score>=30){bg='#9A7B3A';verdict='Cần lưu ý';vdesc='Hai tuổi có xung khắc đáng kể. Cần thêm sự thấu hiểu và nhẫn nại.';}
+  else{bg='#C0392B';verdict='Nhiều xung khắc';vdesc='Hai tuổi có nhiều điểm bất hợp. Nên tham khảo thêm lá số đầy đủ.';}
+  document.getElementById('scoreCircle').textContent=score;
+  document.getElementById('scoreCircle').style.background=bg;
+  document.getElementById('verdict').textContent=verdict;
+  document.getElementById('verdictDesc').textContent=vdesc;
+  document.getElementById('compatList').innerHTML=items.map(it=>`
+    <div class="compat-item ${it.good?'good':'bad'}">
+      <span class="compat-icon">${it.icon}</span>
+      <div><div class="compat-name">${it.name}</div><div class="compat-desc">${it.desc}</div></div>
     </div>`).join('');
-
-  document.getElementById('result').style.display='block';
-  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
+  document.getElementById('result-section').classList.add('active');
+  document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
 }
-
-document.getElementById('navToggle').addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('open'));
-document.querySelectorAll('.nav-dropdown>a').forEach(a=>a.addEventListener('click',e=>{if(window.innerWidth<=820){e.preventDefault();a.parentElement.classList.toggle('open');}}));
 </script>
 </body>
 </html>
