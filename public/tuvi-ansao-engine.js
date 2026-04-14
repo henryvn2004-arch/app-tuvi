@@ -438,7 +438,7 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
   const phaToai = dcIdx(PHA_TOAI[chiNam] || 'Tý');
 
   // Hoa Cái
-  const HOA_CAI = {'Tý':'Thìn','Ngọ':'Tuất','Mão':'Mùi','Dậu':'Sửu','Dần':'Ngọ','Thân':'Tý','Tỵ':'Sửu','Hợi':'Mão','Thìn':'Thân','Tuất':'Dần','Sửu':'Tỵ','Mùi':'Hợi'};
+  const HOA_CAI = {'Tý':'Thìn','Thân':'Thìn','Thìn':'Thìn','Ngọ':'Tuất','Dần':'Tuất','Tuất':'Tuất','Tỵ':'Sửu','Dậu':'Sửu','Sửu':'Sửu','Hợi':'Mùi','Mão':'Mùi','Mùi':'Mùi'};
   const hoaCai = dcIdx(HOA_CAI[chiNam] || 'Tý');
 
   // Lưu Hà
@@ -446,7 +446,7 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
   const luuHa = dcIdx(LUU_HA[canNam] || 'Tý');
 
   // Thiên Trù
-  const THIEN_TRU = {'Giáp':'Tỵ','Ất':'Ngọ','Bính':'Mùi','Đinh':'Thân','Mậu':'Dậu','Kỷ':'Thân','Canh':'Hợi','Tân':'Tý','Nhâm':'Sửu','Quý':'Dần'};
+  const THIEN_TRU = {'Giáp':'Tỵ','Đinh':'Tỵ','Canh':'Tỵ','Ất':'Ngọ','Mậu':'Ngọ','Tân':'Ngọ','Bính':'Tý','Kỷ':'Thân','Nhâm':'Dậu','Quý':'Tuất'};
   const thienTru = dcIdx(THIEN_TRU[canNam] || 'Tý');
 
 
@@ -493,15 +493,15 @@ function anPhuTinh(canNam, chiNam, thangAL, ngayAL, gioIdx, locTonIdx) {
   const thienGiai  = mod12(dcIdx('Thân') + thangAL - 1);  // Thân=T1 thuận
   const diaGiai = mod12(dcIdx('Mùi') + thangAL - 1);  // Mùi=T1 đếm thuận tới tháng
   const thienHinh  = mod12(dcIdx('Dậu') + thangAL - 1);   // Dậu=T1 thuận
-  const thienRieu  = mod12(dcIdx('Dần') + thangAL - 1);  // Dần=T1 đếm thuận tới tháng
+  const thienRieu  = mod12(dcIdx('Sửu') + thangAL - 1);  // Sửu=T1 đếm thuận tới tháng
   const thienY     = mod12(dcIdx('Sửu') + thangAL - 1);  // Thiên Y đồng cung Thiên Riêu
   const thaiPhu = mod12(dcIdx('Ngọ') + gioIdx);  // Ngọ=Tý đếm thuận tới giờ
   const phongCao   = mod12(dcIdx('Dần') + gioIdx);  // Dần=Tý đếm thuận tới giờ
 
   // ── Sao theo Lộc Tồn ──
   const giaiThan = phuongCac;  // đồng cung Phượng Các
-  const QUOC_AN_MAP = {'Thân':'Tuất','Tý':'Tuất','Thìn':'Tuất','Dần':'Thìn','Ngọ':'Thìn','Tuất':'Mùi','Tỵ':'Mùi','Dậu':'Mùi','Sửu':'Dần','Hợi':'Sửu','Mão':'Sửu','Mùi':'Dậu'};
-  const quocAn     = dcIdx(QUOC_AN_MAP[chiNam] || 'Tuất');
+  const QUOC_AN_CAN = {'Giáp':'Tuất','Ất':'Hợi','Bính':'Sửu','Mậu':'Sửu','Đinh':'Dần','Kỷ':'Dần','Canh':'Thìn','Tân':'Tỵ','Nhâm':'Mùi','Quý':'Thân'};
+  const quocAn     = dcIdx(QUOC_AN_CAN[canNam] || 'Tuất');
   const duongPhu = mod12(locTonIdx - 7);  // Lộc Tồn=T1, đếm nghịch tới T8
   const bacSy    = locTonIdx;             // Bác Sỹ = cùng cung Lộc Tồn
 
