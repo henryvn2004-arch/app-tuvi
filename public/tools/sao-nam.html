@@ -8,8 +8,9 @@
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="stylesheet" href="/tools/tools.css">
 <script src="/tuvi-ansao-engine.js"></script>
+<script src="/tuvi-form.js"></script>
 <style>
-.group-card{padding:24px;border-left:4px solid transparent;margin-bottom:20px}
+.group-card{padding:24px;border-left:4px solid transparent;margin-bottom:0}
 .group-card.g1{background:#eaf4ed;border-color:#1E6B3C}
 .group-card.g2{background:#e8f0fe;border-color:#1455A4}
 .group-card.g3{background:#fff8ec;border-color:#9A7B3A}
@@ -45,7 +46,7 @@
       <div class="xt-grid-2">
         <div>
           <h2 class="xt-h2">Nhóm Thái Tuế &amp;<br>Vận Khí Năm 2026</h2>
-          <p class="xt-body">Mỗi năm, vòng sao Thái Tuế di chuyển qua một cung trong lá số. Tùy theo cung nào vòng Thái Tuế đi qua và nhóm sao nào đứng tại đó, tính chất vận khí của năm sẽ khác nhau đáng kể.</p>
+          <p class="xt-body">Mỗi năm, vòng sao Thái Tuế di chuyển qua một cung trong lá số. Tùy theo nhóm sao nào đứng tại cung đó, tính chất vận khí của năm sẽ khác nhau đáng kể.</p>
           <p class="xt-body">Tử Vi Minh Bảo phân loại thành 4 nhóm chính theo bộ sao Thái Tuế tại cung Mệnh — mỗi nhóm có đặc điểm tính khí và xu hướng vận hạn riêng cho năm đó.</p>
         </div>
         <div class="xt-factors">
@@ -61,35 +62,7 @@
 
   <div class="form-section">
     <div class="section-eyebrow">Nhập Ngày Sinh</div>
-    <div class="form-grid cols-2">
-      <div class="form-col">
-        <div class="form-col-title">Ngày Sinh Dương Lịch</div>
-        <div class="form-row-3">
-          <div class="form-group"><label class="form-label">Ngày</label><input class="form-input" type="number" id="ngay" placeholder="1–31" min="1" max="31"></div>
-          <div class="form-group"><label class="form-label">Tháng</label><input class="form-input" type="number" id="thang" placeholder="1–12" min="1" max="12"></div>
-          <div class="form-group"><label class="form-label">Năm</label><input class="form-input" type="number" id="nam" placeholder="1990" min="1900" max="2010"></div>
-        </div>
-      </div>
-      <div class="form-col">
-        <div class="form-col-title">Giờ &amp; Giới Tính</div>
-        <div class="form-group">
-          <label class="form-label">Giờ sinh</label>
-          <select class="form-input" id="gio">
-            <option value="0">Giờ Tý (23–01h)</option><option value="2">Giờ Sửu (01–03h)</option>
-            <option value="4">Giờ Dần (03–05h)</option><option value="6">Giờ Mão (05–07h)</option>
-            <option value="8">Giờ Thìn (07–09h)</option><option value="10">Giờ Tỵ (09–11h)</option>
-            <option value="12">Giờ Ngọ (11–13h)</option><option value="14">Giờ Mùi (13–15h)</option>
-            <option value="16">Giờ Thân (15–17h)</option><option value="18">Giờ Dậu (17–19h)</option>
-            <option value="20">Giờ Tuất (19–21h)</option><option value="22">Giờ Hợi (21–23h)</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Giới tính</label>
-          <select class="form-input" id="gioitinh"><option value="nam">Nam</option><option value="nu">Nữ</option></select>
-        </div>
-        <button class="btn-submit" onclick="calculate()">Xem Sao Năm 2026</button>
-      </div>
-    </div>
+    <div id="tuvi-form-container"></div>
     <div class="status-bar" id="loader"><div class="status-dot"></div><div id="loader-text">Đang an sao...</div></div>
     <div class="error-msg" id="error-msg"></div>
   </div>
@@ -97,7 +70,7 @@
   <div class="result-section" id="result-section">
     <div class="res-block" style="margin-bottom:24px">
       <div class="res-block-header"><span class="res-block-title">Nhóm Thái Tuế Năm 2026</span></div>
-      <div class="res-block-body" id="groupBox"></div>
+      <div id="groupBox"></div>
     </div>
     <div class="res-block">
       <div class="res-block-header"><span class="res-block-title">Sao Tại Các Cung Chính</span></div>
@@ -108,7 +81,7 @@
   <div class="tool-cta">
     <div class="tool-cta-eyebrow">Luận Giải Vận Hạn Năm Nay</div>
     <div class="tool-cta-title">Tiểu Vận 2026 từ Lá Số Tử Vi</div>
-    <div class="tool-cta-desc">Nhóm sao năm là cái nhìn tổng quan — phần tiểu vận trong luận giải đầy đủ sẽ cho bạn biết năm 2026 cụ thể ảnh hưởng đến tài lộc, sự nghiệp, sức khỏe và mối quan hệ ra sao.</div>
+    <div class="tool-cta-desc">Nhóm sao năm là cái nhìn tổng quan — phần tiểu vận trong luận giải đầy đủ sẽ cho bạn biết năm 2026 ảnh hưởng đến tài lộc, sự nghiệp, sức khỏe và mối quan hệ ra sao.</div>
     <a class="tool-cta-btn" href="/luan-giai.html">Xem Tiểu Vận 2026 ($19) →</a>
   </div>
 </div>
@@ -120,43 +93,66 @@
 
 <script>
 const CURRENT_YEAR=2026;
-const GROUPS={1:{cls:'g1',badge:'Ngay thẳng · Lý tưởng',title:'Nhóm 1 — Tuế Hổ Phù',sao:'Thái Tuế · Quan Phù · Bạch Hổ',desc:'Năm nay bạn thuộc nhóm Tuế Hổ Phù — người ngay thẳng, chính trực, có lý tưởng cao. Vận khí nghiêng về chính danh và sự công bằng. Thích hợp cho công việc quản lý, pháp luật, giáo dục. Cần tránh cứng nhắc trong giao tiếp.'},2:{cls:'g2',badge:'Sáng suốt · Hay cạnh tranh',title:'Nhóm 2 — Dương Phù Phúc',sao:'Thiếu Dương · Tử Phù · Phúc Đức',desc:'Năm nay bạn thuộc nhóm Dương Phù Phúc — sáng suốt, có phúc lộc, dễ gặp quý nhân. Vận có phúc đức hỗ trợ, thuận cho mở rộng quan hệ và tìm kiếm cơ hội mới. Cần kiềm chế tính hay so đo.'},3:{cls:'g3',badge:'Thông minh · Hay trái sở nguyện',title:'Nhóm 3 — Tang Tuế Khách',sao:'Tang Môn · Tuế Phá · Điếu Khách',desc:'Năm nay bạn thuộc nhóm Tang Tuế Khách — thông minh, tháo vát nhưng hay gặp trái sở nguyện. Năm dễ có biến động không mong muốn, có thể gặp tin buồn. Nên giữ tâm bình tĩnh, tránh liều lĩnh.'},4:{cls:'g4',badge:'Làm công · Được phúc che chở',title:'Nhóm 4 — Âm Long Trực',sao:'Thiếu Âm · Long Đức · Trực Phù',desc:'Năm nay bạn thuộc nhóm Âm Long Trực — có xu hướng làm công, phụ thuộc nhưng được phúc đức che chở. Nên an phận, không nổi loạn thay đổi lớn. Hỗ trợ tốt cho công việc làm thuê, công ty, tổ chức.'}};
+const GROUPS={
+  1:{cls:'g1',badge:'Ngay thẳng · Lý tưởng',title:'Nhóm 1 — Tuế Hổ Phù',sao:'Thái Tuế · Quan Phù · Bạch Hổ',desc:'Năm nay bạn thuộc nhóm Tuế Hổ Phù — ngay thẳng, chính trực, có lý tưởng cao. Vận khí nghiêng về chính danh và sự công bằng. Thích hợp cho công việc quản lý, pháp luật, giáo dục. Cần tránh cứng nhắc trong giao tiếp.'},
+  2:{cls:'g2',badge:'Sáng suốt · Hay cạnh tranh',title:'Nhóm 2 — Dương Phù Phúc',sao:'Thiếu Dương · Tử Phù · Phúc Đức',desc:'Năm nay bạn thuộc nhóm Dương Phù Phúc — sáng suốt, có phúc lộc, dễ gặp quý nhân. Vận có phúc đức hỗ trợ, thuận cho mở rộng quan hệ và tìm kiếm cơ hội mới. Cần kiềm chế tính hay so đo.'},
+  3:{cls:'g3',badge:'Thông minh · Hay trái sở nguyện',title:'Nhóm 3 — Tang Tuế Khách',sao:'Tang Môn · Tuế Phá · Điếu Khách',desc:'Năm nay bạn thuộc nhóm Tang Tuế Khách — thông minh, tháo vát nhưng hay gặp trái sở nguyện. Năm dễ có biến động không mong muốn. Nên giữ tâm bình tĩnh, tránh liều lĩnh.'},
+  4:{cls:'g4',badge:'Làm công · Được phúc che chở',title:'Nhóm 4 — Âm Long Trực',sao:'Thiếu Âm · Long Đức · Trực Phù',desc:'Năm nay bạn thuộc nhóm Âm Long Trực — có xu hướng làm công, phụ thuộc nhưng được phúc đức che chở. Nên an phận, không nổi loạn thay đổi lớn. Hỗ trợ tốt cho công việc làm thuê, công ty, tổ chức.'}
+};
 const KEY_CUNGS=['Mệnh','Quan Lộc','Tài Bạch','Phu Thê','Phúc Đức'];
-function calculate(){
-  const ngay=parseInt(document.getElementById('ngay').value);
-  const thang=parseInt(document.getElementById('thang').value);
-  const nam=parseInt(document.getElementById('nam').value);
-  const gioHour=parseInt(document.getElementById('gio').value);
-  const gioitinh=document.getElementById('gioitinh').value;
+function luanGiai(){
+  const {hoten,ngay,thang,nam,gioIdx,gioHour,gioitinh,namXem}=TuviForm.getData();
   const err=document.getElementById('error-msg');
   err.classList.remove('active');
-  if(!ngay||ngay<1||ngay>31||!thang||thang<1||thang>12||!nam||nam<1900||nam>2010){err.textContent='Vui lòng nhập đầy đủ ngày/tháng/năm hợp lệ.';err.classList.add('active');return;}
-  const loader=document.getElementById('loader');loader.classList.add('active');document.querySelector('.btn-submit').disabled=true;
+  if(!ngay||!thang||!nam){err.textContent='Vui lòng điền đầy đủ thông tin.';err.classList.add('active');return;}
+  if(nam<1900||nam>new Date().getFullYear()){err.textContent='Năm sinh không hợp lệ.';err.classList.add('active');return;}
+  const loader=document.getElementById('loader');
+  loader.classList.add('active');
+  document.querySelector('.btn-submit').disabled=true;
+  document.getElementById('result-section').classList.remove('active');
   try{
     const conv=convertDuongToAm(ngay,thang,nam,gioHour);
-    conv._dl={day:ngay,month:thang,year:nam};
-    const ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:nam,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:conv.gioIdx,gioitinh,namXem:CURRENT_YEAR});
+    const ls=anSaoLaSo({
+      ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:nam,
+      canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:conv.gioIdx,
+      gioitinh,namXem:namXem||CURRENT_YEAR
+    });
     const nhom=ls.thaiTueNhom??1;
     const g=GROUPS[nhom]||GROUPS[1];
-    document.getElementById('groupBox').innerHTML=`<div class="group-card ${g.cls}"><span class="group-badge">${g.badge}</span><div class="group-title">${g.title}</div><div class="group-sao">Sao: ${g.sao}</div><div class="group-desc">${g.desc}</div></div>`;
+    document.getElementById('groupBox').innerHTML=`
+      <div class="group-card ${g.cls}">
+        <span class="group-badge">${g.badge}</span>
+        <div class="group-title">${g.title}</div>
+        <div class="group-sao">Sao: ${g.sao}</div>
+        <div class="group-desc">${g.desc}</div>
+      </div>`;
     const palaces=ls.palaces||[];
-    const rows=palaces.filter(p=>KEY_CUNGS.some(k=>p.cungName&&p.cungName.includes(k))||p.isMenh).map(p=>{
-      const all=[...(p.majorStars||[]),...(p.stars||[])];
-      if(!all.length)return'';
-      const stars=all.map(s=>{
-        const n=typeof s==='string'?s:(s.ten||s.name||'');
-        if(!n)return'';
-        const isMajor=(p.majorStars||[]).some(ms=>(typeof ms==='string'?ms:(ms.ten||ms.name||''))===n);
-        return`<span class="star-chip${isMajor?' major':''}">${n}</span>`;
+    const rows=palaces
+      .filter(p=>KEY_CUNGS.some(k=>String(p.cungName||'').includes(k))||p.isMenh)
+      .map(p=>{
+        const all=[...(p.majorStars||[]),...(p.stars||[])];
+        if(!all.length)return'';
+        const majorNames=new Set((p.majorStars||[]).map(s=>String(s.ten||s.name||s||'')));
+        const chips=all.map(s=>{
+          const n=String(s&&typeof s==='object'?(s.ten||s.name||''):(s||''));
+          if(!n)return'';
+          return`<span class="star-chip${majorNames.has(n)?' major':''}">${n}</span>`;
+        }).filter(Boolean).join('');
+        return`<div class="palace-row">
+          <div class="palace-name">${p.cungName||''}${p.isMenh?' · Mệnh':''}</div>
+          <div class="stars-wrap">${chips}</div>
+        </div>`;
       }).filter(Boolean).join('');
-      return`<div class="palace-row"><div class="palace-name">${p.cungName||''}${p.isMenh?' · Mệnh':''}</div><div class="stars-wrap">${stars}</div></div>`;
-    }).filter(Boolean).join('');
-    document.getElementById('palaceList').innerHTML=rows||'<p style="color:var(--text-lt);font-size:13px">Không có dữ liệu sao.</p>';
+    document.getElementById('palaceList').innerHTML=rows||'<div style="padding:16px;color:var(--text-lt);font-size:13px">Không có dữ liệu sao.</div>';
     document.getElementById('result-section').classList.add('active');
-    document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
-  }catch(e){err.textContent='Lỗi: '+e.message;err.classList.add('active');}
-  finally{loader.classList.remove('active');document.querySelector('.btn-submit').disabled=false;}
+    setTimeout(()=>document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'}),300);
+  }catch(e){
+    err.textContent='Lỗi: '+e.message;err.classList.add('active');
+  }finally{
+    loader.classList.remove('active');document.querySelector('.btn-submit').disabled=false;
+  }
 }
+window.luanGiai=luanGiai;
 </script>
 </body>
 </html>

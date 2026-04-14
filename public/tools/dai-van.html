@@ -8,6 +8,7 @@
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="stylesheet" href="/tools/tools.css">
 <script src="/tuvi-ansao-engine.js"></script>
+<script src="/tuvi-form.js"></script>
 </head>
 <body>
 <script src="/nav.js"></script>
@@ -28,12 +29,12 @@
         <div>
           <h2 class="xt-h2">Đại Vận — Chu Kỳ<br>10 Năm Vận Mệnh</h2>
           <p class="xt-body">Trong Tử Vi Đẩu Số, mỗi người trải qua 9 đại vận, mỗi vận kéo dài khoảng 10 năm. Mỗi đại vận an tại một cung trong lá số — cung đó và các sao tại đó phản ánh bối cảnh vận khí chủ đạo của 10 năm đó.</p>
-          <p class="xt-body">Biết mình đang ở đại vận nào và cung nào đang vận là bước đầu để hiểu tại sao một giai đoạn lại thuận hoặc nghịch hơn giai đoạn khác. Đây là phần <strong>hoàn toàn miễn phí</strong> — không cần AI.</p>
+          <p class="xt-body">Biết mình đang ở đại vận nào và cung nào đang vận là bước đầu để hiểu tại sao một giai đoạn lại thuận hay nghịch hơn giai đoạn khác. Đây là phần <strong>hoàn toàn miễn phí</strong> — không cần AI.</p>
         </div>
         <div class="xt-factors">
           <div class="xt-factor-title">Bạn sẽ thấy gì</div>
-          <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">9 đại vận</span><span class="xt-factor-desc">Can chi và năm bắt đầu từng đại vận</span></div>
-          <div class="xt-factor-item"><span class="xt-factor-num">②</span><span class="xt-factor-label">Vận hiện tại</span><span class="xt-factor-desc">Đại vận đang chạy được đánh dấu</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">9 đại vận</span><span class="xt-factor-desc">Can chi, tuổi bắt đầu và cung vận của từng vận</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">②</span><span class="xt-factor-label">Vận hiện tại</span><span class="xt-factor-desc">Đại vận đang chạy được đánh dấu nổi bật</span></div>
           <div class="xt-factor-item"><span class="xt-factor-num">③</span><span class="xt-factor-label">Cung vận</span><span class="xt-factor-desc">Đại vận đang an tại cung nào trong lá số</span></div>
         </div>
       </div>
@@ -42,44 +43,7 @@
 
   <div class="form-section">
     <div class="section-eyebrow">Nhập Ngày Sinh</div>
-    <div class="form-grid cols-2">
-      <div class="form-col">
-        <div class="form-col-title">Ngày Sinh Dương Lịch</div>
-        <div class="form-row-3">
-          <div class="form-group">
-            <label class="form-label">Ngày</label>
-            <input class="form-input" type="number" id="ngay" placeholder="1–31" min="1" max="31">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Tháng</label>
-            <input class="form-input" type="number" id="thang" placeholder="1–12" min="1" max="12">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Năm</label>
-            <input class="form-input" type="number" id="nam" placeholder="1990" min="1900" max="2010">
-          </div>
-        </div>
-      </div>
-      <div class="form-col">
-        <div class="form-col-title">Giờ &amp; Giới Tính</div>
-        <div class="form-group">
-          <label class="form-label">Giờ sinh</label>
-          <select class="form-input" id="gio">
-            <option value="0">Giờ Tý (23:00–01:00)</option><option value="2">Giờ Sửu (01:00–03:00)</option>
-            <option value="4">Giờ Dần (03:00–05:00)</option><option value="6">Giờ Mão (05:00–07:00)</option>
-            <option value="8">Giờ Thìn (07:00–09:00)</option><option value="10">Giờ Tỵ (09:00–11:00)</option>
-            <option value="12">Giờ Ngọ (11:00–13:00)</option><option value="14">Giờ Mùi (13:00–15:00)</option>
-            <option value="16">Giờ Thân (15:00–17:00)</option><option value="18">Giờ Dậu (17:00–19:00)</option>
-            <option value="20">Giờ Tuất (19:00–21:00)</option><option value="22">Giờ Hợi (21:00–23:00)</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Giới tính</label>
-          <select class="form-input" id="gioitinh"><option value="nam">Nam</option><option value="nu">Nữ</option></select>
-        </div>
-        <button class="btn-submit" onclick="calculate()">Xem Đại Vận</button>
-      </div>
-    </div>
+    <div id="tuvi-form-container"></div>
     <div class="status-bar" id="loader"><div class="status-dot"></div><div id="loader-text">Đang an sao...</div></div>
     <div class="error-msg" id="error-msg"></div>
   </div>
@@ -109,53 +73,57 @@
 
 <script>
 const CURRENT_YEAR=2026;
-function calculate(){
-  const ngay=parseInt(document.getElementById('ngay').value);
-  const thang=parseInt(document.getElementById('thang').value);
-  const nam=parseInt(document.getElementById('nam').value);
-  const gioHour=parseInt(document.getElementById('gio').value);
-  const gioitinh=document.getElementById('gioitinh').value;
+function luanGiai(){
+  const {hoten,ngay,thang,nam,gioIdx,gioHour,gioitinh,namXem}=TuviForm.getData();
   const err=document.getElementById('error-msg');
   err.classList.remove('active');
-  if(!ngay||ngay<1||ngay>31||!thang||thang<1||thang>12||!nam||nam<1900||nam>2010){err.textContent='Vui lòng nhập đầy đủ ngày/tháng/năm hợp lệ.';err.classList.add('active');return;}
+  if(!ngay||!thang||!nam){err.textContent='Vui lòng điền đầy đủ thông tin.';err.classList.add('active');return;}
+  if(nam<1900||nam>new Date().getFullYear()){err.textContent='Năm sinh không hợp lệ.';err.classList.add('active');return;}
   const loader=document.getElementById('loader');
   loader.classList.add('active');
   document.querySelector('.btn-submit').disabled=true;
+  document.getElementById('result-section').classList.remove('active');
   try{
     const conv=convertDuongToAm(ngay,thang,nam,gioHour);
-    conv._dl={day:ngay,month:thang,year:nam};
-    const ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:nam,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:conv.gioIdx,gioitinh,namXem:CURRENT_YEAR});
+    const ls=anSaoLaSo({
+      ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:nam,
+      canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:conv.gioIdx,
+      gioitinh,namXem:namXem||CURRENT_YEAR
+    });
     const dvs=ls.daiVans||[];
     const curDv=ls.daiVanHienTai;
-    const tuoiTa=CURRENT_YEAR-nam+1;
-    if(curDv){document.getElementById('curDvLabel').textContent='Tuổi '+tuoiTa+' — đang chạy: '+(curDv.diaChi||getDVCanChi(curDv));}
+    const tuoiTa=(namXem||CURRENT_YEAR)-nam+1;
+    if(curDv&&curDv.diaChi){
+      document.getElementById('curDvLabel').textContent=`Tuổi ${tuoiTa} — đang chạy: ${curDv.diaChi}`;
+    }
     document.getElementById('dvList').innerHTML=dvs.slice(0,9).map((dv,i)=>{
-      const canChi=getDVCanChi(dv);
-      const tuoi=dv.tuoiStart??dv.tuoi??'?';
-      const tuoiEnd=dv.tuoiEnd??(dvs[i+1]?.tuoiStart??dv.tuoiEnd??'?');
-      const fromY=typeof tuoi==='number'?nam+tuoi-1:'?';
+      const canChi=String(dv.diaChi||'—');
+      const tuoiStart=dv.tuoiStart??dv.tuoi??'?';
+      const tuoiEnd=dv.tuoiEnd??(dvs[i+1]?.tuoiStart??'?');
+      const fromY=typeof tuoiStart==='number'?nam+tuoiStart-1:'?';
       const toY=typeof tuoiEnd==='number'?nam+tuoiEnd-2:'?';
-      const isCur=curDv&&(JSON.stringify(dv)===JSON.stringify(curDv)||(typeof tuoi==='number'&&typeof tuoiEnd==='number'&&tuoiTa>=tuoi&&tuoiTa<tuoiEnd)||(typeof tuoi==='number'&&!dvs[i+1]&&tuoiTa>=tuoi));
-      const cungName=ls.palaces&&dv.cungIdx!=null?ls.palaces[dv.cungIdx]?.cungName||'':'';
+      const isCur=curDv&&dv.cungIdx!=null&&curDv.cungIdx===dv.cungIdx;
+      const cungName=ls.palaces&&dv.cungIdx!=null?String(ls.palaces[dv.cungIdx]?.cungName||''):'';
+      const majorStars=ls.palaces&&dv.cungIdx!=null?(ls.palaces[dv.cungIdx]?.majorStars||[]).map(s=>String(s.ten||s||'')).filter(Boolean).join(', '):'';
       return`<div class="dv-item${isCur?' current':''}">
-        <div class="dv-age">${tuoi}<small>tuổi</small></div>
-        <div style="flex:1"><div class="dv-canchi">${canChi}${cungName?' — cung '+cungName:''}</div><div class="dv-years">${fromY}${typeof toY==='number'?'–'+toY:''}</div></div>
+        <div class="dv-age">${tuoiStart}<small>tuổi</small></div>
+        <div style="flex:1">
+          <div class="dv-canchi">${canChi}${cungName?' — cung '+cungName:''}</div>
+          <div class="dv-years">${fromY}${typeof toY==='number'?'–'+toY:''}</div>
+          ${majorStars?`<div style="font-size:11px;color:var(--text-lt);margin-top:3px">${majorStars}</div>`:''}
+        </div>
         ${isCur?'<div class="dv-badge">Hiện tại</div>':''}
       </div>`;
     }).join('');
     document.getElementById('result-section').classList.add('active');
-    document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
-  }catch(e){err.textContent='Lỗi tính toán: '+e.message;err.classList.add('active');}
-  finally{loader.classList.remove('active');document.querySelector('.btn-submit').disabled=false;}
+    setTimeout(()=>document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'}),300);
+  }catch(e){
+    err.textContent='Lỗi: '+e.message;err.classList.add('active');
+  }finally{
+    loader.classList.remove('active');document.querySelector('.btn-submit').disabled=false;
+  }
 }
-function getDVCanChi(dv){
-  if(!dv)return'—';
-  if(dv.diaChi)return dv.diaChi;
-  const CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
-  const CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
-  if(dv.can!=null&&dv.chi!=null)return CAN[dv.can]+' '+CHI[dv.chi];
-  return'—';
-}
+window.luanGiai=luanGiai;
 </script>
 </body>
 </html>
