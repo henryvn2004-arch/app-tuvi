@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Xem Hạn Năm – Tử Vi Minh Bảo</title>
+<meta name="description" content="Tra hạn năm trong 20 năm tới: Thái Tuế, Tam Tai, Tang Môn, Bạch Hổ, Quan Phù, Điếu Khách. Biết năm nào cần thận trọng đặc biệt.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<style>
+.han-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.han-card{border-radius:8px;padding:16px;border:1px solid var(--border-lt)}
+.han-card.critical{background:#fef0ef;border-color:#f5c0bc}
+.han-card.warn{background:#fdf6e9;border-color:#e8d9b0}
+.han-card.good{background:#eaf4ed;border-color:#c3e0cc}
+.han-card.normal{background:var(--bg-soft);border-color:var(--border-lt)}
+.han-year{font-size:22px;font-weight:700;color:var(--navy);margin-bottom:2px}
+.han-canchi{font-size:12px;color:var(--text-lt);margin-bottom:10px}
+.han-tags{display:flex;flex-wrap:wrap;gap:4px}
+.han-tag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:2px}
+.ht-critical{background:#f5c0bc;color:#C0392B}
+.ht-warn{background:#e8d9b0;color:#9A7B3A}
+.ht-good{background:#c3e0cc;color:#1E6B3C}
+.ht-neu{background:var(--border-lt);color:var(--text-lt)}
+</style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Miễn Phí</div>
+    <h1>Xem <em>Hạn Năm</em><br>20 Năm Tới</h1>
+    <p>Thái Tuế, Tam Tai, Tang Môn, Bạch Hổ, Quan Phù, Điếu Khách — bảng hạn năm toàn diện trong 20 năm tới theo địa chi năm sinh.</p>
+  </div>
+</div>
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Hạn Năm là gì?</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">Sao Hạn Xoay Theo<br>Vòng 12 Năm</h2>
+          <p class="xt-body">Ngoài Kim Lâu và Tam Tai, mệnh lý dân gian Việt Nam còn xét nhiều hạn năm quan trọng khác: <strong>Thái Tuế</strong> (năm trực tiếp, cần cẩn thận nhất), <strong>Tang Môn</strong> và <strong>Điếu Khách</strong> (có thể gặp tang sự), <strong>Bạch Hổ</strong> (hung sát), <strong>Quan Phù</strong> (kiện tụng, rắc rối pháp lý).</p>
+          <p class="xt-body">Các hạn này xoay theo chu kỳ 12 năm dựa trên địa chi năm sinh và địa chi của từng năm âm lịch, mỗi người có lịch hạn khác nhau.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">Các Hạn Chính</div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#C0392B">①</span><span class="xt-factor-label">Thái Tuế</span><span class="xt-factor-desc">Năm tam hợp với tuổi — thăng trầm lớn, cẩn thận nhất</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#C0392B">②</span><span class="xt-factor-label">Tam Tai</span><span class="xt-factor-desc">3 năm liên tiếp — vận khó khăn, tránh đại sự</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#C0392B">③</span><span class="xt-factor-label">Tang Môn/Điếu Khách</span><span class="xt-factor-desc">Năm dễ gặp tang sự, buồn bã</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#C0392B">④</span><span class="xt-factor-label">Bạch Hổ/Quan Phù</span><span class="xt-factor-desc">Hung sát, kiện tụng, rắc rối bất ngờ</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1E6B3C">⑤</span><span class="xt-factor-label">Phúc Đức/Long Đức</span><span class="xt-factor-desc">Năm may mắn, phúc lộc</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-section">
+    <div class="section-eyebrow">Nhập Thông Tin</div>
+    <div class="form-grid cols-1">
+      <div class="form-col">
+        <div class="form-col-title">Năm Sinh Dương Lịch</div>
+        <div class="form-row-2">
+          <div class="form-group"><label class="form-label">Năm sinh</label><input class="form-input" type="number" id="year" placeholder="1990" min="1900" max="2010"></div>
+          <div class="form-group"><label class="form-label">Số năm hiển thị</label><select class="form-input" id="nyears"><option value="10">10 năm</option><option value="20" selected>20 năm</option><option value="30">30 năm</option></select></div>
+        </div>
+        <button class="btn-submit" onclick="calculate()">Xem Hạn Năm</button>
+      </div>
+    </div>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+  <div class="result-section" id="result-section">
+    <div class="res-block" style="margin-bottom:16px">
+      <div class="res-block-header"><span class="res-block-title" id="resTitle">—</span></div>
+      <div class="res-block-body" id="hanGrid"></div>
+    </div>
+  </div>
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Xem Vận Hạn Chính Xác Hơn</div>
+    <div class="tool-cta-title">Đại Vận &amp; Tiểu Vận Theo Lá Số</div>
+    <div class="tool-cta-desc">Hạn năm dân gian là tham khảo tổng quát. Đại vận và tiểu vận trong lá số Tử Vi phân tích sâu hơn với chính tinh, phụ tinh và điểm scoring cụ thể từng năm.</div>
+    <a class="tool-cta-btn" href="/tools/dai-van.html">Xem Đại Vận Miễn Phí →</a>
+  </div>
+</div>
+<footer class="site-footer">
+  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
+<script>
+const CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
+const CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+// Tam Tai nhóm theo chi năm sinh
+const TAM_TAI={0:[4,5,6],4:[4,5,6],8:[4,5,6], 1:[7,8,9],5:[7,8,9],9:[7,8,9], 2:[10,11,0],6:[10,11,0],10:[10,11,0], 3:[1,2,3],7:[1,2,3],11:[1,2,3]};
+// Thái Tuế: chi năm = chi người sinh
+// Hạn theo khoảng cách từ chi tuổi đến chi năm (0-11)
+const HAN_BY_DIST={
+  0:'Thái Tuế',
+  1:'Thiếu Dương',
+  2:'Tang Môn',
+  3:'Quan Phù',
+  4:'Tứ Phù',  // or Tiểu Hao
+  5:'Quan Phù', // Quan Hao
+  6:'Mộc Kị',  // Tuế Phá — xung
+  7:'Long Đức',
+  8:'Bạch Hổ',
+  9:'Phúc Đức',
+  10:'Điếu Khách',
+  11:'Trực Phù',
+};
+const HAN_TYPE={
+  'Thái Tuế':'critical','Tang Môn':'critical','Bạch Hổ':'critical','Điếu Khách':'warn',
+  'Quan Phù':'warn','Mộc Kị':'warn','Thiếu Dương':'warn',
+  'Long Đức':'good','Phúc Đức':'good','Trực Phù':'normal','Tứ Phù':'normal','Thiếu Dương':'normal'
+};
+const CURRENT=2026;
+function calculate(){
+  const year=parseInt(document.getElementById('year').value);
+  const ny=parseInt(document.getElementById('nyears').value)||20;
+  const err=document.getElementById('error-msg');
+  err.classList.remove('active');
+  if(!year||year<1900||year>2010){err.textContent='Năm sinh không hợp lệ.';err.classList.add('active');return;}
+  const bChi=((year-4)%12+12)%12;
+  document.getElementById('resTitle').textContent=`Năm sinh ${year} (${CHI[bChi]}) — Hạn ${ny} năm từ ${CURRENT}`;
+  const cards=[];
+  for(let y=CURRENT;y<CURRENT+ny;y++){
+    const y60=((y-4)%60+60)%60;
+    const yChi=y60%12,yCan=y60%10;
+    const dist=(yChi-bChi+12)%12;
+    const hanName=HAN_BY_DIST[dist]||'—';
+    const hanType=HAN_TYPE[hanName]||'normal';
+    const isTT=(yChi===bChi);
+    const ttGroup=TAM_TAI[bChi%4!==undefined?bChi%4:0];
+    const isTamTai=ttGroup&&ttGroup.includes(yChi);
+    const isKimLau=((y-year+1)%5===1)||((y-year+1)%5===3);
+    const tags=[];
+    if(isTT)tags.push(`<span class="han-tag ht-critical">Thái Tuế</span>`);
+    if(isTamTai)tags.push(`<span class="han-tag ht-critical">Tam Tai</span>`);
+    if(!isTT&&hanName!=='—')tags.push(`<span class="han-tag ${hanType==='critical'?'ht-critical':hanType==='warn'?'ht-warn':hanType==='good'?'ht-good':'ht-neu'}">${hanName}</span>`);
+    if(isKimLau)tags.push(`<span class="han-tag ht-warn">Kim Lâu</span>`);
+    if(tags.length===0)tags.push(`<span class="han-tag ht-neu">Bình thường</span>`);
+    const cardCls=(isTT||isTamTai||hanType==='critical')?'critical':(hanType==='warn'||isKimLau)?'warn':hanType==='good'?'good':'normal';
+    const isNow=y===CURRENT;
+    cards.push(`<div class="han-card ${cardCls}${isNow?' '+'outline:2px solid var(--blue)':''}">
+      <div class="han-year">${y}${isNow?' ◆':''}</div>
+      <div class="han-canchi">${CAN[yCan]} ${CHI[yChi]} · Tuổi ${y-year+1}</div>
+      <div class="han-tags">${tags.join('')}</div>
+    </div>`);
+  }
+  document.getElementById('hanGrid').innerHTML=`<div class="han-grid">${cards.join('')}</div>`;
+  document.getElementById('result-section').classList.add('active');
+  document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
+}
+</script>
+</body>
+</html>

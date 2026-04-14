@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Thần Số Học – Tử Vi Minh Bảo</title>
+<meta name="description" content="Tra số đường đời, số định mệnh, số linh hồn và số sứ mệnh theo Thần Số Học (Numerology). Nhập ngày sinh và tên đầy đủ, nhận kết quả ngay.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<style>
+.num-card{display:flex;gap:20px;align-items:flex-start;padding:20px 24px;border-bottom:1px solid var(--border-lt)}
+.num-card:last-child{border-bottom:none}
+.num-circle{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;flex-shrink:0;color:#fff}
+.num-content{flex:1}
+.num-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.num-desc{font-size:13px;color:var(--text-mid);line-height:1.7}
+.num-keywords{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.num-kw{font-size:11px;padding:2px 8px;border-radius:2px;background:var(--bg-soft);border:1px solid var(--border-lt);color:var(--text-mid)}
+</style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Miễn Phí</div>
+    <h1>Thần Số Học<br><em>Numerology</em></h1>
+    <p>Số đường đời, số định mệnh, số linh hồn, số sứ mệnh — 4 con số cốt lõi từ ngày sinh và tên của bạn, giải mã theo hệ thống Pythagoras.</p>
+  </div>
+</div>
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Thần Số Học là gì?</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">4 Con Số Cốt Lõi<br>Từ Ngày Sinh &amp; Tên</h2>
+          <p class="xt-body">Thần Số Học (Numerology) là hệ thống cổ đại tin rằng con số chứa đựng năng lượng và ý nghĩa riêng. Hệ thống Pythagoras gán giá trị số cho từng chữ cái (A=1, B=2...) và tính toán 4 con số cốt lõi từ ngày sinh và tên đầy đủ.</p>
+          <p class="xt-body">Đây là công cụ phương Tây bổ sung cho Tử Vi Đẩu Số — hai hệ thống đôi khi chỉ ra cùng một xu hướng tính cách nhưng bằng ngôn ngữ khác nhau.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">4 Con Số Cốt Lõi</div>
+          <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">Đường Đời</span><span class="xt-factor-desc">Từ ngày tháng năm sinh — sứ mệnh, hành trình chính của cuộc đời</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">②</span><span class="xt-factor-label">Định Mệnh</span><span class="xt-factor-desc">Từ tên đầy đủ — tài năng, tiềm năng được sinh ra để thể hiện</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">③</span><span class="xt-factor-label">Linh Hồn</span><span class="xt-factor-desc">Từ nguyên âm trong tên — khao khát nội tâm sâu nhất</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">④</span><span class="xt-factor-label">Sứ Mệnh</span><span class="xt-factor-desc">Từ phụ âm trong tên — cách bạn hiện ra trước thế giới</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-section">
+    <div class="section-eyebrow">Nhập Thông Tin</div>
+    <div class="form-grid cols-2">
+      <div class="form-col">
+        <div class="form-col-title">Ngày Sinh</div>
+        <div class="form-row-3">
+          <div class="form-group"><label class="form-label">Ngày</label><input class="form-input" type="number" id="ngay" placeholder="1–31" min="1" max="31"></div>
+          <div class="form-group"><label class="form-label">Tháng</label><input class="form-input" type="number" id="thang" placeholder="1–12" min="1" max="12"></div>
+          <div class="form-group"><label class="form-label">Năm</label><input class="form-input" type="number" id="nam" placeholder="1990"></div>
+        </div>
+      </div>
+      <div class="form-col">
+        <div class="form-col-title">Tên Đầy Đủ</div>
+        <div class="form-group"><label class="form-label">Họ và tên (không dấu, tiếng Việt phiên âm)</label><input class="form-input" type="text" id="ten" placeholder="Nguyen Van An"></div>
+        <div style="font-size:12px;color:var(--text-lt);margin-top:4px">Nhập tên khai sinh, không dấu, chỉ dùng ký tự A–Z</div>
+        <button class="btn-submit" onclick="calculate()" style="margin-top:24px">Tính Thần Số</button>
+      </div>
+    </div>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+  <div class="result-section" id="result-section">
+    <div class="res-block"><div id="numResults"></div></div>
+  </div>
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Khám Phá Thêm</div>
+    <div class="tool-cta-title">Đối Chiếu Với Tử Vi Đẩu Số</div>
+    <div class="tool-cta-desc">Thần Số Học cho góc nhìn phương Tây. Tử Vi Đẩu Số cổ pháp của phương Đông sẽ bổ sung thêm phân tích vận trình, tài lộc và đại vận chi tiết hơn.</div>
+    <a class="tool-cta-btn" href="/luan-giai.html">Xem Lá Số Tử Vi →</a>
+  </div>
+</div>
+<footer class="site-footer">
+  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
+<script>
+const NUM_COLORS=['','#C0392B','#E67E22','#F1C40F','#2ECC71','#1455A4','#8E44AD','#1ABC9C','#E91E63','#2C3E50','#c9a84c','#5FA8D3','#1E6B3C'];
+const VOWELS=new Set('AEIOU');
+const CHAR_VAL={A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,I:9,J:1,K:2,L:3,M:4,N:5,O:6,P:7,Q:8,R:9,S:1,T:2,U:3,V:4,W:5,X:6,Y:7,Z:8};
+function reduce(n){while(n>9&&n!==11&&n!==22&&n!==33){let s=0;while(n>0){s+=n%10;n=Math.floor(n/10);}n=s;}return n;}
+function sumName(name,vowelOnly=false,consonantOnly=false){
+  let s=0;
+  for(const c of name.toUpperCase()){
+    if(!/[A-Z]/.test(c))continue;
+    const isV=VOWELS.has(c);
+    if(vowelOnly&&!isV)continue;
+    if(consonantOnly&&isV)continue;
+    s+=CHAR_VAL[c]||0;
+  }
+  return s;
+}
+const MEANINGS={
+  1:{kw:['Lãnh đạo','Tiên phong','Độc lập','Ý chí mạnh'],desc:'Số 1 mang năng lượng của khởi đầu và lãnh đạo. Bạn có xu hướng độc lập, quyết đoán và muốn đứng đầu. Thích mở đường, ghét bị kiểm soát. Điểm yếu: cứng đầu, khó nhượng bộ.'},
+  2:{kw:['Hợp tác','Ngoại giao','Nhạy cảm','Trực giác'],desc:'Số 2 là năng lượng của sự hài hòa và đối tác. Bạn nhạy cảm, có khả năng ngoại giao, thích làm việc cùng người khác hơn là đơn độc. Điểm yếu: thiếu quyết đoán, phụ thuộc vào người khác.'},
+  3:{kw:['Sáng tạo','Biểu đạt','Lạc quan','Giao tiếp'],desc:'Số 3 là năng lượng của sáng tạo và biểu đạt. Bạn vui vẻ, tài năng nghệ thuật, khả năng giao tiếp xuất sắc. Điểm yếu: thiếu tập trung, hay phân tán sức lực.'},
+  4:{kw:['Kỷ luật','Ổn định','Chăm chỉ','Thực tế'],desc:'Số 4 mang năng lượng của nền tảng và kỷ luật. Bạn đáng tin cậy, có tổ chức, kiên nhẫn xây dựng từng bước. Điểm yếu: cứng nhắc, khó thích nghi với thay đổi.'},
+  5:{kw:['Tự do','Phiêu lưu','Thay đổi','Đa tài'],desc:'Số 5 là năng lượng của tự do và biến đổi. Bạn thích trải nghiệm mới, linh hoạt và đa tài. Điểm yếu: thiếu kiên định, dễ chán nản và bỏ cuộc giữa chừng.'},
+  6:{kw:['Yêu thương','Trách nhiệm','Chữa lành','Gia đình'],desc:'Số 6 mang năng lượng của tình yêu và trách nhiệm. Bạn quan tâm, muốn chăm lo cho người khác, coi trọng gia đình và cộng đồng. Điểm yếu: hay lo lắng thái quá, can thiệp việc người khác.'},
+  7:{kw:['Trí tuệ','Nội tâm','Tâm linh','Phân tích'],desc:'Số 7 là năng lượng của trí tuệ và tâm linh. Bạn có chiều sâu nội tâm, thích phân tích và tìm kiếm sự thật. Điểm yếu: hướng nội quá mức, khó mở lòng với người khác.'},
+  8:{kw:['Quyền lực','Thịnh vượng','Tham vọng','Thực tế'],desc:'Số 8 mang năng lượng của vật chất và quyền lực. Bạn có tham vọng, khả năng tổ chức và bản năng kinh doanh. Điểm yếu: quá tập trung vào vật chất, có thể cứng nhắc và kiểm soát.'},
+  9:{kw:['Nhân ái','Lý tưởng','Hy sinh','Trí tuệ cao'],desc:'Số 9 là năng lượng của sự hoàn chỉnh và nhân ái. Bạn có tầm nhìn rộng, muốn cống hiến cho nhân loại. Điểm yếu: quá lý tưởng hóa, có thể bị tổn thương khi thực tế không như mong đợi.'},
+  11:{kw:['Trực giác cao','Truyền cảm hứng','Nhạy cảm','Thiên khiếu'],desc:'Số 11 là số Master — trực giác cực cao và khả năng truyền cảm hứng mạnh. Bạn nhạy cảm với năng lượng xung quanh và có sứ mệnh soi sáng cho người khác. Điểm yếu: dễ lo âu, áp lực nội tâm lớn.'},
+  22:{kw:['Kiến trúc sư vĩ đại','Thực tế','Lý tưởng','Xây dựng'],desc:'Số 22 là số Master Builder — kết hợp tầm nhìn của số 11 với tính thực tế của số 4. Bạn có khả năng biến giấc mơ lớn thành hiện thực. Điểm yếu: gánh chịu quá nhiều trách nhiệm, dễ kiệt sức.'},
+  33:{kw:['Thầy giáo tâm linh','Yêu thương','Hy sinh','Chữa lành'],desc:'Số 33 là Master Teacher — đỉnh cao của số 6, mang tình yêu vô điều kiện. Bạn có thiên hướng hướng dẫn và chữa lành. Điểm yếu: có thể ôm đồm quá mức, cần học cách tự chăm sóc bản thân.'},
+};
+const NUM_LABELS=['Số Đường Đời','Số Định Mệnh','Số Linh Hồn','Số Sứ Mệnh'];
+const NUM_SUBS=['(từ ngày sinh)','(từ tên đầy đủ)','(từ nguyên âm)','(từ phụ âm)'];
+
+function calculate(){
+  const ngay=parseInt(document.getElementById('ngay').value);
+  const thang=parseInt(document.getElementById('thang').value);
+  const nam=parseInt(document.getElementById('nam').value);
+  const ten=document.getElementById('ten').value.trim().toUpperCase().replace(/[^A-Z ]/g,'');
+  const err=document.getElementById('error-msg');
+  err.classList.remove('active');
+  if(!ngay||!thang||!nam){err.textContent='Vui lòng nhập ngày tháng năm sinh.';err.classList.add('active');return;}
+  if(!ten){err.textContent='Vui lòng nhập tên (ký tự A–Z, không dấu).';err.classList.add('active');return;}
+
+  const duongDoi=reduce(ngay+thang+nam%100+Math.floor(nam/100)%100);
+  // Alternative: sum all digits
+  const allDigits=[...String(ngay),...String(thang),...String(nam)].reduce((s,c)=>s+parseInt(c),0);
+  const dd=reduce(allDigits);
+  const dinhMenh=reduce(sumName(ten));
+  const linhHon=reduce(sumName(ten,true,false));
+  const suMenh=reduce(sumName(ten,false,true));
+
+  const nums=[dd,dinhMenh,linhHon,suMenh];
+  document.getElementById('numResults').innerHTML=nums.map((n,i)=>{
+    const m=MEANINGS[n]||MEANINGS[9];
+    return`<div class="num-card">
+      <div class="num-circle" style="background:${NUM_COLORS[Math.min(n,12)]}">
+        ${n}
+      </div>
+      <div class="num-content">
+        <div class="num-title">${NUM_LABELS[i]} ${NUM_SUBS[i]}</div>
+        <div class="num-desc">${m.desc}</div>
+        <div class="num-keywords">${m.kw.map(k=>`<span class="num-kw">${k}</span>`).join('')}</div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('result-section').classList.add('active');
+  document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Ngũ Hành Trong Tên – Tử Vi Minh Bảo</title>
+<meta name="description" content="Tra ngũ hành của từng chữ trong tên Hán-Việt theo số nét. Biết tên bổ sung hay xung khắc với mệnh cục. Miễn phí.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<style>
+.ten-chars{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin:24px 0}
+.char-card{width:100px;padding:20px 12px;border-radius:8px;text-align:center;border:1px solid var(--border-lt)}
+.char-word{font-size:32px;font-weight:700;margin-bottom:8px}
+.char-net{font-size:11px;color:var(--text-lt);margin-bottom:6px}
+.char-hanh{font-size:14px;font-weight:700}
+.hanh-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.hanh-name{width:60px;font-size:12px;color:var(--text-mid);flex-shrink:0}
+.hanh-bar{flex:1;height:10px;border-radius:5px;background:var(--border-lt);overflow:hidden}
+.hanh-fill{height:100%;border-radius:5px}
+.hanh-count{font-size:12px;width:20px;text-align:right;flex-shrink:0;color:var(--text-mid)}
+.net-input{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+</style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Miễn Phí</div>
+    <h1>Ngũ Hành<br><em>Trong Tên</em></h1>
+    <p>Tra ngũ hành của từng chữ trong tên Hán-Việt theo tổng số nét — biết tên bổ sung hay xung khắc với mệnh cục của bạn.</p>
+  </div>
+</div>
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Ngũ Hành tên là gì?</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">Số Nét Chữ →<br>Ngũ Hành Mỗi Chữ</h2>
+          <p class="xt-body">Trong phong thủy đặt tên, mỗi chữ Hán có một số nét nhất định. Tổng số nét (sau khi rút gọn về chữ số đơn) quy định ngũ hành của chữ đó: số 1–2 = Mộc, 3–4 = Hỏa, 5–6 = Thổ, 7–8 = Kim, 9–0 = Thủy.</p>
+          <p class="xt-body">Tên lý tưởng nên có ngũ hành bổ trợ hoặc tương sinh với ngũ hành bản mệnh. Ví dụ: người mệnh Thổ cần thêm Hỏa (Hỏa sinh Thổ) hoặc Kim (Thổ sinh Kim).</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">Quy Tắc Ngũ Hành Tên</div>
+          <div class="xt-factor-item"><span class="xt-factor-num">1–2</span><span class="xt-factor-label">Mộc</span><span class="xt-factor-desc">Nét lẻ 1 hoặc chữ số cuối là 1, 2</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">3–4</span><span class="xt-factor-label">Hỏa</span><span class="xt-factor-desc">Chữ số cuối là 3, 4</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">5–6</span><span class="xt-factor-label">Thổ</span><span class="xt-factor-desc">Chữ số cuối là 5, 6</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">7–8</span><span class="xt-factor-label">Kim</span><span class="xt-factor-desc">Chữ số cuối là 7, 8</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">9–0</span><span class="xt-factor-label">Thủy</span><span class="xt-factor-desc">Chữ số cuối là 9, 0</span></div>
+        </div>
+      </div>
+      <div class="xt-note">
+        <span class="xt-note-icon">💡</span>
+        <div>Nhập tên từng chữ và số nét thực của chữ đó (tra từ từ điển Hán-Việt). Công cụ này tính ngũ hành dựa trên số nét bạn nhập. Nên kiểm tra số nét từ nguồn đáng tin cậy.</div>
+      </div>
+    </div>
+  </div>
+  <div class="form-section">
+    <div class="section-eyebrow">Nhập Tên &amp; Số Nét</div>
+    <div class="form-grid cols-2">
+      <div class="form-col">
+        <div class="form-col-title">Tên (từng chữ)</div>
+        <div id="charInputs" class="net-input">
+          <div class="form-group"><label class="form-label">Họ</label><input class="form-input" type="text" id="c0" placeholder="Nguyễn" maxlength="20"></div>
+          <div class="form-group"><label class="form-label">Chữ đệm</label><input class="form-input" type="text" id="c1" placeholder="Văn" maxlength="10"></div>
+          <div class="form-group"><label class="form-label">Tên</label><input class="form-input" type="text" id="c2" placeholder="An" maxlength="10"></div>
+        </div>
+      </div>
+      <div class="form-col">
+        <div class="form-col-title">Số Nét (chữ Hán tương ứng)</div>
+        <div class="net-input">
+          <div class="form-group"><label class="form-label">Nét Họ</label><input class="form-input" type="number" id="n0" placeholder="VD: 12" min="1" max="64"></div>
+          <div class="form-group"><label class="form-label">Nét Đệm</label><input class="form-input" type="number" id="n1" placeholder="VD: 8" min="1" max="64"></div>
+          <div class="form-group"><label class="form-label">Nét Tên</label><input class="form-input" type="number" id="n2" placeholder="VD: 7" min="1" max="64"></div>
+        </div>
+        <div class="form-group" style="margin-top:16px"><label class="form-label">Ngũ hành bản mệnh (nạp âm)</label>
+          <select class="form-input" id="menh"><option value="">Không rõ</option><option value="Mộc">Mộc</option><option value="Hỏa">Hỏa</option><option value="Thổ">Thổ</option><option value="Kim">Kim</option><option value="Thủy">Thủy</option></select>
+        </div>
+        <button class="btn-submit" onclick="calculate()">Tra Ngũ Hành Tên</button>
+      </div>
+    </div>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+  <div class="result-section" id="result-section">
+    <div class="res-block">
+      <div class="res-block-header"><span class="res-block-title" id="resTitle">—</span></div>
+      <div class="res-block-body">
+        <div class="ten-chars" id="tenChars"></div>
+        <div style="border-top:1px solid var(--border-lt);padding-top:20px" id="hanhBalance"></div>
+        <div id="menhBox" style="margin-top:16px"></div>
+      </div>
+    </div>
+  </div>
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Kết Hợp Với Mệnh Cục</div>
+    <div class="tool-cta-title">Biết Ngũ Hành Bản Mệnh Chính Xác</div>
+    <div class="tool-cta-desc">Để biết tên bổ hay xung mệnh, cần biết ngũ hành nạp âm chính xác từ lá số Tử Vi. Luận giải lá số sẽ cho biết rõ mệnh cục và nạp âm từ ngày giờ sinh.</div>
+    <a class="tool-cta-btn" href="/tools/nap-am.html">Tra Nạp Âm Ngũ Hành Miễn Phí →</a>
+  </div>
+</div>
+<footer class="site-footer">
+  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
+<script>
+const HANH=['','Mộc','Mộc','Hỏa','Hỏa','Thổ','Thổ','Kim','Kim','Thủy','Thủy'];
+const H_COLOR={Mộc:'#1E6B3C',Hỏa:'#C0392B',Thổ:'#9A7B3A',Kim:'#7F8C8D',Thủy:'#1455A4'};
+const SINH={Mộc:'Hỏa',Hỏa:'Thổ',Thổ:'Kim',Kim:'Thủy',Thủy:'Mộc'};
+const KHAC={Mộc:'Thổ',Hỏa:'Kim',Thổ:'Thủy',Kim:'Mộc',Thủy:'Hỏa'};
+function getHanh(net){const d=net%10||10;return HANH[d]||'Thủy';}
+function calculate(){
+  const chars=[document.getElementById('c0').value.trim(),document.getElementById('c1').value.trim(),document.getElementById('c2').value.trim()].filter(Boolean);
+  const nets=[parseInt(document.getElementById('n0').value),parseInt(document.getElementById('n1').value),parseInt(document.getElementById('n2').value)];
+  const menh=document.getElementById('menh').value;
+  const err=document.getElementById('error-msg');
+  err.classList.remove('active');
+  const valid=chars.filter((_,i)=>chars[i]&&nets[i]&&nets[i]>0);
+  if(valid.length===0){err.textContent='Nhập ít nhất 1 chữ và số nét tương ứng.';err.classList.add('active');return;}
+  document.getElementById('resTitle').textContent='Ngũ Hành: '+chars.filter(Boolean).join(' ');
+  const hCount={Mộc:0,Hỏa:0,Thổ:0,Kim:0,Thủy:0};
+  const cardHTML=chars.map((c,i)=>{
+    if(!c||!nets[i])return'';
+    const h=getHanh(nets[i]);
+    hCount[h]=(hCount[h]||0)+1;
+    const col=H_COLOR[h]||'#666';
+    return`<div class="char-card" style="border-color:${col}22;background:${col}10">
+      <div class="char-word" style="color:${col}">${c}</div>
+      <div class="char-net">${nets[i]} nét</div>
+      <div class="char-hanh" style="color:${col}">${h}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('tenChars').innerHTML=cardHTML;
+  const total=Object.values(hCount).reduce((a,b)=>a+b,0)||1;
+  const balHTML=`<div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);margin-bottom:12px">Cân Bằng Ngũ Hành Trong Tên</div>`+
+    Object.entries(hCount).map(([h,c])=>`<div class="hanh-bar-row"><span class="hanh-name" style="color:${H_COLOR[h]}">${h}</span><div class="hanh-bar"><div class="hanh-fill" style="width:${(c/total*100).toFixed(0)}%;background:${H_COLOR[h]}"></div></div><span class="hanh-count">${c}</span></div>`).join('');
+  document.getElementById('hanhBalance').innerHTML=balHTML;
+  if(menh&&hCount){
+    const dominant=Object.entries(hCount).sort((a,b)=>b[1]-a[1])[0][0];
+    const isSinh=SINH[menh]===dominant||SINH[dominant]===menh;
+    const isKhac=KHAC[menh]===dominant||KHAC[dominant]===menh;
+    const isSame=menh===dominant;
+    let msg='',cls='';
+    if(isSame){msg=`Tên mang hành <strong>${dominant}</strong> — cùng hành với mệnh <strong>${menh}</strong>. Bổ trợ tốt, tăng cường khí mệnh.`;cls='#eaf4ed';}
+    else if(isSinh){msg=`Tên mang hành <strong>${dominant}</strong> — tương sinh với mệnh <strong>${menh}</strong>. Tốt, tên giúp nuôi dưỡng hoặc phát huy mệnh cục.`;cls='#eaf4ed';}
+    else if(isKhac){msg=`Tên mang hành <strong>${dominant}</strong> — tương khắc với mệnh <strong>${menh}</strong>. Cần xem xét thêm, đặc biệt khi đặt tên trẻ em.`;cls='#fef0ef';}
+    else{msg=`Tên mang hành <strong>${dominant}</strong> — không tương sinh cũng không tương khắc với mệnh <strong>${menh}</strong>. Trung tính.`;cls='var(--bg-soft)';}
+    document.getElementById('menhBox').innerHTML=`<div style="background:${cls};border-radius:8px;padding:14px 18px;font-size:13px;color:var(--text-mid);line-height:1.7">${msg}</div>`;
+  }
+  document.getElementById('result-section').classList.add('active');
+  document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
+}
+</script>
+</body>
+</html>

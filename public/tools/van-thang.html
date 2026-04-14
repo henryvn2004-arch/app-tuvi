@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Xem Vận Tháng – Tử Vi Minh Bảo</title>
+<meta name="description" content="Xem can chi 12 tháng trong năm và vận khí từng tháng theo lá số Tử Vi cổ pháp. Nhập ngày sinh, biết tháng nào thuận, tháng nào cần cẩn thận.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<script src="/tuvi-ansao-engine.js"></script>
+<script src="/tuvi-form.js"></script>
+<style>
+.thang-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.thang-card{border:1px solid var(--border-lt);border-radius:8px;padding:16px;position:relative}
+.thang-card.cur{outline:2px solid var(--blue);outline-offset:-2px}
+.thang-num{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);margin-bottom:8px}
+.thang-canchi{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.thang-cung{font-size:12px;color:var(--text-mid);margin-bottom:8px}
+.thang-stars{font-size:11px;color:var(--text-lt);line-height:1.6}
+.score-mini{height:4px;border-radius:2px;margin-top:8px}
+@media(max-width:600px){.thang-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Miễn Phí</div>
+    <h1>Xem <em>Vận Tháng</em><br>Trong Năm</h1>
+    <p>Can chi 12 tháng âm lịch và cung vận của từng tháng trong lá số — tháng nào chính tinh tốt, tháng nào cần lưu ý.</p>
+  </div>
+</div>
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Vận Tháng là gì?</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">12 Tháng — 12 Cung Vận<br>Xoay Trong Lá Số</h2>
+          <p class="xt-body">Mỗi năm âm lịch, vòng tiểu vận di chuyển qua 12 cung trong lá số — mỗi tháng ứng với một cung. Tháng nào vận an tại cung có chính tinh tốt, nhiều cát tinh thì thuận lợi; tháng nào cung vận có nhiều sao hung thì cần thận trọng hơn.</p>
+          <p class="xt-body">Đây là phần tiểu vận theo tháng — nhanh hơn đại vận nhưng ảnh hưởng cụ thể hơn trong ngắn hạn.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">Thông Tin Hiển Thị</div>
+          <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">Can chi tháng</span><span class="xt-factor-desc">Can chi của 12 tháng âm lịch trong năm xem</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">②</span><span class="xt-factor-label">Cung vận tháng</span><span class="xt-factor-desc">Tháng đó vận an tại cung nào trong lá số</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">③</span><span class="xt-factor-label">Chính tinh</span><span class="xt-factor-desc">Sao tinh chính tại cung vận của tháng</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">④</span><span class="xt-factor-label">Điểm vận tháng</span><span class="xt-factor-desc">Bar chart nhỏ từ scoring cung</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-section">
+    <div class="section-eyebrow">Nhập Ngày Sinh</div>
+    <div id="tuvi-form-container"></div>
+    <div class="status-bar" id="loader"><div class="status-dot"></div><div id="loader-text">Đang an sao...</div></div>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+  <div class="result-section" id="result-section">
+    <div class="res-block">
+      <div class="res-block-header"><span class="res-block-title" id="resTitle">—</span></div>
+      <div class="res-block-body"><div class="thang-grid" id="thangGrid"></div></div>
+    </div>
+  </div>
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Luận Giải Đầy Đủ</div>
+    <div class="tool-cta-title">Tiểu Vận Chi Tiết Theo AI</div>
+    <div class="tool-cta-desc">Vận tháng cho thấy cung vận — luận giải AI sẽ giải thích ý nghĩa từng cung trong bối cảnh cuộc đời bạn: tiền bạc, tình cảm, sức khỏe cụ thể ra sao.</div>
+    <a class="tool-cta-btn" href="/luan-giai.html">Mở Khóa 24 Phần ($19) →</a>
+  </div>
+</div>
+<footer class="site-footer">
+  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
+<script>
+const CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
+const CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+// Can tháng: dựa vào can năm
+const THANG_CAN_START=[2,4,6,8,0,2,4,6,8,0]; // canNam → can tháng 1 (Dần)
+const THANG_CHI_START=2; // tháng 1 âm = Dần (chi 2)
+const CURRENT_YEAR=2026;
+
+function luanGiai(){
+  const {hoten,ngay,thang,nam,gioIdx,gioHour,gioitinh,namXem}=TuviForm.getData();
+  const err=document.getElementById('error-msg');
+  err.classList.remove('active');
+  if(!ngay||!thang||!nam){err.textContent='Vui lòng điền đầy đủ thông tin.';err.classList.add('active');return;}
+  const loader=document.getElementById('loader');
+  loader.classList.add('active');
+  document.querySelector('.btn-submit').disabled=true;
+  document.getElementById('result-section').classList.remove('active');
+  try{
+    const conv=convertDuongToAm(ngay,thang,nam,gioHour);
+    const ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:nam,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:conv.gioIdx,gioitinh,namXem:namXem||CURRENT_YEAR});
+    const namXemVal=namXem||CURRENT_YEAR;
+    const namChi=((namXemVal-4)%12+12)%12;
+    const namCan=((namXemVal-4)%10+10)%10;
+    document.getElementById('resTitle').textContent=`Vận Tháng Năm ${namXemVal} — ${hoten||''}`;
+    const now=new Date();
+    const curAlMonth=ls.palaces?.[0]?.diaChi?1:1; // approx
+    // Tính tiểu vận tháng: mỗi tháng âm = 1 cung, bắt đầu từ tiểu hạn
+    const tieuHanIdx=ls.tieuHanIdx??0;
+    const cards=[];
+    for(let m=0;m<12;m++){
+      const mChi=(THANG_CHI_START+m)%12;
+      const mCan=(THANG_CAN_START[namCan]+m)%10;
+      // Cung tiểu vận tháng: xoay từ tiểu hạn
+      const cungIdx=(tieuHanIdx+m)%12;
+      const palace=ls.palaces?.[cungIdx];
+      const cungName=palace?.cungName||'—';
+      const stars=(palace?.majorStars||[]).map(s=>String(s.ten||'')).filter(Boolean).join(', ')||'(vô chính diệu)';
+      const score=ls.cungScores?.[cungName];
+      const tot=score?Object.values(score).reduce((a,b)=>a+b,0)/6:5;
+      const col=tot>=7?'#1FA3D6':tot>=5?'#2F5BEA':'#C0392B';
+      const isCur=m===((now.getMonth()+1-1+12)%12); // rough
+      cards.push(`<div class="thang-card${isCur?' cur':''}">
+        <div class="thang-num">Tháng ${m+1} âm lịch</div>
+        <div class="thang-canchi">${CAN[mCan]} ${CHI[mChi]}</div>
+        <div class="thang-cung">Cung: ${cungName}</div>
+        <div class="thang-stars">${stars}</div>
+        <div class="score-mini" style="background:#e0e8f0"><div style="height:100%;width:${(tot/10*100).toFixed(0)}%;background:${col};border-radius:2px"></div></div>
+      </div>`);
+    }
+    document.getElementById('thangGrid').innerHTML=cards.join('');
+    document.getElementById('result-section').classList.add('active');
+    setTimeout(()=>document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'}),300);
+  }catch(e){
+    err.textContent='Lỗi: '+e.message;err.classList.add('active');
+  }finally{
+    loader.classList.remove('active');document.querySelector('.btn-submit').disabled=false;
+  }
+}
+window.luanGiai=luanGiai;
+TuviForm.render('tuvi-form-container',{onSubmit:luanGiai,submitLabel:'Xem Vận Tháng →'});
+</script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Lục Nhâm Giản – Tra Thần Tướng Giờ – Tử Vi Minh Bảo</title>
+<meta name="description" content="Tra 12 thần tướng Lục Nhâm theo giờ và ngày. Biết thần tướng nào đang cai quản thời điểm hiện tại và ý nghĩa cho hành sự.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<script src="/tuvi-ansao-engine.js"></script>
+<style>
+.than-wheel{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.than-card{padding:14px 12px;border-radius:8px;border:1px solid var(--border-lt);text-align:center}
+.than-card.active-than{background:#e8f0fe;border-color:#1455A4;outline:2px solid #1455A4}
+.than-card.good{background:#eaf4ed;border-color:#c3e0cc}
+.than-card.bad{background:#fef0ef;border-color:#f5c0bc}
+.than-name{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.than-gio{font-size:11px;color:var(--text-lt);margin-bottom:6px}
+.than-type{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 6px;border-radius:2px}
+.ty-good{background:#c3e0cc;color:#1E6B3C}
+.ty-bad{background:#f5c0bc;color:#C0392B}
+@media(max-width:600px){.than-wheel{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Miễn Phí</div>
+    <h1>Lục Nhâm Giản —<br><em>12 Thần Tướng</em></h1>
+    <p>Tra 12 thần tướng Lục Nhâm theo ngày giờ — biết thần tướng nào đang cai quản hiện tại, tốt hay xấu cho hành sự.</p>
+  </div>
+</div>
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Lục Nhâm Giản là gì?</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">12 Thần Tướng —<br>Vòng Xoay Theo Giờ &amp; Ngày</h2>
+          <p class="xt-body">Lục Nhâm (六壬) là một trong ba môn "Tam Thức" cổ đại cùng với Kỳ Môn Độn Giáp và Thái Ất. Phiên bản giản lược dùng 12 thần tướng xoay theo can chi ngày và giờ để đoán vận khí ngắn hạn.</p>
+          <p class="xt-body">Mỗi giờ trong ngày được cai quản bởi một trong 12 thần tướng. Thần tướng nào trực tại thời điểm bạn xuất hành, ký kết hay gặp gỡ sẽ phản ánh vận khí của hành động đó.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">6 Thần Tướng Cát</div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1E6B3C">✦</span><span class="xt-factor-label">Thanh Long</span><span class="xt-factor-desc">Tài lộc, phú quý, vạn sự hanh thông</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1E6B3C">✦</span><span class="xt-factor-label">Thiên Ất</span><span class="xt-factor-desc">Quý nhân tương trợ, sự nghiệp thăng tiến</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1E6B3C">✦</span><span class="xt-factor-label">Đằng Xà</span><span class="xt-factor-desc">Biến động nhưng có cơ hội, linh hoạt</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1E6B3C">✦</span><span class="xt-factor-label">Thái Âm</span><span class="xt-factor-desc">Âm mưu tốt, bí mật thuận, hôn nhân</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1E6B3C">✦</span><span class="xt-factor-label">Thiên Hậu</span><span class="xt-factor-desc">Phúc đức, thuận hòa, vạn vật phát</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1E6B3C">✦</span><span class="xt-factor-label">Thái Thường</span><span class="xt-factor-desc">Tài lộc ổn định, ẩm thực, hội hợp</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-section">
+    <div class="section-eyebrow">Chọn Ngày Giờ Cần Tra</div>
+    <div class="form-grid cols-1">
+      <div class="form-col">
+        <div class="form-col-title">Ngày &amp; Giờ</div>
+        <div class="form-row-3">
+          <div class="form-group"><label class="form-label">Ngày</label><input class="form-input" type="number" id="ngay" min="1" max="31" placeholder="1–31"></div>
+          <div class="form-group"><label class="form-label">Tháng</label><input class="form-input" type="number" id="thang" min="1" max="12" placeholder="1–12"></div>
+          <div class="form-group"><label class="form-label">Năm</label><input class="form-input" type="number" id="nam" placeholder="2026"></div>
+        </div>
+        <div class="form-group" style="margin-top:12px">
+          <label class="form-label">Giờ (chi)</label>
+          <select class="form-input" id="gio">
+            <option value="0">Giờ Tý (23–01h)</option><option value="1">Giờ Sửu (01–03h)</option>
+            <option value="2">Giờ Dần (03–05h)</option><option value="3">Giờ Mão (05–07h)</option>
+            <option value="4">Giờ Thìn (07–09h)</option><option value="5">Giờ Tỵ (09–11h)</option>
+            <option value="6" selected>Giờ Ngọ (11–13h)</option><option value="7">Giờ Mùi (13–15h)</option>
+            <option value="8">Giờ Thân (15–17h)</option><option value="9">Giờ Dậu (17–19h)</option>
+            <option value="10">Giờ Tuất (19–21h)</option><option value="11">Giờ Hợi (21–23h)</option>
+          </select>
+        </div>
+        <button class="btn-submit" onclick="calculate()">Tra Thần Tướng</button>
+      </div>
+    </div>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+  <div class="result-section" id="result-section">
+    <div class="res-block" style="margin-bottom:16px">
+      <div class="res-block-header"><span class="res-block-title" id="resTitle">—</span></div>
+      <div class="res-block-body" id="activeBox" style="margin-bottom:20px"></div>
+      <div class="res-block-body">
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);margin-bottom:12px">Tất Cả 12 Thần Tướng Trong Ngày</div>
+        <div class="than-wheel" id="thanWheel"></div>
+      </div>
+    </div>
+  </div>
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Kết Hợp Với Lá Số Cá Nhân</div>
+    <div class="tool-cta-title">Thần Tướng + Vận Hạn Tử Vi</div>
+    <div class="tool-cta-desc">Thần tướng cho biết vận khí chung của thời điểm. Lá số Tử Vi cá nhân sẽ cho biết thời điểm đó phù hợp hay không với riêng vận trình của bạn.</div>
+    <a class="tool-cta-btn" href="/luan-giai.html">Xem Lá Số Tử Vi →</a>
+  </div>
+</div>
+<footer class="site-footer">
+  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
+<script>
+const CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
+const CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+const GIO_TIME=['23–01h','01–03h','03–05h','05–07h','07–09h','09–11h','11–13h','13–15h','15–17h','17–19h','19–21h','21–23h'];
+// 12 Thần Tướng Lục Nhâm theo thứ tự
+const THAN12=[
+  {name:'Quý Nhân',good:true,desc:'Quý nhân xuất hiện, được giúp đỡ, vạn sự đại lợi. Giờ tốt nhất để gặp gỡ, cầu xin, hội họp.'},
+  {name:'Đằng Xà',good:false,desc:'Biến động bất ngờ, lo lắng, sự việc xoắn xuýt. Tránh quyết định vội vàng, cần bình tĩnh.'},
+  {name:'Chu Tước',good:false,desc:'Khẩu thiệt, thị phi, văn thư rắc rối. Tránh tranh luận, ký kết hợp đồng.'},
+  {name:'Lục Hợp',good:true,desc:'Hợp tác, ký kết, hôn nhân thuận lợi. Mọi sự giao hợp đều có kết quả tốt.'},
+  {name:'Câu Trận',good:false,desc:'Cản trở, trì trệ, mắc kẹt. Việc khởi sự gặp trở ngại, tránh tranh kiện.'},
+  {name:'Thanh Long',good:true,desc:'Tài lộc dồi dào, phú quý, mọi việc hanh thông. Rất tốt cho kinh doanh, thu nạp tài lộc.'},
+  {name:'Thiên Không',good:false,desc:'Hư không, thất thoát, lời hứa không thực hiện được. Tránh cho mượn tiền, ký kết.'},
+  {name:'Bạch Hổ',good:false,desc:'Sát khí, tai họa, bệnh tật. Cẩn thận khi đi lại, tránh nơi nguy hiểm.'},
+  {name:'Thái Thường',good:true,desc:'Tài lộc ổn định, hội hợp vui vẻ, ẩm thực. Tốt cho kinh doanh nhỏ, gặp gỡ thân thiết.'},
+  {name:'Huyền Vũ',good:false,desc:'Trộm cắp, gian lận, bí mật bị lộ. Cẩn thận tài sản, tránh tiết lộ thông tin quan trọng.'},
+  {name:'Thái Âm',good:true,desc:'Bí mật thuận lợi, hôn nhân tốt, nữ giới được phù trợ. Tốt cho mưu kế, kế hoạch lâu dài.'},
+  {name:'Thiên Hậu',good:true,desc:'Phúc đức, thuận hòa, vạn vật phát triển. Rất tốt cho mọi sự khởi đầu tích cực.'},
+];
+// Thần tướng bắt đầu theo can ngày + giờ
+const THAN_START=[0,2,4,6,8,10,0,2,4,6,8,10]; // canNgay → vị trí Quý Nhân tại giờ Tý (tuần hoàn)
+// Thực tế: Quý Nhân (Thiên Ất) bắt đầu theo can ngày, tính theo giờ Dần
+// Simplified: chiNgay + chiGio → offset
+function toJDN(y,m,d){const a=Math.floor((14-m)/12),yr=y+4800-a,mn=m+12*a-3;return d+Math.floor((153*mn+2)/5)+365*yr+Math.floor(yr/4)-Math.floor(yr/100)+Math.floor(yr/400)-32045;}
+function calculate(){
+  const ngay=parseInt(document.getElementById('ngay').value);
+  const thang=parseInt(document.getElementById('thang').value);
+  const nam=parseInt(document.getElementById('nam').value);
+  const gioChi=parseInt(document.getElementById('gio').value);
+  const err=document.getElementById('error-msg');
+  err.classList.remove('active');
+  if(!ngay||ngay<1||ngay>31||!thang||!nam){err.textContent='Vui lòng nhập ngày tháng năm.';err.classList.add('active');return;}
+  const jdn=toJDN(nam,thang,ngay);
+  const ANCHOR=2434290;
+  const diff=((jdn-ANCHOR)%60+600)%60;
+  const canNgay=diff%10,chiNgay=diff%12;
+  // Vị trí thần tướng đầu tiên (Quý Nhân) tại giờ Tý, dựa theo can ngày
+  // Hai can tạo thành 1 nhóm: Giáp/Mậu/Canh → Quý Nhân tại Sửu+Mùi, etc.
+  // Simplified mapping: offset = (canNgay * 2) % 12
+  const startOffset=(canNgay*2)%12;
+  // Thần tướng tại giờ chiGio = THAN12[(chiGio - startOffset + 12) % 12]
+  const activeThanIdx=((gioChi-startOffset+12)%12);
+  const activeThan=THAN12[activeThanIdx];
+  const canNgayStr=CAN[canNgay]+' '+['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'][canNgay]?CAN[canNgay]:'';
+  document.getElementById('resTitle').textContent=`Ngày ${ngay}/${thang}/${nam} — Giờ ${CHI[gioChi]} (${GIO_TIME[gioChi]})`;
+  document.getElementById('activeBox').innerHTML=`<div style="background:${activeThan.good?'#eaf4ed':'#fef0ef'};border-left:4px solid ${activeThan.good?'#1E6B3C':'#C0392B'};padding:16px 20px;border-radius:0 8px 8px 0">
+    <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${activeThan.good?'#1E6B3C':'#C0392B'};margin-bottom:6px">${activeThan.good?'✦ Thần Tướng Cát':'✗ Thần Tướng Hung'} — Giờ Hiện Tại</div>
+    <div style="font-size:22px;font-weight:700;color:var(--navy);margin-bottom:8px">${activeThan.name}</div>
+    <div style="font-size:14px;color:var(--text-mid);line-height:1.7">${activeThan.desc}</div>
+  </div>`;
+  document.getElementById('thanWheel').innerHTML=THAN12.map((t,i)=>{
+    const gioIdx=(startOffset+i)%12;
+    const isActive=i===activeThanIdx;
+    return`<div class="than-card ${isActive?'active-than':t.good?'good':'bad'}">
+      <div class="than-name">${t.name}</div>
+      <div class="than-gio">Giờ ${CHI[gioIdx]} (${GIO_TIME[gioIdx]})</div>
+      <span class="than-type ${t.good?'ty-good':'ty-bad'}">${t.good?'Cát':'Hung'}</span>
+    </div>`;
+  }).join('');
+  document.getElementById('result-section').classList.add('active');
+  document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
+}
+(function(){const t=new Date();document.getElementById('ngay').value=t.getDate();document.getElementById('thang').value=t.getMonth()+1;document.getElementById('nam').value=t.getFullYear();const h=t.getHours();document.getElementById('gio').value=Math.floor(((h*60+60)%(24*60))/120)%12;})();
+</script>
+</body>
+</html>

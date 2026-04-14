@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Kinh Dịch – Gieo Quẻ 64 Quẻ – Tử Vi Minh Bảo</title>
+<meta name="description" content="Gieo quẻ Kinh Dịch theo phương pháp 3 đồng xu cổ truyền. 64 quẻ đầy đủ với lời đoán, ý nghĩa và quẻ biến. Miễn phí, không cần tài khoản.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<style>
+.coins-wrap { display: flex; gap: 16px; justify-content: center; margin: 24px 0; }
+.coin { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; border: 3px solid var(--border); transition: all 0.3s; cursor: default; position: relative; }
+.coin.flipping { animation: flip 0.6s ease-in-out; }
+.coin.heads { background: #c9a84c; color: #fff; border-color: #a07a30; }
+.coin.tails { background: var(--bg-soft); color: var(--navy); border-color: var(--border); }
+@keyframes flip { 0%{transform:rotateY(0)} 50%{transform:rotateY(90deg) scale(1.1)} 100%{transform:rotateY(0)} }
+.lines-build { display: flex; flex-direction: column-reverse; gap: 6px; align-items: center; min-height: 180px; }
+.line-row { display: flex; gap: 8px; align-items: center; opacity: 0; transform: translateY(8px); transition: all 0.4s; }
+.line-row.visible { opacity: 1; transform: translateY(0); }
+.line-yang { width: 80px; height: 12px; background: var(--navy); border-radius: 2px; }
+.line-yin  { display: flex; gap: 8px; }
+.line-yin span { width: 35px; height: 12px; background: var(--navy); border-radius: 2px; }
+.line-changing .line-yang, .line-changing .line-yin span { background: #c9a84c; }
+.line-num { width: 16px; font-size: 10px; color: var(--text-lt); text-align: right; }
+.line-tag { font-size: 9px; font-weight: 700; letter-spacing: 1px; padding: 1px 5px; border-radius: 2px; margin-left: 4px; }
+.lt-change { background: #fff8e6; color: #9A7B3A; border: 1px solid #c9a84c; }
+/* Quẻ display */
+.que-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.que-card { border: 1px solid var(--border-lt); border-radius: 8px; padding: 20px; }
+.que-card.primary { border-color: var(--navy); background: var(--navy-lt, #f5f7fa); }
+.que-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 10px; }
+.que-symbol { font-size: 64px; line-height: 1; margin-bottom: 8px; }
+.que-name { font-size: 22px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.que-zh { font-size: 14px; color: var(--text-lt); margin-bottom: 12px; }
+.que-meaning { font-size: 13px; font-weight: 600; color: var(--text-mid); margin-bottom: 10px; }
+.que-guidance { font-size: 14px; color: var(--text-mid); line-height: 1.8; }
+.fortune-badge { display: inline-block; font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 10px; border-radius: 2px; margin-bottom: 14px; }
+.fb-tot { background: #c3e0cc; color: #1E6B3C; }
+.fb-trung { background: #e8f0fe; color: #1455A4; }
+.fb-canh { background: #f5c0bc; color: #C0392B; }
+.step-counter { font-size: 14px; color: var(--text-mid); text-align: center; margin-bottom: 8px; }
+.toss-btn { width: 100%; max-width: 320px; display: block; margin: 0 auto; }
+.line-vis { display: flex; flex-direction: column; gap: 8px; padding: 16px; background: var(--bg-soft); border-radius: 8px; }
+@media(max-width:600px){ .que-grid{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<script src="/nav.js"></script>
+
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Miễn Phí</div>
+    <h1>Gieo Quẻ <em>Kinh Dịch</em><br>64 Quẻ Đầy Đủ</h1>
+    <p>Phương pháp 3 đồng xu cổ truyền — 6 lần gieo, nhận quẻ Kinh Dịch kèm lời đoán và quẻ biến nếu có hào động.</p>
+  </div>
+</div>
+
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Kinh Dịch là gì?</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">64 Quẻ — Bản Đồ<br>Mọi Tình Huống Cuộc Đời</h2>
+          <p class="xt-body">Kinh Dịch (易經) là một trong những kinh điển cổ nhất của phương Đông, ra đời cách đây hơn 3000 năm. 64 quẻ biểu thị 64 tình huống căn bản của vạn vật — từ thịnh đến suy, từ tĩnh đến động, từ đóng đến mở.</p>
+          <p class="xt-body">Phương pháp 3 đồng xu là cách gieo quẻ phổ biến nhất: gieo 3 đồng xu 6 lần, mỗi lần xác định 1 hào (từ dưới lên). Hào dương (7,9) = vạch liền, hào âm (6,8) = vạch đứt. Hào 6 và 9 là "hào động" — hào biến sang ngược lại, tạo ra quẻ biến có ý nghĩa bổ sung.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">Cách Đọc Kết Quả</div>
+          <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">Quẻ chính</span><span class="xt-factor-desc">Tình huống hiện tại — bức tranh tổng thể của câu hỏi</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">②</span><span class="xt-factor-label">Hào động (vàng)</span><span class="xt-factor-desc">Điểm trọng yếu đang thay đổi — nơi cần chú ý nhất</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">③</span><span class="xt-factor-label">Quẻ biến</span><span class="xt-factor-desc">Xu hướng — nếu có hào động, đây là nơi sự việc sẽ đi đến</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">④</span><span class="xt-factor-label">Không có hào động</span><span class="xt-factor-desc">Tình huống tương đối ổn định — chỉ đọc quẻ chính</span></div>
+          <div class="xt-note" style="margin-top:12px">
+            <span class="xt-note-icon">💡</span>
+            <div>Trước khi gieo quẻ, hãy định thần, nghĩ rõ câu hỏi trong tâm trí. Kinh Dịch phản chiếu tâm trạng và hoàn cảnh hiện tại — kết quả có ý nghĩa nhất khi bạn đặt câu hỏi cụ thể.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORM / GIEO -->
+  <div class="form-section">
+    <div class="section-eyebrow">Gieo Quẻ</div>
+
+    <div class="form-grid cols-1">
+      <div class="form-col">
+        <div class="form-col-title">Câu Hỏi (tuỳ chọn)</div>
+        <div class="form-group">
+          <input class="form-input" type="text" id="cauHoi" placeholder="VD: Công việc sắp tới của tôi thế nào?" maxlength="100">
+        </div>
+        <div class="step-counter" id="stepCounter">Bấm để bắt đầu gieo quẻ — 6 lần gieo, mỗi lần xác định 1 hào</div>
+
+        <!-- 3 đồng xu animation -->
+        <div class="coins-wrap" id="coinsWrap" style="display:none">
+          <div class="coin" id="coin0">?</div>
+          <div class="coin" id="coin1">?</div>
+          <div class="coin" id="coin2">?</div>
+        </div>
+
+        <!-- Hào đang xây -->
+        <div id="linesBuild" class="line-vis" style="display:none">
+          <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);margin-bottom:4px">Quẻ đang hình thành (từ dưới lên)</div>
+          <div class="lines-build" id="linesContainer"></div>
+        </div>
+
+        <button class="btn-submit toss-btn" id="tossBtn" onclick="toss()">✦ Tập Trung &amp; Gieo Hào Đầu Tiên</button>
+        <button class="btn-secondary" id="resetBtn" onclick="reset()" style="display:none;margin-top:12px;width:100%;max-width:320px;display:none;margin-left:auto;margin-right:auto">Gieo Quẻ Mới</button>
+      </div>
+    </div>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+
+  <!-- KẾT QUẢ -->
+  <div class="result-section" id="result-section">
+    <div id="cauHoiDisplay" style="font-size:13px;color:var(--text-lt);font-style:italic;margin-bottom:20px;text-align:center"></div>
+
+    <div class="que-grid" id="queGrid"></div>
+
+    <div style="margin-top:24px;padding:16px 20px;background:var(--bg-soft);border-radius:8px;border-left:3px solid var(--border)">
+      <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);margin-bottom:8px">Lưu Ý Đọc Quẻ</div>
+      <p style="font-size:13px;color:var(--text-mid);line-height:1.7;margin:0">Kinh Dịch không dự đoán số phận — Kinh Dịch phản chiếu <em>xu hướng</em> của tình huống. Lời đoán là gợi ý cho hướng hành động, không phải bản án. Cùng một quẻ gieo vào hai thời điểm khác nhau có thể có ý nghĩa rất khác nhau.</p>
+    </div>
+  </div>
+
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Phương Đông Gặp Phương Đông</div>
+    <div class="tool-cta-title">Kết Hợp Kinh Dịch &amp; Tử Vi Đẩu Số</div>
+    <div class="tool-cta-desc">Kinh Dịch trả lời câu hỏi cụ thể tại một thời điểm. Tử Vi Đẩu Số phân tích vận trình dài hạn theo lá số cá nhân — hai hệ thống bổ trợ nhau, không mâu thuẫn.</div>
+    <a class="tool-cta-btn" href="/luan-giai.html">Xem Lá Số Tử Vi ($19) →</a>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
+
+<script>
+// ── 64 quẻ Kinh Dịch — King Wen sequence ──
+// lines: 6 chars từ hào 1 (dưới) → hào 6 (trên), 1=dương 0=âm
+// Unicode symbol: U+4DC0 + (index)
+const QUE = [
+  {n:'Càn',zh:'乾',li:'111111',f:'tot',m:'Trời — Sức mạnh sáng tạo',g:'Thời điểm của sức mạnh và hành động quyết đoán. Tin vào tiềm năng bản thân. Cơ hội lớn đang mở ra — đừng do dự, hãy tiến về phía trước với toàn bộ năng lượng.'},
+  {n:'Khôn',zh:'坤',li:'000000',f:'tot',m:'Đất — Tiếp nhận, nuôi dưỡng',g:'Thời điểm của sự nhún nhường và kiên nhẫn. Đừng cố dẫn đầu — hãy hỗ trợ, nuôi dưỡng và kiên trì. Thành công đến qua sự bền bỉ và hợp tác.'},
+  {n:'Truân',zh:'屯',li:'100010',f:'canh',m:'Khó khăn ban đầu',g:'Khởi đầu gặp trở ngại là điều tự nhiên. Cần sự kiên nhẫn và chuẩn bị kỹ lưỡng trước khi hành động. Tìm kiếm sự hỗ trợ từ người có kinh nghiệm.'},
+  {n:'Mông',zh:'蒙',li:'010001',f:'trung',m:'Thiếu kinh nghiệm, học hỏi',g:'Giai đoạn học hỏi và trưởng thành. Khiêm tốn đặt câu hỏi, lắng nghe người hướng dẫn. Không nên vội vàng — hiểu đúng trước khi hành động.'},
+  {n:'Nhu',zh:'需',li:'010111',f:'trung',m:'Chờ đợi đúng thời',g:'Thời cơ chưa đến. Kiên nhẫn chờ đợi không phải yếu đuối — đó là trí tuệ. Chuẩn bị trong khi chờ. Ăn uống, nghỉ ngơi, dưỡng sức cho giai đoạn tiếp theo.'},
+  {n:'Tụng',zh:'訟',li:'111010',f:'canh',m:'Xung đột, tranh chấp',g:'Tránh leo thang mâu thuẫn. Tìm cách dàn xếp thay vì đối đầu trực tiếp. Không có bên nào thắng hoàn toàn trong tranh chấp — nhượng bộ một phần để giữ hòa khí.'},
+  {n:'Sư',zh:'師',li:'000010',f:'trung',m:'Kỷ luật, tổ chức',g:'Cần lãnh đạo và tổ chức rõ ràng. Hành động tập thể đòi hỏi kỷ luật — mỗi người phải biết vai trò của mình. Người lãnh đạo phải có đức tin của tập thể.'},
+  {n:'Tỉ',zh:'比',li:'010000',f:'tot',m:'Đoàn kết, liên minh',g:'Sức mạnh đến từ sự đoàn kết. Hãy mở lòng với những người xung quanh, xây dựng quan hệ tin cậy. Đây là thời điểm tốt để hợp tác và kết nghĩa.'},
+  {n:'Tiểu Súc',zh:'小畜',li:'110111',f:'trung',m:'Tích lũy từng bước nhỏ',g:'Không thể tiến nhanh lúc này — hãy kiên nhẫn tích lũy từng chút nhỏ. Mưa nhỏ cũng thấm dần. Chú trọng chuẩn bị hơn là hành động lớn.'},
+  {n:'Lý',zh:'履',li:'111011',f:'tot',m:'Đi đứng cẩn thận',g:'Tình huống đòi hỏi sự khéo léo và cẩn thận. Như bước trên đuôi hổ — biết giới hạn của mình, hành xử đúng mực. Thái độ đúng đắn sẽ hóa giải nguy hiểm.'},
+  {n:'Thái',zh:'泰',li:'111000',f:'tot',m:'Thái bình, thịnh vượng',g:'Thời điểm vàng của sự hài hòa và phát triển. Trời đất giao hòa — mọi việc đang thuận lợi. Nắm bắt thời cơ này để tiến hành kế hoạch quan trọng.'},
+  {n:'Bĩ',zh:'否',li:'000111',f:'canh',m:'Bế tắc, trì trệ',g:'Thiên địa không giao hòa — trên dưới không thông. Không phải lúc để cố sức đẩy. Rút lui, giữ gìn sức lực, chờ thời cơ thay đổi. Tiểu nhân đang lên, quân tử nên ẩn mình.'},
+  {n:'Đồng Nhân',zh:'同人',li:'111101',f:'tot',m:'Hòa đồng, cộng đồng',g:'Sức mạnh của sự đoàn kết vì mục tiêu chung. Hãy mở rộng tâm, không phân biệt. Hợp tác với người có cùng lý tưởng sẽ vượt qua mọi khó khăn.'},
+  {n:'Đại Hữu',zh:'大有',li:'101111',f:'tot',m:'Sở hữu lớn, phong phú',g:'Vận may và sự phong phú đang ở đỉnh cao. Nhưng tài nguyên lớn đòi hỏi trách nhiệm lớn. Chia sẻ và quản lý khôn ngoan — đừng để tự mãn làm mất đi những gì đã có.'},
+  {n:'Khiêm',zh:'謙',li:'000100',f:'tot',m:'Khiêm tốn, nhún nhường',g:'Khiêm tốn là đức hạnh cao quý nhất. Núi cao nằm dưới đất — vĩ đại mà không kiêu ngạo. Sự khiêm tốn chân thành sẽ mang lại thành công bền vững và được lòng mọi người.'},
+  {n:'Dự',zh:'豫',li:'001000',f:'tot',m:'Nhiệt tình, chuẩn bị',g:'Thời điểm vui vẻ và sẵn sàng. Hãy chuẩn bị kỹ lưỡng và hành động với nhiệt huyết. Âm nhạc và lễ hội — mọi thứ đang thuận dòng. Nhưng đừng quá đắm chìm vào hưởng thụ.'},
+  {n:'Tùy',zh:'隨',li:'011001',f:'tot',m:'Thích nghi, theo dòng',g:'Đây là lúc thích nghi với hoàn cảnh thay vì cưỡng lại nó. Theo dòng nước không có nghĩa là mất bản thân — hãy linh hoạt mà vẫn giữ vững giá trị cốt lõi.'},
+  {n:'Cổ',zh:'蠱',li:'100110',f:'canh',m:'Sửa chữa, chỉnh đốn',g:'Có điều gì đó đã bị hỏng và cần sửa chữa. Đừng né tránh vấn đề — hãy đối mặt và khắc phục tận gốc. Ba ngày trước khi thay đổi và ba ngày sau để ổn định.'},
+  {n:'Lâm',zh:'臨',li:'000011',f:'tot',m:'Tiếp cận, đến gần',g:'Cơ hội đang đến gần. Tiếp cận với thái độ thân thiện và mở lòng. Tám tháng tới thuận lợi — hãy tận dụng. Sự giám sát và quan tâm đúng lúc sẽ mang lại kết quả tốt.'},
+  {n:'Quán',zh:'觀',li:'110000',f:'trung',m:'Quan sát, chiêm nghiệm',g:'Thời điểm để nhìn nhận lại toàn cảnh. Quan sát trước khi hành động. Như gió thổi qua đất — ảnh hưởng âm thầm nhưng sâu sắc. Hãy là tấm gương cho người khác bằng chính phong cách của bạn.'},
+  {n:'Phệ Hạp',zh:'噬嗑',li:'101001',f:'trung',m:'Cắn xuyên qua chướng ngại',g:'Có chướng ngại vật cần loại bỏ trước khi tiến lên. Cần quyết đoán và dứt khoát. Pháp luật và kỷ luật sẽ giải quyết vấn đề. Đừng dung túng cái sai.'},
+  {n:'Bí',zh:'賁',li:'100101',f:'tot',m:'Vẻ đẹp, trang sức',g:'Hình thức và nội dung cần hài hòa. Đừng bỏ bê vẻ ngoài, nhưng đừng để hình thức lấn át bản chất. Vẻ đẹp chân thực đến từ sự hài hòa giữa trong và ngoài.'},
+  {n:'Bác',zh:'剝',li:'100000',f:'canh',m:'Sụp đổ, tan rã',g:'Năng lượng tiêu cực đang ở đỉnh điểm. Không nên đi xa, không nên khởi sự. Giữ gìn những gì đang có. Như mùa đông — sự sụp đổ là tiền đề cho sự tái sinh. Chờ đợi thời điểm xoay chuyển.'},
+  {n:'Phục',zh:'復',li:'000001',f:'tot',m:'Trở về, phục hồi',g:'Sau đêm dài là bình minh. Dương khí bắt đầu trở lại từ dưới cùng. Thời điểm tốt để bắt đầu lại, quay về với bản chất chân thực. Bảy ngày để hoàn chỉnh một chu kỳ.'},
+  {n:'Vô Vọng',zh:'無妄',li:'100111',f:'tot',m:'Hành động đúng theo thiên ý',g:'Thuận theo lẽ tự nhiên, không cưỡng cầu. Hành động từ sự trong sáng và trung thực — không mưu tính. Tai họa đến với người hành động không đúng chỗ. Chân thành là con đường đúng nhất.'},
+  {n:'Đại Súc',zh:'大畜',li:'111100',f:'tot',m:'Tích lũy sức mạnh lớn',g:'Đây là giai đoạn tích lũy kiến thức, kinh nghiệm và sức mạnh. Học hỏi từ quá khứ. Năng lượng đang được gom tụ — khi thời cơ đến sẽ bùng phát mạnh mẽ.'},
+  {n:'Di',zh:'頤',li:'100001',f:'trung',m:'Nuôi dưỡng, ăn uống',g:'Chú ý đến việc nuôi dưỡng bản thân và người khác — cả thể xác lẫn tinh thần. Xem mình ăn gì, nói gì, suy nghĩ gì. Sự nuôi dưỡng đúng đắn là nền tảng của sức mạnh.'},
+  {n:'Đại Quá',zh:'大過',li:'011110',f:'canh',m:'Vượt quá giới hạn',g:'Tình huống đang vượt ngoài tầm kiểm soát bình thường. Cây đòn giữa đang gãy dưới tải trọng. Cần hành động phi thường. Như người không sợ chết khi lội qua sông — cần can đảm đặc biệt.'},
+  {n:'Khảm',zh:'坎',li:'010010',f:'canh',m:'Nước, vực sâu nguy hiểm',g:'Đang ở giữa vòng xoáy nguy hiểm. Giữ vững tâm trí, đừng hoảng loạn. Nước thấm qua mọi nơi — kiên trì và linh hoạt mới thoát được. Chỉ cần tinh thần không gục ngã.'},
+  {n:'Ly',zh:'離',li:'101101',f:'tot',m:'Lửa, ánh sáng, rõ ràng',g:'Ánh sáng và sự minh bạch. Bám vào điều đúng đắn như lửa bám vào nhiên liệu. Sự rõ ràng và chân thực sẽ soi sáng mọi việc. Trâu cái — tượng trưng cho sự nhún nhường mang lại phát triển.'},
+  {n:'Hàm',zh:'咸',li:'011100',f:'tot',m:'Cảm ứng, thu hút',g:'Rung động tình cảm và sự hấp dẫn lẫn nhau. Cởi mở với tình cảm thật sự. Đây là quẻ tốt nhất cho tình yêu và hôn nhân. Hãy để con tim dẫn đường, không chỉ lý trí.'},
+  {n:'Hằng',zh:'恒',li:'001110',f:'tot',m:'Bền vững, kiên định',g:'Kiên trì theo đuổi mục tiêu lâu dài. Sự bền vững không có nghĩa là cứng nhắc — hãy linh hoạt trong phương pháp nhưng kiên định trong mục tiêu. Thành công đến với người nhất quán.'},
+  {n:'Độn',zh:'遯',li:'111100',f:'trung',m:'Rút lui chiến lược',g:'Đây là lúc rút lui khéo léo, không phải thất bại. Như quân tử ẩn mình khi tiểu nhân nắm quyền. Rút lui kịp thời là chiến lược thông minh. Giữ gìn sức lực cho giai đoạn thích hợp hơn.'},
+  {n:'Đại Tráng',zh:'大壯',li:'001111',f:'canh',m:'Sức mạnh quá lớn',g:'Sức mạnh đang ở đỉnh cao nhưng cần cẩn thận với sự hống hách. Dê húc vào hàng rào — dù mạnh vẫn bị mắc kẹt. Dùng sức mạnh đúng chỗ và đúng cách.'},
+  {n:'Tấn',zh:'晉',li:'101000',f:'tot',m:'Tiến lên, thăng tiến',g:'Thời điểm tiến về phía trước với ánh sáng và sự trong sáng. Như mặt trời mọc trên mặt đất — ngày càng tỏa sáng hơn. Người lãnh đạo đức hạnh được trọng dụng.'},
+  {n:'Minh Di',zh:'明夷',li:'000101',f:'canh',m:'Ánh sáng bị che khuất',g:'Trí tuệ và đức hạnh đang bị đàn áp. Hãy che giấu sự thông minh của mình, hành xử như người bình thường. Không phải lúc để tỏa sáng — hãy ẩn nhẫn và chờ thời.'},
+  {n:'Gia Nhân',zh:'家人',li:'110101',f:'tot',m:'Gia đình, tổ chức nội bộ',g:'Hãy chú trọng vào việc nội bộ — gia đình và tổ chức của bạn. Mỗi người biết vai trò của mình. Sự hài hòa trong nhà là nền tảng cho mọi thành công bên ngoài.'},
+  {n:'Khuê',zh:'睽',li:'101110',f:'canh',m:'Đối lập, bất đồng',g:'Có sự đối lập và hiểu lầm. Trong bất đồng vẫn có điểm chung — hãy tìm kiếm điểm đó. Việc nhỏ có thể tiến, việc lớn cần chờ thời cơ hòa hợp trở lại.'},
+  {n:'Kiển',zh:'蹇',li:'010100',f:'canh',m:'Đường gập ghềnh, chướng ngại',g:'Con đường phía trước nhiều khó khăn. Không nên tiến thẳng — hãy tìm đường vòng hoặc quay về chuẩn bị tốt hơn. Cần đến sự giúp đỡ của bạn bè và đồng minh.'},
+  {n:'Giải',zh:'解',li:'001010',f:'tot',m:'Giải thoát, tháo gỡ',g:'Gút mắc và chướng ngại đang được tháo gỡ. Thời điểm giải phóng — hãy tha thứ và buông bỏ. Đừng giữ oán giận. Trở về bình thường là điều tốt nhất lúc này.'},
+  {n:'Tổn',zh:'損',li:'110001',f:'trung',m:'Bớt đi để tiến lên',g:'Đôi khi phải bớt phần dưới để bổ sung phần trên. Hy sinh nhỏ để đạt mục tiêu lớn hơn. Sự thành thật trong dâng hiến — dù ít nhưng thật lòng — vẫn được chấp nhận.'},
+  {n:'Ích',zh:'益',li:'100011',f:'tot',m:'Tăng ích, phát triển',g:'Thời điểm của sự tăng trưởng và phát triển. Phần trên bớt đi để bổ sung phần dưới — người có quyền lực chia sẻ với người dưới. Hành động lớn và vượt sông được khuyến khích.'},
+  {n:'Quái',zh:'夬',li:'011111',f:'canh',m:'Quyết đoán, đột phá',g:'Cần hành động quyết đoán để loại bỏ điều sai trái. Nói thật trước công chúng, không thể dùng vũ lực mà phải dùng chính nghĩa. Nguy hiểm — nhưng không hành động còn nguy hơn.'},
+  {n:'Cấu',zh:'姤',li:'111110',f:'canh',m:'Gặp gỡ bất ngờ',g:'Một cuộc gặp gỡ đang xảy ra — nhưng hãy cẩn thận với sự hấp dẫn bề ngoài. Người phụ nữ mạnh mẽ khó kiểm soát. Không nên hôn nhân vội vàng lúc này. Chú ý đến người mới xuất hiện trong cuộc đời.'},
+  {n:'Tụy',zh:'萃',li:'011000',f:'tot',m:'Tụ họp, tập hợp',g:'Thời điểm của sự quy tụ và đoàn kết. Hãy tụ họp những người cùng chí hướng. Lễ hội và sự kết nối xã hội đang thuận lợi. Chuẩn bị phòng ngừa bất trắc khi mọi người tụ họp.'},
+  {n:'Thăng',zh:'升',li:'000110',f:'tot',m:'Thăng lên, tiến lên từ từ',g:'Như cây cỏ mọc lên từ đất — tiến lên từng bước vững chắc. Đây không phải bước nhảy vọt mà là sự tăng trưởng ổn định. Hướng Nam để tìm kiếm cơ hội.'},
+  {n:'Khốn',zh:'困',li:'011010',f:'canh',m:'Kiệt sức, bí bách',g:'Đang bị vây hãm và kiệt sức. Lời nói không được tin — hãy để hành động chứng minh. Kiên trì với phẩm giá, đừng từ bỏ nguyên tắc. Người quân tử biết vươn lên từ gian khổ.'},
+  {n:'Tỉnh',zh:'井',li:'010110',f:'trung',m:'Giếng nước — nguồn cội',g:'Hãy trở về với nguồn gốc và giá trị cốt lõi. Như giếng cung cấp nước — đừng thay đổi vị trí, hãy đào sâu hơn. Sự ổn định trong việc phục vụ cộng đồng.'},
+  {n:'Cách',zh:'革',li:'011101',f:'trung',m:'Cách mạng, thay đổi',g:'Thay đổi lớn đang đến. Thay đổi chỉ được chấp nhận khi đúng lúc và có lý do chính đáng. Sau khi cách mạng thành công, cần ổn định lại. Đừng cách mạng vì lợi ích cá nhân.'},
+  {n:'Đỉnh',zh:'鼎',li:'101110',f:'tot',m:'Đỉnh vạc — chuyển hóa',g:'Như chiếc vạc nấu chín thức ăn để dâng cúng — sự chuyển hóa tạo ra điều mới. Thời điểm tốt để hợp tác với người tài giỏi và đạt được mục tiêu lớn. Sự ổn định cao quý.'},
+  {n:'Chấn',zh:'震',li:'001001',f:'canh',m:'Sấm sét, chấn động',g:'Sự kiện đột ngột gây chấn động. Sau cơn sốc ban đầu, hãy lấy lại bình tĩnh — rồi cười. Sấm sét thức tỉnh và thanh lọc. Tự xem xét lại bản thân sau sự kiện này.'},
+  {n:'Cấn',zh:'艮',li:'100100',f:'trung',m:'Núi — dừng lại',g:'Biết khi nào phải dừng lại — đó là trí tuệ. Thiền định và hướng vào nội tâm. Không phải thời điểm tiến lên. Hãy giữ tĩnh tâm và không bị cuốn vào xúc động bên ngoài.'},
+  {n:'Tiệm',zh:'漸',li:'110100',f:'tot',m:'Dần dần, từng bước',g:'Tiến lên từng bước như con ngỗng hoang bay dần lên cao. Không thể vội vàng — hãy tuân theo đúng trình tự. Hôn nhân, sự nghiệp, mọi việc quan trọng đều cần thời gian và đúng thủ tục.'},
+  {n:'Quy Muội',zh:'歸妹',li:'001011',f:'canh',m:'Hôn nhân, về nhà',g:'Hành động xuất phát từ cảm xúc hơn là lý trí. Cần cẩn thận với các mối quan hệ mới. Không thuận lợi cho việc khởi sự. Nhìn nhận thực tế thay vì mộng tưởng.'},
+  {n:'Phong',zh:'豐',li:'001101',f:'tot',m:'Phong phú, đỉnh cao',g:'Đang ở đỉnh cao của phong phú và vinh quang. Đừng lo lắng về việc này không kéo dài — hãy tận hưởng và trân trọng. Như mặt trời lúc ngọ — sau đỉnh cao sẽ đến giai đoạn khác.'},
+  {n:'Lữ',zh:'旅',li:'101100',f:'canh',m:'Lữ hành, xa xứ',g:'Đang ở vị trí xa lạ hoặc tạm bợ. Cẩn thận và khiêm nhường khi ở đất khách. Việc nhỏ thuận lợi, nhưng tránh va chạm khi đang lưu lạc. Hành xử đúng mực để được bảo vệ.'},
+  {n:'Tốn',zh:'巽',li:'110110',f:'trung',m:'Gió — thấm dần',g:'Như gió thổi nhẹ nhàng nhưng thấm vào mọi nơi. Sự kiên trì và nhún nhường. Hướng dẫn người khác bằng sự nhẹ nhàng chứ không phải cưỡng ép. Tìm kiếm người hướng dẫn bạn.'},
+  {n:'Đoài',zh:'兌',li:'011011',f:'tot',m:'Hồ — vui vẻ, chia sẻ',g:'Vui vẻ và hứng khởi. Chia sẻ niềm vui với người khác sẽ nhân đôi nó. Ngôn từ ngọt ngào và sự giao tiếp tích cực. Nhưng tránh bị dẫn dụ bởi lời nịnh hót.'},
+  {n:'Hoán',zh:'渙',li:'110010',f:'trung',m:'Tan rã, phân tán',g:'Sự đông cứng đang tan ra. Như băng tan — rào cản đang được tháo bỏ. Thời điểm để đến đền thờ, tập hợp mọi người vì mục tiêu chung. Vượt qua nước lớn được.'},
+  {n:'Tiết',zh:'節',li:'010011',f:'trung',m:'Tiết chế, giới hạn',g:'Biết giới hạn là trí tuệ. Tiết kiệm và tiết chế mang lại sự bền vững. Tuy nhiên đừng quá khắt khe với bản thân và người khác — quy tắc khắc nghiệt khó duy trì lâu dài.'},
+  {n:'Trung Phu',zh:'中孚',li:'110011',f:'tot',m:'Tin tưởng nội tâm, thành tín',g:'Sự thành thật và tin tưởng từ trái tim. Khi bạn thật sự tin vào điều gì đó, ảnh hưởng của bạn sẽ lan rộng như tiếng kêu của con hạc. Lòng trung thực sẽ cảm hóa ngay cả kẻ cứng đầu nhất.'},
+  {n:'Tiểu Quá',zh:'小過',li:'001100',f:'canh',m:'Vượt qua một chút',g:'Được phép vượt qua một chút so với thông thường — nhưng chỉ một chút thôi. Như chim nhỏ bay thấp an toàn hơn bay cao. Việc nhỏ thuận, việc lớn không nên làm lúc này.'},
+  {n:'Ký Tế',zh:'既濟',li:'010101',f:'trung',m:'Đã hoàn thành',g:'Mọi việc đã đúng chỗ và hoàn tất. Nhưng đây chính là lúc nguy hiểm nhất — thành công dễ sinh ra sơ suất. Hãy duy trì cảnh giác và trật tự. Như lửa trên nước — phải giữ cân bằng liên tục.'},
+  {n:'Vị Tế',zh:'未濟',li:'101010',f:'trung',m:'Chưa hoàn thành',g:'Chưa đến lúc hoàn thành — vẫn còn phải vượt qua. Như cáo nhỏ sắp sang sông nhưng còn ướt đuôi. Tiếp tục cố gắng, mục tiêu đang ở gần. Sắp xong rồi — đừng bỏ cuộc.'},
+];
+
+// Trigram binary lookup (lower 3 bits = lower trigram, upper 3 bits = upper trigram)
+// Map binary string (6 chars, bottom→top) to QUE index (0-based)
+const LINE_TO_IDX = {};
+QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
+
+// ── State ──
+let currentLines = []; // array of {val: 6|7|8|9, yang: bool, changing: bool}
+let step = 0;
+let isFlipping = false;
+
+function toss() {
+  if (isFlipping) return;
+  if (step >= 6) return;
+  isFlipping = true;
+  const tossBtn = document.getElementById('tossBtn');
+  tossBtn.disabled = true;
+
+  document.getElementById('coinsWrap').style.display = 'flex';
+  document.getElementById('linesBuild').style.display = 'block';
+
+  // Animate 3 coins
+  const coins = [0,1,2].map(i => document.getElementById('coin'+i));
+  coins.forEach(c => { c.classList.remove('heads','tails','flipping'); c.textContent='?'; });
+
+  let flipCount = 0;
+  const interval = setInterval(() => {
+    coins.forEach(c => { c.classList.add('flipping'); c.textContent = Math.random() > 0.5 ? '正' : '反'; });
+    flipCount++;
+    if (flipCount >= 6) {
+      clearInterval(interval);
+      // Final result
+      const results = [0,1,2].map(() => Math.random() < 0.5 ? 3 : 2); // 3=heads(正), 2=tails(反)
+      const sum = results.reduce((a,b) => a+b, 0); // 6,7,8,9
+      setTimeout(() => {
+        results.forEach((r, i) => {
+          const c = coins[i];
+          c.classList.remove('flipping');
+          c.classList.toggle('heads', r === 3);
+          c.classList.toggle('tails', r === 2);
+          c.textContent = r === 3 ? '正' : '反';
+        });
+        addLine(sum);
+        isFlipping = false;
+        tossBtn.disabled = false;
+      }, 100);
+    }
+  }, 100);
+}
+
+function addLine(val) {
+  const isYang = val === 7 || val === 9;
+  const isChanging = val === 6 || val === 9;
+  currentLines.push({ val, yang: isYang, changing: isChanging });
+  step++;
+
+  // Render lines
+  const container = document.getElementById('linesContainer');
+  container.innerHTML = '';
+  currentLines.forEach((l, i) => {
+    const row = document.createElement('div');
+    row.className = 'line-row visible' + (l.changing ? ' line-changing' : '');
+    const numEl = document.createElement('div');
+    numEl.className = 'line-num';
+    numEl.textContent = i+1;
+    const lineEl = document.createElement('div');
+    if (l.yang) { lineEl.innerHTML = '<div class="line-yang"></div>'; }
+    else { lineEl.innerHTML = '<div class="line-yin"><span></span><span></span></div>'; }
+    const tagEl = document.createElement('div');
+    tagEl.style.minWidth = '50px';
+    if (l.changing) tagEl.innerHTML = `<span class="line-tag lt-change">Hào động ${l.val}</span>`;
+    row.appendChild(numEl);
+    row.appendChild(lineEl);
+    row.appendChild(tagEl);
+    container.appendChild(row);
+  });
+
+  const counter = document.getElementById('stepCounter');
+  if (step < 6) {
+    counter.textContent = `Đã gieo ${step}/6 hào — Bấm để gieo hào ${step+1}`;
+    document.getElementById('tossBtn').textContent = `✦ Gieo Hào ${step+1}`;
+  } else {
+    counter.textContent = 'Đã đủ 6 hào — Đang xem quẻ...';
+    document.getElementById('tossBtn').style.display = 'none';
+    document.getElementById('resetBtn').style.display = 'block';
+    setTimeout(showResult, 600);
+  }
+}
+
+function showResult() {
+  // Build binary string (bottom→top = index 0→5)
+  const primary = currentLines.map(l => l.yang ? '1' : '0').join('');
+  // Changed lines flip
+  const changed = currentLines.map(l => l.changing ? (l.yang ? '0' : '1') : (l.yang ? '1' : '0')).join('');
+  const hasChanging = currentLines.some(l => l.changing);
+
+  const pIdx = findHexagram(primary);
+  const cIdx = hasChanging ? findHexagram(changed) : -1;
+
+  const que = QUE[pIdx] || QUE[0];
+  const cQue = cIdx >= 0 ? QUE[cIdx] : null;
+
+  const cHoi = document.getElementById('cauHoi').value.trim();
+  document.getElementById('cauHoiDisplay').textContent = cHoi ? `"${cHoi}"` : '';
+
+  const fbCls = { tot: 'fb-tot', trung: 'fb-trung', canh: 'fb-canh' };
+  const fbLabel = { tot: '✦ Cát', trung: '◆ Bình', canh: '⚠ Cần thận' };
+
+  let html = `<div class="que-card primary">
+    <div class="que-eyebrow">Quẻ Chính</div>
+    <div class="que-symbol">${String.fromCodePoint(0x4DC0 + pIdx)}</div>
+    <div class="que-name">${que.n}</div>
+    <div class="que-zh">${que.zh} · ${que.li.split('').map(b=>b==='1'?'⚊':'⚋').join(' ')}</div>
+    <span class="fortune-badge ${fbCls[que.f]}">${fbLabel[que.f]}</span>
+    <div class="que-meaning">${que.m}</div>
+    <div class="que-guidance">${que.g}</div>
+  </div>`;
+
+  if (cQue) {
+    html += `<div class="que-card">
+      <div class="que-eyebrow">Quẻ Biến (xu hướng)</div>
+      <div class="que-symbol" style="opacity:0.7">${String.fromCodePoint(0x4DC0 + cIdx)}</div>
+      <div class="que-name">${cQue.n}</div>
+      <div class="que-zh">${cQue.zh} · ${cQue.li.split('').map(b=>b==='1'?'⚊':'⚋').join(' ')}</div>
+      <span class="fortune-badge ${fbCls[cQue.f]}">${fbLabel[cQue.f]}</span>
+      <div class="que-meaning">${cQue.m}</div>
+      <div class="que-guidance" style="font-size:13px">${cQue.g}</div>
+    </div>`;
+  } else {
+    html += `<div class="que-card" style="display:flex;align-items:center;justify-content:center;opacity:0.5">
+      <div style="text-align:center">
+        <div style="font-size:32px;margin-bottom:8px">—</div>
+        <div style="font-size:13px;color:var(--text-lt)">Không có hào động<br>Tình huống ổn định<br>Chỉ đọc quẻ chính</div>
+      </div>
+    </div>`;
+  }
+
+  document.getElementById('queGrid').innerHTML = html;
+  document.getElementById('result-section').classList.add('active');
+  document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function findHexagram(binary) {
+  // Direct lookup
+  if (LINE_TO_IDX[binary] !== undefined) return LINE_TO_IDX[binary];
+  // Fallback: find closest
+  let best = 0, bestScore = -1;
+  QUE.forEach((q, i) => {
+    let score = 0;
+    for (let j = 0; j < 6; j++) if (q.li[j] === binary[j]) score++;
+    if (score > bestScore) { bestScore = score; best = i; }
+  });
+  return best;
+}
+
+function reset() {
+  currentLines = [];
+  step = 0;
+  isFlipping = false;
+  document.getElementById('coinsWrap').style.display = 'none';
+  document.getElementById('linesBuild').style.display = 'none';
+  document.getElementById('linesContainer').innerHTML = '';
+  document.getElementById('result-section').classList.remove('active');
+  document.getElementById('queGrid').innerHTML = '';
+  document.getElementById('stepCounter').textContent = 'Bấm để bắt đầu gieo quẻ — 6 lần gieo, mỗi lần xác định 1 hào';
+  const tossBtn = document.getElementById('tossBtn');
+  tossBtn.textContent = '✦ Tập Trung & Gieo Hào Đầu Tiên';
+  tossBtn.style.display = 'block';
+  tossBtn.disabled = false;
+  document.getElementById('resetBtn').style.display = 'none';
+  [0,1,2].forEach(i => {
+    const c = document.getElementById('coin'+i);
+    c.className = 'coin';
+    c.textContent = '?';
+  });
+  window.scrollTo({ top: document.querySelector('.form-section').offsetTop - 80, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tra Giờ Hoàng Đạo Hắc Đạo – Tử Vi Minh Bảo</title>
+<meta name="description" content="Tra 6 giờ Hoàng Đạo và 6 giờ Hắc Đạo trong ngày theo can chi ngày âm lịch. Biết giờ nào xuất hành, ký kết, gặp đối tác thuận lợi nhất.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<script src="/tuvi-ansao-engine.js"></script>
+<style>
+.gio-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.gio-card { padding: 14px 8px; text-align: center; border-radius: 6px; border: 1px solid var(--border-lt); }
+.gio-card.hd { background: #eaf4ed; border-color: #c3e0cc; }
+.gio-card.hd2 { background: #fef0ef; border-color: #f5c0bc; }
+.gio-chi { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.gio-time { font-size: 10px; color: var(--text-lt); margin-bottom: 6px; }
+.gio-than { font-size: 11px; font-weight: 600; }
+.gio-type { font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+.tag-hd { color: #1E6B3C; } .tag-hd2 { color: #C0392B; }
+.ngay-info { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 24px; }
+.ngay-item { font-size: 13px; color: var(--text-mid); }
+.ngay-item strong { color: var(--navy); }
+@media(max-width:600px) { .gio-grid { grid-template-columns: repeat(3,1fr); } }
+</style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Miễn Phí</div>
+    <h1>Tra Giờ <em>Hoàng Đạo</em> &amp; Hắc Đạo</h1>
+    <p>Biết 6 giờ Hoàng Đạo và 6 giờ Hắc Đạo trong ngày — xuất hành, ký kết, khởi công, gặp đối tác vào giờ nào là thuận nhất.</p>
+  </div>
+</div>
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Hoàng Đạo / Hắc Đạo là gì?</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">12 Giờ Mỗi Ngày —<br>6 Thuận, 6 Nghịch</h2>
+          <p class="xt-body">Mỗi ngày trong âm lịch có 12 giờ (chi), mỗi giờ được cai quản bởi một trong 12 Thần Tướng. 6 thần thuộc Hoàng Đạo (Thanh Long, Minh Đường, Kim Quỹ, Thiên Đức, Ngọc Đường, Tư Mệnh) — giờ tốt để hành sự. 6 thần còn lại thuộc Hắc Đạo — nên tránh việc quan trọng.</p>
+          <p class="xt-body">Vị trí 12 thần xoay vòng theo can chi của ngày, nên giờ Hoàng Đạo khác nhau mỗi ngày. Tra đúng ngày để biết chính xác.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">6 Thần Hoàng Đạo</div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1E6B3C">✦</span><span class="xt-factor-label">Thanh Long</span><span class="xt-factor-desc">Tài lộc, may mắn, mọi việc hanh thông</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1E6B3C">✦</span><span class="xt-factor-label">Minh Đường</span><span class="xt-factor-desc">Quý nhân phù trợ, giao dịch thuận lợi</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1E6B3C">✦</span><span class="xt-factor-label">Kim Quỹ</span><span class="xt-factor-desc">Tài chính, thu nạp tiền bạc</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1E6B3C">✦</span><span class="xt-factor-label">Thiên Đức</span><span class="xt-factor-desc">Phúc đức, hóa giải hung sát</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1E6B3C">✦</span><span class="xt-factor-label">Ngọc Đường</span><span class="xt-factor-desc">Danh vọng, thành tựu, vinh hiển</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1E6B3C">✦</span><span class="xt-factor-label">Tư Mệnh</span><span class="xt-factor-desc">Bảo hộ sinh mệnh, cầu phúc</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-section">
+    <div class="section-eyebrow">Chọn Ngày Cần Tra</div>
+    <div class="form-grid cols-1">
+      <div class="form-col">
+        <div class="form-col-title">Ngày Dương Lịch</div>
+        <div class="form-row-3">
+          <div class="form-group"><label class="form-label">Ngày</label><input class="form-input" type="number" id="ngay" min="1" max="31" placeholder="1–31"></div>
+          <div class="form-group"><label class="form-label">Tháng</label><input class="form-input" type="number" id="thang" min="1" max="12" placeholder="1–12"></div>
+          <div class="form-group"><label class="form-label">Năm</label><input class="form-input" type="number" id="nam" placeholder="2026" min="1900" max="2100"></div>
+        </div>
+        <button class="btn-submit" onclick="calculate()">Tra Giờ Hoàng Đạo</button>
+      </div>
+    </div>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+  <div class="result-section" id="result-section">
+    <div class="res-block">
+      <div class="res-block-header"><span class="res-block-title" id="resTitle">—</span></div>
+      <div class="res-block-body">
+        <div class="ngay-info" id="ngayInfo"></div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#1E6B3C;margin-bottom:8px">✦ Hoàng Đạo — 6 Giờ Tốt</div>
+        <div class="gio-grid" id="hdList"></div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#C0392B;margin:20px 0 8px">✗ Hắc Đạo — 6 Giờ Cần Tránh</div>
+        <div class="gio-grid" id="hd2List"></div>
+      </div>
+    </div>
+  </div>
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Chọn Ngày Theo Lá Số Riêng</div>
+    <div class="tool-cta-title">Kết Hợp Hoàng Đạo Với Vận Hạn Cá Nhân</div>
+    <div class="tool-cta-desc">Giờ Hoàng Đạo tốt cho tất cả mọi người — nhưng chọn ngày tốt nhất cho riêng bạn cần xét thêm đại vận, tiểu vận và cung vị cá nhân trong lá số Tử Vi.</div>
+    <a class="tool-cta-btn" href="/luan-giai.html">Xem Lá Số & Vận Hạn →</a>
+  </div>
+</div>
+<footer class="site-footer">
+  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
+<script>
+const CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+const CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
+const GIO_TIME=['23–01h','01–03h','03–05h','05–07h','07–09h','09–11h','11–13h','13–15h','15–17h','17–19h','19–21h','21–23h'];
+// 12 thần tướng theo thứ tự vòng tròn
+const THAN=['Thanh Long','Minh Đường','Thiên Hình','Chu Tước','Kim Quỹ','Thiên Đức','Bạch Hổ','Ngọc Đường','Thiên Lao','Huyền Vũ','Tư Mệnh','Câu Trần'];
+const IS_HD=[true,true,false,false,true,true,false,true,false,false,true,false]; // HD index trong THAN
+// chi ngày → offset bắt đầu của Thanh Long (tại giờ chi nào)
+const HD_OFFSET=[0,2,1,2,2,3,0,2,1,2,2,3]; // Tý=0,Sửu=2,Dần=1,...
+const THAN_DESC={
+  'Thanh Long':'Tài lộc, mọi việc hanh thông',
+  'Minh Đường':'Quý nhân phù trợ, thuận lợi',
+  'Thiên Hình':'Kiện tụng, tranh chấp, hung',
+  'Chu Tước':'Khẩu thiệt, thị phi',
+  'Kim Quỹ':'Tài chính, thu nạp tiền',
+  'Thiên Đức':'Phúc đức, hóa giải hung',
+  'Bạch Hổ':'Sát khí, tai họa',
+  'Ngọc Đường':'Danh vọng, thành tựu',
+  'Thiên Lao':'Giam cầm, trở ngại',
+  'Huyền Vũ':'Trộm cướp, tổn thất',
+  'Tư Mệnh':'Bảo hộ, cầu phúc',
+  'Câu Trần':'Vướng mắc, trì trệ'
+};
+function toJDN(y,m,d){const a=Math.floor((14-m)/12),yr=y+4800-a,mn=m+12*a-3;return d+Math.floor((153*mn+2)/5)+365*yr+Math.floor(yr/4)-Math.floor(yr/100)+Math.floor(yr/400)-32045;}
+function getNgayCanChi(y,m,d){
+  const jdn=toJDN(y,m,d);
+  const ANCHOR=2434290; // Oct 4 1952 = Giáp Tý
+  const diff=((jdn-ANCHOR)%60+600)%60;
+  return{can:diff%10,chi:diff%12};
+}
+function calculate(){
+  const ngay=parseInt(document.getElementById('ngay').value);
+  const thang=parseInt(document.getElementById('thang').value);
+  const nam=parseInt(document.getElementById('nam').value);
+  const err=document.getElementById('error-msg');
+  err.classList.remove('active');
+  if(!ngay||ngay<1||ngay>31||!thang||thang<1||thang>12||!nam){err.textContent='Vui lòng nhập ngày tháng năm hợp lệ.';err.classList.add('active');return;}
+  const {can,chi}=getNgayCanChi(nam,thang,ngay);
+  const canChiNgay=CAN[can]+' '+CHI[chi];
+  // Convert to AL for display
+  let alStr='';
+  try{const conv=convertDuongToAm(ngay,thang,nam,0);alStr=` (AL ${conv.amLich.day}/${conv.amLich.month})`;}catch(e){}
+  document.getElementById('resTitle').textContent=`${ngay}/${thang}/${nam}${alStr} — Ngày ${canChiNgay}`;
+  document.getElementById('ngayInfo').innerHTML=`<span class="ngay-item">Ngày <strong>${canChiNgay}</strong></span><span class="ngay-item">Can <strong>${CAN[can]}</strong> — Ngũ hành <strong>${['Mộc','Mộc','Hỏa','Hỏa','Thổ','Thổ','Kim','Kim','Thủy','Thủy'][can]}</strong></span>`;
+  // Build 12 thần for each giờ
+  const offset=HD_OFFSET[chi]; // Thanh Long bắt đầu tại giờ offset
+  const hdItems=[],hd2Items=[];
+  for(let g=0;g<12;g++){
+    const thanIdx=((g-offset+12)%12);
+    const than=THAN[thanIdx];
+    const isHD=IS_HD[thanIdx];
+    const card=`<div class="gio-card ${isHD?'hd':'hd2'}">
+      <div class="gio-chi">${CHI[g]}</div>
+      <div class="gio-time">${GIO_TIME[g]}</div>
+      <div class="gio-than ${isHD?'tag-hd':'tag-hd2'}">${than}</div>
+      <div class="gio-type ${isHD?'tag-hd':'tag-hd2'}">${isHD?'Hoàng Đạo':'Hắc Đạo'}</div>
+      <div style="font-size:10px;color:var(--text-lt);margin-top:4px;line-height:1.4">${THAN_DESC[than]||''}</div>
+    </div>`;
+    if(isHD)hdItems.push({g,card});else hd2Items.push({g,card});
+  }
+  document.getElementById('hdList').innerHTML=hdItems.map(x=>x.card).join('');
+  document.getElementById('hd2List').innerHTML=hd2Items.map(x=>x.card).join('');
+  document.getElementById('result-section').classList.add('active');
+  document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
+}
+// Default today
+(function(){const t=new Date();document.getElementById('ngay').value=t.getDate();document.getElementById('thang').value=t.getMonth()+1;document.getElementById('nam').value=t.getFullYear();})();
+</script>
+</body>
+</html>

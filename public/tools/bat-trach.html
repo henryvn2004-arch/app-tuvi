@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Hướng Tốt Xấu Bát Trạch – Tử Vi Minh Bảo</title>
+<meta name="description" content="Tra 4 hướng tốt và 4 hướng xấu theo Bát Trạch Phong Thủy. Biết hướng ngủ, ngồi làm việc, đặt bàn thờ, cửa chính phù hợp với tuổi.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<style>
+.compass-wrap { position: relative; width: 260px; height: 260px; margin: 0 auto 24px; }
+.compass-ring { width: 260px; height: 260px; border-radius: 50%; border: 2px solid var(--border); position: absolute; }
+.compass-dir { position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 70px; height: 70px; border-radius: 50%; font-size: 11px; font-weight: 700; }
+.dir-N  { top:-8px;    left:50%; transform:translateX(-50%); }
+.dir-S  { bottom:-8px; left:50%; transform:translateX(-50%); }
+.dir-E  { right:-8px;  top:50%;  transform:translateY(-50%); }
+.dir-W  { left:-8px;   top:50%;  transform:translateY(-50%); }
+.dir-NE { top:16px;    right:16px; }
+.dir-NW { top:16px;    left:16px; }
+.dir-SE { bottom:16px; right:16px; }
+.dir-SW { bottom:16px; left:16px; }
+.dir-good { background: #eaf4ed; color: #1E6B3C; border: 2px solid #c3e0cc; }
+.dir-bad  { background: #fef0ef; color: #C0392B; border: 2px solid #f5c0bc; }
+.dir-neu  { background: var(--bg-soft); color: var(--text-mid); border: 1px solid var(--border-lt); }
+.dir-label { font-size: 9px; font-weight: 400; margin-top: 2px; text-align: center; line-height: 1.3; }
+.huong-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.huong-table th { background: var(--navy); color: #fff; padding: 10px 14px; font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; text-align: left; }
+.huong-table td { padding: 10px 14px; border-bottom: 1px solid var(--border-lt); }
+.huong-table tr.good td { background: #eaf4ed; }
+.huong-table tr.bad  td { background: #fef0ef; }
+.dot-good { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #1E6B3C; margin-right: 6px; vertical-align: middle; }
+.dot-bad  { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #C0392B; margin-right: 6px; vertical-align: middle; }
+.nhom-badge { display: inline-block; padding: 4px 12px; font-size: 11px; font-weight: 700; letter-spacing: 1px; border-radius: 3px; }
+.dong { background: #e8f0fe; color: #1455A4; }
+.tay  { background: #fff8ec; color: #9A7B3A; }
+</style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Miễn Phí</div>
+    <h1>Hướng Tốt Xấu<br><em>Bát Trạch</em> Phong Thủy</h1>
+    <p>Tra 4 hướng đại cát và 4 hướng đại hung theo cung mệnh Bát Trạch — biết hướng ngủ, bàn làm việc, cửa chính, bàn thờ phù hợp nhất với tuổi.</p>
+  </div>
+</div>
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Bát Trạch là gì?</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">Bát Trạch Phong Thủy —<br>8 Hướng, 2 Nhóm Mệnh</h2>
+          <p class="xt-body">Bát Trạch (八宅) là hệ thống phong thủy chia con người thành 2 nhóm: <strong>Đông Tứ Mệnh</strong> (cung 1, 3, 4, 9) và <strong>Tây Tứ Mệnh</strong> (cung 2, 6, 7, 8). Mỗi nhóm hợp với 4 hướng cát và xung với 4 hướng hung.</p>
+          <p class="xt-body">Cung mệnh được tính từ năm sinh và giới tính theo công thức Lạc Thư Phi Tinh. Hai người cùng năm sinh nhưng khác giới có cung mệnh khác nhau và hướng tốt/xấu khác nhau.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">4 Hướng Cát (theo thứ tự tốt)</div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1E6B3C">①</span><span class="xt-factor-label">Sinh Khí</span><span class="xt-factor-desc">Hướng tốt nhất — tài lộc, sức khỏe, phát triển</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1E6B3C">②</span><span class="xt-factor-label">Thiên Y</span><span class="xt-factor-desc">Sức khỏe, trường thọ, y duyên thuận lợi</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1E6B3C">③</span><span class="xt-factor-label">Diên Niên</span><span class="xt-factor-desc">Hôn nhân, quan hệ, sự nghiệp lâu dài</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#1E6B3C">④</span><span class="xt-factor-label">Phục Vị</span><span class="xt-factor-desc">Bình ổn, giữ vững — tốt cho an cư</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="color:#C0392B">✗</span><span class="xt-factor-label">4 Hung</span><span class="xt-factor-desc">Tuyệt Mệnh, Ngũ Quỷ, Lục Sát, Họa Hại — tránh đặt cửa/bàn ngủ</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-section">
+    <div class="section-eyebrow">Nhập Thông Tin</div>
+    <div class="form-grid cols-2">
+      <div class="form-col">
+        <div class="form-col-title">Năm Sinh &amp; Giới Tính</div>
+        <div class="form-group"><label class="form-label">Năm sinh dương lịch</label><input class="form-input" type="number" id="year" placeholder="1990" min="1900" max="2010"></div>
+        <div class="form-group"><label class="form-label">Giới tính</label><select class="form-input" id="gender"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
+        <button class="btn-submit" onclick="calculate()">Tra Hướng Bát Trạch</button>
+      </div>
+      <div class="form-col" style="background:var(--bg-soft);border-left:1px solid var(--border)">
+        <div class="form-col-title">Lưu Ý</div>
+        <p style="font-size:13px;color:var(--text-mid);line-height:1.7">Bát Trạch cho biết hướng tốt <em>tổng quan</em> theo năm sinh. Để chọn hướng nhà, phòng ngủ chính xác cần xét thêm hình thế, toà sơn, hướng nước... Kết quả này mang tính tham khảo theo quan điểm Bát Trạch cổ pháp.</p>
+      </div>
+    </div>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+  <div class="result-section" id="result-section">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start" id="resultGrid">
+      <div>
+        <div class="res-block" style="margin-bottom:0">
+          <div class="res-block-header"><span class="res-block-title" id="resTitle">—</span></div>
+          <div class="res-block-body" id="resInfo"></div>
+        </div>
+      </div>
+      <div>
+        <div class="compass-wrap" id="compassWrap"></div>
+      </div>
+    </div>
+    <div class="res-block" style="margin-top:24px">
+      <div class="res-block-header"><span class="res-block-title">Bảng 8 Hướng Chi Tiết</span></div>
+      <div style="overflow-x:auto"><table class="huong-table" id="huongTable">
+        <thead><tr><th>Hướng</th><th>Tên Hướng</th><th>Ý Nghĩa</th><th>Gợi Ý Dùng</th></tr></thead>
+        <tbody id="huongBody"></tbody>
+      </table></div>
+    </div>
+  </div>
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Kết Hợp Phong Thủy &amp; Tử Vi</div>
+    <div class="tool-cta-title">Xem Vận Hạn Cá Nhân Theo Lá Số</div>
+    <div class="tool-cta-desc">Hướng tốt Bát Trạch là nền tảng — nhưng vận hạn từng giai đoạn trong lá số Tử Vi mới cho biết đây có phải thời điểm chuyển nhà, sắp xếp lại không gian hay không.</div>
+    <a class="tool-cta-btn" href="/luan-giai.html">Xem Lá Số Tử Vi ($19) →</a>
+  </div>
+</div>
+<footer class="site-footer">
+  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
+<script>
+// Cung mệnh theo năm sinh + giới tính
+function getCungMenh(nam, gioitinh) {
+  let s = 0, y = nam % 100; if(y===0) y=100;
+  while(y>9){s=0;while(y>0){s+=y%10;y=Math.floor(y/10);}y=s;}
+  let cung;
+  if(gioitinh==='nam'){ cung=10-y; if(cung===0)cung=9; if(cung===5)cung=2; }
+  else { cung=y+5; if(cung>9)cung-=9; if(cung===5)cung=8; }
+  return cung;
+}
+const CUNG_NAME=['','Khảm','Khôn','Chấn','Tốn','Trung Cung','Càn','Đoài','Cấn','Ly'];
+const CUNG_HANH=['','Thủy','Thổ','Mộc','Mộc','Thổ','Kim','Kim','Thổ','Hỏa'];
+const CUNG_DIR=['','N','SW','E','SE','—','NW','W','NE','S'];
+const NHOM=['','Đông','Tây','Đông','Đông','Tây','Tây','Tây','Tây','Đông'];
+// [Sinh Khí, Thiên Y, Diên Niên, Phục Vị, Họa Hại, Lục Sát, Ngũ Quỷ, Tuyệt Mệnh]
+const BT={
+  1:['SE','E','S','N','W','NW','NE','SW'],
+  2:['NE','W','NW','SW','E','SE','S','N'],
+  3:['S','N','SE','E','SW','NE','W','NW'],
+  4:['N','S','E','SE','NW','SW','NW','W'],  // fix: Phục Vị=SE
+  6:['W','NE','SW','NW','SE','E','N','S'],
+  7:['NW','SW','NE','W','N','S','SE','E'],
+  8:['SW','NW','W','NE','S','N','E','SE'],
+  9:['E','SE','N','S','NE','SW','SW','NW'],
+};
+// Fix cung 4 (Tốn): SK=N, TY=S, DN=E, PV=SE
+BT[4]=['N','S','E','SE','SW','NE','W','NW'];
+const CAT_NAMES=['Sinh Khí','Thiên Y','Diên Niên','Phục Vị'];
+const HUNG_NAMES=['Họa Hại','Lục Sát','Ngũ Quỷ','Tuyệt Mệnh'];
+const CAT_DESC=['Tài lộc, sức khỏe, phát triển tốt nhất','Sức khỏe, trường thọ, y duyên','Hôn nhân, sự nghiệp bền vững','Bình ổn, an cư, giữ vững'];
+const HUNG_DESC=['Hao tài, thị phi, chuyện không hay','Tình cảm trục trặc, sức khỏe suy','Tiểu nhân, phá hoại ngầm','Tuyệt vận, bệnh nặng, tai họa lớn'];
+const CAT_USE=['Cửa chính, phòng ngủ, bàn làm việc','Phòng ngủ, hướng đầu giường','Bàn thờ, phòng khách, bàn ăn','Kho, nhà vệ sinh, phòng phụ'];
+const HUNG_USE=['Tránh cửa chính, phòng ngủ','Tránh đặt bàn thờ, phòng ngủ','Tránh bếp, phòng chủ','Không đặt cửa, không kê giường'];
+const DIR_VI={'N':'Bắc','S':'Nam','E','Đông','W':'Tây','NE':'Đông Bắc','NW':'Tây Bắc','SE':'Đông Nam','SW':'Tây Nam'};
+const DIR_POS={'N':{css:'dir-N'},'S':{css:'dir-S'},'E':{css:'dir-E'},'W':{css:'dir-W'},'NE':{css:'dir-NE'},'NW':{css:'dir-NW'},'SE':{css:'dir-SE'},'SW':{css:'dir-SW'}};
+
+function calculate(){
+  const year=parseInt(document.getElementById('year').value);
+  const gender=document.getElementById('gender').value;
+  const err=document.getElementById('error-msg');
+  err.classList.remove('active');
+  if(!year||year<1900||year>2010){err.textContent='Vui lòng nhập năm sinh hợp lệ (1900–2010).';err.classList.add('active');return;}
+  let cung=getCungMenh(year,gender);
+  if(cung===5) cung=gender==='nam'?2:8;
+  const dirs=BT[cung];
+  if(!dirs){err.textContent='Không tính được cung mệnh.';err.classList.add('active');return;}
+  const nhom=NHOM[cung];
+  document.getElementById('resTitle').textContent=`Năm ${year} — Cung ${cung} ${CUNG_NAME[cung]} — ${nhom} Tứ Mệnh`;
+  document.getElementById('resInfo').innerHTML=`
+    <div style="margin-bottom:16px"><span class="nhom-badge ${nhom==='Đông'?'dong':'tay'}">${nhom} Tứ Mệnh</span></div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div class="res-row"><span class="res-row-label">Cung Mệnh</span><span class="res-row-val">${cung} — ${CUNG_NAME[cung]}</span></div>
+      <div class="res-row"><span class="res-row-label">Ngũ Hành</span><span class="res-row-val">${CUNG_HANH[cung]}</span></div>
+      <div class="res-row"><span class="res-row-label">Vị Trí Cung</span><span class="res-row-val">${DIR_VI[CUNG_DIR[cung]]||'Trung tâm'}</span></div>
+      <div class="res-row" style="border:none"><span class="res-row-label">Nhóm</span><span class="res-row-val">${nhom==='Đông'?'Đông Tứ Mệnh — hợp các hướng Đông, Đông Nam, Nam, Bắc':'Tây Tứ Mệnh — hợp các hướng Tây, Tây Bắc, Đông Bắc, Tây Nam'}</span></div>
+    </div>`;
+  // Compass
+  const compassHTML=Object.entries(DIR_POS).map(([d,p])=>{
+    const catIdx=dirs.slice(0,4).indexOf(d);
+    const hungIdx=dirs.slice(4).indexOf(d);
+    let cls='dir-neu',label='';
+    if(catIdx>=0){cls='dir-good';label=CAT_NAMES[catIdx];}
+    else if(hungIdx>=0){cls='dir-bad';label=HUNG_NAMES[hungIdx];}
+    return`<div class="compass-dir ${p.css} ${cls}"><div>${DIR_VI[d]}</div><div class="dir-label">${label}</div></div>`;
+  }).join('');
+  document.getElementById('compassWrap').innerHTML=`<div class="compass-ring"></div><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text-lt);font-weight:600">CUNG ${cung}</div>${compassHTML}`;
+  // Table
+  const rows=[
+    ...dirs.slice(0,4).map((d,i)=>`<tr class="good"><td><span class="dot-good"></span><strong>${DIR_VI[d]}</strong></td><td style="color:#1E6B3C;font-weight:600">${CAT_NAMES[i]}</td><td>${CAT_DESC[i]}</td><td style="font-size:12px">${CAT_USE[i]}</td></tr>`),
+    ...dirs.slice(4).map((d,i)=>`<tr class="bad"><td><span class="dot-bad"></span><strong>${DIR_VI[d]}</strong></td><td style="color:#C0392B;font-weight:600">${HUNG_NAMES[i]}</td><td>${HUNG_DESC[i]}</td><td style="font-size:12px;color:#999">${HUNG_USE[i]}</td></tr>`),
+  ];
+  document.getElementById('huongBody').innerHTML=rows.join('');
+  document.getElementById('result-section').classList.add('active');
+  document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
+}
+</script>
+</body>
+</html>
