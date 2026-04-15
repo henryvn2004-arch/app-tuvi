@@ -55,7 +55,7 @@
     '.nav-hamburger{display:block;margin-left:auto}',
     '.nav-dd{width:100%;display:block}',
     '.nav-dd:hover .nav-dd-menu{display:none}',
-    '.nav-dd-menu{position:static;border:none;box-shadow:none;background:rgba(255,255,255,.06);width:100%;max-height:none}',
+    '.nav-dd-menu{position:static;border:none;box-shadow:none;background:rgba(255,255,255,.06);width:100%;max-height:60vh;overflow-y:auto}',
     '.nav-dd-menu.open{display:block !important}',
     '.nav-dd-item{color:#8BAACC;padding:9px 36px;border-bottom:1px solid rgba(255,255,255,.05)}',
     '.nav-dd-item:hover{background:rgba(255,255,255,.05);color:#fff}',
