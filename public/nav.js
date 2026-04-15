@@ -64,6 +64,19 @@
     '}'
   ].join('');
 
+  // ── Google Analytics 4 ───────────────────────────────────────────────────
+  if (!document.getElementById('gtag-js')) {
+    var ga = document.createElement('script');
+    ga.id = 'gtag-js'; ga.async = true;
+    ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-F4XNRS2XT0';
+    document.head.appendChild(ga);
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', 'G-F4XNRS2XT0');
+  }
+
   if (!document.getElementById('nav-css')) {
     var s = document.createElement('style');
     s.id = 'nav-css';
