@@ -4,27 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Xem Tướng Mặt bằng AI – Tử Vi Minh Bảo</title>
-<meta name="description" content="Chụp hoặc tải ảnh khuôn mặt — AI phân tích nhân tướng học theo truyền thống phương Đông: trán, mắt, mũi, miệng, cằm, lông mày, tai. Miễn phí.">
+<meta name="description" content="Chụp hoặc tải ảnh khuôn mặt — MediaPipe xác định Tam Đình chính xác, Claude AI phân tích nhân tướng học cổ pháp phương Đông.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="stylesheet" href="/tools/tools.css">
 <style>
-/* Upload area */
 .upload-area{border:2px dashed var(--border);border-radius:12px;padding:40px 24px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg-soft);position:relative}
 .upload-area:hover,.upload-area.dragover{border-color:#c9a84c;background:#c9a84c08}
 .upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 .upload-icon{font-size:48px;margin-bottom:12px;display:block}
 .upload-title{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:6px}
 .upload-sub{font-size:13px;color:var(--text-lt)}
-/* Preview */
 .preview-wrap{position:relative;display:inline-block;margin:0 auto}
-.preview-img{max-width:300px;max-height:350px;width:100%;border-radius:12px;display:block;object-fit:cover}
+.preview-img{max-width:300px;max-height:380px;width:100%;border-radius:12px;display:block}
+.overlay-canvas{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;pointer-events:none}
 .preview-badge{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;font-size:11px;padding:4px 10px;border-radius:20px}
+.mp-badge{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(20,85,164,.85);color:#fff;font-size:10px;padding:3px 10px;border-radius:20px;white-space:nowrap;display:none}
 .remove-btn{display:block;margin:10px auto 0;background:none;border:1px solid var(--border);border-radius:4px;padding:6px 16px;font-size:12px;color:var(--text-mid);cursor:pointer;font-family:inherit}
-.remove-btn:hover{background:var(--bg-soft)}
-/* Camera btn */
-.camera-btn{display:flex;align-items:center;gap:8px;padding:12px 24px;background:var(--navy);color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;margin:12px auto 0}
-.camera-btn:hover{background:#0D3B5E}
-/* Result markdown */
+.camera-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:var(--navy);color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin:12px auto 0}
 .md-result{font-size:14px;line-height:1.85;color:var(--text-mid)}
 .md-result h2{font-size:16px;font-weight:700;color:var(--navy);margin:20px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border-lt)}
 .md-result h3{font-size:14px;font-weight:700;color:var(--navy);margin:14px 0 6px}
@@ -34,14 +30,11 @@
 .md-result li{margin:4px 0}
 .md-result p{margin:0 0 10px}
 .md-result blockquote{border-left:3px solid #c9a84c;padding:8px 16px;margin:12px 0;background:#fdf8f0;border-radius:0 6px 6px 0;color:#9A7B3A;font-style:italic}
-/* Loading */
 .ai-loading{display:flex;flex-direction:column;align-items:center;gap:16px;padding:40px 0}
 .ai-loading-icon{font-size:48px;animation:pulse 1.5s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.95)}}
 .ai-loading-text{font-size:14px;color:var(--text-lt);text-align:center}
-/* Privacy notice */
 .privacy-notice{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;background:#e8f0fe;border-radius:8px;border-left:3px solid #1455A4;font-size:12px;color:#1455A4;margin-top:16px}
-/* Tabs */
 .input-tabs{display:flex;gap:0;border-bottom:2px solid var(--border-lt);margin-bottom:20px}
 .input-tab{padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text-lt);border-bottom:2px solid transparent;margin-bottom:-2px;font-family:inherit;background:none;border-top:none;border-left:none;border-right:none;transition:all .15s}
 .input-tab.active{color:var(--navy);border-bottom-color:#c9a84c}
@@ -56,69 +49,70 @@
   <div class="page">
     <div class="eyebrow">Công Cụ Miễn Phí · AI Vision</div>
     <h1>Xem Tướng Mặt<br><em>Bằng AI</em></h1>
-    <p>Chụp hoặc tải ảnh khuôn mặt — Claude AI phân tích theo nhân tướng học phương Đông: trán, mắt, mũi, miệng, cằm, lông mày, tai.</p>
+    <p>MediaPipe xác định Tam Đình chính xác. Claude AI phân tích nhân tướng học cổ pháp — trung thực, cân bằng tốt lẫn xấu.</p>
   </div>
 </div>
 
 <div class="page">
   <div class="tool-intro">
     <div class="xt-section">
-      <div class="xt-eyebrow">AI + Nhân Tướng Học</div>
+      <div class="xt-eyebrow">Hai Lớp Phân Tích</div>
       <div class="xt-grid-2">
         <div>
-          <h2 class="xt-h2">Claude Đọc Tướng Mặt<br>Theo Cổ Pháp Phương Đông</h2>
-          <p class="xt-body">Không chỉ là nhận diện khuôn mặt thông thường — AI được hướng dẫn theo <strong>Ma Y Thần Tướng</strong> và cổ pháp nhân tướng học phương Đông, phân tích từng đặc điểm và liên kết với ý nghĩa tướng pháp cụ thể.</p>
-          <p class="xt-body">Cho kết quả tốt nhất với ảnh chụp thẳng mặt, ánh sáng đủ, không đeo kính hay khẩu trang. Bạn có thể dùng ảnh của mình hoặc ảnh bất kỳ người nào.</p>
+          <h2 class="xt-h2">MediaPipe + Claude —<br>Geometry &amp; Luận Giải</h2>
+          <p class="xt-body"><strong>MediaPipe FaceMesh</strong> (Google) chạy ngay trên trình duyệt — detect 478 landmark, xác định chính xác vị trí chân mày, sóng mũi, cằm để vẽ đường Tam Đình đúng chuẩn cổ pháp.</p>
+          <p class="xt-body"><strong>Claude AI</strong> phân tích đặc điểm nhân tướng theo Ma Y Thần Tướng và Liễu Trang Thần Tướng — nêu cả điểm vượng lẫn điểm cần lưu ý, không tô vẽ một chiều.</p>
         </div>
         <div class="xt-factors">
-          <div class="xt-factor-title">AI Phân Tích 8 Bộ Phận</div>
-          <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">Tổng Quan</span><span class="xt-factor-desc">Hình dạng khuôn mặt, khí chất tổng thể</span></div>
-          <div class="xt-factor-item"><span class="xt-factor-num">②③</span><span class="xt-factor-label">Trán & Lông Mày</span><span class="xt-factor-desc">Trí tuệ, vận 15–30, quan hệ anh chị em</span></div>
-          <div class="xt-factor-item"><span class="xt-factor-num">④</span><span class="xt-factor-label">Mắt</span><span class="xt-factor-desc">Tâm hồn, cảm xúc, vận trung niên</span></div>
-          <div class="xt-factor-item"><span class="xt-factor-num">⑤</span><span class="xt-factor-label">Mũi</span><span class="xt-factor-desc">Tài lộc, sức khoẻ, vận 41–50</span></div>
-          <div class="xt-factor-item"><span class="xt-factor-num">⑥⑦⑧</span><span class="xt-factor-label">Miệng, Cằm, Tai</span><span class="xt-factor-desc">Giao tiếp, hậu vận, tuổi thọ</span></div>
+          <div class="xt-factor-title">Tam Đình (三停)</div>
+          <div class="xt-factor-item">
+            <span style="background:#1455A430;color:#1455A4;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700;flex-shrink:0">Thượng Đình</span>
+            <span class="xt-factor-desc">Đỉnh trán → Chân mày · Thiên phú, trí tuệ, vận niên thiếu</span>
+          </div>
+          <div class="xt-factor-item">
+            <span style="background:#9A7B3A30;color:#9A7B3A;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700;flex-shrink:0">Trung Đình</span>
+            <span class="xt-factor-desc">Chân mày → Sóng mũi · Nhân, khí, sự nghiệp, tình cảm</span>
+          </div>
+          <div class="xt-factor-item">
+            <span style="background:#1E6B3C30;color:#1E6B3C;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700;flex-shrink:0">Hạ Đình</span>
+            <span class="xt-factor-desc">Sóng mũi → Cuối cằm · Địa, hoạt động, hậu vận, con cái</span>
+          </div>
+          <div class="xt-note" style="margin-top:12px">
+            <span class="xt-note-icon">💡</span>
+            <div>Ba vùng cân bằng 1:1:1 là lý tưởng. Vùng nào vượng hơn → giai đoạn đó thuận lợi hơn.</div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- TOOL -->
   <div class="form-section" id="inputSection">
     <div class="section-eyebrow">Tải Ảnh Lên</div>
-
-    <!-- Privacy notice -->
     <div class="privacy-notice">
       <span>🔒</span>
-      <div><strong>Quyền riêng tư:</strong> Ảnh chỉ được gửi đến Claude AI để phân tích và không được lưu trữ trên máy chủ của chúng tôi. Không dùng ảnh của người khác khi chưa được đồng ý.</div>
+      <div><strong>Quyền riêng tư:</strong> MediaPipe chạy hoàn toàn trên trình duyệt — ảnh không rời thiết bị cho đến khi bạn bấm phân tích. Ảnh chỉ gửi đến Claude AI và không lưu trên server.</div>
     </div>
 
-    <!-- Input tabs -->
     <div class="input-tabs" style="margin-top:20px">
       <button class="input-tab active" onclick="switchTab('upload',this)">📁 Tải Ảnh Lên</button>
       <button class="input-tab" onclick="switchTab('camera',this)">📷 Chụp Ảnh</button>
     </div>
 
-    <!-- Upload pane -->
     <div class="input-pane active" id="pane-upload">
       <div id="uploadArea" class="upload-area" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
         <input type="file" id="fileInput" accept="image/*" onchange="onFileSelect(event)">
         <span class="upload-icon">🖼️</span>
         <div class="upload-title">Kéo thả ảnh vào đây hoặc click để chọn</div>
-        <div class="upload-sub">JPG, PNG, WebP — tối đa 5MB · Tốt nhất: ảnh chụp thẳng mặt, đủ sáng</div>
+        <div class="upload-sub">JPG, PNG, WebP — tối đa 5MB · Tốt nhất: ảnh thẳng mặt, đủ sáng, không che mặt</div>
       </div>
     </div>
 
-    <!-- Camera pane -->
     <div class="input-pane" id="pane-camera">
       <div style="text-align:center;padding:20px">
-        <div style="font-size:14px;color:var(--text-mid);margin-bottom:16px;line-height:1.7">
-          Bấm nút bên dưới để mở camera. Chụp thẳng mặt, ánh sáng đủ, không che mặt.
-        </div>
-        <button class="camera-btn" onclick="openCamera()">
-          <span>📷</span> Mở Camera
-        </button>
-        <video id="camVideo" style="display:none;max-width:300px;width:100%;border-radius:12px;margin:16px auto;display:none" autoplay playsinline></video>
-        <div id="camBtns" style="display:none;margin-top:12px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <div style="font-size:14px;color:var(--text-mid);margin-bottom:16px;line-height:1.7">Chụp thẳng mặt, ánh sáng đủ, không che mặt.</div>
+        <button class="camera-btn" id="openCamBtn" onclick="openCamera()"><span>📷</span> Mở Camera</button>
+        <video id="camVideo" style="display:none;max-width:300px;width:100%;border-radius:12px;margin:16px auto" autoplay playsinline></video>
+        <div id="camBtns" style="display:none;margin-top:12px;gap:10px;justify-content:center;flex-wrap:wrap">
           <button class="btn-submit" onclick="capturePhoto()" style="margin:0">📸 Chụp</button>
           <button class="btn-prev" onclick="stopCamera()">✕ Huỷ</button>
         </div>
@@ -126,11 +120,12 @@
       </div>
     </div>
 
-    <!-- Preview -->
     <div id="previewSection" style="display:none;text-align:center;margin:20px 0">
-      <div class="preview-wrap">
+      <div class="preview-wrap" id="previewWrap">
         <img id="previewImg" class="preview-img" alt="Ảnh đã chọn">
+        <canvas id="overlayCanvas" class="overlay-canvas"></canvas>
         <div class="preview-badge">✓ Ảnh đã chọn</div>
+        <div class="mp-badge" id="mpBadge">✦ Tam Đình đã xác định</div>
       </div>
       <button class="remove-btn" onclick="removePhoto()">✕ Xoá ảnh</button>
     </div>
@@ -143,12 +138,11 @@
     <div class="error-msg" id="error-msg"></div>
   </div>
 
-  <!-- RESULT -->
   <div class="result-section" id="result-section">
     <div class="res-block" style="margin-bottom:16px">
       <div class="res-block-header">
         <span class="res-block-title">Phân Tích Nhân Tướng Học</span>
-        <span style="font-size:11px;color:var(--text-lt)">bởi Claude AI · Ma Y Thần Tướng cổ pháp</span>
+        <span style="font-size:11px;color:var(--text-lt)">Claude AI · Ma Y Thần Tướng cổ pháp</span>
       </div>
       <div class="res-block-body">
         <div id="aiResult" class="md-result"></div>
@@ -162,7 +156,7 @@
   <div class="tool-cta">
     <div class="tool-cta-eyebrow">Tướng + Số + Vận</div>
     <div class="tool-cta-title">Kết Hợp Nhân Tướng Với Lá Số Tử Vi</div>
-    <div class="tool-cta-desc">Tướng mặt phản chiếu khí chất bẩm sinh. Lá số Tử Vi phân tích vận trình từng giai đoạn — hai phương pháp cổ đại bổ trợ nhau để cho bức tranh toàn diện nhất.</div>
+    <div class="tool-cta-desc">Tướng mặt phản chiếu khí chất bẩm sinh. Lá số Tử Vi phân tích vận trình từng giai đoạn — hai phương pháp cổ đại bổ trợ nhau để có bức tranh toàn diện nhất.</div>
     <a class="tool-cta-btn" href="/luan-giai.html">Xem Lá Số Tử Vi ($19) →</a>
   </div>
 </div>
@@ -173,122 +167,89 @@
 </footer>
 
 <script>
-let _imageData = null;  // base64 string (no prefix)
+let _imageData = null;
 let _mediaType = 'image/jpeg';
 let _camStream = null;
+let _mpReady = false;
 
-// ── Tab switching ─────────────────────────────────────────────
-function switchTab(id, btn) {
-  document.querySelectorAll('.input-tab').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.input-pane').forEach(p => p.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById(`pane-${id}`).classList.add('active');
-  if (id !== 'camera') stopCamera();
+// ── MediaPipe FaceMesh lazy load ──────────────────────────────
+// Load từ CDN khi user chọn ảnh, không block page load
+function loadMediaPipe(cb) {
+  if (_mpReady) { cb(null); return; }
+  if (window._mpLoading) { setTimeout(() => loadMediaPipe(cb), 150); return; }
+  window._mpLoading = true;
+  let done = 0;
+  const srcs = [
+    'https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js',
+  ];
+  srcs.forEach(src => {
+    const s = document.createElement('script');
+    s.src = src; s.crossOrigin = 'anonymous';
+    s.onload = () => { if (++done === srcs.length) { _mpReady = true; window._mpLoading = false; cb(null); } };
+    s.onerror = () => { window._mpLoading = false; cb(new Error('MP load failed')); };
+    document.head.appendChild(s);
+  });
 }
 
-// ── Drag & drop ───────────────────────────────────────────────
-function onDragOver(e) { e.preventDefault(); document.getElementById('uploadArea').classList.add('dragover'); }
-function onDragLeave() { document.getElementById('uploadArea').classList.remove('dragover'); }
-function onDrop(e) {
-  e.preventDefault();
-  document.getElementById('uploadArea').classList.remove('dragover');
-  const file = e.dataTransfer.files[0];
-  if (file) processFile(file);
+function detectLandmarks(imgEl, cb) {
+  loadMediaPipe((err) => {
+    if (err || typeof FaceMesh === 'undefined') { cb(null); return; }
+    try {
+      const fm = new FaceMesh({
+        locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${f}`
+      });
+      fm.setOptions({ maxNumFaces:1, refineLandmarks:false, minDetectionConfidence:0.5, minTrackingConfidence:0.5 });
+      fm.onResults(r => {
+        cb(r.multiFaceLandmarks && r.multiFaceLandmarks[0] ? r.multiFaceLandmarks[0] : null);
+      });
+      fm.send({ image: imgEl });
+    } catch(e) { cb(null); }
+  });
 }
 
-function onFileSelect(e) {
-  const file = e.target.files[0];
-  if (file) processFile(file);
-}
-
-function processFile(file) {
-  const err = document.getElementById('error-msg');
-  err.classList.remove('active');
-  if (!file.type.startsWith('image/')) {
-    err.textContent = 'Vui lòng chọn file ảnh (JPG, PNG, WebP).';
-    err.classList.add('active'); return;
-  }
-  if (file.size > 5 * 1024 * 1024) {
-    err.textContent = 'Ảnh quá lớn. Vui lòng chọn ảnh nhỏ hơn 5MB.';
-    err.classList.add('active'); return;
-  }
-  _mediaType = file.type || 'image/jpeg';
-
-  // Resize về max 1000px trước khi encode — Claude cap ở 1568px anyway
-  // Giảm ~60% tokens ảnh, không ảnh hưởng chất lượng phân tích tướng
-  const img = new Image();
-  const objectUrl = URL.createObjectURL(file);
-  img.onload = () => {
-    URL.revokeObjectURL(objectUrl);
-    const MAX = 1000;
-    let { width: w, height: h } = img;
-    if (w > MAX || h > MAX) {
-      if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
-      else { w = Math.round(w * MAX / h); h = MAX; }
-    }
-    const canvas = document.createElement('canvas');
-    canvas.width = w; canvas.height = h;
-    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.88);
-    _imageData = dataUrl.split(',')[1];
-    _mediaType = 'image/jpeg';
-    showPreview(dataUrl);
-  };
-  img.src = objectUrl;
-}
-
-function showPreview(dataUrl) {
-  document.getElementById('previewImg').src = dataUrl;
-  document.getElementById('previewSection').style.display = 'block';
-  document.getElementById('uploadArea').style.display = 'none';
-  document.getElementById('analyzeBtn').disabled = false;
-}
-
-// Vẽ Tam Đình dựa trên tọa độ Claude trả về
-function drawFaceZones(coords) {
+// ── Draw Tam Đình using real landmarks ────────────────────────
+// Landmarks used:
+//   10  → đỉnh trán (hairline estimate)
+//   107 → chân mày trái (inner)  |  avg y = chân mày
+//   336 → chân mày phải (inner)  |
+//   4   → đầu sóng mũi (nose tip)
+//   152 → cuối cằm (chin)
+//   1   → sống mũi (center x reference)
+function drawTamDinh(lm) {
   const img = document.getElementById('previewImg');
-  // Tạo canvas overlay nếu chưa có
-  let canvas = document.getElementById('zoneCanvas');
-  if (!canvas) {
-    canvas = document.createElement('canvas');
-    canvas.id = 'zoneCanvas';
-    canvas.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;pointer-events:none';
-    img.parentNode.insertBefore(canvas, img.nextSibling);
-  }
+  const cv  = document.getElementById('overlayCanvas');
   const w = img.clientWidth, h = img.clientHeight;
-  canvas.width = w; canvas.height = h;
-  const ctx = canvas.getContext('2d');
+  cv.width = w; cv.height = h;
+  const ctx = cv.getContext('2d');
   ctx.clearRect(0, 0, w, h);
+  if (!lm) return;
 
-  // Tọa độ từ Claude (% → px)
-  const yEyebrow  = h * coords.chan_may / 100;
-  const yNoseTip  = h * coords.cuoi_song_mui / 100;
-  const yHairline = h * coords.chan_toc / 100;
-  const yChin     = h * coords.cuoi_cam / 100;
+  const yTop      = lm[10].y  * h;
+  const yEyebrow  = ((lm[107].y + lm[336].y) / 2) * h;
+  const yNoseTip  = lm[4].y   * h;
+  const yChin     = lm[152].y * h;
+  const xCenter   = lm[1].x   * w;
 
-  // Đường trung ấn
+  // Trung ấn — nét đứt dọc
   ctx.save();
   ctx.setLineDash([5,5]);
   ctx.lineWidth = 1.5;
-  ctx.strokeStyle = 'rgba(255,255,255,0.6)';
-  ctx.shadowColor = 'rgba(0,0,0,0.6)';
+  ctx.strokeStyle = 'rgba(255,255,255,0.55)';
+  ctx.shadowColor = 'rgba(0,0,0,0.7)';
   ctx.shadowBlur = 3;
   ctx.beginPath();
-  ctx.moveTo(w/2, yHairline);
-  ctx.lineTo(w/2, yChin);
+  ctx.moveTo(xCenter, yTop * 0.85);
+  ctx.lineTo(xCenter, yChin * 1.02);
   ctx.stroke();
   ctx.restore();
 
-  // 2 đường chia Tam Đình
-  const dividers = [
-    {y: yEyebrow, color: 'rgba(20,85,164,0.9)'},
-    {y: yNoseTip, color: 'rgba(154,123,58,0.9)'},
-  ];
-  dividers.forEach(({y, color}) => {
+  // 2 đường ngang
+  [{ y: yEyebrow, c:'rgba(20,85,164,0.85)' },
+   { y: yNoseTip, c:'rgba(154,123,58,0.85)' }].forEach(({ y, c }) => {
     ctx.save();
-    ctx.setLineDash([0]);
+    ctx.setLineDash([]);
     ctx.lineWidth = 2;
-    ctx.strokeStyle = color;
+    ctx.strokeStyle = c;
     ctx.shadowColor = 'rgba(0,0,0,0.5)';
     ctx.shadowBlur = 3;
     ctx.beginPath();
@@ -299,26 +260,79 @@ function drawFaceZones(coords) {
   });
 
   // Labels
-  const fs = Math.max(10, Math.round(w*0.04));
-  const zones = [
-    {y: yHairline + (yEyebrow-yHairline)/2, text:'THƯỢNG ĐÌNH', color:'rgba(20,85,164,0.95)'},
-    {y: yEyebrow  + (yNoseTip-yEyebrow)/2,  text:'TRUNG ĐÌNH',  color:'rgba(154,123,58,0.95)'},
-    {y: yNoseTip  + (yChin-yNoseTip)/2,     text:'HẠ ĐÌNH',     color:'rgba(30,107,60,0.95)'},
-  ];
-  zones.forEach(({y, text, color}) => {
+  const fs = Math.max(10, Math.round(w * 0.04));
+  [{ my:(yTop+yEyebrow)/2,  t:'THƯỢNG ĐÌNH', c:'rgba(20,85,164,0.95)' },
+   { my:(yEyebrow+yNoseTip)/2, t:'TRUNG ĐÌNH', c:'rgba(154,123,58,0.95)' },
+   { my:(yNoseTip+yChin)/2, t:'HẠ ĐÌNH',    c:'rgba(30,107,60,0.95)' },
+  ].forEach(({ my, t, c }) => {
     ctx.save();
     ctx.font = `bold ${fs}px Arial`;
-    const tw = ctx.measureText(text).width;
-    ctx.fillStyle = 'rgba(0,0,0,0.4)';
-    ctx.fillRect(w*0.04-3, y-fs, tw+8, fs+4);
-    ctx.fillStyle = color;
+    const tw = ctx.measureText(t).width;
+    ctx.fillStyle = 'rgba(0,0,0,0.38)';
+    ctx.fillRect(w*0.04-3, my-fs, tw+8, fs+4);
+    ctx.fillStyle = c;
     ctx.shadowColor = 'rgba(0,0,0,0.9)';
     ctx.shadowBlur = 4;
-    ctx.fillText(text, w*0.05, y);
+    ctx.fillText(t, w*0.05, my);
     ctx.restore();
   });
+
+  document.getElementById('mpBadge').style.display = 'block';
 }
 
+// ── Tab / Drag / File ─────────────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.input-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.input-pane').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('pane-'+id).classList.add('active');
+  if (id !== 'camera') stopCamera();
+}
+function onDragOver(e) { e.preventDefault(); document.getElementById('uploadArea').classList.add('dragover'); }
+function onDragLeave() { document.getElementById('uploadArea').classList.remove('dragover'); }
+function onDrop(e) { e.preventDefault(); document.getElementById('uploadArea').classList.remove('dragover'); const f=e.dataTransfer.files[0]; if(f) processFile(f); }
+function onFileSelect(e) { const f=e.target.files[0]; if(f) processFile(f); }
+
+function processFile(file) {
+  const err = document.getElementById('error-msg');
+  err.classList.remove('active');
+  if (!file.type.startsWith('image/')) { err.textContent='Vui lòng chọn file ảnh.'; err.classList.add('active'); return; }
+  if (file.size > 5*1024*1024) { err.textContent='Ảnh quá lớn (tối đa 5MB).'; err.classList.add('active'); return; }
+
+  const img = new Image();
+  const ou = URL.createObjectURL(file);
+  img.onload = () => {
+    URL.revokeObjectURL(ou);
+    const MAX=1000; let {width:w, height:h}=img;
+    if(w>MAX||h>MAX){ if(w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;} }
+    const cv=document.createElement('canvas'); cv.width=w; cv.height=h;
+    cv.getContext('2d').drawImage(img,0,0,w,h);
+    const dataUrl=cv.toDataURL('image/jpeg',0.88);
+    _imageData=dataUrl.split(',')[1]; _mediaType='image/jpeg';
+    showPreview(dataUrl);
+  };
+  img.src = ou;
+}
+
+function showPreview(dataUrl) {
+  const imgEl = document.getElementById('previewImg');
+  imgEl.src = dataUrl;
+  document.getElementById('previewSection').style.display = 'block';
+  document.getElementById('uploadArea').style.display = 'none';
+  document.getElementById('analyzeBtn').disabled = false;
+  document.getElementById('mpBadge').style.display = 'none';
+
+  const run = () => detectLandmarks(imgEl, lm => {
+    drawTamDinh(lm);
+    if (lm === null) {
+      const err = document.getElementById('error-msg');
+      err.textContent = '⚠ Không nhận diện được khuôn mặt rõ ràng. Vẫn có thể phân tích nhưng kết quả có thể kém chính xác hơn.';
+      err.classList.add('active');
+    }
+  });
+  if (imgEl.complete && imgEl.naturalWidth) run();
+  else imgEl.onload = run;
+}
 
 function removePhoto() {
   _imageData = null;
@@ -326,136 +340,95 @@ function removePhoto() {
   document.getElementById('uploadArea').style.display = 'block';
   document.getElementById('analyzeBtn').disabled = true;
   document.getElementById('fileInput').value = '';
+  const cv=document.getElementById('overlayCanvas');
+  cv.getContext('2d').clearRect(0,0,cv.width,cv.height);
   stopCamera();
 }
 
 // ── Camera ────────────────────────────────────────────────────
 async function openCamera() {
   try {
-    _camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 640, height: 480 } });
-    const vid = document.getElementById('camVideo');
-    vid.srcObject = _camStream;
-    vid.style.display = 'block';
-    document.getElementById('camBtns').style.display = 'flex';
-    document.querySelector('.camera-btn').style.display = 'none';
+    _camStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:640,height:480}});
+    const vid=document.getElementById('camVideo');
+    vid.srcObject=_camStream; vid.style.display='block';
+    document.getElementById('camBtns').style.display='flex';
+    document.getElementById('openCamBtn').style.display='none';
   } catch(e) {
-    const err = document.getElementById('error-msg');
-    err.textContent = 'Không thể mở camera. Vui lòng tải ảnh lên thay thế.';
-    err.classList.add('active');
+    const err=document.getElementById('error-msg');
+    err.textContent='Không thể mở camera. Vui lòng tải ảnh lên.'; err.classList.add('active');
   }
 }
-
 function capturePhoto() {
-  const vid = document.getElementById('camVideo');
-  const canvas = document.getElementById('camCanvas');
-  canvas.width = vid.videoWidth;
-  canvas.height = vid.videoHeight;
-  canvas.getContext('2d').drawImage(vid, 0, 0);
-  const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-  _imageData = dataUrl.split(',')[1];
-  _mediaType = 'image/jpeg';
-  stopCamera();
-  showPreview(dataUrl);
+  const vid=document.getElementById('camVideo');
+  const cv=document.getElementById('camCanvas');
+  cv.width=vid.videoWidth; cv.height=vid.videoHeight;
+  cv.getContext('2d').drawImage(vid,0,0);
+  const dataUrl=cv.toDataURL('image/jpeg',0.85);
+  _imageData=dataUrl.split(',')[1]; _mediaType='image/jpeg';
+  stopCamera(); showPreview(dataUrl);
 }
-
 function stopCamera() {
-  if (_camStream) { _camStream.getTracks().forEach(t => t.stop()); _camStream = null; }
-  const vid = document.getElementById('camVideo');
-  vid.style.display = 'none'; vid.srcObject = null;
-  document.getElementById('camBtns').style.display = 'none';
-  const camBtn = document.querySelector('.camera-btn');
-  if (camBtn) camBtn.style.display = 'inline-flex';
+  if(_camStream){_camStream.getTracks().forEach(t=>t.stop());_camStream=null;}
+  const vid=document.getElementById('camVideo');
+  vid.style.display='none'; vid.srcObject=null;
+  document.getElementById('camBtns').style.display='none';
+  document.getElementById('openCamBtn').style.display='inline-flex';
 }
 
 // ── Analyze ───────────────────────────────────────────────────
 async function analyze() {
   if (!_imageData) return;
-  const err = document.getElementById('error-msg');
-  err.classList.remove('active');
-  const btn = document.getElementById('analyzeBtn');
-  btn.disabled = true;
+  const err=document.getElementById('error-msg'); err.classList.remove('active');
+  const btn=document.getElementById('analyzeBtn'); btn.disabled=true;
 
-  // Show loading
   document.getElementById('result-section').classList.add('active');
-  document.getElementById('aiResult').innerHTML = `
-    <div class="ai-loading">
-      <span class="ai-loading-icon">🔮</span>
-      <div class="ai-loading-text">AI đang phân tích tướng mặt...<br><span style="font-size:12px;opacity:.7">Thường mất 10–20 giây</span></div>
-    </div>`;
-  document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.getElementById('aiResult').innerHTML=
+    '<div class="ai-loading"><span class="ai-loading-icon">🔮</span><div class="ai-loading-text">AI đang phân tích tướng mặt...<br><span style="font-size:12px;opacity:.7">Thường mất 15–25 giây</span></div></div>';
+  document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
 
   try {
-    const res = await fetch('/api/tuong-mat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image: _imageData, mediaType: _mediaType })
+    const res = await fetch('/api/tuong-mat',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({image:_imageData, mediaType:_mediaType})
     });
+    if (!res.ok) { const d=await res.json().catch(()=>({})); throw new Error(d.error||'Lỗi '+res.status); }
 
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}));
-      throw new Error(data.error || `Lỗi ${res.status}`);
-    }
+    const reader=res.body.getReader(); const dec=new TextDecoder();
+    let full='', buf='';
+    const el=document.getElementById('aiResult'); el.innerHTML='';
 
-    // Đọc SSE stream, tích luỹ text rồi render dần
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let fullText = '';
-    let buf = '';
-    const resultEl = document.getElementById('aiResult');
-    resultEl.innerHTML = '<div class="md-result" style="color:var(--text-lt);font-style:italic">Đang phân tích...</div>';
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buf += decoder.decode(value, { stream: true });
-      const lines = buf.split('\n');
-      buf = lines.pop() || '';
-      for (const line of lines) {
-        if (!line.startsWith('data: ')) continue;
-        const raw = line.slice(6).trim();
-        if (raw === '[DONE]') break;
-        try {
-          const json = JSON.parse(raw);
-          if (json.err) throw new Error(json.err);
-          if (json.t) { fullText += json.t; resultEl.innerHTML = renderMarkdown(fullText); }
-        } catch(e) { if (e.message && e.message !== 'Unexpected end of JSON input') throw e; }
+    while(true){
+      const {done,value}=await reader.read(); if(done) break;
+      buf+=dec.decode(value,{stream:true});
+      const lines=buf.split('\n'); buf=lines.pop()||'';
+      for(const line of lines){
+        if(!line.startsWith('data: ')) continue;
+        const raw=line.slice(6).trim(); if(raw==='[DONE]') break;
+        try{
+          const j=JSON.parse(raw);
+          if(j.err) throw new Error(j.err);
+          if(j.t){ full+=j.t; el.innerHTML=renderMarkdown(full); }
+        }catch(e){ if(e.message&&!e.message.includes('JSON')) throw e; }
       }
     }
-
-    if (!fullText) throw new Error('AI không trả về kết quả.');
-
-    // Parse COORDS từ dòng đầu, tách ra phần phân tích
-    let analysisText = fullText;
-    const coordsMatch = fullText.match(/^COORDS:(\{[^}]+\}|null)/);
-    if (coordsMatch) {
-      analysisText = fullText.replace(/^COORDS:[^\n]+\n---\n?/, '');
-      if (coordsMatch[1] !== 'null') {
-        try {
-          const coords = JSON.parse(coordsMatch[1]);
-          drawFaceZones(coords);
-        } catch(_) {}
-      }
-    }
-    resultEl.innerHTML = renderMarkdown(analysisText);
-    btn.disabled = false;
-
+    if(!full) throw new Error('AI không trả về kết quả.');
+    el.innerHTML=renderMarkdown(full);
+    btn.disabled=false;
   } catch(e) {
-    document.getElementById('aiResult').innerHTML = '';
+    document.getElementById('aiResult').innerHTML='';
     document.getElementById('result-section').classList.remove('active');
-    err.textContent = 'Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.');
-    err.classList.add('active');
-    btn.disabled = false;
+    err.textContent='Lỗi: '+(e.message||'Không thể kết nối. Vui lòng thử lại.');
+    err.classList.add('active'); btn.disabled=false;
   }
 }
 
 function reset() {
   removePhoto();
   document.getElementById('result-section').classList.remove('active');
-  document.getElementById('aiResult').innerHTML = '';
-  document.getElementById('inputSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.getElementById('aiResult').innerHTML='';
+  document.getElementById('inputSection').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-// ── Simple Markdown renderer ──────────────────────────────────
 function renderMarkdown(md) {
   return md
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -465,8 +438,8 @@ function renderMarkdown(md) {
     .replace(/\*(.+?)\*/g,'<em>$1</em>')
     .replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>')
     .replace(/^- (.+)$/gm,'<li>$1</li>')
-    .replace(/(<li>.*<\/li>(\n|$))+/g, s => '<ul>' + s + '</ul>')
-    .replace(/\n\n/g,'</p><p>')
+    .replace(/(<li>[^]*?<\/li>\n?)+/g,s=>'<ul>'+s+'</ul>')
+    .replace(/\n\n+/g,'</p><p>')
     .replace(/^(?!<[hublp])(.+)$/gm,'<p>$1</p>')
     .replace(/<p><\/p>/g,'')
     .replace(/<p>(<[hul])/g,'$1')
