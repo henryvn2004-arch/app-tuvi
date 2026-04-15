@@ -64,6 +64,14 @@
     '}'
   ].join('');
 
+  // ── Conversion (Social Proof + Popup) ───────────────────────────────────
+  if (!document.getElementById('cv-script')) {
+    var cv = document.createElement('script');
+    cv.id = 'cv-script';
+    cv.src = '/conversion.js';
+    document.body.appendChild(cv);
+  }
+
   // ── Google Analytics 4 ───────────────────────────────────────────────────
   if (!document.getElementById('gtag-js')) {
     var ga = document.createElement('script');
