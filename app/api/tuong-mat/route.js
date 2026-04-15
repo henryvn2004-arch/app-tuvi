@@ -55,7 +55,7 @@ Phân tích các tiểu vùng quan sát được rõ: Ấn Đường, Sơn Căn,
 ## Nguyên Tắc
 - Dùng kiến thức cổ pháp thật sự, nêu đủ cả tốt lẫn xấu
 - KHÔNG chỉ khen — thiếu điểm cần lưu ý là phân tích không trung thực
-- Viết tiếng Việt tự nhiên, ~700–900 chữ
+- Viết tiếng Việt tự nhiên, ~1200–1500 chữ
 - Nếu ảnh mờ hoặc không thấy mặt rõ → nói thẳng, đề nghị chụp lại`;
 
 export async function POST(request) {
@@ -77,7 +77,7 @@ export async function POST(request) {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
-        max_tokens: 2000,
+        max_tokens: 3000,
         stream: true,
         system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }],
         messages: [{
