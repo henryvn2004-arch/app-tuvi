@@ -198,7 +198,8 @@ function detectLandmarks(imgEl, cb) {
       const fm = new FaceMesh({
         locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${f}`
       });
-      fm.setOptions({ maxNumFaces:1, refineLandmarks:false, minDetectionConfidence:0.5, minTrackingConfidence:0.5 });
+      // refineLandmarks:true → thêm iris landmarks 468–477 (~2MB model thêm)
+      fm.setOptions({ maxNumFaces:1, refineLandmarks:true, minDetectionConfidence:0.5, minTrackingConfidence:0.5 });
       fm.onResults(r => {
         cb(r.multiFaceLandmarks && r.multiFaceLandmarks[0] ? r.multiFaceLandmarks[0] : null);
       });
@@ -207,14 +208,153 @@ function detectLandmarks(imgEl, cb) {
   });
 }
 
+// ── Geometry analysis từ landmarks → text mô tả cho Claude ──
+// Tính tỷ lệ thực tế để Claude không phải đoán từ ảnh
+// Tất cả đều từ landmarks đã có — zero model thêm
+function analyzeGeometry(lm, w, h) {
+  const p = (lm, axis) => lm[axis] * (axis === 'x' ? w : h);
+
+  // Tam Đình heights (pixel)
+  const yHairline = p(lm[10], 'y');
+  const yEyebrow  = (p(lm[107], 'y') + p(lm[336], 'y')) / 2;
+  const yNoseTip  = p(lm[4],   'y');
+  const yChin     = p(lm[152], 'y');
+  const faceH     = yChin - yHairline;
+  if (faceH < 10) return null;
+
+  const thuong = ((yEyebrow - yHairline) / faceH * 100).toFixed(0);
+  const trung  = ((yNoseTip - yEyebrow)  / faceH * 100).toFixed(0);
+  const ha     = ((yChin    - yNoseTip)  / faceH * 100).toFixed(0);
+
+  // Chiều rộng mặt (gò má) vs chiều cao → hình dạng mặt
+  const faceW = Math.abs(p(lm[454], 'x') - p(lm[234], 'x'));
+  const ratio = (faceW / faceH).toFixed(2); // >0.85 = tròn/vuông, <0.75 = dài
+
+  // Khoảng cách 2 mắt (inner) / chiều rộng mặt
+  const eyeSpanX = Math.abs(p(lm[362], 'x') - p(lm[133], 'x'));
+  const eyeGapRatio = (eyeSpanX / faceW).toFixed(2); // <0.45=mắt gần, >0.55=mắt xa
+
+  // Chiều rộng mũi / chiều rộng mặt
+  const noseW = Math.abs(p(lm[358], 'x') - p(lm[129], 'x'));
+  const noseRatio = (noseW / faceW).toFixed(2); // >0.3=mũi to, <0.2=mũi nhỏ
+
+  // Chiều rộng miệng / chiều rộng mặt
+  const mouthW = Math.abs(p(lm[291], 'x') - p(lm[61], 'x'));
+  const mouthRatio = (mouthW / faceW).toFixed(2); // >0.5=miệng rộng, <0.35=miệng nhỏ
+
+  // Góc đuôi mắt (upcant/downcant)
+  // Mắt trái: outer=33, inner=133; mắt phải: inner=362, outer=263
+  const eyeLAngle = Math.atan2(
+    (p(lm[33],'y') - p(lm[133],'y')),
+    (p(lm[133],'x') - p(lm[33],'x'))
+  ) * 180 / Math.PI;
+  const eyeRAngle = Math.atan2(
+    (p(lm[263],'y') - p(lm[362],'y')),
+    (p(lm[263],'x') - p(lm[362],'x'))
+  ) * 180 / Math.PI;
+  const eyeAngle = ((eyeLAngle + eyeRAngle) / 2).toFixed(1);
+  // >2° = đuôi mắt cong lên, <-2° = đuôi mắt xuôi
+
+  // Cằm: chiều rộng cằm / chiều rộng mặt
+  const chinW = Math.abs(p(lm[397], 'x') - p(lm[172], 'x'));
+  const chinRatio = (chinW / faceW).toFixed(2); // >0.45=cằm rộng ngang, <0.3=cằm nhọn
+
+  // Trán: chiều rộng trán / chiều rộng mặt
+  const foreheadW = Math.abs(p(lm[103], 'x') - p(lm[332], 'x'));
+  const foreheadRatio = (foreheadW / faceW).toFixed(2);
+
+  // Build text mô tả ngắn gọn để đưa vào prompt
+  const lines = [
+    `[Số liệu MediaPipe — dùng để phân tích chính xác hơn]`,
+    `Tam Đình: Thượng ${thuong}% · Trung ${trung}% · Hạ ${ha}%`,
+    `Tỷ lệ rộng/dài mặt: ${ratio} (${parseFloat(ratio)>0.85?'mặt tròn/vuông':parseFloat(ratio)<0.75?'mặt dài/hẹp':'mặt bầu dục'})`,
+    `Khoảng cách 2 mắt so với mặt: ${eyeGapRatio} (${parseFloat(eyeGapRatio)>0.52?'mắt thưa':parseFloat(eyeGapRatio)<0.44?'mắt gần':'trung bình'})`,
+    `Góc đuôi mắt: ${eyeAngle}° (${parseFloat(eyeAngle)>2?'đuôi mắt cong lên':parseFloat(eyeAngle)<-2?'đuôi mắt xuôi':'ngang'})`,
+    `Tỷ lệ mũi/mặt: ${noseRatio} (${parseFloat(noseRatio)>0.28?'mũi to/rộng':parseFloat(noseRatio)<0.2?'mũi nhỏ/thanh':'trung bình'})`,
+    `Tỷ lệ miệng/mặt: ${mouthRatio} (${parseFloat(mouthRatio)>0.48?'miệng rộng':parseFloat(mouthRatio)<0.36?'miệng nhỏ':'trung bình'})`,
+    `Tỷ lệ trán/mặt: ${foreheadRatio} (${parseFloat(foreheadRatio)>0.85?'trán rộng':parseFloat(foreheadRatio)<0.7?'trán hẹp':'trung bình'})`,
+    `Tỷ lệ cằm/mặt: ${chinRatio} (${parseFloat(chinRatio)>0.42?'cằm ngang rộng':parseFloat(chinRatio)<0.3?'cằm nhọn/thon':'trung bình'})`,
+  ];
+  return lines.join('\n');
+}
+
+// ── Head tilt check ───────────────────────────────────────────
+// Roll: góc nghiêng trái phải → so sánh y của 2 đuôi mắt ngoài (33=trái, 263=phải)
+// Yaw: quay mặt trái/phải → so sánh khoảng cách mũi đến tai trái (234) và phải (454)
+function checkHeadTilt(lm, w, h) {
+  // Roll angle
+  const dy = (lm[263].y - lm[33].y) * h;
+  const dx = (lm[263].x - lm[33].x) * w;
+  const rollDeg = Math.abs(Math.atan2(dy, dx) * 180 / Math.PI);
+
+  // Yaw: tỷ lệ khoảng cách mũi→tai trái / mũi→tai phải
+  const dLeft  = Math.abs(lm[4].x - lm[234].x);
+  const dRight = Math.abs(lm[454].x - lm[4].x);
+  const yawRatio = dLeft > dRight ? dLeft/dRight : dRight/dLeft;
+
+  const warnings = [];
+  if (rollDeg > 12) warnings.push(`Đầu nghiêng ~${Math.round(rollDeg)}° — nên chụp thẳng hơn`);
+  if (yawRatio > 1.35) warnings.push('Mặt hơi quay sang một bên — nên chụp chính diện');
+  return warnings;
+}
+
+// ── Iris analysis ─────────────────────────────────────────────
+// Refined landmarks: 468=iris trái tâm, 473=iris phải tâm
+// Eye contour landmarks (approximate):
+//   Mắt trái: top=159, bottom=145, left=33, right=133
+//   Mắt phải: top=386, bottom=374, left=362, right=263
+function analyzeIris(lm) {
+  if (!lm[468] || !lm[473]) return null; // cần refineLandmarks
+
+  const eyeL = { top:lm[159].y, bot:lm[145].y, left:lm[33].x, right:lm[133].x, iris:lm[468] };
+  const eyeR = { top:lm[386].y, bot:lm[374].y, left:lm[362].x, right:lm[263].x, iris:lm[473] };
+
+  function classifyEye(eye) {
+    const eyeH = Math.abs(eye.bot - eye.top);
+    if (eyeH < 0.005) return null; // mắt nhắm hoặc quá nhỏ để đo
+    // Vị trí iris theo chiều dọc (0=sát top, 1=sát bottom)
+    const posV = (eye.iris.y - eye.top) / (eye.bot - eye.top);
+    // Vị trí iris theo chiều ngang (0=sát trái, 1=sát phải)
+    const eyeW = Math.abs(eye.right - eye.left);
+    const posH = eyeW > 0.005 ? (eye.iris.x - eye.left) / (eye.right - eye.left) : 0.5;
+
+    // Phân loại
+    const whiteBottom = posV < 0.35; // tròng trắng lộ phía dưới → Tam Bạch Nhãn hạ
+    const whiteTop    = posV > 0.65; // tròng trắng lộ phía trên
+    const whiteLeft   = posH < 0.2;
+    const whiteRight  = posH > 0.8;
+
+    const exposed = [whiteBottom, whiteTop, whiteLeft, whiteRight].filter(Boolean).length;
+    return { posV, posH, whiteBottom, whiteTop, whiteLeft, whiteRight, exposed };
+  }
+
+  const L = classifyEye(eyeL);
+  const R = classifyEye(eyeR);
+  if (!L || !R) return null;
+
+  // Lấy trung bình 2 mắt
+  const avgExposed = (L.exposed + R.exposed) / 2;
+  const avgBottom  = (L.whiteBottom ? 1:0) + (R.whiteBottom ? 1:0);
+
+  let type = null, label = '', color = '';
+  if (avgExposed >= 3) {
+    type = 'tu-bach'; label = 'Tứ Bạch Nhãn — tròng trắng lộ nhiều phía'; color = '#C0392B';
+  } else if (avgBottom >= 1.5) {
+    type = 'tam-bach-ha'; label = 'Tam Bạch Nhãn Hạ — tròng trắng lộ phía dưới'; color = '#9A7B3A';
+  } else if ((L.whiteTop && R.whiteTop)) {
+    type = 'tam-bach-thuong'; label = 'Tam Bạch Nhãn Thượng — tròng trắng lộ phía trên'; color = '#9A7B3A';
+  }
+
+  return { type, label, color, L, R };
+}
+
 // ── Draw Tam Đình using real landmarks ────────────────────────
 // Landmarks used:
-//   10  → đỉnh trán (hairline estimate)
-//   107 → chân mày trái (inner)  |  avg y = chân mày
-//   336 → chân mày phải (inner)  |
-//   4   → đầu sóng mũi (nose tip)
-//   152 → cuối cằm (chin)
-//   1   → sống mũi (center x reference)
+//   10  → đỉnh trán
+//   107+336 → avg y chân mày
+//   4   → đầu sóng mũi
+//   152 → cuối cằm
+//   1   → sống mũi (center x)
 function drawTamDinh(lm) {
   const img = document.getElementById('previewImg');
   const cv  = document.getElementById('overlayCanvas');
@@ -230,7 +370,7 @@ function drawTamDinh(lm) {
   const yChin     = lm[152].y * h;
   const xCenter   = lm[1].x   * w;
 
-  // Trung ấn — nét đứt dọc
+  // Trung ấn
   ctx.save();
   ctx.setLineDash([5,5]);
   ctx.lineWidth = 1.5;
@@ -243,7 +383,7 @@ function drawTamDinh(lm) {
   ctx.stroke();
   ctx.restore();
 
-  // 2 đường ngang
+  // 2 đường ngang Tam Đình
   [{ y: yEyebrow, c:'rgba(20,85,164,0.85)' },
    { y: yNoseTip, c:'rgba(154,123,58,0.85)' }].forEach(({ y, c }) => {
     ctx.save();
@@ -261,9 +401,9 @@ function drawTamDinh(lm) {
 
   // Labels
   const fs = Math.max(10, Math.round(w * 0.04));
-  [{ my:(yTop+yEyebrow)/2,  t:'THƯỢNG ĐÌNH', c:'rgba(20,85,164,0.95)' },
-   { my:(yEyebrow+yNoseTip)/2, t:'TRUNG ĐÌNH', c:'rgba(154,123,58,0.95)' },
-   { my:(yNoseTip+yChin)/2, t:'HẠ ĐÌNH',    c:'rgba(30,107,60,0.95)' },
+  [{ my:(yTop+yEyebrow)/2,     t:'THƯỢNG ĐÌNH', c:'rgba(20,85,164,0.95)' },
+   { my:(yEyebrow+yNoseTip)/2, t:'TRUNG ĐÌNH',  c:'rgba(154,123,58,0.95)' },
+   { my:(yNoseTip+yChin)/2,    t:'HẠ ĐÌNH',     c:'rgba(30,107,60,0.95)' },
   ].forEach(({ my, t, c }) => {
     ctx.save();
     ctx.font = `bold ${fs}px Arial`;
@@ -276,6 +416,20 @@ function drawTamDinh(lm) {
     ctx.fillText(t, w*0.05, my);
     ctx.restore();
   });
+
+  // Vẽ iris centers nếu có
+  if (lm[468] && lm[473]) {
+    [lm[468], lm[473]].forEach(p => {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(p.x*w, p.y*h, 3, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(255,220,0,0.85)';
+      ctx.shadowColor = 'rgba(0,0,0,0.8)';
+      ctx.shadowBlur = 3;
+      ctx.fill();
+      ctx.restore();
+    });
+  }
 
   document.getElementById('mpBadge').style.display = 'block';
 }
@@ -321,14 +475,45 @@ function showPreview(dataUrl) {
   document.getElementById('uploadArea').style.display = 'none';
   document.getElementById('analyzeBtn').disabled = false;
   document.getElementById('mpBadge').style.display = 'none';
+  document.getElementById('error-msg').classList.remove('active');
 
   const run = () => detectLandmarks(imgEl, lm => {
-    drawTamDinh(lm);
+    const img = document.getElementById('previewImg');
+    const w = img.clientWidth, h = img.clientHeight;
+
     if (lm === null) {
       const err = document.getElementById('error-msg');
       err.textContent = '⚠ Không nhận diện được khuôn mặt rõ ràng. Vẫn có thể phân tích nhưng kết quả có thể kém chính xác hơn.';
       err.classList.add('active');
+      return;
     }
+
+    // 1. Vẽ Tam Đình
+    drawTamDinh(lm);
+
+    // 2. Head tilt check
+    const tiltWarnings = checkHeadTilt(lm, w, h);
+    if (tiltWarnings.length > 0) {
+      const err = document.getElementById('error-msg');
+      err.textContent = '⚠ ' + tiltWarnings.join(' · ') + ' — kết quả sẽ chính xác hơn với ảnh thẳng mặt.';
+      err.classList.add('active');
+    }
+
+    // 3. Iris analysis → hiển thị badge
+    const iris = analyzeIris(lm);
+    const badge = document.getElementById('mpBadge');
+    if (iris && iris.type) {
+      badge.textContent = '👁 ' + iris.label;
+      badge.style.background = iris.color + 'cc';
+    } else {
+      badge.textContent = '✦ Tam Đình đã xác định';
+      badge.style.background = 'rgba(20,85,164,.85)';
+    }
+    badge.style.display = 'block';
+
+    // 4. Geometry analysis từ landmarks → truyền vào Claude prompt
+    window._irisResult = iris;
+    window._geoNote = analyzeGeometry(lm, w, h);
   });
   if (imgEl.complete && imgEl.naturalWidth) run();
   else imgEl.onload = run;
@@ -389,7 +574,12 @@ async function analyze() {
   try {
     const res = await fetch('/api/tuong-mat',{
       method:'POST', headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({image:_imageData, mediaType:_mediaType})
+      body:JSON.stringify({
+        image: _imageData,
+        mediaType: _mediaType,
+        irisNote: window._irisResult?.type ? `[MediaPipe detect: ${window._irisResult.label}]` : null,
+        geoNote: window._geoNote || null
+      })
     });
     if (!res.ok) { const d=await res.json().catch(()=>({})); throw new Error(d.error||'Lỗi '+res.status); }
 
