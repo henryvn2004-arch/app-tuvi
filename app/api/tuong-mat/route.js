@@ -43,7 +43,7 @@ Kết bằng: "Tướng tùy tâm sinh, tướng tùy tâm diệt" — nhân tư
 
 export async function POST(request) {
   try {
-    const { image, mediaType = 'image/jpeg' } = await request.json();
+    const { image, mediaType = 'image/jpeg', irisNote = null, geoNote = null } = await request.json();
     if (!image) return Response.json({ error: 'Thiếu dữ liệu ảnh.' }, { status: 400 });
     if (image.length > 7 * 1024 * 1024) return Response.json({ error: 'Ảnh quá lớn. Vui lòng chọn ảnh nhỏ hơn 5MB.' }, { status: 400 });
 
@@ -67,7 +67,7 @@ export async function POST(request) {
           role: 'user',
           content: [
             { type: 'image', source: { type: 'base64', media_type: mediaType, data: image } },
-            { type: 'text', text: 'Hãy phân tích khuôn mặt trong ảnh này theo nhân tướng học phương Đông, đủ 5 phần như hướng dẫn.' }
+            { type: 'text', text: ['Hãy phân tích khuôn mặt trong ảnh này theo nhân tướng học phương Đông, đủ 5 phần như hướng dẫn.', geoNote || '', irisNote || ''].filter(Boolean).join('\n\n') }
           ]
         }]
       })
