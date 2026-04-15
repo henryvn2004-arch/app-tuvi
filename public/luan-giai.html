@@ -3808,15 +3808,15 @@ TuviPaywall.init({
 
     // Restore state từ sessionStorage và rebuild astrolabe
     try {
-      const { ngay, thang, nam, gioIdx, gioChi, gioitinh, namXem, hoTen } = pending;
+      const { ngay, thang, nam, gioHour, gioPhut, gioitinh, namXem, hoTen } = pending;
 
       // Fill form via TuviForm
       if (typeof TuviForm !== 'undefined') {
-        TuviForm.setData({ hoten: hoTen||'', ngay, thang, nam, gioIdx, gioitinh, namXem: namXem||new Date().getFullYear() });
+        TuviForm.setData({ hoten: hoTen||'', ngay, thang, nam, gioHour: gioHour ?? 0, gioPhut: gioPhut ?? 0, gioitinh, namXem: namXem||new Date().getFullYear() });
       }
 
       // Rebuild astrolabe từ engine (giống luanGiai())
-      const conv = convertDuongToAm(ngay, thang, nam, gioIdx !== null ? gioIdx : 0);
+      const conv = convertDuongToAm(ngay, thang, nam, gioHour ?? 0);
       conv._dl = { day: ngay, month: thang, year: nam };
       const ls = anSaoLaSo({
         ngayAL:   conv.amLich.day,
