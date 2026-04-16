@@ -172,6 +172,17 @@
         <div id="handGeomText" style="color:var(--text-mid);line-height:1.8"></div>
       </div>
       <button class="remove-btn" onclick="removePhoto()">✕ Xoá ảnh</button>
+      <!-- Palm line legend -->
+      <div id="palmLineLegend" style="display:none;margin-top:12px;padding:10px 14px;background:var(--bg-soft);border-radius:8px;border:1px solid var(--border-lt);max-width:340px;margin-left:auto;margin-right:auto">
+        <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-lt);margin-bottom:8px">Chú thích đường chỉ</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">
+          <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-mid)"><span style="display:inline-block;width:28px;height:3px;background:rgba(220,55,55,0.9);border-radius:2px;flex-shrink:0"></span>Sinh Đạo</div>
+          <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-mid)"><span style="display:inline-block;width:28px;height:3px;background:rgba(59,130,246,0.9);border-radius:2px;flex-shrink:0"></span>Trí Đạo</div>
+          <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-mid)"><span style="display:inline-block;width:28px;height:3px;background:rgba(236,72,153,0.9);border-radius:2px;flex-shrink:0"></span>Tâm Đạo</div>
+          <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-mid)"><span style="display:inline-block;width:28px;height:3px;background:rgba(139,92,246,0.9);border-radius:2px;flex-shrink:0"></span>Vận Mệnh</div>
+        </div>
+        <div style="font-size:11px;color:var(--text-lt);margin-top:6px">⚠ Vị trí ước tính theo giải phẫu — AI đọc chỉ tay từ ảnh thực tế</div>
+      </div>
     </div>
 
     <div style="text-align:center;margin-top:20px">
@@ -255,40 +266,158 @@ function detectHand(imgEl, cb) {
 
 function drawHandOverlay(lm, imgEl) {
   const cv = document.getElementById('overlayCanvas');
-  const w = imgEl.clientWidth, h = imgEl.clientHeight;
-  cv.width = w; cv.height = h;
+  const W = imgEl.clientWidth, H = imgEl.clientHeight;
+  cv.width = W; cv.height = H;
   const ctx = cv.getContext('2d');
-  ctx.clearRect(0, 0, w, h);
+  ctx.clearRect(0, 0, W, H);
   if (!lm) return;
 
-  // Draw connections
-  ctx.strokeStyle = 'rgba(201,168,76,0.75)';
-  ctx.lineWidth = 2;
+  // ── 1. Skeleton (mờ, nền) ──
+  ctx.strokeStyle = 'rgba(201,168,76,0.35)';
+  ctx.lineWidth = 1.5;
   HAND_CONNECTIONS.forEach(([a, b]) => {
     ctx.beginPath();
-    ctx.moveTo(lm[a].x*w, lm[a].y*h);
-    ctx.lineTo(lm[b].x*w, lm[b].y*h);
+    ctx.moveTo(lm[a].x*W, lm[a].y*H);
+    ctx.lineTo(lm[b].x*W, lm[b].y*H);
     ctx.stroke();
   });
-
-  // Draw knuckle dots
-  lm.forEach((pt, i) => {
-    const isTip = FINGER_TIPS.includes(i);
+  lm.forEach(pt => {
     ctx.beginPath();
-    ctx.arc(pt.x*w, pt.y*h, isTip ? 4 : 3, 0, Math.PI*2);
-    ctx.fillStyle = isTip ? 'rgba(255,220,0,0.9)' : 'rgba(201,168,76,0.8)';
+    ctx.arc(pt.x*W, pt.y*H, 2, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(201,168,76,0.45)';
     ctx.fill();
   });
 
-  // Label key points
-  ctx.font = 'bold 9px Arial';
-  ctx.fillStyle = 'rgba(255,255,255,0.85)';
-  ctx.shadowColor = 'rgba(0,0,0,0.8)'; ctx.shadowBlur = 3;
-  const labels = [[0,'Cổ tay'],[5,'Trỏ'],[9,'Giữa'],[13,'Áp út'],[17,'Út'],[2,'Cái']];
-  labels.forEach(([i, label]) => {
-    ctx.fillText(label, lm[i].x*w + 5, lm[i].y*h - 4);
-  });
-  ctx.shadowBlur = 0;
+  // ── 2. Các điểm tham chiếu ──
+  const x = i => lm[i].x * W;
+  const y = i => lm[i].y * H;
+
+  // Thumb vs pinky side detection
+  const thumbLeft = lm[1].x < lm[17].x;
+  const tDir = thumbLeft ? -1 : 1; // hướng về phía ngón cái
+
+  const palmW = Math.abs(x(5) - x(17));
+  const palmH = Math.abs(y(0) - y(9));
+
+  // Điểm xuất phát chung của Sinh + Trí đạo
+  // Nằm giữa MCP ngón cái (lm[2]) và MCP ngón trỏ (lm[5])
+  const origX = x(2) * 0.35 + x(5) * 0.65;
+  const origY = y(2) * 0.40 + y(5) * 0.60;
+
+  // ── Helper vẽ đường cong có label ──
+  function drawCurve(color, pts, label, lx, ly, alignRight) {
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.shadowColor = 'rgba(0,0,0,0.7)';
+    ctx.shadowBlur = 4;
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    for (let i = 1; i < pts.length - 1; i += 2) {
+      ctx.quadraticCurveTo(pts[i].x, pts[i].y, pts[i+1].x, pts[i+1].y);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    // Label pill
+    ctx.save();
+    ctx.font = 'bold 11px Arial';
+    const tw = ctx.measureText(label).width;
+    const px = alignRight ? lx - tw - 10 : lx;
+    const py = ly;
+    // Pill background
+    ctx.fillStyle = color.replace(/,\s*[\d.]+\)$/, ',0.93)');
+    ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 5;
+    ctx.beginPath();
+    ctx.rect(px - 4, py - 14, tw + 8, 18);
+    ctx.fill();
+    // Text
+    ctx.fillStyle = '#fff';
+    ctx.shadowBlur = 2;
+    ctx.fillText(label, px, py);
+    ctx.restore();
+  }
+
+  // ── 3. Đường Tâm Đạo (Tim) — hồng, gần gốc ngón tay ──
+  // Chạy từ gốc ngón út → gốc ngón trỏ/giữa, hơi cong lên
+  {
+    const sx = x(17) + tDir * palmW * 0.05;
+    const sy = y(17) - palmH * 0.02;
+    const ex = x(5) - tDir * palmW * 0.05;
+    const ey = y(5) + palmH * 0.01;
+    const cpx = (sx + ex) / 2;
+    const cpy = Math.min(sy, ey) - palmH * 0.07;
+
+    drawCurve(
+      'rgba(236,72,153,0.92)',
+      [{x:sx,y:sy},{x:cpx,y:cpy},{x:ex,y:ey}],
+      'Tâm Đạo',
+      thumbLeft ? ex + 5 : sx - 5,
+      ey - 4,
+      !thumbLeft
+    );
+  }
+
+  // ── 4. Đường Trí Đạo (Đầu) — xanh dương, ngang giữa lòng bàn tay ──
+  // Từ vùng gốc ngón cái/trỏ ngang sang phía ngón út, thấp hơn Tâm Đạo
+  {
+    const ex = thumbLeft ? x(17) + palmW * 0.06 : x(17) - palmW * 0.06;
+    const ey = y(17) + palmH * 0.27;
+    const cpx = (origX + ex) / 2;
+    const cpy = (origY + ey) / 2 + palmH * 0.03;
+
+    drawCurve(
+      'rgba(59,130,246,0.92)',
+      [{x:origX, y:origY + palmH*0.07},
+       {x:cpx, y:cpy},
+       {x:ex, y:ey}],
+      'Trí Đạo',
+      thumbLeft ? ex + 5 : ex - 5,
+      ey - 2,
+      !thumbLeft
+    );
+  }
+
+  // ── 5. Đường Sinh Đạo (Mệnh) — đỏ, vòng quanh gò ngón cái ──
+  // Từ vùng gốc ngón cái/trỏ, cong về phía ngón cái xuống đến cổ tay
+  {
+    const cpx = x(2) + tDir * palmW * 0.08;
+    const cpy = (y(2) + y(0)) / 2;
+    const endX = x(0) + tDir * palmW * 0.20;
+    const endY = y(0) - palmH * 0.02;
+
+    drawCurve(
+      'rgba(220,55,55,0.92)',
+      [{x:origX, y:origY},
+       {x:cpx, y:cpy},
+       {x:endX, y:endY}],
+      'Sinh Đạo',
+      thumbLeft ? endX - 5 : endX + 5,
+      endY - 4,
+      thumbLeft
+    );
+  }
+
+  // ── 6. Đường Vận Mệnh — tím, dọc giữa lòng bàn tay ──
+  // Từ cổ tay đi thẳng lên về phía gốc ngón giữa
+  {
+    const sx = (x(0) + x(9)) / 2 * 0.35 + x(9) * 0.65;
+    const sy = y(0) - palmH * 0.04;
+    const ex = x(9);
+    const ey = y(9) + palmH * 0.12;
+    const cpx = (sx + ex) / 2 + tDir * palmW * 0.02;
+    const cpy = (sy + ey) / 2;
+
+    drawCurve(
+      'rgba(139,92,246,0.90)',
+      [{x:sx,y:sy},{x:cpx,y:cpy},{x:ex,y:ey}],
+      'Vận Mệnh',
+      ex + palmW * 0.07,
+      ey,
+      false
+    );
+  }
 
   document.getElementById('mpBadge').style.display = 'block';
 }
@@ -390,6 +519,7 @@ function showPreview(dataUrl) {
       drawHandOverlay(lm, imgEl);
       if (lm) {
         _handGeoNote = analyzeHandGeometry(lm, w, h);
+        document.getElementById('palmLineLegend').style.display = 'block';
       } else {
         const err=document.getElementById('error-msg');
         err.textContent='⚠ Không nhận diện được bàn tay. Thử chụp rõ hơn với nền tương phản và ánh sáng đủ.';
@@ -408,6 +538,7 @@ function removePhoto() {
   document.getElementById('analyzeBtn').disabled=true;
   document.getElementById('fileInput').value='';
   document.getElementById('handGeomPanel').style.display='none';
+  document.getElementById('palmLineLegend').style.display='none';
   const cv=document.getElementById('overlayCanvas');
   cv.getContext('2d').clearRect(0,0,cv.width,cv.height);
   stopCamera();
