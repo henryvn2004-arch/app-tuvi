@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Thanh Tướng AI — Xem Tướng Giọng Nói – Tử Vi Minh Bảo</title>
+<meta name="description" content="Phân tích thanh tướng học — xem tướng giọng nói theo Ngũ Âm cổ pháp phương Đông: Kim, Mộc, Thủy, Hỏa, Thổ.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<style>
+/* Passage card */
+.passage-card{background:linear-gradient(135deg,#fdf8f0,#fff9ef);border:2px solid #c9a84c;border-radius:12px;padding:24px 28px;margin:20px 0}
+.passage-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#9A7B3A;margin-bottom:10px}
+.passage-text{font-family:'Noto Serif',Georgia,serif;font-size:18px;line-height:1.9;color:#061A2E;text-align:center}
+.passage-text em{color:#9A7B3A;font-style:normal;font-weight:600}
+.passage-note{font-size:12px;color:var(--text-lt);margin-top:8px;text-align:center}
+/* Recording UI */
+.record-wrap{text-align:center;padding:24px 0 16px}
+.btn-record{display:inline-flex;align-items:center;gap:10px;padding:16px 36px;background:var(--navy);color:#fff;border:none;border-radius:50px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;letter-spacing:.5px}
+.btn-record:hover{background:#0D3B5E;transform:scale(1.02)}
+.btn-record.recording{background:#C0392B;animation:pulse-red 1.2s ease-in-out infinite}
+.btn-record.processing{background:#888;cursor:not-allowed}
+@keyframes pulse-red{0%,100%{box-shadow:0 0 0 0 rgba(192,57,43,0.4)}50%{box-shadow:0 0 0 12px rgba(192,57,43,0)}}
+.countdown-badge{display:none;font-size:48px;font-weight:700;color:#C0392B;margin:12px 0;font-family:Georgia,serif}
+.countdown-badge.visible{display:block}
+.timer-bar-wrap{height:4px;background:var(--border-lt);border-radius:2px;margin:12px 24px;overflow:hidden;display:none}
+.timer-bar-wrap.visible{display:block}
+.timer-bar{height:100%;background:#C0392B;border-radius:2px;width:0%;transition:width .1s linear}
+/* Waveform canvas */
+.waveform-wrap{margin:12px 0;display:none}
+.waveform-wrap.visible{display:block}
+#waveCanvas{width:100%;height:80px;border-radius:8px;background:#061A2E;display:block}
+/* Features panel */
+.features-panel{display:none;margin-top:16px;padding:14px 16px;background:var(--bg-soft);border-radius:10px;border:1px solid var(--border-lt)}
+.features-panel.visible{display:block}
+.features-title{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-lt);margin-bottom:10px}
+.features-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.feature-item{display:flex;flex-direction:column;gap:2px;padding:8px 10px;background:#fff;border-radius:6px;border:1px solid var(--border-lt)}
+.feature-label{font-size:10px;color:var(--text-lt);text-transform:uppercase;letter-spacing:.8px}
+.feature-value{font-size:13px;font-weight:600;color:var(--navy)}
+.feature-bar{height:3px;background:var(--border-lt);border-radius:2px;margin-top:4px;overflow:hidden}
+.feature-bar-fill{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.ngu-am-badge{display:inline-block;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:700;margin-top:10px}
+.ngu-am-Kim{background:#E6F1FB;color:#0C447C;border:1.5px solid #B5D4F4}
+.ngu-am-Moc{background:#EAF3DE;color:#27500A;border:1.5px solid #C0DD97}
+.ngu-am-Thuy{background:#E1F5EE;color:#085041;border:1.5px solid #9FE1CB}
+.ngu-am-Hoa{background:#FCEBEB;color:#A32D2D;border:1.5px solid #F7C1C1}
+.ngu-am-Tho{background:#FAEEDA;color:#633806;border:1.5px solid #FAC775}
+/* Result */
+.md-result{font-size:14px;line-height:1.85;color:var(--text-mid)}
+.md-result h2{font-size:16px;font-weight:700;color:var(--navy);margin:20px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border-lt)}
+.md-result h3{font-size:14px;font-weight:700;color:var(--navy);margin:14px 0 6px}
+.md-result strong{color:var(--navy);font-weight:700}
+.md-result em{color:#9A7B3A}
+.md-result p{margin:0 0 10px}
+.md-result blockquote{border-left:3px solid #c9a84c;padding:8px 16px;margin:12px 0;background:#fdf8f0;font-style:italic;color:#9A7B3A}
+.ai-loading{display:flex;flex-direction:column;align-items:center;gap:16px;padding:40px 0}
+.ai-loading-icon{font-size:48px;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.privacy-notice{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;background:#e8f0fe;border-radius:8px;border-left:3px solid #1455A4;font-size:12px;color:#1455A4;margin-top:16px}
+/* Ngũ âm reference */
+.ngu-am-ref{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:16px 0}
+@media(max-width:600px){.ngu-am-ref{grid-template-columns:1fr 1fr};.features-grid{grid-template-columns:1fr}}
+.ngu-am-card{padding:10px 8px;border-radius:8px;text-align:center;border:1px solid transparent}
+.ngu-am-card .hanh{font-size:16px;font-weight:700;margin-bottom:3px}
+.ngu-am-card .desc{font-size:10px;line-height:1.5;color:inherit;opacity:.85}
+.status-msg{font-size:13px;color:var(--text-lt);margin-top:10px;text-align:center;min-height:20px}
+</style>
+</head>
+<body>
+<script src="/nav.js"></script>
+
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Miễn Phí · Thanh Tướng Học</div>
+    <h1>Xem Tướng Giọng Nói<br><em>Thanh Tướng AI</em></h1>
+    <p>Đọc một đoạn thơ ngắn — AI phân tích giọng nói theo Ngũ Âm cổ pháp: Kim · Mộc · Thủy · Hỏa · Thổ.</p>
+  </div>
+</div>
+
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Thanh Tướng Học (聲相學)</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">Giọng Nói Là Tấm Gương<br>Của Tâm Tính & Vận Mệnh</h2>
+          <p class="xt-body">Tướng học tông sư Mã Môi đời Tống đã nói: <strong>"Tướng pháp thường thừa lấy âm thanh làm chủ."</strong> Đạt Ma thiền sư Thiếu Lâm cũng khẳng định: <strong>"Cầu toàn lại thanh âm."</strong> Trong nhân tướng học, thanh tướng được coi là yếu tố tiết lộ nhất về nội tâm và vận mệnh.</p>
+          <p class="xt-body">Hệ thống <strong>Ngũ Âm</strong> phân giọng nói thành 5 loại theo ngũ hành: Kim · Mộc · Thủy · Hỏa · Thổ — mỗi loại phản chiếu tính cách, sức khoẻ và phúc lộc khác nhau. Web Audio API đo các đặc tính âm thanh, Claude luận giải theo cổ pháp.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">Ngũ Âm Tướng Pháp</div>
+          <div class="ngu-am-ref">
+            <div class="ngu-am-card ngu-am-Kim"><div class="hanh">Kim</div><div class="desc">Sang sảng, trong trẻo, ấm mà vang — tiếng khánh</div></div>
+            <div class="ngu-am-card ngu-am-Moc"><div class="hanh">Mộc</div><div class="desc">Tròn trịa, đôn hậu, có sinh khí, nghe xa rõ</div></div>
+            <div class="ngu-am-card ngu-am-Thuy"><div class="hanh">Thủy</div><div class="desc">Lành lạnh, sâu sa, rõ ràng, nhanh mà không nuốt</div></div>
+            <div class="ngu-am-card ngu-am-Hoa"><div class="hanh">Hỏa</div><div class="desc">Cao, hơi khàn, gằn có lực, vang xa, sôi nổi</div></div>
+            <div class="ngu-am-card ngu-am-Tho"><div class="hanh">Thổ</div><div class="desc">Trầm ấm, to, chậm, ngân vang như chuông chùa</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recording Section -->
+  <div class="form-section" id="inputSection">
+    <div class="section-eyebrow">Thu Âm Giọng Nói</div>
+    <div class="privacy-notice">
+      <span>🔒</span>
+      <div><strong>Quyền riêng tư:</strong> Âm thanh được xử lý hoàn toàn trong trình duyệt. Chỉ gửi các chỉ số đo được (không gửi file audio) lên server để AI phân tích.</div>
+    </div>
+
+    <!-- Passage to read -->
+    <div class="passage-card">
+      <div class="passage-label">📖 Đọc đoạn thơ này (tự nhiên, rõ ràng)</div>
+      <div class="passage-text">
+        Công cha như núi <em>Thái Sơn</em>,<br>
+        nghĩa mẹ như nước trong nguồn <em>chảy ra</em>.<br>
+        Một lòng thờ mẹ kính cha,<br>
+        cho tròn chữ hiếu mới là <em>đạo con</em>.
+      </div>
+      <div class="passage-note">Đọc chậm rãi, tự nhiên như đang đọc thơ — khoảng 10–15 giây · Nên ở nơi yên tĩnh, không có tiếng ồn</div>
+    </div>
+
+    <!-- Recording controls -->
+    <div class="record-wrap">
+      <div class="countdown-badge" id="countdownBadge"></div>
+      <button class="btn-record" id="recordBtn" onclick="toggleRecord()">
+        <span id="recordIcon">🎙</span>
+        <span id="recordLabel">Bắt Đầu Thu Âm</span>
+      </button>
+      <div class="status-msg" id="statusMsg">Nhấn để bắt đầu thu âm · Cho phép truy cập microphone khi trình duyệt hỏi</div>
+      <div class="timer-bar-wrap" id="timerBarWrap">
+        <div class="timer-bar" id="timerBar"></div>
+      </div>
+    </div>
+
+    <!-- Waveform visualization -->
+    <div class="waveform-wrap" id="waveWrap">
+      <canvas id="waveCanvas" height="80"></canvas>
+    </div>
+
+    <!-- Features panel (after recording) -->
+    <div class="features-panel" id="featuresPanel">
+      <div class="features-title">📊 Kết quả đo lường giọng nói</div>
+      <div class="features-grid" id="featuresGrid"></div>
+      <div style="text-align:center;margin-top:6px">
+        <span id="nguAmBadge" class="ngu-am-badge"></span>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:20px">
+      <button class="btn-submit" id="analyzeBtn" onclick="analyze()" disabled style="padding:14px 40px;font-size:15px">
+        🎵 Phân Tích Thanh Tướng
+      </button>
+    </div>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+
+  <!-- Result -->
+  <div class="result-section" id="result-section">
+    <div class="res-block" style="margin-bottom:16px">
+      <div class="res-block-header">
+        <span class="res-block-title">Phân Tích Thanh Tướng Học</span>
+        <span style="font-size:11px;color:var(--text-lt)">Claude AI · Ngũ Âm Cổ Pháp · Mã Môi · Đạt Ma</span>
+      </div>
+      <div class="res-block-body">
+        <div id="aiResult" class="md-result"></div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:8px">
+      <button class="btn-secondary" onclick="resetTool()" style="padding:10px 24px">Thu Âm Lại</button>
+    </div>
+  </div>
+
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Tướng + Số + Vận</div>
+    <div class="tool-cta-title">Kết Hợp Thanh Tướng Với Lá Số Tử Vi</div>
+    <div class="tool-cta-desc">Thanh tướng phản chiếu khí chất và nội tâm. Lá số Tử Vi phân tích vận trình từng giai đoạn — kết hợp cho bức tranh toàn diện nhất.</div>
+    <a class="tool-cta-btn" href="/luan-giai.html">Xem Lá Số Tử Vi ($19) →</a>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────
+let _audioCtx = null;
+let _analyser = null;
+let _stream = null;
+let _recorder = null;
+let _chunks = [];
+let _isRecording = false;
+let _recordTimer = null;
+let _countdownTimer = null;
+let _animFrame = null;
+let _features = null;
+
+const RECORD_MS = 14000;
+const COUNTDOWN = 3;
+
+// ── Recording Flow ──────────────────────────────────────────────────────
+async function toggleRecord() {
+  if (_isRecording) { stopRecording(); return; }
+  const btn = document.getElementById('recordBtn');
+  if (btn.classList.contains('processing')) return;
+  await startCountdown();
+}
+
+async function startCountdown() {
+  const badge = document.getElementById('countdownBadge');
+  const statusEl = document.getElementById('statusMsg');
+  badge.classList.add('visible');
+  statusEl.textContent = 'Chuẩn bị giọng nói...';
+  let n = COUNTDOWN;
+  badge.textContent = n;
+  await new Promise(res => {
+    _countdownTimer = setInterval(() => {
+      n--;
+      if (n <= 0) { clearInterval(_countdownTimer); badge.classList.remove('visible'); badge.textContent = ''; res(); }
+      else badge.textContent = n;
+    }, 900);
+  });
+  await startRecording();
+}
+
+async function startRecording() {
+  const errEl = document.getElementById('error-msg');
+  errEl.classList.remove('active');
+  try {
+    _stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, sampleRate: 44100 }, video: false });
+  } catch(e) {
+    errEl.textContent = 'Không thể truy cập microphone. Vui lòng cho phép quyền trong trình duyệt.';
+    errEl.classList.add('active');
+    return;
+  }
+
+  _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const source = _audioCtx.createMediaStreamSource(_stream);
+  _analyser = _audioCtx.createAnalyser();
+  _analyser.fftSize = 1024;
+  source.connect(_analyser);
+
+  // MediaRecorder
+  const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus'
+    : MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/ogg';
+  _recorder = new MediaRecorder(_stream, { mimeType });
+  _chunks = [];
+  _recorder.ondataavailable = e => { if (e.data.size > 0) _chunks.push(e.data); };
+  _recorder.onstop = processAudio;
+  _recorder.start(100);
+
+  _isRecording = true;
+  updateRecordUI(true);
+  startWaveform();
+  startProgressBar();
+
+  _recordTimer = setTimeout(stopRecording, RECORD_MS);
+}
+
+function stopRecording() {
+  if (!_isRecording) return;
+  _isRecording = false;
+  clearTimeout(_recordTimer);
+  cancelAnimationFrame(_animFrame);
+  if (_recorder && _recorder.state !== 'inactive') _recorder.stop();
+  if (_stream) _stream.getTracks().forEach(t => t.stop());
+  stopProgressBar();
+  updateRecordUI(false, true); // processing state
+  document.getElementById('statusMsg').textContent = 'Đang phân tích âm thanh...';
+}
+
+// ── UI helpers ──────────────────────────────────────────────────────────
+function updateRecordUI(recording, processing = false) {
+  const btn = document.getElementById('recordBtn');
+  const icon = document.getElementById('recordIcon');
+  const label = document.getElementById('recordLabel');
+  const timerWrap = document.getElementById('timerBarWrap');
+  const waveWrap = document.getElementById('waveWrap');
+
+  btn.classList.remove('recording', 'processing');
+  if (recording) {
+    btn.classList.add('recording');
+    icon.textContent = '⏹';
+    label.textContent = 'Dừng Lại';
+    timerWrap.classList.add('visible');
+    waveWrap.classList.add('visible');
+    document.getElementById('statusMsg').textContent = 'Đang thu âm — hãy đọc đoạn thơ trên...';
+  } else if (processing) {
+    btn.classList.add('processing');
+    icon.textContent = '⏳';
+    label.textContent = 'Đang xử lý...';
+    timerWrap.classList.remove('visible');
+  } else {
+    icon.textContent = '🎙';
+    label.textContent = 'Thu Âm Lại';
+    timerWrap.classList.remove('visible');
+    waveWrap.classList.remove('visible');
+  }
+}
+
+// ── Waveform Animation ──────────────────────────────────────────────────
+function startWaveform() {
+  const canvas = document.getElementById('waveCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth;
+  const W = canvas.width, H = canvas.height;
+  const bufLen = _analyser.frequencyBinCount;
+  const dataArr = new Uint8Array(bufLen);
+
+  function draw() {
+    _animFrame = requestAnimationFrame(draw);
+    _analyser.getByteTimeDomainData(dataArr);
+    ctx.fillStyle = '#061A2E';
+    ctx.fillRect(0, 0, W, H);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#c9a84c';
+    ctx.beginPath();
+    const slice = W / bufLen;
+    let x = 0;
+    for (let i = 0; i < bufLen; i++) {
+      const v = dataArr[i] / 128.0;
+      const y = v * H / 2;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      x += slice;
+    }
+    ctx.lineTo(W, H / 2);
+    ctx.stroke();
+  }
+  draw();
+}
+
+// ── Progress Bar ─────────────────────────────────────────────────────────
+let _progressInterval = null;
+function startProgressBar() {
+  const bar = document.getElementById('timerBar');
+  let elapsed = 0;
+  bar.style.width = '0%';
+  _progressInterval = setInterval(() => {
+    elapsed += 100;
+    bar.style.width = Math.min(100, elapsed / RECORD_MS * 100) + '%';
+    if (elapsed >= RECORD_MS) clearInterval(_progressInterval);
+  }, 100);
+}
+function stopProgressBar() {
+  clearInterval(_progressInterval);
+  document.getElementById('timerBar').style.width = '100%';
+  setTimeout(() => { document.getElementById('timerBar').style.width = '0%'; }, 600);
+}
+
+// ── Audio Processing ─────────────────────────────────────────────────────
+async function processAudio() {
+  const blob = new Blob(_chunks, { type: _chunks[0]?.type || 'audio/webm' });
+  try {
+    const arrayBuf = await blob.arrayBuffer();
+    const audioBuffer = await _audioCtx.decodeAudioData(arrayBuf);
+    const data = audioBuffer.getChannelData(0);
+    const sr = audioBuffer.sampleRate;
+
+    _features = extractFeatures(data, sr);
+    showFeatures(_features);
+    document.getElementById('analyzeBtn').disabled = false;
+    updateRecordUI(false);
+    document.getElementById('statusMsg').textContent = 'Thu âm hoàn tất — nhấn "Phân Tích" để xem kết quả.';
+    document.getElementById('waveWrap').classList.remove('visible');
+  } catch(e) {
+    const errEl = document.getElementById('error-msg');
+    errEl.textContent = 'Không thể xử lý âm thanh: ' + e.message + '. Vui lòng thử lại.';
+    errEl.classList.add('active');
+    updateRecordUI(false);
+    document.getElementById('statusMsg').textContent = '';
+  }
+}
+
+// ── Feature Extraction ─────────────────────────────────────────────────
+function extractFeatures(data, sr) {
+  const frameSize = Math.floor(sr * 0.04);  // 40ms
+  const hopSize = Math.floor(frameSize / 2);
+  const frames = [];
+
+  for (let i = 0; i + frameSize < data.length; i += hopSize) {
+    const frame = data.slice(i, i + frameSize);
+    let rms = 0;
+    for (let j = 0; j < frame.length; j++) rms += frame[j] * frame[j];
+    frames.push({ data: frame, rms: Math.sqrt(rms / frame.length) });
+  }
+
+  const maxRms = Math.max(...frames.map(f => f.rms));
+  const threshold = maxRms * 0.12;
+  const voiced = frames.filter(f => f.rms > threshold);
+
+  // Overall amplitude
+  let totalRms = 0;
+  for (let i = 0; i < data.length; i++) totalRms += data[i] * data[i];
+  const amplitude = Math.sqrt(totalRms / data.length);
+
+  // Pitch per voiced frame (autocorrelation)
+  const pitches = voiced.map(f => detectPitch(f.data, sr)).filter(p => p > 75 && p < 520);
+  const sortedP = [...pitches].sort((a, b) => a - b);
+  const medianPitch = sortedP.length > 0 ? sortedP[Math.floor(sortedP.length / 2)] : 0;
+
+  // Pitch variance (coefficient of variation)
+  const pitchVar = pitches.length > 3
+    ? Math.sqrt(pitches.reduce((s, p) => s + (p - medianPitch) ** 2, 0) / pitches.length) / (medianPitch || 1)
+    : 0.5;
+  const stability = Math.max(0, Math.min(100, Math.round((1 - Math.min(pitchVar, 1)) * 100)));
+
+  // Speech rate — energy envelope peaks
+  const energies = frames.map(f => f.rms);
+  const speechRate = countSyllables(energies, sr, hopSize);
+
+  // Brightness — ZCR proxy for spectral content
+  const avgZcr = voiced.length > 0 ? voiced.map(f => {
+    let crosses = 0;
+    for (let i = 1; i < f.data.length; i++) if ((f.data[i] >= 0) !== (f.data[i - 1] >= 0)) crosses++;
+    return crosses / f.data.length;
+  }).reduce((s, z) => s + z, 0) / voiced.length : 0.05;
+  const brightness = Math.min(1, Math.max(0, (avgZcr - 0.015) / 0.12));
+
+  const duration = Math.round(data.length / sr * 10) / 10;
+
+  return {
+    pitch: Math.round(medianPitch),
+    pitchCount: pitches.length,
+    speechRate: Math.round(speechRate * 10) / 10,
+    amplitude: Math.round(amplitude * 1000) / 1000,
+    brightness: Math.round(brightness * 100) / 100,
+    stability,
+    duration
+  };
+}
+
+function detectPitch(frame, sr) {
+  const N = frame.length;
+  const minPeriod = Math.floor(sr / 500);
+  const maxPeriod = Math.min(Math.floor(sr / 75), Math.floor(N / 2));
+  let bestPeriod = -1, bestCorr = 0.42;
+
+  for (let lag = minPeriod; lag <= maxPeriod; lag++) {
+    let num = 0, den = 0;
+    for (let i = 0; i < N - lag; i++) {
+      num += frame[i] * frame[i + lag];
+      den += frame[i] * frame[i] + frame[i + lag] * frame[i + lag];
+    }
+    const corr = den > 0 ? 2 * num / den : 0;
+    if (corr > bestCorr) { bestCorr = corr; bestPeriod = lag; }
+  }
+  return bestPeriod > 0 ? sr / bestPeriod : 0;
+}
+
+function countSyllables(energies, sr, hopSize) {
+  // Smooth
+  const sm = energies.map((e, i) => {
+    const w = energies.slice(Math.max(0, i - 2), i + 3);
+    return w.reduce((s, x) => s + x, 0) / w.length;
+  });
+  const maxE = Math.max(...sm);
+  const thr = maxE * 0.28;
+  let peaks = 0;
+  for (let i = 2; i < sm.length - 2; i++) {
+    if (sm[i] > thr && sm[i] >= sm[i-1] && sm[i] >= sm[i+1] && sm[i] >= sm[i-2] && sm[i] >= sm[i+2]) {
+      peaks++; i += 3;
+    }
+  }
+  const dur = energies.length * hopSize / sr;
+  return dur > 0 ? peaks / dur : 0;
+}
+
+// ── Estimate Ngũ Âm ────────────────────────────────────────────────────
+function estimateNguAm(f) {
+  let scores = { Kim: 0, Moc: 0, Thuy: 0, Hoa: 0, Tho: 0 };
+
+  // Pitch contribution
+  if (f.pitch > 0) {
+    if (f.pitch > 210)      { scores.Hoa += 3; scores.Kim += 1; }
+    else if (f.pitch > 175) { scores.Kim += 3; scores.Hoa += 1; }
+    else if (f.pitch > 145) { scores.Moc += 3; scores.Kim += 1; }
+    else if (f.pitch > 115) { scores.Thuy += 2; scores.Moc += 1; }
+    else                    { scores.Tho += 3; scores.Thuy += 1; }
+  }
+
+  // Speech rate
+  if (f.speechRate > 5.5)      { scores.Thuy += 2; scores.Hoa += 1; }
+  else if (f.speechRate > 4)   { scores.Kim += 1; scores.Moc += 1; }
+  else if (f.speechRate > 2.5) { scores.Moc += 1; }
+  else                         { scores.Tho += 2; }
+
+  // Brightness
+  if (f.brightness > 0.65)      { scores.Hoa += 2; }
+  else if (f.brightness > 0.45) { scores.Kim += 2; }
+  else if (f.brightness > 0.3)  { scores.Moc += 1; scores.Kim += 1; }
+  else                          { scores.Tho += 1; scores.Thuy += 1; }
+
+  // Amplitude
+  if (f.amplitude > 0.10)       { scores.Tho += 1; scores.Hoa += 1; }
+  else if (f.amplitude < 0.025) { scores.Thuy += 1; }
+
+  const winner = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+  const descs = {
+    Kim: 'Kim Thanh (Thương) — trong sáng, vang xa',
+    Moc: 'Mộc Thanh (Giốc) — tròn trịa, đôn hậu',
+    Thuy: 'Thủy Thanh (Vũ) — lành lạnh, sâu sa',
+    Hoa: 'Hỏa Thanh (Chủy) — cao, gằn có lực',
+    Tho: 'Thổ Thanh (Cung) — trầm ấm, ngân vang',
+  };
+  return { type: winner, label: descs[winner] };
+}
+
+// ── Display Features ───────────────────────────────────────────────────
+function showFeatures(f) {
+  const panel = document.getElementById('featuresPanel');
+  const grid = document.getElementById('featuresGrid');
+  const badge = document.getElementById('nguAmBadge');
+
+  const pitchLabel = f.pitch === 0 ? 'Không rõ' :
+    f.pitch < 110 ? `${f.pitch}Hz — rất trầm` :
+    f.pitch < 140 ? `${f.pitch}Hz — trầm` :
+    f.pitch < 170 ? `${f.pitch}Hz — trung-thấp` :
+    f.pitch < 200 ? `${f.pitch}Hz — trung bình` :
+    f.pitch < 240 ? `${f.pitch}Hz — trung-cao` : `${f.pitch}Hz — cao`;
+
+  const rateLabel = f.speechRate < 2 ? `${f.speechRate} âm/s — rất chậm` :
+    f.speechRate < 3.5 ? `${f.speechRate} âm/s — chậm` :
+    f.speechRate < 5 ? `${f.speechRate} âm/s — vừa` :
+    f.speechRate < 6.5 ? `${f.speechRate} âm/s — nhanh` : `${f.speechRate} âm/s — rất nhanh`;
+
+  const ampLabel = f.amplitude < 0.015 ? 'Nhỏ, yếu' :
+    f.amplitude < 0.045 ? 'Vừa phải' :
+    f.amplitude < 0.09  ? 'Khá to' : 'To, có lực';
+
+  const brightLabel = f.brightness < 0.25 ? 'Tối, ấm' :
+    f.brightness < 0.45 ? 'Trung bình, ấm' :
+    f.brightness < 0.65 ? 'Sáng, trong' : 'Rất sáng';
+
+  const items = [
+    { label: 'Cao Độ (Pitch)', value: pitchLabel, fill: f.pitch > 0 ? Math.min(100, (f.pitch - 75) / 3.5) : 0, color: '#378ADD' },
+    { label: 'Tốc Độ Nói', value: rateLabel, fill: Math.min(100, f.speechRate / 7 * 100), color: '#1D9E75' },
+    { label: 'Âm Lượng', value: ampLabel, fill: Math.min(100, f.amplitude / 0.12 * 100), color: '#BA7517' },
+    { label: 'Âm Sắc (Brightness)', value: brightLabel, fill: f.brightness * 100, color: '#7B2FBE' },
+    { label: 'Độ Ổn Định', value: `${f.stability}%`, fill: f.stability, color: '#0F6E56' },
+    { label: 'Thời Lượng', value: `${f.duration}s`, fill: Math.min(100, f.duration / 15 * 100), color: '#534AB7' },
+  ];
+
+  grid.innerHTML = items.map(it => `
+    <div class="feature-item">
+      <div class="feature-label">${it.label}</div>
+      <div class="feature-value">${it.value}</div>
+      <div class="feature-bar"><div class="feature-bar-fill" style="width:${it.fill.toFixed(0)}%;background:${it.color}"></div></div>
+    </div>
+  `).join('');
+
+  const nguAm = estimateNguAm(f);
+  badge.className = `ngu-am-badge ngu-am-${nguAm.type}`;
+  badge.textContent = `Ước tính: ${nguAm.label}`;
+
+  panel.classList.add('visible');
+}
+
+// ── Build text for Claude ──────────────────────────────────────────────
+function buildFeaturesText(f) {
+  const p = f.pitch;
+  const pitchDesc = p === 0 ? 'Không xác định được cao độ (tín hiệu quá yếu)' :
+    p < 110 ? `Rất trầm — ${p}Hz, đặc trưng Thổ sâu hoặc Thủy nặng` :
+    p < 140 ? `Trầm — ${p}Hz, thiên Thổ hoặc Thủy` :
+    p < 170 ? `Trung-thấp — ${p}Hz, thiên Thủy hoặc Mộc trầm` :
+    p < 200 ? `Trung bình — ${p}Hz, thiên Mộc hoặc Kim trung` :
+    p < 240 ? `Trung-cao — ${p}Hz, thiên Kim hoặc Hỏa vừa` :
+    `Cao — ${p}Hz, thiên Hỏa hoặc Kim cao`;
+
+  const rateDesc = f.speechRate < 2 ? 'Rất chậm' :
+    f.speechRate < 3.5 ? `Chậm rãi (~${f.speechRate} âm tiết/giây), thiên Thổ` :
+    f.speechRate < 5   ? `Vừa phải (~${f.speechRate} âm tiết/giây), Kim/Mộc` :
+    f.speechRate < 6.5 ? `Nhanh (~${f.speechRate} âm tiết/giây), thiên Thủy` :
+    `Rất nhanh (~${f.speechRate} âm tiết/giây), thiên Hỏa/Thủy`;
+
+  const ampDesc = f.amplitude < 0.015 ? 'Nhỏ, yếu — không phát từ đan điền' :
+    f.amplitude < 0.045 ? 'Vừa phải' :
+    f.amplitude < 0.09  ? 'Khá to, có lực' : 'To, mạnh mẽ — khả năng phát từ đan điền';
+
+  const brightDesc = f.brightness < 0.25 ? 'Tối, ấm, trầm ấm — thiên Thổ/Thủy' :
+    f.brightness < 0.45 ? 'Trung bình, ấm áp — thiên Mộc/Kim' :
+    f.brightness < 0.65 ? 'Sáng, trong trẻo — thiên Kim' :
+    'Rất sáng, cao tần — thiên Hỏa hoặc Kim phá cách';
+
+  const stabDesc = f.stability > 80 ? 'Rất ổn định, đều đặn' :
+    f.stability > 60 ? 'Ổn định' :
+    f.stability > 40 ? 'Có dao động vừa' : 'Dao động nhiều, thiếu đều';
+
+  const nguAm = estimateNguAm(f);
+
+  return [
+    '[Dữ liệu phân tích giọng nói — Web Audio API]',
+    `Người dùng đọc bài thơ "Công cha như núi Thái Sơn" trong ${f.duration} giây.`,
+    '',
+    `Cao độ giọng (Pitch): ${pitchDesc}`,
+    `Tốc độ nói: ${rateDesc}`,
+    `Âm lượng: ${ampDesc}`,
+    `Âm sắc (Brightness/ZCR): ${brightDesc}`,
+    `Độ ổn định giọng: ${stabDesc} (${f.stability}%)`,
+    '',
+    `Ước tính Ngũ Âm sơ bộ (theo thuật toán): ${nguAm.label}`,
+    '(Lưu ý: đây là ước tính kỹ thuật — Claude cần xét toàn diện để luận giải chính xác)',
+  ].join('\n');
+}
+
+// ── API Call ────────────────────────────────────────────────────────────
+async function analyze() {
+  if (!_features) return;
+  const errEl = document.getElementById('error-msg');
+  errEl.classList.remove('active');
+  document.getElementById('analyzeBtn').disabled = true;
+  document.getElementById('result-section').classList.add('active');
+  document.getElementById('aiResult').innerHTML = '<div class="ai-loading"><span class="ai-loading-icon">🎵</span><div style="font-size:14px;color:var(--text-lt)">AI đang luận giải thanh tướng...<br><span style="font-size:12px;opacity:.7">Thường mất 10–15 giây</span></div></div>';
+  document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  try {
+    const res = await fetch('/api/tuong-mat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'thanh-tuong',
+        geoNote: buildFeaturesText(_features),
+        image: null,
+      })
+    });
+    if (!res.ok) { const d = await res.json().catch(() => ({})); throw new Error(d.error || 'Lỗi ' + res.status); }
+
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+    let full = '', buf = '';
+    const el = document.getElementById('aiResult');
+    el.innerHTML = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      const lines = buf.split('\n'); buf = lines.pop() || '';
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const raw = line.slice(6).trim();
+        if (raw === '[DONE]') break;
+        try {
+          const j = JSON.parse(raw);
+          if (j.err) throw new Error(j.err);
+          if (j.t) { full += j.t; el.innerHTML = renderMd(full); }
+        } catch(e) { if (e.message && !e.message.includes('JSON')) throw e; }
+      }
+    }
+    if (!full) throw new Error('Không có kết quả.');
+    el.innerHTML = renderMd(full);
+    document.getElementById('analyzeBtn').disabled = false;
+  } catch(e) {
+    document.getElementById('aiResult').innerHTML = '';
+    document.getElementById('result-section').classList.remove('active');
+    errEl.textContent = 'Lỗi: ' + (e.message || 'Không thể kết nối.');
+    errEl.classList.add('active');
+    document.getElementById('analyzeBtn').disabled = false;
+  }
+}
+
+function resetTool() {
+  _features = null;
+  _isRecording = false;
+  clearTimeout(_recordTimer);
+  clearInterval(_countdownTimer);
+  cancelAnimationFrame(_animFrame);
+  if (_stream) _stream.getTracks().forEach(t => t.stop());
+  if (_audioCtx) _audioCtx.close().catch(() => {});
+  _audioCtx = null; _stream = null; _recorder = null;
+
+  updateRecordUI(false);
+  document.getElementById('statusMsg').textContent = 'Nhấn để bắt đầu thu âm · Cho phép truy cập microphone khi trình duyệt hỏi';
+  document.getElementById('featuresPanel').classList.remove('visible');
+  document.getElementById('analyzeBtn').disabled = true;
+  document.getElementById('result-section').classList.remove('active');
+  document.getElementById('aiResult').innerHTML = '';
+  document.getElementById('error-msg').classList.remove('active');
+  document.getElementById('countdownBadge').classList.remove('visible');
+  document.getElementById('waveWrap').classList.remove('visible');
+  document.getElementById('timerBarWrap').classList.remove('visible');
+  document.getElementById('recordBtn').classList.remove('recording', 'processing');
+  document.getElementById('recordIcon').textContent = '🎙';
+  document.getElementById('recordLabel').textContent = 'Bắt Đầu Thu Âm';
+  document.getElementById('inputSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function renderMd(md) {
+  return md
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>')
+    .replace(/\n\n+/g,'</p><p>')
+    .replace(/^(?!<[hbp])(.+)$/gm,'<p>$1</p>')
+    .replace(/<p><\/p>/g,'')
+    .replace(/<p>(<[hb])/g,'$1')
+    .replace(/(<\/[hb][^>]*>)<\/p>/g,'$1');
+}
+</script>
+</body>
+</html>
