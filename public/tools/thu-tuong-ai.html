@@ -272,9 +272,9 @@ function drawHandOverlay(lm, imgEl) {
   ctx.clearRect(0, 0, W, H);
   if (!lm) return;
 
-  // ── 1. Skeleton (mờ, nền) ──
-  ctx.strokeStyle = 'rgba(201,168,76,0.35)';
-  ctx.lineWidth = 1.5;
+  // ── Skeleton mờ (nền) ──
+  ctx.strokeStyle = 'rgba(201,168,76,0.28)';
+  ctx.lineWidth = 1.2;
   HAND_CONNECTIONS.forEach(([a, b]) => {
     ctx.beginPath();
     ctx.moveTo(lm[a].x*W, lm[a].y*H);
@@ -283,144 +283,127 @@ function drawHandOverlay(lm, imgEl) {
   });
   lm.forEach(pt => {
     ctx.beginPath();
-    ctx.arc(pt.x*W, pt.y*H, 2, 0, Math.PI*2);
-    ctx.fillStyle = 'rgba(201,168,76,0.45)';
+    ctx.arc(pt.x*W, pt.y*H, 1.8, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(201,168,76,0.38)';
     ctx.fill();
   });
 
-  // ── 2. Các điểm tham chiếu ──
   const x = i => lm[i].x * W;
   const y = i => lm[i].y * H;
 
-  // Thumb vs pinky side detection
+  // Detect thumb side
   const thumbLeft = lm[1].x < lm[17].x;
-  const tDir = thumbLeft ? -1 : 1; // hướng về phía ngón cái
+  const tDir = thumbLeft ? -1 : 1; // -1=trái, 1=phải, hướng về ngón cái
 
   const palmW = Math.abs(x(5) - x(17));
   const palmH = Math.abs(y(0) - y(9));
 
-  // Điểm xuất phát chung của Sinh + Trí đạo
-  // Nằm giữa MCP ngón cái (lm[2]) và MCP ngón trỏ (lm[5])
-  const origX = x(2) * 0.35 + x(5) * 0.65;
-  const origY = y(2) * 0.40 + y(5) * 0.60;
+  // y trung bình gốc các ngón (MCP level) — Tâm Đạo sẽ nằm sát đây
+  const mcpY = (y(5) + y(9) + y(13) + y(17)) / 4;
 
-  // ── Helper vẽ đường cong có label ──
-  function drawCurve(color, pts, label, lx, ly, alignRight) {
+  // Điểm xuất phát Sinh + Trí đạo: giữa MCP ngón cái (lm[2]) và MCP ngón trỏ (lm[5])
+  const origX = x(2) * 0.45 + x(5) * 0.55;
+  const origY = y(2) * 0.45 + y(5) * 0.55;
+
+  // Helper: vẽ đường bezier + label pill
+  function drawLine(color, drawFn, label, lx, ly, alignRight) {
     ctx.save();
     ctx.strokeStyle = color;
     ctx.lineWidth = 3;
     ctx.lineCap = 'round';
-    ctx.shadowColor = 'rgba(0,0,0,0.7)';
+    ctx.shadowColor = 'rgba(0,0,0,0.65)';
     ctx.shadowBlur = 4;
     ctx.beginPath();
-    ctx.moveTo(pts[0].x, pts[0].y);
-    for (let i = 1; i < pts.length - 1; i += 2) {
-      ctx.quadraticCurveTo(pts[i].x, pts[i].y, pts[i+1].x, pts[i+1].y);
-    }
+    drawFn(ctx);
     ctx.stroke();
     ctx.restore();
-
-    // Label pill
+    // Pill label
     ctx.save();
     ctx.font = 'bold 11px Arial';
     const tw = ctx.measureText(label).width;
-    const px = alignRight ? lx - tw - 10 : lx;
-    const py = ly;
-    // Pill background
-    ctx.fillStyle = color.replace(/,\s*[\d.]+\)$/, ',0.93)');
+    const bx = alignRight ? lx - tw - 8 : lx;
     ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 5;
-    ctx.beginPath();
-    ctx.rect(px - 4, py - 14, tw + 8, 18);
-    ctx.fill();
-    // Text
+    ctx.fillStyle = color.replace(/[\d.]+\)$/, '0.92)');
+    ctx.fillRect(bx - 4, ly - 14, tw + 8, 19);
     ctx.fillStyle = '#fff';
-    ctx.shadowBlur = 2;
-    ctx.fillText(label, px, py);
+    ctx.shadowBlur = 1;
+    ctx.fillText(label, bx, ly);
     ctx.restore();
   }
 
-  // ── 3. Đường Tâm Đạo (Tim) — hồng, gần gốc ngón tay ──
-  // Chạy từ gốc ngón út → gốc ngón trỏ/giữa, hơi cong lên
+  // ── Tâm Đạo — hồng, sát gốc ngón tay ──
+  // Từ gốc ngón út (lm[17]) cong nhẹ sang gốc ngón trỏ (lm[5])
   {
-    const sx = x(17) + tDir * palmW * 0.05;
-    const sy = y(17) - palmH * 0.02;
-    const ex = x(5) - tDir * palmW * 0.05;
-    const ey = y(5) + palmH * 0.01;
+    const sx = x(17);
+    const sy = y(17) + palmH * 0.005;
+    const ex = x(5) + tDir * palmW * 0.05; // hơi sang phía ngón cái
+    const ey = y(5) + palmH * 0.005;
     const cpx = (sx + ex) / 2;
-    const cpy = Math.min(sy, ey) - palmH * 0.07;
-
-    drawCurve(
-      'rgba(236,72,153,0.92)',
-      [{x:sx,y:sy},{x:cpx,y:cpy},{x:ex,y:ey}],
-      'Tâm Đạo',
-      thumbLeft ? ex + 5 : sx - 5,
-      ey - 4,
-      !thumbLeft
-    );
+    const cpy = Math.min(sy, ey) - palmH * 0.055;
+    drawLine('rgba(236,72,153,0.92)', ctx => {
+      ctx.moveTo(sx, sy);
+      ctx.quadraticCurveTo(cpx, cpy, ex, ey);
+    }, 'Tâm Đạo',
+    thumbLeft ? ex + 4 : sx + 4,
+    cpy - 3, false);
   }
 
-  // ── 4. Đường Trí Đạo (Đầu) — xanh dương, ngang giữa lòng bàn tay ──
-  // Từ vùng gốc ngón cái/trỏ ngang sang phía ngón út, thấp hơn Tâm Đạo
+  // ── Trí Đạo — xanh, ngang giữa lòng bàn tay ──
+  // Xuất phát cùng vùng với Sinh Đạo, đi ngang sang phía ngón út
   {
-    const ex = thumbLeft ? x(17) + palmW * 0.06 : x(17) - palmW * 0.06;
-    const ey = y(17) + palmH * 0.27;
-    const cpx = (origX + ex) / 2;
-    const cpy = (origY + ey) / 2 + palmH * 0.03;
-
-    drawCurve(
-      'rgba(59,130,246,0.92)',
-      [{x:origX, y:origY + palmH*0.07},
-       {x:cpx, y:cpy},
-       {x:ex, y:ey}],
-      'Trí Đạo',
-      thumbLeft ? ex + 5 : ex - 5,
-      ey - 2,
-      !thumbLeft
-    );
+    const sx = origX;
+    const sy = origY + palmH * 0.06;
+    const ex = thumbLeft ? x(17) + palmW * 0.04 : x(17) - palmW * 0.04;
+    const ey = y(17) + palmH * 0.23;
+    drawLine('rgba(59,130,246,0.92)', ctx => {
+      ctx.moveTo(sx, sy);
+      ctx.quadraticCurveTo(
+        (sx + ex) / 2, (sy + ey) / 2 + palmH * 0.02,
+        ex, ey
+      );
+    }, 'Trí Đạo',
+    thumbLeft ? ex + 4 : ex - 4,
+    ey, !thumbLeft);
   }
 
-  // ── 5. Đường Sinh Đạo (Mệnh) — đỏ, vòng quanh gò ngón cái ──
-  // Từ vùng gốc ngón cái/trỏ, cong về phía ngón cái xuống đến cổ tay
+  // ── Sinh Đạo — đỏ, CUNG LỚN vòng quanh gò ngón cái ──
+  // Cubic bezier 2 control points mở rộng mạnh sang phía ngón cái
   {
-    const cpx = x(2) + tDir * palmW * 0.08;
-    const cpy = (y(2) + y(0)) / 2;
-    const endX = x(0) + tDir * palmW * 0.20;
-    const endY = y(0) - palmH * 0.02;
-
-    drawCurve(
-      'rgba(220,55,55,0.92)',
-      [{x:origX, y:origY},
-       {x:cpx, y:cpy},
-       {x:endX, y:endY}],
-      'Sinh Đạo',
-      thumbLeft ? endX - 5 : endX + 5,
-      endY - 4,
-      thumbLeft
-    );
+    const sx = origX;
+    const sy = origY;
+    // CP1: lệch mạnh về phía ngón cái, phần trên cung
+    const cp1x = x(2) + tDir * palmW * 0.38;
+    const cp1y = y(2) - palmH * 0.02;
+    // CP2: lệch về phía ngón cái, phần dưới cung
+    const cp2x = x(1) + tDir * palmW * 0.32;
+    const cp2y = y(1) + palmH * 0.05;
+    // End: cổ tay phía ngón cái
+    const ex = x(0) + tDir * palmW * 0.16;
+    const ey = y(0) - palmH * 0.02;
+    drawLine('rgba(220,55,55,0.92)', ctx => {
+      ctx.moveTo(sx, sy);
+      ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, ex, ey);
+    }, 'Sinh Đạo',
+    thumbLeft ? ex - 4 : ex + 4,
+    ey - 4, thumbLeft);
   }
 
-  // ── 6. Đường Vận Mệnh — tím, dọc giữa lòng bàn tay ──
-  // Từ cổ tay đi thẳng lên về phía gốc ngón giữa
+  // ── Vận Mệnh — tím, dọc trung tâm từ cổ tay lên gốc ngón giữa ──
   {
-    const sx = (x(0) + x(9)) / 2 * 0.35 + x(9) * 0.65;
-    const sy = y(0) - palmH * 0.04;
+    const sx = x(0) * 0.22 + x(9) * 0.78;
+    const sy = y(0) - palmH * 0.02;
     const ex = x(9);
-    const ey = y(9) + palmH * 0.12;
-    const cpx = (sx + ex) / 2 + tDir * palmW * 0.02;
-    const cpy = (sy + ey) / 2;
-
-    drawCurve(
-      'rgba(139,92,246,0.90)',
-      [{x:sx,y:sy},{x:cpx,y:cpy},{x:ex,y:ey}],
-      'Vận Mệnh',
-      ex + palmW * 0.07,
-      ey,
-      false
-    );
+    const ey = y(9) + palmH * 0.10;
+    drawLine('rgba(139,92,246,0.90)', ctx => {
+      ctx.moveTo(sx, sy);
+      ctx.quadraticCurveTo((sx+ex)/2, (sy+ey)/2, ex, ey);
+    }, 'Vận Mệnh',
+    ex + palmW * 0.07, (sy + ey) / 2, false);
   }
 
   document.getElementById('mpBadge').style.display = 'block';
 }
+
 
 function analyzeHandGeometry(lm, w, h) {
   if (!lm) return null;
