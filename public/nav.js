@@ -22,7 +22,7 @@
   }
 
   var isLuanGiai = ['/luan-giai.html','/xem-tuoi.html','/xem-lam-an.html'].indexOf(path) >= 0;
-  var isTuong    = ['/tools/tuong-mat-ai.html','/tools/nhan-tuong-ai.html','/tools/thu-tuong-ai.html'].indexOf(path) >= 0;
+  var isTuong    = ['/tools/tuong-mat-ai.html','/tools/nhan-tuong-ai.html','/tools/thu-tuong-ai.html','/tools/thanh-tuong-ai.html'].indexOf(path) >= 0;
   var isTool     = path.indexOf('/tools/') === 0 && !isTuong;
 
   // ── CSS ──────────────────────────────────────────────────────────────────
@@ -114,6 +114,7 @@
     + ddItem('/tools/tuong-mat-ai.html', '\ud83d\ude42', 'Di\u1ec7n T\u01b0\u1edbng \u2014 Xem T\u01b0\u1edbng M\u1eb7t')
     + ddItem('/tools/nhan-tuong-ai.html', '\ud83d\udc41', 'Nh\u00e3n T\u01b0\u1edbng \u2014 Xem T\u01b0\u1edbng M\u1eaft')
     + ddItem('/tools/thu-tuong-ai.html',  '\u270b', 'Th\u1ee7 T\u01b0\u1edbng \u2014 Xem Ch\u1ec9 Tay')
+    + ddItem('/tools/thanh-tuong-ai.html', '\ud83c\udfa4', 'Thanh T\u01b0\u1edbng \u2014 Xem T\u01b0\u1edbng Gi\u1ecdng N\u00f3i')
     + '</div></div>';
 
   // DD3 — Công Cụ (tuong-mat-ai đã tách ra rồi, không còn trong đây)
