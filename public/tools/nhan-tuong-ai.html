@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Nhãn Tướng AI — Xem Tướng Mắt – Tử Vi Minh Bảo</title>
+<meta name="description" content="Phân tích nhãn tướng học cổ pháp — hình dạng mắt, tròng mắt, ánh mắt, Tam Bạch Nhãn theo truyền thống phương Đông.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<style>
+.upload-area{border:2px dashed var(--border);border-radius:12px;padding:40px 24px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg-soft);position:relative}
+.upload-area:hover,.upload-area.dragover{border-color:#c9a84c;background:#c9a84c08}
+.upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{font-size:48px;margin-bottom:12px;display:block}
+.upload-title{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.upload-sub{font-size:13px;color:var(--text-lt)}
+/* Preview */
+.preview-wrap{position:relative;display:inline-block;margin:0 auto}
+.preview-img{max-width:340px;max-height:420px;width:100%;border-radius:12px;display:block}
+.overlay-canvas{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;pointer-events:none}
+.preview-badge{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;font-size:11px;padding:4px 10px;border-radius:20px}
+.mp-badge{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);color:#fff;font-size:10px;padding:3px 10px;border-radius:20px;white-space:nowrap;display:none;background:rgba(20,85,164,.85)}
+/* Eye zoom panels */
+.eye-panels{display:flex;gap:12px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.eye-panel{text-align:center}
+.eye-panel-label{font-size:11px;color:var(--text-lt);margin-bottom:4px}
+.eye-panel canvas{border-radius:8px;border:2px solid var(--border-lt);display:block}
+.remove-btn{display:block;margin:10px auto 0;background:none;border:1px solid var(--border);border-radius:4px;padding:6px 16px;font-size:12px;color:var(--text-mid);cursor:pointer;font-family:inherit}
+.camera-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:var(--navy);color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:12px}
+/* Result */
+.md-result{font-size:14px;line-height:1.85;color:var(--text-mid)}
+.md-result h2{font-size:16px;font-weight:700;color:var(--navy);margin:20px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border-lt)}
+.md-result h3{font-size:14px;font-weight:700;color:var(--navy);margin:14px 0 6px}
+.md-result strong{color:var(--navy);font-weight:700}
+.md-result em{color:#9A7B3A}
+.md-result ul{padding-left:20px;margin:8px 0}
+.md-result li{margin:4px 0}
+.md-result p{margin:0 0 10px}
+.md-result blockquote{border-left:3px solid #c9a84c;padding:8px 16px;margin:12px 0;background:#fdf8f0;border-radius:0 6px 6px 0;color:#9A7B3A;font-style:italic}
+.ai-loading{display:flex;flex-direction:column;align-items:center;gap:16px;padding:40px 0}
+.ai-loading-icon{font-size:48px;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.95)}}
+.ai-loading-text{font-size:14px;color:var(--text-lt);text-align:center}
+.privacy-notice{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;background:#e8f0fe;border-radius:8px;border-left:3px solid #1455A4;font-size:12px;color:#1455A4;margin-top:16px}
+.input-tabs{display:flex;gap:0;border-bottom:2px solid var(--border-lt);margin-bottom:20px}
+.input-tab{padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text-lt);border-bottom:2px solid transparent;margin-bottom:-2px;font-family:inherit;background:none;border-top:none;border-left:none;border-right:none;transition:all .15s}
+.input-tab.active{color:var(--navy);border-bottom-color:#c9a84c}
+.input-pane{display:none}
+.input-pane.active{display:block}
+</style>
+</head>
+<body>
+<script src="/nav.js"></script>
+
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Miễn Phí · Nhãn Tướng Học</div>
+    <h1>Xem Tướng Mắt<br><em>Nhãn Tướng AI</em></h1>
+    <p>Tải ảnh khuôn mặt — AI phân tích đôi mắt theo Nhãn Pháp cổ truyền: hình dạng, tròng mắt, ánh mắt, Tam Bạch Nhãn.</p>
+  </div>
+</div>
+
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Nhãn Tướng Học (眼相學)</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">Đôi Mắt Là Tấm Gương<br>Của Tâm Hồn & Vận Mệnh</h2>
+          <p class="xt-body">Trong nhãn tướng học cổ pháp, đôi mắt phản chiếu trực tiếp trí tuệ, nội tâm, sự nghiệp trung niên và khả năng quan hệ với quý nhân. Mắt là <strong>Giám Sát Quan (監察官)</strong> — một trong Ngũ Quan quan trọng nhất.</p>
+          <p class="xt-body">AI phân tích theo Ma Y Thần Tướng và Liễu Trang Thần Tướng — từ hình dạng, đuôi mắt, vị trí tròng đen đến ánh mắt và mối tương quan với lông mày.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">5 Phần Phân Tích</div>
+          <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">Tổng Quan</span><span class="xt-factor-desc">Loại nhãn hình, khí thần tổng thể</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">②</span><span class="xt-factor-label">Hình Dạng</span><span class="xt-factor-desc">Đuôi mắt, độ rộng, mí, khoảng cách</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">③</span><span class="xt-factor-label">Tròng Mắt</span><span class="xt-factor-desc">Vị trí, màu, Tam/Tứ Bạch Nhãn</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">④</span><span class="xt-factor-label">Lông Mày</span><span class="xt-factor-desc">Tương quan với nhãn tướng</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">⑤</span><span class="xt-factor-label">Tổng Hợp</span><span class="xt-factor-desc">Tính cách, vận trình, lĩnh vực phù hợp</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section" id="inputSection">
+    <div class="section-eyebrow">Tải Ảnh Lên</div>
+    <div class="privacy-notice">
+      <span>🔒</span>
+      <div><strong>Quyền riêng tư:</strong> Ảnh chỉ gửi đến Claude AI để phân tích, không lưu trên server. Chụp thẳng mặt, đủ sáng — hệ thống sẽ tự zoom vào vùng mắt để phân tích chi tiết hơn.</div>
+    </div>
+
+    <div class="input-tabs" style="margin-top:20px">
+      <button class="input-tab active" onclick="switchTab('upload',this)">📁 Tải Ảnh Lên</button>
+      <button class="input-tab" onclick="switchTab('camera',this)">📷 Chụp Ảnh</button>
+    </div>
+
+    <div class="input-pane active" id="pane-upload">
+      <div id="uploadArea" class="upload-area" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+        <input type="file" id="fileInput" accept="image/*" onchange="onFileSelect(event)">
+        <span class="upload-icon">👁</span>
+        <div class="upload-title">Kéo thả ảnh vào đây hoặc click để chọn</div>
+        <div class="upload-sub">JPG, PNG, WebP — tối đa 5MB · Chụp thẳng mặt, thấy rõ 2 mắt</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;justify-content:center">
+        <div style="font-size:12px;color:var(--green);background:#f0faf4;border:1px solid #b7e4c7;border-radius:20px;padding:4px 10px">✓ Thẳng mặt, không nghiêng</div>
+        <div style="font-size:12px;color:var(--green);background:#f0faf4;border:1px solid #b7e4c7;border-radius:20px;padding:4px 10px">✓ Mắt mở tự nhiên</div>
+        <div style="font-size:12px;color:var(--red);background:#fff5f5;border:1px solid #fcc;border-radius:20px;padding:4px 10px">✗ Đeo kính, nheo mắt</div>
+        <div style="font-size:12px;color:var(--red);background:#fff5f5;border:1px solid #fcc;border-radius:20px;padding:4px 10px">✗ Ánh sáng đèn flash chói</div>
+      </div>
+    </div>
+
+    <div class="input-pane" id="pane-camera">
+      <div style="text-align:center;padding:16px 20px">
+        <div id="preCamTips">
+          <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px">📋 Trước khi chụp</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;max-width:320px;margin:0 auto;text-align:left;margin-bottom:14px">
+            <div style="font-size:12px;color:var(--text-mid);display:flex;gap:5px"><span style="color:var(--green)">✓</span>Nhìn thẳng vào camera</div>
+            <div style="font-size:12px;color:var(--text-mid);display:flex;gap:5px"><span style="color:var(--green)">✓</span>Ánh sáng đủ, không ngược sáng</div>
+            <div style="font-size:12px;color:var(--text-mid);display:flex;gap:5px"><span style="color:var(--green)">✓</span>Mắt mở tự nhiên, không nheo</div>
+            <div style="font-size:12px;color:var(--text-mid);display:flex;gap:5px"><span style="color:var(--red)">✗</span>Không đeo kính</div>
+          </div>
+          <button class="camera-btn" id="openCamBtn" onclick="openCamera()"><span>📷</span> Mở Camera</button>
+        </div>
+        <div id="camWrap" style="display:none;position:relative;width:300px;margin:0 auto">
+          <video id="camVideo" style="width:300px;border-radius:12px;display:block" autoplay playsinline></video>
+          <svg style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid meet">
+            <defs><mask id="eyeMask"><rect width="300" height="400" fill="white"/><ellipse cx="150" cy="185" rx="105" ry="135" fill="black"/></mask></defs>
+            <rect width="300" height="400" fill="rgba(0,0,0,0.45)" mask="url(#eyeMask)"/>
+            <ellipse cx="150" cy="185" rx="105" ry="135" fill="none" stroke="rgba(201,168,76,0.9)" stroke-width="2.5" stroke-dasharray="8,4"/>
+            <text x="150" y="26" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="11" font-family="Arial">Đặt mặt vào khung, mắt mở tự nhiên</text>
+          </svg>
+        </div>
+        <div id="camBtns" style="display:none;margin-top:14px;gap:10px;justify-content:center;flex-wrap:wrap">
+          <button class="btn-submit" onclick="capturePhoto()" style="margin:0">📸 Chụp</button>
+          <button class="btn-prev" onclick="stopCamera()">✕ Huỷ</button>
+        </div>
+        <canvas id="camCanvas" style="display:none"></canvas>
+      </div>
+    </div>
+
+    <!-- Preview + eye zoom -->
+    <div id="previewSection" style="display:none;text-align:center;margin:20px 0">
+      <div class="preview-wrap" id="previewWrap">
+        <img id="previewImg" class="preview-img" alt="Ảnh đã chọn">
+        <canvas id="overlayCanvas" class="overlay-canvas"></canvas>
+        <div class="preview-badge">✓ Ảnh đã chọn</div>
+        <div class="mp-badge" id="mpBadge">👁 Mắt đã xác định</div>
+      </div>
+      <!-- Eye crop panels -->
+      <div class="eye-panels" id="eyePanels" style="display:none">
+        <div class="eye-panel">
+          <div class="eye-panel-label">Mắt trái</div>
+          <canvas id="eyeLeft" width="120" height="60"></canvas>
+        </div>
+        <div class="eye-panel">
+          <div class="eye-panel-label">Mắt phải</div>
+          <canvas id="eyeRight" width="120" height="60"></canvas>
+        </div>
+      </div>
+      <button class="remove-btn" onclick="removePhoto()">✕ Xoá ảnh</button>
+    </div>
+
+    <div style="text-align:center;margin-top:20px">
+      <button class="btn-submit" id="analyzeBtn" onclick="analyze()" disabled style="padding:14px 40px;font-size:15px">
+        👁 Phân Tích Nhãn Tướng
+      </button>
+    </div>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+
+  <div class="result-section" id="result-section">
+    <div class="res-block" style="margin-bottom:16px">
+      <div class="res-block-header">
+        <span class="res-block-title">Phân Tích Nhãn Tướng Học</span>
+        <span style="font-size:11px;color:var(--text-lt)">Claude AI · Ma Y Thần Tướng · Nhãn Pháp cổ pháp</span>
+      </div>
+      <div class="res-block-body">
+        <div id="aiResult" class="md-result"></div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:8px">
+      <button class="btn-secondary" onclick="reset()" style="padding:10px 24px">Phân Tích Ảnh Khác</button>
+    </div>
+  </div>
+
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Tướng + Số + Vận</div>
+    <div class="tool-cta-title">Kết Hợp Nhãn Tướng Với Lá Số Tử Vi</div>
+    <div class="tool-cta-desc">Nhãn tướng phản chiếu khí chất và nội tâm. Lá số Tử Vi phân tích vận trình từng giai đoạn — kết hợp hai phương pháp cho bức tranh toàn diện nhất.</div>
+    <a class="tool-cta-btn" href="/luan-giai.html">Xem Lá Số Tử Vi ($19) →</a>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
+
+<script>
+let _imageData = null, _mediaType = 'image/jpeg', _camStream = null;
+let _mpReady = false, _irisNote = null;
+
+function loadMediaPipe(cb) {
+  if (_mpReady) { cb(null); return; }
+  if (window._mpLoading) { setTimeout(() => loadMediaPipe(cb), 150); return; }
+  window._mpLoading = true;
+  const s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js';
+  s.crossOrigin = 'anonymous';
+  s.onload = () => { _mpReady = true; window._mpLoading = false; cb(null); };
+  s.onerror = () => { window._mpLoading = false; cb(new Error('MP load failed')); };
+  document.head.appendChild(s);
+}
+
+function detectAndDrawEyes(imgEl, cb) {
+  loadMediaPipe((err) => {
+    if (err || typeof FaceMesh === 'undefined') { cb(null); return; }
+    try {
+      const fm = new FaceMesh({ locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${f}` });
+      fm.setOptions({ maxNumFaces:1, refineLandmarks:true, minDetectionConfidence:0.5, minTrackingConfidence:0.5 });
+      fm.onResults(r => { cb(r.multiFaceLandmarks?.[0] || null); });
+      fm.send({ image: imgEl });
+    } catch(e) { cb(null); }
+  });
+}
+
+function drawEyeOverlay(lm, imgEl) {
+  const cv = document.getElementById('overlayCanvas');
+  const w = imgEl.clientWidth, h = imgEl.clientHeight;
+  cv.width = w; cv.height = h;
+  const ctx = cv.getContext('2d');
+  ctx.clearRect(0, 0, w, h);
+  if (!lm) return;
+
+  // Eye region landmarks
+  const eyeGroups = [
+    { pts: [33,7,163,144,145,153,154,155,133,173,157,158,159,160,161,246], color:'rgba(201,168,76,0.85)', label:'Mắt trái' },
+    { pts: [362,382,381,380,374,373,390,249,263,466,388,387,386,385,384,398], color:'rgba(59,130,246,0.85)', label:'Mắt phải' },
+  ];
+
+  eyeGroups.forEach(({ pts, color, label }) => {
+    ctx.beginPath();
+    pts.forEach((i, j) => {
+      const x = lm[i].x * w, y = lm[i].y * h;
+      j === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.closePath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = color.replace('0.85', '0.08');
+    ctx.fill();
+  });
+
+  // Iris dots if available
+  if (lm[468] && lm[473]) {
+    [lm[468], lm[473]].forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x*w, p.y*h, 3, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(255,220,0,0.9)';
+      ctx.fill();
+    });
+  }
+
+  // Eye angle lines
+  const eyeAngles = [
+    [lm[33], lm[133]], // L outer to inner
+    [lm[263], lm[362]], // R outer to inner
+  ];
+  eyeAngles.forEach(([a, b]) => {
+    ctx.beginPath();
+    ctx.moveTo(a.x*w, a.y*h);
+    ctx.lineTo(b.x*w, b.y*h);
+    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  });
+
+  document.getElementById('mpBadge').style.display = 'block';
+}
+
+function cropEye(imgEl, lm, side) {
+  // side: 'left' uses L eye landmarks, 'right' uses R
+  if (!lm) return;
+  const L_OUTER=33, L_INNER=133, L_TOP=159, L_BOT=145;
+  const R_OUTER=263, R_INNER=362, R_TOP=386, R_BOT=374;
+  const [outer, inner, top, bot] = side === 'left'
+    ? [L_OUTER, L_INNER, L_TOP, L_BOT]
+    : [R_OUTER, R_INNER, R_TOP, R_BOT];
+
+  const srcW = imgEl.naturalWidth, srcH = imgEl.naturalHeight;
+  const pad = 0.35;
+  const ex1 = Math.min(lm[outer].x, lm[inner].x);
+  const ex2 = Math.max(lm[outer].x, lm[inner].x);
+  const ey1 = Math.min(lm[top].y, lm[bot].y);
+  const ey2 = Math.max(lm[top].y, lm[bot].y);
+  const ew = ex2 - ex1, eh = ey2 - ey1;
+
+  const sx = Math.max(0, (ex1 - ew*pad) * srcW);
+  const sy = Math.max(0, (ey1 - eh*1.5) * srcH);
+  const sw = Math.min(srcW - sx, (ew + ew*pad*2) * srcW);
+  const sh = Math.min(srcH - sy, (eh + eh*3) * srcH);
+
+  const cvId = side === 'left' ? 'eyeLeft' : 'eyeRight';
+  const cv = document.getElementById(cvId);
+  const ctx = cv.getContext('2d');
+  ctx.clearRect(0, 0, cv.width, cv.height);
+  ctx.drawImage(imgEl, sx, sy, sw, sh, 0, 0, cv.width, cv.height);
+}
+
+function analyzeIrisNote(lm) {
+  if (!lm || !lm[468]) return null;
+  // Quick Tam/Tu Bach Nhan check
+  const eyeL = { top:lm[159].y, bot:lm[145].y, iris:lm[468] };
+  const eyeR = { top:lm[386].y, bot:lm[374].y, iris:lm[473] };
+  const checkEye = (eye) => {
+    const h = Math.abs(eye.bot - eye.top);
+    if (h < 0.005) return null;
+    return (eye.iris.y - eye.top) / h;
+  };
+  const pL = checkEye(eyeL), pR = checkEye(eyeR);
+  if (!pL || !pR) return null;
+  const avgPos = (pL + pR) / 2;
+  if (avgPos < 0.3) return '[MediaPipe detect: tròng mắt lệch lên — có thể Tam Bạch Nhãn Hạ]';
+  if (avgPos > 0.7) return '[MediaPipe detect: tròng mắt lệch xuống — có thể Tam Bạch Nhãn Thượng]';
+  return null;
+}
+
+// ── Tab / Drag / File ─────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.input-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.input-pane').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('pane-'+id).classList.add('active');
+  if (id !== 'camera') stopCamera();
+}
+function onDragOver(e) { e.preventDefault(); document.getElementById('uploadArea').classList.add('dragover'); }
+function onDragLeave() { document.getElementById('uploadArea').classList.remove('dragover'); }
+function onDrop(e) { e.preventDefault(); document.getElementById('uploadArea').classList.remove('dragover'); const f=e.dataTransfer.files[0]; if(f) processFile(f); }
+function onFileSelect(e) { const f=e.target.files[0]; if(f) processFile(f); }
+
+function processFile(file) {
+  const err=document.getElementById('error-msg'); err.classList.remove('active');
+  if (!file.type.startsWith('image/')) { err.textContent='Vui lòng chọn file ảnh.'; err.classList.add('active'); return; }
+  if (file.size > 5*1024*1024) { err.textContent='Ảnh quá lớn (tối đa 5MB).'; err.classList.add('active'); return; }
+  const img = new Image();
+  const ou = URL.createObjectURL(file);
+  img.onload = () => {
+    URL.revokeObjectURL(ou);
+    const MAX=1200; let {width:ww, height:hh}=img;
+    if(ww>MAX||hh>MAX){ if(ww>hh){hh=Math.round(hh*MAX/ww);ww=MAX;}else{ww=Math.round(ww*MAX/hh);hh=MAX;} }
+    const cv=document.createElement('canvas'); cv.width=ww; cv.height=hh;
+    cv.getContext('2d').drawImage(img,0,0,ww,hh);
+    const dataUrl=cv.toDataURL('image/jpeg',0.90);
+    _imageData=dataUrl.split(',')[1]; _mediaType='image/jpeg';
+    showPreview(dataUrl);
+  };
+  img.src=ou;
+}
+
+function showPreview(dataUrl) {
+  const imgEl=document.getElementById('previewImg');
+  imgEl.src=dataUrl;
+  document.getElementById('previewSection').style.display='block';
+  document.getElementById('uploadArea').style.display='none';
+  document.getElementById('analyzeBtn').disabled=false;
+  document.getElementById('mpBadge').style.display='none';
+  document.getElementById('eyePanels').style.display='none';
+  document.getElementById('error-msg').classList.remove('active');
+
+  const run = () => detectAndDrawEyes(imgEl, lm => {
+    drawEyeOverlay(lm, imgEl);
+    if (lm) {
+      cropEye(imgEl, lm, 'left');
+      cropEye(imgEl, lm, 'right');
+      document.getElementById('eyePanels').style.display='flex';
+      _irisNote = analyzeIrisNote(lm);
+    } else {
+      const err=document.getElementById('error-msg');
+      err.textContent='⚠ Không nhận diện được mặt rõ ràng. Vẫn có thể phân tích nhưng nên dùng ảnh thẳng mặt hơn.';
+      err.classList.add('active');
+    }
+  });
+  if (imgEl.complete && imgEl.naturalWidth) run(); else imgEl.onload = run;
+}
+
+function removePhoto() {
+  _imageData=null; _irisNote=null;
+  document.getElementById('previewSection').style.display='none';
+  document.getElementById('uploadArea').style.display='block';
+  document.getElementById('analyzeBtn').disabled=true;
+  document.getElementById('fileInput').value='';
+  document.getElementById('eyePanels').style.display='none';
+  const cv=document.getElementById('overlayCanvas');
+  cv.getContext('2d').clearRect(0,0,cv.width,cv.height);
+  stopCamera();
+}
+
+async function openCamera() {
+  try {
+    _camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:640,height:480}});
+    document.getElementById('camVideo').srcObject=_camStream;
+    document.getElementById('preCamTips').style.display='none';
+    document.getElementById('camWrap').style.display='block';
+    document.getElementById('camBtns').style.display='flex';
+  } catch(e) {
+    const err=document.getElementById('error-msg');
+    err.textContent='Không thể mở camera.'; err.classList.add('active');
+  }
+}
+function capturePhoto() {
+  const vid=document.getElementById('camVideo');
+  const cv=document.getElementById('camCanvas');
+  cv.width=vid.videoWidth; cv.height=vid.videoHeight;
+  cv.getContext('2d').drawImage(vid,0,0);
+  const dataUrl=cv.toDataURL('image/jpeg',0.88);
+  _imageData=dataUrl.split(',')[1]; _mediaType='image/jpeg';
+  stopCamera(); showPreview(dataUrl);
+}
+function stopCamera() {
+  if(_camStream){_camStream.getTracks().forEach(t=>t.stop());_camStream=null;}
+  const vid=document.getElementById('camVideo');
+  vid.style.display='none'; vid.srcObject=null;
+  document.getElementById('camBtns').style.display='none';
+  document.getElementById('preCamTips').style.display='block';
+  document.getElementById('camWrap').style.display='none';
+}
+
+async function analyze() {
+  if (!_imageData) return;
+  const err=document.getElementById('error-msg'); err.classList.remove('active');
+  const btn=document.getElementById('analyzeBtn'); btn.disabled=true;
+  document.getElementById('result-section').classList.add('active');
+  document.getElementById('aiResult').innerHTML='<div class="ai-loading"><span class="ai-loading-icon">👁</span><div class="ai-loading-text">AI đang phân tích nhãn tướng...<br><span style="font-size:12px;opacity:.7">Thường mất 15–20 giây</span></div></div>';
+  document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
+
+  try {
+    const res=await fetch('/api/tuong-mat',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ image:_imageData, mediaType:_mediaType, action:'nhan-tuong', irisNote:_irisNote||null })
+    });
+    if (!res.ok) { const d=await res.json().catch(()=>({})); throw new Error(d.error||'Lỗi '+res.status); }
+
+    const reader=res.body.getReader(); const dec=new TextDecoder();
+    let full='', buf='';
+    const el=document.getElementById('aiResult'); el.innerHTML='';
+
+    while(true){
+      const {done,value}=await reader.read(); if(done) break;
+      buf+=dec.decode(value,{stream:true});
+      const lines=buf.split('\n'); buf=lines.pop()||'';
+      for(const line of lines){
+        if(!line.startsWith('data: ')) continue;
+        const raw=line.slice(6).trim(); if(raw==='[DONE]') break;
+        try{ const j=JSON.parse(raw); if(j.err) throw new Error(j.err); if(j.t){ full+=j.t; el.innerHTML=renderMd(full); } }catch(e){ if(e.message&&!e.message.includes('JSON')) throw e; }
+      }
+    }
+    if(!full) throw new Error('Không có kết quả.');
+    el.innerHTML=renderMd(full); btn.disabled=false;
+  } catch(e){
+    document.getElementById('aiResult').innerHTML='';
+    document.getElementById('result-section').classList.remove('active');
+    err.textContent='Lỗi: '+(e.message||'Không thể kết nối.'); err.classList.add('active');
+    btn.disabled=false;
+  }
+}
+
+function reset() {
+  removePhoto();
+  document.getElementById('result-section').classList.remove('active');
+  document.getElementById('aiResult').innerHTML='';
+  document.getElementById('inputSection').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function renderMd(md){
+  return md
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>')
+    .replace(/^- (.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>[^]*?<\/li>\n?)+/g,s=>'<ul>'+s+'</ul>')
+    .replace(/\n\n+/g,'</p><p>')
+    .replace(/^(?!<[hublp])(.+)$/gm,'<p>$1</p>')
+    .replace(/<p><\/p>/g,'')
+    .replace(/<p>(<[hul])/g,'$1')
+    .replace(/(<\/[hul][^>]*>)<\/p>/g,'$1');
+}
+</script>
+</body>
+</html>
