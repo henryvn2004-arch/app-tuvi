@@ -1,4 +1,4 @@
-// nav.js — Shared navigation component v4 (+ Công Cụ dropdown)
+// nav.js — Shared navigation component v5 (+ Xem Tướng dropdown)
 (function () {
   var path = window.location.pathname;
 
@@ -22,7 +22,8 @@
   }
 
   var isLuanGiai = ['/luan-giai.html','/xem-tuoi.html','/xem-lam-an.html'].indexOf(path) >= 0;
-  var isTool = path.indexOf('/tools/') === 0;
+  var isTuong    = ['/tools/tuong-mat-ai.html','/tools/nhan-tuong-ai.html','/tools/thu-tuong-ai.html'].indexOf(path) >= 0;
+  var isTool     = path.indexOf('/tools/') === 0 && !isTuong;
 
   // ── CSS ──────────────────────────────────────────────────────────────────
   var css = [
@@ -64,7 +65,7 @@
     '}'
   ].join('');
 
-  // ── Conversion (Social Proof + Popup) ───────────────────────────────────
+  // ── Conversion (Social Proof + Popup) ─────────────────────────────────
   if (!document.getElementById('cv-script')) {
     var cv = document.createElement('script');
     cv.id = 'cv-script';
@@ -72,7 +73,7 @@
     document.body.appendChild(cv);
   }
 
-  // ── Google Analytics 4 ───────────────────────────────────────────────────
+  // ── Google Analytics 4 ─────────────────────────────────────────────────
   if (!document.getElementById('gtag-js')) {
     var ga = document.createElement('script');
     ga.id = 'gtag-js'; ga.async = true;
@@ -92,10 +93,12 @@
     document.head.appendChild(s);
   }
 
-  // ── Build HTML ────────────────────────────────────────────────────────────
-  var lgActive  = isLuanGiai ? ' active' : '';
-  var toolActive = isTool    ? ' active' : '';
+  // ── Build HTML ────────────────────────────────────────────────────────
+  var lgActive    = isLuanGiai ? ' active' : '';
+  var tuongActive = isTuong    ? ' active' : '';
+  var toolActive  = isTool     ? ' active' : '';
 
+  // DD1 — Luận Giải
   var luanGiaiDD = '<div class="nav-dd" id="nav-dd">'
     + '<span class="nav-link' + lgActive + '" id="nav-dd-toggle" role="button" tabindex="0">Lu\u1eadn Gi\u1ea3i \u25be</span>'
     + '<div class="nav-dd-menu" id="nav-dd-menu">'
@@ -104,9 +107,19 @@
     + ddItem('/xem-lam-an.html', '\ud83e\udd1d', 'Xem Tu\u1ed5i L\u00e0m \u0102n')
     + '</div></div>';
 
-  var congCuDD = '<div class="nav-dd" id="nav-dd2">'
-    + '<span class="nav-link' + toolActive + '" id="nav-dd2-toggle" role="button" tabindex="0">C\u00f4ng C\u1ee5 \u25be</span>'
+  // DD2 — Xem Tướng (NEW — ngay sau Luận Giải)
+  var xemTuongDD = '<div class="nav-dd" id="nav-dd2">'
+    + '<span class="nav-link' + tuongActive + '" id="nav-dd2-toggle" role="button" tabindex="0">Xem T\u01b0\u1edbng \u25be</span>'
     + '<div class="nav-dd-menu" id="nav-dd2-menu">'
+    + ddItem('/tools/tuong-mat-ai.html', '\ud83d\ude42', 'Di\u1ec7n T\u01b0\u1edbng \u2014 Xem T\u01b0\u1edbng M\u1eb7t')
+    + ddItem('/tools/nhan-tuong-ai.html', '\ud83d\udc41', 'Nh\u00e3n T\u01b0\u1edbng \u2014 Xem T\u01b0\u1edbng M\u1eaft')
+    + ddItem('/tools/thu-tuong-ai.html',  '\u270b', 'Th\u1ee7 T\u01b0\u1edbng \u2014 Xem Ch\u1ec9 Tay')
+    + '</div></div>';
+
+  // DD3 — Công Cụ (tuong-mat-ai đã tách ra rồi, không còn trong đây)
+  var congCuDD = '<div class="nav-dd" id="nav-dd3">'
+    + '<span class="nav-link' + toolActive + '" id="nav-dd3-toggle" role="button" tabindex="0">C\u00f4ng C\u1ee5 \u25be</span>'
+    + '<div class="nav-dd-menu" id="nav-dd3-menu">'
 
     + ddSection('T\u1eed Vi \u0110\u1ea9u S\u1ed1')
     + ddItem('/tools/an-sao.html',    '\ud83d\udcca', 'An Sao L\u00e1 S\u1ed1')
@@ -122,21 +135,21 @@
     + ddItem('/tools/han-nam.html',   '\ud83d\udd04',  'H\u1ea1n N\u0103m')
 
     + ddSection('M\u1ec7nh L\u00fd & Phong Th\u1ee7y')
-    + ddItem('/tools/bat-trach.html',       '\ud83e\uddad', 'H\u01b0\u1edbng B\u00e1t Tr\u1ea1ch')
-    + ddItem('/tools/nap-am.html',          '\ud83c\udf00', 'N\u1ea1p \u00c2m Ng\u0169 H\u00e0nh')
-    + ddItem('/tools/tuong-hop.html',       '\u2764\ufe0f', 'T\u01b0\u01a1ng H\u1ee3p Tu\u1ed5i')
-    + ddItem('/tools/kim-lau.html',         '\ud83c\udfe0', 'Kim L\u00e2u & Tam Tai')
-    + ddItem('/tools/ngu-hanh-ten.html',    '\u270d\ufe0f', 'Ng\u0169 H\u00e0nh T\u00ean')
-    + ddItem('/tools/tu-tru.html',          '\ud83d\udcdc', 'T\u1ee9 Tr\u1ee5 B\u00e1t T\u1ef1')
+    + ddItem('/tools/bat-trach.html',    '\ud83e\uddad', 'H\u01b0\u1edbng B\u00e1t Tr\u1ea1ch')
+    + ddItem('/tools/nap-am.html',       '\ud83c\udf00', 'N\u1ea1p \u00c2m Ng\u0169 H\u00e0nh')
+    + ddItem('/tools/tuong-hop.html',    '\u2764\ufe0f', 'T\u01b0\u01a1ng H\u1ee3p Tu\u1ed5i')
+    + ddItem('/tools/kim-lau.html',      '\ud83c\udfe0', 'Kim L\u00e2u & Tam Tai')
+    + ddItem('/tools/ngu-hanh-ten.html', '\u270d\ufe0f', 'Ng\u0169 H\u00e0nh T\u00ean')
+    + ddItem('/tools/tu-tru.html',       '\ud83d\udcdc', 'T\u1ee9 Tr\u1ee5 B\u00e1t T\u1ef1')
 
     + ddSection('Huy\u1ec1n H\u1ecdc & Ph\u01b0\u01a1ng T\u00e2y')
     + ddItem('/tools/kinh-dich.html',   '\u262f',       'Kinh D\u1ecbch 64 Qu\u1ebb')
     + ddItem('/tools/than-so-hoc.html', '\ud83d\udd22', 'Th\u1ea7n S\u1ed1 H\u1ecdc')
-    + ddSection('B\u00f3i B\u00e0i & T\u01b0\u1edbng S\u1ed1')
+
+    + ddSection('B\u00f3i B\u00e0i & Huy\u1ec1n H\u1ecdc')
     + ddItem('/tools/tarot.html',       '\ud83c\udccf', 'Tarot 78 L\u00e1')
     + ddItem('/tools/oracle.html',      '\u2728',       'Oracle Ph\u01b0\u01a1ng \u0110\u00f4ng')
     + ddItem('/tools/boi-bai-tay.html', '\ud83c\udca0', 'B\u00f3i B\u00e0i T\u00e2y')
-    + ddItem('/tools/tuong-mat-ai.html', '\ud83d\udc64', 'Xem T\u01b0\u1edbng M\u1eb7t (AI)')
 
     + '</div></div>';
 
@@ -146,6 +159,7 @@
     + '<div class="nav-links" id="nav-links">'
     + navLink('/', 'Trang Ch\u1ee7')
     + luanGiaiDD
+    + xemTuongDD
     + congCuDD
     + navLink('/about.html',     'Gi\u1edbi Thi\u1ec7u')
     + navLink('/resources.html', 'T\u00e0i Li\u1ec7u')
@@ -164,9 +178,16 @@
   tmp.innerHTML = html;
   document.body.insertBefore(tmp.firstChild, document.body.firstChild);
 
-  // ── Events ───────────────────────────────────────────────────────────────
-  var ddMenu  = document.getElementById('nav-dd-menu');
+  // ── Events ─────────────────────────────────────────────────────────────
+  var ddMenu1 = document.getElementById('nav-dd-menu');
   var ddMenu2 = document.getElementById('nav-dd2-menu');
+  var ddMenu3 = document.getElementById('nav-dd3-menu');
+
+  function closeAll() {
+    ddMenu1.classList.remove('open');
+    ddMenu2.classList.remove('open');
+    ddMenu3.classList.remove('open');
+  }
 
   // Hamburger
   document.getElementById('nav-hamburger').addEventListener('click', function(e) {
@@ -175,39 +196,42 @@
   });
 
   // DD1: Luận Giải (mobile toggle)
-  var ddToggle = document.getElementById('nav-dd-toggle');
-  ddToggle.style.cursor = 'pointer';
-  ddToggle.style.webkitTapHighlightColor = 'transparent';
-  ddToggle.setAttribute('ontouchstart', '');
   var _dd1Busy = false;
-  ddToggle.addEventListener('click', function(e) {
+  document.getElementById('nav-dd-toggle').addEventListener('click', function(e) {
     if (window.innerWidth <= 700) {
       e.preventDefault(); e.stopPropagation();
       if (_dd1Busy) return; _dd1Busy = true; setTimeout(function(){_dd1Busy=false;},300);
-      ddMenu.classList.toggle('open');
-      ddMenu2.classList.remove('open');
+      var was = ddMenu1.classList.contains('open');
+      closeAll();
+      if (!was) ddMenu1.classList.add('open');
     }
   });
 
-  // DD2: Công Cụ (mobile toggle)
-  var ddToggle2 = document.getElementById('nav-dd2-toggle');
-  ddToggle2.style.cursor = 'pointer';
-  ddToggle2.style.webkitTapHighlightColor = 'transparent';
-  ddToggle2.setAttribute('ontouchstart', '');
+  // DD2: Xem Tướng (mobile toggle)
   var _dd2Busy = false;
-  ddToggle2.addEventListener('click', function(e) {
+  document.getElementById('nav-dd2-toggle').addEventListener('click', function(e) {
     if (window.innerWidth <= 700) {
       e.preventDefault(); e.stopPropagation();
       if (_dd2Busy) return; _dd2Busy = true; setTimeout(function(){_dd2Busy=false;},300);
-      ddMenu2.classList.toggle('open');
-      ddMenu.classList.remove('open');
+      var was = ddMenu2.classList.contains('open');
+      closeAll();
+      if (!was) ddMenu2.classList.add('open');
     }
   });
 
-  // Click outside → đóng cả 2
-  document.addEventListener('click', function() {
-    ddMenu.classList.remove('open');
-    ddMenu2.classList.remove('open');
+  // DD3: Công Cụ (mobile toggle)
+  var _dd3Busy = false;
+  document.getElementById('nav-dd3-toggle').addEventListener('click', function(e) {
+    if (window.innerWidth <= 700) {
+      e.preventDefault(); e.stopPropagation();
+      if (_dd3Busy) return; _dd3Busy = true; setTimeout(function(){_dd3Busy=false;},300);
+      var was = ddMenu3.classList.contains('open');
+      closeAll();
+      if (!was) ddMenu3.classList.add('open');
+    }
   });
+
+  // Click outside → đóng tất cả
+  document.addEventListener('click', closeAll);
 
 })();
