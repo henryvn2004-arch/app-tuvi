@@ -104,7 +104,18 @@ async function hasSlugAccess(userId: string, slug: string): Promise<boolean> {
   return (await res.json()).length > 0;
 }
 
-// ── GET: balance ──────────────────────────────────────────────
+// ── Admin: verify token is admin ─────────────────────────────
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@tuviminhbao.com';
+
+async function verifyAdmin(token: string): Promise<{ id: string; email: string } | null> {
+  const user = await getUserFromToken(token);
+  if (!user) return null;
+  const email = (user as any).email || '';
+  if (email !== ADMIN_EMAIL) return null;
+  return user as { id: string; email: string };
+}
+
+// ── GET: balance ──────────────────────────────────────────────────
 async function handleBalance(sp: URLSearchParams): Promise<Response> {
   const userId = sp.get('userId') || '';
   if (!userId) return err('Missing userId', 400);
@@ -273,23 +284,121 @@ async function handleDeduct(request: NextRequest, body: Record<string, unknown>)
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
+// ── POST: admin grant credits ────────────────────────────────
+// Headers: Authorization: Bearer <admin_token>
+// Body: { targetEmail?, targetUserId?, amount, description? }
+async function handleAdminGrant(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized — admin only', 403);
+
+  const amount      = parseInt(String(body.amount || '0'));
+  const targetEmail = String(body.targetEmail || '');
+  const targetId    = String(body.targetUserId || '');
+  const description = String(body.description || 'Admin grant');
+
+  if (!amount || amount <= 0) return err('Invalid amount', 400);
+  if (!targetEmail && !targetId) return err('Need targetEmail or targetUserId', 400);
+
+  try {
+    // Resolve userId from email if needed
+    let userId = targetId;
+    if (!userId && targetEmail) {
+      const r = await fetch(`${SUPABASE_URL}/auth/v1/admin/users?email=${encodeURIComponent(targetEmail)}`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` },
+      });
+      if (!r.ok) return err('User not found', 404);
+      const data = await r.json();
+      userId = data.users?.[0]?.id || '';
+      if (!userId) return err(`No user found with email: ${targetEmail}`, 404);
+    }
+
+    const newBal = await rpc('add_credits', { p_user_id: userId, p_amount: amount });
+    await logTransaction({ userId, amount, type: 'admin_grant', description });
+    return ok({ success: true, balance: newBal, userId });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── POST: admin create user ───────────────────────────────────
+// Headers: Authorization: Bearer <admin_token>
+// Body: { email, password, credits? }
+async function handleAdminCreateUser(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized — admin only', 403);
+
+  const email    = String(body.email    || '').trim().toLowerCase();
+  const password = String(body.password || '').trim();
+  const credits  = parseInt(String(body.credits || '0'));
+
+  if (!email || !password) return err('Need email and password', 400);
+  if (password.length < 6)  return err('Password min 6 chars', 400);
+
+  try {
+    // Create user via Supabase Admin API
+    const createRes = await fetch(`${SUPABASE_URL}/auth/v1/admin/users`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password, email_confirm: true }),
+    });
+    if (!createRes.ok) {
+      const e = await createRes.json();
+      throw new Error(e.message || e.msg || 'Create user failed');
+    }
+    const newUser = await createRes.json();
+    const userId = newUser.id;
+
+    // Grant initial credits if specified
+    let balance = 0;
+    if (credits > 0) {
+      balance = await rpc('add_credits', { p_user_id: userId, p_amount: credits });
+      await logTransaction({ userId, amount: credits, type: 'admin_grant', description: 'Khởi tạo credits khi tạo account' });
+    }
+
+    return ok({ success: true, userId, email, balance });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── GET: admin list users with balances ───────────────────────
+async function handleAdminUsers(request: NextRequest, sp: URLSearchParams): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/user_credits?order=balance.desc&select=user_id,balance,updated_at`,
+      { headers: SB_HEADERS }
+    );
+    const rows = await res.json();
+    return ok({ users: rows });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
 // ── Route handlers ────────────────────────────────────────────
 export async function OPTIONS() { return options(); }
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const action = searchParams.get('action');
-  if (action === 'balance') return handleBalance(searchParams);
-  if (action === 'check')   return handleCheck(searchParams);
-  return err('Invalid action. Use ?action=balance|check', 400);
+  if (action === 'balance')      return handleBalance(searchParams);
+  if (action === 'check')        return handleCheck(searchParams);
+  if (action === 'admin-users')  return handleAdminUsers(request, searchParams);
+  return err('Invalid action.', 400);
 }
 
 export async function POST(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const action = searchParams.get('action');
   const body   = await parseBody(request);
-  if (action === 'topup')   return handleTopup(body);
-  if (action === 'capture') return handleCapture(body);
-  if (action === 'deduct')  return handleDeduct(request, body);
-  return err('Invalid action. Use ?action=topup|capture|deduct', 400);
+  if (action === 'topup')           return handleTopup(body);
+  if (action === 'capture')         return handleCapture(body);
+  if (action === 'deduct')          return handleDeduct(request, body);
+  if (action === 'admin-grant')     return handleAdminGrant(request, body);
+  if (action === 'admin-create-user') return handleAdminCreateUser(request, body);
+  return err('Invalid action.', 400);
 }
