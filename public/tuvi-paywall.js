@@ -143,7 +143,7 @@ const TuviPaywall = (() => {
 .tpw-spinner{width:16px;height:16px;border:2px solid rgba(201,168,76,.3);border-top-color:#c9a84c;border-radius:50%;animation:tpw-spin .7s linear infinite;display:inline-block;margin-right:7px;vertical-align:middle;flex-shrink:0}
 @keyframes tpw-spin{to{transform:rotate(360deg)}}
 .tpw-success-banner{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#1E6B3C;color:#fff;padding:11px 28px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.2);white-space:nowrap;animation:tpw-fade .3s ease}
-.tpw-confirm{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:#fff;border:1.5px solid #c9a84c;border-radius:12px;padding:16px 22px;z-index:9999;box-shadow:0 8px 32px rgba(6,26,46,.18);min-width:300px;max-width:400px;width:90%;animation:tpw-up .2s cubic-bezier(.4,0,.2,1)}
+.tpw-confirm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border:1.5px solid #c9a84c;border-radius:12px;padding:20px 24px;z-index:9999;box-shadow:0 16px 48px rgba(6,26,46,.25);min-width:300px;max-width:420px;width:90%;animation:tpw-up .2s cubic-bezier(.4,0,.2,1)}
 .tpw-confirm-title{font-family:'Noto Serif',Georgia,serif;font-size:14px;font-weight:700;color:#061A2E;margin-bottom:10px}
 .tpw-confirm-rows{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
 .tpw-confirm-row{display:flex;justify-content:space-between;font-size:12.5px;color:#444;font-family:Arial,sans-serif}
