@@ -19,18 +19,30 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh}
 
-/* NAV */
-nav{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
-.nav-logo{color:#fff;font-family:'Noto Serif',serif;font-size:1.1rem;font-weight:700;text-decoration:none}
-.nav-links{display:flex;align-items:center;gap:.1rem}
-.nav-links a{color:rgba(255,255,255,.85);text-decoration:none;font-size:.82rem;padding:.5rem .7rem;border-radius:4px}
-.nav-links a:hover{background:rgba(255,255,255,.1)}
-@media(max-width:768px){.nav-links{display:none}}
+/* NAV — same as site standard */
+.topnav{position:sticky;top:0;z-index:200;background:var(--navy);display:flex;align-items:center;height:60px;padding:0 40px;gap:32px}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo img{width:36px;height:36px;border-radius:5px;object-fit:contain}
+.nav-logo .name{font-size:15px;font-weight:700;color:#CC2200;font-family:Georgia,serif}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-link{color:#8BAACC;font-size:13px;text-decoration:none;padding:6px 12px;border-radius:6px;transition:all .15s;white-space:nowrap}
+.nav-link:hover{color:#fff;background:rgba(255,255,255,.07)}
+.nav-link.active{color:#c9a84c}
 .nav-dropdown{position:relative}
-.nav-dropdown .dropdown-menu{display:none;position:absolute;top:100%;left:0;background:var(--navy);border:1px solid rgba(255,255,255,.15);border-radius:4px;min-width:180px;z-index:200;padding:.4rem 0}
-.nav-dropdown:hover .dropdown-menu{display:block}
-.dropdown-menu a{display:block;color:rgba(255,255,255,.85);font-size:.82rem;padding:.5rem 1rem;text-decoration:none}
-.dropdown-menu a:hover{background:rgba(255,255,255,.1)}
+.nav-dropdown-menu{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-top:3px solid #c9a84c;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:300}
+.nav-dropdown:hover .nav-dropdown-menu{display:block}
+.nav-dropdown-item{display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:13px;color:var(--text);text-decoration:none;border-bottom:1px solid #f0f0f0}
+.nav-dropdown-item:last-child{border-bottom:none}
+.nav-dropdown-item:hover{background:var(--bg-soft);color:var(--navy)}
+.nav-dropdown-item .di{font-size:15px;flex-shrink:0}
+.nav-hamburger{display:none;background:none;border:none;color:#8BAACC;cursor:pointer;padding:8px;font-size:20px;position:relative;z-index:400}
+@media(max-width:768px){
+  .topnav{padding:0 16px}
+  .nav-links{display:none;position:fixed;top:60px;left:0;right:0;background:var(--navy);flex-direction:column;align-items:stretch;padding:.5rem 0;z-index:199}
+  .nav-links.open{display:flex}
+  .nav-link{padding:12px 20px;border-radius:0}
+  .nav-hamburger{display:block;margin-left:auto}
+}
 
 /* LAYOUT */
 .wrap{max-width:900px;margin:0 auto;padding:3rem 1.5rem 5rem}
@@ -87,32 +99,35 @@ nav{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justif
 .alert.error{background:#FFF5F5;color:var(--red);border:1px solid #f5c6c6;display:block}
 .alert.success{background:#F0FAF4;color:var(--green);border:1px solid #c3e6d0;display:block}
 
-footer{background:#1A1210;color:rgba(255,255,255,.4);padding:20px 2rem;font-size:11px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
-footer a{color:rgba(255,255,255,.4);text-decoration:none}
+
 </style>
 <script src="/auth.js"></script>
 </head>
 <body>
 
-<nav>
-  <a class="nav-logo" href="/">☽ Tử Vi Minh Bảo</a>
-  <div class="nav-links">
-    <a href="/">Trang Chủ</a>
+<nav class="topnav">
+  <a class="nav-logo" href="/">
+    <img src="/seal.webp" alt="Tử Vi Minh Bảo">
+    <div class="name">Tử Vi Minh Bảo</div>
+  </a>
+  <div class="nav-links" id="nav-links">
+    <a class="nav-link" href="/">Trang Chủ</a>
     <div class="nav-dropdown">
-      <a href="#">Luận Giải ▾</a>
-      <div class="dropdown-menu">
-        <a href="/">Luận Giải Lá Số</a>
-        <a href="/xem-tuoi.html">Xem Tuổi Vợ Chồng</a>
-        <a href="/xem-lam-an.html">Xem Tuổi Làm Ăn</a>
+      <a class="nav-link" href="#">Luận Giải ▾</a>
+      <div class="nav-dropdown-menu">
+        <a class="nav-dropdown-item" href="/luan-giai.html"><span class="di">🔮</span>Luận Giải Lá Số</a>
+        <a class="nav-dropdown-item" href="/xem-tuoi.html"><span class="di">💑</span>Xem Tuổi Vợ Chồng</a>
+        <a class="nav-dropdown-item" href="/xem-lam-an.html"><span class="di">🤝</span>Xem Tuổi Làm Ăn</a>
       </div>
     </div>
-    <a href="/about.html">Giới Thiệu</a>
-    <a href="/resources.html">Tài Liệu</a>
-    <a href="/blog.html">Khảo Luận</a>
-    <a href="/menh-kho.html">Mệnh Khố</a>
-    <a href="/contact.html">Liên Hệ</a>
+    <a class="nav-link" href="/about.html">Giới Thiệu</a>
+    <a class="nav-link" href="/resources.html">Tài Liệu</a>
+    <a class="nav-link" href="/blog.html">Khảo Luận</a>
+    <a class="nav-link" href="/menh-kho.html">Mệnh Khố</a>
+    <a class="nav-link" href="/contact.html">Liên Hệ</a>
   </div>
-  <div id="nav-auth-area"></div>
+  <div id="nav-auth-area" style="margin-left:auto"></div>
+  <button class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')">☰</button>
 </nav>
 
 <div class="wrap">
@@ -214,6 +229,7 @@ footer a{color:rgba(255,255,255,.4);text-decoration:none}
   </div>
 </div>
 
+<script src="/nav.js"></script>
 <script src="/footer.js"></script>
 
 <script>
