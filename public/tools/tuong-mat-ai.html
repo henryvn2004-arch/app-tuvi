@@ -612,6 +612,7 @@ async function analyze() {
   const btn=document.getElementById('analyzeBtn'); btn.disabled=true;
 
   document.getElementById('result-section').classList.add('active');
+  _currentSlug = _generateSlug('dien-tuong');
   document.getElementById('aiResult').innerHTML=
     '<div class="ai-loading"><span class="ai-loading-icon">🔮</span><div class="ai-loading-text">AI đang phân tích tướng mặt...<br><span style="font-size:12px;opacity:.7">Thường mất 15–25 giây</span></div></div>';
   document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
@@ -649,6 +650,7 @@ async function analyze() {
     if(!full) throw new Error('AI không trả về kết quả.');
     el.innerHTML=renderMarkdown(full);
     btn.disabled=false;
+    await _paywallCheck('dien-tuong');
   } catch(e) {
     document.getElementById('aiResult').innerHTML='';
     document.getElementById('result-section').classList.remove('active');
@@ -680,6 +682,17 @@ function renderMarkdown(md) {
     .replace(/<p>(<[hul])/g,'$1')
     .replace(/(<\/[hul][^>]*>)<\/p>/g,'$1');
 }
+</script>
+<script src="/tuvi-paywall.js">
+// ── TuviPaywall init ──────────────────────────────────────────
+TuviPaywall.init({
+  product: 'dien-tuong',
+  slug: () => _currentSlug,
+  onUnlock: () => {
+    const el = document.getElementById('aiResult');
+    if (el) { el.style.filter = ''; el.style.userSelect = ''; el.style.pointerEvents = ''; }
+  },
+});
 </script>
 </body>
 </html>

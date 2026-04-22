@@ -613,6 +613,7 @@ async function analyze() {
   errEl.classList.remove('active');
   document.getElementById('analyzeBtn').disabled = true;
   document.getElementById('result-section').classList.add('active');
+  _currentSlug = _generateSlug('thanh-tuong');
   document.getElementById('aiResult').innerHTML = '<div class="ai-loading"><span class="ai-loading-icon">🎵</span><div style="font-size:14px;color:var(--text-lt)">AI đang luận giải thanh tướng...<br><span style="font-size:12px;opacity:.7">Thường mất 10–15 giây</span></div></div>';
   document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
@@ -653,6 +654,7 @@ async function analyze() {
     if (!full) throw new Error('Không có kết quả.');
     el.innerHTML = renderMd(full);
     document.getElementById('analyzeBtn').disabled = false;
+    await _paywallCheck('thanh-tuong');
   } catch(e) {
     document.getElementById('aiResult').innerHTML = '';
     document.getElementById('result-section').classList.remove('active');
@@ -702,6 +704,17 @@ function renderMd(md) {
     .replace(/<p>(<[hb])/g,'$1')
     .replace(/(<\/[hb][^>]*>)<\/p>/g,'$1');
 }
+</script>
+<script src="/tuvi-paywall.js">
+// ── TuviPaywall init ──────────────────────────────────────────
+TuviPaywall.init({
+  product: 'thanh-tuong',
+  slug: () => _currentSlug,
+  onUnlock: () => {
+    const el = document.getElementById('aiResult');
+    if (el) { el.style.filter = ''; el.style.userSelect = ''; el.style.pointerEvents = ''; }
+  },
+});
 </script>
 </body>
 </html>
