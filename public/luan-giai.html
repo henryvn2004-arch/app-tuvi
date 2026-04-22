@@ -1295,8 +1295,6 @@ select.form-input { cursor: pointer; }
       // chatbot unlocks after payment via startClaudeluanGiai()
       document.getElementById('progress-fill').style.width = '100%';
 
-      // ── Task #1: P1 Tổng Quan free (non-blocking) ──
-      _loadP1Free();
 
       // Auto-scroll xuống kết quả sau khi lá số hiện
       setTimeout(() => {
@@ -1689,7 +1687,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       const r = await fetch(`/api/payment?action=check&slug=${encodeURIComponent(tempSlug)}${userId?'&userId='+userId:''}`);
       const d = await r.json();
       console.log('[paywall check]', tempSlug, d);
-      if (d.purchased === true) { await startClaudeOrLoadCache(tempSlug || _pendingSlug); return; }
+      if (d.hasAccess === true) { await startClaudeOrLoadCache(tempSlug || _pendingSlug); return; }
     } catch(e) { console.warn('[paywall check error]', e); }
     // Chưa mua — lock boxes đã hiển thị, không cần làm gì thêm
   }

@@ -24,7 +24,7 @@ const TuviPaywall = (() => {
   // ── Product config ───────────────────────────────────────────
   const PRODUCTS = {
     'laso': {
-      cost: 190, usd: '$19',
+      cost: 150, usd: '$15',
       eyebrow:  '紫微明寶 · Luận Giải Lá Số',
       title:    'Mở khóa 24 phần luận giải chuyên sâu',
       subtitle: 'Phân tích toàn diện 12 cung, 9 đại vận, tiểu vận từng năm — được tạo riêng cho lá số của bạn bởi AI Tử Vi Minh Bảo.',
@@ -37,7 +37,7 @@ const TuviPaywall = (() => {
       ],
     },
     'xem-tuoi': {
-      cost: 90, usd: '$9',
+      cost: 50, usd: '$5',
       eyebrow:  '紫微明寶 · Xem Tuổi Vợ Chồng',
       title:    'Mở khóa 9 phần luận giải tương hợp',
       subtitle: 'Phân tích chuyên sâu 8 yếu tố hôn nhân — từ ngũ hành, tư tưởng, tính cách đến tài chính và vận hạn.',
@@ -49,7 +49,7 @@ const TuviPaywall = (() => {
       ],
     },
     'xem-lam-an': {
-      cost: 90, usd: '$9',
+      cost: 50, usd: '$5',
       eyebrow:  '紫微明寶 · Xem Tuổi Làm Ăn',
       title:    'Mở khóa 9 phần luận giải hợp tác',
       subtitle: 'Phân tích 8 yếu tố theo góc độ kinh doanh — tương hợp cung Nô Bộc, tài chính, và vận hạn đối tác.',
@@ -61,10 +61,10 @@ const TuviPaywall = (() => {
       ],
     },
     // Template cho tools xem tướng và tools mới
-    'dien-tuong':  { cost: 50, usd: '$5', eyebrow: '紫微明寶 · Diện Tướng', title: 'Mở khóa luận giải tướng mặt', subtitle: 'Phân tích chuyên sâu tướng mặt theo Ma Y Thần Tướng.', features: ['Tướng tổng thể', 'Ngũ nhạc tứ độc', 'Thái dương / Thái âm', 'Vận trình theo tuổi'], anchor: '', cta: 'Mở Khóa Diện Tướng', testimonials: [] },
-    'nhan-tuong':  { cost: 50, usd: '$5', eyebrow: '紫微明寶 · Nhãn Tướng', title: 'Mở khóa luận giải tướng mắt', subtitle: 'Phân tích nhãn tướng chi tiết theo cổ pháp.', features: ['Thần & sắc mắt', 'Ngũ hành nhãn hình', 'Vận trình', 'Đặc điểm tính cách'], anchor: '', cta: 'Mở Khóa Nhãn Tướng', testimonials: [] },
-    'thu-tuong':   { cost: 50, usd: '$5', eyebrow: '紫微明寶 · Thủ Tướng', title: 'Mở khóa luận giải tướng tay', subtitle: 'Phân tích chỉ tay và hình dạng bàn tay theo cổ pháp.', features: ['Hình dạng bàn tay', 'Các đường chỉ tay', 'Vận trình', 'Tính cách & sự nghiệp'], anchor: '', cta: 'Mở Khóa Thủ Tướng', testimonials: [] },
-    'thanh-tuong': { cost: 50, usd: '$5', eyebrow: '紫微明寶 · Thanh Tướng', title: 'Mở khóa luận giải tướng giọng', subtitle: 'Phân tích thanh tướng và âm sắc theo cổ pháp.', features: ['Ngũ hành âm sắc', 'Tướng giọng tổng thể', 'Vận trình', 'Tính cách'], anchor: '', cta: 'Mở Khóa Thanh Tướng', testimonials: [] },
+    'dien-tuong':  { cost: 5, usd: '$0.5', eyebrow: '紫微明寶 · Diện Tướng', title: 'Mở khóa luận giải tướng mặt', subtitle: 'Phân tích chuyên sâu tướng mặt theo Ma Y Thần Tướng.', features: ['Tướng tổng thể', 'Ngũ nhạc tứ độc', 'Thái dương / Thái âm', 'Vận trình theo tuổi'], anchor: '', cta: 'Mở Khóa Diện Tướng', testimonials: [] },
+    'nhan-tuong':  { cost: 5, usd: '$0.5', eyebrow: '紫微明寶 · Nhãn Tướng', title: 'Mở khóa luận giải tướng mắt', subtitle: 'Phân tích nhãn tướng chi tiết theo cổ pháp.', features: ['Thần & sắc mắt', 'Ngũ hành nhãn hình', 'Vận trình', 'Đặc điểm tính cách'], anchor: '', cta: 'Mở Khóa Nhãn Tướng', testimonials: [] },
+    'thu-tuong':   { cost: 5, usd: '$0.5', eyebrow: '紫微明寶 · Thủ Tướng', title: 'Mở khóa luận giải tướng tay', subtitle: 'Phân tích chỉ tay và hình dạng bàn tay theo cổ pháp.', features: ['Hình dạng bàn tay', 'Các đường chỉ tay', 'Vận trình', 'Tính cách & sự nghiệp'], anchor: '', cta: 'Mở Khóa Thủ Tướng', testimonials: [] },
+    'thanh-tuong': { cost: 5, usd: '$0.5', eyebrow: '紫微明寶 · Thanh Tướng', title: 'Mở khóa luận giải tướng giọng', subtitle: 'Phân tích thanh tướng và âm sắc theo cổ pháp.', features: ['Ngũ hành âm sắc', 'Tướng giọng tổng thể', 'Vận trình', 'Tính cách'], anchor: '', cta: 'Mở Khóa Thanh Tướng', testimonials: [] },
   };
 
   // ── Dynamic pricing (fetched from Supabase, overrides PRODUCTS) ──
@@ -413,13 +413,82 @@ const TuviPaywall = (() => {
     setTimeout(() => b.remove(), 5700);
   }
 
+  // ── requireCredits: Option A — check + deduct BEFORE action ────
+  // Usage: await TuviPaywall.requireCredits(slug, callback)
+  // callback() is called only if credits successfully deducted
+  async function requireCredits(slug, callback) {
+    // 1. Login check
+    if (!window.Auth?.isLoggedIn()) {
+      showAuthModal(async () => { await requireCredits(slug, callback); });
+      return;
+    }
+
+    await _fetchPricing(); // ensure pricing cached
+    const p = _p();
+    const userId = window.Auth.getUser()?.id || '';
+    const token  = window.Auth.getSession()?.access_token || '';
+
+    // 2. Re-access check (same slug = already paid)
+    if (slug) {
+      try {
+        const r = await fetch('/api/payment?action=check&slug=' + encodeURIComponent(slug) + '&userId=' + encodeURIComponent(userId));
+        if ((await r.json()).hasAccess) { await callback(); return; }
+      } catch(e) {}
+    }
+
+    // 3. Balance check
+    let balance = 0;
+    try {
+      const r = await fetch('/api/payment?action=balance&userId=' + encodeURIComponent(userId));
+      balance = (await r.json()).balance ?? 0;
+    } catch(e) {}
+
+    if (balance < p.cost) {
+      // Not enough — show paywall modal (already has topup CTA)
+      _buildModal();
+      _modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      _renderCta(); // will show deficit + topup
+      return;
+    }
+
+    // 4. Deduct then run
+    try {
+      const res = await fetch('/api/payment?action=deduct', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({ amount: p.cost, toolType: TOOL_TYPE_MAP[_cfg.product] || ('use_' + _cfg.product), slug, description: p.title }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        window.refreshNavCredits && window.refreshNavCredits();
+        await callback();
+        return;
+      }
+
+      if (data.insufficientBalance) {
+        _buildModal();
+        _modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        _renderCta();
+        return;
+      }
+
+      alert('Lỗi trừ credits: ' + (data.error || 'Vui lòng thử lại.'));
+    } catch(e) {
+      alert('Lỗi kết nối: ' + e.message);
+    }
+  }
+
   return {
     init,
     check,
     show,
     hide,
+    requireCredits,
     showSuccessBanner: _showSuccessBanner,
-    _initiate:    show,   // legacy compat
+    _initiate:    show,
     _checkAlready,
     _doDeduct,
     _doLogin,

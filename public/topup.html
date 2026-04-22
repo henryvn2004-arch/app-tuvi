@@ -134,34 +134,34 @@ footer a{color:rgba(255,255,255,.4);text-decoration:none}
 
   <!-- Packages -->
   <div class="packages">
-    <!-- Starter -->
+    <!-- Trial -->
     <div class="pkg-card">
-      <div class="pkg-name">Starter</div>
-      <div class="pkg-credits">100 <span>credits</span></div>
-      <div class="pkg-price">$10</div>
-      <div class="pkg-rate">$0.10 / credit</div>
-      <button class="btn-pkg" onclick="initiateTopup('10')">Nạp $10</button>
+      <div class="pkg-name">Trial</div>
+      <div class="pkg-credits">50 <span>credits</span></div>
+      <div class="pkg-price">$5</div>
+      <div class="pkg-rate">= 1 Xem Tuổi · hoặc 10 Xem Tướng</div>
+      <button class="btn-pkg" onclick="initiateTopup('5')">Nạp $5</button>
     </div>
 
     <!-- Popular -->
     <div class="pkg-card popular">
       <div class="pkg-badge">PHỔ BIẾN NHẤT</div>
       <div class="pkg-name">Popular</div>
-      <div class="pkg-credits">220 <span>credits</span></div>
-      <div class="pkg-price">$20</div>
+      <div class="pkg-credits">110 <span>credits</span></div>
+      <div class="pkg-price">$10</div>
       <div class="pkg-rate">$0.091 / credit</div>
       <div class="pkg-bonus">+10% bonus</div>
-      <button class="btn-pkg gold" onclick="initiateTopup('20')">Nạp $20</button>
+      <button class="btn-pkg gold" onclick="initiateTopup('10')">Nạp $10</button>
     </div>
 
     <!-- Pro -->
     <div class="pkg-card">
       <div class="pkg-name">Pro</div>
-      <div class="pkg-credits">460 <span>credits</span></div>
-      <div class="pkg-price">$40</div>
-      <div class="pkg-rate">$0.087 / credit</div>
-      <div class="pkg-bonus">+15% bonus</div>
-      <button class="btn-pkg" onclick="initiateTopup('40')">Nạp $40</button>
+      <div class="pkg-credits">240 <span>credits</span></div>
+      <div class="pkg-price">$20</div>
+      <div class="pkg-rate">$0.083 / credit</div>
+      <div class="pkg-bonus">+20% bonus</div>
+      <button class="btn-pkg" onclick="initiateTopup('20')">Nạp $20</button>
     </div>
   </div>
 
@@ -173,21 +173,21 @@ footer a{color:rgba(255,255,255,.4);text-decoration:none}
         <span class="cost-icon">🔮</span>
         <span class="cost-name">Luận Giải Lá Số (24 phần đầy đủ)</span>
       </div>
-      <div><span class="cost-price">190 credits</span><span class="cost-usd">≈ $19</span></div>
+      <div><span class="cost-price">150 credits</span><span class="cost-usd">≈ $15</span></div>
     </div>
     <div class="cost-row">
       <div style="display:flex;align-items:center">
         <span class="cost-icon">💑</span>
         <span class="cost-name">Xem Tuổi Vợ Chồng</span>
       </div>
-      <div><span class="cost-price">90 credits</span><span class="cost-usd">≈ $9</span></div>
+      <div><span class="cost-price">50 credits</span><span class="cost-usd">≈ $5</span></div>
     </div>
     <div class="cost-row">
       <div style="display:flex;align-items:center">
         <span class="cost-icon">💼</span>
         <span class="cost-name">Xem Tuổi Làm Ăn</span>
       </div>
-      <div><span class="cost-price">90 credits</span><span class="cost-usd">≈ $9</span></div>
+      <div><span class="cost-price">50 credits</span><span class="cost-usd">≈ $5</span></div>
     </div>
   </div>
 
@@ -276,7 +276,7 @@ async function initiateTopup(packageId) {
       throw new Error(data.error || 'Không tạo được đơn PayPal');
     }
   } catch(e) {
-    if (btn) { btn.disabled = false; btn.textContent = packageId === '20' ? 'Nạp $20' : packageId === '40' ? 'Nạp $40' : 'Nạp $10'; }
+    if (btn) { btn.disabled = false; btn.textContent = packageId === '10' ? 'Nạp $10' : packageId === '20' ? 'Nạp $20' : 'Nạp $5'; }
     const alert = document.getElementById('alertBox');
     alert.className = 'alert error';
     alert.textContent = 'Lỗi kết nối PayPal: ' + (e.message || 'Vui lòng thử lại.');

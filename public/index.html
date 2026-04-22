@@ -1617,7 +1617,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       const res = await fetch('/api/payment?action=deduct', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-        body: JSON.stringify({ amount: 190, toolType: 'use_laso', slug, description: 'Luận giải lá số 24 phần' }),
+        body: JSON.stringify({ amount: 150, toolType: 'use_laso', slug, description: 'Luận giải lá số 24 phần' }),
       });
       const data = await res.json();
       if (data.success) {
@@ -1627,7 +1627,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         await startClaudeOrLoadCache(slug);
       } else if (data.insufficientBalance) {
         const balance = data.balance ?? 0;
-        const need = 190 - balance;
+        const need = 150 - balance;
         const gate = document.getElementById('paywall-gate');
         if (gate) gate.innerHTML = `
           <div class="paywall-eyebrow">紫微明寶 · Luận Giải Đầy Đủ</div>
@@ -1635,17 +1635,17 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
           <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:#856404">
             Số dư: <strong>${balance} credits</strong> — cần thêm <strong>${need} credits</strong>
           </div>
-          <div class="paywall-price">190 Credits</div>
+          <div class="paywall-price">150 Credits</div>
           <a href="/topup.html" class="btn-paywall" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none">
             <span>💳 Nạp Credits</span><span style="font-size:16px">→</span>
           </a>
           <div class="paywall-secure">🔒 $1 = 10 credits · Không hết hạn · Dùng cho mọi công cụ</div>`;
       } else {
-        if (btn) { btn.disabled = false; btn.innerHTML = '<span>Mở Khóa (190 Credits)</span><span style="font-size:16px">→</span>'; }
+        if (btn) { btn.disabled = false; btn.innerHTML = '<span>Mở Khóa (150 Credits)</span><span style="font-size:16px">→</span>'; }
         alert('Lỗi: ' + (data.error || 'Vui lòng thử lại.'));
       }
     } catch(e) {
-      if (btn) { btn.disabled = false; btn.innerHTML = '<span>Mở Khóa (190 Credits)</span><span style="font-size:16px">→</span>'; }
+      if (btn) { btn.disabled = false; btn.innerHTML = '<span>Mở Khóa (150 Credits)</span><span style="font-size:16px">→</span>'; }
       alert('Lỗi kết nối: ' + e.message);
     }
   }
@@ -1671,10 +1671,10 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         <div class="paywall-feature">Chia sẻ lá số với người thân</div>
       </div>
       <div style="font-size:12px;color:#9A7B3A;margin-bottom:6px;letter-spacing:0.3px">24 khía cạnh cuộc đời · Bằng 1 buổi cà phê</div>
-      <div class="paywall-price">190 Credits</div>
-      <div class="paywall-price-note">Bằng $19 · Nạp 1 lần dùng mọi công cụ · Credits không hết hạn</div>
+      <div class="paywall-price">150 Credits</div>
+      <div class="paywall-price-note">Bằng $15 · Nạp 1 lần dùng mọi công cụ · Credits không hết hạn</div>
       <button class="btn-paywall" id="btn-paywall-pay" onclick="handlePaywallClick()">
-        <span>Mở Khóa (190 Credits)</span>
+        <span>Mở Khóa (150 Credits)</span>
         <span style="font-size:16px">→</span>
       </button>
       <div class="paywall-secure">🔒 Thanh toán bảo mật qua PayPal · Hoàn tiền nếu lỗi kỹ thuật</div>
@@ -1696,7 +1696,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
   async function handlePaywallClick() {
     if (!window.Auth?.isLoggedIn()) { showAuthModal(async () => { await handlePaywallClick(); }); return; }
     const balance = await getCreditBalance();
-    if (balance >= 190) {
+    if (balance >= 150) {
       await deductAndUnlock(_pendingSlug);
     } else {
       const gate = document.getElementById('paywall-gate');
@@ -1704,9 +1704,9 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         <div class="paywall-eyebrow">紫微明寶 · Luận Giải Đầy Đủ</div>
         <div class="paywall-title">Không đủ credits</div>
         <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:#856404">
-          Số dư: <strong>${balance} credits</strong> — cần thêm <strong>${190 - balance} credits</strong>
+          Số dư: <strong>${balance} credits</strong> — cần thêm <strong>${150 - balance} credits</strong>
         </div>
-        <div class="paywall-price">190 Credits</div>
+        <div class="paywall-price">150 Credits</div>
         <a href="/topup.html" class="btn-paywall" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none">
           <span>💳 Nạp Credits</span><span style="font-size:16px">→</span>
         </a>

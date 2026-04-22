@@ -883,8 +883,8 @@ select.form-input { cursor: pointer; }
             <div class="tvc-paywall-feature">Câu trả lời cá nhân hóa</div>
             <div class="tvc-paywall-feature">Dựa trên 2 lá số thực tế</div>
         </div>
-        <div class="tvc-paywall-price">90 Credits</div>
-        <div class="tvc-paywall-price-note">≈ $9 · Credits không hết hạn · Dùng cho mọi công cụ · <a href="/topup.html" style="color:#c9a84c">Nạp thêm →</a></div>
+        <div class="tvc-paywall-price">50 Credits</div>
+        <div class="tvc-paywall-price-note">≈ $5 · Credits không hết hạn · Dùng cho mọi công cụ · <a href="/topup.html" style="color:#c9a84c">Nạp thêm →</a></div>
         <button class="tvc-paywall-btn" onclick="initiatePaymentTuoi(_savedResult, 'xem-lam-an')">
           Mở Khóa Luận Giải &amp; Vấn Đáp →
         </button>
@@ -1821,14 +1821,13 @@ async function analyze(){
       const _el = document.getElementById('result-header-tuoi') || document.getElementById('result-section');
       if (_el) _el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 300);
-    // Credit check
+    // Option A: requireCredits handles check + deduct before API
     const alreadyPaid = await checkCreditAccess(_pendingSlug);
     if (alreadyPaid) {
       luanGiaiAll(result);
     } else {
-      await luanGiaiSection(0, null, result);
-      await new Promise(r => setTimeout(r, 15000));
-      showPaywall(result, 'xem-lam-an', 'Xem Tuổi Làm Ăn');
+      // Show paywall immediately — no free section preview
+      TuviPaywall.show();
     }
   }catch(e){
     errEl.textContent='Lỗi: '+(e.message||'Không thể tính toán.');
