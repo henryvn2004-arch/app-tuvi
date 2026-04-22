@@ -187,7 +187,34 @@
     <div class="tool-cta-eyebrow">Tướng + Số + Vận</div>
     <div class="tool-cta-title">Kết Hợp Nhãn Tướng Với Lá Số Tử Vi</div>
     <div class="tool-cta-desc">Nhãn tướng phản chiếu khí chất và nội tâm. Lá số Tử Vi phân tích vận trình từng giai đoạn — kết hợp hai phương pháp cho bức tranh toàn diện nhất.</div>
-    <a class="tool-cta-btn" href="/luan-giai.html">Xem Lá Số Tử Vi ($19) →</a>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
+        <a class="tool-cta-btn" href="/xem-tuoi.html" style="background:var(--navy);border-color:var(--gold)">
+          Xem Tuổi Vợ Chồng <span id="upsell-tuoi-price" style="opacity:.75;font-size:.85em">(50 lượng)</span> →
+        </a>
+        <a class="tool-cta-btn" href="/luan-giai.html" style="background:transparent;color:var(--navy);border:2px solid var(--navy)">
+          Luận Giải Lá Số <span id="upsell-laso-price" style="opacity:.65;font-size:.85em">(150 lượng)</span> →
+        </a>
+      </div>
+      <script>
+      // Dynamic pricing for upsell banner
+      (async function() {
+        try {
+          const r = await fetch('https://dciwkfdqhhddeymlisey.supabase.co/rest/v1/tool_pricing?tool_id=in.(xem-tuoi,laso)&select=tool_id,credits',
+            {headers:{'apikey':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I'}});
+          const rows = await r.json();
+          rows.forEach(row => {
+            if (row.tool_id === 'xem-tuoi') {
+              const el = document.getElementById('upsell-tuoi-price');
+              if (el) el.textContent = '(' + row.credits + ' lượng)';
+            }
+            if (row.tool_id === 'laso') {
+              const el = document.getElementById('upsell-laso-price');
+              if (el) el.textContent = '(' + row.credits + ' lượng)';
+            }
+          });
+        } catch(e) {}
+      })();
+      </script>
   </div>
 </div>
 
@@ -475,7 +502,6 @@ async function _doAnalyze() {
   }
 }
 
-}
 function reset() {
   removePhoto();
   document.getElementById('result-section').classList.remove('active');
