@@ -1254,7 +1254,7 @@ Phân tích theo đúng 6 phần quy định. Bắt buộc dẫn nguyên văn ki
    ============================================================ */
 analyzeBtn.addEventListener('click', async () => {
   // Option A: check + confirm credits before calling API
-  _currentSlug = _generateSlug('thanh-tuong');
+  _currentSlug = TuviPaywall.generateToolSlug('thanh-tuong');
   await TuviPaywall.requireCredits(_currentSlug, async () => {
     await _doThanhTuongAnalyze();
   });
@@ -1354,10 +1354,7 @@ function renderMarkdown(md){
 // ── TuviPaywall init ──────────────────────────────────────────
 let _currentSlug = '';
 
-function _generateSlug(product) {
-  const uid = window.Auth?.getUser()?.id || 'guest';
-  return product + '-' + uid.slice(0,8) + '-' + Date.now();
-}
+
 
 TuviPaywall.init({
   product: 'thanh-tuong',
