@@ -1719,36 +1719,7 @@ async function checkPaymentOnLoad(product) {
 
 async function initiatePaymentTuoi(result, product) {
   _pendingSlug = buildSlug(result, product);
-  await handleCreditUnlock(_pendingSlug, product, result);
-}
-async function handleCreditUnlock(slug, product, result) {
-  if (!window.Auth?.isLoggedIn()) { showAuthModal(async () => handleCreditUnlock(slug, product, result)); return; }
-  const COST = 90;
-  const toolType = product === 'xem-lam-an' ? 'use_xem_lam_an' : 'use_xem_tuoi';
-  const desc = product === 'xem-lam-an' ? 'Xem tuổi làm ăn' : 'Xem tuổi vợ chồng';
-  const btn = document.querySelector('.tvc-paywall-btn, .btn-paywall-tuoi');
-  if (btn) { btn.disabled = true; btn.textContent = 'Đang xử lý...'; }
-  const data = await deductCredits(slug, toolType, COST, desc);
-  if (data.success) {
-    window.refreshNavCredits && window.refreshNavCredits();
-    TuviPaywall.showSuccessBanner && TuviPaywall.showSuccessBanner();
-    if (result) luanGiaiAll(result);
-    return;
-  }
-  if (btn) { btn.disabled = false; btn.textContent = 'Mở Khóa (90 Credits)'; }
-  if (data.needLogin) { showAuthModal(async () => handleCreditUnlock(slug, product, result)); return; }
-  if (data.insufficientBalance) {
-    const bal = data.balance ?? 0;
-    const overlay = document.querySelector('.tvc-paywall-inner');
-    if (overlay) {
-      const div = document.createElement('div');
-      div.style.cssText = 'background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:12px 16px;margin-bottom:14px;font-size:13px;color:#856404;text-align:center';
-      div.innerHTML = 'Số dư: <strong>' + bal + ' credits</strong>. Cần thêm <strong>' + (COST-bal) + '</strong>. <a href="/topup.html" style="color:#856404;font-weight:700">→ Nạp ngay</a>';
-      overlay.insertBefore(div, overlay.firstChild);
-    }
-    return;
-  }
-  alert('Lỗi: ' + (data.error || 'Vui lòng thử lại.'));
+  TuviPaywall.show();
 }
 
 function showPaywall(result, product, productLabel) {
@@ -1779,9 +1750,7 @@ function showPaywall(result, product, productLabel) {
 // Init TuviPaywall
 TuviPaywall.init({
   product:  'xem-lam-an',
-  price:    '$9',
   slug:     () => _pendingSlug,
-  sessionKey: 'tuvi_pending_form_xem-lam-an',
   getFormData: () => {
     const a = TuviForm.getData('a'), b = TuviForm.getData('b');
     return {
