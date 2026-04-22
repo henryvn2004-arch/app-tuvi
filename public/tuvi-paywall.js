@@ -517,12 +517,19 @@ const TuviPaywall = (() => {
     }); // end confirm
   }
 
+  // Global helper for tool pages
+  function generateToolSlug(product) {
+    const uid = window.Auth?.getUser()?.id || 'guest';
+    return product + '-' + uid.slice(0,8) + '-' + Date.now();
+  }
+
   return {
     init,
     check,
     show,
     hide,
     requireCredits,
+    generateToolSlug,
     showSuccessBanner: _showSuccessBanner,
     _initiate:    show,
     _checkAlready,
