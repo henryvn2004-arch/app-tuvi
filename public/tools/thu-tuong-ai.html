@@ -487,6 +487,7 @@ async function analyze() {
 
 async function _doAnalyze() {
   document.getElementById('aiResult').innerHTML='<div class="ai-loading"><span class="ai-loading-icon">✋</span><div class="ai-loading-text">AI đang đọc chỉ tay...<br><span style="font-size:12px;opacity:.7">Thường mất 15–20 giây</span></div></div>';
+  document.getElementById('result-section').classList.add('active');
   document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
 
   try {
