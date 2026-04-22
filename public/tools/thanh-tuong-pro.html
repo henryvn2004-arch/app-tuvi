@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Thanh Tướng Pro — Phân Tích Giọng Nói Theo Cổ Pháp | Tử Vi Minh Bảo</title>
+<meta name="description" content="Phân tích chuyên sâu tướng giọng nói theo thanh tướng học cổ pháp — đo Khí, Jitter, Shimmer, HNR, Formants. Luận giải Ngũ Âm Kim-Mộc-Thủy-Hỏa-Thổ theo Ma Y Thần Tướng và Thần Tướng Toàn Biên.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<style>
+:root{--pro-accent:#8B1A1A;--pro-accent-lt:#FBEFEF}
+
+/* Hero */
+.pro-hero{background:linear-gradient(135deg,#061A2E 0%,#0D3B5E 100%);color:#fff;padding:48px 24px 40px;margin-bottom:0;position:relative;overflow:hidden}
+.pro-hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(circle at 20% 20%,rgba(154,123,58,.15) 0%,transparent 50%);pointer-events:none}
+.pro-hero-inner{max-width:860px;margin:0 auto;position:relative;z-index:1}
+.pro-badge{display:inline-block;padding:4px 12px;background:var(--gold);color:#061A2E;font-size:10px;font-weight:800;letter-spacing:2px;border-radius:4px;margin-bottom:16px;text-transform:uppercase}
+.pro-hero h1{font-family:'Noto Serif',Georgia,serif;font-size:36px;line-height:1.2;margin:0 0 14px;font-weight:700}
+.pro-hero .sub{font-size:16px;line-height:1.6;color:#e8d9b8;margin:0;max-width:640px}
+
+/* Intro */
+.pro-intro{background:#fff;padding:32px 24px 8px}
+.pro-intro-inner{max-width:860px;margin:0 auto}
+.pro-intro h2{font-family:'Noto Serif',serif;font-size:22px;color:var(--navy);margin:0 0 14px;font-weight:700}
+.pro-intro p{font-size:14.5px;line-height:1.75;color:var(--text-mid);margin:0 0 12px}
+.pro-intro .cite{font-style:italic;color:var(--gold);font-size:13px;padding-left:14px;border-left:3px solid var(--gold);margin:12px 0}
+
+/* Section dividers */
+.pro-section{max-width:860px;margin:0 auto;padding:24px}
+.pro-section-title{display:flex;align-items:center;gap:12px;font-family:'Noto Serif',serif;font-size:18px;color:var(--navy);margin:0 0 16px;font-weight:700}
+.pro-section-title::before{content:'';width:4px;height:20px;background:var(--gold);border-radius:2px}
+
+/* Differences card */
+.compare-card{background:var(--bg-soft);border:1px solid var(--border);border-radius:10px;padding:20px 22px;margin-bottom:20px}
+.compare-row{display:grid;grid-template-columns:110px 1fr 1fr;gap:14px;padding:10px 0;border-bottom:1px solid var(--border-lt);font-size:13.5px;line-height:1.55}
+.compare-row:last-child{border-bottom:none}
+.compare-row.head{font-weight:700;color:var(--navy);font-size:12px;letter-spacing:.5px;text-transform:uppercase;border-bottom:2px solid var(--gold)}
+.compare-row .old{color:var(--text-lt)}
+.compare-row .new{color:var(--navy);font-weight:600}
+
+/* Guide steps */
+.guide-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:8px}
+.guide-step{background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center}
+.guide-step .num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:var(--navy);color:#fff;border-radius:50%;font-family:'Noto Serif',serif;font-size:14px;font-weight:700;margin-bottom:10px}
+.guide-step .name{font-weight:700;color:var(--navy);font-size:14px;margin-bottom:4px}
+.guide-step .desc{font-size:12px;color:var(--text-mid);line-height:1.5}
+
+/* Setup — gender/age */
+.setup-card{background:#fff;border:2px solid var(--gold);border-radius:12px;padding:24px;margin-bottom:20px}
+.setup-label{font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--gold);margin-bottom:8px;text-transform:uppercase}
+.setup-title{font-family:'Noto Serif',serif;font-size:18px;color:var(--navy);margin:0 0 16px;font-weight:700}
+.gender-opts{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.gender-opt{flex:1;min-width:100px;padding:12px 16px;background:#fff;border:2px solid var(--border);border-radius:8px;cursor:pointer;text-align:center;font-weight:600;color:var(--text-mid);transition:all .15s}
+.gender-opt:hover{border-color:var(--gold)}
+.gender-opt.selected{background:var(--navy);border-color:var(--navy);color:#fff}
+.age-input{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit}
+.age-input:focus{border-color:var(--gold);outline:none}
+
+/* Task progress */
+.task-progress{display:flex;gap:6px;margin:16px 0 20px}
+.task-pip{flex:1;height:6px;background:var(--border-lt);border-radius:3px;position:relative;overflow:hidden}
+.task-pip.active{background:#C0392B}
+.task-pip.done{background:var(--green)}
+
+/* Task card */
+.task-card{background:linear-gradient(135deg,#fdf8f0,#fff9ef);border:2px solid var(--gold);border-radius:12px;padding:28px 28px 20px;margin-bottom:20px;display:none}
+.task-card.visible{display:block}
+.task-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.task-num{font-size:11px;font-weight:800;letter-spacing:2px;color:#8B1A1A;text-transform:uppercase}
+.task-time{font-size:12px;color:var(--text-lt);font-weight:600}
+.task-title{font-family:'Noto Serif',serif;font-size:20px;color:var(--navy);margin:0 0 10px;font-weight:700}
+.task-instruction{font-size:13px;color:var(--text-mid);margin-bottom:18px;line-height:1.6;padding:10px 14px;background:rgba(255,255,255,.7);border-left:3px solid var(--gold);border-radius:4px}
+.task-text{font-family:'Noto Serif',serif;font-size:20px;line-height:1.8;color:#061A2E;text-align:center;padding:20px 10px;background:#fff;border-radius:8px;border:1px solid var(--border-lt);margin-bottom:16px;min-height:80px;white-space:pre-line}
+.task-text.vowel{font-size:72px;letter-spacing:16px;font-weight:700;color:var(--navy)}
+
+/* Record controls */
+.record-wrap{text-align:center;padding:14px 0 6px}
+.btn-record{display:inline-flex;align-items:center;gap:10px;padding:14px 32px;background:var(--navy);color:#fff;border:none;border-radius:50px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;letter-spacing:.5px}
+.btn-record:hover{background:#0D3B5E;transform:scale(1.02)}
+.btn-record.recording{background:#C0392B;animation:pulse-red 1.2s ease-in-out infinite}
+.btn-record.processing{background:#888;cursor:not-allowed;animation:none}
+.btn-record:disabled{opacity:.6;cursor:not-allowed}
+@keyframes pulse-red{0%,100%{box-shadow:0 0 0 0 rgba(192,57,43,0.4)}50%{box-shadow:0 0 0 12px rgba(192,57,43,0)}}
+
+.countdown-badge{display:none;font-size:56px;font-weight:700;color:#C0392B;margin:8px 0;font-family:'Noto Serif',Georgia,serif}
+.countdown-badge.visible{display:block}
+.timer-bar-wrap{height:4px;background:var(--border-lt);border-radius:2px;margin:12px 24px;overflow:hidden;display:none}
+.timer-bar-wrap.visible{display:block}
+.timer-bar{height:100%;background:#C0392B;border-radius:2px;width:0%;transition:width .1s linear}
+.waveform-wrap{margin:12px 0;display:none}
+.waveform-wrap.visible{display:block}
+#waveCanvas{width:100%;height:60px;background:#fff;border:1px solid var(--border-lt);border-radius:6px;display:block}
+.record-status{font-size:12px;color:var(--text-lt);margin-top:10px;min-height:16px}
+
+/* Task done summary */
+.task-done-mini{display:none;padding:12px 16px;background:#eef8f0;border:1px solid var(--green);border-radius:8px;margin-top:14px;font-size:13px;color:var(--green);font-weight:600}
+.task-done-mini.visible{display:block}
+.btn-next-task{display:inline-block;margin-top:12px;padding:10px 24px;background:var(--gold);color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-next-task:hover{background:#8a6a2a}
+.btn-retry{display:inline-block;margin-left:8px;padding:10px 20px;background:#fff;color:var(--text-mid);border:1.5px solid var(--border);border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-retry:hover{border-color:var(--text-mid)}
+
+/* Feature panel */
+.features-panel{background:#fff;border:2px solid var(--navy);border-radius:12px;padding:24px;margin-bottom:20px;display:none}
+.features-panel.visible{display:block}
+.features-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.features-title{font-family:'Noto Serif',serif;font-size:18px;color:var(--navy);margin:0;font-weight:700}
+.nguam-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:var(--gold);color:#fff;border-radius:50px;font-size:13px;font-weight:700;font-family:'Noto Serif',serif}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.feature-item{padding:12px 14px;background:var(--bg-soft);border-radius:8px;border-left:3px solid var(--gold)}
+.feature-name{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--text-lt);text-transform:uppercase;margin-bottom:4px}
+.feature-value{font-family:'Noto Serif',serif;font-size:18px;color:var(--navy);font-weight:700;margin-bottom:4px}
+.feature-interp{font-size:12px;color:var(--text-mid);line-height:1.5}
+.feature-bar-wrap{height:4px;background:#e5e2dc;border-radius:2px;margin-top:6px;overflow:hidden}
+.feature-bar{height:100%;background:var(--navy);border-radius:2px;transition:width .4s}
+
+/* Warnings */
+.warn-card{display:none;padding:14px 18px;background:#fff6f0;border-left:4px solid #d35400;border-radius:6px;margin:12px 0;font-size:13px;color:#7a3d00;line-height:1.6}
+.warn-card.visible{display:block}
+
+/* Analyze */
+.analyze-wrap{text-align:center;margin:20px 0;display:none}
+.analyze-wrap.visible{display:block}
+.btn-analyze{padding:16px 40px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.5px}
+.btn-analyze:hover{background:#0D3B5E}
+.btn-analyze:disabled{background:#888;cursor:not-allowed}
+
+/* Results */
+.results-panel{background:#fff;border:1px solid var(--border);border-radius:12px;padding:28px 30px;margin-bottom:30px;display:none}
+.results-panel.visible{display:block}
+.results-panel h2{font-family:'Noto Serif',serif;font-size:22px;color:var(--navy);margin:22px 0 10px;font-weight:700;border-bottom:1px solid var(--border-lt);padding-bottom:6px}
+.results-panel h2:first-child{margin-top:0}
+.results-panel h3{font-family:'Noto Serif',serif;font-size:17px;color:var(--navy-mid);margin:16px 0 8px;font-weight:700}
+.results-panel p{font-size:14.5px;line-height:1.75;color:var(--text);margin:0 0 10px}
+.results-panel em{color:var(--gold);font-style:italic}
+.results-panel strong{color:var(--navy)}
+.results-panel blockquote{border-left:3px solid var(--gold);background:var(--gold-lt);padding:10px 16px;margin:14px 0;font-style:italic;color:var(--navy-mid)}
+
+.loading-dots::after{content:'…';display:inline-block;animation:dots 1.5s steps(4,end) infinite}
+@keyframes dots{0%,20%{content:''}40%{content:'.'}60%{content:'..'}80%,100%{content:'…'}}
+
+@media (max-width:640px){
+  .pro-hero{padding:36px 18px 30px}
+  .pro-hero h1{font-size:26px}
+  .task-text{font-size:17px;padding:16px 8px}
+  .task-text.vowel{font-size:54px;letter-spacing:10px}
+  .compare-row{grid-template-columns:90px 1fr 1fr;font-size:12.5px}
+}
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+<script src="/nav.js"></script>
+
+<main>
+  <!-- HERO -->
+  <section class="pro-hero">
+    <div class="pro-hero-inner">
+      <span class="pro-badge">Pro · Bản Nâng Cao</span>
+      <h1>Thanh Tướng Pro — Phân Tích Giọng Nói Theo Cổ Pháp</h1>
+      <p class="sub">Bốn bài đo chuyên sâu · Mười hai chỉ số âm học · Luận giải Ngũ Âm Kim-Mộc-Thủy-Hỏa-Thổ theo <em>Ma Y Thần Tướng</em>, <em>Thần Tướng Toàn Biên</em> và <em>Thủy Kính Tập</em>.</p>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="pro-intro">
+    <div class="pro-intro-inner">
+      <h2>Thanh Tướng Học Là Gì?</h2>
+      <p>Thanh tướng (聲相) là một trong <strong>năm phép tướng cổ pháp</strong> phương Đông, bên cạnh Diện tướng, Nhãn tướng, Thủ tướng và Cốt tướng. Người xưa tin rằng giọng nói là <strong>tiếng vọng của khí huyết</strong> — ai khí đầy thì giọng vang, ai khí suy thì giọng nhược; ai tâm chính thì giọng trong, ai tâm tạp thì giọng đục.</p>
+      <blockquote class="cite">"Thanh tại khí trung, khí túc tắc thanh viên, khí khuyết tắc thanh phá." — <em>Ma Y Thần Tướng · Thanh Tướng Chương</em></blockquote>
+      <p>Giọng thuộc một trong <strong>Ngũ Âm</strong>: Kim (chuông lớn — quý), Mộc (gió xuyên rừng — thanh tú), Thủy (suối chảy — uyển chuyển), Hỏa (lửa bốc — hiểm), Thổ (trống đất — phúc hậu). Trong mỗi hành lại phân <strong>Thanh</strong> (trong, vang) và <strong>Trọc</strong> (đục, rè), và có các <strong>dị cách</strong> như Hổ Hống, Oanh Minh, Phá La, Hữu Đầu Vô Vĩ…</p>
+      <p style="margin-top:14px">Bản Pro này khác với bản thường ở chỗ: <strong>đo Khí trực tiếp</strong> qua bài ngân âm dài, tính toán các chỉ số y học giọng (jitter, shimmer, HNR) mà bản thường không có, và luận giải có <strong>dẫn nguyên văn kinh điển</strong> thay vì mô tả chung chung.</p>
+    </div>
+  </section>
+
+  <!-- DIFFERENCES -->
+  <section class="pro-section">
+    <h3 class="pro-section-title">Thanh Tướng Thường vs Pro</h3>
+    <div class="compare-card">
+      <div class="compare-row head"><div>Hạng mục</div><div>Bản Thường</div><div>Bản Pro</div></div>
+      <div class="compare-row"><div>Số bài đo</div><div class="old">1 bài · 14s</div><div class="new">4 bài · ~40s</div></div>
+      <div class="compare-row"><div>Đo Khí</div><div class="old">Không đo trực tiếp</div><div class="new">Có — bài ngân âm 5s</div></div>
+      <div class="compare-row"><div>Chỉ số</div><div class="old">Pitch, ZCR, Rate</div><div class="new">F0, Jitter, Shimmer, HNR, Formants F1/F2, Sustain, Decay</div></div>
+      <div class="compare-row"><div>Thuật toán pitch</div><div class="old">Autocorrelation</div><div class="new">YIN (chuẩn y học giọng)</div></div>
+      <div class="compare-row"><div>Phân biệt Thanh/Trọc</div><div class="old">Không</div><div class="new">Có — qua HNR</div></div>
+      <div class="compare-row"><div>Dị cách</div><div class="old">Không</div><div class="new">Có — nhận diện 7 dị cách</div></div>
+      <div class="compare-row"><div>Nguồn kinh điển</div><div class="old">Mô tả tổng quan</div><div class="new">Dẫn nguyên văn Ma Y, Thần Tướng Toàn Biên, Thủy Kính</div></div>
+    </div>
+  </section>
+
+  <!-- GUIDE -->
+  <section class="pro-section">
+    <h3 class="pro-section-title">Hướng Dẫn — Bốn Bước Đo</h3>
+    <div class="guide-steps">
+      <div class="guide-step">
+        <div class="num">1</div>
+        <div class="name">Đọc Đoạn Văn</div>
+        <div class="desc">10 giây · ca dao quen thuộc · đo F0, tốc độ, nền giọng cơ bản</div>
+      </div>
+      <div class="guide-step">
+        <div class="num">2</div>
+        <div class="name">Ngân Âm "A"</div>
+        <div class="desc">5 giây · ngân một hơi · đo Khí, Jitter, Shimmer, HNR</div>
+      </div>
+      <div class="guide-step">
+        <div class="num">3</div>
+        <div class="name">Đếm Số</div>
+        <div class="desc">12 giây · đếm 1 → 15 · đo nhịp nói, độ đều</div>
+      </div>
+      <div class="guide-step">
+        <div class="num">4</div>
+        <div class="name">Đọc Thơ</div>
+        <div class="desc">10 giây · Truyện Kiều · đo độ uyển chuyển pitch</div>
+      </div>
+    </div>
+    <div class="warn-card visible" style="margin-top:16px">
+      <strong>Để kết quả chính xác nhất:</strong><br>
+      • Ở nơi <strong>yên tĩnh</strong>, không có tiếng quạt/điều hòa to, không có người nói xung quanh.<br>
+      • Giữ mic cách miệng <strong>15–25cm</strong>, không cầm sát mặt.<br>
+      • Nói bằng <strong>giọng tự nhiên</strong> hằng ngày — không cố lên giọng trầm hay cao.<br>
+      • Nếu ho, nấc, hay bị đứt quãng, nhấn <strong>"Thu lại"</strong> ở bài đó.
+    </div>
+  </section>
+
+  <!-- SETUP -->
+  <section class="pro-section">
+    <h3 class="pro-section-title">Bước 1 · Thông Tin Cơ Bản</h3>
+    <div class="setup-card">
+      <div class="setup-label">Giới Tính</div>
+      <div class="gender-opts" id="genderOpts">
+        <div class="gender-opt" data-gender="nam">Nam</div>
+        <div class="gender-opt" data-gender="nu">Nữ</div>
+      </div>
+      <div class="setup-label" style="margin-top:6px">Tuổi</div>
+      <input type="number" class="age-input" id="ageInput" placeholder="Ví dụ: 32" min="10" max="100">
+      <div class="record-wrap" style="padding-top:16px">
+        <button class="btn-record" id="startBtn" disabled>Bắt Đầu Bài Đo</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TASKS -->
+  <section class="pro-section" id="tasksSection" style="display:none">
+    <h3 class="pro-section-title">Bước 2 · Bốn Bài Đo Giọng</h3>
+    <div class="task-progress" id="taskProgress">
+      <div class="task-pip" data-idx="0"></div>
+      <div class="task-pip" data-idx="1"></div>
+      <div class="task-pip" data-idx="2"></div>
+      <div class="task-pip" data-idx="3"></div>
+    </div>
+
+    <div class="task-card visible" id="taskCard">
+      <div class="task-header">
+        <span class="task-num" id="taskNum">Bài 1/4</span>
+        <span class="task-time" id="taskTime">10 giây</span>
+      </div>
+      <h3 class="task-title" id="taskTitle">Đọc Đoạn Văn</h3>
+      <div class="task-instruction" id="taskInstruction">Đọc bình thường, rõ ràng, không gấp.</div>
+      <div class="task-text" id="taskText"></div>
+
+      <div class="record-wrap">
+        <div class="countdown-badge" id="countdown"></div>
+        <button class="btn-record" id="recordBtn">Bắt Đầu Thu Âm</button>
+      </div>
+      <div class="timer-bar-wrap" id="timerWrap"><div class="timer-bar" id="timerBar"></div></div>
+      <div class="waveform-wrap" id="waveWrap"><canvas id="waveCanvas" width="800" height="60"></canvas></div>
+      <div class="record-status" id="recordStatus"></div>
+
+      <div class="task-done-mini" id="taskDone">
+        <div id="taskDoneText">✓ Đã ghi xong.</div>
+        <button class="btn-next-task" id="nextBtn">Bài Tiếp Theo →</button>
+        <button class="btn-retry" id="retryBtn">Thu Lại</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="pro-section">
+    <div class="features-panel" id="featuresPanel">
+      <div class="features-head">
+        <h3 class="features-title">Bước 3 · Kết Quả Đo</h3>
+        <span class="nguam-badge" id="nguamBadge">Ngũ Âm: —</span>
+      </div>
+      <div class="features-grid" id="featuresGrid"></div>
+      <div class="warn-card" id="featuresWarn"></div>
+    </div>
+
+    <div class="analyze-wrap" id="analyzeWrap">
+      <button class="btn-analyze" id="analyzeBtn">Luận Giải Thanh Tướng</button>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="pro-section">
+    <div class="results-panel" id="resultsPanel"></div>
+  </section>
+</main>
+
+<script src="/auth.js"></script>
+<script>
+/* ============================================================
+   THANH TƯỚNG PRO — Acoustic Analysis Engine
+   ============================================================ */
+
+const TASKS = [
+  {
+    id: 'baseline',
+    num: '1/4',
+    title: 'Đọc Đoạn Văn',
+    duration: 10,
+    instruction: 'Đọc bình thường, rõ ràng, không gấp, không cố ý lên trầm/cao. Đây là giọng nền cơ bản.',
+    text: 'Công cha như núi Thái Sơn,\nnghĩa mẹ như nước trong nguồn chảy ra.',
+    vowel: false
+  },
+  {
+    id: 'sustain',
+    num: '2/4',
+    title: 'Ngân Âm "A" — Bài Đo Khí',
+    duration: 5,
+    instruction: 'Hít một hơi sâu, sau đó ngân chữ "A" liên tục CÙNG MỘT TONE, không lên xuống, giữ càng đều càng tốt. Đây là bài quan trọng nhất — đo khí lực.',
+    text: 'A',
+    vowel: true
+  },
+  {
+    id: 'count',
+    num: '3/4',
+    title: 'Đếm Số 1 → 15',
+    duration: 12,
+    instruction: 'Đếm đều tốc độ, không gấp, không chậm. Mỗi số cách nhau khoảng nửa giây.',
+    text: 'Một, hai, ba, bốn, năm, sáu,\nbảy, tám, chín, mười, mười một,\nmười hai, mười ba, mười bốn, mười lăm.',
+    vowel: false
+  },
+  {
+    id: 'tonal',
+    num: '4/4',
+    title: 'Đọc Thơ — Bài Đo Pitch Range',
+    duration: 10,
+    instruction: 'Đọc có ngữ điệu, lên xuống tự nhiên. Đây là câu mở đầu Truyện Kiều — đọc như đang đọc thơ.',
+    text: 'Trăm năm trong cõi người ta,\nchữ tài chữ mệnh khéo là ghét nhau.',
+    vowel: false
+  }
+];
+
+/* ---------- State ---------- */
+let state = {
+  gender: null,
+  age: null,
+  currentIdx: 0,
+  results: {},
+  audioCtx: null,
+  stream: null,
+  recorder: null,
+  isRecording: false
+};
+
+/* ---------- DOM refs ---------- */
+const $ = id => document.getElementById(id);
+const genderOpts = $('genderOpts');
+const ageInput = $('ageInput');
+const startBtn = $('startBtn');
+const tasksSection = $('tasksSection');
+const taskCard = $('taskCard');
+const taskNum = $('taskNum');
+const taskTime = $('taskTime');
+const taskTitle = $('taskTitle');
+const taskInstruction = $('taskInstruction');
+const taskText = $('taskText');
+const recordBtn = $('recordBtn');
+const countdown = $('countdown');
+const timerWrap = $('timerWrap');
+const timerBar = $('timerBar');
+const waveWrap = $('waveWrap');
+const waveCanvas = $('waveCanvas');
+const recordStatus = $('recordStatus');
+const taskDone = $('taskDone');
+const taskDoneText = $('taskDoneText');
+const nextBtn = $('nextBtn');
+const retryBtn = $('retryBtn');
+const taskProgress = $('taskProgress');
+const featuresPanel = $('featuresPanel');
+const featuresGrid = $('featuresGrid');
+const featuresWarn = $('featuresWarn');
+const nguamBadge = $('nguamBadge');
+const analyzeWrap = $('analyzeWrap');
+const analyzeBtn = $('analyzeBtn');
+const resultsPanel = $('resultsPanel');
+
+/* ---------- Setup ---------- */
+genderOpts.addEventListener('click', e => {
+  const opt = e.target.closest('.gender-opt');
+  if (!opt) return;
+  [...genderOpts.children].forEach(x => x.classList.remove('selected'));
+  opt.classList.add('selected');
+  state.gender = opt.dataset.gender;
+  checkSetup();
+});
+ageInput.addEventListener('input', () => {
+  state.age = parseInt(ageInput.value) || null;
+  checkSetup();
+});
+function checkSetup() {
+  startBtn.disabled = !(state.gender && state.age && state.age >= 10 && state.age <= 100);
+}
+startBtn.addEventListener('click', () => {
+  tasksSection.style.display = 'block';
+  loadTask(0);
+  tasksSection.scrollIntoView({behavior:'smooth',block:'start'});
+});
+
+/* ---------- Task loader ---------- */
+function loadTask(idx) {
+  state.currentIdx = idx;
+  const t = TASKS[idx];
+  taskNum.textContent = 'Bài ' + t.num;
+  taskTime.textContent = t.duration + ' giây';
+  taskTitle.textContent = t.title;
+  taskInstruction.textContent = t.instruction;
+  taskText.textContent = t.text;
+  taskText.classList.toggle('vowel', !!t.vowel);
+  recordBtn.disabled = false;
+  recordBtn.textContent = 'Bắt Đầu Thu Âm';
+  recordBtn.classList.remove('recording','processing');
+  taskDone.classList.remove('visible');
+  countdown.classList.remove('visible');
+  timerWrap.classList.remove('visible');
+  waveWrap.classList.remove('visible');
+  timerBar.style.width = '0%';
+  recordStatus.textContent = '';
+  updateProgressPips();
+}
+function updateProgressPips() {
+  [...taskProgress.children].forEach((pip, i) => {
+    pip.classList.remove('active','done');
+    if (state.results[TASKS[i].id]) pip.classList.add('done');
+    else if (i === state.currentIdx) pip.classList.add('active');
+  });
+}
+
+/* ---------- Recording ---------- */
+recordBtn.addEventListener('click', startRecording);
+retryBtn.addEventListener('click', () => {
+  delete state.results[TASKS[state.currentIdx].id];
+  loadTask(state.currentIdx);
+});
+nextBtn.addEventListener('click', () => {
+  if (state.currentIdx < TASKS.length - 1) {
+    loadTask(state.currentIdx + 1);
+  } else {
+    // All tasks done
+    compileAndShowFeatures();
+  }
+});
+
+async function startRecording() {
+  const t = TASKS[state.currentIdx];
+  if (state.isRecording) return;
+  try {
+    if (!state.stream) {
+      state.stream = await navigator.mediaDevices.getUserMedia({
+        audio: { echoCancellation:false, noiseSuppression:false, autoGainControl:false }
+      });
+    }
+    // Countdown 3-2-1
+    recordBtn.disabled = true;
+    countdown.classList.add('visible');
+    for (let i = 3; i >= 1; i--) {
+      countdown.textContent = i;
+      await wait(900);
+    }
+    countdown.classList.remove('visible');
+    // Record
+    await recordBuffer(t.duration);
+    // Analyze
+    recordBtn.classList.remove('recording');
+    recordBtn.classList.add('processing');
+    recordBtn.textContent = 'Đang phân tích…';
+    recordStatus.textContent = 'Đang tính toán đặc trưng âm học…';
+    await wait(60); // let UI update
+    const features = analyzeTask(t.id, state._lastBuffer, state._sampleRate);
+    state.results[t.id] = features;
+    recordBtn.classList.remove('processing');
+    recordBtn.disabled = true;
+    recordBtn.textContent = 'Đã ghi xong';
+    // Quick summary
+    const summary = miniSummary(t.id, features);
+    taskDoneText.innerHTML = '✓ ' + summary;
+    if (state.currentIdx < TASKS.length - 1) {
+      nextBtn.textContent = 'Bài Tiếp Theo →';
+    } else {
+      nextBtn.textContent = 'Xem Kết Quả →';
+    }
+    taskDone.classList.add('visible');
+    timerWrap.classList.remove('visible');
+    waveWrap.classList.remove('visible');
+    updateProgressPips();
+  } catch (err) {
+    console.error(err);
+    recordStatus.textContent = 'Lỗi: ' + (err.message || 'không truy cập được microphone');
+    recordBtn.disabled = false;
+    recordBtn.textContent = 'Thử Lại';
+    recordBtn.classList.remove('recording','processing');
+  }
+}
+
+async function recordBuffer(durationSec) {
+  state.audioCtx = state.audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+  const ac = state.audioCtx;
+  if (ac.state === 'suspended') await ac.resume();
+  const source = ac.createMediaStreamSource(state.stream);
+  const bufferSize = 4096;
+  const processor = ac.createScriptProcessor(bufferSize, 1, 1);
+  const chunks = [];
+  state._sampleRate = ac.sampleRate;
+
+  // Waveform setup
+  const analyser = ac.createAnalyser();
+  analyser.fftSize = 2048;
+  const waveData = new Uint8Array(analyser.fftSize);
+  source.connect(analyser);
+  source.connect(processor);
+  processor.connect(ac.destination);
+  waveWrap.classList.add('visible');
+  timerWrap.classList.add('visible');
+  recordBtn.classList.add('recording');
+  recordBtn.textContent = 'Đang ghi âm…';
+  recordStatus.textContent = 'Đọc/ngân theo hướng dẫn.';
+  state.isRecording = true;
+
+  processor.onaudioprocess = e => {
+    const input = e.inputBuffer.getChannelData(0);
+    chunks.push(new Float32Array(input));
+  };
+
+  // Waveform + timer
+  const startTime = performance.now();
+  let stopRAF = false;
+  function draw() {
+    if (stopRAF) return;
+    analyser.getByteTimeDomainData(waveData);
+    const ctx = waveCanvas.getContext('2d');
+    const w = waveCanvas.width, h = waveCanvas.height;
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0,0,w,h);
+    ctx.strokeStyle = '#C0392B';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    const sliceW = w / waveData.length;
+    for (let i = 0; i < waveData.length; i++) {
+      const v = waveData[i] / 128.0;
+      const y = v * h / 2;
+      if (i === 0) ctx.moveTo(0, y);
+      else ctx.lineTo(i * sliceW, y);
+    }
+    ctx.stroke();
+    const elapsed = (performance.now() - startTime) / 1000;
+    const pct = Math.min(100, elapsed / durationSec * 100);
+    timerBar.style.width = pct + '%';
+    if (elapsed < durationSec) requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+
+  await wait(durationSec * 1000);
+  stopRAF = true;
+  state.isRecording = false;
+
+  processor.disconnect(); source.disconnect(); analyser.disconnect();
+  // Merge chunks
+  let total = 0;
+  chunks.forEach(c => total += c.length);
+  const out = new Float32Array(total);
+  let off = 0;
+  chunks.forEach(c => { out.set(c, off); off += c.length; });
+  state._lastBuffer = out;
+}
+
+function wait(ms){return new Promise(r=>setTimeout(r,ms))}
+
+/* ============================================================
+   ACOUSTIC FEATURE EXTRACTORS
+   ============================================================ */
+
+/* --- Voice Activity Detection (remove silences) --- */
+function vadTrim(buf, fs, thrFactor=0.05) {
+  const frame = Math.floor(fs * 0.025); // 25ms
+  const hop = Math.floor(fs * 0.01);     // 10ms
+  const energies = [];
+  for (let i = 0; i + frame < buf.length; i += hop) {
+    let s = 0;
+    for (let j = 0; j < frame; j++) s += buf[i+j] * buf[i+j];
+    energies.push(Math.sqrt(s / frame));
+  }
+  const maxE = Math.max(...energies);
+  const thr = maxE * thrFactor;
+  const voiced = [];
+  for (let i = 0; i < energies.length; i++) {
+    if (energies[i] > thr) {
+      const start = i * hop;
+      const end = Math.min(buf.length, start + hop + frame);
+      voiced.push(buf.subarray(start, end));
+    }
+  }
+  if (!voiced.length) return buf;
+  let total = 0;
+  voiced.forEach(v => total += v.length);
+  const out = new Float32Array(total);
+  let off = 0;
+  voiced.forEach(v => { out.set(v, off); off += v.length; });
+  return out;
+}
+
+/* --- YIN pitch detection --- */
+function yinPitch(buf, fs, threshold=0.15) {
+  const N = buf.length;
+  const halfN = Math.floor(N / 2);
+  if (halfN < 100) return -1;
+  const d = new Float32Array(halfN);
+  for (let tau = 0; tau < halfN; tau++) {
+    let sum = 0;
+    for (let i = 0; i < halfN; i++) {
+      const delta = buf[i] - buf[i + tau];
+      sum += delta * delta;
+    }
+    d[tau] = sum;
+  }
+  d[0] = 1;
+  let running = 0;
+  for (let tau = 1; tau < halfN; tau++) {
+    running += d[tau];
+    d[tau] *= tau / (running || 1);
+  }
+  // Search in F0 range 60-500Hz
+  const minTau = Math.floor(fs / 500);
+  const maxTau = Math.floor(fs / 60);
+  let tau = minTau;
+  for (; tau < maxTau && tau < halfN; tau++) {
+    if (d[tau] < threshold) {
+      while (tau + 1 < halfN && d[tau + 1] < d[tau]) tau++;
+      break;
+    }
+  }
+  if (tau >= maxTau || d[tau] >= threshold) return -1;
+  // Parabolic interpolation
+  const x0 = Math.max(0, tau - 1);
+  const x2 = Math.min(halfN - 1, tau + 1);
+  const s0 = d[x0], s1 = d[tau], s2 = d[x2];
+  const denom = 2 * (2*s1 - s2 - s0);
+  const better = denom !== 0 ? tau + (s2 - s0) / denom : tau;
+  return fs / better;
+}
+
+/* --- Frame-by-frame F0 track --- */
+function f0Track(buf, fs) {
+  const frame = Math.floor(fs * 0.040); // 40ms
+  const hop = Math.floor(fs * 0.020);    // 20ms
+  const f0s = [];
+  for (let i = 0; i + frame < buf.length; i += hop) {
+    const f0 = yinPitch(buf.subarray(i, i + frame), fs);
+    if (f0 > 0) f0s.push(f0);
+  }
+  return f0s;
+}
+
+/* --- Stats helpers --- */
+function mean(a){ if(!a.length) return 0; let s=0; for(const x of a) s+=x; return s/a.length; }
+function stdev(a){ if(a.length<2) return 0; const m=mean(a); let v=0; for(const x of a) v+=(x-m)**2; return Math.sqrt(v/a.length); }
+function median(a){ if(!a.length) return 0; const s=[...a].sort((x,y)=>x-y); return s[Math.floor(s.length/2)]; }
+
+/* --- Jitter (local, %) --- */
+function localJitter(f0s) {
+  if (f0s.length < 3) return 0;
+  const periods = f0s.map(f => 1/f);
+  let diffSum = 0;
+  for (let i = 1; i < periods.length; i++) diffSum += Math.abs(periods[i] - periods[i-1]);
+  const avgPeriod = mean(periods);
+  return (diffSum / (periods.length - 1)) / avgPeriod * 100;
+}
+
+/* --- Shimmer (local, dB) --- */
+function localShimmer(buf, fs, f0s) {
+  if (f0s.length < 3) return 0;
+  const avgF0 = mean(f0s);
+  if (avgF0 <= 0) return 0;
+  const period = Math.floor(fs / avgF0);
+  // Find cycle peaks
+  const peaks = [];
+  for (let i = period; i + period < buf.length; i += period) {
+    let maxAbs = 0;
+    for (let j = i - period/2; j < i + period/2; j++) {
+      const k = Math.floor(j);
+      if (k >= 0 && k < buf.length) {
+        if (Math.abs(buf[k]) > maxAbs) maxAbs = Math.abs(buf[k]);
+      }
+    }
+    if (maxAbs > 0.001) peaks.push(maxAbs);
+  }
+  if (peaks.length < 3) return 0;
+  let sum = 0, n = 0;
+  for (let i = 1; i < peaks.length; i++) {
+    if (peaks[i-1] > 0 && peaks[i] > 0) {
+      sum += Math.abs(20 * Math.log10(peaks[i] / peaks[i-1]));
+      n++;
+    }
+  }
+  return n > 0 ? sum / n : 0;
+}
+
+/* --- HNR (Boersma-style via normalized autocorrelation) --- */
+function hnrBoersma(buf, fs, f0) {
+  if (f0 <= 0) return 0;
+  const period = Math.round(fs / f0);
+  if (period >= buf.length / 2 || period < 2) return 0;
+  // Window
+  const N = Math.min(buf.length, period * 6);
+  let r0 = 0, rT = 0;
+  for (let i = 0; i < N - period; i++) {
+    r0 += buf[i] * buf[i];
+    rT += buf[i] * buf[i + period];
+  }
+  r0 /= (N - period);
+  rT /= (N - period);
+  if (r0 <= 0) return 0;
+  const ratio = rT / r0;
+  if (ratio <= 0 || ratio >= 1) return 0;
+  return 10 * Math.log10(ratio / (1 - ratio));
+}
+
+function hnrTrack(buf, fs) {
+  const frame = Math.floor(fs * 0.040);
+  const hop = Math.floor(fs * 0.020);
+  const hnrs = [];
+  for (let i = 0; i + frame < buf.length; i += hop) {
+    const sub = buf.subarray(i, i + frame);
+    const f0 = yinPitch(sub, fs);
+    if (f0 > 0) {
+      const h = hnrBoersma(sub, fs, f0);
+      if (!isNaN(h) && isFinite(h)) hnrs.push(h);
+    }
+  }
+  return hnrs;
+}
+
+/* --- FFT (radix-2) --- */
+function fft(real, imag) {
+  const N = real.length;
+  if ((N & (N-1)) !== 0) throw new Error('FFT size must be power of 2');
+  // Bit reverse
+  for (let i = 1, j = 0; i < N; i++) {
+    let b = N >> 1;
+    for (; j & b; b >>= 1) j ^= b;
+    j ^= b;
+    if (i < j) {
+      [real[i], real[j]] = [real[j], real[i]];
+      [imag[i], imag[j]] = [imag[j], imag[i]];
+    }
+  }
+  for (let len = 2; len <= N; len <<= 1) {
+    const half = len >> 1;
+    const ang = -2 * Math.PI / len;
+    const wRe = Math.cos(ang), wIm = Math.sin(ang);
+    for (let i = 0; i < N; i += len) {
+      let curRe = 1, curIm = 0;
+      for (let k = 0; k < half; k++) {
+        const tRe = curRe * real[i+k+half] - curIm * imag[i+k+half];
+        const tIm = curRe * imag[i+k+half] + curIm * real[i+k+half];
+        real[i+k+half] = real[i+k] - tRe;
+        imag[i+k+half] = imag[i+k] - tIm;
+        real[i+k] += tRe;
+        imag[i+k] += tIm;
+        const nRe = curRe * wRe - curIm * wIm;
+        curIm = curRe * wIm + curIm * wRe;
+        curRe = nRe;
+      }
+    }
+  }
+}
+
+function magSpectrum(buf, fs, fftSize=4096) {
+  // Hann window + zero-pad to fftSize
+  const N = Math.min(buf.length, fftSize);
+  const real = new Float32Array(fftSize);
+  const imag = new Float32Array(fftSize);
+  for (let i = 0; i < N; i++) {
+    const w = 0.5 * (1 - Math.cos(2*Math.PI*i/(N-1)));
+    real[i] = buf[i] * w;
+  }
+  fft(real, imag);
+  const mag = new Float32Array(fftSize/2);
+  for (let i = 0; i < fftSize/2; i++) {
+    mag[i] = Math.sqrt(real[i]*real[i] + imag[i]*imag[i]);
+  }
+  return mag;
+}
+
+/* --- Spectral centroid & rolloff --- */
+function spectralStats(mag, fs, fftSize) {
+  const binW = fs / fftSize;
+  let weighted = 0, total = 0;
+  for (let i = 0; i < mag.length; i++) {
+    weighted += i * binW * mag[i];
+    total += mag[i];
+  }
+  const centroid = total > 0 ? weighted / total : 0;
+  // Rolloff 85%
+  const target = 0.85 * total;
+  let cum = 0, rolloff = 0;
+  for (let i = 0; i < mag.length; i++) {
+    cum += mag[i];
+    if (cum >= target) { rolloff = i * binW; break; }
+  }
+  return { centroid, rolloff };
+}
+
+/* --- Formants via smoothed spectrum peak picking --- */
+function estimateFormants(mag, fs, fftSize) {
+  const binW = fs / fftSize;
+  // Log-magnitude, smooth
+  const log = new Float32Array(mag.length);
+  for (let i = 0; i < mag.length; i++) log[i] = Math.log(mag[i] + 1e-10);
+  const smoothed = new Float32Array(mag.length);
+  const w = 6;
+  for (let i = 0; i < mag.length; i++) {
+    let s = 0, c = 0;
+    for (let j = Math.max(0, i-w); j <= Math.min(mag.length-1, i+w); j++) {
+      s += log[j]; c++;
+    }
+    smoothed[i] = s / c;
+  }
+  // Find peaks in formant range
+  const peaks = [];
+  for (let i = 2; i < smoothed.length - 2; i++) {
+    const f = i * binW;
+    if (f < 200 || f > 4000) continue;
+    if (smoothed[i] > smoothed[i-1] && smoothed[i] > smoothed[i+1] &&
+        smoothed[i] > smoothed[i-2] && smoothed[i] > smoothed[i+2]) {
+      peaks.push({ freq: f, mag: smoothed[i] });
+    }
+  }
+  peaks.sort((a,b) => b.mag - a.mag);
+  const top = peaks.slice(0, 5).sort((a,b) => a.freq - b.freq);
+  return {
+    f1: top[0] ? top[0].freq : 0,
+    f2: top[1] ? top[1].freq : 0
+  };
+}
+
+/* --- Sustain metrics (for task 2) --- */
+function sustainMetrics(buf, fs) {
+  const frame = Math.floor(fs * 0.025);
+  const hop = Math.floor(fs * 0.010);
+  const env = [];
+  for (let i = 0; i + frame < buf.length; i += hop) {
+    let s = 0;
+    for (let j = 0; j < frame; j++) s += buf[i+j] * buf[i+j];
+    env.push(Math.sqrt(s / frame));
+  }
+  const maxE = Math.max(...env);
+  const thr = maxE * 0.25;
+  let start = -1, end = -1;
+  for (let i = 0; i < env.length; i++) {
+    if (env[i] > thr) { if (start === -1) start = i; end = i; }
+  }
+  if (start < 0 || end - start < 3) return { duration: 0, decaySlope: 0 };
+  const duration = (end - start) * hop / fs;
+  // Decay slope: last 50% of sustained region, in dB/s
+  const midIdx = start + Math.floor((end - start) * 0.5);
+  let sx=0, sy=0, sxy=0, sxx=0, n=0;
+  for (let i = midIdx; i <= end; i++) {
+    const x = (i - midIdx) * hop / fs;
+    const y = 20 * Math.log10(env[i] + 1e-10);
+    sx += x; sy += y; sxy += x*y; sxx += x*x; n++;
+  }
+  const slope = (n > 1 && (n*sxx - sx*sx) !== 0) ? (n*sxy - sx*sy) / (n*sxx - sx*sx) : 0;
+  return { duration, decaySlope: slope };
+}
+
+/* --- Speech rate (syllables/second) --- */
+function speechRate(buf, fs) {
+  const frame = Math.floor(fs * 0.025);
+  const hop = Math.floor(fs * 0.010);
+  const env = [];
+  for (let i = 0; i + frame < buf.length; i += hop) {
+    let s = 0;
+    for (let j = 0; j < frame; j++) s += buf[i+j] * buf[i+j];
+    env.push(Math.sqrt(s / frame));
+  }
+  // Smooth
+  const smoothed = new Float32Array(env.length);
+  const w = 5;
+  for (let i = 0; i < env.length; i++) {
+    let s = 0, c = 0;
+    for (let j = Math.max(0, i-w); j <= Math.min(env.length-1, i+w); j++) {
+      s += env[j]; c++;
+    }
+    smoothed[i] = s/c;
+  }
+  const maxE = Math.max(...smoothed);
+  const thr = maxE * 0.35;
+  // Peak detection with minimum distance (syllable width ~150ms → 15 hops)
+  const minDist = 15;
+  const peaks = [];
+  for (let i = 2; i < smoothed.length - 2; i++) {
+    if (smoothed[i] > thr &&
+        smoothed[i] > smoothed[i-1] && smoothed[i] > smoothed[i+1] &&
+        smoothed[i] >= smoothed[i-2] && smoothed[i] >= smoothed[i+2]) {
+      if (!peaks.length || i - peaks[peaks.length-1] >= minDist) peaks.push(i);
+    }
+  }
+  const durSec = buf.length / fs;
+  return { rate: peaks.length / durSec, syllables: peaks.length, duration: durSec };
+}
+
+/* ============================================================
+   TASK-SPECIFIC ANALYZERS
+   ============================================================ */
+function analyzeTask(taskId, buf, fs) {
+  const trimmed = vadTrim(buf, fs, 0.04);
+  const durTotal = buf.length / fs;
+  const durVoiced = trimmed.length / fs;
+
+  if (taskId === 'baseline') {
+    const f0s = f0Track(trimmed, fs);
+    const hnrs = hnrTrack(trimmed, fs);
+    const mag = magSpectrum(trimmed, fs, 4096);
+    const { centroid, rolloff } = spectralStats(mag, fs, 4096);
+    const form = estimateFormants(mag, fs, 4096);
+    const sr = speechRate(buf, fs);
+    return {
+      f0Mean: mean(f0s), f0Median: median(f0s), f0Std: stdev(f0s),
+      f0Min: f0s.length?Math.min(...f0s):0, f0Max: f0s.length?Math.max(...f0s):0,
+      jitter: localJitter(f0s),
+      hnrMean: mean(hnrs),
+      centroid, rolloff,
+      f1: form.f1, f2: form.f2,
+      speechRate: sr.rate, syllables: sr.syllables,
+      durVoiced, durTotal
+    };
+  }
+
+  if (taskId === 'sustain') {
+    const f0s = f0Track(trimmed, fs);
+    const sus = sustainMetrics(buf, fs);
+    const hnrs = hnrTrack(trimmed, fs);
+    return {
+      f0Mean: mean(f0s), f0Std: stdev(f0s),
+      jitter: localJitter(f0s),
+      shimmer: localShimmer(trimmed, fs, f0s),
+      hnrMean: mean(hnrs),
+      sustainDuration: sus.duration,
+      decaySlope: sus.decaySlope,
+      durVoiced, durTotal
+    };
+  }
+
+  if (taskId === 'count') {
+    const f0s = f0Track(trimmed, fs);
+    const sr = speechRate(buf, fs);
+    return {
+      f0Mean: mean(f0s), f0Std: stdev(f0s),
+      speechRate: sr.rate, syllables: sr.syllables,
+      expectedSyllables: 18, // 1+2+3+4+5 + 1+2+2+2+2+3+3+3+3+3
+      rateConsistency: stdev(f0s) / (mean(f0s) || 1),
+      durVoiced, durTotal
+    };
+  }
+
+  if (taskId === 'tonal') {
+    const f0s = f0Track(trimmed, fs);
+    const mag = magSpectrum(trimmed, fs, 4096);
+    const { centroid } = spectralStats(mag, fs, 4096);
+    const range = f0s.length ? Math.max(...f0s) - Math.min(...f0s) : 0;
+    // Pitch agility — mean abs delta
+    let agil = 0;
+    for (let i = 1; i < f0s.length; i++) agil += Math.abs(f0s[i] - f0s[i-1]);
+    agil = f0s.length > 1 ? agil / (f0s.length - 1) : 0;
+    return {
+      f0Mean: mean(f0s), f0Std: stdev(f0s),
+      f0Range: range,
+      pitchAgility: agil,
+      centroid,
+      durVoiced, durTotal
+    };
+  }
+
+  return {};
+}
+
+/* ============================================================
+   MINI SUMMARIES (per-task quick feedback)
+   ============================================================ */
+function miniSummary(taskId, f) {
+  if (taskId === 'baseline') {
+    return 'Giọng nền: F0 trung bình <strong>' + f.f0Mean.toFixed(0) + 'Hz</strong>, tốc độ ' + f.speechRate.toFixed(1) + ' âm tiết/giây.';
+  }
+  if (taskId === 'sustain') {
+    const q = f.sustainDuration >= 3.5 ? 'khí lực tốt' : f.sustainDuration >= 2.5 ? 'khí trung bình' : 'khí bất túc';
+    return 'Ngân dài <strong>' + f.sustainDuration.toFixed(1) + 's</strong>, shimmer ' + f.shimmer.toFixed(2) + 'dB — <em>' + q + '</em>.';
+  }
+  if (taskId === 'count') {
+    return 'Tốc độ đếm: <strong>' + f.speechRate.toFixed(1) + '</strong> âm tiết/giây.';
+  }
+  if (taskId === 'tonal') {
+    return 'Pitch range: <strong>' + f.f0Range.toFixed(0) + 'Hz</strong>, độ uyển chuyển ' + f.pitchAgility.toFixed(1) + 'Hz/bước.';
+  }
+  return 'Xong.';
+}
+
+/* ============================================================
+   COMPILE FEATURES + NGŨ ÂM HEURISTIC + WARNINGS
+   ============================================================ */
+function compileAndShowFeatures() {
+  const r = state.results;
+  const b = r.baseline, s = r.sustain, c = r.count, t = r.tonal;
+
+  // Build items
+  const items = [
+    { name: 'F0 Trung Bình', value: b.f0Mean.toFixed(0) + ' Hz', interp: interpF0(b.f0Mean), bar: clamp((b.f0Mean - 60) / 240, 0, 1) },
+    { name: 'Khí (Sustain)', value: s.sustainDuration.toFixed(1) + ' s', interp: interpSustain(s.sustainDuration), bar: clamp(s.sustainDuration / 5, 0, 1) },
+    { name: 'Jitter (Ngân)', value: s.jitter.toFixed(2) + ' %', interp: interpJitter(s.jitter), bar: 1 - clamp(s.jitter / 2, 0, 1) },
+    { name: 'Shimmer (Ngân)', value: s.shimmer.toFixed(2) + ' dB', interp: interpShimmer(s.shimmer), bar: 1 - clamp(s.shimmer / 1.5, 0, 1) },
+    { name: 'HNR (Độ Trong)', value: s.hnrMean.toFixed(1) + ' dB', interp: interpHNR(s.hnrMean), bar: clamp(s.hnrMean / 25, 0, 1) },
+    { name: 'Decay Slope', value: s.decaySlope.toFixed(1) + ' dB/s', interp: interpDecay(s.decaySlope), bar: 1 - clamp(Math.abs(s.decaySlope) / 10, 0, 1) },
+    { name: 'Spectral Centroid', value: b.centroid.toFixed(0) + ' Hz', interp: interpCentroid(b.centroid), bar: clamp(b.centroid / 3000, 0, 1) },
+    { name: 'Formant F1 / F2', value: b.f1.toFixed(0) + ' / ' + b.f2.toFixed(0) + ' Hz', interp: 'Vùng cộng hưởng giọng.', bar: clamp(b.f2 / 3000, 0, 1) },
+    { name: 'Pitch Range', value: t.f0Range.toFixed(0) + ' Hz', interp: interpRange(t.f0Range), bar: clamp(t.f0Range / 150, 0, 1) },
+    { name: 'Pitch Agility', value: t.pitchAgility.toFixed(1) + ' Hz', interp: 'Độ uyển chuyển tông giọng.', bar: clamp(t.pitchAgility / 40, 0, 1) },
+    { name: 'Tốc Độ Nói', value: b.speechRate.toFixed(1) + ' âm/s', interp: interpRate(b.speechRate), bar: clamp(b.speechRate / 6, 0, 1) },
+    { name: 'Độ Ổn Định F0', value: (b.f0Std / (b.f0Mean || 1) * 100).toFixed(1) + ' %', interp: interpStability(b.f0Std / (b.f0Mean || 1)), bar: 1 - clamp(b.f0Std / (b.f0Mean || 1) / 0.4, 0, 1) }
+  ];
+
+  // Render
+  featuresGrid.innerHTML = items.map(it => `
+    <div class="feature-item">
+      <div class="feature-name">${it.name}</div>
+      <div class="feature-value">${it.value}</div>
+      <div class="feature-interp">${it.interp}</div>
+      <div class="feature-bar-wrap"><div class="feature-bar" style="width:${(it.bar*100).toFixed(0)}%"></div></div>
+    </div>
+  `).join('');
+
+  // Ngũ Âm heuristic
+  const nguam = estimateNguAm(r, state.gender);
+  nguamBadge.textContent = 'Ngũ Âm ước tính: ' + nguam.label;
+
+  // Warnings
+  const warns = [];
+  if (s.sustainDuration < 2.5) warns.push('⚠ Ngân âm quá ngắn (<2.5s) — khí bất túc hoặc mic không thu trọn. Nếu không cố ý, nên thu lại bài 2.');
+  if (s.shimmer > 1.2) warns.push('⚠ Shimmer cao (>1.2dB) — giọng không ổn định khi ngân. Có thể do run giọng hoặc micro chất lượng thấp.');
+  if (s.hnrMean < 8) warns.push('⚠ HNR thấp (<8dB) — nhiều tạp âm. Kiểm tra môi trường yên tĩnh hơn.');
+  if (b.f0Mean > 260 && state.gender === 'nam') warns.push('ℹ Giọng cao bất thường cho nam. Có thể đang nói giọng giả hoặc dữ liệu không ổn định.');
+  if (b.f0Mean < 150 && state.gender === 'nu') warns.push('ℹ Giọng trầm bất thường cho nữ. Có thể đang nói giọng giả hoặc dữ liệu không ổn định.');
+
+  if (warns.length) {
+    featuresWarn.innerHTML = warns.join('<br>');
+    featuresWarn.classList.add('visible');
+  } else {
+    featuresWarn.classList.remove('visible');
+  }
+
+  featuresPanel.classList.add('visible');
+  analyzeWrap.classList.add('visible');
+  taskCard.classList.remove('visible');
+  featuresPanel.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function clamp(x, lo, hi){ return Math.max(lo, Math.min(hi, x)); }
+
+/* --- Interpretations --- */
+function interpF0(f){
+  if (state.gender === 'nam') {
+    if (f < 90) return 'Rất trầm — vùng Thổ/Hổ Hống.';
+    if (f < 120) return 'Trầm — vùng Kim/Thổ.';
+    if (f < 150) return 'Trung bình.';
+    if (f < 180) return 'Cao — vùng Mộc.';
+    return 'Rất cao — bất thường cho nam.';
+  } else {
+    if (f < 170) return 'Trầm — vùng Thổ.';
+    if (f < 210) return 'Trung bình — vùng Kim.';
+    if (f < 250) return 'Sáng — vùng Mộc/Oanh Minh.';
+    return 'Rất cao — kiểm tra lại.';
+  }
+}
+function interpSustain(s){
+  if (s >= 4.0) return 'Khí lực rất tốt — "khí túc thanh viên".';
+  if (s >= 3.0) return 'Khí đủ — vùng quý tướng.';
+  if (s >= 2.0) return 'Khí trung bình.';
+  return 'Khí bất túc — cần luyện dưỡng.';
+}
+function interpJitter(j){
+  if (j < 0.5) return 'Rất ổn định — giọng "viên mãn".';
+  if (j < 1.0) return 'Ổn định — bình thường.';
+  if (j < 2.0) return 'Hơi rung — có thể căng thẳng.';
+  return 'Rung rõ rệt — chú ý sức khoẻ giọng.';
+}
+function interpShimmer(s){
+  if (s < 0.35) return 'Amplitude rất ổn định.';
+  if (s < 0.7) return 'Bình thường.';
+  if (s < 1.2) return 'Hơi lệch — dấu hiệu khí không đều.';
+  return 'Dao động mạnh — kỵ cách "Phá La".';
+}
+function interpHNR(h){
+  if (h >= 20) return 'Giọng "Thanh" — trong vang.';
+  if (h >= 15) return 'Giọng vừa thanh vừa có lực.';
+  if (h >= 10) return 'Có tạp âm — vùng giữa Thanh/Trọc.';
+  if (h >= 5) return 'Giọng "Trọc" — đục.';
+  return 'Rất đục — có thể mic kém hoặc giọng rè.';
+}
+function interpDecay(d){
+  if (d > -3) return 'Giữ đều — khí đáy tốt.';
+  if (d > -7) return 'Suy nhẹ — bình thường.';
+  return 'Suy nhanh — "hữu đầu vô vĩ", khí yếu về sau.';
+}
+function interpCentroid(c){
+  if (c < 1000) return 'Âm sắc ấm, tối — Thổ/Kim trầm.';
+  if (c < 1800) return 'Âm sắc trung bình.';
+  if (c < 2500) return 'Âm sắc sáng.';
+  return 'Rất sáng — có thể chói.';
+}
+function interpRange(r){
+  if (r < 40) return 'Đơn điệu — ít biểu cảm.';
+  if (r < 80) return 'Vừa phải.';
+  if (r < 120) return 'Uyển chuyển — vùng Thủy.';
+  return 'Rất biến ảo — có thể kịch tính.';
+}
+function interpRate(r){
+  if (r < 3.5) return 'Chậm — điềm đạm.';
+  if (r < 5) return 'Trung bình.';
+  if (r < 6) return 'Nhanh — linh hoạt.';
+  return 'Rất nhanh — có thể gấp gáp.';
+}
+function interpStability(cv){
+  if (cv < 0.10) return 'Rất ổn định.';
+  if (cv < 0.20) return 'Ổn định.';
+  if (cv < 0.30) return 'Có biến động.';
+  return 'Biến động lớn.';
+}
+
+/* --- Ngũ Âm heuristic (sơ bộ, Claude sẽ luận sâu) --- */
+function estimateNguAm(r, gender){
+  const b = r.baseline, s = r.sustain;
+  const scores = { Kim:0, Moc:0, Thuy:0, Hoa:0, Tho:0 };
+
+  // Kim: HNR cao + sustain dài + jitter thấp + F0 trung bình
+  if (s.hnrMean > 15) scores.Kim += 2;
+  if (s.sustainDuration > 3.5) scores.Kim += 2;
+  if (s.jitter < 0.8) scores.Kim += 1;
+  if (b.centroid > 1500) scores.Kim += 1;
+
+  // Mộc: F0 cao, jitter thấp, stability cao, range thấp-vừa
+  const f0HighThr = gender === 'nam' ? 145 : 230;
+  if (b.f0Mean > f0HighThr) scores.Moc += 2;
+  if (s.jitter < 1.0) scores.Moc += 1;
+  if ((b.f0Std / (b.f0Mean || 1)) < 0.15) scores.Moc += 1;
+
+  // Thủy: F0 variance cao, pitch range cao, uyển chuyển
+  if (r.tonal.f0Range > 80) scores.Thuy += 2;
+  if (r.tonal.pitchAgility > 15) scores.Thuy += 2;
+  if (s.hnrMean > 10) scores.Thuy += 1;
+
+  // Hỏa: shimmer cao, decay steep, sustain ngắn
+  if (s.shimmer > 0.9) scores.Hoa += 2;
+  if (s.decaySlope < -5) scores.Hoa += 2;
+  if (s.sustainDuration < 2.8) scores.Hoa += 1;
+
+  // Thổ: F0 thấp, sustain dài, stability cao, centroid thấp
+  const f0LowThr = gender === 'nam' ? 110 : 200;
+  if (b.f0Mean < f0LowThr) scores.Tho += 2;
+  if (s.sustainDuration > 3.5) scores.Tho += 1;
+  if (b.centroid < 1200) scores.Tho += 2;
+  if ((b.f0Std / (b.f0Mean || 1)) < 0.15) scores.Tho += 1;
+
+  // Pick top
+  const sorted = Object.entries(scores).sort((a,b) => b[1] - a[1]);
+  const top = sorted[0];
+  const second = sorted[1];
+  const names = { Kim:'Kim (金)', Moc:'Mộc (木)', Thuy:'Thủy (水)', Hoa:'Hỏa (火)', Tho:'Thổ (土)' };
+  let label = names[top[0]];
+  if (second[1] >= top[1] - 1 && second[1] >= 3) {
+    label += ' chen ' + names[second[0]].split(' ')[0];
+  }
+  // Thanh / Trọc
+  if (s.hnrMean >= 15) label = 'Thanh ' + label;
+  else if (s.hnrMean < 8) label = 'Trọc ' + label;
+
+  return { label, scores, primary: top[0], secondary: second[0] };
+}
+
+/* ============================================================
+   ANALYZE — call API
+   ============================================================ */
+analyzeBtn.addEventListener('click', async () => {
+  analyzeBtn.disabled = true;
+  analyzeBtn.textContent = 'Đang luận giải…';
+  resultsPanel.classList.add('visible');
+  resultsPanel.innerHTML = '<p class="loading-dots" style="text-align:center;color:var(--text-lt);padding:30px 0">Đang phân tích theo cổ pháp</p>';
+  resultsPanel.scrollIntoView({behavior:'smooth',block:'start'});
+
+  const nguam = estimateNguAm(state.results, state.gender);
+  const payload = {
+    action: 'thanh-tuong-pro',
+    gender: state.gender,
+    age: state.age,
+    nguamEstimate: nguam,
+    features: state.results
+  };
+
+  try {
+    const res = await fetch('/api/tuong-mat?action=thanh-tuong-pro', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error('API error: ' + err);
+    }
+    // Stream or full response
+    const ct = res.headers.get('content-type') || '';
+    if (ct.includes('text/event-stream') || ct.includes('text/plain')) {
+      const reader = res.body.getReader();
+      const dec = new TextDecoder();
+      let acc = '';
+      resultsPanel.innerHTML = '';
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        acc += dec.decode(value, {stream:true});
+        resultsPanel.innerHTML = renderMarkdown(acc);
+      }
+    } else {
+      const data = await res.json();
+      resultsPanel.innerHTML = renderMarkdown(data.content || data.text || JSON.stringify(data));
+    }
+    analyzeBtn.textContent = 'Luận Giải Lại';
+    analyzeBtn.disabled = false;
+  } catch (err) {
+    console.error(err);
+    resultsPanel.innerHTML = '<p style="color:#C0392B;padding:20px;text-align:center">Lỗi: ' + err.message + '</p>';
+    analyzeBtn.textContent = 'Thử Lại';
+    analyzeBtn.disabled = false;
+  }
+});
+
+/* --- Light markdown renderer --- */
+function renderMarkdown(md){
+  let h = md
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>');
+  // Paragraphs
+  const blocks = h.split(/\n\n+/);
+  h = blocks.map(b => {
+    if (b.startsWith('<h2') || b.startsWith('<h3') || b.startsWith('<blockquote')) return b;
+    return '<p>' + b.replace(/\n/g, '<br>') + '</p>';
+  }).join('\n');
+  return h;
+}
+</script>
+</body>
+</html>
