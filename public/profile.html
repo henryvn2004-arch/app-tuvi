@@ -22,14 +22,7 @@
 body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh}
 
 /* ── NAV ── */
-nav{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
-.nav-logo{color:#fff;font-family:'Noto Serif',serif;font-size:1.15rem;font-weight:700;text-decoration:none;letter-spacing:.02em}
-.nav-links{display:flex;align-items:center;gap:.1rem}
-.nav-links a{color:rgba(255,255,255,.85);text-decoration:none;font-size:.82rem;padding:.5rem .7rem;border-radius:4px;transition:background .2s}
-.nav-links a:hover{background:rgba(255,255,255,.1)}
-.nav-dropdown{position:relative}
-.nav-dropdown .dropdown-menu{display:none;position:absolute;top:100%;left:0;background:var(--navy);border:1px solid rgba(255,255,255,.15);border-radius:4px;min-width:180px;z-index:200;padding:.4rem 0}
-.nav-dropdown:hover .dropdown-menu{display:block}
+
 .dropdown-menu a{display:block;color:rgba(255,255,255,.85);font-size:.82rem;padding:.5rem 1rem;text-decoration:none}
 .dropdown-menu a:hover{background:rgba(255,255,255,.1)}
 
@@ -195,25 +188,7 @@ nav{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justif
 <body>
 
 <!-- NAV -->
-<nav>
-  <a class="nav-logo" href="/">☽ Tử Vi Minh Bảo</a>
-  <div class="nav-links">
-    <a href="/">Trang Chủ</a>
-    <div class="nav-dropdown">
-      <a href="#">Luận Giải ▾</a>
-      <div class="dropdown-menu">
-        <a href="/">Luận Giải Lá Số</a>
-        <a href="/xem-tuoi.html">Xem Tuổi Vợ Chồng</a>
-        <a href="/xem-lam-an.html">Xem Tuổi Làm Ăn</a>
-      </div>
-    </div>
-    <a href="/about.html">Giới Thiệu</a>
-    <a href="/resources.html">Tài Liệu</a>
-    <a href="/blog.html">Khảo Luận</a>
-    <a href="/menh-kho.html">Mệnh Khố</a>
-    <a href="/contact.html">Liên Hệ</a>
-  </div>
-</nav>
+
 
 <!-- PAGE -->
 <div class="page-wrap">
@@ -391,6 +366,7 @@ nav{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justif
   </div>
 </div>
 
+<script src="/nav.js"></script>
 <script src="/auth.js"></script>
 <script>
 const SUPABASE_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
