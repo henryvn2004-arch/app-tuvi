@@ -302,6 +302,39 @@ const TuviPaywall = (() => {
     }
   }
 
+  // ── Confirmation toast ──────────────────────────────────────────
+  function _showConfirm(cost, balance, toolName, onConfirm) {
+    _hideConfirm();
+    const after = balance - cost;
+    const el = document.createElement('div');
+    el.id = 'tpw-confirm';
+    el.className = 'tpw-confirm';
+    el.innerHTML =
+      '<div class="tpw-confirm-title">⊙ Xác nhận sử dụng Lượng</div>' +
+      '<div class="tpw-confirm-rows">' +
+        '<div class="tpw-confirm-row"><span>' + toolName + '</span><span class="tpw-confirm-val red">−' + cost + ' lượng</span></div>' +
+        '<div class="tpw-confirm-row"><span>Số dư hiện tại</span><span class="tpw-confirm-val gold">' + balance + ' lượng</span></div>' +
+        '<div class="tpw-confirm-row highlight"><span>Còn lại sau khi trừ</span><span class="tpw-confirm-val green">' + after + ' lượng</span></div>' +
+      '</div>' +
+      '<div class="tpw-confirm-btns">' +
+        '<button class="tpw-confirm-cancel" onclick="TuviPaywall._hideConfirm()">Huỷ</button>' +
+        '<button class="tpw-confirm-ok" id="tpw-confirm-ok-btn">Xác Nhận →</button>' +
+      '</div>';
+    document.body.appendChild(el);
+    document.getElementById('tpw-confirm-ok-btn').onclick = async () => {
+      const btn = document.getElementById('tpw-confirm-ok-btn');
+      if (btn) { btn.disabled = true; btn.textContent = '...'; }
+      _hideConfirm();
+      await onConfirm();
+    };
+    setTimeout(_hideConfirm, 30000);
+  }
+
+  function _hideConfirm() {
+    const el = document.getElementById('tpw-confirm');
+    if (el) el.remove();
+  }
+
   // ── Deduct credits ────────────────────────────────────────────
   async function _doDeduct() {
     const btn  = document.getElementById('tpw-pay-btn');
@@ -452,33 +485,36 @@ const TuviPaywall = (() => {
       return;
     }
 
-    // 4. Deduct then run
-    try {
-      const res = await fetch('/api/payment?action=deduct', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-        body: JSON.stringify({ amount: p.cost, toolType: TOOL_TYPE_MAP[_cfg.product] || ('use_' + _cfg.product), slug, description: p.title }),
-      });
-      const data = await res.json();
+    // 4. Show confirm then deduct
+    _showConfirm(p.cost, balance, p.title, async () => {
+      try {
+        const res = await fetch('/api/payment?action=deduct', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify({ amount: p.cost, toolType: TOOL_TYPE_MAP[_cfg.product] || ('use_' + _cfg.product), slug, description: p.title }),
+        });
+        const data = await res.json();
 
-      if (data.success) {
-        window.refreshNavCredits && window.refreshNavCredits();
-        await callback();
-        return;
+        if (data.success) {
+          window.refreshNavCredits && window.refreshNavCredits();
+          _showSuccessBanner('✓ Đã trừ ' + p.cost + ' lượng · Còn lại ' + data.balance + ' lượng');
+          await callback();
+          return;
+        }
+
+        if (data.insufficientBalance) {
+          _buildModal();
+          _modal.style.display = 'flex';
+          document.body.style.overflow = 'hidden';
+          _renderCta();
+          return;
+        }
+
+        alert('Lỗi trừ credits: ' + (data.error || 'Vui lòng thử lại.'));
+      } catch(e) {
+        alert('Lỗi kết nối: ' + e.message);
       }
-
-      if (data.insufficientBalance) {
-        _buildModal();
-        _modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-        _renderCta();
-        return;
-      }
-
-      alert('Lỗi trừ credits: ' + (data.error || 'Vui lòng thử lại.'));
-    } catch(e) {
-      alert('Lỗi kết nối: ' + e.message);
-    }
+    }); // end confirm
   }
 
   return {
@@ -493,6 +529,7 @@ const TuviPaywall = (() => {
     _doDeduct,
     _doLogin,
     _doTopupInline,
+    _hideConfirm,
   };
 
 })();
