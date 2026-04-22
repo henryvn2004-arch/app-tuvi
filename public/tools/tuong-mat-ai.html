@@ -283,7 +283,7 @@ function analyzeGeometry(lm, w, h) {
   // Tam Đình heights (pixel)
   const yHairline = p(lm[10], 'y');
   const yEyebrow  = (p(lm[107], 'y') + p(lm[336], 'y')) / 2;
-  const yNoseTip  = p(lm[4],   'y');
+  const yNoseTip  = p(lm[94],  'y');  // lm[94]=đáy mũi (columella base), đúng ranh giới Trung/Hạ Đình
   const yChin     = p(lm[152], 'y');
   const faceH     = yChin - yHairline;
   if (faceH < 10) return null;
@@ -432,7 +432,7 @@ function drawTamDinh(lm) {
 
   const yTop      = lm[10].y  * h;
   const yEyebrow  = ((lm[107].y + lm[336].y) / 2) * h;
-  const yNoseTip  = lm[4].y   * h;
+  const yNoseTip  = lm[94].y  * h;  // lm[94]=đáy mũi (columella base), đúng ranh giới Trung/Hạ Đình
   const yChin     = lm[152].y * h;
   const xCenter   = lm[1].x   * w;
 
