@@ -143,6 +143,22 @@ const TuviPaywall = (() => {
 .tpw-spinner{width:16px;height:16px;border:2px solid rgba(201,168,76,.3);border-top-color:#c9a84c;border-radius:50%;animation:tpw-spin .7s linear infinite;display:inline-block;margin-right:7px;vertical-align:middle;flex-shrink:0}
 @keyframes tpw-spin{to{transform:rotate(360deg)}}
 .tpw-success-banner{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#1E6B3C;color:#fff;padding:11px 28px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.2);white-space:nowrap;animation:tpw-fade .3s ease}
+.tpw-confirm{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:#fff;border:1.5px solid #c9a84c;border-radius:12px;padding:16px 22px;z-index:9999;box-shadow:0 8px 32px rgba(6,26,46,.18);min-width:300px;max-width:400px;width:90%;animation:tpw-up .2s cubic-bezier(.4,0,.2,1)}
+.tpw-confirm-title{font-family:'Noto Serif',Georgia,serif;font-size:14px;font-weight:700;color:#061A2E;margin-bottom:10px}
+.tpw-confirm-rows{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.tpw-confirm-row{display:flex;justify-content:space-between;font-size:12.5px;color:#444;font-family:Arial,sans-serif}
+.tpw-confirm-row.highlight{color:#061A2E;font-weight:700;border-top:1px solid #f0f0f0;padding-top:5px;margin-top:2px}
+.tpw-confirm-val{font-family:'Noto Serif',Georgia,serif;font-weight:700}
+.tpw-confirm-val.red{color:#C0392B}
+.tpw-confirm-val.green{color:#1E6B3C}
+.tpw-confirm-val.gold{color:#9A7B3A}
+.tpw-confirm-btns{display:flex;gap:8px}
+.tpw-confirm-btns button{flex:1;padding:9px;border:none;border-radius:6px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+.tpw-confirm-ok{background:#061A2E;color:#c9a84c;border:1.5px solid #c9a84c}
+.tpw-confirm-ok:hover{background:#c9a84c;color:#061A2E}
+.tpw-confirm-ok:disabled{opacity:.5;cursor:not-allowed}
+.tpw-confirm-cancel{background:#f5f5f5;color:#666;border:1.5px solid #e8e8e8}
+.tpw-confirm-cancel:hover{background:#e8e8e8}
 @keyframes tpw-shake{0%,100%{transform:none}20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
 .tpw-shake{animation:tpw-shake .35s ease}
 @media(max-width:520px){
