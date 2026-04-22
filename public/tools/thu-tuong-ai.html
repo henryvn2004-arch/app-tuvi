@@ -477,7 +477,6 @@ async function analyze() {
   if (!_imageData) return;
   const err=document.getElementById('error-msg'); err.classList.remove('active');
   const btn=document.getElementById('analyzeBtn'); btn.disabled=true;
-  document.getElementById('result-section').classList.add('active');
   _currentSlug = TuviPaywall.generateToolSlug('thu-tuong');
   // Option A: check + deduct credits before calling API
   _saveStateForAuth();
@@ -545,7 +544,8 @@ function renderMd(md){
     .replace(/(<\/[hul][^>]*>)<\/p>/g,'$1');
 }
 </script>
-<script src="/tuvi-paywall.js">
+<script src="/tuvi-paywall.js"></script>
+<script>
 let _currentSlug = '';
 
 function _generateSlug(product) {

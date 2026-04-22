@@ -1255,6 +1255,7 @@ Phân tích theo đúng 6 phần quy định. Bắt buộc dẫn nguyên văn ki
 analyzeBtn.addEventListener('click', async () => {
   // Option A: check + confirm credits before calling API
   _currentSlug = TuviPaywall.generateToolSlug('thanh-tuong');
+  _saveStateForAuth();
   await TuviPaywall.requireCredits(_currentSlug, async () => {
     await _doThanhTuongAnalyze();
   });
@@ -1350,7 +1351,8 @@ function renderMarkdown(md){
   return h;
 }
 </script>
-<script src="/tuvi-paywall.js">
+<script src="/tuvi-paywall.js"></script>
+<script>
 // ── TuviPaywall init ──────────────────────────────────────────
 let _currentSlug = '';
 
@@ -1374,6 +1376,41 @@ TuviPaywall.init({
     }, 1000);
   }
 })();
+
+// ── State persistence ────────────────────────────────────────────
+const _TP_PRO_KEY = 'tvmb_thanh_tuong_pro_state';
+function _saveStateForAuth() {
+  try {
+    const toSave = {
+      gender: state.gender, age: state.age,
+      currentIdx: state.currentIdx, results: state.results,
+      _savedAt: Date.now()
+    };
+    sessionStorage.setItem(_TP_PRO_KEY, JSON.stringify(toSave));
+  } catch(e) {}
+}
+function _restoreStateAfterAuth() {
+  try {
+    const raw = sessionStorage.getItem(_TP_PRO_KEY);
+    if (!raw) return false;
+    const saved = JSON.parse(raw);
+    if (Date.now() - (saved._savedAt||0) > 10*60*1000) { sessionStorage.removeItem(_TP_PRO_KEY); return false; }
+    sessionStorage.removeItem(_TP_PRO_KEY);
+    state.gender = saved.gender; state.age = saved.age; state.results = saved.results||{};
+    if (state.gender) document.querySelectorAll('.gender-opt').forEach(o=>o.classList.toggle('selected',o.dataset.gender===state.gender));
+    const ageEl = document.getElementById('ageInput'); if(ageEl&&state.age) ageEl.value=state.age;
+    const done = Object.keys(state.results).length;
+    if (done > 0) {
+      const ts = document.getElementById('tasksSection'); if(ts) ts.style.display='block';
+      const nxt = TASKS.findIndex(t=>!state.results[t.id]);
+      state.currentIdx = nxt>=0?nxt:TASKS.length-1;
+      loadTask(state.currentIdx);
+      if (done>=TASKS.length) { const aw=document.getElementById('analyzeWrap'); if(aw) aw.classList.add('visible'); }
+    }
+    return true;
+  } catch(e) { return false; }
+}
+(function(){ if(_restoreStateAfterAuth()) setTimeout(()=>{ if(Object.keys(state.results).length>=TASKS.length&&window.Auth?.isLoggedIn()) analyzeBtn.click(); },1000); })();
 </script>
 </body>
 </html>
