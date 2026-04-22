@@ -508,12 +508,14 @@ const TuviPaywall = (() => {
     // 4. Show confirm then deduct
     _showConfirm(p.cost, balance, p.title, async () => {
       try {
+        console.log('[TuviPaywall] deducting:', p.cost, 'token:', token ? token.slice(0,20)+'...' : 'EMPTY');
         const res = await fetch('/api/payment?action=deduct', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
           body: JSON.stringify({ amount: p.cost, toolType: TOOL_TYPE_MAP[_cfg.product] || ('use_' + _cfg.product), slug, description: p.title }),
         });
         const data = await res.json();
+        console.log('[TuviPaywall] deduct response:', data);
 
         if (data.success) {
           window.refreshNavCredits && window.refreshNavCredits();
