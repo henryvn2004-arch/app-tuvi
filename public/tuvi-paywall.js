@@ -67,6 +67,24 @@ const TuviPaywall = (() => {
     'thanh-tuong': { cost: 50, usd: '$5', eyebrow: '紫微明寶 · Thanh Tướng', title: 'Mở khóa luận giải tướng giọng', subtitle: 'Phân tích thanh tướng và âm sắc theo cổ pháp.', features: ['Ngũ hành âm sắc', 'Tướng giọng tổng thể', 'Vận trình', 'Tính cách'], anchor: '', cta: 'Mở Khóa Thanh Tướng', testimonials: [] },
   };
 
+  // ── Dynamic pricing (fetched from Supabase, overrides PRODUCTS) ──
+  let _pricingCache = null;
+
+  async function _fetchPricing() {
+    if (_pricingCache) return _pricingCache;
+    try {
+      const res = await fetch(
+        'https://dciwkfdqhhddeymlisey.supabase.co/rest/v1/tool_pricing?select=tool_id,credits,enabled&enabled=eq.true',
+        { headers: { 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I' } }
+      );
+      if (!res.ok) return null;
+      const rows = await res.json();
+      _pricingCache = {};
+      rows.forEach(r => { _pricingCache[r.tool_id] = r.credits; });
+      return _pricingCache;
+    } catch(e) { return null; }
+  }
+
   const TOOL_TYPE_MAP = {
     'laso': 'use_laso', 'xem-tuoi': 'use_xem_tuoi', 'xem-lam-an': 'use_xem_lam_an',
     'dien-tuong': 'use_dien_tuong', 'nhan-tuong': 'use_nhan_tuong',
@@ -139,12 +157,16 @@ const TuviPaywall = (() => {
     document.head.appendChild(s);
   }
 
-  // ── Get merged product config ─────────────────────────────────
+  // ── Get merged product config (DB price takes priority) ─────────
   function _p() {
     const base = PRODUCTS[_cfg.product] || PRODUCTS['laso'];
+    const dbCost = _pricingCache ? (_pricingCache[_cfg.product] ?? null) : null;
+    const cost = _cfg.cost ?? dbCost ?? base.cost;
+    const usd = '$' + (cost / 10).toFixed(cost % 10 === 0 ? 0 : 1);
     return {
       ...base,
-      ...(_cfg.cost     !== undefined && { cost:     _cfg.cost }),
+      cost,
+      usd,
       ...(_cfg.title    !== undefined && { title:    _cfg.title }),
       ...(_cfg.subtitle !== undefined && { subtitle: _cfg.subtitle }),
       ...(_cfg.features !== undefined && { features: _cfg.features }),
@@ -347,6 +369,7 @@ const TuviPaywall = (() => {
   function init(config) {
     _cfg = config;
     _injectCss();
+    _fetchPricing(); // prefetch in background
   }
 
   // ── Public: check access ──────────────────────────────────────
@@ -362,7 +385,9 @@ const TuviPaywall = (() => {
   }
 
   // ── Public: show ─────────────────────────────────────────────
-  function show() {
+  async function show() {
+    // Fetch pricing first (uses cache after first call)
+    await _fetchPricing();
     _buildModal();
     _modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
