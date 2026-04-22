@@ -93,6 +93,14 @@
     document.head.appendChild(s);
   }
 
+  // ── Auto-load auth.js if not already present ───────────────────
+  if (!document.getElementById('auth-js-tag') && typeof window.Auth === 'undefined') {
+    var authScript = document.createElement('script');
+    authScript.id = 'auth-js-tag';
+    authScript.src = '/auth.js';
+    document.head.appendChild(authScript);
+  }
+
   // ── Build HTML ────────────────────────────────────────────────────────
   var lgActive    = isLuanGiai ? ' active' : '';
   var tuongActive = isTuong    ? ' active' : '';
