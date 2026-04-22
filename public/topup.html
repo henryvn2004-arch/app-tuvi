@@ -25,6 +25,7 @@ nav{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justif
 .nav-links{display:flex;align-items:center;gap:.1rem}
 .nav-links a{color:rgba(255,255,255,.85);text-decoration:none;font-size:.82rem;padding:.5rem .7rem;border-radius:4px}
 .nav-links a:hover{background:rgba(255,255,255,.1)}
+@media(max-width:768px){.nav-links{display:none}}
 .nav-dropdown{position:relative}
 .nav-dropdown .dropdown-menu{display:none;position:absolute;top:100%;left:0;background:var(--navy);border:1px solid rgba(255,255,255,.15);border-radius:4px;min-width:180px;z-index:200;padding:.4rem 0}
 .nav-dropdown:hover .dropdown-menu{display:block}
@@ -213,7 +214,6 @@ footer a{color:rgba(255,255,255,.4);text-decoration:none}
   </div>
 </div>
 
-<script src="/nav.js"></script>
 <script src="/footer.js"></script>
 
 <script>
