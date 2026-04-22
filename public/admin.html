@@ -141,6 +141,570 @@ tr:hover td{background:#fafafa}
   .main{margin-left:60px}
   .stats{grid-template-columns:repeat(2,1fr)}
 }
+
+/* ── CONTENT MANAGER (from admin-content) ── */
+
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+
+/* ── Sidebar ── */
+
+
+
+
+
+.nav-section {
+  padding: 8px 16px 4px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.3);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 20px;
+  color: rgba(255,255,255,0.65);
+  text-decoration: none;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+  border-left: 3px solid transparent;
+}
+
+.nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.nav-item.active {
+  background: rgba(154,123,58,0.15);
+  color: var(--gold);
+  border-left-color: var(--gold);
+}
+
+.nav-item .icon { font-size: 15px; width: 18px; text-align: center; }
+
+/* ── Main ── */
+
+.topbar {
+  background: var(--bg);
+  border-bottom: 1px solid var(--border-lt);
+  padding: 0 28px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.topbar-title {
+  font-family: 'Noto Serif', serif;
+  font-size: 16px;
+  color: var(--navy);
+  font-weight: 600;
+}
+
+.topbar-actions { display: flex; gap: 10px; align-items: center; }
+
+.btn {
+  padding: 7px 16px;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  border: none;
+  font-family: Arial, sans-serif;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-primary { background: var(--blue); color: #fff; }
+.btn-primary:hover { background: #0f48a0; }
+.btn-gold { background: var(--gold); color: #fff; }
+.btn-gold:hover { background: #8a6c2e; }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-mid); }
+.btn-outline:hover { border-color: var(--blue); color: var(--blue); }
+.btn-sm { padding: 5px 11px; font-size: 12px; }
+.btn-danger { background: var(--red); color: #fff; }
+.btn-success { background: var(--green); color: #fff; }
+
+/* ── Content area ── */
+.content { padding: 24px 28px; flex: 1; }
+
+/* ── Stats cards ── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--bg);
+  border: 1px solid var(--border-lt);
+  border-radius: 6px;
+  padding: 16px 18px;
+}
+
+.stat-card .label {
+  font-size: 11px;
+  color: var(--text-lt);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.stat-card .value {
+  font-family: 'Noto Serif', serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.stat-card.gold .value { color: var(--gold); }
+.stat-card.green .value { color: var(--green); }
+.stat-card.blue .value { color: var(--blue); }
+
+/* ── Panel ── */
+.panel {
+  background: var(--bg);
+  border: 1px solid var(--border-lt);
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.panel-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-lt);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panel-title {
+  font-family: 'Noto Serif', serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.panel-body { padding: 20px; }
+
+/* ── Form ── */
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.form-row.full { grid-template-columns: 1fr; }
+
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+
+.form-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-mid);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.form-control {
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: Arial, sans-serif;
+  color: var(--text);
+  transition: border-color 0.15s;
+  background: var(--bg);
+}
+
+.form-control:focus { outline: none; border-color: var(--blue); }
+
+textarea.form-control { resize: vertical; line-height: 1.6; }
+
+/* ── Script editor ── */
+.script-editor { border: 1px solid var(--border-lt); border-radius: 6px; overflow: hidden; }
+
+.script-toolbar {
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--border-lt);
+  padding: 8px 14px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.script-toolbar .info {
+  font-size: 12px;
+  color: var(--text-lt);
+  margin-left: auto;
+}
+
+.script-lines { padding: 0; }
+
+.script-line {
+  display: grid;
+  grid-template-columns: 90px 1fr 36px;
+  gap: 0;
+  border-bottom: 1px solid var(--border-lt);
+}
+
+.script-line:last-child { border-bottom: none; }
+
+.line-role {
+  padding: 10px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  border-right: 1px solid var(--border-lt);
+  background: var(--bg-soft);
+}
+
+.role-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.role-badge.hoi { background: #EBF4FF; color: var(--blue); }
+.role-badge.tra-loi { background: #F0F7F0; color: var(--green); }
+
+.line-text { padding: 0; }
+.line-text textarea {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 10px 14px;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text);
+  resize: none;
+  min-height: 44px;
+  background: transparent;
+}
+
+.line-del {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-left: 1px solid var(--border-lt);
+  cursor: pointer;
+  color: var(--text-lt);
+  transition: all 0.15s;
+}
+
+.line-del:hover { background: #FFF0F0; color: var(--red); }
+
+/* ── Table ── */
+.table-wrap { overflow-x: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+th {
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-lt);
+  border-bottom: 1px solid var(--border-lt);
+  white-space: nowrap;
+}
+
+td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-lt);
+  vertical-align: middle;
+}
+
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--bg-soft); }
+
+.td-title { font-weight: 600; color: var(--navy); }
+.td-sub { font-size: 11px; color: var(--text-lt); margin-top: 2px; }
+
+/* Status badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge-draft    { background: #F0F0F0; color: #666; }
+.badge-ready    { background: #EBF4FF; color: var(--blue); }
+.badge-published{ background: #ECFBF0; color: var(--green); }
+.badge-pending  { background: #FFF8E7; color: #b38000; }
+.badge-done     { background: #ECFBF0; color: var(--green); }
+.badge-error    { background: #FDECEA; color: var(--red); }
+.badge-live     { background: #ECFBF0; color: var(--green); }
+.badge-processing { background: #EBF4FF; color: var(--blue); }
+
+.dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; display: inline-block; }
+
+/* ── Pipeline steps ── */
+.pipeline {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 4px 0;
+}
+
+.pipe-step {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 3px;
+}
+
+.pipe-step.done { color: var(--green); }
+.pipe-step.pending { color: #bbb; }
+.pipe-step.error { color: var(--red); }
+.pipe-step.active { color: var(--blue); font-weight: 600; }
+
+.pipe-arrow { color: #ccc; font-size: 10px; }
+
+/* ── Tabs ── */
+.tabs { display: flex; border-bottom: 1px solid var(--border-lt); margin-bottom: 20px; }
+
+.tab {
+  padding: 10px 18px;
+  font-size: 13px;
+  color: var(--text-lt);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.15s;
+}
+
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--blue); border-bottom-color: var(--blue); font-weight: 600; }
+
+/* ── Modal ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(6,26,46,0.55);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--bg);
+  border-radius: 8px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border-lt);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 1;
+}
+
+.modal-title {
+  font-family: 'Noto Serif', serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.modal-close {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-soft);
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-lt);
+}
+
+.modal-close:hover { background: var(--border-lt); color: var(--text); }
+.modal-body { padding: 24px; }
+.modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border-lt);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* ── Progress steps ── */
+.steps-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 24px;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.step-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--border-lt);
+  color: var(--text-lt);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.step-item.active .step-num { background: var(--blue); color: #fff; }
+.step-item.done .step-num { background: var(--green); color: #fff; }
+
+.step-label { font-size: 12px; color: var(--text-lt); }
+.step-item.active .step-label { color: var(--blue); font-weight: 600; }
+.step-item.done .step-label { color: var(--text-mid); }
+
+.step-line { flex: 1; height: 1px; background: var(--border-lt); margin: 0 8px; }
+
+/* ── TTS preview ── */
+.audio-preview {
+  background: var(--bg-soft);
+  border: 1px solid var(--border-lt);
+  border-radius: 6px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.audio-icon { font-size: 24px; }
+.audio-info .name { font-size: 13px; font-weight: 600; color: var(--text); }
+.audio-info .meta { font-size: 11px; color: var(--text-lt); margin-top: 2px; }
+
+audio { height: 32px; flex: 1; }
+
+/* ── Loading spinner ── */
+.spinner {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-bar {
+  height: 3px;
+  background: var(--border-lt);
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+
+.loading-bar-fill {
+  height: 100%;
+  background: var(--blue);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+/* ── Toast ── */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toast {
+  padding: 12px 18px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  animation: slideIn 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 240px;
+}
+
+.toast.success { background: var(--green); }
+.toast.error { background: var(--red); }
+.toast.info { background: var(--blue); }
+
+@keyframes slideIn {
+  from { transform: translateX(40px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* ── YT settings ── */
+.yt-form .form-row { margin-bottom: 14px; }
+
+.char-count { font-size: 11px; color: var(--text-lt); text-align: right; margin-top: 3px; }
+.char-count.warn { color: var(--gold); }
+.char-count.over { color: var(--red); }
+
+/* ── Empty state ── */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-lt);
+}
+
+.empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+.empty-state p { font-size: 14px; }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .stats-row { grid-template-columns: repeat(3, 1fr); }
+  .form-row { grid-template-columns: 1fr; }
+}
+
+/* ── Login gate ── */
+
+
+
+
+
+
+
 </style>
 </head>
 <body>
@@ -199,8 +763,8 @@ tr:hover td{background:#fafafa}
 
     <div class="sidebar-section">
       <div class="sidebar-section-label">Nội Dung</div>
-      <button class="nav-item" onclick="goTo('articles')">
-        <span class="ni">✍️</span><span>Khảo Luận</span>
+      <button class="nav-item" onclick="goTo('content')">
+        <span class="ni">✍️</span><span>Content Manager</span>
       </button>
     </div>
 
@@ -324,19 +888,925 @@ tr:hover td{background:#fafafa}
         </div>
       </div>
 
-      <!-- ── ARTICLES ── -->
-      <div class="page" id="page-articles">
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title">Khảo Luận (Articles)</div>
-            <div class="panel-actions">
-              <input class="search-input" id="search-articles" placeholder="Tìm tiêu đề, slug..." style="width:220px" oninput="filterArticles()">
-              <button class="btn btn-primary btn-sm" onclick="loadArticles()">↻</button>
+      <!-- ── CONTENT MANAGER ── -->
+      <div class="page" id="page-content">
+        <div id="content-app">
+          <div id="view-dashboard">
+      <div class="stats-row" id="stats-row">
+        <div class="stat-card">
+          <div class="label">Tổng</div>
+          <div class="value" id="stat-total">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Draft</div>
+          <div class="value" id="stat-draft">—</div>
+        </div>
+        <div class="stat-card blue">
+          <div class="label">Sẵn sàng</div>
+          <div class="value" id="stat-ready">—</div>
+        </div>
+        <div class="stat-card green">
+          <div class="label">Đã đăng</div>
+          <div class="value" id="stat-published">—</div>
+        </div>
+        <div class="stat-card gold">
+          <div class="label">YouTube Live</div>
+          <div class="value" id="stat-yt">—</div>
+        </div>
+      </div>
+
+      <!-- Recent items -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Nội dung gần đây</span>
+          <button class="btn btn-outline btn-sm" onclick="showView('list')">Xem tất cả →</button>
+        </div>
+        <div class="panel-body" style="padding:0">
+          <div class="table-wrap">
+            <table id="recent-table">
+              <thead>
+                <tr>
+                  <th>Tiêu đề</th>
+                  <th>Chủ đề</th>
+                  <th>TTS</th>
+                  <th>Video</th>
+                  <th>YouTube</th>
+                  <th>Trạng thái</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="recent-tbody">
+                <tr><td colspan="7"><div class="empty-state"><div class="icon">📭</div><p>Chưa có nội dung</p></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── LIST VIEW ── -->
+    <div id="view-list" style="display:none">
+      <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap">
+        <input type="text" class="form-control" id="search-input" placeholder="🔍 Tìm kiếm tiêu đề..." style="max-width:300px" oninput="filterList()">
+        <select class="form-control" id="filter-status" onchange="filterList()" style="max-width:160px">
+          <option value="">Tất cả trạng thái</option>
+          <option value="draft">Draft</option>
+          <option value="ready">Sẵn sàng</option>
+          <option value="published">Đã đăng</option>
+          <option value="archived">Lưu trữ</option>
+        </select>
+        <select class="form-control" id="filter-chu-de" onchange="filterList()" style="max-width:180px">
+          <option value="">Tất cả chủ đề</option>
+          <option value="menh">Mệnh</option>
+          <option value="tai-chinh">Tài chính</option>
+          <option value="hon-nhan">Hôn nhân</option>
+          <option value="su-nghiep">Sự nghiệp</option>
+          <option value="suc-khoe">Sức khỏe</option>
+          <option value="dai-van">Đại vận</option>
+        </select>
+      </div>
+      <div class="panel">
+        <div class="panel-body" style="padding:0">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Tiêu đề</th>
+                  <th>Chủ đề</th>
+                  <th>Pipeline</th>
+                  <th>Trạng thái</th>
+                  <th>Ngày tạo</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="list-tbody">
+                <tr><td colspan="7"><div class="empty-state"><div class="icon">📭</div><p>Đang tải...</p></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TTS VIEW ── -->
+    <div id="view-tts" style="display:none">
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">🔊 TTS Queue — Google Text-to-Speech</span>
+          <button class="btn btn-primary btn-sm" onclick="processTTSQueue()">▶ Chạy queue</button>
+        </div>
+        <div class="panel-body">
+          <div style="background:var(--gold-lt); border:1px solid var(--gold); border-radius:6px; padding:14px 16px; margin-bottom:20px; font-size:13px; color:var(--text-mid)">
+            <strong>📌 Cấu hình TTS:</strong> Hiện dùng <strong>Google Cloud TTS free tier</strong> (1M chars/tháng).
+            Giọng hỏi: <code>vi-VN-Wavenet-A</code> (nữ) · Giọng trả lời: <code>vi-VN-Wavenet-D</code> (nam, giả lập Nguyễn Ngọc Ngạn).
+            <br>Khi có Vbee API → cập nhật trong Cài đặt.
+          </div>
+          <div id="tts-queue-list">
+            <div class="empty-state"><div class="icon">✅</div><p>Không có item nào chờ TTS</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── YOUTUBE VIEW ── -->
+    <div id="view-youtube" style="display:none">
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">▶️ YouTube Upload Queue</span>
+          <button class="btn btn-gold btn-sm" onclick="processYTQueue()">📤 Upload tất cả</button>
+        </div>
+        <div class="panel-body">
+          <div id="yt-queue-list">
+            <div class="empty-state"><div class="icon">📭</div><p>Không có video nào chờ upload</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SETTINGS VIEW ── -->
+    <div id="view-settings" style="display:none">
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title">⚙️ Cài đặt</span></div>
+        <div class="panel-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">TTS Provider</label>
+              <select class="form-control" id="cfg-tts-provider">
+                <option value="google">Google Cloud TTS (free)</option>
+                <option value="vbee">Vbee API</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Giọng hỏi (nữ)</label>
+              <select class="form-control" id="cfg-voice-female">
+                <option value="vi-VN-Wavenet-A">vi-VN-Wavenet-A (Google, nữ)</option>
+                <option value="vi-VN-Wavenet-C">vi-VN-Wavenet-C (Google, nữ 2)</option>
+              </select>
             </div>
           </div>
-          <div class="table-wrap" id="articles-table">
-            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Giọng trả lời (nam)</label>
+              <select class="form-control" id="cfg-voice-male">
+                <option value="vi-VN-Wavenet-D">vi-VN-Wavenet-D (Google, nam)</option>
+                <option value="vi-VN-Wavenet-B">vi-VN-Wavenet-B (Google, nam 2)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nhạc nền mặc định</label>
+              <select class="form-control" id="cfg-music">
+                <option value="">Không có</option>
+                <option value="calm">Nhạc thiền (calm)</option>
+                <option value="mystical">Nhạc huyền bí</option>
+              </select>
+            </div>
           </div>
+          <div class="form-row full">
+            <div class="form-group">
+              <label class="form-label">YouTube Channel ID</label>
+              <input type="text" class="form-control" id="cfg-yt-channel" placeholder="UCxxxxxxxx">
+            </div>
+          </div>
+          <div class="form-row full">
+            <div class="form-group">
+              <label class="form-label">YouTube default description (template)</label>
+              <textarea class="form-control" id="cfg-yt-desc" rows="4"
+                placeholder="🔮 {title}&#10;&#10;Tử Vi Minh Bảo — luận giải lá số theo cổ pháp.&#10;🌐 tuviminhbao.com"></textarea>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="saveSettings()">💾 Lưu cài đặt</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ── CREATE/EDIT MODAL ── -->
+<div class="modal-overlay" id="create-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-title">✏️ Tạo nội dung mới</span>
+      <button class="modal-close" onclick="closeModal('create-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <div class="tab active" id="tab-info" onclick="switchTab('info')">📝 Thông tin</div>
+        <div class="tab" id="tab-script" onclick="switchTab('script')">🎙 Kịch bản</div>
+        <div class="tab" id="tab-tts" onclick="switchTab('tts-tab')">🔊 TTS & Audio</div>
+        <div class="tab" id="tab-yt" onclick="switchTab('yt')">▶️ YouTube</div>
+      </div>
+
+      <!-- Info tab -->
+      <div id="tab-content-info">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Tiêu đề video *</label>
+            <input type="text" class="form-control" id="f-title" placeholder="VD: Mệnh Kim gặp tuổi Canh Tý — có hợp không?">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Chủ đề</label>
+            <select class="form-control" id="f-chu-de">
+              <option value="">— Chọn chủ đề —</option>
+              <option value="menh">Mệnh</option>
+              <option value="tai-chinh">Tài chính</option>
+              <option value="hon-nhan">Hôn nhân</option>
+              <option value="su-nghiep">Sự nghiệp</option>
+              <option value="suc-khoe">Sức khỏe</option>
+              <option value="dai-van">Đại vận</option>
+              <option value="cung-menh">Cung Mệnh</option>
+              <option value="cach-cuc">Cách cục</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="form-group">
+            <label class="form-label">Tags (cách nhau bởi dấu phẩy)</label>
+            <input type="text" class="form-control" id="f-tags" placeholder="tử vi, mệnh kim, hôn nhân, ...">
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="form-group">
+            <label class="form-label">Ghi chú nội bộ</label>
+            <textarea class="form-control" id="f-notes" rows="2" placeholder="Ghi chú cho team..."></textarea>
+          </div>
+        </div>
+        <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+          <select class="form-control" id="khao-luan-select" style="max-width:360px; flex:1"
+            onchange="previewKhaoLuan(this.value)">
+            <option value="">📚 Chọn bài từ Khảo Luận...</option>
+          </select>
+          <button class="btn btn-primary" onclick="importKhaoLuan()" id="btn-import-kl" disabled>
+            📥 Nhập vào script
+          </button>
+          <span id="gen-status" style="font-size:12px; color:var(--text-lt); align-self:center"></span>
+        </div>
+        <div id="kl-preview" style="display:none; margin-top:12px; background:var(--bg-soft); border:1px solid var(--border-lt); border-radius:6px; padding:14px 16px; font-size:12px; color:var(--text-mid); max-height:120px; overflow-y:auto; line-height:1.6"></div>
+      </div>
+
+      <!-- Script tab -->
+      <div id="tab-content-script" style="display:none">
+        <div class="script-editor" id="script-editor">
+          <div class="script-toolbar">
+            <button class="btn btn-outline btn-sm" onclick="addScriptLine('hoi')">+ Câu hỏi</button>
+            <button class="btn btn-outline btn-sm" onclick="addScriptLine('tra_loi')">+ Trả lời</button>
+            <button class="btn btn-outline btn-sm" onclick="addScriptLineAI()">✨ Tiếp tục AI</button>
+            <span class="info" id="script-char-count">0 ký tự</span>
+          </div>
+          <div class="script-lines" id="script-lines">
+            <!-- Lines rendered here -->
+          </div>
+        </div>
+        <div style="margin-top:12px; display:flex; gap:10px">
+          <button class="btn btn-outline btn-sm" onclick="previewScript()">👁 Preview script</button>
+          <button class="btn btn-outline btn-sm" onclick="clearScript()">🗑 Xóa tất cả</button>
+        </div>
+      </div>
+
+      <!-- TTS tab -->
+      <div id="tab-content-tts-tab" style="display:none">
+        <div style="margin-bottom:16px; font-size:13px; color:var(--text-mid)">
+          Chạy TTS để tạo file audio cho từng lượt thoại, sau đó ghép và lồng nhạc nền.
+        </div>
+        <div id="tts-preview-area">
+          <div class="empty-state" style="padding:30px 0">
+            <div class="icon">🎙</div>
+            <p>Chưa có audio. Chạy TTS để tạo.</p>
+          </div>
+        </div>
+        <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="runTTS()" id="btn-run-tts">🔊 Chạy TTS</button>
+          <button class="btn btn-outline" onclick="mixAudio()" id="btn-mix" disabled>🎵 Mix + Lồng nhạc</button>
+          <button class="btn btn-outline" onclick="retryPendingTTS()" id="btn-retry-tts" style="display:none">🔄 Retry dòng lỗi</button>
+          <select class="form-control" id="tts-music-select" style="max-width:180px">
+            <option value="">Không có nhạc</option>
+            <option value="calm">Nhạc thiền</option>
+            <option value="mystical">Nhạc huyền bí</option>
+          </select>
+        </div>
+        <div id="tts-progress" style="display:none; margin-top:12px">
+          <div style="font-size:12px; color:var(--text-lt); margin-bottom:4px" id="tts-progress-label">Đang xử lý...</div>
+          <div class="loading-bar"><div class="loading-bar-fill" id="tts-progress-fill" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <!-- YouTube tab -->
+      <div id="tab-content-yt" style="display:none">
+        <div class="yt-form">
+          <div class="form-row full">
+            <div class="form-group">
+              <label class="form-label">Tiêu đề YouTube (max 100 ký tự)</label>
+              <input type="text" class="form-control" id="yt-title" maxlength="100" oninput="countChars('yt-title','yt-title-count',100)">
+              <div class="char-count" id="yt-title-count">0/100</div>
+            </div>
+          </div>
+          <div class="form-row full">
+            <div class="form-group">
+              <label class="form-label">Mô tả (max 5000 ký tự)</label>
+              <textarea class="form-control" id="yt-desc" rows="6" maxlength="5000" oninput="countChars('yt-desc','yt-desc-count',5000)"></textarea>
+              <div class="char-count" id="yt-desc-count">0/5000</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Tags YouTube</label>
+              <input type="text" class="form-control" id="yt-tags" placeholder="tử vi, mệnh, vấn đáp, ...">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Lên lịch đăng</label>
+              <input type="datetime-local" class="form-control" id="yt-schedule">
+            </div>
+          </div>
+          <div style="margin-top:8px; display:flex; gap:10px">
+            <button class="btn btn-gold" onclick="scheduleYTUpload()" id="btn-yt-upload" disabled>📤 Lên lịch upload YouTube</button>
+            <span id="yt-upload-status" style="font-size:12px; color:var(--text-lt); align-self:center"></span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /modal-body -->
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('create-modal')">Hủy</button>
+      <button class="btn btn-primary" onclick="saveItem()">💾 Lưu</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- ── Scripts ── -->
+<script>
+// ────────────────────────────────────────────────
+// CONFIG
+// ────────────────────────────────────────────────
+// SB_URL used from portal
+// SB_ANON used from portal
+
+// ────────────────────────────────────────────────
+// SUPABASE HELPERS
+// ────────────────────────────────────────────────
+async function sbFetch(path, opts = {}) {
+  const r = await fetch(`${SB_URL}/rest/v1/${path}`, {
+    ...opts,
+    headers: {
+      'apikey': SB_ANON,
+      'Authorization': `Bearer ${SB_ANON}`,
+      'Content-Type': 'application/json',
+      'Prefer': opts.prefer || 'return=representation',
+      ...(opts.headers || {})
+    }
+  });
+  if (!r.ok) {
+    const err = await r.text();
+    throw new Error(err);
+  }
+  const text = await r.text();
+  return text ? JSON.parse(text) : null;
+}
+
+async function getStats() {
+  const data = await sbFetch('van_dap?select=publish_status,tts_status,yt_status');
+  if (!data) return {};
+  return {
+    total: data.length,
+    draft: data.filter(d => d.publish_status === 'draft').length,
+    ready: data.filter(d => d.publish_status === 'ready').length,
+    published: data.filter(d => d.publish_status === 'published').length,
+    yt_live: data.filter(d => d.yt_status === 'live').length,
+  };
+}
+
+async function getItems(filters = {}) {
+  let q = 'van_dap?order=created_at.desc';
+  if (filters.status) q += `&publish_status=eq.${filters.status}`;
+  if (filters.chu_de) q += `&chu_de=eq.${filters.chu_de}`;
+  return sbFetch(q) || [];
+}
+
+async function saveItemToDB(item, id = null) {
+  if (id) {
+    return sbFetch(`van_dap?id=eq.${id}`, {
+      method: 'PATCH',
+      prefer: 'return=representation',
+      body: JSON.stringify(item)
+    });
+  } else {
+    return sbFetch('van_dap', {
+      method: 'POST',
+      prefer: 'return=representation',
+      body: JSON.stringify(item)
+    });
+  }
+}
+
+// ────────────────────────────────────────────────
+// STATE
+// ────────────────────────────────────────────────
+let allItems = [];
+let currentEditId = null;
+let currentTab = 'info';
+let scriptLines = []; // [{role:'hoi'|'tra_loi', text:''}]
+
+// ────────────────────────────────────────────────
+// INIT
+// ────────────────────────────────────────────────
+async function init() {
+  try {
+    const stats = await getStats();
+    document.getElementById('stat-total').textContent = stats.total ?? 0;
+    document.getElementById('stat-draft').textContent = stats.draft ?? 0;
+    document.getElementById('stat-ready').textContent = stats.ready ?? 0;
+    document.getElementById('stat-published').textContent = stats.published ?? 0;
+    document.getElementById('stat-yt').textContent = stats.yt_live ?? 0;
+    document.getElementById('db-status').textContent = '🟢 Đã kết nối DB';
+
+    allItems = await getItems();
+    renderRecentTable(allItems.slice(0, 10));
+    renderListTable(allItems);
+    renderTTSQueue();
+    renderYTQueue();
+  } catch (e) {
+    document.getElementById('db-status').textContent = '🔴 Lỗi kết nối DB';
+    console.error(e);
+    // Show sample data if DB not ready yet
+    renderRecentTable([]);
+    renderListTable([]);
+  }
+}
+
+// ────────────────────────────────────────────────
+// VIEWS
+// ────────────────────────────────────────────────
+const views = ['dashboard', 'list', 'tts', 'youtube', 'settings'];
+const viewTitles = {
+  dashboard: 'Dashboard',
+  list: 'Danh sách nội dung',
+  tts: 'TTS Queue',
+  youtube: 'YouTube Upload',
+  settings: 'Cài đặt'
+};
+
+function showView(v) {
+  views.forEach(x => {
+    const el = document.getElementById(`view-${x}`);
+    if (el) el.style.display = x === v ? '' : 'none';
+  });
+  document.getElementById('topbar-title').textContent = viewTitles[v] || v;
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+}
+
+// ────────────────────────────────────────────────
+// RENDER TABLES
+// ────────────────────────────────────────────────
+function statusBadge(status, type = 'publish') {
+  const map = {
+    draft: 'badge-draft', ready: 'badge-ready', published: 'badge-published',
+    pending: 'badge-pending', done: 'badge-done', error: 'badge-error',
+    live: 'badge-live', processing: 'badge-processing', archived: 'badge-draft'
+  };
+  const labels = {
+    draft: 'Draft', ready: 'Sẵn sàng', published: 'Đã đăng', archived: 'Lưu trữ',
+    pending: 'Chờ', done: '✓ Xong', error: '✗ Lỗi', live: '▶ Live', processing: '⟳'
+  };
+  const cls = map[status] || 'badge-draft';
+  return `<span class="badge ${cls}">${labels[status] || status}</span>`;
+}
+
+function pipelineHTML(item) {
+  const s = (st) => {
+    if (st === 'done' || st === 'live') return 'done';
+    if (st === 'error') return 'error';
+    if (st === 'processing') return 'active';
+    return 'pending';
+  };
+  const icons = { done: '✓', error: '✗', active: '⟳', pending: '○' };
+  const steps = [
+    { label: 'TTS', st: s(item.tts_status) },
+    { label: 'Video', st: s(item.video_status) },
+    { label: 'YT', st: s(item.yt_status) }
+  ];
+  return `<div class="pipeline">${steps.map((st, i) =>
+    `${i > 0 ? '<span class="pipe-arrow">›</span>' : ''}
+     <span class="pipe-step ${st.st}">${icons[st.st]} ${st.label}</span>`
+  ).join('')}</div>`;
+}
+
+function renderRecentTable(items) {
+  const tbody = document.getElementById('recent-tbody');
+  if (!items.length) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon">📭</div><p>Chưa có nội dung nào. <a href="#" onclick="openCreateModal()">Tạo mới →</a></p></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = items.map(item => `
+    <tr>
+      <td>
+        <div class="td-title">${escHtml(item.title)}</div>
+        <div class="td-sub">${item.tags?.join(', ') || ''}</div>
+      </td>
+      <td><span style="font-size:12px; color:var(--text-lt)">${item.chu_de || '—'}</span></td>
+      <td>${statusBadge(item.tts_status)}</td>
+      <td>${statusBadge(item.video_status)}</td>
+      <td>${statusBadge(item.yt_status)}</td>
+      <td>${statusBadge(item.publish_status)}</td>
+      <td>
+        <button class="btn btn-outline btn-sm" onclick="editItem('${item.id}')">Sửa</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function renderListTable(items) {
+  const tbody = document.getElementById('list-tbody');
+  if (!items.length) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon">📭</div><p>Chưa có nội dung</p></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = items.map((item, i) => `
+    <tr>
+      <td style="color:var(--text-lt); font-size:12px">${i + 1}</td>
+      <td>
+        <div class="td-title">${escHtml(item.title)}</div>
+        <div class="td-sub">${fmtDate(item.created_at)}</div>
+      </td>
+      <td><span style="font-size:12px">${item.chu_de || '—'}</span></td>
+      <td>${pipelineHTML(item)}</td>
+      <td>${statusBadge(item.publish_status)}</td>
+      <td style="font-size:12px; color:var(--text-lt)">${fmtDate(item.created_at)}</td>
+      <td>
+        <div style="display:flex; gap:6px">
+          <button class="btn btn-outline btn-sm" onclick="editItem('${item.id}')">✏️</button>
+          <button class="btn btn-outline btn-sm" onclick="runTTSForItem('${item.id}')">🔊</button>
+          <button class="btn btn-outline btn-sm" onclick="openYTModal('${item.id}')">▶️</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function renderTTSQueue() {
+  const pending = allItems.filter(i => i.tts_status === 'pending');
+  const el = document.getElementById('tts-queue-list');
+  if (!pending.length) {
+    el.innerHTML = `<div class="empty-state"><div class="icon">✅</div><p>Không có item nào chờ TTS</p></div>`;
+    return;
+  }
+  el.innerHTML = pending.map(item => `
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:12px; border-bottom:1px solid var(--border-lt)">
+      <div>
+        <div style="font-weight:600; font-size:13px">${escHtml(item.title)}</div>
+        <div style="font-size:11px; color:var(--text-lt)">${(item.noi_dung || []).length} dòng thoại</div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="runTTSForItem('${item.id}')">🔊 Chạy TTS</button>
+    </div>
+  `).join('');
+}
+
+function renderYTQueue() {
+  const ready = allItems.filter(i => i.video_status === 'done' && i.yt_status === 'pending');
+  const el = document.getElementById('yt-queue-list');
+  if (!ready.length) {
+    el.innerHTML = `<div class="empty-state"><div class="icon">📭</div><p>Không có video nào sẵn sàng để upload</p></div>`;
+    return;
+  }
+  el.innerHTML = ready.map(item => `
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:14px; border-bottom:1px solid var(--border-lt)">
+      <div>
+        <div style="font-weight:600; font-size:13px">${escHtml(item.title)}</div>
+        <div style="font-size:11px; color:var(--text-lt)">${item.audio_final_url ? '✓ Audio ready' : '⚠ Chưa có audio'}</div>
+      </div>
+      <div style="display:flex; gap:8px">
+        <button class="btn btn-outline btn-sm" onclick="openYTModal('${item.id}')">⚙ Config YT</button>
+        <button class="btn btn-gold btn-sm" onclick="uploadToYT('${item.id}')">📤 Upload</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ────────────────────────────────────────────────
+// SCRIPT EDITOR
+// ────────────────────────────────────────────────
+function renderScriptEditor() {
+  const container = document.getElementById('script-lines');
+  if (!scriptLines.length) {
+    container.innerHTML = `<div style="padding:20px; text-align:center; color:var(--text-lt); font-size:13px">
+      Chưa có kịch bản. Nhấn "+ Câu hỏi" hoặc "✨ Sinh kịch bản bằng AI" để bắt đầu.
+    </div>`;
+  } else {
+    container.innerHTML = scriptLines.map((line, i) => `
+      <div class="script-line" data-idx="${i}">
+        <div class="line-role">
+          <span class="role-badge ${line.role === 'hoi' ? 'hoi' : 'tra-loi'}">
+            ${line.role === 'hoi' ? '🎙 Hỏi' : '🧧 Trả lời'}
+          </span>
+        </div>
+        <div class="line-text">
+          <textarea rows="2" oninput="updateScriptLine(${i}, this.value); autoResize(this)"
+            onkeydown="handleScriptKey(event, ${i})"
+          >${escHtml(line.text)}</textarea>
+        </div>
+        <div class="line-del" onclick="removeScriptLine(${i})" title="Xóa dòng">✕</div>
+      </div>
+    `).join('');
+    // Auto resize all textareas
+    container.querySelectorAll('textarea').forEach(autoResize);
+  }
+  // Update char count
+  const total = scriptLines.reduce((s, l) => s + l.text.length, 0);
+  document.getElementById('script-char-count').textContent = `${total.toLocaleString()} ký tự`;
+}
+
+function addScriptLine(role) {
+  scriptLines.push({ role, text: '' });
+  renderScriptEditor();
+  switchTab('script');
+  // Focus last textarea
+  setTimeout(() => {
+    const tas = document.querySelectorAll('#script-lines textarea');
+    if (tas.length) tas[tas.length - 1].focus();
+  }, 50);
+}
+
+function removeScriptLine(idx) {
+  scriptLines.splice(idx, 1);
+  renderScriptEditor();
+}
+
+function updateScriptLine(idx, val) {
+  scriptLines[idx].text = val;
+  const total = scriptLines.reduce((s, l) => s + l.text.length, 0);
+  document.getElementById('script-char-count').textContent = `${total.toLocaleString()} ký tự`;
+}
+
+function handleScriptKey(e, idx) {
+  if (e.key === 'Enter' && e.ctrlKey) {
+    e.preventDefault();
+    const nextRole = scriptLines[idx].role === 'hoi' ? 'tra_loi' : 'hoi';
+    scriptLines.splice(idx + 1, 0, { role: nextRole, text: '' });
+    renderScriptEditor();
+    setTimeout(() => {
+      const tas = document.querySelectorAll('#script-lines textarea');
+      if (tas[idx + 1]) tas[idx + 1].focus();
+    }, 50);
+  }
+}
+
+function autoResize(ta) {
+  ta.style.height = 'auto';
+  ta.style.height = (ta.scrollHeight) + 'px';
+}
+
+function clearScript() {
+  if (!scriptLines.length || confirm('Xóa toàn bộ kịch bản?')) {
+    scriptLines = [];
+    renderScriptEditor();
+  }
+}
+
+function previewScript() {
+  const preview = scriptLines.map(l =>
+    `[${l.role === 'hoi' ? 'HỎI' : 'TRẢ LỜI'}]: ${l.text}`
+  ).join('\n\n');
+  alert(preview || 'Chưa có kịch bản');
+}
+
+// ────────────────────────────────────────────────
+// AI GENERATE SCRIPT
+// ────────────────────────────────────────────────
+// ────────────────────────────────────────────────
+// KHẢO LUẬN — Import bài viết thành script
+// ────────────────────────────────────────────────
+let khaoLuanCache = []; // cache danh sách bài
+
+async function loadKhaoLuanList() {
+  try {
+    const data = await sbFetch('khao_luan?select=id,title,excerpt,category&order=created_at.desc&limit=100');
+    khaoLuanCache = data || [];
+    const sel = document.getElementById('khao-luan-select');
+    sel.innerHTML = '<option value="">📚 Chọn bài từ Khảo Luận...</option>';
+    khaoLuanCache.forEach(item => {
+      const opt = document.createElement('option');
+      opt.value = item.id;
+      opt.textContent = `${item.category ? '[' + item.category + '] ' : ''}${item.title}`;
+      sel.appendChild(opt);
+    });
+  } catch (e) {
+    console.error('loadKhaoLuanList error:', e);
+  }
+}
+
+function previewKhaoLuan(id) {
+  const btn = document.getElementById('btn-import-kl');
+  const preview = document.getElementById('kl-preview');
+  if (!id) {
+    btn.disabled = true;
+    preview.style.display = 'none';
+    return;
+  }
+  btn.disabled = false;
+  const item = khaoLuanCache.find(i => String(i.id) === String(id));
+  if (item?.excerpt) {
+    preview.style.display = '';
+    preview.textContent = item.excerpt;
+  }
+}
+
+async function importKhaoLuan() {
+  const id = document.getElementById('khao-luan-select').value;
+  if (!id) return;
+
+  const status = document.getElementById('gen-status');
+  status.textContent = 'Đang tải bài...';
+
+  try {
+    const data = await sbFetch(`khao_luan?id=eq.${id}&select=id,title,content`);
+    const item = data?.[0];
+    if (!item) { toast('Không tìm thấy bài viết', 'error'); return; }
+
+    // Auto-fill tiêu đề nếu chưa có
+    const titleEl = document.getElementById('f-title');
+    if (!titleEl.value) titleEl.value = item.title;
+
+    // Parse content → script lines
+    const lines = parseContentToLines(item.title, item.content);
+    scriptLines = lines;
+    renderScriptEditor();
+    switchTab('script');
+
+    status.textContent = `✓ Đã nhập 1 đoạn (${lines[0].text.length} ký tự)`;
+    toast(`📥 Đã nhập bài "${item.title.substring(0,40)}..."`, 'success');
+  } catch (e) {
+    toast('Lỗi tải bài: ' + e.message, 'error');
+    status.textContent = '';
+  }
+}
+
+// Parse markdown content → 1 dòng duy nhất (title + content gộp)
+function parseContentToLines(title, content) {
+  // Làm sạch title
+  const cleanTitle = title.replace(/^#+\s*/, '').trim();
+
+  // Làm sạch content: bỏ markdown formatting
+  const cleanContent = (content || '')
+    .replace(/^#{1,3}\s+.+$/gm, '')          // bỏ headings
+    .replace(/\*\*/g, '')                    // bỏ bold
+    .replace(/\*/g, '')                      // bỏ italic
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // bỏ links
+    .replace(/`[^`]+`/g, '')                 // bỏ code
+    .replace(/\n{2,}/g, ' ')                 // gộp xuống dòng thành space
+    .replace(/\s+/g, ' ')                    // normalize spaces
+    .trim();
+
+  // Gộp title + content thành 1 dòng duy nhất
+  const fullText = cleanTitle + '. ' + cleanContent;
+
+  return [{ role: 'tra_loi', text: fullText }];
+}
+
+async function generateScriptAI() {
+  const title = document.getElementById('f-title').value.trim();
+  if (!title) { toast('Nhập tiêu đề trước', 'error'); return; }
+
+  const btn = document.querySelector('[onclick="generateScriptAI()"]');
+  const status = document.getElementById('gen-status');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Đang sinh...';
+  status.textContent = '';
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: `Bạn là chuyên gia Tử Vi Đẩu Số. Hãy tạo kịch bản vấn đáp ngắn gọn, súc tích cho video YouTube theo định dạng JSON sau:
+{"lines": [{"role":"hoi","text":"..."}, {"role":"tra_loi","text":"..."}, ...]}
+- Giọng hỏi: phụ nữ, tò mò, ngắn gọn (1-2 câu)
+- Giọng trả lời: thầy Nguyễn Ngọc Ngạn, trầm ấm, có chiều sâu học thuật, không quá dài
+- 4-6 cặp hỏi-đáp
+- Trả về CHỈ JSON, không có markdown hay giải thích`,
+        messages: [{ role: 'user', content: `Tạo kịch bản vấn đáp về chủ đề: "${title}"` }]
+      })
+    });
+    const data = await resp.json();
+    const text = data.content?.[0]?.text || '';
+    const clean = text.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+    scriptLines = parsed.lines || [];
+    renderScriptEditor();
+    switchTab('script');
+    toast('✨ Đã sinh kịch bản', 'success');
+    status.textContent = `${scriptLines.length} dòng thoại`;
+  } catch (e) {
+    toast('Lỗi sinh kịch bản: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '✨ Sinh kịch bản bằng AI';
+  }
+}
+
+async function addScriptLineAI() {
+  if (!scriptLines.length) { toast('Hãy thêm ít nhất 1 dòng trước', 'error'); return; }
+  const context = scriptLines.slice(-4).map(l => `[${l.role}]: ${l.text}`).join('\n');
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: `Bạn là chuyên gia Tử Vi. Tiếp tục kịch bản vấn đáp. Trả về JSON: {"lines":[...]} chỉ 1-2 cặp hỏi-đáp tiếp theo. CHỈ JSON.`,
+        messages: [{ role: 'user', content: `Ngữ cảnh:\n${context}\n\nTiếp tục tự nhiên:` }]
+      })
+    });
+    const data = await resp.json();
+    const text = data.content?.[0]?.text || '';
+    const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
+    scriptLines.push(...(parsed.lines || []));
+    renderScriptEditor();
+    toast('Đã thêm ' + (parsed.lines?.length || 0) + ' dòng', 'success');
+  } catch (e) {
+    toast('Lỗi: ' + e.message, 'error');
+  }
+}
+
+// ────────────────────────────────────────────────
+// SAVE / EDIT
+// ────────────────────────────────────────────────
+function openCreateModal() {
+  currentEditId = null;
+  scriptLines = [];
+  document.getElementById('modal-title').textContent = '✏️ Tạo nội dung mới';
+  document.getElementById('f-title').value = '';
+  document.getElementById('f-chu-de').value = '';
+  document.getElementById('f-tags').value = '';
+  document.getElementById('f-notes').value = '';
+  // Pre-fill YT title
+  document.getElementById('yt-title').value = '';
+  document.getElementById('yt-desc').value = '';
+  renderScriptEditor();
+  switchTab('info');
+  document.getElementById('create-modal').classList.add('open');
+  loadKhaoLuanList();
+}
+
+async function editItem(id) {
+  const item = allItems.find(i => i.id === id);
+  if (!item) return;
+  currentEditId = id;
+  scriptLines = item.noi_dung || [];
+  document.getElementById('modal-title').textContent = '✏️ Sửa nội dung';
+  document.getElementById('f-title').value = item.title || '';
+  document.getElementById('f-chu-de').value = item.chu_de || '';
+  document.getElementById('f-tags').value = (item.tags || []).join(', ');
+  document.getElementById('f-notes').value = item.notes || '';
+  document.getElementById('yt-title').value = item.yt_title || item.title || '';
+  document.getElementById('yt-desc').value = item.yt_description || '';
+  renderScriptEditor();
+  switchTab('info');
+  document.getElementById('create-modal').classList.add('open');
+  // Check TTS status
+  updateTTSTab(item);
+}
+
+function updateTTSTab(item) {
+  const previewArea   = document.getElementById('tts-preview-area');
+  const progressEl    = document.getElementById('tts-progress');
+  const progressFill  = document.getElementById('tts-progress-fill');
+  const progressLabel = document.getElementById('tts-progress-label');
+  if (!item) return;
+
+  // Audio URL nằm ở audio_final_url hoặc audio_hoi_url
+  const audioUrl = item.audio_final_url || item.audio_hoi_url || null;
+
+  if (item.tts_status === 'done' && audioUrl) {
+    progressEl.style.display = 'none';
+    document.getElementById('btn-mix').disabled = false;
+    const ytBtn = document.getElementById('btn-yt-upload');
+    if (ytBtn) ytBtn.disabled = false;
+    previewArea.innerHTML = `
+      <div class="audio-preview">
+        <span class="audio-icon">🎵</span>
+        <div class="audio-info">
+          <div class="name">Audio hoàn chỉnh</div>
+          <div class="meta">Vbee · Nguyễn Ngọc Ngạn · MP3</div>
+        </div>
+        <audio controls src="${audioUrl}" style="flex:1; height:32px"></audio>
+      </div>`;
+    toast('✅ TTS xong! Nghe thử rồi upload YouTube.', 'success');
+
+  } else if (item.tts_status === 'processing') {
+    progressEl.style.display = '';
+    progressFill.style.width = '50%';
+    progressLabel.textContent = 'Vbee đang render audio...';
+
+  } else if (item.tts_status === 'error') {
+    progressEl.style.display = 'none';
+    previewArea.innerHTML = `<div style="color:var(--red);font-size:13px;padding:12px">❌ Lỗi TTS: ${escHtml(item.tts_error || 'unknown')}
         </div>
       </div>
 
@@ -414,7 +1884,7 @@ const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsIn
 const ADMIN_EMAIL = 'admin@tuviminhbao.com';
 
 let _token = null;
-let _allUsers = [], _allCredits = [], _allLasos = [], _allArticles = [];
+let _allUsers = [], _allCredits = [], _allLasos = [];
 let _currentPage = 'dashboard';
 
 const PAGE_TITLES = {
@@ -462,7 +1932,8 @@ function goTo(page) {
   document.getElementById('topbar-meta').textContent = new Date().toLocaleDateString('vi-VN', {weekday:'long',day:'numeric',month:'long',year:'numeric'});
   // Lazy load
   const loaders = { users: loadUsers, credits: loadCredits, lasos: loadLasos,
-                    pricing: loadPricing, articles: loadArticles, tools: loadAdminUsers };
+                    pricing: loadPricing, tools: loadAdminUsers,
+                    content: () => { showView('dashboard'); } };
   if (loaders[page]) loaders[page]();
 }
 
@@ -741,33 +2212,7 @@ async function savePricingRow(id) {
   }
 }
 
-// ── ARTICLES ──
-async function loadArticles() {
-  document.getElementById('articles-table').innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
-  try {
-    _allArticles = await sbGet('khao_luan?order=created_at.desc&limit=200&select=id,title,slug,category,published,created_at');
-    renderArticles(_allArticles);
-  } catch(e) { document.getElementById('articles-table').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`; }
-}
-
-function renderArticles(list) {
-  if (!list.length) { document.getElementById('articles-table').innerHTML = '<div class="empty">Chưa có bài viết</div>'; return; }
-  document.getElementById('articles-table').innerHTML = `<table>
-    <thead><tr><th>Ngày</th><th>Tiêu Đề</th><th>Slug</th><th>Danh Mục</th><th>Published</th></tr></thead>
-    <tbody>${list.map(a => `<tr>
-      <td style="font-size:.72rem;color:var(--text-lt);white-space:nowrap">${fmtDate(a.created_at)}</td>
-      <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${a.title||''}">${a.title||'—'}</td>
-      <td class="mono" style="font-size:.68rem;color:var(--text-lt);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.slug||'—'}</td>
-      <td><span class="badge badge-blue">${a.category||'—'}</span></td>
-      <td>${a.published ? '<span class="badge badge-green">✓</span>' : '<span class="badge badge-grey">Draft</span>'}</td>
-    </tr>`).join('')}</tbody>
-  </table>`;
-}
-
-function filterArticles() {
-  const q = document.getElementById('search-articles').value.toLowerCase();
-  renderArticles(_allArticles.filter(a => (a.title||'').toLowerCase().includes(q) || (a.slug||'').toLowerCase().includes(q) || (a.category||'').toLowerCase().includes(q)));
-}
+// Articles handled by Content Manager
 
 // ── TOOLS ──
 async function createUser() {
@@ -838,6 +2283,981 @@ function fmtDateFull(d) {
   if (!d) return '—';
   return new Date(d).toLocaleDateString('vi-VN', {day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
 }
+
+// ── CONTENT MANAGER JS ──────────────────────────────────────
+
+// ────────────────────────────────────────────────
+// CONFIG
+// ────────────────────────────────────────────────
+
+// ────────────────────────────────────────────────
+// SUPABASE HELPERS
+// ────────────────────────────────────────────────
+async function sbFetch(path, opts = {}) {
+  const r = await fetch(`${SB_URL}/rest/v1/${path}`, {
+    ...opts,
+    headers: {
+      'apikey': SB_ANON,
+      'Authorization': `Bearer ${SB_ANON}`,
+      'Content-Type': 'application/json',
+      'Prefer': opts.prefer || 'return=representation',
+      ...(opts.headers || {})
+    }
+  });
+  if (!r.ok) {
+    const err = await r.text();
+    throw new Error(err);
+  }
+  const text = await r.text();
+  return text ? JSON.parse(text) : null;
+}
+
+async function getStats() {
+  const data = await sbFetch('van_dap?select=publish_status,tts_status,yt_status');
+  if (!data) return {};
+  return {
+    total: data.length,
+    draft: data.filter(d => d.publish_status === 'draft').length,
+    ready: data.filter(d => d.publish_status === 'ready').length,
+    published: data.filter(d => d.publish_status === 'published').length,
+    yt_live: data.filter(d => d.yt_status === 'live').length,
+  };
+}
+
+async function getItems(filters = {}) {
+  let q = 'van_dap?order=created_at.desc';
+  if (filters.status) q += `&publish_status=eq.${filters.status}`;
+  if (filters.chu_de) q += `&chu_de=eq.${filters.chu_de}`;
+  return sbFetch(q) || [];
+}
+
+async function saveItemToDB(item, id = null) {
+  if (id) {
+    return sbFetch(`van_dap?id=eq.${id}`, {
+      method: 'PATCH',
+      prefer: 'return=representation',
+      body: JSON.stringify(item)
+    });
+  } else {
+    return sbFetch('van_dap', {
+      method: 'POST',
+      prefer: 'return=representation',
+      body: JSON.stringify(item)
+    });
+  }
+}
+
+// ────────────────────────────────────────────────
+// STATE
+// ────────────────────────────────────────────────
+let allItems = [];
+let currentEditId = null;
+let currentTab = 'info';
+let scriptLines = []; // [{role:'hoi'|'tra_loi', text:''}]
+
+// ────────────────────────────────────────────────
+// INIT
+// ────────────────────────────────────────────────
+async function init() {
+  try {
+    const stats = await getStats();
+    document.getElementById('stat-total').textContent = stats.total ?? 0;
+    document.getElementById('stat-draft').textContent = stats.draft ?? 0;
+    document.getElementById('stat-ready').textContent = stats.ready ?? 0;
+    document.getElementById('stat-published').textContent = stats.published ?? 0;
+    document.getElementById('stat-yt').textContent = stats.yt_live ?? 0;
+    document.getElementById('db-status').textContent = '🟢 Đã kết nối DB';
+
+    allItems = await getItems();
+    renderRecentTable(allItems.slice(0, 10));
+    renderListTable(allItems);
+    renderTTSQueue();
+    renderYTQueue();
+  } catch (e) {
+    document.getElementById('db-status').textContent = '🔴 Lỗi kết nối DB';
+    console.error(e);
+    // Show sample data if DB not ready yet
+    renderRecentTable([]);
+    renderListTable([]);
+  }
+}
+
+// ────────────────────────────────────────────────
+// VIEWS
+// ────────────────────────────────────────────────
+const views = ['dashboard', 'list', 'tts', 'youtube', 'settings'];
+const viewTitles = {
+  dashboard: 'Dashboard',
+  list: 'Danh sách nội dung',
+  tts: 'TTS Queue',
+  youtube: 'YouTube Upload',
+  settings: 'Cài đặt'
+};
+
+function showView(v) {
+  views.forEach(x => {
+    const el = document.getElementById(`view-${x}`);
+    if (el) el.style.display = x === v ? '' : 'none';
+  });
+  document.getElementById('topbar-title').textContent = viewTitles[v] || v;
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+}
+
+// ────────────────────────────────────────────────
+// RENDER TABLES
+// ────────────────────────────────────────────────
+function statusBadge(status, type = 'publish') {
+  const map = {
+    draft: 'badge-draft', ready: 'badge-ready', published: 'badge-published',
+    pending: 'badge-pending', done: 'badge-done', error: 'badge-error',
+    live: 'badge-live', processing: 'badge-processing', archived: 'badge-draft'
+  };
+  const labels = {
+    draft: 'Draft', ready: 'Sẵn sàng', published: 'Đã đăng', archived: 'Lưu trữ',
+    pending: 'Chờ', done: '✓ Xong', error: '✗ Lỗi', live: '▶ Live', processing: '⟳'
+  };
+  const cls = map[status] || 'badge-draft';
+  return `<span class="badge ${cls}">${labels[status] || status}</span>`;
+}
+
+function pipelineHTML(item) {
+  const s = (st) => {
+    if (st === 'done' || st === 'live') return 'done';
+    if (st === 'error') return 'error';
+    if (st === 'processing') return 'active';
+    return 'pending';
+  };
+  const icons = { done: '✓', error: '✗', active: '⟳', pending: '○' };
+  const steps = [
+    { label: 'TTS', st: s(item.tts_status) },
+    { label: 'Video', st: s(item.video_status) },
+    { label: 'YT', st: s(item.yt_status) }
+  ];
+  return `<div class="pipeline">${steps.map((st, i) =>
+    `${i > 0 ? '<span class="pipe-arrow">›</span>' : ''}
+     <span class="pipe-step ${st.st}">${icons[st.st]} ${st.label}</span>`
+  ).join('')}</div>`;
+}
+
+function renderRecentTable(items) {
+  const tbody = document.getElementById('recent-tbody');
+  if (!items.length) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon">📭</div><p>Chưa có nội dung nào. <a href="#" onclick="openCreateModal()">Tạo mới →</a></p></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = items.map(item => `
+    <tr>
+      <td>
+        <div class="td-title">${escHtml(item.title)}</div>
+        <div class="td-sub">${item.tags?.join(', ') || ''}</div>
+      </td>
+      <td><span style="font-size:12px; color:var(--text-lt)">${item.chu_de || '—'}</span></td>
+      <td>${statusBadge(item.tts_status)}</td>
+      <td>${statusBadge(item.video_status)}</td>
+      <td>${statusBadge(item.yt_status)}</td>
+      <td>${statusBadge(item.publish_status)}</td>
+      <td>
+        <button class="btn btn-outline btn-sm" onclick="editItem('${item.id}')">Sửa</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function renderListTable(items) {
+  const tbody = document.getElementById('list-tbody');
+  if (!items.length) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon">📭</div><p>Chưa có nội dung</p></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = items.map((item, i) => `
+    <tr>
+      <td style="color:var(--text-lt); font-size:12px">${i + 1}</td>
+      <td>
+        <div class="td-title">${escHtml(item.title)}</div>
+        <div class="td-sub">${fmtDate(item.created_at)}</div>
+      </td>
+      <td><span style="font-size:12px">${item.chu_de || '—'}</span></td>
+      <td>${pipelineHTML(item)}</td>
+      <td>${statusBadge(item.publish_status)}</td>
+      <td style="font-size:12px; color:var(--text-lt)">${fmtDate(item.created_at)}</td>
+      <td>
+        <div style="display:flex; gap:6px">
+          <button class="btn btn-outline btn-sm" onclick="editItem('${item.id}')">✏️</button>
+          <button class="btn btn-outline btn-sm" onclick="runTTSForItem('${item.id}')">🔊</button>
+          <button class="btn btn-outline btn-sm" onclick="openYTModal('${item.id}')">▶️</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function renderTTSQueue() {
+  const pending = allItems.filter(i => i.tts_status === 'pending');
+  const el = document.getElementById('tts-queue-list');
+  if (!pending.length) {
+    el.innerHTML = `<div class="empty-state"><div class="icon">✅</div><p>Không có item nào chờ TTS</p></div>`;
+    return;
+  }
+  el.innerHTML = pending.map(item => `
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:12px; border-bottom:1px solid var(--border-lt)">
+      <div>
+        <div style="font-weight:600; font-size:13px">${escHtml(item.title)}</div>
+        <div style="font-size:11px; color:var(--text-lt)">${(item.noi_dung || []).length} dòng thoại</div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="runTTSForItem('${item.id}')">🔊 Chạy TTS</button>
+    </div>
+  `).join('');
+}
+
+function renderYTQueue() {
+  const ready = allItems.filter(i => i.video_status === 'done' && i.yt_status === 'pending');
+  const el = document.getElementById('yt-queue-list');
+  if (!ready.length) {
+    el.innerHTML = `<div class="empty-state"><div class="icon">📭</div><p>Không có video nào sẵn sàng để upload</p></div>`;
+    return;
+  }
+  el.innerHTML = ready.map(item => `
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:14px; border-bottom:1px solid var(--border-lt)">
+      <div>
+        <div style="font-weight:600; font-size:13px">${escHtml(item.title)}</div>
+        <div style="font-size:11px; color:var(--text-lt)">${item.audio_final_url ? '✓ Audio ready' : '⚠ Chưa có audio'}</div>
+      </div>
+      <div style="display:flex; gap:8px">
+        <button class="btn btn-outline btn-sm" onclick="openYTModal('${item.id}')">⚙ Config YT</button>
+        <button class="btn btn-gold btn-sm" onclick="uploadToYT('${item.id}')">📤 Upload</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ────────────────────────────────────────────────
+// SCRIPT EDITOR
+// ────────────────────────────────────────────────
+function renderScriptEditor() {
+  const container = document.getElementById('script-lines');
+  if (!scriptLines.length) {
+    container.innerHTML = `<div style="padding:20px; text-align:center; color:var(--text-lt); font-size:13px">
+      Chưa có kịch bản. Nhấn "+ Câu hỏi" hoặc "✨ Sinh kịch bản bằng AI" để bắt đầu.
+    </div>`;
+  } else {
+    container.innerHTML = scriptLines.map((line, i) => `
+      <div class="script-line" data-idx="${i}">
+        <div class="line-role">
+          <span class="role-badge ${line.role === 'hoi' ? 'hoi' : 'tra-loi'}">
+            ${line.role === 'hoi' ? '🎙 Hỏi' : '🧧 Trả lời'}
+          </span>
+        </div>
+        <div class="line-text">
+          <textarea rows="2" oninput="updateScriptLine(${i}, this.value); autoResize(this)"
+            onkeydown="handleScriptKey(event, ${i})"
+          >${escHtml(line.text)}</textarea>
+        </div>
+        <div class="line-del" onclick="removeScriptLine(${i})" title="Xóa dòng">✕</div>
+      </div>
+    `).join('');
+    // Auto resize all textareas
+    container.querySelectorAll('textarea').forEach(autoResize);
+  }
+  // Update char count
+  const total = scriptLines.reduce((s, l) => s + l.text.length, 0);
+  document.getElementById('script-char-count').textContent = `${total.toLocaleString()} ký tự`;
+}
+
+function addScriptLine(role) {
+  scriptLines.push({ role, text: '' });
+  renderScriptEditor();
+  switchTab('script');
+  // Focus last textarea
+  setTimeout(() => {
+    const tas = document.querySelectorAll('#script-lines textarea');
+    if (tas.length) tas[tas.length - 1].focus();
+  }, 50);
+}
+
+function removeScriptLine(idx) {
+  scriptLines.splice(idx, 1);
+  renderScriptEditor();
+}
+
+function updateScriptLine(idx, val) {
+  scriptLines[idx].text = val;
+  const total = scriptLines.reduce((s, l) => s + l.text.length, 0);
+  document.getElementById('script-char-count').textContent = `${total.toLocaleString()} ký tự`;
+}
+
+function handleScriptKey(e, idx) {
+  if (e.key === 'Enter' && e.ctrlKey) {
+    e.preventDefault();
+    const nextRole = scriptLines[idx].role === 'hoi' ? 'tra_loi' : 'hoi';
+    scriptLines.splice(idx + 1, 0, { role: nextRole, text: '' });
+    renderScriptEditor();
+    setTimeout(() => {
+      const tas = document.querySelectorAll('#script-lines textarea');
+      if (tas[idx + 1]) tas[idx + 1].focus();
+    }, 50);
+  }
+}
+
+function autoResize(ta) {
+  ta.style.height = 'auto';
+  ta.style.height = (ta.scrollHeight) + 'px';
+}
+
+function clearScript() {
+  if (!scriptLines.length || confirm('Xóa toàn bộ kịch bản?')) {
+    scriptLines = [];
+    renderScriptEditor();
+  }
+}
+
+function previewScript() {
+  const preview = scriptLines.map(l =>
+    `[${l.role === 'hoi' ? 'HỎI' : 'TRẢ LỜI'}]: ${l.text}`
+  ).join('\n\n');
+  alert(preview || 'Chưa có kịch bản');
+}
+
+// ────────────────────────────────────────────────
+// AI GENERATE SCRIPT
+// ────────────────────────────────────────────────
+// ────────────────────────────────────────────────
+// KHẢO LUẬN — Import bài viết thành script
+// ────────────────────────────────────────────────
+let khaoLuanCache = []; // cache danh sách bài
+
+async function loadKhaoLuanList() {
+  try {
+    const data = await sbFetch('khao_luan?select=id,title,excerpt,category&order=created_at.desc&limit=100');
+    khaoLuanCache = data || [];
+    const sel = document.getElementById('khao-luan-select');
+    sel.innerHTML = '<option value="">📚 Chọn bài từ Khảo Luận...</option>';
+    khaoLuanCache.forEach(item => {
+      const opt = document.createElement('option');
+      opt.value = item.id;
+      opt.textContent = `${item.category ? '[' + item.category + '] ' : ''}${item.title}`;
+      sel.appendChild(opt);
+    });
+  } catch (e) {
+    console.error('loadKhaoLuanList error:', e);
+  }
+}
+
+function previewKhaoLuan(id) {
+  const btn = document.getElementById('btn-import-kl');
+  const preview = document.getElementById('kl-preview');
+  if (!id) {
+    btn.disabled = true;
+    preview.style.display = 'none';
+    return;
+  }
+  btn.disabled = false;
+  const item = khaoLuanCache.find(i => String(i.id) === String(id));
+  if (item?.excerpt) {
+    preview.style.display = '';
+    preview.textContent = item.excerpt;
+  }
+}
+
+async function importKhaoLuan() {
+  const id = document.getElementById('khao-luan-select').value;
+  if (!id) return;
+
+  const status = document.getElementById('gen-status');
+  status.textContent = 'Đang tải bài...';
+
+  try {
+    const data = await sbFetch(`khao_luan?id=eq.${id}&select=id,title,content`);
+    const item = data?.[0];
+    if (!item) { toast('Không tìm thấy bài viết', 'error'); return; }
+
+    // Auto-fill tiêu đề nếu chưa có
+    const titleEl = document.getElementById('f-title');
+    if (!titleEl.value) titleEl.value = item.title;
+
+    // Parse content → script lines
+    const lines = parseContentToLines(item.title, item.content);
+    scriptLines = lines;
+    renderScriptEditor();
+    switchTab('script');
+
+    status.textContent = `✓ Đã nhập 1 đoạn (${lines[0].text.length} ký tự)`;
+    toast(`📥 Đã nhập bài "${item.title.substring(0,40)}..."`, 'success');
+  } catch (e) {
+    toast('Lỗi tải bài: ' + e.message, 'error');
+    status.textContent = '';
+  }
+}
+
+// Parse markdown content → 1 dòng duy nhất (title + content gộp)
+function parseContentToLines(title, content) {
+  // Làm sạch title
+  const cleanTitle = title.replace(/^#+\s*/, '').trim();
+
+  // Làm sạch content: bỏ markdown formatting
+  const cleanContent = (content || '')
+    .replace(/^#{1,3}\s+.+$/gm, '')          // bỏ headings
+    .replace(/\*\*/g, '')                    // bỏ bold
+    .replace(/\*/g, '')                      // bỏ italic
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // bỏ links
+    .replace(/`[^`]+`/g, '')                 // bỏ code
+    .replace(/\n{2,}/g, ' ')                 // gộp xuống dòng thành space
+    .replace(/\s+/g, ' ')                    // normalize spaces
+    .trim();
+
+  // Gộp title + content thành 1 dòng duy nhất
+  const fullText = cleanTitle + '. ' + cleanContent;
+
+  return [{ role: 'tra_loi', text: fullText }];
+}
+
+async function generateScriptAI() {
+  const title = document.getElementById('f-title').value.trim();
+  if (!title) { toast('Nhập tiêu đề trước', 'error'); return; }
+
+  const btn = document.querySelector('[onclick="generateScriptAI()"]');
+  const status = document.getElementById('gen-status');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Đang sinh...';
+  status.textContent = '';
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: `Bạn là chuyên gia Tử Vi Đẩu Số. Hãy tạo kịch bản vấn đáp ngắn gọn, súc tích cho video YouTube theo định dạng JSON sau:
+{"lines": [{"role":"hoi","text":"..."}, {"role":"tra_loi","text":"..."}, ...]}
+- Giọng hỏi: phụ nữ, tò mò, ngắn gọn (1-2 câu)
+- Giọng trả lời: thầy Nguyễn Ngọc Ngạn, trầm ấm, có chiều sâu học thuật, không quá dài
+- 4-6 cặp hỏi-đáp
+- Trả về CHỈ JSON, không có markdown hay giải thích`,
+        messages: [{ role: 'user', content: `Tạo kịch bản vấn đáp về chủ đề: "${title}"` }]
+      })
+    });
+    const data = await resp.json();
+    const text = data.content?.[0]?.text || '';
+    const clean = text.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+    scriptLines = parsed.lines || [];
+    renderScriptEditor();
+    switchTab('script');
+    toast('✨ Đã sinh kịch bản', 'success');
+    status.textContent = `${scriptLines.length} dòng thoại`;
+  } catch (e) {
+    toast('Lỗi sinh kịch bản: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '✨ Sinh kịch bản bằng AI';
+  }
+}
+
+async function addScriptLineAI() {
+  if (!scriptLines.length) { toast('Hãy thêm ít nhất 1 dòng trước', 'error'); return; }
+  const context = scriptLines.slice(-4).map(l => `[${l.role}]: ${l.text}`).join('\n');
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: `Bạn là chuyên gia Tử Vi. Tiếp tục kịch bản vấn đáp. Trả về JSON: {"lines":[...]} chỉ 1-2 cặp hỏi-đáp tiếp theo. CHỈ JSON.`,
+        messages: [{ role: 'user', content: `Ngữ cảnh:\n${context}\n\nTiếp tục tự nhiên:` }]
+      })
+    });
+    const data = await resp.json();
+    const text = data.content?.[0]?.text || '';
+    const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
+    scriptLines.push(...(parsed.lines || []));
+    renderScriptEditor();
+    toast('Đã thêm ' + (parsed.lines?.length || 0) + ' dòng', 'success');
+  } catch (e) {
+    toast('Lỗi: ' + e.message, 'error');
+  }
+}
+
+// ────────────────────────────────────────────────
+// SAVE / EDIT
+// ────────────────────────────────────────────────
+function openCreateModal() {
+  currentEditId = null;
+  scriptLines = [];
+  document.getElementById('modal-title').textContent = '✏️ Tạo nội dung mới';
+  document.getElementById('f-title').value = '';
+  document.getElementById('f-chu-de').value = '';
+  document.getElementById('f-tags').value = '';
+  document.getElementById('f-notes').value = '';
+  // Pre-fill YT title
+  document.getElementById('yt-title').value = '';
+  document.getElementById('yt-desc').value = '';
+  renderScriptEditor();
+  switchTab('info');
+  document.getElementById('create-modal').classList.add('open');
+  loadKhaoLuanList();
+}
+
+async function editItem(id) {
+  const item = allItems.find(i => i.id === id);
+  if (!item) return;
+  currentEditId = id;
+  scriptLines = item.noi_dung || [];
+  document.getElementById('modal-title').textContent = '✏️ Sửa nội dung';
+  document.getElementById('f-title').value = item.title || '';
+  document.getElementById('f-chu-de').value = item.chu_de || '';
+  document.getElementById('f-tags').value = (item.tags || []).join(', ');
+  document.getElementById('f-notes').value = item.notes || '';
+  document.getElementById('yt-title').value = item.yt_title || item.title || '';
+  document.getElementById('yt-desc').value = item.yt_description || '';
+  renderScriptEditor();
+  switchTab('info');
+  document.getElementById('create-modal').classList.add('open');
+  // Check TTS status
+  updateTTSTab(item);
+}
+
+function updateTTSTab(item) {
+  const previewArea   = document.getElementById('tts-preview-area');
+  const progressEl    = document.getElementById('tts-progress');
+  const progressFill  = document.getElementById('tts-progress-fill');
+  const progressLabel = document.getElementById('tts-progress-label');
+  if (!item) return;
+
+  // Audio URL nằm ở audio_final_url hoặc audio_hoi_url
+  const audioUrl = item.audio_final_url || item.audio_hoi_url || null;
+
+  if (item.tts_status === 'done' && audioUrl) {
+    progressEl.style.display = 'none';
+    document.getElementById('btn-mix').disabled = false;
+    const ytBtn = document.getElementById('btn-yt-upload');
+    if (ytBtn) ytBtn.disabled = false;
+    previewArea.innerHTML = `
+      <div class="audio-preview">
+        <span class="audio-icon">🎵</span>
+        <div class="audio-info">
+          <div class="name">Audio hoàn chỉnh</div>
+          <div class="meta">Vbee · Nguyễn Ngọc Ngạn · MP3</div>
+        </div>
+        <audio controls src="${audioUrl}" style="flex:1; height:32px"></audio>
+      </div>`;
+    toast('✅ TTS xong! Nghe thử rồi upload YouTube.', 'success');
+
+  } else if (item.tts_status === 'processing') {
+    progressEl.style.display = '';
+    progressFill.style.width = '50%';
+    progressLabel.textContent = 'Vbee đang render audio...';
+
+  } else if (item.tts_status === 'error') {
+    progressEl.style.display = 'none';
+    previewArea.innerHTML = `<div style="color:var(--red);font-size:13px;padding:12px">❌ Lỗi TTS: ${escHtml(item.tts_error || 'unknown')}</div>`;
+  }
+}
+
+async function saveItem() {
+  const title = document.getElementById('f-title').value.trim();
+  if (!title) { toast('Nhập tiêu đề!', 'error'); return; }
+
+  const tags = document.getElementById('f-tags').value
+    .split(',').map(t => t.trim()).filter(Boolean);
+
+  const payload = {
+    title,
+    chu_de: document.getElementById('f-chu-de').value || null,
+    tags,
+    noi_dung: scriptLines,
+    notes: document.getElementById('f-notes').value || null,
+    yt_title: document.getElementById('yt-title').value || title,
+    yt_description: document.getElementById('yt-desc').value || null,
+    yt_tags: document.getElementById('yt-tags').value.split(',').map(t => t.trim()).filter(Boolean),
+    publish_status: scriptLines.length > 0 ? 'ready' : 'draft'
+  };
+
+  try {
+    await saveItemToDB(payload, currentEditId);
+    toast(currentEditId ? 'Đã cập nhật' : 'Đã tạo mới', 'success');
+    closeModal('create-modal');
+    allItems = await getItems();
+    renderRecentTable(allItems.slice(0, 10));
+    renderListTable(allItems);
+    // Reload stats
+    const stats = await getStats();
+    document.getElementById('stat-total').textContent = stats.total ?? 0;
+    document.getElementById('stat-draft').textContent = stats.draft ?? 0;
+    document.getElementById('stat-ready').textContent = stats.ready ?? 0;
+    document.getElementById('stat-published').textContent = stats.published ?? 0;
+  } catch (e) {
+    toast('Lỗi lưu: ' + e.message, 'error');
+  }
+}
+
+// ────────────────────────────────────────────────
+// TTS (stub — sẽ gọi /api/tts khi build route)
+// ────────────────────────────────────────────────
+let _ttsPoller = null; // interval ID cho auto-poll
+
+// Gộp toàn bộ script thành 1 đoạn text để gửi Vbee 1 lần
+function buildTTSText(lines) {
+  return lines
+    .filter(l => l.text?.trim())
+    .map(l => l.text.trim())
+    .join('\n\n');
+}
+
+async function runTTS() {
+  if (!scriptLines.length) { toast('Chưa có kịch bản', 'error'); return; }
+  if (!currentEditId) { toast('Lưu nội dung trước đã', 'error'); return; }
+
+  const text = buildTTSText(scriptLines);
+  if (!text) { toast('Không có nội dung để đọc', 'error'); return; }
+
+  const btn = document.getElementById('btn-run-tts');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Đang gửi Vbee...';
+
+  try {
+    const resp = await fetch(
+      'https://dciwkfdqhhddeymlisey.supabase.co/functions/v1/tts',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: currentEditId, text }),
+      }
+    );
+    const data = await resp.json();
+    if (data.success) {
+      toast('🔊 Đã gửi Vbee. Đang chờ render...', 'success');
+      document.getElementById('tts-progress').style.display = '';
+      document.getElementById('tts-progress-label').textContent = 'Đang render audio — chờ 15-60s...';
+      document.getElementById('tts-progress-fill').style.width = '15%';
+      startTTSPoller(currentEditId);
+    } else {
+      toast('Lỗi: ' + (data.error || 'unknown'), 'error');
+    }
+  } catch (e) {
+    toast('Lỗi kết nối: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '🔊 Chạy TTS';
+  }
+}
+
+// Poll DB mỗi 5 giây cho đến khi tts_status = done/error
+function startTTSPoller(id) {
+  if (_ttsPoller) clearInterval(_ttsPoller);
+  let attempts = 0;
+  const MAX = 36; // tối đa 3 phút (36 × 5s)
+
+  _ttsPoller = setInterval(async () => {
+    attempts++;
+    try {
+      const data = await sbFetch(`van_dap?id=eq.${id}&select=id,tts_status,tts_error,noi_dung,audio_hoi_url,audio_tl_url,tts_provider`);
+      const item = data?.[0];
+      if (!item) return;
+
+      // Cập nhật UI
+      updateTTSTab(item);
+
+      // Nếu xong hoặc lỗi hoặc quá thời gian → dừng poll
+      if (item.tts_status === 'done' || item.tts_status === 'error' || attempts >= MAX) {
+        clearInterval(_ttsPoller);
+        _ttsPoller = null;
+        if (item.noi_dung) scriptLines = item.noi_dung;
+        allItems = await getItems();
+        renderRecentTable(allItems.slice(0, 10));
+        renderListTable(allItems);
+      }
+      // Sau 3 lần poll (15s) mà vẫn còn pending → hiện nút Retry
+      const pendingLines = (item.noi_dung || []).filter(l => l.status === 'pending');
+      const retryBtn = document.getElementById('btn-retry-tts');
+      if (retryBtn) retryBtn.style.display = pendingLines.length > 0 && attempts >= 3 ? '' : 'none';
+    } catch (e) {
+      console.error('Poll error:', e);
+    }
+  }, 5000); // mỗi 5 giây
+}
+
+async function runTTSForItem(id) {
+  const item = allItems.find(i => i.id === id);
+  if (!item) return;
+  toast(`🔊 Queuing TTS cho "${item.title}"...`, 'info');
+  // TODO: POST /api/tts
+}
+
+async function mixAudio() {
+  if (!currentEditId) { toast('Không có item nào', 'error'); return; }
+
+  const item = allItems.find(i => i.id === currentEditId);
+  const audioUrl = item?.audio_final_url || item?.audio_hoi_url;
+  if (!audioUrl) { toast('Chưa có audio. Chạy TTS trước.', 'error'); return; }
+
+  const mixUrl = 'https://tuvi-mix-service-production.up.railway.app/mix';
+  const btn = document.getElementById('btn-mix');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Đang mix...';
+
+  try {
+    const resp = await fetch(mixUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ audio_url: audioUrl, item_id: currentEditId }),
+    });
+    const data = await resp.json();
+    if (data.success) {
+      toast('🎵 Mix xong! Video sẵn sàng upload YouTube.', 'success');
+      // Reload item để lấy video_url mới
+      allItems = await getItems();
+      const updated = allItems.find(i => i.id === currentEditId);
+      if (updated) updateTTSTab(updated);
+      const ytBtn = document.getElementById('btn-yt-upload');
+      if (ytBtn) ytBtn.disabled = false;
+    } else {
+      throw new Error(data.error || 'unknown');
+    }
+  } catch (e) {
+    toast('Lỗi mix: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '🎵 Mix + Lồng nhạc';
+  }
+}
+
+// Retry dòng pending: gọi Vbee Get Request API lấy audio_link rồi upload Storage
+async function retryPendingTTS() {
+  if (!currentEditId) return;
+  const btn = document.getElementById('btn-retry-tts');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Đang retry...';
+
+  try {
+    const resp = await fetch(
+      'https://dciwkfdqhhddeymlisey.supabase.co/functions/v1/tts-callback?action=retry&id=' + currentEditId,
+      { method: 'POST', headers: { 'Content-Type': 'application/json' } }
+    );
+    const data = await resp.json();
+    if (data.ok) {
+      toast(`🔄 Retry xong: ${data.done}/${data.retried} dòng lấy được audio`, data.done > 0 ? 'success' : 'info');
+      // Poll lại ngay
+      startTTSPoller(currentEditId);
+    } else {
+      toast('Retry lỗi: ' + (data.error || 'unknown'), 'error');
+    }
+  } catch(e) {
+    toast('Lỗi: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '🔄 Retry dòng lỗi';
+  }
+}
+
+// ────────────────────────────────────────────────
+// YOUTUBE (stub)
+// ────────────────────────────────────────────────
+async function scheduleYTUpload() {
+  if (!currentEditId) { toast('Không có item nào', 'error'); return; }
+  await uploadToYT(currentEditId);
+}
+
+async function uploadToYT(id) {
+  const item = allItems.find(i => i.id === id);
+  if (!item) return;
+
+  const audioUrl = item.audio_final_url || item.audio_hoi_url;
+  if (!audioUrl) { toast('Chưa có audio. Chạy TTS trước.', 'error'); return; }
+
+  const btn = document.getElementById('btn-yt-upload');
+  const statusEl = document.getElementById('yt-upload-status');
+  if (btn) btn.disabled = true;
+  if (statusEl) statusEl.textContent = '⏳ Đang upload...';
+
+  try {
+    const resp = await fetch(
+      'https://dciwkfdqhhddeymlisey.supabase.co/functions/v1/youtube-upload',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      }
+    );
+    const data = await resp.json();
+    if (data.success) {
+      toast('🎬 Đã upload YouTube! ' + data.url, 'success');
+      if (statusEl) statusEl.innerHTML = '✅ Live: <a href="' + data.url + '" target="_blank" style="color:var(--blue)">' + data.url + '</a>';
+      // Refresh list
+      allItems = await getItems();
+      renderRecentTable(allItems.slice(0, 10));
+      renderListTable(allItems);
+    } else {
+      throw new Error(data.error || 'unknown');
+    }
+  } catch (e) {
+    toast('Lỗi upload: ' + e.message, 'error');
+    if (statusEl) statusEl.textContent = '❌ ' + e.message;
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
+
+async function processYTQueue() {
+  const ready = allItems.filter(i => (i.audio_final_url || i.audio_hoi_url) && i.yt_status === 'pending');
+  if (!ready.length) { toast('Không có video nào sẵn sàng', 'info'); return; }
+  toast('Đang upload ' + ready.length + ' video...', 'info');
+  for (const item of ready) await uploadToYT(item.id);
+}
+
+async function processTTSQueue() {
+  const pending = allItems.filter(i => i.tts_status === 'pending');
+  if (!pending.length) { toast('Không có item nào trong queue', 'info'); return; }
+  toast(`Đang xử lý ${pending.length} items...`, 'info');
+}
+
+function openYTModal(id) {
+  const item = allItems.find(i => i.id === id);
+  if (item) editItem(id).then(() => switchTab('yt'));
+}
+
+// ────────────────────────────────────────────────
+// FILTER
+// ────────────────────────────────────────────────
+function filterList() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  const status = document.getElementById('filter-status').value;
+  const chuDe = document.getElementById('filter-chu-de').value;
+  const filtered = allItems.filter(item => {
+    const matchQ = !q || item.title.toLowerCase().includes(q);
+    const matchS = !status || item.publish_status === status;
+    const matchC = !chuDe || item.chu_de === chuDe;
+    return matchQ && matchS && matchC;
+  });
+  renderListTable(filtered);
+}
+
+// ────────────────────────────────────────────────
+// TABS
+// ────────────────────────────────────────────────
+// tab button IDs: tab-info, tab-script, tab-tts, tab-yt
+// tab content IDs: tab-content-info, tab-content-script, tab-content-tts-tab, tab-content-yt
+const tabIds = [
+  { btn: 'info',    content: 'info'    },
+  { btn: 'script',  content: 'script'  },
+  { btn: 'tts',     content: 'tts-tab' },
+  { btn: 'yt',      content: 'yt'      },
+];
+function switchTab(tab) {
+  // tab param là content key: 'info','script','tts-tab','yt'
+  // map ngược về btn key nếu cần
+  const btnKey = tab === 'tts-tab' ? 'tts' : tab;
+  currentTab = tab;
+  tabIds.forEach(t => {
+    document.getElementById(`tab-content-${t.content}`).style.display = t.content === tab ? '' : 'none';
+    document.getElementById(`tab-${t.btn}`).classList.toggle('active', t.btn === btnKey);
+  });
+  if (tab === 'script') renderScriptEditor();
+}
+
+// ────────────────────────────────────────────────
+// SETTINGS
+// ────────────────────────────────────────────────
+function saveSettings() {
+  const cfg = {
+    tts_provider: document.getElementById('cfg-tts-provider').value,
+    voice_female: document.getElementById('cfg-voice-female').value,
+    voice_male: document.getElementById('cfg-voice-male').value,
+    music: document.getElementById('cfg-music').value,
+    yt_channel: document.getElementById('cfg-yt-channel').value,
+    yt_desc_template: document.getElementById('cfg-yt-desc').value,
+  };
+  localStorage.setItem('tuvi_admin_cfg', JSON.stringify(cfg));
+  toast('Đã lưu cài đặt', 'success');
+}
+
+function loadSettings() {
+  const cfg = JSON.parse(localStorage.getItem('tuvi_admin_cfg') || '{}');
+  if (cfg.tts_provider) document.getElementById('cfg-tts-provider').value = cfg.tts_provider;
+  if (cfg.voice_female) document.getElementById('cfg-voice-female').value = cfg.voice_female;
+  if (cfg.voice_male) document.getElementById('cfg-voice-male').value = cfg.voice_male;
+  if (cfg.yt_channel) document.getElementById('cfg-yt-channel').value = cfg.yt_channel;
+  if (cfg.yt_desc_template) document.getElementById('cfg-yt-desc').value = cfg.yt_desc_template;
+}
+
+// ────────────────────────────────────────────────
+// UTILS
+// ────────────────────────────────────────────────
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function fmtDate(d) {
+  if (!d) return '—';
+  return new Date(d).toLocaleDateString('vi-VN', { day:'2-digit', month:'2-digit', year:'numeric' });
+}
+
+function countChars(inputId, countId, max) {
+  const val = document.getElementById(inputId).value.length;
+  const el = document.getElementById(countId);
+  el.textContent = `${val}/${max}`;
+  el.className = 'char-count' + (val > max * 0.9 ? (val >= max ? ' over' : ' warn') : '');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+function toast(msg, type = 'info') {
+  const c = document.getElementById('toast-container');
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `<span>${msg}</span>`;
+  c.appendChild(el);
+  setTimeout(() => el.remove(), 3500);
+}
+
+
+// ────────────────────────────────────────────────
+// AUTH — Supabase login gate
+// ────────────────────────────────────────────────
+const ADMIN_EMAIL = null; // null = chấp nhận mọi account đăng nhập được vào Supabase
+
+
+function showLoginError(msg) {
+  const el = document.getElementById('login-error');
+  el.textContent    = msg;
+  el.style.display  = 'block';
+}
+
+function checkSession() {
+  const token = sessionStorage.getItem('admin_token');
+  if (token) {
+    document.getElementById('login-gate').style.display = 'none';
+    const em = sessionStorage.getItem('admin_email');
+    if (em) document.getElementById('admin-email-display').textContent = em;
+  }
+  // Nếu không có token → giữ login gate hiện
+}
+
+// Logout button (thêm vào topbar)
+function adminLogout() {
+  sessionStorage.removeItem('admin_token');
+  sessionStorage.removeItem('admin_email');
+  location.reload();
+}
+
+// ── Start ──
+document.addEventListener('DOMContentLoaded', () => {
+  checkSession();
+  init();
+  loadSettings();
+  renderScriptEditor();
+  // Auto-fill YT title when main title changes
+  document.getElementById('f-title').addEventListener('input', function() {
+    const ytTitle = document.getElementById('yt-title');
+    if (!ytTitle.value || ytTitle.value === this._prev) {
+      ytTitle.value = this.value;
+    }
+    this._prev = this.value;
+  });
+});
+
 </script>
 </body>
 </html>
