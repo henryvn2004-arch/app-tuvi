@@ -1,564 +1,311 @@
 /**
- * tuvi-paywall.js — Credit-based shared paywall · Tử Vi Minh Bảo
- *
- * Usage:
- *   TuviPaywall.init({
- *     product:  'laso' | 'xem-tuoi' | 'xem-lam-an' | 'dien-tuong' | ...,
- *     slug:     () => string,       // getter — slug có thể chưa có lúc init
- *     onUnlock: async () => void,   // callback sau khi unlock thành công
- *     // optional overrides:
- *     cost:     number,             // override số credits
- *     title:    string,
- *     subtitle: string,
- *     features: string[],
- *   });
- *
- *   TuviPaywall.check()             → Promise<boolean>  đã có access chưa
- *   TuviPaywall.show()              → hiện paywall modal
- *   TuviPaywall.hide()              → ẩn modal
- *   TuviPaywall.showSuccessBanner() → banner xanh "Đã mở khóa"
+ * tuvi-paywall.js — Tử Vi Minh Bảo
+ * Self-contained credit paywall. No dependency on window.Auth or window.showAuthModal.
+ * Uses window.supabaseClient directly for session.
  */
-
 const TuviPaywall = (() => {
+  const SB_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
+  const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 
-  // ── Product config ───────────────────────────────────────────
   const PRODUCTS = {
-    'laso': {
-      cost: 150, usd: '$15',
-      eyebrow:  '紫微明寶 · Luận Giải Lá Số',
-      title:    'Mở khóa 24 phần luận giải chuyên sâu',
-      subtitle: 'Phân tích toàn diện 12 cung, 9 đại vận, tiểu vận từng năm — được tạo riêng cho lá số của bạn bởi AI Tử Vi Minh Bảo.',
-      features: ['Luận giải 12 cung chi tiết', 'Phân tích 9 đại vận toàn đời', 'Tiểu vận từng năm', 'Cách cục & ý nghĩa sâu', 'Vấn đáp AI không giới hạn', 'Lưu & xuất PDF'],
-      anchor:   'Thầy tử vi offline thường 500k–1tr',
-      cta:      'Mở Khóa Luận Giải',
-      testimonials: [
-        { text: '"Phần Quan Lộc nói đúng y chang tình huống tao đang gặp."', name: 'Trần M.K. — TP.HCM' },
-        { text: '"Đọc phần đại vận xong ngồi im một lúc. Đúng y chang 3 năm nay."', name: 'Nguyễn T.H. — Hà Nội' },
-      ],
-    },
-    'xem-tuoi': {
-      cost: 50, usd: '$5',
-      eyebrow:  '紫微明寶 · Xem Tuổi Vợ Chồng',
-      title:    'Mở khóa 9 phần luận giải tương hợp',
-      subtitle: 'Phân tích chuyên sâu 8 yếu tố hôn nhân — từ ngũ hành, tư tưởng, tính cách đến tài chính và vận hạn.',
-      features: ['Xét tuổi & ngũ hành', 'Tư tưởng & tính cách', 'Cung Phu Thê chi tiết', 'Tài chính & sự nghiệp', 'Vận hạn đại vận', 'Vấn đáp AI 2 lá số'],
-      anchor:   'Xem offline thường 300k–500k',
-      cta:      'Mở Khóa Xem Tuổi',
-      testimonials: [
-        { text: '"Phần tư tưởng giải thích đúng nguyên nhân mâu thuẫn của tụi tao."', name: 'Lê T.B. — Đà Nẵng' },
-      ],
-    },
-    'xem-lam-an': {
-      cost: 50, usd: '$5',
-      eyebrow:  '紫微明寶 · Xem Tuổi Làm Ăn',
-      title:    'Mở khóa 9 phần luận giải hợp tác',
-      subtitle: 'Phân tích 8 yếu tố theo góc độ kinh doanh — tương hợp cung Nô Bộc, tài chính, và vận hạn đối tác.',
-      features: ['Xét tuổi & ngũ hành', 'Tư tưởng & tính cách', 'Cung Nô Bộc / Đối Tác', 'Giao tiếp & cung Thân', 'Tài chính & vận hạn', 'Vấn đáp AI 2 lá số'],
-      anchor:   'Tư vấn phong thủy kinh doanh thường 500k+',
-      cta:      'Mở Khóa Xem Làm Ăn',
-      testimonials: [
-        { text: '"Phần đối tác phân tích đúng điểm yếu trong hợp tác của tụi tao."', name: 'Phạm Q.A. — TP.HCM' },
-      ],
-    },
-    // Template cho tools xem tướng và tools mới
-    'dien-tuong':  { cost: 5, usd: '$0.5', eyebrow: '紫微明寶 · Diện Tướng', title: 'Mở khóa luận giải tướng mặt', subtitle: 'Phân tích chuyên sâu tướng mặt theo Ma Y Thần Tướng.', features: ['Tướng tổng thể', 'Ngũ nhạc tứ độc', 'Thái dương / Thái âm', 'Vận trình theo tuổi'], anchor: '', cta: 'Mở Khóa Diện Tướng', testimonials: [] },
-    'nhan-tuong':  { cost: 5, usd: '$0.5', eyebrow: '紫微明寶 · Nhãn Tướng', title: 'Mở khóa luận giải tướng mắt', subtitle: 'Phân tích nhãn tướng chi tiết theo cổ pháp.', features: ['Thần & sắc mắt', 'Ngũ hành nhãn hình', 'Vận trình', 'Đặc điểm tính cách'], anchor: '', cta: 'Mở Khóa Nhãn Tướng', testimonials: [] },
-    'thu-tuong':   { cost: 5, usd: '$0.5', eyebrow: '紫微明寶 · Thủ Tướng', title: 'Mở khóa luận giải tướng tay', subtitle: 'Phân tích chỉ tay và hình dạng bàn tay theo cổ pháp.', features: ['Hình dạng bàn tay', 'Các đường chỉ tay', 'Vận trình', 'Tính cách & sự nghiệp'], anchor: '', cta: 'Mở Khóa Thủ Tướng', testimonials: [] },
-    'thanh-tuong': { cost: 5, usd: '$0.5', eyebrow: '紫微明寶 · Thanh Tướng', title: 'Mở khóa luận giải tướng giọng', subtitle: 'Phân tích thanh tướng và âm sắc theo cổ pháp.', features: ['Ngũ hành âm sắc', 'Tướng giọng tổng thể', 'Vận trình', 'Tính cách'], anchor: '', cta: 'Mở Khóa Thanh Tướng', testimonials: [] },
+    'laso':        { cost: 150, title: 'Luận Giải Lá Số' },
+    'xem-tuoi':    { cost:  50, title: 'Xem Tuổi Vợ Chồng' },
+    'xem-lam-an':  { cost:  50, title: 'Xem Tuổi Làm Ăn' },
+    'dien-tuong':  { cost:   5, title: 'Diện Tướng AI' },
+    'nhan-tuong':  { cost:   5, title: 'Nhãn Tướng AI' },
+    'thu-tuong':   { cost:   5, title: 'Thủ Tướng AI' },
+    'thanh-tuong': { cost:   5, title: 'Thanh Tướng AI' },
   };
 
-  // ── Dynamic pricing (fetched from Supabase, overrides PRODUCTS) ──
-  let _pricingCache = null;
-
-  async function _fetchPricing() {
-    if (_pricingCache) return _pricingCache;
-    try {
-      const res = await fetch(
-        'https://dciwkfdqhhddeymlisey.supabase.co/rest/v1/tool_pricing?select=tool_id,credits,enabled&enabled=eq.true',
-        { headers: { 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I' } }
-      );
-      if (!res.ok) return null;
-      const rows = await res.json();
-      _pricingCache = {};
-      rows.forEach(r => { _pricingCache[r.tool_id] = r.credits; });
-      return _pricingCache;
-    } catch(e) { return null; }
-  }
-
-  const TOOL_TYPE_MAP = {
+  const TOOL_TYPE = {
     'laso': 'use_laso', 'xem-tuoi': 'use_xem_tuoi', 'xem-lam-an': 'use_xem_lam_an',
     'dien-tuong': 'use_dien_tuong', 'nhan-tuong': 'use_nhan_tuong',
     'thu-tuong': 'use_thu_tuong', 'thanh-tuong': 'use_thanh_tuong',
   };
 
-  let _cfg  = null;
-  let _modal = null;
+  let _cfg         = null;
+  let _priceCache  = null;
 
-  // ── CSS ──────────────────────────────────────────────────────
+  // ── CSS ────────────────────────────────────────────────────────
   function _injectCss() {
     if (document.getElementById('tpw-css')) return;
     const s = document.createElement('style');
     s.id = 'tpw-css';
     s.textContent = `
-.tpw-overlay{position:fixed;inset:0;background:rgba(6,26,46,0.78);z-index:8000;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px);animation:tpw-fade .2s ease}
+.tpw-overlay{position:fixed;inset:0;background:rgba(6,26,46,.75);z-index:9000;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px);animation:tpw-fade .2s ease}
 @keyframes tpw-fade{from{opacity:0}to{opacity:1}}
-.tpw-box{background:#fff;border-radius:16px;max-width:480px;width:100%;overflow:hidden;box-shadow:0 32px 80px rgba(6,26,46,.45);animation:tpw-up .25s cubic-bezier(.4,0,.2,1);max-height:92vh;overflow-y:auto}
-@keyframes tpw-up{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
-.tpw-header{background:linear-gradient(150deg,#061A2E 0%,#0D3B5E 60%,#1455A4 100%);padding:28px 28px 22px;text-align:center}
-.tpw-eyebrow{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#c9a84c;margin-bottom:10px}
-.tpw-title{font-family:'Noto Serif',Georgia,serif;font-size:20px;font-weight:700;color:#fff;line-height:1.35;margin-bottom:7px}
-.tpw-subtitle{font-size:12.5px;color:#8BAACC;line-height:1.6}
-.tpw-body{padding:22px 28px 24px}
-.tpw-features{display:grid;grid-template-columns:1fr 1fr;gap:7px 12px;margin-bottom:16px}
-.tpw-feat{display:flex;align-items:flex-start;gap:6px;font-size:12.5px;color:#444;line-height:1.4}
-.tpw-feat::before{content:'✦';color:#c9a84c;flex-shrink:0;font-size:9px;margin-top:3px}
-.tpw-anchor{text-align:center;font-size:11.5px;color:#9A7B3A;margin-bottom:6px;opacity:.85}
-.tpw-price-row{background:#F9F4EB;border:1px solid #e8d9b0;border-radius:10px;padding:13px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.tpw-credit-num{font-family:'Noto Serif',Georgia,serif;font-size:28px;font-weight:700;color:#061A2E;line-height:1}
-.tpw-credit-label{font-size:10.5px;color:#9A7B3A;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-top:2px}
-.tpw-price-right{text-align:right;flex-shrink:0}
-.tpw-usd{font-size:13px;color:#9A7B3A;font-weight:700}
-.tpw-usd-note{font-size:10px;color:#bbb;margin-top:2px;line-height:1.4}
-.tpw-balance-row{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#777;margin-bottom:9px;padding:0 2px}
-.tpw-balance-ok{font-weight:700;color:#1E6B3C}
-.tpw-balance-low{font-weight:700;color:#C0392B}
-.tpw-btn{width:100%;padding:15px;background:#061A2E;color:#c9a84c;border:2px solid #c9a84c;border-radius:8px;font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;font-family:inherit;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px;text-decoration:none}
-.tpw-btn:hover:not(:disabled){background:#c9a84c;color:#061A2E}
-.tpw-btn:disabled{opacity:.55;cursor:not-allowed}
-.tpw-btn-secondary{background:transparent;color:#9A7B3A;border-color:#e8d9b0;font-size:12px;letter-spacing:1px;padding:11px}
-.tpw-btn-secondary:hover:not(:disabled){background:#F9F4EB;color:#061A2E;border-color:#c9a84c}
-.tpw-btn-login{background:transparent;border-color:#ddd;color:#333;font-size:12px;letter-spacing:1px;padding:12px}
-.tpw-btn-login:hover{background:#f5f5f5}
-.tpw-deficit{background:#FFF5F5;border:1px solid #f5c6c6;border-radius:8px;padding:11px 14px;margin-bottom:12px;font-size:12.5px;color:#C0392B;text-align:center;line-height:1.6}
-.tpw-login-hint{background:#EEF4FF;border:1px solid #C7D9F5;border-radius:8px;padding:11px 14px;font-size:12.5px;color:#1455A4;text-align:center;margin-bottom:12px;line-height:1.6}
-.tpw-divider{display:flex;align-items:center;gap:8px;margin:12px 0;color:#ddd;font-size:11px}
-.tpw-divider::before,.tpw-divider::after{content:'';flex:1;height:1px;background:#eee}
-.tpw-testimonial{background:#F9F4EB;border-left:3px solid #c9a84c;border-radius:0 6px 6px 0;padding:10px 14px;margin-bottom:8px}
-.tpw-testimonial-text{font-size:12px;color:#444;line-height:1.55;font-style:italic;margin-bottom:4px}
-.tpw-testimonial-name{font-size:10.5px;color:#9A7B3A;font-weight:700}
-.tpw-secure{text-align:center;font-size:11px;color:#aaa;margin-top:8px;line-height:1.7}
-.tpw-secure a{color:#9A7B3A;text-decoration:none}
-.tpw-already{text-align:center;font-size:11.5px;color:#9A7B3A;cursor:pointer;background:none;border:none;font-family:inherit;padding:5px 0;text-decoration:underline;display:block;width:100%;margin-top:4px}
-.tpw-already:hover{color:#061A2E}
-.tpw-spinner{width:16px;height:16px;border:2px solid rgba(201,168,76,.3);border-top-color:#c9a84c;border-radius:50%;animation:tpw-spin .7s linear infinite;display:inline-block;margin-right:7px;vertical-align:middle;flex-shrink:0}
-@keyframes tpw-spin{to{transform:rotate(360deg)}}
-.tpw-success-banner{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#1E6B3C;color:#fff;padding:11px 28px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.2);white-space:nowrap;animation:tpw-fade .3s ease}
-.tpw-confirm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border:1.5px solid #c9a84c;border-radius:12px;padding:20px 24px;z-index:9999;box-shadow:0 16px 48px rgba(6,26,46,.25);min-width:300px;max-width:420px;width:90%;animation:tpw-up .2s cubic-bezier(.4,0,.2,1)}
-.tpw-confirm-title{font-family:'Noto Serif',Georgia,serif;font-size:14px;font-weight:700;color:#061A2E;margin-bottom:10px}
-.tpw-confirm-rows{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
-.tpw-confirm-row{display:flex;justify-content:space-between;font-size:12.5px;color:#444;font-family:Arial,sans-serif}
-.tpw-confirm-row.highlight{color:#061A2E;font-weight:700;border-top:1px solid #f0f0f0;padding-top:5px;margin-top:2px}
-.tpw-confirm-val{font-family:'Noto Serif',Georgia,serif;font-weight:700}
-.tpw-confirm-val.red{color:#C0392B}
-.tpw-confirm-val.green{color:#1E6B3C}
-.tpw-confirm-val.gold{color:#9A7B3A}
-.tpw-confirm-btns{display:flex;gap:8px}
-.tpw-confirm-btns button{flex:1;padding:9px;border:none;border-radius:6px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
-.tpw-confirm-ok{background:#061A2E;color:#c9a84c;border:1.5px solid #c9a84c}
-.tpw-confirm-ok:hover{background:#c9a84c;color:#061A2E}
-.tpw-confirm-ok:disabled{opacity:.5;cursor:not-allowed}
-.tpw-confirm-cancel{background:#f5f5f5;color:#666;border:1.5px solid #e8e8e8}
-.tpw-confirm-cancel:hover{background:#e8e8e8}
-@keyframes tpw-shake{0%,100%{transform:none}20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
-.tpw-shake{animation:tpw-shake .35s ease}
-@media(max-width:520px){
-  .tpw-box{border-radius:12px}
-  .tpw-header{padding:22px 20px 18px}
-  .tpw-body{padding:18px 20px 20px}
-  .tpw-features{grid-template-columns:1fr}
-  .tpw-title{font-size:18px}
-  .tpw-credit-num{font-size:24px}
-}
-`;
+@keyframes tpw-up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.tpw-box{background:#fff;border-radius:14px;width:100%;max-width:420px;box-shadow:0 24px 64px rgba(6,26,46,.35);animation:tpw-up .22s ease;overflow:hidden}
+.tpw-head{background:#061A2E;padding:20px 24px}
+.tpw-head-title{font-family:'Noto Serif',Georgia,serif;font-size:16px;color:#fff;font-weight:700;margin-bottom:4px}
+.tpw-head-sub{font-size:12px;color:rgba(255,255,255,.55)}
+.tpw-body{padding:20px 24px}
+.tpw-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f5f5f5;font-size:13px;color:#444}
+.tpw-row:last-of-type{border-bottom:none}
+.tpw-row-label{color:#666}
+.tpw-row-val{font-family:'Noto Serif',Georgia,serif;font-weight:700;font-size:14px}
+.tpw-row-val.deduct{color:#C0392B}
+.tpw-row-val.balance{color:#9A7B3A}
+.tpw-row-val.remain{color:#1E6B3C}
+.tpw-divider{border:none;border-top:1.5px solid #f0f0f0;margin:4px 0}
+.tpw-btns{display:flex;gap:10px;padding:16px 24px;border-top:1px solid #f0f0f0}
+.tpw-btn-cancel{flex:1;padding:10px;border:1.5px solid #ddd;border-radius:7px;background:#fff;color:#666;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.tpw-btn-cancel:hover{background:#f5f5f5}
+.tpw-btn-confirm{flex:2;padding:10px;border:none;border-radius:7px;background:#061A2E;color:#c9a84c;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.03em}
+.tpw-btn-confirm:hover{background:#0D3B5E}
+.tpw-btn-confirm:disabled{opacity:.5;cursor:not-allowed}
+.tpw-topup-box{padding:0 24px 20px;text-align:center}
+.tpw-topup-msg{font-size:13px;color:#666;margin-bottom:12px;line-height:1.6}
+.tpw-topup-msg strong{color:#C0392B}
+.tpw-btn-topup{display:inline-block;padding:10px 28px;background:#9A7B3A;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;font-family:inherit}
+.tpw-btn-topup:hover{background:#7d6230}
+.tpw-login-box{padding:20px 24px;text-align:center}
+.tpw-login-msg{font-size:13px;color:#444;margin-bottom:14px;line-height:1.6}
+.tpw-btn-login{padding:10px 28px;background:#061A2E;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.tpw-btn-login:hover{background:#0D3B5E}
+.tpw-banner{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#1E6B3C;color:#fff;padding:10px 24px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.2);white-space:nowrap;animation:tpw-fade .25s ease;pointer-events:none}
+    `;
     document.head.appendChild(s);
   }
 
-  // ── Get merged product config (DB price takes priority) ─────────
-  function _p() {
-    const base = PRODUCTS[_cfg.product] || PRODUCTS['laso'];
-    const dbCost = _pricingCache ? (_pricingCache[_cfg.product] ?? null) : null;
-    const cost = _cfg.cost ?? dbCost ?? base.cost;
-    const usd = '$' + (cost / 10).toFixed(cost % 10 === 0 ? 0 : 1);
-    return {
-      ...base,
-      cost,
-      usd,
-      ...(_cfg.title    !== undefined && { title:    _cfg.title }),
-      ...(_cfg.subtitle !== undefined && { subtitle: _cfg.subtitle }),
-      ...(_cfg.features !== undefined && { features: _cfg.features }),
-    };
-  }
-
-  // ── Build modal skeleton ──────────────────────────────────────
-  function _buildModal() {
-    if (_modal) { _modal.remove(); _modal = null; }
-    _injectCss();
-    const p = _p();
-
-    _modal = document.createElement('div');
-    _modal.className = 'tpw-overlay';
-    _modal.id = 'tpw-overlay';
-
-    const testi = p.testimonials.length
-      ? `<div class="tpw-divider">người dùng nói gì</div>` +
-        p.testimonials.map(t => `<div class="tpw-testimonial"><div class="tpw-testimonial-text">${t.text}</div><div class="tpw-testimonial-name">— ${t.name}</div></div>`).join('')
-      : '';
-
-    _modal.innerHTML = `
-      <div class="tpw-box" id="tpw-box">
-        <div class="tpw-header">
-          <div class="tpw-eyebrow">${p.eyebrow}</div>
-          <div class="tpw-title">${p.title}</div>
-          <div class="tpw-subtitle">${p.subtitle}</div>
-        </div>
-        <div class="tpw-body">
-          <div class="tpw-features">
-            ${p.features.map(f => `<div class="tpw-feat">${f}</div>`).join('')}
-          </div>
-          ${p.anchor ? `<div class="tpw-anchor">${p.anchor} · Tại đây chỉ ${p.cost} credits</div>` : ''}
-          <div class="tpw-price-row">
-            <div>
-              <div class="tpw-credit-num">${p.cost}</div>
-              <div class="tpw-credit-label">Credits</div>
-            </div>
-            <div class="tpw-price-right">
-              <div class="tpw-usd">≈ ${p.usd}</div>
-              <div class="tpw-usd-note">Không hết hạn<br>Re-access miễn phí</div>
-            </div>
-          </div>
-          <div id="tpw-cta-area">
-            <div style="text-align:center;padding:14px 0;color:#aaa;font-size:12px">
-              <span class="tpw-spinner"></span>Đang kiểm tra...
-            </div>
-          </div>
-          ${testi}
-          <div class="tpw-secure">
-            🔒 Credits không hết hạn · Dùng cho mọi công cụ ·
-            <a href="/topup.html">Xem gói nạp →</a>
-          </div>
-          <button class="tpw-already" onclick="TuviPaywall._checkAlready()">
-            Đã có credits nhưng chưa mở khóa? Nhấn đây
-          </button>
-        </div>
-      </div>`;
-
-    // Bounce khi click ngoài
-    _modal.addEventListener('click', e => {
-      if (e.target !== _modal) return;
-      const box = document.getElementById('tpw-box');
-      if (box) { box.classList.add('tpw-shake'); setTimeout(() => box.classList.remove('tpw-shake'), 400); }
-    });
-
-    document.body.appendChild(_modal);
-  }
-
-  // ── Render CTA area (dynamic based on auth + balance) ─────────
-  async function _renderCta() {
-    const ctaArea = document.getElementById('tpw-cta-area');
-    if (!ctaArea) return;
-    const p = _p();
-
-    // Not logged in
-    if (!window.Auth?.isLoggedIn()) {
-      ctaArea.innerHTML = `
-        <div class="tpw-login-hint">
-          Đăng nhập để dùng credits và mở khóa ngay —<br>không cần redirect, không cần thanh toán lại.
-        </div>
-        <button class="tpw-btn tpw-btn-login" onclick="TuviPaywall._doLogin()">
-          Đăng Nhập / Đăng Ký →
-        </button>`;
-      return;
-    }
-
-    // Fetch balance
-    const userId = window.Auth.getUser()?.id || '';
-    let balance = 0;
+  // ── Session helper (uses supabaseClient directly) ─────────────
+  async function _getSession() {
     try {
-      const r = await fetch('/api/payment?action=balance&userId=' + encodeURIComponent(userId));
-      balance = (await r.json()).balance ?? 0;
+      if (window.supabaseClient) {
+        const { data: { session } } = await window.supabaseClient.auth.getSession();
+        return session || null;
+      }
     } catch(e) {}
+    return null;
+  }
 
-    const enough = balance >= p.cost;
-    const need   = p.cost - balance;
+  // ── Pricing cache ─────────────────────────────────────────────
+  async function _getCost() {
+    const product = _cfg?.product;
+    const base = PRODUCTS[product] || PRODUCTS['dien-tuong'];
+    if (_cfg?.cost) return { cost: _cfg.cost, title: base.title };
 
-    if (enough) {
-      ctaArea.innerHTML = `
-        <div class="tpw-balance-row">
-          <span>Số dư của bạn</span>
-          <span class="tpw-balance-ok">✓ ${balance} credits</span>
-        </div>
-        <button class="tpw-btn" id="tpw-pay-btn" onclick="TuviPaywall._doDeduct()">
-          <span id="tpw-btn-text">🔓 ${p.cta} — ${p.cost} Credits</span>
-        </button>`;
-    } else {
-      ctaArea.innerHTML = `
-        <div class="tpw-balance-row">
-          <span>Số dư của bạn</span>
-          <span class="tpw-balance-low">${balance} credits</span>
-        </div>
-        <div class="tpw-deficit">
-          Cần thêm <strong>${need} credits</strong> để mở khóa.<br>
-          Gói nhỏ nhất: <strong>$10 = 100 credits</strong>.
-        </div>
-        <a href="/topup.html" class="tpw-btn" style="text-decoration:none">
-          💳 Nạp Credits — từ $10 →
-        </a>
-        <button class="tpw-btn tpw-btn-secondary" onclick="TuviPaywall._doTopupInline()">
-          Chọn gói nạp phù hợp
-        </button>`;
+    if (!_priceCache) {
+      try {
+        const r = await fetch(`${SB_URL}/rest/v1/tool_pricing?select=tool_id,credits&enabled=eq.true`,
+          { headers: { apikey: SB_ANON } });
+        if (r.ok) {
+          const rows = await r.json();
+          _priceCache = {};
+          rows.forEach(row => { _priceCache[row.tool_id] = row.credits; });
+        }
+      } catch(e) {}
     }
+    const cost = (_priceCache && _priceCache[product] != null) ? _priceCache[product] : base.cost;
+    return { cost, title: _cfg?.title || base.title };
   }
 
-  // ── Login then re-render ──────────────────────────────────────
-  function _doLogin() {
-    if (window.showAuthModal) {
-      window.showAuthModal(async () => { await _renderCta(); });
-    } else {
-      window.location.href = '/profile.html';
-    }
+  // ── Slug generator ────────────────────────────────────────────
+  function generateToolSlug(product) {
+    const uid = (window.supabaseClient ? 'u' : 'g') + Date.now();
+    return product + '-' + uid;
   }
 
-  // ── Confirmation toast ──────────────────────────────────────────
-  function _showConfirm(cost, balance, toolName, onConfirm) {
-    _hideConfirm();
-    const after = balance - cost;
-    const el = document.createElement('div');
-    el.id = 'tpw-confirm';
-    el.className = 'tpw-confirm';
-    el.innerHTML =
-      '<div class="tpw-confirm-title">⊙ Xác nhận sử dụng Lượng</div>' +
-      '<div class="tpw-confirm-rows">' +
-        '<div class="tpw-confirm-row"><span>' + toolName + '</span><span class="tpw-confirm-val red">−' + cost + ' lượng</span></div>' +
-        '<div class="tpw-confirm-row"><span>Số dư hiện tại</span><span class="tpw-confirm-val gold">' + balance + ' lượng</span></div>' +
-        '<div class="tpw-confirm-row highlight"><span>Còn lại sau khi trừ</span><span class="tpw-confirm-val green">' + after + ' lượng</span></div>' +
-      '</div>' +
-      '<div class="tpw-confirm-btns">' +
-        '<button class="tpw-confirm-cancel" onclick="TuviPaywall._hideConfirm()">Huỷ</button>' +
-        '<button class="tpw-confirm-ok" id="tpw-confirm-ok-btn">Xác Nhận →</button>' +
-      '</div>';
-    document.body.appendChild(el);
-    document.getElementById('tpw-confirm-ok-btn').onclick = async () => {
-      const btn = document.getElementById('tpw-confirm-ok-btn');
-      if (btn) { btn.disabled = true; btn.textContent = '...'; }
-      _hideConfirm();
-      await onConfirm();
-    };
-    setTimeout(_hideConfirm, 30000);
-  }
+  // ── Modal management ──────────────────────────────────────────
+  let _overlay = null;
 
-  function _hideConfirm() {
-    const el = document.getElementById('tpw-confirm');
-    if (el) el.remove();
-  }
-
-  // ── Deduct credits ────────────────────────────────────────────
-  async function _doDeduct() {
-    const btn  = document.getElementById('tpw-pay-btn');
-    const text = document.getElementById('tpw-btn-text');
-    if (btn)  btn.disabled = true;
-    if (text) text.innerHTML = '<span class="tpw-spinner"></span>Đang mở khóa...';
-
-    const p     = _p();
-    const slug  = typeof _cfg.slug === 'function' ? _cfg.slug() : (_cfg.slug || '');
-    const token = window.Auth?.getSession()?.access_token || '';
-    const toolType = TOOL_TYPE_MAP[_cfg.product] || ('use_' + _cfg.product);
-
-    try {
-      const res = await fetch('/api/payment?action=deduct', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-        body: JSON.stringify({ amount: p.cost, toolType, slug, description: p.title }),
-      });
-      const data = await res.json();
-
-      if (data.success) {
-        hide();
-        _showSuccessBanner('✓ Đã mở khóa — đang luận giải...');
-        window.refreshNavCredits && window.refreshNavCredits();
-        if (_cfg.onUnlock) await _cfg.onUnlock();
-        return;
-      }
-
-      if (data.insufficientBalance) {
-        await _renderCta(); // re-render with topup state
-        return;
-      }
-
-      if (btn)  btn.disabled = false;
-      if (text) text.textContent = `🔓 ${p.cta} — ${p.cost} Credits`;
-      alert('Lỗi: ' + (data.error || 'Vui lòng thử lại.'));
-    } catch(e) {
-      if (btn)  btn.disabled = false;
-      if (text) text.textContent = `🔓 ${p.cta} — ${p.cost} Credits`;
-      alert('Lỗi kết nối: ' + e.message);
-    }
-  }
-
-  // ── Topup redirect ────────────────────────────────────────────
-  function _doTopupInline() {
-    sessionStorage.setItem('tpw_topup_return', window.location.href);
-    window.location.href = '/topup.html';
-  }
-
-  // ── Check already paid ────────────────────────────────────────
-  async function _checkAlready() {
-    const btn = document.querySelector('.tpw-already');
-    if (btn) btn.textContent = 'Đang kiểm tra...';
-    const paid = await check();
-    if (paid) {
-      hide();
-      _showSuccessBanner('✓ Xác nhận thành công — đang mở khóa...');
-      if (_cfg.onUnlock) await _cfg.onUnlock();
-    } else {
-      if (btn) btn.textContent = 'Chưa tìm thấy. Liên hệ hỗ trợ nếu đã thanh toán.';
-    }
-  }
-
-  // ── Public: init ─────────────────────────────────────────────
-  function init(config) {
-    _cfg = config;
-    _injectCss();
-    _fetchPricing(); // prefetch in background
-  }
-
-  // ── Public: check access ──────────────────────────────────────
-  async function check() {
-    try {
-      const slug = typeof _cfg.slug === 'function' ? _cfg.slug() : (_cfg.slug || '');
-      if (!slug) return false;
-      const userId = window.Auth?.isLoggedIn() ? window.Auth.getUser()?.id : null;
-      if (!userId) return false;
-      const r = await fetch(`/api/payment?action=check&slug=${encodeURIComponent(slug)}&userId=${encodeURIComponent(userId)}`);
-      return (await r.json()).hasAccess === true;
-    } catch(e) { return false; }
-  }
-
-  // ── Public: show ─────────────────────────────────────────────
-  async function show() {
-    // Fetch pricing first (uses cache after first call)
-    await _fetchPricing();
-    _buildModal();
-    _modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-    _renderCta(); // async — fills in CTA after balance check
-  }
-
-  // ── Public: hide ─────────────────────────────────────────────
-  function hide() {
-    if (_modal) _modal.style.display = 'none';
+  function _closeOverlay() {
+    if (_overlay) { _overlay.remove(); _overlay = null; }
     document.body.style.overflow = '';
   }
 
-  // ── Public: success banner ────────────────────────────────────
-  function _showSuccessBanner(msg = '✓ Đã mở khóa thành công!') {
-    const old = document.getElementById('tpw-success-banner');
-    if (old) old.remove();
-    const b = document.createElement('div');
-    b.id = 'tpw-success-banner';
-    b.className = 'tpw-success-banner';
-    b.textContent = msg;
-    document.body.appendChild(b);
-    setTimeout(() => { b.style.transition = 'opacity .6s'; b.style.opacity = '0'; }, 5000);
-    setTimeout(() => b.remove(), 5700);
+  function _showOverlay(innerHTML) {
+    _closeOverlay();
+    _injectCss();
+    _overlay = document.createElement('div');
+    _overlay.className = 'tpw-overlay';
+    _overlay.innerHTML = `<div class="tpw-box">${innerHTML}</div>`;
+    _overlay.addEventListener('click', e => { if (e.target === _overlay) _closeOverlay(); });
+    document.body.appendChild(_overlay);
+    document.body.style.overflow = 'hidden';
   }
 
-  // ── requireCredits: Option A — check + deduct BEFORE action ────
-  // Usage: await TuviPaywall.requireCredits(slug, callback)
-  // callback() is called only if credits successfully deducted
-  async function requireCredits(slug, callback) {
-    // 1. Login check
-    if (!window.Auth?.isLoggedIn()) {
+  // ── Show confirm dialog ───────────────────────────────────────
+  function _showConfirm(cost, balance, title, onConfirm) {
+    const after = balance - cost;
+    _showOverlay(`
+      <div class="tpw-head">
+        <div class="tpw-head-title">⊙ Xác nhận sử dụng Lượng</div>
+        <div class="tpw-head-sub">${title}</div>
+      </div>
+      <div class="tpw-body">
+        <div class="tpw-row">
+          <span class="tpw-row-label">Chi phí</span>
+          <span class="tpw-row-val deduct">−${cost} lượng</span>
+        </div>
+        <div class="tpw-row">
+          <span class="tpw-row-label">Số dư hiện tại</span>
+          <span class="tpw-row-val balance">${balance} lượng</span>
+        </div>
+        <hr class="tpw-divider">
+        <div class="tpw-row">
+          <span class="tpw-row-label"><strong>Còn lại sau khi trừ</strong></span>
+          <span class="tpw-row-val remain">${after} lượng</span>
+        </div>
+      </div>
+      <div class="tpw-btns">
+        <button class="tpw-btn-cancel" id="tpw-cancel">Huỷ</button>
+        <button class="tpw-btn-confirm" id="tpw-confirm-ok">Xác Nhận →</button>
+      </div>
+    `);
+    document.getElementById('tpw-cancel').onclick = _closeOverlay;
+    document.getElementById('tpw-confirm-ok').onclick = async () => {
+      const btn = document.getElementById('tpw-confirm-ok');
+      if (btn) { btn.disabled = true; btn.textContent = '...'; }
+      _closeOverlay();
+      await onConfirm();
+    };
+  }
+
+  // ── Show insufficient credits ─────────────────────────────────
+  function _showInsufficient(cost, balance) {
+    const need = cost - balance;
+    _showOverlay(`
+      <div class="tpw-head">
+        <div class="tpw-head-title">⊙ Không đủ Lượng</div>
+        <div class="tpw-head-sub">Cần thêm ${need} lượng để tiếp tục</div>
+      </div>
+      <div class="tpw-topup-box">
+        <div class="tpw-topup-msg">
+          Số dư: <strong>${balance} lượng</strong> · Cần: <strong>${cost} lượng</strong><br>
+          Nạp thêm credits để sử dụng công cụ này.
+        </div>
+        <a class="tpw-btn-topup" href="/topup.html" onclick="TuviPaywall._close()">Nạp Credits →</a>
+      </div>
+    `);
+  }
+
+  // ── Show login prompt ─────────────────────────────────────────
+  function _showLogin(slug, callback) {
+    _showOverlay(`
+      <div class="tpw-head">
+        <div class="tpw-head-title">Đăng nhập để tiếp tục</div>
+        <div class="tpw-head-sub">Cần tài khoản để sử dụng credits</div>
+      </div>
+      <div class="tpw-login-box">
+        <div class="tpw-login-msg">
+          Đăng nhập để dùng credits và mở khoá ngay.<br>
+          <span style="font-size:12px;color:#999">Đăng ký nhận 10 credits miễn phí</span>
+        </div>
+        <button class="tpw-btn-login" id="tpw-login-btn">Đăng Nhập / Đăng Ký</button>
+      </div>
+    `);
+    document.getElementById('tpw-login-btn').onclick = () => {
+      _closeOverlay();
       if (window.showAuthModal) {
         window.showAuthModal(async () => { await requireCredits(slug, callback); });
+      } else if (window.Auth?.require) {
+        window.Auth.require(async () => { await requireCredits(slug, callback); });
       } else {
         window.location.href = '/profile.html?redirect=' + encodeURIComponent(window.location.href);
       }
+    };
+  }
+
+  // ── Success banner ────────────────────────────────────────────
+  function _showBanner(msg) {
+    const old = document.getElementById('tpw-banner');
+    if (old) old.remove();
+    const el = document.createElement('div');
+    el.id = 'tpw-banner';
+    el.className = 'tpw-banner';
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(() => { el.style.transition = 'opacity .5s'; el.style.opacity = '0'; }, 3000);
+    setTimeout(() => el.remove(), 3600);
+  }
+
+  // ── MAIN: requireCredits ──────────────────────────────────────
+  async function requireCredits(slug, callback) {
+    _injectCss();
+
+    // 1. Get session directly from supabase
+    const session = await _getSession();
+    if (!session) {
+      _showLogin(slug, callback);
       return;
     }
 
-    await _fetchPricing(); // ensure pricing cached
-    const p = _p();
-    const userId = window.Auth.getUser()?.id || '';
-    const token  = window.Auth.getSession()?.access_token || '';
+    const userId = session.user.id;
+    const token  = session.access_token;
 
-    // 2. Re-access check (same slug = already paid)
+    // 2. Get cost from cache/DB
+    const { cost, title } = await _getCost();
+
+    // 3. Re-access check (already paid for this slug)
     if (slug) {
       try {
-        const r = await fetch('/api/payment?action=check&slug=' + encodeURIComponent(slug) + '&userId=' + encodeURIComponent(userId));
-        if ((await r.json()).hasAccess) { await callback(); return; }
+        const r = await fetch(`/api/payment?action=check&slug=${encodeURIComponent(slug)}&userId=${encodeURIComponent(userId)}`);
+        const d = await r.json();
+        if (d.hasAccess) { await callback(); return; }
       } catch(e) {}
     }
 
-    // 3. Balance check
+    // 4. Balance check
     let balance = 0;
     try {
-      const r = await fetch('/api/payment?action=balance&userId=' + encodeURIComponent(userId));
-      balance = (await r.json()).balance ?? 0;
+      const r = await fetch(`/api/payment?action=balance&userId=${encodeURIComponent(userId)}`);
+      const d = await r.json();
+      balance = d.balance ?? 0;
     } catch(e) {}
 
-    if (balance < p.cost) {
-      // Not enough — show paywall modal (already has topup CTA)
-      _buildModal();
-      _modal.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-      _renderCta(); // will show deficit + topup
+    if (balance < cost) {
+      _showInsufficient(cost, balance);
       return;
     }
 
-    // 4. Show confirm then deduct
-    _showConfirm(p.cost, balance, p.title, async () => {
+    // 5. Show confirm → deduct → callback
+    _showConfirm(cost, balance, title, async () => {
       try {
-        console.log('[TuviPaywall] deducting:', p.cost, 'token:', token ? token.slice(0,20)+'...' : 'EMPTY');
         const res = await fetch('/api/payment?action=deduct', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-          body: JSON.stringify({ amount: p.cost, toolType: TOOL_TYPE_MAP[_cfg.product] || ('use_' + _cfg.product), slug, description: p.title }),
+          body: JSON.stringify({
+            amount: cost,
+            toolType: TOOL_TYPE[_cfg?.product] || ('use_' + (_cfg?.product || 'unknown')),
+            slug: slug || '',
+            description: title,
+          }),
         });
         const data = await res.json();
-        console.log('[TuviPaywall] deduct response:', data);
 
-        if (data.success) {
+        if (data.success || data.alreadyPaid) {
           window.refreshNavCredits && window.refreshNavCredits();
-          _showSuccessBanner('✓ Đã trừ ' + p.cost + ' lượng · Còn lại ' + data.balance + ' lượng');
+          _showBanner('✓ Đã trừ ' + cost + ' lượng · Còn lại ' + (data.balance ?? (balance - cost)) + ' lượng');
           await callback();
           return;
         }
 
         if (data.insufficientBalance) {
-          _buildModal();
-          _modal.style.display = 'flex';
-          document.body.style.overflow = 'hidden';
-          _renderCta();
+          _showInsufficient(cost, balance);
           return;
         }
 
-        alert('Lỗi trừ credits: ' + (data.error || 'Vui lòng thử lại.'));
+        alert('Lỗi: ' + (data.error || 'Vui lòng thử lại.'));
       } catch(e) {
         alert('Lỗi kết nối: ' + e.message);
       }
-    }); // end confirm
+    });
   }
 
-  // Global helper for tool pages
-  function generateToolSlug(product) {
-    const uid = window.Auth?.getUser()?.id || 'guest';
-    return product + '-' + uid.slice(0,8) + '-' + Date.now();
+  // ── Public API ────────────────────────────────────────────────
+  function init(config) {
+    _cfg = config;
+    _injectCss();
+    // Pre-fetch pricing in background
+    _getCost().catch(() => {});
   }
 
   return {
     init,
-    check,
-    show,
-    hide,
     requireCredits,
     generateToolSlug,
-    showSuccessBanner: _showSuccessBanner,
-    _initiate:    show,
-    _checkAlready,
-    _doDeduct,
-    _doLogin,
-    _doTopupInline,
-    _hideConfirm,
+    _close: _closeOverlay,
+    show: _showInsufficient,
   };
-
 })();
