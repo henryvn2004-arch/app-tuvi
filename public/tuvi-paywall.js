@@ -312,7 +312,7 @@ const TuviPaywall = (() => {
   // ── Login then re-render ──────────────────────────────────────
   function _doLogin() {
     if (window.showAuthModal) {
-      showAuthModal(async () => { await _renderCta(); });
+      window.showAuthModal(async () => { await _renderCta(); });
     } else {
       window.location.href = '/profile.html';
     }
@@ -468,7 +468,11 @@ const TuviPaywall = (() => {
   async function requireCredits(slug, callback) {
     // 1. Login check
     if (!window.Auth?.isLoggedIn()) {
-      showAuthModal(async () => { await requireCredits(slug, callback); });
+      if (window.showAuthModal) {
+        window.showAuthModal(async () => { await requireCredits(slug, callback); });
+      } else {
+        window.location.href = '/profile.html?redirect=' + encodeURIComponent(window.location.href);
+      }
       return;
     }
 
