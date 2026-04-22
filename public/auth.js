@@ -80,8 +80,8 @@ async function _loadNavCredits() {
     const bal = rows[0]?.balance ?? 0;
     const badge = document.getElementById('nav-credit-badge');
     const menuVal = document.getElementById('nav-credit-menu-val');
-    if (badge) badge.textContent = bal + ' cr';
-    if (menuVal) menuVal.textContent = bal + ' credits';
+    if (badge) badge.innerHTML = '⊙ ' + bal.toLocaleString();
+    if (menuVal) menuVal.textContent = bal.toLocaleString() + ' lượng';
   } catch(e) {}
 }
 
@@ -180,8 +180,8 @@ function updateNavUI() {
         <div style="display:flex;align-items:center;gap:7px;cursor:pointer;padding:6px 8px;border-radius:8px;transition:background .15s"
              onmouseover="this.style.background='rgba(255,255,255,.08)'" onmouseout="this.style.background=''"
              onclick="document.getElementById('nav-profile-menu').style.display=document.getElementById('nav-profile-menu').style.display==='block'?'none':'block'">
-          <div id="nav-credit-badge" style="background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.4);border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700;color:#c9a84c;letter-spacing:.02em;white-space:nowrap">
-            … cr
+          <div id="nav-credit-badge" style="background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.4);border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700;color:#c9a84c;letter-spacing:.02em;white-space:nowrap;font-family:Georgia,serif">
+            ⊙ …
           </div>
           ${avatar
             ? `<img src="${avatar}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:2px solid #c9a84c">`
@@ -196,8 +196,8 @@ function updateNavUI() {
           </div>
           <div style="padding:10px 16px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between">
             <div>
-              <div style="font-size:10px;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px">Credits</div>
-              <div id="nav-credit-menu-val" style="font-size:16px;font-weight:700;color:#061A2E;font-family:Georgia,serif">…</div>
+              <div style="font-size:10px;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px">Lượng · Xu</div>
+              <div id="nav-credit-menu-val" style="font-size:16px;font-weight:700;color:#061A2E;font-family:Georgia,serif">… lượng</div>
             </div>
             <a href="/topup.html" style="background:#c9a84c;color:#061A2E;font-size:11px;font-weight:700;padding:5px 10px;border-radius:5px;text-decoration:none" onmouseover="this.style.background='#f0d080'" onmouseout="this.style.background='#c9a84c'">+ Nạp</a>
           </div>

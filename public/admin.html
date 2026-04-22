@@ -129,10 +129,9 @@ tr:hover td{background:#fafafa}
     <!-- Tabs -->
     <div class="tabs">
       <button class="tab-btn active" data-tab="purchases">💳 Giao Dịch</button>
-      <button class="tab-btn" data-tab="credits">⚡ Credits</button>
-      <button class="tab-btn" data-tab="pricing">🎛 Pricing</button>
       <button class="tab-btn" data-tab="users">👤 Users</button>
       <button class="tab-btn" data-tab="lasos">🔮 Lá Số</button>
+      <button class="tab-btn" data-tab="tools">⚙️ Công Cụ</button>
     </div>
 
     <!-- Tab: Purchases -->
@@ -179,60 +178,69 @@ tr:hover td{background:#fafafa}
         </div>
       </div>
     </div>
-    <!-- Tab: Credits -->
-    <div class="tab-content" id="tab-credits">
-      <div class="section">
-        <div class="section-header">
-          <div class="section-title">Credit Transactions</div>
-          <button class="refresh-btn" onclick="loadCredits()">↻ Refresh</button>
-        </div>
-        <div class="search-bar">
-          <input class="search-input" id="search-credits" placeholder="Tìm user_id, type, slug..." oninput="filterCredits()"/>
-        </div>
-        <div class="table-wrap" id="credits-table">
-          <div class="loading"><span class="spin"></span>Đang tải...</div>
-        </div>
-      </div>
-      <div class="section" style="margin-top:1.5rem">
-        <div class="section-header">
-          <div class="section-title">User Balances</div>
-          <button class="refresh-btn" onclick="loadUserBalances()">↻ Refresh</button>
-        </div>
-        <div class="table-wrap" id="balances-table">
-          <div class="loading"><span class="spin"></span>Đang tải...</div>
-        </div>
-      </div>
-    </div>
+    <!-- Tab: Công Cụ Admin -->
+    <div class="tab-content" id="tab-tools">
 
-    <!-- Tab: Pricing -->
-    <div class="tab-content" id="tab-pricing">
+      <!-- Create User -->
       <div class="section">
         <div class="section-header">
-          <div class="section-title">Quản Lý Giá Credits</div>
-          <span style="font-size:.75rem;color:var(--text-lt)">Thay đổi có hiệu lực ngay lập tức</span>
+          <div class="section-title">Tạo Tài Khoản Mới</div>
         </div>
-        <div id="pricing-alert" style="margin-bottom:.75rem"></div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Tool</th>
-                <th>Tool ID</th>
-                <th>Credits</th>
-                <th>Tương Đương</th>
-                <th>Bật</th>
-                <th>Lưu</th>
-              </tr>
-            </thead>
-            <tbody id="pricing-body">
-              <tr><td colspan="6" class="loading"><span class="spin"></span>Đang tải...</td></tr>
-            </tbody>
-          </table>
+        <div id="create-user-alert" style="margin-bottom:.75rem"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:.75rem;align-items:end;margin-bottom:.5rem">
+          <div>
+            <div style="font-size:.72rem;font-weight:700;color:var(--text-lt);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem">Email</div>
+            <input type="email" id="cu-email" placeholder="user@example.com" style="width:100%;padding:.55rem .85rem;border:1.5px solid var(--border);border-radius:6px;font-size:.82rem;font-family:inherit;outline:none">
+          </div>
+          <div>
+            <div style="font-size:.72rem;font-weight:700;color:var(--text-lt);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem">Mật Khẩu</div>
+            <input type="text" id="cu-pwd" placeholder="Tối thiểu 6 ký tự" style="width:100%;padding:.55rem .85rem;border:1.5px solid var(--border);border-radius:6px;font-size:.82rem;font-family:inherit;outline:none">
+          </div>
+          <div>
+            <div style="font-size:.72rem;font-weight:700;color:var(--text-lt);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem">Credits ban đầu</div>
+            <input type="number" id="cu-credits" placeholder="0" min="0" style="width:100px;padding:.55rem .85rem;border:1.5px solid var(--border);border-radius:6px;font-size:.82rem;font-family:inherit;outline:none;text-align:center">
+          </div>
         </div>
-        <div style="margin-top:1rem;padding:.75rem 1rem;background:var(--bg);border-radius:6px;font-size:.75rem;color:var(--text-lt)">
-          ⚠️ Đảm bảo đã chạy <code>migration-add-pricing.sql</code> trong Supabase trước khi dùng tính năng này.
+        <button class="refresh-btn" onclick="createUser()" style="margin-top:.5rem">Tạo Tài Khoản</button>
+      </div>
+
+      <!-- Grant Credits -->
+      <div class="section" style="margin-top:1.25rem">
+        <div class="section-header">
+          <div class="section-title">Cấp Credits Thủ Công</div>
+        </div>
+        <div id="grant-alert" style="margin-bottom:.75rem"></div>
+        <div style="display:grid;grid-template-columns:1fr auto auto auto;gap:.75rem;align-items:end">
+          <div>
+            <div style="font-size:.72rem;font-weight:700;color:var(--text-lt);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem">Email User</div>
+            <input type="email" id="grant-email" placeholder="user@example.com" style="width:100%;padding:.55rem .85rem;border:1.5px solid var(--border);border-radius:6px;font-size:.82rem;font-family:inherit;outline:none">
+          </div>
+          <div>
+            <div style="font-size:.72rem;font-weight:700;color:var(--text-lt);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem">Số Credits</div>
+            <input type="number" id="grant-amount" placeholder="100" min="1" style="width:100px;padding:.55rem .85rem;border:1.5px solid var(--border);border-radius:6px;font-size:.82rem;font-family:inherit;outline:none;text-align:center">
+          </div>
+          <div>
+            <div style="font-size:.72rem;font-weight:700;color:var(--text-lt);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem">Ghi Chú</div>
+            <input type="text" id="grant-note" placeholder="Lý do cấp..." style="width:160px;padding:.55rem .85rem;border:1.5px solid var(--border);border-radius:6px;font-size:.82rem;font-family:inherit;outline:none">
+          </div>
+          <button class="refresh-btn" onclick="grantCredits()" style="white-space:nowrap">Cấp Credits</button>
+        </div>
+        <div style="margin-top:1rem;font-size:.75rem;color:var(--text-lt)">
+          Để trừ credits, nhập số âm (ví dụ: -50)
         </div>
       </div>
+
+      <!-- User Credit Overview -->
+      <div class="section" style="margin-top:1.25rem">
+        <div class="section-header">
+          <div class="section-title">Số Dư Tất Cả Users</div>
+          <button class="refresh-btn" onclick="loadAdminUsers()">↻ Refresh</button>
+        </div>
+        <div class="table-wrap" id="admin-users-table">
+          <div class="loading"><span class="spin"></span>Đang tải...</div>
+        </div>
+      </div>
+
     </div>
 
   </div>
@@ -321,8 +329,6 @@ async function sbRpc(fn, body = {}) {
 function loadAll() {
   loadStats();
   loadPurchases();
-  loadCredits();
-  loadPricing();
   loadUsers();
   loadLasos();
 }
@@ -330,43 +336,36 @@ function loadAll() {
 // ── STATS ──
 async function loadStats() {
   try {
-    const [lasos] = await Promise.all([
+    const [purchases, lasos] = await Promise.all([
+      sbFetch('purchases', '?status=eq.completed&select=amount,created_at'),
       sbFetch('laso_public', '?select=slug,created_at,luan_giai'),
     ]);
 
-    const withLG = lasos.filter(l => l.luan_giai && Object.keys(l.luan_giai).length > 0);
-
-    // Credit stats
-    let creditStats = { topupCredits: 0, topupCount: 0, usedCredits: 0 };
-    try {
-      const txns = await sbFetch('credit_transactions', '?select=amount,type');
-      txns.forEach(t => {
-        if (t.amount > 0) { creditStats.topupCredits += t.amount; creditStats.topupCount++; }
-        else { creditStats.usedCredits += Math.abs(t.amount); }
-      });
-    } catch(e) {}
-    const estRevenue = (creditStats.topupCredits / 10).toFixed(0);
+    const totalRev = purchases.reduce((s, p) => s + parseFloat(p.amount || 0), 0);
+    const last7d   = purchases.filter(p => new Date(p.created_at) > new Date(Date.now() - 7*24*3600*1000));
+    const rev7d    = last7d.reduce((s, p) => s + parseFloat(p.amount || 0), 0);
+    const withLG   = lasos.filter(l => l.luan_giai && Object.keys(l.luan_giai).length > 0);
 
     document.getElementById('stats-grid').innerHTML = `
       <div class="stat-card gold">
-        <div class="stat-label">Doanh Thu Ước Tính</div>
-        <div class="stat-value">$${estRevenue}</div>
-        <div class="stat-sub">${creditStats.topupCount} lần nạp</div>
+        <div class="stat-label">Tổng Doanh Thu</div>
+        <div class="stat-value">$${totalRev.toFixed(0)}</div>
+        <div class="stat-sub">${purchases.length} giao dịch</div>
       </div>
       <div class="stat-card green">
-        <div class="stat-label">Credits Đã Nạp</div>
-        <div class="stat-value">${creditStats.topupCredits.toLocaleString()}</div>
-        <div class="stat-sub">credits tổng cộng</div>
+        <div class="stat-label">Doanh Thu 7 Ngày</div>
+        <div class="stat-value">$${rev7d.toFixed(0)}</div>
+        <div class="stat-sub">${last7d.length} giao dịch gần đây</div>
       </div>
       <div class="stat-card blue">
-        <div class="stat-label">Credits Đã Dùng</div>
-        <div class="stat-value">${creditStats.usedCredits.toLocaleString()}</div>
-        <div class="stat-sub">trên mọi tools</div>
-      </div>
-      <div class="stat-card">
         <div class="stat-label">Lá Số Đã Tạo</div>
         <div class="stat-value">${lasos.length}</div>
         <div class="stat-sub">${withLG.length} có luận giải AI</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Tổng Giao Dịch</div>
+        <div class="stat-value">${purchases.length}</div>
+        <div class="stat-sub">Trung bình $${purchases.length ? (totalRev/purchases.length).toFixed(1) : 0}/đơn</div>
       </div>
     `;
   } catch(e) {
@@ -516,157 +515,117 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
-    if (btn.dataset.tab === 'credits') loadCredits();
-    if (btn.dataset.tab === 'pricing') loadPricing();
   });
 });
 
-// ── CREDITS ──
-let _allCredits = [];
+// ── ADMIN TOOLS ──
+async function createUser() {
+  const email   = document.getElementById('cu-email').value.trim();
+  const pwd     = document.getElementById('cu-pwd').value.trim();
+  const credits = parseInt(document.getElementById('cu-credits').value || '0');
+  const alertEl = document.getElementById('create-user-alert');
+  alertEl.innerHTML = '';
 
-async function loadCredits() {
-  document.getElementById('credits-table').innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
+  if (!email || !pwd) { showToolAlert('create-user-alert', 'error', 'Vui lòng nhập email và mật khẩu'); return; }
+
   try {
-    _allCredits = await sbFetch('credit_transactions', '?order=created_at.desc&limit=300&select=*');
-    renderCredits(_allCredits);
-  } catch(e) {
-    document.getElementById('credits-table').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
-  }
-  loadUserBalances();
+    const res = await fetch('/api/payment?action=admin-create-user', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${_token}` },
+      body: JSON.stringify({ email, password: pwd, credits }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToolAlert('create-user-alert', 'success',
+        `✓ Đã tạo tài khoản <strong>${email}</strong>${credits > 0 ? ` · Cấp ${credits} credits` : ''}`);
+      document.getElementById('cu-email').value = '';
+      document.getElementById('cu-pwd').value = '';
+      document.getElementById('cu-credits').value = '';
+      loadAdminUsers();
+    } else {
+      showToolAlert('create-user-alert', 'error', data.error || 'Tạo thất bại');
+    }
+  } catch(e) { showToolAlert('create-user-alert', 'error', e.message); }
 }
 
-function renderCredits(data) {
-  if (!data.length) { document.getElementById('credits-table').innerHTML = '<div class="empty">Chưa có giao dịch</div>'; return; }
-  const TYPE_LABELS = { topup:'💳 Nạp', use_laso:'🔮 Lá Số', use_xem_tuoi:'💑 Xem Tuổi', use_xem_lam_an:'💼 Làm Ăn', use_dien_tuong:'👁 Diện Tướng', use_nhan_tuong:'👁 Nhãn Tướng', use_thu_tuong:'✋ Thủ Tướng', use_thanh_tuong:'🎵 Thanh Tướng' };
-  const rows = data.map(t => {
-    const d = new Date(t.created_at).toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
-    const isAdd = t.amount > 0;
-    const amtStyle = isAdd ? 'color:var(--green);font-weight:700' : 'color:var(--red);font-weight:700';
-    const amtStr = (isAdd?'+':'') + t.amount + ' cr';
-    const label = TYPE_LABELS[t.type] || t.type;
-    return `<tr>
-      <td style="font-size:.75rem;color:var(--text-lt)">${d}</td>
-      <td><span class="badge ${isAdd?'badge-green':'badge-red'}">${label}</span></td>
-      <td style="${amtStyle}">${amtStr}</td>
-      <td style="font-size:.72rem;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-lt)" title="${t.slug||''}">${t.slug||'—'}</td>
-      <td class="mono" style="font-size:.65rem;color:var(--text-lt)">${(t.user_id||'').slice(0,12)}...</td>
-    </tr>`;
-  }).join('');
-  document.getElementById('credits-table').innerHTML = `<table>
-    <thead><tr><th>Thời Gian</th><th>Loại</th><th>Credits</th><th>Slug</th><th>User</th></tr></thead>
-    <tbody>${rows}</tbody>
-  </table>`;
-}
+async function grantCredits() {
+  const email  = document.getElementById('grant-email').value.trim();
+  const amount = parseInt(document.getElementById('grant-amount').value || '0');
+  const note   = document.getElementById('grant-note').value.trim() || 'Admin cấp thủ công';
 
-function filterCredits() {
-  const q = document.getElementById('search-credits').value.toLowerCase();
-  renderCredits(_allCredits.filter(t =>
-    (t.user_id||'').toLowerCase().includes(q) ||
-    (t.type||'').toLowerCase().includes(q) ||
-    (t.slug||'').toLowerCase().includes(q)
-  ));
-}
+  if (!email) { showToolAlert('grant-alert', 'error', 'Nhập email user'); return; }
+  if (!amount || amount === 0) { showToolAlert('grant-alert', 'error', 'Nhập số credits khác 0'); return; }
 
-async function loadUserBalances() {
-  document.getElementById('balances-table').innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
   try {
-    const rows = await sbFetch('user_credits', '?order=balance.desc&select=user_id,balance,updated_at');
-    if (!rows.length) { document.getElementById('balances-table').innerHTML = '<div class="empty">Chưa có dữ liệu</div>'; return; }
-    const html = `<table>
-      <thead><tr><th>User ID</th><th>Balance (Credits)</th><th>Cập Nhật</th></tr></thead>
-      <tbody>${rows.map(r => `<tr>
-        <td class="mono" style="font-size:.7rem">${r.user_id}</td>
-        <td style="font-weight:700;color:var(--navy)">${r.balance} cr</td>
-        <td style="font-size:.75rem;color:var(--text-lt)">${new Date(r.updated_at).toLocaleDateString('vi-VN')}</td>
-      </tr>`).join('')}</tbody>
-    </table>`;
-    document.getElementById('balances-table').innerHTML = html;
-  } catch(e) {
-    document.getElementById('balances-table').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
-  }
+    const res = await fetch('/api/payment?action=admin-grant', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${_token}` },
+      body: JSON.stringify({ targetEmail: email, amount, description: note }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      const sign = amount > 0 ? '+' : '';
+      showToolAlert('grant-alert', 'success',
+        `✓ ${sign}${amount} credits cho <strong>${email}</strong> · Số dư mới: <strong>${data.balance} lượng</strong>`);
+      document.getElementById('grant-email').value = '';
+      document.getElementById('grant-amount').value = '';
+      document.getElementById('grant-note').value = '';
+      loadAdminUsers();
+    } else {
+      showToolAlert('grant-alert', 'error', data.error || 'Thất bại');
+    }
+  } catch(e) { showToolAlert('grant-alert', 'error', e.message); }
 }
 
-// ── PRICING ──
-const TOOL_LABELS = {
-  'laso':'🔮 Luận Giải Lá Số', 'xem-tuoi':'💑 Xem Tuổi Vợ Chồng', 'xem-lam-an':'💼 Xem Tuổi Làm Ăn',
-  'dien-tuong':'👁 Diện Tướng', 'nhan-tuong':'👁 Nhãn Tướng', 'thu-tuong':'✋ Thủ Tướng', 'thanh-tuong':'🎵 Thanh Tướng',
-};
-
-async function loadPricing() {
-  document.getElementById('pricing-body').innerHTML = '<tr><td colspan="6" class="loading"><span class="spin"></span>Đang tải...</td></tr>';
+async function loadAdminUsers() {
+  document.getElementById('admin-users-table').innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
   try {
-    const rows = await sbFetch('tool_pricing', '?order=credits.desc&select=*');
-    if (!rows.length) {
-      document.getElementById('pricing-body').innerHTML = '<tr><td colspan="6" class="empty">Chưa có dữ liệu — chạy migration-add-pricing.sql trước</td></tr>';
+    const res = await fetch('/api/payment?action=admin-users', {
+      headers: { Authorization: `Bearer ${_token}` }
+    });
+    const { users } = await res.json();
+    if (!users || !users.length) {
+      document.getElementById('admin-users-table').innerHTML = '<div class="empty">Chưa có dữ liệu</div>';
       return;
     }
-    document.getElementById('pricing-body').innerHTML = rows.map(r => `
-      <tr id="pr-row-${r.tool_id}">
-        <td style="font-weight:600">${TOOL_LABELS[r.tool_id] || r.tool_id}</td>
-        <td class="mono" style="color:var(--text-lt);font-size:.75rem">${r.tool_id}</td>
+    document.getElementById('admin-users-table').innerHTML = `<table>
+      <thead><tr><th>User ID</th><th>Số Dư (Lượng)</th><th>Cập Nhật</th><th></th></tr></thead>
+      <tbody>${users.map(u => `<tr>
+        <td class="mono" style="font-size:.7rem">${u.user_id}</td>
+        <td style="font-weight:700;color:var(--navy);font-family:'Noto Serif',serif">⊙ ${u.balance.toLocaleString()}</td>
+        <td style="font-size:.75rem;color:var(--text-lt)">${new Date(u.updated_at).toLocaleDateString('vi-VN')}</td>
         <td>
-          <input type="number" id="pr-credits-${r.tool_id}" value="${r.credits}" min="1" max="9999"
-            style="width:70px;padding:.3rem .5rem;border:1.5px solid var(--border);border-radius:5px;font-size:.85rem;font-family:inherit;text-align:center"
-            oninput="updateUsdEquiv('${r.tool_id}')">
-        </td>
-        <td id="pr-usd-${r.tool_id}" style="font-size:.8rem;color:var(--text-lt)">≈ $${(r.credits/10).toFixed(r.credits%10===0?0:1)}</td>
-        <td>
-          <label style="cursor:pointer;display:flex;align-items:center;gap:.35rem">
-            <input type="checkbox" id="pr-enabled-${r.tool_id}" ${r.enabled?'checked':''}>
-            <span style="font-size:.75rem">${r.enabled?'Bật':'Tắt'}</span>
-          </label>
-        </td>
-        <td>
-          <button onclick="savePricingRow('${r.tool_id}')" id="pr-btn-${r.tool_id}"
-            style="padding:.3rem .7rem;background:var(--navy);color:#fff;border:none;border-radius:5px;font-size:.75rem;font-weight:700;cursor:pointer;font-family:inherit">
-            Lưu
+          <button onclick="quickGrant('${u.user_id}')"
+            style="padding:.25rem .6rem;font-size:.7rem;background:var(--gold);color:#fff;border:none;border-radius:4px;cursor:pointer;font-family:inherit">
+            + Credits
           </button>
         </td>
-      </tr>
-    `).join('');
+      </tr>`).join('')}</tbody>
+    </table>`;
   } catch(e) {
-    document.getElementById('pricing-body').innerHTML = `<tr><td colspan="6" class="empty">Lỗi: ${e.message}</td></tr>`;
+    document.getElementById('admin-users-table').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
   }
 }
 
-function updateUsdEquiv(toolId) {
-  const credits = parseInt(document.getElementById('pr-credits-' + toolId)?.value || 0);
-  const usdEl = document.getElementById('pr-usd-' + toolId);
-  if (usdEl) usdEl.textContent = '≈ $' + (credits/10).toFixed(credits%10===0?0:1);
+function quickGrant(userId) {
+  const amount = parseInt(prompt('Số credits cấp (âm để trừ):', '50') || '0');
+  if (!amount) return;
+  fetch('/api/payment?action=admin-grant', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${_token}` },
+    body: JSON.stringify({ targetUserId: userId, amount, description: 'Admin quick grant' }),
+  }).then(r => r.json()).then(d => {
+    if (d.success) { alert(`✓ Số dư mới: ${d.balance} lượng`); loadAdminUsers(); }
+    else alert('Lỗi: ' + (d.error || 'unknown'));
+  });
 }
 
-async function savePricingRow(toolId) {
-  const credits = parseInt(document.getElementById('pr-credits-' + toolId)?.value);
-  const enabled = document.getElementById('pr-enabled-' + toolId)?.checked;
-  const btn = document.getElementById('pr-btn-' + toolId);
-  if (!credits || credits < 1) { alert('Credits phải >= 1'); return; }
-
-  if (btn) { btn.disabled = true; btn.textContent = '...'; }
-
-  try {
-    const res = await fetch(`${SB_URL}/rest/v1/tool_pricing?tool_id=eq.${encodeURIComponent(toolId)}`, {
-      method: 'PATCH',
-      headers: {
-        apikey: SB_ANON,
-        Authorization: `Bearer ${_token}`,
-        'Content-Type': 'application/json',
-        Prefer: 'return=minimal',
-      },
-      body: JSON.stringify({ credits, enabled, updated_at: new Date().toISOString() }),
-    });
-    if (!res.ok) throw new Error(await res.text());
-    if (btn) { btn.disabled = false; btn.textContent = '✓ Đã lưu'; btn.style.background = 'var(--green)'; }
-    setTimeout(() => { if (btn) { btn.textContent = 'Lưu'; btn.style.background = ''; btn.disabled = false; }}, 2000);
-
-    // Show alert
-    const alertEl = document.getElementById('pricing-alert');
-    alertEl.innerHTML = `<div style="background:#F0FAF4;color:var(--green);border:1px solid #c3e6d0;border-radius:6px;padding:.65rem 1rem;font-size:.82rem">✓ Đã cập nhật giá <strong>${TOOL_LABELS[toolId]||toolId}</strong> → <strong>${credits} credits</strong></div>`;
-    setTimeout(() => { alertEl.innerHTML = ''; }, 3000);
-  } catch(e) {
-    if (btn) { btn.disabled = false; btn.textContent = 'Lỗi'; btn.style.background = 'var(--red)'; }
-    setTimeout(() => { if (btn) { btn.textContent = 'Lưu'; btn.style.background = ''; btn.disabled = false; }}, 2000);
-    alert('Lỗi lưu: ' + e.message + '\n\nĐảm bảo đã chạy migration-add-pricing.sql và RLS policy cho admin write.');
-  }
+function showToolAlert(id, type, msg) {
+  const el = document.getElementById(id);
+  const colors = { success: { bg: '#F0FAF4', color: 'var(--green)', border: '#c3e6d0' }, error: { bg: '#FFF5F5', color: 'var(--red)', border: '#f5c6c6' }};
+  const c = colors[type] || colors.error;
+  el.innerHTML = `<div style="background:${c.bg};color:${c.color};border:1px solid ${c.border};border-radius:6px;padding:.65rem 1rem;font-size:.82rem">${msg}</div>`;
+  if (type === 'success') setTimeout(() => { el.innerHTML = ''; }, 4000);
 }
 </script>
 </body>
