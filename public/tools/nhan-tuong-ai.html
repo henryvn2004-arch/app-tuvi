@@ -462,6 +462,7 @@ async function analyze() {
   document.getElementById('result-section').classList.add('active');
   _currentSlug = TuviPaywall.generateToolSlug('nhan-tuong');
   // Option A: check + deduct credits before calling API
+  _saveStateForAuth();
   await TuviPaywall.requireCredits(_currentSlug, async () => {
     await _doAnalyze();
   });
@@ -533,6 +534,42 @@ function _generateSlug(product) {
   const uid = window.Auth?.getUser()?.id || 'guest';
   return product + '-' + uid.slice(0,8) + '-' + Date.now();
 }
+
+// ── State persistence (survive OAuth redirect) ────────────────────
+function _saveStateForAuth() {
+  try {
+    const toSave = { _savedAt: Date.now() };
+      toSave._imageData = _imageData;
+      toSave._mediaType = _mediaType;
+    sessionStorage.setItem('tvmb_nhan_tuong_state', JSON.stringify(toSave));
+  } catch(e) {}
+}
+
+function _restoreStateAfterAuth() {
+  try {
+    const raw = sessionStorage.getItem('tvmb_nhan_tuong_state');
+    if (!raw) return false;
+    const saved = JSON.parse(raw);
+    if (Date.now() - (saved._savedAt || 0) > 10 * 60 * 1000) {
+      sessionStorage.removeItem('tvmb_nhan_tuong_state');
+      return false;
+    }
+    sessionStorage.removeItem('tvmb_nhan_tuong_state');
+    
+    if (saved._imageData) {
+      _imageData = saved._imageData;
+      _mediaType = saved._mediaType || 'image/jpeg';
+      const analyzeBtn = document.getElementById('analyzeBtn') || document.querySelector('.btn-analyze');
+      if (analyzeBtn) analyzeBtn.disabled = false;
+      setTimeout(() => { if (window.Auth?.isLoggedIn() && _imageData) { const btn = document.getElementById('analyzeBtn') || document.querySelector('.btn-analyze'); if (btn) btn.click(); } }, 800);
+    }
+    return true;
+  } catch(e) { return false; }
+}
+
+// Run restore on load
+(function() { _restoreStateAfterAuth(); })();
+
 // ── TuviPaywall init ──────────────────────────────────────────
 TuviPaywall.init({
   product: 'nhan-tuong',

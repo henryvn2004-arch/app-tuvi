@@ -642,6 +642,7 @@ async function analyze() {
   document.getElementById('result-section').classList.add('active');
   _currentSlug = TuviPaywall.generateToolSlug('thanh-tuong');
   // Option A: check + deduct credits before calling API
+  _saveStateForAuth();
   await TuviPaywall.requireCredits(_currentSlug, async () => {
     await _doAnalyze();
   });
@@ -739,6 +740,40 @@ function renderMd(md) {
 }
 </script>
 <script src="/tuvi-paywall.js">
+
+// ── State persistence (survive OAuth redirect) ────────────────────
+function _saveStateForAuth() {
+  try {
+    const toSave = { _savedAt: Date.now() };
+      toSave._features = _features;
+    sessionStorage.setItem('tvmb_thanh_tuong_state', JSON.stringify(toSave));
+  } catch(e) {}
+}
+
+function _restoreStateAfterAuth() {
+  try {
+    const raw = sessionStorage.getItem('tvmb_thanh_tuong_state');
+    if (!raw) return false;
+    const saved = JSON.parse(raw);
+    if (Date.now() - (saved._savedAt || 0) > 10 * 60 * 1000) {
+      sessionStorage.removeItem('tvmb_thanh_tuong_state');
+      return false;
+    }
+    sessionStorage.removeItem('tvmb_thanh_tuong_state');
+    
+    if (saved._features) {
+      _features = saved._features;
+      const analyzeBtn = document.getElementById('analyzeBtn') || document.querySelector('.btn-submit');
+      if (analyzeBtn) analyzeBtn.disabled = false;
+      setTimeout(() => { if (window.Auth?.isLoggedIn() && _features) { const btn = document.getElementById('analyzeBtn') || document.querySelector('.btn-submit'); if (btn) btn.click(); } }, 800);
+    }
+    return true;
+  } catch(e) { return false; }
+}
+
+// Run restore on load
+(function() { _restoreStateAfterAuth(); })();
+
 // ── TuviPaywall init ──────────────────────────────────────────
 TuviPaywall.init({
   product: 'thanh-tuong',

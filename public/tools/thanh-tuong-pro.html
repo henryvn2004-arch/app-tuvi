@@ -1361,6 +1361,19 @@ TuviPaywall.init({
   slug: () => _currentSlug,
   onUnlock: () => {},
 });
+
+// ── Restore state after OAuth login ──────────────────────────────
+(function() {
+  const restored = restoreStateAfterAuth();
+  if (restored) {
+    setTimeout(async () => {
+      const completedCount = Object.keys(state.results).length;
+      if (completedCount >= TASKS.length && window.Auth?.isLoggedIn()) {
+        analyzeBtn.click();
+      }
+    }, 1000);
+  }
+})();
 </script>
 </body>
 </html>
