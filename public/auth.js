@@ -68,6 +68,23 @@ let _user    = null;
     } catch(e) { console.warn('[auth] refresh failed:', e); }
   }
 
+// ── Load credit balance for nav ──
+async function _loadNavCredits() {
+  if (!_user) return;
+  try {
+    const res = await fetch(SUPA_URL + '/rest/v1/user_credits?user_id=eq.' + encodeURIComponent(_user.id) + '&select=balance&limit=1', {
+      headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + (_session?.access_token || SUPA_KEY) }
+    });
+    if (!res.ok) return;
+    const rows = await res.json();
+    const bal = rows[0]?.balance ?? 0;
+    const badge = document.getElementById('nav-credit-badge');
+    const menuVal = document.getElementById('nav-credit-menu-val');
+    if (badge) badge.textContent = bal + ' cr';
+    if (menuVal) menuVal.textContent = bal + ' credits';
+  } catch(e) {}
+}
+
 // ── Public API ──
 window.Auth = {
   isLoggedIn:  () => !!_session,
@@ -160,16 +177,29 @@ function updateNavUI() {
     const initial = (name || email).charAt(0).toUpperCase();
     navEl.innerHTML = `
       <div style="position:relative;display:inline-block" id="nav-profile-wrap">
-        <div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="document.getElementById('nav-profile-menu').style.display=document.getElementById('nav-profile-menu').style.display==='block'?'none':'block'">
+        <div style="display:flex;align-items:center;gap:7px;cursor:pointer;padding:6px 8px;border-radius:8px;transition:background .15s"
+             onmouseover="this.style.background='rgba(255,255,255,.08)'" onmouseout="this.style.background=''"
+             onclick="document.getElementById('nav-profile-menu').style.display=document.getElementById('nav-profile-menu').style.display==='block'?'none':'block'">
+          <div id="nav-credit-badge" style="background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.4);border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700;color:#c9a84c;letter-spacing:.02em;white-space:nowrap">
+            … cr
+          </div>
           ${avatar
-            ? `<img src="${avatar}" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid #c9a84c">`
-            : `<div style="width:30px;height:30px;background:#c9a84c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#061A2E">${initial}</div>`
+            ? `<img src="${avatar}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:2px solid #c9a84c">`
+            : `<div style="width:28px;height:28px;background:#c9a84c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#061A2E">${initial}</div>`
           }
+          <span style="font-size:11px;color:rgba(255,255,255,.5)">▾</span>
         </div>
-        <div id="nav-profile-menu" style="display:none;position:absolute;right:0;top:40px;background:#fff;border:1px solid #ddd;border-radius:8px;padding:8px 0;min-width:180px;box-shadow:0 8px 24px rgba(0,0,0,0.12);z-index:1000">
-          <div style="padding:10px 16px;border-bottom:1px solid #f0f0f0">
-            <div style="font-size:12px;font-weight:600;color:#333">${name || 'Tài khoản'}</div>
-            <div style="font-size:11px;color:#888;margin-top:2px">${email}</div>
+        <div id="nav-profile-menu" style="display:none;position:absolute;right:0;top:44px;background:#fff;border:1px solid #ddd;border-radius:10px;padding:8px 0;min-width:200px;box-shadow:0 8px 28px rgba(0,0,0,.14);z-index:1000">
+          <div style="padding:11px 16px;border-bottom:1px solid #f0f0f0">
+            <div style="font-size:12px;font-weight:700;color:#333">${name || 'Tài khoản'}</div>
+            <div style="font-size:11px;color:#999;margin-top:2px">${email}</div>
+          </div>
+          <div style="padding:10px 16px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-size:10px;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px">Credits</div>
+              <div id="nav-credit-menu-val" style="font-size:16px;font-weight:700;color:#061A2E;font-family:Georgia,serif">…</div>
+            </div>
+            <a href="/topup.html" style="background:#c9a84c;color:#061A2E;font-size:11px;font-weight:700;padding:5px 10px;border-radius:5px;text-decoration:none" onmouseover="this.style.background='#f0d080'" onmouseout="this.style.background='#c9a84c'">+ Nạp</a>
           </div>
           <a href="/profile.html" style="display:block;padding:9px 16px;font-size:13px;color:#333;text-decoration:none" onmouseover="this.style.background='#f8f8f8'" onmouseout="this.style.background=''">Hồ sơ của tôi</a>
           <a href="/menh-kho.html" style="display:block;padding:9px 16px;font-size:13px;color:#333;text-decoration:none" onmouseover="this.style.background='#f8f8f8'" onmouseout="this.style.background=''">Mệnh Khố</a>
@@ -177,6 +207,8 @@ function updateNavUI() {
           <button onclick="Auth.signOut()" style="display:block;width:100%;padding:9px 16px;font-size:13px;color:#C0392B;background:none;border:none;text-align:left;cursor:pointer;font-family:inherit" onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background=''">Đăng xuất</button>
         </div>
       </div>`;
+    // Load credit balance async
+    _loadNavCredits();
     // Close menu when clicking outside
     setTimeout(() => {
       document.addEventListener('click', function closeMenu(e) {
@@ -320,6 +352,7 @@ function showAuthError(msg) {
 
 // Expose for inline use
 window.showAuthModal  = showAuthModal;
+window.refreshNavCredits = _loadNavCredits;
 window.closeAuthModal = closeAuthModal;
 window.switchTab      = switchTab;
 window.submitAuth     = submitAuth;

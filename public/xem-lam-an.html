@@ -1730,6 +1730,7 @@ async function handleCreditUnlock(slug, product, result) {
   if (btn) { btn.disabled = true; btn.textContent = 'Đang xử lý...'; }
   const data = await deductCredits(slug, toolType, COST, desc);
   if (data.success) {
+    window.refreshNavCredits && window.refreshNavCredits();
     TuviPaywall.showSuccessBanner && TuviPaywall.showSuccessBanner();
     if (result) luanGiaiAll(result);
     return;

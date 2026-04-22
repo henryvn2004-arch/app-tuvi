@@ -1621,6 +1621,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       });
       const data = await res.json();
       if (data.success) {
+        window.refreshNavCredits && window.refreshNavCredits();
         const gate = document.getElementById('paywall-gate');
         if (gate) gate.remove();
         await startClaudeOrLoadCache(slug);
