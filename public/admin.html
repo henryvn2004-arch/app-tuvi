@@ -1321,7 +1321,7 @@ let _currentPage = 'dashboard';
 
 const PAGE_TITLES = {
   dashboard: 'Dashboard', users: 'Users', credits: 'Credits & Giao Dịch',
-  lasos: 'Lá Số', pricing: 'Pricing', articles: 'Khảo Luận', tools: 'Công Cụ',
+  lasos: 'Lá Số', pricing: 'Pricing', tools: 'Công Cụ',
 };
 
 // ── AUTH ──
@@ -1365,7 +1365,13 @@ function goTo(page) {
   // Lazy load
   const loaders = { users: loadUsers, credits: loadCredits, lasos: loadLasos,
                     pricing: loadPricing, tools: loadAdminUsers,
-                    content: () => showView && showView('dashboard') };
+                    content: () => {
+    if (showView) showView('dashboard');
+    if (!window._contentInitialized) {
+      window._contentInitialized = true;
+      if (typeof init === 'function') init();
+    }
+  } };
   if (loaders[page]) loaders[page]();
 }
 
@@ -1645,32 +1651,8 @@ async function savePricingRow(id) {
 }
 
 // ── ARTICLES ──
-async function loadArticles() {
-  document.getElementById('articles-table').innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
-  try {
-    _allArticles = await sbGet('khao_luan?order=created_at.desc&limit=200&select=id,title,slug,category,published,created_at');
-    renderArticles(_allArticles);
-  } catch(e) { document.getElementById('articles-table').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`; }
-}
 
-function renderArticles(list) {
-  if (!list.length) { document.getElementById('articles-table').innerHTML = '<div class="empty">Chưa có bài viết</div>'; return; }
-  document.getElementById('articles-table').innerHTML = `<table>
-    <thead><tr><th>Ngày</th><th>Tiêu Đề</th><th>Slug</th><th>Danh Mục</th><th>Published</th></tr></thead>
-    <tbody>${list.map(a => `<tr>
-      <td style="font-size:.72rem;color:var(--text-lt);white-space:nowrap">${fmtDate(a.created_at)}</td>
-      <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${a.title||''}">${a.title||'—'}</td>
-      <td class="mono" style="font-size:.68rem;color:var(--text-lt);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.slug||'—'}</td>
-      <td><span class="badge badge-blue">${a.category||'—'}</span></td>
-      <td>${a.published ? '<span class="badge badge-green">✓</span>' : '<span class="badge badge-grey">Draft</span>'}</td>
-    </tr>`).join('')}</tbody>
-  </table>`;
-}
 
-function filterArticles() {
-  const q = document.getElementById('search-articles').value.toLowerCase();
-  renderArticles(_allArticles.filter(a => (a.title||'').toLowerCase().includes(q) || (a.slug||'').toLowerCase().includes(q) || (a.category||'').toLowerCase().includes(q)));
-}
 
 // ── TOOLS ──
 async function createUser() {
@@ -1758,7 +1740,7 @@ async function sbFetch(path, opts = {}) {
     ...opts,
     headers: {
       'apikey': SB_ANON,
-      'Authorization': `Bearer ${SB_ANON}`,
+      'Authorization': `Bearer ${_token || SB_ANON}`,
       'Content-Type': 'application/json',
       'Prefer': opts.prefer || 'return=representation',
       ...(opts.headers || {})
@@ -2685,27 +2667,9 @@ function showLoginError(msg) {
   el.style.display  = 'block';
 }
 
-function checkSession() {
-  const token = sessionStorage.getItem('admin_token');
-  if (token) {
-    document.getElementById('login-gate').style.display = 'none';
-    const em = sessionStorage.getItem('admin_email');
-    if (em) document.getElementById('admin-email-display').textContent = em;
-  }
-  // Nếu không có token → giữ login gate hiện
-}
-
-// Logout button (thêm vào topbar)
-function adminLogout() {
-  sessionStorage.removeItem('admin_token');
-  sessionStorage.removeItem('admin_email');
-  location.reload();
-}
-
 // ── Start ──
 document.addEventListener('DOMContentLoaded', () => {
-  checkSession();
-  init();
+    init();
   loadSettings();
   renderScriptEditor();
   // Auto-fill YT title when main title changes
