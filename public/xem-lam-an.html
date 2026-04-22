@@ -883,9 +883,9 @@ select.form-input { cursor: pointer; }
             <div class="tvc-paywall-feature">Câu trả lời cá nhân hóa</div>
             <div class="tvc-paywall-feature">Dựa trên 2 lá số thực tế</div>
         </div>
-        <div class="tvc-paywall-price">$9</div>
-        <div class="tvc-paywall-price-note">Bao gồm 9 phần luận giải + Vấn đáp không giới hạn</div>
-        <button class="tvc-paywall-btn" onclick="initiatePaymentTuoi(_savedResult, "xem-tuoi")">
+        <div class="tvc-paywall-price">90 Credits</div>
+        <div class="tvc-paywall-price-note">≈ $9 · Credits không hết hạn · Dùng cho mọi công cụ · <a href="/topup.html" style="color:#c9a84c">Nạp thêm →</a></div>
+        <button class="tvc-paywall-btn" onclick="initiatePaymentTuoi(_savedResult, 'xem-lam-an')">
           Mở Khóa Luận Giải &amp; Vấn Đáp →
         </button>
         <div class="tvc-paywall-secure">🔒 Thanh toán bảo mật qua PayPal · Hoàn tiền nếu lỗi kỹ thuật</div>
@@ -1683,43 +1683,71 @@ function buildSlug(result, product) {
   return parts.join('-').replace(/-+/g,'-').slice(0,80);
 }
 
-async function verifyPaymentTuoi(slug) {
+async function getCreditBalance() {
   try {
-    const r = await fetch('/api/payment?action=check&slug='+encodeURIComponent(slug));
-    const d = await r.json();
-    return d.purchased === true;
+    const userId = window.Auth?.getUser()?.id || '';
+    if (!userId) return 0;
+    const r = await fetch('/api/payment?action=balance&userId=' + encodeURIComponent(userId));
+    return (await r.json()).balance ?? 0;
+  } catch(e) { return 0; }
+}
+async function checkCreditAccess(slug) {
+  try {
+    const userId = window.Auth?.getUser()?.id || '';
+    if (!userId) return false;
+    const r = await fetch('/api/payment?action=check&slug=' + encodeURIComponent(slug) + '&userId=' + encodeURIComponent(userId));
+    return (await r.json()).hasAccess === true;
   } catch(e) { return false; }
 }
+async function deductCredits(slug, toolType, amount, desc) {
+  if (!window.Auth?.isLoggedIn()) return { success: false, needLogin: true };
+  const token = window.Auth.getSession()?.access_token;
+  try {
+    const res = await fetch('/api/payment?action=deduct', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ amount, toolType, slug, description: desc }),
+    });
+    return await res.json();
+  } catch(e) { return { success: false, error: e.message }; }
+}
+async function verifyPaymentTuoi(slug) { return checkCreditAccess(slug); }
 
 async function checkPaymentOnLoad(product) {
-  const p = new URLSearchParams(window.location.search);
-  if (p.get('unlocked') !== '1') return false;
-  const slug = p.get('slug') || '';
-  try {
-    const raw = sessionStorage.getItem('tuvi_pending_form_' + product);
-    if (!raw) return false;
-    const pending = JSON.parse(raw);
-    sessionStorage.removeItem('tuvi_pending_form_' + product);
-    // Restore form
-    TuviForm.setData({hoten:pending.nameA||'',gioitinh:pending.gtA||'nam',
-      ngay:pending.ngayA||0,thang:pending.thangA||0,nam:pending.namA||0,
-      gioHour:pending.gioHourA||0,gioPhut:pending.gioPhutA||0},'a');
-    TuviForm.setData({hoten:pending.nameB||'',gioitinh:pending.gtB||'nu',
-      ngay:pending.ngayB||0,thang:pending.thangB||0,nam:pending.namB||0,
-      gioHour:pending.gioHourB||0,gioPhut:pending.gioPhutB||0},'b');
-    if (document.getElementById('nam-xem')) document.getElementById('nam-xem').value = pending.namXem||'2026';
-    _pendingSlug = toSlugAscii(slug);
-    window._autoUnlock = toSlugAscii(slug);
-    await analyze();
-    window.history.replaceState({}, '', window.location.pathname);
-    return true;
-  } catch(e) { console.error('[paywall] restore error', e); return false; }
+  return false;
 }
 
 async function initiatePaymentTuoi(result, product) {
-  // Delegate sang TuviPaywall
   _pendingSlug = buildSlug(result, product);
-  TuviPaywall._initiate();
+  await handleCreditUnlock(_pendingSlug, product, result);
+}
+async function handleCreditUnlock(slug, product, result) {
+  if (!window.Auth?.isLoggedIn()) { showAuthModal(async () => handleCreditUnlock(slug, product, result)); return; }
+  const COST = 90;
+  const toolType = product === 'xem-lam-an' ? 'use_xem_lam_an' : 'use_xem_tuoi';
+  const desc = product === 'xem-lam-an' ? 'Xem tuổi làm ăn' : 'Xem tuổi vợ chồng';
+  const btn = document.querySelector('.tvc-paywall-btn, .btn-paywall-tuoi');
+  if (btn) { btn.disabled = true; btn.textContent = 'Đang xử lý...'; }
+  const data = await deductCredits(slug, toolType, COST, desc);
+  if (data.success) {
+    TuviPaywall.showSuccessBanner && TuviPaywall.showSuccessBanner();
+    if (result) luanGiaiAll(result);
+    return;
+  }
+  if (btn) { btn.disabled = false; btn.textContent = 'Mở Khóa (90 Credits)'; }
+  if (data.needLogin) { showAuthModal(async () => handleCreditUnlock(slug, product, result)); return; }
+  if (data.insufficientBalance) {
+    const bal = data.balance ?? 0;
+    const overlay = document.querySelector('.tvc-paywall-inner');
+    if (overlay) {
+      const div = document.createElement('div');
+      div.style.cssText = 'background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:12px 16px;margin-bottom:14px;font-size:13px;color:#856404;text-align:center';
+      div.innerHTML = 'Số dư: <strong>' + bal + ' credits</strong>. Cần thêm <strong>' + (COST-bal) + '</strong>. <a href="/topup.html" style="color:#856404;font-weight:700">→ Nạp ngay</a>';
+      overlay.insertBefore(div, overlay.firstChild);
+    }
+    return;
+  }
+  alert('Lỗi: ' + (data.error || 'Vui lòng thử lại.'));
 }
 
 function showPaywall(result, product, productLabel) {
@@ -1823,23 +1851,14 @@ async function analyze(){
       const _el = document.getElementById('result-header-tuoi') || document.getElementById('result-section');
       if (_el) _el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 300);
-    // Check if already paid
-    // If returning from PayPal with _autoUnlock, skip re-checking
-    if (window._autoUnlock) {
-      // Return từ PayPal — unlock thẳng, không cần check slug
-      window._autoUnlock = null;
-      TuviPaywall.showSuccessBanner();
+    // Credit check
+    const alreadyPaid = await checkCreditAccess(_pendingSlug);
+    if (alreadyPaid) {
       luanGiaiAll(result);
     } else {
-      const alreadyPaid = await TuviPaywall.check();
-      if (alreadyPaid) {
-        luanGiaiAll(result);
-      } else {
-        await luanGiaiSection(0, null, result);
-        // Cho user 4 giây đọc section 0 trước khi hiện paywall
-        await new Promise(r => setTimeout(r, 15000));
-        showPaywall(result, 'xem-lam-an', 'Xem Tuổi Làm Ăn');
-      }
+      await luanGiaiSection(0, null, result);
+      await new Promise(r => setTimeout(r, 15000));
+      showPaywall(result, 'xem-lam-an', 'Xem Tuổi Làm Ăn');
     }
   }catch(e){
     errEl.textContent='Lỗi: '+(e.message||'Không thể tính toán.');

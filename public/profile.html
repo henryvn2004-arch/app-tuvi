@@ -45,6 +45,12 @@ nav{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justif
 .profile-since{color:rgba(255,255,255,.45);font-size:.78rem;margin-top:.3rem}
 .profile-signout{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);padding:.5rem 1.1rem;border-radius:6px;cursor:pointer;font-size:.82rem;transition:all .2s}
 .profile-signout:hover{background:rgba(255,255,255,.18)}
+.credit-widget{background:rgba(255,255,255,.07);border:1px solid rgba(201,168,76,.35);border-radius:8px;padding:.6rem 1rem;text-align:center;min-width:110px}
+.credit-widget-label{color:rgba(255,255,255,.5);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.2rem}
+.credit-widget-value{color:#c9a84c;font-family:'Noto Serif',serif;font-size:1.3rem;font-weight:700;line-height:1.2}
+.credit-widget-value small{font-size:.7rem;font-weight:400;color:rgba(255,255,255,.4);font-family:Arial,sans-serif;display:block}
+.btn-topup-sm{display:block;margin-top:.45rem;background:#c9a84c;color:#061A2E;font-size:.7rem;font-weight:700;padding:.3rem .5rem;border-radius:4px;text-decoration:none;text-align:center}
+.btn-topup-sm:hover{background:#f0d080}
 
 /* ── TABS ── */
 .tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:1.75rem;background:var(--bg);border-radius:8px 8px 0 0;overflow:hidden}
@@ -234,7 +240,14 @@ nav{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justif
         <div class="profile-name" id="userDisplayName">Người Dùng</div>
         <div class="profile-since" id="userSince"></div>
       </div>
-      <button class="profile-signout" id="btnSignout">Đăng Xuất</button>
+      <div style="display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;justify-content:flex-end">
+        <div class="credit-widget">
+          <div class="credit-widget-label">Credits</div>
+          <div class="credit-widget-value" id="headerCreditBalance"><small>...</small></div>
+          <a href="/topup.html" class="btn-topup-sm">💳 Nạp thêm</a>
+        </div>
+        <button class="profile-signout" id="btnSignout">Đăng Xuất</button>
+      </div>
     </div>
 
     <!-- Tabs -->
@@ -242,6 +255,7 @@ nav{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justif
       <button class="tab-btn active" data-tab="lasos">🔮 Lá Số <span id="countLasos" class="chat-count" style="margin-left:.35rem;display:none"></span></button>
       <button class="tab-btn" data-tab="xemtuoi">💑 Xem Tuổi <span id="countXemTuoi" class="chat-count" style="margin-left:.35rem;display:none"></span></button>
       <button class="tab-btn" data-tab="chat">💬 Lịch Sử Chat <span id="countChat" class="chat-count" style="margin-left:.35rem;display:none"></span></button>
+      <button class="tab-btn" data-tab="credits">💳 Credits</button>
       <button class="tab-btn" data-tab="account">👤 Tài Khoản</button>
     </div>
 
@@ -264,6 +278,39 @@ nav{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justif
     <div class="tab-content" id="tab-chat">
       <div id="chatListLoading" style="text-align:center;padding:2rem;color:var(--text-lt)">Đang tải...</div>
       <div id="chatListContent" style="display:none"></div>
+    </div>
+
+    <!-- Tab: Credits -->
+    <div class="tab-content" id="tab-credits">
+      <div style="background:var(--navy);border-radius:12px;padding:1.5rem 2rem;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+        <div>
+          <div style="color:rgba(255,255,255,.55);font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem">Số Dư Credits</div>
+          <div id="tabCreditBalance" style="color:#c9a84c;font-family:'Noto Serif',serif;font-size:2rem;font-weight:700">…</div>
+          <div style="color:rgba(255,255,255,.4);font-size:.75rem;margin-top:.3rem">$1 = 10 credits · Không hết hạn</div>
+        </div>
+        <a href="/topup.html" style="background:#c9a84c;color:#061A2E;padding:.75rem 1.5rem;border-radius:8px;font-size:.88rem;font-weight:700;text-decoration:none">💳 Nạp Credits</a>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.25rem">
+        <a href="/" style="background:#fff;border:1px solid var(--border-lt);border-radius:8px;padding:1rem;text-decoration:none;text-align:center;color:var(--navy)">
+          <div style="font-size:1.4rem;margin-bottom:.35rem">🔮</div>
+          <div style="font-size:.8rem;font-weight:700">Luận Giải Lá Số</div>
+          <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin-top:.2rem">190 credits</div>
+        </a>
+        <a href="/xem-tuoi.html" style="background:#fff;border:1px solid var(--border-lt);border-radius:8px;padding:1rem;text-decoration:none;text-align:center;color:var(--navy)">
+          <div style="font-size:1.4rem;margin-bottom:.35rem">💑</div>
+          <div style="font-size:.8rem;font-weight:700">Xem Tuổi Vợ Chồng</div>
+          <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin-top:.2rem">90 credits</div>
+        </a>
+        <a href="/xem-lam-an.html" style="background:#fff;border:1px solid var(--border-lt);border-radius:8px;padding:1rem;text-decoration:none;text-align:center;color:var(--navy)">
+          <div style="font-size:1.4rem;margin-bottom:.35rem">💼</div>
+          <div style="font-size:.8rem;font-weight:700">Xem Tuổi Làm Ăn</div>
+          <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin-top:.2rem">90 credits</div>
+        </a>
+      </div>
+      <div class="account-section">
+        <h3>Lịch Sử Giao Dịch</h3>
+        <div id="transactionList"><div style="color:var(--text-lt);font-size:.85rem">Đang tải...</div></div>
+      </div>
     </div>
 
     <!-- Tab: Tài Khoản -->
@@ -376,6 +423,7 @@ async function initProfile() {
   document.getElementById('dashboard').style.display = 'block';
   loadHistory();
   setupTabs();
+  loadHeaderBalance();
 }
 
 function renderProfileHeader() {
@@ -402,6 +450,7 @@ function setupTabs() {
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
       btn.classList.add('active');
       document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      if (btn.dataset.tab === 'credits') loadCredits();
     });
   });
 }
@@ -561,25 +610,64 @@ function chatListItem(c) {
   </div>`;
 }
 
-// ── RENDER PURCHASES ──
-function renderPurchases(list) {
-  const el = document.getElementById('purchaseList');
+// ── CREDIT FUNCTIONS ──
+async function loadHeaderBalance() {
+  if (!_pUser) return;
+  try {
+    const res = await fetch('/api/payment?action=balance&userId=' + encodeURIComponent(_pUser.id));
+    const d = await res.json();
+    const bal = d.balance ?? 0;
+    const h = document.getElementById('headerCreditBalance');
+    if (h) h.innerHTML = bal + ' <small>cr</small>';
+    const t = document.getElementById('tabCreditBalance');
+    if (t) t.textContent = bal + ' credits';
+  } catch(e) {
+    const h = document.getElementById('headerCreditBalance');
+    if (h) h.innerHTML = '<small>—</small>';
+  }
+}
+
+async function loadCredits() {
+  if (!_pUser || !_pToken) return;
+  // Balance
+  await loadHeaderBalance();
+  const t = document.getElementById('tabCreditBalance');
+  if (t && t.textContent === '…') t.textContent = '...';
+  // Transactions
+  try {
+    const res = await fetch(
+      SUPABASE_URL + '/rest/v1/credit_transactions?user_id=eq.' + encodeURIComponent(_pUser.id) +
+      '&order=created_at.desc&limit=30&select=*',
+      { headers: { apikey: SUPABASE_ANON, Authorization: 'Bearer ' + _pToken } }
+    );
+    const txns = res.ok ? await res.json() : [];
+    renderTransactions(txns);
+  } catch(e) {
+    document.getElementById('transactionList').innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Không thể tải lịch sử.</div>';
+  }
+}
+
+function renderTransactions(list) {
+  const el = document.getElementById('transactionList');
   if (!list || list.length === 0) {
-    el.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Chưa có lịch sử thanh toán.</div>';
+    el.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Chưa có giao dịch nào.</div>';
     return;
   }
-  el.innerHTML = `<div class="purchase-list">${list.map(p => {
-    const date = new Date(p.created_at).toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});
-    const status = p.status === 'completed' ? 'completed' : '';
-    const label = p.status === 'completed' ? 'Hoàn thành' : p.status;
-    return `<div class="purchase-item">
-      <div class="purchase-slug">${p.slug}</div>
-      <div class="purchase-amount">$${p.amount}</div>
-      <span class="purchase-status ${status}">${label}</span>
-      <div class="purchase-date">${date}</div>
-    </div>`;
-  }).join('')}</div>`;
+  const LABELS = { topup:'💳 Nạp Credits', use_laso:'🔮 Luận Giải Lá Số', use_xem_tuoi:'💑 Xem Tuổi Vợ Chồng', use_xem_lam_an:'💼 Xem Tuổi Làm Ăn' };
+  el.innerHTML = '<div class="purchase-list">' + list.map(t => {
+    const date = new Date(t.created_at).toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});
+    const isAdd = t.amount > 0;
+    const amtColor = isAdd ? 'var(--green)' : 'var(--red)';
+    const amtStr = (isAdd ? '+' : '') + t.amount + ' cr';
+    const label = LABELS[t.type] || t.description || t.type;
+    return '<div class="purchase-item"><div class="purchase-slug">' + escHtml(label) + '</div>' +
+           '<div class="purchase-amount" style="color:' + amtColor + '">' + amtStr + '</div>' +
+           '<div class="purchase-date">' + date + '</div></div>';
+  }).join('') + '</div>';
 }
+
+// ── RENDER PURCHASES (no-op in credit system) ──
+function renderPurchases(list) {}
 
 // ── OPEN LUAN GIAI MODAL ──
 async function openLuanModal(slug, name) {
@@ -803,6 +891,12 @@ document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('cli
 // ── UTILS ──
 function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 
+// ── Handle #credits anchor ──
+if (window.location.hash === '#credits') {
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => { const b = document.querySelector('[data-tab="credits"]'); if (b) b.click(); }, 1500);
+  });
+}
 // ── BOOT ──
 initProfile();
 </script>

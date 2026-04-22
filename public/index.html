@@ -1452,7 +1452,7 @@ select.form-input { cursor: pointer; }
             <span>Xem Luận Giải Đầy Đủ</span>
             <span style="font-size:16px">→</span>
           </button>
-          <div class="paywall-secure">🔒 Thanh toán bảo mật qua PayPal · Hoàn tiền nếu lỗi kỹ thuật</div>
+          <div class="paywall-secure">🔒 Credits không hết hạn · Dùng được cho mọi công cụ · <a href="/topup.html" style="color:#c9a84c">Nạp thêm →</a></div>
           <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;max-width:440px;margin-left:auto;margin-right:auto;text-align:left">
             <div style="background:rgba(255,255,255,0.7);border-left:3px solid #c9a84c;padding:10px 14px;border-radius:0 6px 6px 0">
               <div style="font-size:13px;color:#333;line-height:1.5;font-style:italic">"Phần Quan Lộc nói đúng y chang tình huống tao đang gặp — cả cái cách nó diễn ra theo từng giai đoạn."</div>
@@ -1578,34 +1578,75 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     ].join('-'));
     _pendingSlug = tempSlug;
 
-    // Check từ URL param (return từ PayPal)
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('unlocked') === '1' && urlParams.get('slug')) {
-      _pendingSlug = urlParams.get('slug');
-      const paid = await verifyPayment(_pendingSlug);
-      if (paid) { await startClaudeOrLoadCache(_pendingSlug); return; }
+    // Credit check: đã dùng credits cho slug này chưa?
+    const userId = window.Auth?.getUser()?.id || '';
+    if (userId) {
+      try {
+        const r = await fetch('/api/payment?action=check&slug=' + encodeURIComponent(tempSlug) + '&userId=' + encodeURIComponent(userId));
+        if ((await r.json()).hasAccess) { await startClaudeOrLoadCache(tempSlug || _pendingSlug); return; }
+      } catch(e) {}
     }
+    // Chưa có access — hiện paywall
+  }
 
-    // Check Supabase purchases
-    let userId = null;
-    if (window.supabaseClient) {
-      const { data: { session } } = await window.supabaseClient.auth.getSession().catch(() => ({data:{session:null}}));
-      userId = session?.user?.id || null;
-    }
+  // ── Credit helpers ──
+  async function getCreditBalance() {
     try {
-      const r = await fetch(`/api/payment?action=check&slug=${encodeURIComponent(tempSlug)}${userId?'&userId='+userId:''}`);
-      const d = await r.json();
-      if (d.purchased) { await startClaudeOrLoadCache(tempSlug || _pendingSlug); return; }
-    } catch(e) {}
-    // Chưa mua — lock boxes đã hiển thị, không cần làm gì thêm
+      const userId = window.Auth?.getUser()?.id || '';
+      if (!userId) return 0;
+      const r = await fetch('/api/payment?action=balance&userId=' + encodeURIComponent(userId));
+      return (await r.json()).balance ?? 0;
+    } catch(e) { return 0; }
   }
 
   async function verifyPayment(slug) {
     try {
-      const r = await fetch(`/api/payment?action=check&slug=${encodeURIComponent(slug)}`);
-      const d = await r.json();
-      return d.purchased === true;
+      const userId = window.Auth?.getUser()?.id || '';
+      if (!userId) return false;
+      const r = await fetch('/api/payment?action=check&slug=' + encodeURIComponent(slug) + '&userId=' + encodeURIComponent(userId));
+      return (await r.json()).hasAccess === true;
     } catch(e) { return false; }
+  }
+
+  async function deductAndUnlock(slug) {
+    if (!window.Auth?.isLoggedIn()) { showAuthModal(() => deductAndUnlock(slug)); return; }
+    const token = window.Auth.getSession()?.access_token;
+    const btn = document.getElementById('btn-paywall-pay');
+    if (btn) { btn.disabled = true; btn.innerHTML = '<span>Đang xử lý...</span>'; }
+    try {
+      const res = await fetch('/api/payment?action=deduct', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({ amount: 190, toolType: 'use_laso', slug, description: 'Luận giải lá số 24 phần' }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        const gate = document.getElementById('paywall-gate');
+        if (gate) gate.remove();
+        await startClaudeOrLoadCache(slug);
+      } else if (data.insufficientBalance) {
+        const balance = data.balance ?? 0;
+        const need = 190 - balance;
+        const gate = document.getElementById('paywall-gate');
+        if (gate) gate.innerHTML = `
+          <div class="paywall-eyebrow">紫微明寶 · Luận Giải Đầy Đủ</div>
+          <div class="paywall-title">Không đủ credits</div>
+          <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:#856404">
+            Số dư: <strong>${balance} credits</strong> — cần thêm <strong>${need} credits</strong>
+          </div>
+          <div class="paywall-price">190 Credits</div>
+          <a href="/topup.html" class="btn-paywall" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none">
+            <span>💳 Nạp Credits</span><span style="font-size:16px">→</span>
+          </a>
+          <div class="paywall-secure">🔒 $1 = 10 credits · Không hết hạn · Dùng cho mọi công cụ</div>`;
+      } else {
+        if (btn) { btn.disabled = false; btn.innerHTML = '<span>Mở Khóa (190 Credits)</span><span style="font-size:16px">→</span>'; }
+        alert('Lỗi: ' + (data.error || 'Vui lòng thử lại.'));
+      }
+    } catch(e) {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<span>Mở Khóa (190 Credits)</span><span style="font-size:16px">→</span>'; }
+      alert('Lỗi kết nối: ' + e.message);
+    }
   }
 
   function renderPaywall() {
@@ -1629,10 +1670,10 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         <div class="paywall-feature">Chia sẻ lá số với người thân</div>
       </div>
       <div style="font-size:12px;color:#9A7B3A;margin-bottom:6px;letter-spacing:0.3px">24 khía cạnh cuộc đời · Bằng 1 buổi cà phê</div>
-      <div class="paywall-price">$19</div>
-      <div class="paywall-price-note">Xem offline thường 500k–1tr · Ở đây chỉ $19, nhận kết quả ngay</div>
-      <button class="btn-paywall" id="btn-paywall-pay" onclick="initiatePayment()">
-        <span>Xem Luận Giải Đầy Đủ</span>
+      <div class="paywall-price">190 Credits</div>
+      <div class="paywall-price-note">Bằng $19 · Nạp 1 lần dùng mọi công cụ · Credits không hết hạn</div>
+      <button class="btn-paywall" id="btn-paywall-pay" onclick="handlePaywallClick()">
+        <span>Mở Khóa (190 Credits)</span>
         <span style="font-size:16px">→</span>
       </button>
       <div class="paywall-secure">🔒 Thanh toán bảo mật qua PayPal · Hoàn tiền nếu lỗi kỹ thuật</div>
@@ -1650,87 +1691,28 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     body.appendChild(gate);
   }
 
-  // ── Khởi tạo PayPal payment ──
-  async function initiatePayment() {
-    const btn = document.getElementById('btn-paywall-pay');
-    if (btn) { btn.disabled = true; btn.innerHTML = '<span>Đang kết nối PayPal...</span>'; }
-
-    // Lưu form data vào sessionStorage — để restore sau khi return từ PayPal
-    try {
-      sessionStorage.setItem('tuvi_pending', JSON.stringify({
-        ngay:     _ngay,
-        thang:    _thang,
-        nam:      _nam,
-        gioIdx:   _astrolabe._conv?.gioIdx ?? null,
-        gioChi:   _astrolabe._conv?.gioChi || '',
-        gioitinh: _gioitinh,
-        namXem:   _namXem,
-        hoTen:    _hoTen || '',
-        slug:     _pendingSlug,
-      }));
-    } catch(e) { console.warn('sessionStorage save failed:', e); }
-
-    // Save lá số trước khi redirect (không có luận giải Claude)
-    let slug = _pendingSlug;
-    try {
-      const _authTok = window.Auth?.isLoggedIn() ? window.Auth.getSession()?.access_token : null;
-      const saveRes = await fetch('/api/save-laso', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...(_authTok ? {'Authorization': 'Bearer ' + _authTok} : {}) },
-        body: JSON.stringify({
-          canChiNam:    _astrolabe.canChiNam,
-          gioiTinh:     _gioitinh,
-          namSinh:      _nam,
-          thangSinh:    _thang,
-          ngaySinh:     _ngay,
-          gioIdx:       _astrolabe._conv?.gioIdx ?? null,
-          gioChi:       _astrolabe._conv?.gioChi || '',
-          canNam:       _astrolabe._conv?.canNam || '',
-          chiNam:       _astrolabe._conv?.chiNam || '',
-          namXem:       _namXem,
-          cungMenh:     _astrolabe.menhDC,
-          chinhTinh:    _astrolabe.palaces?.find(p=>p.isMenh)?.majorStars?.map(s=>s.ten).join(', ') || '',
-          napAm:        _astrolabe.napAm,
-          astrolabeData: JSON.stringify({
-            cungScores:    _astrolabe.cungScores || null,
-            cachCuc:       _astrolabe.cachCuc || [],
-            canChiNam:     _astrolabe.canChiNam,
-            napAm:         _astrolabe.napAm,
-            cuc:           _astrolabe.cuc,
-            menhDC:        _astrolabe.menhDC,
-            thanDC:        _astrolabe.thanDC,
-            tuoiXem:       _astrolabe.tuoiXem,
-            chiNamXem:     _astrolabe.chiNamXem,
-            daiVans:       _astrolabe.daiVans || [],
-            daiVanHienTai: _astrolabe.daiVanHienTai || null,
-            tieuVanScores: _astrolabe.tieuVanScores || [],
-            palaces:       _astrolabe.palaces || [],
-          }),
-        }),
-      });
-      const saved = await saveRes.json();
-      if (saved.slug) slug = saved.slug;
-      _pendingSlug = slug;
-    } catch(e) { console.warn('Pre-save failed:', e.message); }
-
-    // Tạo PayPal order
-    try {
-      const res = await fetch('/api/payment?action=create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slug }),
-      });
-      const data = await res.json();
-      if (data.approvalUrl) {
-        window.location.href = data.approvalUrl;
-      } else {
-        throw new Error(data.error || 'Không tạo được đơn PayPal');
-      }
-    } catch(e) {
-      if (btn) { btn.disabled = false; btn.innerHTML = '<span>Xem Luận Giải Đầy Đủ</span><span style="font-size:16px">→</span>'; }
-      alert('Lỗi kết nối PayPal: ' + e.message + '\nVui lòng thử lại.');
+  // ── Credit-based unlock ──
+  async function handlePaywallClick() {
+    if (!window.Auth?.isLoggedIn()) { showAuthModal(async () => { await handlePaywallClick(); }); return; }
+    const balance = await getCreditBalance();
+    if (balance >= 190) {
+      await deductAndUnlock(_pendingSlug);
+    } else {
+      const gate = document.getElementById('paywall-gate');
+      if (gate) gate.innerHTML = `
+        <div class="paywall-eyebrow">紫微明寶 · Luận Giải Đầy Đủ</div>
+        <div class="paywall-title">Không đủ credits</div>
+        <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:#856404">
+          Số dư: <strong>${balance} credits</strong> — cần thêm <strong>${190 - balance} credits</strong>
+        </div>
+        <div class="paywall-price">190 Credits</div>
+        <a href="/topup.html" class="btn-paywall" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none">
+          <span>💳 Nạp Credits</span><span style="font-size:16px">→</span>
+        </a>
+        <div class="paywall-secure">🔒 $1 = 10 credits · Không hết hạn · Dùng cho mọi công cụ</div>`;
     }
   }
+  async function initiatePayment() { await handlePaywallClick(); }
 
   // ── Sau khi paid — unlock tất cả lock boxes và load Claude từng phần ──
 
