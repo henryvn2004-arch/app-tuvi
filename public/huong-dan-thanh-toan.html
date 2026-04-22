@@ -4,18 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hướng Dẫn Thanh Toán — Tử Vi Minh Bảo</title>
-<meta name="description" content="Hướng dẫn thanh toán và nhận kết quả luận giải Tử Vi tại Tử Vi Minh Bảo — thanh toán qua PayPal, nhận PDF ngay lập tức.">
+<meta name="description" content="Hướng dẫn nạp credits và sử dụng Tử Vi Minh Bảo — nạp một lần, dùng cho mọi công cụ.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Be Vietnam Pro',sans-serif;background:#fff;color:#1a1a1a;line-height:1.8}
-.topnav{background:#061A2E;height:60px;display:flex;align-items:center;padding:0 40px;gap:32px;position:sticky;top:0;z-index:200}
-.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
-.nav-logo img{width:36px;height:36px;border-radius:5px;object-fit:contain}
-.nav-logo .name{font-size:15px;font-weight:700;color:#CC2200;font-family:Georgia,serif}
-.nav-link{color:#8BAACC;font-size:13px;text-decoration:none;padding:6px 12px;border-radius:6px}
-.nav-link:hover{color:#fff;background:rgba(255,255,255,.07)}
 .wrap{max-width:720px;margin:0 auto;padding:56px 40px 100px}
 .eyebrow{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#777;margin-bottom:16px}
 h1{font-size:32px;font-weight:400;color:#061A2E;margin-bottom:8px}
@@ -27,6 +21,27 @@ h1{font-size:32px;font-weight:400;color:#061A2E;margin-bottom:8px}
 .notice{background:#e8f4e8;border-left:3px solid #1E6B3C;padding:14px 18px;margin:24px 0;font-size:14px;color:#1E6B3C}
 .warn{background:#FDF3C0;border-left:3px solid #C9A84C;padding:14px 18px;margin:24px 0;font-size:14px;color:#5a4000}
 h2{font-size:16px;font-weight:700;color:#061A2E;margin:36px 0 16px;letter-spacing:.5px}
+
+.pkg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}
+@media(max-width:500px){.pkg-grid{grid-template-columns:1fr}}
+.pkg-box{border:1.5px solid #E8E8E8;border-radius:10px;padding:16px;text-align:center}
+.pkg-box.pop{border-color:#c9a84c}
+.pkg-box .credits{font-size:22px;font-weight:700;color:#061A2E;font-family:Georgia,serif}
+.pkg-box .price{font-size:14px;color:#777;margin-top:4px}
+.pkg-box .bonus{font-size:11px;color:#1E6B3C;font-weight:700;margin-top:4px}
+.pkg-box .name{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#aaa;margin-bottom:6px}
+
+.tool-costs{width:100%;border-collapse:collapse;font-size:14px;margin:16px 0}
+.tool-costs th{text-align:left;padding:8px 12px;background:#F5F4F0;color:#444;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.tool-costs td{padding:10px 12px;border-bottom:1px solid #eee;color:#333}
+.tool-costs tr:last-child td{border-bottom:none}
+.credits-val{font-weight:700;color:#061A2E}
+.usd-val{color:#aaa;font-size:12px}
+
+p{font-size:14px;color:#444;margin-bottom:14px}
+p strong{color:#061A2E}
+a{color:#1455A4}
+
 footer{background:#1A1210;color:rgba(255,255,255,.4);padding:24px 40px;font-size:11px;display:flex;justify-content:space-between;align-items:center}
 footer a{color:rgba(255,255,255,.4);text-decoration:none}
 </style>
@@ -36,54 +51,95 @@ footer a{color:rgba(255,255,255,.4);text-decoration:none}
 <div class="wrap">
   <div class="eyebrow">Hỗ Trợ</div>
   <h1>Hướng Dẫn Thanh Toán</h1>
-  <div class="updated">Thanh toán qua PayPal · Nhận kết quả ngay lập tức</div>
+  <div class="updated">Hệ thống Credits · Nạp 1 lần, dùng mọi công cụ · Không hết hạn</div>
 
-  <h2>Các bước thực hiện</h2>
+  <h2>Cách hoạt động</h2>
 
   <div class="step">
     <div class="step-num">1</div>
     <div class="step-content">
-      <h3>Điền thông tin và an sao</h3>
-      <p>Nhập ngày tháng năm sinh dương lịch, giờ sinh, giới tính và múi giờ. Bấm <strong>Luận Giải Lá Số</strong> để hệ thống an sao và tạo tóm tắt miễn phí.</p>
+      <h3>Đăng ký tài khoản miễn phí</h3>
+      <p>Nhấn <strong>Đăng nhập</strong> ở góc trên bên phải. Dùng Google, Facebook, hoặc email/mật khẩu. Tài khoản giúp lưu số dư và lịch sử sử dụng.</p>
     </div>
   </div>
 
   <div class="step">
     <div class="step-num">2</div>
     <div class="step-content">
-      <h3>Xem tóm tắt và chọn mở khóa</h3>
-      <p>Kết quả tóm tắt sẽ hiển thị miễn phí. Để xem luận giải đầy đủ và tải PDF, bấm <strong>Xem Luận Giải Đầy Đủ</strong>.</p>
+      <h3>Chọn gói nạp credits</h3>
+      <p>Vào trang <a href="/topup.html"><strong>Nạp Credits</strong></a> và chọn một trong ba gói bên dưới. Thanh toán qua PayPal hoặc thẻ Visa/Mastercard.</p>
+
+      <div class="pkg-grid" style="margin-top:16px">
+        <div class="pkg-box">
+          <div class="name">Starter</div>
+          <div class="credits">100 cr</div>
+          <div class="price">$10</div>
+        </div>
+        <div class="pkg-box pop">
+          <div class="name">Popular ⭐</div>
+          <div class="credits">220 cr</div>
+          <div class="price">$20</div>
+          <div class="bonus">+10% bonus</div>
+        </div>
+        <div class="pkg-box">
+          <div class="name">Pro</div>
+          <div class="credits">460 cr</div>
+          <div class="price">$40</div>
+          <div class="bonus">+15% bonus</div>
+        </div>
+      </div>
     </div>
   </div>
 
   <div class="step">
     <div class="step-num">3</div>
     <div class="step-content">
-      <h3>Thanh toán qua PayPal</h3>
-      <p>Cửa sổ PayPal sẽ mở ra. Bạn có thể thanh toán bằng tài khoản PayPal <strong>hoặc thẻ Visa/Mastercard/JCB</strong> mà không cần có tài khoản PayPal.</p>
+      <h3>Sử dụng công cụ</h3>
+      <p>Sau khi nạp xong, quay lại bất kỳ công cụ nào và nhấn <strong>Mở Khóa</strong>. Credits tự động trừ ngay lập tức — không cần redirect hay đợi xác nhận.</p>
+
+      <table class="tool-costs" style="margin-top:14px">
+        <thead>
+          <tr><th>Công cụ</th><th>Chi phí</th><th>Tương đương</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>🔮 Luận Giải Lá Số (24 phần)</td>
+            <td><span class="credits-val">190 credits</span></td>
+            <td class="usd-val">≈ $19</td>
+          </tr>
+          <tr>
+            <td>💑 Xem Tuổi Vợ Chồng</td>
+            <td><span class="credits-val">90 credits</span></td>
+            <td class="usd-val">≈ $9</td>
+          </tr>
+          <tr>
+            <td>💼 Xem Tuổi Làm Ăn</td>
+            <td><span class="credits-val">90 credits</span></td>
+            <td class="usd-val">≈ $9</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <div class="step">
-    <div class="step-num">4</div>
-    <div class="step-content">
-      <h3>Nhận kết quả ngay lập tức</h3>
-      <p>Sau khi thanh toán thành công, trang tự động chuyển về và mở khóa toàn bộ luận giải. Bạn có thể tải xuống bản PDF ngay lập tức.</p>
-    </div>
-  </div>
+  <div class="notice">✓ Mỗi kết quả chỉ trừ credits <strong>một lần</strong>. Bạn có thể xem lại miễn phí bất kỳ lúc nào từ trang Hồ Sơ.</div>
 
-  <div class="notice">✓ Kết quả luận giải được lưu trong 7 ngày — bạn có thể quay lại xem bất kỳ lúc nào bằng cách nhập lại thông tin sinh nhật tương tự.</div>
-
-  <h2>Câu hỏi thường gặp về thanh toán</h2>
+  <h2>Câu hỏi thường gặp</h2>
 
   <p><strong>Tôi có thể thanh toán bằng thẻ không cần tài khoản PayPal không?</strong><br>
-  Có. Trong cửa sổ PayPal, chọn "Thanh toán bằng thẻ" (Pay with Debit or Credit Card) để nhập thông tin thẻ trực tiếp.</p>
+  Có. Trong cửa sổ PayPal, chọn <em>"Pay with Debit or Credit Card"</em> để nhập thông tin thẻ trực tiếp.</p>
 
-  <p><strong>Thanh toán xong nhưng chưa thấy kết quả?</strong><br>
-  Thử làm mới trang (F5). Nếu vẫn không thấy, liên hệ chúng tôi qua <a href="/contact.html" style="color:#1455A4">trang Liên Hệ</a> kèm mã giao dịch PayPal để được hỗ trợ trong vòng 24 giờ.</p>
+  <p><strong>Credits có hết hạn không?</strong><br>
+  Không. Credits không bao giờ hết hạn.</p>
 
-  <p><strong>Tôi có thể thanh toán bằng VNPay hay chuyển khoản không?</strong><br>
-  Hiện tại chúng tôi chỉ hỗ trợ PayPal và thẻ quốc tế. Chúng tôi đang xem xét thêm các phương thức thanh toán nội địa trong tương lai.</p>
+  <p><strong>Tôi có thể dùng credits cho nhiều công cụ không?</strong><br>
+  Có. Một lần nạp dùng được cho tất cả công cụ: lá số, xem tuổi vợ chồng, xem tuổi làm ăn và mọi công cụ sẽ ra mắt sau này.</p>
+
+  <p><strong>Nạp xong credits nhưng chưa thấy trong tài khoản?</strong><br>
+  Thử làm mới trang (F5) hoặc vào <a href="/profile.html#credits">Hồ Sơ → Credits</a> để kiểm tra. Nếu vẫn không thấy, liên hệ qua <a href="/contact.html">trang Liên Hệ</a> kèm mã giao dịch PayPal.</p>
+
+  <p><strong>Tôi có thể chuyển credits cho người khác không?</strong><br>
+  Không. Credits gắn với tài khoản cá nhân và không thể chuyển nhượng.</p>
 
   <div class="warn">Nếu gặp bất kỳ vấn đề nào với thanh toán, vui lòng liên hệ trước khi thực hiện giao dịch lại để tránh bị tính phí hai lần.</div>
 </div>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nạp Credits — Tử Vi Minh Bảo</title>
+<meta name="description" content="Nạp credits để sử dụng các tính năng luận giải Tử Vi Minh Bảo: Luận giải lá số, xem tuổi vợ chồng, xem tuổi làm ăn.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#061A2E; --navy-mid:#0D3B5E; --blue:#1455A4;
+  --gold:#9A7B3A; --gold-lt:#F9F4EB;
+  --text:#1a1a1a; --text-mid:#444; --text-lt:#777;
+  --border:#CCCCCC; --border-lt:#E8E8E8;
+  --bg:#FFFFFF; --bg-soft:#F5F4F0;
+  --red:#C0392B; --green:#1E6B3C;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh}
+
+/* NAV */
+nav{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
+.nav-logo{color:#fff;font-family:'Noto Serif',serif;font-size:1.1rem;font-weight:700;text-decoration:none}
+.nav-links{display:flex;align-items:center;gap:.1rem}
+.nav-links a{color:rgba(255,255,255,.85);text-decoration:none;font-size:.82rem;padding:.5rem .7rem;border-radius:4px}
+.nav-links a:hover{background:rgba(255,255,255,.1)}
+.nav-dropdown{position:relative}
+.nav-dropdown .dropdown-menu{display:none;position:absolute;top:100%;left:0;background:var(--navy);border:1px solid rgba(255,255,255,.15);border-radius:4px;min-width:180px;z-index:200;padding:.4rem 0}
+.nav-dropdown:hover .dropdown-menu{display:block}
+.dropdown-menu a{display:block;color:rgba(255,255,255,.85);font-size:.82rem;padding:.5rem 1rem;text-decoration:none}
+.dropdown-menu a:hover{background:rgba(255,255,255,.1)}
+
+/* LAYOUT */
+.wrap{max-width:900px;margin:0 auto;padding:3rem 1.5rem 5rem}
+.page-header{text-align:center;margin-bottom:2.5rem}
+.page-header .eyebrow{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem}
+.page-header h1{font-family:'Noto Serif',serif;font-size:2rem;color:var(--navy);margin-bottom:.75rem}
+.page-header p{font-size:.95rem;color:var(--text-mid);max-width:520px;margin:0 auto;line-height:1.7}
+
+/* BALANCE WIDGET */
+.balance-bar{background:var(--navy);border-radius:12px;padding:1.25rem 2rem;display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;gap:1rem;flex-wrap:wrap}
+.balance-label{color:rgba(255,255,255,.6);font-size:.82rem;margin-bottom:.2rem}
+.balance-value{color:#fff;font-family:'Noto Serif',serif;font-size:1.75rem;font-weight:700}
+.balance-value span{font-size:.9rem;font-weight:400;color:rgba(255,255,255,.5);margin-left:.25rem}
+
+/* PACKAGES */
+.packages{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:2.5rem}
+@media(max-width:640px){.packages{grid-template-columns:1fr}}
+.pkg-card{background:#fff;border:2px solid var(--border-lt);border-radius:14px;padding:1.75rem 1.5rem;text-align:center;position:relative;transition:border-color .2s,box-shadow .2s}
+.pkg-card:hover{border-color:var(--gold);box-shadow:0 6px 24px rgba(154,123,58,.12)}
+.pkg-card.popular{border-color:var(--gold)}
+.pkg-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--gold);color:#fff;font-size:.7rem;font-weight:700;padding:.2rem .75rem;border-radius:20px;letter-spacing:.06em;white-space:nowrap}
+.pkg-name{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text-lt);margin-bottom:.75rem}
+.pkg-credits{font-family:'Noto Serif',serif;font-size:2.5rem;font-weight:700;color:var(--navy);line-height:1}
+.pkg-credits span{font-size:.9rem;font-weight:400;color:var(--text-lt);display:block;margin-top:.2rem}
+.pkg-price{font-size:1.1rem;color:var(--text-mid);margin:1rem 0 .25rem;font-weight:600}
+.pkg-rate{font-size:.75rem;color:var(--text-lt);margin-bottom:1.25rem}
+.pkg-bonus{font-size:.75rem;color:var(--green);font-weight:700;background:#F0FAF4;padding:.2rem .6rem;border-radius:20px;display:inline-block;margin-bottom:1.25rem}
+.btn-pkg{width:100%;padding:.85rem;border:none;border-radius:8px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;background:var(--navy);color:#fff}
+.btn-pkg:hover{background:var(--navy-mid)}
+.btn-pkg.gold{background:var(--gold);color:var(--navy)}
+.btn-pkg.gold:hover{background:#7d6230;color:#fff}
+.btn-pkg:disabled{opacity:.6;cursor:not-allowed}
+
+/* TOOL COSTS */
+.costs-section{background:#fff;border:1px solid var(--border-lt);border-radius:12px;padding:1.75rem 2rem;margin-bottom:2rem}
+.costs-section h3{font-family:'Noto Serif',serif;font-size:1rem;color:var(--navy);margin-bottom:1.25rem}
+.cost-row{display:flex;align-items:center;justify-content:space-between;padding:.65rem 0;border-bottom:1px solid var(--border-lt)}
+.cost-row:last-child{border-bottom:none}
+.cost-icon{font-size:1.25rem;margin-right:.75rem}
+.cost-name{font-size:.9rem;color:var(--text)}
+.cost-price{font-weight:700;color:var(--navy);font-size:.95rem}
+.cost-usd{font-size:.75rem;color:var(--text-lt);margin-left:.4rem}
+
+/* FAQ */
+.faq{background:#fff;border:1px solid var(--border-lt);border-radius:12px;padding:1.75rem 2rem}
+.faq h3{font-family:'Noto Serif',serif;font-size:1rem;color:var(--navy);margin-bottom:1.25rem}
+.faq-item{margin-bottom:1.1rem;padding-bottom:1.1rem;border-bottom:1px solid var(--border-lt)}
+.faq-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.faq-q{font-size:.88rem;font-weight:700;color:var(--navy);margin-bottom:.35rem}
+.faq-a{font-size:.85rem;color:var(--text-mid);line-height:1.7}
+
+/* ALERT */
+.alert{padding:.85rem 1.1rem;border-radius:8px;font-size:.85rem;margin-bottom:1.25rem;display:none}
+.alert.error{background:#FFF5F5;color:var(--red);border:1px solid #f5c6c6;display:block}
+.alert.success{background:#F0FAF4;color:var(--green);border:1px solid #c3e6d0;display:block}
+
+footer{background:#1A1210;color:rgba(255,255,255,.4);padding:20px 2rem;font-size:11px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+footer a{color:rgba(255,255,255,.4);text-decoration:none}
+</style>
+<script src="/auth.js"></script>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/">☽ Tử Vi Minh Bảo</a>
+  <div class="nav-links">
+    <a href="/">Trang Chủ</a>
+    <div class="nav-dropdown">
+      <a href="#">Luận Giải ▾</a>
+      <div class="dropdown-menu">
+        <a href="/">Luận Giải Lá Số</a>
+        <a href="/xem-tuoi.html">Xem Tuổi Vợ Chồng</a>
+        <a href="/xem-lam-an.html">Xem Tuổi Làm Ăn</a>
+      </div>
+    </div>
+    <a href="/about.html">Giới Thiệu</a>
+    <a href="/resources.html">Tài Liệu</a>
+    <a href="/blog.html">Khảo Luận</a>
+    <a href="/menh-kho.html">Mệnh Khố</a>
+    <a href="/contact.html">Liên Hệ</a>
+  </div>
+  <div id="nav-auth-area"></div>
+</nav>
+
+<div class="wrap">
+  <div class="page-header">
+    <div class="eyebrow">Thanh Toán</div>
+    <h1>Nạp Credits</h1>
+    <p>Nạp một lần, dùng cho mọi công cụ. Không hết hạn. $1 = 10 credits.</p>
+  </div>
+
+  <!-- Balance -->
+  <div class="balance-bar" id="balanceBar" style="display:none">
+    <div>
+      <div class="balance-label">Số dư của bạn</div>
+      <div class="balance-value" id="balanceDisplay">0 <span>credits</span></div>
+    </div>
+    <a href="/profile.html" style="color:rgba(255,255,255,.6);font-size:.82rem;text-decoration:none">Xem lịch sử →</a>
+  </div>
+
+  <div id="alertBox" class="alert"></div>
+
+  <!-- Packages -->
+  <div class="packages">
+    <!-- Starter -->
+    <div class="pkg-card">
+      <div class="pkg-name">Starter</div>
+      <div class="pkg-credits">100 <span>credits</span></div>
+      <div class="pkg-price">$10</div>
+      <div class="pkg-rate">$0.10 / credit</div>
+      <button class="btn-pkg" onclick="initiateTopup('10')">Nạp $10</button>
+    </div>
+
+    <!-- Popular -->
+    <div class="pkg-card popular">
+      <div class="pkg-badge">PHỔ BIẾN NHẤT</div>
+      <div class="pkg-name">Popular</div>
+      <div class="pkg-credits">220 <span>credits</span></div>
+      <div class="pkg-price">$20</div>
+      <div class="pkg-rate">$0.091 / credit</div>
+      <div class="pkg-bonus">+10% bonus</div>
+      <button class="btn-pkg gold" onclick="initiateTopup('20')">Nạp $20</button>
+    </div>
+
+    <!-- Pro -->
+    <div class="pkg-card">
+      <div class="pkg-name">Pro</div>
+      <div class="pkg-credits">460 <span>credits</span></div>
+      <div class="pkg-price">$40</div>
+      <div class="pkg-rate">$0.087 / credit</div>
+      <div class="pkg-bonus">+15% bonus</div>
+      <button class="btn-pkg" onclick="initiateTopup('40')">Nạp $40</button>
+    </div>
+  </div>
+
+  <!-- Tool Costs -->
+  <div class="costs-section">
+    <h3>Chi phí sử dụng</h3>
+    <div class="cost-row">
+      <div style="display:flex;align-items:center">
+        <span class="cost-icon">🔮</span>
+        <span class="cost-name">Luận Giải Lá Số (24 phần đầy đủ)</span>
+      </div>
+      <div><span class="cost-price">190 credits</span><span class="cost-usd">≈ $19</span></div>
+    </div>
+    <div class="cost-row">
+      <div style="display:flex;align-items:center">
+        <span class="cost-icon">💑</span>
+        <span class="cost-name">Xem Tuổi Vợ Chồng</span>
+      </div>
+      <div><span class="cost-price">90 credits</span><span class="cost-usd">≈ $9</span></div>
+    </div>
+    <div class="cost-row">
+      <div style="display:flex;align-items:center">
+        <span class="cost-icon">💼</span>
+        <span class="cost-name">Xem Tuổi Làm Ăn</span>
+      </div>
+      <div><span class="cost-price">90 credits</span><span class="cost-usd">≈ $9</span></div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq">
+    <h3>Câu hỏi thường gặp</h3>
+    <div class="faq-item">
+      <div class="faq-q">Credits có hết hạn không?</div>
+      <div class="faq-a">Không. Credits không bao giờ hết hạn và được lưu vĩnh viễn trong tài khoản của bạn.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Tôi đã dùng credits cho một lá số, nếu xem lại có bị trừ tiếp không?</div>
+      <div class="faq-a">Không. Mỗi lá số hoặc kết quả xem tuổi chỉ trừ credits một lần. Sau đó bạn có thể xem lại tùy ý miễn phí.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Tôi có thể thanh toán bằng thẻ Visa/Mastercard không?</div>
+      <div class="faq-a">Có. Trong cửa sổ PayPal, chọn "Pay with Debit or Credit Card" để nhập thông tin thẻ trực tiếp mà không cần tài khoản PayPal.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Credits dùng chung được không?</div>
+      <div class="faq-a">Credits gắn với tài khoản cá nhân và không thể chuyển nhượng.</div>
+    </div>
+  </div>
+</div>
+
+<script src="/nav.js"></script>
+<script src="/footer.js"></script>
+
+<script>
+const SUPABASE_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
+
+async function loadBalance() {
+  const deadline = Date.now() + 2000;
+  while (!window.Auth?.isLoggedIn() && Date.now() < deadline) {
+    await new Promise(r => setTimeout(r, 100));
+  }
+  if (!window.Auth?.isLoggedIn()) return;
+
+  const userId = window.Auth.getUser()?.id;
+  if (!userId) return;
+
+  try {
+    const res = await fetch(`/api/payment?action=balance&userId=${encodeURIComponent(userId)}`);
+    const data = await res.json();
+    const balance = data.balance ?? 0;
+    document.getElementById('balanceDisplay').innerHTML = `${balance} <span>credits</span>`;
+    document.getElementById('balanceBar').style.display = 'flex';
+  } catch(e) {}
+
+  // Show cancelled banner if redirected back
+  const p = new URLSearchParams(window.location.search);
+  if (p.get('payment') === 'cancelled') {
+    const alert = document.getElementById('alertBox');
+    alert.className = 'alert error';
+    alert.textContent = 'Thanh toán đã bị hủy. Bạn có thể thử lại bất kỳ lúc nào.';
+    alert.style.display = 'block';
+    window.history.replaceState({}, '', '/topup.html');
+  }
+}
+
+async function initiateTopup(packageId) {
+  // Require login
+  if (!window.Auth?.isLoggedIn()) {
+    window.showAuthModal(async () => { await initiateTopup(packageId); });
+    return;
+  }
+
+  const userId = window.Auth.getUser()?.id;
+  const btnMap = { '10': 0, '20': 1, '40': 2 };
+  const btns = document.querySelectorAll('.btn-pkg');
+  const btn = btns[btnMap[packageId]];
+
+  if (btn) { btn.disabled = true; btn.textContent = 'Đang kết nối...'; }
+
+  try {
+    const res = await fetch('/api/payment?action=topup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ packageId, userId }),
+    });
+    const data = await res.json();
+    if (data.approvalUrl) {
+      window.location.href = data.approvalUrl;
+    } else {
+      throw new Error(data.error || 'Không tạo được đơn PayPal');
+    }
+  } catch(e) {
+    if (btn) { btn.disabled = false; btn.textContent = packageId === '20' ? 'Nạp $20' : packageId === '40' ? 'Nạp $40' : 'Nạp $10'; }
+    const alert = document.getElementById('alertBox');
+    alert.className = 'alert error';
+    alert.textContent = 'Lỗi kết nối PayPal: ' + (e.message || 'Vui lòng thử lại.');
+    alert.style.display = 'block';
+  }
+}
+
+loadBalance();
+</script>
+</body>
+</html>

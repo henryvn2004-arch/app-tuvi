@@ -5,60 +5,100 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Xác nhận thanh toán — Tử Vi Minh Bảo</title>
 <meta name="robots" content="noindex">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Be Vietnam Pro', sans-serif;
-    background: #fdf6e9;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-  .card {
-    background: #fff;
-    border: 1px solid #d4c4a0;
-    border-radius: 12px;
-    padding: 48px 40px;
-    max-width: 440px;
-    width: 100%;
-    text-align: center;
-  }
-  .icon { font-size: 56px; margin-bottom: 20px; }
-  .title {
-    font-family: 'Noto Serif', serif;
-    font-size: 24px;
-    color: #061A2E;
-    margin-bottom: 10px;
-  }
-  .subtitle { font-size: 14px; color: #777; line-height: 1.6; margin-bottom: 28px; }
-  .spinner {
-    width: 32px; height: 32px;
-    border: 3px solid #e0e0e0;
-    border-top-color: #061A2E;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin: 0 auto 16px;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .btn {
-    display: inline-block;
-    padding: 12px 28px;
-    background: #061A2E;
-    color: #fff;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    font-family: inherit;
-    transition: background 0.15s;
-  }
-  .btn:hover { background: #1455A4; }
-  .btn-gold { background: #c9a84c; color: #061A2E; }
-  .btn-gold:hover { background: #f0d080; }
-  .status { font-size: 13px; color: #888; margin-top: 12px; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Be Vietnam Pro', sans-serif;
+  background: #fdf6e9;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.card {
+  background: #fff;
+  border: 1px solid #d4c4a0;
+  border-radius: 12px;
+  padding: 48px 40px;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+}
+.icon { font-size: 56px; margin-bottom: 20px; }
+.title {
+  font-family: 'Noto Serif', serif;
+  font-size: 24px;
+  color: #061A2E;
+  margin-bottom: 10px;
+}
+.subtitle { font-size: 14px; color: #777; line-height: 1.6; margin-bottom: 28px; }
+.credit-badge {
+  display: inline-block;
+  background: #F9F4EB;
+  border: 1.5px solid #c9a84c;
+  color: #9A7B3A;
+  font-weight: 700;
+  font-size: 22px;
+  border-radius: 10px;
+  padding: 10px 24px;
+  margin-bottom: 24px;
+  font-family: 'Noto Serif', serif;
+}
+.credit-badge small { font-size: 13px; display: block; font-weight: 400; color: #aaa; margin-top: 2px; font-family: inherit; }
+.spinner {
+  width: 32px; height: 32px;
+  border: 3px solid #e0e0e0;
+  border-top-color: #061A2E;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background: #061A2E;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  font-family: inherit;
+  margin: 4px;
+  transition: background 0.15s;
+  border: none;
+  cursor: pointer;
+}
+.btn:hover { background: #1455A4; }
+.btn-gold { background: #c9a84c; color: #061A2E; }
+.btn-gold:hover { background: #f0d080; }
+.btn-outline {
+  background: transparent;
+  color: #061A2E;
+  border: 1.5px solid #061A2E;
+}
+.btn-outline:hover { background: #061A2E; color: #fff; }
+.tools-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 16px;
+}
+.tool-link {
+  display: block;
+  padding: 12px;
+  background: #F5F4F0;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #061A2E;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.15s;
+}
+.tool-link:hover { background: #e8e4dc; }
+.tool-link .icon-sm { font-size: 20px; display: block; margin-bottom: 4px; }
 </style>
 </head>
 <body>
@@ -70,109 +110,99 @@
 
 <script src="/auth.js"></script>
 <script>
-const params = new URLSearchParams(window.location.search);
-const slug    = params.get('slug');
-const token   = params.get('token');   // PayPal order token
-const payerId = params.get('PayerID'); // PayPal payer ID
+const params  = new URLSearchParams(window.location.search);
+const slug    = params.get('slug') || '';
+const token   = params.get('token') || params.get('orderID') || params.get('order_id');
+const payerId = params.get('PayerID');
+const userId  = params.get('userId') || '';
+
+function isTopup(s) { return s.startsWith('topup-'); }
 
 async function capture() {
-  const card = document.getElementById('card');
-
-  // Debug: log tất cả URL params
-  console.log('[payment-success] params:', Object.fromEntries(params));
-  console.log('[payment-success] token:', token, 'slug:', slug);
-
-  if (!token || !slug) {
-    // Fallback: PayPal đôi khi dùng 'orderID' thay vì 'token'
-    const orderID = params.get('orderID') || params.get('order_id');
-    if (orderID && slug) {
-      console.log('[payment-success] Using orderID fallback:', orderID);
-      // reassign token
-      window._paypalToken = orderID;
-    } else {
-      showError('Thiếu thông tin thanh toán. URL params: ' + window.location.search);
-      return;
-    }
+  const ppToken = token || params.get('token');
+  if (!ppToken || !slug) {
+    showError('Thiếu thông tin thanh toán. Vui lòng liên hệ hỗ trợ.');
+    return;
   }
 
   try {
-    // Lấy user hiện tại nếu đã login
-    let userId = null;
-    if (window.supabaseClient) {
+    // Lấy userId từ URL hoặc session
+    let finalUserId = userId;
+    if (!finalUserId && window.supabaseClient) {
       const { data: { session } } = await window.supabaseClient.auth.getSession();
-      userId = session?.user?.id || null;
+      finalUserId = session?.user?.id || '';
+    }
+    if (!finalUserId && window.Auth?.isLoggedIn()) {
+      finalUserId = window.Auth.getUser()?.id || '';
     }
 
-    // Capture payment
     const res = await fetch('/api/payment?action=capture', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ orderId: window._paypalToken || token, slug, userId }),
+      body: JSON.stringify({ orderId: ppToken, slug, userId: finalUserId }),
     });
-
     const data = await res.json();
 
     if (data.success) {
-      showSuccess(slug);
+      showSuccess(slug, data.credits || 0, data.balance || 0);
     } else {
       showError(data.error || 'Thanh toán thất bại. Vui lòng liên hệ hỗ trợ.');
     }
-
   } catch (e) {
     showError('Lỗi kết nối. Vui lòng thử lại sau.');
   }
 }
 
-function getReturnUrl(slug) {
-  // Detect product from slug prefix
-  if (slug.startsWith('xem-tuoi-')) return '/xem-tuoi.html';
-  if (slug.startsWith('xem-lam-an-')) return '/xem-lam-an.html';
-  return '/luan-giai.html';  // default: lá số cá nhân
+function getPackageLabel(slug) {
+  const id = slug.replace('topup-', '');
+  const labels = { '10': '100 Credits', '20': '220 Credits', '40': '460 Credits' };
+  return labels[id] || '? Credits';
 }
 
-function getProductLabel(slug) {
-  if (slug.startsWith('xem-tuoi-')) return 'Xem Tuổi Vợ Chồng';
-  if (slug.startsWith('xem-lam-an-')) return 'Xem Tuổi Làm Ăn';
-  return 'Luận Giải Lá Số';
-}
-
-function showSuccess(slug) {
-  const returnUrl = getReturnUrl(slug);
-  const label = getProductLabel(slug);
-  const backUrl = `${returnUrl}?slug=${encodeURIComponent(slug)}&unlocked=1`;
+function showSuccess(slug, credits, balance) {
+  const label = getPackageLabel(slug);
   document.getElementById('card').innerHTML = `
-    <div class="icon">✅</div>
-    <div class="title">Thanh toán thành công!</div>
-    <div class="subtitle">
-      Luận giải đầy đủ đã được mở khóa.<br>
-      Cảm ơn bạn đã tin dùng Tử Vi Minh Bảo.
+    <div class="icon">🎉</div>
+    <div class="title">Nạp credits thành công!</div>
+    <div class="credit-badge">
+      +${credits} Credits
+      <small>Số dư hiện tại: ${balance} credits</small>
     </div>
-    <a href="${backUrl}" class="btn btn-gold">
-      Xem luận giải ${label} →
+    <div class="subtitle">
+      Cảm ơn bạn đã tin dùng Tử Vi Minh Bảo.<br>
+      Dùng credits để luận giải lá số và xem tuổi.
+    </div>
+    <a href="/profile.html#credits" class="btn btn-gold" style="display:block;margin-bottom:16px">
+      Xem tài khoản →
     </a>
-    <div class="status">Kết quả sẽ được khôi phục tự động khi bạn quay lại trang.</div>
+    <div style="font-size:12px;color:#999;margin-bottom:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px">Hoặc sử dụng ngay</div>
+    <div class="tools-grid">
+      <a href="/" class="tool-link"><span class="icon-sm">🔮</span>Luận Giải Lá Số</a>
+      <a href="/xem-tuoi.html" class="tool-link"><span class="icon-sm">💑</span>Xem Tuổi Vợ Chồng</a>
+      <a href="/xem-lam-an.html" class="tool-link"><span class="icon-sm">💼</span>Xem Tuổi Làm Ăn</a>
+      <a href="/topup.html" class="tool-link"><span class="icon-sm">💳</span>Nạp Thêm Credits</a>
+    </div>
   `;
-  // Auto redirect after 2s
-  setTimeout(() => { window.location.href = backUrl; }, 2000);
+  // Auto redirect to profile after 4s
+  setTimeout(() => { window.location.href = '/profile.html'; }, 4500);
 }
 
 function showError(msg) {
   document.getElementById('card').innerHTML = `
     <div class="icon">❌</div>
     <div class="title">Có lỗi xảy ra</div>
-    <div class="subtitle">${msg}</div>
-    <a href="${getReturnUrl(slug||'')}?slug=${encodeURIComponent(slug || '')}" class="btn" style="margin-right:8px">
-      ← Quay lại
-    </a>
-    <a href="/contact.html" class="btn btn-gold">Liên hệ hỗ trợ</a>
+    <div class="subtitle" style="color:#C0392B">${msg}</div>
+    <div style="margin-top:20px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px">
+      <a href="/topup.html" class="btn btn-outline">← Quay lại nạp credits</a>
+      <a href="/contact.html" class="btn btn-gold">Liên hệ hỗ trợ</a>
+    </div>
   `;
 }
 
-// Chờ auth.js init xong rồi mới capture
 async function waitForAuth(timeout = 3000) {
   const start = Date.now();
   while (Date.now() - start < timeout) {
-    if (window.supabaseClient) return;
+    if (window.Auth) return;
     await new Promise(r => setTimeout(r, 100));
   }
 }
