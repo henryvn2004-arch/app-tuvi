@@ -1185,7 +1185,72 @@ function estimateNguAm(r, gender){
 }
 
 /* ============================================================
-   ANALYZE — call API
+   BUILD geoNote TEXT (format cho server)
+   ============================================================ */
+function buildGeoNote(gender, age, nguamEstimate, results) {
+  const b = results.baseline || {};
+  const s = results.sustain || {};
+  const c = results.count || {};
+  const t = results.tonal || {};
+  const fmt = (n, d=1) => {
+    if (n === undefined || n === null || isNaN(n)) return '—';
+    return Number(n).toFixed(d);
+  };
+  const sc = nguamEstimate.scores || {};
+
+  return `DỮ LIỆU ĐO GIỌNG — THANH TƯỚNG PRO
+═══════════════════════════════════
+
+GIỚI TÍNH: ${gender === 'nam' ? 'Nam' : 'Nữ'}
+TUỔI: ${age}
+
+NGŨ ÂM ƯỚC TÍNH (heuristic client-side, chỉ tham khảo): ${nguamEstimate.label}
+Điểm số: Kim ${sc.Kim||0} | Mộc ${sc.Moc||0} | Thủy ${sc.Thuy||0} | Hỏa ${sc.Hoa||0} | Thổ ${sc.Tho||0}
+
+── BÀI 1 — Đọc "Công cha như núi Thái Sơn..." (10s, giọng nền)
+F0 trung bình: ${fmt(b.f0Mean, 0)} Hz
+F0 median: ${fmt(b.f0Median, 0)} Hz
+F0 độ lệch chuẩn: ${fmt(b.f0Std, 1)} Hz
+F0 min / max: ${fmt(b.f0Min, 0)} / ${fmt(b.f0Max, 0)} Hz
+Jitter (local): ${fmt(b.jitter, 2)} %
+HNR trung bình: ${fmt(b.hnrMean, 1)} dB
+Spectral centroid: ${fmt(b.centroid, 0)} Hz
+Spectral rolloff 85%: ${fmt(b.rolloff, 0)} Hz
+Formant F1: ${fmt(b.f1, 0)} Hz
+Formant F2: ${fmt(b.f2, 0)} Hz
+Tốc độ nói: ${fmt(b.speechRate, 1)} âm tiết/s
+Số âm tiết đếm được: ${b.syllables || 0}
+
+── BÀI 2 — Ngân âm "A" (5s) — ĐO KHÍ, QUAN TRỌNG NHẤT
+F0 trung bình: ${fmt(s.f0Mean, 0)} Hz
+F0 độ lệch chuẩn: ${fmt(s.f0Std, 1)} Hz
+Jitter (local): ${fmt(s.jitter, 2)} %
+Shimmer (local): ${fmt(s.shimmer, 2)} dB
+HNR trung bình: ${fmt(s.hnrMean, 1)} dB
+Sustain duration: ${fmt(s.sustainDuration, 2)} s   ← đo trực tiếp khí lực
+Decay slope: ${fmt(s.decaySlope, 2)} dB/s   ← đo khí đáy, âm có tắt nhanh không
+
+── BÀI 3 — Đếm 1 → 15 (12s, đo nhịp)
+F0 trung bình: ${fmt(c.f0Mean, 0)} Hz
+F0 độ lệch chuẩn: ${fmt(c.f0Std, 1)} Hz
+Tốc độ đếm: ${fmt(c.speechRate, 1)} âm tiết/s
+Số âm tiết phát hiện: ${c.syllables || 0} (kỳ vọng ~18)
+Độ ổn định (CV): ${fmt((c.rateConsistency||0) * 100, 1)} %
+
+── BÀI 4 — "Trăm năm trong cõi người ta..." (10s, đo pitch range)
+F0 trung bình: ${fmt(t.f0Mean, 0)} Hz
+F0 độ lệch chuẩn: ${fmt(t.f0Std, 1)} Hz
+Pitch range: ${fmt(t.f0Range, 0)} Hz
+Pitch agility (mean |ΔF0|): ${fmt(t.pitchAgility, 1)} Hz/bước
+Spectral centroid: ${fmt(t.centroid, 0)} Hz
+
+═══════════════════════════════════
+
+Phân tích theo đúng 6 phần quy định. Bắt buộc dẫn nguyên văn kinh điển (phiên âm Hán-Việt kèm dịch). Nếu sustainDuration < 2.5s HOẶC shimmer > 1.2dB → bắt buộc phán "Khí bất túc" ở phần 2.`;
+}
+
+/* ============================================================
+   ANALYZE — call API với SSE streaming
    ============================================================ */
 analyzeBtn.addEventListener('click', async () => {
   analyzeBtn.disabled = true;
@@ -1195,46 +1260,65 @@ analyzeBtn.addEventListener('click', async () => {
   resultsPanel.scrollIntoView({behavior:'smooth',block:'start'});
 
   const nguam = estimateNguAm(state.results, state.gender);
+  const geoNote = buildGeoNote(state.gender, state.age, nguam, state.results);
+
   const payload = {
     action: 'thanh-tuong-pro',
-    gender: state.gender,
-    age: state.age,
-    nguamEstimate: nguam,
-    features: state.results
+    geoNote: geoNote
   };
 
   try {
-    const res = await fetch('/api/tuong-mat?action=thanh-tuong-pro', {
+    const res = await fetch('/api/tuong-mat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
     if (!res.ok) {
-      const err = await res.text();
-      throw new Error('API error: ' + err);
+      const errText = await res.text();
+      let errMsg = errText;
+      try { errMsg = JSON.parse(errText).error || errText; } catch(_) {}
+      throw new Error(errMsg);
     }
-    // Stream or full response
-    const ct = res.headers.get('content-type') || '';
-    if (ct.includes('text/event-stream') || ct.includes('text/plain')) {
-      const reader = res.body.getReader();
-      const dec = new TextDecoder();
-      let acc = '';
-      resultsPanel.innerHTML = '';
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        acc += dec.decode(value, {stream:true});
-        resultsPanel.innerHTML = renderMarkdown(acc);
+
+    // Parse SSE stream: lines of "data: {"t":"..."}\n\n" and "data: [DONE]"
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+    let buf = '';
+    let content = '';
+    resultsPanel.innerHTML = '';
+
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      const lines = buf.split('\n');
+      buf = lines.pop() || '';
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const raw = line.slice(6).trim();
+        if (!raw || raw === '[DONE]') continue;
+        try {
+          const json = JSON.parse(raw);
+          if (json.t) {
+            content += json.t;
+            resultsPanel.innerHTML = renderMarkdown(content);
+          }
+          if (json.err) {
+            resultsPanel.innerHTML += '<p style="color:#C0392B;margin-top:14px">Lỗi stream: ' + json.err + '</p>';
+          }
+        } catch(_) { /* ignore malformed chunks */ }
       }
-    } else {
-      const data = await res.json();
-      resultsPanel.innerHTML = renderMarkdown(data.content || data.text || JSON.stringify(data));
     }
+
+    if (!content) {
+      resultsPanel.innerHTML = '<p style="color:#C0392B;padding:20px;text-align:center">Không nhận được nội dung từ AI. Thử lại.</p>';
+    }
+
     analyzeBtn.textContent = 'Luận Giải Lại';
     analyzeBtn.disabled = false;
   } catch (err) {
     console.error(err);
-    resultsPanel.innerHTML = '<p style="color:#C0392B;padding:20px;text-align:center">Lỗi: ' + err.message + '</p>';
+    resultsPanel.innerHTML = '<p style="color:#C0392B;padding:20px;text-align:center">Lỗi: ' + (err.message || err) + '</p>';
     analyzeBtn.textContent = 'Thử Lại';
     analyzeBtn.disabled = false;
   }
