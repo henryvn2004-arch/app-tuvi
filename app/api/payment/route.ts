@@ -363,19 +363,57 @@ async function handleAdminCreateUser(request: NextRequest, body: Record<string, 
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
-// ── GET: admin list users with balances ───────────────────────
+// ── GET: admin list users (all auth users + balances) ────────
 async function handleAdminUsers(request: NextRequest, sp: URLSearchParams): Promise<Response> {
   const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
   const admin = await verifyAdmin(token);
   if (!admin) return err('Unauthorized', 403);
 
   try {
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/user_credits?order=balance.desc&select=user_id,balance,updated_at`,
+    const page = parseInt(sp.get('page') || '1');
+    const perPage = 100;
+
+    // Fetch all auth users via Admin API (service key)
+    const authRes = await fetch(
+      `${SUPABASE_URL}/auth/v1/admin/users?page=${page}&per_page=${perPage}`,
+      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+    );
+    if (!authRes.ok) throw new Error(`Auth API failed: ${authRes.status}`);
+    const authData = await authRes.json();
+    const authUsers = authData.users || [];
+
+    // Fetch all credit balances
+    const credRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/user_credits?select=user_id,balance`,
       { headers: SB_HEADERS }
     );
-    const rows = await res.json();
-    return ok({ users: rows });
+    const credits: { user_id: string; balance: number }[] = credRes.ok ? await credRes.json() : [];
+    const creditMap: Record<string, number> = {};
+    credits.forEach((c) => { creditMap[c.user_id] = c.balance; });
+
+    // Fetch transaction counts per user
+    const txnRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/credit_transactions?select=user_id&type=neq.topup`,
+      { headers: SB_HEADERS }
+    );
+    const txns: { user_id: string }[] = txnRes.ok ? await txnRes.json() : [];
+    const txnCount: Record<string, number> = {};
+    txns.forEach((t) => { txnCount[t.user_id] = (txnCount[t.user_id] || 0) + 1; });
+
+    // Merge
+    const users = authUsers.map((u: any) => ({
+      id:           u.id,
+      email:        u.email,
+      name:         u.user_metadata?.full_name || u.user_metadata?.name || '',
+      provider:     u.app_metadata?.provider || 'email',
+      created_at:   u.created_at,
+      last_sign_in: u.last_sign_in_at,
+      balance:      creditMap[u.id] ?? 0,
+      tool_uses:    txnCount[u.id] || 0,
+      confirmed:    !!u.email_confirmed_at,
+    }));
+
+    return ok({ users, total: authData.total || users.length });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
