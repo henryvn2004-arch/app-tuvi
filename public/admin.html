@@ -2,259 +2,425 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Admin — Tử Vi Minh Bảo</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;
-  --gold:#9A7B3A;--gold-lt:#F9F4EB;
-  --text:#1a1a1a;--text-mid:#444;--text-lt:#777;
-  --border:#E8E8E8;--bg:#F5F4F0;--bg-card:#fff;
-  --red:#C0392B;--green:#1E6B3C;--orange:#D97706;
+  --navy:#061A2E; --navy-mid:#0D3B5E; --blue:#1455A4;
+  --gold:#9A7B3A; --gold-lt:#F9F4EB;
+  --text:#1a1a1a; --text-mid:#444; --text-lt:#777;
+  --border:#E8E8E8; --border-lt:#F0F0F0;
+  --bg:#F5F4F0; --card:#fff;
+  --red:#C0392B; --green:#1E6B3C; --orange:#D97706;
+  --sidebar-w:220px;
   --radius:8px;
 }
-body{font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text);min-height:100vh;font-size:13px}
+body{font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text);font-size:13px;min-height:100vh}
 
-/* TOPBAR */
-.topbar{background:var(--navy);padding:0 2rem;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.topbar-logo{color:#fff;font-family:'Noto Serif',serif;font-size:1rem;font-weight:700;letter-spacing:.05em}
-.topbar-logo span{color:var(--gold);margin-left:.5rem;font-size:.7rem;letter-spacing:.15em;text-transform:uppercase}
-.topbar-user{color:rgba(255,255,255,.6);font-size:.75rem;display:flex;align-items:center;gap:1rem}
-.topbar-user button{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);padding:.3rem .8rem;border-radius:4px;cursor:pointer;font-size:.72rem;font-family:inherit}
-
-/* LAYOUT */
-.wrap{max-width:1200px;margin:0 auto;padding:2rem 1.5rem}
-
-/* LOGIN */
-.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--navy)}
-.login-box{background:#fff;border-radius:12px;padding:2.5rem;width:100%;max-width:380px;text-align:center}
-.login-logo{font-family:'Noto Serif',serif;font-size:1.4rem;font-weight:700;color:var(--navy);margin-bottom:.5rem}
+/* ── LOGIN ── */
+#login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--navy)}
+.login-box{background:#fff;border-radius:14px;padding:2.5rem;width:100%;max-width:360px;text-align:center}
+.login-logo{font-family:'Noto Serif',serif;font-size:1.5rem;font-weight:700;color:var(--navy);margin-bottom:.25rem}
 .login-sub{color:var(--text-lt);font-size:.8rem;margin-bottom:2rem;font-family:Arial,sans-serif}
-.login-input{width:100%;padding:.7rem 1rem;border:1.5px solid var(--border);border-radius:6px;font-size:.9rem;font-family:inherit;margin-bottom:.75rem;outline:none}
+.login-input{width:100%;padding:.65rem 1rem;border:1.5px solid var(--border);border-radius:6px;font-size:.85rem;font-family:inherit;margin-bottom:.65rem;outline:none}
 .login-input:focus{border-color:var(--navy)}
-.login-btn{width:100%;padding:.75rem;background:var(--navy);color:#fff;border:none;border-radius:6px;font-size:.85rem;font-weight:600;cursor:pointer;font-family:inherit}
+.login-btn{width:100%;padding:.75rem;background:var(--navy);color:#fff;border:none;border-radius:6px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.05em}
 .login-btn:hover{background:var(--navy-mid)}
-.login-err{color:var(--red);font-size:.78rem;margin-top:.5rem}
+.login-err{color:var(--red);font-size:.75rem;margin-top:.5rem;min-height:1.2em}
 
-/* STATS GRID */
-.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
-.stat-card{background:var(--bg-card);border-radius:var(--radius);padding:1.25rem 1.5rem;border:1px solid var(--border)}
-.stat-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-lt);margin-bottom:.5rem}
-.stat-value{font-family:'Noto Serif',serif;font-size:2rem;font-weight:700;color:var(--navy);line-height:1}
-.stat-sub{font-size:.72rem;color:var(--text-lt);margin-top:.4rem}
-.stat-card.green .stat-value{color:var(--green)}
-.stat-card.gold .stat-value{color:var(--gold)}
-.stat-card.blue .stat-value{color:var(--blue)}
+/* ── LAYOUT ── */
+#app{display:none;min-height:100vh}
+.sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:var(--navy);display:flex;flex-direction:column;z-index:100;overflow-y:auto}
+.sidebar-logo{padding:1.25rem 1.2rem;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:.6rem}
+.sidebar-logo-icon{width:28px;height:28px;background:var(--gold);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.85rem;color:var(--navy);font-weight:700;font-family:'Noto Serif',serif;flex-shrink:0}
+.sidebar-logo-text{font-family:'Noto Serif',serif;font-size:.85rem;color:#fff;font-weight:700;line-height:1.2}
+.sidebar-logo-sub{font-size:.65rem;color:rgba(255,255,255,.4);font-family:'JetBrains Mono',monospace}
+.sidebar-section{padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.sidebar-section-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.3);padding:.5rem 1.2rem .25rem;font-weight:700}
+.nav-item{display:flex;align-items:center;gap:.7rem;padding:.6rem 1.2rem;color:rgba(255,255,255,.6);text-decoration:none;cursor:pointer;border:none;background:none;width:100%;text-align:left;font-size:.78rem;font-family:inherit;transition:all .15s;border-left:3px solid transparent}
+.nav-item:hover{color:rgba(255,255,255,.9);background:rgba(255,255,255,.06)}
+.nav-item.active{color:#fff;background:rgba(255,255,255,.1);border-left-color:var(--gold)}
+.nav-item .ni{font-size:1rem;width:20px;text-align:center;flex-shrink:0}
+.nav-item .badge{background:rgba(201,168,76,.25);color:#c9a84c;font-size:.6rem;padding:.1rem .35rem;border-radius:10px;margin-left:auto;font-weight:700}
+.sidebar-bottom{margin-top:auto;padding:1rem 1.2rem;border-top:1px solid rgba(255,255,255,.08)}
+.sidebar-user{font-size:.72rem;color:rgba(255,255,255,.5);margin-bottom:.65rem;line-height:1.5}
+.btn-logout{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.6);padding:.4rem .85rem;border-radius:5px;cursor:pointer;font-size:.72rem;font-family:inherit;width:100%}
+.btn-logout:hover{background:rgba(255,255,255,.14);color:#fff}
 
-/* SECTION */
-.section{margin-bottom:2rem}
-.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
-.section-title{font-family:'Noto Serif',serif;font-size:1rem;color:var(--navy);font-weight:700}
-.section-count{font-size:.72rem;color:var(--text-lt);background:var(--bg);border:1px solid var(--border);padding:.2rem .6rem;border-radius:20px}
+.main{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column}
+.topbar{background:#fff;border-bottom:1px solid var(--border);padding:.85rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.topbar-title{font-family:'Noto Serif',serif;font-size:1rem;color:var(--navy);font-weight:700}
+.topbar-meta{font-size:.72rem;color:var(--text-lt)}
+.content{padding:1.75rem 2rem;flex:1}
 
-/* TABLE */
-.table-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+/* ── STATS ── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.75rem}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.25rem}
+.stat-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-lt);margin-bottom:.5rem;font-weight:700}
+.stat-value{font-family:'Noto Serif',serif;font-size:1.75rem;font-weight:700;color:var(--navy);line-height:1}
+.stat-sub{font-size:.7rem;color:var(--text-lt);margin-top:.35rem}
+.stat.green .stat-value{color:var(--green)}
+.stat.gold .stat-value{color:var(--gold)}
+.stat.blue .stat-value{color:var(--blue)}
+
+/* ── PANEL ── */
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1.25rem}
+.panel-header{padding:.85rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;background:var(--card)}
+.panel-title{font-family:'Noto Serif',serif;font-size:.9rem;color:var(--navy);font-weight:700}
+.panel-actions{display:flex;align-items:center;gap:.5rem;flex-shrink:0}
+.panel-body{padding:1.25rem}
+
+/* ── SEARCH ── */
+.search-row{display:flex;gap:.6rem;margin-bottom:1rem}
+.search-input{flex:1;padding:.5rem .85rem;border:1.5px solid var(--border);border-radius:6px;font-size:.78rem;font-family:inherit;outline:none}
+.search-input:focus{border-color:var(--navy)}
+
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse}
-th{background:var(--navy);color:rgba(255,255,255,.8);padding:.6rem 1rem;text-align:left;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
-td{padding:.7rem 1rem;border-bottom:1px solid var(--border);font-size:.78rem;color:var(--text-mid);vertical-align:middle}
+th{text-align:left;padding:.55rem 1rem;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.8);background:var(--navy);white-space:nowrap}
+td{padding:.6rem 1rem;border-bottom:1px solid var(--border-lt);font-size:.78rem;color:var(--text-mid);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:#fafafa}
-.badge{display:inline-block;padding:.15rem .5rem;border-radius:20px;font-size:.68rem;font-weight:600}
+.mono{font-family:'JetBrains Mono',monospace;font-size:.72rem}
+
+/* ── BADGES ── */
+.badge{display:inline-block;padding:.15rem .5rem;border-radius:20px;font-size:.65rem;font-weight:700;white-space:nowrap}
 .badge-green{background:#f0faf4;color:var(--green);border:1px solid #c3e6d0}
 .badge-gold{background:var(--gold-lt);color:var(--gold);border:1px solid #e8d9b0}
 .badge-red{background:#fff5f5;color:var(--red);border:1px solid #f5c6c6}
 .badge-blue{background:#eef4ff;color:var(--blue);border:1px solid #c7d9f5}
-.mono{font-family:'JetBrains Mono',monospace;font-size:.72rem}
+.badge-grey{background:#f5f5f5;color:#666;border:1px solid #ddd}
 
-/* TABS */
-.tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:1.5rem}
-.tab-btn{padding:.65rem 1.25rem;font-size:.8rem;font-weight:600;border:none;background:transparent;cursor:pointer;color:var(--text-lt);border-bottom:2px solid transparent;margin-bottom:-2px;font-family:inherit;transition:all .15s}
-.tab-btn:hover{color:var(--navy)}
-.tab-btn.active{color:var(--navy);border-bottom-color:var(--gold)}
-.tab-content{display:none}
-.tab-content.active{display:block}
+/* ── BUTTONS ── */
+.btn{padding:.45rem 1rem;border:none;border-radius:5px;font-size:.75rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;letter-spacing:.04em}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-primary:hover{background:var(--navy-mid)}
+.btn-gold{background:var(--gold);color:#fff}
+.btn-gold:hover{background:#7d6230}
+.btn-sm{padding:.3rem .65rem;font-size:.7rem}
+.btn-ghost{background:transparent;color:var(--navy);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--bg)}
+.btn-danger{background:var(--red);color:#fff}
 
-/* LOADING */
-.loading{text-align:center;padding:3rem;color:var(--text-lt)}
-.spin{display:inline-block;width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:.5rem}
+/* ── FORMS ── */
+.form-grid{display:grid;gap:.85rem}
+.form-grid-2{grid-template-columns:1fr 1fr}
+.form-grid-3{grid-template-columns:1fr 1fr 1fr}
+.form-grid-4{grid-template-columns:1fr 1fr 1fr auto}
+.form-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-lt);margin-bottom:.3rem;display:block}
+.form-input{width:100%;padding:.5rem .75rem;border:1.5px solid var(--border);border-radius:5px;font-size:.82rem;font-family:inherit;outline:none}
+.form-input:focus{border-color:var(--navy)}
+.form-input[type=number]{text-align:center}
+
+/* ── ALERT ── */
+.alert-box{border-radius:6px;padding:.65rem 1rem;font-size:.78rem;margin-bottom:.75rem}
+.alert-success{background:#f0faf4;color:var(--green);border:1px solid #c3e6d0}
+.alert-error{background:#fff5f5;color:var(--red);border:1px solid #f5c6c6}
+
+/* ── LOADING ── */
+.loading{text-align:center;padding:2.5rem;color:var(--text-lt);font-size:.82rem}
+.spin{display:inline-block;width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:.5rem}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* SEARCH */
-.search-bar{display:flex;gap:.75rem;margin-bottom:1rem}
-.search-input{flex:1;padding:.55rem .9rem;border:1.5px solid var(--border);border-radius:6px;font-size:.8rem;font-family:inherit;outline:none}
-.search-input:focus{border-color:var(--navy)}
-
-/* REFRESH */
-.refresh-btn{background:var(--navy);color:#fff;border:none;padding:.5rem 1rem;border-radius:6px;cursor:pointer;font-size:.75rem;font-family:inherit;font-weight:600}
-.refresh-btn:hover{background:var(--navy-mid)}
-
 .empty{text-align:center;padding:2rem;color:var(--text-lt);font-size:.8rem}
+
+/* ── PRICING TABLE ── */
+.price-input{width:70px;padding:.3rem .5rem;border:1.5px solid var(--border);border-radius:4px;font-size:.82rem;font-family:inherit;outline:none;text-align:center}
+.price-input:focus{border-color:var(--navy)}
+
+/* ── SECTIONS (pages) ── */
+.page{display:none}
+.page.active{display:block}
+
+@media(max-width:900px){
+  .sidebar{width:60px}
+  .sidebar-logo-text,.sidebar-logo-sub,.sidebar-section-label,.nav-item span:not(.ni),.sidebar-user,.btn-logout span{display:none}
+  .nav-item{padding:.6rem;justify-content:center}
+  .main{margin-left:60px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+}
 </style>
 </head>
 <body>
 
 <!-- LOGIN -->
 <div id="login-page">
-  <div class="login-wrap">
-    <div class="login-box">
-      <div class="login-logo">紫微明寶</div>
-      <div class="login-sub">Admin Dashboard</div>
-      <input class="login-input" type="email" id="login-email" placeholder="admin@tuviminhbao.com"/>
-      <input class="login-input" type="password" id="login-pwd" placeholder="Mật khẩu" onkeydown="if(event.key==='Enter')doLogin()"/>
-      <button class="login-btn" onclick="doLogin()">Đăng Nhập</button>
-      <div class="login-err" id="login-err"></div>
-    </div>
+  <div class="login-box">
+    <div class="login-logo">紫微明寶</div>
+    <div class="login-sub">Admin Portal</div>
+    <input class="login-input" type="email" id="login-email" placeholder="admin@tuviminhbao.com" />
+    <input class="login-input" type="password" id="login-pwd" placeholder="Mật khẩu"
+      onkeydown="if(event.key==='Enter')doLogin()" />
+    <button class="login-btn" onclick="doLogin()">Đăng Nhập →</button>
+    <div class="login-err" id="login-err"></div>
   </div>
 </div>
 
-<!-- DASHBOARD -->
-<div id="dashboard" style="display:none">
-  <div class="topbar">
-    <div class="topbar-logo">紫微明寶 <span>Admin</span></div>
-    <div class="topbar-user">
-      <span id="admin-email-display"></span>
-      <button onclick="doLogout()">Đăng Xuất</button>
+<!-- APP -->
+<div id="app">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">紫</div>
+      <div>
+        <div class="sidebar-logo-text">Tử Vi Minh Bảo</div>
+        <div class="sidebar-logo-sub">Admin Portal</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Tổng Quan</div>
+      <button class="nav-item active" onclick="goTo('dashboard')">
+        <span class="ni">📊</span><span>Dashboard</span>
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Người Dùng</div>
+      <button class="nav-item" onclick="goTo('users')">
+        <span class="ni">👥</span><span>Users</span>
+        <span class="badge" id="badge-users">—</span>
+      </button>
+      <button class="nav-item" onclick="goTo('credits')">
+        <span class="ni">⚡</span><span>Credits & Giao Dịch</span>
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Sản Phẩm</div>
+      <button class="nav-item" onclick="goTo('lasos')">
+        <span class="ni">🔮</span><span>Lá Số</span>
+      </button>
+      <button class="nav-item" onclick="goTo('pricing')">
+        <span class="ni">🎛</span><span>Pricing</span>
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Nội Dung</div>
+      <button class="nav-item" onclick="goTo('articles')">
+        <span class="ni">✍️</span><span>Khảo Luận</span>
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Công Cụ</div>
+      <button class="nav-item" onclick="goTo('tools')">
+        <span class="ni">⚙️</span><span>Quản Lý</span>
+      </button>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-user" id="sidebar-user-info">...</div>
+      <button class="btn-logout" onclick="doLogout()"><span>Đăng Xuất</span></button>
     </div>
   </div>
 
-  <div class="wrap">
-    <!-- Stats -->
-    <div class="stats" id="stats-grid">
-      <div class="loading"><span class="spin"></span>Đang tải...</div>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-meta" id="topbar-meta"></div>
     </div>
 
-    <!-- Tabs -->
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="purchases">💳 Giao Dịch</button>
-      <button class="tab-btn" data-tab="users">👤 Users</button>
-      <button class="tab-btn" data-tab="lasos">🔮 Lá Số</button>
-      <button class="tab-btn" data-tab="tools">⚙️ Công Cụ</button>
-    </div>
+    <div class="content">
 
-    <!-- Tab: Purchases -->
-    <div class="tab-content active" id="tab-purchases">
-      <div class="section">
-        <div class="section-header">
-          <div class="section-title">Lịch Sử Giao Dịch</div>
-          <button class="refresh-btn" onclick="loadPurchases()">↻ Refresh</button>
+      <!-- ── DASHBOARD ── -->
+      <div class="page active" id="page-dashboard">
+        <div class="stats" id="stats-grid">
+          <div class="stat"><div class="stat-label">Users</div><div class="stat-value spin-val">…</div><div class="stat-sub">tổng tài khoản</div></div>
+          <div class="stat green"><div class="stat-label">Credits Nạp</div><div class="stat-value spin-val">…</div><div class="stat-sub">tổng</div></div>
+          <div class="stat gold"><div class="stat-label">Doanh Thu</div><div class="stat-value spin-val">…</div><div class="stat-sub">ước tính</div></div>
+          <div class="stat blue"><div class="stat-label">Lá Số</div><div class="stat-value spin-val">…</div><div class="stat-sub">đã tạo</div></div>
         </div>
-        <div class="search-bar">
-          <input class="search-input" id="search-purchases" placeholder="Tìm slug, email..." oninput="filterPurchases()"/>
-        </div>
-        <div class="table-wrap" id="purchases-table">
-          <div class="loading"><span class="spin"></span>Đang tải...</div>
-        </div>
-      </div>
-    </div>
 
-    <!-- Tab: Users -->
-    <div class="tab-content" id="tab-users">
-      <div class="section">
-        <div class="section-header">
-          <div class="section-title">Danh Sách Users</div>
-          <button class="refresh-btn" onclick="loadUsers()">↻ Refresh</button>
-        </div>
-        <div class="table-wrap" id="users-table">
-          <div class="loading"><span class="spin"></span>Đang tải...</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Tab: Lá Số -->
-    <div class="tab-content" id="tab-lasos">
-      <div class="section">
-        <div class="section-header">
-          <div class="section-title">Lá Số Đã Tạo</div>
-          <button class="refresh-btn" onclick="loadLasos()">↻ Refresh</button>
-        </div>
-        <div class="search-bar">
-          <input class="search-input" id="search-lasos" placeholder="Tìm slug, cung mệnh..." oninput="filterLasos()"/>
-        </div>
-        <div class="table-wrap" id="lasos-table">
-          <div class="loading"><span class="spin"></span>Đang tải...</div>
-        </div>
-      </div>
-    </div>
-    <!-- Tab: Công Cụ Admin -->
-    <div class="tab-content" id="tab-tools">
-
-      <!-- Create User -->
-      <div class="section">
-        <div class="section-header">
-          <div class="section-title">Tạo Tài Khoản Mới</div>
-        </div>
-        <div id="create-user-alert" style="margin-bottom:.75rem"></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:.75rem;align-items:end;margin-bottom:.5rem">
-          <div>
-            <div style="font-size:.72rem;font-weight:700;color:var(--text-lt);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem">Email</div>
-            <input type="email" id="cu-email" placeholder="user@example.com" style="width:100%;padding:.55rem .85rem;border:1.5px solid var(--border);border-radius:6px;font-size:.82rem;font-family:inherit;outline:none">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
+          <!-- Recent signups -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">Đăng Ký Gần Đây</div>
+              <button class="btn btn-ghost btn-sm" onclick="goTo('users')">Xem tất cả →</button>
+            </div>
+            <div class="table-wrap" id="dash-recent-users">
+              <div class="loading"><span class="spin"></span>Đang tải...</div>
+            </div>
           </div>
-          <div>
-            <div style="font-size:.72rem;font-weight:700;color:var(--text-lt);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem">Mật Khẩu</div>
-            <input type="text" id="cu-pwd" placeholder="Tối thiểu 6 ký tự" style="width:100%;padding:.55rem .85rem;border:1.5px solid var(--border);border-radius:6px;font-size:.82rem;font-family:inherit;outline:none">
+          <!-- Recent transactions -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">Giao Dịch Gần Đây</div>
+              <button class="btn btn-ghost btn-sm" onclick="goTo('credits')">Xem tất cả →</button>
+            </div>
+            <div class="table-wrap" id="dash-recent-txns">
+              <div class="loading"><span class="spin"></span>Đang tải...</div>
+            </div>
           </div>
-          <div>
-            <div style="font-size:.72rem;font-weight:700;color:var(--text-lt);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem">Credits ban đầu</div>
-            <input type="number" id="cu-credits" placeholder="0" min="0" style="width:100px;padding:.55rem .85rem;border:1.5px solid var(--border);border-radius:6px;font-size:.82rem;font-family:inherit;outline:none;text-align:center">
-          </div>
-        </div>
-        <button class="refresh-btn" onclick="createUser()" style="margin-top:.5rem">Tạo Tài Khoản</button>
-      </div>
-
-      <!-- Grant Credits -->
-      <div class="section" style="margin-top:1.25rem">
-        <div class="section-header">
-          <div class="section-title">Cấp Credits Thủ Công</div>
-        </div>
-        <div id="grant-alert" style="margin-bottom:.75rem"></div>
-        <div style="display:grid;grid-template-columns:1fr auto auto auto;gap:.75rem;align-items:end">
-          <div>
-            <div style="font-size:.72rem;font-weight:700;color:var(--text-lt);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem">Email User</div>
-            <input type="email" id="grant-email" placeholder="user@example.com" style="width:100%;padding:.55rem .85rem;border:1.5px solid var(--border);border-radius:6px;font-size:.82rem;font-family:inherit;outline:none">
-          </div>
-          <div>
-            <div style="font-size:.72rem;font-weight:700;color:var(--text-lt);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem">Số Credits</div>
-            <input type="number" id="grant-amount" placeholder="100" min="1" style="width:100px;padding:.55rem .85rem;border:1.5px solid var(--border);border-radius:6px;font-size:.82rem;font-family:inherit;outline:none;text-align:center">
-          </div>
-          <div>
-            <div style="font-size:.72rem;font-weight:700;color:var(--text-lt);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem">Ghi Chú</div>
-            <input type="text" id="grant-note" placeholder="Lý do cấp..." style="width:160px;padding:.55rem .85rem;border:1.5px solid var(--border);border-radius:6px;font-size:.82rem;font-family:inherit;outline:none">
-          </div>
-          <button class="refresh-btn" onclick="grantCredits()" style="white-space:nowrap">Cấp Credits</button>
-        </div>
-        <div style="margin-top:1rem;font-size:.75rem;color:var(--text-lt)">
-          Để trừ credits, nhập số âm (ví dụ: -50)
         </div>
       </div>
 
-      <!-- User Credit Overview -->
-      <div class="section" style="margin-top:1.25rem">
-        <div class="section-header">
-          <div class="section-title">Số Dư Tất Cả Users</div>
-          <button class="refresh-btn" onclick="loadAdminUsers()">↻ Refresh</button>
-        </div>
-        <div class="table-wrap" id="admin-users-table">
-          <div class="loading"><span class="spin"></span>Đang tải...</div>
+      <!-- ── USERS ── -->
+      <div class="page" id="page-users">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Tất Cả Users</div>
+            <div class="panel-actions">
+              <input class="search-input" id="search-users" placeholder="Tìm email, tên..." style="width:220px" oninput="filterUsers()">
+              <button class="btn btn-primary btn-sm" onclick="loadUsers()">↻</button>
+            </div>
+          </div>
+          <div class="table-wrap" id="users-table">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
         </div>
       </div>
 
-    </div>
+      <!-- ── CREDITS ── -->
+      <div class="page" id="page-credits">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Lịch Sử Giao Dịch Credits</div>
+            <div class="panel-actions">
+              <input class="search-input" id="search-credits" placeholder="Tìm email, type, slug..." style="width:220px" oninput="filterCredits()">
+              <button class="btn btn-primary btn-sm" onclick="loadCredits()">↻</button>
+            </div>
+          </div>
+          <div class="table-wrap" id="credits-table">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+      </div>
 
-  </div>
-</div>
+      <!-- ── LÁ SỐ ── -->
+      <div class="page" id="page-lasos">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Lá Số Đã Tạo</div>
+            <div class="panel-actions">
+              <input class="search-input" id="search-lasos" placeholder="Tìm slug, cung mệnh..." style="width:220px" oninput="filterLasos()">
+              <button class="btn btn-primary btn-sm" onclick="loadLasos()">↻</button>
+            </div>
+          </div>
+          <div class="table-wrap" id="lasos-table">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+      </div>
 
-<script src="/auth.js"></script>
+      <!-- ── PRICING ── -->
+      <div class="page" id="page-pricing">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Quản Lý Giá Credits</div>
+            <div class="panel-actions">
+              <span style="font-size:.72rem;color:var(--text-lt)">Thay đổi có hiệu lực ngay</span>
+              <button class="btn btn-primary btn-sm" onclick="loadPricing()">↻</button>
+            </div>
+          </div>
+          <div id="pricing-alert" style="padding:0 1.25rem"></div>
+          <table>
+            <thead><tr><th>Công Cụ</th><th>Tool ID</th><th>Credits</th><th>Tương Đương</th><th>Bật</th><th>Lưu</th></tr></thead>
+            <tbody id="pricing-body"><tr><td colspan="6" class="loading"><span class="spin"></span>Đang tải...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── ARTICLES ── -->
+      <div class="page" id="page-articles">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Khảo Luận (Articles)</div>
+            <div class="panel-actions">
+              <input class="search-input" id="search-articles" placeholder="Tìm tiêu đề, slug..." style="width:220px" oninput="filterArticles()">
+              <button class="btn btn-primary btn-sm" onclick="loadArticles()">↻</button>
+            </div>
+          </div>
+          <div class="table-wrap" id="articles-table">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TOOLS ── -->
+      <div class="page" id="page-tools">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
+
+          <!-- Create User -->
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">Tạo Tài Khoản</div></div>
+            <div class="panel-body">
+              <div id="alert-create"></div>
+              <div class="form-grid" style="margin-bottom:.85rem">
+                <div>
+                  <label class="form-label">Email</label>
+                  <input type="email" id="cu-email" class="form-input" placeholder="user@example.com">
+                </div>
+                <div>
+                  <label class="form-label">Mật Khẩu</label>
+                  <input type="text" id="cu-pwd" class="form-input" placeholder="min 6 ký tự">
+                </div>
+                <div>
+                  <label class="form-label">Credits Ban Đầu</label>
+                  <input type="number" id="cu-credits" class="form-input" placeholder="0" min="0" style="max-width:120px">
+                </div>
+              </div>
+              <button class="btn btn-primary" onclick="createUser()">Tạo Tài Khoản →</button>
+            </div>
+          </div>
+
+          <!-- Grant Credits -->
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">Cấp Credits</div></div>
+            <div class="panel-body">
+              <div id="alert-grant"></div>
+              <div class="form-grid" style="margin-bottom:.85rem">
+                <div>
+                  <label class="form-label">Email User</label>
+                  <input type="email" id="grant-email" class="form-input" placeholder="user@example.com">
+                </div>
+                <div>
+                  <label class="form-label">Số Credits (âm để trừ)</label>
+                  <input type="number" id="grant-amount" class="form-input" placeholder="100" style="max-width:120px">
+                </div>
+                <div>
+                  <label class="form-label">Ghi Chú</label>
+                  <input type="text" id="grant-note" class="form-input" placeholder="Lý do...">
+                </div>
+              </div>
+              <button class="btn btn-gold" onclick="grantCredits()">Cấp Credits →</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- User Balances -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Số Dư Tất Cả Users</div>
+            <button class="btn btn-ghost btn-sm" onclick="loadAdminUsers()">↻ Refresh</button>
+          </div>
+          <div class="table-wrap" id="admin-users-table">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
 <script>
 const SB_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
 const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 const ADMIN_EMAIL = 'admin@tuviminhbao.com';
 
 let _token = null;
-let _allPurchases = [];
-let _allLasos = [];
+let _allUsers = [], _allCredits = [], _allLasos = [], _allArticles = [];
+let _currentPage = 'dashboard';
+
+const PAGE_TITLES = {
+  dashboard: 'Dashboard', users: 'Users', credits: 'Credits & Giao Dịch',
+  lasos: 'Lá Số', pricing: 'Pricing', articles: 'Khảo Luận', tools: 'Công Cụ',
+};
 
 // ── AUTH ──
 async function doLogin() {
@@ -262,11 +428,7 @@ async function doLogin() {
   const pwd   = document.getElementById('login-pwd').value;
   const err   = document.getElementById('login-err');
   err.textContent = '';
-
-  if (email !== ADMIN_EMAIL) {
-    err.textContent = 'Không có quyền truy cập.'; return;
-  }
-
+  if (email !== ADMIN_EMAIL) { err.textContent = 'Không có quyền admin.'; return; }
   try {
     const res = await fetch(`${SB_URL}/auth/v1/token?grant_type=password`, {
       method: 'POST',
@@ -276,51 +438,55 @@ async function doLogin() {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error_description || 'Sai mật khẩu');
     _token = data.access_token;
-    document.getElementById('admin-email-display').textContent = email;
+    document.getElementById('sidebar-user-info').textContent = email;
     document.getElementById('login-page').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
+    document.getElementById('app').style.display = 'block';
     loadAll();
-  } catch(e) {
-    err.textContent = e.message;
-  }
+  } catch(e) { err.textContent = e.message; }
 }
 
 function doLogout() {
   _token = null;
-  document.getElementById('login-page').style.display = 'block';
-  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('login-page').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
 }
 
-// Check if already logged in via auth.js
-(function() {
-  setTimeout(() => {
-    if (window.Auth?.isLoggedIn()) {
-      const user = window.Auth.getUser();
-      if (user?.email === ADMIN_EMAIL) {
-        _token = window.Auth.getSession()?.access_token;
-        document.getElementById('admin-email-display').textContent = user.email;
-        document.getElementById('login-page').style.display = 'none';
-        document.getElementById('dashboard').style.display = 'block';
-        loadAll();
-      }
-    }
-  }, 800);
-})();
+// ── NAVIGATION ──
+function goTo(page) {
+  _currentPage = page;
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelector(`[onclick="goTo('${page}')"]`)?.classList.add('active');
+  document.getElementById('page-' + page)?.classList.add('active');
+  document.getElementById('topbar-title').textContent = PAGE_TITLES[page] || page;
+  document.getElementById('topbar-meta').textContent = new Date().toLocaleDateString('vi-VN', {weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  // Lazy load
+  const loaders = { users: loadUsers, credits: loadCredits, lasos: loadLasos,
+                    pricing: loadPricing, articles: loadArticles, tools: loadAdminUsers };
+  if (loaders[page]) loaders[page]();
+}
 
-// ── SUPABASE FETCH ──
-async function sbFetch(path, params = '') {
-  const res = await fetch(`${SB_URL}/rest/v1/${path}${params}`, {
+// ── SUPABASE HELPERS ──
+async function sbGet(path) {
+  const res = await fetch(`${SB_URL}/rest/v1/${path}`, {
     headers: { apikey: SB_ANON, Authorization: `Bearer ${_token}` }
   });
   if (!res.ok) throw new Error(await res.text());
   return res.json();
 }
 
-async function sbRpc(fn, body = {}) {
-  const res = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, {
+async function apiPost(action, body) {
+  const res = await fetch(`/api/payment?action=${action}`, {
     method: 'POST',
-    headers: { apikey: SB_ANON, Authorization: `Bearer ${_token}`, 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${_token}` },
     body: JSON.stringify(body),
+  });
+  return res.json();
+}
+
+async function apiGet(action, params = '') {
+  const res = await fetch(`/api/payment?action=${action}${params}`, {
+    headers: { Authorization: `Bearer ${_token}` }
   });
   return res.json();
 }
@@ -328,304 +494,349 @@ async function sbRpc(fn, body = {}) {
 // ── LOAD ALL ──
 function loadAll() {
   loadStats();
-  loadPurchases();
-  loadUsers();
-  loadLasos();
+  loadDashboardRecent();
 }
 
 // ── STATS ──
 async function loadStats() {
   try {
-    const [purchases, lasos] = await Promise.all([
-      sbFetch('purchases', '?status=eq.completed&select=amount,created_at'),
-      sbFetch('laso_public', '?select=slug,created_at,luan_giai'),
+    const [usersData, txns, lasos] = await Promise.all([
+      apiGet('admin-users'),
+      sbGet('credit_transactions?select=amount,type,created_at'),
+      sbGet('laso_public?select=slug&limit=1000'),
     ]);
 
-    const totalRev = purchases.reduce((s, p) => s + parseFloat(p.amount || 0), 0);
-    const last7d   = purchases.filter(p => new Date(p.created_at) > new Date(Date.now() - 7*24*3600*1000));
-    const rev7d    = last7d.reduce((s, p) => s + parseFloat(p.amount || 0), 0);
-    const withLG   = lasos.filter(l => l.luan_giai && Object.keys(l.luan_giai).length > 0);
+    const users = usersData.users || [];
+    document.getElementById('badge-users').textContent = users.length;
+
+    const topups = txns.filter(t => t.amount > 0);
+    const totalCr = topups.reduce((s, t) => s + t.amount, 0);
+    const revenue = '$' + (totalCr / 10).toFixed(0);
 
     document.getElementById('stats-grid').innerHTML = `
-      <div class="stat-card gold">
-        <div class="stat-label">Tổng Doanh Thu</div>
-        <div class="stat-value">$${totalRev.toFixed(0)}</div>
-        <div class="stat-sub">${purchases.length} giao dịch</div>
+      <div class="stat">
+        <div class="stat-label">Users</div>
+        <div class="stat-value">${users.length}</div>
+        <div class="stat-sub">${users.filter(u => u.confirmed).length} đã xác nhận</div>
       </div>
-      <div class="stat-card green">
-        <div class="stat-label">Doanh Thu 7 Ngày</div>
-        <div class="stat-value">$${rev7d.toFixed(0)}</div>
-        <div class="stat-sub">${last7d.length} giao dịch gần đây</div>
+      <div class="stat green">
+        <div class="stat-label">Credits Nạp</div>
+        <div class="stat-value">${totalCr.toLocaleString()}</div>
+        <div class="stat-sub">${topups.length} lần topup</div>
       </div>
-      <div class="stat-card blue">
-        <div class="stat-label">Lá Số Đã Tạo</div>
+      <div class="stat gold">
+        <div class="stat-label">Doanh Thu Est.</div>
+        <div class="stat-value">${revenue}</div>
+        <div class="stat-sub">từ credit topup</div>
+      </div>
+      <div class="stat blue">
+        <div class="stat-label">Lá Số</div>
         <div class="stat-value">${lasos.length}</div>
-        <div class="stat-sub">${withLG.length} có luận giải AI</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Tổng Giao Dịch</div>
-        <div class="stat-value">${purchases.length}</div>
-        <div class="stat-sub">Trung bình $${purchases.length ? (totalRev/purchases.length).toFixed(1) : 0}/đơn</div>
-      </div>
-    `;
+        <div class="stat-sub">tổng đã tạo</div>
+      </div>`;
   } catch(e) {
-    document.getElementById('stats-grid').innerHTML = `<div class="empty">Lỗi tải stats: ${e.message}</div>`;
+    document.getElementById('stats-grid').innerHTML = `<div style="padding:1rem;color:var(--red);font-size:.8rem">Lỗi: ${e.message}</div>`;
   }
 }
 
-// ── PURCHASES ──
-async function loadPurchases() {
-  document.getElementById('purchases-table').innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
+// ── DASHBOARD RECENT ──
+async function loadDashboardRecent() {
   try {
-    _allPurchases = await sbFetch('purchases', '?order=created_at.desc&limit=200&select=*');
-    renderPurchases(_allPurchases);
+    const [usersData, txns] = await Promise.all([
+      apiGet('admin-users'),
+      sbGet('credit_transactions?order=created_at.desc&limit=8&select=*'),
+    ]);
+    const users = (usersData.users || []).sort((a,b) => new Date(b.created_at) - new Date(a.created_at)).slice(0,8);
+
+    // Recent users
+    document.getElementById('dash-recent-users').innerHTML = `<table>
+      <thead><tr><th>Email</th><th>Đăng Ký</th><th>Lượng</th></tr></thead>
+      <tbody>${users.map(u => `<tr>
+        <td>${u.email}</td>
+        <td style="color:var(--text-lt)">${fmtDate(u.created_at)}</td>
+        <td style="color:var(--gold);font-weight:700">⊙ ${u.balance}</td>
+      </tr>`).join('')}</tbody>
+    </table>`;
+
+    // Recent transactions
+    const TLABELS = { topup:'💳', use_laso:'🔮', use_xem_tuoi:'💑', use_xem_lam_an:'💼', use_dien_tuong:'👁', use_nhan_tuong:'👁', use_thu_tuong:'✋', use_thanh_tuong:'🎵', signup_bonus:'🎁', admin_grant:'⚙️' };
+    document.getElementById('dash-recent-txns').innerHTML = `<table>
+      <thead><tr><th>Thời Gian</th><th>Loại</th><th>Credits</th></tr></thead>
+      <tbody>${txns.map(t => {
+        const isAdd = t.amount > 0;
+        return `<tr>
+          <td style="color:var(--text-lt)">${fmtDate(t.created_at)}</td>
+          <td>${TLABELS[t.type]||'?'} ${t.type}</td>
+          <td style="color:${isAdd?'var(--green)':'var(--red)'};font-weight:700">${isAdd?'+':''}${t.amount}</td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table>`;
   } catch(e) {
-    document.getElementById('purchases-table').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
+    document.getElementById('dash-recent-users').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
   }
-}
-
-function renderPurchases(data) {
-  if (!data.length) { document.getElementById('purchases-table').innerHTML = '<div class="empty">Không có dữ liệu</div>'; return; }
-  const rows = data.map(p => {
-    const d = new Date(p.created_at).toLocaleDateString('vi-VN', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
-    const type = p.slug?.startsWith('xem-tuoi') ? '<span class="badge badge-blue">Xem Tuổi</span>' :
-                 p.slug?.startsWith('xem-lam-an') ? '<span class="badge badge-gold">Làm Ăn</span>' :
-                 '<span class="badge badge-green">Lá Số</span>';
-    const status = p.status === 'completed' ? '<span class="badge badge-green">✓</span>' : `<span class="badge badge-red">${p.status}</span>`;
-    return `<tr>
-      <td>${d}</td>
-      <td>${status}</td>
-      <td>${type}</td>
-      <td class="mono" style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${p.slug}">${p.slug||'-'}</td>
-      <td>${p.email||'<span style="color:var(--text-lt)">—</span>'}</td>
-      <td style="font-weight:700;color:var(--green)">$${p.amount}</td>
-      <td class="mono" style="color:var(--text-lt);font-size:.65rem">${p.order_id?.slice(0,12)||'-'}...</td>
-    </tr>`;
-  }).join('');
-  document.getElementById('purchases-table').innerHTML = `<table>
-    <thead><tr><th>Thời Gian</th><th>TT</th><th>Loại</th><th>Slug</th><th>Email</th><th>Số Tiền</th><th>Order ID</th></tr></thead>
-    <tbody>${rows}</tbody>
-  </table>`;
-}
-
-function filterPurchases() {
-  const q = document.getElementById('search-purchases').value.toLowerCase();
-  renderPurchases(_allPurchases.filter(p =>
-    (p.slug||'').toLowerCase().includes(q) ||
-    (p.email||'').toLowerCase().includes(q) ||
-    (p.order_id||'').toLowerCase().includes(q)
-  ));
 }
 
 // ── USERS ──
 async function loadUsers() {
   document.getElementById('users-table').innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
   try {
-    // Query via purchases + laso to get user activity (no admin API needed)
-    const [purchases, lasos] = await Promise.all([
-      sbFetch('purchases', '?status=eq.completed&select=user_id,email,amount,created_at'),
-      sbFetch('laso_public', '?select=user_id,slug,created_at&order=created_at.desc'),
-    ]);
-
-    // Aggregate by email (since user_id often null)
-    const emailMap = {};
-    purchases.forEach(p => {
-      const key = p.email || p.user_id || 'unknown';
-      if (!emailMap[key]) emailMap[key] = { email: p.email, purchases: 0, revenue: 0, lastPurchase: null };
-      emailMap[key].purchases++;
-      emailMap[key].revenue += parseFloat(p.amount || 0);
-      if (!emailMap[key].lastPurchase || new Date(p.created_at) > new Date(emailMap[key].lastPurchase)) {
-        emailMap[key].lastPurchase = p.created_at;
-      }
-    });
-
-    const sorted = Object.values(emailMap).sort((a, b) => b.revenue - a.revenue);
-
-    if (!sorted.length) {
-      document.getElementById('users-table').innerHTML = '<div class="empty">Chưa có user nào mua hàng</div>';
-      return;
-    }
-
-    const rows = sorted.map(u => {
-      const d = u.lastPurchase ? new Date(u.lastPurchase).toLocaleDateString('vi-VN') : '-';
-      return `<tr>
-        <td>${u.email || '<span style="color:var(--text-lt)">guest</span>'}</td>
-        <td style="font-weight:700;color:var(--green)">$${u.revenue.toFixed(0)}</td>
-        <td>${u.purchases}</td>
-        <td>${d}</td>
-      </tr>`;
-    }).join('');
-
-    document.getElementById('users-table').innerHTML = `<table>
-      <thead><tr><th>Email</th><th>Tổng Chi</th><th>Số Đơn</th><th>Mua Gần Nhất</th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table>`;
+    const data = await apiGet('admin-users');
+    _allUsers = (data.users || []).sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+    renderUsers(_allUsers);
   } catch(e) {
     document.getElementById('users-table').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
   }
+}
+
+function renderUsers(list) {
+  if (!list.length) { document.getElementById('users-table').innerHTML = '<div class="empty">Không có user</div>'; return; }
+  const providerBadge = p => p === 'google' ? '<span class="badge badge-blue">Google</span>' : p === 'facebook' ? '<span class="badge" style="background:#eef;color:#1877F2;border:1px solid #c7d5f5">FB</span>' : '<span class="badge badge-grey">Email</span>';
+  document.getElementById('users-table').innerHTML = `<table>
+    <thead><tr><th>Email</th><th>Tên</th><th>Provider</th><th>Đăng Ký</th><th>Lần Cuối</th><th>Lượng</th><th>Tools Dùng</th><th>Xác Nhận</th><th></th></tr></thead>
+    <tbody>${list.map(u => `<tr>
+      <td>${u.email}</td>
+      <td style="color:var(--text-lt)">${u.name||'—'}</td>
+      <td>${providerBadge(u.provider)}</td>
+      <td style="color:var(--text-lt);font-size:.72rem">${fmtDate(u.created_at)}</td>
+      <td style="color:var(--text-lt);font-size:.72rem">${u.last_sign_in ? fmtDate(u.last_sign_in) : '—'}</td>
+      <td><strong style="color:var(--gold)">⊙ ${u.balance}</strong></td>
+      <td style="text-align:center">${u.tool_uses||0}</td>
+      <td>${u.confirmed ? '<span class="badge badge-green">✓</span>' : '<span class="badge badge-red">✗</span>'}</td>
+      <td><button class="btn btn-ghost btn-sm" onclick="quickGrantUser('${u.id}','${u.email}')">+ Credits</button></td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+function filterUsers() {
+  const q = document.getElementById('search-users').value.toLowerCase();
+  renderUsers(_allUsers.filter(u => (u.email||'').toLowerCase().includes(q) || (u.name||'').toLowerCase().includes(q)));
+}
+
+function quickGrantUser(userId, email) {
+  const amount = parseInt(prompt(`Cấp credits cho ${email}:`, '50') || '0');
+  if (!amount) return;
+  apiPost('admin-grant', { targetUserId: userId, amount, description: 'Admin quick grant' })
+    .then(d => { if (d.success) { alert(`✓ Số dư mới: ⊙ ${d.balance}`); loadUsers(); loadStats(); } else alert('Lỗi: ' + d.error); });
+}
+
+// ── CREDITS ──
+async function loadCredits() {
+  document.getElementById('credits-table').innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
+  try {
+    _allCredits = await sbGet('credit_transactions?order=created_at.desc&limit=300&select=*');
+    renderCredits(_allCredits);
+  } catch(e) {
+    document.getElementById('credits-table').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
+  }
+}
+
+function renderCredits(list) {
+  if (!list.length) { document.getElementById('credits-table').innerHTML = '<div class="empty">Chưa có giao dịch</div>'; return; }
+  const LABELS = { topup:'💳 Topup', use_laso:'🔮 Lá Số', use_xem_tuoi:'💑 Xem Tuổi', use_xem_lam_an:'💼 Làm Ăn', use_dien_tuong:'👁 Diện Tướng', use_nhan_tuong:'👁 Nhãn Tướng', use_thu_tuong:'✋ Thủ Tướng', use_thanh_tuong:'🎵 Thanh Tướng', signup_bonus:'🎁 Signup', admin_grant:'⚙️ Admin' };
+  document.getElementById('credits-table').innerHTML = `<table>
+    <thead><tr><th>Thời Gian</th><th>Loại</th><th>Credits</th><th>Mô Tả</th><th>Slug</th><th>User</th></tr></thead>
+    <tbody>${list.map(t => {
+      const isAdd = t.amount > 0;
+      return `<tr>
+        <td style="font-size:.7rem;color:var(--text-lt);white-space:nowrap">${fmtDateFull(t.created_at)}</td>
+        <td><span class="badge ${isAdd?'badge-green':'badge-gold'}">${LABELS[t.type]||t.type}</span></td>
+        <td style="color:${isAdd?'var(--green)':'var(--red)'};font-weight:700;white-space:nowrap">${isAdd?'+':''}${t.amount} cr</td>
+        <td style="color:var(--text-lt);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.description||'—'}</td>
+        <td class="mono" style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.65rem" title="${t.slug||''}">${t.slug||'—'}</td>
+        <td class="mono" style="font-size:.62rem;color:var(--text-lt)">${(t.user_id||'').slice(0,10)}…</td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>`;
+}
+
+function filterCredits() {
+  const q = document.getElementById('search-credits').value.toLowerCase();
+  renderCredits(_allCredits.filter(t => (t.user_id||'').includes(q) || (t.type||'').includes(q) || (t.slug||'').includes(q) || (t.description||'').toLowerCase().includes(q)));
 }
 
 // ── LÁ SỐ ──
 async function loadLasos() {
   document.getElementById('lasos-table').innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
   try {
-    _allLasos = await sbFetch('laso_public', '?order=created_at.desc&limit=200&select=slug,gioi_tinh,nam_sinh,gio_chi,cung_menh,chinh_tinh,nap_am,cuc,luan_giai,laso_image,created_at');
+    _allLasos = await sbGet('laso_public?order=created_at.desc&limit=300&select=slug,gioi_tinh,nam_sinh,gio_chi,cung_menh,chinh_tinh,nap_am,luan_giai,created_at');
     renderLasos(_allLasos);
-  } catch(e) {
-    document.getElementById('lasos-table').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
-  }
+  } catch(e) { document.getElementById('lasos-table').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`; }
 }
 
-function renderLasos(data) {
-  if (!data.length) { document.getElementById('lasos-table').innerHTML = '<div class="empty">Không có dữ liệu</div>'; return; }
-  const rows = data.map(l => {
-    const d = new Date(l.created_at).toLocaleDateString('vi-VN', {day:'2-digit',month:'2-digit',year:'numeric'});
-    const hasLG = l.luan_giai && Object.keys(l.luan_giai).length > 0;
-    const hasImg = !!l.laso_image;
-    const gender = l.gioi_tinh === 'nam' ? '♂' : '♀';
-    return `<tr>
-      <td>${d}</td>
-      <td class="mono" style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.7rem" title="${l.slug}">${l.slug}</td>
-      <td>${gender} ${l.nam_sinh||''}</td>
-      <td>${l.cung_menh||'-'}</td>
-      <td style="font-size:.75rem;color:var(--text-mid)">${l.chinh_tinh||'-'}</td>
-      <td>${hasLG ? '<span class="badge badge-green">✓ AI</span>' : '<span class="badge badge-red">–</span>'}</td>
-      <td>${hasImg ? '<span class="badge badge-blue">📷</span>' : '–'}</td>
-    </tr>`;
-  }).join('');
+function renderLasos(list) {
+  if (!list.length) { document.getElementById('lasos-table').innerHTML = '<div class="empty">Chưa có dữ liệu</div>'; return; }
   document.getElementById('lasos-table').innerHTML = `<table>
-    <thead><tr><th>Ngày</th><th>Slug</th><th>Sinh</th><th>Cung Mệnh</th><th>Chính Tinh</th><th>Luận Giải</th><th>Ảnh</th></tr></thead>
-    <tbody>${rows}</tbody>
+    <thead><tr><th>Ngày</th><th>Slug</th><th>GT</th><th>Năm Sinh</th><th>Cung Mệnh</th><th>Chính Tinh</th><th>Nạp Âm</th><th>AI</th></tr></thead>
+    <tbody>${list.map(l => {
+      const hasAI = l.luan_giai && Object.keys(l.luan_giai).length > 0;
+      return `<tr>
+        <td style="font-size:.72rem;color:var(--text-lt);white-space:nowrap">${fmtDate(l.created_at)}</td>
+        <td class="mono" style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.7rem" title="${l.slug}">${l.slug}</td>
+        <td>${l.gioi_tinh === 'nam' ? '♂' : '♀'}</td>
+        <td>${l.nam_sinh||'—'}</td>
+        <td><span class="badge badge-gold">${l.cung_menh||'—'}</span></td>
+        <td style="font-size:.75rem;color:var(--text-mid)">${l.chinh_tinh||'—'}</td>
+        <td style="font-size:.72rem;color:var(--text-lt)">${l.nap_am||'—'}</td>
+        <td>${hasAI ? '<span class="badge badge-green">✓ AI</span>' : '<span class="badge badge-grey">—</span>'}</td>
+      </tr>`;
+    }).join('')}</tbody>
   </table>`;
 }
 
 function filterLasos() {
   const q = document.getElementById('search-lasos').value.toLowerCase();
-  renderLasos(_allLasos.filter(l =>
-    (l.slug||'').toLowerCase().includes(q) ||
-    (l.cung_menh||'').toLowerCase().includes(q) ||
-    (l.chinh_tinh||'').toLowerCase().includes(q)
-  ));
+  renderLasos(_allLasos.filter(l => (l.slug||'').includes(q) || (l.cung_menh||'').toLowerCase().includes(q) || (l.chinh_tinh||'').toLowerCase().includes(q)));
 }
 
-// ── TABS ──
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
-  });
-});
+// ── PRICING ──
+const TOOL_LABELS = { 'laso':'🔮 Luận Giải Lá Số', 'xem-tuoi':'💑 Xem Tuổi Vợ Chồng', 'xem-lam-an':'💼 Xem Tuổi Làm Ăn', 'dien-tuong':'👁 Diện Tướng', 'nhan-tuong':'👁 Nhãn Tướng', 'thu-tuong':'✋ Thủ Tướng', 'thanh-tuong':'🎵 Thanh Tướng' };
 
-// ── ADMIN TOOLS ──
+async function loadPricing() {
+  document.getElementById('pricing-body').innerHTML = '<tr><td colspan="6" class="loading"><span class="spin"></span>Đang tải...</td></tr>';
+  try {
+    const rows = await sbGet('tool_pricing?order=credits.desc&select=*');
+    if (!rows.length) { document.getElementById('pricing-body').innerHTML = '<tr><td colspan="6" class="empty">Chưa có dữ liệu</td></tr>'; return; }
+    document.getElementById('pricing-body').innerHTML = rows.map(r => `
+      <tr id="pr-row-${r.tool_id}">
+        <td><strong>${TOOL_LABELS[r.tool_id]||r.tool_id}</strong></td>
+        <td class="mono" style="color:var(--text-lt);font-size:.7rem">${r.tool_id}</td>
+        <td><input type="number" id="pr-credits-${r.tool_id}" value="${r.credits}" min="1" class="price-input" oninput="updateUsd('${r.tool_id}')"></td>
+        <td id="pr-usd-${r.tool_id}" style="color:var(--text-lt)">≈ $${(r.credits/10).toFixed(r.credits%10===0?0:1)}</td>
+        <td>
+          <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer">
+            <input type="checkbox" id="pr-en-${r.tool_id}" ${r.enabled?'checked':''}> <span style="font-size:.72rem">${r.enabled?'Bật':'Tắt'}</span>
+          </label>
+        </td>
+        <td><button class="btn btn-primary btn-sm" id="pr-btn-${r.tool_id}" onclick="savePricingRow('${r.tool_id}')">Lưu</button></td>
+      </tr>`).join('');
+  } catch(e) { document.getElementById('pricing-body').innerHTML = `<tr><td colspan="6" class="empty">Lỗi: ${e.message}</td></tr>`; }
+}
+
+function updateUsd(id) {
+  const cr = parseInt(document.getElementById('pr-credits-' + id)?.value || 0);
+  const el = document.getElementById('pr-usd-' + id);
+  if (el) el.textContent = '≈ $' + (cr/10).toFixed(cr%10===0?0:1);
+}
+
+async function savePricingRow(id) {
+  const credits = parseInt(document.getElementById('pr-credits-' + id)?.value);
+  const enabled = document.getElementById('pr-en-' + id)?.checked;
+  const btn = document.getElementById('pr-btn-' + id);
+  if (!credits || credits < 1) return;
+  btn.disabled = true; btn.textContent = '...';
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/tool_pricing?tool_id=eq.${encodeURIComponent(id)}`, {
+      method: 'PATCH',
+      headers: { apikey: SB_ANON, Authorization: `Bearer ${_token}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+      body: JSON.stringify({ credits, enabled, updated_at: new Date().toISOString() }),
+    });
+    if (!res.ok) throw new Error(await res.text());
+    btn.textContent = '✓'; btn.style.background = 'var(--green)';
+    const alertEl = document.getElementById('pricing-alert');
+    alertEl.innerHTML = `<div class="alert-box alert-success" style="margin:0 0 .75rem">✓ Đã cập nhật <strong>${TOOL_LABELS[id]||id}</strong> → ${credits} credits</div>`;
+    setTimeout(() => { alertEl.innerHTML = ''; btn.textContent = 'Lưu'; btn.style.background = ''; btn.disabled = false; }, 2000);
+  } catch(e) {
+    btn.textContent = 'Lỗi'; btn.style.background = 'var(--red)';
+    setTimeout(() => { btn.textContent = 'Lưu'; btn.style.background = ''; btn.disabled = false; }, 2000);
+  }
+}
+
+// ── ARTICLES ──
+async function loadArticles() {
+  document.getElementById('articles-table').innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
+  try {
+    _allArticles = await sbGet('khao_luan?order=created_at.desc&limit=200&select=id,title,slug,category,published,created_at');
+    renderArticles(_allArticles);
+  } catch(e) { document.getElementById('articles-table').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`; }
+}
+
+function renderArticles(list) {
+  if (!list.length) { document.getElementById('articles-table').innerHTML = '<div class="empty">Chưa có bài viết</div>'; return; }
+  document.getElementById('articles-table').innerHTML = `<table>
+    <thead><tr><th>Ngày</th><th>Tiêu Đề</th><th>Slug</th><th>Danh Mục</th><th>Published</th></tr></thead>
+    <tbody>${list.map(a => `<tr>
+      <td style="font-size:.72rem;color:var(--text-lt);white-space:nowrap">${fmtDate(a.created_at)}</td>
+      <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${a.title||''}">${a.title||'—'}</td>
+      <td class="mono" style="font-size:.68rem;color:var(--text-lt);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.slug||'—'}</td>
+      <td><span class="badge badge-blue">${a.category||'—'}</span></td>
+      <td>${a.published ? '<span class="badge badge-green">✓</span>' : '<span class="badge badge-grey">Draft</span>'}</td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+function filterArticles() {
+  const q = document.getElementById('search-articles').value.toLowerCase();
+  renderArticles(_allArticles.filter(a => (a.title||'').toLowerCase().includes(q) || (a.slug||'').toLowerCase().includes(q) || (a.category||'').toLowerCase().includes(q)));
+}
+
+// ── TOOLS ──
 async function createUser() {
   const email   = document.getElementById('cu-email').value.trim();
   const pwd     = document.getElementById('cu-pwd').value.trim();
   const credits = parseInt(document.getElementById('cu-credits').value || '0');
-  const alertEl = document.getElementById('create-user-alert');
-  alertEl.innerHTML = '';
-
-  if (!email || !pwd) { showToolAlert('create-user-alert', 'error', 'Vui lòng nhập email và mật khẩu'); return; }
-
+  if (!email || !pwd) { showAlert('alert-create', 'error', 'Nhập email và mật khẩu'); return; }
   try {
-    const res = await fetch('/api/payment?action=admin-create-user', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${_token}` },
-      body: JSON.stringify({ email, password: pwd, credits }),
-    });
-    const data = await res.json();
-    if (data.success) {
-      showToolAlert('create-user-alert', 'success',
-        `✓ Đã tạo tài khoản <strong>${email}</strong>${credits > 0 ? ` · Cấp ${credits} credits` : ''}`);
+    const d = await apiPost('admin-create-user', { email, password: pwd, credits });
+    if (d.success) {
+      showAlert('alert-create', 'success', `✓ Tạo thành công <strong>${email}</strong>${credits ? ` · ${credits} credits` : ''}`);
       document.getElementById('cu-email').value = '';
       document.getElementById('cu-pwd').value = '';
       document.getElementById('cu-credits').value = '';
-      loadAdminUsers();
-    } else {
-      showToolAlert('create-user-alert', 'error', data.error || 'Tạo thất bại');
-    }
-  } catch(e) { showToolAlert('create-user-alert', 'error', e.message); }
+      loadStats();
+    } else showAlert('alert-create', 'error', d.error || 'Thất bại');
+  } catch(e) { showAlert('alert-create', 'error', e.message); }
 }
 
 async function grantCredits() {
   const email  = document.getElementById('grant-email').value.trim();
   const amount = parseInt(document.getElementById('grant-amount').value || '0');
-  const note   = document.getElementById('grant-note').value.trim() || 'Admin cấp thủ công';
-
-  if (!email) { showToolAlert('grant-alert', 'error', 'Nhập email user'); return; }
-  if (!amount || amount === 0) { showToolAlert('grant-alert', 'error', 'Nhập số credits khác 0'); return; }
-
+  const note   = document.getElementById('grant-note').value.trim() || 'Admin cấp';
+  if (!email || !amount) { showAlert('alert-grant', 'error', 'Nhập email và số credits'); return; }
   try {
-    const res = await fetch('/api/payment?action=admin-grant', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${_token}` },
-      body: JSON.stringify({ targetEmail: email, amount, description: note }),
-    });
-    const data = await res.json();
-    if (data.success) {
-      const sign = amount > 0 ? '+' : '';
-      showToolAlert('grant-alert', 'success',
-        `✓ ${sign}${amount} credits cho <strong>${email}</strong> · Số dư mới: <strong>${data.balance} lượng</strong>`);
+    const d = await apiPost('admin-grant', { targetEmail: email, amount, description: note });
+    if (d.success) {
+      showAlert('alert-grant', 'success', `✓ ${amount > 0 ? '+' : ''}${amount} credits cho <strong>${email}</strong> · Số dư mới: ⊙ ${d.balance}`);
       document.getElementById('grant-email').value = '';
       document.getElementById('grant-amount').value = '';
       document.getElementById('grant-note').value = '';
       loadAdminUsers();
-    } else {
-      showToolAlert('grant-alert', 'error', data.error || 'Thất bại');
-    }
-  } catch(e) { showToolAlert('grant-alert', 'error', e.message); }
+    } else showAlert('alert-grant', 'error', d.error || 'Thất bại');
+  } catch(e) { showAlert('alert-grant', 'error', e.message); }
 }
 
 async function loadAdminUsers() {
   document.getElementById('admin-users-table').innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
   try {
-    const res = await fetch('/api/payment?action=admin-users', {
-      headers: { Authorization: `Bearer ${_token}` }
-    });
-    const { users } = await res.json();
-    if (!users || !users.length) {
-      document.getElementById('admin-users-table').innerHTML = '<div class="empty">Chưa có dữ liệu</div>';
-      return;
-    }
+    const { users } = await apiGet('admin-users');
+    if (!users?.length) { document.getElementById('admin-users-table').innerHTML = '<div class="empty">Chưa có dữ liệu</div>'; return; }
+    const sorted = [...users].sort((a,b) => b.balance - a.balance);
     document.getElementById('admin-users-table').innerHTML = `<table>
-      <thead><tr><th>User ID</th><th>Số Dư (Lượng)</th><th>Cập Nhật</th><th></th></tr></thead>
-      <tbody>${users.map(u => `<tr>
-        <td class="mono" style="font-size:.7rem">${u.user_id}</td>
-        <td style="font-weight:700;color:var(--navy);font-family:'Noto Serif',serif">⊙ ${u.balance.toLocaleString()}</td>
-        <td style="font-size:.75rem;color:var(--text-lt)">${new Date(u.updated_at).toLocaleDateString('vi-VN')}</td>
-        <td>
-          <button onclick="quickGrant('${u.user_id}')"
-            style="padding:.25rem .6rem;font-size:.7rem;background:var(--gold);color:#fff;border:none;border-radius:4px;cursor:pointer;font-family:inherit">
-            + Credits
-          </button>
-        </td>
+      <thead><tr><th>Email</th><th>Số Dư (Lượng)</th><th>Cập Nhật</th><th></th></tr></thead>
+      <tbody>${sorted.map(u => `<tr>
+        <td>${u.email}</td>
+        <td style="font-family:'Noto Serif',serif;font-weight:700;color:var(--gold)">⊙ ${u.balance}</td>
+        <td style="font-size:.72rem;color:var(--text-lt)">${fmtDate(u.last_sign_in||u.created_at)}</td>
+        <td><button class="btn btn-ghost btn-sm" onclick="quickGrantUser('${u.id}','${u.email}')">+ Credits</button></td>
       </tr>`).join('')}</tbody>
     </table>`;
-  } catch(e) {
-    document.getElementById('admin-users-table').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
-  }
+  } catch(e) { document.getElementById('admin-users-table').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`; }
 }
 
-function quickGrant(userId) {
-  const amount = parseInt(prompt('Số credits cấp (âm để trừ):', '50') || '0');
-  if (!amount) return;
-  fetch('/api/payment?action=admin-grant', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${_token}` },
-    body: JSON.stringify({ targetUserId: userId, amount, description: 'Admin quick grant' }),
-  }).then(r => r.json()).then(d => {
-    if (d.success) { alert(`✓ Số dư mới: ${d.balance} lượng`); loadAdminUsers(); }
-    else alert('Lỗi: ' + (d.error || 'unknown'));
-  });
-}
-
-function showToolAlert(id, type, msg) {
+// ── UTILS ──
+function showAlert(id, type, msg) {
   const el = document.getElementById(id);
-  const colors = { success: { bg: '#F0FAF4', color: 'var(--green)', border: '#c3e6d0' }, error: { bg: '#FFF5F5', color: 'var(--red)', border: '#f5c6c6' }};
-  const c = colors[type] || colors.error;
-  el.innerHTML = `<div style="background:${c.bg};color:${c.color};border:1px solid ${c.border};border-radius:6px;padding:.65rem 1rem;font-size:.82rem">${msg}</div>`;
+  if (!el) return;
+  el.innerHTML = `<div class="alert-box alert-${type}" style="margin-bottom:.75rem">${msg}</div>`;
   if (type === 'success') setTimeout(() => { el.innerHTML = ''; }, 4000);
+}
+
+function fmtDate(d) {
+  if (!d) return '—';
+  return new Date(d).toLocaleDateString('vi-VN', {day:'2-digit',month:'2-digit',year:'numeric'});
+}
+function fmtDateFull(d) {
+  if (!d) return '—';
+  return new Date(d).toLocaleDateString('vi-VN', {day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
 }
 </script>
 </body>
