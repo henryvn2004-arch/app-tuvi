@@ -22,9 +22,9 @@ const CURRENCY      = 'USD';
 
 // ── Credit packages ───────────────────────────────────────────
 const PACKAGES: Record<string, { amount: string; credits: number; label: string }> = {
-  '10': { amount: '10.00', credits: 100, label: 'Starter – 100 Credits' },
-  '20': { amount: '20.00', credits: 220, label: 'Popular – 220 Credits' },
-  '40': { amount: '40.00', credits: 460, label: 'Pro – 460 Credits'     },
+  '5':  { amount: '5.00',  credits: 50,  label: 'Trial – 50 Credits'    },
+  '10': { amount: '10.00', credits: 110, label: 'Popular – 110 Credits' },
+  '20': { amount: '20.00', credits: 240, label: 'Pro – 240 Credits'     },
 };
 
 // ── Helpers ───────────────────────────────────────────────────
