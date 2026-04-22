@@ -69,7 +69,6 @@
 </head>
 <body>
 <script src="/nav.js"></script>
-<script src="/auth.js"></script>
 
 <div class="hero-tool">
   <div class="page">
@@ -257,12 +256,12 @@ async function startCountdown() {
 
 async function startRecording() {
   const errEl = document.getElementById('error-msg');
-  errEl.classList.remove('active');
+  document.getElementById('error-msg').classList.remove('active');
   try {
     _stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, sampleRate: 44100 }, video: false });
   } catch(e) {
     errEl.textContent = 'Không thể truy cập microphone. Vui lòng cho phép quyền trong trình duyệt.';
-    errEl.classList.add('active');
+    document.getElementById('error-msg').classList.add('active');
     return;
   }
 
@@ -397,7 +396,7 @@ async function processAudio() {
   } catch(e) {
     const errEl = document.getElementById('error-msg');
     errEl.textContent = 'Không thể xử lý âm thanh: ' + e.message + '. Vui lòng thử lại.';
-    errEl.classList.add('active');
+    document.getElementById('error-msg').classList.add('active');
     updateRecordUI(false);
     document.getElementById('statusMsg').textContent = '';
   }
@@ -638,7 +637,7 @@ function buildFeaturesText(f) {
 async function analyze() {
   if (!_features) return;
   const errEl = document.getElementById('error-msg');
-  errEl.classList.remove('active');
+  document.getElementById('error-msg').classList.remove('active');
   document.getElementById('analyzeBtn').disabled = true;
   _currentSlug = TuviPaywall.generateToolSlug('thanh-tuong');
   // Option A: check + deduct credits before calling API
@@ -693,8 +692,8 @@ async function _doAnalyze() {
   } catch(e) {
     document.getElementById('aiResult').innerHTML = '';
     document.getElementById('result-section').classList.remove('active');
-    errEl.textContent = 'Lỗi: ' + (e.message || 'Không thể kết nối.');
-    errEl.classList.add('active');
+    document.getElementById('error-msg').textContent = 'Lỗi: ' + (e.message || 'Không thể kết nối.');
+    document.getElementById('error-msg').classList.add('active');
     document.getElementById('analyzeBtn').disabled = false;
   }
 }

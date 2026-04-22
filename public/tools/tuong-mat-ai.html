@@ -44,7 +44,6 @@
 </head>
 <body>
 <script src="/nav.js"></script>
-<script src="/auth.js"></script>
 
 <div class="hero-tool">
   <div class="page">
@@ -516,9 +515,9 @@ function onFileSelect(e) { const f=e.target.files[0]; if(f) processFile(f); }
 
 function processFile(file) {
   const err = document.getElementById('error-msg');
-  err.classList.remove('active');
-  if (!file.type.startsWith('image/')) { err.textContent='Vui lòng chọn file ảnh.'; err.classList.add('active'); return; }
-  if (file.size > 5*1024*1024) { err.textContent='Ảnh quá lớn (tối đa 5MB).'; err.classList.add('active'); return; }
+  document.getElementById('error-msg').classList.remove('active');
+  if (!file.type.startsWith('image/')) { err.textContent='Vui lòng chọn file ảnh.'; document.getElementById('error-msg').classList.add('active'); return; }
+  if (file.size > 5*1024*1024) { err.textContent='Ảnh quá lớn (tối đa 5MB).'; document.getElementById('error-msg').classList.add('active'); return; }
 
   const img = new Image();
   const ou = URL.createObjectURL(file);
@@ -551,7 +550,7 @@ function showPreview(dataUrl) {
     if (lm === null) {
       const err = document.getElementById('error-msg');
       err.textContent = '⚠ Không nhận diện được khuôn mặt rõ ràng. Vẫn có thể phân tích nhưng kết quả có thể kém chính xác hơn.';
-      err.classList.add('active');
+      document.getElementById('error-msg').classList.add('active');
       return;
     }
 
@@ -563,7 +562,7 @@ function showPreview(dataUrl) {
     if (tiltWarnings.length > 0) {
       const err = document.getElementById('error-msg');
       err.textContent = '⚠ ' + tiltWarnings.join(' · ') + ' — kết quả sẽ chính xác hơn với ảnh thẳng mặt.';
-      err.classList.add('active');
+      document.getElementById('error-msg').classList.add('active');
     }
 
     // 3. Iris analysis → hiển thị badge
@@ -610,7 +609,7 @@ async function openCamera() {
     document.getElementById('openCamBtn').style.display='none';
   } catch(e) {
     const err=document.getElementById('error-msg');
-    err.textContent='Không thể mở camera. Vui lòng tải ảnh lên.'; err.classList.add('active');
+    err.textContent='Không thể mở camera. Vui lòng tải ảnh lên.'; document.getElementById('error-msg').classList.add('active');
   }
 }
 function capturePhoto() {
@@ -636,8 +635,8 @@ function stopCamera() {
 // ── Analyze ───────────────────────────────────────────────────
 async function analyze() {
   if (!_imageData) return;
-  const err=document.getElementById('error-msg'); err.classList.remove('active');
-  const btn=document.getElementById('analyzeBtn'); btn.disabled=true;
+  const err=document.getElementById('error-msg'); document.getElementById('error-msg').classList.remove('active');
+  const btn=document.getElementById('analyzeBtn'); document.getElementById('analyzeBtn').disabled=true;
 
   _currentSlug = TuviPaywall.generateToolSlug('dien-tuong');
   // Option A: check + deduct credits before calling API
@@ -685,12 +684,12 @@ async function _doAnalyze() {
     }
     if(!full) throw new Error('AI không trả về kết quả.');
     el.innerHTML=renderMarkdown(full);
-    btn.disabled=false;
+    document.getElementById('analyzeBtn').disabled=false;
   } catch(e) {
     document.getElementById('aiResult').innerHTML='';
     document.getElementById('result-section').classList.remove('active');
-    err.textContent='Lỗi: '+(e.message||'Không thể kết nối. Vui lòng thử lại.');
-    err.classList.add('active'); btn.disabled=false;
+    document.getElementById('error-msg').textContent='Lỗi: '+(e.message||'Không thể kết nối. Vui lòng thử lại.');
+    document.getElementById('error-msg').classList.add('active'); document.getElementById('analyzeBtn').disabled=false;
   }
 }
 

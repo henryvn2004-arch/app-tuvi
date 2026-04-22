@@ -49,7 +49,6 @@
 </head>
 <body>
 <script src="/nav.js"></script>
-<script src="/auth.js"></script>
 
 <div class="hero-tool">
   <div class="page">
@@ -376,9 +375,9 @@ function onDrop(e){e.preventDefault();document.getElementById('uploadArea').clas
 function onFileSelect(e){const f=e.target.files[0];if(f)processFile(f);}
 
 function processFile(file) {
-  const err=document.getElementById('error-msg'); err.classList.remove('active');
-  if (!file.type.startsWith('image/')) {err.textContent='Vui lòng chọn file ảnh.';err.classList.add('active');return;}
-  if (file.size>5*1024*1024) {err.textContent='Ảnh quá lớn.';err.classList.add('active');return;}
+  const err=document.getElementById('error-msg'); document.getElementById('error-msg').classList.remove('active');
+  if (!file.type.startsWith('image/')) {err.textContent='Vui lòng chọn file ảnh.';document.getElementById('error-msg').classList.add('active');return;}
+  if (file.size>5*1024*1024) {err.textContent='Ảnh quá lớn.';document.getElementById('error-msg').classList.add('active');return;}
   const img=new Image();
   const ou=URL.createObjectURL(file);
   img.onload=()=>{
@@ -414,7 +413,7 @@ function showPreview(dataUrl) {
       } else {
         const err=document.getElementById('error-msg');
         err.textContent='⚠ Không nhận diện được bàn tay. Thử chụp rõ hơn với nền tương phản và ánh sáng đủ.';
-        err.classList.add('active');
+        document.getElementById('error-msg').classList.add('active');
         _handGeoNote = null;
       }
     });
@@ -452,7 +451,7 @@ async function openCamera() {
       document.getElementById('camBtns').style.display='flex';
     } catch(e2) {
       const err=document.getElementById('error-msg');
-      err.textContent='Không thể mở camera.'; err.classList.add('active');
+      err.textContent='Không thể mở camera.'; document.getElementById('error-msg').classList.add('active');
     }
   }
 }
@@ -476,8 +475,8 @@ function stopCamera() {
 
 async function analyze() {
   if (!_imageData) return;
-  const err=document.getElementById('error-msg'); err.classList.remove('active');
-  const btn=document.getElementById('analyzeBtn'); btn.disabled=true;
+  const err=document.getElementById('error-msg'); document.getElementById('error-msg').classList.remove('active');
+  const btn=document.getElementById('analyzeBtn'); document.getElementById('analyzeBtn').disabled=true;
   _currentSlug = TuviPaywall.generateToolSlug('thu-tuong');
   // Option A: check + deduct credits before calling API
   _saveStateForAuth();
@@ -512,12 +511,12 @@ async function _doAnalyze() {
       }
     }
     if(!full) throw new Error('Không có kết quả.');
-    el.innerHTML=renderMd(full); btn.disabled=false;
+    el.innerHTML=renderMd(full); document.getElementById('analyzeBtn').disabled=false;
   } catch(e){
     document.getElementById('aiResult').innerHTML='';
     document.getElementById('result-section').classList.remove('active');
-    err.textContent='Lỗi: '+(e.message||'Không thể kết nối.'); err.classList.add('active');
-    btn.disabled=false;
+    document.getElementById('error-msg').textContent='Lỗi: '+(e.message||'Không thể kết nối.'); document.getElementById('error-msg').classList.add('active');
+    document.getElementById('analyzeBtn').disabled=false;
   }
 }
 
