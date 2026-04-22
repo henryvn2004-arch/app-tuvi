@@ -142,7 +142,7 @@ tr:hover td{background:#fafafa}
   .stats{grid-template-columns:repeat(2,1fr)}
 }
 
-/* ── CONTENT MANAGER (from admin-content) ── */
+/* ── Content Manager CSS ── */
 
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1239,574 +1239,6 @@ audio { height: 32px; flex: 1; }
 <div class="toast-container" id="toast-container"></div>
 
 <!-- ── Scripts ── -->
-<script>
-// ────────────────────────────────────────────────
-// CONFIG
-// ────────────────────────────────────────────────
-// SB_URL used from portal
-// SB_ANON used from portal
-
-// ────────────────────────────────────────────────
-// SUPABASE HELPERS
-// ────────────────────────────────────────────────
-async function sbFetch(path, opts = {}) {
-  const r = await fetch(`${SB_URL}/rest/v1/${path}`, {
-    ...opts,
-    headers: {
-      'apikey': SB_ANON,
-      'Authorization': `Bearer ${SB_ANON}`,
-      'Content-Type': 'application/json',
-      'Prefer': opts.prefer || 'return=representation',
-      ...(opts.headers || {})
-    }
-  });
-  if (!r.ok) {
-    const err = await r.text();
-    throw new Error(err);
-  }
-  const text = await r.text();
-  return text ? JSON.parse(text) : null;
-}
-
-async function getStats() {
-  const data = await sbFetch('van_dap?select=publish_status,tts_status,yt_status');
-  if (!data) return {};
-  return {
-    total: data.length,
-    draft: data.filter(d => d.publish_status === 'draft').length,
-    ready: data.filter(d => d.publish_status === 'ready').length,
-    published: data.filter(d => d.publish_status === 'published').length,
-    yt_live: data.filter(d => d.yt_status === 'live').length,
-  };
-}
-
-async function getItems(filters = {}) {
-  let q = 'van_dap?order=created_at.desc';
-  if (filters.status) q += `&publish_status=eq.${filters.status}`;
-  if (filters.chu_de) q += `&chu_de=eq.${filters.chu_de}`;
-  return sbFetch(q) || [];
-}
-
-async function saveItemToDB(item, id = null) {
-  if (id) {
-    return sbFetch(`van_dap?id=eq.${id}`, {
-      method: 'PATCH',
-      prefer: 'return=representation',
-      body: JSON.stringify(item)
-    });
-  } else {
-    return sbFetch('van_dap', {
-      method: 'POST',
-      prefer: 'return=representation',
-      body: JSON.stringify(item)
-    });
-  }
-}
-
-// ────────────────────────────────────────────────
-// STATE
-// ────────────────────────────────────────────────
-let allItems = [];
-let currentEditId = null;
-let currentTab = 'info';
-let scriptLines = []; // [{role:'hoi'|'tra_loi', text:''}]
-
-// ────────────────────────────────────────────────
-// INIT
-// ────────────────────────────────────────────────
-async function init() {
-  try {
-    const stats = await getStats();
-    document.getElementById('stat-total').textContent = stats.total ?? 0;
-    document.getElementById('stat-draft').textContent = stats.draft ?? 0;
-    document.getElementById('stat-ready').textContent = stats.ready ?? 0;
-    document.getElementById('stat-published').textContent = stats.published ?? 0;
-    document.getElementById('stat-yt').textContent = stats.yt_live ?? 0;
-    document.getElementById('db-status').textContent = '🟢 Đã kết nối DB';
-
-    allItems = await getItems();
-    renderRecentTable(allItems.slice(0, 10));
-    renderListTable(allItems);
-    renderTTSQueue();
-    renderYTQueue();
-  } catch (e) {
-    document.getElementById('db-status').textContent = '🔴 Lỗi kết nối DB';
-    console.error(e);
-    // Show sample data if DB not ready yet
-    renderRecentTable([]);
-    renderListTable([]);
-  }
-}
-
-// ────────────────────────────────────────────────
-// VIEWS
-// ────────────────────────────────────────────────
-const views = ['dashboard', 'list', 'tts', 'youtube', 'settings'];
-const viewTitles = {
-  dashboard: 'Dashboard',
-  list: 'Danh sách nội dung',
-  tts: 'TTS Queue',
-  youtube: 'YouTube Upload',
-  settings: 'Cài đặt'
-};
-
-function showView(v) {
-  views.forEach(x => {
-    const el = document.getElementById(`view-${x}`);
-    if (el) el.style.display = x === v ? '' : 'none';
-  });
-  document.getElementById('topbar-title').textContent = viewTitles[v] || v;
-  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-}
-
-// ────────────────────────────────────────────────
-// RENDER TABLES
-// ────────────────────────────────────────────────
-function statusBadge(status, type = 'publish') {
-  const map = {
-    draft: 'badge-draft', ready: 'badge-ready', published: 'badge-published',
-    pending: 'badge-pending', done: 'badge-done', error: 'badge-error',
-    live: 'badge-live', processing: 'badge-processing', archived: 'badge-draft'
-  };
-  const labels = {
-    draft: 'Draft', ready: 'Sẵn sàng', published: 'Đã đăng', archived: 'Lưu trữ',
-    pending: 'Chờ', done: '✓ Xong', error: '✗ Lỗi', live: '▶ Live', processing: '⟳'
-  };
-  const cls = map[status] || 'badge-draft';
-  return `<span class="badge ${cls}">${labels[status] || status}</span>`;
-}
-
-function pipelineHTML(item) {
-  const s = (st) => {
-    if (st === 'done' || st === 'live') return 'done';
-    if (st === 'error') return 'error';
-    if (st === 'processing') return 'active';
-    return 'pending';
-  };
-  const icons = { done: '✓', error: '✗', active: '⟳', pending: '○' };
-  const steps = [
-    { label: 'TTS', st: s(item.tts_status) },
-    { label: 'Video', st: s(item.video_status) },
-    { label: 'YT', st: s(item.yt_status) }
-  ];
-  return `<div class="pipeline">${steps.map((st, i) =>
-    `${i > 0 ? '<span class="pipe-arrow">›</span>' : ''}
-     <span class="pipe-step ${st.st}">${icons[st.st]} ${st.label}</span>`
-  ).join('')}</div>`;
-}
-
-function renderRecentTable(items) {
-  const tbody = document.getElementById('recent-tbody');
-  if (!items.length) {
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon">📭</div><p>Chưa có nội dung nào. <a href="#" onclick="openCreateModal()">Tạo mới →</a></p></div></td></tr>`;
-    return;
-  }
-  tbody.innerHTML = items.map(item => `
-    <tr>
-      <td>
-        <div class="td-title">${escHtml(item.title)}</div>
-        <div class="td-sub">${item.tags?.join(', ') || ''}</div>
-      </td>
-      <td><span style="font-size:12px; color:var(--text-lt)">${item.chu_de || '—'}</span></td>
-      <td>${statusBadge(item.tts_status)}</td>
-      <td>${statusBadge(item.video_status)}</td>
-      <td>${statusBadge(item.yt_status)}</td>
-      <td>${statusBadge(item.publish_status)}</td>
-      <td>
-        <button class="btn btn-outline btn-sm" onclick="editItem('${item.id}')">Sửa</button>
-      </td>
-    </tr>
-  `).join('');
-}
-
-function renderListTable(items) {
-  const tbody = document.getElementById('list-tbody');
-  if (!items.length) {
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon">📭</div><p>Chưa có nội dung</p></div></td></tr>`;
-    return;
-  }
-  tbody.innerHTML = items.map((item, i) => `
-    <tr>
-      <td style="color:var(--text-lt); font-size:12px">${i + 1}</td>
-      <td>
-        <div class="td-title">${escHtml(item.title)}</div>
-        <div class="td-sub">${fmtDate(item.created_at)}</div>
-      </td>
-      <td><span style="font-size:12px">${item.chu_de || '—'}</span></td>
-      <td>${pipelineHTML(item)}</td>
-      <td>${statusBadge(item.publish_status)}</td>
-      <td style="font-size:12px; color:var(--text-lt)">${fmtDate(item.created_at)}</td>
-      <td>
-        <div style="display:flex; gap:6px">
-          <button class="btn btn-outline btn-sm" onclick="editItem('${item.id}')">✏️</button>
-          <button class="btn btn-outline btn-sm" onclick="runTTSForItem('${item.id}')">🔊</button>
-          <button class="btn btn-outline btn-sm" onclick="openYTModal('${item.id}')">▶️</button>
-        </div>
-      </td>
-    </tr>
-  `).join('');
-}
-
-function renderTTSQueue() {
-  const pending = allItems.filter(i => i.tts_status === 'pending');
-  const el = document.getElementById('tts-queue-list');
-  if (!pending.length) {
-    el.innerHTML = `<div class="empty-state"><div class="icon">✅</div><p>Không có item nào chờ TTS</p></div>`;
-    return;
-  }
-  el.innerHTML = pending.map(item => `
-    <div style="display:flex; align-items:center; justify-content:space-between; padding:12px; border-bottom:1px solid var(--border-lt)">
-      <div>
-        <div style="font-weight:600; font-size:13px">${escHtml(item.title)}</div>
-        <div style="font-size:11px; color:var(--text-lt)">${(item.noi_dung || []).length} dòng thoại</div>
-      </div>
-      <button class="btn btn-primary btn-sm" onclick="runTTSForItem('${item.id}')">🔊 Chạy TTS</button>
-    </div>
-  `).join('');
-}
-
-function renderYTQueue() {
-  const ready = allItems.filter(i => i.video_status === 'done' && i.yt_status === 'pending');
-  const el = document.getElementById('yt-queue-list');
-  if (!ready.length) {
-    el.innerHTML = `<div class="empty-state"><div class="icon">📭</div><p>Không có video nào sẵn sàng để upload</p></div>`;
-    return;
-  }
-  el.innerHTML = ready.map(item => `
-    <div style="display:flex; align-items:center; justify-content:space-between; padding:14px; border-bottom:1px solid var(--border-lt)">
-      <div>
-        <div style="font-weight:600; font-size:13px">${escHtml(item.title)}</div>
-        <div style="font-size:11px; color:var(--text-lt)">${item.audio_final_url ? '✓ Audio ready' : '⚠ Chưa có audio'}</div>
-      </div>
-      <div style="display:flex; gap:8px">
-        <button class="btn btn-outline btn-sm" onclick="openYTModal('${item.id}')">⚙ Config YT</button>
-        <button class="btn btn-gold btn-sm" onclick="uploadToYT('${item.id}')">📤 Upload</button>
-      </div>
-    </div>
-  `).join('');
-}
-
-// ────────────────────────────────────────────────
-// SCRIPT EDITOR
-// ────────────────────────────────────────────────
-function renderScriptEditor() {
-  const container = document.getElementById('script-lines');
-  if (!scriptLines.length) {
-    container.innerHTML = `<div style="padding:20px; text-align:center; color:var(--text-lt); font-size:13px">
-      Chưa có kịch bản. Nhấn "+ Câu hỏi" hoặc "✨ Sinh kịch bản bằng AI" để bắt đầu.
-    </div>`;
-  } else {
-    container.innerHTML = scriptLines.map((line, i) => `
-      <div class="script-line" data-idx="${i}">
-        <div class="line-role">
-          <span class="role-badge ${line.role === 'hoi' ? 'hoi' : 'tra-loi'}">
-            ${line.role === 'hoi' ? '🎙 Hỏi' : '🧧 Trả lời'}
-          </span>
-        </div>
-        <div class="line-text">
-          <textarea rows="2" oninput="updateScriptLine(${i}, this.value); autoResize(this)"
-            onkeydown="handleScriptKey(event, ${i})"
-          >${escHtml(line.text)}</textarea>
-        </div>
-        <div class="line-del" onclick="removeScriptLine(${i})" title="Xóa dòng">✕</div>
-      </div>
-    `).join('');
-    // Auto resize all textareas
-    container.querySelectorAll('textarea').forEach(autoResize);
-  }
-  // Update char count
-  const total = scriptLines.reduce((s, l) => s + l.text.length, 0);
-  document.getElementById('script-char-count').textContent = `${total.toLocaleString()} ký tự`;
-}
-
-function addScriptLine(role) {
-  scriptLines.push({ role, text: '' });
-  renderScriptEditor();
-  switchTab('script');
-  // Focus last textarea
-  setTimeout(() => {
-    const tas = document.querySelectorAll('#script-lines textarea');
-    if (tas.length) tas[tas.length - 1].focus();
-  }, 50);
-}
-
-function removeScriptLine(idx) {
-  scriptLines.splice(idx, 1);
-  renderScriptEditor();
-}
-
-function updateScriptLine(idx, val) {
-  scriptLines[idx].text = val;
-  const total = scriptLines.reduce((s, l) => s + l.text.length, 0);
-  document.getElementById('script-char-count').textContent = `${total.toLocaleString()} ký tự`;
-}
-
-function handleScriptKey(e, idx) {
-  if (e.key === 'Enter' && e.ctrlKey) {
-    e.preventDefault();
-    const nextRole = scriptLines[idx].role === 'hoi' ? 'tra_loi' : 'hoi';
-    scriptLines.splice(idx + 1, 0, { role: nextRole, text: '' });
-    renderScriptEditor();
-    setTimeout(() => {
-      const tas = document.querySelectorAll('#script-lines textarea');
-      if (tas[idx + 1]) tas[idx + 1].focus();
-    }, 50);
-  }
-}
-
-function autoResize(ta) {
-  ta.style.height = 'auto';
-  ta.style.height = (ta.scrollHeight) + 'px';
-}
-
-function clearScript() {
-  if (!scriptLines.length || confirm('Xóa toàn bộ kịch bản?')) {
-    scriptLines = [];
-    renderScriptEditor();
-  }
-}
-
-function previewScript() {
-  const preview = scriptLines.map(l =>
-    `[${l.role === 'hoi' ? 'HỎI' : 'TRẢ LỜI'}]: ${l.text}`
-  ).join('\n\n');
-  alert(preview || 'Chưa có kịch bản');
-}
-
-// ────────────────────────────────────────────────
-// AI GENERATE SCRIPT
-// ────────────────────────────────────────────────
-// ────────────────────────────────────────────────
-// KHẢO LUẬN — Import bài viết thành script
-// ────────────────────────────────────────────────
-let khaoLuanCache = []; // cache danh sách bài
-
-async function loadKhaoLuanList() {
-  try {
-    const data = await sbFetch('khao_luan?select=id,title,excerpt,category&order=created_at.desc&limit=100');
-    khaoLuanCache = data || [];
-    const sel = document.getElementById('khao-luan-select');
-    sel.innerHTML = '<option value="">📚 Chọn bài từ Khảo Luận...</option>';
-    khaoLuanCache.forEach(item => {
-      const opt = document.createElement('option');
-      opt.value = item.id;
-      opt.textContent = `${item.category ? '[' + item.category + '] ' : ''}${item.title}`;
-      sel.appendChild(opt);
-    });
-  } catch (e) {
-    console.error('loadKhaoLuanList error:', e);
-  }
-}
-
-function previewKhaoLuan(id) {
-  const btn = document.getElementById('btn-import-kl');
-  const preview = document.getElementById('kl-preview');
-  if (!id) {
-    btn.disabled = true;
-    preview.style.display = 'none';
-    return;
-  }
-  btn.disabled = false;
-  const item = khaoLuanCache.find(i => String(i.id) === String(id));
-  if (item?.excerpt) {
-    preview.style.display = '';
-    preview.textContent = item.excerpt;
-  }
-}
-
-async function importKhaoLuan() {
-  const id = document.getElementById('khao-luan-select').value;
-  if (!id) return;
-
-  const status = document.getElementById('gen-status');
-  status.textContent = 'Đang tải bài...';
-
-  try {
-    const data = await sbFetch(`khao_luan?id=eq.${id}&select=id,title,content`);
-    const item = data?.[0];
-    if (!item) { toast('Không tìm thấy bài viết', 'error'); return; }
-
-    // Auto-fill tiêu đề nếu chưa có
-    const titleEl = document.getElementById('f-title');
-    if (!titleEl.value) titleEl.value = item.title;
-
-    // Parse content → script lines
-    const lines = parseContentToLines(item.title, item.content);
-    scriptLines = lines;
-    renderScriptEditor();
-    switchTab('script');
-
-    status.textContent = `✓ Đã nhập 1 đoạn (${lines[0].text.length} ký tự)`;
-    toast(`📥 Đã nhập bài "${item.title.substring(0,40)}..."`, 'success');
-  } catch (e) {
-    toast('Lỗi tải bài: ' + e.message, 'error');
-    status.textContent = '';
-  }
-}
-
-// Parse markdown content → 1 dòng duy nhất (title + content gộp)
-function parseContentToLines(title, content) {
-  // Làm sạch title
-  const cleanTitle = title.replace(/^#+\s*/, '').trim();
-
-  // Làm sạch content: bỏ markdown formatting
-  const cleanContent = (content || '')
-    .replace(/^#{1,3}\s+.+$/gm, '')          // bỏ headings
-    .replace(/\*\*/g, '')                    // bỏ bold
-    .replace(/\*/g, '')                      // bỏ italic
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // bỏ links
-    .replace(/`[^`]+`/g, '')                 // bỏ code
-    .replace(/\n{2,}/g, ' ')                 // gộp xuống dòng thành space
-    .replace(/\s+/g, ' ')                    // normalize spaces
-    .trim();
-
-  // Gộp title + content thành 1 dòng duy nhất
-  const fullText = cleanTitle + '. ' + cleanContent;
-
-  return [{ role: 'tra_loi', text: fullText }];
-}
-
-async function generateScriptAI() {
-  const title = document.getElementById('f-title').value.trim();
-  if (!title) { toast('Nhập tiêu đề trước', 'error'); return; }
-
-  const btn = document.querySelector('[onclick="generateScriptAI()"]');
-  const status = document.getElementById('gen-status');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Đang sinh...';
-  status.textContent = '';
-
-  try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: `Bạn là chuyên gia Tử Vi Đẩu Số. Hãy tạo kịch bản vấn đáp ngắn gọn, súc tích cho video YouTube theo định dạng JSON sau:
-{"lines": [{"role":"hoi","text":"..."}, {"role":"tra_loi","text":"..."}, ...]}
-- Giọng hỏi: phụ nữ, tò mò, ngắn gọn (1-2 câu)
-- Giọng trả lời: thầy Nguyễn Ngọc Ngạn, trầm ấm, có chiều sâu học thuật, không quá dài
-- 4-6 cặp hỏi-đáp
-- Trả về CHỈ JSON, không có markdown hay giải thích`,
-        messages: [{ role: 'user', content: `Tạo kịch bản vấn đáp về chủ đề: "${title}"` }]
-      })
-    });
-    const data = await resp.json();
-    const text = data.content?.[0]?.text || '';
-    const clean = text.replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(clean);
-    scriptLines = parsed.lines || [];
-    renderScriptEditor();
-    switchTab('script');
-    toast('✨ Đã sinh kịch bản', 'success');
-    status.textContent = `${scriptLines.length} dòng thoại`;
-  } catch (e) {
-    toast('Lỗi sinh kịch bản: ' + e.message, 'error');
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = '✨ Sinh kịch bản bằng AI';
-  }
-}
-
-async function addScriptLineAI() {
-  if (!scriptLines.length) { toast('Hãy thêm ít nhất 1 dòng trước', 'error'); return; }
-  const context = scriptLines.slice(-4).map(l => `[${l.role}]: ${l.text}`).join('\n');
-  try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: `Bạn là chuyên gia Tử Vi. Tiếp tục kịch bản vấn đáp. Trả về JSON: {"lines":[...]} chỉ 1-2 cặp hỏi-đáp tiếp theo. CHỈ JSON.`,
-        messages: [{ role: 'user', content: `Ngữ cảnh:\n${context}\n\nTiếp tục tự nhiên:` }]
-      })
-    });
-    const data = await resp.json();
-    const text = data.content?.[0]?.text || '';
-    const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
-    scriptLines.push(...(parsed.lines || []));
-    renderScriptEditor();
-    toast('Đã thêm ' + (parsed.lines?.length || 0) + ' dòng', 'success');
-  } catch (e) {
-    toast('Lỗi: ' + e.message, 'error');
-  }
-}
-
-// ────────────────────────────────────────────────
-// SAVE / EDIT
-// ────────────────────────────────────────────────
-function openCreateModal() {
-  currentEditId = null;
-  scriptLines = [];
-  document.getElementById('modal-title').textContent = '✏️ Tạo nội dung mới';
-  document.getElementById('f-title').value = '';
-  document.getElementById('f-chu-de').value = '';
-  document.getElementById('f-tags').value = '';
-  document.getElementById('f-notes').value = '';
-  // Pre-fill YT title
-  document.getElementById('yt-title').value = '';
-  document.getElementById('yt-desc').value = '';
-  renderScriptEditor();
-  switchTab('info');
-  document.getElementById('create-modal').classList.add('open');
-  loadKhaoLuanList();
-}
-
-async function editItem(id) {
-  const item = allItems.find(i => i.id === id);
-  if (!item) return;
-  currentEditId = id;
-  scriptLines = item.noi_dung || [];
-  document.getElementById('modal-title').textContent = '✏️ Sửa nội dung';
-  document.getElementById('f-title').value = item.title || '';
-  document.getElementById('f-chu-de').value = item.chu_de || '';
-  document.getElementById('f-tags').value = (item.tags || []).join(', ');
-  document.getElementById('f-notes').value = item.notes || '';
-  document.getElementById('yt-title').value = item.yt_title || item.title || '';
-  document.getElementById('yt-desc').value = item.yt_description || '';
-  renderScriptEditor();
-  switchTab('info');
-  document.getElementById('create-modal').classList.add('open');
-  // Check TTS status
-  updateTTSTab(item);
-}
-
-function updateTTSTab(item) {
-  const previewArea   = document.getElementById('tts-preview-area');
-  const progressEl    = document.getElementById('tts-progress');
-  const progressFill  = document.getElementById('tts-progress-fill');
-  const progressLabel = document.getElementById('tts-progress-label');
-  if (!item) return;
-
-  // Audio URL nằm ở audio_final_url hoặc audio_hoi_url
-  const audioUrl = item.audio_final_url || item.audio_hoi_url || null;
-
-  if (item.tts_status === 'done' && audioUrl) {
-    progressEl.style.display = 'none';
-    document.getElementById('btn-mix').disabled = false;
-    const ytBtn = document.getElementById('btn-yt-upload');
-    if (ytBtn) ytBtn.disabled = false;
-    previewArea.innerHTML = `
-      <div class="audio-preview">
-        <span class="audio-icon">🎵</span>
-        <div class="audio-info">
-          <div class="name">Audio hoàn chỉnh</div>
-          <div class="meta">Vbee · Nguyễn Ngọc Ngạn · MP3</div>
-        </div>
-        <audio controls src="${audioUrl}" style="flex:1; height:32px"></audio>
-      </div>`;
-    toast('✅ TTS xong! Nghe thử rồi upload YouTube.', 'success');
-
-  } else if (item.tts_status === 'processing') {
-    progressEl.style.display = '';
-    progressFill.style.width = '50%';
-    progressLabel.textContent = 'Vbee đang render audio...';
-
-  } else if (item.tts_status === 'error') {
-    progressEl.style.display = 'none';
-    previewArea.innerHTML = `<div style="color:var(--red);font-size:13px;padding:12px">❌ Lỗi TTS: ${escHtml(item.tts_error || 'unknown')}
         </div>
       </div>
 
@@ -1933,7 +1365,7 @@ function goTo(page) {
   // Lazy load
   const loaders = { users: loadUsers, credits: loadCredits, lasos: loadLasos,
                     pricing: loadPricing, tools: loadAdminUsers,
-                    content: () => { showView('dashboard'); } };
+                    content: () => showView && showView('dashboard') };
   if (loaders[page]) loaders[page]();
 }
 
@@ -2212,7 +1644,33 @@ async function savePricingRow(id) {
   }
 }
 
-// Articles handled by Content Manager
+// ── ARTICLES ──
+async function loadArticles() {
+  document.getElementById('articles-table').innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
+  try {
+    _allArticles = await sbGet('khao_luan?order=created_at.desc&limit=200&select=id,title,slug,category,published,created_at');
+    renderArticles(_allArticles);
+  } catch(e) { document.getElementById('articles-table').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`; }
+}
+
+function renderArticles(list) {
+  if (!list.length) { document.getElementById('articles-table').innerHTML = '<div class="empty">Chưa có bài viết</div>'; return; }
+  document.getElementById('articles-table').innerHTML = `<table>
+    <thead><tr><th>Ngày</th><th>Tiêu Đề</th><th>Slug</th><th>Danh Mục</th><th>Published</th></tr></thead>
+    <tbody>${list.map(a => `<tr>
+      <td style="font-size:.72rem;color:var(--text-lt);white-space:nowrap">${fmtDate(a.created_at)}</td>
+      <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${a.title||''}">${a.title||'—'}</td>
+      <td class="mono" style="font-size:.68rem;color:var(--text-lt);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.slug||'—'}</td>
+      <td><span class="badge badge-blue">${a.category||'—'}</span></td>
+      <td>${a.published ? '<span class="badge badge-green">✓</span>' : '<span class="badge badge-grey">Draft</span>'}</td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+function filterArticles() {
+  const q = document.getElementById('search-articles').value.toLowerCase();
+  renderArticles(_allArticles.filter(a => (a.title||'').toLowerCase().includes(q) || (a.slug||'').toLowerCase().includes(q) || (a.category||'').toLowerCase().includes(q)));
+}
 
 // ── TOOLS ──
 async function createUser() {
@@ -2283,8 +1741,10 @@ function fmtDateFull(d) {
   if (!d) return '—';
   return new Date(d).toLocaleDateString('vi-VN', {day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
 }
+</script>
 
-// ── CONTENT MANAGER JS ──────────────────────────────────────
+<script>
+// ── CONTENT MANAGER ──
 
 // ────────────────────────────────────────────────
 // CONFIG
