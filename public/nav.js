@@ -1,4 +1,4 @@
-// nav.js — Shared navigation component v5 (+ Xem Tướng dropdown)
+// nav.js — Shared navigation component v6 (+ Khí Sắc)
 (function () {
   var path = window.location.pathname;
 
@@ -22,7 +22,7 @@
   }
 
   var isLuanGiai = ['/luan-giai.html','/xem-tuoi.html','/xem-lam-an.html'].indexOf(path) >= 0;
-  var isTuong    = ['/tools/tuong-mat-ai.html','/tools/nhan-tuong-ai.html','/tools/thu-tuong-ai.html','/tools/thanh-tuong-ai.html','/tools/thanh-tuong-pro.html'].indexOf(path) >= 0;
+  var isTuong    = ['/tools/tuong-mat-ai.html','/tools/nhan-tuong-ai.html','/tools/thu-tuong-ai.html','/tools/thanh-tuong-ai.html','/tools/thanh-tuong-pro.html','/tools/khi-sac-ai.html'].indexOf(path) >= 0;
   var isTool     = path.indexOf('/tools/') === 0 && !isTuong;
 
   // ── CSS ──────────────────────────────────────────────────────────────────
@@ -124,6 +124,7 @@
     + ddItem('/tools/thu-tuong-ai.html',  '\u270b', 'Th\u1ee7 T\u01b0\u1edbng \u2014 Xem Ch\u1ec9 Tay')
     + ddItem('/tools/thanh-tuong-ai.html', '\ud83c\udfa4', 'Thanh T\u01b0\u1edbng \u2014 Xem T\u01b0\u1edbng Gi\u1ecdng N\u00f3i')
     + ddItem('/tools/thanh-tuong-pro.html', '\ud83c\udfbc', 'Thanh T\u01b0\u1edbng Pro \u2014 Ph\u00e2n T\u00edch C\u1ed5 Ph\u00e1p')
+    + ddItem('/tools/khi-sac-ai.html', '\ud83c\udf05', 'Kh\u00ed S\u1eafc \u2014 Lu\u1eadn V\u1eadn Kh\u00ed 1\u20133 Th\u00e1ng')
     + '</div></div>';
 
   // DD3 — Công Cụ (tuong-mat-ai đã tách ra rồi, không còn trong đây)
