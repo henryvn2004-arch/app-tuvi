@@ -173,7 +173,7 @@ function updateNavUI() {
   if (_session && _user) {
     const email = _user.email || '';
     const name  = _user.user_metadata?.full_name || _user.user_metadata?.name || '';
-    const avatar= _user.user_metadata?.avatar_url || '';
+    const avatar= _user.user_metadata?.avatar_url || _user.user_metadata?.picture || '';
     const initial = (name || email).charAt(0).toUpperCase();
     navEl.innerHTML = `
       <div style="position:relative;display:inline-block" id="nav-profile-wrap">
@@ -184,7 +184,7 @@ function updateNavUI() {
             ⊙ …
           </div>
           ${avatar
-            ? `<img src="${avatar}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:2px solid #c9a84c">`
+            ? `<img src="${avatar}" referrerpolicy="no-referrer" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:2px solid #c9a84c">`
             : `<div style="width:28px;height:28px;background:#c9a84c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#061A2E">${initial}</div>`
           }
           <span style="font-size:11px;color:rgba(255,255,255,.5)">▾</span>
