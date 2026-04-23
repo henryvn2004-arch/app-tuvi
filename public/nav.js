@@ -21,10 +21,10 @@
     return '<div class="nav-dd-section">' + label + '</div>';
   }
 
-  var isLuanGiai = ['/luan-giai.html','/xem-tuoi.html','/xem-lam-an.html','/xem-tuoi-sinh-con.html'].indexOf(path) >= 0;
+  var isLuanGiai = ['/luan-giai.html','/xem-tuoi.html','/xem-lam-an.html','/tools/xem-tuoi-sinh-con.html'].indexOf(path) >= 0;
   var isTuong    = ['/tools/tuong-mat-ai.html','/tools/nhan-tuong-ai.html','/tools/thu-tuong-ai.html','/tools/thanh-tuong-ai.html','/tools/thanh-tuong-pro.html','/tools/khi-sac-ai.html'].indexOf(path) >= 0;
   var isTool = (path.indexOf('/tools/') === 0 && !isTuong)
-    || ['/dat-ten-con.html','/dat-ten-doanh-nghiep.html','/chon-ngay-tot.html'].indexOf(path) >= 0;
+    || ['/tools/dat-ten-con.html','/tools/dat-ten-doanh-nghiep.html','/tools/chon-ngay-tot.html'].indexOf(path) >= 0;
 
   // ── CSS ──────────────────────────────────────────────────────────────────
   var css = [
@@ -114,7 +114,7 @@
     + ddItem('/luan-giai.html',         '\ud83d\udd2e', 'Lu\u1eadn Gi\u1ea3i L\u00e1 S\u1ed1')
     + ddItem('/xem-tuoi.html',          '\ud83d\udc91', 'Xem Tu\u1ed5i V\u1ee3 Ch\u1ed3ng')
     + ddItem('/xem-lam-an.html',        '\ud83e\udd1d', 'Xem Tu\u1ed5i L\u00e0m \u0102n')
-    + ddItem('/xem-tuoi-sinh-con.html', '\ud83d\udc76', 'Xem Tu\u1ed5i Sinh Con \u2014 Mi\u1ec5n Ph\u00ed')
+    + ddItem('/tools/xem-tuoi-sinh-con.html', '\ud83d\udc76', 'Xem Tu\u1ed5i Sinh Con \u2014 Mi\u1ec5n Ph\u00ed')
     + '</div></div>';
 
   // DD2 — Xem Tướng (NEW — ngay sau Luận Giải)
@@ -156,9 +156,9 @@
     + ddItem('/tools/tu-tru.html',       '\ud83d\udcdc', 'T\u1ee9 Tr\u1ee5 B\u00e1t T\u1ef1')
 
     + ddSection('\u0110\u1eb7t T\u00ean & Ng\u00e0y L\u00e0nh')
-    + ddItem('/dat-ten-con.html',           '\ud83d\udc76', '\u0110\u1eb7t T\u00ean Con Theo Ng\u0169 H\u00e0nh')
-    + ddItem('/dat-ten-doanh-nghiep.html',  '\ud83c\udfe2', '\u0110\u1eb7t T\u00ean Doanh Nghi\u1ec7p')
-    + ddItem('/chon-ngay-tot.html',         '\ud83d\udcc5', 'Ch\u1ecdn Ng\u00e0y T\u1ed1t')
+    + ddItem('/tools/dat-ten-con.html',           '\ud83d\udc76', '\u0110\u1eb7t T\u00ean Con Theo Ng\u0169 H\u00e0nh')
+    + ddItem('/tools/dat-ten-doanh-nghiep.html',  '\ud83c\udfe2', '\u0110\u1eb7t T\u00ean Doanh Nghi\u1ec7p')
+    + ddItem('/tools/chon-ngay-tot.html',         '\ud83d\udcc5', 'Ch\u1ecdn Ng\u00e0y T\u1ed1t')
 
     + ddSection('Huy\u1ec1n H\u1ecdc & Ph\u01b0\u01a1ng T\u00e2y')
     + ddItem('/tools/kinh-dich.html',   '\u262f',       'Kinh D\u1ecbch 64 Qu\u1ebb')
