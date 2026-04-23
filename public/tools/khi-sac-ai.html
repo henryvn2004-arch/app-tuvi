@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="apple-touch-icon" href="/seal.webp">
+<meta name="description" content="Xem khí sắc (氣色) theo Ma Y Thần Tướng — tầng cao của tướng học cổ, luận vận khí ngắn hạn 1–3 tháng. Phân tích sắc khí trên Ấn Đường và 5 vùng Ngũ Nhạc từ ảnh chân dung.">
+<meta name="keywords" content="khí sắc, xem khí sắc, ma y thần tướng, tướng học, ngũ nhạc, ấn đường, tử vi minh bảo">
+<link rel="canonical" href="https://www.tuviminhbao.com/tools/khi-sac-ai.html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xem Khí Sắc — Luận Vận Khí 1–3 Tháng | Tử Vi Minh Bảo</title>
+<meta property="og:title" content="Xem Khí Sắc — Tầng cao của tướng học cổ | Tử Vi Minh Bảo">
+<meta property="og:description" content="Luận khí sắc theo Ma Y Thần Tướng — dự báo vận khí 1–3 tháng qua sắc khí trên Ấn Đường và 5 vùng Ngũ Nhạc.">
+<meta property="og:image" content="https://www.tuviminhbao.com/seal.webp">
+<meta property="og:url" content="https://www.tuviminhbao.com/tools/khi-sac-ai.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tử Vi Minh Bảo">
+<meta property="og:locale" content="vi_VN">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy:      #061A2E;
+  --navy-mid:  #0D3B5E;
+  --blue:      #1455A4;
+  --text:      #1a1a1a;
+  --text-mid:  #444;
+  --text-lt:   #777;
+  --border:    #CCCCCC;
+  --border-lt: #E8E8E8;
+  --bg:        #FFFFFF;
+  --bg-soft:   #F5F4F0;
+  --gold:      #9A7B3A;
+  --gold-lt:   #F9F4EB;
+  --red:       #C0392B;
+  --green:     #1E6B3C;
+}
+body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+/* LAYOUT */
+.page { max-width: 1100px; margin: 0 auto; padding: 0 56px; }
+@media (max-width: 700px) { .page { padding: 0 20px; } }
+
+/* HERO */
+.hero-ks {
+  background: linear-gradient(180deg, #061A2E 0%, #0D3B5E 100%);
+  color: #fff;
+  padding: 72px 0 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-ks::before {
+  content: '氣';
+  position: absolute;
+  font-family: Georgia, 'Noto Serif', serif;
+  font-size: 520px;
+  font-weight: 700;
+  color: rgba(201, 168, 76, 0.06);
+  top: 50%; right: -40px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  user-select: none;
+  line-height: 1;
+}
+.hero-ks .page { position: relative; z-index: 2; }
+.hero-eyebrow-ks {
+  font-size: 10px; font-weight: 600; letter-spacing: 3px;
+  text-transform: uppercase; color: #c9a84c; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 12px;
+}
+.hero-eyebrow-ks::after { content: ''; width: 32px; height: 1px; background: #c9a84c; }
+.hero-ks h1 {
+  font-family: Arial, sans-serif; font-size: 54px; font-weight: 400;
+  line-height: 1.07; color: #fff; margin-bottom: 12px; letter-spacing: -0.5px;
+  max-width: 680px;
+}
+.hero-ks h1 em { font-style: italic; color: #c9a84c; }
+.hero-hantu-ks {
+  font-family: Georgia, 'Noto Serif', serif;
+  font-size: 28px; color: #c9a84c; letter-spacing: 10px; margin-bottom: 28px;
+}
+.hero-quote-ks {
+  font-style: italic; font-size: 17px; color: rgba(255,255,255,0.85);
+  line-height: 1.7; max-width: 620px; margin-bottom: 18px;
+  padding-left: 18px; border-left: 2px solid #c9a84c;
+}
+.hero-desc-ks {
+  font-size: 16px; color: rgba(255,255,255,0.72); line-height: 1.75;
+  max-width: 620px; margin-bottom: 32px; font-weight: 300;
+}
+.hero-cta-ks {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 32px; background: #c9a84c; color: #061A2E;
+  border: 2px solid #c9a84c; border-radius: 4px; font-size: 13px;
+  font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  text-decoration: none; transition: all 0.2s; cursor: pointer;
+  font-family: inherit;
+}
+.hero-cta-ks:hover { background: transparent; color: #c9a84c; }
+.hero-meta-ks {
+  margin-top: 18px; font-size: 12px; color: rgba(255,255,255,0.55);
+  display: flex; gap: 20px; flex-wrap: wrap;
+}
+.hero-meta-ks span::before { content: '✓ '; color: #c9a84c; }
+
+@media (max-width: 700px) {
+  .hero-ks { padding: 56px 0 64px; }
+  .hero-ks h1 { font-size: 36px; }
+  .hero-hantu-ks { font-size: 22px; letter-spacing: 7px; }
+  .hero-quote-ks { font-size: 15px; }
+  .hero-ks::before { font-size: 340px; right: -80px; }
+}
+
+/* SECTION */
+.section { padding: 64px 0; border-bottom: 1px solid var(--border); }
+.section.alt { background: var(--bg-soft); }
+.section-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 16px; display: flex; align-items: center; gap: 16px; }
+.section-eyebrow::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.section-title {
+  font-family: Arial, sans-serif; font-size: 32px; font-weight: 400;
+  color: var(--navy); margin-bottom: 10px; line-height: 1.2; letter-spacing: -0.3px;
+}
+.section-title em { font-style: italic; color: var(--gold); }
+.section-hantu { font-family: Georgia, 'Noto Serif', serif; font-size: 15px; color: var(--gold); letter-spacing: 5px; margin-bottom: 28px; }
+.section-lead { font-size: 16px; color: var(--text-mid); line-height: 1.8; max-width: 720px; margin-bottom: 32px; font-weight: 300; }
+
+@media (max-width: 700px) {
+  .section-title { font-size: 26px; }
+}
+
+/* EDU */
+.edu p { font-size: 15.5px; color: var(--text-mid); line-height: 1.85; margin-bottom: 14px; max-width: 820px; }
+.edu .quote-box {
+  border-left: 3px solid var(--gold);
+  background: var(--gold-lt);
+  padding: 18px 22px;
+  margin: 20px 0;
+  font-family: Georgia, 'Noto Serif', serif;
+  font-style: italic; color: var(--navy);
+  font-size: 15.5px; line-height: 1.7;
+  max-width: 820px;
+}
+.edu .quote-src {
+  display: block; font-family: Arial, sans-serif;
+  font-style: normal; font-size: 12px; color: var(--text-lt);
+  margin-top: 8px; letter-spacing: 0.5px;
+}
+
+/* COMPARE */
+.compare-tbl {
+  width: 100%; max-width: 900px;
+  border-collapse: collapse; margin-top: 20px;
+  background: #fff; border: 1px solid var(--border);
+}
+.compare-tbl th, .compare-tbl td {
+  padding: 14px 18px; text-align: left; border-bottom: 1px solid var(--border-lt);
+  font-size: 14px; vertical-align: top;
+}
+.compare-tbl thead th {
+  background: var(--navy); color: #fff; font-weight: 600;
+  font-family: Arial, sans-serif; font-size: 13px;
+  letter-spacing: 0.3px; text-transform: uppercase;
+}
+.compare-tbl tbody td:first-child {
+  font-weight: 700; color: var(--navy); background: var(--bg-soft);
+  width: 180px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;
+}
+.compare-tbl tr:last-child td { border-bottom: none; }
+.compare-tbl strong { color: var(--navy); }
+
+/* ZONES grid */
+.zones-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 12px; margin-top: 24px; max-width: 900px;
+}
+.zone-card {
+  padding: 16px 18px; background: #fff; border: 1px solid var(--border-lt);
+  border-left: 3px solid var(--gold);
+}
+.zone-card strong {
+  display: block; color: var(--navy); font-family: Arial, sans-serif;
+  font-weight: 700; font-size: 14.5px; margin-bottom: 4px;
+}
+.zone-card strong .zh {
+  color: var(--gold); font-family: Georgia, serif;
+  font-size: 11px; margin-left: 8px; letter-spacing: 2px;
+}
+.zone-card p { font-size: 13px; color: var(--text-mid); margin: 0; line-height: 1.6; }
+@media (max-width: 700px) { .zones-grid { grid-template-columns: 1fr; } }
+
+/* 5 SẮC */
+.colors-row {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: 10px; margin-top: 24px; max-width: 900px;
+}
+.color-card {
+  padding: 16px 8px; text-align: center;
+  background: #fff; border: 1px solid var(--border-lt);
+}
+.color-card .swatch {
+  width: 42px; height: 42px; border-radius: 50%;
+  margin: 0 auto 10px;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+}
+.color-card .zh { font-family: Georgia, serif; font-size: 22px; color: var(--navy); font-weight: 700; line-height: 1; }
+.color-card .nm { font-size: 12px; color: var(--text); margin: 6px 0 6px; font-weight: 600; }
+.color-card .mn { font-size: 11px; color: var(--text-lt); line-height: 1.5; }
+.swatch.thanh { background: #5a8fa8; }
+.swatch.xich  { background: #c94434; }
+.swatch.hoang { background: #d9ad4c; }
+.swatch.bach  { background: #f0ece3; box-shadow: 0 0 0 1px #c7c2b6; }
+.swatch.hac   { background: #2b2b2b; }
+@media (max-width: 700px) { .colors-row { grid-template-columns: repeat(2, 1fr); } }
+
+/* GUIDE */
+.guide {
+  background: #fff; border: 1px solid var(--border);
+  margin-top: 28px; max-width: 900px;
+}
+.guide-head {
+  background: var(--navy); color: #fff;
+  padding: 16px 24px; font-size: 14px; font-weight: 600;
+  letter-spacing: 1.5px; text-transform: uppercase;
+}
+.guide-head .zh { color: var(--gold); font-family: Georgia, serif; font-size: 12px; margin-left: 10px; letter-spacing: 3px; }
+.guide-body { padding: 28px; }
+.guide-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.guide-col h4 {
+  font-size: 13px; font-weight: 700; margin-bottom: 14px; padding-bottom: 8px;
+  border-bottom: 2px solid var(--border-lt); letter-spacing: 1px;
+}
+.guide-col.good h4 { color: var(--green); border-bottom-color: var(--green); }
+.guide-col.bad  h4 { color: var(--red);   border-bottom-color: var(--red); }
+.guide-col ul { list-style: none; padding: 0; }
+.guide-col li {
+  padding: 8px 0 8px 22px; position: relative;
+  font-size: 13.5px; color: var(--text-mid);
+  border-bottom: 1px solid var(--border-lt);
+  line-height: 1.55;
+}
+.guide-col li:last-child { border-bottom: none; }
+.guide-col.good li::before { content: '✓'; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 700; }
+.guide-col.bad  li::before { content: '✕'; position: absolute; left: 0; top: 8px; color: var(--red); font-weight: 700; }
+.guide-note {
+  margin-top: 20px; padding: 14px 18px;
+  background: var(--gold-lt); border-left: 3px solid var(--gold);
+  font-size: 13px; color: var(--text-mid); font-style: italic; line-height: 1.7;
+}
+.guide-note strong { color: var(--navy); font-style: normal; }
+@media (max-width: 700px) { .guide-cols { grid-template-columns: 1fr; gap: 20px; } .guide-body { padding: 20px; } }
+
+/* TOOL */
+.tool-card {
+  max-width: 780px; margin: 0 auto;
+  background: #fff; border: 1px solid var(--border);
+  padding: 40px;
+}
+.tool-card h2 {
+  font-family: Arial, sans-serif; font-size: 28px; font-weight: 400;
+  color: var(--navy); text-align: center; margin-bottom: 6px;
+}
+.tool-card .tool-zh {
+  text-align: center; font-family: Georgia, serif;
+  color: var(--gold); font-size: 14px; letter-spacing: 6px; margin-bottom: 28px;
+}
+.tool-steps { margin-bottom: 26px; }
+.tool-step {
+  display: flex; gap: 14px; padding: 12px 14px; margin-bottom: 10px;
+  background: var(--bg-soft); border-left: 3px solid var(--gold);
+}
+.tool-step-num {
+  background: var(--navy); color: #c9a84c;
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; flex-shrink: 0; font-size: 13px;
+}
+.tool-step-body h4 { font-size: 13.5px; color: var(--navy); margin-bottom: 3px; font-weight: 700; }
+.tool-step-body p { font-size: 13px; color: var(--text-mid); margin: 0; line-height: 1.55; }
+
+.upload-area {
+  border: 2px dashed var(--border);
+  padding: 44px 20px; text-align: center;
+  background: #fafafa; cursor: pointer;
+  transition: all 0.2s; display: block;
+}
+.upload-area:hover, .upload-area.dragover {
+  border-color: var(--gold); background: var(--gold-lt);
+}
+.upload-area.has-image { padding: 16px; cursor: default; }
+.upload-area input[type="file"] { display: none; }
+.upload-icon { font-size: 40px; margin-bottom: 12px; }
+.upload-text { font-size: 14.5px; color: var(--text-mid); margin-bottom: 6px; font-weight: 600; }
+.upload-hint { font-size: 12px; color: var(--text-lt); }
+.preview-img {
+  max-width: 100%; max-height: 380px; display: block;
+  margin: 0 auto; border-radius: 2px;
+}
+.change-photo {
+  margin-top: 12px; background: transparent; color: var(--navy);
+  border: 1px solid var(--border); padding: 8px 16px; border-radius: 3px;
+  font-size: 12px; cursor: pointer; font-family: inherit; letter-spacing: 0.5px;
+}
+.change-photo:hover { background: var(--navy); color: #fff; }
+
+/* Spinner */
+.spinner-sm {
+  display: inline-block; width: 14px; height: 14px;
+  border: 2px solid rgba(6,26,46,0.2); border-top-color: var(--navy);
+  border-radius: 50%; animation: spin 0.8s linear infinite;
+  vertical-align: middle; margin-right: 8px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Paywall — same pattern as index.html */
+.paywall-gate {
+  border: 2px solid #c9a84c; border-radius: 12px;
+  padding: 36px 32px; margin-top: 28px;
+  background: linear-gradient(135deg, #fdf6e9 0%, #fff9ef 100%);
+  text-align: center; position: relative; overflow: hidden;
+  display: none;
+}
+.paywall-gate.show { display: block; }
+.paywall-gate::before {
+  content: ''; position: absolute; inset: 0;
+  background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(201,168,76,0.03) 10px, rgba(201,168,76,0.03) 20px);
+  pointer-events: none;
+}
+.paywall-eyebrow {
+  font-size: 10px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: #c9a84c; margin-bottom: 12px; position: relative;
+}
+.paywall-title {
+  font-family: Arial, sans-serif; font-size: 22px; font-weight: 400;
+  color: #061A2E; margin-bottom: 10px; line-height: 1.3; position: relative;
+}
+.paywall-desc {
+  font-size: 14px; color: #666; line-height: 1.7;
+  margin-bottom: 24px; max-width: 460px; margin-left: auto; margin-right: auto; position: relative;
+}
+.paywall-features {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 8px; margin-bottom: 24px; max-width: 460px;
+  margin-left: auto; margin-right: auto; text-align: left; position: relative;
+}
+.paywall-feature {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 12.5px; color: #444; line-height: 1.4;
+}
+.paywall-feature::before { content: '✦'; color: #c9a84c; flex-shrink: 0; font-size: 11px; margin-top: 1px; }
+.paywall-price {
+  font-size: 34px; font-weight: 700; color: #061A2E;
+  margin-bottom: 4px; font-family: Arial, sans-serif; position: relative;
+}
+.paywall-price-note { font-size: 11px; color: #999; margin-bottom: 22px; position: relative; }
+.btn-paywall {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 15px 36px; background: #061A2E; color: #c9a84c;
+  border: 2px solid #c9a84c; border-radius: 4px; font-size: 12.5px;
+  font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  cursor: pointer; font-family: inherit; transition: all 0.2s;
+  position: relative;
+}
+.btn-paywall:hover:not(:disabled) { background: #c9a84c; color: #061A2E; }
+.btn-paywall:disabled { opacity: 0.6; cursor: not-allowed; }
+.paywall-secure { font-size: 11px; color: #aaa; margin-top: 12px; position: relative; }
+.paywall-secure a { color: #c9a84c; text-decoration: none; }
+
+/* RESULTS */
+.results-section {
+  display: none; padding: 56px 0; border-top: 1px solid var(--border);
+}
+.results-section.show { display: block; }
+.results-head {
+  text-align: center; margin-bottom: 32px;
+}
+.results-head .eyebrow {
+  font-size: 10px; font-weight: 600; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--blue); margin-bottom: 12px;
+}
+.results-head h2 {
+  font-family: Arial, sans-serif; font-size: 38px; font-weight: 400;
+  color: var(--navy); margin-bottom: 6px;
+}
+.results-head .zh {
+  font-family: Georgia, serif; color: var(--gold);
+  font-size: 16px; letter-spacing: 6px;
+}
+
+.results-loading {
+  text-align: center; padding: 40px 20px; color: var(--text-mid);
+  max-width: 600px; margin: 0 auto;
+}
+.results-loading .big-spinner {
+  width: 42px; height: 42px;
+  border: 3px solid var(--border-lt); border-top-color: var(--gold);
+  border-radius: 50%; margin: 0 auto 18px;
+  animation: spin 0.9s linear infinite;
+}
+.results-loading .loading-text { font-size: 14px; color: var(--text-mid); line-height: 1.7; }
+
+.results-content {
+  max-width: 820px; margin: 0 auto;
+  font-size: 15.5px; line-height: 1.85; color: var(--text);
+}
+.results-content h2 {
+  font-family: Arial, sans-serif; font-size: 22px; font-weight: 700;
+  color: var(--navy); margin: 32px 0 14px;
+  padding-bottom: 8px; border-bottom: 1px solid var(--border-lt);
+}
+.results-content h2:first-child { margin-top: 0; }
+.results-content h3 {
+  font-family: Arial, sans-serif; font-size: 17px; font-weight: 700;
+  color: var(--navy-mid); margin: 22px 0 10px;
+}
+.results-content p { margin-bottom: 14px; }
+.results-content em { color: var(--gold); font-weight: 500; }
+.results-content strong { color: var(--navy); }
+.results-content ul, .results-content ol { padding-left: 24px; margin-bottom: 14px; }
+.results-content li { margin-bottom: 8px; }
+.results-content blockquote {
+  border-left: 3px solid var(--gold); padding: 10px 20px;
+  background: var(--gold-lt); margin: 18px 0; font-style: italic;
+  font-family: Georgia, 'Noto Serif', serif; color: var(--navy-mid);
+}
+
+.results-actions {
+  margin-top: 36px; text-align: center;
+  padding-top: 24px; border-top: 1px solid var(--border-lt);
+  max-width: 820px; margin-left: auto; margin-right: auto;
+}
+.results-actions p { font-size: 13px; color: var(--text-lt); margin-bottom: 14px; font-style: italic; }
+.results-actions a {
+  display: inline-block; background: var(--navy); color: #fff;
+  padding: 11px 28px; border-radius: 3px; text-decoration: none;
+  font-size: 12px; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase; transition: background 0.2s;
+}
+.results-actions a:hover { background: var(--navy-mid); }
+
+/* FAQ */
+.faq-item {
+  background: #fff; border: 1px solid var(--border);
+  margin-bottom: 10px; max-width: 820px;
+}
+.faq-q {
+  padding: 16px 20px; font-size: 15px; color: var(--navy);
+  cursor: pointer; display: flex; justify-content: space-between;
+  align-items: center; font-weight: 600;
+  transition: background 0.15s;
+}
+.faq-q:hover { background: var(--bg-soft); }
+.faq-q::after {
+  content: '+'; color: var(--gold); font-size: 22px;
+  font-weight: 300; transition: transform 0.2s;
+}
+.faq-item.open .faq-q::after { transform: rotate(45deg); }
+.faq-a {
+  padding: 0 20px; max-height: 0; overflow: hidden;
+  transition: max-height 0.3s, padding 0.3s;
+  color: var(--text-mid); font-size: 14px; line-height: 1.75;
+}
+.faq-item.open .faq-a { max-height: 500px; padding: 0 20px 18px; }
+
+/* DISCLAIMER */
+.disclaimer-box {
+  background: var(--bg-soft); padding: 28px 32px;
+  font-size: 12.5px; color: var(--text-lt); line-height: 1.7;
+  border-top: 1px solid var(--border-lt); text-align: center;
+}
+
+</style>
+<script src="/auth.js"></script>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<section class="hero-ks">
+  <div class="page">
+    <div class="hero-eyebrow-ks">Ma Y Thần Tướng · Tầng Cao Tướng Học</div>
+    <h1>Xem <em>khí sắc</em></h1>
+    <div class="hero-hantu-ks">氣 色</div>
+    <div class="hero-quote-ks">
+      "Hình bất như cốt, cốt bất như thần, thần bất như khí."<br>
+      <span style="font-size:14px;opacity:0.75">— hình không bằng cốt, cốt không bằng thần, thần không bằng khí —</span>
+    </div>
+    <p class="hero-desc-ks">
+      Khác với Diện Tướng đọc cấu trúc cả đời, Khí Sắc đọc <strong style="color:#c9a84c">vận đang vận hành</strong>:
+      tài lộc, hỷ sự, thị phi, bệnh tật, hay đại họa sắp tới — qua màu sắc và thần khí hiện trên
+      Ấn Đường và 5 vùng Ngũ Nhạc. Dự báo 1–3 tháng tới.
+    </p>
+    <a href="#tool" class="hero-cta-ks">Bắt đầu xem khí sắc →</a>
+    <div class="hero-meta-ks">
+      <span>Luận 6 phần theo Ma Y Thần Tướng</span>
+      <span>Dự báo 1–3 tháng tới</span>
+      <span>Kết quả lưu tài khoản</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ KHÍ SẮC LÀ GÌ ============ -->
+<section class="section">
+  <div class="page edu">
+    <div class="section-eyebrow">Khí sắc là gì</div>
+    <h2 class="section-title">Tầng cao nhất của tướng học cổ</h2>
+    <div class="section-hantu">神 相 之 上</div>
+    <p>
+      Ma Y Thần Tướng phân tướng học thành nhiều tầng. Tầng thấp nhất là <strong>hình</strong>
+      (cấu trúc xương thịt), cao hơn là <strong>cốt</strong>, rồi <strong>thần</strong>,
+      và đỉnh cao là <strong>khí sắc</strong> — sắc khí hiện trên mặt theo từng thời điểm.
+    </p>
+    <p>
+      Trong khi Diện Tướng đọc <em>hình</em> — cấu trúc khuôn mặt vốn gần như không đổi cả đời —
+      thì Khí Sắc đọc <em>sắc</em>, tức màu sắc và khí trên da, đổi theo từng ngày, từng tháng.
+      Chính vì khí sắc phản ánh <strong>vận đang vận hành</strong>, nên từ xưa các thầy tướng giỏi
+      luôn xem khí sắc là phép đoán vận ngắn hạn chính xác nhất.
+    </p>
+    <div class="quote-box">
+      "印堂發黃，百日內有喜事；山根發暗，百日內防破財。"<br>
+      <em style="font-style:italic">(Ấn đường phát hoàng, bách nhật nội hữu hỷ sự; sơn căn phát ám, bách nhật nội phòng phá tài.)</em>
+      <span class="quote-src">— Ma Y Thần Tướng, chương Khí Sắc luận</span>
+    </div>
+    <p>
+      Nghĩa là: <em>Ấn đường hiện sắc vàng, trong 100 ngày có hỷ sự; sống mũi hiện sắc tối,
+      trong 100 ngày phải đề phòng mất tiền.</em>
+    </p>
+  </div>
+</section>
+
+<!-- ============ KHÁC DIỆN TƯỚNG THẾ NÀO ============ -->
+<section class="section alt">
+  <div class="page">
+    <div class="section-eyebrow">So sánh</div>
+    <h2 class="section-title">Khí Sắc khác <em>Diện Tướng</em> thế nào?</h2>
+    <p class="section-lead">
+      Hai phép bổ sung nhau, không chồng chéo. Diện Tướng xem một lần cả đời,
+      Khí Sắc xem lại định kỳ để theo vận khí ngắn hạn.
+    </p>
+    <table class="compare-tbl">
+      <thead>
+        <tr>
+          <th style="width:180px">Tiêu chí</th>
+          <th>Diện Tướng 面相</th>
+          <th>Khí Sắc 氣色</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Đọc cái gì</td>
+          <td><strong>Hình</strong> — cấu trúc</td>
+          <td><strong>Sắc</strong> — màu &amp; khí</td>
+        </tr>
+        <tr>
+          <td>Đối tượng quan sát</td>
+          <td>Xương, thịt, tỷ lệ bộ phận</td>
+          <td>Màu da, độ sáng, độ tươi</td>
+        </tr>
+        <tr>
+          <td>Tính chất</td>
+          <td>Tĩnh — cả đời gần như không đổi</td>
+          <td>Động — đổi theo ngày / tháng</td>
+        </tr>
+        <tr>
+          <td>Luận về</td>
+          <td><strong>Số</strong> — vận mệnh tổng, tính cách gốc</td>
+          <td><strong>Vận</strong> — cát hung đang và sắp tới</td>
+        </tr>
+        <tr>
+          <td>Hiệu lực</td>
+          <td>Cả đời</td>
+          <td>1 – 3 tháng (nên xem lại định kỳ)</td>
+        </tr>
+        <tr>
+          <td>Ví dụ kết luận</td>
+          <td>Mũi thẳng đầy → cả đời tài vận ổn</td>
+          <td>Mũi sắc hoàng minh → tháng này tài lộc về</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 5 VÙNG ============ -->
+<section class="section">
+  <div class="page">
+    <div class="section-eyebrow">Cổ pháp luận khí sắc</div>
+    <h2 class="section-title">5 Vùng Ngũ Nhạc &amp; Ấn Đường</h2>
+    <div class="section-hantu">五 岳 + 印 堂</div>
+    <p class="section-lead">
+      Ma Y phân khuôn mặt thành 5 vùng lớn (Ngũ Nhạc) cộng với Ấn Đường — mỗi vùng
+      ứng với một lĩnh vực đời sống. Sắc khí hiện trên vùng nào thì báo vận về lĩnh vực đó.
+    </p>
+    <div class="zones-grid">
+      <div class="zone-card">
+        <strong>Ấn Đường<span class="zh">印堂</span></strong>
+        <p>Giữa hai lông mày — vận tổng 100 ngày tới. Quan trọng nhất.</p>
+      </div>
+      <div class="zone-card">
+        <strong>Nam Nhạc · Trán<span class="zh">南岳</span></strong>
+        <p>Quan lộc, sự nghiệp, địa vị, quý nhân phù trợ.</p>
+      </div>
+      <div class="zone-card">
+        <strong>Trung Nhạc · Mũi<span class="zh">中岳</span></strong>
+        <p>Tài bạch, tiền bạc. Chuẩn đầu (đầu mũi) là trọng tâm.</p>
+      </div>
+      <div class="zone-card">
+        <strong>Bắc Nhạc · Cằm<span class="zh">北岳</span></strong>
+        <p>Điền trạch, hậu vận, nhà cửa, thuộc hạ.</p>
+      </div>
+      <div class="zone-card">
+        <strong>Đông Nhạc · Gò má trái<span class="zh">東岳</span></strong>
+        <p>Quyền thế, đồng nghiệp, bạn bè thân.</p>
+      </div>
+      <div class="zone-card">
+        <strong>Tây Nhạc · Gò má phải<span class="zh">西岳</span></strong>
+        <p>Danh tiếng, đối nghịch, người ngoài.</p>
+      </div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:48px">5 Sắc Ngũ Hành</h2>
+    <div class="section-hantu">五 色 五 行</div>
+    <p class="section-lead">
+      Mỗi sắc ứng với một hành, mang ý nghĩa cát hung khác nhau. Cổ pháp phân biệt rất tinh:
+      cùng sắc đỏ nhưng đỏ tươi hồng nhuận là hỷ, đỏ ám gắt là thị phi. Cùng hoàng
+      nhưng hoàng tươi là tài, hoàng ám là bệnh.
+    </p>
+    <div class="colors-row">
+      <div class="color-card">
+        <div class="swatch thanh"></div>
+        <div class="zh">青</div>
+        <div class="nm">Thanh · Mộc</div>
+        <div class="mn">Lo âu, kinh sợ, bệnh gan</div>
+      </div>
+      <div class="color-card">
+        <div class="swatch xich"></div>
+        <div class="zh">赤</div>
+        <div class="nm">Xích · Hỏa</div>
+        <div class="mn">Thị phi · tươi hồng = hỷ</div>
+      </div>
+      <div class="color-card">
+        <div class="swatch hoang"></div>
+        <div class="zh">黃</div>
+        <div class="nm">Hoàng · Thổ</div>
+        <div class="mn">Tài lộc, hỷ sự sắp đến</div>
+      </div>
+      <div class="color-card">
+        <div class="swatch bach"></div>
+        <div class="zh">白</div>
+        <div class="nm">Bạch · Kim</div>
+        <div class="mn">Tang khó, bệnh tật</div>
+      </div>
+      <div class="color-card">
+        <div class="swatch hac"></div>
+        <div class="zh">黑</div>
+        <div class="nm">Hắc · Thủy</div>
+        <div class="mn">Đại họa, hiểm nguy</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HƯỚNG DẪN CHỤP ẢNH ============ -->
+<section class="section alt">
+  <div class="page">
+    <div class="section-eyebrow">Quan trọng — đọc trước khi chụp</div>
+    <h2 class="section-title">Hướng dẫn chụp ảnh</h2>
+    <p class="section-lead">
+      Khí sắc cực nhạy với ánh sáng. Ma Y dạy: <em>"bình đán quan khí"</em> (平旦觀氣) —
+      xem khí vào buổi sáng. Ảnh phải đạt chuẩn, nếu không kết quả sẽ sai lệch.
+    </p>
+    <div class="guide">
+      <div class="guide-head">
+        Tiêu Chuẩn Chụp Ảnh <span class="zh">攝像標準</span>
+      </div>
+      <div class="guide-body">
+        <div class="guide-cols">
+          <div class="guide-col good">
+            <h4>✓ NÊN</h4>
+            <ul>
+              <li>Chụp <strong>buổi sáng 7–10h</strong> hoặc <strong>chiều 3–5h</strong></li>
+              <li>Đứng <strong>gần cửa sổ</strong>, ánh sáng tự nhiên chiếu đều</li>
+              <li><strong>Mặt mộc</strong> — không makeup, không kem nền, không filter</li>
+              <li>Mặt <strong>thẳng, nhìn camera</strong>, biểu cảm thả lỏng</li>
+              <li>Khoảng cách <strong>30–50 cm</strong>, thấy rõ từ trán đến cằm</li>
+              <li>Tóc <strong>vén gọn</strong>, lộ trán để quan sát Ấn Đường</li>
+              <li>Ảnh chụp <strong>trong 24 giờ</strong> trở lại</li>
+            </ul>
+          </div>
+          <div class="guide-col bad">
+            <h4>✕ TRÁNH</h4>
+            <ul>
+              <li>Đèn vàng, đèn huỳnh quang, đèn LED màu</li>
+              <li>Chụp ban đêm chỉ có đèn trong nhà</li>
+              <li><strong>Filter làm đẹp, beauty mode</strong> của camera</li>
+              <li>Ảnh cũ lâu ngày — khí sắc đổi theo ngày</li>
+              <li>Mặt nghiêng, cúi, ngẩng</li>
+              <li>Ảnh thiếu sáng, quá sáng cháy, ngược sáng</li>
+              <li>Kính gọng to che Ấn Đường hoặc trán</li>
+            </ul>
+          </div>
+        </div>
+        <div class="guide-note">
+          <strong>Vì sao nghiêm ngặt thế?</strong> — Chụp dưới đèn vàng làm cả mặt ám hoàng
+          → có thể bị luận "sắc hoàng chủ tài" (sai). Filter làm da hồng → bị luận "xích sắc chủ khẩu thiệt" (sai).
+          Nếu ảnh có dấu hiệu ánh sáng bất thường, AI sẽ <strong>nói thẳng ở đầu bài luận</strong>
+          và đề nghị bạn chụp lại — chứ không cố bịa theo sắc giả.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TOOL ============ -->
+<section class="section" id="tool" style="padding-top:72px;padding-bottom:72px">
+  <div class="page">
+    <div class="tool-card">
+      <h2>Xem Khí Sắc Ngay</h2>
+      <div class="tool-zh">氣 色 觀 測</div>
+
+      <div class="tool-steps">
+        <div class="tool-step">
+          <div class="tool-step-num">1</div>
+          <div class="tool-step-body">
+            <h4>Chụp ảnh mới theo hướng dẫn ở trên</h4>
+            <p>Ảnh mới (trong 24h), ánh sáng tự nhiên, mặt mộc, thẳng, thấy rõ trán và toàn mặt.</p>
+          </div>
+        </div>
+        <div class="tool-step">
+          <div class="tool-step-num">2</div>
+          <div class="tool-step-body">
+            <h4>Mở khóa 90 credits — nhận kết quả 6 phần</h4>
+            <p>Luận chi tiết Ấn Đường + 5 vùng Ngũ Nhạc, sắc tổng quan, dự báo 1–3 tháng, lời khuyên dưỡng khí.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upload area -->
+      <label class="upload-area" id="upload-area" for="file-input">
+        <div id="upload-placeholder">
+          <div class="upload-icon">📷</div>
+          <div class="upload-text">Nhấn để chọn ảnh hoặc kéo thả vào đây</div>
+          <div class="upload-hint">JPG, PNG — tối đa 10MB · Chụp trong 24h</div>
+        </div>
+        <div id="upload-preview" style="display:none">
+          <img class="preview-img" id="preview-img" alt="Ảnh chân dung">
+          <button type="button" class="change-photo" onclick="event.preventDefault(); resetTool(true);">Chọn ảnh khác</button>
+        </div>
+        <input type="file" id="file-input" accept="image/jpeg,image/png,image/jpg,image/webp">
+      </label>
+
+      <!-- Paywall -->
+      <div class="paywall-gate" id="paywall-gate">
+        <div class="paywall-eyebrow">紫微明寶 · Khí Sắc Luận</div>
+        <div class="paywall-title">Mở khóa luận khí sắc 6 phần</div>
+        <div class="paywall-desc">
+          Luận chi tiết Ấn Đường và 5 vùng Ngũ Nhạc theo Ma Y Thần Tướng —
+          dự báo vận khí 1–3 tháng tới, kèm lời khuyên dưỡng khí và cổ văn dẫn chứng.
+        </div>
+        <div class="paywall-features">
+          <div class="paywall-feature">Tổng quan khí sắc &amp; sắc chủ đạo</div>
+          <div class="paywall-feature">Ấn Đường — vận tổng 100 ngày</div>
+          <div class="paywall-feature">5 Ngũ Nhạc — từng lĩnh vực cụ thể</div>
+          <div class="paywall-feature">Dự báo 1–3 tháng tới</div>
+          <div class="paywall-feature">Lời khuyên dưỡng khí</div>
+          <div class="paywall-feature">Lưu vĩnh viễn trong tài khoản</div>
+        </div>
+        <div class="paywall-price">90 Credits</div>
+        <div class="paywall-price-note">Bằng $9 · Credits không hết hạn · Dùng cho mọi công cụ</div>
+        <button class="btn-paywall" id="btn-pay" onclick="handlePaywallClick()">
+          <span id="btn-pay-text">Mở Khóa (90 Credits)</span>
+          <span style="font-size:16px">→</span>
+        </button>
+        <div class="paywall-secure">
+          🔒 Credits không hết hạn · <a href="/topup.html">Nạp credits →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESULTS ============ -->
+<section class="results-section" id="results-section">
+  <div class="page">
+    <div class="results-head">
+      <div class="eyebrow">Kết Quả Luận</div>
+      <h2>Khí Sắc Luận</h2>
+      <div class="zh">氣 色 論</div>
+    </div>
+    <div id="results-body">
+      <div class="results-loading" id="results-loading">
+        <div class="big-spinner"></div>
+        <div class="loading-text">
+          Đang quan sát khí sắc từ ảnh của bạn — vui lòng chờ khoảng 30 giây...<br>
+          <span style="font-size:12px;color:var(--text-lt)">AI đang phân tích sắc trên Ấn Đường và 5 vùng Ngũ Nhạc.</span>
+        </div>
+      </div>
+      <article class="results-content" id="results-content" style="display:none"></article>
+      <div class="results-actions" id="results-actions" style="display:none">
+        <p>Khí sắc đổi theo ngày — nên xem lại 1–3 tháng để theo vận khí.</p>
+        <a href="/profile.html">Xem trong Tài Khoản →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="section alt">
+  <div class="page">
+    <div class="section-eyebrow">Câu hỏi thường gặp</div>
+    <h2 class="section-title">FAQ</h2>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        Khí sắc khác Diện Tướng thế nào?
+      </div>
+      <div class="faq-a">
+        Diện Tướng đọc <em>hình</em> (cấu trúc mặt cả đời), Khí Sắc đọc <em>sắc</em>
+        (màu và khí đổi theo ngày). Diện Tướng xem 1 lần cả đời đủ. Khí Sắc nên xem lại
+        định kỳ 1–3 tháng/lần để theo vận khí đang vận hành.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        Vì sao phải chụp ảnh mới, không dùng lại ảnh cũ?
+      </div>
+      <div class="faq-a">
+        Vì khí sắc đổi theo ngày. Cổ nhân có câu "bình đán quan khí" — xem khí lúc bình minh.
+        Ảnh cũ chỉ phản ánh khí sắc tại thời điểm chụp đó, không còn đúng với vận hiện tại.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        Nếu ảnh tôi chụp không đạt chuẩn thì sao?
+      </div>
+      <div class="faq-a">
+        AI sẽ <strong>nói thẳng ở đầu bài luận</strong> rằng ảnh có vấn đề gì (ánh sáng bất thường,
+        có filter, góc mặt lệch...) và luận thận trọng hơn — hoặc đề nghị bạn chụp lại.
+        Chúng tôi không cố gán sắc cưỡng ép khi ảnh không rõ. Vui lòng đọc kỹ hướng dẫn chụp
+        phía trên trước khi mở khoá để đảm bảo ảnh đúng chuẩn.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        Kết quả có chính xác tuyệt đối không?
+      </div>
+      <div class="faq-a">
+        Tướng học cổ là phương pháp tham khảo truyền thống, không phải khoa học.
+        Chúng tôi dùng Ma Y Thần Tướng làm chuẩn, AI quan sát và dẫn cổ pháp để luận.
+        Nếu khí sắc bình hoà, AI sẽ nói thẳng <em>"không có biến động rõ"</em> thay vì bịa —
+        vì cổ nhân coi bình hoà là bình thường, không phải xấu.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        Nên xem lại bao lâu một lần?
+      </div>
+      <div class="faq-a">
+        1–3 tháng một lần là hợp lý. Khí sắc đổi chậm với người bình thường, nhanh với người đang
+        vào đại vận mới hoặc sắp có biến cố lớn. Nếu thấy sắc khí đột ngột khác (da xỉn, trán ám,
+        mắt mệt) có thể xem lại sớm hơn.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        Dữ liệu ảnh của tôi có an toàn không?
+      </div>
+      <div class="faq-a">
+        Ảnh chỉ gửi lên máy chủ Anthropic (Claude AI) để phân tích, không chia sẻ với bên thứ 3.
+        Kết quả luận lưu trong tài khoản để xem lại. Bạn có thể yêu cầu xoá qua trang Liên Hệ.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DISCLAIMER ============ -->
+<div class="disclaimer-box">
+  <strong>Lưu ý:</strong> Khí sắc là tầng luận ngắn hạn của tướng học cổ, phản ánh vận khí 1–3 tháng.
+  Kết quả phụ thuộc chất lượng ảnh và điều kiện chụp. Khuyến nghị xem lại định kỳ 1–3 tháng.
+  Nội dung mang tính tham khảo văn hoá, không thay thế tư vấn y tế, tài chính, hay quyết định trọng đại.
+</div>
+
+<!-- ============ FOOTER + NAV INJECTION ============ -->
+<script src="/nav.js"></script>
+<script src="/footer.js"></script>
+
+<!-- ============ TOOL SCRIPT ============ -->
+<script>
+const PRICE_CREDITS = 90;
+const TOOL_TYPE = 'khi-sac';
+const READING_ACTION = 'khi-sac';
+
+let currentImageDataUrl = null;  // full dataURL for preview
+let currentImageBase64 = null;   // stripped base64 for API
+let currentMediaType = 'image/jpeg';
+let currentSlug = null;
+
+// ──────────────────────────────────────────────────────────
+// RESET
+// ──────────────────────────────────────────────────────────
+function resetTool(clearFile = true) {
+  currentImageDataUrl = null;
+  currentImageBase64 = null;
+  currentSlug = null;
+  if (clearFile) document.getElementById('file-input').value = '';
+  document.getElementById('upload-placeholder').style.display = 'block';
+  document.getElementById('upload-preview').style.display = 'none';
+  document.getElementById('upload-area').classList.remove('has-image');
+  document.getElementById('paywall-gate').classList.remove('show');
+  document.getElementById('results-section').classList.remove('show');
+  document.getElementById('results-loading').style.display = 'block';
+  document.getElementById('results-content').style.display = 'none';
+  document.getElementById('results-content').innerHTML = '';
+  document.getElementById('results-actions').style.display = 'none';
+  const btn = document.getElementById('btn-pay');
+  btn.disabled = false;
+  document.getElementById('btn-pay-text').textContent = `Mở Khóa (${PRICE_CREDITS} Credits)`;
+}
+
+// ──────────────────────────────────────────────────────────
+// IMAGE COMPRESSION
+// ──────────────────────────────────────────────────────────
+function compressImage(file, maxSize = 1400, quality = 0.88) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let { width, height } = img;
+        if (width > height && width > maxSize) {
+          height = Math.round(height * maxSize / width);
+          width = maxSize;
+        } else if (height > maxSize) {
+          width = Math.round(width * maxSize / height);
+          height = maxSize;
+        }
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        const dataUrl = canvas.toDataURL('image/jpeg', quality);
+        resolve({ dataUrl, width, height });
+      };
+      img.onerror = () => reject(new Error('Không đọc được ảnh'));
+      img.src = e.target.result;
+    };
+    reader.onerror = () => reject(new Error('Không đọc được file'));
+    reader.readAsDataURL(file);
+  });
+}
+
+// ──────────────────────────────────────────────────────────
+// HANDLE FILE
+// ──────────────────────────────────────────────────────────
+async function handleFile(file) {
+  if (!file) return;
+  if (!file.type.startsWith('image/')) {
+    alert('Vui lòng chọn file ảnh (JPG hoặc PNG).');
+    return;
+  }
+  if (file.size > 10 * 1024 * 1024) {
+    alert('Ảnh quá lớn (tối đa 10MB).');
+    return;
+  }
+
+  try {
+    resetTool(false);
+    const { dataUrl } = await compressImage(file);
+    currentImageDataUrl = dataUrl;
+    currentMediaType = 'image/jpeg';
+    currentImageBase64 = dataUrl.replace(/^data:image\/\w+;base64,/, '');
+
+    // Show preview
+    document.getElementById('preview-img').src = dataUrl;
+    document.getElementById('upload-placeholder').style.display = 'none';
+    document.getElementById('upload-preview').style.display = 'block';
+    document.getElementById('upload-area').classList.add('has-image');
+
+    // Generate slug (unique per reading)
+    const ts = Date.now().toString(36);
+    const rnd = Math.random().toString(36).slice(2, 6);
+    currentSlug = `khi-sac-${ts}-${rnd}`;
+
+    // Show paywall immediately
+    document.getElementById('paywall-gate').classList.add('show');
+  } catch (err) {
+    alert('Lỗi xử lý ảnh: ' + err.message);
+    resetTool(true);
+  }
+}
+
+// ──────────────────────────────────────────────────────────
+// AUTH + CREDITS HELPERS (giống pattern index.html)
+// ──────────────────────────────────────────────────────────
+async function getCreditBalance() {
+  try {
+    const userId = window.Auth?.getUser()?.id || '';
+    if (!userId) return 0;
+    const r = await fetch('/api/payment?action=balance&userId=' + encodeURIComponent(userId));
+    return (await r.json()).balance ?? 0;
+  } catch (e) { return 0; }
+}
+
+function showAuthModalThen(cb) {
+  if (typeof window.showAuthModal === 'function') {
+    window.showAuthModal(cb);
+  } else {
+    alert('Vui lòng đăng nhập để tiếp tục.');
+    setTimeout(() => { window.location.href = '/?auth=login'; }, 500);
+  }
+}
+
+// ──────────────────────────────────────────────────────────
+// PAYWALL CLICK
+// ──────────────────────────────────────────────────────────
+async function handlePaywallClick() {
+  if (!currentImageBase64 || !currentSlug) {
+    alert('Vui lòng chọn ảnh trước.');
+    return;
+  }
+  if (!window.Auth?.isLoggedIn()) {
+    showAuthModalThen(async () => { await handlePaywallClick(); });
+    return;
+  }
+  const balance = await getCreditBalance();
+  if (balance < PRICE_CREDITS) {
+    renderInsufficientCredits(balance);
+    return;
+  }
+  await deductAndRun();
+}
+
+function renderInsufficientCredits(balance) {
+  const gate = document.getElementById('paywall-gate');
+  const need = PRICE_CREDITS - balance;
+  gate.innerHTML = `
+    <div class="paywall-eyebrow">紫微明寶 · Khí Sắc Luận</div>
+    <div class="paywall-title">Không đủ credits</div>
+    <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:14px 18px;margin:0 auto 22px;font-size:13px;color:#856404;max-width:420px;position:relative">
+      Số dư: <strong>${balance} credits</strong> — cần thêm <strong>${need} credits</strong>
+    </div>
+    <div class="paywall-price">${PRICE_CREDITS} Credits</div>
+    <div class="paywall-price-note">Bằng $${(PRICE_CREDITS/10).toFixed(0)} · Credits không hết hạn</div>
+    <a href="/topup.html" class="btn-paywall" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none">
+      <span>💳 Nạp Credits</span><span style="font-size:16px">→</span>
+    </a>
+    <div class="paywall-secure">🔒 Credits dùng được cho mọi công cụ</div>
+  `;
+}
+
+// ──────────────────────────────────────────────────────────
+// DEDUCT + RUN READING
+// ──────────────────────────────────────────────────────────
+async function deductAndRun() {
+  const token = window.Auth?.getSession()?.access_token;
+  if (!token) {
+    showAuthModalThen(async () => { await deductAndRun(); });
+    return;
+  }
+
+  const btn = document.getElementById('btn-pay');
+  const btnText = document.getElementById('btn-pay-text');
+  btn.disabled = true;
+  btnText.innerHTML = '<span class="spinner-sm" style="border-top-color:#c9a84c;border-color:rgba(201,168,76,0.3)"></span>Đang xử lý...';
+
+  try {
+    const res = await fetch('/api/payment?action=deduct', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({
+        amount: PRICE_CREDITS,
+        toolType: TOOL_TYPE,
+        slug: currentSlug,
+        description: 'Xem Khí Sắc — luận Ấn Đường + Ngũ Nhạc'
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      window.refreshNavCredits && window.refreshNavCredits();
+      await runReading();
+    } else if (data.insufficientBalance) {
+      renderInsufficientCredits(data.balance ?? 0);
+    } else {
+      btn.disabled = false;
+      btnText.textContent = `Mở Khóa (${PRICE_CREDITS} Credits)`;
+      alert('Lỗi: ' + (data.error || 'Vui lòng thử lại.'));
+    }
+  } catch (e) {
+    btn.disabled = false;
+    btnText.textContent = `Mở Khóa (${PRICE_CREDITS} Credits)`;
+    alert('Lỗi kết nối: ' + e.message);
+  }
+}
+
+// ──────────────────────────────────────────────────────────
+// STREAM READING
+// ──────────────────────────────────────────────────────────
+async function runReading() {
+  // Scroll tool to results
+  document.getElementById('paywall-gate').classList.remove('show');
+  const rs = document.getElementById('results-section');
+  rs.classList.add('show');
+  document.getElementById('results-loading').style.display = 'block';
+  document.getElementById('results-content').style.display = 'none';
+  document.getElementById('results-content').innerHTML = '';
+  document.getElementById('results-actions').style.display = 'none';
+  rs.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  try {
+    const res = await fetch('/api/tuong-mat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: READING_ACTION,
+        image: currentImageBase64,
+        mediaType: currentMediaType
+      })
+    });
+
+    if (!res.ok) {
+      const e = await res.json().catch(() => ({}));
+      throw new Error(e.error || 'Lỗi kết nối khi luận.');
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buf = '';
+    let fullText = '';
+    let firstChunk = true;
+    const contentEl = document.getElementById('results-content');
+    const loadingEl = document.getElementById('results-loading');
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
+      const lines = buf.split('\n');
+      buf = lines.pop() || '';
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const raw = line.slice(6).trim();
+        if (!raw || raw === '[DONE]') continue;
+        try {
+          const json = JSON.parse(raw);
+          if (json.t) {
+            fullText += json.t;
+            if (firstChunk) {
+              loadingEl.style.display = 'none';
+              contentEl.style.display = 'block';
+              firstChunk = false;
+            }
+            contentEl.innerHTML = renderMarkdown(fullText);
+          }
+          if (json.err) {
+            throw new Error(json.err);
+          }
+        } catch (_) {}
+      }
+    }
+
+    document.getElementById('results-actions').style.display = 'block';
+  } catch (e) {
+    document.getElementById('results-loading').style.display = 'none';
+    document.getElementById('results-content').style.display = 'block';
+    document.getElementById('results-content').innerHTML = `
+      <div style="background:#fbeceb;border-left:3px solid var(--red);padding:18px 22px;border-radius:0 4px 4px 0">
+        <strong style="color:var(--red);display:block;margin-bottom:6px">Lỗi luận khí sắc</strong>
+        <div style="font-size:14px;color:var(--text-mid)">${e.message}<br><br>
+          Credits đã được ghi nhận trong tài khoản. Nếu cần hỗ trợ, vui lòng
+          <a href="/contact.html" style="color:var(--blue)">liên hệ</a>.
+        </div>
+      </div>
+    `;
+  }
+}
+
+// ──────────────────────────────────────────────────────────
+// SIMPLE MARKDOWN → HTML (đủ cho output của AI)
+// ──────────────────────────────────────────────────────────
+function renderMarkdown(md) {
+  // Escape HTML
+  const escape = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  // Split into blocks by blank lines
+  let text = md;
+
+  // Code fences (just in case)
+  text = text.replace(/```([\s\S]*?)```/g, (_, code) => `<pre style="background:#f4f4f4;padding:12px;border-radius:4px;overflow-x:auto"><code>${escape(code)}</code></pre>`);
+
+  // Headings
+  text = text.replace(/^##\s+(.+)$/gm, (_, t) => `<h2>${escape(t)}</h2>`);
+  text = text.replace(/^###\s+(.+)$/gm, (_, t) => `<h3>${escape(t)}</h3>`);
+
+  // Blockquotes
+  text = text.replace(/^>\s+(.+)$/gm, (_, t) => `<blockquote>${escape(t)}</blockquote>`);
+
+  // Bold + italic
+  text = text.replace(/\*\*([^*]+)\*\*/g, (_, t) => `<strong>${escape(t)}</strong>`);
+  text = text.replace(/\*([^*]+)\*/g, (_, t) => `<em>${escape(t)}</em>`);
+
+  // Line breaks → paragraphs
+  const paragraphs = text.split(/\n{2,}/).map(p => {
+    p = p.trim();
+    if (!p) return '';
+    if (p.startsWith('<h2>') || p.startsWith('<h3>') || p.startsWith('<blockquote>') || p.startsWith('<pre>')) return p;
+    // Lists
+    if (/^[-*]\s/.test(p)) {
+      const items = p.split(/\n/).map(l => l.replace(/^[-*]\s+/, '').trim()).filter(Boolean);
+      return '<ul>' + items.map(i => `<li>${i}</li>`).join('') + '</ul>';
+    }
+    return `<p>${p.replace(/\n/g, '<br>')}</p>`;
+  });
+
+  return paragraphs.join('\n');
+}
+
+// ──────────────────────────────────────────────────────────
+// INIT
+// ──────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const fileInput = document.getElementById('file-input');
+  const uploadArea = document.getElementById('upload-area');
+
+  fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+
+  uploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadArea.classList.add('dragover');
+  });
+  uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+  uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove('dragover');
+    const f = e.dataTransfer.files?.[0];
+    if (f) handleFile(f);
+  });
+});
+</script>
+
+</body>
+</html>
