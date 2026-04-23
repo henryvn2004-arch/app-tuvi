@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Xem Tuổi Sinh Con – Năm Nào Hợp – Tử Vi Minh Bảo</title>
+<meta name="description" content="Tra cứu miễn phí: năm nào hợp để sinh con theo địa chi bố mẹ. Tính điểm lục hợp, tam hợp, lục xung cho 15 năm tới.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<style>
+.form-group{margin-bottom:18px}
+.form-label{display:block;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:6px}
+.form-input,.form-select{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;color:var(--text);background:var(--bg);transition:border-color .15s}
+.form-input:focus,.form-select:focus{outline:none;border-color:#c9a84c}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-hint{font-size:11px;color:var(--text-lt);margin-top:4px}
+
+/* Results table */
+.year-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
+.year-table th{background:var(--navy);color:#fff;padding:8px 10px;font-size:12px;font-weight:600;text-align:left}
+.year-table td{padding:9px 10px;border-bottom:1px solid var(--border-lt);vertical-align:middle}
+.year-table tr:hover td{background:var(--bg-soft)}
+.year-table tr.top-year td{background:#fdf8f0}
+.score-bar{display:flex;gap:2px;align-items:center}
+.score-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.dot-on-great{background:#27ae60}
+.dot-on-good{background:#c9a84c}
+.dot-on-ok{background:#ccc}
+.dot-on-bad{background:#c0392b}
+.label-great{color:#1E6B3C;font-weight:700;font-size:12px}
+.label-good{color:#9A7B3A;font-weight:600;font-size:12px}
+.label-ok{color:#777;font-size:12px}
+.label-bad{color:#c0392b;font-weight:600;font-size:12px}
+.year-num{font-weight:700;color:var(--navy)}
+.can-chi-cell{color:var(--text-mid);font-size:12px}
+.hanh-badge{display:inline-block;padding:1px 8px;border-radius:20px;font-size:11px;font-weight:700;color:#fff}
+.hb-Kim{background:#a0937d}.hb-Mộc{background:#27ae60}
+.hb-Hỏa{background:#c0392b}.hb-Thổ{background:#e67e22}
+.hb-Thủy{background:#2980b9}
+.reason-cell{font-size:12px;color:var(--text-mid);line-height:1.4}
+.note-box{display:flex;gap:10px;padding:12px 16px;background:#e8f0fe;border-radius:8px;border-left:3px solid #1455A4;font-size:12px;color:#1455A4;margin-bottom:20px;line-height:1.6}
+.parents-preview{background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:8px;padding:14px 16px;margin-bottom:20px;display:none}
+.parents-preview.show{display:block}
+.pp-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;font-size:13px}
+.pp-label{color:var(--text-lt);width:50px;flex-shrink:0}
+.free-badge{display:inline-flex;align-items:center;gap:6px;background:#e8f7ee;border:1px solid #b7e4c7;color:#1E6B3C;font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;margin-bottom:16px}
+@media(max-width:600px){.form-row{grid-template-columns:1fr}.year-table th:nth-child(5),.year-table td:nth-child(5){display:none}}
+</style>
+</head>
+<body>
+<script src="/nav.js"></script>
+
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Miễn Phí · Địa Chi Học</div>
+    <h1>Xem Tuổi Sinh Con —<br><em>Năm Nào Hợp</em></h1>
+    <p>Tính điểm lục hợp, tam hợp, lục xung giữa địa chi năm sinh con và bố mẹ — cho bức tranh 15 năm tới.</p>
+  </div>
+</div>
+
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Cơ Sở Cổ Pháp</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">Địa Chi Tương Hợp —<br>Cha Mẹ Và Con Cái</h2>
+          <p class="xt-body">Trong cổ pháp, địa chi năm sinh con xét với địa chi bố mẹ để thấy mối tương quan: <strong>Lục Hợp</strong> và <strong>Tam Hợp</strong> là thuận — con cái dễ nuôi, cha mẹ nhẹ nhàng; <strong>Lục Xung</strong> và <strong>Tam Hình</strong> là nghịch — có thể vất vả hơn trong hành trình nuôi dạy.</p>
+          <p class="xt-body">Đây là lăng kính tham khảo theo quan niệm truyền thống — không phải chân lý tuyệt đối, và không ảnh hưởng đến tình yêu thương của cha mẹ với con cái.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">Thang Điểm Đánh Giá</div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="background:#27ae60">★★★</span><span class="xt-factor-label">Rất Thuận</span><span class="xt-factor-desc">Lục Hợp với cả bố lẫn mẹ, hoặc Lục Hợp 1 + Tam Hợp 1</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="background:#c9a84c">★★</span><span class="xt-factor-label">Thuận</span><span class="xt-factor-desc">Tam Hợp với bố/mẹ, hoặc trung tính với cả hai</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="background:#e67e22">★</span><span class="xt-factor-label">Bình Thường</span><span class="xt-factor-desc">Không có tương quan đặc biệt</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num" style="background:#c0392b">✗</span><span class="xt-factor-label">Cần Lưu Ý</span><span class="xt-factor-desc">Lục Xung hoặc Tam Hình với bố hoặc mẹ</span></div>
+          <div class="xt-note">
+            <span class="xt-note-icon">💡</span>
+            <div>Miễn phí — tính hoàn toàn theo địa chi, không cần AI.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section" id="inputSection">
+    <div class="section-eyebrow">Năm Sinh Bố Mẹ</div>
+    <span class="free-badge">✓ Miễn Phí</span>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Năm sinh bố (dương lịch)</label>
+        <input class="form-input" id="namSinhBo" type="number" placeholder="VD: 1988" min="1930" max="2005" oninput="onFormChange()">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Năm sinh mẹ (dương lịch)</label>
+        <input class="form-input" id="namSinhMe" type="number" placeholder="VD: 1992" min="1930" max="2005" oninput="onFormChange()">
+      </div>
+    </div>
+
+    <div class="parents-preview" id="parentsPreview">
+      <div class="pp-row">
+        <span class="pp-label">Bố:</span>
+        <strong id="canChiBo" style="color:var(--navy)"></strong>
+        <span style="font-size:12px;color:var(--text-lt)" id="chiBoTen"></span>
+      </div>
+      <div class="pp-row">
+        <span class="pp-label">Mẹ:</span>
+        <strong id="canChiMe" style="color:var(--navy)"></strong>
+        <span style="font-size:12px;color:var(--text-lt)" id="chiMeTen"></span>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:8px">
+      <button class="btn-submit" id="calcBtn" onclick="calculate()" disabled style="padding:14px 40px;font-size:15px">
+        🔍 Xem 15 Năm Tới
+      </button>
+    </div>
+  </div>
+
+  <div class="result-section" id="result-section">
+    <div class="res-block">
+      <div class="res-block-header">
+        <span class="res-block-title" id="resultTitle">Kết Quả 15 Năm</span>
+        <span style="font-size:11px;color:var(--text-lt)">Địa chi · Lục Hợp · Tam Hợp · Lục Xung</span>
+      </div>
+      <div class="res-block-body" style="overflow-x:auto">
+        <div id="topRecommend" style="margin-bottom:16px"></div>
+        <table class="year-table" id="yearTable">
+          <thead>
+            <tr>
+              <th>Năm</th>
+              <th>Can Chi</th>
+              <th>Hành</th>
+              <th>Đánh Giá</th>
+              <th>Lý Do</th>
+            </tr>
+          </thead>
+          <tbody id="yearTableBody"></tbody>
+        </table>
+        <div style="margin-top:16px;padding:12px;background:var(--bg-soft);border-radius:8px;font-size:12px;color:var(--text-lt);line-height:1.7">
+          <strong style="color:var(--text-mid)">Ghi chú:</strong> Kết quả dựa trên địa chi năm sinh (lịch dương). Nếu con sinh vào tháng 1–2 dương lịch, địa chi thực tế tính theo năm âm lịch có thể khác 1 năm — cần xem xét kỹ hơn.
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:8px">
+      <button class="btn-secondary" onclick="reset()" style="padding:10px 24px">Tính Lại</button>
+    </div>
+  </div>
+
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Muốn Phân Tích Sâu Hơn?</div>
+    <div class="tool-cta-title">Đặt Tên Con Theo Ngũ Hành</div>
+    <div class="tool-cta-desc">Đã chọn được năm sinh phù hợp — bước tiếp theo là đặt tên con hài hòa với ngũ hành bố mẹ và năm sinh.</div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
+      <a class="tool-cta-btn" href="/dat-ten-con.html" style="background:var(--navy);border-color:var(--gold)">Đặt Tên Con →</a>
+      <a class="tool-cta-btn" href="/chon-ngay-tot.html" style="background:transparent;color:var(--navy);border:2px solid var(--navy)">Chọn Ngày Sinh Tốt →</a>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
+
+<script>
+const _CAN = ['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
+const _CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+const _NA = ['Kim','Hỏa','Mộc','Thổ','Kim','Hỏa','Thủy','Thổ','Kim','Mộc','Thủy','Thổ','Hỏa','Mộc','Thủy','Kim','Hỏa','Mộc','Thổ','Kim','Hỏa','Thủy','Thổ','Kim','Mộc','Thủy','Thổ','Hỏa','Mộc','Thủy'];
+const _NA_TEN = ['Hải Trung Kim','Lò Trung Hỏa','Đại Lâm Mộc','Lộ Bàng Thổ','Kiếm Phong Kim','Sơn Đầu Hỏa','Giản Hạ Thủy','Thành Đầu Thổ','Bạch Lạp Kim','Dương Liễu Mộc','Tuyền Trung Thủy','Ốc Thượng Thổ','Tích Lịch Hỏa','Tùng Bách Mộc','Trường Lưu Thủy','Sa Trung Kim','Sơn Hạ Hỏa','Bình Địa Mộc','Bích Thượng Thổ','Kim Bạc Kim','Phú Đăng Hỏa','Thiên Hà Thủy','Đại Dịch Thổ','Thoa Xuyến Kim','Tang Đố Mộc','Đại Khê Thủy','Sa Trung Thổ','Thiên Thượng Hỏa','Thạch Lựu Mộc','Đại Hải Thủy'];
+
+// Lục Hợp pairs [a,b] where a<b
+const _LUC_HOP = [[0,1],[2,11],[3,10],[4,9],[5,8],[6,7]];
+// Lục Xung pairs
+const _LUC_XUNG = [[0,6],[1,7],[2,8],[3,9],[4,10],[5,11]];
+// Tam Hợp groups
+const _TAM_HOP = [[8,0,4],[2,6,10],[5,9,1],[11,3,7]];
+// Tam Hình (3-way penalty)
+const _TAM_HINH = [[2,11,8],[0,3,6],[1,4,7]];
+
+function _getInfo(year) {
+  if (!year || isNaN(year)) return null;
+  const pos = ((year-1924)%60+60)%60;
+  return {
+    canChi: _CAN[pos%10]+' '+_CHI[pos%12],
+    can: _CAN[pos%10], chi: _CHI[pos%12],
+    chiIdx: pos%12,
+    hanh: _NA[Math.floor(pos/2)],
+    napAm: _NA_TEN[Math.floor(pos/2)]
+  };
+}
+
+function _isLucHop(a, b) {
+  return _LUC_HOP.some(p => (p[0]===a&&p[1]===b)||(p[0]===b&&p[1]===a));
+}
+function _isLucXung(a, b) {
+  return _LUC_XUNG.some(p => (p[0]===a&&p[1]===b)||(p[0]===b&&p[1]===a));
+}
+function _isTamHop(a, b) {
+  return _TAM_HOP.some(g => g.includes(a) && g.includes(b));
+}
+function _isTamHinh(a, b) {
+  return _TAM_HINH.some(g => g.includes(a) && g.includes(b));
+}
+
+function _scoreYear(chiIdx, chiBoIdx, chiMeIdx) {
+  const reasons = [];
+  let score = 0;
+
+  // Bố
+  if (_isLucHop(chiIdx, chiBoIdx))       { score += 3; reasons.push('Lục Hợp với bố ✓'); }
+  else if (_isTamHop(chiIdx, chiBoIdx))   { score += 2; reasons.push('Tam Hợp với bố'); }
+  else if (_isLucXung(chiIdx, chiBoIdx))  { score -= 3; reasons.push('Lục Xung với bố ✗'); }
+  else if (_isTamHinh(chiIdx, chiBoIdx))  { score -= 2; reasons.push('Tam Hình với bố'); }
+
+  // Mẹ
+  if (_isLucHop(chiIdx, chiMeIdx))       { score += 3; reasons.push('Lục Hợp với mẹ ✓'); }
+  else if (_isTamHop(chiIdx, chiMeIdx))   { score += 2; reasons.push('Tam Hợp với mẹ'); }
+  else if (_isLucXung(chiIdx, chiMeIdx))  { score -= 3; reasons.push('Lục Xung với mẹ ✗'); }
+  else if (_isTamHinh(chiIdx, chiMeIdx))  { score -= 2; reasons.push('Tam Hình với mẹ'); }
+
+  return { score, reasons };
+}
+
+function _ratingLabel(score) {
+  if (score >= 5) return { label: 'Rất Thuận ★★★', cls: 'label-great', dots: 3, dotCls: 'dot-on-great' };
+  if (score >= 2) return { label: 'Thuận ★★',       cls: 'label-good',  dots: 2, dotCls: 'dot-on-good' };
+  if (score >= 0) return { label: 'Bình Thường ★',  cls: 'label-ok',    dots: 1, dotCls: 'dot-on-ok' };
+  return           { label: 'Cần Lưu Ý',            cls: 'label-bad',   dots: 0, dotCls: 'dot-on-bad' };
+}
+
+function onFormChange() {
+  const bo = parseInt(document.getElementById('namSinhBo').value);
+  const me = parseInt(document.getElementById('namSinhMe').value);
+  const iB = _getInfo(bo), iM = _getInfo(me);
+
+  const preview = document.getElementById('parentsPreview');
+  if (iB || iM) {
+    preview.classList.add('show');
+    if (iB) { document.getElementById('canChiBo').textContent=iB.canChi; document.getElementById('chiBoTen').textContent='('+iB.chi+' — '+iB.napAm+')'; }
+    if (iM) { document.getElementById('canChiMe').textContent=iM.canChi; document.getElementById('chiMeTen').textContent='('+iM.chi+' — '+iM.napAm+')'; }
+  } else { preview.classList.remove('show'); }
+
+  document.getElementById('calcBtn').disabled = !(iB && iM);
+}
+
+function calculate() {
+  const bo = parseInt(document.getElementById('namSinhBo').value);
+  const me = parseInt(document.getElementById('namSinhMe').value);
+  const iB = _getInfo(bo), iM = _getInfo(me);
+  if (!iB || !iM) return;
+
+  const currentYear = 2026;
+  const rows = [];
+
+  for (let y = currentYear; y < currentYear + 15; y++) {
+    const info = _getInfo(y);
+    const { score, reasons } = _scoreYear(info.chiIdx, iB.chiIdx, iM.chiIdx);
+    const rating = _ratingLabel(score);
+    rows.push({ year: y, info, score, reasons, rating });
+  }
+
+  // Build table
+  const tbody = document.getElementById('yearTableBody');
+  tbody.innerHTML = rows.map(r => {
+    const isTop = r.score >= 5;
+    const dotsHtml = [1,2,3].map(i =>
+      `<span class="score-dot ${i <= r.rating.dots ? r.rating.dotCls : 'dot-on-ok'}" style="${i > r.rating.dots ? 'background:#e0e0e0' : ''}"></span>`
+    ).join('');
+    return `<tr class="${isTop?'top-year':''}">
+      <td class="year-num">${r.year}${isTop?'<span style="color:#c9a84c;margin-left:4px">★</span>':''}</td>
+      <td class="can-chi-cell">${r.info.canChi}</td>
+      <td><span class="hanh-badge hb-${r.info.hanh}">${r.info.hanh}</span></td>
+      <td><div class="score-bar">${dotsHtml}<span class="${r.rating.cls}" style="margin-left:6px">${r.rating.label}</span></div></td>
+      <td class="reason-cell">${r.reasons.length ? r.reasons.join(' · ') : 'Trung tính'}</td>
+    </tr>`;
+  }).join('');
+
+  // Top recommendations
+  const top3 = [...rows].sort((a,b)=>b.score-a.score).slice(0,3);
+  document.getElementById('topRecommend').innerHTML = `
+    <div style="background:#f0faf4;border:1px solid #b7e4c7;border-radius:8px;padding:12px 16px;margin-bottom:4px">
+      <div style="font-size:12px;font-weight:600;color:#1E6B3C;margin-bottom:8px">🌟 Năm Thuận Nhất (Top 3)</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px">
+        ${top3.map((r,i)=>`<span style="background:#fff;border:1px solid #b7e4c7;border-radius:6px;padding:4px 12px;font-size:13px;font-weight:700;color:var(--navy)">${i+1}. ${r.year} — ${r.info.canChi} (${r.info.hanh})</span>`).join('')}
+      </div>
+    </div>`;
+
+  document.getElementById('resultTitle').textContent = 'Kết Quả 2026 – ' + (currentYear+14);
+  document.getElementById('result-section').classList.add('active');
+  document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function reset(){
+  document.getElementById('result-section').classList.remove('active');
+  document.getElementById('inputSection').scrollIntoView({behavior:'smooth',block:'start'});
+}
+</script>
+</body>
+</html>

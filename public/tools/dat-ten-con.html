@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Đặt Tên Con Theo Ngũ Hành – Tử Vi Minh Bảo</title>
+<meta name="description" content="Gợi ý tên con phù hợp ngũ hành bố mẹ, nạp âm năm sinh theo Lục Thập Hoa Giáp. AI phân tích và đề xuất 12 tên kèm chữ Hán, ý nghĩa.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<style>
+.form-group{margin-bottom:18px}
+.form-label{display:block;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:6px}
+.form-input,.form-select{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;color:var(--text);background:var(--bg);transition:border-color .15s}
+.form-input:focus,.form-select:focus{outline:none;border-color:#c9a84c}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-hint{font-size:11px;color:var(--text-lt);margin-top:4px}
+.ngu-hanh-preview{background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:8px;padding:14px 16px;margin-top:16px;display:none}
+.ngu-hanh-preview.show{display:block}
+.nh-title{font-size:12px;font-weight:600;color:var(--text-mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.nh-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;font-size:13px}
+.nh-label{color:var(--text-lt);width:60px;flex-shrink:0}
+.nh-badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:700;color:#fff}
+.nh-Kim{background:#a0937d}.nh-Moc,.nh-Mộc{background:#27ae60}
+.nh-Hoa,.nh-Hỏa{background:#c0392b}.nh-Tho,.nh-Thổ{background:#e67e22}
+.nh-Thuy,.nh-Thủy{background:#2980b9}
+.nh-can-chi{color:var(--text-mid);font-size:12px}
+.md-result{font-size:14px;line-height:1.85;color:var(--text-mid)}
+.md-result h2{font-size:16px;font-weight:700;color:var(--navy);margin:20px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border-lt)}
+.md-result h3{font-size:14px;font-weight:700;color:var(--navy);margin:14px 0 6px}
+.md-result strong{color:var(--navy);font-weight:700}
+.md-result em{color:#9A7B3A}
+.md-result ul{padding-left:20px;margin:8px 0}
+.md-result li{margin:4px 0}
+.md-result p{margin:0 0 10px}
+.md-result blockquote{border-left:3px solid #c9a84c;padding:8px 16px;margin:12px 0;background:#fdf8f0;border-radius:0 6px 6px 0;color:#9A7B3A;font-style:italic}
+.ai-loading{display:flex;flex-direction:column;align-items:center;gap:16px;padding:40px 0}
+.ai-loading-icon{font-size:48px;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.95)}}
+.ai-loading-text{font-size:14px;color:var(--text-lt);text-align:center}
+.note-box{display:flex;gap:10px;padding:12px 16px;background:#e8f0fe;border-radius:8px;border-left:3px solid #1455A4;font-size:12px;color:#1455A4;margin-bottom:20px;line-height:1.6}
+@media(max-width:600px){.form-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<script src="/nav.js"></script>
+
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Đặt Tên · Ngũ Hành Học</div>
+    <h1>Đặt Tên Con<br><em>Theo Ngũ Hành</em></h1>
+    <p>AI gợi ý 12 tên phù hợp ngũ hành nạp âm bố mẹ và năm sinh con — kèm chữ Hán, ý nghĩa và lý do cụ thể.</p>
+  </div>
+</div>
+
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Cơ Sở Luận Tên</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">Tên Phù Hợp Ngũ Hành —<br>Cổ Pháp Lục Thập Hoa Giáp</h2>
+          <p class="xt-body">Tên con không chỉ là ngôn từ — mỗi chữ Hán mang một hành nhất định. Khi tên con hài hòa với ngũ hành nạp âm của bố, mẹ và bản thân, tạo nên sự cân bằng sinh khắc trong gia đình.</p>
+          <p class="xt-body">Công cụ này dựa trên <strong>Lục Thập Hoa Giáp</strong> (lục pháp nạp âm ngũ hành) và từ điển Hán Việt — không dùng hệ thống "81 số nét cát hung" vốn là sáng tạo của người Nhật thế kỷ 20, không có cơ sở cổ pháp Trung Hoa.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">3 Cơ Sở Luận Tên</div>
+          <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">Nạp Âm Ngũ Hành</span><span class="xt-factor-desc">Lục Thập Hoa Giáp — hành của bố, mẹ, con → xác định hành cần bổ trợ</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">②</span><span class="xt-factor-num">②</span><span class="xt-factor-label">Ý Nghĩa Chữ Hán</span><span class="xt-factor-desc">Từ điển Hán Việt chuẩn — chọn chữ có nghĩa tốt, phù hợp nguyện vọng gia đình</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">③</span><span class="xt-factor-label">Âm Hán Việt Đẹp</span><span class="xt-factor-desc">Phát âm tự nhiên, thanh tao trong tiếng Việt — dễ đọc, dễ nhớ</span></div>
+          <div class="xt-note">
+            <span class="xt-note-icon">📌</span>
+            <div>Số nét Khang Hy nếu có là thông tin tham khảo thuần túy — không luận cát hung từ số nét.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section" id="inputSection">
+    <div class="section-eyebrow">Thông Tin Gia Đình</div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Họ con (họ + tên đệm nếu có)</label>
+        <input class="form-input" id="ho" type="text" placeholder="VD: Nguyễn Minh" maxlength="30" oninput="onFormChange()">
+        <div class="form-hint">AI sẽ ghép tên vào sau họ này</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Giới tính</label>
+        <select class="form-select" id="gioiTinh" onchange="onFormChange()">
+          <option value="">— Chọn —</option>
+          <option value="Nam">Nam</option>
+          <option value="Nữ">Nữ</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Năm sinh con (dương lịch)</label>
+        <input class="form-input" id="namSinhCon" type="number" placeholder="VD: 2025" min="2024" max="2040" oninput="onFormChange()">
+      </div>
+      <div class="form-group" style="display:flex;align-items:flex-end">
+        <div style="width:100%">
+          <label class="form-label">Năm sinh bố (dương lịch)</label>
+          <input class="form-input" id="namSinhBo" type="number" placeholder="VD: 1990" min="1930" max="2010" oninput="onFormChange()">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Năm sinh mẹ (dương lịch)</label>
+        <input class="form-input" id="namSinhMe" type="number" placeholder="VD: 1993" min="1930" max="2010" oninput="onFormChange()">
+      </div>
+      <div></div>
+    </div>
+
+    <div class="ngu-hanh-preview" id="nhPreview">
+      <div class="nh-title">Ngũ Hành Gia Đình</div>
+      <div class="nh-row"><span class="nh-label">Con:</span><span class="nh-badge" id="nhCon">—</span><span class="nh-can-chi" id="ccCon"></span></div>
+      <div class="nh-row"><span class="nh-label">Bố:</span><span class="nh-badge" id="nhBo">—</span><span class="nh-can-chi" id="ccBo"></span></div>
+      <div class="nh-row"><span class="nh-label">Mẹ:</span><span class="nh-badge" id="nhMe">—</span><span class="nh-can-chi" id="ccMe"></span></div>
+    </div>
+
+    <div class="note-box" style="margin-top:20px">
+      <span>💡</span>
+      <div>Kết quả là <strong>gợi ý tham khảo</strong> về ngũ hành và ngôn ngữ — không phải bảo đảm vận mệnh. Quyết định cuối cùng thuộc về gia đình bạn.</div>
+    </div>
+
+    <div style="text-align:center;margin-top:8px">
+      <button class="btn-submit" id="analyzeBtn" onclick="analyze()" disabled style="padding:14px 40px;font-size:15px">
+        ✨ Gợi Ý Tên Con
+      </button>
+    </div>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+
+  <div class="result-section" id="result-section">
+    <div class="res-block">
+      <div class="res-block-header">
+        <span class="res-block-title">12 Tên Gợi Ý Theo Ngũ Hành</span>
+        <span style="font-size:11px;color:var(--text-lt)">AI · Lục Thập Hoa Giáp · Hán Việt học</span>
+      </div>
+      <div class="res-block-body">
+        <div id="aiResult" class="md-result"></div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:8px">
+      <button class="btn-secondary" onclick="reset()" style="padding:10px 24px">Đặt Tên Khác</button>
+    </div>
+  </div>
+
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Tìm Hiểu Thêm</div>
+    <div class="tool-cta-title">Kết Hợp Với Lá Số Tử Vi</div>
+    <div class="tool-cta-desc">Tên con hợp ngũ hành là bước đầu. Lá số Tử Vi phân tích vận trình từng giai đoạn — hai phương pháp cổ đại bổ trợ nhau cho bức tranh toàn diện.</div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
+      <a class="tool-cta-btn" href="/xem-tuoi-sinh-con.html" style="background:var(--navy);border-color:var(--gold)">Xem Tuổi Sinh Con →</a>
+      <a class="tool-cta-btn" href="/" style="background:transparent;color:var(--navy);border:2px solid var(--navy)">Luận Giải Lá Số →</a>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
+
+<script>
+// ── Can/Chi / Nạp Âm ─────────────────────────────────────────
+const _CAN = ['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
+const _CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+// Nạp âm theo chỉ số cặp trong lục thập hoa giáp (0–29)
+const _NA = ['Kim','Hỏa','Mộc','Thổ','Kim','Hỏa','Thủy','Thổ','Kim','Mộc','Thủy','Thổ','Hỏa','Mộc','Thủy','Kim','Hỏa','Mộc','Thổ','Kim','Hỏa','Thủy','Thổ','Kim','Mộc','Thủy','Thổ','Hỏa','Mộc','Thủy'];
+const _NA_TEN = ['Hải Trung Kim','Lò Trung Hỏa','Đại Lâm Mộc','Lộ Bàng Thổ','Kiếm Phong Kim','Sơn Đầu Hỏa','Giản Hạ Thủy','Thành Đầu Thổ','Bạch Lạp Kim','Dương Liễu Mộc','Tuyền Trung Thủy','Ốc Thượng Thổ','Tích Lịch Hỏa','Tùng Bách Mộc','Trường Lưu Thủy','Sa Trung Kim','Sơn Hạ Hỏa','Bình Địa Mộc','Bích Thượng Thổ','Kim Bạc Kim','Phú Đăng Hỏa','Thiên Hà Thủy','Đại Dịch Thổ','Thoa Xuyến Kim','Tang Đố Mộc','Đại Khê Thủy','Sa Trung Thổ','Thiên Thượng Hỏa','Thạch Lựu Mộc','Đại Hải Thủy'];
+
+function _getInfo(year) {
+  if (!year || isNaN(year)) return null;
+  const pos = ((year - 1924) % 60 + 60) % 60;
+  const canIdx = pos % 10, chiIdx = pos % 12, pairIdx = Math.floor(pos / 2);
+  return {
+    canChi: _CAN[canIdx] + ' ' + _CHI[chiIdx],
+    napAm: _NA_TEN[pairIdx],
+    hanh: _NA[pairIdx]
+  };
+}
+
+let _currentSlug = '';
+
+function onFormChange() {
+  const ho = document.getElementById('ho').value.trim();
+  const gt = document.getElementById('gioiTinh').value;
+  const con = parseInt(document.getElementById('namSinhCon').value);
+  const bo  = parseInt(document.getElementById('namSinhBo').value);
+  const me  = parseInt(document.getElementById('namSinhMe').value);
+
+  const infoC = _getInfo(con), infoB = _getInfo(bo), infoM = _getInfo(me);
+  const preview = document.getElementById('nhPreview');
+
+  if (infoC || infoB || infoM) {
+    preview.classList.add('show');
+    if (infoC) {
+      document.getElementById('nhCon').textContent = infoC.hanh;
+      document.getElementById('nhCon').className = 'nh-badge nh-' + infoC.hanh;
+      document.getElementById('ccCon').textContent = infoC.canChi + ' — ' + infoC.napAm;
+    }
+    if (infoB) {
+      document.getElementById('nhBo').textContent = infoB.hanh;
+      document.getElementById('nhBo').className = 'nh-badge nh-' + infoB.hanh;
+      document.getElementById('ccBo').textContent = infoB.canChi + ' — ' + infoB.napAm;
+    }
+    if (infoM) {
+      document.getElementById('nhMe').textContent = infoM.hanh;
+      document.getElementById('nhMe').className = 'nh-badge nh-' + infoM.hanh;
+      document.getElementById('ccMe').textContent = infoM.canChi + ' — ' + infoM.napAm;
+    }
+  } else {
+    preview.classList.remove('show');
+  }
+
+  const ok = ho && gt && infoC && infoB && infoM;
+  document.getElementById('analyzeBtn').disabled = !ok;
+  if (ok) _currentSlug = TuviPaywall.generateToolSlug('dat-ten-con-' + ho.replace(/\s+/g,'-') + '-' + con);
+}
+
+async function analyze() {
+  const ho = document.getElementById('ho').value.trim();
+  const gt = document.getElementById('gioiTinh').value;
+  const con = parseInt(document.getElementById('namSinhCon').value);
+  const bo  = parseInt(document.getElementById('namSinhBo').value);
+  const me  = parseInt(document.getElementById('namSinhMe').value);
+  const infoC = _getInfo(con), infoB = _getInfo(bo), infoM = _getInfo(me);
+  if (!ho || !gt || !infoC || !infoB || !infoM) return;
+
+  _saveStateForAuth();
+  await TuviPaywall.requireCredits(_currentSlug, async () => {
+    await _doAnalyze(ho, gt, con, infoC, infoB, infoM, bo, me);
+  });
+}
+
+async function _doAnalyze(ho, gt, con, infoC, infoB, infoM, bo, me) {
+  document.getElementById('analyzeBtn').disabled = true;
+  document.getElementById('result-section').classList.add('active');
+  document.getElementById('aiResult').innerHTML =
+    '<div class="ai-loading"><span class="ai-loading-icon">✨</span><div class="ai-loading-text">AI đang gợi ý tên...<br><span style="font-size:12px;opacity:.7">Thường mất 15–25 giây</span></div></div>';
+  document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
+  document.getElementById('error-msg').classList.remove('active');
+
+  try {
+    const res = await fetch('/api/xem-tuoi?action=dat-ten-con', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        ho, gioiTinh: gt,
+        namSinhCon: con, canChiCon: infoC.canChi, napAmCon: infoC.napAm,
+        canChiBo: infoB.canChi, napAmBo: infoB.napAm,
+        canChiMe: infoM.canChi, napAmMe: infoM.napAm
+      })
+    });
+    if (!res.ok) { const d = await res.json().catch(()=>({})); throw new Error(d.error||'Lỗi '+res.status); }
+    const data = await res.json();
+    document.getElementById('aiResult').innerHTML = renderMarkdown(data.result || '');
+  } catch(e) {
+    document.getElementById('aiResult').innerHTML = '';
+    document.getElementById('result-section').classList.remove('active');
+    document.getElementById('error-msg').textContent = 'Lỗi: ' + (e.message||'Không thể kết nối. Vui lòng thử lại.');
+    document.getElementById('error-msg').classList.add('active');
+  }
+  document.getElementById('analyzeBtn').disabled = false;
+}
+
+function reset() {
+  document.getElementById('result-section').classList.remove('active');
+  document.getElementById('aiResult').innerHTML = '';
+  document.getElementById('inputSection').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function renderMarkdown(md) {
+  return md
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>')
+    .replace(/^- (.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>[^]*?<\/li>\n?)+/g,s=>'<ul>'+s+'</ul>')
+    .replace(/\n\n+/g,'</p><p>')
+    .replace(/^(?!<[hublp])(.+)$/gm,'<p>$1</p>')
+    .replace(/<p><\/p>/g,'')
+    .replace(/<p>(<[hul])/g,'$1')
+    .replace(/(<\/[hul][^>]*>)<\/p>/g,'$1');
+}
+</script>
+<script src="/tuvi-paywall.js"></script>
+<script>
+function _saveStateForAuth() {
+  try {
+    sessionStorage.setItem('tvmb_dat_ten_con_state', JSON.stringify({
+      _savedAt: Date.now(),
+      ho: document.getElementById('ho').value,
+      gioiTinh: document.getElementById('gioiTinh').value,
+      namSinhCon: document.getElementById('namSinhCon').value,
+      namSinhBo: document.getElementById('namSinhBo').value,
+      namSinhMe: document.getElementById('namSinhMe').value,
+    }));
+  } catch(e) {}
+}
+
+function _restoreStateAfterAuth() {
+  try {
+    const raw = sessionStorage.getItem('tvmb_dat_ten_con_state');
+    if (!raw) return false;
+    const saved = JSON.parse(raw);
+    if (Date.now() - (saved._savedAt||0) > 10*60*1000) {
+      sessionStorage.removeItem('tvmb_dat_ten_con_state'); return false;
+    }
+    sessionStorage.removeItem('tvmb_dat_ten_con_state');
+    document.getElementById('ho').value = saved.ho || '';
+    document.getElementById('gioiTinh').value = saved.gioiTinh || '';
+    document.getElementById('namSinhCon').value = saved.namSinhCon || '';
+    document.getElementById('namSinhBo').value = saved.namSinhBo || '';
+    document.getElementById('namSinhMe').value = saved.namSinhMe || '';
+    onFormChange();
+    setTimeout(() => { if (window.Auth?.isLoggedIn() && document.getElementById('analyzeBtn') && !document.getElementById('analyzeBtn').disabled) document.getElementById('analyzeBtn').click(); }, 800);
+    return true;
+  } catch(e) { return false; }
+}
+
+(function(){ _restoreStateAfterAuth(); })();
+
+TuviPaywall.init({
+  product: 'dat-ten-con',
+  slug: () => _currentSlug,
+  onUnlock: () => {},
+});
+</script>
+</body>
+</html>

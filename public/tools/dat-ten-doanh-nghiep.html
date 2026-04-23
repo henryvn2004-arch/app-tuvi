@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Đặt Tên Doanh Nghiệp Theo Ngũ Hành – Tử Vi Minh Bảo</title>
+<meta name="description" content="AI gợi ý tên thương hiệu, công ty theo ngũ hành nạp âm chủ doanh nghiệp và ngành nghề. 12 tên kèm ý nghĩa, Hán Việt, lý do phù hợp.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<style>
+.form-group{margin-bottom:18px}
+.form-label{display:block;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:6px}
+.form-input,.form-select{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;color:var(--text);background:var(--bg);transition:border-color .15s}
+.form-input:focus,.form-select:focus{outline:none;border-color:#c9a84c}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-hint{font-size:11px;color:var(--text-lt);margin-top:4px}
+.info-preview{background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:8px;padding:14px 16px;margin-top:16px;display:none}
+.info-preview.show{display:block}
+.nh-title{font-size:12px;font-weight:600;color:var(--text-mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.nh-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;font-size:13px}
+.nh-label{color:var(--text-lt);width:80px;flex-shrink:0}
+.nh-badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:700;color:#fff}
+.nh-Kim{background:#a0937d}.nh-Mộc{background:#27ae60}
+.nh-Hỏa{background:#c0392b}.nh-Thổ{background:#e67e22}
+.nh-Thủy{background:#2980b9}
+.nh-can-chi{color:var(--text-mid);font-size:12px}
+.md-result{font-size:14px;line-height:1.85;color:var(--text-mid)}
+.md-result h2{font-size:16px;font-weight:700;color:var(--navy);margin:20px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border-lt)}
+.md-result h3{font-size:14px;font-weight:700;color:var(--navy);margin:14px 0 6px}
+.md-result strong{color:var(--navy);font-weight:700}
+.md-result em{color:#9A7B3A}
+.md-result ul{padding-left:20px;margin:8px 0}
+.md-result li{margin:4px 0}
+.md-result p{margin:0 0 10px}
+.md-result blockquote{border-left:3px solid #c9a84c;padding:8px 16px;margin:12px 0;background:#fdf8f0;border-radius:0 6px 6px 0;color:#9A7B3A;font-style:italic}
+.ai-loading{display:flex;flex-direction:column;align-items:center;gap:16px;padding:40px 0}
+.ai-loading-icon{font-size:48px;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.95)}}
+.ai-loading-text{font-size:14px;color:var(--text-lt);text-align:center}
+.note-box{display:flex;gap:10px;padding:12px 16px;background:#e8f0fe;border-radius:8px;border-left:3px solid #1455A4;font-size:12px;color:#1455A4;margin-bottom:20px;line-height:1.6}
+@media(max-width:600px){.form-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<script src="/nav.js"></script>
+
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Đặt Tên · Thương Hiệu & Doanh Nghiệp</div>
+    <h1>Đặt Tên Doanh Nghiệp<br><em>Theo Ngũ Hành</em></h1>
+    <p>AI gợi ý 12 tên thương hiệu/công ty phù hợp ngũ hành chủ doanh nghiệp và ngành nghề — Thuần Việt, Hán Việt và kết hợp.</p>
+  </div>
+</div>
+
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Phương Pháp Luận</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">Tên Thương Hiệu Hài Hòa —<br>Ngũ Hành & Ngôn Ngữ Học</h2>
+          <p class="xt-body">Tên doanh nghiệp tốt cần hội đủ: ý nghĩa phù hợp ngành, âm thanh dễ nhớ, và — theo quan niệm truyền thống — hành của tên tương hợp với chủ doanh nghiệp.</p>
+          <p class="xt-body">Công cụ này phân tích ngũ hành nạp âm của chủ theo <strong>Lục Thập Hoa Giáp</strong>, xác định hành cần bổ trợ, sau đó đề xuất tên theo 3 phong cách khác nhau để bạn có nhiều lựa chọn.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">Kết Quả Gồm 3 Nhóm</div>
+          <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">Tên Thuần Việt</span><span class="xt-factor-desc">Dễ hiểu, gần gũi, phù hợp thị trường nội địa và SME</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">②</span><span class="xt-factor-label">Tên Hán Việt</span><span class="xt-factor-desc">Trang trọng, hàm súc, phù hợp công ty, tập đoàn, thương hiệu cao cấp</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">③</span><span class="xt-factor-label">Tên Kết Hợp</span><span class="xt-factor-desc">Sáng tạo, hiện đại — pha trộn âm Hán Việt với từ Việt thuần hoặc tiếng Anh</span></div>
+          <div class="xt-note">
+            <span class="xt-note-icon">⚠️</span>
+            <div>Đây là gợi ý tham khảo. Cần tra cứu đăng ký nhãn hiệu trước khi sử dụng chính thức.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section" id="inputSection">
+    <div class="section-eyebrow">Thông Tin Chủ Doanh Nghiệp</div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Họ tên chủ doanh nghiệp</label>
+        <input class="form-input" id="hoTen" type="text" placeholder="VD: Trần Văn Minh" maxlength="50" oninput="onFormChange()">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Năm sinh chủ (dương lịch)</label>
+        <input class="form-input" id="namSinh" type="number" placeholder="VD: 1985" min="1930" max="2005" oninput="onFormChange()">
+      </div>
+    </div>
+
+    <div class="info-preview" id="infoPreview">
+      <div class="nh-title">Ngũ Hành Chủ Doanh Nghiệp</div>
+      <div class="nh-row"><span class="nh-label">Năm sinh:</span><span class="nh-can-chi" id="ccChu" style="font-weight:600"></span></div>
+      <div class="nh-row"><span class="nh-label">Nạp âm:</span><span class="nh-can-chi" id="napAmChu"></span><span class="nh-badge" id="nhChu" style="margin-left:8px">—</span></div>
+    </div>
+
+    <div class="form-row" style="margin-top:18px">
+      <div class="form-group">
+        <label class="form-label">Lĩnh vực kinh doanh</label>
+        <select class="form-select" id="linhVuc" onchange="onFormChange()">
+          <option value="">— Chọn lĩnh vực —</option>
+          <option value="Công nghệ & phần mềm">Công nghệ & phần mềm</option>
+          <option value="Thương mại & bán lẻ">Thương mại & bán lẻ</option>
+          <option value="Xây dựng & bất động sản">Xây dựng & bất động sản</option>
+          <option value="Ẩm thực & F&B">Ẩm thực & F&B</option>
+          <option value="Giáo dục & đào tạo">Giáo dục & đào tạo</option>
+          <option value="Y tế & sức khỏe">Y tế & sức khỏe</option>
+          <option value="Tài chính & đầu tư">Tài chính & đầu tư</option>
+          <option value="Logistics & vận chuyển">Logistics & vận chuyển</option>
+          <option value="Sản xuất & chế biến">Sản xuất & chế biến</option>
+          <option value="Dịch vụ tư vấn">Dịch vụ tư vấn</option>
+          <option value="Nông nghiệp & thực phẩm">Nông nghiệp & thực phẩm</option>
+          <option value="Thời trang & làm đẹp">Thời trang & làm đẹp</option>
+          <option value="Du lịch & khách sạn">Du lịch & khách sạn</option>
+          <option value="Khác">Khác (ghi rõ bên dưới)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Loại hình</label>
+        <select class="form-select" id="loaiHinh" onchange="onFormChange()">
+          <option value="">— Chọn —</option>
+          <option value="Công ty TNHH">Công ty TNHH</option>
+          <option value="Công ty cổ phần">Công ty cổ phần</option>
+          <option value="Hộ kinh doanh / cửa hàng">Hộ kinh doanh / cửa hàng</option>
+          <option value="Thương hiệu / nhãn hiệu">Thương hiệu / nhãn hiệu</option>
+          <option value="Startup / ứng dụng">Startup / ứng dụng</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group" id="linhVucKhacWrap" style="display:none">
+      <label class="form-label">Mô tả lĩnh vực kinh doanh</label>
+      <input class="form-input" id="linhVucKhac" type="text" placeholder="VD: Kinh doanh đồ handmade, sản phẩm thủ công mỹ nghệ" maxlength="100" oninput="onFormChange()">
+    </div>
+
+    <div class="note-box" style="margin-top:8px">
+      <span>💡</span>
+      <div>Kết quả là <strong>gợi ý tham khảo</strong>. Kiểm tra trùng tên với doanh nghiệp đã đăng ký tại Cổng thông tin đăng ký doanh nghiệp quốc gia trước khi sử dụng.</div>
+    </div>
+
+    <div style="text-align:center;margin-top:8px">
+      <button class="btn-submit" id="analyzeBtn" onclick="analyze()" disabled style="padding:14px 40px;font-size:15px">
+        🏢 Gợi Ý Tên Doanh Nghiệp
+      </button>
+    </div>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+
+  <div class="result-section" id="result-section">
+    <div class="res-block">
+      <div class="res-block-header">
+        <span class="res-block-title">12 Tên Gợi Ý Theo Ngũ Hành</span>
+        <span style="font-size:11px;color:var(--text-lt)">AI · Lục Thập Hoa Giáp · Hán Việt học</span>
+      </div>
+      <div class="res-block-body">
+        <div id="aiResult" class="md-result"></div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:8px">
+      <button class="btn-secondary" onclick="reset()" style="padding:10px 24px">Đặt Tên Khác</button>
+    </div>
+  </div>
+
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Bước Tiếp Theo</div>
+    <div class="tool-cta-title">Xem Tuổi Hợp Tác Làm Ăn</div>
+    <div class="tool-cta-desc">Đã có tên doanh nghiệp phù hợp — bước tiếp theo là tìm đối tác hợp tuổi để bắt đầu hoặc mở rộng kinh doanh.</div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
+      <a class="tool-cta-btn" href="/xem-lam-an.html" style="background:var(--navy);border-color:var(--gold)">Xem Tuổi Làm Ăn →</a>
+      <a class="tool-cta-btn" href="/chon-ngay-tot.html" style="background:transparent;color:var(--navy);border:2px solid var(--navy)">Chọn Ngày Khai Trương →</a>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
+
+<script>
+const _CAN = ['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
+const _CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+const _NA = ['Kim','Hỏa','Mộc','Thổ','Kim','Hỏa','Thủy','Thổ','Kim','Mộc','Thủy','Thổ','Hỏa','Mộc','Thủy','Kim','Hỏa','Mộc','Thổ','Kim','Hỏa','Thủy','Thổ','Kim','Mộc','Thủy','Thổ','Hỏa','Mộc','Thủy'];
+const _NA_TEN = ['Hải Trung Kim','Lò Trung Hỏa','Đại Lâm Mộc','Lộ Bàng Thổ','Kiếm Phong Kim','Sơn Đầu Hỏa','Giản Hạ Thủy','Thành Đầu Thổ','Bạch Lạp Kim','Dương Liễu Mộc','Tuyền Trung Thủy','Ốc Thượng Thổ','Tích Lịch Hỏa','Tùng Bách Mộc','Trường Lưu Thủy','Sa Trung Kim','Sơn Hạ Hỏa','Bình Địa Mộc','Bích Thượng Thổ','Kim Bạc Kim','Phú Đăng Hỏa','Thiên Hà Thủy','Đại Dịch Thổ','Thoa Xuyến Kim','Tang Đố Mộc','Đại Khê Thủy','Sa Trung Thổ','Thiên Thượng Hỏa','Thạch Lựu Mộc','Đại Hải Thủy'];
+const _NH_COLOR = {Kim:'#a0937d',Mộc:'#27ae60',Hỏa:'#c0392b',Thổ:'#e67e22',Thủy:'#2980b9'};
+
+function _getInfo(year) {
+  if (!year || isNaN(year)) return null;
+  const pos = ((year - 1924) % 60 + 60) % 60;
+  return { canChi: _CAN[pos%10]+' '+_CHI[pos%12], napAm: _NA_TEN[Math.floor(pos/2)], hanh: _NA[Math.floor(pos/2)] };
+}
+
+let _currentSlug = '';
+
+document.getElementById('linhVuc').addEventListener('change', function() {
+  document.getElementById('linhVucKhacWrap').style.display = this.value === 'Khác' ? 'block' : 'none';
+  onFormChange();
+});
+
+function onFormChange() {
+  const hoTen = document.getElementById('hoTen').value.trim();
+  const ns = parseInt(document.getElementById('namSinh').value);
+  const lv = document.getElementById('linhVuc').value;
+  const lh = document.getElementById('loaiHinh').value;
+  const info = _getInfo(ns);
+
+  const preview = document.getElementById('infoPreview');
+  if (info) {
+    preview.classList.add('show');
+    document.getElementById('ccChu').textContent = info.canChi;
+    document.getElementById('napAmChu').textContent = info.napAm;
+    const badge = document.getElementById('nhChu');
+    badge.textContent = info.hanh;
+    badge.style.background = _NH_COLOR[info.hanh] || '#888';
+  } else {
+    preview.classList.remove('show');
+  }
+
+  const ready = hoTen && info && lv && lh;
+  document.getElementById('analyzeBtn').disabled = !ready;
+  if (ready) _currentSlug = TuviPaywall.generateToolSlug('dat-ten-dn-' + ns);
+}
+
+async function analyze() {
+  const hoTen = document.getElementById('hoTen').value.trim();
+  const ns = parseInt(document.getElementById('namSinh').value);
+  const lv = document.getElementById('linhVuc').value;
+  const lvKhac = document.getElementById('linhVucKhac').value.trim();
+  const lh = document.getElementById('loaiHinh').value;
+  const info = _getInfo(ns);
+  if (!hoTen || !info || !lv || !lh) return;
+
+  _saveStateForAuth();
+  await TuviPaywall.requireCredits(_currentSlug, async () => {
+    await _doAnalyze(hoTen, ns, info, lv === 'Khác' ? lvKhac || lv : lv, lh);
+  });
+}
+
+async function _doAnalyze(hoTen, ns, info, lv, lh) {
+  document.getElementById('analyzeBtn').disabled = true;
+  document.getElementById('result-section').classList.add('active');
+  document.getElementById('aiResult').innerHTML =
+    '<div class="ai-loading"><span class="ai-loading-icon">🏢</span><div class="ai-loading-text">AI đang gợi ý tên doanh nghiệp...<br><span style="font-size:12px;opacity:.7">Thường mất 15–25 giây</span></div></div>';
+  document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
+  document.getElementById('error-msg').classList.remove('active');
+
+  try {
+    const res = await fetch('/api/xem-tuoi?action=dat-ten-doanh-nghiep', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        hoTen, namSinh: ns,
+        canChiChu: info.canChi, napAmChu: info.napAm,
+        linhVuc: lv, loaiHinh: lh
+      })
+    });
+    if (!res.ok) { const d = await res.json().catch(()=>({})); throw new Error(d.error||'Lỗi '+res.status); }
+    const data = await res.json();
+    document.getElementById('aiResult').innerHTML = renderMarkdown(data.result || '');
+  } catch(e) {
+    document.getElementById('aiResult').innerHTML = '';
+    document.getElementById('result-section').classList.remove('active');
+    document.getElementById('error-msg').textContent = 'Lỗi: ' + (e.message||'Không thể kết nối.');
+    document.getElementById('error-msg').classList.add('active');
+  }
+  document.getElementById('analyzeBtn').disabled = false;
+}
+
+function reset() {
+  document.getElementById('result-section').classList.remove('active');
+  document.getElementById('aiResult').innerHTML = '';
+  document.getElementById('inputSection').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function renderMarkdown(md) {
+  return md
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>')
+    .replace(/^- (.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>[^]*?<\/li>\n?)+/g,s=>'<ul>'+s+'</ul>')
+    .replace(/\n\n+/g,'</p><p>').replace(/^(?!<[hublp])(.+)$/gm,'<p>$1</p>')
+    .replace(/<p><\/p>/g,'').replace(/<p>(<[hul])/g,'$1').replace(/(<\/[hul][^>]*>)<\/p>/g,'$1');
+}
+</script>
+<script src="/tuvi-paywall.js"></script>
+<script>
+function _saveStateForAuth() {
+  try {
+    sessionStorage.setItem('tvmb_dat_ten_dn_state', JSON.stringify({
+      _savedAt: Date.now(),
+      hoTen: document.getElementById('hoTen').value,
+      namSinh: document.getElementById('namSinh').value,
+      linhVuc: document.getElementById('linhVuc').value,
+      loaiHinh: document.getElementById('loaiHinh').value,
+      linhVucKhac: document.getElementById('linhVucKhac').value,
+    }));
+  } catch(e) {}
+}
+
+function _restoreStateAfterAuth() {
+  try {
+    const raw = sessionStorage.getItem('tvmb_dat_ten_dn_state');
+    if (!raw) return false;
+    const saved = JSON.parse(raw);
+    if (Date.now() - (saved._savedAt||0) > 10*60*1000) {
+      sessionStorage.removeItem('tvmb_dat_ten_dn_state'); return false;
+    }
+    sessionStorage.removeItem('tvmb_dat_ten_dn_state');
+    document.getElementById('hoTen').value = saved.hoTen || '';
+    document.getElementById('namSinh').value = saved.namSinh || '';
+    document.getElementById('linhVuc').value = saved.linhVuc || '';
+    document.getElementById('loaiHinh').value = saved.loaiHinh || '';
+    if (saved.linhVuc === 'Khác') { document.getElementById('linhVucKhacWrap').style.display='block'; document.getElementById('linhVucKhac').value = saved.linhVucKhac||''; }
+    onFormChange();
+    setTimeout(() => { if (window.Auth?.isLoggedIn() && !document.getElementById('analyzeBtn').disabled) document.getElementById('analyzeBtn').click(); }, 800);
+    return true;
+  } catch(e) { return false; }
+}
+
+(function(){ _restoreStateAfterAuth(); })();
+
+TuviPaywall.init({
+  product: 'dat-ten-doanh-nghiep',
+  slug: () => _currentSlug,
+  onUnlock: () => {},
+});
+</script>
+</body>
+</html>
