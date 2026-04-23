@@ -184,6 +184,7 @@
     + navLink('/blog.html',      'Kh\u1ea3o Lu\u1eadn')
     + navLink('/menh-kho.html',  'M\u1ec7nh Kh\u1ed1')
     + navLink('/contact.html',   'Li\u00ean H\u1ec7')
+    + navLink('/topup.html',      'N\u1ea1p L\u01b0\u1ee3ng')
     + '</div>'
     + '<div id="nav-auth-area"></div>'
     + '<button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">\u2630</button>'
