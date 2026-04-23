@@ -3,287 +3,374 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nạp Credits — Tử Vi Minh Bảo</title>
-<meta name="description" content="Nạp credits để sử dụng các tính năng luận giải Tử Vi Minh Bảo: Luận giải lá số, xem tuổi vợ chồng, xem tuổi làm ăn.">
+<title>Bảng Giá & Nạp Lượng — Tử Vi Minh Bảo</title>
+<meta name="description" content="Nạp lượng để sử dụng các công cụ Tử Vi Minh Bảo. Đăng ký nhận 10 lượng miễn phí. Không hết hạn.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
-:root {
-  --navy:#061A2E; --navy-mid:#0D3B5E; --blue:#1455A4;
-  --gold:#9A7B3A; --gold-lt:#F9F4EB;
-  --text:#1a1a1a; --text-mid:#444; --text-lt:#777;
-  --border:#CCCCCC; --border-lt:#E8E8E8;
-  --bg:#FFFFFF; --bg-soft:#F5F4F0;
-  --red:#C0392B; --green:#1E6B3C;
+:root{
+  --navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;
+  --gold:#9A7B3A;--gold-lt:#F9F4EB;
+  --text:#1a1a1a;--text-mid:#444;--text-lt:#777;
+  --border:#CCCCCC;--border-lt:#E8E8E8;
+  --bg:#FFFFFF;--bg-soft:#F5F4F0;
+  --red:#C0392B;--green:#1E6B3C;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh}
 
-/* NAV — same as site standard */
-.topnav{position:sticky;top:0;z-index:200;background:var(--navy);display:flex;align-items:center;height:60px;padding:0 40px;gap:32px}
-.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
-.nav-logo img{width:36px;height:36px;border-radius:5px;object-fit:contain}
-.nav-logo .name{font-size:15px;font-weight:700;color:#CC2200;font-family:Georgia,serif}
-.nav-links{display:flex;align-items:center;gap:4px}
-.nav-link{color:#8BAACC;font-size:13px;text-decoration:none;padding:6px 12px;border-radius:6px;transition:all .15s;white-space:nowrap}
-.nav-link:hover{color:#fff;background:rgba(255,255,255,.07)}
-.nav-link.active{color:#c9a84c}
-.nav-dropdown{position:relative}
-.nav-dropdown-menu{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-top:3px solid #c9a84c;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:300}
-.nav-dropdown:hover .nav-dropdown-menu{display:block}
-.nav-dropdown-item{display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:13px;color:var(--text);text-decoration:none;border-bottom:1px solid #f0f0f0}
-.nav-dropdown-item:last-child{border-bottom:none}
-.nav-dropdown-item:hover{background:var(--bg-soft);color:var(--navy)}
-.nav-dropdown-item .di{font-size:15px;flex-shrink:0}
-.nav-hamburger{display:none;background:none;border:none;color:#8BAACC;cursor:pointer;padding:8px;font-size:20px;position:relative;z-index:400}
-@media(max-width:768px){
-  .topnav{padding:0 16px}
-  .nav-links{display:none;position:fixed;top:60px;left:0;right:0;background:var(--navy);flex-direction:column;align-items:stretch;padding:.5rem 0;z-index:199}
-  .nav-links.open{display:flex}
-  .nav-link{padding:12px 20px;border-radius:0}
-  .nav-hamburger{display:block;margin-left:auto}
-}
+.wrap{max-width:960px;margin:0 auto;padding:3rem 1.5rem 5rem}
 
-/* LAYOUT */
-.wrap{max-width:900px;margin:0 auto;padding:3rem 1.5rem 5rem}
-.page-header{text-align:center;margin-bottom:2.5rem}
+/* HEADER */
+.page-header{text-align:center;margin-bottom:3rem}
 .page-header .eyebrow{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem}
-.page-header h1{font-family:'Noto Serif',serif;font-size:2rem;color:var(--navy);margin-bottom:.75rem}
-.page-header p{font-size:.95rem;color:var(--text-mid);max-width:520px;margin:0 auto;line-height:1.7}
+.page-header h1{font-family:'Noto Serif',serif;font-size:2.2rem;color:var(--navy);margin-bottom:.75rem}
+.page-header p{font-size:.95rem;color:var(--text-mid);max-width:540px;margin:0 auto;line-height:1.7}
 
-/* BALANCE WIDGET */
-.balance-bar{background:var(--navy);border-radius:12px;padding:1.25rem 2rem;display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;gap:1rem;flex-wrap:wrap}
+/* FREE BANNER */
+.free-banner{background:linear-gradient(135deg,#1E6B3C 0%,#27ae60 100%);border-radius:14px;padding:1.5rem 2rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.free-banner-left{color:#fff}
+.free-banner-tag{font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.8;margin-bottom:.35rem}
+.free-banner-title{font-family:'Noto Serif',serif;font-size:1.3rem;font-weight:700}
+.free-banner-sub{font-size:.85rem;opacity:.85;margin-top:.25rem}
+.btn-free{background:#fff;color:#1E6B3C;font-size:.88rem;font-weight:700;padding:.75rem 1.5rem;border-radius:8px;text-decoration:none;white-space:nowrap;border:none;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-free:hover{background:#f0faf4}
+
+/* BALANCE */
+.balance-bar{background:var(--navy);border-radius:12px;padding:1.25rem 2rem;display:none;align-items:center;justify-content:space-between;margin-bottom:2rem;gap:1rem;flex-wrap:wrap}
+.balance-bar.show{display:flex}
 .balance-label{color:rgba(255,255,255,.6);font-size:.82rem;margin-bottom:.2rem}
 .balance-value{color:#fff;font-family:'Noto Serif',serif;font-size:1.75rem;font-weight:700}
 .balance-value span{font-size:.9rem;font-weight:400;color:rgba(255,255,255,.5);margin-left:.25rem}
 
 /* PACKAGES */
-.packages{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:2.5rem}
-@media(max-width:640px){.packages{grid-template-columns:1fr}}
-.pkg-card{background:#fff;border:2px solid var(--border-lt);border-radius:14px;padding:1.75rem 1.5rem;text-align:center;position:relative;transition:border-color .2s,box-shadow .2s}
-.pkg-card:hover{border-color:var(--gold);box-shadow:0 6px 24px rgba(154,123,58,.12)}
-.pkg-card.popular{border-color:var(--gold)}
-.pkg-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--gold);color:#fff;font-size:.7rem;font-weight:700;padding:.2rem .75rem;border-radius:20px;letter-spacing:.06em;white-space:nowrap}
-.pkg-name{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text-lt);margin-bottom:.75rem}
-.pkg-credits{font-family:'Noto Serif',serif;font-size:2.5rem;font-weight:700;color:var(--navy);line-height:1}
-.pkg-credits span{font-size:.9rem;font-weight:400;color:var(--text-lt);display:block;margin-top:.2rem}
-.pkg-price{font-size:1.1rem;color:var(--text-mid);margin:1rem 0 .25rem;font-weight:600}
-.pkg-rate{font-size:.75rem;color:var(--text-lt);margin-bottom:1.25rem}
-.pkg-bonus{font-size:.75rem;color:var(--green);font-weight:700;background:#F0FAF4;padding:.2rem .6rem;border-radius:20px;display:inline-block;margin-bottom:1.25rem}
-.btn-pkg{width:100%;padding:.85rem;border:none;border-radius:8px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;background:var(--navy);color:#fff}
+.section-label{font-size:.7rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-lt);margin-bottom:1.25rem}
+.packages{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:1rem}
+@media(max-width:680px){.packages{grid-template-columns:1fr}}
+
+.pkg-card{background:#fff;border:2px solid var(--border-lt);border-radius:14px;padding:1.75rem 1.5rem;text-align:center;position:relative;transition:border-color .2s,box-shadow .2s;display:flex;flex-direction:column}
+.pkg-card:hover{border-color:#c9a84c;box-shadow:0 6px 24px rgba(154,123,58,.12)}
+.pkg-card.featured{border-color:var(--gold)}
+.pkg-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:#fff;font-size:.68rem;font-weight:700;padding:.25rem .9rem;border-radius:20px;letter-spacing:.08em;white-space:nowrap}
+.pkg-icon{font-size:2rem;margin-bottom:.75rem}
+.pkg-name{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text-lt);margin-bottom:.6rem}
+.pkg-credits{font-family:'Noto Serif',serif;font-size:2.8rem;font-weight:700;color:var(--navy);line-height:1}
+.pkg-credits-unit{font-size:.85rem;font-weight:400;color:var(--text-lt);display:block;margin-top:.2rem}
+.pkg-price{font-size:1.15rem;color:var(--text-mid);margin:1rem 0 .2rem;font-weight:700}
+.pkg-rate{font-size:.75rem;color:var(--text-lt);margin-bottom:.75rem}
+.pkg-perks{list-style:none;text-align:left;margin-bottom:1.25rem;flex:1}
+.pkg-perks li{font-size:.8rem;color:var(--text-mid);padding:.3rem 0;border-bottom:1px solid var(--border-lt);display:flex;align-items:center;gap:.5rem}
+.pkg-perks li:last-child{border-bottom:none}
+.perk-check{color:var(--green);font-weight:700;flex-shrink:0}
+.btn-pkg{width:100%;padding:.9rem;border:none;border-radius:8px;font-size:.92rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;background:var(--navy);color:#fff}
 .btn-pkg:hover{background:var(--navy-mid)}
-.btn-pkg.gold{background:var(--gold);color:var(--navy)}
-.btn-pkg.gold:hover{background:#7d6230;color:#fff}
+.btn-pkg.gold{background:var(--gold);color:#fff}
+.btn-pkg.gold:hover{background:#7d6230}
 .btn-pkg:disabled{opacity:.6;cursor:not-allowed}
 
-/* TOOL COSTS */
-.costs-section{background:#fff;border:1px solid var(--border-lt);border-radius:12px;padding:1.75rem 2rem;margin-bottom:2rem}
-.costs-section h3{font-family:'Noto Serif',serif;font-size:1rem;color:var(--navy);margin-bottom:1.25rem}
-.cost-row{display:flex;align-items:center;justify-content:space-between;padding:.65rem 0;border-bottom:1px solid var(--border-lt)}
+/* CUSTOM TOPUP */
+.custom-card{background:#fff;border:2px solid var(--border-lt);border-radius:14px;padding:1.5rem 2rem;margin-bottom:2.5rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+.custom-card-label{flex:1;min-width:200px}
+.custom-card-label strong{display:block;font-size:.95rem;color:var(--navy);margin-bottom:.25rem}
+.custom-card-label span{font-size:.82rem;color:var(--text-lt)}
+.custom-input-wrap{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+.custom-prefix{font-size:1.1rem;font-weight:700;color:var(--text-mid)}
+.custom-input{width:90px;padding:.7rem .75rem;border:1.5px solid var(--border);border-radius:6px;font-size:1rem;font-weight:700;font-family:inherit;color:var(--navy);text-align:center}
+.custom-input:focus{outline:none;border-color:#c9a84c}
+.custom-credits-preview{font-size:.82rem;color:var(--text-lt);min-width:100px}
+.btn-custom{padding:.75rem 1.5rem;background:var(--navy);color:#fff;border:none;border-radius:8px;font-size:.88rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;white-space:nowrap}
+.btn-custom:hover{background:var(--navy-mid)}
+
+/* TOOL COSTS — DYNAMIC */
+.costs-section{background:#fff;border:1px solid var(--border-lt);border-radius:14px;padding:2rem;margin-bottom:2rem}
+.costs-section h3{font-family:'Noto Serif',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.35rem}
+.costs-subtitle{font-size:.82rem;color:var(--text-lt);margin-bottom:1.5rem}
+.cost-category{font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);padding:.5rem 0 .4rem;margin-top:.75rem}
+.cost-row{display:flex;align-items:center;justify-content:space-between;padding:.7rem 0;border-bottom:1px solid var(--border-lt)}
 .cost-row:last-child{border-bottom:none}
-.cost-icon{font-size:1.25rem;margin-right:.75rem}
-.cost-name{font-size:.9rem;color:var(--text)}
-.cost-price{font-weight:700;color:var(--navy);font-size:.95rem}
-.cost-usd{font-size:.75rem;color:var(--text-lt);margin-left:.4rem}
+.cost-left{display:flex;align-items:center;gap:.75rem}
+.cost-icon-wrap{font-size:1.25rem;width:32px;text-align:center;flex-shrink:0}
+.cost-info{}
+.cost-name{font-size:.88rem;color:var(--text);font-weight:600}
+.cost-desc{font-size:.75rem;color:var(--text-lt);margin-top:.1rem}
+.cost-right{text-align:right;flex-shrink:0}
+.cost-credits{font-weight:700;color:var(--navy);font-size:.92rem}
+.cost-usd{font-size:.72rem;color:var(--text-lt);margin-top:.1rem}
+.cost-free-badge{background:#e8f7ee;color:var(--green);font-size:.72rem;font-weight:700;padding:.15rem .5rem;border-radius:10px}
+.costs-loading{text-align:center;padding:2rem;color:var(--text-lt);font-size:.85rem}
 
 /* FAQ */
-.faq{background:#fff;border:1px solid var(--border-lt);border-radius:12px;padding:1.75rem 2rem}
-.faq h3{font-family:'Noto Serif',serif;font-size:1rem;color:var(--navy);margin-bottom:1.25rem}
-.faq-item{margin-bottom:1.1rem;padding-bottom:1.1rem;border-bottom:1px solid var(--border-lt)}
+.faq{background:#fff;border:1px solid var(--border-lt);border-radius:14px;padding:2rem;margin-bottom:2rem}
+.faq h3{font-family:'Noto Serif',serif;font-size:1.1rem;color:var(--navy);margin-bottom:1.25rem}
+.faq-item{margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border-lt)}
 .faq-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
 .faq-q{font-size:.88rem;font-weight:700;color:var(--navy);margin-bottom:.35rem}
-.faq-a{font-size:.85rem;color:var(--text-mid);line-height:1.7}
+.faq-a{font-size:.84rem;color:var(--text-mid);line-height:1.7}
 
 /* ALERT */
 .alert{padding:.85rem 1.1rem;border-radius:8px;font-size:.85rem;margin-bottom:1.25rem;display:none}
 .alert.error{background:#FFF5F5;color:var(--red);border:1px solid #f5c6c6;display:block}
 .alert.success{background:#F0FAF4;color:var(--green);border:1px solid #c3e6d0;display:block}
-
-
 </style>
 <script src="/auth.js"></script>
 </head>
 <body>
-
-<nav class="topnav">
-  <a class="nav-logo" href="/">
-    <img src="/seal.webp" alt="Tử Vi Minh Bảo">
-    <div class="name">Tử Vi Minh Bảo</div>
-  </a>
-  <div class="nav-links" id="nav-links">
-    <a class="nav-link" href="/">Trang Chủ</a>
-    <div class="nav-dropdown">
-      <a class="nav-link" href="#">Luận Giải ▾</a>
-      <div class="nav-dropdown-menu">
-        <a class="nav-dropdown-item" href="/luan-giai.html"><span class="di">🔮</span>Luận Giải Lá Số</a>
-        <a class="nav-dropdown-item" href="/xem-tuoi.html"><span class="di">💑</span>Xem Tuổi Vợ Chồng</a>
-        <a class="nav-dropdown-item" href="/xem-lam-an.html"><span class="di">🤝</span>Xem Tuổi Làm Ăn</a>
-      </div>
-    </div>
-    <a class="nav-link" href="/about.html">Giới Thiệu</a>
-    <a class="nav-link" href="/resources.html">Tài Liệu</a>
-    <a class="nav-link" href="/blog.html">Khảo Luận</a>
-    <a class="nav-link" href="/menh-kho.html">Mệnh Khố</a>
-    <a class="nav-link" href="/contact.html">Liên Hệ</a>
-  </div>
-  <div id="nav-auth-area" style="margin-left:auto"></div>
-  <button class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')">☰</button>
-</nav>
+<script src="/nav.js"></script>
 
 <div class="wrap">
   <div class="page-header">
-    <div class="eyebrow">Thanh Toán</div>
-    <h1>Nạp Credits</h1>
-    <p>Nạp một lần, dùng cho mọi công cụ. Không hết hạn. $1 = 10 credits.</p>
+    <div class="eyebrow">Bảng Giá</div>
+    <h1>Nạp Lượng — Dùng Mọi Công Cụ</h1>
+    <p>Nạp một lần, dùng cho tất cả công cụ. Không hết hạn. Đăng ký tài khoản nhận ngay <strong>10 lượng miễn phí</strong> để trải nghiệm.</p>
   </div>
 
   <!-- Balance -->
-  <div class="balance-bar" id="balanceBar" style="display:none">
+  <div class="balance-bar" id="balanceBar">
     <div>
-      <div class="balance-label">Số dư của bạn</div>
-      <div class="balance-value" id="balanceDisplay">0 <span>credits</span></div>
+      <div class="balance-label">Số dư hiện tại</div>
+      <div class="balance-value" id="balanceDisplay">0 <span>lượng</span></div>
     </div>
     <a href="/profile.html" style="color:rgba(255,255,255,.6);font-size:.82rem;text-decoration:none">Xem lịch sử →</a>
   </div>
 
   <div id="alertBox" class="alert"></div>
 
+  <!-- Free signup banner -->
+  <div class="free-banner" id="freeBanner">
+    <div class="free-banner-left">
+      <div class="free-banner-tag">Miễn Phí</div>
+      <div class="free-banner-title">🎁 Nhận 10 Lượng Khi Đăng Ký</div>
+      <div class="free-banner-sub">Đủ để dùng thử Xem Tướng (2 lần) hoặc Chọn Ngày Tốt (1 lần) — không cần thanh toán</div>
+    </div>
+    <button class="btn-free" id="freeBannerBtn" onclick="handleFreeSignup()">Đăng Ký Miễn Phí →</button>
+  </div>
+
   <!-- Packages -->
+  <div class="section-label" style="margin-bottom:1.25rem">Gói Nạp Lượng</div>
   <div class="packages">
-    <!-- Trial -->
+
+    <!-- Cá Nhân -->
     <div class="pkg-card">
-      <div class="pkg-name">Trial</div>
-      <div class="pkg-credits">50 <span>credits</span></div>
-      <div class="pkg-price">$5</div>
-      <div class="pkg-rate">= 1 Xem Tuổi · hoặc 10 Xem Tướng</div>
-      <button class="btn-pkg" onclick="initiateTopup('5')">Nạp $5</button>
+      <div class="pkg-icon">👤</div>
+      <div class="pkg-name">Cá Nhân</div>
+      <div class="pkg-credits">200<span class="pkg-credits-unit">lượng</span></div>
+      <div class="pkg-price">$20 <span style="font-size:.75rem;font-weight:400;color:var(--text-lt)">≈ 500K VNĐ</span></div>
+      <div class="pkg-rate">$0.10 / lượng</div>
+      <ul class="pkg-perks">
+        <li><span class="perk-check">✓</span> 1 Luận Giải Lá Số đầy đủ (150 lượng)</li>
+        <li><span class="perk-check">✓</span> + Xem Tuổi Vợ Chồng (50 lượng)</li>
+        <li><span class="perk-check">✓</span> Hoặc 10× Xem Tướng (5 lượng/lần)</li>
+        <li><span class="perk-check">✓</span> Không hết hạn</li>
+      </ul>
+      <button class="btn-pkg" onclick="initiateTopup('20')" id="btn-20">Nạp $20</button>
     </div>
 
-    <!-- Popular -->
-    <div class="pkg-card popular">
+    <!-- Gia Đình -->
+    <div class="pkg-card featured">
       <div class="pkg-badge">PHỔ BIẾN NHẤT</div>
-      <div class="pkg-name">Popular</div>
-      <div class="pkg-credits">110 <span>credits</span></div>
-      <div class="pkg-price">$10</div>
-      <div class="pkg-rate">$0.091 / credit</div>
-      <div class="pkg-bonus">+10% bonus</div>
-      <button class="btn-pkg gold" onclick="initiateTopup('10')">Nạp $10</button>
+      <div class="pkg-icon">👨‍👩‍👧‍👦</div>
+      <div class="pkg-name">Gia Đình</div>
+      <div class="pkg-credits">500<span class="pkg-credits-unit">lượng</span></div>
+      <div class="pkg-price">$45 <span style="font-size:.75rem;font-weight:400;color:var(--text-lt)">≈ 1.1tr VNĐ</span></div>
+      <div class="pkg-rate" style="color:var(--green);font-weight:600">$0.09 / lượng — tiết kiệm 10%</div>
+      <ul class="pkg-perks">
+        <li><span class="perk-check">✓</span> 3× Luận Giải Lá Số (cho cả nhà)</li>
+        <li><span class="perk-check">✓</span> + Xem tuổi, đặt tên, chọn ngày</li>
+        <li><span class="perk-check">✓</span> 50+ lần Xem Tướng các loại</li>
+        <li><span class="perk-check">✓</span> Không hết hạn · Dùng chung account</li>
+      </ul>
+      <button class="btn-pkg gold" onclick="initiateTopup('45')" id="btn-45">Nạp $45</button>
     </div>
 
-    <!-- Pro -->
+    <!-- Nhóm -->
     <div class="pkg-card">
-      <div class="pkg-name">Pro</div>
-      <div class="pkg-credits">240 <span>credits</span></div>
-      <div class="pkg-price">$20</div>
-      <div class="pkg-rate">$0.083 / credit</div>
-      <div class="pkg-bonus">+20% bonus</div>
-      <button class="btn-pkg" onclick="initiateTopup('20')">Nạp $20</button>
+      <div class="pkg-icon">👥</div>
+      <div class="pkg-name">Nhóm</div>
+      <div class="pkg-credits">1000<span class="pkg-credits-unit">lượng</span></div>
+      <div class="pkg-price">$80 <span style="font-size:.75rem;font-weight:400;color:var(--text-lt)">≈ 2tr VNĐ</span></div>
+      <div class="pkg-rate" style="color:var(--green);font-weight:600">$0.08 / lượng — tiết kiệm 20%</div>
+      <ul class="pkg-perks">
+        <li><span class="perk-check">✓</span> 6× Luận Giải Lá Số đầy đủ</li>
+        <li><span class="perk-check">✓</span> Dùng cho cả nhóm bạn / công ty</li>
+        <li><span class="perk-check">✓</span> 100+ lần Xem Tướng, Đặt Tên...</li>
+        <li><span class="perk-check">✓</span> Không hết hạn · Tiết kiệm nhất</li>
+      </ul>
+      <button class="btn-pkg" onclick="initiateTopup('80')" id="btn-80">Nạp $80</button>
+    </div>
+
+  </div>
+
+  <!-- Custom topup -->
+  <div class="custom-card" id="customCard">
+    <div class="custom-card-label">
+      <strong>Nạp Số Tiền Tùy Chỉnh</strong>
+      <span>Tối thiểu $5 · Tối đa $500 · 10 lượng / $1</span>
+    </div>
+    <div class="custom-input-wrap">
+      <span class="custom-prefix">$</span>
+      <input type="number" class="custom-input" id="customInput" min="5" max="500" step="1" placeholder="10" oninput="onCustomInput()">
+      <span class="custom-credits-preview" id="customPreview">= 100 lượng</span>
+      <button class="btn-custom" id="btnCustom" onclick="initiateTopup('custom')">Nạp Ngay</button>
     </div>
   </div>
 
-  <!-- Tool Costs -->
+  <!-- Tool Costs — Dynamic -->
   <div class="costs-section">
-    <h3>Chi phí sử dụng</h3>
-    <div class="cost-row">
-      <div style="display:flex;align-items:center">
-        <span class="cost-icon">🔮</span>
-        <span class="cost-name">Luận Giải Lá Số (24 phần đầy đủ)</span>
-      </div>
-      <div><span class="cost-price">150 credits</span><span class="cost-usd">≈ $15</span></div>
-    </div>
-    <div class="cost-row">
-      <div style="display:flex;align-items:center">
-        <span class="cost-icon">💑</span>
-        <span class="cost-name">Xem Tuổi Vợ Chồng</span>
-      </div>
-      <div><span class="cost-price">50 credits</span><span class="cost-usd">≈ $5</span></div>
-    </div>
-    <div class="cost-row">
-      <div style="display:flex;align-items:center">
-        <span class="cost-icon">💼</span>
-        <span class="cost-name">Xem Tuổi Làm Ăn</span>
-      </div>
-      <div><span class="cost-price">50 credits</span><span class="cost-usd">≈ $5</span></div>
-    </div>
+    <h3>Chi Phí Các Công Cụ</h3>
+    <p class="costs-subtitle">Cập nhật tự động khi có công cụ mới. $1 = 10 lượng.</p>
+    <div id="costsContent"><div class="costs-loading">⏳ Đang tải...</div></div>
   </div>
 
   <!-- FAQ -->
   <div class="faq">
-    <h3>Câu hỏi thường gặp</h3>
+    <h3>Câu Hỏi Thường Gặp</h3>
     <div class="faq-item">
-      <div class="faq-q">Credits có hết hạn không?</div>
-      <div class="faq-a">Không. Credits không bao giờ hết hạn và được lưu vĩnh viễn trong tài khoản của bạn.</div>
+      <div class="faq-q">Lượng có hết hạn không?</div>
+      <div class="faq-a">Không bao giờ. Lượng được lưu vĩnh viễn trong tài khoản.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">Tôi đã dùng credits cho một lá số, nếu xem lại có bị trừ tiếp không?</div>
-      <div class="faq-a">Không. Mỗi lá số hoặc kết quả xem tuổi chỉ trừ credits một lần. Sau đó bạn có thể xem lại tùy ý miễn phí.</div>
+      <div class="faq-q">Xem lại kết quả có bị trừ lượng tiếp không?</div>
+      <div class="faq-a">Không. Mỗi lá số / kết quả chỉ trừ lượng một lần. Sau đó xem lại tùy ý miễn phí.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">Tôi có thể thanh toán bằng thẻ Visa/Mastercard không?</div>
-      <div class="faq-a">Có. Trong cửa sổ PayPal, chọn "Pay with Debit or Credit Card" để nhập thông tin thẻ trực tiếp mà không cần tài khoản PayPal.</div>
+      <div class="faq-q">Thanh toán bằng thẻ Visa/Mastercard được không?</div>
+      <div class="faq-a">Được. Trong cửa sổ PayPal, chọn "Pay with Debit or Credit Card" để nhập thẻ trực tiếp — không cần tài khoản PayPal.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">Credits dùng chung được không?</div>
-      <div class="faq-a">Credits gắn với tài khoản cá nhân và không thể chuyển nhượng.</div>
+      <div class="faq-q">10 lượng miễn phí khi đăng ký dùng được những gì?</div>
+      <div class="faq-a">Dùng được 2 lần Xem Tướng (5 lượng/lần), hoặc 1 lần Chọn Ngày Tốt (15 lượng — cần thêm 5 lượng), hoặc dùng thử nhiều công cụ nhỏ khác.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Lượng có dùng chung được không?</div>
+      <div class="faq-a">Lượng gắn với tài khoản cá nhân. Gói Gia Đình phù hợp nhất khi muốn xem cho nhiều người trong cùng một tài khoản.</div>
     </div>
   </div>
 </div>
 
-<script src="/nav.js"></script>
 <script src="/footer.js"></script>
-
 <script>
 const SUPABASE_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 
+// ── Load balance ──────────────────────────────────────────────
 async function loadBalance() {
-  const deadline = Date.now() + 2000;
-  while (!window.Auth?.isLoggedIn() && Date.now() < deadline) {
+  const deadline = Date.now() + 3000;
+  while (!window.Auth?.isLoggedIn() && Date.now() < deadline)
     await new Promise(r => setTimeout(r, 100));
-  }
-  if (!window.Auth?.isLoggedIn()) return;
 
+  const loggedIn = window.Auth?.isLoggedIn();
+
+  // Hide free banner if already logged in
+  if (loggedIn) document.getElementById('freeBanner').style.display = 'none';
+
+  if (!loggedIn) return;
   const userId = window.Auth.getUser()?.id;
   if (!userId) return;
 
   try {
-    const res = await fetch(`/api/payment?action=balance&userId=${encodeURIComponent(userId)}`);
+    const res  = await fetch(`/api/payment?action=balance&userId=${encodeURIComponent(userId)}`);
     const data = await res.json();
-    const balance = data.balance ?? 0;
-    document.getElementById('balanceDisplay').innerHTML = `${balance} <span>credits</span>`;
-    document.getElementById('balanceBar').style.display = 'flex';
+    const bal  = data.balance ?? 0;
+    document.getElementById('balanceDisplay').innerHTML = `${bal} <span>lượng</span>`;
+    document.getElementById('balanceBar').classList.add('show');
   } catch(e) {}
 
-  // Show cancelled banner if redirected back
+  // Cancelled payment banner
   const p = new URLSearchParams(window.location.search);
   if (p.get('payment') === 'cancelled') {
-    const alert = document.getElementById('alertBox');
-    alert.className = 'alert error';
-    alert.textContent = 'Thanh toán đã bị hủy. Bạn có thể thử lại bất kỳ lúc nào.';
-    alert.style.display = 'block';
+    showAlert('error', 'Thanh toán đã bị hủy. Bạn có thể thử lại bất kỳ lúc nào.');
     window.history.replaceState({}, '', '/topup.html');
   }
 }
 
+// ── Load tool pricing from Supabase ──────────────────────────
+async function loadToolPricing() {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/tool_pricing?enabled=eq.true&select=tool_id,label,credits,icon,category,sort_order,is_free,description&order=sort_order.asc`,
+      { headers: { 'apikey': SUPABASE_ANON } }
+    );
+    const tools = await res.json();
+    if (!tools?.length) { document.getElementById('costsContent').innerHTML = '<div class="costs-loading">Không có dữ liệu.</div>'; return; }
+
+    // Group by category
+    const groups = {};
+    tools.forEach(t => {
+      if (!groups[t.category]) groups[t.category] = [];
+      groups[t.category].push(t);
+    });
+
+    const catOrder = ['Luận Giải', 'Xem Tướng', 'Đặt Tên & Ngày', 'Khác'];
+    const sortedCats = Object.keys(groups).sort((a, b) => {
+      const ia = catOrder.indexOf(a), ib = catOrder.indexOf(b);
+      return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+    });
+
+    let html = '';
+    sortedCats.forEach(cat => {
+      html += `<div class="cost-category">${cat}</div>`;
+      groups[cat].forEach(t => {
+        const creditsHtml = t.is_free
+          ? `<span class="cost-free-badge">Miễn Phí</span>`
+          : `<div class="cost-credits">${t.credits} lượng</div><div class="cost-usd">≈ $${(t.credits / 10).toFixed(1)}</div>`;
+        html += `
+          <div class="cost-row">
+            <div class="cost-left">
+              <div class="cost-icon-wrap">${t.icon || '🔮'}</div>
+              <div class="cost-info">
+                <div class="cost-name">${t.label}</div>
+                ${t.description ? `<div class="cost-desc">${t.description}</div>` : ''}
+              </div>
+            </div>
+            <div class="cost-right">${creditsHtml}</div>
+          </div>`;
+      });
+    });
+
+    document.getElementById('costsContent').innerHTML = html;
+  } catch(e) {
+    document.getElementById('costsContent').innerHTML = '<div class="costs-loading">Không tải được. Vui lòng thử lại.</div>';
+  }
+}
+
+// ── Custom input ──────────────────────────────────────────────
+function onCustomInput() {
+  const val = parseFloat(document.getElementById('customInput').value) || 0;
+  const credits = Math.round(val * 10);
+  document.getElementById('customPreview').textContent = val >= 5 ? `= ${credits} lượng` : 'Tối thiểu $5';
+}
+
+// ── Initiate topup ────────────────────────────────────────────
 async function initiateTopup(packageId) {
-  // Require login
   if (!window.Auth?.isLoggedIn()) {
     window.showAuthModal(async () => { await initiateTopup(packageId); });
     return;
   }
 
   const userId = window.Auth.getUser()?.id;
-  const btnMap = { '10': 0, '20': 1, '40': 2 };
-  const btns = document.querySelectorAll('.btn-pkg');
-  const btn = btns[btnMap[packageId]];
+  let customAmount = null;
 
+  if (packageId === 'custom') {
+    customAmount = parseFloat(document.getElementById('customInput').value) || 0;
+    if (customAmount < 5 || customAmount > 500) {
+      showAlert('error', 'Vui lòng nhập số tiền từ $5 đến $500.');
+      return;
+    }
+  }
+
+  // Disable button
+  const btnId = packageId === 'custom' ? 'btnCustom' : `btn-${packageId}`;
+  const btn = document.getElementById(btnId);
   if (btn) { btn.disabled = true; btn.textContent = 'Đang kết nối...'; }
 
   try {
-    const res = await fetch('/api/payment?action=topup', {
+    const body = { packageId, userId };
+    if (customAmount) body.customAmount = customAmount;
+
+    const res  = await fetch('/api/payment?action=topup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ packageId, userId }),
+      body: JSON.stringify(body),
     });
     const data = await res.json();
     if (data.approvalUrl) {
@@ -292,15 +379,37 @@ async function initiateTopup(packageId) {
       throw new Error(data.error || 'Không tạo được đơn PayPal');
     }
   } catch(e) {
-    if (btn) { btn.disabled = false; btn.textContent = packageId === '10' ? 'Nạp $10' : packageId === '20' ? 'Nạp $20' : 'Nạp $5'; }
-    const alert = document.getElementById('alertBox');
-    alert.className = 'alert error';
-    alert.textContent = 'Lỗi kết nối PayPal: ' + (e.message || 'Vui lòng thử lại.');
-    alert.style.display = 'block';
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = packageId === '20' ? 'Nạp $20' : packageId === '45' ? 'Nạp $45' : 'Nạp Ngay';
+    }
+    showAlert('error', 'Lỗi kết nối PayPal: ' + (e.message || 'Vui lòng thử lại.'));
   }
 }
 
+// ── Free signup ───────────────────────────────────────────────
+function handleFreeSignup() {
+  if (window.Auth?.isLoggedIn()) {
+    document.getElementById('freeBanner').style.display = 'none';
+    return;
+  }
+  window.showAuthModal(() => {
+    document.getElementById('freeBanner').style.display = 'none';
+    loadBalance();
+  });
+}
+
+function showAlert(type, msg) {
+  const el = document.getElementById('alertBox');
+  el.className = 'alert ' + type;
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 6000);
+}
+
+// Init
 loadBalance();
+loadToolPricing();
 </script>
 </body>
 </html>
