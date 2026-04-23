@@ -36,8 +36,13 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 .profile-email{color:rgba(255,255,255,.7);font-size:.85rem;margin-bottom:.25rem}
 .profile-name{color:#fff;font-family:'Noto Serif',serif;font-size:1.25rem;font-weight:700}
 .profile-since{color:rgba(255,255,255,.45);font-size:.78rem;margin-top:.3rem}
-.profile-signout{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);padding:.5rem 1.1rem;border-radius:6px;cursor:pointer;font-size:.82rem;transition:all .2s}
-.profile-signout:hover{background:rgba(255,255,255,.18)}
+.profile-signout{background:rgba(192,57,43,.2);border:1px solid rgba(220,80,60,.45);color:#f5a49a;padding:.5rem 1.1rem;border-radius:6px;cursor:pointer;font-size:.82rem;font-weight:600;transition:all .2s}
+.profile-signout:hover{background:rgba(192,57,43,.45);color:#fff;border-color:rgba(220,80,60,.8)}
+.provider-badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.7rem;color:rgba(255,255,255,.45);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:.15rem .6rem;margin-top:.35rem;width:fit-content}
+.credit-progress-wrap{margin:.85rem 0 .5rem}
+.credit-progress-label{display:flex;justify-content:space-between;font-size:.74rem;color:rgba(255,255,255,.5);margin-bottom:.45rem}
+.credit-progress-track{background:rgba(255,255,255,.1);border-radius:20px;height:7px;overflow:hidden}
+.credit-progress-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#c9a84c,#f0d080);transition:width .7s cubic-bezier(.4,0,.2,1)}
 .credit-widget{background:rgba(255,255,255,.07);border:1px solid rgba(201,168,76,.35);border-radius:8px;padding:.6rem 1rem;text-align:center;min-width:110px}
 .credit-widget-label{color:rgba(255,255,255,.5);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.2rem}
 .credit-widget-value{color:#c9a84c;font-family:'Noto Serif',serif;font-size:1.3rem;font-weight:700;line-height:1.2}
@@ -178,8 +183,9 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 
 @media(max-width:600px){
   .profile-header{flex-direction:column;text-align:center;gap:1rem;padding:1.5rem}
-  .tabs{overflow-x:auto;flex-nowrap:nowrap}
-  .tab-btn{min-width:100px;font-size:.78rem;padding:.7rem .4rem}
+  .tabs{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab-btn{min-width:95px;font-size:.77rem;padding:.7rem .35rem;white-space:nowrap}
   .card-grid{grid-template-columns:1fr}
   .xem-item{flex-wrap:wrap}
 }
@@ -200,8 +206,9 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
   <div id="notLoggedIn" style="display:none;text-align:center;padding:4rem 1rem">
     <div style="font-size:2.5rem;margin-bottom:1rem">🔮</div>
     <h2 style="font-family:'Noto Serif',serif;color:var(--navy);margin-bottom:.75rem">Đăng nhập để xem hồ sơ</h2>
-    <p style="color:var(--text-lt);margin-bottom:1.5rem">Hồ sơ giúp bạn xem lại lá số, kết quả xem tuổi và lịch sử trò chuyện.</p>
-    <button class="btn-primary" onclick="showAuthModal(function(){ location.reload(); })">Đăng Nhập</button>
+    <p style="color:var(--text-lt);margin-bottom:.6rem">Hồ sơ giúp bạn xem lại lá số, kết quả xem tuổi và lịch sử trò chuyện.</p>
+    <p style="color:var(--text-lt);font-size:.82rem;margin-bottom:1.5rem">Hỗ trợ đăng nhập qua <strong>Google</strong>, <strong>Facebook</strong> hoặc email.</p>
+    <button class="btn-primary" onclick="showAuthModal(function(){ location.reload(); })">Đăng Nhập / Đăng Ký</button>
   </div>
 
   <!-- MAIN DASHBOARD -->
@@ -214,6 +221,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
         <div class="profile-email" id="userEmail"></div>
         <div class="profile-name" id="userDisplayName">Người Dùng</div>
         <div class="profile-since" id="userSince"></div>
+        <div id="providerBadge" style="display:none" class="provider-badge"></div>
       </div>
       <div style="display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;justify-content:flex-end">
         <div class="credit-widget">
@@ -257,13 +265,24 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 
     <!-- Tab: Credits -->
     <div class="tab-content" id="tab-credits">
-      <div style="background:var(--navy);border-radius:12px;padding:1.5rem 2rem;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
-        <div>
-          <div style="color:rgba(255,255,255,.55);font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem">Số Dư Credits</div>
-          <div id="tabCreditBalance" style="color:#c9a84c;font-family:'Noto Serif',serif;font-size:2rem;font-weight:700">…</div>
-          <div style="color:rgba(255,255,255,.4);font-size:.75rem;margin-top:.3rem">$1 = 10 credits · Không hết hạn</div>
+      <div style="background:var(--navy);border-radius:12px;padding:1.5rem 2rem;margin-bottom:1.25rem">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:.25rem">
+          <div>
+            <div style="color:rgba(255,255,255,.55);font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem">Số Dư Credits</div>
+            <div id="tabCreditBalance" style="color:#c9a84c;font-family:'Noto Serif',serif;font-size:2rem;font-weight:700">…</div>
+            <div style="color:rgba(255,255,255,.4);font-size:.75rem;margin-top:.3rem">$1 = 10 credits · Không hết hạn</div>
+          </div>
+          <a href="/topup.html" style="background:#c9a84c;color:#061A2E;padding:.75rem 1.5rem;border-radius:8px;font-size:.88rem;font-weight:700;text-decoration:none;align-self:flex-start">💳 Nạp Credits</a>
         </div>
-        <a href="/topup.html" style="background:#c9a84c;color:#061A2E;padding:.75rem 1.5rem;border-radius:8px;font-size:.88rem;font-weight:700;text-decoration:none">💳 Nạp Credits</a>
+        <div class="credit-progress-wrap">
+          <div class="credit-progress-label">
+            <span>Đã dùng tháng này</span>
+            <span id="monthlyUsageLabel">0 credits</span>
+          </div>
+          <div class="credit-progress-track">
+            <div class="credit-progress-fill" id="monthlyUsageBar" style="width:0%"></div>
+          </div>
+        </div>
       </div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.25rem">
         <a href="/" style="background:#fff;border:1px solid var(--border-lt);border-radius:8px;padding:1rem;text-decoration:none;text-align:center;color:var(--navy)">
@@ -307,6 +326,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 
         <div class="account-section">
           <h3>Đổi mật khẩu</h3>
+          <div id="pwdSection">
           <div class="form-row">
             <label>Mật khẩu mới</label>
             <input type="password" id="newPwd" placeholder="Nhập mật khẩu mới"/>
@@ -317,11 +337,14 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
           </div>
           <button class="btn-primary" onclick="changePassword()">Đổi Mật Khẩu</button>
           <div id="pwdAlert"></div>
+          </div>
+          <div id="pwdOAuthMsg" style="display:none;font-size:.85rem;color:var(--text-lt);padding:.5rem 0">
+            Tài khoản đăng nhập qua OAuth không sử dụng mật khẩu.
+          </div>
         </div>
 
-        <div class="account-section">
-          <h3>Lịch sử thanh toán</h3>
-          <div id="purchaseList"><div style="color:var(--text-lt);font-size:.85rem">Đang tải...</div></div>
+        <div class="account-section" style="border:1px solid var(--border-lt);border-radius:var(--radius);padding:1rem 1.2rem;background:var(--gold-lt)">
+          <p style="font-size:.82rem;color:var(--text-mid)">💳 Xem lịch sử giao dịch và số dư credits tại tab <strong><a href="#" onclick="document.querySelector('[data-tab=credits]').click();return false" style="color:var(--gold)">Credits</a></strong>.</p>
         </div>
       </div>
     </div>
@@ -414,6 +437,28 @@ function renderProfileHeader() {
   document.getElementById('userSince').textContent = createdAt ? `Thành viên từ ${createdAt}` : '';
   document.getElementById('accEmail').value = email;
   document.getElementById('accName').value = displayName;
+
+  // Detect OAuth provider
+  const identities = _pUser.identities || [];
+  const oauthIdentity = identities.find(i => i.provider !== 'email');
+  const isOAuthOnly = identities.length > 0 && !identities.find(i => i.provider === 'email');
+
+  if (oauthIdentity) {
+    const PROVIDER_ICONS = { google: '🔵', facebook: '🔷' };
+    const PROVIDER_NAMES = { google: 'Google', facebook: 'Facebook' };
+    const badge = document.getElementById('providerBadge');
+    if (badge) {
+      badge.style.display = 'inline-flex';
+      badge.textContent = (PROVIDER_ICONS[oauthIdentity.provider] || '🔗') + ' via ' + (PROVIDER_NAMES[oauthIdentity.provider] || oauthIdentity.provider);
+    }
+  }
+
+  if (isOAuthOnly) {
+    const pwdSection = document.getElementById('pwdSection');
+    const pwdOAuthMsg = document.getElementById('pwdOAuthMsg');
+    if (pwdSection) pwdSection.style.display = 'none';
+    if (pwdOAuthMsg) pwdOAuthMsg.style.display = 'block';
+  }
 }
 
 document.getElementById('btnSignout').onclick = () => Auth.signOut();
@@ -485,19 +530,21 @@ function lasoCard(l) {
   const letter = name[0].toUpperCase();
   const gioi = l.gioi_tinh === 'nam' ? '♂ Nam' : '♀ Nữ';
   const ngaySinh = `${l.ngay_sinh}/${l.thang_sinh}/${l.nam_sinh}`;
+  // Cung Mệnh + cục hiện ngay subtitle trên card-top
+  const menhCuc = [l.cung_menh ? `Mệnh ${l.cung_menh}` : '', l.cuc || ''].filter(Boolean).join(' · ');
+  const chinh = l.chinh_tinh ? `<span class="badge blue" style="margin-top:.5rem">${l.chinh_tinh}</span>` : '';
   return `<div class="laso-card" onclick="openLuanModal('${l.slug}','${escHtml(name)}')">
     <div class="card-top">
       <div class="card-avatar">${letter}</div>
       <div>
         <div class="card-title">${escHtml(name)}</div>
         <div class="card-subtitle">${ngaySinh} · Giờ ${l.gio_chi} · ${gioi}</div>
+        ${menhCuc ? `<div class="card-subtitle" style="color:#c9a84c;margin-top:.2rem;font-weight:600">${menhCuc}</div>` : ''}
       </div>
     </div>
     <div class="card-body">
-      <div class="card-badges">
-        ${l.cung_menh ? `<span class="badge">Mệnh ${l.cung_menh}</span>` : ''}
-        ${l.chinh_tinh ? `<span class="badge blue">${l.chinh_tinh}</span>` : ''}
-        ${l.cuc ? `<span class="badge">${l.cuc}</span>` : ''}
+      <div class="card-badges" style="margin-bottom:.6rem">
+        ${chinh}
       </div>
       <div class="card-date">📅 ${date}</div>
       <div class="card-actions">
@@ -618,6 +665,26 @@ async function loadCredits() {
     );
     const txns = res.ok ? await res.json() : [];
     renderTransactions(txns);
+
+    // Monthly usage progress bar
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const monthUsed = txns
+      .filter(tx => tx.amount < 0 && new Date(tx.created_at) >= monthStart)
+      .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
+    // Get current balance to estimate total (used + remaining)
+    const balRes = await fetch('/api/payment?action=balance&userId=' + encodeURIComponent(_pUser.id));
+    const balData = await balRes.json();
+    const currentBal = balData.balance ?? 0;
+    const totalThisMonth = monthUsed + currentBal;
+    const pct = totalThisMonth > 0 ? Math.min(100, Math.round(monthUsed / totalThisMonth * 100)) : 0;
+
+    const bar = document.getElementById('monthlyUsageBar');
+    const label = document.getElementById('monthlyUsageLabel');
+    if (bar) setTimeout(() => { bar.style.width = pct + '%'; }, 100);
+    if (label) label.textContent = monthUsed + ' credits';
+    // Color shift when high usage
+    if (bar && pct >= 80) bar.style.background = 'linear-gradient(90deg,#c0392b,#e74c3c)';
   } catch(e) {
     document.getElementById('transactionList').innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Không thể tải lịch sử.</div>';
   }
