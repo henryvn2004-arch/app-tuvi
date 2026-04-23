@@ -1,6 +1,9 @@
 // app/api/xem-tuoi/route.ts
 // POST /api/xem-tuoi              → xem tuổi / làm ăn
-// POST /api/xem-tuoi?action=chat  → chatbot với dual laso context
+// POST /api/xem-tuoi?action=chat           → chatbot
+// POST /api/xem-tuoi?action=dat-ten-con    → đặt tên con
+// POST /api/xem-tuoi?action=dat-ten-doanh-nghiep → đặt tên DN
+// POST /api/xem-tuoi?action=chon-ngay-tot  → chọn ngày tốt
 export const maxDuration = 60;
 
 import { NextRequest } from 'next/server';
@@ -166,14 +169,137 @@ Lưu ý đặc biệt: Đây là chế độ so sánh tương hợp 2 lá số. 
   return ok({ answer: data.content?.[0]?.text || '', scenario: hasLaso ? 'laso' : 'general' });
 }
 
+// ─── Đặt tên con ─────────────────────────────────────────────
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function handleDatTenCon(body: any): Promise<Response> {
+  const { ho, gioiTinh, namSinhCon, canChiCon, napAmCon, canChiBo, napAmBo, canChiMe, napAmMe } = body;
+  if (!ho || !namSinhCon || !canChiCon) return err('Thiếu thông tin', 400);
+
+  const system = `Bạn là chuyên gia đặt tên con theo ngũ hành và Hán Việt học cổ điển.
+
+Cơ sở luận tên (chỉ dùng các cơ sở sau):
+1. Ngũ hành nạp âm — Lục Thập Hoa Giáp: xác định hành cần bổ trợ dựa trên sinh khắc giữa con, bố, mẹ
+2. Ý nghĩa chữ Hán — tra từ điển Hán Việt: chọn chữ có nghĩa tốt, phù hợp nguyện vọng
+3. Âm Hán Việt thanh tao, phát âm đẹp và tự nhiên trong tiếng Việt
+
+KHÔNG dùng: hệ thống 81 số nét cát hung (do người Nhật thế kỷ 20 phát triển, không có cơ sở cổ pháp Trung Hoa). Nếu có ghi số nét Khang Hy, ghi rõ "chỉ để tham khảo — không luận cát hung từ số nét".
+
+Ngũ hành sinh: Mộc→Hỏa→Thổ→Kim→Thủy→Mộc
+Ngũ hành khắc: Mộc→Thổ, Thổ→Thủy, Thủy→Hỏa, Hỏa→Kim, Kim→Mộc
+
+Cách phân tích: xác định hành con cần thêm (hành bị thiếu hoặc cần sinh trợ), sau đó chọn chữ Hán mang ý nghĩa và ngũ hành phù hợp.
+
+Format: Trả về 3 nhóm (mỗi nhóm 4 tên), tiêu đề nhóm theo mức ưu tiên ngũ hành. Mỗi tên:
+**[Họ + Tên đầy đủ]** — Chữ Hán: [chữ] · Âm HV: [âm] · Nghĩa: [nghĩa ngắn gọn] · Hành chữ: [hành] · Phù hợp vì: [1 câu lý do ngũ hành]`;
+
+  const user = `Đặt tên cho con:
+- Họ: ${ho} | Giới tính: ${gioiTinh}
+- Năm sinh con: ${namSinhCon} (${canChiCon}) — Nạp âm: ${napAmCon}
+- Bố: năm sinh ${canChiBo} — Nạp âm: ${napAmBo}
+- Mẹ: năm sinh ${canChiMe} — Nạp âm: ${napAmMe}
+
+Trước khi gợi ý tên, hãy viết 2–3 câu phân tích ngũ hành của gia đình và hành cần bổ trợ cho con. Sau đó gợi ý 12 tên phù hợp chia 3 nhóm.`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 2500, system, messages: [{ role: 'user', content: user }] }),
+    });
+    const data = await resp.json();
+    return ok({ result: data.content?.[0]?.text || '' });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ─── Đặt tên doanh nghiệp ────────────────────────────────────
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function handleDatTenDoanhNghiep(body: any): Promise<Response> {
+  const { hoTen, namSinh, canChiChu, napAmChu, linhVuc, loaiHinh, maSo } = body;
+  if (!hoTen || !namSinh || !linhVuc) return err('Thiếu thông tin', 400);
+
+  const system = `Bạn là chuyên gia tư vấn đặt tên thương hiệu/doanh nghiệp theo ngũ hành và ngôn ngữ học.
+
+Cơ sở tư vấn:
+1. Ngũ hành nạp âm chủ doanh nghiệp — xác định hành cần bổ trợ
+2. Âm thanh và ý nghĩa tên — dễ nhớ, dễ phát âm, phù hợp ngành nghề
+3. Chữ Hán nếu dùng — phải có ý nghĩa thực sự, không gượng ép
+4. Tính khả dụng thực tiễn — không trùng thương hiệu lớn, phù hợp đăng ký
+
+KHÔNG dùng: số nét cát hung, phong thủy màu sắc mà không có cơ sở. Trung thực về giới hạn: đây là gợi ý tham khảo, không đảm bảo thành công kinh doanh.
+
+Format: 3 nhóm × 4 tên. Mỗi tên:
+**[Tên đề xuất]** — Ý nghĩa: [giải thích] · Hành: [hành tên] · Ngũ hành phù hợp: [lý do] · Ghi chú thực tiễn: [1 câu]`;
+
+  const user = `Đặt tên doanh nghiệp:
+- Chủ: ${hoTen} | Năm sinh: ${namSinh} (${canChiChu}) — Nạp âm: ${napAmChu}
+- Lĩnh vực: ${linhVuc}
+- Loại hình: ${loaiHinh}
+${maSo ? `- Mã số ngành: ${maSo}` : ''}
+
+Phân tích ngắn ngũ hành phù hợp cho lĩnh vực này, sau đó gợi ý 12 tên chia 3 nhóm: Tên Thuần Việt / Tên Hán Việt / Tên Kết Hợp.`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 2500, system, messages: [{ role: 'user', content: user }] }),
+    });
+    const data = await resp.json();
+    return ok({ result: data.content?.[0]?.text || '' });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ─── Chọn ngày tốt ───────────────────────────────────────────
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function handleChonNgayTot(body: any): Promise<Response> {
+  const { suKien, hoTen, namSinh, canChiNguoi, napAmNguoi, thangCanChi, namCanChi, thangNum, namNum } = body;
+  if (!suKien || !namSinh || !thangNum || !namNum) return err('Thiếu thông tin', 400);
+
+  const system = `Bạn là chuyên gia tư vấn chọn ngày tốt theo nguyên lý Tứ Trụ và ngũ hành.
+
+Cơ sở phân tích:
+1. Ngũ hành nạp âm người chính — hành nào tương sinh/tương hợp
+2. Can chi tháng mục tiêu — xét sinh khắc với người
+3. Nguyên lý địa chi: Lục Hợp (Tý-Sửu, Dần-Hợi, Mão-Tuất, Thìn-Dậu, Tỵ-Thân, Ngọ-Mùi), Tam Hợp, Lục Xung — để tìm ngày địa chi thuận
+4. Theo loại sự kiện: nguyên tắc cổ truyền phù hợp (cưới hỏi, khai trương, nhập trạch...)
+
+Giới hạn trung thực: Không có cơ sở dữ liệu Thông Thư thực tế — phân tích dựa trên nguyên lý. Khuyến khích đối chiếu với lịch vạn niên cụ thể trước khi quyết định.
+
+Format: Gợi ý 4–5 khoảng thời gian tốt trong tháng, mỗi khoảng gồm:
+**[Ngày X–Y tháng Z]** — Can chi ngày: [...] · Lý do: [nguyên lý cụ thể] · Phù hợp vì: [liên hệ với ngũ hành người] · Lưu ý: [điều cần tránh nếu có]
+
+Cuối: 1 đoạn tổng hợp khuyến nghị và lưu ý thực tiễn.`;
+
+  const user = `Chọn ngày tốt cho sự kiện:
+- Sự kiện: ${suKien}
+- Người chính: ${hoTen} | Năm sinh: ${namSinh} (${canChiNguoi}) — Nạp âm: ${napAmNguoi}
+- Tháng cần chọn: tháng ${thangNum}/${namNum} (${thangCanChi} — năm ${namCanChi})
+
+Phân tích và gợi ý các khoảng ngày tốt trong tháng này cho sự kiện trên.`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 2000, system, messages: [{ role: 'user', content: user }] }),
+    });
+    const data = await resp.json();
+    return ok({ result: data.content?.[0]?.text || '' });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
 // ─── Route handlers ───────────────────────────────────────────
 export async function OPTIONS() { return options(); }
 
 export async function POST(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const body = await parseBody(request);
+  const action = searchParams.get('action');
 
-  if (searchParams.get('action') === 'chat') return handleChat(body);
+  if (action === 'chat')                  return handleChat(body);
+  if (action === 'dat-ten-con')           return handleDatTenCon(body);
+  if (action === 'dat-ten-doanh-nghiep')  return handleDatTenDoanhNghiep(body);
+  if (action === 'chon-ngay-tot')         return handleChonNgayTot(body);
 
   const { prompt } = body as { prompt?: string };
   if (!prompt) return err('Missing prompt', 400);
