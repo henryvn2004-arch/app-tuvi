@@ -251,7 +251,7 @@ Format: Trả về 3 nhóm (mỗi nhóm 4 tên), tiêu đề nhóm theo mức ư
 
 Trước khi gợi ý tên, hãy viết 2–3 câu phân tích ngũ hành của gia đình và hành cần bổ trợ cho con. Sau đó gợi ý 12 tên phù hợp chia 3 nhóm.`;
 
-  return streamAnthropicResponse(system, user, 2500);
+  return streamAnthropicResponse(system, user, 4000);
 }
 
 // ─── Đặt tên doanh nghiệp ────────────────────────────────────
@@ -281,7 +281,7 @@ ${maSo ? `- Mã số ngành: ${maSo}` : ''}
 
 Phân tích ngắn ngũ hành phù hợp cho lĩnh vực này, sau đó gợi ý 12 tên chia 3 nhóm: Tên Thuần Việt / Tên Hán Việt / Tên Kết Hợp.`;
 
-  return streamAnthropicResponse(system, user, 2500);
+  return streamAnthropicResponse(system, user, 4000);
 }
 
 // ─── Chọn ngày tốt ───────────────────────────────────────────
