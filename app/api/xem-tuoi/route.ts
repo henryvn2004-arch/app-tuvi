@@ -169,6 +169,59 @@ Lưu ý đặc biệt: Đây là chế độ so sánh tương hợp 2 lá số. 
   return ok({ answer: data.content?.[0]?.text || '', scenario: hasLaso ? 'laso' : 'general' });
 }
 
+// ─── Streaming helper ────────────────────────────────────────
+async function streamAnthropicResponse(system: string, user: string, maxTokens: number): Promise<Response> {
+  const enc = new TextEncoder();
+  const sendErr = (msg: string) => new Response(
+    `data: ${JSON.stringify({ err: msg })}\n\ndata: [DONE]\n\n`,
+    { headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Access-Control-Allow-Origin': '*' } }
+  );
+
+  let upstream: globalThis.Response;
+  try {
+    upstream = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: maxTokens, stream: true, system, messages: [{ role: 'user', content: user }] }),
+    });
+  } catch (e: unknown) { return sendErr((e as Error).message); }
+
+  if (!upstream.ok) return sendErr((await upstream.text()).slice(0, 200));
+
+  const stream = new ReadableStream({
+    async start(controller) {
+      const reader = upstream.body!.getReader();
+      const dec = new TextDecoder();
+      let buf = '';
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buf += dec.decode(value, { stream: true });
+          const lines = buf.split('\n'); buf = lines.pop() || '';
+          for (const line of lines) {
+            if (!line.startsWith('data: ')) continue;
+            const raw = line.slice(6).trim();
+            if (raw === '[DONE]') { controller.enqueue(enc.encode('data: [DONE]\n\n')); break; }
+            try {
+              const j = JSON.parse(raw);
+              if (j.type === 'content_block_delta' && j.delta?.text)
+                controller.enqueue(enc.encode(`data: ${JSON.stringify({ t: j.delta.text })}\n\n`));
+            } catch { /* skip malformed */ }
+          }
+        }
+      } catch (e: unknown) {
+        controller.enqueue(enc.encode(`data: ${JSON.stringify({ err: (e as Error).message })}\n\n`));
+      }
+      controller.close();
+    }
+  });
+
+  return new Response(stream, {
+    headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Access-Control-Allow-Origin': '*' }
+  });
+}
+
 // ─── Đặt tên con ─────────────────────────────────────────────
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function handleDatTenCon(body: any): Promise<Response> {
@@ -187,8 +240,6 @@ KHÔNG dùng: hệ thống 81 số nét cát hung (do người Nhật thế kỷ
 Ngũ hành sinh: Mộc→Hỏa→Thổ→Kim→Thủy→Mộc
 Ngũ hành khắc: Mộc→Thổ, Thổ→Thủy, Thủy→Hỏa, Hỏa→Kim, Kim→Mộc
 
-Cách phân tích: xác định hành con cần thêm (hành bị thiếu hoặc cần sinh trợ), sau đó chọn chữ Hán mang ý nghĩa và ngũ hành phù hợp.
-
 Format: Trả về 3 nhóm (mỗi nhóm 4 tên), tiêu đề nhóm theo mức ưu tiên ngũ hành. Mỗi tên:
 **[Họ + Tên đầy đủ]** — Chữ Hán: [chữ] · Âm HV: [âm] · Nghĩa: [nghĩa ngắn gọn] · Hành chữ: [hành] · Phù hợp vì: [1 câu lý do ngũ hành]`;
 
@@ -200,15 +251,7 @@ Format: Trả về 3 nhóm (mỗi nhóm 4 tên), tiêu đề nhóm theo mức ư
 
 Trước khi gợi ý tên, hãy viết 2–3 câu phân tích ngũ hành của gia đình và hành cần bổ trợ cho con. Sau đó gợi ý 12 tên phù hợp chia 3 nhóm.`;
 
-  try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 2500, system, messages: [{ role: 'user', content: user }] }),
-    });
-    const data = await resp.json();
-    return ok({ result: data.content?.[0]?.text || '' });
-  } catch (e: unknown) { return err((e as Error).message); }
+  return streamAnthropicResponse(system, user, 2500);
 }
 
 // ─── Đặt tên doanh nghiệp ────────────────────────────────────
@@ -238,15 +281,7 @@ ${maSo ? `- Mã số ngành: ${maSo}` : ''}
 
 Phân tích ngắn ngũ hành phù hợp cho lĩnh vực này, sau đó gợi ý 12 tên chia 3 nhóm: Tên Thuần Việt / Tên Hán Việt / Tên Kết Hợp.`;
 
-  try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 2500, system, messages: [{ role: 'user', content: user }] }),
-    });
-    const data = await resp.json();
-    return ok({ result: data.content?.[0]?.text || '' });
-  } catch (e: unknown) { return err((e as Error).message); }
+  return streamAnthropicResponse(system, user, 2500);
 }
 
 // ─── Chọn ngày tốt ───────────────────────────────────────────
@@ -277,15 +312,7 @@ Cuối: 1 đoạn tổng hợp khuyến nghị và lưu ý thực tiễn.`;
 
 Phân tích và gợi ý các khoảng ngày tốt trong tháng này cho sự kiện trên.`;
 
-  try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 2000, system, messages: [{ role: 'user', content: user }] }),
-    });
-    const data = await resp.json();
-    return ok({ result: data.content?.[0]?.text || '' });
-  } catch (e: unknown) { return err((e as Error).message); }
+  return streamAnthropicResponse(system, user, 2000);
 }
 
 // ─── Route handlers ───────────────────────────────────────────
