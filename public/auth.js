@@ -80,7 +80,7 @@ async function _loadNavCredits() {
     const bal = rows[0]?.balance ?? 0;
     const badge = document.getElementById('nav-credit-badge');
     const menuVal = document.getElementById('nav-credit-menu-val');
-    if (badge) badge.innerHTML = '⊙ ' + bal.toLocaleString();
+    if (badge) badge.innerHTML = '<svg width="14" height="11" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:3px"><ellipse cx="7" cy="8.5" rx="6.2" ry="2" fill="#c9a84c" opacity=".35"/><path d="M1.2 7C1.2 7 0.8 5.5 2 4.2C3 3.2 4.5 2.8 7 2.8C9.5 2.8 11 3.2 12 4.2C13.2 5.5 12.8 7 12.8 7C12.1 8.2 9.8 9 7 9C4.2 9 1.9 8.2 1.2 7Z" fill="#c9a84c"/><path d="M2.5 4.5C3.3 3.5 5 3 7 3C9 3 10.7 3.5 11.5 4.5" stroke="#f0d080" stroke-width=".7" stroke-linecap="round"/><ellipse cx="7" cy="3" rx="3.5" ry="1.2" fill="#d4a853"/><path d="M5.5 3C5.5 3 6 1.5 7 1.2C8 1.5 8.5 3 8.5 3" stroke="#f0d080" stroke-width=".6" fill="none"/></svg>' + bal.toLocaleString();
     if (menuVal) menuVal.textContent = bal.toLocaleString() + ' lượng';
   } catch(e) {}
 }
@@ -181,7 +181,7 @@ function updateNavUI() {
              onmouseover="this.style.background='rgba(255,255,255,.08)'" onmouseout="this.style.background=''"
              onclick="document.getElementById('nav-profile-menu').style.display=document.getElementById('nav-profile-menu').style.display==='block'?'none':'block'">
           <div id="nav-credit-badge" style="background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.4);border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700;color:#c9a84c;letter-spacing:.02em;white-space:nowrap;font-family:Georgia,serif">
-            ⊙ …
+            <svg width="14" height="11" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:3px"><ellipse cx="7" cy="8.5" rx="6.2" ry="2" fill="#c9a84c" opacity=".35"/><path d="M1.2 7C1.2 7 0.8 5.5 2 4.2C3 3.2 4.5 2.8 7 2.8C9.5 2.8 11 3.2 12 4.2C13.2 5.5 12.8 7 12.8 7C12.1 8.2 9.8 9 7 9C4.2 9 1.9 8.2 1.2 7Z" fill="#c9a84c"/><path d="M2.5 4.5C3.3 3.5 5 3 7 3C9 3 10.7 3.5 11.5 4.5" stroke="#f0d080" stroke-width=".7" stroke-linecap="round"/><ellipse cx="7" cy="3" rx="3.5" ry="1.2" fill="#d4a853"/><path d="M5.5 3C5.5 3 6 1.5 7 1.2C8 1.5 8.5 3 8.5 3" stroke="#f0d080" stroke-width=".6" fill="none"/></svg> …
           </div>
           ${avatar
             ? `<img src="${avatar}" referrerpolicy="no-referrer" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:2px solid #c9a84c">`
