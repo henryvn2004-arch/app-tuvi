@@ -22,9 +22,9 @@ const CURRENCY      = 'USD';
 
 // ── Credit packages ───────────────────────────────────────────
 const PACKAGES: Record<string, { amount: string; credits: number; label: string }> = {
-  '5':  { amount: '5.00',  credits: 50,  label: 'Trial – 50 Credits'    },
-  '10': { amount: '10.00', credits: 110, label: 'Popular – 110 Credits' },
-  '20': { amount: '20.00', credits: 240, label: 'Pro – 240 Credits'     },
+  '20': { amount: '20.00', credits: 200,  label: 'Cá Nhân – 200 Lượng'  },
+  '45': { amount: '45.00', credits: 500,  label: 'Gia Đình – 500 Lượng' },
+  '80': { amount: '80.00', credits: 1000, label: 'Nhóm – 1000 Lượng'    },
 };
 
 // ── Helpers ───────────────────────────────────────────────────
@@ -138,12 +138,27 @@ async function handleCheck(sp: URLSearchParams): Promise<Response> {
 
 // ── POST: topup ───────────────────────────────────────────────
 async function handleTopup(body: Record<string, unknown>): Promise<Response> {
-  const packageId = String(body.packageId || '');
-  const userId    = String(body.userId    || '');
-  const pkg = PACKAGES[packageId];
-  if (!pkg) return err(`Invalid packageId. Use: ${Object.keys(PACKAGES).join(', ')}`, 400);
+  const packageId    = String(body.packageId    || '');
+  const userId       = String(body.userId       || '');
+  const customAmount = parseFloat(String(body.customAmount || '0'));
 
-  const slug = `topup-${packageId}`;
+  // Resolve package
+  let pkg: { amount: string; credits: number; label: string };
+  let slug: string;
+
+  if (packageId === 'custom') {
+    if (!customAmount || customAmount < 5 || customAmount > 500)
+      return err('Số tiền tùy chỉnh phải từ $5 đến $500', 400);
+    const roundedAmt = Math.round(customAmount * 100) / 100;
+    const credits    = Math.round(roundedAmt * 10);
+    pkg  = { amount: roundedAmt.toFixed(2), credits, label: `Nạp Tùy Chỉnh – ${credits} Lượng` };
+    slug = `topup-custom-${Math.round(roundedAmt)}`;
+  } else {
+    const found = PACKAGES[packageId];
+    if (!found) return err(`packageId không hợp lệ. Dùng: ${Object.keys(PACKAGES).join(', ')} hoặc "custom"`, 400);
+    pkg  = found;
+    slug = `topup-${packageId}`;
+  }
   try {
     const ppToken = await getPayPalToken();
     const orderRes = await fetch(`${PAYPAL_BASE}/v2/checkout/orders`, {
