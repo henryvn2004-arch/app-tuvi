@@ -302,6 +302,26 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
 }
 .change-photo:hover { background: var(--navy); color: #fff; }
 
+/* Analyze button */
+.btn-analyze {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 40px; background: var(--navy); color: #fff;
+  border: 2px solid var(--navy); border-radius: 4px;
+  font-family: inherit; font-size: 15px; font-weight: 600;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-analyze:hover:not(:disabled) { background: var(--navy-mid); border-color: var(--gold); }
+.btn-analyze:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Error message */
+.error-msg {
+  display: none; background: #FFF5F5; border-left: 3px solid var(--red);
+  padding: 14px 20px; font-size: 14px; color: var(--red);
+  margin-top: 16px; border-radius: 0 4px 4px 0;
+}
+.error-msg.active { display: block; }
+
 /* Spinner */
 .spinner-sm {
   display: inline-block; width: 14px; height: 14px;
@@ -312,58 +332,7 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* Paywall — same pattern as index.html */
-.paywall-gate {
-  border: 2px solid #c9a84c; border-radius: 12px;
-  padding: 36px 32px; margin-top: 28px;
-  background: linear-gradient(135deg, #fdf6e9 0%, #fff9ef 100%);
-  text-align: center; position: relative; overflow: hidden;
-  display: none;
-}
-.paywall-gate.show { display: block; }
-.paywall-gate::before {
-  content: ''; position: absolute; inset: 0;
-  background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(201,168,76,0.03) 10px, rgba(201,168,76,0.03) 20px);
-  pointer-events: none;
-}
-.paywall-eyebrow {
-  font-size: 10px; font-weight: 700; letter-spacing: 3px;
-  text-transform: uppercase; color: #c9a84c; margin-bottom: 12px; position: relative;
-}
-.paywall-title {
-  font-family: Arial, sans-serif; font-size: 22px; font-weight: 400;
-  color: #061A2E; margin-bottom: 10px; line-height: 1.3; position: relative;
-}
-.paywall-desc {
-  font-size: 14px; color: #666; line-height: 1.7;
-  margin-bottom: 24px; max-width: 460px; margin-left: auto; margin-right: auto; position: relative;
-}
-.paywall-features {
-  display: grid; grid-template-columns: repeat(2, 1fr);
-  gap: 8px; margin-bottom: 24px; max-width: 460px;
-  margin-left: auto; margin-right: auto; text-align: left; position: relative;
-}
-.paywall-feature {
-  display: flex; align-items: flex-start; gap: 8px;
-  font-size: 12.5px; color: #444; line-height: 1.4;
-}
-.paywall-feature::before { content: '✦'; color: #c9a84c; flex-shrink: 0; font-size: 11px; margin-top: 1px; }
-.paywall-price {
-  font-size: 34px; font-weight: 700; color: #061A2E;
-  margin-bottom: 4px; font-family: Arial, sans-serif; position: relative;
-}
-.paywall-price-note { font-size: 11px; color: #999; margin-bottom: 22px; position: relative; }
-.btn-paywall {
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 15px 36px; background: #061A2E; color: #c9a84c;
-  border: 2px solid #c9a84c; border-radius: 4px; font-size: 12.5px;
-  font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-  cursor: pointer; font-family: inherit; transition: all 0.2s;
-  position: relative;
-}
-.btn-paywall:hover:not(:disabled) { background: #c9a84c; color: #061A2E; }
-.btn-paywall:disabled { opacity: 0.6; cursor: not-allowed; }
-.paywall-secure { font-size: 11px; color: #aaa; margin-top: 12px; position: relative; }
-.paywall-secure a { color: #c9a84c; text-decoration: none; }
+/* Paywall popup is handled entirely by /tuvi-paywall.js — no custom paywall CSS needed here */
 
 /* RESULTS */
 .results-section {
@@ -747,32 +716,15 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
         <input type="file" id="file-input" accept="image/jpeg,image/png,image/jpg,image/webp">
       </label>
 
-      <!-- Paywall -->
-      <div class="paywall-gate" id="paywall-gate">
-        <div class="paywall-eyebrow">紫微明寶 · Khí Sắc Luận</div>
-        <div class="paywall-title">Mở khóa luận khí sắc 6 phần</div>
-        <div class="paywall-desc">
-          Luận chi tiết Ấn Đường và 5 vùng Ngũ Nhạc theo Ma Y Thần Tướng —
-          dự báo vận khí 1–3 tháng tới, kèm lời khuyên dưỡng khí và cổ văn dẫn chứng.
-        </div>
-        <div class="paywall-features">
-          <div class="paywall-feature">Tổng quan khí sắc &amp; sắc chủ đạo</div>
-          <div class="paywall-feature">Ấn Đường — vận tổng 100 ngày</div>
-          <div class="paywall-feature">5 Ngũ Nhạc — từng lĩnh vực cụ thể</div>
-          <div class="paywall-feature">Dự báo 1–3 tháng tới</div>
-          <div class="paywall-feature">Lời khuyên dưỡng khí</div>
-          <div class="paywall-feature">Lưu vĩnh viễn trong tài khoản</div>
-        </div>
-        <div class="paywall-price">90 Credits</div>
-        <div class="paywall-price-note">Bằng $9 · Credits không hết hạn · Dùng cho mọi công cụ</div>
-        <button class="btn-paywall" id="btn-pay" onclick="handlePaywallClick()">
-          <span id="btn-pay-text">Mở Khóa (90 Credits)</span>
-          <span style="font-size:16px">→</span>
+      <!-- Analyze button -->
+      <div style="text-align:center;margin-top:24px">
+        <button class="btn-analyze" id="analyze-btn" onclick="analyze()" disabled>
+          <span style="font-size:18px;vertical-align:middle;margin-right:4px">🌅</span>
+          Luận Khí Sắc
+          <span id="analyze-price" style="opacity:.75;font-size:.85em;margin-left:4px">(90 lượng)</span>
         </button>
-        <div class="paywall-secure">
-          🔒 Credits không hết hạn · <a href="/topup.html">Nạp credits →</a>
-        </div>
       </div>
+      <div class="error-msg" id="error-msg"></div>
 
     </div>
   </div>
@@ -887,43 +839,38 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
 <!-- ============ FOOTER + NAV INJECTION ============ -->
 <script src="/nav.js"></script>
 <script src="/footer.js"></script>
+<script src="/tuvi-paywall.js"></script>
 
 <!-- ============ TOOL SCRIPT ============ -->
 <script>
-const PRICE_CREDITS = 90;
-const TOOL_TYPE = 'khi-sac';
-const READING_ACTION = 'khi-sac';
+// ── State ─────────────────────────────────────────────────────
+let _imageData = null;       // stripped base64 (for API body)
+let _mediaType = 'image/jpeg';
+let _previewDataUrl = null;  // full dataURL (for <img src>)
+let _currentSlug = null;
 
-let currentImageDataUrl = null;  // full dataURL for preview
-let currentImageBase64 = null;   // stripped base64 for API
-let currentMediaType = 'image/jpeg';
-let currentSlug = null;
-
-// ──────────────────────────────────────────────────────────
-// RESET
-// ──────────────────────────────────────────────────────────
-function resetTool(clearFile = true) {
-  currentImageDataUrl = null;
-  currentImageBase64 = null;
-  currentSlug = null;
-  if (clearFile) document.getElementById('file-input').value = '';
+// ── Reset ─────────────────────────────────────────────────────
+function resetTool(clearFile) {
+  _imageData = null;
+  _previewDataUrl = null;
+  _mediaType = 'image/jpeg';
+  _currentSlug = null;
+  if (clearFile !== false) document.getElementById('file-input').value = '';
   document.getElementById('upload-placeholder').style.display = 'block';
   document.getElementById('upload-preview').style.display = 'none';
   document.getElementById('upload-area').classList.remove('has-image');
-  document.getElementById('paywall-gate').classList.remove('show');
-  document.getElementById('results-section').classList.remove('show');
+  document.getElementById('analyze-btn').disabled = true;
+  document.getElementById('error-msg').classList.remove('active');
+  document.getElementById('error-msg').textContent = '';
+  const rs = document.getElementById('results-section');
+  rs.classList.remove('show');
   document.getElementById('results-loading').style.display = 'block';
   document.getElementById('results-content').style.display = 'none';
   document.getElementById('results-content').innerHTML = '';
   document.getElementById('results-actions').style.display = 'none';
-  const btn = document.getElementById('btn-pay');
-  btn.disabled = false;
-  document.getElementById('btn-pay-text').textContent = `Mở Khóa (${PRICE_CREDITS} Credits)`;
 }
 
-// ──────────────────────────────────────────────────────────
-// IMAGE COMPRESSION
-// ──────────────────────────────────────────────────────────
+// ── Image compression ─────────────────────────────────────────
 function compressImage(file, maxSize = 1400, quality = 0.88) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -943,8 +890,7 @@ function compressImage(file, maxSize = 1400, quality = 0.88) {
         canvas.height = height;
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, width, height);
-        const dataUrl = canvas.toDataURL('image/jpeg', quality);
-        resolve({ dataUrl, width, height });
+        resolve(canvas.toDataURL('image/jpeg', quality));
       };
       img.onerror = () => reject(new Error('Không đọc được ảnh'));
       img.src = e.target.result;
@@ -954,9 +900,7 @@ function compressImage(file, maxSize = 1400, quality = 0.88) {
   });
 }
 
-// ──────────────────────────────────────────────────────────
-// HANDLE FILE
-// ──────────────────────────────────────────────────────────
+// ── Handle file upload ────────────────────────────────────────
 async function handleFile(file) {
   if (!file) return;
   if (!file.type.startsWith('image/')) {
@@ -970,144 +914,86 @@ async function handleFile(file) {
 
   try {
     resetTool(false);
-    const { dataUrl } = await compressImage(file);
-    currentImageDataUrl = dataUrl;
-    currentMediaType = 'image/jpeg';
-    currentImageBase64 = dataUrl.replace(/^data:image\/\w+;base64,/, '');
+    const dataUrl = await compressImage(file);
+    _previewDataUrl = dataUrl;
+    _mediaType = 'image/jpeg';
+    _imageData = dataUrl.replace(/^data:image\/\w+;base64,/, '');
 
-    // Show preview
     document.getElementById('preview-img').src = dataUrl;
     document.getElementById('upload-placeholder').style.display = 'none';
     document.getElementById('upload-preview').style.display = 'block';
     document.getElementById('upload-area').classList.add('has-image');
-
-    // Generate slug (unique per reading)
-    const ts = Date.now().toString(36);
-    const rnd = Math.random().toString(36).slice(2, 6);
-    currentSlug = `khi-sac-${ts}-${rnd}`;
-
-    // Show paywall immediately
-    document.getElementById('paywall-gate').classList.add('show');
+    document.getElementById('analyze-btn').disabled = false;
   } catch (err) {
     alert('Lỗi xử lý ảnh: ' + err.message);
     resetTool(true);
   }
 }
 
-// ──────────────────────────────────────────────────────────
-// AUTH + CREDITS HELPERS (giống pattern index.html)
-// ──────────────────────────────────────────────────────────
-async function getCreditBalance() {
+// ── State persistence (survive OAuth redirect) ────────────────
+function _saveStateForAuth() {
   try {
-    const userId = window.Auth?.getUser()?.id || '';
-    if (!userId) return 0;
-    const r = await fetch('/api/payment?action=balance&userId=' + encodeURIComponent(userId));
-    return (await r.json()).balance ?? 0;
-  } catch (e) { return 0; }
+    const toSave = {
+      _savedAt: Date.now(),
+      _imageData: _imageData,
+      _mediaType: _mediaType,
+    };
+    sessionStorage.setItem('tvmb_khi_sac_state', JSON.stringify(toSave));
+  } catch(e) {}
 }
 
-function showAuthModalThen(cb) {
-  if (typeof window.showAuthModal === 'function') {
-    window.showAuthModal(cb);
-  } else {
-    alert('Vui lòng đăng nhập để tiếp tục.');
-    setTimeout(() => { window.location.href = '/?auth=login'; }, 500);
-  }
-}
-
-// ──────────────────────────────────────────────────────────
-// PAYWALL CLICK
-// ──────────────────────────────────────────────────────────
-async function handlePaywallClick() {
-  if (!currentImageBase64 || !currentSlug) {
-    alert('Vui lòng chọn ảnh trước.');
-    return;
-  }
-  if (!window.Auth?.isLoggedIn()) {
-    showAuthModalThen(async () => { await handlePaywallClick(); });
-    return;
-  }
-  const balance = await getCreditBalance();
-  if (balance < PRICE_CREDITS) {
-    renderInsufficientCredits(balance);
-    return;
-  }
-  await deductAndRun();
-}
-
-function renderInsufficientCredits(balance) {
-  const gate = document.getElementById('paywall-gate');
-  const need = PRICE_CREDITS - balance;
-  gate.innerHTML = `
-    <div class="paywall-eyebrow">紫微明寶 · Khí Sắc Luận</div>
-    <div class="paywall-title">Không đủ credits</div>
-    <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:14px 18px;margin:0 auto 22px;font-size:13px;color:#856404;max-width:420px;position:relative">
-      Số dư: <strong>${balance} credits</strong> — cần thêm <strong>${need} credits</strong>
-    </div>
-    <div class="paywall-price">${PRICE_CREDITS} Credits</div>
-    <div class="paywall-price-note">Bằng $${(PRICE_CREDITS/10).toFixed(0)} · Credits không hết hạn</div>
-    <a href="/topup.html" class="btn-paywall" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none">
-      <span>💳 Nạp Credits</span><span style="font-size:16px">→</span>
-    </a>
-    <div class="paywall-secure">🔒 Credits dùng được cho mọi công cụ</div>
-  `;
-}
-
-// ──────────────────────────────────────────────────────────
-// DEDUCT + RUN READING
-// ──────────────────────────────────────────────────────────
-async function deductAndRun() {
-  const token = window.Auth?.getSession()?.access_token;
-  if (!token) {
-    showAuthModalThen(async () => { await deductAndRun(); });
-    return;
-  }
-
-  const btn = document.getElementById('btn-pay');
-  const btnText = document.getElementById('btn-pay-text');
-  btn.disabled = true;
-  btnText.innerHTML = '<span class="spinner-sm" style="border-top-color:#c9a84c;border-color:rgba(201,168,76,0.3)"></span>Đang xử lý...';
-
+function _restoreStateAfterAuth() {
   try {
-    const res = await fetch('/api/payment?action=deduct', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
-      },
-      body: JSON.stringify({
-        amount: PRICE_CREDITS,
-        toolType: TOOL_TYPE,
-        slug: currentSlug,
-        description: 'Xem Khí Sắc — luận Ấn Đường + Ngũ Nhạc'
-      })
-    });
-
-    const data = await res.json();
-
-    if (data.success) {
-      window.refreshNavCredits && window.refreshNavCredits();
-      await runReading();
-    } else if (data.insufficientBalance) {
-      renderInsufficientCredits(data.balance ?? 0);
-    } else {
-      btn.disabled = false;
-      btnText.textContent = `Mở Khóa (${PRICE_CREDITS} Credits)`;
-      alert('Lỗi: ' + (data.error || 'Vui lòng thử lại.'));
+    const raw = sessionStorage.getItem('tvmb_khi_sac_state');
+    if (!raw) return false;
+    const saved = JSON.parse(raw);
+    if (Date.now() - (saved._savedAt || 0) > 10 * 60 * 1000) {
+      sessionStorage.removeItem('tvmb_khi_sac_state');
+      return false;
     }
-  } catch (e) {
-    btn.disabled = false;
-    btnText.textContent = `Mở Khóa (${PRICE_CREDITS} Credits)`;
-    alert('Lỗi kết nối: ' + e.message);
-  }
+    sessionStorage.removeItem('tvmb_khi_sac_state');
+
+    if (saved._imageData) {
+      _imageData = saved._imageData;
+      _mediaType = saved._mediaType || 'image/jpeg';
+      _previewDataUrl = 'data:' + _mediaType + ';base64,' + _imageData;
+
+      document.getElementById('preview-img').src = _previewDataUrl;
+      document.getElementById('upload-placeholder').style.display = 'none';
+      document.getElementById('upload-preview').style.display = 'block';
+      document.getElementById('upload-area').classList.add('has-image');
+      document.getElementById('analyze-btn').disabled = false;
+
+      // Auto-trigger analyze after login
+      setTimeout(() => {
+        if (window.Auth?.isLoggedIn() && _imageData) {
+          const btn = document.getElementById('analyze-btn');
+          if (btn) btn.click();
+        }
+      }, 800);
+    }
+    return true;
+  } catch(e) { return false; }
 }
 
-// ──────────────────────────────────────────────────────────
-// STREAM READING
-// ──────────────────────────────────────────────────────────
-async function runReading() {
-  // Scroll tool to results
-  document.getElementById('paywall-gate').classList.remove('show');
+// ── Analyze (popup → deduct → stream) ─────────────────────────
+async function analyze() {
+  if (!_imageData) return;
+  document.getElementById('error-msg').classList.remove('active');
+  document.getElementById('analyze-btn').disabled = true;
+
+  _currentSlug = TuviPaywall.generateToolSlug('khi-sac');
+  _saveStateForAuth();
+
+  await TuviPaywall.requireCredits(_currentSlug, async () => {
+    await _doAnalyze();
+  });
+
+  // Re-enable button (requireCredits may have declined, failed, or finished)
+  document.getElementById('analyze-btn').disabled = false;
+}
+
+async function _doAnalyze() {
   const rs = document.getElementById('results-section');
   rs.classList.add('show');
   document.getElementById('results-loading').style.display = 'block';
@@ -1121,22 +1007,20 @@ async function runReading() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        action: READING_ACTION,
-        image: currentImageBase64,
-        mediaType: currentMediaType
+        action: 'khi-sac',
+        image: _imageData,
+        mediaType: _mediaType
       })
     });
 
     if (!res.ok) {
-      const e = await res.json().catch(() => ({}));
-      throw new Error(e.error || 'Lỗi kết nối khi luận.');
+      const d = await res.json().catch(() => ({}));
+      throw new Error(d.error || 'Lỗi ' + res.status);
     }
 
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
-    let buf = '';
-    let fullText = '';
-    let firstChunk = true;
+    let buf = '', full = '', firstChunk = true;
     const contentEl = document.getElementById('results-content');
     const loadingEl = document.getElementById('results-loading');
 
@@ -1149,84 +1033,106 @@ async function runReading() {
       for (const line of lines) {
         if (!line.startsWith('data: ')) continue;
         const raw = line.slice(6).trim();
-        if (!raw || raw === '[DONE]') continue;
+        if (raw === '[DONE]') break;
         try {
-          const json = JSON.parse(raw);
-          if (json.t) {
-            fullText += json.t;
+          const j = JSON.parse(raw);
+          if (j.err) throw new Error(j.err);
+          if (j.t) {
+            full += j.t;
             if (firstChunk) {
               loadingEl.style.display = 'none';
               contentEl.style.display = 'block';
               firstChunk = false;
             }
-            contentEl.innerHTML = renderMarkdown(fullText);
+            contentEl.innerHTML = renderMarkdown(full);
           }
-          if (json.err) {
-            throw new Error(json.err);
-          }
-        } catch (_) {}
+        } catch (e) {
+          if (e.message && !e.message.includes('JSON')) throw e;
+        }
       }
     }
 
+    if (!full) throw new Error('AI không trả về kết quả.');
+    contentEl.innerHTML = renderMarkdown(full);
     document.getElementById('results-actions').style.display = 'block';
+    _saveKhiSacReading(full);
   } catch (e) {
-    document.getElementById('results-loading').style.display = 'none';
+    document.getElementById('results-content').innerHTML = '';
     document.getElementById('results-content').style.display = 'block';
-    document.getElementById('results-content').innerHTML = `
-      <div style="background:#fbeceb;border-left:3px solid var(--red);padding:18px 22px;border-radius:0 4px 4px 0">
-        <strong style="color:var(--red);display:block;margin-bottom:6px">Lỗi luận khí sắc</strong>
-        <div style="font-size:14px;color:var(--text-mid)">${e.message}<br><br>
-          Credits đã được ghi nhận trong tài khoản. Nếu cần hỗ trợ, vui lòng
-          <a href="/contact.html" style="color:var(--blue)">liên hệ</a>.
-        </div>
-      </div>
-    `;
+    document.getElementById('results-loading').style.display = 'none';
+    const err = document.getElementById('error-msg');
+    err.textContent = 'Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.');
+    err.classList.add('active');
   }
 }
 
-// ──────────────────────────────────────────────────────────
-// SIMPLE MARKDOWN → HTML (đủ cho output của AI)
-// ──────────────────────────────────────────────────────────
-function renderMarkdown(md) {
-  // Escape HTML
-  const escape = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-  // Split into blocks by blank lines
-  let text = md;
-
-  // Code fences (just in case)
-  text = text.replace(/```([\s\S]*?)```/g, (_, code) => `<pre style="background:#f4f4f4;padding:12px;border-radius:4px;overflow-x:auto"><code>${escape(code)}</code></pre>`);
-
-  // Headings
-  text = text.replace(/^##\s+(.+)$/gm, (_, t) => `<h2>${escape(t)}</h2>`);
-  text = text.replace(/^###\s+(.+)$/gm, (_, t) => `<h3>${escape(t)}</h3>`);
-
-  // Blockquotes
-  text = text.replace(/^>\s+(.+)$/gm, (_, t) => `<blockquote>${escape(t)}</blockquote>`);
-
-  // Bold + italic
-  text = text.replace(/\*\*([^*]+)\*\*/g, (_, t) => `<strong>${escape(t)}</strong>`);
-  text = text.replace(/\*([^*]+)\*/g, (_, t) => `<em>${escape(t)}</em>`);
-
-  // Line breaks → paragraphs
-  const paragraphs = text.split(/\n{2,}/).map(p => {
-    p = p.trim();
-    if (!p) return '';
-    if (p.startsWith('<h2>') || p.startsWith('<h3>') || p.startsWith('<blockquote>') || p.startsWith('<pre>')) return p;
-    // Lists
-    if (/^[-*]\s/.test(p)) {
-      const items = p.split(/\n/).map(l => l.replace(/^[-*]\s+/, '').trim()).filter(Boolean);
-      return '<ul>' + items.map(i => `<li>${i}</li>`).join('') + '</ul>';
+// ── Save reading to history ───────────────────────────────────
+async function _saveKhiSacReading(resultText) {
+  try {
+    const token = window.Auth?.getSession()?.access_token;
+    if (!token || !resultText) return;
+    let thumbnail = null;
+    if (_imageData) {
+      const img = new Image();
+      await new Promise(resolve => {
+        img.onload = resolve;
+        img.src = 'data:' + _mediaType + ';base64,' + _imageData;
+      });
+      const canvas = document.createElement('canvas');
+      const maxW = 200;
+      const scale = Math.min(1, maxW / img.width);
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      thumbnail = canvas.toDataURL('image/jpeg', 0.7);
     }
-    return `<p>${p.replace(/\n/g, '<br>')}</p>`;
-  });
-
-  return paragraphs.join('\n');
+    fetch('/api/history?action=save_tuong', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ tool: 'khi-sac', result_text: resultText, thumbnail }),
+    }).catch(() => {});
+  } catch(e) {}
 }
 
-// ──────────────────────────────────────────────────────────
-// INIT
-// ──────────────────────────────────────────────────────────
+// ── Markdown renderer (match tuong-mat-ai.html) ───────────────
+function renderMarkdown(md) {
+  return md
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>')
+    .replace(/^- (.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>[^]*?<\/li>\n?)+/g,s=>'<ul>'+s+'</ul>')
+    .replace(/\n\n+/g,'</p><p>')
+    .replace(/^(?!<[hublp])(.+)$/gm,'<p>$1</p>')
+    .replace(/<p><\/p>/g,'')
+    .replace(/<p>(<[hul])/g,'$1')
+    .replace(/(<\/[hul][^>]*>)<\/p>/g,'$1');
+}
+
+// ── Dynamic pricing (show actual credits from Supabase) ───────
+(async function() {
+  try {
+    const r = await fetch('https://dciwkfdqhhddeymlisey.supabase.co/rest/v1/tool_pricing?tool_id=eq.khi-sac&select=credits',
+      { headers: { 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I' }});
+    const rows = await r.json();
+    if (rows[0]?.credits) {
+      const el = document.getElementById('analyze-price');
+      if (el) el.textContent = '(' + rows[0].credits + ' lượng)';
+    }
+  } catch(e) {}
+})();
+
+// ── TuviPaywall init ──────────────────────────────────────────
+TuviPaywall.init({
+  product: 'khi-sac',
+  slug: () => _currentSlug,
+  onUnlock: () => {},
+});
+
+// ── Init file upload listeners ────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   const fileInput = document.getElementById('file-input');
   const uploadArea = document.getElementById('upload-area');
@@ -1244,6 +1150,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const f = e.dataTransfer.files?.[0];
     if (f) handleFile(f);
   });
+
+  // Restore state after OAuth redirect (if any)
+  _restoreStateAfterAuth();
 });
 </script>
 
