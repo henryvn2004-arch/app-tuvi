@@ -128,7 +128,27 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 .purchase-status.completed{background:#F0FAF4;color:var(--green)}
 .purchase-date{color:var(--text-lt);font-size:.75rem}
 
-/* ── MODAL ── */
+/* ── TUONG CARDS ── */
+.tuong-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
+.tuong-card{background:#fff;border:1px solid var(--border-lt);border-radius:var(--radius);overflow:hidden;transition:box-shadow .2s;cursor:pointer}
+.tuong-card:hover{box-shadow:0 4px 16px rgba(6,26,46,.1)}
+.tuong-thumb{width:100%;height:140px;object-fit:cover;background:var(--bg-soft);display:block}
+.tuong-thumb-placeholder{width:100%;height:140px;background:linear-gradient(135deg,var(--navy),var(--navy-mid));display:flex;align-items:center;justify-content:center;font-size:2.5rem;opacity:.6}
+.tuong-card-body{padding:.9rem 1.1rem}
+.tuong-tool-badge{display:inline-block;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;padding:.2rem .55rem;border-radius:20px;margin-bottom:.5rem}
+.tuong-tool-badge.dien{background:#EEF4FF;color:var(--blue)}
+.tuong-tool-badge.nhan{background:#F5F0FF;color:#7B2D8B}
+.tuong-tool-badge.thu{background:#FFF5EB;color:#B85C00}
+.tuong-tool-badge.thanh{background:#F0FAF4;color:var(--green)}
+.tuong-preview{font-size:.8rem;color:var(--text-mid);line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:.6rem}
+.tuong-date{font-size:.74rem;color:var(--text-lt)}
+
+/* ── MODAL: Xem Tướng ── */
+.tuong-modal-thumb{width:100%;max-height:260px;object-fit:contain;border-radius:8px;background:var(--bg-soft);margin-bottom:1.25rem;display:block}
+.tuong-result-text{font-size:.88rem;line-height:1.8;color:var(--text)}
+.tuong-result-text h2,.tuong-result-text h3{font-family:'Noto Serif',serif;color:var(--navy);margin:1rem 0 .4rem}
+.tuong-result-text p{margin-bottom:.7rem}
+.tuong-result-text strong{color:var(--navy)}
 .modal-overlay{position:fixed;inset:0;background:rgba(6,26,46,.7);z-index:500;display:none;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto}
 .modal-overlay.open{display:flex}
 .modal{background:#fff;border-radius:12px;max-width:800px;width:100%;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;position:relative}
@@ -237,7 +257,8 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
     <div class="tabs">
       <button class="tab-btn active" data-tab="lasos">🔮 Lá Số <span id="countLasos" class="chat-count" style="margin-left:.35rem;display:none"></span></button>
       <button class="tab-btn" data-tab="xemtuoi">💑 Xem Tuổi <span id="countXemTuoi" class="chat-count" style="margin-left:.35rem;display:none"></span></button>
-      <button class="tab-btn" data-tab="chat">💬 Lịch Sử Chat <span id="countChat" class="chat-count" style="margin-left:.35rem;display:none"></span></button>
+      <button class="tab-btn" data-tab="tuong">🪬 Xem Tướng <span id="countTuong" class="chat-count" style="margin-left:.35rem;display:none"></span></button>
+      <button class="tab-btn" data-tab="chat">💬 Chat <span id="countChat" class="chat-count" style="margin-left:.35rem;display:none"></span></button>
       <button class="tab-btn" data-tab="credits">💳 Credits</button>
       <button class="tab-btn" data-tab="account">👤 Tài Khoản</button>
     </div>
@@ -255,6 +276,12 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
     <div class="tab-content" id="tab-xemtuoi">
       <div id="xemTuoiLoading" style="text-align:center;padding:2rem;color:var(--text-lt)">Đang tải...</div>
       <div id="xemTuoiContent" style="display:none"></div>
+    </div>
+
+    <!-- Tab: Xem Tướng -->
+    <div class="tab-content" id="tab-tuong">
+      <div id="tuongLoading" style="text-align:center;padding:2rem;color:var(--text-lt)">Đang tải...</div>
+      <div id="tuongContent" style="display:none"></div>
     </div>
 
     <!-- Tab: Chat -->
@@ -389,6 +416,20 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
   </div>
 </div>
 
+<!-- ===== MODAL: Xem Tướng ===== -->
+<div class="modal-overlay" id="tuongModal">
+  <div class="modal" style="max-width:700px">
+    <div class="modal-header">
+      <h2 id="tuongModalTitle">Kết Quả Xem Tướng</h2>
+      <button class="modal-close" onclick="closeModal('tuongModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <img id="tuongModalThumb" class="tuong-modal-thumb" style="display:none" alt="ảnh xem tướng"/>
+      <div id="tuongModalContent" class="tuong-result-text"></div>
+    </div>
+  </div>
+</div>
+
 <script src="/nav.js"></script>
 <script src="/auth.js"></script>
 <script>
@@ -486,6 +527,7 @@ async function loadHistory() {
 
   renderLasos(_pHistoryData.lasos || []);
   renderXemTuoi(_pHistoryData.xemTuoi || []);
+  renderTuong(_pHistoryData.tuong || []);
   renderChatList(_pHistoryData.chatList || []);
   renderPurchases(_pHistoryData.purchases || []);
 }
@@ -707,6 +749,79 @@ function renderTransactions(list) {
            '<div class="purchase-amount" style="color:' + amtColor + '">' + amtStr + '</div>' +
            '<div class="purchase-date">' + date + '</div></div>';
   }).join('') + '</div>';
+}
+
+// ── RENDER XEM TƯỚNG ──
+const TUONG_TOOL_LABELS = {
+  'dien-tuong':     { label: 'Diện Tướng', cls: 'dien', icon: '😶' },
+  'nhan-tuong':     { label: 'Nhãn Tướng', cls: 'nhan', icon: '👁' },
+  'thu-tuong':      { label: 'Thủ Tướng',  cls: 'thu',  icon: '✋' },
+  'thanh-tuong':    { label: 'Thanh Tướng', cls: 'thanh', icon: '🎙' },
+  'thanh-tuong-pro':{ label: 'Thanh Tướng Pro', cls: 'thanh', icon: '🎙' },
+};
+
+function renderTuong(list) {
+  document.getElementById('tuongLoading').style.display = 'none';
+  document.getElementById('tuongContent').style.display = 'block';
+
+  if (list.length > 0) {
+    const badge = document.getElementById('countTuong');
+    badge.textContent = list.length; badge.style.display = '';
+  }
+
+  const el = document.getElementById('tuongContent');
+  if (list.length === 0) {
+    el.innerHTML = `<div class="empty-state">
+      <div class="icon">🪬</div>
+      <p>Chưa có kết quả xem tướng nào được lưu.<br>Đăng nhập trước khi xem tướng để lưu lịch sử.</p>
+      <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap">
+        <a href="/tuong-mat-ai.html" class="btn-primary">Diện Tướng</a>
+        <a href="/nhan-tuong-ai.html" class="btn-primary btn-gold">Nhãn Tướng</a>
+        <a href="/thu-tuong-ai.html" class="btn-primary" style="background:var(--blue)">Thủ Tướng</a>
+        <a href="/thanh-tuong-ai.html" class="btn-primary" style="background:var(--green)">Thanh Tướng</a>
+      </div>
+    </div>`;
+    return;
+  }
+
+  el.innerHTML = `<div class="tuong-grid">${list.map(t => tuongCard(t)).join('')}</div>`;
+}
+
+function tuongCard(t) {
+  const meta = TUONG_TOOL_LABELS[t.tool] || { label: t.tool, cls: 'dien', icon: '🪬' };
+  const date = new Date(t.created_at).toLocaleDateString('vi-VN', { day:'2-digit', month:'2-digit', year:'numeric' });
+  // Strip markdown for preview
+  const preview = (t.result_text || '').replace(/#{1,3} .+/g,'').replace(/\*\*/g,'').replace(/\n+/g,' ').trim().slice(0, 120) + '...';
+  const thumbHtml = t.thumbnail
+    ? `<img class="tuong-thumb" src="${escHtml(t.thumbnail)}" alt="${meta.label}" loading="lazy"/>`
+    : `<div class="tuong-thumb-placeholder">${meta.icon}</div>`;
+  return `<div class="tuong-card" onclick="openTuongModal('${escHtml(t.id)}','${meta.label}','${escHtml(t.thumbnail||'')}','${escHtml((t.result_text||'').replace(/'/g,'&#39;'))}')">
+    ${thumbHtml}
+    <div class="tuong-card-body">
+      <span class="tuong-tool-badge ${meta.cls}">${meta.icon} ${meta.label}</span>
+      <div class="tuong-preview">${escHtml(preview)}</div>
+      <div class="tuong-date">📅 ${date}</div>
+    </div>
+  </div>`;
+}
+
+function openTuongModal(id, label, thumbnail, resultText) {
+  document.getElementById('tuongModalTitle').textContent = label;
+  const thumb = document.getElementById('tuongModalThumb');
+  if (thumbnail) {
+    thumb.src = thumbnail; thumb.style.display = 'block';
+  } else {
+    thumb.style.display = 'none';
+  }
+  // Render markdown-ish result text
+  const html = resultText
+    .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&#39;/g,"'")
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .split(/\n\n+/).map(p => p.startsWith('<h') ? p : `<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
+  document.getElementById('tuongModalContent').innerHTML = html;
+  openModal('tuongModal');
 }
 
 // ── RENDER PURCHASES (no-op in credit system) ──
