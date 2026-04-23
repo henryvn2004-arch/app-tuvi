@@ -36,7 +36,13 @@ export async function GET(req: NextRequest) {
   try {
     // -- list: tất cả readings của user --
     if (action === 'list') {
-      const [{ data: lasos }, { data: xemTuoi }, { data: chatList }, { data: purchases }] = await Promise.all([
+      const [
+        { data: lasos },
+        { data: xemTuoi },
+        { data: chatList },
+        { data: purchases },
+        { data: tuong },
+      ] = await Promise.all([
         supabase.from('laso_public')
           .select('slug, person_name, gioi_tinh, nam_sinh, thang_sinh, ngay_sinh, gio_chi, cung_menh, chinh_tinh, nap_am, cuc, laso_image, created_at')
           .eq('user_id', user.id)
@@ -53,8 +59,19 @@ export async function GET(req: NextRequest) {
           .select('slug, amount, status, created_at')
           .eq('user_id', user.id)
           .order('created_at', { ascending: false }),
+        supabase.from('tuong_readings')
+          .select('id, tool, result_text, thumbnail, created_at')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(30),
       ]);
-      return cors(NextResponse.json({ lasos: lasos ?? [], xemTuoi: xemTuoi ?? [], chatList: chatList ?? [], purchases: purchases ?? [] }));
+      return cors(NextResponse.json({
+        lasos:     lasos     ?? [],
+        xemTuoi:  xemTuoi   ?? [],
+        chatList:  chatList  ?? [],
+        purchases: purchases ?? [],
+        tuong:     tuong     ?? [],
+      }));
     }
 
     // -- laso: luan_giai cached --
@@ -136,7 +153,23 @@ export async function POST(req: NextRequest) {
       return cors(NextResponse.json({ ok: true }));
     }
 
-    // -- link_laso: gắn user_id cho lá số cũ chưa có owner --
+    // -- save_tuong --
+    if (action === 'save_tuong') {
+      const { tool, result_text, thumbnail } = body;
+      const VALID_TOOLS = ['dien-tuong', 'nhan-tuong', 'thu-tuong', 'thanh-tuong', 'thanh-tuong-pro'];
+      if (!tool || !VALID_TOOLS.includes(tool)) return cors(NextResponse.json({ error: 'Invalid tool' }, { status: 400 }));
+      if (!result_text) return cors(NextResponse.json({ error: 'Missing result_text' }, { status: 400 }));
+      const { error } = await supabase.from('tuong_readings').insert({
+        user_id: user.id,
+        tool,
+        result_text,
+        thumbnail: thumbnail ?? null,
+      });
+      if (error) return cors(NextResponse.json({ error: error.message }, { status: 500 }));
+      return cors(NextResponse.json({ ok: true }));
+    }
+
+    // -- link_laso --
     if (action === 'link_laso') {
       const { slug, person_name } = body;
       if (!slug) return cors(NextResponse.json({ error: 'Missing slug' }, { status: 400 }));
