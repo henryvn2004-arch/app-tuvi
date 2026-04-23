@@ -688,6 +688,7 @@ async function _doAnalyze() {
     }
     if (!full) throw new Error('Không có kết quả.');
     el.innerHTML = renderMd(full);
+    _saveTuongReading('thanh-tuong', full, null, null);
     document.getElementById('analyzeBtn').disabled = false;
   } catch(e) {
     document.getElementById('aiResult').innerHTML = '';
@@ -780,6 +781,31 @@ TuviPaywall.init({
   slug: () => _currentSlug,
   onUnlock: () => {}, // Option A: no blur needed
 });
+
+// ── Save tuong reading to profile ──────────────────────────
+async function _saveTuongReading(tool, resultText, imageData, mediaType) {
+  try {
+    const token = window.Auth?.getSession()?.access_token;
+    if (!token || !resultText) return;
+    let thumbnail = null;
+    if (imageData) {
+      const img = new Image();
+      await new Promise(resolve => { img.onload = resolve; img.src = "data:" + (mediaType||"image/jpeg") + ";base64," + imageData; });
+      const canvas = document.createElement("canvas");
+      const maxW = 200;
+      const scale = Math.min(1, maxW / img.width);
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+      thumbnail = canvas.toDataURL("image/jpeg", 0.7);
+    }
+    fetch("/api/history?action=save_tuong", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+      body: JSON.stringify({ tool, result_text: resultText, thumbnail }),
+    }).catch(() => {});
+  } catch(e) {}
+}
 </script>
 </body>
 </html>
