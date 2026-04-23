@@ -9,28 +9,29 @@
 // CONFIG
 // ═══════════════════════════════════════════════════════════
 const CFG = {
-  // Social proof: khoảng cách giữa các notification (ms)
-  notifInterval: [18000, 35000], // random giữa 18–35s
-  notifDuration: 5500,           // hiển thị bao lâu
-  notifDelay: 8000,              // delay trước notification đầu tiên
-  // Popup: hiện sau bao nhiêu ms kể từ khi page load
-  popupDelay: 45000,             // 45s — đủ thời gian đọc xong phần miễn phí
-  // Popup: không hiện lại trong N ngày
-  popupCooldown: 2,              // ngày
+  notifInterval: [25000, 45000], // random giữa 25–45s (chậm hơn trước)
+  notifDuration: 6000,           // hiển thị 6s
+  notifDelay:    12000,          // delay 12s trước notification đầu tiên
+  popupDelay:    45000,
+  popupCooldown: 2,
 };
 
 // ═══════════════════════════════════════════════════════════
 // SOCIAL PROOF DATA
 // ═══════════════════════════════════════════════════════════
 const ACTIONS = [
-  { action: 'vừa mở khóa luận giải lá số', page: '/' },
-  { action: 'vừa xem tuổi vợ chồng', page: '/xem-tuoi.html' },
-  { action: 'vừa xem tuổi làm ăn', page: '/xem-lam-an.html' },
-  { action: 'vừa mở khóa luận giải lá số', page: '/' },
-  { action: 'vừa xem tướng mặt AI', page: '/tools/tuong-mat-ai.html' },
-  { action: 'vừa đọc khảo luận về mệnh Thuỷ', page: '/blog.html' },
-  { action: 'vừa mở khóa phân tích đại vận', page: '/' },
-  { action: 'vừa xem tuổi hợp tác kinh doanh', page: '/xem-lam-an.html' },
+  { action: 'vừa mở khóa luận giải lá số',           page: '/luan-giai.html' },
+  { action: 'vừa xem tuổi vợ chồng',                 page: '/xem-tuoi.html' },
+  { action: 'vừa xem tuổi làm ăn',                   page: '/xem-lam-an.html' },
+  { action: 'vừa phân tích diện tướng khuôn mặt',    page: '/tools/tuong-mat-ai.html' },
+  { action: 'vừa xem nhãn tướng đôi mắt',            page: '/tools/nhan-tuong-ai.html' },
+  { action: 'vừa luận giải thanh tướng giọng nói',   page: '/tools/thanh-tuong-ai.html' },
+  { action: 'vừa xem khí sắc vận trình 1–3 tháng',  page: '/tools/khi-sac-ai.html' },
+  { action: 'vừa xem thủ tướng chỉ tay',             page: '/tools/thu-tuong-ai.html' },
+  { action: 'vừa mở khóa phân tích đại vận',         page: '/luan-giai.html' },
+  { action: 'vừa xem tuổi hợp tác kinh doanh',       page: '/xem-lam-an.html' },
+  { action: 'vừa đọc khảo luận về mệnh Thuỷ',        page: '/blog.html' },
+  { action: 'vừa luận giải lá số vừa lập xong',      page: '/luan-giai.html' },
 ];
 
 const NAMES = [
