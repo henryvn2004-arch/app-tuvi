@@ -277,7 +277,6 @@
   }
 
   function injectFooter() {
-    if (document.querySelector('footer.site-footer')) return;
     var fhtml = '<footer class="site-footer">'
       + '<div class="ft-body">'
       + '<div class="ft-top">'
@@ -326,11 +325,16 @@
     document.body.appendChild(ftmp.firstChild);
   }
 
-  // Inject sau khi DOM ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', injectFooter);
-  } else {
+  // Inject sau footer.js cũ (setTimeout để luôn override)
+  function runFooter() {
+    var old = document.querySelector('footer.site-footer');
+    if (old) old.remove();
     injectFooter();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(runFooter, 0); });
+  } else {
+    setTimeout(runFooter, 0);
   }
 
 })();
