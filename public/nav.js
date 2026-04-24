@@ -1,4 +1,4 @@
-// nav.js — Shared navigation component v6 (+ Khí Sắc)
+// nav.js — Shared navigation component v7
 (function () {
   var path = window.location.pathname;
 
@@ -117,7 +117,7 @@
     + ddItem('/tools/xem-tuoi-sinh-con.html', '\ud83d\udc76', 'Xem Tu\u1ed5i Sinh Con \u2014 Mi\u1ec5n Ph\u00ed')
     + '</div></div>';
 
-  // DD2 — Xem Tướng (NEW — ngay sau Luận Giải)
+  // DD2 — Xem Tướng
   var xemTuongDD = '<div class="nav-dd" id="nav-dd2">'
     + '<span class="nav-link' + tuongActive + '" id="nav-dd2-toggle" role="button" tabindex="0">Xem T\u01b0\u1edbng \u25be</span>'
     + '<div class="nav-dd-menu" id="nav-dd2-menu">'
@@ -129,7 +129,7 @@
     + ddItem('/tools/khi-sac-ai.html', '\ud83c\udf05', 'Kh\u00ed S\u1eafc \u2014 Lu\u1eadn V\u1eadn Kh\u00ed 1\u20133 Th\u00e1ng')
     + '</div></div>';
 
-  // DD3 — Công Cụ (tuong-mat-ai đã tách ra rồi, không còn trong đây)
+  // DD3 — Công Cụ
   var congCuDD = '<div class="nav-dd" id="nav-dd3">'
     + '<span class="nav-link' + toolActive + '" id="nav-dd3-toggle" role="button" tabindex="0">C\u00f4ng C\u1ee5 \u25be</span>'
     + '<div class="nav-dd-menu" id="nav-dd3-menu">'
@@ -179,12 +179,8 @@
     + luanGiaiDD
     + xemTuongDD
     + congCuDD
-    + navLink('/about.html',     'Gi\u1edbi Thi\u1ec7u')
-    + navLink('/resources.html', 'T\u00e0i Li\u1ec7u')
-    + navLink('/blog.html',      'Kh\u1ea3o Lu\u1eadn')
-    + navLink('/menh-kho.html',  'M\u1ec7nh Kh\u1ed1')
-    + navLink('/contact.html',   'Li\u00ean H\u1ec7')
-    + navLink('/topup.html',      'N\u1ea1p L\u01b0\u1ee3ng')
+    + navLink('/blog.html',   'Kh\u1ea3o Lu\u1eadn')
+    + navLink('/topup.html',  'N\u1ea1p L\u01b0\u1ee3ng')
     + '</div>'
     + '<div id="nav-auth-area"></div>'
     + '<button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">\u2630</button>'
@@ -252,5 +248,89 @@
 
   // Click outside → đóng tất cả
   document.addEventListener('click', closeAll);
+
+  // ── Footer ──────────────────────────────────────────────────────────────
+  var footerCss = [
+    '.site-footer{background:#1A1210;color:rgba(255,255,255,0.5);padding:48px 40px 24px;margin-top:auto}',
+    '.ft-body{max-width:1100px;margin:0 auto}',
+    '.ft-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:20px}',
+    '.ft-brand-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}',
+    '.ft-brand-row img{width:36px;height:36px;object-fit:contain;border-radius:5px;opacity:0.9}',
+    '.ft-brand-name{font-size:14px;font-weight:700;color:rgba(255,255,255,0.85);font-family:Georgia,serif;line-height:1.2}',
+    '.ft-brand-zh{font-size:12px;color:#C9A84C}',
+    '.ft-tagline{font-size:12px;color:rgba(255,255,255,0.3);line-height:1.7;max-width:240px}',
+    '.ft-col-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#C9A84C;margin-bottom:14px}',
+    '.ft-col a{display:block;font-size:13px;color:rgba(255,255,255,0.45);text-decoration:none;margin-bottom:9px;transition:color .15s}',
+    '.ft-col a:hover{color:rgba(255,255,255,0.85)}',
+    '.ft-bottom{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(255,255,255,0.2);gap:16px;flex-wrap:wrap}',
+    '.ft-bottom img{width:20px;height:20px;object-fit:contain;opacity:0.25;border-radius:3px}',
+    '.ft-disclaimer{font-size:10px;color:rgba(255,255,255,0.15);line-height:1.6;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.05);text-align:center}',
+    '@media(max-width:900px){.ft-top{grid-template-columns:1fr 1fr;gap:28px}.ft-brand{grid-column:1/-1}.ft-tagline{max-width:100%}}',
+    '@media(max-width:600px){.site-footer{padding:40px 20px 20px}.ft-top{grid-template-columns:1fr 1fr;gap:24px}.ft-brand{grid-column:1/-1}.ft-bottom{flex-direction:column;align-items:flex-start;gap:4px}}'
+  ].join('');
+
+  if (!document.getElementById('footer-css')) {
+    var fs = document.createElement('style');
+    fs.id = 'footer-css';
+    fs.textContent = footerCss;
+    document.head.appendChild(fs);
+  }
+
+  function injectFooter() {
+    if (document.querySelector('footer.site-footer')) return;
+    var fhtml = '<footer class="site-footer">'
+      + '<div class="ft-body">'
+      + '<div class="ft-top">'
+
+      // Cột 1 — Brand
+      + '<div class="ft-brand">'
+      + '<div class="ft-brand-row"><img src="/seal.webp" alt=""><div><div class="ft-brand-name">T\u1eed Vi Minh B\u1ea3o</div><div class="ft-brand-zh">Tri m\u1ec7nh l\u00fd \u2013 Thu\u1eadn th\u1ebf h\u00e0nh</div></div></div>'
+      + '<div class="ft-tagline">T\u1eed vi \u0111\u1ea9u s\u1ed1 theo c\u1ed5 ph\u00e1p, lu\u1eadn gi\u1ea3i b\u1eb1ng tr\u00ed tu\u1ec7 nh\u00e2n t\u1ea1o.</div>'
+      + '</div>'
+
+      // Cột 2 — Luận Giải
+      + '<div class="ft-col">'
+      + '<div class="ft-col-title">Lu\u1eadn Gi\u1ea3i</div>'
+      + '<a href="/luan-giai.html">Lu\u1eadn Gi\u1ea3i L\u00e1 S\u1ed1</a>'
+      + '<a href="/xem-tuoi.html">Xem Tu\u1ed5i V\u1ee3 Ch\u1ed3ng</a>'
+      + '<a href="/xem-lam-an.html">Xem Tu\u1ed5i L\u00e0m \u0102n</a>'
+      + '<a href="/blog.html">Kh\u1ea3o Lu\u1eadn</a>'
+      + '</div>'
+
+      // Cột 3 — Công Cụ
+      + '<div class="ft-col">'
+      + '<div class="ft-col-title">C\u00f4ng C\u1ee5</div>'
+      + '<a href="/tools/an-sao.html">An Sao L\u00e1 S\u1ed1</a>'
+      + '<a href="/tools/tuong-mat-ai.html">Xem T\u01b0\u1edbng M\u1eb7t</a>'
+      + '<a href="/tools/tuong-hop.html">T\u01b0\u01a1ng H\u1ee3p Tu\u1ed5i</a>'
+      + '<a href="/tools/ngu-hanh-ten.html">Ng\u0169 H\u00e0nh T\u00ean</a>'
+      + '<a href="/tools/hoang-dao.html">Gi\u1edd Ho\u00e0ng \u0110\u1ea1o</a>'
+      + '</div>'
+
+      // Cột 4 — Về Chúng Tôi
+      + '<div class="ft-col">'
+      + '<div class="ft-col-title">V\u1ec1 Ch\u00fang T\u00f4i</div>'
+      + '<a href="/about.html">Gi\u1edbi Thi\u1ec7u</a>'
+      + '<a href="/resources.html">T\u00e0i Li\u1ec7u</a>'
+      + '<a href="/menh-kho.html">M\u1ec7nh Kh\u1ed1</a>'
+      + '<a href="/contact.html">Li\u00ean H\u1ec7</a>'
+      + '</div>'
+
+      + '</div>' // ft-top
+      + '<div class="ft-bottom"><span>\u00a9 2025 T\u1eed Vi Minh B\u1ea3o \u2014 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>'
+      + '<div class="ft-disclaimer">N\u1ed9i dung lu\u1eadn gi\u1ea3i mang t\u00ednh tham kh\u1ea3o, kh\u00f4ng th\u1ea3y th\u1ebf t\u01b0 v\u1ea5n chuy\u00ean m\u00f4n.</div>'
+      + '</div></footer>';
+
+    var ftmp = document.createElement('div');
+    ftmp.innerHTML = fhtml;
+    document.body.appendChild(ftmp.firstChild);
+  }
+
+  // Inject sau khi DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', injectFooter);
+  } else {
+    injectFooter();
+  }
 
 })();
