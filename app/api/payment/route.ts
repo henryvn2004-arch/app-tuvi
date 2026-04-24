@@ -503,8 +503,8 @@ async function handleCreateBank(body: Record<string, unknown>): Promise<Response
 
     const d = payosData.data;
     return ok({ orderCode, checkoutUrl: d.checkoutUrl, accountNumber: d.accountNumber,
-      accountName: d.accountName, bin: d.bin, amountVND: pkg.amountVND,
-      credits: pkg.credits, label: pkg.label });
+      accountName: d.accountName, bin: d.bin, amountVND,
+      credits, label });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
