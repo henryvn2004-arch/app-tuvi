@@ -1,0 +1,167 @@
+<!-- ============================================================
+  BANK TRANSFER QR MODAL — paste vào trước </body> của 3 trang:
+  index.html, xem-tuoi.html, xem-lam-an.html
+  ============================================================ -->
+
+<!-- Modal overlay -->
+<div id="bankModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:12px;padding:32px 28px;max-width:400px;width:94%;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.25);position:relative;">
+    <button onclick="closeBankModal()" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:#777">&times;</button>
+    <div style="font-family:'Noto Serif',serif;font-size:1.15rem;font-weight:700;color:var(--navy);margin-bottom:6px">Thanh Toán Chuyển Khoản</div>
+    <div id="bankAmount" style="font-size:1.4rem;font-weight:700;color:var(--gold);margin-bottom:16px"></div>
+
+    <!-- QR image -->
+    <div id="bankQRWrap" style="margin:0 auto 16px;width:220px;height:220px;background:#f5f4f0;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+      <div style="color:#aaa;font-size:.85rem">Đang tải QR...</div>
+    </div>
+
+    <!-- Thông tin tài khoản -->
+    <div id="bankInfo" style="background:#f5f4f0;border-radius:8px;padding:12px 14px;font-size:.85rem;text-align:left;margin-bottom:14px;line-height:1.7"></div>
+
+    <!-- Nội dung chuyển khoản -->
+    <div style="font-size:.8rem;color:var(--text-mid);margin-bottom:16px">
+      Mở app ngân hàng → Quét QR hoặc chuyển khoản thủ công<br>
+      <span style="color:#c0392b;font-weight:600">⚠ Giữ nguyên nội dung CK để xác nhận tự động</span>
+    </div>
+
+    <!-- Status polling -->
+    <div id="bankStatus" style="font-size:.9rem;color:var(--text-mid);margin-bottom:12px">
+      ⏳ Đang chờ thanh toán...
+    </div>
+
+    <button onclick="checkBankPayment(true)" style="background:var(--navy);color:#fff;border:none;padding:9px 24px;border-radius:6px;cursor:pointer;font-size:.9rem">Tôi đã chuyển khoản</button>
+  </div>
+</div>
+
+<!-- Nút thanh toán chuyển khoản — thêm vào cạnh nút PayPal hiện tại -->
+<!--
+  Thêm nút này vào chỗ có nút PayPal trong mỗi trang:
+
+  <div style="text-align:center;margin-top:10px">
+    <button onclick="openBankModal()" style="
+      background:#fff;color:var(--navy);
+      border:2px solid var(--navy);
+      padding:10px 28px;border-radius:6px;
+      font-size:.95rem;cursor:pointer;font-weight:600;
+      display:inline-flex;align-items:center;gap:8px">
+      🏦 Chuyển khoản ngân hàng
+    </button>
+  </div>
+-->
+
+<script>
+(function() {
+  let _bankOrderCode = null;
+  let _bankSlug = null;
+  let _bankPollTimer = null;
+  let _bankPollCount = 0;
+
+  // Hàm này gọi từ nút bên ngoài, truyền vào slug của order
+  window.openBankModal = async function(slug) {
+    _bankSlug = slug;
+    _bankOrderCode = null;
+    _bankPollCount = 0;
+
+    // Reset UI
+    document.getElementById('bankStatus').textContent = '⏳ Đang tạo mã QR...';
+    document.getElementById('bankQRWrap').innerHTML = '<div style="color:#aaa;font-size:.85rem">Đang tải QR...</div>';
+    document.getElementById('bankInfo').innerHTML = '';
+
+    const modal = document.getElementById('bankModal');
+    modal.style.display = 'flex';
+
+    try {
+      const resp = await fetch('/api/payment?action=create-bank', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug })
+      });
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data.error || 'Lỗi tạo đơn hàng');
+
+      _bankOrderCode = data.orderCode;
+
+      // Hiển thị số tiền
+      document.getElementById('bankAmount').textContent =
+        new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.amountVND);
+
+      // Hiển thị QR — payOS trả về checkoutUrl, dùng VietQR embed
+      const qrUrl = `https://api.vietqr.io/image/${data.bin}-${data.accountNumber}-compact2.jpg` +
+        `?amount=${data.amountVND}&addInfo=${encodeURIComponent('TVMB' + _bankOrderCode)}&accountName=${encodeURIComponent(data.accountName || '')}`;
+
+      document.getElementById('bankQRWrap').innerHTML =
+        `<img src="${qrUrl}" style="width:220px;height:220px;object-fit:contain" onerror="this.parentNode.innerHTML='<a href=\\'${data.checkoutUrl}\\' target=\\'_blank\\' style=\\'color:var(--blue)\\'>Mở trang thanh toán payOS</a>'" />`;
+
+      // Thông tin tài khoản
+      document.getElementById('bankInfo').innerHTML =
+        `<b>Ngân hàng:</b> MB Bank<br>` +
+        `<b>Số TK:</b> ${data.accountNumber || '—'}<br>` +
+        `<b>Chủ TK:</b> ${data.accountName || '—'}<br>` +
+        `<b>Số tiền:</b> ${new Intl.NumberFormat('vi-VN').format(data.amountVND)} VNĐ<br>` +
+        `<b>Nội dung CK:</b> <span style="color:var(--navy);font-weight:700">TVMB${_bankOrderCode}</span>`;
+
+      document.getElementById('bankStatus').textContent = '⏳ Đang chờ thanh toán...';
+
+      // Bắt đầu polling
+      startBankPolling();
+
+    } catch (err) {
+      document.getElementById('bankStatus').textContent = '❌ ' + err.message;
+    }
+  };
+
+  function startBankPolling() {
+    clearInterval(_bankPollTimer);
+    _bankPollTimer = setInterval(() => {
+      _bankPollCount++;
+      // Timeout sau 15 phút (300 lần × 3s)
+      if (_bankPollCount > 300) {
+        clearInterval(_bankPollTimer);
+        document.getElementById('bankStatus').textContent = '⏰ Hết thời gian chờ. Vui lòng thử lại.';
+        return;
+      }
+      checkBankPayment(false);
+    }, 3000);
+  }
+
+  window.checkBankPayment = async function(manual) {
+    if (!_bankOrderCode) return;
+    try {
+      const resp = await fetch(`/api/payment?action=check-bank&orderCode=${_bankOrderCode}`);
+      const data = await resp.json();
+
+      if (data.paid) {
+        clearInterval(_bankPollTimer);
+        document.getElementById('bankStatus').innerHTML =
+          '✅ <b style="color:var(--green)">Thanh toán thành công!</b> Đang mở kết quả...';
+
+        setTimeout(() => {
+          closeBankModal();
+          // Trigger unlock — giống flow PayPal: redirect với unlocked=1&slug=...
+          const slug = data.slug || _bankSlug;
+          const currentUrl = new URL(window.location.href);
+          currentUrl.searchParams.set('unlocked', '1');
+          currentUrl.searchParams.set('slug', slug);
+          currentUrl.searchParams.set('method', 'bank');
+          window.location.href = currentUrl.toString();
+        }, 1500);
+
+      } else if (manual) {
+        document.getElementById('bankStatus').textContent = '⏳ Chưa ghi nhận giao dịch. Vui lòng chờ thêm...';
+      }
+    } catch (err) {
+      if (manual) document.getElementById('bankStatus').textContent = '❌ Lỗi kiểm tra. Thử lại sau.';
+    }
+  };
+
+  window.closeBankModal = function() {
+    clearInterval(_bankPollTimer);
+    document.getElementById('bankModal').style.display = 'none';
+  };
+
+  // Đóng modal khi click ra ngoài
+  document.getElementById('bankModal').addEventListener('click', function(e) {
+    if (e.target === this) closeBankModal();
+  });
+})();
+</script>
