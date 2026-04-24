@@ -12,7 +12,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 webhook_dir = os.path.join(ROOT, 'app', 'api', 'bank-webhook')
 os.makedirs(webhook_dir, exist_ok=True)
 shutil.copy2(
-    os.path.join(SCRIPT_DIR, 'payos-v2', 'bank-webhook-route.ts'),
+    os.path.join(SCRIPT_DIR, 'bank-webhook-route.ts'),
     os.path.join(webhook_dir, 'route.ts')
 )
 print('✅ Created app/api/bank-webhook/route.ts')
