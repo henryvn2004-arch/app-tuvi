@@ -4,13 +4,5 @@
     { "path": "/api/cron-khao-luan", "schedule": "0 3 * * *"  },
     { "path": "/api/cron-khao-luan", "schedule": "0 11 * * *" },
     { "path": "/api/cron-khao-luan", "schedule": "0 15 * * *" }
-  ],
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "has": [{ "type": "host", "value": "studio.kiraresearch.com" }],
-      "destination": "/studio/$1"
-    },
-    { "source": "/studio", "destination": "/studio/index.html" }
   ]
 }
