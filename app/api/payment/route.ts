@@ -495,8 +495,8 @@ async function handleCreateBank(body: Record<string, unknown>): Promise<Response
       headers: { ...SB_HEADERS, 'Prefer': 'resolution=ignore-duplicates' },
       body: JSON.stringify({
         order_code: String(orderCode), user_id: userId,
-        package_id: packageId, amount_vnd: pkg.amountVND,
-        credits: pkg.credits, label: pkg.label,
+        package_id: packageId, amount_vnd: amountVND,
+        credits, label,
         status: 'pending', created_at: new Date().toISOString(),
       }),
     });
