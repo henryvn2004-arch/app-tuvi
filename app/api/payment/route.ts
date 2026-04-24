@@ -30,9 +30,9 @@ const PACKAGES: Record<string, { amount: string; credits: number; label: string 
 
 // ── payOS Credit packages (VNĐ) ──────────────────────────────
 const PAYOS_PACKAGES: Record<string, { amountVND: number; credits: number; label: string }> = {
-  '5':  { amountVND: 130_000, credits: 50,  label: 'Trial – 50 Credits'    },
-  '10': { amountVND: 250_000, credits: 110, label: 'Popular – 110 Credits' },
-  '20': { amountVND: 490_000, credits: 240, label: 'Pro – 240 Credits'     },
+  '20': { amountVND:   490_000, credits: 200,  label: 'Ca Nhan – 200 Luong'  },
+  '45': { amountVND: 1_100_000, credits: 500,  label: 'Gia Dinh – 500 Luong' },
+  '80': { amountVND: 1_960_000, credits: 1000, label: 'Nhom – 1000 Luong'    },
 };
 
 function createPayOSSignature(data: Record<string, unknown>): string {
@@ -451,15 +451,31 @@ async function handleAdminUsers(request: NextRequest, sp: URLSearchParams): Prom
 async function handleCreateBank(body: Record<string, unknown>): Promise<Response> {
   const packageId = String(body.packageId || '');
   const userId    = String(body.userId    || '');
-  const pkg = PAYOS_PACKAGES[packageId];
-  if (!pkg)    return err(`Invalid packageId. Use: ${Object.keys(PAYOS_PACKAGES).join(', ')}`, 400);
   if (!userId) return err('Missing userId', 400);
 
+  let amountVND: number;
+  let credits: number;
+  let label: string;
+
+  if (packageId === 'custom') {
+    const customAmount = Number(body.customAmount || 0);
+    if (customAmount < 5 || customAmount > 500) return err('Custom amount must be 5-500', 400);
+    amountVND = Math.round(customAmount * 24_500);
+    credits   = Math.round(customAmount * 10);
+    label     = `Nap ${credits} Luong`;
+  } else {
+    const pkg = PAYOS_PACKAGES[packageId];
+    if (!pkg) return err(`Invalid packageId. Use: ${Object.keys(PAYOS_PACKAGES).join(', ')}`, 400);
+    amountVND = pkg.amountVND;
+    credits   = pkg.credits;
+    label     = pkg.label;
+  }
+
   const orderCode   = Date.now() % 999_999_999;
-  const description = pkg.label.substring(0, 25);
+  const description = label.substring(0, 25);
   const returnUrl   = `${SITE_URL}/topup.html?payment=success&method=bank&orderCode=${orderCode}`;
   const cancelUrl   = `${SITE_URL}/topup.html?payment=cancelled`;
-  const sigData     = { amount: pkg.amountVND, cancelUrl, description, orderCode, returnUrl };
+  const sigData     = { amount: amountVND, cancelUrl, description, orderCode, returnUrl };
 
   try {
     const res = await fetch('https://api-merchant.payos.vn/v2/payment-requests', {

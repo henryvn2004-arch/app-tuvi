@@ -163,6 +163,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
         <li><span class="perk-check">✓</span> Không hết hạn</li>
       </ul>
       <button class="btn-pkg" onclick="initiateTopup('20')" id="btn-20">Nạp $20</button>
+      <button class="btn-pkg" style="margin-top:.5rem;background:#fff;color:var(--navy);border:2px solid var(--navy)" onclick="initiateBankTopup('20')">🏦 Chuyển khoản</button>
     </div>
 
     <!-- Gia Đình -->
@@ -180,6 +181,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
         <li><span class="perk-check">✓</span> Không hết hạn · Dùng chung account</li>
       </ul>
       <button class="btn-pkg gold" onclick="initiateTopup('45')" id="btn-45">Nạp $45</button>
+      <button class="btn-pkg" style="margin-top:.5rem;background:#fff;color:var(--navy);border:2px solid var(--navy)" onclick="initiateBankTopup('45')">🏦 Chuyển khoản</button>
     </div>
 
     <!-- Nhóm -->
@@ -196,6 +198,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
         <li><span class="perk-check">✓</span> Không hết hạn · Tiết kiệm nhất</li>
       </ul>
       <button class="btn-pkg" onclick="initiateTopup('80')" id="btn-80">Nạp $80</button>
+      <button class="btn-pkg" style="margin-top:.5rem;background:#fff;color:var(--navy);border:2px solid var(--navy)" onclick="initiateBankTopup('80')">🏦 Chuyển khoản</button>
     </div>
 
   </div>
@@ -210,7 +213,8 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
       <span class="custom-prefix">$</span>
       <input type="number" class="custom-input" id="customInput" min="5" max="500" step="1" placeholder="10" oninput="onCustomInput()">
       <span class="custom-credits-preview" id="customPreview">= 100 lượng</span>
-      <button class="btn-custom" id="btnCustom" onclick="initiateTopup('custom')">Nạp Ngay</button>
+      <button class="btn-custom" id="btnCustom" onclick="initiateTopup('custom')">PayPal</button>
+      <button class="btn-custom" style="background:#fff;color:var(--navy);border:2px solid var(--navy)" onclick="initiateBankTopup('custom')">🏦 CK</button>
     </div>
   </div>
 
@@ -411,5 +415,109 @@ function showAlert(type, msg) {
 loadBalance();
 loadToolPricing();
 </script>
+
+<!-- ── payOS Bank Transfer Modal ─────────────────────────── -->
+<div id="bankModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:14px;padding:2rem 1.75rem;max-width:380px;width:94%;text-align:center;position:relative;box-shadow:0 8px 40px rgba(0,0,0,.25)">
+    <button onclick="closeBankModal()" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:22px;cursor:pointer;color:#999">&times;</button>
+    <div style="font-family:'Noto Serif',serif;font-size:1.1rem;font-weight:700;color:#061A2E;margin-bottom:4px">Chuyển Khoản Ngân Hàng</div>
+    <div id="bm-credits" style="font-size:.85rem;color:#777;margin-bottom:14px"></div>
+    <div id="bm-amount" style="font-size:1.6rem;font-weight:700;color:#9A7B3A;margin-bottom:14px"></div>
+
+    <!-- QR -->
+    <div id="bm-qr" style="margin:0 auto 14px;width:200px;height:200px;background:#f5f4f0;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center">
+      <span style="color:#aaa;font-size:.8rem">Đang tải QR...</span>
+    </div>
+
+    <!-- Bank info -->
+    <div id="bm-info" style="background:#f5f4f0;border-radius:8px;padding:10px 14px;font-size:.82rem;text-align:left;margin-bottom:10px;line-height:1.8"></div>
+
+    <div style="font-size:.75rem;color:#777;margin-bottom:12px">
+      Mở app ngân hàng → Quét QR hoặc chuyển khoản thủ công<br>
+      <span style="color:#C0392B;font-weight:600">⚠ Giữ nguyên nội dung CK để xác nhận tự động</span>
+    </div>
+
+    <div id="bm-status" style="font-size:.88rem;color:#555;margin-bottom:10px">⏳ Đang chờ thanh toán...</div>
+    <button onclick="checkBankPoll(true)" style="background:#061A2E;color:#fff;border:none;padding:9px 22px;border-radius:6px;cursor:pointer;font-size:.88rem">Tôi đã chuyển khoản</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  let _oc=null, _timer=null, _cnt=0;
+
+  window.initiateBankTopup = async function(packageId) {
+    if (!window.Auth?.isLoggedIn()) {
+      window.showAuthModal(async()=>{ await initiateBankTopup(packageId); });
+      return;
+    }
+    const userId = window.Auth.getUser()?.id;
+    let customAmount = null;
+    if (packageId === 'custom') {
+      customAmount = parseFloat(document.getElementById('customInput').value)||0;
+      if (customAmount < 5 || customAmount > 500) { showAlert('error','Vui lòng nhập $5–$500.'); return; }
+    }
+
+    // Reset & show modal
+    _oc=null; _cnt=0;
+    document.getElementById('bm-status').textContent='⏳ Đang tạo mã QR...';
+    document.getElementById('bm-qr').innerHTML='<span style="color:#aaa;font-size:.8rem">Đang tải QR...</span>';
+    document.getElementById('bm-info').innerHTML='';
+    document.getElementById('bm-amount').textContent='';
+    document.getElementById('bm-credits').textContent='';
+    document.getElementById('bankModal').style.display='flex';
+
+    try {
+      const body={packageId,userId};
+      if(customAmount) body.customAmount=customAmount;
+      const r=await fetch('/api/payment?action=create-bank',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+      const d=await r.json();
+      if(!r.ok) throw new Error(d.error||'Lỗi tạo đơn');
+      _oc=d.orderCode;
+
+      document.getElementById('bm-credits').textContent=d.credits+' lượng';
+      document.getElementById('bm-amount').textContent=new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(d.amountVND);
+
+      const qrUrl=`https://api.vietqr.io/image/${d.bin}-${d.accountNumber}-compact2.jpg?amount=${d.amountVND}&addInfo=${encodeURIComponent('TVMB'+_oc)}&accountName=${encodeURIComponent(d.accountName||'')}`;
+      document.getElementById('bm-qr').innerHTML=`<img src="${qrUrl}" style="width:200px;height:200px;object-fit:contain" onerror="this.parentNode.innerHTML='<a href=\'${d.checkoutUrl}\' target=\'_blank\' style=\'font-size:.8rem;color:#1455A4\'>Mở trang payOS →</a>'" />`;
+
+      document.getElementById('bm-info').innerHTML=
+        `<b>Ngân hàng:</b> MB Bank<br>`+
+        `<b>Số TK:</b> ${d.accountNumber||'—'}<br>`+
+        `<b>Chủ TK:</b> ${d.accountName||'—'}<br>`+
+        `<b>Nội dung CK:</b> <span style="font-weight:700;color:#061A2E">TVMB${_oc}</span>`;
+
+      document.getElementById('bm-status').textContent='⏳ Đang chờ thanh toán...';
+      clearInterval(_timer);
+      _timer=setInterval(()=>{ _cnt++; if(_cnt>300){clearInterval(_timer);document.getElementById('bm-status').textContent='⏰ Hết giờ chờ.';return;} checkBankPoll(false); },3000);
+    } catch(e){
+      document.getElementById('bm-status').textContent='❌ '+e.message;
+    }
+  };
+
+  window.checkBankPoll=async function(manual){
+    if(!_oc) return;
+    try{
+      const r=await fetch(`/api/payment?action=check-bank&orderCode=${_oc}`);
+      const d=await r.json();
+      if(d.paid){
+        clearInterval(_timer);
+        document.getElementById('bm-status').innerHTML='✅ <b style="color:#1E6B3C">Thanh toán thành công!</b> Đang cập nhật...';
+        setTimeout(()=>{ closeBankModal(); loadBalance(); showAlert('success',`Nạp thành công ${d.credits} lượng!`); },1500);
+      } else if(manual){
+        document.getElementById('bm-status').textContent='⏳ Chưa ghi nhận. Chờ thêm vài giây...';
+      }
+    } catch(e){ if(manual) document.getElementById('bm-status').textContent='❌ Lỗi kiểm tra. Thử lại.'; }
+  };
+
+  window.closeBankModal=function(){
+    clearInterval(_timer);
+    document.getElementById('bankModal').style.display='none';
+  };
+
+  document.getElementById('bankModal').addEventListener('click',function(e){ if(e.target===this) closeBankModal(); });
+})();
+</script>
+
 </body>
 </html>
