@@ -106,9 +106,9 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 @media(max-width:700px){.breadcrumb,.article-wrap{padding-left:16px;padding-right:16px}.article-title{font-size:26px}}
 </style>
 <script src="/auth.js"></script>
-<script src="/nav.js"></script>
 </head>
 <body>
+<script src="/nav.js"></script>
 <div class="breadcrumb"><a href="/">Trang Chủ</a><span>›</span><a href="/blog.html">Khảo Luận</a><span>›</span><span>${title}</span></div>
 <article class="article-wrap">
   <div class="article-meta">
@@ -138,7 +138,6 @@ function buildNotFound() {
 <title>Không tìm thấy — Tử Vi Minh Bảo</title>
 <link rel="icon" type="image/webp" href="/seal.webp">
 <script src="/auth.js"></script>
-<script src="/nav.js"></script>
 </head>
 <body style="font-family:sans-serif;text-align:center;padding:80px">
 <h1 style="color:#061A2E;font-family:Georgia,serif;margin-bottom:16px">Không tìm thấy bài viết</h1>
