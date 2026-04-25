@@ -31,7 +31,7 @@
     '.nav-logo img{width:38px;height:38px;object-fit:contain;border-radius:5px}',
     '.nav-logo .name{font-size:16px;font-weight:700;color:#CC2200;font-family:Georgia,serif}',
     '.nav-logo .url{font-size:10px;color:#aaa;letter-spacing:.07em;text-transform:uppercase}',
-    '.nav-links{display:flex;align-items:center;gap:2px;flex:1;overflow:hidden}',
+    '.nav-links{display:flex;align-items:center;gap:2px;flex:1;overflow:visible}',
     '.nav-link{color:#8BAACC;font-size:13px;text-decoration:none;padding:6px 10px;border-radius:6px;transition:all .15s;white-space:nowrap;cursor:pointer}',
     '.nav-link:hover{color:#fff;background:rgba(255,255,255,.07)}',
     '.nav-link.active{color:#c9a84c}',
