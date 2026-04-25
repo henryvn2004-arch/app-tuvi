@@ -39,6 +39,7 @@ function buildHTML(article: any, slug: string, related: any[]) {
   const desc  = escHtml(article.excerpt || article.title);
   const tags  = (article.tags||[]).slice(0,3) as string[];
   const body  = renderMarkdown(article.content||'');
+  const cat   = escHtml(article.category||'');
 
   const schemas = JSON.stringify([
     { '@context':'https://schema.org','@type':'Article', headline:article.title, description:article.excerpt||'', url, datePublished:article.created_at, inLanguage:'vi',
@@ -47,7 +48,7 @@ function buildHTML(article: any, slug: string, related: any[]) {
       image:{'@type':'ImageObject',url:BASE_URL+'/seal.webp'} },
     { '@context':'https://schema.org','@type':'BreadcrumbList', itemListElement:[
       {'@type':'ListItem',position:1,name:'Trang Chủ',item:BASE_URL+'/'},
-      {'@type':'ListItem',position:2,name:'Vấn Đáp',item:BASE_URL+'/blog.html'},
+      {'@type':'ListItem',position:2,name:'Khảo Luận',item:BASE_URL+'/blog.html'},
       {'@type':'ListItem',position:3,name:article.title,item:url}] },
   ]);
 
@@ -62,23 +63,17 @@ function buildHTML(article: any, slug: string, related: any[]) {
 <meta property="og:url" content="${url}">
 <link rel="canonical" href="${url}">
 <link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="apple-touch-icon" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
 <script type="application/ld+json">${schemas}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#061A2E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--bg:#FFFFFF;--bg-soft:#F5F4F0}
-body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
-.topnav{position:sticky;top:0;z-index:200;background:var(--navy);display:flex;align-items:center;height:60px;padding:0 40px;gap:32px}
-.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
-.nav-logo img{width:38px;height:38px;object-fit:contain;border-radius:5px}
-.nav-logo .name{font-size:16px;font-weight:700;color:#CC2200;font-family:Georgia,serif}
-.nav-logo .url{font-size:10px;color:#aaa;letter-spacing:.07em;text-transform:uppercase}
-.nav-links{display:flex;align-items:center;gap:4px}
-.nav-link{color:#8BAACC;font-size:13px;text-decoration:none;padding:6px 12px;border-radius:6px;transition:all .15s}
-.nav-link:hover{color:#fff;background:rgba(255,255,255,.07)}
-.nav-link.active{color:#c9a84c}
+:root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--gold-bright:#D4A843;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0;--red:#C0392B;--green:#1E6B3C}
+body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
 .breadcrumb{background:var(--bg-soft);border-bottom:1px solid var(--border);padding:12px 40px;font-size:12px;color:var(--text-lt);display:flex;gap:8px;align-items:center}
 .breadcrumb a{color:var(--text-lt);text-decoration:none}.breadcrumb a:hover{color:var(--navy)}
+.breadcrumb span{color:var(--border)}
 .article-wrap{flex:1;max-width:760px;margin:0 auto;padding:48px 40px 80px;width:100%}
 .article-meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
 .meta-cat{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold)}
@@ -107,45 +102,49 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .related-item a:hover{background:var(--bg-soft);color:var(--blue)}
 .related-item .rel-title{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .related-item .rel-cat{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);flex-shrink:0}
-.site-footer{background:#1A1210;color:rgba(255,255,255,.5);padding:36px 32px 24px;margin-top:auto}
-.footer-bottom{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(255,255,255,.25)}
-.footer-bottom img{width:20px;height:20px;opacity:.3;border-radius:3px}
-@media(max-width:700px){.topnav{padding:0 16px}.nav-links{display:none}.breadcrumb,.article-wrap{padding-left:16px;padding-right:16px}.article-title{font-size:26px}}
-</style><script src="/auth.js"></script></head>
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:700px){.breadcrumb,.article-wrap{padding-left:16px;padding-right:16px}.article-title{font-size:26px}}
+</style>
+<script src="/auth.js"></script>
+<script src="/nav.js"></script>
+</head>
 <body>
-<nav class="topnav">
-  <a class="nav-logo" href="/"><img src="/seal.webp" alt="Tử Vi Minh Bảo"><div><div class="name">Tử Vi Minh Bảo</div><div class="url">Tri mệnh lý – Thuận thế hành</div></div></a>
-  <div class="nav-links">
-    <a class="nav-link" href="/">Trang Chủ</a>
-    <a class="nav-link" href="/about.html">Giới Thiệu</a>
-    <a class="nav-link" href="/resources.html">Tài Liệu</a>
-    <a class="nav-link active" href="/blog.html">Vấn Đáp</a>
-    <a class="nav-link" href="/menh-kho.html">Mệnh Khố</a>
-    <a class="nav-link" href="/contact.html">Liên Hệ</a>
-  </div>
-</nav>
-<div class="breadcrumb"><a href="/">Trang Chủ</a><span>›</span><a href="/blog.html">Vấn Đáp</a><span>›</span><span>${title}</span></div>
+<div class="breadcrumb"><a href="/">Trang Chủ</a><span>›</span><a href="/blog.html">Khảo Luận</a><span>›</span><span>${title}</span></div>
 <article class="article-wrap">
   <div class="article-meta">
-    ${article.category?`<span class="meta-cat">${escHtml(article.category)}</span>`:''}
+    ${article.category?`<span class="meta-cat">${cat}</span>`:''}
     ${article.created_at?`<span class="meta-date">${formatDate(article.created_at)}</span>`:''}
     ${tags.map((t:string)=>`<span class="meta-tag">${escHtml(t)}</span>`).join('')}
   </div>
   <h1 class="article-title">${title}</h1>
   ${article.excerpt?`<div class="article-excerpt">${escHtml(article.excerpt)}</div>`:''}
   <div class="article-body">${body}</div>
-  <div class="article-nav"><a href="/blog.html">← Về Vấn Đáp</a></div>
+  <div class="article-nav"><a href="/blog.html">← Về Khảo Luận</a></div>
   ${related.length?`<div class="related-section"><div class="related-title">Bài Viết Liên Quan</div><ul class="related-list">${
     related.map((r:any)=>`<li class="related-item"><a href="/khao-luan/${r.slug}"><span class="rel-title">${escHtml(r.title)}</span>${r.category?`<span class="rel-cat">${escHtml(r.category)}</span>`:''}</a></li>`).join('')
   }</ul></div>`:''}
 </article>
-<footer class="site-footer"><div class="footer-bottom"><span>© 2026 tuviminhbao.com — All rights reserved</span><img src="/seal.webp" alt=""></div></footer>
+<script>
+// Expose article data for related-tools.js
+window._articleData = { category: ${JSON.stringify(article.category||'')}, tags: ${JSON.stringify(article.tags||[])} };
+</script>
+<script src="/related-tools.js"></script>
+<script src="/testimonials.js"></script>
 </body></html>`;
 }
 
 function buildNotFound() {
-  return `<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><title>Không tìm thấy — Tử Vi Minh Bảo</title></head>
-<body style="font-family:sans-serif;text-align:center;padding:80px"><h1 style="color:#061A2E">Không tìm thấy bài viết</h1><a href="/blog.html" style="color:#1455A4">← Về Vấn Đáp</a></body></html>`;
+  return `<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8">
+<title>Không tìm thấy — Tử Vi Minh Bảo</title>
+<link rel="icon" type="image/webp" href="/seal.webp">
+<script src="/auth.js"></script>
+<script src="/nav.js"></script>
+</head>
+<body style="font-family:sans-serif;text-align:center;padding:80px">
+<h1 style="color:#061A2E;font-family:Georgia,serif;margin-bottom:16px">Không tìm thấy bài viết</h1>
+<p style="color:#777;margin-bottom:24px">Bài viết không tồn tại hoặc đã bị xóa.</p>
+<a href="/blog.html" style="color:#1455A4">← Về Khảo Luận</a>
+</body></html>`;
 }
 
 export async function GET(request: NextRequest) {
@@ -176,7 +175,10 @@ export async function GET(request: NextRequest) {
     const html = buildHTML(rows[0], slug, related);
     return new NextResponse(html, {
       status: 200,
-      headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400' },
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+      },
     });
   } catch(e:unknown) {
     return new NextResponse(`<h1>Lỗi: ${(e as Error).message}</h1>`, { status: 500, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
