@@ -15,12 +15,18 @@ const TuviPaywall = (() => {
     'nhan-tuong':  { cost:   5, title: 'Nhãn Tướng AI' },
     'thu-tuong':   { cost:   5, title: 'Thủ Tướng AI' },
     'thanh-tuong': { cost:   5, title: 'Thanh Tướng AI' },
+    'phong-thuy':          { cost:  90, title: 'Phong Thủy Nội Thất' },
+    'ban-lam-viec':        { cost:  90, title: 'Phong Thủy Bàn Làm Việc' },
+    'cua-hang-phong-thuy': { cost:  90, title: 'Phong Thủy Cửa Hàng & VP' },
+    'mau-sac-hop-menh':    { cost:  20, title: 'Màu Sắc Hợp Mệnh' },
   };
 
   const TOOL_TYPE = {
     'laso': 'use_laso', 'xem-tuoi': 'use_xem_tuoi', 'xem-lam-an': 'use_xem_lam_an',
     'dien-tuong': 'use_dien_tuong', 'nhan-tuong': 'use_nhan_tuong',
     'thu-tuong': 'use_thu_tuong', 'thanh-tuong': 'use_thanh_tuong',
+    'phong-thuy': 'use_phong_thuy', 'ban-lam-viec': 'use_ban_lam_viec',
+    'cua-hang-phong-thuy': 'use_cua_hang_phong_thuy', 'mau-sac-hop-menh': 'use_mau_sac',
   };
 
   let _cfg        = null;
