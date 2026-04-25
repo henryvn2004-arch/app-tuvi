@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Phong Thủy Nội Thất — Tử Vi Minh Bảo</title>
+<meta name="description" content="Chụp ảnh phòng thực tế, nhận phân tích bố trí hợp bản mệnh theo Bát Trạch Minh Cảnh. Kèm đề xuất và shopping list vật phẩm phong thủy."/>
+<link rel="icon" href="/favicon.ico"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&display=swap" rel="stylesheet"/>
+<script src="/auth.js"></script>
+<script src="/tuvi-paywall.js"></script>
+<style>
+:root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--gold-bright:#D4A843;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0;--red:#C0392B;--green:#1E6B3C;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh;}
+h1,h2,h3{font-family:'Noto Serif',serif;}
+.hero{background:linear-gradient(180deg,var(--navy),var(--navy-mid));padding:36px 24px 28px;text-align:center;}
+.hero h1{font-size:22px;color:var(--gold-bright);margin-bottom:6px;}
+.hero p{font-size:13px;color:rgba(255,255,255,.62);max-width:500px;margin:0 auto 14px;line-height:1.65;}
+.hero-cost{display:inline-flex;align-items:center;gap:8px;background:rgba(154,123,58,.15);border:1px solid rgba(154,123,58,.4);border-radius:20px;padding:5px 14px;font-size:12px;color:var(--gold-bright);}
+.container{max-width:780px;margin:0 auto;padding:0 14px;}
+.card{background:var(--bg);border:1px solid var(--border-lt);border-radius:12px;padding:22px;margin:16px 0;box-shadow:0 2px 6px rgba(0,0,0,.05);}
+.card-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border-lt);display:flex;align-items:center;gap:8px;}
+.card-num{width:22px;height:22px;background:var(--navy);color:var(--gold-bright);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+@media(max-width:500px){.form-row{grid-template-columns:1fr;}}
+.form-group{display:flex;flex-direction:column;gap:5px;}
+.form-label{font-size:12px;color:var(--text-mid);font-weight:600;}
+.form-control{padding:9px 11px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;color:var(--text);background:var(--bg);outline:none;font-family:Arial,sans-serif;transition:border-color .2s;}
+.form-control:focus{border-color:var(--blue);}
+.form-hint{font-size:11px;color:var(--text-lt);margin-top:2px;}
+.gua-badge{display:none;background:var(--bg-soft);border:1.5px solid var(--border-lt);border-radius:9px;padding:11px 14px;margin-top:10px;}
+.gua-badge.show{display:flex;align-items:center;gap:11px;}
+.gua-icon{font-size:26px;}
+.gua-name{font-size:13px;font-weight:700;color:var(--navy);font-family:'Noto Serif',serif;}
+.gua-dirs{font-size:11px;color:var(--text-mid);margin-top:3px;line-height:1.6;}
+.gua-dirs .g{color:var(--green);font-weight:600;} .gua-dirs .b{color:var(--red);font-weight:600;}
+.upload-zone{border:2px dashed var(--border);border-radius:10px;padding:28px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg-soft);}
+.upload-zone:hover,.upload-zone.drag-over{border-color:var(--blue);background:#EEF4FF;}
+.upload-zone input{display:none;}
+.upload-icon{font-size:36px;display:block;margin-bottom:8px;}
+.upload-btn-lbl{display:inline-block;margin-top:10px;background:var(--navy);color:var(--gold-bright);padding:7px 18px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;}
+.preview-wrap{display:none;position:relative;}
+.preview-wrap.show{display:block;}
+.preview-img{width:100%;max-height:320px;object-fit:contain;border-radius:7px;border:1px solid var(--border-lt);background:#000;}
+.preview-change{position:absolute;top:7px;right:7px;background:rgba(0,0,0,.55);color:#fff;border:none;padding:4px 10px;border-radius:5px;font-size:11px;cursor:pointer;}
+.analyze-area{background:var(--bg);border:1px solid var(--border-lt);border-radius:12px;padding:18px;margin:16px 0;}
+.cost-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;font-size:12px;color:var(--text-mid);flex-wrap:wrap;gap:6px;}
+.cost-row strong{color:var(--navy);}
+.btn-analyze{width:100%;padding:13px;background:linear-gradient(135deg,var(--navy),var(--navy-mid));color:var(--gold-bright);border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Serif',serif;display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity .2s;}
+.btn-analyze:hover{opacity:.88;} .btn-analyze:disabled{opacity:.5;cursor:not-allowed;}
+.error-box{background:#FFF5F5;border:1px solid #FECACA;border-radius:7px;padding:10px;font-size:12px;color:var(--red);display:none;margin-bottom:10px;}
+.loading-overlay{display:none;text-align:center;padding:28px;}
+.loading-overlay.show{display:block;}
+.loading-spinner{width:36px;height:36px;border:3px solid var(--border-lt);border-top-color:var(--navy);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 14px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ls-step{font-size:12px;color:var(--text-lt);padding:2px 0;transition:color .3s;}
+.ls-step.active{color:var(--blue);font-weight:600;} .ls-step.done{color:var(--green);}
+#results-section{display:none;}
+/* Score */
+.score-compare{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;margin-bottom:6px;}
+.score-label{font-size:10px;color:var(--text-lt);font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px;}
+.score-num{font-size:34px;font-weight:700;font-family:'Noto Serif',serif;}
+.score-before .score-num{color:var(--red);} .score-after .score-num{color:var(--green);}
+.score-bar-wrap{height:6px;background:var(--border-lt);border-radius:3px;overflow:hidden;margin-top:6px;}
+.score-bar{height:100%;border-radius:3px;width:0;transition:width 1s ease;}
+.score-before .score-bar{background:var(--red);} .score-after .score-bar{background:var(--green);}
+.delta-num{font-size:20px;font-weight:700;color:var(--green);font-family:'Noto Serif',serif;text-align:center;}
+.delta-lbl{font-size:10px;color:var(--text-lt);text-align:center;margin-top:3px;}
+.score-expl{font-size:12px;color:var(--text-mid);line-height:1.65;margin-top:10px;padding-top:10px;border-top:1px solid var(--border-lt);}
+/* Tags */
+.tag-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px;}
+.tag{display:flex;align-items:center;gap:4px;background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:16px;padding:3px 9px;font-size:11px;color:var(--text-mid);}
+.tag .tag-pos{font-weight:600;color:var(--navy);}
+/* Floor plan */
+.fp-compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:520px){.fp-compare{grid-template-columns:1fr;}}
+.fp-half{text-align:center;}
+.fp-half-title{font-size:10px;color:var(--text-lt);font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:7px;}
+.fp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;}
+.fp-cell{border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 3px;min-height:64px;border:1px solid rgba(0,0,0,.07);}
+.fp-dir{font-size:9px;color:rgba(255,255,255,.6);font-weight:700;letter-spacing:.3px;}
+.fp-icon{font-size:17px;}
+.fp-name{font-size:8px;color:rgba(255,255,255,.85);text-align:center;line-height:1.2;}
+.fp-quality{font-size:8px;font-weight:700;}
+/* Recs */
+.rec-list{display:flex;flex-direction:column;gap:9px;}
+.rec-item{border:1px solid var(--border-lt);border-radius:9px;padding:13px;display:flex;gap:10px;align-items:flex-start;}
+.rec-item.priority-high{border-left:3px solid var(--red);}
+.rec-item.priority-medium{border-left:3px solid #F59E0B;}
+.rec-item.priority-low{border-left:3px solid var(--green);}
+.rec-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:8px;white-space:nowrap;flex-shrink:0;}
+.priority-high .rec-badge{background:#FEE2E2;color:var(--red);}
+.priority-medium .rec-badge{background:#FEF3C7;color:#92400E;}
+.priority-low .rec-badge{background:#D1FAE5;color:#065F46;}
+.rec-body{flex:1;}
+.rec-title{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:3px;font-family:'Noto Serif',serif;}
+.rec-move{font-size:11px;color:var(--text-mid);margin-bottom:4px;}
+.pos-from{color:var(--red);} .pos-to{color:var(--green);font-weight:600;} .pos-keep{color:var(--green);font-weight:600;}
+.rec-reason{font-size:11px;color:var(--text-mid);line-height:1.6;}
+.rec-impr{font-size:10px;color:var(--green);font-weight:700;margin-top:3px;}
+/* Shop */
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:9px;}
+.shop-item{border:1px solid var(--border-lt);border-radius:9px;padding:12px;background:var(--bg-soft);}
+.shop-hdr{display:flex;align-items:center;gap:7px;margin-bottom:7px;}
+.shop-icon{font-size:20px;} .shop-name{font-size:12px;font-weight:600;color:var(--navy);}
+.shop-urg{font-size:9px;padding:2px 5px;border-radius:7px;margin-left:auto;white-space:nowrap;}
+.urg-must{background:#FEE2E2;color:var(--red);} .urg-good{background:#FEF3C7;color:#92400E;} .urg-opt{background:#F3F4F6;color:#6B7280;}
+.shop-pos{font-size:10px;color:var(--blue);font-weight:600;margin-bottom:3px;}
+.shop-reason{font-size:10px;color:var(--text-mid);line-height:1.5;margin-bottom:4px;}
+.shop-price{font-size:10px;color:var(--text-lt);}
+.advice-text{font-size:13px;color:var(--text-mid);line-height:1.75;background:var(--bg-soft);border-left:3px solid var(--gold);padding:12px 14px;border-radius:0 7px 7px 0;}
+</style>
+</head>
+<body>
+<script src="/nav.js"></script>
+
+<div class="hero">
+  <span style="font-size:44px;display:block;margin-bottom:10px;">🧭</span>
+  <h1>Phong Thủy Nội Thất</h1>
+  <p>Chụp ảnh phòng thực tế, nhận phân tích bố trí hợp bản mệnh theo Bát Trạch Minh Cảnh. Kèm sơ đồ trước/sau và shopping list vật phẩm phong thủy.</p>
+  <div class="hero-cost">⟐ 90 lượng · AI Vision + Bát Trạch + Ngũ Hành</div>
+</div>
+
+<div class="container">
+
+  <div class="card">
+    <div class="card-title"><span class="card-num">1</span> Bản Mệnh & Thông Tin Phòng</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Năm sinh dương lịch</label>
+        <input type="number" id="namSinh" class="form-control" placeholder="VD: 1990" min="1900" max="2025" oninput="onYearChange()"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Giới tính</label>
+        <select id="gioiTinh" class="form-control" onchange="onYearChange()">
+          <option value="male">Nam</option>
+          <option value="female">Nữ</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Loại phòng</label>
+        <select id="loaiPhong" class="form-control">
+          <option value="bedroom">Phòng ngủ</option>
+          <option value="living">Phòng khách</option>
+          <option value="workspace">Phòng làm việc</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Hướng cửa chính hướng về</label>
+        <select id="huongCua" class="form-control">
+          <option value="S">Nam (South)</option>
+          <option value="N">Bắc (North)</option>
+          <option value="E">Đông (East)</option>
+          <option value="W">Tây (West)</option>
+          <option value="SE">Đông Nam</option>
+          <option value="SW">Tây Nam</option>
+          <option value="NE">Đông Bắc</option>
+          <option value="NW">Tây Bắc</option>
+        </select>
+        <div class="form-hint">Hướng nhìn ra khi đứng trong phòng nhìn ra ngoài</div>
+      </div>
+    </div>
+    <div class="gua-badge" id="guaBadge">
+      <div class="gua-icon" id="guaIcon">☵</div>
+      <div>
+        <div class="gua-name" id="guaName"></div>
+        <div class="gua-dirs"><span class="g">✓ Tốt:</span> <span id="guaGood"></span></div>
+        <div class="gua-dirs"><span class="b">✗ Xấu:</span> <span id="guaBad"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-num">2</span> Chụp / Tải Ảnh Phòng</div>
+    <p style="font-size:12px;color:var(--text-mid);margin-bottom:12px;line-height:1.6;">Chụp ảnh toàn cảnh phòng, bao gồm cửa chính và các đồ vật chính. Ảnh càng rõ, phân tích càng chính xác.</p>
+    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="onDrag(event,1)" ondragleave="onDrag(event,0)" ondrop="onDrop(event)">
+      <input type="file" id="fileInput" accept="image/*" onchange="onFile(event)"/>
+      <span class="upload-icon">📷</span>
+      <div style="font-size:13px;color:var(--text-mid);margin-bottom:4px;">Kéo thả ảnh vào đây</div>
+      <span class="upload-btn-lbl">Chọn Ảnh</span>
+      <div style="font-size:11px;color:var(--text-lt);margin-top:8px;">JPG, PNG, HEIC · Tối đa 20MB</div>
+    </div>
+    <div class="preview-wrap" id="previewWrap">
+      <img id="previewImg" src="" alt="" class="preview-img"/>
+      <button class="preview-change" onclick="resetUpload()">✕ Đổi ảnh</button>
+    </div>
+  </div>
+
+  <div class="analyze-area">
+    <div class="cost-row">
+      <span>Chi phí: <strong>90 lượng</strong></span>
+      <span>Số dư: <span id="balDisplay" style="font-weight:700;">—</span> lượng</span>
+    </div>
+    <div class="error-box" id="errorBox"></div>
+    <button class="btn-analyze" id="btnAnalyze" onclick="doAnalyze()">🧭 Phân Tích Phong Thủy</button>
+  </div>
+
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <div style="font-size:14px;font-weight:600;color:var(--navy);font-family:'Noto Serif',serif;">Đang phân tích phong thủy...</div>
+    <div style="margin-top:10px;">
+      <div class="ls-step" id="ls1">⟳ Nhận diện đồ vật trong phòng</div>
+      <div class="ls-step" id="ls2">⟳ Tính toán Bát Trạch & Ngũ Hành</div>
+      <div class="ls-step" id="ls3">⟳ Tạo đề xuất bố trí tối ưu</div>
+      <div class="ls-step" id="ls4">⟳ Chuẩn bị kết quả</div>
+    </div>
+  </div>
+
+  <div id="results-section">
+
+    <div class="card">
+      <div class="card-title">📊 Điểm Phong Thủy Trước & Sau</div>
+      <div class="score-compare">
+        <div class="score-box score-before"><div class="score-label">Hiện Tại</div><div class="score-num" id="scoreBefore">—</div><div class="score-bar-wrap"><div class="score-bar" id="sbarB"></div></div></div>
+        <div><div class="delta-num" id="scoreDelta">—</div><div class="delta-lbl">cải thiện</div></div>
+        <div class="score-box score-after"><div class="score-label">Sau Điều Chỉnh</div><div class="score-num" id="scoreAfter">—</div><div class="score-bar-wrap"><div class="score-bar" id="sbarA"></div></div></div>
+      </div>
+      <div class="score-expl" id="scoreExpl"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📸 Ảnh Phòng & Đồ Vật Nhận Diện</div>
+      <div id="photoDisplay" style="border-radius:8px;overflow:hidden;border:1px solid var(--border-lt);margin-bottom:12px;"></div>
+      <div style="font-size:11px;color:var(--text-lt);font-weight:700;margin-bottom:5px;">ĐỒ VẬT PHÁT HIỆN</div>
+      <div class="tag-list" id="tagList"></div>
+      <div style="font-size:11px;color:var(--text-lt);font-style:italic;margin-top:7px;" id="observations"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🗺 Sơ Đồ Bố Trí Trước / Sau</div>
+      <div class="fp-compare">
+        <div class="fp-half"><div class="fp-half-title">⬛ Hiện Tại</div><div class="fp-grid" id="fpBefore"></div></div>
+        <div class="fp-half"><div class="fp-half-title">✅ Sau Điều Chỉnh</div><div class="fp-grid" id="fpAfter"></div></div>
+      </div>
+      <p style="font-size:11px;color:var(--text-lt);margin-top:8px;text-align:center;">Lưới 3×3 theo la bàn · Nam ở trên · Bắc ở dưới</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔧 Đề Xuất Bố Trí</div>
+      <div class="rec-list" id="recList"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🛒 Vật Phẩm Phong Thủy Nên Thêm</div>
+      <div class="shop-grid" id="shopGrid"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">💬 Lời Khuyên Tổng Thể</div>
+      <div class="advice-text" id="adviceText"></div>
+    </div>
+
+    <div style="text-align:center;padding:14px 0 6px;">
+      <button onclick="resetAll()" style="background:var(--bg-soft);border:1.5px solid var(--border);border-radius:7px;padding:9px 22px;cursor:pointer;font-size:12px;color:var(--text-mid);">← Phân Tích Phòng Khác</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const GUA_DATA={1:{name:'Khảm',elem:'Thủy',icon:'☵',good:{SE:'Sinh Khí',E:'Thiên Y',S:'Diên Niên',N:'Phục Vị'},bad:{W:'Họa Hại',NE:'Ngũ Quỷ',NW:'Lục Sát',SW:'Tuyệt Mệnh'}},2:{name:'Khôn',elem:'Thổ',icon:'☷',good:{NE:'Sinh Khí',W:'Thiên Y',NW:'Diên Niên',SW:'Phục Vị'},bad:{E:'Họa Hại',SE:'Ngũ Quỷ',S:'Lục Sát',N:'Tuyệt Mệnh'}},3:{name:'Chấn',elem:'Mộc',icon:'☳',good:{S:'Sinh Khí',N:'Thiên Y',SE:'Diên Niên',E:'Phục Vị'},bad:{SW:'Họa Hại',W:'Ngũ Quỷ',NE:'Lục Sát',NW:'Tuyệt Mệnh'}},4:{name:'Tốn',elem:'Mộc',icon:'☴',good:{N:'Sinh Khí',S:'Thiên Y',E:'Diên Niên',SE:'Phục Vị'},bad:{NW:'Họa Hại',SW:'Ngũ Quỷ',W:'Lục Sát',NE:'Tuyệt Mệnh'}},6:{name:'Càn',elem:'Kim',icon:'☰',good:{W:'Sinh Khí',NE:'Thiên Y',SW:'Diên Niên',NW:'Phục Vị'},bad:{SE:'Họa Hại',S:'Ngũ Quỷ',E:'Lục Sát',N:'Tuyệt Mệnh'}},7:{name:'Đoài',elem:'Kim',icon:'☱',good:{NW:'Sinh Khí',SW:'Thiên Y',NE:'Diên Niên',W:'Phục Vị'},bad:{E:'Họa Hại',N:'Ngũ Quỷ',SE:'Lục Sát',S:'Tuyệt Mệnh'}},8:{name:'Cấn',elem:'Thổ',icon:'☶',good:{SW:'Sinh Khí',NW:'Thiên Y',W:'Diên Niên',NE:'Phục Vị'},bad:{S:'Họa Hại',E:'Ngũ Quỷ',N:'Lục Sát',SE:'Tuyệt Mệnh'}},9:{name:'Ly',elem:'Hỏa',icon:'☲',good:{E:'Sinh Khí',SE:'Thiên Y',N:'Diên Niên',S:'Phục Vị'},bad:{NE:'Họa Hại',NW:'Ngũ Quỷ',SW:'Lục Sát',W:'Tuyệt Mệnh'}}};
+const DIR_VN={N:'Bắc',NE:'Đông Bắc',E:'Đông',SE:'Đông Nam',S:'Nam',SW:'Tây Nam',W:'Tây',NW:'Tây Bắc',C:'Trung Tâm'};
+const BAGUA=[['SE','S','SW'],['E','C','W'],['NE','N','NW']];
+const TIER_BG={best:'#1E6B3C',good:'#2D8E52',ok:'#5B8A3C',neutral:'#6B7280',warn:'#B45309',bad:'#B91C1C',worst:'#7F1D1D'};
+const TIER_CLR={best:'#86EFAC',good:'#BBF7D0',ok:'#D9F99D',neutral:'#E5E7EB',warn:'#FCD34D',bad:'#FCA5A5',worst:'#FECACA'};
+
+function calcGua(y,g){let s=String(y).split('').reduce((a,c)=>a+parseInt(c),0);while(s>=10)s=String(s).split('').reduce((a,c)=>a+parseInt(c),0);let r;if(g==='male'){r=y>=2000?9-s:10-s;if(r<=0)r+=9;if(r===5)r=2;}else{r=y>=2000?s+6:s+5;while(r>=10)r=String(r).split('').reduce((a,c)=>a+parseInt(c),0);if(r===5)r=8;}return r;}
+
+function cellQuality(dir,gua){if(!gua||dir==='C')return'neutral';const g=GUA_DATA[gua];if(!g)return'neutral';if(g.good[dir]){const v=g.good[dir];return v.includes('Sinh')?'best':v.includes('Thiên')?'good':'ok';}if(g.bad[dir]){const v=g.bad[dir];return v.includes('Tuyệt')?'worst':v.includes('Ngũ')?'bad':'warn';}return'neutral';}
+function getQLabel(dir,gua){if(!gua)return'';const g=GUA_DATA[gua];return(g?.good[dir]||g?.bad[dir]||'');}
+function getFIcon(id){return({bed:'🛏',desk:'🖥',sofa:'🛋',altar:'🏮',stove:'🔥',plant:'🌿',mirror:'🪞',door:'🚪',toilet:'🚿',water:'💧',wardrobe:'🚪',tv:'📺',table:'🪑'})[id]||'📦';}
+
+let _gua=null,_img64=null,_imgType='image/jpeg';
+
+function onYearChange(){
+  const y=parseInt(document.getElementById('namSinh').value),g=document.getElementById('gioiTinh').value;
+  if(!y||y<1900||y>2025){document.getElementById('guaBadge').classList.remove('show');return;}
+  _gua=calcGua(y,g);const d=GUA_DATA[_gua];if(!d)return;
+  document.getElementById('guaIcon').textContent=d.icon;
+  document.getElementById('guaName').textContent='Quái '+_gua+' — '+d.name+' ('+d.elem+')';
+  document.getElementById('guaGood').textContent=Object.entries(d.good).map(([k,v])=>(DIR_VN[k]||k)+' ('+v+')').join(' · ');
+  document.getElementById('guaBad').textContent=Object.entries(d.bad).map(([k,v])=>(DIR_VN[k]||k)+' ('+v+')').join(' · ');
+  document.getElementById('guaBadge').classList.add('show');
+}
+
+function onDrag(e,on){e.preventDefault();document.getElementById('uploadZone').classList[on?'add':'remove']('drag-over');}
+function onDrop(e){e.preventDefault();document.getElementById('uploadZone').classList.remove('drag-over');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))processFile(f);}
+function onFile(e){const f=e.target.files[0];if(f)processFile(f);}
+function resetUpload(){_img64=null;document.getElementById('uploadZone').style.display='block';document.getElementById('previewWrap').classList.remove('show');document.getElementById('fileInput').value='';}
+function resetAll(){resetUpload();document.getElementById('results-section').style.display='none';window.scrollTo({top:0,behavior:'smooth'});}
+
+async function processFile(file){
+  const{base64,type}=await resizeImg(file);_img64=base64;_imgType=type;
+  document.getElementById('previewImg').src='data:'+type+';base64,'+base64;
+  document.getElementById('uploadZone').style.display='none';
+  document.getElementById('previewWrap').classList.add('show');
+}
+function resizeImg(file){return new Promise((res,rej)=>{const r=new FileReader();r.onerror=()=>rej(new Error('Lỗi đọc file'));r.onload=e=>{const img=new Image();img.onerror=()=>rej(new Error('Lỗi tải ảnh'));img.onload=()=>{const M=1024;let{width:w,height:h}=img;if(w>M||h>M){if(w>h){h=Math.round(h*M/w);w=M;}else{w=Math.round(w*M/h);h=M;}}const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);res({base64:c.toDataURL('image/jpeg',.78).split(',')[1],type:'image/jpeg'});};img.src=e.target.result;};r.readAsDataURL(file);});}
+
+let _lsT=null;
+function startLoading(){['ls1','ls2','ls3','ls4'].forEach(id=>{const e=document.getElementById(id);e.className='ls-step';});let i=0;_lsT=setInterval(()=>{if(i<4){if(i>0){const p=document.getElementById('ls'+i);p.className='ls-step done';p.textContent=p.textContent.replace('⟳','✓');}document.getElementById('ls'+(i+1)).classList.add('active');i++;}},9000);}
+function stopLoading(){if(_lsT){clearInterval(_lsT);_lsT=null;}['ls1','ls2','ls3','ls4'].forEach(id=>{document.getElementById(id).className='ls-step done';});}
+
+async function doAnalyze(){
+  document.getElementById('errorBox').style.display='none';
+  const y=parseInt(document.getElementById('namSinh').value),g=document.getElementById('gioiTinh').value;
+  if(!y||y<1900||y>2025){showErr('Vui lòng nhập năm sinh hợp lệ');return;}
+  if(!_img64){showErr('Vui lòng chọn ảnh phòng');return;}
+  if(!window.Auth?.isLoggedIn()){window.Auth?.require?.(()=>doAnalyze());return;}
+  _gua=calcGua(y,g);
+  const token=window.Auth.getSession()?.access_token;
+  const roomType=document.getElementById('loaiPhong').value;
+  const doorDir=document.getElementById('huongCua').value;
+  document.getElementById('btnAnalyze').disabled=true;
+  document.getElementById('loadingOverlay').classList.add('show');
+  document.getElementById('results-section').style.display='none';
+  startLoading();
+  const _slug=TuviPaywall.generateToolSlug('phong-thuy');
+  try{
+    await new Promise((resolve,reject)=>{
+      TuviPaywall.requireCredits(_slug,async()=>{
+        try{
+          const res=await fetch('/api/phong-thuy?action=analyze',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({imageBase64:_img64,imageType:_imgType,roomType,doorDir,guaNumber:_gua,namSinh:y,gioiTinh:g})});
+          const data=await res.json();
+          if(!data.success)throw new Error(data.error||'Phân tích thất bại');
+          window.refreshNavCredits&&window.refreshNavCredits();
+          renderResults(data);resolve();
+        }catch(e){reject(e);}
+      });
+    });
+  }catch(e){showErr('Lỗi: '+e.message);}
+  finally{stopLoading();document.getElementById('loadingOverlay').classList.remove('show');document.getElementById('btnAnalyze').disabled=false;}
+}
+
+function showErr(m){const b=document.getElementById('errorBox');b.textContent=m;b.style.display='block';}
+
+function renderFloorPlan(furniture,recs){
+  const beforeMap={},afterMap={};
+  (furniture||[]).forEach(f=>{beforeMap[f.currentPosition]=f;afterMap[f.currentPosition]=f;});
+  (recs||[]).forEach(r=>{if(r.action==='move'&&r.recommendedPosition){const orig=Object.entries(afterMap).find(([,v])=>v.id===r.furnitureId||v.name===r.furnitureName);if(orig)delete afterMap[orig[0]];afterMap[r.recommendedPosition]={id:r.furnitureId,name:r.furnitureName,currentPosition:r.recommendedPosition};}});
+  ['fpBefore','fpAfter'].forEach((cid,idx)=>{
+    const map=idx===0?beforeMap:afterMap;
+    const cont=document.getElementById(cid);cont.innerHTML='';
+    BAGUA.forEach(row=>row.forEach(dir=>{
+      const q=cellQuality(dir,_gua),f=map[dir];
+      const cell=document.createElement('div');cell.className='fp-cell';
+      cell.style.background=TIER_BG[q]||'#6B7280';
+      cell.innerHTML=(dir==='C'?'<div class="fp-dir">中</div>':'<div class="fp-dir">'+dir+'</div>')
+        +(f?'<div class="fp-icon">'+getFIcon(f.id)+'</div><div class="fp-name">'+(f.name||'')+'</div>':'')
+        +(dir!=='C'&&_gua?'<div class="fp-quality" style="color:'+TIER_CLR[q]+'">'+getQLabel(dir,_gua)+'</div>':'');
+      cont.appendChild(cell);
+    }));
+  });
+}
+
+function renderResults(data){
+  const{detected,analysis}=data;
+  const before=analysis.beforeScore||0,after=analysis.afterScore||0;
+  document.getElementById('scoreBefore').textContent=before;
+  document.getElementById('scoreAfter').textContent=after;
+  document.getElementById('scoreDelta').textContent='+'+Math.max(0,after-before);
+  document.getElementById('scoreExpl').textContent=analysis.scoreExplanation||'';
+  setTimeout(()=>{document.getElementById('sbarB').style.width=before+'%';document.getElementById('sbarA').style.width=after+'%';},100);
+  const pd=document.getElementById('photoDisplay');pd.innerHTML='';
+  if(_img64){const img=document.createElement('img');img.src='data:'+_imgType+';base64,'+_img64;img.style.cssText='width:100%;display:block;';pd.appendChild(img);}
+  const tl=document.getElementById('tagList');tl.innerHTML='';
+  (detected.detectedFurniture||[]).forEach(f=>{const t=document.createElement('div');t.className='tag';t.innerHTML=getFIcon(f.id)+' '+f.name+' <span class="tag-pos">· '+(DIR_VN[f.currentPosition]||f.currentPosition||'')+'</span>';tl.appendChild(t);});
+  document.getElementById('observations').textContent=detected.roomObservations||'';
+  renderFloorPlan(detected.detectedFurniture||[],analysis.recommendations||[]);
+  const recs=(analysis.recommendations||[]).sort((a,b)=>({high:0,medium:1,low:2}[a.priority]||1)-({high:0,medium:1,low:2}[b.priority]||1));
+  const rl=document.getElementById('recList');rl.innerHTML='';
+  if(!recs.length){rl.innerHTML='<p style="color:var(--text-lt);font-size:12px;">Bố trí hiện tại tương đối tốt.</p>';}
+  else recs.forEach(r=>{
+    const isMove=r.action==='move',isKeep=r.action==='keep';
+    const mv=isKeep?'<span class="pos-keep">✓ Giữ nguyên</span>':isMove?'<span class="pos-from">'+(DIR_VN[r.currentPosition]||r.currentPosition)+'</span> → <span class="pos-to">'+(DIR_VN[r.recommendedPosition]||r.recommendedPosition)+'</span>':'<span style="color:var(--text-mid)">'+(r.action==='remove'?'Dọn bỏ':'Điều chỉnh')+'</span>';
+    const pl={high:'⚠ Quan Trọng',medium:'→ Nên Làm',low:'◎ Tuỳ Ý'}[r.priority]||r.priority;
+    rl.innerHTML+='<div class="rec-item priority-'+(r.priority||'medium')+'"><div><span class="rec-badge">'+pl+'</span></div><div class="rec-body"><div class="rec-title">'+getFIcon(r.furnitureId)+' '+r.furnitureName+'</div><div class="rec-move">'+mv+'</div><div class="rec-reason">'+(r.reason||'')+'</div>'+(r.improvement?'<div class="rec-impr">↑ ~'+r.improvement+' điểm</div>':'')+'</div></div>';
+  });
+  const sg=document.getElementById('shopGrid');sg.innerHTML='';
+  (analysis.shoppingList||[]).forEach(s=>{const uc=s.urgency==='nên có'?'urg-must':s.urgency==='tốt nếu có'?'urg-good':'urg-opt';const ul=s.urgency==='nên có'?'Nên Có':s.urgency==='tốt nếu có'?'Tốt Nếu Có':'Tuỳ Ý';sg.innerHTML+='<div class="shop-item"><div class="shop-hdr"><span class="shop-icon">'+(s.icon||'✨')+'</span><span class="shop-name">'+s.item+'</span><span class="shop-urg '+uc+'">'+ul+'</span></div><div class="shop-pos">📍 '+(DIR_VN[s.position]||s.position||'')+'</div><div class="shop-reason">'+(s.reason||'')+'</div><div class="shop-price">💰 '+(s.priceRange||'')+'</div></div>';});
+  if(!(analysis.shoppingList||[]).length)sg.innerHTML='<p style="color:var(--text-lt);font-size:12px;">Không có đề xuất thêm vật phẩm.</p>';
+  document.getElementById('adviceText').textContent=analysis.generalAdvice||'';
+  const sec=document.getElementById('results-section');sec.style.display='block';
+  setTimeout(()=>sec.scrollIntoView({behavior:'smooth',block:'start'}),200);
+}
+
+TuviPaywall.init({ product: 'phong-thuy' });
+</script>
+</body>
+</html>

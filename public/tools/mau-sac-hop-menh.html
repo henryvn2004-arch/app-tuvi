@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Màu Sắc Hợp Mệnh — Tử Vi Minh Bảo</title>
+<meta name="description" content="Tư vấn màu sắc trang phục hợp bản mệnh theo Ngũ Hành Nạp Âm. Quần áo, giày dép, phụ kiện đúng màu đúng mệnh."/>
+<link rel="icon" href="/favicon.ico"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&display=swap" rel="stylesheet"/>
+<script src="/auth.js"></script>
+<script src="/tuvi-paywall.js"></script>
+<style>
+:root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--gold-bright:#D4A843;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0;--red:#C0392B;--green:#1E6B3C;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh;}
+h1,h2,h3{font-family:'Noto Serif',serif;}
+.hero{background:linear-gradient(180deg,var(--navy),var(--navy-mid));padding:36px 24px 28px;text-align:center;}
+.hero h1{font-size:22px;color:var(--gold-bright);margin-bottom:6px;}
+.hero p{font-size:13px;color:rgba(255,255,255,.62);max-width:480px;margin:0 auto 14px;line-height:1.65;}
+.hero-cost{display:inline-flex;align-items:center;gap:8px;background:rgba(154,123,58,.15);border:1px solid rgba(154,123,58,.4);border-radius:20px;padding:5px 14px;font-size:12px;color:var(--gold-bright);}
+.container{max-width:780px;margin:0 auto;padding:0 14px;}
+.card{background:var(--bg);border:1px solid var(--border-lt);border-radius:12px;padding:22px;margin:16px 0;box-shadow:0 2px 6px rgba(0,0,0,.05);}
+.card-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border-lt);display:flex;align-items:center;gap:8px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+@media(max-width:500px){.form-row{grid-template-columns:1fr;}}
+.form-group{display:flex;flex-direction:column;gap:5px;}
+.form-label{font-size:12px;color:var(--text-mid);font-weight:600;}
+.form-control{padding:9px 11px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;color:var(--text);background:var(--bg);outline:none;font-family:Arial,sans-serif;transition:border-color .2s;}
+.form-control:focus{border-color:var(--blue);}
+.gua-row{display:none;background:var(--bg-soft);border:1.5px solid var(--border-lt);border-radius:9px;padding:11px 14px;margin-top:4px;gap:12px;align-items:center;}
+.gua-row.show{display:flex;flex-wrap:wrap;}
+.gua-icon{font-size:26px;}
+.gua-info-text{font-size:12px;color:var(--text-mid);line-height:1.65;}
+.analyze-area{background:var(--bg);border:1px solid var(--border-lt);border-radius:12px;padding:18px;margin:16px 0;}
+.cost-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;font-size:12px;color:var(--text-mid);}
+.cost-row strong{color:var(--navy);}
+.btn-analyze{width:100%;padding:13px;background:linear-gradient(135deg,var(--navy),var(--navy-mid));color:var(--gold-bright);border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Serif',serif;display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity .2s;}
+.btn-analyze:hover{opacity:.88;} .btn-analyze:disabled{opacity:.5;cursor:not-allowed;}
+.error-box{background:#FFF5F5;border:1px solid #FECACA;border-radius:7px;padding:10px;font-size:12px;color:var(--red);display:none;margin-bottom:10px;}
+.loading-overlay{display:none;text-align:center;padding:28px;}
+.loading-overlay.show{display:block;}
+.loading-spinner{width:36px;height:36px;border:3px solid var(--border-lt);border-top-color:var(--navy);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 14px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+#results-section{display:none;}
+
+/* MỆNH BANNER */
+.menh-banner{border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;margin-bottom:4px;flex-wrap:wrap;}
+.menh-icon{font-size:44px;}
+.menh-info{flex:1;}
+.menh-title{font-size:16px;font-weight:700;font-family:'Noto Serif',serif;margin-bottom:4px;}
+.menh-sub{font-size:12px;opacity:.8;line-height:1.6;}
+.menh-summary{font-size:13px;line-height:1.7;margin-top:10px;padding:10px 14px;background:rgba(255,255,255,.2);border-radius:8px;}
+
+/* COLOR PALETTE */
+.palette-section{margin-bottom:4px;}
+.palette-label{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text-lt);margin-bottom:8px;}
+.palette-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;}
+.color-chip{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:default;}
+.color-swatch{width:44px;height:44px;border-radius:8px;border:2px solid rgba(0,0,0,.1);box-shadow:0 1px 4px rgba(0,0,0,.12);}
+.color-name{font-size:9px;color:var(--text-mid);text-align:center;max-width:50px;line-height:1.3;}
+.avoid-chip .color-swatch{opacity:.55;border-style:dashed;}
+.avoid-chip .color-name{color:var(--red);}
+
+/* CLOTHING GUIDE */
+.clothing-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;}
+.clothing-item{background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:9px;padding:12px;}
+.clothing-header{display:flex;align-items:center;gap:7px;margin-bottom:8px;}
+.clothing-icon{font-size:20px;}
+.clothing-cat{font-size:12px;font-weight:700;color:var(--navy);}
+.clothing-colors{display:flex;flex-wrap:wrap;gap:4px;}
+.clothing-color-tag{font-size:10px;padding:2px 8px;border-radius:10px;border:1px solid;font-weight:600;}
+.clothing-avoid{font-size:10px;color:var(--red);margin-top:6px;padding-top:6px;border-top:1px solid var(--border-lt);}
+
+/* OCCASIONS */
+.occasion-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;}
+.occasion-item{border:1px solid var(--border-lt);border-radius:9px;padding:13px;background:var(--bg-soft);}
+.occasion-header{display:flex;align-items:center;gap:7px;margin-bottom:7px;}
+.occasion-icon{font-size:18px;}
+.occasion-name{font-size:12px;font-weight:700;color:var(--navy);}
+.occasion-colors{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;}
+.occasion-tip{font-size:11px;color:var(--text-mid);line-height:1.5;}
+
+/* COMBOS */
+.combo-list{display:flex;flex-direction:column;gap:10px;}
+.combo-item{border:1px solid var(--border-lt);border-radius:10px;padding:14px;display:flex;gap:12px;align-items:flex-start;}
+.combo-score-circle{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;}
+.combo-body{flex:1;}
+.combo-name{font-size:13px;font-weight:700;color:var(--navy);font-family:'Noto Serif',serif;margin-bottom:4px;}
+.combo-items{font-size:12px;color:var(--text-mid);margin-bottom:4px;line-height:1.6;}
+.combo-vibe{font-size:11px;color:var(--text-lt);font-style:italic;}
+
+/* AVOID */
+.avoid-explain{font-size:13px;color:var(--text-mid);line-height:1.7;background:#FFF5F5;border-left:3px solid var(--red);padding:12px 14px;border-radius:0 7px 7px 0;}
+.bonus-tip{font-size:13px;color:var(--text-mid);line-height:1.7;background:var(--gold-lt);border-left:3px solid var(--gold);padding:12px 14px;border-radius:0 7px 7px 0;}
+</style>
+</head>
+<body>
+<script src="/nav.js"></script>
+
+<div class="hero">
+  <span style="font-size:44px;display:block;margin-bottom:10px;">🎨</span>
+  <h1>Màu Sắc Hợp Mệnh</h1>
+  <p>Tư vấn màu sắc trang phục theo Ngũ Hành Nạp Âm và Bát Trạch. Quần, áo, giày, phụ kiện — đúng màu đúng mệnh, vận khí thăng tiến.</p>
+  <div class="hero-cost">⟐ 20 lượng · Ngũ Hành Nạp Âm + Bát Trạch</div>
+</div>
+
+<div class="container">
+
+  <div class="card">
+    <div class="card-title">✨ Thông Tin Bản Mệnh</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Năm sinh dương lịch</label>
+        <input type="number" id="namSinh" class="form-control" placeholder="VD: 1990" min="1900" max="2025" oninput="onYearChange()"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Giới tính</label>
+        <select id="gioiTinh" class="form-control" onchange="onYearChange()">
+          <option value="male">Nam</option>
+          <option value="female">Nữ</option>
+        </select>
+      </div>
+    </div>
+    <div class="gua-row" id="guaRow">
+      <div class="gua-icon" id="guaIcon">☵</div>
+      <div class="gua-info-text">
+        <div style="font-weight:700;font-size:13px;color:var(--navy);font-family:'Noto Serif',serif;" id="guaLine"></div>
+        <div id="napAmLine" style="margin-top:2px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="analyze-area">
+    <div class="cost-row">
+      <span>Chi phí: <strong>20 lượng</strong></span>
+      <span>Số dư: <span id="balDisplay" style="font-weight:700;">—</span> lượng</span>
+    </div>
+    <div class="error-box" id="errorBox"></div>
+    <button class="btn-analyze" id="btnAnalyze" onclick="doAnalyze()">🎨 Xem Màu Sắc Hợp Mệnh</button>
+  </div>
+
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <div style="font-size:14px;font-weight:600;color:var(--navy);font-family:'Noto Serif',serif;">Đang tính màu sắc hợp mệnh...</div>
+  </div>
+
+  <div id="results-section">
+
+    <!-- MỆNH BANNER -->
+    <div class="card">
+      <div class="menh-banner" id="menhBanner">
+        <div class="menh-icon" id="menhIcon">🌟</div>
+        <div class="menh-info">
+          <div class="menh-title" id="menhTitle"></div>
+          <div class="menh-sub" id="menhSub"></div>
+          <div class="menh-summary" id="menhSummary"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PALETTE -->
+    <div class="card">
+      <div class="card-title">🎨 Bảng Màu Theo Mệnh</div>
+      <div class="palette-section">
+        <div class="palette-label">✓ Màu Chính — Tốt Nhất</div>
+        <div class="palette-row" id="primaryPalette"></div>
+        <div class="palette-label">◎ Màu Phụ — Chấp Nhận Được</div>
+        <div class="palette-row" id="secondaryPalette"></div>
+        <div class="palette-label">✗ Màu Nên Tránh</div>
+        <div class="palette-row" id="avoidPalette"></div>
+      </div>
+    </div>
+
+    <!-- CLOTHING -->
+    <div class="card">
+      <div class="card-title">👗 Hướng Dẫn Trang Phục Chi Tiết</div>
+      <div class="clothing-grid" id="clothingGrid"></div>
+    </div>
+
+    <!-- OCCASIONS -->
+    <div class="card">
+      <div class="card-title">📅 Màu Theo Dịp</div>
+      <div class="occasion-grid" id="occasionGrid"></div>
+    </div>
+
+    <!-- COMBOS -->
+    <div class="card">
+      <div class="card-title">✨ Gợi Ý Phối Đồ Hoàn Chỉnh</div>
+      <div class="combo-list" id="comboList"></div>
+    </div>
+
+    <!-- AVOID EXPLAIN -->
+    <div class="card">
+      <div class="card-title">⚠ Tại Sao Nên Tránh Những Màu Này?</div>
+      <div class="avoid-explain" id="avoidExplain"></div>
+    </div>
+
+    <!-- BONUS -->
+    <div class="card" id="bonusCard" style="display:none;">
+      <div class="card-title">💡 Mẹo Đặc Biệt Theo Bản Mệnh</div>
+      <div class="bonus-tip" id="bonusTip"></div>
+    </div>
+
+    <div style="text-align:center;padding:14px 0 6px;">
+      <button onclick="resetAll()" style="background:var(--bg-soft);border:1.5px solid var(--border);border-radius:7px;padding:9px 22px;cursor:pointer;font-size:12px;color:var(--text-mid);">← Xem Lại</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const GUA_DATA={1:{name:'Khảm',elem:'Thủy',icon:'☵'},2:{name:'Khôn',elem:'Thổ',icon:'☷'},3:{name:'Chấn',elem:'Mộc',icon:'☳'},4:{name:'Tốn',elem:'Mộc',icon:'☴'},6:{name:'Càn',elem:'Kim',icon:'☰'},7:{name:'Đoài',elem:'Kim',icon:'☱'},8:{name:'Cấn',elem:'Thổ',icon:'☶'},9:{name:'Ly',elem:'Hỏa',icon:'☲'}};
+
+// Approx hex for color names
+const COLOR_HEX={
+  'Trắng':'#FFFFFF','Bạc':'#C0C0C0','Xám nhạt':'#D3D3D3','Vàng kim':'#D4AF37',
+  'Vàng đất':'#C8973A','Be':'#D4B896','Kem':'#FFF8DC','Be đậm':'#D2B48C',
+  'Xanh lá':'#2E8B57','Xanh ngọc':'#40E0D0','Xanh lam nhạt':'#87CEEB','Nâu gỗ':'#8B4513',
+  'Xanh mint':'#98FF98','Xanh rêu':'#6B8E23','Xanh olive':'#808000',
+  'Đen':'#111111','Navy':'#000080','Xanh dương đậm':'#00008B','Xanh biển':'#1E90FF',
+  'Xám đậm':'#696969','Tím than':'#4B0082','Xanh rêu đậm':'#355E3B',
+  'Đỏ':'#CC0000','Cam':'#FF6600','Hồng tươi':'#FF69B4','Tím đỏ':'#800040',
+  'Vàng tươi':'#FFD700','Hồng phấn':'#FFB6C1','Nâu đỏ':'#8B2500',
+  'Nâu ấm':'#8B6914','Cam đất':'#CC7722','Vàng nhạt':'#F5DEB3','Nâu vàng':'#DAA520',
+  'Kem đậm':'#FAEBD7','Xám kim loại':'#A8A9AD','Tím':'#800080','Xanh tím':'#6A0DAD',
+};
+const NH_BG={Kim:'linear-gradient(135deg,#C0C0C0,#D4AF37)',Mộc:'linear-gradient(135deg,#2E8B57,#40E0D0)',Thủy:'linear-gradient(135deg,#000080,#1E90FF)',Hỏa:'linear-gradient(135deg,#CC0000,#FF6600)',Thổ:'linear-gradient(135deg,#C8973A,#8B6914)'};
+const NH_ICON={Kim:'⚙️',Mộc:'🌿',Thủy:'💧',Hỏa:'🔥',Thổ:'🌍'};
+
+const NAP_AM_MAP={};
+const base=[[1924,'Hỏa'],[1926,'Thổ'],[1928,'Mộc'],[1930,'Kim'],[1932,'Thủy'],[1934,'Hỏa'],[1936,'Thổ'],[1938,'Mộc'],[1940,'Kim'],[1942,'Thủy'],[1944,'Hỏa'],[1946,'Thổ'],[1948,'Mộc'],[1950,'Kim'],[1952,'Thủy'],[1954,'Hỏa'],[1956,'Thổ'],[1958,'Mộc'],[1960,'Kim'],[1962,'Thủy'],[1964,'Hỏa'],[1966,'Thổ'],[1968,'Mộc'],[1970,'Kim'],[1972,'Thủy'],[1974,'Hỏa'],[1976,'Thổ'],[1978,'Mộc'],[1980,'Kim'],[1982,'Thủy'],[1984,'Hỏa'],[1986,'Thổ'],[1988,'Mộc'],[1990,'Kim'],[1992,'Thủy'],[1994,'Hỏa'],[1996,'Thổ'],[1998,'Mộc'],[2000,'Kim'],[2002,'Thủy'],[2004,'Hỏa'],[2006,'Thổ'],[2008,'Mộc'],[2010,'Kim'],[2012,'Thủy'],[2014,'Hỏa'],[2016,'Thổ'],[2018,'Mộc'],[2020,'Kim'],[2022,'Thủy'],[2024,'Hỏa']];
+base.forEach(([y,h])=>{NAP_AM_MAP[y]=h;NAP_AM_MAP[y+1]=h;});
+
+function calcGua(y,g){let s=String(y).split('').reduce((a,c)=>a+parseInt(c),0);while(s>=10)s=String(s).split('').reduce((a,c)=>a+parseInt(c),0);let r;if(g==='male'){r=y>=2000?9-s:10-s;if(r<=0)r+=9;if(r===5)r=2;}else{r=y>=2000?s+6:s+5;while(r>=10)r=String(r).split('').reduce((a,c)=>a+parseInt(c),0);if(r===5)r=8;}return r;}
+
+let _gua=null;
+
+function onYearChange(){
+  const y=parseInt(document.getElementById('namSinh').value);
+  const g=document.getElementById('gioiTinh').value;
+  if(!y||y<1900||y>2025){document.getElementById('guaRow').classList.remove('show');return;}
+  _gua=calcGua(y,g);
+  const d=GUA_DATA[_gua];const na=NAP_AM_MAP[y]||'Hỏa';
+  if(!d)return;
+  document.getElementById('guaIcon').textContent=d.icon;
+  document.getElementById('guaLine').textContent=`Quái ${_gua} — ${d.name} (${d.elem})`;
+  document.getElementById('napAmLine').textContent=`Nạp Âm: ${na} · Màu chủ đạo theo hành ${na}`;
+  document.getElementById('guaRow').classList.add('show');
+}
+
+function resetAll(){document.getElementById('results-section').style.display='none';window.scrollTo({top:0,behavior:'smooth'});}
+
+async function doAnalyze(){
+  document.getElementById('errorBox').style.display='none';
+  const y=parseInt(document.getElementById('namSinh').value);
+  const g=document.getElementById('gioiTinh').value;
+  if(!y||y<1900||y>2025){showErr('Vui lòng nhập năm sinh hợp lệ (1900–2025)');return;}
+  if(!window.Auth?.isLoggedIn()){window.Auth?.require?.(()=>doAnalyze());return;}
+  _gua=calcGua(y,g);
+  const token=window.Auth.getSession()?.access_token;
+
+  document.getElementById('btnAnalyze').disabled=true;
+  document.getElementById('loadingOverlay').classList.add('show');
+  document.getElementById('results-section').style.display='none';
+
+  const _slug=TuviPaywall.generateToolSlug('mau-sac-hop-menh');
+  try{
+    await new Promise((resolve,reject)=>{
+      TuviPaywall.requireCredits(_slug,async()=>{
+        try{
+          const res=await fetch('/api/phong-thuy?action=mau-sac',{
+            method:'POST',
+            headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+            body:JSON.stringify({namSinh:y,gioiTinh:g,guaNumber:_gua}),
+          });
+          const data=await res.json();
+          if(!data.success)throw new Error(data.error||'Phân tích thất bại');
+          window.refreshNavCredits&&window.refreshNavCredits();
+          renderResults(data);
+          resolve();
+        }catch(e){reject(e);}
+      });
+    });
+  }catch(e){showErr('Lỗi: '+e.message);}
+  finally{document.getElementById('loadingOverlay').classList.remove('show');document.getElementById('btnAnalyze').disabled=false;}
+}
+
+function showErr(m){const b=document.getElementById('errorBox');b.textContent=m;b.style.display='block';}
+
+function colorChip(name,avoid=false){
+  const hex=COLOR_HEX[name]||'#888888';
+  const isDark=['#000080','#111111','#00008B','#4B0082','#8B2500','#355E3B','#000000'].includes(hex);
+  return `<div class="color-chip${avoid?' avoid-chip':''}">
+    <div class="color-swatch" style="background:${hex};"></div>
+    <div class="color-name">${name}</div>
+  </div>`;
+}
+
+function clothingTag(color){
+  const hex=COLOR_HEX[color]||'#888';
+  const isDark=['#000080','#111111','#00008B','#4B0082','#8B2500','#355E3B'].includes(hex);
+  return `<span class="clothing-color-tag" style="background:${hex};color:${isDark?'#fff':'#1a1a1a'};border-color:${hex};">${color}</span>`;
+}
+
+function renderResults(data){
+  const{napAmHanh,colorData,styleGuide:s}=data;
+
+  // Mệnh banner
+  const bg=NH_BG[napAmHanh]||'linear-gradient(135deg,#888,#aaa)';
+  const banner=document.getElementById('menhBanner');
+  banner.style.background=bg;banner.style.color='#fff';
+  document.getElementById('menhIcon').textContent=NH_ICON[napAmHanh]||'🌟';
+  document.getElementById('menhTitle').textContent=`Mệnh ${napAmHanh} · Quái ${s.guaNum} ${s.guaName}`;
+  document.getElementById('menhSub').textContent=`Màu chủ: ${(colorData.primary||[]).slice(0,3).join(', ')}`;
+  document.getElementById('menhSummary').textContent=s.summary||'';
+
+  // Palette
+  const pp=document.getElementById('primaryPalette');
+  pp.innerHTML=(colorData.primary||[]).map(c=>colorChip(c)).join('');
+  document.getElementById('secondaryPalette').innerHTML=(colorData.secondary||[]).map(c=>colorChip(c)).join('');
+  document.getElementById('avoidPalette').innerHTML=(colorData.avoid||[]).map(c=>colorChip(c,true)).join('');
+
+  // Clothing guide
+  const cl=s.clothing||{};
+  const cats=[
+    {id:'topColors',icon:'👕',name:'Áo / Áo Khoác'},
+    {id:'bottomColors',icon:'👖',name:'Quần / Chân Váy'},
+    {id:'outerColors',icon:'🧥',name:'Áo Khoác Ngoài'},
+    {id:'shoeColors',icon:'👟',name:'Giày / Dép'},
+    {id:'bagColors',icon:'👜',name:'Túi / Ba Lô'},
+    {id:'accessoryColors',icon:'💍',name:'Phụ Kiện'},
+  ];
+  const cg=document.getElementById('clothingGrid');cg.innerHTML='';
+  cats.forEach(cat=>{
+    const colors=cl[cat.id]||[];
+    if(!colors.length)return;
+    cg.innerHTML+=`<div class="clothing-item">
+      <div class="clothing-header"><span class="clothing-icon">${cat.icon}</span><span class="clothing-cat">${cat.name}</span></div>
+      <div class="clothing-colors">${colors.map(c=>clothingTag(c)).join('')}</div>
+      ${(cl.avoidColors||[]).length?`<div class="clothing-avoid">✗ Tránh: ${(cl.avoidColors||[]).slice(0,3).join(', ')}</div>`:''}
+    </div>`;
+  });
+
+  // Occasions
+  const occs={interview:{icon:'💼',name:'Phỏng Vấn'},date:{icon:'💕',name:'Hẹn Hò'},business:{icon:'🤝',name:'Gặp Đối Tác'},daily:{icon:'☀️',name:'Hàng Ngày'}};
+  const og=document.getElementById('occasionGrid');og.innerHTML='';
+  Object.entries(s.occasions||{}).forEach(([k,v])=>{
+    const oc=occs[k]||{icon:'📅',name:k};
+    og.innerHTML+=`<div class="occasion-item">
+      <div class="occasion-header"><span class="occasion-icon">${oc.icon}</span><span class="occasion-name">${oc.name}</span></div>
+      <div class="occasion-colors">${(v.colors||[]).map(c=>clothingTag(c)).join('')}</div>
+      <div class="occasion-tip">${v.tip||''}</div>
+    </div>`;
+  });
+  if(!Object.keys(s.occasions||{}).length)og.innerHTML='<p style="color:var(--text-lt);font-size:12px;">Xem màu chính bên trên để áp dụng.</p>';
+
+  // Combos
+  const cl2=document.getElementById('comboList');cl2.innerHTML='';
+  (s.colorCombos||[]).forEach(combo=>{
+    const sc=combo.score||80;
+    const bg2=sc>=90?'#1E6B3C':sc>=80?'#9A7B3A':'#1455A4';
+    cl2.innerHTML+=`<div class="combo-item">
+      <div class="combo-score-circle" style="background:${bg2};">${sc}</div>
+      <div class="combo-body">
+        <div class="combo-name">${combo.name||'Combo '+sc}</div>
+        <div class="combo-items">🎽 ${(combo.items||[]).join(' · ')}</div>
+        <div class="combo-vibe">${combo.vibe||''}</div>
+      </div>
+    </div>`;
+  });
+  if(!(s.colorCombos||[]).length)cl2.innerHTML='<p style="color:var(--text-lt);font-size:12px;">Phối màu dựa trên bảng màu phù hợp bên trên.</p>';
+
+  document.getElementById('avoidExplain').textContent=s.avoidExplanation||'';
+  if(s.bonusTip){document.getElementById('bonusCard').style.display='block';document.getElementById('bonusTip').textContent=s.bonusTip;}
+
+  const sec=document.getElementById('results-section');sec.style.display='block';
+  setTimeout(()=>sec.scrollIntoView({behavior:'smooth',block:'start'}),200);
+}
+
+TuviPaywall.init({ product: 'mau-sac-hop-menh' });
+</script>
+</body>
+</html>
