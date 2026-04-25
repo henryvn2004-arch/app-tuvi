@@ -428,6 +428,170 @@ Luận từng vùng theo thứ tự: Nam Nhạc (trán) → Trung Nhạc (mũi) 
 4. DẪN CỔ VĂN đúng nguyên văn — không tự sáng tác.
 5. Giọng trang trọng, như một lão sư đang quan khí — không xuề xoà, không khoa trương.`;
 
+// ── Kiểu Tóc AI ────────────────────────────────────────────────────────────
+const SP_KIEU_TOC = `Bạn là chuyên gia phân tích khuôn mặt và tư vấn kiểu tóc theo nhân tướng học phương Đông.
+Nhiệm vụ: phân tích hình dạng khuôn mặt và xếp hạng 5 kiểu tóc theo mức độ phù hợp.
+Trả về JSON THUẦN TÚY — không có markdown, không có backtick, không có text nào ngoài JSON.
+
+Format bắt buộc:
+{
+  "faceShape": "oval|round|square|heart|oblong",
+  "faceShapeVN": "Bầu dục|Tròn|Vuông|Trái tim|Dài",
+  "desc": "2-3 đặc điểm nhận dạng của khuôn mặt này (tiếng Việt tự nhiên, ngắn gọn)",
+  "ranked": ["id1","id2","id3","id4","id5"],
+  "reasons": {
+    "undercut": "lý do phù hợp hoặc không phù hợp (1 câu tiếng Việt)",
+    "pompadour": "lý do phù hợp hoặc không phù hợp (1 câu tiếng Việt)",
+    "curtain": "lý do phù hợp hoặc không phù hợp (1 câu tiếng Việt)",
+    "buzz": "lý do phù hợp hoặc không phù hợp (1 câu tiếng Việt)",
+    "textured": "lý do phù hợp hoặc không phù hợp (1 câu tiếng Việt)"
+  },
+  "tip": "1-2 câu lời khuyên tổng quát về chọn kiểu tóc cho khuôn mặt này (tiếng Việt)"
+}
+
+Quy tắc:
+- faceShape phải là đúng 1 trong 5 giá trị: oval, round, square, heart, oblong
+- ranked phải chứa đúng 5 IDs, thứ tự từ phù hợp nhất đến ít phù hợp nhất
+- IDs hợp lệ: undercut, pompadour, curtain, buzz, textured
+- Chỉ trả về JSON, không có gì khác`;
+
+const HAIR_REPLICATE_PROMPTS = {
+  undercut: {
+    nam: 'portrait photo of a man img with classic undercut haircut, shaved fade sides, longer textured top, natural expression, photorealistic, professional portrait, sharp focus, 8k',
+    nu:  'portrait photo of a woman img with undercut hairstyle, shaved sides, longer styled top, natural expression, photorealistic, professional portrait, sharp focus',
+  },
+  pompadour: {
+    nam: 'portrait photo of a man img with pompadour hairstyle, high volume swept back from forehead, well groomed, classic barbershop style, photorealistic, professional portrait, sharp focus',
+    nu:  'portrait photo of a woman img with modern pompadour, voluminous front swept stylishly back, elegant polished look, photorealistic, professional portrait, sharp focus',
+  },
+  curtain: {
+    nam: 'portrait photo of a man img with curtain bangs hairstyle, center parted, soft hair falling naturally to both sides of face, relaxed modern style, photorealistic, sharp focus',
+    nu:  'portrait photo of a woman img with curtain bangs, center part, soft waves framing face gently, romantic feminine style, photorealistic, professional portrait, sharp focus',
+  },
+  buzz: {
+    nam: 'portrait photo of a man img with buzz cut, very short uniform hair all over, clean sharp look, natural expression, photorealistic, professional portrait, sharp focus',
+    nu:  'portrait photo of a woman img with buzz cut, very short cropped hair, bold confident look, natural expression, photorealistic, professional portrait, sharp focus',
+  },
+  textured: {
+    nam: 'portrait photo of a man img with textured crop haircut, short textured top with natural movement and volume, modern trendy style, photorealistic, professional portrait, sharp focus',
+    nu:  'portrait photo of a woman img with textured crop, tousled short waves with natural texture, effortless modern look, photorealistic, professional portrait, sharp focus',
+  },
+};
+
+const REPLICATE_NEG_PROMPT = 'nsfw, ugly, deformed, bad anatomy, distorted face, blurry, low quality, cartoon, painting, illustration, anime, watermark, text, logo, duplicate, extra limbs';
+
+function _sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function handleKieuTocPhanTich(body, apiKey) {
+  const { image, mediaType = 'image/jpeg', gender = 'nam' } = body;
+  if (!image) return Response.json({ error: 'Thiếu dữ liệu ảnh.' }, { status: 400 });
+  if (image.length > 7 * 1024 * 1024) return Response.json({ error: 'Ảnh quá lớn.' }, { status: 400 });
+
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 800,
+      system: SP_KIEU_TOC,
+      messages: [{
+        role: 'user',
+        content: [
+          { type: 'image', source: { type: 'base64', media_type: mediaType, data: image } },
+          { type: 'text', text: `Phân tích khuôn mặt và xếp hạng 5 kiểu tóc phù hợp nhất. Giới tính: ${gender === 'nu' ? 'Nữ' : 'Nam'}.` }
+        ]
+      }]
+    })
+  });
+
+  if (!resp.ok) {
+    const e = await resp.json().catch(() => ({}));
+    return Response.json({ error: e.error?.message || 'Lỗi AI.' }, { status: 500 });
+  }
+  const data = await resp.json();
+  const text = data.content?.[0]?.text || '{}';
+  try {
+    const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
+    return Response.json(parsed);
+  } catch (_) {
+    return Response.json({ error: 'Lỗi phân tích kết quả AI.' }, { status: 500 });
+  }
+}
+
+async function handleKieuTocTryon(body) {
+  const replKey = process.env.REPLICATE_API_KEY;
+  if (!replKey) return Response.json({ error: 'Replicate API key chưa cấu hình.' }, { status: 500 });
+
+  const { image, mediaType = 'image/jpeg', style_id, gender = 'nam' } = body;
+  if (!image) return Response.json({ error: 'Thiếu dữ liệu ảnh.' }, { status: 400 });
+  if (!HAIR_REPLICATE_PROMPTS[style_id]) return Response.json({ error: 'Kiểu tóc không hợp lệ.' }, { status: 400 });
+
+  const prompt = HAIR_REPLICATE_PROMPTS[style_id][gender === 'nu' ? 'nu' : 'nam'];
+  const imageDataUri = `data:${mediaType};base64,${image}`;
+
+  // Start Replicate prediction (PhotoMaker)
+  const startResp = await fetch('https://api.replicate.com/v1/models/tencentarc/photomaker/predictions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${replKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      input: {
+        input_image: imageDataUri,
+        prompt,
+        negative_prompt: REPLICATE_NEG_PROMPT,
+        style_strength_ratio: 20,
+        num_outputs: 1,
+        guidance_scale: 5,
+        num_inference_steps: 30,
+      }
+    })
+  });
+
+  if (!startResp.ok) {
+    const e = await startResp.json().catch(() => ({}));
+    return Response.json({ error: e.detail || 'Lỗi khởi tạo Replicate.' }, { status: 500 });
+  }
+
+  const prediction = await startResp.json();
+
+  // If Prefer: wait worked and already done
+  if (prediction.status === 'succeeded') {
+    const url = Array.isArray(prediction.output) ? prediction.output[0] : prediction.output;
+    return Response.json({ imageUrl: url });
+  }
+
+  const predId = prediction.id;
+  if (!predId) return Response.json({ error: 'Không tạo được prediction ID.' }, { status: 500 });
+
+  // Poll up to ~54s (27 × 2s)
+  for (let i = 0; i < 27; i++) {
+    await _sleep(2000);
+    const pollResp = await fetch(`https://api.replicate.com/v1/predictions/${predId}`, {
+      headers: { 'Authorization': `Bearer ${replKey}` }
+    });
+    if (!pollResp.ok) continue;
+    const data = await pollResp.json();
+
+    if (data.status === 'succeeded') {
+      const url = Array.isArray(data.output) ? data.output[0] : data.output;
+      return Response.json({ imageUrl: url });
+    }
+    if (data.status === 'failed' || data.status === 'canceled') {
+      return Response.json({ error: data.error || 'Replicate xử lý thất bại.' }, { status: 500 });
+    }
+  }
+
+  return Response.json({ error: 'Hết thời gian chờ. Vui lòng thử lại.' }, { status: 504 });
+}
+
+// ── End Kiểu Tóc AI ─────────────────────────────────────────────────────────
+
 const PROMPTS = {
   'dien-tuong': SP_DIEN,
   'nhan-tuong': SP_NHAN,
@@ -451,8 +615,14 @@ export async function POST(request) {
     const body = await request.json();
     const { image, mediaType = 'image/jpeg', irisNote = null, geoNote = null, action = 'dien-tuong' } = body;
 
+    // ── Replicate-based actions (không cần Anthropic key) ──────────────────
+    if (action === 'kieu-toc-tryon') return await handleKieuTocTryon(body);
+
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) return Response.json({ error: 'API key chưa cấu hình.' }, { status: 500 });
+
+    // ── Non-streaming Claude Vision JSON actions ───────────────────────────
+    if (action === 'kieu-toc-phan-tich') return await handleKieuTocPhanTich(body, apiKey);
 
     // Validation: thanh-tuong & thanh-tuong-pro cần geoNote (text), còn lại cần image
     if (action === 'thanh-tuong' || action === 'thanh-tuong-pro') {
