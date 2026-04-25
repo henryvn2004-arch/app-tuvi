@@ -3950,119 +3950,11 @@ TuviPaywall.init({
   }
 
 </script>
-<!-- REVIEWS SECTION -->
-<section style="background:var(--bg-soft);border-top:1px solid var(--border);padding:64px 0;overflow:hidden">
-  <div class="page">
-    <div class="section-eyebrow">Đánh Giá Của Khách Hàng</div>
-    <div style="position:relative;margin-top:8px">
 
-      <!-- Slider track -->
-      <div id="rv-track" style="display:flex;gap:24px;transition:transform .4s cubic-bezier(.4,0,.2,1);will-change:transform;align-items:stretch">
 
-        <div class="rv-card">
-          <div class="rv-stars">★★★★★</div>
-          <p class="rv-text">"Đọc phần đại vận xong tôi ngồi im một lúc. Đúng y chang những gì đã xảy ra 3 năm nay, kể cả mấy chuyện tưởng không liên quan. Chưa thấy AI nào viết tử vi mà không bị chung chung như vậy."</p>
-          <div class="rv-meta"><div class="rv-name">Nguyễn T.H. — Hà Nội</div><div class="rv-date">Tháng 2, 2026</div></div>
-        </div>
 
-        <div class="rv-card">
-          <div class="rv-stars">★★★★★</div>
-          <p class="rv-text">"Năm nay tiểu vận nó nói là cung Tài Bạch có biến động, cần cẩn thận cuối quý 2. Tôi suýt quyết định đầu tư một khoản lớn đúng thời điểm đó — may đọc xong dừng lại. Tháng sau thị trường rớt thật."</p>
-          <div class="rv-meta"><div class="rv-name">Trần M.K. — TP.HCM</div><div class="rv-date">Tháng 1, 2026</div></div>
-        </div>
 
-        <div class="rv-card">
-          <div class="rv-stars">★★★★★</div>
-          <p class="rv-text">"Cái hay là nó tách ra từng giai đoạn 10 năm rõ ràng, không gộp chung một đống. Đại vận tôi đang chạy mà nó mô tả tính chất vượng suy — đúng với thực tế đến mức hơi rùng mình."</p>
-          <div class="rv-meta"><div class="rv-name">Lê Q.B. — Đà Nẵng</div><div class="rv-date">Tháng 3, 2026</div></div>
-        </div>
 
-        <div class="rv-card">
-          <div class="rv-stars">★★★★★</div>
-          <p class="rv-text">"Tôi hay xem với một thầy tử vi quen, lần này thử Tử Vi Minh Bảo xem sao. Xu hướng đại vận hai bên ra gần giống nhau. Phần tiểu vận còn chi tiết hơn, nhất là phần sự nghiệp theo từng năm."</p>
-          <div class="rv-meta"><div class="rv-name">Phạm H.A. — Hải Phòng</div><div class="rv-date">Tháng 3, 2026</div></div>
-        </div>
-
-        <div class="rv-card">
-          <div class="rv-stars">★★★★★</div>
-          <p class="rv-text">"Năm ngoái đại vận chuyển — mọi thứ xáo trộn, phải sắp xếp lại từ đầu. Lúc đọc tưởng nó nói chung, ai dè đúng cả thứ tự. Phần năm nay đọc xong biết mình cần làm gì rồi."</p>
-          <div class="rv-meta"><div class="rv-name">Võ T.L. — Cần Thơ</div><div class="rv-date">Tháng 2, 2026</div></div>
-        </div>
-
-        <div class="rv-card">
-          <div class="rv-stars">★★★★☆</div>
-          <p class="rv-text">"Mấy trang tử vi khác an sao hay bị lệch, tôi check lại bằng sách thì Tử Vi Minh Bảo chuẩn hơn nhiều. Phần tóm tắt đại vận theo thập niên dễ đọc, tôi save lại dùng làm tham chiếu dài hạn."</p>
-          <div class="rv-meta"><div class="rv-name">Hoàng M.T. — Hà Nội</div><div class="rv-date">Tháng 1, 2026</div></div>
-        </div>
-
-      </div>
-
-      <!-- Nav buttons -->
-      <button id="rv-prev" onclick="rvSlide(-1)" style="position:absolute;top:50%;left:-20px;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:16px;color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.08);transition:all .15s;z-index:10" onmouseover="this.style.borderColor='var(--navy)'" onmouseout="this.style.borderColor='var(--border)'">‹</button>
-      <button id="rv-next" onclick="rvSlide(1)"  style="position:absolute;top:50%;right:-20px;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:16px;color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.08);transition:all .15s;z-index:10" onmouseover="this.style.borderColor='var(--navy)'" onmouseout="this.style.borderColor='var(--border)'">›</button>
-
-      <!-- Dots -->
-      <div id="rv-dots" style="display:flex;justify-content:center;gap:8px;margin-top:24px"></div>
-    </div>
-  </div>
-</section>
-
-<style>
-.rv-card{background:#fff;border:1px solid var(--border);padding:28px 24px;width:calc(33.333% - 16px);flex:0 0 calc(33.333% - 16px);box-sizing:border-box;display:flex;flex-direction:column}
-.rv-stars{color:#c9a84c;font-size:15px;margin-bottom:14px;letter-spacing:2px}
-.rv-text{font-size:14px;color:var(--text-mid);line-height:1.75;font-style:italic;margin-bottom:20px;flex:1}
-.rv-meta{}
-.rv-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px}
-.rv-date{font-size:11px;color:var(--text-lt)}
-@media(max-width:700px){.rv-card{width:100% !important;flex:0 0 100% !important}}
-
-/* ── UX IMPROVEMENTS ── */
-.ux-teaser-wrap { position: relative; }
-.ux-teaser-blur { filter: blur(4px); user-select: none; pointer-events: none; max-height: 120px; overflow: hidden; opacity: 0.6; padding: 0 4px; position: relative; }
-.ux-teaser-blur::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 80px; background: linear-gradient(transparent, #fff); }
-.ux-paywall-overlay { background: linear-gradient(135deg, #fdf6e9 0%, #fff9ef 100%); border: 2px solid #c9a84c; border-radius: 12px; padding: 32px 36px; margin-top: 0; text-align: center; }
-.ux-share-bar { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-lt); display: flex; gap: 10px; flex-wrap: wrap; }
-.ux-share-btn { background: none; border: 1px solid var(--border); border-radius: 4px; padding: 6px 14px; font-size: 11px; color: var(--text-lt); cursor: pointer; font-family: inherit; transition: all .15s; }
-.ux-share-btn:hover { border-color: var(--navy); color: var(--navy); }
-.ux-share-btn.copied { border-color: var(--green); color: var(--green); }
-</style>
-
-<script>
-(function(){
-  const track = document.getElementById('rv-track');
-  const dotsEl = document.getElementById('rv-dots');
-  const total = 6;
-  let perView = window.innerWidth <= 700 ? 1 : 3;
-  let cur = 0;
-  const maxSlide = total - perView;
-
-  // Build dots
-  const dotCount = maxSlide + 1;
-  for(let i=0;i<dotCount;i++){
-    const d = document.createElement('div');
-    d.style.cssText = 'width:7px;height:7px;border-radius:50%;background:var(--border);cursor:pointer;transition:background .2s';
-    d.onclick = ()=>goTo(i);
-    dotsEl.appendChild(d);
-  }
-
-  function updateDots(){
-    dotsEl.querySelectorAll('div').forEach((d,i)=>{
-      d.style.background = i===cur ? 'var(--navy)' : 'var(--border)';
-    });
-  }
-
-  function goTo(n){
-    cur = Math.max(0, Math.min(n, maxSlide));
-    const cardW = track.children[0].offsetWidth + 24;
-    track.style.transform = `translateX(-${cur * cardW}px)`;
-    updateDots();
-  }
-
-  window.rvSlide = function(dir){ goTo(cur + dir); };
-  window.addEventListener('resize',()=>{ perView = window.innerWidth<=700?1:3; goTo(0); });
-  updateDots();
-})();
-</script>
 
 <footer class="site-footer">
   <div class="footer-top">
@@ -4119,5 +4011,6 @@ document.querySelector('.nav-dropdown .nav-link')?.addEventListener('click', fun
     apiPath: '/api/lasotuvi?action=chat',
   };
 </script>
+<script src="/testimonials.js"></script>
 </body>
 </html>

@@ -854,15 +854,7 @@ select.form-input { cursor: pointer; }
     </div>
   </div>
 </div>
-<style>
-.rv-card{background:#fff;border:1px solid var(--border);padding:28px 24px;width:calc(33.333% - 16px);flex:0 0 calc(33.333% - 16px);box-sizing:border-box;display:flex;flex-direction:column}
-.rv-stars{color:#c9a84c;font-size:15px;margin-bottom:14px;letter-spacing:2px}
-.rv-text{font-size:14px;color:var(--text-mid);line-height:1.75;font-style:italic;margin-bottom:20px;flex:1}
-.rv-meta{}
-.rv-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px}
-.rv-date{font-size:11px;color:var(--text-lt)}
-@media(max-width:700px){.rv-card{width:100% !important;flex:0 0 100% !important}}
-</style>
+
 
 <div style="max-width:1100px;margin:0 auto;padding:0 56px">
   <div id="tuvi-chat-section" style="display:block; margin-top:40px; margin-bottom:40px;">
@@ -894,68 +886,8 @@ select.form-input { cursor: pointer; }
   </div>
 </div>
 
-<!-- REVIEWS SECTION -->
-<section style="background:var(--bg-soft);border-top:1px solid var(--border);padding:64px 0;overflow:hidden">
-  <div style="max-width:1100px;margin:0 auto;padding:0 56px">
-    <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-lt);margin-bottom:8px;display:flex;align-items:center;gap:16px">Đánh Giá Của Khách Hàng<span style="flex:1;height:1px;background:var(--border);display:block"></span></div>
-    <div style="position:relative;margin-top:8px;overflow:hidden">
-      <div id="rv-track-tuoi" style="display:flex;gap:24px;transition:transform .4s cubic-bezier(.4,0,.2,1);will-change:transform;align-items:stretch">
-        <div class="rv-card">
-  <div class="rv-stars">★★★★★</div>
-  <p class="rv-text">"Hai đứa lá số khác nhau khá nhiều, tưởng không hợp. Nhưng đọc phần phân tích cung Phu Thê mới thấy — khác nhau đúng chỗ bổ trợ cho nhau. Phần đại vận giao thoa cũng đúng với những gì hai đứa trải qua."</p>
-  <div class="rv-meta"><div class="rv-name">Nguyễn T.M. — Hà Nội</div><div class="rv-date">Tháng 3, 2026</div></div>
-</div>
-<div class="rv-card">
-  <div class="rv-stars">★★★★★</div>
-  <p class="rv-text">"Cái phần cung Tử Tức hai vợ chồng đọc xong phải cười vì nó giải thích đúng tại sao hai đứa hay cãi nhau về chuyện con cái. Từ đó biết cách nhường nhau hơn, thật ra không phải ai sai ai đúng."</p>
-  <div class="rv-meta"><div class="rv-name">Lê H.P. — TP.HCM</div><div class="rv-date">Tháng 2, 2026</div></div>
-</div>
-<div class="rv-card">
-  <div class="rv-stars">★★★★★</div>
-  <p class="rv-text">"Xem trước khi cưới cho yên tâm. Phần nó nói về những năm đại vận hai đứa giao nhau — năm nào thuận, năm nào phải để ý — tôi lưu lại để hai vợ chồng tự nhắc nhau sau này."</p>
-  <div class="rv-meta"><div class="rv-name">Trần Q.A. — Đà Nẵng</div><div class="rv-date">Tháng 3, 2026</div></div>
-</div>
-<div class="rv-card">
-  <div class="rv-stars">★★★★★</div>
-  <p class="rv-text">"Đưa cho ổng đọc phần tương quan tính cách, ổng ngồi gật đầu mãi. Nói thật mấy cái tool so tuổi thông thường không ra được kết quả kiểu này — cái này xét thật bằng lá số nên thuyết phục hơn nhiều."</p>
-  <div class="rv-meta"><div class="rv-name">Phạm T.L. — Cần Thơ</div><div class="rv-date">Tháng 1, 2026</div></div>
-</div>
-<div class="rv-card">
-  <div class="rv-stars">★★★★★</div>
-  <p class="rv-text">"Tôi hay lo xa, xem xong thấy có mấy năm cần chú ý — không phải để sợ mà để hai vợ chồng biết mà chuẩn bị tinh thần. Phần theo từng giai đoạn 10 năm rất rõ, không nói chung chung."</p>
-  <div class="rv-meta"><div class="rv-name">Võ M.H. — Hải Phòng</div><div class="rv-date">Tháng 2, 2026</div></div>
-</div>
-<div class="rv-card">
-  <div class="rv-stars">★★★★☆</div>
-  <p class="rv-text">"Mấy trang xem tuổi thông thường chỉ so nạp âm, nhiều khi kết quả tréo ngoe. Cái này xét bằng lá số Tử Vi hẳn hoi — cung Phu Thê, bộ sao, hóa tinh — nhìn vào thấy có cơ sở hơn nhiều."</p>
-  <div class="rv-meta"><div class="rv-name">Hoàng T.B. — Hà Nội</div><div class="rv-date">Tháng 3, 2026</div></div>
-</div>
-      </div>
-      <button id="rv-prev-tuoi" onclick="rvSlide_tuoi(-1)" style="position:absolute;top:50%;left:-20px;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:16px;color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:10">‹</button>
-      <button id="rv-next-tuoi" onclick="rvSlide_tuoi(1)"  style="position:absolute;top:50%;right:-20px;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:16px;color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:10">›</button>
-      <div id="rv-dots-tuoi" style="display:flex;justify-content:center;gap:8px;margin-top:24px"></div>
-    </div>
-  </div>
-</section>
-<script>
-(function(){
-  const track = document.getElementById('rv-track-tuoi');
-  const dotsEl = document.getElementById('rv-dots-tuoi');
-  const total = 6; let cur = 0;
-  let perView = window.innerWidth <= 700 ? 1 : 3;
-  const maxSlide = total - perView;
-  for(let i=0;i<maxSlide+1;i++){
-    const d=document.createElement('div');
-    d.style.cssText='width:7px;height:7px;border-radius:50%;background:var(--border);cursor:pointer;transition:background .2s';
-    d.onclick=()=>goTo_tuoi(i); dotsEl.appendChild(d);
-  }
-  function updateDots(){ dotsEl.querySelectorAll('div').forEach((d,i)=>{ d.style.background=i===cur?'var(--navy)':'var(--border)'; }); }
-  function goTo_tuoi(n){ cur=Math.max(0,Math.min(n,maxSlide)); const w=track.children[0].offsetWidth+24; track.style.transform=`translateX(${-cur*w}px)`; updateDots(); }
-  window.rvSlide_tuoi=function(dir){ goTo_tuoi(cur+dir); };
-  window.addEventListener('resize',()=>{ perView=window.innerWidth<=700?1:3; goTo_tuoi(0); });
-  updateDots();
-})();
-</script>
+
+
 
 <script>
 
@@ -1876,5 +1808,6 @@ document.addEventListener('click',e=>{if(!e.target.closest('.nav-dropdown')){doc
     apiPath: '/api/xem-tuoi?action=chat',
   };
 </script>
+<script src="/testimonials.js"></script>
 </body>
 </html>
