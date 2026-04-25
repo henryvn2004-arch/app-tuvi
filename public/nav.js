@@ -45,9 +45,6 @@
     '.nav-dd-item.active{color:#9A7B3A;font-weight:600}',
     '.nav-dd-section{padding:8px 16px 4px;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#9A7B3A;background:#fdfaf5;border-bottom:1px solid #efe8d8;margin-top:2px}',
     '.nav-dd-section:first-child{margin-top:0}',
-    '.nav-right-btns{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0}',
-    '.nav-topup-btn{background:#9A7B3A;color:#fff;font-size:12px;font-weight:700;padding:6px 14px;border-radius:6px;text-decoration:none;white-space:nowrap;transition:background .15s}',
-    '.nav-topup-btn:hover{background:#7d6230}',
     '@media(max-width:900px){.topnav{padding:0 16px;gap:0}.nav-links{gap:0}}',
     '@media(max-width:700px){',
     '.nav-links{display:none;position:absolute;top:60px;left:0;right:0;background:#061A2E;flex-direction:column;padding:8px 0 16px;gap:0;border-bottom:1px solid #1a2a3a;z-index:199;overflow-y:auto;max-height:calc(100vh - 60px)}',
@@ -173,10 +170,7 @@
     + dd1 + dd2 + dd3 + dd4 + dd5 + dd6
     + navLink('/blog.html', 'Kh\u1ea3o Lu\u1eadn')
     + '</div>'
-    + '<div class="nav-right-btns">'
     + '<div id="nav-auth-area"></div>'
-    + '<a class="nav-topup-btn" href="/topup.html">N\u1ea1p L\u01b0\u1ee3ng</a>'
-    + '</div>'
     + '<button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">\u2630</button>'
     + '</nav>';
 
