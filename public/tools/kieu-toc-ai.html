@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tư Vấn Kiểu Tóc Hợp Tướng Mặt Bằng AI | Tử Vi Minh Bảo</title>
+<meta property="og:title" content="Tư Vấn Kiểu Tóc Hợp Tướng Mặt Bằng AI | Tử Vi Minh Bảo"/>
+<meta property="og:description" content="Chụp ảnh khuôn mặt — AI phân tích hình dạng và gợi ý kiểu tóc phù hợp theo nhân tướng học. Thử kiểu tóc ngay trên ảnh bằng Replicate AI."/>
+<meta property="og:url" content="https://tuviminhbao.com/tools/kieu-toc-ai.html"/>
+<meta property="og:image" content="https://tuviminhbao.com/og-image.webp"/>
+<meta name="keywords" content="tư vấn kiểu tóc, kiểu tóc hợp mặt, AI kiểu tóc, thử kiểu tóc online, kiểu tóc theo tướng mặt"/>
+<meta name="description" content="Chụp ảnh khuôn mặt — AI phân tích hình dạng và gợi ý kiểu tóc phù hợp theo nhân tướng học. Thử kiểu tóc ngay trên ảnh bằng Replicate AI."/>
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<style>
+/* Upload */
+.upload-area{border:2px dashed var(--border);border-radius:12px;padding:40px 24px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg-soft);position:relative}
+.upload-area:hover,.upload-area.dragover{border-color:#c9a84c;background:#c9a84c08}
+.upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{font-size:48px;margin-bottom:12px;display:block}
+.upload-title{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.upload-sub{font-size:13px;color:var(--text-lt)}
+.preview-wrap{text-align:center;margin-top:16px}
+.preview-img{max-width:280px;max-height:360px;width:100%;border-radius:12px;display:inline-block;object-fit:cover}
+.remove-btn{display:block;margin:10px auto 0;background:none;border:1px solid var(--border);border-radius:4px;padding:6px 16px;font-size:12px;color:var(--text-mid);cursor:pointer;font-family:inherit}
+.camera-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:var(--navy);color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin:12px auto 0}
+.privacy-notice{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;background:#e8f0fe;border-radius:8px;border-left:3px solid #1455A4;font-size:12px;color:#1455A4;margin-top:16px}
+.input-tabs{display:flex;gap:0;border-bottom:2px solid var(--border-lt);margin-bottom:20px}
+.input-tab{padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text-lt);border-bottom:2px solid transparent;margin-bottom:-2px;font-family:inherit;background:none;border-top:none;border-left:none;border-right:none;transition:all .15s}
+.input-tab.active{color:var(--navy);border-bottom-color:#c9a84c}
+.input-pane{display:none}.input-pane.active{display:block}
+
+/* Gender */
+.gender-row{display:flex;gap:10px;margin-bottom:20px}
+.gender-btn{flex:1;padding:10px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text-mid);transition:all .15s}
+.gender-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+/* Loading */
+.ai-loading{display:flex;flex-direction:column;align-items:center;gap:16px;padding:40px 0}
+.ai-loading-icon{font-size:48px;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.95)}}
+.ai-loading-text{font-size:14px;color:var(--text-lt);text-align:center;line-height:1.6}
+
+/* Analysis result section */
+.result-section{display:none;margin-top:32px}
+.result-section.active{display:block}
+
+/* Face shape card */
+.face-shape-card{display:flex;align-items:center;gap:16px;background:var(--navy);color:#fff;border-radius:12px;padding:18px 20px;margin-bottom:20px}
+.shape-emoji{font-size:42px;flex-shrink:0}
+.shape-label{font-size:11px;opacity:.6;margin-bottom:3px;letter-spacing:.5px;text-transform:uppercase}
+.shape-name{font-size:22px;font-weight:700;font-family:'Noto Serif',Georgia,serif;margin-bottom:4px}
+.shape-desc{font-size:13px;opacity:.78;line-height:1.5}
+
+/* Style cards */
+.styles-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:12px}
+.style-cards{display:flex;flex-direction:column;gap:10px}
+.style-card{border:1.5px solid var(--border);border-radius:10px;padding:14px 16px;cursor:pointer;transition:all .18s;background:#fff;display:flex;align-items:flex-start;gap:12px}
+.style-card:hover{border-color:#c9a84c;background:#fffdf7}
+.style-card.selected{border-color:var(--navy);background:#f0f4fb}
+.style-rank{font-size:11px;font-weight:700;background:var(--bg-soft);color:var(--gold);padding:3px 8px;border-radius:20px;flex-shrink:0;margin-top:2px}
+.style-info{flex:1}
+.style-name{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.style-sub{font-size:12px;color:var(--text-lt);margin-bottom:6px}
+.style-reason{font-size:12px;color:var(--text-mid);font-style:italic;line-height:1.5}
+.style-reason::before{content:'💡 '}
+.try-btn{background:var(--navy);color:#fff;border:none;border-radius:6px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;flex-shrink:0;white-space:nowrap;align-self:center;transition:opacity .15s}
+.try-btn:hover{opacity:.85}
+.try-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Tip box */
+.tip-box{background:#fff8e7;border:1px solid #c9a84c;border-radius:8px;padding:12px 14px;margin-top:16px;font-size:13px;color:var(--navy);line-height:1.6}
+.tip-box strong{color:var(--gold)}
+
+/* Try-on section */
+.tryon-section{margin-top:28px;border-top:2px solid var(--border-lt);padding-top:24px}
+.tryon-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:16px}
+.tryon-loading{display:none;text-align:center;padding:32px 0}
+.tryon-spinner{width:42px;height:42px;border:3px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:spin .9s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.tryon-loading-text{font-size:14px;color:var(--text-lt);line-height:1.6}
+
+.before-after{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.ba-col{text-align:center}
+.ba-label{font-size:11px;font-weight:700;color:var(--text-lt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.ba-img{width:100%;border-radius:10px;object-fit:cover;aspect-ratio:3/4;display:block}
+.ba-img-before{filter:brightness(.95)}
+
+.tryon-actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn-download{flex:1;padding:11px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-retry{flex:1;padding:11px;background:transparent;color:var(--navy);border:1.5px solid var(--navy);border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+
+/* Error */
+.error-msg{display:none;background:#fff5f5;border:1px solid #fcc;border-radius:8px;padding:12px 14px;color:var(--red);font-size:13px;margin-top:12px}
+.error-msg.active{display:block}
+</style>
+</head>
+<body>
+<script src="/nav.js"></script>
+
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ AI · Replicate Vision</div>
+    <h1>Tư Vấn Kiểu Tóc<br><em>Hợp Tướng Mặt</em></h1>
+    <p>AI phân tích hình dạng khuôn mặt và gợi ý 5 kiểu tóc phù hợp nhất. Thử ngay trên ảnh bằng Replicate AI — xem kết quả thực tế trước khi đến tiệm.</p>
+  </div>
+</div>
+
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Nhân Tướng Học Ứng Dụng</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">Kiểu Tóc Đúng —<br>Tôn Lên Khí Chất Tướng Mặt</h2>
+          <p class="xt-body">Trong nhân tướng học, tóc là "thiên bộ" bảo vệ thiên đình — ảnh hưởng đến khí trường và vận khí. Kiểu tóc phù hợp không chỉ đẹp hơn mà còn cân bằng và tôn lên hình dạng khuôn mặt theo cổ pháp.</p>
+          <p class="xt-body">Tải ảnh lên — AI phân tích hình khuôn mặt, xếp hạng kiểu tóc theo mức phù hợp, và <strong>thử ngay trên ảnh của bạn</strong> bằng AI tạo ảnh chuyên nghiệp.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">3 Bước Đơn Giản</div>
+          <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">Tải ảnh lên</span><span class="xt-factor-desc">Ảnh chụp thẳng mặt, đủ sáng, thấy rõ từ trán đến cằm</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">②</span><span class="xt-factor-label">AI phân tích</span><span class="xt-factor-desc">Claude Vision nhận diện hình khuôn mặt, xếp hạng 5 kiểu tóc kèm lý do</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">③</span><span class="xt-factor-label">Thử trên ảnh</span><span class="xt-factor-desc">Replicate AI render kiểu tóc lên ảnh của bạn — xem trước thực tế</span></div>
+          <div class="xt-note" style="margin-top:12px">
+            <span class="xt-note-icon">✂️</span>
+            <div>Kết quả try-on là mô phỏng AI (~20–30 giây), dùng để tham khảo trước khi đến tiệm.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section" id="inputSection">
+    <div class="section-eyebrow">Tải Ảnh Lên</div>
+
+    <!-- Gender -->
+    <div style="margin-bottom:20px">
+      <div style="font-size:13px;font-weight:600;color:var(--text-mid);margin-bottom:8px">Giới tính</div>
+      <div class="gender-row">
+        <button class="gender-btn active" id="genderNam" onclick="setGender('nam',this)">👦 Nam</button>
+        <button class="gender-btn" id="genderNu" onclick="setGender('nu',this)">👧 Nữ</button>
+      </div>
+    </div>
+
+    <div class="privacy-notice">
+      <span>🔒</span>
+      <div><strong>Quyền riêng tư:</strong> Ảnh chỉ gửi đến AI để phân tích, không lưu trên server của chúng tôi. Replicate xử lý và trả về ảnh kết quả, không lưu trữ lâu dài.</div>
+    </div>
+
+    <div class="input-tabs" style="margin-top:20px">
+      <button class="input-tab active" onclick="switchTab('upload',this)">📁 Tải Ảnh Lên</button>
+      <button class="input-tab" onclick="switchTab('camera',this)">📷 Chụp Ảnh</button>
+    </div>
+
+    <!-- Upload pane -->
+    <div class="input-pane active" id="pane-upload">
+      <div id="uploadArea" class="upload-area" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+        <input type="file" id="fileInput" accept="image/*" onchange="onFileSelect(event)">
+        <span class="upload-icon">🪮</span>
+        <div class="upload-title">Kéo thả ảnh vào đây hoặc click để chọn</div>
+        <div class="upload-sub">JPG, PNG, WebP — tối đa 5MB</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;justify-content:center">
+        <div style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--green);background:#f0faf4;border:1px solid #b7e4c7;border-radius:20px;padding:4px 10px">✓ Thẳng mặt, chính diện</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--green);background:#f0faf4;border:1px solid #b7e4c7;border-radius:20px;padding:4px 10px">✓ Ánh sáng tự nhiên, đều</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--green);background:#f0faf4;border:1px solid #b7e4c7;border-radius:20px;padding:4px 10px">✓ Thấy rõ từ trán đến cằm</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--red);background:#fff5f5;border:1px solid #fcc;border-radius:20px;padding:4px 10px">✗ Đội mũ, đội khăn che tóc</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--red);background:#fff5f5;border:1px solid #fcc;border-radius:20px;padding:4px 10px">✗ Ngược sáng, tối</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--red);background:#fff5f5;border:1px solid #fcc;border-radius:20px;padding:4px 10px">✗ Nghiêng mặt nhiều</div>
+      </div>
+    </div>
+
+    <!-- Camera pane -->
+    <div class="input-pane" id="pane-camera">
+      <div style="text-align:center;padding:16px 20px 20px">
+        <div id="preCamTips" style="margin-bottom:16px">
+          <p style="font-size:14px;color:var(--text-mid)">Nhìn thẳng vào camera, đảm bảo ánh sáng đủ và khuôn mặt chiếm phần lớn khung hình.</p>
+        </div>
+        <div id="camWrap" style="display:none;position:relative;max-width:320px;margin:0 auto">
+          <video id="camVideo" autoplay playsinline style="width:100%;border-radius:10px;transform:scaleX(-1)"></video>
+          <canvas id="camCanvas" style="display:none"></canvas>
+        </div>
+        <div id="camBtns" style="display:none;gap:12px;justify-content:center;margin-top:12px">
+          <button onclick="capturePhoto()" style="padding:10px 24px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">📸 Chụp</button>
+          <button onclick="stopCamera()" style="padding:10px 20px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;color:var(--text-mid)">Huỷ</button>
+        </div>
+        <button id="openCamBtn" class="camera-btn" onclick="openCamera()">📷 Mở Camera</button>
+      </div>
+    </div>
+
+    <!-- Preview (shared) -->
+    <div id="previewSection" style="display:none;margin-top:16px;text-align:center">
+      <div class="preview-wrap">
+        <img id="previewImg" class="preview-img" src="" alt="Preview ảnh">
+      </div>
+      <button class="remove-btn" onclick="removePhoto()">✕ Đổi ảnh khác</button>
+    </div>
+
+    <div class="error-msg" id="error-msg"></div>
+
+    <button id="analyzeBtn" onclick="analyze()" disabled style="
+      width:100%;margin-top:20px;padding:14px;background:var(--navy);color:#fff;
+      border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;
+      font-family:inherit;letter-spacing:.3px;transition:opacity .15s
+    " onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
+      ✨ Phân Tích Khuôn Mặt & Gợi Ý Kiểu Tóc
+    </button>
+    <div style="font-size:11px;color:var(--text-lt);text-align:center;margin-top:8px">
+      Kết quả trong ~5 giây
+    </div>
+  </div>
+
+  <!-- Analysis result -->
+  <div class="result-section" id="resultSection">
+    <div class="section-eyebrow">Kết Quả Phân Tích</div>
+
+    <!-- Loading state -->
+    <div id="analysisLoading" class="ai-loading" style="display:none">
+      <span class="ai-loading-icon">🔮</span>
+      <div class="ai-loading-text">AI đang phân tích khuôn mặt...<br><span style="font-size:12px;opacity:.7">Thường mất 5–8 giây</span></div>
+    </div>
+
+    <!-- Face shape card -->
+    <div id="faceShapeCard" class="face-shape-card" style="display:none">
+      <div class="shape-emoji" id="shapeEmoji">🥚</div>
+      <div>
+        <div class="shape-label">Hình dạng khuôn mặt</div>
+        <div class="shape-name" id="shapeName">—</div>
+        <div class="shape-desc" id="shapeDesc">—</div>
+      </div>
+    </div>
+
+    <!-- Style cards -->
+    <div id="styleCardsWrap" style="display:none">
+      <div class="styles-title">✨ Kiểu tóc gợi ý (theo mức phù hợp)</div>
+      <div class="style-cards" id="styleCardsList"></div>
+      <div class="tip-box" id="tipBox" style="display:none">
+        <strong>💬 Lời khuyên: </strong><span id="tipText"></span>
+      </div>
+    </div>
+
+    <!-- Try-on section -->
+    <div class="tryon-section" id="tryonSection" style="display:none">
+      <div class="tryon-title" id="tryonTitle">Thử Kiểu Tóc Trên Ảnh</div>
+
+      <div class="tryon-loading" id="tryonLoading">
+        <div class="tryon-spinner"></div>
+        <div class="tryon-loading-text">Replicate AI đang render kiểu tóc...<br><span style="font-size:12px;opacity:.7">Thường mất 20–35 giây</span></div>
+      </div>
+
+      <div id="tryonResult" style="display:none">
+        <div class="before-after">
+          <div class="ba-col">
+            <div class="ba-label">Ảnh gốc</div>
+            <img id="imgBefore" class="ba-img ba-img-before" src="" alt="Ảnh gốc">
+          </div>
+          <div class="ba-col">
+            <div class="ba-label" id="afterLabel">Sau khi thử</div>
+            <img id="imgAfter" class="ba-img" src="" alt="Kết quả">
+          </div>
+        </div>
+        <div class="tryon-actions">
+          <button class="btn-download" onclick="downloadResult()">⬇ Tải Ảnh Kết Quả</button>
+          <button class="btn-retry" onclick="clearTryon()">🔄 Thử Kiểu Khác</button>
+        </div>
+      </div>
+
+      <div class="error-msg" id="tryon-error-msg"></div>
+    </div>
+
+    <!-- Analyze again -->
+    <div id="resetWrap" style="display:none;margin-top:24px;text-align:center">
+      <button onclick="resetAll()" style="padding:10px 28px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text-mid);cursor:pointer;font-family:inherit">
+        🔄 Phân tích ảnh khác
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Constants ──────────────────────────────────────────────────
+const STYLE_META = {
+  undercut:  { name: 'Undercut Cổ Điển',     sub: 'Hai bên fade ngắn sát, đỉnh dài có volume' },
+  pompadour: { name: 'Pompadour Bờm Cao',     sub: 'Vuốt cao phía trước, phong cách cổ điển-hiện đại' },
+  curtain:   { name: 'Curtain Bangs Mái Rèm', sub: 'Rẽ ngôi giữa, mái thả tự nhiên hai bên' },
+  buzz:      { name: 'Buzz Cut Cắt Ngắn',     sub: 'Cắt đều ngắn, làm nổi đường nét khuôn mặt' },
+  textured:  { name: 'Textured Crop Lởm',     sub: 'Ngắn kết cấu, dễ tạo kiểu, cá tính hiện đại' },
+};
+
+const SHAPE_EMOJI = { oval: '🥚', round: '⭕', square: '⬜', heart: '🫀', oblong: '📏' };
+
+// ── State ──────────────────────────────────────────────────────
+let _imageData = null;
+let _mediaType = 'image/jpeg';
+let _gender = 'nam';
+let _analysisResult = null;
+let _currentSlug = null;
+let _camStream = null;
+let _tryonImgUrl = null;
+let _selectedStyleId = null;
+
+// ── Gender ─────────────────────────────────────────────────────
+function setGender(g, btn) {
+  _gender = g;
+  document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ── Tab switch ─────────────────────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.input-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.input-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('pane-' + id).classList.add('active');
+}
+
+// ── File upload ────────────────────────────────────────────────
+function onDragOver(e) { e.preventDefault(); document.getElementById('uploadArea').classList.add('dragover'); }
+function onDragLeave(e) { document.getElementById('uploadArea').classList.remove('dragover'); }
+function onDrop(e) {
+  e.preventDefault();
+  document.getElementById('uploadArea').classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file) loadFile(file);
+}
+function onFileSelect(e) { if (e.target.files[0]) loadFile(e.target.files[0]); }
+
+function loadFile(file) {
+  if (!file.type.startsWith('image/')) return;
+  if (file.size > 5 * 1024 * 1024) {
+    showError('Ảnh quá lớn (tối đa 5MB). Vui lòng chọn ảnh khác.');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = e => {
+    _mediaType = file.type || 'image/jpeg';
+    showPreview(e.target.result);
+  };
+  reader.readAsDataURL(file);
+}
+
+function showPreview(dataUrl) {
+  _imageData = dataUrl.split(',')[1];
+  const img = document.getElementById('previewImg');
+  img.src = dataUrl;
+  document.getElementById('uploadArea').style.display = 'none';
+  document.getElementById('previewSection').style.display = 'block';
+  document.getElementById('analyzeBtn').disabled = false;
+  clearError();
+}
+
+function removePhoto() {
+  _imageData = null;
+  document.getElementById('previewSection').style.display = 'none';
+  document.getElementById('uploadArea').style.display = 'block';
+  document.getElementById('fileInput').value = '';
+  document.getElementById('analyzeBtn').disabled = true;
+  stopCamera();
+}
+
+// ── Camera ─────────────────────────────────────────────────────
+async function openCamera() {
+  try {
+    _camStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:640,height:480}});
+    const vid = document.getElementById('camVideo');
+    vid.srcObject = _camStream;
+    document.getElementById('preCamTips').style.display = 'none';
+    document.getElementById('camWrap').style.display = 'block';
+    document.getElementById('camBtns').style.display = 'flex';
+    document.getElementById('openCamBtn').style.display = 'none';
+  } catch(e) {
+    showError('Không thể mở camera. Vui lòng tải ảnh lên thay thế.');
+  }
+}
+function capturePhoto() {
+  const vid = document.getElementById('camVideo');
+  const cv = document.getElementById('camCanvas');
+  cv.width = vid.videoWidth; cv.height = vid.videoHeight;
+  cv.getContext('2d').drawImage(vid, 0, 0);
+  const dataUrl = cv.toDataURL('image/jpeg', 0.88);
+  _mediaType = 'image/jpeg';
+  stopCamera();
+  showPreview(dataUrl);
+}
+function stopCamera() {
+  if (_camStream) { _camStream.getTracks().forEach(t => t.stop()); _camStream = null; }
+  const vid = document.getElementById('camVideo');
+  vid.style.display = 'none'; vid.srcObject = null;
+  document.getElementById('camBtns').style.display = 'none';
+  document.getElementById('openCamBtn').style.display = 'inline-flex';
+  document.getElementById('preCamTips').style.display = 'block';
+  document.getElementById('camWrap').style.display = 'none';
+}
+
+// ── Error helpers ──────────────────────────────────────────────
+function showError(msg) {
+  const el = document.getElementById('error-msg');
+  el.textContent = '⚠ ' + msg; el.classList.add('active');
+}
+function clearError() {
+  document.getElementById('error-msg').classList.remove('active');
+}
+function showTryonError(msg) {
+  const el = document.getElementById('tryon-error-msg');
+  el.textContent = '⚠ ' + msg; el.classList.add('active');
+}
+function clearTryonError() {
+  document.getElementById('tryon-error-msg').classList.remove('active');
+}
+
+// ── Analysis ───────────────────────────────────────────────────
+async function analyze() {
+  if (!_imageData) return;
+  clearError();
+  document.getElementById('analyzeBtn').disabled = true;
+
+  _currentSlug = TuviPaywall.generateToolSlug('kieu-toc-phan-tich');
+  _saveStateForAuth();
+  await TuviPaywall.requireCredits(_currentSlug, async () => {
+    await _doPhanTich();
+  });
+  document.getElementById('analyzeBtn').disabled = false;
+}
+
+async function _doPhanTich() {
+  // Show result section + loading
+  const resultSec = document.getElementById('resultSection');
+  resultSec.classList.add('active');
+  resultSec.style.display = 'block';
+  document.getElementById('analysisLoading').style.display = 'flex';
+  document.getElementById('faceShapeCard').style.display = 'none';
+  document.getElementById('styleCardsWrap').style.display = 'none';
+  document.getElementById('tryonSection').style.display = 'none';
+  document.getElementById('resetWrap').style.display = 'none';
+  resultSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  try {
+    const res = await fetch('/api/tuong-mat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'kieu-toc-phan-tich',
+        image: _imageData,
+        mediaType: _mediaType,
+        gender: _gender
+      })
+    });
+    if (!res.ok) {
+      const d = await res.json().catch(() => ({}));
+      throw new Error(d.error || 'Lỗi ' + res.status);
+    }
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    _analysisResult = data;
+    renderAnalysis(data);
+  } catch(e) {
+    document.getElementById('analysisLoading').style.display = 'none';
+    showError('Lỗi phân tích: ' + (e.message || 'Vui lòng thử lại.'));
+    resultSec.style.display = 'none';
+  }
+}
+
+function renderAnalysis(data) {
+  document.getElementById('analysisLoading').style.display = 'none';
+
+  // Face shape card
+  document.getElementById('shapeEmoji').textContent = SHAPE_EMOJI[data.faceShape] || '🫧';
+  document.getElementById('shapeName').textContent = data.faceShapeVN || '—';
+  document.getElementById('shapeDesc').textContent = data.desc || '';
+  document.getElementById('faceShapeCard').style.display = 'flex';
+
+  // Style cards
+  const list = document.getElementById('styleCardsList');
+  list.innerHTML = '';
+  const ranked = data.ranked || Object.keys(STYLE_META);
+  ranked.forEach((id, i) => {
+    const meta = STYLE_META[id];
+    if (!meta) return;
+    const card = document.createElement('div');
+    card.className = 'style-card';
+    card.id = 'sc_' + id;
+    card.innerHTML = `
+      <span class="style-rank">#${i+1}</span>
+      <div class="style-info">
+        <div class="style-name">${meta.name}</div>
+        <div class="style-sub">${meta.sub}</div>
+        ${data.reasons?.[id] ? `<div class="style-reason">${data.reasons[id]}</div>` : ''}
+      </div>
+      <button class="try-btn" onclick="selectStyle('${id}')">Thử ngay →</button>
+    `;
+    list.appendChild(card);
+  });
+
+  // Tip
+  if (data.tip) {
+    document.getElementById('tipText').textContent = data.tip;
+    document.getElementById('tipBox').style.display = 'block';
+  }
+  document.getElementById('styleCardsWrap').style.display = 'block';
+  document.getElementById('resetWrap').style.display = 'block';
+}
+
+// ── Try-on ─────────────────────────────────────────────────────
+async function selectStyle(styleId) {
+  _selectedStyleId = styleId;
+  const meta = STYLE_META[styleId];
+
+  // Highlight selected card
+  document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
+  const card = document.getElementById('sc_' + styleId);
+  if (card) card.classList.add('selected');
+
+  _currentSlug = TuviPaywall.generateToolSlug('kieu-toc-tryon');
+  _saveStateForAuth();
+  await TuviPaywall.requireCredits(_currentSlug, async () => {
+    await _doTryOn(styleId, meta);
+  });
+}
+
+async function _doTryOn(styleId, meta) {
+  clearTryonError();
+  const tryonSec = document.getElementById('tryonSection');
+  tryonSec.style.display = 'block';
+  document.getElementById('tryonTitle').textContent = `Thử: ${meta?.name || styleId}`;
+  document.getElementById('tryonLoading').style.display = 'block';
+  document.getElementById('tryonResult').style.display = 'none';
+  tryonSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Disable all try buttons while processing
+  document.querySelectorAll('.try-btn').forEach(b => b.disabled = true);
+
+  try {
+    const res = await fetch('/api/tuong-mat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'kieu-toc-tryon',
+        image: _imageData,
+        mediaType: _mediaType,
+        style_id: styleId,
+        gender: _gender
+      })
+    });
+    if (!res.ok) {
+      const d = await res.json().catch(() => ({}));
+      throw new Error(d.error || 'Lỗi ' + res.status);
+    }
+    const data = await res.json();
+    if (!data.imageUrl) throw new Error('Không nhận được ảnh kết quả.');
+
+    _tryonImgUrl = data.imageUrl;
+    document.getElementById('imgBefore').src = 'data:' + _mediaType + ';base64,' + _imageData;
+    document.getElementById('imgAfter').src = data.imageUrl;
+    document.getElementById('afterLabel').textContent = meta?.name || styleId;
+    document.getElementById('tryonLoading').style.display = 'none';
+    document.getElementById('tryonResult').style.display = 'block';
+    _saveTryonReading(styleId, data.imageUrl);
+  } catch(e) {
+    document.getElementById('tryonLoading').style.display = 'none';
+    showTryonError('Lỗi tạo ảnh: ' + (e.message || 'Vui lòng thử lại.'));
+  } finally {
+    document.querySelectorAll('.try-btn').forEach(b => b.disabled = false);
+  }
+}
+
+function clearTryon() {
+  document.getElementById('tryonSection').style.display = 'none';
+  _selectedStyleId = null;
+  document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
+}
+
+async function downloadResult() {
+  if (!_tryonImgUrl) return;
+  try {
+    const res = await fetch(_tryonImgUrl);
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'kieu-toc-' + (_selectedStyleId || 'result') + '.png';
+    a.click(); URL.revokeObjectURL(url);
+  } catch(e) {
+    window.open(_tryonImgUrl, '_blank');
+  }
+}
+
+function resetAll() {
+  removePhoto();
+  document.getElementById('resultSection').style.display = 'none';
+  document.getElementById('resultSection').classList.remove('active');
+  _analysisResult = null; _tryonImgUrl = null; _selectedStyleId = null;
+  document.getElementById('inputSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── State persistence (survive OAuth redirect) ─────────────────
+function _saveStateForAuth() {
+  try {
+    sessionStorage.setItem('tvmb_kieu_toc_state', JSON.stringify({
+      _savedAt: Date.now(),
+      _imageData,
+      _mediaType,
+      _gender,
+    }));
+  } catch(e) {}
+}
+
+function _restoreStateAfterAuth() {
+  try {
+    const raw = sessionStorage.getItem('tvmb_kieu_toc_state');
+    if (!raw) return false;
+    const saved = JSON.parse(raw);
+    if (Date.now() - (saved._savedAt || 0) > 10 * 60 * 1000) {
+      sessionStorage.removeItem('tvmb_kieu_toc_state');
+      return false;
+    }
+    sessionStorage.removeItem('tvmb_kieu_toc_state');
+    if (saved._imageData) {
+      _imageData = saved._imageData;
+      _mediaType = saved._mediaType || 'image/jpeg';
+      _gender = saved._gender || 'nam';
+      // Sync gender UI
+      document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('active'));
+      const gBtn = document.getElementById(_gender === 'nu' ? 'genderNu' : 'genderNam');
+      if (gBtn) gBtn.classList.add('active');
+      // Show preview
+      const imgEl = document.getElementById('previewImg');
+      if (imgEl) imgEl.src = 'data:' + _mediaType + ';base64,' + _imageData;
+      document.getElementById('uploadArea').style.display = 'none';
+      document.getElementById('previewSection').style.display = 'block';
+      document.getElementById('analyzeBtn').disabled = false;
+      // Auto-trigger if logged in
+      setTimeout(() => {
+        if (window.Auth?.isLoggedIn() && _imageData) {
+          document.getElementById('analyzeBtn').click();
+        }
+      }, 800);
+    }
+    return true;
+  } catch(e) { return false; }
+}
+
+// Save try-on to history
+async function _saveTryonReading(styleId, imageUrl) {
+  try {
+    const token = window.Auth?.getSession()?.access_token;
+    if (!token) return;
+    fetch('/api/history?action=save_tuong', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ tool: 'kieu-toc-' + styleId, result_text: imageUrl, thumbnail: null }),
+    }).catch(() => {});
+  } catch(e) {}
+}
+
+(function() { _restoreStateAfterAuth(); })();
+</script>
+<script src="/tuvi-paywall.js"></script>
+<script>
+TuviPaywall.init({
+  product: 'kieu-toc',
+  slug: () => _currentSlug,
+  onUnlock: () => {},
+});
+</script>
+<script src="/testimonials.js"></script>
+<script src="/related-tools.js"></script>
+</body>
+</html>
