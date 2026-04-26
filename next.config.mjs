@@ -20,6 +20,7 @@ const nextConfig = {
       { source: '/tai-lieu/sach/:slug', destination: '/sach-detail.html'     },
       { source: '/sitemap.xml',         destination: '/api/sitemap'          },
       { source: '/khao-luan/:slug',     destination: '/api/khao-luan?slug=:slug' },
+      { source: '/tu-vi/:slug',         destination: '/api/tu-vi?slug=:slug'     },
     ];
   },
 };
