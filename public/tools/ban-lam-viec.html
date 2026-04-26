@@ -106,6 +106,31 @@ h1,h2,h3,h4{font-family:'Noto Serif',serif;}
 .shop-reason{font-size:10px;color:var(--text-mid);line-height:1.5;margin-bottom:4px;}
 .shop-price{font-size:10px;color:var(--text-lt);}
 .advice-text{font-size:13px;color:var(--text-mid);line-height:1.75;background:var(--bg-soft);border-left:3px solid var(--gold);padding:12px 14px;border-radius:0 7px 7px 0;}
+/* RENDER */
+.render-btn{width:100%;padding:13px;background:linear-gradient(135deg,#9A7B3A,#c9a84c);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Serif',serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s;}
+.render-btn:hover{opacity:.88;} .render-btn:disabled{opacity:.45;cursor:not-allowed;}
+.render-spinner{width:34px;height:34px;border:3px solid var(--border-lt);border-top-color:#c9a84c;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px;}
+.render-ba{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.render-ba-col{text-align:center;}
+.render-ba-label{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text-lt);margin-bottom:6px;}
+.render-ba-img{width:100%;border-radius:9px;display:block;object-fit:cover;aspect-ratio:4/3;}
+.render-err{font-size:12px;color:var(--red);background:#fff5f5;border:1px solid #fcc;border-radius:7px;padding:9px 12px;display:none;margin-top:10px;}
+/* INTRO */
+.ti-wrap{background:var(--bg);border:1px solid var(--border-lt);border-radius:12px;padding:22px;margin:16px 0 0;box-shadow:0 2px 6px rgba(0,0,0,.05);}
+.ti-eyebrow{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.ti-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+@media(max-width:600px){.ti-grid{grid-template-columns:1fr;}}
+.ti-h2{font-size:17px;color:var(--navy);font-family:'Noto Serif',serif;line-height:1.4;margin-bottom:10px;}
+.ti-body{font-size:13px;color:var(--text-mid);line-height:1.75;margin-bottom:8px;}
+.ti-cite{font-size:11px;color:var(--gold);font-style:italic;margin-top:6px;padding-top:6px;border-top:1px solid var(--border-lt);}
+.ti-factors-title{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text-lt);margin-bottom:10px;}
+.ti-factor{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border-lt);}
+.ti-factor:last-of-type{border-bottom:none;padding-bottom:0;}
+.ti-factor-num{width:21px;height:21px;background:var(--navy);color:var(--gold-bright);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;}
+.ti-factor-body{flex:1;}
+.ti-factor-label{font-size:12px;font-weight:700;color:var(--navy);}
+.ti-factor-desc{font-size:11px;color:var(--text-mid);margin-top:2px;line-height:1.5;}
+.ti-note{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;background:var(--gold-lt);border-radius:8px;font-size:12px;color:var(--navy);margin-top:10px;line-height:1.5;border:1px solid #e8d9b0;}
 </style>
 </head>
 <body>
@@ -119,6 +144,27 @@ h1,h2,h3,h4{font-family:'Noto Serif',serif;}
 </div>
 
 <div class="container">
+
+<div class="ti-wrap">
+  <div class="ti-eyebrow">Bát Trạch Minh Cảnh · Ngũ Hành · Không Gian Sự Nghiệp</div>
+  <div class="ti-grid">
+    <div>
+      <h2 class="ti-h2">Hướng Ngồi Sinh Khí —<br>Tối Ưu Hiệu Suất Theo Bản Mệnh</h2>
+      <p class="ti-body">Trong Bát Trạch Minh Cảnh (八宅明鏡), hướng ngồi làm việc là yếu tố then chốt nhất của không gian sự nghiệp. Ngồi mặt hướng Sinh Khí — phương vị cát nhất của bản mệnh — kích hoạt vận khí trí tuệ, tăng khả năng tập trung và quyết đoán. Ngồi hướng hung như Ngũ Quỷ hay Tuyệt Mệnh tạo trở ngại vô hình, khó thăng tiến và dễ phạm sai lầm.</p>
+      <p class="ti-body">Ngoài hướng ngồi, các yếu tố khác tác động trực tiếp đến vận khí làm việc: đèn đặt bên trái (Thanh Long kích văn khí), cây xanh góc Đông (Mộc hành sinh trí tuệ), màn hình không sát tường (cần không gian thở), gương không chiếu thẳng mặt (tán khí), và lưng ghế phải tựa tường vững — cổ nhân gọi là "hậu chẩm có cụm, tiền đường khai quảng".</p>
+      <div class="ti-cite">📖 Bát Trạch Minh Cảnh (八宅明鏡) — kinh điển phong thủy trường phái Lý Khí, hệ Đông Tây Tứ Trạch, thời Thanh.</div>
+    </div>
+    <div>
+      <div class="ti-factors-title">Bài Phân Tích Gồm 5 Phần</div>
+      <div class="ti-factor"><span class="ti-factor-num">①</span><div class="ti-factor-body"><div class="ti-factor-label">Hướng Ngồi Làm Việc</div><div class="ti-factor-desc">Xác định hướng ngồi hiện tại, đề xuất đổi sang Sinh Khí hoặc Thiên Y của bản mệnh</div></div></div>
+      <div class="ti-factor"><span class="ti-factor-num">②</span><div class="ti-factor-body"><div class="ti-factor-label">Nhận Diện Vật Dụng</div><div class="ti-factor-desc">AI Vision quét bàn làm việc, gắn vị trí từng thiết bị theo 8 hướng la bàn</div></div></div>
+      <div class="ti-factor"><span class="ti-factor-num">③</span><div class="ti-factor-body"><div class="ti-factor-label">Mẹo Tăng Tập Trung</div><div class="ti-factor-desc">3 mẹo cụ thể kích hoạt vận trí tuệ theo Ngũ Hành và mục đích sử dụng không gian</div></div></div>
+      <div class="ti-factor"><span class="ti-factor-num">④</span><div class="ti-factor-body"><div class="ti-factor-label">Đề Xuất Điều Chỉnh</div><div class="ti-factor-desc">Thứ tự ưu tiên cao → thấp, kèm lý do theo cổ pháp Bát Trạch</div></div></div>
+      <div class="ti-factor"><span class="ti-factor-num">⑤</span><div class="ti-factor-body"><div class="ti-factor-label">Render AI (Replicate)</div><div class="ti-factor-desc">Tạo ảnh không gian làm việc sau tối ưu phong thủy — thấy trước kết quả thực tế</div></div></div>
+      <div class="ti-note">💡 Chụp từ góc người ngồi — thấy được bàn, màn hình, đèn và nguồn sáng gần nhất. Ảnh rõ giúp AI nhận diện chính xác hướng ngồi.</div>
+    </div>
+  </div>
+</div>
 
   <div class="card">
     <div class="card-title"><span class="card-num">1</span> Bản Mệnh & Thông Tin</div>
@@ -249,6 +295,30 @@ h1,h2,h3,h4{font-family:'Noto Serif',serif;}
     <div class="card">
       <div class="card-title">💬 Lời Khuyên Tổng Thể</div>
       <div class="advice-text" id="adviceText"></div>
+    </div>
+
+    <div class="card" id="renderCard" style="display:none;">
+      <div class="card-title">🖥 Render Không Gian Làm Việc Bằng AI
+        <span style="font-size:10px;background:#e8f0fe;color:#1455A4;padding:2px 8px;border-radius:10px;font-weight:600;margin-left:4px;">Replicate · 30 lượng</span>
+      </div>
+      <p style="font-size:12px;color:var(--text-mid);line-height:1.65;margin-bottom:14px;">AI render lại góc làm việc theo màu ngũ hành bản mệnh và bố trí tối ưu — hình dung kết quả trước khi sắp xếp thực tế.</p>
+      <div id="renderIdle"><button class="render-btn" id="btnRender" onclick="doRoomRender()">✨ Render Không Gian Theo Phong Thủy</button></div>
+      <div id="renderLoading" style="display:none;text-align:center;padding:20px 0;">
+        <div class="render-spinner"></div>
+        <div style="font-size:13px;font-weight:600;color:var(--navy);">AI đang render không gian...</div>
+        <div style="font-size:11px;color:var(--text-lt);margin-top:4px;">Thường mất 25–45 giây</div>
+      </div>
+      <div id="renderResult" style="display:none;">
+        <div class="render-ba">
+          <div class="render-ba-col"><div class="render-ba-label">Ảnh gốc</div><img id="renderBefore" class="render-ba-img" src="" alt="Trước"></div>
+          <div class="render-ba-col"><div class="render-ba-label">Sau phong thủy AI</div><img id="renderAfter" class="render-ba-img" src="" alt="Sau"></div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button onclick="downloadRender()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif;">⬇ Tải Ảnh</button>
+          <button onclick="resetRender()" style="flex:1;padding:10px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;font-family:Arial,sans-serif;color:var(--text-mid);">🔄 Render Lại</button>
+        </div>
+      </div>
+      <div class="render-err" id="renderErr"></div>
     </div>
 
     <div style="text-align:center;padding:14px 0 6px;">
@@ -392,23 +462,59 @@ function renderResults(data){
   if(!(analysis.shoppingList||[]).length)sg.innerHTML='<p style="color:var(--text-lt);font-size:12px;">Không có đề xuất thêm vật phẩm.</p>';
 
   document.getElementById('adviceText').textContent=analysis.generalAdvice||'';
-
+  _renderGua=_gua; _renderWorkType=document.getElementById('workType').value;
+  _renderGender=document.getElementById('gioiTinh').value;
+  _renderRecs=(analysis.recommendations||[]).filter(r=>r.priority==='high').slice(0,3).map(r=>r.reason||'').filter(Boolean);
+  resetRender(); document.getElementById('renderCard').style.display='block';
   const sec=document.getElementById('results-section');sec.style.display='block';
   setTimeout(()=>sec.scrollIntoView({behavior:'smooth',block:'start'}),200);
 }
 
 function getIcon(id){return({bed:'🛏',desk:'🖥',sofa:'🛋',altar:'🏮',stove:'🔥',plant:'🌿',mirror:'🪞',door:'🚪',toilet:'🚿',water:'💧',wardrobe:'🚪',tv:'📺',monitor:'🖥',laptop:'💻',lamp:'💡',phone:'📱',notebook:'📒',keyboard:'⌨️',mouse:'🖱',clock:'🕐',speaker:'🔊',printer:'🖨',drawer:'🗄',cashier:'💰',entrance:'🚪',display:'🛍',storage:'📦',counter:'🪞',safe:'🔒',seating:'💺',sign:'🪧',light:'💡'})[id]||'📦';}
-
 function getExtraBody(){return{workType:document.getElementById('workType').value};}
 function renderExtraResults(data){
   const a=data.analysis;
-  if(a.chairDirection){
-    const cc=document.getElementById('chairCard'),co=document.getElementById('chairContent');
-    cc.style.display='block';
-    co.innerHTML=`<strong>Hiện tại:</strong> ${DIR_VN[a.chairDirection.current]||a.chairDirection.current||'Chưa xác định'}<br><strong>Nên đổi sang:</strong> <span style="color:var(--green);font-weight:700;">${DIR_VN[a.chairDirection.recommended]||a.chairDirection.recommended}</span><br><span style="color:var(--text-mid)">${a.chairDirection.reason||''}</span>`;
-  }
+  if(a.chairDirection){const cc=document.getElementById('chairCard'),co=document.getElementById('chairContent');cc.style.display='block';co.innerHTML=`<strong>Hiện tại:</strong> ${DIR_VN[a.chairDirection.current]||a.chairDirection.current||'Chưa xác định'}<br><strong>Nên đổi sang:</strong> <span style="color:var(--green);font-weight:700;">${DIR_VN[a.chairDirection.recommended]||a.chairDirection.recommended}</span><br><span style="color:var(--text-mid)">${a.chairDirection.reason||''}</span>`;}
   if(a.focusTips){document.getElementById('focusCard').style.display='block';document.getElementById('focusContent').textContent=a.focusTips;}
 }
+
+let _renderGua=null,_renderWorkType='workspace',_renderGender='male',_renderRecs=[],_renderResultUrl=null,_renderSlug=null;
+function resetRender(){document.getElementById('renderIdle').style.display='block';document.getElementById('renderLoading').style.display='none';document.getElementById('renderResult').style.display='none';document.getElementById('renderErr').style.display='none';_renderResultUrl=null;}
+async function doRoomRender(){
+  if(!_img64)return;
+  TuviPaywall.init({product:'phong-thuy-render',slug:()=>_renderSlug,onUnlock:()=>{}});
+  _renderSlug=TuviPaywall.generateToolSlug('phong-thuy-render');
+  await TuviPaywall.requireCredits(_renderSlug,async()=>{await _doRenderCall();});
+}
+async function _doRenderCall(){
+  document.getElementById('renderErr').style.display='none';
+  document.getElementById('renderIdle').style.display='none';
+  document.getElementById('renderLoading').style.display='block';
+  document.getElementById('renderResult').style.display='none';
+  document.getElementById('btnRender').disabled=true;
+  const token=window.Auth?.getSession()?.access_token;
+  try{
+    const res=await fetch('/api/phong-thuy?action=phong-thuy-render',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+(token||'')},body:JSON.stringify({imageBase64:_img64,imageType:_imgType,guaNumber:_renderGua,roomType:_renderWorkType,gioiTinh:_renderGender,topRecs:_renderRecs})});
+    const data=await res.json();
+    if(!data.imageUrl)throw new Error(data.error||'Không nhận được ảnh.');
+    _renderResultUrl=data.imageUrl;
+    document.getElementById('renderBefore').src='data:'+_imgType+';base64,'+_img64;
+    document.getElementById('renderAfter').src=data.imageUrl;
+    document.getElementById('renderLoading').style.display='none';
+    document.getElementById('renderResult').style.display='block';
+    document.getElementById('renderIdle').style.display='block';
+  }catch(e){
+    document.getElementById('renderLoading').style.display='none';
+    document.getElementById('renderIdle').style.display='block';
+    const el=document.getElementById('renderErr');el.textContent='⚠ Lỗi: '+(e.message||'Vui lòng thử lại.');el.style.display='block';
+  }finally{document.getElementById('btnRender').disabled=false;}
+}
+async function downloadRender(){
+  if(!_renderResultUrl)return;
+  try{const res=await fetch(_renderResultUrl);const blob=await res.blob();const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='ban-lam-viec-phong-thuy.png';a.click();URL.revokeObjectURL(url);}
+  catch(e){window.open(_renderResultUrl,'_blank');}
+}
+
 TuviPaywall.init({ product: 'ban-lam-viec' });
 </script>
 <script src="/testimonials.js"></script>

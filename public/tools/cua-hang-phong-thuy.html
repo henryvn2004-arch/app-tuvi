@@ -106,6 +106,31 @@ h1,h2,h3,h4{font-family:'Noto Serif',serif;}
 .shop-reason{font-size:10px;color:var(--text-mid);line-height:1.5;margin-bottom:4px;}
 .shop-price{font-size:10px;color:var(--text-lt);}
 .advice-text{font-size:13px;color:var(--text-mid);line-height:1.75;background:var(--bg-soft);border-left:3px solid var(--gold);padding:12px 14px;border-radius:0 7px 7px 0;}
+/* RENDER */
+.render-btn{width:100%;padding:13px;background:linear-gradient(135deg,#9A7B3A,#c9a84c);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Serif',serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s;}
+.render-btn:hover{opacity:.88;} .render-btn:disabled{opacity:.45;cursor:not-allowed;}
+.render-spinner{width:34px;height:34px;border:3px solid var(--border-lt);border-top-color:#c9a84c;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px;}
+.render-ba{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.render-ba-col{text-align:center;}
+.render-ba-label{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text-lt);margin-bottom:6px;}
+.render-ba-img{width:100%;border-radius:9px;display:block;object-fit:cover;aspect-ratio:4/3;}
+.render-err{font-size:12px;color:var(--red);background:#fff5f5;border:1px solid #fcc;border-radius:7px;padding:9px 12px;display:none;margin-top:10px;}
+/* INTRO */
+.ti-wrap{background:var(--bg);border:1px solid var(--border-lt);border-radius:12px;padding:22px;margin:16px 0 0;box-shadow:0 2px 6px rgba(0,0,0,.05);}
+.ti-eyebrow{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.ti-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+@media(max-width:600px){.ti-grid{grid-template-columns:1fr;}}
+.ti-h2{font-size:17px;color:var(--navy);font-family:'Noto Serif',serif;line-height:1.4;margin-bottom:10px;}
+.ti-body{font-size:13px;color:var(--text-mid);line-height:1.75;margin-bottom:8px;}
+.ti-cite{font-size:11px;color:var(--gold);font-style:italic;margin-top:6px;padding-top:6px;border-top:1px solid var(--border-lt);}
+.ti-factors-title{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text-lt);margin-bottom:10px;}
+.ti-factor{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border-lt);}
+.ti-factor:last-of-type{border-bottom:none;padding-bottom:0;}
+.ti-factor-num{width:21px;height:21px;background:var(--navy);color:var(--gold-bright);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;}
+.ti-factor-body{flex:1;}
+.ti-factor-label{font-size:12px;font-weight:700;color:var(--navy);}
+.ti-factor-desc{font-size:11px;color:var(--text-mid);margin-top:2px;line-height:1.5;}
+.ti-note{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;background:var(--gold-lt);border-radius:8px;font-size:12px;color:var(--navy);margin-top:10px;line-height:1.5;border:1px solid #e8d9b0;}
 </style>
 </head>
 <body>
@@ -119,6 +144,27 @@ h1,h2,h3,h4{font-family:'Noto Serif',serif;}
 </div>
 
 <div class="container">
+
+<div class="ti-wrap">
+  <div class="ti-eyebrow">Loan Đầu · Bát Trạch · Phong Thủy Thương Mại</div>
+  <div class="ti-grid">
+    <div>
+      <h2 class="ti-h2">Tài Vị & Luồng Khách —<br>Bố Trí Không Gian Kinh Doanh Phát Đạt</h2>
+      <p class="ti-body">Phong thủy thương mại kết hợp Loan Đầu pháp (形法 — đọc hình thế luồng khách) và Bát Trạch Lý Khí (理氣 — hướng phương cát hung của chủ nhân). Nguyên lý cốt lõi: <em>"Khí thừa phong tắc tán, giới thủy tắc chỉ"</em> — khí gặp rào cản tụ lại mới sinh tài. Cửa chính đón khí, thu ngân giữ khí, khu trưng bày lan khí thu hút khách.</p>
+      <p class="ti-body">Vị trí thu ngân hướng Sinh Khí của chủ là điều kiện số một — quyết định dòng tiền vào kho thuận hay nghịch. Két sắt đặt hướng hung gây tổn tài, mất vốn không rõ nguyên nhân. Gương đặt đúng vị trí nhân đôi khách; cây xanh Mộc hành tại Tài vị kích hoạt dòng khách liên tục.</p>
+      <div class="ti-cite">📖 Kết hợp Loan Đầu Kinh (巒頭經) — hình thế không gian, và Bát Trạch Minh Cảnh (八宅明鏡) — hướng khí theo bản mệnh.</div>
+    </div>
+    <div>
+      <div class="ti-factors-title">Bài Phân Tích Gồm 5 Phần</div>
+      <div class="ti-factor"><span class="ti-factor-num">①</span><div class="ti-factor-body"><div class="ti-factor-label">Nhận Diện Không Gian</div><div class="ti-factor-desc">AI Vision quét khu vực, vật dụng, ước lượng luồng khách và vị trí thu ngân trong ảnh</div></div></div>
+      <div class="ti-factor"><span class="ti-factor-num">②</span><div class="ti-factor-body"><div class="ti-factor-label">Phân Tích Tài Vị</div><div class="ti-factor-desc">Xác định vị trí thu ngân, két sắt, khu trưng bày so với phương cát hung của bản mệnh</div></div></div>
+      <div class="ti-factor"><span class="ti-factor-num">③</span><div class="ti-factor-body"><div class="ti-factor-label">Mẹo Kích Hoạt Tài Lộc</div><div class="ti-factor-desc">3 mẹo cụ thể theo Ngũ Hành và loại hình kinh doanh — cửa hàng, văn phòng, nhà hàng</div></div></div>
+      <div class="ti-factor"><span class="ti-factor-num">④</span><div class="ti-factor-body"><div class="ti-factor-label">Đề Xuất Bố Trí</div><div class="ti-factor-desc">Thứ tự ưu tiên kèm tác động kinh doanh cụ thể — không chỉ lý thuyết phong thủy</div></div></div>
+      <div class="ti-factor"><span class="ti-factor-num">⑤</span><div class="ti-factor-body"><div class="ti-factor-label">Render AI (Replicate)</div><div class="ti-factor-desc">Visualize không gian kinh doanh sau tối ưu phong thủy — thấy trước kết quả thực tế</div></div></div>
+      <div class="ti-note">💡 Chụp từ góc thấy cả cửa chính, quầy thu ngân và khu trưng bày chính. Ảnh toàn cảnh cho kết quả phân tích chính xác nhất.</div>
+    </div>
+  </div>
+</div>
 
   <div class="card">
     <div class="card-title"><span class="card-num">1</span> Bản Mệnh & Thông Tin</div>
@@ -244,6 +290,30 @@ h1,h2,h3,h4{font-family:'Noto Serif',serif;}
     <div class="card">
       <div class="card-title">💬 Lời Khuyên Tổng Thể</div>
       <div class="advice-text" id="adviceText"></div>
+    </div>
+
+    <div class="card" id="renderCard" style="display:none;">
+      <div class="card-title">🏪 Render Không Gian Kinh Doanh Bằng AI
+        <span style="font-size:10px;background:#e8f0fe;color:#1455A4;padding:2px 8px;border-radius:10px;font-weight:600;margin-left:4px;">Replicate · 30 lượng</span>
+      </div>
+      <p style="font-size:12px;color:var(--text-mid);line-height:1.65;margin-bottom:14px;">AI render lại không gian kinh doanh theo màu ngũ hành bản mệnh và bố trí tối ưu thu hút tài lộc.</p>
+      <div id="renderIdle"><button class="render-btn" id="btnRender" onclick="doRoomRender()">✨ Render Không Gian Theo Phong Thủy</button></div>
+      <div id="renderLoading" style="display:none;text-align:center;padding:20px 0;">
+        <div class="render-spinner"></div>
+        <div style="font-size:13px;font-weight:600;color:var(--navy);">AI đang render không gian...</div>
+        <div style="font-size:11px;color:var(--text-lt);margin-top:4px;">Thường mất 25–45 giây</div>
+      </div>
+      <div id="renderResult" style="display:none;">
+        <div class="render-ba">
+          <div class="render-ba-col"><div class="render-ba-label">Ảnh gốc</div><img id="renderBefore" class="render-ba-img" src="" alt="Trước"></div>
+          <div class="render-ba-col"><div class="render-ba-label">Sau phong thủy AI</div><img id="renderAfter" class="render-ba-img" src="" alt="Sau"></div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button onclick="downloadRender()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif;">⬇ Tải Ảnh</button>
+          <button onclick="resetRender()" style="flex:1;padding:10px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;font-family:Arial,sans-serif;color:var(--text-mid);">🔄 Render Lại</button>
+        </div>
+      </div>
+      <div class="render-err" id="renderErr"></div>
     </div>
 
     <div style="text-align:center;padding:14px 0 6px;">
@@ -387,17 +457,53 @@ function renderResults(data){
   if(!(analysis.shoppingList||[]).length)sg.innerHTML='<p style="color:var(--text-lt);font-size:12px;">Không có đề xuất thêm vật phẩm.</p>';
 
   document.getElementById('adviceText').textContent=analysis.generalAdvice||'';
-
+  _renderGua=_gua; _renderSpaceType=document.getElementById('spaceType').value;
+  _renderGender=document.getElementById('gioiTinh').value;
+  _renderRecs=(analysis.recommendations||[]).filter(r=>r.priority==='high').slice(0,3).map(r=>r.reason||'').filter(Boolean);
+  resetRender(); document.getElementById('renderCard').style.display='block';
   const sec=document.getElementById('results-section');sec.style.display='block';
   setTimeout(()=>sec.scrollIntoView({behavior:'smooth',block:'start'}),200);
 }
 
 function getIcon(id){return({bed:'🛏',desk:'🖥',sofa:'🛋',altar:'🏮',stove:'🔥',plant:'🌿',mirror:'🪞',door:'🚪',toilet:'🚿',water:'💧',wardrobe:'🚪',tv:'📺',monitor:'🖥',laptop:'💻',lamp:'💡',phone:'📱',notebook:'📒',keyboard:'⌨️',mouse:'🖱',clock:'🕐',speaker:'🔊',printer:'🖨',drawer:'🗄',cashier:'💰',entrance:'🚪',display:'🛍',storage:'📦',counter:'🪞',safe:'🔒',seating:'💺',sign:'🪧',light:'💡'})[id]||'📦';}
-
 function getExtraBody(){return{spaceType:document.getElementById('spaceType').value};}
-function renderExtraResults(data){
-  const a=data.analysis;
-  if(a.wealthTips){document.getElementById('wealthCard').style.display='block';document.getElementById('wealthContent').textContent=a.wealthTips;}
+function renderExtraResults(data){const a=data.analysis;if(a.wealthTips){document.getElementById('wealthCard').style.display='block';document.getElementById('wealthContent').textContent=a.wealthTips;}}
+
+let _renderGua=null,_renderSpaceType='store',_renderGender='male',_renderRecs=[],_renderResultUrl=null,_renderSlug=null;
+function resetRender(){document.getElementById('renderIdle').style.display='block';document.getElementById('renderLoading').style.display='none';document.getElementById('renderResult').style.display='none';document.getElementById('renderErr').style.display='none';_renderResultUrl=null;}
+async function doRoomRender(){
+  if(!_img64)return;
+  TuviPaywall.init({product:'phong-thuy-render',slug:()=>_renderSlug,onUnlock:()=>{}});
+  _renderSlug=TuviPaywall.generateToolSlug('phong-thuy-render');
+  await TuviPaywall.requireCredits(_renderSlug,async()=>{await _doRenderCall();});
+}
+async function _doRenderCall(){
+  document.getElementById('renderErr').style.display='none';
+  document.getElementById('renderIdle').style.display='none';
+  document.getElementById('renderLoading').style.display='block';
+  document.getElementById('renderResult').style.display='none';
+  document.getElementById('btnRender').disabled=true;
+  const token=window.Auth?.getSession()?.access_token;
+  try{
+    const res=await fetch('/api/phong-thuy?action=phong-thuy-render',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+(token||'')},body:JSON.stringify({imageBase64:_img64,imageType:_imgType,guaNumber:_renderGua,roomType:_renderSpaceType,gioiTinh:_renderGender,topRecs:_renderRecs})});
+    const data=await res.json();
+    if(!data.imageUrl)throw new Error(data.error||'Không nhận được ảnh.');
+    _renderResultUrl=data.imageUrl;
+    document.getElementById('renderBefore').src='data:'+_imgType+';base64,'+_img64;
+    document.getElementById('renderAfter').src=data.imageUrl;
+    document.getElementById('renderLoading').style.display='none';
+    document.getElementById('renderResult').style.display='block';
+    document.getElementById('renderIdle').style.display='block';
+  }catch(e){
+    document.getElementById('renderLoading').style.display='none';
+    document.getElementById('renderIdle').style.display='block';
+    const el=document.getElementById('renderErr');el.textContent='⚠ Lỗi: '+(e.message||'Vui lòng thử lại.');el.style.display='block';
+  }finally{document.getElementById('btnRender').disabled=false;}
+}
+async function downloadRender(){
+  if(!_renderResultUrl)return;
+  try{const res=await fetch(_renderResultUrl);const blob=await res.blob();const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cua-hang-phong-thuy.png';a.click();URL.revokeObjectURL(url);}
+  catch(e){window.open(_renderResultUrl,'_blank');}
 }
 TuviPaywall.init({ product: 'cua-hang-phong-thuy' });
 </script>

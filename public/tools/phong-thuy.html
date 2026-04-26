@@ -117,6 +117,22 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 .shop-reason{font-size:10px;color:var(--text-mid);line-height:1.5;margin-bottom:4px;}
 .shop-price{font-size:10px;color:var(--text-lt);}
 .advice-text{font-size:13px;color:var(--text-mid);line-height:1.75;background:var(--bg-soft);border-left:3px solid var(--gold);padding:12px 14px;border-radius:0 7px 7px 0;}
+/* INTRO */
+.ti-wrap{background:var(--bg);border:1px solid var(--border-lt);border-radius:12px;padding:22px;margin:16px 0 0;box-shadow:0 2px 6px rgba(0,0,0,.05);}
+.ti-eyebrow{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.ti-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+@media(max-width:600px){.ti-grid{grid-template-columns:1fr;}}
+.ti-h2{font-size:17px;color:var(--navy);font-family:'Noto Serif',serif;line-height:1.4;margin-bottom:10px;}
+.ti-body{font-size:13px;color:var(--text-mid);line-height:1.75;margin-bottom:8px;}
+.ti-cite{font-size:11px;color:var(--gold);font-style:italic;margin-top:6px;padding-top:6px;border-top:1px solid var(--border-lt);}
+.ti-factors-title{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text-lt);margin-bottom:10px;}
+.ti-factor{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border-lt);}
+.ti-factor:last-of-type{border-bottom:none;padding-bottom:0;}
+.ti-factor-num{width:21px;height:21px;background:var(--navy);color:var(--gold-bright);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;}
+.ti-factor-body{flex:1;}
+.ti-factor-label{font-size:12px;font-weight:700;color:var(--navy);}
+.ti-factor-desc{font-size:11px;color:var(--text-mid);margin-top:2px;line-height:1.5;}
+.ti-note{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;background:var(--gold-lt);border-radius:8px;font-size:12px;color:var(--navy);margin-top:10px;line-height:1.5;border:1px solid #e8d9b0;}
 
 /* AI ROOM RENDER */
 .render-btn{width:100%;padding:13px;background:linear-gradient(135deg,#9A7B3A,#c9a84c);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Serif',serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s;}
@@ -140,6 +156,27 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 </div>
 
 <div class="container">
+
+<div class="ti-wrap">
+  <div class="ti-eyebrow">Bát Trạch Minh Cảnh · Loan Đầu Pháp · Ngũ Hành</div>
+  <div class="ti-grid">
+    <div>
+      <h2 class="ti-h2">Khoa Học Bố Trí Không Gian —<br>Hợp Bản Mệnh Theo Bát Trạch</h2>
+      <p class="ti-body">Bát Trạch Minh Cảnh (八宅明鏡) là kinh điển phong thủy thời Thanh thuộc trường phái Lý Khí (理氣), phân chia mỗi không gian thành 8 cung theo hướng la bàn và kết hợp với Quái số của chủ nhân để xác định các phương vị cát hung. Đây là phương pháp hệ thống hóa và ứng dụng được nhất trong phong thủy hiện đại.</p>
+      <p class="ti-body">Mỗi người thuộc Đông Tứ Mệnh (Khảm-Chấn-Tốn-Ly) hoặc Tây Tứ Mệnh (Càn-Khôn-Cấn-Đoài), ứng với 4 phương cát: Sinh Khí (vượng nhất), Thiên Y (sức khỏe), Diên Niên (quan hệ), Phục Vị (bình ổn) — và 4 phương hung cần tránh đặt đồ vật quan trọng.</p>
+      <div class="ti-cite">📖 Bát Trạch Minh Cảnh (八宅明鏡) + Loan Đầu Kinh (巒頭經) — hai trụ cột của phong thủy Lý Khí ứng dụng vào không gian sống.</div>
+    </div>
+    <div>
+      <div class="ti-factors-title">Bài Phân Tích Gồm 5 Phần</div>
+      <div class="ti-factor"><span class="ti-factor-num">①</span><div class="ti-factor-body"><div class="ti-factor-label">Điểm Phong Thủy Trước/Sau</div><div class="ti-factor-desc">Tính điểm 0–100 dựa trên vị trí đồ vật so với phương cát hung, hiển thị mức cải thiện</div></div></div>
+      <div class="ti-factor"><span class="ti-factor-num">②</span><div class="ti-factor-body"><div class="ti-factor-label">Nhận Diện Đồ Vật AI</div><div class="ti-factor-desc">AI Vision quét toàn phòng, gắn nhãn và ước lượng vị trí từng vật theo 8 hướng la bàn</div></div></div>
+      <div class="ti-factor"><span class="ti-factor-num">③</span><div class="ti-factor-body"><div class="ti-factor-label">Sơ Đồ Bát Trạch 3×3</div><div class="ti-factor-desc">Lưới trực quan hiển thị chất lượng 8 cung theo màu sắc cát/hung của bản mệnh</div></div></div>
+      <div class="ti-factor"><span class="ti-factor-num">④</span><div class="ti-factor-body"><div class="ti-factor-label">Đề Xuất Bố Trí</div><div class="ti-factor-desc">Di chuyển, giữ nguyên hoặc thêm vật phẩm — ưu tiên cao/trung/thấp kèm lý do cổ pháp</div></div></div>
+      <div class="ti-factor"><span class="ti-factor-num">⑤</span><div class="ti-factor-body"><div class="ti-factor-label">Render AI (Replicate)</div><div class="ti-factor-desc">Visualize phòng sau tối ưu phong thủy với màu ngũ hành bản mệnh — thấy trước khi sắp xếp</div></div></div>
+      <div class="ti-note">💡 Chụp ảnh toàn cảnh phòng, bao gồm cửa chính và đồ vật chính. Ảnh rõ nét giúp AI nhận diện vị trí chính xác hơn.</div>
+    </div>
+  </div>
+</div>
 
   <div class="card">
     <div class="card-title"><span class="card-num">1</span> Bản Mệnh & Thông Tin Phòng</div>
