@@ -16,6 +16,26 @@ async function fetchSlugs(table: string, select = 'slug,created_at') {
   return await res.json() as { slug: string; created_at?: string }[];
 }
 
+// Paginate through seo_pages (Supabase caps at 1000 rows per request)
+async function fetchAllSeoPages() {
+  const results: { slug: string; category: string; created_at: string }[] = [];
+  const pageSize = 1000;
+  let offset = 0;
+  while (true) {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/seo_pages?select=slug,category,created_at&order=id.asc&limit=${pageSize}&offset=${offset}`,
+      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+    );
+    if (!res.ok) break;
+    const batch = await res.json() as { slug: string; category: string; created_at: string }[];
+    if (!batch.length) break;
+    results.push(...batch);
+    if (batch.length < pageSize) break;
+    offset += pageSize;
+  }
+  return results;
+}
+
 function escXml(s: string) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
@@ -78,7 +98,7 @@ export async function GET() {
     fetchSlugs('tai_lieu'),
     fetchSlugs('khao_luan'),
     fetchSlugs('sach_library'),
-    fetchSlugs('seo_pages', 'slug,category,created_at'),
+    fetchAllSeoPages(),
   ]);
 
   const SEO_PRIORITY: Record<string, string> = {
