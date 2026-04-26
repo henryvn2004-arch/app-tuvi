@@ -6,7 +6,7 @@ import { NextResponse } from 'next/server';
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
 const BASE_URL     = 'https://www.tuviminhbao.com';
-const CACHE_TTL    = 6 * 60 * 60;
+const CACHE_TTL    = 0; // no CDN cache — sitemap always fresh
 
 async function fetchSlugs(table: string, select = 'slug,created_at') {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?select=${select}&limit=10000`, {
@@ -143,7 +143,7 @@ ${entries.join('\n')}
     status: 200,
     headers: {
       'Content-Type': 'application/xml; charset=utf-8',
-      'Cache-Control': `public, max-age=${CACHE_TTL}, stale-while-revalidate=3600`,
+      'Cache-Control': 'no-store',
     },
   });
 }
