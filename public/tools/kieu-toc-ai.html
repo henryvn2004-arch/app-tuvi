@@ -414,6 +414,7 @@ async function analyze() {
   clearError();
   document.getElementById('analyzeBtn').disabled = true;
 
+  TuviPaywall.init({ product: 'kieu-toc-phan-tich', slug: () => _currentSlug, onUnlock: () => {} });
   _currentSlug = TuviPaywall.generateToolSlug('kieu-toc-phan-tich');
   _saveStateForAuth();
   await TuviPaywall.requireCredits(_currentSlug, async () => {
@@ -510,6 +511,7 @@ async function selectStyle(styleId) {
   const card = document.getElementById('sc_' + styleId);
   if (card) card.classList.add('selected');
 
+  TuviPaywall.init({ product: 'kieu-toc-tryon', slug: () => _currentSlug, onUnlock: () => {} });
   _currentSlug = TuviPaywall.generateToolSlug('kieu-toc-tryon');
   _saveStateForAuth();
   await TuviPaywall.requireCredits(_currentSlug, async () => {
@@ -655,11 +657,9 @@ async function _saveTryonReading(styleId, imageUrl) {
 </script>
 <script src="/tuvi-paywall.js"></script>
 <script>
-TuviPaywall.init({
-  product: 'kieu-toc',
-  slug: () => _currentSlug,
-  onUnlock: () => {},
-});
+// TuviPaywall được init per-action trong analyze() và selectStyle()
+// để dùng đúng product/cost cho từng loại (phan-tich vs tryon)
+TuviPaywall.init({ product: 'kieu-toc-phan-tich', slug: () => _currentSlug, onUnlock: () => {} });
 </script>
 <script src="/testimonials.js"></script>
 <script src="/related-tools.js"></script>
