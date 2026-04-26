@@ -98,6 +98,11 @@
     + ddItem('/tools/cach-cuc.html',  '\u26e7',       'C\u00e1ch C\u1ee5c & C\u00e1c Cung')
     + ddItem('/tools/dai-van.html',   '\ud83d\udcc8', '\u0110\u1ea1i V\u1eadn & V\u1eadn Tr\u00ecnh')
     + ddItem('/tools/van-thang.html', '\ud83d\uddd3', 'V\u1eadn Th\u00e1ng')
+    + ddSection('Tra C\u1ee9u Ki\u1ebfn Th\u1ee9c')
+    + ddItem('/kien-thuc-tuvi',       '\ud83d\udcda', 'Ki\u1ebfn Th\u1ee9c T\u1eed Vi \u0110\u1ea9u S\u1ed1')
+    + ddItem('/tu-vi/tuong-hop-hon-nhan-tuoi-giap-ty-va-at-suu', '\ud83d\udc8d', 'T\u01b0\u01a1ng H\u1ee3p H\u00f4n Nh\u00e2n')
+    + ddItem('/tu-vi/van-han-tuoi-giap-ty-nam-2026',             '\ud83d\udcc5', 'V\u1eadn H\u1ea1n Theo N\u0103m')
+    + ddItem('/tu-vi/y-nghia-sao-tu-vi-tai-cung-menh',           '\u2b50',       '\u00dd Ngh\u0129a C\u00e1c Sao')
     + '</div></div>';
 
   // DD2 — Xem Tướng
@@ -110,6 +115,11 @@
     + ddItem('/tools/thanh-tuong-ai.html', '\ud83c\udfa4', 'Thanh T\u01b0\u1edbng \u2014 Gi\u1ecdng N\u00f3i')
     + ddItem('/tools/thanh-tuong-pro.html','\ud83c\udfbc', 'Thanh T\u01b0\u1edbng Pro')
     + ddItem('/tools/khi-sac-ai.html',     '\ud83c\udf05', 'Kh\u00ed S\u1eafc \u2014 V\u1eadn Kh\u00ed 1\u20133 Th\u00e1ng')
+    + ddSection('Tra C\u1ee9u T\u01b0\u1edbng S\u1ed1')
+    + ddItem('/xem-tuong',                '\ud83d\udc41', 'T\u01b0\u1edbng S\u1ed1 To\u00e0n Di\u1ec7n')
+    + ddItem('/tu-vi/tuong-khuon-mat-tron-nu',   '\ud83d\ude0a', 'T\u01b0\u1edbng Khu\u00f4n M\u1eb7t')
+    + ddItem('/tu-vi/not-ruoi-o-not-ruoi-mui-nam','\u25cf',       '\u00dd Ngh\u0129a N\u1ed1t Ru\u1ed3i')
+    + ddItem('/tu-vi/y-nghia-chi-tay-sinh-menh-nam','\u270b',     'Ch\u1ec9 Tay & V\u1eadn M\u1ec7nh')
 
     + '</div></div>';
 
@@ -124,6 +134,11 @@
     + ddSection('M\u1ec7nh L\u00fd & Phong Th\u1ee7y')
     + ddItem('/tools/bat-trach.html',             '\ud83e\uddad', 'H\u01b0\u1edbng B\u00e1t Tr\u1ea1ch')
     + ddItem('/tools/kim-lau.html',               '\ud83c\udfe0', 'Kim L\u00e2u & Tam Tai')
+    + ddSection('Tra C\u1ee9u Phong Th\u1ee7y')
+    + ddItem('/phong-thuy',                          '\ud83e\uddad', 'Phong Th\u1ee7y Theo M\u1ec7nh & Tu\u1ed5i')
+    + ddItem('/chon-ngay',                           '\ud83d\udcc5', 'Ch\u1ecdn Ng\u00e0y T\u1ed1t')
+    + ddItem('/tu-vi/phong-thuy-menh-kim',           '\ud83e\udd47', 'Phong Th\u1ee7y M\u1ec7nh Kim')
+    + ddItem('/tu-vi/ngay-tot-cuoi-hoi-nam-2026',    '\ud83d\udc8d', 'Ng\u00e0y T\u1ed1t C\u01b0\u1edbi H\u1ecfi 2026')
 
     + '</div></div>';
 

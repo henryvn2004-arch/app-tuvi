@@ -21,6 +21,12 @@ const nextConfig = {
       { source: '/sitemap.xml',         destination: '/api/sitemap'          },
       { source: '/khao-luan/:slug',     destination: '/api/khao-luan?slug=:slug' },
       { source: '/tu-vi/:slug',         destination: '/api/tu-vi?slug=:slug'     },
+      { source: '/phong-thuy',          destination: '/api/tu-vi-hub?cat=phong-thuy'   },
+      { source: '/xem-tuong',           destination: '/api/tu-vi-hub?cat=xem-tuong'    },
+      { source: '/chon-ngay',           destination: '/api/tu-vi-hub?cat=chon-ngay'    },
+      { source: '/lam-dep',             destination: '/api/tu-vi-hub?cat=lam-dep'      },
+      { source: '/dat-ten',             destination: '/api/tu-vi-hub?cat=dat-ten'      },
+      { source: '/kien-thuc-tuvi',      destination: '/api/tu-vi-hub?cat=kien-thuc-tuvi' },
     ];
   },
 };

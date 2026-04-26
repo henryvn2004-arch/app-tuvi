@@ -25,7 +25,7 @@ function renderMarkdown(text: string) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function buildHTML(page: any, slug: string) {
+function buildHTML(page: any, slug: string, relatedHtml = '') {
   const url   = `${BASE_URL}/tu-vi/${slug}`;
   const title = escHtml(page.title);
   const desc  = escHtml(page.meta_description || page.title);
@@ -86,6 +86,12 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 .cta-btn{display:inline-block;background:var(--purple);color:#fff;padding:13px 32px;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px;transition:opacity .15s}
 .cta-btn:hover{opacity:.88}
 @media(max-width:700px){.breadcrumb,.article-wrap{padding-left:16px;padding-right:16px}.article-title{font-size:24px}}
+        .rel-wrap{margin-top:32px;padding-top:24px;border-top:1px solid var(--border-lt)}
+        .rel-title{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#999;margin-bottom:12px}
+        .rel-title a{color:var(--blue);text-decoration:none}.rel-title a:hover{text-decoration:underline}
+        .rel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+        .rel-item{display:block;padding:10px 12px;background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:6px;font-size:12px;color:var(--navy);text-decoration:none;line-height:1.4;transition:all .12s}
+        .rel-item:hover{border-color:var(--blue);background:#fff;color:var(--blue)}
 </style>
 <script src="/auth.js"></script>
 </head>
@@ -107,6 +113,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
     <p>Luận giải AI chi tiết — tính cách, vận hạn, tình duyên, sự nghiệp theo giờ sinh cụ thể</p>
     <a class="cta-btn" href="/">Xem Tử Vi Minh Bảo →</a>
   </div>
+  ${relatedHtml}
 </article>
 <script src="/footer.js"></script>
 </body></html>`;
@@ -125,21 +132,61 @@ function buildNotFound() {
 </body></html>`;
 }
 
+const CAT_HUB: Record<string, string> = {
+  'tu-vi-nam-sinh': '/kien-thuc-tuvi', 'y-nghia-sao': '/kien-thuc-tuvi',
+  'van-han': '/kien-thuc-tuvi', 'tuong-hop-hon-nhan': '/kien-thuc-tuvi',
+  'tuong-hop-lam-an': '/kien-thuc-tuvi', 'phong-thuy': '/phong-thuy',
+  'xem-tuong': '/xem-tuong', 'chon-ngay': '/chon-ngay',
+  'lam-dep': '/lam-dep', 'dat-ten': '/dat-ten',
+};
+const CAT_LABEL: Record<string, string> = {
+  'tu-vi-nam-sinh':'Tử Vi','y-nghia-sao':'Ý Nghĩa Sao','van-han':'Vận Hạn',
+  'tuong-hop-hon-nhan':'Tương Hợp Hôn Nhân','tuong-hop-lam-an':'Tương Hợp Làm Ăn',
+  'phong-thuy':'Phong Thủy','xem-tuong':'Xem Tướng','chon-ngay':'Chọn Ngày',
+  'lam-dep':'Làm Đẹp','dat-ten':'Đặt Tên',
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function buildRelated(related: any[], category: string): string {
+  if (!related?.length) return '';
+  const hub = CAT_HUB[category] || '/kien-thuc-tuvi';
+  const label = CAT_LABEL[category] || 'Xem Thêm';
+  const links = related.map(r =>
+    `<a class="rel-item" href="${BASE_URL}/tu-vi/${r.slug}">${r.h1 || r.title}</a>`
+  ).join('');
+  return `<div class="rel-wrap">
+    <div class="rel-title">Bài Viết Liên Quan — <a href="${hub}">${label}</a></div>
+    <div class="rel-grid">${links}</div>
+  </div>`;
+}
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const slug = searchParams.get('slug') || '';
   if (!slug) return NextResponse.redirect(new URL('/', BASE_URL));
 
   try {
-    const r = await fetch(
-      `${SUPABASE_URL}/rest/v1/seo_pages?slug=eq.${encodeURIComponent(slug)}&select=*&limit=1`,
-      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
-    );
-    const rows = await r.json() as any[];
+    const [pageRes, relRes] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/seo_pages?slug=eq.${encodeURIComponent(slug)}&select=*&limit=1`,
+        { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }),
+      // fetch 6 related from same category (random via limit+offset trick)
+      fetch(`${SUPABASE_URL}/rest/v1/seo_pages?slug=neq.${encodeURIComponent(slug)}&select=slug,h1,title,category&limit=6&offset=${Math.floor(Math.random()*20)}`,
+        { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }),
+    ]);
+    const rows = await pageRes.json() as any[];
     if (!rows?.length) {
       return new NextResponse(buildNotFound(), { status: 404, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
     }
-    const html = buildHTML(rows[0], slug);
+    const related = await relRes.json() as any[];
+    const page = rows[0];
+    // Fetch same-category related
+    const sameCatRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/seo_pages?slug=neq.${encodeURIComponent(slug)}&category=eq.${encodeURIComponent(page.category)}&select=slug,h1,title,category&limit=8`,
+      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+    );
+    const sameCat = await sameCatRes.json() as any[];
+    const relatedHtml = buildRelated(sameCat.length ? sameCat.slice(0,8) : related.slice(0,8), page.category);
+    const html = buildHTML(page, slug, relatedHtml);
     return new NextResponse(html, {
       status: 200,
       headers: {
