@@ -338,6 +338,113 @@ Trả về JSON:
   return ok({ success: true, balance: auth.newBalance, napAmHanh, colorData, styleGuide });
 }
 
+// ── Trang Phục Try-On (Replicate) ────────────────────────────────
+
+const NH_OUTFIT: Record<string, { main: string; accent: string }> = {
+  'Kim':  { main: 'white and silver grey',         accent: 'cream and light gold' },
+  'Mộc':  { main: 'forest green and warm brown',   accent: 'sage green and mint' },
+  'Thủy': { main: 'navy blue and charcoal black',  accent: 'deep teal and dark grey' },
+  'Hỏa':  { main: 'red and coral orange',          accent: 'burgundy and warm rose' },
+  'Thổ':  { main: 'warm beige and earthy brown',   accent: 'golden yellow and terracotta' },
+};
+
+const STYLE_DESC: Record<string, { nam: string; nu: string }> = {
+  'cong-so': {
+    nam: 'professional office attire, dress shirt and tailored trousers, business formal style',
+    nu:  'professional office wear, elegant blouse and tailored pants or pencil skirt, business formal style',
+  },
+  'casual': {
+    nam: 'casual everyday outfit, clean polo shirt and chinos, modern relaxed style',
+    nu:  'casual chic outfit, stylish blouse and jeans or casual midi skirt, modern relaxed style',
+  },
+  'sang-trong': {
+    nam: 'elegant formal wear, well-fitted blazer and dress pants with tie, luxury fashion style',
+    nu:  'elegant evening wear, sophisticated dress or blouse with wide-leg trousers, luxury fashion style',
+  },
+  'dao-pho': {
+    nam: 'trendy street fashion, casual graphic tee and jogger pants, modern urban style',
+    nu:  'trendy street style outfit, fashionable casual top and wide pants, modern urban fashion',
+  },
+};
+
+const REPL_NEG = 'nsfw, ugly, deformed, bad anatomy, distorted face, blurry, low quality, cartoon, painting, watermark, text, logo';
+
+function _sleep(ms: number): Promise<void> { return new Promise(r => setTimeout(r, ms)); }
+
+async function handleTrangPhucTryon(request: NextRequest, body: Record<string, unknown>) {
+  const replKey = process.env.REPLICATE_API_KEY;
+  if (!replKey) return err('Replicate API key chưa cấu hình.', 500);
+
+  // Auth check only (no deduct — TuviPaywall handled client-side)
+  const authHeader = request.headers.get('Authorization');
+  if (!authHeader?.startsWith('Bearer ')) return err('Unauthorized', 401);
+  const user = await getUserFromToken(authHeader.slice(7));
+  if (!user?.id) return err('Unauthorized', 401);
+
+  const { imageBase64, imageType, napAmHanh, gioiTinh, style } = body as Record<string, string>;
+  if (!imageBase64) return err('Missing image', 400);
+
+  const nh = napAmHanh || 'Hỏa';
+  const gender = gioiTinh === 'female' ? 'nu' : 'nam';
+  const st = style || 'casual';
+  const nhColors = NH_OUTFIT[nh] || NH_OUTFIT['Hỏa'];
+  const styleDesc = STYLE_DESC[st] || STYLE_DESC['casual'];
+  const genderLabel = gender === 'nu' ? 'woman' : 'man';
+
+  const prompt = `portrait photo of a ${genderLabel} img wearing ${styleDesc[gender]} in ${nhColors.main} and ${nhColors.accent} colors, photorealistic, professional fashion photography, high quality, sharp focus`;
+  const imageDataUri = `data:${imageType || 'image/jpeg'};base64,${imageBase64}`;
+
+  // Start Replicate prediction (PhotoMaker)
+  const startResp = await fetch('https://api.replicate.com/v1/models/tencentarc/photomaker/predictions', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${replKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      input: {
+        input_image: imageDataUri,
+        prompt,
+        negative_prompt: REPL_NEG,
+        style_strength_ratio: 20,
+        num_outputs: 1,
+        guidance_scale: 5,
+        num_inference_steps: 30,
+      }
+    })
+  });
+
+  if (!startResp.ok) {
+    const e = await startResp.json().catch(() => ({})) as Record<string, string>;
+    return err(e.detail || 'Lỗi khởi tạo Replicate.', 500);
+  }
+
+  const prediction = await startResp.json() as { id?: string; status?: string; output?: string | string[] };
+
+  if (prediction.status === 'succeeded') {
+    const url = Array.isArray(prediction.output) ? prediction.output[0] : prediction.output;
+    return ok({ imageUrl: url });
+  }
+
+  const predId = prediction.id;
+  if (!predId) return err('Không tạo được prediction ID.', 500);
+
+  // Poll up to ~54s
+  for (let i = 0; i < 27; i++) {
+    await _sleep(2000);
+    const pollResp = await fetch(`https://api.replicate.com/v1/predictions/${predId}`, {
+      headers: { 'Authorization': `Bearer ${replKey}` }
+    });
+    if (!pollResp.ok) continue;
+    const data = await pollResp.json() as { status?: string; output?: string | string[]; error?: string };
+    if (data.status === 'succeeded') {
+      const url = Array.isArray(data.output) ? data.output[0] : data.output;
+      return ok({ imageUrl: url });
+    }
+    if (data.status === 'failed' || data.status === 'canceled') {
+      return err(data.error || 'Replicate xử lý thất bại.', 500);
+    }
+  }
+  return err('Hết thời gian chờ. Vui lòng thử lại.', 504);
+}
+
 // ── Routes ───────────────────────────────────────────────────────
 
 export async function OPTIONS() { return options(); }
@@ -346,9 +453,10 @@ export async function POST(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const action = searchParams.get('action') || 'analyze';
   const body = await parseBody(request) as Record<string, unknown>;
-  if (action === 'analyze')       return handleAnalyze(request, body);
-  if (action === 'ban-lam-viec')  return handleBanLamViec(request, body);
-  if (action === 'cua-hang')      return handleCuaHang(request, body);
-  if (action === 'mau-sac')       return handleMauSac(request, body);
+  if (action === 'analyze')             return handleAnalyze(request, body);
+  if (action === 'ban-lam-viec')        return handleBanLamViec(request, body);
+  if (action === 'cua-hang')            return handleCuaHang(request, body);
+  if (action === 'mau-sac')            return handleMauSac(request, body);
+  if (action === 'trang-phuc-tryon')   return handleTrangPhucTryon(request, body);
   return err('Invalid action', 400);
 }
