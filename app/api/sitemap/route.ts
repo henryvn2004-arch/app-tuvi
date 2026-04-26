@@ -56,6 +56,13 @@ export async function GET() {
     { path:'/xem-tuoi.html',  cf:'monthly', p:'0.7' },
     { path:'/xem-lam-an.html',cf:'monthly', p:'0.7' },
     { path:'/contact.html',   cf:'monthly', p:'0.4' },
+    // Category hubs
+    { path:'/kien-thuc-tuvi', cf:'weekly',  p:'0.9' },
+    { path:'/phong-thuy',     cf:'weekly',  p:'0.9' },
+    { path:'/xem-tuong',      cf:'weekly',  p:'0.9' },
+    { path:'/chon-ngay',      cf:'weekly',  p:'0.9' },
+    { path:'/lam-dep',        cf:'weekly',  p:'0.8' },
+    { path:'/dat-ten',        cf:'weekly',  p:'0.8' },
     // Tools
     { path:'/tools/an-sao.html',               cf:'monthly', p:'0.7' },
     { path:'/tools/ban-lam-viec.html',          cf:'monthly', p:'0.7' },

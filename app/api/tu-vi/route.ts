@@ -33,6 +33,27 @@ function buildHTML(page: any, slug: string, relatedHtml = '') {
   const body  = renderMarkdown(page.content||'');
   const kws   = (page.keywords||[]).join(', ');
 
+  const catHubUrl: Record<string, string> = {
+    'tu-vi-nam-sinh': BASE_URL+'/kien-thuc-tuvi',
+    'y-nghia-sao': BASE_URL+'/kien-thuc-tuvi',
+    'van-han': BASE_URL+'/kien-thuc-tuvi',
+    'tuong-hop-hon-nhan': BASE_URL+'/kien-thuc-tuvi',
+    'tuong-hop-lam-an': BASE_URL+'/kien-thuc-tuvi',
+    'phong-thuy': BASE_URL+'/phong-thuy',
+    'xem-tuong': BASE_URL+'/xem-tuong',
+    'chon-ngay': BASE_URL+'/chon-ngay',
+    'lam-dep': BASE_URL+'/lam-dep',
+    'dat-ten': BASE_URL+'/dat-ten',
+  };
+  const catHubName: Record<string, string> = {
+    'tu-vi-nam-sinh': 'Tử Vi Đẩu Số', 'y-nghia-sao': 'Kiến Thức Tử Vi',
+    'van-han': 'Vận Hạn', 'tuong-hop-hon-nhan': 'Tương Hợp Hôn Nhân',
+    'tuong-hop-lam-an': 'Tương Hợp Làm Ăn', 'phong-thuy': 'Phong Thủy',
+    'xem-tuong': 'Xem Tướng', 'chon-ngay': 'Chọn Ngày', 'lam-dep': 'Làm Đẹp', 'dat-ten': 'Đặt Tên',
+  };
+  const hubUrl  = catHubUrl[page.category]  || BASE_URL+'/kien-thuc-tuvi';
+  const hubName = catHubName[page.category] || 'Tử Vi';
+
   const schema = JSON.stringify([
     { '@context':'https://schema.org','@type':'Article',
       headline: page.title, description: page.meta_description||'', url,
@@ -43,7 +64,7 @@ function buildHTML(page: any, slug: string, relatedHtml = '') {
       image:{'@type':'ImageObject',url:BASE_URL+'/seal.webp'} },
     { '@context':'https://schema.org','@type':'BreadcrumbList', itemListElement:[
       {'@type':'ListItem',position:1,name:'Trang Chủ',item:BASE_URL+'/'},
-      {'@type':'ListItem',position:2,name:'Tử Vi',item:BASE_URL+'/tu-vi'},
+      {'@type':'ListItem',position:2,name:hubName,item:hubUrl},
       {'@type':'ListItem',position:3,name:page.h1||page.title,item:url}] },
   ]);
 
