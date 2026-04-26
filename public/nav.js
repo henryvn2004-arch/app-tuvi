@@ -18,7 +18,7 @@
 
   // Active state detection
   var TUVI_PATHS   = ['/', '/luan-giai.html','/xem-tuoi.html','/xem-lam-an.html','/tools/xem-tuoi-sinh-con.html','/tools/an-sao.html','/tools/sao-nam.html','/tools/cach-cuc.html','/tools/dai-van.html','/tools/van-thang.html'];
-  var TUONG_PATHS  = ['/tools/tuong-mat-ai.html','/tools/nhan-tuong-ai.html','/tools/thu-tuong-ai.html','/tools/thanh-tuong-ai.html','/tools/thanh-tuong-pro.html','/tools/khi-sac-ai.html'];
+  var TUONG_PATHS  = ['/tools/tuong-mat-ai.html','/tools/nhan-tuong-ai.html','/tools/thu-tuong-ai.html','/tools/thanh-tuong-ai.html','/tools/thanh-tuong-pro.html','/tools/khi-sac-ai.html','/tools/kieu-toc-ai.html'];
   var PHONG_PATHS  = ['/tools/phong-thuy.html','/tools/ban-lam-viec.html','/tools/cua-hang-phong-thuy.html','/tools/bat-trach.html','/tools/kim-lau.html','/tools/mau-sac-hop-menh.html'];
   var NGAY_PATHS   = ['/tools/hoang-dao.html','/tools/ngay-tot.html','/tools/luc-nham.html','/tools/han-nam.html','/tools/chon-ngay-tot.html'];
   var TENCHU_PATHS = ['/tools/dat-ten-con.html','/tools/dat-ten-doanh-nghiep.html'];
@@ -109,6 +109,8 @@
     + ddItem('/tools/thanh-tuong-ai.html', '\ud83c\udfa4', 'Thanh T\u01b0\u1edbng \u2014 Gi\u1ecdng N\u00f3i')
     + ddItem('/tools/thanh-tuong-pro.html','\ud83c\udfbc', 'Thanh T\u01b0\u1edbng Pro')
     + ddItem('/tools/khi-sac-ai.html',     '\ud83c\udf05', 'Kh\u00ed S\u1eafc \u2014 V\u1eadn Kh\u00ed 1\u20133 Th\u00e1ng')
+    + ddSection('L\u00e0m \u0110\u1eb9p')
+    + ddItem('/tools/kieu-toc-ai.html',    '\u2702\ufe0f', 'Ki\u1ec3u T\u00f3c H\u1ee3p T\u01b0\u1edbng M\u1eb7t')
     + '</div></div>';
 
   // DD3 — Phong Thủy
