@@ -352,7 +352,14 @@ const GUA_ROOM_STYLE: Record<number, { colors: string; mood: string; elem: strin
 };
 
 const ROOM_LABELS: Record<string, string> = {
-  bedroom: 'bedroom', living: 'living room', workspace: 'home office workspace',
+  bedroom:   'bedroom interior',
+  living:    'living room interior',
+  workspace: 'home office workspace',
+  study:     'study room and learning space',
+  creative:  'creative studio workspace',
+  store:     'retail store interior',
+  office:    'corporate office interior',
+  restaurant:'restaurant or cafe interior',
 };
 
 async function handlePhongThuyRender(request: NextRequest, body: Record<string, unknown>) {
