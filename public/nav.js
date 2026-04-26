@@ -18,8 +18,9 @@
 
   // Active state detection
   var TUVI_PATHS   = ['/', '/luan-giai.html','/xem-tuoi.html','/xem-lam-an.html','/tools/xem-tuoi-sinh-con.html','/tools/an-sao.html','/tools/sao-nam.html','/tools/cach-cuc.html','/tools/dai-van.html','/tools/van-thang.html'];
-  var TUONG_PATHS  = ['/tools/tuong-mat-ai.html','/tools/nhan-tuong-ai.html','/tools/thu-tuong-ai.html','/tools/thanh-tuong-ai.html','/tools/thanh-tuong-pro.html','/tools/khi-sac-ai.html','/tools/kieu-toc-ai.html'];
-  var PHONG_PATHS  = ['/tools/phong-thuy.html','/tools/ban-lam-viec.html','/tools/cua-hang-phong-thuy.html','/tools/bat-trach.html','/tools/kim-lau.html','/tools/mau-sac-hop-menh.html'];
+  var TUONG_PATHS  = ['/tools/tuong-mat-ai.html','/tools/nhan-tuong-ai.html','/tools/thu-tuong-ai.html','/tools/thanh-tuong-ai.html','/tools/thanh-tuong-pro.html','/tools/khi-sac-ai.html'];
+  var LAM_DEP_PATHS = ['/tools/kieu-toc-ai.html','/tools/mau-sac-hop-menh.html'];
+  var PHONG_PATHS  = ['/tools/phong-thuy.html','/tools/ban-lam-viec.html','/tools/cua-hang-phong-thuy.html','/tools/bat-trach.html','/tools/kim-lau.html'];
   var NGAY_PATHS   = ['/tools/hoang-dao.html','/tools/ngay-tot.html','/tools/luc-nham.html','/tools/han-nam.html','/tools/chon-ngay-tot.html'];
   var TENCHU_PATHS = ['/tools/dat-ten-con.html','/tools/dat-ten-doanh-nghiep.html'];
 
@@ -109,8 +110,7 @@
     + ddItem('/tools/thanh-tuong-ai.html', '\ud83c\udfa4', 'Thanh T\u01b0\u1edbng \u2014 Gi\u1ecdng N\u00f3i')
     + ddItem('/tools/thanh-tuong-pro.html','\ud83c\udfbc', 'Thanh T\u01b0\u1edbng Pro')
     + ddItem('/tools/khi-sac-ai.html',     '\ud83c\udf05', 'Kh\u00ed S\u1eafc \u2014 V\u1eadn Kh\u00ed 1\u20133 Th\u00e1ng')
-    + ddSection('L\u00e0m \u0110\u1eb9p')
-    + ddItem('/tools/kieu-toc-ai.html',    '\u2702\ufe0f', 'Ki\u1ec3u T\u00f3c H\u1ee3p T\u01b0\u1edbng M\u1eb7t')
+
     + '</div></div>';
 
   // DD3 — Phong Thủy
@@ -124,7 +124,17 @@
     + ddSection('M\u1ec7nh L\u00fd & Phong Th\u1ee7y')
     + ddItem('/tools/bat-trach.html',             '\ud83e\uddad', 'H\u01b0\u1edbng B\u00e1t Tr\u1ea1ch')
     + ddItem('/tools/kim-lau.html',               '\ud83c\udfe0', 'Kim L\u00e2u & Tam Tai')
-    + ddItem('/tools/mau-sac-hop-menh.html',      '\ud83c\udfa8', 'M\u00e0u S\u1eafc & Th\u1eed Trang Ph\u1ee5c')
+
+    + '</div></div>';
+
+
+  // DD_LAM_DEP — Làm Đẹp
+  var dd_dep = '<div class="nav-dd" id="nav-dd-dep">'
+    + '<span class="nav-link' + (anyActive(LAM_DEP_PATHS)?' active':'') + '" id="nav-dd-dep-toggle" role="button" tabindex="0">L\u00e0m \u0110\u1eb9p \u25be</span>'
+    + '<div class="nav-dd-menu" id="nav-dd-dep-menu">'
+    + ddSection('T\u01b0 V\u1ea5n Ngo\u1ea1i H\u00ecnh')
+    + ddItem('/tools/kieu-toc-ai.html',       '\u2702\ufe0f', 'Ki\u1ec3u T\u00f3c H\u1ee3p T\u01b0\u1edbng M\u1eb7t')
+    + ddItem('/tools/mau-sac-hop-menh.html',  '\ud83c\udfa8', 'M\u00e0u S\u1eafc & Th\u1eed Trang Ph\u1ee5c')
     + '</div></div>';
 
   // DD4 — Chọn Ngày
@@ -169,7 +179,7 @@
     + '<div><div class="name">T\u1eed Vi Minh B\u1ea3o</div><div class="url">Tri m\u1ec7nh l\u00fd \u2013 Thu\u1eadn th\u1ebf h\u00e0nh</div></div></a>'
     + '<div class="nav-links" id="nav-links">'
     + navLink('/', 'Trang Ch\u1ee7')
-    + dd1 + dd2 + dd3 + dd4 + dd5 + dd6
+    + dd1 + dd2 + dd3 + dd_dep + dd4 + dd5 + dd6
     + navLink('/blog.html', 'Kh\u1ea3o Lu\u1eadn')
     + '</div>'
     + '<div id="nav-auth-area"></div>'
@@ -182,7 +192,7 @@
   document.body.insertBefore(tmp.firstChild, document.body.firstChild);
 
   // ── Mobile dropdown events ─────────────────────────────────────
-  var menus = ['nav-dd1-menu','nav-dd2-menu','nav-dd3-menu','nav-dd4-menu','nav-dd5-menu','nav-dd6-menu'];
+  var menus = ['nav-dd1-menu','nav-dd2-menu','nav-dd3-menu','nav-dd-dep-menu','nav-dd4-menu','nav-dd5-menu','nav-dd6-menu'];
   function closeAll() { menus.forEach(function(id){ var m=document.getElementById(id); if(m)m.classList.remove('open'); }); }
 
   document.getElementById('nav-hamburger').addEventListener('click', function(e) {
@@ -190,7 +200,7 @@
     document.getElementById('nav-links').classList.toggle('open');
   });
 
-  ['nav-dd1-toggle','nav-dd2-toggle','nav-dd3-toggle','nav-dd4-toggle','nav-dd5-toggle','nav-dd6-toggle'].forEach(function(tid, idx) {
+  ['nav-dd1-toggle','nav-dd2-toggle','nav-dd3-toggle','nav-dd-dep-toggle','nav-dd4-toggle','nav-dd5-toggle','nav-dd6-toggle'].forEach(function(tid, idx) {
     var busy = false;
     var el = document.getElementById(tid);
     if (!el) return;
@@ -244,6 +254,8 @@
       + '<a href="/tools/phong-thuy.html">Phong Th\u1ee7y N\u1ed9i Th\u1ea5t</a>'
       + '<a href="/tools/bat-trach.html">H\u01b0\u1edbng B\u00e1t Tr\u1ea1ch</a>'
       + '<a href="/tools/tuong-mat-ai.html">Xem T\u01b0\u1edbng M\u1eb7t</a>'
+      + '<a href="/tools/kieu-toc-ai.html">Ki\u1ec3u T\u00f3c H\u1ee3p T\u01b0\u1edbng</a>'
+      + '<a href="/tools/mau-sac-hop-menh.html">M\u00e0u S\u1eafc & Th\u1eed Trang Ph\u1ee5c</a>'
       + '<a href="/tools/mau-sac-hop-menh.html">M\u00e0u S\u1eafc & Th\u1eed Trang Ph\u1ee5c</a></div>'
       + '<div class="ft-col"><div class="ft-col-title">V\u1ec1 Ch\u00fang T\u00f4i</div>'
       + '<a href="/about.html">Gi\u1edbi Thi\u1ec7u</a>'
