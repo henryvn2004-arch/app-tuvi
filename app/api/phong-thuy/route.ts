@@ -338,6 +338,110 @@ Trả về JSON:
   return ok({ success: true, balance: auth.newBalance, napAmHanh, colorData, styleGuide });
 }
 
+// ── Phong Thủy Room Render (Replicate) ───────────────────────────
+
+const GUA_ROOM_STYLE: Record<number, { colors: string; mood: string; elem: string }> = {
+  1: { elem: 'Thủy', colors: 'navy blue and deep teal with dark wood accents', mood: 'serene and flowing' },
+  2: { elem: 'Thổ', colors: 'warm beige and soft yellow with terracotta accents', mood: 'grounded and nurturing' },
+  3: { elem: 'Mộc', colors: 'forest green with natural wood tones', mood: 'fresh and vibrant' },
+  4: { elem: 'Mộc', colors: 'sage green and light teal with bamboo accents', mood: 'calm and expansive' },
+  6: { elem: 'Kim', colors: 'crisp white with gold and silver metallic accents', mood: 'refined and elegant' },
+  7: { elem: 'Kim', colors: 'soft white with polished gold accents', mood: 'bright and balanced' },
+  8: { elem: 'Thổ', colors: 'warm brown and sandy beige with golden yellow', mood: 'cozy and stable' },
+  9: { elem: 'Hỏa', colors: 'warm red and orange with wood tones', mood: 'energetic and welcoming' },
+};
+
+const ROOM_LABELS: Record<string, string> = {
+  bedroom: 'bedroom', living: 'living room', workspace: 'home office workspace',
+};
+
+async function handlePhongThuyRender(request: NextRequest, body: Record<string, unknown>) {
+  const replKey = process.env.REPLICATE_API_KEY;
+  if (!replKey) return err('Replicate API key chưa cấu hình.', 500);
+
+  // Auth check only (TuviPaywall handles deduction client-side)
+  const authHeader = request.headers.get('Authorization');
+  if (!authHeader?.startsWith('Bearer ')) return err('Unauthorized', 401);
+  const user = await getUserFromToken(authHeader.slice(7));
+  if (!user?.id) return err('Unauthorized', 401);
+
+  const { imageBase64, imageType, guaNumber, roomType, topRecs } = body as {
+    imageBase64?: string; imageType?: string; guaNumber?: number;
+    roomType?: string; topRecs?: string[];
+  };
+  if (!imageBase64) return err('Missing image', 400);
+
+  const guaNum = parseInt(String(guaNumber || 1));
+  const style = GUA_ROOM_STYLE[guaNum] || GUA_ROOM_STYLE[1];
+  const roomLabel = ROOM_LABELS[roomType || 'bedroom'] || 'bedroom';
+
+  // Build a rich interior design prompt
+  const recsText = (topRecs || []).slice(0, 3).join(', ');
+  const prompt = [
+    `feng shui optimized ${roomLabel} interior`,
+    `${style.colors} color scheme`,
+    `${style.mood} atmosphere`,
+    'clean and organized layout',
+    recsText ? recsText.substring(0, 120) : '',
+    'natural lighting, harmonious proportions',
+    'professional interior design photography',
+    'photorealistic, high quality, 8k',
+  ].filter(Boolean).join(', ');
+
+  const negPrompt = 'cluttered, dark, ugly, low quality, blurry, cartoon, painting, watermark, text, bad lighting, distorted';
+  const imageDataUri = `data:${imageType || 'image/jpeg'};base64,${imageBase64}`;
+
+  // Call Replicate adirik/interior-design
+  const startResp = await fetch('https://api.replicate.com/v1/models/adirik/interior-design/predictions', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${replKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      input: {
+        image: imageDataUri,
+        prompt,
+        negative_prompt: negPrompt,
+        guidance_scale: 15,
+        num_inference_steps: 50,
+        strength: 0.55,
+        num_outputs: 1,
+      }
+    })
+  });
+
+  if (!startResp.ok) {
+    const e = await startResp.json().catch(() => ({})) as Record<string, string>;
+    return err(e.detail || 'Lỗi khởi tạo Replicate.', 500);
+  }
+
+  const prediction = await startResp.json() as { id?: string; status?: string; output?: string | string[] };
+
+  if (prediction.status === 'succeeded') {
+    const url = Array.isArray(prediction.output) ? prediction.output[0] : prediction.output;
+    return ok({ imageUrl: url });
+  }
+
+  const predId = prediction.id;
+  if (!predId) return err('Không tạo được prediction ID.', 500);
+
+  // Poll up to ~54s
+  for (let i = 0; i < 27; i++) {
+    await _sleep(2000);
+    const pollResp = await fetch(`https://api.replicate.com/v1/predictions/${predId}`, {
+      headers: { 'Authorization': `Bearer ${replKey}` }
+    });
+    if (!pollResp.ok) continue;
+    const data = await pollResp.json() as { status?: string; output?: string | string[]; error?: string };
+    if (data.status === 'succeeded') {
+      const url = Array.isArray(data.output) ? data.output[0] : data.output;
+      return ok({ imageUrl: url });
+    }
+    if (data.status === 'failed' || data.status === 'canceled') {
+      return err(data.error || 'Replicate xử lý thất bại.', 500);
+    }
+  }
+  return err('Hết thời gian chờ. Vui lòng thử lại.', 504);
+}
+
 // ── Trang Phục Try-On (Replicate) ────────────────────────────────
 
 const NH_OUTFIT: Record<string, { main: string; accent: string }> = {
@@ -458,5 +562,6 @@ export async function POST(request: NextRequest) {
   if (action === 'cua-hang')            return handleCuaHang(request, body);
   if (action === 'mau-sac')            return handleMauSac(request, body);
   if (action === 'trang-phuc-tryon')   return handleTrangPhucTryon(request, body);
+  if (action === 'phong-thuy-render')  return handlePhongThuyRender(request, body);
   return err('Invalid action', 400);
 }
