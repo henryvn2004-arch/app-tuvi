@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Phân Tích Hướng Nhà Theo Tuổi — Bát Trạch | Tử Vi Minh Bảo</title>
+<meta name="description" content="Phân tích hướng nhà hợp tuổi theo Bát Trạch. Nhập hướng cửa chính, năm sinh, giới tính — xem 4 hướng tốt và 4 hướng xấu theo mệnh."/>
+<meta property="og:title" content="Phân Tích Hướng Nhà Hợp Tuổi — Bát Trạch | Tử Vi Minh Bảo"/>
+<meta property="og:image" content="https://tuviminhbao.com/og-image.webp"/>
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;
+  --gold:#9A7B3A;--gold-lt:#F9F4EB;--gold-bright:#D4A843;
+  --text:#1a1a1a;--text-mid:#444;--text-lt:#777;
+  --border:#CCCCCC;--border-lt:#E8E8E8;
+  --bg:#FFFFFF;--bg-soft:#F5F4F0;
+  --red:#C0392B;--green:#1E6B3C;
+  --green-lt:rgba(30,107,60,.08);--red-lt:rgba(192,57,43,.07);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh;}
+h1,h2,h3{font-family:'Noto Serif',serif;}
+
+.hero{background:linear-gradient(180deg,var(--navy),var(--navy-mid));padding:28px 24px 22px;text-align:center;}
+.hero h1{font-size:20px;color:var(--gold-bright);margin-bottom:5px;}
+.hero p{font-size:12px;color:rgba(255,255,255,.6);max-width:480px;margin:0 auto;}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(30,107,60,.2);border:1px solid rgba(30,107,60,.4);border-radius:12px;padding:3px 10px;font-size:11px;color:#6fcf97;margin-top:8px;}
+
+.container{max-width:480px;margin:0 auto;padding:0 14px 48px;}
+
+.card{background:var(--bg);border:1px solid var(--border-lt);border-radius:12px;padding:18px;margin:14px 0;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.card-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border-lt);display:flex;align-items:center;gap:6px;}
+
+/* Form */
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:11px;font-weight:600;color:var(--text-lt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.field input,.field select{
+  width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;
+  font-size:14px;font-family:'Be Vietnam Pro',sans-serif;color:var(--text);
+  background:var(--bg-soft);outline:none;
+  transition:border-color .15s;
+}
+.field input:focus,.field select:focus{border-color:var(--gold);}
+
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* Direction picker */
+.dir-picker{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:4px;}
+.dp-btn{
+  border:1px solid var(--border-lt);border-radius:8px;
+  padding:10px 4px;text-align:center;cursor:pointer;background:var(--bg-soft);
+  transition:all .15s;
+}
+.dp-btn:active{transform:scale(.97);}
+.dp-btn.selected{border-color:var(--gold);background:var(--gold-lt);}
+.dp-icon{font-size:14px;margin-bottom:2px;}
+.dp-lbl{font-size:11px;font-weight:600;color:var(--navy);}
+.dp-deg{font-size:9px;color:var(--text-lt);}
+
+.btn-analyze{
+  width:100%;padding:13px;background:var(--navy);color:#fff;
+  border:none;border-radius:8px;font-size:14px;font-weight:600;
+  cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;margin-top:4px;
+  transition:background .15s;
+}
+.btn-analyze:active{background:var(--navy-mid);}
+.btn-analyze:disabled{opacity:.5;cursor:not-allowed;}
+
+/* Result */
+#result{display:none;}
+
+.gua-header{text-align:center;padding:16px 12px;background:linear-gradient(135deg,var(--navy),var(--navy-mid));border-radius:12px;margin-bottom:16px;color:#fff;}
+.gua-num{font-size:48px;font-family:'Noto Serif',serif;color:var(--gold-bright);line-height:1;}
+.gua-name{font-size:14px;font-weight:600;margin-top:4px;color:rgba(255,255,255,.9);}
+.gua-type{display:inline-block;padding:3px 12px;border-radius:10px;font-size:11px;margin-top:6px;}
+.east-type{background:rgba(30,107,60,.25);color:#6fcf97;}
+.west-type{background:rgba(212,168,67,.2);color:var(--gold-bright);}
+.gua-desc{font-size:11px;color:rgba(255,255,255,.6);margin-top:8px;line-height:1.6;max-width:320px;margin-left:auto;margin-right:auto;}
+
+/* Main door verdict */
+.verdict-banner{
+  border-radius:10px;padding:12px 14px;margin-bottom:14px;
+  display:flex;align-items:flex-start;gap:10px;
+}
+.verdict-banner.good{background:var(--green-lt);border:1px solid rgba(30,107,60,.2);}
+.verdict-banner.bad{background:var(--red-lt);border:1px solid rgba(192,57,43,.2);}
+.verdict-icon{font-size:22px;flex-shrink:0;}
+.verdict-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:3px;}
+.verdict-text{font-size:11px;color:var(--text-mid);line-height:1.65;}
+
+/* Direction tables */
+.dir-section-title{font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin:14px 0 8px;display:flex;align-items:center;gap:6px;}
+.dir-section-title.good-title{color:var(--green);}
+.dir-section-title.bad-title{color:var(--red);}
+
+.dir-row{
+  display:flex;align-items:center;gap:10px;padding:9px 10px;
+  border-radius:8px;margin-bottom:6px;
+}
+.dir-row.good{background:var(--green-lt);border:1px solid rgba(30,107,60,.12);}
+.dir-row.bad{background:var(--red-lt);border:1px solid rgba(192,57,43,.1);}
+.dir-row.highlighted-door{outline:2px solid var(--gold);}
+.dir-arrow{font-size:18px;flex-shrink:0;width:28px;text-align:center;}
+.dir-info{flex:1;}
+.dir-row-name{font-size:13px;font-weight:600;color:var(--navy);}
+.dir-row-cat{font-size:10px;font-weight:600;margin-top:1px;}
+.dir-row-cat.good{color:var(--green);}
+.dir-row-cat.bad{color:var(--red);}
+.dir-row-desc{font-size:11px;color:var(--text-mid);margin-top:2px;line-height:1.5;}
+.dir-door-tag{font-size:9px;background:var(--gold);color:#fff;padding:1px 6px;border-radius:8px;vertical-align:middle;margin-left:4px;}
+
+/* Link to compass */
+.compass-link{
+  display:flex;align-items:center;gap:10px;padding:12px 14px;
+  background:var(--bg);border:1px solid var(--border-lt);border-radius:10px;
+  text-decoration:none;color:var(--text);margin-top:14px;
+}
+.compass-link:hover{border-color:var(--gold);}
+
+.error-msg{background:rgba(192,57,43,.06);border:1px solid rgba(192,57,43,.2);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--red);margin-top:8px;display:none;}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>🏠 Phân Tích Hướng Nhà</h1>
+  <p>Xem hướng cửa chính hợp tuổi theo Bát Trạch — 4 hướng tốt, 4 hướng xấu</p>
+  <div class="hero-badge">✓ Miễn phí · Không cần đăng nhập</div>
+</div>
+
+<div class="container">
+
+  <!-- Form -->
+  <div class="card">
+    <div class="card-title">📋 Thông tin</div>
+
+    <div class="row2">
+      <div class="field">
+        <label>Năm sinh</label>
+        <input type="number" id="nam-sinh" placeholder="1990" min="1900" max="2020"/>
+      </div>
+      <div class="field">
+        <label>Giới tính</label>
+        <select id="gioi-tinh">
+          <option value="nam">Nam</option>
+          <option value="nu">Nữ</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Hướng cửa chính</label>
+      <div class="dir-picker" id="dir-picker">
+        <div class="dp-btn" data-dir="N"  onclick="selectDoor('N')">  <div class="dp-icon">⬆</div><div class="dp-lbl">Bắc</div>  <div class="dp-deg">0°</div></div>
+        <div class="dp-btn" data-dir="NE" onclick="selectDoor('NE')"> <div class="dp-icon">↗</div><div class="dp-lbl">Đông Bắc</div><div class="dp-deg">45°</div></div>
+        <div class="dp-btn" data-dir="E"  onclick="selectDoor('E')">  <div class="dp-icon">➡</div><div class="dp-lbl">Đông</div>  <div class="dp-deg">90°</div></div>
+        <div class="dp-btn" data-dir="SE" onclick="selectDoor('SE')"> <div class="dp-icon">↘</div><div class="dp-lbl">Đông Nam</div><div class="dp-deg">135°</div></div>
+        <div class="dp-btn" data-dir="S"  onclick="selectDoor('S')">  <div class="dp-icon">⬇</div><div class="dp-lbl">Nam</div>   <div class="dp-deg">180°</div></div>
+        <div class="dp-btn" data-dir="SW" onclick="selectDoor('SW')"> <div class="dp-icon">↙</div><div class="dp-lbl">Tây Nam</div><div class="dp-deg">225°</div></div>
+        <div class="dp-btn" data-dir="W"  onclick="selectDoor('W')">  <div class="dp-icon">⬅</div><div class="dp-lbl">Tây</div>   <div class="dp-deg">270°</div></div>
+        <div class="dp-btn" data-dir="NW" onclick="selectDoor('NW')"> <div class="dp-icon">↖</div><div class="dp-lbl">Tây Bắc</div><div class="dp-deg">315°</div></div>
+      </div>
+    </div>
+
+    <div class="error-msg" id="error-msg"></div>
+    <button class="btn-analyze" onclick="analyze()">Phân Tích Ngay →</button>
+  </div>
+
+  <!-- Result -->
+  <div id="result">
+
+    <div class="gua-header" id="gua-header"></div>
+
+    <div class="card">
+      <div class="verdict-banner" id="verdict-banner">
+        <div class="verdict-icon" id="verdict-icon"></div>
+        <div>
+          <div class="verdict-title" id="verdict-title"></div>
+          <div class="verdict-text" id="verdict-text"></div>
+        </div>
+      </div>
+
+      <div class="dir-section-title good-title">✅ 4 Hướng Tốt (Sinh Khí)</div>
+      <div id="good-dirs"></div>
+
+      <div class="dir-section-title bad-title" style="margin-top:18px">⚠️ 4 Hướng Xấu (Hung Tinh)</div>
+      <div id="bad-dirs"></div>
+    </div>
+
+    <a href="/tools/la-ban-phong-thuy.html" class="compass-link">
+      <span style="font-size:22px">🧭</span>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:var(--navy)">Dùng La Bàn để đo hướng thực tế</div>
+        <div style="font-size:11px;color:var(--text-lt);margin-top:2px">Xác định hướng cửa chính bằng cảm biến điện thoại</div>
+      </div>
+      <span style="margin-left:auto;color:var(--text-lt)">›</span>
+    </a>
+
+  </div>
+
+</div>
+
+<script src="/nav.js"></script>
+<script src="/footer.js"></script>
+<script>
+// ── Bát Trạch data ──────────────────────────────────────────────────────────
+
+const DIR_LABELS = {
+  N:'Bắc', NE:'Đông Bắc', E:'Đông', SE:'Đông Nam',
+  S:'Nam', SW:'Tây Nam',  W:'Tây', NW:'Tây Bắc'
+};
+const DIR_ARROWS = { N:'⬆', NE:'↗', E:'➡', SE:'↘', S:'⬇', SW:'↙', W:'⬅', NW:'↖' };
+
+// Each gua: [Sinh Khí, Thiên Y, Diên Niên, Phục Vị, Họa Hại, Lục Sát, Ngũ Quỷ, Tuyệt Mệnh]
+const GUA_DATA = {
+  1: { name:'Khảm', hanh:'Thủy', type:'east', mệnh:'Đông Tứ Mệnh',
+    desc:'Người có quẻ số 1 (Khảm Thủy) thuộc Đông Tứ Mệnh — hợp với hướng Nam, Bắc, Đông, Đông Nam.',
+    good: [
+      {dir:'SE', cat:'Sinh Khí', desc:'Đại cát, tài lộc và cơ hội phát triển liên tục.'},
+      {dir:'E',  cat:'Thiên Y',  desc:'Sức khỏe, bình an và hạnh phúc gia đình.'},
+      {dir:'S',  cat:'Diên Niên',desc:'Ổn định dài lâu, hôn nhân bền vững, thọ.'},
+      {dir:'N',  cat:'Phục Vị',  desc:'Bình hòa, giữ nguyên trạng, ổn định nội tâm.'},
+    ],
+    bad: [
+      {dir:'W',  cat:'Họa Hại',  desc:'Tai nạn nhỏ, tranh chấp, thất thoát tiền bạc.'},
+      {dir:'NE', cat:'Lục Sát',  desc:'Phiền não, kiện tụng, hao tài tốn của.'},
+      {dir:'SW', cat:'Ngũ Quỷ',  desc:'Ma quái, bệnh tật khó lường, hao tổn.'},
+      {dir:'NW', cat:'Tuyệt Mệnh',desc:'Suy vong, tuyệt tự, hung hiểm nhất.'},
+    ]},
+  2: { name:'Khôn', hanh:'Thổ', type:'west', mệnh:'Tây Tứ Mệnh',
+    desc:'Người có quẻ số 2 (Khôn Thổ) thuộc Tây Tứ Mệnh — hợp với hướng Đông Bắc, Tây, Tây Bắc, Tây Nam.',
+    good: [
+      {dir:'NE', cat:'Sinh Khí', desc:'Đại cát, tài lộc và cơ hội phát triển liên tục.'},
+      {dir:'W',  cat:'Thiên Y',  desc:'Sức khỏe, bình an và hạnh phúc gia đình.'},
+      {dir:'NW', cat:'Diên Niên',desc:'Ổn định dài lâu, hôn nhân bền vững, thọ.'},
+      {dir:'SW', cat:'Phục Vị',  desc:'Bình hòa, giữ nguyên trạng, ổn định nội tâm.'},
+    ],
+    bad: [
+      {dir:'E',  cat:'Họa Hại',  desc:'Tai nạn nhỏ, tranh chấp, thất thoát tiền bạc.'},
+      {dir:'SE', cat:'Lục Sát',  desc:'Phiền não, kiện tụng, hao tài tốn của.'},
+      {dir:'S',  cat:'Ngũ Quỷ',  desc:'Ma quái, bệnh tật khó lường, hao tổn.'},
+      {dir:'N',  cat:'Tuyệt Mệnh',desc:'Suy vong, tuyệt tự, hung hiểm nhất.'},
+    ]},
+  3: { name:'Chấn', hanh:'Mộc', type:'east', mệnh:'Đông Tứ Mệnh',
+    desc:'Người có quẻ số 3 (Chấn Mộc) thuộc Đông Tứ Mệnh — hợp với hướng Nam, Bắc, Đông Nam, Đông.',
+    good: [
+      {dir:'S',  cat:'Sinh Khí', desc:'Đại cát, tài lộc và cơ hội phát triển liên tục.'},
+      {dir:'N',  cat:'Thiên Y',  desc:'Sức khỏe, bình an và hạnh phúc gia đình.'},
+      {dir:'SE', cat:'Diên Niên',desc:'Ổn định dài lâu, hôn nhân bền vững, thọ.'},
+      {dir:'E',  cat:'Phục Vị',  desc:'Bình hòa, giữ nguyên trạng, ổn định nội tâm.'},
+    ],
+    bad: [
+      {dir:'SW', cat:'Họa Hại',  desc:'Tai nạn nhỏ, tranh chấp, thất thoát tiền bạc.'},
+      {dir:'NW', cat:'Lục Sát',  desc:'Phiền não, kiện tụng, hao tài tốn của.'},
+      {dir:'NE', cat:'Ngũ Quỷ',  desc:'Ma quái, bệnh tật khó lường, hao tổn.'},
+      {dir:'W',  cat:'Tuyệt Mệnh',desc:'Suy vong, tuyệt tự, hung hiểm nhất.'},
+    ]},
+  4: { name:'Tốn', hanh:'Mộc', type:'east', mệnh:'Đông Tứ Mệnh',
+    desc:'Người có quẻ số 4 (Tốn Mộc) thuộc Đông Tứ Mệnh — hợp với hướng Bắc, Nam, Đông, Đông Nam.',
+    good: [
+      {dir:'N',  cat:'Sinh Khí', desc:'Đại cát, tài lộc và cơ hội phát triển liên tục.'},
+      {dir:'S',  cat:'Thiên Y',  desc:'Sức khỏe, bình an và hạnh phúc gia đình.'},
+      {dir:'E',  cat:'Diên Niên',desc:'Ổn định dài lâu, hôn nhân bền vững, thọ.'},
+      {dir:'SE', cat:'Phục Vị',  desc:'Bình hòa, giữ nguyên trạng, ổn định nội tâm.'},
+    ],
+    bad: [
+      {dir:'NW', cat:'Họa Hại',  desc:'Tai nạn nhỏ, tranh chấp, thất thoát tiền bạc.'},
+      {dir:'W',  cat:'Lục Sát',  desc:'Phiền não, kiện tụng, hao tài tốn của.'},
+      {dir:'SW', cat:'Ngũ Quỷ',  desc:'Ma quái, bệnh tật khó lường, hao tổn.'},
+      {dir:'NE', cat:'Tuyệt Mệnh',desc:'Suy vong, tuyệt tự, hung hiểm nhất.'},
+    ]},
+  6: { name:'Càn', hanh:'Kim', type:'west', mệnh:'Tây Tứ Mệnh',
+    desc:'Người có quẻ số 6 (Càn Kim) thuộc Tây Tứ Mệnh — hợp với hướng Tây, Đông Bắc, Tây Nam, Tây Bắc.',
+    good: [
+      {dir:'W',  cat:'Sinh Khí', desc:'Đại cát, tài lộc và cơ hội phát triển liên tục.'},
+      {dir:'NE', cat:'Thiên Y',  desc:'Sức khỏe, bình an và hạnh phúc gia đình.'},
+      {dir:'SW', cat:'Diên Niên',desc:'Ổn định dài lâu, hôn nhân bền vững, thọ.'},
+      {dir:'NW', cat:'Phục Vị',  desc:'Bình hòa, giữ nguyên trạng, ổn định nội tâm.'},
+    ],
+    bad: [
+      {dir:'SE', cat:'Họa Hại',  desc:'Tai nạn nhỏ, tranh chấp, thất thoát tiền bạc.'},
+      {dir:'S',  cat:'Lục Sát',  desc:'Phiền não, kiện tụng, hao tài tốn của.'},
+      {dir:'E',  cat:'Ngũ Quỷ',  desc:'Ma quái, bệnh tật khó lường, hao tổn.'},
+      {dir:'N',  cat:'Tuyệt Mệnh',desc:'Suy vong, tuyệt tự, hung hiểm nhất.'},
+    ]},
+  7: { name:'Đoài', hanh:'Kim', type:'west', mệnh:'Tây Tứ Mệnh',
+    desc:'Người có quẻ số 7 (Đoài Kim) thuộc Tây Tứ Mệnh — hợp với hướng Tây Bắc, Tây Nam, Đông Bắc, Tây.',
+    good: [
+      {dir:'NW', cat:'Sinh Khí', desc:'Đại cát, tài lộc và cơ hội phát triển liên tục.'},
+      {dir:'SW', cat:'Thiên Y',  desc:'Sức khỏe, bình an và hạnh phúc gia đình.'},
+      {dir:'NE', cat:'Diên Niên',desc:'Ổn định dài lâu, hôn nhân bền vững, thọ.'},
+      {dir:'W',  cat:'Phục Vị',  desc:'Bình hòa, giữ nguyên trạng, ổn định nội tâm.'},
+    ],
+    bad: [
+      {dir:'E',  cat:'Họa Hại',  desc:'Tai nạn nhỏ, tranh chấp, thất thoát tiền bạc.'},
+      {dir:'S',  cat:'Lục Sát',  desc:'Phiền não, kiện tụng, hao tài tốn của.'},
+      {dir:'N',  cat:'Ngũ Quỷ',  desc:'Ma quái, bệnh tật khó lường, hao tổn.'},
+      {dir:'SE', cat:'Tuyệt Mệnh',desc:'Suy vong, tuyệt tự, hung hiểm nhất.'},
+    ]},
+  8: { name:'Cấn', hanh:'Thổ', type:'west', mệnh:'Tây Tứ Mệnh',
+    desc:'Người có quẻ số 8 (Cấn Thổ) thuộc Tây Tứ Mệnh — hợp với hướng Tây Nam, Tây Bắc, Tây, Đông Bắc.',
+    good: [
+      {dir:'SW', cat:'Sinh Khí', desc:'Đại cát, tài lộc và cơ hội phát triển liên tục.'},
+      {dir:'NW', cat:'Thiên Y',  desc:'Sức khỏe, bình an và hạnh phúc gia đình.'},
+      {dir:'W',  cat:'Diên Niên',desc:'Ổn định dài lâu, hôn nhân bền vững, thọ.'},
+      {dir:'NE', cat:'Phục Vị',  desc:'Bình hòa, giữ nguyên trạng, ổn định nội tâm.'},
+    ],
+    bad: [
+      {dir:'N',  cat:'Họa Hại',  desc:'Tai nạn nhỏ, tranh chấp, thất thoát tiền bạc.'},
+      {dir:'E',  cat:'Lục Sát',  desc:'Phiền não, kiện tụng, hao tài tốn của.'},
+      {dir:'SE', cat:'Ngũ Quỷ',  desc:'Ma quái, bệnh tật khó lường, hao tổn.'},
+      {dir:'S',  cat:'Tuyệt Mệnh',desc:'Suy vong, tuyệt tự, hung hiểm nhất.'},
+    ]},
+  9: { name:'Ly', hanh:'Hỏa', type:'east', mệnh:'Đông Tứ Mệnh',
+    desc:'Người có quẻ số 9 (Ly Hỏa) thuộc Đông Tứ Mệnh — hợp với hướng Đông, Đông Nam, Bắc, Nam.',
+    good: [
+      {dir:'E',  cat:'Sinh Khí', desc:'Đại cát, tài lộc và cơ hội phát triển liên tục.'},
+      {dir:'SE', cat:'Thiên Y',  desc:'Sức khỏe, bình an và hạnh phúc gia đình.'},
+      {dir:'N',  cat:'Diên Niên',desc:'Ổn định dài lâu, hôn nhân bền vững, thọ.'},
+      {dir:'S',  cat:'Phục Vị',  desc:'Bình hòa, giữ nguyên trạng, ổn định nội tâm.'},
+    ],
+    bad: [
+      {dir:'NE', cat:'Họa Hại',  desc:'Tai nạn nhỏ, tranh chấp, thất thoát tiền bạc.'},
+      {dir:'SW', cat:'Lục Sát',  desc:'Phiền não, kiện tụng, hao tài tốn của.'},
+      {dir:'W',  cat:'Ngũ Quỷ',  desc:'Ma quái, bệnh tật khó lường, hao tổn.'},
+      {dir:'NW', cat:'Tuyệt Mệnh',desc:'Suy vong, tuyệt tự, hung hiểm nhất.'},
+    ]},
+};
+
+// ── Gua calculation ──────────────────────────────────────────────────────────
+function digitSum(n) {
+  let s = 0;
+  String(Math.abs(n)).split('').forEach(c => s += parseInt(c));
+  return s;
+}
+function reducedSum(year) {
+  let s = digitSum(year);
+  while (s >= 10) s = digitSum(s);
+  return s;
+}
+function calcGua(year, gender) {
+  const s = reducedSum(year);
+  let g;
+  if (gender === 'nam') {
+    g = year < 2000 ? (10 - s) : (9 - s);
+    g = ((g % 9) + 9) % 9 || 9;
+    if (g === 5) g = 2;
+  } else {
+    g = year < 2000 ? (5 + s) : (6 + s);
+    g = ((g % 9) + 9) % 9 || 9;
+    if (g === 5) g = 8;
+  }
+  return g;
+}
+
+// ── UI state ─────────────────────────────────────────────────────────────────
+let selectedDoor = null;
+function selectDoor(dir) {
+  selectedDoor = dir;
+  document.querySelectorAll('.dp-btn').forEach(b => {
+    b.classList.toggle('selected', b.dataset.dir === dir);
+  });
+}
+
+function showError(msg) {
+  const el = document.getElementById('error-msg');
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 3500);
+}
+
+function analyze() {
+  const yearVal = parseInt(document.getElementById('nam-sinh').value);
+  const gender  = document.getElementById('gioi-tinh').value;
+
+  if (!yearVal || yearVal < 1900 || yearVal > 2020) {
+    showError('Vui lòng nhập năm sinh hợp lệ (1900–2020)');
+    return;
+  }
+  if (!selectedDoor) {
+    showError('Vui lòng chọn hướng cửa chính');
+    return;
+  }
+
+  const gua  = calcGua(yearVal, gender);
+  const data = GUA_DATA[gua];
+
+  // Header
+  document.getElementById('gua-header').innerHTML = `
+    <div class="gua-num">${gua}</div>
+    <div class="gua-name">Quẻ ${data.name} — Mệnh ${data.hanh}</div>
+    <span class="gua-type ${data.type === 'east' ? 'east-type' : 'west-type'}">${data.mệnh}</span>
+    <div class="gua-desc">${data.desc}</div>
+  `;
+
+  // Verdict
+  const isGood = data.good.some(d => d.dir === selectedDoor);
+  const catEntry = [...data.good, ...data.bad].find(d => d.dir === selectedDoor);
+  const catName  = catEntry?.cat || '';
+  const banner   = document.getElementById('verdict-banner');
+  banner.className = 'verdict-banner ' + (isGood ? 'good' : 'bad');
+  document.getElementById('verdict-icon').textContent = isGood ? '✅' : '⚠️';
+  document.getElementById('verdict-title').textContent = isGood
+    ? `Hướng ${DIR_LABELS[selectedDoor]} hợp mệnh — ${catName}`
+    : `Hướng ${DIR_LABELS[selectedDoor]} không hợp mệnh — ${catName}`;
+  document.getElementById('verdict-text').innerHTML = isGood
+    ? `Cửa chính hướng <strong>${DIR_LABELS[selectedDoor]}</strong> thuộc vị trí <strong>${catName}</strong> — đây là hướng tốt cho mệnh của bạn. ${catEntry?.desc || ''}`
+    : `Cửa chính hướng <strong>${DIR_LABELS[selectedDoor]}</strong> thuộc vị trí <strong>${catName}</strong>. ${catEntry?.desc || ''} Nếu không thể đổi hướng nhà, có thể dùng vật phẩm phong thủy để hóa giải.`;
+
+  // Good directions
+  document.getElementById('good-dirs').innerHTML = data.good.map(d => `
+    <div class="dir-row good ${d.dir === selectedDoor ? 'highlighted-door' : ''}">
+      <div class="dir-arrow">${DIR_ARROWS[d.dir]}</div>
+      <div class="dir-info">
+        <div class="dir-row-name">${DIR_LABELS[d.dir]}
+          ${d.dir === selectedDoor ? '<span class="dir-door-tag">Cửa chính của bạn</span>' : ''}
+        </div>
+        <div class="dir-row-cat good">${d.cat}</div>
+        <div class="dir-row-desc">${d.desc}</div>
+      </div>
+    </div>`).join('');
+
+  // Bad directions
+  document.getElementById('bad-dirs').innerHTML = data.bad.map(d => `
+    <div class="dir-row bad ${d.dir === selectedDoor ? 'highlighted-door' : ''}">
+      <div class="dir-arrow">${DIR_ARROWS[d.dir]}</div>
+      <div class="dir-info">
+        <div class="dir-row-name">${DIR_LABELS[d.dir]}
+          ${d.dir === selectedDoor ? '<span class="dir-door-tag">Cửa chính của bạn</span>' : ''}
+        </div>
+        <div class="dir-row-cat bad">${d.cat}</div>
+        <div class="dir-row-desc">${d.desc}</div>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('result').style.display = 'block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'start'});
+}
+</script>
+</body>
+</html>

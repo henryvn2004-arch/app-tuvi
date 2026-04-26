@@ -72,6 +72,8 @@ export async function GET() {
     { path:'/tools/an-sao.html',               cf:'monthly', p:'0.7' },
     { path:'/tools/ban-lam-viec.html',          cf:'monthly', p:'0.7' },
     { path:'/tools/bat-trach.html',             cf:'monthly', p:'0.7' },
+    { path:'/tools/la-ban-phong-thuy.html',     cf:'monthly', p:'0.8' },
+    { path:'/tools/huong-nha-phong-thuy.html',  cf:'monthly', p:'0.8' },
     { path:'/tools/boi-bai-tay.html',           cf:'monthly', p:'0.6' },
     { path:'/tools/cach-cuc.html',              cf:'monthly', p:'0.7' },
     { path:'/tools/chon-ngay-tot.html',         cf:'monthly', p:'0.7' },

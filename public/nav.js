@@ -20,7 +20,7 @@
   var TUVI_PATHS   = ['/', '/luan-giai.html','/xem-tuoi.html','/xem-lam-an.html','/tools/xem-tuoi-sinh-con.html','/tools/an-sao.html','/tools/sao-nam.html','/tools/cach-cuc.html','/tools/dai-van.html','/tools/van-thang.html'];
   var TUONG_PATHS  = ['/tools/tuong-mat-ai.html','/tools/nhan-tuong-ai.html','/tools/thu-tuong-ai.html','/tools/thanh-tuong-ai.html','/tools/thanh-tuong-pro.html','/tools/khi-sac-ai.html'];
   var LAM_DEP_PATHS = ['/tools/kieu-toc-ai.html','/tools/mau-sac-hop-menh.html'];
-  var PHONG_PATHS  = ['/tools/phong-thuy.html','/tools/ban-lam-viec.html','/tools/cua-hang-phong-thuy.html','/tools/bat-trach.html','/tools/kim-lau.html'];
+  var PHONG_PATHS  = ['/tools/phong-thuy.html','/tools/ban-lam-viec.html','/tools/cua-hang-phong-thuy.html','/tools/bat-trach.html','/tools/kim-lau.html','/tools/la-ban-phong-thuy.html','/tools/huong-nha-phong-thuy.html'];
   var NGAY_PATHS   = ['/tools/hoang-dao.html','/tools/ngay-tot.html','/tools/luc-nham.html','/tools/han-nam.html','/tools/chon-ngay-tot.html'];
   var TENCHU_PATHS = ['/tools/dat-ten-con.html','/tools/dat-ten-doanh-nghiep.html'];
 
@@ -132,6 +132,8 @@
     + ddItem('/tools/ban-lam-viec.html',          '\ud83d\udda5', 'Phong Th\u1ee7y B\u00e0n L\u00e0m Vi\u1ec7c')
     + ddItem('/tools/cua-hang-phong-thuy.html',   '\ud83c\udfea', 'Phong Th\u1ee7y C\u1eeda H\u00e0ng & VP')
     + ddSection('M\u1ec7nh L\u00fd & Phong Th\u1ee7y')
+    + ddItem('/tools/la-ban-phong-thuy.html',     '\ud83e\udded', 'La B\u00e0n Phong Th\u1ee7y')
+    + ddItem('/tools/huong-nha-phong-thuy.html',  '\ud83c\udfe0', 'Ph\u00e2n T\u00edch H\u01b0\u1edbng Nh\u00e0')
     + ddItem('/tools/bat-trach.html',             '\ud83e\uddad', 'H\u01b0\u1edbng B\u00e1t Tr\u1ea1ch')
     + ddItem('/tools/kim-lau.html',               '\ud83c\udfe0', 'Kim L\u00e2u & Tam Tai')
     + ddSection('Tra C\u1ee9u Phong Th\u1ee7y')
