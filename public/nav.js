@@ -124,7 +124,7 @@
     + ddSection('M\u1ec7nh L\u00fd & Phong Th\u1ee7y')
     + ddItem('/tools/bat-trach.html',             '\ud83e\uddad', 'H\u01b0\u1edbng B\u00e1t Tr\u1ea1ch')
     + ddItem('/tools/kim-lau.html',               '\ud83c\udfe0', 'Kim L\u00e2u & Tam Tai')
-    + ddItem('/tools/mau-sac-hop-menh.html',      '\ud83c\udfa8', 'M\u00e0u S\u1eafc H\u1ee3p M\u1ec7nh')
+    + ddItem('/tools/mau-sac-hop-menh.html',      '\ud83c\udfa8', 'M\u00e0u S\u1eafc & Th\u1eed Trang Ph\u1ee5c')
     + '</div></div>';
 
   // DD4 — Chọn Ngày
@@ -244,7 +244,7 @@
       + '<a href="/tools/phong-thuy.html">Phong Th\u1ee7y N\u1ed9i Th\u1ea5t</a>'
       + '<a href="/tools/bat-trach.html">H\u01b0\u1edbng B\u00e1t Tr\u1ea1ch</a>'
       + '<a href="/tools/tuong-mat-ai.html">Xem T\u01b0\u1edbng M\u1eb7t</a>'
-      + '<a href="/tools/mau-sac-hop-menh.html">M\u00e0u S\u1eafc H\u1ee3p M\u1ec7nh</a></div>'
+      + '<a href="/tools/mau-sac-hop-menh.html">M\u00e0u S\u1eafc & Th\u1eed Trang Ph\u1ee5c</a></div>'
       + '<div class="ft-col"><div class="ft-col-title">V\u1ec1 Ch\u00fang T\u00f4i</div>'
       + '<a href="/about.html">Gi\u1edbi Thi\u1ec7u</a>'
       + '<a href="/resources.html">T\u00e0i Li\u1ec7u</a>'
