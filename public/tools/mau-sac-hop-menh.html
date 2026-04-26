@@ -99,6 +99,24 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 /* AVOID */
 .avoid-explain{font-size:13px;color:var(--text-mid);line-height:1.7;background:#FFF5F5;border-left:3px solid var(--red);padding:12px 14px;border-radius:0 7px 7px 0;}
 .bonus-tip{font-size:13px;color:var(--text-mid);line-height:1.7;background:var(--gold-lt);border-left:3px solid var(--gold);padding:12px 14px;border-radius:0 7px 7px 0;}
+
+/* TRY-ON */
+.tryon-upload-zone{border:2px dashed var(--border);border-radius:10px;padding:28px 16px;text-align:center;cursor:pointer;background:var(--bg-soft);position:relative;transition:all .2s;}
+.tryon-upload-zone:hover,.tryon-upload-zone.drag{border-color:#c9a84c;background:#c9a84c08;}
+.tryon-upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.tryon-preview{max-width:220px;border-radius:9px;display:block;margin:10px auto 0;object-fit:cover;}
+.style-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0;}
+.style-btn{padding:10px;border:1.5px solid var(--border);border-radius:8px;background:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:Arial,sans-serif;color:var(--text-mid);transition:all .15s;text-align:center;}
+.style-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.style-btn:hover:not(.active){border-color:#c9a84c;background:#fffdf7;}
+.btn-tryon{width:100%;padding:12px;background:linear-gradient(135deg,#9A7B3A,#c9a84c);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Serif',serif;transition:opacity .2s;}
+.btn-tryon:hover{opacity:.88;} .btn-tryon:disabled{opacity:.45;cursor:not-allowed;}
+.tryon-spinner{width:34px;height:34px;border:3px solid var(--border-lt);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px;}
+.ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.ba-col{text-align:center;}
+.ba-label{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text-lt);margin-bottom:6px;}
+.ba-img{width:100%;border-radius:9px;aspect-ratio:3/4;object-fit:cover;display:block;}
+.tryon-error{font-size:12px;color:var(--red);background:#fff5f5;border:1px solid #fcc;border-radius:7px;padding:9px 12px;display:none;margin-top:10px;}
 </style>
 </head>
 <body>
@@ -206,6 +224,69 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
     <div class="card" id="bonusCard" style="display:none;">
       <div class="card-title">💡 Mẹo Đặc Biệt Theo Bản Mệnh</div>
       <div class="bonus-tip" id="bonusTip"></div>
+    </div>
+
+    <!-- TRY-ON TRANG PHỤC -->
+    <div class="card" id="tryonCard">
+      <div class="card-title">👗 Thử Trang Phục Theo Mệnh <span style="font-size:10px;background:#e8f0fe;color:#1455A4;padding:2px 8px;border-radius:10px;font-weight:600;margin-left:4px;">AI · 20 lượng/lần</span></div>
+
+      <!-- Step 1: Upload -->
+      <div id="tryonStep1">
+        <div class="tryon-upload-zone" id="tryonUploadZone"
+          ondragover="event.preventDefault();document.getElementById('tryonUploadZone').classList.add('drag')"
+          ondragleave="document.getElementById('tryonUploadZone').classList.remove('drag')"
+          ondrop="event.preventDefault();document.getElementById('tryonUploadZone').classList.remove('drag');handleTryonDrop(event)">
+          <input type="file" accept="image/*" onchange="onTryonFile(event)" id="tryonFileInput">
+          <div id="tryonUploadPrompt">
+            <div style="font-size:36px;margin-bottom:8px;">👤</div>
+            <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px;">Tải ảnh của bạn lên</div>
+            <div style="font-size:12px;color:var(--text-lt);">Ảnh chụp thẳng người, đủ sáng · JPG/PNG</div>
+          </div>
+          <img id="tryonPreviewImg" class="tryon-preview" src="" alt="" style="display:none;max-height:220px;width:auto">
+        </div>
+        <div style="display:flex;justify-content:center;margin-top:8px;">
+          <button id="tryonChangeBtn" onclick="clearTryonPhoto()" style="display:none;background:none;border:1px solid var(--border);border-radius:4px;padding:5px 14px;font-size:11px;color:var(--text-mid);cursor:pointer;font-family:Arial,sans-serif;">✕ Đổi ảnh</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Style + Button (shown after upload) -->
+      <div id="tryonStep2" style="display:none;margin-top:14px;">
+        <div style="font-size:12px;font-weight:600;color:var(--text-mid);margin-bottom:8px;">Chọn phong cách trang phục:</div>
+        <div class="style-btns">
+          <button class="style-btn active" id="sbCongSo" onclick="setStyle('cong-so',this)">💼 Công Sở</button>
+          <button class="style-btn" id="sbCasual"  onclick="setStyle('casual',this)">👕 Casual</button>
+          <button class="style-btn" id="sbSangTrong" onclick="setStyle('sang-trong',this)">✨ Sang Trọng</button>
+          <button class="style-btn" id="sbDaoPho" onclick="setStyle('dao-pho',this)">🛍 Dạo Phố</button>
+        </div>
+        <button class="btn-tryon" id="btnTryon" onclick="doTryon()">🪄 Thử Trang Phục Ngay</button>
+      </div>
+
+      <!-- Loading -->
+      <div id="tryonLoading" style="display:none;text-align:center;padding:24px 0;">
+        <div class="tryon-spinner"></div>
+        <div style="font-size:13px;font-weight:600;color:var(--navy);">AI đang tạo trang phục...</div>
+        <div style="font-size:11px;color:var(--text-lt);margin-top:4px;">Thường mất 20–35 giây</div>
+      </div>
+
+      <!-- Result -->
+      <div id="tryonResult" style="display:none;margin-top:14px;">
+        <div class="ba-grid">
+          <div class="ba-col">
+            <div class="ba-label">Ảnh gốc</div>
+            <img id="tryonBefore" class="ba-img" src="" alt="Trước">
+          </div>
+          <div class="ba-col">
+            <div class="ba-label" id="tryonAfterLabel">Sau khi thử</div>
+            <img id="tryonAfter" class="ba-img" src="" alt="Sau">
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button onclick="downloadTryonResult()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif;">⬇ Tải Ảnh</button>
+          <button onclick="resetTryon()" style="flex:1;padding:10px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;font-family:Arial,sans-serif;color:var(--text-mid);">🔄 Thử Lại</button>
+        </div>
+      </div>
+
+      <div class="tryon-error" id="tryonError"></div>
     </div>
 
     <div style="text-align:center;padding:14px 0 6px;">
@@ -380,8 +461,137 @@ function renderResults(data){
   document.getElementById('avoidExplain').textContent=s.avoidExplanation||'';
   if(s.bonusTip){document.getElementById('bonusCard').style.display='block';document.getElementById('bonusTip').textContent=s.bonusTip;}
 
+  // Save for try-on
+  _napAmHanh = napAmHanh;
+  _tryonGender = document.getElementById('gioiTinh').value;
+  resetTryon();
+
   const sec=document.getElementById('results-section');sec.style.display='block';
   setTimeout(()=>sec.scrollIntoView({behavior:'smooth',block:'start'}),200);
+}
+
+// ── Try-on state ─────────────────────────────────────────────
+let _napAmHanh = null;
+let _tryonGender = 'male';
+let _tryonImageData = null;
+let _tryonMediaType = 'image/jpeg';
+let _tryonStyle = 'cong-so';
+let _tryonResultUrl = null;
+let _tryonCurrentSlug = null;
+
+function onTryonFile(e) { if (e.target.files[0]) loadTryonFile(e.target.files[0]); }
+function handleTryonDrop(e) { const f = e.dataTransfer.files[0]; if (f) loadTryonFile(f); }
+
+function loadTryonFile(file) {
+  if (!file.type.startsWith('image/')) return;
+  if (file.size > 5 * 1024 * 1024) { showTryonErr('Ảnh quá lớn (tối đa 5MB)'); return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    _tryonMediaType = file.type || 'image/jpeg';
+    _tryonImageData = e.target.result.split(',')[1];
+    const img = document.getElementById('tryonPreviewImg');
+    img.src = e.target.result; img.style.display = 'block';
+    document.getElementById('tryonUploadPrompt').style.display = 'none';
+    document.getElementById('tryonChangeBtn').style.display = 'inline-block';
+    document.getElementById('tryonStep2').style.display = 'block';
+    document.getElementById('tryonError').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearTryonPhoto() {
+  _tryonImageData = null;
+  document.getElementById('tryonPreviewImg').style.display = 'none';
+  document.getElementById('tryonPreviewImg').src = '';
+  document.getElementById('tryonUploadPrompt').style.display = 'block';
+  document.getElementById('tryonChangeBtn').style.display = 'none';
+  document.getElementById('tryonStep2').style.display = 'none';
+  document.getElementById('tryonResult').style.display = 'none';
+  document.getElementById('tryonFileInput').value = '';
+}
+
+function setStyle(s, btn) {
+  _tryonStyle = s;
+  document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function showTryonErr(msg) {
+  const el = document.getElementById('tryonError');
+  el.textContent = '⚠ ' + msg; el.style.display = 'block';
+}
+
+function resetTryon() {
+  clearTryonPhoto();
+  document.getElementById('tryonLoading').style.display = 'none';
+  document.getElementById('tryonResult').style.display = 'none';
+  document.getElementById('tryonError').style.display = 'none';
+  _tryonResultUrl = null;
+}
+
+async function doTryon() {
+  if (!_tryonImageData) { showTryonErr('Vui lòng tải ảnh lên trước.'); return; }
+  if (!_napAmHanh) { showTryonErr('Vui lòng phân tích màu sắc trước.'); return; }
+
+  TuviPaywall.init({ product: 'trang-phuc-tryon', slug: () => _tryonCurrentSlug, onUnlock: () => {} });
+  _tryonCurrentSlug = TuviPaywall.generateToolSlug('trang-phuc-tryon');
+
+  await TuviPaywall.requireCredits(_tryonCurrentSlug, async () => {
+    await _doTryonCall();
+  });
+}
+
+async function _doTryonCall() {
+  document.getElementById('tryonError').style.display = 'none';
+  document.getElementById('tryonStep2').style.display = 'none';
+  document.getElementById('tryonLoading').style.display = 'block';
+  document.getElementById('tryonResult').style.display = 'none';
+  document.getElementById('btnTryon').disabled = true;
+
+  const token = window.Auth?.getSession()?.access_token;
+  const styleLabels = { 'cong-so':'Công Sở', 'casual':'Casual', 'sang-trong':'Sang Trọng', 'dao-pho':'Dạo Phố' };
+
+  try {
+    const res = await fetch('/api/phong-thuy?action=trang-phuc-tryon', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (token || '') },
+      body: JSON.stringify({
+        imageBase64: _tryonImageData,
+        imageType: _tryonMediaType,
+        napAmHanh: _napAmHanh,
+        gioiTinh: _tryonGender,
+        style: _tryonStyle,
+      }),
+    });
+    const data = await res.json();
+    if (!data.imageUrl) throw new Error(data.error || 'Không nhận được ảnh kết quả.');
+
+    _tryonResultUrl = data.imageUrl;
+    document.getElementById('tryonBefore').src = 'data:' + _tryonMediaType + ';base64,' + _tryonImageData;
+    document.getElementById('tryonAfter').src = data.imageUrl;
+    document.getElementById('tryonAfterLabel').textContent = (styleLabels[_tryonStyle] || _tryonStyle) + ' · Mệnh ' + _napAmHanh;
+    document.getElementById('tryonLoading').style.display = 'none';
+    document.getElementById('tryonResult').style.display = 'block';
+    document.getElementById('tryonStep2').style.display = 'block';
+  } catch(e) {
+    document.getElementById('tryonLoading').style.display = 'none';
+    document.getElementById('tryonStep2').style.display = 'block';
+    showTryonErr('Lỗi: ' + (e.message || 'Vui lòng thử lại.'));
+  } finally {
+    document.getElementById('btnTryon').disabled = false;
+  }
+}
+
+async function downloadTryonResult() {
+  if (!_tryonResultUrl) return;
+  try {
+    const res = await fetch(_tryonResultUrl);
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url;
+    a.download = 'trang-phuc-menh-' + (_napAmHanh || '') + '.png';
+    a.click(); URL.revokeObjectURL(url);
+  } catch(e) { window.open(_tryonResultUrl, '_blank'); }
 }
 
 TuviPaywall.init({ product: 'mau-sac-hop-menh' });
