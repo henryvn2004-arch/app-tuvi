@@ -17,23 +17,28 @@ async function fetchSlugs(table: string, select = 'slug,created_at') {
 }
 
 // Paginate through seo_pages (Supabase caps at 1000 rows per request)
+// Fetch total count first, then all batches in parallel
 async function fetchAllSeoPages() {
-  const results: { slug: string; category: string; created_at: string }[] = [];
+  // Get total count first
+  const countRes = await fetch(
+    `${SUPABASE_URL}/rest/v1/seo_pages?select=id&limit=1`,
+    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Prefer': 'count=exact' } }
+  );
+  const totalCount = parseInt(countRes.headers.get('content-range')?.split('/')[1] || '0', 10);
+  if (!totalCount) return [];
+
   const pageSize = 1000;
-  let offset = 0;
-  while (true) {
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/seo_pages?select=slug,category,created_at&order=id.asc&limit=${pageSize}&offset=${offset}`,
-      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-    );
-    if (!res.ok) break;
-    const batch = await res.json() as { slug: string; category: string; created_at: string }[];
-    if (!batch.length) break;
-    results.push(...batch);
-    if (batch.length < pageSize) break;
-    offset += pageSize;
-  }
-  return results;
+  const pages = Math.ceil(totalCount / pageSize);
+  const offsets = Array.from({length: pages}, (_, i) => i * pageSize);
+
+  const results = await Promise.all(
+    offsets.map(offset =>
+      fetch(`${SUPABASE_URL}/rest/v1/seo_pages?select=slug,category,created_at&order=id.asc&limit=${pageSize}&offset=${offset}`,
+        { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+      ).then(r => r.ok ? r.json() : [])
+    )
+  );
+  return results.flat() as { slug: string; category: string; created_at: string }[];
 }
 
 function escXml(s: string) {
