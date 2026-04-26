@@ -117,6 +117,16 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 .shop-reason{font-size:10px;color:var(--text-mid);line-height:1.5;margin-bottom:4px;}
 .shop-price{font-size:10px;color:var(--text-lt);}
 .advice-text{font-size:13px;color:var(--text-mid);line-height:1.75;background:var(--bg-soft);border-left:3px solid var(--gold);padding:12px 14px;border-radius:0 7px 7px 0;}
+
+/* AI ROOM RENDER */
+.render-btn{width:100%;padding:13px;background:linear-gradient(135deg,#9A7B3A,#c9a84c);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Serif',serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s;}
+.render-btn:hover{opacity:.88;} .render-btn:disabled{opacity:.45;cursor:not-allowed;}
+.render-spinner{width:34px;height:34px;border:3px solid var(--border-lt);border-top-color:#c9a84c;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px;}
+.render-ba{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.render-ba-col{text-align:center;}
+.render-ba-label{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text-lt);margin-bottom:6px;}
+.render-ba-img{width:100%;border-radius:9px;display:block;object-fit:cover;aspect-ratio:4/3;}
+.render-err{font-size:12px;color:var(--red);background:#fff5f5;border:1px solid #fcc;border-radius:7px;padding:9px 12px;display:none;margin-top:10px;}
 </style>
 </head>
 <body>
@@ -260,6 +270,46 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
       <div class="advice-text" id="adviceText"></div>
     </div>
 
+    <!-- AI ROOM RENDER -->
+    <div class="card" id="renderCard" style="display:none;">
+      <div class="card-title">🏠 Render Phòng Phong Thủy Bằng AI
+        <span style="font-size:10px;background:#e8f0fe;color:#1455A4;padding:2px 8px;border-radius:10px;font-weight:600;margin-left:4px;">Replicate · 30 lượng</span>
+      </div>
+      <p style="font-size:12px;color:var(--text-mid);line-height:1.65;margin-bottom:14px;">AI sẽ render lại ảnh phòng của bạn theo màu sắc ngũ hành và bố trí phong thủy tối ưu — để bạn hình dung kết quả trước khi sắp xếp thực tế.</p>
+
+      <!-- Idle state -->
+      <div id="renderIdle">
+        <button class="render-btn" id="btnRender" onclick="doRoomRender()">✨ Render Phòng Theo Phong Thủy</button>
+      </div>
+
+      <!-- Loading -->
+      <div id="renderLoading" style="display:none;text-align:center;padding:20px 0;">
+        <div class="render-spinner"></div>
+        <div style="font-size:13px;font-weight:600;color:var(--navy);">AI đang render lại phòng...</div>
+        <div style="font-size:11px;color:var(--text-lt);margin-top:4px;">Thường mất 25–45 giây</div>
+      </div>
+
+      <!-- Result -->
+      <div id="renderResult" style="display:none;">
+        <div class="render-ba">
+          <div class="render-ba-col">
+            <div class="render-ba-label">Ảnh gốc</div>
+            <img id="renderBefore" class="render-ba-img" src="" alt="Trước">
+          </div>
+          <div class="render-ba-col">
+            <div class="render-ba-label">Sau phong thủy AI</div>
+            <img id="renderAfter" class="render-ba-img" src="" alt="Sau">
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button onclick="downloadRender()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif;">⬇ Tải Ảnh</button>
+          <button onclick="resetRender()" style="flex:1;padding:10px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;font-family:Arial,sans-serif;color:var(--text-mid);">🔄 Render Lại</button>
+        </div>
+      </div>
+
+      <div class="render-err" id="renderErr"></div>
+    </div>
+
     <div style="text-align:center;padding:14px 0 6px;">
       <button onclick="resetAll()" style="background:var(--bg-soft);border:1.5px solid var(--border);border-radius:7px;padding:9px 22px;cursor:pointer;font-size:12px;color:var(--text-mid);">← Phân Tích Phòng Khác</button>
     </div>
@@ -390,8 +440,90 @@ function renderResults(data){
   (analysis.shoppingList||[]).forEach(s=>{const uc=s.urgency==='nên có'?'urg-must':s.urgency==='tốt nếu có'?'urg-good':'urg-opt';const ul=s.urgency==='nên có'?'Nên Có':s.urgency==='tốt nếu có'?'Tốt Nếu Có':'Tuỳ Ý';sg.innerHTML+='<div class="shop-item"><div class="shop-hdr"><span class="shop-icon">'+(s.icon||'✨')+'</span><span class="shop-name">'+s.item+'</span><span class="shop-urg '+uc+'">'+ul+'</span></div><div class="shop-pos">📍 '+(DIR_VN[s.position]||s.position||'')+'</div><div class="shop-reason">'+(s.reason||'')+'</div><div class="shop-price">💰 '+(s.priceRange||'')+'</div></div>';});
   if(!(analysis.shoppingList||[]).length)sg.innerHTML='<p style="color:var(--text-lt);font-size:12px;">Không có đề xuất thêm vật phẩm.</p>';
   document.getElementById('adviceText').textContent=analysis.generalAdvice||'';
+
+  // Save state for render
+  _renderGua = _gua;
+  _renderRoomType = document.getElementById('loaiPhong').value;
+  _renderGioiTinh = document.getElementById('gioiTinh').value;
+  _renderRecs = (analysis.recommendations||[]).filter(r=>r.priority==='high').slice(0,4).map(r=>r.reason||'').filter(Boolean);
+  resetRender();
+  document.getElementById('renderCard').style.display = 'block';
+
   const sec=document.getElementById('results-section');sec.style.display='block';
   setTimeout(()=>sec.scrollIntoView({behavior:'smooth',block:'start'}),200);
+}
+
+// ── Room Render state ─────────────────────────────────────────
+let _renderGua = null, _renderRoomType = 'bedroom', _renderGioiTinh = 'male';
+let _renderRecs = [], _renderResultUrl = null, _renderSlug = null;
+
+function resetRender() {
+  document.getElementById('renderIdle').style.display = 'block';
+  document.getElementById('renderLoading').style.display = 'none';
+  document.getElementById('renderResult').style.display = 'none';
+  document.getElementById('renderErr').style.display = 'none';
+  _renderResultUrl = null;
+}
+
+async function doRoomRender() {
+  if (!_img64) return;
+  TuviPaywall.init({ product: 'phong-thuy-render', slug: () => _renderSlug, onUnlock: () => {} });
+  _renderSlug = TuviPaywall.generateToolSlug('phong-thuy-render');
+  await TuviPaywall.requireCredits(_renderSlug, async () => {
+    await _doRenderCall();
+  });
+}
+
+async function _doRenderCall() {
+  document.getElementById('renderErr').style.display = 'none';
+  document.getElementById('renderIdle').style.display = 'none';
+  document.getElementById('renderLoading').style.display = 'block';
+  document.getElementById('renderResult').style.display = 'none';
+  document.getElementById('btnRender').disabled = true;
+
+  const token = window.Auth?.getSession()?.access_token;
+  try {
+    const res = await fetch('/api/phong-thuy?action=phong-thuy-render', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (token||'') },
+      body: JSON.stringify({
+        imageBase64: _img64,
+        imageType: _imgType,
+        guaNumber: _renderGua,
+        roomType: _renderRoomType,
+        gioiTinh: _renderGioiTinh,
+        topRecs: _renderRecs,
+      }),
+    });
+    const data = await res.json();
+    if (!data.imageUrl) throw new Error(data.error || 'Không nhận được ảnh.');
+    _renderResultUrl = data.imageUrl;
+    document.getElementById('renderBefore').src = 'data:' + _imgType + ';base64,' + _img64;
+    document.getElementById('renderAfter').src = data.imageUrl;
+    document.getElementById('renderLoading').style.display = 'none';
+    document.getElementById('renderResult').style.display = 'block';
+    document.getElementById('renderIdle').style.display = 'block';
+  } catch(e) {
+    document.getElementById('renderLoading').style.display = 'none';
+    document.getElementById('renderIdle').style.display = 'block';
+    const el = document.getElementById('renderErr');
+    el.textContent = '⚠ Lỗi: ' + (e.message || 'Vui lòng thử lại.');
+    el.style.display = 'block';
+  } finally {
+    document.getElementById('btnRender').disabled = false;
+  }
+}
+
+async function downloadRender() {
+  if (!_renderResultUrl) return;
+  try {
+    const res = await fetch(_renderResultUrl);
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url;
+    a.download = 'phong-thuy-render.png'; a.click();
+    URL.revokeObjectURL(url);
+  } catch(e) { window.open(_renderResultUrl, '_blank'); }
 }
 
 TuviPaywall.init({ product: 'phong-thuy' });
