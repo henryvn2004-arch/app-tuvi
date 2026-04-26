@@ -73,12 +73,21 @@ export async function GET() {
     { path:'/tools/xem-tuoi-sinh-con.html',     cf:'monthly', p:'0.7' },
   ];
 
-  const [lasoRows, taiLieuRows, khaoLuanRows, sachRows] = await Promise.all([
+  const [lasoRows, taiLieuRows, khaoLuanRows, sachRows, seoRows] = await Promise.all([
     fetchSlugs('laso_public'),
     fetchSlugs('tai_lieu'),
     fetchSlugs('khao_luan'),
     fetchSlugs('sach_library'),
+    fetchSlugs('seo_pages', 'slug,category,created_at'),
   ]);
+
+  const SEO_PRIORITY: Record<string, string> = {
+    'tu-vi-nam-sinh':    '0.80',
+    'van-han':           '0.75',
+    'tuong-hop-hon-nhan':'0.70',
+    'tuong-hop-lam-an':  '0.70',
+    'y-nghia-sao':       '0.65',
+  };
 
   const entries: string[] = [];
   for (const p of staticPages) entries.push(urlEntry(BASE_URL + p.path, today, p.cf, p.p));
@@ -86,6 +95,12 @@ export async function GET() {
   for (const r of taiLieuRows)  if (r.slug) entries.push(urlEntry(`${BASE_URL}/tai-lieu/${encodeURIComponent(r.slug)}`, r.created_at?.slice(0,10)||today, 'monthly', '0.6'));
   for (const r of sachRows)     if (r.slug) entries.push(urlEntry(`${BASE_URL}/tai-lieu/sach/${encodeURIComponent(r.slug)}`, r.created_at?.slice(0,10)||today, 'monthly', '0.65'));
   for (const r of khaoLuanRows) if (r.slug) entries.push(urlEntry(`${BASE_URL}/khao-luan/${encodeURIComponent(r.slug)}`, r.created_at?.slice(0,10)||today, 'weekly', '0.7'));
+  for (const r of (seoRows as any[])) {
+    if (!r.slug) continue;
+    const prio = SEO_PRIORITY[r.category] || '0.65';
+    const cf   = r.category === 'van-han' ? 'yearly' : 'monthly';
+    entries.push(urlEntry(`${BASE_URL}/tu-vi/${encodeURIComponent(r.slug)}`, r.created_at?.slice(0,10)||today, cf, prio));
+  }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
