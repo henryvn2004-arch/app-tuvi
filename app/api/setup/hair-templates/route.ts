@@ -7,16 +7,29 @@ const SB_ANON  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsI
 const PUBLIC   = `${SB_URL}/storage/v1/object/public/hair-templates`;
 
 const TEMPLATES = [
-  { id: 'undercut_nam',  p: 'Vietnamese male portrait, classic undercut fade hairstyle shaved sides longer top, neutral expression, white background, front facing, photorealistic' },
-  { id: 'undercut_nu',   p: 'Vietnamese female portrait, undercut hairstyle shaved sides styled longer top, neutral expression, white background, front facing, photorealistic' },
-  { id: 'pompadour_nam', p: 'Vietnamese male portrait, pompadour hairstyle high volume swept back, neutral expression, white background, front facing, photorealistic' },
-  { id: 'pompadour_nu',  p: 'Vietnamese female portrait, modern pompadour voluminous swept front, neutral expression, white background, front facing, photorealistic' },
-  { id: 'curtain_nam',   p: 'Vietnamese male portrait, curtain bangs center part hair falling both sides, neutral expression, white background, front facing, photorealistic' },
-  { id: 'curtain_nu',    p: 'Vietnamese female portrait, curtain bangs center part soft waves framing face, neutral expression, white background, front facing, photorealistic' },
-  { id: 'buzz_nam',      p: 'Vietnamese male portrait, buzz cut very short uniform hair clean, neutral expression, white background, front facing, photorealistic' },
-  { id: 'buzz_nu',       p: 'Vietnamese female portrait, buzz cut very short cropped bold, neutral expression, white background, front facing, photorealistic' },
-  { id: 'textured_nam',  p: 'Vietnamese male portrait, textured crop short natural movement modern, neutral expression, white background, front facing, photorealistic' },
-  { id: 'textured_nu',   p: 'Vietnamese female portrait, textured crop tousled short waves natural, neutral expression, white background, front facing, photorealistic' },
+  // NAM
+  { id: 'undercut_nam',   p: 'Vietnamese male portrait, classic undercut fade hairstyle, shaved sides, longer textured top, neutral expression, white background, front facing, photorealistic, studio lighting' },
+  { id: 'pompadour_nam',  p: 'Vietnamese male portrait, pompadour hairstyle high volume swept back from forehead, well-groomed, neutral expression, white background, front facing, photorealistic, studio lighting' },
+  { id: 'curtain_nam',    p: 'Vietnamese male portrait, curtain bangs hairstyle center parted soft hair falling naturally to both sides, neutral expression, white background, front facing, photorealistic' },
+  { id: 'buzz_nam',       p: 'Vietnamese male portrait, buzz cut very short uniform hair all over, clean look, neutral expression, white background, front facing, photorealistic' },
+  { id: 'textured_nam',   p: 'Vietnamese male portrait, textured crop haircut short with natural movement and volume, neutral expression, white background, front facing, photorealistic' },
+  { id: 'two_block_nam',  p: 'Vietnamese male portrait, Korean two-block haircut, very short shaved sides, longer natural top, modern K-style, neutral expression, white background, front facing, photorealistic' },
+  { id: 'side_part_nam',  p: 'Vietnamese male portrait, classic side part haircut neatly combed to one side, professional look, neutral expression, white background, front facing, photorealistic' },
+  { id: 'slick_back_nam', p: 'Vietnamese male portrait, slick back hairstyle hair swept straight back glossy, polished look, neutral expression, white background, front facing, photorealistic' },
+  // NỮ
+  { id: 'curtain_nu',     p: 'Vietnamese female portrait, curtain bangs center part soft waves framing face, romantic feminine, neutral expression, white background, front facing, photorealistic' },
+  { id: 'wolf_nu',        p: 'Vietnamese female portrait, wolf cut hairstyle layered with wispy curtain bangs shaggy texture, modern Gen-Z style, neutral expression, white background, front facing, photorealistic' },
+  { id: 'bob_nu',         p: 'Vietnamese female portrait, short bob haircut jaw-length clean structured, neutral expression, white background, front facing, photorealistic' },
+  { id: 'long_layers_nu', p: 'Vietnamese female portrait, long layered haircut flowing layers adding volume and movement, neutral expression, white background, front facing, photorealistic' },
+  { id: 'pixie_nu',       p: 'Vietnamese female portrait, pixie cut very short back and sides slightly longer on top feminine, neutral expression, white background, front facing, photorealistic' },
+  { id: 'side_waves_nu',  p: 'Vietnamese female portrait, side part with soft waves flowing to shoulder elegant, neutral expression, white background, front facing, photorealistic' },
+  { id: 'wispy_nu',       p: 'Vietnamese female portrait, wispy bangs soft feathery fringe with medium length hair, youthful, neutral expression, white background, front facing, photorealistic' },
+  { id: 'shag_nu',        p: 'Vietnamese female portrait, shag haircut with layers choppy ends and curtain bangs retro-modern, neutral expression, white background, front facing, photorealistic' },
+  { id: 'lob_nu',         p: 'Vietnamese female portrait, lob long bob shoulder-length sleek polished, neutral expression, white background, front facing, photorealistic' },
+  { id: 'blunt_fringe_nu',p: 'Vietnamese female portrait, blunt fringe straight across bangs with long straight hair, clean sharp look, neutral expression, white background, front facing, photorealistic' },
+  { id: 'textured_wavy_nu',p:'Vietnamese female portrait, textured wavy medium length hair natural beach waves effortless, neutral expression, white background, front facing, photorealistic' },
+  { id: 'pompadour_nu',   p: 'Vietnamese female portrait, modern female pompadour voluminous swept front soft, elegant, neutral expression, white background, front facing, photorealistic' },
+  { id: 'undercut_nu',    p: 'Vietnamese female portrait, undercut hairstyle shaved sides styled longer top, neutral expression, white background, front facing, photorealistic' },
 ];
 
 function sleep(ms: number) { return new Promise(r => setTimeout(r, ms)); }

@@ -457,7 +457,7 @@ IDs kính hợp lệ: rectangle, round, oval, browline, cat_eye, aviator
 Quy tắc:
 - faceShape: đúng 1 trong 5 giá trị
 - ageGroup: đúng 1 trong 3 giá trị (estimate từ ảnh, không hỏi)
-- hairRanked: đúng 5 IDs từ danh sách hợp lệ theo giới tính được cung cấp
+- hairRanked: 5 đến 7 IDs từ danh sách hợp lệ theo giới tính, thứ tự từ phù hợp nhất → ít phù hợp nhất
 - glassesRanked: đúng 3 IDs từ danh sách kính hợp lệ
 - hairReasons: chỉ cần có key cho 5 IDs trong hairRanked
 - glassesReasons: chỉ cần có key cho 3 IDs trong glassesRanked
@@ -505,11 +505,12 @@ const REPLICATE_NEG_PROMPT = 'nsfw, ugly, deformed, bad anatomy, distorted face,
 function _sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 async function _replicateRun(replKey, modelUrl, input, extraBody = {}) {
-  // Support both versioned (/v1/predictions) and model (/v1/models/.../predictions) endpoints
+  const prefer = extraBody.prefer || 'wait';
+  const { prefer: _, ...bodyRest } = extraBody;
   const startResp = await fetch(modelUrl, {
     method: 'POST',
-    headers: { 'Authorization': `Bearer ${replKey}`, 'Content-Type': 'application/json', 'Prefer': 'wait' },
-    body: JSON.stringify({ ...extraBody, input })
+    headers: { 'Authorization': `Bearer ${replKey}`, 'Content-Type': 'application/json', 'Prefer': prefer },
+    body: JSON.stringify({ ...bodyRest, input })
   });
   if (!startResp.ok) {
     const e = await startResp.json().catch(() => ({}));
@@ -535,14 +536,30 @@ async function _replicateRun(replKey, modelUrl, input, extraBody = {}) {
 }
 
 async function handleKieuTocPhanTich(body, apiKey) {
-  const { image, mediaType = 'image/jpeg', gender = 'nam' } = body;
+  const { image, mediaType = 'image/jpeg', gender = 'nam', faceMeasurements } = body;
   if (!image) return Response.json({ error: 'Thiếu dữ liệu ảnh.' }, { status: 400 });
   if (image.length > 7 * 1024 * 1024) return Response.json({ error: 'Ảnh quá lớn.' }, { status: 400 });
 
   const genderLabel = gender === 'nu' ? 'Nữ' : 'Nam';
   const validHairIds = gender === 'nu'
-    ? 'curtain, curtain_nu, wolf, bob, long_layers, pixie, side_waves, wispy, shag, lob, blunt_fringe, textured_wavy, pompadour_nu'
+    ? 'curtain_nu, wolf, bob, long_layers, pixie, side_waves, wispy, shag, lob, blunt_fringe, textured_wavy, pompadour_nu, undercut_nu'
     : 'undercut, pompadour, curtain, buzz, textured, two_block, side_part, slick_back';
+
+  // Build measurement context if available
+  let measurementContext = '';
+  if (faceMeasurements) {
+    const m = faceMeasurements;
+    measurementContext = `\n\nĐO LƯỜNG KHUÔN MẶT (MediaPipe Face Mesh — dùng để xác định hình dạng chính xác):
+- Rộng mặt (gò má): ${m.faceWidth}px
+- Rộng hàm: ${m.jawWidth}px  
+- Rộng trán: ${m.foreheadWidth}px
+- Cao mặt: ${m.faceHeight}px
+- Tỷ lệ rộng/cao: ${m.widthToHeight} (>0.85=tròn/vuông, 0.75-0.85=oval, <0.75=dài)
+- Tỷ lệ hàm/mặt: ${m.jawToFace} (>0.85=vuông, 0.7-0.85=oval, <0.7=trái tim)
+- Tỷ lệ trán/hàm: ${m.foreToJaw} (>1.1=trái tim, 0.9-1.1=oval/tròn/vuông)
+
+Dùng các số đo này để xác định hình dạng khuôn mặt CHÍNH XÁC, không chỉ dựa vào cảm quan.`;
+  }
 
   const resp = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -550,12 +567,12 @@ async function handleKieuTocPhanTich(body, apiKey) {
     body: JSON.stringify({
       model: 'claude-sonnet-4-6',
       max_tokens: 1000,
-      system: SP_NGOAI_HINH,
+      system: SP_NGOAI_HINH + measurementContext,
       messages: [{
         role: 'user',
         content: [
           { type: 'image', source: { type: 'base64', media_type: mediaType, data: image } },
-          { type: 'text', text: `Giới tính: ${genderLabel}. IDs kiểu tóc hợp lệ: ${validHairIds}. Phân tích và trả về JSON.` }
+          { type: 'text', text: `Giới tính: ${genderLabel}. IDs kiểu tóc hợp lệ: ${validHairIds}. Phân tích và trả về JSON. Chọn TẤT CẢ ${gender === 'nu' ? '5-7' : '5'} kiểu phù hợp nhất trong danh sách.` }
         ]
       }]
     })
@@ -600,7 +617,8 @@ async function handleKieuTocTryon(body) {
     const url = await _replicateRun(
       replKey,
       'https://api.replicate.com/v1/models/black-forest-labs/flux-kontext-pro/predictions',
-      { prompt, input_image: imageDataUri, output_format: 'jpg', safety_tolerance: 2 }
+      { prompt, input_image: imageDataUri, output_format: 'jpg', safety_tolerance: 2 },
+      { prefer: 'wait=55' }
     );
     return Response.json({ imageUrl: url });
   } catch (e) {
