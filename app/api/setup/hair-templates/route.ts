@@ -85,9 +85,10 @@ export async function GET(request: NextRequest) {
     if (generated.length < todo.length) await sleep(1000);
   }
 
+  type ResultItem = { id: string; url?: string; error?: string };
   const urls: Record<string, string> = {};
   const errors: Record<string, string> = {};
-  [...done, ...generated].forEach(r => { if (r.url) urls[r.id] = r.url; else if (r.error) errors[r.id] = r.error; });
+  ([...done, ...generated] as ResultItem[]).forEach(r => { if (r.url) urls[r.id] = r.url; else if (r.error) errors[r.id] = r.error; });
 
   return Response.json({
     urls, errors,
