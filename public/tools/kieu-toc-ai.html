@@ -255,7 +255,7 @@
 
       <!-- HAIR TAB -->
       <div id="pane-hair" class="result-pane active">
-        <div class="styles-title">✨ Kiểu tóc phù hợp theo tướng mặt & nhóm tuổi</div>
+        <div class="styles-title">✨ Tất cả kiểu tóc — ⭐ là phù hợp nhất theo tướng mặt của bạn</div>
         <div class="style-cards" id="styleCardsList"></div>
       </div>
 
@@ -311,14 +311,19 @@
 const SB_TEMPLATES = 'https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/hair-templates';
 const TEMPLATE_MAP = {
   // NAM
-  undercut:   'undercut_nam', pompadour: 'pompadour_nam', curtain:   'curtain_nam',
-  buzz:       'buzz_nam',     textured:  'textured_nam',  two_block: 'two_block_nam',
-  side_part:  'side_part_nam',slick_back:'slick_back_nam',
+  undercut:    'undercut_nam',    pompadour:   'pompadour_nam',  curtain:     'curtain_nam',
+  buzz:        'buzz_nam',        textured:    'textured_nam',   two_block:   'two_block_nam',
+  side_part:   'side_part_nam',   slick_back:  'slick_back_nam',
+  cushion_perm:'cushion_perm_nam',layered_curl:'layered_curl_nam',perm_wave:  'perm_wave_nam',
   // NỮ
-  curtain_nu:'curtain_nu', wolf:'wolf_nu', bob:'bob_nu', long_layers:'long_layers_nu',
-  pixie:'pixie_nu', side_waves:'side_waves_nu', wispy:'wispy_nu', shag:'shag_nu',
-  lob:'lob_nu', blunt_fringe:'blunt_fringe_nu', textured_wavy:'textured_wavy_nu',
-  pompadour_nu:'pompadour_nu', undercut_nu:'undercut_nu', textured_nu:'textured_nam',
+  curtain_nu:  'curtain_nu',      wolf:        'wolf_nu',        bob:         'bob_nu',
+  long_layers: 'long_layers_nu',  pixie:       'pixie_nu',       side_waves:  'side_waves_nu',
+  wispy:       'wispy_nu',        shag:        'shag_nu',        lob:         'lob_nu',
+  blunt_fringe:'blunt_fringe_nu', textured_wavy:'textured_wavy_nu', pompadour_nu:'pompadour_nu',
+  undercut_nu: 'undercut_nu',     textured_nu: 'textured_nam',
+  korean_perm: 'korean_perm_nu',  hime:        'hime_nu',        jellyfish:   'jellyfish_nu',
+  butterfly:   'butterfly_nu',    aline_bob:   'aline_bob_nu',   glass_hair:  'glass_hair_nu',
+  money_piece: 'money_piece_nu',
 };
 
 function _getTemplateId(id, gender) {
@@ -390,6 +395,10 @@ const GLASSES_META = {
   cat_eye:   { name: 'Cat Eye',          sub: 'Đuôi vát lên — nữ tính quyến rũ (phù hợp nữ nhiều)', icon: '😺' },
   aviator:   { name: 'Aviator',          sub: 'Giọt nước cổ điển — unisex, mạnh mẽ tự tin',         icon: '✈️' },
 };
+
+// All styles per gender — shown in full grid, AI rank is used for badge only
+const ALL_STYLES_NAM = ['undercut','pompadour','curtain','buzz','textured','two_block','side_part','slick_back','cushion_perm','layered_curl','perm_wave'];
+const ALL_STYLES_NU  = ['curtain_nu','wolf','bob','long_layers','pixie','side_waves','wispy','shag','lob','blunt_fringe','textured_wavy','pompadour_nu','undercut_nu','korean_perm','hime','jellyfish','butterfly','aline_bob','glass_hair','money_piece'];
 
 const SHAPE_EMOJI = { oval: '🥚', round: '⭕', square: '⬜', heart: '🫀', oblong: '📏' };
 
@@ -655,19 +664,31 @@ function renderAnalysis(data) {
   }
   document.getElementById('faceShapeCard').style.display = 'flex';
 
-  // Hair cards
+  // Hair cards — show ALL styles, AI rank gets badge
   const hairList = document.getElementById('styleCardsList');
   hairList.innerHTML = '';
-  const hairRanked = data.hairRanked || data.ranked || []; // show ALL ranked
-  hairRanked.forEach((id, i) => {
+  const hairRanked = data.hairRanked || data.ranked || [];
+  const hairRankMap = {}; // id → rank position
+  hairRanked.forEach((id, i) => { hairRankMap[id] = i + 1; });
+  const allStyles = _gender === 'nu' ? ALL_STYLES_NU : ALL_STYLES_NAM;
+  // Show AI-recommended first, then remaining
+  const orderedStyles = [
+    ...hairRanked.filter(id => STYLE_META[id]),
+    ...allStyles.filter(id => !hairRankMap[id] && STYLE_META[id])
+  ];
+  orderedStyles.forEach((id) => {
     const meta = STYLE_META[id]; if (!meta) return;
+    const rank = hairRankMap[id];
     const card = document.createElement('div');
     card.className = 'style-card'; card.id = 'sc_' + id;
+    const rankBadge = rank
+      ? `<span class="style-rank" style="background:#fff8e7;color:#9a7b3a">⭐ #${rank}</span>`
+      : `<span class="style-rank" style="background:var(--bg-soft);color:var(--text-lt)">✂️</span>`;
     card.innerHTML = `
       ${_hairThumb(id, _gender)}
       <div class="style-info" style="flex:1">
         <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
-          <span class="style-rank">#${i+1}</span>
+          ${rankBadge}
           <div class="style-name">${meta.name}</div>
         </div>
         <div class="style-sub">${meta.sub}</div>
