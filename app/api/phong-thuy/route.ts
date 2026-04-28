@@ -395,22 +395,19 @@ async function handlePhongThuyRender(request: NextRequest, body: Record<string, 
     'photorealistic, high quality, 8k',
   ].filter(Boolean).join(', ');
 
-  const negPrompt = 'cluttered, dark, ugly, low quality, blurry, cartoon, painting, watermark, text, bad lighting, distorted';
   const imageDataUri = `data:${imageType || 'image/jpeg'};base64,${imageBase64}`;
+  const fluxPrompt = `Redesign this ${roomLabel} with ${style.colors} color scheme, ${style.mood} atmosphere, clean and organized feng shui layout, natural lighting, harmonious proportions. Photorealistic interior design photography, high quality.`;
 
-  // Call Replicate adirik/interior-design
-  const startResp = await fetch('https://api.replicate.com/v1/models/adirik/interior-design/predictions', {
+  // Call flux-kontext-pro (img2img via kontext)
+  const startResp = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-kontext-pro/predictions', {
     method: 'POST',
     headers: { 'Authorization': `Bearer ${replKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       input: {
-        image: imageDataUri,
-        prompt,
-        negative_prompt: negPrompt,
-        guidance_scale: 15,
-        num_inference_steps: 50,
-        strength: 0.55,
-        num_outputs: 1,
+        prompt: fluxPrompt,
+        input_image: imageDataUri,
+        output_format: 'jpg',
+        safety_tolerance: 2,
       }
     })
   });
@@ -502,22 +499,19 @@ async function handleTrangPhucTryon(request: NextRequest, body: Record<string, u
   const styleDesc = STYLE_DESC[st] || STYLE_DESC['casual'];
   const genderLabel = gender === 'nu' ? 'woman' : 'man';
 
-  const prompt = `portrait photo of a ${genderLabel} img wearing ${styleDesc[gender]} in ${nhColors.main} and ${nhColors.accent} colors, photorealistic, professional fashion photography, high quality, sharp focus`;
+  const fluxPrompt = `Change the outfit to ${styleDesc[gender]} in ${nhColors.main} and ${nhColors.accent} colors. Keep the face, expression, pose and background exactly the same. Photorealistic, professional fashion photography.`;
   const imageDataUri = `data:${imageType || 'image/jpeg'};base64,${imageBase64}`;
 
-  // Start Replicate prediction (PhotoMaker)
-  const startResp = await fetch('https://api.replicate.com/v1/models/tencentarc/photomaker/predictions', {
+  // flux-kontext-pro — image editing via natural language
+  const startResp = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-kontext-pro/predictions', {
     method: 'POST',
     headers: { 'Authorization': `Bearer ${replKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       input: {
+        prompt: fluxPrompt,
         input_image: imageDataUri,
-        prompt,
-        negative_prompt: REPL_NEG,
-        style_strength_ratio: 20,
-        num_outputs: 1,
-        guidance_scale: 5,
-        num_inference_steps: 30,
+        output_format: 'jpg',
+        safety_tolerance: 2,
       }
     })
   });

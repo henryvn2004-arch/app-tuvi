@@ -547,45 +547,26 @@ async function handleKieuTocTryon(body) {
   const replKey = process.env.REPLICATE_API_KEY;
   if (!replKey) return Response.json({ error: 'Replicate API key chưa cấu hình.' }, { status: 500 });
 
-  const { image, mediaType = 'image/jpeg', style_id, gender = 'nam', hair_ref_url } = body;
+  const { image, mediaType = 'image/jpeg', style_id, gender = 'nam' } = body;
   if (!image) return Response.json({ error: 'Thiếu dữ liệu ảnh.' }, { status: 400 });
   if (!HAIR_STYLE_DESC[style_id]) return Response.json({ error: 'Kiểu tóc không hợp lệ.' }, { status: 400 });
 
-  const imageDataUri = `data:${mediaType};base64,${image}`;
   const styleDesc = HAIR_STYLE_DESC[style_id][gender === 'nu' ? 'nu' : 'nam'];
+  const prompt = `Change only the hairstyle to ${styleDesc}. Keep the face, skin, expression, clothing and background exactly the same. Photorealistic, natural lighting.`;
+  const imageDataUri = `data:${mediaType};base64,${image}`;
 
   try {
-    // Try HairFastGAN first (nếu có hair_ref_url từ client)
-    if (hair_ref_url) {
-      const url = await _replicateRun(
-        replKey,
-        'https://api.replicate.com/v1/models/hairfastgan/hairfast/predictions',
-        {
-          face_img: imageDataUri,
-          hair_img: hair_ref_url,
-          result_resolution: 1024,
-        }
-      );
-      return Response.json({ imageUrl: url });
-    }
-
-    // Fallback: InstantID + hairstyle prompt (stable, không cần reference)
-    const prompt = `professional portrait photo, person with ${styleDesc}, photorealistic, natural lighting, sharp focus, high quality`;
     const url = await _replicateRun(
       replKey,
-      'https://api.replicate.com/v1/models/zsxkib/instant-id/predictions',
+      'https://api.replicate.com/v1/models/black-forest-labs/flux-kontext-pro/predictions',
       {
-        image: imageDataUri,
         prompt,
-        negative_prompt: REPLICATE_NEG_PROMPT,
-        num_inference_steps: 30,
-        guidance_scale: 5,
-        ip_adapter_scale: 0.8,
-        controlnet_conditioning_scale: 0.8,
+        input_image: imageDataUri,
+        output_format: 'jpg',
+        safety_tolerance: 2,
       }
     );
     return Response.json({ imageUrl: url });
-
   } catch (e) {
     return Response.json({ error: e.message || 'Lỗi xử lý ảnh.' }, { status: 500 });
   }
