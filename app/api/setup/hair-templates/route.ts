@@ -4,6 +4,7 @@ export const maxDuration = 60;
 const REPL_KEY = process.env.REPLICATE_API_KEY!;
 const SB_URL   = 'https://dciwkfdqhhddeymlisey.supabase.co';
 const SB_ANON  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
+const PUBLIC   = `${SB_URL}/storage/v1/object/public/hair-templates`;
 
 const TEMPLATES = [
   { id: 'undercut_nam',  p: 'Vietnamese male portrait, classic undercut fade hairstyle shaved sides longer top, neutral expression, white background, front facing, photorealistic' },
@@ -21,10 +22,10 @@ const TEMPLATES = [
 function sleep(ms: number) { return new Promise(r => setTimeout(r, ms)); }
 
 async function exists(id: string): Promise<boolean> {
-  const r = await fetch(`${SB_URL}/storage/v1/object/hair-templates/${id}.jpg`, {
-    method: 'HEAD', headers: { 'apikey': SB_ANON }
-  });
-  return r.ok;
+  try {
+    const r = await fetch(`${PUBLIC}/${id}.jpg`, { method: 'HEAD' });
+    return r.ok;
+  } catch { return false; }
 }
 
 async function genAndUpload(id: string, prompt: string): Promise<{ id: string; url?: string; error?: string }> {
@@ -58,22 +59,10 @@ async function genAndUpload(id: string, prompt: string): Promise<{ id: string; u
       body: imgBuf,
     });
     if (!up.ok) throw new Error(`upload ${await up.text()}`);
-    return { id, url: `${SB_URL}/storage/v1/object/public/hair-templates/${id}.jpg` };
+    return { id, url: `${PUBLIC}/${id}.jpg` };
   } catch(e) {
     return { id, error: e instanceof Error ? e.message : String(e) };
   }
-}
-
-// Process in batches of N with delay between batches
-async function batchProcess<T>(items: T[], batchSize: number, delayMs: number, fn: (item: T) => Promise<unknown>) {
-  const results = [];
-  for (let i = 0; i < items.length; i += batchSize) {
-    const batch = items.slice(i, i + batchSize);
-    const batchResults = await Promise.all(batch.map(fn));
-    results.push(...batchResults);
-    if (i + batchSize < items.length) await sleep(delayMs);
-  }
-  return results;
 }
 
 export async function GET(request: NextRequest) {
@@ -81,17 +70,22 @@ export async function GET(request: NextRequest) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  // Check which already exist
+  // Check which already exist (use correct public URL)
   const existChecks = await Promise.all(TEMPLATES.map(async t => ({ ...t, exists: await exists(t.id) })));
   const todo = existChecks.filter(t => !t.exists);
-  const done = existChecks.filter(t => t.exists).map(t => ({ id: t.id, url: `${SB_URL}/storage/v1/object/public/hair-templates/${t.id}.jpg` }));
+  const done = existChecks.filter(t => t.exists).map(t => ({ id: t.id, url: `${PUBLIC}/${t.id}.jpg` }));
 
-  // Generate missing in batches of 2
-  const results = await batchProcess(todo, 2, 1000, (t) => genAndUpload(t.id, t.p)) as { id: string; url?: string; error?: string }[];
+  // Generate SEQUENTIALLY with small delay to avoid rate limit
+  const generated: { id: string; url?: string; error?: string }[] = [];
+  for (const t of todo) {
+    const result = await genAndUpload(t.id, t.p);
+    generated.push(result);
+    if (generated.length < todo.length) await sleep(500);
+  }
 
   const urls: Record<string, string> = {};
   const errors: Record<string, string> = {};
-  [...done, ...results].forEach(r => { if (r.url) urls[r.id] = r.url; else if (r.error) errors[r.id] = r.error; });
+  [...done, ...generated].forEach(r => { if (r.url) urls[r.id] = r.url; else if (r.error) errors[r.id] = r.error; });
 
-  return Response.json({ urls, errors, count: Object.keys(urls).length, skipped: done.length });
+  return Response.json({ urls, errors, count: Object.keys(urls).length, skipped: done.length, generated: generated.filter(r => r.url).length });
 }
