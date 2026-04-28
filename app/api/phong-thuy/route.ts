@@ -114,19 +114,74 @@ const NH_COLORS: Record<string, { primary: string[]; secondary: string[]; avoid:
   },
 };
 
-const NAP_AM: Record<number, string> = {
-  1924:'Hỏa',1925:'Hỏa',1926:'Thổ',1927:'Thổ',1928:'Mộc',1929:'Mộc',1930:'Kim',1931:'Kim',1932:'Thủy',1933:'Thủy',
-  1934:'Hỏa',1935:'Hỏa',1936:'Thổ',1937:'Thổ',1938:'Mộc',1939:'Mộc',1940:'Kim',1941:'Kim',1942:'Thủy',1943:'Thủy',
-  1944:'Hỏa',1945:'Hỏa',1946:'Thổ',1947:'Thổ',1948:'Mộc',1949:'Mộc',1950:'Kim',1951:'Kim',1952:'Thủy',1953:'Thủy',
-  1954:'Hỏa',1955:'Hỏa',1956:'Thổ',1957:'Thổ',1958:'Mộc',1959:'Mộc',1960:'Kim',1961:'Kim',1962:'Thủy',1963:'Thủy',
-  1964:'Hỏa',1965:'Hỏa',1966:'Thổ',1967:'Thổ',1968:'Mộc',1969:'Mộc',1970:'Kim',1971:'Kim',1972:'Thủy',1973:'Thủy',
-  1974:'Hỏa',1975:'Hỏa',1976:'Thổ',1977:'Thổ',1978:'Mộc',1979:'Mộc',1980:'Kim',1981:'Kim',1982:'Thủy',1983:'Thủy',
-  1984:'Hỏa',1985:'Hỏa',1986:'Thổ',1987:'Thổ',1988:'Mộc',1989:'Mộc',1990:'Kim',1991:'Kim',1992:'Thủy',1993:'Thủy',
-  1994:'Hỏa',1995:'Hỏa',1996:'Thổ',1997:'Thổ',1998:'Mộc',1999:'Mộc',2000:'Kim',2001:'Kim',2002:'Thủy',2003:'Thủy',
-  2004:'Hỏa',2005:'Hỏa',2006:'Thổ',2007:'Thổ',2008:'Mộc',2009:'Mộc',2010:'Kim',2011:'Kim',2012:'Thủy',2013:'Thủy',
-  2014:'Hỏa',2015:'Hỏa',2016:'Thổ',2017:'Thổ',2018:'Mộc',2019:'Mộc',2020:'Kim',2021:'Kim',2022:'Thủy',2023:'Thủy',
-  2024:'Hỏa',2025:'Hỏa',
+// ── Forked from tuvi-ansao-engine.js: NAP_AM lookup by Can-Chi ──
+const _CAN = ['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
+const _CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+
+// NAP_AM keyed by "Can Chi" — 60 hoa giáp cycle
+const _NAP_AM_TABLE: Record<string, string> = {
+  'Giáp Tý':'Kim','Ất Sửu':'Kim','Bính Dần':'Hỏa','Đinh Mão':'Hỏa',
+  'Mậu Thìn':'Mộc','Kỷ Tỵ':'Mộc','Canh Ngọ':'Thổ','Tân Mùi':'Thổ',
+  'Nhâm Thân':'Kim','Quý Dậu':'Kim','Giáp Tuất':'Hỏa','Ất Hợi':'Hỏa',
+  'Bính Tý':'Thủy','Đinh Sửu':'Thủy','Mậu Dần':'Thổ','Kỷ Mão':'Thổ',
+  'Canh Thìn':'Kim','Tân Tỵ':'Kim','Nhâm Ngọ':'Mộc','Quý Mùi':'Mộc',
+  'Giáp Thân':'Thủy','Ất Dậu':'Thủy','Bính Tuất':'Thổ','Đinh Hợi':'Thổ',
+  'Mậu Tý':'Hỏa','Kỷ Sửu':'Hỏa','Canh Dần':'Mộc','Tân Mão':'Mộc',
+  'Nhâm Thìn':'Thủy','Quý Tỵ':'Thủy','Giáp Ngọ':'Kim','Ất Mùi':'Kim',
+  'Bính Thân':'Hỏa','Đinh Dậu':'Hỏa','Mậu Tuất':'Mộc','Kỷ Hợi':'Mộc',
+  'Canh Tý':'Thổ','Tân Sửu':'Thổ','Nhâm Dần':'Kim','Quý Mão':'Kim',
+  'Giáp Thìn':'Hỏa','Ất Tỵ':'Hỏa','Bính Ngọ':'Thủy','Đinh Mùi':'Thủy',
+  'Mậu Thân':'Thổ','Kỷ Dậu':'Thổ','Canh Tuất':'Kim','Tân Hợi':'Kim',
+  'Nhâm Tý':'Mộc','Quý Sửu':'Mộc','Giáp Dần':'Thủy','Ất Mão':'Thủy',
+  'Bính Thìn':'Thổ','Đinh Tỵ':'Thổ','Mậu Ngọ':'Hỏa','Kỷ Mùi':'Hỏa',
+  'Canh Thân':'Mộc','Tân Dậu':'Mộc','Nhâm Tuất':'Thủy','Quý Hợi':'Thủy',
 };
+
+// Full nạp âm names (60 hoa giáp)
+const _NAP_AM_FULL: Record<string, string> = {
+  'Giáp Tý':'Hải Trung Kim','Ất Sửu':'Hải Trung Kim',
+  'Bính Dần':'Lô Trung Hỏa','Đinh Mão':'Lô Trung Hỏa',
+  'Mậu Thìn':'Đại Lâm Mộc','Kỷ Tỵ':'Đại Lâm Mộc',
+  'Canh Ngọ':'Lộ Bàng Thổ','Tân Mùi':'Lộ Bàng Thổ',
+  'Nhâm Thân':'Kiếm Phong Kim','Quý Dậu':'Kiếm Phong Kim',
+  'Giáp Tuất':'Sơn Đầu Hỏa','Ất Hợi':'Sơn Đầu Hỏa',
+  'Bính Tý':'Giản Hạ Thủy','Đinh Sửu':'Giản Hạ Thủy',
+  'Mậu Dần':'Thành Đầu Thổ','Kỷ Mão':'Thành Đầu Thổ',
+  'Canh Thìn':'Bạch Lạp Kim','Tân Tỵ':'Bạch Lạp Kim',
+  'Nhâm Ngọ':'Dương Liễu Mộc','Quý Mùi':'Dương Liễu Mộc',
+  'Giáp Thân':'Tuyền Trung Thủy','Ất Dậu':'Tuyền Trung Thủy',
+  'Bính Tuất':'Ốc Thượng Thổ','Đinh Hợi':'Ốc Thượng Thổ',
+  'Mậu Tý':'Tích Lịch Hỏa','Kỷ Sửu':'Tích Lịch Hỏa',
+  'Canh Dần':'Tùng Bách Mộc','Tân Mão':'Tùng Bách Mộc',
+  'Nhâm Thìn':'Trường Lưu Thủy','Quý Tỵ':'Trường Lưu Thủy',
+  'Giáp Ngọ':'Sa Trung Kim','Ất Mùi':'Sa Trung Kim',
+  'Bính Thân':'Sơn Hạ Hỏa','Đinh Dậu':'Sơn Hạ Hỏa',
+  'Mậu Tuất':'Bình Địa Mộc','Kỷ Hợi':'Bình Địa Mộc',
+  'Canh Tý':'Bích Thượng Thổ','Tân Sửu':'Bích Thượng Thổ',
+  'Nhâm Dần':'Kim Bạc Kim','Quý Mão':'Kim Bạc Kim',
+  'Giáp Thìn':'Phúc Đăng Hỏa','Ất Tỵ':'Phúc Đăng Hỏa',
+  'Bính Ngọ':'Thiên Hà Thủy','Đinh Mùi':'Thiên Hà Thủy',
+  'Mậu Thân':'Đại Dịch Thổ','Kỷ Dậu':'Đại Dịch Thổ',
+  'Canh Tuất':'Thoa Xuyến Kim','Tân Hợi':'Thoa Xuyến Kim',
+  'Nhâm Tý':'Tang Đố Mộc','Quý Sửu':'Tang Đố Mộc',
+  'Giáp Dần':'Đại Khê Thủy','Ất Mão':'Đại Khê Thủy',
+  'Bính Thìn':'Sa Trung Thổ','Đinh Tỵ':'Sa Trung Thổ',
+  'Mậu Ngọ':'Thiên Thượng Hỏa','Kỷ Mùi':'Thiên Thượng Hỏa',
+  'Canh Thân':'Thạch Lựu Mộc','Tân Dậu':'Thạch Lựu Mộc',
+  'Nhâm Tuất':'Đại Hải Thủy','Quý Hợi':'Đại Hải Thủy',
+};
+
+function yearToCanChi(year: number): string {
+  return `${_CAN[(year - 4 + 400) % 10]} ${_CHI[(year - 4 + 480) % 12]}`;
+}
+
+function getNapAmHanh(year: number): string {
+  return _NAP_AM_TABLE[yearToCanChi(year)] || 'Hỏa';
+}
+
+function getNapAmFull(year: number): string {
+  return _NAP_AM_FULL[yearToCanChi(year)] || yearToCanChi(year);
+}
 
 // ── Auth + credit deduct common ──────────────────────────────────
 
@@ -274,7 +329,9 @@ async function handleMauSac(request: NextRequest, body: Record<string, unknown>)
 
   const guaNum = calcGua(year, gioiTinh || 'male');
   const guaData = GUA[guaNum];
-  const napAmHanh = NAP_AM[year] || 'Hỏa';
+  const napAmHanh = getNapAmHanh(year);
+  const napAmFull = getNapAmFull(year);
+  const canChi = yearToCanChi(year);
   const colorData = NH_COLORS[napAmHanh] || NH_COLORS['Hỏa'];
 
   // Claude generate detailed style guide
@@ -283,7 +340,7 @@ async function handleMauSac(request: NextRequest, body: Record<string, unknown>)
     content: `Tạo hướng dẫn màu sắc trang phục hợp mệnh cho người:
 - Năm sinh: ${year}
 - Giới tính: ${gioiTinh === 'male' ? 'Nam' : 'Nữ'}
-- Nạp Âm Ngũ Hành: ${napAmHanh}
+- Nạp Âm: ${napAmFull} (hành ${napAmHanh}) — ${canChi}
 - Bản Mệnh Quái: ${guaNum} — ${guaData?.name || ''} (${guaData?.elem || ''})
 
 Màu chính tốt cho hành ${napAmHanh}: ${colorData.primary.join(', ')}
@@ -293,6 +350,8 @@ Màu nên tránh: ${colorData.avoid.join(', ')}
 Trả về JSON:
 {
   "napAmHanh": "${napAmHanh}",
+  "napAmFull": "${napAmFull}",
+  "canChi": "${canChi}",
   "guaNum": ${guaNum},
   "guaName": "${guaData?.name || ''}",
   "summary": "tóm tắt 2-3 câu về màu sắc phù hợp",
@@ -322,7 +381,7 @@ Trả về JSON:
   }], 'Bạn là chuyên gia phong thủy và thời trang. Tư vấn màu sắc dựa trên Ngũ Hành Nạp Âm và Bát Trạch. Chỉ trả về JSON hợp lệ.', 1600);
 
   const styleGuide = parseJSON(styleText) || {
-    napAmHanh, guaNum, guaName: guaData?.name || '',
+    napAmHanh, napAmFull, canChi, guaNum, guaName: guaData?.name || '',
     summary: `Người mệnh ${napAmHanh} hợp với các tông màu ${colorData.primary.slice(0,2).join(', ')}.`,
     clothing: { topColors: colorData.primary, bottomColors: colorData.secondary, outerColors: colorData.primary.slice(0,2), shoeColors: colorData.secondary, bagColors: colorData.primary.slice(0,2), accessoryColors: colorData.secondary, avoidColors: colorData.avoid },
     occasions: {},
@@ -335,7 +394,7 @@ Trả về JSON:
   const slug = `mau-sac-${auth.user.id.slice(0,8)}-${Date.now()}`;
   await logTx(auth.user.id, auth.cost, 'mau_sac', 'Màu Sắc Hợp Mệnh', slug);
 
-  return ok({ success: true, balance: auth.newBalance, napAmHanh, colorData, styleGuide });
+  return ok({ success: true, balance: auth.newBalance, napAmHanh, napAmFull, canChi, colorData, styleGuide });
 }
 
 // ── Phong Thủy Room Render (Replicate) ───────────────────────────
