@@ -555,7 +555,7 @@ const HAIR_TEMPLATES = {
   buzz_nam:      `${SB_HAIR}/buzz_nam.jpg`,
   buzz_nu:       `${SB_HAIR}/buzz_nu.jpg`,
   textured_nam:  `${SB_HAIR}/textured_nam.jpg`,
-  textured_nu:   `${SB_HAIR}/textured_nu.jpg`, // gen pending — fallback to flux-kontext
+  textured_nu:   `${SB_HAIR}/textured_nam.jpg`, // fallback to nam template — similar enough, face-swap handles gender
 };
 
 async function handleKieuTocTryon(body) {
