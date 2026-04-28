@@ -435,32 +435,40 @@ const SP_NGOAI_HINH = `Bạn là chuyên gia nhân tướng học và tư vấn 
 Nhiệm vụ: phân tích khuôn mặt và đưa ra gợi ý kiểu tóc + kính phù hợp theo hình dạng, nhóm tuổi, và giới tính.
 Trả về JSON THUẦN TÚY — không markdown, không backtick, không text ngoài JSON.
 
-Format bắt buộc:
+Format bắt buộc (ví dụ cho nam mặt tròn):
 {
-  "faceShape": "oval|round|square|heart|oblong",
-  "faceShapeVN": "Bầu dục|Tròn|Vuông|Trái tim|Dài",
-  "ageGroup": "20s|30s|40s+",
-  "desc": "2-3 đặc điểm nhận dạng khuôn mặt ngắn gọn (tiếng Việt)",
-  "tuongHocInsight": "1-2 câu nhân tướng học về khuôn mặt — trích dẫn cổ pháp nếu có (tiếng Việt)",
-  "hairRanked": ["id1","id2","id3","id4","id5"],
-  "hairReasons": { "id": "1 câu lý do tiếng Việt" },
-  "glassesRanked": ["id1","id2","id3"],
-  "glassesReasons": { "id": "1 câu lý do tiếng Việt" },
-  "tip": "1-2 câu lời khuyên tổng quát về phong cách theo khuôn mặt và nhóm tuổi (tiếng Việt)"
+  "faceShape": "round",
+  "faceShapeVN": "Tròn",
+  "ageGroup": "30s",
+  "desc": "Mặt tròn đầy đặn, gò má cao, cằm mềm",
+  "tuongHocInsight": "Mặt tròn thuộc Thủy hình tướng — phúc hậu, hòa đồng",
+  "hairRanked": ["pompadour","two_block","undercut","side_part","slick_back"],
+  "hairReasons": {
+    "pompadour": "Tạo chiều cao tôn mặt, cân bằng độ tròn",
+    "two_block": "Cạo hai bên giúp mặt trông thon hơn",
+    "undercut": "Fade cạnh tạo góc cạnh cho mặt tròn"
+  },
+  "glassesRanked": ["rectangle","browline","aviator"],
+  "glassesReasons": {
+    "rectangle": "Gọng vuông tạo góc cạnh cân bằng mặt tròn",
+    "browline": "Viền trên đậm kéo sự chú ý lên cao"
+  },
+  "tip": "Ưu tiên kiểu tạo chiều cao và góc cạnh để cân bằng đường cong của mặt tròn"
 }
 
 IDs kiểu tóc NAM hợp lệ: undercut, pompadour, curtain, buzz, textured, two_block, side_part, slick_back
-IDs kiểu tóc NỮ hợp lệ: curtain, wolf, bob, long_layers, pixie, side_waves, wispy, shag, lob, blunt_fringe, textured_wavy, pompadour_nu
+IDs kiểu tóc NỮ hợp lệ: curtain_nu, wolf, bob, long_layers, pixie, side_waves, wispy, shag, lob, blunt_fringe, textured_wavy, pompadour_nu, undercut_nu
 
 IDs kính hợp lệ: rectangle, round, oval, browline, cat_eye, aviator
 
 Quy tắc:
-- faceShape: đúng 1 trong 5 giá trị
-- ageGroup: đúng 1 trong 3 giá trị (estimate từ ảnh, không hỏi)
-- hairRanked: 5 đến 7 IDs từ danh sách hợp lệ theo giới tính, thứ tự từ phù hợp nhất → ít phù hợp nhất
-- glassesRanked: đúng 3 IDs từ danh sách kính hợp lệ
-- hairReasons: chỉ cần có key cho 5 IDs trong hairRanked
-- glassesReasons: chỉ cần có key cho 3 IDs trong glassesRanked
+- faceShape: đúng 1 trong 5 giá trị: oval, round, square, heart, oblong
+- faceShapeVN: đúng 1 trong 5: Bầu dục, Tròn, Vuông, Trái tim, Dài
+- ageGroup: đúng 1 trong 3: 20s, 30s, 40s+
+- hairRanked: 5-7 IDs từ danh sách hợp lệ theo giới tính, thứ tự phù hợp nhất → ít nhất
+- hairReasons: object với key = hair ID (chỉ cần 3-5 key đầu trong hairRanked)
+- glassesRanked: đúng 3 IDs từ danh sách kính
+- glassesReasons: object với key = glasses ID (đủ 3 key)
 - Chỉ trả về JSON, không có gì khác`;
 
 // Hair & Glasses style descriptors for flux-kontext-pro prompts
@@ -566,7 +574,7 @@ Dùng các số đo này để xác định hình dạng khuôn mặt CHÍNH XÁ
     headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
     body: JSON.stringify({
       model: 'claude-sonnet-4-6',
-      max_tokens: 1000,
+      max_tokens: 1500,
       system: SP_NGOAI_HINH + measurementContext,
       messages: [{
         role: 'user',
