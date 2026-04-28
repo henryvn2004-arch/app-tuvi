@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trang Điểm AI — Tử Vi Minh Bảo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+<script src="/nav.js" defer></script>
+<script src="/auth.js" defer></script>
+<script src="/tuvi-paywall.js" defer></script>
+<style>
+:root {
+  --navy:#061A2E; --navy-mid:#0D3B5E; --blue:#1455A4;
+  --gold:#9A7B3A; --gold-lt:#F9F4EB;
+  --text:#1a1a1a; --text-mid:#444; --text-lt:#777;
+  --border:#CCCCCC; --border-lt:#E8E8E8;
+  --bg:#FFFFFF; --bg-soft:#F5F4F0;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg-soft); color: var(--text); min-height: 100vh; }
+
+/* ── Hero ── */
+.hero {
+  background: linear-gradient(160deg, #1a0a0a 0%, #2d1018 40%, #1a0a20 100%);
+  padding: 56px 20px 44px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(180,60,80,0.18) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+  color: #f0c0b0; font-size: 11px; letter-spacing: 1.8px; text-transform: uppercase;
+  padding: 5px 14px; border-radius: 20px; margin-bottom: 16px;
+}
+.hero h1 {
+  font-family: 'Noto Serif', serif;
+  font-size: clamp(26px, 6vw, 40px);
+  color: #fff;
+  line-height: 1.25;
+  margin-bottom: 10px;
+}
+.hero h1 span { color: #f0a0a8; }
+.hero p { color: rgba(255,255,255,0.6); font-size: 14px; max-width: 480px; margin: 0 auto; }
+
+/* ── Main layout ── */
+.main-wrap { max-width: 860px; margin: 0 auto; padding: 28px 16px 80px; }
+
+/* ── Upload zone ── */
+.upload-card {
+  background: var(--bg); border-radius: 16px;
+  border: 1px solid var(--border-lt);
+  padding: 24px; margin-bottom: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+.card-title {
+  font-family: 'Noto Serif', serif;
+  font-size: 15px; font-weight: 600;
+  color: var(--navy); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.card-title span { font-size: 18px; }
+
+.upload-zone {
+  border: 2px dashed var(--border);
+  border-radius: 12px; padding: 36px 20px;
+  text-align: center; cursor: pointer;
+  transition: all .2s; background: var(--bg-soft);
+  position: relative;
+}
+.upload-zone:hover, .upload-zone.drag-over {
+  border-color: var(--blue);
+  background: #f0f5ff;
+}
+.upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.upload-icon { font-size: 32px; margin-bottom: 10px; }
+.upload-text { font-size: 14px; color: var(--text-mid); }
+.upload-hint { font-size: 12px; color: var(--text-lt); margin-top: 4px; }
+
+.preview-wrap { position: relative; display: inline-block; margin-top: 16px; }
+.preview-wrap img { max-width: 280px; max-height: 320px; border-radius: 10px; display: block; }
+.remove-btn {
+  position: absolute; top: -8px; right: -8px;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: #c0392b; color: #fff; border: none;
+  font-size: 14px; cursor: pointer; display: flex;
+  align-items: center; justify-content: center;
+}
+
+/* ── Inputs row ── */
+.inputs-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+.input-group { flex: 1; min-width: 120px; }
+.input-group label { display: block; font-size: 12px; color: var(--text-lt); margin-bottom: 6px; }
+.input-group select, .input-group input {
+  width: 100%; height: 38px; padding: 0 12px;
+  border: 1px solid var(--border); border-radius: 8px;
+  font-size: 13px; color: var(--text);
+  background: var(--bg); outline: none;
+}
+
+/* ── Analyze button ── */
+.btn-analyze {
+  width: 100%; height: 48px; border-radius: 12px;
+  background: linear-gradient(135deg, #8b1a2a, #c0392b);
+  color: #fff; font-size: 15px; font-weight: 500;
+  border: none; cursor: pointer; margin-top: 16px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: opacity .2s;
+}
+.btn-analyze:hover { opacity: 0.9; }
+.btn-analyze:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Loading ── */
+.loading-overlay {
+  display: none; text-align: center;
+  padding: 40px 20px; background: var(--bg);
+  border-radius: 16px; margin-bottom: 20px;
+  border: 1px solid var(--border-lt);
+}
+.loading-overlay.show { display: block; }
+.loading-spinner {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 3px solid var(--border-lt);
+  border-top-color: #c0392b;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 14px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-msg { font-size: 13px; color: var(--text-mid); }
+
+/* ── Results section ── */
+#resultsSection { display: none; }
+
+.result-header {
+  background: linear-gradient(135deg, #1a0a0a, #2d1018);
+  border-radius: 16px; padding: 20px 24px;
+  margin-bottom: 16px; color: #fff;
+  display: flex; align-items: center; gap: 16px;
+}
+.face-badge {
+  width: 54px; height: 54px; border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.face-badge .face-emoji { font-size: 22px; }
+.face-badge .face-label { font-size: 9px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+.result-info h2 { font-family: 'Noto Serif', serif; font-size: 18px; margin-bottom: 4px; }
+.result-info p { font-size: 12px; color: rgba(255,255,255,0.65); line-height: 1.4; }
+.menh-tag {
+  margin-left: auto; flex-shrink: 0;
+  background: rgba(180,60,80,0.3); border: 1px solid rgba(180,60,80,0.5);
+  border-radius: 8px; padding: 6px 12px; text-align: center;
+}
+.menh-tag .hanh { font-size: 18px; font-weight: 600; color: #f0a0a8; }
+.menh-tag .hanh-label { font-size: 10px; color: rgba(255,255,255,0.55); }
+
+/* ── Style cards ── */
+.styles-section-title {
+  font-family: 'Noto Serif', serif;
+  font-size: 13px; color: var(--text-lt);
+  padding: 4px 0 10px; letter-spacing: 0.5px;
+}
+.style-cards-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.style-card {
+  background: var(--bg); border-radius: 12px;
+  border: 1.5px solid var(--border-lt);
+  padding: 14px 14px 14px 14px;
+  display: flex; align-items: center; gap: 12px;
+  transition: border-color .2s, box-shadow .2s;
+}
+.style-card:hover { border-color: #c0392b; box-shadow: 0 2px 10px rgba(192,57,43,0.08); }
+.style-card.menh-match { border-color: rgba(180,60,80,0.35); background: #fff8f8; }
+
+.style-emoji { font-size: 28px; width: 44px; text-align: center; flex-shrink: 0; }
+.style-info { flex: 1; min-width: 0; }
+.style-name-row { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; flex-wrap: wrap; }
+.style-rank-badge {
+  font-size: 10px; padding: 1px 7px; border-radius: 10px;
+  background: #fff0f0; color: #c0392b; border: 1px solid #f0c0c0;
+  font-weight: 500; white-space: nowrap;
+}
+.style-menh-badge {
+  font-size: 10px; padding: 1px 7px; border-radius: 10px;
+  background: #fff8e0; color: #9a7b3a; border: 1px solid #e8d080;
+  font-weight: 500; white-space: nowrap;
+}
+.style-name { font-size: 14px; font-weight: 500; color: var(--text); }
+.style-aesthetic { font-size: 10px; color: var(--text-lt); margin-bottom: 3px; }
+.style-sub { font-size: 12px; color: var(--text-mid); margin-bottom: 4px; }
+.style-reason {
+  font-size: 11px; color: var(--blue);
+  background: #f0f5ff; border-radius: 6px;
+  padding: 4px 8px; margin-top: 4px; line-height: 1.4;
+}
+.try-btn {
+  flex-shrink: 0; height: 34px; padding: 0 14px;
+  background: var(--navy); color: #fff;
+  border: none; border-radius: 8px; font-size: 12px;
+  cursor: pointer; transition: background .2s; white-space: nowrap;
+}
+.try-btn:hover { background: #c0392b; }
+
+/* ── Color palette ── */
+.palette-card {
+  background: var(--bg); border-radius: 12px;
+  border: 1px solid var(--border-lt); padding: 16px;
+  margin-bottom: 16px;
+}
+.palette-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.palette-row:last-child { margin-bottom: 0; }
+.palette-label { font-size: 12px; color: var(--text-lt); width: 50px; flex-shrink: 0; }
+.palette-swatches { display: flex; gap: 8px; flex-wrap: wrap; }
+.swatch {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 2px solid rgba(0,0,0,0.08);
+  cursor: pointer; transition: transform .15s;
+  position: relative;
+}
+.swatch:hover { transform: scale(1.15); }
+.swatch-hex {
+  position: absolute; bottom: -18px; left: 50%;
+  transform: translateX(-50%);
+  font-size: 9px; color: var(--text-lt);
+  white-space: nowrap; pointer-events: none;
+  opacity: 0;
+}
+.swatch:hover .swatch-hex { opacity: 1; }
+
+/* ── Try-on area ── */
+.tryon-area {
+  background: var(--bg); border-radius: 14px;
+  border: 1px solid var(--border-lt); padding: 20px;
+  margin-bottom: 20px; display: none;
+}
+.tryon-area.show { display: block; }
+.tryon-title { font-family: 'Noto Serif', serif; font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+.tryon-style-name { font-size: 12px; color: var(--text-lt); margin-bottom: 14px; }
+.tryon-loading { text-align: center; padding: 30px 0; color: var(--text-lt); font-size: 13px; }
+.tryon-result img { width: 100%; max-width: 380px; border-radius: 10px; display: block; margin: 0 auto; }
+.tryon-actions { display: flex; gap: 10px; margin-top: 12px; justify-content: center; }
+.btn-download {
+  height: 36px; padding: 0 16px; border-radius: 8px;
+  background: var(--gold); color: #fff; border: none;
+  font-size: 13px; cursor: pointer;
+}
+.btn-retry {
+  height: 36px; padding: 0 16px; border-radius: 8px;
+  background: var(--bg-soft); color: var(--text-mid);
+  border: 1px solid var(--border); font-size: 13px; cursor: pointer;
+}
+
+/* ── Tip card ── */
+.tip-card {
+  background: #fff8f0; border-radius: 10px;
+  border-left: 3px solid var(--gold);
+  padding: 12px 14px; margin-bottom: 16px;
+  font-size: 13px; color: var(--text-mid); line-height: 1.5;
+}
+.tip-card strong { color: var(--gold); font-size: 11px; display: block; margin-bottom: 4px; }
+
+/* ── Mediapipe hidden ── */
+#canvas { display: none; }
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+
+<div class="hero">
+  <div class="hero-badge">✦ Công cụ làm đẹp AI</div>
+  <h1>Trang Điểm <span>Hợp Tướng</span></h1>
+  <p>Phân tích tướng mặt theo cổ pháp — gợi ý phong cách makeup châu Á phù hợp với mệnh và tướng số của bạn</p>
+</div>
+
+<div class="main-wrap">
+
+  <!-- Upload Card -->
+  <div class="upload-card">
+    <div class="card-title"><span>📸</span> Chụp hoặc tải ảnh khuôn mặt</div>
+
+    <div class="upload-zone" id="uploadZone">
+      <input type="file" accept="image/*" id="fileInput" capture="user">
+      <div class="upload-icon">🪞</div>
+      <div class="upload-text">Nhấn để chọn ảnh hoặc kéo thả vào đây</div>
+      <div class="upload-hint">Ảnh rõ mặt, ánh sáng đủ, không đeo kính</div>
+    </div>
+    <div id="previewWrap" style="text-align:center;display:none">
+      <div class="preview-wrap">
+        <img id="previewImg" alt="preview">
+        <button class="remove-btn" onclick="removePhoto()">✕</button>
+      </div>
+    </div>
+
+    <div class="inputs-row">
+      <div class="input-group">
+        <label>Năm sinh (tùy chọn)</label>
+        <input type="number" id="namSinh" placeholder="VD: 1990" min="1920" max="2010">
+      </div>
+    </div>
+
+    <button class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
+      💄 Phân tích phong cách
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-msg" id="loadingMsg">Đang phân tích tướng mặt...</div>
+  </div>
+
+  <!-- Results -->
+  <div id="resultsSection">
+
+    <!-- Header -->
+    <div class="result-header" id="resultHeader">
+      <div class="face-badge">
+        <div class="face-emoji" id="faceEmoji">🪞</div>
+        <div class="face-label" id="faceLabel">Tướng mặt</div>
+      </div>
+      <div class="result-info">
+        <h2 id="faceShapeText">—</h2>
+        <p id="tuongHocText">—</p>
+      </div>
+      <div class="menh-tag" id="menhTag" style="display:none">
+        <div class="hanh" id="menhHanh">—</div>
+        <div class="hanh-label" id="menhLabel">Nạp Âm</div>
+      </div>
+    </div>
+
+    <!-- Try-on area (shown after selecting a style) -->
+    <div class="tryon-area" id="tryonArea">
+      <div class="tryon-title">🎭 Thử trang điểm — <span id="tryonStyleName"></span></div>
+      <div class="tryon-style-name" id="tryonStyleSub"></div>
+      <div class="tryon-loading" id="tryonLoading" style="display:none">
+        <div class="loading-spinner" style="margin-bottom:10px"></div>
+        Đang áp dụng makeup... (~20s)
+      </div>
+      <div class="tryon-result" id="tryonResult" style="display:none">
+        <img id="tryonImg" alt="result">
+        <div class="tryon-actions">
+          <button class="btn-download" onclick="downloadResult()">⬇ Tải ảnh</button>
+          <button class="btn-retry" onclick="retryStyle()">↺ Thử lại</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Style cards -->
+    <div class="styles-section-title">✦ Phong cách makeup phù hợp — nhấn "Thử →" để xem kết quả</div>
+    <div class="style-cards-list" id="styleCardsList"></div>
+
+    <!-- Color palette -->
+    <div class="palette-card" id="paletteCard" style="display:none">
+      <div class="card-title" style="margin-bottom:12px"><span>🎨</span> Bảng màu gợi ý</div>
+      <div class="palette-row">
+        <div class="palette-label">Môi</div>
+        <div class="palette-swatches" id="lipSwatches"></div>
+      </div>
+      <div class="palette-row">
+        <div class="palette-label">Mắt</div>
+        <div class="palette-swatches" id="eyeSwatches"></div>
+      </div>
+      <div class="palette-row">
+        <div class="palette-label">Má hồng</div>
+        <div class="palette-swatches" id="blushSwatches"></div>
+      </div>
+    </div>
+
+    <!-- Tip -->
+    <div class="tip-card" id="tipCard" style="display:none">
+      <strong>✦ Lời khuyên cổ pháp</strong>
+      <span id="tipText">—</span>
+    </div>
+
+  </div><!-- /resultsSection -->
+</div>
+
+<canvas id="canvas"></canvas>
+
+<script>
+const SB_URL = 'https://dciwkfdqhhddeymlisey.supabase.co';
+const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
+
+const FACE_EMOJI = { oval:'🥚', round:'⭕', square:'⬜', heart:'🫀', oblong:'📏' };
+
+const STYLE_META = {
+  glass_skin:  { name:'Glass Skin Korea',  sub:'No-makeup makeup, dewy lit-from-within glow', emoji:'🪞', aesthetic:'K-Beauty' },
+  soft_girl:   { name:'Soft Girl Seoul',   sub:'Blush bomb, gradient lip, innocent glow',     emoji:'🌸', aesthetic:'K-Beauty' },
+  kdrama_glam: { name:'K-Drama Glam',      sub:'Defined liner, bold lip, đỉnh cao sang trọng',emoji:'💄', aesthetic:'K-Drama'  },
+  j_sheer:     { name:'J-Beauty Sheer',    sub:'Translucent skin, sheer lip, wabi-sabi tối giản', emoji:'🍵', aesthetic:'J-Beauty' },
+  j_gyaru:     { name:'Gyaru Bold',        sub:'Circle-lens vibes, dramatic lash, bright liner', emoji:'✨', aesthetic:'J-Gyaru' },
+  guochao:     { name:'Guochao Editorial', sub:'Red lips đậm, liner sắc, khí chất cổ đại',    emoji:'🏮', aesthetic:'C-Beauty' },
+  hoa_dan:     { name:'Hoa Đán Soft',      sub:'Đào hồng, rose blush, nhẹ nhàng duyên dáng',  emoji:'🌺', aesthetic:'V-Beauty' },
+  dark_muse:   { name:'Dark Muse',         sub:'Muted smoky, cool tones, editorial edge',      emoji:'🌑', aesthetic:'Editorial'},
+};
+const ALL_STYLES = ['glass_skin','soft_girl','kdrama_glam','j_sheer','j_gyaru','guochao','hoa_dan','dark_muse'];
+
+let _imageData = null, _mediaType = 'image/jpeg', _faceMeasurements = null;
+let _currentStyleId = null, _analysisResult = null;
+
+// ── File handling ──
+const uploadZone = document.getElementById('uploadZone');
+const fileInput  = document.getElementById('fileInput');
+
+uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault(); uploadZone.classList.remove('drag-over');
+  const f = e.dataTransfer.files[0]; if (f) loadFile(f);
+});
+fileInput.addEventListener('change', e => { if (e.target.files[0]) loadFile(e.target.files[0]); });
+
+function loadFile(file) {
+  _mediaType = file.type || 'image/jpeg';
+  const reader = new FileReader();
+  reader.onload = async ev => {
+    // EXIF rotation fix
+    const blob = await fetch(ev.target.result).then(r => r.blob());
+    const bitmap = await createImageBitmap(blob);
+    const canvas = document.createElement('canvas');
+    canvas.width = bitmap.width; canvas.height = bitmap.height;
+    canvas.getContext('2d').drawImage(bitmap, 0, 0);
+    canvas.toBlob(b => {
+      const r2 = new FileReader();
+      r2.onload = x => {
+        _imageData = x.target.result.split(',')[1];
+        document.getElementById('previewImg').src = x.target.result;
+        document.getElementById('previewWrap').style.display = 'block';
+        uploadZone.style.display = 'none';
+        document.getElementById('btnAnalyze').disabled = false;
+        // Run MediaPipe in background
+        runMediaPipe(x.target.result);
+      };
+      r2.readAsDataURL(b);
+    }, 'image/jpeg', 0.9);
+  };
+  reader.readAsDataURL(file);
+}
+
+function removePhoto() {
+  _imageData = null; _faceMeasurements = null;
+  document.getElementById('previewWrap').style.display = 'none';
+  uploadZone.style.display = 'block';
+  fileInput.value = '';
+  document.getElementById('btnAnalyze').disabled = true;
+  document.getElementById('resultsSection').style.display = 'none';
+}
+
+// ── MediaPipe face measurements ──
+async function runMediaPipe(imgSrc) {
+  try {
+    const { FaceMesh } = await import('https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4/face_mesh.js');
+    const fm = new FaceMesh({ locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4/${f}` });
+    fm.setOptions({ maxNumFaces: 1, refineLandmarks: false, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
+    fm.onResults(res => {
+      if (!res.multiFaceLandmarks?.length) return;
+      const lm = res.multiFaceLandmarks[0];
+      const w = 640, h = 480;
+      const p = i => ({ x: lm[i].x * w, y: lm[i].y * h });
+      const faceWidth = Math.abs(p(234).x - p(454).x);
+      const jawWidth  = Math.abs(p(172).x - p(397).x);
+      const foreHead  = Math.abs(p(21).x  - p(251).x);
+      const faceHeight= Math.abs(p(10).y  - p(152).y);
+      _faceMeasurements = {
+        faceWidth: faceWidth.toFixed(1), jawWidth: jawWidth.toFixed(1),
+        foreheadWidth: foreHead.toFixed(1), faceHeight: faceHeight.toFixed(1),
+        widthToHeight: (faceWidth / faceHeight).toFixed(2),
+        jawToFace:     (jawWidth  / faceWidth).toFixed(2),
+        foreToJaw:     (foreHead  / jawWidth).toFixed(2),
+      };
+    });
+    const img = new Image(); img.src = imgSrc;
+    await new Promise(r => img.onload = r);
+    const canvas = document.getElementById('canvas');
+    canvas.width = 640; canvas.height = 480;
+    canvas.getContext('2d').drawImage(img, 0, 0, 640, 480);
+    await fm.send({ image: canvas });
+  } catch(_) {}
+}
+
+// ── Analyze ──
+async function analyze() {
+  if (!_imageData) return;
+  const namSinh = parseInt(document.getElementById('namSinh').value) || null;
+  const token = window.Auth?.getSession()?.access_token;
+
+  document.getElementById('btnAnalyze').disabled = true;
+  document.getElementById('loadingOverlay').classList.add('show');
+  document.getElementById('resultsSection').style.display = 'none';
+
+  const slug = TuviPaywall.generateToolSlug('trang-diem-phan-tich');
+  TuviPaywall.init({ product: 'trang-diem-phan-tich' });
+
+  try {
+    await new Promise((resolve, reject) => {
+      TuviPaywall.requireCredits(slug, async () => {
+        try {
+          document.getElementById('loadingMsg').textContent = 'Đang phân tích tướng mặt...';
+          const res = await fetch('/api/tuong-mat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify({
+              action: 'trang-diem-phan-tich',
+              image: _imageData,
+              mediaType: _mediaType,
+              namSinh,
+              faceMeasurements: _faceMeasurements,
+            }),
+          });
+          const data = await res.json();
+          if (!res.ok || data.error) throw new Error(data.error || 'Lỗi phân tích');
+          _analysisResult = data;
+          window.refreshNavCredits?.();
+          renderResults(data);
+          resolve();
+        } catch(e) { reject(e); }
+      });
+    });
+  } catch(e) {
+    alert('Lỗi: ' + (e.message || 'Vui lòng thử lại.'));
+  } finally {
+    document.getElementById('btnAnalyze').disabled = false;
+    document.getElementById('loadingOverlay').classList.remove('show');
+  }
+}
+
+// ── Render results ──
+function renderResults(data) {
+  document.getElementById('resultsSection').style.display = 'block';
+  document.getElementById('tryonArea').classList.remove('show');
+
+  // Header
+  const faceShape = data.faceShape || 'oval';
+  document.getElementById('faceEmoji').textContent = FACE_EMOJI[faceShape] || '🪞';
+  document.getElementById('faceLabel').textContent = data.faceShapeVN || '';
+  document.getElementById('faceShapeText').textContent = `Mặt ${data.faceShapeVN || ''} · ${data.ageGroup || ''} · Da ${data.skinTone || ''}`;
+  document.getElementById('tuongHocText').textContent = data.tuongHocInsight || '';
+
+  // Mệnh tag
+  if (data.napAmHanh) {
+    document.getElementById('menhHanh').textContent = 'Mệnh ' + data.napAmHanh;
+    document.getElementById('menhLabel').textContent = data.napAmFull || data.canChi || '';
+    document.getElementById('menhTag').style.display = 'block';
+  } else {
+    document.getElementById('menhTag').style.display = 'none';
+  }
+
+  // Style cards — AI ranked first, rest below
+  const ranked = data.makeupRanked || [];
+  const rankMap = {};
+  ranked.forEach((id, i) => { rankMap[id] = i + 1; });
+  const menhIds = new Set(data.menhSuggestedIds || []);
+  const ordered = [
+    ...ranked.filter(id => STYLE_META[id]),
+    ...ALL_STYLES.filter(id => !rankMap[id] && STYLE_META[id])
+  ];
+
+  const list = document.getElementById('styleCardsList');
+  list.innerHTML = '';
+  ordered.forEach(id => {
+    const meta = STYLE_META[id]; if (!meta) return;
+    const rank = rankMap[id];
+    const isMenh = menhIds.has(id);
+    const reason = (data.makeupReasons || {})[id];
+    const card = document.createElement('div');
+    card.className = 'style-card' + (isMenh && rank ? ' menh-match' : '');
+    card.innerHTML = `
+      <div class="style-emoji">${meta.emoji}</div>
+      <div class="style-info">
+        <div class="style-name-row">
+          ${rank ? `<span class="style-rank-badge">✦ #${rank} phù hợp</span>` : ''}
+          ${isMenh && rank ? `<span class="style-menh-badge">⟡ Hợp mệnh</span>` : ''}
+          <span class="style-name">${meta.name}</span>
+        </div>
+        <div class="style-aesthetic">${meta.aesthetic}</div>
+        <div class="style-sub">${meta.sub}</div>
+        ${reason ? `<div class="style-reason">✦ ${reason}</div>` : ''}
+      </div>
+      <button class="try-btn" onclick="selectStyle('${id}')">Thử →</button>
+    `;
+    list.appendChild(card);
+  });
+
+  // Color palette
+  const pal = data.colorPalette;
+  if (pal) {
+    renderSwatches('lipSwatches', pal.lip || []);
+    renderSwatches('eyeSwatches', pal.eye || []);
+    renderSwatches('blushSwatches', pal.blush || []);
+    document.getElementById('paletteCard').style.display = 'block';
+  }
+
+  // Tip
+  if (data.tip) {
+    document.getElementById('tipText').textContent = data.tip;
+    document.getElementById('tipCard').style.display = 'block';
+  }
+}
+
+function renderSwatches(containerId, hexArr) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = '';
+  hexArr.forEach(hex => {
+    const s = document.createElement('div');
+    s.className = 'swatch';
+    s.style.background = hex;
+    s.title = hex;
+    s.innerHTML = `<span class="swatch-hex">${hex}</span>`;
+    el.appendChild(s);
+  });
+}
+
+// ── Try-on ──
+function selectStyle(id) {
+  if (!_imageData || !id) return;
+  _currentStyleId = id;
+  const meta = STYLE_META[id];
+  document.getElementById('tryonArea').classList.add('show');
+  document.getElementById('tryonStyleName').textContent = meta.name;
+  document.getElementById('tryonStyleSub').textContent = meta.sub;
+  document.getElementById('tryonLoading').style.display = 'none';
+  document.getElementById('tryonResult').style.display = 'none';
+  document.getElementById('tryonArea').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  doTryon(id);
+}
+
+async function doTryon(id) {
+  const token = window.Auth?.getSession()?.access_token;
+  document.getElementById('tryonLoading').style.display = 'block';
+  document.getElementById('tryonResult').style.display = 'none';
+
+  const slug = TuviPaywall.generateToolSlug('trang-diem-tryon');
+  TuviPaywall.init({ product: 'trang-diem-tryon' });
+
+  try {
+    await new Promise((resolve, reject) => {
+      TuviPaywall.requireCredits(slug, async () => {
+        try {
+          const res = await fetch('/api/tuong-mat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify({ action: 'trang-diem-tryon', image: _imageData, mediaType: _mediaType, style_id: id }),
+          });
+          const data = await res.json();
+          if (!res.ok || !data.imageUrl) throw new Error(data.error || 'Lỗi xử lý ảnh');
+          document.getElementById('tryonImg').src = data.imageUrl;
+          document.getElementById('tryonResult').style.display = 'block';
+          window.refreshNavCredits?.();
+          resolve();
+        } catch(e) { reject(e); }
+      });
+    });
+  } catch(e) {
+    alert('Lỗi: ' + (e.message || 'Vui lòng thử lại.'));
+  } finally {
+    document.getElementById('tryonLoading').style.display = 'none';
+  }
+}
+
+function retryStyle() { if (_currentStyleId) doTryon(_currentStyleId); }
+
+function downloadResult() {
+  const img = document.getElementById('tryonImg');
+  if (!img.src) return;
+  const a = document.createElement('a');
+  a.href = img.src; a.download = 'trang-diem-ai.jpg'; a.click();
+}
+
+// ── Paywall init ──
+window.addEventListener('load', () => {
+  TuviPaywall.init({ product: 'trang-diem-phan-tich' });
+});
+</script>
+</body>
+</html>

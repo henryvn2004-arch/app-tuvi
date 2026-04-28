@@ -646,6 +646,192 @@ async function handleKieuTocTryon(body) {
 
 // ── End Kiểu Tóc AI ─────────────────────────────────────────────────────────
 
+// ── Trang Điểm AI ────────────────────────────────────────────────────────────
+
+// Makeup styles: Asian aesthetic taxonomy
+const MAKEUP_STYLES = {
+  glass_skin:  { name: 'Glass Skin Korea',   sub: 'No-makeup makeup, dewy lit-from-within glow', emoji: '🪞', aesthetic: 'K-Beauty' },
+  soft_girl:   { name: 'Soft Girl Seoul',    sub: 'Blush bomb, gradient lip, innocent glow',      emoji: '🌸', aesthetic: 'K-Beauty' },
+  kdrama_glam: { name: 'K-Drama Glam',       sub: 'Defined liner, bold lip, đỉnh cao sang trọng', emoji: '💄', aesthetic: 'K-Drama' },
+  j_sheer:     { name: 'J-Beauty Sheer',     sub: 'Translucent skin, sheer lip, wabi-sabi tối giản', emoji: '🍵', aesthetic: 'J-Beauty' },
+  j_gyaru:     { name: 'Gyaru Bold',         sub: 'Circle-lens vibes, dramatic lash, bright liner', emoji: '✨', aesthetic: 'J-Gyaru' },
+  guochao:     { name: 'Guochao Editorial',  sub: 'Red lips đậm, liner sắc, khí chất cổ đại',     emoji: '🏮', aesthetic: 'C-Beauty' },
+  hoa_dan:     { name: 'Hoa Đán Soft',       sub: 'Đào hồng, rose blush, nhẹ nhàng duyên dáng',   emoji: '🌺', aesthetic: 'V-Beauty' },
+  dark_muse:   { name: 'Dark Muse',          sub: 'Muted smoky, cool tones, editorial edge',       emoji: '🌑', aesthetic: 'Editorial' },
+};
+
+// Flux-kontext-pro prompts cho từng makeup style
+const MAKEUP_STYLE_DESC = {
+  glass_skin:  'Apply ultra-dewy glass skin Korean makeup: flawless luminous skin with lit-from-within glow, natural gradient lips in soft rose-nude, minimal eye makeup with subtle lash definition, soft pink blush. No-makeup makeup effect. Keep face identity unchanged.',
+  soft_girl:   'Apply Korean soft girl makeup: pillow-y blush on cheeks and nose bridge, glossy gradient lips in baby pink or peach, soft brown eye makeup with barely-there liner, bright innocent eye effect. Keep face identity unchanged.',
+  kdrama_glam: 'Apply K-drama glamour makeup: porcelain skin with satin finish, bold statement lip in deep red or wine, precise sharp eyeliner, groomed bold brows, subtle contour for definition. Elegant and dramatic. Keep face identity unchanged.',
+  j_sheer:     'Apply Japanese J-beauty sheer makeup: translucent poreless skin texture, sheer lip tint in soft coral or peach, minimal eye makeup with natural lash curl, soft peachy blush, wabi-sabi effortless finish. Keep face identity unchanged.',
+  j_gyaru:     'Apply Japanese Gyaru makeup: enlarged eye effect with dramatic lashes and subtle circle-lens illusion, bold lower lash line, bright eye shadow in pink or lavender, glossy lips. Statement but playful. Keep face identity unchanged.',
+  guochao:     'Apply Chinese Guochao editorial makeup: bold red or deep plum lips inspired by ancient Chinese aesthetics, dramatic defined eye liner, high-contrast face with pale skin finish, strong brow shape. Regal editorial look. Keep face identity unchanged.',
+  hoa_dan:     'Apply Vietnamese-inspired Hoa Đán soft makeup: delicate peach-rose blush, soft pink gradient lips, subtle shimmer on eyelids, gentle brow arch, fresh spring-flower femininity. Natural and graceful. Keep face identity unchanged.',
+  dark_muse:   'Apply editorial dark muse makeup: muted cool-toned skin, smoky eye in deep taupe or charcoal, dark mauve or berry lips, subtle under-eye smudge, editorial high-fashion edge. Moody and artistic. Keep face identity unchanged.',
+};
+
+// Nạp âm → recommended makeup styles (ordered)
+const MENH_MAKEUP_MAP = {
+  'Kim':   ['glass_skin', 'j_sheer',    'soft_girl',   'dark_muse'],
+  'Mộc':  ['j_sheer',    'hoa_dan',    'soft_girl',   'glass_skin'],
+  'Hỏa':  ['kdrama_glam','guochao',    'j_gyaru',     'soft_girl'],
+  'Thủy': ['dark_muse',  'glass_skin', 'j_sheer',     'kdrama_glam'],
+  'Thổ':  ['soft_girl',  'hoa_dan',    'glass_skin',  'j_sheer'],
+};
+
+// Can-chi helpers (forked từ engine)
+const _CAN_MU = ['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
+const _CHI_MU = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+const _NAP_AM_MU = {
+  'Giáp Tý':'Kim','Ất Sửu':'Kim','Bính Dần':'Hỏa','Đinh Mão':'Hỏa','Mậu Thìn':'Mộc','Kỷ Tỵ':'Mộc',
+  'Canh Ngọ':'Thổ','Tân Mùi':'Thổ','Nhâm Thân':'Kim','Quý Dậu':'Kim','Giáp Tuất':'Hỏa','Ất Hợi':'Hỏa',
+  'Bính Tý':'Thủy','Đinh Sửu':'Thủy','Mậu Dần':'Thổ','Kỷ Mão':'Thổ','Canh Thìn':'Kim','Tân Tỵ':'Kim',
+  'Nhâm Ngọ':'Mộc','Quý Mùi':'Mộc','Giáp Thân':'Thủy','Ất Dậu':'Thủy','Bính Tuất':'Thổ','Đinh Hợi':'Thổ',
+  'Mậu Tý':'Hỏa','Kỷ Sửu':'Hỏa','Canh Dần':'Mộc','Tân Mão':'Mộc','Nhâm Thìn':'Thủy','Quý Tỵ':'Thủy',
+  'Giáp Ngọ':'Kim','Ất Mùi':'Kim','Bính Thân':'Hỏa','Đinh Dậu':'Hỏa','Mậu Tuất':'Mộc','Kỷ Hợi':'Mộc',
+  'Canh Tý':'Thổ','Tân Sửu':'Thổ','Nhâm Dần':'Kim','Quý Mão':'Kim','Giáp Thìn':'Hỏa','Ất Tỵ':'Hỏa',
+  'Bính Ngọ':'Thủy','Đinh Mùi':'Thủy','Mậu Thân':'Thổ','Kỷ Dậu':'Thổ','Canh Tuất':'Kim','Tân Hợi':'Kim',
+  'Nhâm Tý':'Mộc','Quý Sửu':'Mộc','Giáp Dần':'Thủy','Ất Mão':'Thủy','Bính Thìn':'Thổ','Đinh Tỵ':'Thổ',
+  'Mậu Ngọ':'Hỏa','Kỷ Mùi':'Hỏa','Canh Thân':'Mộc','Tân Dậu':'Mộc','Nhâm Tuất':'Thủy','Quý Hợi':'Thủy',
+};
+const _NAP_AM_FULL_MU = {
+  'Giáp Tý':'Hải Trung Kim','Ất Sửu':'Hải Trung Kim','Bính Dần':'Lô Trung Hỏa','Đinh Mão':'Lô Trung Hỏa',
+  'Mậu Thìn':'Đại Lâm Mộc','Kỷ Tỵ':'Đại Lâm Mộc','Canh Ngọ':'Lộ Bàng Thổ','Tân Mùi':'Lộ Bàng Thổ',
+  'Nhâm Thân':'Kiếm Phong Kim','Quý Dậu':'Kiếm Phong Kim','Giáp Tuất':'Sơn Đầu Hỏa','Ất Hợi':'Sơn Đầu Hỏa',
+  'Bính Tý':'Giản Hạ Thủy','Đinh Sửu':'Giản Hạ Thủy','Mậu Dần':'Thành Đầu Thổ','Kỷ Mão':'Thành Đầu Thổ',
+  'Canh Thìn':'Bạch Lạp Kim','Tân Tỵ':'Bạch Lạp Kim','Nhâm Ngọ':'Dương Liễu Mộc','Quý Mùi':'Dương Liễu Mộc',
+  'Giáp Thân':'Tuyền Trung Thủy','Ất Dậu':'Tuyền Trung Thủy','Bính Tuất':'Ốc Thượng Thổ','Đinh Hợi':'Ốc Thượng Thổ',
+  'Mậu Tý':'Tích Lịch Hỏa','Kỷ Sửu':'Tích Lịch Hỏa','Canh Dần':'Tùng Bách Mộc','Tân Mão':'Tùng Bách Mộc',
+  'Nhâm Thìn':'Trường Lưu Thủy','Quý Tỵ':'Trường Lưu Thủy','Giáp Ngọ':'Sa Trung Kim','Ất Mùi':'Sa Trung Kim',
+  'Bính Thân':'Sơn Hạ Hỏa','Đinh Dậu':'Sơn Hạ Hỏa','Mậu Tuất':'Bình Địa Mộc','Kỷ Hợi':'Bình Địa Mộc',
+  'Canh Tý':'Bích Thượng Thổ','Tân Sửu':'Bích Thượng Thổ','Nhâm Dần':'Kim Bạc Kim','Quý Mão':'Kim Bạc Kim',
+  'Giáp Thìn':'Phúc Đăng Hỏa','Ất Tỵ':'Phúc Đăng Hỏa','Bính Ngọ':'Thiên Hà Thủy','Đinh Mùi':'Thiên Hà Thủy',
+  'Mậu Thân':'Đại Dịch Thổ','Kỷ Dậu':'Đại Dịch Thổ','Canh Tuất':'Thoa Xuyến Kim','Tân Hợi':'Thoa Xuyến Kim',
+  'Nhâm Tý':'Tang Đố Mộc','Quý Sửu':'Tang Đố Mộc','Giáp Dần':'Đại Khê Thủy','Ất Mão':'Đại Khê Thủy',
+  'Bính Thìn':'Sa Trung Thổ','Đinh Tỵ':'Sa Trung Thổ','Mậu Ngọ':'Thiên Thượng Hỏa','Kỷ Mùi':'Thiên Thượng Hỏa',
+  'Canh Thân':'Thạch Lựu Mộc','Tân Dậu':'Thạch Lựu Mộc','Nhâm Tuất':'Đại Hải Thủy','Quý Hợi':'Đại Hải Thủy',
+};
+function _muYearToCanChi(y) { return `${_CAN_MU[(y-4+400)%10]} ${_CHI_MU[(y-4+480)%12]}`; }
+function _muGetHanh(y) { return _NAP_AM_MU[_muYearToCanChi(y)] || 'Thổ'; }
+
+const SP_TRANG_DIEM = `Bạn là chuyên gia nhân tướng học và tư vấn trang điểm theo cổ pháp phương Đông.
+Nhiệm vụ: phân tích khuôn mặt → gợi ý phong cách makeup châu Á phù hợp, có lý giải cổ pháp ngắn gọn.
+Trả về JSON THUẦN TÚY — không markdown, không backtick, không text ngoài JSON.
+
+IDs makeup hợp lệ: glass_skin, soft_girl, kdrama_glam, j_sheer, j_gyaru, guochao, hoa_dan, dark_muse
+
+Format bắt buộc:
+{
+  "faceShape": "oval",
+  "faceShapeVN": "Bầu dục",
+  "ageGroup": "20s",
+  "skinTone": "fair",
+  "tuongHocInsight": "Mặt bầu dục — tướng Mộc, thanh tú, khí chất tự nhiên",
+  "makeupRanked": ["glass_skin","j_sheer","soft_girl","hoa_dan"],
+  "makeupReasons": {
+    "glass_skin": "Mộc hình tướng hợp với vẻ tinh khiết, trong trẻo — glass skin tôn lên nét thanh tú tự nhiên",
+    "j_sheer": "Thủy sinh Mộc — sheer texture nhẹ nhàng hòa hợp với khí chất thanh tao của tướng Mộc",
+    "soft_girl": "Mặt bầu dục cân đối — soft blush tạo sự tươi sáng mà không làm mất nét tự nhiên"
+  },
+  "colorPalette": {
+    "lip": ["#E8917A","#C77B6E","#F0A898"],
+    "eye": ["#8B7355","#C4A882","#3D2B1F"],
+    "blush": ["#F4B8A8","#E8A898"]
+  },
+  "tip": "Lời khuyên ngắn về cách apply phù hợp nhất"
+}
+
+Quy tắc:
+- faceShape: oval / round / square / heart / oblong
+- skinTone: fair / medium / warm / dark
+- makeupRanked: 4 IDs từ danh sách hợp lệ, thứ tự phù hợp nhất → ít nhất
+- makeupReasons: đủ 3 key đầu trong makeupRanked, mỗi lý do ≤ 20 từ, phải nhắc cổ pháp (tướng, hành, khí chất)
+- colorPalette: hex codes thực tế phù hợp skinTone
+- Chỉ trả về JSON`;
+
+async function handleTrangDiemPhanTich(body, apiKey) {
+  const { image, mediaType = 'image/jpeg', namSinh, faceMeasurements } = body;
+  if (!image) return Response.json({ error: 'Thiếu dữ liệu ảnh.' }, { status: 400 });
+  if (image.length > 7 * 1024 * 1024) return Response.json({ error: 'Ảnh quá lớn.' }, { status: 400 });
+
+  // Tính nạp âm nếu có năm sinh
+  let napAmContext = '';
+  let napAmHanh = null;
+  let napAmFull = null;
+  let canChi = null;
+  let menhMakeupIds = null;
+  if (namSinh && namSinh >= 1900 && namSinh <= 2050) {
+    canChi = _muYearToCanChi(namSinh);
+    napAmHanh = _muGetHanh(namSinh);
+    napAmFull = _NAP_AM_FULL_MU[canChi] || canChi;
+    menhMakeupIds = MENH_MAKEUP_MAP[napAmHanh] || MENH_MAKEUP_MAP['Thổ'];
+    napAmContext = `\n\nNẠP ÂM & MỆNH: Năm sinh ${namSinh} (${canChi}) — ${napAmFull}, hành ${napAmHanh}.
+Theo cổ pháp, người mệnh ${napAmHanh} hợp với phong cách: ${menhMakeupIds.join(', ')}.
+Ưu tiên đề xuất các style này trong makeupRanked, và lồng ghép lý giải mệnh ${napAmHanh} vào makeupReasons.`;
+  }
+
+  let measurementContext = '';
+  if (faceMeasurements) {
+    const m = faceMeasurements;
+    measurementContext = `\n\nĐO LƯỜNG KHUÔN MẶT:\n- Rộng/cao: ${m.widthToHeight} | Hàm/mặt: ${m.jawToFace} | Trán/hàm: ${m.foreToJaw}`;
+  }
+
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1200,
+      system: SP_TRANG_DIEM + napAmContext + measurementContext,
+      messages: [{ role: 'user', content: [
+        { type: 'image', source: { type: 'base64', media_type: mediaType, data: image } },
+        { type: 'text', text: 'Phân tích khuôn mặt và trả về JSON phong cách makeup phù hợp.' }
+      ]}]
+    })
+  });
+  if (!resp.ok) return Response.json({ error: 'Lỗi AI.' }, { status: 500 });
+  const data = await resp.json();
+  const text = data.content?.[0]?.text || '{}';
+  try {
+    const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
+    // Inject menh context vào response
+    if (napAmHanh) {
+      parsed.napAmHanh = napAmHanh;
+      parsed.napAmFull = napAmFull;
+      parsed.canChi = canChi;
+      parsed.menhSuggestedIds = menhMakeupIds;
+    }
+    return Response.json(parsed);
+  } catch (_) {
+    return Response.json({ error: 'Lỗi phân tích kết quả AI.' }, { status: 500 });
+  }
+}
+
+async function handleTrangDiemTryon(body) {
+  const replKey = process.env.REPLICATE_API_KEY;
+  if (!replKey) return Response.json({ error: 'Replicate API key chưa cấu hình.' }, { status: 500 });
+  const { image, mediaType = 'image/jpeg', style_id } = body;
+  if (!image) return Response.json({ error: 'Thiếu dữ liệu ảnh.' }, { status: 400 });
+  const styleDesc = MAKEUP_STYLE_DESC[style_id];
+  if (!styleDesc) return Response.json({ error: 'Style không hợp lệ.' }, { status: 400 });
+  const prompt = `${styleDesc} The person's face shape, bone structure, skin texture, age, hair, clothing, and background must remain pixel-perfect identical. Only the makeup changes. Photorealistic.`;
+  try {
+    const url = await _replicateRun(
+      replKey,
+      'https://api.replicate.com/v1/models/black-forest-labs/flux-kontext-pro/predictions',
+      { prompt, input_image: `data:${mediaType};base64,${image}`, output_format: 'jpg', safety_tolerance: 2 },
+      { prefer: 'wait=55' }
+    );
+    return Response.json({ imageUrl: url });
+  } catch (e) {
+    return Response.json({ error: e.message || 'Lỗi xử lý ảnh.' }, { status: 500 });
+  }
+}
+
+// ── End Trang Điểm AI ─────────────────────────────────────────────────────────
+
 const PROMPTS = {
   'dien-tuong': SP_DIEN,
   'nhan-tuong': SP_NHAN,
@@ -677,6 +863,8 @@ export async function POST(request) {
 
     // ── Non-streaming Claude Vision JSON actions ───────────────────────────
     if (action === 'kieu-toc-phan-tich') return await handleKieuTocPhanTich(body, apiKey);
+    if (action === 'trang-diem-phan-tich') return await handleTrangDiemPhanTich(body, apiKey);
+    if (action === 'trang-diem-tryon') return await handleTrangDiemTryon(body);
 
     // Validation: thanh-tuong & thanh-tuong-pro cần geoNote (text), còn lại cần image
     if (action === 'thanh-tuong' || action === 'thanh-tuong-pro') {
