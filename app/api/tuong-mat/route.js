@@ -577,11 +577,13 @@ async function handleKieuTocTryon(body) {
     // source_image = face DONOR (user) → extracts user's face
     // target_image = where face gets placed (template with hairstyle)
     // Result: template body + template hairstyle + user's face ✓
-    // codeplugtech/face-swap v278a81e7: versioned endpoint, source=donor face, target=destination
+    // codeplugtech/face-swap v278a81e7: input_image=target, swap_image=face donor
+    // Result: input_image with face from swap_image
+    // We want: user face on template → swap_image=user, input_image=template
     const url = await _replicateRun(
       replKey,
       'https://api.replicate.com/v1/predictions',
-      { source_image: imageDataUri, target_image: template },
+      { swap_image: imageDataUri, input_image: template },
       { version: '278a81e7ebb22db98bcba54de985d22cc1abeead2754eb1f2af717247be69b34' }
     );
     return Response.json({ imageUrl: url });
