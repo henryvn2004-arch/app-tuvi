@@ -1,5 +1,6 @@
 // app/api/tuong-mat/route.js — v4 (dien + nhan + thu + thanh + khi-sac)
 export const dynamic = 'force-dynamic';
+export const maxDuration = 60;
 
 // ── System Prompts ─────────────────────────────────────────────────────────
 const SP_DIEN = `Bạn là chuyên gia nhân tướng học (面相學) theo truyền thống phương Đông, am hiểu Ma Y Thần Tướng (麻衣神相), Liễu Trang Thần Tướng (柳莊神相) và Thủy Kính Tập (水鏡集).
@@ -568,23 +569,17 @@ async function handleKieuTocTryon(body) {
   if (!HAIR_STYLE_DESC[style_id]) return Response.json({ error: 'Kiểu tóc không hợp lệ.' }, { status: 400 });
 
   const g = gender === 'nu' ? 'nu' : 'nam';
-  const templateKey = `${style_id}_${g}`;
-  const templateUrl = HAIR_TEMPLATES[templateKey];
+  const styleDesc = HAIR_STYLE_DESC[style_id][g];
   const imageDataUri = `data:${mediaType};base64,${image}`;
 
+  // flux-kontext-pro: image editing — chỉ đổi tóc, giữ nguyên mặt
+  const prompt = `Change only the hairstyle to ${styleDesc}. Keep the person's face, skin tone, expression, age, weight, and all facial features exactly the same. Do not change the face at all. Only modify the hair on top of the head.`;
+
   try {
-    const template = templateUrl || HAIR_TEMPLATES[`${style_id}_nam`];
-    // source_image = face DONOR (user) → extracts user's face
-    // target_image = where face gets placed (template with hairstyle)
-    // Result: template body + template hairstyle + user's face ✓
-    // codeplugtech/face-swap v278a81e7: input_image=target, swap_image=face donor
-    // Result: input_image with face from swap_image
-    // We want: user face on template → swap_image=user, input_image=template
     const url = await _replicateRun(
       replKey,
-      'https://api.replicate.com/v1/predictions',
-      { swap_image: imageDataUri, input_image: template },
-      { version: '278a81e7ebb22db98bcba54de985d22cc1abeead2754eb1f2af717247be69b34' }
+      'https://api.replicate.com/v1/models/black-forest-labs/flux-kontext-pro/predictions',
+      { prompt, input_image: imageDataUri, output_format: 'jpg', safety_tolerance: 2 }
     );
     return Response.json({ imageUrl: url });
   } catch (e) {
