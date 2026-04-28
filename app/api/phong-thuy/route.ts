@@ -4,7 +4,7 @@
 // POST /api/phong-thuy?action=cua-hang         — Phong thủy cửa hàng/VP (Vision)
 // POST /api/phong-thuy?action=mau-sac          — Màu sắc hợp mệnh (no Vision)
 
-export const maxDuration = 60;
+export const maxDuration = 300;
 export const runtime = 'nodejs';
 
 import { NextRequest } from 'next/server';
