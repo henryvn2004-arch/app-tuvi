@@ -30,6 +30,18 @@ const TEMPLATES = [
   { id: 'textured_wavy_nu',p:'Vietnamese female portrait, textured wavy medium length hair natural beach waves effortless, neutral expression, white background, front facing, photorealistic' },
   { id: 'pompadour_nu',   p: 'Vietnamese female portrait, modern female pompadour voluminous swept front soft, elegant, neutral expression, white background, front facing, photorealistic' },
   { id: 'undercut_nu',    p: 'Vietnamese female portrait, undercut hairstyle shaved sides styled longer top, neutral expression, white background, front facing, photorealistic' },
+  // NAM mới
+  { id: 'cushion_perm_nam', p: 'Vietnamese male portrait, Korean cushion perm hairstyle soft natural waves with volume at roots, airy bouncy texture, neutral expression, white background, front facing, photorealistic' },
+  { id: 'layered_curl_nam', p: 'Vietnamese male portrait, soft smoky layered curl hairstyle wispy layers with subtle waves, youthful Korean-inspired, neutral expression, white background, front facing, photorealistic' },
+  { id: 'perm_wave_nam',    p: 'Vietnamese male portrait, Korean wave perm hairstyle medium length natural effortless waves, relaxed modern, neutral expression, white background, front facing, photorealistic' },
+  // NỮ mới
+  { id: 'korean_perm_nu',   p: 'Vietnamese female portrait, Korean wave perm hairstyle soft natural romantic waves shoulder length, effortless chic, neutral expression, white background, front facing, photorealistic' },
+  { id: 'hime_nu',          p: 'Vietnamese female portrait, Hime cut hairstyle straight blunt bangs with princess layers two-length cut, elegant Japanese style, neutral expression, white background, front facing, photorealistic' },
+  { id: 'jellyfish_nu',     p: 'Vietnamese female portrait, jellyfish cut hairstyle short top layers with longer underlayer, edgy playful Gen-Z style, neutral expression, white background, front facing, photorealistic' },
+  { id: 'butterfly_nu',     p: 'Vietnamese female portrait, butterfly cut hairstyle face-framing layers shorter top longer underneath, voluminous movement, neutral expression, white background, front facing, photorealistic' },
+  { id: 'aline_bob_nu',     p: 'Vietnamese female portrait, A-line bob hairstyle angled shorter back longer front, sleek modern, neutral expression, white background, front facing, photorealistic' },
+  { id: 'glass_hair_nu',    p: 'Vietnamese female portrait, glass hair style ultra-smooth shiny straight hair collarbone length, polished Korean trend, neutral expression, white background, front facing, photorealistic' },
+  { id: 'money_piece_nu',   p: 'Vietnamese female portrait, money piece highlights hairstyle face-framing bright front sections with dark base, trendy color style, neutral expression, white background, front facing, photorealistic' },
 ];
 
 function sleep(ms: number) { return new Promise(r => setTimeout(r, ms)); }

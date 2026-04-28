@@ -456,8 +456,8 @@ Format bắt buộc (ví dụ cho nam mặt tròn):
   "tip": "Ưu tiên kiểu tạo chiều cao và góc cạnh để cân bằng đường cong của mặt tròn"
 }
 
-IDs kiểu tóc NAM hợp lệ: undercut, pompadour, curtain, buzz, textured, two_block, side_part, slick_back
-IDs kiểu tóc NỮ hợp lệ: curtain_nu, wolf, bob, long_layers, pixie, side_waves, wispy, shag, lob, blunt_fringe, textured_wavy, pompadour_nu, undercut_nu
+IDs kiểu tóc NAM hợp lệ: undercut, pompadour, curtain, buzz, textured, two_block, side_part, slick_back, cushion_perm, layered_curl, perm_wave
+IDs kiểu tóc NỮ hợp lệ: curtain_nu, wolf, bob, long_layers, pixie, side_waves, wispy, shag, lob, blunt_fringe, textured_wavy, pompadour_nu, undercut_nu, korean_perm, hime, jellyfish, butterfly, aline_bob, glass_hair, money_piece, undercut_nu
 
 IDs kính hợp lệ: rectangle, round, oval, browline, cat_eye, aviator
 
@@ -482,6 +482,9 @@ const HAIR_STYLE_DESC = {
   two_block:   { nam: 'Korean two-block haircut shaved sides longer textured top modern style' },
   side_part:   { nam: 'classic side part haircut neatly combed to one side professional look' },
   slick_back:  { nam: 'slick back hairstyle hair swept straight back glossy finish' },
+  cushion_perm: { nam: 'Korean cushion perm hairstyle soft natural waves with volume at crown, airy bouncy K-style' },
+  layered_curl: { nam: 'soft smoky layered curl hairstyle wispy layers with subtle waves, youthful Korean-inspired' },
+  perm_wave:    { nam: 'Korean wave perm hairstyle medium length natural effortless waves, relaxed modern look' },
   // NỮ
   wolf:         { nu: 'wolf cut hairstyle layered with wispy curtain bangs shaggy texture' },
   bob:          { nu: 'short bob haircut jaw-length clean and structured' },
@@ -494,6 +497,13 @@ const HAIR_STYLE_DESC = {
   blunt_fringe: { nu: 'blunt fringe straight across bangs with long hair clean sharp look' },
   textured_wavy:{ nu: 'textured wavy medium length hair natural beach waves effortless style' },
   pompadour_nu: { nu: 'modern female pompadour voluminous swept front elegant style' },
+  korean_perm:  { nu: 'Korean wave perm hairstyle soft natural romantic waves shoulder length, effortless chic' },
+  hime:         { nu: 'Hime cut hairstyle straight blunt bangs with princess layers two-length structure, elegant Japanese' },
+  jellyfish:    { nu: 'jellyfish cut hairstyle short top layers with longer underlayer, edgy playful Gen-Z style' },
+  butterfly:    { nu: 'butterfly cut hairstyle face-framing layers shorter top longer underneath, voluminous movement' },
+  aline_bob:    { nu: 'A-line bob hairstyle angled shorter back longer front, sleek modern' },
+  glass_hair:   { nu: 'glass hair ultra-smooth shiny straight hair collarbone length, polished Korean trend' },
+  money_piece:  { nu: 'money piece highlights face-framing bright front sections with dark base, trendy color-style' },
   // Shared
   curtain_nu:  { nu: 'curtain bangs center part soft waves framing face romantic feminine style' },
 };
@@ -550,8 +560,8 @@ async function handleKieuTocPhanTich(body, apiKey) {
 
   const genderLabel = gender === 'nu' ? 'Nữ' : 'Nam';
   const validHairIds = gender === 'nu'
-    ? 'curtain_nu, wolf, bob, long_layers, pixie, side_waves, wispy, shag, lob, blunt_fringe, textured_wavy, pompadour_nu, undercut_nu'
-    : 'undercut, pompadour, curtain, buzz, textured, two_block, side_part, slick_back';
+    ? 'curtain_nu, wolf, bob, long_layers, pixie, side_waves, wispy, shag, lob, blunt_fringe, textured_wavy, pompadour_nu, undercut_nu, korean_perm, hime, jellyfish, butterfly, aline_bob, glass_hair, money_piece'
+    : 'undercut, pompadour, curtain, buzz, textured, two_block, side_part, slick_back, cushion_perm, layered_curl, perm_wave';
 
   // Build measurement context if available
   let measurementContext = '';
