@@ -572,26 +572,19 @@ async function handleKieuTocTryon(body) {
   const imageDataUri = `data:${mediaType};base64,${image}`;
 
   try {
-    if (templateUrl) {
-      // Face-swap: put user's face onto hair template
-      const url = await _replicateRun(
-        replKey,
-        'https://api.replicate.com/v1/models/codeplugtech/face-swap/predictions',
-        {
-          source_image: imageDataUri,   // user face
-          target_image: templateUrl,    // hair template
-        }
-      );
-      return Response.json({ imageUrl: url });
-    }
-
-    // Fallback: flux-kontext-pro for textured_nu (not yet generated)
-    const styleDesc = HAIR_STYLE_DESC[style_id][g];
-    const prompt = `Change only the hairstyle to ${styleDesc}. Keep the face, skin, expression, clothing and background exactly the same. Photorealistic, natural lighting.`;
+    const template = templateUrl || HAIR_TEMPLATES[`${style_id}_nam`]; // final fallback
+    // codeplugtech/face-swap: source = face donor, target = scene to put face into
+    // We want user's face ON the template → source=template face (ignored), target=user image
+    // Actually: source_image = face to EXTRACT, target_image = image to PUT face INTO
+    // So: source=user face, target=template → result is template body with user face ✓
+    // But model might work differently — swap them if result is wrong
     const url = await _replicateRun(
       replKey,
-      'https://api.replicate.com/v1/models/black-forest-labs/flux-kontext-pro/predictions',
-      { prompt, input_image: imageDataUri, output_format: 'jpg', safety_tolerance: 2 }
+      'https://api.replicate.com/v1/models/codeplugtech/face-swap/predictions',
+      {
+        source_image: template,      // face extracted FROM template (hair style)
+        target_image: imageDataUri,  // user photo — face in this gets REPLACED
+      }
     );
     return Response.json({ imageUrl: url });
   } catch (e) {
