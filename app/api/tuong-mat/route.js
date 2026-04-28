@@ -455,32 +455,53 @@ Quy tắc:
 - IDs hợp lệ: undercut, pompadour, curtain, buzz, textured
 - Chỉ trả về JSON, không có gì khác`;
 
-const HAIR_REPLICATE_PROMPTS = {
-  undercut: {
-    nam: 'portrait photo of a man img with classic undercut haircut, shaved fade sides, longer textured top, natural expression, photorealistic, professional portrait, sharp focus, 8k',
-    nu:  'portrait photo of a woman img with undercut hairstyle, shaved sides, longer styled top, natural expression, photorealistic, professional portrait, sharp focus',
-  },
-  pompadour: {
-    nam: 'portrait photo of a man img with pompadour hairstyle, high volume swept back from forehead, well groomed, classic barbershop style, photorealistic, professional portrait, sharp focus',
-    nu:  'portrait photo of a woman img with modern pompadour, voluminous front swept stylishly back, elegant polished look, photorealistic, professional portrait, sharp focus',
-  },
-  curtain: {
-    nam: 'portrait photo of a man img with curtain bangs hairstyle, center parted, soft hair falling naturally to both sides of face, relaxed modern style, photorealistic, sharp focus',
-    nu:  'portrait photo of a woman img with curtain bangs, center part, soft waves framing face gently, romantic feminine style, photorealistic, professional portrait, sharp focus',
-  },
-  buzz: {
-    nam: 'portrait photo of a man img with buzz cut, very short uniform hair all over, clean sharp look, natural expression, photorealistic, professional portrait, sharp focus',
-    nu:  'portrait photo of a woman img with buzz cut, very short cropped hair, bold confident look, natural expression, photorealistic, professional portrait, sharp focus',
-  },
-  textured: {
-    nam: 'portrait photo of a man img with textured crop haircut, short textured top with natural movement and volume, modern trendy style, photorealistic, professional portrait, sharp focus',
-    nu:  'portrait photo of a woman img with textured crop, tousled short waves with natural texture, effortless modern look, photorealistic, professional portrait, sharp focus',
-  },
+// Hair style reference prompts (dùng cho fallback text nếu cần)
+const HAIR_STYLE_DESC = {
+  undercut:  { nam: 'classic undercut, shaved fade sides, longer textured top', nu: 'undercut, shaved sides, longer styled top' },
+  pompadour: { nam: 'pompadour, high volume swept back from forehead', nu: 'modern pompadour, voluminous swept front' },
+  curtain:   { nam: 'curtain bangs, center parted, soft hair falling to both sides', nu: 'curtain bangs, center part, soft waves framing face' },
+  buzz:      { nam: 'buzz cut, very short uniform hair', nu: 'buzz cut, very short cropped bold look' },
+  textured:  { nam: 'textured crop, short with natural movement', nu: 'textured crop, tousled short waves' },
+};
+
+// HairFastGAN reference face images (neutral faces per gender for hair shape reference)
+const HAIR_FACE_REF = {
+  nam: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Gatto_europeo4.jpg/320px-Gatto_europeo4.jpg', // placeholder - replace with real refs
+  nu:  'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Gatto_europeo4.jpg/320px-Gatto_europeo4.jpg',
 };
 
 const REPLICATE_NEG_PROMPT = 'nsfw, ugly, deformed, bad anatomy, distorted face, blurry, low quality, cartoon, painting, illustration, anime, watermark, text, logo, duplicate, extra limbs';
 
 function _sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function _replicateRun(replKey, modelUrl, input) {
+  const startResp = await fetch(modelUrl, {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${replKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ input })
+  });
+  if (!startResp.ok) {
+    const e = await startResp.json().catch(() => ({}));
+    throw new Error(e.detail || `Replicate error ${startResp.status}`);
+  }
+  const prediction = await startResp.json();
+  if (prediction.status === 'succeeded') {
+    return Array.isArray(prediction.output) ? prediction.output[0] : prediction.output;
+  }
+  const predId = prediction.id;
+  if (!predId) throw new Error('Không tạo được prediction ID.');
+  for (let i = 0; i < 30; i++) {
+    await _sleep(2000);
+    const pollResp = await fetch(`https://api.replicate.com/v1/predictions/${predId}`, {
+      headers: { 'Authorization': `Bearer ${replKey}` }
+    });
+    if (!pollResp.ok) continue;
+    const data = await pollResp.json();
+    if (data.status === 'succeeded') return Array.isArray(data.output) ? data.output[0] : data.output;
+    if (data.status === 'failed' || data.status === 'canceled') throw new Error(data.error || 'Replicate thất bại.');
+  }
+  throw new Error('Hết thời gian chờ. Vui lòng thử lại.');
+}
 
 async function handleKieuTocPhanTich(body, apiKey) {
   const { image, mediaType = 'image/jpeg', gender = 'nam' } = body;
@@ -526,68 +547,48 @@ async function handleKieuTocTryon(body) {
   const replKey = process.env.REPLICATE_API_KEY;
   if (!replKey) return Response.json({ error: 'Replicate API key chưa cấu hình.' }, { status: 500 });
 
-  const { image, mediaType = 'image/jpeg', style_id, gender = 'nam' } = body;
+  const { image, mediaType = 'image/jpeg', style_id, gender = 'nam', hair_ref_url } = body;
   if (!image) return Response.json({ error: 'Thiếu dữ liệu ảnh.' }, { status: 400 });
-  if (!HAIR_REPLICATE_PROMPTS[style_id]) return Response.json({ error: 'Kiểu tóc không hợp lệ.' }, { status: 400 });
+  if (!HAIR_STYLE_DESC[style_id]) return Response.json({ error: 'Kiểu tóc không hợp lệ.' }, { status: 400 });
 
-  const prompt = HAIR_REPLICATE_PROMPTS[style_id][gender === 'nu' ? 'nu' : 'nam'];
   const imageDataUri = `data:${mediaType};base64,${image}`;
+  const styleDesc = HAIR_STYLE_DESC[style_id][gender === 'nu' ? 'nu' : 'nam'];
 
-  // Start Replicate prediction (PhotoMaker)
-  const startResp = await fetch('https://api.replicate.com/v1/models/tencentarc/photomaker/predictions', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${replKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      input: {
-        input_image: imageDataUri,
-        prompt,
-        negative_prompt: REPLICATE_NEG_PROMPT,
-        style_strength_ratio: 20,
-        num_outputs: 1,
-        guidance_scale: 5,
-        num_inference_steps: 30,
-      }
-    })
-  });
-
-  if (!startResp.ok) {
-    const e = await startResp.json().catch(() => ({}));
-    return Response.json({ error: e.detail || 'Lỗi khởi tạo Replicate.' }, { status: 500 });
-  }
-
-  const prediction = await startResp.json();
-
-  // If Prefer: wait worked and already done
-  if (prediction.status === 'succeeded') {
-    const url = Array.isArray(prediction.output) ? prediction.output[0] : prediction.output;
-    return Response.json({ imageUrl: url });
-  }
-
-  const predId = prediction.id;
-  if (!predId) return Response.json({ error: 'Không tạo được prediction ID.' }, { status: 500 });
-
-  // Poll up to ~54s (27 × 2s)
-  for (let i = 0; i < 27; i++) {
-    await _sleep(2000);
-    const pollResp = await fetch(`https://api.replicate.com/v1/predictions/${predId}`, {
-      headers: { 'Authorization': `Bearer ${replKey}` }
-    });
-    if (!pollResp.ok) continue;
-    const data = await pollResp.json();
-
-    if (data.status === 'succeeded') {
-      const url = Array.isArray(data.output) ? data.output[0] : data.output;
+  try {
+    // Try HairFastGAN first (nếu có hair_ref_url từ client)
+    if (hair_ref_url) {
+      const url = await _replicateRun(
+        replKey,
+        'https://api.replicate.com/v1/models/hairfastgan/hairfast/predictions',
+        {
+          face_img: imageDataUri,
+          hair_img: hair_ref_url,
+          result_resolution: 1024,
+        }
+      );
       return Response.json({ imageUrl: url });
     }
-    if (data.status === 'failed' || data.status === 'canceled') {
-      return Response.json({ error: data.error || 'Replicate xử lý thất bại.' }, { status: 500 });
-    }
-  }
 
-  return Response.json({ error: 'Hết thời gian chờ. Vui lòng thử lại.' }, { status: 504 });
+    // Fallback: InstantID + hairstyle prompt (stable, không cần reference)
+    const prompt = `professional portrait photo, person with ${styleDesc}, photorealistic, natural lighting, sharp focus, high quality`;
+    const url = await _replicateRun(
+      replKey,
+      'https://api.replicate.com/v1/models/zsxkib/instant-id/predictions',
+      {
+        image: imageDataUri,
+        prompt,
+        negative_prompt: REPLICATE_NEG_PROMPT,
+        num_inference_steps: 30,
+        guidance_scale: 5,
+        ip_adapter_scale: 0.8,
+        controlnet_conditioning_scale: 0.8,
+      }
+    );
+    return Response.json({ imageUrl: url });
+
+  } catch (e) {
+    return Response.json({ error: e.message || 'Lỗi xử lý ảnh.' }, { status: 500 });
+  }
 }
 
 // ── End Kiểu Tóc AI ─────────────────────────────────────────────────────────
