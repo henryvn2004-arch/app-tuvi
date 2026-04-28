@@ -474,11 +474,12 @@ const REPLICATE_NEG_PROMPT = 'nsfw, ugly, deformed, bad anatomy, distorted face,
 
 function _sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-async function _replicateRun(replKey, modelUrl, input) {
+async function _replicateRun(replKey, modelUrl, input, extraBody = {}) {
+  // Support both versioned (/v1/predictions) and model (/v1/models/.../predictions) endpoints
   const startResp = await fetch(modelUrl, {
     method: 'POST',
-    headers: { 'Authorization': `Bearer ${replKey}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ input })
+    headers: { 'Authorization': `Bearer ${replKey}`, 'Content-Type': 'application/json', 'Prefer': 'wait' },
+    body: JSON.stringify({ ...extraBody, input })
   });
   if (!startResp.ok) {
     const e = await startResp.json().catch(() => ({}));
@@ -576,13 +577,12 @@ async function handleKieuTocTryon(body) {
     // source_image = face DONOR (user) → extracts user's face
     // target_image = where face gets placed (template with hairstyle)
     // Result: template body + template hairstyle + user's face ✓
+    // codeplugtech/face-swap v278a81e7: versioned endpoint, source=donor face, target=destination
     const url = await _replicateRun(
       replKey,
-      'https://api.replicate.com/v1/models/codeplugtech/face-swap/predictions',
-      {
-        source_image: imageDataUri,  // user photo — extract face from here
-        target_image: template,      // template — user face gets placed here
-      }
+      'https://api.replicate.com/v1/predictions',
+      { source_image: imageDataUri, target_image: template },
+      { version: '278a81e7ebb22db98bcba54de985d22cc1abeead2754eb1f2af717247be69b34' }
     );
     return Response.json({ imageUrl: url });
   } catch (e) {
