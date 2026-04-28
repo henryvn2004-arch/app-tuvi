@@ -21,11 +21,16 @@ const TEMPLATES = [
 
 function sleep(ms: number) { return new Promise(r => setTimeout(r, ms)); }
 
-async function exists(id: string): Promise<boolean> {
-  try {
-    const r = await fetch(`${PUBLIC}/${id}.jpg`, { method: 'HEAD' });
-    return r.ok;
-  } catch { return false; }
+async function getExistingFiles(): Promise<Set<string>> {
+  // Query Supabase Storage API to list existing files
+  const r = await fetch(`${SB_URL}/storage/v1/object/list/hair-templates`, {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${SB_ANON}`, 'apikey': SB_ANON, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prefix: '', limit: 100 })
+  });
+  if (!r.ok) return new Set();
+  const files = await r.json() as { name: string }[];
+  return new Set(files.map(f => f.name.replace('.jpg', '')));
 }
 
 async function genAndUpload(id: string, prompt: string): Promise<{ id: string; url?: string; error?: string }> {
@@ -37,7 +42,6 @@ async function genAndUpload(id: string, prompt: string): Promise<{ id: string; u
     });
     if (!start.ok) throw new Error(`start ${start.status}`);
     const pred = await start.json() as { id: string; status: string; output?: string[] };
-
     let imgUrl = pred.status === 'succeeded' ? pred.output![0] : null;
     if (!imgUrl) {
       for (let i = 0; i < 20; i++) {
@@ -51,7 +55,6 @@ async function genAndUpload(id: string, prompt: string): Promise<{ id: string; u
       }
     }
     if (!imgUrl) throw new Error('timeout');
-
     const imgBuf = await fetch(imgUrl).then(r => r.arrayBuffer());
     const up = await fetch(`${SB_URL}/storage/v1/object/hair-templates/${id}.jpg`, {
       method: 'POST',
@@ -70,22 +73,27 @@ export async function GET(request: NextRequest) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  // Check which already exist (use correct public URL)
-  const existChecks = await Promise.all(TEMPLATES.map(async t => ({ ...t, exists: await exists(t.id) })));
-  const todo = existChecks.filter(t => !t.exists);
-  const done = existChecks.filter(t => t.exists).map(t => ({ id: t.id, url: `${PUBLIC}/${t.id}.jpg` }));
+  const existing = await getExistingFiles();
+  const todo = TEMPLATES.filter(t => !existing.has(t.id));
+  const done = TEMPLATES.filter(t => existing.has(t.id)).map(t => ({ id: t.id, url: `${PUBLIC}/${t.id}.jpg` }));
 
-  // Generate SEQUENTIALLY with small delay to avoid rate limit
+  // Generate sequentially — rate limit safe
   const generated: { id: string; url?: string; error?: string }[] = [];
   for (const t of todo) {
-    const result = await genAndUpload(t.id, t.p);
-    generated.push(result);
-    if (generated.length < todo.length) await sleep(500);
+    const r = await genAndUpload(t.id, t.p);
+    generated.push(r);
+    if (generated.length < todo.length) await sleep(1000);
   }
 
   const urls: Record<string, string> = {};
   const errors: Record<string, string> = {};
   [...done, ...generated].forEach(r => { if (r.url) urls[r.id] = r.url; else if (r.error) errors[r.id] = r.error; });
 
-  return Response.json({ urls, errors, count: Object.keys(urls).length, skipped: done.length, generated: generated.filter(r => r.url).length });
+  return Response.json({
+    urls, errors,
+    count: Object.keys(urls).length,
+    skipped: done.length,
+    generated: generated.filter(r => r.url).length,
+    todo: todo.map(t => t.id),
+  });
 }
