@@ -390,30 +390,39 @@ function onDrop(e) {
 }
 function onFileSelect(e) { if (e.target.files[0]) loadFile(e.target.files[0]); }
 
-function loadFile(file) {
+async function loadFile(file) {
   if (!file.type.startsWith('image/')) return;
-  if (file.size > 5 * 1024 * 1024) {
-    showError('Ảnh quá lớn (tối đa 5MB). Vui lòng chọn ảnh khác.');
-    return;
-  }
-  const reader = new FileReader();
-  reader.onload = e => {
+  if (file.size > 5 * 1024 * 1024) { showError('Ảnh quá lớn (tối đa 5MB). Vui lòng chọn ảnh khác.'); return; }
+  const MAX = 1024;
+  try {
+    // createImageBitmap normalizes EXIF orientation correctly across modern browsers
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, MAX / Math.max(bitmap.width, bitmap.height));
+    const w = Math.round(bitmap.width * scale), h = Math.round(bitmap.height * scale);
+    const cv = document.createElement('canvas');
+    cv.width = w; cv.height = h;
+    cv.getContext('2d').drawImage(bitmap, 0, 0, w, h);
+    bitmap.close();
     _mediaType = 'image/jpeg';
-    // Fix EXIF rotation — draw onto canvas to normalize orientation
-    const img = new Image();
-    img.onload = () => {
-      const MAX = 1024;
-      let w = img.naturalWidth, h = img.naturalHeight;
-      const scale = Math.min(1, MAX / Math.max(w, h));
-      w = Math.round(w * scale); h = Math.round(h * scale);
-      const cv = document.createElement('canvas');
-      cv.width = w; cv.height = h;
-      cv.getContext('2d').drawImage(img, 0, 0, w, h);
-      showPreview(cv.toDataURL('image/jpeg', 0.88));
+    showPreview(cv.toDataURL('image/jpeg', 0.88));
+  } catch(_) {
+    // Fallback for older browsers
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(1, MAX / Math.max(img.naturalWidth, img.naturalHeight));
+        const w = Math.round(img.naturalWidth * scale), h = Math.round(img.naturalHeight * scale);
+        const cv = document.createElement('canvas');
+        cv.width = w; cv.height = h;
+        cv.getContext('2d').drawImage(img, 0, 0, w, h);
+        _mediaType = 'image/jpeg';
+        showPreview(cv.toDataURL('image/jpeg', 0.88));
+      };
+      img.src = e.target.result;
     };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
+    reader.readAsDataURL(file);
+  }
 }
 
 function showPreview(dataUrl) {

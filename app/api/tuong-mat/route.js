@@ -572,18 +572,16 @@ async function handleKieuTocTryon(body) {
   const imageDataUri = `data:${mediaType};base64,${image}`;
 
   try {
-    const template = templateUrl || HAIR_TEMPLATES[`${style_id}_nam`]; // final fallback
-    // codeplugtech/face-swap: source = face donor, target = scene to put face into
-    // We want user's face ON the template → source=template face (ignored), target=user image
-    // Actually: source_image = face to EXTRACT, target_image = image to PUT face INTO
-    // So: source=user face, target=template → result is template body with user face ✓
-    // But model might work differently — swap them if result is wrong
+    const template = templateUrl || HAIR_TEMPLATES[`${style_id}_nam`];
+    // source_image = face DONOR (user) → extracts user's face
+    // target_image = where face gets placed (template with hairstyle)
+    // Result: template body + template hairstyle + user's face ✓
     const url = await _replicateRun(
       replKey,
       'https://api.replicate.com/v1/models/codeplugtech/face-swap/predictions',
       {
-        source_image: template,      // face extracted FROM template (hair style)
-        target_image: imageDataUri,  // user photo — face in this gets REPLACED
+        source_image: imageDataUri,  // user photo — extract face from here
+        target_image: template,      // template — user face gets placed here
       }
     );
     return Response.json({ imageUrl: url });
