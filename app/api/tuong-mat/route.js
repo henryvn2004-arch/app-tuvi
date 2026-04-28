@@ -593,7 +593,7 @@ async function handleKieuTocTryon(body) {
     const styleObj = HAIR_STYLE_DESC[style_id];
     if (!styleObj) return Response.json({ error: 'Kiểu tóc không hợp lệ.' }, { status: 400 });
     const styleDesc = gender === 'nu' ? (styleObj.nu || styleObj.nam) : (styleObj.nam || styleObj.nu);
-    prompt = `Change only the hairstyle to ${styleDesc}. Keep the person's face, skin tone, expression, age, weight, and all facial features exactly the same. Do not change the face at all. Only modify the hair. Photorealistic.`;
+    prompt = `Edit ONLY the hair. Change the hairstyle to: ${styleDesc}. Everything else must remain pixel-perfect identical: the face shape, skin tone, skin texture, eye color, nose, mouth, expression, age, body weight, clothing, and background. Do not alter the face in any way. Only the hair changes.`;
   }
 
   try {
