@@ -429,46 +429,75 @@ Luận từng vùng theo thứ tự: Nam Nhạc (trán) → Trung Nhạc (mũi) 
 4. DẪN CỔ VĂN đúng nguyên văn — không tự sáng tác.
 5. Giọng trang trọng, như một lão sư đang quan khí — không xuề xoà, không khoa trương.`;
 
-// ── Kiểu Tóc AI ────────────────────────────────────────────────────────────
-const SP_KIEU_TOC = `Bạn là chuyên gia phân tích khuôn mặt và tư vấn kiểu tóc theo nhân tướng học phương Đông.
-Nhiệm vụ: phân tích hình dạng khuôn mặt và xếp hạng 5 kiểu tóc theo mức độ phù hợp.
-Trả về JSON THUẦN TÚY — không có markdown, không có backtick, không có text nào ngoài JSON.
+// ── Kiểu Tóc & Kính Mắt AI ──────────────────────────────────────────────────
+
+const SP_NGOAI_HINH = `Bạn là chuyên gia nhân tướng học và tư vấn ngoại hình theo cổ pháp phương Đông.
+Nhiệm vụ: phân tích khuôn mặt và đưa ra gợi ý kiểu tóc + kính phù hợp theo hình dạng, nhóm tuổi, và giới tính.
+Trả về JSON THUẦN TÚY — không markdown, không backtick, không text ngoài JSON.
 
 Format bắt buộc:
 {
   "faceShape": "oval|round|square|heart|oblong",
   "faceShapeVN": "Bầu dục|Tròn|Vuông|Trái tim|Dài",
-  "desc": "2-3 đặc điểm nhận dạng của khuôn mặt này (tiếng Việt tự nhiên, ngắn gọn)",
-  "ranked": ["id1","id2","id3","id4","id5"],
-  "reasons": {
-    "undercut": "lý do phù hợp hoặc không phù hợp (1 câu tiếng Việt)",
-    "pompadour": "lý do phù hợp hoặc không phù hợp (1 câu tiếng Việt)",
-    "curtain": "lý do phù hợp hoặc không phù hợp (1 câu tiếng Việt)",
-    "buzz": "lý do phù hợp hoặc không phù hợp (1 câu tiếng Việt)",
-    "textured": "lý do phù hợp hoặc không phù hợp (1 câu tiếng Việt)"
-  },
-  "tip": "1-2 câu lời khuyên tổng quát về chọn kiểu tóc cho khuôn mặt này (tiếng Việt)"
+  "ageGroup": "20s|30s|40s+",
+  "desc": "2-3 đặc điểm nhận dạng khuôn mặt ngắn gọn (tiếng Việt)",
+  "tuongHocInsight": "1-2 câu nhân tướng học về khuôn mặt — trích dẫn cổ pháp nếu có (tiếng Việt)",
+  "hairRanked": ["id1","id2","id3","id4","id5"],
+  "hairReasons": { "id": "1 câu lý do tiếng Việt" },
+  "glassesRanked": ["id1","id2","id3"],
+  "glassesReasons": { "id": "1 câu lý do tiếng Việt" },
+  "tip": "1-2 câu lời khuyên tổng quát về phong cách theo khuôn mặt và nhóm tuổi (tiếng Việt)"
 }
 
+IDs kiểu tóc NAM hợp lệ: undercut, pompadour, curtain, buzz, textured, two_block, side_part, slick_back
+IDs kiểu tóc NỮ hợp lệ: curtain, wolf, bob, long_layers, pixie, side_waves, wispy, shag, lob, blunt_fringe, textured_wavy, pompadour_nu
+
+IDs kính hợp lệ: rectangle, round, oval, browline, cat_eye, aviator
+
 Quy tắc:
-- faceShape phải là đúng 1 trong 5 giá trị: oval, round, square, heart, oblong
-- ranked phải chứa đúng 5 IDs, thứ tự từ phù hợp nhất đến ít phù hợp nhất
-- IDs hợp lệ: undercut, pompadour, curtain, buzz, textured
+- faceShape: đúng 1 trong 5 giá trị
+- ageGroup: đúng 1 trong 3 giá trị (estimate từ ảnh, không hỏi)
+- hairRanked: đúng 5 IDs từ danh sách hợp lệ theo giới tính được cung cấp
+- glassesRanked: đúng 3 IDs từ danh sách kính hợp lệ
+- hairReasons: chỉ cần có key cho 5 IDs trong hairRanked
+- glassesReasons: chỉ cần có key cho 3 IDs trong glassesRanked
 - Chỉ trả về JSON, không có gì khác`;
 
-// Hair style reference prompts (dùng cho fallback text nếu cần)
+// Hair & Glasses style descriptors for flux-kontext-pro prompts
 const HAIR_STYLE_DESC = {
-  undercut:  { nam: 'classic undercut, shaved fade sides, longer textured top', nu: 'undercut, shaved sides, longer styled top' },
-  pompadour: { nam: 'pompadour, high volume swept back from forehead', nu: 'modern pompadour, voluminous swept front' },
-  curtain:   { nam: 'curtain bangs, center parted, soft hair falling to both sides', nu: 'curtain bangs, center part, soft waves framing face' },
-  buzz:      { nam: 'buzz cut, very short uniform hair', nu: 'buzz cut, very short cropped bold look' },
-  textured:  { nam: 'textured crop, short with natural movement', nu: 'textured crop, tousled short waves' },
+  // NAM
+  undercut:    { nam: 'classic undercut hairstyle with shaved fade sides and longer textured top' },
+  pompadour:   { nam: 'pompadour hairstyle with high volume swept back from forehead' },
+  curtain:     { nam: 'curtain bangs hairstyle center parted soft hair falling naturally to both sides' },
+  buzz:        { nam: 'buzz cut very short uniform hair all around' },
+  textured:    { nam: 'textured crop short hair with natural movement and volume' },
+  two_block:   { nam: 'Korean two-block haircut shaved sides longer textured top modern style' },
+  side_part:   { nam: 'classic side part haircut neatly combed to one side professional look' },
+  slick_back:  { nam: 'slick back hairstyle hair swept straight back glossy finish' },
+  // NỮ
+  wolf:         { nu: 'wolf cut hairstyle layered with wispy curtain bangs shaggy texture' },
+  bob:          { nu: 'short bob haircut jaw-length clean and structured' },
+  long_layers:  { nu: 'long layered haircut flowing layers adding volume and movement' },
+  pixie:        { nu: 'pixie cut very short back and sides slightly longer on top feminine style' },
+  side_waves:   { nu: 'side part with soft waves flowing to shoulder elegant feminine style' },
+  wispy:        { nu: 'wispy bangs soft feathery fringe with medium length hair' },
+  shag:         { nu: 'shag haircut with layers choppy ends and curtain bangs retro modern' },
+  lob:          { nu: 'lob long bob shoulder-length sleek and polished' },
+  blunt_fringe: { nu: 'blunt fringe straight across bangs with long hair clean sharp look' },
+  textured_wavy:{ nu: 'textured wavy medium length hair natural beach waves effortless style' },
+  pompadour_nu: { nu: 'modern female pompadour voluminous swept front elegant style' },
+  // Shared
+  curtain_nu:  { nu: 'curtain bangs center part soft waves framing face romantic feminine style' },
 };
 
-// HairFastGAN reference face images (neutral faces per gender for hair shape reference)
-const HAIR_FACE_REF = {
-  nam: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Gatto_europeo4.jpg/320px-Gatto_europeo4.jpg', // placeholder - replace with real refs
-  nu:  'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Gatto_europeo4.jpg/320px-Gatto_europeo4.jpg',
+// Glasses style descriptors
+const GLASSES_STYLE_DESC = {
+  rectangle: { desc: 'wearing rectangular thin-frame glasses modern professional style' },
+  round:     { desc: 'wearing round retro glasses Korean style thin metal frame' },
+  oval:      { desc: 'wearing oval shaped glasses lightweight delicate frame' },
+  browline:  { desc: 'wearing browline semi-rimless glasses upper frame bold lower rimless' },
+  cat_eye:   { desc: 'wearing cat-eye glasses slightly upswept corners elegant retro style' },
+  aviator:   { desc: 'wearing aviator glasses teardrop shape classic timeless style' },
 };
 
 const REPLICATE_NEG_PROMPT = 'nsfw, ugly, deformed, bad anatomy, distorted face, blurry, low quality, cartoon, painting, illustration, anime, watermark, text, logo, duplicate, extra limbs';
@@ -510,22 +539,23 @@ async function handleKieuTocPhanTich(body, apiKey) {
   if (!image) return Response.json({ error: 'Thiếu dữ liệu ảnh.' }, { status: 400 });
   if (image.length > 7 * 1024 * 1024) return Response.json({ error: 'Ảnh quá lớn.' }, { status: 400 });
 
+  const genderLabel = gender === 'nu' ? 'Nữ' : 'Nam';
+  const validHairIds = gender === 'nu'
+    ? 'curtain, curtain_nu, wolf, bob, long_layers, pixie, side_waves, wispy, shag, lob, blunt_fringe, textured_wavy, pompadour_nu'
+    : 'undercut, pompadour, curtain, buzz, textured, two_block, side_part, slick_back';
+
   const resp = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-    },
+    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
     body: JSON.stringify({
       model: 'claude-sonnet-4-6',
-      max_tokens: 800,
-      system: SP_KIEU_TOC,
+      max_tokens: 1000,
+      system: SP_NGOAI_HINH,
       messages: [{
         role: 'user',
         content: [
           { type: 'image', source: { type: 'base64', media_type: mediaType, data: image } },
-          { type: 'text', text: `Phân tích khuôn mặt và xếp hạng 5 kiểu tóc phù hợp nhất. Giới tính: ${gender === 'nu' ? 'Nữ' : 'Nam'}.` }
+          { type: 'text', text: `Giới tính: ${genderLabel}. IDs kiểu tóc hợp lệ: ${validHairIds}. Phân tích và trả về JSON.` }
         ]
       }]
     })
@@ -545,35 +575,26 @@ async function handleKieuTocPhanTich(body, apiKey) {
   }
 }
 
-// Pre-generated hair template URLs (Supabase Storage)
-const SB_HAIR = 'https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/hair-templates';
-const HAIR_TEMPLATES = {
-  undercut_nam:  `${SB_HAIR}/undercut_nam.jpg`,
-  undercut_nu:   `${SB_HAIR}/undercut_nu.jpg`,
-  pompadour_nam: `${SB_HAIR}/pompadour_nam.jpg`,
-  pompadour_nu:  `${SB_HAIR}/pompadour_nu.jpg`,
-  curtain_nam:   `${SB_HAIR}/curtain_nam.jpg`,
-  curtain_nu:    `${SB_HAIR}/curtain_nu.jpg`,
-  buzz_nam:      `${SB_HAIR}/buzz_nam.jpg`,
-  buzz_nu:       `${SB_HAIR}/buzz_nu.jpg`,
-  textured_nam:  `${SB_HAIR}/textured_nam.jpg`,
-  textured_nu:   `${SB_HAIR}/textured_nam.jpg`, // fallback to nam template — similar enough, face-swap handles gender
-};
-
 async function handleKieuTocTryon(body) {
   const replKey = process.env.REPLICATE_API_KEY;
   if (!replKey) return Response.json({ error: 'Replicate API key chưa cấu hình.' }, { status: 500 });
 
-  const { image, mediaType = 'image/jpeg', style_id, gender = 'nam' } = body;
+  const { image, mediaType = 'image/jpeg', style_id, gender = 'nam', type = 'hair' } = body;
   if (!image) return Response.json({ error: 'Thiếu dữ liệu ảnh.' }, { status: 400 });
-  if (!HAIR_STYLE_DESC[style_id]) return Response.json({ error: 'Kiểu tóc không hợp lệ.' }, { status: 400 });
 
-  const g = gender === 'nu' ? 'nu' : 'nam';
-  const styleDesc = HAIR_STYLE_DESC[style_id][g];
   const imageDataUri = `data:${mediaType};base64,${image}`;
+  let prompt;
 
-  // flux-kontext-pro: image editing — chỉ đổi tóc, giữ nguyên mặt
-  const prompt = `Change only the hairstyle to ${styleDesc}. Keep the person's face, skin tone, expression, age, weight, and all facial features exactly the same. Do not change the face at all. Only modify the hair on top of the head.`;
+  if (type === 'glasses') {
+    const g = GLASSES_STYLE_DESC[style_id];
+    if (!g) return Response.json({ error: 'Kiểu kính không hợp lệ.' }, { status: 400 });
+    prompt = `The person is now ${g.desc}. Keep the face, hairstyle, skin tone, expression, age, and everything else exactly the same. Only add the glasses on the face. Photorealistic.`;
+  } else {
+    const styleObj = HAIR_STYLE_DESC[style_id];
+    if (!styleObj) return Response.json({ error: 'Kiểu tóc không hợp lệ.' }, { status: 400 });
+    const styleDesc = gender === 'nu' ? (styleObj.nu || styleObj.nam) : (styleObj.nam || styleObj.nu);
+    prompt = `Change only the hairstyle to ${styleDesc}. Keep the person's face, skin tone, expression, age, weight, and all facial features exactly the same. Do not change the face at all. Only modify the hair. Photorealistic.`;
+  }
 
   try {
     const url = await _replicateRun(

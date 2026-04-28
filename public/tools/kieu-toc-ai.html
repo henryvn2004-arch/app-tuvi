@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Tư Vấn Kiểu Tóc Hợp Tướng Mặt Bằng AI | Tử Vi Minh Bảo</title>
+<title>Tư Vấn Kiểu Tóc & Kính Mắt Hợp Tướng Mặt Bằng AI | Tử Vi Minh Bảo</title>
 <meta property="og:title" content="Tư Vấn Kiểu Tóc Hợp Tướng Mặt Bằng AI | Tử Vi Minh Bảo"/>
 <meta property="og:description" content="Chụp ảnh khuôn mặt — AI phân tích hình dạng và gợi ý kiểu tóc phù hợp theo nhân tướng học. Thử kiểu tóc ngay trên ảnh bằng Replicate AI."/>
 <meta property="og:url" content="https://tuviminhbao.com/tools/kieu-toc-ai.html"/>
@@ -76,6 +76,11 @@
 
 /* Tip box */
 .tip-box{background:#fff8e7;border:1px solid #c9a84c;border-radius:8px;padding:12px 14px;margin-top:16px;font-size:13px;color:var(--navy);line-height:1.6}
+.result-tab{padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;color:var(--text-lt);border-bottom:2px solid transparent;margin-bottom:-2px;font-family:inherit;background:none;border-top:none;border-left:none;border-right:none;transition:all .15s}
+.result-tab.active{color:var(--navy);border-bottom-color:#c9a84c}
+.result-pane{display:none}.result-pane.active{display:block}
+/* Glasses card uses .style-card */
+.glasses-icon{font-size:28px;flex-shrink:0;width:52px;height:64px;display:flex;align-items:center;justify-content:center;background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:8px}
 .tip-box strong{color:var(--gold)}
 
 /* Try-on section */
@@ -209,7 +214,7 @@
       border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;
       font-family:inherit;letter-spacing:.3px;transition:opacity .15s
     " onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
-      ✨ Phân Tích Khuôn Mặt & Gợi Ý Kiểu Tóc
+      ✨ Phân Tích Khuôn Mặt & Gợi Ý Phong Cách
     </button>
     <div style="font-size:11px;color:var(--text-lt);text-align:center;margin-top:8px">
       Kết quả trong ~5 giây
@@ -226,34 +231,51 @@
       <div class="ai-loading-text">AI đang phân tích khuôn mặt...<br><span style="font-size:12px;opacity:.7">Thường mất 5–8 giây</span></div>
     </div>
 
-    <!-- Face shape card -->
+    <!-- Face shape + age group card -->
     <div id="faceShapeCard" class="face-shape-card" style="display:none">
       <div class="shape-emoji" id="shapeEmoji">🥚</div>
-      <div>
-        <div class="shape-label">Hình dạng khuôn mặt</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
+          <div class="shape-label" style="margin:0">Hình dạng khuôn mặt</div>
+          <span id="ageGroupBadge" style="font-size:10px;background:rgba(255,255,255,.15);color:#fff;padding:2px 8px;border-radius:10px;display:none"></span>
+        </div>
         <div class="shape-name" id="shapeName">—</div>
         <div class="shape-desc" id="shapeDesc">—</div>
+        <div id="tuongHocInsight" style="font-size:11px;color:rgba(255,255,255,.6);font-style:italic;margin-top:6px;line-height:1.5;display:none"></div>
       </div>
     </div>
 
-    <!-- Style cards -->
-    <div id="styleCardsWrap" style="display:none">
-      <div class="styles-title">✨ Kiểu tóc gợi ý (theo mức phù hợp)</div>
-      <div class="style-cards" id="styleCardsList"></div>
-      <div class="tip-box" id="tipBox" style="display:none">
+    <!-- Result tabs -->
+    <div id="resultTabsWrap" style="display:none">
+      <div style="display:flex;gap:0;border-bottom:2px solid var(--border-lt);margin-bottom:16px">
+        <button class="result-tab active" id="tab-hair" onclick="switchResultTab('hair',this)">✂️ Kiểu Tóc</button>
+        <button class="result-tab" id="tab-glasses" onclick="switchResultTab('glasses',this)">👓 Kính Mắt</button>
+      </div>
+
+      <!-- HAIR TAB -->
+      <div id="pane-hair" class="result-pane active">
+        <div class="styles-title">✨ Kiểu tóc phù hợp theo tướng mặt & nhóm tuổi</div>
+        <div class="style-cards" id="styleCardsList"></div>
+      </div>
+
+      <!-- GLASSES TAB -->
+      <div id="pane-glasses" class="result-pane" style="display:none">
+        <div class="styles-title">👓 Kiểu kính phù hợp theo cấu trúc khuôn mặt</div>
+        <div class="style-cards" id="glassesCardsList"></div>
+      </div>
+
+      <div class="tip-box" id="tipBox" style="display:none;margin-top:12px">
         <strong>💬 Lời khuyên: </strong><span id="tipText"></span>
       </div>
     </div>
 
     <!-- Try-on section -->
     <div class="tryon-section" id="tryonSection" style="display:none">
-      <div class="tryon-title" id="tryonTitle">Thử Kiểu Tóc Trên Ảnh</div>
-
+      <div class="tryon-title" id="tryonTitle">Thử Trên Ảnh</div>
       <div class="tryon-loading" id="tryonLoading">
         <div class="tryon-spinner"></div>
-        <div class="tryon-loading-text">Replicate AI đang render kiểu tóc...<br><span style="font-size:12px;opacity:.7">Thường mất 20–35 giây</span></div>
+        <div class="tryon-loading-text">AI đang render...<br><span style="font-size:12px;opacity:.7">Thường mất 20–40 giây</span></div>
       </div>
-
       <div id="tryonResult" style="display:none">
         <div class="before-after">
           <div class="ba-col">
@@ -270,7 +292,6 @@
           <button class="btn-retry" onclick="clearTryon()">🔄 Thử Kiểu Khác</button>
         </div>
       </div>
-
       <div class="error-msg" id="tryon-error-msg"></div>
     </div>
 
@@ -345,11 +366,37 @@ function _hairSvg(id, g) {
 }
 
 const STYLE_META = {
-  undercut:  { name: 'Undercut',        sub: 'Fade hai bên sát, đỉnh dài volume — cổ điển-hiện đại' },
-  pompadour: { name: 'Pompadour',       sub: 'Bờm vuốt cao phía trước, phong cách vintage-modern' },
-  curtain:   { name: 'Curtain Bangs',   sub: 'Mái rèm rẽ ngôi giữa, tự nhiên hai bên mặt' },
-  buzz:      { name: 'Buzz Cut',        sub: 'Cắt đều ngắn toàn bộ, tôn đường nét khuôn mặt' },
-  textured:  { name: 'Textured Crop',   sub: 'Ngắn lởm kết cấu, cá tính — dễ tạo kiểu hàng ngày' },
+  // NAM
+  undercut:    { name: 'Undercut',         sub: 'Fade hai bên sát, đỉnh dài — cổ điển hiện đại' },
+  pompadour:   { name: 'Pompadour',        sub: 'Bờm vuốt cao phía trước — vintage-modern' },
+  curtain:     { name: 'Curtain Bangs',    sub: 'Mái rèm rẽ ngôi giữa, tự nhiên' },
+  buzz:        { name: 'Buzz Cut',         sub: 'Cắt đều ngắn, tôn đường nét khuôn mặt' },
+  textured:    { name: 'Textured Crop',    sub: 'Ngắn lởm kết cấu, cá tính, dễ tạo kiểu' },
+  two_block:   { name: 'Two Block',        sub: 'Phong cách Hàn — cạo hai bên, đỉnh dài tự nhiên' },
+  side_part:   { name: 'Side Part',        sub: 'Rẽ ngôi bên, chải phẳng — chuyên nghiệp lịch lãm' },
+  slick_back:  { name: 'Slick Back',       sub: 'Chải ngược ra sau bóng mượt — mạnh mẽ sang trọng' },
+  // NỮ
+  curtain_nu:  { name: 'Curtain Bangs',    sub: 'Mái rèm mềm, rẽ ngôi giữa — lãng mạn nữ tính' },
+  wolf:        { name: 'Wolf Cut',         sub: 'Layers phân tầng wispy — cá tính Gen Z' },
+  bob:         { name: 'Bob Ngắn',         sub: 'Bob ngang hàm gọn gàng — chắc và sạch sẽ' },
+  long_layers: { name: 'Long Layers',      sub: 'Tóc dài layers mềm tự nhiên — nữ tính thanh lịch' },
+  pixie:       { name: 'Pixie Cut',        sub: 'Tóc rất ngắn táo bạo — cá tính tự tin' },
+  side_waves:  { name: 'Side Part Waves',  sub: 'Rẽ ngôi bên + sóng mềm — quý phái gợi cảm' },
+  wispy:       { name: 'Wispy Bangs',      sub: 'Mái thưa mềm mại — trẻ trung nhẹ nhàng' },
+  shag:        { name: 'Shag Cut',         sub: 'Layers lởm + curtain bangs — retro-modern' },
+  lob:         { name: 'Lob (Long Bob)',   sub: 'Bob dài ngang vai — tinh tế đa dụng' },
+  blunt_fringe:{ name: 'Blunt Fringe',     sub: 'Mái thẳng ngang trán + tóc dài — rõ nét cá tính' },
+  textured_wavy:{ name:'Textured Wavy',    sub: 'Sóng tự nhiên có kết cấu — effortless và trendy' },
+  pompadour_nu:{ name: 'Pompadour Nữ',     sub: 'Bờm phồng phía trước mềm mại — thanh lịch sang trọng' },
+};
+
+const GLASSES_META = {
+  rectangle: { name: 'Gọng Chữ Nhật',   sub: 'Gọng mỏng hiện đại — phù hợp hầu hết khuôn mặt',  icon: '🔲' },
+  round:     { name: 'Gọng Tròn Retro',  sub: 'Phong cách Hàn/vintage — làm mềm khuôn mặt vuông',  icon: '⭕' },
+  oval:      { name: 'Gọng Oval',        sub: 'Nhẹ nhàng tinh tế — hài hòa với mọi khuôn mặt',     icon: '🫧' },
+  browline:  { name: 'Browline Bán Viền', sub: 'Nửa viền trên đậm — trí thức lịch lãm',             icon: '🕶' },
+  cat_eye:   { name: 'Cat Eye',          sub: 'Đuôi vát lên — nữ tính quyến rũ (phù hợp nữ nhiều)', icon: '😺' },
+  aviator:   { name: 'Aviator',          sub: 'Giọt nước cổ điển — unisex, mạnh mẽ tự tin',         icon: '✈️' },
 };
 
 const SHAPE_EMOJI = { oval: '🥚', round: '⭕', square: '⬜', heart: '🫀', oblong: '📏' };
@@ -547,25 +594,41 @@ async function _doPhanTich() {
   }
 }
 
+function switchResultTab(tab, btn) {
+  document.querySelectorAll('.result-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.result-pane').forEach(p => { p.style.display = 'none'; p.classList.remove('active'); });
+  btn.classList.add('active');
+  const pane = document.getElementById('pane-' + tab);
+  pane.style.display = 'block'; pane.classList.add('active');
+}
+
 function renderAnalysis(data) {
   document.getElementById('analysisLoading').style.display = 'none';
 
-  // Face shape card
+  // Face shape + age group
   document.getElementById('shapeEmoji').textContent = SHAPE_EMOJI[data.faceShape] || '🫧';
   document.getElementById('shapeName').textContent = data.faceShapeVN || '—';
   document.getElementById('shapeDesc').textContent = data.desc || '';
+  if (data.ageGroup) {
+    const badge = document.getElementById('ageGroupBadge');
+    badge.textContent = { '20s': '20s', '30s': '30s', '40s+': '40s+' }[data.ageGroup] || data.ageGroup;
+    badge.style.display = 'inline';
+  }
+  if (data.tuongHocInsight) {
+    const el = document.getElementById('tuongHocInsight');
+    el.textContent = '📖 ' + data.tuongHocInsight;
+    el.style.display = 'block';
+  }
   document.getElementById('faceShapeCard').style.display = 'flex';
 
-  // Style cards
-  const list = document.getElementById('styleCardsList');
-  list.innerHTML = '';
-  const ranked = data.ranked || Object.keys(STYLE_META);
-  ranked.forEach((id, i) => {
-    const meta = STYLE_META[id];
-    if (!meta) return;
+  // Hair cards
+  const hairList = document.getElementById('styleCardsList');
+  hairList.innerHTML = '';
+  const hairRanked = data.hairRanked || data.ranked || [];
+  hairRanked.forEach((id, i) => {
+    const meta = STYLE_META[id]; if (!meta) return;
     const card = document.createElement('div');
-    card.className = 'style-card';
-    card.id = 'sc_' + id;
+    card.className = 'style-card'; card.id = 'sc_' + id;
     card.innerHTML = `
       <div class="style-thumb">${_hairSvg(id, _gender)}</div>
       <div class="style-info" style="flex:1">
@@ -574,50 +637,77 @@ function renderAnalysis(data) {
           <div class="style-name">${meta.name}</div>
         </div>
         <div class="style-sub">${meta.sub}</div>
-        ${data.reasons?.[id] ? `<div class="style-reason">${data.reasons[id]}</div>` : ''}
+        ${(data.hairReasons||data.reasons||{})[id] ? `<div class="style-reason">${(data.hairReasons||data.reasons)[id]}</div>` : ''}
       </div>
-      <button class="try-btn" onclick="selectStyle('${id}')">Thử →</button>
+      <button class="try-btn" onclick="selectStyle('${id}','hair')">Thử →</button>
     `;
-    list.appendChild(card);
+    hairList.appendChild(card);
   });
 
-  // Tip
+  // Glasses cards
+  const glassesList = document.getElementById('glassesCardsList');
+  glassesList.innerHTML = '';
+  const glassesRanked = data.glassesRanked || [];
+  glassesRanked.forEach((id, i) => {
+    const meta = GLASSES_META[id]; if (!meta) return;
+    const card = document.createElement('div');
+    card.className = 'style-card'; card.id = 'gc_' + id;
+    card.innerHTML = `
+      <div class="glasses-icon">${meta.icon}</div>
+      <div class="style-info" style="flex:1">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+          <span class="style-rank">#${i+1}</span>
+          <div class="style-name">${meta.name}</div>
+        </div>
+        <div class="style-sub">${meta.sub}</div>
+        ${(data.glassesReasons||{})[id] ? `<div class="style-reason">${data.glassesReasons[id]}</div>` : ''}
+      </div>
+      <button class="try-btn" onclick="selectStyle('${id}','glasses')">Thử →</button>
+    `;
+    glassesList.appendChild(card);
+  });
+
+  // Show tabs only if we have results
+  if (hairRanked.length || glassesRanked.length) {
+    document.getElementById('resultTabsWrap').style.display = 'block';
+  }
+
   if (data.tip) {
     document.getElementById('tipText').textContent = data.tip;
     document.getElementById('tipBox').style.display = 'block';
   }
-  document.getElementById('styleCardsWrap').style.display = 'block';
   document.getElementById('resetWrap').style.display = 'block';
 }
 
 // ── Try-on ─────────────────────────────────────────────────────
-async function selectStyle(styleId) {
+async function selectStyle(styleId, type = 'hair') {
   _selectedStyleId = styleId;
-  const meta = STYLE_META[styleId];
+  const meta = type === 'glasses' ? GLASSES_META[styleId] : STYLE_META[styleId];
 
   // Highlight selected card
   document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
-  const card = document.getElementById('sc_' + styleId);
+  const cardId = type === 'glasses' ? 'gc_' + styleId : 'sc_' + styleId;
+  const card = document.getElementById(cardId);
   if (card) card.classList.add('selected');
 
   TuviPaywall.init({ product: 'kieu-toc-tryon', slug: () => _currentSlug, onUnlock: () => {} });
   _currentSlug = TuviPaywall.generateToolSlug('kieu-toc-tryon');
   _saveStateForAuth();
   await TuviPaywall.requireCredits(_currentSlug, async () => {
-    await _doTryOn(styleId, meta);
+    await _doTryOn(styleId, meta, type);
   });
 }
 
-async function _doTryOn(styleId, meta) {
+async function _doTryOn(styleId, meta, type = 'hair') {
   clearTryonError();
   const tryonSec = document.getElementById('tryonSection');
   tryonSec.style.display = 'block';
-  document.getElementById('tryonTitle').textContent = `Thử: ${meta?.name || styleId}`;
+  const typeLabel = type === 'glasses' ? '👓' : '✂️';
+  document.getElementById('tryonTitle').textContent = `${typeLabel} Thử: ${meta?.name || styleId}`;
   document.getElementById('tryonLoading').style.display = 'block';
   document.getElementById('tryonResult').style.display = 'none';
   tryonSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-  // Disable all try buttons while processing
   document.querySelectorAll('.try-btn').forEach(b => b.disabled = true);
 
   try {
@@ -629,7 +719,8 @@ async function _doTryOn(styleId, meta) {
         image: _imageData,
         mediaType: _mediaType,
         style_id: styleId,
-        gender: _gender
+        gender: _gender,
+        type
       })
     });
     if (!res.ok) {
