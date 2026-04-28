@@ -543,6 +543,21 @@ async function handleKieuTocPhanTich(body, apiKey) {
   }
 }
 
+// Pre-generated hair template URLs (Supabase Storage)
+const SB_HAIR = 'https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/hair-templates';
+const HAIR_TEMPLATES = {
+  undercut_nam:  `${SB_HAIR}/undercut_nam.jpg`,
+  undercut_nu:   `${SB_HAIR}/undercut_nu.jpg`,
+  pompadour_nam: `${SB_HAIR}/pompadour_nam.jpg`,
+  pompadour_nu:  `${SB_HAIR}/pompadour_nu.jpg`,
+  curtain_nam:   `${SB_HAIR}/curtain_nam.jpg`,
+  curtain_nu:    `${SB_HAIR}/curtain_nu.jpg`,
+  buzz_nam:      `${SB_HAIR}/buzz_nam.jpg`,
+  buzz_nu:       `${SB_HAIR}/buzz_nu.jpg`,
+  textured_nam:  `${SB_HAIR}/textured_nam.jpg`,
+  textured_nu:   `${SB_HAIR}/textured_nu.jpg`, // gen pending — fallback to flux-kontext
+};
+
 async function handleKieuTocTryon(body) {
   const replKey = process.env.REPLICATE_API_KEY;
   if (!replKey) return Response.json({ error: 'Replicate API key chưa cấu hình.' }, { status: 500 });
@@ -551,20 +566,32 @@ async function handleKieuTocTryon(body) {
   if (!image) return Response.json({ error: 'Thiếu dữ liệu ảnh.' }, { status: 400 });
   if (!HAIR_STYLE_DESC[style_id]) return Response.json({ error: 'Kiểu tóc không hợp lệ.' }, { status: 400 });
 
-  const styleDesc = HAIR_STYLE_DESC[style_id][gender === 'nu' ? 'nu' : 'nam'];
-  const prompt = `Change only the hairstyle to ${styleDesc}. Keep the face, skin, expression, clothing and background exactly the same. Photorealistic, natural lighting.`;
+  const g = gender === 'nu' ? 'nu' : 'nam';
+  const templateKey = `${style_id}_${g}`;
+  const templateUrl = HAIR_TEMPLATES[templateKey];
   const imageDataUri = `data:${mediaType};base64,${image}`;
 
   try {
+    if (templateUrl) {
+      // Face-swap: put user's face onto hair template
+      const url = await _replicateRun(
+        replKey,
+        'https://api.replicate.com/v1/models/codeplugtech/face-swap/predictions',
+        {
+          source_image: imageDataUri,   // user face
+          target_image: templateUrl,    // hair template
+        }
+      );
+      return Response.json({ imageUrl: url });
+    }
+
+    // Fallback: flux-kontext-pro for textured_nu (not yet generated)
+    const styleDesc = HAIR_STYLE_DESC[style_id][g];
+    const prompt = `Change only the hairstyle to ${styleDesc}. Keep the face, skin, expression, clothing and background exactly the same. Photorealistic, natural lighting.`;
     const url = await _replicateRun(
       replKey,
       'https://api.replicate.com/v1/models/black-forest-labs/flux-kontext-pro/predictions',
-      {
-        prompt,
-        input_image: imageDataUri,
-        output_format: 'jpg',
-        safety_tolerance: 2,
-      }
+      { prompt, input_image: imageDataUri, output_format: 'jpg', safety_tolerance: 2 }
     );
     return Response.json({ imageUrl: url });
   } catch (e) {
