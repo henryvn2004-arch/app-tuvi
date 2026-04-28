@@ -390,6 +390,7 @@ async function doAnalyze(){
   document.getElementById('results-section').style.display='none';
 
   const _slug=TuviPaywall.generateToolSlug('mau-sac-hop-menh');
+  TuviPaywall.init({ product: 'mau-sac-hop-menh' }); // ensure correct product/cost
   try{
     await new Promise((resolve,reject)=>{
       TuviPaywall.requireCredits(_slug,async()=>{
