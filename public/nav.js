@@ -137,6 +137,9 @@
     + ddItem('/tools/trang-diem-ai.html',     '\ud83d\udc84', 'Trang \u0110i\u1ec3m H\u1ee3p T\u01b0\u1edbng')
     + ddItem('/tools/trang-phuc-theo-ngay.html','\ud83d\udc57', 'Trang Ph\u1ee5c Theo Ng\u00e0y')
     + ddItem('/tools/mau-sac-hop-menh.html',  '\ud83c\udfa8', 'M\u00e0u S\u1eafc & Th\u1eed Trang Ph\u1ee5c')
+    + ddItem('/tools/da-lieu-ai.html',        '\ud83c\udf3f', 'Da Li\u1ec7u AI \u0110\u00f4ng T\u00e2y Y')
+    + ddItem('/tools/personal-color.html',    '\ud83c\udfa8', 'Personal Color AI')
+    + ddItem('/tools/xlook.html',             '\ud83d\udc57', 'xLook \u2014 T\u1ee7 \u0110\u1ed3 AI')
     + '</div></div>';
 
   // DD4 — Chọn Ngày
