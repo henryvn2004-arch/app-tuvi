@@ -54,6 +54,9 @@ export async function GET() {
 
   const staticPages = [
     { path:'/',               cf:'daily',   p:'1.0' },
+    { path:'/luan-giai.html', cf:'monthly', p:'1.0' },  // core product page
+    { path:'/tu-vi',          cf:'weekly',  p:'0.9' },  // SEO pages index
+    { path:'/tu-dien',        cf:'weekly',  p:'0.9' },  // từ điển index
     { path:'/about.html',     cf:'monthly', p:'0.5' },
     { path:'/resources.html', cf:'daily',   p:'0.8' },
     { path:'/blog.html',      cf:'daily',   p:'0.8' },
