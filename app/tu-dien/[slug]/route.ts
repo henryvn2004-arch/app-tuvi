@@ -11,18 +11,44 @@ function esc(s: unknown) {
 }
 function renderMarkdown(text: string) {
   if (!text) return '';
-  let h = text;
-  h = h.replace(/^### (.+)$/gm,'<h3>$1</h3>');
-  h = h.replace(/^## (.+)$/gm,'<h2>$1</h2>');
-  h = h.replace(/^# (.+)$/gm,'<h1>$1</h1>');
-  h = h.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
-  h = h.replace(/\*(.+?)\*/g,'<em>$1</em>');
-  return h.split('\n').filter(l=>l.trim()).map(l=>{
+  // Unescape literal \n stored in DB
+  let src = text.replace(/\\n/g, '\n');
+  // Bold/italic
+  src = src.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  src = src.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+  const lines = src.split('\n');
+  const out: string[] = [];
+  let inList = false;
+
+  for (const raw of lines) {
+    const l = raw.trimEnd();
     const t = l.trim();
-    if (/^<(h[123]|ul|ol|li|blockquote|hr|div)/.test(t)) return t;
-    return `<p>${t}</p>`;
-  }).join('\n');
+    if (!t) {
+      if (inList) { out.push('</ul>'); inList = false; }
+      continue;
+    }
+    if (/^### (.+)$/.test(t)) {
+      if (inList) { out.push('</ul>'); inList = false; }
+      out.push(`<h3>${t.slice(4)}</h3>`);
+    } else if (/^## (.+)$/.test(t)) {
+      if (inList) { out.push('</ul>'); inList = false; }
+      out.push(`<h2>${t.slice(3)}</h2>`);
+    } else if (/^# (.+)$/.test(t)) {
+      if (inList) { out.push('</ul>'); inList = false; }
+      out.push(`<h1>${t.slice(2)}</h1>`);
+    } else if (/^[-*] (.+)$/.test(t)) {
+      if (!inList) { out.push('<ul>'); inList = true; }
+      out.push(`<li>${t.slice(2)}</li>`);
+    } else {
+      if (inList) { out.push('</ul>'); inList = false; }
+      out.push(`<p>${t}</p>`);
+    }
+  }
+  if (inList) out.push('</ul>');
+  return out.join('\n');
 }
+
 
 const LOAI_LABEL: Record<string,string> = {
   'sao-tu-vi':  'Sao Tử Vi',
@@ -127,11 +153,15 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 .article-meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
 .meta-loai{font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold)}
 .meta-han{font-size:13px;color:var(--text-lt);font-style:italic}
-.article-title{font-family:'Noto Serif',serif;font-size:36px;color:var(--navy);font-weight:600;line-height:1.2;margin-bottom:36px;padding-bottom:28px;border-bottom:2px solid var(--border);letter-spacing:-0.3px}
-.article-body{font-size:17px;line-height:1.85;color:var(--text-mid);font-weight:300}
-.article-body h2{font-family:Arial,sans-serif;color:var(--navy);font-weight:400;font-size:24px;margin:40px 0 16px;padding-top:28px;border-top:1px solid var(--border-lt)}
-.article-body h3{font-family:Arial,sans-serif;font-size:19px;font-weight:500;color:var(--navy);margin:28px 0 12px}
-.article-body p{margin-bottom:18px;max-width:680px}
+.article-title{font-family:'Noto Serif',serif;font-size:30px;color:var(--navy);font-weight:600;line-height:1.25;margin-bottom:36px;padding-bottom:24px;border-bottom:2px solid var(--border);letter-spacing:-0.2px}
+.article-body{font-size:16px;line-height:1.8;color:var(--text-mid);font-weight:400}
+.article-body h2{font-family:Arial,sans-serif;color:var(--navy);font-weight:400;font-size:20px;margin:36px 0 14px;padding-top:24px;border-top:1px solid var(--border-lt)}
+.article-body h3{font-family:Arial,sans-serif;font-size:16px;font-weight:600;color:var(--text);margin:24px 0 10px}
+.article-body p{margin-bottom:14px;max-width:680px}
+.article-body ul{margin:12px 0 20px 0;padding-left:0;list-style:none;max-width:680px}
+.article-body ul li{position:relative;padding:7px 12px 7px 28px;margin-bottom:4px;background:var(--bg-soft);border-left:2px solid var(--border-lt);font-size:15px;line-height:1.6;color:var(--text-mid)}
+.article-body ul li::before{content:'—';position:absolute;left:10px;color:var(--gold);font-weight:700}
+.article-body ul li strong{color:var(--navy)}
 .article-body strong{color:var(--text);font-weight:600}
 .article-body em{color:var(--text-mid);font-style:italic}
 .article-body table{width:100%;border-collapse:collapse;margin:20px 0 28px;font-size:14px}
