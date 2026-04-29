@@ -36,7 +36,7 @@
     '<div class="ft-brand-row"><img src="/seal.webp" alt="">',
     '<div><div class="ft-brand-name">T\u1eed Vi Minh B\u1ea3o</div>',
     '<div class="ft-brand-zh">Tri m\u1ec7nh l\u00fd \u2013 Thu\u1eadn th\u1ebf h\u00e0nh</div></div></div>',
-    '<div class="ft-tagline">T\u1eed vi \u0111\u1ea9u s\u1ed1 theo c\u1ed5 ph\u00e1p,<br>lu\u1eadn gi\u1ea3i b\u1eb1ng AI \u2014 mi\u1ec5n ph\u00ed th\u1eed nghi\u1ec7m.</div>',
+    '<div class="ft-tagline">Tri m\u1ec7nh nhi h\u00e0nh \u2014 v\u00f4 \u01b0u v\u00f4 ho\u1eb7c.</div>',
     '</div>',
 
     // Col 2 — Công Cụ (hub pages)
