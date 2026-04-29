@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trang Phục Theo Ngày — Tử Vi Minh Bảo</title>
+<meta name="description" content="Tư vấn màu sắc trang phục theo can-chi ngày và bản mệnh — cổ pháp Ngũ Hành Nạp Âm.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="/auth.js"></script>
+<script src="/tuvi-paywall.js"></script>
+<script src="/nav.js" defer></script>
+<style>
+:root {
+  --navy:#061A2E; --navy-mid:#0D3B5E; --blue:#1455A4;
+  --gold:#9A7B3A; --gold-lt:#F9F4EB; --gold-bright:#D4A843;
+  --text:#1a1a1a; --text-mid:#444; --text-lt:#777;
+  --border:#CCCCCC; --border-lt:#E8E8E8;
+  --bg:#FFFFFF; --bg-soft:#F5F4F0;
+  --red:#C0392B; --green:#1E6B3C;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh;}
+h1,h2,h3{font-family:'Noto Serif',serif;}
+
+/* ── Hero ── */
+.hero{
+  background:linear-gradient(160deg,#0a1520 0%,#0d2540 50%,#1a2010 100%);
+  padding:48px 20px 36px; text-align:center; position:relative; overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(154,123,58,0.2) 0%,transparent 60%);
+  pointer-events:none;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(212,168,67,.12);border:1px solid rgba(212,168,67,.3);
+  color:var(--gold-bright);font-size:11px;letter-spacing:1.8px;text-transform:uppercase;
+  padding:5px 14px;border-radius:20px;margin-bottom:14px;
+}
+.hero h1{font-size:clamp(24px,5.5vw,36px);color:#fff;line-height:1.25;margin-bottom:8px;}
+.hero h1 span{color:var(--gold-bright);}
+.hero p{color:rgba(255,255,255,.6);font-size:13px;max-width:440px;margin:0 auto 14px;line-height:1.65;}
+.hero-cost{display:inline-flex;align-items:center;gap:8px;background:rgba(154,123,58,.15);border:1px solid rgba(154,123,58,.35);border-radius:20px;padding:5px 14px;font-size:12px;color:var(--gold-bright);}
+
+/* ── Layout ── */
+.wrap{max-width:780px;margin:0 auto;padding:20px 14px 80px;}
+
+/* ── Card ── */
+.card{background:var(--bg);border:1px solid var(--border-lt);border-radius:12px;padding:20px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.card-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border-lt);display:flex;align-items:center;gap:8px;}
+
+/* ── Form ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+@media(max-width:480px){.form-grid{grid-template-columns:1fr;}}
+.form-group{display:flex;flex-direction:column;gap:5px;}
+.form-label{font-size:12px;color:var(--text-mid);font-weight:600;}
+.form-control{padding:9px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);background:var(--bg);outline:none;font-family:'DM Sans',sans-serif;transition:border-color .2s;}
+.form-control:focus{border-color:var(--blue);}
+
+/* Mục đích pills */
+.purpose-pills{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px;}
+.pill{padding:6px 13px;border:1.5px solid var(--border);border-radius:20px;font-size:12px;cursor:pointer;transition:all .15s;color:var(--text-mid);background:var(--bg);}
+.pill.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.pill:hover:not(.active){border-color:var(--gold);color:var(--navy);}
+
+/* Ngày preview */
+.day-preview{display:none;background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:9px;padding:10px 14px;margin-top:8px;font-size:13px;gap:10px;align-items:center;}
+.day-preview.show{display:flex;flex-wrap:wrap;}
+.day-canchi{font-family:'Noto Serif',serif;font-weight:700;color:var(--navy);font-size:15px;}
+.day-hanh{font-size:11px;padding:2px 9px;border-radius:10px;font-weight:600;}
+
+/* Analyze button */
+.btn-analyze{width:100%;padding:13px;background:linear-gradient(135deg,var(--navy),var(--navy-mid));color:var(--gold-bright);border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Serif',serif;display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity .2s;margin-top:4px;}
+.btn-analyze:hover{opacity:.88;}.btn-analyze:disabled{opacity:.45;cursor:not-allowed;}
+
+/* Loading */
+.loading{display:none;text-align:center;padding:32px;}
+.loading.show{display:block;}
+.spinner{width:36px;height:36px;border:3px solid var(--border-lt);border-top-color:var(--navy);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Results ── */
+#results{display:none;}
+
+/* Relation banner */
+.rel-banner{border-radius:12px;padding:18px 20px;margin-bottom:4px;color:#fff;}
+.rel-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.rel-icon{font-size:40px;}
+.rel-info{flex:1;}
+.rel-title{font-size:16px;font-weight:700;font-family:'Noto Serif',serif;margin-bottom:3px;}
+.rel-sub{font-size:12px;opacity:.75;line-height:1.5;}
+.rel-tag{margin-left:auto;text-align:center;background:rgba(255,255,255,.15);border-radius:9px;padding:7px 12px;min-width:70px;}
+.rel-tag-main{font-size:17px;font-weight:700;}
+.rel-tag-label{font-size:10px;opacity:.7;margin-top:1px;}
+.ly-giai{font-size:13px;line-height:1.7;background:rgba(255,255,255,.12);border-radius:8px;padding:10px 14px;margin-top:10px;}
+
+/* Color chips */
+.color-section{margin-bottom:10px;}
+.color-label{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text-lt);margin-bottom:8px;}
+.color-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.chip{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.chip-swatch{width:42px;height:42px;border-radius:8px;border:2px solid rgba(0,0,0,.08);box-shadow:0 1px 4px rgba(0,0,0,.1);}
+.chip-name{font-size:9px;color:var(--text-mid);text-align:center;max-width:48px;line-height:1.3;}
+.chip.avoid .chip-swatch{opacity:.5;border-style:dashed;}
+.chip.avoid .chip-name{color:var(--red);}
+
+/* Asian style card */
+.style-card{background:var(--bg-soft);border:1.5px solid var(--border-lt);border-radius:10px;padding:14px;display:flex;align-items:flex-start;gap:12px;}
+.style-emoji{font-size:30px;flex-shrink:0;}
+.style-body{}
+.style-name{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:2px;}
+.style-desc{font-size:12px;color:var(--text-mid);margin-bottom:4px;line-height:1.5;}
+.style-why{font-size:11px;color:var(--blue);background:#f0f5ff;border-radius:6px;padding:4px 8px;line-height:1.4;}
+
+/* Outfit breakdown */
+.outfit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;}
+.outfit-item{background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:9px;padding:11px;}
+.outfit-icon{font-size:18px;margin-bottom:5px;}
+.outfit-cat{font-size:11px;font-weight:700;color:var(--navy);margin-bottom:3px;}
+.outfit-desc{font-size:12px;color:var(--text-mid);line-height:1.4;}
+
+/* Tip */
+.tip-box{background:var(--gold-lt);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:11px 14px;font-size:13px;color:var(--text-mid);line-height:1.65;}
+.tip-box strong{color:var(--gold);font-size:11px;font-weight:700;display:block;margin-bottom:4px;}
+
+/* Try-on */
+.tryon-upload{border:2px dashed var(--border);border-radius:10px;padding:28px 16px;text-align:center;cursor:pointer;background:var(--bg-soft);position:relative;transition:all .2s;}
+.tryon-upload:hover,.tryon-upload.drag{border-color:var(--gold);background:#fffdf5;}
+.tryon-upload input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.tryon-preview{max-width:200px;border-radius:9px;display:block;margin:10px auto 0;max-height:220px;width:auto;}
+.style-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0;}
+.style-btn{padding:10px;border:1.5px solid var(--border);border-radius:8px;background:#fff;font-size:12px;font-weight:600;cursor:pointer;color:var(--text-mid);transition:all .15s;text-align:center;}
+.style-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.style-btn:hover:not(.active){border-color:var(--gold);}
+.btn-tryon{width:100%;padding:12px;background:linear-gradient(135deg,var(--gold),var(--gold-bright));color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Serif',serif;transition:opacity .2s;}
+.btn-tryon:hover{opacity:.88;}.btn-tryon:disabled{opacity:.45;cursor:not-allowed;}
+.ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.ba-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-lt);margin-bottom:5px;}
+.ba-img{width:100%;border-radius:8px;aspect-ratio:3/4;object-fit:cover;}
+.tryon-spinner{width:32px;height:32px;border:3px solid var(--border-lt);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 10px;}
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+
+<div class="hero">
+  <div class="hero-badge">✦ Ngũ Hành Nạp Âm · Can Chi Ngày</div>
+  <h1>Trang Phục <span>Theo Ngày</span></h1>
+  <p>Nhập ngày đi sự kiện — AI tính can chi ngày, đối chiếu bản mệnh, gợi ý màu sắc + phong cách trang phục chuẩn cổ pháp</p>
+  <div class="hero-cost">⟐ 10 lượng · Can Chi Ngày × Nạp Âm Mệnh</div>
+</div>
+
+<div class="wrap">
+
+  <div class="card">
+    <div class="card-title">📅 Thông Tin</div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Năm sinh dương lịch</label>
+        <input type="number" id="namSinh" class="form-control" placeholder="VD: 1990" min="1920" max="2010" oninput="onFormChange()">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Giới tính</label>
+        <select id="gioiTinh" class="form-control" onchange="onFormChange()">
+          <option value="male">Nam</option>
+          <option value="female">Nữ</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:12px">
+      <label class="form-label">Ngày đi (dương lịch)</label>
+      <input type="date" id="ngayDi" class="form-control" oninput="onFormChange()">
+    </div>
+
+    <div class="form-group" style="margin-bottom:12px">
+      <label class="form-label">Mục đích (chọn 1)</label>
+      <div class="purpose-pills" id="purposePills">
+        <div class="pill active" onclick="setPurpose(this,'ra ngoài thông thường')">🌿 Thường ngày</div>
+        <div class="pill" onclick="setPurpose(this,'phỏng vấn xin việc, cần tạo ấn tượng chuyên nghiệp')">💼 Phỏng vấn</div>
+        <div class="pill" onclick="setPurpose(this,'hẹn hò, gặp người yêu, cần thu hút và lãng mạn')">💕 Hẹn hò</div>
+        <div class="pill" onclick="setPurpose(this,'gặp đối tác kinh doanh, ký kết hợp đồng')">🤝 Kinh doanh</div>
+        <div class="pill" onclick="setPurpose(this,'sự kiện quan trọng, tiệc tùng, cần nổi bật')">✨ Sự kiện</div>
+        <div class="pill" onclick="setPurpose(this,'đi du lịch, thư giãn, cần thoải mái')">✈️ Du lịch</div>
+      </div>
+    </div>
+
+    <!-- Ngày preview -->
+    <div class="day-preview" id="dayPreview">
+      <div>
+        <span class="day-canchi" id="previewCanChi">—</span>
+      </div>
+      <div class="day-hanh" id="previewHanh">—</div>
+      <div id="previewRelation" style="font-size:12px;color:var(--text-mid);"></div>
+    </div>
+
+    <button class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
+      👘 Xem Trang Phục Hợp Ngày
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <div style="font-size:14px;font-weight:600;color:var(--navy);font-family:'Noto Serif',serif;">Đang tính can chi ngày...</div>
+    <div style="font-size:11px;color:var(--text-lt);margin-top:4px;">Phân tích Ngũ Hành Nạp Âm · ~5 giây</div>
+  </div>
+
+  <!-- Results -->
+  <div id="results">
+
+    <!-- Relation banner -->
+    <div class="rel-banner" id="relBanner">
+      <div class="rel-top">
+        <div class="rel-icon" id="relIcon">☯️</div>
+        <div class="rel-info">
+          <div class="rel-title" id="relTitle">—</div>
+          <div class="rel-sub" id="relSub">—</div>
+        </div>
+        <div class="rel-tag">
+          <div class="rel-tag-main" id="relTagMain">—</div>
+          <div class="rel-tag-label">Hành ngày</div>
+        </div>
+      </div>
+      <div class="ly-giai" id="lyGiai"></div>
+    </div>
+
+    <!-- Màu sắc -->
+    <div class="card">
+      <div class="card-title">🎨 Màu Sắc Hợp Ngày</div>
+      <div class="color-section">
+        <div class="color-label">✓ Nên mặc</div>
+        <div class="color-row" id="mainColors"></div>
+        <div class="color-label">◎ Điểm nhấn</div>
+        <div class="color-row" id="accentColors"></div>
+        <div class="color-label">✗ Nên tránh</div>
+        <div class="color-row" id="avoidColors"></div>
+      </div>
+    </div>
+
+    <!-- Asian style -->
+    <div class="card">
+      <div class="card-title">✦ Phong Cách Gợi Ý</div>
+      <div class="style-card" id="styleCard">
+        <div class="style-emoji" id="styleEmoji">✨</div>
+        <div class="style-body">
+          <div class="style-name" id="styleName">—</div>
+          <div class="style-desc" id="styleDesc">—</div>
+          <div class="style-why" id="styleWhy">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Outfit breakdown -->
+    <div class="card">
+      <div class="card-title">👗 Gợi Ý Trang Phục Cụ Thể</div>
+      <div class="outfit-grid" id="outfitGrid"></div>
+    </div>
+
+    <!-- Tip -->
+    <div class="card">
+      <div class="tip-box">
+        <strong>✦ Mẹo Cổ Pháp</strong>
+        <span id="tipText">—</span>
+      </div>
+    </div>
+
+    <!-- Try-on -->
+    <div class="card" id="tryonCard">
+      <div class="card-title">🪄 Thử Trang Phục AI <span style="font-size:10px;background:#e8f0fe;color:#1455A4;padding:2px 8px;border-radius:10px;margin-left:4px;">20 lượng/lần</span></div>
+
+      <div id="tryonStep1">
+        <div class="tryon-upload" id="tryonZone"
+          ondragover="event.preventDefault();this.classList.add('drag')"
+          ondragleave="this.classList.remove('drag')"
+          ondrop="event.preventDefault();this.classList.remove('drag');loadTryonFile(event.dataTransfer.files[0])">
+          <input type="file" accept="image/*" onchange="loadTryonFile(this.files[0])" id="tryonInput">
+          <div id="tryonPrompt">
+            <div style="font-size:32px;margin-bottom:8px;">👤</div>
+            <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:4px;">Tải ảnh của bạn lên</div>
+            <div style="font-size:11px;color:var(--text-lt);">Ảnh chụp toàn thân hoặc nửa người · JPG/PNG</div>
+          </div>
+          <img id="tryonPreview" class="tryon-preview" src="" alt="" style="display:none">
+        </div>
+        <div style="text-align:center;margin-top:6px;">
+          <button id="btnChangeTryon" onclick="clearTryon()" style="display:none;background:none;border:1px solid var(--border);border-radius:6px;padding:4px 13px;font-size:11px;color:var(--text-mid);cursor:pointer;">✕ Đổi ảnh</button>
+        </div>
+      </div>
+
+      <div id="tryonStep2" style="display:none;margin-top:12px;">
+        <div style="font-size:12px;font-weight:600;color:var(--text-mid);margin-bottom:8px;">Phong cách:</div>
+        <div class="style-btns">
+          <button class="style-btn active" onclick="setTryonStyle('cong-so',this)">💼 Công Sở</button>
+          <button class="style-btn" onclick="setTryonStyle('casual',this)">👕 Casual</button>
+          <button class="style-btn" onclick="setTryonStyle('sang-trong',this)">✨ Sang Trọng</button>
+          <button class="style-btn" onclick="setTryonStyle('dao-pho',this)">🛍 Dạo Phố</button>
+        </div>
+        <button class="btn-tryon" id="btnTryon" onclick="doTryon()">🪄 Thử Trang Phục Ngay</button>
+      </div>
+
+      <div id="tryonLoading" style="display:none;text-align:center;padding:24px 0;">
+        <div class="tryon-spinner"></div>
+        <div style="font-size:13px;font-weight:600;color:var(--navy);">AI đang tạo trang phục...</div>
+        <div style="font-size:11px;color:var(--text-lt);margin-top:4px;">Thường mất 20–35 giây</div>
+      </div>
+
+      <div id="tryonResult" style="display:none;margin-top:12px;">
+        <div class="ba-grid">
+          <div><div class="ba-label">Ảnh gốc</div><img id="tryonBefore" class="ba-img" src="" alt="Trước"></div>
+          <div><div class="ba-label" id="tryonAfterLabel">Sau khi thử</div><img id="tryonAfter" class="ba-img" src="" alt="Sau"></div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button onclick="downloadTryon()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;">⬇ Tải Ảnh</button>
+          <button onclick="resetTryon()" style="flex:1;padding:10px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;color:var(--text-mid);">🔄 Thử Lại</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;padding:12px 0 4px;">
+      <button onclick="document.getElementById('results').style.display='none';window.scrollTo({top:0,behavior:'smooth'})" style="background:var(--bg-soft);border:1.5px solid var(--border);border-radius:7px;padding:9px 22px;cursor:pointer;font-size:12px;color:var(--text-mid);">← Xem Lại</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── Can-chi ngày (mirror engine logic) ──────────────────────────────
+const _CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
+const _CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+const _NAP_AM={
+  'Giáp Tý':'Kim','Ất Sửu':'Kim','Bính Dần':'Hỏa','Đinh Mão':'Hỏa','Mậu Thìn':'Mộc','Kỷ Tỵ':'Mộc',
+  'Canh Ngọ':'Thổ','Tân Mùi':'Thổ','Nhâm Thân':'Kim','Quý Dậu':'Kim','Giáp Tuất':'Hỏa','Ất Hợi':'Hỏa',
+  'Bính Tý':'Thủy','Đinh Sửu':'Thủy','Mậu Dần':'Thổ','Kỷ Mão':'Thổ','Canh Thìn':'Kim','Tân Tỵ':'Kim',
+  'Nhâm Ngọ':'Mộc','Quý Mùi':'Mộc','Giáp Thân':'Thủy','Ất Dậu':'Thủy','Bính Tuất':'Thổ','Đinh Hợi':'Thổ',
+  'Mậu Tý':'Hỏa','Kỷ Sửu':'Hỏa','Canh Dần':'Mộc','Tân Mão':'Mộc','Nhâm Thìn':'Thủy','Quý Tỵ':'Thủy',
+  'Giáp Ngọ':'Kim','Ất Mùi':'Kim','Bính Thân':'Hỏa','Đinh Dậu':'Hỏa','Mậu Tuất':'Mộc','Kỷ Hợi':'Mộc',
+  'Canh Tý':'Thổ','Tân Sửu':'Thổ','Nhâm Dần':'Kim','Quý Mão':'Kim','Giáp Thìn':'Hỏa','Ất Tỵ':'Hỏa',
+  'Bính Ngọ':'Thủy','Đinh Mùi':'Thủy','Mậu Thân':'Thổ','Kỷ Dậu':'Thổ','Canh Tuất':'Kim','Tân Hợi':'Kim',
+  'Nhâm Tý':'Mộc','Quý Sửu':'Mộc','Giáp Dần':'Thủy','Ất Mão':'Thủy','Bính Thìn':'Thổ','Đinh Tỵ':'Thổ',
+  'Mậu Ngọ':'Hỏa','Kỷ Mùi':'Hỏa','Canh Thân':'Mộc','Tân Dậu':'Mộc','Nhâm Tuất':'Thủy','Quý Hợi':'Thủy',
+};
+const _NAP_AM_YEAR={
+  'Giáp Tý':'Kim','Ất Sửu':'Kim','Bính Dần':'Hỏa','Đinh Mão':'Hỏa','Mậu Thìn':'Mộc','Kỷ Tỵ':'Mộc',
+  'Canh Ngọ':'Thổ','Tân Mùi':'Thổ','Nhâm Thân':'Kim','Quý Dậu':'Kim','Giáp Tuất':'Hỏa','Ất Hợi':'Hỏa',
+  'Bính Tý':'Thủy','Đinh Sửu':'Thủy','Mậu Dần':'Thổ','Kỷ Mão':'Thổ','Canh Thìn':'Kim','Tân Tỵ':'Kim',
+  'Nhâm Ngọ':'Mộc','Quý Mùi':'Mộc','Giáp Thân':'Thủy','Ất Dậu':'Thủy','Bính Tuất':'Thổ','Đinh Hợi':'Thổ',
+  'Mậu Tý':'Hỏa','Kỷ Sửu':'Hỏa','Canh Dần':'Mộc','Tân Mão':'Mộc','Nhâm Thìn':'Thủy','Quý Tỵ':'Thủy',
+  'Giáp Ngọ':'Kim','Ất Mùi':'Kim','Bính Thân':'Hỏa','Đinh Dậu':'Hỏa','Mậu Tuất':'Mộc','Kỷ Hợi':'Mộc',
+  'Canh Tý':'Thổ','Tân Sửu':'Thổ','Nhâm Dần':'Kim','Quý Mão':'Kim','Giáp Thìn':'Hỏa','Ất Tỵ':'Hỏa',
+  'Bính Ngọ':'Thủy','Đinh Mùi':'Thủy','Mậu Thân':'Thổ','Kỷ Dậu':'Thổ','Canh Tuất':'Kim','Tân Hợi':'Kim',
+  'Nhâm Tý':'Mộc','Quý Sửu':'Mộc','Giáp Dần':'Thủy','Ất Mão':'Thủy','Bính Thìn':'Thổ','Đinh Tỵ':'Thổ',
+  'Mậu Ngọ':'Hỏa','Kỷ Mùi':'Hỏa','Canh Thân':'Mộc','Tân Dậu':'Mộc','Nhâm Tuất':'Thủy','Quý Hợi':'Thủy',
+};
+
+function jd(dd,mm,yy){
+  const a=Math.floor((14-mm)/12),y=yy+4800-a,m=mm+12*a-3;
+  let j=dd+Math.floor((153*m+2)/5)+365*y+Math.floor(y/4)-Math.floor(y/100)+Math.floor(y/400)-32045;
+  if(j<2299161)j=dd+Math.floor((153*m+2)/5)+365*y+Math.floor(y/4)-32083;
+  return j;
+}
+function dayCanChi(dd,mm,yy){ const j=jd(dd,mm,yy); return `${_CAN[(j+9)%10]} ${_CHI[(j+1)%12]}`; }
+function yearCanChi(y){ return `${_CAN[(y-4+400)%10]} ${_CHI[(y-4+480)%12]}`; }
+
+const _SINH={Kim:'Thủy',Thủy:'Mộc',Mộc:'Hỏa',Hỏa:'Thổ',Thổ:'Kim'};
+const _KHAC={Kim:'Mộc',Mộc:'Thổ',Thổ:'Thủy',Thủy:'Hỏa',Hỏa:'Kim'};
+function getRelation(menh,ngay){
+  if(menh===ngay)return{code:'binh_hoa',text:'Ngày đồng hành — bình ổn, thuận lợi',icon:'☯️',color:'linear-gradient(135deg,#1a3a2a,#2e5a42)'};
+  if(_SINH[ngay]===menh)return{code:'ngay_sinh_menh',text:'Ngày sinh Mệnh ✦ Cực kỳ thuận lợi',icon:'⭐',color:'linear-gradient(135deg,#1a2a10,#2e5010)'};
+  if(_SINH[menh]===ngay)return{code:'menh_sinh_ngay',text:'Mệnh sinh Ngày — hao tổn chút ít, vẫn tốt',icon:'🌙',color:'linear-gradient(135deg,#1a2a40,#0d3b5e)'};
+  if(_KHAC[ngay]===menh)return{code:'ngay_khac_menh',text:'Ngày khắc Mệnh ✦ Cần hóa giải bằng màu',icon:'⚠️',color:'linear-gradient(135deg,#3a1a10,#6b2510)'};
+  return{code:'menh_khac_ngay',text:'Mệnh khắc Ngày — ngày trung bình, cẩn thận',icon:'🔶',color:'linear-gradient(135deg,#3a2a10,#6b4510)'};
+}
+
+const NH_COLORS_HEX={
+  Kim:['#E8E8E8','#C0C0C0','#D4AF37','#FFFACD'],
+  Thủy:['#000080','#1E3A5F','#4169E1','#708090'],
+  Mộc:['#2E8B57','#228B22','#8B4513','#D2B48C'],
+  Hỏa:['#DC143C','#FF6347','#FF8C00','#FF1493'],
+  Thổ:['#D2B48C','#8B6914','#DAA520','#F5DEB3'],
+};
+const NH_BG={Kim:'linear-gradient(135deg,#4a4a5a,#8a8090)',Mộc:'linear-gradient(135deg,#1a4a2a,#3a7a3a)',Thủy:'linear-gradient(135deg,#0a1a4a,#1a3a7a)',Hỏa:'linear-gradient(135deg,#5a1010,#9a2020)',Thổ:'linear-gradient(135deg,#4a3010,#8a6a20)'};
+const STYLE_META={
+  glass_skin:{emoji:'🪞',name:'Glass Skin Korea'},j_sheer:{emoji:'🍵',name:'J-Beauty Sheer'},
+  kdrama_glam:{emoji:'💄',name:'K-Drama Glam'},guochao:{emoji:'🏮',name:'Guochao Editorial'},
+  hoa_dan:{emoji:'🌺',name:'Hoa Đán Soft'},dark_muse:{emoji:'🌑',name:'Dark Muse'},
+  clean_casual:{emoji:'☁️',name:'Clean Casual'},warm_earth:{emoji:'🌿',name:'Warm Earth'},
+};
+const OUTFIT_META=[
+  {key:'top',icon:'👕',cat:'Áo'},
+  {key:'bottom',icon:'👖',cat:'Quần / Váy'},
+  {key:'outer',icon:'🧥',cat:'Áo Khoác'},
+  {key:'shoes',icon:'👟',cat:'Giày'},
+  {key:'accessory',icon:'💍',cat:'Phụ Kiện'},
+];
+const COLOR_HEX={'Trắng':'#FFFFFF','Bạc':'#C0C0C0','Xám nhạt':'#D3D3D3','Vàng kim':'#D4AF37','Be':'#D4B896','Kem':'#FFF8DC','Xanh lá':'#2E8B57','Xanh ngọc':'#40E0D0','Xanh lam':'#87CEEB','Nâu gỗ':'#8B4513','Đen':'#111111','Navy':'#000080','Xanh dương':'#1E90FF','Xám đậm':'#696969','Đỏ':'#CC0000','Cam':'#FF6600','Hồng':'#FF69B4','Vàng':'#FFD700','Nâu':'#8B6914','Cam đất':'#CC7722','Xanh rêu':'#6B8E23','Tím':'#800080','Tím đỏ':'#800040','Hồng phấn':'#FFB6C1'};
+
+let _mucDich='ra ngoài thông thường';
+let _resultData=null;
+let _tryonImgData=null,_tryonMediaType='image/jpeg',_tryonStyle='cong-so',_tryonResultUrl=null;
+
+function setPurpose(el,val){
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active'); _mucDich=val;
+}
+
+function onFormChange(){
+  const yr=parseInt(document.getElementById('namSinh').value);
+  const dateVal=document.getElementById('ngayDi').value;
+  const preview=document.getElementById('dayPreview');
+  if(!dateVal||!yr||yr<1920||yr>2010){preview.classList.remove('show');document.getElementById('btnAnalyze').disabled=true;return;}
+  const [yy,mm,dd]=dateVal.split('-').map(Number);
+  const cc=dayCanChi(dd,mm,yy);
+  const hanh=_NAP_AM[cc]||'Thổ';
+  const menhCC=yearCanChi(yr);
+  const menhHanh=_NAP_AM_YEAR[menhCC]||'Thổ';
+  const rel=getRelation(menhHanh,hanh);
+  document.getElementById('previewCanChi').textContent=`${dd}/${mm}/${yy} — ${cc}`;
+  const hanhEl=document.getElementById('previewHanh');
+  hanhEl.textContent='Hành '+hanh;
+  const colors={Kim:'#888',Mộc:'#2E8B57',Thủy:'#1455A4',Hỏa:'#C0392B',Thổ:'#9A7B3A'};
+  hanhEl.style.cssText=`background:${colors[hanh]||'#888'};color:#fff;padding:2px 9px;border-radius:10px;font-weight:600;font-size:11px;`;
+  document.getElementById('previewRelation').textContent=rel.text;
+  preview.classList.add('show');
+  document.getElementById('btnAnalyze').disabled=false;
+}
+
+async function analyze(){
+  const yr=parseInt(document.getElementById('namSinh').value);
+  const g=document.getElementById('gioiTinh').value;
+  const dateVal=document.getElementById('ngayDi').value;
+  if(!dateVal||!yr)return;
+  const [yy,mm,dd]=dateVal.split('-').map(Number);
+  const token=window.Auth?.getSession()?.access_token;
+  document.getElementById('btnAnalyze').disabled=true;
+  document.getElementById('loading').classList.add('show');
+  document.getElementById('results').style.display='none';
+  const slug=TuviPaywall.generateToolSlug('trang-phuc-theo-ngay');
+  TuviPaywall.init({product:'trang-phuc-theo-ngay'});
+  try{
+    await new Promise((resolve,reject)=>{
+      TuviPaywall.requireCredits(slug,async()=>{
+        try{
+          const res=await fetch('/api/phong-thuy?action=trang-phuc-theo-ngay',{
+            method:'POST',
+            headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+            body:JSON.stringify({namSinh:yr,gioiTinh:g,ngay:dd,thang:mm,nam:yy,mucDich:_mucDich}),
+          });
+          const data=await res.json();
+          if(!data.success)throw new Error(data.error||'Lỗi phân tích');
+          _resultData=data;
+          window.refreshNavCredits?.();
+          renderResults(data);
+          resolve();
+        }catch(e){reject(e);}
+      });
+    });
+  }catch(e){alert('Lỗi: '+(e.message||'Vui lòng thử lại.'));}
+  finally{document.getElementById('btnAnalyze').disabled=false;document.getElementById('loading').classList.remove('show');}
+}
+
+function renderResults(d){
+  // Relation banner
+  const menhHanh=d.menhHanh||'Thổ';
+  const ngayHanh=d.ngayHanh||'Thổ';
+  const rel=getRelation(menhHanh,ngayHanh);
+  const banner=document.getElementById('relBanner');
+  banner.style.background=rel.color;
+  document.getElementById('relIcon').textContent=rel.icon;
+  document.getElementById('relTitle').textContent=`Mệnh ${menhHanh} · Ngày ${d.ngayCC||''}`;
+  document.getElementById('relSub').textContent=`${d.menhFull||menhHanh} — ${rel.text}`;
+  document.getElementById('relTagMain').textContent=ngayHanh;
+  document.getElementById('lyGiai').textContent=d.lyGiai||'';
+
+  // Colors
+  renderColorRow('mainColors',d.mainColors||[],false);
+  renderColorRow('accentColors',d.accentColors||[],false);
+  renderColorRow('avoidColors',d.avoidColors||[],true);
+
+  // Style
+  const sm=STYLE_META[d.asianStyle?.id]||{emoji:'✨',name:d.asianStyle?.id||''};
+  document.getElementById('styleEmoji').textContent=sm.emoji;
+  document.getElementById('styleName').textContent=sm.name||d.asianStyle?.name||'';
+  document.getElementById('styleDesc').textContent=d.asianStyle?.desc||'';
+  document.getElementById('styleWhy').textContent='✦ '+d.asianStyle?.why||'';
+
+  // Outfit
+  const og=document.getElementById('outfitGrid'); og.innerHTML='';
+  const outfit=d.outfit||{};
+  OUTFIT_META.forEach(({key,icon,cat})=>{
+    if(!outfit[key])return;
+    og.innerHTML+=`<div class="outfit-item"><div class="outfit-icon">${icon}</div><div class="outfit-cat">${cat}</div><div class="outfit-desc">${outfit[key]}</div></div>`;
+  });
+
+  // Tip
+  document.getElementById('tipText').textContent=d.tip||'';
+
+  // Reset tryon
+  clearTryon();
+  document.getElementById('tryonResult').style.display='none';
+
+  document.getElementById('results').style.display='block';
+  setTimeout(()=>document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'}),200);
+}
+
+function renderColorRow(id,colors,isAvoid){
+  const el=document.getElementById(id); el.innerHTML='';
+  colors.forEach(name=>{
+    const hex=COLOR_HEX[name]||'#888';
+    el.innerHTML+=`<div class="chip${isAvoid?' avoid':''}"><div class="chip-swatch" style="background:${hex}"></div><div class="chip-name">${name}</div></div>`;
+  });
+}
+
+// ── Try-on ──────────────────────────────────────────────────────
+function loadTryonFile(file){
+  if(!file||!file.type.startsWith('image/'))return;
+  const r=new FileReader();
+  r.onload=e=>{
+    _tryonMediaType=file.type||'image/jpeg';
+    _tryonImgData=e.target.result.split(',')[1];
+    const img=document.getElementById('tryonPreview');
+    img.src=e.target.result; img.style.display='block';
+    document.getElementById('tryonPrompt').style.display='none';
+    document.getElementById('btnChangeTryon').style.display='inline-block';
+    document.getElementById('tryonStep2').style.display='block';
+  };
+  r.readAsDataURL(file);
+}
+function clearTryon(){
+  _tryonImgData=null;
+  document.getElementById('tryonPreview').style.display='none';
+  document.getElementById('tryonPreview').src='';
+  document.getElementById('tryonPrompt').style.display='block';
+  document.getElementById('btnChangeTryon').style.display='none';
+  document.getElementById('tryonStep2').style.display='none';
+  document.getElementById('tryonInput').value='';
+}
+function setTryonStyle(s,btn){
+  _tryonStyle=s;
+  document.querySelectorAll('.style-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function resetTryon(){clearTryon();document.getElementById('tryonResult').style.display='none';}
+
+async function doTryon(){
+  if(!_tryonImgData||!_resultData)return;
+  const token=window.Auth?.getSession()?.access_token;
+  const slug=TuviPaywall.generateToolSlug('trang-phuc-tryon');
+  TuviPaywall.init({product:'trang-phuc-tryon'});
+  await TuviPaywall.requireCredits(slug,async()=>{
+    document.getElementById('tryonStep2').style.display='none';
+    document.getElementById('tryonLoading').style.display='block';
+    document.getElementById('tryonResult').style.display='none';
+    try{
+      const res=await fetch('/api/phong-thuy?action=trang-phuc-tryon',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+(token||'')},
+        body:JSON.stringify({imageBase64:_tryonImgData,imageType:_tryonMediaType,napAmHanh:_resultData.menhHanh,gioiTinh:document.getElementById('gioiTinh').value,style:_tryonStyle}),
+      });
+      const data=await res.json();
+      if(!data.imageUrl)throw new Error(data.error||'Lỗi');
+      _tryonResultUrl=data.imageUrl;
+      document.getElementById('tryonBefore').src='data:'+_tryonMediaType+';base64,'+_tryonImgData;
+      document.getElementById('tryonAfter').src=data.imageUrl;
+      document.getElementById('tryonAfterLabel').textContent='Mệnh '+_resultData.menhHanh+' · '+_tryonStyle;
+      document.getElementById('tryonResult').style.display='block';
+      window.refreshNavCredits?.();
+    }catch(e){alert('Lỗi: '+(e.message||'Vui lòng thử lại.'));}
+    finally{document.getElementById('tryonLoading').style.display='none';document.getElementById('tryonStep2').style.display='block';}
+  });
+}
+async function downloadTryon(){
+  if(!_tryonResultUrl)return;
+  try{const r=await fetch(_tryonResultUrl);const b=await r.blob();const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='trang-phuc-ngay.jpg';a.click();URL.revokeObjectURL(u);}
+  catch(e){window.open(_tryonResultUrl,'_blank');}
+}
+
+// Set today as default date
+window.addEventListener('DOMContentLoaded',()=>{
+  const today=new Date();
+  const yyyy=today.getFullYear();
+  const mm=String(today.getMonth()+1).padStart(2,'0');
+  const dd=String(today.getDate()).padStart(2,'0');
+  document.getElementById('ngayDi').value=`${yyyy}-${mm}-${dd}`;
+  TuviPaywall.init({product:'trang-phuc-theo-ngay'});
+});
+</script>
+</body>
+</html>

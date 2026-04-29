@@ -622,6 +622,146 @@ export async function POST(request: NextRequest) {
   if (action === 'cua-hang')            return handleCuaHang(request, body);
   if (action === 'mau-sac')            return handleMauSac(request, body);
   if (action === 'trang-phuc-tryon')   return handleTrangPhucTryon(request, body);
+  if (action === 'trang-phuc-theo-ngay') return handleTrangPhucTheoNgay(request, body);
   if (action === 'phong-thuy-render')  return handlePhongThuyRender(request, body);
   return err('Invalid action', 400);
 }
+
+// ── Trang Phục Theo Ngày ─────────────────────────────────────────────────────
+
+// Can-chi ngày (forked từ engine)
+const _CAN_TD = ['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
+const _CHI_TD = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+const _NAP_AM_TD: Record<string,string> = {
+  'Giáp Tý':'Kim','Ất Sửu':'Kim','Bính Dần':'Hỏa','Đinh Mão':'Hỏa','Mậu Thìn':'Mộc','Kỷ Tỵ':'Mộc',
+  'Canh Ngọ':'Thổ','Tân Mùi':'Thổ','Nhâm Thân':'Kim','Quý Dậu':'Kim','Giáp Tuất':'Hỏa','Ất Hợi':'Hỏa',
+  'Bính Tý':'Thủy','Đinh Sửu':'Thủy','Mậu Dần':'Thổ','Kỷ Mão':'Thổ','Canh Thìn':'Kim','Tân Tỵ':'Kim',
+  'Nhâm Ngọ':'Mộc','Quý Mùi':'Mộc','Giáp Thân':'Thủy','Ất Dậu':'Thủy','Bính Tuất':'Thổ','Đinh Hợi':'Thổ',
+  'Mậu Tý':'Hỏa','Kỷ Sửu':'Hỏa','Canh Dần':'Mộc','Tân Mão':'Mộc','Nhâm Thìn':'Thủy','Quý Tỵ':'Thủy',
+  'Giáp Ngọ':'Kim','Ất Mùi':'Kim','Bính Thân':'Hỏa','Đinh Dậu':'Hỏa','Mậu Tuất':'Mộc','Kỷ Hợi':'Mộc',
+  'Canh Tý':'Thổ','Tân Sửu':'Thổ','Nhâm Dần':'Kim','Quý Mão':'Kim','Giáp Thìn':'Hỏa','Ất Tỵ':'Hỏa',
+  'Bính Ngọ':'Thủy','Đinh Mùi':'Thủy','Mậu Thân':'Thổ','Kỷ Dậu':'Thổ','Canh Tuất':'Kim','Tân Hợi':'Kim',
+  'Nhâm Tý':'Mộc','Quý Sửu':'Mộc','Giáp Dần':'Thủy','Ất Mão':'Thủy','Bính Thìn':'Thổ','Đinh Tỵ':'Thổ',
+  'Mậu Ngọ':'Hỏa','Kỷ Mùi':'Hỏa','Canh Thân':'Mộc','Tân Dậu':'Mộc','Nhâm Tuất':'Thủy','Quý Hợi':'Thủy',
+};
+
+function _jdTD(dd: number, mm: number, yy: number): number {
+  const a = Math.floor((14 - mm) / 12);
+  const y = yy + 4800 - a;
+  const m = mm + 12 * a - 3;
+  let jd = dd + Math.floor((153 * m + 2) / 5) + 365 * y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) - 32045;
+  if (jd < 2299161) jd = dd + Math.floor((153 * m + 2) / 5) + 365 * y + Math.floor(y / 4) - 32083;
+  return jd;
+}
+function dayCanChiTD(dd: number, mm: number, yy: number): string {
+  const jd = _jdTD(dd, mm, yy);
+  return `${_CAN_TD[(jd + 9) % 10]} ${_CHI_TD[(jd + 1) % 12]}`;
+}
+function napAmTD(canChi: string): string { return _NAP_AM_TD[canChi] || 'Thổ'; }
+
+// Ngũ hành tương quan
+const _SINH: Record<string,string> = { Kim:'Thủy', Thủy:'Mộc', Mộc:'Hỏa', Hỏa:'Thổ', Thổ:'Kim' };
+const _SINH_BY: Record<string,string> = { Thủy:'Kim', Mộc:'Thủy', Hỏa:'Mộc', Thổ:'Hỏa', Kim:'Thổ' };
+const _KHAC: Record<string,string> = { Kim:'Mộc', Mộc:'Thổ', Thổ:'Thủy', Thủy:'Hỏa', Hỏa:'Kim' };
+const _KHAC_BY: Record<string,string> = { Mộc:'Kim', Thổ:'Mộc', Thủy:'Thổ', Hỏa:'Thủy', Kim:'Hỏa' };
+
+function getRelation(menhHanh: string, ngayHanh: string): 'binh_hoa' | 'ngay_sinh_menh' | 'menh_sinh_ngay' | 'ngay_khac_menh' | 'menh_khac_ngay' {
+  if (menhHanh === ngayHanh) return 'binh_hoa';
+  if (_SINH[ngayHanh] === menhHanh) return 'ngay_sinh_menh';
+  if (_SINH[menhHanh] === ngayHanh) return 'menh_sinh_ngay';
+  if (_KHAC[ngayHanh] === menhHanh) return 'ngay_khac_menh';
+  return 'menh_khac_ngay';
+}
+
+async function handleTrangPhucTheoNgay(request: NextRequest, body: Record<string, unknown>) {
+  const auth = await authAndDeduct(request, 'trang-phuc-theo-ngay');
+  if (auth.error) return ok({ error: auth.error, balance: auth.balance, insufficientBalance: !!(auth as Record<string,unknown>).insufficientBalance });
+
+  const { namSinh, gioiTinh, ngay, thang, nam, mucDich } = body as Record<string, unknown>;
+  const yr = Number(namSinh); const g = String(gioiTinh || 'male');
+  const dd = Number(ngay); const mm = Number(thang); const yy = Number(nam);
+  if (!yr || !dd || !mm || !yy) return err('Thiếu thông tin ngày hoặc năm sinh.', 400);
+
+  // Tính can-chi ngày và mệnh
+  const ngayCC   = dayCanChiTD(dd, mm, yy);
+  const ngayHanh = napAmTD(ngayCC);
+  const menhCC   = yearToCanChi(yr);
+  const menhHanh = getNapAmHanh(yr);
+  const menhFull = getNapAmFull(yr);
+  const relation = getRelation(menhHanh, ngayHanh);
+
+  const relationText: Record<string, string> = {
+    binh_hoa:       'Ngày đồng hành — bình ổn, thuận lợi',
+    ngay_sinh_menh: 'Ngày sinh Mệnh ✦ Cực kỳ thuận lợi',
+    menh_sinh_ngay: 'Mệnh sinh Ngày — hao tổn chút ít, vẫn tốt',
+    ngay_khac_menh: 'Ngày khắc Mệnh ✦ Cần chú ý, mặc màu hóa giải',
+    menh_khac_ngay: 'Mệnh khắc Ngày — ngày trung bình, cần cẩn thận',
+  };
+
+  const genderVN = g === 'female' ? 'Nữ' : 'Nam';
+  const mucDichVN = String(mucDich || 'ra ngoài thông thường');
+
+  const prompt = `Tư vấn trang phục theo ngày theo cổ pháp Ngũ Hành cho người:
+- Năm sinh: ${yr} (${menhCC}) — Nạp Âm: ${menhFull}, hành ${menhHanh}
+- Giới tính: ${genderVN}
+- Ngày đi: ${dd}/${mm}/${yy} — Can Chi: ${ngayCC}, hành ngày: ${ngayHanh}
+- Quan hệ mệnh-ngày: ${relationText[relation]}
+- Mục đích: ${mucDichVN}
+
+Nguyên lý:
+- ${relation === 'ngay_sinh_menh' ? `Ngày ${ngayHanh} SINH mệnh ${menhHanh} → mặc màu hành ${ngayHanh} để khuếch đại tác dụng sinh` : ''}
+- ${relation === 'ngay_khac_menh' ? `Ngày ${ngayHanh} KHẮC mệnh ${menhHanh} → mặc màu hành ${_SINH_BY[menhHanh]} để hóa giải, tránh màu ${ngayHanh}` : ''}
+- ${relation === 'binh_hoa' ? `Ngày đồng hành ${ngayHanh} = mệnh ${menhHanh} → củng cố bản mệnh, mặc màu chính mệnh` : ''}
+- ${relation === 'menh_sinh_ngay' ? `Mệnh ${menhHanh} sinh ngày ${ngayHanh} → mặc màu mệnh ${menhHanh}, thêm accent màu ${ngayHanh}` : ''}
+- ${relation === 'menh_khac_ngay' ? `Mệnh ${menhHanh} khắc ngày ${ngayHanh} → mặc màu trung hòa hành ${_SINH_BY[menhHanh]}` : ''}
+
+Trả về JSON thuần túy:
+{
+  "relation": "${relation}",
+  "relationText": "${relationText[relation]}",
+  "ngayHanh": "${ngayHanh}",
+  "ngayCC": "${ngayCC}",
+  "menhHanh": "${menhHanh}",
+  "menhFull": "${menhFull}",
+  "lyGiai": "2-3 câu giải thích cổ pháp ngắn gọn tại sao chọn màu này cho ngày này",
+  "mainColors": ["màu 1","màu 2","màu 3"],
+  "accentColors": ["màu 1","màu 2"],
+  "avoidColors": ["màu 1","màu 2"],
+  "asianStyle": {
+    "id": "glass_skin|j_sheer|kdrama_glam|guochao|hoa_dan|dark_muse|clean_casual|warm_earth",
+    "name": "Tên phong cách",
+    "desc": "Mô tả phong cách phù hợp với màu ngày và mục đích",
+    "why": "1 câu lý do theo cổ pháp"
+  },
+  "outfit": {
+    "top": "Mô tả áo cụ thể với màu",
+    "bottom": "Mô tả quần/váy với màu",
+    "outer": "Áo khoác ngoài nếu cần",
+    "shoes": "Giày với màu",
+    "accessory": "Phụ kiện điểm nhấn"
+  },
+  "tip": "Mẹo thực hành ngắn gọn — ví dụ vật phẩm, giờ xuất hành, hướng đi"
+}`;
+
+  const apiKey = process.env.ANTHROPIC_API_KEY!;
+  const aiResp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 1000,
+      messages: [{ role: 'user', content: prompt }],
+    }),
+  });
+  if (!aiResp.ok) return err('Lỗi AI.', 500);
+  const aiData = await aiResp.json() as { content?: Array<{text:string}> };
+  const raw = aiData.content?.[0]?.text || '{}';
+  try {
+    const parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    return ok({ success: true, balance: auth.newBalance, ...parsed });
+  } catch(_) {
+    return err('Lỗi phân tích kết quả.', 500);
+  }
+}
+
+// ── End Trang Phục Theo Ngày ──────────────────────────────────────────────────
