@@ -107,12 +107,14 @@ export async function GET() {
     { path:'/tools/xem-tuoi-sinh-con.html',     cf:'monthly', p:'0.7' },
   ];
 
-  const [lasoRows, taiLieuRows, khaoLuanRows, sachRows, seoRows] = await Promise.all([
+  const [lasoRows, taiLieuRows, khaoLuanRows, sachRows, seoRows, pregenRows, tuDienRows] = await Promise.all([
     fetchSlugs('laso_public'),
     fetchSlugs('tai_lieu'),
     fetchSlugs('khao_luan'),
     fetchSlugs('sach_library'),
     fetchAllSeoPages(),
+    fetchSlugs('laso_pregen'),
+    fetchSlugs('tu_dien'),
   ]);
 
   const SEO_PRIORITY: Record<string, string> = {
@@ -125,7 +127,12 @@ export async function GET() {
 
   const entries: string[] = [];
   for (const p of staticPages) entries.push(urlEntry(BASE_URL + p.path, today, p.cf, p.p));
-  for (const r of lasoRows)     if (r.slug) entries.push(urlEntry(`${BASE_URL}/la-so.html?slug=${encodeURIComponent(r.slug)}`, r.created_at?.slice(0,10)||today, 'monthly', '0.7'));
+  // laso_public → new static route
+  for (const r of lasoRows)     if (r.slug) entries.push(urlEntry(`${BASE_URL}/la-so/${encodeURIComponent(r.slug)}`, r.created_at?.slice(0,10)||today, 'monthly', '0.8'));
+  // laso_pregen → static route
+  for (const r of pregenRows)   if (r.slug) entries.push(urlEntry(`${BASE_URL}/la-so/${encodeURIComponent(r.slug)}`, today, 'yearly', '0.7'));
+  // tu_dien → static route
+  for (const r of tuDienRows)   if (r.slug) entries.push(urlEntry(`${BASE_URL}/tu-dien/${encodeURIComponent(r.slug)}`, r.created_at?.slice(0,10)||today, 'monthly', '0.8'));
   for (const r of taiLieuRows)  if (r.slug) entries.push(urlEntry(`${BASE_URL}/tai-lieu/${encodeURIComponent(r.slug)}`, r.created_at?.slice(0,10)||today, 'monthly', '0.6'));
   for (const r of sachRows)     if (r.slug) entries.push(urlEntry(`${BASE_URL}/tai-lieu/sach/${encodeURIComponent(r.slug)}`, r.created_at?.slice(0,10)||today, 'monthly', '0.65'));
   for (const r of khaoLuanRows) if (r.slug) entries.push(urlEntry(`${BASE_URL}/khao-luan/${encodeURIComponent(r.slug)}`, r.created_at?.slice(0,10)||today, 'weekly', '0.7'));
