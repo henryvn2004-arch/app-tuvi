@@ -34,15 +34,20 @@ const CAT_ORDER = [
 export async function GET() {
   const headers = { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` };
 
-  // 1. Count per category
-  const countRes = await fetch(
-    `${SB_URL}/rest/v1/seo_pages?select=category&limit=10000`,
-    { headers }
-  );
-  const allRows: Array<{category: string}> = countRes.ok ? await countRes.json() : [];
+  // 1. Count per category dùng Prefer: count=exact (tránh bị giới hạn 1000 rows)
+  // Dùng Range: 0-0 để không load data, chỉ lấy count từ Content-Range header
   const counts: Record<string, number> = {};
-  for (const r of allRows) counts[r.category] = (counts[r.category]||0) + 1;
-  const totalCount = allRows.length;
+  await Promise.all(CAT_ORDER.map(async (cat) => {
+    const r = await fetch(
+      `${SB_URL}/rest/v1/seo_pages?category=eq.${cat}&select=id`,
+      { headers: { ...headers, 'Prefer': 'count=exact', 'Range': '0-0' } }
+    );
+    const contentRange = r.headers.get('content-range') || '';
+    // Content-Range format: "0-0/3540" → lấy số sau /
+    const match = contentRange.match(/\/(\d+)$/);
+    counts[cat] = match ? parseInt(match[1]) : 0;
+  }));
+  const totalCount = Object.values(counts).reduce((s, n) => s + n, 0);
 
   // 2. Fetch items per category (LIMIT_PER_CAT each)
   const catData: Record<string, Array<{slug:string; title:string}>> = {};
