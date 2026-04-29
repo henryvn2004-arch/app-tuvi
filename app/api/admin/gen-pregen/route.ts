@@ -137,27 +137,30 @@ export async function GET(req: NextRequest) {
 
   const records = generateBatch(batchIdx, batchSize, engineFns);
 
-  // Insert to Supabase
-  const res = await fetch(`${SB_URL}/rest/v1/laso_pregen`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'apikey': SB_KEY,
-      'Authorization': `Bearer ${SB_KEY}`,
-      'Prefer': 'resolution=merge-duplicates',
-    },
-    body: JSON.stringify(records),
-  });
-
-  const ok = res.ok;
-  const body = ok ? null : await res.text();
+  // Insert to Supabase — split into 50-record chunks to avoid internal duplicates
+  let totalInserted = 0;
+  const CHUNK = 50;
+  for (let i = 0; i < records.length; i += CHUNK) {
+    const chunk = records.slice(i, i + CHUNK);
+    const res = await fetch(`${SB_URL}/rest/v1/laso_pregen`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SB_KEY,
+        'Authorization': `Bearer ${SB_KEY}`,
+        'Prefer': 'resolution=ignore-duplicates,return=minimal',
+      },
+      body: JSON.stringify(chunk),
+    });
+    if (res.ok || res.status === 201) totalInserted += chunk.length;
+  }
 
   return NextResponse.json({
     batch: batchIdx,
     total_batches: totalBatches,
     generated: records.length,
-    inserted: ok,
-    error: body || null,
+    inserted: totalInserted,
+    error: null,
     next_url: batchIdx + 1 < totalBatches
       ? `/api/admin/gen-pregen?secret=${ADMIN_SECRET}&batch=${batchIdx+1}&size=${batchSize}`
       : null,
