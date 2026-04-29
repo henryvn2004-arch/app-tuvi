@@ -15,10 +15,11 @@ const SUPABASE_URL  = process.env.SUPABASE_URL!;
 const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY!;
 
 const COSTS: Record<string, number> = {
-  'analyze':       90,
-  'ban-lam-viec':  90,
-  'cua-hang':      90,
-  'mau-sac':       20,
+  'analyze':              90,
+  'ban-lam-viec':         90,
+  'cua-hang':             90,
+  'mau-sac':              20,
+  'trang-phuc-theo-ngay': 10,
 };
 
 // ── Supabase helpers ─────────────────────────────────────────────
