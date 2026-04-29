@@ -13,15 +13,42 @@ function escHtml(s: unknown) {
 
 function renderMarkdown(text: string) {
   if (!text) return '<p>Nội dung đang được cập nhật.</p>';
-  let h = text;
-  h = h.replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>');
-  h = h.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>');
-  h = h.replace(/\[(.+?)\]\((.+?)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
-  return h.split('\n').filter(l=>l.trim()).map(l=>{
-    const t=l.trim();
-    if(/^<(h[123]|ul|ol|li|blockquote|hr|div)/.test(t)) return t;
-    return `<p>${t}</p>`;
-  }).join('\n');
+  // Unescape literal \n stored in DB
+  let src = text.replace(/\\n/g, '\n');
+  // Inline formatting
+  src = src.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+  src = src.replace(/\*(.+?)\*/g,'<em>$1</em>');
+  src = src.replace(/\[(.+?)\]\((.+?)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
+
+  const lines = src.split('\n');
+  const out: string[] = [];
+  let inList = false;
+
+  for (const raw of lines) {
+    const t = raw.trim();
+    if (!t) {
+      if (inList) { out.push('</ul>'); inList = false; }
+      continue;
+    }
+    if (/^### (.+)$/.test(t)) {
+      if (inList) { out.push('</ul>'); inList = false; }
+      out.push(`<h3>${t.slice(4)}</h3>`);
+    } else if (/^## (.+)$/.test(t)) {
+      if (inList) { out.push('</ul>'); inList = false; }
+      out.push(`<h2>${t.slice(3)}</h2>`);
+    } else if (/^# (.+)$/.test(t)) {
+      if (inList) { out.push('</ul>'); inList = false; }
+      out.push(`<h1>${t.slice(2)}</h1>`);
+    } else if (/^[-*] (.+)$/.test(t)) {
+      if (!inList) { out.push('<ul>'); inList = true; }
+      out.push(`<li>${t.slice(2)}</li>`);
+    } else {
+      if (inList) { out.push('</ul>'); inList = false; }
+      out.push(`<p>${t}</p>`);
+    }
+  }
+  if (inList) out.push('</ul>');
+  return out.join('\n');
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
