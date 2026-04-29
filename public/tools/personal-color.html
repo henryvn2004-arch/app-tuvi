@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personal Color AI — Tông Màu Cá Nhân | Tử Vi Minh Bảo</title>
+<meta name="description" content="AI phân tích undertone và Personal Color Season — gợi ý màu áo, màu tóc và phụ kiện làm sáng gương mặt nhất. Kết hợp cổ pháp ngũ hành.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="/auth.js"></script>
+<script src="/tuvi-paywall.js"></script>
+<script src="/nav.js" defer></script>
+<style>
+:root{
+  --navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;
+  --gold:#9A7B3A;--gold-lt:#F9F4EB;--gold-bright:#D4A843;
+  --text:#1a1a1a;--text-mid:#444;--text-lt:#777;
+  --border:#CCCCCC;--border-lt:#E8E8E8;
+  --bg:#FFFFFF;--bg-soft:#F5F4F0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh;}
+h1,h2,h3{font-family:'Noto Serif',serif;}
+
+/* ── Hero ── */
+.hero{
+  background:linear-gradient(160deg,#1a1020 0%,#2d1a40 50%,#101828 100%);
+  padding:50px 20px 38px;text-align:center;position:relative;overflow:hidden;
+}
+.hero::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(180,100,220,.18) 0%,transparent 65%);pointer-events:none;}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;
+  background:rgba(180,100,220,.12);border:1px solid rgba(180,100,220,.3);
+  color:#d4a0f0;font-size:11px;letter-spacing:1.8px;text-transform:uppercase;
+  padding:5px 14px;border-radius:20px;margin-bottom:14px;}
+.hero h1{font-size:clamp(24px,5.5vw,38px);color:#fff;line-height:1.2;margin-bottom:8px;}
+.hero h1 span{color:#d4a0f0;}
+.hero p{color:rgba(255,255,255,.6);font-size:13px;max-width:480px;margin:0 auto 14px;line-height:1.7;}
+.season-strip{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.season-dot{width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,.25);}
+.hero-cost{display:inline-flex;align-items:center;gap:6px;
+  background:rgba(154,123,58,.15);border:1px solid rgba(154,123,58,.35);
+  border-radius:20px;padding:5px 14px;font-size:12px;color:var(--gold-bright);}
+
+/* ── Layout ── */
+.wrap{max-width:780px;margin:0 auto;padding:20px 14px 80px;}
+.card{background:var(--bg);border:1px solid var(--border-lt);border-radius:14px;padding:20px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.card-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border-lt);display:flex;align-items:center;gap:8px;}
+
+/* ── Upload ── */
+.upload-zone{border:2px dashed var(--border);border-radius:12px;padding:36px 20px;
+  text-align:center;cursor:pointer;background:var(--bg-soft);position:relative;transition:all .2s;}
+.upload-zone:hover,.upload-zone.drag{border-color:#9b59b6;background:#faf0ff;}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.upload-icon{font-size:36px;margin-bottom:10px;}
+.upload-text{font-size:14px;color:var(--text-mid);font-weight:500;}
+.upload-hint{font-size:12px;color:var(--text-lt);margin-top:5px;line-height:1.5;}
+.preview-box{text-align:center;margin-top:12px;}
+.preview-box img{max-width:260px;max-height:300px;border-radius:10px;display:block;margin:0 auto;}
+.btn-change{background:none;border:1px solid var(--border);border-radius:6px;
+  padding:4px 13px;font-size:11px;color:var(--text-mid);cursor:pointer;margin-top:8px;}
+
+.tips-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.tip-badge{font-size:11px;padding:4px 10px;border-radius:12px;
+  background:#faf0ff;border:1px solid #e0c0f0;color:#7a2d9a;}
+
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
+@media(max-width:480px){.form-row{grid-template-columns:1fr;}}
+.form-group{display:flex;flex-direction:column;gap:5px;}
+.form-label{font-size:12px;color:var(--text-mid);font-weight:600;}
+.form-control{padding:9px 11px;border:1.5px solid var(--border);border-radius:8px;
+  font-size:13px;color:var(--text);background:var(--bg);outline:none;transition:border-color .2s;}
+.form-control:focus{border-color:#9b59b6;}
+
+.btn-analyze{width:100%;padding:13px;background:linear-gradient(135deg,#4a1a6a,#7b2fbe);
+  color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;
+  cursor:pointer;font-family:'Noto Serif',serif;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  transition:opacity .2s;margin-top:14px;}
+.btn-analyze:hover{opacity:.88;}.btn-analyze:disabled{opacity:.45;cursor:not-allowed;}
+
+/* Loading */
+.loading{display:none;text-align:center;padding:40px 20px;background:var(--bg);
+  border-radius:14px;margin-bottom:14px;border:1px solid var(--border-lt);}
+.loading.show{display:block;}
+.spinner{width:40px;height:40px;border:3px solid var(--border-lt);
+  border-top-color:#7b2fbe;border-radius:50%;
+  animation:spin 1s linear infinite;margin:0 auto 14px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Results ── */
+#results{display:none;}
+
+/* Season result card */
+.season-result{border-radius:14px;padding:22px;margin-bottom:14px;color:#fff;position:relative;overflow:hidden;}
+.season-result::before{content:'';position:absolute;inset:0;opacity:.15;
+  background:radial-gradient(ellipse at 80% 20%,#fff 0%,transparent 60%);}
+.season-top{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:12px;}
+.season-icon{font-size:48px;flex-shrink:0;}
+.season-info{flex:1;}
+.season-type{font-size:22px;font-weight:700;font-family:'Noto Serif',serif;margin-bottom:4px;}
+.season-vn{font-size:14px;opacity:.8;margin-bottom:4px;}
+.season-desc{font-size:12px;opacity:.7;line-height:1.5;}
+.season-right{margin-left:auto;text-align:center;}
+.undertone-badge{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.35);
+  border-radius:9px;padding:8px 14px;margin-bottom:6px;}
+.undertone-val{font-size:16px;font-weight:700;}
+.undertone-lbl{font-size:10px;opacity:.7;margin-top:1px;}
+.confidence-badge{font-size:10px;padding:3px 10px;border-radius:12px;
+  background:rgba(255,255,255,.15);display:inline-block;}
+.season-ly-giai{font-size:13px;opacity:.8;line-height:1.7;
+  background:rgba(255,255,255,.1);border-radius:8px;padding:11px 14px;margin-bottom:10px;}
+.menh-note{font-size:11px;opacity:.7;font-style:italic;padding:6px 14px;
+  background:rgba(255,255,255,.08);border-radius:6px;}
+
+/* Palette */
+.palette-section{margin-bottom:16px;}
+.palette-label{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+  color:var(--text-lt);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.palette-label.good{color:#2E8B57;}.palette-label.bad{color:#c0392b;}
+.swatches{display:flex;gap:10px;flex-wrap:wrap;}
+.swatch-wrap{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;}
+.swatch{width:44px;height:44px;border-radius:10px;border:2px solid rgba(0,0,0,.08);
+  box-shadow:0 2px 6px rgba(0,0,0,.12);transition:transform .15s;}
+.swatch:hover{transform:scale(1.12);}
+.swatch-name{font-size:9px;color:var(--text-lt);text-align:center;max-width:52px;line-height:1.3;}
+.swatch-wrap.avoid .swatch{opacity:.55;border-style:dashed;}
+
+/* Rec cards */
+.rec-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+@media(max-width:540px){.rec-grid{grid-template-columns:1fr;}}
+.rec-card{background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:10px;padding:14px;}
+.rec-icon{font-size:22px;margin-bottom:6px;}
+.rec-title{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:8px;
+  text-transform:uppercase;letter-spacing:.5px;}
+.rec-items{display:flex;flex-direction:column;gap:5px;}
+.rec-item{font-size:12px;color:var(--text-mid);display:flex;align-items:baseline;gap:5px;line-height:1.4;}
+.rec-item::before{content:'✦';color:#7b2fbe;font-size:9px;flex-shrink:0;}
+.rec-avoid{margin-top:8px;padding-top:8px;border-top:1px dashed var(--border-lt);}
+.rec-avoid-title{font-size:10px;color:#c0392b;font-weight:700;margin-bottom:4px;}
+.rec-avoid-item{font-size:11px;color:var(--text-lt);display:flex;align-items:baseline;gap:5px;}
+.rec-avoid-item::before{content:'✕';color:#c0392b;font-size:9px;flex-shrink:0;}
+.rec-reason{font-size:11px;color:var(--blue);background:#f0f5ff;border-radius:6px;
+  padding:6px 9px;margin-top:8px;line-height:1.5;}
+
+/* Phụ kiện */
+.accessory-row{display:flex;gap:10px;flex-wrap:wrap;}
+.acc-item{background:var(--bg-soft);border:1.5px solid var(--border-lt);border-radius:9px;
+  padding:11px 14px;flex:1;min-width:130px;}
+.acc-icon{font-size:18px;margin-bottom:4px;}
+.acc-label{font-size:10px;font-weight:700;color:var(--text-lt);text-transform:uppercase;margin-bottom:3px;}
+.acc-val{font-size:13px;font-weight:600;color:var(--navy);}
+
+/* Tip + celeb */
+.tip-final{background:linear-gradient(135deg,#faf0ff,#f0e8ff);border:1px solid #d8b4fe;
+  border-radius:10px;padding:13px 16px;margin-bottom:10px;}
+.tip-final strong{color:#7b2fbe;font-size:11px;display:block;margin-bottom:5px;}
+.tip-final p{font-size:13px;color:var(--text-mid);line-height:1.6;}
+.celeb-box{background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:9px;
+  padding:11px 14px;font-size:13px;color:var(--text-mid);}
+.celeb-box strong{color:var(--navy);}
+
+/* Season colors map */
+</style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+
+<div class="hero">
+  <div class="hero-badge">✦ Personal Color × Cổ Pháp Ngũ Hành</div>
+  <h1>Tông Màu <span>Cá Nhân</span></h1>
+  <p>AI phân tích undertone và season type từ ảnh mặt — gợi ý màu áo, màu tóc và phụ kiện làm sáng gương mặt nhất. Kết hợp cổ pháp bản mệnh.</p>
+  <div class="season-strip">
+    <div class="season-dot" style="background:#F4A460"></div>
+    <div class="season-dot" style="background:#FFD700"></div>
+    <div class="season-dot" style="background:#DDA0DD"></div>
+    <div class="season-dot" style="background:#87CEEB"></div>
+    <div class="season-dot" style="background:#CD853F"></div>
+    <div class="season-dot" style="background:#8B4513"></div>
+    <div class="season-dot" style="background:#191970"></div>
+    <div class="season-dot" style="background:#2F2F2F"></div>
+  </div>
+  <div class="hero-cost">⟐ 5 lượng · Sonnet Vision</div>
+</div>
+
+<div class="wrap">
+
+  <div class="card">
+    <div class="card-title">📸 Ảnh Khuôn Mặt</div>
+
+    <div class="upload-zone" id="uploadZone"
+      ondragover="event.preventDefault();this.classList.add('drag')"
+      ondragleave="this.classList.remove('drag')"
+      ondrop="event.preventDefault();this.classList.remove('drag');loadFile(event.dataTransfer.files[0])">
+      <input type="file" accept="image/*" id="fileInput" onchange="loadFile(this.files[0])">
+      <div id="uploadPrompt">
+        <div class="upload-icon">🎨</div>
+        <div class="upload-text">Chụp hoặc chọn ảnh khuôn mặt</div>
+        <div class="upload-hint">Ánh sáng tự nhiên ban ngày · Không filter không makeup<br>Cần thấy rõ tông da, không bị overexposed</div>
+      </div>
+      <div id="previewBox" class="preview-box" style="display:none">
+        <img id="previewImg" alt="preview">
+        <button class="btn-change" onclick="clearPhoto()">✕ Đổi ảnh</button>
+      </div>
+    </div>
+
+    <div class="tips-row">
+      <span class="tip-badge">☀️ Ánh sáng tự nhiên tốt nhất</span>
+      <span class="tip-badge">🚫 Không filter màu</span>
+      <span class="tip-badge">💆 Mặt không trang điểm</span>
+      <span class="tip-badge">📸 Chụp gần, rõ da mặt</span>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Năm sinh (tùy chọn — kết hợp bản mệnh)</label>
+        <input type="number" id="namSinh" class="form-control" placeholder="VD: 1992" min="1920" max="2010">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Giới tính</label>
+        <select id="gioiTinh" class="form-control">
+          <option value="nam">Nam</option>
+          <option value="nu">Nữ</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
+      🎨 Phân Tích Personal Color
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <div style="font-size:14px;font-weight:600;color:#7b2fbe;font-family:'Noto Serif',serif;">Đang phân tích tông màu...</div>
+    <div style="font-size:12px;color:var(--text-lt);margin-top:6px;">Đọc undertone · Xác định season · ~10 giây</div>
+  </div>
+
+  <!-- Results -->
+  <div id="results">
+
+    <!-- Season Result -->
+    <div class="season-result" id="seasonResult">
+      <div class="season-top">
+        <div class="season-icon" id="seasonIcon">🎨</div>
+        <div class="season-info">
+          <div class="season-type" id="seasonType">—</div>
+          <div class="season-vn" id="seasonVn">—</div>
+          <div class="season-desc" id="seasonDesc">—</div>
+        </div>
+        <div class="season-right">
+          <div class="undertone-badge">
+            <div class="undertone-val" id="undertoneVal">—</div>
+            <div class="undertone-lbl">Undertone</div>
+          </div>
+          <span class="confidence-badge" id="confidenceBadge">—</span>
+        </div>
+      </div>
+      <div class="season-ly-giai" id="seasonLyGiai">—</div>
+      <div class="menh-note" id="menhNote" style="display:none">—</div>
+    </div>
+
+    <!-- Palette -->
+    <div class="card">
+      <div class="card-title">🎨 Bảng Màu Cá Nhân</div>
+      <div class="palette-section">
+        <div class="palette-label good">✓ Màu hợp — làm sáng, nổi bật gương mặt</div>
+        <div class="swatches" id="swatchesGood"></div>
+      </div>
+      <div class="palette-section">
+        <div class="palette-label bad">✗ Màu nên tránh — làm xỉn, tối da</div>
+        <div class="swatches" id="swatchesBad"></div>
+      </div>
+    </div>
+
+    <!-- Áo sơ mi + Màu tóc -->
+    <div class="rec-grid">
+      <div class="rec-card">
+        <div class="rec-icon">👔</div>
+        <div class="rec-title">Màu Áo Sơ Mi</div>
+        <div class="rec-items" id="aoSoMiItems"></div>
+        <div class="rec-avoid" id="aoSoMiAvoid"></div>
+        <div class="rec-reason" id="aoSoMiReason"></div>
+      </div>
+      <div class="rec-card">
+        <div class="rec-icon">💇</div>
+        <div class="rec-title">Màu Tóc</div>
+        <div class="rec-items" id="mauTocItems"></div>
+        <div class="rec-avoid" id="mauTocAvoid"></div>
+        <div class="rec-reason" id="mauTocReason"></div>
+      </div>
+    </div>
+
+    <!-- Phụ kiện -->
+    <div class="card">
+      <div class="card-title">💍 Kim Loại & Phụ Kiện</div>
+      <div class="accessory-row">
+        <div class="acc-item">
+          <div class="acc-icon">⌚</div>
+          <div class="acc-label">Kim Loại</div>
+          <div class="acc-val" id="accKimLoai">—</div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-icon">👓</div>
+          <div class="acc-label">Gọng Kính</div>
+          <div class="acc-val" id="accKinh">—</div>
+        </div>
+        <div class="acc-item" style="flex:2">
+          <div class="acc-icon">💬</div>
+          <div class="acc-label">Lý Do</div>
+          <div class="acc-val" style="font-size:12px;font-weight:400;color:var(--text-mid)" id="accLyDo">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tip + Celeb -->
+    <div class="tip-final">
+      <strong>✦ Tip Áp Dụng Ngay</strong>
+      <p id="tipFinal">—</p>
+    </div>
+    <div class="celeb-box">
+      🌟 <strong>Celeb cùng tông màu:</strong> <span id="celebInspo">—</span>
+    </div>
+
+    <div style="text-align:center;padding:16px 0 4px;">
+      <button onclick="document.getElementById('results').style.display='none';window.scrollTo({top:0,behavior:'smooth'})" style="background:var(--bg-soft);border:1.5px solid var(--border);border-radius:7px;padding:9px 22px;cursor:pointer;font-size:12px;color:var(--text-mid);">← Phân Tích Lại</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const SEASON_META = {
+  spring_warm:  { icon:'🌸', color:'linear-gradient(135deg,#7a3a10,#c86020)', name:'Spring Warm',   vn:'Xuân Ấm' },
+  spring_bright:{ icon:'✨', color:'linear-gradient(135deg,#1a3a7a,#c82060)', name:'Spring Bright', vn:'Xuân Sáng' },
+  summer_cool:  { icon:'🌊', color:'linear-gradient(135deg,#1a3a6a,#5a7aaa)', name:'Summer Cool',   vn:'Hạ Lạnh' },
+  summer_soft:  { icon:'🌸', color:'linear-gradient(135deg,#3a2a5a,#7a5a8a)', name:'Summer Soft',   vn:'Hạ Dịu' },
+  autumn_warm:  { icon:'🍂', color:'linear-gradient(135deg,#5a2a10,#9a5a20)', name:'Autumn Warm',   vn:'Thu Ấm' },
+  autumn_deep:  { icon:'🍁', color:'linear-gradient(135deg,#3a1a10,#6a2a18)', name:'Autumn Deep',   vn:'Thu Sâu' },
+  winter_cool:  { icon:'❄️', color:'linear-gradient(135deg,#0a1040,#2a2a6a)', name:'Winter Cool',   vn:'Đông Lạnh' },
+  winter_deep:  { icon:'🌑', color:'linear-gradient(135deg,#0a0a1a,#1a1a3a)', name:'Winter Deep',   vn:'Đông Sâu' },
+};
+const SEASON_DESC = {
+  spring_warm:'Tông da vàng ấm, sáng, tươi — ánh peach/golden',
+  spring_bright:'Tông sáng rõ, contrast cao, màu tươi nổi bật',
+  summer_cool:'Tông hồng lạnh, nhẹ nhàng, da hồng pha xanh',
+  summer_soft:'Tông lạnh muted, soft — màu pha xám dịu',
+  autumn_warm:'Tông vàng đất, ấm sâu — da olive/bánh mật',
+  autumn_deep:'Tông đất sâu, rich — da nâu ấm, contrast cao',
+  winter_cool:'Tông lạnh tương phản cao — da trắng xanh hoặc tối lạnh',
+  winter_deep:'Tông lạnh deep, contrast rất cao — da nâu/tối lạnh',
+};
+const UNDERTONE_VN = { warm:'Ấm (Warm)', cool:'Lạnh (Cool)', neutral:'Trung tính (Neutral)' };
+const CONFIDENCE_COLOR = { cao:'#2E8B57', 'trung bình':'#9A7B3A', thấp:'#c0392b' };
+
+let _imgData = null, _mediaType = 'image/jpeg';
+
+function loadFile(file) {
+  if (!file?.type?.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = async e => {
+    try {
+      const bitmap = await createImageBitmap(await fetch(e.target.result).then(r => r.blob()));
+      const canvas = document.createElement('canvas');
+      canvas.width = bitmap.width; canvas.height = bitmap.height;
+      canvas.getContext('2d').drawImage(bitmap, 0, 0);
+      canvas.toBlob(b => {
+        const r2 = new FileReader();
+        r2.onload = x => {
+          _imgData = x.target.result.split(',')[1];
+          _mediaType = 'image/jpeg';
+          document.getElementById('previewImg').src = x.target.result;
+          document.getElementById('uploadPrompt').style.display = 'none';
+          document.getElementById('previewBox').style.display = 'block';
+          document.getElementById('btnAnalyze').disabled = false;
+        };
+        r2.readAsDataURL(b);
+      }, 'image/jpeg', 0.9);
+    } catch(_) {
+      _imgData = e.target.result.split(',')[1];
+      _mediaType = file.type;
+      document.getElementById('previewImg').src = e.target.result;
+      document.getElementById('uploadPrompt').style.display = 'none';
+      document.getElementById('previewBox').style.display = 'block';
+      document.getElementById('btnAnalyze').disabled = false;
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearPhoto() {
+  _imgData = null;
+  document.getElementById('previewBox').style.display = 'none';
+  document.getElementById('uploadPrompt').style.display = 'block';
+  document.getElementById('fileInput').value = '';
+  document.getElementById('btnAnalyze').disabled = true;
+  document.getElementById('results').style.display = 'none';
+}
+
+async function analyze() {
+  if (!_imgData) return;
+  const namSinh = parseInt(document.getElementById('namSinh').value) || null;
+  const token = window.Auth?.getSession()?.access_token;
+
+  document.getElementById('btnAnalyze').disabled = true;
+  document.getElementById('loading').classList.add('show');
+  document.getElementById('results').style.display = 'none';
+
+  const slug = TuviPaywall.generateToolSlug('personal-color');
+  TuviPaywall.init({ product: 'personal-color' });
+
+  try {
+    await new Promise((resolve, reject) => {
+      TuviPaywall.requireCredits(slug, async () => {
+        try {
+          const res = await fetch('/api/tuong-mat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify({ action: 'personal-color', image: _imgData, mediaType: _mediaType, namSinh }),
+          });
+          const data = await res.json();
+          if (!res.ok || data.error) throw new Error(data.error || 'Lỗi phân tích');
+          window.refreshNavCredits?.();
+          renderResults(data);
+          resolve();
+        } catch(e) { reject(e); }
+      });
+    });
+  } catch(e) {
+    alert('Lỗi: ' + (e.message || 'Vui lòng thử lại.'));
+  } finally {
+    document.getElementById('btnAnalyze').disabled = false;
+    document.getElementById('loading').classList.remove('show');
+  }
+}
+
+function renderResults(d) {
+  document.getElementById('results').style.display = 'block';
+
+  // Season header
+  const season = d.season || 'spring_warm';
+  const meta = SEASON_META[season] || SEASON_META.spring_warm;
+  document.getElementById('seasonResult').style.background = meta.color;
+  document.getElementById('seasonIcon').textContent = meta.icon;
+  document.getElementById('seasonType').textContent = meta.name;
+  document.getElementById('seasonVn').textContent = d.season_vn || meta.vn;
+  document.getElementById('seasonDesc').textContent = SEASON_DESC[season] || '';
+  document.getElementById('undertoneVal').textContent = UNDERTONE_VN[d.undertone] || d.undertone || '—';
+  const confBadge = document.getElementById('confidenceBadge');
+  confBadge.textContent = 'Độ tin cậy: ' + (d.confidence || '—');
+  confBadge.style.background = (CONFIDENCE_COLOR[d.confidence] || '#888') + '33';
+  document.getElementById('seasonLyGiai').textContent = d.ly_giai || '';
+
+  // Mệnh note
+  if (d.menhHanh) {
+    const mNote = document.getElementById('menhNote');
+    const mSeasons = (d.menhSeasons || []).map(s => SEASON_META[s]?.vn || s).join(', ');
+    mNote.textContent = `✦ Bản mệnh ${d.menhHanh} (${d.menhFull}) — cổ pháp gợi ý season: ${mSeasons}`;
+    mNote.style.display = 'block';
+  }
+
+  // Palette
+  renderSwatches('swatchesGood', d.hex_palette || [], false);
+  renderSwatches('swatchesBad', d.hex_avoid || [], true);
+
+  // Áo sơ mi
+  const ao = d.ao_so_mi || {};
+  renderRecItems('aoSoMiItems', ao.top3 || []);
+  renderAvoidItems('aoSoMiAvoid', ao.tranh || []);
+  document.getElementById('aoSoMiReason').textContent = ao.ly_do || '';
+
+  // Màu tóc
+  const toc = d.mau_toc || {};
+  renderRecItems('mauTocItems', toc.top3 || []);
+  renderAvoidItems('mauTocAvoid', toc.tranh || []);
+  document.getElementById('mauTocReason').textContent = toc.ly_do || '';
+
+  // Phụ kiện
+  const pk = d.phu_kien || {};
+  document.getElementById('accKimLoai').textContent = pk.kim_loai || '—';
+  document.getElementById('accKinh').textContent = pk.kinh || '—';
+  document.getElementById('accLyDo').textContent = pk.ly_do || '';
+
+  // Tip + celeb
+  document.getElementById('tipFinal').textContent = d.tip || '';
+  document.getElementById('celebInspo').textContent = d.celebrity_inspo || '';
+
+  setTimeout(() => document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
+}
+
+function renderSwatches(id, hexArr, isAvoid) {
+  const el = document.getElementById(id); el.innerHTML = '';
+  hexArr.forEach(hex => {
+    el.innerHTML += `
+      <div class="swatch-wrap${isAvoid ? ' avoid' : ''}" title="${hex}">
+        <div class="swatch" style="background:${hex}"></div>
+        <div class="swatch-name">${hex}</div>
+      </div>`;
+  });
+}
+function renderRecItems(id, items) {
+  document.getElementById(id).innerHTML = items.map(i => `<div class="rec-item">${i}</div>`).join('');
+}
+function renderAvoidItems(id, items) {
+  if (!items.length) return;
+  document.getElementById(id).innerHTML = `
+    <div class="rec-avoid-title">✕ Nên tránh</div>
+    ${items.map(i => `<div class="rec-avoid-item">${i}</div>`).join('')}`;
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  TuviPaywall.init({ product: 'personal-color' });
+});
+</script>
+</body>
+</html>

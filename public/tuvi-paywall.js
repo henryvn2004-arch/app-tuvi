@@ -27,6 +27,7 @@ const TuviPaywall = (() => {
     'trang-diem-tryon':    { cost:  20, title: 'Thử Trang Điểm AI' },
     'trang-phuc-theo-ngay':{ cost:  10, title: 'Trang Phục Theo Ngày' },
     'da-lieu-ai':           { cost:  10, title: 'Da Liệu AI Toàn Diện' },
+    'personal-color':       { cost:   5, title: 'Personal Color AI' },
   };
 
   const TOOL_TYPE = {
@@ -42,6 +43,7 @@ const TuviPaywall = (() => {
     'trang-diem-tryon': 'use_trang_diem_tryon',
     'trang-phuc-theo-ngay': 'use_trang_phuc_theo_ngay',
     'da-lieu-ai': 'use_da_lieu_ai',
+    'personal-color': 'use_personal_color',
   };
 
   let _cfg        = null;
