@@ -8,12 +8,23 @@ const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
 const BASE_URL     = 'https://www.tuviminhbao.com';
 const CACHE_TTL    = 0; // no CDN cache — sitemap always fresh
 
-async function fetchSlugs(table: string, select = 'slug,created_at') {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?select=${select}&limit=10000`, {
-    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` },
-  });
-  if (!res.ok) return [];
-  return await res.json() as { slug: string; created_at?: string }[];
+async function fetchAllSlugs(table: string) {
+  const countRes = await fetch(
+    `${SUPABASE_URL}/rest/v1/${table}?select=id&limit=1`,
+    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Prefer': 'count=exact' } }
+  );
+  const total = parseInt(countRes.headers.get('content-range')?.split('/')[1] || '0', 10);
+  if (!total) return [];
+  const pageSize = 1000;
+  const offsets = Array.from({length: Math.ceil(total/pageSize)}, (_, i) => i * pageSize);
+  const results = await Promise.all(
+    offsets.map(offset =>
+      fetch(`${SUPABASE_URL}/rest/v1/${table}?select=slug,created_at&order=id.asc&limit=${pageSize}&offset=${offset}`,
+        { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+      ).then(r => r.ok ? r.json() : [])
+    )
+  );
+  return results.flat() as { slug: string; created_at?: string }[];
 }
 
 // Paginate through seo_pages (Supabase caps at 1000 rows per request)
@@ -111,13 +122,13 @@ export async function GET() {
   ];
 
   const [lasoRows, taiLieuRows, khaoLuanRows, sachRows, seoRows, pregenRows, tuDienRows] = await Promise.all([
-    fetchSlugs('laso_public'),
-    fetchSlugs('tai_lieu'),
-    fetchSlugs('khao_luan'),
-    fetchSlugs('sach_library'),
+    fetchAllSlugs('laso_public'),
+    fetchAllSlugs('tai_lieu'),
+    fetchAllSlugs('khao_luan'),
+    fetchAllSlugs('sach_library'),
     fetchAllSeoPages(),
-    fetchSlugs('laso_pregen'),
-    fetchSlugs('tu_dien'),
+    fetchAllSlugs('laso_pregen'),
+    fetchAllSlugs('tu_dien'),
   ]);
 
   const SEO_PRIORITY: Record<string, string> = {
