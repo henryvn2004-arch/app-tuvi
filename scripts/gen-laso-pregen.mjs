@@ -32,6 +32,7 @@ const { convertDuongToAm, anSaoLaSo } = engineFn(g, g);
 const CAN  = ['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
 const CHI  = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
 const GIO_CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+const GIO_SLUG = ['ty','suu','dan','mao','thin','ti','ngo','mui','than','dau','tuat','hoi'];
 const GIO_HOURS = [23, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21]; // representative hour for each chi
 
 // Base years for each can-chi (2 complete cycles: 1924-2043)

@@ -27,6 +27,8 @@ function toSlug(str: string): string {
 const CAN  = ['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
 const CHI  = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
 const GIO_CHI   = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+// Unique slugs for each chi — Tý(0)='ty' vs Tỵ(5)='ti' to avoid collision
+const GIO_SLUG = ['ty','suu','dan','mao','thin','ti','ngo','mui','than','dau','tuat','hoi'];
 const GIO_HOURS = [23,1,3,5,7,9,11,13,15,17,19,21];
 
 function getBaseYears(ci: number, cii: number): number[] {
