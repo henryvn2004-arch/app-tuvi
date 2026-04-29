@@ -1,17 +1,14 @@
-// footer.js — Shared footer component (dùng cho Next.js route pages: tu-dien, la-so, v.v.)
-// Include trước </body>: <script src="/footer.js"></script>
-// Cấu trúc: Brand | Luận Giải | Từ Điển | Thông Tin
-// KHÔNG lặp tool links đã có trong nav dropdown
+// footer.js — dùng cho Next.js route pages (tu-dien/[slug], la-so/[slug], v.v.)
+// Cấu trúc: Brand | Công Cụ | Kiến Thức | Thông Tin
 
 (function () {
-
   if (!document.getElementById('footer-css')) {
     var style = document.createElement('style');
     style.id = 'footer-css';
     style.textContent = [
       '.site-footer{background:#1A1210;color:rgba(255,255,255,0.5);padding:48px 40px 24px;margin-top:auto}',
       '.ft-body{max-width:1100px;margin:0 auto}',
-      '.ft-top{display:grid;grid-template-columns:1.8fr 1fr 1.2fr 1fr;gap:40px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:20px}',
+      '.ft-top{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:40px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:20px}',
       '.ft-brand-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}',
       '.ft-brand-row img{width:36px;height:36px;object-fit:contain;border-radius:5px;opacity:0.9}',
       '.ft-brand-name{font-size:14px;font-weight:700;color:rgba(255,255,255,0.85);font-family:Georgia,serif;line-height:1.2}',
@@ -42,30 +39,26 @@
     '<div class="ft-tagline">T\u1eed vi \u0111\u1ea9u s\u1ed1 theo c\u1ed5 ph\u00e1p,<br>lu\u1eadn gi\u1ea3i b\u1eb1ng AI \u2014 mi\u1ec5n ph\u00ed th\u1eed nghi\u1ec7m.</div>',
     '</div>',
 
-    // Col 2 — Luận Giải (core pages)
-    '<div class="ft-col"><div class="ft-col-title">Lu\u1eadn Gi\u1ea3i</div>',
-    '<a href="/luan-giai.html">Lu\u1eadn Gi\u1ea3i L\u00e1 S\u1ed1</a>',
-    '<a href="/xem-tuoi.html">Xem Tu\u1ed5i V\u1ee3 Ch\u1ed3ng</a>',
-    '<a href="/xem-lam-an.html">Xem Tu\u1ed5i L\u00e0m \u0102n</a>',
+    // Col 2 — Công Cụ (hub pages)
+    '<div class="ft-col"><div class="ft-col-title">C\u00f4ng C\u1ee5</div>',
+    '<a href="/luan-giai.html">Lu\u1eadn Gi\u1ea3i T\u1eed Vi</a>',
+    '<a href="/xem-tuong.html">Xem T\u01b0\u1edbng</a>',
+    '<a href="/phong-thuy.html">Phong Th\u1ee7y</a>',
+    '<a href="/lam-dep.html">L\u00e0m \u0110\u1eb9p</a>',
+    '<a href="/chon-ngay.html">Ch\u1ecdn Ng\u00e0y</a>',
+    '<a href="/dat-ten.html">\u0110\u1eb7t T\u00ean</a>',
+    '</div>',
+
+    // Col 3 — Kiến Thức
+    '<div class="ft-col"><div class="ft-col-title">Ki\u1ebfn Th\u1ee9c</div>',
+    '<a href="/tu-dien">T\u1eeb \u0110i\u1ec3n</a>',
+    '<a href="/resources.html">T\u00e0i Li\u1ec7u</a>',
     '<a href="/menh-kho.html">M\u1ec7nh Kh\u1ed1</a>',
     '<a href="/blog.html">Kh\u1ea3o Lu\u1eadn</a>',
-    '<a href="/resources.html">T\u00e0i Li\u1ec7u T\u1eed Vi</a>',
+    '<a href="/kien-thuc-tuvi.html">L\u00fd Thuy\u1ebft C\u1ed5 Ph\u00e1p</a>',
     '</div>',
 
-    // Col 3 — Từ Điển (content, not tools)
-    '<div class="ft-col"><div class="ft-col-title">T\u1eeb \u0110i\u1ec3n</div>',
-    '<a href="/tu-dien/tu-hoa-khai-niem">T\u1ee9 H\u00f3a: L\u1ed9c Quy\u1ec1n Khoa K\u1ef5</a>',
-    '<a href="/tu-dien/sao-hoa-loc">H\u00f3a L\u1ed9c l\u00e0 g\u00ec?</a>',
-    '<a href="/tu-dien/sao-hoa-ky">H\u00f3a K\u1ef5 l\u00e0 g\u00ec?</a>',
-    '<a href="/tu-dien/cach-cuc-tong-quan">C\u00e1c C\u00e1ch C\u1ee5c Ph\u00fa Qu\u00fd</a>',
-    '<a href="/tu-dien/dai-van-tieu-van">\u0110\u1ea1i V\u1eadn &amp; Ti\u1ec3u V\u1eadn</a>',
-    '<a href="/tu-dien/tuong-phap-xem-mat">Xem T\u01b0\u1edbng M\u1eb7t</a>',
-    '<a href="/tu-dien/ngay-tot-hon-nhan">Ch\u1ecdn Ng\u00e0y C\u01b0\u1edbi T\u1ed1t</a>',
-    '<a href="/tu-dien/dat-ten-theo-menh">\u0110\u1eb7t T\u00ean Theo M\u1ec7nh</a>',
-    '<a href="/tu-dien/lam-dep-mau-sac-menh">M\u00e0u S\u1eafc May M\u1eafn</a>',
-    '</div>',
-
-    // Col 4 — Thông tin & Pháp lý
+    // Col 4 — Thông Tin
     '<div class="ft-col"><div class="ft-col-title">Th\u00f4ng Tin</div>',
     '<a href="/about.html">Gi\u1edbi Thi\u1ec7u</a>',
     '<a href="/contact.html">Li\u00ean H\u1ec7</a>',
@@ -83,7 +76,7 @@
     '<a href="/dieu-khoan-dich-vu.html">\u0110i\u1ec1u Kho\u1ea3n</a>',
     '<img src="/seal.webp" alt="">',
     '</div></div>',
-    '<div class="ft-disclaimer">N\u1ed9i dung lu\u1eadn gi\u1ea3i mang t\u00ednh tham kh\u1ea3o, kh\u00f4ng th\u1ea3y th\u1ebf t\u01b0 v\u1ea5n chuy\u00ean m\u00f4n. \u0110\u00e2y l\u00e0 \u0111\u1ecbnh ngh\u0129a theo tr\u01b0\u1eddng ph\u00e1i c\u1ed5 ph\u00e1p.</div>',
+    '<div class="ft-disclaimer">N\u1ed9i dung lu\u1eadn gi\u1ea3i mang t\u00ednh tham kh\u1ea3o, kh\u00f4ng th\u1ea3y th\u1ebf t\u01b0 v\u1ea5n chuy\u00ean m\u00f4n.</div>',
     '</div></footer>'
   ].join('');
 
@@ -92,5 +85,4 @@
   var old = document.querySelector('footer.site-footer');
   if (old) old.remove();
   document.body.appendChild(el.firstChild);
-
 })();

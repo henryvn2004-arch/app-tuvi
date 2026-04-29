@@ -25,23 +25,29 @@ function renderMarkdown(text: string) {
 }
 
 const LOAI_LABEL: Record<string,string> = {
-  'sao-tu-vi': 'Sao Tử Vi',
+  'sao-tu-vi':  'Sao Tử Vi',
   'cung-tu-vi': 'Cung Tử Vi',
-  'khai-niem': 'Khái Niệm',
+  'khai-niem':  'Khái Niệm Tử Vi',
   'tuong-phap': 'Tướng Pháp',
-  'ngay-tot': 'Ngày Tốt',
-  'ngu-hanh': 'Ngũ Hành',
-  'khac': 'Từ Điển',
+  'ngay-tot':   'Chọn Ngày Tốt',
+  'ngu-hanh':   'Ngũ Hành',
+  'lam-dep':    'Làm Đẹp Theo Mệnh',
+  'dat-ten':    'Đặt Tên',
+  'phong-thuy': 'Phong Thủy',
+  'khac':       'Từ Điển',
 };
 
 const HUB_URLS: Record<string,string> = {
-  'sao-tu-vi': `${BASE}/kien-thuc-tuvi`,
+  'sao-tu-vi':  `${BASE}/kien-thuc-tuvi`,
   'cung-tu-vi': `${BASE}/kien-thuc-tuvi`,
-  'khai-niem': `${BASE}/kien-thuc-tuvi`,
+  'khai-niem':  `${BASE}/kien-thuc-tuvi`,
   'tuong-phap': `${BASE}/xem-tuong`,
-  'ngay-tot': `${BASE}/chon-ngay`,
-  'ngu-hanh': `${BASE}/kien-thuc-tuvi`,
-  'khac': `${BASE}/kien-thuc-tuvi`,
+  'ngay-tot':   `${BASE}/chon-ngay`,
+  'ngu-hanh':   `${BASE}/kien-thuc-tuvi`,
+  'lam-dep':    `${BASE}/lam-dep`,
+  'dat-ten':    `${BASE}/dat-ten`,
+  'phong-thuy': `${BASE}/phong-thuy`,
+  'khac':       `${BASE}/tu-dien`,
 };
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
