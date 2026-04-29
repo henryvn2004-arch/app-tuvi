@@ -830,6 +830,168 @@ async function handleTrangDiemTryon(body) {
   }
 }
 
+
+// ── Da Liệu AI ────────────────────────────────────────────────────────────────
+
+// Ngũ tạng → da (Đông y)
+// Phế chủ bì mao (Phổi chủ da/lông)
+// Can tàng huyết (Gan tàng trữ huyết → sắc da)
+// Tỳ vận hóa (Tỳ vị vận hóa thủy thấp → độ ẩm, mụn)
+// Thận tàng tinh (Thận → lão hóa, quầng thâm)
+// Tâm chủ huyết mạch (Tim → đỏ mặt, mụn viêm)
+
+// Mệnh → tạng chủ đạo → xu hướng da
+const MENH_TANG = {
+  Kim:  { tang: 'Phế', mo_ta: 'Phế chủ bì mao — da dễ khô, lỗ chân lông to, nhạy cảm với không khí khô', xu_huong: 'Da khô, bong tróc mùa lạnh, dị ứng', thanh_nhiet: false },
+  Mộc:  { tang: 'Can', mo_ta: 'Can tàng huyết — sắc da phụ thuộc huyết dịch, dễ nám, xỉn khi Can khí uất', xu_huong: 'Da xỉn, thâm, nám nội tiết', thanh_nhiet: false },
+  Hỏa:  { tang: 'Tâm', mo_ta: 'Tâm chủ huyết mạch — da dễ đỏ, mụn viêm, Tâm Hỏa vượng sinh nhiệt độc lên mặt', xu_huong: 'Da nhờn, mụn viêm, đỏ ửng', thanh_nhiet: true },
+  Thủy: { tang: 'Thận', mo_ta: 'Thận tàng tinh — Thận tinh suy giảm gây lão hóa sớm, quầng thâm mắt, da thiếu nước', xu_huong: 'Da lão hóa sớm, quầng thâm, thiếu ẩm sâu', thanh_nhiet: false },
+  Thổ:  { tang: 'Tỳ', mo_ta: 'Tỳ vận hóa thủy thấp — Tỳ hư thấp trệ sinh mụn đầu trắng, da nhờn vùng T', xu_huong: 'Da hỗn hợp, mụn đầu trắng, nhờn vùng T', thanh_nhiet: false },
+};
+
+const CAN_NHIET = ['Bính','Đinh']; // can nóng
+const _CAN_DL = ['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
+const _CHI_DL = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+const _NAP_AM_DL = {
+  'Giáp Tý':'Kim','Ất Sửu':'Kim','Bính Dần':'Hỏa','Đinh Mão':'Hỏa','Mậu Thìn':'Mộc','Kỷ Tỵ':'Mộc',
+  'Canh Ngọ':'Thổ','Tân Mùi':'Thổ','Nhâm Thân':'Kim','Quý Dậu':'Kim','Giáp Tuất':'Hỏa','Ất Hợi':'Hỏa',
+  'Bính Tý':'Thủy','Đinh Sửu':'Thủy','Mậu Dần':'Thổ','Kỷ Mão':'Thổ','Canh Thìn':'Kim','Tân Tỵ':'Kim',
+  'Nhâm Ngọ':'Mộc','Quý Mùi':'Mộc','Giáp Thân':'Thủy','Ất Dậu':'Thủy','Bính Tuất':'Thổ','Đinh Hợi':'Thổ',
+  'Mậu Tý':'Hỏa','Kỷ Sửu':'Hỏa','Canh Dần':'Mộc','Tân Mão':'Mộc','Nhâm Thìn':'Thủy','Quý Tỵ':'Thủy',
+  'Giáp Ngọ':'Kim','Ất Mùi':'Kim','Bính Thân':'Hỏa','Đinh Dậu':'Hỏa','Mậu Tuất':'Mộc','Kỷ Hợi':'Mộc',
+  'Canh Tý':'Thổ','Tân Sửu':'Thổ','Nhâm Dần':'Kim','Quý Mão':'Kim','Giáp Thìn':'Hỏa','Ất Tỵ':'Hỏa',
+  'Bính Ngọ':'Thủy','Đinh Mùi':'Thủy','Mậu Thân':'Thổ','Kỷ Dậu':'Thổ','Canh Tuất':'Kim','Tân Hợi':'Kim',
+  'Nhâm Tý':'Mộc','Quý Sửu':'Mộc','Giáp Dần':'Thủy','Ất Mão':'Thủy','Bính Thìn':'Thổ','Đinh Tỵ':'Thổ',
+  'Mậu Ngọ':'Hỏa','Kỷ Mùi':'Hỏa','Canh Thân':'Mộc','Tân Dậu':'Mộc','Nhâm Tuất':'Thủy','Quý Hợi':'Thủy',
+};
+const _NAP_AM_FULL_DL = {
+  'Giáp Tý':'Hải Trung Kim','Ất Sửu':'Hải Trung Kim','Bính Dần':'Lô Trung Hỏa','Đinh Mão':'Lô Trung Hỏa',
+  'Mậu Thìn':'Đại Lâm Mộc','Kỷ Tỵ':'Đại Lâm Mộc','Canh Ngọ':'Lộ Bàng Thổ','Tân Mùi':'Lộ Bàng Thổ',
+  'Nhâm Thân':'Kiếm Phong Kim','Quý Dậu':'Kiếm Phong Kim','Giáp Tuất':'Sơn Đầu Hỏa','Ất Hợi':'Sơn Đầu Hỏa',
+  'Bính Tý':'Giản Hạ Thủy','Đinh Sửu':'Giản Hạ Thủy','Mậu Dần':'Thành Đầu Thổ','Kỷ Mão':'Thành Đầu Thổ',
+  'Canh Thìn':'Bạch Lạp Kim','Tân Tỵ':'Bạch Lạp Kim','Nhâm Ngọ':'Dương Liễu Mộc','Quý Mùi':'Dương Liễu Mộc',
+  'Giáp Thân':'Tuyền Trung Thủy','Ất Dậu':'Tuyền Trung Thủy','Bính Tuất':'Ốc Thượng Thổ','Đinh Hợi':'Ốc Thượng Thổ',
+  'Mậu Tý':'Tích Lịch Hỏa','Kỷ Sửu':'Tích Lịch Hỏa','Canh Dần':'Tùng Bách Mộc','Tân Mão':'Tùng Bách Mộc',
+  'Nhâm Thìn':'Trường Lưu Thủy','Quý Tỵ':'Trường Lưu Thủy','Giáp Ngọ':'Sa Trung Kim','Ất Mùi':'Sa Trung Kim',
+  'Bính Thân':'Sơn Hạ Hỏa','Đinh Dậu':'Sơn Hạ Hỏa','Mậu Tuất':'Bình Địa Mộc','Kỷ Hợi':'Bình Địa Mộc',
+  'Canh Tý':'Bích Thượng Thổ','Tân Sửu':'Bích Thượng Thổ','Nhâm Dần':'Kim Bạc Kim','Quý Mão':'Kim Bạc Kim',
+  'Giáp Thìn':'Phúc Đăng Hỏa','Ất Tỵ':'Phúc Đăng Hỏa','Bính Ngọ':'Thiên Hà Thủy','Đinh Mùi':'Thiên Hà Thủy',
+  'Mậu Thân':'Đại Dịch Thổ','Kỷ Dậu':'Đại Dịch Thổ','Canh Tuất':'Thoa Xuyến Kim','Tân Hợi':'Thoa Xuyến Kim',
+  'Nhâm Tý':'Tang Đố Mộc','Quý Sửu':'Tang Đố Mộc','Giáp Dần':'Đại Khê Thủy','Ất Mão':'Đại Khê Thủy',
+  'Bính Thìn':'Sa Trung Thổ','Đinh Tỵ':'Sa Trung Thổ','Mậu Ngọ':'Thiên Thượng Hỏa','Kỷ Mùi':'Thiên Thượng Hỏa',
+  'Canh Thân':'Thạch Lựu Mộc','Tân Dậu':'Thạch Lựu Mộc','Nhâm Tuất':'Đại Hải Thủy','Quý Hợi':'Đại Hải Thủy',
+};
+function _dlYearToCanChi(y) { return `${_CAN_DL[(y-4+400)%10]} ${_CHI_DL[(y-4+480)%12]}`; }
+function _dlGetHanh(y) { return _NAP_AM_DL[_dlYearToCanChi(y)] || 'Thổ'; }
+
+const SP_DA_LIEU = `Bạn là chuyên gia tư vấn da kết hợp Đông Tây y và cổ pháp phương Đông.
+Nhiệm vụ: phân tích ảnh da mặt và đưa ra tư vấn holistic gồm 4 phần.
+Trả về JSON THUẦN TÚY — không markdown, không backtick, không text ngoài JSON.
+
+Format bắt buộc:
+{
+  "phan_tich_da": {
+    "loai_da": "da dầu / da khô / da hỗn hợp / da thường / da nhạy cảm",
+    "tinh_trang": ["tình trạng 1", "tình trạng 2", "..."],
+    "muc_do": "nhẹ / trung bình / nặng",
+    "vung_can_chu_y": "mô tả vùng da cần chú ý nhất",
+    "mo_ta": "mô tả ngắn 2-3 câu về tình trạng da quan sát được"
+  },
+  "dong_y": {
+    "tang_phu": "tạng liên quan chính",
+    "ly_giai": "lý giải Đông y 2-3 câu tại sao da bị như vậy theo học thuyết tạng phủ",
+    "menh_lien_quan": "cách mệnh ngũ hành ảnh hưởng đến tình trạng da hiện tại",
+    "can_bang": "hướng điều chỉnh cân bằng âm dương/ngũ hành"
+  },
+  "an_uong": {
+    "nen_an": [
+      {"ten": "tên thực phẩm", "ly_do": "lý do ngắn theo Đông Tây y"},
+      {"ten": "...", "ly_do": "..."}
+    ],
+    "nen_tranh": [
+      {"ten": "tên thực phẩm", "ly_do": "lý do ngắn"},
+      {"ten": "...", "ly_do": "..."}
+    ],
+    "thuc_duong": "1-2 câu về nguyên tắc thực dưỡng theo mệnh và tình trạng da",
+    "nuoc_uong": "gợi ý nước uống/trà dược liệu phù hợp"
+  },
+  "my_pham": {
+    "ingredients_nen": [
+      {"ten": "tên thành phần", "cong_dung": "công dụng", "phu_hop_hanh": "hành tương sinh"},
+      {"ten": "...", "cong_dung": "...", "phu_hop_hanh": "..."}
+    ],
+    "ingredients_tranh": [
+      {"ten": "tên thành phần", "ly_do": "lý do nên tránh theo mệnh/tình trạng"},
+      {"ten": "...", "ly_do": "..."}
+    ],
+    "routine_sang": "routine buổi sáng ngắn gọn",
+    "routine_toi": "routine buổi tối ngắn gọn",
+    "luu_y": "lưu ý đặc biệt theo bản mệnh"
+  },
+  "tong_ket": "1-2 câu tổng kết holistic kết hợp Đông Tây y"
+}
+
+Quy tắc:
+- nen_an và nen_tranh: mỗi mảng 4-5 items
+- ingredients_nen và ingredients_tranh: mỗi mảng 4-5 items
+- Lồng ghép Đông y (ngũ tạng, âm dương, hành) VÀ Tây y (vitamin, peptide, SPF...) tự nhiên
+- Chỉ trả về JSON`;
+
+async function handleDaLieuAI(body, apiKey) {
+  const { image, mediaType = 'image/jpeg', namSinh, faceMeasurements } = body;
+  if (!image) return Response.json({ error: 'Thiếu dữ liệu ảnh.' }, { status: 400 });
+  if (image.length > 7 * 1024 * 1024) return Response.json({ error: 'Ảnh quá lớn (tối đa ~5MB).' }, { status: 400 });
+
+  // Tính mệnh nếu có năm sinh
+  let menhContext = '';
+  let menhHanh = null, menhFull = null, canChi = null, tangInfo = null;
+  if (namSinh && namSinh >= 1900 && namSinh <= 2010) {
+    canChi = _dlYearToCanChi(namSinh);
+    menhHanh = _dlGetHanh(namSinh);
+    menhFull = _NAP_AM_FULL_DL[canChi] || canChi;
+    tangInfo = MENH_TANG[menhHanh];
+    menhContext = `
+
+THÔNG TIN BẢN MỆNH:
+- Năm sinh: ${namSinh} (${canChi}) — Nạp Âm: ${menhFull}, hành ${menhHanh}
+- ${tangInfo?.mo_ta || ''}
+- Xu hướng da theo mệnh: ${tangInfo?.xu_huong || ''}
+
+Hãy lồng ghép thông tin mệnh vào phần dong_y.menh_lien_quan và my_pham.luu_y.
+Phần an_uong cũng phải tính đến mệnh ${menhHanh} (VD: mệnh Hỏa cần thanh nhiệt, mệnh Thủy cần bổ thận).`;
+  }
+
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 2000,
+      system: SP_DA_LIEU + menhContext,
+      messages: [{
+        role: 'user',
+        content: [
+          { type: 'image', source: { type: 'base64', media_type: mediaType, data: image } },
+          { type: 'text', text: 'Phân tích tình trạng da trong ảnh và trả về JSON tư vấn holistic đầy đủ 4 phần.' }
+        ]
+      }]
+    })
+  });
+
+  if (!resp.ok) return Response.json({ error: 'Lỗi AI.' }, { status: 500 });
+  const data = await resp.json();
+  const text = data.content?.[0]?.text || '{}';
+  try {
+    const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
+    if (menhHanh) { parsed.menhHanh = menhHanh; parsed.menhFull = menhFull; parsed.canChi = canChi; }
+    return Response.json(parsed);
+  } catch(_) {
+    return Response.json({ error: 'Lỗi phân tích kết quả AI.' }, { status: 500 });
+  }
+}
+
+// ── End Da Liệu AI ────────────────────────────────────────────────────────────
+
 // ── End Trang Điểm AI ─────────────────────────────────────────────────────────
 
 const PROMPTS = {
@@ -863,6 +1025,7 @@ export async function POST(request) {
 
     // ── Non-streaming Claude Vision JSON actions ───────────────────────────
     if (action === 'kieu-toc-phan-tich') return await handleKieuTocPhanTich(body, apiKey);
+    if (action === 'da-lieu-ai') return await handleDaLieuAI(body, apiKey);
     if (action === 'trang-diem-phan-tich') return await handleTrangDiemPhanTich(body, apiKey);
     if (action === 'trang-diem-tryon') return await handleTrangDiemTryon(body);
 
