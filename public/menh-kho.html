@@ -277,7 +277,7 @@ function render() {
     const previewText = preview.replace(/[#*_`]/g,'').slice(0, 120);
     const date = d.created_at ? new Date(d.created_at).toLocaleDateString('vi-VN') : '';
     return `
-    <a class="laso-card" href="/la-so.html?slug=${d.slug}" style="animation-delay:${i*0.03}s">
+    <a class="laso-card" href="/la-so/${d.slug}" style="animation-delay:${i*0.03}s">
       <div class="card-top">
         <div class="card-can-chi">${d.can_chi_nam || '—'}</div>
         <div class="card-gt ${gt}">${gtLbl}</div>
@@ -299,7 +299,7 @@ function render() {
         (allData.length > 0 ? filtered.slice(start, start + PAGE_SIZE) : []).forEach(d => {
           if (window.ShareButtons && d.slug) {
             ShareButtons.render('share-card-' + d.slug, {
-              url: window.location.origin + '/la-so.html?slug=' + d.slug,
+              url: window.location.origin + '/la-so/' + d.slug,
               title: 'Lá số ' + (d.can_chi_nam||'') + ' — Tử Vi Minh Bảo',
               text: 'Xem lá số Tử Vi tại Tử Vi Minh Bảo'
             });
