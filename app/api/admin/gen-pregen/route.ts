@@ -152,7 +152,7 @@ export async function GET(req: NextRequest) {
       },
       body: JSON.stringify(chunk),
     });
-    if (res.ok || res.status === 201) totalInserted += chunk.length;
+    const debug = await res.text().catch(()=>''); if (res.ok || res.status === 201 || res.status === 204) { totalInserted += chunk.length; } else { return NextResponse.json({error: 'Supabase error: '+res.status+' '+debug.slice(0,200), sb_url: SB_URL, has_key: !!SB_KEY}); }
   }
 
   return NextResponse.json({
