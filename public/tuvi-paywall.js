@@ -23,6 +23,9 @@ const TuviPaywall = (() => {
     'kieu-toc-tryon':      { cost:  20, title: 'Thử Kiểu Tóc AI' },
     'trang-phuc-tryon':    { cost:  20, title: 'Thử Trang Phục AI' },
     'phong-thuy-render':   { cost:  30, title: 'Render Phòng Phong Thủy AI' },
+    'trang-diem-phan-tich':{ cost:   5, title: 'Phân Tích Trang Điểm AI' },
+    'trang-diem-tryon':    { cost:  20, title: 'Thử Trang Điểm AI' },
+    'trang-phuc-theo-ngay':{ cost:  10, title: 'Trang Phục Theo Ngày' },
   };
 
   const TOOL_TYPE = {
@@ -34,6 +37,9 @@ const TuviPaywall = (() => {
     'kieu-toc-phan-tich': 'use_kieu_toc_phan_tich', 'kieu-toc-tryon': 'use_kieu_toc_tryon',
     'trang-phuc-tryon': 'use_trang_phuc_tryon',
     'phong-thuy-render': 'use_phong_thuy_render',
+    'trang-diem-phan-tich': 'use_trang_diem_phan_tich',
+    'trang-diem-tryon': 'use_trang_diem_tryon',
+    'trang-phuc-theo-ngay': 'use_trang_phuc_theo_ngay',
   };
 
   let _cfg        = null;
