@@ -1082,6 +1082,32 @@ Format:
   "hex_palette": ["#hex1","#hex2","#hex3","#hex4","#hex5","#hex6"],
   "hex_avoid": ["#hex1","#hex2","#hex3"],
   "celebrity_inspo": "tên 1-2 celeb châu Á cùng season type để tham khảo",
+  "outfit_goi_y": {
+    "hang_ngay": {
+      "mo_ta": "mô tả bộ outfit casual hàng ngày cụ thể với màu sắc theo season",
+      "ao": "áo cụ thể — kiểu áo + màu chính xác",
+      "quan_vay": "quần hoặc váy + màu",
+      "layer": "áo khoác/blazer nếu cần + màu",
+      "giay": "giày + màu",
+      "ly_do": "tại sao combo này làm sáng gương mặt"
+    },
+    "cong_so": {
+      "mo_ta": "mô tả bộ outfit công sở/chuyên nghiệp",
+      "ao": "áo + màu",
+      "quan_vay": "quần/váy + màu",
+      "layer": "blazer/áo khoác + màu",
+      "giay": "giày + màu",
+      "ly_do": "lý do phù hợp season"
+    },
+    "su_kien": {
+      "mo_ta": "mô tả bộ outfit cho buổi tối/sự kiện",
+      "ao": "áo/top + màu",
+      "quan_vay": "quần/váy + màu",
+      "layer": "layer ngoài nếu cần",
+      "giay": "giày + màu",
+      "ly_do": "lý do phù hợp season"
+    }
+  },
   "tip": "1 câu tip thực hành nhanh nhất để áp dụng ngay"
 }
 
@@ -1145,6 +1171,39 @@ Nếu kết quả phân tích ảnh cho phép, ưu tiên season này. Nếu tôn
 
 // ── End Personal Color AI ─────────────────────────────────────────────────────
 
+// Personal Color Try-on
+const PC_OUTFIT_DESC = {
+  spring_warm:   { casual: 'a warm peach toned casual shirt with camel trousers', formal: 'a coral orange blazer with cream dress pants', evening: 'a warm golden dress or deep orange top with camel bottoms' },
+  spring_bright: { casual: 'a vivid cobalt blue t-shirt with white trousers', formal: 'a bright red blazer with white shirt and navy trousers', evening: 'a bold fuchsia or bright red dress/top with black bottoms' },
+  summer_cool:   { casual: 'a soft lavender or baby blue casual shirt with light grey trousers', formal: 'a dusty rose or periwinkle blazer with soft white shirt', evening: 'a cool mauve or lilac dress or elegant blush pink outfit' },
+  summer_soft:   { casual: 'a muted teal or dusty blue casual shirt with grey trousers', formal: 'a soft grey-blue blazer with white shirt and slate trousers', evening: 'a smoky rose or muted plum dress with subtle grey accents' },
+  autumn_warm:   { casual: 'a rust orange or olive green casual shirt with dark brown trousers', formal: 'a camel or terracotta blazer with cream shirt and dark pants', evening: 'a deep rust or warm burgundy outfit with gold accessories' },
+  autumn_deep:   { casual: 'a deep chocolate brown or forest green shirt with dark khaki trousers', formal: 'a rich dark navy or burgundy blazer with warm white shirt', evening: 'a deep wine or forest green dress with copper accessories' },
+  winter_cool:   { casual: 'a crisp white or icy blue shirt with black trousers', formal: 'a sharp black blazer with bright white shirt and charcoal trousers', evening: 'a deep royal blue or elegant black outfit with silver accessories' },
+  winter_deep:   { casual: 'a jet black or deep navy shirt with charcoal trousers', formal: 'a deep charcoal or black blazer with bright white shirt', evening: 'a deep plum or midnight navy dress with silver or platinum accessories' },
+};
+
+async function handlePersonalColorTryon(body) {
+  const replKey = process.env.REPLICATE_API_KEY;
+  if (!replKey) return Response.json({ error: 'Replicate API key chưa cấu hình.' }, { status: 500 });
+  const { image, mediaType = 'image/jpeg', season, outfit_type = 'casual' } = body;
+  if (!image) return Response.json({ error: 'Thiếu ảnh.' }, { status: 400 });
+  const desc = PC_OUTFIT_DESC[season || 'spring_warm'];
+  const outfitDesc = desc?.[outfit_type] || desc?.casual || 'a stylish outfit';
+  const prompt = `Change the outfit to: ${outfitDesc}. Keep face, hair, expression, body shape, pose and background exactly identical. Photorealistic, professional fashion photo.`;
+  try {
+    const url = await _replicateRun(
+      replKey,
+      'https://api.replicate.com/v1/models/black-forest-labs/flux-kontext-pro/predictions',
+      { prompt, input_image: `data:${mediaType};base64,${image}`, output_format: 'jpg', safety_tolerance: 2 },
+      { prefer: 'wait=55' }
+    );
+    return Response.json({ imageUrl: url });
+  } catch(e) {
+    return Response.json({ error: e.message || 'Lỗi xử lý ảnh.' }, { status: 500 });
+  }
+}
+
 
 // ── End Trang Điểm AI ─────────────────────────────────────────────────────────
 
@@ -1180,6 +1239,7 @@ export async function POST(request) {
     // ── Non-streaming Claude Vision JSON actions ───────────────────────────
     if (action === 'kieu-toc-phan-tich') return await handleKieuTocPhanTich(body, apiKey);
     if (action === 'personal-color') return await handlePersonalColor(body, apiKey);
+    if (action === 'personal-color-tryon') return await handlePersonalColorTryon(body);
     if (action === 'da-lieu-ai') return await handleDaLieuAI(body, apiKey);
     if (action === 'trang-diem-phan-tich') return await handleTrangDiemPhanTich(body, apiKey);
     if (action === 'trang-diem-tryon') return await handleTrangDiemTryon(body);

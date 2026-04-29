@@ -161,6 +161,40 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
   padding:11px 14px;font-size:13px;color:var(--text-mid);}
 .celeb-box strong{color:var(--navy);}
 
+/* Outfit section */
+.outfit-tabs{display:flex;gap:6px;margin-bottom:12px;}
+.outfit-tab{padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);
+  background:var(--bg);font-size:12px;font-weight:600;cursor:pointer;
+  color:var(--text-mid);transition:all .15s;}
+.outfit-tab.active{background:#4a1a6a;color:#fff;border-color:#4a1a6a;}
+.outfit-tab:hover:not(.active){border-color:#9b59b6;color:#7b2fbe;}
+.outfit-panel{display:none;}.outfit-panel.show{display:block;}
+.outfit-card{background:var(--bg-soft);border-radius:10px;padding:14px;margin-bottom:10px;}
+.outfit-mo-ta{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px;
+  font-family:'Noto Serif',serif;}
+.outfit-items{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-bottom:8px;}
+.outfit-item{background:var(--bg);border:1px solid var(--border-lt);border-radius:8px;padding:9px 11px;}
+.outfit-item-icon{font-size:16px;margin-bottom:3px;}
+.outfit-item-cat{font-size:10px;font-weight:700;color:var(--text-lt);text-transform:uppercase;margin-bottom:2px;}
+.outfit-item-val{font-size:12px;color:var(--text-mid);}
+.outfit-ly-do{font-size:11px;color:var(--blue);background:#f0f5ff;border-radius:6px;padding:6px 10px;line-height:1.5;}
+
+/* Try-on */
+.tryon-upload{border:2px dashed var(--border);border-radius:10px;padding:24px 16px;
+  text-align:center;cursor:pointer;background:var(--bg-soft);position:relative;transition:all .2s;}
+.tryon-upload:hover,.tryon-upload.drag{border-color:#9b59b6;background:#faf0ff;}
+.tryon-upload input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.tryon-preview-img{max-width:180px;max-height:220px;border-radius:8px;display:block;margin:8px auto 0;}
+.btn-tryon{width:100%;padding:12px;background:linear-gradient(135deg,var(--gold),var(--gold-bright));
+  color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;
+  font-family:'Noto Serif',serif;margin-top:10px;transition:opacity .2s;}
+.btn-tryon:hover{opacity:.88;}.btn-tryon:disabled{opacity:.45;cursor:not-allowed;}
+.ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.ba-label{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--text-lt);margin-bottom:5px;}
+.ba-img{width:100%;border-radius:8px;aspect-ratio:3/4;object-fit:cover;}
+.tryon-spinner{width:32px;height:32px;border:3px solid var(--border-lt);
+  border-top-color:#9b59b6;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 10px;}
+
 /* Season colors map */
 </style>
 </head>
@@ -311,6 +345,72 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
           <div class="acc-icon">💬</div>
           <div class="acc-label">Lý Do</div>
           <div class="acc-val" style="font-size:12px;font-weight:400;color:var(--text-mid)" id="accLyDo">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Outfit gợi ý -->
+    <div class="card" id="outfitSection" style="display:none">
+      <div class="card-title">👔 Gợi Ý Trang Phục Theo Season</div>
+      <div class="outfit-tabs">
+        <button class="outfit-tab active" onclick="showOutfit('hang_ngay',this)">🌿 Hàng Ngày</button>
+        <button class="outfit-tab" onclick="showOutfit('cong_so',this)">💼 Công Sở</button>
+        <button class="outfit-tab" onclick="showOutfit('su_kien',this)">✨ Sự Kiện</button>
+      </div>
+      <div class="outfit-panel show" id="outfit-hang_ngay"></div>
+      <div class="outfit-panel" id="outfit-cong_so"></div>
+      <div class="outfit-panel" id="outfit-su_kien"></div>
+    </div>
+
+    <!-- Try-on -->
+    <div class="card" id="tryonSection" style="display:none">
+      <div class="card-title">🪄 Thử Trang Phục <span style="font-size:10px;background:#e8f0fe;color:#1455A4;padding:2px 8px;border-radius:10px;margin-left:4px;">20 lượng/lần</span></div>
+
+      <div style="font-size:12px;color:var(--text-lt);margin-bottom:10px;line-height:1.5;">
+        Upload ảnh toàn thân → AI thay trang phục đúng màu season <strong id="tryonSeasonLabel"></strong> của bạn
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--text-lt);margin-bottom:6px;">CHỌN STYLE</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <button class="outfit-tab active" id="tryonTabCasual" style="border-radius:8px;justify-content:flex-start;" onclick="setTryonType('casual',this)">🌿 Hàng ngày</button>
+            <button class="outfit-tab" id="tryonTabFormal" style="border-radius:8px;justify-content:flex-start;" onclick="setTryonType('formal',this)">💼 Công sở</button>
+            <button class="outfit-tab" id="tryonTabEvening" style="border-radius:8px;justify-content:flex-start;" onclick="setTryonType('evening',this)">✨ Sự kiện</button>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--text-lt);margin-bottom:6px;">ẢNH CỦA BẠN</div>
+          <div class="tryon-upload" id="tryonZone"
+            ondragover="event.preventDefault();this.classList.add('drag')"
+            ondragleave="this.classList.remove('drag')"
+            ondrop="event.preventDefault();this.classList.remove('drag');loadTryonFile(event.dataTransfer.files[0])">
+            <input type="file" accept="image/*" id="tryonInput" onchange="loadTryonFile(this.files[0])">
+            <div id="tryonPrompt" style="font-size:12px;color:var(--text-lt)">
+              <div style="font-size:24px;margin-bottom:6px;">👤</div>
+              Chụp ảnh toàn thân
+            </div>
+            <img id="tryonPreviewImg" class="tryon-preview-img" src="" alt="" style="display:none">
+          </div>
+          <button id="btnChangeTryon" onclick="clearTryon()" style="display:none;background:none;border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-size:10px;color:var(--text-mid);cursor:pointer;margin-top:4px;width:100%;">✕ Đổi ảnh</button>
+        </div>
+      </div>
+
+      <button class="btn-tryon" id="btnTryon" onclick="doTryon()" disabled>🪄 Thử Trang Phục Ngay</button>
+
+      <div id="tryonLoading" style="display:none;text-align:center;padding:24px 0;">
+        <div class="tryon-spinner"></div>
+        <div style="font-size:13px;font-weight:600;color:#7b2fbe;">AI đang tạo outfit...</div>
+        <div style="font-size:11px;color:var(--text-lt);margin-top:4px;">~20-35 giây</div>
+      </div>
+      <div id="tryonResult" style="display:none;margin-top:12px;">
+        <div class="ba-grid">
+          <div><div class="ba-label">Ảnh gốc</div><img id="tryonBefore" class="ba-img" src="" alt=""></div>
+          <div><div class="ba-label" id="tryonAfterLabel">Sau khi thử</div><img id="tryonAfter" class="ba-img" src="" alt=""></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:10px;">
+          <button onclick="downloadTryon()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;">⬇ Tải Ảnh</button>
+          <button onclick="resetTryon()" style="flex:1;padding:10px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;color:var(--text-mid);">🔄 Thử Lại</button>
         </div>
       </div>
     </div>
@@ -487,8 +587,28 @@ function renderResults(d) {
   document.getElementById('tipFinal').textContent = d.tip || '';
   document.getElementById('celebInspo').textContent = d.celebrity_inspo || '';
 
+  // Outfit gợi ý
+  const og = d.outfit_goi_y;
+  if (og) {
+    renderOutfit('hang_ngay', og.hang_ngay);
+    renderOutfit('cong_so', og.cong_so);
+    renderOutfit('su_kien', og.su_kien);
+    document.getElementById('outfitSection').style.display = 'block';
+    showOutfit('hang_ngay', document.querySelector('.outfit-tab'));
+  }
+
+  // Try-on
+  _tryonSeason = d.season || 'spring_warm';
+  document.getElementById('tryonSeasonLabel').textContent = '— ' + (d.season_vn || d.season || '');
+  document.getElementById('tryonSection').style.display = 'block';
+  clearTryon();
+
   setTimeout(() => document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
 }
+
+window.addEventListener('DOMContentLoaded', () => {
+  TuviPaywall.init({ product: 'personal-color' });
+});
 
 function renderSwatches(id, hexArr, isAvoid) {
   const el = document.getElementById(id); el.innerHTML = '';
@@ -510,9 +630,97 @@ function renderAvoidItems(id, items) {
     ${items.map(i => `<div class="rec-avoid-item">${i}</div>`).join('')}`;
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  TuviPaywall.init({ product: 'personal-color' });
-});
+function renderOutfit(key, data) {
+  const el = document.getElementById('outfit-' + key);
+  if (!el || !data) return;
+  const icons = { ao:'👔', quan_vay:'👖', layer:'🧥', giay:'👟' };
+  const labels = { ao:'Áo', quan_vay:'Quần / Váy', layer:'Layer ngoài', giay:'Giày' };
+  const items = ['ao','quan_vay','layer','giay'].filter(k => data[k]).map(k => `
+    <div class="outfit-item">
+      <div class="outfit-item-icon">${icons[k]}</div>
+      <div class="outfit-item-cat">${labels[k]}</div>
+      <div class="outfit-item-val">${data[k]}</div>
+    </div>`).join('');
+  el.innerHTML = `
+    <div class="outfit-card">
+      <div class="outfit-mo-ta">${data.mo_ta || ''}</div>
+      <div class="outfit-items">${items}</div>
+      ${data.ly_do ? `<div class="outfit-ly-do">✦ ${data.ly_do}</div>` : ''}
+    </div>`;
+}
+
+function showOutfit(key, btn) {
+  document.querySelectorAll('.outfit-panel').forEach(p => p.classList.remove('show'));
+  document.querySelectorAll('.outfit-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('outfit-' + key)?.classList.add('show');
+  if (btn) btn.classList.add('active');
+}
+
+// Try-on
+let _tryonImgData = null, _tryonMediaType = 'image/jpeg', _tryonType = 'casual', _tryonSeason = 'spring_warm', _tryonResultUrl = null;
+
+function loadTryonFile(file) {
+  if (!file?.type?.startsWith('image/')) return;
+  const r = new FileReader();
+  r.onload = e => {
+    _tryonImgData = e.target.result.split(',')[1];
+    _tryonMediaType = file.type;
+    document.getElementById('tryonPreviewImg').src = e.target.result;
+    document.getElementById('tryonPreviewImg').style.display = 'block';
+    document.getElementById('tryonPrompt').style.display = 'none';
+    document.getElementById('btnChangeTryon').style.display = 'block';
+    document.getElementById('btnTryon').disabled = false;
+  };
+  r.readAsDataURL(file);
+}
+function clearTryon() {
+  _tryonImgData = null;
+  document.getElementById('tryonPreviewImg').style.display = 'none';
+  document.getElementById('tryonPrompt').style.display = 'block';
+  document.getElementById('btnChangeTryon').style.display = 'none';
+  document.getElementById('tryonInput').value = '';
+  document.getElementById('btnTryon').disabled = true;
+  document.getElementById('tryonResult').style.display = 'none';
+}
+function setTryonType(type, btn) {
+  _tryonType = type;
+  document.querySelectorAll('#tryonSection .outfit-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function resetTryon() { clearTryon(); }
+
+async function doTryon() {
+  if (!_tryonImgData) return;
+  const token = window.Auth?.getSession()?.access_token;
+  const slug = TuviPaywall.generateToolSlug('personal-color-tryon');
+  TuviPaywall.init({ product: 'personal-color-tryon' });
+  await TuviPaywall.requireCredits(slug, async () => {
+    document.getElementById('tryonLoading').style.display = 'block';
+    document.getElementById('tryonResult').style.display = 'none';
+    document.getElementById('btnTryon').disabled = true;
+    try {
+      const res = await fetch('/api/tuong-mat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (token || '') },
+        body: JSON.stringify({ action: 'personal-color-tryon', image: _tryonImgData, mediaType: _tryonMediaType, season: _tryonSeason, outfit_type: _tryonType }),
+      });
+      const data = await res.json();
+      if (!data.imageUrl) throw new Error(data.error || 'Lỗi');
+      _tryonResultUrl = data.imageUrl;
+      document.getElementById('tryonBefore').src = 'data:' + _tryonMediaType + ';base64,' + _tryonImgData;
+      document.getElementById('tryonAfter').src = data.imageUrl;
+      document.getElementById('tryonAfterLabel').textContent = 'Season ' + _tryonSeason;
+      document.getElementById('tryonResult').style.display = 'block';
+      window.refreshNavCredits?.();
+    } catch(e) { alert('Lỗi: ' + (e.message || 'Vui lòng thử lại.')); }
+    finally { document.getElementById('tryonLoading').style.display = 'none'; document.getElementById('btnTryon').disabled = false; }
+  });
+}
+async function downloadTryon() {
+  if (!_tryonResultUrl) return;
+  try { const r = await fetch(_tryonResultUrl); const b = await r.blob(); const u = URL.createObjectURL(b); const a = document.createElement('a'); a.href = u; a.download = 'personal-color-outfit.jpg'; a.click(); URL.revokeObjectURL(u); }
+  catch(e) { window.open(_tryonResultUrl, '_blank'); }
+}
 </script>
 </body>
 </html>
