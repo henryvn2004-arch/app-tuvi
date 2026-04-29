@@ -63,7 +63,7 @@ export async function GET() {
   const tabBtns = CAT_ORDER.filter(c => catData[c]?.length).map((cat, i) => {
     const meta = CAT_META[cat] || { label: cat, icon: '📄' };
     const cnt = counts[cat] || 0;
-    return `<button class="tab-btn${i===0?' active':''}" onclick="switchTab('${cat}',this)">${meta.icon} ${esc(meta.label)} <span class="tab-count">${cnt.toLocaleString()}</span></button>`;
+    return `<button class="tab-btn${i===0?' active':''}" data-cat="${cat}">${meta.icon} ${esc(meta.label)} <span class="tab-count">${cnt.toLocaleString('vi-VN')}</span></button>`;
   }).join('\n  ');
 
   const tabPanels = CAT_ORDER.filter(c => catData[c]?.length).map((cat, i) => {
@@ -193,7 +193,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
   <span class="search-count" id="search-count"></span>
 </div>
 
-<div class="tabs">
+<div class="tabs" id="tabs-bar">
   ${tabBtns}
 </div>
 
@@ -202,40 +202,65 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 </div>
 
 <script>
-var _currentTab = '${CAT_ORDER[0]}';
-
-function switchTab(cat, btn) {
-  document.querySelectorAll('.tab-content').forEach(function(el){ el.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(el){ el.classList.remove('active'); });
-  var panel = document.getElementById('tab-' + cat);
-  if (panel) panel.classList.add('active');
-  if (btn) btn.classList.add('active');
-  _currentTab = cat;
-  filterItems();
-}
-
-function filterItems() {
-  var q = document.getElementById('search-input').value.toLowerCase().trim();
-  var panel = document.getElementById('tab-' + _currentTab);
-  if (!panel) return;
-  var items = panel.querySelectorAll('.book-item');
-  var shown = 0;
-  items.forEach(function(li) {
-    var txt = li.textContent.toLowerCase();
-    var match = !q || txt.indexOf(q) >= 0;
-    li.classList.toggle('hidden', !match);
-    if (match) shown++;
-  });
-  var countEl = document.getElementById('search-count');
-  if (countEl) countEl.textContent = q ? (shown + ' kết quả') : '';
-}
-
-// Init counts
 (function() {
-  document.querySelectorAll('.tab-content').forEach(function(panel) {
-    var items = panel.querySelectorAll('.book-item').length;
-    // Already shown in tab-count spans
+  var currentTab = '${CAT_ORDER[0]}';
+
+  function switchTab(cat) {
+    if (cat === currentTab) return;
+    currentTab = cat;
+
+    // Switch panels
+    document.querySelectorAll('.tab-content').forEach(function(el) {
+      el.classList.remove('active');
+    });
+    var panel = document.getElementById('tab-' + cat);
+    if (panel) panel.classList.add('active');
+
+    // Switch buttons
+    document.querySelectorAll('#tabs-bar .tab-btn').forEach(function(el) {
+      el.classList.remove('active');
+      if (el.dataset.cat === cat) el.classList.add('active');
+    });
+
+    // Clear search + scroll to content
+    var searchInput = document.getElementById('search-input');
+    if (searchInput) searchInput.value = '';
+    var countEl = document.getElementById('search-count');
+    if (countEl) countEl.textContent = '';
+    var body = document.querySelector('.page-body');
+    if (body) body.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function filterItems() {
+    var searchInput = document.getElementById('search-input');
+    var q = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    var panel = document.getElementById('tab-' + currentTab);
+    if (!panel) return;
+    var items = panel.querySelectorAll('.book-item');
+    var shown = 0;
+    items.forEach(function(li) {
+      var match = !q || li.textContent.toLowerCase().indexOf(q) >= 0;
+      li.classList.toggle('hidden', !match);
+      if (match) shown++;
+    });
+    var countEl = document.getElementById('search-count');
+    if (countEl) countEl.textContent = q ? (shown + ' kết quả') : '';
+  }
+
+  // Wire up tabs via addEventListener (không dùng onclick inline)
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('#tabs-bar .tab-btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation(); // tránh closeAll của nav.js
+        switchTab(btn.dataset.cat);
+      });
+    });
+    var searchInput = document.getElementById('search-input');
+    if (searchInput) searchInput.addEventListener('input', filterItems);
   });
+
+  // Expose for oninput fallback
+  window.filterItems = filterItems;
 })();
 </script>
 
