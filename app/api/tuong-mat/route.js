@@ -1169,6 +1169,234 @@ Nếu kết quả phân tích ảnh cho phép, ưu tiên season này. Nếu tôn
   }
 }
 
+
+// ── xLook Wardrobe AI ─────────────────────────────────────────────────────────
+
+const SB_URL_XL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://dciwkfdqhhddeymlisey.supabase.co';
+const SB_ANON_XL = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
+const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+const SP_WARDROBE_CLASSIFY = `Bạn là chuyên gia phân tích trang phục. Phân tích ảnh quần áo/phụ kiện và trả về JSON.
+Trả về JSON THUẦN TÚY — không markdown, không backtick.
+
+{
+  "category": "top|bottom|outer|shoes|accessory|dress",
+  "color_main": "tên màu chính bằng tiếng Việt",
+  "color_hex": "#RRGGBB hex của màu chính",
+  "style_tags": ["casual","formal","sporty","elegant","streetwear","minimalist","vintage","korean","japanese"],
+  "occasion": ["daily","work","date","party","sport","travel"],
+  "season": ["spring","summer","autumn","winter"],
+  "napam_hanh": "Kim|Mộc|Thủy|Hỏa|Thổ — hành ngũ hành phù hợp với màu sắc",
+  "ai_desc": "mô tả ngắn 1 câu về món đồ này"
+}
+
+Quy tắc:
+- category: chọn đúng 1 trong 6 giá trị
+- style_tags: 2-4 tags phù hợp nhất
+- occasion: 1-3 dịp phù hợp
+- season: 1-4 mùa phù hợp
+- napam_hanh: Kim=trắng/xám/bạc, Mộc=xanh lá/nâu, Thủy=đen/navy/xanh đậm, Hỏa=đỏ/cam/hồng, Thổ=vàng/be/nâu đất
+- Chỉ trả về JSON`;
+
+async function handleWardrobeAdd(request, body, apiKey) {
+  const authHeader = request.headers.get('authorization') || '';
+  const token = authHeader.replace('Bearer ', '');
+  if (!token) return Response.json({ error: 'Chưa đăng nhập.' }, { status: 401 });
+
+  // Get user from token
+  const userRes = await fetch(`${SB_URL_XL}/auth/v1/user`, {
+    headers: { 'apikey': SB_ANON_XL, 'Authorization': `Bearer ${token}` }
+  });
+  if (!userRes.ok) return Response.json({ error: 'Token không hợp lệ.' }, { status: 401 });
+  const user = await userRes.json();
+
+  const { image, mediaType = 'image/jpeg', notes = '' } = body;
+  if (!image) return Response.json({ error: 'Thiếu ảnh.' }, { status: 400 });
+  if (image.length > 6 * 1024 * 1024) return Response.json({ error: 'Ảnh quá lớn.' }, { status: 400 });
+
+  // 1. AI classify
+  const aiResp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 400,
+      system: SP_WARDROBE_CLASSIFY,
+      messages: [{ role: 'user', content: [
+        { type: 'image', source: { type: 'base64', media_type: mediaType, data: image } },
+        { type: 'text', text: 'Phân tích món đồ này.' }
+      ]}]
+    })
+  });
+  if (!aiResp.ok) return Response.json({ error: 'Lỗi AI phân tích.' }, { status: 500 });
+  const aiData = await aiResp.json();
+  let classified = {};
+  try {
+    classified = JSON.parse(aiData.content?.[0]?.text?.replace(/```json|```/g,'').trim() || '{}');
+  } catch(_) {}
+
+  // 2. Upload ảnh lên Supabase Storage
+  const imgBytes = Buffer.from(image, 'base64');
+  const fileName = `${user.id}/${Date.now()}.jpg`;
+  const uploadHeaders = { 'Content-Type': mediaType, 'apikey': SB_ANON_XL, 'Authorization': `Bearer ${token}` };
+  const uploadRes = await fetch(`${SB_URL_XL}/storage/v1/object/wardrobe-items/${fileName}`, {
+    method: 'POST', headers: uploadHeaders, body: imgBytes
+  });
+  if (!uploadRes.ok) {
+    const err = await uploadRes.text();
+    return Response.json({ error: 'Lỗi upload ảnh: ' + err }, { status: 500 });
+  }
+  const image_url = `${SB_URL_XL}/storage/v1/object/public/wardrobe-items/${fileName}`;
+
+  // 3. Save to DB
+  const item = {
+    user_id: user.id,
+    image_url,
+    category: classified.category || 'top',
+    color_main: classified.color_main || '',
+    color_hex: classified.color_hex || '#888888',
+    style_tags: classified.style_tags || [],
+    occasion: classified.occasion || [],
+    season: classified.season || [],
+    napam_hanh: classified.napam_hanh || '',
+    ai_desc: classified.ai_desc || '',
+    notes,
+  };
+  const dbRes = await fetch(`${SB_URL_XL}/rest/v1/wardrobe_items`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json', 'apikey': SB_ANON_XL,
+      'Authorization': `Bearer ${token}`, 'Prefer': 'return=representation'
+    },
+    body: JSON.stringify(item)
+  });
+  if (!dbRes.ok) return Response.json({ error: 'Lỗi lưu DB.' }, { status: 500 });
+  const saved = await dbRes.json();
+  return Response.json({ success: true, item: saved[0] || item });
+}
+
+async function handleWardrobeMix(request, body, apiKey) {
+  const authHeader = request.headers.get('authorization') || '';
+  const token = authHeader.replace('Bearer ', '');
+  if (!token) return Response.json({ error: 'Chưa đăng nhập.' }, { status: 401 });
+
+  const userRes = await fetch(`${SB_URL_XL}/auth/v1/user`, {
+    headers: { 'apikey': SB_ANON_XL, 'Authorization': `Bearer ${token}` }
+  });
+  if (!userRes.ok) return Response.json({ error: 'Token không hợp lệ.' }, { status: 401 });
+  const user = await userRes.json();
+
+  // Load wardrobe
+  const wRes = await fetch(`${SB_URL_XL}/rest/v1/wardrobe_items?user_id=eq.${user.id}&select=*&order=created_at.desc`, {
+    headers: { 'apikey': SB_ANON_XL, 'Authorization': `Bearer ${token}` }
+  });
+  const wardrobe = await wRes.json();
+  if (!wardrobe?.length) return Response.json({ error: 'Tủ đồ trống. Hãy thêm quần áo trước.' }, { status: 400 });
+
+  const { occasion = 'daily', weather = 'mild', style_pref = '', namSinh } = body;
+
+  // Mệnh context
+  let menhCtx = '';
+  if (namSinh && namSinh >= 1920 && namSinh <= 2010) {
+    const canChi = _pcYearToCanChi(namSinh);
+    const hanh = _pcGetHanh(namSinh);
+    menhCtx = `
+Bản mệnh: ${canChi}, hành ${hanh} — ưu tiên chọn trang phục có napam_hanh phù hợp (${hanh} hoặc hành tương sinh).`;
+  }
+
+  // Wardrobe summary for AI
+  const wardrobeSummary = wardrobe.map(i => ({
+    id: i.id,
+    category: i.category,
+    color: i.color_main,
+    hex: i.color_hex,
+    style: i.style_tags?.join(','),
+    occasion: i.occasion?.join(','),
+    season: i.season?.join(','),
+    hanh: i.napam_hanh,
+    desc: i.ai_desc,
+  }));
+
+  const prompt = `Bạn là stylist AI. Từ tủ đồ sau, hãy tạo 2-3 bộ outfit phù hợp.
+
+TỦ ĐỒ: ${JSON.stringify(wardrobeSummary)}
+
+YÊU CẦU:
+- Dịp: ${occasion}
+- Thời tiết: ${weather}
+- Phong cách ưa thích: ${style_pref || 'không giới hạn'}
+${menhCtx}
+
+Trả về JSON:
+{
+  "outfits": [
+    {
+      "name": "tên bộ outfit ngắn gọn",
+      "vibe": "mô tả vibe/cảm giác của bộ đồ",
+      "items": ["item_id_1", "item_id_2", "item_id_3"],
+      "why": "lý do 1-2 câu tại sao combo này hợp dịp và thời tiết",
+      "tip": "mẹo mặc hoặc phụ kiện thêm"
+    }
+  ],
+  "missing": ["gợi ý 1-2 món đồ nên mua thêm để tủ đồ phong phú hơn"]
+}
+
+Quy tắc:
+- Mỗi outfit: 2-4 items từ danh sách id thực tế trong tủ đồ
+- Ưu tiên outfit có màu sắc phối tốt với nhau
+- Chỉ trả về JSON`;
+
+  const aiResp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 1000,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  if (!aiResp.ok) return Response.json({ error: 'Lỗi AI.' }, { status: 500 });
+  const aiData = await aiResp.json();
+  try {
+    const parsed = JSON.parse(aiData.content?.[0]?.text?.replace(/```json|```/g,'').trim() || '{}');
+    // Attach full item data to each outfit
+    const itemMap = Object.fromEntries(wardrobe.map(i => [i.id, i]));
+    (parsed.outfits || []).forEach(outfit => {
+      outfit.itemDetails = (outfit.items || []).map(id => itemMap[id]).filter(Boolean);
+    });
+    return Response.json({ success: true, outfits: parsed.outfits || [], missing: parsed.missing || [], total_items: wardrobe.length });
+  } catch(_) {
+    return Response.json({ error: 'Lỗi phân tích kết quả.' }, { status: 500 });
+  }
+}
+
+async function handleWardrobeDelete(request, body) {
+  const authHeader = request.headers.get('authorization') || '';
+  const token = authHeader.replace('Bearer ', '');
+  const { item_id, image_url } = body;
+  if (!item_id) return Response.json({ error: 'Thiếu item_id.' }, { status: 400 });
+
+  // Delete from DB
+  await fetch(`${SB_URL_XL}/rest/v1/wardrobe_items?id=eq.${item_id}`, {
+    method: 'DELETE',
+    headers: { 'apikey': SB_ANON_XL, 'Authorization': `Bearer ${token}` }
+  });
+
+  // Delete from storage
+  if (image_url) {
+    const path = image_url.split('/wardrobe-items/')[1];
+    if (path) {
+      await fetch(`${SB_URL_XL}/storage/v1/object/wardrobe-items/${path}`, {
+        method: 'DELETE',
+        headers: { 'apikey': SB_ANON_XL, 'Authorization': `Bearer ${token}` }
+      });
+    }
+  }
+  return Response.json({ success: true });
+}
+
+// ── End xLook Wardrobe AI ─────────────────────────────────────────────────────
+
 // ── End Personal Color AI ─────────────────────────────────────────────────────
 
 // Personal Color Try-on
@@ -1238,6 +1466,9 @@ export async function POST(request) {
 
     // ── Non-streaming Claude Vision JSON actions ───────────────────────────
     if (action === 'kieu-toc-phan-tich') return await handleKieuTocPhanTich(body, apiKey);
+    if (action === 'wardrobe-add')    return await handleWardrobeAdd(request, body, apiKey);
+    if (action === 'wardrobe-mix')    return await handleWardrobeMix(request, body, apiKey);
+    if (action === 'wardrobe-delete') return await handleWardrobeDelete(request, body);
     if (action === 'personal-color') return await handlePersonalColor(body, apiKey);
     if (action === 'personal-color-tryon') return await handlePersonalColorTryon(body);
     if (action === 'da-lieu-ai') return await handleDaLieuAI(body, apiKey);
