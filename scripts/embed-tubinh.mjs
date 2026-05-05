@@ -17,7 +17,10 @@
 import fs from 'fs';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
-const pdf = require('pdf-parse');
+const pdfParseModule = require('pdf-parse');
+const pdf = typeof pdfParseModule === 'function'
+  ? pdfParseModule
+  : (pdfParseModule.default || pdfParseModule);
 
 // ─── CONFIG ──────────────────────────────────────────────────
 const BOOKS = [
