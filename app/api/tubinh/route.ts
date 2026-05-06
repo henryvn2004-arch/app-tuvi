@@ -40,8 +40,8 @@ DỮ LIỆU CÓ SẴN trong lá số:
 - Ngũ hành balance (counts + weighted với trọng số tàng can)
 - Dụng thần (primary + Hỉ Thần, method: phù-ức / điều-hậu / tòng-cách / chuyên-vượng)
 - Cách cục (chính cách hoặc biệt cách, thành cách / phá cách)
-- Đại vận đầy đủ 8 vận với điểm scoring 6 chiều
-- Lưu niên năm xem (thập thần, score, relation với tứ trụ)
+- Đại vận đầy đủ 9 vận với điểm scoring + label (thuận/trung/nghịch) + breakdown các yếu tố (factors): dụng thần, hỉ thần, kỵ thần, hợp/xung tứ trụ, can hợp, thập thần asymmetric (vượng/nhược), cách cục interaction
+- Lưu niên năm xem (thập thần can + chi, score + label, factors, relations với tứ trụ + đại vận hiện tại)
 - Hình xung hại hợp trong tứ trụ
 - Thần sát đã detect
 
@@ -408,17 +408,17 @@ Chỉ đề cập thần sát thực sự xuất hiện trong lá số. Nói c�
 
 PHẦN 12 — TỔNG QUAN ĐẠI VẬN
 
-Đại vận chia đời thành 9 giai đoạn, mỗi giai đoạn 10 năm. Mỗi đại vận có can chi riêng, thập thần đối với Nhật Can, và score 0-10 dựa trên dụng thần.
+Đại vận chia đời thành 9 giai đoạn, mỗi giai đoạn 10 năm. Mỗi đại vận có can chi riêng, thập thần đối với Nhật Can, và score 0-10 với label thuận/trung/nghịch — dựa trên các yếu tố (factors) thực sự của Tử Bình: dụng thần, hỉ thần, kỵ thần, hợp/xung tứ trụ, can hợp, thập thần asymmetric theo vượng/nhược, cách cục interaction.
 
 Bảng tổng hợp 9 đại vận (đối chiếu với biểu đồ đã có sẵn ở phía trên):
-| ĐV | Tuổi | Can Chi | Thập thần | Score |
+| ĐV | Tuổi | Can Chi | Thập thần | Score (label) |
 
 Nhận xét tổng (250-350 từ):
-① Giai đoạn đẹp nhất của đời là khi nào — vì sao (vận đó hợp dụng thần)?
-② Giai đoạn khó khăn nhất — vì sao (vận khắc dụng thần, hoặc gặp thần sát xấu)?
+① Giai đoạn ĐẸP NHẤT: Đại vận nào có score cao nhất, vì sao (đọc các yếu tố)?
+② Giai đoạn KHÓ NHẤT: Đại vận nào có score thấp nhất, vì sao (yếu tố nào kéo xuống — kỵ thần, xung Nhật Chi, phá cách)?
 ③ Xu hướng chung: Đời này phát sớm, phát muộn, hay đều?
-④ Nhật can vượng/nhược ảnh hưởng đến cách đọc đại vận thế nào?
-⑤ Một dấu mốc quan trọng cần lưu ý (giao thời giữa hai đại vận lệch nhau lớn).`;
+④ Vượng/nhược nhật can ảnh hưởng cách đọc thế nào (vượng thì thích Quan/Sát/Thực; nhược thì thích Ấn/Tỷ Kiếp)?
+⑤ Một dấu mốc giao thời quan trọng (chuyển đại vận có biên độ score lớn).`;
 
   if (phan === 13) return ctx + `
 
@@ -426,9 +426,9 @@ PHẦN 13 — ĐẠI VẬN HIỆN TẠI (200-280 từ)
 Đại vận đang sống ở thời điểm hiện tại — quan trọng nhất.
 
 Tìm "Đại Vận hiện tại" trong dữ liệu. Viết văn xuôi:
-① Tính chất vận: Can chi gì, thập thần với Nhật Can là gì? Hành vận có hợp dụng thần không?
-② Score nói lên điều gì: Vận tốt (>7), bình thường (5-7), hay khó (<5)? Cụ thể ở 6 chiều scoring (tiềm năng, bền vững, an toàn, quý nhân, minh bạch, tương hợp).
-③ Tác động thực tế: Trong giai đoạn này, người này dễ gặp gì — thuận lợi sự nghiệp/tài lộc, hay vướng quan tinh, hay mất phương hướng?
+① Tính chất vận: Can chi gì, thập thần với Nhật Can là gì? Hành vận hợp dụng thần hay nghịch?
+② Đánh giá tổng (thuận / trung / nghịch): Score bao nhiêu, tại sao? Đọc các "Yếu tố" trong dữ liệu (mỗi yếu tố có +/- delta) — diễn giải các yếu tố CHỦ ĐẠO ảnh hưởng đến vận này.
+③ Tác động thực tế: Trong giai đoạn này, người này dễ gặp gì — thuận lợi sự nghiệp/tài lộc, vướng quan tinh, mất phương hướng, hay biến động lớn nếu có xung Nhật Chi?
 ④ Lời khuyên ngắn: 1-2 ý cụ thể nên làm/tránh trong giai đoạn này.`;
 
   if (phan === 14) return ctx + `
@@ -445,13 +445,14 @@ Tìm "Đại Vận kế tiếp" trong dữ liệu. Viết văn xuôi:
   if (phan === 15) return ctx + `
 
 PHẦN 15 — LƯU NIÊN (Năm xem) (200-280 từ)
-Lưu niên là biến số trong khung đại vận. Năm này có can chi riêng, tương tác với tứ trụ và đại vận.
+Lưu niên là biến số trong khung đại vận. Năm này có can chi riêng, tương tác với tứ trụ và đại vận hiện tại. Theo cổ pháp, thái tuế (lưu niên) coi THIÊN CAN quan trọng hơn địa chi.
 
-Tìm "Lưu niên" trong dữ liệu. Viết văn xuôi:
+Tìm "LƯU NIÊN" trong dữ liệu. Viết văn xuôi:
 ① Tính chất năm: Can chi năm xem, thập thần với Nhật Can. Đem hành gì đến cho Nhật chủ?
-② Quan hệ với tứ trụ: Năm xem có hợp/xung/hình/hại với chi nào trong tứ trụ? Hợp với chi nào → việc gì thuận; xung chi nào → việc gì khó.
-③ Quan hệ với đại vận hiện tại: Năm tốt trong đại vận tốt = nhân đôi may mắn; năm xấu trong đại vận xấu = năm khó nhất; chéo nhau → cân bằng.
-④ Tổng nhận định + 2-3 việc cụ thể nên làm/tránh trong năm này.`;
+② Đánh giá tổng (thuận/trung/nghịch): Score bao nhiêu, tại sao? Đọc "Yếu tố" — yếu tố nào nâng/hạ điểm.
+③ Quan hệ với tứ trụ: Năm xem có hợp/xung/hình/hại với chi nào? Hợp với chi nào → việc gì thuận; xung chi nào → việc gì khó.
+④ Quan hệ với đại vận hiện tại: Năm tốt trong đại vận tốt = nhân đôi may mắn; năm xấu trong đại vận xấu = năm khó nhất; chéo nhau → cân bằng.
+⑤ Tổng nhận định + 2-3 việc cụ thể nên làm/tránh trong năm này.`;
 
   if (phan === 16) return ctx + `
 
