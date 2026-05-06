@@ -290,18 +290,88 @@
     return d._partnerLaso ? 'tuongHop' : 'laso';
   }
 
+  // Detect: Tử Bình has tuTru array; Tử Vi has palaces array
+  function isTuBinh(ls) { return !!(ls && ls.tuTru && Array.isArray(ls.tuTru)); }
+
   // Build ngắn gọn context text của 1 lá số để hiển thị chip
   function lasoChipText(ls) {
     if (!ls) return '';
+    if (isTuBinh(ls)) {
+      const t = ls.tuTru || [];
+      const tuTruStr = t.map(x => x.can + ' ' + x.chi).join(' / ');
+      return `${tuTruStr} · Nhật Can ${ls.nhatCan || ''}`;
+    }
     const menh = ls.palaces?.find(p => p.isMenh);
     const chinh = (menh?.majorStars || []).map(s => s.ten).join(', ') || 'VCĐ';
     return `${ls.canChiNam || ''} · Mệnh ${ls.menhDC || ''} · ${chinh}`;
+  }
+
+  // === Slim Tử Bình bt object cho API (~5KB) ===
+  function slimLasoTuBinh(bt) {
+    if (!bt) return null;
+    const dvHT = bt.daiVanHienTai;
+    const dvKT = bt.daiVanKeTiep;
+    return {
+      _type: 'tubinh',
+      tuTru: (bt.tuTru || []).map(t => ({
+        ten: t.ten, can: t.can, chi: t.chi, napAm: t.napAm,
+        tangCan: (t.tangCan || []).map(tc => ({ can: tc.can }))
+      })),
+      nhatCan: bt.nhatCan,
+      nhatChi: bt.nhatChi,
+      nhatCanHanh: bt.nhatCanHanh,
+      nhatCanAmDuong: bt.nhatCanAmDuong,
+      cuongNhuoc: bt.cuongNhuoc ? {
+        label: bt.cuongNhuoc.label, score: bt.cuongNhuoc.score,
+        dacLenh: bt.cuongNhuoc.dacLenh
+      } : null,
+      cachCuc: bt.cachCuc ? {
+        primary: bt.cachCuc.primary, type: bt.cachCuc.type,
+        thanhPhaCach: bt.cachCuc.thanhPhaCach
+      } : null,
+      dungThan: bt.dungThan ? {
+        primary: bt.dungThan.primary, secondary: bt.dungThan.secondary,
+        method: bt.dungThan.method, rationale: bt.dungThan.rationale
+      } : null,
+      canChiNamSinh: bt.canChiNamSinh,
+      tuoiXem: bt.tuoiXem,
+      thapThan: bt.thapThan,
+      hinhXungHaiHop: bt.hinhXungHaiHop,
+      thanSat: (bt.thanSat || []).slice(0, 12),
+      daiVans: (bt.daiVans || []).slice(0, 9).map(dv => ({
+        idx: dv.idx, can: dv.can, chi: dv.chi,
+        tuoiStart: dv.tuoiStart, tuoiEnd: dv.tuoiEnd,
+        thapThanCan: dv.thapThanCan, thapThanChi: dv.thapThanChi,
+        score: dv.score, label: dv.label
+      })),
+      daiVanHienTai: dvHT ? {
+        can: dvHT.can, chi: dvHT.chi,
+        tuoiStart: dvHT.tuoiStart, tuoiEnd: dvHT.tuoiEnd,
+        thapThanCan: dvHT.thapThanCan, thapThanChi: dvHT.thapThanChi,
+        score: dvHT.score, label: dvHT.label,
+        factors: (dvHT.factors || []).slice(0, 12)
+      } : null,
+      daiVanKeTiep: dvKT ? {
+        can: dvKT.can, chi: dvKT.chi,
+        tuoiStart: dvKT.tuoiStart, tuoiEnd: dvKT.tuoiEnd,
+        thapThanCan: dvKT.thapThanCan, thapThanChi: dvKT.thapThanChi,
+        score: dvKT.score, label: dvKT.label
+      } : null,
+      luuNien: bt.luuNien ? {
+        canChi: bt.luuNien.canChi, score: bt.luuNien.score, label: bt.luuNien.label,
+        thapThanCan: bt.luuNien.thapThanCan, thapThanChi: bt.luuNien.thapThanChi,
+        factors: (bt.luuNien.factors || []).slice(0, 8)
+      } : null,
+    };
   }
 
   // Build full context string gửi lên API — gộp cả 2 lá số nếu có
   // Slim down 1 lá số thành object gọn cho API (~10KB thay vì ~500KB)
   function slimLaso(ls) {
     if (!ls) return null;
+    if (isTuBinh(ls)) return slimLasoTuBinh(ls);
+
+    // Tử Vi
     const palaces = (ls.palaces || []).map(p => ({
       cungName:   p.cungName,
       diaChi:     p.diaChi,
@@ -328,13 +398,14 @@
 
     const dvHT = ls.daiVanHienTai;
     return {
+      _type:         'tuvi',
       canChiNam:     ls.canChiNam,
       napAm:         ls.napAm,
       napAmHanh:     ls.napAmHanh,
       menhDC:        ls.menhDC,
       thanDC:        ls.thanDC,
       tuoiXem:       ls.tuoiXem,
-      cachCuc:       (ls.cachCuc || []).map(c => ({ ten: typeof c === 'object' ? c.ten : c })),
+      cachCuc:       (Array.isArray(ls.cachCuc) ? ls.cachCuc : []).map(c => ({ ten: typeof c === 'object' ? c.ten : c })),
       palaces,
       daiVans,
       daiVanHienTai: dvHT ? {
@@ -356,26 +427,49 @@
     }
 
     // Dual lá số — gửi cả 2 slim objects
+    const isTB = isTuBinh(lsA);
     return {
       _mode:  'tuongHop',
+      _type:  isTB ? 'tubinh' : 'tuvi',
       _nameA: lsA._nameA || 'Người A',
       _nameB: lsA._nameB || 'Người B',
       _lsA:   slimLaso(lsA),
       _lsB:   slimLaso(lsB),
-      // 1 palace slim để API detect hasLaso (không dùng raw object — circular ref)
-      palaces: (lsA.palaces || []).slice(0, 1).map(p => ({ cungName: p.cungName, diaChi: p.diaChi })),
+      // Ổn định API detect hasLaso
+      palaces: !isTB ? (lsA.palaces || []).slice(0, 1).map(p => ({ cungName: p.cungName, diaChi: p.diaChi })) : undefined,
+      tuTru: isTB ? lsA.tuTru.map(t => ({ can: t.can, chi: t.chi })) : undefined,
     };
+  }
+
+  // === Tóm tắt ngắn 1 lá số Tử Bình thành text cho AI ===
+  function summarizeLasoTuBinh(bt, name) {
+    if (!bt) return '';
+    const tuTruStr = (bt.tuTru || []).map(t => t.ten + ': ' + t.can + ' ' + t.chi).join(' | ');
+    const dvHT = bt.daiVanHienTai;
+    const lines = [
+      `=== ${name} (Tử Bình Bát Tự) ===`,
+      `Tứ trụ: ${tuTruStr}`,
+      `Nhật Can: ${bt.nhatCan || ''} (${bt.nhatCanHanh || ''}, ${bt.nhatCanAmDuong || ''})`,
+      `Cường nhược: ${bt.cuongNhuoc?.label || ''} (score ${bt.cuongNhuoc?.score ?? '?'})`,
+      `Cách cục: ${bt.cachCuc?.primary || ''}${bt.cachCuc?.thanhPhaCach ? ' — ' + bt.cachCuc.thanhPhaCach : ''}`,
+      `Dụng thần: ${bt.dungThan?.primary || ''}${bt.dungThan?.secondary ? ', hỉ ' + bt.dungThan.secondary : ''}`,
+      dvHT ? `Đại vận hiện tại: ${dvHT.can} ${dvHT.chi} (${dvHT.tuoiStart}–${dvHT.tuoiEnd}t, ${dvHT.thapThanCan}/${dvHT.thapThanChi}, score ${dvHT.score} ${dvHT.label})` : '',
+    ];
+    return lines.filter(Boolean).join('\n');
   }
 
   // Tóm tắt ngắn 1 lá số thành text cho AI
   function summarizeLaso(ls, name) {
     if (!ls) return '';
+    if (isTuBinh(ls)) return summarizeLasoTuBinh(ls, name);
+
+    // Tử Vi
     const menh  = ls.palaces?.find(p => p.isMenh);
     const chinh = (menh?.majorStars || []).map(s =>
       s.ten + (s.brightness ? `(${s.brightness})` : '') + (s.hoa ? `[Hóa ${s.hoa}]` : '')
     ).join(', ') || 'Vô chính diệu';
     const dvHT  = ls.daiVanHienTai;
-    const cc    = (ls.cachCuc || []).map(c => c.ten).join(', ');
+    const cc    = (Array.isArray(ls.cachCuc) ? ls.cachCuc : []).map(c => c.ten || c).join(', ');
 
     const lines = [
       `=== ${name} ===`,
@@ -530,15 +624,17 @@
     if (mode === 'tuongHop' && lsA && lsB) {
       const nameA = lsA._nameA || 'Người A';
       const nameB = lsA._nameB || 'Người B';
+      const chipA = lasoChipText(lsA);
+      const chipB = lasoChipText(lsB);
       chipsHTML = `
         <div class="tvc-ctx-chips">
           <div class="tvc-chip" style="background:#EBF3FF;border-color:#1455A4;color:#1455A4">
             <div class="tvc-chip-dot" style="background:#1455A4"></div>
-            <span>${nameA} — ${lsA.canChiNam || ''} · Mệnh ${lsA.menhDC || ''}</span>
+            <span>${nameA} — ${chipA}</span>
           </div>
           <div class="tvc-chip" style="background:#FFF3E0;border-color:#9A7B3A;color:#7a5a1a">
             <div class="tvc-chip-dot" style="background:#9A7B3A"></div>
-            <span>${nameB} — ${lsB.canChiNam || ''} · Mệnh ${lsB.menhDC || ''}</span>
+            <span>${nameB} — ${chipB}</span>
           </div>
           <div class="tvc-chip" style="background:#F0FFF4;border-color:#1E6B3C;color:#1E6B3C">
             <div class="tvc-chip-dot" style="background:#1E6B3C"></div>
@@ -546,11 +642,13 @@
           </div>
         </div>`;
     } else if (mode === 'laso' && lsA) {
+      const chipText = lasoChipText(lsA);
+      const tenLaso = isTuBinh(lsA) ? 'Bát Tự' : 'Lá số';
       chipsHTML = `
         <div class="tvc-ctx-chips">
           <div class="tvc-chip" style="background:#EBF3FF;border-color:#1455A4;color:#1455A4">
             <div class="tvc-chip-dot" style="background:#1455A4"></div>
-            <span>Lá số ${lsA.canChiNam || ''} · Mệnh ${lsA.menhDC || ''} · ${lsA.napAm || ''}</span>
+            <span>${tenLaso} ${chipText}</span>
           </div>
         </div>`;
     }
