@@ -754,7 +754,7 @@ function _tinhDaiVan(tuTru, nhatCan, gioitinh, jdnRaw, dungThan, namSinhDL) {
   const monthCanIdx = _canIdx(monthCan);
   const monthChiIdx = _chiIdx(monthChi);
   const dvs = [];
-  for (let i = 1; i <= 8; i++) {
+  for (let i = 1; i <= 9; i++) {
     const offset = isThuan ? i : -i;
     const dvCan = THIEN_CAN_TB[_mod(monthCanIdx + offset, 10)];
     const dvChi = DIA_CHI_TB[_mod(monthChiIdx + offset, 12)];
