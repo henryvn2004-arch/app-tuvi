@@ -804,21 +804,22 @@ function _tinhDaiVan(tuTru, nhatCan, gioitinh, jdnRaw, dungThan, namSinhDL, cuon
     let score = 5;  // base trung dung
 
     // 1) Affinity với dụng thần (chi quan trọng hơn can — chunk 165)
+    // Trọng số giảm so với v1.1 (3.0/2.0 → 2.0/1.5) để cân bằng với các yếu tố khác
     const kyThan = KHAC_BY_TB[dungThan.primary];  // hành khắc dụng thần (FIX bug cũ)
     if (dvHanhChi === dungThan.primary) {
-      score += 3.0; factors.push({ type:'dụng thần', text:`Chi ${dvChi} hành ${dvHanhChi} = dụng thần`, delta: 3.0 });
+      score += 2.0; factors.push({ type:'dụng thần', text:`Chi ${dvChi} hành ${dvHanhChi} = dụng thần`, delta: 2.0 });
     } else if (dvHanhCan === dungThan.primary) {
-      score += 2.0; factors.push({ type:'dụng thần', text:`Can ${dvCan} hành ${dvHanhCan} = dụng thần`, delta: 2.0 });
+      score += 1.5; factors.push({ type:'dụng thần', text:`Can ${dvCan} hành ${dvHanhCan} = dụng thần`, delta: 1.5 });
     }
     if (dvHanhChi === dungThan.secondary && dvHanhChi !== dungThan.primary) {
-      score += 1.5; factors.push({ type:'hỉ thần', text:`Chi ${dvChi} = hỉ thần ${dungThan.secondary}`, delta: 1.5 });
+      score += 1.0; factors.push({ type:'hỉ thần', text:`Chi ${dvChi} = hỉ thần ${dungThan.secondary}`, delta: 1.0 });
     } else if (dvHanhCan === dungThan.secondary && dvHanhCan !== dungThan.primary) {
-      score += 1.0; factors.push({ type:'hỉ thần', text:`Can ${dvCan} = hỉ thần ${dungThan.secondary}`, delta: 1.0 });
+      score += 0.6; factors.push({ type:'hỉ thần', text:`Can ${dvCan} = hỉ thần ${dungThan.secondary}`, delta: 0.6 });
     }
     if (dvHanhChi === kyThan) {
-      score -= 3.0; factors.push({ type:'kỵ thần', text:`Chi ${dvChi} hành ${kyThan} = kỵ thần (khắc dụng)`, delta: -3.0 });
+      score -= 2.0; factors.push({ type:'kỵ thần', text:`Chi ${dvChi} hành ${kyThan} = kỵ thần (khắc dụng)`, delta: -2.0 });
     } else if (dvHanhCan === kyThan) {
-      score -= 2.0; factors.push({ type:'kỵ thần', text:`Can ${dvCan} hành ${kyThan} = kỵ thần`, delta: -2.0 });
+      score -= 1.5; factors.push({ type:'kỵ thần', text:`Can ${dvCan} hành ${kyThan} = kỵ thần`, delta: -1.5 });
     }
 
     // 2) Điều hậu
@@ -832,9 +833,32 @@ function _tinhDaiVan(tuTru, nhatCan, gioitinh, jdnRaw, dungThan, namSinhDL, cuon
       // Lục xung
       if (LUC_XUNG.some(([a,b]) => (a===dvChi && b===tchi) || (b===dvChi && a===tchi))) {
         const isNhatXung = idx === 2;
-        const delta = isNhatXung ? -1.5 : -1.0;
+        const isNguyetXung = idx === 1;
+        let delta, text;
+        if (isNhatXung) {
+          delta = -1.5;
+          text = `Chi ĐV ${dvChi} xung Nhật Chi ${tchi} (biến động lớn)`;
+        } else if (isNguyetXung) {
+          // Cổ pháp: xung tháng chi phụ thuộc dụng thần
+          // - Chi vận = dụng/hỉ → xung khai mở kho dụng (cát)
+          // - Chi vận = kỵ → phá nguyệt lệnh thật sự (đại hung)
+          // - Trung tính → chấn động nhẹ
+          if (dvHanhChi === dungThan.primary || dvHanhChi === dungThan.secondary) {
+            delta = +0.3;
+            text = `Chi ĐV ${dvChi} xung Tháng ${tchi} → xung khai mở dụng thần`;
+          } else if (dvHanhChi === kyThan) {
+            delta = -1.5;
+            text = `Chi ĐV ${dvChi} xung Tháng ${tchi} → phá nguyệt lệnh`;
+          } else {
+            delta = -0.5;
+            text = `Chi ĐV ${dvChi} xung Tháng ${tchi} → chấn động nguyệt lệnh`;
+          }
+        } else {
+          delta = -1.0;
+          text = `Chi ĐV ${dvChi} xung ${truTens[idx]} ${tchi}`;
+        }
         score += delta;
-        factors.push({ type:'xung', text:`Chi ĐV ${dvChi} xung ${truTens[idx]} ${tchi}${isNhatXung?' (xung Nhật Chi — biến động lớn)':''}`, delta });
+        factors.push({ type:'xung', text, delta });
       }
       // Lục hợp
       if (LUC_HOP.some(h => h.chis.includes(dvChi) && h.chis.includes(tchi) && dvChi !== tchi)) {
@@ -870,12 +894,14 @@ function _tinhDaiVan(tuTru, nhatCan, gioitinh, jdnRaw, dungThan, namSinhDL, cuon
         score += delta;
         factors.push({ type:'tam hợp', text:`Chi ĐV ${dvChi} cùng ${matchInTru.join(',')} tam hợp → ${th.hanh}`, delta });
       } else if (matchInTru.length === 1) {
-        // bán hợp
-        let delta = 0.3;
+        // bán hợp — chỉ cho điểm khi rõ hợp dụng/kỵ, neutral = 0 (không thưởng tự động)
+        let delta = 0;
         if (th.hanh === dungThan.primary) delta = 0.8;
         else if (th.hanh === kyThan)       delta = -0.8;
-        score += delta;
-        factors.push({ type:'bán hợp', text:`Chi ĐV ${dvChi} bán hợp ${matchInTru[0]} → ${th.hanh}`, delta });
+        if (delta !== 0) {
+          score += delta;
+          factors.push({ type:'bán hợp', text:`Chi ĐV ${dvChi} bán hợp ${matchInTru[0]} → ${th.hanh}`, delta });
+        }
       }
     });
 
