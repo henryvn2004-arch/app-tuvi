@@ -915,23 +915,56 @@ select.form-input { cursor: pointer; }
       }
       case 10: { // Hình Xung Hại Hợp
         const hxhh = bt.hinhXungHaiHop || {};
+        // Helper: format pair-style entries (lục xung/hợp/hại)
+        const fmtPair = (item, sep) => {
+          if (!item) return '';
+          if (item.cungA && item.cungB) {
+            return `${item.cungA} (${item.chiA}) ${sep} ${item.cungB} (${item.chiB})${item.hanh ? ' → ' + item.hanh : ''}`;
+          }
+          return JSON.stringify(item);
+        };
+        // Helper: format tri-style entries (tam hợp/tam hình)
+        const fmtTri = (item) => {
+          if (!item) return '';
+          if (item.chis?.length) {
+            const chis = item.chis.join(' + ');
+            const status = item.full ? 'trọn vẹn' : 'không trọn (thiếu 1 chi)';
+            const extra = item.type ? ` [${item.type}]` : '';
+            const hanh = item.hanh ? ` → ${item.hanh}` : '';
+            return `${chis}${hanh} (${status})${extra}`;
+          }
+          return JSON.stringify(item);
+        };
+        // Helper: format can pairs
+        const fmtCanPair = (item, sep) => {
+          if (!item) return '';
+          if (item.cungA && item.cungB) {
+            return `${item.cungA} (${item.canA}) ${sep} ${item.cungB} (${item.canB})${item.hanh ? ' → ' + item.hanh : ''}`;
+          }
+          return JSON.stringify(item);
+        };
         const sections = [
-          { key: 'lucXung', label: 'Lục Xung', cls: 'yn-hung' },
-          { key: 'lucHop',  label: 'Lục Hợp', cls: 'yn-cat'  },
-          { key: 'tamHop',  label: 'Tam Hợp', cls: 'yn-cat'  },
-          { key: 'tamHinh', label: 'Tam Hình', cls: 'yn-hung' },
-          { key: 'lucHai',  label: 'Lục Hại', cls: 'yn-hung' },
+          { key: 'lucXung', label: 'Lục Xung (chi đối nghịch)', cls: 'yn-hung', fmt: (i) => fmtPair(i, '↔') },
+          { key: 'lucHop',  label: 'Lục Hợp (chi tương hợp)',   cls: 'yn-cat',  fmt: (i) => fmtPair(i, '⊕') },
+          { key: 'tamHop',  label: 'Tam Hợp Cục',                cls: 'yn-cat',  fmt: fmtTri },
+          { key: 'tamHinh', label: 'Tam Hình',                   cls: 'yn-hung', fmt: fmtTri },
+          { key: 'lucHai',  label: 'Lục Hại',                    cls: 'yn-hung', fmt: (i) => fmtPair(i, '✗') },
+          { key: 'canHop',  label: 'Thiên Can Hợp Hóa',          cls: 'yn-cat',  fmt: (i) => fmtCanPair(i, '⊕') },
         ];
         sections.forEach(s => {
           const arr = hxhh[s.key] || [];
           if (arr.length === 0) return;
           h += `<div class="pregen-block"><div class="pregen-title">${s.label} — ${arr.length}</div>`;
           arr.forEach(item => {
-            const txt = typeof item === 'string' ? item : (item.text || JSON.stringify(item));
-            h += `<div class="pregen-yn ${s.cls}">${txt}</div>`;
+            h += `<div class="pregen-yn ${s.cls}">${s.fmt(item)}</div>`;
           });
           h += `</div>`;
         });
+        // Empty state
+        const totalRels = sections.reduce((sum, s) => sum + ((hxhh[s.key] || []).length), 0);
+        if (totalRels === 0) {
+          h += `<div class="pregen-block"><div class="pregen-domain-reasons" style="padding-left:0">Lá số không có quan hệ hình/xung/hợp/hại đáng kể giữa các trụ — khá êm.</div></div>`;
+        }
         break;
       }
       case 11: { // Thần Sát
@@ -1003,11 +1036,39 @@ select.form-input { cursor: pointer; }
         break;
       }
       case 15: { // Lưu Niên
-        h += `<div class="pregen-block">
-          <div class="pregen-title">📅 Năm xem ${bt.namXem || ''}</div>
-          <div class="pregen-cach-name">Tuổi ${bt.tuoiXem || '—'}</div>
-          <div class="pregen-cach-desc">Can chi năm: ${bt.canChiNamXem?.can || ''} ${bt.canChiNamXem?.chi || ''}</div>
-        </div>`;
+        const ln = bt.luuNien;
+        if (ln) {
+          const factors = ln.factors || [];
+          const rels = ln.relations || {};
+          h += `<div class="pregen-block">
+            <div class="pregen-title">📅 Năm ${ln.nam} (Lưu Niên)</div>
+            <div class="pregen-cach-name">${ln.can} ${ln.chi} — ${ln.thapThanCan} / ${ln.thapThanChi}</div>
+            <div class="pregen-cach-desc">Tuổi ${bt.tuoiXem} · Nạp âm ${ln.napAm} · Score ${ln.score}/10 · ${ln.label}</div>`;
+          // Relations với tứ trụ
+          const relPairs = [];
+          if (rels.xungVoi?.length)    relPairs.push({ cls: 'yn-hung', txt: 'Xung với: ' + rels.xungVoi.join(', ') });
+          if (rels.hopVoi?.length)     relPairs.push({ cls: 'yn-cat',  txt: 'Hợp với: ' + rels.hopVoi.join(', ') });
+          if (rels.hinhVoi?.length)    relPairs.push({ cls: 'yn-hung', txt: 'Hình với: ' + rels.hinhVoi.join(', ') });
+          if (rels.haiVoi?.length)     relPairs.push({ cls: 'yn-hung', txt: 'Hại với: ' + rels.haiVoi.join(', ') });
+          if (rels.canHopVoi?.length)  relPairs.push({ cls: 'yn-cat',  txt: 'Can hợp: ' + rels.canHopVoi.join(', ') });
+          if (rels.canKhacVoi?.length) relPairs.push({ cls: 'yn-neutral', txt: 'Can khắc: ' + rels.canKhacVoi.join(', ') });
+          if (relPairs.length) {
+            h += `<div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--border-lt)">`;
+            relPairs.forEach(r => h += `<div class="pregen-yn ${r.cls}" style="margin-bottom:4px">${r.txt}</div>`);
+            h += `</div>`;
+          }
+          // Factors breakdown
+          if (factors.length) {
+            h += `<div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--border-lt)">`;
+            factors.forEach(f => {
+              const cls = f.delta > 0 ? 'yn-cat' : (f.delta < 0 ? 'yn-hung' : 'yn-neutral');
+              const sign = f.delta >= 0 ? '+' : '';
+              h += `<div class="pregen-yn ${cls}" style="margin-bottom:4px">${sign}${f.delta}: ${f.text}</div>`;
+            });
+            h += `</div>`;
+          }
+          h += `</div>`;
+        }
         break;
       }
       case 16: { // Tổng Kết — không pregen, để Claude tự kết
@@ -1169,7 +1230,25 @@ select.form-input { cursor: pointer; }
         }
         break;
       }
-      // Phần 10, 11, 15, 16: không cần pregenContext nặng
+      case 15: { // Lưu Niên
+        const ln = bt.luuNien;
+        if (ln) {
+          lines.push(`Lưu niên năm ${ln.nam}: ${ln.can} ${ln.chi} (${ln.napAm}) — ${ln.thapThanCan}/${ln.thapThanChi} — Score ${ln.score}/10 ${ln.label}`);
+          const rels = ln.relations || {};
+          if (rels.xungVoi?.length)    lines.push('  Xung với: ' + rels.xungVoi.join(', '));
+          if (rels.hopVoi?.length)     lines.push('  Hợp với: ' + rels.hopVoi.join(', '));
+          if (rels.hinhVoi?.length)    lines.push('  Hình với: ' + rels.hinhVoi.join(', '));
+          if (rels.haiVoi?.length)     lines.push('  Hại với: ' + rels.haiVoi.join(', '));
+          if (rels.canHopVoi?.length)  lines.push('  Can hợp với: ' + rels.canHopVoi.join(', '));
+          if (rels.canKhacVoi?.length) lines.push('  Can khắc với: ' + rels.canKhacVoi.join(', '));
+          if (ln.factors?.length) {
+            lines.push('Factor breakdown:');
+            ln.factors.forEach(f => lines.push(`  ${f.delta >= 0 ? '+' : ''}${f.delta}: ${f.text}`));
+          }
+        }
+        break;
+      }
+      // Phần 10, 11, 16: không cần pregenContext nặng
     }
 
     if (lines.length <= 3) return ''; // not enough content
