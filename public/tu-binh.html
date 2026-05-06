@@ -111,27 +111,77 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
 @media (max-width: 900px) { .result-layout { grid-template-columns: 1fr; } }
 .result-sidebar { position: sticky; top: 80px; align-self: start; max-height: calc(100vh - 100px); overflow-y: auto; }
 @media (max-width: 900px) { .result-sidebar { position: static; max-height: none; } }
-.muc-luc { background: var(--bg-soft); border: 1px solid var(--border); padding: 14px; }
-.muc-luc-header { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border-lt); }
-.muc-luc-items { display: flex; flex-direction: column; gap: 2px; }
-.muc-luc-btn { display: grid; grid-template-columns: 26px 1fr auto; gap: 8px; align-items: center; padding: 7px 6px; border: none; background: transparent; cursor: pointer; text-align: left; transition: background .12s; }
-.muc-luc-btn:hover { background: rgba(154,123,58,0.07); }
-.muc-luc-btn.active { background: rgba(154,123,58,0.15); }
-.ml-num { font-family: 'Noto Serif', serif; font-size: 12px; color: var(--gold); font-weight: 700; text-align: center; }
-.ml-label { font-size: 12px; color: var(--text); }
-.ml-status { font-size: 11px; color: var(--text-lt); }
-.ml-status.loading { color: var(--blue); }
-.ml-status.done { color: var(--green); }
 
-/* RESULT BODY (luận giải blocks) */
-.result-body { min-width: 0; }
-.phan-anchor { padding-top: 16px; }
-.phan-block { margin-bottom: 36px; padding-bottom: 28px; border-bottom: 1px solid var(--border-lt); }
-.phan-block:last-child { border-bottom: none; }
-.phan-num { font-family: 'Noto Serif', serif; font-size: 12px; color: var(--gold); letter-spacing: 3px; margin-bottom: 6px; }
-.phan-title { font-family: 'Noto Serif', serif; font-size: 24px; color: var(--navy); font-weight: 600; margin-bottom: 16px; }
-.phan-content { font-size: 15px; line-height: 1.85; color: var(--text); }
-.phan-content p { margin-bottom: 14px; }
+/* MUC LUC (sidebar) — ported from Tử Vi */
+.muc-luc { border: 1px solid var(--border); }
+.muc-luc-header { background: var(--navy); color: white; padding: 12px 16px; font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+.muc-luc-items { display: flex; flex-direction: column; }
+.muc-luc-btn { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: white; border: none; border-bottom: 1px solid var(--border-lt); cursor: pointer; transition: background 0.15s; text-align: left; width: 100%; }
+.muc-luc-btn:last-child { border-bottom: none; }
+.muc-luc-btn:hover:not(.loading) { background: var(--bg-soft); }
+.muc-luc-btn.active { background: var(--gold-lt); }
+.muc-luc-btn.loading { cursor: not-allowed; background: #FFF8EC; border-left: 3px solid #c9a84c; }
+.muc-luc-btn.loading .ml-num { background: transparent; border: 2px solid #c9a84c; color: #c9a84c; animation: spin 0.8s linear infinite; }
+.muc-luc-btn.loading .ml-label { color: #9A7B3A; font-weight: 600; }
+.muc-luc-btn.loading .ml-status { color: #c9a84c; }
+.ml-num { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: var(--text-lt); flex-shrink: 0; transition: all 0.2s; }
+.muc-luc-btn.active .ml-num { border-color: var(--gold); color: var(--gold); }
+.muc-luc-btn.done .ml-num { background: var(--navy); border-color: var(--navy); color: white; }
+.muc-luc-btn.loading .ml-num { border-color: var(--blue); color: var(--blue); }
+.ml-label { font-size: 12px; font-weight: 500; color: var(--text); line-height: 1.3; flex: 1; }
+.ml-status { font-size: 11px; color: var(--text-lt); flex-shrink: 0; }
+.ml-status.done { color: var(--green); font-weight: 700; }
+.ml-status.loading { color: var(--blue); }
+
+/* LUẬN GIẢI sections — ported from Tử Vi */
+.result-body {}
+.phan-section { border-top: 1px solid var(--border); padding: 56px 0; }
+.phan-section:first-child { border-top: 2px solid var(--navy); }
+.phan-num { font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--blue); margin-bottom: 12px; }
+.phan-section h2 { font-family: Arial, sans-serif; font-size: 30px; font-weight: 400; color: var(--navy); margin-bottom: 28px; line-height: 1.3; }
+.phan-section h3 { font-family: Arial, sans-serif; font-size: 20px; font-weight: 500; color: var(--navy); margin: 36px 0 16px; padding-top: 28px; border-top: 1px solid var(--border-lt); }
+.phan-section p { font-family: Arial, sans-serif; font-size: 17px; line-height: 1.85; color: var(--text-mid); margin-bottom: 18px; font-weight: 300; max-width: 760px; }
+.phan-section strong { color: var(--text); font-weight: 600; }
+.phan-section em { font-style: italic; color: var(--gold); }
+.phan-anchor { display: block; height: 0; scroll-margin-top: 76px; }
+
+/* MARKDOWN TABLES */
+.md-table-wrap { overflow-x: auto; margin: 20px 0 32px; }
+.md-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.md-table th { background: var(--bg-soft); border: 1px solid var(--border); padding: 10px 12px; text-align: left; font-weight: 600; color: var(--navy); }
+.md-table td { border: 1px solid var(--border-lt); padding: 10px 12px; color: var(--text-mid); }
+
+/* PRE-GEN BLOCKS (inline charts/cards before luận giải) */
+.phan-pregen { margin: 12px 0 24px; }
+.pregen-block { background: var(--bg-soft); border: 1px solid var(--border-lt); padding: 16px 18px; margin-bottom: 14px; }
+.pregen-block.override { border-left: 3px solid var(--gold); background: var(--gold-lt); }
+.pregen-block.warn     { border-left: 3px solid var(--red); background: #FDF6F5; }
+.pregen-title { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+.pregen-item { display: flex; align-items: flex-start; gap: 10px; padding: 4px 0; font-size: 13px; line-height: 1.55; }
+.pregen-row { font-size: 13px; line-height: 1.6; padding: 4px 0; }
+.pregen-good { color: var(--green); font-weight: 600; }
+.pregen-bad  { color: var(--red); font-weight: 600; }
+.pregen-yn { font-size: 13px; line-height: 1.55; padding: 4px 8px; border-radius: 2px; margin-bottom: 4px; }
+.pregen-yn.yn-cat   { background: rgba(30,107,60,0.08); color: var(--green); }
+.pregen-yn.yn-hung  { background: rgba(192,57,43,0.07); color: var(--red); }
+.pregen-yn.yn-neutral { background: rgba(154,123,58,0.07); color: var(--text-mid); }
+.pregen-yn.yn-great-hung { background: var(--red); color: #fff; font-weight: 600; }
+.pregen-cach-name { font-family: 'Noto Serif', serif; font-size: 16px; color: var(--navy); margin-bottom: 4px; }
+.pregen-cach-desc { font-size: 12px; color: var(--text-mid); line-height: 1.6; }
+.pregen-cach-source { font-size: 10px; color: var(--text-lt); font-style: italic; margin-top: 6px; }
+.pregen-divider { display: flex; align-items: center; gap: 14px; margin: 28px 0 22px; color: var(--text-lt); font-size: 11px; letter-spacing: 3px; text-transform: uppercase; }
+.pregen-divider::before, .pregen-divider::after { content: ''; flex: 1; height: 1px; background: var(--border-lt); }
+
+/* DOMAIN BAR (single bar inline) */
+.pregen-domain-bar { display: grid; grid-template-columns: 110px 1fr 50px; gap: 12px; align-items: center; margin: 8px 0; }
+.pregen-domain-name { font-size: 13px; color: var(--navy); font-weight: 600; }
+.pregen-domain-track { background: var(--border-lt); height: 14px; position: relative; overflow: hidden; }
+.pregen-domain-fill { background: linear-gradient(90deg, var(--blue), var(--navy-mid)); height: 100%; transition: width 0.6s ease; }
+.pregen-domain-score { font-size: 14px; font-weight: 700; color: var(--blue); text-align: right; font-family: 'Noto Serif', serif; }
+.pregen-domain-reasons { font-size: 11px; color: var(--text-lt); margin-top: 4px; padding-left: 122px; line-height: 1.5; }
+@media (max-width: 800px) { .pregen-domain-reasons { padding-left: 0; } }
+
+/* PHAN LOADING (shimmer style — used by lock-box swap) */
 .chart-canvas-wrap { background: var(--bg-soft); border: 1px solid var(--border); padding: 20px; margin: 16px 0; }
 
 /* PAYWALL */
@@ -186,46 +236,7 @@ select.form-input { cursor: pointer; }
 }
 
 /* DAI VAN CHART (pre-rendered từ engine data) */
-.daivan-chart-section { background: #fff; border: 1px solid var(--border); padding: 24px; margin-bottom: 32px; }
-.daivan-chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
-.daivan-chart-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
-.daivan-chart-note { font-size: 12px; color: var(--text-lt); }
 .daivan-chart-canvas-wrap { position: relative; height: 220px; }
-
-/* SPECIAL CÁCH CỤC SECTION */
-.special-cach-section { background: #fff; border: 1px solid var(--border); padding: 24px; margin-bottom: 32px; }
-.special-cach-header { margin-bottom: 16px; }
-.special-cach-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
-.special-cach-subtitle { font-size: 12px; color: var(--text-lt); }
-.special-cach-list { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-@media (max-width: 800px) { .special-cach-list { grid-template-columns: 1fr; } }
-.special-cach-card { border: 1px solid var(--border-lt); padding: 14px 16px; background: var(--bg-soft); position: relative; }
-.special-cach-card.override { border-left: 3px solid var(--gold); background: var(--gold-lt); }
-.special-cach-card.enhance { border-left: 3px solid var(--blue); }
-.special-cach-card.warn { border-left: 3px solid var(--red); background: #FDF6F5; }
-.special-cach-badge { position: absolute; top: 10px; right: 12px; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-lt); }
-.special-cach-name { font-family: 'Noto Serif', serif; font-size: 17px; color: var(--navy); margin-bottom: 2px; padding-right: 80px; line-height: 1.3; }
-.special-cach-group { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
-.special-cach-desc { font-size: 13px; color: var(--text-mid); line-height: 1.55; margin-bottom: 8px; }
-.special-cach-reasons { font-size: 11px; color: var(--text-lt); line-height: 1.5; padding-top: 8px; border-top: 1px dashed var(--border-lt); }
-.special-cach-source { font-size: 10px; color: var(--text-lt); font-style: italic; margin-top: 6px; }
-
-/* DOMAIN RADAR SECTION */
-.domain-radar-section { background: #fff; border: 1px solid var(--border); padding: 24px; margin-bottom: 32px; }
-.domain-radar-header { margin-bottom: 16px; }
-.domain-radar-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
-.domain-radar-subtitle { font-size: 12px; color: var(--text-lt); }
-.domain-radar-grid { display: grid; grid-template-columns: 380px 1fr; gap: 32px; align-items: start; }
-@media (max-width: 800px) { .domain-radar-grid { grid-template-columns: 1fr; } }
-.domain-radar-canvas-wrap { position: relative; height: 380px; }
-.domain-bars { display: flex; flex-direction: column; gap: 10px; }
-.domain-bar-row { display: grid; grid-template-columns: 90px 1fr 40px; gap: 10px; align-items: center; }
-.domain-bar-name { font-size: 12px; color: var(--navy); font-weight: 600; }
-.domain-bar-track { background: var(--border-lt); height: 14px; position: relative; overflow: hidden; }
-.domain-bar-fill { background: linear-gradient(90deg, var(--blue), var(--navy-mid)); height: 100%; transition: width 0.6s ease; }
-.domain-bar-score { font-size: 13px; font-weight: 700; color: var(--blue); text-align: right; font-family: 'Noto Serif', serif; }
-.domain-bar-reason { font-size: 11px; color: var(--text-lt); margin-top: 2px; line-height: 1.4; padding-left: 100px; }
-@media (max-width: 800px) { .domain-bar-reason { padding-left: 0; } }
 
 /* RESULT TOOLBAR (PDF, share) */
 .result-toolbar { display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 16px; flex-wrap: wrap; }
@@ -253,7 +264,7 @@ select.form-input { cursor: pointer; }
   .result-header { border-bottom: 2pt solid #000; }
   .phan-block { page-break-inside: avoid; break-inside: avoid; }
   .tutru-table { page-break-inside: avoid; }
-  .daivan-chart-section { page-break-inside: avoid; }
+  .phan-section { page-break-inside: avoid; break-inside: avoid; }
   .phan-content { color: #000 !important; }
 }
 </style>
@@ -363,35 +374,6 @@ select.form-input { cursor: pointer; }
     </div>
 
     <div class="info-cards" id="info-cards"></div>
-
-    <div class="special-cach-section" id="special-cach-section" style="display:none">
-      <div class="special-cach-header">
-        <div class="special-cach-label">CÁCH CỤC ĐẶC BIỆT</div>
-        <div class="special-cach-subtitle" id="special-cach-subtitle"></div>
-      </div>
-      <div class="special-cach-list" id="special-cach-list"></div>
-    </div>
-
-    <div class="domain-radar-section" id="domain-radar-section" style="display:none">
-      <div class="domain-radar-header">
-        <div class="domain-radar-label">7 TRỤC ĐÁNH GIÁ</div>
-        <div class="domain-radar-subtitle">Định lượng từng phương diện cuộc đời theo cấu trúc tứ trụ</div>
-      </div>
-      <div class="domain-radar-grid">
-        <div class="domain-radar-canvas-wrap"><canvas id="domain-radar-chart"></canvas></div>
-        <div class="domain-bars" id="domain-bars"></div>
-      </div>
-    </div>
-
-    <div class="daivan-chart-section" id="daivan-chart-section" style="display:none">
-      <div class="daivan-chart-header">
-        <div>
-          <div class="daivan-chart-label">9 ĐẠI VẬN — BIỂU ĐỒ ĐIỂM SỐ</div>
-          <div class="daivan-chart-note" id="daivan-chart-note"></div>
-        </div>
-      </div>
-      <div class="daivan-chart-canvas-wrap"><canvas id="daivan-chart"></canvas></div>
-    </div>
 
     <div class="result-layout">
       <div class="result-sidebar">
@@ -757,22 +739,377 @@ select.form-input { cursor: pointer; }
 
   function renderPhanBlocks() {
     const body = document.getElementById('result-body');
+    const bt = _batTu;
     let html = '';
     for (let i = 1; i <= TONG_PHAN; i++) {
+      const pregen = buildPreGenForPhan(i, bt);
       html += `
-        <div class="phan-anchor" id="phan-anchor-${i}">
-          <div class="phan-block" id="phan-block-${i}">
-            <div class="phan-num">PHẦN ${String(i).padStart(2,'0')}</div>
-            <div class="phan-title">${PHAN_LABELS[i]}</div>
-            <div class="phan-content" id="claude-content-${i}" style="display:none"></div>
-            <div class="paywall-gate" id="lock-box-${i}" style="display:none;margin:0">
-              <div class="paywall-eyebrow">紫微明寶 · Đang Tải</div>
-              <div class="paywall-title" style="font-size:18px">Đang luận giải phần ${i}...</div>
-            </div>
+        <a class="phan-anchor" id="phan-anchor-${i}"></a>
+        <div class="phan-section" id="phan-block-${i}">
+          <div class="phan-num">PHẦN ${String(i).padStart(2,'0')} / ${TONG_PHAN} — ${PHAN_LABELS[i]}</div>
+          <h2>${PHAN_LABELS[i]}</h2>
+          ${pregen ? `<div class="phan-pregen" id="phan-pregen-${i}">${pregen}</div>` : ''}
+          ${pregen ? `<div class="pregen-divider"><span>Luận giải</span></div>` : ''}
+          <div class="phan-content" id="claude-content-${i}" style="display:none"></div>
+          <div class="paywall-gate" id="lock-box-${i}" style="display:none;margin:0">
+            <div class="paywall-eyebrow">紫微明寶 · Đang Tải</div>
+            <div class="paywall-title" style="font-size:18px">Đang luận giải phần ${i}...</div>
           </div>
         </div>`;
     }
     body.innerHTML = html;
+
+    // Render Chart.js charts (radar phần 1, line đại vận phần 12) sau khi DOM ready
+    setTimeout(() => {
+      renderInlineDomainRadar(bt);
+      renderInlineDaiVanLineChart(bt);
+    }, 50);
+  }
+
+  // Build pre-generated HTML cho từng phần (charts/cards/tables INLINE)
+  function buildPreGenForPhan(phan, bt) {
+    if (!bt) return '';
+    let h = '';
+    const matches = (typeof window.TuBinhSpecialCach !== 'undefined')
+      ? window.TuBinhSpecialCach.detectSpecialCachCuc(bt) : [];
+    const ds = (typeof window.TuBinhDomainScores !== 'undefined')
+      ? window.TuBinhDomainScores.tinhDomainScores(bt) : null;
+
+    function renderDomainBar(label, key) {
+      if (!ds || !ds[key]) return '';
+      const v = ds[key];
+      const reasons = (v.reasons || []).slice(0, 3).map(r => '· ' + r).join('<br>');
+      return `
+        <div class="pregen-block">
+          <div class="pregen-title">📊 Trục ${label}</div>
+          <div class="pregen-domain-bar">
+            <div class="pregen-domain-name">${label}</div>
+            <div class="pregen-domain-track"><div class="pregen-domain-fill" style="width:${v.score*10}%"></div></div>
+            <div class="pregen-domain-score">${v.score}</div>
+          </div>
+          <div class="pregen-domain-reasons">${reasons}</div>
+        </div>`;
+    }
+
+    function renderCachCucCard(m) {
+      const cls = !m.hopLe ? 'warn' : (m.override ? 'override' : '');
+      const badge = !m.hopLe ? '⚠ Bán cách' : (m.override ? '🔥 Ngoại cách (thay nội cách)' : '✨ Cách bổ trợ');
+      const reasons = (m.lyDo || []).map(r => '· ' + r).join('<br>');
+      return `
+        <div class="pregen-block ${cls}">
+          <div class="pregen-title">${badge}</div>
+          <div class="pregen-cach-name">${m.ten}</div>
+          <div class="pregen-cach-desc">${m.description}</div>
+          ${reasons ? `<div class="pregen-domain-reasons" style="padding-left:0;margin-top:8px">${reasons}</div>` : ''}
+          ${m.source ? `<div class="pregen-cach-source">— ${m.source}</div>` : ''}
+        </div>`;
+    }
+
+    // Filter cách cục theo phần (khớp keyword với từng domain)
+    function filterCachByKeywords(keywords) {
+      return matches.filter(m => {
+        const txt = (m.ten + ' ' + m.description + ' ' + (m.lyDo||[]).join(' ')).toLowerCase();
+        return keywords.some(k => txt.includes(k.toLowerCase()));
+      });
+    }
+
+    switch (phan) {
+      case 1: { // Tổng Quan Bát Tự — radar 7 trục + cường nhược + ngũ hành + override cách cục
+        h += `<div class="pregen-block">
+          <div class="pregen-title">⚖ Cường Nhược Nhật Can</div>
+          <div class="pregen-domain-bar">
+            <div class="pregen-domain-name">${bt.cuongNhuoc.label}</div>
+            <div class="pregen-domain-track"><div class="pregen-domain-fill" style="width:${(bt.cuongNhuoc.score||5)*10}%"></div></div>
+            <div class="pregen-domain-score">${bt.cuongNhuoc.score}</div>
+          </div>
+          <div class="pregen-domain-reasons">
+            · Đắc lệnh: ${bt.cuongNhuoc.dacLenh ? 'có' : 'không'}<br>
+            · Đắc địa: ${bt.cuongNhuoc.dacDia || 0}<br>
+            · Đắc thế: ${bt.cuongNhuoc.dacThe || 0}
+          </div>
+        </div>`;
+        h += `<div class="pregen-block"><div class="pregen-title">📐 7 trục đánh giá định lượng</div>
+          <div style="margin-top:8px"><canvas id="phan1-radar-chart" style="max-height:380px"></canvas></div>
+        </div>`;
+        const overrides = matches.filter(m => m.hopLe && m.override);
+        if (overrides.length) {
+          h += `<div class="pregen-block override"><div class="pregen-title">🔥 Cách cục đặc biệt thay nội cách</div>`;
+          overrides.forEach(m => h += `<div class="pregen-cach-name">${m.ten}</div><div class="pregen-cach-desc">${m.description}</div><div class="pregen-cach-source">— ${m.source}</div>`);
+          h += `</div>`;
+        }
+        break;
+      }
+      case 2: { // Cách Cục
+        h += `<div class="pregen-block">
+          <div class="pregen-title">📜 Nội cách bản mệnh</div>
+          <div class="pregen-cach-name">${bt.cachCuc.primary || '—'}</div>
+          <div class="pregen-cach-desc">Loại: ${bt.cachCuc.type || '—'} · ${bt.cachCuc.thanhPhaCach || ''}</div>
+          ${bt.cachCuc.note ? `<div class="pregen-domain-reasons" style="padding-left:0;margin-top:8px">${bt.cachCuc.note}</div>` : ''}
+        </div>`;
+        const validMatches = matches.filter(m => m.hopLe);
+        if (validMatches.length) validMatches.forEach(m => h += renderCachCucCard(m));
+        const warnings = matches.filter(m => !m.hopLe);
+        if (warnings.length) warnings.forEach(m => h += renderCachCucCard(m));
+        h += `<div class="pregen-block">
+          <div class="pregen-title">🌟 Dụng thần</div>
+          <div class="pregen-cach-name">Dụng: ${bt.dungThan.primary}${bt.dungThan.secondary ? ' · Hỉ: ' + bt.dungThan.secondary : ''}</div>
+          <div class="pregen-cach-desc">${bt.dungThan.method || ''}<br>${bt.dungThan.rationale || ''}</div>
+        </div>`;
+        break;
+      }
+      case 3: { // Quan Sát (Sự nghiệp)
+        h += renderDomainBar('Sự nghiệp', 'suNghiep');
+        const cc = filterCachByKeywords(['quan', 'sát', 'tài quan']);
+        if (cc.length) cc.forEach(m => h += renderCachCucCard(m));
+        break;
+      }
+      case 4: { // Tài
+        h += renderDomainBar('Tài lộc', 'taiLoc');
+        const cc = filterCachByKeywords(['tài', 'tuế đức']);
+        if (cc.length) cc.forEach(m => h += renderCachCucCard(m));
+        break;
+      }
+      case 5: { // Thực Thương
+        h += renderDomainBar('Sáng tạo', 'sangTao');
+        const cc = filterCachByKeywords(['thực', 'thương quan']);
+        if (cc.length) cc.forEach(m => h += renderCachCucCard(m));
+        break;
+      }
+      case 6: { // Ấn
+        h += renderDomainBar('Học vấn', 'hocVan');
+        const cc = filterCachByKeywords(['ấn', 'sát ấn']);
+        if (cc.length) cc.forEach(m => h += renderCachCucCard(m));
+        break;
+      }
+      case 7: { // Tỷ Kiếp
+        h += renderDomainBar('Đối tác', 'doiTac');
+        const cc = filterCachByKeywords(['tỷ', 'kiếp', 'lưỡng', 'nhất khí']);
+        if (cc.length) cc.forEach(m => h += renderCachCucCard(m));
+        break;
+      }
+      case 8: { // Tình Duyên
+        h += renderDomainBar('Hôn nhân', 'honNhan');
+        h += `<div class="pregen-block"><div class="pregen-title">💞 Cung Phu Thê (Nhật Chi)</div>
+          <div class="pregen-cach-name">${bt.tuTru[2].chi}</div>
+          <div class="pregen-cach-desc">Tàng can: ${(bt.tuTru[2].tangCan||[]).map(t=>t.can).join(', ') || '—'}</div>
+        </div>`;
+        const cc = filterCachByKeywords(['hợp', 'đào hoa', 'tình', 'nhật chi']);
+        if (cc.length) cc.forEach(m => h += renderCachCucCard(m));
+        break;
+      }
+      case 9: { // Sức Khỏe
+        h += renderDomainBar('Sức khỏe', 'sucKhoe');
+        const nh = bt.nguHanh?.counts || {};
+        const order = ['Mộc','Hỏa','Thổ','Kim','Thủy'];
+        h += `<div class="pregen-block"><div class="pregen-title">🌿 Phân bố ngũ hành</div>`;
+        order.forEach(hanh => {
+          const n = nh[hanh] || 0;
+          h += `<div class="pregen-domain-bar">
+            <div class="pregen-domain-name">${hanh}</div>
+            <div class="pregen-domain-track"><div class="pregen-domain-fill" style="width:${Math.min(n*20,100)}%"></div></div>
+            <div class="pregen-domain-score">${n}</div>
+          </div>`;
+        });
+        h += `</div>`;
+        break;
+      }
+      case 10: { // Hình Xung Hại Hợp
+        const hxhh = bt.hinhXungHaiHop || {};
+        const sections = [
+          { key: 'lucXung', label: 'Lục Xung', cls: 'yn-hung' },
+          { key: 'lucHop',  label: 'Lục Hợp', cls: 'yn-cat'  },
+          { key: 'tamHop',  label: 'Tam Hợp', cls: 'yn-cat'  },
+          { key: 'tamHinh', label: 'Tam Hình', cls: 'yn-hung' },
+          { key: 'lucHai',  label: 'Lục Hại', cls: 'yn-hung' },
+        ];
+        sections.forEach(s => {
+          const arr = hxhh[s.key] || [];
+          if (arr.length === 0) return;
+          h += `<div class="pregen-block"><div class="pregen-title">${s.label} — ${arr.length}</div>`;
+          arr.forEach(item => {
+            const txt = typeof item === 'string' ? item : (item.text || JSON.stringify(item));
+            h += `<div class="pregen-yn ${s.cls}">${txt}</div>`;
+          });
+          h += `</div>`;
+        });
+        break;
+      }
+      case 11: { // Thần Sát
+        const ts = bt.thanSat || {};
+        const found = Object.entries(ts).filter(([k,v]) => v && v.found);
+        if (found.length) {
+          h += `<div class="pregen-block"><div class="pregen-title">⭐ Thần sát hiện ra (${found.length})</div>`;
+          found.forEach(([name, info]) => {
+            const detail = (info.details || []).map(d => typeof d === 'string' ? d : (d.text || '')).filter(Boolean).join('; ');
+            h += `<div class="pregen-yn yn-neutral"><strong>${name}</strong>${detail ? ' — ' + detail : ''}</div>`;
+          });
+          h += `</div>`;
+        }
+        break;
+      }
+      case 12: { // Tổng Quan Đại Vận — line chart
+        if (bt.daiVans?.length) {
+          h += `<div class="pregen-block">
+            <div class="pregen-title">📈 9 đại vận — biểu đồ điểm số</div>
+            <div style="position:relative;height:240px;margin-top:8px"><canvas id="phan12-line-chart"></canvas></div>
+            <div class="pregen-domain-reasons" style="padding-left:0;margin-top:12px">
+              · Khởi vận: ${bt.tuoiKhoiVan} tuổi · Hướng: ${bt.daiVanThuan ? 'thuận' : 'nghịch'}<br>
+              ${bt.daiVanHienTai ? `· Hiện tại: ĐV${bt.daiVanHienTai.idx+1} (${bt.daiVanHienTai.can} ${bt.daiVanHienTai.chi}, ${bt.daiVanHienTai.tuoiStart}-${bt.daiVanHienTai.tuoiEnd}t) · ${bt.daiVanHienTai.score}/10` : ''}
+            </div>
+          </div>`;
+        }
+        break;
+      }
+      case 13: { // Đại Vận Hiện Tại
+        const dv = bt.daiVanHienTai;
+        if (dv) {
+          h += `<div class="pregen-block">
+            <div class="pregen-title">⚡ Đại vận đang trải qua</div>
+            <div class="pregen-cach-name">${dv.can} ${dv.chi} — ${dv.thapThanCan}/${dv.thapThanChi}</div>
+            <div class="pregen-cach-desc">Tuổi ${dv.tuoiStart}-${dv.tuoiEnd} · Năm ${dv.namStart}-${dv.namEnd} · Score ${dv.score}/10 · ${dv.label}</div>`;
+          if (dv.factors?.length) {
+            h += `<div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--border-lt)">`;
+            dv.factors.forEach(f => {
+              const cls = f.delta > 0 ? 'yn-cat' : (f.delta < 0 ? 'yn-hung' : 'yn-neutral');
+              const sign = f.delta >= 0 ? '+' : '';
+              h += `<div class="pregen-yn ${cls}" style="margin-bottom:4px">${sign}${f.delta}: ${f.text}</div>`;
+            });
+            h += `</div>`;
+          }
+          h += `</div>`;
+        }
+        break;
+      }
+      case 14: { // Đại Vận Kế Tiếp
+        const cur = bt.daiVanHienTai;
+        const nextIdx = cur ? cur.idx + 1 : 0;
+        const next = bt.daiVans?.[nextIdx];
+        if (next) {
+          h += `<div class="pregen-block">
+            <div class="pregen-title">🔮 Đại vận sắp tới</div>
+            <div class="pregen-cach-name">${next.can} ${next.chi} — ${next.thapThanCan}/${next.thapThanChi}</div>
+            <div class="pregen-cach-desc">Tuổi ${next.tuoiStart}-${next.tuoiEnd} · Năm ${next.namStart}-${next.namEnd} · Score ${next.score}/10 · ${next.label}</div>`;
+          if (next.factors?.length) {
+            h += `<div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--border-lt)">`;
+            next.factors.slice(0,5).forEach(f => {
+              const cls = f.delta > 0 ? 'yn-cat' : (f.delta < 0 ? 'yn-hung' : 'yn-neutral');
+              const sign = f.delta >= 0 ? '+' : '';
+              h += `<div class="pregen-yn ${cls}" style="margin-bottom:4px">${sign}${f.delta}: ${f.text}</div>`;
+            });
+            h += `</div>`;
+          }
+          h += `</div>`;
+        }
+        break;
+      }
+      case 15: { // Lưu Niên
+        h += `<div class="pregen-block">
+          <div class="pregen-title">📅 Năm xem ${bt.namXem || ''}</div>
+          <div class="pregen-cach-name">Tuổi ${bt.tuoiXem || '—'}</div>
+          <div class="pregen-cach-desc">Can chi năm: ${bt.canChiNamXem?.can || ''} ${bt.canChiNamXem?.chi || ''}</div>
+        </div>`;
+        break;
+      }
+      case 16: { // Tổng Kết — không pregen, để Claude tự kết
+        break;
+      }
+    }
+    return h;
+  }
+
+  // Render radar chart for phần 1 (after DOM ready)
+  function renderInlineDomainRadar(bt) {
+    if (typeof Chart === 'undefined' || typeof window.TuBinhDomainScores === 'undefined') return;
+    const canvas = document.getElementById('phan1-radar-chart');
+    if (!canvas) return;
+    const ds = window.TuBinhDomainScores.tinhDomainScores(bt);
+    const labelMap = { suNghiep: 'Sự nghiệp', taiLoc: 'Tài lộc', sangTao: 'Sáng tạo',
+      hocVan: 'Học vấn', doiTac: 'Đối tác', honNhan: 'Hôn nhân', sucKhoe: 'Sức khỏe' };
+    const order = ['suNghiep','taiLoc','sangTao','hocVan','doiTac','honNhan','sucKhoe'];
+    if (window._phan1Radar) try { window._phan1Radar.destroy(); } catch(e) {}
+    window._phan1Radar = new Chart(canvas.getContext('2d'), {
+      type: 'radar',
+      data: {
+        labels: order.map(k => labelMap[k]),
+        datasets: [{
+          label: 'Điểm 7 trục',
+          data: order.map(k => ds[k].score),
+          borderColor: '#1455A4',
+          backgroundColor: 'rgba(20,85,164,0.20)',
+          pointBackgroundColor: '#9A7B3A',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 5,
+          borderWidth: 2,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: (item) => {
+            const k = order[item.dataIndex];
+            return [labelMap[k] + ': ' + ds[k].score + '/10'].concat((ds[k].reasons||[]).map(r => '· ' + r));
+          } } }
+        },
+        scales: {
+          r: {
+            min: 0, max: 10,
+            ticks: { stepSize: 2, font: { size: 10 }, color: '#777', backdropColor: 'transparent' },
+            pointLabels: { font: { size: 12, family: 'Arial' }, color: '#061A2E' },
+            grid: { color: '#E8E8E8' },
+            angleLines: { color: '#CCC' },
+          }
+        }
+      }
+    });
+  }
+
+  // Render line chart for phần 12 (after DOM ready)
+  function renderInlineDaiVanLineChart(bt) {
+    if (typeof Chart === 'undefined') return;
+    const canvas = document.getElementById('phan12-line-chart');
+    if (!canvas || !bt?.daiVans?.length) return;
+    const labels = bt.daiVans.map((dv, i) => `ĐV${i+1} (${dv.tuoiStart}-${dv.tuoiEnd}t)`);
+    const scores = bt.daiVans.map(dv => dv.score);
+    const cur = bt.daiVanHienTai;
+    if (window._phan12Line) try { window._phan12Line.destroy(); } catch(e) {}
+    window._phan12Line = new Chart(canvas.getContext('2d'), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Điểm Đại Vận',
+          data: scores,
+          borderColor: '#9A7B3A',
+          backgroundColor: 'rgba(154,123,58,0.15)',
+          fill: true,
+          tension: 0.35,
+          pointRadius: 6,
+          pointHoverRadius: 8,
+          pointBackgroundColor: bt.daiVans.map((dv, i) => cur && cur.idx === i ? '#C0392B' : '#061A2E'),
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          y: { min: 0, max: 10, ticks: { stepSize: 2, font: { size: 11 } } },
+          x: { ticks: { font: { size: 10 }, maxRotation: 30, minRotation: 0 } },
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: {
+            title: (items) => labels[items[0].dataIndex],
+            label: (item) => {
+              const dv = bt.daiVans[item.dataIndex];
+              return [`${dv.can} ${dv.chi} (${dv.thapThanCan})`, `Score: ${dv.score}/10 — ${dv.label}`, `${dv.namStart}-${dv.namEnd}`];
+            }
+          } }
+        }
+      }
+    });
   }
 
   function updateMucLuc(phan, status) {
@@ -795,10 +1132,37 @@ select.form-input { cursor: pointer; }
   // ─── Markdown renderer (đơn giản, đủ dùng) ────────────────────
   function renderMarkdown(text) {
     if (!text) return '';
-    return text
-      .split(/\n\n+/)
-      .map(p => `<p>${p.replace(/\n/g,' ').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>`)
-      .join('');
+    const lines = text.split('\n');
+    let out = '', inTable = false, rows = [];
+    function flushTable() {
+      if (!rows.length) return;
+      out += '<div class="md-table-wrap"><table class="md-table">';
+      rows.forEach((row, i) => {
+        if (i === 1 && /^\|[-| :]+\|$/.test(row.trim())) return;
+        const cells = row.split('|').filter((_, ci, a) => ci > 0 && ci < a.length - 1);
+        const t = i === 0 ? 'th' : 'td';
+        out += '<tr>' + cells.map(c => `<${t}>${c.trim()}</${t}>`).join('') + '</tr>';
+      });
+      out += '</table></div>';
+      rows = []; inTable = false;
+    }
+    for (const line of lines) {
+      if (line.trim().startsWith('|')) {
+        inTable = true;
+        rows.push(line.trim());
+      } else {
+        if (inTable) flushTable();
+        const l = line
+          .replace(/^## (.+)$/, '<h2>$1</h2>')
+          .replace(/^### (.+)$/, '<h3>$1</h3>')
+          .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\*(.+?)\*/g, '<em>$1</em>');
+        if (l.startsWith('<h')) out += l;
+        else if (l.trim()) out += `<p>${l}</p>`;
+      }
+    }
+    if (inTable) flushTable();
+    return out;
   }
 
   // ─── Slug helper ─────────────────────────────────────────────
@@ -896,9 +1260,6 @@ select.form-input { cursor: pointer; }
 
     renderTuTruTable(_batTu);
     renderInfoCards(_batTu);
-    renderSpecialCachCuc(_batTu);
-    renderDomainRadar(_batTu);
-    renderDaiVanChartFromEngine(_batTu);
     renderMucLuc();
     renderPhanBlocks();
 
@@ -908,181 +1269,6 @@ select.form-input { cursor: pointer; }
     sec.scrollIntoView({ behavior: 'smooth' });
   }
 
-  // ─── Pre-render đại vận chart từ engine data (instant, không phụ thuộc Claude) ──
-  function renderSpecialCachCuc(bt) {
-    const section = document.getElementById('special-cach-section');
-    const listEl  = document.getElementById('special-cach-list');
-    const subEl   = document.getElementById('special-cach-subtitle');
-    if (typeof window.TuBinhSpecialCach === 'undefined') {
-      console.warn('[tu-binh] TuBinhSpecialCach not loaded'); return;
-    }
-    const matches = window.TuBinhSpecialCach.detectSpecialCachCuc(bt);
-    if (!matches.length) { section.style.display = 'none'; return; }
-    section.style.display = '';
-
-    const overrideValid = matches.filter(m => m.hopLe && m.override);
-    const enhanceValid  = matches.filter(m => m.hopLe && !m.override);
-    const warnings      = matches.filter(m => !m.hopLe);
-    const sub = [];
-    if (overrideValid.length) sub.push(overrideValid.length + ' cách thay nội cách');
-    if (enhanceValid.length)  sub.push(enhanceValid.length + ' cách bổ trợ');
-    if (warnings.length)      sub.push(warnings.length + ' bán cách / cảnh báo');
-    subEl.textContent = sub.join(' · ');
-
-    let html = '';
-    matches.forEach(m => {
-      const cls = !m.hopLe ? 'warn' : (m.override ? 'override' : 'enhance');
-      const badge = !m.hopLe ? 'Bán cách' : (m.override ? 'Ngoại cách' : 'Bổ trợ');
-      const reasons = (m.lyDo || []).map(r => '· ' + r).join('<br>');
-      html += '<div class="special-cach-card ' + cls + '">'
-            +   '<div class="special-cach-badge">' + badge + '</div>'
-            +   '<div class="special-cach-name">' + m.ten + '</div>'
-            +   '<div class="special-cach-group">' + m.nhomCach + ' · weight ' + m.weight + '</div>'
-            +   '<div class="special-cach-desc">' + m.description + '</div>'
-            +   (reasons ? '<div class="special-cach-reasons">' + reasons + '</div>' : '')
-            +   (m.source ? '<div class="special-cach-source">— ' + m.source + '</div>' : '')
-            + '</div>';
-    });
-    listEl.innerHTML = html;
-  }
-
-  function renderDomainRadar(bt) {
-    const section = document.getElementById('domain-radar-section');
-    if (typeof window.TuBinhDomainScores === 'undefined') {
-      console.warn('[tu-binh] TuBinhDomainScores not loaded'); return;
-    }
-    if (typeof Chart === 'undefined') return;
-    const ds = window.TuBinhDomainScores.tinhDomainScores(bt);
-    section.style.display = '';
-
-    const labelMap = {
-      suNghiep: 'Sự nghiệp', taiLoc: 'Tài lộc', sangTao: 'Sáng tạo',
-      hocVan: 'Học vấn', doiTac: 'Đối tác', honNhan: 'Hôn nhân', sucKhoe: 'Sức khỏe',
-    };
-    const order = ['suNghiep','taiLoc','sangTao','hocVan','doiTac','honNhan','sucKhoe'];
-    const labels = order.map(k => labelMap[k]);
-    const scores = order.map(k => ds[k].score);
-
-    // Radar chart (Chart.js v4)
-    const ctx = document.getElementById('domain-radar-chart').getContext('2d');
-    if (window._domainRadarChart) try { window._domainRadarChart.destroy(); } catch(e) {}
-    window._domainRadarChart = new Chart(ctx, {
-      type: 'radar',
-      data: {
-        labels,
-        datasets: [{
-          label: 'Điểm 7 trục',
-          data: scores,
-          borderColor: '#1455A4',
-          backgroundColor: 'rgba(20,85,164,0.20)',
-          pointBackgroundColor: '#9A7B3A',
-          pointBorderColor: '#fff',
-          pointBorderWidth: 2,
-          pointRadius: 5,
-          borderWidth: 2,
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: {
-              label: (item) => {
-                const k = order[item.dataIndex];
-                return [labelMap[k] + ': ' + ds[k].score + '/10'].concat((ds[k].reasons||[]).map(r => '· ' + r));
-              }
-            }
-          }
-        },
-        scales: {
-          r: {
-            min: 0, max: 10,
-            ticks: { stepSize: 2, font: { size: 10 }, color: '#777', backdropColor: 'transparent' },
-            pointLabels: { font: { size: 12, family: 'Arial' }, color: '#061A2E' },
-            grid: { color: '#E8E8E8' },
-            angleLines: { color: '#CCC' },
-          }
-        }
-      }
-    });
-
-    // Bars list
-    let bhtml = '';
-    order.forEach(k => {
-      const v = ds[k];
-      const reasons = (v.reasons||[]).slice(0, 2).map(r => '· ' + r).join('<br>');
-      bhtml += '<div>'
-            +   '<div class="domain-bar-row">'
-            +     '<div class="domain-bar-name">' + labelMap[k] + '</div>'
-            +     '<div class="domain-bar-track"><div class="domain-bar-fill" style="width:' + (v.score*10) + '%"></div></div>'
-            +     '<div class="domain-bar-score">' + v.score + '</div>'
-            +   '</div>'
-            +   (reasons ? '<div class="domain-bar-reason">' + reasons + '</div>' : '')
-            + '</div>';
-    });
-    document.getElementById('domain-bars').innerHTML = bhtml;
-  }
-
-  function renderDaiVanChartFromEngine(bt) {
-    if (!bt?.daiVans?.length || typeof Chart === 'undefined') return;
-    const section = document.getElementById('daivan-chart-section');
-    section.style.display = '';
-
-    const labels = bt.daiVans.map((dv, i) => `ĐV${i+1} (${dv.tuoiStart}-${dv.tuoiEnd}t)`);
-    const scores = bt.daiVans.map(dv => dv.score);
-
-    // Note: highlight đại vận hiện tại
-    const cur = bt.daiVanHienTai;
-    const noteEl = document.getElementById('daivan-chart-note');
-    if (cur) noteEl.textContent = `Hiện tại: ĐV${cur.idx+1} (${cur.can} ${cur.chi}, ${cur.tuoiStart}-${cur.tuoiEnd} tuổi) · ${cur.thapThanCan} · ${cur.score}/10`;
-    else noteEl.textContent = `Khởi vận: ${bt.tuoiKhoiVan} tuổi · Hướng vận: ${bt.daiVanThuan?'thuận':'nghịch'}`;
-
-    const ctx = document.getElementById('daivan-chart').getContext('2d');
-    new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [{
-          label: 'Điểm Đại Vận',
-          data: scores,
-          borderColor: '#9A7B3A',
-          backgroundColor: 'rgba(154,123,58,0.15)',
-          fill: true,
-          tension: 0.35,
-          pointRadius: 6,
-          pointHoverRadius: 8,
-          pointBackgroundColor: bt.daiVans.map((dv, i) => cur && cur.idx === i ? '#C0392B' : '#061A2E'),
-          pointBorderColor: '#fff',
-          pointBorderWidth: 2,
-        }]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        scales: {
-          y: { min: 0, max: 10, ticks: { stepSize: 2, font: { size: 11 } } },
-          x: { ticks: { font: { size: 10 }, maxRotation: 30, minRotation: 0 } },
-        },
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: {
-              title: (items) => labels[items[0].dataIndex],
-              label: (item) => {
-                const dv = bt.daiVans[item.dataIndex];
-                return [
-                  `${dv.can} ${dv.chi} (${dv.thapThanCan})`,
-                  `Score: ${dv.score}/10 — ${dv.label}`,
-                  `${dv.namStart}-${dv.namEnd}`,
-                ];
-              }
-            }
-          }
-        }
-      }
-    });
-  }
 
   // ─── Paywall check ───────────────────────────────────────────
   async function checkAndRenderPaywall() {
