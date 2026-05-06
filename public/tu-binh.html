@@ -761,7 +761,7 @@ select.form-input { cursor: pointer; }
       return;
     }
 
-    const data = window.TuviForm.getData();
+    const data = TuviForm.getData();
 
     if (!data.hoten || !data.ngay || !data.thang || !data.nam) {
       showError('Vui lòng nhập đầy đủ họ tên, ngày tháng năm sinh.');
@@ -1238,7 +1238,7 @@ select.form-input { cursor: pointer; }
     }
 
     // Render shared form (full mode = 3-col layout)
-    window.TuviForm.render('tubinh-form-container', {
+    TuviForm.render('tubinh-form-container', {
       submitLabel: 'Luận Giải Bát Tự →',
       onSubmit: () => analyze(),
       showSample: false,
@@ -1252,7 +1252,7 @@ select.form-input { cursor: pointer; }
         if (saved.hoten) {
           _autoUnlock = true;
           setTimeout(() => {
-            window.TuviForm.setData(saved);
+            TuviForm.setData(saved);
             analyze();
           }, 300);
         }
