@@ -220,30 +220,47 @@ function extractTuBinhContext(batTuData: any, question: string): string {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function handleChat(body: any): Promise<Response> {
-  const { messages, batTuData } = body;
+  const { messages, batTuData, lasoData } = body;
+  const data = batTuData || lasoData;
   if (!messages?.length) return err('Missing messages', 400);
 
   const lastQ = messages[messages.length - 1]?.content || '';
-  const hasBatTu = !!(batTuData?.tuTru?.length);
+  const hasBatTu = !!(data?.tuTru?.length);
   const systemPrompt = hasBatTu
-    ? CHAT_SYSTEM_TUBINH(extractTuBinhContext(batTuData, lastQ))
+    ? CHAT_SYSTEM_TUBINH(extractTuBinhContext(data, lastQ))
     : CHAT_SYSTEM_GENERAL;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const trimmed = messages.slice(-10).map((m: any) => ({
-    role: m.role,
-    content: String(m.content).slice(0, 2000),
-  }));
+  const trimmed = messages.slice(-10)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .map((m: any) => ({
+      role: m.role,
+      content: String(m.content || '').slice(0, 2000),
+    }))
+    // Anthropic rejects empty content — filter out
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .filter((m: any) => m.content.trim().length > 0);
 
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 800, system: systemPrompt, messages: trimmed }),
-  });
+  if (!trimmed.length) return err('Empty messages after filter', 400);
 
-  if (!resp.ok) return err('API error: ' + (await resp.text()).slice(0, 200));
-  const data = await resp.json();
-  return ok({ answer: data.content?.[0]?.text || '', scenario: hasBatTu ? 'batTu' : 'general' });
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 800, system: systemPrompt, messages: trimmed }),
+    });
+
+    if (!resp.ok) {
+      const errText = await resp.text();
+      console.error('[handleChat] Anthropic API error', resp.status, errText.slice(0, 500));
+      return err('Anthropic API ' + resp.status + ': ' + errText.slice(0, 200));
+    }
+    const apiResp = await resp.json();
+    return ok({ answer: apiResp.content?.[0]?.text || '', scenario: hasBatTu ? 'batTu' : 'general' });
+  } catch (e: unknown) {
+    console.error('[handleChat] exception', e);
+    return err('handleChat error: ' + (e as Error).message);
+  }
 }
 
 // ─── RAG search trong tubinh_docs ──────────────────────────────
