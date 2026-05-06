@@ -192,6 +192,41 @@ select.form-input { cursor: pointer; }
 .daivan-chart-note { font-size: 12px; color: var(--text-lt); }
 .daivan-chart-canvas-wrap { position: relative; height: 220px; }
 
+/* SPECIAL CÁCH CỤC SECTION */
+.special-cach-section { background: #fff; border: 1px solid var(--border); padding: 24px; margin-bottom: 32px; }
+.special-cach-header { margin-bottom: 16px; }
+.special-cach-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+.special-cach-subtitle { font-size: 12px; color: var(--text-lt); }
+.special-cach-list { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 800px) { .special-cach-list { grid-template-columns: 1fr; } }
+.special-cach-card { border: 1px solid var(--border-lt); padding: 14px 16px; background: var(--bg-soft); position: relative; }
+.special-cach-card.override { border-left: 3px solid var(--gold); background: var(--gold-lt); }
+.special-cach-card.enhance { border-left: 3px solid var(--blue); }
+.special-cach-card.warn { border-left: 3px solid var(--red); background: #FDF6F5; }
+.special-cach-badge { position: absolute; top: 10px; right: 12px; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-lt); }
+.special-cach-name { font-family: 'Noto Serif', serif; font-size: 17px; color: var(--navy); margin-bottom: 2px; padding-right: 80px; line-height: 1.3; }
+.special-cach-group { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.special-cach-desc { font-size: 13px; color: var(--text-mid); line-height: 1.55; margin-bottom: 8px; }
+.special-cach-reasons { font-size: 11px; color: var(--text-lt); line-height: 1.5; padding-top: 8px; border-top: 1px dashed var(--border-lt); }
+.special-cach-source { font-size: 10px; color: var(--text-lt); font-style: italic; margin-top: 6px; }
+
+/* DOMAIN RADAR SECTION */
+.domain-radar-section { background: #fff; border: 1px solid var(--border); padding: 24px; margin-bottom: 32px; }
+.domain-radar-header { margin-bottom: 16px; }
+.domain-radar-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+.domain-radar-subtitle { font-size: 12px; color: var(--text-lt); }
+.domain-radar-grid { display: grid; grid-template-columns: 380px 1fr; gap: 32px; align-items: start; }
+@media (max-width: 800px) { .domain-radar-grid { grid-template-columns: 1fr; } }
+.domain-radar-canvas-wrap { position: relative; height: 380px; }
+.domain-bars { display: flex; flex-direction: column; gap: 10px; }
+.domain-bar-row { display: grid; grid-template-columns: 90px 1fr 40px; gap: 10px; align-items: center; }
+.domain-bar-name { font-size: 12px; color: var(--navy); font-weight: 600; }
+.domain-bar-track { background: var(--border-lt); height: 14px; position: relative; overflow: hidden; }
+.domain-bar-fill { background: linear-gradient(90deg, var(--blue), var(--navy-mid)); height: 100%; transition: width 0.6s ease; }
+.domain-bar-score { font-size: 13px; font-weight: 700; color: var(--blue); text-align: right; font-family: 'Noto Serif', serif; }
+.domain-bar-reason { font-size: 11px; color: var(--text-lt); margin-top: 2px; line-height: 1.4; padding-left: 100px; }
+@media (max-width: 800px) { .domain-bar-reason { padding-left: 0; } }
+
 /* RESULT TOOLBAR (PDF, share) */
 .result-toolbar { display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 16px; flex-wrap: wrap; }
 .btn-tool { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: #fff; border: 1px solid var(--border); color: var(--text-mid); font-size: 12px; cursor: pointer; transition: all .15s; text-decoration: none; }
@@ -329,6 +364,25 @@ select.form-input { cursor: pointer; }
 
     <div class="info-cards" id="info-cards"></div>
 
+    <div class="special-cach-section" id="special-cach-section" style="display:none">
+      <div class="special-cach-header">
+        <div class="special-cach-label">CÁCH CỤC ĐẶC BIỆT</div>
+        <div class="special-cach-subtitle" id="special-cach-subtitle"></div>
+      </div>
+      <div class="special-cach-list" id="special-cach-list"></div>
+    </div>
+
+    <div class="domain-radar-section" id="domain-radar-section" style="display:none">
+      <div class="domain-radar-header">
+        <div class="domain-radar-label">7 TRỤC ĐÁNH GIÁ</div>
+        <div class="domain-radar-subtitle">Định lượng từng phương diện cuộc đời theo cấu trúc tứ trụ</div>
+      </div>
+      <div class="domain-radar-grid">
+        <div class="domain-radar-canvas-wrap"><canvas id="domain-radar-chart"></canvas></div>
+        <div class="domain-bars" id="domain-bars"></div>
+      </div>
+    </div>
+
     <div class="daivan-chart-section" id="daivan-chart-section" style="display:none">
       <div class="daivan-chart-header">
         <div>
@@ -383,7 +437,9 @@ select.form-input { cursor: pointer; }
 </div>
 
 <!-- Engine + form + paywall -->
-<script src="/tubinh-ansao-engine.js"></script>
+<script src="/tubinh-ansao-engine.js?v=4"></script>
+<script src="/tubinh-cach-cuc-special.js?v=1"></script>
+<script src="/tubinh-domain-scores.js?v=1"></script>
 <script src="/tuvi-form.js"></script>
 <script src="/tuvi-paywall2.js"></script>
 <script src="/chatbot.js"></script>
@@ -840,6 +896,8 @@ select.form-input { cursor: pointer; }
 
     renderTuTruTable(_batTu);
     renderInfoCards(_batTu);
+    renderSpecialCachCuc(_batTu);
+    renderDomainRadar(_batTu);
     renderDaiVanChartFromEngine(_batTu);
     renderMucLuc();
     renderPhanBlocks();
@@ -851,6 +909,122 @@ select.form-input { cursor: pointer; }
   }
 
   // ─── Pre-render đại vận chart từ engine data (instant, không phụ thuộc Claude) ──
+  function renderSpecialCachCuc(bt) {
+    const section = document.getElementById('special-cach-section');
+    const listEl  = document.getElementById('special-cach-list');
+    const subEl   = document.getElementById('special-cach-subtitle');
+    if (typeof window.TuBinhSpecialCach === 'undefined') {
+      console.warn('[tu-binh] TuBinhSpecialCach not loaded'); return;
+    }
+    const matches = window.TuBinhSpecialCach.detectSpecialCachCuc(bt);
+    if (!matches.length) { section.style.display = 'none'; return; }
+    section.style.display = '';
+
+    const overrideValid = matches.filter(m => m.hopLe && m.override);
+    const enhanceValid  = matches.filter(m => m.hopLe && !m.override);
+    const warnings      = matches.filter(m => !m.hopLe);
+    const sub = [];
+    if (overrideValid.length) sub.push(overrideValid.length + ' cách thay nội cách');
+    if (enhanceValid.length)  sub.push(enhanceValid.length + ' cách bổ trợ');
+    if (warnings.length)      sub.push(warnings.length + ' bán cách / cảnh báo');
+    subEl.textContent = sub.join(' · ');
+
+    let html = '';
+    matches.forEach(m => {
+      const cls = !m.hopLe ? 'warn' : (m.override ? 'override' : 'enhance');
+      const badge = !m.hopLe ? 'Bán cách' : (m.override ? 'Ngoại cách' : 'Bổ trợ');
+      const reasons = (m.lyDo || []).map(r => '· ' + r).join('<br>');
+      html += '<div class="special-cach-card ' + cls + '">'
+            +   '<div class="special-cach-badge">' + badge + '</div>'
+            +   '<div class="special-cach-name">' + m.ten + '</div>'
+            +   '<div class="special-cach-group">' + m.nhomCach + ' · weight ' + m.weight + '</div>'
+            +   '<div class="special-cach-desc">' + m.description + '</div>'
+            +   (reasons ? '<div class="special-cach-reasons">' + reasons + '</div>' : '')
+            +   (m.source ? '<div class="special-cach-source">— ' + m.source + '</div>' : '')
+            + '</div>';
+    });
+    listEl.innerHTML = html;
+  }
+
+  function renderDomainRadar(bt) {
+    const section = document.getElementById('domain-radar-section');
+    if (typeof window.TuBinhDomainScores === 'undefined') {
+      console.warn('[tu-binh] TuBinhDomainScores not loaded'); return;
+    }
+    if (typeof Chart === 'undefined') return;
+    const ds = window.TuBinhDomainScores.tinhDomainScores(bt);
+    section.style.display = '';
+
+    const labelMap = {
+      suNghiep: 'Sự nghiệp', taiLoc: 'Tài lộc', sangTao: 'Sáng tạo',
+      hocVan: 'Học vấn', doiTac: 'Đối tác', honNhan: 'Hôn nhân', sucKhoe: 'Sức khỏe',
+    };
+    const order = ['suNghiep','taiLoc','sangTao','hocVan','doiTac','honNhan','sucKhoe'];
+    const labels = order.map(k => labelMap[k]);
+    const scores = order.map(k => ds[k].score);
+
+    // Radar chart (Chart.js v4)
+    const ctx = document.getElementById('domain-radar-chart').getContext('2d');
+    if (window._domainRadarChart) try { window._domainRadarChart.destroy(); } catch(e) {}
+    window._domainRadarChart = new Chart(ctx, {
+      type: 'radar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Điểm 7 trục',
+          data: scores,
+          borderColor: '#1455A4',
+          backgroundColor: 'rgba(20,85,164,0.20)',
+          pointBackgroundColor: '#9A7B3A',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 5,
+          borderWidth: 2,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (item) => {
+                const k = order[item.dataIndex];
+                return [labelMap[k] + ': ' + ds[k].score + '/10'].concat((ds[k].reasons||[]).map(r => '· ' + r));
+              }
+            }
+          }
+        },
+        scales: {
+          r: {
+            min: 0, max: 10,
+            ticks: { stepSize: 2, font: { size: 10 }, color: '#777', backdropColor: 'transparent' },
+            pointLabels: { font: { size: 12, family: 'Arial' }, color: '#061A2E' },
+            grid: { color: '#E8E8E8' },
+            angleLines: { color: '#CCC' },
+          }
+        }
+      }
+    });
+
+    // Bars list
+    let bhtml = '';
+    order.forEach(k => {
+      const v = ds[k];
+      const reasons = (v.reasons||[]).slice(0, 2).map(r => '· ' + r).join('<br>');
+      bhtml += '<div>'
+            +   '<div class="domain-bar-row">'
+            +     '<div class="domain-bar-name">' + labelMap[k] + '</div>'
+            +     '<div class="domain-bar-track"><div class="domain-bar-fill" style="width:' + (v.score*10) + '%"></div></div>'
+            +     '<div class="domain-bar-score">' + v.score + '</div>'
+            +   '</div>'
+            +   (reasons ? '<div class="domain-bar-reason">' + reasons + '</div>' : '')
+            + '</div>';
+    });
+    document.getElementById('domain-bars').innerHTML = bhtml;
+  }
+
   function renderDaiVanChartFromEngine(bt) {
     if (!bt?.daiVans?.length || typeof Chart === 'undefined') return;
     const section = document.getElementById('daivan-chart-section');
