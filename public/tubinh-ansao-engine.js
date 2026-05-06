@@ -1589,12 +1589,111 @@ function tinhBatTu({ ngayDL, thangDL, namDL, gio = 12, gioitinh = 'nam', namXem 
 }
 
 // ============================================================
+// BACKTEST API: tinhBatTuFromTuTru
+// Bypass dương → âm conversion. Caller provides tứ trụ trực tiếp.
+// Used for backtest harness against historical case studies.
+// ============================================================
+function tinhBatTuFromTuTru({ tuTru: tuTruInput, gioitinh = 'nam', namSinhDL = 1950, namXem }) {
+  if (!tuTruInput || tuTruInput.length !== 4) {
+    throw new Error('tuTru must be array of 4 {can, chi}');
+  }
+
+  // Synthesize full tuTru with tangCan + ten
+  const TEN_TRU = ['Năm', 'Tháng', 'Ngày', 'Giờ'];
+  const tuTru = tuTruInput.map((t, i) => ({
+    ten: TEN_TRU[i],
+    can: t.can,
+    chi: t.chi,
+    napAm: _napAm(t.can, t.chi),
+    tangCan: TANG_CAN[t.chi] || [],
+  }));
+  const nhatCan = tuTru[2].can;
+  const nhatChi = tuTru[2].chi;
+  const namXemFinal = namXem || new Date().getFullYear();
+
+  // Synthesize a JDN for đại vận khởi vận age. Without exact dương lịch,
+  // we use Jan 1 of namSinhDL as a proxy. This affects tuoiKhoiVan by ±5 years
+  // but does NOT affect đại vận sequence (which depends only on tháng pillar).
+  const jdnRaw = _jdFromDate_TB(1, 1, namSinhDL);
+
+  // Step 2: Thập thần
+  const thapThanData = {};
+  TEN_TRU.forEach((tenTru, i) => {
+    const tru = tuTru[i];
+    thapThanData[tenTru] = {
+      thienCan: i === 2 ? '—' : thapThan(nhatCan, tru.can),
+      tangCan: {},
+    };
+    (tru.tangCan || []).forEach(tc => {
+      thapThanData[tenTru].tangCan[tc.can] = (i === 2 && tc.can === nhatCan)
+        ? '—'
+        : thapThan(nhatCan, tc.can);
+    });
+  });
+
+  // Step 3-6: Cường nhược, ngũ hành, dụng thần, cách cục
+  const cuongNhuoc = _tinhCuongNhuoc(tuTru, nhatCan);
+  const nguHanh = _tinhNguHanhBalance(tuTru);
+  const dungThan = _chonDungThan(cuongNhuoc, nhatCan, tuTru, nguHanh);
+  const cachCuc = _xacDinhCachCuc(tuTru, nhatCan, dungThan);
+
+  // Step 7: Đại vận
+  const dvData = _tinhDaiVan(tuTru, nhatCan, gioitinh, jdnRaw, dungThan, namSinhDL, cuongNhuoc, cachCuc);
+
+  // Step 8: Đại vận hiện tại
+  const tuoiXem = namXemFinal - namSinhDL + 1;
+  let dvHienTai = null, dvKeTiep = null;
+  for (let i = 0; i < dvData.daiVans.length; i++) {
+    const dv = dvData.daiVans[i];
+    if (tuoiXem >= dv.tuoiStart && tuoiXem <= dv.tuoiEnd) {
+      dvHienTai = dv;
+      dvKeTiep = dvData.daiVans[i + 1] || null;
+      break;
+    }
+  }
+
+  // Step 9-11: Lưu niên, hợp/xung, thần sát
+  const luuNien = _tinhLuuNien(namXemFinal, nhatCan, tuTru, dungThan, cuongNhuoc, cachCuc, dvHienTai);
+  const hinhXungHaiHop = _tinhHinhXungHaiHop(tuTru);
+  const thanSat = _tinhThanSat(tuTru, nhatCan);
+
+  return {
+    input: { tuTru: tuTruInput, gioitinh, namSinhDL, namXem: namXemFinal, _bypass: true },
+    tuTru,
+    nhatCan,
+    nhatChi,
+    nhatCanHanh: NGU_HANH_CAN_TB[nhatCan],
+    nhatCanAmDuong: amDuongCan(nhatCan),
+    thapThan: thapThanData,
+    cuongNhuoc,
+    nguHanh,
+    dungThan,
+    cachCuc,
+    daiVans: dvData.daiVans,
+    tuoiKhoiVan: dvData.tuoiKhoiVan,
+    daiVanThuan: dvData.isThuan,
+    daiVanHienTai: dvHienTai,
+    daiVanKeTiep: dvKeTiep,
+    luuNien,
+    hinhXungHaiHop,
+    thanSat,
+    canChiNamSinh: { can: tuTru[0].can, chi: tuTru[0].chi },
+    solarYearAdjusted: false,
+    gioChi: tuTru[3].chi,
+    tuoiXem,
+    truongPhai: 'Tử Bình Chân Thuyên + Trích Thiên Tủy',
+    engineVersion: '1.0-bypass',
+  };
+}
+
+// ============================================================
 // EXPORTS
 // ============================================================
 if (typeof module !== 'undefined') {
   module.exports = {
     convertDuongToBatTu,
     tinhBatTu,
+    tinhBatTuFromTuTru,
     thapThan,
     nhomThapThan,
     amDuongCan,
