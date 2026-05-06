@@ -242,7 +242,54 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
 
   <div class="form-section">
     <div class="section-eyebrow">Nhập Thông Tin</div>
-    <div id="tubinh-form-container"></div>
+    <div id="tubinh-form-container">
+      <form id="tubinh-form" onsubmit="event.preventDefault(); window.tubinhSubmit();" style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px 18px;max-width:680px;margin:0 auto">
+        <div style="grid-column:1/-1">
+          <label style="display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px">Họ Tên</label>
+          <input id="hoten" type="text" placeholder="Họ và tên đầy đủ" required style="width:100%;padding:10px 12px;border:1px solid var(--border);font-size:14px;font-family:inherit">
+        </div>
+        <div>
+          <label style="display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px">Ngày Sinh (Dương)</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:6px">
+            <select id="ngay" required style="padding:10px 8px;border:1px solid var(--border);font-size:14px;font-family:inherit"><option value="">Ngày</option></select>
+            <select id="thang" required style="padding:10px 8px;border:1px solid var(--border);font-size:14px;font-family:inherit"><option value="">Tháng</option></select>
+            <select id="nam" required style="padding:10px 8px;border:1px solid var(--border);font-size:14px;font-family:inherit"><option value="">Năm</option></select>
+          </div>
+        </div>
+        <div>
+          <label style="display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px">Giờ Sinh</label>
+          <select id="gio" required style="width:100%;padding:10px 12px;border:1px solid var(--border);font-size:14px;font-family:inherit">
+            <option value="">-- Chọn giờ --</option>
+            <option value="0">Tý (23h–1h)</option>
+            <option value="2">Sửu (1h–3h)</option>
+            <option value="4">Dần (3h–5h)</option>
+            <option value="6">Mão (5h–7h)</option>
+            <option value="8">Thìn (7h–9h)</option>
+            <option value="10">Tỵ (9h–11h)</option>
+            <option value="12">Ngọ (11h–13h)</option>
+            <option value="14">Mùi (13h–15h)</option>
+            <option value="16">Thân (15h–17h)</option>
+            <option value="18">Dậu (17h–19h)</option>
+            <option value="20">Tuất (19h–21h)</option>
+            <option value="22">Hợi (21h–23h)</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px">Giới Tính</label>
+          <select id="gioitinh" required style="width:100%;padding:10px 12px;border:1px solid var(--border);font-size:14px;font-family:inherit">
+            <option value="nam">Nam</option>
+            <option value="nu">Nữ</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px">Năm Xem</label>
+          <input id="namxem" type="number" min="1900" max="2100" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-size:14px;font-family:inherit">
+        </div>
+        <div style="grid-column:1/-1;display:flex;justify-content:center;margin-top:12px">
+          <button type="submit" style="padding:14px 36px;background:var(--navy);color:#fff;border:none;font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background .2s" onmouseover="this.style.background='#0D3B5E'" onmouseout="this.style.background='var(--navy)'">Luận Giải Bát Tự →</button>
+        </div>
+      </form>
+    </div>
 
     <div class="status-bar" id="loader">
       <div class="status-dot"></div>
@@ -281,7 +328,6 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
 
 <!-- Engine + form + paywall -->
 <script src="/tubinh-ansao-engine.js"></script>
-<script src="/tuvi-form.js"></script>
 <script src="/tuvi-paywall2.js"></script>
 <script src="/nav.js"></script>
 
@@ -962,22 +1008,32 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
   }
 
   // ─── Init ────────────────────────────────────────────────────
+  function populateFormSelects() {
+    // Ngày 1-31
+    const sel_ngay = document.getElementById('ngay');
+    for (let i = 1; i <= 31; i++) sel_ngay.innerHTML += `<option value="${i}">${i}</option>`;
+    // Tháng 1-12
+    const sel_thang = document.getElementById('thang');
+    for (let i = 1; i <= 12; i++) sel_thang.innerHTML += `<option value="${i}">${i}</option>`;
+    // Năm 1940 → currentYear
+    const sel_nam = document.getElementById('nam');
+    const yNow = new Date().getFullYear();
+    for (let y = yNow; y >= 1940; y--) sel_nam.innerHTML += `<option value="${y}">${y}</option>`;
+    // Năm xem default = current
+    document.getElementById('namxem').value = yNow;
+  }
+
+  window.tubinhSubmit = function() {
+    analyze();
+  };
+
   function init() {
     if (!window.tinhBatTu) {
       console.error('tubinh-ansao-engine.js chưa load');
       showError('Engine chưa load — vui lòng refresh trang.');
       return;
     }
-    if (!window.TuviForm) {
-      console.error('tuvi-form.js chưa load');
-      showError('Form module chưa load — vui lòng refresh trang.');
-      return;
-    }
-
-    window.TuviForm.render('tubinh-form-container', {
-      submitLabel: 'Luận Giải Bát Tự →',
-      onSubmit: () => analyze(),
-    });
+    populateFormSelects();
 
     // Auto-resume từ session storage nếu vừa thanh toán
     const params = new URLSearchParams(window.location.search);
@@ -986,7 +1042,6 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
         const saved = JSON.parse(sessionStorage.getItem('tubinh_pending_form') || '{}');
         if (saved.hoten) {
           _autoUnlock = true;
-          // Trigger form submit programmatically
           setTimeout(() => {
             ['hoten','ngay','thang','nam','gio','gioitinh','namxem'].forEach(k => {
               const el = document.getElementById(k);
