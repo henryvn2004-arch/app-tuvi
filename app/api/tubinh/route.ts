@@ -273,11 +273,21 @@ const PHAN_INFO: Record<number, { ten: string; maxTokens: number }> = {
 };
 
 // ─── Prompt builder ────────────────────────────────────────────
-function buildPromptTuBinh(phan: number, batTuText: string, docs?: string): string {
-  const docsSection = docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : '';
-  const ctx = '=== BÁT TỰ ===\n' + batTuText + docsSection;
+// Returns 3 parts để split cache: batTu (constant per lá số), docs (per group), instructions (per phần)
+function buildPromptTuBinh(phan: number, batTuText: string, docs?: string): {
+  batTuBlock: string;
+  docsBlock: string;
+  instrBlock: string;
+} {
+  const batTuBlock = '=== BÁT TỰ ===\n' + batTuText;
+  const docsBlock  = docs ? '=== TÀI LIỆU THAM KHẢO ===\n' + docs : '';
+  const instrBlock = _phanInstruction(phan);
+  return { batTuBlock, docsBlock, instrBlock };
+}
 
-  if (phan === 1) return ctx + `
+// Per-phần instructions only (no context — context lives in batTuBlock + docsBlock above)
+function _phanInstruction(phan: number): string {
+  if (phan === 1) return `
 
 PHẦN 1 — TỔNG QUAN BÁT TỰ (300-400 từ)
 Viết văn xuôi liền mạch, không dùng bullet, không đề cập đại vận chi tiết trong phần này.
@@ -290,7 +300,7 @@ Cấu trúc gợi ý (không cần tiêu đề con):
 
 Lưu ý: Diễn giải, không liệt kê lại dữ liệu thô.`;
 
-  if (phan === 2) return ctx + `
+  if (phan === 2) return `
 
 PHẦN 2 — CÁCH CỤC (250-350 từ)
 Cách cục là khung chính của Bát Tự — quyết định "kiểu" số mệnh.
@@ -301,7 +311,7 @@ Viết văn xuôi súc tích:
 ③ Phối hợp với dụng thần: Dụng thần có hỗ trợ cách cục không hay xung khắc? Đây là then chốt phú quý vs lận đận.
 ④ Cảnh báo (nếu có): Cách cục có dấu hiệu phá hay không trọn vẹn? Nói thẳng.`;
 
-  if (phan === 3) return ctx + `
+  if (phan === 3) return `
 
 PHẦN 3 — QUAN SÁT (Sự nghiệp & Quyền uy) (180-240 từ)
 Quan tinh (Chính Quan + Thất Sát) là sao của sự nghiệp, quyền lực, danh phận, và áp lực xã hội.
@@ -312,7 +322,7 @@ Viết văn xuôi:
 ③ Phối với Nhật Can: Nhật can vượng đủ chế Sát không? Nhật can nhược thì Quan Sát có sinh ra Tài để hỗ trợ không?
 ④ Sự nghiệp thực tế: Hợp với nghề gì — nhà nước/tư nhân/tự do? Có phát quan không, hay khó leo cao?`;
 
-  if (phan === 4) return ctx + `
+  if (phan === 4) return `
 
 PHẦN 4 — TÀI (Tài chính & Của cải) (180-240 từ)
 Tài tinh (Chính Tài + Thiên Tài) là sao của tiền bạc, tài sản, và (với nam) là vợ.
@@ -323,7 +333,7 @@ Viết văn xuôi:
 ③ Tài có gốc không: Tài tinh có vượng không (đắc địa, đắc thế)? Hay tài bị kiếp tài cướp?
 ④ Khả năng tài chính thực tế: Kiếm tiền dễ hay khó? Giữ được tiền không? Phù hợp với nguồn tiền nào?`;
 
-  if (phan === 5) return ctx + `
+  if (phan === 5) return `
 
 PHẦN 5 — THỰC THƯƠNG (Sáng tạo & Tự do) (180-240 từ)
 Thực Thần và Thương Quan là sao của sáng tạo, tài năng, biểu đạt cá nhân, và tiết khí.
@@ -334,7 +344,7 @@ Viết văn xuôi:
 ③ Phối hợp Quan Sát: Thương Quan kỵ Quan (phá cách quan); Thực Thần chế Sát (tốt). Lá số có vướng không?
 ④ Tài năng & nghề nghiệp: Thực Thương mạnh thường có tài nghệ, sáng tạo, biểu diễn, viết lách. Hợp với gì?`;
 
-  if (phan === 6) return ctx + `
+  if (phan === 6) return `
 
 PHẦN 6 — ẤN (Học vấn & Mẹ & Quý nhân) (180-240 từ)
 Ấn tinh (Chính Ấn + Kiêu Thần) là sao của học vấn, bằng cấp, mẹ, sự che chở, và sinh khí cho Nhật Can.
@@ -345,7 +355,7 @@ Viết văn xuôi:
 ③ Vai trò sinh phù Nhật Can: Nhật can nhược thì Ấn là cứu tinh. Nhật can vượng có Ấn thêm thì quá vượng — phản tác dụng.
 ④ Học vấn & sự nghiệp tri thức: Ấn vượng thường thông minh, học giỏi, hợp nghiên cứu, giáo dục. Lá số này thế nào?`;
 
-  if (phan === 7) return ctx + `
+  if (phan === 7) return `
 
 PHẦN 7 — TỶ KIẾP (Anh em & Bạn bè & Cạnh tranh) (150-220 từ)
 Tỷ Kiên và Kiếp Tài là sao của anh chị em, bạn bè cùng vai vế, và sự cạnh tranh, phân chia tài lộc.
@@ -356,7 +366,7 @@ Viết văn xuôi:
 ③ Nhật can vượng có Tỷ Kiếp: Quá nhiều → cần Quan Sát chế. Nhật can nhược có Tỷ Kiếp: Là cứu tinh, sinh phù.
 ④ Quan hệ anh em & đối tác: Lá số này anh em có hợp tác không, hay tranh chấp tài sản? Đối tác làm ăn có bền không?`;
 
-  if (phan === 8) return ctx + `
+  if (phan === 8) return `
 
 PHẦN 8 — TÌNH DUYÊN & HÔN NHÂN (200-280 từ)
 Trục luận: nam lấy Tài làm vợ, nữ lấy Quan Sát làm chồng. Cung Phu Thê chính là Nhật Chi (chi của trụ ngày).
@@ -367,7 +377,7 @@ Viết văn xuôi:
 ③ Đào Hoa, Hồng Diễm: Có không? Tô điểm sắc thái duyên dáng, hay là dấu hiệu đa đoan?
 ④ Hôn nhân thực tế: Lập gia đình sớm/muộn? Hôn nhân thuận hay trắc trở? Có dấu hiệu kết hôn nhiều lần (xung phu thê cung, sao phối nhiều) không? Nói thẳng nhưng không phán định tuyệt đối.`;
 
-  if (phan === 9) return ctx + `
+  if (phan === 9) return `
 
 PHẦN 9 — SỨC KHỎE & THỂ TRẠNG (150-220 từ)
 Sức khỏe trong Tử Bình xét theo ngũ hành nhật can + cường nhược + cách cục.
@@ -378,7 +388,7 @@ Viết văn xuôi:
 ③ Hình xung trong tứ trụ: Tự hình, lục xung ở chi liên quan đến trụ nào → bộ phận đó dễ có vấn đề.
 ④ Lưu ý cụ thể: Một-hai điểm cần chú ý về sức khỏe (không chẩn đoán y khoa, chỉ gợi ý hướng quan sát).`;
 
-  if (phan === 10) return ctx + `
+  if (phan === 10) return `
 
 PHẦN 10 — HÌNH XUNG HẠI HỢP (180-240 từ)
 Quan hệ giữa các địa chi trong tứ trụ là động lực biến chuyển lá số.
@@ -391,7 +401,7 @@ Viết văn xuôi:
 
 Diễn giải tác động thực tế lên cuộc đời, không liệt kê lý thuyết.`;
 
-  if (phan === 11) return ctx + `
+  if (phan === 11) return `
 
 PHẦN 11 — THẦN SÁT (180-240 từ)
 Thần sát là dấu hiệu phụ — không quyết định cách cục nhưng tô đậm sắc thái.
@@ -404,7 +414,7 @@ Viết văn xuôi:
 
 Chỉ đề cập thần sát thực sự xuất hiện trong lá số. Nói cụ thể "vì sao quan trọng với người này".`;
 
-  if (phan === 12) return ctx + `
+  if (phan === 12) return `
 
 PHẦN 12 — TỔNG QUAN ĐẠI VẬN
 
@@ -420,7 +430,7 @@ Nhận xét tổng (250-350 từ):
 ④ Vượng/nhược nhật can ảnh hưởng cách đọc thế nào (vượng thì thích Quan/Sát/Thực; nhược thì thích Ấn/Tỷ Kiếp)?
 ⑤ Một dấu mốc giao thời quan trọng (chuyển đại vận có biên độ score lớn).`;
 
-  if (phan === 13) return ctx + `
+  if (phan === 13) return `
 
 PHẦN 13 — ĐẠI VẬN HIỆN TẠI (200-280 từ)
 Đại vận đang sống ở thời điểm hiện tại — quan trọng nhất.
@@ -431,7 +441,7 @@ Tìm "Đại Vận hiện tại" trong dữ liệu. Viết văn xuôi:
 ③ Tác động thực tế: Trong giai đoạn này, người này dễ gặp gì — thuận lợi sự nghiệp/tài lộc, vướng quan tinh, mất phương hướng, hay biến động lớn nếu có xung Nhật Chi?
 ④ Lời khuyên ngắn: 1-2 ý cụ thể nên làm/tránh trong giai đoạn này.`;
 
-  if (phan === 14) return ctx + `
+  if (phan === 14) return `
 
 PHẦN 14 — ĐẠI VẬN KẾ TIẾP (180-240 từ)
 Đại vận sắp tới — chuẩn bị cho 10 năm sau.
@@ -442,7 +452,7 @@ Tìm "Đại Vận kế tiếp" trong dữ liệu. Viết văn xuôi:
 ③ Cơ hội và thách thức: 1-2 cơ hội rõ + 1-2 điểm cần đề phòng.
 ④ Chuẩn bị từ bây giờ: Gợi ý vài việc nên làm trước khi vận đến.`;
 
-  if (phan === 15) return ctx + `
+  if (phan === 15) return `
 
 PHẦN 15 — LƯU NIÊN (Năm xem) (200-280 từ)
 Lưu niên là biến số trong khung đại vận. Năm này có can chi riêng, tương tác với tứ trụ và đại vận hiện tại. Theo cổ pháp, thái tuế (lưu niên) coi THIÊN CAN quan trọng hơn địa chi.
@@ -454,7 +464,7 @@ Tìm "LƯU NIÊN" trong dữ liệu. Viết văn xuôi:
 ④ Quan hệ với đại vận hiện tại: Năm tốt trong đại vận tốt = nhân đôi may mắn; năm xấu trong đại vận xấu = năm khó nhất; chéo nhau → cân bằng.
 ⑤ Tổng nhận định + 2-3 việc cụ thể nên làm/tránh trong năm này.`;
 
-  if (phan === 16) return ctx + `
+  if (phan === 16) return `
 
 PHẦN 16 — TỔNG KẾT (250-350 từ)
 Đây là phần cuối, đúc kết toàn bộ lá số thành 1 bức tranh tổng thể.
@@ -468,7 +478,7 @@ Viết văn xuôi liền mạch, không bullet:
 
 Văn phong tổng kết: trầm tĩnh, có chiều sâu, không phán định tuyệt đối, không hứa hẹn.`;
 
-  return ctx + `\nPhần ${phan}: Luận giải theo Bát Tự đã cho.`;
+  return `\nPhần ${phan}: Luận giải theo Bát Tự đã cho.`;
 }
 
 // ─── Route handlers ────────────────────────────────────────────
@@ -490,12 +500,26 @@ export async function POST(request: NextRequest) {
   const phanInfo = PHAN_INFO[phanNum];
   if (!phanInfo) return err(`Phần ${phanNum} không tồn tại (1-16)`, 400);
 
-  let prompt: string;
+  let parts;
   try {
-    prompt = buildPromptTuBinh(phanNum, batTuText, docs);
+    parts = buildPromptTuBinh(phanNum, batTuText, docs);
   } catch (e: unknown) {
     return err('buildPrompt error: ' + (e as Error).message);
   }
+
+  // Build user content với 3 blocks — 2 cache breakpoints (batTu + docs)
+  // System prompt cached → ~1500 tokens
+  // Block 1 batTu cached → constant per lá số (~1500 tokens) — hit cho cả 16 phần
+  // Block 2 docs cached → constant trong cùng group (~1500-2500 tokens) — hit cho phần cùng group
+  // Block 3 instructions varies → ~300-500 tokens không cache
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const userContent: any[] = [
+    { type: 'text', text: parts.batTuBlock, cache_control: { type: 'ephemeral' } },
+  ];
+  if (parts.docsBlock) {
+    userContent.push({ type: 'text', text: parts.docsBlock, cache_control: { type: 'ephemeral' } });
+  }
+  userContent.push({ type: 'text', text: parts.instrBlock });
 
   try {
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
@@ -511,7 +535,7 @@ export async function POST(request: NextRequest) {
         max_tokens: phanInfo.maxTokens,
         stream: true,
         system: [{ type: 'text', text: SYSTEM_PROMPT_TUBINH, cache_control: { type: 'ephemeral' } }],
-        messages: [{ role: 'user', content: [{ type: 'text', text: prompt, cache_control: { type: 'ephemeral' } }] }],
+        messages: [{ role: 'user', content: userContent }],
       }),
     });
 
