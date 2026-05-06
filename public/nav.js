@@ -1,4 +1,4 @@
-// nav.js — Shared navigation component v8
+// nav.js — Shared navigation component v9 (added Tử Bình)
 (function () {
   var path = window.location.pathname;
 
@@ -19,7 +19,7 @@
   // Active state detection
   var TUVI_PATHS   = ['/', '/luan-giai.html','/xem-tuoi.html','/xem-lam-an.html','/tools/xem-tuoi-sinh-con.html','/tools/an-sao.html','/tools/sao-nam.html','/tools/cach-cuc.html','/tools/dai-van.html','/tools/van-thang.html'];
   var TUONG_PATHS  = ['/tools/tuong-mat-ai.html','/tools/nhan-tuong-ai.html','/tools/thu-tuong-ai.html','/tools/thanh-tuong-ai.html','/tools/thanh-tuong-pro.html','/tools/khi-sac-ai.html'];
-  var LAM_DEP_PATHS = ['/tools/kieu-toc-ai.html','/tools/mau-sac-hop-menh.html','/tools/trang-diem-ai.html','/tools/trang-phuc-theo-ngay.html','/tools/da-lieu-ai.html','/tools/personal-color.html','/tools/xlook.html'];
+  var LAM_DEP_PATHS = ['/tools/kieu-toc-ai.html','/tools/mau-sac-hop-menh.html'];
   var PHONG_PATHS  = ['/tools/phong-thuy.html','/tools/ban-lam-viec.html','/tools/cua-hang-phong-thuy.html','/tools/bat-trach.html','/tools/kim-lau.html'];
   var NGAY_PATHS   = ['/tools/hoang-dao.html','/tools/ngay-tot.html','/tools/luc-nham.html','/tools/han-nam.html','/tools/chon-ngay-tot.html'];
   var TENCHU_PATHS = ['/tools/dat-ten-con.html','/tools/dat-ten-doanh-nghiep.html'];
@@ -134,12 +134,7 @@
     + '<div class="nav-dd-menu" id="nav-dd-dep-menu">'
     + ddSection('T\u01b0 V\u1ea5n Ngo\u1ea1i H\u00ecnh')
     + ddItem('/tools/kieu-toc-ai.html',       '\u2702\ufe0f', 'Ki\u1ec3u T\u00f3c H\u1ee3p T\u01b0\u1edbng M\u1eb7t')
-    + ddItem('/tools/trang-diem-ai.html',     '\ud83d\udc84', 'Trang \u0110i\u1ec3m H\u1ee3p T\u01b0\u1edbng')
-    + ddItem('/tools/trang-phuc-theo-ngay.html','\ud83d\udc57', 'Trang Ph\u1ee5c Theo Ng\u00e0y')
     + ddItem('/tools/mau-sac-hop-menh.html',  '\ud83c\udfa8', 'M\u00e0u S\u1eafc & Th\u1eed Trang Ph\u1ee5c')
-    + ddItem('/tools/da-lieu-ai.html',        '\ud83c\udf3f', 'Da Li\u1ec7u AI \u0110\u00f4ng T\u00e2y Y')
-    + ddItem('/tools/personal-color.html',    '\ud83c\udfa8', 'Personal Color AI')
-    + ddItem('/tools/xlook.html',             '\ud83d\udc57', 'xLook \u2014 T\u1ee7 \u0110\u1ed3 AI')
     + '</div></div>';
 
   // DD4 — Chọn Ngày
@@ -184,7 +179,9 @@
     + '<div><div class="name">T\u1eed Vi Minh B\u1ea3o</div><div class="url">Tri m\u1ec7nh l\u00fd \u2013 Thu\u1eadn th\u1ebf h\u00e0nh</div></div></a>'
     + '<div class="nav-links" id="nav-links">'
     + navLink('/', 'Trang Ch\u1ee7')
-    + dd1 + dd2 + dd3 + dd_dep + dd4 + dd5 + dd6
+    + dd1
+    + navLink('/tu-binh.html', 'T\u1eed B\u00ecnh')
+    + dd2 + dd3 + dd_dep + dd4 + dd5 + dd6
     + navLink('/blog.html', 'Kh\u1ea3o Lu\u1eadn')
     + '</div>'
     + '<div id="nav-auth-area"></div>'
@@ -224,26 +221,23 @@
   document.addEventListener('click', closeAll);
 
   // ── Footer ────────────────────────────────────────────────────
-  // Cấu trúc: Brand | Công Cụ (link hub pages) | Kiến Thức (content) | Thông Tin (legal/info)
   var footerCss = [
     '.site-footer{background:#1A1210;color:rgba(255,255,255,0.5);padding:48px 40px 24px;margin-top:auto}',
     '.ft-body{max-width:1100px;margin:0 auto}',
-    '.ft-top{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:40px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:20px}',
+    '.ft-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:20px}',
     '.ft-brand-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}',
     '.ft-brand-row img{width:36px;height:36px;object-fit:contain;border-radius:5px;opacity:0.9}',
     '.ft-brand-name{font-size:14px;font-weight:700;color:rgba(255,255,255,0.85);font-family:Georgia,serif;line-height:1.2}',
     '.ft-brand-zh{font-size:11px;color:#C9A84C}',
-    '.ft-tagline{font-size:12px;color:rgba(255,255,255,0.3);line-height:1.7;max-width:240px;margin-top:4px}',
+    '.ft-tagline{font-size:12px;color:rgba(255,255,255,0.3);line-height:1.7;max-width:240px}',
     '.ft-col-title{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#9A7B3A;margin-bottom:14px}',
     '.ft-col a{display:block;font-size:13px;color:rgba(255,255,255,0.45)!important;text-decoration:none!important;margin-bottom:9px;transition:color .15s;background:none!important;border:none!important;padding:0!important}',
     '.ft-col a:hover{color:rgba(255,255,255,0.85)!important}',
     '.ft-bottom{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(255,255,255,0.2);gap:16px;flex-wrap:wrap}',
-    '.ft-bottom a{font-size:11px;color:rgba(255,255,255,0.2)!important;text-decoration:none!important}',
-    '.ft-bottom a:hover{color:rgba(255,255,255,0.5)!important}',
     '.ft-bottom img{width:20px;height:20px;object-fit:contain;opacity:0.25;border-radius:3px}',
     '.ft-disclaimer{font-size:10px;color:rgba(255,255,255,0.15);line-height:1.6;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.05);text-align:center}',
-    '@media(max-width:960px){.ft-top{grid-template-columns:1fr 1fr;gap:28px}.ft-brand{grid-column:1/-1}}',
-    '@media(max-width:600px){.site-footer{padding:40px 20px 20px}.ft-top{grid-template-columns:1fr 1fr;gap:24px}.ft-brand{grid-column:1/-1}.ft-bottom{flex-direction:column;align-items:flex-start;gap:8px}}'
+    '@media(max-width:900px){.ft-top{grid-template-columns:1fr 1fr;gap:28px}.ft-brand{grid-column:1/-1}}',
+    '@media(max-width:600px){.site-footer{padding:40px 20px 20px}.ft-top{grid-template-columns:1fr 1fr;gap:24px}.ft-brand{grid-column:1/-1}.ft-bottom{flex-direction:column;align-items:flex-start;gap:4px}}'
   ].join('');
 
   if (!document.getElementById('footer-css')) {
@@ -252,52 +246,26 @@
 
   function injectFooter() {
     var f = '<footer class="site-footer"><div class="ft-body"><div class="ft-top">'
-
-      // Col 1 — Brand
-      + '<div class="ft-brand">'
-      + '<div class="ft-brand-row"><img src="/seal.webp" alt="">'
-      + '<div><div class="ft-brand-name">T\u1eed Vi Minh B\u1ea3o</div>'
-      + '<div class="ft-brand-zh">Tri m\u1ec7nh l\u00fd \u2013 Thu\u1eadn th\u1ebf h\u00e0nh</div></div></div>'
-      + '<div class="ft-tagline">Tri m\u1ec7nh nhi h\u00e0nh \u2014 v\u00f4 \u01b0u v\u00f4 ho\u1eb7c.</div>'
-      + '</div>'
-
-      // Col 2 — Công Cụ (links to hub pages)
-      + '<div class="ft-col"><div class="ft-col-title">C\u00f4ng C\u1ee5</div>'
-      + '<a href="/luan-giai.html">Lu\u1eadn Gi\u1ea3i T\u1eed Vi</a>'
-      + '<a href="/xem-tuong.html">Xem T\u01b0\u1edbng</a>'
-      + '<a href="/phong-thuy.html">Phong Th\u1ee7y</a>'
-      + '<a href="/lam-dep.html">L\u00e0m \u0110\u1eb9p</a>'
-      + '<a href="/chon-ngay.html">Ch\u1ecdn Ng\u00e0y</a>'
-      + '<a href="/dat-ten.html">\u0110\u1eb7t T\u00ean</a>'
-      + '</div>'
-
-      // Col 3 — Kiến Thức
-      + '<div class="ft-col"><div class="ft-col-title">Ki\u1ebfn Th\u1ee9c</div>'
-      + '<a href="/tu-dien">T\u1eeb \u0110i\u1ec3n</a>'
+      + '<div class="ft-brand"><div class="ft-brand-row"><img src="/seal.webp" alt=""><div><div class="ft-brand-name">T\u1eed Vi Minh B\u1ea3o</div><div class="ft-brand-zh">Tri m\u1ec7nh l\u00fd \u2013 Thu\u1eadn th\u1ebf h\u00e0nh</div></div></div><div class="ft-tagline">T\u1eed vi \u0111\u1ea9u s\u1ed1 theo c\u1ed5 ph\u00e1p, lu\u1eadn gi\u1ea3i b\u1eb1ng AI.</div></div>'
+      + '<div class="ft-col"><div class="ft-col-title">T\u1eed Vi</div>'
+      + '<a href="/luan-giai.html">Lu\u1eadn Gi\u1ea3i L\u00e1 S\u1ed1</a>'
+      + '<a href="/tu-binh.html">T\u1eed B\u00ecnh B\u00e1t T\u1ef1</a>'
+      + '<a href="/xem-tuoi.html">Xem Tu\u1ed5i V\u1ee3 Ch\u1ed3ng</a>'
+      + '<a href="/tools/an-sao.html">An Sao L\u00e1 S\u1ed1</a>'
+      + '<a href="/blog.html">Kh\u1ea3o Lu\u1eadn</a></div>'
+      + '<div class="ft-col"><div class="ft-col-title">Phong Th\u1ee7y & Xem T\u01b0\u1edbng</div>'
+      + '<a href="/tools/phong-thuy.html">Phong Th\u1ee7y N\u1ed9i Th\u1ea5t</a>'
+      + '<a href="/tools/bat-trach.html">H\u01b0\u1edbng B\u00e1t Tr\u1ea1ch</a>'
+      + '<a href="/tools/tuong-mat-ai.html">Xem T\u01b0\u1edbng M\u1eb7t</a>'
+      + '<a href="/tools/kieu-toc-ai.html">Ki\u1ec3u T\u00f3c H\u1ee3p T\u01b0\u1edbng</a>'
+      + '<a href="/tools/mau-sac-hop-menh.html">M\u00e0u S\u1eafc & Th\u1eed Trang Ph\u1ee5c</a></div>'
+      + '<div class="ft-col"><div class="ft-col-title">V\u1ec1 Ch\u00fang T\u00f4i</div>'
+      + '<a href="/about.html">Gi\u1edbi Thi\u1ec7u</a>'
       + '<a href="/resources.html">T\u00e0i Li\u1ec7u</a>'
       + '<a href="/menh-kho.html">M\u1ec7nh Kh\u1ed1</a>'
-      + '<a href="/blog.html">Kh\u1ea3o Lu\u1eadn</a>'
-      + '<a href="/kien-thuc-tuvi.html">L\u00fd Thuy\u1ebft C\u1ed5 Ph\u00e1p</a>'
+      + '<a href="/contact.html">Li\u00ean H\u1ec7</a></div>'
       + '</div>'
-
-      // Col 4 — Thông Tin
-      + '<div class="ft-col"><div class="ft-col-title">Th\u00f4ng Tin</div>'
-      + '<a href="/about.html">Gi\u1edbi Thi\u1ec7u</a>'
-      + '<a href="/contact.html">Li\u00ean H\u1ec7</a>'
-      + '<a href="/faqs.html">FAQs</a>'
-      + '<a href="/huong-dan-thanh-toan.html">H\u01b0\u1edbng D\u1eabn Thanh To\u00e1n</a>'
-      + '<a href="/chinh-sach-bao-mat.html">Ch\u00ednh S\u00e1ch B\u1ea3o M\u1eadt</a>'
-      + '<a href="/dieu-khoan-dich-vu.html">\u0110i\u1ec1u Kho\u1ea3n D\u1ecbch V\u1ee5</a>'
-      + '</div>'
-
-      + '</div>'
-      + '<div class="ft-bottom">'
-      + '<span>\u00a9 2025 T\u1eed Vi Minh B\u1ea3o \u2014 tuviminhbao.com</span>'
-      + '<div style="display:flex;gap:16px;align-items:center">'
-      + '<a href="/chinh-sach-bao-mat.html">B\u1ea3o M\u1eadt</a>'
-      + '<a href="/dieu-khoan-dich-vu.html">\u0110i\u1ec1u Kho\u1ea3n</a>'
-      + '<img src="/seal.webp" alt="">'
-      + '</div></div>'
+      + '<div class="ft-bottom"><span>\u00a9 2025 T\u1eed Vi Minh B\u1ea3o \u2014 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>'
       + '<div class="ft-disclaimer">N\u1ed9i dung lu\u1eadn gi\u1ea3i mang t\u00ednh tham kh\u1ea3o, kh\u00f4ng th\u1ea3y th\u1ebf t\u01b0 v\u1ea5n chuy\u00ean m\u00f4n.</div>'
       + '</div></footer>';
     var ft=document.createElement('div'); ft.innerHTML=f; document.body.appendChild(ft.firstChild);
@@ -305,5 +273,6 @@
 
   function runFooter() { var o=document.querySelector('footer.site-footer'); if(o)o.remove(); injectFooter(); }
   if (document.readyState==='loading') { document.addEventListener('DOMContentLoaded',function(){setTimeout(runFooter,0);}); }
+  else { setTimeout(runFooter,0); }
 
 })();
