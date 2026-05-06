@@ -163,6 +163,28 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
 .intro-step-title { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
 .intro-step-desc { font-size: 13px; color: var(--text-lt); line-height: 1.6; }
 
+/* FORM CSS (cho TuviForm shared component) */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; border: 1px solid var(--border); }
+.form-col { padding: 32px 32px 36px; border-right: 1px solid var(--border); }
+.form-col:last-child { border-right: none; }
+.form-col-title { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--navy); margin-bottom: 28px; padding-bottom: 14px; border-bottom: 2px solid var(--navy); }
+.form-group { margin-bottom: 24px; }
+.form-label { display: block; font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 8px; }
+.form-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--border); padding: 10px 0; font-size: 16px; color: var(--text); font-family: Arial, sans-serif; outline: none; transition: border-color 0.2s; }
+.form-input:focus { border-color: var(--navy); }
+.form-input::placeholder { color: #C4C4C4; }
+select.form-input { cursor: pointer; }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.btn-submit { width: 100%; background: var(--navy); color: white; border: none; padding: 16px; font-family: Arial, sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; cursor: pointer; transition: background 0.2s; margin-top: 4px; }
+.btn-submit:hover { background: var(--navy-mid); }
+.btn-submit:disabled { background: #aaa; cursor: not-allowed; }
+.btn-group-submit { display: flex; flex-direction: column; gap: 10px; }
+@media (max-width: 800px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .form-col { border-right: none; border-bottom: 1px solid var(--border); }
+  .form-col:last-child { border-bottom: none; }
+}
+
 /* DAI VAN CHART (pre-rendered từ engine data) */
 .daivan-chart-section { background: #fff; border: 1px solid var(--border); padding: 24px; margin-bottom: 32px; }
 .daivan-chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
@@ -279,54 +301,7 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
 
   <div class="form-section">
     <div class="section-eyebrow">Nhập Thông Tin</div>
-    <div id="tubinh-form-container">
-      <form id="tubinh-form" onsubmit="event.preventDefault(); window.tubinhSubmit();" style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px 18px;max-width:680px;margin:0 auto">
-        <div style="grid-column:1/-1">
-          <label style="display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px">Họ Tên</label>
-          <input id="hoten" type="text" placeholder="Họ và tên đầy đủ" required style="width:100%;padding:10px 12px;border:1px solid var(--border);font-size:14px;font-family:inherit">
-        </div>
-        <div>
-          <label style="display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px">Ngày Sinh (Dương)</label>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:6px">
-            <select id="ngay" required style="padding:10px 8px;border:1px solid var(--border);font-size:14px;font-family:inherit"><option value="">Ngày</option></select>
-            <select id="thang" required style="padding:10px 8px;border:1px solid var(--border);font-size:14px;font-family:inherit"><option value="">Tháng</option></select>
-            <select id="nam" required style="padding:10px 8px;border:1px solid var(--border);font-size:14px;font-family:inherit"><option value="">Năm</option></select>
-          </div>
-        </div>
-        <div>
-          <label style="display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px">Giờ Sinh</label>
-          <select id="gio" required style="width:100%;padding:10px 12px;border:1px solid var(--border);font-size:14px;font-family:inherit">
-            <option value="">-- Chọn giờ --</option>
-            <option value="0">Tý (23h–1h)</option>
-            <option value="2">Sửu (1h–3h)</option>
-            <option value="4">Dần (3h–5h)</option>
-            <option value="6">Mão (5h–7h)</option>
-            <option value="8">Thìn (7h–9h)</option>
-            <option value="10">Tỵ (9h–11h)</option>
-            <option value="12">Ngọ (11h–13h)</option>
-            <option value="14">Mùi (13h–15h)</option>
-            <option value="16">Thân (15h–17h)</option>
-            <option value="18">Dậu (17h–19h)</option>
-            <option value="20">Tuất (19h–21h)</option>
-            <option value="22">Hợi (21h–23h)</option>
-          </select>
-        </div>
-        <div>
-          <label style="display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px">Giới Tính</label>
-          <select id="gioitinh" required style="width:100%;padding:10px 12px;border:1px solid var(--border);font-size:14px;font-family:inherit">
-            <option value="nam">Nam</option>
-            <option value="nu">Nữ</option>
-          </select>
-        </div>
-        <div>
-          <label style="display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px">Năm Xem</label>
-          <input id="namxem" type="number" min="1900" max="2100" style="width:100%;padding:10px 12px;border:1px solid var(--border);font-size:14px;font-family:inherit">
-        </div>
-        <div style="grid-column:1/-1;display:flex;justify-content:center;margin-top:12px">
-          <button type="submit" style="padding:14px 36px;background:var(--navy);color:#fff;border:none;font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background .2s" onmouseover="this.style.background='#0D3B5E'" onmouseout="this.style.background='var(--navy)'">Luận Giải Bát Tự →</button>
-        </div>
-      </form>
-    </div>
+    <div id="tubinh-form-container"></div>
 
     <div class="status-bar" id="loader">
       <div class="status-dot"></div>
@@ -409,6 +384,7 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
 
 <!-- Engine + form + paywall -->
 <script src="/tubinh-ansao-engine.js"></script>
+<script src="/tuvi-form.js"></script>
 <script src="/tuvi-paywall2.js"></script>
 <script src="/chatbot.js"></script>
 <script src="/nav.js"></script>
@@ -533,8 +509,12 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
     bt.daiVans.forEach((dv, i) => {
       const isCur = bt.daiVanHienTai && bt.daiVanHienTai.idx === dv.idx;
       lines.push(`ĐV${i+1}: ${dv.can} ${dv.chi} (${dv.tuoiStart}–${dv.tuoiEnd}t, ${dv.namStart}–${dv.namEnd}) ${isCur?'← ĐANG XEM':''}`);
-      lines.push(`  Thập thần: ${dv.thapThanCan} | Hành can: ${dv.hanhCan} | Hành chi: ${dv.hanhChi} | NA: ${dv.napAm}`);
-      lines.push(`  Score: ${dv.score}/10 | cungScores: tiềm năng=${dv.cungScores.tiemNang}, bền vững=${dv.cungScores.benVung}, an toàn=${dv.cungScores.anToan}, quý nhân=${dv.cungScores.quyNhan}, minh bạch=${dv.cungScores.minhBach}, tương hợp=${dv.cungScores.tuongHop}`);
+      lines.push(`  Thập thần: ${dv.thapThanCan} (can) / ${dv.thapThanChi||'-'} (chi) | Hành: ${dv.hanhCan}-${dv.hanhChi} | NA: ${dv.napAm}`);
+      lines.push(`  Score: ${dv.score}/10 — ${dv.label.toUpperCase()}`);
+      if (dv.factors?.length) {
+        const factorTexts = dv.factors.map(f => `${f.delta>=0?'+':''}${f.delta.toFixed(1)} ${f.text}`).join(' | ');
+        lines.push(`  Yếu tố: ${factorTexts}`);
+      }
     });
     lines.push('');
 
@@ -543,8 +523,12 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
       const ln = bt.luuNien;
       lines.push('=== LƯU NIÊN (NĂM XEM) ===');
       lines.push(`${ln.nam}: ${ln.can} ${ln.chi} | NA: ${ln.napAm}`);
-      lines.push(`Thập thần: ${ln.thapThanCan} | Hành can: ${ln.hanhCan} | Hành chi: ${ln.hanhChi}`);
-      lines.push(`Score: ${ln.score}/10`);
+      lines.push(`Thập thần: ${ln.thapThanCan} (can) / ${ln.thapThanChi||'-'} (chi) | Hành can: ${ln.hanhCan} | Hành chi: ${ln.hanhChi}`);
+      lines.push(`Score: ${ln.score}/10 — ${ln.label.toUpperCase()}`);
+      if (ln.factors?.length) {
+        const factorTexts = ln.factors.map(f => `${f.delta>=0?'+':''}${f.delta.toFixed(1)} ${f.text}`).join(' | ');
+        lines.push(`Yếu tố: ${factorTexts}`);
+      }
       const r = ln.relations;
       if (r.hopVoi?.length)    lines.push(`  Hợp với: ${r.hopVoi.join('; ')}`);
       if (r.xungVoi?.length)   lines.push(`  Xung với: ${r.xungVoi.join('; ')}`);
@@ -645,7 +629,7 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
     html += `<div class="info-card"><div class="info-card-label">Cường Nhược</div><div class="info-card-val">${cn.label}</div><div class="info-card-note">${cn.score}/10 ${cn.dacLenh?'· đắc lệnh':'· không đắc lệnh'}</div></div>`;
     html += `<div class="info-card"><div class="info-card-label">Dụng Thần</div><div class="info-card-val">${dt.primary}${dt.secondary?` / ${dt.secondary}`:''}</div><div class="info-card-note">${dt.method}</div></div>`;
     html += `<div class="info-card"><div class="info-card-label">Cách Cục</div><div class="info-card-val" style="font-size:15px">${cc.primary}</div><div class="info-card-note">${cc.thanhPhaCach}</div></div>`;
-    if (dvh) html += `<div class="info-card"><div class="info-card-label">Đại Vận Hiện Tại</div><div class="info-card-val">${dvh.can} ${dvh.chi}</div><div class="info-card-note">${dvh.tuoiStart}–${dvh.tuoiEnd}t · ${dvh.thapThanCan} · ${dvh.score}/10</div></div>`;
+    if (dvh) html += `<div class="info-card"><div class="info-card-label">Đại Vận Hiện Tại</div><div class="info-card-val">${dvh.can} ${dvh.chi}</div><div class="info-card-note">${dvh.tuoiStart}–${dvh.tuoiEnd}t · ${dvh.thapThanCan} · ${dvh.score}/10 (${dvh.label})</div></div>`;
     else html += `<div class="info-card"><div class="info-card-label">Khởi Vận</div><div class="info-card-val">${bt.tuoiKhoiVan}t</div><div class="info-card-note">${bt.daiVanThuan?'thuận hành':'nghịch hành'}</div></div>`;
     document.getElementById('info-cards').innerHTML = html;
   }
@@ -726,54 +710,42 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
       return;
     }
 
-    const hoten    = document.getElementById('hoten').value.trim();
-    const ngay     = parseInt(document.getElementById('ngay').value);
-    const thang    = parseInt(document.getElementById('thang').value);
-    const nam      = parseInt(document.getElementById('nam').value);
-    const gio      = document.getElementById('gio').value;
-    const gioitinh = document.getElementById('gioitinh').value;
-    const namXemEl = document.getElementById('namxem');
-    const namXem   = namXemEl ? parseInt(namXemEl.value) : new Date().getFullYear();
+    const data = window.TuviForm.getData();
 
-    if (!hoten || !ngay || !thang || !nam || gio === '') {
-      showError('Vui lòng nhập đầy đủ thông tin.');
+    if (!data.hoten || !data.ngay || !data.thang || !data.nam) {
+      showError('Vui lòng nhập đầy đủ họ tên, ngày tháng năm sinh.');
       return;
     }
+
+    // Save form to sessionStorage (auto-resume nếu user đi nạp credits xong quay lại)
+    try { sessionStorage.setItem('tubinh_pending_form', JSON.stringify(data)); } catch(e) {}
 
     showError('');
     showLoader(true);
     document.getElementById('phan-progress').textContent = 'Đang an tứ trụ...';
 
     try {
-      // gioIdx: 0=Tý..23 (giờ chi). tubinh-engine convertDuongToBatTu nhận hour 0-23
-      // tuvi-form input value: '0','2','4'..'22' (gioIdx*2). Để tương thích, ép kiểu.
-      const gioIdx = parseInt(gio);  // 0..22 dạng giờ chính (Tý=23 hay 0 đều OK)
-      // tubinh engine expects 24h format. Convert gioIdx*2 → hour midpoint.
-      // gioIdx=0 (Tý): hour=23 (để đúng giờ Tý sớm boundary)
-      // gioIdx=1..11: hour = gioIdx*2
-      // Nhưng tuvi-form trả 0,2,4,..22 = chính giờ. Convert đơn giản: hour = gioIdx (0,2,4..22 đã là giờ thật).
-      // Edge case: giờ Tý (0) — nhập 0 hay 23 đều ra giờ Tý qua Math.floor((h+1)/2)%12.
-      const hour = isNaN(gioIdx) ? 12 : gioIdx;
-
+      // TuviForm trả về gioHour (0-23) đã convert sang VN time theo UTC offset.
+      // Engine tinhBatTu nhận gio là hour 0-23 (giờ ≥23 → bumps day theo cổ pháp Tử Bình).
       const bt = window.tinhBatTu({
-        ngayDL: ngay, thangDL: thang, namDL: nam,
-        gio: hour, gioitinh, namXem,
+        ngayDL:   data.ngay,
+        thangDL:  data.thang,
+        namDL:    data.nam,
+        gio:      data.gioHour,
+        gioitinh: data.gioitinh,
+        namXem:   data.namXem,
       });
 
-      _hoTen = hoten; _ngay = ngay; _thang = thang; _nam = nam; _gio = hour;
-      _gioitinh = gioitinh; _namXem = namXem;
+      _hoTen = data.hoten; _ngay = data.ngay; _thang = data.thang; _nam = data.nam;
+      _gio = data.gioHour; _gioitinh = data.gioitinh; _namXem = data.namXem;
       _batTu = bt;
       _batTuText = formatBatTuToText(bt);
 
       window._bttuResult = bt;
 
-      // Render
       displayResult();
-
-      // Check paywall
       await checkAndRenderPaywall();
 
-      // Auto-unlock nếu vừa thanh toán xong
       if (_autoUnlock) {
         _autoUnlock = false;
         await luanGiaiAll();
@@ -873,7 +845,7 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
                 const dv = bt.daiVans[item.dataIndex];
                 return [
                   `${dv.can} ${dv.chi} (${dv.thapThanCan})`,
-                  `Score: ${dv.score}/10`,
+                  `Score: ${dv.score}/10 — ${dv.label}`,
                   `${dv.namStart}-${dv.namEnd}`,
                 ];
               }
@@ -1206,32 +1178,24 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
   }
 
   // ─── Init ────────────────────────────────────────────────────
-  function populateFormSelects() {
-    // Ngày 1-31
-    const sel_ngay = document.getElementById('ngay');
-    for (let i = 1; i <= 31; i++) sel_ngay.innerHTML += `<option value="${i}">${i}</option>`;
-    // Tháng 1-12
-    const sel_thang = document.getElementById('thang');
-    for (let i = 1; i <= 12; i++) sel_thang.innerHTML += `<option value="${i}">${i}</option>`;
-    // Năm 1940 → currentYear
-    const sel_nam = document.getElementById('nam');
-    const yNow = new Date().getFullYear();
-    for (let y = yNow; y >= 1940; y--) sel_nam.innerHTML += `<option value="${y}">${y}</option>`;
-    // Năm xem default = current
-    document.getElementById('namxem').value = yNow;
-  }
-
-  window.tubinhSubmit = function() {
-    analyze();
-  };
-
   function init() {
     if (!window.tinhBatTu) {
       console.error('tubinh-ansao-engine.js chưa load');
       showError('Engine chưa load — vui lòng refresh trang.');
       return;
     }
-    populateFormSelects();
+    if (!window.TuviForm) {
+      console.error('tuvi-form.js chưa load');
+      showError('Form module chưa load — vui lòng refresh trang.');
+      return;
+    }
+
+    // Render shared form (full mode = 3-col layout)
+    window.TuviForm.render('tubinh-form-container', {
+      submitLabel: 'Luận Giải Bát Tự →',
+      onSubmit: () => analyze(),
+      showSample: false,
+    });
 
     // Auto-resume từ session storage nếu vừa thanh toán
     const params = new URLSearchParams(window.location.search);
@@ -1241,10 +1205,7 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
         if (saved.hoten) {
           _autoUnlock = true;
           setTimeout(() => {
-            ['hoten','ngay','thang','nam','gio','gioitinh','namxem'].forEach(k => {
-              const el = document.getElementById(k);
-              if (el && saved[k] != null) el.value = saved[k];
-            });
+            window.TuviForm.setData(saved);
             analyze();
           }, 300);
         }

@@ -111,6 +111,9 @@ const NGU_HANH_CHI_TB = {
 };
 const NGU_HANH_SINH_TB = {'Mộc':'Hỏa','Hỏa':'Thổ','Thổ':'Kim','Kim':'Thủy','Thủy':'Mộc'};
 const NGU_HANH_KHAC_TB = {'Kim':'Mộc','Mộc':'Thổ','Thổ':'Thủy','Thủy':'Hỏa','Hỏa':'Kim'};
+// KHAC_BY_TB: hành X bị hành nào khắc (kỵ thần thực sự)
+// 'Mộc':'Kim' nghĩa là Mộc bị Kim khắc → kỵ thần của dụng thần Mộc là Kim
+const KHAC_BY_TB = {'Mộc':'Kim','Hỏa':'Thủy','Thổ':'Mộc','Kim':'Hỏa','Thủy':'Thổ'};
 
 // ─── TÀNG CAN ──────────────────────────────────────────────
 // Mỗi chi chứa: chính khí (bản khí), trung khí, dư khí.
@@ -523,17 +526,17 @@ function _chonDungThan(cuongNhuoc, nhatCan, tuTru, nguHanh) {
     method = 'chuyên-vượng';
     rationale = `Nhật Can ${nhatCan} cực vượng, tứ trụ chuyên một hành — thuận theo thế chuyên vượng, dụng hành ${primary}.`;
   } else if (cuongNhuoc.score >= 6.5) {
-    // Vượng → khắc/tiết
-    const khacHanh = NGU_HANH_KHAC_TB[nhatHanh];   // hành khắc nhật can (Quan Sát)
-    const tietHanh = NGU_HANH_SINH_TB[nhatHanh];   // hành nhật can sinh (Thực Thương)
-    const taiHanh  = NGU_HANH_KHAC_TB[NGU_HANH_KHAC_TB[nhatHanh]]; // hành nhật can khắc (Tài)
-    // Ưu tiên: nếu Quan Sát có gốc → dùng; nếu không, dùng Thực Thương; phụ là Tài
-    if (nguHanh.weighted[khacHanh] >= 1.5) {
-      primary = khacHanh; secondary = taiHanh;
-    } else if (nguHanh.weighted[tietHanh] >= 1) {
-      primary = tietHanh; secondary = taiHanh;
+    // Vượng → khắc/tiết/hao thân
+    const quanSatHanh = KHAC_BY_TB[nhatHanh];           // hành khắc nhật can = Quan Sát (FIX)
+    const tietHanh    = NGU_HANH_SINH_TB[nhatHanh];     // hành nhật can sinh = Thực Thương
+    const taiHanh     = NGU_HANH_KHAC_TB[nhatHanh];     // hành nhật can khắc = Tài
+    // Cổ pháp ưu tiên: Quan Sát có gốc → dụng; nếu không, Thực Thương; phụ là Tài (sinh Quan)
+    if (nguHanh.weighted[quanSatHanh] >= 1.5) {
+      primary = quanSatHanh; secondary = taiHanh; // Tài sinh Quan
+    } else if (nguHanh.weighted[tietHanh] >= 1.5) {
+      primary = tietHanh; secondary = taiHanh;    // Thực tiết khí + Tài
     } else {
-      primary = taiHanh; secondary = tietHanh;
+      primary = taiHanh; secondary = tietHanh;    // Tài hao thân + Thực sinh Tài
     }
     method = 'phù-ức (chế)';
     rationale = `Nhật Can ${nhatCan} ${cuongNhuoc.label.toLowerCase()} (đắc lệnh tháng ${monthHanh}, đắc địa ${cuongNhuoc.dacDia}, đắc thế ${cuongNhuoc.dacThe}). Cần ${primary} để chế, hỉ thần ${secondary}.`;
@@ -715,10 +718,12 @@ function _xacDinhCachCuc(tuTru, nhatCan, dungThan) {
 // ============================================================
 // ĐẠI VẬN
 // ============================================================
-function _tinhDaiVan(tuTru, nhatCan, gioitinh, jdnRaw, dungThan, namSinhDL) {
+function _tinhDaiVan(tuTru, nhatCan, gioitinh, jdnRaw, dungThan, namSinhDL, cuongNhuoc, cachCuc) {
   const yearCan = tuTru[0].can;
   const monthCan = tuTru[1].can;
   const monthChi = tuTru[1].chi;
+  const nhatHanh = NGU_HANH_CAN_TB[nhatCan];
+  const nhatChi = tuTru[2].chi;
 
   // Chiều: Dương Nam / Âm Nữ → thuận; Âm Nam / Dương Nữ → nghịch
   const yearAD = amDuongCan(yearCan);
@@ -726,10 +731,7 @@ function _tinhDaiVan(tuTru, nhatCan, gioitinh, jdnRaw, dungThan, namSinhDL) {
                   (yearAD === 'âm'    && gioitinh === 'nu');
 
   // Khởi vận age: đếm ngày từ sinh đến tiết khí gần nhất theo chiều
-  // (thuận → tiết khí kế tiếp; nghịch → tiết khí trước đó)
   const TIET_DEGS = [315, 345, 15, 45, 75, 105, 135, 165, 195, 225, 255, 285];
-  // Tìm tiết khí trước và sau jdnRaw
-  // Đơn giản: thử mỗi tiết, tìm jdn gần nhất
   let nearestForward = null, nearestBackward = null;
   for (const yy of [namSinhDL - 1, namSinhDL, namSinhDL + 1]) {
     for (const deg of TIET_DEGS) {
@@ -741,19 +743,32 @@ function _tinhDaiVan(tuTru, nhatCan, gioitinh, jdnRaw, dungThan, namSinhDL) {
   }
 
   let daysDiff;
-  if (isThuan) {
-    daysDiff = nearestForward ? (nearestForward - jdnRaw) : 5;
-  } else {
-    daysDiff = nearestBackward ? (jdnRaw - nearestBackward) : 5;
-  }
-  // Khởi vận = days / 3 (round nửa lên)
-  const tuoiKhoiVanRaw = daysDiff / 3;
-  const tuoiKhoiVan = Math.max(1, Math.round(tuoiKhoiVanRaw));
+  if (isThuan) daysDiff = nearestForward ? (nearestForward - jdnRaw) : 5;
+  else         daysDiff = nearestBackward ? (jdnRaw - nearestBackward) : 5;
+  const tuoiKhoiVan = Math.max(1, Math.round(daysDiff / 3));
 
-  // Sequence: từ tháng trụ, tăng/giảm 1 mỗi đại vận
+  // Thập thần Tỷ Kiếp / Ấn vs Quan Sát / Thực Thương / Tài
+  const TT_PHU_THAN  = ['Tỷ Kiên','Kiếp Tài','Chính Ấn','Kiêu Thần']; // sinh-phù nhật can
+  const TT_KHAC_THAN = ['Chính Quan','Thất Sát','Thực Thần','Thương Quan','Chính Tài','Thiên Tài']; // chế-tiết-hao nhật can
+  const TT_QUANSAT   = ['Chính Quan','Thất Sát'];
+  const TT_THUCTHUONG= ['Thực Thần','Thương Quan'];
+  const TT_AN        = ['Chính Ấn','Kiêu Thần'];
+  const TT_TYKIEP    = ['Tỷ Kiên','Kiếp Tài'];
+
+  // Tứ trụ chi để check hợp/xung
+  const truChis = tuTru.map(t => t.chi);
+  const truTens = tuTru.map(t => t.ten);
+  const truCans = tuTru.map(t => t.can);
+
+  // Vượng nhược context
+  const isVuong  = cuongNhuoc.score >= 6.5 || cuongNhuoc.label === 'Vượng' || cuongNhuoc.label === 'Cực vượng';
+  const isNhuoc  = cuongNhuoc.score < 4.5  || cuongNhuoc.label === 'Nhược' || cuongNhuoc.label === 'Cực nhược';
+
+  // Sequence: từ tháng trụ
   const monthCanIdx = _canIdx(monthCan);
   const monthChiIdx = _chiIdx(monthChi);
   const dvs = [];
+
   for (let i = 1; i <= 9; i++) {
     const offset = isThuan ? i : -i;
     const dvCan = THIEN_CAN_TB[_mod(monthCanIdx + offset, 10)];
@@ -765,105 +780,375 @@ function _tinhDaiVan(tuTru, nhatCan, gioitinh, jdnRaw, dungThan, namSinhDL) {
 
     const dvHanhCan = NGU_HANH_CAN_TB[dvCan];
     const dvHanhChi = NGU_HANH_CHI_TB[dvChi];
-    const tt = thapThan(nhatCan, dvCan);
+    const ttCan = thapThan(nhatCan, dvCan);
+    const ttChi = thapThan(nhatCan, _bankhi(dvChi));  // thập thần của bản khí địa chi
 
-    // Score 0-10: dựa vào affinity với dụng thần
-    // - Dụng thần primary trong dvHanhCan or dvHanhChi: +3
-    // - Hỉ thần secondary: +1.5
-    // - Kỵ thần (khắc dụng): -2
-    let score = 5;
-    const aff = [dvHanhCan, dvHanhChi];
-    if (aff.includes(dungThan.primary)) score += 3;
-    if (aff.includes(dungThan.secondary)) score += 1.5;
-    if (aff.includes(NGU_HANH_KHAC_TB[dungThan.primary])) score -= 2;
-    if (dungThan.dieuHau && aff.includes(dungThan.dieuHau)) score += 1;
+    // ─── Score breakdown — factors[] cho từng yếu tố ───
+    const factors = [];
+    let score = 5;  // base trung dung
+
+    // 1) Affinity với dụng thần (chi quan trọng hơn can — chunk 165)
+    const kyThan = KHAC_BY_TB[dungThan.primary];  // hành khắc dụng thần (FIX bug cũ)
+    if (dvHanhChi === dungThan.primary) {
+      score += 3.0; factors.push({ type:'dụng thần', text:`Chi ${dvChi} hành ${dvHanhChi} = dụng thần`, delta: 3.0 });
+    } else if (dvHanhCan === dungThan.primary) {
+      score += 2.0; factors.push({ type:'dụng thần', text:`Can ${dvCan} hành ${dvHanhCan} = dụng thần`, delta: 2.0 });
+    }
+    if (dvHanhChi === dungThan.secondary && dvHanhChi !== dungThan.primary) {
+      score += 1.5; factors.push({ type:'hỉ thần', text:`Chi ${dvChi} = hỉ thần ${dungThan.secondary}`, delta: 1.5 });
+    } else if (dvHanhCan === dungThan.secondary && dvHanhCan !== dungThan.primary) {
+      score += 1.0; factors.push({ type:'hỉ thần', text:`Can ${dvCan} = hỉ thần ${dungThan.secondary}`, delta: 1.0 });
+    }
+    if (dvHanhChi === kyThan) {
+      score -= 3.0; factors.push({ type:'kỵ thần', text:`Chi ${dvChi} hành ${kyThan} = kỵ thần (khắc dụng)`, delta: -3.0 });
+    } else if (dvHanhCan === kyThan) {
+      score -= 2.0; factors.push({ type:'kỵ thần', text:`Can ${dvCan} hành ${kyThan} = kỵ thần`, delta: -2.0 });
+    }
+
+    // 2) Điều hậu
+    if (dungThan.dieuHau && (dvHanhCan === dungThan.dieuHau || dvHanhChi === dungThan.dieuHau)) {
+      score += 1.0;
+      factors.push({ type:'điều hậu', text:`Bù ${dungThan.dieuHau} điều hậu`, delta: 1.0 });
+    }
+
+    // 3) Đại vận chi VS tứ trụ chi: xung / hợp / hình / hại
+    truChis.forEach((tchi, idx) => {
+      // Lục xung
+      if (LUC_XUNG.some(([a,b]) => (a===dvChi && b===tchi) || (b===dvChi && a===tchi))) {
+        const isNhatXung = idx === 2;
+        const delta = isNhatXung ? -1.5 : -1.0;
+        score += delta;
+        factors.push({ type:'xung', text:`Chi ĐV ${dvChi} xung ${truTens[idx]} ${tchi}${isNhatXung?' (xung Nhật Chi — biến động lớn)':''}`, delta });
+      }
+      // Lục hợp
+      if (LUC_HOP.some(h => h.chis.includes(dvChi) && h.chis.includes(tchi) && dvChi !== tchi)) {
+        const hopHanh = LUC_HOP.find(h => h.chis.includes(dvChi) && h.chis.includes(tchi)).hanh;
+        let delta = 0.3;
+        if (hopHanh === dungThan.primary) delta = 1.5;
+        else if (hopHanh === kyThan)      delta = -1.5;
+        score += delta;
+        factors.push({ type:'lục hợp', text:`Chi ĐV ${dvChi} hợp ${truTens[idx]} ${tchi} → hóa ${hopHanh}`, delta });
+      }
+      // Tam hình
+      if (TAM_HINH.some(th => th.chis.includes(dvChi) && th.chis.includes(tchi) && dvChi !== tchi)) {
+        score -= 0.5;
+        factors.push({ type:'hình', text:`Chi ĐV ${dvChi} hình ${truTens[idx]} ${tchi}`, delta: -0.5 });
+      }
+      // Lục hại
+      if (LUC_HAI.some(([a,b]) => (a===dvChi && b===tchi) || (b===dvChi && a===tchi))) {
+        score -= 0.3;
+        factors.push({ type:'hại', text:`Chi ĐV ${dvChi} hại ${truTens[idx]} ${tchi}`, delta: -0.3 });
+      }
+    });
+
+    // 4) Tam hợp với 2 chi tứ trụ → tạo cục
+    TAM_HOP.forEach(th => {
+      if (!th.chis.includes(dvChi)) return;
+      const matchInTru = th.chis.filter(c => c !== dvChi && truChis.includes(c));
+      if (matchInTru.length >= 2) {
+        // 3-chi: dvChi + 2 trụ → tam hợp trọn cục
+        let delta = 0.8;
+        if (th.hanh === dungThan.primary)     delta = 2.0;
+        else if (th.hanh === kyThan)          delta = -2.0;
+        else if (th.hanh === dungThan.secondary) delta = 1.0;
+        score += delta;
+        factors.push({ type:'tam hợp', text:`Chi ĐV ${dvChi} cùng ${matchInTru.join(',')} tam hợp → ${th.hanh}`, delta });
+      } else if (matchInTru.length === 1) {
+        // bán hợp
+        let delta = 0.3;
+        if (th.hanh === dungThan.primary) delta = 0.8;
+        else if (th.hanh === kyThan)       delta = -0.8;
+        score += delta;
+        factors.push({ type:'bán hợp', text:`Chi ĐV ${dvChi} bán hợp ${matchInTru[0]} → ${th.hanh}`, delta });
+      }
+    });
+
+    // 5) Can hợp giữa thiên can ĐV và can nhật/tháng/giờ
+    truCans.forEach((tcan, idx) => {
+      if (idx === 0) return; // bỏ can năm vì xa
+      const k = `${dvCan}-${tcan}`;
+      const hoaHanh = THIEN_CAN_HOP[k] || THIEN_CAN_HOP[`${tcan}-${dvCan}`];
+      if (hoaHanh) {
+        const isNhat = idx === 2;
+        let delta = isNhat ? 0.5 : 0.3;
+        if (hoaHanh === dungThan.primary)      delta = isNhat ? 1.5 : 0.8;
+        else if (hoaHanh === kyThan)           delta = isNhat ? -1.5 : -0.8;
+        score += delta;
+        factors.push({ type:'can hợp', text:`Can ĐV ${dvCan} hợp ${truTens[idx]} ${tcan} → hóa ${hoaHanh}${isNhat?' (hợp Nhật Can)':''}`, delta });
+      }
+    });
+
+    // 6) Asymmetric reading theo vượng/nhược (cổ pháp chunk 224 + 30)
+    if (isVuong) {
+      // Vượng → thích Quan/Sát/Thực/Thương/Tài (chế-tiết-hao)
+      if (TT_QUANSAT.includes(ttCan) || TT_QUANSAT.includes(ttChi)) {
+        score += 1.0; factors.push({ type:'thập thần ĐV', text:`${ttCan}/Sát chế Nhật Can vượng — thuận`, delta: 1.0 });
+      } else if (TT_THUCTHUONG.includes(ttCan)) {
+        score += 0.8; factors.push({ type:'thập thần ĐV', text:`${ttCan} tiết khí thừa — thuận`, delta: 0.8 });
+      } else if (['Chính Tài','Thiên Tài'].includes(ttCan)) {
+        score += 0.6; factors.push({ type:'thập thần ĐV', text:`${ttCan} hao thân (vừa phải) — thuận`, delta: 0.6 });
+      }
+      // Nghịch: Tỷ Kiếp / Ấn → vượng càng vượng
+      if (TT_TYKIEP.includes(ttCan)) {
+        score -= 1.0; factors.push({ type:'thập thần ĐV', text:`${ttCan} thêm gốc cho Nhật Can vượng — nghịch`, delta: -1.0 });
+      } else if (TT_AN.includes(ttCan)) {
+        score -= 1.2; factors.push({ type:'thập thần ĐV', text:`${ttCan} sinh phù Nhật Can vượng — nghịch`, delta: -1.2 });
+      }
+    } else if (isNhuoc) {
+      // Nhược → thích Ấn / Tỷ Kiếp (sinh-phù)
+      if (TT_AN.includes(ttCan)) {
+        score += 1.2; factors.push({ type:'thập thần ĐV', text:`${ttCan} sinh phù Nhật Can nhược — thuận`, delta: 1.2 });
+      } else if (TT_TYKIEP.includes(ttCan)) {
+        score += 1.0; factors.push({ type:'thập thần ĐV', text:`${ttCan} hỗ trợ Nhật Can nhược — thuận`, delta: 1.0 });
+      }
+      // Đặc biệt: nhược + tài/quan đè (chunk 30 cảnh báo)
+      if (TT_QUANSAT.includes(ttCan)) {
+        const taiNhieu = (cuongNhuoc.dacThe||0) === 0 || cuongNhuoc.score < 3;
+        const delta = taiNhieu ? -1.8 : -1.0;
+        score += delta;
+        factors.push({ type:'thập thần ĐV', text:`${ttCan} khắc Nhật Can nhược${taiNhieu?' — nguy (vận quan họa tương trục)':' — nghịch'}`, delta });
+      } else if (['Chính Tài','Thiên Tài'].includes(ttCan)) {
+        score -= 0.8; factors.push({ type:'thập thần ĐV', text:`${ttCan} hao Nhật Can vốn nhược — nghịch`, delta: -0.8 });
+      } else if (TT_THUCTHUONG.includes(ttCan)) {
+        score -= 0.6; factors.push({ type:'thập thần ĐV', text:`${ttCan} tiết khí Nhật Can nhược — nghịch nhẹ`, delta: -0.6 });
+      }
+    }
+
+    // 7) Cách cục interaction
+    if (cachCuc?.primary) {
+      const cc = cachCuc.primary;
+      // Chính Quan cách + ĐV Thương Quan = phá cách
+      if (cc.includes('Chính Quan') && ttCan === 'Thương Quan') {
+        score -= 1.5; factors.push({ type:'phá cách', text:`Cách Chính Quan gặp ĐV Thương Quan → phá cách`, delta: -1.5 });
+      }
+      // Thất Sát cách + ĐV Thực Thần = thành cách (chế Sát)
+      if (cc.includes('Thất Sát') && ttCan === 'Thực Thần') {
+        score += 1.2; factors.push({ type:'thành cách', text:`Cách Thất Sát gặp ĐV Thực Thần (chế Sát) → thành`, delta: 1.2 });
+      }
+      // Thực Thần cách + ĐV Kiêu Thần = đoạt Thực
+      if (cc.includes('Thực Thần') && ttCan === 'Kiêu Thần') {
+        score -= 1.2; factors.push({ type:'phá cách', text:`Cách Thực Thần gặp ĐV Kiêu Thần (đoạt Thực) → phá`, delta: -1.2 });
+      }
+      // Tài cách + ĐV Tỷ Kiếp/Kiếp Tài = đoạt Tài
+      if ((cc.includes('Chính Tài') || cc.includes('Thiên Tài')) && TT_TYKIEP.includes(ttCan)) {
+        score -= 1.2; factors.push({ type:'phá cách', text:`Cách Tài gặp ĐV ${ttCan} (đoạt Tài) → phá`, delta: -1.2 });
+      }
+      // Ấn cách + ĐV Tài = phá Ấn
+      if ((cc.includes('Chính Ấn') || cc.includes('Kiêu Thần')) && ['Chính Tài','Thiên Tài'].includes(ttCan)) {
+        score -= 1.0; factors.push({ type:'phá cách', text:`Cách Ấn gặp ĐV ${ttCan} (phá Ấn) → phá cách`, delta: -1.0 });
+      }
+    }
+
+    // ─── Clamp & label ───
     score = Math.max(0, Math.min(10, score));
-
-    // 6 cungScores dimensions (cho radar/line chart compatibility với Tử Vi)
-    const cungScores = {
-      tiemNang: Math.round((score + (aff.includes(dungThan.primary) ? 1 : 0)) * 10) / 10,
-      benVung: Math.round(score * 10) / 10,
-      anToan: Math.round((score - (aff.includes(NGU_HANH_KHAC_TB[dungThan.primary]) ? 1 : 0)) * 10) / 10,
-      quyNhan: Math.round((score + (['Chính Ấn','Chính Quan'].includes(tt) ? 1 : 0)) * 10) / 10,
-      minhBach: Math.round((score - (['Thương Quan','Kiếp Tài'].includes(tt) ? 1 : 0)) * 10) / 10,
-      tuongHop: Math.round(score * 10) / 10,
-    };
-    Object.keys(cungScores).forEach(k => cungScores[k] = Math.max(0, Math.min(10, cungScores[k])));
+    const scoreRounded = Math.round(score * 10) / 10;
+    let label;
+    if (scoreRounded >= 6.5)      label = 'thuận';
+    else if (scoreRounded >= 4.0) label = 'trung';
+    else                          label = 'nghịch';
 
     dvs.push({
       idx: i - 1,
       can: dvCan,
       chi: dvChi,
       napAm: _napAm(dvCan, dvChi),
-      thapThanCan: tt,
+      thapThanCan: ttCan,
+      thapThanChi: ttChi,
       hanhCan: dvHanhCan,
       hanhChi: dvHanhChi,
       tuoiStart, tuoiEnd, namStart, namEnd,
-      score: Math.round(score * 10) / 10,
-      cungScores,
+      score: scoreRounded,
+      label,
+      factors,  // breakdown chi tiết
     });
   }
 
   return { daiVans: dvs, tuoiKhoiVan, isThuan, daysDiff };
 }
 
+// Helper: bản khí của 1 địa chi (can chính tàng)
+function _bankhi(chi) {
+  const tang = TANG_CAN[chi];
+  return tang && tang.length > 0 ? tang[0].can : null;
+}
+
 // ============================================================
 // LƯU NIÊN (năm xem)
 // ============================================================
-function _tinhLuuNien(namXem, nhatCan, tuTru, dungThan) {
+function _tinhLuuNien(namXem, nhatCan, tuTru, dungThan, cuongNhuoc, cachCuc, dvHienTai) {
   const yp = _yearPillarBySolarYear(namXem);
-  const tt = thapThan(nhatCan, yp.can);
+  const ttCan = thapThan(nhatCan, yp.can);
+  const ttChi = thapThan(nhatCan, _bankhi(yp.chi));
   const hanhCan = NGU_HANH_CAN_TB[yp.can];
   const hanhChi = NGU_HANH_CHI_TB[yp.chi];
 
-  // Relations với tứ trụ
+  const TT_QUANSAT    = ['Chính Quan','Thất Sát'];
+  const TT_THUCTHUONG = ['Thực Thần','Thương Quan'];
+  const TT_AN         = ['Chính Ấn','Kiêu Thần'];
+  const TT_TYKIEP     = ['Tỷ Kiên','Kiếp Tài'];
+
+  const isVuong = cuongNhuoc?.score >= 6.5 || cuongNhuoc?.label === 'Vượng' || cuongNhuoc?.label === 'Cực vượng';
+  const isNhuoc = cuongNhuoc?.score < 4.5 || cuongNhuoc?.label === 'Nhược' || cuongNhuoc?.label === 'Cực nhược';
+
+  const truChis = tuTru.map(t => t.chi);
+  const truTens = tuTru.map(t => t.ten);
+  const truCans = tuTru.map(t => t.can);
+
+  // Relations với tứ trụ (giữ structure cũ cho backward compat)
   const relations = { hopVoi: [], xungVoi: [], hinhVoi: [], haiVoi: [], canHopVoi: [], canKhacVoi: [] };
   tuTru.forEach(tru => {
-    // Lục xung
-    if (LUC_XUNG.some(([a, b]) => (a === yp.chi && b === tru.chi) || (b === yp.chi && a === tru.chi))) {
+    if (LUC_XUNG.some(([a,b]) => (a===yp.chi && b===tru.chi) || (b===yp.chi && a===tru.chi))) {
       relations.xungVoi.push(`${tru.ten} (${tru.chi})`);
     }
-    // Lục hợp
     if (LUC_HOP.some(h => h.chis.includes(yp.chi) && h.chis.includes(tru.chi) && yp.chi !== tru.chi)) {
       relations.hopVoi.push(`${tru.ten} (${tru.chi})`);
     }
-    // Lục hại
-    if (LUC_HAI.some(([a, b]) => (a === yp.chi && b === tru.chi) || (b === yp.chi && a === tru.chi))) {
+    if (LUC_HAI.some(([a,b]) => (a===yp.chi && b===tru.chi) || (b===yp.chi && a===tru.chi))) {
       relations.haiVoi.push(`${tru.ten} (${tru.chi})`);
     }
-    // Thiên can hợp
-    const k = `${yp.can}-${tru.can}`;
-    if (THIEN_CAN_HOP[k]) {
-      relations.canHopVoi.push(`${tru.ten} (${tru.can}) → hóa ${THIEN_CAN_HOP[k]}`);
+    if (TAM_HINH.some(th => th.chis.includes(yp.chi) && th.chis.includes(tru.chi) && yp.chi !== tru.chi)) {
+      relations.hinhVoi.push(`${tru.ten} (${tru.chi})`);
     }
-    // Thiên can khắc
-    const yh = NGU_HANH_CAN_TB[yp.can];
-    const th = NGU_HANH_CAN_TB[tru.can];
+    const k1 = `${yp.can}-${tru.can}`, k2 = `${tru.can}-${yp.can}`;
+    if (THIEN_CAN_HOP[k1] || THIEN_CAN_HOP[k2]) {
+      const h = THIEN_CAN_HOP[k1] || THIEN_CAN_HOP[k2];
+      relations.canHopVoi.push(`${tru.ten} (${tru.can}) → hóa ${h}`);
+    }
+    const yh = NGU_HANH_CAN_TB[yp.can], th = NGU_HANH_CAN_TB[tru.can];
     if (NGU_HANH_KHAC_TB[yh] === th || NGU_HANH_KHAC_TB[th] === yh) {
       relations.canKhacVoi.push(`${tru.ten} (${tru.can})`);
     }
   });
 
-  // Score lưu niên
+  // ─── Score breakdown ───
+  const factors = [];
   let score = 5;
-  const aff = [hanhCan, hanhChi];
-  if (aff.includes(dungThan.primary)) score += 2.5;
-  if (aff.includes(dungThan.secondary)) score += 1;
-  if (aff.includes(NGU_HANH_KHAC_TB[dungThan.primary])) score -= 1.5;
-  if (relations.xungVoi.length > 0) score -= 1;
-  if (relations.hinhVoi.length > 0) score -= 0.5;
-  if (relations.hopVoi.length > 0) score += 0.5;
+  const kyThan = KHAC_BY_TB[dungThan.primary];
+
+  // 1) Affinity với dụng thần — chunk 165: thái tuế CAN > CHI (đảo lại với đại vận)
+  if (hanhCan === dungThan.primary) {
+    score += 2.5; factors.push({ type:'dụng thần', text:`Can ${yp.can} = dụng thần`, delta: 2.5 });
+  } else if (hanhChi === dungThan.primary) {
+    score += 1.5; factors.push({ type:'dụng thần', text:`Chi ${yp.chi} = dụng thần`, delta: 1.5 });
+  }
+  if (hanhCan === dungThan.secondary && hanhCan !== dungThan.primary) {
+    score += 1.0; factors.push({ type:'hỉ thần', text:`Can ${yp.can} = hỉ thần`, delta: 1.0 });
+  } else if (hanhChi === dungThan.secondary && hanhChi !== dungThan.primary) {
+    score += 0.6; factors.push({ type:'hỉ thần', text:`Chi ${yp.chi} = hỉ thần`, delta: 0.6 });
+  }
+  if (hanhCan === kyThan) {
+    score -= 2.5; factors.push({ type:'kỵ thần', text:`Can ${yp.can} hành ${kyThan} = kỵ thần`, delta: -2.5 });
+  } else if (hanhChi === kyThan) {
+    score -= 1.5; factors.push({ type:'kỵ thần', text:`Chi ${yp.chi} hành ${kyThan} = kỵ thần`, delta: -1.5 });
+  }
+
+  // 2) Hợp/Xung/Hình/Hại với 4 chi tứ trụ
+  truChis.forEach((tchi, idx) => {
+    if (LUC_XUNG.some(([a,b]) => (a===yp.chi && b===tchi) || (b===yp.chi && a===tchi))) {
+      const isNhatXung = idx === 2;
+      const delta = isNhatXung ? -1.2 : -0.8;
+      score += delta;
+      factors.push({ type:'xung', text:`Năm xung ${truTens[idx]} ${tchi}${isNhatXung?' (xung Nhật Chi)':''}`, delta });
+    }
+    if (LUC_HOP.some(h => h.chis.includes(yp.chi) && h.chis.includes(tchi) && yp.chi !== tchi)) {
+      const hopHanh = LUC_HOP.find(h => h.chis.includes(yp.chi) && h.chis.includes(tchi)).hanh;
+      let delta = 0.2;
+      if (hopHanh === dungThan.primary) delta = 1.0;
+      else if (hopHanh === kyThan)      delta = -1.0;
+      score += delta;
+      factors.push({ type:'lục hợp', text:`Chi năm ${yp.chi} hợp ${truTens[idx]} ${tchi} → ${hopHanh}`, delta });
+    }
+    if (TAM_HINH.some(th => th.chis.includes(yp.chi) && th.chis.includes(tchi) && yp.chi !== tchi)) {
+      score -= 0.4;
+      factors.push({ type:'hình', text:`Năm hình ${truTens[idx]} ${tchi}`, delta: -0.4 });
+    }
+  });
+
+  // 3) Tam hợp năm xem với 2 chi tứ trụ
+  TAM_HOP.forEach(th => {
+    if (!th.chis.includes(yp.chi)) return;
+    const matchInTru = th.chis.filter(c => c !== yp.chi && truChis.includes(c));
+    if (matchInTru.length >= 2) {
+      let delta = 0.6;
+      if (th.hanh === dungThan.primary) delta = 1.5;
+      else if (th.hanh === kyThan)       delta = -1.5;
+      score += delta;
+      factors.push({ type:'tam hợp', text:`Chi năm tam hợp ${matchInTru.join(',')} → ${th.hanh}`, delta });
+    }
+  });
+
+  // 4) Can hợp với can nhật/tháng/giờ
+  truCans.forEach((tcan, idx) => {
+    if (idx === 0) return;
+    const k1 = `${yp.can}-${tcan}`, k2 = `${tcan}-${yp.can}`;
+    const hoa = THIEN_CAN_HOP[k1] || THIEN_CAN_HOP[k2];
+    if (hoa) {
+      const isNhat = idx === 2;
+      let delta = isNhat ? 0.3 : 0.2;
+      if (hoa === dungThan.primary) delta = isNhat ? 1.0 : 0.5;
+      else if (hoa === kyThan)       delta = isNhat ? -1.0 : -0.5;
+      score += delta;
+      factors.push({ type:'can hợp', text:`Can năm ${yp.can} hợp ${truTens[idx]} ${tcan} → ${hoa}${isNhat?' (hợp Nhật Can)':''}`, delta });
+    }
+  });
+
+  // 5) Asymmetric theo vượng/nhược (cùng pattern đại vận, weight nhẹ hơn)
+  if (isVuong) {
+    if (TT_QUANSAT.includes(ttCan) || TT_THUCTHUONG.includes(ttCan)) {
+      score += 0.6; factors.push({ type:'thập thần năm', text:`${ttCan} chế/tiết Nhật Can vượng — thuận`, delta: 0.6 });
+    } else if (TT_AN.includes(ttCan) || TT_TYKIEP.includes(ttCan)) {
+      score -= 0.7; factors.push({ type:'thập thần năm', text:`${ttCan} thêm khí cho Nhật Can vượng — nghịch`, delta: -0.7 });
+    }
+  } else if (isNhuoc) {
+    if (TT_AN.includes(ttCan) || TT_TYKIEP.includes(ttCan)) {
+      score += 0.7; factors.push({ type:'thập thần năm', text:`${ttCan} sinh phù Nhật Can nhược — thuận`, delta: 0.7 });
+    } else if (TT_QUANSAT.includes(ttCan)) {
+      score -= 1.0; factors.push({ type:'thập thần năm', text:`${ttCan} khắc Nhật Can nhược — nguy`, delta: -1.0 });
+    } else if (['Chính Tài','Thiên Tài'].includes(ttCan)) {
+      score -= 0.5; factors.push({ type:'thập thần năm', text:`${ttCan} hao Nhật Can vốn nhược`, delta: -0.5 });
+    } else if (TT_THUCTHUONG.includes(ttCan)) {
+      score -= 0.4; factors.push({ type:'thập thần năm', text:`${ttCan} tiết khí Nhật Can nhược`, delta: -0.4 });
+    }
+  }
+
+  // 6) Tương tác với đại vận hiện tại (chunk 234: lưu niên + đại vận hợp lại để dự đoán)
+  if (dvHienTai) {
+    // Năm xem chi xung đại vận chi
+    if (LUC_XUNG.some(([a,b]) => (a===yp.chi && b===dvHienTai.chi) || (b===yp.chi && a===dvHienTai.chi))) {
+      score -= 0.8; factors.push({ type:'tuế-vận', text:`Năm xem xung Đại Vận hiện tại ${dvHienTai.chi} — biến động`, delta: -0.8 });
+    }
+    // Năm xem hợp với đại vận
+    if (LUC_HOP.some(h => h.chis.includes(yp.chi) && h.chis.includes(dvHienTai.chi))) {
+      score += 0.5; factors.push({ type:'tuế-vận', text:`Năm xem hợp Đại Vận hiện tại ${dvHienTai.chi}`, delta: 0.5 });
+    }
+    // Đại vận đẹp + năm đẹp = nhân đôi; đại vận xấu + năm xấu = đáy
+    if (dvHienTai.label === 'thuận' && score > 5) {
+      score += 0.3; factors.push({ type:'tuế-vận', text:`Đại vận thuận + năm thuận → nhân đôi may mắn`, delta: 0.3 });
+    } else if (dvHienTai.label === 'nghịch' && score < 5) {
+      score -= 0.3; factors.push({ type:'tuế-vận', text:`Đại vận nghịch + năm nghịch → giai đoạn khó`, delta: -0.3 });
+    }
+  }
+
+  // ─── Clamp & label ───
   score = Math.max(0, Math.min(10, score));
+  const scoreRounded = Math.round(score * 10) / 10;
+  let label;
+  if (scoreRounded >= 6.5)      label = 'thuận';
+  else if (scoreRounded >= 4.0) label = 'trung';
+  else                          label = 'nghịch';
 
   return {
     nam: namXem,
     can: yp.can,
     chi: yp.chi,
     napAm: _napAm(yp.can, yp.chi),
-    thapThanCan: tt,
+    thapThanCan: ttCan,
+    thapThanChi: ttChi,
     hanhCan, hanhChi,
     relations,
-    score: Math.round(score * 10) / 10,
+    score: scoreRounded,
+    label,
+    factors,
   };
 }
 
@@ -1223,8 +1508,8 @@ function tinhBatTu({ ngayDL, thangDL, namDL, gio = 12, gioitinh = 'nam', namXem 
   // Step 6: Cách cục
   const cachCuc = _xacDinhCachCuc(tuTru, nhatCan, dungThan);
 
-  // Step 7: Đại vận
-  const dvData = _tinhDaiVan(tuTru, nhatCan, gioitinh, conv.jdn, dungThan, namDL);
+  // Step 7: Đại vận (cần cuongNhuoc + cachCuc cho asymmetric reading + interaction)
+  const dvData = _tinhDaiVan(tuTru, nhatCan, gioitinh, conv.jdn, dungThan, namDL, cuongNhuoc, cachCuc);
 
   // Step 8: Đại vận hiện tại + kế tiếp
   const tuoiXem = namXemFinal - namDL + 1; // Vietnamese age (tuổi mụ)
@@ -1242,8 +1527,8 @@ function tinhBatTu({ ngayDL, thangDL, namDL, gio = 12, gioitinh = 'nam', namXem 
     dvKeTiep = dvData.daiVans[0];
   }
 
-  // Step 9: Lưu niên
-  const luuNien = _tinhLuuNien(namXemFinal, nhatCan, tuTru, dungThan);
+  // Step 9: Lưu niên (cần cuongNhuoc, cachCuc, đại vận hiện tại)
+  const luuNien = _tinhLuuNien(namXemFinal, nhatCan, tuTru, dungThan, cuongNhuoc, cachCuc, dvHienTai);
 
   // Step 10: Hợp/Xung/Hại/Hình
   const hinhXungHaiHop = _tinhHinhXungHaiHop(tuTru);
