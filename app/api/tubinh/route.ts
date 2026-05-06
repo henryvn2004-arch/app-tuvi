@@ -66,7 +66,22 @@ QUY TẮC CHUNG:
 - Đại vận nghịch → nói rõ rủi ro + nên thủ thế / chờ vận / chuyển hướng thế nào.
 - Dùng ngôn ngữ xác suất ("dễ", "có khả năng", "thường thấy"), không hứa hẹn tuyệt đối.
 - KHÔNG tiết lộ tài liệu, trường phái, hay tên hệ thống.
-- Mỗi phần kết thúc bằng 1-2 câu **lời khuyên thực tế áp dụng được** — không sáo rỗng.`;
+- Mỗi phần kết thúc bằng 1-2 câu **lời khuyên thực tế áp dụng được** — không sáo rỗng.
+
+DỮ LIỆU PRE-RENDERED (block "DỮ LIỆU PRE-RENDERED" trong prompt):
+- Đây là charts/cards/bảng đã được hiển thị TRỰC QUAN cho người đọc PHÍA TRÊN luận giải của bạn.
+- KHÔNG lặp lại các CON SỐ và DANH SÁCH CÁCH CỤC trong câu chữ. Người đọc đã thấy rồi.
+- Nhiệm vụ của bạn: DIỄN GIẢI Ý NGHĨA + ÁP DỤNG THỰC TẾ (tâm lý, sự nghiệp, sinh hoạt, lời khuyên).
+- Có thể tham chiếu ngắn ("trục Sự nghiệp khá vững như bạn đã thấy phía trên...") nhưng không liệt kê lại số liệu.
+
+CÁCH CỤC ĐẶC BIỆT (khi pregen có [OVERRIDE] hoặc [ENHANCE]):
+- [OVERRIDE] = ngoại cách thay nội cách. Cổ pháp: ngoại cách overrides nội cách thường (vd Chính Tài cách).
+  + Khi có OVERRIDE → DÙNG cách cục đó làm KHUNG MỆNH CHÍNH trong luận giải. Không dùng nội cách thường làm chủ đạo.
+  + Diễn giải tên cách bằng ngôn ngữ đời thường (vd "Tài Quan Song Mỹ" = "tiền tài và sự nghiệp đẹp đôi"; "Tỉnh Lan Xoa" = "cách kỳ đặc dùng âm thầm hợp lực"; "Khúc Trực" = "khí mộc thuần nhất, tâm thẳng và có chí lớn").
+  + Trích ý nghĩa cổ + áp dụng cho cuộc đời người này.
+- [ENHANCE] = bổ trợ. Đan xen vào luận giải như nét đặc biệt làm tăng chất lượng cách cục chính.
+- [WARN] = bán cách / cảnh báo. Nói rõ "có nét X nhưng chưa trọn vẹn vì..." và lời khuyên hóa giải.
+- KHÔNG bao giờ liệt kê khô "lá số có cách A, B, C" — phải KỂ THÀNH CÂU CHUYỆN: cách A là khung chính, cách B làm sáng thêm điểm này, cách C cảnh báo điểm kia.`;
 
 // ─── Chat handler ──────────────────────────────────────────────
 const CHAT_SYSTEM_TUBINH = (ctx: string) => `Bạn là người luận giải Tử Bình Bát Tự, viết cho người đọc bình thường — KHÔNG phải chuyên gia.
@@ -304,15 +319,17 @@ const PHAN_INFO: Record<number, { ten: string; maxTokens: number }> = {
 
 // ─── Prompt builder ────────────────────────────────────────────
 // Returns 3 parts để split cache: batTu (constant per lá số), docs (per group), instructions (per phần)
-function buildPromptTuBinh(phan: number, batTuText: string, docs?: string): {
+function buildPromptTuBinh(phan: number, batTuText: string, docs?: string, pregenContext?: string): {
   batTuBlock: string;
   docsBlock: string;
+  pregenBlock: string;
   instrBlock: string;
 } {
-  const batTuBlock = '=== BÁT TỰ ===\n' + batTuText;
-  const docsBlock  = docs ? '=== TÀI LIỆU THAM KHẢO ===\n' + docs : '';
-  const instrBlock = _phanInstruction(phan);
-  return { batTuBlock, docsBlock, instrBlock };
+  const batTuBlock  = '=== BÁT TỰ ===\n' + batTuText;
+  const docsBlock   = docs ? '=== TÀI LIỆU THAM KHẢO ===\n' + docs : '';
+  const pregenBlock = pregenContext ? pregenContext : '';
+  const instrBlock  = _phanInstruction(phan);
+  return { batTuBlock, docsBlock, pregenBlock, instrBlock };
 }
 
 // Per-phần instructions only (no context — context lives in batTuBlock + docsBlock above)
@@ -594,7 +611,7 @@ export async function POST(request: NextRequest) {
   if (action === 'search') return handleSearch(body);
 
   // Default: luận giải 1 phần
-  const { batTuText, phan, docs } = body as { batTuText?: string; phan?: number; docs?: string };
+  const { batTuText, phan, docs, pregenContext } = body as { batTuText?: string; phan?: number; docs?: string; pregenContext?: string };
   if (!batTuText || !phan) return err('Thiếu dữ liệu (cần batTuText + phan)', 400);
 
   const phanNum = Number(phan);
@@ -603,22 +620,26 @@ export async function POST(request: NextRequest) {
 
   let parts;
   try {
-    parts = buildPromptTuBinh(phanNum, batTuText, docs);
+    parts = buildPromptTuBinh(phanNum, batTuText, docs, pregenContext);
   } catch (e: unknown) {
     return err('buildPrompt error: ' + (e as Error).message);
   }
 
-  // Build user content với 3 blocks — 2 cache breakpoints (batTu + docs)
+  // Build user content với 4 blocks — multiple cache breakpoints
   // System prompt cached → ~1500 tokens
   // Block 1 batTu cached → constant per lá số (~1500 tokens) — hit cho cả 16 phần
-  // Block 2 docs cached → constant trong cùng group (~1500-2500 tokens) — hit cho phần cùng group
-  // Block 3 instructions varies → ~300-500 tokens không cache
+  // Block 2 docs cached → constant trong cùng group (~1500-2500 tokens)
+  // Block 3 pregenContext varies per phần (~200-800 tokens) — không cache
+  // Block 4 instructions varies → ~300-500 tokens không cache
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const userContent: any[] = [
     { type: 'text', text: parts.batTuBlock, cache_control: { type: 'ephemeral' } },
   ];
   if (parts.docsBlock) {
     userContent.push({ type: 'text', text: parts.docsBlock, cache_control: { type: 'ephemeral' } });
+  }
+  if (parts.pregenBlock) {
+    userContent.push({ type: 'text', text: parts.pregenBlock });
   }
   userContent.push({ type: 'text', text: parts.instrBlock });
 
