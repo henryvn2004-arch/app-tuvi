@@ -423,7 +423,7 @@ select.form-input { cursor: pointer; }
 <script src="/tubinh-cach-cuc-special.js?v=2"></script>
 <script src="/tubinh-domain-scores.js?v=2"></script>
 <script src="/tuvi-form.js"></script>
-<script src="/tuvi-paywall2.js"></script>
+<script src="/tuvi-paywall.js"></script>
 <script src="/chatbot.js"></script>
 <script src="/nav.js"></script>
 
@@ -1017,6 +1017,165 @@ select.form-input { cursor: pointer; }
     return h;
   }
 
+
+  // Build TEXT context for AI prompt (per phần) — feeds pregen data into Claude's prompt
+  // so Claude knows what's already shown to the reader and can reference it
+  function buildPregenContextForPhan(phan, bt) {
+    if (!bt) return '';
+    const matches = (typeof window.TuBinhSpecialCach !== 'undefined')
+      ? window.TuBinhSpecialCach.detectSpecialCachCuc(bt) : [];
+    const ds = (typeof window.TuBinhDomainScores !== 'undefined')
+      ? window.TuBinhDomainScores.tinhDomainScores(bt) : null;
+
+    const overrideValid = matches.filter(m => m.hopLe && m.override);
+    const enhanceValid  = matches.filter(m => m.hopLe && !m.override);
+    const warnings      = matches.filter(m => !m.hopLe);
+
+    const fmtCach = (m, prefix) => {
+      const reasons = (m.lyDo || []).join('; ');
+      return `${prefix} ${m.ten} [${m.nhomCach}]\n  Mô tả: ${m.description}\n  Lý do trigger: ${reasons}\n  Nguồn: ${m.source}`;
+    };
+    const fmtDomain = (label, key) => {
+      if (!ds || !ds[key]) return '';
+      const v = ds[key];
+      const reasons = (v.reasons || []).join('; ');
+      return `${label}: ${v.score}/10 (${reasons})`;
+    };
+
+    const lines = [];
+    lines.push('=== DỮ LIỆU PRE-RENDERED (đã hiển thị cho người đọc dưới dạng chart/card phía trên) ===');
+    lines.push('LƯU Ý: KHÔNG lặp lại các con số/danh sách này trong câu chữ. Chỉ DIỄN GIẢI ý nghĩa và áp dụng thực tế.');
+    lines.push('');
+
+    function filterCachByKeywords(keywords) {
+      return matches.filter(m => {
+        const txt = (m.ten + ' ' + m.description + ' ' + (m.lyDo || []).join(' ')).toLowerCase();
+        return keywords.some(k => txt.includes(k.toLowerCase()));
+      });
+    }
+
+    switch (phan) {
+      case 1: { // Tổng Quan
+        lines.push('--- 7 trục đánh giá định lượng (radar chart) ---');
+        ['suNghiep','taiLoc','sangTao','hocVan','doiTac','honNhan','sucKhoe'].forEach(k => {
+          const labelMap = { suNghiep:'Sự nghiệp', taiLoc:'Tài lộc', sangTao:'Sáng tạo', hocVan:'Học vấn', doiTac:'Đối tác', honNhan:'Hôn nhân', sucKhoe:'Sức khỏe' };
+          const line = fmtDomain(labelMap[k], k);
+          if (line) lines.push(line);
+        });
+        lines.push('');
+        if (overrideValid.length) {
+          lines.push('--- CÁCH CỤC ĐẶC BIỆT THAY NỘI CÁCH (override) ---');
+          lines.push('CỰC KỲ QUAN TRỌNG: Dùng cách cục OVERRIDE dưới đây làm KHUNG MỆNH CHÍNH thay vì nội cách thường. Tử Bình cổ pháp dạy: ngoại cách overrides nội cách.');
+          overrideValid.forEach(m => lines.push(fmtCach(m, '[OVERRIDE]')));
+          lines.push('');
+        }
+        if (enhanceValid.length) {
+          lines.push('--- CÁCH CỤC BỔ TRỢ ---');
+          enhanceValid.forEach(m => lines.push(fmtCach(m, '[ENHANCE]')));
+          lines.push('');
+        }
+        break;
+      }
+      case 2: { // Cách Cục
+        if (overrideValid.length) {
+          lines.push('--- NGOẠI CÁCH (override nội cách) — đây là khung mệnh THẬT của lá số ---');
+          overrideValid.forEach(m => lines.push(fmtCach(m, '[OVERRIDE]')));
+          lines.push('CHỈ DẪN: Khi viết phần Cách Cục, lấy ngoại cách OVERRIDE làm chủ đạo. Không dùng nội cách thường (vd "Chính Tài cách") làm khung chính nữa — chỉ nhắc qua như nội cách bị áp bởi ngoại cách.');
+          lines.push('');
+        }
+        if (enhanceValid.length) {
+          lines.push('--- CÁCH CỤC BỔ TRỢ ---');
+          enhanceValid.forEach(m => lines.push(fmtCach(m, '[ENHANCE]')));
+          lines.push('');
+        }
+        if (warnings.length) {
+          lines.push('--- CÁCH CỤC BÁN/CẢNH BÁO (không trọn vẹn) ---');
+          warnings.forEach(m => lines.push(fmtCach(m, '[WARN]')));
+          lines.push('');
+        }
+        break;
+      }
+      case 3: { // Quan Sát — Sự nghiệp
+        const dom = fmtDomain('Sự nghiệp', 'suNghiep'); if (dom) lines.push('Trục Sự nghiệp: ' + dom);
+        const cc = filterCachByKeywords(['quan', 'sát', 'tài quan']);
+        if (cc.length) { lines.push(''); lines.push('--- Cách cục liên quan đến sự nghiệp ---'); cc.forEach(m => lines.push(fmtCach(m, m.override ? '[OVERRIDE]' : '[ENHANCE]'))); }
+        break;
+      }
+      case 4: { // Tài
+        const dom = fmtDomain('Tài lộc', 'taiLoc'); if (dom) lines.push('Trục Tài lộc: ' + dom);
+        const cc = filterCachByKeywords(['tài', 'tuế đức']);
+        if (cc.length) { lines.push(''); lines.push('--- Cách cục liên quan đến tài lộc ---'); cc.forEach(m => lines.push(fmtCach(m, m.override ? '[OVERRIDE]' : '[ENHANCE]'))); }
+        break;
+      }
+      case 5: { // Thực Thương
+        const dom = fmtDomain('Sáng tạo', 'sangTao'); if (dom) lines.push('Trục Sáng tạo: ' + dom);
+        const cc = filterCachByKeywords(['thực', 'thương quan']);
+        if (cc.length) { lines.push(''); lines.push('--- Cách cục liên quan ---'); cc.forEach(m => lines.push(fmtCach(m, m.override ? '[OVERRIDE]' : '[ENHANCE]'))); }
+        break;
+      }
+      case 6: { // Ấn
+        const dom = fmtDomain('Học vấn', 'hocVan'); if (dom) lines.push('Trục Học vấn: ' + dom);
+        const cc = filterCachByKeywords(['ấn', 'sát ấn']);
+        if (cc.length) { lines.push(''); lines.push('--- Cách cục liên quan ---'); cc.forEach(m => lines.push(fmtCach(m, m.override ? '[OVERRIDE]' : '[ENHANCE]'))); }
+        break;
+      }
+      case 7: { // Tỷ Kiếp
+        const dom = fmtDomain('Đối tác', 'doiTac'); if (dom) lines.push('Trục Đối tác: ' + dom);
+        const cc = filterCachByKeywords(['tỷ', 'kiếp', 'lưỡng', 'nhất khí']);
+        if (cc.length) { lines.push(''); lines.push('--- Cách cục liên quan ---'); cc.forEach(m => lines.push(fmtCach(m, m.override ? '[OVERRIDE]' : '[ENHANCE]'))); }
+        break;
+      }
+      case 8: { // Tình Duyên
+        const dom = fmtDomain('Hôn nhân', 'honNhan'); if (dom) lines.push('Trục Hôn nhân: ' + dom);
+        const cc = filterCachByKeywords(['hợp', 'đào hoa', 'tình', 'nhật chi']);
+        if (cc.length) { lines.push(''); lines.push('--- Cách cục liên quan ---'); cc.forEach(m => lines.push(fmtCach(m, m.override ? '[OVERRIDE]' : '[ENHANCE]'))); }
+        break;
+      }
+      case 9: { // Sức Khỏe
+        const dom = fmtDomain('Sức khỏe', 'sucKhoe'); if (dom) lines.push('Trục Sức khỏe: ' + dom);
+        const nh = bt.nguHanh?.counts || {};
+        lines.push('Phân bố ngũ hành: ' + ['Mộc','Hỏa','Thổ','Kim','Thủy'].map(h => h + '=' + (nh[h]||0)).join(', '));
+        break;
+      }
+      case 12: { // Tổng Quan Đại Vận
+        if (bt.daiVans?.length) {
+          lines.push('--- 9 đại vận (line chart đã render) ---');
+          bt.daiVans.forEach(dv => {
+            lines.push(`ĐV${dv.idx+1} ${dv.can} ${dv.chi} (${dv.tuoiStart}-${dv.tuoiEnd}t, ${dv.namStart}-${dv.namEnd}): ${dv.thapThanCan}/${dv.thapThanChi} → ${dv.score}/10 ${dv.label}`);
+          });
+        }
+        break;
+      }
+      case 13: { // ĐV Hiện Tại
+        const dv = bt.daiVanHienTai;
+        if (dv) {
+          lines.push(`Đại vận hiện tại: ${dv.can} ${dv.chi} (${dv.tuoiStart}-${dv.tuoiEnd}t) — ${dv.thapThanCan}/${dv.thapThanChi} — Score ${dv.score}/10 ${dv.label}`);
+          if (dv.factors?.length) {
+            lines.push('Factor breakdown:');
+            dv.factors.forEach(f => lines.push(`  ${f.delta >= 0 ? '+' : ''}${f.delta}: ${f.text}`));
+          }
+        }
+        break;
+      }
+      case 14: { // ĐV Kế Tiếp
+        const cur = bt.daiVanHienTai;
+        const next = cur ? bt.daiVans?.[cur.idx + 1] : bt.daiVans?.[0];
+        if (next) {
+          lines.push(`Đại vận kế tiếp: ${next.can} ${next.chi} (${next.tuoiStart}-${next.tuoiEnd}t) — ${next.thapThanCan}/${next.thapThanChi} — Score ${next.score}/10 ${next.label}`);
+          if (next.factors?.length) {
+            lines.push('Factor breakdown:');
+            next.factors.slice(0, 5).forEach(f => lines.push(`  ${f.delta >= 0 ? '+' : ''}${f.delta}: ${f.text}`));
+          }
+        }
+        break;
+      }
+      // Phần 10, 11, 15, 16: không cần pregenContext nặng
+    }
+
+    if (lines.length <= 3) return ''; // not enough content
+    return lines.join('\n');
+  }
+
   // Render radar chart for phần 1 (after DOM ready)
   function renderInlineDomainRadar(bt) {
     if (typeof Chart === 'undefined' || typeof window.TuBinhDomainScores === 'undefined') return;
@@ -1400,10 +1559,11 @@ select.form-input { cursor: pointer; }
 
   // ─── Streaming SSE consumer ──────────────────────────────────
   async function streamLuanGiai(phan, batTuText, docs, contentEl) {
+    const pregenContext = buildPregenContextForPhan(phan, _batTu);
     const resp = await fetch('/api/tubinh', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ batTuText, phan, docs })
+      body: JSON.stringify({ batTuText, phan, docs, pregenContext })
     });
     if (!resp.ok || !resp.body) {
       const errTxt = await resp.text().catch(() => '');
