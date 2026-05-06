@@ -1231,7 +1231,7 @@ select.form-input { cursor: pointer; }
       showError('Engine chưa load — vui lòng refresh trang.');
       return;
     }
-    if (!window.TuviForm) {
+    if (typeof TuviForm === 'undefined') {
       console.error('tuvi-form.js chưa load');
       showError('Form module chưa load — vui lòng refresh trang.');
       return;
