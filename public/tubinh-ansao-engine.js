@@ -801,7 +801,7 @@ function _tinhDaiVan(tuTru, nhatCan, gioitinh, jdnRaw, dungThan, namSinhDL, cuon
 
     // ─── Score breakdown — factors[] cho từng yếu tố ───
     const factors = [];
-    let score = 5;  // base trung dung
+    let score = 5.5;  // base trung dung (v1.3: lifted from 5.0 to align with Tử Vi mean)
 
     // 1) Affinity với dụng thần (chi quan trọng hơn can — chunk 165)
     // Trọng số giảm so với v1.1 (3.0/2.0 → 2.0/1.5) để cân bằng với các yếu tố khác
@@ -836,8 +836,21 @@ function _tinhDaiVan(tuTru, nhatCan, gioitinh, jdnRaw, dungThan, namSinhDL, cuon
         const isNguyetXung = idx === 1;
         let delta, text;
         if (isNhatXung) {
-          delta = -1.5;
-          text = `Chi ĐV ${dvChi} xung Nhật Chi ${tchi} (biến động lớn)`;
+          // v1.3: xung Nhật chi conditional theo dụng thần
+          // Cổ pháp "xung khai mở dụng" — nếu chi vận = dụng thì xung ÍT xấu
+          if (dvHanhChi === dungThan.primary) {
+            delta = -0.5;
+            text = `Chi ĐV ${dvChi} xung Nhật Chi ${tchi} (xung khai mở dụng — nhẹ)`;
+          } else if (dvHanhChi === dungThan.secondary) {
+            delta = -0.8;
+            text = `Chi ĐV ${dvChi} xung Nhật Chi ${tchi} (chi vận hỉ thần)`;
+          } else if (dvHanhChi === kyThan) {
+            delta = -2.0;
+            text = `Chi ĐV ${dvChi} xung Nhật Chi ${tchi} (chi vận kỵ — đại biến)`;
+          } else {
+            delta = -1.5;
+            text = `Chi ĐV ${dvChi} xung Nhật Chi ${tchi} (biến động lớn)`;
+          }
         } else if (isNguyetXung) {
           // Cổ pháp: xung tháng chi phụ thuộc dụng thần
           // - Chi vận = dụng/hỉ → xung khai mở kho dụng (cát)
@@ -886,11 +899,11 @@ function _tinhDaiVan(tuTru, nhatCan, gioitinh, jdnRaw, dungThan, namSinhDL, cuon
       if (!th.chis.includes(dvChi)) return;
       const matchInTru = th.chis.filter(c => c !== dvChi && truChis.includes(c));
       if (matchInTru.length >= 2) {
-        // 3-chi: dvChi + 2 trụ → tam hợp trọn cục
+        // 3-chi: dvChi + 2 trụ → tam hợp trọn cục — sự kiện rất hiếm và rất mạnh
         let delta = 0.8;
-        if (th.hanh === dungThan.primary)     delta = 2.0;
-        else if (th.hanh === kyThan)          delta = -2.0;
-        else if (th.hanh === dungThan.secondary) delta = 1.0;
+        if (th.hanh === dungThan.primary)     delta = 2.5;  // v1.3: 2.0 → 2.5 (cục trọn dụng = đại lực)
+        else if (th.hanh === kyThan)          delta = -2.5; // v1.3: -2.0 → -2.5
+        else if (th.hanh === dungThan.secondary) delta = 1.5; // v1.3: 1.0 → 1.5
         score += delta;
         factors.push({ type:'tam hợp', text:`Chi ĐV ${dvChi} cùng ${matchInTru.join(',')} tam hợp → ${th.hanh}`, delta });
       } else if (matchInTru.length === 1) {
@@ -954,73 +967,95 @@ function _tinhDaiVan(tuTru, nhatCan, gioitinh, jdnRaw, dungThan, namSinhDL, cuon
       } else if (TT_THUCTHUONG.includes(ttCan)) {
         score -= 0.6; factors.push({ type:'thập thần ĐV', text:`${ttCan} tiết khí Nhật Can nhược — nghịch nhẹ`, delta: -0.6 });
       }
+    } else {
+      // v1.3: Bình hòa cũng có asymmetric mild — tránh score quá flat
+      // Bình hòa cần stimulus mild: Quan/Sát/Tài cho cá tính, Ấn nhẹ phù trợ
+      if (TT_QUANSAT.includes(ttCan) || ['Chính Tài','Thiên Tài'].includes(ttCan)) {
+        score += 0.4; factors.push({ type:'thập thần ĐV', text:`${ttCan} thúc đẩy Nhật Can bình hòa — thuận nhẹ`, delta: 0.4 });
+      } else if (TT_THUCTHUONG.includes(ttCan)) {
+        score += 0.3; factors.push({ type:'thập thần ĐV', text:`${ttCan} tiết khí — thuận nhẹ`, delta: 0.3 });
+      } else if (TT_AN.includes(ttCan)) {
+        score += 0.2; factors.push({ type:'thập thần ĐV', text:`${ttCan} sinh phù nhẹ — trung tính`, delta: 0.2 });
+      } else if (TT_TYKIEP.includes(ttCan)) {
+        score -= 0.3; factors.push({ type:'thập thần ĐV', text:`${ttCan} thêm khí cùng — phẳng lì`, delta: -0.3 });
+      }
     }
 
     // 7) Cách cục interaction
     if (cachCuc?.primary) {
       const cc = cachCuc.primary;
+      // v1.3: multiplier theo độ "thành" của cách
+      // thường cách = cách yếu (không thấu can / không có hỗ trợ) → tác động 50%
+      // thành cách rõ → 100%
+      const ccMult = (cachCuc.thanhPhaCach && /thường/.test(cachCuc.thanhPhaCach)) ? 0.5 : 1.0;
+      const _push = (type, text, rawDelta) => {
+        const delta = Math.round(rawDelta * ccMult * 10) / 10;
+        score += delta;
+        factors.push({ type, text: ccMult < 1 ? text + ' (thường cách)' : text, delta });
+      };
+
       // Chính Quan cách + ĐV Thương Quan = phá cách
       if (cc.includes('Chính Quan') && ttCan === 'Thương Quan') {
-        score -= 1.5; factors.push({ type:'phá cách', text:`Cách Chính Quan gặp ĐV Thương Quan → phá cách`, delta: -1.5 });
+        _push('phá cách', `Cách Chính Quan gặp ĐV Thương Quan → phá cách`, -1.5);
       }
       // Thất Sát cách + ĐV Thực Thần = thành cách (chế Sát)
       if (cc.includes('Thất Sát') && ttCan === 'Thực Thần') {
-        score += 1.2; factors.push({ type:'thành cách', text:`Cách Thất Sát gặp ĐV Thực Thần (chế Sát) → thành`, delta: 1.2 });
+        _push('thành cách', `Cách Thất Sát gặp ĐV Thực Thần (chế Sát) → thành`, 1.2);
       }
       // Thực Thần cách + ĐV Kiêu Thần = đoạt Thực
       if (cc.includes('Thực Thần') && ttCan === 'Kiêu Thần') {
-        score -= 1.2; factors.push({ type:'phá cách', text:`Cách Thực Thần gặp ĐV Kiêu Thần (đoạt Thực) → phá`, delta: -1.2 });
+        _push('phá cách', `Cách Thực Thần gặp ĐV Kiêu Thần (đoạt Thực) → phá`, -1.2);
       }
       // Tài cách + ĐV Tỷ Kiếp/Kiếp Tài = đoạt Tài
       if ((cc.includes('Chính Tài') || cc.includes('Thiên Tài')) && TT_TYKIEP.includes(ttCan)) {
-        score -= 1.2; factors.push({ type:'phá cách', text:`Cách Tài gặp ĐV ${ttCan} (đoạt Tài) → phá`, delta: -1.2 });
+        _push('phá cách', `Cách Tài gặp ĐV ${ttCan} (đoạt Tài) → phá`, -1.2);
       }
       // Ấn cách + ĐV Tài = phá Ấn
       if ((cc.includes('Chính Ấn') || cc.includes('Kiêu Thần')) && ['Chính Tài','Thiên Tài'].includes(ttCan)) {
-        score -= 1.0; factors.push({ type:'phá cách', text:`Cách Ấn gặp ĐV ${ttCan} (phá Ấn) → phá cách`, delta: -1.0 });
+        _push('phá cách', `Cách Ấn gặp ĐV ${ttCan} (phá Ấn) → phá cách`, -1.0);
       }
 
       // === BỔ SUNG: 10 patterns from TBCT/DDTT (chunks c30, c41, c216, c217, c224, c226, c228, c229) ===
 
       // 6. Thương Quan cách + ĐV Tài = thương quan sinh tài [c30]
       if (cc.includes('Thương Quan') && ['Chính Tài','Thiên Tài'].includes(ttCan)) {
-        score += 1.5; factors.push({ type:'thành cách', text:`Cách Thương Quan gặp ĐV ${ttCan} → thương quan sinh tài`, delta: 1.5 });
+        _push('thành cách', `Cách Thương Quan gặp ĐV ${ttCan} → thương quan sinh tài`, 1.5);
       }
       // 7. Thương Quan cách + ĐV Quan/Sát = thương quan kiến quan
       if (cc.includes('Thương Quan') && TT_QUANSAT.includes(ttCan)) {
-        score -= 1.0; factors.push({ type:'phá cách', text:`Cách Thương Quan gặp ĐV ${ttCan} → thương quan kiến quan, tai họa`, delta: -1.0 });
+        _push('phá cách', `Cách Thương Quan gặp ĐV ${ttCan} → thương quan kiến quan, tai họa`, -1.0);
       }
       // 8. Thương Quan cách + ĐV Ấn = thương quan bội ấn (rất quý) [c217]
       if (cc.includes('Thương Quan') && TT_AN.includes(ttCan)) {
-        score += 1.5; factors.push({ type:'thành cách', text:`Cách Thương Quan gặp ĐV ${ttCan} → thương quan bội ấn quý`, delta: 1.5 });
+        _push('thành cách', `Cách Thương Quan gặp ĐV ${ttCan} → thương quan bội ấn quý`, 1.5);
       }
       // 9. Chính Quan cách + ĐV Thất Sát = quan sát hỗn tạp
       if (cc.includes('Chính Quan') && ttCan === 'Thất Sát') {
-        score -= 0.8; factors.push({ type:'phá cách', text:`Cách Chính Quan gặp ĐV Thất Sát → quan sát hỗn tạp`, delta: -0.8 });
+        _push('phá cách', `Cách Chính Quan gặp ĐV Thất Sát → quan sát hỗn tạp`, -0.8);
       }
       // 10/11. Thất Sát cách + ĐV Tài: thân nhược -1.5, thân vượng +0.8 [c30, c216]
       if (cc.includes('Thất Sát') && ['Chính Tài','Thiên Tài'].includes(ttCan)) {
         if (isNhuoc) {
-          score -= 1.5; factors.push({ type:'phá cách', text:`Cách Sát thân nhược gặp ĐV ${ttCan} → tài sinh sát họa tương trục`, delta: -1.5 });
+          _push('phá cách', `Cách Sát thân nhược gặp ĐV ${ttCan} → tài sinh sát họa tương trục`, -1.5);
         } else if (isVuong) {
-          score += 0.8; factors.push({ type:'thành cách', text:`Cách Sát thân vượng gặp ĐV ${ttCan} → tài sinh sát thành quyền`, delta: 0.8 });
+          _push('thành cách', `Cách Sát thân vượng gặp ĐV ${ttCan} → tài sinh sát thành quyền`, 0.8);
         }
       }
       // 12. Tài cách + ĐV Quan/Sát = tài sinh quan đắc lộc [c216]
       if ((cc.includes('Chính Tài') || cc.includes('Thiên Tài')) && TT_QUANSAT.includes(ttCan)) {
-        score += 1.0; factors.push({ type:'thành cách', text:`Cách Tài gặp ĐV ${ttCan} → tài sinh quan đắc lộc`, delta: 1.0 });
+        _push('thành cách', `Cách Tài gặp ĐV ${ttCan} → tài sinh quan đắc lộc`, 1.0);
       }
       // 13. Tài cách + ĐV Thực/Thương = thực thương sinh tài [c216]
       if ((cc.includes('Chính Tài') || cc.includes('Thiên Tài')) && TT_THUCTHUONG.includes(ttCan)) {
-        score += 0.8; factors.push({ type:'thành cách', text:`Cách Tài gặp ĐV ${ttCan} → thực thương sinh tài`, delta: 0.8 });
+        _push('thành cách', `Cách Tài gặp ĐV ${ttCan} → thực thương sinh tài`, 0.8);
       }
       // 14. Ấn cách + ĐV Quan/Sát = quan ấn tương sinh
       if ((cc.includes('Chính Ấn') || cc.includes('Kiêu Thần') || cc.includes('Ấn Thụ')) && TT_QUANSAT.includes(ttCan)) {
-        score += 1.0; factors.push({ type:'thành cách', text:`Cách Ấn gặp ĐV ${ttCan} → quan ấn tương sinh`, delta: 1.0 });
+        _push('thành cách', `Cách Ấn gặp ĐV ${ttCan} → quan ấn tương sinh`, 1.0);
       }
       // 15. Lộc/Nhận cách + ĐV Quan/Sát = chế kiếp đắc lực [c228]
       if ((cc.includes('Lộc') || cc.includes('Nhận') || cc.includes('Dương Nhẫn')) && TT_QUANSAT.includes(ttCan)) {
-        score += 1.5; factors.push({ type:'thành cách', text:`Cách Lộc/Nhận gặp ĐV ${ttCan} → quan sát chế kiếp`, delta: 1.5 });
+        _push('thành cách', `Cách Lộc/Nhận gặp ĐV ${ttCan} → quan sát chế kiếp`, 1.5);
       }
     }
 
