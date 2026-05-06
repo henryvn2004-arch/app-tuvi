@@ -422,25 +422,76 @@ select.form-input { cursor: pointer; }
     16: 'Tổng Kết',
   };
 
-  // RAG queries cho mỗi phần (tiếng Việt, từ khóa Tử Bình)
-  const QUERIES = {
-    1:  () => `Nhật Can vượng nhược cường nhược dụng thần tổng quan Bát Tự`,
-    2:  () => `cách cục Tử Bình thập thần thấu can nguyệt lệnh thành cách phá cách`,
-    3:  () => `Chính Quan Thất Sát sự nghiệp công danh quyền uy chế Sát`,
-    4:  () => `Chính Tài Thiên Tài tiền bạc tài lộc kiếm tiền tài tinh có gốc`,
-    5:  () => `Thực Thần Thương Quan tài năng sáng tạo biểu đạt tiết khí Quan`,
-    6:  () => `Chính Ấn Kiêu Thần học vấn mẹ quý nhân sinh phù Nhật Can`,
-    7:  () => `Tỷ Kiên Kiếp Tài anh em bạn bè cạnh tranh phân chia tài lộc`,
-    8:  () => `tình duyên hôn nhân vợ chồng cung Phu Thê Nhật Chi sao phối ngẫu Đào Hoa`,
-    9:  () => `sức khỏe ngũ hành cơ quan tỳ vị gan tim phổi thận hình xung`,
-    10: () => `hình xung hại hợp tam hợp lục hợp lục xung tam hình can hợp`,
-    11: () => `thần sát Thiên Ất Quý Nhân Văn Xương Đào Hoa Dịch Mã Cô Thần Quả Tú Không Vong Dương Nhẫn`,
-    12: () => `đại vận thuận nghịch khởi vận hành vận dụng thần hợp dụng nghịch dụng`,
-    13: () => `đại vận hiện tại thập thần hành vận thuận hay nghịch dụng thần`,
-    14: () => `đại vận kế tiếp chuẩn bị 10 năm sau hành vận`,
-    15: () => `lưu niên năm xem can chi tương tác tứ trụ đại vận hợp xung`,
-    16: () => `tổng kết Bát Tự bản chất con người đường đời ưu thế đề phòng`,
+  // ─── RAG: 6 group thay vì 16 query riêng ─────────────────────
+  // Mỗi group share 1 RAG fetch → cache → reuse cho phần cùng group.
+  const PHAN_GROUPS = {
+    1: 'overview', 2: 'overview', 16: 'overview',
+    3: 'thapthan', 4: 'thapthan', 5: 'thapthan', 6: 'thapthan', 7: 'thapthan',
+    8: 'tinhduyen',
+    9: 'suckhoe',
+    10: 'hopxung', 11: 'hopxung',
+    12: 'daivan', 13: 'daivan', 14: 'daivan', 15: 'daivan',
   };
+
+  const GROUP_TOPK = {
+    overview: 10, thapthan: 10, tinhduyen: 6,
+    suckhoe: 5, hopxung: 8, daivan: 10,
+  };
+
+  // Cache RAG docs per group (reset mỗi lần analyze mới)
+  let _ragCache = {};
+
+  // Dynamic query builder — nhúng context lá số để retrieve sát hơn
+  function buildGroupQuery(group, bt) {
+    const nc = bt.nhatCan || '';
+    const ncH = bt.nhatCanHanh || '';
+    const cn = (bt.cuongNhuoc?.label || '').toLowerCase();
+    const dt = bt.dungThan?.primary || '';
+    const ht = bt.dungThan?.secondary || '';
+    const cc = bt.cachCuc?.primary || '';
+    const dvCur = bt.daiVanHienTai;
+    const dvCurStr = dvCur ? `${dvCur.can} ${dvCur.chi} ${dvCur.thapThanCan}` : '';
+    const ln = bt.luuNien;
+    const lnStr = ln ? `${ln.can} ${ln.chi} ${ln.thapThanCan}` : '';
+
+    switch (group) {
+      case 'overview':
+        return `${nc} ${ncH} nhật can ${cn} dụng thần ${dt} cách cục ${cc} nguyệt lệnh thấu can tổng quan Bát Tự`;
+      case 'thapthan':
+        return `${cc} ${nc} nhật can ${cn} dụng thần ${dt} thập thần Chính Quan Thất Sát Chính Tài Thiên Tài Thực Thần Thương Quan Chính Ấn Kiêu Thần Tỷ Kiên Kiếp Tài`;
+      case 'tinhduyen':
+        return `${nc} nhật can cung Phu Thê Nhật Chi tình duyên hôn nhân ${cn} ${cc} sao phối ngẫu Đào Hoa Hồng Diễm`;
+      case 'suckhoe':
+        return `${ncH} ngũ hành sức khỏe cơ quan tỳ vị gan tim phổi thận hình xung ${cn}`;
+      case 'hopxung':
+        return `tam hợp lục hợp lục xung tam hình can hợp ${nc} thần sát Thiên Ất Quý Nhân Văn Xương Đào Hoa Dịch Mã Cô Thần Quả Tú Không Vong Dương Nhẫn`;
+      case 'daivan':
+        return `${cn} dụng thần ${dt} hỉ thần ${ht} ${dvCurStr} đại vận thuận nghịch hành vận ${lnStr} lưu niên thái tuế hợp xung tứ trụ`;
+      default:
+        return `${nc} ${cc} dụng thần ${dt}`;
+    }
+  }
+
+  async function getDocsForPhan(phan) {
+    const group = PHAN_GROUPS[phan] || 'overview';
+    if (_ragCache[group] !== undefined) return _ragCache[group];
+
+    const query = buildGroupQuery(group, _batTu);
+    const topK = GROUP_TOPK[group] || 6;
+    try {
+      const sr = await fetch('/api/tubinh?action=search', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, topK })
+      });
+      if (sr.ok) {
+        const docs = (await sr.json()).docs || '';
+        _ragCache[group] = docs;
+        return docs;
+      }
+    } catch(e) { console.warn('RAG search error:', e); }
+    _ragCache[group] = '';
+    return '';
+  }
 
   // ─── Format Bát Tự thành text cho prompt ──────────────────────
   function formatBatTuToText(bt) {
@@ -723,6 +774,9 @@ select.form-input { cursor: pointer; }
     showError('');
     showLoader(true);
     document.getElementById('phan-progress').textContent = 'Đang an tứ trụ...';
+
+    // Reset RAG cache cho lá số mới
+    _ragCache = {};
 
     try {
       // TuviForm trả về gioHour (0-23) đã convert sang VN time theo UTC offset.
@@ -1077,15 +1131,8 @@ select.form-input { cursor: pointer; }
     }
 
     try {
-      // RAG search trước
-      let docs = '';
-      try {
-        const sr = await fetch('/api/tubinh?action=search', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: QUERIES[_currentPhan](), topK: _currentPhan===1 ? 8 : 5 })
-        });
-        if (sr.ok) docs = (await sr.json()).docs || '';
-      } catch(e) { console.warn('RAG search error:', e); }
+      // RAG search (cached per group)
+      const docs = await getDocsForPhan(_currentPhan);
 
       // Delay tránh rate limit
       if (_currentPhan > 1) await new Promise(r => setTimeout(r, 800));
