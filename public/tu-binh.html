@@ -162,6 +162,43 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
 .intro-step-num.gold { background: var(--gold); color: var(--navy); }
 .intro-step-title { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
 .intro-step-desc { font-size: 13px; color: var(--text-lt); line-height: 1.6; }
+
+/* DAI VAN CHART (pre-rendered từ engine data) */
+.daivan-chart-section { background: #fff; border: 1px solid var(--border); padding: 24px; margin-bottom: 32px; }
+.daivan-chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+.daivan-chart-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
+.daivan-chart-note { font-size: 12px; color: var(--text-lt); }
+.daivan-chart-canvas-wrap { position: relative; height: 220px; }
+
+/* RESULT TOOLBAR (PDF, share) */
+.result-toolbar { display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 16px; flex-wrap: wrap; }
+.btn-tool { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: #fff; border: 1px solid var(--border); color: var(--text-mid); font-size: 12px; cursor: pointer; transition: all .15s; text-decoration: none; }
+.btn-tool:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+/* Streaming spinner */
+.phan-spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid var(--gold-lt); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 6px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.phan-streaming-cursor { display: inline-block; width: 8px; height: 16px; background: var(--gold); margin-left: 2px; vertical-align: text-bottom; animation: blink 0.9s infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* Loading box per-phần (đẹp hơn paywall lock) */
+.phan-loading { background: linear-gradient(90deg, var(--bg-soft) 0%, #fff 50%, var(--bg-soft) 100%); background-size: 200% 100%; animation: shimmer 1.6s infinite; border: 1px solid var(--border-lt); padding: 24px; text-align: center; }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+.phan-loading-title { font-family: 'Noto Serif', serif; font-size: 16px; color: var(--navy); margin-bottom: 6px; }
+.phan-loading-desc { font-size: 13px; color: var(--text-lt); }
+
+/* PRINT (PDF export) */
+@media print {
+  body { font-size: 12pt; }
+  nav.topnav, .hero, .form-section, .intro-section, .result-toolbar, .muc-luc, .result-sidebar, .paywall-gate, .phan-loading, footer.site-footer { display: none !important; }
+  .result-layout { grid-template-columns: 1fr !important; }
+  .result-section { display: block !important; padding: 0 !important; }
+  .result-header { border-bottom: 2pt solid #000; }
+  .phan-block { page-break-inside: avoid; break-inside: avoid; }
+  .tutru-table { page-break-inside: avoid; }
+  .daivan-chart-section { page-break-inside: avoid; }
+  .phan-content { color: #000 !important; }
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
@@ -189,8 +226,8 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
         <div class="hero-stat-label">Khung phú quý — Chính Quan, Thất Sát, Tài, Ấn, Thực Thương... Dụng thần chìa khóa cuộc đời.</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-num">Đại Vận 80 Năm</div>
-        <div class="hero-stat-label">8 đại vận, mỗi vận 10 năm — biểu đồ điểm số cho thấy giai đoạn nào thuận, giai đoạn nào khó.</div>
+        <div class="hero-stat-num">Đại Vận 90 Năm</div>
+        <div class="hero-stat-label">9 đại vận, mỗi vận 10 năm — biểu đồ điểm số cho thấy giai đoạn nào thuận, giai đoạn nào khó.</div>
       </div>
     </div>
   </div>
@@ -303,6 +340,11 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
 
   <div class="result-section" id="result-section">
 
+    <div class="result-toolbar" id="result-toolbar" style="display:none">
+      <button class="btn-tool" id="btn-share" onclick="window.tubinhShare()">⤴ Chia sẻ</button>
+      <button class="btn-tool" id="btn-pdf" onclick="window.print()">⬇ Tải PDF</button>
+    </div>
+
     <div class="result-header" id="result-header"></div>
 
     <div class="tutru-wrap">
@@ -311,6 +353,16 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
     </div>
 
     <div class="info-cards" id="info-cards"></div>
+
+    <div class="daivan-chart-section" id="daivan-chart-section" style="display:none">
+      <div class="daivan-chart-header">
+        <div>
+          <div class="daivan-chart-label">9 ĐẠI VẬN — BIỂU ĐỒ ĐIỂM SỐ</div>
+          <div class="daivan-chart-note" id="daivan-chart-note"></div>
+        </div>
+      </div>
+      <div class="daivan-chart-canvas-wrap"><canvas id="daivan-chart"></canvas></div>
+    </div>
 
     <div class="result-layout">
       <div class="result-sidebar">
@@ -323,12 +375,42 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
       <div class="result-body" id="result-body"></div>
     </div>
 
+    <!-- Chatbot section: visible always, paywall overlay locked until paid -->
+    <div id="tuvi-chat-section" style="display:none; margin-top:40px; position:relative;">
+      <div id="tvc-paywall-overlay" style="position:absolute; inset:0; background:rgba(255,255,255,0.96); backdrop-filter:blur(2px); z-index:50; display:flex; align-items:center; justify-content:center; padding:40px 20px;">
+        <div style="max-width:480px; text-align:center; padding:32px 24px; background:#fff; border:2px solid var(--gold); position:relative;">
+          <div style="font-size:32px; margin-bottom:14px;">💬</div>
+          <div class="paywall-eyebrow">紫微明寶 · Vấn Đáp AI</div>
+          <div class="paywall-title" style="font-size:20px;">Hỏi đáp trực tiếp với Bát Tự của bạn</div>
+          <div class="paywall-desc" style="font-size:13px;">
+            Sau khi mở khóa luận giải, bạn có thể đặt câu hỏi trực tiếp về Nhật Can, Dụng Thần, Đại Vận hay bất kỳ chi tiết nào — AI trả lời dựa trên chính Bát Tự của bạn.
+          </div>
+          <div class="paywall-features">
+            <div class="paywall-feature">Hỏi về Nhật Can &amp; Dụng Thần</div>
+            <div class="paywall-feature">Phân tích từng đại vận</div>
+            <div class="paywall-feature">Tư vấn tình duyên cá nhân</div>
+            <div class="paywall-feature">Hỏi không giới hạn</div>
+            <div class="paywall-feature">Trích dẫn cổ pháp Tử Bình</div>
+            <div class="paywall-feature">Cá nhân hóa theo lá số</div>
+          </div>
+          <div class="paywall-price" style="font-size:24px;">100 Credits</div>
+          <div class="paywall-price-note">Bao gồm 16 phần luận giải + Vấn đáp không giới hạn</div>
+          <button class="btn-paywall" onclick="window.tubinhUnlock()">
+            <span>Mở Khóa Luận Giải &amp; Vấn Đáp</span>
+            <span style="font-size:16px">→</span>
+          </button>
+          <div class="paywall-secure">🔒 $1 = 10 credits · Credits không hết hạn</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
 <!-- Engine + form + paywall -->
 <script src="/tubinh-ansao-engine.js"></script>
 <script src="/tuvi-paywall2.js"></script>
+<script src="/chatbot.js"></script>
 <script src="/nav.js"></script>
 
 <script>
@@ -446,7 +528,7 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
     lines.push('');
 
     // Đại vận
-    lines.push('=== 8 ĐẠI VẬN ===');
+    lines.push('=== 9 ĐẠI VẬN ===');
     lines.push(`Hướng vận: ${bt.daiVanThuan?'THUẬN':'NGHỊCH'} | Khởi vận: ${bt.tuoiKhoiVan} tuổi`);
     bt.daiVans.forEach((dv, i) => {
       const isCur = bt.daiVanHienTai && bt.daiVanHienTai.idx === dv.idx;
@@ -719,6 +801,8 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
     const sec = document.getElementById('result-section');
     sec.classList.add('show');
 
+    document.getElementById('result-toolbar').style.display = '';
+
     document.getElementById('result-header').innerHTML = `
       <div class="result-name">${_hoTen}</div>
       <div class="result-info">
@@ -730,10 +814,74 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
 
     renderTuTruTable(_batTu);
     renderInfoCards(_batTu);
+    renderDaiVanChartFromEngine(_batTu);
     renderMucLuc();
     renderPhanBlocks();
 
+    // Show chat section (paywall overlay vẫn lock cho đến khi unlock)
+    document.getElementById('tuvi-chat-section').style.display = 'block';
+
     sec.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // ─── Pre-render đại vận chart từ engine data (instant, không phụ thuộc Claude) ──
+  function renderDaiVanChartFromEngine(bt) {
+    if (!bt?.daiVans?.length || typeof Chart === 'undefined') return;
+    const section = document.getElementById('daivan-chart-section');
+    section.style.display = '';
+
+    const labels = bt.daiVans.map((dv, i) => `ĐV${i+1} (${dv.tuoiStart}-${dv.tuoiEnd}t)`);
+    const scores = bt.daiVans.map(dv => dv.score);
+
+    // Note: highlight đại vận hiện tại
+    const cur = bt.daiVanHienTai;
+    const noteEl = document.getElementById('daivan-chart-note');
+    if (cur) noteEl.textContent = `Hiện tại: ĐV${cur.idx+1} (${cur.can} ${cur.chi}, ${cur.tuoiStart}-${cur.tuoiEnd} tuổi) · ${cur.thapThanCan} · ${cur.score}/10`;
+    else noteEl.textContent = `Khởi vận: ${bt.tuoiKhoiVan} tuổi · Hướng vận: ${bt.daiVanThuan?'thuận':'nghịch'}`;
+
+    const ctx = document.getElementById('daivan-chart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Điểm Đại Vận',
+          data: scores,
+          borderColor: '#9A7B3A',
+          backgroundColor: 'rgba(154,123,58,0.15)',
+          fill: true,
+          tension: 0.35,
+          pointRadius: 6,
+          pointHoverRadius: 8,
+          pointBackgroundColor: bt.daiVans.map((dv, i) => cur && cur.idx === i ? '#C0392B' : '#061A2E'),
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          y: { min: 0, max: 10, ticks: { stepSize: 2, font: { size: 11 } } },
+          x: { ticks: { font: { size: 10 }, maxRotation: 30, minRotation: 0 } },
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              title: (items) => labels[items[0].dataIndex],
+              label: (item) => {
+                const dv = bt.daiVans[item.dataIndex];
+                return [
+                  `${dv.can} ${dv.chi} (${dv.thapThanCan})`,
+                  `Score: ${dv.score}/10`,
+                  `${dv.namStart}-${dv.namEnd}`,
+                ];
+              }
+            }
+          }
+        }
+      }
+    });
   }
 
   // ─── Paywall check ───────────────────────────────────────────
@@ -764,20 +912,22 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
     const lock = document.getElementById(`lock-box-${phan}`);
     if (!lock) return;
     lock.style.display = 'block';
+    lock.className = 'paywall-gate';
     lock.innerHTML = `
       <div class="paywall-eyebrow">紫微明寶 · Luận Giải Đầy Đủ</div>
       <div class="paywall-title">Mở khóa 16 phần luận giải Bát Tự</div>
       <div class="paywall-desc">
-        Phân tích chuyên sâu Nhật Can, Cách Cục, Dụng Thần, từng nhóm Thập Thần, tình duyên, sức khỏe, Đại Vận và Lưu Niên — luận giải cá nhân hóa bằng AI theo cổ pháp Tử Bình Chân Thuyên + Trích Thiên Tủy.
+        Phân tích chuyên sâu Nhật Can, Cách Cục, Dụng Thần, từng nhóm Thập Thần, tình duyên, sức khỏe, 9 Đại Vận và Lưu Niên — luận giải cá nhân hóa bằng AI theo cổ pháp <em>Tử Bình Chân Thuyên</em> + <em>Trích Thiên Tủy</em>.
       </div>
       <div class="paywall-features">
         <div class="paywall-feature">Tổng quan Bát Tự &amp; Cách Cục</div>
         <div class="paywall-feature">5 nhóm Thập Thần chi tiết</div>
         <div class="paywall-feature">Tình duyên &amp; sức khỏe</div>
         <div class="paywall-feature">Hình xung hại hợp &amp; Thần Sát</div>
-        <div class="paywall-feature">8 Đại Vận với biểu đồ</div>
+        <div class="paywall-feature">9 Đại Vận với biểu đồ</div>
         <div class="paywall-feature">Lưu niên năm xem chi tiết</div>
       </div>
+      <div style="font-size:12px;color:#9A7B3A;margin-bottom:6px;letter-spacing:0.3px">16 phần · Bằng nửa buổi cà phê</div>
       <div class="paywall-price">100 Credits</div>
       <div class="paywall-price-note">Bằng $10 · Nạp 1 lần dùng mọi công cụ · Credits không hết hạn</div>
       <button class="btn-paywall" id="btn-paywall-pay" onclick="window.tubinhUnlock()">
@@ -785,6 +935,17 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
         <span style="font-size:16px">→</span>
       </button>
       <div class="paywall-secure">🔒 $1 = 10 credits · Dùng cho mọi công cụ · <a href="/topup.html" style="color:#c9a84c">Nạp thêm →</a></div>
+
+      <div style="margin-top:24px;display:flex;flex-direction:column;gap:10px;max-width:440px;margin-left:auto;margin-right:auto;text-align:left">
+        <div style="background:rgba(255,255,255,0.7);border-left:3px solid #c9a84c;padding:10px 14px;border-radius:0 6px 6px 0">
+          <div style="font-size:13px;color:#333;line-height:1.5;font-style:italic">"Đọc xong phần Cách Cục mới hiểu vì sao công việc tao luôn vướng người trên đè người dưới — tao là Thất Sát mà không có Ấn chế."</div>
+          <div style="font-size:11px;color:#9A7B3A;margin-top:5px;font-weight:600">Lê V.A. — Đà Nẵng</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.7);border-left:3px solid #c9a84c;padding:10px 14px;border-radius:0 6px 6px 0">
+          <div style="font-size:13px;color:#333;line-height:1.5;font-style:italic">"Phần Đại Vận chỉ ra 2025-2034 là vận đẹp nhất đời. Đúng y chang cơ hội đang mở ra với mình bây giờ."</div>
+          <div style="font-size:11px;color:#9A7B3A;margin-top:5px;font-weight:600">Phạm T.Q. — TP.HCM</div>
+        </div>
+      </div>
     `;
   }
 
@@ -838,11 +999,77 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
     } catch(e) { return 0; }
   }
 
-  // ─── Luận giải all 16 phần (sequential) ──────────────────────
+  // ─── Streaming SSE consumer ──────────────────────────────────
+  async function streamLuanGiai(phan, batTuText, docs, contentEl) {
+    const resp = await fetch('/api/tubinh', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ batTuText, phan, docs })
+    });
+    if (!resp.ok || !resp.body) {
+      const errTxt = await resp.text().catch(() => '');
+      throw new Error('API ' + resp.status + ': ' + errTxt.slice(0, 200));
+    }
+
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder('utf-8');
+    let buffer = '';
+    let accumulated = '';
+    let firstChunkArrived = false;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+
+      // SSE format: lines ending with \n, blocks separated by blank lines
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || ''; // keep last incomplete line
+
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const payload = line.slice(6).trim();
+        if (!payload) continue;
+        try {
+          const evt = JSON.parse(payload);
+          if (evt.type === 'content_block_delta' && evt.delta?.type === 'text_delta') {
+            const chunk = evt.delta.text || '';
+            accumulated += chunk;
+            if (!firstChunkArrived) {
+              firstChunkArrived = true;
+              contentEl.style.display = '';
+              contentEl.innerHTML = '<div class="phan-streaming-content"></div>';
+            }
+            // Render incrementally with cursor
+            const inner = contentEl.querySelector('.phan-streaming-content');
+            if (inner) inner.innerHTML = renderMarkdown(accumulated) + '<span class="phan-streaming-cursor"></span>';
+          }
+          if (evt.type === 'message_stop') {
+            // Final render without cursor
+            const inner = contentEl.querySelector('.phan-streaming-content');
+            if (inner) inner.innerHTML = renderMarkdown(accumulated);
+          }
+        } catch(e) { /* ignore parse errors on partial chunks */ }
+      }
+    }
+
+    return accumulated;
+  }
+
+  // ─── Luận giải all 16 phần (sequential, streaming) ───────────
   async function luanGiaiAll() {
-    // Hide paywall gate ở phần 1 nếu có
     const gate = document.getElementById('lock-box-1');
     if (gate) gate.style.display = 'none';
+
+    // Hide chatbot paywall overlay + init chatbot
+    const overlay = document.getElementById('tvc-paywall-overlay');
+    if (overlay) overlay.style.display = 'none';
+    if (typeof TuviChatbot !== 'undefined') {
+      TuviChatbot.init({
+        getLasoData: () => window._bttuResult || null,
+        apiPath: '/api/tubinh?action=chat',
+      });
+    }
 
     showLoader(true);
     _currentPhan = 0;
@@ -853,8 +1080,7 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
     _currentPhan++;
     if (_currentPhan > TONG_PHAN) {
       showLoader(false);
-      document.getElementById('phan-progress').textContent = `Hoàn thành 16/${TONG_PHAN} phần`;
-      // Save laso
+      document.getElementById('phan-progress').textContent = `Hoàn thành ${TONG_PHAN}/${TONG_PHAN} phần`;
       saveLaSo();
       return;
     }
@@ -864,23 +1090,22 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
     const claudeBox = document.getElementById(`claude-content-${_currentPhan}`);
     if (lockBox) {
       lockBox.style.display = 'block';
+      lockBox.className = 'phan-loading';
       lockBox.innerHTML = `
-        <div class="paywall-eyebrow">紫微明寶 · Đang Tải</div>
-        <div class="paywall-title" style="font-size:18px">Đang luận giải phần ${_currentPhan} / ${TONG_PHAN}...</div>
-        <div class="paywall-desc">${PHAN_LABELS[_currentPhan]}</div>`;
+        <div class="phan-loading-title"><span class="phan-spinner"></span>Đang luận giải phần ${_currentPhan} / ${TONG_PHAN}</div>
+        <div class="phan-loading-desc">${PHAN_LABELS[_currentPhan]} — đang truy hồi tài liệu và phân tích...</div>`;
     }
 
-    document.getElementById('phan-progress').textContent = `Đang luận giải ${_currentPhan} / ${TONG_PHAN}: ${PHAN_LABELS[_currentPhan]}`;
+    document.getElementById('phan-progress').textContent = `Phần ${_currentPhan} / ${TONG_PHAN}: ${PHAN_LABELS[_currentPhan]}`;
     document.getElementById('progress-fill').style.width = (_currentPhan*100/TONG_PHAN) + '%';
 
-    // Scroll to current phan
     if (_currentPhan === 1) {
       const anc = document.getElementById('phan-anchor-1');
       if (anc) anc.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     try {
-      // RAG search
+      // RAG search trước
       let docs = '';
       try {
         const sr = await fetch('/api/tubinh?action=search', {
@@ -890,48 +1115,36 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
         if (sr.ok) docs = (await sr.json()).docs || '';
       } catch(e) { console.warn('RAG search error:', e); }
 
-      // Delay to avoid rate limit
-      if (_currentPhan > 1) await new Promise(r => setTimeout(r, _currentPhan >= 12 ? 2000 : 1000));
+      // Delay tránh rate limit
+      if (_currentPhan > 1) await new Promise(r => setTimeout(r, 800));
 
-      // Call Claude API
-      const resp = await fetch('/api/tubinh', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ batTuText: _batTuText, phan: _currentPhan, docs })
-      });
-      if (!resp.ok) throw new Error('API ' + resp.status);
-      const data = await resp.json();
-      if (data.error) throw new Error(data.error);
-
-      _luanGiaiStore[_currentPhan] = data.luanGiai || '';
-
-      if (claudeBox) {
-        claudeBox.innerHTML = renderMarkdown(data.luanGiai);
-        claudeBox.style.display = '';
-      }
+      // Hide lock box, show streaming content
       if (lockBox) lockBox.style.display = 'none';
-
-      // Render chart cho phần 12 (đại vận tổng quan)
-      if (_currentPhan === 12 && data.chartData) {
-        renderDaiVanChart(data.chartData);
+      if (claudeBox) {
+        claudeBox.style.display = '';
+        claudeBox.innerHTML = '<div class="phan-loading-title" style="text-align:left"><span class="phan-spinner"></span>Đang khởi tạo luận giải...</div>';
       }
+
+      // Stream
+      const finalText = await streamLuanGiai(_currentPhan, _batTuText, docs, claudeBox);
+      _luanGiaiStore[_currentPhan] = finalText;
 
       updateMucLuc(_currentPhan, 'done');
       if (_currentPhan < TONG_PHAN) updateMucLuc(_currentPhan + 1, 'active');
 
     } catch(e) {
       updateMucLuc(_currentPhan, 'done');
-      if (lockBox) {
-        lockBox.innerHTML = `
-          <div class="paywall-eyebrow" style="color:#C0392B">Lỗi kết nối</div>
-          <div class="paywall-title" style="font-size:18px">❌ Không tải được phần ${_currentPhan}</div>
-          <div class="paywall-desc">${e.message}</div>
-          <button class="btn-paywall" onclick="window.tubinhRetry(${_currentPhan})">
-            <span>Thử lại</span><span style="font-size:16px">↻</span>
-          </button>`;
+      if (claudeBox) {
+        claudeBox.style.display = '';
+        claudeBox.innerHTML = `
+          <div style="background:rgba(192,57,43,0.06);border:1px solid var(--red);padding:16px;color:var(--red);font-size:13px">
+            ❌ Lỗi tải phần ${_currentPhan}: ${e.message}
+            <button class="btn-tool" style="margin-left:12px" onclick="window.tubinhRetry(${_currentPhan})">↻ Thử lại</button>
+          </div>`;
       }
+      if (lockBox) lockBox.style.display = 'none';
     }
 
-    // Continue to next
     await loadNextPhan();
   }
 
@@ -940,39 +1153,24 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
     loadNextPhan();
   };
 
-  // ─── Đại vận chart (phần 12) ─────────────────────────────────
-  function renderDaiVanChart(chartData) {
-    const block = document.getElementById('phan-block-12');
-    if (!block || !chartData?.labels || !chartData?.scores) return;
-    let wrap = block.querySelector('.chart-canvas-wrap');
-    if (!wrap) {
-      wrap = document.createElement('div');
-      wrap.className = 'chart-canvas-wrap';
-      wrap.innerHTML = '<canvas id="dv-chart" height="100"></canvas>';
-      const content = document.getElementById('claude-content-12');
-      if (content) content.parentNode.insertBefore(wrap, content);
-    }
-    const ctx = document.getElementById('dv-chart');
-    if (!ctx || typeof Chart === 'undefined') return;
-    new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: chartData.labels,
-        datasets: [{
-          label: 'Điểm Đại Vận',
-          data: chartData.scores,
-          borderColor: '#9A7B3A',
-          backgroundColor: 'rgba(154,123,58,0.15)',
-          fill: true, tension: 0.35, pointRadius: 5, pointBackgroundColor: '#061A2E',
-        }]
-      },
-      options: {
-        scales: { y: { min: 0, max: 10, ticks: { stepSize: 2 } } },
-        plugins: { legend: { display: false } },
-        responsive: true, maintainAspectRatio: true,
+  // ─── Share ───────────────────────────────────────────────────
+  window.tubinhShare = async function() {
+    const title = `Bát Tự ${_hoTen} | Tử Vi Minh Bảo`;
+    const text = `Lá số Tử Bình: ${_batTu.tuTru.map(t => t.can+' '+t.chi).join(' / ')} — Nhật Can ${_batTu.nhatCan}`;
+    const url = window.location.href;
+    if (navigator.share) {
+      try { await navigator.share({ title, text, url }); }
+      catch(e) { /* user cancelled */ }
+    } else {
+      // Fallback: copy URL to clipboard
+      try {
+        await navigator.clipboard.writeText(url);
+        alert('Đã copy link vào clipboard.');
+      } catch(e) {
+        alert('Link: ' + url);
       }
-    });
-  }
+    }
+  };
 
   // ─── Save laso ───────────────────────────────────────────────
   async function saveLaSo() {
