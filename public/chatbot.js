@@ -337,7 +337,18 @@
       tuoiXem: bt.tuoiXem,
       thapThan: bt.thapThan,
       hinhXungHaiHop: bt.hinhXungHaiHop,
-      thanSat: (bt.thanSat || []).slice(0, 12),
+      thanSat: (() => {
+        // bt.thanSat là OBJECT keyed by name, không phải array
+        const ts = bt.thanSat || {};
+        if (Array.isArray(ts)) return ts.slice(0, 12);
+        return Object.entries(ts)
+          .filter(([_, info]) => info && info.found)
+          .slice(0, 12)
+          .map(([name, info]) => ({
+            ten: name,
+            details: (info.details || []).map(d => typeof d === 'string' ? d : (d.text || d.chi || ''))
+          }));
+      })(),
       daiVans: (bt.daiVans || []).slice(0, 9).map(dv => ({
         idx: dv.idx, can: dv.can, chi: dv.chi,
         tuoiStart: dv.tuoiStart, tuoiEnd: dv.tuoiEnd,

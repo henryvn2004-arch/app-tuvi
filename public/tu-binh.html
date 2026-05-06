@@ -419,9 +419,9 @@ select.form-input { cursor: pointer; }
 </div>
 
 <!-- Engine + form + paywall -->
-<script src="/tubinh-ansao-engine.js?v=4"></script>
-<script src="/tubinh-cach-cuc-special.js?v=1"></script>
-<script src="/tubinh-domain-scores.js?v=1"></script>
+<script src="/tubinh-ansao-engine.js?v=5"></script>
+<script src="/tubinh-cach-cuc-special.js?v=2"></script>
+<script src="/tubinh-domain-scores.js?v=2"></script>
 <script src="/tuvi-form.js"></script>
 <script src="/tuvi-paywall2.js"></script>
 <script src="/chatbot.js"></script>
@@ -1132,6 +1132,11 @@ select.form-input { cursor: pointer; }
   // ─── Markdown renderer (đơn giản, đủ dùng) ────────────────────
   function renderMarkdown(text) {
     if (!text) return '';
+    // Normalize line endings + remove BOM / zero-width chars
+    text = text
+      .replace(/\r\n/g, '\n')
+      .replace(/\r/g, '\n')
+      .replace(/[\u200B-\u200D\uFEFF]/g, '');
     const lines = text.split('\n');
     let out = '', inTable = false, rows = [];
     function flushTable() {
@@ -1141,24 +1146,32 @@ select.form-input { cursor: pointer; }
         if (i === 1 && /^\|[-| :]+\|$/.test(row.trim())) return;
         const cells = row.split('|').filter((_, ci, a) => ci > 0 && ci < a.length - 1);
         const t = i === 0 ? 'th' : 'td';
-        out += '<tr>' + cells.map(c => `<${t}>${c.trim()}</${t}>`).join('') + '</tr>';
+        out += '<tr>' + cells.map(c => {
+          const txt = c.trim()
+            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.+?)\*/g, '<em>$1</em>');
+          return `<${t}>${txt}</${t}>`;
+        }).join('') + '</tr>';
       });
       out += '</table></div>';
       rows = []; inTable = false;
     }
-    for (const line of lines) {
-      if (line.trim().startsWith('|')) {
+    for (const rawLine of lines) {
+      const line = rawLine.trim();  // trim per line — robust against leading whitespace
+      if (line.startsWith('|')) {
         inTable = true;
-        rows.push(line.trim());
+        rows.push(line);
       } else {
         if (inTable) flushTable();
         const l = line
-          .replace(/^## (.+)$/, '<h2>$1</h2>')
-          .replace(/^### (.+)$/, '<h3>$1</h3>')
+          .replace(/^####\s+(.+)$/, '<h4>$1</h4>')
+          .replace(/^###\s+(.+)$/, '<h3>$1</h3>')
+          .replace(/^##\s+(.+)$/, '<h2>$1</h2>')
+          .replace(/^#\s+(.+)$/, '<h2>$1</h2>')
           .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
           .replace(/\*(.+?)\*/g, '<em>$1</em>');
         if (l.startsWith('<h')) out += l;
-        else if (l.trim()) out += `<p>${l}</p>`;
+        else if (line) out += `<p>${l}</p>`;
       }
     }
     if (inTable) flushTable();
