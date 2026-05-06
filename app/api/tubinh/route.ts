@@ -408,21 +408,17 @@ Chỉ đề cập thần sát thực sự xuất hiện trong lá số. Nói c�
 
 PHẦN 12 — TỔNG QUAN ĐẠI VẬN
 
-Đại vận chia đời thành các giai đoạn 10 năm. Mỗi đại vận có can chi riêng, thập thần đối với Nhật Can, và score 0-10 dựa trên dụng thần.
+Đại vận chia đời thành 9 giai đoạn, mỗi giai đoạn 10 năm. Mỗi đại vận có can chi riêng, thập thần đối với Nhật Can, và score 0-10 dựa trên dụng thần.
 
-Bảng tổng hợp 8 đại vận:
+Bảng tổng hợp 9 đại vận (đối chiếu với biểu đồ đã có sẵn ở phía trên):
 | ĐV | Tuổi | Can Chi | Thập thần | Score |
 
-JSON chart (BẮT BUỘC, đủ 8 điểm cho line chart):
-\`\`\`chartdata
-{"labels":["ĐV1 x-y","ĐV2 x-y","ĐV3 x-y","ĐV4 x-y","ĐV5 x-y","ĐV6 x-y","ĐV7 x-y","ĐV8 x-y"],"scores":[s1,s2,s3,s4,s5,s6,s7,s8]}
-\`\`\`
-
-Nhận xét tổng (200-280 từ):
+Nhận xét tổng (250-350 từ):
 ① Giai đoạn đẹp nhất của đời là khi nào — vì sao (vận đó hợp dụng thần)?
 ② Giai đoạn khó khăn nhất — vì sao (vận khắc dụng thần, hoặc gặp thần sát xấu)?
 ③ Xu hướng chung: Đời này phát sớm, phát muộn, hay đều?
-④ Nhật can vượng/nhược ảnh hưởng đến cách đọc đại vận thế nào?`;
+④ Nhật can vượng/nhược ảnh hưởng đến cách đọc đại vận thế nào?
+⑤ Một dấu mốc quan trọng cần lưu ý (giao thời giữa hai đại vận lệch nhau lớn).`;
 
   if (phan === 13) return ctx + `
 
@@ -512,26 +508,30 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
         max_tokens: phanInfo.maxTokens,
+        stream: true,
         system: [{ type: 'text', text: SYSTEM_PROMPT_TUBINH, cache_control: { type: 'ephemeral' } }],
         messages: [{ role: 'user', content: [{ type: 'text', text: prompt, cache_control: { type: 'ephemeral' } }] }],
       }),
     });
 
-    if (!resp.ok) return err('API error: ' + (await resp.text()).slice(0, 200));
-    const data = await resp.json();
-    if (data.error) return err(data.error.message);
-
-    const text: string = data.content?.[0]?.text || '';
-
-    // Extract chartdata for phần 12 (đại vận tổng quan)
-    let chartData = null;
-    const chartMatch = text.match(/```chartdata\s*([\s\S]*?)```/);
-    if (chartMatch) {
-      try { chartData = JSON.parse(chartMatch[1].trim()); } catch { /* ignore */ }
+    if (!resp.ok) {
+      const errText = await resp.text();
+      return err('API error: ' + errText.slice(0, 200));
     }
-    const luanGiai = text.replace(/```chartdata[\s\S]*?```/, '').trim();
 
-    return ok({ luanGiai, chartData, phan: phanNum, phanTen: phanInfo.ten });
+    // Forward Anthropic SSE stream directly to client.
+    // Frontend parses content_block_delta events to accumulate text.
+    return new Response(resp.body, {
+      headers: {
+        'Content-Type': 'text/event-stream; charset=utf-8',
+        'Cache-Control': 'no-cache, no-transform',
+        'Connection': 'keep-alive',
+        'X-Accel-Buffering': 'no',
+        'Access-Control-Allow-Origin': '*',
+        'X-Phan': String(phanNum),
+        'X-Phan-Ten': encodeURIComponent(phanInfo.ten),
+      },
+    });
   } catch (e: unknown) {
     return err((e as Error).message);
   }
