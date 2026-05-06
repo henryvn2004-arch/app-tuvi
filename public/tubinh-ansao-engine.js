@@ -764,6 +764,22 @@ function _tinhDaiVan(tuTru, nhatCan, gioitinh, jdnRaw, dungThan, namSinhDL, cuon
   const isVuong  = cuongNhuoc.score >= 6.5 || cuongNhuoc.label === 'Vượng' || cuongNhuoc.label === 'Cực vượng';
   const isNhuoc  = cuongNhuoc.score < 4.5  || cuongNhuoc.label === 'Nhược' || cuongNhuoc.label === 'Cực nhược';
 
+  // Đếm thập thần trong tứ trụ (cả thiên can lẫn bản khí địa chi) — dùng cho combo patterns
+  const ttCounts = { Quan: 0, Sát: 0, Tài: 0, Ấn: 0, Thực: 0, Thương: 0, TyKiep: 0 };
+  function _bumpTT(tt) {
+    if (tt === 'Chính Quan') ttCounts.Quan++;
+    else if (tt === 'Thất Sát') ttCounts.Sát++;
+    else if (tt === 'Chính Tài' || tt === 'Thiên Tài') ttCounts.Tài++;
+    else if (tt === 'Chính Ấn' || tt === 'Kiêu Thần') ttCounts.Ấn++;
+    else if (tt === 'Thực Thần') ttCounts.Thực++;
+    else if (tt === 'Thương Quan') ttCounts.Thương++;
+    else if (tt === 'Tỷ Kiên' || tt === 'Kiếp Tài') ttCounts.TyKiep++;
+  }
+  for (let _i = 0; _i < 4; _i++) {
+    if (_i !== 2) _bumpTT(thapThan(nhatCan, tuTru[_i].can));
+    _bumpTT(thapThan(nhatCan, _bankhi(tuTru[_i].chi)));
+  }
+
   // Sequence: từ tháng trụ
   const monthCanIdx = _canIdx(monthCan);
   const monthChiIdx = _chiIdx(monthChi);
@@ -936,6 +952,72 @@ function _tinhDaiVan(tuTru, nhatCan, gioitinh, jdnRaw, dungThan, namSinhDL, cuon
       // Ấn cách + ĐV Tài = phá Ấn
       if ((cc.includes('Chính Ấn') || cc.includes('Kiêu Thần')) && ['Chính Tài','Thiên Tài'].includes(ttCan)) {
         score -= 1.0; factors.push({ type:'phá cách', text:`Cách Ấn gặp ĐV ${ttCan} (phá Ấn) → phá cách`, delta: -1.0 });
+      }
+
+      // === BỔ SUNG: 10 patterns from TBCT/DDTT (chunks c30, c41, c216, c217, c224, c226, c228, c229) ===
+
+      // 6. Thương Quan cách + ĐV Tài = thương quan sinh tài [c30]
+      if (cc.includes('Thương Quan') && ['Chính Tài','Thiên Tài'].includes(ttCan)) {
+        score += 1.5; factors.push({ type:'thành cách', text:`Cách Thương Quan gặp ĐV ${ttCan} → thương quan sinh tài`, delta: 1.5 });
+      }
+      // 7. Thương Quan cách + ĐV Quan/Sát = thương quan kiến quan
+      if (cc.includes('Thương Quan') && TT_QUANSAT.includes(ttCan)) {
+        score -= 1.0; factors.push({ type:'phá cách', text:`Cách Thương Quan gặp ĐV ${ttCan} → thương quan kiến quan, tai họa`, delta: -1.0 });
+      }
+      // 8. Thương Quan cách + ĐV Ấn = thương quan bội ấn (rất quý) [c217]
+      if (cc.includes('Thương Quan') && TT_AN.includes(ttCan)) {
+        score += 1.5; factors.push({ type:'thành cách', text:`Cách Thương Quan gặp ĐV ${ttCan} → thương quan bội ấn quý`, delta: 1.5 });
+      }
+      // 9. Chính Quan cách + ĐV Thất Sát = quan sát hỗn tạp
+      if (cc.includes('Chính Quan') && ttCan === 'Thất Sát') {
+        score -= 0.8; factors.push({ type:'phá cách', text:`Cách Chính Quan gặp ĐV Thất Sát → quan sát hỗn tạp`, delta: -0.8 });
+      }
+      // 10/11. Thất Sát cách + ĐV Tài: thân nhược -1.5, thân vượng +0.8 [c30, c216]
+      if (cc.includes('Thất Sát') && ['Chính Tài','Thiên Tài'].includes(ttCan)) {
+        if (isNhuoc) {
+          score -= 1.5; factors.push({ type:'phá cách', text:`Cách Sát thân nhược gặp ĐV ${ttCan} → tài sinh sát họa tương trục`, delta: -1.5 });
+        } else if (isVuong) {
+          score += 0.8; factors.push({ type:'thành cách', text:`Cách Sát thân vượng gặp ĐV ${ttCan} → tài sinh sát thành quyền`, delta: 0.8 });
+        }
+      }
+      // 12. Tài cách + ĐV Quan/Sát = tài sinh quan đắc lộc [c216]
+      if ((cc.includes('Chính Tài') || cc.includes('Thiên Tài')) && TT_QUANSAT.includes(ttCan)) {
+        score += 1.0; factors.push({ type:'thành cách', text:`Cách Tài gặp ĐV ${ttCan} → tài sinh quan đắc lộc`, delta: 1.0 });
+      }
+      // 13. Tài cách + ĐV Thực/Thương = thực thương sinh tài [c216]
+      if ((cc.includes('Chính Tài') || cc.includes('Thiên Tài')) && TT_THUCTHUONG.includes(ttCan)) {
+        score += 0.8; factors.push({ type:'thành cách', text:`Cách Tài gặp ĐV ${ttCan} → thực thương sinh tài`, delta: 0.8 });
+      }
+      // 14. Ấn cách + ĐV Quan/Sát = quan ấn tương sinh
+      if ((cc.includes('Chính Ấn') || cc.includes('Kiêu Thần') || cc.includes('Ấn Thụ')) && TT_QUANSAT.includes(ttCan)) {
+        score += 1.0; factors.push({ type:'thành cách', text:`Cách Ấn gặp ĐV ${ttCan} → quan ấn tương sinh`, delta: 1.0 });
+      }
+      // 15. Lộc/Nhận cách + ĐV Quan/Sát = chế kiếp đắc lực [c228]
+      if ((cc.includes('Lộc') || cc.includes('Nhận') || cc.includes('Dương Nhẫn')) && TT_QUANSAT.includes(ttCan)) {
+        score += 1.5; factors.push({ type:'thành cách', text:`Cách Lộc/Nhận gặp ĐV ${ttCan} → quan sát chế kiếp`, delta: 1.5 });
+      }
+    }
+
+    // 8) Combo patterns (cuongNhuoc + tứ trụ context + ĐV)
+    {
+      // Combo 1: Nhược + Tài đa (≥3) + ĐV Quan/Sát: -1.5 [c30]
+      if (isNhuoc && ttCounts.Tài >= 3 && TT_QUANSAT.includes(ttCan)) {
+        score -= 1.5; factors.push({ type:'combo', text:`Combo: thân nhược tài đa + ĐV ${ttCan} → họa tương trục`, delta: -1.5 });
+      }
+      // Combo 2: Nhược + Tài đa + ĐV Tài: -1.0 [c226]
+      if (isNhuoc && ttCounts.Tài >= 3 && ['Chính Tài','Thiên Tài'].includes(ttCan)) {
+        score -= 1.0; factors.push({ type:'combo', text:`Combo: thân nhược tài đa + ĐV ${ttCan} → phú ốc bần nhân`, delta: -1.0 });
+      }
+      // Combo 3: Vượng + Ấn đa (≥3) + ĐV Ấn/Tỷ: -1.0 [c229]
+      if (isVuong && ttCounts.Ấn >= 3 && (TT_AN.includes(ttCan) || TT_TYKIEP.includes(ttCan))) {
+        score -= 1.0; factors.push({ type:'combo', text:`Combo: thân vượng Ấn đa + ĐV ${ttCan} → vượng quá phá cách`, delta: -1.0 });
+      }
+      // Combo 7: ĐV trùng can-chi với 1 trụ trong tứ trụ (phục ngâm): -0.5
+      for (let _ti = 0; _ti < 4; _ti++) {
+        if (tuTru[_ti].can === dvCan && tuTru[_ti].chi === dvChi) {
+          score -= 0.5; factors.push({ type:'combo', text:`Combo: ĐV trùng trụ ${truTens[_ti]} (phục ngâm)`, delta: -0.5 });
+          break;
+        }
       }
     }
 
