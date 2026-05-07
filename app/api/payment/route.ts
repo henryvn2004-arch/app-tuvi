@@ -21,18 +21,21 @@ const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY!;
 const SITE_URL      = 'https://www.tuviminhbao.com';
 const CURRENCY      = 'USD';
 
-// ── Credit packages ───────────────────────────────────────────
+// ── Credit packages (USD via PayPal) ──────────────────────────
+// Tỷ giá tham chiếu: 1 USD = 25.000đ → packages khớp với VND tier
 const PACKAGES: Record<string, { amount: string; credits: number; label: string }> = {
-  '20': { amount: '20.00', credits: 200,  label: 'Cá Nhân – 200 Lượng'  },
-  '45': { amount: '45.00', credits: 500,  label: 'Gia Đình – 500 Lượng' },
-  '80': { amount: '80.00', credits: 1000, label: 'Nhóm – 1000 Lượng'    },
+  '50':  { amount:  '4.00', credits:  50, label: 'Khoi Dau – 50 Luong (+25%)'    },
+  '120': { amount:  '8.00', credits: 120, label: 'Pho Thong – 120 Luong (+50%)'  },
+  '350': { amount: '20.00', credits: 350, label: 'Cao Cap – 350 Luong (+75%)'    },
+  '800': { amount: '40.00', credits: 800, label: 'VIP – 800 Luong (+100%)'       },
 };
 
 // ── payOS Credit packages (VNĐ) ──────────────────────────────
 const PAYOS_PACKAGES: Record<string, { amountVND: number; credits: number; label: string }> = {
-  '20': { amountVND:   490_000, credits: 200,  label: 'Ca Nhan – 200 Luong'  },
-  '45': { amountVND: 1_100_000, credits: 500,  label: 'Gia Dinh – 500 Luong' },
-  '80': { amountVND: 1_960_000, credits: 1000, label: 'Nhom – 1000 Luong'    },
+  '50':  { amountVND:  99_000, credits:  50, label: 'Khoi Dau – 50 Luong (+25%)'    },
+  '120': { amountVND: 199_000, credits: 120, label: 'Pho Thong – 120 Luong (+50%)'  },
+  '350': { amountVND: 499_000, credits: 350, label: 'Cao Cap – 350 Luong (+75%)'    },
+  '800': { amountVND: 999_000, credits: 800, label: 'VIP – 800 Luong (+100%)'       },
 };
 
 function createPayOSSignature(data: Record<string, unknown>): string {
@@ -153,21 +156,24 @@ async function handleCheck(sp: URLSearchParams): Promise<Response> {
 
 // ── POST: topup ───────────────────────────────────────────────
 async function handleTopup(body: Record<string, unknown>): Promise<Response> {
-  const packageId    = String(body.packageId    || '');
-  const userId       = String(body.userId       || '');
-  const customAmount = parseFloat(String(body.customAmount || '0'));
+  const packageId        = String(body.packageId        || '');
+  const userId           = String(body.userId           || '');
+  // Frontend gửi VND-native cho cả PayPal và bank — convert sang USD ở đây
+  const customAmountVnd  = parseFloat(String(body.customAmountVnd || body.customAmount || '0'));
 
   // Resolve package
   let pkg: { amount: string; credits: number; label: string };
   let slug: string;
 
   if (packageId === 'custom') {
-    if (!customAmount || customAmount < 5 || customAmount > 500)
-      return err('Số tiền tùy chỉnh phải từ $5 đến $500', 400);
-    const roundedAmt = Math.round(customAmount * 100) / 100;
-    const credits    = Math.round(roundedAmt * 10);
-    pkg  = { amount: roundedAmt.toFixed(2), credits, label: `Nạp Tùy Chỉnh – ${credits} Lượng` };
-    slug = `topup-custom-${Math.round(roundedAmt)}`;
+    if (!customAmountVnd || customAmountVnd < 50_000 || customAmountVnd > 5_000_000)
+      return err('Số tiền tùy chỉnh phải từ 50.000đ đến 5.000.000đ', 400);
+    // 1 Lượng = 2.500đ (no bonus, anchor pricing)
+    const credits = Math.floor(customAmountVnd / 2500);
+    // PayPal cần USD: convert VND → USD ở rate 25.000
+    const usdAmount = Math.round((customAmountVnd / 25_000) * 100) / 100;
+    pkg  = { amount: usdAmount.toFixed(2), credits, label: `Nap Tuy Chinh – ${credits} Luong` };
+    slug = `topup-custom-${Math.round(customAmountVnd / 1000)}k`;
   } else {
     const found = PACKAGES[packageId];
     if (!found) return err(`packageId không hợp lệ. Dùng: ${Object.keys(PACKAGES).join(', ')} hoặc "custom"`, 400);
@@ -248,6 +254,7 @@ async function handleCapture(body: Record<string, unknown>): Promise<Response> {
       }
       const newBal = await rpc('add_credits', { p_user_id: userId, p_amount: pkg.credits });
       await logTransaction({ userId, amount: pkg.credits, type: 'topup', description: pkg.label, paypalOrderId: orderId });
+      // Referral reward fire tự động qua Postgres trigger trg_referral_check_on_topup
       return ok({ success: true, credits: pkg.credits, balance: newBal });
     }
 
@@ -266,6 +273,7 @@ async function handleCapture(body: Record<string, unknown>): Promise<Response> {
 
     const newBal = await rpc('add_credits', { p_user_id: userId, p_amount: pkg.credits });
     await logTransaction({ userId, amount: pkg.credits, type: 'topup', description: pkg.label, paypalOrderId: orderId });
+    // Referral reward fire tự động qua Postgres trigger trg_referral_check_on_topup
     return ok({ success: true, credits: pkg.credits, balance: newBal });
 
   } catch (e: unknown) { return err((e as Error).message); }
@@ -458,11 +466,21 @@ async function handleCreateBank(body: Record<string, unknown>): Promise<Response
   let label: string;
 
   if (packageId === 'custom') {
-    const customAmount = Number(body.customAmount || 0);
-    if (customAmount < 5 || customAmount > 500) return err('Custom amount must be 5-500', 400);
-    amountVND = Math.round(customAmount * 24_500);
-    credits   = Math.round(customAmount * 10);
-    label     = `Nap ${credits} Luong`;
+    // Frontend gửi customAmountVnd (VND), backward-compat customAmount (USD)
+    const customAmountVnd = Number(body.customAmountVnd || 0);
+    const customAmountUsd = Number(body.customAmount    || 0);
+    if (customAmountVnd) {
+      if (customAmountVnd < 50_000 || customAmountVnd > 5_000_000)
+        return err('Custom amount must be 50.000đ – 5.000.000đ', 400);
+      amountVND = customAmountVnd;
+      credits   = Math.floor(customAmountVnd / 2500);  // 1 Lượng = 2.500đ
+    } else {
+      // Legacy USD path
+      if (customAmountUsd < 5 || customAmountUsd > 500) return err('Custom amount must be 5-500 USD', 400);
+      amountVND = Math.round(customAmountUsd * 25_000);
+      credits   = Math.floor(amountVND / 2500);
+    }
+    label = `Nap ${credits} Luong`;
   } else {
     const pkg = PAYOS_PACKAGES[packageId];
     if (!pkg) return err(`Invalid packageId. Use: ${Object.keys(PAYOS_PACKAGES).join(', ')}`, 400);
@@ -534,15 +552,69 @@ export async function GET(request: NextRequest) {
   return err('Invalid action.', 400);
 }
 
+// ── POST: referral-register ────────────────────────────────────
+// Body: { refCode: string }   Headers: Authorization: Bearer <user_token>
+// Frontend gọi sau khi user mới đăng ký xong + có ?ref=CODE trong URL/sessionStorage.
+// INSERT pending referral. Reward sẽ trigger tự động khi user nạp lần đầu (Postgres trigger).
+async function handleReferralRegister(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const authHeader = request.headers.get('Authorization') || '';
+  const userToken  = authHeader.replace('Bearer ', '').trim();
+  if (!userToken) return err('Missing Authorization token', 401);
+
+  const refCode = String(body.refCode || '').toUpperCase().trim();
+  if (!refCode || refCode.length !== 8) return err('Invalid referral code format', 400);
+
+  try {
+    const user = await getUserFromToken(userToken);
+    if (!user) return err('Invalid token', 401);
+
+    // Lookup referrer by code
+    const lookupRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/user_credits?referral_code=eq.${encodeURIComponent(refCode)}&select=user_id&limit=1`,
+      { headers: SB_HEADERS }
+    );
+    const rows: { user_id: string }[] = lookupRes.ok ? await lookupRes.json() : [];
+    if (!rows.length) return err('Referral code không tồn tại', 404);
+
+    const referrerId = rows[0].user_id;
+    if (referrerId === user.id) return err('Không thể tự refer chính mình', 400);
+
+    // INSERT (UNIQUE constraint on referee_user_id sẽ block double-refer)
+    const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/referrals`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, 'Prefer': 'resolution=ignore-duplicates,return=representation' },
+      body: JSON.stringify({
+        referrer_user_id: referrerId,
+        referee_user_id:  user.id,
+        referral_code_used: refCode,
+        status: 'pending',
+      }),
+    });
+
+    if (!insertRes.ok) {
+      const text = await insertRes.text();
+      return err('Insert failed: ' + text.slice(0, 100));
+    }
+    const inserted = await insertRes.json();
+    if (!inserted?.length) {
+      // Đã có referral cho user này (UNIQUE conflict, ignored) — không phải lỗi
+      return ok({ success: true, alreadyReferred: true });
+    }
+
+    return ok({ success: true, referrerId, message: 'Đã ghi nhận. Khi bạn nạp Lượng lần đầu, cả 2 sẽ nhận 30 Lượng.' });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
 export async function POST(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const action = searchParams.get('action');
   const body   = await parseBody(request);
-  if (action === 'topup')           return handleTopup(body);
-  if (action === 'capture')         return handleCapture(body);
-  if (action === 'deduct')          return handleDeduct(request, body);
-  if (action === 'admin-grant')     return handleAdminGrant(request, body);
+  if (action === 'topup')             return handleTopup(body);
+  if (action === 'capture')           return handleCapture(body);
+  if (action === 'deduct')            return handleDeduct(request, body);
+  if (action === 'admin-grant')       return handleAdminGrant(request, body);
   if (action === 'admin-create-user') return handleAdminCreateUser(request, body);
-  if (action === 'create-bank') return handleCreateBank(body);
+  if (action === 'create-bank')       return handleCreateBank(body);
+  if (action === 'referral-register') return handleReferralRegister(request, body);
   return err('Invalid action.', 400);
 }
