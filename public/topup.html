@@ -19,7 +19,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh}
 
-.wrap{max-width:960px;margin:0 auto;padding:3rem 1.5rem 5rem}
+.wrap{max-width:1120px;margin:0 auto;padding:3rem 1.5rem 5rem}
 
 /* HEADER */
 .page-header{text-align:center;margin-bottom:3rem}
@@ -45,23 +45,20 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 
 /* PACKAGES */
 .section-label{font-size:.7rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-lt);margin-bottom:1.25rem}
-.packages{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:1rem}
-@media(max-width:680px){.packages{grid-template-columns:1fr}}
+.packages{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1rem}
+@media(max-width:1100px){.packages{grid-template-columns:repeat(2,1fr);gap:1.25rem}}
+@media(max-width:560px){.packages{grid-template-columns:1fr}}
 
-.pkg-card{background:#fff;border:2px solid var(--border-lt);border-radius:14px;padding:1.75rem 1.5rem;text-align:center;position:relative;transition:border-color .2s,box-shadow .2s;display:flex;flex-direction:column}
+.pkg-card{background:#fff;border:2px solid var(--border-lt);border-radius:14px;padding:1.5rem 1.25rem;text-align:center;position:relative;transition:border-color .2s,box-shadow .2s;display:flex;flex-direction:column}
 .pkg-card:hover{border-color:#c9a84c;box-shadow:0 6px 24px rgba(154,123,58,.12)}
 .pkg-card.featured{border-color:var(--gold)}
-.pkg-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:#fff;font-size:.68rem;font-weight:700;padding:.25rem .9rem;border-radius:20px;letter-spacing:.08em;white-space:nowrap}
-.pkg-icon{font-size:2rem;margin-bottom:.75rem}
-.pkg-name{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text-lt);margin-bottom:.6rem}
-.pkg-credits{font-family:'Noto Serif',serif;font-size:2.8rem;font-weight:700;color:var(--navy);line-height:1}
-.pkg-credits-unit{font-size:.85rem;font-weight:400;color:var(--text-lt);display:block;margin-top:.2rem}
-.pkg-price{font-size:1.15rem;color:var(--text-mid);margin:1rem 0 .2rem;font-weight:700}
-.pkg-rate{font-size:.75rem;color:var(--text-lt);margin-bottom:.75rem}
-.pkg-perks{list-style:none;text-align:left;margin-bottom:1.25rem;flex:1}
-.pkg-perks li{font-size:.8rem;color:var(--text-mid);padding:.3rem 0;border-bottom:1px solid var(--border-lt);display:flex;align-items:center;gap:.5rem}
-.pkg-perks li:last-child{border-bottom:none}
-.perk-check{color:var(--green);font-weight:700;flex-shrink:0}
+.pkg-icon{font-size:1.7rem;margin-bottom:.5rem}
+.pkg-name{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text-lt);margin-bottom:.5rem}
+.pkg-credits{font-family:'Noto Serif',serif;font-size:2.4rem;font-weight:700;color:var(--navy);line-height:1}
+.pkg-credits-unit{font-size:.8rem;font-weight:400;color:var(--text-lt);display:block;margin-top:.2rem}
+.pkg-price{font-size:1.05rem;color:var(--navy);margin:.85rem 0 .15rem;font-weight:700}
+.pkg-rate{font-size:.72rem;color:var(--text-lt);margin-bottom:.6rem}
+.pkg-note{font-size:.78rem;color:var(--text-mid);line-height:1.55;margin:.5rem 0 1rem;padding:.6rem .5rem;background:var(--bg-soft);border-radius:6px;flex:1}
 .btn-pkg{width:100%;padding:.9rem;border:none;border-radius:8px;font-size:.92rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;background:var(--navy);color:#fff}
 .btn-pkg:hover{background:var(--navy-mid)}
 .btn-pkg.gold{background:var(--gold);color:#fff}
@@ -119,9 +116,9 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 
 <div class="wrap">
   <div class="page-header">
-    <div class="eyebrow">Bảng Giá</div>
-    <h1>Nạp Lượng — Dùng Mọi Công Cụ</h1>
-    <p>Nạp một lần, dùng cho tất cả công cụ. Không hết hạn. Đăng ký tài khoản nhận ngay <strong>10 lượng miễn phí</strong> để trải nghiệm.</p>
+    <div class="eyebrow">Đóng Góp Duy Trì</div>
+    <h1>Nạp Lượng để Tra Cứu Mệnh Lý</h1>
+    <p>Tử Vi Minh Bảo là dự án nghiên cứu mệnh lý cổ pháp được hỗ trợ bởi AI. Việc nạp Lượng giúp duy trì server, chi trả API mô hình ngôn ngữ lớn, và phát triển thêm công cụ. <strong>1 Lượng = 2.500đ</strong>, không hết hạn.</p>
   </div>
 
   <!-- Balance -->
@@ -138,15 +135,15 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
   <!-- Free signup banner -->
   <div class="free-banner" id="freeBanner">
     <div class="free-banner-left">
-      <div class="free-banner-tag">Miễn Phí</div>
-      <div class="free-banner-title">🎁 Nhận 10 Lượng Khi Đăng Ký</div>
-      <div class="free-banner-sub">Đủ để dùng thử Xem Tướng (2 lần) hoặc Chọn Ngày Tốt (1 lần) — không cần thanh toán</div>
+      <div class="free-banner-tag">Quà Chào Mừng</div>
+      <div class="free-banner-title">10 Lượng tặng cho thành viên mới</div>
+      <div class="free-banner-sub">Đủ để bạn dùng thử các công cụ Xem Tướng. Không cần thẻ, không cam kết.</div>
     </div>
-    <button class="btn-free" id="freeBannerBtn" onclick="handleFreeSignup()">Đăng Ký Miễn Phí →</button>
+    <button class="btn-free" id="freeBannerBtn" onclick="handleFreeSignup()">Đăng Ký →</button>
   </div>
 
   <!-- Packages -->
-  <div class="section-label" style="margin-bottom:1.25rem">Gói Nạp Lượng</div>
+  <div class="section-label" style="margin-bottom:1.25rem">Mức Đóng Góp</div>
   <div class="packages">
 
     <!-- Khởi Đầu -->
@@ -154,32 +151,21 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
       <div class="pkg-icon">🌱</div>
       <div class="pkg-name">Khởi Đầu</div>
       <div class="pkg-credits">50<span class="pkg-credits-unit">Lượng</span></div>
-      <div class="pkg-price">99.000đ <span style="font-size:.75rem;font-weight:400;color:var(--text-lt)">≈ $4</span></div>
-      <div class="pkg-rate" style="color:var(--green);font-weight:600">+25% bonus · 1.980đ / Lượng</div>
-      <ul class="pkg-perks">
-        <li><span class="perk-check">✓</span> 10× Xem Tướng (5 Lượng/lần)</li>
-        <li><span class="perk-check">✓</span> Hoặc 5× Phong Cách AI</li>
-        <li><span class="perk-check">✓</span> Tiết kiệm 26.000đ vs mua lẻ</li>
-        <li><span class="perk-check">✓</span> Không hết hạn</li>
-      </ul>
+      <div class="pkg-price">99.000đ</div>
+      <div class="pkg-rate">≈ $4 · 1.980đ / Lượng</div>
+      <div class="pkg-note">Phù hợp để trải nghiệm các công cụ Xem Tướng, Đặt Tên, Chọn Ngày Tốt.</div>
       <button class="btn-pkg" onclick="initiateTopup('50')" id="btn-50">Nạp 99.000đ</button>
       <button class="btn-pkg" style="margin-top:.5rem;background:#fff;color:var(--navy);border:2px solid var(--navy)" onclick="initiateBankTopup('50')">🏦 Chuyển khoản</button>
     </div>
 
-    <!-- Phổ Thông (POPULAR) -->
+    <!-- Phổ Thông -->
     <div class="pkg-card featured">
-      <div class="pkg-badge">PHỔ BIẾN NHẤT</div>
       <div class="pkg-icon">⭐</div>
       <div class="pkg-name">Phổ Thông</div>
       <div class="pkg-credits">120<span class="pkg-credits-unit">Lượng</span></div>
-      <div class="pkg-price">199.000đ <span style="font-size:.75rem;font-weight:400;color:var(--text-lt)">≈ $8</span></div>
-      <div class="pkg-rate" style="color:var(--green);font-weight:600">+50% bonus · 1.660đ / Lượng</div>
-      <ul class="pkg-perks">
-        <li><span class="perk-check">✓</span> Đủ cho 2× Xem Tuổi (50 Lượng/lần)</li>
-        <li><span class="perk-check">✓</span> + 4× Xem Tướng AI</li>
-        <li><span class="perk-check">✓</span> Tiết kiệm 101.000đ vs mua lẻ</li>
-        <li><span class="perk-check">✓</span> Không hết hạn · Dùng cho cả nhà</li>
-      </ul>
+      <div class="pkg-price">199.000đ</div>
+      <div class="pkg-rate">≈ $8 · 1.660đ / Lượng</div>
+      <div class="pkg-note">Đủ cho 1 Tử Bình Bát Tự đầy đủ hoặc 2 lần Xem Tuổi.</div>
       <button class="btn-pkg gold" onclick="initiateTopup('120')" id="btn-120">Nạp 199.000đ</button>
       <button class="btn-pkg" style="margin-top:.5rem;background:#fff;color:var(--navy);border:2px solid var(--navy)" onclick="initiateBankTopup('120')">🏦 Chuyển khoản</button>
     </div>
@@ -189,36 +175,30 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
       <div class="pkg-icon">💎</div>
       <div class="pkg-name">Cao Cấp</div>
       <div class="pkg-credits">350<span class="pkg-credits-unit">Lượng</span></div>
-      <div class="pkg-price">499.000đ <span style="font-size:.75rem;font-weight:400;color:var(--text-lt)">≈ $20</span></div>
-      <div class="pkg-rate" style="color:var(--green);font-weight:600">+75% bonus · 1.425đ / Lượng</div>
-      <ul class="pkg-perks">
-        <li><span class="perk-check">✓</span> 2× Luận Giải Lá Số đầy đủ (150 Lượng/lần)</li>
-        <li><span class="perk-check">✓</span> + Xem Tuổi cho cả nhà</li>
-        <li><span class="perk-check">✓</span> Tiết kiệm 376.000đ vs mua lẻ</li>
-        <li><span class="perk-check">✓</span> Không hết hạn · Tiết kiệm 30%</li>
-      </ul>
+      <div class="pkg-price">499.000đ</div>
+      <div class="pkg-rate">≈ $20 · 1.425đ / Lượng</div>
+      <div class="pkg-note">Đủ cho 2 Luận Giải Lá Số đầy đủ + Xem Tuổi cho cả nhà.</div>
       <button class="btn-pkg" onclick="initiateTopup('350')" id="btn-350">Nạp 499.000đ</button>
       <button class="btn-pkg" style="margin-top:.5rem;background:#fff;color:var(--navy);border:2px solid var(--navy)" onclick="initiateBankTopup('350')">🏦 Chuyển khoản</button>
     </div>
 
     <!-- VIP -->
     <div class="pkg-card">
-      <div class="pkg-badge" style="background:linear-gradient(135deg,#9A7B3A,#c9a84c);color:#fff">🔥 BONUS +100%</div>
       <div class="pkg-icon">👑</div>
       <div class="pkg-name">VIP</div>
       <div class="pkg-credits">800<span class="pkg-credits-unit">Lượng</span></div>
-      <div class="pkg-price">999.000đ <span style="font-size:.75rem;font-weight:400;color:var(--text-lt)">≈ $40</span></div>
-      <div class="pkg-rate" style="color:var(--green);font-weight:600">+100% bonus · 1.250đ / Lượng</div>
-      <ul class="pkg-perks">
-        <li><span class="perk-check">✓</span> 5× Luận Giải Lá Số đầy đủ</li>
-        <li><span class="perk-check">✓</span> Hoặc 8× Tử Bình Bát Tự (100 Lượng/lần)</li>
-        <li><span class="perk-check">✓</span> Tiết kiệm 1.001.000đ vs mua lẻ</li>
-        <li><span class="perk-check">✓</span> Không hết hạn · Whale tier</li>
-      </ul>
+      <div class="pkg-price">999.000đ</div>
+      <div class="pkg-rate">≈ $40 · 1.250đ / Lượng</div>
+      <div class="pkg-note">Phù hợp cho gia đình hoặc dùng nghiên cứu thường xuyên.</div>
       <button class="btn-pkg" onclick="initiateTopup('800')" id="btn-800">Nạp 999.000đ</button>
       <button class="btn-pkg" style="margin-top:.5rem;background:#fff;color:var(--navy);border:2px solid var(--navy)" onclick="initiateBankTopup('800')">🏦 Chuyển khoản</button>
     </div>
 
+  </div>
+
+  <!-- Academic note about why payment exists -->
+  <div style="margin:1rem 0 2rem;padding:1.1rem 1.4rem;background:var(--bg-soft);border-left:3px solid var(--gold);border-radius:6px;font-size:.85rem;color:var(--text-mid);line-height:1.7">
+    <strong style="color:var(--navy)">Vì sao có thanh toán?</strong> Mỗi luận giải AI gọi API mô hình ngôn ngữ lớn (Claude/GPT), tốn khoảng 0.05–0.10 USD mỗi lần. Cộng với chi phí lưu trữ Supabase, hosting Vercel, và phát triển công cụ mới — Lượng là cách giúp dự án tự duy trì để giữ <strong>28 công cụ tra cứu khác miễn phí</strong> cho mọi người.
   </div>
 
   <!-- Custom topup -->
@@ -281,19 +261,23 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
     </div>
     <div class="faq-item">
       <div class="faq-q">Xem lại kết quả có bị trừ lượng tiếp không?</div>
-      <div class="faq-a">Không. Mỗi lá số / kết quả chỉ trừ lượng một lần. Sau đó xem lại tùy ý miễn phí.</div>
+      <div class="faq-a">Không. Mỗi lá số / kết quả chỉ trừ Lượng một lần. Sau đó xem lại tùy ý miễn phí.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">Thanh toán bằng thẻ Visa/Mastercard được không?</div>
-      <div class="faq-a">Được. Trong cửa sổ PayPal, chọn "Pay with Debit or Credit Card" để nhập thẻ trực tiếp — không cần tài khoản PayPal.</div>
+      <div class="faq-q">Tôi có thể thanh toán bằng cách nào?</div>
+      <div class="faq-a">Hai phương thức: <strong>(1) PayPal</strong> — chấp nhận thẻ Visa/Mastercard quốc tế (chọn "Pay with Debit or Credit Card" trong cửa sổ PayPal, không cần tài khoản). <strong>(2) Chuyển khoản ngân hàng VND</strong> qua payOS — quét QR từ app ngân hàng Việt Nam, ghi credit tự động.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">10 lượng miễn phí khi đăng ký dùng được những gì?</div>
-      <div class="faq-a">Dùng được 2 lần Xem Tướng (5 lượng/lần), hoặc 1 lần Chọn Ngày Tốt (15 lượng — cần thêm 5 lượng), hoặc dùng thử nhiều công cụ nhỏ khác.</div>
+      <div class="faq-q">10 Lượng quà chào mừng khi đăng ký dùng được gì?</div>
+      <div class="faq-a">Dùng được 2 lần Xem Tướng (5 Lượng/lần), hoặc trải nghiệm nhiều công cụ phong cách AI khác. 28 công cụ tra cứu khác (an sao, tứ trụ, hoàng đạo, tarot...) hoàn toàn miễn phí, không cần Lượng.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">Lượng có dùng chung được không?</div>
-      <div class="faq-a">Lượng gắn với tài khoản cá nhân. Gói Gia Đình phù hợp nhất khi muốn xem cho nhiều người trong cùng một tài khoản.</div>
+      <div class="faq-q">Lượng có dùng chung tài khoản được không?</div>
+      <div class="faq-a">Lượng gắn với một tài khoản. Nếu muốn dùng cho cả nhà, có thể chọn mức đóng góp lớn hơn (Cao Cấp / VIP) và dùng chung 1 tài khoản.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Vì sao có thanh toán mà không phải hoàn toàn miễn phí?</div>
+      <div class="faq-a">28 công cụ tra cứu cổ pháp (an sao, tứ trụ, hoàng đạo...) hoàn toàn miễn phí. Các công cụ luận giải bằng AI thì cần Lượng vì mỗi lần gọi API mô hình ngôn ngữ lớn (Claude/GPT) tốn 0.05–0.10 USD. Lượng giúp dự án bù đắp chi phí AI, server và phát triển công cụ mới.</div>
     </div>
   </div>
 </div>
