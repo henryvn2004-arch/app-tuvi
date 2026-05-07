@@ -49,20 +49,41 @@ const NAMES = [
 // LOSS AVERSION POPUP DATA (theo từng page)
 // ═══════════════════════════════════════════════════════════
 const POPUP_DATA = {
+  // Homepage portal — academic, KHÔNG scarcity, KHÔNG price
   '/': {
+    icon: '✦',
+    headline: 'Mệnh lý không nên để mai sau mới biết',
+    body: 'Hiểu được bản mệnh, đại vận, tướng pháp giúp bạn chủ động trong những quyết định quan trọng. <strong>47 công cụ luận giải</strong> theo cổ pháp đang chờ bạn khám phá.',
+    cta: 'Khám Phá Công Cụ Mệnh Lý →',
+    ctaHref: '/luan-giai.html',
+    secondary: 'Để sau vậy',
+    urgency: '🔒 Theo cổ pháp · 紫微鬥數 · 子平八字 · 麻衣神相 · 八宅明鏡',
+  },
+  // Lá Số tool page — scarcity (đoạn cũ của homepage di chuyển về đây)
+  '/luan-giai.html': {
     icon: '⚠️',
     headline: 'Lá số của bạn có thể đang ở giai đoạn chuyển vận quan trọng',
     body: 'Nhiều người bỏ qua dấu hiệu này và hối tiếc về sau. Bài luận giải đầy đủ sẽ chỉ ra chính xác <strong>những đại hạn cần chuẩn bị trong 5 năm tới</strong> — và cách thuận thế để không bỏ lỡ.',
-    cta: 'Mở Khóa Luận Giải Đầy Đủ — $19',
+    cta: 'Mở Khóa Luận Giải Đầy Đủ →',
     ctaHref: '#payment-section',
     secondary: 'Không, tôi chấp nhận bỏ lỡ',
-    urgency: '🔒 Phân tích cá nhân hoá · Không lưu ảnh · Bảo mật tuyệt đối',
+    urgency: '🔒 Phân tích cá nhân hoá · Theo cổ pháp · Bảo mật tuyệt đối',
+  },
+  // Tử Bình Bát Tự
+  '/tu-binh.html': {
+    icon: '📜',
+    headline: 'Bát Tự là bản đồ chính xác nhất về vận trình cuộc đời',
+    body: 'Tứ Trụ — Năm, Tháng, Ngày, Giờ — chứa đủ thông tin về <strong>tính cách, sự nghiệp, tài lộc và những giai đoạn cần lưu ý</strong>. Đọc đúng Bát Tự là biết được hướng đi của 60 năm tới.',
+    cta: 'Mở Khóa Luận Giải Đầy Đủ →',
+    ctaHref: '#payment-section',
+    secondary: 'Để sau vậy',
+    urgency: '🔒 Cổ pháp Tử Bình Chân Thuyên · Cá nhân hóa AI · Bảo mật tuyệt đối',
   },
   '/xem-tuoi.html': {
     icon: '💑',
     headline: 'Tuổi tác ảnh hưởng lớn hơn bạn nghĩ đến hôn nhân',
     body: 'Nhiều cặp đôi gặp xung đột không giải thích được chỉ vì bỏ qua yếu tố tuổi. Bài phân tích đầy đủ sẽ chỉ ra <strong>mức độ tương hợp thực sự và những giai đoạn cần lưu ý</strong> trong cuộc hôn nhân.',
-    cta: 'Xem Phân Tích Đầy Đủ — $9',
+    cta: 'Xem Phân Tích Đầy Đủ →',
     ctaHref: '#payment-section',
     secondary: 'Thôi, tôi tự xử lý được',
     urgency: '⚡ Kết quả ngay · Dựa trên lá số thực · Không phán chung chung',
@@ -71,22 +92,22 @@ const POPUP_DATA = {
     icon: '🤝',
     headline: 'Hợp tác sai người có thể tiêu tốn nhiều năm nỗ lực',
     body: 'Tuổi tác hợp làm ăn không chỉ là "hợp hay không" — mà còn là <strong>thời điểm nào thuận, giai đoạn nào cần cẩn thận</strong> và ai là người phù hợp dài hạn.',
-    cta: 'Xem Phân Tích Đầy Đủ — $9',
+    cta: 'Xem Phân Tích Đầy Đủ →',
     ctaHref: '#payment-section',
     secondary: 'Không cần, tôi đã quyết rồi',
     urgency: '⚡ Kết quả ngay · Dựa trên lá số thực · Không phán chung chung',
   },
 };
 
-// Fallback cho các page khác
+// Fallback cho các page khác (Phong Thủy, Xem Tướng, Đặt Tên...)
 const POPUP_DEFAULT = {
   icon: '✦',
   headline: 'Khám phá thêm về mệnh lý của bạn',
-  body: 'Lá số Tử Vi phân tích toàn diện: tính cách, vận trình, tình duyên, tài lộc và những đại hạn quan trọng sắp tới.',
-  cta: 'Xem Lá Số Cá Nhân — $19',
+  body: 'Tử Vi · Tử Bình · Tướng Số · Phong Thủy theo cổ pháp — phân tích toàn diện về tính cách, vận trình, tình duyên, tài lộc và những đại hạn quan trọng sắp tới.',
+  cta: 'Xem Lá Số Cá Nhân →',
   ctaHref: '/luan-giai.html',
   secondary: 'Để sau vậy',
-  urgency: '🔒 Phân tích cá nhân hoá · Thanh toán an toàn qua PayPal',
+  urgency: '🔒 Phân tích cá nhân hoá · Theo cổ pháp · Bảo mật tuyệt đối',
 };
 
 // ═══════════════════════════════════════════════════════════

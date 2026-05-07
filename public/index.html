@@ -587,11 +587,13 @@ function switchToTab(tabId) {
   target.classList.add('active');
   renderActiveTab();
   history.replaceState(null, '', '#' + tabId);
-  // Scroll to tab nav area
+  // Scroll to tab nav area — use offsetTop để KHÔNG bị sticky position lừa
+  // (getBoundingClientRect().top = 60 khi tab-nav-wrap đang sticky stuck)
   const nav = document.querySelector('.tab-nav-wrap');
   if (nav) {
-    const y = nav.getBoundingClientRect().top + window.scrollY - 50;
-    window.scrollTo({ top: y, behavior: 'smooth' });
+    // offsetTop returns normal-flow position from document top
+    const y = nav.offsetTop - 70;  // 70 = topnav 60px + small gap
+    window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
   }
 }
 
