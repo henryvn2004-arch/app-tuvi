@@ -149,56 +149,74 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
   <div class="section-label" style="margin-bottom:1.25rem">Gói Nạp Lượng</div>
   <div class="packages">
 
-    <!-- Cá Nhân -->
+    <!-- Khởi Đầu -->
     <div class="pkg-card">
-      <div class="pkg-icon">👤</div>
-      <div class="pkg-name">Cá Nhân</div>
-      <div class="pkg-credits">200<span class="pkg-credits-unit">lượng</span></div>
-      <div class="pkg-price">$20 <span style="font-size:.75rem;font-weight:400;color:var(--text-lt)">≈ 500K VNĐ</span></div>
-      <div class="pkg-rate">$0.10 / lượng</div>
+      <div class="pkg-icon">🌱</div>
+      <div class="pkg-name">Khởi Đầu</div>
+      <div class="pkg-credits">50<span class="pkg-credits-unit">Lượng</span></div>
+      <div class="pkg-price">99.000đ <span style="font-size:.75rem;font-weight:400;color:var(--text-lt)">≈ $4</span></div>
+      <div class="pkg-rate" style="color:var(--green);font-weight:600">+25% bonus · 1.980đ / Lượng</div>
       <ul class="pkg-perks">
-        <li><span class="perk-check">✓</span> 1 Luận Giải Lá Số đầy đủ (150 lượng)</li>
-        <li><span class="perk-check">✓</span> + Xem Tuổi Vợ Chồng (50 lượng)</li>
-        <li><span class="perk-check">✓</span> Hoặc 10× Xem Tướng (5 lượng/lần)</li>
+        <li><span class="perk-check">✓</span> 10× Xem Tướng (5 Lượng/lần)</li>
+        <li><span class="perk-check">✓</span> Hoặc 5× Phong Cách AI</li>
+        <li><span class="perk-check">✓</span> Tiết kiệm 26.000đ vs mua lẻ</li>
         <li><span class="perk-check">✓</span> Không hết hạn</li>
       </ul>
-      <button class="btn-pkg" onclick="initiateTopup('20')" id="btn-20">Nạp $20</button>
-      <button class="btn-pkg" style="margin-top:.5rem;background:#fff;color:var(--navy);border:2px solid var(--navy)" onclick="initiateBankTopup('20')">🏦 Chuyển khoản</button>
+      <button class="btn-pkg" onclick="initiateTopup('50')" id="btn-50">Nạp 99.000đ</button>
+      <button class="btn-pkg" style="margin-top:.5rem;background:#fff;color:var(--navy);border:2px solid var(--navy)" onclick="initiateBankTopup('50')">🏦 Chuyển khoản</button>
     </div>
 
-    <!-- Gia Đình -->
+    <!-- Phổ Thông (POPULAR) -->
     <div class="pkg-card featured">
       <div class="pkg-badge">PHỔ BIẾN NHẤT</div>
-      <div class="pkg-icon">👨‍👩‍👧‍👦</div>
-      <div class="pkg-name">Gia Đình</div>
-      <div class="pkg-credits">500<span class="pkg-credits-unit">lượng</span></div>
-      <div class="pkg-price">$45 <span style="font-size:.75rem;font-weight:400;color:var(--text-lt)">≈ 1.1tr VNĐ</span></div>
-      <div class="pkg-rate" style="color:var(--green);font-weight:600">$0.09 / lượng — tiết kiệm 10%</div>
+      <div class="pkg-icon">⭐</div>
+      <div class="pkg-name">Phổ Thông</div>
+      <div class="pkg-credits">120<span class="pkg-credits-unit">Lượng</span></div>
+      <div class="pkg-price">199.000đ <span style="font-size:.75rem;font-weight:400;color:var(--text-lt)">≈ $8</span></div>
+      <div class="pkg-rate" style="color:var(--green);font-weight:600">+50% bonus · 1.660đ / Lượng</div>
       <ul class="pkg-perks">
-        <li><span class="perk-check">✓</span> 3× Luận Giải Lá Số (cho cả nhà)</li>
-        <li><span class="perk-check">✓</span> + Xem tuổi, đặt tên, chọn ngày</li>
-        <li><span class="perk-check">✓</span> 50+ lần Xem Tướng các loại</li>
-        <li><span class="perk-check">✓</span> Không hết hạn · Dùng chung account</li>
+        <li><span class="perk-check">✓</span> Đủ cho 2× Xem Tuổi (50 Lượng/lần)</li>
+        <li><span class="perk-check">✓</span> + 4× Xem Tướng AI</li>
+        <li><span class="perk-check">✓</span> Tiết kiệm 101.000đ vs mua lẻ</li>
+        <li><span class="perk-check">✓</span> Không hết hạn · Dùng cho cả nhà</li>
       </ul>
-      <button class="btn-pkg gold" onclick="initiateTopup('45')" id="btn-45">Nạp $45</button>
-      <button class="btn-pkg" style="margin-top:.5rem;background:#fff;color:var(--navy);border:2px solid var(--navy)" onclick="initiateBankTopup('45')">🏦 Chuyển khoản</button>
+      <button class="btn-pkg gold" onclick="initiateTopup('120')" id="btn-120">Nạp 199.000đ</button>
+      <button class="btn-pkg" style="margin-top:.5rem;background:#fff;color:var(--navy);border:2px solid var(--navy)" onclick="initiateBankTopup('120')">🏦 Chuyển khoản</button>
     </div>
 
-    <!-- Nhóm -->
+    <!-- Cao Cấp -->
     <div class="pkg-card">
-      <div class="pkg-icon">👥</div>
-      <div class="pkg-name">Nhóm</div>
-      <div class="pkg-credits">1000<span class="pkg-credits-unit">lượng</span></div>
-      <div class="pkg-price">$80 <span style="font-size:.75rem;font-weight:400;color:var(--text-lt)">≈ 2tr VNĐ</span></div>
-      <div class="pkg-rate" style="color:var(--green);font-weight:600">$0.08 / lượng — tiết kiệm 20%</div>
+      <div class="pkg-icon">💎</div>
+      <div class="pkg-name">Cao Cấp</div>
+      <div class="pkg-credits">350<span class="pkg-credits-unit">Lượng</span></div>
+      <div class="pkg-price">499.000đ <span style="font-size:.75rem;font-weight:400;color:var(--text-lt)">≈ $20</span></div>
+      <div class="pkg-rate" style="color:var(--green);font-weight:600">+75% bonus · 1.425đ / Lượng</div>
       <ul class="pkg-perks">
-        <li><span class="perk-check">✓</span> 6× Luận Giải Lá Số đầy đủ</li>
-        <li><span class="perk-check">✓</span> Dùng cho cả nhóm bạn / công ty</li>
-        <li><span class="perk-check">✓</span> 100+ lần Xem Tướng, Đặt Tên...</li>
-        <li><span class="perk-check">✓</span> Không hết hạn · Tiết kiệm nhất</li>
+        <li><span class="perk-check">✓</span> 2× Luận Giải Lá Số đầy đủ (150 Lượng/lần)</li>
+        <li><span class="perk-check">✓</span> + Xem Tuổi cho cả nhà</li>
+        <li><span class="perk-check">✓</span> Tiết kiệm 376.000đ vs mua lẻ</li>
+        <li><span class="perk-check">✓</span> Không hết hạn · Tiết kiệm 30%</li>
       </ul>
-      <button class="btn-pkg" onclick="initiateTopup('80')" id="btn-80">Nạp $80</button>
-      <button class="btn-pkg" style="margin-top:.5rem;background:#fff;color:var(--navy);border:2px solid var(--navy)" onclick="initiateBankTopup('80')">🏦 Chuyển khoản</button>
+      <button class="btn-pkg" onclick="initiateTopup('350')" id="btn-350">Nạp 499.000đ</button>
+      <button class="btn-pkg" style="margin-top:.5rem;background:#fff;color:var(--navy);border:2px solid var(--navy)" onclick="initiateBankTopup('350')">🏦 Chuyển khoản</button>
+    </div>
+
+    <!-- VIP -->
+    <div class="pkg-card">
+      <div class="pkg-badge" style="background:linear-gradient(135deg,#9A7B3A,#c9a84c);color:#fff">🔥 BONUS +100%</div>
+      <div class="pkg-icon">👑</div>
+      <div class="pkg-name">VIP</div>
+      <div class="pkg-credits">800<span class="pkg-credits-unit">Lượng</span></div>
+      <div class="pkg-price">999.000đ <span style="font-size:.75rem;font-weight:400;color:var(--text-lt)">≈ $40</span></div>
+      <div class="pkg-rate" style="color:var(--green);font-weight:600">+100% bonus · 1.250đ / Lượng</div>
+      <ul class="pkg-perks">
+        <li><span class="perk-check">✓</span> 5× Luận Giải Lá Số đầy đủ</li>
+        <li><span class="perk-check">✓</span> Hoặc 8× Tử Bình Bát Tự (100 Lượng/lần)</li>
+        <li><span class="perk-check">✓</span> Tiết kiệm 1.001.000đ vs mua lẻ</li>
+        <li><span class="perk-check">✓</span> Không hết hạn · Whale tier</li>
+      </ul>
+      <button class="btn-pkg" onclick="initiateTopup('800')" id="btn-800">Nạp 999.000đ</button>
+      <button class="btn-pkg" style="margin-top:.5rem;background:#fff;color:var(--navy);border:2px solid var(--navy)" onclick="initiateBankTopup('800')">🏦 Chuyển khoản</button>
     </div>
 
   </div>
@@ -207,12 +225,12 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
   <div class="custom-card" id="customCard">
     <div class="custom-card-label">
       <strong>Nạp Số Tiền Tùy Chỉnh</strong>
-      <span>Tối thiểu $5 · Tối đa $500 · 10 lượng / $1</span>
+      <span>Tối thiểu 50.000đ · Không bonus · 2.500đ / Lượng</span>
     </div>
     <div class="custom-input-wrap">
-      <span class="custom-prefix">$</span>
-      <input type="number" class="custom-input" id="customInput" min="5" max="500" step="1" placeholder="10" oninput="onCustomInput()">
-      <span class="custom-credits-preview" id="customPreview">= 100 lượng</span>
+      <input type="number" class="custom-input" id="customInput" min="50000" max="5000000" step="1000" placeholder="100000" oninput="onCustomInput()">
+      <span class="custom-prefix" style="left:auto;right:1rem">đ</span>
+      <span class="custom-credits-preview" id="customPreview">= 40 Lượng</span>
       <button class="btn-custom" id="btnCustom" onclick="initiateTopup('custom')">PayPal</button>
       <button class="btn-custom" style="background:#fff;color:var(--navy);border:2px solid var(--navy)" onclick="initiateBankTopup('custom')">🏦 CK</button>
     </div>
@@ -221,8 +239,37 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
   <!-- Tool Costs — Dynamic -->
   <div class="costs-section">
     <h3>Chi Phí Các Công Cụ</h3>
-    <p class="costs-subtitle">Cập nhật tự động khi có công cụ mới. $1 = 10 lượng.</p>
+    <p class="costs-subtitle">Cập nhật tự động khi có công cụ mới. 1 Lượng = 2.500đ.</p>
     <div id="costsContent"><div class="costs-loading">⏳ Đang tải...</div></div>
+  </div>
+
+  <!-- Referral Program -->
+  <div class="costs-section" id="referralSection" style="display:none">
+    <h3>🎁 Mời Bạn — Cùng Nhận Lượng</h3>
+    <p class="costs-subtitle">Bạn của bạn nạp lần đầu → cả 2 cùng nhận <strong>30 Lượng</strong> (bằng 75.000đ). Tối đa 10 lượt mời / tháng.</p>
+    <div style="background:#fff;border:1px solid var(--border-lt);border-radius:10px;padding:1.25rem;display:flex;flex-direction:column;gap:.85rem">
+      <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+        <div style="font-size:.82rem;color:var(--text-lt)">Mã giới thiệu của bạn:</div>
+        <div id="refCode" style="font-family:'Noto Serif',serif;font-size:1.6rem;font-weight:700;color:var(--navy);letter-spacing:.15em;padding:.4rem .85rem;background:var(--bg-soft);border-radius:6px">—</div>
+        <button id="btnCopyRef" onclick="copyRefCode()" style="margin-left:auto;background:var(--navy);color:#c9a84c;border:none;padding:.55rem 1rem;border-radius:6px;font-weight:600;cursor:pointer;font-size:.85rem">📋 Copy</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+        <div style="font-size:.82rem;color:var(--text-lt)">Link mời:</div>
+        <code id="refLink" style="flex:1;background:var(--bg-soft);padding:.5rem .75rem;border-radius:6px;font-size:.8rem;color:var(--text);overflow-x:auto;white-space:nowrap">—</code>
+        <button id="btnCopyLink" onclick="copyRefLink()" style="background:#fff;border:1.5px solid var(--navy);color:var(--navy);padding:.5rem .85rem;border-radius:6px;font-weight:600;cursor:pointer;font-size:.85rem">📋 Copy Link</button>
+      </div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <button onclick="shareRef('zalo')" style="background:#0068ff;color:#fff;border:none;padding:.5rem 1rem;border-radius:6px;font-weight:600;cursor:pointer;font-size:.85rem">Zalo</button>
+        <button onclick="shareRef('messenger')" style="background:#0084ff;color:#fff;border:none;padding:.5rem 1rem;border-radius:6px;font-weight:600;cursor:pointer;font-size:.85rem">Messenger</button>
+        <button onclick="shareRef('facebook')" style="background:#1877f2;color:#fff;border:none;padding:.5rem 1rem;border-radius:6px;font-weight:600;cursor:pointer;font-size:.85rem">Facebook</button>
+        <button onclick="shareRef('whatsapp')" style="background:#25d366;color:#fff;border:none;padding:.5rem 1rem;border-radius:6px;font-weight:600;cursor:pointer;font-size:.85rem">WhatsApp</button>
+      </div>
+      <div id="refStats" style="display:flex;gap:1.5rem;padding-top:.75rem;border-top:1px dashed var(--border-lt);font-size:.85rem;color:var(--text-lt)">
+        <div>Đã mời: <strong id="refTotal" style="color:var(--navy)">—</strong></div>
+        <div>Đã nạp lần đầu: <strong id="refQualified" style="color:var(--green)">—</strong></div>
+        <div>Đã nhận: <strong id="refEarned" style="color:#9A7B3A">—</strong> Lượng</div>
+      </div>
+    </div>
   </div>
 
   <!-- FAQ -->
@@ -304,19 +351,26 @@ async function loadToolPricing() {
       groups[t.category].push(t);
     });
 
-    const catOrder = ['Luận Giải', 'Xem Tướng', 'Đặt Tên & Ngày', 'Khác'];
+    const catOrder = ['Luận Giải', 'Phong Thủy', 'Xem Tướng', 'Đặt Tên & Ngày', 'Phong Cách AI'];
     const sortedCats = Object.keys(groups).sort((a, b) => {
       const ia = catOrder.indexOf(a), ib = catOrder.indexOf(b);
       return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
     });
 
+    // Hide free categories from costs section (free is free, no need to display price)
+    const FREE_CATS = ['Công Cụ Tử Vi', 'Mệnh Lý', 'Lịch Số', 'Bói Bài', 'Huyền Học'];
+
     let html = '';
     sortedCats.forEach(cat => {
+      if (FREE_CATS.includes(cat)) return;
       html += `<div class="cost-category">${cat}</div>`;
       groups[cat].forEach(t => {
+        // Round up VND to nearest 1.000đ
+        const vnd = Math.ceil((t.credits * 2500) / 1000) * 1000;
+        const vndFmt = vnd.toLocaleString('vi-VN') + 'đ';
         const creditsHtml = t.is_free
           ? `<span class="cost-free-badge">Miễn Phí</span>`
-          : `<div class="cost-credits">${t.credits} lượng</div><div class="cost-usd">≈ $${(t.credits / 10).toFixed(1)}</div>`;
+          : `<div class="cost-credits">${t.credits} Lượng</div><div class="cost-usd">≈ ${vndFmt}</div>`;
         html += `
           <div class="cost-row">
             <div class="cost-left">
@@ -337,12 +391,22 @@ async function loadToolPricing() {
   }
 }
 
-// ── Custom input ──────────────────────────────────────────────
+// ── Custom input (VND-based) ──────────────────────────────────
 function onCustomInput() {
   const val = parseFloat(document.getElementById('customInput').value) || 0;
-  const credits = Math.round(val * 10);
-  document.getElementById('customPreview').textContent = val >= 5 ? `= ${credits} lượng` : 'Tối thiểu $5';
+  const credits = Math.floor(val / 2500);   // 2.500đ = 1 Lượng
+  document.getElementById('customPreview').textContent =
+    val >= 50000 ? `= ${credits} Lượng` : 'Tối thiểu 50.000đ';
 }
+
+// ── Package label restore (sau khi disable, restore lại label gốc) ────
+const PACKAGE_LABELS = {
+  '50':  'Nạp 99.000đ',
+  '120': 'Nạp 199.000đ',
+  '350': 'Nạp 499.000đ',
+  '800': 'Nạp 999.000đ',
+  'custom': 'PayPal',
+};
 
 // ── Initiate topup ────────────────────────────────────────────
 async function initiateTopup(packageId) {
@@ -352,12 +416,12 @@ async function initiateTopup(packageId) {
   }
 
   const userId = window.Auth.getUser()?.id;
-  let customAmount = null;
+  let customAmountVnd = null;
 
   if (packageId === 'custom') {
-    customAmount = parseFloat(document.getElementById('customInput').value) || 0;
-    if (customAmount < 5 || customAmount > 500) {
-      showAlert('error', 'Vui lòng nhập số tiền từ $5 đến $500.');
+    customAmountVnd = parseFloat(document.getElementById('customInput').value) || 0;
+    if (customAmountVnd < 50000 || customAmountVnd > 5000000) {
+      showAlert('error', 'Vui lòng nhập số tiền từ 50.000đ đến 5.000.000đ.');
       return;
     }
   }
@@ -369,7 +433,7 @@ async function initiateTopup(packageId) {
 
   try {
     const body = { packageId, userId };
-    if (customAmount) body.customAmount = customAmount;
+    if (customAmountVnd) body.customAmountVnd = customAmountVnd;
 
     const res  = await fetch('/api/payment?action=topup', {
       method: 'POST',
@@ -385,7 +449,7 @@ async function initiateTopup(packageId) {
   } catch(e) {
     if (btn) {
       btn.disabled = false;
-      btn.textContent = packageId === '20' ? 'Nạp $20' : packageId === '45' ? 'Nạp $45' : 'Nạp Ngay';
+      btn.textContent = PACKAGE_LABELS[packageId] || 'Nạp Ngay';
     }
     showAlert('error', 'Lỗi kết nối PayPal: ' + (e.message || 'Vui lòng thử lại.'));
   }
@@ -411,9 +475,70 @@ function showAlert(type, msg) {
   setTimeout(() => { el.style.display = 'none'; }, 6000);
 }
 
+// ── Referral program ──────────────────────────────────────────
+async function loadReferralInfo() {
+  const userId = window.Auth?.getUser()?.id;
+  if (!userId) return;
+  try {
+    // Fetch own referral_code from user_credits
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/user_credits?user_id=eq.${userId}&select=referral_code,balance`, {
+      headers: { apikey: SUPABASE_ANON, Authorization: 'Bearer ' + (window.Auth.getSession()?.access_token || '') }
+    });
+    const rows = await r.json();
+    const code = rows?.[0]?.referral_code;
+    if (!code) return;
+
+    document.getElementById('referralSection').style.display = 'block';
+    document.getElementById('refCode').textContent = code;
+    const link = `${window.location.origin}/?ref=${code}`;
+    document.getElementById('refLink').textContent = link;
+    document.getElementById('refLink').dataset.url = link;
+
+    // Stats: count from referrals table
+    const stats = await fetch(`${SUPABASE_URL}/rest/v1/referrals?referrer_user_id=eq.${userId}&select=status,credits_to_referrer`, {
+      headers: { apikey: SUPABASE_ANON, Authorization: 'Bearer ' + (window.Auth.getSession()?.access_token || '') }
+    });
+    const refs = await stats.json();
+    const total = refs?.length || 0;
+    const qualified = (refs || []).filter(r => r.status === 'rewarded' || r.status === 'qualified').length;
+    const earned = (refs || []).filter(r => r.status === 'rewarded').reduce((s, r) => s + (r.credits_to_referrer || 0), 0);
+    document.getElementById('refTotal').textContent = total;
+    document.getElementById('refQualified').textContent = qualified;
+    document.getElementById('refEarned').textContent = earned;
+  } catch(e) { console.warn('[referral] load failed', e); }
+}
+
+function copyRefCode() {
+  const code = document.getElementById('refCode').textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    const b = document.getElementById('btnCopyRef');
+    const old = b.textContent; b.textContent = '✓ Copied'; setTimeout(() => b.textContent = old, 1500);
+  });
+}
+function copyRefLink() {
+  const link = document.getElementById('refLink').dataset.url || document.getElementById('refLink').textContent;
+  navigator.clipboard.writeText(link).then(() => {
+    const b = document.getElementById('btnCopyLink');
+    const old = b.textContent; b.textContent = '✓ Copied'; setTimeout(() => b.textContent = old, 1500);
+  });
+}
+function shareRef(channel) {
+  const link = document.getElementById('refLink').dataset.url || document.getElementById('refLink').textContent;
+  const msg = `Mình đang dùng Tử Vi Minh Bảo — luận giải lá số bằng AI theo cổ pháp. Đăng ký qua link này, cả 2 cùng nhận 30 Lượng (75.000đ): ${link}`;
+  const enc = encodeURIComponent(msg);
+  const urls = {
+    zalo:      `https://zalo.me/share/url?url=${encodeURIComponent(link)}`,
+    messenger: `fb-messenger://share?link=${encodeURIComponent(link)}`,
+    facebook:  `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`,
+    whatsapp:  `https://wa.me/?text=${enc}`,
+  };
+  window.open(urls[channel] || urls.facebook, '_blank', 'width=600,height=500');
+}
+
 // Init
 loadBalance();
 loadToolPricing();
+loadReferralInfo();
 </script>
 
 <!-- ── payOS Bank Transfer Modal ─────────────────────────── -->
