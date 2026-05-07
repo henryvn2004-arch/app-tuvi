@@ -410,7 +410,7 @@ select.form-input { cursor: pointer; }
             <span>Mở Khóa Luận Giải &amp; Vấn Đáp</span>
             <span style="font-size:16px">→</span>
           </button>
-          <div class="paywall-secure">🔒 $1 = 10 credits · Credits không hết hạn</div>
+          <div class="paywall-secure">🔒 $1 = 10 credits · Credits không hết hạn · Modal xác nhận sẽ hiện ra</div>
         </div>
       </div>
     </div>
@@ -1523,6 +1523,7 @@ select.form-input { cursor: pointer; }
 
   // ─── Paywall check ───────────────────────────────────────────
   async function checkAndRenderPaywall() {
+    // Build slug consistent với credit_transactions
     const tempSlug = toSlugAscii([
       'tu-binh',
       _batTu.canChiNamSinh.can + _batTu.canChiNamSinh.chi,
@@ -1531,110 +1532,33 @@ select.form-input { cursor: pointer; }
     ].join('-'));
     _pendingSlug = tempSlug;
 
-    const userId = window.Auth?.getUser()?.id || '';
-    if (userId) {
-      try {
-        const r = await fetch('/api/payment?action=check&slug=' + encodeURIComponent(tempSlug) + '&userId=' + encodeURIComponent(userId));
-        if ((await r.json()).hasAccess) {
-          await luanGiaiAll();
-          return;
-        }
-      } catch(e) {}
-    }
-    // Chưa có access → render paywall vào lock-box-1 (visible cho phần đầu)
-    renderPaywallGate(1);
-  }
-
-  function renderPaywallGate(phan) {
-    const lock = document.getElementById(`lock-box-${phan}`);
-    if (!lock) return;
-    lock.style.display = 'block';
-    lock.className = 'paywall-gate';
-    lock.innerHTML = `
-      <div class="paywall-eyebrow">紫微明寶 · Luận Giải Đầy Đủ</div>
-      <div class="paywall-title">Mở khóa 16 phần luận giải Bát Tự</div>
-      <div class="paywall-desc">
-        Phân tích chuyên sâu Nhật Can, Cách Cục, Dụng Thần, từng nhóm Thập Thần, tình duyên, sức khỏe, 9 Đại Vận và Lưu Niên — luận giải cá nhân hóa bằng AI theo cổ pháp <em>Tử Bình Chân Thuyên</em> + <em>Trích Thiên Tủy</em>.
-      </div>
-      <div class="paywall-features">
-        <div class="paywall-feature">Tổng quan Bát Tự &amp; Cách Cục</div>
-        <div class="paywall-feature">5 nhóm Thập Thần chi tiết</div>
-        <div class="paywall-feature">Tình duyên &amp; sức khỏe</div>
-        <div class="paywall-feature">Hình xung hại hợp &amp; Thần Sát</div>
-        <div class="paywall-feature">9 Đại Vận với biểu đồ</div>
-        <div class="paywall-feature">Lưu niên năm xem chi tiết</div>
-      </div>
-      <div style="font-size:12px;color:#9A7B3A;margin-bottom:6px;letter-spacing:0.3px">16 phần · Bằng nửa buổi cà phê</div>
-      <div class="paywall-price">100 Credits</div>
-      <div class="paywall-price-note">Bằng $10 · Nạp 1 lần dùng mọi công cụ · Credits không hết hạn</div>
-      <button class="btn-paywall" id="btn-paywall-pay" onclick="window.tubinhUnlock()">
-        <span>Mở Khóa (100 Credits)</span>
-        <span style="font-size:16px">→</span>
-      </button>
-      <div class="paywall-secure">🔒 $1 = 10 credits · Dùng cho mọi công cụ · <a href="/topup.html" style="color:#c9a84c">Nạp thêm →</a></div>
-
-      <div style="margin-top:24px;display:flex;flex-direction:column;gap:10px;max-width:440px;margin-left:auto;margin-right:auto;text-align:left">
-        <div style="background:rgba(255,255,255,0.7);border-left:3px solid #c9a84c;padding:10px 14px;border-radius:0 6px 6px 0">
-          <div style="font-size:13px;color:#333;line-height:1.5;font-style:italic">"Đọc xong phần Cách Cục mới hiểu vì sao công việc tao luôn vướng người trên đè người dưới — tao là Thất Sát mà không có Ấn chế."</div>
-          <div style="font-size:11px;color:#9A7B3A;margin-top:5px;font-weight:600">Lê V.A. — Đà Nẵng</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.7);border-left:3px solid #c9a84c;padding:10px 14px;border-radius:0 6px 6px 0">
-          <div style="font-size:13px;color:#333;line-height:1.5;font-style:italic">"Phần Đại Vận chỉ ra 2025-2034 là vận đẹp nhất đời. Đúng y chang cơ hội đang mở ra với mình bây giờ."</div>
-          <div style="font-size:11px;color:#9A7B3A;margin-top:5px;font-weight:600">Phạm T.Q. — TP.HCM</div>
-        </div>
-      </div>
-    `;
-  }
-
-  // ─── Credit deduct + unlock ──────────────────────────────────
-  window.tubinhUnlock = async function() {
-    if (!window.Auth?.isLoggedIn()) {
-      window.Auth?.require?.(() => window.tubinhUnlock()); return;
-    }
-    const balance = await getBalance();
-    if (balance < 100) {
-      const lock = document.getElementById('lock-box-1');
-      if (lock) lock.innerHTML = `
-        <div class="paywall-eyebrow" style="color:#C0392B">Không đủ credits</div>
-        <div class="paywall-title">Số dư: ${balance} credits — cần thêm ${100-balance} credits</div>
-        <div class="paywall-price">100 Credits</div>
-        <a href="/topup.html" class="btn-paywall" style="text-decoration:none;display:inline-flex">💳 Nạp Credits →</a>
-        <div class="paywall-secure">🔒 $1 = 10 credits · Không hết hạn</div>`;
+    // Verify TuviPaywall loaded
+    if (typeof window.TuviPaywall === 'undefined') {
+      console.error('[tu-binh] TuviPaywall not loaded — paywall disabled');
       return;
     }
 
-    const token = window.Auth.getSession()?.access_token;
-    const btn = document.getElementById('btn-paywall-pay');
-    if (btn) { btn.disabled = true; btn.innerHTML = '<span>Đang xử lý...</span>'; }
-
-    try {
-      const res = await fetch('/api/payment?action=deduct', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-        body: JSON.stringify({ amount: 100, toolType: 'use_tubinh', slug: _pendingSlug, description: 'Luận giải Tử Bình 16 phần' }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        window.refreshNavCredits && window.refreshNavCredits();
-        await luanGiaiAll();
-      } else {
-        if (btn) { btn.disabled = false; btn.innerHTML = '<span>Mở Khóa (100 Credits)</span><span style="font-size:16px">→</span>'; }
-        alert('Lỗi: ' + (data.error || 'Vui lòng thử lại.'));
-      }
-    } catch(e) {
-      if (btn) { btn.disabled = false; btn.innerHTML = '<span>Mở Khóa (100 Credits)</span><span style="font-size:16px">→</span>'; }
-      alert('Lỗi kết nối: ' + e.message);
-    }
-  };
-
-  async function getBalance() {
-    try {
-      const userId = window.Auth?.getUser()?.id || '';
-      if (!userId) return 0;
-      const r = await fetch('/api/payment?action=balance&userId=' + encodeURIComponent(userId));
-      return (await r.json()).balance ?? 0;
-    } catch(e) { return 0; }
+    // requireCredits handles full flow:
+    //   1. Check login (auth.js)
+    //   2. Get pricing from tool_pricing table (tu-binh = 100 credits)
+    //   3. Check if already paid for this slug → callback silently
+    //   4. Else check balance
+    //   5. If insufficient → show "không đủ lượng" dialog with topup link
+    //   6. Else → show CONFIRM popup ("Trừ 100 lượng, xác nhận?")
+    //   7. On confirm → POST /api/payment?action=deduct → success banner → callback
+    await window.TuviPaywall.requireCredits(tempSlug, async () => {
+      await luanGiaiAll();
+    });
   }
+
+  // Expose for inline onclick handlers (chatbot CTA button)
+  window.tubinhUnlock = async function() {
+    if (!_batTu) {
+      alert('Vui lòng nhập thông tin sinh và bấm Luận Giải trước.');
+      return;
+    }
+    await checkAndRenderPaywall();
+  };
 
   // ─── Streaming SSE consumer ──────────────────────────────────
   async function streamLuanGiai(phan, batTuText, docs, contentEl) {
@@ -1878,6 +1802,15 @@ select.form-input { cursor: pointer; }
     setTimeout(init, 0);
   }
 })();
+
+// Init TuviPaywall — register product 'tu-binh' (cost = 100 credits từ tool_pricing table)
+if (typeof TuviPaywall !== 'undefined') {
+  TuviPaywall.init({
+    product: 'tu-binh',
+    title:   'Luận Giải Tử Bình 16 Phần',
+  });
+}
+
 </script>
 
 </body>
