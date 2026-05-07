@@ -20,6 +20,12 @@
 <meta name="twitter:title" content="Tử Vi Minh Bảo — Cổng Mệnh Lý AI">
 <meta name="twitter:description" content="47 công cụ tử vi · tử bình · tướng số · phong thủy bằng AI theo cổ pháp.">
 <meta name="twitter:image" content="https://www.tuviminhbao.com/seal.webp">
+
+<!-- Fonts: Noto Serif (Vietnamese subset, auto via Google Fonts) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -72,7 +78,7 @@ a { color: var(--blue); text-decoration: none; }
 .hero {
   background: linear-gradient(180deg, var(--navy) 0%, var(--navy-mid) 100%);
   color: #fff;
-  padding: 72px 0 56px;
+  padding: 80px 0 72px;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -80,55 +86,63 @@ a { color: var(--blue); text-decoration: none; }
 .hero::before {
   content: '';
   position: absolute; inset: 0;
-  background-image: radial-gradient(circle at 20% 50%, rgba(201,168,76,.08) 0%, transparent 40%),
-                    radial-gradient(circle at 80% 30%, rgba(20,85,164,.15) 0%, transparent 50%);
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(201,168,76,.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(20,85,164,.10) 0%, transparent 60%);
   pointer-events: none;
 }
 .hero > * { position: relative; z-index: 1; }
+
+.hero-mark {
+  font-family: 'Noto Serif', Georgia, serif;
+  font-size: 22px; color: var(--gold-bright);
+  letter-spacing: 0.55em; margin-bottom: 6px; padding-left: 0.55em;
+  font-weight: 400;
+}
 .hero-pretitle {
   font-family: 'Noto Serif', Georgia, serif;
-  font-size: 14px;
-  color: var(--gold-bright);
-  letter-spacing: 0.4em;
-  margin-bottom: 14px;
+  font-size: 11px;
+  color: rgba(201,168,76,0.65);
+  letter-spacing: 0.5em;
+  margin-bottom: 36px; padding-left: 0.5em;
+  text-transform: uppercase;
 }
 .hero h1 {
   font-family: 'Noto Serif', Georgia, serif;
-  font-size: clamp(34px, 5.5vw, 52px);
-  font-weight: 700;
-  line-height: 1.18;
-  margin-bottom: 18px;
+  font-size: clamp(30px, 4.6vw, 44px);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.25;
+  margin-bottom: 32px;
   color: #fff;
+  letter-spacing: 0.02em;
 }
-.hero-sub {
-  font-size: clamp(15px, 2vw, 18px);
-  color: rgba(255,255,255,0.78);
-  max-width: 680px;
-  margin: 0 auto 36px;
-  line-height: 1.6;
-}
-.hero-chips {
-  display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
-  max-width: 720px; margin: 0 auto 28px;
-}
-.hero-chip {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(255,255,255,0.07); border: 1px solid rgba(201,168,76,0.3);
-  color: #fff; padding: 10px 18px; border-radius: 100px; font-size: 14px;
-  text-decoration: none; transition: all 0.18s;
+
+.hero-body {
+  max-width: 640px;
+  margin: 0 auto 40px;
   font-family: 'Noto Serif', Georgia, serif;
+  font-size: 16px;
+  color: rgba(255,255,255,0.78);
+  line-height: 1.85;
 }
-.hero-chip:hover { background: rgba(201,168,76,0.15); border-color: var(--gold-bright); transform: translateY(-1px); }
-.hero-chip-price {
-  background: var(--gold-bright); color: var(--navy);
-  padding: 2px 9px; border-radius: 12px; font-family: Arial; font-size: 11px; font-weight: 700;
+.hero-body p { margin-bottom: 14px; }
+.hero-body p:last-child { margin-bottom: 0; }
+
+.hero-attribution {
+  font-family: 'Noto Serif', Georgia, serif;
+  font-size: 12px;
+  color: rgba(201,168,76,0.55);
+  letter-spacing: 0.18em;
+  padding-top: 28px;
+  border-top: 1px solid rgba(201,168,76,0.18);
+  display: inline-block;
+  padding-left: 32px; padding-right: 32px;
 }
-.hero-trust {
-  margin-top: 28px;
-  display: flex; flex-wrap: wrap; justify-content: center; gap: 24px;
-  font-size: 12.5px; color: rgba(255,255,255,0.5); letter-spacing: 0.05em;
+@media (max-width: 600px) {
+  .hero { padding: 56px 0 48px; }
+  .hero-attribution { font-size: 11px; letter-spacing: 0.1em; padding-left: 0; padding-right: 0; }
 }
-.hero-trust strong { color: var(--gold-bright); font-weight: 700; }
 
 /* ── TAB NAV (sticky) ──────────────────────────────────────── */
 .tab-nav-wrap {
@@ -280,24 +294,21 @@ a { color: var(--blue); text-decoration: none; }
 <!-- ─── HERO ─────────────────────────────────────────────── -->
 <section class="hero">
   <div class="page">
-    <div class="hero-pretitle">紫 微 明 寶 · TỬ VI MINH BẢO</div>
+    <div class="hero-mark">紫 微 明 寶</div>
+    <div class="hero-pretitle">Tử Vi Minh Bảo</div>
     <h1>Tri Mệnh Lý — Thuận Thế Hành</h1>
-    <p class="hero-sub">
-      Cổng tử vi · tử bình · tướng số · phong thủy bằng AI theo cổ pháp. <strong style="color:#fff">47 công cụ</strong> luận giải cá nhân hóa — chuyên sâu, lưu vĩnh viễn, không hết hạn.
-    </p>
 
-    <div class="hero-chips">
-      <a href="/luan-giai.html" class="hero-chip">🔮 Luận Giải Lá Số <span class="hero-chip-price">150 Lượng</span></a>
-      <a href="/tu-binh.html" class="hero-chip">📜 Tử Bình Bát Tự <span class="hero-chip-price">100 Lượng</span></a>
-      <a href="/xem-tuoi.html" class="hero-chip">💑 Xem Tuổi Vợ Chồng <span class="hero-chip-price">50 Lượng</span></a>
-      <a href="/xem-lam-an.html" class="hero-chip">🤝 Xem Tuổi Làm Ăn <span class="hero-chip-price">50 Lượng</span></a>
+    <div class="hero-body">
+      <p>
+        Mệnh do trời định, vận do mình tạo. <em>Biết được mệnh để hiểu mình, biết được vận để chọn đúng đường.</em>
+      </p>
+      <p>
+        Sự nghiệp ngàn năm của các bậc tiền nhân — Tử Vi Đẩu Số, Tử Bình Bát Tự, Tướng Pháp, Bát Trạch Phong Thủy — nay được giúp sức bởi trí tuệ nhân tạo, để mỗi người có thể tự tra cứu mệnh lý của mình một cách bài bản và đầy đủ như đến gặp một bậc chuyên môn.
+      </p>
     </div>
 
-    <div class="hero-trust">
-      <span><strong>1.444+</strong> lá số đã luận</span>
-      <span><strong>47</strong> công cụ</span>
-      <span><strong>28</strong> miễn phí mãi mãi</span>
-      <span><strong>1 Lượng = 2.500đ</strong> · không hết hạn</span>
+    <div class="hero-attribution">
+      Theo cổ pháp · 紫微鬥數 · 子平八字 · 麻衣神相 · 八宅明鏡
     </div>
   </div>
 </section>
@@ -376,7 +387,7 @@ a { color: var(--blue); text-decoration: none; }
     </div>
 
     <div class="free-cta-row">
-      <a href="#" class="free-cta-link" onclick="document.querySelector('[data-tab=mien-phi]').click(); window.scrollTo({top: document.querySelector('.tab-nav-wrap').offsetTop - 60, behavior: 'smooth'}); return false;">
+      <a href="#mien-phi" class="free-cta-link" id="freeAllLink">
         Xem Tất Cả 28 Công Cụ Miễn Phí →
       </a>
     </div>
@@ -387,20 +398,20 @@ a { color: var(--blue); text-decoration: none; }
 <section class="section">
   <div class="page">
     <div class="section-eyebrow">Vì Sao Chọn Tử Vi Minh Bảo</div>
-    <h2 class="section-title">Cổ pháp · AI · Cá nhân hóa</h2>
+    <h2 class="section-title">Cổ pháp · Bài bản · Cá nhân hóa</h2>
 
     <div class="values-grid" style="margin-top:28px">
       <div class="value-card">
         <div class="value-title">Theo cổ pháp</div>
-        <div class="value-desc">Tử Vi Đẩu Số an sao theo Tử Vi Đẩu Số toàn thư · Tử Bình theo Tử Bình Chân Thuyên & Trích Thiên Tủy · Phong thủy Bát Trạch & Ngũ Hành · Tướng số Ma Y Thần Tướng & Liễu Trang.</div>
+        <div class="value-desc">Tử Vi Đẩu Số an sao theo Tử Vi Đẩu Số Toàn Thư · Tử Bình theo Tử Bình Chân Thuyên &amp; Trích Thiên Tủy · Tướng pháp theo Ma Y Thần Tướng &amp; Liễu Trang · Phong thủy Bát Trạch &amp; Ngũ Hành. Engine an sao &amp; tính toán mở, có thể tra ngược.</div>
       </div>
       <div class="value-card">
         <div class="value-title">Cá nhân hóa bằng AI</div>
-        <div class="value-desc">Mỗi luận giải được sinh riêng cho lá số của bạn — không phải nội dung đóng khung. AI đọc chính xác từng cung, từng đại vận, từng thần sát của bạn.</div>
+        <div class="value-desc">Mỗi luận giải được sinh riêng cho lá số của bạn — không phải nội dung đóng khung. AI đọc chính xác từng cung, từng đại vận, từng thần sát, kết hợp với kho tàng Khảo Luận của các bậc tiền nhân để cho ra một bức tranh đầy đủ về mệnh lý.</div>
       </div>
       <div class="value-card">
-        <div class="value-title">Lượng — không hết hạn</div>
-        <div class="value-desc">Nạp 1 lần dùng cho mọi công cụ trên cổng. Lượng không hết hạn, không subscription, không phí ẩn. Bạn xài bao nhiêu trừ bấy nhiêu.</div>
+        <div class="value-title">Tự tra cứu, không phụ thuộc</div>
+        <div class="value-desc">Mục đích của Tử Vi Minh Bảo không phải bán dịch vụ — mà giúp bạn tự hiểu mệnh lý của mình ở mức tương đương đến gặp một thầy chuyên môn. Biết để chủ động trong cuộc đời, không phải để mê tín hay phụ thuộc vào thầy bói.</div>
       </div>
     </div>
   </div>
@@ -569,14 +580,34 @@ function formatVnd(vnd) {
 // ─────────────────────────────────────────────────────────────
 // Tab switching
 // ─────────────────────────────────────────────────────────────
+function switchToTab(tabId) {
+  const target = document.querySelector('[data-tab="' + tabId + '"]');
+  if (!target) return;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  target.classList.add('active');
+  renderActiveTab();
+  history.replaceState(null, '', '#' + tabId);
+  // Scroll to tab nav area
+  const nav = document.querySelector('.tab-nav-wrap');
+  if (nav) {
+    const y = nav.getBoundingClientRect().top + window.scrollY - 50;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  }
+}
+
 document.getElementById('tabNav').addEventListener('click', (e) => {
   const btn = e.target.closest('.tab-btn');
   if (!btn) return;
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   renderActiveTab();
-  // Update URL hash for bookmark/share
   history.replaceState(null, '', '#' + btn.dataset.tab);
+});
+
+// "Xem tất cả 28 công cụ miễn phí" CTA — switch tab + scroll
+document.getElementById('freeAllLink')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  switchToTab('mien-phi');
 });
 
 // Restore tab from URL hash on load
