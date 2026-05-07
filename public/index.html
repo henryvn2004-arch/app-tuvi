@@ -654,6 +654,7 @@ select.form-input { cursor: pointer; }
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://tuviminhbao.com/seal.webp">
 <script src="/auth.js"></script>
+<script src="/tuvi-paywall.js"></script>
 <script src="/share.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
@@ -794,7 +795,7 @@ select.form-input { cursor: pointer; }
             <div style="width:32px;height:32px;background:var(--gold);color:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">3</div>
             <div>
               <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px">Mở khóa 24 phần luận giải AI</div>
-              <div style="font-size:13px;color:var(--text-lt);line-height:1.6">Thanh toán một lần $19 để nhận đầy đủ 24 phần luận giải chuyên sâu — từ tổng quan mệnh cục đến từng cung, đại vận và luận đoán cá nhân hóa.</div>
+              <div style="font-size:13px;color:var(--text-lt);line-height:1.6">Trừ 150 Lượng một lần để nhận đầy đủ 24 phần luận giải chuyên sâu — từ tổng quan mệnh cục đến từng cung, đại vận và luận đoán cá nhân hóa.</div>
             </div>
           </div>
           <div style="display:flex;gap:20px;padding-top:24px">
@@ -993,12 +994,12 @@ select.form-input { cursor: pointer; }
             <div class="tvc-paywall-feature">Dựa trên lá số thực tế</div>
           </div>
           <div style="font-size:11px;color:#9A7B3A;margin-bottom:5px">24 khía cạnh cuộc đời · Bằng 1 buổi cà phê</div>
-          <div class="tvc-paywall-price">$19</div>
+          <div class="tvc-paywall-price">150 Lượng</div>
           <div class="tvc-paywall-price-note">Bao gồm 24 phần luận giải + Vấn đáp không giới hạn</div>
-          <button class="tvc-paywall-btn" onclick="initiatePayment()">
+          <button class="tvc-paywall-btn" onclick="window.tuviUnlock()">
             Mở Khóa Luận Giải &amp; Vấn Đáp →
           </button>
-          <div class="tvc-paywall-secure">🔒 Thanh toán bảo mật qua PayPal · Hoàn tiền nếu lỗi kỹ thuật</div>
+          <div class="tvc-paywall-secure">🔒 Trừ 150 Lượng · Modal xác nhận sẽ hiện ra · Lượng không hết hạn</div>
         </div>
       </div>
     </div>
@@ -1446,13 +1447,13 @@ select.form-input { cursor: pointer; }
             <div class="paywall-feature">Chia sẻ lá số với người thân</div>
           </div>
           <div style="font-size:12px;color:#9A7B3A;margin-bottom:6px;letter-spacing:0.3px">24 khía cạnh cuộc đời · Bằng 1 buổi cà phê</div>
-          <div class="paywall-price">$19</div>
-          <div class="paywall-price-note">Xem offline thường 500k–1tr · Ở đây chỉ $19, nhận kết quả ngay</div>
-          <button class="btn-paywall" onclick="initiatePayment()">
+          <div class="paywall-price">150 Lượng</div>
+          <div class="paywall-price-note">Xem offline thường 500k–1tr · Ở đây chỉ 150 Lượng (375.000đ), nhận kết quả ngay</div>
+          <button class="btn-paywall" onclick="window.tuviUnlock()">
             <span>Xem Luận Giải Đầy Đủ</span>
             <span style="font-size:16px">→</span>
           </button>
-          <div class="paywall-secure">🔒 Credits không hết hạn · Dùng được cho mọi công cụ · <a href="/topup.html" style="color:#c9a84c">Nạp thêm →</a></div>
+          <div class="paywall-secure">🔒 Modal xác nhận sẽ hiện ra · Lượng không hết hạn · <a href="/topup.html" style="color:#c9a84c">Nạp thêm →</a></div>
           <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;max-width:440px;margin-left:auto;margin-right:auto;text-align:left">
             <div style="background:rgba(255,255,255,0.7);border-left:3px solid #c9a84c;padding:10px 14px;border-radius:0 6px 6px 0">
               <div style="font-size:13px;color:#333;line-height:1.5;font-style:italic">"Phần Quan Lộc nói đúng y chang tình huống tao đang gặp — cả cái cách nó diễn ra theo từng giai đoạn."</div>
@@ -1568,152 +1569,39 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     document.getElementById('result-actions').style.display = 'flex';
   }
 
-  // ── Check payment — lock boxes đã render sẵn, chỉ cần unlock nếu đã mua ──
+  // ── Check payment — TuviPaywall.requireCredits handles full flow ──
+  // 1. Login check (auth.js) → 2. Get price (tool_pricing 'laso' = 150) →
+  // 3. Check hasAccess (already paid → silent callback) →
+  // 4. Check balance → 5. Confirm popup ("Trừ 150 lượng?") →
+  // 6. Deduct via /api/payment?action=deduct → 7. Banner "✓ Đã trừ" →
+  // 8. Callback → startClaudeOrLoadCache
   async function checkAndRenderPaywall() {
-    // Tạo slug tạm
+    // Slug format khớp với purchases legacy + credit_transactions: <canChiNam>-<gioitinh>-<nam>-gio-<gioChi>
     const tempSlug = toSlugAscii([
-      _astrolabe.canChiNam||'',
+      _astrolabe.canChiNam || '',
       _gioitinh, _nam,
       'gio-' + (_astrolabe._conv?.gioChi || 'unknown')
     ].join('-'));
     _pendingSlug = tempSlug;
 
-    // Credit check: đã dùng credits cho slug này chưa?
-    const userId = window.Auth?.getUser()?.id || '';
-    if (userId) {
-      try {
-        const r = await fetch('/api/payment?action=check&slug=' + encodeURIComponent(tempSlug) + '&userId=' + encodeURIComponent(userId));
-        if ((await r.json()).hasAccess) { await startClaudeOrLoadCache(tempSlug || _pendingSlug); return; }
-      } catch(e) {}
+    if (typeof window.TuviPaywall === 'undefined') {
+      console.error('[index] TuviPaywall not loaded — paywall disabled');
+      return;
     }
-    // Chưa có access — hiện paywall
+
+    await window.TuviPaywall.requireCredits(tempSlug, async () => {
+      await startClaudeOrLoadCache(tempSlug);
+    });
   }
 
-  // ── Credit helpers ──
-  async function getCreditBalance() {
-    try {
-      const userId = window.Auth?.getUser()?.id || '';
-      if (!userId) return 0;
-      const r = await fetch('/api/payment?action=balance&userId=' + encodeURIComponent(userId));
-      return (await r.json()).balance ?? 0;
-    } catch(e) { return 0; }
-  }
-
-  async function verifyPayment(slug) {
-    try {
-      const userId = window.Auth?.getUser()?.id || '';
-      if (!userId) return false;
-      const r = await fetch('/api/payment?action=check&slug=' + encodeURIComponent(slug) + '&userId=' + encodeURIComponent(userId));
-      return (await r.json()).hasAccess === true;
-    } catch(e) { return false; }
-  }
-
-  async function deductAndUnlock(slug) {
-    if (!window.Auth?.isLoggedIn()) { showAuthModal(() => deductAndUnlock(slug)); return; }
-    const token = window.Auth.getSession()?.access_token;
-    const btn = document.getElementById('btn-paywall-pay');
-    if (btn) { btn.disabled = true; btn.innerHTML = '<span>Đang xử lý...</span>'; }
-    try {
-      const res = await fetch('/api/payment?action=deduct', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-        body: JSON.stringify({ amount: 150, toolType: 'use_laso', slug, description: 'Luận giải lá số 24 phần' }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        window.refreshNavCredits && window.refreshNavCredits();
-        const gate = document.getElementById('paywall-gate');
-        if (gate) gate.remove();
-        await startClaudeOrLoadCache(slug);
-      } else if (data.insufficientBalance) {
-        const balance = data.balance ?? 0;
-        const need = 150 - balance;
-        const gate = document.getElementById('paywall-gate');
-        if (gate) gate.innerHTML = `
-          <div class="paywall-eyebrow">紫微明寶 · Luận Giải Đầy Đủ</div>
-          <div class="paywall-title">Không đủ credits</div>
-          <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:#856404">
-            Số dư: <strong>${balance} credits</strong> — cần thêm <strong>${need} credits</strong>
-          </div>
-          <div class="paywall-price">150 Credits</div>
-          <a href="/topup.html" class="btn-paywall" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none">
-            <span>💳 Nạp Credits</span><span style="font-size:16px">→</span>
-          </a>
-          <div class="paywall-secure">🔒 $1 = 10 credits · Không hết hạn · Dùng cho mọi công cụ</div>`;
-      } else {
-        if (btn) { btn.disabled = false; btn.innerHTML = '<span>Mở Khóa (150 Credits)</span><span style="font-size:16px">→</span>'; }
-        alert('Lỗi: ' + (data.error || 'Vui lòng thử lại.'));
-      }
-    } catch(e) {
-      if (btn) { btn.disabled = false; btn.innerHTML = '<span>Mở Khóa (150 Credits)</span><span style="font-size:16px">→</span>'; }
-      alert('Lỗi kết nối: ' + e.message);
+  // Expose wrapper for inline onclick handlers in paywall CTAs (lock-box per phần + chatbot CTA)
+  window.tuviUnlock = async function() {
+    if (!_astrolabe) {
+      alert('Vui lòng nhập thông tin sinh và bấm An Sao trước.');
+      return;
     }
-  }
-
-  function renderPaywall() {
-    const body = document.getElementById('result-body');
-    const gate = document.createElement('div');
-    gate.className = 'paywall-gate';
-    gate.id = 'paywall-gate';
-    gate.innerHTML = `
-      <div class="paywall-eyebrow">紫微明寶 · Luận Giải Đầy Đủ</div>
-      <div class="paywall-title">Mở khóa 24 phần luận giải chuyên sâu</div>
-      <div class="paywall-desc">
-        Phân tích toàn diện 12 cung, vận hạn đại vận – tiểu vận, và luận đoán chi tiết
-        được tạo ra riêng cho lá số của bạn bởi AI Tử Vi Minh Bảo.
-      </div>
-      <div class="paywall-features">
-        <div class="paywall-feature">Luận giải 12 cung chi tiết</div>
-        <div class="paywall-feature">Phân tích đại vận toàn đời</div>
-        <div class="paywall-feature">Tiểu vận từng năm</div>
-        <div class="paywall-feature">Cách cục & ý nghĩa sâu</div>
-        <div class="paywall-feature">Lưu vĩnh viễn trong tài khoản</div>
-        <div class="paywall-feature">Chia sẻ lá số với người thân</div>
-      </div>
-      <div style="font-size:12px;color:#9A7B3A;margin-bottom:6px;letter-spacing:0.3px">24 khía cạnh cuộc đời · Bằng 1 buổi cà phê</div>
-      <div class="paywall-price">150 Credits</div>
-      <div class="paywall-price-note">Bằng $15 · Nạp 1 lần dùng mọi công cụ · Credits không hết hạn</div>
-      <button class="btn-paywall" id="btn-paywall-pay" onclick="handlePaywallClick()">
-        <span>Mở Khóa (150 Credits)</span>
-        <span style="font-size:16px">→</span>
-      </button>
-      <div class="paywall-secure">🔒 Thanh toán bảo mật qua PayPal · Hoàn tiền nếu lỗi kỹ thuật</div>
-          <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;max-width:440px;margin-left:auto;margin-right:auto;text-align:left">
-            <div style="background:rgba(255,255,255,0.7);border-left:3px solid #c9a84c;padding:10px 14px;border-radius:0 6px 6px 0">
-              <div style="font-size:13px;color:#333;line-height:1.5;font-style:italic">"Phần Quan Lộc nói đúng y chang tình huống tao đang gặp — cả cái cách nó diễn ra theo từng giai đoạn."</div>
-              <div style="font-size:11px;color:#9A7B3A;margin-top:5px;font-weight:600">Trần M.K. — TP.HCM</div>
-            </div>
-            <div style="background:rgba(255,255,255,0.7);border-left:3px solid #c9a84c;padding:10px 14px;border-radius:0 6px 6px 0">
-              <div style="font-size:13px;color:#333;line-height:1.5;font-style:italic">"Đọc phần đại vận xong ngồi im một lúc. Đúng y chang những gì đã xảy ra 3 năm nay."</div>
-              <div style="font-size:11px;color:#9A7B3A;margin-top:5px;font-weight:600">Nguyễn T.H. — Hà Nội</div>
-            </div>
-          </div>
-    `;
-    body.appendChild(gate);
-  }
-
-  // ── Credit-based unlock ──
-  async function handlePaywallClick() {
-    if (!window.Auth?.isLoggedIn()) { showAuthModal(async () => { await handlePaywallClick(); }); return; }
-    const balance = await getCreditBalance();
-    if (balance >= 150) {
-      await deductAndUnlock(_pendingSlug);
-    } else {
-      const gate = document.getElementById('paywall-gate');
-      if (gate) gate.innerHTML = `
-        <div class="paywall-eyebrow">紫微明寶 · Luận Giải Đầy Đủ</div>
-        <div class="paywall-title">Không đủ credits</div>
-        <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:#856404">
-          Số dư: <strong>${balance} credits</strong> — cần thêm <strong>${150 - balance} credits</strong>
-        </div>
-        <div class="paywall-price">150 Credits</div>
-        <a href="/topup.html" class="btn-paywall" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none">
-          <span>💳 Nạp Credits</span><span style="font-size:16px">→</span>
-        </a>
-        <div class="paywall-secure">🔒 $1 = 10 credits · Không hết hạn · Dùng cho mọi công cụ</div>`;
-    }
-  }
-  async function initiatePayment() { await handlePaywallClick(); }
+    await checkAndRenderPaywall();
+  };
 
   // ── Sau khi paid — unlock tất cả lock boxes và load Claude từng phần ──
 
@@ -3683,87 +3571,6 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     </svg>`;
   }
 
-  // ── Auto-unlock khi return từ PayPal ──────────────────────────
-  // Dùng sessionStorage để restore form data, không cần fetch DB
-  (async function checkReturnFromPayPal() {
-    const p = new URLSearchParams(window.location.search);
-    if (p.get('unlocked') !== '1') return;
-
-    // Lấy form data từ sessionStorage
-    let pending;
-    try {
-      const raw = sessionStorage.getItem('tuvi_pending');
-      if (!raw) {
-        document.getElementById('error-msg').textContent = 'Phiên làm việc đã hết hạn. Vui lòng an sao lại — thanh toán của bạn đã được ghi nhận.';
-        document.getElementById('error-msg').classList.add('active');
-        return;
-      }
-      pending = JSON.parse(raw);
-      sessionStorage.removeItem('tuvi_pending'); // dùng 1 lần
-    } catch(e) { return; }
-
-    const slug = toSlugAscii(pending.slug || p.get('slug') || '');
-
-    // Verify payment
-    try {
-      const r = await fetch(`/api/payment?action=check&slug=${encodeURIComponent(slug)}`);
-      const d = await r.json();
-      if (!d.purchased) {
-        document.getElementById('error-msg').textContent = 'Đang xác nhận thanh toán, vui lòng chờ 30 giây rồi thử lại...';
-        document.getElementById('error-msg').classList.add('active');
-        return;
-      }
-    } catch(e) { return; }
-
-    // Restore state từ sessionStorage và rebuild astrolabe
-    try {
-      const { ngay, thang, nam, gioIdx, gioChi, gioitinh, namXem, hoTen } = pending;
-
-      // Fill form để user thấy
-      document.getElementById('ngay').value     = ngay  || '';
-      document.getElementById('thang').value    = thang || '';
-      document.getElementById('nam').value      = nam   || '';
-      if (gioIdx !== null) document.getElementById('gio').value = Math.floor(gioIdx / 2);
-      document.getElementById('gioitinh').value = gioitinh || 'nam';
-
-      // Rebuild astrolabe từ engine (giống luanGiai())
-      const conv = convertDuongToAm(ngay, thang, nam, gioIdx !== null ? gioIdx : 0);
-      conv._dl = { day: ngay, month: thang, year: nam };
-      const ls = anSaoLaSo({
-        ngayAL:   conv.amLich.day,
-        thangAL:  conv.amLich.month,
-        namAL:    nam,
-        canNam:   conv.canNam,
-        chiNam:   conv.chiNam,
-        gioIdx:   conv.gioIdx,
-        gioitinh: gioitinh,
-        namXem:   namXem || new Date().getFullYear(),
-      });
-      ls._conv = conv;
-      ls._hoTen = hoTen || '';
-
-      // Set global state
-      _hoTen = hoTen || ''; _ngay = ngay; _thang = thang; _nam = nam;
-      _gioitinh = gioitinh; _namXem = namXem || new Date().getFullYear();
-      _astrolabe = ls; _pendingSlug = slug;
-      _laSoText = formatLaSoV2(ls, conv);
-      _currentPhan = 0;
-
-      // Clear result + render
-      document.getElementById('result-body').innerHTML = '';
-      await renderPreGenFree();
-      await startClaudeOrLoadCache(slug);
-
-      // Scroll + clean URL
-      setTimeout(() => document.getElementById('result-section')?.scrollIntoView({ behavior: 'smooth' }), 300);
-      window.history.replaceState({}, '', '/');
-
-    } catch(e) {
-      console.error('[auto-unlock]', e);
-      document.getElementById('error-msg').textContent = 'Lỗi khôi phục lá số: ' + e.message + '. Vui lòng an sao lại — thanh toán đã được ghi nhận.';
-      document.getElementById('error-msg').classList.add('active');
-    }
-  })();
 
   // Redirect sang luan-giai.html với form data
   window.redirectToLuanGiai = function() {
@@ -3783,6 +3590,57 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
   });
 
   window.luanGiaiNhanh = luanGiaiNhanh;
+
+  // Init TuviPaywall — register product 'laso' (cost = 150 credits từ tool_pricing table)
+  if (typeof TuviPaywall !== 'undefined') {
+    TuviPaywall.init({
+      product: 'laso',
+      title:   'Luận Giải Lá Số 24 Phần',
+    });
+  }
+
+  // ── Referral capture ─────────────────────────────────────────
+  // Bắt ?ref=CODE từ URL, lưu sessionStorage để gửi backend sau khi user signup
+  (function captureRefCode() {
+    const refRaw = new URLSearchParams(window.location.search).get('ref');
+    if (refRaw && /^[A-Z0-9]{8}$/i.test(refRaw)) {
+      sessionStorage.setItem('pending_ref_code', refRaw.toUpperCase());
+      // Clean URL để không lộ code khi user share lại
+      const u = new URL(window.location.href);
+      u.searchParams.delete('ref');
+      window.history.replaceState({}, '', u.toString());
+    }
+  })();
+
+  // Submit pending refCode SAU khi user đăng ký (gọi tự động khi auth state thay đổi)
+  window.tryRegisterReferral = async function() {
+    const refCode = sessionStorage.getItem('pending_ref_code');
+    if (!refCode || !window.Auth?.isLoggedIn()) return;
+    const token = window.Auth.getSession()?.access_token;
+    if (!token) return;
+    try {
+      const res = await fetch('/api/payment?action=referral-register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({ refCode }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        sessionStorage.removeItem('pending_ref_code');
+        console.log('[referral] registered:', data);
+      }
+    } catch(e) { console.warn('[referral]', e); }
+  };
+
+  // Try register on page load (nếu user đã login + có pending code)
+  setTimeout(() => window.tryRegisterReferral?.(), 1500);
+  // Hook vào Supabase auth state change nếu có
+  if (window.Auth?.onAuthChange) {
+    window.Auth.onAuthChange((event) => {
+      if (event === 'SIGNED_IN') setTimeout(() => window.tryRegisterReferral?.(), 500);
+    });
+  }
+
 
 
 </script>
