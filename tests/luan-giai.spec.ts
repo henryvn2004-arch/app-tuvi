@@ -8,23 +8,16 @@ test.describe('Luan Giai La So', () => {
 
   test('form render — TuviForm inject thanh cong', async ({ page }) => {
     await expect(page.locator('#tuvi-form-container')).toBeVisible();
-    const submit = page.locator('.btn-submit').first();
-    await expect(submit).toBeVisible({ timeout: 8_000 });
-    await expect(submit).toContainText('Luận Giải Lá Số');
+    await expect(page.locator('.btn-submit').first()).toBeVisible({ timeout: 8_000 });
+    await expect(page.locator('.btn-submit').first()).toContainText('Luận Giải Lá Số');
   });
 
   test('submit -> #result-section active + #laso-grid 12 cung', async ({ page }) => {
-    // Cho TuviForm load xong
-    await page.waitForFunction(() => typeof (window as any).TuviForm !== 'undefined' && typeof (window as any).TuviForm.setData === 'function', { timeout: 10_000 });
+    // TuviForm la const (khong phai window.TuviForm) — dung string expression
+    await page.waitForFunction('typeof TuviForm !== "undefined"', { timeout: 10_000 });
+    await page.evaluate('TuviForm.setData({ hoten: "Test", ngay: 15, thang: 7, nam: 1990, gioHour: 7, gioitinh: "nam", namXem: 2026 })');
 
-    await page.evaluate(() => {
-      (window as any).TuviForm.setData({
-        hoten: 'Playwright Test', ngay: 15, thang: 7, nam: 1990,
-        gioHour: 7, gioPhut: 0, gioitinh: 'nam', namXem: 2026
-      });
-    });
-
-    await page.locator('.btn-submit').first().click();
+    await page.locator('#tvf-submit-btn').click();
     await page.waitForSelector('#result-section.active', { timeout: 20_000 });
 
     const cells = page.locator('#laso-grid .cung-cell');

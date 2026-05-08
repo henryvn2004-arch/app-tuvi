@@ -13,16 +13,12 @@ test.describe('Xem Tuoi Vo Chong', () => {
     await page.goto('/xem-tuoi.html');
     await page.waitForLoadState('networkidle');
 
-    // Cho TuviForm load xong
-    await page.waitForFunction(() => typeof (window as any).TuviForm !== 'undefined' && typeof (window as any).TuviForm.setData === 'function', { timeout: 10_000 });
-
-    await page.evaluate(() => {
-      const TF = (window as any).TuviForm;
-      TF.setData({ hoten: 'Nguyen Van A', ngay: 15, thang: 7, nam: 1990, gioHour: 7, gioitinh: 'nam' }, 'a');
-      TF.setData({ hoten: 'Tran Thi B',   ngay: 10, thang: 3, nam: 1992, gioHour: 3, gioitinh: 'nu'  }, 'b');
-      const namXem = document.getElementById('nam-xem') as HTMLInputElement;
-      if (namXem) namXem.value = '2026';
-    });
+    await page.waitForFunction('typeof TuviForm !== "undefined"', { timeout: 10_000 });
+    await page.evaluate(`
+      TuviForm.setData({ hoten: 'Nguyen Van A', ngay: 15, thang: 7, nam: 1990, gioHour: 7, gioitinh: 'nam' }, 'a');
+      TuviForm.setData({ hoten: 'Tran Thi B',   ngay: 10, thang: 3, nam: 1992, gioHour: 3, gioitinh: 'nu'  }, 'b');
+      document.getElementById('nam-xem').value = '2026';
+    `);
 
     await page.locator('#btn-analyze').click();
     await page.waitForSelector('#result-section:not([style*="display: none"])', { timeout: 25_000 });
