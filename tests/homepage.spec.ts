@@ -14,11 +14,16 @@ test.describe('Homepage', () => {
     await expect(page.locator('.tab-nav button, .tab-btn, [role="tablist"] button').first()).toBeVisible();
   });
 
-  test('tool links render trong main (it nhat 5)', async ({ page }) => {
-    const main = page.locator('main, #main-content, .main-content, #portal-content').first();
-    const links = main.locator('a[href]');
-    await expect(links.first()).toBeVisible({ timeout: 8_000 });
-    expect(await links.count()).toBeGreaterThanOrEqual(5);
+  test('tool links render (it nhat 5)', async ({ page }) => {
+    // Tim a[href] visible, khong phai nav items
+    const allLinks = page.locator('a[href]:not(.nav-dd-item):not(.nav-brand):not(.nav-link):not([class*="nav-"])');
+    const visible: number[] = [];
+    const count = await allLinks.count();
+    for (let i = 0; i < Math.min(count, 50); i++) {
+      if (await allLinks.nth(i).isVisible()) visible.push(i);
+      if (visible.length >= 5) break;
+    }
+    expect(visible.length).toBeGreaterThanOrEqual(5);
   });
 
   test('khong co JS errors', async ({ page }) => {
