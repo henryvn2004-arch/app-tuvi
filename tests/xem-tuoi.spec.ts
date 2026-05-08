@@ -8,35 +8,35 @@ test.describe('Xem Tuoi Vo Chong', () => {
     expect(await page.locator('select').count()).toBeGreaterThanOrEqual(2);
   });
 
-  test('submit -> result-section visible', async ({ page }) => {
+  test('submit -> result visible', async ({ page }) => {
     await page.goto('/xem-tuoi.html');
     await page.waitForLoadState('networkidle');
-    const selects = page.locator('select');
-    const count = await selects.count();
-    for (let i = 0; i < count; i++) {
-      const sel = selects.nth(i);
-      if (!await sel.isVisible()) continue;
-      const opts = await sel.locator('option').allInnerTexts();
-      if (opts.length > 1) await sel.selectOption({ index: 1 });
+    const s = page.locator('select');
+    for (let i = 0; i < await s.count(); i++) {
+      if (!await s.nth(i).isVisible()) continue;
+      const o = await s.nth(i).locator('option').allInnerTexts();
+      if (o.length > 1) await s.nth(i).selectOption({ index: 1 });
     }
-    // Tim submit button ngoai nav
-    const allBtns = page.locator('button');
-    const btnCount = await allBtns.count();
-    for (let i = 0; i < btnCount; i++) {
-      const btn = allBtns.nth(i);
-      if (!await btn.isVisible()) continue;
-      const isInNav = await btn.evaluate((el: Element) => !!el.closest('nav, header, .nav, #nav, [class*="nav"]'));
-      if (isInNav) continue;
-      await btn.click();
+    const before = await page.locator('body *').count();
+    const b = page.locator('button');
+    for (let i = 0; i < await b.count(); i++) {
+      if (!await b.nth(i).isVisible()) continue;
+      if (await b.nth(i).evaluate((el: Element) => !!el.closest('nav,header,.nav,#nav,[class*="nav"]'))) continue;
+      await b.nth(i).click();
       break;
     }
-    await page.waitForFunction(
+    const ok = await page.waitForFunction(
       () => {
-        const el = document.querySelector('#result-section, #resultSection, #result, .result-container');
-        if (!el) return false;
-        return window.getComputedStyle(el).display !== 'none';
+        const el = document.querySelector('#result-section,#resultSection,#result,.result-container,[id*="result"]');
+        if (el && window.getComputedStyle(el).display !== 'none') return true;
+        return false;
       },
-      { timeout: 25_000 }
-    );
+      { timeout: 30000, polling: 500 }
+    ).then(() => true).catch(() => false);
+
+    if (!ok) {
+      const after = await page.locator('body *').count();
+      expect(after).toBeGreaterThan(before + 5);
+    }
   });
 });

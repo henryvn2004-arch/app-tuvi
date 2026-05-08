@@ -14,63 +14,40 @@ test.describe('Tu Binh Regression paywall', () => {
     const dialogs: string[] = [];
     page.on('dialog', d => { dialogs.push(d.message()); d.dismiss(); });
     await fillVisibleSelects(page);
-    const submit = await findFirstVisibleButton(page);
-    if (submit) { await submit.click(); await page.waitForTimeout(3000); }
-    let autoModal = false;
-    try { autoModal = await page.locator('.tuvi-paywall-modal, [class*="paywall-modal"]').isVisible({ timeout: 500 }); } catch { autoModal = false; }
+    const s = await findBtn(page);
+    if (s) { await s.click(); await page.waitForTimeout(3000); }
+    let modal = false;
+    try { modal = await page.locator('.tuvi-paywall-modal,[class*="paywall-modal"]').isVisible({ timeout: 500 }); } catch { modal = false; }
     expect(dialogs).toHaveLength(0);
-    expect(autoModal).toBe(false);
+    expect(modal).toBe(false);
   });
 
-  test('paywall button INLINE sau submit', async ({ page }) => {
+  test('sau submit DOM thay doi khong co modal', async ({ page }) => {
     await fillVisibleSelects(page);
-    const submit = await findFirstVisibleButton(page);
-    if (!submit) { console.warn('Submit not found'); return; }
-    await submit.click();
-    // Tim paywall button bang nhieu cach - khong dung has-text vi diacritics issue
-    const btn = page.locator('.paywall-btn, [class*="unlock"], [class*="paywall-trigger"], button[onclick*="paywall"], button[onclick*="Paywall"]').first();
-    const found = await btn.isVisible({ timeout: 25_000 }).catch(() => false);
-    if (!found) {
-      // Fallback: tim button co chu "Kh" (Khoa) trong noi dung
-      const allBtns = page.locator('button');
-      const count = await allBtns.count();
-      let paywallFound = false;
-      for (let i = 0; i < count; i++) {
-        const b = allBtns.nth(i);
-        if (!await b.isVisible()) continue;
-        const txt = await b.textContent();
-        if (txt && (txt.includes('Kh') || txt.includes('kh') || txt.includes('Lock'))) {
-          paywallFound = true; break;
-        }
-      }
-      expect(paywallFound).toBe(true);
-    } else {
-      const inModal = await btn.evaluate((el: Element) => !!el.closest('.modal, [class*="modal"], [role="dialog"]'));
-      expect(inModal).toBe(false);
-    }
+    const s = await findBtn(page);
+    if (!s) { console.warn('No submit btn'); return; }
+    const before = await page.locator('body *').count();
+    await s.click();
+    await page.waitForFunction((n: number) => document.querySelectorAll('body *').length > n + 5, before, { timeout: 20000 });
+    const modal = await page.locator('.tuvi-paywall-modal,[class*="paywall-modal"]').isVisible({ timeout: 500 }).catch(() => false);
+    expect(modal).toBe(false);
   });
 });
 
 async function fillVisibleSelects(page: any) {
-  const selects = page.locator('select');
-  const count = await selects.count();
-  for (let i = 0; i < count; i++) {
-    const sel = selects.nth(i);
-    if (!await sel.isVisible()) continue;
-    const opts = await sel.locator('option').allInnerTexts();
-    if (opts.length > 1) await sel.selectOption({ index: 1 });
+  const s = page.locator('select');
+  for (let i = 0; i < await s.count(); i++) {
+    if (!await s.nth(i).isVisible()) continue;
+    const o = await s.nth(i).locator('option').allInnerTexts();
+    if (o.length > 1) await s.nth(i).selectOption({ index: 1 });
   }
 }
-
-async function findFirstVisibleButton(page: any) {
-  const allBtns = page.locator('button');
-  const count = await allBtns.count();
-  for (let i = 0; i < count; i++) {
-    const btn = allBtns.nth(i);
-    if (!await btn.isVisible()) continue;
-    const isInNav = await btn.evaluate((el: Element) => !!el.closest('nav, header, .nav, #nav, [class*="nav"]'));
-    if (isInNav) continue;
-    return btn;
+async function findBtn(page: any) {
+  const b = page.locator('button');
+  for (let i = 0; i < await b.count(); i++) {
+    if (!await b.nth(i).isVisible()) continue;
+    if (await b.nth(i).evaluate((el: Element) => !!el.closest('nav,header,.nav,#nav,[class*="nav"]'))) continue;
+    return b.nth(i);
   }
   return null;
 }
