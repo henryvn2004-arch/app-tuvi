@@ -7,23 +7,21 @@ test.describe('Luận Giải Lá Số', () => {
   });
 
   test('form render đủ fields', async ({ page }) => {
-    await expect(page.locator('h1, .page-title')).toBeVisible();
-    await expect(page.locator('input[name*="nam"], #namSinh').first()).toBeVisible();
+    // Page này dùng TuviForm — title có thể là .tool-title, .form-title, hoặc section heading
+    const hasTitle = await page.locator('h1, h2, h3, .tool-title, .form-title, .section-title').first().isVisible();
+    expect(hasTitle).toBe(true);
+
+    // Năm sinh
+    const namInput = page.locator('input[name*="nam"], #namSinh, input.year-input').first();
+    await expect(namInput).toBeVisible();
   });
 
   test('submit → lá số grid 12 cung render', async ({ page }) => {
-    const selects = page.locator('select');
-    const count = await selects.count();
-    for (let i = 0; i < count; i++) {
-      const opts = await selects.nth(i).locator('option').allInnerTexts();
-      if (opts.length > 1) await selects.nth(i).selectOption({ index: 1 });
-    }
+    await fillVisibleSelects(page);
     await page.locator('input[name*="nam"], #namSinh').first().fill('1990');
-
-    await page.locator('button[type="submit"], #btnAnalyze, button:has-text("Xem")').first().click();
-    await page.waitForSelector('.palace, .cung, [class*="palace"]', { timeout: 20_000 });
-
-    const palaces = page.locator('.palace, .cung, [class*="palace-cell"]');
+    await page.locator('button[type="submit"], #btnAnalyze, button:has-text("Xem"), button:has-text("Lập")').first().click();
+    await page.waitForSelector('.palace, .cung, [class*="palace"], td.palace-cell', { timeout: 20_000 });
+    const palaces = page.locator('.palace, .cung, [class*="palace-cell"], td.palace-cell');
     expect(await palaces.count()).toBeGreaterThanOrEqual(12);
   });
 
@@ -35,3 +33,14 @@ test.describe('Luận Giải Lá Số', () => {
     expect(autoPopup).toBe(false);
   });
 });
+
+async function fillVisibleSelects(page: any) {
+  const selects = page.locator('select');
+  const count = await selects.count();
+  for (let i = 0; i < count; i++) {
+    const sel = selects.nth(i);
+    if (!await sel.isVisible()) continue;
+    const opts = await sel.locator('option').allInnerTexts();
+    if (opts.length > 1) await sel.selectOption({ index: 1 });
+  }
+}

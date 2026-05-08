@@ -7,24 +7,18 @@ test.describe('Tử Bình — Regression paywall', () => {
   });
 
   test('page load OK', async ({ page }) => {
-    await expect(page.locator('h1, .page-title')).toBeVisible();
+    await expect(page.locator('h1, .page-title, .tool-title, header h2').first()).toBeVisible();
   });
 
   test('🔴 REGRESSION: paywall KHÔNG auto-popup khi submit', async ({ page }) => {
     const dialogs: string[] = [];
     page.on('dialog', d => { dialogs.push(d.message()); d.dismiss(); });
 
-    // Fill form tối thiểu
-    const selects = page.locator('select');
-    const count = await selects.count();
-    for (let i = 0; i < count; i++) {
-      const opts = await selects.nth(i).locator('option').allInnerTexts();
-      if (opts.length > 1) await selects.nth(i).selectOption({ index: 1 });
-    }
+    await fillVisibleSelects(page);
     const namInput = page.locator('input[type="number"], input[name*="nam"]').first();
     if (await namInput.isVisible()) await namInput.fill('1990');
 
-    const submit = page.locator('button[type="submit"], button:has-text("Xem"), button:has-text("Tính")').first();
+    const submit = page.locator('button[type="submit"], button:has-text("Xem"), button:has-text("Tính"), button:has-text("Tra")').first();
     await submit.click();
     await page.waitForTimeout(3000);
 
@@ -39,12 +33,7 @@ test.describe('Tử Bình — Regression paywall', () => {
   });
 
   test('paywall button visible INLINE sau submit', async ({ page }) => {
-    const selects = page.locator('select');
-    const count = await selects.count();
-    for (let i = 0; i < count; i++) {
-      const opts = await selects.nth(i).locator('option').allInnerTexts();
-      if (opts.length > 1) await selects.nth(i).selectOption({ index: 1 });
-    }
+    await fillVisibleSelects(page);
     const namInput = page.locator('input[type="number"], input[name*="nam"]').first();
     if (await namInput.isVisible()) await namInput.fill('1990');
 
@@ -57,3 +46,15 @@ test.describe('Tử Bình — Regression paywall', () => {
     expect(inModal).toBe(false);
   });
 });
+
+// Chỉ fill các select VISIBLE — bỏ qua hidden (như #tvf-utc)
+async function fillVisibleSelects(page: any) {
+  const selects = page.locator('select');
+  const count = await selects.count();
+  for (let i = 0; i < count; i++) {
+    const sel = selects.nth(i);
+    if (!await sel.isVisible()) continue;
+    const opts = await sel.locator('option').allInnerTexts();
+    if (opts.length > 1) await sel.selectOption({ index: 1 });
+  }
+}
