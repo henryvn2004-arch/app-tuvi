@@ -17,15 +17,12 @@
 import fs from 'fs';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
-const pdfParseModule = require('pdf-parse');
-const pdf = typeof pdfParseModule === 'function'
-  ? pdfParseModule
-  : (pdfParseModule.default || pdfParseModule);
+const pdf = require('pdf-parse/lib/pdf-parse.js');
 
 // ─── CONFIG ──────────────────────────────────────────────────
 const BOOKS = [
-  { path: './sach/tu-binh-chan-thuyen.pdf', source: 'Tử Bình Chân Thuyên' },
-  { path: './sach/trich-thien-tuy.pdf',     source: 'Trích Thiên Tủy' },
+  { path: './sach/tu-binh-chan-thuyen.pdf', source: 'Tử Bình Chân Thuyên (Quảng Văn)' },
+  { path: './sach/trich-thien-tuy.pdf',     source: 'Dự Đoán Tứ Trụ (Trần Viên & Thiệu Vĩ Hoa)' },
 ];
 const CHUNK_SIZE   = 3500;  // chars per chunk (~700 tokens cho tiếng Việt)
 const RATE_DELAY   = 200;   // ms giữa các call OpenAI

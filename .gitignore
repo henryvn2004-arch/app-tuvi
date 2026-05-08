@@ -1,2 +1,8 @@
 node_modules/
 .next/
+
+# Playwright
+/playwright-report/
+/test-results/
+/tests/.auth/
+*.webm

@@ -1,0 +1,54 @@
+name: Playwright E2E
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: 'Override base URL'
+        required: false
+        default: 'https://www.tuviminhbao.com'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - run: npx playwright install chromium --with-deps
+
+      - name: Set BASE_URL
+        id: url
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ -n "${{ github.event.inputs.base_url }}" ]; then
+            echo "val=${{ github.event.inputs.base_url }}" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref_name }}" = "dev" ]; then
+            echo "val=https://app-tuvi-git-dev-henryvn2004-5000s-projects.vercel.app" >> $GITHUB_OUTPUT
+          else
+            echo "val=https://www.tuviminhbao.com" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run tests
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ steps.url.outputs.val }}
+          PLAYWRIGHT_TEST_EMAIL: ${{ secrets.PLAYWRIGHT_TEST_EMAIL }}
+          PLAYWRIGHT_TEST_PASSWORD: ${{ secrets.PLAYWRIGHT_TEST_PASSWORD }}
+        run: npx playwright test
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-${{ github.run_id }}
+          path: playwright-report/
+          retention-days: 14
