@@ -14,7 +14,9 @@ test.describe('Luan Giai La So', () => {
   });
 
   test('submit -> #result-section active + #laso-grid 12 cung', async ({ page }) => {
-    // Fill form qua TuviForm.setData() API thay vi selector guessing
+    // Cho TuviForm load xong
+    await page.waitForFunction(() => typeof (window as any).TuviForm !== 'undefined' && typeof (window as any).TuviForm.setData === 'function', { timeout: 10_000 });
+
     await page.evaluate(() => {
       (window as any).TuviForm.setData({
         hoten: 'Playwright Test', ngay: 15, thang: 7, nam: 1990,
@@ -23,11 +25,8 @@ test.describe('Luan Giai La So', () => {
     });
 
     await page.locator('.btn-submit').first().click();
-
-    // Cho result-section co class 'active'
     await page.waitForSelector('#result-section.active', { timeout: 20_000 });
 
-    // Verify 12 cung cells
     const cells = page.locator('#laso-grid .cung-cell');
     expect(await cells.count()).toBeGreaterThanOrEqual(12);
   });
