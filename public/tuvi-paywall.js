@@ -272,3 +272,6 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
 
   return { init, requireCredits, generateToolSlug, _close, show: _insufficient };
 })();
+
+// Export to global window so cross-script checks (e.g. tu-binh.html line 1537) work
+window.TuviPaywall = TuviPaywall;
