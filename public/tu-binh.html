@@ -752,10 +752,31 @@ select.form-input { cursor: pointer; }
           ${pregen ? `<div class="phan-pregen" id="phan-pregen-${i}">${pregen}</div>` : ''}
           ${pregen ? `<div class="pregen-divider"><span>Luận giải</span></div>` : ''}
           <div class="phan-content" id="claude-content-${i}" style="display:none"></div>
+          ${i === 1 ? `
+          <div class="paywall-gate" id="lock-box-1" style="margin:0">
+            <div class="paywall-eyebrow">紫微明寶 · Tử Bình Bát Tự</div>
+            <div class="paywall-title">Mở Khóa Luận Giải 16 Phần</div>
+            <div class="paywall-desc">Luận giải chuyên sâu theo cổ pháp <em>Tử Bình Chân Thuyên</em> và <em>Trích Thiên Tủy</em> — từ Nhật Can, Cách Cục, Dụng Thần đến từng Đại Vận cuộc đời.</div>
+            <div class="paywall-features">
+              <div class="paywall-feature">Nhật Can &amp; Cường Nhược</div>
+              <div class="paywall-feature">Cách Cục &amp; Dụng Thần</div>
+              <div class="paywall-feature">Tình duyên, Sức khỏe</div>
+              <div class="paywall-feature">Hình Xung Hại Hợp &amp; Thần Sát</div>
+              <div class="paywall-feature">9 Đại Vận + Lưu Niên</div>
+              <div class="paywall-feature">Vấn đáp AI không giới hạn</div>
+            </div>
+            <div class="paywall-price">100 <span style="font-size:18px;font-weight:400">Lượng</span></div>
+            <div class="paywall-price-note">≈ 250.000đ · Lưu vĩnh viễn trong tài khoản</div>
+            <button class="btn-paywall" onclick="window.tubinhUnlock()">
+              <span>Mở Khóa Luận Giải Đầy Đủ</span>
+              <span style="font-size:16px">→</span>
+            </button>
+            <div class="paywall-secure">🔒 Modal xác nhận sẽ hiện ra · Credits không hết hạn</div>
+          </div>` : `
           <div class="paywall-gate" id="lock-box-${i}" style="display:none;margin:0">
             <div class="paywall-eyebrow">紫微明寶 · Đang Tải</div>
             <div class="paywall-title" style="font-size:18px">Đang luận giải phần ${i}...</div>
-          </div>
+          </div>`}
         </div>`;
     }
     body.innerHTML = html;
@@ -1539,26 +1560,33 @@ select.form-input { cursor: pointer; }
       return;
     }
 
-    // requireCredits handles full flow:
-    //   1. Check login (auth.js)
-    //   2. Get pricing from tool_pricing table (tu-binh = 100 credits)
-    //   3. Check if already paid for this slug → callback silently
-    //   4. Else check balance
-    //   5. If insufficient → show "không đủ lượng" dialog with topup link
-    //   6. Else → show CONFIRM popup ("Trừ 100 lượng, xác nhận?")
-    //   7. On confirm → POST /api/payment?action=deduct → success banner → callback
-    await window.TuviPaywall.requireCredits(tempSlug, async () => {
-      await luanGiaiAll();
-    });
+    // Auto-unlock: chỉ khi _autoUnlock flag set (user vừa topup và quay lại)
+    // Trường hợp thông thường: paywall card visible (lock-box-1), user tự click
+    if (_autoUnlock) {
+      _autoUnlock = false;
+      await window.TuviPaywall.requireCredits(tempSlug, async () => {
+        await luanGiaiAll();
+      });
+      return;
+    }
+
+    // Không auto-popup. Lock-box-1 đã visible để user chủ động click.
+    // tubinhUnlock() gọi requireCredits khi user click button.
   }
 
-  // Expose for inline onclick handlers (chatbot CTA button)
+  // Expose for inline onclick handlers (paywall card + chatbot CTA)
   window.tubinhUnlock = async function() {
     if (!_batTu) {
       alert('Vui lòng nhập thông tin sinh và bấm Luận Giải trước.');
       return;
     }
-    await checkAndRenderPaywall();
+    if (!_pendingSlug || typeof window.TuviPaywall === 'undefined') {
+      console.error('[tu-binh] tubinhUnlock: slug hoặc TuviPaywall chưa sẵn sàng');
+      return;
+    }
+    await window.TuviPaywall.requireCredits(_pendingSlug, async () => {
+      await luanGiaiAll();
+    });
   };
 
   // ─── Streaming SSE consumer ──────────────────────────────────
