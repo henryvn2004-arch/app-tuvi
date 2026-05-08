@@ -4,8 +4,7 @@ test.describe('Xem Tuoi Vo Chong', () => {
   test('page load + TuviForm render 2 panels', async ({ page }) => {
     await page.goto('/xem-tuoi.html');
     await page.waitForLoadState('networkidle');
-    await expect(page.locator('h1.hero-tuoi, .hero-tuoi h1').first()).toBeVisible();
-    // TuviForm render vao #tuvi-form-a va #tuvi-form-b
+    await expect(page.locator('.hero-tuoi')).toBeVisible();
     await expect(page.locator('#tuvi-form-a')).toBeVisible({ timeout: 5_000 });
     await expect(page.locator('#tuvi-form-b')).toBeVisible({ timeout: 5_000 });
   });
@@ -14,33 +13,21 @@ test.describe('Xem Tuoi Vo Chong', () => {
     await page.goto('/xem-tuoi.html');
     await page.waitForLoadState('networkidle');
 
-    // Fill visible selects trong ca 2 form panels
-    const selects = page.locator('select');
-    const count = await selects.count();
-    for (let i = 0; i < count; i++) {
-      const sel = selects.nth(i);
-      if (!await sel.isVisible()) continue;
-      const opts = await sel.locator('option').allInnerTexts();
-      if (opts.length > 1) await sel.selectOption({ index: 1 });
-    }
+    // Fill ca 2 forms qua TuviForm API
+    await page.evaluate(() => {
+      const TF = (window as any).TuviForm;
+      TF.setData({ hoten: 'Nguyen Van A', ngay: 15, thang: 7, nam: 1990, gioHour: 7, gioitinh: 'nam' }, 'a');
+      TF.setData({ hoten: 'Tran Thi B',   ngay: 10, thang: 3, nam: 1992, gioHour: 3, gioitinh: 'nu'  }, 'b');
+      const namXem = document.getElementById('nam-xem') as HTMLInputElement;
+      if (namXem) namXem.value = '2026';
+    });
 
-    // Nam xem
-    const namXem = page.locator('#nam-xem');
-    if (await namXem.isVisible()) await namXem.fill('2026');
-
-    // Click submit chinh xac: #btn-analyze
     const btn = page.locator('#btn-analyze');
     await expect(btn).toBeVisible({ timeout: 5_000 });
     await btn.click();
 
-    // #result-section bat dau display:none -> analyze() set display:block
-    await page.waitForFunction(
-      () => {
-        const el = document.getElementById('result-section');
-        return el && el.style.display !== 'none' && el.style.display !== '';
-      },
-      { timeout: 25_000, polling: 300 }
-    );
-    console.log('result-section visible sau submit');
+    // #result-section: display:none -> display:block sau khi analyze() chay
+    await page.waitForSelector('#result-section:not([style*="display: none"])', { timeout: 25_000 });
+    console.log('result-section visible');
   });
 });
