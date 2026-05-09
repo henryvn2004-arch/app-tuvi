@@ -21,12 +21,17 @@ for (const { path, name } of KEY_PAGES) {
       const clientWidth = await page.evaluate(() => document.documentElement.clientWidth);
 
       // Dùng getBoundingClientRect thay vì scrollWidth — scrollWidth bị kẹp bởi overflow:hidden
+      // Exclude position:absolute/fixed vì những element đó có thể intentionally nằm ngoài viewport
+      // (ví dụ: carousel arrow rv-next right:-20px, auth widget fixed)
       const offenders = await page.evaluate((vw: number) => {
         const els = [...document.querySelectorAll('*')] as HTMLElement[];
         return els
           .filter(el => {
+            const style = getComputedStyle(el);
+            if (style.display === 'none' || style.visibility === 'hidden') return false;
+            if (style.position === 'fixed' || style.position === 'absolute') return false;
             const r = el.getBoundingClientRect();
-            return r.right > vw + 5 && getComputedStyle(el).display !== 'none';
+            return r.right > vw + 5;
           })
           .slice(0, 5)
           .map(el => `${el.tagName}#${el.id || '-'}.${el.className.toString().split(' ')[0] || '-'} right=${el.getBoundingClientRect().right.toFixed(0)}`);
