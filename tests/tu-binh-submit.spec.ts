@@ -12,7 +12,7 @@ async function submitTuBinh(page: any) {
   await page.locator('#tvf-submit-btn').click();
   // Chờ result-section hoặc error-msg show (AI call có thể mất 30-90s)
   await page.waitForFunction(
-    `document.querySelector('#result-section')?.style.display !== 'none' ||
+    `getComputedStyle(document.querySelector('#result-section')).display !== 'none' ||
      document.querySelector('#error-msg')?.classList.contains('show')`,
     { timeout: 90_000 }
   );
@@ -41,9 +41,7 @@ test.describe('Tử Bình — Submit & Result', () => {
     test.setTimeout(120_000);
     await submitTuBinh(page);
 
-    const resultVisible = await page.locator('#result-section').evaluate(
-      (el: HTMLElement) => el.style.display !== 'none'
-    ).catch(() => false);
+    const resultVisible = await page.locator('#result-section').isVisible().catch(() => false);
     const errorVisible = await page.locator('#error-msg.show').isVisible().catch(() => false);
     expect(resultVisible || errorVisible).toBe(true);
   });
@@ -52,9 +50,7 @@ test.describe('Tử Bình — Submit & Result', () => {
     test.setTimeout(120_000);
     await submitTuBinh(page);
 
-    const resultVisible = await page.locator('#result-section').evaluate(
-      (el: HTMLElement) => el.style.display !== 'none'
-    ).catch(() => false);
+    const resultVisible = await page.locator('#result-section').isVisible().catch(() => false);
     if (!resultVisible) { console.warn('Result không hiện (có thể thiếu credits)'); return; }
 
     await expect(page.locator('#result-header')).not.toBeEmpty({ timeout: 5000 });
@@ -68,9 +64,7 @@ test.describe('Tử Bình — Submit & Result', () => {
     test.setTimeout(120_000);
     await submitTuBinh(page);
 
-    const resultVisible = await page.locator('#result-section').evaluate(
-      (el: HTMLElement) => el.style.display !== 'none'
-    ).catch(() => false);
+    const resultVisible = await page.locator('#result-section').isVisible().catch(() => false);
     if (!resultVisible) { console.warn('Result không hiện (có thể thiếu credits)'); return; }
 
     const mucLuc = page.locator('#muc-luc-items .muc-luc-btn, [id^="ml-"]');

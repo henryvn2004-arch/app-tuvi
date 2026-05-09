@@ -11,7 +11,7 @@ test.describe('Khảo Luận (khao-luan.html)', () => {
   });
 
   test('navigate từ blog → article load đầy đủ', async ({ page }) => {
-    // Lấy link bài đầu tiên từ blog
+    // /khao-luan/:slug → SSR HTML từ API (không phải khao-luan.html)
     await page.goto('/blog.html');
     await page.waitForLoadState('networkidle');
     await page.waitForSelector('#state-loading', { state: 'hidden', timeout: 15000 }).catch(() => {});
@@ -25,10 +25,10 @@ test.describe('Khảo Luận (khao-luan.html)', () => {
 
     await page.goto(href);
     await page.waitForLoadState('networkidle');
-    await page.waitForSelector('#state-loading', { state: 'hidden', timeout: 15000 }).catch(() => {});
 
-    const articleVisible = await page.locator('#article').isVisible().catch(() => false);
-    const errorVisible = await page.locator('#state-error').isVisible().catch(() => false);
+    // SSR page dùng .article-title và .article-body
+    const articleVisible = await page.locator('.article-title, .article-body').first().isVisible().catch(() => false);
+    const errorVisible = await page.locator('.error-state, [class*="error"]').first().isVisible().catch(() => false);
     expect(articleVisible || errorVisible).toBe(true);
   });
 
@@ -46,11 +46,11 @@ test.describe('Khảo Luận (khao-luan.html)', () => {
 
     await page.goto(href);
     await page.waitForLoadState('networkidle');
-    await page.waitForSelector('#state-loading', { state: 'hidden', timeout: 15000 }).catch(() => {});
 
-    const articleVisible = await page.locator('#article').isVisible().catch(() => false);
-    if (articleVisible) {
-      await expect(page.locator('#article-title')).not.toBeEmpty({ timeout: 5000 });
+    const titleEl = page.locator('.article-title, h1').first();
+    const titleVisible = await titleEl.isVisible().catch(() => false);
+    if (titleVisible) {
+      await expect(titleEl).not.toBeEmpty({ timeout: 5000 });
     }
   });
 
@@ -157,9 +157,12 @@ test.describe('Resources (resources.html)', () => {
     const tabTrung = page.locator('.tab-btn').filter({ hasText: /trung|china/i }).first();
     if (await tabTrung.isVisible().catch(() => false)) {
       await tabTrung.click();
-      await page.waitForTimeout(400);
-      // Chỉ check #tab-trung (container), tránh strict mode khi #list-trung cũng match
-      await expect(page.locator('#tab-trung').first()).toBeVisible({ timeout: 3000 });
+      await page.waitForTimeout(600);
+      // Check class active toggled (CSS display:none → display:block via .active)
+      const hasActive = await page.locator('#tab-trung').evaluate(
+        (el: Element) => el.classList.contains('active')
+      ).catch(() => false);
+      expect(hasActive).toBe(true);
     }
   });
 });

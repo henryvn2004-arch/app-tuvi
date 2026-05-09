@@ -20,7 +20,7 @@ test.describe('La So (la-so.html)', () => {
   });
 
   test('submit đủ thông tin → grid 12 cung hiện', async ({ page }) => {
-    // inp-dd/mm/yyyy là <select>, inp-name/namxem là <input>
+    // inp-dd/mm là <select>, inp-yyyy/inp-name/inp-namxem là <input>
     const fillInput = async (id: string, val: string) => {
       const el = page.locator(`#${id}`);
       if (await el.isVisible().catch(() => false)) await el.fill(val);
@@ -32,7 +32,7 @@ test.describe('La So (la-so.html)', () => {
     await fillInput('inp-name', 'Test User');
     await fillSelect('inp-dd', '15');
     await fillSelect('inp-mm', '7');
-    await fillSelect('inp-yyyy', '1990');
+    await fillInput('inp-yyyy', '1990');
     await fillInput('inp-namxem', '2026');
 
     const genderSel = page.locator('#inp-gender');
@@ -88,7 +88,7 @@ test.describe('La So V2 (la-so-v2.html)', () => {
     await fillInput('inp-name', 'Test V2');
     await fillSelect('inp-dd', '10');
     await fillSelect('inp-mm', '3');
-    await fillSelect('inp-yyyy', '1985');
+    await fillInput('inp-yyyy', '1985');
     await fillInput('inp-namxem', '2026');
 
     const gioSel = page.locator('#inp-hh');
