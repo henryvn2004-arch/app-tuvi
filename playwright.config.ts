@@ -33,5 +33,14 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'], storageState: 'tests/.auth/user.json' },
       dependencies: ['setup'],
     },
+    {
+      name: 'mobile-chrome',
+      use: {
+        ...devices['Pixel 5'],
+        storageState: 'tests/.auth/user.json',
+      },
+      dependencies: ['setup'],
+      testMatch: /mobile\.spec\.ts/,
+    },
   ],
 });
