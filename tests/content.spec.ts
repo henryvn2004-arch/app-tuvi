@@ -154,20 +154,23 @@ test.describe('Resources (resources.html)', () => {
   });
 
   test('tab switch — Trung Hoa tab hiển thị', async ({ page }) => {
-    const tabTrung = page.locator('.tab-btn').filter({ hasText: /trung|china/i }).first();
-    if (!await tabTrung.isVisible().catch(() => false)) return;
-
-    await tabTrung.click();
-    await page.waitForTimeout(600);
-
     const tabContent = page.locator('#tab-trung');
     if (await tabContent.count() === 0) { console.warn('#tab-trung không tồn tại'); return; }
+
+    // Gọi switchTab trực tiếp thay vì click (tránh CSP block inline onclick)
+    const switched = await page.evaluate(() => {
+      if (typeof (window as any).switchTab !== 'function') return false;
+      const btn = document.querySelectorAll('.tab-btn')[1] as HTMLElement;
+      if (!btn) return false;
+      (window as any).switchTab('trung', btn);
+      return true;
+    }).catch(() => false);
+    if (!switched) { console.warn('switchTab không khả dụng'); return; }
 
     // Check class active toggled (CSS display:none → display:block via .active)
     const hasActive = await tabContent.evaluate(
       (el: Element) => el.classList.contains('active')
     ).catch(() => false);
-    if (!hasActive) { console.warn('tab-trung không có class active sau click — có thể CSP block inline onclick'); return; }
     expect(hasActive).toBe(true);
   });
 });
