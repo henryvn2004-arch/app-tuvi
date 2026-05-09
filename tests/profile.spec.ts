@@ -51,12 +51,11 @@ test.describe('Profile (profile.html) — logged in', () => {
 
   test('tab Lá Số — lịch sử hiện (hoặc empty state)', async ({ page }) => {
     if (!await isDashboardVisible(page)) { console.warn('Chưa login, bỏ qua'); return; }
-    const lasoTab = page.locator('.tab-btn[data-tab="lasos"], .tab-btn').filter({ hasText: /lá số|laso/i }).first();
+    const lasoTab = page.locator('.tab-btn[data-tab="lasos"]').first();
     if (await lasoTab.isVisible().catch(() => false)) {
       await lasoTab.click();
       await page.waitForTimeout(1000);
-      const content = page.locator('#tab-lasos, #lasosContent');
-      await expect(content).toBeVisible({ timeout: 3000 });
+      await expect(page.locator('#tab-lasos')).toBeVisible({ timeout: 3000 });
     }
   });
 
