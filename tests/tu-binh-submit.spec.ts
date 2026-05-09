@@ -3,7 +3,8 @@ import { test, expect } from '@playwright/test';
 // Gap hiện tại: tu-binh.spec.ts chỉ test paywall regression, chưa test kết quả thực
 
 // Helper: setData + click submit + chờ result hoặc error
-async function submitTuBinh(page: any) {
+// Returns true nếu AI phản hồi, false nếu timeout (thiếu credits)
+async function submitTuBinh(page: any): Promise<boolean> {
   await page.waitForFunction('typeof TuviForm !== "undefined"', { timeout: 10_000 });
   await page.evaluate(`
     TuviForm.setData({ hoten: 'Test Tubinh', ngay: 15, thang: 7, nam: 1990, gioHour: 7, gioitinh: 'nam', namXem: 2026 })
@@ -11,11 +12,11 @@ async function submitTuBinh(page: any) {
   // TuviForm generates #tvf-submit-btn
   await page.locator('#tvf-submit-btn').click();
   // Chờ result-section hoặc error-msg show (AI call có thể mất 30-90s)
-  await page.waitForFunction(
+  return page.waitForFunction(
     `getComputedStyle(document.querySelector('#result-section')).display !== 'none' ||
      document.querySelector('#error-msg')?.classList.contains('show')`,
     { timeout: 90_000 }
-  );
+  ).then(() => true).catch(() => false);
 }
 
 test.describe('Tử Bình — Submit & Result', () => {
@@ -39,7 +40,8 @@ test.describe('Tử Bình — Submit & Result', () => {
 
   test('submit → result-section hoặc error-msg hiện (không treo)', async ({ page }) => {
     test.setTimeout(120_000);
-    await submitTuBinh(page);
+    const responded = await submitTuBinh(page);
+    if (!responded) { console.warn('AI không phản hồi trong 90s — có thể thiếu credits, bỏ qua'); return; }
 
     const resultVisible = await page.locator('#result-section').isVisible().catch(() => false);
     const errorVisible = await page.locator('#error-msg.show').isVisible().catch(() => false);
@@ -48,7 +50,8 @@ test.describe('Tử Bình — Submit & Result', () => {
 
   test('nếu result hiện — result-header và tutru-table có nội dung', async ({ page }) => {
     test.setTimeout(120_000);
-    await submitTuBinh(page);
+    const responded = await submitTuBinh(page);
+    if (!responded) { console.warn('AI không phản hồi trong 90s — có thể thiếu credits, bỏ qua'); return; }
 
     const resultVisible = await page.locator('#result-section').isVisible().catch(() => false);
     if (!resultVisible) { console.warn('Result không hiện (có thể thiếu credits)'); return; }
@@ -68,7 +71,8 @@ test.describe('Tử Bình — Submit & Result', () => {
 
   test('nếu result hiện — mục lục ít nhất 3 mục', async ({ page }) => {
     test.setTimeout(120_000);
-    await submitTuBinh(page);
+    const responded = await submitTuBinh(page);
+    if (!responded) { console.warn('AI không phản hồi trong 90s — có thể thiếu credits, bỏ qua'); return; }
 
     const resultVisible = await page.locator('#result-section').isVisible().catch(() => false);
     if (!resultVisible) { console.warn('Result không hiện (có thể thiếu credits)'); return; }

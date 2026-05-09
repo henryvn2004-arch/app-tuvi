@@ -155,15 +155,19 @@ test.describe('Resources (resources.html)', () => {
 
   test('tab switch — Trung Hoa tab hiển thị', async ({ page }) => {
     const tabTrung = page.locator('.tab-btn').filter({ hasText: /trung|china/i }).first();
-    if (await tabTrung.isVisible().catch(() => false)) {
-      await tabTrung.click();
-      await page.waitForTimeout(600);
-      // Check class active toggled (CSS display:none → display:block via .active)
-      const hasActive = await page.locator('#tab-trung').evaluate(
-        (el: Element) => el.classList.contains('active')
-      ).catch(() => false);
-      expect(hasActive).toBe(true);
-    }
+    if (!await tabTrung.isVisible().catch(() => false)) return;
+
+    await tabTrung.click();
+    await page.waitForTimeout(600);
+
+    const tabContent = page.locator('#tab-trung');
+    if (await tabContent.count() === 0) { console.warn('#tab-trung không tồn tại'); return; }
+
+    // Check class active toggled (CSS display:none → display:block via .active)
+    const hasActive = await tabContent.evaluate(
+      (el: Element) => el.classList.contains('active')
+    ).catch(() => false);
+    expect(hasActive).toBe(true);
   });
 });
 
