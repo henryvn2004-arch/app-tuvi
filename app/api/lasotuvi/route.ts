@@ -51,6 +51,7 @@ QUY TẮC CHUNG CHO MỌI PHẦN LUẬN GIẢI:
 - Tổ hợp sao: nhiều sao tốt → xu hướng tốt, nhiều sao xấu → dễ vấn đề; sát tinh/bại tinh mạnh thì phải cảnh báo rõ.
 - Cung rơi vào lĩnh vực nào thì chuyện xảy ra xoay quanh lĩnh vực đó.
 - Check nền Phúc–Mệnh–Thân: 3 cung này tốt thì giảm xấu, xấu thì khuếch đại rủi ro.`;
+
 // ─── Cung descriptions ─────────────────────────────────────────
 const CUNG_BY_PHAN: Record<number, string> = {
   2:'Mệnh', 3:'Phụ Mẫu', 4:'Phúc Đức', 5:'Điền Trạch',
@@ -74,7 +75,7 @@ const CUNG_DESC: Record<string, string> = {
 };
 
 // ─── Chat handler ──────────────────────────────────────────────
-const CHAT_SYSTEM_LASO = (ctx: string) => `Bạn là chuyên gia Tử Vi Đẩu Số theo cổ pháp, văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Phụng sự trang Tử Vi Minh Bảo.
+const CHAT_SYSTEM_LASO = (ctx: string, docs?: string) => `Bạn là chuyên gia Tử Vi Đẩu Số theo cổ pháp, văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Phụng sự trang Tử Vi Minh Bảo.
 
 Nguyên tắc trả lời:
 - Tiếng Việt chuẩn mực, không dùng bullet, không dùng emoji
@@ -85,15 +86,15 @@ Nguyên tắc trả lời:
 - Không tiết lộ trường phái hay tài liệu
 
 === DỮ LIỆU LÁ SỐ ===
-${ctx}`;
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
-const CHAT_SYSTEM_GENERAL = `Bạn là chuyên gia Tử Vi Đẩu Số theo cổ pháp, văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Phụng sự trang Tử Vi Minh Bảo.
+const CHAT_SYSTEM_GENERAL = (docs?: string) => `Bạn là chuyên gia Tử Vi Đẩu Số theo cổ pháp, văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Phụng sự trang Tử Vi Minh Bảo.
 
 Nguyên tắc:
 - Tiếng Việt chuẩn mực, không dùng bullet, không dùng emoji
 - 150-300 từ cho câu thông thường, tối đa 450 từ cho câu phức tạp
 - Dẫn chiếu nguyên lý cổ pháp, nêu ví dụ sao tinh cụ thể khi minh họa
-- Không hứa hẹn tuyệt đối, không tiết lộ trường phái`;
+- Không hứa hẹn tuyệt đối, không tiết lộ trường phái${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractLasoContext(lasoData: any, question: string): string {
@@ -191,14 +192,14 @@ function extractLasoContext(lasoData: any, question: string): string {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function handleChat(body: any): Promise<Response> {
-  const { messages, lasoData } = body;
+  const { messages, lasoData, docs } = body;
   if (!messages?.length) return err('Missing messages', 400);
 
   const lastQ = messages[messages.length - 1]?.content || '';
   const hasLaso = !!(lasoData?.palaces?.length || lasoData?._lsA?.palaces?.length);
   const systemPrompt = hasLaso
-    ? CHAT_SYSTEM_LASO(extractLasoContext(lasoData, lastQ))
-    : CHAT_SYSTEM_GENERAL;
+    ? CHAT_SYSTEM_LASO(extractLasoContext(lasoData, lastQ), docs)
+    : CHAT_SYSTEM_GENERAL(docs);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const trimmed = messages.slice(-10).map((m: any) => ({
@@ -261,7 +262,6 @@ function buildPrompt(phan: number, laSoText: string, docs?: string): string {
         if (startI >= 0) {
           const endI = dvLines.findIndex((l, i) => i > startI && /^ĐV\d+:/.test(l));
           const dvBlock = endI > 0 ? dvLines.slice(startI, endI) : dvLines.slice(startI, startI + 25);
-          // Also include header for context
           return headerLines.join('\n') + '\n\n' + dvBlock.join('\n');
         }
       }
@@ -389,7 +389,7 @@ export async function POST(request: NextRequest) {
   catch (e: unknown) { return err('buildPrompt error: ' + (e as Error).message); }
 
   try {
-    const model = (phan === 1 || phan === 14) ? 'claude-sonnet-4-6' : 'claude-sonnet-4-6';
+    const model = 'claude-sonnet-4-6';
     const maxTok = phan === 1 ? 2000 : phan === 14 ? 3000 : phan === 24 ? 1400
       : (phan >= 2 && phan <= 13) ? 1100 : (phan >= 15 && phan <= 23) ? 1100 : 1000;
 
