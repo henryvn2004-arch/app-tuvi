@@ -22,21 +22,21 @@ setup('authenticate', async ({ page }) => {
 
   if (!res.access_token) throw new Error(`Login thất bại: ${JSON.stringify(res)}`);
 
+  const session = {
+    access_token: res.access_token,
+    refresh_token: res.refresh_token,
+    expires_in: res.expires_in,
+    expires_at: Math.floor(Date.now() / 1000) + res.expires_in,
+    token_type: 'bearer',
+    user: res.user,
+  };
+
   await page.goto('/');
-  await page.evaluate(({ url, session }) => {
-    const ref = url.split('//')[1].split('.')[0];
-    localStorage.setItem(`sb-${ref}-auth-token`, JSON.stringify(session));
-  }, {
-    url: SUPABASE_URL,
-    session: {
-      access_token: res.access_token,
-      refresh_token: res.refresh_token,
-      expires_in: res.expires_in,
-      expires_at: Math.floor(Date.now() / 1000) + res.expires_in,
-      token_type: 'bearer',
-      user: res.user,
-    },
-  });
+  // auth.js uses 'tuvi_session' / 'tuvi_user' keys — NOT supabase SDK keys
+  await page.evaluate(({ session, user }) => {
+    localStorage.setItem('tuvi_session', JSON.stringify(session));
+    localStorage.setItem('tuvi_user', JSON.stringify(user));
+  }, { session, user: res.user });
 
   await page.reload();
   await page.waitForTimeout(1000);
