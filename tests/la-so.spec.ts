@@ -20,18 +20,20 @@ test.describe('La So (la-so.html)', () => {
   });
 
   test('submit đủ thông tin → grid 12 cung hiện', async ({ page }) => {
-    // Điền trực tiếp vào input (la-so.html dùng input riêng, không phải TuviForm API)
-    const fill = async (id: string, val: string) => {
+    // inp-dd/mm/yyyy là <select>, inp-name/namxem là <input>
+    const fillInput = async (id: string, val: string) => {
       const el = page.locator(`#${id}`);
-      if (await el.isVisible().catch(() => false)) {
-        await el.fill(val);
-      }
+      if (await el.isVisible().catch(() => false)) await el.fill(val);
     };
-    await fill('inp-name', 'Test User');
-    await fill('inp-dd', '15');
-    await fill('inp-mm', '7');
-    await fill('inp-yyyy', '1990');
-    await fill('inp-namxem', '2026');
+    const fillSelect = async (id: string, val: string) => {
+      const el = page.locator(`#${id}`);
+      if (await el.isVisible().catch(() => false)) await el.selectOption(val);
+    };
+    await fillInput('inp-name', 'Test User');
+    await fillSelect('inp-dd', '15');
+    await fillSelect('inp-mm', '7');
+    await fillSelect('inp-yyyy', '1990');
+    await fillInput('inp-namxem', '2026');
 
     const genderSel = page.locator('#inp-gender');
     if (await genderSel.isVisible().catch(() => false)) {
@@ -75,15 +77,19 @@ test.describe('La So V2 (la-so-v2.html)', () => {
   });
 
   test('submit đủ thông tin → grid xuất hiện', async ({ page }) => {
-    const fill = async (id: string, val: string) => {
+    const fillInput = async (id: string, val: string) => {
       const el = page.locator(`#${id}`);
       if (await el.isVisible().catch(() => false)) await el.fill(val);
     };
-    await fill('inp-name', 'Test V2');
-    await fill('inp-dd', '10');
-    await fill('inp-mm', '3');
-    await fill('inp-yyyy', '1985');
-    await fill('inp-namxem', '2026');
+    const fillSelect = async (id: string, val: string) => {
+      const el = page.locator(`#${id}`);
+      if (await el.isVisible().catch(() => false)) await el.selectOption(val);
+    };
+    await fillInput('inp-name', 'Test V2');
+    await fillSelect('inp-dd', '10');
+    await fillSelect('inp-mm', '3');
+    await fillSelect('inp-yyyy', '1985');
+    await fillInput('inp-namxem', '2026');
 
     const gioSel = page.locator('#inp-hh');
     if (await gioSel.isVisible().catch(() => false)) {

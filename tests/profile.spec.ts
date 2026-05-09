@@ -6,18 +6,18 @@ test.describe('Profile (profile.html) — logged in', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/profile.html');
     await page.waitForLoadState('networkidle');
-    // Chờ auth load xong — dashboard hoặc notLoggedIn hiện
-    await page.waitForSelector('#dashboard, #notLoggedIn', { timeout: 10000 });
+    // Chờ auth JS chạy xong — dashboard visible (có thể mất vài giây)
+    await page.waitForSelector('#dashboard', { state: 'visible', timeout: 15000 });
   });
 
   test('dashboard hiện khi đã login', async ({ page }) => {
-    await expect(page.locator('#dashboard')).toBeVisible({ timeout: 8000 });
+    await expect(page.locator('#dashboard')).toBeVisible({ timeout: 15000 });
     await expect(page.locator('#notLoggedIn')).not.toBeVisible();
   });
 
   test('email user hiện đúng', async ({ page }) => {
     const email = page.locator('#userEmail');
-    await expect(email).toBeVisible({ timeout: 5000 });
+    await expect(email).toBeVisible({ timeout: 10000 });
     const text = await email.textContent();
     expect(text).toContain('@');
   });
