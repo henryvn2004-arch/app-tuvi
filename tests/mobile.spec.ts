@@ -22,11 +22,19 @@ for (const { path, name } of KEY_PAGES) {
       const clientWidth = await page.evaluate(() => document.documentElement.clientWidth);
       const overflow = scrollWidth - clientWidth;
 
-      // xem-tuoi.html có overflow 36px chưa xác định được nguyên nhân qua code inspection
-      // cần debug trực tiếp trên browser — skip thay vì fail
-      if (path === '/xem-tuoi.html' && overflow > 5) {
-        console.warn(`xem-tuoi mobile overflow: ${overflow}px — known issue, cần debug live`);
-        return;
+      if (overflow > 5) {
+        // Report which elements extend past viewport to help debug
+        const offenders = await page.evaluate((vw: number) => {
+          const els = [...document.querySelectorAll('*')] as HTMLElement[];
+          return els
+            .filter(el => {
+              const r = el.getBoundingClientRect();
+              return r.right > vw + 2 && getComputedStyle(el).display !== 'none';
+            })
+            .slice(0, 5)
+            .map(el => `${el.tagName}#${el.id || '-'}.${el.className.toString().split(' ')[0] || '-'} right=${el.getBoundingClientRect().right.toFixed(0)}`);
+        }, clientWidth);
+        console.warn(`${path} mobile overflow ${overflow}px — offenders: ${offenders.join(' | ')}`);
       }
       // Cho phép sai lệch tối đa 5px
       expect(overflow).toBeLessThanOrEqual(5);
