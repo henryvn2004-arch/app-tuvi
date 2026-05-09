@@ -1086,6 +1086,31 @@ select.form-input { cursor: pointer; }
     const p = _astrolabe.palaces.find(p => p.cungName === cungName);
     return p ? p.majorStars.map(s => s.ten).join(' ') : '';
   }
+  // Tam phương tứ chính: lấy sao của cung chính + 2 tam hợp + xung chiếu
+  const _TAM_HOP = {
+    'Dần':['Ngọ','Tuất'],'Ngọ':['Dần','Tuất'],'Tuất':['Dần','Ngọ'],
+    'Thân':['Tý','Thìn'],'Tý':['Thân','Thìn'],'Thìn':['Thân','Tý'],
+    'Tỵ':['Dậu','Sửu'],'Dậu':['Tỵ','Sửu'],'Sửu':['Tỵ','Dậu'],
+    'Hợi':['Mão','Mùi'],'Mão':['Hợi','Mùi'],'Mùi':['Hợi','Mão'],
+  };
+  const _XUNG = {
+    'Tý':'Ngọ','Ngọ':'Tý','Sửu':'Mùi','Mùi':'Sửu',
+    'Dần':'Thân','Thân':'Dần','Mão':'Dậu','Dậu':'Mão',
+    'Thìn':'Tuất','Tuất':'Thìn','Tỵ':'Hợi','Hợi':'Tỵ',
+  };
+  function _getTamPhuongStars(cungName) {
+    if (!_astrolabe) return '';
+    const mainP = _astrolabe.palaces.find(p => p.cungName === cungName);
+    if (!mainP) return '';
+    const dc = mainP.diaChi;
+    const related = [dc, ...(_TAM_HOP[dc]||[]), _XUNG[dc]].filter(Boolean);
+    const seen = new Set(), stars = [];
+    for (const chi of related) {
+      const p = _astrolabe.palaces.find(p => p.diaChi === chi);
+      if (p) p.majorStars.forEach(s => { if (!seen.has(s.ten)) { seen.add(s.ten); stars.push(s.ten); } });
+    }
+    return stars.join(' ');
+  }
   function _getDvInfo(dvNum) {
     if (!_astrolabe) return '';
     const dv = _astrolabe.daiVans[dvNum - 1];
@@ -1094,19 +1119,19 @@ select.form-input { cursor: pointer; }
     return `${dv.diaChi} ${p ? p.majorStars.map(s => s.ten).join(' ') : ''}`;
   }
   const QUERIES = {
-    1:  () => `tổng quan lá số ${_astrolabe?.napAm||''} cục ${_astrolabe?.cuc||''} ${_getStarNames('Mệnh')} khí chất bản mệnh`,
-    2:  () => `cung mệnh ${_getStarNames('Mệnh')} cách cục ý nghĩa chính tinh`,
-    3:  () => `cung phụ mẫu ${_getStarNames('Phụ Mẫu')} cha mẹ ý nghĩa`,
-    4:  () => `cung phúc đức ${_getStarNames('Phúc Đức')} phúc khí tổ tiên`,
-    5:  () => `cung điền trạch ${_getStarNames('Điền Trạch')} nhà đất bất động sản`,
-    6:  () => `cung quan lộc ${_getStarNames('Quan Lộc')} sự nghiệp công danh`,
-    7:  () => `cung nô bộc ${_getStarNames('Nô Bộc')} bạn bè cộng sự`,
-    8:  () => `cung thiên di ${_getStarNames('Thiên Di')} xuất ngoại giao thiệp`,
-    9:  () => `cung tật ách ${_getStarNames('Tật Ách')} sức khỏe bệnh tật`,
-    10: () => `cung tài bạch ${_getStarNames('Tài Bạch')} tiền bạc tài chính`,
-    11: () => `cung tử tức ${_getStarNames('Tử Tức')} con cái`,
-    12: () => `cung phu thê ${_getStarNames('Phu Thê')} hôn nhân vợ chồng`,
-    13: () => `cung huynh đệ ${_getStarNames('Huynh Đệ')} anh chị em`,
+    1:  () => `tổng quan lá số ${_astrolabe?.napAm||''} cục ${_astrolabe?.cuc||''} ${_getTamPhuongStars('Mệnh')} khí chất bản mệnh`,
+    2:  () => `cung mệnh ${_getTamPhuongStars('Mệnh')} cách cục ý nghĩa chính tinh`,
+    3:  () => `cung phụ mẫu ${_getTamPhuongStars('Phụ Mẫu')} cha mẹ ý nghĩa`,
+    4:  () => `cung phúc đức ${_getTamPhuongStars('Phúc Đức')} phúc khí tổ tiên`,
+    5:  () => `cung điền trạch ${_getTamPhuongStars('Điền Trạch')} nhà đất bất động sản`,
+    6:  () => `cung quan lộc ${_getTamPhuongStars('Quan Lộc')} sự nghiệp công danh`,
+    7:  () => `cung nô bộc ${_getTamPhuongStars('Nô Bộc')} bạn bè cộng sự`,
+    8:  () => `cung thiên di ${_getTamPhuongStars('Thiên Di')} xuất ngoại giao thiệp`,
+    9:  () => `cung tật ách ${_getTamPhuongStars('Tật Ách')} sức khỏe bệnh tật`,
+    10: () => `cung tài bạch ${_getTamPhuongStars('Tài Bạch')} tiền bạc tài chính`,
+    11: () => `cung tử tức ${_getTamPhuongStars('Tử Tức')} con cái`,
+    12: () => `cung phu thê ${_getTamPhuongStars('Phu Thê')} hôn nhân vợ chồng`,
+    13: () => `cung huynh đệ ${_getTamPhuongStars('Huynh Đệ')} anh chị em`,
     14: () => `đại vận thiên thời địa lợi nhân hòa scoring ${_astrolabe?.daiVanHienTai?.diaChi||''}`,
     15: () => `đại vận ${_getDvInfo(1)} vận hạn ý nghĩa`,
     16: () => `đại vận ${_getDvInfo(2)} vận hạn ý nghĩa`,
@@ -1630,7 +1655,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       try {
         const sr = await fetch('/api/search', {
           method: 'POST', headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({ query: QUERIES[1](), matchCount: 5 })
+          body: JSON.stringify({ query: QUERIES[1](), matchCount: 10 })
         });
         docs = (await sr.json()).docs || '';
       } catch(e) {}
@@ -1834,7 +1859,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       let docs = '';
       try {
         const sr = await fetch('/api/search', {
-          body: JSON.stringify({ query: QUERIES[_currentPhan](), matchCount: _currentPhan===1?8:5 })
+          body: JSON.stringify({ query: QUERIES[_currentPhan](), matchCount: _currentPhan===1?10:7 })
         });
         docs = (await sr.json()).docs || '';
       } catch(e) {}
@@ -1951,7 +1976,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       loaderText.textContent = `Đang tra cổ thư... (${_currentPhan}/${TONG_PHAN})`;
       document.getElementById('progress-fill').style.width = '40%';
       try {
-        const matchCount = _currentPhan === 1 ? 8 : 5;
+        const matchCount = _currentPhan === 1 ? 10 : 7;
         const sr = await fetch('/api/search', {
           method: 'POST', headers: {'Content-Type':'application/json'},
           body: JSON.stringify({ query: QUERIES[_currentPhan](), matchCount })
@@ -3630,7 +3655,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       // RAG search
       let docs = '';
       try {
-        const matchCount = cfg.phan === 1 ? 8 : 5;
+        const matchCount = cfg.phan === 1 ? 10 : 7;
         const sr = await fetch('/api/search', {
           method: 'POST', headers: {'Content-Type':'application/json'},
           body: JSON.stringify({ query: QUERIES[cfg.phan] ? QUERIES[cfg.phan]() : cfg.label, matchCount })
