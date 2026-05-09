@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     if (!pageRes.ok) throw new Error(`YouTube ${pageRes.status}`);
     const html = await pageRes.text();
 
-    const m = html.match(/ytInitialPlayerResponse\s*=\s*(\{.+?\})\s*(?:;|<\/script)/s);
+    const m = html.match(/ytInitialPlayerResponse\s*=\s*(\{[\s\S]+?\})\s*(?:;|<\/script)/);
     if (!m) throw new Error('ytInitialPlayerResponse not found — video may be private/age-restricted');
 
     const pr = JSON.parse(m[1]);
