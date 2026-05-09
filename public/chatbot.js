@@ -581,6 +581,17 @@
       const lasoData  = buildLasoContext();
       const mode      = getMode();
 
+      // RAG: dùng câu hỏi user làm query trực tiếp
+      let docs = '';
+      try {
+        const sr = await fetch('/api/search', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: text, matchCount: 5 }),
+        });
+        docs = (await sr.json()).docs || '';
+      } catch(e) { /* silent fail — chat vẫn chạy không có RAG */ }
+
       const res = await fetch(_cfg.apiPath, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -588,6 +599,7 @@
           messages: _msgs.slice(-12),
           lasoData,
           scenario: mode,
+          docs,
         }),
       });
 
