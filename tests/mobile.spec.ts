@@ -18,26 +18,24 @@ for (const { path, name } of KEY_PAGES) {
       await page.goto(path);
       await page.waitForLoadState('networkidle');
 
-      const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
       const clientWidth = await page.evaluate(() => document.documentElement.clientWidth);
-      const overflow = scrollWidth - clientWidth;
 
-      if (overflow > 5) {
-        // Report which elements extend past viewport to help debug
-        const offenders = await page.evaluate((vw: number) => {
-          const els = [...document.querySelectorAll('*')] as HTMLElement[];
-          return els
-            .filter(el => {
-              const r = el.getBoundingClientRect();
-              return r.right > vw + 2 && getComputedStyle(el).display !== 'none';
-            })
-            .slice(0, 5)
-            .map(el => `${el.tagName}#${el.id || '-'}.${el.className.toString().split(' ')[0] || '-'} right=${el.getBoundingClientRect().right.toFixed(0)}`);
-        }, clientWidth);
-        console.warn(`${path} mobile overflow ${overflow}px — offenders: ${offenders.join(' | ')}`);
+      // Dùng getBoundingClientRect thay vì scrollWidth — scrollWidth bị kẹp bởi overflow:hidden
+      const offenders = await page.evaluate((vw: number) => {
+        const els = [...document.querySelectorAll('*')] as HTMLElement[];
+        return els
+          .filter(el => {
+            const r = el.getBoundingClientRect();
+            return r.right > vw + 5 && getComputedStyle(el).display !== 'none';
+          })
+          .slice(0, 5)
+          .map(el => `${el.tagName}#${el.id || '-'}.${el.className.toString().split(' ')[0] || '-'} right=${el.getBoundingClientRect().right.toFixed(0)}`);
+      }, clientWidth);
+
+      if (offenders.length > 0) {
+        console.warn(`${path} mobile overflow — offenders: ${offenders.join(' | ')}`);
       }
-      // Cho phép sai lệch tối đa 5px
-      expect(overflow).toBeLessThanOrEqual(5);
+      expect(offenders).toHaveLength(0);
     });
 
     test('nav/header visible', async ({ page }) => {
