@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YouTube Transcript Extractor — Tử Vi Minh Bảo</title>
+<style>
+  :root {
+    --navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;
+    --gold:#9A7B3A;--gold-lt:#F9F4EB;
+    --text:#1a1a1a;--text-mid:#444;--text-lt:#777;
+    --border:#CCCCCC;--border-lt:#E8E8E8;
+    --bg:#FFFFFF;--bg-soft:#F5F4F0;
+    --red:#C0392B;--green:#1E6B3C;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh;}
+
+  header{background:var(--navy);color:#fff;padding:16px 28px;display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--gold);}
+  header h1{font-family:'Noto Serif',serif;font-size:1.05rem;color:var(--gold-lt);}
+  header small{display:block;font-size:.75rem;color:#aaa;margin-top:2px;}
+
+  .stepper{display:flex;background:var(--navy-mid);padding:0 28px;overflow-x:auto;}
+  .step-tab{padding:10px 18px;font-size:.77rem;color:#8aaccc;border-bottom:2px solid transparent;white-space:nowrap;display:flex;align-items:center;gap:6px;}
+  .step-tab.active{color:#fff;border-bottom-color:var(--gold);}
+  .step-tab.done{color:#6ecf8a;}
+  .step-tab .num{width:17px;height:17px;border-radius:50%;background:rgba(255,255,255,.12);display:inline-flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;}
+  .step-tab.active .num{background:var(--gold);color:var(--navy);}
+  .step-tab.done .num{background:var(--green);color:#fff;}
+
+  main{max-width:840px;margin:28px auto;padding:0 20px 60px;}
+  .panel{background:#fff;border:1px solid var(--border-lt);border-radius:10px;padding:24px 28px;margin-bottom:16px;display:none;}
+  .panel.visible{display:block;}
+  .panel-title{font-family:'Noto Serif',serif;font-size:1rem;color:var(--navy);margin-bottom:4px;}
+  .panel-sub{font-size:.78rem;color:var(--text-lt);margin-bottom:20px;}
+
+  label{display:block;font-size:.78rem;font-weight:700;color:var(--text-mid);margin-bottom:5px;margin-top:14px;}
+  label:first-of-type{margin-top:0;}
+  input[type=text],input[type=password],input[type=number],select{width:100%;padding:8px 11px;border:1px solid var(--border);border-radius:6px;font-size:.84rem;font-family:inherit;background:var(--bg-soft);outline:none;transition:border-color .2s;}
+  input:focus,select:focus{border-color:var(--blue);background:#fff;}
+  textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-size:.8rem;font-family:'Courier New',monospace;background:#1e1e2e;color:#cdd6f4;resize:vertical;outline:none;}
+
+  .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 20px;border-radius:6px;border:none;cursor:pointer;font-size:.83rem;font-weight:700;font-family:inherit;transition:opacity .15s,transform .1s;}
+  .btn:disabled{opacity:.4;cursor:not-allowed;}
+  .btn:not(:disabled):hover{opacity:.87;}
+  .btn:not(:disabled):active{transform:scale(.98);}
+  .btn-primary{background:var(--blue);color:#fff;}
+  .btn-gold{background:var(--gold);color:#fff;}
+  .btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text-mid);}
+  .btn-green{background:var(--green);color:#fff;}
+  .btn-sm{padding:5px 12px;font-size:.73rem;}
+  .btn-row{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap;align-items:center;}
+
+  .alert{padding:9px 13px;border-radius:6px;font-size:.8rem;margin-top:12px;display:none;}
+  .alert.visible{display:block;}
+  .alert-err{background:#fdf0ef;border:1px solid #f5c5c2;color:var(--red);}
+  .alert-ok{background:#eef7f1;border:1px solid #b8dfc6;color:var(--green);}
+  .alert-info{background:#eef3fb;border:1px solid #b8cff0;color:var(--blue);}
+
+  .table-wrap{overflow-x:auto;margin-top:14px;border-radius:8px;border:1px solid var(--border-lt);max-height:500px;overflow-y:auto;}
+  table{width:100%;border-collapse:collapse;font-size:.8rem;}
+  th{background:var(--navy);color:#fff;text-align:left;padding:8px 11px;font-weight:600;position:sticky;top:0;z-index:1;}
+  td{padding:7px 11px;border-bottom:1px solid var(--border-lt);vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
+  tr:hover td{background:var(--bg-soft);}
+
+  .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.7rem;font-weight:700;}
+  .badge-wait{background:#f0f0f0;color:var(--text-lt);}
+  .badge-fetch{background:#fff3cd;color:#856404;}
+  .badge-ok{background:#d4edda;color:var(--green);}
+  .badge-err{background:#f8d7da;color:var(--red);}
+  .badge-manual{background:#e8eaf6;color:#3949ab;}
+  .dur-pill{display:inline-block;padding:1px 7px;border-radius:10px;font-size:.7rem;background:var(--bg-soft);color:var(--text-mid);font-variant-numeric:tabular-nums;}
+
+  .prog-bar-wrap{background:var(--border-lt);border-radius:20px;height:8px;overflow:hidden;margin:10px 0 4px;}
+  .prog-bar-fill{height:100%;background:var(--blue);border-radius:20px;transition:width .3s;}
+  .prog-label{font-size:.76rem;color:var(--text-lt);}
+
+  .filter-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .filter-row > *{flex:1;min-width:140px;}
+  .select-row{display:flex;gap:8px;margin-bottom:10px;align-items:center;font-size:.78rem;color:var(--text-mid);flex-wrap:wrap;}
+
+  .switch-row{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--bg-soft);border-radius:6px;margin-bottom:14px;font-size:.83rem;}
+  .switch-row label{margin:0;cursor:pointer;font-weight:600;}
+
+  .stat-row{display:flex;gap:12px;margin:14px 0;flex-wrap:wrap;}
+  .stat-box{text-align:center;background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:8px;padding:10px 18px;flex:1;min-width:130px;}
+  .stat-box .n{font-size:1.5rem;font-weight:700;color:var(--navy);font-family:'Noto Serif',serif;}
+  .stat-box .l{font-size:.73rem;color:var(--text-lt);margin-top:2px;}
+
+  .manual-area{margin-top:8px;display:none;}
+  .manual-area.open{display:block;}
+  .manual-area textarea{background:var(--bg-soft);color:var(--text);min-height:70px;font-family:inherit;font-size:.8rem;}
+
+  details.preview{margin-bottom:8px;border:1px solid var(--border-lt);border-radius:6px;padding:8px 12px;background:#fff;}
+  details.preview summary{cursor:pointer;font-size:.8rem;font-weight:600;color:var(--text-mid);outline:none;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  details.preview[open]{padding-bottom:14px;}
+  .preview-text{margin-top:8px;padding:10px;background:var(--bg-soft);border-radius:4px;font-size:.78rem;color:var(--text-mid);max-height:220px;overflow-y:auto;line-height:1.6;font-family:'Courier New',monospace;}
+
+  a.vid-link{color:var(--blue);text-decoration:none;font-size:.78rem;}
+  a.vid-link:hover{text-decoration:underline;}
+  input[type=checkbox]{width:14px;height:14px;accent-color:var(--blue);cursor:pointer;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .spin{display:inline-block;animation:spin .8s linear infinite;}
+
+  .howto{background:var(--gold-lt);border:1px solid #e0d0a0;border-radius:8px;padding:14px 18px;margin-bottom:20px;font-size:.82rem;line-height:1.7;}
+  .howto strong{color:var(--navy);}
+  .howto code{background:#e8d8a0;padding:1px 5px;border-radius:3px;font-size:.77rem;}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>📼 YouTube Transcript Extractor v2</h1>
+    <small>Tử Vi Minh Bảo · Pipeline RAG · Bước 1/2: extract → upload chat → tìm cách cục mới</small>
+  </div>
+</header>
+
+<nav class="stepper" id="stepper">
+  <div class="step-tab active" data-step="1"><span class="num">1</span> Cấu hình</div>
+  <div class="step-tab" data-step="2"><span class="num">2</span> Chọn Video</div>
+  <div class="step-tab" data-step="3"><span class="num">3</span> Lấy Transcript</div>
+  <div class="step-tab" data-step="4"><span class="num">4</span> Export</div>
+</nav>
+
+<main>
+
+  <!-- STEP 1 -->
+  <div class="panel visible" id="panel-1">
+    <div class="panel-title">⚙️ Bước 1 — API Key, Kênh & Lọc thời lượng</div>
+    <div class="panel-sub">Chỉ cần YouTube Data API v3 key. Miễn phí từ Google Cloud Console.</div>
+
+    <div class="howto">
+      <strong>Lấy YouTube API Key nhanh:</strong><br>
+      1. Vào <a href="https://console.cloud.google.com/" target="_blank">console.cloud.google.com</a> → Tạo project mới<br>
+      2. APIs &amp; Services → Enable APIs → Tìm <code>YouTube Data API v3</code> → Enable<br>
+      3. Credentials → Create Credentials → API Key → Copy
+    </div>
+
+    <label>🔑 YouTube Data API v3 Key</label>
+    <input type="password" id="yt-key" placeholder="AIza..." autocomplete="off">
+
+    <label>📺 Channel URL</label>
+    <input type="text" id="channel-url" placeholder="https://www.youtube.com/@TenKenh">
+
+    <label>📦 Số video tối đa <span style="font-weight:400;color:var(--text-lt)">(để trống = tất cả)</span></label>
+    <input type="text" id="max-videos" placeholder="Ví dụ: 30">
+
+    <label>⏱ Lọc thời lượng <span style="font-weight:400;color:var(--text-lt)">(giây — bỏ shorts &amp; livestream lê thê)</span></label>
+    <div class="filter-row">
+      <input type="number" id="min-dur" placeholder="Min (180 = 3 phút)" value="180">
+      <input type="number" id="max-dur" placeholder="Max (vd 7200 = 2 giờ)">
+    </div>
+
+    <div id="alert-1" class="alert"></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="fetchVideoList()">→ Fetch danh sách video</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="panel" id="panel-2">
+    <div class="panel-title">📋 Bước 2 — Chọn Video <span id="chan-label" style="color:var(--text-lt);font-size:.82rem;margin-left:6px"></span></div>
+    <div class="panel-sub">Tìm theo tiêu đề, sort, chọn checkbox để lấy transcript.</div>
+
+    <div class="filter-row" style="margin-bottom:10px">
+      <input type="text" id="vid-search" placeholder="🔍 Tìm theo tiêu đề (vd: cách cục, sát phá, tử vi)" oninput="renderVideoTable()">
+      <select id="vid-sort" onchange="renderVideoTable()" style="flex:0 0 160px">
+        <option value="newest">Mới nhất</option>
+        <option value="oldest">Cũ nhất</option>
+        <option value="longest">Dài nhất</option>
+        <option value="shortest">Ngắn nhất</option>
+        <option value="title">Theo tên A→Z</option>
+      </select>
+    </div>
+
+    <div class="select-row">
+      <button class="btn btn-outline btn-sm" onclick="selectAllVisible(true)">✓ Chọn tất cả visible</button>
+      <button class="btn btn-outline btn-sm" onclick="selectAllVisible(false)">✗ Bỏ chọn visible</button>
+      <span id="sel-count" style="margin-left:auto;font-size:.78rem">0 chọn / 0 visible</span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th width="32">☑</th><th>Tiêu đề</th><th width="75">Thời lượng</th><th width="90">Ngày đăng</th></tr></thead>
+        <tbody id="video-table-body"></tbody>
+      </table>
+    </div>
+
+    <div id="alert-2" class="alert"></div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="goStep(1)">← Quay lại</button>
+      <button class="btn btn-primary" id="btn-fetch-tr" disabled onclick="startTranscriptFetch()">→ Lấy Transcript</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="panel" id="panel-3">
+    <div class="panel-title">📝 Bước 3 — Fetch & Làm Sạch Transcript</div>
+    <div class="panel-sub">Lấy caption tiếng Việt qua YouTube timedtext API. Video fail → paste thủ công.</div>
+
+    <div class="switch-row">
+      <label>
+        <input type="checkbox" id="noise-filter" checked onchange="recleanAll()">
+        🧹 Lọc noise (intro / outro / "đăng ký kênh" / "like share" / "[Nhạc]"…)
+      </label>
+      <span id="noise-stat" style="font-size:.75rem;color:var(--text-lt)"></span>
+    </div>
+
+    <div class="prog-bar-wrap"><div class="prog-bar-fill" id="prog-3" style="width:0%"></div></div>
+    <div class="prog-label" id="prog-label-3">0 / 0</div>
+
+    <div class="table-wrap" style="margin-top:12px">
+      <table>
+        <thead><tr><th>Video</th><th width="95">Trạng thái</th><th width="115">Ký tự (raw → sạch)</th></tr></thead>
+        <tbody id="tr-table-body"></tbody>
+      </table>
+    </div>
+
+    <div id="alert-3" class="alert"></div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="goStep(2)">← Quay lại</button>
+      <button class="btn btn-green" id="btn-go-export" disabled onclick="goStep(4)">→ Xem & Export</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: EXPORT -->
+  <div class="panel" id="panel-4">
+    <div class="panel-title">📤 Bước 4 — Download & Upload vào Chat</div>
+    <div class="panel-sub">Download <strong>file TXT</strong> rồi upload vào Claude chat. Tao sẽ extract cách cục → query Supabase → import cái mới.</div>
+
+    <div class="stat-row">
+      <div class="stat-box"><div class="n" id="st-vid">0</div><div class="l">Video có transcript</div></div>
+      <div class="stat-box"><div class="n" id="st-chars">0</div><div class="l">Tổng ký tự</div></div>
+      <div class="stat-box"><div class="n" id="st-tok">0</div><div class="l">~Tokens</div></div>
+    </div>
+
+    <div id="per-video-export"></div>
+
+    <div id="alert-4" class="alert"></div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="goStep(3)">← Quay lại</button>
+      <button class="btn btn-gold" onclick="downloadTxt()">⬇ Download TXT (recommend)</button>
+      <button class="btn btn-outline" onclick="downloadJson()">⬇ Download JSON</button>
+    </div>
+  </div>
+
+</main>
+
+<script>
+const LS_KEY  = 'tuvi_yt_api_key';
+const LS_URL  = 'tuvi_yt_channel_url';
+const LS_MIN  = 'tuvi_yt_min_dur';
+const LS_MAX  = 'tuvi_yt_max_dur';
+const LS_NOISE= 'tuvi_yt_noise_filter';
+
+const state = {
+  ytKey:'', channelId:'', channelName:'',
+  videos:[], // {id, title, publishedAt, duration}
+  selected: new Set(),
+  transcripts:{}, // id → {title, raw, cleaned, status}
+};
+
+// ── LOAD/SAVE PREFS ──
+window.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('yt-key').value      = localStorage.getItem(LS_KEY) || '';
+  document.getElementById('channel-url').value = localStorage.getItem(LS_URL) || '';
+  document.getElementById('min-dur').value     = localStorage.getItem(LS_MIN) ?? '180';
+  document.getElementById('max-dur').value     = localStorage.getItem(LS_MAX) || '';
+  const noise = localStorage.getItem(LS_NOISE);
+  if(noise!==null) document.getElementById('noise-filter').checked = noise === '1';
+});
+
+function savePrefs(){
+  localStorage.setItem(LS_KEY, document.getElementById('yt-key').value.trim());
+  localStorage.setItem(LS_URL, document.getElementById('channel-url').value.trim());
+  localStorage.setItem(LS_MIN, document.getElementById('min-dur').value.trim());
+  localStorage.setItem(LS_MAX, document.getElementById('max-dur').value.trim());
+}
+
+// ── UTILS ──
+function showAlert(n,msg,type='err'){
+  const el=document.getElementById(`alert-${n}`);
+  el.textContent=msg; el.className=`alert visible alert-${type}`;
+}
+function clearAlert(n){ document.getElementById(`alert-${n}`).className='alert'; }
+
+function goStep(n){
+  document.querySelectorAll('.step-tab').forEach(t=>{
+    const s=parseInt(t.dataset.step);
+    t.className='step-tab'+(s===n?' active':s<n?' done':'');
+  });
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('visible'));
+  document.getElementById(`panel-${n}`).classList.add('visible');
+  if(n===4) renderExport();
+}
+
+function setBadge(id,type,html){
+  const el=document.getElementById(id);
+  if(el){el.className=`badge badge-${type}`;el.innerHTML=html;}
+}
+function setProgress(n,done,total){
+  document.getElementById(`prog-${n}`).style.width=(done/total*100)+'%';
+  document.getElementById(`prog-label-${n}`).textContent=`${done} / ${total}`;
+}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+function truncate(s,n){return s.length>n?s.slice(0,n)+'…':s;}
+function approxTokens(s){return Math.round(s/3.5);}
+function formatDate(iso){return iso?iso.slice(0,10):'';}
+function formatDur(sec){
+  if(!sec) return '—';
+  const h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60;
+  return h>0 ? `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
+              : `${m}:${String(s).padStart(2,'0')}`;
+}
+function parseISO8601Duration(iso){
+  if(!iso) return 0;
+  const m=iso.match(/^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/);
+  if(!m) return 0;
+  return (parseInt(m[1]||0)*3600)+(parseInt(m[2]||0)*60)+parseInt(m[3]||0);
+}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+// ── STEP 1: FETCH VIDEO LIST ──
+async function fetchVideoList(){
+  clearAlert(1); savePrefs();
+  state.ytKey=document.getElementById('yt-key').value.trim();
+  const url=document.getElementById('channel-url').value.trim();
+  const maxV=parseInt(document.getElementById('max-videos').value)||9999;
+  const minD=parseInt(document.getElementById('min-dur').value)||0;
+  const maxD=parseInt(document.getElementById('max-dur').value)||Infinity;
+  if(!state.ytKey||!url) return showAlert(1,'Điền đủ API Key và Channel URL.');
+
+  showAlert(1,'⏳ Đang lấy thông tin kênh…','info');
+  try{
+    let chanId='',chanName='';
+    const handleM=url.match(/@([^/?\s]+)/);
+    const chanM=url.match(/channel\/([A-Za-z0-9_-]{20,})/);
+    const userM=url.match(/\/user\/([^/?\s]+)/);
+
+    if(chanM){
+      chanId=chanM[1];
+      const r=await fetch(`https://www.googleapis.com/youtube/v3/channels?id=${chanId}&part=snippet&key=${state.ytKey}`);
+      const d=await r.json();
+      if(d.error) throw new Error(d.error.message);
+      if(d.items?.length) chanName=d.items[0].snippet.title;
+    } else if(handleM){
+      const r=await fetch(`https://www.googleapis.com/youtube/v3/channels?forHandle=@${handleM[1]}&part=contentDetails,snippet&key=${state.ytKey}`);
+      const d=await r.json();
+      if(d.error) throw new Error(d.error.message);
+      if(!d.items?.length) throw new Error('Không tìm thấy kênh từ handle.');
+      chanId=d.items[0].id; chanName=d.items[0].snippet.title;
+    } else if(userM){
+      const r=await fetch(`https://www.googleapis.com/youtube/v3/channels?forUsername=${userM[1]}&part=contentDetails,snippet&key=${state.ytKey}`);
+      const d=await r.json();
+      if(d.error) throw new Error(d.error.message);
+      if(!d.items?.length) throw new Error('Không tìm thấy kênh từ username.');
+      chanId=d.items[0].id; chanName=d.items[0].snippet.title;
+    } else throw new Error('URL không hợp lệ. Dùng /@TenKenh hoặc /channel/UCxxxx');
+
+    state.channelId=chanId; state.channelName=chanName;
+    document.getElementById('chan-label').textContent='— '+chanName;
+
+    // Get upload playlist
+    const cr=await fetch(`https://www.googleapis.com/youtube/v3/channels?id=${chanId}&part=contentDetails&key=${state.ytKey}`);
+    const cd=await cr.json();
+    if(!cd.items?.length) throw new Error('Không lấy được uploads playlist.');
+    const uploadPl=cd.items[0].contentDetails.relatedPlaylists.uploads;
+
+    // Paginate playlistItems
+    let videos=[],pageToken='',fetched=0;
+    showAlert(1,'⏳ Đang lấy danh sách video…','info');
+    do{
+      const r=await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?playlistId=${uploadPl}&part=snippet&maxResults=50&pageToken=${pageToken}&key=${state.ytKey}`);
+      const d=await r.json();
+      if(d.error) throw new Error(d.error.message);
+      for(const item of (d.items||[])){
+        const s=item.snippet;
+        if(!s.resourceId?.videoId) continue;
+        videos.push({id:s.resourceId.videoId,title:s.title,publishedAt:s.publishedAt,duration:0});
+        if(++fetched>=maxV) break;
+      }
+      pageToken=d.nextPageToken||'';
+    }while(pageToken&&fetched<maxV);
+
+    if(!videos.length) throw new Error('Kênh không có video nào.');
+
+    // Fetch durations in batches of 50
+    showAlert(1,`⏳ Đang lấy thời lượng cho ${videos.length} videos…`,'info');
+    const idMap={};
+    for(let i=0;i<videos.length;i+=50){
+      const batch=videos.slice(i,i+50).map(v=>v.id).join(',');
+      const r=await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${batch}&part=contentDetails&key=${state.ytKey}`);
+      const d=await r.json();
+      if(d.error) throw new Error(d.error.message);
+      for(const item of (d.items||[])){
+        idMap[item.id]=parseISO8601Duration(item.contentDetails.duration);
+      }
+    }
+    videos.forEach(v=>{ v.duration=idMap[v.id]||0; });
+
+    // Apply duration filter
+    const before=videos.length;
+    videos=videos.filter(v=>v.duration>=minD && v.duration<=maxD);
+    const filtered=before-videos.length;
+
+    state.videos=videos;
+    // Auto-select all visible by default
+    state.selected=new Set(videos.map(v=>v.id));
+
+    renderVideoTable();
+    showAlert(1,`✓ Lấy ${before} videos · sau lọc thời lượng còn ${videos.length}${filtered>0?` (bỏ ${filtered} video ngắn/dài quá)`:''}.`,'ok');
+    setTimeout(()=>{clearAlert(1);goStep(2);},700);
+  }catch(e){ showAlert(1,'❌ '+e.message); }
+}
+
+// ── STEP 2: VIDEO TABLE WITH SEARCH/SORT ──
+function getFilteredSortedVideos(){
+  const search=(document.getElementById('vid-search')?.value||'').toLowerCase().trim();
+  const sort=document.getElementById('vid-sort')?.value||'newest';
+  let list=state.videos;
+  if(search) list=list.filter(v=>v.title.toLowerCase().includes(search));
+  const sorted=[...list];
+  switch(sort){
+    case 'oldest':  sorted.sort((a,b)=>a.publishedAt.localeCompare(b.publishedAt)); break;
+    case 'newest':  sorted.sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt)); break;
+    case 'longest': sorted.sort((a,b)=>(b.duration||0)-(a.duration||0)); break;
+    case 'shortest':sorted.sort((a,b)=>(a.duration||0)-(b.duration||0)); break;
+    case 'title':   sorted.sort((a,b)=>a.title.localeCompare(b.title,'vi')); break;
+  }
+  return sorted;
+}
+
+function renderVideoTable(){
+  const tb=document.getElementById('video-table-body');
+  const list=getFilteredSortedVideos();
+  if(!list.length){
+    tb.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--text-lt);padding:18px">Không có video nào khớp filter.</td></tr>';
+    updateSelCount();
+    return;
+  }
+  tb.innerHTML=list.map(v=>`
+    <tr>
+      <td><input type="checkbox" id="cb-${v.id}" ${state.selected.has(v.id)?'checked':''} onchange="toggleSel('${v.id}',this.checked)"></td>
+      <td><a class="vid-link" href="https://youtu.be/${v.id}" target="_blank">${escapeHtml(truncate(v.title,80))}</a></td>
+      <td><span class="dur-pill">${formatDur(v.duration)}</span></td>
+      <td style="color:var(--text-lt)">${formatDate(v.publishedAt)}</td>
+    </tr>`).join('');
+  updateSelCount();
+}
+
+function updateSelCount(){
+  const visible=getFilteredSortedVideos().length;
+  const selectedVisible=getFilteredSortedVideos().filter(v=>state.selected.has(v.id)).length;
+  document.getElementById('sel-count').textContent=`${selectedVisible} chọn / ${visible} visible (tổng ${state.videos.length})`;
+  document.getElementById('btn-fetch-tr').disabled=state.selected.size===0;
+}
+
+function selectAllVisible(v){
+  const list=getFilteredSortedVideos();
+  list.forEach(vid=>{
+    const cb=document.getElementById(`cb-${vid.id}`);
+    if(cb) cb.checked=v;
+    v?state.selected.add(vid.id):state.selected.delete(vid.id);
+  });
+  updateSelCount();
+}
+
+function toggleSel(id,checked){
+  checked?state.selected.add(id):state.selected.delete(id);
+  updateSelCount();
+}
+
+// ── STEP 3: FETCH TRANSCRIPTS ──
+async function startTranscriptFetch(){
+  clearAlert(2);
+  const sel=state.videos.filter(v=>state.selected.has(v.id));
+  if(!sel.length) return showAlert(2,'Chưa chọn video nào.');
+
+  goStep(3);
+  state.transcripts={};
+  const tb=document.getElementById('tr-table-body');
+  tb.innerHTML='';
+
+  sel.forEach(v=>{
+    state.transcripts[v.id]={title:v.title,duration:v.duration,publishedAt:v.publishedAt,raw:'',cleaned:'',status:'wait'};
+    tb.innerHTML+=`
+      <tr id="row-${v.id}">
+        <td>
+          <a class="vid-link" href="https://youtu.be/${v.id}" target="_blank">${escapeHtml(truncate(v.title,68))}</a>
+          <span class="dur-pill" style="margin-left:6px">${formatDur(v.duration)}</span>
+          <div class="manual-area" id="manual-${v.id}">
+            <div style="font-size:.73rem;color:var(--text-lt);margin:6px 0 3px">Paste transcript thủ công (YouTube → ··· → Hiển thị bản chép lời):</div>
+            <textarea rows="4" placeholder="Paste transcript tiếng Việt…" id="manual-text-${v.id}"></textarea>
+            <button class="btn btn-outline btn-sm" style="margin-top:5px" onclick="useManual('${v.id}')">✓ Xác nhận</button>
+          </div>
+        </td>
+        <td><span class="badge badge-wait" id="badge-${v.id}">Chờ</span></td>
+        <td id="chars-${v.id}" style="color:var(--text-lt)">—</td>
+      </tr>`;
+  });
+
+  let done=0;
+  for(const v of sel){
+    setBadge(`badge-${v.id}`,'fetch','<span class="spin">⏳</span>');
+    const text=await fetchTranscript(v.id);
+    if(text){
+      state.transcripts[v.id].raw=text;
+      state.transcripts[v.id].cleaned=cleanTranscript(text);
+      state.transcripts[v.id].status='ok';
+      setBadge(`badge-${v.id}`,'ok','✓ OK');
+      updateCharsCell(v.id);
+    } else {
+      state.transcripts[v.id].status='manual';
+      setBadge(`badge-${v.id}`,'manual','✍ Manual');
+      document.getElementById(`manual-${v.id}`).classList.add('open');
+    }
+    done++;
+    setProgress(3,done,sel.length);
+    await sleep(350);
+  }
+
+  refreshNoiseStat();
+  const okCount=Object.values(state.transcripts).filter(t=>t.status==='ok').length;
+  const manCount=Object.values(state.transcripts).filter(t=>t.status==='manual').length;
+  showAlert(3,
+    `✓ ${okCount} transcript OK, ${manCount} cần paste thủ công.`,
+    manCount>0?'info':'ok');
+  document.getElementById('btn-go-export').disabled=(okCount===0);
+}
+
+function updateCharsCell(id){
+  const t=state.transcripts[id];
+  if(!t) return;
+  const cell=document.getElementById(`chars-${id}`);
+  if(!cell) return;
+  if(t.raw.length===t.cleaned.length){
+    cell.textContent=t.cleaned.length.toLocaleString();
+  } else {
+    const saved=t.raw.length-t.cleaned.length;
+    cell.innerHTML=`<span style="color:var(--text-lt)">${t.raw.length.toLocaleString()}</span> → <strong>${t.cleaned.length.toLocaleString()}</strong> <span style="color:var(--green);font-size:.7rem">(-${saved.toLocaleString()})</span>`;
+  }
+}
+
+function refreshNoiseStat(){
+  const ok=Object.values(state.transcripts).filter(t=>t.status==='ok');
+  if(!ok.length){ document.getElementById('noise-stat').textContent=''; return; }
+  const rawTotal=ok.reduce((s,t)=>s+t.raw.length,0);
+  const cleanTotal=ok.reduce((s,t)=>s+t.cleaned.length,0);
+  const removed=rawTotal-cleanTotal;
+  if(removed<=0){ document.getElementById('noise-stat').textContent=''; return; }
+  const pct=Math.round(removed/rawTotal*100);
+  document.getElementById('noise-stat').textContent=`Đã lọc ~${removed.toLocaleString()} ký tự (${pct}%)`;
+}
+
+function recleanAll(){
+  localStorage.setItem(LS_NOISE,document.getElementById('noise-filter').checked?'1':'0');
+  for(const id in state.transcripts){
+    const t=state.transcripts[id];
+    if(t.status==='ok' && t.raw){
+      t.cleaned=cleanTranscript(t.raw);
+      updateCharsCell(id);
+    }
+  }
+  refreshNoiseStat();
+}
+
+async function fetchTranscript(videoId){
+  try{
+    const r=await fetch(`https://tuviminhbao.com/api/yt-transcript?v=${videoId}`);
+    if(!r.ok) return null;
+    const d=await r.json();
+    return d.text&&d.text.length>50?d.text:null;
+  }catch(e){ return null; }
+}
+
+function parseJson3(json){
+  if(!json?.events) return '';
+  return json.events.filter(e=>e.segs)
+    .map(e=>e.segs.map(s=>s.utf8||'').join(''))
+    .join(' ').replace(/\n/g,' ').replace(/\s+/g,' ').trim();
+}
+
+// ── NOISE FILTER (CONSERVATIVE) ──
+// Chỉ strip phrases rõ ràng marketing/intro/outro, không strip filler đơn lẻ
+// để tránh phá nội dung tử vi.
+function cleanTranscript(text){
+  if(!document.getElementById('noise-filter')?.checked) return text;
+  let s=text;
+
+  // Bracketed annotations (always safe)
+  s=s.replace(/\[(?:Music|Nhạc|Âm nhạc|âm nhạc|Tiếng [^\]]+|Applause|Laughter|inaudible|Vỗ tay|Cười)\]/gi,' ');
+
+  // Marketing/outro patterns (conservative — match cụm rõ ràng)
+  const patterns=[
+    // "đăng ký kênh" + variants
+    /(?:đừng\s+quên\s+|nhớ\s+|hãy\s+|và\s+|nhấn\s+|ấn\s+|bấm\s+)?(?:nút\s+|cái\s+nút\s+)?đăng\s+ký\s+kênh(?:\s+(?:của\s+(?:chúng\s+)?(?:tôi|mình|chúng\s+tôi)|này|nhé|để\s+(?:không\s+)?(?:bỏ\s+)?(?:lỡ|sót)\s+\S+)){0,3}/gi,
+    // like share comment
+    /like(?:\s*[,&]\s*|\s+(?:và\s+)?)(?:share|chia\s+sẻ)(?:\s*[,&]\s*|\s+(?:và\s+)?)?(?:comment|bình\s+luận)?/gi,
+    // bấm/nhấn nút like
+    /(?:nhấn|bấm|ấn)\s+(?:nút\s+|cho\s+)?(?:like|thích)(?:\s+cho\s+(?:chúng\s+)?(?:tôi|mình|video))?/gi,
+    // bấm/ấn chuông
+    /(?:nhấn|ấn|bấm)\s+(?:cái\s+|nút\s+)?chuông(?:\s+thông\s+báo)?/gi,
+    // "chia sẻ video này"
+    /chia\s+sẻ\s+video(?:\s+này)?(?:\s+(?:đến|cho|với)\s+(?:bạn\s+bè|mọi\s+người|người\s+thân))?/gi,
+    // "cảm ơn các bạn đã xem"
+    /(?:xin\s+|chân\s+thành\s+)?cảm\s+ơn\s+(?:tất\s+cả\s+|toàn\s+thể\s+)?(?:các\s+bạn|quý\s+vị|quý\s+khán\s+giả|anh\s+chị\s+em)(?:\s+đã\s+(?:xem|theo\s+dõi|lắng\s+nghe|ủng\s+hộ|đồng\s+hành|quan\s+tâm)(?:\s+\S+){0,4})?/gi,
+    // hẹn gặp lại
+    /(?:xin\s+)?(?:hẹn\s+gặp\s+lại|tạm\s+biệt|chào\s+(?:tạm\s+biệt|và\s+hẹn\s+gặp))(?:\s+(?:các\s+bạn|quý\s+vị))?(?:\s+(?:vào|trong|ở)\s+(?:video|tập|phần|buổi)\s+\S+){0,2}/gi,
+    // mời các bạn đến với kênh
+    /(?:xin\s+)?(?:kính\s+)?mời\s+(?:các\s+bạn|quý\s+vị|quý\s+khán\s+giả)\s+(?:đến\s+với|theo\s+dõi|đón\s+xem)(?:\s+(?:kênh|video|chương\s+trình))?(?:\s+\S+){0,4}/gi,
+    // kính chào quý vị / chào mừng
+    /(?:xin\s+)?(?:kính\s+chào|chào\s+mừng)\s+(?:tất\s+cả\s+|quý\s+|các\s+)?(?:vị|bạn|khán\s+giả|anh\s+chị\s+em)(?:\s+(?:đã\s+|đến\s+với))?(?:\s+\S+){0,5}/gi,
+  ];
+
+  for(const p of patterns) s=s.replace(p,' ');
+
+  // Final whitespace + comma cleanup
+  s=s.replace(/\s+/g,' ').replace(/\s+([,.!?])/g,'$1').replace(/\s*,\s*,+/g,',').trim();
+  return s;
+}
+
+function useManual(id){
+  const text=document.getElementById(`manual-text-${id}`).value.trim();
+  if(!text) return alert('Paste transcript vào trước!');
+  state.transcripts[id].raw=text;
+  state.transcripts[id].cleaned=cleanTranscript(text);
+  state.transcripts[id].status='ok';
+  setBadge(`badge-${id}`,'ok','✓ Manual OK');
+  updateCharsCell(id);
+  document.getElementById(`manual-${id}`).classList.remove('open');
+  refreshNoiseStat();
+  const okCount=Object.values(state.transcripts).filter(t=>t.status==='ok').length;
+  document.getElementById('btn-go-export').disabled=okCount===0;
+  showAlert(3,'✓ Đã nhận transcript thủ công.','ok');
+}
+
+// ── STEP 4: EXPORT ──
+function renderExport(){
+  const ok=Object.entries(state.transcripts).filter(([,t])=>t.status==='ok');
+  const totalChars=ok.reduce((s,[,t])=>s+t.cleaned.length,0);
+  document.getElementById('st-vid').textContent=ok.length;
+  document.getElementById('st-chars').textContent=totalChars.toLocaleString();
+  document.getElementById('st-tok').textContent='~'+approxTokens(totalChars).toLocaleString();
+
+  const container=document.getElementById('per-video-export');
+  container.innerHTML=ok.map(([id,t])=>`
+    <details class="preview">
+      <summary>
+        📹 ${escapeHtml(truncate(t.title,68))}
+        <span class="dur-pill">${formatDur(t.duration)}</span>
+        <span style="color:var(--text-lt);font-weight:400;margin-left:auto;font-size:.74rem">${t.cleaned.length.toLocaleString()} ký tự</span>
+      </summary>
+      <div class="preview-text">${escapeHtml(t.cleaned.slice(0,1200))}${t.cleaned.length>1200?'\n\n…':''}</div>
+    </details>
+  `).join('');
+}
+
+function buildTxtExport(){
+  const ok=Object.entries(state.transcripts).filter(([,t])=>t.status==='ok');
+  const today=new Date().toISOString().slice(0,10);
+  const totalChars=ok.reduce((s,[,t])=>s+t.cleaned.length,0);
+  const noise=document.getElementById('noise-filter').checked?'ON':'OFF';
+
+  let out=`================================================================
+TRANSCRIPT EXPORT — Tử Vi Minh Bảo Pipeline
+Channel: ${state.channelName}
+Channel ID: ${state.channelId}
+Exported: ${today}
+Videos: ${ok.length} · Total chars: ${totalChars.toLocaleString()}
+Noise filter: ${noise}
+================================================================
+
+`;
+
+  ok.forEach(([id,t],i)=>{
+    out+=`[VIDEO ${i+1}/${ok.length}]
+[VIDEO_ID: ${id}]
+[TITLE: ${t.title}]
+[URL: https://youtu.be/${id}]
+[DURATION: ${formatDur(t.duration)}]
+[PUBLISHED: ${formatDate(t.publishedAt)}]
+[CHARS: ${t.cleaned.length.toLocaleString()}]
+
+${t.cleaned}
+
+----------------------------------------------------------------
+
+`;
+  });
+  return out;
+}
+
+function downloadTxt(){
+  const ok=Object.entries(state.transcripts).filter(([,t])=>t.status==='ok');
+  if(!ok.length) return showAlert(4,'Chưa có transcript nào để export.');
+  const txt=buildTxtExport();
+  const blob=new Blob([txt],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  const slug=(state.channelName||'channel').replace(/[^\w\u00C0-\u1EF9]+/g,'-').toLowerCase().slice(0,40);
+  a.download=`transcripts-${slug}-${new Date().toISOString().slice(0,10)}.txt`;
+  a.click();
+  showAlert(4,`✓ Downloaded ${ok.length} transcripts (TXT).`,'ok');
+}
+
+function downloadJson(){
+  const ok=Object.entries(state.transcripts).filter(([,t])=>t.status==='ok');
+  if(!ok.length) return showAlert(4,'Chưa có transcript nào để export.');
+  const data={
+    channel:state.channelName,
+    channel_id:state.channelId,
+    exported_at:new Date().toISOString(),
+    noise_filter:document.getElementById('noise-filter').checked,
+    videos: ok.map(([id,t])=>({
+      video_id:id,
+      title:t.title,
+      url:`https://youtu.be/${id}`,
+      duration:t.duration,
+      published_at:t.publishedAt,
+      transcript:t.cleaned,
+    }))
+  };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  const slug=(state.channelName||'channel').replace(/[^\w\u00C0-\u1EF9]+/g,'-').toLowerCase().slice(0,40);
+  a.download=`transcripts-${slug}-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  showAlert(4,`✓ Downloaded ${ok.length} transcripts (JSON).`,'ok');
+}
+</script>
+</body>
+</html>
