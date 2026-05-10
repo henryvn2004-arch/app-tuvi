@@ -946,6 +946,17 @@ const _TTN = typeof THAI_TUE_NHOM!=='undefined'?THAI_TUE_NHOM:{'Thái Tuế':1,'
 const _NA = {'Giáp Tý':'Kim','Ất Sửu':'Kim','Bính Dần':'Hỏa','Đinh Mão':'Hỏa','Mậu Thìn':'Mộc','Kỷ Tỵ':'Mộc','Canh Ngọ':'Thổ','Tân Mùi':'Thổ','Nhâm Thân':'Kim','Quý Dậu':'Kim','Giáp Tuất':'Hỏa','Ất Hợi':'Hỏa','Bính Tý':'Thủy','Đinh Sửu':'Thủy','Mậu Dần':'Thổ','Kỷ Mão':'Thổ','Canh Thìn':'Kim','Tân Tỵ':'Kim','Nhâm Ngọ':'Mộc','Quý Mùi':'Mộc','Giáp Thân':'Thủy','Ất Dậu':'Thủy','Bính Tuất':'Thổ','Đinh Hợi':'Thổ','Mậu Tý':'Hỏa','Kỷ Sửu':'Hỏa','Canh Dần':'Mộc','Tân Mão':'Mộc','Nhâm Thìn':'Thủy','Quý Tỵ':'Thủy','Giáp Ngọ':'Kim','Ất Mùi':'Kim','Bính Thân':'Hỏa','Đinh Dậu':'Hỏa','Mậu Tuất':'Mộc','Kỷ Hợi':'Mộc','Canh Tý':'Thổ','Tân Sửu':'Thổ','Nhâm Dần':'Kim','Quý Mão':'Kim','Giáp Thìn':'Hỏa','Ất Tỵ':'Hỏa','Bính Ngọ':'Thủy','Đinh Mùi':'Thủy','Mậu Thân':'Thổ','Kỷ Dậu':'Thổ','Canh Tuất':'Kim','Tân Hợi':'Kim','Nhâm Tý':'Mộc','Quý Sửu':'Mộc','Giáp Dần':'Thủy','Ất Mão':'Thủy','Bính Thìn':'Thổ','Đinh Tỵ':'Thổ','Mậu Ngọ':'Hỏa','Kỷ Mùi':'Hỏa','Canh Thân':'Mộc','Tân Dậu':'Mộc','Nhâm Tuất':'Thủy','Quý Hợi':'Thủy'};
 
 const PHAN_LABELS = ['Tổng Quan','Xét Tuổi','Ngũ Hành','Tư Tưởng','Tính Cách','Đối Tác','Giao Tiếp','Tài Chính','Vận Hạn'];
+const SECTION_TEASERS = [
+  'Phần tổng quan phân tích mối tương quan toàn diện giữa hai lá số — điểm mạnh cần phát huy, điểm cần lưu ý, và xu hướng phát triển của mối quan hệ theo thời gian...',
+  'Tương quan địa chi không chỉ dừng lại ở "hợp tuổi" hay "khắc tuổi" đơn giản — nạp âm, lục hợp, tam hợp, tứ xung đều có vai trò trong việc xác định mức độ hài hòa căn bản giữa hai người...',
+  'Ngũ hành của hai người tương tác theo nhiều chiều — không chỉ sinh hay khắc mà còn cách thức tương tác ảnh hưởng đến năng lượng và sự bổ trợ lẫn nhau trong cuộc sống chung...',
+  'Cách cục cung Mệnh tiết lộ lý tưởng sống và cách mỗi người nhìn nhận thế giới. Hai cách cục có hợp nhau phụ thuộc vào sự tương đồng và bổ trợ giữa các giá trị cốt lõi của từng người...',
+  'Nhóm Thái Tuế và các sao Trường Sinh phản ánh tính cách ẩn sâu — cách mỗi người phản ứng trong xung đột, cách ra quyết định, và những điểm tương đồng hay khác biệt trong phong cách sống...',
+  'Tương quan cung Phu Thê của hai lá số là một trong những chỉ báo trực tiếp nhất về chất lượng mối quan hệ — hòa hợp cảm xúc, cách xử lý xung đột và tiềm năng phát triển lâu dài...',
+  'Tương quan cung Tử Tức không chỉ nói về con cái mà còn phản ánh khả năng cùng nhau xây dựng và đầu tư cho tương lai. Hai người có cùng tầm nhìn hay sẽ cần tìm tiếng nói chung...',
+  'Cung Tài Bạch tương quan tiết lộ cách hai người tiếp cận tiền bạc và sự ổn định kinh tế. Sự phối hợp hay va chạm tài chính thường là một trong những nguyên nhân xung đột phổ biến nhất...',
+  'Đại vận hiện tại của mỗi người có thể tạo ra đồng thuận hoặc kéo họ theo hướng khác nhau. Phân tích tương quan vận hạn giúp nhận ra giai đoạn nào thuận lợi và khi nào cần thêm kiên nhẫn...',
+];
 const WEIGHTS = [0,0.10,0.10,0.20,0.10,0.20,0.10,0.15,0.05];
 const CUNG_MAP = [null,null,null,'Mệnh',null,'Nô Bộc',null,'Tài Bạch',null]; // idx6=Thân cung (special)
 
@@ -1448,6 +1459,28 @@ function renderAllSections(result){
   // luanGiaiAll called after payment check
 }
 
+function renderTeasers(result) {
+  const { items, total, nameA, nameB } = result;
+  const product = (_pendingSlug || '').startsWith('xem-lam-an') ? 'xem-lam-an' : 'xem-tuoi';
+  const el0 = document.getElementById('luangiai-0');
+  if (el0) el0.innerHTML = `
+    <div class="paywall-blur-preview">
+      <p style="font-size:15px;line-height:1.85;color:#555;margin:0">${nameA} và ${nameB} đạt <strong>${total}/100</strong> tổng điểm tương hợp. ${SECTION_TEASERS[0]}</p>
+    </div>
+    <div style="text-align:center;margin-top:16px">
+      <button class="btn-paywall" onclick="initiatePaymentTuoi(_savedResult,'${product}')"><span>Mở Khóa Luận Giải →</span></button>
+      <div class="paywall-secure" style="margin-top:8px">🔒 Trừ thẳng từ số dư · 50 lượng</div>
+    </div>`;
+  items.forEach((m, i) => {
+    const idx = i + 1;
+    const el = document.getElementById('luangiai-' + idx);
+    if (el) el.innerHTML = `
+      <div class="paywall-blur-preview">
+        <p style="font-size:14px;line-height:1.8;color:#666;margin:0"><strong>${m.label}: ${m.score}/10</strong> — ${SECTION_TEASERS[idx] || ''}</p>
+      </div>`;
+  });
+}
+
 function appendSection(idx,contentHtml,body){
   const sec=document.createElement('div');
   sec.className='phan-section';
@@ -1812,7 +1845,7 @@ async function analyze(){
     if (alreadyPaid) {
       luanGiaiAll(result);
     } else {
-      TuviPaywall.requireCredits(_pendingSlug, () => luanGiaiAll(result));
+      renderTeasers(result);
     }
   }catch(e){
     errEl.textContent='Lỗi: '+(e.message||'Không thể tính toán.');

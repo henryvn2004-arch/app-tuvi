@@ -460,6 +460,41 @@ select.form-input { cursor: pointer; }
     15: 'Lưu Niên',
     16: 'Tổng Kết',
   };
+  const PHAN_TEASERS = [
+    null,
+    // 1: Tổng Quan Bát Tự
+    ['Bát Tự không chỉ là bốn cột năm tháng ngày giờ — nó là bản đồ khí trời đất tại thời điểm sinh, phản ánh cấu trúc căn bản của mệnh người. Tổng quan này đọc vị toàn bộ cấu hình trước khi đi vào từng phần...', 'Sự phân bố Can Chi trong Bát Tự này có một đặc điểm đáng chú ý — Nhật Can và sự cường nhược của nó quyết định phần lớn cách luận mọi thứ còn lại trong lá số...'],
+    // 2: Cách Cục
+    ['Cách Cục là "khuôn mẫu lớn" của Bát Tự — nó xác định loại người này là ai trong xã hội, con đường phát triển nào phù hợp nhất và Dụng Thần nên là gì...', 'Nhận diện đúng Cách Cục là bước quan trọng nhất trong toàn bộ luận giải Tử Bình. Sai từ bước này thì mọi phân tích phía sau đều lệch...'],
+    // 3: Quan Sát (Sự nghiệp)
+    ['Quan Sát phản ánh mối quan hệ với quyền lực, tổ chức và sự nghiệp. Trong Tử Bình, sự cân bằng giữa Quan và Sát — cùng cách chúng tương tác với Nhật Can — tiết lộ nhiều điều về con đường thăng tiến...', 'Người có Quan Sát mạnh hay yếu đều có cách phát huy riêng. Điều quan trọng là nhận ra đây là thuận hay nghịch dụng trong Bát Tự này...'],
+    // 4: Tài
+    ['Tài tinh trong Bát Tự không chỉ nói về tiền bạc — nó còn phản ánh mối quan hệ với phụ nữ, tài sản và khả năng vật chất hóa mục tiêu. Cường nhược của Tài và Dụng Thần quyết định cách tiền đến...', 'Có Tài nhiều chưa chắc đã giàu — quan trọng là Nhật Can có đủ lực để dùng Tài không. Bát Tự này có một cấu hình đáng phân tích kỹ ở điểm này...'],
+    // 5: Thực Thương
+    ['Thực Thần và Thương Quan phản ánh tư duy sáng tạo, khả năng biểu đạt và cách người này tạo ra giá trị. Đây thường là nguồn năng lượng quan trọng — nhưng cần được dẫn hướng đúng...', 'Thương Quan đặc biệt là con dao hai lưỡi trong Tử Bình — khi dùng đúng là sức mạnh vượt trội, khi lạc hướng lại trở thành nguyên nhân của nhiều trắc trở...'],
+    // 6: Ấn
+    ['Ấn tinh — bao gồm Chính Ấn và Thiên Ấn — phản ánh sự hỗ trợ từ người thân, môi trường thuận lợi, và khả năng tiếp nhận kiến thức. Ấn cũng liên quan đến phúc phần và sự bảo trợ trong cuộc đời...', 'Bát Tự có Ấn mạnh thường được hỗ trợ tốt, nhưng nếu Ấn quá vượng mà không có Tài để chế thì lại sinh ra những vấn đề khác — phần này luận giải chi tiết...'],
+    // 7: Tỷ Kiếp
+    ['Tỷ Kiên và Kiếp Tài đại diện cho tính cạnh tranh, ý chí tự lập và mối quan hệ với anh chị em đồng lứa. Mạnh hay yếu — đều có hai mặt tùy vào cấu hình tổng thể của Bát Tự...', 'Khi Tỷ Kiếp quá vượng mà không có chế hóa, đây thường là dấu hiệu của những giai đoạn tranh đoạt và tổn thất. Bát Tự này có cấu hình như thế nào ở điểm này...'],
+    // 8: Tình Duyên
+    ['Tình duyên trong Tử Bình được xét qua nhiều lăng kính — Tài tinh với nam, Quan Sát với nữ, cùng các thần sát liên quan. Đây là phần phân tích toàn diện nhất về mối quan hệ lứa đôi trong Bát Tự này...', 'Thời điểm, kiểu người phù hợp và những điểm cần lưu ý trong tình cảm đều được đọc từ cấu trúc của Bát Tự — không phải từ năm sinh đơn thuần...'],
+    // 9: Sức Khỏe
+    ['Sức khỏe trong Tử Bình liên quan đến ngũ hành thiếu hụt hay quá vượng trong Bát Tự. Cơ thể người thường phản ánh sự mất cân bằng hành khí — phần này chỉ ra những điểm cần chú ý...', 'Không phải mọi Bát Tự đều có dấu hiệu sức khỏe như nhau. Tùy vào cấu hình, có những lĩnh vực cần bảo vệ sớm và những giai đoạn cần thêm thận trọng...'],
+    // 10: Hình Xung Hại Hợp
+    ['Hình, Xung, Hại, Hợp trong Địa Chi tạo ra những biến đổi quan trọng trong Bát Tự — đôi khi kích hoạt sức mạnh ẩn, đôi khi gây ra những gián đoạn bất ngờ. Tất cả phụ thuộc vào vị trí và bối cảnh...', 'Không phải mọi Xung hay Hình đều xấu — nhiều Bát Tự nổi tiếng lại có Xung mạnh. Phần này phân tích chi tiết ý nghĩa của từng tương tác trong lá số này...'],
+    // 11: Thần Sát
+    ['Thần Sát là lớp thông tin bổ sung quan trọng trong Tử Bình cổ pháp — từ Thiên Ất Quý Nhân đến Kiếp Sát, mỗi thần sát đều thêm một chiều phân tích về may mắn, trắc trở và đặc điểm cuộc đời...', 'Bát Tự này có một số thần sát đáng chú ý — tích cực lẫn cần lưu ý. Nhận ra chúng sớm giúp hiểu tại sao một số thời điểm lại đặc biệt hơn những thời điểm khác...'],
+    // 12: Tổng Quan Đại Vận
+    ['Đại Vận là những giai đoạn 10 năm mà khí vận hành qua Bát Tự thay đổi. Tổng quan này nhìn toàn bộ hành trình — giai đoạn nào thuận, giai đoạn nào cần kiên nhẫn, và xu hướng lớn của cuộc đời...', 'Mỗi Đại Vận tương tác khác nhau với Nhật Can và Dụng Thần của Bát Tự — có vận thúc đẩy mạnh, có vận cần tích lũy. Tổng quan này giúp nhìn ra bức tranh lớn...'],
+    // 13: Đại Vận Hiện Tại
+    ['Đại Vận đang chạy là lớp ảnh hưởng trực tiếp nhất đến cuộc sống hiện tại — Can Chi của vận tương tác với Bát Tự gốc tạo ra những điều kiện thuận lợi hoặc thách thức cụ thể...', 'Hiểu Đại Vận hiện tại không chỉ để biết "vận tốt hay xấu" — mà để biết nên tập trung vào lĩnh vực nào, tránh điều gì, và tận dụng khí vận như thế nào...'],
+    // 14: Đại Vận Kế Tiếp
+    ['Đại Vận kế tiếp thường bắt đầu định hình ảnh hưởng vài năm trước khi chính thức bước vào. Nhận biết sớm xu hướng của giai đoạn này giúp chuẩn bị và định hướng tốt hơn...', 'Can Chi của Đại Vận kế tiếp trong lá số này mang một tín hiệu đáng chú ý — nó gợi ý những thay đổi nào đang đến và cách tốt nhất để đón nhận giai đoạn mới...'],
+    // 15: Lưu Niên
+    ['Lưu Niên là vận năm — lớp mỏng nhưng có ảnh hưởng thực tế ngay trong hiện tại. Kết hợp giữa Lưu Niên, Đại Vận và Bát Tự gốc tạo ra bức tranh chi tiết nhất về năm đang xem...', 'Năm xem trong lá số này có một cấu hình Lưu Niên cụ thể — phần này phân tích những cơ hội, thách thức và thời điểm quan trọng cần lưu ý trong năm...'],
+    // 16: Tổng Kết
+    ['Tổng Kết không chỉ nhắc lại những gì đã luận — nó tổng hợp thành bức tranh coherent về con người này: điểm mạnh cốt lõi, hướng đi phù hợp nhất, và những điều cần ghi nhớ lâu dài...', 'Phần cuối này cũng đưa ra những lời khuyên thực tiễn nhất — dựa trên toàn bộ cấu trúc Bát Tự, không phải những lời khuyên chung chung mà là điều phù hợp riêng với lá số này...'],
+  ];
 
   // ─── RAG: 6 group thay vì 16 query riêng ─────────────────────
   // Mỗi group share 1 RAG fetch → cache → reuse cho phần cùng group.
@@ -753,6 +788,12 @@ select.form-input { cursor: pointer; }
           ${pregen ? `<div class="pregen-divider"><span>Luận giải</span></div>` : ''}
           <div class="phan-content" id="claude-content-${i}" style="display:none"></div>
           ${i === 1 ? `
+          <div class="ux-teaser-wrap" style="margin:0 0 0">
+            <div class="ux-teaser-blur">
+              <p style="font-size:16px;line-height:1.85;color:#555;font-family:Arial,sans-serif">${PHAN_TEASERS[1][0]}</p>
+              <p style="font-size:16px;line-height:1.85;color:#555;font-family:Arial,sans-serif">${PHAN_TEASERS[1][1]}</p>
+            </div>
+          </div>
           <div class="paywall-gate" id="lock-box-1" style="margin:0">
             <div class="paywall-eyebrow">紫微明寶 · Tử Bình Bát Tự</div>
             <div class="paywall-title">Mở Khóa Luận Giải 16 Phần</div>
