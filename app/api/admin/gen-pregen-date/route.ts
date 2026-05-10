@@ -47,6 +47,24 @@ function loadEngine() {
   return fn(g, g) as { convertDuongToAm: (...a: unknown[]) => unknown; anSaoLaSo: (...a: unknown[]) => unknown };
 }
 
+type StarData = { ten: string; hoa: string | null; nhom: string; brightness: string };
+type PalaceData = { cungName: string; diaChi: string; isMenh: boolean; majorStars: StarData[]; stars: StarData[] };
+type DaiVanData = { startAge: number; endAge: number; canChi: string; isCurrentDV: boolean; cungIdx: number; scoring: Record<string,unknown> | null; rules: Array<{type:string;text:string}> };
+
+function serializeStar(s: Record<string,unknown>): StarData {
+  return { ten: String(s.ten||''), hoa: (s.hoa as string)|null, nhom: String(s.nhom||''), brightness: String(s.brightness||'') };
+}
+
+function serializePalaces(palaces: Array<Record<string,unknown>>): PalaceData[] {
+  return palaces.map(p => ({
+    cungName: String(p.cungName||''),
+    diaChi:   String(p.diaChi||''),
+    isMenh:   Boolean(p.isMenh),
+    majorStars: ((p.majorStars as Array<Record<string,unknown>>) || []).map(serializeStar),
+    stars:      ((p.stars     as Array<Record<string,unknown>>) || []).map(serializeStar),
+  }));
+}
+
 function generateRecord(
   day: number, month: number, year: number, gioIdx: number, gt: string, namXem: number,
   fns: ReturnType<typeof loadEngine>
@@ -77,8 +95,17 @@ function generateRecord(
     if (v && Object.values(v).some(x => x > 0)) cs[k] = v;
   }
 
-  // slug: {can-chi}-{dd}-{mm}-{yyyy}-gio-{gio}-{gioi-tinh}
-  // e.g. giap-ty-05-09-1984-gio-dan-nam
+  // daiVans: capture scoring + rules + cungIdx (no circular palace refs)
+  const daiVans: DaiVanData[] = ((ls.daiVans as Array<Record<string,unknown>>) || []).slice(0,10).map(d => ({
+    startAge:    Number(d.startAge||0),
+    endAge:      Number(d.endAge||0),
+    canChi:      String(d.canChi||''),
+    isCurrentDV: Boolean(d.isCurrentDV),
+    cungIdx:     Number(d.cungIdx ?? -1),
+    scoring:     (d.scoring as Record<string,unknown>) || null,
+    rules:       ((d.rules as Array<{type:string;text:string}>) || []),
+  }));
+
   const slug = `${toSlug(cc)}-${pad2(day)}-${pad2(month)}-${year}-gio-${GIO_SLUG[gioIdx]}-${gt}`;
   const gtLabel = gt === 'nu' ? 'Nữ' : 'Nam';
 
@@ -93,22 +120,24 @@ function generateRecord(
     gio_idx: gioIdx,
     cung_menh: cm,
     chinh_tinh_menh: ct,
-    nap_am: ls.napAm || '',
-    nap_am_hanh: ls.napAmHanh || '',
-    cuc: ls.cuc || '',
-    am_duong: ls.amDuong || '',
-    cach_cuc: ls.cachCuc || [],
+    nap_am:     String(ls.napAm||''),
+    nap_am_hanh:String(ls.napAmHanh||''),
+    cuc:        String(ls.cuc||''),
+    am_duong:   String(ls.amDuong||''),
+    cach_cuc:   ls.cachCuc || [],
     cung_scores: cs,
-    dai_van: ((ls.daiVans as Array<Record<string,unknown>>) || []).slice(0,10).map(d => ({
-      startAge: d.startAge, endAge: d.endAge, canChi: d.canChi, isCurrentDV: d.isCurrentDV || false,
-    })),
+    dai_van: daiVans,
     engine_data: {
-      palaces: palaces.map(p => ({
-        cungName: p.cungName, diaChi: p.diaChi, isMenh: p.isMenh || false,
-        majorStars: ((p.majorStars as Array<Record<string,string>>) || []).map(s => ({ ten: s.ten || s })),
-        stars: ((p.stars as Array<Record<string,string>>) || []).slice(0,8).map(s => s.ten || s),
-      })),
-      canChiNam: ls.canChiNam, napAm: ls.napAm, napAmHanh: ls.napAmHanh,
+      palaces: serializePalaces(palaces),
+      canChiNam:  ls.canChiNam,
+      napAm:      ls.napAm,
+      napAmHanh:  ls.napAmHanh,
+      menhDC:     ls.menhDC,
+      thanDC:     ls.thanDC,
+      // Per-cung star analysis (ý nghĩa sao) — key SEO unique content
+      cachCucTungCung: ls.cachCucTungCung || {},
+      // Tiểu vận scores for candlestick (per-year scoring)
+      tieuVanScores: ls.tieuVanScores || [],
     },
     nam_xem: namXem,
     seo_title: `Lá Số Tử Vi ${cc} ${gtLabel} Sinh ${pad2(day)}/${pad2(month)}/${year} Giờ ${gc} — Tử Vi Minh Bảo`,
