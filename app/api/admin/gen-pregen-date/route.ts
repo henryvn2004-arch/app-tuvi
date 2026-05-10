@@ -52,7 +52,7 @@ type PalaceData = { cungName: string; diaChi: string; isMenh: boolean; majorStar
 type DaiVanData = { startAge: number; endAge: number; canChi: string; isCurrentDV: boolean; cungIdx: number; scoring: Record<string,unknown> | null; rules: Array<{type:string;text:string}> };
 
 function serializeStar(s: Record<string,unknown>): StarData {
-  return { ten: String(s.ten||''), hoa: (s.hoa as string)|null, nhom: String(s.nhom||''), brightness: String(s.brightness||'') };
+  return { ten: String(s.ten||''), hoa: s.hoa ? String(s.hoa) : null, nhom: String(s.nhom||''), brightness: String(s.brightness||'') };
 }
 
 function serializePalaces(palaces: Array<Record<string,unknown>>): PalaceData[] {
