@@ -877,11 +877,11 @@ select.form-input { cursor: pointer; }
             <div class="tvc-paywall-feature">Dựa trên 2 lá số thực tế</div>
         </div>
         <div class="tvc-paywall-price">50 Credits</div>
-        <div class="tvc-paywall-price-note">≈ $5 · Credits không hết hạn · Dùng cho mọi công cụ · <a href="/topup.html" style="color:#c9a84c">Nạp thêm →</a></div>
+        <div class="tvc-paywall-price-note">Credits không hết hạn · Dùng cho mọi công cụ · <a href="/topup.html" style="color:#c9a84c">Nạp thêm →</a></div>
         <button class="tvc-paywall-btn" onclick="initiatePaymentTuoi(_savedResult, 'xem-lam-an')">
           Mở Khóa Luận Giải &amp; Vấn Đáp →
         </button>
-        <div class="tvc-paywall-secure">🔒 Thanh toán bảo mật qua PayPal · Hoàn tiền nếu lỗi kỹ thuật</div>
+        <div class="tvc-paywall-secure">🔒 Trừ thẳng từ số dư · Truy cập vĩnh viễn</div>
       </div>
     </div>
   </div>
@@ -1706,11 +1706,11 @@ async function checkPaymentOnLoad(product) {
 
 async function initiatePaymentTuoi(result, product) {
   _pendingSlug = buildSlug(result, product);
-  TuviPaywall.show();
+  await TuviPaywall.requireCredits(_pendingSlug, () => luanGiaiAll(_savedResult));
 }
 
 function showPaywall(result, product, productLabel) {
-  TuviPaywall.show();
+  TuviPaywall.requireCredits(_pendingSlug, () => luanGiaiAll(_savedResult));
 }
 
 // Check payment on page load (return from PayPal)
@@ -1808,13 +1808,11 @@ async function analyze(){
       const _el = document.getElementById('result-header-tuoi') || document.getElementById('result-section');
       if (_el) _el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 300);
-    // Option A: requireCredits handles check + deduct before API
     const alreadyPaid = await checkCreditAccess(_pendingSlug);
     if (alreadyPaid) {
       luanGiaiAll(result);
     } else {
-      // Show paywall immediately — no free section preview
-      TuviPaywall.show();
+      TuviPaywall.requireCredits(_pendingSlug, () => luanGiaiAll(result));
     }
   }catch(e){
     errEl.textContent='Lỗi: '+(e.message||'Không thể tính toán.');
