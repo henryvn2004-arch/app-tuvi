@@ -195,3 +195,35 @@ select.form-input { cursor: pointer; }
   .form-row-3 { grid-template-columns: 1fr 1fr; }
   .pillars-grid { grid-template-columns: repeat(2,1fr); }
 }
+
+/* ── KNOWLEDGE BLOCK ──────────────────────────────────────── */
+.kb-section {
+  background: var(--bg-soft);
+  border-top: 1px solid var(--border-lt);
+  padding: 56px 0 60px;
+}
+.kb-inner { max-width: 720px; }
+.kb-eyebrow {
+  font-family: 'Noto Serif', Georgia, serif;
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.kb-title {
+  font-family: 'Noto Serif', Georgia, serif;
+  font-size: 22px;
+  color: var(--navy);
+  font-weight: 700;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+.kb-body {
+  font-size: 15px;
+  color: var(--text-mid);
+  line-height: 1.85;
+}
+.kb-body p { margin-bottom: 14px; }
+.kb-body p:last-child { margin-bottom: 0; }
+.kb-body strong { color: var(--text); font-weight: 600; }
