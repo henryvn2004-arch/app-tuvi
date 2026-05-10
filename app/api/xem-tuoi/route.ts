@@ -134,25 +134,26 @@ function extractLasoContext(lasoData: any, question: string): string {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function handleChat(body: any): Promise<Response> {
-  const { messages, lasoData } = body;
+  const { messages, lasoData, docs } = body;
   if (!messages?.length) return err('Missing messages', 400);
 
   const lastQ = messages[messages.length - 1]?.content || '';
   const hasLaso = !!(lasoData?.palaces?.length || lasoData?._lsA?.palaces?.length || (lasoData?._partnerLaso && lasoData?.palaces?.length));
   const isTuongHop = !!(lasoData?._mode === 'tuongHop' || lasoData?._partnerLaso);
 
+  const docsSection = docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : '';
   let systemPrompt: string;
   if (hasLaso && isTuongHop) {
-    systemPrompt = CHAT_SYSTEM_LASO(extractLasoContext(lasoData, lastQ)) + `
+    systemPrompt = CHAT_SYSTEM_LASO(extractLasoContext(lasoData, lastQ)) + docsSection + `
 
 Lưu ý đặc biệt: Đây là chế độ so sánh tương hợp 2 lá số. Khi trả lời, hãy:
 - Phân tích mối tương quan giữa 2 lá số, không chỉ 1 người
 - Dẫn chứng cụ thể từ cả 2 cung vị liên quan
 - Nêu rõ điểm tương hợp, xung khắc nếu có`;
   } else if (hasLaso) {
-    systemPrompt = CHAT_SYSTEM_LASO(extractLasoContext(lasoData, lastQ));
+    systemPrompt = CHAT_SYSTEM_LASO(extractLasoContext(lasoData, lastQ)) + docsSection;
   } else {
-    systemPrompt = CHAT_SYSTEM_GENERAL;
+    systemPrompt = CHAT_SYSTEM_GENERAL + docsSection;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -328,8 +329,9 @@ export async function POST(request: NextRequest) {
   if (action === 'dat-ten-doanh-nghiep')  return handleDatTenDoanhNghiep(body);
   if (action === 'chon-ngay-tot')         return handleChonNgayTot(body);
 
-  const { prompt } = body as { prompt?: string };
+  const { prompt, docs } = body as { prompt?: string; docs?: string };
   if (!prompt) return err('Missing prompt', 400);
+  const userPrompt = docs ? prompt + '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : prompt;
 
   try {
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
@@ -339,7 +341,7 @@ export async function POST(request: NextRequest) {
         model: 'claude-sonnet-4-6',
         max_tokens: 1200,
         system: 'Bạn là nhà luận giải Tử Vi Đẩu Số theo trường phái Tử Vi Minh Bảo. Văn phong: trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Viết văn xuôi, không dùng bullet. Không tiết lộ trường phái hay tài liệu.',
-        messages: [{ role: 'user', content: prompt }],
+        messages: [{ role: 'user', content: userPrompt }],
       }),
     });
     const data = await resp.json();
