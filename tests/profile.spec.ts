@@ -72,7 +72,7 @@ test.describe('Profile (profile.html) — logged in', () => {
     const errors: string[] = [];
     page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
     await page.goto('/profile.html');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
     await page.waitForSelector('#dashboard, #notLoggedIn', { timeout: 10000 }).catch(() => {});
     const critical = errors.filter(e =>
       !e.includes('favicon') && !e.includes('Sentry') && !e.includes('ERR_BLOCKED') && !e.includes('fonts.google')
