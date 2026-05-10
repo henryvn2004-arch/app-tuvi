@@ -56,11 +56,16 @@ function buildHTML(article: any, slug: string, related: any[]) {
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>${title} — Tử Vi Minh Bảo</title>
 <meta name="description" content="${desc}">
+${tags.length ? `<meta name="keywords" content="${escHtml(tags.join(', '))}">` : ''}
 <meta property="og:title" content="${title} — Tử Vi Minh Bảo">
 <meta property="og:description" content="${desc}">
 <meta property="og:image" content="${BASE_URL}/seal.webp">
 <meta property="og:type" content="article">
 <meta property="og:url" content="${url}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${title} — Tử Vi Minh Bảo">
+<meta name="twitter:description" content="${desc}">
+<meta name="twitter:image" content="${BASE_URL}/seal.webp">
 <link rel="canonical" href="${url}">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="apple-touch-icon" href="/seal.webp">
@@ -176,7 +181,7 @@ export async function GET(request: NextRequest) {
       status: 200,
       headers: {
         'Content-Type': 'text/html; charset=utf-8',
-        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+        'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800',
       },
     });
   } catch(e:unknown) {

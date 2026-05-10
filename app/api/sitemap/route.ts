@@ -144,7 +144,7 @@ export async function GET() {
   // laso_public → new static route
   for (const r of lasoRows)     if (r.slug) entries.push(urlEntry(`${BASE_URL}/la-so/${encodeURIComponent(r.slug)}`, r.created_at?.slice(0,10)||today, 'monthly', '0.8'));
   // laso_pregen → static route
-  for (const r of pregenRows)   if (r.slug) entries.push(urlEntry(`${BASE_URL}/la-so/${encodeURIComponent(r.slug)}`, today, 'yearly', '0.7'));
+  for (const r of pregenRows)   if (r.slug) entries.push(urlEntry(`${BASE_URL}/la-so/${encodeURIComponent(r.slug)}`, r.created_at?.slice(0,10)||today, 'yearly', '0.7'));
   // tu_dien → static route
   for (const r of tuDienRows)   if (r.slug) entries.push(urlEntry(`${BASE_URL}/tu-dien/${encodeURIComponent(r.slug)}`, r.created_at?.slice(0,10)||today, 'monthly', '0.8'));
   for (const r of taiLieuRows)  if (r.slug) entries.push(urlEntry(`${BASE_URL}/tai-lieu/${encodeURIComponent(r.slug)}`, r.created_at?.slice(0,10)||today, 'monthly', '0.6'));

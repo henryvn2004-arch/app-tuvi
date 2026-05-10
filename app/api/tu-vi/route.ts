@@ -85,6 +85,7 @@ function buildHTML(page: any, slug: string, relatedHtml = '') {
     { '@context':'https://schema.org','@type':'Article',
       headline: page.title, description: page.meta_description||'', url,
       inLanguage:'vi',
+      datePublished: page.created_at ? String(page.created_at).slice(0,10) : undefined,
       author:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE_URL},
       publisher:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE_URL,
         logo:{'@type':'ImageObject',url:BASE_URL+'/seal.webp'}},
@@ -105,6 +106,10 @@ ${kws ? `<meta name="keywords" content="${escHtml(kws)}">` : ''}
 <meta property="og:image" content="${BASE_URL}/seal.webp">
 <meta property="og:type" content="article">
 <meta property="og:url" content="${url}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${title} — Tử Vi Minh Bảo">
+<meta name="twitter:description" content="${desc}">
+<meta name="twitter:image" content="${BASE_URL}/seal.webp">
 <link rel="canonical" href="${url}">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="apple-touch-icon" href="/seal.webp">
@@ -152,7 +157,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 </div>
 <article class="article-wrap">
   <div class="article-meta">
-    <span class="meta-cat">Tử Vi Theo Tuổi</span>
+    <span class="meta-cat">${escHtml(catHubName[page.category] || 'Tử Vi')}</span>
   </div>
   <h1 class="article-title">${h1}</h1>
   <div class="article-body">${body}</div>

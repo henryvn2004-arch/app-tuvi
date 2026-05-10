@@ -119,6 +119,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
 
   const schema = JSON.stringify([
     {'@context':'https://schema.org','@type':'Article',headline:esc(row.ten),description:desc,url,inLanguage:'vi',
+     datePublished: row.created_at ? String(row.created_at).slice(0,10) : undefined,
      author:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE},
      publisher:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE,logo:{'@type':'ImageObject',url:`${BASE}/seal.webp`}},
      image:{'@type':'ImageObject',url:`${BASE}/seal.webp`}},
@@ -138,6 +139,10 @@ ${(row.tags||[]).length ? `<meta name="keywords" content="${esc(row.tags.join(',
 <meta property="og:image" content="${BASE}/seal.webp">
 <meta property="og:type" content="article">
 <meta property="og:url" content="${url}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${title}">
+<meta name="twitter:description" content="${desc}">
+<meta name="twitter:image" content="${BASE}/seal.webp">
 <link rel="canonical" href="${url}">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">

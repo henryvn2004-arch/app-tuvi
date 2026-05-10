@@ -184,21 +184,46 @@ function buildPublicHTML(row: Record<string,unknown>, slug: string): string {
   const title = `Lá Số ${esc(row.can_chi_nam)} ${gt} — Cung ${esc(row.cung_menh)} — Tử Vi Minh Bảo`;
   const desc  = `Lá số tử vi ${row.can_chi_nam} ${gt.toLowerCase()}, cung mệnh ${row.cung_menh}, chính tinh ${row.chinh_tinh || ''}, nạp âm ${row.nap_am || ''}.`;
 
-  // If rendered_html exists, embed it directly
-  if (row.rendered_html) {
-    return `<!DOCTYPE html><html lang="vi"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  const schema = JSON.stringify([
+    {'@context':'https://schema.org','@type':'Article',headline:title,description:desc,url,inLanguage:'vi',
+     datePublished:(row.created_at as string||'').slice(0,10)||undefined,
+     author:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE},
+     publisher:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE,logo:{'@type':'ImageObject',url:`${BASE}/seal.webp`}},
+     image:{'@type':'ImageObject',url:`${BASE}/seal.webp`}},
+    {'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[
+      {'@type':'ListItem',position:1,name:'Trang Chủ',item:`${BASE}/`},
+      {'@type':'ListItem',position:2,name:'Mệnh Khố',item:`${BASE}/menh-kho.html`},
+      {'@type':'ListItem',position:3,name:title,item:url}]},
+  ]);
+  const commonHead = `<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>${title}</title>
 <meta name="description" content="${esc(desc)}">
 <meta property="og:title" content="${title}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:image" content="${BASE}/seal.webp">
+<meta property="og:type" content="article">
 <meta property="og:url" content="${url}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${title}">
+<meta name="twitter:description" content="${esc(desc)}">
+<meta name="twitter:image" content="${BASE}/seal.webp">
 <link rel="canonical" href="${url}">
 <link rel="icon" type="image/webp" href="/seal.webp">
+<script type="application/ld+json">${schema}</script>`;
+  const bcHTML = `<div style="background:#F5F4F0;border-bottom:1px solid #E8E8E8;padding:12px 40px;font-size:12px;color:#777;display:flex;gap:8px;align-items:center">
+  <a href="/" style="color:#777;text-decoration:none">Trang Chủ</a><span style="color:#CCC">›</span>
+  <a href="/menh-kho.html" style="color:#777;text-decoration:none">Mệnh Khố</a><span style="color:#CCC">›</span>
+  <span>${esc(row.can_chi_nam as string)} ${esc(gt)} — Cung ${esc(row.cung_menh as string)}</span>
+</div>`;
+
+  // If rendered_html exists, embed it directly
+  if (row.rendered_html) {
+    return `<!DOCTYPE html><html lang="vi"><head>
+${commonHead}
 <script src="/auth.js"></script>
 </head><body>
 <script src="/nav.js"></script>
+${bcHTML}
 ${row.rendered_html}
 <script src="/footer.js"></script>
 </body></html>`;
@@ -210,21 +235,17 @@ ${row.rendered_html}
   const bodyHTML = sections.map(([,v]) => `<div style="margin-bottom:24px">${String(v||'').split('\n').map(l=>`<p>${l}</p>`).join('')}</div>`).join('');
 
   return `<!DOCTYPE html><html lang="vi"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>${title}</title>
-<meta name="description" content="${esc(desc)}">
-<meta property="og:url" content="${url}">
-<link rel="canonical" href="${url}">
-<link rel="icon" type="image/webp" href="/seal.webp">
+${commonHead}
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="/auth.js"></script>
 <style>
-body{font-family:'Be Vietnam Pro',sans-serif;max-width:760px;margin:0 auto;padding:40px 20px;color:#333}
-h1{font-family:'Noto Serif',serif;color:#061A2E;margin-bottom:24px}
+body{font-family:'Be Vietnam Pro',sans-serif;max-width:760px;margin:0 auto;padding:0 20px 40px;color:#333}
+h1{font-family:'Noto Serif',serif;color:#061A2E;margin:32px 0 24px}
 p{margin-bottom:14px;line-height:1.8;color:#444}
 </style>
 </head><body>
 <script src="/nav.js"></script>
+${bcHTML}
 <h1>${title}</h1>
 <div>${bodyHTML}</div>
 <script src="/footer.js"></script>
