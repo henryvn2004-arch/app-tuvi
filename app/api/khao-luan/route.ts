@@ -66,6 +66,7 @@ ${tags.length ? `<meta name="keywords" content="${escHtml(tags.join(', '))}">` :
 <meta name="twitter:title" content="${title} — Tử Vi Minh Bảo">
 <meta name="twitter:description" content="${desc}">
 <meta name="twitter:image" content="${BASE_URL}/seal.webp">
+<meta name="robots" content="index, follow">
 <link rel="canonical" href="${url}">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="apple-touch-icon" href="/seal.webp">
@@ -169,11 +170,23 @@ export async function GET(request: NextRequest) {
     let related: any[] = [];
     try {
       const cat = rows[0].category || '';
-      const rRes = await fetch(`${SUPABASE_URL}/rest/v1/khao_luan?select=slug,title,category&order=created_at.desc&limit=20`, { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } });
-      const rRows = await rRes.json() as any[];
-      const same  = rRows.filter((r:any) => r.slug !== slug && r.category === cat);
-      const other = rRows.filter((r:any) => r.slug !== slug && r.category !== cat);
-      related = [...same, ...other].slice(0, 5);
+      const sbHeaders = { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` };
+      const sameCatRes = await fetch(
+        `${SUPABASE_URL}/rest/v1/khao_luan?slug=neq.${encodeURIComponent(slug)}&category=eq.${encodeURIComponent(cat)}&select=slug,title,category&order=created_at.desc&limit=5`,
+        { headers: sbHeaders }
+      );
+      const sameCat = sameCatRes.ok ? await sameCatRes.json() as any[] : [];
+      if (sameCat.length < 5) {
+        const needed = 5 - sameCat.length;
+        const otherRes = await fetch(
+          `${SUPABASE_URL}/rest/v1/khao_luan?slug=neq.${encodeURIComponent(slug)}&category=neq.${encodeURIComponent(cat)}&select=slug,title,category&order=created_at.desc&limit=${needed}`,
+          { headers: sbHeaders }
+        );
+        const other = otherRes.ok ? await otherRes.json() as any[] : [];
+        related = [...sameCat, ...other];
+      } else {
+        related = sameCat;
+      }
     } catch { /* ignore */ }
 
     const html = buildHTML(rows[0], slug, related);

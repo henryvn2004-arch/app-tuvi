@@ -90,24 +90,30 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
   if (!rows?.length) return NextResponse.redirect(`${BASE}/kien-thuc-tuvi`);
   const row = rows[0];
 
-  // Fetch related items
+  // Fetch related items — prefer explicit related_ids, fallback to same loai
   let relatedHTML = '';
+  let relRows: Record<string,string>[] = [];
   if (row.related_ids?.length) {
     const relRes = await fetch(
       `${SB_URL}/rest/v1/tu_dien?id=in.(${row.related_ids.join(',')})&select=slug,ten,loai&limit=8`,
       { headers }
     );
-    if (relRes.ok) {
-      const relRows = await relRes.json();
-      if (relRows?.length) {
-        relatedHTML = `<div class="rel-wrap">
-          <div class="rel-title">Xem Thêm Trong Từ Điển</div>
-          <div class="rel-grid">${relRows.map((r: Record<string,string>) =>
-            `<a class="rel-item" href="/tu-dien/${esc(r.slug)}">${esc(r.ten)}</a>`
-          ).join('')}</div>
-        </div>`;
-      }
-    }
+    if (relRes.ok) relRows = await relRes.json();
+  }
+  if (!relRows.length && row.loai) {
+    const relRes = await fetch(
+      `${SB_URL}/rest/v1/tu_dien?loai=eq.${encodeURIComponent(String(row.loai))}&slug=neq.${encodeURIComponent(slug)}&select=slug,ten,loai&limit=8`,
+      { headers }
+    );
+    if (relRes.ok) relRows = await relRes.json();
+  }
+  if (relRows.length) {
+    relatedHTML = `<div class="rel-wrap">
+      <div class="rel-title">Xem Thêm Trong Từ Điển</div>
+      <div class="rel-grid">${relRows.map((r: Record<string,string>) =>
+        `<a class="rel-item" href="/tu-dien/${esc(r.slug)}">${esc(r.ten)}</a>`
+      ).join('')}</div>
+    </div>`;
   }
 
   const url   = `${BASE}/tu-dien/${slug}`;
@@ -143,6 +149,7 @@ ${(row.tags||[]).length ? `<meta name="keywords" content="${esc(row.tags.join(',
 <meta name="twitter:title" content="${title}">
 <meta name="twitter:description" content="${desc}">
 <meta name="twitter:image" content="${BASE}/seal.webp">
+<meta name="robots" content="index, follow">
 <link rel="canonical" href="${url}">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">

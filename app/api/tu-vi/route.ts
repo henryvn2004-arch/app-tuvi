@@ -110,6 +110,7 @@ ${kws ? `<meta name="keywords" content="${escHtml(kws)}">` : ''}
 <meta name="twitter:title" content="${title} — Tử Vi Minh Bảo">
 <meta name="twitter:description" content="${desc}">
 <meta name="twitter:image" content="${BASE_URL}/seal.webp">
+<meta name="robots" content="index, follow">
 <link rel="canonical" href="${url}">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="apple-touch-icon" href="/seal.webp">
@@ -219,26 +220,21 @@ export async function GET(request: NextRequest) {
   if (!slug) return NextResponse.redirect(new URL('/', BASE_URL));
 
   try {
-    const [pageRes, relRes] = await Promise.all([
-      fetch(`${SUPABASE_URL}/rest/v1/seo_pages?slug=eq.${encodeURIComponent(slug)}&select=*&limit=1`,
-        { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }),
-      // fetch 6 related from same category (random via limit+offset trick)
-      fetch(`${SUPABASE_URL}/rest/v1/seo_pages?slug=neq.${encodeURIComponent(slug)}&select=slug,h1,title,category&limit=6&offset=${Math.floor(Math.random()*20)}`,
-        { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }),
-    ]);
+    const pageRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/seo_pages?slug=eq.${encodeURIComponent(slug)}&select=*&limit=1`,
+      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+    );
     const rows = await pageRes.json() as any[];
     if (!rows?.length) {
       return new NextResponse(buildNotFound(), { status: 404, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
     }
-    const related = await relRes.json() as any[];
     const page = rows[0];
-    // Fetch same-category related
     const sameCatRes = await fetch(
       `${SUPABASE_URL}/rest/v1/seo_pages?slug=neq.${encodeURIComponent(slug)}&category=eq.${encodeURIComponent(page.category)}&select=slug,h1,title,category&limit=8`,
       { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
     );
     const sameCat = await sameCatRes.json() as any[];
-    const relatedHtml = buildRelated(sameCat.length ? sameCat.slice(0,8) : related.slice(0,8), page.category);
+    const relatedHtml = buildRelated(sameCat.slice(0,8), page.category);
     const html = buildHTML(page, slug, relatedHtml);
     return new NextResponse(html, {
       status: 200,

@@ -207,6 +207,7 @@ function buildPublicHTML(row: Record<string,unknown>, slug: string): string {
 <meta name="twitter:title" content="${title}">
 <meta name="twitter:description" content="${esc(desc)}">
 <meta name="twitter:image" content="${BASE}/seal.webp">
+<meta name="robots" content="index, follow">
 <link rel="canonical" href="${url}">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <script type="application/ld+json">${schema}</script>`;
@@ -267,7 +268,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
     const rows = await pubRes.json();
     if (rows?.length) {
       const html = buildPublicHTML(rows[0], slug);
-      return new NextResponse(html, { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400' }});
+      return new NextResponse(html, { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800' }});
     }
   }
 
