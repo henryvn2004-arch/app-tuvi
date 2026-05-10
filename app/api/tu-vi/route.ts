@@ -80,6 +80,7 @@ function buildHTML(page: any, slug: string, relatedHtml = '') {
   };
   const hubUrl  = catHubUrl[page.category]  || BASE_URL+'/kien-thuc-tuvi';
   const hubName = catHubName[page.category] || 'Tử Vi';
+  const img     = `${BASE_URL}/api/og?${new URLSearchParams({ title: String(page.title||'').slice(0,80), sub: hubName }).toString()}`;
 
   const schema = JSON.stringify([
     { '@context':'https://schema.org','@type':'Article',
@@ -89,7 +90,7 @@ function buildHTML(page: any, slug: string, relatedHtml = '') {
       author:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE_URL},
       publisher:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE_URL,
         logo:{'@type':'ImageObject',url:BASE_URL+'/seal.webp'}},
-      image:{'@type':'ImageObject',url:BASE_URL+'/seal.webp'} },
+      image:{'@type':'ImageObject',url:img} },
     { '@context':'https://schema.org','@type':'BreadcrumbList', itemListElement:[
       {'@type':'ListItem',position:1,name:'Trang Chủ',item:BASE_URL+'/'},
       {'@type':'ListItem',position:2,name:hubName,item:hubUrl},
@@ -103,13 +104,13 @@ function buildHTML(page: any, slug: string, relatedHtml = '') {
 ${kws ? `<meta name="keywords" content="${escHtml(kws)}">` : ''}
 <meta property="og:title" content="${title} — Tử Vi Minh Bảo">
 <meta property="og:description" content="${desc}">
-<meta property="og:image" content="${BASE_URL}/seal.webp">
+<meta property="og:image" content="${escHtml(img)}">
 <meta property="og:type" content="article">
 <meta property="og:url" content="${url}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${title} — Tử Vi Minh Bảo">
 <meta name="twitter:description" content="${desc}">
-<meta name="twitter:image" content="${BASE_URL}/seal.webp">
+<meta name="twitter:image" content="${escHtml(img)}">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="${url}">
 <link rel="icon" type="image/webp" href="/seal.webp">

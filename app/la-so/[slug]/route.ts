@@ -11,16 +11,21 @@ function esc(s: unknown) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
+function ogImg(base: string, title: string, sub: string): string {
+  return `${base}/api/og?${new URLSearchParams({ title: title.slice(0,80), sub }).toString()}`;
+}
+
 function buildPregenHTML(row: Record<string,unknown>, slug: string): string {
   const url   = `${BASE}/la-so/${slug}`;
   const gt    = row.gioi_tinh === 'nu' ? 'Nữ' : 'Nam';
   const title = `Lá Số Tử Vi ${esc(row.can_chi)} ${gt} — Cung ${esc(row.cung_menh)} — Tử Vi Minh Bảo`;
   const desc  = `Lá số tử vi ${row.can_chi} ${gt.toLowerCase()}, cung mệnh ${row.cung_menh}, chính tinh ${row.chinh_tinh_menh || ''}, nạp âm ${row.nap_am || ''}. Xem cách cục đặc biệt và phân tích 12 cung theo cổ pháp.`;
+  const img   = ogImg(BASE, title, 'Lá Số Tử Vi · Cổ Pháp');
   const schema = JSON.stringify([
     {'@context':'https://schema.org','@type':'Article',headline:title,description:desc,url,inLanguage:'vi',
      author:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE},
      publisher:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE,logo:{'@type':'ImageObject',url:`${BASE}/seal.webp`}},
-     image:{'@type':'ImageObject',url:`${BASE}/seal.webp`}},
+     image:{'@type':'ImageObject',url:img}},
     {'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[
       {'@type':'ListItem',position:1,name:'Trang Chủ',item:`${BASE}/`},
       {'@type':'ListItem',position:2,name:'Mệnh Khố',item:`${BASE}/menh-kho.html`},
@@ -66,7 +71,7 @@ function buildPregenHTML(row: Record<string,unknown>, slug: string): string {
 <meta name="description" content="${esc(desc)}">
 <meta property="og:title" content="${title}">
 <meta property="og:description" content="${esc(desc)}">
-<meta property="og:image" content="${BASE}/seal.webp">
+<meta property="og:image" content="${esc(img)}">
 <meta property="og:type" content="article">
 <meta property="og:url" content="${url}">
 <link rel="canonical" href="${url}">
@@ -184,12 +189,13 @@ function buildPublicHTML(row: Record<string,unknown>, slug: string): string {
   const title = `Lá Số ${esc(row.can_chi_nam)} ${gt} — Cung ${esc(row.cung_menh)} — Tử Vi Minh Bảo`;
   const desc  = `Lá số tử vi ${row.can_chi_nam} ${gt.toLowerCase()}, cung mệnh ${row.cung_menh}, chính tinh ${row.chinh_tinh || ''}, nạp âm ${row.nap_am || ''}.`;
 
+  const img   = ogImg(BASE, title, `Cung ${esc(row.cung_menh as string)}`);
   const schema = JSON.stringify([
     {'@context':'https://schema.org','@type':'Article',headline:title,description:desc,url,inLanguage:'vi',
      datePublished:(row.created_at as string||'').slice(0,10)||undefined,
      author:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE},
      publisher:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE,logo:{'@type':'ImageObject',url:`${BASE}/seal.webp`}},
-     image:{'@type':'ImageObject',url:`${BASE}/seal.webp`}},
+     image:{'@type':'ImageObject',url:img}},
     {'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[
       {'@type':'ListItem',position:1,name:'Trang Chủ',item:`${BASE}/`},
       {'@type':'ListItem',position:2,name:'Mệnh Khố',item:`${BASE}/menh-kho.html`},
@@ -200,13 +206,13 @@ function buildPublicHTML(row: Record<string,unknown>, slug: string): string {
 <meta name="description" content="${esc(desc)}">
 <meta property="og:title" content="${title}">
 <meta property="og:description" content="${esc(desc)}">
-<meta property="og:image" content="${BASE}/seal.webp">
+<meta property="og:image" content="${esc(img)}">
 <meta property="og:type" content="article">
 <meta property="og:url" content="${url}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${title}">
 <meta name="twitter:description" content="${esc(desc)}">
-<meta name="twitter:image" content="${BASE}/seal.webp">
+<meta name="twitter:image" content="${esc(img)}">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="${url}">
 <link rel="icon" type="image/webp" href="/seal.webp">

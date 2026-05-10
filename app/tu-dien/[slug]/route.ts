@@ -120,6 +120,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
   const loai  = String(row.loai || 'khac');
   const title = esc(row.seo_title || `${row.ten} — ${LOAI_LABEL[loai] || 'Từ Điển Cổ Học'} — Tử Vi Minh Bảo`);
   const desc  = esc(row.seo_desc || `Tìm hiểu về ${row.ten} theo cổ pháp tử vi và đông phương học.`);
+  const img   = `${BASE}/api/og?${new URLSearchParams({ title: String(row.ten||'').slice(0,80), sub: LOAI_LABEL[loai] || 'Từ Điển' }).toString()}`;
   const hubUrl = HUB_URLS[loai] || `${BASE}/kien-thuc-tuvi`;
   const hubName = LOAI_LABEL[loai] || 'Tử Vi';
 
@@ -128,7 +129,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
      datePublished: row.created_at ? String(row.created_at).slice(0,10) : undefined,
      author:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE},
      publisher:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE,logo:{'@type':'ImageObject',url:`${BASE}/seal.webp`}},
-     image:{'@type':'ImageObject',url:`${BASE}/seal.webp`}},
+     image:{'@type':'ImageObject',url:img}},
     {'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[
       {'@type':'ListItem',position:1,name:'Trang Chủ',item:`${BASE}/`},
       {'@type':'ListItem',position:2,name:hubName,item:hubUrl},
@@ -142,13 +143,13 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
 ${(row.tags||[]).length ? `<meta name="keywords" content="${esc(row.tags.join(', '))}">` : ''}
 <meta property="og:title" content="${title}">
 <meta property="og:description" content="${desc}">
-<meta property="og:image" content="${BASE}/seal.webp">
+<meta property="og:image" content="${esc(img)}">
 <meta property="og:type" content="article">
 <meta property="og:url" content="${url}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${title}">
 <meta name="twitter:description" content="${desc}">
-<meta name="twitter:image" content="${BASE}/seal.webp">
+<meta name="twitter:image" content="${esc(img)}">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="${url}">
 <link rel="icon" type="image/webp" href="/seal.webp">
