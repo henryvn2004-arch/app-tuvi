@@ -227,3 +227,6 @@ select.form-input { cursor: pointer; }
 .kb-body p { margin-bottom: 14px; }
 .kb-body p:last-child { margin-bottom: 0; }
 .kb-body strong { color: var(--text); font-weight: 600; }
+.kb-links { border-top: 1px solid var(--border-lt); margin-top: 20px; padding-top: 16px; font-size: 13px; color: var(--text-lt); }
+.kb-links a { color: var(--navy); text-decoration: none; font-weight: 600; }
+.kb-links a:hover { text-decoration: underline; }

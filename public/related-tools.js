@@ -46,6 +46,21 @@
     { id:'tarot',        url:'/tools/tarot.html',               icon:'🃏', name:'Tarot 78 Lá',              cat:['tinh-cach'],                    tags:['tarot','rút bài','tình duyên'] },
     { id:'ngu-hanh-ten', url:'/tools/ngu-hanh-ten.html',        icon:'✍', name:'Ngũ Hành Tên',             cat:['daten','tinh-cach'],            tags:['ngũ hành tên','phân tích tên'] },
     { id:'xem-sinh-con', url:'/tools/xem-tuoi-sinh-con.html',   icon:'🍼', name:'Xem Tuổi Sinh Con',        cat:['tuvi','gia-dinh','con-cai'],    tags:['sinh con','tuổi sinh con','năm sinh'] },
+    // Bói / Huyền Học
+    { id:'oracle',        url:'/tools/oracle.html',              icon:'🔯', name:'Oracle Phương Đông',        cat:['tuvi'],                         tags:['oracle','bói toán','huyền học','á đông'] },
+    { id:'boi-bai-tay',   url:'/tools/boi-bai-tay.html',        icon:'🃏', name:'Bói Bài Tây',               cat:['tuvi','tinh-cach'],             tags:['bài tây','bói bài','tarot','huyền bí'] },
+    // Phong Thủy bổ sung
+    { id:'huong-nha',     url:'/tools/huong-nha-phong-thuy.html',icon:'🏠', name:'Hướng Nhà Phong Thủy',     cat:['phongthu','gia-dinh'],          tags:['hướng nhà','bát trạch','phong thủy'] },
+    { id:'la-ban',        url:'/tools/la-ban-phong-thuy.html',   icon:'🧭', name:'La Bàn Phong Thủy',        cat:['phongthu'],                     tags:['la bàn','hướng','phong thủy'] },
+    // AI Ngoại Hình
+    { id:'kieu-toc',      url:'/tools/kieu-toc-ai.html',         icon:'💇', name:'Tư Vấn Kiểu Tóc & Kính Mắt', cat:['ngoai-hinh'],               tags:['kiểu tóc','kính mắt','tướng mặt','ai'] },
+    { id:'trang-diem',    url:'/tools/trang-diem-ai.html',       icon:'💄', name:'Trang Điểm AI',             cat:['ngoai-hinh'],                   tags:['trang điểm','makeup','ai','làm đẹp'] },
+    { id:'personal-color',url:'/tools/personal-color.html',      icon:'🎨', name:'Personal Color AI',         cat:['ngoai-hinh','tinh-cach'],       tags:['personal color','tông màu','màu sắc','ai'] },
+    { id:'xlook',         url:'/tools/xlook.html',               icon:'👗', name:'xLook — Tủ Đồ AI',          cat:['ngoai-hinh'],                   tags:['tủ đồ','phong cách','ai','thời trang'] },
+    { id:'trang-phuc',    url:'/tools/trang-phuc-theo-ngay.html',icon:'👔', name:'Trang Phục Theo Ngày',      cat:['ngoai-hinh','ngaytot'],         tags:['trang phục','phong cách','ngày tốt'] },
+    { id:'da-lieu',       url:'/tools/da-lieu-ai.html',          icon:'🧴', name:'Da Liễu AI',                cat:['ngoai-hinh'],                   tags:['da liễu','da mặt','ai','sức khỏe'] },
+    // Thanh Tướng Pro
+    { id:'thanh-tuong-pro',url:'/tools/thanh-tuong-pro.html',   icon:'🎙', name:'Thanh Tướng Pro',           cat:['tuong','tinh-cach'],            tags:['giọng nói','thanh tướng','chuyên sâu'] },
   ];
 
   // ── Category → tool mapping for khao-luan ────────────────────
