@@ -194,9 +194,9 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 .rel-item:hover{border-color:var(--blue);background:#fff;color:var(--blue)}
 @media(max-width:700px){.bc,.article-wrap{padding-left:20px;padding-right:20px}.article-title{font-size:28px}.article-body{font-size:16px}}
 </style>
-<script src="/auth.js"></script>
+<script src="/auth.js" defer></script>
 </head><body>
-<script src="/nav.js"></script>
+<div id="nav-ph" style="height:60px;background:#061A2E"></div>
 <div class="bc">
   <a href="/">Trang Chủ</a><span>›</span>
   <a href="${hubUrl}">${esc(hubName)}</a><span>›</span>
@@ -218,6 +218,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
   </div>
 </article>
 <script src="/footer.js"></script>
+<script src="/nav.js" defer></script>
 </body></html>`;
 
   return new NextResponse(html, {

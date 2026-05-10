@@ -191,7 +191,9 @@
   var old = document.querySelector('nav.topnav');
   if (old) old.remove();
   var tmp = document.createElement('div'); tmp.innerHTML = html;
-  document.body.insertBefore(tmp.firstChild, document.body.firstChild);
+  var ph = document.getElementById('nav-ph');
+  if (ph) ph.replaceWith(tmp.firstChild);
+  else document.body.insertBefore(tmp.firstChild, document.body.firstChild);
 
   // ── Mobile dropdown events ─────────────────────────────────────
   var menus = ['nav-dd1-menu','nav-dd2-menu','nav-dd3-menu','nav-dd-dep-menu','nav-dd4-menu','nav-dd5-menu','nav-dd6-menu'];

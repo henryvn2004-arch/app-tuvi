@@ -112,10 +112,10 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 @keyframes spin{to{transform:rotate(360deg)}}
 @media(max-width:700px){.breadcrumb,.article-wrap{padding-left:16px;padding-right:16px}.article-title{font-size:26px}}
 </style>
-<script src="/auth.js"></script>
+<script src="/auth.js" defer></script>
 </head>
 <body>
-<script src="/nav.js"></script>
+<div id="nav-ph" style="height:60px;background:#061A2E"></div>
 <div class="breadcrumb"><a href="/">Trang Chủ</a><span>›</span><a href="/blog.html">Khảo Luận</a><span>›</span><span>${title}</span></div>
 <article class="article-wrap">
   <div class="article-meta">
@@ -137,6 +137,7 @@ window._articleData = { category: ${JSON.stringify(article.category||'')}, tags:
 </script>
 <script src="/related-tools.js"></script>
 <script src="/testimonials.js"></script>
+<script src="/nav.js" defer></script>
 </body></html>`;
 }
 
@@ -144,12 +145,13 @@ function buildNotFound() {
   return `<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8">
 <title>Không tìm thấy — Tử Vi Minh Bảo</title>
 <link rel="icon" type="image/webp" href="/seal.webp">
-<script src="/auth.js"></script>
+<script src="/auth.js" defer></script>
 </head>
 <body style="font-family:sans-serif;text-align:center;padding:80px">
 <h1 style="color:#061A2E;font-family:Georgia,serif;margin-bottom:16px">Không tìm thấy bài viết</h1>
 <p style="color:#777;margin-bottom:24px">Bài viết không tồn tại hoặc đã bị xóa.</p>
 <a href="/blog.html" style="color:#1455A4">← Về Khảo Luận</a>
+<script src="/nav.js" defer></script>
 </body></html>`;
 }
 

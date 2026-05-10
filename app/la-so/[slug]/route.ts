@@ -129,9 +129,9 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 .rel-item:hover{border-color:var(--blue);color:var(--blue)}
 @media(max-width:700px){.bc,.wrap{padding-left:16px;padding-right:16px}.hero-title{font-size:22px}}
 </style>
-<script src="/auth.js"></script>
+<script src="/auth.js" defer></script>
 </head><body>
-<script src="/nav.js"></script>
+<div id="nav-ph" style="height:60px;background:#061A2E"></div>
 <div class="bc">
   <a href="/">Trang Chủ</a><span>›</span>
   <a href="/menh-kho.html">Mệnh Khố</a><span>›</span>
@@ -180,6 +180,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
   </div>
 </div>
 <script src="/footer.js"></script>
+<script src="/nav.js" defer></script>
 </body></html>`;
 }
 
@@ -227,12 +228,13 @@ function buildPublicHTML(row: Record<string,unknown>, slug: string): string {
   if (row.rendered_html) {
     return `<!DOCTYPE html><html lang="vi"><head>
 ${commonHead}
-<script src="/auth.js"></script>
+<script src="/auth.js" defer></script>
 </head><body>
-<script src="/nav.js"></script>
+<div id="nav-ph" style="height:60px;background:#061A2E"></div>
 ${bcHTML}
 ${row.rendered_html}
 <script src="/footer.js"></script>
+<script src="/nav.js" defer></script>
 </body></html>`;
   }
 
@@ -244,18 +246,19 @@ ${row.rendered_html}
   return `<!DOCTYPE html><html lang="vi"><head>
 ${commonHead}
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
-<script src="/auth.js"></script>
+<script src="/auth.js" defer></script>
 <style>
 body{font-family:'Be Vietnam Pro',sans-serif;max-width:760px;margin:0 auto;padding:0 20px 40px;color:#333}
 h1{font-family:'Noto Serif',serif;color:#061A2E;margin:32px 0 24px}
 p{margin-bottom:14px;line-height:1.8;color:#444}
 </style>
 </head><body>
-<script src="/nav.js"></script>
+<div id="nav-ph" style="height:60px;background:#061A2E"></div>
 ${bcHTML}
 <h1>${title}</h1>
 <div>${bodyHTML}</div>
 <script src="/footer.js"></script>
+<script src="/nav.js" defer></script>
 </body></html>`;
 }
 

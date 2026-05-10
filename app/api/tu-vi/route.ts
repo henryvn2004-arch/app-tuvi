@@ -148,10 +148,10 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
         .rel-item{display:block;padding:10px 12px;background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:6px;font-size:12px;color:var(--navy);text-decoration:none;line-height:1.4;transition:all .12s}
         .rel-item:hover{border-color:var(--blue);background:#fff;color:var(--blue)}
 </style>
-<script src="/auth.js"></script>
+<script src="/auth.js" defer></script>
 </head>
 <body>
-<script src="/nav.js"></script>
+<div id="nav-ph" style="height:60px;background:#061A2E"></div>
 <div class="breadcrumb">
   <a href="/">Trang Chủ</a><span>›</span>
   <a href="/tu-vi">Tử Vi</a><span>›</span>
@@ -171,6 +171,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
   ${relatedHtml}
 </article>
 <script src="/footer.js"></script>
+<script src="/nav.js" defer></script>
 </body></html>`;
 }
 
@@ -178,12 +179,13 @@ function buildNotFound() {
   return `<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8">
 <title>Không tìm thấy — Tử Vi Minh Bảo</title>
 <link rel="icon" type="image/webp" href="/seal.webp">
-<script src="/auth.js"></script>
+<script src="/auth.js" defer></script>
 </head>
 <body style="font-family:sans-serif;text-align:center;padding:80px">
 <h1 style="color:#061A2E;font-family:Georgia,serif;margin-bottom:16px">Không tìm thấy trang</h1>
 <p style="color:#777;margin-bottom:24px">Trang tử vi này không tồn tại hoặc đã được cập nhật.</p>
 <a href="/" style="color:#1455A4">← Về Trang Chủ</a>
+<script src="/nav.js" defer></script>
 </body></html>`;
 }
 
