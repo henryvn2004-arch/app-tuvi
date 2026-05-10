@@ -1006,12 +1006,12 @@ select.form-input { cursor: pointer; }
             <div class="tvc-paywall-feature">Câu trả lời cá nhân hóa</div>
             <div class="tvc-paywall-feature">Dựa trên lá số thực tế</div>
           </div>
-          <div class="tvc-paywall-price">$19</div>
+          <div class="tvc-paywall-price">150 lượng</div>
           <div class="tvc-paywall-price-note">Bao gồm 24 phần luận giải + Vấn đáp không giới hạn</div>
           <button class="tvc-paywall-btn" onclick="initiatePayment()">
             Mở Khóa Luận Giải &amp; Vấn Đáp →
           </button>
-          <div class="tvc-paywall-secure">🔒 Thanh toán bảo mật qua PayPal · Hoàn tiền nếu lỗi kỹ thuật</div>
+          <div class="tvc-paywall-secure">🔒 Trừ thẳng từ số dư · Truy cập vĩnh viễn</div>
         </div>
       </div>
     </div>
@@ -1484,13 +1484,11 @@ select.form-input { cursor: pointer; }
 
             <div style="display:flex;align-items:baseline;justify-content:center;gap:8px;margin-bottom:4px">
 
-              <div class="paywall-price">$19</div>
-
-              <span style="font-size:13px;color:#999;text-decoration:line-through">$49</span>
+              <div class="paywall-price">150 lượng</div>
 
             </div>
 
-            <div class="paywall-price-note">Bằng 1 ly cà phê · Thanh toán một lần · Truy cập vĩnh viễn</div>
+            <div class="paywall-price-note">Trừ thẳng từ số dư · Truy cập vĩnh viễn</div>
 
             <button class="btn-paywall" onclick="initiatePayment()">
 
@@ -1512,7 +1510,7 @@ select.form-input { cursor: pointer; }
 
             </div>
 
-            <div class="paywall-secure">🔒 Thanh toán bảo mật qua PayPal · Hoàn tiền nếu lỗi kỹ thuật</div>
+            <div class="paywall-secure">🔒 Trừ thẳng từ số dư · Truy cập vĩnh viễn</div>
 
           </div>
 
@@ -1726,13 +1724,10 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     } catch(e) { return false; }
   }
 
-  function renderPaywall() {
-    TuviPaywall.show();
-  }
-
-  // ── Khởi tạo PayPal payment ──
   async function initiatePayment() {
-    TuviPaywall._initiate();
+    await TuviPaywall.requireCredits(_pendingSlug, async () => {
+      await startClaudeOrLoadCache(_pendingSlug);
+    });
   }
 
   // ── Sau khi paid — unlock tất cả lock boxes và load Claude từng phần ──
@@ -3774,7 +3769,6 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
   
 TuviPaywall.init({
   product:  'laso',
-  price:    '$19',
   slug:     () => _pendingSlug,
   sessionKey: 'tuvi_pending',
   getFormData: () => {
@@ -3909,8 +3903,8 @@ TuviPaywall.init({
           <div style="font-size:32px;margin-bottom:12px">🔮</div>
           <div style="font-family:'Noto Serif',serif;font-size:20px;color:#061A2E;margin-bottom:10px">Lá số của bạn đã sẵn sàng</div>
           <div style="font-size:14px;color:#666;line-height:1.6;margin-bottom:24px">Luận giải 24 phần đang chờ — bao gồm vận hạn năm ${new Date().getFullYear()} và các đại vận quan trọng nhất.</div>
-          <button onclick="initiatePayment();document.getElementById('ux-exit-modal').remove()" style="width:100%;padding:14px;background:#061A2E;color:#c9a84c;border:2px solid #c9a84c;border-radius:4px;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:inherit">Mở Khóa $19 →</button>
-          <div style="font-size:11px;color:#aaa;margin-top:10px">Bằng 1 ly cà phê · Thanh toán một lần</div>
+          <button onclick="initiatePayment();document.getElementById('ux-exit-modal').remove()" style="width:100%;padding:14px;background:#061A2E;color:#c9a84c;border:2px solid #c9a84c;border-radius:4px;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:inherit">Mở Khóa — 150 Lượng →</button>
+          <div style="font-size:11px;color:#aaa;margin-top:10px">Trừ thẳng từ số dư · Truy cập vĩnh viễn</div>
         </div>
       </div>`;
     document.body.appendChild(modal);
