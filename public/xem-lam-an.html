@@ -948,6 +948,32 @@ const _NA = {'Giáp Tý':'Kim','Ất Sửu':'Kim','Bính Dần':'Hỏa','Đinh M
 const PHAN_LABELS = ['Tổng Quan','Xét Tuổi','Ngũ Hành','Tư Tưởng','Tính Cách','Đối Tác','Giao Tiếp','Tài Chính','Vận Hạn'];
 const WEIGHTS = [0,0.10,0.10,0.20,0.10,0.20,0.10,0.15,0.05];
 const CUNG_MAP = [null,null,null,'Mệnh',null,'Nô Bộc',null,'Tài Bạch',null]; // idx6=Thân cung (special)
+
+// RAG helpers — tam phương tứ chính
+const _TH = {'Dần':['Ngọ','Tuất'],'Ngọ':['Dần','Tuất'],'Tuất':['Dần','Ngọ'],'Thân':['Tý','Thìn'],'Tý':['Thân','Thìn'],'Thìn':['Thân','Tý'],'Tỵ':['Dậu','Sửu'],'Dậu':['Tỵ','Sửu'],'Sửu':['Tỵ','Dậu'],'Hợi':['Mão','Mùi'],'Mão':['Hợi','Mùi'],'Mùi':['Hợi','Mão']};
+const _XC = {'Tý':'Ngọ','Ngọ':'Tý','Sửu':'Mùi','Mùi':'Sửu','Dần':'Thân','Thân':'Dần','Mão':'Dậu','Dậu':'Mão','Thìn':'Tuất','Tuất':'Thìn','Tỵ':'Hợi','Hợi':'Tỵ'};
+function _tpStars(ls, cungName) {
+  if (!ls?.palaces) return '';
+  const main = ls.palaces.find(p => p.cungName === cungName); if (!main) return '';
+  const dc = main.diaChi;
+  const seen = new Set(), stars = [];
+  for (const chi of [dc, ...(_TH[dc]||[]), _XC[dc]].filter(Boolean)) {
+    const p = ls.palaces.find(p => p.diaChi === chi);
+    if (p) (p.majorStars||[]).forEach(s => { if (!seen.has(s.ten)) { seen.add(s.ten); stars.push(s.ten); } });
+  }
+  return stars.join(' ');
+}
+const QUERIES = [
+  (r) => `tương hợp lá số ${r.lsA.canChiNam||''} ${r.lsB.canChiNam||''} ${_tpStars(r.lsA,'Mệnh')} ${_tpStars(r.lsB,'Mệnh')} làm ăn hợp tác`,
+  (r) => `địa chi năm sinh lục hợp tứ xung xét tuổi ${r.lsA.canChiNam||''} ${r.lsB.canChiNam||''}`,
+  (r) => `nạp âm ${r.naA||''} ${r.naB||''} ngũ hành sinh khắc tương hợp`,
+  (r) => `cung mệnh ${_tpStars(r.lsA,'Mệnh')} ${_tpStars(r.lsB,'Mệnh')} cách cục tư tưởng`,
+  (r) => `nhóm thái tuế chính tinh ${_tpStars(r.lsA,'Mệnh')} ${_tpStars(r.lsB,'Mệnh')} tính cách`,
+  (r) => `cung nô bộc ${_tpStars(r.lsA,'Nô Bộc')} ${_tpStars(r.lsB,'Nô Bộc')} đối tác hợp tác làm ăn`,
+  (r) => `cung thân ${r.lsA.thanDC||''} ${r.lsB.thanDC||''} giao tiếp ứng xử xã giao`,
+  (r) => `cung tài bạch ${_tpStars(r.lsA,'Tài Bạch')} ${_tpStars(r.lsB,'Tài Bạch')} tài chính tiền bạc`,
+  (r) => `đại vận ${r.lsA.daiVanHienTai?.diaChi||''} ${r.lsB.daiVanHienTai?.diaChi||''} vận hạn hiện tại`,
+];
 const METRICS_VI = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
 const METRICS_KEY = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
 
@@ -1556,7 +1582,13 @@ Viết 300-350 từ văn xuôi. Nhận định tổng quan, điểm mạnh, đi�
 
   try{
     console.log('[section'+idx+'] prompt len=', prompt.length, 'first50=', prompt.slice(0,50));
-    const resp=await fetch('/api/xem-tuoi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+    let _docs = '';
+    try {
+      const _q = QUERIES[idx] ? QUERIES[idx](result) : prompt.slice(0, 300);
+      const _sr = await fetch('/api/search', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ query: _q, matchCount: 5 }) });
+      _docs = (await _sr.json()).docs || '';
+    } catch(e) { /* silent — vẫn luận giải bình thường nếu search fail */ }
+    const resp=await fetch('/api/xem-tuoi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt, docs: _docs})});
     console.log('[section'+idx+'] status=', resp.status);
     const data=await resp.json();
     console.log('[section'+idx+'] data=', JSON.stringify(data).slice(0,200));
