@@ -528,6 +528,7 @@ select.form-input { cursor: pointer; }
 .btn-paywall:hover:not(:disabled) { background: #c9a84c; color: #061A2E; }
 .btn-paywall:disabled { opacity: 0.6; cursor: not-allowed; }
 .paywall-secure { font-size: 11px; color: #aaa; margin-top: 12px; }
+.ux-paywall-overlay { text-align: center; }
 
     /* ── Chat Paywall ── */
     .tvc-paywall-overlay {
@@ -1011,6 +1012,58 @@ select.form-input { cursor: pointer; }
       if (_dv) PHAN_LABELS[15 + _di] = 'Đại Vận ' + (_di+1) + ' (' + _dv.tuoiStart + '–' + _dv.tuoiEnd + 't)';
     }
   }
+  const PHAN_TEASERS = [
+    null, // 0
+    // 1: Tổng Quan Lá Số
+    ['Lá số tổng thể có một cấu hình không phổ biến — sự phân bố sao ở các cung chính tạo nên điểm mạnh đặc biệt mà ít người nhận ra ngay từ đầu...', 'Mối liên kết giữa bản mệnh, quan lộc và tài bạch tiết lộ xu hướng phát triển theo một hướng cụ thể — và lý do tại sao một số giai đoạn trong đời lại có tính quyết định hơn những giai đoạn còn lại...'],
+    // 2: Cung Mệnh
+    ['Chính tinh an tại Cung Mệnh quyết định phần lớn tính cách cốt lõi và con đường mà người này dễ thành công nhất. Sức mạnh thực sự của cung chỉ bộc lộ khi xét kết hợp với phụ tinh và tam phương...', 'Cách cục Cung Mệnh trong lá số này có một đặc điểm đáng chú ý — nó giải thích tại sao người có mệnh này thường trải qua một bước ngoặt rõ ràng vào một giai đoạn tuổi nhất định...'],
+    // 3: Cung Phụ Mẫu
+    ['Cung Phụ Mẫu không chỉ phản ánh mối quan hệ với cha mẹ — nó còn tiết lộ cách người này tương tác với cấp trên, pháp lý và văn bằng. Sao trong cung này lý giải nhiều điều về xuất phát điểm...', 'Cấu hình Cung Phụ Mẫu trong lá số này có tác động đến khả năng được hỗ trợ từ bên ngoài — một yếu tố nhiều người bỏ qua khi đánh giá tiềm lực thực sự của mình...'],
+    // 4: Cung Phúc Đức
+    ['Cung Phúc Đức phản ánh nội tâm, phúc khí tích lũy và khả năng hưởng thụ cuộc sống. Sự bố trí sao tại đây cho thấy một kiểu phúc đức đặc biệt — không phải ai cũng nhận ra dưới dạng trực tiếp...', 'Điều ít người biết là Cung Phúc Đức ảnh hưởng đến chất lượng cuộc sống nội tâm nhiều hơn vật chất. Lá số này có một tín hiệu đáng chú ý cần phân tích kỹ...'],
+    // 5: Cung Điền Trạch
+    ['Cung Điền Trạch cho biết khả năng sở hữu tài sản và môi trường sống. Sao an tại đây không chỉ nói về nhà cửa — nó còn phản ánh sự ổn định và gốc rễ trong cuộc đời người này...', 'Có một tổ hợp đặc biệt trong Cung Điền Trạch của lá số này — nó lý giải tại sao các quyết định liên quan đến bất động sản hoặc nơi sinh sống thường mang tính quyết định hơn với người này...'],
+    // 6: Cung Quan Lộc
+    ['Cung Quan Lộc không chỉ phản ánh sự nghiệp mà còn tiết lộ loại công việc nào phù hợp nhất và con đường nào có khả năng thành công cao hơn với cách cục lá số này...', 'Sao an tại Cung Quan Lộc tạo ra một cấu hình có tính hai mặt — nếu biết tận dụng đúng cách thì đây là cung mạnh, nhưng nếu chọn sai lĩnh vực thì sức mạnh đó lại không phát huy được...'],
+    // 7: Cung Nô Bộc
+    ['Cung Nô Bộc phản ánh mối quan hệ với người dưới, đồng nghiệp và bạn bè thân thiết. Cấu hình sao tại đây cho thấy cách người này xây dựng và duy trì các mối quan hệ xung quanh...', 'Điều thú vị trong Cung Nô Bộc của lá số này là tín hiệu về chất lượng mạng lưới xã hội — ai sẽ thực sự hỗ trợ trong lúc khó khăn, và ai chỉ hiện diện khi thuận lợi...'],
+    // 8: Cung Thiên Di
+    ['Cung Thiên Di phản ánh khả năng phát triển khi ra khỏi môi trường quen thuộc — di chuyển địa lý, công tác xa, hoặc mở rộng ra thị trường mới đều liên quan đến cung này...', 'Có một chi tiết đặc biệt trong Cung Thiên Di của lá số này: nó giải thích tại sao người có mệnh này thường phát triển vượt trội hơn khi không ở trong môi trường sinh sống ban đầu...'],
+    // 9: Cung Tật Ách
+    ['Cung Tật Ách không chỉ liên quan đến sức khỏe thể chất — nó còn phản ánh những trở ngại tiềm ẩn và khả năng phục hồi khi gặp biến cố. Sao an tại đây cho thấy những điểm cần chú ý đặc biệt...', 'Tổ hợp sao trong Cung Tật Ách của lá số này có thông điệp quan trọng về thời điểm các thách thức thường xuất hiện — và biện pháp hóa giải hiệu quả nhất cần biết trước...'],
+    // 10: Cung Tài Bạch
+    ['Cung Tài Bạch tiết lộ cách tiền bạc đến và đi trong cuộc đời — không chỉ là khả năng kiếm tiền mà còn cách giữ và tích lũy. Sao an tại đây quyết định phong cách tài chính cốt lõi...', 'Điều đáng chú ý trong Cung Tài Bạch của lá số này là mối liên hệ giữa cách kiếm tiền và cách tiêu tiền — một tổ hợp có thể tạo ra hoặc phá vỡ sự ổn định tài chính dài hạn nếu không nhận ra sớm...'],
+    // 11: Cung Tử Tức
+    ['Cung Tử Tức không chỉ nói về con cái — nó còn phản ánh tư duy sáng tạo, khả năng đầu tư và tạo ra nguồn thu nhập mới. Sao trong cung này lý giải xu hướng ra quyết định trong các tình huống quan trọng...', 'Một chi tiết thú vị trong Cung Tử Tức: cấu hình sao tại đây tiết lộ loại đầu tư nào phù hợp và không phù hợp với người này — thông tin quan trọng để tránh những sai lầm tốn kém...'],
+    // 12: Cung Phu Thê
+    ['Cung Phu Thê phản ánh không chỉ hôn nhân mà còn cả các mối quan hệ đối tác quan trọng. Sao an tại đây tiết lộ kiểu người phù hợp, thời điểm thuận lợi và những thách thức cần vượt qua...', 'Tổ hợp sao trong Cung Phu Thê có một tín hiệu rõ ràng về động lực trong mối quan hệ thân mật — điều giải thích tại sao một số giai đoạn trong cuộc sống đôi lứa lại có tính quyết định hơn...'],
+    // 13: Cung Huynh Đệ
+    ['Cung Huynh Đệ phản ánh mối quan hệ với anh chị em, bạn bè cùng lứa và đồng nghiệp ngang hàng. Cấu hình sao tại đây cho thấy chất lượng các mối liên kết — yếu tố thường bị đánh giá thấp...', 'Điều đặc biệt trong Cung Huynh Đệ của lá số này là tín hiệu về sự tương hỗ — ai trong vòng tròn quan hệ thực sự là nguồn hỗ trợ, và ai có thể là nguyên nhân của những xung đột không cần thiết...'],
+    // 14: Tổng quan đại vận
+    ['Lá số này có 9 đại vận trải dài theo tuổi đời — mỗi giai đoạn 10 năm mang một cung khí và bộ sao khác nhau. Tổng quan này phân tích xu hướng chung của toàn bộ hành trình vận hạn...', 'Khi nhìn tổng thể các đại vận, có những điểm bản lề đặc biệt quan trọng trong lá số này — những giai đoạn chuyển tiếp mà quyết định đúng đắn có thể thay đổi đáng kể quỹ đạo cuộc đời...'],
+    // 15: Đại Vận 1
+    ['Đại vận đầu tiên đặt nền móng cho toàn bộ hành trình — sao và cung khí trong giai đoạn này ảnh hưởng đến cách người này hình thành tính cách, nền tảng và định hướng ban đầu trong cuộc đời...', 'Sự tương tác giữa sao đại vận và sao bản mệnh trong giai đoạn này tạo ra một năng lượng đặc biệt — vừa là cơ hội cần tận dụng, vừa là thử thách cần nhận ra và chuẩn bị...'],
+    // 16: Đại Vận 2
+    ['Đại vận thứ hai thường là giai đoạn người ta bắt đầu thực sự định hình con đường của mình. Cung khí vận hành trong giai đoạn này có tác động trực tiếp đến những lựa chọn quan trọng nhất...', 'Sự kết hợp giữa sao đại vận và các cung tam phương tứ chính tạo ra một xu hướng rõ ràng — phân tích chi tiết sẽ giúp nhận ra đâu là cơ hội thực sự trong 10 năm này...'],
+    // 17: Đại Vận 3
+    ['Đại vận thứ ba thường mang theo những biến chuyển đáng kể — nhiều người trải qua thay đổi lớn về sự nghiệp, gia đình hoặc nhận thức về bản thân trong giai đoạn này...', 'Cấu hình sao vận hạn tiết lộ liệu đây là giai đoạn tích lũy bền vững hay cần cẩn thận với những quyết định mang tính rủi ro cao — một thông tin quan trọng để định hướng đúng...'],
+    // 18: Đại Vận 4
+    ['Đại vận thứ tư thường là giai đoạn sung mãn hoặc là lúc phải đối mặt với những thách thức tích lũy từ trước. Sao và cung khí trong giai đoạn này quyết định phần lớn chất lượng thời gian này...', 'Lá số này có một tín hiệu thú vị trong đại vận thứ tư: sự tương tác giữa vận hạn và bản mệnh gợi ý rõ về những điều kiện thuận lợi và bất lợi cụ thể cần biết trước...'],
+    // 19: Đại Vận 5
+    ['Đại vận thứ năm thường rơi vào độ tuổi đánh giá lại những gì đã đạt được và điều chỉnh hướng đi. Cung khí vận hành trong giai đoạn này mang ý nghĩa đặc biệt với lá số này...', 'Phân tích đại vận thứ năm cho thấy một cấu hình đáng chú ý — nó gợi ý những lĩnh vực nào sẽ phát triển mạnh và những lĩnh vực nào cần thận trọng trong 10 năm này...'],
+    // 20: Đại Vận 6
+    ['Đại vận thứ sáu thường quyết định chất lượng nửa sau của cuộc đời — những gì được tích lũy và những thách thức nào cần đối mặt. Sao vận hạn trong giai đoạn này mang nhiều thông tin quan trọng...', 'Có một tổ hợp đặc biệt trong đại vận thứ sáu của lá số này — nó lý giải xu hướng của giai đoạn và những gì cần ưu tiên để tận dụng tốt nhất 10 năm này...'],
+    // 21: Đại Vận 7
+    ['Đại vận thứ bảy mang theo những đặc điểm của kinh nghiệm tích lũy. Cung khí và sao vận hạn trong giai đoạn này cho thấy những mảng cuộc sống nào sẽ nổi bật và cần được chú trọng...', 'Phân tích chi tiết đại vận thứ bảy tiết lộ những điểm thú vị về chất lượng cuộc sống và các mối quan hệ trong giai đoạn này — thông tin hữu ích để chuẩn bị trước...'],
+    // 22: Đại Vận 8
+    ['Đại vận thứ tám phản ánh giai đoạn muộn của hành trình — nhưng không có nghĩa là kém sôi động. Sao và cung khí trong giai đoạn này tiết lộ những điều thú vị về chất lượng trải nghiệm...', 'Có những tín hiệu đặc biệt trong đại vận thứ tám: cấu hình sao gợi ý về những gì vẫn có thể phát triển và những điều nào cần buông bỏ để cuộc sống trở nên nhẹ nhàng và trọn vẹn hơn...'],
+    // 23: Đại Vận 9
+    ['Đại vận cuối là kết tinh của toàn bộ hành trình — sao và cung khí trong giai đoạn này phản ánh chất lượng của những năm về sau và những gì được lưu lại từ cả một đời người...', 'Phân tích đại vận thứ chín tiết lộ những điều đặc biệt về giai đoạn này: những niềm vui, thách thức và ý nghĩa sâu xa của hành trình trong những năm cuối của lá số...'],
+    // 24: Tiểu Vận Năm Xem
+    ['Tiểu vận năm xem là phân tích gần nhất với thực tế hiện tại — sao tiểu vận kết hợp với đại vận đang chạy tạo ra bức tranh cụ thể về những gì đang và sẽ diễn ra trong năm này...', 'Đây là phần quan trọng nhất cho những ai muốn hiểu năm hiện tại: lá số này có một cấu hình tiểu vận cho thấy những cơ hội và thách thức cụ thể — cùng cách hành động phù hợp nhất để tận dụng tốt giai đoạn này...'],
+  ];
+
   // QUERIES động — dùng dữ liệu lá số thực để RAG tìm tài liệu relevant hơn
   function _getStarNames(cungName) {
     if (!_astrolabe) return '';
@@ -1387,9 +1440,9 @@ select.form-input { cursor: pointer; }
 
           <div class="ux-teaser-blur">
 
-            <p style="font-size:16px;line-height:1.85;color:var(--text-mid);font-family:Arial,sans-serif">Với cách cục này, bạn có xu hướng phát triển rõ nét khi được làm đúng việc. Điều ít người nhận ra là chính tinh tại đây không hoạt động đơn độc — phải xét cả tam phương mới thấy hết lực...</p>
+            <p style="font-size:16px;line-height:1.85;color:var(--text-mid);font-family:Arial,sans-serif">${(PHAN_TEASERS[phan] || PHAN_TEASERS[1])[0]}</p>
 
-            <p style="font-size:16px;line-height:1.85;color:var(--text-mid);font-family:Arial,sans-serif">Điểm đáng chú ý nhất là tổ hợp sao ở cung này kết hợp với vận hạn hiện tại — tạo ra một giai đoạn mà nếu biết cách...</p>
+            <p style="font-size:16px;line-height:1.85;color:var(--text-mid);font-family:Arial,sans-serif">${(PHAN_TEASERS[phan] || PHAN_TEASERS[1])[1]}</p>
 
           </div>
 
