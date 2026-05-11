@@ -371,7 +371,7 @@ function renderGrid(ls: Rec): string {
     const hasTriet  = allStars.some(s => s.ten==='Triệt');
     const dcIdx     = DCHI.indexOf(diacChi);
     const dvForCung = dvs.find(d => d.cungIdx===dcIdx) as Rec|undefined;
-    const dvBadge   = dvForCung ? `<span style="position:absolute;bottom:3px;right:5px;font-size:10px;font-weight:700;color:#555">${esc(String(dvForCung.canChi||''))}</span>` : '';
+    const dvBadge   = dvForCung ? `<span style="position:absolute;bottom:3px;right:5px;font-size:10px;font-weight:700;color:#555">${esc(String(dvForCung.diaChi||''))}</span>` : '';
     const tuanTag   = hasTuan  ? '<span style="position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);background:#2c4a00;color:#fff;font-size:8px;padding:0 5px;border-radius:2px">Tuần</span>' : '';
     const trietTag  = hasTriet ? '<span style="position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);background:#4a0000;color:#fff;font-size:8px;padding:0 5px;border-radius:2px">Triệt</span>' : '';
     const dvActive  = curDV && dcIdx === dvs.indexOf(curDV);
@@ -477,7 +477,7 @@ function renderTextBlocks(ls: Rec): string {
     const isCur= !!dv.isCurrentDV;
     return `<div style="text-align:center;padding:8px 10px;border:${isCur?'2px solid #c9a84c':'1px solid #e0e0e0'};border-radius:6px;background:${isCur?'#F9F4EB':'#fff'}">
       <div style="font-size:10px;color:#888;margin-bottom:2px">${esc(String(dv.tuoiStart||''))}–${esc(String(dv.tuoiEnd||''))}t</div>
-      <div style="font-size:12px;font-weight:700;color:#061A2E">${esc(String(dv.canChi||''))}</div>
+      <div style="font-size:12px;font-weight:700;color:#061A2E">${esc(String(dv.diaChi||''))}</div>
       ${tong>0?`<div style="font-size:11px;font-weight:700;color:${col};margin-top:2px">${tong}/10</div>`:''}
       ${isCur?'<div style="font-size:9px;color:#9A7B3A;font-weight:700;margin-top:2px">Hiện tại</div>':''}
     </div>`;
@@ -675,7 +675,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
       const col=t2>=7?'#1E6B3C':t2>=4?'#9A7B3A':'#C0392B';
       b14 += `<div style="text-align:center;padding:8px 10px;border:${isCur?'2px solid #9A7B3A':'1px solid #e0e0e0'};border-radius:7px;background:${isCur?'#F9F4EB':'#fff'};min-width:66px">
         <div style="font-size:10px;color:#888;margin-bottom:2px">ĐV ${idx+1}</div>
-        <div style="font-size:12px;font-weight:700;color:#061A2E">${esc(String(dv.canChi||''))}</div>
+        <div style="font-size:12px;font-weight:700;color:#061A2E">${esc(String(dv.diaChi||''))}</div>
         <div style="font-size:9px;color:#999">${esc(String(dv.tuoiStart||''))}–${esc(String(dv.tuoiEnd||''))}t</div>
         ${t2>0?`<div style="font-size:11px;font-weight:700;color:${col};margin-top:2px">${t2}/10</div>`:''}
         ${isCur?`<div style="font-size:9px;color:#9A7B3A;font-weight:700">Hiện tại</div>`:''}
@@ -700,7 +700,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     const isCur      = !!dv.isCurrentDV;
 
     // Override PHAN_LABELS_ISR with actual DV canChi + ages
-    const dvLabel = `${PHAN_LABELS_ISR[phanNum]} — ${esc(String(dv.canChi||''))} (${esc(String(dv.tuoiStart||''))}–${esc(String(dv.tuoiEnd||''))}t)${isCur?' ★ Hiện tại':''}`;
+    const dvLabel = `${PHAN_LABELS_ISR[phanNum]} — Cung ${esc(dvDC||String(dv.diaChi||''))} (${esc(String(dv.tuoiStart||''))}–${esc(String(dv.tuoiEnd||''))}t)${isCur?' ★ Hiện tại':''}`;
 
     let body = '';
 
@@ -832,7 +832,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
   if (curDV) {
     const dvSc2 = (curDV.scoring as Rec)||{};
     const dvT2  = Number(dvSc2.tong)||0;
-    b24 += `<p style="font-size:12px;color:#666">Đại vận đang chạy: <strong>${esc(String(curDV.canChi||''))}</strong> (${esc(String(curDV.tuoiStart||''))}–${esc(String(curDV.tuoiEnd||''))}t)${dvT2>0?`, điểm ${dvT2}/10`:''} — tiểu vận được xét trong bối cảnh đại vận này.</p>`;
+    b24 += `<p style="font-size:12px;color:#666">Đại vận đang chạy: <strong>Cung ${esc(String(curDV.diaChi||''))}</strong> (${esc(String(curDV.tuoiStart||''))}–${esc(String(curDV.tuoiEnd||''))}t)${dvT2>0?`, điểm ${dvT2}/10`:''} — tiểu vận được xét trong bối cảnh đại vận này.</p>`;
   }
   if (tvWindow.length > 1) {
     b24 += `<div style="display:flex;gap:6px;margin:10px 0;flex-wrap:wrap">`;
@@ -892,7 +892,7 @@ function buildIsrHTML(ls: Rec, params: IsrParams, slug: string): string {
     ...(cachCuc.length > 0 ? [{ q: `Lá số ${canChiNam} ${gtLabel.toLowerCase()} giờ ${gioLabel} có những cách cục gì?`,
       a: `Lá số này có ${cachCuc.length} cách cục: ${cachCuc.map(c=>String(c.ten||'')).join(', ')}.` }] : []),
     ...(curDV ? [{ q: `Đại vận hiện tại của lá số này là gì?`,
-      a: `Đại vận hiện tại là ${String(curDV.canChi||'')} (tuổi ${String(curDV.tuoiStart||'')}–${String(curDV.tuoiEnd||'')}).` }] : []),
+      a: `Đại vận hiện tại là Cung ${String(curDV.diaChi||'')} (tuổi ${String(curDV.tuoiStart||'')}–${String(curDV.tuoiEnd||'')}).` }] : []),
     { q: `Điểm cung mệnh của lá số ${canChiNam} ${gtLabel.toLowerCase()} giờ ${gioLabel} là bao nhiêu?`,
       a: diemMenh > 0 ? `Điểm cung mệnh là ${diemMenh.toFixed(1)}/10. Để xem phân tích chi tiết 24 phần, dùng công cụ luận giải tại tuviminhbao.com.` : `Xem điểm chi tiết bằng công cụ luận giải tại tuviminhbao.com.` },
   ];
