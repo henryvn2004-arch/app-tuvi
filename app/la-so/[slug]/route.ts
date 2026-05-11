@@ -499,85 +499,52 @@ function renderTextBlocks(ls: Rec): string {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// ISR: 24-section template content (deterministic, no AI)
+// ISR: 24-section template content (mirrors luan-giai.html buildPreGenHtml)
+// Structure: 1=Tổng Quan, 2-13=12 Cung, 14=Tổng quan ĐV, 15-23=ĐV 1-9, 24=Tiểu Vận Năm Xem
 // ────────────────────────────────────────────────────────────────────────────
 
 const CUNG_12 = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc',
                  'Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
 
-const CUNG_ICON: Record<string,string> = {
-  'Mệnh':'⊕','Phụ Mẫu':'👪','Phúc Đức':'🙏','Điền Trạch':'🏠',
-  'Quan Lộc':'💼','Nô Bộc':'🤝','Thiên Di':'✈','Tật Ách':'❤',
-  'Tài Bạch':'💰','Tử Tức':'👶','Phu Thê':'💑','Huynh Đệ':'👫',
-};
-
-const CUNG_MEANING: Record<string,string> = {
-  'Mệnh':'Cung Mệnh phản ánh bản chất, tính cách, ngoại hình và cách xã hội nhìn nhận về bản thân. Đây là cung quan trọng nhất, quyết định phần lớn vận mệnh tổng thể.',
-  'Phụ Mẫu':'Cung Phụ Mẫu chi phối mối quan hệ với cha mẹ, thầy cô, cấp trên và người có quyền lực. Còn liên quan đến văn bản pháp lý và quan hệ công quyền.',
-  'Phúc Đức':'Cung Phúc Đức phản ánh phúc khí từ tổ tiên, đời sống tâm linh và sức khỏe tinh thần. Cung tốt mang lại bình an nội tâm và may mắn dài hạn.',
-  'Điền Trạch':'Cung Điền Trạch liên quan đến bất động sản, nhà ở, đất đai và tài sản cố định. Cung mạnh ám chỉ khả năng tích lũy tài sản vật chất tốt.',
-  'Quan Lộc':'Cung Quan Lộc quyết định hướng đi sự nghiệp, địa vị xã hội và khả năng thăng tiến. Là một trong ba cung tam hợp quan trọng nhất trong lá số.',
-  'Nô Bộc':'Cung Nô Bộc thể hiện mối quan hệ với bạn bè, đối tác kinh doanh và nhân viên. Ảnh hưởng đến khả năng kết giao và xây dựng mạng lưới hỗ trợ.',
-  'Thiên Di':'Cung Thiên Di liên quan đến đi lại, du lịch, làm ăn xa và các mối quan hệ bên ngoài. Người có cung này tốt thường thích hợp lập nghiệp xa quê.',
-  'Tật Ách':'Cung Tật Ách phản ánh thể trạng sức khỏe, khả năng mắc bệnh và nguy cơ tai nạn. Cần lưu ý để phòng tránh chủ động.',
-  'Tài Bạch':'Cung Tài Bạch quyết định khả năng kiếm tiền, tích lũy của cải và vận tài chính tổng thể. Cung mạnh với sao tốt ám chỉ tài vận ổn định và bền vững.',
-  'Tử Tức':'Cung Tử Tức thể hiện mối quan hệ với con cái và học trò. Còn phản ánh khả năng sáng tạo, tư duy phát kiến và sự kế thừa.',
-  'Phu Thê':'Cung Phu Thê quyết định chất lượng hôn nhân, tính cách người bạn đời và vận tình duyên tổng thể.',
-  'Huynh Đệ':'Cung Huynh Đệ thể hiện mối quan hệ với anh chị em ruột, đồng nghiệp và bạn bè lâu năm.',
-};
-
-const STAR_TRAIT: Record<string,string> = {
-  'Tử Vi':'mang tính lãnh đạo, quyền uy, được tôn trọng và có uy tín trong môi trường xung quanh',
-  'Thiên Cơ':'thông minh nhạy bén, giỏi chiến lược và biến hóa linh hoạt theo tình huống',
-  'Thái Dương':'nhiệt tình, hào phóng, thích hoạt động xã hội, có danh tiếng và ảnh hưởng rộng',
-  'Vũ Khúc':'cứng rắn, quyết đoán, thực dụng, giỏi quản lý tài chính và công việc cụ thể',
-  'Thiên Đồng':'hiền lành, thân thiện, có phúc, thích cuộc sống bình yên và ổn định',
-  'Liêm Trinh':'sắc bén, có chí khí, bí ẩn, tự trọng cao và không dễ khuất phục trước khó khăn',
-  'Thiên Phủ':'ổn định, cẩn thận, giỏi tích lũy, tư duy bảo thủ nhưng an toàn và bền vững',
-  'Thái Âm':'cảm xúc phong phú, nội tâm sâu sắc, trực giác tốt, yêu cái đẹp và nghệ thuật',
-  'Tham Lang':'đa tài đa năng, ham muốn nhiều thứ, hấp dẫn và giỏi giao thiệp xã hội',
-  'Cự Môn':'hùng biện tốt, có tài thuyết phục, hay tranh luận và đôi khi đa nghi',
-  'Thiên Tướng':'trung thành, giỏi hỗ trợ người khác, kỷ luật và có năng lực tổ chức tốt',
-  'Thiên Lương':'nhân từ, hay giúp đỡ, có duyên với y tế hoặc tâm linh, đức hạnh cao',
-  'Thất Sát':'mạnh mẽ, độc lập, quyết liệt, không sợ thử thách và thường tự lập từ sớm',
-  'Phá Quân':'thích đột phá, không theo lối mòn, có sức chinh phục và khả năng cải cách mạnh mẽ',
-};
+const PHAN_LABELS_ISR = [
+  '','Tổng Quan Lá Số',
+  'Cung Mệnh','Cung Phụ Mẫu','Cung Phúc Đức','Cung Điền Trạch',
+  'Cung Quan Lộc','Cung Nô Bộc','Cung Thiên Di','Cung Tật Ách',
+  'Cung Tài Bạch','Cung Tử Tức','Cung Phu Thê','Cung Huynh Đệ',
+  'Tổng Quan Đại Vận',
+  'Đại Vận 1','Đại Vận 2','Đại Vận 3','Đại Vận 4','Đại Vận 5',
+  'Đại Vận 6','Đại Vận 7','Đại Vận 8','Đại Vận 9',
+  'Tiểu Vận Năm Xem',
+];
 
 function render24Sections(ls: Rec, params: IsrParams): string {
   const palaces   = (ls.palaces as Rec[]) || [];
   const scores    = (ls.cungScores as Record<string,Record<string,number>>) || {};
   const cachCuc   = (ls.cachCuc as Rec[]) || [];
+  const cachCucTC = (ls.cachCucTungCung as Record<string,string[]>) || {};
   const dvs       = (ls.daiVans as Rec[]) || [];
   const tieuVanSc = (ls.tieuVanScores as Rec[]) || [];
-  const cachCucTC = (ls.cachCucTungCung as Record<string,string[]>) || {};
-  const menhP     = palaces.find(p => p.isMenh) as Rec|undefined;
-  const cungMenh  = String(menhP?.cungName || '');
-  const chinhTinh = ((menhP?.majorStars as Rec[])||[]).map(s=>String(s.ten||'')).join(', ');
-  const canChiNam = String(ls.canChiNam || `${CAN_NAMES[params.canIdx]} ${CHI_NAMES[params.chiIdx]}`);
-  const napAm     = String(ls.napAm || '');
-  const cuc       = String(ls.cuc || '');
-  const { dd, mm, year, gioIdx, gioi, namXem } = params;
-  const gtLabel   = gioi === 'nam' ? 'Nam' : 'Nữ';
-  const gioLabel  = GIO_NAMES[gioIdx];
-  const pad       = (n: number) => String(n).padStart(2,'0');
+  const { namXem } = params;
 
   const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
   const MLABELS = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
+  const LOAI_COL: Record<string,string> = {
+    quy_cuc:'#7B3FA0',phu_cuc:'#1E6B3C',hung_cuc:'#C0392B',trung_cuc:'#9A7B3A',than_cu:'#555',
+  };
+  const LOAI_LABEL: Record<string,string> = {
+    quy_cuc:'Quý Cục',phu_cuc:'Phú Cục',hung_cuc:'Hung Cục',trung_cuc:'Trung Cục',than_cu:'Thần Cú',
+  };
+  const SAT_TPTC = ['Kình Dương','Đà La','Hỏa Tinh','Linh Tinh','Địa Không','Địa Kiếp'];
+  const BAI_TPTC = ['Thiên Khốc','Thiên Hư','Tang Môn','Bạch Hổ','Đại Hao','Tiểu Hao'];
+  const CAT_TPTC = ['Văn Xương','Văn Khúc','Thiên Khôi','Thiên Việt','Tả Phù','Hữu Bật','Lộc Tồn','Hóa Lộc','Hóa Quyền','Hóa Khoa'];
 
-  function avgScore(cungName: string): number {
-    const sc = scores[cungName];
-    if (!sc) return 0;
-    return Math.round(METRICS.reduce((s,m)=>s+(sc[m]||0),0)/METRICS.length*10)/10;
-  }
-
-  function miniScoreBars(cungName: string): string {
+  function scoreBars6(cungName: string): string {
     const sc = scores[cungName];
     if (!sc) return '';
     return `<div style="display:flex;flex-direction:column;gap:3px;margin-top:8px">${METRICS.map((m,i)=>{
-      const v=sc[m]||0;
-      const col=v>=7?'#1E6B3C':v>=5?'#1455A4':v>=3?'#9A7B3A':'#C0392B';
-      return `<div style="display:flex;align-items:center;gap:5px">
-        <span style="font-size:10px;color:#888;width:70px">${MLABELS[i]}</span>
+      const v=sc[m]||0; const col=v>=7?'#1FA3D6':v>=5?'#2F5BEA':v>=3?'#233E99':'#C0392B';
+      return `<div style="display:flex;align-items:center;gap:6px">
+        <span style="font-size:10px;color:#888;width:72px">${MLABELS[i]}</span>
         <div style="flex:1;height:5px;background:#e0e0e0;border-radius:3px;overflow:hidden">
           <div style="width:${v*10}%;height:100%;background:${col};border-radius:3px"></div>
         </div>
@@ -586,323 +553,304 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     }).join('')}</div>`;
   }
 
-  function sec(n: number, icon: string, title: string, body: string): string {
+  function sec(n: number, body: string): string {
+    const label = PHAN_LABELS_ISR[n] || `Phần ${n}`;
     return `<div class="s24" id="s${n}">
-<h2 class="s24h">${esc(icon)} ${esc(title)}</h2>
+<h2 class="s24h">Phần ${n} / 24 — ${esc(label)}</h2>
 <div class="s24b">${body}</div>
 </div>`;
   }
 
-  // ── Section 1: Tổng quan ──────────────────────────────────────────────────
-  const scMenh     = avgScore(cungMenh);
-  const hasGoodCC  = cachCuc.some(c => ['quy_cuc','phu_cuc'].includes(String(c.loai||'')));
-  const hasBadCC   = cachCuc.some(c => String(c.loai||'')==='hung_cuc');
-  const mainStar0  = chinhTinh.split(',')[0].trim();
-  const s1 = sec(1,'📜','Tổng Quan Lá Số',
-    `<p>Lá số tử vi <strong>${esc(canChiNam)} ${esc(gtLabel)}</strong>, sinh ngày <strong>${pad(dd)}/${pad(mm)}/${year}</strong> giờ <strong>${esc(gioLabel)}</strong> được lập theo cổ pháp Tử Vi Đẩu Số. Mệnh thuộc <strong>${esc(napAm)}</strong>, cục <strong>${esc(cuc)}</strong>.</p>
-    <p>Cung mệnh đóng tại cung <strong>${esc(cungMenh)}</strong>${chinhTinh?` với chính tinh <strong>${esc(chinhTinh)}</strong>`:''}. ${esc(CUNG_MEANING[cungMenh]||'')}${mainStar0 && STAR_TRAIT[mainStar0]?' Người mang chính tinh '+esc(mainStar0)+' thường '+esc(STAR_TRAIT[mainStar0])+'.':''}</p>
-    ${cachCuc.length>0
-      ?`<p>Lá số có <strong>${cachCuc.length} cách cục</strong> đặc biệt: <em>${esc(cachCuc.map(c=>String(c.ten||'')).join(', '))}</em>. ${hasGoodCC?'Đây là tín hiệu tích cực cho vận mệnh và sự nghiệp.':hasBadCC?'Cần lưu ý các yếu tố hung cục và có chiến lược phòng ngừa phù hợp.':'Lá số có điểm nổi bật cần phân tích kỹ.'}</p>`
-      :`<p>Lá số không có cách cục đặc biệt nổi bật — tốt xấu phụ thuộc vào các sao đơn lẻ và sự phối hợp giữa các cung.</p>`}
-    ${scMenh>0?`<p>Điểm tổng quan cung mệnh: <strong>${scMenh.toFixed(1)}/10</strong>. ${scMenh>=7?'Lá số nhìn chung có nền tảng tốt.':scMenh>=5?'Lá số ở mức trung bình khá, cần nỗ lực đúng hướng.':'Lá số có nhiều thách thức, cần kiên nhẫn vượt qua trở ngại.'} Xem phân tích chi tiết từng cung bên dưới.</p>`:''}`
-  );
+  // ── Section 1: Tổng Quan Lá Số ───────────────────────────────────────────
+  let b1 = '';
+  if (cachCuc.length > 0) {
+    b1 += `<div style="margin-bottom:12px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">⚙ Cách cục đặc biệt</div>`;
+    cachCuc.forEach(c => {
+      const loai = String(c.loai||'');
+      b1 += `<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;padding:8px 10px;background:#F5F4F0;border-radius:6px;border-left:3px solid ${LOAI_COL[loai]||'#888'}">
+        <span style="background:${LOAI_COL[loai]||'#888'};color:#fff;font-size:11px;font-weight:700;padding:2px 7px;border-radius:3px;white-space:nowrap">${esc(String(c.ten||''))}</span>
+        <span style="font-size:12px;color:#444;line-height:1.5">${esc(String(c.moTa||''))}</span>
+      </div>`;
+    });
+    b1 += `</div>`;
+  }
+  if (Object.keys(scores).length > 0) {
+    const allSc = Object.entries(scores).map(([c,sc])=>[c,METRICS.reduce((s,m)=>s+((sc as Record<string,number>)[m]||0),0)] as [string,number]);
+    const top3  = [...allSc].sort((a,b)=>b[1]-a[1]).slice(0,3);
+    const bot3  = [...allSc].sort((a,b)=>a[1]-b[1]).slice(0,3);
+    b1 += `<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">📊 Điểm mạnh / yếu nổi bật</div>
+      <div style="font-size:12px;color:#1E6B3C;margin-bottom:4px">Mạnh nhất: <strong>${top3.map(([c,s])=>`${esc(c)} (${s.toFixed(0)})`).join(', ')}</strong></div>
+      <div style="font-size:12px;color:#C0392B">Yếu nhất: <strong>${bot3.map(([c,s])=>`${esc(c)} (${s.toFixed(0)})`).join(', ')}</strong></div>
+    </div>`;
+  }
+  if (!b1) b1 = `<p>Lá số không có cách cục đặc biệt. Phân tích dựa trên từng sao và sự phối hợp giữa các cung.</p>`;
+  const s1 = sec(1, b1);
 
   // ── Sections 2–13: 12 Cung ───────────────────────────────────────────────
   const HOA_COL: Record<string,string> = {'Lộc':'#1E6B3C','Quyền':'#7B3FA0','Khoa':'#1455A4','Kỵ':'#C0392B'};
-  const SAT_NAMES = new Set(['Kình Dương','Đà La','Hỏa Tinh','Linh Tinh','Địa Không','Địa Kiếp']);
 
   const cungSecs = CUNG_12.map((cungName, i) => {
-    const palace   = palaces.find(p => p.cungName === cungName) as Rec|undefined;
-    const majStars = palace ? ((palace.majorStars as Rec[])||[]) : [];
-    const allStars = palace ? ((palace.stars as Rec[])||[]) : [];
-    const minStars = allStars.filter(s => !majStars.find(m => m.ten===s.ten));
-    const diacChi  = palace ? String(palace.diaChi||'') : '';
+    const palace    = palaces.find(p => p.cungName === cungName) as Rec|undefined;
+    const majStars  = palace ? ((palace.majorStars as Rec[])||[]) : [];
+    const allStars  = palace ? ((palace.stars as Rec[])||[]) : [];
+    const minStars  = allStars.filter(s => !majStars.find(m => m.ten===s.ten));
+    const diacChi   = palace ? String(palace.diaChi||'') : '';
     const trangSinh = palace ? String(palace.trangSinh||'') : '';
-    const isVong   = palace ? !!palace.isVong : false;
-    const avg      = avgScore(cungName);
-    const tags     = (cachCucTC[cungName]||[]).slice(0,3);
-    const satInCung = allStars.filter(s => SAT_NAMES.has(String(s.ten||'')));
-    const hasTuan  = allStars.some(s => s.ten==='Tuần');
-    const hasTriet = allStars.some(s => s.ten==='Triệt');
+    const isVong    = palace ? !!palace.isVong : false;
+    const ynItems   = cachCucTC[cungName] || [];
+    const ccInCung  = cachCuc.filter(c => String(c.cung||'')===cungName);
+    const sc        = scores[cungName];
 
-    const starsHTML = majStars.length > 0
-      ? majStars.map(s => {
-          const hoa   = String(s.hoa||'');
-          const bright = String(s.brightness||'');
-          const col   = hoa ? (HOA_COL[hoa]||'#1455A4') : '#061A2E';
-          return `<span style="display:inline-block;padding:2px 8px;background:${col};color:#fff;border-radius:4px;font-size:12px;font-weight:700;margin:2px 2px 2px 0">${esc(String(s.ten||''))}${hoa?' '+esc(hoa[0]):''}${bright==='Miếu'||bright==='Vượng'?'●':''}</span>`;
-        }).join('')
-      : '<span style="font-size:12px;color:#888;font-style:italic">Không có chính tinh</span>';
+    let body = '';
 
-    const minStarText = minStars.slice(0,6).map(s=>String(s.ten||'')).filter(Boolean).join(', ');
-    const satText     = satInCung.map(s=>String(s.ten||'')).join(', ');
+    // Chính tinh block
+    body += `<div style="margin-bottom:8px">`;
+    if (majStars.length === 0) {
+      const xung = palace?.xungChieuCung as Rec|undefined;
+      const xungStars = xung ? ((xung.majorStars as Rec[])||[]).map(s=>`${esc(String(s.ten||''))} (${esc(String(s.brightness||''))})`).join(', ') : '';
+      body += `<span style="font-size:12px;color:#888;font-style:italic">Vô chính diệu${xungStars?` — mượn từ cung xung: <strong>${xungStars}</strong>`:''}</span>`;
+    } else {
+      majStars.forEach(s => {
+        const hoa   = String(s.hoa||'');
+        const bright = String(s.brightness||'');
+        const brightCol = bright==='Miếu'||bright==='Vượng'?'#4ade80':bright==='Đắc'?'#86efac':bright==='Bình hòa'||bright==='Bình'?'#60a5fa':'#f87171';
+        body += `<span style="display:inline-block;margin:2px 4px 2px 0;padding:2px 8px;background:#061A2E;color:#fff;border-radius:4px;font-size:12px;font-weight:700">${esc(String(s.ten||''))} <span style="color:${brightCol};font-size:10px">(${esc(bright)})</span>${hoa?` <span style="color:#5FA8D3">[H.${esc(hoa[0])}]</span>`:''}</span>`;
+      });
+    }
+    body += `</div>`;
 
-    let interp = CUNG_MEANING[cungName]||'';
-    if (majStars.length > 0) {
-      const mName = String(majStars[0].ten||'');
-      const trait = STAR_TRAIT[mName];
-      if (trait) interp += ` Chính tinh ${esc(mName)} ở đây cho thấy chủ nhân ${esc(trait)}.`;
-    }
-    if (satInCung.length > 0) {
-      interp += ` Tuy nhiên sát tinh ${esc(satText)} hiện diện trong cung, có thể gây ra trở ngại hoặc biến cố liên quan đến ${esc(cungName.toLowerCase())}.`;
-    }
-    if (hasTuan || hasTriet) {
-      interp += ` Cung bị ${hasTuan?'Tuần':''} ${hasTriet?'Triệt':''} làm giảm sức mạnh của các sao trong cung này.`;
-    }
-    if (isVong) {
-      interp += ` Cung rơi vào Không Vong, ảnh hưởng bị suy giảm đáng kể.`;
-    }
-    if (trangSinh) {
-      interp += ` Trạng thái: <em>${esc(trangSinh)}</em>.`;
+    // Phụ tinh
+    const minNames = minStars.slice(0,8).map(s=>String(s.ten||'')).filter(Boolean).join(', ');
+    if (minNames) body += `<p style="font-size:11px;color:#888;margin-bottom:6px">Phụ tinh: ${esc(minNames)}</p>`;
+
+    // Trạng thái cung
+    const stateChips: string[] = [];
+    if (diacChi) stateChips.push(esc(diacChi));
+    if (trangSinh) stateChips.push(esc(trangSinh));
+    if (isVong) stateChips.push('<span style="color:#C0392B">Không Vong</span>');
+    const hasTuan  = allStars.some(s=>s.ten==='Tuần');
+    const hasTriet = allStars.some(s=>s.ten==='Triệt');
+    if (hasTuan)  stateChips.push('<span style="color:#5a4a00">Tuần</span>');
+    if (hasTriet) stateChips.push('<span style="color:#5a4a00">Triệt</span>');
+    if (stateChips.length) body += `<p style="font-size:11px;color:#888;margin-bottom:6px">${stateChips.join(' · ')}</p>`;
+
+    // Cách cục riêng cung
+    if (ccInCung.length > 0) {
+      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">⚙ Cách cục đặc biệt</div>`;
+      ccInCung.forEach(c => {
+        const loai = String(c.loai||'');
+        body += `<span style="display:inline-block;background:${LOAI_COL[loai]||'#888'};color:#fff;font-size:11px;font-weight:700;padding:2px 7px;border-radius:3px;margin:2px">${esc(String(c.ten||''))}</span>`;
+      });
+      body += `</div>`;
     }
 
-    return sec(i+2,
-      CUNG_ICON[cungName]||'★',
-      `Cung ${cungName}${diacChi?' ('+diacChi+')':''}${avg>0?' — '+avg.toFixed(1)+'/10':''}`,
-      `<div style="margin-bottom:8px">${starsHTML}</div>
-      ${minStarText?`<p style="font-size:12px;color:#666;margin-bottom:6px">Phụ tinh: <em>${esc(minStarText)}</em></p>`:''}
-      ${tags.length>0?`<div style="margin-bottom:8px">${tags.map(t=>`<span style="background:#F0F4FF;color:#1455A4;font-size:11px;padding:2px 7px;border-radius:3px;margin:2px 2px 2px 0;display:inline-block">${esc(t)}</span>`).join('')}</div>`:''}
-      <p style="font-size:13px;color:#444;line-height:1.7">${interp}</p>
-      ${miniScoreBars(cungName)}`
-    );
+    // Phân tích sao (cachCucTungCung)
+    if (ynItems.length > 0) {
+      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">📋 Phân tích sao</div>`;
+      ynItems.slice(0, 8).forEach(y => {
+        const isGreatCat = y.includes('đại cát')||y.includes('đại phú');
+        const isCat      = !isGreatCat && (y.includes('[cát]')||y.includes('phú quý')||y.includes('giàu sang'));
+        const isGreatHung= y.includes('đại hung');
+        const isHung     = !isGreatHung && (y.includes('hung')||y.includes('vất vả')||y.includes('tai'));
+        const isTT       = y.includes('Tuần')||y.includes('Triệt');
+        const col = isGreatCat?'#4ade80':isCat?'#86efac':isGreatHung?'#f87171':isHung?'#fca5a5':isTT?'#fbbf24':'#94a3b8';
+        body += `<div style="font-size:12px;color:${col};padding:2px 0;line-height:1.5">• ${esc(y)}</div>`;
+      });
+      body += `</div>`;
+    }
+
+    // Score bars 6 chiều
+    if (sc) body += scoreBars6(cungName);
+
+    return sec(i+2, body);
   });
 
-  // ── Section 14: Cách cục chi tiết ────────────────────────────────────────
-  const LOAI_LABEL: Record<string,string> = {
-    quy_cuc:'Quý Cục', phu_cuc:'Phú Cục', hung_cuc:'Hung Cục',
-    trung_cuc:'Trung Cục', than_cu:'Thần Cú',
-  };
-  const LOAI_COL: Record<string,string> = {
-    quy_cuc:'#7B3FA0', phu_cuc:'#1E6B3C', hung_cuc:'#C0392B',
-    trung_cuc:'#9A7B3A', than_cu:'#555',
-  };
-  const s14 = sec(14,'⚙','Cách Cục Chi Tiết',
-    cachCuc.length > 0
-      ? cachCuc.map(c => {
-          const loai = String(c.loai||'');
-          return `<div style="padding:12px;background:#F5F4F0;border-radius:8px;border-left:3px solid ${LOAI_COL[loai]||'#9A7B3A'};margin-bottom:10px">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-              <strong style="font-size:13px;color:#061A2E">${esc(String(c.ten||''))}</strong>
-              <span style="font-size:11px;color:#888">${esc(LOAI_LABEL[loai]||loai)}</span>
+  // ── Section 14: Tổng quan Đại Vận ────────────────────────────────────────
+  let b14 = '';
+  if (dvs.length > 0) {
+    b14 += `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">`;
+    dvs.slice(0,9).forEach((dv, idx) => {
+      const sc2=(dv.scoring as Rec)||{}; const t2=Number(sc2.tong)||0;
+      const isCur=!!dv.isCurrentDV;
+      const col=t2>=7?'#1E6B3C':t2>=4?'#9A7B3A':'#C0392B';
+      b14 += `<div style="text-align:center;padding:8px 10px;border:${isCur?'2px solid #9A7B3A':'1px solid #e0e0e0'};border-radius:7px;background:${isCur?'#F9F4EB':'#fff'};min-width:66px">
+        <div style="font-size:10px;color:#888;margin-bottom:2px">ĐV ${idx+1}</div>
+        <div style="font-size:12px;font-weight:700;color:#061A2E">${esc(String(dv.canChi||''))}</div>
+        <div style="font-size:9px;color:#999">${esc(String(dv.tuoiStart||''))}–${esc(String(dv.tuoiEnd||''))}t</div>
+        ${t2>0?`<div style="font-size:11px;font-weight:700;color:${col};margin-top:2px">${t2}/10</div>`:''}
+        ${isCur?`<div style="font-size:9px;color:#9A7B3A;font-weight:700">Hiện tại</div>`:''}
+      </div>`;
+    });
+    b14 += `</div>`;
+    b14 += `<p style="font-size:12px;color:#666">Điểm đại vận tính theo 3 trụ: Thiên Thời (0-5), Địa Lợi (0-1), Nhân Hòa (0-4). Tổng tối đa 10 điểm. <a href="/" style="color:#1455A4">Xem AI luận giải từng đại vận chi tiết →</a></p>`;
+  } else {
+    b14 = `<p>Không có dữ liệu đại vận.</p>`;
+  }
+  const s14 = sec(14, b14);
+
+  // ── Sections 15–23: Đại Vận 1–9 ──────────────────────────────────────────
+  function buildDVSection(dvIdx: number, phanNum: number): string {
+    const dv = dvs[dvIdx] as Rec|undefined;
+    if (!dv) return sec(phanNum, `<p style="color:#888;font-style:italic">Không có dữ liệu đại vận ${dvIdx+1}.</p>`);
+
+    const dvPalace = dv.cungIdx !== undefined ? (palaces[Number(dv.cungIdx)] as Rec|undefined) : undefined;
+    const dvCungName = dvPalace ? String(dvPalace.cungName||'') : '';
+    const dvDC       = dvPalace ? String(dvPalace.diaChi||'') : '';
+    const sc         = (dv.scoring as Rec)||{};
+    const isCur      = !!dv.isCurrentDV;
+
+    // Override PHAN_LABELS_ISR with actual DV canChi + ages
+    const dvLabel = `${PHAN_LABELS_ISR[phanNum]} — ${esc(String(dv.canChi||''))} (${esc(String(dv.tuoiStart||''))}–${esc(String(dv.tuoiEnd||''))}t)${isCur?' ★ Hiện tại':''}`;
+
+    let body = '';
+
+    // Scoring bars (Thiên Thời / Địa Lợi / Nhân Hòa / Tổng)
+    if (sc.tong !== undefined) {
+      const ttSc = Number((sc.thienThoi as Rec)?.score ?? sc.thienThoi ?? 0);
+      const dlSc = Number((sc.diaLoi as Rec)?.score ?? sc.diaLoi ?? 0);
+      const nhSc = Number((sc.nhanHoa as Rec)?.score ?? sc.nhanHoa ?? 0);
+      const tong = Number(sc.tong)||0;
+      const totCol = tong>=7?'#4ade80':tong>=4?'#60a5fa':'#f87171';
+      const nhDetail = sc.nhanHoa as Rec|undefined;
+      body += `<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">📊 Scoring — Cung ${esc(dvCungName)} (${esc(dvDC)})</div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          ${[['Thiên Thời',ttSc,5,'#c9a84c'],['Địa Lợi',dlSc,1,'#0E7490'],['Nhân Hòa',nhSc,4,'#7B2FBE']].map(([lbl,v,max,col])=>`
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:10px;color:#888;width:72px">${esc(String(lbl))}</span>
+              <div style="flex:1;height:5px;background:#e0e0e0;border-radius:3px;overflow:hidden">
+                <div style="width:${(Number(v)/Number(max)*100).toFixed(0)}%;height:100%;background:${esc(String(col))};border-radius:3px"></div>
+              </div>
+              <span style="font-size:10px;color:#555;width:28px">${Number(v).toFixed(0)}/${max}</span>
+            </div>`).join('')}
+          <div style="display:flex;align-items:center;gap:6px;border-top:1px solid #e0e0e0;padding-top:4px;margin-top:2px">
+            <span style="font-size:10px;font-weight:700;color:#444;width:72px">Tổng ${esc(String(sc.flag||''))}</span>
+            <div style="flex:1;height:6px;background:#e0e0e0;border-radius:3px;overflow:hidden">
+              <div style="width:${tong*10}%;height:100%;background:${totCol};border-radius:3px"></div>
             </div>
-            <p style="font-size:13px;color:#444;line-height:1.6;margin:0">${esc(String(c.moTa||c.tomTat||''))}</p>
-          </div>`;
-        }).join('')
-      : `<p style="font-size:13px;color:#888;font-style:italic">Lá số không có cách cục đặc biệt. Phân tích dựa vào từng sao và sự phối hợp giữa các cung.</p>`
-  );
+            <span style="font-size:11px;font-weight:700;color:${totCol};width:28px">${tong}/10</span>
+          </div>
+        </div>
+        ${nhDetail?.boMenh?`<p style="font-size:11px;color:#888;margin-top:6px">Bộ Mệnh: ${esc(String(nhDetail.boMenh))} → Bộ ĐV: ${esc(String(nhDetail.boVan||''))}</p>`:''}</div>`;
+    }
 
-  // ── Section 15: Đại vận hiện tại ─────────────────────────────────────────
-  const curDV  = dvs.find(d => d.isCurrentDV) as Rec|undefined;
-  const dvSc   = curDV ? (curDV.scoring as Rec)||{} : {};
-  const dvTong = Number(dvSc.tong)||0;
-  const DV_DESC: Record<number,string> = {
-    9:'rất tốt — giai đoạn phát đạt mạnh',8:'tốt — nhiều thuận lợi',
-    7:'khá tốt — cần nỗ lực thêm để đạt đỉnh',6:'trung bình khá — cần cân nhắc kỹ',
-    5:'trung bình — phù hợp duy trì và củng cố',4:'trung bình yếu — cần thận trọng',
-    3:'yếu — nên giữ phòng thủ',2:'khó khăn — kiên trì vượt qua',1:'rất khó — tránh quyết định lớn',
-  };
-  const dvDesc = DV_DESC[Math.min(9,Math.max(1,Math.round(dvTong)))]||'trung bình';
-  const s15 = sec(15,'📅','Đại Vận Hiện Tại',
-    curDV
-      ? `<p>Đại vận hiện tại: <strong>${esc(String(curDV.canChi||''))}</strong> (tuổi ${esc(String(curDV.tuoiStart||''))}–${esc(String(curDV.tuoiEnd||''))}).</p>
-        ${dvTong>0?`<p>Điểm đại vận: <strong style="color:${dvTong>=7?'#1E6B3C':dvTong>=4?'#9A7B3A':'#C0392B'}">${dvTong.toFixed(1)}/10</strong> — ${esc(dvDesc)}.</p>`:''}
-        <p style="font-size:13px;color:#444;line-height:1.7">${dvTong>=7?`Đại vận ${esc(String(curDV.canChi||''))} tương đối thuận lợi, thích hợp để đầu tư vào sự nghiệp và phát triển bản thân trong giai đoạn này.`:dvTong>=4?`Đại vận ở mức trung bình, cần cân nhắc kỹ trước khi đưa ra các quyết định lớn.`:`Đại vận khó khăn — nên tập trung phòng thủ, tránh đầu tư mạo hiểm và chú trọng sức khỏe, gia đình.`}</p>
-        <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">
-          ${dvs.slice(0,9).map(dv=>{
-            const sc2=(dv.scoring as Rec)||{}; const t2=Number(sc2.tong)||0;
-            const isCur=!!dv.isCurrentDV;
-            return `<div style="text-align:center;padding:6px 8px;border:${isCur?'2px solid #9A7B3A':'1px solid #e0e0e0'};border-radius:6px;background:${isCur?'#F9F4EB':'#fff'};min-width:58px">
-              <div style="font-size:9px;color:#888">${esc(String(dv.tuoiStart||''))}–${esc(String(dv.tuoiEnd||''))}t</div>
-              <div style="font-size:12px;font-weight:700;color:#061A2E">${esc(String(dv.canChi||''))}</div>
-              ${t2>0?`<div style="font-size:10px;color:${t2>=7?'#1E6B3C':t2>=4?'#9A7B3A':'#C0392B'}">${t2}/10</div>`:''}
-            </div>`;
-          }).join('')}
-        </div>`
-      : `<p style="font-size:13px;color:#888;font-style:italic">Không xác định được đại vận hiện tại với năm xem ${namXem}.</p>`
-  );
+    // Chính tinh cung đại vận
+    if (dvPalace) {
+      const majDV  = (dvPalace.majorStars as Rec[])||[];
+      const xungDV = dvPalace.xungChieuCung as Rec|undefined;
+      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">⭐ Chính tinh cung đại vận</div>`;
+      if (majDV.length === 0) {
+        const xungStars = xungDV ? ((xungDV.majorStars as Rec[])||[]).map(s=>`${esc(String(s.ten||''))} (${esc(String(s.brightness||''))})`).join(', ') : '';
+        body += `<div style="font-size:12px;color:#94a3b8;font-style:italic">Vô chính diệu${xungStars?` — mượn từ cung xung: <strong>${xungStars}</strong>`:''}</div>`;
+      } else {
+        majDV.forEach(s => {
+          const bright = String(s.brightness||'');
+          const bCol = bright==='Miếu'||bright==='Vượng'?'#4ade80':bright==='Đắc'?'#86efac':bright==='Bình hòa'||bright==='Bình'?'#60a5fa':'#f87171';
+          const hoa   = String(s.hoa||'');
+          body += `<div style="font-size:12px;color:#ddd;margin:2px 0"><span style="font-weight:600;color:#061A2E">${esc(String(s.ten||''))}</span> <span style="color:${bCol};font-size:11px">(${esc(bright)})</span>${hoa?` <span style="color:#1455A4">[Hóa ${esc(hoa)}]</span>`:''}</div>`;
+        });
+      }
+      body += `</div>`;
 
-  // ── Section 16: Tiểu vận năm namXem ──────────────────────────────────────
+      // Sao tam phương tứ chính
+      const tptcP = [dvPalace, ...((dvPalace.tamHopCungs as Rec[])||[]), xungDV].filter(Boolean) as Rec[];
+      const tptcNames = tptcP.flatMap(p => ((p.stars as Rec[])||[]).map(s=>String(s.ten||'')));
+      const allDVStars = (dvPalace.stars as Rec[])||[];
+      const hasTuan  = allDVStars.some(s=>s.ten==='Tuần');
+      const hasTriet = allDVStars.some(s=>s.ten==='Triệt');
+      const catIn  = CAT_TPTC.filter(s=>tptcNames.includes(s));
+      const satIn  = SAT_TPTC.filter(s=>tptcNames.includes(s));
+      const baiIn  = BAI_TPTC.filter(s=>tptcNames.includes(s));
+
+      if (catIn.length||satIn.length||baiIn.length||hasTuan||hasTriet) {
+        body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">🔍 Sao tam phương tứ chính</div>`;
+        if (catIn.length)  body += `<div style="font-size:12px;color:#86efac;margin:2px 0">Cát tinh: ${esc(catIn.join(', '))}</div>`;
+        if (satIn.length)  body += `<div style="font-size:12px;color:#f87171;margin:2px 0">Sát tinh: ${esc(satIn.join(', '))}</div>`;
+        if (baiIn.length)  body += `<div style="font-size:12px;color:#fca5a5;margin:2px 0">Bại tinh: ${esc(baiIn.join(', '))}</div>`;
+        if (hasTuan)  body += `<div style="font-size:12px;color:#fbbf24;margin:2px 0">Tuần án ngữ cung đại vận</div>`;
+        if (hasTriet) body += `<div style="font-size:12px;color:#fbbf24;margin:2px 0">Triệt án ngữ cung đại vận</div>`;
+        body += `</div>`;
+      }
+    }
+
+    // Cách cục liên quan
+    const ccDV = cachCuc.filter(c => String(c.cung||'')===dvCungName||String(c.cung||'')==='');
+    if (ccDV.length > 0) {
+      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">⚙ Cách cục liên quan</div>`;
+      ccDV.forEach(c => {
+        const loai = String(c.loai||'');
+        body += `<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:5px;padding:7px 10px;background:#F5F4F0;border-radius:5px;border-left:2px solid ${LOAI_COL[loai]||'#888'}">
+          <span style="background:${LOAI_COL[loai]||'#888'};color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:3px;white-space:nowrap">${esc(String(c.ten||''))}</span>
+          <span style="font-size:11px;color:#444;line-height:1.4">${esc(String(c.moTa||''))}</span>
+        </div>`;
+      });
+      body += `</div>`;
+    }
+
+    // Luận đoán rules
+    const dvRules = (dv.rules as Rec[])||[];
+    if (dvRules.length > 0) {
+      const totR  = dvRules.filter(r=>r.type==='tot');
+      const xauR  = dvRules.filter(r=>r.type==='xau');
+      const cbR   = dvRules.filter(r=>r.type==='canh_bao');
+      const trungR = dvRules.filter(r=>r.type==='trung');
+      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">🔮 Luận đoán vận hạn</div>`;
+      totR.forEach(r   => { body += `<div style="font-size:12px;color:#86efac;padding:2px 0;line-height:1.5">✦ ${esc(String(r.text||''))}</div>`; });
+      trungR.forEach(r => { body += `<div style="font-size:12px;color:#94a3b8;padding:2px 0;line-height:1.5">◆ ${esc(String(r.text||''))}</div>`; });
+      xauR.forEach(r   => { body += `<div style="font-size:12px;color:#f87171;padding:2px 0;line-height:1.5">▼ ${esc(String(r.text||''))}</div>`; });
+      cbR.forEach(r    => { body += `<div style="font-size:12px;color:#f87171;font-weight:600;padding:2px 0;line-height:1.5">⚠ ${esc(String(r.text||''))}</div>`; });
+      body += `</div>`;
+    }
+
+    if (!body) body = `<p style="color:#888;font-style:italic">Không đủ dữ liệu để phân tích đại vận này.</p>`;
+
+    // Return with dynamic title including canChi + age
+    return `<div class="s24" id="s${phanNum}">
+<h2 class="s24h">Phần ${phanNum} / 24 — ${dvLabel}</h2>
+<div class="s24b">${body}</div>
+</div>`;
+  }
+
+  const dvSecs = Array.from({length:9}, (_, i) => buildDVSection(i, 15+i));
+
+  // ── Section 24: Tiểu Vận Năm Xem ─────────────────────────────────────────
+  const curDV    = dvs.find(d => d.isCurrentDV) as Rec|undefined;
   const tvThis   = tieuVanSc.find(t=>Number(t.nam)===namXem) as Rec|undefined;
   const tvScore  = tvThis ? Number(tvThis.mainScore||0) : 0;
   const tvDC     = tvThis ? String(tvThis.diaChi||'') : '';
   const tvDir    = tvThis ? String(tvThis.direction||'') : '';
-  const tvDirLbl = tvDir==='up'?'đang tăng — thuận chiều':tvDir==='down'?'đang giảm — cần thận trọng':'ổn định — không đột biến';
-  const s16 = sec(16,'🔮',`Tiểu Vận Năm ${namXem}`,
-    tvThis
-      ? `<p>Tiểu vận năm <strong>${namXem}</strong>: cung <strong>${esc(tvDC)}</strong>. Điểm: <strong style="color:${tvScore>=7?'#1E6B3C':tvScore>=4?'#9A7B3A':'#C0392B'}">${tvScore.toFixed(1)}/10</strong>.</p>
-        <p style="font-size:13px;color:#444;line-height:1.7">Xu hướng tiểu vận năm ${namXem} <strong>${esc(tvDirLbl)}</strong>. ${tvScore>=7?`Năm ${namXem} nhìn chung thuận lợi — thích hợp thúc đẩy sự nghiệp và tài chính.`:tvScore>=4?`Năm ${namXem} ở mức trung bình, cần cân nhắc kỹ các quyết định lớn.`:`Năm ${namXem} có nhiều thách thức, nên giữ ổn định và không mạo hiểm.`}</p>
-        ${Number(tvThis.satCount)>0?`<p style="font-size:12px;color:#C0392B">⚠ Có ${tvThis.satCount} sát tinh ảnh hưởng trong năm này — chú ý sức khỏe và tránh rủi ro.</p>`:''}`
-      : `<p>Không tìm thấy dữ liệu tiểu vận năm ${namXem}. <a href="/" style="color:#1455A4">Xem luận giải đầy đủ tại đây</a>.</p>`
-  );
-
-  // ── Section 17: Điểm mạnh tổng thể ──────────────────────────────────────
-  const allCungSc = CUNG_12.map(c=>({name:c,avg:avgScore(c)})).filter(x=>x.avg>0);
-  const top3 = [...allCungSc].sort((a,b)=>b.avg-a.avg).slice(0,3);
-  const s17 = sec(17,'💪','Điểm Mạnh Tổng Thể',
-    top3.length>0
-      ? `<p>Ba cung có điểm cao nhất trong lá số này:</p>
-        ${top3.map(x=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;padding:8px 12px;background:#F0FFF4;border-radius:6px;border-left:3px solid #1E6B3C">
-          <div style="font-weight:700;color:#061A2E;min-width:80px">${esc(x.name)}</div>
-          <div style="flex:1;height:8px;background:#e0e0e0;border-radius:4px;overflow:hidden">
-            <div style="width:${x.avg*10}%;height:100%;background:#1E6B3C;border-radius:4px"></div>
-          </div>
-          <div style="font-weight:700;color:#1E6B3C;min-width:40px">${x.avg.toFixed(1)}/10</div>
-        </div>`).join('')}
-        <p style="font-size:13px;color:#444;line-height:1.7;margin-top:10px">Cung <strong>${esc(top3[0].name)}</strong> là điểm mạnh nổi bật nhất. ${esc(CUNG_MEANING[top3[0].name]||'')} Đây là lĩnh vực có lợi thế tự nhiên cần khai thác.</p>`
-      : `<p style="color:#888;font-style:italic">Chưa đủ dữ liệu phân tích điểm mạnh.</p>`
-  );
-
-  // ── Section 18: Điểm cần cải thiện ──────────────────────────────────────
-  const bot3 = [...allCungSc].sort((a,b)=>a.avg-b.avg).slice(0,3);
-  const s18 = sec(18,'🔧','Điểm Cần Cải Thiện',
-    bot3.length>0
-      ? `<p>Ba cung có điểm thấp nhất cần được quan tâm:</p>
-        ${bot3.map(x=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;padding:8px 12px;background:#FFF8F0;border-radius:6px;border-left:3px solid ${x.avg<4?'#C0392B':'#9A7B3A'}">
-          <div style="font-weight:700;color:#061A2E;min-width:80px">${esc(x.name)}</div>
-          <div style="flex:1;height:8px;background:#e0e0e0;border-radius:4px;overflow:hidden">
-            <div style="width:${x.avg*10}%;height:100%;background:${x.avg<4?'#C0392B':'#9A7B3A'};border-radius:4px"></div>
-          </div>
-          <div style="font-weight:700;color:${x.avg<4?'#C0392B':'#9A7B3A'};min-width:40px">${x.avg.toFixed(1)}/10</div>
-        </div>`).join('')}
-        <p style="font-size:13px;color:#444;line-height:1.7;margin-top:10px">Cung <strong>${esc(bot3[0].name)}</strong> cần được chú ý nhất. ${esc(CUNG_MEANING[bot3[0].name]||'')} Hãy có chiến lược cụ thể để cải thiện lĩnh vực này.</p>`
-      : `<p style="color:#888;font-style:italic">Chưa đủ dữ liệu phân tích.</p>`
-  );
-
-  // ── Section 19: Tứ Hóa ───────────────────────────────────────────────────
-  const HOA_DESC: Record<string,string> = {
-    'Lộc':'mang lại tài lộc, thuận lợi vật chất — rất tốt cho cung này',
-    'Quyền':'tăng cường quyền lực, địa vị và khả năng tự chủ',
-    'Khoa':'mang lại trí tuệ, danh tiếng học thuật và danh dự',
-    'Kỵ':'gây ra trở ngại, thị phi hoặc tổn thất — cần cẩn thận',
-  };
-  interface HoaEntry { ten: string; hoa: string; cung: string }
-  const hoaStars: HoaEntry[] = [];
-  palaces.forEach(p => {
-    const cName = String(p.cungName||'');
-    ((p.stars as Rec[])||[]).forEach(s => {
-      const hoa = String(s.hoa||'');
-      if (hoa) hoaStars.push({ten:String(s.ten||''),hoa,cung:cName});
-    });
-  });
-  const s19 = sec(19,'✨','Tứ Hóa Bản Mệnh',
-    hoaStars.length>0
-      ? `<p>Trong lá số có ${hoaStars.length} sao Hóa đặc biệt:</p>
-        ${hoaStars.map(h=>`<div style="padding:8px 12px;background:#F5F4F0;border-radius:6px;border-left:3px solid ${HOA_COL[h.hoa]||'#888'};margin-bottom:8px;display:flex;align-items:flex-start;gap:10px">
-          <div style="min-width:140px"><span style="font-weight:700;color:${HOA_COL[h.hoa]||'#333'}">${esc(h.ten)} Hóa ${esc(h.hoa)}</span> <span style="color:#888;font-size:12px">cung ${esc(h.cung)}</span></div>
-          <div style="font-size:12px;color:#444">${esc(HOA_DESC[h.hoa]||h.hoa)}</div>
-        </div>`).join('')}
-        <p style="font-size:12px;color:#666;margin-top:8px">Tứ Hóa xác định theo Can Năm sinh (${esc(canChiNam.split(' ')[0]||'')}). Vị trí sao Hóa rơi vào cung nào sẽ khuếch đại năng lực hoặc thách thức của cung đó.</p>`
-      : `<p style="color:#888;font-style:italic">Không xác định được Tứ Hóa trong lá số này.</p>`
-  );
-
-  // ── Section 20: Thần Sát ─────────────────────────────────────────────────
-  const SAT_DESC: Record<string,string> = {
-    'Kình Dương':'sao sát phạt mạnh, gây xung đột và dễ tổn thương do bạo lực hoặc tai nạn',
-    'Đà La':'sao cản trở, gây trì hoãn và khó khăn kéo dài trong lĩnh vực liên quan',
-    'Hỏa Tinh':'sao bốc đồng, gây biến cố bất ngờ và tính khí nóng nảy',
-    'Linh Tinh':'sao âm tính, gây tai họa âm thầm và vấn đề sức khỏe',
-    'Địa Không':'sao hao tán, gây mất mát và công sức đổ sông đổ biển',
-    'Địa Kiếp':'sao kiếp tài, gây hao tài và thiệt thòi bất ngờ',
-  };
-  interface SatEntry { ten: string; cung: string }
-  const satFound: SatEntry[] = [];
-  palaces.forEach(p => {
-    ((p.stars as Rec[])||[]).forEach(s => {
-      if (SAT_NAMES.has(String(s.ten||''))) {
-        satFound.push({ten:String(s.ten||''),cung:String(p.cungName||'')});
-      }
-    });
-  });
-  const s20 = sec(20,'⚠','Thần Sát Quan Trọng',
-    satFound.length>0
-      ? `<p>Lá số có ${satFound.length} sát tinh quan trọng:</p>
-        ${satFound.map(s=>`<div style="padding:8px 12px;background:#FFF5F5;border-radius:6px;border-left:3px solid #C0392B;margin-bottom:8px">
-          <span style="font-weight:700;color:#C0392B">${esc(s.ten)}</span>
-          <span style="color:#888;font-size:12px"> ở cung ${esc(s.cung)}</span>
-          <p style="font-size:12px;color:#444;margin:4px 0 0">${esc(SAT_DESC[s.ten]||'')} Ảnh hưởng đến lĩnh vực ${esc(s.cung.toLowerCase())}.</p>
-        </div>`).join('')}
-        <p style="font-size:12px;color:#666;margin-top:8px">Sát tinh không luôn xấu — đôi khi tạo ra động lực và sức mạnh nếu được điều hòa đúng cách.</p>`
-      : `<p>Lá số không có sát tinh lớn đáng lo ngại — đây là dấu hiệu tốt về sự ổn định và ít biến cố bất ngờ.</p>`
-  );
-
-  // ── Section 21: Tuần/Triệt ───────────────────────────────────────────────
-  interface TTEntry { cung: string; type: string }
-  const tuanTriet: TTEntry[] = [];
-  palaces.forEach(p => {
-    ((p.stars as Rec[])||[]).forEach(s => {
-      if (s.ten==='Tuần')  tuanTriet.push({cung:String(p.cungName||''),type:'Tuần'});
-      if (s.ten==='Triệt') tuanTriet.push({cung:String(p.cungName||''),type:'Triệt'});
-    });
-  });
-  const s21 = sec(21,'🔒','Tuần Triệt Ảnh Hưởng',
-    tuanTriet.length>0
-      ? `<p>Các cung bị Tuần/Triệt trong lá số:</p>
-        ${tuanTriet.map(t=>`<div style="padding:8px 12px;background:#F5F4F0;border-radius:6px;margin-bottom:6px">
-          <span style="font-weight:700;color:#5a4a00">${esc(t.type)}</span> ở cung <strong>${esc(t.cung)}</strong>
-          <p style="font-size:12px;color:#666;margin:4px 0 0">${t.type==='Tuần'?'Tuần làm suy yếu hiệu lực của tất cả sao trong cung, bất kể tốt hay xấu.':'Triệt làm triệt tiêu một phần lực của sao — ảnh hưởng đến '+esc(CUNG_MEANING[t.cung]?.split('.')[0]||t.cung)+'.'}</p>
-        </div>`).join('')}
-        <p style="font-size:12px;color:#666;margin-top:8px">Tuần và Triệt không phải hung tinh — chúng chỉ làm giảm hoặc trung hòa sao có mặt trong cung đó.</p>`
-      : `<p>Lá số không có cung nào bị Tuần hoặc Triệt — các sao phát huy đầy đủ sức mạnh trong từng cung.</p>`
-  );
-
-  // ── Section 22: Vận năm namXem tổng hợp ──────────────────────────────────
-  const tvWindow = tieuVanSc
-    .filter(t=>Number(t.nam)>=namXem-1&&Number(t.nam)<=namXem+1)
+  const tvWindow = tieuVanSc.filter(t=>Number(t.nam)>=namXem-1&&Number(t.nam)<=namXem+2)
     .sort((a,b)=>Number(a.nam)-Number(b.nam));
-  const combinedScore = dvTong>0&&tvScore>0 ? Math.round((dvTong+tvScore)/2*10)/10 : 0;
-  const s22 = sec(22,'📊',`Vận Hạn Năm ${namXem} Tổng Hợp`,
-    `${curDV?`<p style="font-size:13px;color:#444;line-height:1.7">Đại vận <strong>${esc(String(curDV.canChi||''))}</strong>${dvTong>0?` (${dvTong.toFixed(1)}/10 — ${esc(dvDesc)})`:''} tạo nền tảng vận mệnh tổng thể cho giai đoạn này.</p>`:''}
-    ${tvThis?`<p style="font-size:13px;color:#444;line-height:1.7">Tiểu vận năm ${namXem} tại cung <strong>${esc(tvDC)}</strong>: ${tvScore.toFixed(1)}/10, xu hướng ${esc(tvDirLbl)}.</p>`:''}
-    ${tvWindow.length>1?`<div style="display:flex;gap:8px;margin:10px 0;flex-wrap:wrap">${tvWindow.map(t=>{
-      const tSc=Number(t.mainScore||0); const tNam=Number(t.nam);
-      const isThis=tNam===namXem;
-      return `<div style="text-align:center;padding:8px 10px;border:${isThis?'2px solid #1455A4':'1px solid #e0e0e0'};border-radius:6px;background:${isThis?'#EEF4FF':'#fff'};min-width:70px">
+
+  let b24 = '';
+  if (tvThis) {
+    const tvCol = tvScore>=7?'#1E6B3C':tvScore>=4?'#9A7B3A':'#C0392B';
+    const tvDirLbl = tvDir==='up'?'↑ Đang tăng':tvDir==='down'?'↓ Đang giảm':'→ Ổn định';
+    b24 += `<p>Tiểu vận năm <strong>${namXem}</strong>: cung <strong>${esc(tvDC)}</strong>. Điểm <strong style="color:${tvCol}">${tvScore.toFixed(1)}/10</strong> — ${esc(tvDirLbl)}.</p>`;
+    if (Number(tvThis.satCount)>0) b24 += `<p style="color:#C0392B;font-size:12px">⚠ ${tvThis.satCount} sát tinh ảnh hưởng — chú ý sức khỏe và tránh rủi ro.</p>`;
+    if (Number(tvThis.catCount)>0) b24 += `<p style="color:#1E6B3C;font-size:12px">✦ ${tvThis.catCount} cát tinh hỗ trợ trong năm này.</p>`;
+  }
+  if (curDV) {
+    const dvSc2 = (curDV.scoring as Rec)||{};
+    const dvT2  = Number(dvSc2.tong)||0;
+    b24 += `<p style="font-size:12px;color:#666">Đại vận đang chạy: <strong>${esc(String(curDV.canChi||''))}</strong> (${esc(String(curDV.tuoiStart||''))}–${esc(String(curDV.tuoiEnd||''))}t)${dvT2>0?`, điểm ${dvT2}/10`:''} — tiểu vận được xét trong bối cảnh đại vận này.</p>`;
+  }
+  if (tvWindow.length > 1) {
+    b24 += `<div style="display:flex;gap:6px;margin:10px 0;flex-wrap:wrap">`;
+    tvWindow.forEach(t => {
+      const tSc=Number(t.mainScore||0); const tNam=Number(t.nam); const isThis=tNam===namXem;
+      b24 += `<div style="text-align:center;padding:7px 10px;border:${isThis?'2px solid #1455A4':'1px solid #e0e0e0'};border-radius:6px;background:${isThis?'#EEF4FF':'#fff'};min-width:64px">
         <div style="font-size:10px;color:#888">${tNam}</div>
-        <div style="font-size:14px;font-weight:700;color:${tSc>=7?'#1E6B3C':tSc>=4?'#9A7B3A':'#C0392B'}">${tSc.toFixed(1)}</div>
+        <div style="font-size:13px;font-weight:700;color:${tSc>=7?'#1E6B3C':tSc>=4?'#9A7B3A':'#C0392B'}">${tSc.toFixed(1)}</div>
         <div style="font-size:10px;color:#888">${esc(String(t.diaChi||''))}</div>
       </div>`;
-    }).join('')}</div>`:''}
-    <p style="font-size:13px;color:#444;line-height:1.7">${
-      combinedScore>=6.5?`Tổng thể năm ${namXem} khá tích cực (điểm tổng hợp ${combinedScore.toFixed(1)}/10). Đây là thời điểm phù hợp để mở rộng sự nghiệp và đầu tư dài hạn.`:
-      combinedScore>=4?`Năm ${namXem} ở mức trung bình (điểm tổng hợp ${combinedScore.toFixed(1)}/10) — có thuận lợi nhất định nhưng cũng cần thận trọng trong các quyết định lớn.`:
-      combinedScore>0?`Năm ${namXem} cần thận trọng (điểm tổng hợp ${combinedScore.toFixed(1)}/10). Ưu tiên phòng thủ, chăm sóc sức khỏe và giữ gìn các mối quan hệ quan trọng.`:
-      `Xem luận giải đầy đủ để có nhận xét chi tiết về năm ${namXem}.`
-    }</p>`
-  );
+    });
+    b24 += `</div>`;
+  }
+  if (!b24) b24 = `<p>Không tìm thấy dữ liệu tiểu vận năm ${namXem}. <a href="/" style="color:#1455A4">Xem luận giải đầy đủ →</a></p>`;
+  b24 += `<p style="font-size:12px;color:#888;font-style:italic;margin-top:8px">Để xem luận giải AI chuyên sâu cho từng phần — tính cách, sự nghiệp, tình duyên, vận hạn — vui lòng dùng công cụ tại <a href="/" style="color:#1455A4">tuviminhbao.com</a>.</p>`;
+  const s24 = sec(24, b24);
 
-  // ── Section 23: Dự phóng năm tới ─────────────────────────────────────────
-  const tvNext   = tieuVanSc.find(t=>Number(t.nam)===namXem+1) as Rec|undefined;
-  const tvNextSc = tvNext ? Number(tvNext.mainScore||0) : 0;
-  const tvNextDC = tvNext ? String(tvNext.diaChi||'') : '';
-  const s23 = sec(23,'🔭',`Dự Phóng Năm ${namXem+1}`,
-    tvNext
-      ? `<p>Tiểu vận năm <strong>${namXem+1}</strong>: cung <strong>${esc(tvNextDC)}</strong>, điểm <strong style="color:${tvNextSc>=7?'#1E6B3C':tvNextSc>=4?'#9A7B3A':'#C0392B'}">${tvNextSc.toFixed(1)}/10</strong>.</p>
-        <p style="font-size:13px;color:#444;line-height:1.7">${
-          tvNextSc>tvScore?`Vận hạn năm ${namXem+1} có xu hướng tốt hơn năm ${namXem}. Hãy tận dụng năm ${namXem} để chuẩn bị nền tảng cho đà tăng tốc.`:
-          tvNextSc<tvScore?`Vận hạn năm ${namXem+1} có thể thấp hơn năm ${namXem}. Nên tận dụng tốt năm ${namXem} và chuẩn bị dự phòng cho năm tới.`:
-          `Vận hạn năm ${namXem+1} ổn định tương đương năm ${namXem} — tiếp tục duy trì chiến lược hiện tại.`
-        }</p>
-        ${Number(tvNext.satCount)>0?`<p style="font-size:12px;color:#C0392B">⚠ Năm ${namXem+1} có ${tvNext.satCount} sát tinh ảnh hưởng — chú ý sức khỏe và tránh rủi ro.</p>`:''}`
-      : `<p style="color:#888;font-style:italic">Không có dữ liệu tiểu vận năm ${namXem+1}. <a href="/" style="color:#1455A4">Xem luận giải đầy đủ tại đây</a>.</p>`
-  );
-
-  // ── Section 24: Kết luận ─────────────────────────────────────────────────
-  const totalAvg = allCungSc.length>0
-    ? Math.round(allCungSc.reduce((s,x)=>s+x.avg,0)/allCungSc.length*10)/10
-    : 0;
-  const s24 = sec(24,'🎯','Tổng Kết và Lời Khuyên',
-    `<p>Lá số <strong>${esc(canChiNam)} ${esc(gtLabel)}</strong>, sinh ${pad(dd)}/${pad(mm)}/${year} giờ ${esc(gioLabel)}, điểm tổng thể trung bình <strong>${totalAvg>0?totalAvg.toFixed(1)+'/10':'N/A'}</strong>.</p>
-    ${totalAvg>=7
-      ?`<p>Đây là lá số có nền tảng tốt với nhiều tiềm năng phát triển. Chủ nhân có lợi thế tự nhiên${cachCuc.length>0?` cùng ${cachCuc.length} cách cục đặc biệt`:''} — cần khai thác đúng hướng.</p>`
-      :totalAvg>=5
-      ?`<p>Lá số ở mức trung bình khá — có điểm mạnh cần phát huy và điểm yếu cần cải thiện. Thành công phụ thuộc nhiều vào nỗ lực cá nhân và lựa chọn đúng thời điểm.</p>`
-      :`<p>Lá số này có nhiều thách thức. Tuy nhiên khó khăn cũng là môi trường để trưởng thành và rèn luyện ý chí. Tập trung vào các cung mạnh, tránh liều lĩnh ở cung yếu.</p>`}
-    ${top3.length>0?`<p><strong>Tập trung khai thác:</strong> ${top3.map(x=>`${esc(x.name)} (${x.avg.toFixed(1)}/10)`).join(', ')} — lĩnh vực có lợi thế tự nhiên.</p>`:''}
-    ${bot3.length>0?`<p><strong>Cần cải thiện:</strong> ${bot3.map(x=>`${esc(x.name)} (${x.avg.toFixed(1)}/10)`).join(', ')} — cần đầu tư thêm thời gian và nỗ lực.</p>`:''}
-    <p style="font-size:13px;color:#888;font-style:italic;margin-top:12px">Phân tích này dựa trên cổ pháp Tử Vi Đẩu Số, tính toán tự động theo tham số lá số. Để có luận giải chuyên sâu hơn với AI phân tích 24 phần đầy đủ, vui lòng sử dụng công cụ tại <a href="/" style="color:#1455A4">tuviminhbao.com</a>.</p>`
-  );
-
-  return [s1, ...cungSecs, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24].join('\n');
+  return [s1, ...cungSecs, s14, ...dvSecs, s24].join('\n');
 }
 
 // ────────────────────────────────────────────────────────────────────────────
