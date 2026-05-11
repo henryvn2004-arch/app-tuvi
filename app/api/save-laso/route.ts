@@ -7,9 +7,11 @@ import { ok, err, options, parseBody } from '@/lib/cors';
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY!;
 
-function makeSlug(canChiNam: string, gioiTinh: string, namSinh: string, gioChi: string): string {
-  const rm = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[đĐ]/g,'d').toLowerCase().replace(/\s+/g,'-');
-  return [rm(canChiNam||''), gioiTinh==='nu'?'nu':'nam', namSinh||'', gioChi?'gio-'+rm(gioChi):''].filter(Boolean).join('-');
+function makeSlug(canChiNam: string, gioiTinh: string, ngaySinh: string, thangSinh: string, namSinh: string, gioChi: string): string {
+  const rm = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[đĐ]/g,'d').toLowerCase().replace(/\s+/g,'-');
+  const dd = ngaySinh ? String(ngaySinh).padStart(2,'0') : '';
+  const mm = thangSinh ? String(thangSinh).padStart(2,'0') : '';
+  return [rm(canChiNam||''), dd, mm, namSinh||'', gioiTinh==='nu'?'nu':'nam', gioChi?'gio-'+rm(gioChi):''].filter(Boolean).join('-');
 }
 
 export async function OPTIONS() { return options(); }
@@ -29,7 +31,14 @@ export async function POST(request: NextRequest) {
       if (user) userId = user.id;
     }
 
-    const slug = makeSlug(String(b.canChiNam), String(b.gioiTinh||''), String(b.namSinh), String(b.gioChi||''));
+    const slug = makeSlug(
+      String(b.canChiNam),
+      String(b.gioiTinh||''),
+      String(b.ngaySinh||''),
+      String(b.thangSinh||''),
+      String(b.namSinh),
+      String(b.gioChi||'')
+    );
 
     const payload: Record<string, unknown> = {
       slug,

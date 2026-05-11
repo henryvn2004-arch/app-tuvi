@@ -1656,23 +1656,23 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         return;
       }
 
-      // Show full P1, ẩn lock box
-      claudeBox.innerHTML = renderMarkdown(data.luanGiai)
-        + `<div class="ux-share-bar">
-            <button onclick="uxCopySection(this, 1)" class="ux-share-btn">📋 Sao chép phần này</button>
-          </div>`;
+      // Show full P1 với streaming animation, ẩn lock box
       claudeBox.style.display = '';
       lockBox.style.display = 'none';
+      streamIntoEl(claudeBox, renderMarkdown(data.luanGiai) + `<div class="ux-share-bar"><button onclick="uxCopySection(this, 1)" class="ux-share-btn">📋 Sao chép phần này</button></div>`, () => {});
       updateMucLuc(1, 'done');
 
     } catch(e) { /* silent fail — lock box vẫn hiện như cũ */ }
   }
 
   async function checkAndRenderPaywall() {
-    // Tạo slug tạm
+    // Tạo slug tạm — phải bao gồm ngày+tháng để tránh collision giữa người khác nhau cùng năm+giờ
     const tempSlug = toSlugAscii([
       _astrolabe.canChiNam||'',
-      _gioitinh, _nam,
+      String(_ngay).padStart(2,'0'),
+      String(_thang).padStart(2,'0'),
+      _nam,
+      _gioitinh,
       'gio-' + (_astrolabe._conv?.gioChi || 'unknown')
     ].join('-'));
     _pendingSlug = tempSlug;
@@ -1710,7 +1710,8 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 
   async function initiatePayment() {
     await TuviPaywall.requireCredits(_pendingSlug, async () => {
-      await startClaudeOrLoadCache(_pendingSlug);
+      // Vừa trả tiền → luôn chạy fresh, không redirect cache
+      await startClaudeluanGiai();
     });
   }
 
@@ -1838,6 +1839,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       let docs = '';
       try {
         const sr = await fetch('/api/search', {
+          method: 'POST', headers: {'Content-Type':'application/json'},
           body: JSON.stringify({ query: QUERIES[_currentPhan](), matchCount: _currentPhan===1?10:7 })
         });
         docs = (await sr.json()).docs || '';
@@ -1860,13 +1862,11 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 
       _luanGiaiStore[_currentPhan] = data.luanGiai || '';
 
-      // Điền content, ẩn lock box
+      // Điền content với streaming animation, ẩn lock box
       if (claudeBox) {
-        claudeBox.innerHTML = renderMarkdown(data.luanGiai)
-          + `<div class="ux-share-bar">
-              <button onclick="uxCopySection(this, ${_currentPhan})" class="ux-share-btn">📋 Sao chép phần này</button>
-            </div>`;
         claudeBox.style.display = '';
+        const shareBar = `<div class="ux-share-bar"><button onclick="uxCopySection(this, ${_currentPhan})" class="ux-share-btn">📋 Sao chép phần này</button></div>`;
+        streamIntoEl(claudeBox, renderMarkdown(data.luanGiai) + shareBar, () => {});
       }
       if (lockBox) lockBox.style.display = 'none';
 
