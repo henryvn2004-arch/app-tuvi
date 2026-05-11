@@ -5,49 +5,63 @@
 
 ---
 
-## 🔴 ĐANG LÀM — Pre-gen Lá Số SEO (438K pages)
+## 🔴 ĐANG LÀM — ISR Lá Số SEO (438K pages)
 
-**Branch:** `claude/charming-swartz-a756cb`  
-**Status:** Plan xong, CHƯA BUILD
+**Branch:** `claude/serene-elion-e060cc`  
+**Status:** ISR skeleton DONE + deployed, đang làm 24-section template content
 
-### Mục tiêu
-438K pre-generated SEO pages targeting long-tail:
-> "lá số tử vi canh ngọ sinh 03/05/1990 giờ sửu nam 2027"
-
-Scale: 50 năm (1960–2010) × 365 ngày × 12 giờ × 2 giới × namXem=2027
-
-### Slug format đã thống nhất
+### Slug format
 ```
 /la-so/{can-chi}-{dd}-{mm}-{yyyy}-gio-{gio}-{gioi-tinh}-{namXem}
-ví dụ: /la-so/canh-ngo-03-05-1990-gio-suu-nam-2027
+ví dụ: /la-so/canh-ngo-03-06-1998-gio-suu-nam-2027
 ```
 
-### Code đã push trên branch
-- `app/api/admin/gen-pregen-date/route.ts` — gen full-date records
-- `app/la-so/[slug]/route.ts` — buildPregenHTML với grid 4×4 + 24 phần
+### Kiến trúc: ISR compute on-demand
+- `app/la-so/[slug]/route.ts`: parse slug → loadEngine() → compute → HTML → cache CDN vĩnh viễn
+- Priority: laso_public → laso_pregen → **ISR compute** → redirect
+- Fix quan trọng: module-level `globalThis.location` mock (3 files) để tránh Next.js URL crash sau khi engine set `globalThis.window = globalThis`
 
-### Kiến trúc đã thống nhất: ISR (không dùng DB cho pre-gen)
-- Compute on-demand (~80ms), cache CDN vĩnh viễn
-- Supabase chỉ cho laso_public (user submissions)
-- Lý do: 438K rows × 20KB = ~8.7GB, vượt Supabase free (500MB) và Pro (8GB)
-
-### Thứ tự build (9 bước)
-1. [ ] Refactor `[slug]/route.ts`: ISR compute on-demand (bỏ DB lookup cho pre-gen)
-2. [ ] Update slug: thêm namXem vào cuối
-3. [ ] Trim tieuVanScores: chỉ lưu data của namXem (không cần 90 năm)
-4. [ ] Test 10 records (`preview=1` API)
-5. [ ] Tạo hub pages `/menh-kho/[year]` — QUAN TRỌNG cho Google crawl
-6. [ ] Related links trên mỗi lá số page (~15 links)
-7. [ ] Sitemap routes `/api/sitemap/pregen/[year].xml`
-8. [ ] GitHub Actions warm-up cron (1 năm/đêm, 50 đêm xong)
-9. [ ] Run full 438K
-
-### Internal linking (quan trọng nhất)
+### Discovery path
 ```
-Homepage → Mệnh Khố → /menh-kho/[year] → /la-so/[slug]
+Homepage → /menh-kho.html → /menh-kho/[year] → /menh-kho/[year]/[mm-dd] → /la-so/[slug]
 ```
-Mỗi lá số page có ~15 related links (cùng ngày/giờ khác, cùng ngày/giới khác)
+
+### Files đã làm trên branch
+- `app/la-so/[slug]/route.ts` — ISR compute (parseIsrSlug + loadEngine + renderGrid + renderTextBlocks + buildIsrHTML)
+- `app/menh-kho/[year]/route.ts` — Calendar hub 50 năm (1960–2010)
+- `app/menh-kho/[year]/[day]/route.ts` — Day hub, 24 cards (12 giờ × 2 giới)
+- `app/van-han/route.ts` — Hub page 12 chi × 3 năm
+- `app/van-han/[slug]/route.ts` — Level 1 (tuoi-[chi]-nam-[year]) + Level 2 (can-chi-nam-year)
+- `app/api/og/laso/route.tsx` — Enhanced OG image edge (1200×630)
+- `app/api/admin/sample-laso/route.ts` — Admin preview page
+- `public/llms.txt` — AEO: describe tool for LLM crawlers
+- `public/robots.txt` — Allow AI bots (GPTBot, ClaudeBot, PerplexityBot...)
+- `public/index.html` — SoftwareApplication JSON-LD schema
+
+### ✅ Bước tiếp theo: 24-section template content
+Thêm text content vào ISR page bằng template engine (0 AI token).
+Mỗi page sẽ có ~3000-5000 chữ unique dựa trên data từ `anSaoLaSo()`.
+
+**24 sections cần build:**
+```
+1.  Tổng quan lá số
+2-13. 12 cung (Mệnh, Phụ Mẫu, Phúc Đức, Điền Trạch, Quan Lộc,
+      Nô Bộc, Thiên Di, Tật Ách, Tài Bạch, Tử Tức, Phu Thê, Huynh Đệ)
+14. Cách cục chi tiết
+15. Đại vận hiện tại
+16. Tiểu vận năm [namXem]
+17. Điểm mạnh tổng thể
+18. Điểm cần cải thiện
+19-24. Nâng cao (thần sát, năm tới, v.v.)
+```
+
+**Template approach:** if/else logic dựa trên `majorStars`, `cungScores`, `cachCuc`
+từ engine output. Không cần AI — hoàn toàn deterministic.
 
 ### Test case
-- Nam, 03/05/1990, 1h30 sáng = giờ Sửu (index 1), namXem 2026
-- API test: `/api/admin/gen-pregen-date?secret=tuvi2024admin&preview=1&day=3&month=5&year=1990&gio=1&gt=nam&namXem=2026`
+- `/la-so/canh-ngo-03-06-1998-gio-suu-nam-2027` ✅ đang work trên localhost:3000
+- Engine output: Mậu Dần, Cung Mệnh Cự Môn, điểm 7.3/10, 4 cách cục
+
+### NAM_XEM
+- Hardcode 2027 trong `menh-kho/[year]/[day]/route.ts` (line: `const NAM_XEM = 2027`)
+- Update hằng năm thủ công
