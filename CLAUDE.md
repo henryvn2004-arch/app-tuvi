@@ -8,7 +8,7 @@
 ## 🔴 ĐANG LÀM — ISR Lá Số SEO (438K pages)
 
 **Branch:** `claude/serene-elion-e060cc`  
-**Status:** ISR skeleton DONE + deployed, đang làm 24-section template content
+**Status:** 24-section template DONE (commit c5dbc8a), sẵn sàng deploy + test
 
 ### Slug format
 ```
@@ -38,25 +38,30 @@ Homepage → /menh-kho.html → /menh-kho/[year] → /menh-kho/[year]/[mm-dd] �
 - `public/robots.txt` — Allow AI bots (GPTBot, ClaudeBot, PerplexityBot...)
 - `public/index.html` — SoftwareApplication JSON-LD schema
 
-### ✅ Bước tiếp theo: 24-section template content
-Thêm text content vào ISR page bằng template engine (0 AI token).
-Mỗi page sẽ có ~3000-5000 chữ unique dựa trên data từ `anSaoLaSo()`.
+### ✅ DONE: 24-section template content (commit c5dbc8a)
+Đã thêm `render24Sections(ls, params)` vào route.ts — 420 lines template logic.
 
-**24 sections cần build:**
+**Sections đã build:**
 ```
-1.  Tổng quan lá số
-2-13. 12 cung (Mệnh, Phụ Mẫu, Phúc Đức, Điền Trạch, Quan Lộc,
-      Nô Bộc, Thiên Di, Tật Ách, Tài Bạch, Tử Tức, Phu Thê, Huynh Đệ)
-14. Cách cục chi tiết
-15. Đại vận hiện tại
-16. Tiểu vận năm [namXem]
-17. Điểm mạnh tổng thể
-18. Điểm cần cải thiện
-19-24. Nâng cao (thần sát, năm tới, v.v.)
+1.  Tổng quan (cung mệnh, nạp âm, cục, cách cục tóm tắt)
+2-13. 12 cung (major stars, sat tinh, cachCucTungCung tags, miniScoreBars)
+14. Cách cục chi tiết (moTa per cach cuc)
+15. Đại vận hiện tại (scoring + DV timeline)
+16. Tiểu vận năm namXem (mainScore, direction, satCount)
+17. Điểm mạnh (top 3 cung by avg score)
+18. Điểm cần cải thiện (bot 3 cung by avg score)
+19. Tứ Hóa phân tích (Lộc/Quyền/Khoa/Kỵ position)
+20. Thần sát (Kình/Đà/Hỏa/Linh/Không/Kiếp per cung)
+21. Tuần/Triệt ảnh hưởng
+22. Vận năm namXem tổng hợp (DV + TV combined)
+23. Dự phóng năm namXem+1
+24. Tổng kết và lời khuyên
 ```
 
-**Template approach:** if/else logic dựa trên `majorStars`, `cungScores`, `cachCuc`
-từ engine output. Không cần AI — hoàn toàn deterministic.
+### 🔴 Bước tiếp theo: Deploy + test
+1. Deploy branch lên Vercel
+2. Test `/la-so/canh-ngo-03-06-1998-gio-suu-nam-2027` — verify 24 sections render
+3. Check word count: mỗi page có ≥3000 chữ unique
 
 ### Test case
 - `/la-so/canh-ngo-03-06-1998-gio-suu-nam-2027` ✅ đang work trên localhost:3000
