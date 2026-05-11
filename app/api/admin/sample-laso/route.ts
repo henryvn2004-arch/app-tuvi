@@ -8,6 +8,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
+// Module-level location mock — prevents Next.js URL parsing crash after engine load
+{
+  const _g = globalThis as Record<string, unknown>;
+  if (!_g.location) {
+    _g.location = { protocol:'https:', hostname:'tuviminhbao.com', host:'tuviminhbao.com', port:'', href:'https://tuviminhbao.com/', pathname:'/', search:'', hash:'' };
+  }
+}
+
 const ADMIN_SECRET = process.env.ADMIN_SECRET || 'tuvi2024admin';
 const BASE = 'https://www.tuviminhbao.com';
 
@@ -29,6 +37,9 @@ function loadEngine() {
   const code = readFileSync(join(process.cwd(), 'public', 'tuvi-ansao-engine.js'), 'utf-8');
   const g = globalThis as Rec;
   g.window = g;
+  if (!g.location) {
+    g.location = { protocol:'https:', hostname:'tuviminhbao.com', host:'tuviminhbao.com', port:'', href:'https://tuviminhbao.com/', pathname:'/', search:'', hash:'' };
+  }
   return (new Function('window','globalThis', code + '\nreturn{convertDuongToAm,anSaoLaSo};'))(g,g) as {
     convertDuongToAm: (...a: unknown[]) => unknown;
     anSaoLaSo: (...a: unknown[]) => unknown;

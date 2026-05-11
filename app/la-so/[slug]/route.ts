@@ -11,6 +11,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
+// ⚠️ Module-level: must run before any request so that if loadEngine() sets
+// globalThis.window = globalThis, Next.js URL parsing (getLocationOrigin)
+// won't crash looking for window.location.protocol
+{
+  const _g = globalThis as Record<string, unknown>;
+  if (!_g.location) {
+    _g.location = { protocol:'https:', hostname:'tuviminhbao.com', host:'tuviminhbao.com', port:'', href:'https://tuviminhbao.com/', pathname:'/', search:'', hash:'' };
+  }
+}
+
 const SB_URL = process.env.SUPABASE_URL!;
 const SB_KEY = process.env.SUPABASE_SERVICE_KEY!;
 const BASE   = 'https://www.tuviminhbao.com';
@@ -302,6 +312,11 @@ function loadEngine() {
   const code = readFileSync(join(process.cwd(), 'public', 'tuvi-ansao-engine.js'), 'utf-8');
   const g = globalThis as Rec;
   g.window = g;
+  // Provide mock location so Next.js shared utils don't crash when
+  // they check `typeof window !== 'undefined'` and then read window.location
+  if (!g.location) {
+    g.location = { protocol:'https:', hostname:'tuviminhbao.com', host:'tuviminhbao.com', port:'', href:'https://tuviminhbao.com/', pathname:'/', search:'', hash:'' };
+  }
   engineCache = (new Function('window','globalThis', code + '\nreturn{convertDuongToAm,anSaoLaSo};'))(g,g) as typeof engineCache;
   return engineCache!;
 }
