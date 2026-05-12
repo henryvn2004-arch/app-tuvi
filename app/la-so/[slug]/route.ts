@@ -622,6 +622,20 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     if (hasTriet) stateChips.push('<span style="color:#5a4a00">Triệt</span>');
     if (stateChips.length) body += `<p style="font-size:11px;color:#888;margin-bottom:6px">${stateChips.join(' · ')}</p>`;
 
+    // Sao tam phương tứ chính (SAT/BAI/CAT — giống logic DV sections)
+    const tptcCungs = [palace, ...((palace?.tamHopCungs as Rec[])||[]), palace?.xungChieuCung as Rec].filter(Boolean) as Rec[];
+    const tptcNames = tptcCungs.flatMap(p => ((p.stars as Rec[])||[]).map(s => String(s.ten||'')));
+    const catTPTC = CAT_TPTC.filter(s => tptcNames.includes(s));
+    const satTPTC = SAT_TPTC.filter(s => tptcNames.includes(s));
+    const baiTPTC = BAI_TPTC.filter(s => tptcNames.includes(s));
+    if (catTPTC.length || satTPTC.length || baiTPTC.length) {
+      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">🔍 Sao tam phương tứ chính</div>`;
+      if (catTPTC.length) body += `<div style="font-size:12px;color:#86efac;margin:2px 0">Cát tinh: ${esc(catTPTC.join(', '))}</div>`;
+      if (satTPTC.length) body += `<div style="font-size:12px;color:#f87171;margin:2px 0">Sát tinh: ${esc(satTPTC.join(', '))}</div>`;
+      if (baiTPTC.length) body += `<div style="font-size:12px;color:#fca5a5;margin:2px 0">Bại tinh: ${esc(baiTPTC.join(', '))}</div>`;
+      body += `</div>`;
+    }
+
     // Cách cục riêng cung
     if (ccInCung.length > 0) {
       body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">⚙ Cách cục đặc biệt</div>`;
