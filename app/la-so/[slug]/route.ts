@@ -488,10 +488,7 @@ function renderTextBlocks(ls: Rec): string {
       <div style="font-size:13px;font-weight:700;color:#061A2E;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #061A2E">⚙ Cách Cục</div>
       ${ccHTML}
     </div>
-    ${scoresHTML ? `<div style="background:#fff;border-radius:10px;padding:20px;border:1px solid #e0e0e0;margin-bottom:16px">
-      <div style="font-size:13px;font-weight:700;color:#061A2E;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #061A2E">📊 Điểm 6 Chiều</div>
-      ${scoresHTML}
-    </div>` : ''}
+
     ${dvHTML ? `<div style="background:#fff;border-radius:10px;padding:20px;border:1px solid #e0e0e0">
       <div style="font-size:13px;font-weight:700;color:#061A2E;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #061A2E">📅 Đại Vận</div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">${dvHTML}</div>
