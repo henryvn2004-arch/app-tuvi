@@ -126,55 +126,8 @@ const BAI_SAO_SET=new Set(['Đại Hao','Tiểu Hao','Bệnh Phù','Phục Binh'
 const TRANG_SINH_SET=new Set(['Tràng Sinh','Mộc Dục','Quan Đới','Lâm Quan','Đế Vượng','Suy','Bệnh','Tử','Mộ','Tuyệt','Thai','Dưỡng']);
 function bShort(b){return{Miếu:'M',Vượng:'V',Đắc:'Đ',Bình:'B',Hãm:'H'}[b]||''}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-// Hardcoded element color for ALL stars (compiled from tuvi-ansao-engine.js STAR_DATA)
-const ALL_STAR_COLOR={
-  // 14 Chính tinh
-  'Tử Vi':'tho','Thiên Cơ':'moc','Thái Dương':'hoa','Vũ Khúc':'kim','Thiên Đồng':'thuy',
-  'Liêm Trinh':'hoa','Thiên Phủ':'tho','Thái Âm':'thuy','Tham Lang':'thuy','Cự Môn':'thuy',
-  'Thiên Tướng':'thuy','Thiên Lương':'moc','Thất Sát':'kim','Phá Quân':'thuy',
-  // Sát tinh
-  'Kình Dương':'kim','Đà La':'kim',
-  'Hỏa Tinh':'hoa','Linh Tinh':'hoa','Kiếp Sát':'hoa',
-  'Lưu Hà':'thuy','Thiên Hình':'hoa','Thiên Không':'hoa',
-  'Địa Không':'hoa','Địa Kiếp':'hoa',
-  // Hung tinh
-  'Thiên La':'tho','Địa Võng':'tho','Thiên Thương':'tho','Thiên Sứ':'thuy',
-  'Tử Phù':'hoa','Trực Phù':'hoa',
-  // Bại tinh
-  'Phá Toái':'hoa','Tang Môn':'moc','Quan Phù':'hoa','Bạch Hổ':'kim',
-  'Tiểu Hao':'hoa','Đại Hao':'hoa','Bệnh Phù':'tho','Phục Binh':'hoa',
-  'Điếu Khách':'tho','Thiên Khốc':'thuy','Thiên Hư':'thuy',
-  // Tuế tinh
-  'Thái Tuế':'tho','Thiếu Dương':'hoa','Thiếu Âm':'thuy','Tuế Phá':'tho',
-  // Quý/đặc biệt
-  'Lộc Tồn':'tho','Thiên Mã':'hoa',
-  // Phụ tinh
-  'Tả Phụ':'tho','Hữu Bật':'thuy',
-  'Văn Xương':'kim','Văn Khúc':'thuy',
-  'Thiên Khôi':'tho','Thiên Việt':'tho',
-  'Long Trì':'thuy','Phượng Các':'kim',
-  'Hồng Loan':'thuy','Thiên Hỷ':'thuy','Đào Hoa':'moc',
-  'Tam Thai':'thuy','Bát Tọa':'moc',
-  'Ân Quang':'moc','Thiên Quý':'tho',
-  'Thiên Tài':'tho','Thiên Thọ':'tho',
-  'Thiên Giải':'hoa','Địa Giải':'tho','Giải Thần':'moc',
-  'Thiên Đức':'tho','Nguyệt Đức':'kim','Thiên Y':'thuy',
-  'Thiên Quan':'hoa','Thiên Phúc':'tho',
-  'Cô Thần':'tho','Quả Tú':'tho','Hoa Cái':'kim','Thiên Trù':'tho',
-  'Quốc Ấn':'tho','Đường Phù':'moc',
-  'Long Đức':'thuy','Phúc Đức':'tho',
-  'Lực Sỹ':'kim','Thanh Long':'moc',
-  'Tướng Quân':'kim','Tấu Thư':'moc',
-  'Phi Liêm':'hoa','Hỷ Thần':'moc',
-  'Bác Sỹ':'thuy','Đẩu Quân':'tho',
-  'Thiên Riêu':'thuy',
-  // Hóa tinh
-  'Hóa Lộc':'moc','Hóa Quyền':'moc','Hóa Khoa':'moc','Hóa Kỵ':'thuy',
-  // Vòng Tràng Sinh
-  'Tràng Sinh':'thuy','Mộc Dục':'thuy','Quan Đới':'kim','Lâm Quan':'kim','Đế Vượng':'kim',
-  'Suy':'thuy','Bệnh':'hoa','Tử':'thuy','Mộ':'tho','Tuyệt':'tho','Thai':'tho','Dưỡng':'moc',
-};
-function getStarClass(s){if(s.hoa==='Lộc')return'sc-hoa-loc';if(s.hoa==='Quyền')return'sc-hoa-quyen';if(s.hoa==='Khoa')return'sc-hoa-khoa';if(s.hoa==='Kỵ')return'sc-hoa-ky';const c=ALL_STAR_COLOR[s.ten];return c?'sc-'+c:'sc-neutral';}
+function getStarElementClass(n){const d=(typeof STAR_DATA!=='undefined')?STAR_DATA[n]:null;if(!d?.element)return'sc-neutral';return{'kim':'sc-kim','mộc':'sc-moc','thủy':'sc-thuy','hỏa':'sc-hoa','thổ':'sc-tho'}[d.element.toLowerCase()]||'sc-neutral'}
+function getStarClass(s){if(s.nhom==='chinh')return'sc-'+(CHINH_TINH_COLOR[s.ten]||'neutral');if(s.hoa==='Lộc')return'sc-hoa-loc';if(s.hoa==='Quyền')return'sc-hoa-quyen';if(s.hoa==='Khoa')return'sc-hoa-khoa';if(s.hoa==='Kỵ')return'sc-hoa-ky';return getStarElementClass(s.ten)}
 function getCungCan(ci,di){return((ci%5)*2+di)%10}
 function hourMinToGioAm(h,m){return Math.floor(((h*60+m+60)%(24*60))/120)%12}
 
@@ -193,7 +146,7 @@ function renderCungCell(palace, dvTuoi, canNamIdx) {
   else if(trietS)tuanTriet='<span class="triet-tag">TRIỆT</span>';
   let chinhHTML='';
   for(const s of palace.majorStars){
-    const cls='sc-'+(ALL_STAR_COLOR[s.ten]||'neutral');
+    const cls='sc-'+(CHINH_TINH_COLOR[s.ten]||'neutral');
     const b=s.brightness?` <span style="font-size:10px">(${bShort(s.brightness)})</span>`:'';
     chinhHTML+=`<div class="chinh-tinh-item ${cls}">${esc(s.ten.toUpperCase())}${b}</div>`;
   }
