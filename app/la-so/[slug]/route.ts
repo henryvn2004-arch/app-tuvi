@@ -122,8 +122,9 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 .section-title{font-family:'Noto Serif',serif;font-size:16px;font-weight:600;color:var(--navy);padding-bottom:10px;border-bottom:2px solid var(--border-lt);margin-bottom:16px;display:flex;align-items:center;gap:8px}
 .cc-list{display:flex;flex-direction:column;gap:10px}
 .cc-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:var(--bg-soft);border-radius:8px;border-left:3px solid var(--gold)}
-.cc-badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap;background:#2a1f5e;color:#a78bfa}
-.cc-desc{font-size:13px;color:var(--text-mid);line-height:1.5}
+.cc-badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap;flex-shrink:0;background:#2a1f5e;color:#a78bfa}
+.cc-desc{font-size:13px;color:var(--text-mid);line-height:1.5;flex:1;min-width:0}
+@media(max-width:600px){.cc-item{flex-direction:column;gap:6px}.cc-badge{align-self:flex-start}}
 .no-cc{font-size:13px;color:var(--text-lt);font-style:italic;padding:8px 0}
 .dv-list{display:flex;gap:8px;flex-wrap:wrap}
 .dv-item{text-align:center;padding:10px 14px;border:1.5px solid var(--border-lt);border-radius:8px;min-width:72px}
