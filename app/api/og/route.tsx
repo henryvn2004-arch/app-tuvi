@@ -10,11 +10,12 @@ let fontCache: ArrayBuffer | null = null;
 async function loadFont(): Promise<ArrayBuffer | null> {
   if (fontCache) return fontCache;
   try {
+    // @vercel/og (Satori) only supports TTF — request old UA to get TTF from Google Fonts
     const css = await fetch(
-      'https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@600;700&subset=vietnamese',
-      { headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' } }
+      'https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@700&display=swap',
+      { headers: { 'User-Agent': 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)' } }
     ).then(r => r.text());
-    const match = css.match(/url\((https:\/\/fonts\.gstatic\.com\/[^)]+\.woff2)\)/);
+    const match = css.match(/url\((https:\/\/fonts\.gstatic\.com\/[^)]+\.ttf)\)/);
     if (!match) return null;
     fontCache = await fetch(match[1]).then(r => r.arrayBuffer());
     return fontCache;
