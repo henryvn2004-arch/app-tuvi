@@ -441,7 +441,6 @@ function renderGrid(ls: Rec, canIdx: number): string {
       if (s.hoa) hoaFromChinh.push(s);
       chinhH += `<div class="v2-chinh-item ${cls}">${esc(String(s.ten||'')).toUpperCase()}${b}</div>`;
     }
-    if (!chinhH) chinhH = `<div class="v2-chinh-item sc-neutral" style="font-style:italic;font-size:10px">Vô chính diệu</div>`;
 
     // Phụ tinh: exclude tràng sinh, tuần/triệt, chính tinh
     const phuStars = allStars.filter(s => {
