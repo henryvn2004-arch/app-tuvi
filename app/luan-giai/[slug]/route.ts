@@ -403,9 +403,9 @@ h2.sec-title{font-family:'Noto Serif',serif;font-size:16px;text-transform:none;l
 // ── GET handler ───────────────────────────────────────────────────────────────
 export async function GET(
   req: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
-  const slug = params.slug;
+  const { slug } = await params;
   const parsed = parseSlug(slug);
 
   if (!parsed) {
