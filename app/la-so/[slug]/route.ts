@@ -336,10 +336,10 @@ const DCHI_TO_POS: Record<number, [number,number]> = {
 
 // ── Star data for grid rendering ─────────────────────────────────────────────
 const CHINH_CLS: Record<string,string> = {
-  'Tử Vi':'sc-tho','Thiên Cơ':'sc-moc','Thái Dương':'sc-hoa','Vũ Khúc':'sc-kim',
-  'Thiên Đồng':'sc-thuy','Liêm Trinh':'sc-hoa','Thiên Phủ':'sc-tho','Thái Âm':'sc-thuy',
-  'Tham Lang':'sc-thuy','Cự Môn':'sc-thuy','Thiên Tướng':'sc-thuy','Thiên Lương':'sc-moc',
-  'Thất Sát':'sc-kim','Phá Quân':'sc-thuy',
+  'Tử Vi':'tho','Thiên Cơ':'moc','Thái Dương':'hoa','Vũ Khúc':'kim',
+  'Thiên Đồng':'thuy','Liêm Trinh':'hoa','Thiên Phủ':'tho','Thái Âm':'thuy',
+  'Tham Lang':'thuy','Cự Môn':'thuy','Thiên Tướng':'thuy','Thiên Lương':'moc',
+  'Thất Sát':'kim','Phá Quân':'thuy',
 };
 const HUNG_SET = new Set([
   'Kình Dương','Đà La','Hỏa Tinh','Linh Tinh','Địa Không','Địa Kiếp','Thiên Không',
