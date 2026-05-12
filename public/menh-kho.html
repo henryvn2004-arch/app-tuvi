@@ -1,339 +1,406 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="icon" type="image/webp" href="/seal.webp">
-<link rel="apple-touch-icon" href="/seal.webp">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mệnh Khố — Tử Vi Minh Bảo</title>
-<meta name="description" content="Kho lưu trữ các lá số Tử Vi Đẩu Số đã được luận giải — Tử Vi Minh Bảo. Tri mệnh lý – Thuận thế hành">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Mệnh Khố — Tra Cứu Lá Số Tử Vi Đẩu Số Theo Năm Sinh | Tử Vi Minh Bảo</title>
+<meta name="description" content="Tra cứu lá số tử vi đẩu số theo năm sinh 1960–2010. Phân tích đầy đủ 12 cung, cách cục, đại vận, tiểu vận theo cổ pháp. 438.000 lá số sẵn sàng xem miễn phí.">
 <link rel="canonical" href="https://www.tuviminhbao.com/menh-kho.html">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --navy: #061A2E; --blue: #1455A4; --gold: #9A7B3A; --gold-lt: #F9F4EB;
-  --text: #1a1a1a; --text-mid: #444; --text-lt: #777;
-  --border: #CCCCCC; --bg: #FFFFFF; --bg-soft: #F5F4F0;
-}
-body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
-
-.topnav { position: sticky; top: 0; z-index: 200; background: var(--navy); display: flex; align-items: center; height: 60px; padding: 0 40px; gap: 32px; }
-.nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
-.nav-logo img { width:38px; height:38px; object-fit:contain; border-radius:5px; }
-.nav-logo .name { font-size:16px; font-weight:700; color:#CC2200; font-family:Georgia,serif; }
-.nav-logo .url  { font-size:10px; color:#aaa; letter-spacing:0.07em; text-transform:uppercase; }
-.nav-logo em { font-style: italic; color: #8BAACC; font-size: 14px; margin-left: 8px; font-family: 'Noto Serif', serif; }
-.nav-links { display: flex; align-items: center; gap: 4px; }
-.nav-link { color: #8BAACC; font-size: 13px; text-decoration: none; padding: 6px 12px; border-radius: 6px; transition: all 0.15s; }
-.nav-link:hover { color: #fff; background: rgba(255,255,255,0.07); }
-.nav-link.active { color: #c9a84c; }
-.nav-hamburger { display: none; background: none; border: none; color: #8BAACC; cursor: pointer; padding: 8px; font-size: 20px; }
-
-/* Hero */
-.hero { background: var(--navy); padding: 56px 40px 44px; position: relative; overflow: hidden; }
-.hero::before { content: '命庫'; position: absolute; font-family: 'Noto Serif SC', serif; font-size: 220px; color: rgba(255,255,255,0.025); top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; white-space: nowrap; }
-.hero-eyebrow { font-size: 11px; letter-spacing: 4px; color: #c9a84c; text-transform: uppercase; margin-bottom: 12px; opacity:0; animation: fadeUp 0.6s ease 0.1s forwards; }
-.hero-title { font-family: 'Noto Serif', serif; font-size: 38px; color: #fff; font-weight: 400; margin-bottom: 10px; opacity:0; animation: fadeUp 0.6s ease 0.2s forwards; }
-.hero-sub { font-size: 14px; color: #8BAACC; font-weight: 300; line-height: 1.6; opacity:0; animation: fadeUp 0.6s ease 0.3s forwards; }
-
-/* Controls */
-.controls {
-  background: var(--bg-soft);
-  border-bottom: 1px solid var(--border);
-  padding: 16px 40px;
-  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-}
-.search-input {
-  flex: 1; min-width: 200px; max-width: 360px;
-  padding: 8px 14px; border: 1px solid var(--border);
-  border-radius: 6px; font-size: 13px; font-family: inherit;
-  background: #fff; color: var(--text); outline: none;
-  transition: border-color 0.15s;
-}
-.search-input:focus { border-color: var(--navy); }
-.filter-select {
-  padding: 8px 12px; border: 1px solid var(--border);
-  border-radius: 6px; font-size: 13px; font-family: inherit;
-  background: #fff; color: var(--text); outline: none; cursor: pointer;
-}
-.count-badge { margin-left: auto; font-size: 12px; color: var(--text-lt); }
-
-/* Grid */
-.page-body { flex: 1; max-width: 1060px; margin: 0 auto; padding: 36px 40px 72px; width: 100%; }
-
-.laso-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
-}
-
-.laso-card {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 20px;
-  text-decoration: none;
-  color: inherit;
-  display: flex; flex-direction: column; gap: 10px;
-  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
-  opacity: 0;
-  animation: fadeUp 0.4s ease forwards;
-}
-.laso-card:hover { border-color: var(--navy); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(6,26,46,0.08); }
-
-.card-top { display: flex; align-items: flex-start; justify-content: space-between; }
-.card-can-chi { font-family: 'Noto Serif', serif; font-size: 18px; font-weight: 600; color: var(--navy); }
-.card-gt { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 500; }
-.card-gt.nam { background: #e8f0fb; color: #1455A4; }
-.card-gt.nu  { background: #fce8f0; color: #9b2060; }
-
-.card-menh { font-size: 13px; color: var(--text-mid); }
-.card-chinh { font-size: 12px; color: var(--gold); font-weight: 500; }
-
-.card-meta {
-  display: flex; gap: 8px; flex-wrap: wrap;
-  border-top: 1px solid var(--border-lt, #eee);
-  padding-top: 10px; margin-top: 2px;
-}
-.card-tag {
-  font-size: 10px; color: var(--text-lt);
-  background: var(--bg-soft); border-radius: 4px;
-  padding: 2px 7px;
-}
-
-.card-preview {
-  font-size: 12px; color: var(--text-lt); line-height: 1.6;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* States */
-.state-loading { text-align: center; padding: 80px 20px; }
-.spinner { width: 32px; height: 32px; border: 3px solid #e0e0e0; border-top-color: var(--navy); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
-.state-empty { text-align: center; padding: 80px 20px; }
-.state-empty-icon { font-size: 48px; margin-bottom: 16px; }
-.state-empty-title { font-family: 'Noto Serif', serif; font-size: 20px; color: var(--navy); margin-bottom: 8px; }
-.state-empty-sub { font-size: 14px; color: var(--text-lt); }
-
-/* Pagination */
-.pagination { display: flex; justify-content: center; gap: 8px; margin-top: 36px; }
-.page-btn { padding: 7px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; cursor: pointer; background: #fff; color: var(--text); font-family: inherit; transition: all 0.15s; }
-.page-btn:hover { border-color: var(--navy); color: var(--navy); }
-.page-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
-.page-btn:disabled { opacity: 0.4; cursor: default; }
-
-.footer { background: var(--navy); padding: 20px 40px; display: flex; justify-content: space-between; font-size: 12px; color: #4a6080; }
-
-@keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-@media (max-width: 700px) {
-  .topnav { padding: 0 16px; }
-  .nav-links { display: none; position: absolute; top: 60px; left: 0; right: 0; background: var(--navy); flex-direction: column; padding: 8px 0 16px; border-bottom: 1px solid #1a2a3a; }
-  .nav-links.open { display: flex; }
-  .nav-link { padding: 10px 24px; border-radius: 0; width: 100%; }
-  .nav-hamburger { display: block; margin-left: auto; }
-  .hero { padding: 40px 20px 32px; }
-  .controls { padding: 12px 16px; }
-  .page-body { padding: 24px 16px 48px; }
-  .footer { flex-direction: column; gap: 4px; }
-}
-.site-footer { background:#1A1210; color:rgba(255,255,255,0.5); padding:36px 32px 24px; }
-.footer-top  { display:flex; justify-content:space-between; align-items:flex-start; gap:32px; flex-wrap:wrap; padding-bottom:24px; border-bottom:1px solid rgba(255,255,255,0.08); margin-bottom:20px; }
-.footer-brand { display:flex; align-items:center; gap:10px; }
-.footer-brand img { width:36px; height:36px; object-fit:contain; border-radius:5px; opacity:0.9; }
-.footer-brand-text .name { font-size:14px; font-weight:700; color:rgba(255,255,255,0.85); font-family:Georgia,serif; }
-.footer-brand-text .zh   { font-size:12px; color:#C9A84C; }
-.footer-tagline { font-size:12px; margin-top:8px; color:rgba(255,255,255,0.35); line-height:1.6; }
-.footer-bottom  { display:flex; justify-content:space-between; align-items:center; font-size:11px; color:rgba(255,255,255,0.25); }
-.footer-bottom img { width:20px; height:20px; object-fit:contain; opacity:0.3; border-radius:3px; }
-</style>
-<meta property="og:title" content="Tử Vi Minh Bảo – Lá số tử vi chính xác">
-<meta property="og:description" content="Tri mệnh lý – Thuận thế hành. Tử vi đẩu số theo cổ pháp, luận giải bằng trí tuệ nhân tạo.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<meta property="og:title" content="Mệnh Khố — Tra Cứu Lá Số Tử Vi Đẩu Số">
+<meta property="og:description" content="438.000 lá số tử vi từ 1960–2010. Phân tích 12 cung, cách cục, đại vận, tiểu vận theo cổ pháp.">
 <meta property="og:image" content="https://www.tuviminhbao.com/seal.webp">
 <meta property="og:url" content="https://www.tuviminhbao.com/menh-kho.html">
 <meta property="og:type" content="website">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://www.tuviminhbao.com/seal.webp">
-<script src="/share.js"></script>
-<script src="/auth.js"></script>
+<meta name="twitter:card" content="summary_large_image">
+<meta name="robots" content="index, follow">
+
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Mệnh Khố — Tra Cứu Lá Số Tử Vi Đẩu Số Theo Năm Sinh",
+    "description": "Tra cứu lá số tử vi đẩu số theo năm sinh 1960–2010. Phân tích 12 cung, cách cục, đại vận, tiểu vận theo cổ pháp. 438.000 lá số sẵn sàng xem miễn phí.",
+    "url": "https://www.tuviminhbao.com/menh-kho.html",
+    "inLanguage": "vi",
+    "publisher": { "@type": "Organization", "name": "Tử Vi Minh Bảo", "url": "https://www.tuviminhbao.com" },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Trang Chủ", "item": "https://www.tuviminhbao.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Mệnh Khố", "item": "https://www.tuviminhbao.com/menh-kho.html" }
+      ]
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Lá số tử vi đẩu số là gì?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Lá số tử vi đẩu số là bản đồ mệnh lý được lập dựa trên ngày, tháng, năm và giờ sinh âm lịch. Lá số gồm 12 cung (Mệnh, Phụ Mẫu, Phúc Đức, Điền Trạch, Quan Lộc, Nô Bộc, Thiên Di, Tật Ách, Tài Bạch, Tử Tức, Phu Thê, Huynh Đệ) và các ngôi sao được an vào mỗi cung theo quy tắc cổ pháp. Từ đó luận đoán tính cách, sự nghiệp, tình duyên và vận hạn từng năm." }
+      },
+      {
+        "@type": "Question",
+        "name": "Cung mệnh trong tử vi là gì?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Cung Mệnh là cung quan trọng nhất trong lá số tử vi, phản ánh tính cách, ngoại hình và vận mệnh tổng thể của người được luận. Cung Mệnh được xác định từ giờ sinh và tháng sinh âm lịch, sau đó đối chiếu với can năm để xác định chính tinh. Mỗi chính tinh (Tử Vi, Thiên Phủ, Liêm Trinh...) mang đặc tính khác nhau." }
+      },
+      {
+        "@type": "Question",
+        "name": "Đại vận trong tử vi là gì?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Đại vận là giai đoạn vận hạn kéo dài 10 năm, được tính từ tuổi tiểu hạn đầu tiên. Mỗi đại vận ứng với một cung trong 12 cung của lá số và luân chuyển theo chiều thuận hoặc nghịch tuỳ âm dương. Đại vận xấu hay tốt phụ thuộc vào sao tại cung đó và mối liên hệ với cung Mệnh." }
+      },
+      {
+        "@type": "Question",
+        "name": "Tại sao giờ sinh quan trọng trong tử vi đẩu số?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Giờ sinh quyết định cung Mệnh và cung Thân — hai cung nền tảng của lá số. Cùng ngày sinh nhưng khác giờ sẽ có cung Mệnh hoàn toàn khác, dẫn đến chính tinh khác, cách cục khác và vận hạn khác. Trong tử vi đẩu số có 12 giờ sinh (giờ Tý, Sửu, Dần, Mão, Thìn, Tỵ, Ngọ, Mùi, Thân, Dậu, Tuất, Hợi), mỗi giờ kéo dài 2 tiếng đồng hồ." }
+      },
+      {
+        "@type": "Question",
+        "name": "Cách an sao tử vi theo cổ pháp là gì?",
+        "acceptedAnswer": { "@type": "Answer", "text": "An sao theo cổ pháp là phương pháp an sao truyền thống của Tử Vi Đẩu Số Trung Hoa, không dùng các điều chỉnh hiện đại. Các sao chính (Tử Vi, Thiên Phủ, Liêm Trinh, Thiên Tướng...) được an theo ngày sinh âm lịch và can năm. Sao phụ (Văn Xương, Văn Khúc, Tả Phù, Hữu Bật...) an theo tháng, giờ sinh. Tứ Hóa (Lộc, Quyền, Khoa, Kỵ) an theo can năm sinh." }
+      },
+      {
+        "@type": "Question",
+        "name": "Tiểu vận là gì và khác đại vận như thế nào?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Tiểu vận là vận hạn theo từng năm, nằm trong khuôn khổ của một đại vận 10 năm. Mỗi năm tiểu vận ứng với một cung khác nhau và được đánh giá dựa trên sao lưu niên, sao tiểu hạn cùng tương tác với đại vận đang chạy. Tiểu vận cho biết năm đó thuận hay nghịch trong cục diện lớn hơn của đại vận." }
+      },
+      {
+        "@type": "Question",
+        "name": "Có bao nhiêu lá số tử vi trong Mệnh Khố?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Mệnh Khố của Tử Vi Minh Bảo chứa 438.000 lá số được tính sẵn cho các ngày sinh từ năm 1960 đến 2010, bao gồm 12 giờ sinh và cả nam lẫn nữ mệnh. Mỗi lá số được an sao theo cổ pháp, phân tích 12 cung, cách cục, đại vận và tiểu vận năm 2027." }
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "Cách tra cứu lá số tử vi đẩu số trên Mệnh Khố",
+    "description": "Hướng dẫn tra cứu lá số tử vi theo ngày sinh tại tuviminhbao.com",
+    "step": [
+      { "@type": "HowToStep", "position": 1, "name": "Chọn năm sinh", "text": "Chọn năm sinh dương lịch từ 1960 đến 2010 trong bảng tra cứu bên dưới." },
+      { "@type": "HowToStep", "position": 2, "name": "Chọn ngày tháng", "text": "Trên trang năm sinh, click vào ngày sinh dương lịch trong lịch." },
+      { "@type": "HowToStep", "position": 3, "name": "Chọn giờ sinh và giới tính", "text": "Chọn 1 trong 12 giờ sinh (giờ Tý đến giờ Hợi) và giới tính (Nam / Nữ)." },
+      { "@type": "HowToStep", "position": 4, "name": "Xem lá số đầy đủ", "text": "Lá số tử vi hiện ra với bản đồ 4×4, phân tích 12 cung, cách cục, đại vận và tiểu vận năm xem." }
+    ]
+  }
+]
+</script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#061A2E; --navy-mid:#0D3B5E; --blue:#1455A4;
+  --gold:#9A7B3A; --gold-lt:#F9F4EB; --gold-bright:#C9A84C;
+  --text:#1a1a1a; --text-mid:#444; --text-lt:#777;
+  --border:#CCCCCC; --border-lt:#E8E8E8;
+  --bg:#FFFFFF; --bg-soft:#F5F4F0;
+}
+body{font-family:Arial,'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+a{color:inherit;text-decoration:none}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);padding:56px 40px 48px;position:relative;overflow:hidden}
+.hero::before{content:'命庫';position:absolute;font-size:200px;color:rgba(255,255,255,.025);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;white-space:nowrap;font-family:serif}
+.hero-inner{max-width:900px;margin:0 auto;position:relative}
+.hero-eyebrow{font-size:10px;letter-spacing:4px;color:var(--gold-bright);text-transform:uppercase;margin-bottom:12px}
+.hero h1{font-size:36px;color:#fff;font-weight:400;margin-bottom:10px;line-height:1.25}
+.hero h1 em{font-style:italic;color:var(--gold-bright)}
+.hero-sub{font-size:14px;color:#8BAACC;line-height:1.7;max-width:560px;margin-bottom:24px}
+.hero-stats{display:flex;gap:24px;flex-wrap:wrap}
+.stat{text-align:center}
+.stat-n{font-size:22px;font-weight:700;color:var(--gold-bright)}
+.stat-l{font-size:10px;color:#8BAACC;letter-spacing:1px;text-transform:uppercase}
+.hero-cta{display:inline-block;margin-top:20px;background:var(--gold-bright);color:var(--navy);font-weight:700;font-size:14px;padding:11px 28px;border-radius:6px}
+.hero-cta:hover{background:#e0b84c}
+
+/* Breadcrumb */
+.bc{background:var(--bg-soft);border-bottom:1px solid var(--border-lt);padding:9px 40px;font-size:12px;color:var(--text-lt);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.bc a{color:var(--text-lt)}.bc a:hover{color:var(--navy)}
+
+/* Section wrapper */
+.wrap{max-width:1000px;margin:0 auto;padding:0 32px}
+section{padding:48px 0}
+section+section{border-top:1px solid var(--border-lt)}
+.section-eyebrow{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--blue);margin-bottom:10px}
+.section-title{font-size:26px;color:var(--navy);font-weight:400;margin-bottom:8px}
+.section-sub{font-size:14px;color:var(--text-lt);margin-bottom:28px;max-width:600px}
+
+/* Year grid */
+.decade-block{margin-bottom:28px}
+.decade-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);padding-bottom:8px;border-bottom:1px solid var(--border-lt);margin-bottom:12px}
+.year-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.year-pill{display:flex;flex-direction:column;padding:10px 14px;background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:8px;transition:all .12s;cursor:pointer}
+.year-pill:hover{border-color:var(--blue);background:#EEF4FF;transform:translateY(-1px)}
+.year-pill .yr{font-size:16px;font-weight:700;color:var(--navy)}
+.year-pill .cc{font-size:11px;color:var(--gold);font-weight:500}
+.year-pill.popular{border-color:var(--gold-bright);background:var(--gold-lt)}
+.year-pill.popular .yr{color:var(--navy)}
+
+/* How to */
+.steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-top:8px}
+.step{padding:20px;background:var(--bg-soft);border-radius:10px;border:1px solid var(--border-lt)}
+.step-num{font-size:28px;font-weight:700;color:var(--border-lt);margin-bottom:8px;line-height:1}
+.step-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.step-desc{font-size:13px;color:var(--text-mid);line-height:1.6}
+
+/* FAQ */
+.faq-list{margin-top:8px;display:flex;flex-direction:column;gap:2px}
+.faq-item{border:1px solid var(--border-lt);border-radius:8px;overflow:hidden}
+.faq-q{font-size:14px;font-weight:600;color:var(--navy);padding:16px 20px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:#fff}
+.faq-q:hover{background:var(--bg-soft)}
+.faq-q::after{content:'+';font-size:20px;color:var(--text-lt);flex-shrink:0;margin-left:12px}
+.faq-item.open .faq-q::after{content:'−'}
+.faq-a{display:none;font-size:13px;color:var(--text-mid);line-height:1.8;padding:0 20px 16px;background:#fff}
+.faq-item.open .faq-a{display:block}
+
+/* About section */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:8px}
+.about-card{padding:20px 24px;background:var(--bg-soft);border-radius:10px}
+.about-card h3{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.about-card p{font-size:13px;color:var(--text-mid);line-height:1.7}
+
+/* CTA strip */
+.cta-strip{background:linear-gradient(135deg,var(--navy),var(--navy-mid));padding:40px;text-align:center;margin-top:0}
+.cta-strip h2{font-size:22px;color:#fff;font-weight:400;margin-bottom:8px}
+.cta-strip p{font-size:14px;color:#8BAACC;margin-bottom:20px}
+.cta-strip a{display:inline-block;background:var(--gold-bright);color:var(--navy);font-weight:700;font-size:15px;padding:12px 32px;border-radius:7px}
+
+/* Responsive */
+@media(max-width:700px){
+  .hero{padding:36px 20px 32px}.hero h1{font-size:26px}
+  .bc,.wrap{padding-left:16px;padding-right:16px}
+  section{padding:32px 0}
+  .about-grid{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr 1fr}
+  .cta-strip{padding:32px 20px}
+}
+@media(max-width:480px){.steps{grid-template-columns:1fr}}
+</style>
+<script src="/auth.js" defer></script>
 </head>
 <body>
 
+<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+
+<div class="bc">
+  <a href="/">Trang Chủ</a><span>›</span>
+  <span>Mệnh Khố</span>
+</div>
+
+<!-- Hero -->
 <div class="hero">
-  <div class="hero-eyebrow">命庫 · Kho Lưu Trữ</div>
-  <div class="hero-title">Mệnh Khố</div>
-  <div class="hero-sub">Tổng hợp các lá số Tử Vi Đẩu Số đã được luận giải — mỗi lá số là một bức tranh về mệnh lý</div>
-</div>
-
-<div class="controls">
-  <input class="search-input" type="text" id="search-input" placeholder="Tìm theo can chi, cung mệnh, chính tinh..." oninput="filterCards()">
-  <select class="filter-select" id="filter-gt" onchange="filterCards()">
-    <option value="">Tất cả giới tính</option>
-    <option value="nam">Nam mệnh</option>
-    <option value="nu">Nữ mệnh</option>
-  </select>
-  <select class="filter-select" id="filter-menh" onchange="filterCards()">
-    <option value="">Tất cả cung mệnh</option>
-  </select>
-  <div class="count-badge" id="count-badge">Đang tải...</div>
-</div>
-
-<div class="page-body">
-  <div id="state-loading" class="state-loading">
-    <div class="spinner"></div>
-    <div style="font-size:14px;color:#aaa">Đang tải Mệnh Khố...</div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">命庫 · Kho Lưu Trữ · Tra Cứu</div>
+    <h1>Mệnh Khố — Tra Cứu<br><em>Lá Số Tử Vi Đẩu Số</em></h1>
+    <p class="hero-sub">438.000 lá số được tính sẵn theo cổ pháp cho các ngày sinh từ 1960 đến 2010. Chọn năm sinh để bắt đầu tra cứu.</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-n">438K</div><div class="stat-l">Lá số</div></div>
+      <div class="stat"><div class="stat-n">51</div><div class="stat-l">Năm sinh</div></div>
+      <div class="stat"><div class="stat-n">12</div><div class="stat-l">Giờ sinh</div></div>
+      <div class="stat"><div class="stat-n">24</div><div class="stat-l">Phần luận giải</div></div>
+    </div>
   </div>
-  <div id="state-empty" class="state-empty" style="display:none">
-    <div class="state-empty-icon">☁</div>
-    <div class="state-empty-title">Chưa có lá số nào</div>
-    <div class="state-empty-sub">Hãy <a href="/" style="color:var(--blue)">an sao lá số đầu tiên</a> để bắt đầu.</div>
-  </div>
-  <div id="laso-grid" class="laso-grid"></div>
-  <div id="pagination" class="pagination"></div>
 </div>
 
+<!-- Section 1: Year grid -->
+<section>
+  <div class="wrap">
+    <div class="section-eyebrow">Tra cứu lá số</div>
+    <h2 class="section-title">Chọn năm sinh (1960–2010)</h2>
+    <p class="section-sub">Mỗi năm có đầy đủ 365 ngày × 12 giờ sinh × Nam &amp; Nữ = 8.760 lá số.</p>
 
+    <div class="decade-block">
+      <div class="decade-label">Thập niên 1960</div>
+      <div class="year-grid">
+        <a href="/menh-kho/1960" class="year-pill"><span class="yr">1960</span><span class="cc">Canh Tý</span></a>
+        <a href="/menh-kho/1961" class="year-pill"><span class="yr">1961</span><span class="cc">Tân Sửu</span></a>
+        <a href="/menh-kho/1962" class="year-pill"><span class="yr">1962</span><span class="cc">Nhâm Dần</span></a>
+        <a href="/menh-kho/1963" class="year-pill"><span class="yr">1963</span><span class="cc">Quý Mão</span></a>
+        <a href="/menh-kho/1964" class="year-pill"><span class="yr">1964</span><span class="cc">Giáp Thìn</span></a>
+        <a href="/menh-kho/1965" class="year-pill"><span class="yr">1965</span><span class="cc">Ất Tỵ</span></a>
+        <a href="/menh-kho/1966" class="year-pill"><span class="yr">1966</span><span class="cc">Bính Ngọ</span></a>
+        <a href="/menh-kho/1967" class="year-pill"><span class="yr">1967</span><span class="cc">Đinh Mùi</span></a>
+        <a href="/menh-kho/1968" class="year-pill"><span class="yr">1968</span><span class="cc">Mậu Thân</span></a>
+        <a href="/menh-kho/1969" class="year-pill"><span class="yr">1969</span><span class="cc">Kỷ Dậu</span></a>
+      </div>
+    </div>
+
+    <div class="decade-block">
+      <div class="decade-label">Thập niên 1970</div>
+      <div class="year-grid">
+        <a href="/menh-kho/1970" class="year-pill"><span class="yr">1970</span><span class="cc">Canh Tuất</span></a>
+        <a href="/menh-kho/1971" class="year-pill"><span class="yr">1971</span><span class="cc">Tân Hợi</span></a>
+        <a href="/menh-kho/1972" class="year-pill"><span class="yr">1972</span><span class="cc">Nhâm Tý</span></a>
+        <a href="/menh-kho/1973" class="year-pill"><span class="yr">1973</span><span class="cc">Quý Sửu</span></a>
+        <a href="/menh-kho/1974" class="year-pill"><span class="yr">1974</span><span class="cc">Giáp Dần</span></a>
+        <a href="/menh-kho/1975" class="year-pill popular"><span class="yr">1975</span><span class="cc">Ất Mão</span></a>
+        <a href="/menh-kho/1976" class="year-pill popular"><span class="yr">1976</span><span class="cc">Bính Thìn</span></a>
+        <a href="/menh-kho/1977" class="year-pill popular"><span class="yr">1977</span><span class="cc">Đinh Tỵ</span></a>
+        <a href="/menh-kho/1978" class="year-pill popular"><span class="yr">1978</span><span class="cc">Mậu Ngọ</span></a>
+        <a href="/menh-kho/1979" class="year-pill popular"><span class="yr">1979</span><span class="cc">Kỷ Mùi</span></a>
+      </div>
+    </div>
+
+    <div class="decade-block">
+      <div class="decade-label">Thập niên 1980 — Phổ biến nhất</div>
+      <div class="year-grid">
+        <a href="/menh-kho/1980" class="year-pill popular"><span class="yr">1980</span><span class="cc">Canh Thân</span></a>
+        <a href="/menh-kho/1981" class="year-pill popular"><span class="yr">1981</span><span class="cc">Tân Dậu</span></a>
+        <a href="/menh-kho/1982" class="year-pill popular"><span class="yr">1982</span><span class="cc">Nhâm Tuất</span></a>
+        <a href="/menh-kho/1983" class="year-pill popular"><span class="yr">1983</span><span class="cc">Quý Hợi</span></a>
+        <a href="/menh-kho/1984" class="year-pill popular"><span class="yr">1984</span><span class="cc">Giáp Tý</span></a>
+        <a href="/menh-kho/1985" class="year-pill popular"><span class="yr">1985</span><span class="cc">Ất Sửu</span></a>
+        <a href="/menh-kho/1986" class="year-pill popular"><span class="yr">1986</span><span class="cc">Bính Dần</span></a>
+        <a href="/menh-kho/1987" class="year-pill popular"><span class="yr">1987</span><span class="cc">Đinh Mão</span></a>
+        <a href="/menh-kho/1988" class="year-pill popular"><span class="yr">1988</span><span class="cc">Mậu Thìn</span></a>
+        <a href="/menh-kho/1989" class="year-pill popular"><span class="yr">1989</span><span class="cc">Kỷ Tỵ</span></a>
+      </div>
+    </div>
+
+    <div class="decade-block">
+      <div class="decade-label">Thập niên 1990 — Phổ biến nhất</div>
+      <div class="year-grid">
+        <a href="/menh-kho/1990" class="year-pill popular"><span class="yr">1990</span><span class="cc">Canh Ngọ</span></a>
+        <a href="/menh-kho/1991" class="year-pill popular"><span class="yr">1991</span><span class="cc">Tân Mùi</span></a>
+        <a href="/menh-kho/1992" class="year-pill popular"><span class="yr">1992</span><span class="cc">Nhâm Thân</span></a>
+        <a href="/menh-kho/1993" class="year-pill popular"><span class="yr">1993</span><span class="cc">Quý Dậu</span></a>
+        <a href="/menh-kho/1994" class="year-pill popular"><span class="yr">1994</span><span class="cc">Giáp Tuất</span></a>
+        <a href="/menh-kho/1995" class="year-pill popular"><span class="yr">1995</span><span class="cc">Ất Hợi</span></a>
+        <a href="/menh-kho/1996" class="year-pill popular"><span class="yr">1996</span><span class="cc">Bính Tý</span></a>
+        <a href="/menh-kho/1997" class="year-pill popular"><span class="yr">1997</span><span class="cc">Đinh Sửu</span></a>
+        <a href="/menh-kho/1998" class="year-pill popular"><span class="yr">1998</span><span class="cc">Mậu Dần</span></a>
+        <a href="/menh-kho/1999" class="year-pill popular"><span class="yr">1999</span><span class="cc">Kỷ Mão</span></a>
+      </div>
+    </div>
+
+    <div class="decade-block">
+      <div class="decade-label">Thập niên 2000</div>
+      <div class="year-grid">
+        <a href="/menh-kho/2000" class="year-pill popular"><span class="yr">2000</span><span class="cc">Canh Thìn</span></a>
+        <a href="/menh-kho/2001" class="year-pill"><span class="yr">2001</span><span class="cc">Tân Tỵ</span></a>
+        <a href="/menh-kho/2002" class="year-pill"><span class="yr">2002</span><span class="cc">Nhâm Ngọ</span></a>
+        <a href="/menh-kho/2003" class="year-pill"><span class="yr">2003</span><span class="cc">Quý Mùi</span></a>
+        <a href="/menh-kho/2004" class="year-pill"><span class="yr">2004</span><span class="cc">Giáp Thân</span></a>
+        <a href="/menh-kho/2005" class="year-pill"><span class="yr">2005</span><span class="cc">Ất Dậu</span></a>
+        <a href="/menh-kho/2006" class="year-pill"><span class="yr">2006</span><span class="cc">Bính Tuất</span></a>
+        <a href="/menh-kho/2007" class="year-pill"><span class="yr">2007</span><span class="cc">Đinh Hợi</span></a>
+        <a href="/menh-kho/2008" class="year-pill"><span class="yr">2008</span><span class="cc">Mậu Tý</span></a>
+        <a href="/menh-kho/2009" class="year-pill"><span class="yr">2009</span><span class="cc">Kỷ Sửu</span></a>
+        <a href="/menh-kho/2010" class="year-pill"><span class="yr">2010</span><span class="cc">Canh Dần</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 2: How to use -->
+<section>
+  <div class="wrap">
+    <div class="section-eyebrow">Hướng dẫn</div>
+    <h2 class="section-title">Cách tra cứu lá số tử vi</h2>
+    <p class="section-sub">4 bước đơn giản để xem lá số đầy đủ — không cần tạo tài khoản.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Chọn năm sinh</div>
+        <div class="step-desc">Click vào năm sinh dương lịch trong bảng tra cứu ở trên (1960–2010).</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">Chọn ngày tháng</div>
+        <div class="step-desc">Trên trang năm sinh, click vào ngày tháng dương lịch trong lịch 12 tháng.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Chọn giờ &amp; giới tính</div>
+        <div class="step-desc">Chọn giờ sinh (Tý, Sửu, Dần... Hợi) và giới tính Nam / Nữ.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-title">Xem lá số đầy đủ</div>
+        <div class="step-desc">Bản đồ 12 cung, cách cục, đại vận, tiểu vận năm 2027 hiện ra ngay lập tức.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 3: About Tử Vi -->
+<section>
+  <div class="wrap">
+    <div class="section-eyebrow">Kiến thức</div>
+    <h2 class="section-title">Tử Vi Đẩu Số — Khoa Mệnh Lý Cổ Pháp</h2>
+    <p class="section-sub">Tử Vi Đẩu Số là hệ thống mệnh lý học từ thời Tống, được truyền thừa qua hơn 1.000 năm.</p>
+    <div class="about-grid">
+      <div class="about-card">
+        <h3>12 Cung</h3>
+        <p>Lá số tử vi chia thành 12 cung: Mệnh, Phụ Mẫu, Phúc Đức, Điền Trạch, Quan Lộc, Nô Bộc, Thiên Di, Tật Ách, Tài Bạch, Tử Tức, Phu Thê, Huynh Đệ. Mỗi cung phụ trách một lĩnh vực cuộc đời.</p>
+      </div>
+      <div class="about-card">
+        <h3>An Sao Cổ Pháp</h3>
+        <p>Các sao chính (Tử Vi, Thiên Phủ, Liêm Trinh...) an theo ngày sinh âm lịch. Sao phụ an theo tháng, giờ. Tứ Hóa (Lộc, Quyền, Khoa, Kỵ) an theo can năm — tạo ra mạng sao độc nhất cho từng giờ sinh.</p>
+      </div>
+      <div class="about-card">
+        <h3>Đại Vận &amp; Tiểu Vận</h3>
+        <p>Đại vận là chu kỳ 10 năm luân chuyển qua 12 cung. Tiểu vận là vận từng năm trong khuôn khổ đại vận. Hai lớp vận này xác định thời điểm thuận nghịch trong cuộc đời.</p>
+      </div>
+      <div class="about-card">
+        <h3>Cách Cục Đặc Biệt</h3>
+        <p>Cách cục là sự phối hợp đặc biệt giữa các sao tạo ra vận mệnh khác biệt: Tử Phủ Đồng Cung, Nhật Nguyệt Đồng Lương, Sát Phá Tham... Mỗi cách cục mang ý nghĩa và ảnh hưởng riêng.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 4: FAQ -->
+<section>
+  <div class="wrap">
+    <div class="section-eyebrow">FAQ</div>
+    <h2 class="section-title">Câu hỏi thường gặp</h2>
+    <p class="section-sub">Những câu hỏi phổ biến về tử vi đẩu số và Mệnh Khố.</p>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">Lá số tử vi đẩu số là gì?</div>
+        <div class="faq-a">Lá số tử vi đẩu số là bản đồ mệnh lý được lập từ ngày, tháng, năm và giờ sinh âm lịch. Lá số gồm 12 cung với các ngôi sao an vào theo quy tắc cổ pháp, từ đó luận đoán tính cách, sự nghiệp, tình duyên và vận hạn từng năm.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">Tại sao giờ sinh quan trọng trong tử vi?</div>
+        <div class="faq-a">Giờ sinh quyết định cung Mệnh và cung Thân — hai cung nền tảng của lá số. Cùng ngày sinh nhưng khác giờ sẽ có cung Mệnh hoàn toàn khác, chính tinh khác, cách cục khác và vận hạn khác. Có 12 giờ sinh (Tý, Sửu, Dần, Mão, Thìn, Tỵ, Ngọ, Mùi, Thân, Dậu, Tuất, Hợi), mỗi giờ kéo dài 2 tiếng.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">Cung mệnh là gì?</div>
+        <div class="faq-a">Cung Mệnh là cung quan trọng nhất trong lá số tử vi, phản ánh tính cách, ngoại hình và vận mệnh tổng thể. Cung Mệnh được xác định từ giờ sinh và tháng sinh âm lịch, sau đó đối chiếu với can năm để xác định chính tinh. Mỗi chính tinh mang đặc tính khác nhau.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">Đại vận và tiểu vận là gì?</div>
+        <div class="faq-a">Đại vận là giai đoạn vận hạn kéo dài 10 năm, luân chuyển qua 12 cung. Tiểu vận là vận hạn từng năm nằm trong đại vận. Hai lớp vận kết hợp xác định thời điểm thuận lợi và thách thức trong cuộc đời.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">Mệnh Khố có bao nhiêu lá số?</div>
+        <div class="faq-a">Mệnh Khố chứa 438.000 lá số được tính sẵn cho các ngày sinh từ 1960 đến 2010 (51 năm × 365 ngày × 12 giờ × 2 giới). Mỗi lá số được an sao theo cổ pháp, phân tích 12 cung, cách cục, đại vận và tiểu vận năm 2027.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">An sao theo cổ pháp khác gì so với phương pháp hiện đại?</div>
+        <div class="faq-a">An sao cổ pháp tuân theo quy tắc truyền thống từ thời Tống — không có điều chỉnh hay sáng tạo thêm. Các phương pháp hiện đại đôi khi thêm sao mới hoặc thay đổi cách an sao. Tử Vi Minh Bảo sử dụng thuần cổ pháp để đảm bảo tính nhất quán và truyền thống.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-strip">
+  <h2>Muốn Nhận Luận Giải AI Chuyên Sâu?</h2>
+  <p>Nhập ngày giờ sinh để nhận phân tích đầy đủ 24 phần — tính cách, sự nghiệp, tình duyên, vận hạn năm 2027.</p>
+  <a href="/luan-giai.html">Xem Lá Số &amp; Luận Giải Miễn Phí →</a>
+</div>
 
 <script>
-const SUPABASE_URL = 'https://dciwkfdqhhddeymlisey.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
-
-const PAGE_SIZE = 24;
-let allData = [];
-let filtered = [];
-let currentPage = 1;
-
-async function loadAll() {
-  try {
-    // Fetch all (up to 1000) — can paginate from Supabase later
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/laso_public?select=slug,can_chi_nam,gioi_tinh,nam_sinh,gio_chi,cung_menh,chinh_tinh,nap_am,cuc,luan_giai,created_at&order=created_at.desc&limit=1000`,
-      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-    );
-    if (!res.ok) throw new Error('Fetch failed');
-    allData = await res.json();
-    buildFilters();
-    filtered = [...allData];
-    render();
-  } catch(e) {
-    document.getElementById('state-loading').style.display = 'none';
-    document.getElementById('state-empty').style.display = 'block';
-  }
+function toggle(el) {
+  el.parentElement.classList.toggle('open');
 }
-
-function buildFilters() {
-  const menhs = [...new Set(allData.map(d => d.cung_menh).filter(Boolean))].sort();
-  const sel = document.getElementById('filter-menh');
-  menhs.forEach(m => {
-    const opt = document.createElement('option');
-    opt.value = m; opt.textContent = m;
-    sel.appendChild(opt);
-  });
-}
-
-function filterCards() {
-  const q = document.getElementById('search-input').value.toLowerCase();
-  const gt = document.getElementById('filter-gt').value;
-  const menh = document.getElementById('filter-menh').value;
-
-  filtered = allData.filter(d => {
-    if (gt && d.gioi_tinh !== gt) return false;
-    if (menh && d.cung_menh !== menh) return false;
-    if (q) {
-      const hay = [d.can_chi_nam, d.cung_menh, d.chinh_tinh, d.nap_am, d.cuc].join(' ').toLowerCase();
-      if (!hay.includes(q)) return false;
-    }
-    return true;
-  });
-  currentPage = 1;
-  render();
-}
-
-function render() {
-  document.getElementById('state-loading').style.display = 'none';
-
-  const grid = document.getElementById('laso-grid');
-  const total = filtered.length;
-  document.getElementById('count-badge').textContent = `${total} lá số`;
-
-  if (total === 0) {
-    grid.innerHTML = '';
-    document.getElementById('state-empty').style.display = 'block';
-    document.getElementById('pagination').innerHTML = '';
-    return;
-  }
-  document.getElementById('state-empty').style.display = 'none';
-
-  const start = (currentPage - 1) * PAGE_SIZE;
-  const page  = filtered.slice(start, start + PAGE_SIZE);
-
-  grid.innerHTML = page.map((d, i) => {
-    const gt   = d.gioi_tinh === 'nu' ? 'nu' : 'nam';
-    const gtLbl = gt === 'nu' ? 'Nữ mệnh' : 'Nam mệnh';
-    const preview = d.luan_giai?.[1] || d.luan_giai?.['1'] || '';
-    const previewText = preview.replace(/[#*_`]/g,'').slice(0, 120);
-    const date = d.created_at ? new Date(d.created_at).toLocaleDateString('vi-VN') : '';
-    return `
-    <a class="laso-card" href="/la-so/${d.slug}" style="animation-delay:${i*0.03}s">
-      <div class="card-top">
-        <div class="card-can-chi">${d.can_chi_nam || '—'}</div>
-        <div class="card-gt ${gt}">${gtLbl}</div>
-      </div>
-      <div class="card-menh">Cung Mệnh: <b>${d.cung_menh || '—'}</b></div>
-      <div class="card-chinh">${d.chinh_tinh || ''}</div>
-      ${previewText ? `<div class="card-preview">${previewText}...</div>` : ''}
-      <div class="card-meta">
-        ${d.nap_am ? `<span class="card-tag">${d.nap_am}</span>` : ''}
-        ${d.cuc ? `<span class="card-tag">${d.cuc}</span>` : ''}
-        ${d.nam_sinh ? `<span class="card-tag">${d.nam_sinh}</span>` : ''}
-        ${d.gio_chi ? `<span class="card-tag">Giờ ${d.gio_chi}</span>` : ''}
-        ${date ? `<span class="card-tag" style="margin-left:auto">${date}</span>` : ''}
-      </div>
-    </a>`;
-  }).join('');
-      // Render share buttons on each card
-      setTimeout(() => {
-        (allData.length > 0 ? filtered.slice(start, start + PAGE_SIZE) : []).forEach(d => {
-          if (window.ShareButtons && d.slug) {
-            ShareButtons.render('share-card-' + d.slug, {
-              url: window.location.origin + '/la-so/' + d.slug,
-              title: 'Lá số ' + (d.can_chi_nam||'') + ' — Tử Vi Minh Bảo',
-              text: 'Xem lá số Tử Vi tại Tử Vi Minh Bảo'
-            });
-          }
-        });
-      }, 200);
-
-  // Pagination
-  const totalPages = Math.ceil(total / PAGE_SIZE);
-  const pag = document.getElementById('pagination');
-  if (totalPages <= 1) { pag.innerHTML = ''; return; }
-
-  let btns = `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>←</button>`;
-  for (let p = 1; p <= totalPages; p++) {
-    if (p === 1 || p === totalPages || Math.abs(p - currentPage) <= 1) {
-      btns += `<button class="page-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`;
-    } else if (Math.abs(p - currentPage) === 2) {
-      btns += `<span style="padding:7px 4px;color:#aaa">…</span>`;
-    }
-  }
-  btns += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>→</button>`;
-  pag.innerHTML = btns;
-}
-
-function goPage(p) {
-  currentPage = p;
-  render();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-loadAll();
 </script>
-
-<script src="/nav.js"></script>
+<script src="/nav.js" defer></script>
 <script src="/footer.js"></script>
 </body>
 </html>
