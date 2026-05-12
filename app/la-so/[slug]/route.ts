@@ -346,16 +346,50 @@ const HUNG_SET = new Set([
   'Đại Hao','Tiểu Hao','Bệnh Phù','Phục Binh','Quan Phù','Bạch Hổ','Tang Môn',
   'Điếu Khách','Kiếp Sát','Phá Toái','Thiên Hình','Thiên Riêu','Phi Liêm','Thiên Sứ',
 ]);
+// STAR_CLS compiled from tuvi-ansao-engine.js STAR_DATA (server-side, no runtime access)
 const STAR_CLS: Record<string,string> = {
-  'Kình Dương':'sc-kim','Đà La':'sc-kim','Tả Phù':'sc-kim','Hữu Bật':'sc-kim',
-  'Văn Xương':'sc-kim','Thiên Tài':'sc-kim','Thiên Quan':'sc-kim',
-  'Văn Khúc':'sc-thuy','Thiên Khôi':'sc-thuy','Thiên Việt':'sc-thuy','Thiên Y':'sc-thuy',
-  'Đào Hoa':'sc-thuy','Hồng Loan':'sc-thuy','Thiên Hỷ':'sc-thuy','Thiên Quý':'sc-thuy',
-  'Hỏa Tinh':'sc-hoa','Linh Tinh':'sc-hoa','Thái Tuế':'sc-hoa','Thiên Mã':'sc-hoa',
-  'Tang Môn':'sc-hoa','Bạch Hổ':'sc-hoa',
-  'Lộc Tồn':'sc-moc','Thiên Đức':'sc-moc','Long Đức':'sc-moc','Thiên Phúc':'sc-moc',
-  'Đại Hao':'sc-tho','Tiểu Hao':'sc-tho','Địa Kiếp':'sc-tho','Địa Không':'sc-tho',
-  'Bệnh Phù':'sc-tho','Phúc Đức':'sc-tho',
+  // Kim
+  'Kình Dương':'sc-kim','Đà La':'sc-kim',
+  'Văn Xương':'sc-kim','Phượng Các':'sc-kim',
+  'Bạch Hổ':'sc-kim','Nguyệt Đức':'sc-kim',
+  'Hoa Cái':'sc-kim','Lực Sỹ':'sc-kim','Tướng Quân':'sc-kim',
+  // Thủy
+  'Văn Khúc':'sc-thuy','Thiên Y':'sc-thuy',
+  'Hồng Loan':'sc-thuy','Thiên Hỷ':'sc-thuy',
+  'Long Trì':'sc-thuy','Lưu Hà':'sc-thuy',
+  'Thiên Riêu':'sc-thuy','Thiên Sứ':'sc-thuy',
+  'Thiên Khốc':'sc-thuy','Thiên Hư':'sc-thuy',
+  'Tam Thai':'sc-thuy','Long Đức':'sc-thuy',
+  'Thiếu Âm':'sc-thuy','Bác Sỹ':'sc-thuy',
+  'Hữu Bật':'sc-thuy',
+  // Hỏa
+  'Hỏa Tinh':'sc-hoa','Linh Tinh':'sc-hoa',
+  'Kiếp Sát':'sc-hoa','Thiên Hình':'sc-hoa',
+  'Địa Không':'sc-hoa','Địa Kiếp':'sc-hoa','Thiên Không':'sc-hoa',
+  'Đại Hao':'sc-hoa','Tiểu Hao':'sc-hoa',
+  'Phục Binh':'sc-hoa','Quan Phù':'sc-hoa',
+  'Phá Toái':'sc-hoa','Tử Phù':'sc-hoa','Trực Phù':'sc-hoa',
+  'Thiếu Dương':'sc-hoa','Thiên Giải':'sc-hoa',
+  'Thiên Mã':'sc-hoa','Phi Liêm':'sc-hoa',
+  // Mộc
+  'Đào Hoa':'sc-moc','Bát Tọa':'sc-moc',
+  'Ân Quang':'sc-moc','Giải Thần':'sc-moc',
+  'Tang Môn':'sc-moc','Đường Phù':'sc-moc',
+  'Thanh Long':'sc-moc','Tấu Thư':'sc-moc','Hỷ Thần':'sc-moc',
+  // Thổ
+  'Tả Phụ':'sc-tho','Tả Phù':'sc-tho',
+  'Thiên Khôi':'sc-tho','Thiên Việt':'sc-tho',
+  'Thiên Quý':'sc-tho','Thiên Tài':'sc-tho',
+  'Lộc Tồn':'sc-tho','Thiên Thọ':'sc-tho',
+  'Thiên Đức':'sc-tho','Thiên Phúc':'sc-tho',
+  'Địa Giải':'sc-tho','Phúc Đức':'sc-tho',
+  'Thiên La':'sc-tho','Địa Võng':'sc-tho',
+  'Thiên Thương':'sc-tho','Thiên Trù':'sc-tho',
+  'Cô Thần':'sc-tho','Quả Tú':'sc-tho',
+  'Quốc Ấn':'sc-tho','Thiên Quan':'sc-tho',
+  'Thái Tuế':'sc-tho','Tuế Phá':'sc-tho',
+  'Bệnh Phù':'sc-tho','Điếu Khách':'sc-tho',
+  'Đẩu Quân':'sc-tho',
 };
 const BC_MAP: Record<string,string> = {Miếu:'M',Vượng:'V',Đắc:'Đ',Bình:'B',Hãm:'H'};
 const TS_SET = new Set(['Tràng Sinh','Mộc Dục','Quan Đới','Lâm Quan','Đế Vượng','Suy','Bệnh','Tử','Mộ','Tuyệt','Thai','Dưỡng']);
@@ -1152,7 +1186,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 .v2-dai-van{font-size:9px;color:#666;font-weight:700}
 .v2-tuan-tag,.v2-triet-tag{position:absolute;bottom:-1px;left:0;right:0;font-size:8px;text-align:center;padding:1px;color:#fff}
 .v2-tuan-tag{background:#2c4a00}.v2-triet-tag{background:#4a0000}
-.sc-hoa{color:#E74C3C}.sc-kim{color:#7F8C8D}.sc-thuy{color:#1455A4}.sc-moc{color:#27AE60}.sc-tho{color:#D4A017}.sc-neutral{color:#333}
+.sc-hoa{color:#E74C3C}.sc-kim{color:#7F8C8D}.sc-thuy{color:#1a1a1a}.sc-moc{color:#27AE60}.sc-tho{color:#D4A017}.sc-neutral{color:#333}
 .sc-hoa-loc{color:#1E6B3C;font-weight:700}.sc-hoa-quyen{color:#7B3FA0;font-weight:700}.sc-hoa-khoa{color:#1455A4;font-weight:700}.sc-hoa-ky{color:#C0392B;font-weight:700}
 @media(max-width:800px){.layout{grid-template-columns:1fr}.bc,.wrap{padding-left:14px;padding-right:14px}.hero-title{font-size:18px}.laso-grid{font-size:9px}.cung-cell{min-height:90px;padding:3px 4px 16px}.v2-chinh-item{font-size:10px}.v2-phu-item{font-size:8px}.v2-phu-area{grid-template-columns:1fr}}
 </style>
