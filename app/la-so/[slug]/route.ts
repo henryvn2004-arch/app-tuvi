@@ -554,7 +554,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
 
   function cta(label: string): string {
     return `<div style="margin-top:16px;padding-top:12px;border-top:1px solid #E8E3D9;text-align:right">
-<a href="/luan-giai/${lasoSlug}" style="display:inline-block;background:#9A7B3A;color:#fff;font-size:12px;font-weight:600;padding:7px 16px;border-radius:5px;text-decoration:none">${esc(label)} →</a>
+<a href="/luan-giai.html" style="display:inline-block;background:#9A7B3A;color:#fff;font-size:12px;font-weight:600;padding:7px 16px;border-radius:5px;text-decoration:none">${esc(label)} →</a>
 </div>`;
   }
 
