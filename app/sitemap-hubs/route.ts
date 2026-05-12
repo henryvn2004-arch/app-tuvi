@@ -1,11 +1,11 @@
 // app/sitemap-hubs/route.ts
-// Hub pages: /menh-kho/[year] (51) + /menh-kho/[year]/[mm]-[dd] (~18,615) = ~18,666 URLs
+// Hub pages: /menh-kho/[year] (67) + /menh-kho/[year]/[mm]-[dd] (~24,471) = ~24,538 URLs
 export const revalidate = false;
 
 import { NextResponse } from 'next/server';
 
 const BASE  = 'https://www.tuviminhbao.com';
-const YEARS = Array.from({ length: 51 }, (_, i) => 1960 + i);
+const YEARS = Array.from({ length: 67 }, (_, i) => 1960 + i);
 
 function isLeap(y: number) { return (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0; }
 function daysInMonth(m: number, y: number) {

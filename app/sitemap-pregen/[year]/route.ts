@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const BASE      = 'https://www.tuviminhbao.com';
 const NAM_XEM   = 2027;
-const YEARS     = Array.from({ length: 51 }, (_, i) => 1960 + i);
+const YEARS     = Array.from({ length: 67 }, (_, i) => 1960 + i);
 const CAN_SLUGS = ['giap','at','binh','dinh','mau','ky','canh','tan','nham','quy'];
 const CHI_SLUGS = ['ty','suu','dan','mao','thin','ti','ngo','mui','than','dau','tuat','hoi'];
 const GIO_SLUGS = ['ty','suu','dan','mao','thin','ti','ngo','mui','than','dau','tuat','hoi'];
