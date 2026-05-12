@@ -550,6 +550,14 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     }).join('')}</div>`;
   }
 
+  const lasoSlug = `${CAN_SLUGS[params.canIdx]}-${CHI_SLUGS[params.chiIdx]}-${String(params.dd).padStart(2,'0')}-${String(params.mm).padStart(2,'0')}-${params.year}-gio-${GIO_SLUGS[params.gioIdx]}-${params.gioi}-${params.namXem}`;
+
+  function cta(label: string): string {
+    return `<div style="margin-top:16px;padding-top:12px;border-top:1px solid #E8E3D9;text-align:right">
+<a href="/luan-giai/${lasoSlug}" style="display:inline-block;background:#9A7B3A;color:#fff;font-size:12px;font-weight:600;padding:7px 16px;border-radius:5px;text-decoration:none">${esc(label)} →</a>
+</div>`;
+  }
+
   function sec(n: number, body: string): string {
     const label = PHAN_LABELS_ISR[n] || `Phần ${n}`;
     return `<div class="s24" id="s${n}">
@@ -572,6 +580,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     b1 += `</div>`;
   }
   if (!b1) b1 = `<p>Lá số không có cách cục đặc biệt. Phân tích dựa trên từng sao và sự phối hợp giữa các cung.</p>`;
+  b1 += cta('Xem luận giải AI đầy đủ lá số này');
   const s1 = sec(1, b1);
 
   // ── Sections 2–13: 12 Cung ───────────────────────────────────────────────
@@ -694,6 +703,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     // Score bars 6 chiều
     if (sc) body += scoreBars6(cungName);
 
+    body += cta(`Xem luận giải AI chi tiết ${cungName}`);
     return sec(i+2, body);
   });
 
@@ -714,10 +724,11 @@ function render24Sections(ls: Rec, params: IsrParams): string {
       </div>`;
     });
     b14 += `</div>`;
-    b14 += `<p style="font-size:12px;color:#666">Điểm đại vận tính theo 3 trụ: Thiên Thời (0-5), Địa Lợi (0-1), Nhân Hòa (0-4). Tổng tối đa 10 điểm. <a href="/" style="color:#1455A4">Xem AI luận giải từng đại vận chi tiết →</a></p>`;
+    b14 += `<p style="font-size:12px;color:#666">Điểm đại vận tính theo 3 trụ: Thiên Thời (0-5), Địa Lợi (0-1), Nhân Hòa (0-4). Tổng tối đa 10 điểm.</p>`;
   } else {
     b14 = `<p>Không có dữ liệu đại vận.</p>`;
   }
+  b14 += cta('Xem luận giải AI toàn bộ đại vận');
   const s14 = sec(14, b14);
 
   // ── Sections 15–23: Đại Vận 1–9 ──────────────────────────────────────────
@@ -834,6 +845,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     }
 
     if (!body) body = `<p style="color:#888;font-style:italic">Không đủ dữ liệu để phân tích đại vận này.</p>`;
+    body += cta(`Xem luận giải AI đại vận ${dvIdx+1}`);
 
     // Return with dynamic title including canChi + age
     return `<div class="s24" id="s${phanNum}">
@@ -878,8 +890,8 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     });
     b24 += `</div>`;
   }
-  if (!b24) b24 = `<p>Không tìm thấy dữ liệu tiểu vận năm ${namXem}. <a href="/" style="color:#1455A4">Xem luận giải đầy đủ →</a></p>`;
-  b24 += `<p style="font-size:12px;color:#888;font-style:italic;margin-top:8px">Để xem luận giải AI chuyên sâu cho từng phần — tính cách, sự nghiệp, tình duyên, vận hạn — vui lòng dùng công cụ tại <a href="/" style="color:#1455A4">tuviminhbao.com</a>.</p>`;
+  if (!b24) b24 = `<p>Không tìm thấy dữ liệu tiểu vận năm ${namXem}.</p>`;
+  b24 += cta(`Xem luận giải AI tiểu vận năm ${namXem}`);
   const s24 = sec(24, b24);
 
   return [s1, ...cungSecs, s14, ...dvSecs, s24].join('\n');
