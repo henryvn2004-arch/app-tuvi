@@ -574,15 +574,6 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     });
     b1 += `</div>`;
   }
-  if (Object.keys(scores).length > 0) {
-    const allSc = Object.entries(scores).map(([c,sc])=>[c,METRICS.reduce((s,m)=>s+((sc as Record<string,number>)[m]||0),0)] as [string,number]);
-    const top3  = [...allSc].sort((a,b)=>b[1]-a[1]).slice(0,3);
-    const bot3  = [...allSc].sort((a,b)=>a[1]-b[1]).slice(0,3);
-    b1 += `<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">📊 Điểm mạnh / yếu nổi bật</div>
-      <div style="font-size:12px;color:#1E6B3C;margin-bottom:4px">Mạnh nhất: <strong>${top3.map(([c,s])=>`${esc(c)} (${s.toFixed(0)})`).join(', ')}</strong></div>
-      <div style="font-size:12px;color:#C0392B">Yếu nhất: <strong>${bot3.map(([c,s])=>`${esc(c)} (${s.toFixed(0)})`).join(', ')}</strong></div>
-    </div>`;
-  }
   if (!b1) b1 = `<p>Lá số không có cách cục đặc biệt. Phân tích dựa trên từng sao và sự phối hợp giữa các cung.</p>`;
   const s1 = sec(1, b1);
 
