@@ -27,8 +27,9 @@ const CAN_SLUGS = ['giap','at','binh','dinh','mau','ky','canh','tan','nham','quy
 const CAN_NAMES = ['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
 const CHI_SLUGS = ['ty','suu','dan','mao','thin','ti','ngo','mui','than','dau','tuat','hoi'];
 const CHI_NAMES = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
-const GIO_SLUGS = ['ty','suu','dan','mao','thin','ti','ngo','mui','than','dau','tuat','hoi'];
-const GIO_NAMES = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+const GIO_SLUGS  = ['ty','suu','dan','mao','thin','ti','ngo','mui','than','dau','tuat','hoi'];
+const GIO_NAMES  = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+const GIO_HOURS  = [23,1,3,5,7,9,11,13,15,17,19,21];
 
 interface IsrParams {
   canIdx: number; chiIdx: number;
@@ -413,23 +414,24 @@ export async function GET(
   }
 
   try {
-    const engine = loadEngine();
-    const { convertDuongToAm, anSaoLaSo } = engine;
+    const { convertDuongToAm, anSaoLaSo } = loadEngine();
+    const hour = GIO_HOURS[parsed.gioIdx];
+    const conv = convertDuongToAm(parsed.dd, parsed.mm, parsed.year, hour) as Rec;
+    if (!conv?.amLich) return NextResponse.redirect(new URL('/menh-kho.html', req.url), 302);
+    const al = conv.amLich as Rec;
 
-    const amDate = (convertDuongToAm as (d:number,m:number,y:number)=>number[])(
-      parsed.dd, parsed.mm, parsed.year
-    );
-    const [ngayAL, thangAL, namAL] = amDate as number[];
-
-    const ls = (anSaoLaSo as (o:object)=>Rec)({
-      ngayAL, thangAL, namAL,
-      canNam:  CAN_NAMES[parsed.canIdx],
-      chiNam:  CHI_NAMES[parsed.chiIdx],
-      gioIdx:  parsed.gioIdx,
+    const ls = (anSaoLaSo as (o: object) => Rec)({
+      ngayAL:   al.day,
+      thangAL:  al.month,
+      namAL:    parsed.year,
+      canNam:   conv.canNam,
+      chiNam:   conv.chiNam,
+      gioIdx:   parsed.gioIdx,
       gioitinh: parsed.gioi,
-      namXem:  parsed.namXem,
+      namXem:   parsed.namXem,
     });
 
+    if (!ls) return NextResponse.redirect(new URL('/menh-kho.html', req.url), 302);
     const html = buildLuanGiaiHTML(ls, parsed, slug);
     return new NextResponse(html, {
       headers: {
