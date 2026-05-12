@@ -1,19 +1,20 @@
-// app/api/sitemap/pregen/[year]/route.ts
+// app/sitemap-pregen/[year]/route.ts
 // Per-year sitemap: 365 × 12 × 2 = 8,760 ISR lá số URLs
+// URL: /sitemap-pregen/1990
 export const revalidate = false;
 
 import { NextRequest, NextResponse } from 'next/server';
 
-const BASE     = 'https://www.tuviminhbao.com';
-const NAM_XEM  = 2027;
-const YEARS    = Array.from({ length: 51 }, (_, i) => 1960 + i);
+const BASE      = 'https://www.tuviminhbao.com';
+const NAM_XEM   = 2027;
+const YEARS     = Array.from({ length: 51 }, (_, i) => 1960 + i);
 const CAN_SLUGS = ['giap','at','binh','dinh','mau','ky','canh','tan','nham','quy'];
 const CHI_SLUGS = ['ty','suu','dan','mao','thin','ti','ngo','mui','than','dau','tuat','hoi'];
 const GIO_SLUGS = ['ty','suu','dan','mao','thin','ti','ngo','mui','than','dau','tuat','hoi'];
 
-function canSlug(year: number)  { return CAN_SLUGS[(year - 4 + 400) % 10]; }
-function chiSlug(year: number)  { return CHI_SLUGS[(year - 4 + 480) % 12]; }
-function isLeap(y: number)      { return (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0; }
+function canSlug(year: number) { return CAN_SLUGS[(year - 4 + 400) % 10]; }
+function chiSlug(year: number) { return CHI_SLUGS[(year - 4 + 480) % 12]; }
+function isLeap(y: number)     { return (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0; }
 function daysInMonth(m: number, y: number) {
   return [31, isLeap(y)?29:28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m - 1];
 }

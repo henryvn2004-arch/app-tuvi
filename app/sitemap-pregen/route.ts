@@ -1,15 +1,16 @@
-// app/api/sitemap/pregen/route.ts
+// app/sitemap-pregen/route.ts
 // Sitemap index for all 51 per-year ISR sitemaps (1960–2010)
+// URL: /sitemap-pregen (outside /api/ so Google crawls without Disallow conflict)
 export const revalidate = false;
 
 import { NextResponse } from 'next/server';
 
-const BASE = 'https://www.tuviminhbao.com';
+const BASE  = 'https://www.tuviminhbao.com';
 const YEARS = Array.from({ length: 51 }, (_, i) => 1960 + i);
 
 export async function GET() {
   const entries = YEARS.map(y =>
-    `  <sitemap>\n    <loc>${BASE}/api/sitemap/pregen/${y}</loc>\n  </sitemap>`
+    `  <sitemap>\n    <loc>${BASE}/sitemap-pregen/${y}</loc>\n  </sitemap>`
   ).join('\n');
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
