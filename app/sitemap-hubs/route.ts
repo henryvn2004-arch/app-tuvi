@@ -13,8 +13,8 @@ function daysInMonth(m: number, y: number) {
 }
 function pad(n: number) { return String(n).padStart(2, '0'); }
 
-function url(loc: string, lastmod: string, cf: string, pri: string) {
-  return `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>${cf}</changefreq>\n    <priority>${pri}</priority>\n  </url>`;
+function url(loc: string, cf: string, pri: string) {
+  return `  <url>\n    <loc>${loc}</loc>\n    <changefreq>${cf}</changefreq>\n    <priority>${pri}</priority>\n  </url>`;
 }
 
 export async function GET() {
@@ -22,7 +22,7 @@ export async function GET() {
 
   for (const year of YEARS) {
     // Year hub
-    lines.push(url(`${BASE}/menh-kho/${year}`, `${year}-01-01`, 'yearly', '0.7'));
+    lines.push(url(`${BASE}/menh-kho/${year}`, 'yearly', '0.7'));
 
     // Day hubs
     for (let m = 1; m <= 12; m++) {
@@ -30,7 +30,7 @@ export async function GET() {
       for (let d = 1; d <= dim; d++) {
         lines.push(url(
           `${BASE}/menh-kho/${year}/${pad(m)}-${pad(d)}`,
-          `${year}-01-01`, 'yearly', '0.5'
+          'yearly', '0.5'
         ));
       }
     }
