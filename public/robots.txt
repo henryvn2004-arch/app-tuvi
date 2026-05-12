@@ -31,6 +31,7 @@ Allow: /
 
 # Sitemap
 Sitemap: https://www.tuviminhbao.com/sitemap.xml
+Sitemap: https://www.tuviminhbao.com/api/sitemap/pregen
 
 # LLMs context
 LLMs: https://www.tuviminhbao.com/llms.txt

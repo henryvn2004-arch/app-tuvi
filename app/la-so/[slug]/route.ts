@@ -898,6 +898,57 @@ function render24Sections(ls: Rec, params: IsrParams): string {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
+// ISR: related links (internal linking for Google crawl)
+// ────────────────────────────────────────────────────────────────────────────
+function isLeapYear(y: number) { return (y%4===0&&y%100!==0)||y%400===0; }
+function daysInMonthISR(m: number, y: number) {
+  return [31,isLeapYear(y)?29:28,31,30,31,30,31,31,30,31,30,31][m-1];
+}
+
+function buildRelatedLinks(params: IsrParams): string {
+  const { canIdx, chiIdx, dd, mm, year, gioIdx, gioi, namXem } = params;
+  const can  = CAN_SLUGS[canIdx];
+  const chi  = CHI_SLUGS[chiIdx];
+  const p    = (n: number) => String(n).padStart(2,'0');
+  const base = `${can}-${chi}-${p(dd)}-${p(mm)}-${year}`;
+
+  const links: { label: string; url: string }[] = [];
+
+  // Same day, adjacent giờ (±1 ±2)
+  for (const d of [-2,-1,1,2]) {
+    const gi = (gioIdx + d + 12) % 12;
+    links.push({ label: `Giờ ${GIO_NAMES[gi]}`, url: `/la-so/${base}-gio-${GIO_SLUGS[gi]}-${gioi}-${namXem}` });
+  }
+
+  // Same day/giờ, other giới
+  const otherGioi = gioi === 'nam' ? 'nu' : 'nam';
+  links.push({ label: gioi === 'nam' ? 'Xem lá số Nữ cùng ngày giờ' : 'Xem lá số Nam cùng ngày giờ',
+    url: `/la-so/${base}-gio-${GIO_SLUGS[gioIdx]}-${otherGioi}-${namXem}` });
+
+  // namXem ±1
+  if (namXem >= 2021) links.push({ label: `Xem vận năm ${namXem-1}`, url: `/la-so/${base}-gio-${GIO_SLUGS[gioIdx]}-${gioi}-${namXem-1}` });
+  if (namXem <= 2038) links.push({ label: `Xem vận năm ${namXem+1}`, url: `/la-so/${base}-gio-${GIO_SLUGS[gioIdx]}-${gioi}-${namXem+1}` });
+
+  // Adjacent days
+  if (dd > 1) links.push({ label: `Sinh ${p(dd-1)}/${p(mm)}/${year}`, url: `/la-so/${can}-${chi}-${p(dd-1)}-${p(mm)}-${year}-gio-${GIO_SLUGS[gioIdx]}-${gioi}-${namXem}` });
+  const maxD = daysInMonthISR(mm, year);
+  if (dd < maxD) links.push({ label: `Sinh ${p(dd+1)}/${p(mm)}/${year}`, url: `/la-so/${can}-${chi}-${p(dd+1)}-${p(mm)}-${year}-gio-${GIO_SLUGS[gioIdx]}-${gioi}-${namXem}` });
+
+  // Hub links
+  links.push({ label: `Tất cả giờ sinh ngày ${p(dd)}/${p(mm)}/${year}`, url: `/menh-kho/${year}/${p(mm)}-${p(dd)}` });
+  links.push({ label: `Lá số tử vi năm sinh ${year}`, url: `/menh-kho/${year}` });
+
+  return `<div style="background:#F5F4F0;border-top:2px solid #E8E8E8;padding:24px;margin-top:32px">
+<div style="max-width:1000px;margin:0 auto">
+  <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:16px">Xem thêm lá số liên quan</div>
+  <div style="display:flex;flex-wrap:wrap;gap:8px">
+    ${links.map(l=>`<a href="${l.url}" style="font-size:12px;padding:5px 12px;border:1px solid #CCC;border-radius:14px;text-decoration:none;color:#444;background:#fff;white-space:nowrap">${esc(l.label)}</a>`).join('')}
+  </div>
+</div>
+</div>`;
+}
+
+// ────────────────────────────────────────────────────────────────────────────
 // ISR: full HTML builder
 // ────────────────────────────────────────────────────────────────────────────
 function buildIsrHTML(ls: Rec, params: IsrParams, slug: string): string {
@@ -957,9 +1008,10 @@ function buildIsrHTML(ls: Rec, params: IsrParams, slug: string): string {
       mainEntity: faqItems.map(f => ({'@type':'Question',name:f.q,acceptedAnswer:{'@type':'Answer',text:f.a}})) },
   ]);
 
-  const gridHTML     = renderGrid(ls);
-  const textHTML     = renderTextBlocks(ls);
+  const gridHTML       = renderGrid(ls);
+  const textHTML       = renderTextBlocks(ls);
   const sections24HTML = render24Sections(ls, params);
+  const relatedHTML    = buildRelatedLinks(params);
 
   return `<!DOCTYPE html>
 <html lang="vi"><head>
@@ -1059,6 +1111,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
     ${sections24HTML}
   </div>
 </div>
+${relatedHTML}
 <script src="/footer.js"></script>
 <script src="/nav.js" defer></script>
 </body></html>`;
