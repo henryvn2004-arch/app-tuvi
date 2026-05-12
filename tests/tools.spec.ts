@@ -106,16 +106,16 @@ test.describe('Mệnh Khó (menh-kho.html)', () => {
     await expect(page.locator('.hero, h1, h2').first()).toBeVisible();
   });
 
-  test('search input visible', async ({ page }) => {
-    await expect(page.locator('#search-input')).toBeVisible({ timeout: 5000 });
+  test('year pills grid hiển thị (ít nhất 10)', async ({ page }) => {
+    const pills = page.locator('.year-pill, a[href*="/menh-kho/"]');
+    const count = await pills.count();
+    expect(count).toBeGreaterThanOrEqual(10);
   });
 
-  test('lá số cards tải về (ít nhất 1)', async ({ page }) => {
-    // Chờ loading xong
-    await page.waitForSelector('#state-loading', { state: 'hidden', timeout: 15000 }).catch(() => {});
-    const cards = page.locator('.laso-card, #laso-grid [class*="card"]');
-    const count = await cards.count();
-    expect(count).toBeGreaterThanOrEqual(1);
+  test('year pill link đúng format /menh-kho/[year]', async ({ page }) => {
+    const firstPill = page.locator('a[href*="/menh-kho/"]').first();
+    const href = await firstPill.getAttribute('href');
+    expect(href).toMatch(/\/menh-kho\/\d{4}/);
   });
 
   test('filter giới tính hoạt động', async ({ page }) => {
