@@ -1187,7 +1187,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 .v2-tuan-tag,.v2-triet-tag{position:absolute;bottom:-1px;left:0;right:0;font-size:8px;text-align:center;padding:1px;color:#fff}
 .v2-tuan-tag{background:#2c4a00}.v2-triet-tag{background:#4a0000}
 .sc-hoa{color:#E74C3C}.sc-kim{color:#7F8C8D}.sc-thuy{color:#1a1a1a}.sc-moc{color:#27AE60}.sc-tho{color:#D4A017}.sc-neutral{color:#333}
-.sc-hoa-loc{color:#1E6B3C;font-weight:700}.sc-hoa-quyen{color:#7B3FA0;font-weight:700}.sc-hoa-khoa{color:#1455A4;font-weight:700}.sc-hoa-ky{color:#C0392B;font-weight:700}
+.sc-hoa-loc{color:#D4A017;font-weight:700}.sc-hoa-quyen{color:#27AE60;font-weight:700}.sc-hoa-khoa{color:#1a1a1a;font-weight:700}.sc-hoa-ky{color:#1a1a1a;font-weight:700}
 @media(max-width:800px){.layout{grid-template-columns:1fr}.bc,.wrap{padding-left:14px;padding-right:14px}.hero-title{font-size:18px}.laso-grid{font-size:9px}.cung-cell{min-height:90px;padding:3px 4px 16px}.v2-chinh-item{font-size:10px}.v2-phu-item{font-size:8px}.v2-phu-area{grid-template-columns:1fr}}
 </style>
 <script src="/auth.js" defer></script>
