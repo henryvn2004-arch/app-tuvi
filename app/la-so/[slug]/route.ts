@@ -334,82 +334,150 @@ const DCHI_TO_POS: Record<number, [number,number]> = {
   8:[0,3], 9:[1,3], 10:[2,3], 11:[3,3],
 };
 
-function renderGrid(ls: Rec): string {
+// ── Star data for grid rendering ─────────────────────────────────────────────
+const CHINH_CLS: Record<string,string> = {
+  'Tử Vi':'sc-tho','Thiên Cơ':'sc-moc','Thái Dương':'sc-hoa','Vũ Khúc':'sc-kim',
+  'Thiên Đồng':'sc-thuy','Liêm Trinh':'sc-hoa','Thiên Phủ':'sc-tho','Thái Âm':'sc-thuy',
+  'Tham Lang':'sc-thuy','Cự Môn':'sc-thuy','Thiên Tướng':'sc-thuy','Thiên Lương':'sc-moc',
+  'Thất Sát':'sc-kim','Phá Quân':'sc-thuy',
+};
+const HUNG_SET = new Set([
+  'Kình Dương','Đà La','Hỏa Tinh','Linh Tinh','Địa Không','Địa Kiếp','Thiên Không',
+  'Đại Hao','Tiểu Hao','Bệnh Phù','Phục Binh','Quan Phù','Bạch Hổ','Tang Môn',
+  'Điếu Khách','Kiếp Sát','Phá Toái','Thiên Hình','Thiên Riêu','Phi Liêm','Thiên Sứ',
+]);
+const STAR_CLS: Record<string,string> = {
+  'Kình Dương':'sc-kim','Đà La':'sc-kim','Tả Phù':'sc-kim','Hữu Bật':'sc-kim',
+  'Văn Xương':'sc-kim','Thiên Tài':'sc-kim','Thiên Quan':'sc-kim',
+  'Văn Khúc':'sc-thuy','Thiên Khôi':'sc-thuy','Thiên Việt':'sc-thuy','Thiên Y':'sc-thuy',
+  'Đào Hoa':'sc-thuy','Hồng Loan':'sc-thuy','Thiên Hỷ':'sc-thuy','Thiên Quý':'sc-thuy',
+  'Hỏa Tinh':'sc-hoa','Linh Tinh':'sc-hoa','Thái Tuế':'sc-hoa','Thiên Mã':'sc-hoa',
+  'Tang Môn':'sc-hoa','Bạch Hổ':'sc-hoa',
+  'Lộc Tồn':'sc-moc','Thiên Đức':'sc-moc','Long Đức':'sc-moc','Thiên Phúc':'sc-moc',
+  'Đại Hao':'sc-tho','Tiểu Hao':'sc-tho','Địa Kiếp':'sc-tho','Địa Không':'sc-tho',
+  'Bệnh Phù':'sc-tho','Phúc Đức':'sc-tho',
+};
+const BC_MAP: Record<string,string> = {Miếu:'M',Vượng:'V',Đắc:'Đ',Bình:'B',Hãm:'H'};
+const TS_SET = new Set(['Tràng Sinh','Mộc Dục','Quan Đới','Lâm Quan','Đế Vượng','Suy','Bệnh','Tử','Mộ','Tuyệt','Thai','Dưỡng']);
+const G_CAN = ['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
+
+function renderGrid(ls: Rec, canIdx: number): string {
   const palaces = (ls.palaces as Rec[]) || [];
   const dcMap: Record<number, Rec> = {};
   palaces.forEach(p => {
     const dc = DCHI.indexOf(String(p.diaChi||''));
     if (dc >= 0) dcMap[dc] = p;
   });
-
   const grid: (Rec|null|'center')[][] = Array.from({length:4}, () => Array(4).fill(null));
   Object.entries(DCHI_TO_POS).forEach(([dcStr, [r,c]]) => { grid[r][c] = dcMap[parseInt(dcStr)] || null; });
   grid[1][1] = grid[1][2] = grid[2][1] = grid[2][2] = 'center';
 
-  const dvs    = (ls.daiVans as Rec[]) || [];
-  const curDV  = dvs.find(d => d.isCurrentDV) as Rec|undefined;
-  const HOA_COLORS: Record<string,string> = { 'Lộc':'#1E6B3C','Quyền':'#7B3FA0','Khoa':'#1455A4','Kỵ':'#C0392B' };
-  const SAT = new Set(['Kình Dương','Đà La','Hỏa Tinh','Linh Tinh','Địa Không','Địa Kiếp','Tang Môn','Bạch Hổ']);
+  const dvs   = (ls.daiVans as Rec[]) || [];
+  const curDV = dvs.find(d => d.isCurrentDV) as Rec|undefined;
 
-  function renderStar(s: Rec) {
-    const ten    = String(s.ten||'');
-    const hoa    = String(s.hoa||'');
-    const bright = String(s.brightness||'');
-    const isSat  = SAT.has(ten);
-    const col    = hoa ? HOA_COLORS[hoa]||'#1455A4' : isSat ? '#C0392B' : '#1a1a1a';
-    const bDot   = bright==='Miếu'||bright==='Vượng' ? '●' : '';
-    return `<span style="color:${col};font-size:11px;font-weight:700;white-space:nowrap">${esc(ten)}${hoa?`<sup style="font-size:8px;color:${HOA_COLORS[hoa]}">${esc(hoa[0])}</sup>`:''}${bDot?`<sup style="color:#4ade80;font-size:8px">${bDot}</sup>`:''}</span>`;
+  function phuCls(s: Rec): string {
+    const ten = String(s.ten||''); const hoa = String(s.hoa||'');
+    if (hoa==='Lộc') return 'sc-hoa-loc';
+    if (hoa==='Quyền') return 'sc-hoa-quyen';
+    if (hoa==='Khoa') return 'sc-hoa-khoa';
+    if (hoa==='Kỵ') return 'sc-hoa-ky';
+    return STAR_CLS[ten]||'sc-neutral';
   }
 
   function renderCell(p: Rec): string {
-    const cungName  = String(p.cungName||'');
-    const diacChi   = String(p.diaChi||'');
-    const majStars  = (p.majorStars as Rec[])||[];
-    const allStars  = (p.stars as Rec[])||[];
-    const minStars  = allStars.filter(s => !majStars.find(m => m.ten===s.ten));
-    const isMenh    = !!p.isMenh;
-    const isVong    = !!p.isVong;
-    const trangSinh = String(p.trangSinh||'');
-    const hasTuan   = allStars.some(s => s.ten==='Tuần');
-    const hasTriet  = allStars.some(s => s.ten==='Triệt');
-    const dcIdx     = DCHI.indexOf(diacChi);
-    const dvForCung = dvs.find(d => d.cungIdx===dcIdx) as Rec|undefined;
-    const dvBadge   = dvForCung ? `<span style="position:absolute;bottom:3px;right:5px;font-size:10px;font-weight:700;color:#555">${esc(String(dvForCung.diaChi||''))}</span>` : '';
-    const tuanTag   = hasTuan  ? '<span style="position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);background:#2c4a00;color:#fff;font-size:8px;padding:0 5px;border-radius:2px">Tuần</span>' : '';
-    const trietTag  = hasTriet ? '<span style="position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);background:#4a0000;color:#fff;font-size:8px;padding:0 5px;border-radius:2px">Triệt</span>' : '';
-    const dvActive  = curDV && dcIdx === dvs.indexOf(curDV);
-    const border    = isMenh ? '2px solid #1455A4' : dvActive ? '2px solid #1E6B3C' : '1px solid #aaa';
-    const bg        = isMenh ? '#EEF4FF' : '#fff';
-    return `<div style="border:${border};background:${bg};padding:6px 6px 18px;min-height:130px;position:relative;display:flex;flex-direction:column">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px">
-        <span style="font-size:9px;color:#888">${esc(diacChi)}</span>
-        ${isVong?'<span style="font-size:8px;color:#888;border:1px solid #ccc;padding:0 3px;border-radius:2px">Vong</span>':''}
+    const cungName = String(p.cungName||'');
+    const diacChi  = String(p.diaChi||'');
+    const dcIdx    = DCHI.indexOf(diacChi);
+    const majStars = (p.majorStars as Rec[])||[];
+    const allStars = (p.stars as Rec[])||[];
+    const isMenh   = !!p.isMenh;
+    const isThan   = !!p.isThan;
+    const isDVCung = curDV && Number(curDV.cungIdx) === dcIdx;
+
+    // Can-chi header for this cung
+    const cungCanIdx = (((canIdx % 5) * 2 + dcIdx) % 10);
+    const canChiHeader = `${G_CAN[cungCanIdx]} ${diacChi}`;
+
+    // Chính tinh
+    const hoaFromChinh: Rec[] = [];
+    let chinhH = '';
+    for (const s of majStars) {
+      const cls = 'sc-'+(CHINH_CLS[String(s.ten||'')] ? CHINH_CLS[String(s.ten||'')] : 'neutral');
+      const b = s.brightness ? ` <span style="font-size:10px">(${BC_MAP[String(s.brightness)]||''})</span>` : '';
+      if (s.hoa) hoaFromChinh.push(s);
+      chinhH += `<div class="v2-chinh-item ${cls}">${esc(String(s.ten||'')).toUpperCase()}${b}</div>`;
+    }
+    if (!chinhH) chinhH = `<div class="v2-chinh-item sc-neutral" style="font-style:italic;font-size:10px">Vô chính diệu</div>`;
+
+    // Phụ tinh: exclude tràng sinh, tuần/triệt, chính tinh
+    const phuStars = allStars.filter(s => {
+      const ten = String(s.ten||'');
+      if (String(s.nhom||'')==='chinh') return false;
+      if (TS_SET.has(ten)) return false;
+      if (ten==='Tuần'||ten==='Triệt'||ten==='Tuần+Triệt') return false;
+      return true;
+    });
+    const renderPhu = (s: Rec) => {
+      const cls = phuCls(s);
+      const b = s.brightness ? ` <span style="font-size:8px">(${BC_MAP[String(s.brightness)]||''})</span>` : '';
+      let nm = esc(String(s.ten||'')).toUpperCase();
+      if (s.hoa) {
+        const hc = s.hoa==='Lộc'?'sc-hoa-loc':s.hoa==='Quyền'?'sc-hoa-quyen':s.hoa==='Khoa'?'sc-hoa-khoa':'sc-hoa-ky';
+        nm += ` <span class="${hc}" style="font-size:8px">[${esc(String(s.hoa)[0])}]</span>`;
+      }
+      return `<div class="v2-phu-item ${cls}">${nm}${b}</div>`;
+    };
+    let catH = phuStars.filter(s => !HUNG_SET.has(String(s.ten||''))).map(renderPhu).join('');
+    const hungH = phuStars.filter(s => HUNG_SET.has(String(s.ten||''))).map(renderPhu).join('');
+    // Hóa từ chính tinh appended to cat column, written out in full
+    for (const s of hoaFromChinh) {
+      const hoa = String(s.hoa||'');
+      const hc = hoa==='Lộc'?'sc-hoa-loc':hoa==='Quyền'?'sc-hoa-quyen':hoa==='Khoa'?'sc-hoa-khoa':'sc-hoa-ky';
+      catH += `<div class="v2-phu-item ${hc}" style="font-weight:700">HÓA ${hoa.toUpperCase()}</div>`;
+    }
+
+    const tsS = allStars.find(s => TS_SET.has(String(s.ten||'')));
+    const hasTuan  = allStars.some(s => s.ten==='Tuần'||s.ten==='Tuần+Triệt');
+    const hasTriet = allStars.some(s => s.ten==='Triệt'||s.ten==='Tuần+Triệt');
+    let tt = '';
+    if (hasTuan && hasTriet) tt = '<span class="v2-tuan-tag">TUẦN+TRIỆT</span>';
+    else if (hasTuan)  tt = '<span class="v2-tuan-tag">TUẦN</span>';
+    else if (hasTriet) tt = '<span class="v2-triet-tag">TRIỆT</span>';
+
+    const dvTuoi = isDVCung && curDV ? `${curDV.tuoiStart}–${curDV.tuoiEnd}` : '';
+    const thanBadge = isThan ? ` <span class="v2-badge-than">THÂN</span>` : '';
+
+    return `<div class="cung-cell${isMenh?' is-menh':''}${isDVCung?' cur-van':''}">
+      <div class="v2-cell-header">
+        <span class="v2-can-chi">${esc(canChiHeader).toUpperCase()}</span>
+        <span class="v2-cung-name">${esc(cungName).toUpperCase()}${thanBadge}</span>
       </div>
-      <div style="text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#222;margin-bottom:3px">
-        ${esc(cungName)}${isMenh?'<span style="font-size:9px;color:#1455A4;margin-left:3px">⊕</span>':''}
+      <div class="v2-chinh-area">${chinhH}</div>
+      <div class="v2-phu-area">
+        <div class="v2-phu-col">${catH}</div>
+        <div class="v2-phu-col v2-phu-col-right">${hungH}</div>
       </div>
-      <div style="text-align:center;margin-bottom:4px">${majStars.map(s=>renderStar(s)).join('<br>')}</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 3px;flex:1">
-        ${minStars.slice(0,8).map(s=>`<div>${renderStar(s)}</div>`).join('')}
+      <div class="v2-footer">
+        <span class="v2-trang-sinh">${tsS ? esc(String(tsS.ten||'')).toUpperCase() : ''}</span>
+        <span class="v2-dai-van">${esc(dvTuoi)}</span>
       </div>
-      <div style="position:absolute;bottom:3px;left:5px;font-size:9px;color:#999">${esc(trangSinh)}</div>
-      ${dvBadge}${tuanTag}${trietTag}
+      ${tt}
     </div>`;
   }
 
-  const menhP = palaces.find(p => p.isMenh) as Rec|undefined;
-  const napAm = String(ls.napAm||'');
-  const cuc   = String(ls.cuc||'');
+  const menhP     = palaces.find(p => p.isMenh) as Rec|undefined;
+  const napAm     = String(ls.napAmHanh||ls.napAm||'');
+  const cuc       = String(ls.cucName||ls.cuc||'');
   const canChiNam = String(ls.canChiNam||'');
-  const centerHTML = `<div style="border:1px solid #ddd;background:#F9F4EB;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px;grid-column:span 2;grid-row:span 2">
+  const centerHTML = `<div class="grid-center">
     <div style="font-size:10px;color:#9A7B3A;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">紫微明寶</div>
     <div style="font-size:14px;font-weight:700;color:#061A2E;margin-bottom:4px">${esc(canChiNam)}</div>
-    <div style="font-size:11px;color:#444;margin-bottom:2px">Cung ${esc(String(menhP?.cungName||''))}</div>
+    <div style="font-size:11px;color:#444;margin-bottom:2px">Cung Mệnh: ${esc(String(menhP?.cungName||''))}</div>
     <div style="font-size:10px;color:#777;margin-bottom:2px">${esc(napAm)}</div>
     <div style="font-size:10px;color:#777">${esc(cuc)}</div>
   </div>`;
 
-  let html = `<div style="display:grid;grid-template-columns:repeat(4,1fr);border:2px solid #333;background:#333;gap:1px">`;
+  let html = `<div class="laso-grid">`;
   let centerRendered = false;
   for (let r = 0; r < 4; r++) {
     for (let c = 0; c < 4; c++) {
@@ -418,7 +486,7 @@ function renderGrid(ls: Rec): string {
         if (!centerRendered && r===1 && c===1) { html += centerHTML; centerRendered = true; }
         continue;
       }
-      html += cell ? renderCell(cell) : `<div style="background:#f8f8f8;min-height:130px"></div>`;
+      html += cell ? renderCell(cell) : `<div class="cung-cell cung-empty"></div>`;
     }
   }
   html += '</div>';
@@ -1011,7 +1079,7 @@ function buildIsrHTML(ls: Rec, params: IsrParams, slug: string): string {
       mainEntity: faqItems.map(f => ({'@type':'Question',name:f.q,acceptedAnswer:{'@type':'Answer',text:f.a}})) },
   ]);
 
-  const gridHTML       = renderGrid(ls);
+  const gridHTML       = renderGrid(ls, params.canIdx);
   const textHTML       = renderTextBlocks(ls);
   const sections24HTML = render24Sections(ls, params);
   const relatedHTML    = buildRelatedLinks(params);
@@ -1030,6 +1098,8 @@ function buildIsrHTML(ls: Rec, params: IsrParams, slug: string): string {
 <meta name="twitter:image" content="${esc(ogUrl)}">
 <link rel="canonical" href="${esc(url)}">
 <link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@0,400;0,700&display=swap" rel="stylesheet">
 <script type="application/ld+json">${schema}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -1061,7 +1131,30 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 .s24b p{font-size:13px;color:var(--text-mid);line-height:1.75;margin-bottom:10px}
 .s24b p:last-child{margin-bottom:0}
 .s24b strong{color:var(--navy)}
-@media(max-width:800px){.layout{grid-template-columns:1fr}.bc,.wrap{padding-left:14px;padding-right:14px}.hero-title{font-size:18px}}
+.laso-grid{display:grid;grid-template-columns:repeat(4,1fr);border:2px solid #555;background:#555;gap:1px}
+.cung-cell{border:1px solid #888;padding:7px 7px 22px;min-height:150px;position:relative;display:flex;flex-direction:column;background:#fff;overflow:hidden}
+.cung-cell.is-menh{border:2px solid #9A7B3A;background:#FFFDF7}
+.cung-cell.cur-van{outline:2px solid #1E6B3C;outline-offset:-2px}
+.cung-empty{background:#f8f8f8;min-height:150px}
+.grid-center{border:2px solid #9A7B3A;background:#F9F4EB;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px;grid-column:span 2;grid-row:span 2}
+.v2-cell-header{display:flex;flex-direction:column;align-items:center;margin-bottom:4px;gap:2px}
+.v2-can-chi{font-size:9px;color:#777;font-weight:500;width:100%;text-align:left}
+.v2-cung-name{font-size:10px;color:#222;font-weight:700;text-transform:uppercase;text-align:center;width:100%;letter-spacing:.5px;display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap}
+.v2-badge-than{font-size:8px;background:#555;color:#fff;padding:1px 4px;border-radius:2px}
+.v2-chinh-area{margin-bottom:4px;text-align:center}
+.v2-chinh-item{font-family:'Noto Serif',Georgia,serif;font-size:12.5px;font-weight:700;line-height:1.4;text-align:center}
+.v2-phu-area{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:0 4px;align-content:start}
+.v2-phu-col{display:flex;flex-direction:column;gap:1px}
+.v2-phu-col-right{text-align:right}
+.v2-phu-item{font-size:9.5px;line-height:1.45;font-weight:700}
+.v2-footer{position:absolute;bottom:3px;left:6px;right:6px;display:flex;justify-content:space-between;align-items:center}
+.v2-trang-sinh{font-size:9px;color:#999}
+.v2-dai-van{font-size:9px;color:#666;font-weight:700}
+.v2-tuan-tag,.v2-triet-tag{position:absolute;bottom:-1px;left:0;right:0;font-size:8px;text-align:center;padding:1px;color:#fff}
+.v2-tuan-tag{background:#2c4a00}.v2-triet-tag{background:#4a0000}
+.sc-hoa{color:#E74C3C}.sc-kim{color:#7F8C8D}.sc-thuy{color:#1455A4}.sc-moc{color:#27AE60}.sc-tho{color:#D4A017}.sc-neutral{color:#333}
+.sc-hoa-loc{color:#1E6B3C;font-weight:700}.sc-hoa-quyen{color:#7B3FA0;font-weight:700}.sc-hoa-khoa{color:#1455A4;font-weight:700}.sc-hoa-ky{color:#C0392B;font-weight:700}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.bc,.wrap{padding-left:14px;padding-right:14px}.hero-title{font-size:18px}.laso-grid{font-size:9px}.cung-cell{min-height:90px;padding:3px 4px 16px}.v2-chinh-item{font-size:10px}.v2-phu-item{font-size:8px}.v2-phu-area{grid-template-columns:1fr}}
 </style>
 <script src="/auth.js" defer></script>
 </head><body>
