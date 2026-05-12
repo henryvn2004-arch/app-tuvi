@@ -622,6 +622,27 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     if (hasTriet) stateChips.push('<span style="color:#5a4a00">Triệt</span>');
     if (stateChips.length) body += `<p style="font-size:11px;color:#888;margin-bottom:6px">${stateChips.join(' · ')}</p>`;
 
+    // Tam phương tứ chính
+    const tamHop = (palace?.tamHopCungs as Rec[]) || [];
+    const xungCung = palace?.xungChieuCung as Rec|undefined;
+    if (tamHop.length > 0 || xungCung) {
+      body += `<div style="margin-bottom:8px;padding:8px 10px;background:#F5F8FF;border-radius:6px;border-left:3px solid #1455A4">`;
+      body += `<div style="font-size:10px;font-weight:600;color:#1455A4;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">Tam phương tứ chính</div>`;
+      tamHop.forEach(c => {
+        const cMaj = ((c.majorStars as Rec[])||[]).map(s=>{
+          const h=String(s.hoa||''); return `${esc(String(s.ten||''))}${h?` [H.${esc(h[0])}]`:''}`;
+        }).join(' · ') || '<span style="color:#aaa">Vô chính diệu</span>';
+        body += `<div style="font-size:11px;margin-bottom:3px"><span style="color:#888">${esc(String(c.cungName||''))} (${esc(String(c.diaChi||''))}):</span> ${cMaj}</div>`;
+      });
+      if (xungCung) {
+        const xMaj = ((xungCung.majorStars as Rec[])||[]).map(s=>{
+          const h=String(s.hoa||''); return `${esc(String(s.ten||''))}${h?` [H.${esc(h[0])}]`:''}`;
+        }).join(' · ') || '<span style="color:#aaa">Vô chính diệu</span>';
+        body += `<div style="font-size:11px;color:#C0392B;margin-bottom:0"><span style="color:#888">↔ Xung ${esc(String(xungCung.cungName||''))} (${esc(String(xungCung.diaChi||''))}):</span> ${xMaj}</div>`;
+      }
+      body += `</div>`;
+    }
+
     // Cách cục riêng cung
     if (ccInCung.length > 0) {
       body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">⚙ Cách cục đặc biệt</div>`;
