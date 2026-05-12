@@ -10,11 +10,25 @@ const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsI
 const SESSION_KEY = 'tuvi_session';
 const USER_KEY    = 'tuvi_user';
 
+// ── Cookie helpers — lưu refresh_token 6 tháng để sống sót ITP trên iOS Safari ──
+function _setCookie(name, value, days) {
+  const d = new Date();
+  d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+  document.cookie = name + '=' + encodeURIComponent(value) + ';expires=' + d.toUTCString() + ';path=/;SameSite=Strict';
+}
+function _getCookie(name) {
+  const v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+  return v ? decodeURIComponent(v.pop()) : null;
+}
+function _delCookie(name) {
+  document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;SameSite=Strict';
+}
+
 // ── Auth state ──
 let _session = null;
 let _user    = null;
 
-// ── Init: restore session from localStorage ──
+// ── Init: restore session từ localStorage, fallback sang cookie (iOS ITP safe) ──
 (function initAuth() {
   try {
     const raw = localStorage.getItem(SESSION_KEY);
@@ -24,15 +38,22 @@ let _user    = null;
         // Session còn hạn
         _session = s;
         _user = JSON.parse(localStorage.getItem(USER_KEY) || 'null');
-      } else if (s && s.refresh_token) {
-        // Hết hạn nhưng có refresh token — tự gia hạn ngầm
-        _refreshSession(s.refresh_token);
       } else {
+        // Hết hạn — ưu tiên refresh_token từ localStorage, fallback sang cookie
+        const rt = (s && s.refresh_token) || _getCookie('tuvi_rt');
         localStorage.removeItem(SESSION_KEY);
         localStorage.removeItem(USER_KEY);
+        if (rt) { _refreshSession(rt); return; }
       }
+    } else {
+      // localStorage trống (bị iOS clear) — thử cookie
+      const rt = _getCookie('tuvi_rt');
+      if (rt) { _refreshSession(rt); return; }
     }
-  } catch(e) {}
+  } catch(e) {
+    const rt = _getCookie('tuvi_rt');
+    if (rt) { _refreshSession(rt); return; }
+  }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', updateNavUI);
   } else {
@@ -60,6 +81,8 @@ let _user    = null;
         _user = data.user || null;
         localStorage.setItem(SESSION_KEY, JSON.stringify(data));
         if (_user) localStorage.setItem(USER_KEY, JSON.stringify(_user));
+        // Lưu refresh_token vào cookie 6 tháng để sống sót iOS ITP
+        if (data.refresh_token) _setCookie('tuvi_rt', data.refresh_token, 180);
         updateNavUI();
         // Auto-refresh 5 min before next expiry
         const msLeft = (data.expires_at - Date.now() / 1000 - 300) * 1000;
@@ -107,6 +130,7 @@ window.Auth = {
     _session = null; _user = null;
     localStorage.removeItem(SESSION_KEY);
     localStorage.removeItem(USER_KEY);
+    _delCookie('tuvi_rt');
     updateNavUI();
     window.location.reload();
   },
@@ -158,6 +182,7 @@ function saveSession(data) {
   _user = data.user || null;
   localStorage.setItem(SESSION_KEY, JSON.stringify(data));
   localStorage.setItem(USER_KEY, JSON.stringify(_user));
+  if (data.refresh_token) _setCookie('tuvi_rt', data.refresh_token, 180);
   updateNavUI();
 }
 
