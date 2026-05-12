@@ -244,15 +244,11 @@ a { color: var(--blue); text-decoration: none; }
 .menh-kho-section .section-eyebrow { color: var(--gold-bright); }
 .menh-kho-section .section-title { color: #fff; }
 .menh-kho-section .section-desc { color: rgba(255,255,255,0.75); }
-.menh-kho-intro {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 32px; align-items: start;
-}
-@media (max-width: 768px) { .menh-kho-intro { grid-template-columns: 1fr; } }
-.menh-kho-text p { color: rgba(255,255,255,0.82); font-size: 15px; line-height: 1.7; margin-bottom: 12px; }
+.menh-kho-lead { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 28px; }
+.menh-kho-text p { color: rgba(255,255,255,0.82); font-size: 15px; line-height: 1.7; margin: 0; }
 .menh-kho-years {
-  display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 8px;
 }
-@media (max-width: 600px) { .menh-kho-years { grid-template-columns: repeat(4, 1fr); } }
 .menh-kho-year-pill {
   background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
   border-radius: 6px; text-align: center; padding: 8px 4px; text-decoration: none;
@@ -427,51 +423,83 @@ a { color: var(--blue); text-decoration: none; }
   <div class="page">
     <div class="section-eyebrow">Tra Cứu Lá Số Tử Vi Theo Năm Sinh</div>
     <h2 class="section-title">Mệnh Khố — 438.000 Lá Số Đã Luận Sẵn</h2>
-    <p class="section-desc">Chọn năm sinh để xem lá số tử vi chi tiết theo ngày, giờ sinh và giới tính — an sao cổ pháp, luận giải đầy đủ 24 phần.</p>
+    <p class="section-desc">Năm sinh 1960–2026 · Chọn ngày, giờ, giới tính · An sao cổ pháp · Luận giải 24 phần.</p>
 
-    <div class="menh-kho-intro">
+    <div class="menh-kho-lead">
       <div class="menh-kho-text">
-        <p>Mệnh Khố tập hợp lá số tử vi được an sao theo <strong style="color:#fff">Tử Vi Đẩu Số cổ pháp</strong> cho mọi ngày sinh từ 1960 đến 2010. Mỗi lá số bao gồm đầy đủ 12 cung, các đại vận, tiểu vận, và 24 phần luận giải chi tiết.</p>
-        <p>Không cần đăng ký. Chọn năm sinh bên dưới để bắt đầu.</p>
-        <a href="/menh-kho.html" class="menh-kho-cta">Xem Mệnh Khố →</a>
-        <div class="menh-kho-sub">Hoặc chọn thẳng năm sinh bên dưới</div>
+        <p>An sao cổ pháp, luận giải 24 phần theo ngày · giờ · giới tính. Không cần đăng ký.</p>
       </div>
+      <a href="/menh-kho.html" class="menh-kho-cta">Xem Mệnh Khố →</a>
+    </div>
 
-      <div>
-        <div class="menh-kho-years">
-          <a href="/menh-kho/1975" class="menh-kho-year-pill hot">1975</a>
-          <a href="/menh-kho/1976" class="menh-kho-year-pill hot">1976</a>
-          <a href="/menh-kho/1977" class="menh-kho-year-pill hot">1977</a>
-          <a href="/menh-kho/1978" class="menh-kho-year-pill hot">1978</a>
-          <a href="/menh-kho/1979" class="menh-kho-year-pill hot">1979</a>
-          <a href="/menh-kho/1980" class="menh-kho-year-pill hot">1980</a>
-          <a href="/menh-kho/1981" class="menh-kho-year-pill hot">1981</a>
-          <a href="/menh-kho/1982" class="menh-kho-year-pill hot">1982</a>
-          <a href="/menh-kho/1983" class="menh-kho-year-pill hot">1983</a>
-          <a href="/menh-kho/1984" class="menh-kho-year-pill hot">1984</a>
-          <a href="/menh-kho/1985" class="menh-kho-year-pill hot">1985</a>
-          <a href="/menh-kho/1986" class="menh-kho-year-pill hot">1986</a>
-          <a href="/menh-kho/1987" class="menh-kho-year-pill hot">1987</a>
-          <a href="/menh-kho/1988" class="menh-kho-year-pill hot">1988</a>
-          <a href="/menh-kho/1989" class="menh-kho-year-pill hot">1989</a>
-          <a href="/menh-kho/1990" class="menh-kho-year-pill hot">1990</a>
-          <a href="/menh-kho/1991" class="menh-kho-year-pill hot">1991</a>
-          <a href="/menh-kho/1992" class="menh-kho-year-pill hot">1992</a>
-          <a href="/menh-kho/1993" class="menh-kho-year-pill hot">1993</a>
-          <a href="/menh-kho/1994" class="menh-kho-year-pill hot">1994</a>
-          <a href="/menh-kho/1995" class="menh-kho-year-pill hot">1995</a>
-          <a href="/menh-kho/1996" class="menh-kho-year-pill hot">1996</a>
-          <a href="/menh-kho/1997" class="menh-kho-year-pill hot">1997</a>
-          <a href="/menh-kho/1998" class="menh-kho-year-pill hot">1998</a>
-          <a href="/menh-kho/1999" class="menh-kho-year-pill hot">1999</a>
-          <a href="/menh-kho/2000" class="menh-kho-year-pill hot">2000</a>
-          <a href="/menh-kho/1960" class="menh-kho-year-pill">1960</a>
-          <a href="/menh-kho/1965" class="menh-kho-year-pill">1965</a>
-          <a href="/menh-kho/1970" class="menh-kho-year-pill">1970</a>
-          <a href="/menh-kho/2005" class="menh-kho-year-pill">2005</a>
-          <a href="/menh-kho/2010" class="menh-kho-year-pill">2010</a>
-        </div>
-      </div>
+    <div class="menh-kho-years">
+      <a href="/menh-kho/1960" class="menh-kho-year-pill">1960</a>
+      <a href="/menh-kho/1961" class="menh-kho-year-pill">1961</a>
+      <a href="/menh-kho/1962" class="menh-kho-year-pill">1962</a>
+      <a href="/menh-kho/1963" class="menh-kho-year-pill">1963</a>
+      <a href="/menh-kho/1964" class="menh-kho-year-pill">1964</a>
+      <a href="/menh-kho/1965" class="menh-kho-year-pill">1965</a>
+      <a href="/menh-kho/1966" class="menh-kho-year-pill">1966</a>
+      <a href="/menh-kho/1967" class="menh-kho-year-pill">1967</a>
+      <a href="/menh-kho/1968" class="menh-kho-year-pill">1968</a>
+      <a href="/menh-kho/1969" class="menh-kho-year-pill">1969</a>
+      <a href="/menh-kho/1970" class="menh-kho-year-pill">1970</a>
+      <a href="/menh-kho/1971" class="menh-kho-year-pill">1971</a>
+      <a href="/menh-kho/1972" class="menh-kho-year-pill">1972</a>
+      <a href="/menh-kho/1973" class="menh-kho-year-pill">1973</a>
+      <a href="/menh-kho/1974" class="menh-kho-year-pill">1974</a>
+      <a href="/menh-kho/1975" class="menh-kho-year-pill hot">1975</a>
+      <a href="/menh-kho/1976" class="menh-kho-year-pill hot">1976</a>
+      <a href="/menh-kho/1977" class="menh-kho-year-pill hot">1977</a>
+      <a href="/menh-kho/1978" class="menh-kho-year-pill hot">1978</a>
+      <a href="/menh-kho/1979" class="menh-kho-year-pill hot">1979</a>
+      <a href="/menh-kho/1980" class="menh-kho-year-pill hot">1980</a>
+      <a href="/menh-kho/1981" class="menh-kho-year-pill hot">1981</a>
+      <a href="/menh-kho/1982" class="menh-kho-year-pill hot">1982</a>
+      <a href="/menh-kho/1983" class="menh-kho-year-pill hot">1983</a>
+      <a href="/menh-kho/1984" class="menh-kho-year-pill hot">1984</a>
+      <a href="/menh-kho/1985" class="menh-kho-year-pill hot">1985</a>
+      <a href="/menh-kho/1986" class="menh-kho-year-pill hot">1986</a>
+      <a href="/menh-kho/1987" class="menh-kho-year-pill hot">1987</a>
+      <a href="/menh-kho/1988" class="menh-kho-year-pill hot">1988</a>
+      <a href="/menh-kho/1989" class="menh-kho-year-pill hot">1989</a>
+      <a href="/menh-kho/1990" class="menh-kho-year-pill hot">1990</a>
+      <a href="/menh-kho/1991" class="menh-kho-year-pill hot">1991</a>
+      <a href="/menh-kho/1992" class="menh-kho-year-pill hot">1992</a>
+      <a href="/menh-kho/1993" class="menh-kho-year-pill hot">1993</a>
+      <a href="/menh-kho/1994" class="menh-kho-year-pill hot">1994</a>
+      <a href="/menh-kho/1995" class="menh-kho-year-pill hot">1995</a>
+      <a href="/menh-kho/1996" class="menh-kho-year-pill hot">1996</a>
+      <a href="/menh-kho/1997" class="menh-kho-year-pill hot">1997</a>
+      <a href="/menh-kho/1998" class="menh-kho-year-pill hot">1998</a>
+      <a href="/menh-kho/1999" class="menh-kho-year-pill hot">1999</a>
+      <a href="/menh-kho/2000" class="menh-kho-year-pill hot">2000</a>
+      <a href="/menh-kho/2001" class="menh-kho-year-pill">2001</a>
+      <a href="/menh-kho/2002" class="menh-kho-year-pill">2002</a>
+      <a href="/menh-kho/2003" class="menh-kho-year-pill">2003</a>
+      <a href="/menh-kho/2004" class="menh-kho-year-pill">2004</a>
+      <a href="/menh-kho/2005" class="menh-kho-year-pill">2005</a>
+      <a href="/menh-kho/2006" class="menh-kho-year-pill">2006</a>
+      <a href="/menh-kho/2007" class="menh-kho-year-pill">2007</a>
+      <a href="/menh-kho/2008" class="menh-kho-year-pill">2008</a>
+      <a href="/menh-kho/2009" class="menh-kho-year-pill">2009</a>
+      <a href="/menh-kho/2010" class="menh-kho-year-pill">2010</a>
+      <a href="/menh-kho/2011" class="menh-kho-year-pill">2011</a>
+      <a href="/menh-kho/2012" class="menh-kho-year-pill">2012</a>
+      <a href="/menh-kho/2013" class="menh-kho-year-pill">2013</a>
+      <a href="/menh-kho/2014" class="menh-kho-year-pill">2014</a>
+      <a href="/menh-kho/2015" class="menh-kho-year-pill">2015</a>
+      <a href="/menh-kho/2016" class="menh-kho-year-pill">2016</a>
+      <a href="/menh-kho/2017" class="menh-kho-year-pill">2017</a>
+      <a href="/menh-kho/2018" class="menh-kho-year-pill">2018</a>
+      <a href="/menh-kho/2019" class="menh-kho-year-pill">2019</a>
+      <a href="/menh-kho/2020" class="menh-kho-year-pill">2020</a>
+      <a href="/menh-kho/2021" class="menh-kho-year-pill">2021</a>
+      <a href="/menh-kho/2022" class="menh-kho-year-pill">2022</a>
+      <a href="/menh-kho/2023" class="menh-kho-year-pill">2023</a>
+      <a href="/menh-kho/2024" class="menh-kho-year-pill">2024</a>
+      <a href="/menh-kho/2025" class="menh-kho-year-pill">2025</a>
+      <a href="/menh-kho/2026" class="menh-kho-year-pill">2026</a>
     </div>
   </div>
 </section>
