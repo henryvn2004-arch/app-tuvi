@@ -305,7 +305,7 @@ function parseIsrSlug(slug: string): IsrParams | null {
 // ────────────────────────────────────────────────────────────────────────────
 // ISR: engine loader (singleton per serverless instance)
 // ────────────────────────────────────────────────────────────────────────────
-let engineCache: { convertDuongToAm: (...a: unknown[]) => unknown; anSaoLaSo: (...a: unknown[]) => unknown } | null = null;
+let engineCache: { convertDuongToAm: (...a: unknown[]) => unknown; anSaoLaSo: (...a: unknown[]) => unknown; phanTichCungYNghia: (...a: unknown[]) => Record<string,string[]> } | null = null;
 
 function loadEngine() {
   if (engineCache) return engineCache;
@@ -317,7 +317,7 @@ function loadEngine() {
   if (!g.location) {
     g.location = { protocol:'https:', hostname:'tuviminhbao.com', host:'tuviminhbao.com', port:'', href:'https://tuviminhbao.com/', pathname:'/', search:'', hash:'' };
   }
-  engineCache = (new Function('window','globalThis', code + '\nreturn{convertDuongToAm,anSaoLaSo};'))(g,g) as typeof engineCache;
+  engineCache = (new Function('window','globalThis', code + '\nreturn{convertDuongToAm,anSaoLaSo,phanTichCungYNghia};'))(g,g) as typeof engineCache;
   return engineCache!;
 }
 
@@ -577,6 +577,13 @@ function render24Sections(ls: Rec, params: IsrParams): string {
   // ── Sections 2–13: 12 Cung ───────────────────────────────────────────────
   const HOA_COL: Record<string,string> = {'Lộc':'#1E6B3C','Quyền':'#7B3FA0','Khoa':'#1455A4','Kỵ':'#C0392B'};
 
+  // TPTC-augmented analysis: expose phanTichCungYNghia to re-run with TPTC stars merged into each palace
+  const _engine = loadEngine();
+  const _phanTichCYN = _engine.phanTichCungYNghia as (...a: unknown[]) => Record<string,string[]>;
+  const _canNam = CAN_NAMES[params.canIdx];
+  const _chiNam = CHI_NAMES[params.chiIdx];
+  const _lsBase = { palaces: ls.palaces, menhDC: ls.menhDC, thanDC: ls.thanDC, amDuong: ls.amDuong, napAmHanh: ls.napAmHanh, chiNam: _chiNam };
+
   const cungSecs = CUNG_12.map((cungName, i) => {
     const palace    = palaces.find(p => p.cungName === cungName) as Rec|undefined;
     const majStars  = palace ? ((palace.majorStars as Rec[])||[]) : [];
@@ -622,17 +629,40 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     if (hasTriet) stateChips.push('<span style="color:#5a4a00">Triệt</span>');
     if (stateChips.length) body += `<p style="font-size:11px;color:#888;margin-bottom:6px">${stateChips.join(' · ')}</p>`;
 
-    // Sao tam phương tứ chính (SAT/BAI/CAT — giống logic DV sections)
-    const tptcCungs = [palace, ...((palace?.tamHopCungs as Rec[])||[]), palace?.xungChieuCung as Rec].filter(Boolean) as Rec[];
+    // Sao tam phương tứ chính — hiển thị + augmented analysis
+    const tptcPals3 = [...((palace?.tamHopCungs as Rec[])||[]), palace?.xungChieuCung as Rec].filter(Boolean) as Rec[];
+    const tptcCungs = palace ? [palace, ...tptcPals3] : tptcPals3;
     const tptcNames = tptcCungs.flatMap(p => ((p.stars as Rec[])||[]).map(s => String(s.ten||'')));
     const catTPTC = CAT_TPTC.filter(s => tptcNames.includes(s));
     const satTPTC = SAT_TPTC.filter(s => tptcNames.includes(s));
     const baiTPTC = BAI_TPTC.filter(s => tptcNames.includes(s));
-    if (catTPTC.length || satTPTC.length || baiTPTC.length) {
-      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">🔍 Sao tam phương tứ chính</div>`;
+    // Re-run phanTichCungYNghia with TPTC stars merged into this palace's stars
+    let tptcItems: string[] = [];
+    if (palace) {
+      const tptcExtraStars = tptcPals3.flatMap(p => (p.stars as Rec[])||[]);
+      const augPalace = { ...palace, stars: [...((palace.stars as Rec[])||[]), ...tptcExtraStars] };
+      const augPalaces = (ls.palaces as Rec[]).map((p: Rec) => String(p.cungName||'') === cungName ? augPalace : p);
+      const augLs = { ..._lsBase, palaces: augPalaces };
+      const augResult = _phanTichCYN(augLs, params.gioi, params.gioIdx, _canNam, _chiNam, 0);
+      const origSet = new Set(ynItems);
+      tptcItems = (augResult[cungName] || []).filter((item: string) => !origSet.has(item));
+    }
+    if (catTPTC.length || satTPTC.length || baiTPTC.length || tptcItems.length) {
+      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">🔍 Tam phương tứ chính</div>`;
       if (catTPTC.length) body += `<div style="font-size:12px;color:#86efac;margin:2px 0">Cát tinh: ${esc(catTPTC.join(', '))}</div>`;
       if (satTPTC.length) body += `<div style="font-size:12px;color:#f87171;margin:2px 0">Sát tinh: ${esc(satTPTC.join(', '))}</div>`;
       if (baiTPTC.length) body += `<div style="font-size:12px;color:#fca5a5;margin:2px 0">Bại tinh: ${esc(baiTPTC.join(', '))}</div>`;
+      if (tptcItems.length) {
+        body += `<div style="margin-top:6px;padding-top:6px;border-top:1px solid #e0e0e0">`;
+        tptcItems.slice(0, 6).forEach(y => {
+          const isGreatCat = y.includes('đại cát')||y.includes('đại phú')||y.includes('phú quý');
+          const isCat      = !isGreatCat && (y.includes('[cát]')||y.includes('giàu sang')||y.includes('sáng'));
+          const isHung     = y.includes('hung')||y.includes('vất vả')||y.includes('tai')||y.includes('xấu');
+          const col = isGreatCat?'#4ade80':isCat?'#86efac':isHung?'#fca5a5':'#94a3b8';
+          body += `<div style="font-size:12px;color:${col};padding:2px 0;line-height:1.5">◦ ${esc(y)}</div>`;
+        });
+        body += `</div>`;
+      }
       body += `</div>`;
     }
 
