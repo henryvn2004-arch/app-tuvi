@@ -33,7 +33,7 @@ function formatDate(iso: string) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function buildHTML(article: any, slug: string, related: any[]) {
+function buildHTML(article: any, slug: string, related: any[], master?: any) {
   const url   = `${BASE_URL}/khao-luan/${slug}`;
   const title = escHtml(article.title);
   const desc  = escHtml(article.excerpt || article.title);
@@ -44,7 +44,9 @@ function buildHTML(article: any, slug: string, related: any[]) {
 
   const schemas = JSON.stringify([
     { '@context':'https://schema.org','@type':'Article', headline:article.title, description:article.excerpt||'', url, datePublished:article.created_at, inLanguage:'vi',
-      author:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE_URL},
+      author: master
+        ? {'@type':'Person',name:master.display_name,url:`${BASE_URL}/tac-gia/${master.id}`}
+        : {'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE_URL},
       publisher:{'@type':'Organization',name:'Tử Vi Minh Bảo',url:BASE_URL,logo:{'@type':'ImageObject',url:BASE_URL+'/seal.webp'}},
       image:{'@type':'ImageObject',url:img} },
     { '@context':'https://schema.org','@type':'BreadcrumbList', itemListElement:[
@@ -109,8 +111,16 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 .related-item a:hover{background:var(--bg-soft);color:var(--blue)}
 .related-item .rel-title{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .related-item .rel-cat{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);flex-shrink:0}
+.author-box{display:flex;gap:16px;align-items:flex-start;margin-top:48px;padding:20px 24px;background:var(--gold-lt);border:1px solid #e6d9c0;border-radius:10px}
+.author-box-avatar{width:52px;height:52px;border-radius:50%;background:var(--navy);color:var(--gold-bright);font-family:'Noto Serif',serif;font-size:20px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.author-box-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.author-box-info{flex:1;min-width:0}
+.author-box-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.author-box-name{font-family:'Noto Serif',serif;font-size:16px;font-weight:600;color:var(--navy);margin-bottom:4px}
+.author-box-bio{font-size:13px;color:var(--text-lt);line-height:1.65;margin-bottom:8px}
+.author-box-link{font-size:12px;color:var(--blue);text-decoration:none}.author-box-link:hover{text-decoration:underline}
 @keyframes spin{to{transform:rotate(360deg)}}
-@media(max-width:700px){.breadcrumb,.article-wrap{padding-left:16px;padding-right:16px}.article-title{font-size:26px}}
+@media(max-width:700px){.breadcrumb,.article-wrap{padding-left:16px;padding-right:16px}.article-title{font-size:26px}.author-box{flex-direction:column;gap:12px}}
 </style>
 <script src="/auth.js" defer></script>
 </head>
@@ -126,6 +136,21 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
   <h1 class="article-title">${title}</h1>
   ${article.excerpt?`<div class="article-excerpt">${escHtml(article.excerpt)}</div>`:''}
   <div class="article-body">${body}</div>
+  ${master ? `<div class="author-box">
+    <div class="author-box-avatar" data-init="${escHtml(String(master.display_name||'?')[0])}">
+      <picture>
+        <source srcset="/authors/${escHtml(master.id)}.webp" type="image/webp">
+        <img src="/authors/${escHtml(master.id)}.jpg" alt="${escHtml(master.display_name)}"
+          onerror="this.closest('.author-box-avatar').innerHTML=this.closest('.author-box-avatar').dataset.init">
+      </picture>
+    </div>
+    <div class="author-box-info">
+      <div class="author-box-label">Tác Giả</div>
+      <div class="author-box-name">${escHtml(master.display_name)}</div>
+      ${master.bio ? `<div class="author-box-bio">${escHtml(master.bio)}</div>` : ''}
+      <a class="author-box-link" href="/tac-gia/${escHtml(master.id)}">Xem tất cả bài viết →</a>
+    </div>
+  </div>` : ''}
   <div class="article-nav"><a href="/blog.html">← Về Khảo Luận</a></div>
   ${related.length?`<div class="related-section"><div class="related-title">Bài Viết Liên Quan</div><ul class="related-list">${
     related.map((r:any)=>`<li class="related-item"><a href="/khao-luan/${r.slug}"><span class="rel-title">${escHtml(r.title)}</span>${r.category?`<span class="rel-cat">${escHtml(r.category)}</span>`:''}</a></li>`).join('')
@@ -170,15 +195,26 @@ export async function GET(request: NextRequest) {
     const rows = await r.json() as any[];
     if (!rows?.length) return new NextResponse(buildNotFound(), { status: 404, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
 
+    const article = rows[0];
+    const sbHeaders = { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` };
+    const cat = article.category || '';
+    const masterId = article.master_id || '';
+
     let related: any[] = [];
+    let master: any = null;
     try {
-      const cat = rows[0].category || '';
-      const sbHeaders = { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` };
-      const sameCatRes = await fetch(
-        `${SUPABASE_URL}/rest/v1/khao_luan?slug=neq.${encodeURIComponent(slug)}&category=eq.${encodeURIComponent(cat)}&select=slug,title,category&order=created_at.desc&limit=5`,
-        { headers: sbHeaders }
-      );
-      const sameCat = sameCatRes.ok ? await sameCatRes.json() as any[] : [];
+      const promises: Promise<any>[] = [
+        fetch(`${SUPABASE_URL}/rest/v1/khao_luan?slug=neq.${encodeURIComponent(slug)}&category=eq.${encodeURIComponent(cat)}&select=slug,title,category&order=created_at.desc&limit=5`, { headers: sbHeaders })
+          .then(r => r.ok ? r.json() : []),
+      ];
+      if (masterId) {
+        promises.push(
+          fetch(`${SUPABASE_URL}/rest/v1/master_profiles?id=eq.${encodeURIComponent(masterId)}&select=id,display_name,bio&limit=1`, { headers: sbHeaders })
+            .then(r => r.ok ? r.json() : [])
+        );
+      }
+      const results = await Promise.all(promises);
+      const sameCat: any[] = results[0] || [];
       if (sameCat.length < 5) {
         const needed = 5 - sameCat.length;
         const otherRes = await fetch(
@@ -190,9 +226,10 @@ export async function GET(request: NextRequest) {
       } else {
         related = sameCat;
       }
+      if (results[1]?.length) master = results[1][0];
     } catch { /* ignore */ }
 
-    const html = buildHTML(rows[0], slug, related);
+    const html = buildHTML(article, slug, related, master);
     return new NextResponse(html, {
       status: 200,
       headers: {
