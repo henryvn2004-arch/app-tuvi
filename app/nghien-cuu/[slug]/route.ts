@@ -251,7 +251,7 @@ export async function GET(
 
     // Enrich related with master display_names
     if (related.length) {
-      const masterIds = [...new Set(related.map((r) => r.master_id).filter(Boolean))];
+      const masterIds = Array.from(new Set(related.map((r) => r.master_id).filter(Boolean)));
       if (masterIds.length) {
         const mpRes = await fetch(
           `${SB_URL}/rest/v1/master_profiles?id=in.(${masterIds.map(encodeURIComponent).join(',')})&select=id,display_name`,
