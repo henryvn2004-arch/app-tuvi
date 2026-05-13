@@ -65,6 +65,8 @@ export async function GET() {
 
   const staticPages = [
     { path:'/',               cf:'daily',   p:'1.0' },
+    { path:'/nghien-cuu',    cf:'daily',   p:'0.8' },  // master articles listing
+    { path:'/tac-gia',       cf:'weekly',  p:'0.8' },  // author listing
     { path:'/luan-giai.html', cf:'monthly', p:'1.0' },  // core product page
     { path:'/tu-vi',          cf:'weekly',  p:'0.9' },  // SEO pages index
     { path:'/tu-dien',        cf:'weekly',  p:'0.9' },  // từ điển index
@@ -121,7 +123,7 @@ export async function GET() {
     { path:'/tools/xem-tuoi-sinh-con.html',     cf:'monthly', p:'0.7' },
   ];
 
-  const [lasoRows, taiLieuRows, khaoLuanRows, sachRows, seoRows, pregenRows, tuDienRows] = await Promise.all([
+  const [lasoRows, taiLieuRows, khaoLuanRows, sachRows, seoRows, pregenRows, tuDienRows, masterArticleRows] = await Promise.all([
     fetchAllSlugs('laso_public'),
     fetchAllSlugs('tai_lieu'),
     fetchAllSlugs('khao_luan'),
@@ -129,6 +131,7 @@ export async function GET() {
     fetchAllSeoPages(),
     fetchAllSlugs('laso_pregen'),
     fetchAllSlugs('tu_dien'),
+    fetchAllSlugs('master_articles'),
   ]);
 
   const SEO_PRIORITY: Record<string, string> = {
@@ -149,7 +152,8 @@ export async function GET() {
   for (const r of tuDienRows)   if (r.slug) entries.push(urlEntry(`${BASE_URL}/tu-dien/${encodeURIComponent(r.slug)}`, r.created_at?.slice(0,10)||today, 'monthly', '0.8'));
   for (const r of taiLieuRows)  if (r.slug) entries.push(urlEntry(`${BASE_URL}/tai-lieu/${encodeURIComponent(r.slug)}`, r.created_at?.slice(0,10)||today, 'monthly', '0.6'));
   for (const r of sachRows)     if (r.slug) entries.push(urlEntry(`${BASE_URL}/tai-lieu/sach/${encodeURIComponent(r.slug)}`, r.created_at?.slice(0,10)||today, 'monthly', '0.65'));
-  for (const r of khaoLuanRows) if (r.slug) entries.push(urlEntry(`${BASE_URL}/khao-luan/${encodeURIComponent(r.slug)}`, r.created_at?.slice(0,10)||today, 'weekly', '0.7'));
+  for (const r of khaoLuanRows)      if (r.slug) entries.push(urlEntry(`${BASE_URL}/khao-luan/${encodeURIComponent(r.slug)}`, r.created_at?.slice(0,10)||today, 'weekly', '0.7'));
+  for (const r of masterArticleRows) if (r.slug) entries.push(urlEntry(`${BASE_URL}/nghien-cuu/${encodeURIComponent(r.slug)}`, r.created_at?.slice(0,10)||today, 'weekly', '0.75'));
   for (const r of (seoRows as any[])) {
     if (!r.slug) continue;
     const prio = SEO_PRIORITY[r.category] || '0.65';
