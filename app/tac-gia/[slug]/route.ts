@@ -134,9 +134,15 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 <div class="breadcrumb"><a href="/">Trang Chủ</a><span>›</span><a href="/tac-gia">Tác Giả</a><span>›</span><span>${esc(name)}</span></div>
 <div class="profile-header">
   <div class="profile-inner">
-    <div class="profile-avatar">
-      <img src="/authors/${esc(masterId)}.webp" alt="${esc(name)}"
-        onerror="this.style.display='none';this.parentElement.textContent='${esc(name[0] || '?')}'">
+    <div class="profile-avatar" data-init="${esc(name[0] || '?')}">
+      <picture>
+        <source srcset="/authors/${esc(masterId)}.webp" type="image/webp">
+        <source srcset="/authors/${esc(masterId)}.jpg" type="image/jpeg">
+        <source srcset="/authors/${esc(masterId)}.jpeg" type="image/jpeg">
+        <source srcset="/authors/${esc(masterId)}.png" type="image/png">
+        <img src="/authors/${esc(masterId)}.jpg" alt="${esc(name)}"
+          onerror="this.closest('.profile-avatar').innerHTML=this.closest('.profile-avatar').dataset.init">
+      </picture>
     </div>
     <div class="profile-details">
       <div class="profile-name">${esc(name)}</div>
