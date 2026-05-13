@@ -41,14 +41,8 @@ function buildHTML(masters: any[]) {
     const specialty: string[] = Array.isArray(m.specialty_topics) ? m.specialty_topics.slice(0, 3) : [];
     return `<a href="/tac-gia/${esc(m.id)}" class="author-card">
   <div class="author-avatar" data-init="${esc(String(m.display_name || '?')[0])}">
-    <picture>
-      <source srcset="/authors/${esc(m.id)}.webp" type="image/webp">
-      <source srcset="/authors/${esc(m.id)}.jpg" type="image/jpeg">
-      <source srcset="/authors/${esc(m.id)}.jpeg" type="image/jpeg">
-      <source srcset="/authors/${esc(m.id)}.png" type="image/png">
-      <img src="/authors/${esc(m.id)}.jpg" alt="${esc(m.display_name)}"
-        onerror="this.closest('.author-avatar').innerHTML=this.closest('.author-avatar').dataset.init">
-    </picture>
+    <img src="/authors/${esc(m.id)}.jpg" alt="${esc(m.display_name)}"
+      onerror="this.closest('.author-avatar').innerHTML=this.closest('.author-avatar').dataset.init">
   </div>
   <div class="author-body">
     <div class="author-name">${esc(m.display_name)}</div>

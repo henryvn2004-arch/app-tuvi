@@ -138,11 +138,8 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
   <div class="article-body">${body}</div>
   ${master ? `<div class="author-box">
     <div class="author-box-avatar" data-init="${escHtml(String(master.display_name||'?')[0])}">
-      <picture>
-        <source srcset="/authors/${escHtml(master.id)}.webp" type="image/webp">
-        <img src="/authors/${escHtml(master.id)}.jpg" alt="${escHtml(master.display_name)}"
-          onerror="this.closest('.author-box-avatar').innerHTML=this.closest('.author-box-avatar').dataset.init">
-      </picture>
+      <img src="/authors/${escHtml(master.id)}.jpg" alt="${escHtml(master.display_name)}"
+        onerror="this.closest('.author-box-avatar').innerHTML=this.closest('.author-box-avatar').dataset.init">
     </div>
     <div class="author-box-info">
       <div class="author-box-label">Tác Giả</div>
