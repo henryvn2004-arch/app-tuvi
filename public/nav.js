@@ -1,4 +1,4 @@
-// nav.js — Shared navigation component v9 (added Tử Bình)
+// nav.js — Shared navigation component v10 (added Nghiên Cứu + Tác Giả)
 (function () {
   var path = window.location.pathname;
 
@@ -22,9 +22,10 @@
   var LAM_DEP_PATHS = ['/tools/kieu-toc-ai.html','/tools/mau-sac-hop-menh.html'];
   var PHONG_PATHS  = ['/tools/phong-thuy.html','/tools/ban-lam-viec.html','/tools/cua-hang-phong-thuy.html','/tools/bat-trach.html','/tools/kim-lau.html'];
   var NGAY_PATHS   = ['/tools/hoang-dao.html','/tools/ngay-tot.html','/tools/luc-nham.html','/tools/han-nam.html','/tools/chon-ngay-tot.html'];
-  var TENCHU_PATHS = ['/tools/dat-ten-con.html','/tools/dat-ten-doanh-nghiep.html'];
+  var TENCHU_PATHS  = ['/tools/dat-ten-con.html','/tools/dat-ten-doanh-nghiep.html'];
+  var BAIVIET_PATHS = ['/blog.html','/nghien-cuu','/tac-gia'];
 
-  function anyActive(arr) { return arr.indexOf(path) >= 0; }
+  function anyActive(arr) { return arr.some(function(p){ return path === p || path.startsWith(p + '/') || path.startsWith(p); }); }
 
   var css = [
     '.topnav{position:sticky;top:0;z-index:200;background:#061A2E;display:flex;align-items:center;height:60px;padding:0 40px;gap:28px}',
@@ -156,6 +157,15 @@
     + ddItem('/tools/dat-ten-doanh-nghiep.html', '\ud83c\udfe2', '\u0110\u1eb7t T\u00ean Doanh Nghi\u1ec7p')
     + '</div></div>';
 
+  // DD_BAIVIET — Bài Viết
+  var dd_baiviet = '<div class="nav-dd" id="nav-dd-baiviet">'
+    + '<span class="nav-link' + (anyActive(BAIVIET_PATHS)?' active':'') + '" id="nav-dd-baiviet-toggle" role="button" tabindex="0">Bài Viết ▾</span>'
+    + '<div class="nav-dd-menu" id="nav-dd-baiviet-menu">'
+    + ddItem('/nghien-cuu',  '📝', 'Nghiên Cứu Tử Vi')
+    + ddItem('/tac-gia',     '👤', 'Tác Giả')
+    + ddItem('/blog.html',   '💬', 'Khảo Luận')
+    + '</div></div>';
+
   // DD6 — Công Cụ (còn lại)
   var dd6 = '<div class="nav-dd" id="nav-dd6">'
     + '<span class="nav-link" id="nav-dd6-toggle" role="button" tabindex="0">C\u00f4ng C\u1ee5 \u25be</span>'
@@ -182,7 +192,7 @@
     + dd1
     + navLink('/tu-binh.html', 'T\u1eed B\u00ecnh')
     + dd2 + dd3 + dd_dep + dd4 + dd5 + dd6
-    + navLink('/blog.html', 'Kh\u1ea3o Lu\u1eadn')
+    + dd_baiviet
     + '</div>'
     + '<div id="nav-auth-area"></div>'
     + '<button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">\u2630</button>'
@@ -196,7 +206,7 @@
   else document.body.insertBefore(tmp.firstChild, document.body.firstChild);
 
   // ── Mobile dropdown events ─────────────────────────────────────
-  var menus = ['nav-dd1-menu','nav-dd2-menu','nav-dd3-menu','nav-dd-dep-menu','nav-dd4-menu','nav-dd5-menu','nav-dd6-menu'];
+  var menus = ['nav-dd1-menu','nav-dd2-menu','nav-dd3-menu','nav-dd-dep-menu','nav-dd4-menu','nav-dd5-menu','nav-dd6-menu','nav-dd-baiviet-menu'];
   function closeAll() { menus.forEach(function(id){ var m=document.getElementById(id); if(m)m.classList.remove('open'); }); }
 
   document.getElementById('nav-hamburger').addEventListener('click', function(e) {
@@ -204,7 +214,7 @@
     document.getElementById('nav-links').classList.toggle('open');
   });
 
-  ['nav-dd1-toggle','nav-dd2-toggle','nav-dd3-toggle','nav-dd-dep-toggle','nav-dd4-toggle','nav-dd5-toggle','nav-dd6-toggle'].forEach(function(tid, idx) {
+  ['nav-dd1-toggle','nav-dd2-toggle','nav-dd3-toggle','nav-dd-dep-toggle','nav-dd4-toggle','nav-dd5-toggle','nav-dd6-toggle','nav-dd-baiviet-toggle'].forEach(function(tid, idx) {
     var busy = false;
     var el = document.getElementById(tid);
     if (!el) return;
@@ -254,6 +264,8 @@
       + '<a href="/tu-binh.html">T\u1eed B\u00ecnh B\u00e1t T\u1ef1</a>'
       + '<a href="/xem-tuoi.html">Xem Tu\u1ed5i V\u1ee3 Ch\u1ed3ng</a>'
       + '<a href="/tools/an-sao.html">An Sao L\u00e1 S\u1ed1</a>'
+      + '<a href="/nghien-cuu">Nghi\u00ean C\u1ee9u T\u1eed Vi</a>'
+      + '<a href="/tac-gia">T\u00e1c Gi\u1ea3</a>'
       + '<a href="/blog.html">Kh\u1ea3o Lu\u1eadn</a></div>'
       + '<div class="ft-col"><div class="ft-col-title">Phong Th\u1ee7y & Xem T\u01b0\u1edbng</div>'
       + '<a href="/tools/phong-thuy.html">Phong Th\u1ee7y N\u1ed9i Th\u1ea5t</a>'
