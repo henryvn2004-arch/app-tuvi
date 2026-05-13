@@ -146,14 +146,20 @@ async function callClaude(prompt: string, maxTokens = 2000): Promise<string> {
     throw new Error(e.error?.message || `Claude ${res.status}`);
   }
   const data = await res.json() as { content: { text: string }[] };
-  return data.content[0].text.trim().replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
+  const raw = data.content[0].text.trim();
+  // Strip outer ```json...``` only, not any inner backticks in content
+  if (raw.startsWith('```')) {
+    const inner = raw.replace(/^```(?:json)?\s*/, '');
+    return inner.trimEnd().endsWith('```') ? inner.trimEnd().slice(0, -3).trimEnd() : inner;
+  }
+  return raw;
 }
 
 // ── Stage 1: Storyboard ────────────────────────────────────────────────────────
 interface Storyboard {
-  thesis: string;
+  hook: string;
   sections: { heading: string; key_points: string[] }[];
-  conclusion_direction: string;
+  closing: string;
 }
 
 async function buildStoryboard(
@@ -161,35 +167,69 @@ async function buildStoryboard(
   master: MasterProfile,
   styleCtx: string,
 ): Promise<Storyboard> {
-  const styleRules = master.style_rules.slice(0, 5).map((r, i) => `${i + 1}. ${r}`).join('\n');
-  const prompt = `Bạn là ${master.display_name}, học giả nghiên cứu Tử Vi Đẩu Số từ trước 1975.
-Văn phong: ${master.style_summary}
-Nguyên tắc viết:
-${styleRules}
+  const prompt = `Bạn là ${master.display_name}, một người đã nghiên cứu và chiêm nghiệm Tử Vi Đẩu Số nhiều năm.
+Bio: ${master.bio}
 
 Chủ đề bài viết: "${topic}"
 
-Bài mẫu văn phong của bạn:
+Tham khảo văn phong từ các bài viết trước của bạn:
 ---
-${styleCtx.slice(0, 3000)}
+${styleCtx.slice(0, 2000)}
 ---
 
-Tạo dàn bài chi tiết cho bài viết ~1200-1500 từ.
-Trả về JSON thuần (KHÔNG backtick markdown):
-{
-  "thesis": "luận điểm trung tâm (1-2 câu)",
-  "sections": [
-    {"heading": "Tiêu đề mục", "key_points": ["điểm 1", "điểm 2", "điểm 3"]}
-  ],
-  "conclusion_direction": "hướng kết luận"
-}
-Cần 4-6 sections. Bám sát văn phong học thuật cổ điển.`;
+Tạo dàn bài cho bài viết kể chuyện, cá nhân, dễ đọc (~1000-1200 từ).
+Cấu trúc ưu tiên: mở bằng câu chuyện/tình huống thực → dẫn vào góc nhìn Tử Vi → rút ra chiêm nghiệm cá nhân.
+KHÔNG phải luận văn, KHÔNG học thuật khô khan. Giọng như đang kể cho bạn nghe.
 
-  const raw = await callClaude(prompt, 800);
+Trả về JSON một dòng (KHÔNG backtick, key_points tối đa 6 từ):
+{"hook":"câu mở đầu gợi cảm xúc","sections":[{"heading":"tên mục ngắn","key_points":["ý ngắn","ý ngắn"]}],"closing":"hướng kết bài"}
+Cần đúng 4 sections.`;
+
+  const raw = await callClaude(prompt, 500);
   return JSON.parse(raw) as Storyboard;
 }
 
-// ── Stage 2: Full article ──────────────────────────────────────────────────────
+// ── Stage 2a: Write article content (plain markdown, no JSON) ─────────────────
+async function writeContent(
+  topic: string,
+  master: MasterProfile,
+  storyboard: Storyboard,
+  styleCtx: string,
+): Promise<string> {
+  const sectionsOutline = storyboard.sections
+    .map(s => `**${s.heading}**: ${s.key_points.join(', ')}`)
+    .join('\n');
+
+  const prompt = `Bạn là ${master.display_name}, đang viết một bài chia sẻ cá nhân về Tử Vi Đẩu Số.
+
+CHỦ ĐỀ: "${topic}"
+MỞ BÀI: ${storyboard.hook}
+KẾT BÀI HƯỚNG ĐẾN: ${storyboard.closing}
+
+DÀN Ý:
+${sectionsOutline}
+
+VĂN PHONG MẪU (học cách diễn đạt, không copy):
+---
+${styleCtx.slice(0, 1800)}
+---
+
+PHONG CÁCH VIẾT:
+- Kể chuyện, cá nhân, dễ đọc — như đang nói chuyện với bạn
+- Mở đầu bằng tình huống/câu chuyện thực tế (có thể là trường hợp tao từng gặp, hoặc câu hỏi ai cũng tự hỏi)
+- Dùng "tôi", "bạn", "chúng ta" tự nhiên
+- Xen kẽ kiến thức Tử Vi như lăng kính, không như giáo trình
+- Câu ngắn, nhịp nhàng, có thể nghe được như podcast
+- 1000-1200 từ, markdown (## cho mục chính, **bold** cho điểm nhấn, > cho câu chiêm nghiệm)
+- Kết bằng một câu chiêm nghiệm cá nhân, ký tên *${master.display_name}*
+- KHÔNG đề cập AI, không học thuật cứng nhắc
+
+Chỉ trả về nội dung markdown, không bọc JSON, không backtick ngoài.`;
+
+  return callClaude(prompt, 4000);
+}
+
+// ── Stage 2b: Extract metadata ─────────────────────────────────────────────────
 interface MasterArticleOutput {
   title: string;
   slug: string;
@@ -201,61 +241,43 @@ interface MasterArticleOutput {
 
 const VALID_CATS = ['hoc-thuat', 'luan-la-so', 'chiem-nghiem', 'thuc-hanh', 'ly-luan'];
 
+async function extractMetadata(topic: string, content: string): Promise<Omit<MasterArticleOutput, 'content'>> {
+  const preview = content.slice(0, 400);
+  const prompt = `Chủ đề: "${topic}"
+Mở bài: ${preview}
+
+Tạo metadata JSON một dòng duy nhất (KHÔNG backtick, KHÔNG xuống dòng trong JSON):
+{"title":"tiêu đề hấp dẫn 50-75 ký tự","slug":"slug-ascii","excerpt":"tóm tắt gợi cảm xúc dưới 155 ký tự","category":"chiem-nghiem hoặc luan-la-so hoặc hoc-thuat","tags":["tag1","tag2","tag3"]}`;
+
+  const raw = await callClaude(prompt, 250);
+  return JSON.parse(raw) as Omit<MasterArticleOutput, 'content'>;
+}
+
 async function writeArticle(
   topic: string,
   master: MasterProfile,
   storyboard: Storyboard,
   styleCtx: string,
-  tuviCtx: string,
+  _tuviCtx: string,
 ): Promise<MasterArticleOutput> {
-  const styleRules = master.style_rules.slice(0, 5).map((r, i) => `${i + 1}. ${r}`).join('\n');
-  const sectionsOutline = storyboard.sections
-    .map(s => `## ${s.heading}\n- ${s.key_points.join('\n- ')}`)
-    .join('\n\n');
+  // Stage 2a: write markdown content
+  const content = await writeContent(topic, master, storyboard, styleCtx);
 
-  const prompt = `Bạn là ${master.display_name}, học giả nghiên cứu Tử Vi Đẩu Số.
-Bio: ${master.bio}
-Văn phong: ${master.style_summary}
-Nguyên tắc viết (PHẢI tuân theo):
-${styleRules}
+  // Stage 2b: extract metadata
+  let meta: Omit<MasterArticleOutput, 'content'>;
+  try {
+    meta = await extractMetadata(topic, content);
+  } catch {
+    meta = {
+      title: topic.slice(0, 75),
+      slug: '',
+      excerpt: storyboard.hook.slice(0, 155),
+      category: 'chiem-nghiem',
+      tags: [],
+    };
+  }
 
-CHỦ ĐỀ: "${topic}"
-LUẬN ĐIỂM: ${storyboard.thesis}
-KẾT LUẬN HƯỚNG ĐẾN: ${storyboard.conclusion_direction}
-
-DÀN BÀI:
-${sectionsOutline}
-
-TÀI LIỆU VĂN PHONG (bài mẫu của bạn — học cách diễn đạt):
----
-${styleCtx.slice(0, 2500)}
----
-
-TÀI LIỆU CHUYÊN MÔN (sự kiện và kiến thức Tử Vi — bám sát, không bịa):
----
-${tuviCtx.slice(0, 2500) || '(Dùng kiến thức Tử Vi Đẩu Số tổng quát)'}
----
-
-Viết bài hoàn chỉnh theo dàn bài trên. Yêu cầu:
-- 1200-1500 từ, markdown
-- Giọng văn học thuật cổ điển, điềm tĩnh, uyên bác
-- Dùng thuật ngữ Tử Vi chính xác (sao, cung, can, chi, hóa...)
-- Có dẫn chứng từ cổ thư hoặc kinh nghiệm luận giải
-- KHÔNG đề cập AI, không tự xưng là AI
-- Tác giả ký tên: ${master.display_name}
-
-Trả về JSON thuần (KHÔNG backtick):
-{
-  "title": "Tiêu đề bài viết (có từ khóa, 50-80 ký tự)",
-  "slug": "slug-ascii-no-diacritic",
-  "excerpt": "Tóm tắt dưới 160 ký tự",
-  "category": "CHỌN 1: hoc-thuat|luan-la-so|chiem-nghiem|thuc-hanh|ly-luan",
-  "tags": ["tag1", "tag2", "tag3"],
-  "content": "nội dung markdown đầy đủ"
-}`;
-
-  const raw = await callClaude(prompt, 3500);
-  const article = JSON.parse(raw) as MasterArticleOutput;
+  const article: MasterArticleOutput = { ...meta, content };
 
   if (!VALID_CATS.includes(article.category)) {
     article.category = master.primary_article_type === 'luan-la-so' ? 'luan-la-so' : 'hoc-thuat';

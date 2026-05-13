@@ -95,7 +95,8 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 .breadcrumb a{color:var(--text-lt);text-decoration:none}.breadcrumb a:hover{color:var(--navy)}.breadcrumb span{color:var(--border)}
 .profile-header{background:var(--navy);padding:48px 40px 40px}
 .profile-inner{max-width:860px;margin:0 auto;display:flex;gap:32px;align-items:flex-start}
-.profile-avatar{width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.1);border:2px solid var(--gold-bright);color:var(--gold-bright);font-family:'Noto Serif',serif;font-size:32px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.profile-avatar{width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.1);border:2px solid var(--gold-bright);color:var(--gold-bright);font-family:'Noto Serif',serif;font-size:32px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.profile-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .profile-details{flex:1;color:#fff}
 .profile-name{font-family:'Noto Serif',serif;font-size:28px;font-weight:600;color:var(--gold-bright);margin-bottom:4px}
 .profile-title{font-size:13px;color:rgba(255,255,255,.55);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px}
@@ -133,7 +134,10 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 <div class="breadcrumb"><a href="/">Trang Chủ</a><span>›</span><a href="/tac-gia">Tác Giả</a><span>›</span><span>${esc(name)}</span></div>
 <div class="profile-header">
   <div class="profile-inner">
-    <div class="profile-avatar">${esc(name[0] || '?')}</div>
+    <div class="profile-avatar">
+      <img src="/authors/${esc(masterId)}.webp" alt="${esc(name)}"
+        onerror="this.style.display='none';this.parentElement.textContent='${esc(name[0] || '?')}'">
+    </div>
     <div class="profile-details">
       <div class="profile-name">${esc(name)}</div>
       <div class="profile-title">Nhà Nghiên Cứu Tử Vi Đẩu Số</div>
@@ -161,8 +165,8 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
       <div class="specialty-tags">${specialty.map((s: string) => `<span class="spec-tag">${esc(s)}</span>`).join('')}</div>
     </div>` : ''}
     <div class="sidebar-card">
-      <div class="sidebar-label">Về Tập San</div>
-      <div class="style-summary">Các bài viết được chọn lọc và biên soạn từ tư liệu nghiên cứu Tử Vi Đẩu Số của Khoa Học Huyền Bí — tập san uy tín về huyền học phương Đông trước 1975.</div>
+      <div class="sidebar-label">Về Bộ Sưu Tập</div>
+      <div class="style-summary">Các bài viết là tinh hoa chiêm nghiệm và luận giải Tử Vi Đẩu Số — được chọn lọc từ kho tàng nghiên cứu của nhóm tác giả qua nhiều năm tìm tòi và đúc kết.</div>
     </div>
   </aside>
 </div>

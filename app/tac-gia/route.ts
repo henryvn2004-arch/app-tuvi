@@ -40,7 +40,10 @@ function buildHTML(masters: any[]) {
   const cards = masters.map(m => {
     const specialty: string[] = Array.isArray(m.specialty_topics) ? m.specialty_topics.slice(0, 3) : [];
     return `<a href="/tac-gia/${esc(m.id)}" class="author-card">
-  <div class="author-avatar">${esc(String(m.display_name || '?')[0])}</div>
+  <div class="author-avatar">
+    <img src="/authors/${esc(m.id)}.webp" alt="${esc(m.display_name)}"
+      onerror="this.style.display='none';this.parentElement.textContent='${esc(String(m.display_name || '?')[0])}'">
+  </div>
   <div class="author-body">
     <div class="author-name">${esc(m.display_name)}</div>
     ${m.bio ? `<div class="author-bio">${esc(m.bio)}</div>` : ''}
@@ -55,7 +58,7 @@ function buildHTML(masters: any[]) {
   return `<!DOCTYPE html><html lang="vi"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Tác Giả Nghiên Cứu Tử Vi — Tử Vi Minh Bảo</title>
-<meta name="description" content="Danh sách 15 học giả nghiên cứu Tử Vi Đẩu Số — các nhà nghiên cứu với kho tàng bài viết học thuật từ tập san Khoa Học Huyền Bí trước 1975.">
+<meta name="description" content="Danh sách các tác giả nghiên cứu Tử Vi Đẩu Số — bộ sưu tập bài viết chiêm nghiệm và luận giải từ nhóm học giả uyên thâm.">
 <meta property="og:title" content="Tác Giả Nghiên Cứu Tử Vi — Tử Vi Minh Bảo">
 <meta property="og:description" content="15 học giả nghiên cứu Tử Vi Đẩu Số uyên thâm">
 <meta property="og:type" content="website">
@@ -81,7 +84,8 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:20px}
 .author-card{display:flex;gap:16px;padding:20px;border:1px solid var(--border-lt);border-radius:10px;text-decoration:none;color:inherit;background:var(--bg);transition:all .12s;align-items:flex-start}
 .author-card:hover{border-color:var(--gold);background:var(--gold-lt);box-shadow:0 2px 12px rgba(154,123,58,.1)}
-.author-avatar{width:52px;height:52px;border-radius:50%;background:var(--navy);color:var(--gold-bright);font-family:'Noto Serif',serif;font-size:22px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.author-avatar{width:52px;height:52px;border-radius:50%;background:var(--navy);color:var(--gold-bright);font-family:'Noto Serif',serif;font-size:22px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.author-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .author-body{flex:1;min-width:0}
 .author-name{font-family:'Noto Serif',serif;font-size:16px;font-weight:600;color:var(--navy);margin-bottom:6px}
 .author-bio{font-size:13px;color:var(--text-lt);line-height:1.65;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -97,11 +101,11 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 <div class="breadcrumb"><a href="/">Trang Chủ</a><span>›</span><span>Tác Giả</span></div>
 <div class="page-header">
   <h1>Tác Giả Nghiên Cứu Tử Vi</h1>
-  <p>Các học giả nghiên cứu Tử Vi Đẩu Số — kho tàng tri thức được chưng cất từ tập san <em>Khoa Học Huyền Bí</em> và nhiều thập kỷ chiêm nghiệm thực tế</p>
+  <p>Bộ sưu tập bài viết chiêm nghiệm và luận giải Tử Vi Đẩu Số từ nhóm tác giả — mỗi người một góc nhìn, một giọng văn, nhưng cùng chung một mối đam mê khám phá bí ẩn của mệnh lý</p>
 </div>
 <main class="main">
   <div class="intro-box">
-    Những tác giả dưới đây là các <strong>học giả chuyên sâu về Tử Vi Đẩu Số</strong>, đã đóng góp cho nền huyền học cổ điển phương Đông qua nhiều công trình nghiên cứu, luận giải và chiêm nghiệm. Mỗi người có một văn phong và chuyên môn riêng biệt.
+    Những tác giả dưới đây là các <strong>học giả và người chiêm nghiệm Tử Vi Đẩu Số</strong> — mỗi người mang một góc nhìn riêng, từ lý luận học thuật đến những câu chuyện sống thực rút ra từ hàng ngàn lá số. Mỗi bài viết là một hành trình khám phá, không chỉ về mệnh lý mà về con người.
   </div>
   <div class="grid">${cards}</div>
 </main>
