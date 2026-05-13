@@ -63,6 +63,20 @@ async function ragSearch(topic: string) {
 }
 
 const VALID_KL_CATS = ['hon-nhan','gia-dinh','tai-chinh','cong-viec','tinh-cach','van-han','dien-san','quan-he','benh-tat','con-cai'];
+const MASTER_IDS = ['huyen-khong','tu-nguyen','linh-son','dau-nam','ngoc-tinh','thien-an','thanh-hu','bac-minh','thai-hu','tam-kinh','co-nguyet','linh-co','dieu-khong','nhat-nguyen','tinh-quang'];
+
+async function pickAuthor(): Promise<string> {
+  try {
+    const r = await sbFetch('/khao_luan?select=master_id&master_id=not.is.null');
+    if (!r.ok || !r.body?.length) return MASTER_IDS[0];
+    const counts: Record<string, number> = {};
+    for (const id of MASTER_IDS) counts[id] = 0;
+    for (const row of r.body as {master_id: string}[]) {
+      if (counts[row.master_id] !== undefined) counts[row.master_id]++;
+    }
+    return MASTER_IDS.reduce((a, b) => counts[a] <= counts[b] ? a : b);
+  } catch { return MASTER_IDS[Math.floor(Math.random() * MASTER_IDS.length)]; }
+}
 
 async function writeArticle(topic: string, ctx: string) {
   const ctxBlock = ctx || '(Dùng kiến thức Tử Vi Đẩu Số tổng quát)';
@@ -76,7 +90,7 @@ Trả về JSON thuần (KHÔNG backtick):
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method:'POST',
     headers:{'Content-Type':'application/json','x-api-key':ANTHROPIC_KEY,'anthropic-version':'2023-06-01'},
-    body:JSON.stringify({model:'claude-sonnet-4-5', max_tokens:2000, messages:[{role:'user',content:prompt}]}),
+    body:JSON.stringify({model:'claude-sonnet-4-6', max_tokens:2000, messages:[{role:'user',content:prompt}]}),
   });
   if (!res.ok) { const e = await res.json() as {error:{message:string}}; throw new Error(e.error?.message||`Claude ${res.status}`); }
   const data = await res.json() as {content:{text:string}[]};
@@ -107,7 +121,7 @@ async function handle(request: NextRequest) {
     if (Date.now() - startTime > 55000) { await updateStatus(t.id, 'pending'); break; }
     if (t.type === 'tai-lieu') { await updateStatus(t.id, 'pending'); continue; }
     try {
-      const ctx = await ragSearch(t.topic);
+      const [ctx, masterId] = await Promise.all([ragSearch(t.topic), pickAuthor()]);
       const article = await writeArticle(t.topic, ctx);
       results.written++;
       let slug = article.slug || toSlug(article.title);
@@ -115,7 +129,7 @@ async function handle(request: NextRequest) {
       article.slug = slug;
       const saved = await sbFetch('/khao_luan', {
         method:'POST', headers:{'Prefer':'resolution=ignore-duplicates'},
-        body:JSON.stringify({slug:article.slug, title:article.title, excerpt:article.excerpt, category:article.category, tags:article.tags, featured:article.featured||false, content:article.content, created_at:new Date().toISOString()}),
+        body:JSON.stringify({slug:article.slug, title:article.title, excerpt:article.excerpt, category:article.category, tags:article.tags, featured:article.featured||false, content:article.content, master_id:masterId, created_at:new Date().toISOString()}),
       });
       if (saved.ok) { results.saved++; await updateStatus(t.id, 'done'); }
       else { results.errors.push(`DB: ${JSON.stringify(saved.body).slice(0,80)}`); await updateStatus(t.id, 'error'); }
