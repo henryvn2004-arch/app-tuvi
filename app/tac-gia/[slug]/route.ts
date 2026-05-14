@@ -19,15 +19,34 @@ const CAT_LABEL: Record<string, string> = {
   'chiem-nghiem': 'Chiêm Nghiệm', 'thuc-hanh': 'Thực Hành', 'ly-luan': 'Lý Luận',
 };
 
+const AUTHOR_SHORT_BIO: Record<string, string> = {
+  'bac-minh':   'Bắc Minh tiên sinh xuất thân từ gia tộc nghiên cứu mệnh lý lâu đời tại Thiểm Tây — nơi lưu giữ nhiều bí bản Tử Vi cổ đại hiếm gặp. Hơn bốn thập kỷ chuyên tâm luận giải lá số cho các gia tộc thương nhân tại Thượng Hải và Hồng Kông, tiên sinh ít xuất hiện công khai nhưng danh tiếng lan rộng trong giới kinh doanh kín tiếng.',
+  'co-nguyet':  'Cổ Nguyệt tiên sinh là một trong số ít học giả nắm vững cả Tử Vi Đẩu Số lẫn Tứ Trụ Tử Bình — hai hệ thống mệnh lý tưởng chừng mâu thuẫn nhưng dưới tay tiên sinh lại bổ trợ nhau một cách tinh tế. Các luận văn của tiên sinh từng lưu hành dưới dạng bản thảo kín trong giới học thuật Đài Loan trước khi được phép chia sẻ rộng hơn.',
+  'dau-nam':    'Đẩu Nam tiên sinh dành hơn ba mươi năm sưu tầm cổ tịch tại Phúc Kiến và Quảng Đông, nơi còn lưu giữ nhiều tài liệu Tử Vi từ thời Minh–Thanh. Tiên sinh hiếm khi nhận trò; những ai được tiếp cận thường là doanh nhân hoặc nhân vật được giới thiệu qua nhiều lớp trung gian.',
+  'dieu-khong': 'Diệu Không tiên sinh kết hợp thiền quán Mật tông với luận giải lá số theo một phương pháp độc đáo ít được truyền dạy công khai. Tiên sinh từng đảm nhiệm vai trò cố vấn âm thầm cho một số tập đoàn lớn tại Hồng Kông trong các quyết định nhân sự và thời điểm ra mắt dự án.',
+  'huyen-khong':'Huyền Không tiên sinh là hậu duệ dòng truyền thừa kết hợp Tử Vi Đẩu Số với Huyền Không Phi Tinh — phương pháp hòa hợp địa lý phong thủy và mệnh lý cá nhân vốn chỉ lưu truyền trong các gia tộc kín. Giới thương gia Hồng Kông và Đài Loan biết đến tiên sinh qua những dự báo vận hạn chính xác đến mức khó lý giải.',
+  'linh-co':    'Linh Cổ tiên sinh thuộc thế hệ cuối được đào tạo hoàn toàn theo phương pháp truyền thống — không sách giáo khoa, không lớp học chính thức, chỉ quan sát và ghi chép dưới sự hướng dẫn trực tiếp của thầy. Tiên sinh không nhận trò mới; những bài viết này là một trong số ít cách tiếp cận công khai duy nhất.',
+  'linh-son':   'Linh Sơn tiên sinh từng nhiều năm ẩn cư tại vùng núi Võ Di nghiên cứu cổ tịch, trở về với góc nhìn thiên về triết học hơn là ứng dụng thực dụng. Các doanh nghiệp tìm đến tiên sinh thường là những người đã thử nhiều phương pháp khác mà chưa thỏa mãn.',
+  'ngoc-tinh':  'Ngọc Tinh tiên sinh kết hợp tâm lý học hành vi và Tử Vi Đẩu Số theo hướng tiếp cận hiếm gặp trong giới học thuật truyền thống. Các luận giải của tiên sinh đặc biệt được chú ý bởi độ chính xác trong đánh giá nhân cách và dự báo quan hệ đối tác — điều mà nhiều doanh nghiệp tại Đài Loan xem là lợi thế cạnh tranh.',
+  'nhat-nguyen':'Nhất Nguyên tiên sinh là học giả chuyên nghiên cứu nguồn gốc và các dị bản của Tử Vi Đẩu Số qua các triều đại, với vốn hiểu biết sâu rộng về sự biến đổi của hệ thống này qua từng thế kỷ. Tiên sinh được giới học thuật Đài Loan và Trung Hoa đại lục mời tham vấn trong các dự án phục dựng kinh điển.',
+  'tam-kinh':   'Tam Kinh tiên sinh thông thạo ba hệ thống huyền học chính — Tử Vi Đẩu Số, Bát Tự Tử Bình và Kỳ Môn Độn Giáp — điều hiếm thấy trong một học giả duy nhất. Phương pháp của tiên sinh là đối chiếu cả ba hệ thống để tìm điểm hội tụ, từ đó cho ra những luận giải vừa toàn diện vừa thận trọng.',
+  'thai-hu':    'Thái Hư tiên sinh theo truyền thống Đạo gia, xem mệnh lý là công cụ để hiểu quy luật biến dịch hơn là để đoán định tuyệt đối. Tiên sinh từng đào tạo một số cố vấn chiến lược cho các tập đoàn đa quốc gia tại Hồng Kông nhưng không bao giờ xác nhận công khai danh sách khách hàng.',
+  'thanh-hu':   'Thanh Hư tiên sinh chuyên nghiên cứu mệnh lý trong bối cảnh lịch sử — lý giải tại sao cùng một lá số lại cho kết quả khác nhau qua các giai đoạn lịch sử khác nhau. Tiên sinh được biết đến với những bài khảo cứu kỹ lưỡng về các nhân vật lịch sử Trung Hoa qua góc nhìn Tử Vi.',
+  'thien-an':   'Thiên An tiên sinh từng đảm nhiệm vai trò cố vấn chiến lược cho một số tập đoàn bất động sản và tài chính tại Hồng Kông — lĩnh vực mà việc chọn đúng thời điểm và đúng nhân sự mang tính quyết định. Tiên sinh ít chia sẻ phương pháp nhưng các bài viết để lại đều mang tính thực dụng cao và ít khi sai.',
+  'tinh-quang': 'Tinh Quang tiên sinh kết hợp thiên văn học cổ đại Trung Hoa với Tử Vi Đẩu Số, xem hai hệ thống này là một chứ không phải hai. Nghiên cứu của tiên sinh về ảnh hưởng của chu kỳ thiên văn lên vận hạn đã thu hút sự quan tâm của một số nhà nghiên cứu độc lập tại Đài Loan và Singapore.',
+  'tu-nguyen':  'Tử Nguyên tiên sinh chuyên sâu về hệ thống Bắc Đẩu tinh hệ trong Tử Vi Đẩu Số — phần lõi phức tạp nhất và ít được luận giải tường tận nhất của hệ thống. Tiên sinh có thói quen không đặt tên cho các kỹ thuật của mình, tin rằng việc đặt tên sẽ làm cứng nhắc những gì vốn phải linh hoạt theo từng lá số.',
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function buildHTML(master: any, articles: any[]) {
+function buildHTML(master: any, articles: any[], realArticleCount: number) {
   const masterId = master.id;
   const name     = master.display_name || '';
   const bio      = master.bio || '';
   const url      = `${BASE}/tac-gia/${masterId}`;
   const specialty: string[] = Array.isArray(master.specialty_topics) ? master.specialty_topics : [];
   const styleSum = master.style_summary || '';
-  const artCount = master.article_count || articles.length;
+  const artCount = realArticleCount || articles.length;
+  const authorBio = AUTHOR_SHORT_BIO[masterId] || '';
 
   const schemas = JSON.stringify([
     {
@@ -164,10 +183,10 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
       <div class="sidebar-label">Chuyên Đề</div>
       <div class="specialty-tags">${specialty.map((s: string) => `<span class="spec-tag">${esc(s)}</span>`).join('')}</div>
     </div>` : ''}
-    <div class="sidebar-card">
-      <div class="sidebar-label">Về Bộ Sưu Tập</div>
-      <div class="style-summary">Các bài viết là tinh hoa chiêm nghiệm và luận giải Tử Vi Đẩu Số — được chọn lọc từ kho tàng nghiên cứu của nhóm tác giả qua nhiều năm tìm tòi và đúc kết.</div>
-    </div>
+    ${authorBio ? `<div class="sidebar-card">
+      <div class="sidebar-label">Về Tác Giả</div>
+      <div class="style-summary">${esc(authorBio)}</div>
+    </div>` : ''}
   </aside>
 </div>
 <script src="/nav.js" defer></script>
@@ -196,9 +215,10 @@ export async function GET(
   const sbHeaders = { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` };
 
   try {
-    const [masterRes, articlesRes] = await Promise.all([
+    const [masterRes, articlesRes, countRes] = await Promise.all([
       fetch(`${SB_URL}/rest/v1/master_profiles?id=eq.${encodeURIComponent(slug)}&select=*&limit=1`, { headers: sbHeaders }),
       fetch(`${SB_URL}/rest/v1/master_articles?master_id=eq.${encodeURIComponent(slug)}&select=slug,title,excerpt,category,word_count,created_at&order=created_at.desc&limit=50`, { headers: sbHeaders }),
+      fetch(`${SB_URL}/rest/v1/master_articles?master_id=eq.${encodeURIComponent(slug)}&select=id`, { headers: { ...sbHeaders, 'Prefer': 'count=exact' } }),
     ]);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -209,8 +229,10 @@ export async function GET(
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const articles: any[] = articlesRes.ok ? await articlesRes.json() : [];
+    const contentRange = countRes.headers.get('Content-Range') || '';
+    const realArticleCount = parseInt(contentRange.split('/')[1] || '0', 10) || articles.length;
 
-    const html = buildHTML(masterRows[0], articles);
+    const html = buildHTML(masterRows[0], articles, realArticleCount);
     return new NextResponse(html, {
       status: 200,
       headers: {
