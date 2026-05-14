@@ -3,6 +3,7 @@ export const maxDuration = 60;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
+import { searchMasterReasoning } from '@/lib/rag';
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!;
 
@@ -197,9 +198,15 @@ async function handleChat(body: any): Promise<Response> {
 
   const lastQ = messages[messages.length - 1]?.content || '';
   const hasLaso = !!(lasoData?.palaces?.length || lasoData?._lsA?.palaces?.length);
+
+  // Server-side: supplement client tuvi_docs with master_docs reasoning examples
+  const masterDocs = await searchMasterReasoning(lastQ, 2);
+  const allDocs = [docs, masterDocs ? '=== THAM KHẢO LUẬN GIẢI MẪU (bổ sung) ===\n' + masterDocs : '']
+    .filter(Boolean).join('\n\n');
+
   const systemPrompt = hasLaso
-    ? CHAT_SYSTEM_LASO(extractLasoContext(lasoData, lastQ), docs)
-    : CHAT_SYSTEM_GENERAL(docs);
+    ? CHAT_SYSTEM_LASO(extractLasoContext(lasoData, lastQ), allDocs || undefined)
+    : CHAT_SYSTEM_GENERAL(allDocs || undefined);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const trimmed = messages.slice(-10).map((m: any) => ({
@@ -219,7 +226,7 @@ async function handleChat(body: any): Promise<Response> {
 }
 
 // ─── Prompt builder ────────────────────────────────────────────
-function buildPrompt(phan: number, laSoText: string, docs?: string): string {
+function buildPrompt(phan: number, laSoText: string, docs?: string, masterDocs?: string): string {
   function trimLaSo(text: string, phan: number): string {
     if (!text) return text;
     const lines = text.split('\n');
@@ -270,8 +277,9 @@ function buildPrompt(phan: number, laSoText: string, docs?: string): string {
   }
 
   const trimmedLaSo = trimLaSo(laSoText, phan);
-  const docsSection = docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : '';
-  const ctx = '=== LÁ SỐ ===\n' + trimmedLaSo + docsSection;
+  const docsSection       = docs       ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : '';
+  const masterDocsSection = masterDocs ? '\n\n=== THAM KHẢO LUẬN GIẢI MẪU (bổ sung) ===\n' + masterDocs : '';
+  const ctx = '=== LÁ SỐ ===\n' + trimmedLaSo + docsSection + masterDocsSection;
 
   if (phan === 1) return ctx + `
 
@@ -384,14 +392,28 @@ export async function POST(request: NextRequest) {
   const { laSoText, phan, docs } = body as { laSoText?: string; phan?: number; docs?: string };
   if (!laSoText || !phan) return err('Thiếu dữ liệu', 400);
 
+  const phanNum = Number(phan);
+  const CUNG_BY_PHAN_LOCAL: Record<number, string> = {
+    2:'Mệnh', 3:'Phụ Mẫu', 4:'Phúc Đức', 5:'Điền Trạch',
+    6:'Quan Lộc', 7:'Nô Bộc', 8:'Thiên Di', 9:'Tật Ách',
+    10:'Tài Bạch', 11:'Tử Tức', 12:'Phu Thê', 13:'Huynh Đệ',
+  };
+  const masterQuery = phanNum <= 1 ? 'tổng quan lá số mệnh thân cách cục'
+    : phanNum <= 13 ? `Cung ${CUNG_BY_PHAN_LOCAL[phanNum] || ''} tử vi đẩu số`
+    : phanNum <= 23 ? 'đại vận vận trình tử vi'
+    : 'tiểu vận lưu niên hạn';
+
+  // Server-side: supplement client tuvi_docs with master_docs reasoning examples
+  const masterDocs = await searchMasterReasoning(masterQuery, 2);
+
   let prompt: string;
-  try { prompt = buildPrompt(Number(phan), laSoText, docs); }
+  try { prompt = buildPrompt(phanNum, laSoText, docs, masterDocs || undefined); }
   catch (e: unknown) { return err('buildPrompt error: ' + (e as Error).message); }
 
   try {
     const model = 'claude-sonnet-4-6';
-    const maxTok = phan === 1 ? 2000 : phan === 14 ? 3000 : phan === 24 ? 1400
-      : (phan >= 2 && phan <= 13) ? 1100 : (phan >= 15 && phan <= 23) ? 1100 : 1000;
+    const maxTok = phanNum === 1 ? 2000 : phanNum === 14 ? 3000 : phanNum === 24 ? 1400
+      : (phanNum >= 2 && phanNum <= 13) ? 1100 : (phanNum >= 15 && phanNum <= 23) ? 1100 : 1000;
 
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -417,7 +439,7 @@ export async function POST(request: NextRequest) {
     const chartMatch = text.match(/```chartdata\s*([\s\S]*?)```/);
     if (chartMatch) { try { chartData = JSON.parse(chartMatch[1].trim()); } catch { /* ignore */ } }
     const luanGiai = text.replace(/```chartdata[\s\S]*?```/, '').trim();
-    return ok({ luanGiai, chartData, phan });
+    return ok({ luanGiai, chartData, phan: phanNum });
   } catch (e: unknown) {
     return err((e as Error).message);
   }

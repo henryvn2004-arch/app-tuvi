@@ -93,7 +93,7 @@ async function embedText(text: string): Promise<number[]> {
 }
 
 // ── RAG: master style docs ─────────────────────────────────────────────────────
-async function ragMasterStyle(embedding: number[], masterId: string, articleType: string): Promise<string> {
+async function ragMasterStyle(query: string, embedding: number[], masterId: string, articleType: string): Promise<string> {
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/search_master_docs`, {
       method: 'POST',
@@ -102,27 +102,80 @@ async function ragMasterStyle(embedding: number[], masterId: string, articleType
         query_embedding: embedding,
         target_master_id: masterId,
         target_article_type: articleType || null,
-        match_count: 6,
+        match_count: 15,
         match_threshold: 0.2,
       }),
     });
     if (!res.ok) return '';
     const docs = (await res.json()) as { source_title: string; content: string }[];
-    return docs.map(d => `[${d.source_title}]\n${d.content}`).join('\n\n---\n\n');
+    const normalized = docs.map(d => ({ source: d.source_title, content: d.content }));
+    const { rerankDocs } = await import('@/lib/cohere');
+    const reranked = await rerankDocs(query, normalized, 5);
+    return reranked.map(d => `[${d.source}]\n${d.content}`).join('\n\n---\n\n');
   } catch { return ''; }
 }
 
 // ── RAG: tuvi factual docs ─────────────────────────────────────────────────────
-async function ragTuviDocs(embedding: number[]): Promise<string> {
+async function ragTuviDocs(query: string, embedding: number[]): Promise<string> {
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/search_tuvi_docs`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` },
-      body: JSON.stringify({ query_embedding: embedding, match_count: 6, match_threshold: 0.25 }),
+      body: JSON.stringify({ query_embedding: embedding, match_count: 15, match_threshold: 0.25 }),
     });
     if (!res.ok) return '';
     const docs = (await res.json()) as { source: string; content: string }[];
-    return docs.map(d => `[${d.source}]\n${d.content}`).join('\n\n---\n\n');
+    const { rerankDocs } = await import('@/lib/cohere');
+    const reranked = await rerankDocs(query, docs, 6);
+    return reranked.map(d => `[${d.source}]\n${d.content}`).join('\n\n---\n\n');
+  } catch { return ''; }
+}
+
+// ── RAG: luan-la-so cross-master (reasoning patterns) ─────────────────────────
+async function ragMasterReasoning(query: string, embedding: number[]): Promise<string> {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/search_master_docs`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` },
+      body: JSON.stringify({
+        query_embedding: embedding,
+        target_master_id: null,
+        target_article_type: 'luan-la-so',
+        match_count: 12,
+        match_threshold: 0.25,
+      }),
+    });
+    if (!res.ok) return '';
+    const docs = (await res.json()) as { source_title: string; content: string }[];
+    const normalized = docs.map(d => ({ source: d.source_title, content: d.content }));
+    const { rerankDocs } = await import('@/lib/cohere');
+    const reranked = await rerankDocs(query, normalized, 3);
+    return reranked.map(d => `[${d.source}]\n${d.content}`).join('\n\n---\n\n');
+  } catch { return ''; }
+}
+
+// ── RAG: historical / celebrity cases ─────────────────────────────────────────
+async function ragHistoricalCases(query: string, embedding: number[]): Promise<string> {
+  try {
+    const [r1, r2] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/rpc/search_master_docs`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` },
+        body: JSON.stringify({ query_embedding: embedding, target_master_id: null, target_article_type: 'nhan-vat-ls', match_count: 8, match_threshold: 0.25 }),
+      }),
+      fetch(`${SUPABASE_URL}/rest/v1/rpc/search_master_docs`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` },
+        body: JSON.stringify({ query_embedding: embedding, target_master_id: null, target_article_type: 'nhan-vat-nghe-si', match_count: 5, match_threshold: 0.25 }),
+      }),
+    ]);
+    const d1 = r1.ok ? (await r1.json()) as { source_title: string; content: string }[] : [];
+    const d2 = r2.ok ? (await r2.json()) as { source_title: string; content: string }[] : [];
+    const all = [...d1, ...d2].map(d => ({ source: d.source_title, content: d.content }));
+    if (!all.length) return '';
+    const { rerankDocs } = await import('@/lib/cohere');
+    const reranked = await rerankDocs(query, all, 2);
+    return reranked.map(d => `[${d.source}]\n${d.content}`).join('\n\n---\n\n');
   } catch { return ''; }
 }
 
@@ -199,10 +252,19 @@ async function writeContent(
   master: MasterProfile,
   storyboard: Storyboard,
   styleCtx: string,
+  tuviCtx: string,
+  reasoningCtx: string,
+  historicalCtx: string,
 ): Promise<string> {
   const sectionsOutline = storyboard.sections
     .map(s => `**${s.heading}**: ${s.key_points.join(', ')}`)
     .join('\n');
+
+  const knowledgeBlock = [
+    tuviCtx     ? `=== KIẾN THỨC TỬ VI (ưu tiên dùng làm nền) ===\n${tuviCtx.slice(0, 2000)}` : '',
+    reasoningCtx ? `=== CÁCH LUẬN GIẢI MẪU (tham khảo logic tiền nhân) ===\n${reasoningCtx.slice(0, 1200)}` : '',
+    historicalCtx ? `=== CASE THỰC TẾ (nhân vật lịch sử/nghệ sĩ tương tự) ===\n${historicalCtx.slice(0, 800)}` : '',
+  ].filter(Boolean).join('\n\n');
 
   const prompt = `Bạn là ${master.display_name}, đang viết một bài chia sẻ cá nhân về Tử Vi Đẩu Số cho độc giả người Việt.
 
@@ -213,9 +275,10 @@ KẾT BÀI HƯỚNG ĐẾN: ${storyboard.closing}
 DÀN Ý:
 ${sectionsOutline}
 
+${knowledgeBlock ? `TÀI LIỆU THAM KHẢO (dùng để làm sâu luận giải — không trích nguyên văn, không liệt kê nguồn):\n${knowledgeBlock}\n` : ''}
 VĂN PHONG MẪU (học cách diễn đạt, không copy):
 ---
-${styleCtx.slice(0, 1800)}
+${styleCtx.slice(0, 1500)}
 ---
 
 KỸ THUẬT KỂ CHUYỆN — TUÂN THỦ NGHIÊM:
@@ -278,10 +341,12 @@ async function writeArticle(
   master: MasterProfile,
   storyboard: Storyboard,
   styleCtx: string,
-  _tuviCtx: string,
+  tuviCtx: string,
+  reasoningCtx: string,
+  historicalCtx: string,
 ): Promise<MasterArticleOutput> {
   // Stage 2a: write markdown content
-  const content = await writeContent(topic, master, storyboard, styleCtx);
+  const content = await writeContent(topic, master, storyboard, styleCtx, tuviCtx, reasoningCtx, historicalCtx);
 
   // Stage 2b: extract metadata
   let meta: Omit<MasterArticleOutput, 'content'>;
@@ -346,18 +411,20 @@ async function handle(request: NextRequest) {
       // Embed topic
       const embedding = await embedText(t.topic);
 
-      // Dual RAG
-      const [styleCtx, tuviCtx] = await Promise.all([
-        ragMasterStyle(embedding, t.master_id, t.article_type),
-        ragTuviDocs(embedding),
+      // 4-way RAG in parallel — tuvi_docs primary, master_docs supplementary
+      const [styleCtx, tuviCtx, reasoningCtx, historicalCtx] = await Promise.all([
+        ragMasterStyle(t.topic, embedding, t.master_id, t.article_type),
+        ragTuviDocs(t.topic, embedding),
+        ragMasterReasoning(t.topic, embedding),
+        ragHistoricalCases(t.topic, embedding),
       ]);
 
-      // Stage 1: Storyboard
+      // Stage 1: Storyboard (style only — structure planning doesn't need knowledge)
       const storyboard = await buildStoryboard(t.topic, master, styleCtx);
       results.written++;
 
-      // Stage 2: Write article
-      const article = await writeArticle(t.topic, master, storyboard, styleCtx, tuviCtx);
+      // Stage 2: Write article (all contexts injected)
+      const article = await writeArticle(t.topic, master, storyboard, styleCtx, tuviCtx, reasoningCtx, historicalCtx);
 
       // Ensure unique slug
       let slug = article.slug || toSlug(article.title);

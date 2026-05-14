@@ -280,7 +280,8 @@ async function searchTubinhDocs(query: string, topK = 5): Promise<string> {
   const embJson = await embRes.json() as { data: { embedding: number[] }[] };
   const embedding = embJson.data[0].embedding;
 
-  // 2. Call RPC function search_tubinh_docs
+  // 2. Fetch rộng hơn topK để rerank có đủ candidates
+  const fetchCount = Math.min(topK * 3, 20);
   const rpcRes = await fetch(`${SUPABASE_URL}/rest/v1/rpc/search_tubinh_docs`, {
     method: 'POST',
     headers: {
@@ -288,7 +289,7 @@ async function searchTubinhDocs(query: string, topK = 5): Promise<string> {
       'apikey': SUPABASE_SERVICE_KEY,
       'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
     },
-    body: JSON.stringify({ query_embedding: embedding, match_count: topK }),
+    body: JSON.stringify({ query_embedding: embedding, match_count: fetchCount }),
   });
   if (!rpcRes.ok) {
     console.error('Supabase RPC error:', await rpcRes.text());
@@ -298,8 +299,11 @@ async function searchTubinhDocs(query: string, topK = 5): Promise<string> {
   const chunks = await rpcRes.json() as any[];
   if (!Array.isArray(chunks) || chunks.length === 0) return '';
 
-  // 3. Concatenate top chunks với source attribution
-  return chunks.map(c => `[${c.source || 'tài liệu'}]\n${c.content}`).join('\n\n---\n\n');
+  // 3. Rerank với Cohere, lấy topK tốt nhất
+  const { rerankDocs } = await import('@/lib/cohere');
+  const reranked = await rerankDocs(query, chunks, topK);
+
+  return reranked.map(c => `[${c.source || 'tài liệu'}]\n${c.content}`).join('\n\n---\n\n');
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

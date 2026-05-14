@@ -54,11 +54,13 @@ async function ragSearch(topic: string) {
     const embedding = await embedText(topic);
     const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/search_tuvi_docs`, {
       method:'POST', headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`},
-      body:JSON.stringify({query_embedding:embedding, match_count:6, match_threshold:0.25}),
+      body:JSON.stringify({query_embedding:embedding, match_count:15, match_threshold:0.25}),
     });
     if (!res.ok) return '';
     const docs = await res.json() as {source:string;content:string}[];
-    return docs.map(d=>`[${d.source}]\n${d.content}`).join('\n\n---\n\n');
+    const { rerankDocs } = await import('@/lib/cohere');
+    const reranked = await rerankDocs(topic, docs, 5);
+    return reranked.map(d=>`[${d.source}]\n${d.content}`).join('\n\n---\n\n');
   } catch { return ''; }
 }
 

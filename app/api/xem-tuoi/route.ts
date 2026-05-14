@@ -1,4 +1,5 @@
 // app/api/xem-tuoi/route.ts
+import { searchMasterReasoning } from '@/lib/rag';
 // POST /api/xem-tuoi              → xem tuổi / làm ăn
 // POST /api/xem-tuoi?action=chat           → chatbot
 // POST /api/xem-tuoi?action=dat-ten-con    → đặt tên con
@@ -141,7 +142,13 @@ async function handleChat(body: any): Promise<Response> {
   const hasLaso = !!(lasoData?.palaces?.length || lasoData?._lsA?.palaces?.length || (lasoData?._partnerLaso && lasoData?.palaces?.length));
   const isTuongHop = !!(lasoData?._mode === 'tuongHop' || lasoData?._partnerLaso);
 
-  const docsSection = docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : '';
+  // Server-side: supplement client tuvi_docs with master_docs reasoning examples
+  const masterDocs = await searchMasterReasoning(lastQ, 2);
+  const allDocs = [
+    docs,
+    masterDocs ? '=== THAM KHẢO LUẬN GIẢI MẪU (bổ sung) ===\n' + masterDocs : '',
+  ].filter(Boolean).join('\n\n');
+  const docsSection = allDocs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + allDocs : '';
   let systemPrompt: string;
   if (hasLaso && isTuongHop) {
     systemPrompt = CHAT_SYSTEM_LASO(extractLasoContext(lasoData, lastQ)) + docsSection + `
@@ -331,7 +338,14 @@ export async function POST(request: NextRequest) {
 
   const { prompt, docs } = body as { prompt?: string; docs?: string };
   if (!prompt) return err('Missing prompt', 400);
-  const userPrompt = docs ? prompt + '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : prompt;
+
+  // Server-side: supplement client tuvi_docs with master_docs reasoning examples
+  const masterDocs = await searchMasterReasoning(prompt.slice(0, 400), 2);
+  const allDocs = [
+    docs,
+    masterDocs ? '=== THAM KHẢO LUẬN GIẢI MẪU (bổ sung) ===\n' + masterDocs : '',
+  ].filter(Boolean).join('\n\n');
+  const userPrompt = allDocs ? prompt + '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + allDocs : prompt;
 
   try {
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
