@@ -152,8 +152,8 @@ function extractLasoContext(lasoData: any, question: string): string {
     const dvCung = palaces[dv.cungIdx] || {};
     ctx += '\nĐại Vận hiện tại: ' + (dv.diaChi||'') + ' (' + (dv.tuoiStart||'') + '–' + (dv.tuoiEnd||'') + ' tuổi)';
     if (dvCung.cungName) ctx += ' — Cung ' + dvCung.cungName;
-    const dvStars = (dvCung.majorStars||[]).map(starName).filter(Boolean);
-    if (dvStars.length) ctx += ' — Sao: ' + dvStars.join(', ');
+    const dvStars = (dvCung.tuChinhStars||dvCung.majorStars||[]).map(starName).filter(Boolean);
+    if (dvStars.length) ctx += ' — Sao (tứ chính): ' + dvStars.join(', ');
     if (dv.scoring?.tong != null) ctx += ' — Điểm vận: ' + dv.scoring.tong + '/10 ' + (dv.scoring.flag||'');
     ctx += '\n';
   }
@@ -169,9 +169,17 @@ function extractLasoContext(lasoData: any, question: string): string {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const phu = (p.stars||[]).filter((s: any) => typeof s === 'object' ? s.nhom !== 'chinh' : true).map(starFmt).filter(Boolean);
     if (phu.length) ctx += '  Phụ tinh: ' + phu.slice(0,8).join(', ') + '\n';
+    // Sao tổ hợp tam phương tứ chính (đã loại Tuần/Triệt từ cung ngoài)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const tptc = (p.tuChinhStars||[]).filter((s: any) => !p.stars?.includes(s)).map(starFmt).filter(Boolean);
+    if (tptc.length) ctx += '  Tam phương tứ chính: ' + tptc.slice(0,12).join(', ') + '\n';
     if (p.cachCuc?.length) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ctx += '  Cách cục: ' + p.cachCuc.map((c: any) => c.ten || c).join(', ') + '\n';
+      p.cachCuc.forEach((c: any) => {
+        const ten = c.ten || c;
+        const mota = c.moTa ? ': ' + c.moTa : '';
+        ctx += '  Cách cục — ' + ten + mota + '\n';
+      });
     }
   }
 
@@ -180,7 +188,7 @@ function extractLasoContext(lasoData: any, question: string): string {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     lasoData.daiVans.slice(0, 9).forEach((dv: any, i: number) => {
       const dvP = palaces[dv.cungIdx] || {};
-      const stars = (dvP.majorStars||[]).map(starName).filter(Boolean);
+      const stars = (dvP.tuChinhStars||dvP.majorStars||[]).map(starName).filter(Boolean);
       ctx += 'ĐV' + (i+1) + ': ' + (dv.diaChi||'') + ' (' + dv.tuoiStart + '–' + dv.tuoiEnd + 't) cung=' + (dvP.cungName||'?');
       if (stars.length) ctx += ' sao=' + stars.join(',');
       if (dv.scoring?.tong != null) ctx += ' điểm=' + dv.scoring.tong + '/10';

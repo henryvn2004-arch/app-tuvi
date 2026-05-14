@@ -87,10 +87,15 @@ function attachTamPhuong(palaces: Palace[]): void {
   for (const p of palaces) {
     const tp = TAM_PHUONG_TU_CHINH[p.cungName];
     if (!tp) continue;
-    p.tamHopCungs    = tp.tamHop.map(n => palaces.find(x => x.cungName === n)).filter(Boolean) as Palace[];
-    p.xungChieuCung  = palaces.find(x => x.cungName === tp.xung) ?? null;
-    p.tuChinhStars   = [p, ...p.tamHopCungs, p.xungChieuCung]
-      .filter(Boolean).flatMap((c: any) => c.majorStars) as Star[];
+    p.tamHopCungs   = tp.tamHop.map(n => palaces.find(x => x.cungName === n)).filter(Boolean) as Palace[];
+    p.xungChieuCung = palaces.find(x => x.cungName === tp.xung) ?? null;
+    // Cung chính: tất cả sao (kể cả Tuần/Triệt vì nó ảnh hưởng cung này)
+    // Cung tam phương/tứ chính: lấy tất cả sao NGOẠI TRỪ Tuần/Triệt
+    const surrounding = [...p.tamHopCungs, p.xungChieuCung].filter(Boolean) as Palace[];
+    p.tuChinhStars = [
+      ...p.stars,
+      ...surrounding.flatMap(c => c.stars.filter(s => s.nhom !== 'tuan_triet')),
+    ] as Star[];
   }
 }
 

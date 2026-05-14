@@ -1177,15 +1177,22 @@ select.form-input { cursor: pointer; }
         lines.push(`  Chính tinh: ${chinh}`);
       }
       if (phu) lines.push(`  Phụ tinh: ${phu}`);
-      // Tam phương tứ chính
+      // Tam phương tứ chính — Tuần/Triệt chỉ ảnh hưởng cung đó, không ảnh hưởng sang cung khác
       if (p.tamHopCungs && p.tamHopCungs.length) {
+        const hasTuanTriet = c => c.stars?.some(s => s.nhom === 'tuan_triet');
         const tamHopStr = p.tamHopCungs.map(c => {
+          if (hasTuanTriet(c)) return `${c.cungName}(${c.diaChi}):(bị Tuần/Triệt)`;
           const cs = c.majorStars.map(s=>s.ten+(s.hoa?`[${s.hoa}]`:'')).join(' ');
           return `${c.cungName}(${c.diaChi}):${cs||'trống'}`;
         }).join(' | ');
-        const xungCs = p.xungChieuCung?.majorStars.map(s=>s.ten+(s.hoa?`[${s.hoa}]`:'')).join(' ') || 'trống';
+        const xung = p.xungChieuCung;
+        const xungCs = xung
+          ? hasTuanTriet(xung)
+            ? '(bị Tuần/Triệt)'
+            : xung.majorStars.map(s=>s.ten+(s.hoa?`[${s.hoa}]`:'')).join(' ') || 'trống'
+          : 'trống';
         lines.push(`  Tam hợp: ${tamHopStr}`);
-        lines.push(`  Xung chiếu: ${p.xungChieuCung?.cungName}(${p.xungChieuCung?.diaChi}):${xungCs}`);
+        lines.push(`  Xung chiếu: ${xung?.cungName}(${xung?.diaChi}):${xungCs}`);
       }
     }
 
