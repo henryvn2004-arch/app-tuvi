@@ -167,22 +167,26 @@ async function buildStoryboard(
   master: MasterProfile,
   styleCtx: string,
 ): Promise<Storyboard> {
-  const prompt = `Bạn là ${master.display_name}, một người đã nghiên cứu và chiêm nghiệm Tử Vi Đẩu Số nhiều năm.
+  const prompt = `Bạn là ${master.display_name}, học giả mệnh lý người Hoa, làm việc trong môi trường Trung Quốc, Đài Loan, Hồng Kông, Ma Cao.
 Bio: ${master.bio}
 
 Chủ đề bài viết: "${topic}"
 
-Tham khảo văn phong từ các bài viết trước của bạn:
+Tham khảo văn phong từ các bài viết trước:
 ---
 ${styleCtx.slice(0, 2000)}
 ---
 
-Tạo dàn bài cho bài viết kể chuyện, cá nhân, dễ đọc (~1000-1200 từ).
-Cấu trúc ưu tiên: mở bằng câu chuyện/tình huống thực → dẫn vào góc nhìn Tử Vi → rút ra chiêm nghiệm cá nhân.
-KHÔNG phải luận văn, KHÔNG học thuật khô khan. Giọng như đang kể cho bạn nghe.
+Tạo dàn bài cho bài viết KỂ CHUYỆN, cá nhân, dễ đọc (~1200-1500 từ).
+
+NGUYÊN TẮC CỐT LÕI:
+- Mở bài IN MEDIAS RES: ném thẳng vào giữa một cảnh cụ thể — có người thật (tên tắt hoặc mô tả), địa điểm, khoảnh khắc. KHÔNG mở bằng định nghĩa, KHÔNG "Hôm nay tôi sẽ nói về..."
+- Nhân vật câu chuyện phải gắn với bối cảnh xã hội Hoa ngữ: doanh nhân Đài Loan, gia đình Hồng Kông lo chuyện hôn nhân con cái, người trẻ Thượng Hải đổi việc, chủ doanh nghiệp Ma Cao trước quyết định lớn...
+- Cấu trúc: Cảnh mở (tension) → bối cảnh/vấn đề → góc nhìn Tử Vi như lăng kính → chiêm nghiệm cá nhân
+- Hook phải là một câu cảnh hoặc câu thoại cụ thể, không phải câu hỏi tu từ
 
 Trả về JSON một dòng (KHÔNG backtick, key_points tối đa 6 từ):
-{"hook":"câu mở đầu gợi cảm xúc","sections":[{"heading":"tên mục ngắn","key_points":["ý ngắn","ý ngắn"]}],"closing":"hướng kết bài"}
+{"hook":"câu mở cảnh cụ thể","sections":[{"heading":"tên mục ngắn","key_points":["ý ngắn","ý ngắn"]}],"closing":"hướng kết bài"}
 Cần đúng 4 sections.`;
 
   const raw = await callClaude(prompt, 500);
@@ -200,10 +204,10 @@ async function writeContent(
     .map(s => `**${s.heading}**: ${s.key_points.join(', ')}`)
     .join('\n');
 
-  const prompt = `Bạn là ${master.display_name}, đang viết một bài chia sẻ cá nhân về Tử Vi Đẩu Số.
+  const prompt = `Bạn là ${master.display_name}, đang viết một bài chia sẻ cá nhân về Tử Vi Đẩu Số cho độc giả người Việt.
 
 CHỦ ĐỀ: "${topic}"
-MỞ BÀI: ${storyboard.hook}
+MỞ BÀI (dùng nguyên câu này, triển khai từ đây): ${storyboard.hook}
 KẾT BÀI HƯỚNG ĐẾN: ${storyboard.closing}
 
 DÀN Ý:
@@ -214,19 +218,35 @@ VĂN PHONG MẪU (học cách diễn đạt, không copy):
 ${styleCtx.slice(0, 1800)}
 ---
 
-PHONG CÁCH VIẾT:
-- Kể chuyện, cá nhân, dễ đọc — như đang nói chuyện với bạn
-- Mở đầu bằng tình huống/câu chuyện thực tế (có thể là trường hợp tao từng gặp, hoặc câu hỏi ai cũng tự hỏi)
-- Dùng "tôi", "bạn", "chúng ta" tự nhiên
-- Xen kẽ kiến thức Tử Vi như lăng kính, không như giáo trình
-- Câu ngắn, nhịp nhàng, có thể nghe được như podcast
-- 1000-1200 từ, markdown (## cho mục chính, **bold** cho điểm nhấn, > cho câu chiêm nghiệm)
-- Kết bằng một câu chiêm nghiệm cá nhân, ký tên *${master.display_name}*
-- KHÔNG đề cập AI, không học thuật cứng nhắc
+KỸ THUẬT KỂ CHUYỆN — TUÂN THỦ NGHIÊM:
+
+1. MỞ BÀI IN MEDIAS RES
+   Bắt đầu ngay giữa một cảnh: có người, có khoảnh khắc, có cảm xúc. Ví dụ tốt: "Anh Minh gọi cho tôi lúc 11 giờ đêm, giọng khàn đặc." Ví dụ tệ: "Tử Vi Đẩu Số là một hệ thống..."
+
+2. NHÂN VẬT CỤ THỂ, BỐI CẢNH HÀ NGỮ
+   Câu chuyện phải đặt trong môi trường Trung Quốc/Đài Loan/Hồng Kông/Ma Cao. Nhân vật có nghề nghiệp, vấn đề thật: chủ doanh nghiệp gia đình Đài Loan lo chuyện thừa kế, cặp vợ chồng Hồng Kông quyết định mua nhà, người trẻ Thượng Hải đứng trước ngã rẽ sự nghiệp, doanh nhân Ma Cao trước một thương vụ lớn...
+
+3. TENSION TRƯỚC KHI CÓ ĐÁP ÁN
+   Không giải thích Tử Vi ngay. Để vấn đề của nhân vật treo lơ lửng đủ lâu để người đọc cảm được sức nặng của nó trước khi lăng kính mệnh lý xuất hiện.
+
+4. SHOW, ĐỪNG TELL
+   Thay vì "anh ấy rất lo lắng" → "anh gõ ngón tay liên tục lên mặt bàn, mắt nhìn ra ngoài cửa sổ nhìn xuống đường Harcourt Road bên dưới."
+
+5. DIALOGUE NGẮN, TỰ NHIÊN
+   Một vài câu thoại làm bài sống hơn hẳn. Không cần nhiều, 2-3 lần là đủ.
+
+6. TỬ VI NHƯ LĂNG KÍNH, KHÔNG PHẢI GIÁO TRÌNH
+   Kiến thức Tử Vi xuất hiện để lý giải câu chuyện, không phải để định nghĩa hay liệt kê. Người đọc học được qua ngữ cảnh, không qua lý thuyết.
+
+7. KẾT NHỎ, CÁ NHÂN
+   Không kết luận lớn lao. Một quan sát nhỏ, thật, từ góc nhìn của bạn. Ký tên *${master.display_name}*.
+
+FORMAT: 1200-1500 từ, markdown (## cho mục chính, **bold** cho điểm nhấn, > cho câu chiêm nghiệm đáng nhớ)
+KHÔNG đề cập AI, không học thuật cứng nhắc, không câu mở theo kiểu "Trong hành trình..."
 
 Chỉ trả về nội dung markdown, không bọc JSON, không backtick ngoài.`;
 
-  return callClaude(prompt, 4000);
+  return callClaude(prompt, 5000);
 }
 
 // ── Stage 2b: Extract metadata ─────────────────────────────────────────────────
