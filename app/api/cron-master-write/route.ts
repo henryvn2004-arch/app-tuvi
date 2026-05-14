@@ -1,6 +1,6 @@
 // app/api/cron-master-write/route.ts
 // Two-stage pipeline: Storyboard → Full article in master's classical voice
-export const maxDuration = 60;
+export const maxDuration = 300;
 import { NextRequest } from 'next/server';
 import { ok, err, options } from '@/lib/cors';
 
