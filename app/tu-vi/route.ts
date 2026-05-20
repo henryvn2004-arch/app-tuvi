@@ -63,7 +63,7 @@ export async function GET() {
   const tabBtns = CAT_ORDER.filter(c => catData[c]?.length).map((cat, i) => {
     const meta = CAT_META[cat] || { label: cat, icon: '📄' };
     const cnt = counts[cat] || 0;
-    return `<button class="tab-btn${i===0?' active':''}" data-cat="${cat}">${meta.icon} ${esc(meta.label)} <span class="tab-count">${cnt.toLocaleString('vi-VN')}</span></button>`;
+    return `<button class="tab-btn${i===0?' active':''}" data-cat="${cat}"><span class="ic-inline" data-icon-emoji="${meta.icon}" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">${meta.icon}</span> ${esc(meta.label)} <span class="tab-count">${cnt.toLocaleString('vi-VN')}</span></button>`;
   }).join('\n  ');
 
   const tabPanels = CAT_ORDER.filter(c => catData[c]?.length).map((cat, i) => {

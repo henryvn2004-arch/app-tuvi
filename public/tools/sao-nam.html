@@ -173,7 +173,7 @@ function buildPreGenPhan1(ls) {
   let h = '';
   const cc = ls.cachCuc || [];
   if (cc.length > 0) {
-    h += `<div class="pregen-block"><div class="pregen-title">⚙ Cách cục đặc biệt</div>`;
+    h += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">⚙</span> Cách cục đặc biệt</div>`;
     cc.forEach(c => { h += `<div class="pregen-item"><span class="cc-label cc-${c.loai||''}">${String(c.ten||'')}</span><span class="cc-mota">${String(c.moTa||'')}</span></div>`; });
     h += `</div>`;
   }
@@ -181,7 +181,7 @@ function buildPreGenPhan1(ls) {
     const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
     const top3 = Object.entries(ls.cungScores).map(([c,sc])=>[c,METRICS.reduce((s,m)=>s+sc[m],0)]).sort((a,b)=>b[1]-a[1]).slice(0,3);
     const bot3 = Object.entries(ls.cungScores).map(([c,sc])=>[c,METRICS.reduce((s,m)=>s+sc[m],0)]).sort((a,b)=>a[1]-b[1]).slice(0,3);
-    h += `<div class="pregen-block"><div class="pregen-title">📊 Điểm mạnh / yếu nổi bật</div>`;
+    h += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📊</span> Điểm mạnh / yếu nổi bật</div>`;
     h += `<div class="pregen-row"><span class="pregen-good">Mạnh nhất: ${top3.map(([c,s])=>`${c} (${s.toFixed(0)})`).join(', ')}</span></div>`;
     h += `<div class="pregen-row"><span class="pregen-bad">Yếu nhất: ${bot3.map(([c,s])=>`${c} (${s.toFixed(0)})`).join(', ')}</span></div>`;
     h += `</div>`;

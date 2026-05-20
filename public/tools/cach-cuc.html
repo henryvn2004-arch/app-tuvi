@@ -130,12 +130,12 @@ function buildCungHtml(ls, cungName) {
 
   let h='';
   if (ccItems.length>0) {
-    h+=`<div class="pregen-block"><div class="pregen-title">⚙ Cách cục đặc biệt</div>`;
+    h+=`<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">⚙</span> Cách cục đặc biệt</div>`;
     ccItems.forEach(c=>{h+=`<div class="pregen-item"><span class="cc-label cc-${c.loai||''}">${String(c.ten||'')}</span><span class="cc-mota">${String(c.moTa||'')}</span></div>`;});
     h+=`</div>`;
   }
   if (ynItems.length>0) {
-    h+=`<div class="pregen-block"><div class="pregen-title">📋 Phân tích sao</div>`;
+    h+=`<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📋" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📋</span> Phân tích sao</div>`;
     ynItems.forEach(y=>{
       const ys=String(y||'');
       const cls=ys.includes('đại cát')||ys.includes('đại phú')?'yn-great-cat':ys.includes('[cát]')||ys.includes('phú quý')||ys.includes('giàu sang')?'yn-cat':ys.includes('đại hung')?'yn-great-hung':ys.includes('hung')||ys.includes('vất vả')||ys.includes('tai')?'yn-hung':ys.includes('Tuần')||ys.includes('Triệt')?'yn-tuan':'yn-neutral';
@@ -144,7 +144,7 @@ function buildCungHtml(ls, cungName) {
     h+=`</div>`;
   }
   if (sc) {
-    h+=`<div class="pregen-block" id="scores-${cungName}"><div class="pregen-title">📈 Đánh giá 6 chiều</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:12px"><canvas id="radar-${cungName}" style="max-width:180px;max-height:180px"></canvas><div class="score-bars" style="margin-top:0">`;
+    h+=`<div class="pregen-block" id="scores-${cungName}"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📈" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📈</span> Đánh giá 6 chiều</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:12px"><canvas id="radar-${cungName}" style="max-width:180px;max-height:180px"></canvas><div class="score-bars" style="margin-top:0">`;
     METRICS.forEach((m,i)=>{const v=sc[m],pct=v*10,col=v>=7?'#1FA3D6':v>=5?'#2F5BEA':v>=3?'#233E99':'#C0392B';h+=`<div class="score-bar-row"><span class="score-label">${MV[i]}</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${pct}%;background:${col}"></div></div><span class="score-val">${v}</span></div>`;});
     h+=`</div></div></div>`;
   }

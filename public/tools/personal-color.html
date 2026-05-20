@@ -226,7 +226,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 <div class="wrap">
 
   <div class="card">
-    <div class="card-title">📸 Ảnh Khuôn Mặt</div>
+    <div class="card-title"><span class="ic-inline" data-icon-emoji="📸" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📸</span> Ảnh Khuôn Mặt</div>
 
     <div class="upload-zone" id="uploadZone"
       ondragover="event.preventDefault();this.classList.add('drag')"
@@ -303,13 +303,13 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 
     <!-- Palette -->
     <div class="card">
-      <div class="card-title">🎨 Bảng Màu Cá Nhân</div>
+      <div class="card-title"><span class="ic-inline" data-icon-emoji="🎨" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🎨</span> Bảng Màu Cá Nhân</div>
       <div class="palette-section">
-        <div class="palette-label good">✓ Màu hợp — làm sáng, nổi bật gương mặt</div>
+        <div class="palette-label good"><span class="ic-inline" data-icon-emoji="✓" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">✓</span> Màu hợp — làm sáng, nổi bật gương mặt</div>
         <div class="swatches" id="swatchesGood"></div>
       </div>
       <div class="palette-section">
-        <div class="palette-label bad">✗ Màu nên tránh — làm xỉn, tối da</div>
+        <div class="palette-label bad"><span class="ic-inline" data-icon-emoji="✗" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">✗</span> Màu nên tránh — làm xỉn, tối da</div>
         <div class="swatches" id="swatchesBad"></div>
       </div>
     </div>
@@ -334,7 +334,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 
     <!-- Phụ kiện -->
     <div class="card">
-      <div class="card-title">💍 Kim Loại & Phụ Kiện</div>
+      <div class="card-title"><span class="ic-inline" data-icon-emoji="💍" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">💍</span> Kim Loại & Phụ Kiện</div>
       <div class="accessory-row">
         <div class="acc-item">
           <div class="acc-icon">⌚</div>
@@ -356,7 +356,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 
     <!-- Outfit gợi ý -->
     <div class="card" id="outfitSection" style="display:none">
-      <div class="card-title">👔 Gợi Ý Trang Phục Theo Season</div>
+      <div class="card-title"><span class="ic-inline" data-icon-emoji="👔" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">👔</span> Gợi Ý Trang Phục Theo Season</div>
       <div class="outfit-tabs">
         <button class="outfit-tab active" onclick="showOutfit('hang_ngay',this)">🌿 Hàng Ngày</button>
         <button class="outfit-tab" onclick="showOutfit('cong_so',this)">💼 Công Sở</button>
@@ -369,7 +369,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 
     <!-- Try-on -->
     <div class="card" id="tryonSection" style="display:none">
-      <div class="card-title">🪄 Thử Trang Phục <span style="font-size:10px;background:#e8f0fe;color:#1455A4;padding:2px 8px;border-radius:10px;margin-left:4px;">20 lượng/lần</span></div>
+      <div class="card-title"><span class="ic-inline" data-icon-emoji="🪄" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🪄</span> Thử Trang Phục <span style="font-size:10px;background:#e8f0fe;color:#1455A4;padding:2px 8px;border-radius:10px;margin-left:4px;">20 lượng/lần</span></div>
 
       <div style="font-size:12px;color:var(--text-lt);margin-bottom:10px;line-height:1.5;">
         Upload ảnh toàn thân → AI thay trang phục đúng màu season <strong id="tryonSeasonLabel"></strong> của bạn
@@ -631,7 +631,7 @@ function renderRecItems(id, items) {
 function renderAvoidItems(id, items) {
   if (!items.length) return;
   document.getElementById(id).innerHTML = `
-    <div class="rec-avoid-title">✕ Nên tránh</div>
+    <div class="rec-avoid-title"><span class="ic-inline" data-icon-emoji="✕" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">✕</span> Nên tránh</div>
     ${items.map(i => `<div class="rec-avoid-item">${i}</div>`).join('')}`;
 }
 

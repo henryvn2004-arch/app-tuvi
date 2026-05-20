@@ -264,13 +264,13 @@
 
       <!-- HAIR TAB -->
       <div id="pane-hair" class="result-pane active">
-        <div class="styles-title">✨ Tất cả kiểu tóc — ⭐ là phù hợp nhất theo tướng mặt của bạn</div>
+        <div class="styles-title"><span class="ic-inline" data-icon-emoji="✨" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">✨</span> Tất cả kiểu tóc — ⭐ là phù hợp nhất theo tướng mặt của bạn</div>
         <div class="style-cards" id="styleCardsList"></div>
       </div>
 
       <!-- GLASSES TAB -->
       <div id="pane-glasses" class="result-pane" style="display:none">
-        <div class="styles-title">👓 Kiểu kính phù hợp theo cấu trúc khuôn mặt</div>
+        <div class="styles-title"><span class="ic-inline" data-icon-emoji="👓" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">👓</span> Kiểu kính phù hợp theo cấu trúc khuôn mặt</div>
         <div class="style-cards" id="glassesCardsList"></div>
       </div>
 
@@ -717,7 +717,7 @@ function renderAnalysis(data) {
     const card = document.createElement('div');
     card.className = 'style-card'; card.id = 'gc_' + id;
     card.innerHTML = `
-      <div class="glasses-icon">${meta.icon}</div>
+      <div class="glasses-icon"><span class="ic-inline" data-icon-emoji="${meta.icon}" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">${meta.icon}</span></div>
       <div class="style-info" style="flex:1">
         <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
           <span class="style-rank">#${i+1}</span>

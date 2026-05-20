@@ -1108,7 +1108,7 @@ function pregenCung(pal,lsObj,name,colorVar){
   const cc=(lsObj.cachCuc||[]).filter(c=>c.cung===pal.cungName||c.cung==='');
   if(cc.length){
     html+=`<div class="pregen-block" style="padding:10px 12px;border-radius:6px;margin:4px 0">
-      <div class="pregen-title" style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">⚙ Cách cục</div>`;
+      <div class="pregen-title" style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">⚙</span> Cách cục</div>`;
     cc.forEach(c=>{
       html+=`<div class="pregen-item"><span class="cc-label cc-${c.loai}" style="display:inline-block;padding:1px 7px;font-size:10px;border-radius:3px;margin-right:5px">${c.ten}</span><span class="cc-mota">${c.moTa||''}</span></div>`;
     });
@@ -1117,7 +1117,7 @@ function pregenCung(pal,lsObj,name,colorVar){
   const yn=((lsObj.cachCucTungCung||{})[pal.cungName]||[]);
   if(yn.length){
     html+=`<div class="pregen-block" style="padding:10px 12px;border-radius:6px;margin:4px 0">
-      <div class="pregen-title" style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">📋 Phân tích sao</div>`;
+      <div class="pregen-title" style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px"><span class="ic-inline" data-icon-emoji="📋" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📋</span> Phân tích sao</div>`;
     yn.slice(0,4).forEach(y=>{
       const cls=y.includes('đại cát')||y.includes('phú quý')?'yn-cat':y.includes('hung')||y.includes('tai')?'yn-hung':'yn-neutral';
       html+=`<div class="pregen-yn ${cls}">• ${y}</div>`;
@@ -1127,7 +1127,7 @@ function pregenCung(pal,lsObj,name,colorVar){
   const sc=(lsObj.cungScores||{})[pal.cungName];
   if(sc){
     html+=`<div class="pregen-block" style="padding:10px 12px;border-radius:6px;margin:4px 0">
-      <div class="pregen-title" style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">📈 6 chiều</div>
+      <div class="pregen-title" style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px"><span class="ic-inline" data-icon-emoji="📈" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📈</span> 6 chiều</div>
       <div class="score-bars">`;
     METRICS_KEY.forEach((m,i)=>{
       const v=sc[m]||0,pct=v*10;
@@ -1315,7 +1315,7 @@ function buildYeuTo(idx,m,nameA,nameB,lsA,lsB){
 
   if(idx===2&&(m.ttSaoA||m.ttSaoB)){
     html+=`<div class="pregen-block" style="padding:10px 12px;border-radius:6px;margin-top:10px">
-      <div class="pregen-title" style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">🔯 Vòng Thái Tuế</div>
+      <div class="pregen-title" style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px"><span class="ic-inline" data-icon-emoji="🔯" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🔯</span> Vòng Thái Tuế</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px">
         <div><span style="color:var(--color-a);font-weight:700">${nameA}</span><br>Sao: <b>${m.ttSaoA||'?'}</b> · Nhóm <b>${m.ttNhomA||'?'}</b></div>
         <div><span style="color:var(--color-b);font-weight:700">${nameB}</span><br>Sao: <b>${m.ttSaoB||'?'}</b> · Nhóm <b>${m.ttNhomB||'?'}</b></div>

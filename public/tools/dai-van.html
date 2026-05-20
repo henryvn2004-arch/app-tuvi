@@ -94,13 +94,13 @@
 
     <!-- Line chart vận trình -->
     <div class="res-block" style="margin-bottom:24px">
-      <div class="res-block-header"><span class="res-block-title">📊 Vận Trình Toàn Đời</span></div>
+      <div class="res-block-header"><span class="res-block-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📊</span> Vận Trình Toàn Đời</span></div>
       <div class="res-block-body"><div style="max-width:700px"><canvas id="chart-daivan"></canvas></div></div>
     </div>
 
     <!-- Timeline -->
     <div class="res-block" style="margin-bottom:24px">
-      <div class="res-block-header"><span class="res-block-title">📊 Timeline Cuộc Đời</span></div>
+      <div class="res-block-header"><span class="res-block-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📊</span> Timeline Cuộc Đời</span></div>
       <div class="res-block-body">
         <div id="chart-timeline-wrap" style="position:relative;padding-top:32px">
           <div id="chart-timeline-blocks" style="display:flex;gap:2px;align-items:flex-end;height:160px"></div>
@@ -128,7 +128,7 @@
 
     <!-- Candlestick 90 năm -->
     <div class="res-block" style="margin-bottom:24px">
-      <div class="res-block-header"><span class="res-block-title">📊 Tiểu Vận 90 Năm (Candlestick)</span></div>
+      <div class="res-block-header"><span class="res-block-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📊</span> Tiểu Vận 90 Năm (Candlestick)</span></div>
       <div class="res-block-body">
         <div style="font-size:11px;color:#666;margin-bottom:8px">Mỗi nến = 1 năm · Xanh = nhiều sao tốt · Đỏ = nhiều sao xấu</div>
         <div class="candle-wrap"><div id="candle-90yr"></div></div>
@@ -246,7 +246,7 @@ function buildDvDetailHtml(ls, dv) {
     const ttScore=sc.thienThoi?.score??sc.thienThoi,dlScore=sc.diaLoi?.score??sc.diaLoi,nhScore=sc.nhanHoa?.score??sc.nhanHoa;
     const ttBar=(ttScore/5*100).toFixed(0),dlBar=(dlScore/1*100).toFixed(0),nhBar=(nhScore/4*100).toFixed(0),totBar=(sc.tong/10*100).toFixed(0);
     const totCol=sc.tong>=7?'#1a6b3a':sc.tong>=4?'#1455A4':'#C0392B';
-    h+=`<div class="pregen-block"><div class="pregen-title">📊 Scoring — Cung ${dvCungName} (${dvDC})</div><div class="score-bars">
+    h+=`<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📊</span> Scoring — Cung ${dvCungName} (${dvDC})</div><div class="score-bars">
       <div class="score-bar-row"><span class="score-label">Thiên Thời</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${ttBar}%;background:#c9a84c"></div></div><span class="score-val">${ttScore}/5</span></div>
       <div class="score-bar-row"><span class="score-label">Địa Lợi</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${dlBar}%;background:#0E7490"></div></div><span class="score-val">${dlScore}/1</span></div>
       <div class="score-bar-row"><span class="score-label">Nhân Hòa</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${nhBar}%;background:#7B2FBE"></div></div><span class="score-val">${nhScore}/4</span></div>
@@ -273,7 +273,7 @@ function buildDvDetailHtml(ls, dv) {
   const satIn=SAT.filter(s=>tptcNames.includes(s)),baiIn=BAI.filter(s=>tptcNames.includes(s)),catIn=CAT.filter(s=>tptcNames.includes(s));
   const hasTuan=allStars.some(s=>s.ten==='Tuần'),hasTriet=allStars.some(s=>s.ten==='Triệt');
   if (catIn.length||satIn.length||baiIn.length||hasTuan||hasTriet) {
-    h+=`<div class="pregen-block"><div class="pregen-title">🔍 Sao tam phương tứ chính</div>`;
+    h+=`<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔍" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🔍</span> Sao tam phương tứ chính</div>`;
     if (catIn.length) h+=`<div class="pregen-yn yn-cat">Cát tinh: ${catIn.join(', ')}</div>`;
     if (satIn.length) h+=`<div class="pregen-yn yn-hung">Sát tinh: ${satIn.join(', ')}</div>`;
     if (baiIn.length) h+=`<div class="pregen-yn yn-hung" style="color:#fca5a5">Bại tinh: ${baiIn.join(', ')}</div>`;
@@ -284,7 +284,7 @@ function buildDvDetailHtml(ls, dv) {
   const dvRules=dv.rules||[];
   if (dvRules.length) {
     const tot=dvRules.filter(r=>r.type==='tot'),xau=dvRules.filter(r=>r.type==='xau'),cb=dvRules.filter(r=>r.type==='canh_bao'),trung=dvRules.filter(r=>r.type==='trung');
-    h+=`<div class="pregen-block"><div class="pregen-title">🔮 Luận đoán vận hạn</div>`;
+    h+=`<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔮" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🔮</span> Luận đoán vận hạn</div>`;
     if (tot.length){h+=`<div class="rules-group">`;tot.forEach(r=>h+=`<div class="pregen-yn yn-cat">✦ ${r.text}</div>`);h+=`</div>`;}
     if (trung.length){h+=`<div class="rules-group">`;trung.forEach(r=>h+=`<div class="pregen-yn yn-neutral">◆ ${r.text}</div>`);h+=`</div>`;}
     if (xau.length){h+=`<div class="rules-group">`;xau.forEach(r=>h+=`<div class="pregen-yn yn-hung">▼ ${r.text}</div>`);h+=`</div>`;}

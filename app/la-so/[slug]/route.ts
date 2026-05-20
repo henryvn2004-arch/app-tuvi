@@ -165,14 +165,14 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
     <div class="hero-tags">
       ${row.chinh_tinh_menh?`<span class="hero-tag">⭐ ${esc(row.chinh_tinh_menh)}</span>`:''}
       ${row.nap_am?`<span class="hero-tag">🔥 ${esc(row.nap_am)}</span>`:''}
-      ${row.cuc?`<span class="hero-tag">⚙ Cục ${esc(row.cuc)}</span>`:''}
+      ${row.cuc?`<span class="hero-tag"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">⚙</span> Cục ${esc(row.cuc)}</span>`:''}
       ${row.am_duong?`<span class="hero-tag">${esc(row.am_duong)}</span>`:''}
       ${row.gio_chi?`<span class="hero-tag">Giờ ${esc(row.gio_chi)}</span>`:''}
     </div>
   </div>
-  ${cachCuc.length > 0 ? `<div class="section"><div class="section-title">⚙ Cách Cục Đặc Biệt <span style="font-size:12px;color:var(--text-lt);font-weight:400">(${cachCuc.length} cách cục)</span></div>${ccHTML}</div>` : ''}
-  ${dvHTML ? `<div class="section"><div class="section-title">📅 Đại Vận</div>${dvHTML}</div>` : ''}
-  ${scoresHTML ? `<div class="section"><div class="section-title">📊 Điểm 6 Chiều Từng Cung</div><div class="scores-grid">${scoresHTML}</div></div>` : ''}
+  ${cachCuc.length > 0 ? `<div class="section"><div class="section-title"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">⚙</span> Cách Cục Đặc Biệt <span style="font-size:12px;color:var(--text-lt);font-weight:400">(${cachCuc.length} cách cục)</span></div>${ccHTML}</div>` : ''}
+  ${dvHTML ? `<div class="section"><div class="section-title"><span class="ic-inline" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📅</span> Đại Vận</div>${dvHTML}</div>` : ''}
+  ${scoresHTML ? `<div class="section"><div class="section-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📊</span> Điểm 6 Chiều Từng Cung</div><div class="scores-grid">${scoresHTML}</div></div>` : ''}
   ${contentHTML ? `<div class="section"><div class="body-content">${contentHTML}</div></div>` : ''}
   <div class="cta-box">
     <h3>Luận Giải AI Đầy Đủ — 24 Phần</h3>
