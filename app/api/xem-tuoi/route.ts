@@ -313,7 +313,7 @@ Cuối: 1 đoạn tổng hợp khuyến nghị và lưu ý thực tiễn.`;
 
 Phân tích và gợi ý các khoảng ngày tốt trong tháng này cho sự kiện trên.`;
 
-  return streamAnthropicResponse(system, user, 2000);
+  return streamAnthropicResponse(system, user, 4000);
 }
 
 // ─── Route handlers ───────────────────────────────────────────
