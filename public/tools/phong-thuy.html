@@ -240,7 +240,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
     <p style="font-size:12px;color:var(--text-mid);margin-bottom:12px;line-height:1.6;">Chụp ảnh toàn cảnh phòng, bao gồm cửa chính và các đồ vật chính. Ảnh càng rõ, phân tích càng chính xác.</p>
     <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="onDrag(event,1)" ondragleave="onDrag(event,0)" ondrop="onDrop(event)">
       <input type="file" id="fileInput" accept="image/*" onchange="onFile(event)"/>
-      <span class="upload-icon">📷</span>
+      <span class="upload-icon"><span class="ic-inline" data-icon-emoji="📷" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📷</span></span>
       <div style="font-size:13px;color:var(--text-mid);margin-bottom:4px;">Kéo thả ảnh vào đây</div>
       <span class="upload-btn-lbl">Chọn Ảnh</span>
       <div style="font-size:11px;color:var(--text-lt);margin-top:8px;">JPG, PNG, HEIC · Tối đa 20MB</div>
@@ -589,6 +589,6 @@ TuviPaywall.init({ product: 'phong-thuy' });
 </section>
 <script src="/testimonials.js"></script>
 <script src="/related-tools.js"></script>
-<script src="/nav.js?v=12" defer></script>
+<script src="/nav.js?v=13" defer></script>
 </body>
 </html>

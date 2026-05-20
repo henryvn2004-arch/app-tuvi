@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=12" as="script">
+<link rel="preload" href="/nav.js?v=13" as="script">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Thanh Tướng — Xem Tướng Giọng Nói Bằng AI | Tử Vi Minh Bảo</title>
 <meta property="og:title" content="Thanh Tướng — Xem Tướng Giọng Nói Bằng AI | Tử Vi Minh Bảo"/>
@@ -663,7 +663,7 @@ async function analyze() {
 
 async function _doAnalyze() {
   document.getElementById('result-section').classList.add('active');
-  document.getElementById('aiResult').innerHTML = '<div class="ai-loading"><span class="ai-loading-icon">🎵</span><div style="font-size:14px;color:var(--text-lt)">AI đang luận giải thanh tướng...<br><span style="font-size:12px;opacity:.7">Thường mất 10–15 giây</span></div></div>';
+  document.getElementById('aiResult').innerHTML = '<div class="ai-loading"><span class="ai-loading-icon"><span class="ic-inline" data-icon-emoji="🎵" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🎵</span></span><div style="font-size:14px;color:var(--text-lt)">AI đang luận giải thanh tướng...<br><span style="font-size:12px;opacity:.7">Thường mất 10–15 giây</span></div></div>';
   document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   try {
@@ -837,6 +837,6 @@ async function _saveTuongReading(tool, resultText, imageData, mediaType) {
 </section>
 <script src="/testimonials.js"></script>
 <script src="/related-tools.js"></script>
-<script src="/nav.js?v=12" defer></script>
+<script src="/nav.js?v=13" defer></script>
 </body>
 </html>

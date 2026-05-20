@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=12" as="script">
+<link rel="preload" href="/nav.js?v=13" as="script">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Xem Tướng Mặt Bằng AI — Nhân Tướng Học Cổ Pháp | Tử Vi Minh Bảo</title>
 <meta property="og:title" content="Xem Tướng Mặt Bằng AI — Nhân Tướng Học Cổ Pháp | Tử Vi Minh Bảo"/>
@@ -85,7 +85,7 @@
           <div class="xt-factor-item"><span class="xt-factor-num">④</span><span class="xt-factor-label">Các Bộ Vị (部位)</span><span class="xt-factor-desc">Ấn Đường · Sơn Căn · Nhân Trung · Lưỡng Quyền · Địa Các và các tiểu vùng quan trọng</span></div>
           <div class="xt-factor-item"><span class="xt-factor-num">⑤</span><span class="xt-factor-label">Tổng Hợp & Kết Luận</span><span class="xt-factor-desc">Điểm mạnh, điểm cần lưu ý, lĩnh vực phù hợp và vận trình theo giai đoạn</span></div>
           <div class="xt-note" style="margin-top:12px">
-            <span class="xt-note-icon">💡</span>
+            <span class="xt-note-icon"><span class="ic-inline" data-icon-emoji="💡" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">💡</span></span>
             <div>Ảnh chụp thẳng mặt, đủ sáng, không che mặt sẽ cho kết quả chính xác nhất.</div>
           </div>
         </div>
@@ -108,7 +108,7 @@
     <div class="input-pane active" id="pane-upload">
       <div id="uploadArea" class="upload-area" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
         <input type="file" id="fileInput" accept="image/*" onchange="onFileSelect(event)">
-        <span class="upload-icon">🖼️</span>
+        <span class="upload-icon"><span class="ic-inline" data-icon-emoji="🖼️" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🖼️</span></span>
         <div class="upload-title">Kéo thả ảnh vào đây hoặc click để chọn</div>
         <div class="upload-sub">JPG, PNG, WebP — tối đa 5MB</div>
       </div>
@@ -663,7 +663,7 @@ async function analyze() {
 async function _doAnalyze() {
   document.getElementById('result-section').classList.add('active');
   document.getElementById('aiResult').innerHTML=
-    '<div class="ai-loading"><span class="ai-loading-icon">🔮</span><div class="ai-loading-text">AI đang phân tích tướng mặt...<br><span style="font-size:12px;opacity:.7">Thường mất 15–25 giây</span></div></div>';
+    '<div class="ai-loading"><span class="ai-loading-icon"><span class="ic-inline" data-icon-emoji="🔮" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🔮</span></span><div class="ai-loading-text">AI đang phân tích tướng mặt...<br><span style="font-size:12px;opacity:.7">Thường mất 15–25 giây</span></div></div>';
   document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
 
   try {
@@ -823,6 +823,6 @@ async function _saveTuongReading(tool, resultText, imageData, mediaType) {
 </section>
 <script src="/testimonials.js"></script>
 <script src="/related-tools.js"></script>
-<script src="/nav.js?v=12" defer></script>
+<script src="/nav.js?v=13" defer></script>
 </body>
 </html>

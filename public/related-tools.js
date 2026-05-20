@@ -92,7 +92,8 @@
       '@media(max-width:500px){.rt-grid{grid-template-columns:1fr 1fr}}',
       '.rt-card{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--bg,#fff);border:1px solid var(--border-lt,#E8E8E8);border-radius:9px;text-decoration:none;transition:border-color .15s,box-shadow .15s;color:inherit}',
       '.rt-card:hover{border-color:var(--navy,#061A2E);box-shadow:0 2px 8px rgba(6,26,46,.08);text-decoration:none}',
-      '.rt-icon{font-size:20px;flex-shrink:0}',
+      '.rt-icon{font-size:20px;flex-shrink:0;color:#9A7B3A;display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px}',
+      '.rt-icon svg{width:20px;height:20px}',
       '.rt-name{font-size:12px;font-weight:600;color:var(--navy,#061A2E);line-height:1.3}',
     ].join('');
     document.head.appendChild(s);
@@ -187,8 +188,9 @@
   function buildSection(tools, title) {
     if (!tools || !tools.length) return '';
     var cards = tools.map(function(t) {
+      var iconHtml = (window.iconHtml ? window.iconHtml(t.icon) : t.icon);
       return '<a class="rt-card" href="' + t.url + '">'
-        + '<span class="rt-icon">' + t.icon + '</span>'
+        + '<span class="rt-icon">' + iconHtml + '</span>'
         + '<span class="rt-name">' + t.name + '</span>'
         + '</a>';
     }).join('');

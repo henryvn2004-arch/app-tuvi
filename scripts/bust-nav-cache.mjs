@@ -4,8 +4,8 @@ import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const ROOT = 'C:\\Users\\DELL\\app-tuvi';
-const VERSION = '?v=12';
-const PATTERN = /\/nav\.js\?v=11"/g;
+const VERSION = '?v=13';
+const PATTERN = /\/nav\.js\?v=12"/g;
 const REPLACEMENT = `/nav.js${VERSION}"`;
 
 // Recursively walk dir, return list of files matching predicate

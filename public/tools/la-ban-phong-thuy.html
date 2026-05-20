@@ -312,7 +312,7 @@ function buildDirGrid() {
   const grid = document.getElementById('dir-grid');
   grid.innerHTML = DIRECTIONS.map(d => `
     <div class="dir-btn" id="dbtn-${d.id}" onclick="selectDir('${d.id}')">
-      <div class="btn-icon">🧭</div>
+      <div class="btn-icon"><span class="ic-inline" data-icon-emoji="🧭" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🧭</span></div>
       <div class="btn-lbl">${d.id}</div>
       <div class="btn-deg">${d.deg}°</div>
     </div>`).join('');
@@ -427,6 +427,6 @@ window.addEventListener('DOMContentLoaded', init);
     </div>
   </div>
 </section>
-<script src="/nav.js?v=12" defer></script>
+<script src="/nav.js?v=13" defer></script>
 </body>
 </html>

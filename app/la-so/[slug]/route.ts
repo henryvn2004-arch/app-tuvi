@@ -181,7 +181,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
   </div>
 </div>
 <script src="/footer.js"></script>
-<script src="/nav.js?v=12" defer></script>
+<script src="/nav.js?v=13" defer></script>
 </body></html>`;
 }
 
@@ -232,7 +232,7 @@ ${commonHead}
 ${bcHTML}
 ${row.rendered_html}
 <script src="/footer.js"></script>
-<script src="/nav.js?v=12" defer></script>
+<script src="/nav.js?v=13" defer></script>
 </body></html>`;
   }
   const luanGiai: Record<string,string> = (row.luan_giai as Record<string,string>) || {};
@@ -249,7 +249,7 @@ ${bcHTML}
 <h1>${title}</h1>
 <div>${bodyHTML}</div>
 <script src="/footer.js"></script>
-<script src="/nav.js?v=12" defer></script>
+<script src="/nav.js?v=13" defer></script>
 </body></html>`;
 }
 
@@ -1242,7 +1242,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 </div>
 ${relatedHTML}
 <script src="/footer.js"></script>
-<script src="/nav.js?v=12" defer></script>
+<script src="/nav.js?v=13" defer></script>
 </body></html>`;
 }
 

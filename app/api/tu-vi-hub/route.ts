@@ -141,7 +141,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 <script src="/auth.js"></script>
 </head>
 <body>
-<script src="/nav.js?v=12"></script>
+<script src="/nav.js?v=13"></script>
 <div class="breadcrumb"><a href="/">Trang Chủ</a> › <span>${esc(meta.h1)}</span></div>
 <div class="hub-hero">
   <div class="hub-hero-icon">${meta.icon}</div>
