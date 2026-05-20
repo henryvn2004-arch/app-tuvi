@@ -218,7 +218,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
   </div>
 </article>
 <script src="/footer.js"></script>
-<script src="/nav.js" defer></script>
+<script src="/nav.js?v=11" defer></script>
 </body></html>`;
 
   return new NextResponse(html, {

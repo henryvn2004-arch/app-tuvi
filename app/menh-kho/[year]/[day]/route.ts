@@ -173,7 +173,7 @@ h1 em{font-style:italic;color:var(--gold)}
   <p class="note">* Lá số hiển thị vận hạn năm ${NAM_XEM}. Để xem năm khác, dùng công cụ luận giải trực tiếp.</p>
 </div>
 <script src="/footer.js"></script>
-<script src="/nav.js" defer></script>
+<script src="/nav.js?v=11" defer></script>
 </body></html>`;
 
   return new NextResponse(html, {

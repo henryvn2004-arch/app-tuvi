@@ -136,7 +136,7 @@ h1 em{font-style:italic;color:var(--gold)}
   </div>
 </div>
 <script src="/footer.js"></script>
-<script src="/nav.js" defer></script>
+<script src="/nav.js?v=11" defer></script>
 </body></html>`;
 
   return new NextResponse(html, {
