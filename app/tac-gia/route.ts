@@ -109,7 +109,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
   </div>
   <div class="grid">${cards}</div>
 </main>
-<script src="/nav.js?v=11" defer></script>
+<script src="/nav.js?v=12" defer></script>
 </body></html>`;
 }
 
