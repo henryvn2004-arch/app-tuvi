@@ -288,13 +288,15 @@ async function _doAnalyze(suKien, hoTen, ns, info, thang, nam) {
   document.getElementById('error-msg').classList.remove('active');
 
   try {
+    const thangCanChi = _getThangCanChi(thang, nam);
+    const namCanChi = _getNamCanChi(nam);
     const res = await fetch('/api/xem-tuoi?action=chon-ngay-tot', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({{
+      body: JSON.stringify({
         suKien, hoTen, namSinh: ns,
         canChiNguoi: info.canChi, napAmNguoi: info.napAm,
         thangCanChi, namCanChi, thangNum: thang, namNum: nam
-      }})
+      })
     });
     if (!res.ok) { const d=await res.json().catch(()=>({})); throw new Error(d.error||'Lỗi '+res.status); }
 
