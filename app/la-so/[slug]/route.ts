@@ -177,7 +177,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
   <div class="cta-box">
     <h3>Luận Giải AI Đầy Đủ — 24 Phần</h3>
     <p>Nhập đúng giờ sinh để có luận giải chuyên sâu về tính cách, sự nghiệp, tình duyên, vận hạn theo cổ pháp Tử Vi Đẩu Số.</p>
-    <a class="cta-btn" href="/">Xem Luận Giải ($19) →</a>
+    <a class="cta-btn" href="/luan-giai.html">Xem Luận Giải →</a>
   </div>
 </div>
 <script src="/footer.js"></script>
