@@ -15,6 +15,9 @@ permissions:
 
 jobs:
   lighthouse:
+    # Skip trên Dependabot PR — Lighthouse chạy lên prod, không relevant cho dep bump
+    # và Dependabot không có quyền dùng secrets nếu cần.
+    if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
