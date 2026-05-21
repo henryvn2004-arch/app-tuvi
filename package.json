@@ -12,7 +12,9 @@
     "format:check": "prettier --check .",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:e2e:report": "playwright show-report"
+    "test:e2e:report": "playwright show-report",
+    "test:smoke": "playwright test --config=playwright.smoke.config.ts",
+    "test:smoke:ui": "playwright test --config=playwright.smoke.config.ts --ui"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.103.0",

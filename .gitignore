@@ -3,6 +3,8 @@ node_modules/
 
 # Playwright
 /playwright-report/
+/playwright-report-smoke/
 /test-results/
 /tests/.auth/
 *.webm
+.vercel
