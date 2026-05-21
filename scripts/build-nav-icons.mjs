@@ -3,7 +3,9 @@ import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 const DIR = 'C:\\Users\\DELL\\AppData\\Local\\Temp\\lucide';
-const files = readdirSync(DIR).filter(f => f.endsWith('.svg')).sort();
+const files = readdirSync(DIR)
+  .filter((f) => f.endsWith('.svg'))
+  .sort();
 
 const wrap = (inner) =>
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;

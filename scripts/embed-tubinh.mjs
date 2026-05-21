@@ -22,28 +22,34 @@ const pdf = require('pdf-parse/lib/pdf-parse.js');
 // ─── CONFIG ──────────────────────────────────────────────────
 const BOOKS = [
   { path: './sach/tu-binh-chan-thuyen.pdf', source: 'Tử Bình Chân Thuyên (Quảng Văn)' },
-  { path: './sach/trich-thien-tuy.pdf',     source: 'Dự Đoán Tứ Trụ (Trần Viên & Thiệu Vĩ Hoa)' },
+  { path: './sach/trich-thien-tuy.pdf', source: 'Dự Đoán Tứ Trụ (Trần Viên & Thiệu Vĩ Hoa)' },
 ];
-const CHUNK_SIZE   = 3500;  // chars per chunk (~700 tokens cho tiếng Việt)
-const RATE_DELAY   = 200;   // ms giữa các call OpenAI
-const REPORT_EVERY = 25;    // log mỗi N chunks
+const CHUNK_SIZE = 3500; // chars per chunk (~700 tokens cho tiếng Việt)
+const RATE_DELAY = 200; // ms giữa các call OpenAI
+const REPORT_EVERY = 25; // log mỗi N chunks
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
-const OPENAI_KEY   = process.env.OPENAI_API_KEY;
+const OPENAI_KEY = process.env.OPENAI_API_KEY;
 
 if (!SUPABASE_URL || !SUPABASE_KEY || !OPENAI_KEY) {
   console.error('❌ Thiếu env vars. Cần: SUPABASE_URL, SUPABASE_SERVICE_KEY, OPENAI_API_KEY');
   process.exit(1);
 }
 
-const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // ─── CHUNKING (paragraph-aware với overlap) ──────────────────
 function chunkText(text, maxChars = CHUNK_SIZE) {
   // Normalize whitespace
-  text = text.replace(/\r\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
-  const paragraphs = text.split(/\n\n+/).map(p => p.trim()).filter(p => p.length > 0);
+  text = text
+    .replace(/\r\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+  const paragraphs = text
+    .split(/\n\n+/)
+    .map((p) => p.trim())
+    .filter((p) => p.length > 0);
 
   const chunks = [];
   let current = [];
@@ -54,7 +60,8 @@ function chunkText(text, maxChars = CHUNK_SIZE) {
     if (p.length > maxChars * 1.5) {
       if (current.length > 0) {
         chunks.push(current.join('\n\n'));
-        current = []; currentLen = 0;
+        current = [];
+        currentLen = 0;
       }
       for (let i = 0; i < p.length; i += maxChars) {
         chunks.push(p.slice(i, Math.min(i + maxChars, p.length)));
@@ -71,7 +78,8 @@ function chunkText(text, maxChars = CHUNK_SIZE) {
         current = [lastP];
         currentLen = lastP.length + 2;
       } else {
-        current = []; currentLen = 0;
+        current = [];
+        currentLen = 0;
       }
     }
     current.push(p);
@@ -88,7 +96,7 @@ async function embedOne(text) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${OPENAI_KEY}`,
+      Authorization: `Bearer ${OPENAI_KEY}`,
     },
     body: JSON.stringify({
       model: 'text-embedding-3-small',
@@ -109,9 +117,9 @@ async function insertChunk(content, source, embedding) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'apikey': SUPABASE_KEY,
-      'Authorization': `Bearer ${SUPABASE_KEY}`,
-      'Prefer': 'return=minimal',
+      apikey: SUPABASE_KEY,
+      Authorization: `Bearer ${SUPABASE_KEY}`,
+      Prefer: 'return=minimal',
     },
     body: JSON.stringify({
       content,
@@ -187,18 +195,20 @@ async function main() {
   let skipBooks = 0;
   let skipChunks = 0;
   for (const arg of args) {
-    if (arg.startsWith('--skip-books='))  skipBooks  = parseInt(arg.split('=')[1]);
+    if (arg.startsWith('--skip-books=')) skipBooks = parseInt(arg.split('=')[1]);
     if (arg.startsWith('--skip-chunks=')) skipChunks = parseInt(arg.split('=')[1]);
   }
 
   console.log('🚀 Embed Tử Bình → Supabase');
-  console.log(`   Books: ${BOOKS.length} | Chunk size: ${CHUNK_SIZE} chars | Rate: ${RATE_DELAY}ms/call`);
-  if (skipBooks)  console.log(`   --skip-books=${skipBooks}`);
+  console.log(
+    `   Books: ${BOOKS.length} | Chunk size: ${CHUNK_SIZE} chars | Rate: ${RATE_DELAY}ms/call`
+  );
+  if (skipBooks) console.log(`   --skip-books=${skipBooks}`);
   if (skipChunks) console.log(`   --skip-chunks=${skipChunks}`);
 
   for (let i = skipBooks; i < BOOKS.length; i++) {
     const book = BOOKS[i];
-    const skip = (i === skipBooks) ? skipChunks : 0;
+    const skip = i === skipBooks ? skipChunks : 0;
     const result = await processBook(book, skip);
     totals.embedded += result.embedded;
     totals.errors.push(...result.errors);
@@ -214,11 +224,11 @@ async function main() {
   console.log(`⏱️  Thời gian: ${mins}m ${secs}s`);
   if (totals.errors.length > 0) {
     console.log('\n5 errors đầu:');
-    totals.errors.slice(0, 5).forEach(e => console.log('  ', e));
+    totals.errors.slice(0, 5).forEach((e) => console.log('  ', e));
   }
 }
 
-main().catch(e => {
+main().catch((e) => {
   console.error('💥 Fatal:', e);
   process.exit(1);
 });

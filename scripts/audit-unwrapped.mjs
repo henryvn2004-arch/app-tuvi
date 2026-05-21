@@ -4,20 +4,81 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const ROOT = 'C:\\Users\\DELL\\app-tuvi';
-const SKIP_DIRS = ['node_modules', '.next', '.git', '.claude', 'dist', 'build', 'sach', '_patches', 'payos-v2', 'payos-integration', 'tuvi-engine'];
-const SKIP_FILES = new Set(['sample-laso-ky-mao-1999.html', 'sample-laso-ky-mao-1999-v2.html', 'admin.html', 'admin-content.html', 'nav.js']);
+const SKIP_DIRS = [
+  'node_modules',
+  '.next',
+  '.git',
+  '.claude',
+  'dist',
+  'build',
+  'sach',
+  '_patches',
+  'payos-v2',
+  'payos-integration',
+  'tuvi-engine',
+];
+const SKIP_FILES = new Set([
+  'sample-laso-ky-mao-1999.html',
+  'sample-laso-ky-mao-1999-v2.html',
+  'admin.html',
+  'admin-content.html',
+  'nav.js',
+]);
 const WRAPPER_RE = /<span[^>]*data-icon-emoji="[^"]*"[^>]*>[^<]*<\/span>/g;
 const EMOJI_RE = /([\u{1F300}-\u{1FAFF}\u{1F000}-\u{1F9FF}\u{2600}-\u{27BF}])/gu;
-const KEEP = new Set(['☵','☷','☶','☴','☳','☲','☱','☰','♦','♥','♠','♣','🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘','⚧','✦','✧','★','☆','🟢','🟡','🔴','🟠','🟣','⚫','⚪']);
+const KEEP = new Set([
+  '☵',
+  '☷',
+  '☶',
+  '☴',
+  '☳',
+  '☲',
+  '☱',
+  '☰',
+  '♦',
+  '♥',
+  '♠',
+  '♣',
+  '🌑',
+  '🌒',
+  '🌓',
+  '🌔',
+  '🌕',
+  '🌖',
+  '🌗',
+  '🌘',
+  '⚧',
+  '✦',
+  '✧',
+  '★',
+  '☆',
+  '🟢',
+  '🟡',
+  '🔴',
+  '🟠',
+  '🟣',
+  '⚫',
+  '⚪',
+]);
 
 function walk(dir) {
   const out = [];
-  let entries; try { entries = readdirSync(dir); } catch { return out; }
+  let entries;
+  try {
+    entries = readdirSync(dir);
+  } catch {
+    return out;
+  }
   for (const name of entries) {
     if (SKIP_DIRS.includes(name)) continue;
     if (SKIP_FILES.has(name)) continue;
     const full = join(dir, name);
-    let st; try { st = statSync(full); } catch { continue; }
+    let st;
+    try {
+      st = statSync(full);
+    } catch {
+      continue;
+    }
     if (st.isDirectory()) out.push(...walk(full));
     else if (/\.(html|tsx?|jsx?|mjs)$/.test(name)) out.push(full);
   }
@@ -26,7 +87,12 @@ function walk(dir) {
 
 const fileMap = new Map();
 for (const file of walk(ROOT)) {
-  let src; try { src = readFileSync(file, 'utf8'); } catch { continue; }
+  let src;
+  try {
+    src = readFileSync(file, 'utf8');
+  } catch {
+    continue;
+  }
   // Strip wrappers (those emoji are "handled")
   const stripped = src.replace(WRAPPER_RE, '');
   // Count remaining

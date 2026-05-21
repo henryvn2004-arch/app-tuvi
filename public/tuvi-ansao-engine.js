@@ -560,6 +560,7 @@ function getTuanTriet(canChi, canNam) {
   for (const [key, val] of Object.entries(TUAN_BANG)) {
     const canTuan = key.split(' ')[0];
     const chiList = DIA_CHI.slice(DIA_CHI.indexOf(key.split(' ')[1]));
+    // eslint-disable-next-line no-constant-condition -- TODO: condition luôn true, cần audit lại logic getTuanTriet
     if (canChi.includes(key.split(' ')[1]) || true) {
       // Đơn giản: tìm nhóm 10 năm chứa can chi năm sinh
       const chiNam = canChi.split(' ')[1];

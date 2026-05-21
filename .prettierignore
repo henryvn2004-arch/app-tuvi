@@ -1,0 +1,62 @@
+node_modules/
+.next/
+.vercel/
+.claude/
+dist/
+build/
+out/
+coverage/
+playwright-report/
+test-results/
+package-lock.json
+
+# Sub-package with own setup
+tuvi-engine/
+
+# Generated / vendor data
+public/cach_cuc_all.json
+chunks_all.json
+sach/
+authors/
+
+# HTML files — vanilla, hand-tuned, không auto-format
+**/*.html
+
+# Markdown — preserve author intent
+**/*.md
+
+# Patches & one-off scripts
+_patches/
+patch-*.js
+*.py
+add-sentry.py
+
+# Sample HTML output
+sample-laso-*.html
+
+# Legacy vanilla JS / engine files — hand-tuned, prettier sẽ tạo diff cosmetic quá lớn
+# Format check chỉ áp dụng cho file mới + config files
+public/**/*.js
+public/cach_cuc_all.json
+public/**/*.css
+tuvi-paywall.js
+add-sentry.py
+payos-integration/
+payos-v2/
+
+# Production files với alignment intentional / file rất dài — không auto-format
+next.config.mjs
+vercel.json
+app/**/*.js
+
+# TypeScript handled by Next.js / tsc — không cần prettier
+**/*.ts
+**/*.tsx
+
+# JSON data files (CACH_CUC, articles, masters...)
+sach/**/*.json
+public/**/*.json
+chunks_all.json
+
+# Misc
+seal.*

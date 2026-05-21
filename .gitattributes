@@ -1,0 +1,13 @@
+# Normalize line endings to LF on commit, check out native on Windows.
+# Ensures Prettier (LF) doesn't fight with Windows CRLF.
+* text=auto eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.pdf binary
+*.zip binary

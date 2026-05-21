@@ -7,7 +7,19 @@ import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const ROOT = 'C:\\Users\\DELL\\app-tuvi';
-const SKIP_DIRS = ['node_modules', '.next', '.git', '.claude', 'dist', 'build', 'sach', '_patches', 'payos-v2', 'payos-integration', 'tuvi-engine'];
+const SKIP_DIRS = [
+  'node_modules',
+  '.next',
+  '.git',
+  '.claude',
+  'dist',
+  'build',
+  'sach',
+  '_patches',
+  'payos-v2',
+  'payos-integration',
+  'tuvi-engine',
+];
 const SKIP_FILES = new Set([
   'sample-laso-ky-mao-1999.html',
   'sample-laso-ky-mao-1999-v2.html',
@@ -17,12 +29,42 @@ const SKIP_FILES = new Set([
 ]);
 
 const DOMAIN_EMOJIS = new Set([
-  '☵','☷','☶','☴','☳','☲','☱','☰',
-  '♦','♥','♠','♣',
-  '🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘',
-  '⚧','⚥','⚦','♂','♀',
-  '✦','✧','★','☆',
-  '🟢','🟡','🔴','🟠','🟣','⚫','⚪',
+  '☵',
+  '☷',
+  '☶',
+  '☴',
+  '☳',
+  '☲',
+  '☱',
+  '☰',
+  '♦',
+  '♥',
+  '♠',
+  '♣',
+  '🌑',
+  '🌒',
+  '🌓',
+  '🌔',
+  '🌕',
+  '🌖',
+  '🌗',
+  '🌘',
+  '⚧',
+  '⚥',
+  '⚦',
+  '♂',
+  '♀',
+  '✦',
+  '✧',
+  '★',
+  '☆',
+  '🟢',
+  '🟡',
+  '🔴',
+  '🟠',
+  '🟣',
+  '⚫',
+  '⚪',
 ]);
 
 const EMOJI_RE = '[\\u{1F300}-\\u{1FAFF}\\u{2600}-\\u{27BF}\\u{1F000}-\\u{1F9FF}](?:\\uFE0F)?';
@@ -30,7 +72,9 @@ const EMOJI_RE = '[\\u{1F300}-\\u{1FAFF}\\u{2600}-\\u{27BF}\\u{1F000}-\\u{1F9FF}
 // Pattern A: <tag class="...{title|heading|label|btn|hero|eyebrow|pregen|toggle|subtitle|tag|section}...">EMOJI TEXT...
 // Must have at least one Vietnamese word character after the emoji + space
 const HEADING_PREFIX_RE = new RegExp(
-  '(<\\w+\\s[^>]*\\bclass="[^"]*(?:title|heading|label|tab-btn|hero|eyebrow|pregen|toggle|subtitle|hero-tag|section-title|card-title|tab-content)[^"]*"[^>]*>)(\\s*)(' + EMOJI_RE + ')(\\s+)([\\w\\u00C0-\\uFFFF])',
+  '(<\\w+\\s[^>]*\\bclass="[^"]*(?:title|heading|label|tab-btn|hero|eyebrow|pregen|toggle|subtitle|hero-tag|section-title|card-title|tab-content)[^"]*"[^>]*>)(\\s*)(' +
+    EMOJI_RE +
+    ')(\\s+)([\\w\\u00C0-\\uFFFF])',
   'gu'
 );
 
@@ -47,13 +91,21 @@ const REPLACE = (emoji) =>
 const targets = [];
 function walk(dir) {
   let entries;
-  try { entries = readdirSync(dir); } catch { return; }
+  try {
+    entries = readdirSync(dir);
+  } catch {
+    return;
+  }
   for (const name of entries) {
     if (SKIP_DIRS.includes(name)) continue;
     if (SKIP_FILES.has(name)) continue;
     const full = join(dir, name);
     let st;
-    try { st = statSync(full); } catch { continue; }
+    try {
+      st = statSync(full);
+    } catch {
+      continue;
+    }
     if (st.isDirectory()) walk(full);
     else if (/\.(html|tsx?|jsx?|mjs)$/.test(name)) targets.push(full);
   }
@@ -66,7 +118,11 @@ const changedFiles = [];
 
 for (const file of targets) {
   let src;
-  try { src = readFileSync(file, 'utf8'); } catch { continue; }
+  try {
+    src = readFileSync(file, 'utf8');
+  } catch {
+    continue;
+  }
   let count = 0;
   const before = src;
 
@@ -79,7 +135,10 @@ for (const file of targets) {
 
   // Pattern B: SSR meta.icon → span wrap
   // Replace `<span class="ic-inline" data-icon-emoji="${meta.icon}" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">${meta.icon}</span>` with `<span data-icon-emoji="<span class="ic-inline" data-icon-emoji="${meta.icon}" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">${meta.icon}</span>"><span class="ic-inline" data-icon-emoji="${meta.icon}" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">${meta.icon}</span></span>`
-  src = src.replace(SSR_META_ICON_RE, '<span class="ic-inline" data-icon-emoji="<span class="ic-inline" data-icon-emoji="${meta.icon}" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">${meta.icon}</span>" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A"><span class="ic-inline" data-icon-emoji="${meta.icon}" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">${meta.icon}</span></span>');
+  src = src.replace(
+    SSR_META_ICON_RE,
+    '<span class="ic-inline" data-icon-emoji="<span class="ic-inline" data-icon-emoji="${meta.icon}" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">${meta.icon}</span>" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A"><span class="ic-inline" data-icon-emoji="${meta.icon}" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">${meta.icon}</span></span>'
+  );
   // Count those too — different counter for this
   const ssrMatches = before.match(SSR_META_ICON_RE);
   if (ssrMatches) count += ssrMatches.length;

@@ -13,7 +13,19 @@ import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const ROOT = 'C:\\Users\\DELL\\app-tuvi';
-const SKIP_DIRS = ['node_modules', '.next', '.git', '.claude', 'dist', 'build', 'sach', '_patches', 'payos-v2', 'payos-integration', 'tuvi-engine'];
+const SKIP_DIRS = [
+  'node_modules',
+  '.next',
+  '.git',
+  '.claude',
+  'dist',
+  'build',
+  'sach',
+  '_patches',
+  'payos-v2',
+  'payos-integration',
+  'tuvi-engine',
+];
 const SKIP_FILES = new Set([
   'sample-laso-ky-mao-1999.html',
   'sample-laso-ky-mao-1999-v2.html',
@@ -25,45 +37,91 @@ const SKIP_FILES = new Set([
 
 // Emojis we KNOW are domain content (NOT UI icons) — skip
 const DOMAIN_EMOJIS = new Set([
-  '☵','☷','☶','☴','☳','☲','☱','☰',  // Bagua trigrams (I Ching)
-  '♦','♥','♠','♣',                    // Card suits
-  '🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘', // Moon phases
-  '⚧','⚥','⚦','♂','♀',               // Gender symbols
-  '✦','✧','★','☆',                    // Decorative stars
-  '✓','✗','✕','✘',                    // simple checks/X — keep small inline as text
-  '🟢','🟡','🔴','🟠','🟣','⚫','⚪',   // Status dot colors
+  '☵',
+  '☷',
+  '☶',
+  '☴',
+  '☳',
+  '☲',
+  '☱',
+  '☰', // Bagua trigrams (I Ching)
+  '♦',
+  '♥',
+  '♠',
+  '♣', // Card suits
+  '🌑',
+  '🌒',
+  '🌓',
+  '🌔',
+  '🌕',
+  '🌖',
+  '🌗',
+  '🌘', // Moon phases
+  '⚧',
+  '⚥',
+  '⚦',
+  '♂',
+  '♀', // Gender symbols
+  '✦',
+  '✧',
+  '★',
+  '☆', // Decorative stars
+  '✓',
+  '✗',
+  '✕',
+  '✘', // simple checks/X — keep small inline as text
+  '🟢',
+  '🟡',
+  '🔴',
+  '🟠',
+  '🟣',
+  '⚫',
+  '⚪', // Status dot colors
 ]);
 
 // Pattern: emoji in opening to closing tag where class contains -icon or icon-
 // Greedy: match emoji-only content (allow whitespace + emoji + whitespace)
 // Single-character emoji (supplementary plane uses 2 UTF-16 code units, handled via /u flag and surrogate ranges)
-const EMOJI_RE_SOURCE = '[\\u{1F300}-\\u{1FAFF}\\u{2600}-\\u{27BF}\\u{1F000}-\\u{1F9FF}](?:\\uFE0F)?';
+const EMOJI_RE_SOURCE =
+  '[\\u{1F300}-\\u{1FAFF}\\u{2600}-\\u{27BF}\\u{1F000}-\\u{1F9FF}](?:\\uFE0F)?';
 
 // Pattern 1: <tag class="...-icon..." [attrs...]>WHITESPACE? EMOJI WHITESPACE?</tag>
 //   Example: <div class="tool-card-icon"><span class="ic-inline" data-icon-emoji="🔮" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🔮</span></div>
 //            <span class="hero-icon"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📊</span></span>
 const ICON_TAG_RE = new RegExp(
-  '(<\\w+\\s[^>]*\\bclass="[^"]*(?:-icon|icon-|tile-icon|tool-icon|hero-icon|hub-card-icon|free-tile-icon|tvc-paywall-icon|xt-note-icon|upload-icon|rec-icon|icon-sm|ic-)[^"]*"[^>]*>)(\\s*)(' + EMOJI_RE_SOURCE + ')(\\s*)(</\\w+>)',
+  '(<\\w+\\s[^>]*\\bclass="[^"]*(?:-icon|icon-|tile-icon|tool-icon|hero-icon|hub-card-icon|free-tile-icon|tvc-paywall-icon|xt-note-icon|upload-icon|rec-icon|icon-sm|ic-)[^"]*"[^>]*>)(\\s*)(' +
+    EMOJI_RE_SOURCE +
+    ')(\\s*)(</\\w+>)',
   'gu'
 );
 
 // Pattern 2: <a class="..." href="...">EMOJI TEXT</a>  (tool-card links in hub pages)
 // More restrictive — only match when class contains -card or tool-link
 const CARD_PREFIX_RE = new RegExp(
-  '(<a\\s[^>]*\\bclass="[^"]*(?:tool-card|tool-link|hub-link|tile-link)[^"]*"[^>]*>)(\\s*)(' + EMOJI_RE_SOURCE + ')(\\s+)',
+  '(<a\\s[^>]*\\bclass="[^"]*(?:tool-card|tool-link|hub-link|tile-link)[^"]*"[^>]*>)(\\s*)(' +
+    EMOJI_RE_SOURCE +
+    ')(\\s+)',
   'gu'
 );
 
 const targets = [];
 function walk(dir) {
   let entries;
-  try { entries = readdirSync(dir); } catch { return; }
+  try {
+    entries = readdirSync(dir);
+  } catch {
+    return;
+  }
   for (const name of entries) {
     if (SKIP_DIRS.includes(name)) continue;
     if (SKIP_FILES.has(name)) continue;
     const full = join(dir, name);
     let st;
-    try { st = statSync(full); } catch { continue; }
+    try {
+      st = statSync(full);
+    } catch {
+      continue;
+    }
     if (st.isDirectory()) walk(full);
     else if (/\.(html|tsx?|jsx?|mjs)$/.test(name)) targets.push(full);
   }
@@ -79,7 +137,11 @@ const changedFiles = [];
 
 for (const file of targets) {
   let src;
-  try { src = readFileSync(file, 'utf8'); } catch { continue; }
+  try {
+    src = readFileSync(file, 'utf8');
+  } catch {
+    continue;
+  }
   let count = 0;
   const before = src;
 

@@ -12,12 +12,20 @@ const REPLACEMENT = `/nav.js${VERSION}"`;
 function walk(dir, predicate, skip = []) {
   const out = [];
   let entries;
-  try { entries = readdirSync(dir); } catch { return out; }
+  try {
+    entries = readdirSync(dir);
+  } catch {
+    return out;
+  }
   for (const name of entries) {
     if (skip.includes(name)) continue;
     const full = join(dir, name);
     let st;
-    try { st = statSync(full); } catch { continue; }
+    try {
+      st = statSync(full);
+    } catch {
+      continue;
+    }
     if (st.isDirectory()) {
       out.push(...walk(full, predicate, skip));
     } else if (predicate(full)) {
@@ -30,8 +38,8 @@ function walk(dir, predicate, skip = []) {
 const SKIP_DIRS = ['node_modules', '.next', '.git', '.claude', 'dist', 'build'];
 
 // Target files: *.html in public/, *.ts in app/
-const htmlFiles = walk(join(ROOT, 'public'), p => p.endsWith('.html'), SKIP_DIRS);
-const tsFiles = walk(join(ROOT, 'app'), p => p.endsWith('.ts') || p.endsWith('.tsx'), SKIP_DIRS);
+const htmlFiles = walk(join(ROOT, 'public'), (p) => p.endsWith('.html'), SKIP_DIRS);
+const tsFiles = walk(join(ROOT, 'app'), (p) => p.endsWith('.ts') || p.endsWith('.tsx'), SKIP_DIRS);
 
 const targets = [...htmlFiles, ...tsFiles];
 

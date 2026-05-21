@@ -9,24 +9,30 @@ let nav = readFileSync(NAV, 'utf8');
 const iconsContent = readFileSync(ICONS_OUT, 'utf8');
 
 // Extract the ICONS block from generated file (everything from `var ICONS` to closing `};`)
-const newIconsMatch = iconsContent.match(/var ICONS = \{[\s\S]*?\n  \};/);
+const newIconsMatch = iconsContent.match(/var ICONS = \{[\s\S]*?\n {2}\};/);
 if (!newIconsMatch) throw new Error('Cannot find ICONS block in generated file');
 const newIconsBlock = newIconsMatch[0];
 
 // Replace old ICONS block in nav.js — match anything from `var ICONS = {` to `};` at indent level
-const oldIconsRe = /  var ICONS = \{[\s\S]*?\n  \};/;
+const oldIconsRe = / {2}var ICONS = \{[\s\S]*?\n {2}\};/;
 if (!oldIconsRe.test(nav)) throw new Error('Cannot find existing ICONS block in nav.js');
 nav = nav.replace(oldIconsRe, '  ' + newIconsBlock);
 
 // Update count comment
-nav = nav.replace(/\/\/ Auto-generated from lucide-static v1\.16\.0 — \d+ icons/, '// Auto-generated from lucide-static v1.16.0 — 78 icons');
+nav = nav.replace(
+  /\/\/ Auto-generated from lucide-static v1\.16\.0 — \d+ icons/,
+  '// Auto-generated from lucide-static v1.16.0 — 78 icons'
+);
 
 // Bump version comment — always to v13 for the current rollout
-nav = nav.replace(/(\/\/ nav\.js — Shared navigation component) v\d+ \([^)]*\)/, '$1 v13 (Lucide icons + iconHtml + EMOJI_TO_ICON map)');
+nav = nav.replace(
+  /(\/\/ nav\.js — Shared navigation component) v\d+ \([^)]*\)/,
+  '$1 v13 (Lucide icons + iconHtml + EMOJI_TO_ICON map)'
+);
 
 // Always replace EMOJI_TO_ICON block (idempotent — easy to extend over time)
-const EMOJI_BLOCK_RE = /\n  \/\/ Map common emoji[\s\S]*?window\.iconHtml = iconHtml;\n/;
-nav = nav.replace(EMOJI_BLOCK_RE, '\n');  // strip old block if exists
+const EMOJI_BLOCK_RE = /\n {2}\/\/ Map common emoji[\s\S]*?window\.iconHtml = iconHtml;\n/;
+nav = nav.replace(EMOJI_BLOCK_RE, '\n'); // strip old block if exists
 if (!nav.includes('var EMOJI_TO_ICON')) {
   const injection = `
   // Map common emoji → Lucide key for runtime translation of legacy data
@@ -67,16 +73,13 @@ if (!nav.includes('var EMOJI_TO_ICON')) {
   window.iconHtml = iconHtml;
 `;
   // Insert right after window.mountIcons = mountIcons; line
-  nav = nav.replace(
-    /(window\.mountIcons = mountIcons;)/,
-    `$1\n${injection}`
-  );
+  nav = nav.replace(/(window\.mountIcons = mountIcons;)/, `$1\n${injection}`);
 }
 
 // Also update mountIcons to also handle [data-icon-emoji] (emoji-based input)
 if (!nav.includes('data-icon-emoji')) {
   nav = nav.replace(
-    /(function mountIcons\(root\) \{[\s\S]*?\n  \})/,
+    /(function mountIcons\(root\) \{[\s\S]*?\n {2}\})/,
     `function mountIcons(root) {
     var scope = root || document;
     // Pass 1: explicit data-icon="key"
@@ -104,4 +107,6 @@ if (!nav.includes('data-icon-emoji')) {
 writeFileSync(NAV, nav, 'utf8');
 console.log(`Updated nav.js — size now ${nav.length} bytes`);
 console.log(`ICONS entries: ${(nav.match(/'<svg/g) || []).length}`);
-console.log(`EMOJI_TO_ICON entries: ${(nav.match(/'[\uD83C-􏰀-\uDFFF☀-➿][^']*':'/g) || []).length} (approx)`);
+console.log(
+  `EMOJI_TO_ICON entries: ${(nav.match(/'[\uD83C-􏰀-\uDFFF☀-➿][^']*':'/gu) || []).length} (approx)`
+);
