@@ -14,7 +14,8 @@
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:report": "playwright show-report",
     "test:smoke": "playwright test --config=playwright.smoke.config.ts",
-    "test:smoke:ui": "playwright test --config=playwright.smoke.config.ts --ui"
+    "test:smoke:ui": "playwright test --config=playwright.smoke.config.ts --ui",
+    "lhci": "lhci autorun"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.103.0",
@@ -24,6 +25,7 @@
     "react-dom": "^18.3.0"
   },
   "devDependencies": {
+    "@lhci/cli": "^0.14.0",
     "@playwright/test": "^1.44.0",
     "@types/node": "^20.0.0",
     "@types/react": "^18.3.0",

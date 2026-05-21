@@ -5,6 +5,7 @@ node_modules/
 /playwright-report/
 /playwright-report-smoke/
 /test-results/
+/.lighthouseci/
 /tests/.auth/
 *.webm
 .vercel

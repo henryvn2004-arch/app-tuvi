@@ -1,0 +1,58 @@
+name: Lighthouse CI
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      lhci_url_override:
+        description: 'Override URLs (comma-sep)'
+        required: false
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      # Lighthouse mặc định chạy lên URL khai báo trong lighthouserc.json.
+      # Trên PR, có thể override sang Vercel preview URL nếu Vercel deployment
+      # status đã có. Fallback: chạy trên prod URLs.
+      - name: Determine target URLs
+        id: targets
+        run: |
+          if [ -n "${{ github.event.inputs.lhci_url_override }}" ]; then
+            echo "urls=${{ github.event.inputs.lhci_url_override }}" >> $GITHUB_OUTPUT
+          else
+            echo "urls=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run Lighthouse CI
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+        run: |
+          if [ -n "${{ steps.targets.outputs.urls }}" ]; then
+            npx lhci autorun --collect.url="${{ steps.targets.outputs.urls }}"
+          else
+            npx lhci autorun
+          fi
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report-${{ github.run_id }}
+          path: .lighthouseci/
+          retention-days: 14
