@@ -101,23 +101,50 @@ cd tuvi-engine && npm run test:coverage
 ```
 
 ### Config files
-- `.eslintrc.json` + `.eslintignore` — vanilla JS rules
+- `eslint.config.js` — ESLint 10 flat config (migrated từ legacy `.eslintrc.json` sau khi bump 8→10)
 - `.prettierrc` + `.prettierignore` — format style
 - `.gitattributes` — chuẩn hoá LF (Windows ↔ Linux)
-- `playwright.config.ts` — E2E full (cần auth)
+- `playwright.config.ts` — E2E full (cần auth, testIgnore `**/smoke/**`)
 - `playwright.smoke.config.ts` — smoke prod (no auth)
 - `lighthouserc.json` — Lighthouse assertions
 - `.github/dependabot.yml` — weekly npm + actions updates
 
+### Dependency versions (sau khi merge Dependabot tháng 5/2026)
+- next: `^14.2.0` (chưa upgrade lên 16 — xem "Open PRs" bên dưới)
+- @supabase/supabase-js: `^2.106.1`
+- pdf-parse: `^1.1.1` (KHÔNG bump lên v2 — break `scripts/embed-tubinh.mjs`, xem "Open PRs")
+- eslint: `^10.4.0` (flat config)
+- @playwright/test: `^1.60.0`
+- prettier: `^3.8.3`
+- @types/node: `^25.9.1` (root + engine)
+- vitest + @vitest/coverage-v8: `^4.1.7` (engine)
+- GHA actions: checkout@v6, setup-node@v6, upload-artifact@v7
+
 ### Known limitations
 - Prettier KHÔNG check HTML files, vanilla `public/*.js`, `app/api/tuong-mat/route.js`, `next.config.mjs`, `vercel.json` — bảo toàn alignment intentional + tránh diff cosmetic lớn
 - ESLint disable `no-dupe-keys` + `no-redeclare` trong `public/tuvi-ansao-engine.js` — file có duplicate star keys cần audit (TODO line ~563)
+- ESLint `no-useless-assignment` disabled — rule mới trong v9+ flag false positive ở vanilla files (pattern build-then-replace)
 - Sentry alerts chưa setup (skip theo lựa chọn) — nếu cần, configure trong Sentry UI: New issue alert + Error rate spike (>10/5min) + Performance LCP P75 > 4s
+- Playwright + Lighthouse SKIP trên Dependabot PR (`if: github.actor != 'dependabot[bot]'`) — Dependabot không có quyền dùng secrets
+
+### Open Dependabot PRs (chưa xử lý — cần decision)
+- **#13 next 14→16** ⚠️ — local build fail do thiếu env vars, không verify được. Risk cao: Next 15 thay đổi async params/cookies/headers, route handlers cần await. Khuyên: review release notes trên branch riêng trước
+- **#11 pdf-parse 1→2** — v2 bỏ internal path `lib/pdf-parse.js` → break `scripts/embed-tubinh.mjs:20`. Khuyên: close PR, hoặc rewrite script trước khi merge
+- **#1, #2 Vercel bot** (Speed Insights + Web Analytics) — không phải Dependabot, merge nếu muốn analytics
 
 ### Vercel preview cho Lighthouse
 Hiện tại Lighthouse chạy trên prod URLs hardcoded. Để chạy trên Vercel preview của PR:
 - Trigger workflow_dispatch + truyền `lhci_url_override=https://app-tuvi-git-<branch>.vercel.app/`
 - Hoặc edit `lighthouserc.json` collect.url thành preview URL trước khi merge
 
-### Smoke test issue dedupe
-`smoke-prod.yml` chỉ tạo issue `prod-down` mới nếu chưa có open issue cùng label. Lần fail tiếp theo sẽ comment vào issue cũ thay vì tạo trùng.
+### Smoke test issue dedupe + label
+`smoke-prod.yml` cần label `prod-down` (đã tạo). Chỉ tạo issue mới nếu chưa có open issue cùng label — lần fail sau comment vào issue cũ.
+
+### Cross-machine setup
+Sau khi clone trên máy mới:
+```bash
+npm ci
+cd tuvi-engine && npm ci && cd ..
+npx playwright install chromium
+```
+ESLint dùng flat config (`eslint.config.js`) nên VS Code cần extension version mới (ESLint v3+).
