@@ -3,14 +3,8 @@ name: Unit Tests (tuvi-engine)
 on:
   push:
     branches: [main, dev]
-    paths:
-      - 'tuvi-engine/**'
-      - '.github/workflows/unit-test.yml'
   pull_request:
     branches: [main, dev]
-    paths:
-      - 'tuvi-engine/**'
-      - '.github/workflows/unit-test.yml'
 
 jobs:
   test:
