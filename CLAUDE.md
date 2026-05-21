@@ -70,3 +70,54 @@ Homepage → /menh-kho.html → /menh-kho/[year] → /menh-kho/[year]/[mm-dd] �
 ### NAM_XEM
 - Hardcode 2027 trong `menh-kho/[year]/[day]/route.ts` (line: `const NAM_XEM = 2027`)
 - Update hằng năm thủ công
+
+---
+
+## QC & Testing
+
+5 lớp QC chạy trên GitHub Actions. Mọi workflow đều free quota.
+
+### Workflows
+| File | Trigger | Mục đích |
+|---|---|---|
+| `lint.yml` | push/PR vào main/dev | ESLint + Prettier check |
+| `unit-test.yml` | push/PR vào main/dev | `tuvi-engine/` vitest + typecheck + coverage |
+| `playwright.yml` | push/PR vào main/dev | E2E full suite (16 specs, có auth) |
+| `smoke-prod.yml` | deployment_status (prod) + cron 6h + manual | Smoke test trên prod URL, tạo issue `prod-down` khi fail |
+| `lighthouse.yml` | PR vào main + manual | Lighthouse trên 4 URL chính, assert Perf/A11y/SEO/LCP/CLS/TBT |
+
+### Lệnh local
+```bash
+npm run lint              # ESLint
+npm run lint:fix          # ESLint auto-fix
+npm run format            # Prettier write
+npm run format:check      # Prettier check
+npm run test:e2e          # Playwright full
+npm run test:smoke        # Playwright smoke (PROD_URL=...)
+npm run lhci              # Lighthouse local (cần Chrome)
+
+cd tuvi-engine && npm test            # Vitest engine
+cd tuvi-engine && npm run test:coverage
+```
+
+### Config files
+- `.eslintrc.json` + `.eslintignore` — vanilla JS rules
+- `.prettierrc` + `.prettierignore` — format style
+- `.gitattributes` — chuẩn hoá LF (Windows ↔ Linux)
+- `playwright.config.ts` — E2E full (cần auth)
+- `playwright.smoke.config.ts` — smoke prod (no auth)
+- `lighthouserc.json` — Lighthouse assertions
+- `.github/dependabot.yml` — weekly npm + actions updates
+
+### Known limitations
+- Prettier KHÔNG check HTML files, vanilla `public/*.js`, `app/api/tuong-mat/route.js`, `next.config.mjs`, `vercel.json` — bảo toàn alignment intentional + tránh diff cosmetic lớn
+- ESLint disable `no-dupe-keys` + `no-redeclare` trong `public/tuvi-ansao-engine.js` — file có duplicate star keys cần audit (TODO line ~563)
+- Sentry alerts chưa setup (skip theo lựa chọn) — nếu cần, configure trong Sentry UI: New issue alert + Error rate spike (>10/5min) + Performance LCP P75 > 4s
+
+### Vercel preview cho Lighthouse
+Hiện tại Lighthouse chạy trên prod URLs hardcoded. Để chạy trên Vercel preview của PR:
+- Trigger workflow_dispatch + truyền `lhci_url_override=https://app-tuvi-git-<branch>.vercel.app/`
+- Hoặc edit `lighthouserc.json` collect.url thành preview URL trước khi merge
+
+### Smoke test issue dedupe
+`smoke-prod.yml` chỉ tạo issue `prod-down` mới nếu chưa có open issue cùng label. Lần fail tiếp theo sẽ comment vào issue cũ thay vì tạo trùng.
