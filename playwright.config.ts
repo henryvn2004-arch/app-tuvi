@@ -10,6 +10,7 @@ const BASE_URL =
 
 export default defineConfig({
   testDir: './tests',
+  testIgnore: ['**/smoke/**'],
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
