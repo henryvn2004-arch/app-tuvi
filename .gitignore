@@ -9,3 +9,7 @@ node_modules/
 /tests/.auth/
 *.webm
 .vercel
+
+# tuvi-engine build artifacts
+tuvi-engine/dist/
+tuvi-engine/coverage/
