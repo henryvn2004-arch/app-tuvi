@@ -31,6 +31,9 @@ export {
   LOC_TON_START, HOA_LINH_KHOI,
 } from './constants.js';
 
+// Ngày tốt (xem ngày)
+export * from './ngay-tot/index.js';
+
 // Types
 export type {
   AnSaoParams,

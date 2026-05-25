@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "cd tuvi-engine && npm ci && npm run build",
     "build": "next build",
+    "build:engine": "cd tuvi-engine && npm run build",
     "start": "next start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
