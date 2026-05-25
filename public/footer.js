@@ -45,6 +45,8 @@
     '<a href="/xem-tuong.html">Xem T\u01b0\u1edbng</a>',
     '<a href="/phong-thuy.html">Phong Th\u1ee7y</a>',
     '<a href="/lam-dep.html">L\u00e0m \u0110\u1eb9p</a>',
+    '<a href="/ngay-tot">Ng\u00e0y T\u1ed1t Theo Vi\u1ec7c</a>',
+    '<a href="/ngay-tot/lich/2026">L\u1ecbch Ng\u00e0y T\u1ed1t 2026</a>',
     '<a href="/chon-ngay.html">Ch\u1ecdn Ng\u00e0y</a>',
     '<a href="/dat-ten.html">\u0110\u1eb7t T\u00ean</a>',
     '</div>',

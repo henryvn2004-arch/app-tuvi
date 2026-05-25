@@ -170,7 +170,7 @@
   var TUONG_PATHS  = ['/tools/tuong-mat-ai.html','/tools/nhan-tuong-ai.html','/tools/thu-tuong-ai.html','/tools/thanh-tuong-ai.html','/tools/thanh-tuong-pro.html','/tools/khi-sac-ai.html'];
   var LAM_DEP_PATHS = ['/tools/kieu-toc-ai.html','/tools/mau-sac-hop-menh.html'];
   var PHONG_PATHS  = ['/tools/phong-thuy.html','/tools/ban-lam-viec.html','/tools/cua-hang-phong-thuy.html','/tools/bat-trach.html','/tools/kim-lau.html'];
-  var NGAY_PATHS   = ['/tools/hoang-dao.html','/tools/ngay-tot.html','/tools/luc-nham.html','/tools/han-nam.html','/tools/chon-ngay-tot.html'];
+  var NGAY_PATHS   = ['/ngay-tot','/tools/hoang-dao.html','/tools/ngay-tot.html','/tools/luc-nham.html','/tools/han-nam.html','/tools/chon-ngay-tot.html'];
   var TENCHU_PATHS  = ['/tools/dat-ten-con.html','/tools/dat-ten-doanh-nghiep.html'];
   var BAIVIET_PATHS = ['/blog.html','/nghien-cuu','/tac-gia'];
 
@@ -296,6 +296,8 @@
   var dd4 = '<div class="nav-dd" id="nav-dd4">'
     + '<span class="nav-link' + (anyActive(NGAY_PATHS)?' active':'') + '" id="nav-dd4-toggle" role="button" tabindex="0">Chọn Ngày ' + CHEV + '</span>'
     + '<div class="nav-dd-menu" id="nav-dd4-menu">'
+    + ddItem('/ngay-tot',              'calendar-days', 'Ngày Tốt Theo Việc')
+    + ddItem('/ngay-tot/lich/2026',    'sparkles',      'Lịch Ngày Tốt 2026')
     + ddItem('/tools/hoang-dao.html',  'sun',         'Giờ Hoàng Đạo')
     + ddItem('/tools/ngay-tot.html',   'calendar',    'Ngày Tốt Trong Tháng')
     + ddItem('/tools/chon-ngay-tot.html', 'pin',      'Chọn Ngày Tốt')
