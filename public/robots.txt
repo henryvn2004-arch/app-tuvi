@@ -33,6 +33,7 @@ Allow: /
 Sitemap: https://www.tuviminhbao.com/sitemap.xml
 Sitemap: https://www.tuviminhbao.com/sitemap-hubs
 Sitemap: https://www.tuviminhbao.com/sitemap-pregen
+Sitemap: https://www.tuviminhbao.com/sitemap-ngay-tot
 
 # LLMs context
 LLMs: https://www.tuviminhbao.com/llms.txt
