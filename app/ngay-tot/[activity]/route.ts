@@ -4,9 +4,22 @@ export const revalidate = false;
 import { NextRequest, NextResponse } from 'next/server';
 import {
   ACTIVITY_META, ACTIVITY_LIST,
+  computeMonth, scoreActivity,
   type ActivityKey,
 } from '../../../tuvi-engine/dist/ngay-tot/index.js';
 import { BASE, YEARS, esc, renderPage, CACHE_HEADERS } from '../_shared';
+
+// Đếm ngày tốt/xấu cho activity trong (year, month)
+function monthStats(year: number, month: number, act: ActivityKey) {
+  const days = computeMonth(year, month);
+  let good = 0, bad = 0;
+  for (const info of days) {
+    const s = scoreActivity(info, act).score;
+    if (s >= 7) good++;
+    else if (s <= 3) bad++;
+  }
+  return { good, bad, total: days.length };
+}
 
 const VALID = new Set(ACTIVITY_LIST as readonly string[]);
 const CURRENT_YEAR = 2026;
@@ -36,7 +49,15 @@ export async function GET(
   const cards = orderedYears.map(y => {
     const monthsHTML = Array.from({ length: 12 }, (_, mi) => {
       const m = mi + 1;
-      return `<a href="/ngay-tot/${activity}/${y}/thang-${m}" class="cal-day">T${m}</a>`;
+      const { good, bad, total } = monthStats(y, m, key);
+      // Tier theo số ngày score ≥ 7 (tốt) / score ≤ 3 (xấu, kể cả hard-block kỵ)
+      let cls = '';
+      if (good >= 8) cls = 'great';      // tháng nhiều ngày đẹp
+      else if (good >= 4) cls = 'good';
+      else if (bad >= 18) cls = 'bad';   // gần như cả tháng kỵ
+      else if (bad >= 12) cls = 'soso';
+      const tooltip = `Tháng ${m}/${y}: ${good} ngày tốt, ${bad} ngày kỵ (trên ${total})`;
+      return `<a href="/ngay-tot/${activity}/${y}/thang-${m}" class="cal-day ${cls}" title="${esc(tooltip)}">T${m}</a>`;
     }).join('');
     return `<div class="cal-month">
       <div class="cal-month-name">Năm ${y}</div>
@@ -55,6 +76,12 @@ export async function GET(
       <p>${esc(meta.desc)}. Chọn năm và tháng để xem top ngày đẹp với chi tiết trực, sao hoàng đạo, can chi và giờ đẹp.</p>
     </div>
     <h2 class="sec-title">Chọn Năm và Tháng</h2>
+    <div class="legend">
+      <span class="legend-item"><span class="legend-dot great"></span>Nhiều ngày đẹp (≥ 8)</span>
+      <span class="legend-item"><span class="legend-dot good"></span>Có ngày đẹp (≥ 4)</span>
+      <span class="legend-item"><span class="legend-dot soso"></span>Ít ngày đẹp</span>
+      <span class="legend-item"><span class="legend-dot bad"></span>Hầu hết kỵ</span>
+    </div>
     <div class="cal-grid">${cards}</div>
     <div class="rel-block">
       <div class="rel-title">Việc khác</div>
