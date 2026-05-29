@@ -31,9 +31,9 @@ Allow: /
 
 # Sitemap
 Sitemap: https://www.tuviminhbao.com/sitemap.xml
-Sitemap: https://www.tuviminhbao.com/sitemap-hubs
-Sitemap: https://www.tuviminhbao.com/sitemap-pregen
-Sitemap: https://www.tuviminhbao.com/sitemap-ngay-tot
+Sitemap: https://www.tuviminhbao.com/sitemap-hubs.xml
+Sitemap: https://www.tuviminhbao.com/sitemap-pregen.xml
+Sitemap: https://www.tuviminhbao.com/sitemap-ngay-tot.xml
 
 # LLMs context
 LLMs: https://www.tuviminhbao.com/llms.txt

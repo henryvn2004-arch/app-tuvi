@@ -74,6 +74,8 @@ export async function GET() {
     { path:'/resources.html', cf:'daily',   p:'0.8' },
     { path:'/blog.html',      cf:'daily',   p:'0.8' },
     { path:'/menh-kho.html',  cf:'daily',   p:'0.8' },
+    { path:'/ngay-tot',       cf:'daily',   p:'0.9' },  // ngay-tot hub
+    { path:'/van-han',        cf:'weekly',  p:'0.8' },  // van-han hub
     { path:'/xem-tuoi.html',  cf:'monthly', p:'0.7' },
     { path:'/xem-lam-an.html',cf:'monthly', p:'0.7' },
     { path:'/contact.html',   cf:'monthly', p:'0.4' },

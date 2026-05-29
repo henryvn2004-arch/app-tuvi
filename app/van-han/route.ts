@@ -39,12 +39,12 @@ export async function GET() {
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:type" content="website">
-<meta property="og:url" content="${BASE}/van-han/">
-<link rel="canonical" href="${BASE}/van-han/">
+<meta property="og:url" content="${BASE}/van-han">
+<link rel="canonical" href="${BASE}/van-han">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <script type="application/ld+json">${JSON.stringify({
   '@context':'https://schema.org','@type':'CollectionPage',
-  name: title, description: desc, url: `${BASE}/van-han/`,
+  name: title, description: desc, url: `${BASE}/van-han`,
   inLanguage: 'vi',
   publisher: { '@type':'Organization', name:'Tử Vi Minh Bảo', url: BASE },
 })}</script>
