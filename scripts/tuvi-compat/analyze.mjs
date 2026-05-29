@@ -6,8 +6,21 @@ import { canRelation, chiRelation, napAmRelation } from './rules.mjs';
 // ── Slug parser ────────────────────────────────────────────────────────────────
 // Slug format: tuong-hop-{type}-tuoi-{canA}-{chiA}-va-{canB}-{chiB}
 // Note: chi "ty" = Tý, "ti" = Tỵ
-const CAN_KEYS = ['giap','at','binh','dinh','mau','ky','canh','tan','nham','quy'];
-const CHI_KEYS = ['ty','suu','dan','mao','thin','ti','ngo','mui','than','dau','tuat','hoi'];
+const CAN_KEYS = ['giap', 'at', 'binh', 'dinh', 'mau', 'ky', 'canh', 'tan', 'nham', 'quy'];
+const CHI_KEYS = [
+  'ty',
+  'suu',
+  'dan',
+  'mao',
+  'thin',
+  'ti',
+  'ngo',
+  'mui',
+  'than',
+  'dau',
+  'tuat',
+  'hoi',
+];
 
 export function parseSlug(slug) {
   // Strip category prefix
@@ -32,34 +45,36 @@ export function parseSlug(slug) {
 
 // ── Analyze: từ 2 tuổi sinh ra full factor object ──────────────────────────────
 export function analyze(A, B) {
-  const canA = CAN[A.canSlug], canB = CAN[B.canSlug];
-  const chiA = CHI[A.chiSlug], chiB = CHI[B.chiSlug];
-  const naA  = napAm(A.canSlug, A.chiSlug);
-  const naB  = napAm(B.canSlug, B.chiSlug);
+  const canA = CAN[A.canSlug],
+    canB = CAN[B.canSlug];
+  const chiA = CHI[A.chiSlug],
+    chiB = CHI[B.chiSlug];
+  const naA = napAm(A.canSlug, A.chiSlug);
+  const naB = napAm(B.canSlug, B.chiSlug);
 
-  const canRel  = canRelation(A.canSlug, B.canSlug);
-  const chiRel  = chiRelation(A.chiSlug, B.chiSlug);
-  const naRel   = napAmRelation(naA.napAmHanh, naB.napAmHanh);
+  const canRel = canRelation(A.canSlug, B.canSlug);
+  const chiRel = chiRelation(A.chiSlug, B.chiSlug);
+  const naRel = napAmRelation(naA.napAmHanh, naB.napAmHanh);
 
   // ── Scoring ────────────────────────────────────────────────────────────
   let score = 50;
   // Thiên Can
-  if (canRel.type === 'hop')         score += 15;
-  else if (canRel.type === 'sinh')   score += 8;
+  if (canRel.type === 'hop') score += 15;
+  else if (canRel.type === 'sinh') score += 8;
   else if (canRel.type === 'tuong-dong') score += 5;
-  else if (canRel.type === 'khac')   score -= 10;
+  else if (canRel.type === 'khac') score -= 10;
   // Địa Chi
-  if (chiRel.type === 'tam-hop')     score += 25;
+  if (chiRel.type === 'tam-hop') score += 25;
   else if (chiRel.type === 'luc-hop') score += 20;
   else if (chiRel.type === 'chi-sinh') score += 10;
   else if (chiRel.type === 'chi-dong') score += 5;
-  else if (chiRel.type === 'tu-xung')  score -= 25;
-  else if (chiRel.type === 'luc-hai')  score -= 15;
+  else if (chiRel.type === 'tu-xung') score -= 25;
+  else if (chiRel.type === 'luc-hai') score -= 15;
   else if (chiRel.type === 'tam-hinh') score -= 15;
-  else if (chiRel.type === 'tu-hinh')  score -= 10;
+  else if (chiRel.type === 'tu-hinh') score -= 10;
   else if (chiRel.type === 'chi-khac') score -= 8;
   // Nạp âm
-  if (naRel.type === 'tuong-dong')   score += 10;
+  if (naRel.type === 'tuong-dong') score += 10;
   else if (naRel.type === 'a-sinh-b' || naRel.type === 'b-sinh-a') score += 15;
   else if (naRel.type === 'a-khac-b' || naRel.type === 'b-khac-a') score -= 15;
 
@@ -75,9 +90,19 @@ export function analyze(A, B) {
   else verdict = 'khong-hop';
 
   return {
-    A, B, canA, canB, chiA, chiB, naA, naB,
-    canRel, chiRel, naRel,
-    score, verdict,
+    A,
+    B,
+    canA,
+    canB,
+    chiA,
+    chiB,
+    naA,
+    naB,
+    canRel,
+    chiRel,
+    naRel,
+    score,
+    verdict,
     tuoiAName: tuoiName(A.canSlug, A.chiSlug),
     tuoiBName: tuoiName(B.canSlug, B.chiSlug),
   };
