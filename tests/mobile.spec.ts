@@ -104,11 +104,13 @@ test.describe('Mobile — Lá Số grid', () => {
     await page.locator('#tvf-submit-btn').click();
     await page.waitForSelector('#result-section.active', { timeout: 20_000 });
 
-    const grid = page.locator('#laso-grid');
-    const box = await grid.boundingBox();
+    // Grid has intentional min-width:480px for scrollable mobile UX.
+    // Verify the wrapping container stays within viewport (not the inner grid).
+    const wrap = page.locator('.laso-wrap');
+    const wrapBox = await wrap.boundingBox();
     const viewportWidth = page.viewportSize()?.width ?? 390;
-    if (box) {
-      expect(box.x + box.width).toBeLessThanOrEqual(viewportWidth + 5);
+    if (wrapBox) {
+      expect(wrapBox.x + wrapBox.width).toBeLessThanOrEqual(viewportWidth + 5);
     }
   });
 });
