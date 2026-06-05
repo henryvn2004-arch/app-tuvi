@@ -35,7 +35,7 @@ export async function GET(
 ) {
   const { year: yearStr } = await params;
   const year = parseInt(yearStr);
-  if (!VALID_YEARS.includes(year)) return NextResponse.redirect(`${BASE}/menh-kho.html`);
+  if (!VALID_YEARS.includes(year)) return new NextResponse('Not Found', { status: 404 });
 
   const canChi = getCanChi(year);
   const url    = `${BASE}/menh-kho/${year}`;

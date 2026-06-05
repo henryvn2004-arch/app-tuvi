@@ -49,15 +49,15 @@ export async function GET(
 ) {
   const { year: yearStr, day } = await params;
   const year = parseInt(yearStr);
-  if (!VALID_YEARS.includes(year)) return NextResponse.redirect(`${BASE}/menh-kho.html`);
+  if (!VALID_YEARS.includes(year)) return new NextResponse('Not Found', { status: 404 });
 
   // Parse day: "06-15" → month=6, date=15
   const dayMatch = day.match(/^(\d{2})-(\d{2})$/);
-  if (!dayMatch) return NextResponse.redirect(`${BASE}/menh-kho/${year}`);
+  if (!dayMatch) return new NextResponse('Not Found', { status: 404 });
   const mm = parseInt(dayMatch[1]);
   const dd = parseInt(dayMatch[2]);
   if (mm < 1 || mm > 12 || dd < 1 || dd > daysInMonth(mm, year)) {
-    return NextResponse.redirect(`${BASE}/menh-kho/${year}`);
+    return new NextResponse('Not Found', { status: 404 });
   }
 
   const canChi = getCanChi(year);
