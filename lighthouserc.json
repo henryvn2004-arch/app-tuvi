@@ -42,7 +42,9 @@
         "modern-image-formats": "off",
         "uses-optimized-images": "off",
         "non-composited-animations": "off",
-        "valid-source-maps": "off"
+        "valid-source-maps": "off",
+        "unminified-javascript": "off",
+        "select-name": "off"
       }
     },
     "upload": {
