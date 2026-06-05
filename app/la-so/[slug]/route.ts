@@ -34,6 +34,44 @@ function esc(s: unknown) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
+// Mapping tên sao → slug tu-dien (chỉ sao có trang riêng)
+const SAO_SLUG: Record<string,string> = {
+  'Tử Vi':'sao-tu-vi','Thiên Cơ':'sao-thien-co','Thái Dương':'sao-thai-duong',
+  'Vũ Khúc':'sao-vu-khuc','Thiên Đồng':'sao-thien-dong','Liêm Trinh':'sao-liem-trinh',
+  'Thiên Phủ':'sao-thien-phu','Thái Âm':'sao-thai-am','Tham Lang':'sao-tham-lang',
+  'Cự Môn':'sao-cu-mon','Thiên Tướng':'sao-thien-tuong','Thiên Lương':'sao-thien-luong',
+  'Thất Sát':'sao-that-sat','Phá Quân':'sao-pha-quan',
+  'Kình Dương':'sao-kinh-duong','Đà La':'sao-da-la',
+  'Hỏa Tinh':'sao-hoa-tinh','Linh Tinh':'sao-linh-tinh',
+  'Địa Không':'sao-dia-khong','Địa Kiếp':'sao-dia-kiep',
+  'Văn Xương':'sao-van-xuong','Văn Khúc':'sao-van-khuc',
+  'Tả Phù':'sao-ta-phu','Hữu Bật':'sao-huu-bat',
+  'Thiên Khôi':'sao-thien-khoi','Thiên Việt':'sao-thien-viet',
+  'Lộc Tồn':'sao-loc-ton','Thiên Mã':'sao-thien-ma',
+  'Hóa Lộc':'sao-hoa-loc','Hóa Quyền':'sao-hoa-quyen',
+  'Hóa Khoa':'sao-hoa-khoa','Hóa Kỵ':'sao-hoa-ky',
+  'Thiên Hình':'sao-thien-hinh','Thiên Hư':'sao-thien-hu',
+  'Thiên Hỷ':'sao-thien-hy','Thiên Khốc':'sao-thien-kho',
+  'Thiên Không':'sao-thien-khong','Thiên Đức':'sao-thien-duc',
+  'Nguyệt Đức':'sao-nguyet-duc','Hồng Loan':'sao-hong-loan',
+  'Đào Hoa':'sao-dao-hoa','Thiên Diêu':'sao-thien-dieu',
+  'Bạch Hổ':'sao-bac-ho','Thanh Long':'sao-thanh-long',
+  'Tang Môn':'sao-tang-mon','Bệnh Phù':'sao-benh-phu',
+  'Thái Tuế':'sao-thai-tue','Phá Toái':'sao-pha-toai',
+  'Kiếp Sát':'sao-kiep-sat','Quan Phù':'sao-quan-phu',
+  'Cô Thần':'sao-co-than','Quả Tú':'sao-qua-tu',
+  'Thiên Tài':'sao-thien-tai','Thiên Thọ':'sao-thien-tho',
+  'Thiên Phúc':'sao-thien-phuc','Bát Tọa':'sao-bat-toa',
+  'Ân Quang':'sao-an-quang','Tiểu Hao':'sao-tieu-hao',
+  'Đại Hao':'sao-dai-hao','Phi Liêm':'sao-phi-liem',
+};
+
+function starLink(ten: string, display: string): string {
+  const slug = SAO_SLUG[ten];
+  if (!slug) return display;
+  return `<a href="/tu-dien/${slug}" class="sao-link">${display}</a>`;
+}
+
 // ────────────────────────────────────────────────────────────────────────────
 // Existing builders (laso_public + laso_pregen) — unchanged
 // ────────────────────────────────────────────────────────────────────────────
@@ -439,7 +477,8 @@ function renderGrid(ls: Rec, canIdx: number): string {
       const cls = 'sc-'+(CHINH_CLS[String(s.ten||'')] ? CHINH_CLS[String(s.ten||'')] : 'neutral');
       const b = s.brightness ? ` <span style="font-size:10px">(${BC_MAP[String(s.brightness)]||''})</span>` : '';
       if (s.hoa) hoaFromChinh.push(s);
-      chinhH += `<div class="v2-chinh-item ${cls}">${esc(String(s.ten||'')).toUpperCase()}${b}</div>`;
+      const _tenChinhDisplay = starLink(String(s.ten||''), esc(String(s.ten||'')).toUpperCase());
+      chinhH += `<div class="v2-chinh-item ${cls}">${_tenChinhDisplay}${b}</div>`;
     }
 
     // Phụ tinh: exclude tràng sinh, tuần/triệt, chính tinh
@@ -453,7 +492,7 @@ function renderGrid(ls: Rec, canIdx: number): string {
     const renderPhu = (s: Rec) => {
       const cls = phuCls(s);
       const b = s.brightness ? ` <span style="font-size:8px">(${BC_MAP[String(s.brightness)]||''})</span>` : '';
-      let nm = esc(String(s.ten||'')).toUpperCase();
+      let nm = starLink(String(s.ten||''), esc(String(s.ten||'')).toUpperCase());
       if (s.hoa) {
         const hc = s.hoa==='Lộc'?'sc-hoa-loc':s.hoa==='Quyền'?'sc-hoa-quyen':s.hoa==='Khoa'?'sc-hoa-khoa':'sc-hoa-ky';
         nm += ` <span class="${hc}" style="font-size:8px">[${esc(String(s.hoa)[0])}]</span>`;
@@ -722,14 +761,14 @@ function render24Sections(ls: Rec, params: IsrParams): string {
         const hoa   = String(s.hoa||'');
         const bright = String(s.brightness||'');
         const brightCol = bright==='Miếu'||bright==='Vượng'?'#4ade80':bright==='Đắc'?'#86efac':bright==='Bình hòa'||bright==='Bình'?'#60a5fa':'#f87171';
-        body += `<span style="display:inline-block;margin:2px 4px 2px 0;padding:2px 8px;background:#061A2E;color:#fff;border-radius:4px;font-size:12px;font-weight:700">${esc(String(s.ten||''))} <span style="color:${brightCol};font-size:10px">(${esc(bright)})</span>${hoa?` <span style="color:#5FA8D3">[H.${esc(hoa[0])}]</span>`:''}</span>`;
+        body += `<span style="display:inline-block;margin:2px 4px 2px 0;padding:2px 8px;background:#061A2E;color:#fff;border-radius:4px;font-size:12px;font-weight:700">${starLink(String(s.ten||''), esc(String(s.ten||'')))} <span style="color:${brightCol};font-size:10px">(${esc(bright)})</span>${hoa?` <span style="color:#5FA8D3">[H.${esc(hoa[0])}]</span>`:''}</span>`;
       });
     }
     body += `</div>`;
 
     // Phụ tinh
-    const minNames = minStars.slice(0,8).map(s=>String(s.ten||'')).filter(Boolean).join(', ');
-    if (minNames) body += `<p style="font-size:11px;color:#888;margin-bottom:6px">Phụ tinh: ${esc(minNames)}</p>`;
+    const minNameLinks = minStars.slice(0,8).map(s=>{ const t=String(s.ten||''); return t?starLink(t,esc(t)):''; }).filter(Boolean).join(', ');
+    if (minNameLinks) body += `<p style="font-size:11px;color:#888;margin-bottom:6px">Phụ tinh: ${minNameLinks}</p>`;
 
     // Trạng thái cung
     const stateChips: string[] = [];
@@ -762,9 +801,9 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     }
     if (catTPTC.length || satTPTC.length || baiTPTC.length || tptcItems.length) {
       body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">🔍 Tam phương tứ chính</div>`;
-      if (catTPTC.length) body += `<div style="font-size:12px;color:#86efac;margin:2px 0">Cát tinh: ${esc(catTPTC.join(', '))}</div>`;
-      if (satTPTC.length) body += `<div style="font-size:12px;color:#f87171;margin:2px 0">Sát tinh: ${esc(satTPTC.join(', '))}</div>`;
-      if (baiTPTC.length) body += `<div style="font-size:12px;color:#fca5a5;margin:2px 0">Bại tinh: ${esc(baiTPTC.join(', '))}</div>`;
+      if (catTPTC.length) body += `<div style="font-size:12px;color:#86efac;margin:2px 0">Cát tinh: ${catTPTC.map(s=>starLink(s,esc(s))).join(', ')}</div>`;
+      if (satTPTC.length) body += `<div style="font-size:12px;color:#f87171;margin:2px 0">Sát tinh: ${satTPTC.map(s=>starLink(s,esc(s))).join(', ')}</div>`;
+      if (baiTPTC.length) body += `<div style="font-size:12px;color:#fca5a5;margin:2px 0">Bại tinh: ${baiTPTC.map(s=>starLink(s,esc(s))).join(', ')}</div>`;
       if (tptcItems.length) {
         body += `<div style="margin-top:6px;padding-top:6px;border-top:1px solid #e0e0e0">`;
         tptcItems.slice(0, 6).forEach(y => {
@@ -1140,6 +1179,8 @@ function buildIsrHTML(ls: Rec, params: IsrParams, slug: string): string {
 body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 .bc{background:var(--bg-soft);border-bottom:1px solid var(--border);padding:9px 24px;font-size:12px;color:var(--text-lt);display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .bc a{color:var(--text-lt);text-decoration:none}.bc a:hover{color:var(--navy)}
+a.sao-link{color:inherit;text-decoration:none;border-bottom:1px dotted currentColor;opacity:.9}
+a.sao-link:hover{opacity:1;border-bottom-style:solid}
 .wrap{max-width:1000px;margin:0 auto;padding:28px 24px 80px}
 .hero{background:linear-gradient(135deg,var(--navy),var(--navy-mid));border-radius:10px;padding:24px 28px;color:#fff;margin-bottom:24px}
 .hero-eyebrow{font-size:10px;letter-spacing:3px;color:#c9a84c;text-transform:uppercase;margin-bottom:6px}

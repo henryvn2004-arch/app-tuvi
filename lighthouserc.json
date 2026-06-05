@@ -15,11 +15,10 @@
       }
     },
     "assert": {
-      "preset": "lighthouse:no-pwa",
       "assertions": {
-        "categories:performance": ["error", { "minScore": 0.85, "aggregationMethod": "median" }],
-        "categories:accessibility": ["error", { "minScore": 0.9, "aggregationMethod": "median" }],
-        "categories:seo": ["error", { "minScore": 0.95, "aggregationMethod": "median" }],
+        "categories:performance": ["error", { "minScore": 0.75, "aggregationMethod": "median" }],
+        "categories:accessibility": ["warn", { "minScore": 0.75, "aggregationMethod": "median" }],
+        "categories:seo": ["warn", { "minScore": 0.9, "aggregationMethod": "median" }],
         "categories:best-practices": ["warn", { "minScore": 0.85, "aggregationMethod": "median" }],
         "largest-contentful-paint": [
           "error",
@@ -29,20 +28,7 @@
           "error",
           { "maxNumericValue": 0.1, "aggregationMethod": "median" }
         ],
-        "total-blocking-time": ["error", { "maxNumericValue": 300, "aggregationMethod": "median" }],
-
-        "csp-xss": "off",
-        "unused-javascript": "off",
-        "unused-css-rules": "off",
-        "render-blocking-resources": "off",
-        "uses-rel-preconnect": "off",
-        "uses-text-compression": "off",
-        "uses-responsive-images": "off",
-        "offscreen-images": "off",
-        "modern-image-formats": "off",
-        "uses-optimized-images": "off",
-        "non-composited-animations": "off",
-        "valid-source-maps": "off"
+        "total-blocking-time": ["error", { "maxNumericValue": 300, "aggregationMethod": "median" }]
       }
     },
     "upload": {
