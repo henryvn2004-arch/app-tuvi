@@ -38,7 +38,9 @@ export async function GET(
 
   const can     = canSlug(year);
   const chi     = chiSlug(year);
-  const lastmod = `${year}-07-01`;
+  // lastmod = ngày ISR feature deploy, KHÔNG phải năm sinh
+  // (Google reject lastmod quá cũ như "1960-07-01")
+  const lastmod = '2026-05-01';
 
   const urlLines: string[] = [];
   for (let m = 1; m <= 12; m++) {
