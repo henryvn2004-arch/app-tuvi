@@ -319,17 +319,18 @@ select.form-input { cursor: pointer; }
   .result-info { flex-direction: column; gap: 4px; }
   .result-info-item { border-right: none; padding-right: 0; margin-right: 0; }
 
-  /* Lá số mobile: 4 cột nhỏ */
-  .laso-grid { grid-template-columns: repeat(4, 1fr); font-size: 9px; }
-  .cung-cell { min-height: 80px; padding: 2px 3px; }
-  .star-chinh { font-weight: 700; font-size: 11px; display: block; line-height: 1.3; }
+  /* Lá số mobile: scroll ngang giữ layout, dễ đọc hơn font 9px */
+  .laso-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .laso-grid { grid-template-columns: repeat(4, 1fr); min-width: 480px; font-size: 10px; }
+  .cung-cell { min-height: 100px; padding: 4px 4px 20px; }
+  .star-chinh { font-weight: 700; font-size: 12px; display: block; line-height: 1.3; }
   .star-phu { font-size: 9px; display: block; line-height: 1.3; }
 
   .cung-center { padding: 8px; }
-  .center-title { font-size: 11px; }
+  .center-title { font-size: 12px; }
   .center-row { font-size: 10px; }
-  .bright { font-size: 7px; }
-  .hoa { font-size: 8px; }
+  .bright { font-size: 8px; }
+  .hoa { font-size: 9px; }
 }
 
 @media (max-width: 480px) {

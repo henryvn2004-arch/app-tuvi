@@ -1318,6 +1318,11 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
     } catch { /* fall through to redirect */ }
   }
 
-  // 4. Not found
-  return NextResponse.redirect(`${BASE}/menh-kho.html`);
+  // 4. Not found — trả về 404 thay vì redirect
+  // Lý do: redirect 307 lãng phí crawl budget (GSC báo "Page with redirect")
+  // 404 rõ ràng hơn: Google dừng crawl URL này, không follow redirect
+  return new NextResponse(
+    `<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><title>Không tìm thấy</title><meta name="robots" content="noindex"></head><body><p>Lá số này không tồn tại. <a href="${BASE}/menh-kho.html">Xem mệnh khố</a></p></body></html>`,
+    { status: 404, headers: { 'Content-Type': 'text/html; charset=utf-8' } }
+  );
 }

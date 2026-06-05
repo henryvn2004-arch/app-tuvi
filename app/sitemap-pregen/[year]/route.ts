@@ -12,6 +12,14 @@ const CAN_SLUGS = ['giap','at','binh','dinh','mau','ky','canh','tan','nham','quy
 const CHI_SLUGS = ['ty','suu','dan','mao','thin','ti','ngo','mui','than','dau','tuat','hoi'];
 const GIO_SLUGS = ['ty','suu','dan','mao','thin','ti','ngo','mui','than','dau','tuat','hoi'];
 
+// Priority tiers — giúp Google biết page nào quan trọng hơn để crawl trước
+// Năm 1975-2000: demographic cao nhất, crawl trước
+function urlPriority(year: number): string {
+  if (year >= 1975 && year <= 2000) return '0.8';
+  if (year >= 1965 && year <= 2010) return '0.6';
+  return '0.4';
+}
+
 function canSlug(year: number) { return CAN_SLUGS[(year - 4 + 400) % 10]; }
 function chiSlug(year: number) { return CHI_SLUGS[(year - 4 + 480) % 12]; }
 function isLeap(y: number)     { return (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0; }
@@ -42,7 +50,7 @@ export async function GET(
         for (const gioi of ['nam', 'nu']) {
           const slug = `${can}-${chi}-${dd}-${mm}-${year}-gio-${gio}-${gioi}-${NAM_XEM}`;
           urlLines.push(
-            `  <url>\n    <loc>${BASE}/la-so/${slug}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>yearly</changefreq>\n    <priority>0.6</priority>\n  </url>`
+            `  <url>\n    <loc>${BASE}/la-so/${slug}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>yearly</changefreq>\n    <priority>${urlPriority(year)}</priority>\n  </url>`
           );
         }
       }

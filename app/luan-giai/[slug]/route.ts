@@ -410,14 +410,15 @@ export async function GET(
   const parsed = parseSlug(slug);
 
   if (!parsed) {
-    return NextResponse.redirect(new URL('/menh-kho.html', req.url), 302);
+    // 404 thay vì redirect — tránh "Page with redirect" trên GSC, tiết kiệm crawl budget
+    return new NextResponse('Not found', { status: 404 });
   }
 
   try {
     const { convertDuongToAm, anSaoLaSo } = loadEngine();
     const hour = GIO_HOURS[parsed.gioIdx];
     const conv = convertDuongToAm(parsed.dd, parsed.mm, parsed.year, hour) as Rec;
-    if (!conv?.amLich) return NextResponse.redirect(new URL('/menh-kho.html', req.url), 302);
+    if (!conv?.amLich) return new NextResponse('Not found', { status: 404 });
     const al = conv.amLich as Rec;
 
     const ls = (anSaoLaSo as (o: object) => Rec)({
@@ -431,7 +432,7 @@ export async function GET(
       namXem:   parsed.namXem,
     });
 
-    if (!ls) return NextResponse.redirect(new URL('/menh-kho.html', req.url), 302);
+    if (!ls) return new NextResponse('Not found', { status: 404 });
     const html = buildLuanGiaiHTML(ls, parsed, slug);
     return new NextResponse(html, {
       headers: {
@@ -440,6 +441,6 @@ export async function GET(
       },
     });
   } catch {
-    return NextResponse.redirect(new URL('/menh-kho.html', req.url), 302);
+    return new NextResponse('Not found', { status: 404 });
   }
 }

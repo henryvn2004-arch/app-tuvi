@@ -192,8 +192,10 @@ select.form-input { cursor: pointer; }
   .pillars-grid { grid-template-columns: repeat(2,1fr); }
 }
 @media (max-width: 480px) {
-  .form-row-3 { grid-template-columns: 1fr 1fr; }
+  .page { padding: 0 12px; }
+  .form-row-3 { grid-template-columns: 1fr; }
   .pillars-grid { grid-template-columns: repeat(2,1fr); }
+  .form-col { padding: 24px 20px 28px; }
 }
 
 /* ── KNOWLEDGE BLOCK ──────────────────────────────────────── */
