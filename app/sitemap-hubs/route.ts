@@ -5,7 +5,7 @@ export const revalidate = false;
 import { NextResponse } from 'next/server';
 
 const BASE  = 'https://www.tuviminhbao.com';
-const YEARS = Array.from({ length: 67 }, (_, i) => 1960 + i);
+const YEARS = Array.from({ length: 51 }, (_, i) => 1960 + i); // 1960–2010, khớp với route handler
 
 function isLeap(y: number) { return (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0; }
 function daysInMonth(m: number, y: number) {
