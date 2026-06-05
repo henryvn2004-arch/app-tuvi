@@ -132,12 +132,12 @@ export const VERDICT = {
     'Tổng quan ba tầng cho thấy đây là cặp tuổi tương hợp ở mức cao, cổ pháp xếp vào nhóm "Tam Hợp Toàn Cục", rất đáng để gắn bó dài lâu',
     'Cấu trúc tương hợp ba tầng của hai tuổi này được cổ pháp đánh giá rất cao — hiếm gặp đầy đủ yếu tố thuận như vậy trong sáu mươi hoa giáp',
   ],
-  'hop': [
+  hop: [
     'Đây là cặp tuổi khá hợp theo cổ pháp — phần lớn các tầng đều có yếu tố thuận, một vài yếu tố trừ điểm không đủ làm thay đổi nhận định chung',
     'Tổng kết ba tầng cho thấy hai tuổi hợp nhau ở mức tốt, các yếu tố tích cực chiếm ưu thế rõ rệt so với yếu tố cần lưu ý',
     'Hai tuổi đứng cạnh nhau ở thế tương hợp tốt, đủ điều kiện theo cổ pháp để gắn bó bền vững',
   ],
-  'kha': [
+  kha: [
     'Đây là cặp tuổi tương hợp ở mức khá — có một số yếu tố thuận đáng giá, đồng thời cũng có yếu tố cần lưu tâm; tổng thể vẫn là một quan hệ có thể vun đắp được',
     'Tổng kết ba tầng cho ra thế khá — không phải lý tưởng nhưng cũng không phải xấu, hai bên cần ý thức về điểm mạnh và điểm yếu để cùng phát huy',
     'Hai tuổi này ở mức tương hợp khá, không phải hợp tuyệt đối nhưng đủ nền tảng cho một quan hệ ổn định nếu cả hai chủ động vun bồi',

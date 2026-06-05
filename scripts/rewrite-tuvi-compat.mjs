@@ -18,10 +18,10 @@ for (const a of process.argv.slice(2)) {
   }
 }
 const DRY_RUN = !!args['dry-run'];
-const LIMIT   = args['all'] ? 999999 : parseInt(args['limit'] || '3');
-const SLUG    = args['slug'] || null;
-const CAT     = args['category'] || null;
-const CONC    = parseInt(args['concurrency'] || '20');
+const LIMIT = args['all'] ? 999999 : parseInt(args['limit'] || '3');
+const SLUG = args['slug'] || null;
+const CAT = args['category'] || null;
+const CONC = parseInt(args['concurrency'] || '20');
 
 // ── Env (chỉ cần khi không dry-run) ────────────────────────────────────────────
 const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -59,9 +59,10 @@ function rewriteOne(row) {
   const parsed = parseSlug(row.slug);
   if (!parsed) return { ok: false, reason: 'slug-parse-failed', slug: row.slug };
   const analysis = analyze(parsed.A, parsed.B);
-  const md = parsed.cat === 'honnhan'
-    ? composeHonNhan(analysis, row.slug)
-    : composeLamAn(analysis, row.slug);
+  const md =
+    parsed.cat === 'honnhan'
+      ? composeHonNhan(analysis, row.slug)
+      : composeLamAn(analysis, row.slug);
   return { ok: true, md, wordCount: md.split(/\s+/).length, charCount: md.length };
 }
 
@@ -72,7 +73,7 @@ async function runWithConcurrency(items, fn, concurrency) {
   async function worker() {
     while (i < items.length) {
       const idx = i++;
-      results[idx] = await fn(items[idx], idx).catch(e => ({ ok: false, error: String(e) }));
+      results[idx] = await fn(items[idx], idx).catch((e) => ({ ok: false, error: String(e) }));
     }
   }
   await Promise.all(Array.from({ length: concurrency }, worker));
@@ -92,9 +93,16 @@ async function main() {
     // Single-slug mode (dùng để dry-run preview 1 bài cụ thể)
     let rows;
     if (DRY_RUN) {
-      rows = [{ slug: SLUG, category: SLUG.includes('hon-nhan') ? 'tuong-hop-hon-nhan' : 'tuong-hop-lam-an' }];
+      rows = [
+        {
+          slug: SLUG,
+          category: SLUG.includes('hon-nhan') ? 'tuong-hop-hon-nhan' : 'tuong-hop-lam-an',
+        },
+      ];
     } else {
-      rows = await sbGet(`/seo_pages?slug=eq.${encodeURIComponent(SLUG)}&select=id,slug,category&limit=1`);
+      rows = await sbGet(
+        `/seo_pages?slug=eq.${encodeURIComponent(SLUG)}&select=id,slug,category&limit=1`
+      );
     }
     return processRows(rows);
   }
@@ -104,13 +112,16 @@ async function main() {
 
   if (DRY_RUN) {
     // Sample mode — single page only
-    const rows = await sbGet(`/seo_pages?${catFilter}&select=id,slug,category&limit=${LIMIT}&order=id.asc`);
+    const rows = await sbGet(
+      `/seo_pages?${catFilter}&select=id,slug,category&limit=${LIMIT}&order=id.asc`
+    );
     return processRows(rows);
   }
 
   // Live write mode — paginate through all rows
   let afterId = parseInt(args['after-id']) || 0;
-  let totalOk = 0, totalFail = 0;
+  let totalOk = 0,
+    totalFail = 0;
   let pageNum = 0;
   const overallStart = Date.now();
 
@@ -121,7 +132,8 @@ async function main() {
 
     console.log(`\n── Page ${pageNum}: ${rows.length} rows (id > ${afterId}) ──`);
     const { ok, fail } = await processRows(rows);
-    totalOk += ok; totalFail += fail;
+    totalOk += ok;
+    totalFail += fail;
 
     afterId = rows[rows.length - 1].id;
     if (rows.length < PAGE_SIZE) break;
@@ -133,7 +145,9 @@ async function main() {
 }
 
 async function processRows(rows) {
-  console.log(`Loaded ${rows.length} row(s). Mode: ${DRY_RUN ? 'DRY-RUN' : 'WRITE'}. Concurrency: ${CONC}.`);
+  console.log(
+    `Loaded ${rows.length} row(s). Mode: ${DRY_RUN ? 'DRY-RUN' : 'WRITE'}. Concurrency: ${CONC}.`
+  );
 
   if (DRY_RUN) {
     for (const row of rows) {
@@ -154,26 +168,34 @@ async function processRows(rows) {
     return { ok: rows.length, fail: 0 };
   }
 
-  let ok = 0, fail = 0;
+  let ok = 0,
+    fail = 0;
   const startT = Date.now();
-  await runWithConcurrency(rows, async (row, idx) => {
-    const r = rewriteOne(row);
-    if (!r.ok) { fail++; return { ok: false }; }
-    await sbPatch(`/seo_pages?id=eq.${row.id}`, { content: r.md });
-    ok++;
-    if ((idx + 1) % 100 === 0) {
-      const rate = ((idx + 1) / ((Date.now() - startT) / 1000)).toFixed(1);
-      console.log(`  [${idx + 1}/${rows.length}] ok=${ok} fail=${fail} (${rate} rows/s)`);
-    }
-    return { ok: true };
-  }, CONC);
+  await runWithConcurrency(
+    rows,
+    async (row, idx) => {
+      const r = rewriteOne(row);
+      if (!r.ok) {
+        fail++;
+        return { ok: false };
+      }
+      await sbPatch(`/seo_pages?id=eq.${row.id}`, { content: r.md });
+      ok++;
+      if ((idx + 1) % 100 === 0) {
+        const rate = ((idx + 1) / ((Date.now() - startT) / 1000)).toFixed(1);
+        console.log(`  [${idx + 1}/${rows.length}] ok=${ok} fail=${fail} (${rate} rows/s)`);
+      }
+      return { ok: true };
+    },
+    CONC
+  );
 
   const totalSec = ((Date.now() - startT) / 1000).toFixed(1);
   console.log(`  page done: ok=${ok} fail=${fail} in ${totalSec}s`);
   return { ok, fail };
 }
 
-main().catch(e => {
+main().catch((e) => {
   console.error('FATAL:', e);
   process.exit(1);
 });
