@@ -1,0 +1,53 @@
+name: Google Indexing API — daily submit
+
+on:
+  schedule:
+    # Chạy mỗi ngày 3:00 UTC (10:00 sáng VN)
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    inputs:
+      birth_year:
+        description: 'Năm sinh cụ thể (để trống = priority years)'
+        required: false
+        type: string
+      limit:
+        description: 'Số URLs gửi tối đa (mặc định 200)'
+        required: false
+        default: '200'
+        type: string
+      dry_run:
+        description: 'Dry run (không gửi thật)'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  submit-urls:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Submit URLs to Google Indexing API
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_INDEXING_SA_JSON }}
+        run: |
+          ARGS=""
+
+          if [ -n "${{ github.event.inputs.birth_year }}" ]; then
+            ARGS="$ARGS --year ${{ github.event.inputs.birth_year }}"
+          fi
+
+          LIMIT="${{ github.event.inputs.limit || '200' }}"
+          ARGS="$ARGS --limit $LIMIT"
+
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+
+          node scripts/indexing-api.mjs $ARGS
