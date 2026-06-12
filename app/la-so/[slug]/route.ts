@@ -1251,6 +1251,9 @@ a.sao-link:hover{opacity:1;border-bottom-style:solid}
       ${String(ls.cuc||'')?`<span class="hero-tag">Cục ${esc(String(ls.cuc))}</span>`:''}
       ${diemMenh>0?`<span class="hero-tag">Điểm ${diemMenh.toFixed(1)}/10</span>`:''}
     </div>
+    <p style="margin-top:14px;font-size:13px;color:rgba(255,255,255,.8);line-height:1.7;max-width:620px">${
+      `Người sinh năm ${esc(canChiNam)} ${esc(gtLabel.toLowerCase())}, ngày ${pad(dd)}/${pad(mm)}/${year} giờ ${esc(gioLabel)}, an vào cung Mệnh ${esc(cungMenh)}${chinhTinh?` với chính tinh ${esc(chinhTinh)}`:''}${napAm?`, nạp âm ${esc(napAm)}`:''}.${cachCuc.length>0?` Lá số có ${cachCuc.length} cách cục${cachCuc.length<=3?': '+cachCuc.slice(0,3).map(c=>esc(String(c.ten||''))).join(', '):'.'}.`:''}${diemMenh>0?` Điểm cung mệnh ${diemMenh.toFixed(1)}/10 theo thang 6 chiều (tiềm năng, bền vững, an toàn, quý nhân, minh bạch, tương hợp).`:''}`
+    }</p>
   </div>
 
   <div class="layout">

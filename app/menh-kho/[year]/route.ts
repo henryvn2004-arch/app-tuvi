@@ -127,7 +127,7 @@ h1 em{font-style:italic;color:var(--gold)}
   <div class="hero">
     <div class="eyebrow">Mệnh Khố · Tra Cứu Lá Số</div>
     <h1>Lá Số Năm <em>${esc(canChi)}</em> (${year})</h1>
-    <p>Chọn ngày sinh để xem danh sách lá số theo 12 giờ sinh — nam và nữ.</p>
+    <p>Năm ${esc(canChi)} (${year}) — chọn ngày sinh bên dưới để tra cứu lá số tử vi theo cổ pháp. Mỗi ngày có 24 lá số (12 giờ sinh × nam/nữ) với phân tích đầy đủ 12 cung, cách cục và vận hạn.</p>
   </div>
   <div class="calendar">${calHTML}</div>
   <div class="rel-block">

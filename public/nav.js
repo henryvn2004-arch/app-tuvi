@@ -448,4 +448,23 @@
   if (document.readyState==='loading') { document.addEventListener('DOMContentLoaded',function(){setTimeout(runFooter,0);}); }
   else { setTimeout(runFooter,0); }
 
+  // PWA: inject manifest link if not already present
+  if (!document.querySelector('link[rel="manifest"]')) {
+    var ml = document.createElement('link');
+    ml.rel = 'manifest'; ml.href = '/manifest.json';
+    document.head.appendChild(ml);
+  }
+
+  // PWA: register service worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function(){});
+  }
+
+  // PWA: smart install prompt (deferred load)
+  window.addEventListener('load', function () {
+    var s = document.createElement('script');
+    s.src = '/pwa-install.js';
+    document.head.appendChild(s);
+  });
+
 })();
