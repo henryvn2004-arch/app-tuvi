@@ -1270,6 +1270,8 @@ a.sao-link:hover{opacity:1;border-bottom-style:solid}
         <a class="cta-btn" href="/">Xem Luận Giải Miễn Phí →</a>
       </div>
 
+      <div id="share-bar-isr"></div>
+
       <div class="faq">
         <div class="faq-title">Câu Hỏi Thường Gặp</div>
         ${faqItems.map(f => `<div class="faq-item">
@@ -1287,6 +1289,22 @@ a.sao-link:hover{opacity:1;border-bottom-style:solid}
 ${relatedHTML}
 <script src="/footer.js"></script>
 <script src="/nav.js?v=14" defer></script>
+<script src="/share-widget.js" defer></script>
+<script src="/pwa-push.js" defer></script>
+<script>
+window.addEventListener('load', function () {
+  if (window.showShareWidget) {
+    window.showShareWidget('share-bar-isr', {
+      url: 'https://www.tuviminhbao.com/la-so/${slug}',
+      title: 'Lá Số ${esc(canChiNam)} ${esc(gtLabel)} — ${pad(dd)}/${pad(mm)}/${year} Giờ ${esc(gioLabel)}',
+      text: 'Xem lá số tử vi của tôi tại Tử Vi Minh Bảo'
+    });
+  }
+  setTimeout(function () {
+    if (window.askPushPermission) window.askPushPermission(${year}, '${esc(canChiNam)}');
+  }, 4000);
+});
+</script>
 </body></html>`;
 }
 
