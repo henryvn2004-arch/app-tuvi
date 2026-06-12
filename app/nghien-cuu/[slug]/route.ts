@@ -44,6 +44,39 @@ function renderMarkdown(text: string) {
   return out.join('\n');
 }
 
+// Extract FAQ items from markdown: H2/H3 heading → first paragraph under it
+function buildFaqItems(content: string, title: string): Array<{ q: string; a: string }> {
+  if (!content) return [];
+  const src = content.replace(/\\n/g, '\n');
+  const lines = src.split('\n');
+  const items: Array<{ q: string; a: string }> = [];
+  let currentQ = '';
+  let collectingA = false;
+
+  for (const raw of lines) {
+    const l = raw.trim();
+    if (/^#{1,3} (.+)$/.test(l)) {
+      currentQ = l.replace(/^#{1,3} /, '').trim();
+      collectingA = true;
+    } else if (collectingA && l && !/^#/.test(l) && !/^[-*]/.test(l)) {
+      const answer = l.replace(/\*\*(.+?)\*\*/g, '$1').replace(/\*(.+?)\*/g, '$1').replace(/`(.+?)`/g, '$1');
+      if (answer.length > 20 && currentQ.length > 5) {
+        items.push({ q: currentQ.endsWith('?') ? currentQ : currentQ + '?', a: answer.slice(0, 320) });
+      }
+      collectingA = false;
+      currentQ = '';
+    }
+    if (items.length >= 5) break;
+  }
+
+  // Fallback: generic FAQ about the article topic
+  if (items.length === 0) {
+    items.push({ q: `${title} là gì?`, a: 'Đây là bài nghiên cứu chuyên sâu về tử vi đẩu số, phân tích theo cổ pháp.' });
+    items.push({ q: 'Tử vi đẩu số có độ chính xác như thế nào?', a: 'Tử vi đẩu số là hệ thống chiêm tinh học cổ điển, có giá trị tham khảo cao khi được luận giải bởi người có kinh nghiệm.' });
+  }
+  return items;
+}
+
 const CAT_LABEL: Record<string, string> = {
   'hoc-thuat': 'Học Thuật', 'luan-la-so': 'Luận Lá Số',
   'chiem-nghiem': 'Chiêm Nghiệm', 'thuc-hanh': 'Thực Hành', 'ly-luan': 'Lý Luận',
@@ -63,6 +96,15 @@ function buildHTML(article: any, master: any, related: any[], slug: string) {
   const masterId   = master?.id || article.master_id || '';
   const masterUrl  = masterId ? `${BASE}/tac-gia/${masterId}` : '';
 
+  const faqItems = buildFaqItems(article.content || '', article.title || '');
+  const faqSchema = faqItems.length ? {
+    '@context': 'https://schema.org', '@type': 'FAQPage',
+    mainEntity: faqItems.map(f => ({
+      '@type': 'Question', name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  } : null;
+
   const schemas = JSON.stringify([
     {
       '@context': 'https://schema.org', '@type': 'Article',
@@ -77,6 +119,7 @@ function buildHTML(article: any, master: any, related: any[], slug: string) {
       about: { '@type': 'Thing', name: 'Tử Vi Đẩu Số' },
       isPartOf: { '@type': 'Blog', name: 'Nghiên Cứu Tử Vi', url: BASE + '/nghien-cuu' },
     },
+    ...(faqSchema ? [faqSchema] : []),
     {
       '@context': 'https://schema.org', '@type': 'BreadcrumbList',
       itemListElement: [
@@ -180,6 +223,18 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
     <a href="/nghien-cuu">← Về Nghiên Cứu</a>
     ${masterUrl ? `<a href="${esc(masterUrl)}">Bài khác của ${esc(masterName)} →</a>` : ''}
   </div>
+  <div id="share-bar-nghiencuu" style="margin-top:32px"></div>
+  ${faqItems.length ? `<div class="related-section" style="margin-top:32px">
+    <div class="related-title">Câu Hỏi Thường Gặp</div>
+    <div style="margin-top:12px">${faqItems.map(f => `
+    <details style="border:1px solid var(--border-lt);border-radius:6px;margin-bottom:8px;overflow:hidden">
+      <summary style="padding:12px 16px;font-size:14px;font-weight:600;color:var(--navy);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center">
+        ${esc(f.q)}<span style="font-size:11px;color:var(--text-lt);flex-shrink:0;margin-left:8px">▾</span>
+      </summary>
+      <div style="padding:10px 16px 14px;font-size:14px;color:var(--text-mid);line-height:1.7;border-top:1px solid var(--border-lt)">${esc(f.a)}</div>
+    </details>`).join('')}
+    </div>
+  </div>` : ''}
   ${related.length ? `<div class="related-section">
     <div class="related-title">Bài Viết Liên Quan</div>
     <ul class="related-list">${related.map((r) => `<li class="related-item">
@@ -193,6 +248,18 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 <script src="/related-tools.js"></script>
 <script src="/testimonials.js"></script>
 <script src="/nav.js?v=14" defer></script>
+<script src="/share-widget.js" defer></script>
+<script>
+window.addEventListener('load', function () {
+  if (window.showShareWidget) {
+    window.showShareWidget('share-bar-nghiencuu', {
+      url: '${url}',
+      title: '${title} — Tử Vi Minh Bảo',
+      text: '${desc}'
+    });
+  }
+});
+</script>
 </body></html>`;
 }
 
