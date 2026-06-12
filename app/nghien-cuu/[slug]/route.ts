@@ -223,7 +223,14 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
     <a href="/nghien-cuu">← Về Nghiên Cứu</a>
     ${masterUrl ? `<a href="${esc(masterUrl)}">Bài khác của ${esc(masterName)} →</a>` : ''}
   </div>
-  <div id="share-bar-nghiencuu" style="margin-top:32px"></div>
+  <div style="margin-top:40px;padding:24px;background:linear-gradient(135deg,#061A2E,#0D3B5E);border-radius:10px;color:#fff;text-align:center">
+    <div style="font-size:11px;letter-spacing:3px;color:#c9a84c;text-transform:uppercase;margin-bottom:8px">Tra Cứu Lá Số</div>
+    <div style="font-family:'Noto Serif',serif;font-size:20px;font-weight:600;margin-bottom:10px">Xem lá số tử vi của bạn</div>
+    <p style="font-size:13px;opacity:.85;margin-bottom:20px;line-height:1.6">Áp dụng kiến thức trong bài để phân tích lá số cụ thể — cách cục, đại vận, điểm 6 chiều.</p>
+    <a href="/menh-kho.html" style="display:inline-block;background:#9A7B3A;color:#fff;padding:12px 28px;border-radius:7px;text-decoration:none;font-weight:700;font-size:14px;margin-right:10px">Tra Lá Số →</a>
+    <a href="/nghien-cuu" style="display:inline-block;background:rgba(255,255,255,.12);color:#fff;padding:12px 20px;border-radius:7px;text-decoration:none;font-size:13px">Bài khác</a>
+  </div>
+  <div id="share-bar-nghiencuu" style="margin-top:16px"></div>
   ${faqItems.length ? `<div class="related-section" style="margin-top:32px">
     <div class="related-title">Câu Hỏi Thường Gặp</div>
     <div style="margin-top:12px">${faqItems.map(f => `

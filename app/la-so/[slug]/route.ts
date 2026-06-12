@@ -1092,9 +1092,41 @@ function buildRelatedLinks(params: IsrParams): string {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
+// ISR: fetch related nghien-cuu articles (tag match → fallback latest)
+// ────────────────────────────────────────────────────────────────────────────
+type ArticleStub = { slug: string; title: string; excerpt: string };
+
+async function fetchRelatedArticles(cungMenh: string, chinhTinh: string): Promise<ArticleStub[]> {
+  const h = { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` };
+  const keywords = [cungMenh, ...chinhTinh.split(', ').slice(0,2)].filter(Boolean);
+  // Try each keyword, return first non-empty result
+  for (const kw of keywords) {
+    try {
+      const r = await fetch(
+        `${SB_URL}/rest/v1/master_articles?tags=cs.%7B"${encodeURIComponent(kw)}"%7D&select=slug,title,excerpt&order=created_at.desc&limit=4`,
+        { headers: h }
+      );
+      if (r.ok) {
+        const rows = await r.json() as ArticleStub[];
+        if (rows?.length) return rows;
+      }
+    } catch { /* continue */ }
+  }
+  // Fallback: latest 4 articles
+  try {
+    const r = await fetch(
+      `${SB_URL}/rest/v1/master_articles?select=slug,title,excerpt&order=created_at.desc&limit=4`,
+      { headers: h }
+    );
+    if (r.ok) return (await r.json() as ArticleStub[]) || [];
+  } catch { /* ignore */ }
+  return [];
+}
+
+// ────────────────────────────────────────────────────────────────────────────
 // ISR: full HTML builder
 // ────────────────────────────────────────────────────────────────────────────
-function buildIsrHTML(ls: Rec, params: IsrParams, slug: string): string {
+function buildIsrHTML(ls: Rec, params: IsrParams, slug: string, relatedArticles: ArticleStub[]): string {
   const palaces    = (ls.palaces as Rec[]) || [];
   const menhP      = palaces.find(p => p.isMenh) as Rec|undefined;
   const cungMenh   = String(menhP?.cungName || '');
@@ -1286,6 +1318,17 @@ a.sao-link:hover{opacity:1;border-bottom-style:solid}
     ${sections24HTML}
   </div>
 </div>
+${relatedArticles.length ? `<div style="background:#F9F4EB;border-top:2px solid #E8E4D9;padding:24px;margin-top:0">
+<div style="max-width:1000px;margin:0 auto">
+  <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#9A7B3A;margin-bottom:14px">Đọc thêm từ nghiên cứu</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px">
+    ${relatedArticles.map(a=>`<a href="/nghien-cuu/${esc(a.slug)}" style="display:block;background:#fff;border:1px solid #E6D9C0;border-radius:8px;padding:14px;text-decoration:none;color:inherit;transition:box-shadow .15s" onmouseover="this.style.boxShadow='0 2px 10px rgba(0,0,0,.1)'" onmouseout="this.style.boxShadow='none'">
+      <div style="font-size:13px;font-weight:700;color:#061A2E;line-height:1.45;margin-bottom:6px">${esc(a.title)}</div>
+      ${a.excerpt?`<div style="font-size:12px;color:#777;line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${esc(a.excerpt)}</div>`:''}
+    </a>`).join('')}
+  </div>
+</div>
+</div>` : ''}
 ${relatedHTML}
 <script src="/footer.js"></script>
 <script src="/nav.js?v=14" defer></script>
@@ -1370,7 +1413,12 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
           namXem: isrParams.namXem,
         }) as Rec;
         if (ls) {
-          const html = buildIsrHTML(ls, isrParams, slug);
+          const palaces   = (ls.palaces as Rec[]) || [];
+          const menhP     = palaces.find(p => p.isMenh) as Rec|undefined;
+          const cungMenh  = String(menhP?.cungName || '');
+          const chinhTinh = ((menhP?.majorStars as Rec[])||[]).map(s=>String(s.ten||'')).join(', ');
+          const relatedArticles = await fetchRelatedArticles(cungMenh, chinhTinh);
+          const html = buildIsrHTML(ls, isrParams, slug, relatedArticles);
           return new NextResponse(html, { headers: {
             'Content-Type': 'text/html; charset=utf-8',
             'Cache-Control': 'public, s-maxage=31536000, stale-while-revalidate=86400',
