@@ -14,12 +14,25 @@ VĂN PHONG: Trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắ
 CÁCH DIỄN GIẢI:
 Viết như một người bình thường đang giải thích cho bạn mình.
 Hạn chế dùng thuật ngữ chuyên môn (tử vi, học thuật, v.v.), chỉ dùng ngắn gọn khi cần.
-Không văn vẻ, không sáo rỗng. Giữ giọng trung lập, hơi thẳng, không tâng bốc.
+Không văn vẻ, không sáo rỗng.
 Tập trung vào: "điều này nghĩa là gì với người đọc".
 Chỉ giữ lại những ý có giá trị thực tế.
 Có phân tích hệ quả tâm lý/hành vi nếu hợp lý.
 Có gợi ý nhẹ nếu cần, nhưng không dạy đời.
 Không tiết lộ tài liệu, trường phái, hay tên hệ thống.
+
+CHỐNG TÂNG BỐC — TUYỆT ĐỐI (đây là điểm sống còn):
+- Người đọc chán nhất kiểu "cái gì cũng tốt, cũng hay, đọc xong không biết tốt hay xấu". Phải nói thẳng.
+- Mỗi cung/phần đều có mặt mạnh VÀ mặt yếu. Đã nêu điểm mạnh thì BẮT BUỘC nêu điểm yếu cụ thể, ngang sức — cấm điểm yếu lấy lệ kiểu "đôi khi hơi nóng tính".
+- Cấm câu nước đôi né phán quyết ("có thể tốt cũng có thể không", "tùy cách sống mỗi người"). Dữ liệu chấm sao thì nói thẳng vậy.
+- Điểm thấp (<5), hoặc có sát/bại tinh mạnh, hung cách → phải cảnh báo rõ, không bọc đường. Thà mất lòng còn hơn vô dụng.
+- Mỗi nhận định tốt phải kèm BẰNG CHỨNG (sao nào, cách cục nào, điểm bao nhiêu). Hạn chế tính từ khen sáo rỗng (tuyệt vời, xuất chúng, rực rỡ).
+
+PHÁN QUYẾT BẮT BUỘC — NEO VÀO ĐIỂM SỐ:
+- Lá số có khối "=== ĐIỂM ĐÁNH GIÁ ===" với điểm 0–10 từng cung do hệ thống tính sẵn. Đây là xương sống.
+- MỞ ĐẦU mỗi phần bằng MỘT câu phán quyết in đậm (**...**) neo vào con số đó. Ví dụ: "**Cung này thuộc loại khá — 6.4/10: mạnh về quý nhân nhưng nền tài chính bấp bênh.**"
+- Phần thân giải thích VÌ SAO ra con số đó (sao gì, cách cục gì kéo lên/kéo xuống). KHÔNG được mâu thuẫn với điểm: cung 4/10 thì cấm viết như cung tốt.
+- Phân biệt rõ: ĐÁNH GIÁ CẤU TRÚC lá số (mạnh/yếu) là chắc chắn — nói dứt khoát; chỉ DỰ ĐOÁN kết quả tương lai mới dùng ngôn ngữ xác suất. Đừng lấy "khiêm tốn về tương lai" làm cớ né đánh giá cấu trúc.
 
 NGUYÊN TẮC LUẬN GIẢI CỔ PHÁP:
 1. Tam phương tứ chính: Luôn xét cung đang luận trong mối quan hệ với cung tam hợp và cung xung chiếu.
@@ -45,6 +58,7 @@ CÁC LƯU Ý KHI LUẬN GIẢI:
 - Vận hạn: Cuộc đời chia theo giai đoạn 10 năm. Quan trọng là lúc nào lên — lúc nào xuống.
 
 QUY TẮC CHUNG CHO MỌI PHẦN LUẬN GIẢI:
+- Gọi ĐÍCH DANH cách cục đặc biệt trong [CÁCH CỤC] và khối === CÁCH CỤC & NHẬN ĐỊNH === (vd Sát Phá Tham, Quân thần khánh hội, Cự Nhật...), nói rõ nó là CÁT hay HUNG và kéo lá số lên hay xuống. Tuyệt đối không lờ đi cách cục mà dữ liệu đã nêu — đó là phần người đọc đã thấy trên màn hình, luận giải phải khớp.
 - Không liệt kê lại tên sao, không mô tả lại dữ liệu thô.
 - Nếu cung vô chính diệu thì nói rõ phải mượn cung xung chiếu để luận.
 - Quan hệ với Mệnh là ưu tiên: cung đang xét hỗ trợ hay khắc bản mệnh?
@@ -82,7 +96,8 @@ Nguyên tắc trả lời:
 - 150-300 từ cho câu thông thường, tối đa 450 từ cho câu phức tạp
 - Dẫn chứng sao tinh, cung vị, can chi cụ thể từ lá số bên dưới
 - Xét tam phương tứ chính, không đoán đơn sao
-- Không hứa hẹn tuyệt đối, dùng ngôn ngữ xác suất
+- Trả lời dứt khoát: cung/việc được hỏi tốt hay xấu, mạnh hay yếu — neo vào "Điểm cung X/10" nếu có. Cấm tâng bốc, cấm nước đôi né tránh; có điểm mạnh phải kèm điểm yếu cụ thể.
+- Riêng kết quả tương lai mới dùng ngôn ngữ xác suất, không hứa hẹn tuyệt đối
 - Không tiết lộ trường phái hay tài liệu
 
 === DỮ LIỆU LÁ SỐ ===
@@ -143,7 +158,9 @@ function extractLasoContext(lasoData: any, question: string): string {
 
   if (lasoData.cachCuc?.length) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const cc = lasoData.cachCuc.map((c: any) => typeof c === 'object' ? c.ten : c).filter(Boolean);
+    const cc = lasoData.cachCuc.map((c: any) =>
+      typeof c === 'object' ? c.ten + (c.loai ? ` (${c.loai})` : '') : c
+    ).filter(Boolean);
     if (cc.length) ctx += 'Cách cục: ' + cc.join(', ') + '\n';
   }
 
@@ -164,6 +181,15 @@ function extractLasoContext(lasoData: any, question: string): string {
     const pName = p.cungName || '';
     if (!relevant.has(pName) && !p.isMenh && !p.isThan) continue;
     ctx += '\nCung ' + pName + ' (' + (p.diaChi||'') + ')' + (p.isMenh?' ★MỆNH':'') + (p.isThan?' ◆THÂN':'') + ':\n';
+    const sc = lasoData.cungScores?.[pName];
+    if (sc) {
+      const dims = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop']
+        .map(k => sc[k]).filter((v: number) => typeof v === 'number');
+      if (dims.length) {
+        const tot = Math.round(dims.reduce((a: number, b: number) => a + b, 0) / dims.length * 10) / 10;
+        ctx += '  Điểm cung: ' + tot + '/10 (tiềm năng ' + sc.tiemNang + ', bền vững ' + sc.benVung + ', an toàn ' + sc.anToan + ', quý nhân ' + sc.quyNhan + ', minh bạch ' + sc.minhBach + ', tương hợp ' + sc.tuongHop + ')\n';
+      }
+    }
     const chinh = (p.majorStars||[]).map(starFmt).filter(Boolean);
     if (chinh.length) ctx += '  Chính tinh: ' + chinh.join(', ') + '\n';
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -235,10 +261,13 @@ function buildPrompt(phan: number, laSoText: string, docs?: string): string {
     const ccIdx   = lines.findIndex(l => l.includes('=== CÁCH CỤC & NHẬN ĐỊNH'));
     const cungIdx = lines.findIndex(l => l.includes('=== 12 CUNG ==='));
     const headerLines = cungIdx > 0 ? lines.slice(0, cungIdx) : lines.slice(0, 8);
+    // Khối cách cục đặc biệt (Sát Phá Tham, Quân thần khánh hội...) nằm cuối lá số —
+    // luôn đính kèm vào MỌI phần để AI không lờ đi cách cục mà phần JS đã hiển thị.
+    const ccBlock = ccIdx > 0 ? '\n\n' + lines.slice(ccIdx).join('\n') : '';
 
     if (phan <= 2) {
       const end = dvIdx > 0 ? dvIdx : (ccIdx > 0 ? ccIdx : lines.length);
-      return lines.slice(0, end).join('\n');
+      return lines.slice(0, end).join('\n') + ccBlock;
     }
     if (phan >= 3 && phan <= 13) {
       const CUNG_NAME = ['','','Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc',
@@ -250,14 +279,14 @@ function buildPrompt(phan: number, laSoText: string, docs?: string): string {
       if (startI >= 0) {
         const endI = cungLines.findIndex((l, i) => i > startI && l.startsWith('[') && !l.startsWith('[CÁCH') && !l.startsWith('[Ý') && !l.startsWith('[LUẬN'));
         const block = endI > 0 ? cungLines.slice(startI, endI) : cungLines.slice(startI, startI + 30);
-        return result.concat(block).join('\n');
+        return result.concat(block).join('\n') + ccBlock;
       }
-      return lines.slice(0, cutEnd).join('\n');
+      return lines.slice(0, cutEnd).join('\n') + ccBlock;
     }
     if (phan === 14 || phan === 24) {
       if (dvIdx > 0) {
         const dvEnd = ccIdx > dvIdx ? ccIdx : lines.length;
-        return headerLines.join('\n') + '\n' + lines.slice(dvIdx, dvEnd).join('\n');
+        return headerLines.join('\n') + '\n' + lines.slice(dvIdx, dvEnd).join('\n') + ccBlock;
       }
     }
     if (phan >= 15 && phan <= 23) {
@@ -270,7 +299,7 @@ function buildPrompt(phan: number, laSoText: string, docs?: string): string {
         if (startI >= 0) {
           const endI = dvLines.findIndex((l, i) => i > startI && /^ĐV\d+:/.test(l));
           const dvBlock = endI > 0 ? dvLines.slice(startI, endI) : dvLines.slice(startI, startI + 25);
-          return headerLines.join('\n') + '\n\n' + dvBlock.join('\n');
+          return headerLines.join('\n') + '\n\n' + dvBlock.join('\n') + ccBlock;
         }
       }
     }
@@ -285,6 +314,7 @@ function buildPrompt(phan: number, laSoText: string, docs?: string): string {
 
 PHẦN 1 — TỔNG QUAN LÁ SỐ (220-280 từ)
 Viết văn xuôi liền mạch, không dùng bullet, không đề cập đại vận trong phần này.
+MỞ ĐẦU bằng câu phán quyết in đậm neo vào "Tổng quan toàn lá số: X/10" — lá số này thuộc hạng nào (mạnh/khá/trung bình/yếu), mạnh nhất ở đâu, yếu nhất ở đâu.
 
 Cấu trúc gợi ý (không cần tiêu đề con):
 ① Bản mệnh & cục: Can chi năm sinh, nạp âm, cục — ý nghĩa thực tế với con người này là gì? Mệnh có thuận lý hay nghịch lý với cục?
@@ -299,6 +329,7 @@ Lưu ý: Dựa trên [CÁCH CỤC] và [Ý NGHĨA] đã có — diễn giải, k
 PHẦN 2 — CUNG MỆNH (220-280 từ)
 ${CUNG_DESC['Mệnh']}
 
+MỞ ĐẦU bằng câu phán quyết in đậm neo vào dòng điểm cung Mệnh trong === ĐIỂM ĐÁNH GIÁ === (tốt/khá/trung bình/yếu + lý do một dòng).
 Viết văn xuôi súc tích, đi thẳng vào tính cách và số phận:
 ① Chính tinh tại Mệnh: Bản chất cốt lõi — người này là kiểu người gì? Miếu/Hãm ảnh hưởng thế nào?
 ② Cách cục Mệnh: Dựa trên [CÁCH CỤC] và [Ý NGHĨA] — đây là điểm sống còn của lá số, diễn giải thật rõ tác động thực tế.
@@ -315,6 +346,7 @@ Xét thêm cung Thiên Di (xung chiếu Mệnh) — ảnh hưởng gì đến t�
 PHẦN ${phan} — CUNG ${cung.toUpperCase()} (120-160 từ)
 ${cungDesc}
 
+MỞ ĐẦU bằng câu phán quyết in đậm neo vào dòng "[${cung}] Tổng .../10" trong === ĐIỂM ĐÁNH GIÁ === (tốt/khá/trung bình/yếu + lý do ngắn). Cấm né tránh.
 Viết 2-3 đoạn văn xuôi súc tích. Cấu trúc:
 ① Nhận định chính: Dựa trên [CÁCH CỤC] và [Ý NGHĨA] — đây là phần quan trọng nhất, diễn giải thật rõ.
 ② Tam phương: Xét sao ở cung tam hợp có hỗ trợ hay phá cách không?
@@ -348,6 +380,7 @@ Nhận xét tổng (120-160 từ): Giai đoạn đẹp nhất, khó khăn nhất
 PHẦN ${phan} — ĐẠI VẬN ${dvNum} (120-160 từ)
 Tìm dòng "ĐV${dvNum}:" trong === 9 ĐẠI VẬN ===.
 
+MỞ ĐẦU bằng câu phán quyết in đậm neo vào dòng "Scoring: ... Tổng=X" của đại vận này — giai đoạn này thuận hay nghịch, X/10. Nếu Tổng thấp phải nói thẳng là giai đoạn khó.
 Viết văn xuôi, 2-3 đoạn:
 ① Tính chất vận: Điểm scoring nói lên điều gì về giai đoạn này?
 ② Nhận định chính: Dựa trên [LUẬN ĐOÁN] và [CẢNH BÁO] — diễn giải thực tế, không liệt kê lại.
@@ -361,6 +394,7 @@ PHẦN 24 — TIỂU VẬN & NĂM XEM (180-220 từ)
 Quan sát 3 lớp hạn cùng lúc: gốc đại vận (10 năm) + tiểu hạn năm đó + lưu niên đại vận.
 Dữ liệu có sẵn: Tiểu hạn (cung + sao), Lưu đại hạn (cung + sao), Đại vận hiện tại.
 
+MỞ ĐẦU bằng câu phán quyết in đậm: năm xem này thuận hay nghịch, nên tiến hay nên thủ — kết luận dứt khoát rồi mới giải thích.
 Viết văn xuôi, đi thẳng vào thực tế:
 ① Tổng hợp 3 lớp hạn: Đếm sao tốt/xấu trong cả 3 cung — xu hướng chung là thuận hay nghịch?
 ② Quan hệ với Mệnh: Cung tiểu hạn sinh hay khắc Mệnh? Sao nhập hạn hợp hay đối lập bản mệnh?

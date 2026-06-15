@@ -1151,6 +1151,29 @@ select.form-input { cursor: pointer; }
     lines.push(`Tiểu hạn: ${ls.palaces[ls.tieuHanIdx]?.diaChi} (${ls.palaces[ls.tieuHanIdx]?.cungName}) | Lưu đại hạn: ${ls.palaces[ls.luuNienDaiHanIdx]?.diaChi} (${ls.palaces[ls.luuNienDaiHanIdx]?.cungName})`);
     lines.push('');
 
+    // Điểm đánh giá JS (anchor cho AI — chống luận chung chung, neo phán quyết vào con số)
+    if (ls.cungScores) {
+      const SC_DIMS = [['tiemNang','Tiềm năng'],['benVung','Bền vững'],['anToan','An toàn'],['quyNhan','Quý nhân'],['minhBach','Minh bạch'],['tuongHop','Tương hợp']];
+      const CUNG_ORDER = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
+      const totals = [];
+      const scLines = [];
+      for (const cn of CUNG_ORDER) {
+        const sc = ls.cungScores[cn];
+        if (!sc) continue;
+        const dims = SC_DIMS.map(([k]) => sc[k]).filter(v => typeof v === 'number');
+        const tot = dims.length ? Math.round(dims.reduce((a,b)=>a+b,0) / dims.length * 10) / 10 : null;
+        if (tot != null) totals.push(tot);
+        const dimStr = SC_DIMS.map(([k,lbl]) => `${lbl} ${sc[k]}`).join(', ');
+        scLines.push(`[${cn}] Tổng ${tot}/10 — ${dimStr}`);
+      }
+      const overall = totals.length ? Math.round(totals.reduce((a,b)=>a+b,0) / totals.length * 10) / 10 : null;
+      lines.push('=== ĐIỂM ĐÁNH GIÁ (thang 0–10, hệ thống tính sẵn — BẮT BUỘC bám sát khi phán) ===');
+      if (overall != null) lines.push(`Tổng quan toàn lá số: ${overall}/10`);
+      lines.push('Quy ước: ≥7 = mạnh/tốt rõ · 5–6.9 = trung bình · <5 = yếu, phải nói thẳng điểm yếu.');
+      scLines.forEach(l => lines.push(l));
+      lines.push('');
+    }
+
     // 12 cung + tam phương tứ chính
     lines.push('=== 12 CUNG ===');
     for (const p of ls.palaces) {
@@ -1162,7 +1185,7 @@ select.form-input { cursor: pointer; }
       if (ls.cachCuc) {
         const cc = ls.cachCuc.filter(r => r.cung === p.cungName || r.cung === '' || r.cung === 'Thân');
         if (cc.length > 0) {
-          cc.forEach(r => lines.push(`  [CÁCH CỤC] ${r.ten}: ${r.moTa}`));
+          cc.forEach(r => lines.push(`  [CÁCH CỤC · ${String(r.loai||'').toUpperCase()}${r.doManh?` ·★${r.doManh}`:''}] ${r.ten}: ${r.moTa}${r.chiTiet?` — ${r.chiTiet}`:''}`));
         }
         // Ý nghĩa từng cung từ phanTichCungYNghia
         if (ls.cachCucTungCung && ls.cachCucTungCung[p.cungName]) {

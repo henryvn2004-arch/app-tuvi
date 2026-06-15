@@ -264,7 +264,7 @@ async function handleAnalyze(request: NextRequest, body: Record<string, unknown>
   return handleVisionTool(request, body, 'analyze',
     `Quan sát ảnh ${roomLabel}. Nhận diện đồ vật và ước lượng vị trí theo 8 hướng la bàn (N/NE/E/SE/S/SW/W/NW/C).
 Trả về JSON: {"detectedFurniture":[{"id":"bed|desk|sofa|altar|stove|plant|mirror|door|toilet|water|wardrobe|tv","name":"tên VN","currentPosition":"N|NE|...","notes":""}],"roomObservations":"","lightSources":"","clutter":"gọn|bình thường|lộn xộn"}`,
-    'Bạn là thầy phong thủy Bát Trạch. Chỉ trả về JSON hợp lệ.',
+    'Bạn là thầy phong thủy Bát Trạch. Chấm beforeScore TRUNG THỰC theo đúng hiện trạng — nếu bố trí có lỗi phong thủy thật thì hạ điểm và nêu thẳng lỗi trong scoreExplanation, không tô hồng, không khen chung chung. reason mỗi khuyến nghị phải nói rõ hại gì nếu để nguyên. Chỉ trả về JSON hợp lệ.',
     (detected, guaCtx) => `Phân tích phong thủy Bát Trạch cho ${roomLabel}.\n${guaCtx}\nĐồ vật: ${JSON.stringify((detected as {detectedFurniture?: unknown[]}).detectedFurniture || [])}\n
 Trả về JSON: {"beforeScore":<0-100>,"afterScore":<cao hơn ít nhất 15>,"scoreExplanation":"","recommendations":[{"furnitureId":"","furnitureName":"","currentPosition":"","action":"move|keep|remove","recommendedPosition":"","reason":"","priority":"high|medium|low","improvement":<số>}],"shoppingList":[{"item":"","icon":"emoji","category":"cây|đèn|tranh|vật phẩm|màu sắc","position":"","reason":"","priceRange":"xxx.000đ","urgency":"nên có|tốt nếu có|tuỳ ý"}],"generalAdvice":""}`,
   );
@@ -276,7 +276,7 @@ async function handleBanLamViec(request: NextRequest, body: Record<string, unkno
   return handleVisionTool(request, body, 'ban-lam-viec',
     `Quan sát ảnh bàn làm việc / góc học tập. Nhận diện các vật dụng trên và xung quanh bàn, ước lượng vị trí tương đối (trái/phải/trước/sau/trung tâm → map sang hướng la bàn nếu biết).
 Trả về JSON: {"detectedItems":[{"id":"monitor|laptop|lamp|plant|phone|notebook|keyboard|mouse|mirror|clock|speaker|printer|drawer","name":"tên VN","position":"N|NE|E|SE|S|SW|W|NW|C|trai|phai|truoc|sau","notes":""}],"deskCondition":"gọn gàng|bình thường|lộn xộn","lightQuality":"tốt|thiếu sáng|chói","chairFacing":"hướng người ngồi nhìn ra"}`,
-    'Bạn là thầy phong thủy chuyên về không gian làm việc và học tập. Áp dụng Bát Trạch + Ngũ Hành. Chỉ trả về JSON hợp lệ.',
+    'Bạn là thầy phong thủy chuyên về không gian làm việc và học tập. Áp dụng Bát Trạch + Ngũ Hành. Chấm beforeScore TRUNG THỰC theo hiện trạng — có lỗi thật thì hạ điểm và nêu thẳng trong scoreExplanation, không tô hồng. reason mỗi khuyến nghị phải nói rõ tác hại nếu để nguyên. Chỉ trả về JSON hợp lệ.',
     (detected, guaCtx, b) => {
       const { workType } = b as Record<string,string>;
       const wl = workType === 'study' ? 'học tập' : workType === 'creative' ? 'sáng tạo' : 'làm việc văn phòng';
@@ -297,7 +297,7 @@ async function handleCuaHang(request: NextRequest, body: Record<string, unknown>
   return handleVisionTool(request, body, 'cua-hang',
     `Quan sát ảnh ${spaceLabel}. Nhận diện các khu vực và vật dụng quan trọng, ước lượng vị trí theo hướng la bàn.
 Trả về JSON: {"detectedItems":[{"id":"cashier|entrance|display|storage|desk|seating|counter|safe|plant|sign|light","name":"tên VN","position":"N|NE|E|SE|S|SW|W|NW|C","notes":""}],"spaceObservations":"","trafficFlow":"mô tả luồng khách","lightingQuality":"tốt|thiếu|chói"}`,
-    'Bạn là thầy phong thủy chuyên về không gian kinh doanh và thương mại. Áp dụng Loan Đầu + Bát Trạch + Ngũ Hành để tối ưu tài lộc và khách hàng. Chỉ trả về JSON hợp lệ.',
+    'Bạn là thầy phong thủy chuyên về không gian kinh doanh và thương mại. Áp dụng Loan Đầu + Bát Trạch + Ngũ Hành để tối ưu tài lộc và khách hàng. Chấm beforeScore TRUNG THỰC theo hiện trạng — có lỗi thật thì hạ điểm và nêu thẳng trong scoreExplanation, không tô hồng. reason/businessImpact phải nói rõ thiệt hại tài lộc nếu để nguyên. Chỉ trả về JSON hợp lệ.',
     (detected, guaCtx, b) => {
       const { spaceType: st } = b as Record<string,string>;
       return `Phân tích phong thủy ${spaceLabel} theo góc nhìn tài lộc và kinh doanh.\n${guaCtx}\n
