@@ -1389,11 +1389,299 @@ function phanTichCachCuc(ls, gioitinh) {
   }
 
   // Hóa Kỵ hội sát tinh (≥2 sát tinh đồng cung)
-  const hoaKyPalace = ls.palaces.find(p => hasHoa(p,'Kỵ'));
+  // Bỏ qua cung Liêm Tham Phùng Kỵ (Tỵ/Hợi) vì Kỵ đã chế hung thành cát ở đó
+  const hoaKyPalace = ls.palaces.find(p => {
+    if (!hasHoa(p,'Kỵ')) return false;
+    const isLiemThamPhungKy = hasSao(p,'Liêm Trinh') && hasSao(p,'Tham Lang') &&
+                               (p.diaChi === 'Tỵ' || p.diaChi === 'Hợi');
+    return !isLiemThamPhungKy;
+  });
   if (hoaKyPalace && countSatTinh(hoaKyPalace) >= 2) {
     add('ban_tien_cuc','Hóa Kỵ Hội Sát',
       `Hóa Kỵ đóng cùng nhiều sát tinh tại cung ${hoaKyPalace.cungName} — hung hại trong lĩnh vực cung đó tăng gấp bội, đặc biệt thận trọng.`,
       `Hóa Kỵ + ${countSatTinh(hoaKyPalace)} sát tinh tại ${hoaKyPalace.cungName}.`, hoaKyPalace.cungName);
+  }
+
+  // ═══════════════════════════════════════════════
+  // 6. CÁCH CỤC TỪNG CUNG CHUYÊN BIỆT
+  // ═══════════════════════════════════════════════
+
+  // ── QUAN LỘC ────────────────────────────────
+  if (p_quan) {
+    // Hóa Kỵ Quan Lộc — trắc trở trừ khi Nhật/Nguyệt tại Sửu/Mùi
+    if (hasHoa(p_quan,'Kỵ')) {
+      const kyGiaiGiai = (hasSao(p_quan,'Thái Dương') || hasSao(p_quan,'Thái Âm')) &&
+                         (p_quan.diaChi === 'Sửu' || p_quan.diaChi === 'Mùi');
+      if (kyGiaiGiai) {
+        add('quy_cuc','Nhật Nguyệt Hóa Kỵ Giao Huy',
+          'Hóa Kỵ đồng cung Thái Dương/Thái Âm tại Sửu/Mùi — Kỵ như mây ngũ sắc chầu Nhật Nguyệt, công danh hoạnh đạt, mọi sự đều hành thông.',
+          'Hóa Kỵ + Nhật/Nguyệt tại Sửu/Mùi = Quan Lộc hoạnh đạt.', 'Quan Lộc');
+      } else {
+        add('ban_tien_cuc','Hóa Kỵ Phá Quan Lộc',
+          'Hóa Kỵ đóng tại Quan Lộc — sự nghiệp hay gặp trở ngại, dễ thăng giáng bất thường, cần thận trọng trong công việc và tránh tranh quyền.',
+          'Hóa Kỵ tại Quan Lộc = trắc trở công danh.', 'Quan Lộc');
+      }
+    }
+    // Quan Lộc vô chính diệu + Tuần/Triệt → sau vẫn hiển đạt
+    if (isVoChinhDieu(p_quan) && hasTuanOrTriet(p_quan)) {
+      add('quy_cuc','Quan Lộc Vô Chính Phùng Tuần Triệt',
+        'Cung Quan Lộc vô chính tinh nhưng có Tuần/Triệt án ngữ — tuy nhiều trở ngại trên đường công danh nhưng sau vẫn hiển đạt, thường hoạnh phát hoạnh phá.',
+        'Quan Lộc vô chính diệu + Tuần/Triệt.', 'Quan Lộc');
+    }
+    // Thiên Mã Quan Lộc → nên làm công việc lưu động
+    if (hasSao(p_quan,'Thiên Mã')) {
+      add('quy_cuc','Thiên Mã Thủ Quan Lộc',
+        'Thiên Mã thủ Quan Lộc — công danh hiển đạt, thích hợp làm việc có tính lưu động, đi xa, di chuyển; không nên thủ thường một chỗ.',
+        'Thiên Mã tại Quan Lộc = sự nghiệp lưu động.', 'Quan Lộc');
+    }
+  }
+
+  // ── NÔ BỘC ──────────────────────────────────
+  if (p_no) {
+    // Liêm Tham Phùng Kỵ — đặc cách tốt
+    if (hasSao(p_no,'Liêm Trinh') && hasSao(p_no,'Tham Lang') && hasHoa(p_no,'Kỵ') &&
+        (p_no.diaChi === 'Tỵ' || p_no.diaChi === 'Hợi')) {
+      add('quy_cuc','Liêm Tham Phùng Kỵ',
+        'Liêm Trinh, Tham Lang và Hóa Kỵ đồng cung tại Tỵ/Hợi — Kỵ chế được tánh hung của Liêm, Tham, hung hóa cát; bạn bè tuy hay có ma sát nhưng sau lại thành đồng minh tốt.',
+        'Liêm Trinh + Tham Lang + Hóa Kỵ tại Tỵ/Hợi = hung hóa cát.', 'Nô Bộc');
+    } else if (hasHoa(p_no,'Kỵ')) {
+      // Hóa Kỵ Nô Bộc — thị phi
+      add('ban_tien_cuc','Hóa Kỵ Nhập Nô Bộc',
+        'Hóa Kỵ đóng tại Nô Bộc — hay mắc thị phi, thường bị người giúp việc hay bạn bè nói xấu và oán trách; cần cẩn thận khi tin người.',
+        'Hóa Kỵ tại Nô Bộc = thị phi, bạn phản.', 'Nô Bộc');
+    }
+    // Tuần/Triệt Nô Bộc — đảo nghịch nhận định
+    if (hasTuanOrTriet(p_no)) {
+      add('menh_co_ban','Tuần Triệt Nô Bộc',
+        'Tuần/Triệt án ngữ cung Nô Bộc — thuê mướn người giúp việc trước khó sau dễ; sao tốt hóa thành xấu, sao xấu hóa thành tốt (nhận định đảo ngược).',
+        'Tuần/Triệt tại Nô Bộc = đảo nghịch ý nghĩa.', 'Nô Bộc');
+    }
+    // Đào Hoa Nô Bộc — đa tình
+    if (hasSao(p_no,'Đào Hoa')) {
+      add('menh_co_ban','Đào Hoa Nhập Nô Bộc',
+        gioitinh === 'nam'
+          ? 'Đào Hoa tọa thủ cung Nô Bộc — nam hay mang lụy vì tình, đa mang việc trăng gió, dễ có vợ lẽ.'
+          : 'Đào Hoa tọa thủ cung Nô Bộc — nữ hay bị bạn bè hay người thân lôi kéo vào chuyện tình cảm phức tạp.',
+        'Đào Hoa tại Nô Bộc.', 'Nô Bộc');
+    }
+  }
+
+  // ── PHỤ MẪU ──────────────────────────────────
+  if (p_phu) {
+    // Tuần/Triệt → sớm khắc một trong hai thân
+    if (hasTuanOrTriet(p_phu)) {
+      add('ban_tien_cuc','Tuần Triệt Phụ Mẫu',
+        'Tuần/Triệt án ngữ cung Phụ Mẫu — dù cung này tốt hay xấu, đều tiềm ẩn nguy cơ sớm khắc một trong hai thân (cha hoặc mẹ mất sớm).',
+        'Tuần/Triệt tại Phụ Mẫu = khắc song thân.', 'Phụ Mẫu');
+    }
+    // Nhật sáng Nguyệt mờ → mẹ mất trước cha
+    const nhatSangPhu = hasSao(p_phu,'Thái Dương') && isSangSua(p_phu,'Thái Dương');
+    const nguyetSangPhu = hasSao(p_phu,'Thái Âm') && isSangSua(p_phu,'Thái Âm');
+    const nhatMoPhu = hasSao(p_phu,'Thái Dương') && isMoAm(p_phu,'Thái Dương');
+    const nguyetMoPhu = hasSao(p_phu,'Thái Âm') && isMoAm(p_phu,'Thái Âm');
+    if (nhatSangPhu && nguyetMoPhu) {
+      add('menh_co_ban','Nhật Sáng Nguyệt Mờ Phụ Mẫu',
+        'Thái Dương sáng, Thái Âm mờ tại Phụ Mẫu — cha tốt đẹp, mẹ suy kém; xác suất mẹ mất trước cha.',
+        'Nhật sáng Nguyệt mờ tại Phụ Mẫu.', 'Phụ Mẫu');
+    } else if (nhatMoPhu && nguyetSangPhu) {
+      add('menh_co_ban','Nhật Mờ Nguyệt Sáng Phụ Mẫu',
+        'Thái Dương mờ, Thái Âm sáng tại Phụ Mẫu — cha suy kém, mẹ tốt đẹp; xác suất cha mất trước mẹ.',
+        'Nhật mờ Nguyệt sáng tại Phụ Mẫu.', 'Phụ Mẫu');
+    }
+    // Hóa Kỵ Phụ Mẫu — bất hòa
+    if (hasHoa(p_phu,'Kỵ')) {
+      add('ban_tien_cuc','Hóa Kỵ Phụ Mẫu',
+        'Hóa Kỵ đóng tại Phụ Mẫu — cha mẹ hay bất hòa với nhau, hoặc cha mẹ và con không hợp tính; cần thận trọng trong quan hệ gia đình.',
+        'Hóa Kỵ tại Phụ Mẫu = bất hòa song thân.', 'Phụ Mẫu');
+    }
+  }
+
+  // ── TỬ TỨC ──────────────────────────────────
+  if (p_tuTuc) {
+    // Hóa Kỵ — muộn con, khó nuôi
+    if (hasHoa(p_tuTuc,'Kỵ')) {
+      add('ban_tien_cuc','Hóa Kỵ Tử Tức',
+        'Hóa Kỵ đóng tại Tử Tức — muộn con, khó nuôi con, hoặc con hay xung khắc với cha mẹ; nên muộn sinh hơn sớm sinh.',
+        'Hóa Kỵ tại Tử Tức = muộn con, khó nuôi.', 'Tử Tức');
+    }
+    // Hóa Lộc — con khá giả
+    if (hasHoa(p_tuTuc,'Lộc')) {
+      add('phu_cuc','Hóa Lộc Tử Tức',
+        'Hóa Lộc đóng tại Tử Tức — con cái khá giả, về già được nhờ con cái, có con hiếu thảo tài giỏi.',
+        'Hóa Lộc tại Tử Tức = con hiếu, được nhờ con.', 'Tử Tức');
+    }
+    // Hóa Quyền — con sớm hiển đạt
+    if (hasHoa(p_tuTuc,'Quyền')) {
+      add('phu_cuc','Hóa Quyền Tử Tức',
+        'Hóa Quyền đóng tại Tử Tức — con cái sớm hiển đạt, có uy quyền sự nghiệp phát triển mạnh.',
+        'Hóa Quyền tại Tử Tức = con sớm hiển đạt.', 'Tử Tức');
+    }
+    // Nhiều sát tinh — sinh nhiều nuôi ít
+    if (countSatTinh(p_tuTuc) >= 2) {
+      add('ban_tien_cuc','Sát Tinh Hội Tử Tức',
+        `Nhiều sát tinh hội tụ tại Tử Tức — sinh nhiều nuôi ít, con cái hay xung khắc với cha mẹ, hoặc khó có con.`,
+        `${countSatTinh(p_tuTuc)} sát tinh tại Tử Tức.`, 'Tử Tức');
+    }
+  }
+
+  // ── PHU THÊ ──────────────────────────────────
+  if (p_phuThe) {
+    // Đào Hoa — bạn đời đa tình
+    if (hasSao(p_phuThe,'Đào Hoa')) {
+      add('menh_co_ban','Đào Hoa Nhập Phu Thê',
+        'Đào Hoa tọa thủ cung Phu Thê — hôn nhân nhiều màu sắc, bạn đời hấp dẫn nhưng đa tình; dễ có hai đời vợ/chồng hoặc hôn nhân trắc trở.',
+        'Đào Hoa tại Phu Thê = bạn đời đa tình.', 'Phu Thê');
+    }
+    // Hóa Kỵ — hôn nhân trắc trở
+    if (hasHoa(p_phuThe,'Kỵ')) {
+      add('ban_tien_cuc','Hóa Kỵ Phu Thê',
+        'Hóa Kỵ đóng tại Phu Thê — hôn nhân hay trắc trở, vợ/chồng không hợp tính hoặc hay xích mích; cần thận trọng trong chọn bạn đời.',
+        'Hóa Kỵ tại Phu Thê = hôn nhân trắc trở.', 'Phu Thê');
+    }
+    // Thiên Mã — vợ chồng hay xa cách
+    if (hasSao(p_phuThe,'Thiên Mã')) {
+      add('menh_co_ban','Thiên Mã Phu Thê',
+        'Thiên Mã đóng tại Phu Thê — vợ/chồng thích di chuyển, hai người hay ở xa nhau; hôn nhân phần lưu động, cần chủ động duy trì kết nối.',
+        'Thiên Mã tại Phu Thê = vợ chồng hay xa cách.', 'Phu Thê');
+    }
+    // Kình Dương hoặc Đà La mờ ám — khắc vợ/chồng
+    const kinhMoPhuThe = hasSao(p_phuThe,'Kình Dương') && isMoAm(p_phuThe,'Kình Dương');
+    const daMoPhuThe   = hasSao(p_phuThe,'Đà La') && isMoAm(p_phuThe,'Đà La');
+    if (kinhMoPhuThe || daMoPhuThe) {
+      add('ban_tien_cuc','Kình Đà Phá Phu Thê',
+        'Kình Dương hoặc Đà La mờ ám thủ cung Phu Thê — có nguy cơ khắc bạn đời, hôn nhân nhiều sóng gió, dễ ly hôn hoặc góa sớm.',
+        'Kình/Đà mờ ám tại Phu Thê = khắc bạn đời.', 'Phu Thê');
+    }
+  }
+
+  // ── TÀI BẠCH ──────────────────────────────────
+  if (p_tai) {
+    // Hóa Kỵ — hao tán
+    if (hasHoa(p_tai,'Kỵ')) {
+      add('ban_tien_cuc','Hóa Kỵ Phá Tài Bạch',
+        'Hóa Kỵ đóng tại Tài Bạch — tài lộc hao tán, hay bị mất mát tiền bạc; cần cẩn thận trong đầu tư và tránh bảo lãnh cho người khác.',
+        'Hóa Kỵ tại Tài Bạch = tài lộc hao tán.', 'Tài Bạch');
+    }
+    // Vũ Khúc sáng — tài lộc vượng
+    if (hasSao(p_tai,'Vũ Khúc') && isSangSua(p_tai,'Vũ Khúc')) {
+      add('phu_cuc','Vũ Khúc Minh Tài Bạch',
+        'Vũ Khúc (tài tinh) sáng sủa thủ Tài Bạch — tài chính vượng phát, giỏi kinh doanh, tích lũy tài sản tốt; phát tài từ công việc và buôn bán.',
+        'Vũ Khúc sáng tại Tài Bạch = tài lộc vượng.', 'Tài Bạch');
+    }
+  }
+
+  // ── ĐIỀN TRẠCH ──────────────────────────────────
+  if (p_dien) {
+    // Hóa Lộc — lộc từ nhà đất
+    if (hasHoa(p_dien,'Lộc')) {
+      add('phu_cuc','Hóa Lộc Điền Trạch',
+        'Hóa Lộc đóng tại Điền Trạch — dễ có nhà cửa đất đai, bất động sản phát triển tốt, lộc từ nhà đất.',
+        'Hóa Lộc tại Điền Trạch = lộc từ nhà đất.', 'Điền Trạch');
+    }
+    // Thái Âm sáng — bất động sản vượng
+    if (hasSao(p_dien,'Thái Âm') && isSangSua(p_dien,'Thái Âm')) {
+      add('phu_cuc','Thái Âm Minh Điền Trạch',
+        'Thái Âm (chủ điền trạch) sáng sủa thủ Điền Trạch — bất động sản vượng phát, dễ có nhiều nhà đất, nhà cửa sung túc và ổn định.',
+        'Thái Âm sáng tại Điền Trạch = bất động sản vượng.', 'Điền Trạch');
+    }
+    // Thiên Phủ sáng — tài lộc súc tích
+    if (hasSao(p_dien,'Thiên Phủ') && isSangSua(p_dien,'Thiên Phủ')) {
+      add('phu_cuc','Thiên Phủ Minh Điền Trạch',
+        'Thiên Phủ (tài tinh) sáng sủa thủ Điền Trạch — tài lộc súc tích, nhiều bất động sản, nhà cửa sung túc và bền vững.',
+        'Thiên Phủ sáng tại Điền Trạch = bất động sản vượng.', 'Điền Trạch');
+    }
+    // Hóa Kỵ — mất mát bất động sản
+    if (hasHoa(p_dien,'Kỵ')) {
+      add('ban_tien_cuc','Hóa Kỵ Điền Trạch',
+        'Hóa Kỵ đóng tại Điền Trạch — hay mất mát nhà cửa bất động sản, thường phải chuyển chỗ ở nhiều lần; cần cẩn thận giao dịch nhà đất.',
+        'Hóa Kỵ tại Điền Trạch = mất mát bất động sản.', 'Điền Trạch');
+    }
+  }
+
+  // ── PHÚC ĐỨC ──────────────────────────────────
+  if (p_phuc) {
+    // Hóa Lộc — phúc lộc dồi dào (Hóa Lộc = thần cung Phúc Đức)
+    if (hasHoa(p_phuc,'Lộc')) {
+      add('phu_cuc','Hóa Lộc Thủ Phúc Đức',
+        'Hóa Lộc (thần cung Phúc Đức) thủ chính cung — phúc lộc dồi dào, cuộc đời được hưởng phúc thọ tốt đẹp, ít tai họa bệnh tật.',
+        'Hóa Lộc tại Phúc Đức = phúc lộc dồi dào.', 'Phúc Đức');
+    }
+    // Thiên Lương sáng — phúc thọ vượng
+    if (hasSao(p_phuc,'Thiên Lương') && isSangSua(p_phuc,'Thiên Lương')) {
+      add('phu_cuc','Thiên Lương Minh Phúc Đức',
+        'Thiên Lương sáng sủa thủ Phúc Đức — phúc thọ vượng, ít bệnh tật, sống lâu, tâm hồn nhân hậu và tích lũy nhiều phúc lành.',
+        'Thiên Lương sáng tại Phúc Đức = phúc thọ vượng.', 'Phúc Đức');
+    }
+    // Phúc Đức tại Tứ Mộ + Mộ tinh — âm phần kết phát
+    const tuMoCung = ['Thìn','Tuất','Sửu','Mùi'];
+    if (tuMoCung.includes(p_phuc.diaChi) && hasSao(p_phuc,'Mộ')) {
+      add('quy_cuc','Âm Phần Kết Phát',
+        'Cung Phúc Đức an tại Tứ Mộ và có Mộ tinh tọa thủ — âm phần đã kết phát, dòng họ ba bốn đời giàu sang vinh hiển, phúc lộc truyền đời.',
+        'Phúc Đức tại Tứ Mộ + Mộ tinh.', 'Phúc Đức');
+    }
+  }
+
+  // ── HUYNH ĐỆ ──────────────────────────────────
+  if (p_huynh) {
+    // Tả Phụ/Hữu Bật — anh chị em đắc lực
+    if (hasSao(p_huynh,'Tả Phụ') || hasSao(p_huynh,'Hữu Bật')) {
+      add('phu_cuc','Tả Hữu Huynh Đệ',
+        'Tả Phụ hoặc Hữu Bật tọa thủ cung Huynh Đệ — nhiều anh chị em, anh chị em đắc lực, tốt lành và hay giúp đỡ lẫn nhau.',
+        'Tả Phụ/Hữu Bật tại Huynh Đệ = anh chị em đắc lực.', 'Huynh Đệ');
+    }
+    // Hóa Kỵ — bất hòa
+    if (hasHoa(p_huynh,'Kỵ')) {
+      add('ban_tien_cuc','Hóa Kỵ Huynh Đệ',
+        'Hóa Kỵ đóng tại Huynh Đệ — anh chị em hay bất hòa, dễ xảy ra tranh chấp trong gia đình; cần thận trọng trong quan hệ anh chị em.',
+        'Hóa Kỵ tại Huynh Đệ = anh chị em bất hòa.', 'Huynh Đệ');
+    }
+  }
+
+  // ── TẬT ÁCH ──────────────────────────────────
+  if (p_tat) {
+    // Hóa Kỵ — bệnh mãn tính
+    if (hasHoa(p_tat,'Kỵ')) {
+      add('ban_tien_cuc','Hóa Kỵ Tật Ách',
+        'Hóa Kỵ đóng tại Tật Ách — hay mắc bệnh tật, bệnh mãn tính khó chữa; cần chú ý sức khỏe và thường xuyên kiểm tra y tế.',
+        'Hóa Kỵ tại Tật Ách = bệnh mãn tính.', 'Tật Ách');
+    }
+    // Tuần/Triệt — bệnh nhẹ hơn, dễ chữa
+    if (hasTuanOrTriet(p_tat)) {
+      add('quy_cuc','Tuần Triệt Giải Tật Ách',
+        'Tuần/Triệt án ngữ cung Tật Ách — bệnh tật thường nhẹ hoặc dễ chữa hơn mức dự đoán, có thể hóa giải được nhiều bệnh nguy hiểm.',
+        'Tuần/Triệt tại Tật Ách = bệnh nhẹ, dễ chữa.', 'Tật Ách');
+    }
+    // Nhiều sát tinh — hay tai nạn thương tích
+    if (countSatTinh(p_tat) >= 2) {
+      add('ban_tien_cuc','Sát Tinh Hội Tật Ách',
+        `Nhiều sát tinh hội tụ tại Tật Ách — hay bệnh tật nặng, dễ gặp tai nạn thương tích; cần đặc biệt chú ý bảo vệ sức khỏe.`,
+        `${countSatTinh(p_tat)} sát tinh tại Tật Ách.`, 'Tật Ách');
+    }
+  }
+
+  // ── THIÊN DI ──────────────────────────────────
+  if (p_thienDi) {
+    // Hóa Lộc — lộc từ ngoại
+    if (hasHoa(p_thienDi,'Lộc')) {
+      add('phu_cuc','Hóa Lộc Thiên Di',
+        'Hóa Lộc đóng tại Thiên Di — tài lộc đến từ bên ngoài, thích hợp làm ăn xa quê; xuất ngoại nhiều cơ hội, đi xa được lợi.',
+        'Hóa Lộc tại Thiên Di = lộc từ ngoại quốc.', 'Thiên Di');
+    }
+    // Thiên Mã — xuất ngoại nhiều, có lợi
+    if (hasSao(p_thienDi,'Thiên Mã')) {
+      const coLocDi = hasHoa(p_thienDi,'Lộc') || hasSao(p_thienDi,'Lộc Tồn');
+      add('phu_cuc','Thiên Mã Thủ Thiên Di',
+        coLocDi
+          ? 'Thiên Mã thủ Thiên Di và có Lộc đồng cung — tài lộc từ ngoài rất tốt, xuất ngoại vừa di chuyển vừa phát tài, thích hợp định cư nước ngoài.'
+          : 'Thiên Mã thủ Thiên Di — cuộc đời di chuyển nhiều, xuất ngoại tốt; thích hợp làm ăn xa hoặc định cư nước ngoài.',
+        `Thiên Mã tại Thiên Di${coLocDi ? ' + Lộc' : ''} = xuất ngoại có lợi.`, 'Thiên Di');
+    }
+    // Hóa Kỵ — di chuyển gặp họa
+    if (hasHoa(p_thienDi,'Kỵ')) {
+      add('ban_tien_cuc','Hóa Kỵ Thiên Di',
+        'Hóa Kỵ đóng tại Thiên Di — di chuyển hay gặp trở ngại tai vạ, xuất ngoại mang lại rủi ro; cần thận trọng khi đi xa hoặc định cư nước ngoài.',
+        'Hóa Kỵ tại Thiên Di = di chuyển gặp họa.', 'Thiên Di');
+    }
   }
 
   // ═══════════════════════════════════════════════
