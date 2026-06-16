@@ -2759,13 +2759,15 @@ function matchCachCucData(palace, ls) {
       // All sao must be in this palace
       matched = sao.length > 0 && sao.every(name => hasStarInPalaces(name, [palace]));
     } else if (pv === 'tam_hop') {
-      // All sao in tam phương tứ chính
+      // All sao in tam phương tứ chính; Tuần/Triệt only count in dong_cung
       const tu = getTu(palace);
-      matched = sao.length > 0 && sao.every(name => hasStarInPalaces(name, tu));
+      matched = sao.length > 0 && sao.every(name =>
+        (name==='Tuần'||name==='Triệt') ? hasStarInPalaces(name, [palace]) : hasStarInPalaces(name, tu));
     } else if (pv === 'xung_chieu') {
-      // All sao in palace + xung chiều
+      // All sao in palace + xung chiều; Tuần/Triệt only count in dong_cung
       const allP = [palace, palace.xungChieuCung].filter(Boolean);
-      matched = sao.length > 0 && sao.every(name => hasStarInPalaces(name, allP));
+      matched = sao.length > 0 && sao.every(name =>
+        (name==='Tuần'||name==='Triệt') ? hasStarInPalaces(name, [palace]) : hasStarInPalaces(name, allP));
     }
 
     if (!matched) continue;
@@ -2851,10 +2853,13 @@ function matchVanHanData(dvPalace, lsCtx, gioitinh) {
     } else if (pv === 'dong_cung') {
       matched = sao.every(name => hasStarInPalaces(name, [dvPalace]));
     } else if (pv === 'tam_hop') {
-      matched = sao.every(name => hasStarInPalaces(name, getTu(dvPalace)));
+      const tu = getTu(dvPalace);
+      matched = sao.every(name =>
+        (name==='Tuần'||name==='Triệt') ? hasStarInPalaces(name, [dvPalace]) : hasStarInPalaces(name, tu));
     } else if (pv === 'xung_chieu') {
       const allP = [dvPalace, dvPalace.xungChieuCung].filter(Boolean);
-      matched = sao.every(name => hasStarInPalaces(name, allP));
+      matched = sao.every(name =>
+        (name==='Tuần'||name==='Triệt') ? hasStarInPalaces(name, [dvPalace]) : hasStarInPalaces(name, allP));
     }
     if (!matched) continue;
     if (dc) {

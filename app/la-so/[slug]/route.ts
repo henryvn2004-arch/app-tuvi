@@ -791,7 +791,8 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     // Re-run phanTichCungYNghia with TPTC stars merged into this palace's stars
     let tptcItems: string[] = [];
     if (palace) {
-      const tptcExtraStars = tptcPals3.flatMap(p => (p.stars as Rec[])||[]);
+      const tptcExtraStars = tptcPals3.flatMap(p => (p.stars as Rec[])||[])
+        .filter((s: Rec) => s.ten !== 'Tuần' && s.ten !== 'Triệt' && s.ten !== 'Tuần+Triệt');
       const augPalace = { ...palace, stars: [...((palace.stars as Rec[])||[]), ...tptcExtraStars] };
       const augPalaces = (ls.palaces as Rec[]).map((p: Rec) => String(p.cungName||'') === cungName ? augPalace : p);
       const augLs = { ..._lsBase, palaces: augPalaces };
