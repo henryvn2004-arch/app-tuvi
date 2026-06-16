@@ -36,7 +36,11 @@ const DRY_RUN = hasFlag('dry-run');
 // ─── JWT / OAuth2 ────────────────────────────────────────────────────────────
 
 function base64url(buf) {
-  return Buffer.from(buf).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+  return Buffer.from(buf)
+    .toString('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=/g, '');
 }
 
 function makeJWT(serviceAccount) {
@@ -54,7 +58,11 @@ function makeJWT(serviceAccount) {
 
   const sign = createSign('RSA-SHA256');
   sign.update(`${header}.${payload}`);
-  const sig = sign.sign(serviceAccount.private_key, 'base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+  const sig = sign
+    .sign(serviceAccount.private_key, 'base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=/g, '');
 
   return `${header}.${payload}.${sig}`;
 }
