@@ -28,7 +28,11 @@ const sa = JSON.parse(readFileSync(SA_PATH, 'utf8'));
 // ─── JWT helpers ──────────────────────────────────────────────────────────────
 
 function base64url(buf) {
-  return Buffer.from(buf).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+  return Buffer.from(buf)
+    .toString('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=/g, '');
 }
 
 async function getServiceAccountToken() {
@@ -45,13 +49,20 @@ async function getServiceAccountToken() {
   );
   const sign = createSign('RSA-SHA256');
   sign.update(`${header}.${payload}`);
-  const sig = sign.sign(sa.private_key, 'base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+  const sig = sign
+    .sign(sa.private_key, 'base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=/g, '');
   const jwt = `${header}.${payload}.${sig}`;
 
   const res = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({ grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer', assertion: jwt }),
+    body: new URLSearchParams({
+      grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+      assertion: jwt,
+    }),
   });
   const data = await res.json();
   if (!data.access_token) throw new Error(`Auth failed: ${JSON.stringify(data)}`);
@@ -114,13 +125,16 @@ async function verify() {
   const saToken = await getServiceAccountToken();
 
   console.log(`Verify ${SITE_URL} với token ${cached.token}...`);
-  const res = await fetch(`https://www.googleapis.com/siteVerification/v1/webResource?verificationMethod=FILE`, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${saToken}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      site: { type: 'SITE', identifier: SITE_URL },
-    }),
-  });
+  const res = await fetch(
+    `https://www.googleapis.com/siteVerification/v1/webResource?verificationMethod=FILE`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${saToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        site: { type: 'SITE', identifier: SITE_URL },
+      }),
+    }
+  );
   const data = await res.json();
 
   if (res.ok) {
@@ -129,7 +143,9 @@ async function verify() {
   } else {
     console.error(`✗ Lỗi ${res.status}:`, JSON.stringify(data, null, 2));
     console.error('\nKiểm tra:');
-    console.error(`  - File có accessible không: curl https://www.tuviminhbao.com/${cached.fileName}`);
+    console.error(
+      `  - File có accessible không: curl https://www.tuviminhbao.com/${cached.fileName}`
+    );
     console.error('  - Vercel đã deploy xong chưa?');
     process.exit(1);
   }
