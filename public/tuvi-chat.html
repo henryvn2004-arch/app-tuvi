@@ -13,7 +13,11 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <link rel="canonical" href="https://www.tuviminhbao.com/tuvi-chat.html">
 <link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <script src="/tuvi-ansao-engine.js"></script>
+<script src="/tuvi-form.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -22,198 +26,93 @@
   --text:#1a1a1a;--text-mid:#444;--text-lt:#777;
   --border:#CCCCCC;--border-lt:#E8E8E8;
   --bg:#FFFFFF;--bg-soft:#FAFAF8;
-  --green:#1E6B3C;
+  --green:#1E6B3C;--red:#C0392B;
 }
-html,body{height:100%;overflow:hidden;font-family:Arial,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
 
-/* ── Page wrapper ── */
-.tc-page{height:100vh;display:flex;flex-direction:column;overflow:hidden}
+/* ── Layout ── */
+.page{max-width:860px;margin:0 auto;padding:0 20px}
+@media(max-width:600px){.page{padding:0 12px}}
 
-/* ── Hero ── */
-.tc-hero{
-  background:var(--navy);
-  padding:14px 20px;
-  display:flex;align-items:center;gap:14px;
-  flex-shrink:0;
-}
-.tc-hero-icon{
-  width:36px;height:36px;
-  background:rgba(201,168,76,.15);
-  border:1px solid rgba(201,168,76,.35);
-  border-radius:9px;
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
-}
-.tc-hero-title{font-size:17px;font-weight:700;color:#fff;font-family:'Noto Serif',Georgia,serif;line-height:1.2}
+/* ── Hero strip ── */
+.tc-hero{background:var(--navy);padding:0}
+.tc-hero-inner{max-width:860px;margin:0 auto;padding:16px 20px;display:flex;align-items:center;gap:14px}
+.tc-hero-icon{width:38px;height:38px;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.35);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tc-hero-title{font-size:18px;font-weight:700;color:#fff;font-family:'Noto Serif',Georgia,serif;line-height:1.2}
 .tc-hero-sub{font-size:11px;color:#8BAACC;margin-top:2px}
+@media(max-width:600px){.tc-hero-inner{padding:12px}}
 
-/* ── Form bar ── */
-.tc-form-bar{
-  background:var(--gold-lt);
-  border-bottom:1px solid #e8d9b0;
-  padding:12px 20px;
-  flex-shrink:0;
-}
-.tc-form-label{
-  font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
-  color:var(--gold);margin-bottom:10px;
-}
-.tc-form-row{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
-.tc-form-group{display:flex;flex-direction:column;gap:4px}
-.tc-form-lbl{font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-lt)}
-.tc-form-input{
-  background:#fff;border:1px solid var(--border);border-radius:6px;
-  padding:7px 10px;font-size:14px;color:var(--text);
-  font-family:Arial,sans-serif;outline:none;
-  transition:border-color .15s;
-  -webkit-appearance:none;
-}
-.tc-form-input:focus{border-color:var(--navy)}
-.tc-input-num{width:70px}
-.tc-input-select{width:auto;cursor:pointer}
-.tc-form-sep{font-size:16px;color:var(--border);padding-bottom:6px;flex-shrink:0}
-.tc-btn-an-sao{
-  background:var(--navy);color:#c9a84c;
-  border:none;border-radius:7px;
-  padding:8px 18px;font-size:13px;font-weight:700;
-  cursor:pointer;font-family:Arial,sans-serif;
-  transition:background .15s,transform .1s;
-  flex-shrink:0;
-  align-self:flex-end;
-}
-.tc-btn-an-sao:hover{background:var(--navy-mid);transform:translateY(-1px)}
+/* ── Form section ── */
+.tc-form-section{background:var(--gold-lt);border-bottom:2px solid #e8d9b0;padding:32px 0}
 
-/* ── Lá số summary bar (replaces form after an sao) ── */
-.tc-laso-bar{
-  background:var(--gold-lt);
-  border-bottom:1px solid #e8d9b0;
-  padding:10px 20px;
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-  flex-shrink:0;
-}
-.tc-laso-chip{
-  display:flex;align-items:center;gap:8px;
-  font-size:12.5px;color:var(--navy);font-weight:600;
-}
-.tc-laso-chip-dot{
-  width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0;
-}
-.tc-btn-reset{
-  background:none;border:1px solid var(--border);border-radius:6px;
-  padding:4px 11px;font-size:11px;color:var(--text-lt);
-  cursor:pointer;font-family:Arial,sans-serif;
-  transition:border-color .15s,color .15s;
-  flex-shrink:0;
-  white-space:nowrap;
-}
+/* TuviForm override — compact for chat page */
+.tc-form-section .form-section{padding:0;border:none}
+.tc-form-section .form-grid{border-radius:8px;overflow:hidden}
+.tc-form-section .section-eyebrow{margin-bottom:20px}
+
+/* ── Lá số summary bar ── */
+.tc-laso-bar{background:var(--gold-lt);border-bottom:1px solid #e8d9b0;padding:10px 20px;display:none;align-items:center;justify-content:space-between;gap:12px}
+.tc-laso-bar.active{display:flex}
+.tc-laso-chip{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--navy);font-weight:600}
+.tc-laso-chip-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0}
+.tc-btn-reset{background:none;border:1px solid var(--border);border-radius:6px;padding:4px 11px;font-size:11px;color:var(--text-lt);cursor:pointer;font-family:Arial,sans-serif;transition:border-color .15s,color .15s;white-space:nowrap}
 .tc-btn-reset:hover{border-color:var(--navy);color:var(--navy)}
 
-/* ── Chat area ── */
-.tc-chat-area{
-  flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0;
-}
-.tc-messages{
-  flex:1;overflow-y:auto;padding:20px 20px 8px;
-  display:flex;flex-direction:column;gap:0;
-  min-height:0;
-}
-.tc-messages::-webkit-scrollbar{width:4px}
-.tc-messages::-webkit-scrollbar-thumb{background:#ddd;border-radius:2px}
+/* ── Chat section ── */
+.tc-chat-section{padding:0 0 24px}
 
-/* ── Message rows ── */
-.tc-msg{
-  display:flex;gap:10px;align-items:flex-end;
-  margin-bottom:14px;
-  animation:tc-in .18s ease;
-}
+/* messages */
+.tc-messages{padding:24px 0 8px;display:flex;flex-direction:column;gap:0;min-height:180px}
+.tc-msg{display:flex;gap:10px;align-items:flex-end;margin-bottom:14px;animation:tc-in .18s ease}
 @keyframes tc-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 .tc-msg.user{flex-direction:row-reverse}
-.tc-av{
-  width:28px;height:28px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:11px;font-weight:700;flex-shrink:0;
-}
-.tc-msg.bot  .tc-av{background:transparent}
+.tc-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.tc-msg.bot .tc-av{background:transparent}
 .tc-msg.user .tc-av{background:var(--blue);color:#fff}
-.tc-bub{
-  max-width:72%;padding:10px 14px;font-size:14px;
-  line-height:1.75;border-radius:14px;position:relative;
-}
-.tc-msg.bot  .tc-bub{background:#fff;color:var(--text);border:1px solid var(--border-lt);border-bottom-left-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.tc-bub{max-width:72%;padding:10px 14px;font-size:14px;line-height:1.75;border-radius:14px;position:relative}
+.tc-msg.bot .tc-bub{background:#fff;color:var(--text);border:1px solid var(--border-lt);border-bottom-left-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
 .tc-msg.user .tc-bub{background:var(--navy);color:#F9F4EB;border-bottom-right-radius:4px}
-
-/* typing dots */
 .tc-msg.typing .tc-bub{display:flex;gap:5px;align-items:center;padding:14px 16px}
 .tc-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:tc-bounce 1.2s infinite}
-.tc-dot:nth-child(2){animation-delay:.18s}
-.tc-dot:nth-child(3){animation-delay:.36s}
+.tc-dot:nth-child(2){animation-delay:.18s}.tc-dot:nth-child(3){animation-delay:.36s}
 @keyframes tc-bounce{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-5px);opacity:1}}
 
-/* ── Suggestions ── */
-.tc-suggs{
-  padding:8px 20px 0;
-  display:flex;flex-wrap:wrap;gap:7px;
-  flex-shrink:0;
-}
-.tc-sug{
-  background:var(--bg-soft);border:1px solid var(--border-lt);
-  border-radius:16px;padding:5px 13px;
-  font-size:12px;color:var(--blue);
-  cursor:pointer;font-family:Arial,sans-serif;
-  transition:all .13s;line-height:1.4;
-}
+/* suggestions */
+.tc-suggs{display:flex;flex-wrap:wrap;gap:7px;padding:4px 0 16px}
+.tc-sug{background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:16px;padding:6px 14px;font-size:12.5px;color:var(--blue);cursor:pointer;font-family:Arial,sans-serif;transition:all .13s;line-height:1.4}
 .tc-sug:hover{background:#EBF3FF;border-color:var(--blue)}
 
-/* ── Input bar ── */
-.tc-input-bar{
-  padding:10px 20px 14px;
-  border-top:1px solid var(--border-lt);
-  display:flex;gap:10px;align-items:flex-end;
-  flex-shrink:0;background:var(--bg);
-}
-.tc-textarea{
-  flex:1;border:1.5px solid var(--border);border-radius:9px;
-  padding:9px 12px;font-size:14px;font-family:Arial,sans-serif;
-  line-height:1.5;resize:none;max-height:110px;overflow-y:auto;
-  background:var(--bg-soft);color:var(--text);
-  outline:none;transition:border-color .15s;
-}
+/* input bar */
+.tc-input-bar{display:flex;gap:10px;align-items:flex-end;border-top:1px solid var(--border-lt);padding-top:12px}
+.tc-textarea{flex:1;border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;font-size:14px;font-family:Arial,sans-serif;line-height:1.5;resize:none;max-height:110px;overflow-y:auto;background:var(--bg-soft);color:var(--text);outline:none;transition:border-color .15s}
 .tc-textarea:focus{border-color:var(--navy);background:#fff}
 .tc-textarea::placeholder{color:#bbb}
-.tc-send{
-  width:38px;height:38px;border-radius:9px;
-  background:var(--navy);border:none;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;transition:background .15s,transform .1s;
-}
+.tc-send{width:38px;height:38px;border-radius:9px;background:var(--navy);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,transform .1s}
 .tc-send:hover:not(:disabled){background:var(--navy-mid);transform:scale(1.05)}
 .tc-send:disabled{background:#C4C4C4;cursor:not-allowed;transform:none}
-.tc-hint{
-  text-align:center;font-size:10px;color:#C4C4C4;
-  padding:0 20px 8px;letter-spacing:.3px;flex-shrink:0;
-}
+.tc-hint{text-align:center;font-size:10px;color:#C4C4C4;padding:8px 0;letter-spacing:.3px}
 
 @media(max-width:640px){
   .tc-bub{max-width:85%;font-size:13.5px}
-  .tc-form-row{gap:8px}
-  .tc-input-num{width:60px}
-  .tc-hero{padding:10px 16px}
-  .tc-form-bar,.tc-laso-bar{padding:10px 16px}
-  .tc-messages{padding:16px 16px 6px}
-  .tc-input-bar{padding:8px 16px 12px}
-  .tc-suggs{padding:6px 16px 0}
+  .tc-laso-bar{padding:10px 12px}
 }
+
+/* TuviForm CSS vars that form.js needs */
+.tc-form-section .form-input{background:transparent;border:none;border-bottom:1px solid var(--border);padding:10px 0;font-size:16px;color:var(--text);font-family:Arial,sans-serif;outline:none;transition:border-color .2s;width:100%}
+.tc-form-section .form-input:focus{border-color:var(--navy)}
+.tc-form-section .btn-submit{background:var(--navy);color:var(--gold-bright);border:none;padding:14px 32px;font-size:15px;font-family:'Noto Serif',Georgia,serif;font-weight:700;border-radius:4px;cursor:pointer;transition:background .2s}
+.tc-form-section .btn-submit:hover{background:var(--navy-mid)}
+.error-msg{display:none;color:var(--red);font-size:13px;margin-top:8px}
+.error-msg.active{display:block}
 </style>
 </head>
 <body>
 
-<div class="tc-page">
+<div id="site-nav"></div>
 
-  <!-- Nav rendered by nav.js -->
-  <div id="site-nav"></div>
-
-  <!-- Hero strip -->
-  <div class="tc-hero">
+<!-- Hero -->
+<div class="tc-hero">
+  <div class="tc-hero-inner">
     <div class="tc-hero-icon">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
     </div>
@@ -222,80 +121,38 @@ html,body{height:100%;overflow:hidden;font-family:Arial,sans-serif;background:va
       <div class="tc-hero-sub">An sao · Luận giải từng cung · Xem vận hạn — tất cả trong một chat</div>
     </div>
   </div>
+</div>
 
-  <!-- Birth date form bar -->
-  <div class="tc-form-bar" id="tc-form-bar">
-    <div class="tc-form-label">Nhập ngày sinh dương lịch để an sao</div>
-    <div class="tc-form-row">
-      <div class="tc-form-group">
-        <span class="tc-form-lbl">Ngày</span>
-        <input class="tc-form-input tc-input-num" type="number" id="tc-ngay" min="1" max="31" placeholder="3">
-      </div>
-      <span class="tc-form-sep">/</span>
-      <div class="tc-form-group">
-        <span class="tc-form-lbl">Tháng</span>
-        <input class="tc-form-input tc-input-num" type="number" id="tc-thang" min="1" max="12" placeholder="6">
-      </div>
-      <span class="tc-form-sep">/</span>
-      <div class="tc-form-group">
-        <span class="tc-form-lbl">Năm</span>
-        <input class="tc-form-input" type="number" id="tc-nam" min="1920" max="2010" placeholder="1990" style="width:80px">
-      </div>
-      <div class="tc-form-group">
-        <span class="tc-form-lbl">Giờ sinh</span>
-        <select class="tc-form-input tc-input-select" id="tc-gio">
-          <option value="0">Tý (23h–1h)</option>
-          <option value="1">Sửu (1h–3h)</option>
-          <option value="2">Dần (3h–5h)</option>
-          <option value="3">Mão (5h–7h)</option>
-          <option value="4">Thìn (7h–9h)</option>
-          <option value="5">Tỵ (9h–11h)</option>
-          <option value="6">Ngọ (11h–13h)</option>
-          <option value="7">Mùi (13h–15h)</option>
-          <option value="8">Thân (15h–17h)</option>
-          <option value="9">Dậu (17h–19h)</option>
-          <option value="10">Tuất (19h–21h)</option>
-          <option value="11">Hợi (21h–23h)</option>
-        </select>
-      </div>
-      <div class="tc-form-group">
-        <span class="tc-form-lbl">Giới tính</span>
-        <select class="tc-form-input tc-input-select" id="tc-gt">
-          <option value="0">Nam</option>
-          <option value="1">Nữ</option>
-        </select>
-      </div>
-      <button class="tc-btn-an-sao" id="tc-an-sao-btn">An Sao →</button>
-    </div>
+<!-- Birth date form (hidden after an sao) -->
+<div class="tc-form-section" id="tc-form-section">
+  <div class="page">
+    <div id="tc-form-container"></div>
+    <p id="error-msg" class="error-msg"></p>
   </div>
+</div>
 
-  <!-- Lá số summary bar (shown after an sao) -->
-  <div class="tc-laso-bar" id="tc-laso-bar" style="display:none">
-    <div class="tc-laso-chip">
-      <div class="tc-laso-chip-dot"></div>
-      <span id="tc-laso-chip-text"></span>
-    </div>
-    <button class="tc-btn-reset" id="tc-reset-btn">Đổi lá số</button>
+<!-- Lá số summary bar (shown after an sao) -->
+<div class="tc-laso-bar" id="tc-laso-bar">
+  <div class="tc-laso-chip">
+    <div class="tc-laso-chip-dot"></div>
+    <span id="tc-laso-chip-text"></span>
   </div>
+  <button class="tc-btn-reset" id="tc-reset-btn">Đổi lá số</button>
+</div>
 
-  <!-- Chat area -->
-  <div class="tc-chat-area">
+<!-- Chat -->
+<div class="tc-chat-section">
+  <div class="page">
     <div class="tc-messages" id="tc-messages"></div>
     <div class="tc-suggs" id="tc-suggs"></div>
     <div class="tc-input-bar">
-      <textarea
-        id="tc-input"
-        class="tc-textarea"
-        placeholder="Hỏi về lá số, vận hạn, tương hợp..."
-        rows="1"
-      ></textarea>
+      <textarea id="tc-input" class="tc-textarea" placeholder="Hỏi về lá số, vận hạn, tương hợp..." rows="1"></textarea>
       <button id="tc-send" class="tc-send" disabled>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
       </button>
     </div>
     <div class="tc-hint">Tử Vi Minh Bảo · Tử Vi Đẩu Số theo cổ pháp</div>
   </div>
-
 </div>
 
 <script src="/nav.js?v=14"></script>
@@ -303,7 +160,6 @@ html,body{height:100%;overflow:hidden;font-family:Arial,sans-serif;background:va
 (function () {
   'use strict';
 
-  var CHI      = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
   var NAM_XEM  = 2027;
   var API_PATH = '/api/lasotuvi?action=chat';
 
@@ -313,7 +169,7 @@ html,body{height:100%;overflow:hidden;font-family:Arial,sans-serif;background:va
 
   var $msgs, $suggs, $ta, $send;
 
-  // ─── Slim laso for API (same logic as chatbot.js) ───────────────
+  // ── Slim laso (same as chatbot.js) ───────────────────────────
   function slimLaso(ls) {
     if (!ls) return null;
     var palaces = (ls.palaces || []).map(function(p) {
@@ -336,7 +192,6 @@ html,body{height:100%;overflow:hidden;font-family:Arial,sans-serif;background:va
       _type:         'tuvi',
       canChiNam:     ls.canChiNam,
       napAm:         ls.napAm,
-      napAmHanh:     ls.napAmHanh,
       menhDC:        ls.menhDC,
       thanDC:        ls.thanDC,
       tuoiXem:       ls.tuoiXem,
@@ -349,7 +204,7 @@ html,body{height:100%;overflow:hidden;font-family:Arial,sans-serif;background:va
     };
   }
 
-  // ─── Suggestions ────────────────────────────────────────────────
+  // ── Suggestions ──────────────────────────────────────────────
   var SUGG_INIT = [
     'Tử Vi Đẩu Số là gì?',
     'Đại vận là gì và xem như thế nào?',
@@ -365,10 +220,8 @@ html,body{height:100%;overflow:hidden;font-family:Arial,sans-serif;background:va
     'Điểm mạnh và yếu trong lá số',
   ];
 
-  // ─── DOM helpers ────────────────────────────────────────────────
-  function scrollToBottom() {
-    if ($msgs) $msgs.scrollTop = $msgs.scrollHeight;
-  }
+  // ── DOM helpers ──────────────────────────────────────────────
+  function scrollToBottom() { if ($msgs) $msgs.scrollTop = $msgs.scrollHeight; }
 
   function appendMsg(role, content, isTyping) {
     var wrap = document.createElement('div');
@@ -379,7 +232,6 @@ html,body{height:100%;overflow:hidden;font-family:Arial,sans-serif;background:va
     av.className = 'tc-av';
     if (role === 'bot') {
       av.innerHTML = '<img src="/thay-tuvi.webp" style="width:28px;height:28px;border-radius:50%;object-fit:cover;display:block;" alt="">';
-      av.style.background = 'transparent';
     } else {
       av.textContent = 'Bạn';
     }
@@ -404,8 +256,7 @@ html,body{height:100%;overflow:hidden;font-family:Arial,sans-serif;background:va
 
   function renderSuggs(list) {
     $suggs.innerHTML = '';
-    if (!list || !list.length) return;
-    list.forEach(function(t) {
+    (list || []).forEach(function(t) {
       var b = document.createElement('button');
       b.className = 'tc-sug';
       b.textContent = t;
@@ -419,53 +270,44 @@ html,body{height:100%;overflow:hidden;font-family:Arial,sans-serif;background:va
     $ta.style.height = Math.min($ta.scrollHeight, 110) + 'px';
   }
 
-  // ─── An Sao ─────────────────────────────────────────────────────
+  // ── An Sao (called by TuviForm submit) ───────────────────────
   function doAnSao() {
-    var ngay   = parseInt(document.getElementById('tc-ngay').value)  || 0;
-    var thang  = parseInt(document.getElementById('tc-thang').value) || 0;
-    var nam    = parseInt(document.getElementById('tc-nam').value)   || 0;
-    var gioIdx = parseInt(document.getElementById('tc-gio').value);
-    var gt     = parseInt(document.getElementById('tc-gt').value);
-
-    if (!ngay || ngay < 1 || ngay > 31) { alert('Vui lòng nhập ngày hợp lệ (1–31)'); return; }
-    if (!thang || thang < 1 || thang > 12) { alert('Vui lòng nhập tháng hợp lệ (1–12)'); return; }
-    if (!nam || nam < 1920 || nam > 2010) { alert('Vui lòng nhập năm sinh hợp lệ (1920–2010)'); return; }
+    var d = TuviForm.getData();
+    if (!d.ngay || !d.thang || !d.nam) return; // TuviForm validates internally
 
     try {
-      var al = convertDuongToAm(ngay, thang, nam, gioIdx);
-      var ls = anSaoLaSo({
-        ngayAL:   al.ngayAL,
-        thangAL:  al.thangAL,
-        namAL:    al.namAL,
-        canNam:   al.canNam,
-        chiNam:   al.chiNam,
-        gioIdx:   gioIdx,
-        gioitinh: gt,
+      // Correct params: gioHour is the actual hour number for convertDuongToAm
+      var conv = convertDuongToAm(d.ngay, d.thang, d.nam, d.gioHour);
+      var ls   = anSaoLaSo({
+        ngayAL:   conv.amLich.day,
+        thangAL:  conv.amLich.month,
+        namAL:    conv.amLich.year,
+        canNam:   conv.canNam,
+        chiNam:   conv.chiNam,
+        gioIdx:   d.gioIdx,
+        gioitinh: d.gioitinh === 'nu' ? 1 : 0,
         namXem:   NAM_XEM,
       });
 
       _lasoData = slimLaso(ls);
 
-      // Build summary chip text
-      var menh    = (ls.palaces || []).find(function(p) { return p.isMenh; });
-      var chinh   = menh ? (menh.majorStars || []).map(function(s) { return s.ten; }).join(', ') || 'Vô chính diệu' : 'Vô chính diệu';
+      // Summary chip
+      var menh   = (ls.palaces || []).find(function(p) { return p.isMenh; });
+      var chinh  = menh ? (menh.majorStars || []).map(function(s) { return s.ten; }).join(', ') || 'Vô chính diệu' : 'Vô chính diệu';
       var chipTxt = (ls.canChiNam || '') + ' · Cung Mệnh: ' + (ls.menhDC || '') + ' · ' + chinh;
       document.getElementById('tc-laso-chip-text').textContent = chipTxt;
 
-      // Switch bars
-      document.getElementById('tc-form-bar').style.display = 'none';
-      document.getElementById('tc-laso-bar').style.display  = 'flex';
+      // Switch UI: hide form, show summary bar
+      document.getElementById('tc-form-section').style.display = 'none';
+      document.getElementById('tc-laso-bar').classList.add('active');
 
-      // Build bot greeting
-      var dvHT  = ls.daiVanHienTai;
-      var dvTxt = dvHT
-        ? 'Đại vận hiện tại: ' + dvHT.diaChi + ' (' + dvHT.tuoiStart + '–' + dvHT.tuoiEnd + ' tuổi).'
-        : '';
-      var cc    = (Array.isArray(ls.cachCuc) ? ls.cachCuc : []).map(function(c) { return typeof c === 'object' ? c.ten : c; }).join(', ');
+      // Bot greeting
+      var dvHT    = ls.daiVanHienTai;
+      var dvTxt   = dvHT ? '\nĐại vận hiện tại: **' + dvHT.diaChi + '** (' + dvHT.tuoiStart + '–' + dvHT.tuoiEnd + ' tuổi).' : '';
+      var cc      = (Array.isArray(ls.cachCuc) ? ls.cachCuc : []).map(function(c) { return typeof c === 'object' ? c.ten : c; }).join(', ');
       var greeting = 'Đã an sao xong! Bạn tuổi **' + (ls.canChiNam || '') + '**, bản mệnh **' + (ls.napAm || '') + '**. Cung Mệnh tại **' + (ls.menhDC || '') + '** có chính tinh **' + chinh + '**.' +
-        (cc ? ' Cách cục nổi bật: ' + cc + '.' : '') +
-        (dvTxt ? '\n' + dvTxt : '') +
-        '\n\nBạn muốn tìm hiểu phần nào trước?';
+        (cc ? ' Cách cục: ' + cc + '.' : '') + dvTxt +
+        '\n\nBạn muốn tìm hiểu phần nào?';
 
       appendMsg('bot', greeting);
       _msgs.push({ role: 'assistant', content: greeting });
@@ -473,12 +315,14 @@ html,body{height:100%;overflow:hidden;font-family:Arial,sans-serif;background:va
       $ta.focus();
 
     } catch(e) {
-      alert('Có lỗi khi an sao. Vui lòng kiểm tra lại ngày sinh.\n' + e.message);
       console.error('[TuviChat] an sao error', e);
+      var errEl = document.getElementById('error-msg');
+      errEl.textContent = 'Có lỗi khi an sao: ' + e.message;
+      errEl.classList.add('active');
     }
   }
 
-  // ─── Send message ────────────────────────────────────────────────
+  // ── Send message ─────────────────────────────────────────────
   async function send(text) {
     text = (text || $ta.value).trim();
     if (!text || _busy) return;
@@ -540,39 +384,36 @@ html,body{height:100%;overflow:hidden;font-family:Arial,sans-serif;background:va
     $ta.focus();
   }
 
-  // ─── Init ────────────────────────────────────────────────────────
+  // ── Init ─────────────────────────────────────────────────────
   function init() {
     $msgs  = document.getElementById('tc-messages');
     $suggs = document.getElementById('tc-suggs');
     $ta    = document.getElementById('tc-input');
     $send  = document.getElementById('tc-send');
 
-    // Initial bot greeting
-    appendMsg('bot', 'Chào bạn! Nhập ngày sinh dương lịch bên trên để an sao lá số, sau đó hỏi tôi bất cứ điều gì.\n\nHoặc bạn có thể hỏi thẳng về Tử Vi Đẩu Số ngay bây giờ.');
-    renderSuggs(SUGG_INIT);
-
-    // An sao button
-    document.getElementById('tc-an-sao-btn').addEventListener('click', doAnSao);
-
-    // Enter on form inputs
-    ['tc-ngay','tc-thang','tc-nam'].forEach(function(id) {
-      document.getElementById(id).addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') doAnSao();
-      });
+    // Render TuviForm into the form container
+    TuviForm.render('tc-form-container', {
+      onSubmit:    doAnSao,
+      submitLabel: 'An Sao & Chat →',
     });
+
+    // Initial bot message
+    appendMsg('bot', 'Chào bạn! Nhập ngày sinh dương lịch bên trên để an sao lá số, sau đó hỏi tôi bất cứ điều gì.\n\nHoặc hỏi thẳng về Tử Vi Đẩu Số ngay bây giờ.');
+    renderSuggs(SUGG_INIT);
 
     // Reset button
     document.getElementById('tc-reset-btn').addEventListener('click', function() {
       _lasoData = null;
       _msgs = [];
       $msgs.innerHTML = '';
-      document.getElementById('tc-laso-bar').style.display  = 'none';
-      document.getElementById('tc-form-bar').style.display  = '';
-      appendMsg('bot', 'Chào bạn! Nhập ngày sinh dương lịch bên trên để an sao lá số, sau đó hỏi tôi bất cứ điều gì.\n\nHoặc bạn có thể hỏi thẳng về Tử Vi Đẩu Số ngay bây giờ.');
+      document.getElementById('tc-laso-bar').classList.remove('active');
+      document.getElementById('tc-form-section').style.display = '';
+      appendMsg('bot', 'Chào bạn! Nhập ngày sinh dương lịch bên trên để an sao lá số, sau đó hỏi tôi bất cứ điều gì.\n\nHoặc hỏi thẳng về Tử Vi Đẩu Số ngay bây giờ.');
       renderSuggs(SUGG_INIT);
+      document.getElementById('error-msg').classList.remove('active');
     });
 
-    // Textarea
+    // Textarea auto-resize + send
     $ta.addEventListener('input', function() {
       autoResize();
       $send.disabled = !$ta.value.trim() || _busy;
@@ -583,8 +424,6 @@ html,body{height:100%;overflow:hidden;font-family:Arial,sans-serif;background:va
         if (!$send.disabled) send();
       }
     });
-
-    // Send button
     $send.addEventListener('click', function() { send(); });
   }
 
