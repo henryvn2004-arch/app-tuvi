@@ -987,6 +987,16 @@ function render24Sections(ls: Rec, params: IsrParams): string {
       body += `</div>`;
     }
 
+    // Vận Hạn patterns (yNghia)
+    const dvYN = (dv.yNghia as string[])||[];
+    if (dvYN.length > 0) {
+      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">📖 Luận giải vận hạn</div>`;
+      dvYN.forEach(t => {
+        body += `<div style="font-size:12px;color:#374151;padding:3px 0 3px 10px;border-left:2px solid #c9a84c;margin-bottom:4px;line-height:1.5">${esc(t)}</div>`;
+      });
+      body += `</div>`;
+    }
+
     if (!body) body = `<p style="color:#888;font-style:italic">Không đủ dữ liệu để phân tích đại vận này.</p>`;
     body += cta(`Xem luận giải AI đại vận ${dvIdx+1}`);
 
