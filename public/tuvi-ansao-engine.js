@@ -909,6 +909,38 @@ function phanTichCachCuc(ls, gioitinh) {
       'Địa Kiếp tại Mệnh, Địa Không tại Thân.', 'Mệnh');
   }
 
+  // Triệt đáo Kim cung (bản mệnh) — Triệt thường trú tại Thân hoặc Dậu
+  const triketKimPalaces = ls.palaces.filter(p => hasTriet(p) && (p.diaChi === 'Thân' || p.diaChi === 'Dậu'));
+  if (triketKimPalaces.length > 0) {
+    const dcListTK = triketKimPalaces.map(p => p.diaChi).join('/');
+    const cungListTK = triketKimPalaces.map(p => p.cungName).filter(Boolean).join('/');
+    add('menh_co_ban','Triệt Đáo Kim Cung',
+      `Triệt đóng thường trú tại ${dcListTK} (Kim cung) — đặc cách cát: hóa giải sát khí, giảm tính xấu sát tinh, tăng tính tốt cát tinh trong cung. Tác dụng mạnh nhất trước 30 tuổi.`,
+      `Triệt tại ${dcListTK} = Kim địa, đặc cách hóa sát.`, cungListTK || dcListTK);
+  }
+
+  // Tuần lâm Hỏa địa (bản mệnh) — Tuần thường trú tại Tỵ hoặc Ngọ
+  const tuanHoaDiaPalaces = ls.palaces.filter(p => hasTuan(p) && (p.diaChi === 'Tỵ' || p.diaChi === 'Ngọ'));
+  if (tuanHoaDiaPalaces.length > 0) {
+    const dcListTH = tuanHoaDiaPalaces.map(p => p.diaChi).join('/');
+    const cungListTH = tuanHoaDiaPalaces.map(p => p.cungName).filter(Boolean).join('/');
+    add('menh_co_ban','Tuần Lâm Hỏa Địa',
+      `Tuần đóng thường trú tại ${dcListTH} (Hỏa địa) — đặc cách cát: giảm tính xấu sát tinh, hóa giải hung khí trong cung. Tác dụng mạnh sau 30 tuổi.`,
+      `Tuần tại ${dcListTH} = Hỏa địa, đặc cách hóa sát.`, cungListTH || dcListTH);
+  }
+
+  // Tuần án Mệnh standalone (chỉ khi không kết hợp thành Mệnh-Thân combo)
+  if (menhTuan && !thanTriet) {
+    add('menh_co_ban','Tuần Án Cung Mệnh',
+      'Tuần đóng tại cung Mệnh — khởi nghiệp chậm, gặp trở ngại giai đoạn đầu, nhưng trung niên trở đi dần khắc phục. Tuần làm trung hòa cả cát lẫn hung trong cung.','', 'Mệnh');
+  }
+
+  // Triệt án Mệnh standalone (chỉ khi không kết hợp thành Mệnh-Thân combo)
+  if (menhTriet && !thanTuan) {
+    add('menh_co_ban','Triệt Án Cung Mệnh',
+      'Triệt đóng tại cung Mệnh — tiềm năng bị kìm hãm ở giai đoạn trẻ, cần nỗ lực cá nhân nhiều hơn người khác. Tác dụng giảm dần sau 30 tuổi.','', 'Mệnh');
+  }
+
   // Thân cư Thiên Di
   if (thanDC === p_thienDi?.diaChi) {
     if (!hasSatTinh(p_thienDi) && !hasTuanOrTriet(p_thienDi)) {
@@ -1230,6 +1262,67 @@ function phanTichCachCuc(ls, gioitinh) {
     }
   }
 
+  // ─── TỨ HÓA THEO CUNG ──────────────────────────────────────
+  // Hóa Lộc tại Tài Bạch
+  if (p_tai && hasHoa(p_tai,'Lộc')) {
+    add('phu_cuc','Hóa Lộc Tại Tài Bạch',
+      'Hóa Lộc đóng tại Tài Bạch — tài lộc dồi dào, kiếm tiền dễ dàng, phù hợp kinh doanh buôn bán.',
+      'Hóa Lộc tại Tài Bạch = tài lộc vượng.', 'Tài Bạch');
+  }
+  // Hóa Lộc tại Quan Lộc
+  if (p_quan && hasHoa(p_quan,'Lộc')) {
+    add('phu_cuc','Hóa Lộc Tại Quan Lộc',
+      'Hóa Lộc đóng tại Quan Lộc — sự nghiệp phát đạt, lộc đến từ công danh và nghề nghiệp.',
+      'Hóa Lộc tại Quan Lộc = lộc từ sự nghiệp.', 'Quan Lộc');
+  }
+  // Tài Tinh nhập Mệnh — Lộc Tồn hoặc Hóa Lộc đồng cung với chính tinh tại Mệnh
+  if (p_menh && (hasSao(p_menh,'Lộc Tồn')||hasHoa(p_menh,'Lộc')) && getSaoChinh(p_menh).length > 0) {
+    add('phu_cuc','Tài Tinh Nhập Mệnh',
+      'Lộc Tồn hoặc Hóa Lộc đóng tại cung Mệnh cùng chính tinh — tài lộc vượng phát từ bản thân, tiền tài do mình tạo ra.',
+      'Tài Tinh (Lộc) tại Mệnh.', 'Mệnh');
+  }
+  // Hóa Quyền tại Quan Lộc
+  if (p_quan && hasHoa(p_quan,'Quyền')) {
+    add('quy_cuc','Hóa Quyền Tại Quan Lộc',
+      'Hóa Quyền đóng tại Quan Lộc — quyền lực trong sự nghiệp, thích hợp lãnh đạo, dễ thăng tiến nhưng cần kiểm soát cái tôi để tránh xung đột.',
+      'Hóa Quyền tại Quan Lộc = quyền từ sự nghiệp.', 'Quan Lộc');
+  }
+  // Hóa Khoa thủ Mệnh
+  if (p_menh && hasHoa(p_menh,'Khoa')) {
+    add('quy_cuc','Hóa Khoa Thủ Mệnh',
+      'Hóa Khoa thủ tại cung Mệnh — thông minh, danh tiếng ổn định, học vấn tốt, dễ được người trên đề bạt.',
+      'Hóa Khoa tại cung Mệnh = danh tiếng học thức.', 'Mệnh');
+  }
+  // Quan Tinh nhập Mệnh — Hóa Quyền thủ Mệnh
+  if (p_menh && hasHoa(p_menh,'Quyền')) {
+    add('quy_cuc','Quan Tinh Nhập Mệnh',
+      'Hóa Quyền đóng tại cung Mệnh — thiên bẩm lãnh đạo, uy quyền tự nhiên, thích hợp các vị trí quản lý và quyết định.',
+      'Quan Tinh (Quyền) tại Mệnh.', 'Mệnh');
+  }
+  // Phúc Tinh thủ Mệnh — Thiên Phủ hoặc Thiên Tướng sáng sủa, không có sát tinh
+  if (p_menh) {
+    const phuTuongSang = (hasSao(p_menh,'Thiên Phủ') && isSangSua(p_menh,'Thiên Phủ')) ||
+                         (hasSao(p_menh,'Thiên Tướng') && isSangSua(p_menh,'Thiên Tướng'));
+    if (phuTuongSang && !hasSatTinh(p_menh)) {
+      add('phu_cuc','Phúc Tinh Thủ Mệnh',
+        'Thiên Phủ hoặc Thiên Tướng sáng sủa thủ Mệnh không gặp sát tinh — phúc lộc dồi dào, cuộc đời ổn định sung túc.',
+        'Phúc Tinh (Phủ/Tướng sáng) tại Mệnh.', 'Mệnh');
+    }
+  }
+  // Tứ Huyền Như Ý — Nhật Nguyệt + Tử Vi/Phủ đủ mặt trong tam phương tứ chính Mệnh
+  if (p_menh) {
+    const tuChinhMenh = [p_menh, ...(p_menh.tamHopCungs||[]), p_menh.xungChieuCung].filter(Boolean);
+    const tcNhat   = tuChinhMenh.some(p => hasSao(p,'Thái Dương'));
+    const tcNguyet = tuChinhMenh.some(p => hasSao(p,'Thái Âm'));
+    const tcTuVi   = tuChinhMenh.some(p => hasSao(p,'Tử Vi'));
+    const tcPhu    = tuChinhMenh.some(p => hasSao(p,'Thiên Phủ'));
+    if (tcNhat && tcNguyet && (tcTuVi || tcPhu)) {
+      add('quy_cuc','Tứ Huyền Như Ý',
+        'Thái Dương, Thái Âm và Tử Vi/Thiên Phủ đều hiện diện trong tam phương tứ chính cung Mệnh — ngôi sao chủ lực đủ mặt, cuộc đời viên mãn.',
+        'Nhật Nguyệt + Tử Vi/Phủ đủ mặt trong tứ chính Mệnh.', 'Mệnh');
+    }
+  }
+
   // ═══════════════════════════════════════════════
   // 4. BẦN TIỆN CỤC (19.3)
   // ═══════════════════════════════════════════════
@@ -1279,6 +1372,28 @@ function phanTichCachCuc(ls, gioitinh) {
   if (p_menh && hasSao(p_menh,'Thiên Mã') && hasTuanOrTriet(p_menh)) {
     add('ban_tien_cuc','Mã Lạc Không Vong',
       'Thiên Mã thủ Mệnh gặp Tuần/Triệt án ngữ → ngựa sa vào chỗ không, bôn ba vô ích.','', 'Mệnh');
+  }
+
+  // Vô Chính Vô Phò — Mệnh VÀ Quan Lộc đều không có chính tinh
+  if (isVoChinhDieu(p_menh) && isVoChinhDieu(p_quan)) {
+    add('ban_tien_cuc','Vô Chính Vô Phò',
+      'Cả cung Mệnh lẫn Quan Lộc đều không có chính tinh — cuộc đời thiếu định hướng, dễ thất bại trong sự nghiệp, cần người hướng dẫn dẫn dắt.',
+      'Mệnh và Quan Lộc đều vô chính diệu.', 'Mệnh');
+  }
+
+  // Hóa Kỵ nhập Mệnh
+  if (p_menh && hasHoa(p_menh,'Kỵ')) {
+    add('ban_tien_cuc','Hóa Kỵ Nhập Mệnh',
+      'Hóa Kỵ đóng tại cung Mệnh — nhiều trắc trở trong cuộc đời, hay gặp oan khuất hoặc cản trở, cần tránh tranh chấp và thận trọng lời nói.',
+      'Hóa Kỵ tại cung Mệnh.', 'Mệnh');
+  }
+
+  // Hóa Kỵ hội sát tinh (≥2 sát tinh đồng cung)
+  const hoaKyPalace = ls.palaces.find(p => hasHoa(p,'Kỵ'));
+  if (hoaKyPalace && countSatTinh(hoaKyPalace) >= 2) {
+    add('ban_tien_cuc','Hóa Kỵ Hội Sát',
+      `Hóa Kỵ đóng cùng nhiều sát tinh tại cung ${hoaKyPalace.cungName} — hung hại trong lĩnh vực cung đó tăng gấp bội, đặc biệt thận trọng.`,
+      `Hóa Kỵ + ${countSatTinh(hoaKyPalace)} sát tinh tại ${hoaKyPalace.cungName}.`, hoaKyPalace.cungName);
   }
 
   // ═══════════════════════════════════════════════
