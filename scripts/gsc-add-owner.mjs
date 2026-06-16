@@ -104,7 +104,10 @@ const target =
 
 if (!target) {
   console.error('\n✗ Không tìm thấy tuviminhbao.com trong verified sites.');
-  console.error('Danh sách IDs:', resources.map((r) => r.id));
+  console.error(
+    'Danh sách IDs:',
+    resources.map((r) => r.id)
+  );
   process.exit(1);
 }
 
