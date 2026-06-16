@@ -662,6 +662,15 @@ function render24Sections(ls: Rec, params: IsrParams): string {
   const scores    = (ls.cungScores as Record<string,Record<string,number>>) || {};
   const cachCuc   = (ls.cachCuc as Rec[]) || [];
   const cachCucTC = (ls.cachCucTungCung as Record<string,string[]>) || {};
+  const CHINH_TINH = ['Tử Vi','Thiên Cơ','Thái Dương','Vũ Khúc','Thiên Đồng','Liêm Trinh',
+    'Thiên Phủ','Thái Âm','Tham Lang','Cự Môn','Thiên Tướng','Thiên Lương','Thất Sát','Phá Quân'];
+  function sortByChinhTinh(items: string[]): string[] {
+    return [...items].sort((a, b) => {
+      const aHas = CHINH_TINH.some(s => a.includes(s)) ? 0 : 1;
+      const bHas = CHINH_TINH.some(s => b.includes(s)) ? 0 : 1;
+      return aHas - bHas;
+    });
+  }
   const dvs       = (ls.daiVans as Rec[]) || [];
   const tieuVanSc = (ls.tieuVanScores as Rec[]) || [];
   const { namXem } = params;
@@ -798,8 +807,26 @@ function render24Sections(ls: Rec, params: IsrParams): string {
       const augLs = { ..._lsBase, palaces: augPalaces };
       const augResult = _phanTichCYN(augLs, params.gioi, params.gioIdx, _canNam, _chiNam, 0);
       const origSet = new Set(ynItems);
-      tptcItems = (augResult[cungName] || []).filter((item: string) => !origSet.has(item));
+      tptcItems = sortByChinhTinh((augResult[cungName] || []).filter((item: string) => !origSet.has(item)));
     }
+
+    // Phân tích sao (cachCucTungCung) — chính tinh patterns first
+    const ynSorted = sortByChinhTinh(ynItems);
+    if (ynSorted.length > 0) {
+      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">📋 Phân tích sao</div>`;
+      ynSorted.slice(0, 8).forEach(y => {
+        const isGreatCat = y.includes('đại cát')||y.includes('đại phú');
+        const isCat      = !isGreatCat && (y.includes('[cát]')||y.includes('phú quý')||y.includes('giàu sang'));
+        const isGreatHung= y.includes('đại hung');
+        const isHung     = !isGreatHung && (y.includes('hung')||y.includes('vất vả')||y.includes('tai'));
+        const isTT       = y.includes('Tuần')||y.includes('Triệt');
+        const col = isGreatCat?'#4ade80':isCat?'#86efac':isGreatHung?'#f87171':isHung?'#fca5a5':isTT?'#fbbf24':'#94a3b8';
+        body += `<div style="font-size:12px;color:${col};padding:2px 0;line-height:1.5">• ${esc(y)}</div>`;
+      });
+      body += `</div>`;
+    }
+
+    // Tam phương tứ chính — after Phân tích sao
     if (catTPTC.length || satTPTC.length || baiTPTC.length || tptcItems.length) {
       body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">🔍 Tam phương tứ chính</div>`;
       if (catTPTC.length) body += `<div style="font-size:12px;color:#86efac;margin:2px 0">Cát tinh: ${catTPTC.map(s=>starLink(s,esc(s))).join(', ')}</div>`;
@@ -825,21 +852,6 @@ function render24Sections(ls: Rec, params: IsrParams): string {
       ccInCung.forEach(c => {
         const loai = String(c.loai||'');
         body += `<span style="display:inline-block;background:${LOAI_COL[loai]||'#888'};color:#fff;font-size:11px;font-weight:700;padding:2px 7px;border-radius:3px;margin:2px">${esc(String(c.ten||''))}</span>`;
-      });
-      body += `</div>`;
-    }
-
-    // Phân tích sao (cachCucTungCung)
-    if (ynItems.length > 0) {
-      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">📋 Phân tích sao</div>`;
-      ynItems.slice(0, 8).forEach(y => {
-        const isGreatCat = y.includes('đại cát')||y.includes('đại phú');
-        const isCat      = !isGreatCat && (y.includes('[cát]')||y.includes('phú quý')||y.includes('giàu sang'));
-        const isGreatHung= y.includes('đại hung');
-        const isHung     = !isGreatHung && (y.includes('hung')||y.includes('vất vả')||y.includes('tai'));
-        const isTT       = y.includes('Tuần')||y.includes('Triệt');
-        const col = isGreatCat?'#4ade80':isCat?'#86efac':isGreatHung?'#f87171':isHung?'#fca5a5':isTT?'#fbbf24':'#94a3b8';
-        body += `<div style="font-size:12px;color:${col};padding:2px 0;line-height:1.5">• ${esc(y)}</div>`;
       });
       body += `</div>`;
     }
