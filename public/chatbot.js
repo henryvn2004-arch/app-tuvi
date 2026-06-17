@@ -417,6 +417,10 @@
       thanDC:        ls.thanDC,
       tuoiXem:       ls.tuoiXem,
       cachCuc:       (Array.isArray(ls.cachCuc) ? ls.cachCuc : []).map(c => ({ ten: typeof c === 'object' ? c.ten : c })),
+      cachCucTungCung: ls.cachCucTungCung
+        ? Object.fromEntries(Object.entries(ls.cachCucTungCung).map(([k, v]) => [k, v.slice(0, 8)]))
+        : undefined,
+      cungScores:    ls.cungScores || undefined,
       palaces,
       daiVans,
       daiVanHienTai: dvHT ? {

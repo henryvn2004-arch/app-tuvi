@@ -196,6 +196,10 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);font-si
       thanDC:        ls.thanDC,
       tuoiXem:       ls.tuoiXem,
       cachCuc:       (Array.isArray(ls.cachCuc) ? ls.cachCuc : []).map(function(c) { return { ten: typeof c === 'object' ? c.ten : c }; }),
+      cachCucTungCung: ls.cachCucTungCung
+        ? Object.fromEntries(Object.entries(ls.cachCucTungCung).map(function(e) { return [e[0], e[1].slice(0, 8)]; }))
+        : undefined,
+      cungScores:    ls.cungScores || undefined,
       palaces:       palaces,
       daiVans:       daiVans,
       daiVanHienTai: dvHT ? { diaChi: dvHT.diaChi, tuoiStart: dvHT.tuoiStart, tuoiEnd: dvHT.tuoiEnd,
