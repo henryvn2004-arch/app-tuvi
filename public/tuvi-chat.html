@@ -32,78 +32,139 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);font-si
 
 /* ── Layout ── */
 .page{max-width:860px;margin:0 auto;padding:0 20px}
-@media(max-width:600px){.page{padding:0 12px}}
+@media(max-width:600px){.page{padding:0 14px}}
 
 /* ── Hero strip ── */
 .tc-hero{background:var(--navy);padding:0}
-.tc-hero-inner{max-width:860px;margin:0 auto;padding:16px 20px;display:flex;align-items:center;gap:14px}
-.tc-hero-icon{width:38px;height:38px;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.35);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.tc-hero-title{font-size:18px;font-weight:700;color:#fff;font-family:'Noto Serif',Georgia,serif;line-height:1.2}
-.tc-hero-sub{font-size:11px;color:#8BAACC;margin-top:2px}
-@media(max-width:600px){.tc-hero-inner{padding:12px}}
+.tc-hero-inner{max-width:860px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:12px}
+.tc-hero-icon{width:36px;height:36px;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.35);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tc-hero-title{font-size:17px;font-weight:700;color:#fff;font-family:'Noto Serif',Georgia,serif;line-height:1.2}
+.tc-hero-sub{font-size:11px;color:#8BAACC;margin-top:1px}
+@media(max-width:600px){
+  .tc-hero-inner{padding:11px 14px}
+  .tc-hero-sub{display:none}
+}
 
 /* ── Form section ── */
-.tc-form-section{background:var(--gold-lt);border-bottom:2px solid #e8d9b0;padding:32px 0}
+.tc-form-section{background:var(--gold-lt);border-bottom:2px solid #e8d9b0;padding:28px 0}
+@media(max-width:600px){.tc-form-section{padding:18px 0}}
 
-/* TuviForm override — compact for chat page */
+/* TuviForm overrides */
 .tc-form-section .form-section{padding:0;border:none}
+.tc-form-section .section-eyebrow{margin-bottom:16px}
 .tc-form-section .form-grid{border-radius:8px;overflow:hidden}
-.tc-form-section .section-eyebrow{margin-bottom:20px}
+
+/* Collapse 3-col form to 1 col on mobile */
+@media(max-width:720px){
+  .tc-form-section .form-grid{grid-template-columns:1fr!important;display:flex;flex-direction:column}
+  .tc-form-section .form-col{border-right:none!important;border-bottom:1px solid var(--border);padding:18px 16px!important}
+  .tc-form-section .form-col:last-child{border-bottom:none}
+  /* Hide the 3rd col "Thực Thi" description text, keep just the button */
+  .tc-form-section .form-col:last-child > p{display:none}
+}
+
+.tc-form-section .btn-submit{background:var(--navy);color:var(--gold-bright);border:none;padding:13px 28px;font-size:15px;font-family:'Noto Serif',Georgia,serif;font-weight:700;border-radius:4px;cursor:pointer;transition:background .2s}
+.tc-form-section .btn-submit:hover{background:var(--navy-mid)}
+.error-msg{display:none;color:var(--red);font-size:13px;margin-top:8px}
+.error-msg.active{display:block}
+.tc-form-section .form-input{background:transparent;border:none;border-bottom:1px solid var(--border);padding:10px 0;font-size:16px;color:var(--text);font-family:Arial,sans-serif;outline:none;transition:border-color .2s;width:100%}
+.tc-form-section .form-input:focus{border-color:var(--navy)}
 
 /* ── Lá số summary bar ── */
-.tc-laso-bar{background:var(--gold-lt);border-bottom:1px solid #e8d9b0;padding:10px 20px;display:none;align-items:center;justify-content:space-between;gap:12px}
+.tc-laso-bar{background:var(--gold-lt);border-bottom:1px solid #e8d9b0;padding:9px 20px;display:none;align-items:center;justify-content:space-between;gap:10px}
 .tc-laso-bar.active{display:flex}
-.tc-laso-chip{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--navy);font-weight:600}
-.tc-laso-chip-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0}
-.tc-btn-reset{background:none;border:1px solid var(--border);border-radius:6px;padding:4px 11px;font-size:11px;color:var(--text-lt);cursor:pointer;font-family:Arial,sans-serif;transition:border-color .15s,color .15s;white-space:nowrap}
+.tc-laso-chip{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--navy);font-weight:600;min-width:0}
+.tc-laso-chip-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0}
+.tc-laso-chip-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tc-btn-reset{background:none;border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:11px;color:var(--text-lt);cursor:pointer;font-family:Arial,sans-serif;transition:border-color .15s,color .15s;white-space:nowrap;flex-shrink:0}
 .tc-btn-reset:hover{border-color:var(--navy);color:var(--navy)}
+@media(max-width:600px){.tc-laso-bar{padding:9px 14px}}
 
 /* ── Chat section ── */
-.tc-chat-section{padding:0 0 24px}
+.tc-chat-section{padding:0 0 4px}
 
 /* messages */
-.tc-messages{padding:24px 0 8px;display:flex;flex-direction:column;gap:0;min-height:180px}
-.tc-msg{display:flex;gap:10px;align-items:flex-end;margin-bottom:14px;animation:tc-in .18s ease}
-@keyframes tc-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.tc-messages{padding:20px 0 8px;display:flex;flex-direction:column;gap:0;min-height:160px}
+.tc-msg{display:flex;gap:9px;align-items:flex-end;margin-bottom:12px;animation:tc-in .18s ease}
+@keyframes tc-in{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 .tc-msg.user{flex-direction:row-reverse}
 .tc-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
 .tc-msg.bot .tc-av{background:transparent}
 .tc-msg.user .tc-av{background:var(--blue);color:#fff}
-.tc-bub{max-width:72%;padding:10px 14px;font-size:14px;line-height:1.75;border-radius:14px;position:relative}
+.tc-bub{max-width:72%;padding:10px 14px;font-size:14px;line-height:1.75;border-radius:14px}
 .tc-msg.bot .tc-bub{background:#fff;color:var(--text);border:1px solid var(--border-lt);border-bottom-left-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
 .tc-msg.user .tc-bub{background:var(--navy);color:#F9F4EB;border-bottom-right-radius:4px}
-.tc-msg.typing .tc-bub{display:flex;gap:5px;align-items:center;padding:14px 16px}
+.tc-msg.typing .tc-bub{display:flex;gap:5px;align-items:center;padding:13px 16px}
 .tc-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:tc-bounce 1.2s infinite}
 .tc-dot:nth-child(2){animation-delay:.18s}.tc-dot:nth-child(3){animation-delay:.36s}
 @keyframes tc-bounce{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-5px);opacity:1}}
 
-/* suggestions */
-.tc-suggs{display:flex;flex-wrap:wrap;gap:7px;padding:4px 0 16px}
-.tc-sug{background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:16px;padding:6px 14px;font-size:12.5px;color:var(--blue);cursor:pointer;font-family:Arial,sans-serif;transition:all .13s;line-height:1.4}
-.tc-sug:hover{background:#EBF3FF;border-color:var(--blue)}
-
-/* input bar */
-.tc-input-bar{display:flex;gap:10px;align-items:flex-end;border-top:1px solid var(--border-lt);padding-top:12px}
-.tc-textarea{flex:1;border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;font-size:14px;font-family:Arial,sans-serif;line-height:1.5;resize:none;max-height:110px;overflow-y:auto;background:var(--bg-soft);color:var(--text);outline:none;transition:border-color .15s}
-.tc-textarea:focus{border-color:var(--navy);background:#fff}
-.tc-textarea::placeholder{color:#bbb}
-.tc-send{width:38px;height:38px;border-radius:9px;background:var(--navy);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,transform .1s}
-.tc-send:hover:not(:disabled){background:var(--navy-mid);transform:scale(1.05)}
-.tc-send:disabled{background:#C4C4C4;cursor:not-allowed;transform:none}
-.tc-hint{text-align:center;font-size:10px;color:#C4C4C4;padding:8px 0;letter-spacing:.3px}
-
-@media(max-width:640px){
-  .tc-bub{max-width:85%;font-size:13.5px}
-  .tc-laso-bar{padding:10px 12px}
+@media(max-width:600px){
+  .tc-bub{max-width:86%;font-size:14px}
+  .tc-messages{padding:16px 0 6px}
 }
 
-/* TuviForm CSS vars that form.js needs */
-.tc-form-section .form-input{background:transparent;border:none;border-bottom:1px solid var(--border);padding:10px 0;font-size:16px;color:var(--text);font-family:Arial,sans-serif;outline:none;transition:border-color .2s;width:100%}
-.tc-form-section .form-input:focus{border-color:var(--navy)}
-.tc-form-section .btn-submit{background:var(--navy);color:var(--gold-bright);border:none;padding:14px 32px;font-size:15px;font-family:'Noto Serif',Georgia,serif;font-weight:700;border-radius:4px;cursor:pointer;transition:background .2s}
-.tc-form-section .btn-submit:hover{background:var(--navy-mid)}
-.error-msg{display:none;color:var(--red);font-size:13px;margin-top:8px}
-.error-msg.active{display:block}
+/* suggestions — horizontal scroll on mobile */
+.tc-suggs{display:flex;flex-wrap:wrap;gap:7px;padding:4px 0 14px}
+.tc-sug{background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:16px;padding:6px 14px;font-size:12.5px;color:var(--blue);cursor:pointer;font-family:Arial,sans-serif;transition:all .13s;line-height:1.4;white-space:nowrap}
+.tc-sug:hover{background:#EBF3FF;border-color:var(--blue)}
+@media(max-width:600px){
+  .tc-suggs{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:10px;scrollbar-width:none}
+  .tc-suggs::-webkit-scrollbar{display:none}
+}
+
+/* ── Input bar — sticky at bottom ── */
+.tc-input-bar{
+  position:sticky;
+  bottom:0;
+  background:var(--bg);
+  border-top:1px solid var(--border-lt);
+  padding:10px 20px;
+  padding-bottom:max(10px, env(safe-area-inset-bottom, 10px));
+  display:flex;gap:10px;align-items:flex-end;
+  z-index:20;
+  max-width:860px;
+  margin:0 auto;
+}
+/* Sticky bar needs full-width background */
+.tc-input-wrap{
+  position:sticky;
+  bottom:0;
+  background:var(--bg);
+  z-index:20;
+  border-top:1px solid var(--border-lt);
+}
+.tc-input-inner{
+  max-width:860px;margin:0 auto;
+  padding:10px 20px;
+  padding-bottom:max(10px, env(safe-area-inset-bottom, 10px));
+  display:flex;gap:10px;align-items:flex-end;
+}
+@media(max-width:600px){.tc-input-inner{padding:8px 14px;padding-bottom:max(10px,env(safe-area-inset-bottom,10px))}}
+
+.tc-textarea{
+  flex:1;border:1.5px solid var(--border);border-radius:9px;
+  padding:9px 12px;
+  font-size:16px; /* ≥16px prevents iOS auto-zoom */
+  font-family:Arial,sans-serif;line-height:1.5;
+  resize:none;max-height:120px;overflow-y:auto;
+  background:var(--bg-soft);color:var(--text);
+  outline:none;transition:border-color .15s;
+}
+.tc-textarea:focus{border-color:var(--navy);background:#fff}
+.tc-textarea::placeholder{color:#bbb;font-size:15px}
+.tc-send{
+  width:40px;height:40px;border-radius:10px;
+  background:var(--navy);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:background .15s,transform .1s;
+}
+.tc-send:hover:not(:disabled){background:var(--navy-mid)}
+.tc-send:disabled{background:#C4C4C4;cursor:not-allowed}
+.tc-hint{text-align:center;font-size:10px;color:#D0D0D0;padding:6px 0 10px;letter-spacing:.3px}
+@media(max-width:600px){.tc-hint{display:none}}
+/* extra bottom space so last message isn't hidden behind sticky input */
+.tc-chat-section{padding-bottom:80px}
 </style>
 </head>
 <body>
@@ -114,7 +175,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);font-si
 <div class="tc-hero">
   <div class="tc-hero-inner">
     <div class="tc-hero-icon">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
     </div>
     <div>
       <div class="tc-hero-title">Tử Vi Chat</div>
@@ -135,24 +196,28 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);font-si
 <div class="tc-laso-bar" id="tc-laso-bar">
   <div class="tc-laso-chip">
     <div class="tc-laso-chip-dot"></div>
-    <span id="tc-laso-chip-text"></span>
+    <span class="tc-laso-chip-text" id="tc-laso-chip-text"></span>
   </div>
   <button class="tc-btn-reset" id="tc-reset-btn">Đổi lá số</button>
 </div>
 
 <!-- Chat -->
-<div class="tc-chat-section">
+<div class="tc-chat-section" id="tc-chat-section">
   <div class="page">
     <div class="tc-messages" id="tc-messages"></div>
     <div class="tc-suggs" id="tc-suggs"></div>
-    <div class="tc-input-bar">
-      <textarea id="tc-input" class="tc-textarea" placeholder="Hỏi về lá số, vận hạn, tương hợp..." rows="1"></textarea>
-      <button id="tc-send" class="tc-send" disabled>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-      </button>
-    </div>
-    <div class="tc-hint">Tử Vi Minh Bảo · Tử Vi Đẩu Số theo cổ pháp</div>
   </div>
+</div>
+
+<!-- Sticky input bar (outside .page to span full width background) -->
+<div class="tc-input-wrap">
+  <div class="tc-input-inner">
+    <textarea id="tc-input" class="tc-textarea" placeholder="Hỏi về lá số, vận hạn, tương hợp..." rows="1"></textarea>
+    <button id="tc-send" class="tc-send" disabled>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+  <div class="tc-hint">Tử Vi Minh Bảo · Tử Vi Đẩu Số theo cổ pháp</div>
 </div>
 
 <script src="/nav.js?v=14"></script>
@@ -207,21 +272,25 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);font-si
   // ── Suggestions ──────────────────────────────────────────────
   var SUGG_INIT = [
     'Tử Vi Đẩu Số là gì?',
-    'Đại vận là gì và xem như thế nào?',
-    'Cung Quan Lộc ảnh hưởng sự nghiệp ra sao?',
-    'Tam phương tứ chính là gì?',
+    'Đại vận là gì?',
+    'Cung Quan Lộc và sự nghiệp',
+    'Tam phương tứ chính',
   ];
   var SUGG_AFTER_LASO = [
-    'Luận giải Cung Mệnh',
-    'Cung Quan Lộc (sự nghiệp)',
-    'Cung Tài Bạch (tài chính)',
-    'Cung Phu Thê (tình duyên)',
+    'Cung Mệnh',
+    'Cung Quan Lộc',
+    'Cung Tài Bạch',
+    'Cung Phu Thê',
     'Đại vận hiện tại',
-    'Điểm mạnh và yếu trong lá số',
+    'Điểm mạnh & yếu',
   ];
 
   // ── DOM helpers ──────────────────────────────────────────────
-  function scrollToBottom() { if ($msgs) $msgs.scrollTop = $msgs.scrollHeight; }
+  function scrollToLatest() {
+    // Scroll so the last message is visible above sticky input
+    var lastMsg = $msgs.lastElementChild;
+    if (lastMsg) lastMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
 
   function appendMsg(role, content, isTyping) {
     var wrap = document.createElement('div');
@@ -250,7 +319,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);font-si
     wrap.appendChild(av);
     wrap.appendChild(bub);
     $msgs.appendChild(wrap);
-    scrollToBottom();
+    scrollToLatest();
     return wrap;
   }
 
@@ -267,16 +336,15 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);font-si
 
   function autoResize() {
     $ta.style.height = 'auto';
-    $ta.style.height = Math.min($ta.scrollHeight, 110) + 'px';
+    $ta.style.height = Math.min($ta.scrollHeight, 120) + 'px';
   }
 
   // ── An Sao (called by TuviForm submit) ───────────────────────
   function doAnSao() {
     var d = TuviForm.getData();
-    if (!d.ngay || !d.thang || !d.nam) return; // TuviForm validates internally
+    if (!d.ngay || !d.thang || !d.nam) return;
 
     try {
-      // Correct params: gioHour is the actual hour number for convertDuongToAm
       var conv = convertDuongToAm(d.ngay, d.thang, d.nam, d.gioHour);
       var ls   = anSaoLaSo({
         ngayAL:   conv.amLich.day,
@@ -292,27 +360,34 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);font-si
       _lasoData = slimLaso(ls);
 
       // Summary chip
-      var menh   = (ls.palaces || []).find(function(p) { return p.isMenh; });
-      var chinh  = menh ? (menh.majorStars || []).map(function(s) { return s.ten; }).join(', ') || 'Vô chính diệu' : 'Vô chính diệu';
-      var chipTxt = (ls.canChiNam || '') + ' · Cung Mệnh: ' + (ls.menhDC || '') + ' · ' + chinh;
+      var menh    = (ls.palaces || []).find(function(p) { return p.isMenh; });
+      var chinh   = menh ? (menh.majorStars || []).map(function(s) { return s.ten; }).join(', ') || 'Vô chính diệu' : 'Vô chính diệu';
+      var chipTxt = (ls.canChiNam || '') + ' · Mệnh ' + (ls.menhDC || '') + ' · ' + chinh;
       document.getElementById('tc-laso-chip-text').textContent = chipTxt;
 
-      // Switch UI: hide form, show summary bar
+      // Switch UI
       document.getElementById('tc-form-section').style.display = 'none';
       document.getElementById('tc-laso-bar').classList.add('active');
 
       // Bot greeting
-      var dvHT    = ls.daiVanHienTai;
-      var dvTxt   = dvHT ? '\nĐại vận hiện tại: **' + dvHT.diaChi + '** (' + dvHT.tuoiStart + '–' + dvHT.tuoiEnd + ' tuổi).' : '';
-      var cc      = (Array.isArray(ls.cachCuc) ? ls.cachCuc : []).map(function(c) { return typeof c === 'object' ? c.ten : c; }).join(', ');
-      var greeting = 'Đã an sao xong! Bạn tuổi **' + (ls.canChiNam || '') + '**, bản mệnh **' + (ls.napAm || '') + '**. Cung Mệnh tại **' + (ls.menhDC || '') + '** có chính tinh **' + chinh + '**.' +
+      var dvHT  = ls.daiVanHienTai;
+      var dvTxt = dvHT ? '\nĐại vận hiện tại: **' + dvHT.diaChi + '** (' + dvHT.tuoiStart + '–' + dvHT.tuoiEnd + ' tuổi).' : '';
+      var cc    = (Array.isArray(ls.cachCuc) ? ls.cachCuc : []).map(function(c) { return typeof c === 'object' ? c.ten : c; }).join(', ');
+      var greeting =
+        'Đã an sao xong! Bạn tuổi **' + (ls.canChiNam || '') + '**, bản mệnh **' + (ls.napAm || '') + '**.' +
+        ' Cung Mệnh tại **' + (ls.menhDC || '') + '** có chính tinh **' + chinh + '**.' +
         (cc ? ' Cách cục: ' + cc + '.' : '') + dvTxt +
         '\n\nBạn muốn tìm hiểu phần nào?';
 
       appendMsg('bot', greeting);
       _msgs.push({ role: 'assistant', content: greeting });
       renderSuggs(SUGG_AFTER_LASO);
-      $ta.focus();
+
+      // Scroll chat into view on mobile
+      setTimeout(function() {
+        document.getElementById('tc-chat-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        $ta.focus();
+      }, 100);
 
     } catch(e) {
       console.error('[TuviChat] an sao error', e);
@@ -339,7 +414,6 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);font-si
     appendMsg('bot', '', true);
 
     try {
-      // RAG search
       var docs = '';
       try {
         var sr = await fetch('/api/search', {
@@ -391,17 +465,15 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);font-si
     $ta    = document.getElementById('tc-input');
     $send  = document.getElementById('tc-send');
 
-    // Render TuviForm into the form container
     TuviForm.render('tc-form-container', {
       onSubmit:    doAnSao,
       submitLabel: 'An Sao & Chat →',
+      showSample:  false,
     });
 
-    // Initial bot message
     appendMsg('bot', 'Chào bạn! Nhập ngày sinh dương lịch bên trên để an sao lá số, sau đó hỏi tôi bất cứ điều gì.\n\nHoặc hỏi thẳng về Tử Vi Đẩu Số ngay bây giờ.');
     renderSuggs(SUGG_INIT);
 
-    // Reset button
     document.getElementById('tc-reset-btn').addEventListener('click', function() {
       _lasoData = null;
       _msgs = [];
@@ -411,9 +483,9 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);font-si
       appendMsg('bot', 'Chào bạn! Nhập ngày sinh dương lịch bên trên để an sao lá số, sau đó hỏi tôi bất cứ điều gì.\n\nHoặc hỏi thẳng về Tử Vi Đẩu Số ngay bây giờ.');
       renderSuggs(SUGG_INIT);
       document.getElementById('error-msg').classList.remove('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // Textarea auto-resize + send
     $ta.addEventListener('input', function() {
       autoResize();
       $send.disabled = !$ta.value.trim() || _busy;
