@@ -391,6 +391,11 @@ body{
       <button class="wa-new-btn" id="wa-new-btn">+ Thêm lá số</button>
     </div>
     <div class="wa-sidebar-list" id="wa-list"></div>
+    <!-- sync banner: visible when not logged in -->
+    <div id="wa-sync-banner" style="display:none;align-items:center;gap:8px;padding:10px 14px;background:#FFF8E7;border-top:1px solid #EEE3C0;font-size:12px;color:#7A5C10;flex-shrink:0;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9A7B3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span>Đăng nhập để lưu lá số trên mọi thiết bị</span>
+    </div>
   </div>
 
   <!-- ═══════════════ MAIN PANEL ═══════════════ -->
@@ -469,6 +474,7 @@ body{
   var API_PATH    = '/api/lasotuvi?action=chat';
   var STORAGE_KEY = 'tvc_chats_v1';
   var GENERAL_ID  = '__general__';
+  var SYNC_API    = '/api/tuvi-chats';
 
   var AVATAR_COLORS = ['#1455A4','#1E6B3C','#7B3F00','#6B21A8','#C0392B','#0D5D6C','#B45309'];
 
@@ -500,6 +506,97 @@ body{
   function saveStorage() {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(_chats)); }
     catch(e) {}
+  }
+
+  /* ── Cloud sync ───────────────────────────────────────────────── */
+  function getAuthToken() {
+    try {
+      var s = window.TuviAuth && TuviAuth.getSession && TuviAuth.getSession();
+      return s ? s.access_token : null;
+    } catch(e) { return null; }
+  }
+
+  function syncToCloud(chat) {
+    var token = getAuthToken();
+    if (!token || !chat || chat.id === GENERAL_ID) return;
+    fetch(SYNC_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({
+        id:         chat.id,
+        label:      chat.label || 'Lá số mới',
+        type:       chat.type  || null,
+        laso_data:  chat.lasoData || null,
+        summary:    chat.summary  || '',
+        messages:   chat.messages || [],
+        last_msg:   chat.lastMsg  || '',
+        updated_at: new Date(chat.updatedAt || Date.now()).toISOString(),
+      }),
+    }).catch(function() {});
+  }
+
+  function deleteFromCloud(id) {
+    var token = getAuthToken();
+    if (!token || !id || id === GENERAL_ID) return;
+    fetch(SYNC_API + '?id=' + encodeURIComponent(id), {
+      method: 'DELETE',
+      headers: { 'Authorization': 'Bearer ' + token },
+    }).catch(function() {});
+  }
+
+  function loadFromCloud() {
+    var token = getAuthToken();
+    if (!token) { renderSyncBanner(false); return; }
+    renderSyncBanner(true);
+    fetch(SYNC_API, { headers: { 'Authorization': 'Bearer ' + token } })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var cloudChats = data.chats || [];
+        var localMap   = {};
+        _chats.forEach(function(c) { if (c.id !== GENERAL_ID) localMap[c.id] = c; });
+
+        /* Cloud → local: merge, cloud wins when newer */
+        cloudChats.forEach(function(cc) {
+          var cloudTs = new Date(cc.updated_at).getTime() || 0;
+          var local   = localMap[cc.id];
+          if (!local || cloudTs > (local.updatedAt || 0)) {
+            var merged = {
+              id:        cc.id,
+              label:     cc.label,
+              type:      cc.type || undefined,
+              lasoData:  cc.laso_data || null,
+              summary:   cc.summary   || '',
+              messages:  cc.messages  || [],
+              lastMsg:   cc.last_msg  || '',
+              updatedAt: cloudTs,
+            };
+            if (!local) { _chats.push(merged); }
+            else        { Object.assign(local, merged); }
+          }
+        });
+
+        /* Local → cloud: push chats that cloud doesn't know */
+        var cloudIds = {};
+        cloudChats.forEach(function(cc) { cloudIds[cc.id] = true; });
+        _chats.forEach(function(c) {
+          if (c.id !== GENERAL_ID && !cloudIds[c.id]) syncToCloud(c);
+        });
+
+        saveStorage();
+        renderSidebar();
+        if (_activeId) renderMain();
+      })
+      .catch(function() {});
+  }
+
+  function renderSyncBanner(loggedIn) {
+    var el = document.getElementById('wa-sync-banner');
+    if (!el) return;
+    if (loggedIn) {
+      el.style.display = 'none';
+    } else {
+      el.style.display = 'flex';
+    }
   }
 
   /* ── Chat factory ─────────────────────────────────────────────── */
@@ -753,6 +850,7 @@ body{
     var chat = newChat('Lá số mới');
     _chats.push(chat);
     saveStorage();
+    syncToCloud(chat);
     openChat(chat.id);
   }
 
@@ -804,6 +902,7 @@ body{
       chat.lastMsg   = stripMd(greeting);
       chat.updatedAt = Date.now();
       saveStorage();
+      syncToCloud(chat);
 
       renderSidebar();
       renderMain();
@@ -921,6 +1020,7 @@ body{
       chat.lastMsg   = stripMd(answer);
       chat.updatedAt = Date.now();
       saveStorage();
+      syncToCloud(chat);
       renderSidebar();
       renderSuggs(chat.lasoData ? SUGG_LASO : SUGG_INIT);
 
@@ -943,7 +1043,9 @@ body{
     var name = prompt('Đổi tên lá số:', chat.label);
     if (name && name.trim()) {
       chat.label = name.trim();
+      chat.updatedAt = Date.now();
       saveStorage();
+      syncToCloud(chat);
       renderSidebar();
       renderMain();
     }
@@ -954,10 +1056,12 @@ body{
     var chat = getActive();
     if (!chat || chat.id === GENERAL_ID) return;
     if (!confirm('Xóa lá số "' + chat.label + '"?\nToàn bộ lịch sử chat sẽ bị mất.')) return;
+    var deletedId = _activeId;
     _chats  = _chats.filter(function(c) { return c.id !== _activeId; });
     _activeId = null;
     _busy   = false;
     saveStorage();
+    deleteFromCloud(deletedId);
     document.getElementById('wa-sidebar').classList.remove('wa-hidden');
     document.getElementById('wa-main').classList.remove('wa-visible');
     renderSidebar();
@@ -981,6 +1085,10 @@ body{
 
     renderSidebar();
     renderMain();
+
+    /* Sync with cloud if user is logged in.
+       TuviAuth may not be ready yet — wait a tick for auth.js to restore session. */
+    setTimeout(loadFromCloud, 300);
 
     /* New chat button */
     document.getElementById('wa-new-btn').addEventListener('click', createNewChat);
