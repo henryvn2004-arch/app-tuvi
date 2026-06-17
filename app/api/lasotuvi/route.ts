@@ -100,7 +100,7 @@ const CHAT_SYSTEM_LASO = (ctx: string, docs?: string) => `Bạn là chuyên gia 
 
 Nguyên tắc trả lời:
 - Tiếng Việt chuẩn mực, không dùng bullet, không dùng emoji
-- 150-300 từ cho câu thông thường, tối đa 450 từ cho câu phức tạp
+- 200-400 từ cho câu thông thường, tối đa 600 từ cho câu phức tạp
 - Dẫn chứng sao tinh, cung vị, can chi cụ thể từ lá số bên dưới
 - Xét tam phương tứ chính, không đoán đơn sao
 - Trả lời dứt khoát: cung/việc được hỏi tốt hay xấu, mạnh hay yếu — neo vào "Điểm cung X/10" nếu có. Cấm tâng bốc, cấm nước đôi né tránh; có điểm mạnh phải kèm điểm yếu cụ thể.
@@ -114,7 +114,7 @@ const CHAT_SYSTEM_GENERAL = (docs?: string) => `Bạn là chuyên gia Tử Vi Đ
 
 Nguyên tắc:
 - Tiếng Việt chuẩn mực, không dùng bullet, không dùng emoji
-- 150-300 từ cho câu thông thường, tối đa 450 từ cho câu phức tạp
+- 200-400 từ cho câu thông thường, tối đa 600 từ cho câu phức tạp
 - Dẫn chiếu nguyên lý cổ pháp, nêu ví dụ sao tinh cụ thể khi minh họa
 - Không hứa hẹn tuyệt đối, không tiết lộ trường phái${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
@@ -256,7 +256,7 @@ async function handleChat(body: any): Promise<Response> {
   const resp = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 800, system: systemPrompt, messages: trimmed }),
+    body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1200, system: systemPrompt, messages: trimmed }),
   });
 
   if (!resp.ok) return err('API error: ' + (await resp.text()).slice(0, 200));
