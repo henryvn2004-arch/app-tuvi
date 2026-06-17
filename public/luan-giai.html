@@ -1174,23 +1174,63 @@ select.form-input { cursor: pointer; }
       lines.push('');
     }
 
+    // ── Helpers for pattern ranking + synthesis ──────────────────────────────
+    const _CT_SET = new Set(['Tử Vi','Thiên Cơ','Thái Dương','Vũ Khúc','Thiên Đồng','Liêm Trinh',
+      'Thiên Phủ','Thái Âm','Tham Lang','Cự Môn','Thiên Tướng','Thiên Lương','Thất Sát','Phá Quân']);
+    const _GOOD_KW = ['phú quý','giàu','tài lộc','quý nhân','sang','thành đạt','hiển','lộc','phúc',
+      'thọ','an khang','thịnh','vinh','sáng sủa','may mắn','thuận','hanh thông','tốt','được'];
+    const _BAD_KW  = ['vất vả','khổ','gian nan','khó khăn','hung','tai nạn','tai họa','tai ương',
+      'nguy','nghèo','túng','hao tài','tán','mất của','bệnh','tật','ốm','yếu','cô đơn',
+      'lẻ loi','yểu','chết','suy','bại','hao','tổn','thiệt','dâm','ngang trái'];
+    const _CC_W = { quy_cuc:3, phu_cuc:2, than_cu:1, tap_cuc:1, trung_cuc:0, hung_cuc:-3 };
+
+    function _hasChinhTinh(text) {
+      for (const s of _CT_SET) if (text.includes(s)) return true;
+      return false;
+    }
+    function _sentimentW(text) {
+      const t = (text||'').toLowerCase();
+      let w = 0;
+      _GOOD_KW.forEach(k => { if (t.includes(k)) w += 0.4; });
+      _BAD_KW.forEach(k  => { if (t.includes(k)) w -= 0.4; });
+      return Math.max(-2, Math.min(2, w));
+    }
+    function _sortYn(items) {
+      return [...items].sort((a, b) => (_hasChinhTinh(a)?0:1) - (_hasChinhTinh(b)?0:1));
+    }
+    function _xuHuong(ccItems, ynItems) {
+      let w = 0;
+      (ccItems||[]).forEach(c => { w += _CC_W[c.loai] || 0; });
+      (ynItems||[]).forEach(y => { w += _sentimentW(y) * 0.5; });
+      w = Math.round(w * 10) / 10;
+      const label = w >= 4 ? 'Tốt rõ' : w >= 2 ? 'Khá' : w >= 0 ? 'Trung bình' : w >= -2 ? 'Yếu' : 'Xấu rõ';
+      return `${label} (w:${w>0?'+':''}${w})`;
+    }
+
     // 12 cung + tam phương tứ chính
     lines.push('=== 12 CUNG ===');
     for (const p of ls.palaces) {
       const van = p.decadal ? `ĐV:${p.decadal.range[0]}-${p.decadal.range[1]}` : '';
       const chinh = p.majorStars.map(s => s.ten + (s.brightness?`(${s.brightness})`:'') + (s.hoa?`[${s.hoa}]`:'')).join(' ');
       const phu = p.stars.filter(s=>s.nhom!=='chinh').map(s => s.ten + (s.hoa?`[${s.hoa}]`:'')).join(' ');
-      lines.push(`[${p.cungName}] ${p.diaChi}${p.isThan?' THÂN':''}${p.isMenh?' MỆNH':''} ${van}`);
-      // Cách cục liên quan đến cung này
+      // Cách cục + patterns cho cung này
+      const _ccThis = ls.cachCuc ? ls.cachCuc.filter(r => r.cung === p.cungName) : [];
+      const _ynRaw  = (ls.cachCucTungCung && ls.cachCucTungCung[p.cungName]) || [];
+      const _ynSorted = _sortYn(_ynRaw);
+      const _xh = _xuHuong(_ccThis, _ynRaw);
+      const _scRow = ls.cungScores?.[p.cungName];
+      const _scDims = _scRow ? ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'].map(k=>_scRow[k]).filter(v=>typeof v==='number') : [];
+      const _scTot  = _scDims.length ? Math.round(_scDims.reduce((a,b)=>a+b,0)/_scDims.length*10)/10 : null;
+      lines.push(`[${p.cungName}] ${p.diaChi}${p.isThan?' THÂN':''}${p.isMenh?' MỆNH':''} ${van}${_scTot!=null?` | Điểm:${_scTot}`:''} | Luận sao: ${_xh}`);
+      // Priority 1: Cách cục đặc biệt (hiếm, sức ảnh hưởng mạnh nhất)
       if (ls.cachCuc) {
         const cc = ls.cachCuc.filter(r => r.cung === p.cungName || r.cung === '' || r.cung === 'Thân');
-        if (cc.length > 0) {
-          cc.forEach(r => lines.push(`  [CÁCH CỤC · ${String(r.loai||'').toUpperCase()}${r.doManh?` ·★${r.doManh}`:''}] ${r.ten}: ${r.moTa}${r.chiTiet?` — ${r.chiTiet}`:''}`));
-        }
-        // Ý nghĩa từng cung từ phanTichCungYNghia
-        if (ls.cachCucTungCung && ls.cachCucTungCung[p.cungName]) {
-          ls.cachCucTungCung[p.cungName].forEach(y => lines.push(`  [Ý NGHĨA] ${y}`));
-        }
+        cc.forEach(r => lines.push(`  [CÁCH CỤC · ${String(r.loai||'').toUpperCase()}${r.doManh?` ·★${r.doManh}`:''}] ${r.ten}: ${r.moTa}${r.chiTiet?` — ${r.chiTiet}`:''}`));
+        // Priority 2+3: patterns sorted (chính tinh first, then phụ tinh)
+        _ynSorted.forEach(y => {
+          const tag = _hasChinhTinh(y) ? '[Ý NGHĨA · chính tinh]' : '[Ý NGHĨA]';
+          lines.push(`  ${tag} ${y}`);
+        });
       }
       if (p.majorStars.length === 0) {
         // Vô chính diệu — mượn chính tinh cung xung chiếu để luận giải
@@ -1247,6 +1287,11 @@ select.form-input { cursor: pointer; }
         if (rTrung.length)lines.push(`  [LUẬN ĐOÁN - TRUNG]: ${rTrung.join(' | ')}`);
         if (rXau.length)  lines.push(`  [LUẬN ĐOÁN - XẤU]: ${rXau.join(' | ')}`);
         if (rCB.length)   lines.push(`  [CẢNH BÁO]: ${rCB.join(' | ')}`);
+      }
+      // VH patterns (yNghia): chính tinh first, limit 6 per DV để tránh noise
+      if (dv.yNghia && dv.yNghia.length > 0) {
+        const _ynDV = _sortYn(dv.yNghia).slice(0, 6);
+        lines.push(`  [VẬN HẠN LUẬN]: ${_ynDV.join(' | ')}`);
       }
     });
 
