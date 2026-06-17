@@ -1153,7 +1153,7 @@ select.form-input { cursor: pointer; }
 
     // Điểm đánh giá JS (anchor cho AI — chống luận chung chung, neo phán quyết vào con số)
     if (ls.cungScores) {
-      const SC_DIMS = [['tiemNang','Tiềm năng'],['benVung','Bền vững'],['anToan','An toàn'],['quyNhan','Quý nhân'],['minhBach','Minh bạch'],['tuongHop','Tương hợp']];
+      const SC_DIMS = [['thienVan','Thiên Vận'],['canCo','Căn Cơ'],['mayMan','May Mắn'],['phuTro','Phù Trợ'],['binhYen','Bình Yên'],['benVung','Bền Vững']];
       const CUNG_ORDER = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
       const totals = [];
       const scLines = [];
@@ -1219,7 +1219,7 @@ select.form-input { cursor: pointer; }
       const _ynSorted = _sortYn(_ynRaw);
       const _xh = _xuHuong(_ccThis, _ynRaw);
       const _scRow = ls.cungScores?.[p.cungName];
-      const _scDims = _scRow ? ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'].map(k=>_scRow[k]).filter(v=>typeof v==='number') : [];
+      const _scDims = _scRow ? ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'].map(k=>_scRow[k]).filter(v=>typeof v==='number') : [];
       const _scTot  = _scDims.length ? Math.round(_scDims.reduce((a,b)=>a+b,0)/_scDims.length*10)/10 : null;
       lines.push(`[${p.cungName}] ${p.diaChi}${p.isThan?' THÂN':''}${p.isMenh?' MỆNH':''} ${van}${_scTot!=null?` | Điểm:${_scTot}`:''} | Luận sao: ${_xh}`);
       // Priority 1: Cách cục đặc biệt (hiếm, sức ảnh hưởng mạnh nhất)
@@ -1433,12 +1433,12 @@ select.form-input { cursor: pointer; }
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center">
             <span style="font-size:12px;color:#888;margin-right:4px">Hiển thị:</span>
             <button class="radar-btn active" data-metric="total" onclick="switchRadarMetric('total',this)">Tổng điểm</button>
-            <button class="radar-btn" data-metric="tiemNang" onclick="switchRadarMetric('tiemNang',this)">Tiềm Năng</button>
+            <button class="radar-btn" data-metric="thienVan" onclick="switchRadarMetric('thienVan',this)">Thiên Vận</button>
+            <button class="radar-btn" data-metric="canCo" onclick="switchRadarMetric('canCo',this)">Căn Cơ</button>
+            <button class="radar-btn" data-metric="mayMan" onclick="switchRadarMetric('mayMan',this)">May Mắn</button>
+            <button class="radar-btn" data-metric="phuTro" onclick="switchRadarMetric('phuTro',this)">Phù Trợ</button>
+            <button class="radar-btn" data-metric="binhYen" onclick="switchRadarMetric('binhYen',this)">Bình Yên</button>
             <button class="radar-btn" data-metric="benVung" onclick="switchRadarMetric('benVung',this)">Bền Vững</button>
-            <button class="radar-btn" data-metric="anToan" onclick="switchRadarMetric('anToan',this)">An Toàn</button>
-            <button class="radar-btn" data-metric="quyNhan" onclick="switchRadarMetric('quyNhan',this)">Quý Nhân</button>
-            <button class="radar-btn" data-metric="minhBach" onclick="switchRadarMetric('minhBach',this)">Minh Bạch</button>
-            <button class="radar-btn" data-metric="tuongHop" onclick="switchRadarMetric('tuongHop',this)">Tương Hợp</button>
           </div>
           <canvas id="chart-radar-all" style="max-height:460px"></canvas>
           <div id="radar-legend" style="margin-top:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:12px"></div>
@@ -1595,10 +1595,10 @@ select.form-input { cursor: pointer; }
         10:'Tài Bạch',11:'Tử Tức',12:'Phu Thê',13:'Huynh Đệ',
       };
       if (_astrolabe?.cungScores) {
-        const METRICS_R = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
-        const METRIC_LABELS_R = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
-        const METRIC_COLORS_R = {tiemNang:'#7EC8E3',benVung:'#5FA8D3',anToan:'#1FA3D6',quyNhan:'#2F5BEA',minhBach:'#233E99',tuongHop:'#142B7A'};
-        const METRIC_DESC_R = {tiemNang:'Tiềm năng phát đạt',benVung:'Bền vững ổn định',anToan:'An toàn ít rủi ro',quyNhan:'Quý nhân hỗ trợ',minhBach:'Cung rõ ràng',tuongHop:'Hài hòa bản mệnh'};
+        const METRICS_R = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
+        const METRIC_LABELS_R = ['Thiên Vận','Căn Cơ','May Mắn','Phù Trợ','Bình Yên','Bền Vững'];
+        const METRIC_COLORS_R = {thienVan:'#7EC8E3',canCo:'#5FA8D3',mayMan:'#1FA3D6',phuTro:'#2F5BEA',binhYen:'#233E99',benVung:'#142B7A'};
+        const METRIC_DESC_R = {thienVan:'Thiên vận năm sinh',canCo:'Căn cơ nền tảng',mayMan:'May mắn tài lộc',phuTro:'Phù trợ quý nhân',binhYen:'Bình yên an lành',benVung:'Bền vững ổn định'};
         for (let p = 2; p <= 13; p++) {
           const cungName = PHAN_TO_CUNG_R[p];
           const sc = _astrolabe.cungScores[cungName];
@@ -1627,7 +1627,7 @@ select.form-input { cursor: pointer; }
             legendEl.innerHTML = METRICS_R.map(m=>`
               <div style="display:flex;gap:5px;align-items:flex-start;padding:5px 7px;background:#F5F5F5;border-radius:5px;border-left:2px solid ${METRIC_COLORS_R[m]}">
                 <div>
-                  <div style="font-weight:700;color:${METRIC_COLORS_R[m]};font-size:11px">${m==='tiemNang'?'Tiềm Năng':m==='benVung'?'Bền Vững':m==='anToan'?'An Toàn':m==='quyNhan'?'Quý Nhân':m==='minhBach'?'Minh Bạch':'Tương Hợp'} <span style="color:#888;font-weight:400">${sc[m]}/10</span></div>
+                  <div style="font-weight:700;color:${METRIC_COLORS_R[m]};font-size:11px">${METRIC_DESC_R[m]||m} <span style="color:#888;font-weight:400">${sc[m]}/10</span></div>
                   <div style="font-size:10px;color:#555;margin-top:1px">${METRIC_DESC_R[m]}</div>
                 </div>
               </div>`).join('');
@@ -2109,12 +2109,12 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center">
     <span style="font-size:12px;color:#888;margin-right:4px">Hiển thị:</span>
     <button class="radar-btn active" data-metric="total" onclick="switchRadarMetric('total',this)">Tổng điểm</button>
-    <button class="radar-btn" data-metric="tiemNang" onclick="switchRadarMetric('tiemNang',this)">Tiềm Năng</button>
+    <button class="radar-btn" data-metric="thienVan" onclick="switchRadarMetric('thienVan',this)">Thiên Vận</button>
+    <button class="radar-btn" data-metric="canCo" onclick="switchRadarMetric('canCo',this)">Căn Cơ</button>
+    <button class="radar-btn" data-metric="mayMan" onclick="switchRadarMetric('mayMan',this)">May Mắn</button>
+    <button class="radar-btn" data-metric="phuTro" onclick="switchRadarMetric('phuTro',this)">Phù Trợ</button>
+    <button class="radar-btn" data-metric="binhYen" onclick="switchRadarMetric('binhYen',this)">Bình Yên</button>
     <button class="radar-btn" data-metric="benVung" onclick="switchRadarMetric('benVung',this)">Bền Vững</button>
-    <button class="radar-btn" data-metric="anToan" onclick="switchRadarMetric('anToan',this)">An Toàn</button>
-    <button class="radar-btn" data-metric="quyNhan" onclick="switchRadarMetric('quyNhan',this)">Quý Nhân</button>
-    <button class="radar-btn" data-metric="minhBach" onclick="switchRadarMetric('minhBach',this)">Minh Bạch</button>
-    <button class="radar-btn" data-metric="tuongHop" onclick="switchRadarMetric('tuongHop',this)">Tương Hợp</button>
   </div>
   <canvas id="chart-radar-all" style="max-height:460px"></canvas>
   <div id="radar-legend" style="margin-top:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:12px"></div>
@@ -2172,8 +2172,8 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
           }
           // Scores tổng quan
           if (_astrolabe.cungScores) {
-            const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
-            const MV = {tiemNang:'Tiềm Năng',benVung:'Bền Vững',anToan:'An Toàn',quyNhan:'Quý Nhân',minhBach:'Minh Bạch',tuongHop:'Tương Hợp'};
+            const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
+            const MV = {thienVan:'Thiên Vận',canCo:'Căn Cơ',mayMan:'May Mắn',phuTro:'Phù Trợ',binhYen:'Bình Yên',benVung:'Bền Vững'};
             const top3 = Object.entries(_astrolabe.cungScores)
               .map(([c,sc]) => [c, METRICS.reduce((s,m) => s+sc[m],0)])
               .sort((a,b) => b[1]-a[1]).slice(0,3);
@@ -2214,8 +2214,8 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
           }
 
           if (sc) {
-            const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
-            const MV = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
+            const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
+            const MV = ['Thiên Vận','Căn Cơ','May Mắn','Phù Trợ','Bình Yên','Bền Vững'];
             preGenHtml += `<div class="pregen-block pregen-scores"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📈" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📈</span> Đánh giá 6 chiều</div><div class="score-bars">`;
             METRICS.forEach((m,i) => {
               const v = sc[m];
@@ -2369,7 +2369,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         setTimeout(() => {
           const CUNG_ORDER = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc',
                               'Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
-          const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
+          const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
           const sc = _astrolabe.cungScores;
 
           // Bar chart 12 cung
@@ -2502,22 +2502,22 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
           window._radarAllScores = _astrolabe.cungScores;
           window._radarAllChart = null;
 
-          const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
+          const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
           const METRIC_COLORS = {
-            tiemNang:'#c9a84c', benVung:'#1E6B3C', anToan:'#0E7490',
-            quyNhan:'#7B2FBE', minhBach:'#1455A4', tuongHop:'#B04020',
+            thienVan:'#c9a84c', canCo:'#1E6B3C', mayMan:'#0E7490',
+            phuTro:'#7B2FBE', binhYen:'#1455A4', benVung:'#B04020',
           };
           const METRIC_LABELS_VI = {
-            tiemNang:'Tiềm Năng', benVung:'Bền Vững', anToan:'An Toàn',
-            quyNhan:'Quý Nhân', minhBach:'Minh Bạch', tuongHop:'Tương Hợp',
+            thienVan:'Thiên Vận', canCo:'Căn Cơ', mayMan:'May Mắn',
+            phuTro:'Phù Trợ', binhYen:'Bình Yên', benVung:'Bền Vững',
           };
           const METRIC_DESC = {
-            tiemNang:'Tiềm năng phát đạt trong lĩnh vực cung quản',
-            benVung:'Tính bền vững, ít thăng trầm biến động',
-            anToan:'Ít tai họa, rủi ro thấp, an lành',
-            quyNhan:'Được quý nhân hỗ trợ, thuận lợi xã hội',
-            minhBach:'Cung rõ ràng, không mâu thuẫn nội tại',
-            tuongHop:'Hài hòa với bản mệnh người này',
+            thienVan:'Thiên vận năm sinh hợp cung',
+            canCo:'Căn cơ nền tảng ngũ hành',
+            mayMan:'May mắn tài lộc thuận lợi',
+            phuTro:'Phù trợ quý nhân hỗ trợ',
+            binhYen:'Bình yên ít tai họa rủi ro',
+            benVung:'Bền vững ổn định lâu dài',
           };
           const CUNG_ORDER = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc',
                               'Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
@@ -2622,17 +2622,17 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
           setTimeout(() => {
             const ctx = document.getElementById(`chart-radar-cung-${_currentPhan}`);
             if (!ctx) return;
-            const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
-            const METRIC_LABELS = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
-            const METRIC_LABELS_VI_C = {tiemNang:'Tiềm Năng',benVung:'Bền Vững',anToan:'An Toàn',quyNhan:'Quý Nhân',minhBach:'Minh Bạch',tuongHop:'Tương Hợp'};
+            const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
+            const METRIC_LABELS = ['Thiên Vận','Căn Cơ','May Mắn','Phù Trợ','Bình Yên','Bền Vững'];
+            const METRIC_LABELS_VI_C = {thienVan:'Thiên Vận',canCo:'Căn Cơ',mayMan:'May Mắn',phuTro:'Phù Trợ',binhYen:'Bình Yên',benVung:'Bền Vững'};
             const METRIC_DESC_SHORT = {
-                tiemNang:'Tiềm năng phát đạt', benVung:'Bền vững ổn định',
-                anToan:'An toàn ít rủi ro', quyNhan:'Quý nhân hỗ trợ',
-                minhBach:'Cung rõ ràng', tuongHop:'Hài hòa bản mệnh',
+                thienVan:'Thiên vận năm sinh', canCo:'Căn cơ nền tảng',
+                mayMan:'May mắn tài lộc', phuTro:'Phù trợ quý nhân',
+                binhYen:'Bình yên an lành', benVung:'Bền vững ổn định',
               };
             const METRIC_COLORS_C = {
-              tiemNang:'#7EC8E3', benVung:'#5FA8D3', anToan:'#1FA3D6',
-              quyNhan:'#2F5BEA', minhBach:'#233E99', tuongHop:'#142B7A',
+              thienVan:'#7EC8E3', canCo:'#5FA8D3', mayMan:'#1FA3D6',
+              phuTro:'#2F5BEA', binhYen:'#233E99', benVung:'#142B7A',
             };
             new Chart(ctx, {
               type: 'radar',
@@ -3225,10 +3225,10 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
   function renderChartsPhan1(ls) {
     if (!ls?.cungScores) return;
     const CUNG_ORDER = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
-    const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
-    const METRIC_COLORS = {tiemNang:'#c9a84c',benVung:'#1E6B3C',anToan:'#0E7490',quyNhan:'#7B2FBE',minhBach:'#1455A4',tuongHop:'#B04020'};
-    const METRIC_LABELS_VI = {tiemNang:'Tiềm Năng',benVung:'Bền Vững',anToan:'An Toàn',quyNhan:'Quý Nhân',minhBach:'Minh Bạch',tuongHop:'Tương Hợp'};
-    const METRIC_DESC = {tiemNang:'Tiềm năng phát đạt',benVung:'Bền vững ổn định',anToan:'An toàn ít rủi ro',quyNhan:'Quý nhân hỗ trợ',minhBach:'Cung rõ ràng',tuongHop:'Hài hòa bản mệnh'};
+    const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
+    const METRIC_COLORS = {thienVan:'#c9a84c',canCo:'#1E6B3C',mayMan:'#0E7490',phuTro:'#7B2FBE',binhYen:'#1455A4',benVung:'#B04020'};
+    const METRIC_LABELS_VI = {thienVan:'Thiên Vận',canCo:'Căn Cơ',mayMan:'May Mắn',phuTro:'Phù Trợ',binhYen:'Bình Yên',benVung:'Bền Vững'};
+    const METRIC_DESC = {thienVan:'Thiên vận năm sinh',canCo:'Căn cơ nền tảng',mayMan:'May mắn tài lộc',phuTro:'Phù trợ quý nhân',binhYen:'Bình yên an lành',benVung:'Bền vững ổn định'};
     const WHEEL_MAP = [
       {name:'Sự nghiệp',cung:'Quan Lộc',color:'#7EC8E3'},{name:'Tài chính',cung:'Tài Bạch',color:'#5FA8D3'},
       {name:'Tình duyên',cung:'Phu Thê',color:'#1FA3D6'},{name:'Sức khỏe',cung:'Tật Ách',color:'#2F5BEA'},
@@ -3387,7 +3387,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         preGenHtml += `</div>`;
       }
       if (_astrolabe.cungScores) {
-        const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
+        const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
         const top3 = Object.entries(_astrolabe.cungScores).map(([c,sc])=>[c,METRICS.reduce((s,m)=>s+sc[m],0)]).sort((a,b)=>b[1]-a[1]).slice(0,3);
         const bot3 = Object.entries(_astrolabe.cungScores).map(([c,sc])=>[c,METRICS.reduce((s,m)=>s+sc[m],0)]).sort((a,b)=>a[1]-b[1]).slice(0,3);
         preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📊</span> Điểm mạnh / yếu nổi bật</div>`;
@@ -3417,8 +3417,8 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         preGenHtml += `</div>`;
       }
       if (sc) {
-        const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
-        const MV = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
+        const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
+        const MV = ['Thiên Vận','Căn Cơ','May Mắn','Phù Trợ','Bình Yên','Bền Vững'];
         preGenHtml += `<div class="pregen-block pregen-scores"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📈" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📈</span> Đánh giá 6 chiều</div><div class="score-bars">`;
         METRICS.forEach((m,i) => {
           const v=sc[m]; const pct=v*10;
@@ -3613,7 +3613,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
           preGenHtml += `</div>`;
         }
         if (ls.cungScores) {
-          const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
+          const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
           const top3 = Object.entries(ls.cungScores).map(([c,sc])=>[c,METRICS.reduce((s,m)=>s+sc[m],0)]).sort((a,b)=>b[1]-a[1]).slice(0,3);
           const bot3 = Object.entries(ls.cungScores).map(([c,sc])=>[c,METRICS.reduce((s,m)=>s+sc[m],0)]).sort((a,b)=>a[1]-b[1]).slice(0,3);
           preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📊</span> Điểm mạnh / yếu nổi bật</div>`;
@@ -3644,8 +3644,8 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
           preGenHtml += `</div>`;
         }
         if (sc) {
-          const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
-          const MV = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
+          const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
+          const MV = ['Thiên Vận','Căn Cơ','May Mắn','Phù Trợ','Bình Yên','Bền Vững'];
           preGenHtml += `<div class="pregen-block pregen-scores"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📈" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📈</span> Đánh giá 6 chiều</div><div class="score-bars">`;
           METRICS.forEach((m,i) => {
             const v = sc[m]; const pct = v*10;
@@ -3687,11 +3687,11 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         setTimeout(() => { const ctx = document.getElementById('chart-radar-all'); if (ctx) window.switchRadarMetric?.('total', document.querySelector('.radar-btn')); }, 200);
       } else if (cungForPhan && ls.cungScores?.[cungForPhan]) {
         const _sc = ls.cungScores[cungForPhan];
-        const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
-        const METRIC_LABELS = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
-        const METRIC_LABELS_VI_C = {tiemNang:'Tiềm Năng',benVung:'Bền Vững',anToan:'An Toàn',quyNhan:'Quý Nhân',minhBach:'Minh Bạch',tuongHop:'Tương Hợp'};
-        const METRIC_DESC_SHORT = {tiemNang:'Tiềm năng phát đạt',benVung:'Bền vững ổn định',anToan:'An toàn ít rủi ro',quyNhan:'Quý nhân hỗ trợ',minhBach:'Cung rõ ràng',tuongHop:'Hài hòa bản mệnh'};
-        const METRIC_COLORS_C = {tiemNang:'#c9a84c',benVung:'#1E6B3C',anToan:'#0E7490',quyNhan:'#7B2FBE',minhBach:'#1455A4',tuongHop:'#B04020'};
+        const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
+        const METRIC_LABELS = ['Thiên Vận','Căn Cơ','May Mắn','Phù Trợ','Bình Yên','Bền Vững'];
+        const METRIC_LABELS_VI_C = {thienVan:'Thiên Vận',canCo:'Căn Cơ',mayMan:'May Mắn',phuTro:'Phù Trợ',binhYen:'Bình Yên',benVung:'Bền Vững'};
+        const METRIC_DESC_SHORT = {thienVan:'Thiên vận năm sinh',canCo:'Căn cơ nền tảng',mayMan:'May mắn tài lộc',phuTro:'Phù trợ quý nhân',binhYen:'Bình yên an lành',benVung:'Bền vững ổn định'};
+        const METRIC_COLORS_C = {thienVan:'#c9a84c',canCo:'#1E6B3C',mayMan:'#0E7490',phuTro:'#7B2FBE',binhYen:'#1455A4',benVung:'#B04020'};
         setTimeout(() => {
           const ctx = document.getElementById(chartCanvasId);
           if (!ctx) return;

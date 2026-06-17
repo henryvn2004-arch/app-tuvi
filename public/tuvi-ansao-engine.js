@@ -2124,7 +2124,7 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
           gioitinh, gioIdx, canNam, chiNam, tuoiXem
         ),
       },
-      napAmHanh, tuoiXem
+      napAmHanh, tuoiXem, chiNam
     ),
     tieuVanScores: tinhTieuVanScores(
       { palaces, daiVans: daiVansScored },
@@ -2476,7 +2476,7 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
           gioitinh, gioIdx, canNam, chiNam, tuoiXem
         ),
       },
-      napAmHanh, tuoiXem
+      napAmHanh, tuoiXem, chiNam
     ),
     tieuVanScores: tinhTieuVanScores(
       { palaces, daiVans: daiVansScored },
@@ -3899,293 +3899,158 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam, tuoiXem) {
 }
 
 
-// ================================================================
-// TÍNH CUNG SCORES — 6 metrics per cung cho radar chart
-// Metrics: Tiềm Năng, Bền Vững, Rủi Ro, Quý Nhân, Minh Bạch, Tương Hợp
-// Output: ls.cungScores = { [cungName]: { tiemNang, benVung, ruiRo, quyNhan, minhBach, tuongHop } }
+// Output: ls.cungScores = { [cungName]: { thienVan, canCo, mayMan, phuTro, binhYen, benVung, tong } }
 // ================================================================
 
-function tinhCungScores(ls, napAmHanh, tuoiXem) {
+function tinhCungScores(ls, napAmHanh, tuoiXem, chiNamSinh) {
   const { palaces, cachCuc, cachCucTungCung } = ls;
 
-  // ─── CONSTANTS ────────────────────────────────────────────────
   const SAT_TINH  = ['Kình Dương','Đà La','Hỏa Tinh','Linh Tinh','Địa Không','Địa Kiếp'];
   const BAI_TINH  = ['Thiên Khốc','Thiên Hư','Tang Môn','Bạch Hổ','Đại Hao','Tiểu Hao'];
-  const CAT_TINH  = ['Văn Xương','Văn Khúc','Thiên Khôi','Thiên Việt','Tả Phù','Hữu Bật','Lộc Tồn','Hóa Lộc'];
-  const BIEN_DONG = ['Thiên Mã','Phá Quân','Tham Lang'];
+  const BIEN_DONG = ['Phá Quân','Tham Lang','Thiên Mã'];
 
-  const STAR_HANH = {
-    'Tử Vi':'Thổ','Thiên Cơ':'Mộc','Thái Dương':'Hỏa','Vũ Khúc':'Kim',
-    'Thiên Đồng':'Thủy','Liêm Trinh':'Hỏa','Thiên Phủ':'Thổ','Thái Âm':'Thủy',
-    'Tham Lang':'Thủy','Cự Môn':'Thổ','Thiên Tướng':'Thủy','Thiên Lương':'Mộc',
-    'Thất Sát':'Kim','Phá Quân':'Thủy',
-  };
+  const KW_MM_POS = ['phú quý','giàu','tài lộc','lộc','phúc','thịnh','vinh','may mắn','thuận','hanh','thành đạt','tốt lành','hưởng','an khang','sang','được lợi'];
+  const KW_MM_NEG = ['hao tài','tán tài','nghèo','mất của','túng','bần','thất tài'];
+  const KW_PT_POS = ['quý nhân','giúp đỡ','hỗ trợ','kính trọng','được người','nhiều người','tôn trọng','phù trợ','được giúp','mến'];
+  const KW_PT_NEG = ['cô đơn','cô độc','không ai','bị khinh','gian manh','phản bạn','gian xảo'];
+  const KW_BY_NEG = ['hung','tai nạn','tai họa','bệnh','tật','chết','nguy','hao','tổn','thất bại','mất mát','suy','bại','yểu','lao','thị phi','gian nan','khổ sở','phá','lụy','nạn'];
+  const KW_BV_NEG = ['không bền','bất ổn','biến động','trắc trở','thay đổi','lưu ly','phiêu','giang hồ','ly tán','hay di','bôn ba','lận đận','bất định'];
 
-  const NGU_HANH_SINH_MAP = {'Mộc':'Hỏa','Hỏa':'Thổ','Thổ':'Kim','Kim':'Thủy','Thủy':'Mộc'};
-  const NGU_HANH_KHAC_MAP = {'Mộc':'Thổ','Thổ':'Thủy','Thủy':'Hỏa','Hỏa':'Kim','Kim':'Mộc'};
-
-  // Loai cachCuc → điểm (positive = tốt)
-  const LOAI_SCORE = {
-    'quy_cuc': 3,    // cách quý
-    'phu_cuc': 2.5,  // cách phú
-    'ban_tien_cuc': 2,
-    'tap_cuc': 1.5,
-    'than_cu': 1,
-    'menh_co_ban': 0.5,
-  };
-
-  // ─── HELPERS ──────────────────────────────────────────────────
   function clamp(v, min=0, max=10) { return Math.max(min, Math.min(max, v)); }
   function r1(v) { return Math.round(v * 10) / 10; }
-
   function getAllStars(p) {
     return [p, ...(p.tamHopCungs||[]), p.xungChieuCung]
       .filter(Boolean).flatMap(c => c.stars.map(s => s.ten));
   }
   function getOwnStars(p) { return p.stars.map(s => s.ten); }
-
-  function brightScore(brightness) {
-    return { 'Miếu':10, 'Vượng':8, 'Đắc':6, 'Bình':4, 'Hãm':2 }[brightness] ?? 4;
-  }
-
   function hasSao(p, name) { return p.stars.some(s => s.ten === name); }
-  function hasSaoTPTC(allStars, name) { return allStars.includes(name); }
+  function tuanActive(p) { return hasSao(p,'Tuần') && (!tuoiXem || tuoiXem > 30); }
+  function trietActive(p) { return hasSao(p,'Triệt') && (!tuoiXem || tuoiXem <= 30); }
+  function tuanLamHoaDia(p) { return hasSao(p,'Tuần') && (p.diaChi==='Tỵ'||p.diaChi==='Ngọ'); }
+  function trietDaoKimCung(p) { return hasSao(p,'Triệt') && (p.diaChi==='Thân'||p.diaChi==='Dậu'); }
 
-  function isVoChinhDieu(p) { return p.majorStars.length === 0; }
-
-  function tuanActive(p) {
-    if (!hasSao(p,'Tuần')) return false;
-    return !tuoiXem || tuoiXem > 30;
-  }
-  function trietActive(p) {
-    if (!hasSao(p,'Triệt')) return false;
-    return !tuoiXem || tuoiXem <= 30;
-  }
-  function tuanLamHoaDia(p) {
-    return hasSao(p,'Tuần') && (p.diaChi === 'Tỵ' || p.diaChi === 'Ngọ');
-  }
-  function trietDaoKimCung(p) {
-    return hasSao(p,'Triệt') && (p.diaChi === 'Thân' || p.diaChi === 'Dậu');
+  function kwScore(text, posKW, negKW) {
+    const t = (text||'').toLowerCase();
+    let s = 0;
+    posKW.forEach(k => { if (t.includes(k)) s += 0.4; });
+    negKW.forEach(k => { if (t.includes(k)) s -= 0.4; });
+    return s;
   }
 
-  // Bộ sao chính tinh
-  const BO_MAP = {
-    'TPVT': ['Tử Vi','Thiên Phủ','Vũ Khúc','Thiên Tướng'],
-    'CNDL': ['Thiên Cơ','Thái Âm','Thiên Đồng','Thiên Lương'],
-    'SPT':  ['Thất Sát','Phá Quân','Tham Lang','Liêm Trinh'],
-    'CN':   ['Cự Môn','Thái Dương'],
-  };
-  const SCORE_BO_MAP = {
-    'TPVT:TPVT':2,'CNDL:CNDL':2,'SPT:SPT':2,'CN:CN':2,
-    'TPVT:SPT':1.5,'SPT:TPVT':1.5,
-    'TPVT:CNDL':1,'CNDL:TPVT':1.5,
-    'TPVT:CN':0,'CN:TPVT':1,
-    'CNDL:SPT':0.5,'SPT:CNDL':0.5,
-    'CNDL:CN':0.5,'CN:CNDL':1.5,
-    'SPT:CN':0,'CN:SPT':0,
-  };
-  function getBo(stars) {
-    const names = stars.map(s => s.ten);
-    for (const [bo, list] of Object.entries(BO_MAP)) {
-      if (list.some(s => names.includes(s))) return bo;
+  function getPatternScores(cungName) {
+    const items = (cachCucTungCung || {})[cungName] || [];
+    let mm = 0, pt = 0, by = 0, bv = 0;
+    for (const txt of items) {
+      mm += kwScore(txt, KW_MM_POS, KW_MM_NEG);
+      pt += kwScore(txt, KW_PT_POS, KW_PT_NEG);
+      KW_BY_NEG.forEach(k => { if ((txt||'').toLowerCase().includes(k)) by -= 0.3; });
+      KW_BV_NEG.forEach(k => { if ((txt||'').toLowerCase().includes(k)) bv -= 0.3; });
     }
-    return null;
+    return { mm, pt, by, bv };
   }
 
-  // Mệnh palace info
-  const menhP = palaces.find(p => p.isMenh);
-  const boMenh = menhP ? getBo(menhP.majorStars) : null;
-
-  // cachCuc per cung (good loais)
   const cachCucByCung = {};
   for (const cc of (cachCuc || [])) {
     if (!cachCucByCung[cc.cung]) cachCucByCung[cc.cung] = [];
     cachCucByCung[cc.cung].push(cc);
   }
 
-  // cachCucTungCung tag scoring
-  function getYNghiaTags(cungName) {
-    const items = (cachCucTungCung || {})[cungName] || [];
-    let catScore = 0, hungScore = 0;
-    for (const s of items) {
-      if (s.includes('đại cát')) catScore += 1.5;
-      else if (s.includes('[cát]') || s.includes('cát') && !s.includes('không') && !s.includes('kém')) catScore += 0.5;
-      if (s.includes('đại hung')) hungScore += 2;
-      else if (s.includes('hung') && !s.includes('đại hung') && !s.includes('giảm hung')) hungScore += 1;
-    }
-    return { catScore: Math.min(catScore, 4), hungScore: Math.min(hungScore, 4) };
-  }
-
-  // ─── PER CUNG SCORING ─────────────────────────────────────────
   const scores = {};
 
   for (const p of palaces) {
     const cungName = p.cungName;
-    const dc = p.diaChi;
-    const allTPTC = getAllStars(p);
+    const dc       = p.diaChi;
+    const allTPTC  = getAllStars(p);
     const ownStars = getOwnStars(p);
-    const isVCD = isVoChinhDieu(p);
-    const tuanOn = tuanActive(p);
-    const trietOn = trietActive(p);
-    const tuanHoa = tuanLamHoaDia(p);
+    const tuanOn   = tuanActive(p);
+    const trietOn  = trietActive(p);
+    const tuanHoa  = tuanLamHoaDia(p);
     const trietKim = trietDaoKimCung(p);
-    const ynTags = getYNghiaTags(cungName);
-    const ccList = cachCucByCung[cungName] || [];
+    const ccList   = cachCucByCung[cungName] || [];
+    const pat      = getPatternScores(cungName);
 
-    // ── 1. TIỀM NĂNG (0-10) ──────────────────────────────────────
-    let tiemNang = 0;
-    if (isVCD) {
-      // Mượn cung xung chiếu
-      const xung = p.xungChieuCung;
-      if (xung && xung.majorStars.length > 0) {
-        const xungBright = xung.majorStars[0].brightness;
-        tiemNang = brightScore(xungBright) * 0.7;
-      } else {
-        tiemNang = 4;
-      }
-    } else {
-      // Chính tinh sáng nhất
-      const mainStar = p.majorStars[0];
-      if (mainStar) {
-        tiemNang = brightScore(mainStar.brightness);
-        // Hóa
-        if (mainStar.hoa === 'Lộc') tiemNang += 2;
-        else if (mainStar.hoa === 'Quyền') tiemNang += 1.5;
-        else if (mainStar.hoa === 'Khoa') tiemNang += 1;
-        else if (mainStar.hoa === 'Kỵ') tiemNang -= 2;
+    // ── 1. THIÊN VẬN (0-10): TAM_HOP ngũ hành cung vs chiNamSinh
+    let thienVan = 5;
+    if (chiNamSinh) {
+      const hCung = TAM_HOP_HANH[dc];
+      const hNam  = TAM_HOP_HANH[chiNamSinh];
+      if (hCung && hNam) {
+        const qh = soSanhHanh(hNam, hCung);
+        thienVan = {dong_hanh:10,sinh_nhap:8,khac_xuat:4,sinh_xuat:2,khac_nhap:0,unknown:5}[qh] ?? 5;
       }
     }
-    // Hóa trong TPTC
-    if (allTPTC.includes('Hóa Lộc') && !p.stars.some(s=>s.ten==='Hóa Lộc' && s.hoa)) tiemNang += 1;
-    if (allTPTC.includes('Lộc Tồn')) tiemNang += 1;
-    // cachCuc đặc biệt
-    for (const cc of ccList) {
-      tiemNang += LOAI_SCORE[cc.loai] ?? 0;
-    }
-    tiemNang += ynTags.catScore * 0.5;
-    tiemNang -= ynTags.hungScore * 0.5;
-    // Tuần/Triệt ảnh hưởng tiềm năng
-    if (tuanOn && !tuanHoa) tiemNang *= 0.8;
-    if (trietOn && !trietKim) tiemNang *= 0.6;
-    if (tuanHoa || trietKim) tiemNang = Math.min(tiemNang * 1.1, 10);
-    tiemNang = r1(clamp(tiemNang));
+    thienVan = r1(thienVan);
 
-    // ── 2. BỀN VỮNG (0-10) ───────────────────────────────────────
-    let benVung = 8;
-    // Biến động stars
-    for (const s of BIEN_DONG) {
-      if (allTPTC.includes(s)) benVung -= 1.5;
+    // ── 2. CĂN CƠ (0-10): DC ngũ hành cung vs napAmHanh + tràng sinh bonus
+    let canCo = 5;
+    if (napAmHanh) {
+      const hCung = DC_HANH[dc];
+      if (hCung) {
+        if (hCung === napAmHanh)                      canCo = 7.5;
+        else if (NGU_HANH_SINH[hCung] === napAmHanh)  canCo = 10;
+        else if (NGU_HANH_SINH[napAmHanh] === hCung)  canCo = 5;
+        else if (NGU_HANH_KHAC[napAmHanh] === hCung)  canCo = 2.5;
+        else if (NGU_HANH_KHAC[hCung] === napAmHanh)  canCo = 0;
+      }
     }
-    // Sát tinh
-    for (const s of SAT_TINH) {
-      if (allTPTC.includes(s)) benVung -= 0.8;
-    }
-    // Ổn định
-    if (allTPTC.includes('Lộc Tồn')) benVung += 1.5;
+    const tsBonus = {'Đế Vượng':1,'Trường Sinh':0.8,'Lâm Quan':0.5,'Quan Đới':0.3,'Mộ':-0.3,'Tử':-0.8,'Tuyệt':-1,'Thai':-0.2,'Dưỡng':0}[p.trangSinh] || 0;
+    canCo = r1(clamp(canCo + tsBonus));
+
+    // ── 3. MAY MẮN (0-10): lộc, thuận lợi, tài vật từ patterns + sao
+    let mayMan = 5 + pat.mm;
+    if (allTPTC.includes('Hóa Lộc')) mayMan += 1.5;
+    if (allTPTC.includes('Lộc Tồn')) mayMan += 1;
+    if (allTPTC.includes('Hóa Kỵ'))  mayMan -= 1.5;
+    for (const cc of ccList) mayMan += ({quy_cuc:2,phu_cuc:1.5,ban_tien_cuc:1,tap_cuc:0.5}[cc.loai] || 0);
+    if (tuanOn && !tuanHoa) mayMan *= 0.85;
+    if (trietOn && !trietKim) mayMan *= 0.7;
+    mayMan = r1(clamp(mayMan));
+
+    // ── 4. PHÙ TRỢ (0-10): quý nhân, hỗ trợ từ patterns + sao phụ tốt
+    let phuTro = 4 + pat.pt;
+    if (allTPTC.includes('Tả Phù'))     phuTro += 1.5;
+    if (allTPTC.includes('Hữu Bật'))    phuTro += 1.5;
+    if (allTPTC.includes('Thiên Khôi')) phuTro += 1.5;
+    if (allTPTC.includes('Thiên Việt')) phuTro += 1.5;
+    if (allTPTC.includes('Văn Xương'))  phuTro += 0.8;
+    if (allTPTC.includes('Văn Khúc'))   phuTro += 0.8;
+    if (allTPTC.includes('Hóa Khoa'))   phuTro += 1;
+    if (allTPTC.includes('Địa Không'))  phuTro -= 1;
+    if (allTPTC.includes('Địa Kiếp'))   phuTro -= 1;
+    if (allTPTC.includes('Hóa Kỵ'))     phuTro -= 0.5;
+    for (const cc of ccList) { if (['quy_cuc','phu_cuc'].includes(cc.loai)) phuTro += 1; }
+    phuTro = r1(clamp(phuTro));
+
+    // ── 5. BÌNH YÊN (0-10): ít hung sát, không tai họa (inverted)
+    let binhYen = 8 + pat.by;
+    for (const s of SAT_TINH) { if (allTPTC.includes(s)) binhYen -= 0.8; }
+    for (const s of BAI_TINH) { if (ownStars.includes(s)) binhYen -= 0.5; }
+    if (allTPTC.includes('Hóa Kỵ'))     binhYen -= 1.5;
+    if (allTPTC.includes('Thiên Hình')) binhYen -= 0.8;
+    for (const cc of ccList) { if (['quy_cuc','phu_cuc'].includes(cc.loai)) binhYen += 0.5; }
+    if (trietKim || tuanHoa) binhYen += 1;
+    binhYen = r1(clamp(binhYen));
+
+    // ── 6. BỀN VỮNG (0-10): ít biến động, ổn định lâu dài (inverted)
+    let benVung = 8 + pat.bv;
+    for (const s of BIEN_DONG) { if (allTPTC.includes(s)) benVung -= 1.5; }
+    if (ownStars.includes('Kình Dương')) benVung -= 0.5;
+    if (ownStars.includes('Đà La'))      benVung -= 0.5;
+    if (allTPTC.includes('Lộc Tồn'))     benVung += 1;
     if (p.majorStars.some(s=>['Thiên Phủ','Thiên Tướng'].includes(s.ten))) benVung += 1;
-    if (tuanOn) benVung += 0.5; // Tuần giảm biến động
-    // Hãm chính tinh → bất ổn
-    if (p.majorStars.some(s=>s.brightness==='Hãm')) benVung -= 1;
+    if (p.majorStars.some(s=>s.brightness==='Hãm')) benVung -= 0.8;
+    if (tuanOn) benVung += 0.5;
     benVung = r1(clamp(benVung));
 
-    // ── 3. AN TOÀN (0-10, cao = tốt) ───────────────────────────
-    // Tính ngược từ Rủi Ro: anToan = 10 - ruiRo
-    let _ruiRo = 2;
-    for (const s of SAT_TINH) {
-      if (allTPTC.includes(s)) _ruiRo += 1.2;
-    }
-    for (const s of BAI_TINH) {
-      if (ownStars.includes(s)) _ruiRo += 0.7;
-    }
-    if (allTPTC.includes('Hóa Kỵ')) _ruiRo += 1.5;
-    if (allTPTC.includes('Thiên Hình')) _ruiRo += 1;
-    if (p.majorStars.some(s=>['Thiên Phủ','Thiên Tướng'].includes(s.ten))) _ruiRo -= 1;
-    if (allTPTC.includes('Lộc Tồn')) _ruiRo -= 1;
-    for (const cc of ccList) {
-      if (['quy_cuc','phu_cuc'].includes(cc.loai)) _ruiRo -= 0.5;
-    }
-    _ruiRo += ynTags.hungScore * 0.4;
-    _ruiRo -= ynTags.catScore * 0.2;
-    if (trietOn) _ruiRo *= 0.3;
-    else if (tuanOn && !tuanHoa) _ruiRo *= 0.5;
-    if (tuanHoa || trietKim) _ruiRo *= 0.7;
-    const anToan = r1(clamp(10 - _ruiRo));
+    // ── TỔNG — same formula as DV: NH + nhRatio*DL + nhRatio*TT
+    const nhAvg  = (mayMan + phuTro + binhYen + benVung) / 4;
+    const nhNorm = nhAvg / 10 * 4;
+    const ttNorm = thienVan / 10 * 5;
+    const dlNorm = canCo / 10;
+    const nhRatio = nhNorm / 4;
+    const tong = r1(Math.min(10, nhNorm + nhRatio * dlNorm + nhRatio * ttNorm));
 
-    // ── 4. QUÝ NHÂN (0-10) ───────────────────────────────────────
-    let quyNhan = 2;
-    if (allTPTC.includes('Tả Phù')) quyNhan += 1.5;
-    if (allTPTC.includes('Hữu Bật')) quyNhan += 1.5;
-    if (allTPTC.includes('Thiên Khôi')) quyNhan += 1.5;
-    if (allTPTC.includes('Thiên Việt')) quyNhan += 1.5;
-    if (allTPTC.includes('Văn Xương')) {
-      const wx = p.tamHopCungs?.flatMap(c=>c.stars).concat(p.stars)
-        .find(s=>s.ten==='Văn Xương');
-      if (wx && ['Miếu','Vượng','Đắc'].includes(wx.brightness)) quyNhan += 1;
-      else quyNhan += 0.5;
-    }
-    if (allTPTC.includes('Văn Khúc')) quyNhan += 0.8;
-    if (allTPTC.includes('Hóa Khoa')) quyNhan += 1;
-    if (allTPTC.includes('Thiên Mã') && !allTPTC.includes('Hóa Kỵ')) quyNhan += 0.5;
-    // Sát tinh giảm quý nhân
-    if (allTPTC.includes('Địa Không')) quyNhan -= 1;
-    if (allTPTC.includes('Địa Kiếp')) quyNhan -= 1;
-    if (allTPTC.includes('Hóa Kỵ')) quyNhan -= 1;
-    // cachCuc
-    for (const cc of ccList) {
-      if (['quy_cuc','phu_cuc'].includes(cc.loai)) quyNhan += 1;
-    }
-    quyNhan = r1(clamp(quyNhan));
-
-    // ── 5. MINH BẠCH (0-10) ──────────────────────────────────────
-    let minhBach = 8;
-    if (isVCD) minhBach -= 2;
-    if (tuanOn && !tuanHoa) minhBach -= 1.5;
-    if (trietOn && !trietKim) minhBach -= 2.5;
-    if (tuanHoa || trietKim) minhBach += 1;
-    // Mâu thuẫn: vừa có cát cục vừa có hung cục
-    const hasDaiCat = (cachCucTungCung?.[cungName]||[]).some(s=>s.includes('đại cát'));
-    const hasDaiHung = (cachCucTungCung?.[cungName]||[]).some(s=>s.includes('đại hung'));
-    if (hasDaiCat && hasDaiHung) minhBach -= 2;
-    // Sao hãm và sao miếu cùng cung → mâu thuẫn
-    const hasMieu = p.majorStars.some(s=>['Miếu','Vượng'].includes(s.brightness));
-    const hasHam  = p.majorStars.some(s=>s.brightness==='Hãm');
-    if (hasMieu && hasHam) minhBach -= 1;
-    // Nhiều sát tinh trong cung → rối
-    const ownSatCount = SAT_TINH.filter(s=>ownStars.includes(s)).length;
-    minhBach -= ownSatCount * 0.5;
-    minhBach = r1(clamp(minhBach));
-
-    // ── 6. TƯƠNG HỢP (0-10) ──────────────────────────────────────
-    let tuongHop = 5;
-    // Ngũ hành chính tinh vs nạp âm bản mệnh
-    const mainStarName = p.majorStars[0]?.ten;
-    const starHanh = STAR_HANH[mainStarName];
-    const menhHanh = napAmHanh;
-    if (starHanh && menhHanh) {
-      if (starHanh === menhHanh)                           tuongHop += 3;   // đồng hành
-      else if (NGU_HANH_SINH_MAP[starHanh] === menhHanh)  tuongHop += 5;   // sinh nhập
-      else if (NGU_HANH_SINH_MAP[menhHanh] === starHanh)  tuongHop += 1;   // sinh xuất
-      else if (NGU_HANH_KHAC_MAP[menhHanh] === starHanh)  tuongHop -= 1;   // khắc xuất
-      else if (NGU_HANH_KHAC_MAP[starHanh] === menhHanh)  tuongHop -= 3;   // khắc nhập
-    }
-    // Bộ sao cung vs bộ sao Mệnh
-    const boCung = getBo(p.majorStars);
-    if (boMenh && boCung) {
-      const boKey = boMenh + ':' + boCung;
-      const boScoreRaw = SCORE_BO_MAP[boKey] ?? 1;
-      // scale 0-2 → -2 to +3
-      tuongHop += (boScoreRaw - 1) * 2;
-    }
-    tuongHop = r1(clamp(tuongHop));
-
-    scores[cungName] = {
-      tiemNang,
-      benVung,
-      anToan,
-      quyNhan,
-      minhBach,
-      tuongHop,
-    };
+    scores[cungName] = { thienVan, canCo, mayMan, phuTro, binhYen, benVung, tong };
   }
 
   return scores;

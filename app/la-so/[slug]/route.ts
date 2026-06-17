@@ -101,8 +101,8 @@ function buildPregenHTML(row: Record<string,unknown>, slug: string): string {
   const cungScores: Record<string,Record<string,number>> = (row.cung_scores as Record<string,Record<string,number>>) || {};
 
   const CUNGS = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
-  const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
-  const MLABELS = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
+  const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
+  const MLABELS = ['Thiên Vận','Căn Cơ','May Mắn','Phù Trợ','Bình Yên','Bền Vững'];
 
   const ccHTML = cachCuc.length > 0
     ? `<div class="cc-list">${cachCuc.map(c=>`<div class="cc-item"><span class="cc-badge cc-${esc(c.loai||'')}">${esc(c.ten||'')}</span><span class="cc-desc">${esc(c.moTa||'')}</span></div>`).join('')}</div>`
@@ -573,8 +573,8 @@ function renderTextBlocks(ls: Rec): string {
   const scores  = (ls.cungScores as Record<string, Record<string,number>>) || {};
   const dvs     = (ls.daiVans as Rec[]) || [];
   const CUNGS   = ['Mệnh','Quan Lộc','Tài Bạch','Phu Thê','Tử Tức'];
-  const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
-  const MLABELS = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
+  const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
+  const MLABELS = ['Thiên Vận','Căn Cơ','May Mắn','Phù Trợ','Bình Yên','Bền Vững'];
   const LOAIs: Record<string,string> = {
     quy_cuc:'background:#2a1f5e;color:#a78bfa',
     phu_cuc:'background:#1f3a2a;color:#4ade80',
@@ -675,8 +675,8 @@ function render24Sections(ls: Rec, params: IsrParams): string {
   const tieuVanSc = (ls.tieuVanScores as Rec[]) || [];
   const { namXem } = params;
 
-  const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
-  const MLABELS = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
+  const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
+  const MLABELS = ['Thiên Vận','Căn Cơ','May Mắn','Phù Trợ','Bình Yên','Bền Vững'];
   const LOAI_COL: Record<string,string> = {
     quy_cuc:'#7B3FA0',phu_cuc:'#1E6B3C',hung_cuc:'#C0392B',trung_cuc:'#9A7B3A',than_cu:'#555',
   };
@@ -1166,9 +1166,8 @@ function buildIsrHTML(ls: Rec, params: IsrParams, slug: string, relatedArticles:
   const pad        = (n: number) => String(n).padStart(2,'0');
 
   // Điểm cung mệnh
-  const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
   const sc = scores[cungMenh];
-  const diemMenh = sc ? Math.round(METRICS.reduce((s,m)=>s+(sc[m]||0),0)/METRICS.length*10)/10 : 0;
+  const diemMenh = sc?.tong ?? 0;
 
   // OG image
   const ccNames = cachCuc.slice(0,3).map(c=>String(c.ten||'')).join(',');

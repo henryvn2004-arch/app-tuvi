@@ -190,11 +190,11 @@ function extractLasoContext(lasoData: any, question: string): string {
     ctx += '\nCung ' + pName + ' (' + (p.diaChi||'') + ')' + (p.isMenh?' ★MỆNH':'') + (p.isThan?' ◆THÂN':'') + ':\n';
     const sc = lasoData.cungScores?.[pName];
     if (sc) {
-      const dims = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop']
+      const dims = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung']
         .map(k => sc[k]).filter((v: number) => typeof v === 'number');
       if (dims.length) {
-        const tot = Math.round(dims.reduce((a: number, b: number) => a + b, 0) / dims.length * 10) / 10;
-        ctx += '  Điểm cung: ' + tot + '/10 (tiềm năng ' + sc.tiemNang + ', bền vững ' + sc.benVung + ', an toàn ' + sc.anToan + ', quý nhân ' + sc.quyNhan + ', minh bạch ' + sc.minhBach + ', tương hợp ' + sc.tuongHop + ')\n';
+        const tot = sc.tong ?? Math.round(dims.reduce((a: number, b: number) => a + b, 0) / dims.length * 10) / 10;
+        ctx += '  Điểm cung: ' + tot + '/10 (thiên vận ' + sc.thienVan + ', căn cơ ' + sc.canCo + ', may mắn ' + sc.mayMan + ', phù trợ ' + sc.phuTro + ', bình yên ' + sc.binhYen + ', bền vững ' + sc.benVung + ')\n';
       }
     }
     const chinh = (p.majorStars||[]).map(starFmt).filter(Boolean);
