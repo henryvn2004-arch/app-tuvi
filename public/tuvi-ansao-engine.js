@@ -2794,7 +2794,8 @@ function matchCachCucData(palace, ls) {
       if (!condOk) continue;
     }
 
-    results.push(pat.t);
+    const prefix = pat.s && pat.s.length > 0 ? `[${pat.s.join(', ')}] ` : '';
+    results.push(prefix + pat.t);
   }
 
   // Dedup: remove exact duplicates
@@ -2892,7 +2893,8 @@ function matchVanHanData(dvPalace, lsCtx, gioitinh) {
       }
       if (!condOk) continue;
     }
-    results.push(pat.t);
+    const prefix = pat.s && pat.s.length > 0 ? `[${pat.s.join(', ')}] ` : '';
+    results.push(prefix + pat.t);
   }
   const seen = new Set();
   return results.filter(t => { if (seen.has(t)) return false; seen.add(t); return true; });

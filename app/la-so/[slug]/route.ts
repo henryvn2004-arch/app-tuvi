@@ -972,7 +972,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     }
 
     // Cách cục liên quan
-    const ccDV = cachCuc.filter(c => String(c.cung||'')===dvCungName||String(c.cung||'')==='');
+    const ccDV = cachCuc.filter(c => dvCungName && String(c.cung||'')===dvCungName);
     if (ccDV.length > 0) {
       body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">⚙ Cách cục liên quan</div>`;
       ccDV.forEach(c => {
