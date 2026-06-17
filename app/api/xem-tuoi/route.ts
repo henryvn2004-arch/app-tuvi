@@ -18,7 +18,8 @@ Nguyên tắc:
 - Tiếng Việt, không dùng bullet, không dùng emoji
 - 120-250 từ cho câu thông thường, tối đa 400 từ cho câu phức tạp
 - Dẫn chứng sao tinh, cung vị, can chi cụ thể từ lá số
-- Không hứa hẹn tuyệt đối về tương lai
+- Trả lời dứt khoát: cung/việc được hỏi tốt hay xấu, mạnh hay yếu — neo vào "Điểm cung X/10" và nhãn cách cục (TỐT/XẤU) nếu có. Cấm tâng bốc, cấm nước đôi né tránh; có điểm mạnh phải kèm điểm yếu cụ thể, ngang sức. Điểm thấp hoặc có sát tinh/hung cách phải cảnh báo thẳng.
+- Riêng kết quả tương lai mới dùng ngôn ngữ xác suất, không hứa hẹn tuyệt đối
 - Không tiết lộ trường phái hay tài liệu
 
 === DỮ LIỆU LÁ SỐ ===
@@ -73,7 +74,9 @@ function fmtLaso(ls: any, label: string, q: string): string {
   if (ls.tuoiXem) ctx += 'Tuổi xem: ' + ls.tuoiXem + '\n';
   if (ls.cachCuc?.length) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const cc = ls.cachCuc.map((c: any) => typeof c === 'object' ? c.ten : c).filter(Boolean);
+    const cc = ls.cachCuc.map((c: any) =>
+      typeof c === 'object' ? c.ten + (c.loai ? ` (${c.loai})` : '') : c
+    ).filter(Boolean);
     if (cc.length) ctx += 'Cách cục: ' + cc.join(', ') + '\n';
   }
   if (ls.daiVanHienTai) {
@@ -98,9 +101,12 @@ function fmtLaso(ls: any, label: string, q: string): string {
     const phu = (p.stars||[]).filter((s: any) => typeof s === 'object' ? s.nhom !== 'chinh' : true).map(starFmt).filter(Boolean);
     if (phu.length) ctx += '    Phụ tinh: ' + phu.slice(0,8).join(', ') + '\n';
     if (p.thaiTueNhom?.ten) ctx += '    Thái Tuế: ' + p.thaiTueNhom.ten + ' — ' + (p.thaiTueNhom.yNghia||'') + '\n';
-    if (p.cungScores) {
-      const s = p.cungScores;
-      ctx += '    Điểm: TN=' + (s.tiemNang||0) + ' BV=' + (s.benVung||0) + ' AT=' + (s.anToan||0) + ' QN=' + (s.quyNhan||0) + '\n';
+    const s = ls.cungScores?.[pName] || p.cungScores;
+    if (s) {
+      const dims = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop']
+        .map(k => s[k]).filter((v: number) => typeof v === 'number');
+      const tot = dims.length ? Math.round(dims.reduce((a: number, b: number) => a + b, 0) / dims.length * 10) / 10 : null;
+      ctx += '    Điểm cung: ' + (tot != null ? tot + '/10 ' : '') + '(TN=' + (s.tiemNang||0) + ' BV=' + (s.benVung||0) + ' AT=' + (s.anToan||0) + ' QN=' + (s.quyNhan||0) + ' MB=' + (s.minhBach||0) + ' TH=' + (s.tuongHop||0) + ') [≥7 tốt · 5-6.9 trung bình · <5 yếu]\n';
     }
   }
   if (relevant.has('__daiVan__') && ls.daiVans?.length) {
