@@ -101,8 +101,8 @@ function buildPregenHTML(row: Record<string,unknown>, slug: string): string {
   const cungScores: Record<string,Record<string,number>> = (row.cung_scores as Record<string,Record<string,number>>) || {};
 
   const CUNGS = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
-  const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
-  const MLABELS = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
+  const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
+  const MLABELS = ['Thiên Vận','Căn Cơ','May Mắn','Phù Trợ','Bình Yên','Bền Vững'];
 
   const ccHTML = cachCuc.length > 0
     ? `<div class="cc-list">${cachCuc.map(c=>`<div class="cc-item"><span class="cc-badge cc-${esc(c.loai||'')}">${esc(c.ten||'')}</span><span class="cc-desc">${esc(c.moTa||'')}</span></div>`).join('')}</div>`
@@ -573,8 +573,8 @@ function renderTextBlocks(ls: Rec): string {
   const scores  = (ls.cungScores as Record<string, Record<string,number>>) || {};
   const dvs     = (ls.daiVans as Rec[]) || [];
   const CUNGS   = ['Mệnh','Quan Lộc','Tài Bạch','Phu Thê','Tử Tức'];
-  const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
-  const MLABELS = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
+  const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
+  const MLABELS = ['Thiên Vận','Căn Cơ','May Mắn','Phù Trợ','Bình Yên','Bền Vững'];
   const LOAIs: Record<string,string> = {
     quy_cuc:'background:#2a1f5e;color:#a78bfa',
     phu_cuc:'background:#1f3a2a;color:#4ade80',
@@ -662,12 +662,21 @@ function render24Sections(ls: Rec, params: IsrParams): string {
   const scores    = (ls.cungScores as Record<string,Record<string,number>>) || {};
   const cachCuc   = (ls.cachCuc as Rec[]) || [];
   const cachCucTC = (ls.cachCucTungCung as Record<string,string[]>) || {};
+  const CHINH_TINH = ['Tử Vi','Thiên Cơ','Thái Dương','Vũ Khúc','Thiên Đồng','Liêm Trinh',
+    'Thiên Phủ','Thái Âm','Tham Lang','Cự Môn','Thiên Tướng','Thiên Lương','Thất Sát','Phá Quân'];
+  function sortByChinhTinh(items: string[]): string[] {
+    return [...items].sort((a, b) => {
+      const aHas = CHINH_TINH.some(s => a.includes(s)) ? 0 : 1;
+      const bHas = CHINH_TINH.some(s => b.includes(s)) ? 0 : 1;
+      return aHas - bHas;
+    });
+  }
   const dvs       = (ls.daiVans as Rec[]) || [];
   const tieuVanSc = (ls.tieuVanScores as Rec[]) || [];
   const { namXem } = params;
 
-  const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
-  const MLABELS = ['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
+  const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
+  const MLABELS = ['Thiên Vận','Căn Cơ','May Mắn','Phù Trợ','Bình Yên','Bền Vững'];
   const LOAI_COL: Record<string,string> = {
     quy_cuc:'#7B3FA0',phu_cuc:'#1E6B3C',hung_cuc:'#C0392B',trung_cuc:'#9A7B3A',than_cu:'#555',
   };
@@ -791,14 +800,33 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     // Re-run phanTichCungYNghia with TPTC stars merged into this palace's stars
     let tptcItems: string[] = [];
     if (palace) {
-      const tptcExtraStars = tptcPals3.flatMap(p => (p.stars as Rec[])||[]);
+      const tptcExtraStars = tptcPals3.flatMap(p => (p.stars as Rec[])||[])
+        .filter((s: Rec) => s.ten !== 'Tuần' && s.ten !== 'Triệt' && s.ten !== 'Tuần+Triệt');
       const augPalace = { ...palace, stars: [...((palace.stars as Rec[])||[]), ...tptcExtraStars] };
       const augPalaces = (ls.palaces as Rec[]).map((p: Rec) => String(p.cungName||'') === cungName ? augPalace : p);
       const augLs = { ..._lsBase, palaces: augPalaces };
       const augResult = _phanTichCYN(augLs, params.gioi, params.gioIdx, _canNam, _chiNam, 0);
       const origSet = new Set(ynItems);
-      tptcItems = (augResult[cungName] || []).filter((item: string) => !origSet.has(item));
+      tptcItems = sortByChinhTinh((augResult[cungName] || []).filter((item: string) => !origSet.has(item)));
     }
+
+    // Phân tích sao (cachCucTungCung) — chính tinh patterns first
+    const ynSorted = sortByChinhTinh(ynItems);
+    if (ynSorted.length > 0) {
+      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">📋 Phân tích sao</div>`;
+      ynSorted.slice(0, 8).forEach(y => {
+        const isGreatCat = y.includes('đại cát')||y.includes('đại phú');
+        const isCat      = !isGreatCat && (y.includes('[cát]')||y.includes('phú quý')||y.includes('giàu sang'));
+        const isGreatHung= y.includes('đại hung');
+        const isHung     = !isGreatHung && (y.includes('hung')||y.includes('vất vả')||y.includes('tai'));
+        const isTT       = y.includes('Tuần')||y.includes('Triệt');
+        const col = isGreatCat?'#4ade80':isCat?'#86efac':isGreatHung?'#f87171':isHung?'#fca5a5':isTT?'#fbbf24':'#94a3b8';
+        body += `<div style="font-size:12px;color:${col};padding:2px 0;line-height:1.5">• ${esc(y)}</div>`;
+      });
+      body += `</div>`;
+    }
+
+    // Tam phương tứ chính — after Phân tích sao
     if (catTPTC.length || satTPTC.length || baiTPTC.length || tptcItems.length) {
       body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">🔍 Tam phương tứ chính</div>`;
       if (catTPTC.length) body += `<div style="font-size:12px;color:#86efac;margin:2px 0">Cát tinh: ${catTPTC.map(s=>starLink(s,esc(s))).join(', ')}</div>`;
@@ -824,21 +852,6 @@ function render24Sections(ls: Rec, params: IsrParams): string {
       ccInCung.forEach(c => {
         const loai = String(c.loai||'');
         body += `<span style="display:inline-block;background:${LOAI_COL[loai]||'#888'};color:#fff;font-size:11px;font-weight:700;padding:2px 7px;border-radius:3px;margin:2px">${esc(String(c.ten||''))}</span>`;
-      });
-      body += `</div>`;
-    }
-
-    // Phân tích sao (cachCucTungCung)
-    if (ynItems.length > 0) {
-      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">📋 Phân tích sao</div>`;
-      ynItems.slice(0, 8).forEach(y => {
-        const isGreatCat = y.includes('đại cát')||y.includes('đại phú');
-        const isCat      = !isGreatCat && (y.includes('[cát]')||y.includes('phú quý')||y.includes('giàu sang'));
-        const isGreatHung= y.includes('đại hung');
-        const isHung     = !isGreatHung && (y.includes('hung')||y.includes('vất vả')||y.includes('tai'));
-        const isTT       = y.includes('Tuần')||y.includes('Triệt');
-        const col = isGreatCat?'#4ade80':isCat?'#86efac':isGreatHung?'#f87171':isHung?'#fca5a5':isTT?'#fbbf24':'#94a3b8';
-        body += `<div style="font-size:12px;color:${col};padding:2px 0;line-height:1.5">• ${esc(y)}</div>`;
       });
       body += `</div>`;
     }
@@ -959,7 +972,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
     }
 
     // Cách cục liên quan
-    const ccDV = cachCuc.filter(c => String(c.cung||'')===dvCungName||String(c.cung||'')==='');
+    const ccDV = cachCuc.filter(c => dvCungName && String(c.cung||'')===dvCungName);
     if (ccDV.length > 0) {
       body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">⚙ Cách cục liên quan</div>`;
       ccDV.forEach(c => {
@@ -984,6 +997,16 @@ function render24Sections(ls: Rec, params: IsrParams): string {
       trungR.forEach(r => { body += `<div style="font-size:12px;color:#94a3b8;padding:2px 0;line-height:1.5">◆ ${esc(String(r.text||''))}</div>`; });
       xauR.forEach(r   => { body += `<div style="font-size:12px;color:#f87171;padding:2px 0;line-height:1.5">▼ ${esc(String(r.text||''))}</div>`; });
       cbR.forEach(r    => { body += `<div style="font-size:12px;color:#f87171;font-weight:600;padding:2px 0;line-height:1.5">⚠ ${esc(String(r.text||''))}</div>`; });
+      body += `</div>`;
+    }
+
+    // Vận Hạn patterns (yNghia)
+    const dvYN = (dv.yNghia as string[])||[];
+    if (dvYN.length > 0) {
+      body += `<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#9A7B3A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">📖 Luận giải vận hạn</div>`;
+      dvYN.forEach(t => {
+        body += `<div style="font-size:12px;color:#374151;padding:3px 0 3px 10px;border-left:2px solid #c9a84c;margin-bottom:4px;line-height:1.5">${esc(t)}</div>`;
+      });
       body += `</div>`;
     }
 
@@ -1143,9 +1166,8 @@ function buildIsrHTML(ls: Rec, params: IsrParams, slug: string, relatedArticles:
   const pad        = (n: number) => String(n).padStart(2,'0');
 
   // Điểm cung mệnh
-  const METRICS = ['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'];
   const sc = scores[cungMenh];
-  const diemMenh = sc ? Math.round(METRICS.reduce((s,m)=>s+(sc[m]||0),0)/METRICS.length*10)/10 : 0;
+  const diemMenh = sc?.tong ?? 0;
 
   // OG image
   const ccNames = cachCuc.slice(0,3).map(c=>String(c.ten||'')).join(',');

@@ -1389,11 +1389,299 @@ function phanTichCachCuc(ls, gioitinh) {
   }
 
   // Hóa Kỵ hội sát tinh (≥2 sát tinh đồng cung)
-  const hoaKyPalace = ls.palaces.find(p => hasHoa(p,'Kỵ'));
+  // Bỏ qua cung Liêm Tham Phùng Kỵ (Tỵ/Hợi) vì Kỵ đã chế hung thành cát ở đó
+  const hoaKyPalace = ls.palaces.find(p => {
+    if (!hasHoa(p,'Kỵ')) return false;
+    const isLiemThamPhungKy = hasSao(p,'Liêm Trinh') && hasSao(p,'Tham Lang') &&
+                               (p.diaChi === 'Tỵ' || p.diaChi === 'Hợi');
+    return !isLiemThamPhungKy;
+  });
   if (hoaKyPalace && countSatTinh(hoaKyPalace) >= 2) {
     add('ban_tien_cuc','Hóa Kỵ Hội Sát',
       `Hóa Kỵ đóng cùng nhiều sát tinh tại cung ${hoaKyPalace.cungName} — hung hại trong lĩnh vực cung đó tăng gấp bội, đặc biệt thận trọng.`,
       `Hóa Kỵ + ${countSatTinh(hoaKyPalace)} sát tinh tại ${hoaKyPalace.cungName}.`, hoaKyPalace.cungName);
+  }
+
+  // ═══════════════════════════════════════════════
+  // 6. CÁCH CỤC TỪNG CUNG CHUYÊN BIỆT
+  // ═══════════════════════════════════════════════
+
+  // ── QUAN LỘC ────────────────────────────────
+  if (p_quan) {
+    // Hóa Kỵ Quan Lộc — trắc trở trừ khi Nhật/Nguyệt tại Sửu/Mùi
+    if (hasHoa(p_quan,'Kỵ')) {
+      const kyGiaiGiai = (hasSao(p_quan,'Thái Dương') || hasSao(p_quan,'Thái Âm')) &&
+                         (p_quan.diaChi === 'Sửu' || p_quan.diaChi === 'Mùi');
+      if (kyGiaiGiai) {
+        add('quy_cuc','Nhật Nguyệt Hóa Kỵ Giao Huy',
+          'Hóa Kỵ đồng cung Thái Dương/Thái Âm tại Sửu/Mùi — Kỵ như mây ngũ sắc chầu Nhật Nguyệt, công danh hoạnh đạt, mọi sự đều hành thông.',
+          'Hóa Kỵ + Nhật/Nguyệt tại Sửu/Mùi = Quan Lộc hoạnh đạt.', 'Quan Lộc');
+      } else {
+        add('ban_tien_cuc','Hóa Kỵ Phá Quan Lộc',
+          'Hóa Kỵ đóng tại Quan Lộc — sự nghiệp hay gặp trở ngại, dễ thăng giáng bất thường, cần thận trọng trong công việc và tránh tranh quyền.',
+          'Hóa Kỵ tại Quan Lộc = trắc trở công danh.', 'Quan Lộc');
+      }
+    }
+    // Quan Lộc vô chính diệu + Tuần/Triệt → sau vẫn hiển đạt
+    if (isVoChinhDieu(p_quan) && hasTuanOrTriet(p_quan)) {
+      add('quy_cuc','Quan Lộc Vô Chính Phùng Tuần Triệt',
+        'Cung Quan Lộc vô chính tinh nhưng có Tuần/Triệt án ngữ — tuy nhiều trở ngại trên đường công danh nhưng sau vẫn hiển đạt, thường hoạnh phát hoạnh phá.',
+        'Quan Lộc vô chính diệu + Tuần/Triệt.', 'Quan Lộc');
+    }
+    // Thiên Mã Quan Lộc → nên làm công việc lưu động
+    if (hasSao(p_quan,'Thiên Mã')) {
+      add('quy_cuc','Thiên Mã Thủ Quan Lộc',
+        'Thiên Mã thủ Quan Lộc — công danh hiển đạt, thích hợp làm việc có tính lưu động, đi xa, di chuyển; không nên thủ thường một chỗ.',
+        'Thiên Mã tại Quan Lộc = sự nghiệp lưu động.', 'Quan Lộc');
+    }
+  }
+
+  // ── NÔ BỘC ──────────────────────────────────
+  if (p_no) {
+    // Liêm Tham Phùng Kỵ — đặc cách tốt
+    if (hasSao(p_no,'Liêm Trinh') && hasSao(p_no,'Tham Lang') && hasHoa(p_no,'Kỵ') &&
+        (p_no.diaChi === 'Tỵ' || p_no.diaChi === 'Hợi')) {
+      add('quy_cuc','Liêm Tham Phùng Kỵ',
+        'Liêm Trinh, Tham Lang và Hóa Kỵ đồng cung tại Tỵ/Hợi — Kỵ chế được tánh hung của Liêm, Tham, hung hóa cát; bạn bè tuy hay có ma sát nhưng sau lại thành đồng minh tốt.',
+        'Liêm Trinh + Tham Lang + Hóa Kỵ tại Tỵ/Hợi = hung hóa cát.', 'Nô Bộc');
+    } else if (hasHoa(p_no,'Kỵ')) {
+      // Hóa Kỵ Nô Bộc — thị phi
+      add('ban_tien_cuc','Hóa Kỵ Nhập Nô Bộc',
+        'Hóa Kỵ đóng tại Nô Bộc — hay mắc thị phi, thường bị người giúp việc hay bạn bè nói xấu và oán trách; cần cẩn thận khi tin người.',
+        'Hóa Kỵ tại Nô Bộc = thị phi, bạn phản.', 'Nô Bộc');
+    }
+    // Tuần/Triệt Nô Bộc — đảo nghịch nhận định
+    if (hasTuanOrTriet(p_no)) {
+      add('menh_co_ban','Tuần Triệt Nô Bộc',
+        'Tuần/Triệt án ngữ cung Nô Bộc — thuê mướn người giúp việc trước khó sau dễ; sao tốt hóa thành xấu, sao xấu hóa thành tốt (nhận định đảo ngược).',
+        'Tuần/Triệt tại Nô Bộc = đảo nghịch ý nghĩa.', 'Nô Bộc');
+    }
+    // Đào Hoa Nô Bộc — đa tình
+    if (hasSao(p_no,'Đào Hoa')) {
+      add('menh_co_ban','Đào Hoa Nhập Nô Bộc',
+        gioitinh === 'nam'
+          ? 'Đào Hoa tọa thủ cung Nô Bộc — nam hay mang lụy vì tình, đa mang việc trăng gió, dễ có vợ lẽ.'
+          : 'Đào Hoa tọa thủ cung Nô Bộc — nữ hay bị bạn bè hay người thân lôi kéo vào chuyện tình cảm phức tạp.',
+        'Đào Hoa tại Nô Bộc.', 'Nô Bộc');
+    }
+  }
+
+  // ── PHỤ MẪU ──────────────────────────────────
+  if (p_phu) {
+    // Tuần/Triệt → sớm khắc một trong hai thân
+    if (hasTuanOrTriet(p_phu)) {
+      add('ban_tien_cuc','Tuần Triệt Phụ Mẫu',
+        'Tuần/Triệt án ngữ cung Phụ Mẫu — dù cung này tốt hay xấu, đều tiềm ẩn nguy cơ sớm khắc một trong hai thân (cha hoặc mẹ mất sớm).',
+        'Tuần/Triệt tại Phụ Mẫu = khắc song thân.', 'Phụ Mẫu');
+    }
+    // Nhật sáng Nguyệt mờ → mẹ mất trước cha
+    const nhatSangPhu = hasSao(p_phu,'Thái Dương') && isSangSua(p_phu,'Thái Dương');
+    const nguyetSangPhu = hasSao(p_phu,'Thái Âm') && isSangSua(p_phu,'Thái Âm');
+    const nhatMoPhu = hasSao(p_phu,'Thái Dương') && isMoAm(p_phu,'Thái Dương');
+    const nguyetMoPhu = hasSao(p_phu,'Thái Âm') && isMoAm(p_phu,'Thái Âm');
+    if (nhatSangPhu && nguyetMoPhu) {
+      add('menh_co_ban','Nhật Sáng Nguyệt Mờ Phụ Mẫu',
+        'Thái Dương sáng, Thái Âm mờ tại Phụ Mẫu — cha tốt đẹp, mẹ suy kém; xác suất mẹ mất trước cha.',
+        'Nhật sáng Nguyệt mờ tại Phụ Mẫu.', 'Phụ Mẫu');
+    } else if (nhatMoPhu && nguyetSangPhu) {
+      add('menh_co_ban','Nhật Mờ Nguyệt Sáng Phụ Mẫu',
+        'Thái Dương mờ, Thái Âm sáng tại Phụ Mẫu — cha suy kém, mẹ tốt đẹp; xác suất cha mất trước mẹ.',
+        'Nhật mờ Nguyệt sáng tại Phụ Mẫu.', 'Phụ Mẫu');
+    }
+    // Hóa Kỵ Phụ Mẫu — bất hòa
+    if (hasHoa(p_phu,'Kỵ')) {
+      add('ban_tien_cuc','Hóa Kỵ Phụ Mẫu',
+        'Hóa Kỵ đóng tại Phụ Mẫu — cha mẹ hay bất hòa với nhau, hoặc cha mẹ và con không hợp tính; cần thận trọng trong quan hệ gia đình.',
+        'Hóa Kỵ tại Phụ Mẫu = bất hòa song thân.', 'Phụ Mẫu');
+    }
+  }
+
+  // ── TỬ TỨC ──────────────────────────────────
+  if (p_tuTuc) {
+    // Hóa Kỵ — muộn con, khó nuôi
+    if (hasHoa(p_tuTuc,'Kỵ')) {
+      add('ban_tien_cuc','Hóa Kỵ Tử Tức',
+        'Hóa Kỵ đóng tại Tử Tức — muộn con, khó nuôi con, hoặc con hay xung khắc với cha mẹ; nên muộn sinh hơn sớm sinh.',
+        'Hóa Kỵ tại Tử Tức = muộn con, khó nuôi.', 'Tử Tức');
+    }
+    // Hóa Lộc — con khá giả
+    if (hasHoa(p_tuTuc,'Lộc')) {
+      add('phu_cuc','Hóa Lộc Tử Tức',
+        'Hóa Lộc đóng tại Tử Tức — con cái khá giả, về già được nhờ con cái, có con hiếu thảo tài giỏi.',
+        'Hóa Lộc tại Tử Tức = con hiếu, được nhờ con.', 'Tử Tức');
+    }
+    // Hóa Quyền — con sớm hiển đạt
+    if (hasHoa(p_tuTuc,'Quyền')) {
+      add('phu_cuc','Hóa Quyền Tử Tức',
+        'Hóa Quyền đóng tại Tử Tức — con cái sớm hiển đạt, có uy quyền sự nghiệp phát triển mạnh.',
+        'Hóa Quyền tại Tử Tức = con sớm hiển đạt.', 'Tử Tức');
+    }
+    // Nhiều sát tinh — sinh nhiều nuôi ít
+    if (countSatTinh(p_tuTuc) >= 2) {
+      add('ban_tien_cuc','Sát Tinh Hội Tử Tức',
+        `Nhiều sát tinh hội tụ tại Tử Tức — sinh nhiều nuôi ít, con cái hay xung khắc với cha mẹ, hoặc khó có con.`,
+        `${countSatTinh(p_tuTuc)} sát tinh tại Tử Tức.`, 'Tử Tức');
+    }
+  }
+
+  // ── PHU THÊ ──────────────────────────────────
+  if (p_phuThe) {
+    // Đào Hoa — bạn đời đa tình
+    if (hasSao(p_phuThe,'Đào Hoa')) {
+      add('menh_co_ban','Đào Hoa Nhập Phu Thê',
+        'Đào Hoa tọa thủ cung Phu Thê — hôn nhân nhiều màu sắc, bạn đời hấp dẫn nhưng đa tình; dễ có hai đời vợ/chồng hoặc hôn nhân trắc trở.',
+        'Đào Hoa tại Phu Thê = bạn đời đa tình.', 'Phu Thê');
+    }
+    // Hóa Kỵ — hôn nhân trắc trở
+    if (hasHoa(p_phuThe,'Kỵ')) {
+      add('ban_tien_cuc','Hóa Kỵ Phu Thê',
+        'Hóa Kỵ đóng tại Phu Thê — hôn nhân hay trắc trở, vợ/chồng không hợp tính hoặc hay xích mích; cần thận trọng trong chọn bạn đời.',
+        'Hóa Kỵ tại Phu Thê = hôn nhân trắc trở.', 'Phu Thê');
+    }
+    // Thiên Mã — vợ chồng hay xa cách
+    if (hasSao(p_phuThe,'Thiên Mã')) {
+      add('menh_co_ban','Thiên Mã Phu Thê',
+        'Thiên Mã đóng tại Phu Thê — vợ/chồng thích di chuyển, hai người hay ở xa nhau; hôn nhân phần lưu động, cần chủ động duy trì kết nối.',
+        'Thiên Mã tại Phu Thê = vợ chồng hay xa cách.', 'Phu Thê');
+    }
+    // Kình Dương hoặc Đà La mờ ám — khắc vợ/chồng
+    const kinhMoPhuThe = hasSao(p_phuThe,'Kình Dương') && isMoAm(p_phuThe,'Kình Dương');
+    const daMoPhuThe   = hasSao(p_phuThe,'Đà La') && isMoAm(p_phuThe,'Đà La');
+    if (kinhMoPhuThe || daMoPhuThe) {
+      add('ban_tien_cuc','Kình Đà Phá Phu Thê',
+        'Kình Dương hoặc Đà La mờ ám thủ cung Phu Thê — có nguy cơ khắc bạn đời, hôn nhân nhiều sóng gió, dễ ly hôn hoặc góa sớm.',
+        'Kình/Đà mờ ám tại Phu Thê = khắc bạn đời.', 'Phu Thê');
+    }
+  }
+
+  // ── TÀI BẠCH ──────────────────────────────────
+  if (p_tai) {
+    // Hóa Kỵ — hao tán
+    if (hasHoa(p_tai,'Kỵ')) {
+      add('ban_tien_cuc','Hóa Kỵ Phá Tài Bạch',
+        'Hóa Kỵ đóng tại Tài Bạch — tài lộc hao tán, hay bị mất mát tiền bạc; cần cẩn thận trong đầu tư và tránh bảo lãnh cho người khác.',
+        'Hóa Kỵ tại Tài Bạch = tài lộc hao tán.', 'Tài Bạch');
+    }
+    // Vũ Khúc sáng — tài lộc vượng
+    if (hasSao(p_tai,'Vũ Khúc') && isSangSua(p_tai,'Vũ Khúc')) {
+      add('phu_cuc','Vũ Khúc Minh Tài Bạch',
+        'Vũ Khúc (tài tinh) sáng sủa thủ Tài Bạch — tài chính vượng phát, giỏi kinh doanh, tích lũy tài sản tốt; phát tài từ công việc và buôn bán.',
+        'Vũ Khúc sáng tại Tài Bạch = tài lộc vượng.', 'Tài Bạch');
+    }
+  }
+
+  // ── ĐIỀN TRẠCH ──────────────────────────────────
+  if (p_dien) {
+    // Hóa Lộc — lộc từ nhà đất
+    if (hasHoa(p_dien,'Lộc')) {
+      add('phu_cuc','Hóa Lộc Điền Trạch',
+        'Hóa Lộc đóng tại Điền Trạch — dễ có nhà cửa đất đai, bất động sản phát triển tốt, lộc từ nhà đất.',
+        'Hóa Lộc tại Điền Trạch = lộc từ nhà đất.', 'Điền Trạch');
+    }
+    // Thái Âm sáng — bất động sản vượng
+    if (hasSao(p_dien,'Thái Âm') && isSangSua(p_dien,'Thái Âm')) {
+      add('phu_cuc','Thái Âm Minh Điền Trạch',
+        'Thái Âm (chủ điền trạch) sáng sủa thủ Điền Trạch — bất động sản vượng phát, dễ có nhiều nhà đất, nhà cửa sung túc và ổn định.',
+        'Thái Âm sáng tại Điền Trạch = bất động sản vượng.', 'Điền Trạch');
+    }
+    // Thiên Phủ sáng — tài lộc súc tích
+    if (hasSao(p_dien,'Thiên Phủ') && isSangSua(p_dien,'Thiên Phủ')) {
+      add('phu_cuc','Thiên Phủ Minh Điền Trạch',
+        'Thiên Phủ (tài tinh) sáng sủa thủ Điền Trạch — tài lộc súc tích, nhiều bất động sản, nhà cửa sung túc và bền vững.',
+        'Thiên Phủ sáng tại Điền Trạch = bất động sản vượng.', 'Điền Trạch');
+    }
+    // Hóa Kỵ — mất mát bất động sản
+    if (hasHoa(p_dien,'Kỵ')) {
+      add('ban_tien_cuc','Hóa Kỵ Điền Trạch',
+        'Hóa Kỵ đóng tại Điền Trạch — hay mất mát nhà cửa bất động sản, thường phải chuyển chỗ ở nhiều lần; cần cẩn thận giao dịch nhà đất.',
+        'Hóa Kỵ tại Điền Trạch = mất mát bất động sản.', 'Điền Trạch');
+    }
+  }
+
+  // ── PHÚC ĐỨC ──────────────────────────────────
+  if (p_phuc) {
+    // Hóa Lộc — phúc lộc dồi dào (Hóa Lộc = thần cung Phúc Đức)
+    if (hasHoa(p_phuc,'Lộc')) {
+      add('phu_cuc','Hóa Lộc Thủ Phúc Đức',
+        'Hóa Lộc (thần cung Phúc Đức) thủ chính cung — phúc lộc dồi dào, cuộc đời được hưởng phúc thọ tốt đẹp, ít tai họa bệnh tật.',
+        'Hóa Lộc tại Phúc Đức = phúc lộc dồi dào.', 'Phúc Đức');
+    }
+    // Thiên Lương sáng — phúc thọ vượng
+    if (hasSao(p_phuc,'Thiên Lương') && isSangSua(p_phuc,'Thiên Lương')) {
+      add('phu_cuc','Thiên Lương Minh Phúc Đức',
+        'Thiên Lương sáng sủa thủ Phúc Đức — phúc thọ vượng, ít bệnh tật, sống lâu, tâm hồn nhân hậu và tích lũy nhiều phúc lành.',
+        'Thiên Lương sáng tại Phúc Đức = phúc thọ vượng.', 'Phúc Đức');
+    }
+    // Phúc Đức tại Tứ Mộ + Mộ tinh — âm phần kết phát
+    const tuMoCung = ['Thìn','Tuất','Sửu','Mùi'];
+    if (tuMoCung.includes(p_phuc.diaChi) && hasSao(p_phuc,'Mộ')) {
+      add('quy_cuc','Âm Phần Kết Phát',
+        'Cung Phúc Đức an tại Tứ Mộ và có Mộ tinh tọa thủ — âm phần đã kết phát, dòng họ ba bốn đời giàu sang vinh hiển, phúc lộc truyền đời.',
+        'Phúc Đức tại Tứ Mộ + Mộ tinh.', 'Phúc Đức');
+    }
+  }
+
+  // ── HUYNH ĐỆ ──────────────────────────────────
+  if (p_huynh) {
+    // Tả Phụ/Hữu Bật — anh chị em đắc lực
+    if (hasSao(p_huynh,'Tả Phụ') || hasSao(p_huynh,'Hữu Bật')) {
+      add('phu_cuc','Tả Hữu Huynh Đệ',
+        'Tả Phụ hoặc Hữu Bật tọa thủ cung Huynh Đệ — nhiều anh chị em, anh chị em đắc lực, tốt lành và hay giúp đỡ lẫn nhau.',
+        'Tả Phụ/Hữu Bật tại Huynh Đệ = anh chị em đắc lực.', 'Huynh Đệ');
+    }
+    // Hóa Kỵ — bất hòa
+    if (hasHoa(p_huynh,'Kỵ')) {
+      add('ban_tien_cuc','Hóa Kỵ Huynh Đệ',
+        'Hóa Kỵ đóng tại Huynh Đệ — anh chị em hay bất hòa, dễ xảy ra tranh chấp trong gia đình; cần thận trọng trong quan hệ anh chị em.',
+        'Hóa Kỵ tại Huynh Đệ = anh chị em bất hòa.', 'Huynh Đệ');
+    }
+  }
+
+  // ── TẬT ÁCH ──────────────────────────────────
+  if (p_tat) {
+    // Hóa Kỵ — bệnh mãn tính
+    if (hasHoa(p_tat,'Kỵ')) {
+      add('ban_tien_cuc','Hóa Kỵ Tật Ách',
+        'Hóa Kỵ đóng tại Tật Ách — hay mắc bệnh tật, bệnh mãn tính khó chữa; cần chú ý sức khỏe và thường xuyên kiểm tra y tế.',
+        'Hóa Kỵ tại Tật Ách = bệnh mãn tính.', 'Tật Ách');
+    }
+    // Tuần/Triệt — bệnh nhẹ hơn, dễ chữa
+    if (hasTuanOrTriet(p_tat)) {
+      add('quy_cuc','Tuần Triệt Giải Tật Ách',
+        'Tuần/Triệt án ngữ cung Tật Ách — bệnh tật thường nhẹ hoặc dễ chữa hơn mức dự đoán, có thể hóa giải được nhiều bệnh nguy hiểm.',
+        'Tuần/Triệt tại Tật Ách = bệnh nhẹ, dễ chữa.', 'Tật Ách');
+    }
+    // Nhiều sát tinh — hay tai nạn thương tích
+    if (countSatTinh(p_tat) >= 2) {
+      add('ban_tien_cuc','Sát Tinh Hội Tật Ách',
+        `Nhiều sát tinh hội tụ tại Tật Ách — hay bệnh tật nặng, dễ gặp tai nạn thương tích; cần đặc biệt chú ý bảo vệ sức khỏe.`,
+        `${countSatTinh(p_tat)} sát tinh tại Tật Ách.`, 'Tật Ách');
+    }
+  }
+
+  // ── THIÊN DI ──────────────────────────────────
+  if (p_thienDi) {
+    // Hóa Lộc — lộc từ ngoại
+    if (hasHoa(p_thienDi,'Lộc')) {
+      add('phu_cuc','Hóa Lộc Thiên Di',
+        'Hóa Lộc đóng tại Thiên Di — tài lộc đến từ bên ngoài, thích hợp làm ăn xa quê; xuất ngoại nhiều cơ hội, đi xa được lợi.',
+        'Hóa Lộc tại Thiên Di = lộc từ ngoại quốc.', 'Thiên Di');
+    }
+    // Thiên Mã — xuất ngoại nhiều, có lợi
+    if (hasSao(p_thienDi,'Thiên Mã')) {
+      const coLocDi = hasHoa(p_thienDi,'Lộc') || hasSao(p_thienDi,'Lộc Tồn');
+      add('phu_cuc','Thiên Mã Thủ Thiên Di',
+        coLocDi
+          ? 'Thiên Mã thủ Thiên Di và có Lộc đồng cung — tài lộc từ ngoài rất tốt, xuất ngoại vừa di chuyển vừa phát tài, thích hợp định cư nước ngoài.'
+          : 'Thiên Mã thủ Thiên Di — cuộc đời di chuyển nhiều, xuất ngoại tốt; thích hợp làm ăn xa hoặc định cư nước ngoài.',
+        `Thiên Mã tại Thiên Di${coLocDi ? ' + Lộc' : ''} = xuất ngoại có lợi.`, 'Thiên Di');
+    }
+    // Hóa Kỵ — di chuyển gặp họa
+    if (hasHoa(p_thienDi,'Kỵ')) {
+      add('ban_tien_cuc','Hóa Kỵ Thiên Di',
+        'Hóa Kỵ đóng tại Thiên Di — di chuyển hay gặp trở ngại tai vạ, xuất ngoại mang lại rủi ro; cần thận trọng khi đi xa hoặc định cư nước ngoài.',
+        'Hóa Kỵ tại Thiên Di = di chuyển gặp họa.', 'Thiên Di');
+    }
   }
 
   // ═══════════════════════════════════════════════
@@ -1788,6 +2076,11 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
   // Tính scoring cho 9 đại vận
   const napAmHanh = getNapAm(canChiNam);
   const daiVansScored = tinhScoringAllDaiVan(daiVans, palaces, canChiNam, chiNam, napAmHanh, chiNam);
+  const _menhP = palaces.find(p => p.isMenh);
+  daiVansScored.forEach(dv => {
+    const dvP = palaces.find(x => x.diaChi === dv.diaChi);
+    dv.yNghia = matchVanHanData(dvP, { napAmHanh, menhPalace: _menhP }, gioitinh);
+  });
 
   return {
     canChiNam, napAm, amDuong, cuc, canMenh,
@@ -1831,7 +2124,7 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
           gioitinh, gioIdx, canNam, chiNam, tuoiXem
         ),
       },
-      napAmHanh, tuoiXem
+      napAmHanh, tuoiXem, chiNam
     ),
     tieuVanScores: tinhTieuVanScores(
       { palaces, daiVans: daiVansScored },
@@ -2135,6 +2428,11 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
   // Tính scoring cho 9 đại vận
   const napAmHanh = getNapAm(canChiNam);
   const daiVansScored = tinhScoringAllDaiVan(daiVans, palaces, canChiNam, chiNam, napAmHanh, chiNam);
+  const _menhP = palaces.find(p => p.isMenh);
+  daiVansScored.forEach(dv => {
+    const dvP = palaces.find(x => x.diaChi === dv.diaChi);
+    dv.yNghia = matchVanHanData(dvP, { napAmHanh, menhPalace: _menhP }, gioitinh);
+  });
 
   return {
     canChiNam, napAm, amDuong, cuc, canMenh,
@@ -2178,7 +2476,7 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
           gioitinh, gioIdx, canNam, chiNam, tuoiXem
         ),
       },
-      napAmHanh, tuoiXem
+      napAmHanh, tuoiXem, chiNam
     ),
     tieuVanScores: tinhTieuVanScores(
       { palaces, daiVans: daiVansScored },
@@ -2191,6 +2489,416 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
 // ─── TÍNH CHẤT SAO ───────────────────────────────────────────
 
 // Export
+
+// ================================================================
+// CACH_CUC_DATA — 748 patterns from cach_cuc_all.json (dong_cung/tam_hop/xung_chieu)
+// Fields: c=cung, s=sao[], p=phamVi, t=tomTat, d=dieuKien (optional)
+// ================================================================
+
+// eslint-disable-next-line no-unused-vars
+const CACH_CUC_STAR_ALIAS = {
+  "Kỵ": [
+    "Hóa Kỵ"
+  ],
+  "Khoa": [
+    "Hóa Khoa"
+  ],
+  "Quyền": [
+    "Hóa Quyền"
+  ],
+  "Lộc": [
+    "Hóa Lộc",
+    "Lộc Tồn"
+  ],
+  "Tử": [
+    "Tử Vi"
+  ],
+  "Cơ": [
+    "Thiên Cơ"
+  ],
+  "Nhật": [
+    "Thái Dương"
+  ],
+  "Nguyệt": [
+    "Thái Âm"
+  ],
+  "Phủ": [
+    "Thiên Phủ"
+  ],
+  "Đồng": [
+    "Thiên Đồng"
+  ],
+  "Lương": [
+    "Thiên Lương"
+  ],
+  "Sát": [
+    "Thất Sát"
+  ],
+  "Tham": [
+    "Tham Lang"
+  ],
+  "Phá": [
+    "Phá Quân"
+  ],
+  "Cự": [
+    "Cự Môn"
+  ],
+  "Liêm": [
+    "Liêm Trinh"
+  ],
+  "Tướng": [
+    "Thiên Tướng"
+  ],
+  "Vũ": [
+    "Vũ Khúc"
+  ],
+  "Kình": [
+    "Kình Dương"
+  ],
+  "Đà": [
+    "Đà La"
+  ],
+  "Hỏa": [
+    "Hỏa Tinh"
+  ],
+  "Linh": [
+    "Linh Tinh"
+  ],
+  "Không": [
+    "Địa Không"
+  ],
+  "Kiếp": [
+    "Địa Kiếp"
+  ],
+  "Tả": [
+    "Tả Phụ"
+  ],
+  "Hữu": [
+    "Hữu Bật"
+  ],
+  "Phù": [
+    "Tả Phụ"
+  ],
+  "Bật": [
+    "Hữu Bật"
+  ],
+  "Khúc": [
+    "Văn Khúc"
+  ],
+  "Xương": [
+    "Văn Xương"
+  ],
+  "Khôi": [
+    "Thiên Khôi"
+  ],
+  "Việt": [
+    "Thiên Việt"
+  ],
+  "Mã": [
+    "Thiên Mã"
+  ],
+  "Hổ": [
+    "Bạch Hổ"
+  ],
+  "Hình": [
+    "Thiên Hình"
+  ],
+  "Hư": [
+    "Thiên Hư"
+  ],
+  "Khốc": [
+    "Thiên Khốc"
+  ],
+  "Riêu": [
+    "Thiên Riêu"
+  ],
+  "Hao": [
+    "Đại Hao",
+    "Tiểu Hao"
+  ],
+  "Song Hao": [
+    "Đại Hao",
+    "Tiểu Hao"
+  ],
+  "Hồng": [
+    "Hồng Loan"
+  ],
+  "Đào": [
+    "Đào Hoa"
+  ],
+  "Cô": [
+    "Cô Thần"
+  ],
+  "Tang": [
+    "Tang Môn"
+  ],
+  "Binh": [
+    "Phục Binh"
+  ],
+  "Bệnh": [
+    "Bệnh Phù"
+  ],
+  "Tấu": [
+    "Tấu Thư"
+  ],
+  "Quả": [
+    "Quả Tú"
+  ],
+  "Tuế": [
+    "Thái Tuế"
+  ],
+  "Long": [
+    "Long Trì"
+  ],
+  "Tả Phù": [
+    "Tả Phụ"
+  ],
+  "Thiên Phụ": [
+    "Tả Phụ"
+  ],
+  "Thiên Bật": [
+    "Hữu Bật"
+  ],
+  "Dương Nhận": [
+    "Kình Dương"
+  ],
+  "La Võng": [
+    "Thiên La",
+    "Địa Võng"
+  ],
+  "Lực Sỹ": [
+    "Lực Sỹ"
+  ],
+  "Lực Sĩ": [
+    "Lực Sỹ"
+  ],
+  "Ấn": [
+    "Quốc Ấn"
+  ],
+  "Quý": [
+    "Thiên Quý"
+  ],
+  "Vượng": [
+    "Đế Vượng"
+  ],
+  "Hỉ": [
+    "Hỷ Thần"
+  ],
+  "Hỷ Thần": [
+    "Hỷ Thần"
+  ],
+  "Mộ": [
+    "Mộ"
+  ]
+};
+
+const CACH_CUC_DATA = [{"c":"Mệnh","s":["Vũ Khúc"],"p":"dong_cung","t":"Cung Mệnh tuyệt địa có Vũ Khúc tọa thủ cứu giải, giúp cải thiện vận mệnh.","d":"Thủy Mệnh, cung Mệnh an tại Tỵ"},{"c":"Mệnh","s":["Tuần","Triệt"],"p":"dong_cung","t":"Cung Mệnh có Tuần án ngữ, cung Thân có Triệt án ngữ, cần sao tốt hội hợp để cải thiện vận mệnh."},{"c":"Mệnh","s":["Địa Không","Địa Kiếp"],"p":"dong_cung","t":"Người có Mệnh Không, Thân Kiếp thường gặp khó khăn trong cuộc sống, cần sao cứu giải.","d":"Cung Mệnh vô Chính diệu"},{"c":"Mệnh","s":["Địa Kiếp","Địa Không"],"p":"dong_cung","t":"Người có Mệnh Kiếp Thân Không thường gặp khó khăn, cần sao cứu giải.","d":"Cung Mệnh vô Chính diệu"},{"c":"Mệnh","s":["Tử Vi"],"p":"dong_cung","t":"Cung Mệnh có Tử Vi miếu, vượng hay đắc địa, gặp nhiều sao tốt, được hưởng phú quý và sống lâu."},{"c":"Mệnh","s":["Tử Vi","Tuần","Triệt"],"p":"dong_cung","t":"Cung Mệnh có Tử Vi gặp Tuần, Triệt án ngữ, thường gặp khó khăn và yểu tử."},{"c":"Mệnh","s":["Tử Vi"],"p":"dong_cung","t":"Cung Mệnh có Tử Vi gặp nhiều sao mờ ám, suốt đời lao tâm khổ tứ."},{"c":"Mệnh","s":["Tử Vi","Tham Lang"],"p":"dong_cung","t":"Người có Tử Vi gặp Tham đồng cung thường yếm thế, cần tu hành để yên thân.","d":"Cung Mệnh an tại Mão, Dậu"},{"c":"Mệnh","s":["Tử Vi"],"p":"dong_cung","t":"Cung Mệnh có Tử Vi miếu địa hay bình hòa tọa thủ là người trung hậu.","d":"Tử miếu địa hay bình hòa"},{"c":"Mệnh","s":["Tử Vi","Thiên La","Địa Võng"],"p":"dong_cung","t":"Tử Vi cư Ngọ, vô Hình Kỵ, Giáp, Đinh, Kỷ vị chí công khanh."},{"c":"Mệnh","s":["Tử Vi"],"p":"dong_cung","t":"Cung Mệnh an tại Ngọ có Tử tọa thủ lại không bị Kình, Đà xâm phạm nên rất rực rỡ tốt đẹp.","d":"Cung Mệnh an tại Ngọ, không bị Kình, Đà xâm phạm"},{"c":"Mệnh","s":["Tử Vi"],"p":"dong_cung","t":"Đàn ông tuổi Nhâm, Giáp an tại Hợi có Tử tọa thủ nên được hưởng phú quý trọn đời. Đàn bà tuổi Nhâm, Giáp an tại Dần cũng được hưởng giàu sang.","d":"Đàn ông tuổi Nhâm, Giáp an tại Hợi; Đàn bà tuổi Nhâm, Giáp an tại Dần"},{"c":"Mệnh","s":["Tử Vi","Thiên Phủ"],"p":"dong_cung","t":"Cung Mệnh an tại Dần, Thân có Tử Phủ tọa thủ đồng cung nên rất rực rỡ tốt đẹp.","d":"Cung Mệnh an tại Dần, Thân"},{"c":"Mệnh","s":["Tử Vi","Thiên Phủ"],"p":"tam_hop","t":"Cung Mệnh có Tử hay Phủ tọa thủ, hay có Tử, Phủ tọa thủ đồng cung, lại gặp Phụ, Bật hội hợp nên được hưởng phú quý trọn đời."},{"c":"Mệnh","s":["Tử Vi","Thiên Phủ","Kình Dương"],"p":"dong_cung","t":"Cung Mệnh có Tử hay Phủ, tọa thủ, gặp Kình đồng cung là người buôn bán lớn rất giàu."},{"c":"Mệnh","s":["Tử Vi","Thiên Phủ","Vũ Khúc","Thiên Tướng"],"p":"tam_hop","t":"Cung Mệnh có Tử tọa thủ, gặp Phủ, Vũ, Tướng, Tả, Hữu, Long, Phượng, Khoa, Quyền, Lộc, Ấn hội hợp nên rất rực rỡ tốt đẹp, ví như vua tôi khánh hội ở chốn triều đình."},{"c":"Mệnh","s":["Tử Vi","Thiên Phủ","Hóa Khoa","Hóa Quyền"],"p":"tam_hop","t":"Cung Mệnh và cung Thân có Tử, Phủ, Khoa, Quyền, Hình, Ấn, Hồng, Khôi hội hợp, rất quý hiển và được hưởng giàu sang trọn đời.","d":"Cung Mệnh và cung Thân"},{"c":"Mệnh","s":["Tử Vi","Thiên Phủ"],"p":"dong_cung","t":"Cung Mệnh an tại Dần có Tử, Phủ tọa thủ đồng cung, gặp Kỷ, Quyền hội hợp, người có tài thao lược, lắm mưu cơ.","d":"Cung Mệnh an tại Dần"},{"c":"Mệnh","s":["Tử Vi","Thiên Tướng"],"p":"dong_cung","t":"Cung Mệnh có Tử, Tướng tọa thủ đồng cung: cung Thân có Phá tọa thủ gặp Vượng, Kình hội hợp là người lắm mưu cơ thủ đoạn, gian hùng và xảo quyệt.","d":"Cung Thân có Phá tọa thủ"},{"c":"Mệnh","s":["Tử Vi","Thất Sát"],"p":"dong_cung","t":"Cung Mệnh an tại Tỵ, Hợi có Tử, Sát tọa thủ đồng cung, nên được hưởng phú quý song toàn.","d":"Cung Mệnh an tại Tỵ, Hợi"},{"c":"Mệnh","s":["Tử Vi","Thất Sát"],"p":"dong_cung","t":"Cung Mệnh an tại Tỵ, Hợi có Tử, Sát tọa thủ đồng cung, gặp Tuần, Triệt án ngữ nên suốt đời lao khổ, chỉ có hư danh bề ngoài.","d":"Cung Mệnh an tại Tỵ, Hợi"},{"c":"Mệnh","s":["Tử Vi","Thất Sát","Hóa Quyền"],"p":"dong_cung","t":"Cung Mệnh an tại Tỵ, Hợi có Tử, Sát, Quyền, tọa thủ đồng cung, nên rất rực rỡ tốt đẹp.","d":"Cung Mệnh an tại Tỵ, Hợi"},{"c":"Mệnh","s":["Tử Vi"],"p":"dong_cung","t":"Cung Mệnh có Tử hay Vũ Miếu địa, hay đắc địa tọa thủ là người có nhiều tài năng.","d":"Tử hay Vũ Miếu địa, hay đắc địa"},{"c":"Mệnh","s":["Tử Vi","Vũ Khúc","Phá Quân"],"p":"tam_hop","t":"Cung Mệnh có Tử, Vũ hay Phá tọa thủ, lại gặp Kình, Đà hội hợp nên không thích công danh mà chỉ thích buôn bán, nhưng cũng khá giả."},{"c":"Mệnh","s":["Tử Vi","Vũ Khúc"],"p":"tam_hop","t":"Cung Mệnh có Tử hay Vũ tọa thủ, gặp nhiều Sát tinh hội hợp, tất là thầy tu hay quan lại nhỏ, nhưng lại thích được tiếng là anh hùng."},{"c":"Mệnh","s":["Tử Vi","Phá Quân"],"p":"dong_cung","t":"Cung Mệnh an tại Tứ Mộ, có Tử hay Phá tọa thủ là người gian quyệt, bất trung, bất hiếu.","d":"Cung Mệnh an tại Tứ Mộ"},{"c":"Mệnh","s":["Tử Vi","Phá Quân"],"p":"dong_cung","t":"Cung Mệnh an tại Thìn, Tuất, Sửu, Mùi có Tử hay Phá tọa thủ, gặp nhiều sao sáng sủa tốt đẹp hội hợp nên được hưởng phú quý đến tột bực.","d":"Cung Mệnh an tại Thìn, Tuất, Sửu, Mùi"},{"c":"Mệnh","s":["Tử Vi","Phá Quân"],"p":"dong_cung","t":"Cung Mệnh an tại Sửu, có Tử, Phá tọa thủ đồng cung nếu không gặp Tả, Hữu và nhiều sao sáng sủa tốt đẹp hội hợp, tất là người gian tham độc ác.","d":"Cung Mệnh an tại Sửu"},{"c":"Mệnh","s":["Tử Vi"],"p":"dong_cung","t":"Cung Mệnh an tại Mão, Dậu, có Tử tọa thủ, gặp Kiếp, Không hội hợp là người tu hành.","d":"Cung Mệnh an tại Mão, Dậu"},{"c":"Mệnh","s":["Tử Vi"],"p":"dong_cung","t":"Cung Mệnh có Tử tọa thủ, gặp Kiếp, Không, Hồng, Đào đồng cung, nên tuổi thọ bị chiết giảm."},{"c":"Mệnh","s":["Tử Vi"],"p":"tam_hop","t":"Cung Mệnh có Tử tọa thủ, gặp Xương, Khúc hội hợp, nên được hưởng giàu sang."},{"c":"Mệnh","s":["Tử Vi","Thiên Phụ","Thiên Bật"],"p":"dong_cung","t":"Cung Mệnh có Tử, Phụ, Bật tọa thủ đồng cung, nên được hưởng phú quý, lại thêm uy quyền hiển hách."},{"c":"Mệnh","s":["Tử Vi"],"p":"tam_hop","t":"Cung Mệnh có Tử tọa thủ, cần phải Khoa, Quyền, Lộc hội hợp mới sáng sủa tốt đẹp."},{"c":"Mệnh","s":["Tử Vi"],"p":"dong_cung","t":"Cung Mệnh an tại Tý, Ngọ có Tử tọa thủ gặp Khoa, Quyền, Lộc hội chiếu nên rất sáng sủa tốt đẹp.","d":"Cung Mệnh an tại Tý, Ngọ"},{"c":"Mệnh","s":["Tử Vi"],"p":"tam_hop","t":"Cung Mệnh có Tử tọa thủ, gặp Quyền, Lộc hội hợp và bị Kình, Đà xâm phạm, cũng vẫn sáng sủa tốt đẹp."},{"c":"Mệnh","s":["Tử Vi","Hóa Lộc"],"p":"dong_cung","t":"Cung Mệnh có Tử, Lộc tọa thủ đồng cung, gặp Phụ, Bật hội chiếu nên quý hiển đến tột bực."},{"c":"Mệnh","s":["Tử Vi","Thiên Phủ"],"p":"xung_chieu","t":"Cung Mệnh sáng sủa tốt đẹp có Tử, Phủ hội chiếu là người rất giàu, suốt đời sung túc và no ấm."},{"c":"Mệnh","s":["Liêm Trinh"],"p":"tam_hop","t":"Liêm Trinh tại Mão, Dậu gặp Sát tinh, không thể mưu cầu công danh, thường chuyên về kỹ nghệ hay doanh thương.","d":"Cung Mệnh an tại Mão, Dậu"},{"c":"Mệnh","s":["Liêm Trinh"],"p":"tam_hop","t":"Liêm Trinh tại Mão, Dậu gặp Kiếp, Hình, suốt đời phải lang thang phiêu bạt.","d":"Cung Mệnh an tại Mão, Dậu"},{"c":"Mệnh","s":["Liêm Trinh"],"p":"tam_hop","t":"Liêm Trinh gặp Kình, Đà, Hỏa, Linh, hay bị bắt bớ giam cầm, có thể bị ám sát."},{"c":"Mệnh","s":["Liêm Trinh","Bạch Hổ"],"p":"dong_cung","t":"Liêm Trinh gặp Bạch Hổ, khó tránh thoát được xiềng xích gông cùm.","d":"Đồng cung hoặc xung chiếu"},{"c":"Mệnh","s":["Liêm Trinh","Tướng Quân"],"p":"dong_cung","t":"Liêm Trinh nhập Miếu hội Tướng Quân, dũng mãnh như ông Trọng Do.","d":"Đồng cung hoặc xung chiếu"},{"c":"Mệnh","s":["Vũ Khúc"],"p":"dong_cung","t":"Người có Vũ Khúc tọa thủ cung Mệnh thường cách biệt người thân, có thể khắc cha mẹ, anh em, vợ chồng hoặc con cái."},{"c":"Mệnh","s":["Vũ Khúc"],"p":"dong_cung","t":"Cung Mệnh có Vũ Khúc miếu viên tọa thủ, gặp nhiều sao tốt hội hợp, được hưởng phú quý và uy quyền.","d":"Miếu viên"},{"c":"Mệnh","s":["Vũ Khúc"],"p":"dong_cung","t":"Cung Mệnh có Vũ Khúc hãm địa tọa thủ, người chuyên về thủ công hay làm thợ.","d":"hãm địa"},{"c":"Mệnh","s":["Vũ Khúc","Phá Quân"],"p":"dong_cung","t":"Cung Mệnh an tại Tỵ, Hợi có Vũ, Phá tọa thủ đồng cung, là người tham lận và bất lương.","d":"an tại Tỵ, Hợi"},{"c":"Mệnh","s":["Vũ Khúc","Phá Quân"],"p":"dong_cung","t":"Cung Mệnh an tại Tỵ, Hợi có Vũ, Phá tọa thủ đồng cung nên không thể gìn giữ được của cải hay sản nghiệp của tiền nhân.","d":"an tại Tỵ, Hợi"},{"c":"Mệnh","s":["Vũ Khúc","Phá Quân"],"p":"dong_cung","t":"Cung Mệnh có Vũ, Phá tọa thủ đồng cung, tất phải bỏ nhà đi kiếm ăn ở phương xa, và suốt đời vất vả lao khổ."},{"c":"Mệnh","s":["Vũ Khúc","Phá Quân","Văn Xương","Văn Khúc"],"p":"dong_cung","t":"Cung Mệnh có Vũ, Phá tọa thủ đồng cung, gặp Xương, Khúc đồng cung là người thông minh, khéo tay nên chuyên về kỹ nghệ máy móc."},{"c":"Mệnh","s":["Vũ Khúc","Thái Âm","Tham Lang"],"p":"dong_cung","t":"Cung Mệnh an tại Hợi có Vũ tọa thủ gặp Thái Âm và Tham Lang, cuộc đời vất vả, ít khi được xứng ý toại lòng.","d":"an tại Hợi"},{"c":"Mệnh","s":["Vũ Khúc","Tham Lang"],"p":"dong_cung","t":"Cung Mệnh, Thân an tại Sửu, Mùi có Vũ, Tham tọa thủ đồng cung, trước nghèo mà sau giàu.","d":"an tại Sửu, Mùi"},{"c":"Mệnh","s":["Vũ Khúc","Kình Dương","Đà La","Quả Tú"],"p":"dong_cung","t":"Cung Mệnh có Vũ hãm địa tọa thủ, gặp Kình, Đà, Quả hội hợp, tất vì tiền mà nguy khốn đến thân.","d":"hãm địa"},{"c":"Mệnh","s":["Vũ Khúc","Văn Khúc"],"p":"dong_cung","t":"Cung Mệnh có Vũ miếu, vượng hay đắc địa tọa thủ, gặp Khúc đồng cung, là người thông minh, học rộng, có tài năng.","d":"miếu, vượng hay đắc địa"},{"c":"Mệnh","s":["Vũ Khúc","Thiên Khôi","Thiên Việt"],"p":"dong_cung","t":"Cung Mệnh có Vũ Miếu địa hay Vượng địa tọa thủ, gặp Khôi hay Việt đồng cung, tất có quan chức về tài chính.","d":"Miếu địa hay Vượng địa"},{"c":"Mệnh","s":["Vũ Khúc","Lộc Tồn","Thiên Mã"],"p":"tam_hop","t":"Cung Mệnh có Vũ Miếu địa, hay đắc địa tọa thủ, gặp Lộc, Mã hội hợp, tất lập nghiệp ở xa quê hương, nhưng rất khá giả.","d":"Miếu địa, hay đắc địa"},{"c":"Mệnh","s":["Vũ Khúc","Lộc Tồn","Quyền"],"p":"dong_cung","t":"Cung Mệnh an tại Dần Thân, có Vũ tọa thủ, gặp Lộc, Quyền hội hợp là người rất giàu, sánh ngang với Vương Khải đời xưa.","d":"an tại Dần Thân"},{"c":"Mệnh","s":["Vũ Khúc","Địa Kiếp","Địa Không","Kình Dương"],"p":"dong_cung","t":"Cung Mệnh có Vũ hãm địa tọa thủ, gặp Kiếp Sát đồng cung gặp Kình chiếu, nên rất gian ác bất lương, giết người không biết ghê tay.","d":"hãm địa"},{"c":"Mệnh","s":["Thái Dương","Thái Âm"],"p":"xung_chieu","t":"Cung Mệnh an tại Mùi có Nhật tọa thủ tại Mão, Nguyệt tọa thủ tại Hợi, hợp chiếu, tất đi thi được đỗ cao.","d":"Cung Mệnh an tại Mùi, Nhật tọa thủ tại Mão, Nguyệt tọa thủ tại Hợi"},{"c":"Mệnh","s":["Thái Dương","Thái Âm"],"p":"xung_chieu","t":"Cung Mệnh an tại Sửu có Nhật Nguyệt tọa thủ đồng cung tại Mùi xung chiếu, là người tài giỏi quyền cao, chức trọng.","d":"Cung Mệnh an tại Sửu, Nhật Nguyệt tọa thủ đồng cung tại Mùi xung chiếu"},{"c":"Mệnh","s":["Thái Dương","Thái Âm"],"p":"dong_cung","t":"Cung Mệnh hay cung Thân an tại Sửu, Mùi có Nhật, Nguyệt tọa thủ đồng cung, nếu không có thêm nhiều sao sáng sủa tốt đẹp, tất bị mờ ám xấu xa.","d":"Cung Mệnh hay cung Thân an tại Sửu, Mùi có Nhật, Nguyệt tọa thủ đồng cung, tam phương vô cát"},{"c":"Mệnh","s":["Thái Dương","Thái Âm"],"p":"dong_cung","t":"Nhật Nguyệt rất kỵ Sát tinh, nếu gặp phải thì giảm bớt ánh sáng.","d":"Cung Mệnh an tại Sửu, Mùi có Nhật Nguyệt tọa thủ đồng cung"},{"c":"Mệnh","s":["Thái Dương","Thái Âm"],"p":"dong_cung","t":"Nhật Nguyệt gặp Xương, Khúc hội hợp cùng với Quý, Ấn, Thai, Tọa, Khôi, Hồng, tất là người có văn tài lỗi lạc.","d":"Cung Mệnh an tại Sửu, Mùi có Nhật Nguyệt tọa thủ đồng cung"},{"c":"Mệnh","s":["Thái Dương","Thái Âm"],"p":"dong_cung","t":"Nhật Nguyệt gặp Tuần, Triệt án ngữ, gặp Quý, Ân, Xương, Khúc hội chiếu, tất có sự nghiệp văn chương lớn lao.","d":"Cung Mệnh an tại Sửu, Mùi có Nhật Nguyệt tọa thủ đồng cung"},{"c":"Mệnh","s":["Thái Dương","Thái Âm"],"p":"dong_cung","t":"Nhật Nguyệt gặp Khoa Lộc hội hợp là người có chức vị lớn trong chính quyền.","d":"Cung Mệnh an tại Sửu có Nhật Nguyệt tọa thủ đồng cung"},{"c":"Mệnh","s":["Thái Dương","Thái Âm"],"p":"xung_chieu","t":"Nhật Nguyệt ở đây ví như mặt trời mặt trăng đua nhau chiếu sáng, suốt đời được hưởng giàu sang.","d":"Cung Mệnh an tại Thìn có Nhật tọa thủ, gặp Nguyệt tọa thủ tại Tuất xung chiếu"},{"c":"Mệnh","s":["Thái Dương","Thái Âm"],"p":"xung_chieu","t":"Cung Mệnh an tại Tuất có Nhật tọa thủ gặp Nguyệt tọa thủ tại Thìn xung chiếu, cần gặp Tuần, Triệt án ngữ hay Thiên Không đồng cung để trở nên sáng sủa tốt đẹp.","d":"Cung Mệnh an tại Tuất có Nhật tọa thủ gặp Nguyệt tọa thủ tại Thìn xung chiếu"},{"c":"Mệnh","s":["Thái Dương","Thái Âm"],"p":"xung_chieu","t":"Nhật Nguyệt gặp Xương Tuế, Lộc, Quyền, Phụ, Cáo, Tả, Hữu hội hợp, tất sớm được nhẹ bước thang mây, thành danh một cách dễ dàng.","d":"Cung Mệnh an tại Thìn, có Nhật tọa thủ, gặp Nguyệt tọa thủ tại Tuất xung chiếu"},{"c":"Mệnh","s":["Thái Dương","Thái Âm"],"p":"dong_cung","t":"Cung Mệnh có Nhật hãm địa tọa thủ hay có Nguyệt hãm địa tọa thủ, gặp nhiều Sát tinh hội hợp, rất xấu xa.","d":"Cung Mệnh có Nhật hãm địa tọa thủ hay có Nguyệt hãm địa tọa thủ"},{"c":"Mệnh","s":["Thái Dương","Thái Âm"],"p":"dong_cung","t":"Cung Mệnh có Nhật hãm địa tọa thủ hay có Nguyệt hãm địa tọa thủ, gặp Riêu, Đà, Kỵ, Kiếp, Kình hội hợp, tất bị mù lòa hai mắt.","d":"Cung Mệnh có Nhật hãm địa tọa thủ hay có Nguyệt hãm địa tọa thủ"},{"c":"Mệnh","s":["Thái Dương","Cự Môn"],"p":"xung_chieu","t":"Cung Mệnh an tại Tỵ có Nhật tọa thủ gặp Cự tọa thủ tại Hợi xung chiếu, thật là suốt đời được hưởng lộc dồi dào.","d":"Cung Mệnh an tại Tỵ có Nhật tọa thủ gặp Cự tọa thủ tại Hợi xung chiếu"},{"c":"Mệnh","s":["Thái Dương","Cự Môn"],"p":"xung_chieu","t":"Cung Mệnh an tại Hợi, có Nhật tọa thủ, gặp Cự tọa thủ tại Kỵ xung chiếu, công danh trắc trở, tiền tài khó kiếm.","d":"Cung Mệnh an tại Hợi, có Nhật tọa thủ, gặp Cự tọa thủ tại Kỵ xung chiếu"},{"c":"Mệnh","s":["Thái Dương"],"p":"dong_cung","t":"Cung Mệnh an tại Tỵ, có Nhật tọa thủ, rất sáng sủa tốt đẹp, nếu Nhật gặp Lộc, Mã, Sinh, Phụ, Bật giao hội, tất làm nên giàu có lớn trong thời bình.","d":"Cung Mệnh an tại Tỵ, có Nhật tọa thủ"},{"c":"Mệnh","s":["Thái Dương"],"p":"dong_cung","t":"Cung Mệnh an tại Hợi, có Nhật tọa thủ, không được sáng sủa tốt đẹp, nếu Nhật gặp Khoa, Quyền, Lộc chiếu, Tả, Hữu, Hồng Khôi giao hội, tất lập được kỳ công.","d":"Cung Mệnh an tại Hợi, có Nhật tọa thủ"},{"c":"Mệnh","s":["Thái Dương"],"p":"dong_cung","t":"Cung Mệnh có Nhật hãm địa tọa thủ, gặp nhiều Sát tinh hội hợp, thật là suốt đời lao khổ.","d":"Cung Mệnh có Nhật hãm địa tọa thủ"},{"c":"Mệnh","s":["Thái Dương","Hóa Kỵ"],"p":"dong_cung","t":"Cung Mệnh có Nhật, Kỵ tọa thủ đồng cung, nên hay đau mắt, mắt thường có tật.","d":"Cung Mệnh có Nhật, Kỵ tọa thủ đồng cung"},{"c":"Mệnh","s":["Thiên Phủ"],"p":"dong_cung","t":"Người khoan hòa, nhân hậu, có lòng từ thiện.","d":"Cung Mệnh có Phủ tọa thủ"},{"c":"Mệnh","s":["Thiên Phủ"],"p":"dong_cung","t":"Người cẩn thận, chín chắn, biết suy nghĩ sâu xa.","d":"Nam mệnh có Phủ thủ Mệnh"},{"c":"Mệnh","s":["Thiên Phủ"],"p":"dong_cung","t":"Được hưởng giàu sang trọn đời.","d":"Cung Mệnh an tại Tuất, có Phủ tọa thủ, gặp nhiều sao sáng sủa tốt đẹp hội hợp"},{"c":"Mệnh","s":["Thiên Phủ"],"p":"dong_cung","t":"Hoạnh phát công danh, hưởng phú quý đến tột bực.","d":"Cung Mệnh an tại Tuất, không bị Sát tinh xâm phạm, hợp với tuổi Giáp, Kỷ"},{"c":"Mệnh","s":["Thiên Phủ","Tử Vi"],"p":"dong_cung","t":"Có văn chức, uy quyền lớn, khiến mọi người phải phục tùng.","d":"Cung Mệnh hay cung Thân an tại Dần"},{"c":"Mệnh","s":["Thiên Phủ","Vũ Khúc"],"p":"dong_cung","t":"Hưởng phúc giàu sang và có danh tiếng xấu.","d":"Tuổi Giáp Đinh có cung Mệnh an tại Tý"},{"c":"Mệnh","s":["Thiên Phủ","Thiên Tướng"],"p":"dong_cung","t":"Có quan chức và được hưởng giàu sang.","d":"Cung Mệnh an tại Ngọ, Tuất"},{"c":"Mệnh","s":["Thiên Phủ","Thiên Tướng","Thiên Lương"],"p":"dong_cung","t":"Rực rỡ tốt đẹp, ví như vua tôi khánh hội ở chốn triều đình.","d":"Cung Mệnh có Phủ tọa thủ, gặp Tướng chiếu nhị hợp có Lương"},{"c":"Mệnh","s":["Thiên Phủ","Văn Xương","Văn Khúc"],"p":"dong_cung","t":"Được vinh hiển, có danh giá hơn người.","d":"Cung Mệnh có Phủ tọa thủ"},{"c":"Mệnh","s":["Thiên Phủ","Văn Xương","Văn Khúc","Lộc Tồn"],"p":"dong_cung","t":"Rất giàu có.","d":"Cung Mệnh có Phủ tọa thủ"},{"c":"Mệnh","s":["Thiên Phủ","Thiên Tướng"],"p":"dong_cung","t":"Rất sung túc, thừa cơm ăn áo mặc.","d":"Cung Mệnh có Phủ, Tướng hội chiếu"},{"c":"Mệnh","s":["Tham Lang"],"p":"dong_cung","t":"Cung Mệnh có Tham Lang miếu địa tọa thủ, nên sống lâu.","d":"Tham Lang miếu địa"},{"c":"Mệnh","s":["Tham Lang"],"p":"dong_cung","t":"Cung Mệnh có Tham Lang hãm địa, là người vô dụng, bỏ đi.","d":"Tham Lang hãm địa"},{"c":"Mệnh","s":["Tham Lang","Vũ Khúc"],"p":"dong_cung","t":"Cung Mệnh an tại Sửu Mùi có Tham, Vũ tọa thủ đồng cung, nên lúc thiếu thời vất vả, nghèo túng, phải từ ngoài 30 tuổi trở đi mới khá giả và càng về già lại càng giàu có.","d":"Cung Mệnh an tại Sửu Mùi"},{"c":"Mệnh","s":["Tham Lang","Vũ Khúc"],"p":"dong_cung","t":"Cung Mệnh an tại Sửu, Mùi có Tham Vũ tọa thủ đồng cung, về già có uy quyền, được nhiều người lui tới thần phục.","d":"Cung Mệnh an tại Sửu, Mùi"},{"c":"Mệnh","s":["Tham Lang","Vũ Khúc"],"p":"dong_cung","t":"Cung Mệnh an tại Tứ Mộ, có Tham tọa thủ, có Vũ tọa thủ, hay có Tham, Vũ tọa thủ đồng cung, tất phải ngoài 30 tuổi mới phát phúc và được hưởng giàu sang.","d":"Cung Mệnh an tại Tứ Mộ"},{"c":"Mệnh","s":["Tham Lang","Vũ Khúc"],"p":"dong_cung","t":"Cung Thân an tại Tứ Mộ có Tham tọa thủ, có Vũ tọa thủ, hay có Tham, Vũ tọa thủ đồng cung, là hạ cách, nên suốt đời vất vả, và không thể qúy hiển được.","d":"Cung Thân an tại Tứ Mộ"},{"c":"Mệnh","s":["Tham Lang","Vũ Khúc"],"p":"dong_cung","t":"Cung Mệnh an tại Sửu Mùi, có Tham, Vũ tọa thủ đồng cung, mà cung Mệnh lại không được sáng sủa tốt đẹp, nên rất mờ ám xấu xa. Có cách này, thật là lao khổ trọn đời.","d":"Cung Mệnh an tại Sửu Mùi"},{"c":"Mệnh","s":["Tham Lang","Vũ Khúc","Phá Quân"],"p":"dong_cung","t":"Cung Mệnh có Tham, Vũ tọa thủ đồng cung, gặp Phá chiếu, nhưng không gặp nhiều sao sáng sủa tốt đẹp hội hợp, tất hay say mê rượu ngon gái đẹp mà hại đến thân.","d":"Không gặp nhiều sao sáng sủa tốt đẹp hội hợp"},{"c":"Mệnh","s":["Tham Lang","Liêm Trinh"],"p":"dong_cung","t":"Cung Mệnh có Tham, Liêm tọa thủ đồng cung, rất mờ ám xấu xa. Đàn ông có cách này, hay chơi bời lang thang nay đây mai đó. Đàn bà có cách này rất dâm dật."},{"c":"Mệnh","s":["Tham Lang","Liêm Trinh"],"p":"dong_cung","t":"Cung Mệnh an tại Hợi (Càn) có Tham tọa thủ đồng cung, rất mờ ám xấu xa. Nếu Tham, Liêm gặp Tuyệt, Linh đồng cung, là người nghèo khổ, và nếu Tham, Liêm gặp Kình, Kiếp, Không, Hư, Mã hội hợp, thật là suốt đời cùng khốn, mà không yểu tử thì cũng cô đơn, bần hàn.","d":"Cung Mệnh an tại Hợi (Càn)"},{"c":"Mệnh","s":["Tham Lang","Văn Xương"],"p":"dong_cung","t":"Cung Mệnh có Tham, Xương tọa thủ đồng cung, thường mắc bệnh bạch biến hay lang ben, da loang lổ trông rất xấu."},{"c":"Mệnh","s":["Tham Lang"],"p":"dong_cung","t":"Cung Mệnh có Tham hãm địa tọa thủ, gặp nhiều Sát tinh hội hợp, mà lại không gặp thêm nhiều sao sáng sủa tốt đẹp giao hội, tất phải làm nghề đồ tể, hàng thịt.","d":"Tham hãm địa"},{"c":"Mệnh","s":["Tham Lang"],"p":"dong_cung","t":"Cung Mệnh có Tham hãm địa tọa thủ, gặp Sát tinh đồng cung, rất mờ ám xấu xa. Đàn bà có cách này là hạng dâm dật, buôn son bán phấn. Đàn ông có cách này, là quân trộm cắp, gian giảo.","d":"Tham hãm địa"},{"c":"Mệnh","s":["Tham Lang"],"p":"dong_cung","t":"Cung Mệnh an tại Hợi, Tý có Tham tọa thủ, gặp Kình đồng cung, hay gặp Đà đồng cung, nên rất mờ ám xấu xa. Tham ở đây ví như hoa đào nổi trôi trên dòng nước. Có cách này, là người chơi bời, hoang đàng, thường lang thang nay đây mai đó.","d":"Cung Mệnh an tại Hợi, Tý"},{"c":"Mệnh","s":["Tham Lang","Đà La"],"p":"dong_cung","t":"Cung Mệnh an tại Dần, có Tham, Đà tọa thủ đồng cung, là người chơi bời bừa bãi, đến nỗi bị đánh đập, mang họa vào thân.","d":"Cung Mệnh an tại Dần"},{"c":"Mệnh","s":["Tham Lang"],"p":"dong_cung","t":"Cung Mệnh an tại Tứ Mộ, có Tham tọa thủ, hoặc gặp Hỏa đồng cung, hoặc gặp Linh đồng cung, gặp hoặc Hỏa, Linh hội hợp, là người rất giàu và có quyền cao chức trọng.","d":"Cung Mệnh an tại Tứ Mộ"},{"c":"Mệnh","s":["Tham Lang","Hỏa Tinh"],"p":"dong_cung","t":"Cung Mệnh có Tham Miếu địa ha Vượng địa tọa thủ, gặp Hỏa đồng cung, tất được hưởng phú qúy đến tột bậc và có uy danh lừng lẫy.","d":"Tham Miếu địa hay Vượng địa"},{"c":"Mệnh","s":["Tham Lang","Linh Tinh"],"p":"dong_cung","t":"Cung Mệnh có Tham Miếu địa hay Vượng địa tọa thủ, gặp Linh đồng cung, là người có tài thao lược, hiển đạt về võ nghiệp, và được hưởng giàu sang.","d":"Tham Miếu địa hay Vượng địa"},{"c":"Mệnh","s":["Tham Lang"],"p":"dong_cung","t":"Tham Lang rất kỵ gặp Kình, Đà, Không, Kiếp hội hợp. Nếu cung Mệnh có Tham Miếu địa hay Vượng địa tọa thủ, gặp Không đồng cung, hay Kiếp đồng cung, tất sau này không được hưởng phúc thọ song toàn, giàu thì chết sớm mà nghèo thì sống lâu.","d":"Tham Miếu địa hay Vượng địa"},{"c":"Mệnh","s":["Tham Lang"],"p":"dong_cung","t":"Cung Mệnh an tại Ngọ, Dần, có Tham tọa thủ, gặp Sát tinh hội hợp cùng với Hổ, Tang, thật khó mà đề phòng được sấm sét hay ác thú cắn đá.","d":"Cung Mệnh an tại Ngọ, Dần"},{"c":"Mệnh","s":["Tham Lang"],"p":"dong_cung","t":"Cung Mệnh an tại Hợi, Tý (Thủy cung) có Tham tọa thủ giáp Tứ Sát, thật là suốt đời nghèo khổ.","d":"Cung Mệnh an tại Hợi, Tý (Thủy cung)"},{"c":"Mệnh","s":["Tham Lang"],"p":"dong_cung","t":"Cung Mệnh an tại Hợi, Tý có Tham tọa thủ, gặp Quyền, Vượng hội hợp, biến hư thành thực, chuyển xấu thành tốt. Tuổi Giáp, Kỷ có cách này, được hưởng giàu sang trọng vẹn.","d":"Cung Mệnh an tại Hợi, Tý"},{"c":"Mệnh","s":["Tham Lang"],"p":"dong_cung","t":"Cung Mệnh có Tham Miếu địa hay Vượng địa tọa thủ, gặp Kỵ đồng cung, hay xung chiếu là người buôn bán xuôi ngược, nay đây mai đó, nhưng rất giàu.","d":"Tham Miếu địa hay Vượng địa"},{"c":"Mệnh","s":["Tham Lang"],"p":"dong_cung","t":"Cung Mệnh an tại Dậu (Đoài), Mão (Chấn) có Tham tọa thủ, là người thoát tục, tu hành. Nhưng trong trường hợp này, nếu Tham gặp Kỵ, Kiếp hội hợp, chắc chắn là sẽ phá giới, trở lại làm người thường, vì còn nặng nợ trần gian.","d":"Cung Mệnh an tại Dậu (Đoài), Mão (Chấn)"},{"c":"Mệnh","s":["Tham Lang"],"p":"dong_cung","t":"Cung Mệnh an tại Dần, Thân có Tham tọa thủ, gặp Sinh đồng cung, gặp thêm nhiều sao sáng sủa tốt đẹp hội hợp, tất sống lâu như ông Bành Tổ.","d":"Cung Mệnh an tại Dần, Thân"},{"c":"Mệnh","s":["Tham Lang","Đào Hoa"],"p":"dong_cung","t":"Đàn bà mà cung Mệnh có Tham hãm địa tọa thủ, gặp Đào đồng cung, là người độc ác thâm hiểm và rất dâm đãng. Nhưng trong trường hợp này, nếu Tham, Đào gặp Tuần, Triệt án ngữ, lại là người nhân hậu và đoan chính.","d":"Tham hãm địa"},{"c":"Mệnh","s":["Tham Lang"],"p":"dong_cung","t":"Cung Mệnh an tại Tý, có Tham tọa thủ, là hạng trộm cắp, du đãng, bất nhân, bất nghĩa. Nhưng trong trường hợp này, nếu Tham gặp Tuần, Triệt án ngữ, lại là người lương thiện, thẳng thắn và đúng mực.","d":"Cung Mệnh an tại Tý"},{"c":"Mệnh","s":["Cự Môn"],"p":"dong_cung","t":"Người đa học, đa năng nhưng không gặp thời."},{"c":"Mệnh","s":["Cự Môn"],"p":"tam_hop","t":"Sống lâu nhưng không xứng ý toại lòng, thường xa cách gia đình, sức khỏe suy kém.","d":"Cự miếu, vượng hay đắc địa"},{"c":"Mệnh","s":["Cự Môn"],"p":"dong_cung","t":"Người kém thông minh, gian quyệt, tham lam, suốt đời vất vả, nhiều bệnh tật.","d":"Cự hãm địa"},{"c":"Mệnh","s":["Cự Môn"],"p":"dong_cung","t":"Người thông minh, giàu sang, không lo ngại nhiều về sự chẳng lành.","d":"Cự hãm địa, Thìn, Tuất, tuổi Quý, Tân"},{"c":"Mệnh","s":["Cự Môn"],"p":"dong_cung","t":"Người khổ sở, khốn đốn đến cùng cực.","d":"Cự hãm địa, Thìn, Tuất, tuổi Đinh, Canh"},{"c":"Mệnh","s":["Cự Môn"],"p":"dong_cung","t":"Người thông minh, học rộng, hiển đạt, khá giả.","d":"Cự hãm địa, Sửu, Mùi, tuổi Ất, Bính, Tân"},{"c":"Mệnh","s":["Cự Môn"],"p":"tam_hop","t":"Người hiểu biết sâu rộng, có văn tài, thường hoạt động chính trị.","d":"Cự hãm địa"},{"c":"Mệnh","s":["Cự Môn"],"p":"tam_hop","t":"Nên đi buôn.","d":"Cự hãm địa"},{"c":"Mệnh","s":["Cự Môn","Kỵ"],"p":"dong_cung","t":"Không thể tránh thoát tai nạn về sông nước hoặc xe cộ.","d":"Cự miếu, vượng hay đắc địa"},{"c":"Mệnh","s":["Cự Môn","Nhật"],"p":"dong_cung","t":"Từ đời ông đời cha đã vinh hiển và liên tục ba đời đều có danh giá."},{"c":"Mệnh","s":["Cự Môn","Nhật"],"p":"dong_cung","t":"Được hưởng giàu sang trọn vẹn.","d":"Cung Mệnh an tại Dần"},{"c":"Mệnh","s":["Cự Môn","Nhật"],"p":"dong_cung","t":"Khá giả, danh tài gồm đủ, nhưng không được toàn mỹ.","d":"Cung Mệnh an tại Thân"},{"c":"Mệnh","s":["Cự Môn","Nhật"],"p":"xung_chieu","t":"Quý hiển trước, rồi về sau mới phú túc.","d":"Cung Mệnh an tại Thân, xung chiếu Dần"},{"c":"Mệnh","s":["Cự Môn","Nhật"],"p":"dong_cung","t":"Rất tốt đẹp, được hưởng phú quý song toàn.","d":"Cung Mệnh an tại Dần, Thân"},{"c":"Mệnh","s":["Cự Môn","Hình"],"p":"xung_chieu","t":"Được hưởng giàu sang trọn đời."},{"c":"Mệnh","s":["Cự Môn","Cơ"],"p":"dong_cung","t":"Người thông minh, học rộng, nhưng thích chơi bời, ăn tiêu hoang phí.","d":"Cung Mệnh an tại Dần"},{"c":"Mệnh","s":["Cự Môn","Cơ"],"p":"dong_cung","t":"Chắc chắn là có quan chức lớn.","d":"Cung Mệnh an tại Dần"},{"c":"Mệnh","s":["Cự Môn","Cơ"],"p":"dong_cung","t":"Có quyền cao chức trọng.","d":"Cung Mệnh an tại Mão, Dậu, tuổi Ất, Tân, Kỷ, Bính"},{"c":"Mệnh","s":["Cự Môn","Cơ"],"p":"dong_cung","t":"Tuy cũng được hưởng phú quý, nhưng không được trọn đời.","d":"Cung Mệnh an tại Dậu"},{"c":"Mệnh","s":["Cự Môn","Cơ"],"p":"dong_cung","t":"Có uy quyền hiển hách, danh tiếng lừng lẫy.","d":"Cung Mệnh an tại Mão, Dậu"},{"c":"Mệnh","s":["Cự Môn","Đồng"],"p":"tam_hop","t":"Khó đề phòng tai nạn sông nước.","d":"Cung Mệnh an tại Tứ Mộ"},{"c":"Mệnh","s":["Cự Môn","Đồng"],"p":"tam_hop","t":"Người có tài du thuyết như Lịch Sinh đời Hán.","d":"Cung Mệnh an tại Thìn, Tuất"},{"c":"Mệnh","s":["Cự Môn"],"p":"tam_hop","t":"Suốt đời vất vả, thường mắc nhiều tật bệnh và khó tránh thoát tai họa.","d":"Cự hãm địa"},{"c":"Mệnh","s":["Thiên Tướng"],"p":"dong_cung","t":"Cung Mệnh an tại Thìn, Tuất có Thiên Tướng tọa thủ, nên rất quý hiển.","d":"Cung Mệnh an tại Thìn, Tuất"},{"c":"Mệnh","s":["Thiên Tướng"],"p":"dong_cung","t":"Đàn bà mà cung Mệnh có Tướng tọa thủ, nên rất can đảm, dũng mãnh.","d":"Nữ mệnh"},{"c":"Mệnh","s":["Thiên Tướng","Hồng Loan"],"p":"dong_cung","t":"Đàn bà mà cung Mệnh có Tướng, Hồng, tọa thủ đồng cung, tất lấy được chồng giàu sang.","d":"Nữ mệnh"},{"c":"Mệnh","s":["Thiên Tướng"],"p":"tam_hop","t":"Đàn bà mà cung Mệnh có Tướng tọa thủ, gặp Khúc, Mộc, Cái, Đào hội hợp, nên rất xinh đẹp, nhưng lại có tính dâm đãng.","d":"Nữ mệnh"},{"c":"Mệnh","s":["Thiên Lương"],"p":"dong_cung","t":"Cung Mệnh có Lương miếu, vượng hay đắc địa tọa thủ, hay chiếu lại gặp nhiều sao sáng sủa tốt đẹp hội hợp, nên được hưởng phúc và sống lâu.","d":"Lương miếu, vượng hay đắc địa"},{"c":"Mệnh","s":["Thiên Lương"],"p":"dong_cung","t":"Cung Mệnh an tại Ngọ có Lương tọa thủ, nên rất rực rỡ tốt đẹp. Tuổi Đinh, Kỷ, Qúy có cách này, tất được hưởng phú quý đến tột bậc.","d":"Cung Mệnh an tại Ngọ"},{"c":"Mệnh","s":["Thiên Lương","Thái Dương"],"p":"dong_cung","t":"Cung Mệnh an tại Mão có Lương, Nhật tọa thủ đồng cung, thật là rực rỡ tốt đẹp, ví như mặt trời mới mọc phương đông hừng sáng.","d":"Cung Mệnh an tại Mão"},{"c":"Mệnh","s":["Thiên Lương","Thái Dương"],"p":"xung_chieu","t":"Cung Mệnh an tại Tý, có Lương tọa thủ, gặp Nhật xung chiếu và Xương Lộc hội hợp, là người rất thông minh, đi thi rất đỗ cao.","d":"Cung Mệnh an tại Tý hoặc Ngọ"},{"c":"Mệnh","s":["Thiên Lương","Thái Âm"],"p":"xung_chieu","t":"Cung Mệnh có Lương hãm địa tọa thủ, gặp Nguyệt hợp chiếu hay có Nguyệt hãm địa tọa thủ, gặp Lương hợp chiếu, là người giang hồ, suốt đời bôn tẩu.","d":"Lương hãm địa hoặc Nguyệt hãm địa"},{"c":"Mệnh","s":["Thiên Lương"],"p":"tam_hop","t":"Cung Mệnh an tại Tý, Sửu, Dần, Mão, Thìn, Tỵ, Ngọ có Lương tọa thủ, gặp Nguyệt, Linh hội chiếu, là nhiều có tài năng và dĩ nhiên là quý hiển.","d":"Cung Mệnh an tại Tý, Sửu, Dần, Mão, Thìn, Tỵ, Ngọ"},{"c":"Mệnh","s":["Thiên Lương","Thiên Đồng"],"p":"dong_cung","t":"Đàn ông mà cung Mệnh an tại Tỵ, Hợi, có Lương hay Đồng tọa thủ, là người phóng đãng và thích phiêu lưu. Đàn bà là người dâm dật.","d":"Cung Mệnh an tại Tỵ, Hợi"},{"c":"Mệnh","s":["Thiên Lương","Thiên Đồng"],"p":"dong_cung","t":"Cung Mệnh, Thân có Lương hay Đồng miếu, vượng, đắc địa tọa thủ, hay có Lương Đồng tọa thủ đồng cung, nên suốt đời không bao giờ mắc phải tai ương họa hại.","d":"Lương hay Đồng miếu, vượng, đắc địa"},{"c":"Mệnh","s":["Thiên Lương","Thiên Đồng"],"p":"dong_cung","t":"Cung Mệnh an tại Dần, Thân, có Lương, Đồng tọa thủ đồng cung, gặp Cơ, Nguyệt hội chiếu, nên rất thông minh và được hưởng giàu sang trọn đời.","d":"Cung Mệnh an tại Dần, Thân"},{"c":"Mệnh","s":["Thiên Lương","Văn Xương"],"p":"dong_cung","t":"Cung Mệnh có Lương Miếu địa tọa thủ, gặp Xương đồng cung, nên rất quý hiển.","d":"Lương Miếu địa"},{"c":"Mệnh","s":["Thiên Lương"],"p":"tam_hop","t":"Cung Mệnh an tại Tỵ, có Lương tọa thủ, gặp Song Hao, Sát tinh hội hợp, tất khó tránh thoát được tai họa về đau thương hay súng đạn.","d":"Cung Mệnh an tại Tỵ"},{"c":"Mệnh","s":["Thiên Lương","Thiên Mã"],"p":"dong_cung","t":"Cung Mệnh an tại Tý, Hợi có Lương tọa thủ, gặp Mã đồng cung hay xung chiếu, là người phiêu đãng, thích chơi bời, ngao du.","d":"Cung Mệnh an tại Tý, Hợi"},{"c":"Mệnh","s":["Thiên Lương","Thiên Mã"],"p":"dong_cung","t":"Đàn bà mà cung Mệnh an tại Tỵ, Hợi có Lương tọa thủ, gặp Mã đồng cung hay xung chiếu, là người hạ tiện và dâm dật.","d":"Nữ mệnh, Cung Mệnh an tại Tỵ, Hợi"},{"c":"Mệnh","s":["Thất Sát"],"p":"dong_cung","t":"Cung Mệnh an tại Dần, Thân có Thất Sát tọa thủ, tất được hưởng phú quý đến tột bậc.","d":"Cung Mệnh an tại Dần, Thân"},{"c":"Mệnh","s":["Thất Sát"],"p":"dong_cung","t":"Cung Mệnh an tại Tý, Ngọ có Thất Sát tọa thủ, tất được hưởng phú quý đến tột bậc.","d":"Cung Mệnh an tại Tý, Ngọ"},{"c":"Mệnh","s":["Thất Sát","Tử Vi"],"p":"dong_cung","t":"Cung Mệnh an tại Tỵ Tốn cung có Sát, Tử đồng cung, tất được hưởng phú quý đến tột bậc và có uy quyền hiển hách.","d":"Cung Mệnh an tại Tỵ Tốn cung"},{"c":"Mệnh","s":["Thất Sát","Liêm Trinh"],"p":"dong_cung","t":"Cung Mệnh an tại Sửu, Mùi có Sát, Liêm tọa thủ đồng cung, tất nhiên chết ở nơi giữa đường sá, hoặc vì tai nạn xe cộ, hoặc vì dao súng.","d":"Cung Mệnh an tại Sửu, Mùi"},{"c":"Mệnh","s":["Thất Sát","Phá Quân"],"p":"dong_cung","t":"Cung Mệnh có Sát hãm địa tọa thủ (hay có Phá hãm địa tọa thủ) tất phải lìa bỏ gia đình, đi làm ăn ở phương xa.","d":"Cung Mệnh có Sát hãm địa tọa thủ"},{"c":"Mệnh","s":["Thất Sát","Hỏa Tinh","Kình Dương"],"p":"dong_cung","t":"Cung Mệnh có Sát hãm địa tọa thủ, gặp Hỏa, Kình hội hợp là người nghèo hèn, thường làm đồ tể, hàng thịt.","d":"Cung Mệnh có Sát hãm địa tọa thủ"},{"c":"Mệnh","s":["Thất Sát","Thiên Hình"],"p":"dong_cung","t":"Cung Mệnh có Sát miếu, vượng hay đắc địa tọa thủ, gặp Hình đồng cung, là người có oai phong lẫm liệt, như long thần giáng thế.","d":"Cung Mệnh có Sát miếu, vượng hay đắc địa tọa thủ"},{"c":"Mệnh","s":["Thất Sát","Kình Dương"],"p":"dong_cung","t":"Cung Mệnh an tại Ngọ có Sát, Kình tọa thủ đồng cung, gặp nhiều Sát tinh hội hợp, tất hay mắc tai họa khủng khiếp.","d":"Cung Mệnh an tại Ngọ"},{"c":"Mệnh","s":["Thất Sát"],"p":"dong_cung","t":"Cung Mệnh an tại Tuyệt địa có Sát tọa thủ, gặp Kình, Đà hội hợp, tất phải yểu tử như ông Nhan Hồi.","d":"Cung Mệnh an tại Tuyệt địa"},{"c":"Mệnh","s":["Phá Quân"],"p":"dong_cung","t":"Cung Mệnh an tại Tý, Ngọ, Thìn, Tuất, Dần, Thân có Phá đơn thủ là người không sát suốt, hay nghe nịnh hót.","d":"Cung Mệnh an tại Tý, Ngọ, Thìn, Tuất, Dần, Thân"},{"c":"Mệnh","s":["Phá Quân","Tham Lang"],"p":"dong_cung","t":"Cung Mệnh có Phá tọa thủ, gặp Lộc, Mã hội hợp: đàn ông hay chơi bời hoang đãng, đàn bà rất dâm dật.","d":"Cung Mệnh có Phá tọa thủ"},{"c":"Mệnh","s":["Phá Quân"],"p":"dong_cung","t":"Người gian ác bất nhân.","d":"Cung Mệnh an tại Thìn, Tuất"},{"c":"Mệnh","s":["Phá Quân","Khoa","Tuần"],"p":"dong_cung","t":"Hoạnh phát danh tài, thẳng thắn, lương thiện.","d":"Cung Mệnh an tại Thìn, Tuất"},{"c":"Mệnh","s":["Phá Quân"],"p":"dong_cung","t":"Người hay gắt gỏng, nói năng thô lỗ.","d":"Cung Mệnh an tại Ngọ"},{"c":"Mệnh","s":["Phá Quân","Lộc","Thiếu Dương"],"p":"dong_cung","t":"Rất vui tính, hay nói đùa bỡn.","d":"Cung Mệnh an tại Ngọ"},{"c":"Mệnh","s":["Phá Quân"],"p":"dong_cung","t":"Người cương quả, gặp được sự nghiệp lớn trong thời loạn.","d":"Cung Mệnh an tại tứ Mộ"},{"c":"Mệnh","s":["Phá Quân","Hình","Lộc"],"p":"dong_cung","t":"Có uy quyền hiển hách, danh tiếng lừng lẫy.","d":"Cung Mệnh an tại tứ Mộ"},{"c":"Mệnh","s":["Văn Xương","Văn Khúc"],"p":"dong_cung","t":"Người thông minh, học rộng, có văn tài và năng khiếu âm nhạc."},{"c":"Mệnh","s":["Văn Xương","Văn Khúc","Thiên Đồng","Thiên Lương"],"p":"tam_hop","t":"Người khôn khéo, có nhiều tài năng, sớm hiển đạt và được hưởng giàu sang trọn đời."},{"c":"Mệnh","s":["Văn Xương","Văn Khúc"],"p":"dong_cung","t":"Người có nhiều rỗ sẹo, tính nông nổi, thường thất bại và gặp tai họa.","d":"Gặp nhiều sao mờ ám xấu xa hay Sát tinh hội hợp"},{"c":"Mệnh","s":["Văn Xương","Văn Khúc","Phá Quân"],"p":"dong_cung","t":"Suốt đời phải tao tâm khổ tứ và hay bị bắt bớ giam cầm."},{"c":"Mệnh","s":["Văn Xương","Văn Khúc","Thiên Lương"],"p":"xung_chieu","t":"Rất quý hiển, có uy danh lừng lẫy."},{"c":"Mệnh","s":["Văn Xương","Văn Khúc","Thiên Cơ","Lộc"],"p":"tam_hop","t":"Người xinh đẹp và khéo léo."},{"c":"Mệnh","s":["Khôi","Việt"],"p":"dong_cung","t":"Cung Mệnh, Thân có Khôi, Việt tọa thủ, tất đi thi đỗ cao ví như được bẻ cành quế.","d":"Cung Mệnh, Thân"},{"c":"Mệnh","s":["Khôi","Việt","Xương","Khúc","Lộc"],"p":"tam_hop","t":"Cung Mệnh có Khôi, Việt tọa thủ, gặp Xương, Khúc, Lộc hội hợp, không bị Sát tinh hay Kỵ, Hình xâm phạm, hưởng phú quý cực độ và sống lâu.","d":"Không bị Sát tinh hay Kỵ, Hình xâm phạm"},{"c":"Mệnh","s":["Khôi","Việt","Sát"],"p":"dong_cung","t":"Cung Mệnh có Khôi, Việt tọa thủ, gặp Sát nên có nhiều bệnh tật không thể chữa khỏi."},{"c":"Mệnh","s":["Lộc Tồn"],"p":"dong_cung","t":"Cung Mệnh có Lộc Tồn tọa thủ, gặp nhiều sao sáng sủa tốt đẹp hội hợp, là người thông minh, học rộng, tính nhân hậu, từ thiện."},{"c":"Mệnh","s":["Lộc Tồn","Hóa Lộc"],"p":"dong_cung","t":"Cung Mệnh có Lộc Tồn và Hóa Lộc tọa thủ đồng cung, gặp nhiều sao sáng sủa tốt đẹp hội hợp, chắc chắn là được hưởng giàu sang trọn đời."},{"c":"Mệnh","s":["Lộc Tồn","Hóa Lộc"],"p":"dong_cung","t":"Cung Mệnh sáng sủa tốt đẹp, có Lộc Tồn tọa thủ, cung nhị hợp có Hóa Lộc tọa thủ, chắc chắn là được hưởng giàu sang, có quan chức lớn và uy quyền hiển hách.","d":"Cung nhị hợp có Hóa Lộc tọa thủ"},{"c":"Mệnh","s":["Lộc","Mã"],"p":"xung_chieu","t":"Cung Mệnh Lộc tọa thủ, gặp Mã xung chiếu, như vậy thật là rực rỡ tốt đẹp, tất được hưởng giàu sang dễ kiếm tiền và được nhiều người mến chuộng.","d":"Lộc tọa thủ, Mã xung chiếu hoặc ngược lại"},{"c":"Mệnh","s":["Lộc","Mã","Kiếp","Không","Tuế"],"p":"xung_chieu","t":"Cung Mệnh có Lộc tọa thủ gặp Mã xung chiếu, nếu lại gặp thêm Kiếp, Không, Tuế hội hợp, tất là mờ ám xấu xa.","d":"Lộc tọa thủ, Mã xung chiếu hoặc ngược lại"},{"c":"Mệnh","s":["Tả Phụ","Hữu Bật"],"p":"dong_cung","t":"Cung Mệnh có Tả, Hữu tọa thủ, gặp nhiều sao sáng sủa tốt đẹp hội hợp, nên suốt đời được hưởng phúc, gặp nhiều may mắn và sống lâu."},{"c":"Mệnh","s":["Kình Dương"],"p":"dong_cung","t":"Kình Dương đắc địa thủ Mệnh, nam mệnh nên chuyên về quân sự, sau có uy quyền hiển hách.","d":"Kình đắc địa"},{"c":"Mệnh","s":["Kình Dương","Tử Vi","Thiên Phủ"],"p":"dong_cung","t":"Kình Dương đắc địa gặp Tử, Phủ cũng đắc địa đồng cung, tất buôn bán lớn mà trở nên giàu có.","d":"Kình, Tử, Phủ đắc địa"},{"c":"Mệnh","s":["Kình Dương"],"p":"tam_hop","t":"Kình hãm địa, không gặp Tuần, Triệt án ngữ, hay gặp nhiều sao sáng sủa tốt đẹp hội hợp cứu giải, thật là khó tránh thoát được tai họa.","d":"Kình hãm địa, không gặp Tuần, Triệt án ngữ"},{"c":"Mệnh","s":["Kình Dương","Đà La","Linh Tinh","Hỏa Tinh"],"p":"dong_cung","t":"Cung Mệnh hay cung Thân có Kình, Đà, Linh, Hỏa hội hợp, là người gù lưng hay có tật ở lưng."},{"c":"Mệnh","s":["Kình Dương"],"p":"tam_hop","t":"Cung Mệnh có Kình tọa thủ, lại gặp thêm Hư, Tuế, Khách hội hợp, nên suốt đời sầu khổ, trai sát vợ, gái khắc chồng."},{"c":"Mệnh","s":["Kình Dương","Lực Sỹ"],"p":"dong_cung","t":"Cung Mệnh có Kình, Lực tọa thủ đồng cung, nên thân hình lực lưỡng có sức khỏe địch được muôn người."},{"c":"Mệnh","s":["Hỏa Tinh","Linh Tinh"],"p":"dong_cung","t":"Cung Mệnh có Hỏa đắc địa tọa thủ, gặp Linh chiếu hay có Linh đắc địa tọa thủ, gặp Hỏa chiếu, là người có tài ba xuất chúng, thường hiển đạt về võ nghiệp.","d":"Hỏa, Linh đắc địa"},{"c":"Mệnh","s":["Địa Kiếp","Địa Không"],"p":"dong_cung","t":"Người gian xảo, ty tiện, suốt đời cùng khổ, khó tránh tai họa.","d":"hãm địa"},{"c":"Mệnh","s":["Địa Kiếp","Địa Không"],"p":"dong_cung","t":"Người cương cường, có mưu lược, công danh sớm đạt nhưng không bền.","d":"đắc địa"},{"c":"Mệnh","s":["Địa Kiếp","Địa Không","Đào Hoa","Hồng Loan"],"p":"dong_cung","t":"Khó giữ được toàn danh tiết, thường là hồng nhan bạc mệnh."},{"c":"Mệnh","s":["Địa Kiếp","Địa Không"],"p":"dong_cung","t":"Công danh sớm đạt nhưng không bền.","d":"Tỵ, Hợi"},{"c":"Mệnh","s":["Địa Kiếp","Thiên Cơ","Hỏa Tinh"],"p":"dong_cung","t":"Hay gặp hỏa tai như cháy nhà, phỏng lửa."},{"c":"Mệnh","s":["Địa Kiếp","Tham Lang"],"p":"dong_cung","t":"Suốt đời lao khổ, lang thang phiêu bạt, hay mắc tai nạn sông nước."},{"c":"Mệnh","s":["Địa Kiếp","Địa Không","Thiên Tướng","Thiên Mã","Hóa Khoa"],"p":"dong_cung","t":"Người tài giỏi, lập nên sự nghiệp lớn trong thời loạn.","d":"Tỵ, Hợi"},{"c":"Mệnh","s":["Địa Kiếp","Địa Không","Đào Hoa","Hồng Loan","Đà La","Linh Tinh"],"p":"dong_cung","t":"Không thể sống lâu, chết non."},{"c":"Mệnh","s":["Hóa Lộc"],"p":"dong_cung","t":"Người thông minh, sành ăn uống, suốt đời được ăn ngon mặc đẹp."},{"c":"Mệnh","s":["Hóa Quyền"],"p":"dong_cung","t":"Người kiêu căng, tự đắc, có uy quyền nhưng hay mắc tai họa."},{"c":"Mệnh","s":["Hóa Khoa"],"p":"dong_cung","t":"Người thanh tú, nhân hậu, thông minh, có danh tiếng lừng lẫy."},{"c":"Mệnh","s":["Hóa Kỵ"],"p":"dong_cung","t":"Người nông nổi, hay nhầm lẫn, mắc thị phi khẩu thiệt."},{"c":"Mệnh","s":["Hóa Kỵ","Văn Xương"],"p":"dong_cung","t":"Người khôn ngoan, cẩn thận, được chúng nhân kính trọng.","d":"Cung Mệnh an tại Hợi, Tý"},{"c":"Mệnh","s":["Đại Hao","Tiểu Hao"],"p":"dong_cung","t":"Thân hình nhỏ nhắn, tiêu tiền không biết tiếc, suốt đời túng thiếu."},{"c":"Mệnh","s":["Tang Môn","Bạch Hổ"],"p":"dong_cung","t":"Người can đảm, cương nghị, nhưng suốt đời ưu tư phiền muộn."},{"c":"Mệnh","s":["Thiên Khốc","Thiên Hư"],"p":"dong_cung","t":"Người đa sầu đa cảm, suốt đời ưu tư phiền muộn."},{"c":"Mệnh","s":["Đại Hao","Tham Lang"],"p":"dong_cung","t":"Người hiếu sắc dâm dật, nhưng rất kín đáo."},{"c":"Mệnh","s":["Đại Hao","Tiểu Hao"],"p":"dong_cung","t":"Hưởng phú quý đến tột bực, phúc thọ song toàn.","d":"Cung Mệnh an tại Mão, Dậu"},{"c":"Mệnh","s":["Thiên Khốc","Thiên Hư"],"p":"dong_cung","t":"Lúc thiếu thời nghèo túng, từ ngoài 30 tuổi trở đi khá giả.","d":"Cung Mệnh an tại Tý, Ngọ"},{"c":"Nô Bộc","s":["Tử Vi","Thiên Phủ","Thiên Cơ","Thái Dương","Thái Âm","Thiên Đồng","Thiên Lương"],"p":"dong_cung","t":"Người giúp việc đắc lực, đông đảo, bạn bè khá giả.","d":"sáng sủa tốt đẹp"},{"c":"Nô Bộc","s":["Thất Sát","Phá Quân","Liêm Trinh","Tham Lang"],"p":"dong_cung","t":"Người giúp việc đắc lực, nhưng hay lấn quyền người trên, bạn bè tài giỏi biết nâng đỡ.","d":"sáng sủa tốt đẹp"},{"c":"Nô Bộc","s":["Vũ Khúc","Thiên Tướng"],"p":"dong_cung","t":"Người giúp việc rất tài giỏi, bạn bè quý hiển, giàu có.","d":"sáng sủa tốt đẹp"},{"c":"Nô Bộc","s":["Văn Xương","Văn Khúc","Thiên Khôi","Thiên Việt"],"p":"dong_cung","t":"Bạn bè có danh chức, nên kết giao với người có địa vị hay quyền thế."},{"c":"Nô Bộc","s":["Tả Phụ","Hữu Bật"],"p":"dong_cung","t":"Người giúp việc rất đắc lực, bạn bè tốt và khá giả."},{"c":"Nô Bộc","s":["Lộc Tồn"],"p":"dong_cung","t":"Khó thuê mượn người làm, ít bạn bè."},{"c":"Nô Bộc","s":["Hóa Kỵ"],"p":"dong_cung","t":"Hay mắc thị phi, thường bị những người giúp việc hay bạn bè nói xấu và oán trách."},{"c":"Nô Bộc","s":["Song Hao"],"p":"dong_cung","t":"Khó thuê mượn người làm, nếu có người giúp việc cũng là hạng gian giảo."},{"c":"Nô Bộc","s":["Thiên Khốc","Thiên Hư"],"p":"dong_cung","t":"Hay bị người giúp việc oán trách."},{"c":"Nô Bộc","s":["Tướng Quân"],"p":"dong_cung","t":"Người giúp việc hay lấn át người trên."},{"c":"Nô Bộc","s":["Phục Binh"],"p":"dong_cung","t":"Người giúp việc đắc lực và đông đảo, ra ngoài gặp nhiều người phụ giúp, bạn bè tốt."},{"c":"Nô Bộc","s":["Đào Hoa"],"p":"dong_cung","t":"Mang lụy vì tình, đàn ông thường đa mang lẽ mọn, ưa việc trăng gió."},{"c":"Nô Bộc","s":["Tuần","Triệt"],"p":"dong_cung","t":"Thuê mượn người giúp việc trước khó sau dễ, tuy vậy cùng chẳng được lâu bền."},{"c":"Nô Bộc","s":["Tả Phụ","Hữu Bật","Địa Không","Địa Kiếp"],"p":"dong_cung","t":"Người giúp việc và bạn bè đều là hạng gian quyệt, bất nhân, hay lừa đảo."},{"c":"Nô Bộc","s":["Tả Phụ","Hữu Bật","Thiên Tướng","Phục Binh"],"p":"dong_cung","t":"Người giúp việc đắc lực, tận tâm và trung thành, bạn bè tốt."},{"c":"Nô Bộc","s":["Thai","Vượng","Đào Hoa","Hồng Loan"],"p":"dong_cung","t":"Trong nhà có sự gian dâm."},{"c":"Nô Bộc","s":["Thiên Phủ"],"p":"dong_cung","t":"Gặp quý nhân, có tài lộc.","d":"đơn thủ tại Tỵ, Hợi"},{"c":"Nô Bộc","s":["Thiên Phủ"],"p":"dong_cung","t":"Xa nhà được lợi ích và yên thân hơn ở nhà, buôn bán phát tài.","d":"đơn thủ tại Sửu, Mùi, Mão, Dậu"},{"c":"Nô Bộc","s":["Thiên Phủ","Tử Vi"],"p":"dong_cung","t":"Ra ngoài luôn gặp quý nhân phù trợ, mọi sự đều hành thông, càng xa nhà càng được xứng ý toại lòng."},{"c":"Nô Bộc","s":["Thiên Phủ","Liêm Trinh"],"p":"dong_cung","t":"Ra ngoài lợi ích hơn ở nhà, tài lộc dễ kiếm, quý nhân trợ giúp cũng nhiều."},{"c":"Nô Bộc","s":["Thiên Phủ","Vũ Khúc"],"p":"dong_cung","t":"Gặp quý nhân phù trợ, được nhiều người kính nể, tài lộc hưng vượng."},{"c":"Nô Bộc","s":["Thái Âm"],"p":"dong_cung","t":"Được nhiều người kính trọng, dễ kiếm tiền.","d":"đơn thủ tại Dậu, Tuất, Hợi"},{"c":"Nô Bộc","s":["Thái Âm"],"p":"dong_cung","t":"Ra ngoài hay gặp tai ương vì những sự phiền lòng, nhiều người ghét.","d":"đơn thủ tại Mão, Thìn, Tỵ"},{"c":"Nô Bộc","s":["Thái Âm","Thiên Đồng"],"p":"dong_cung","t":"Luôn luôn gặp quý nhân phù trợ, được nhiều người kính trọng, buôn bán phát tài.","d":"đồng cung tại Tý"},{"c":"Nô Bộc","s":["Thái Âm","Thiên Đồng"],"p":"dong_cung","t":"Hay gặp sự cạnh tranh và ghen ghét, ra ngoài rất bất lợi.","d":"đồng cung tại Ngọ"},{"c":"Nô Bộc","s":["Thái Âm","Thái Dương"],"p":"dong_cung","t":"Ra ngoài lợi ích hơn ở nhà, hay gần nơi quyền quý, được nhiều người tôn phục."},{"c":"Nô Bộc","s":["Thái Âm","Thiên Cơ"],"p":"dong_cung","t":"Buôn bán phát tài, nhiều người mến chuộng.","d":"đồng cung tại Thân"},{"c":"Nô Bộc","s":["Thái Âm","Thiên Cơ"],"p":"dong_cung","t":"Không nên xa nhà lâu, buôn bán phát tài nhưng bị nhiều người ghen ghét.","d":"đồng cung tại Dần"},{"c":"Nô Bộc","s":["Tham Lang"],"p":"dong_cung","t":"Dễ kiếm tiền, hay gặp quý nhân.","d":"đơn thủ tại Thìn, Tuất"},{"c":"Nô Bộc","s":["Tham Lang"],"p":"dong_cung","t":"Ra ngoài rất bất lợi, hay gặp những sự phiền lòng, sau này chết ở xa nhà.","d":"đơn thủ tại Tý, Ngọ"},{"c":"Nô Bộc","s":["Tham Lang"],"p":"dong_cung","t":"Hay mắc tai nạn, xa nhà rất bất lợi.","d":"đơn thủ tại Dần, Thân"},{"c":"Nô Bộc","s":["Tham Lang","Tử Vi"],"p":"dong_cung","t":"Rời khỏi nhà hay gặp những sự phiền lòng, may ít rủi nhiều, thường có kẻ tiểu nhân theo dõi quấy rối."},{"c":"Nô Bộc","s":["Tham Lang","Vũ Khúc"],"p":"dong_cung","t":"Buôn bán phát tài, trước khó sau dễ, hay gặp sự cạnh tranh ráo riết."},{"c":"Nô Bộc","s":["Tham Lang","Liêm Trinh"],"p":"dong_cung","t":"Ra ngoài tất bít lợi, hay gặp những tai ương bất kỳ, nhất là về hình ngục hay kiện tụng."},{"c":"Nô Bộc","s":["Cự Môn"],"p":"dong_cung","t":"Ra ngoài được nhiều người vị nể, tài lộc dễ kiếm, lời nói được nhiều người tin phục.","d":"đơn thủ tại Tý, Ngọ, Hợi"},{"c":"Nô Bộc","s":["Cự Môn"],"p":"dong_cung","t":"Hay mắc thị phi kiện tụng và tai nạn nguy hiểm, sau này chết ở xa nhà.","d":"đơn thủ tại Thìn, Tuất, Tỵ"},{"c":"Nô Bộc","s":["Thiên Tướng"],"p":"dong_cung","t":"Được nhiều người kính trọng, tài lộc dễ kiếm.","d":"đơn thủ tại Tỵ, Hợi, Sửu, Mùi"},{"c":"Nô Bộc","s":["Thiên Tướng"],"p":"dong_cung","t":"Xa nhà không được lợi ích tuy vậy vẫn được nhiều người mến chuộng.","d":"đơn thủ tại Mão, Dậu"},{"c":"Nô Bộc","s":["Thiên Tướng","Tử Vi"],"p":"dong_cung","t":"Được nhiều người kính nể, hay lui tới những chỗ quyền quý. Ra ngoài, được hưởng nhiều tài lộc."},{"c":"Nô Bộc","s":["Thiên Tướng","Liêm Trinh"],"p":"dong_cung","t":"Được nhiều người vị nể, hay lui tới những chỗ sang trọng."},{"c":"Nô Bộc","s":["Thiên Tướng","Vũ Khúc"],"p":"dong_cung","t":"Gặp quý nhân phù trợ, được nhiều người kính nể, tài lộc hưng vượng."},{"c":"Nô Bộc","s":["Thiên Lương"],"p":"dong_cung","t":"Được nhiều người kính trọng, yêu mến, hay lui tới những chỗ quyền quý.","d":"đơn thủ tại Tý, Ngọ"},{"c":"Nô Bộc","s":["Thiên Lương"],"p":"dong_cung","t":"Gặp quý nhân.","d":"đơn thủ tại Sửu, Mùi"},{"c":"Nô Bộc","s":["Thiên Lương"],"p":"dong_cung","t":"Nay đây mai đó, chết ở xa nhà.","d":"đơn thủ tại Tỵ, Hợi"},{"c":"Nô Bộc","s":["Thiên Lương","Thiên Đồng"],"p":"dong_cung","t":"Luôn luôn gặp quý nhân phù trợ, được nhiều người kính trọng, buôn bán phát tài."},{"c":"Nô Bộc","s":["Thiên Lương"],"p":"dong_cung","t":"Gặp quý nhân phù trợ, ra ngoài được nhiều người kính trọng, tài lộc dồi dào.","d":"tọa thủ tại Dần, Mão, Thìn, Tỵ, Ngọ"},{"c":"Nô Bộc","s":["Thiên Lương","Thiên Cơ"],"p":"dong_cung","t":"Càng xa nhà càng gặp nhiều may mắn, hay được lui tới chỗ quyền quý, được nhiều người tôn kính vị nể."},{"c":"Nô Bộc","s":["Thất Sát"],"p":"dong_cung","t":"Hay gặp quý nhân, vì có oai nên được nhiều người kính nể, lời nói được nhiều người tin phục.","d":"đơn thủ tại Dần, Thân"},{"c":"Nô Bộc","s":["Thất Sát"],"p":"dong_cung","t":"Được nhiều nể sợ và tin phục. Thường gần nơi quyền quý nhưng không nên ra ngoài nhiều.","d":"đơn thủ tại Tý, Ngọ"},{"c":"Nô Bộc","s":["Thất Sát"],"p":"dong_cung","t":"Ra ngoài rất bất lợi. Lúc chết không được ở gần nhà.","d":"đơn thủ tại Thìn, Tuất"},{"c":"Nô Bộc","s":["Thất Sát","Tử Vi"],"p":"dong_cung","t":"Được nhiều người kính nể, hay lui tới những chỗ quyền quý. Ra ngoài, được hưởng nhiều tài lộc."},{"c":"Nô Bộc","s":["Thất Sát","Liêm Trinh"],"p":"dong_cung","t":"Hay gặp tai nạn ở giữa nơi đường xá, không nên lui tới những nơi có nhiều súng ống gươm đao."},{"c":"Nô Bộc","s":["Thất Sát","Vũ Khúc"],"p":"dong_cung","t":"Có oai phong, lời nói được nhiều người tin phục nhưng hay gặp những tai ương nguy hiểm."},{"c":"Nô Bộc","s":["Phá Quân"],"p":"dong_cung","t":"Nhiều người nể sợ, tài lộc dễ kiếm, nhưng đôi khi mắc tai nạn nguy hiểm.","d":"đơn thủ tại Tý, Ngọ"},{"c":"Nô Bộc","s":["Phá Quân"],"p":"dong_cung","t":"Hay mắc tai nạn nhất là về xe cộ và ác thú, hay gặp những kẻ rình ám hại.","d":"đơn thủ tại Dần, Thân"},{"c":"Nô Bộc","s":["Phá Quân"],"p":"dong_cung","t":"May đi liền với rủi, người kính trọng cũng có mà ghen ghét muốn hại cũng nhiều.","d":"đơn thủ tại Thìn, Tuất"},{"c":"Nô Bộc","s":["Kình Dương","Đà La"],"p":"tam_hop","t":"Hay mắc tai nạn. Sau này chết ở xa nhà."},{"c":"Nô Bộc","s":["Hỏa Tinh"],"p":"tam_hop","t":"Ra ngoài chẳng được yên chân."},{"c":"Nô Bộc","s":["Linh Tinh"],"p":"tam_hop","t":"Ra ngoài chẳng được yên chân."},{"c":"Nô Bộc","s":["Địa Không","Địa Kiếp"],"p":"tam_hop","t":"Hay bị lừa đảo, mưu hại, lúc chết không ở gần nhà."},{"c":"Nô Bộc","s":["Văn Xương","Văn Khúc","Thiên Khôi","Thiên Việt"],"p":"tam_hop","t":"Gặp nhiều quý nhân. Thường được gần những bậc quyền cao, chức trọng."},{"c":"Nô Bộc","s":["Tả Phù","Hữu Bật"],"p":"tam_hop","t":"Gặp nhiều người giúp đỡ."},{"c":"Nô Bộc","s":["Lộc Tồn","Hóa Lộc"],"p":"tam_hop","t":"Dễ kiếm tiền, luôn luôn gặp may mắn, buôn bán phát tài."},{"c":"Nô Bộc","s":["Hóa Kỵ"],"p":"tam_hop","t":"Hay mắc thị phi và gặp nhiều sự phiền lòng."},{"c":"Nô Bộc","s":["Song Hao"],"p":"tam_hop","t":"Hay phải xa nhà, nay đây mai đó nhưng được nhiều người mến chuộng."},{"c":"Nô Bộc","s":["Thiên Mã"],"p":"tam_hop","t":"Nay đây mai đó, được nhiều người mến chuộng."},{"c":"Nô Bộc","s":["Thiên Hình"],"p":"tam_hop","t":"Hay mắc tai nạn xe cộ gươm đao."},{"c":"Nô Bộc","s":["Đào Hoa","Hồng Loan","Hỷ Thần"],"p":"tam_hop","t":"Gặp nhau ở nơi đường xa mà nên duyên vợ chồng, đàn ông ra ngoài có gái theo, đàn bà ra ngoài được nhiều người thầm yêu vụng nhớ."},{"c":"Nô Bộc","s":["Tuần","Triệt"],"p":"dong_cung","t":"Ra ngoài hay gặp nhiều sự phiền lòng, lúc chết ở xa nhà.","d":"án ngữ"},{"c":"Nô Bộc","s":["Tham Lang","Phá Quân"],"p":"tam_hop","t":"Hay mắc tai nạn xe cộ, dao, súng. Nếu không cũng bị đánh đập giam cầm."},{"c":"Nô Bộc","s":["Tướng Quân","Thiên Tướng"],"p":"tam_hop","t":"Chết vì tai nạn xe cộ hay bị giết."},{"c":"Nô Bộc","s":["Thiên Mã"],"p":"dong_cung","t":"Suốt đời long đong vất vả, nay đây mai đó, khó tránh thoát được những tai nạn xe cộ, chân tay hay bị đau đớn vì có thương tích."},{"c":"Nô Bộc","s":["Tả Phù","Hữu Bật","Địa Không","Địa Kiếp"],"p":"tam_hop","t":"Nhiều kẻ thù nhắm hãm hại."},{"c":"Nô Bộc","s":["Lộc Tồn","Thiên Mã"],"p":"tam_hop","t":"Buôn bán nay đây mai đó, rất phát tài."},{"c":"Nô Bộc","s":["Tang Môn","Đà La","Hóa Kỵ"],"p":"tam_hop","t":"Mắc thị phi, kiện cáo liên miên."},{"c":"Nô Bộc","s":["Thiên Hình","Địa Kiếp","Hỏa Tinh","Linh Tinh"],"p":"tam_hop","t":"Tai nạn về gươm đao hay súng đạn."},{"c":"Nô Bộc","s":["Phục Binh","Địa Không","Địa Kiếp"],"p":"tam_hop","t":"Có kẻ nhắm lừa đảo hay mưu hại."},{"c":"Nô Bộc","s":["Thiên Tướng","Phục Binh","Hồng Loan","Đào Hoa"],"p":"tam_hop","t":"Tơ duyên rắc rối, hay mắc lừa vì tình."},{"c":"Nô Bộc","s":["Thai","Vượng","Thiên Tướng","Phục Binh","Hồng Loan","Đào Hoa"],"p":"tam_hop","t":"Đàn ông ra ngoài hay vướng vào lưới tình vì đắm mê sắc dục mà hại đến thân. Đàn bà ra ngoài khó giữ được toàn danh tiết."},{"c":"Nô Bộc","s":["Lưu Hà","Kiếp Sát"],"p":"tam_hop","t":"Mắc tai nạn xe cộ hay bị ám sát."},{"c":"Phu Thê","s":["Tử Vi","Thiên Phủ"],"p":"dong_cung","t":"Vợ chồng hòa hợp, khá giả, chung hưởng giàu sang đến bạc đầu.","d":"Đơn thủ tại Ngọ"},{"c":"Phu Thê","s":["Tử Vi","Thiên Tướng"],"p":"dong_cung","t":"Vợ chồng cứng cỏi, ương ngạnh, ban đầu hòa hợp nhưng về sau hay xích mích."},{"c":"Phu Thê","s":["Tử Vi","Thất Sát"],"p":"dong_cung","t":"Tiên trở hậu thành, nên muộn lập gia đình để tránh hình khắc, chia ly."},{"c":"Phu Thê","s":["Tử Vi","Phá Quân"],"p":"dong_cung","t":"Phải hình khắc hay chia ly, sống chung tiếp hờn giận."},{"c":"Phu Thê","s":["Tử Vi","Tham Lang"],"p":"dong_cung","t":"Muộn lập gia đình mới mong được bách niên giai lao, nhưng hay có sự bất hòa."},{"c":"Phu Thê","s":["Liêm Trinh","Thiên Phủ"],"p":"dong_cung","t":"Nên muộn lập gia đình, vợ chồng cương cường nhưng chung sống đến bạc đầu."},{"c":"Phu Thê","s":["Liêm Trinh","Thiên Tướng"],"p":"dong_cung","t":"Vợ chồng bất hòa, nếu không tử biệt cũng sinh ly."},{"c":"Phu Thê","s":["Liêm Trinh","Thất Sát"],"p":"dong_cung","t":"Hình khắc hay sinh ly, nên muộn lập gia đình để tránh buồn thương."},{"c":"Phu Thê","s":["Liêm Trinh","Phá Quân"],"p":"dong_cung","t":"Vợ chồng bất hòa, hay xa cách, sinh kế khó khăn."},{"c":"Phu Thê","s":["Liêm Trinh","Tham Lang"],"p":"dong_cung","t":"Vợ chồng hay sinh tai họa, dễ gặp nhau lại dễ bỏ nhau."},{"c":"Phu Thê","s":["Thiên Cơ"],"p":"dong_cung","t":"Sớm gặp người hiền lương, lấy nhau dễ dàng, làm ăn khá giả."},{"c":"Phu Thê","s":["Thất Sát"],"p":"dong_cung","t":"Nên muộn đường hôn phối, trai lấy vợ tài giỏi nhưng hay ghen.","d":"Đơn thủ tại Dần, Thân"},{"c":"Phu Thê","s":["Thất Sát"],"p":"dong_cung","t":"Vợ chồng hay bất hòa, nếu sớm lập gia đình tất phải hình khắc hay chia ly.","d":"Đơn thủ tại Tý, Ngọ"},{"c":"Phu Thê","s":["Thất Sát"],"p":"dong_cung","t":"Trai hay gái phải hai ba lần lập gia đình, rất nhiều tai ương xảy ra.","d":"Đơn thủ tại Thìn, Tuất"},{"c":"Phu Thê","s":["Tử Vi"],"p":"dong_cung","t":"Tiên trở hậu thành mới tránh được hình khác, chia ly."},{"c":"Phu Thê","s":["Liêm Trinh"],"p":"dong_cung","t":"Hình khắc hay sinh ly, nên muộn lập gia đình để tránh buồn thương."},{"c":"Phu Thê","s":["Vũ Khúc"],"p":"dong_cung","t":"Hình khắc nhau rất thê thảm, chồng chung sống hay sinh tai họa."},{"c":"Phu Thê","s":["Phá Quân"],"p":"dong_cung","t":"Vợ chồng khá giả nhưng nên muộn đường hôn phối.","d":"Đơn thủ tại Tý, Ngọ"},{"c":"Phu Thê","s":["Phá Quân"],"p":"dong_cung","t":"Hình khắc không thể tránh được, trai lấy vợ bất nhân, gái lấy chồng bất nghĩa.","d":"Đơn thủ tại Dần, Thân"},{"c":"Phu Thê","s":["Phá Quân"],"p":"dong_cung","t":"Nên muộn lập gia đình, nếu không tất phải hai ba lần chắp nối đường tơ.","d":"Đơn thủ tại Thìn, Tuất"},{"c":"Phu Thê","s":["Tử Vi","Phá Quân"],"p":"dong_cung","t":"Phải hình khắc hay chia ly, sống chung tiếp hờn giận."},{"c":"Phu Thê","s":["Liêm Trinh","Phá Quân"],"p":"dong_cung","t":"Vợ chồng bất hòa, hay xa cách nhau, sinh kế khó khăn."},{"c":"Phu Thê","s":["Vũ Khúc","Phá Quân"],"p":"dong_cung","t":"Vợ chồng đều thao lược nhưng nếu sớm gặp nhau tất phải hình khắc."},{"c":"Phu Thê","s":["Văn Xương","Văn Khúc"],"p":"dong_cung","t":"Trai lấy vợ đẹp, thông minh, có học. Gái lấy chồng danh giá, phong lưu."},{"c":"Phu Thê","s":["Thiên Khôi","Thiên Việt"],"p":"dong_cung","t":"Trai lấy vợ đẹp, có học, có của. Gái lấy chồng sang, thường là trưởng nam."},{"c":"Phu Thê","s":["Tả Phù","Hữu Bật"],"p":"dong_cung","t":"Cưới xin dễ dàng, vợ chồng hòa thuận, giúp đỡ nhau.","d":"Nhiều sao sáng sủa tốt đẹp"},{"c":"Phu Thê","s":["Tả Phù","Hữu Bật"],"p":"dong_cung","t":"Càng dễ hình khắc chia ly.","d":"Nhiều sao mờ ám xấu xa"},{"c":"Phu Thê","s":["Hóa Lộc"],"p":"dong_cung","t":"Trai lấy vợ có của, gái lấy chồng giàu sang."},{"c":"Phu Thê","s":["Hóa Quyền"],"p":"dong_cung","t":"Trai nể vợ, gái được chồng danh giá."},{"c":"Phu Thê","s":["Hóa Khoa"],"p":"dong_cung","t":"Trai lấy được vợ có học thức, gái lấy chồng có danh chức."},{"c":"Phu Thê","s":["Hóa Kỵ"],"p":"dong_cung","t":"Vợ chồng bất hòa."},{"c":"Phu Thê","s":["Lộc Tồn"],"p":"dong_cung","t":"Nên chậm cưới để tránh sự bất hòa hay chia ly sau này."},{"c":"Phu Thê","s":["Thiên Mã"],"p":"dong_cung","t":"Gặp nhau ở nơi xa mà nên duyên vợ chồng."},{"c":"Phu Thê","s":["Thái Tuế"],"p":"dong_cung","t":"Hay có sự xích mích trong gia đình."},{"c":"Phu Thê","s":["Phục Binh"],"p":"dong_cung","t":"Quen nhau, thường đi lại với nhau rồi mới cưới."},{"c":"Phu Thê","s":["Tướng Quân"],"p":"dong_cung","t":"Trai sợ vợ vì vợ hay ghen. Gái tuy nể chồng, nhưng vẫn tìm cách để bắt nạt."},{"c":"Phu Thê","s":["Song Hao"],"p":"dong_cung","t":"Cưới xin quá dễ dàng, nếu gặp nhiều sao mờ ám xấu xa trai lấy vợ hoang tàng."},{"c":"Phu Thê","s":["Cô Thần","Quả Tú"],"p":"dong_cung","t":"Vợ chồng bất hòa hay xa cách nhau."},{"c":"Phu Thê","s":["Đào Hoa","Hồng Loan"],"p":"dong_cung","t":"Cưới xin dễ dàng, trai lấy vợ đẹp nhưng thường lại lấy thêm vợ lẽ."},{"c":"Phu Thê","s":["Đẩu Quân"],"p":"dong_cung","t":"Vợ chồng hòa thuận, chung sống lâu bền.","d":"Nhiều sao sáng sủa tốt đẹp"},{"c":"Phu Thê","s":["Đẩu Quân"],"p":"dong_cung","t":"Thường bị hình khắc tai ương.","d":"Nhiều sao mờ ám xấu xa"},{"c":"Phu Thê","s":["Thiên Riêu"],"p":"dong_cung","t":"Cả hai vợ chồng đều bất chính và rất hoang đãng."},{"c":"Phu Thê","s":["Tuần","Triệt"],"p":"dong_cung","t":"Nên muộn lập gia đình hay đi xa mà thành hôn phối.","d":"Án ngữ"},{"c":"Phu Thê","s":["Phá Quân","Tuần","Triệt"],"p":"dong_cung","t":"Ba lần lập gia đình.","d":"Án ngữ"},{"c":"Phu Thê","s":["Cự Môn","Hỏa Tinh"],"p":"dong_cung","t":"Mối lái rất nhiều nhưng vẫn khó tìm hôn phối."},{"c":"Phu Thê","s":["Cự Môn","Linh Tinh"],"p":"dong_cung","t":"Mối lái rất nhiều nhưng vẫn khó tìm hôn phối."},{"c":"Phu Thê","s":["Cự Môn","Hóa Kỵ","Cô Thần","Quả Tú","Kình Dương","Đà La","Linh Tinh","Tràng Sinh"],"p":"tam_hop","t":"Gái lấy nhiều chồng và có nhiều con."},{"c":"Phu Thê","s":["Thiên Tướng","Đào Hoa","Hồng Loan"],"p":"dong_cung","t":"Trai lấy vợ đẹp, khá giả, gái lấy chồng hiền, danh giá.","d":"Đồng cung"},{"c":"Phu Thê","s":["Tham Lang","Đà La"],"p":"dong_cung","t":"Trai lấy vợ hoang đãng, gái lấy chồng ham mê tửu sắc.","d":"Đồng cung"},{"c":"Phu Thê","s":["Địa Kiếp","Hóa Kỵ"],"p":"dong_cung","t":"Vợ chồng hại nhau."},{"c":"Phu Thê","s":["Hóa Kỵ","Đà La","Hồng Loan","Đào Hoa"],"p":"dong_cung","t":"Yêu nhau nhưng vẫn tìm cách lừa dối nhau."},{"c":"Phu Thê","s":["Hóa Kỵ","Thiên Riêu"],"p":"dong_cung","t":"Trai lấy vợ dâm đãng, gái lấy chồng chơi bời."},{"c":"Phu Thê","s":["Hóa Kỵ","Phục Binh"],"p":"xung_chieu","t":"Vợ chồng ghét nhau, tìm cách bôi nhọ lẫn nhau.","d":"Cung chiếu"},{"c":"Phu Thê","s":["Lộc Tồn","Hồng Loan"],"p":"dong_cung","t":"Trai lấy vợ có của.","d":"Đồng cung"},{"c":"Phu Thê","s":["Lộc Tồn","Phượng Các","Long Trì"],"p":"dong_cung","t":"Trai lấy vợ rất giàu."},{"c":"Phu Thê","s":["Lộc Tồn","Thiên Mã","Thanh Long"],"p":"dong_cung","t":"Lấy nhau dễ dàng, thường gặp nhau ở xa mà nên duyên vợ chồng."},{"c":"Phu Thê","s":["Đào Hoa","Thai"],"p":"xung_chieu","t":"Vợ chồng hay đi lại, hay có con riêng rồi mới lấy nhau.","d":"Đồng cung hay xung chiếu"},{"c":"Phu Thê","s":["Hồng Loan","Đào Hoa","Hóa Kỵ"],"p":"dong_cung","t":"Vừa bỏ nhau hay vừa góa đã có người muốn lui tới cầu xin kết nghĩa."},{"c":"Phu Thê","s":["Đào Hoa","Thiên Riêu"],"p":"dong_cung","t":"Trai lấy vợ bất chính hay có ngoại tình, gái lấy chồng loạn dâm."},{"c":"Phu Thê","s":["Đào Hoa","Hồng Loan","Tả Phù","Hữu Bật"],"p":"dong_cung","t":"Trai nhiều vợ, nhưng cả lẽ rất thuận hòa. Gái thường dễ lấy chồng lại dễ bỏ chồng."},{"c":"Phúc Đức","s":["Tử Vi"],"p":"dong_cung","t":"Hưởng phúc lâu dài, tránh được nhiều tai họa, trong họ có nhiều người quý hiến.","d":"Tọa thủ tại Ngọ"},{"c":"Phúc Đức","s":["Tử Vi"],"p":"dong_cung","t":"Suốt đời hay gặp những sự may mắn, trong họ tuy hiếm người nhưng khá giả.","d":"Tọa thủ tại Tý"},{"c":"Phúc Đức","s":["Tử Vi","Thiên Phủ"],"p":"dong_cung","t":"Suốt đời được xứng ý toại lòng, sống lâu và hưởng phúc, họ hàng nhiều người giàu sang."},{"c":"Phúc Đức","s":["Tử Vi","Thiên Tướng"],"p":"dong_cung","t":"Suốt đời được xứng ý toại lòng, sống lâu và hưởng phúc, họ hàng nhiều người giàu sang."},{"c":"Phúc Đức","s":["Tử Vi","Thất Sát"],"p":"dong_cung","t":"Phải ly tổ, bôn ba mới được hưởng phúc sống lâu, trong họ có nhiều người giàu sang, hiển đạt về võ nghiệp."},{"c":"Phúc Đức","s":["Tử Vi","Phá Quân"],"p":"dong_cung","t":"Lao tâm khổ tứ, chẳng được yên thân, phải lìa bỏ quê hương mới khá giả và sống lâu, họ hàng ly tán."},{"c":"Phúc Đức","s":["Tử Vi","Tham Lang"],"p":"dong_cung","t":"Suốt đời chẳng được xứng ý toại lòng, giảm thọ vì bạc phúc, họ hàng ly tán, người nào khá giả lại chết sớm."},{"c":"Phúc Đức","s":["Tử Vi"],"p":"dong_cung","t":"Được hưởng phúc, nhưng nên lập nghiệp ở nơi thật xa quê hương. Họ hàng khá giả, có danh giá và uy quyền tế thế.","d":"Đơn thủ tại Dần, Thân"},{"c":"Phúc Đức","s":["Tử Vi"],"p":"dong_cung","t":"Không được hưởng phúc dồi dào, suốt đời may thường đi liền với rủi. Nên ly tổ có sớm xa gia đình mới mong được yên thân.","d":"Đơn thủ tại Tý, Ngọ"},{"c":"Phúc Đức","s":["Tử Vi"],"p":"dong_cung","t":"Bạc phúc nên giảm thọ. Khó tránh được lai nạn vẻ đao thương, dễ mắc hình ngục.","d":"Đơn thủ tại Thìn, Tuất"},{"c":"Phúc Đức","s":["Tử Vi"],"p":"dong_cung","t":"Phải ly tổ, bôn ba mới được hưởng phúc sống lâu. Trong họ có nhiều người giàu sang, hiển đạt về võ nghiệp.","d":"Tử Vi đồng cung"},{"c":"Phúc Đức","s":["Liêm Trinh"],"p":"dong_cung","t":"Giảm thọ, hay gặp nguy hiểm, phải xa quê hương mới mong được an toàn. Trong họ có nhiều người chết non một cách thê thảm.","d":"Liêm đồng cung"},{"c":"Phúc Đức","s":["Vũ Khúc"],"p":"dong_cung","t":"Giảm thọ vì bạc phúc. Suốt đời lao tâm khổ tứ, hay mắc tai họa.","d":"Vũ đồng cung"},{"c":"Phúc Đức","s":["Phá Quân"],"p":"dong_cung","t":"Được hưởng phúc, sống lâu, nhưng nên lập nghiệp ở nơi thật xa quê hương.","d":"Đơn thủ tại Tý, Ngọ"},{"c":"Phúc Đức","s":["Phá Quân"],"p":"dong_cung","t":"Không được hưởng phúc dồi dào. Phải ly tán, sớm xa gia đình, mới mong được yên thân.","d":"Đơn thủ tại Thìn, Tuất"},{"c":"Phúc Đức","s":["Phá Quân"],"p":"dong_cung","t":"Bạc phúc nên giảm thọ. Khó tránh được tai họa.","d":"Đơn thủ tại Dần, Thân"},{"c":"Phúc Đức","s":["Phá Quân","Tử Vi"],"p":"dong_cung","t":"Lao tâm khổ tứ, chẳng được yên thân. Phải lìa bỏ quê hương mới khá giả và sống lâu.","d":"Tử đồng cung"},{"c":"Phúc Đức","s":["Phá Quân","Liêm Trinh"],"p":"dong_cung","t":"Vất vả lao khổ, phải xa quê hương mới sống lâu.","d":"Liêm đồng cung"},{"c":"Phúc Đức","s":["Phá Quân","Vũ Khúc"],"p":"dong_cung","t":"Phải lập nghiệp ở xa quê hương, phải sớm xa gia đình mới mong được yên thân hưởng phúc sống lâu.","d":"Vũ đồng cung"},{"c":"Phúc Đức","s":["Kình Dương","Đà La"],"p":"dong_cung","t":"Họ hàng ly tán. Sáng sủa tốt đẹp: suốt đời may thường đi liền với rủi, về già được an nhàn."},{"c":"Phúc Đức","s":["Hỏa Tinh"],"p":"dong_cung","t":"Giảm thọ. Sáng sủa tốt đẹp: suốt đời may thường đi liền với rủi."},{"c":"Phúc Đức","s":["Linh Tinh"],"p":"dong_cung","t":"Giảm thọ. Sáng sủa tốt đẹp: suốt đời may thường đi liền với rủi."},{"c":"Phúc Đức","s":["Không","Kiếp"],"p":"dong_cung","t":"Sáng sủa tốt đẹp: bạc phúc, suốt đời mưu sự buổi đầu thường trắc trở, về sau mới được hành thông, đắc ý."},{"c":"Phúc Đức","s":["Xương","Khúc"],"p":"dong_cung","t":"Được hưởng phúc sung sướng, vinh hiển và sống lâu. Trong họ có nhiều người đỗ đạt cao có danh giá.","d":"Nhiều sao sáng sủa tốt đẹp"},{"c":"Phúc Đức","s":["Khôi","Việt"],"p":"dong_cung","t":"Tăng tuổi thọ. Được hưởng phúc vinh hiển và sống lâu.","d":"Nhiều sao sáng sủa tốt đẹp"},{"c":"Phúc Đức","s":["Tả","Hữu"],"p":"dong_cung","t":"Được hưởng phúc sống lâu. Suốt đời hay gặp may mắn.","d":"Nhiều sao sáng sủa tốt đẹp"},{"c":"Phúc Đức","s":["Lộc Tồn"],"p":"dong_cung","t":"Tăng tuổi thọ, được hưởng phúc, trong họ hiếm người và thường có sự tranh chấp bất hòa."},{"c":"Phúc Đức","s":["Hóa Lộc"],"p":"dong_cung","t":"Được hưởng phúc, khỏi phải lo lắng những lúc túng thiếu. Tránh được nhiều tai họa."},{"c":"Phúc Đức","s":["Hóa Quyền"],"p":"dong_cung","t":"Được hưởng phúc. Được nhiều người vị nể. Họ hàng quý hiển, có danh giá."},{"c":"Phúc Đức","s":["Hóa Khoa"],"p":"dong_cung","t":"Được hưởng phúc sống lâu. Tránh được nhiều tai họa. Họ hàng khá giả, có người đỗ đạt cao."},{"c":"Phúc Đức","s":["Hóa Kỵ"],"p":"dong_cung","t":"Giảm thọ. Họ hàng ly tán, hay tranh chấp lẫn nhau."},{"c":"Phúc Đức","s":["Song Hao"],"p":"dong_cung","t":"Giảm thọ. Nên sớm xa gia đình, trong họ có nhiều người nghèo túng, phải đi biệt xứ."},{"c":"Phúc Đức","s":["Tang Môn","Bạch Hổ"],"p":"dong_cung","t":"Giảm thọ. Họ hàng ly tán, những người khá giả lại chết sớm."},{"c":"Phúc Đức","s":["Thiên Khốc","Thiên Hư"],"p":"dong_cung","t":"Giảm thọ. Họ hàng hay oán trách lẫn nhau."},{"c":"Phúc Đức","s":["Thiên Mã"],"p":"dong_cung","t":"Tăng tuổi thọ. Càng ở xa quê hương lại càng khá giả. Trong họ có nhiều người hiển đạt."},{"c":"Phúc Đức","s":["Thái Tuế"],"p":"dong_cung","t":"Không được hưởng phúc dồi dào, khó tránh được tai họa. Trong họ thiếu hòa khí."},{"c":"Phúc Đức","s":["Long Trì","Phượng Các"],"p":"dong_cung","t":"Được hưởng phúc. Trong họ có nhiều người khá giả."},{"c":"Phúc Đức","s":["Cô Thần","Quả Tú"],"p":"dong_cung","t":"Được hưởng phúc. Tránh được nhiều tai họa. Họ hàng khá giả.","d":"Nhiều sao sáng sủa tốt đẹp"},{"c":"Phúc Đức","s":["Đào Hoa","Hồng Loan"],"p":"dong_cung","t":"Được hưởng phúc sống lâu. Suốt đời hay gặp may. Trong họ có nhiều người quý hiển giàu sang.","d":"Nhiều sao sáng sủa tốt đẹp"},{"c":"Phúc Đức","s":["Tuần","Triệt"],"p":"dong_cung","t":"Tăng thọ, tránh được nhiều tai họa. Mưu sự gay trắc trở buổi đầu, nhưng về sau lại hành thông toại ý.","d":"Nhiều sao mờ ám xấu xa"},{"c":"Phúc Đức","s":["Tử Vi"],"p":"dong_cung","t":"Giảm thọ, khó tránh được tai họa. Phải lập nghiệp ở nơi thật xa quê hương.","d":"Đồng cung"},{"c":"Phúc Đức","s":["Vũ Khúc","Xương","Khúc","Khôi","Việt"],"p":"dong_cung","t":"Được hưởng phúc, sống lâu. Suốt đời gặp may mắn. Trong họ có nhiều người quý hiển."},{"c":"Phúc Đức","s":["Nhật","Riêu","Đà","Kỵ"],"p":"dong_cung","t":"Giảm thọ, mắt kém. Khó tránh được tai họa. Suốt đời chẳng được xứng ý toại lòng.","d":"Nhật sáng sủa"},{"c":"Phúc Đức","s":["Nhật","Riêu","Đà","Kỵ"],"p":"dong_cung","t":"Giảm thọ, mắt kém. Khó tránh được tai họa. Suốt đời bất đắc chí.","d":"Nhật mờ ám"},{"c":"Phúc Đức","s":["Nguyệt","Riêu","Đà","Kỵ"],"p":"dong_cung","t":"Giảm thọ, mắt kém. Khó tránh được tai họa. Suốt đời bất đắc chí.","d":"Nguyệt sáng sủa"},{"c":"Phúc Đức","s":["Nguyệt","Riêu","Đà","Kỵ"],"p":"dong_cung","t":"Giảm thọ, mắt kém rất đáng lo ngại. Tai họa đầy rẫy không kể xiết được.","d":"Nguyệt mờ ám"},{"c":"Phúc Đức","s":["Nhật","Nguyệt","Kỵ"],"p":"dong_cung","t":"Được hưởng phúc sống lâu. Suốt đời gặp may mắn. Càng ở xa quê hương lại càng khá giả.","d":"Đồng cung Sửu, Mùi"},{"c":"Phúc Đức","s":["Tham Lang","Vũ Khúc","Hỏa Tinh"],"p":"dong_cung","t":"Được hưởng phúc, tăng thêm tuổi thọ. Suốt đời hay gặp may mắn.","d":"Đồng cung Sửu, Mùi"},{"c":"Phúc Đức","s":["Cự Môn","Hóa Kỵ"],"p":"dong_cung","t":"Giảm thọ. Khó tránh được tai họa. Suốt đời chẳng được xứng ý toại lòng.","d":"Đồng cung"},{"c":"Phúc Đức","s":["Cự Môn","Hỏa Tinh"],"p":"dong_cung","t":"Giảm thọ, tai họa đầy rẫy. Họ hàng bất hòa ly tán và càng ngày càng suy bại.","d":"Đồng cung"},{"c":"Phúc Đức","s":["Sát","Kình"],"p":"dong_cung","t":"Giảm thọ. Khó tránh được tai họa. Trong họ có nhiều người chết bất đắc kỳ tử.","d":"Đồng cung"},{"c":"Phúc Đức","s":["Kình","Đà","Không","Kiếp"],"p":"dong_cung","t":"Giảm thọ. Khó tránh được những sự chẳng lành. Suốt đời lao tâm khổ tứ."},{"c":"Phúc Đức","s":["Kình","Đà","Hỏa"],"p":"dong_cung","t":"Bạc phúc nên giảm thọ. Tai họa đầy rẫy. Họ hàng ly tán càng ngày càng suy bại."},{"c":"Phúc Đức","s":["Hỏa","Tang"],"p":"dong_cung","t":"Giảm thọ. Khó tránh được tai họa. Họ hàng ly tán.","d":"Đồng cung"},{"c":"Phúc Đức","s":["Kỵ","Kình"],"p":"dong_cung","t":"Bạc phúc nên suốt đời lao tâm khổ tứ may ít rủi nhiều. Họ hàng hay tranh chấp lẫn nhau.","d":"Đồng cung"},{"c":"Phúc Đức","s":["Kỵ","Không","Kiếp"],"p":"dong_cung","t":"Giảm thọ. Suốt đời chẳng được xứng ý toại lòng. Họ hàng ly tán.","d":"Đồng cung"},{"c":"Phúc Đức","s":["Kỵ","Bệnh","Phù","Hình"],"p":"dong_cung","t":"Giảm thọ. Khó tránh được tai họa. Đau ốm lâu khỏi."},{"c":"Phúc Đức","s":["Thiên Riêu"],"p":"dong_cung","t":"Giảm thọ, phải lìa bỏ quê hương, họ hàng nghèo khổ ly tán."},{"c":"Phúc Đức","s":["Tuần","Triệt"],"p":"dong_cung","t":"Được hưởng phúc sống lâu.","d":"Cung Phúc Đức vô Chính diệu"},{"c":"Phúc Đức","s":["Thái Dương","Thái Âm"],"p":"xung_chieu","t":"Được hưởng phúc sống lâu, tránh được nhiều tai họa.","d":"Cung Phúc Đức vô Chính diệu"},{"c":"Phúc Đức","s":["Đà La"],"p":"dong_cung","t":"Được hưởng phúc, sống lâu, suốt đời hay gặp may mắn.","d":"Cung Phúc Đức vô Chính diệu an tại Dần, Thân"},{"c":"Quan Lộc","s":["Tử Vi","Thiên Phủ"],"p":"dong_cung","t":"Công danh hiển hách, phú quý song toàn.","d":"Tại Ngọ"},{"c":"Quan Lộc","s":["Tử Vi","Thiên Tướng"],"p":"dong_cung","t":"Văn võ toàn tài trước nhỏ sau lớn, có tài tổ chức, nhiều mánh lới, thủ đoạn."},{"c":"Quan Lộc","s":["Tử Vi","Thất Sát"],"p":"dong_cung","t":"Có uy quyền, nên chuyên về quân sự."},{"c":"Quan Lộc","s":["Tử Vi","Phá Quân"],"p":"dong_cung","t":"Thành công trong võ nghiệp nhưng thăng giáng thất thường."},{"c":"Quan Lộc","s":["Tử Vi","Tham Lang"],"p":"dong_cung","t":"Bình thường. Nếu công danh rực rỡ, tất sinh tai họa."},{"c":"Quan Lộc","s":["Liêm Trinh","Thiên Phủ"],"p":"dong_cung","t":"Phú quý song toàn, lập được nhiều chiến công, có uy quyền hiển hách."},{"c":"Quan Lộc","s":["Liêm Trinh","Thiên Tướng"],"p":"dong_cung","t":"Văn võ kiêm toàn, được hưởng giàu sang, được nhiều người kính nể."},{"c":"Quan Lộc","s":["Liêm Trinh","Thất Sát"],"p":"dong_cung","t":"Chuyên về quân sự nhưng thăng giáng thất thường."},{"c":"Quan Lộc","s":["Liêm Trinh","Phá Quân"],"p":"dong_cung","t":"Nên chuyên về kỹ nghệ, hay thương mại."},{"c":"Quan Lộc","s":["Liêm Trinh","Tham Lang"],"p":"dong_cung","t":"Có võ chức, nhưng nhỏ thấp. Trên đường công danh thường gặp nhiều trở ngại, tai ương."},{"c":"Quan Lộc","s":["Phá Quân"],"p":"dong_cung","t":"Võ nghiệp hiển đạt, nhưng thăng giáng thất thường. Lập công danh trong thời loạn.","d":"đơn thủ tại Tý, Ngọ"},{"c":"Quan Lộc","s":["Phá Quân"],"p":"dong_cung","t":"Thành công về quân sự, nổi tiếng về sự nghiệp chính trị. Có uy quyền hiển hách.","d":"đơn thủ tại Thìn, Tuất"},{"c":"Quan Lộc","s":["Phá Quân"],"p":"dong_cung","t":"Công danh trắc trở, chức vị nhỏ thấp. Nếu giàu sang cũng chẳng được lâu bền.","d":"đơn thủ tại Dần, Thân"},{"c":"Quan Lộc","s":["Tử Vi","Phá Quân"],"p":"dong_cung","t":"Thành công trong võ nghiệp nhưng thăng giáng thất thường. Nếu đi buôn cũng phát đạt."},{"c":"Quan Lộc","s":["Liêm Trinh","Phá Quân"],"p":"dong_cung","t":"Nên chuyên về kỹ nghệ, hay thương mại. Nếu chen chân vào đường công danh, tất chẳng được xứng ý toại lòng."},{"c":"Quan Lộc","s":["Vũ Khúc","Phá Quân"],"p":"dong_cung","t":"Xuất thân bằng võ nghiệp, nhưng rất chật vật. Nếu kinh doanh buôn bán, rất được xứng ý toại lòng."},{"c":"Quan Lộc","s":["Sát","Phá","Liêm","Tham"],"p":"tam_hop","t":"Công danh hoạnh đạt. Có võ chức lớn lao, hiển hách trong thời loạn. Nhưng thăng giáng thất thường.","d":"sáng sủa tốt đẹp"},{"c":"Quan Lộc","s":["Sát","Phá","Liêm","Tham"],"p":"tam_hop","t":"Có danh chức nhưng nhỏ thấp, thăng giáng thất thường. Tuy vậy, vẫn gặp được người dìu dắt, nâng đỡ.","d":"mờ ám xấu xa"},{"c":"Quan Lộc","s":["Vũ Khúc","Thiên Tướng"],"p":"tam_hop","t":"Công danh hoạnh đạt, có võ chức lớn lao, có uy quyền hiển hách. Được nhiều người kính trọng và nể sợ.","d":"sáng sủa tốt đẹp"},{"c":"Quan Lộc","s":["Vũ Khúc","Thiên Tướng"],"p":"tam_hop","t":"Có danh chức, nhưng nhỏ thấp. Tuy vậy vẫn gặp được nhiều người dìu dắt, nâng đỡ.","d":"mờ ám xấu xa"},{"c":"Quan Lộc","s":["Xương","Khúc"],"p":"dong_cung","t":"Công danh hiển đạt, có văn tài lỗi lạc."},{"c":"Quan Lộc","s":["Khôi","Việt"],"p":"dong_cung","t":"Có danh chức lớn, nếu gặp thêm nhiều sao sáng sủa tốt đẹp hội hợp, tất được nắm giữ đầu mối những công việc lớn."},{"c":"Quan Lộc","s":["Tả","Hữu"],"p":"dong_cung","t":"Được nhiều người nâng đỡ trên đường công danh."},{"c":"Quan Lộc","s":["Lộc Tồn"],"p":"dong_cung","t":"Có danh chức và nhiều tiền bạc, có tài tổ chức."},{"c":"Quan Lộc","s":["Hóa Kỵ"],"p":"dong_cung","t":"Hay gặp sự phiền lòng, công danh trắc trở nhưng nếu gặp Nhật, Nguyệt đồng cung tại Sửu, Mùi tất công danh hoạnh đạt.","d":"gặp Nhật, Nguyệt đồng cung tại Sửu, Mùi"},{"c":"Quan Lộc","s":["Khoa","Quyền","Lộc"],"p":"dong_cung","t":"Tài lộc thêm dồi dào, uy quyền thêm hiển hách, danh chức thêm lớn lao."},{"c":"Quan Lộc","s":["Khốc","Hư"],"p":"dong_cung","t":"Có uy quyền, ăn nói hoạt bát và hùng hồn. Ra ngoài được nhiều người kính phục.","d":"sáng sủa tốt đẹp"},{"c":"Quan Lộc","s":["Khốc","Hư"],"p":"dong_cung","t":"Hay gặp sự phiền lòng, trên đường công danh hay gặp nhiều trở ngại.","d":"mờ ám xấu xa"},{"c":"Quan Lộc","s":["Thiên Mã"],"p":"dong_cung","t":"Công danh hiển đạt, nên làm công việc có tính cách lưu động. Có tài tổ chức và thao lược."},{"c":"Quan Lộc","s":["Tham Lang","Văn Xương"],"p":"dong_cung","t":"Có danh chức, được nhiều người biết tiếng, tài lộc dồi dào.","d":"đồng cung tại Hợi, Tý"},{"c":"Quan Lộc","s":["Cự Môn","Thiên Đồng","Thiên Hình"],"p":"dong_cung","t":"Phải nhờ người trên dìu dắt mới khá giả được."},{"c":"Quan Lộc","s":["Thiên Đồng","Thái Âm","Kình Dương"],"p":"dong_cung","t":"Làm võ quan trọng trấn ở biên thùy. Lập được nhiều chiến công, hiển đạt trong thời loạn.","d":"đồng cung tại Ngọ"},{"c":"Quan Lộc","s":["Thiên Cơ","Thái Âm"],"p":"dong_cung","t":"Đàn bà gặp cách này hay làm nghề cô đỡ (cô mụ).","d":"đồng cung gặp Tả, Hữu hội hợp"},{"c":"Quan Lộc","s":["Thiên Cơ","Thái Âm","Thiên Đồng","Thiên Lương"],"p":"tam_hop","t":"Nên chuyên nghề thầy thuốc, nếu dạy học cũng nổi tiếng.","d":"tại Dần, Thân, Thìn, Tuất gặp Xương, Khúc, Tả, Hữu"},{"c":"Quan Lộc","s":["Thiên Cơ","Thái Âm","Thiên Đồng","Thiên Lương"],"p":"tam_hop","t":"Vinh hiển trong nghề làm thuốc, được nhiều người kính trọng."},{"c":"Quan Lộc","s":["Thất Sát"],"p":"dong_cung","t":"Có chức vụ lớn lao, uy quyền hiển hách, nhiều người vị nể.","d":"tọa thủ tại Dần, Thân gặp Quyền đồng cung"},{"c":"Quan Lộc","s":["Lộc Tồn","Thiên Mã"],"p":"dong_cung","t":"Danh chức khá lớn, nên làm công việc có tính cách lưu động. Tài lộc ngày càng tăng tiến."},{"c":"Quan Lộc","s":["Địa Kiếp","Thiên Hư","Đại Hao"],"p":"dong_cung","t":"Trên đường công danh đầy rẫy những trở ngại. Thường bị tiểu nhân ghen ghét gièm pha và làm hại."},{"c":"Quan Lộc","s":["Kình Dương","Lực Sĩ"],"p":"dong_cung","t":"Công danh trắc trở, chức vị nhỏ thấp. Có công trạng không được người trên biết đến.","d":"đồng cung"},{"c":"Quan Lộc","s":["Kình Dương"],"p":"dong_cung","t":"Có võ chức, được trọng trấn ở nơi xa xôi, nguy hiểm.","d":"tọa thủ tại Tứ Mộ gặp Thiên Mã"},{"c":"Quan Lộc","s":["Tuế","Hổ","Phù","Xương","Khúc"],"p":"dong_cung","t":"Có tài hùng biện, biết suy xét luận lý, văn chương lỗi lạc. Nên chuyên về pháp lý, chính trị, kinh tế."},{"c":"Quan Lộc","s":["Hồng Loan","Đào Hoa","Thiên Riêu","Tấu Thư","Thiên Cơ","Vũ Khúc"],"p":"dong_cung","t":"Chuyên về múa, hát, tuồng, kịch."},{"c":"Quan Lộc","s":["Thiên Tướng","Tấu Thư","Phù"],"p":"dong_cung","t":"Làm thầy chùa hay phủ thủy (thầy pháp).","d":"Mệnh có Tả, Hữu tọa thủ"},{"c":"Quan Lộc","s":["Binh","Hình","Tướng","Ấn"],"p":"dong_cung","t":"Có võ chức, nhưng chuyên về việc văn phòng."},{"c":"Quan Lộc","s":["Hổ","Tấu Thư"],"p":"dong_cung","t":"Có khiếu về văn chương. Học ngoại ngữ rất chóng thông hiểu. Về sau có danh chức khá lớn.","d":"đồng cung"},{"c":"Quan Lộc","s":["Thiên Mã","Hỏa Tinh"],"p":"dong_cung","t":"Chuyên về cơ khí, hay làm nghề vận tải."},{"c":"Quan Lộc","s":["Thiên Mã","Linh Tinh"],"p":"dong_cung","t":"Chuyên về cơ khí, hay làm nghề vận tải."},{"c":"Quan Lộc","s":["Đào Hoa","Hồng Loan"],"p":"dong_cung","t":"Tuổi Tý, Dậu, sớm hiển đạt nhưng chết non.","d":"tọa thủ tại Tý"},{"c":"Quan Lộc","s":["Thiên Lương","Phá Quân"],"p":"dong_cung","t":"Võ nghiệp hiển đạt, rất dũng mãnh. Hay làm những việc mạo hiểm, sau có uy quyền khá lớn."},{"c":"Quan Lộc","s":["Tuần","Triệt"],"p":"dong_cung","t":"Tuy gặp nhiều trở ngại trên đường công danh nhưng sau vẫn hiển đạt. Thường là hoạnh phát hoạnh phá.","d":"Vô Chính diệu"},{"c":"Quan Lộc","s":["Nhật","Nguyệt"],"p":"xung_chieu","t":"Công danh rực rỡ, uy quyền hiển hách. Nên chuyên về chính trị, kinh tế về sau tất được xứng ý toại lòng.","d":"Vô Chính diệu"},{"c":"Tử Tức","s":["Thiên Phủ","Thiên Tướng","Thiên Lương","Thất Sát","Thiên Đồng","Thái Dương","Thiên Cơ"],"p":"dong_cung","t":"Cung Tử Tức có Chính diệu Nam Đẩu tinh tọa thủ thì con trai nhiều hơn con gái.","d":"Cung Tử Tức có Chính diệu Nam Đẩu tinh tọa thủ"},{"c":"Tử Tức","s":["Thái Âm","Tham Lang","Cự Môn","Liêm Trinh","Vũ Khúc","Phá Quân"],"p":"dong_cung","t":"Cung Tử Tức có Chính diệu Bắc Đẩu tinh tọa thủ thì con gái nhiều hơn con trai.","d":"Cung Tử Tức có Chính diệu Bắc Đẩu tinh tọa thủ"},{"c":"Tử Tức","s":["Thái Dương"],"p":"dong_cung","t":"Người sinh ban ngày, cung Tử Tức có Thái Dương mờ ám tọa thủ, hay Thái Âm chiếu thì khó nuôi con.","d":"Người sinh ban ngày, cung Tử Tức có Thái Dương mờ ám tọa thủ, hay Thái Âm chiếu"},{"c":"Tử Tức","s":["Thái Âm"],"p":"dong_cung","t":"Người sinh ban đêm, cung Tử Tức có Thái Âm mờ ám tọa thủ hay Thái Dương chiếu thì khó nuôi con.","d":"Người sinh ban đêm, cung Tử Tức có Thái Âm mờ ám tọa thủ hay Thái Dương chiếu"},{"c":"Tử Tức","s":["Cô","Quả"],"p":"dong_cung","t":"Muộn con, con hay đau yếu rất khó nuôi.","d":"Nhiều sao sáng sủa tốt đẹp"},{"c":"Tử Tức","s":["Cô","Quả"],"p":"dong_cung","t":"Tuyệt tự.","d":"Nhiều sao mờ ám xấu xa"},{"c":"Tử Tức","s":["Đẩu Quân"],"p":"dong_cung","t":"Con giàu có.","d":"Nhiều sao sáng sủa tốt đẹp"},{"c":"Tử Tức","s":["Đẩu Quân"],"p":"dong_cung","t":"Rất khó nuôi con, hiếm muộn. Con thường là phá gia chi tử.","d":"Nhiều sao mờ ám xấu xa"},{"c":"Tử Tức","s":["Tràng Sinh"],"p":"dong_cung","t":"Tám con, gặp Tuần, Triệt án ngữ thì có bốn con.","d":"Gặp Tuần, Triệt án ngữ"},{"c":"Tử Tức","s":["Mộc Dục"],"p":"dong_cung","t":"Bảy lần sinh, sau nuôi được sáu con."},{"c":"Tử Tức","s":["Quan Đới","Lâm Quan"],"p":"dong_cung","t":"Ba hay bốn con."},{"c":"Tử Tức","s":["Đế Vượng"],"p":"dong_cung","t":"Năm con."},{"c":"Tử Tức","s":["Bệnh"],"p":"dong_cung","t":"Một con."},{"c":"Tử Tức","s":["Tử"],"p":"dong_cung","t":"Rất khó nuôi con, nếu có con, con lớn lên cũng khắc với cha mẹ."},{"c":"Tử Tức","s":["Mộ","Thai","Dưỡng"],"p":"dong_cung","t":"Khó nuôi con buổi đầu nhưng về sau lại dễ nuôi. Muộn con, nên kiếm con nuôi."},{"c":"Tử Tức","s":["Tuyệt"],"p":"dong_cung","t":"Có một con mù lòa."},{"c":"Tử Tức","s":["Thai"],"p":"dong_cung","t":"Sinh hai con gái, sau nuôi được một."},{"c":"Tử Tức","s":["Dưỡng"],"p":"dong_cung","t":"Sinh ba lần, sau nuôi được hai con, có con nuôi."},{"c":"Tử Tức","s":["Khốc","Hư"],"p":"dong_cung","t":"Khó nuôi con, con xung khắc với cha mẹ."},{"c":"Tử Tức","s":["Song Hao"],"p":"dong_cung","t":"Sinh nhiều nuôi ít, con hay chơi bời, phá tán và không ở gần cha mẹ lâu."},{"c":"Tử Tức","s":["Thiên Riêu"],"p":"dong_cung","t":"Con chơi bời."},{"c":"Tử Tức","s":["Thiên Hình"],"p":"dong_cung","t":"Muộn con, tất bị tuyệt tự. May mắn lắm mới có được một con thì cũng phải mang tật bệnh, cùng khổ.","d":"Hình gặp thêm nhiều sao mờ ám xấu xa hội hợp"},{"c":"Tử Tức","s":["Đào Hoa"],"p":"dong_cung","t":"Con dâm đãng."},{"c":"Tử Tức","s":["Hồng Loan"],"p":"dong_cung","t":"Con khéo tay."},{"c":"Tử Tức","s":["Tuần","Triệt"],"p":"dong_cung","t":"Rất khó nuôi con đầu lòng, sau này con cái hay xung khắc với cha mẹ và không thể chung sống cùng một nhà được. Số con giảm một nửa.","d":"Nhiều sao sáng sủa tốt đẹp"},{"c":"Tử Tức","s":["Tuần","Triệt"],"p":"dong_cung","t":"Rất khó nuôi con đầu lòng, sau này con cái hay xung khắc với cha mẹ và không thể chung sống cùng một nhà được. Số con tăng thêm.","d":"Nhiều sao mờ ám xấu xa"},{"c":"Tử Tức","s":["Nhật","Nguyệt","Thai"],"p":"dong_cung","t":"Con sinh đôi."},{"c":"Tử Tức","s":["Nguyệt","Đồng","Tuế"],"p":"dong_cung","t":"Có con là thần nhân giáng thế.","d":"Tại Tý"},{"c":"Tử Tức","s":["Nguyệt","Hỏa","Thai"],"p":"dong_cung","t":"Có con cầu tự."},{"c":"Tử Tức","s":["Sát","Hình","Hổ"],"p":"dong_cung","t":"Tuyệt tự."},{"c":"Tử Tức","s":["Sát","Thai"],"p":"dong_cung","t":"Hay bị sẩy thai."},{"c":"Tử Tức","s":["Kình","Đà","Không","Kiếp"],"p":"dong_cung","t":"Hiếm con, thường sinh con ngẩn ngơ."},{"c":"Tử Tức","s":["Lương","Khốc","Tuế"],"p":"dong_cung","t":"Con hiển đạt."},{"c":"Tử Tức","s":["Tả","Hữu","Thai"],"p":"dong_cung","t":"Con dị bào rất khá giả và hiếu thảo."},{"c":"Tử Tức","s":["Khốc","Hư","Dưỡng"],"p":"dong_cung","t":"Sinh nhiều nuôi ít."},{"c":"Tử Tức","s":["Hổ","Tang","Không","Kiếp"],"p":"dong_cung","t":"Ít nhất phải ba hay bốn lần hữu sinh vô dưỡng, rồi về sau mới nuôi con dễ dàng."},{"c":"Tử Tức","s":["Hổ","Thai"],"p":"dong_cung","t":"Đàn bà hay sẩy thai."},{"c":"Tử Tức","s":["Hổ","Kình","Sát"],"p":"dong_cung","t":"Không có con."},{"c":"Tử Tức","s":["Tướng","Binh","Thai"],"p":"dong_cung","t":"Vợ chồng có con trước khi lấy nhau, đôi khi đi lại với nhau trước khi cưới, có thể là hoặc vợ hoặc chồng có con riêng trước khi thành gia thất."},{"c":"Tử Tức","s":["Hỷ Thần","Dưỡng"],"p":"dong_cung","t":"Có con thần đồng."},{"c":"Tử Tức","s":["Đào","Tử","Phủ"],"p":"dong_cung","t":"Con gái dùng nhan sắc để tiến thân, vinh hiến hơn con trai."},{"c":"Tử Tức","s":["Đào","Hồng","Xương","Khúc"],"p":"dong_cung","t":"Con gái dâm đãng, nguyệt hoa, bừa bãi."},{"c":"Tử Tức","s":["Đào","Thai"],"p":"dong_cung","t":"Hiếm con."},{"c":"Vận Hạn","s":["Linh Tinh","Thiên Riêu"],"p":"tam_hop","t":"Khó nuôi con, đàn bà có mang dễ bị trụy thai, đàn ông dễ gặp ngục tù."},{"c":"Vận Hạn","s":["Thái Âm","Văn Khúc","Văn Xương"],"p":"tam_hop","t":"Rất khá giả, tài lộc dồi dào.","d":"Mệnh an tại Hợi"},{"c":"Vận Hạn","s":["Thái Âm","Hồng Loan","Thiên Riêu"],"p":"tam_hop","t":"Xuân tình phát động, khó kiềm lòng trước sự cám dỗ của sắc dục.","d":"Mệnh an tại Hợi"},{"c":"Vận Hạn","s":["Thiên Tướng","Hồng Loan","Đào Hoa"],"p":"tam_hop","t":"Người vũ dũng, mặt đẹp như hoa nhưng dễ lẩn quẩn trong vòng tình ái.","d":"Mệnh an tại Mão"},{"c":"Vận Hạn","s":["Vũ Khúc","Tham Lang"],"p":"tam_hop","t":"Người có tài nhưng không đức hạnh, dễ gặp tai họa.","d":"Tuổi Mậu, Canh, Âm nữ, Mệnh an tại Thìn hay Tuất"},{"c":"Vận Hạn","s":["Sát","Kình Dương","Đà La"],"p":"tam_hop","t":"Dễ mắc phải những tai họa khủng khiếp.","d":"Mệnh, Thân có Sát tọa thủ"},{"c":"Vận Hạn","s":["Sát","Thiên Hình","Linh Tinh"],"p":"tam_hop","t":"Khó tránh được tù tội.","d":"Mệnh có Sát hay Hình, Linh tọa thủ"},{"c":"Vận Hạn","s":["Phá Quân","Hỏa Tinh","Thiên Việt"],"p":"tam_hop","t":"Giỏi về máy móc nhưng dễ gặp tai nạn què gãy chân tay.","d":"Tuổi Tân, Đinh, Mệnh an tại Dần, Thân"},{"c":"Vận Hạn","s":["Liêm Trinh","Thiên Tướng","Tham Lang"],"p":"tam_hop","t":"Bị chết chém một cách thê thảm.","d":"Mệnh an tại Tý, Ngọ"},{"c":"Vận Hạn","s":["Liêm Trinh","Sát"],"p":"tam_hop","t":"Hoạnh phát công danh và tài lộc.","d":"Tuổi Ất, Kỷ, Âm nam, Mệnh an tại Sửu, Mùi"},{"c":"Vận Hạn","s":["Hồng Loan","Đào Hoa"],"p":"dong_cung","t":"Thành gia thất, lấy vợ lấy chồng."},{"c":"Vận Hạn","s":["Thiên Lương","Kỵ"],"p":"dong_cung","t":"Vật bằng gỗ, đá rơi xuống người gây thương tích."},{"c":"Vận Hạn","s":["Thiên Riêu","Kỵ"],"p":"dong_cung","t":"Tai nạn về sông nước, mắc khẩu thiệt, hay kiện tụng."},{"c":"Vận Hạn","s":["Địa Không","Địa Kiếp"],"p":"dong_cung","t":"Mọi sự đều bế tắc, hao tổn tiền tài, nếu có công danh tất bị truất giáng."},{"c":"Vận Hạn","s":["Bạch Hổ"],"p":"dong_cung","t":"Súc vật hay ác thú cắn đá, nếu không, tất mắc tai nạn xe cộ.","d":"Tham nhập Hạn tại Dần, Tuất"},{"c":"Vận Hạn","s":["Cự Môn"],"p":"dong_cung","t":"Mưu sự được toại lòng, hoạnh phát danh tài, nói được nhiều người nghe theo."},{"c":"Vận Hạn","s":["Cự Môn"],"p":"dong_cung","t":"Hay phiền lòng, mắc khẩu thiệt, thị phi, kiện cáo, hao tán tiền tài.","d":"Cự nhập Hạn tại Tứ Mộ"},{"c":"Vận Hạn","s":["Thiên Tướng"],"p":"dong_cung","t":"Mưu sự được toại lòng, danh tài hưng vượng, thường có hoạnh tài."},{"c":"Vận Hạn","s":["Thiên Tướng"],"p":"dong_cung","t":"Hay mắc kiện cáo, đau ốm và mắc lừa."},{"c":"Vận Hạn","s":["Địa Không","Địa Kiếp"],"p":"dong_cung","t":"Rắc rối trong công việc, thường bị tiểu nhân ghen ghét, ám hại."},{"c":"Vận Hạn","s":["Thiên Khôi","Thiên Hình"],"p":"dong_cung","t":"Tai nạn về đao thương, đầu mặt bị hư hại."},{"c":"Vận Hạn","s":["Tuần","Triệt"],"p":"dong_cung","t":"Đau ốm, tiểu nhân mưu hại, mắc tai nạn xe cộ hay đao thương.","d":"cung nhập hạn vào cung Thiên Di"},{"c":"Vận Hạn","s":["Thiên Lương"],"p":"dong_cung","t":"Danh tài hưng vượng hay gặp vui mừng, nếu đau ốm cũng chóng qua khỏi."},{"c":"Vận Hạn","s":["Thiên Lương"],"p":"dong_cung","t":"Tiền tài hao tán, sức khỏe bị suy kém, chắc chắn là phải đi xa hay thay đổi công việc.","d":"Lương nhập Hạn tại Tý, Hợi"},{"c":"Vận Hạn","s":["Thất Sát"],"p":"dong_cung","t":"Trong nhà có hòa khí, danh tài hưng vượng, mưu sự tất thành một cách nhanh chóng.","d":"Sát nhập Hạn tại Dần, Thân"},{"c":"Vận Hạn","s":["Thất Sát"],"p":"dong_cung","t":"Hay gặp những chuyện buồn bực, đau ốm, thường có tang, làm việc thất bại.","d":"Sát nhập Hạn tại Thìn, Tuất"},{"c":"Vận Hạn","s":["Liêm Trinh","Tham Lang","Phượng Các"],"p":"dong_cung","t":"Bị trách oán."},{"c":"Vận Hạn","s":["Phá Quân","Thiên Hình"],"p":"dong_cung","t":"Tù tội."},{"c":"Vận Hạn","s":["Phá Quân","Hao","Mộc Dục","Kỵ"],"p":"dong_cung","t":"Mắc chứng ung thư hay có mụn nhọt phải mổ xẻ, châm chích."},{"c":"Vận Hạn","s":["Kình Dương","Phục Binh","Địa Không","Hao","Hỏa Tinh","Linh Tinh","Kỵ","Địa Kiếp"],"p":"dong_cung","t":"Tính mạng lâm nguy, khó mà tránh thoát được những tai họa khủng khiếp."},{"c":"Vận Hạn","s":["Hao"],"p":"dong_cung","t":"Đau ốm nặng, có tang."},{"c":"Vận Hạn","s":["Kỵ"],"p":"dong_cung","t":"Thân thể bị đau đớn, hay mang tiếng nhục nhã."},{"c":"Vận Hạn","s":["Phá Quân"],"p":"dong_cung","t":"Tài lộc dồi dào, công danh hiến đạt, tài quan song mỹ, phú quý đến cực độ."},{"c":"Vận Hạn","s":["Phá Quân"],"p":"dong_cung","t":"Đau ốm nặng, thường mắc tội tù, có tang, nếu có quan chức tất bị bãi truất."},{"c":"Vận Hạn","s":["Liêm Trinh","Hỏa Tinh"],"p":"dong_cung","t":"Hao tán, mắc tù tội."},{"c":"Vận Hạn","s":["Thiên Hình"],"p":"dong_cung","t":"Đòn đánh, ẩu đả, nếu không cũng mắc tù tội."},{"c":"Vận Hạn","s":["Thiên Hình","Linh Tinh","Hỏa Tinh","Thiên Việt"],"p":"dong_cung","t":"Điện giật hay sét đánh, tai nạn về đao thương hay súng đạn."},{"c":"Vận Hạn","s":["Phượng Các"],"p":"dong_cung","t":"Bị trách oán."},{"c":"Vận Hạn","s":["Quả Tú"],"p":"dong_cung","t":"Tai nạn dọc đường."},{"c":"Vận Hạn","s":["Phục Binh","Thiên Tướng","Thiên Riêu","Thai"],"p":"dong_cung","t":"Đàn ông rắc rối tơ duyên, đàn bà mắc lừa vì tình."},{"c":"Vận Hạn","s":["Kình Dương"],"p":"dong_cung","t":"Khó tránh được tai họa."},{"c":"Vận Hạn","s":["Văn Xương","Vũ Khúc","La Võng"],"p":"dong_cung","t":"Chết đuối hay mắc tù tội."},{"c":"Vận Hạn","s":["Thiên Việt"],"p":"dong_cung","t":"Sét đánh."},{"c":"Vận Hạn","s":["Địa Không","Địa Kiếp"],"p":"dong_cung","t":"Mưu sự tất thành một cách nhanh chóng, hoạnh phát danh tài nhưng hay đau yếu."},{"c":"Vận Hạn","s":["Địa Không","Địa Kiếp"],"p":"dong_cung","t":"Đau yếu, mắc lừa mất của, nếu có quan chức tất bị truất giáng."},{"c":"Vận Hạn","s":["Tham Lang"],"p":"dong_cung","t":"Mọi sự đều bế tắc, hao tán tiền tài."},{"c":"Vận Hạn","s":["Tử Vi","Thiên Phủ","Thiên Khôi","Thiên Việt"],"p":"dong_cung","t":"Mắc lừa, mất của."},{"c":"Vận Hạn","s":["Tả Phù","Hữu Bật"],"p":"dong_cung","t":"Đi lừa người khác."},{"c":"Vận Hạn","s":["Hóa Quyền"],"p":"dong_cung","t":"Công danh trắc trở, thường bị người xung quanh nói xấu hay gièm pha."},{"c":"Vận Hạn","s":["Lộc Tồn"],"p":"dong_cung","t":"Mọi sự hành thông, danh tài hưng vượng."},{"c":"Vận Hạn","s":["Hóa Khoa","Hóa Quyền","Tả Phù","Hữu Bật"],"p":"dong_cung","t":"Hoạnh phát danh tài phú quý đến cực độ."},{"c":"Vận Hạn","s":["Hóa Lộc"],"p":"dong_cung","t":"Đại phát tài, nếu cùng Lộc Tồn nhập Hạn đồng cung sự tốt đẹp tất bị chiết giảm.","d":"Hóa Lộc chiếu"},{"c":"Vận Hạn","s":["Thiên Mã"],"p":"dong_cung","t":"Mưu sự được toại lòng, danh tài hưng vượng, nếu đi xa buôn bán chắc chắn là buôn một bán mười."},{"c":"Vận Hạn","s":["Địa Không","Địa Kiếp"],"p":"dong_cung","t":"Tính mạng lâm nguy, nếu gốc đại hạn mười năm cũng xấu xa mờ ám phải quyết đoán là chết hay mắc tù tội."},{"c":"Vận Hạn","s":["Tả Phù","Hữu Bật"],"p":"dong_cung","t":"Mọi sự hành thông, hoạnh phát danh tài, hay gặp quý nhân phù trợ.","d":"Tả Hữu nhập Hạn tại Tứ Mộ"},{"c":"Vận Hạn","s":["Tả Phù","Hữu Bật"],"p":"dong_cung","t":"Nhân ly, tài tán, đau yếu, buồn phiền, ra ngoài bị nhiều người khinh bỉ.","d":"Nhiều sao mờ ám xấu xa"},{"c":"Vận Hạn","s":["Hóa Khoa","Hóa Quyền","Hóa Lộc"],"p":"dong_cung","t":"Quan chức cao thăng, được lui tới gần bậc nguyên thủ, tài lộc phong túc."},{"c":"Vận Hạn","s":["Văn Xương","Văn Khúc"],"p":"dong_cung","t":"Mưu sự được toại lòng, nếu đi thì tất đỗ cao, tài quan song mỹ.","d":"Khúc và Vũ nhập Hạn đồng cung"},{"c":"Vận Hạn","s":["Văn Xương","Văn Khúc"],"p":"dong_cung","t":"Sức khỏe suy kém, hao tán tiền tài, phiền lòng về việc giấy tờ nhầm lẫn.","d":"Nhiều sao mờ ám xấu xa"},{"c":"Vận Hạn","s":["Thiên Đồng","Tả Phù","Hữu Bật"],"p":"dong_cung","t":"Tài lộc dồi dào, cầu danh được toại lòng."},{"c":"Vận Hạn","s":["Liêm Trinh","Kình Dương","Đà La"],"p":"dong_cung","t":"Mắc tai nạn khủng khiếp, nếu không cũng không thoát được tù tội.","d":"Nhiều sao mờ ám xấu xa"},{"c":"Vận Hạn","s":["Kỵ"],"p":"dong_cung","t":"Công danh trắc trở, đau yếu, có tang.","d":"Nhiều sao mờ ám xấu xa"},{"c":"Vận Hạn","s":["Mộc Dục"],"p":"dong_cung","t":"Phiền lòng vì giấy tờ nhầm lẫn.","d":"Nhiều sao mờ ám xấu xa"},{"c":"Vận Hạn","s":["Thiên Khốc"],"p":"dong_cung","t":"Hoạnh phát danh tài, phú quý đến cực độ, nếu có tranh chấp với ai cũng thắng lợi."},{"c":"Vận Hạn","s":["Thiên Hình"],"p":"dong_cung","t":"Có thương tích ở đầu, hoặc bị đánh đập, hoặc mắc tai nạn về đao thương."},{"c":"Vận Hạn","s":["Tuần","Triệt"],"p":"dong_cung","t":"Mắc tai nạn khủng khiếp, đầu bị thương rất nặng, nếu có quan chức tất bị bãi truất."},{"c":"Vận Hạn","s":["Thiên Việt"],"p":"dong_cung","t":"Hoạnh phát danh tài, có tiếng tăm lừng lẫy."},{"c":"Vận Hạn","s":["Thiên Hình","Linh Tinh"],"p":"dong_cung","t":"Bị sét đánh hay điện giật."},{"c":"Vận Hạn","s":["Hóa Lộc"],"p":"dong_cung","t":"Giải trừ tai họa, tài lộc phong túc, nếu có ốm đau cũng chóng qua khỏi.","d":"Hóa Lộc nhập Hạn cần gặp Lộc Tồn chiếu"},{"c":"Vận Hạn","s":["Tham Lang","Vũ Khúc"],"p":"dong_cung","t":"Mọi sự hành thông, danh tài hưng vượng, nếu kinh doanh lại càng phát đạt."},{"c":"Vận Hạn","s":["Hóa Quyền"],"p":"dong_cung","t":"Thân thể khỏe mạnh, hoạnh phát danh tài, có uy quyền hiển hách.","d":"Nhiều sao sáng sủa tốt đẹp"},{"c":"Vận Hạn","s":["Hóa Quyền"],"p":"dong_cung","t":"Tai họa liên miên, nếu ốm đau lại thêm phần trầm trọng, công danh trắc trở.","d":"Nhiều sao mờ ám xấu xa"},{"c":"Vận Hạn","s":["Tham Lang","Vũ Khúc"],"p":"dong_cung","t":"Mưu sự được toại lòng, danh tài hưng vượng, có uy quyền hiển hách.","d":"Nhiều sao sáng sủa tốt đẹp"},{"c":"Vận Hạn","s":["Tuần","Triệt"],"p":"dong_cung","t":"Công danh trắc trở, thường bị tiểu nhân gièm pha hay nói xấu."},{"c":"Vận Hạn","s":["Hóa Khoa"],"p":"dong_cung","t":"Giải trừ tai họa, mọi sự hành thông, đang đau yếu hay mắc tai nạn, gặp Hạn có Khoa chắc chắn là qua khỏi được."},{"c":"Vận Hạn","s":["Thiên Khôi","Thiên Việt","Văn Xương","Văn Khúc"],"p":"dong_cung","t":"Nếu đi thi tất đỗ cao, nếu có quan chức tất được cao thăng, mưu sự được toại lòng."},{"c":"Vận Hạn","s":["Hóa Kỵ"],"p":"dong_cung","t":"Mưu sự được toại lòng, danh tài hưng vượng, nhưng kém sức khỏe và hay mắc thi phi.","d":"Nhật, Nguyệt sáng sủa tốt đẹp hội hợp"},{"c":"Vận Hạn","s":["Hóa Kỵ"],"p":"dong_cung","t":"Đau yếu liên miên, có tang thương, mất của, mắc thị phi, kiện cáo.","d":"Nhiều sao mờ ám xấu xa"},{"c":"Vận Hạn","s":["Phá Quân","Kình Dương"],"p":"dong_cung","t":"Đánh nhau lớn, bị thương nặng."},{"c":"Vận Hạn","s":["Đà La","Bạch Hổ"],"p":"dong_cung","t":"Mắc tai nạn khủng khiếp về xe cộ hay đao thương.","d":"Nhiều sao mờ ám xấu xa"},{"c":"Vận Hạn","s":["Kình Dương","Đà La"],"p":"dong_cung","t":"Đau yếu, mắc thị phi, kiện cáo, có tang.","d":"Nhiều sao mờ ám xấu xa"},{"c":"Vận Hạn","s":["Địa Không","Địa Kiếp"],"p":"dong_cung","t":"Tai nạn liên miên, mất của, nếu có quan chức tất bị bãi truất vì ăn hối lộ.","d":"Nhiều sao mờ ám xấu xa"},{"c":"Vận Hạn","s":["Thiên Hình","Địa Kiếp"],"p":"dong_cung","t":"Mắc tai nạn về đao thương hay bị mổ xẻ.","d":"Nhiều sao mờ ám xấu xa"},{"c":"Vận Hạn","s":["Hồng Loan","Đào Hoa"],"p":"dong_cung","t":"Đàn bà con gái gặp hạn này dễ gặp rắc rối về tình duyên, khó giữ toàn danh tiết.","d":"đàn bà con gái gặp Hạn này"},{"c":"Vận Hạn","s":["Song Hao"],"p":"dong_cung","t":"Có thể thay đổi chỗ ở hay công việc, hoặc phải xa nhà."},{"c":"Vận Hạn","s":["Song Hao"],"p":"dong_cung","t":"Dễ kiếm tiền, danh tài phát triển.","d":"Sáng sủa tốt đẹp"},{"c":"Vận Hạn","s":["Song Hao"],"p":"dong_cung","t":"Mất tiền của, buôn bán thua lỗ, hay bị mất trộm.","d":"Mờ ám xấu xa"},{"c":"Vận Hạn","s":["Song Hao"],"p":"tam_hop","t":"Có thể chết trong lao tù nếu gặp nhiều sao xấu.","d":"Gốc đại hạn mười năm có Song Hao hội hợp"},{"c":"Vận Hạn","s":["Tang Môn"],"p":"dong_cung","t":"Có tang, nếu không cũng đau yếu hoặc mất của."},{"c":"Vận Hạn","s":["Tang Môn","Phá Quân","Kỵ"],"p":"dong_cung","t":"Làm ơn nhưng lại bị oán trách.","d":"nhập Hạn tại cung Nô"},{"c":"Vận Hạn","s":["Bạch Hổ"],"p":"dong_cung","t":"Có tang, mất của, đau yếu."},{"c":"Vận Hạn","s":["Bạch Hổ","Tham Lang"],"p":"dong_cung","t":"Mắc tai nạn xe cộ hoặc bị ác thú cắn.","d":"nhập Hạn tại cung Dần, Tuất"},{"c":"Vận Hạn","s":["Thiên Khốc"],"p":"dong_cung","t":"Đau yếu, buồn phiền, mưu sự trước khó sau dễ dàng."},{"c":"Vận Hạn","s":["Thiên Hư"],"p":"dong_cung","t":"Buồn bực, kém sức khỏe, hay đau răng."},{"c":"Vận Hạn","s":["Long Trì","Phượng Các"],"p":"dong_cung","t":"Trong nhà có việc vui mừng."},{"c":"Vận Hạn","s":["Đào Hoa"],"p":"dong_cung","t":"Mọi sự hành thông, danh tài hưng vượng, hỉ khí đầy nhà.","d":"Nhiều sao sáng sủa tốt đẹp"},{"c":"Vận Hạn","s":["Hồng Loan"],"p":"dong_cung","t":"Mọi sự hành thông, thăng quan tiến chức, hỉ khí đầy nhà.","d":"Nhiều sao sáng sủa tốt đẹp"},{"c":"Điền Trạch","s":["Tử Vi","Thiên Phủ"],"p":"dong_cung","t":"Rất nhiều nhà đất, cơ nghiệp ngày càng thịnh vượng.","d":"Đơn thủ tại Ngọ"},{"c":"Điền Trạch","s":["Tử Vi","Thiên Tướng"],"p":"dong_cung","t":"Rất nhiều nhà đất, cơ nghiệp ngày càng thịnh vượng.","d":"Đơn thủ tại Ngọ"},{"c":"Điền Trạch","s":["Tử Vi","Thất Sát"],"p":"dong_cung","t":"Cơ nghiệp của tổ tiên để lại rất vĩ đại nhưng không giữ gìn được."},{"c":"Điền Trạch","s":["Tử Vi","Phá Quân"],"p":"dong_cung","t":"Phá tán tổ nghiệp, hay lìa bỏ tổ nghiệp. Về sau tạo lập ở nơi xa mà bền vững."},{"c":"Điền Trạch","s":["Tử Vi","Tham Lang"],"p":"dong_cung","t":"Không gìn giữ được tổ nghiệp, về sau sa sút."},{"c":"Điền Trạch","s":["Liêm Trinh","Thiên Phủ"],"p":"dong_cung","t":"Được hưởng của tổ nghiệp để lại, nhưng cơ nghiệp càng về sau càng sa sút."},{"c":"Điền Trạch","s":["Liêm Trinh","Thiên Tướng"],"p":"dong_cung","t":"Nhà đất trước ít sau nhiều."},{"c":"Điền Trạch","s":["Liêm Trinh","Thất Sát"],"p":"dong_cung","t":"Tự tay lập nghiệp. Thành bại thất thường. Buổi đầu rất vất vả."},{"c":"Điền Trạch","s":["Liêm Trinh","Phá Quân"],"p":"dong_cung","t":"Lập nghiệp ở buổi đầu hay bị thất bại, phá tán. Về sau mới được bền vững."},{"c":"Điền Trạch","s":["Liêm Trinh","Tham Lang"],"p":"dong_cung","t":"Nhà đất của tổ nghiệp để lại khá nhiều, nhưng không được thừa hưởng."},{"c":"Điền Trạch","s":["Tuần","Triệt"],"p":"dong_cung","t":"Không có nhà đất của nghiệp để lại, tự tay gây dựng cơ nghiệp nhưng thành bại thất thường."},{"c":"Điền Trạch","s":["Nhật","Hổ"],"p":"dong_cung","t":"Trong nhà có chó đá."},{"c":"Điền Trạch","s":["Nhật","Hổ","Long Trì"],"p":"dong_cung","t":"Chó đá ở dưới ao."},{"c":"Điền Trạch","s":["Nhật","Thanh Long","Long Trì"],"p":"dong_cung","t":"Trong nhà có ao giếng, ở đó có người chết đuối.","d":"Nhật mờ ám"},{"c":"Điền Trạch","s":["Cự","Hỏa"],"p":"dong_cung","t":"Nhà hay bị cháy."},{"c":"Điền Trạch","s":["Cự","Tang"],"p":"dong_cung","t":"Nhà cửa cao ráo rộng rãi, nhưng hay có lửa."},{"c":"Điền Trạch","s":["Cơ","Nguyệt"],"p":"dong_cung","t":"Dưới gốc cây trong vườn có hòn đá lâu ngày thành tinh."},{"c":"Điền Trạch","s":["Cơ","Nguyệt","Đà","Kỵ"],"p":"dong_cung","t":"Yêu tinh rất quái gở, hay trêu tròng làm cho người trong nhà đau mắt hay đau bụng."},{"c":"Điền Trạch","s":["Cơ","Nguyệt"],"p":"dong_cung","t":"Gần nhà có kẻ ăn trộm của đình chùa, nên bị thần thánh quở phạt.","d":"Cung Điền Trạch an tại Thân"},{"c":"Điền Trạch","s":["Cơ","Hỏa"],"p":"dong_cung","t":"Nhà cháy, lụn bại."},{"c":"Điền Trạch","s":["Cơ","Hình"],"p":"dong_cung","t":"Chỗ ở xưa kia có nhiều cây cối, sau bị chặt hết."},{"c":"Điền Trạch","s":["Cơ","Hỏa","Linh","Hình","Việt"],"p":"dong_cung","t":"Cây trong vườn bị sét đánh."},{"c":"Điền Trạch","s":["Cơ","Hổ"],"p":"dong_cung","t":"Trong nhà có chó đá."},{"c":"Điền Trạch","s":["Cơ","Hổ","Kình","Đà"],"p":"dong_cung","t":"Chó đá thành tinh."},{"c":"Điền Trạch","s":["Lộc Tồn","Tử"],"p":"dong_cung","t":"Nhà có của chôn, hay đào được của."},{"c":"Điền Trạch","s":["Hỏa","Linh","Riêu","Hỉ"],"p":"dong_cung","t":"Trong nhà rất nhiều ma."},{"c":"Điền Trạch","s":["Hỏa","Linh","Tướng","Binh"],"p":"dong_cung","t":"Quân gian phóng hỏa đốt nhà."},{"c":"Điền Trạch","s":["Hỏa","Tang"],"p":"dong_cung","t":"Cháy nhà."},{"c":"Điền Trạch","s":["Không","Kiếp","Tướng","Binh","Tả","Hữu"],"p":"dong_cung","t":"Trộm cướp lẻn vào trong nhà, thường có nội công từ trước."},{"c":"Điền Trạch","s":["Không","Kiếp","Tướng","Binh","Kình","Đà"],"p":"dong_cung","t":"Giặc cướp phá nhà lấy của."},{"c":"Điền Trạch","s":["Thanh Long","Long Trì"],"p":"dong_cung","t":"Trong nhà có ao giếng. Trên bờ cỏ nhiều cây cối mọc rậm rạp."},{"c":"Điền Trạch","s":["Long","Không","Kiếp"],"p":"dong_cung","t":"Ao giếng lâu ngày bị bồi lấp."},{"c":"Điền Trạch","s":["Khốc","Hư"],"p":"dong_cung","t":"Trong nhà có ma mộc."},{"c":"Điền Trạch","s":["Khốc","Hư","Hỏa","Linh"],"p":"dong_cung","t":"Con ma rất quái ác."},{"c":"Điền Trạch","s":["Nhật","Nguyệt"],"p":"xung_chieu","t":"Rất nhiều nhà đất, chỗ ở rất cao đẹp.","d":"Nhật Nguyệt cùng sáng sủa"},{"c":"Huynh Đệ","s":["Thái Âm","Tham Lang","Cự Môn","Liêm Trinh","Vũ Khúc","Phá Quân"],"p":"dong_cung","t":"Cung Huynh Đệ có các sao Bắc Đẩu tinh, chị em gái nhiều hơn anh em trai.","d":"Cung Huynh Đệ có Chính diệu Bắc Đẩu tinh tọa thủ"},{"c":"Huynh Đệ","s":["Khoa","Quyền","Lộc"],"p":"dong_cung","t":"Anh chị em giàu có, quý hiển và thông minh, học giỏi."},{"c":"Huynh Đệ","s":["Hóa Kỵ"],"p":"dong_cung","t":"Anh chị em bất hòa, xa cách nhau."},{"c":"Huynh Đệ","s":["Song Hao"],"p":"dong_cung","t":"Chiết giảm số anh chị em, trong gia đình thiếu hòa khí."},{"c":"Huynh Đệ","s":["Thiên Mã"],"p":"dong_cung","t":"Anh chị em khá giả, nhưng không ở gần nhau."},{"c":"Huynh Đệ","s":["Tràng Sinh"],"p":"dong_cung","t":"Thêm tám người anh chị em."},{"c":"Huynh Đệ","s":["Đế Vượng"],"p":"dong_cung","t":"Thêm năm người anh chị em."},{"c":"Huynh Đệ","s":["Quan Đới","Lâm Quan"],"p":"dong_cung","t":"Thêm ba hay bốn người anh chị em."},{"c":"Huynh Đệ","s":["Suy"],"p":"dong_cung","t":"Thêm ba người anh chị em."},{"c":"Huynh Đệ","s":["Bệnh","Thai"],"p":"dong_cung","t":"Thêm một người anh chị em."},{"c":"Huynh Đệ","s":["Dưỡng"],"p":"dong_cung","t":"Thêm hai người anh chị em, có em nuôi."},{"c":"Huynh Đệ","s":["Tử"],"p":"dong_cung","t":"Anh chị em bất hòa."},{"c":"Huynh Đệ","s":["Tuyệt"],"p":"dong_cung","t":"Trong số anh chị em có người bị mù lòa hay mang tật."},{"c":"Huynh Đệ","s":["Tuần","Triệt"],"p":"dong_cung","t":"Anh cả hay chị cả chết non, nếu không cũng cùng khổ cô đơn, phải làm ăn ở phương xa."},{"c":"Huynh Đệ","s":["Tử Vi","Tả Phù","Hữu Bật"],"p":"dong_cung","t":"Anh chị em khá giả, thuận hòa, nhưng có người trắc trở về hôn phối."},{"c":"Huynh Đệ","s":["Tử Vi","Tang Môn","Tả Phù","Hữu Bật"],"p":"dong_cung","t":"Anh chị em khá giả nhưng bất hòa, có người bỏ vợ hay bỏ chồng."},{"c":"Huynh Đệ","s":["Thái Dương","Thái Âm","Thai"],"p":"dong_cung","t":"Có anh chị em sinh đôi.","d":"Tử Tức có Thai tọa thủ và có Nhật Nguyệt giáp"},{"c":"Huynh Đệ","s":["Phá Quân","Thiên Tướng"],"p":"dong_cung","t":"Anh chị em có người không đứng đắn, ưa việc liễu ngõ hoa tường."},{"c":"Huynh Đệ","s":["Phá Quân","Thiên Hình","Địa Không"],"p":"dong_cung","t":"Anh chị em làm hại nhau."},{"c":"Huynh Đệ","s":["Tang Môn","Thiên Mã"],"p":"dong_cung","t":"Gia đình ly tán, anh chị em bất hòa."},{"c":"Huynh Đệ","s":["Tang Môn","Trực Phù","Thái Tuế"],"p":"dong_cung","t":"Anh chị em hay tranh chấp, cãi lộn."},{"c":"Huynh Đệ","s":["Thái Tuế","Văn Xương","Văn Khúc"],"p":"dong_cung","t":"Trong số anh chị em có người rất quý hiển, hoạnh đạt công danh, văn tài lỗi lạc."},{"c":"Phụ Mẫu","s":["Tử Vi"],"p":"dong_cung","t":"Cha mẹ quý hiển, giàu có và sống lâu.","d":"Tử Vi đơn thủ tại Ngọ"},{"c":"Phụ Mẫu","s":["Tử Vi"],"p":"dong_cung","t":"Cha mẹ khá giả.","d":"Tử Vi đơn thủ tại Tý"},{"c":"Phụ Mẫu","s":["Tử Vi","Thiên Phủ"],"p":"dong_cung","t":"Cha mẹ giàu sang. Con được thừa hưởng của cha mẹ để lại rất nhiều.","d":"Tử Vi, Thiên Phủ đồng cung"},{"c":"Phụ Mẫu","s":["Tử Vi","Thiên Tướng"],"p":"dong_cung","t":"Cha mẹ vinh hiển. Gia đình yên vui, phúc lộc dồi dào.","d":"Tử Vi, Thiên Tướng đồng cung"},{"c":"Phụ Mẫu","s":["Tử Vi","Thất Sát"],"p":"dong_cung","t":"Cha mẹ phú quý, nhưng bất hòa. Con không hợp với tính cha mẹ. Gia đình ly tán.","d":"Tử Vi, Thất Sát đồng cung"},{"c":"Phụ Mẫu","s":["Tử Vi","Phá Quân"],"p":"dong_cung","t":"Trong nhà hay có sự bất hòa: cha mẹ khá giả. Nhưng sớm khắc một trong hai thân, hay phải xa cách từ lúc thiếu thời.","d":"Tử Vi, Phá Quân đồng cung"},{"c":"Phụ Mẫu","s":["Tử Vi","Tham Lang"],"p":"dong_cung","t":"Cha mẹ bình thường. Nên làm con nuôi họ khác. Nếu không, tất sớm xa cách một trong hai thân.","d":"Tử Vi, Tham Lang đồng cung"},{"c":"Phụ Mẫu","s":["Địa Không","Địa Kiếp"],"p":"dong_cung","t":"Cha mẹ vất vả, bất hòa, không hợp tính với con."},{"c":"Phụ Mẫu","s":["Văn Xương","Văn Khúc"],"p":"dong_cung","t":"Cha mẹ có danh chức."},{"c":"Phụ Mẫu","s":["Thiên Khôi","Thiên Việt"],"p":"dong_cung","t":"Cha thường là con trưởng hoặc đoạt trưởng có danh chức."},{"c":"Phụ Mẫu","s":["Tả Phù","Hữu Bật"],"p":"dong_cung","t":"Hai thân khá giả, nâng đỡ con, nhưng có thể gặp tai ương nếu có Sát tinh.","d":"Nếu gặp nhiều Sát tinh xâm phạm"},{"c":"Phụ Mẫu","s":["Lộc Tồn"],"p":"dong_cung","t":"Hai thân có của nhưng con phá tán, không hợp tính nhau."},{"c":"Phụ Mẫu","s":["Hóa Lộc"],"p":"dong_cung","t":"Hai thân có của."},{"c":"Phụ Mẫu","s":["Hóa Quyền"],"p":"dong_cung","t":"Hai thân có quyền thế."},{"c":"Phụ Mẫu","s":["Hóa Khoa"],"p":"dong_cung","t":"Hai thân thông minh, nhân hậu, có danh chức."},{"c":"Phụ Mẫu","s":["Hóa Kỵ"],"p":"dong_cung","t":"Hai thân bất hòa, cha mẹ và con không hợp tính nhau."},{"c":"Phụ Mẫu","s":["Thái Dương","Thái Âm"],"p":"dong_cung","t":"Cha mẹ giàu sang.","d":"Đồng cung tại Sửu, Mùi"},{"c":"Phụ Mẫu","s":["Văn Xương","Văn Khúc"],"p":"dong_cung","t":"Cha mẹ giảm thọ.","d":"Đồng cung"},{"c":"Phụ Mẫu","s":["Thiên Mã"],"p":"dong_cung","t":"Hai thân có danh giá nhưng thường xa cách nhau."},{"c":"Phụ Mẫu","s":["Thiên Mã","Lộc Tồn"],"p":"dong_cung","t":"Cha mẹ rất khá giả, nhưng con nên ở xa cha mẹ."},{"c":"Phụ Mẫu","s":["Thiên Mã","Đà La"],"p":"dong_cung","t":"Hai thân bất hòa, thường xung đột, nên ở xa cha mẹ."},{"c":"Phụ Mẫu","s":["Thái Tuế"],"p":"dong_cung","t":"Gia đình ly tán, cha mẹ thường mắc tai họa, kiện cáo.","d":"Gặp nhiều Sát tinh, nhất là Đà, Kỵ"},{"c":"Phụ Mẫu","s":["Cô Thần","Quả Tú"],"p":"dong_cung","t":"Hai thân không hợp tính, nên làm con nuôi họ khác.","d":"Gặp nhiều Sát tinh xâm phạm"},{"c":"Phụ Mẫu","s":["Đào Hoa","Hồng Loan"],"p":"dong_cung","t":"Cha có vợ lẽ, ngoại tình, hoặc mẹ bất chính.","d":"Gặp Vượng, Thái đồng cung"},{"c":"Phụ Mẫu","s":["Tuần","Triệt"],"p":"dong_cung","t":"Sớm khắc một trong hai thân, hoặc phải xa cách, làm con nuôi họ khác."},{"c":"Tài Bạch","s":["Lộc Tồn","Tang Môn","Đà La"],"p":"dong_cung","t":"Được của thừa tự của một người trong họ để lại."},{"c":"Tài Bạch","s":["Lộc Tồn","Thiên Không","Địa Kiếp"],"p":"dong_cung","t":"Tính ích kỷ, biến lận nhưng lại hay bị hao tốn tiền tài rất nhiều."},{"c":"Tài Bạch","s":["Lộc Tồn","Thiên Mã"],"p":"dong_cung","t":"Buôn bán phát tài, đi kiếm tiền, nhất là kinh doanh ở nơi xa."},{"c":"Tài Bạch","s":["Song Hao","Hỏa Tinh"],"p":"dong_cung","t":"Mắc nghiện, nếu không cũng say mê cờ bạc, phá tán rất nhiều tiền của."},{"c":"Tài Bạch","s":["Song Hao","Hồng Loan","Đào Hoa"],"p":"dong_cung","t":"Tốn tiền vì chuyện trai gái, dễ bị lợi dụng tài chính."},{"c":"Tài Bạch","s":["Song Hao","Thiên Không","Địa Kiếp"],"p":"dong_cung","t":"Mất trộm lớn, mất cướp hay bị lừa đảo sạt nghiệp."},{"c":"Tài Bạch","s":["Long Trì","Phượng Các","Mộ"],"p":"dong_cung","t":"Được hưởng của tiền nhân để lại."},{"c":"Tài Bạch","s":["Tuế Phá","Lộc Tồn"],"p":"dong_cung","t":"Buôn bán giỏi, được nhiều người tin cậy.","d":"cung Tài Bạch"},{"c":"Tài Bạch","s":["Tuế Phá","Đà La","Kỵ"],"p":"dong_cung","t":"Hay gặp sự tranh chấp về tiền tài, có mắc thị phú kiện tụng mới kiếm ra tiền."},{"c":"Tài Bạch","s":["Thiên Hình","Thiên Cơ","Tuế Phá"],"p":"dong_cung","t":"Làm thợ khéo, kiếm tiền dễ dàng."},{"c":"Tài Bạch","s":["Thiên Hình","Lực Sĩ"],"p":"dong_cung","t":"Hay đi ăn trộm.","d":"đồng cung"},{"c":"Tài Bạch","s":["Thiên Hình","Tang Môn","Đào Hoa"],"p":"dong_cung","t":"Làm nghề thủ công, rất phát đạt."},{"c":"Tài Bạch","s":["Lưu Hà","Kiếp Sát","Thiên Hình"],"p":"dong_cung","t":"Vì tiền mà mang họa vào thân, thường mất cướp, bị đánh đập rất đau đớn."},{"c":"Tài Bạch","s":["Thiên Không","Địa Kiếp"],"p":"dong_cung","t":"Bần cùng, khốn khổ.","d":"đồng cung"},{"c":"Tài Bạch","s":["Tuần","Triệt"],"p":"dong_cung","t":"Buổi đầu kiếm tiền khó khăn, nhưng về sau dễ dàng, càng về già lại càng sung túc.","d":"cung Tài Bạch vô chính diệu"},{"c":"Tài Bạch","s":["Thái Dương","Thái Âm"],"p":"xung_chieu","t":"Nhật, Nguyệt cùng sáng sủa xung chiếu hay hợp chiến: giàu có lớn.","d":"cung Tài Bạch vô chính diệu"},{"c":"Tật Ách","s":["Tử Vi"],"p":"dong_cung","t":"Cứu giải khá nhiều bệnh tật, tai ương.","d":"Phủ đồng cung, Sát đồng cung, Thiên Phủ, Thiên Lương sáng sủa tốt đẹp"},{"c":"Tật Ách","s":["Hóa Khoa"],"p":"dong_cung","t":"Ảnh hưởng cứu giải khá mạnh mẽ, giảm bớt sự nguy hiểm."},{"c":"Tật Ách","s":["Thiên Giải","Địa Giải","Giải Thần"],"p":"dong_cung","t":"Giải trừ bệnh tật tai ương."},{"c":"Tật Ách","s":["Đế Vượng"],"p":"dong_cung","t":"Ít bệnh tật."},{"c":"Tật Ách","s":["Tràng Sinh"],"p":"dong_cung","t":"Ít bệnh tật, nhưng nếu gặp nhiều sao tác họa sẽ đau yếu lâu khỏi.","d":"Không gặp nhiều sao tác họa hội hợp"},{"c":"Tật Ách","s":["Hóa Quyền"],"p":"dong_cung","t":"Qua khỏi bệnh nạn một cách nhanh chóng bất ngờ.","d":"Nhiều sao cứu giải"},{"c":"Tật Ách","s":["Tuần","Triệt"],"p":"dong_cung","t":"Suốt đời mạnh khỏe, không đáng lo ngại nhiều về bệnh nạn."},{"c":"Tật Ách","s":["Liêm Trinh","Tham Lang"],"p":"dong_cung","t":"Mắt kém, hay mắc tù tội."},{"c":"Tật Ách","s":["Liêm Trinh","Tham Lang","Không","Kiếp"],"p":"dong_cung","t":"Chết một cách thê thảm."},{"c":"Tật Ách","s":["Liêm Trinh","Sát"],"p":"dong_cung","t":"Mắt rất kém, mắc tai nạn xe cộ hay đao thương."},{"c":"Tật Ách","s":["Liêm Trinh","Kỵ"],"p":"dong_cung","t":"Chết bất đắc kỳ tử, hoặc vì mắc tai nạn, hoặc vì ngộ độc.","d":"Tại Dần, Thân"},{"c":"Tật Ách","s":["Thiên Khôi"],"p":"dong_cung","t":"Da mặt vàng, có bệnh thuộc về khí huyết hay bệnh ngoài da.","d":"Thiên Khôi đơn thủ tại Mão, Dậu"},{"c":"Tật Ách","s":["Thiên Khôi","Vũ Khúc"],"p":"dong_cung","t":"Mang tật ở đầu."},{"c":"Tật Ách","s":["Thiên Khôi","Thiên Hình"],"p":"dong_cung","t":"Mang tật ở đầu."},{"c":"Tật Ách","s":["Tuần","Triệt"],"p":"dong_cung","t":"Mắc tai nạn, đầu hay mặt bị thương khá nặng."},{"c":"Thiên Di","s":["Tử Vi","Thiên Phủ"],"p":"dong_cung","t":"Ra ngoài luôn gặp quý nhân phù trợ, mọi sự đều hanh thông, càng xa nhà càng được xứng ý toại lòng.","d":"Đơn thủ tại Ngọ"},{"c":"Thiên Di","s":["Tử Vi"],"p":"dong_cung","t":"Gặp nhiều người giúp đỡ, nhưng không được toàn mỹ như khi ở Ngọ.","d":"Đơn thủ tại Tý"},{"c":"Thiên Di","s":["Tử Vi","Thiên Tướng"],"p":"dong_cung","t":"Được nhiều người kính nể, hay lui tới những chỗ quyền quý. Ra ngoài, được hưởng nhiều tài lộc."},{"c":"Thiên Di","s":["Tử Vi","Phá Quân"],"p":"dong_cung","t":"Ra ngoài nhiều hơn là ở nhà, gặp quý nhân phù trợ, nhưng lúc về già thường nhắm mắt ở xa bản quán."},{"c":"Thiên Di","s":["Tử Vi","Tham Lang"],"p":"dong_cung","t":"Rời khỏi nhà hay gặp những sự phiền lòng, may ít rủi nhiều, thường có kẻ tiểu nhân theo dõi quấy rối."},{"c":"Thiên Di","s":["Liêm Trinh"],"p":"dong_cung","t":"Luôn luôn gặp quý nhân, được nhiều người kính trọng, mọi sự hanh thông.","d":"Đơn thủ tại Dần, Thân"},{"c":"Thiên Di","s":["Liêm Trinh","Thiên Phủ"],"p":"dong_cung","t":"Ra ngoài lợi ích hơn ở nhà, tài lộc dễ kiếm, quý nhân trợ giúp cũng nhiều."},{"c":"Thiên Di","s":["Liêm Trinh","Thiên Tướng"],"p":"dong_cung","t":"Được nhiều người vị nể, hay lui tới những chỗ sang trọng. Vì sẵn có oai phong nên những kẻ tiểu nhân mới trông thấy đã khiếp phục."},{"c":"Thiên Di","s":["Liêm Trinh","Phá Quân"],"p":"dong_cung","t":"Xa nhà không được lợi ích, may ít rủi nhiều, sau này chết ở xa nhà."},{"c":"Thiên Di","s":["Liêm Trinh","Thất Sát"],"p":"dong_cung","t":"Hay gặp tai nạn ở giữa nơi đường xá, không nên lui tới những nơi có nhiều súng ống gươm đao."},{"c":"Thiên Di","s":["Liêm Trinh","Tham Lang"],"p":"dong_cung","t":"Ra ngoài tất bít lợi, hay gặp những tai ương bất kỳ, nhất là về hình ngục hay kiện tụng."},{"c":"Mệnh","s":["Thái Tuế"],"p":"dong_cung","t":"Khí thế mạnh, có xu hướng lãnh đạo và đứng đầu nhưng dễ vướng tranh chấp thị phi.","d":"Thái Tuế thuộc vòng Thái Tuế tọa thủ cung Mệnh"},{"c":"Mệnh","s":["Thiếu Dương"],"p":"dong_cung","t":"Thông minh sáng dạ, học nhanh và dễ được quý mến.","d":"Thiếu Dương thuộc vòng Thái Tuế tọa thủ cung Mệnh"},{"c":"Mệnh","s":["Tang Môn"],"p":"dong_cung","t":"Người sâu sắc nhưng nhiều suy tư, dễ ưu phiền.","d":"Tang Môn thuộc vòng Thái Tuế tọa thủ cung Mệnh"},{"c":"Mệnh","s":["Thiếu Âm"],"p":"dong_cung","t":"Tính hiền hòa, tinh tế, giao tiếp khéo léo.","d":"Thiếu Âm thuộc vòng Thái Tuế tọa thủ cung Mệnh"},{"c":"Mệnh","s":["Quan Phù"],"p":"dong_cung","t":"Có tài tranh luận và biện luận nhưng dễ dính pháp lý hoặc tranh chấp.","d":"Quan Phù thuộc vòng Thái Tuế tọa thủ cung Mệnh"},{"c":"Mệnh","s":["Tử Phù"],"p":"dong_cung","t":"Hay gặp thị phi nhỏ, dễ bị hiểu lầm.","d":"Tử Phù thuộc vòng Thái Tuế tọa thủ cung Mệnh"},{"c":"Mệnh","s":["Tuế Phá"],"p":"dong_cung","t":"Tính phản biện mạnh, thích phá vỡ khuôn mẫu.","d":"Tuế Phá thuộc vòng Thái Tuế tọa thủ cung Mệnh"},{"c":"Mệnh","s":["Long Đức"],"p":"dong_cung","t":"Tâm thiện, hay giúp người, dễ gặp quý nhân.","d":"Long Đức thuộc vòng Thái Tuế tọa thủ cung Mệnh"},{"c":"Mệnh","s":["Bạch Hổ"],"p":"dong_cung","t":"Tính mạnh mẽ quyết liệt nhưng dễ va chạm.","d":"Bạch Hổ thuộc vòng Thái Tuế tọa thủ cung Mệnh"},{"c":"Mệnh","s":["Phúc Đức"],"p":"dong_cung","t":"Có phúc khí, nhân hậu, đời sống ít cực đoan.","d":"Phúc Đức thuộc vòng Thái Tuế tọa thủ cung Mệnh"},{"c":"Mệnh","s":["Điếu Khách"],"p":"dong_cung","t":"Khả năng giao tiếp tốt, dễ nổi tiếng.","d":"Điếu Khách thuộc vòng Thái Tuế tọa thủ cung Mệnh"},{"c":"Mệnh","s":["Trực Phù"],"p":"dong_cung","t":"Người thẳng thắn, chính trực nhưng thiếu linh hoạt.","d":"Trực Phù thuộc vòng Thái Tuế tọa thủ cung Mệnh"},{"c":"Mệnh","s":["Lộc Tồn"],"p":"dong_cung","t":"Có khả năng tích lũy tiền bạc, tài chính ổn định.","d":"Lộc Tồn thuộc vòng Lộc Tồn tọa thủ cung Mệnh"},{"c":"Mệnh","s":["Lực Sĩ"],"p":"dong_cung","t":"Nghị lực mạnh, chịu khó và bền bỉ.","d":"Lực Sĩ thuộc vòng Lộc Tồn tọa thủ cung Mệnh"},{"c":"Mệnh","s":["Thanh Long"],"p":"dong_cung","t":"Dễ gặp cơ hội và may mắn.","d":"Thanh Long thuộc vòng Lộc Tồn tọa thủ cung Mệnh"},{"c":"Mệnh","s":["Tiểu Hao"],"p":"dong_cung","t":"Tiền bạc ra vào thường xuyên.","d":"Tiểu Hao thuộc vòng Lộc Tồn tọa thủ cung Mệnh"},{"c":"Mệnh","s":["Tướng Quân"],"p":"dong_cung","t":"Khí chất lãnh đạo, có uy quyền.","d":"Tướng Quân thuộc vòng Lộc Tồn tọa thủ cung Mệnh"},{"c":"Mệnh","s":["Tràng Sinh"],"p":"dong_cung","t":"Sinh lực mạnh, dễ phát triển.","d":"Tràng Sinh thuộc vòng Tràng Sinh tọa thủ cung Mệnh"},{"c":"Mệnh","s":["Lâm Quan"],"p":"dong_cung","t":"Sự nghiệp mạnh, dễ có địa vị.","d":"Lâm Quan thuộc vòng Tràng Sinh tọa thủ cung Mệnh"},{"c":"Mệnh","s":["Đế Vượng"],"p":"dong_cung","t":"Khí thế cực thịnh, dễ đạt thành công lớn.","d":"Đế Vượng thuộc vòng Tràng Sinh tọa thủ cung Mệnh"},{"c":"Mệnh","s":["Suy"],"p":"dong_cung","t":"Năng lượng giảm, đời sống bình ổn.","d":"Suy thuộc vòng Tràng Sinh tọa thủ cung Mệnh"}];
+
+// Generic matcher: checks if a palace matches a pattern from CACH_CUC_DATA
+// Returns array of tomTat strings to append to out[]
+function matchCachCucData(palace, ls) {
+  if (!palace) return [];
+  const results = [];
+  const DIA_CHI_RX = /(?:Tý|Sửu|Dần|Mão|Thìn|Tỵ|Ngọ|Mùi|Thân|Dậu|Tuất|Hợi)/g;
+  const cungName = palace.cungName;
+
+  // Resolve a JSON star name to engine star names, returns array of candidates
+  function resolveNames(name) {
+    const aliased = CACH_CUC_STAR_ALIAS[name];
+    if (aliased) return aliased;
+    return [name];
+  }
+
+  // Check if palace or a palace list contains at least one of the candidate names
+  function palaceHasAny(p, candidates) {
+    return p && candidates.some(n => p.stars.some(s => s.ten === n));
+  }
+
+  // Check if a star name (possibly aliased) is present in any of the given palaces
+  function hasStarInPalaces(name, palaceList) {
+    const cands = resolveNames(name);
+    return palaceList.some(p => palaceHasAny(p, cands));
+  }
+
+  // Get brightness of first matching star from candidates
+  function getBright(p, name) {
+    const cands = resolveNames(name);
+    for (const cand of cands) {
+      const s = p && p.stars.find(st => st.ten === cand);
+      if (s) return s.brightness || '';
+    }
+    return '';
+  }
+
+  function isSangCondition(palace, sao) {
+    return sao.some(name => {
+      const b = getBright(palace, name);
+      return ['Miếu','Vượng','Đắc'].includes(b);
+    });
+  }
+
+  function isMoAmCondition(palace, sao) {
+    return sao.some(name => getBright(palace, name) === 'Hãm');
+  }
+
+  // Tam phương tứ chính: palace + tamHopCungs + xungChieuCung
+  function getTu(p) {
+    return [p, ...(p.tamHopCungs||[]), p.xungChieuCung].filter(Boolean);
+  }
+
+  for (const pat of CACH_CUC_DATA) {
+    if (pat.c !== cungName) continue;
+
+    const sao = pat.s || [];
+    const pv = pat.p;
+    const dc = pat.d || '';
+
+    let matched = false;
+
+    if (pv === 'dong_cung') {
+      // All sao must be in this palace
+      matched = sao.length > 0 && sao.every(name => hasStarInPalaces(name, [palace]));
+    } else if (pv === 'tam_hop') {
+      // All sao in tam phương tứ chính; Tuần/Triệt only count in dong_cung
+      const tu = getTu(palace);
+      matched = sao.length > 0 && sao.every(name =>
+        (name==='Tuần'||name==='Triệt') ? hasStarInPalaces(name, [palace]) : hasStarInPalaces(name, tu));
+    } else if (pv === 'xung_chieu') {
+      // All sao in palace + xung chiều; Tuần/Triệt only count in dong_cung
+      const allP = [palace, palace.xungChieuCung].filter(Boolean);
+      matched = sao.length > 0 && sao.every(name =>
+        (name==='Tuần'||name==='Triệt') ? hasStarInPalaces(name, [palace]) : hasStarInPalaces(name, allP));
+    }
+
+    if (!matched) continue;
+
+    // Check dieuKien condition
+    if (dc) {
+      let condOk = false;
+      if (/sáng sủa/i.test(dc)) {
+        condOk = isSangCondition(palace, sao);
+      } else if (/mờ ám/i.test(dc)) {
+        condOk = isMoAmCondition(palace, sao);
+      } else if (/Vô Chính Diệu/i.test(dc) || /Vô Chính diệu/i.test(dc)) {
+        condOk = (palace.majorStars || []).length === 0;
+      } else {
+        // Try to extract địa chi condition
+        const dcMatches = dc.match(DIA_CHI_RX);
+        if (dcMatches && (/tại|an tại/i.test(dc))) {
+          condOk = dcMatches.includes(palace.diaChi);
+        } else {
+          // Complex condition we can't evaluate — skip
+          continue;
+        }
+      }
+      if (!condOk) continue;
+    }
+
+    const prefix = pat.s && pat.s.length > 0 ? `[${pat.s.join(', ')}] ` : '';
+    results.push(prefix + pat.t);
+  }
+
+  // Dedup: remove exact duplicates
+  const seen = new Set();
+  return results.filter(t => {
+    if (seen.has(t)) return false;
+    seen.add(t);
+    return true;
+  });
+}
+
+// Van Han patterns — 109 patterns from cach_cuc_all.json
+const CACH_CUC_VH_DATA = [{"s":[],"p":"dong_cung","t":"Kim Mệnh hạn đến cung Tý, Bản Mệnh bị hao tổn, thường mắc tai ương.","d":"Kim Mệnh hạn đến cung Tý, thuộc quẻ Khảm (thuộc Thủy)"},{"s":[],"p":"dong_cung","t":"Mộc Mệnh hạn đến cung Ngọ, Bản Mệnh sáng sủa nhưng không lâu bền, khó tránh tai ương.","d":"Mộc Mệnh hạn đến cung Ngọ, thuộc quẻ Ly (thuộc Hỏa)"},{"s":[],"p":"dong_cung","t":"Thủy Mệnh hạn đến cung Dần, Bản Mệnh bế tắc, mọi việc trắc trở.","d":"Thủy Mệnh hạn đến cung Dần, thuộc quẻ Cấn (thuộc Mộc)"},{"s":[],"p":"dong_cung","t":"Hỏa Mệnh hạn đến cung Dậu, Bản Mệnh nguy khốn, khó tránh tai ương.","d":"Hỏa Mệnh hạn đến cung Dậu, thuộc quẻ Đoài (thuộc Kim)"},{"s":[],"p":"dong_cung","t":"Thổ Mệnh hạn đến cung Mão, Bản Mệnh suy nhược, dễ mắc bệnh nguy hiểm.","d":"Thổ Mệnh hạn đến cung Mão, thuộc quẻ Chấn (thuộc Mộc)"},{"s":["Linh Tinh","Thiên Riêu"],"p":"tam_hop","t":"Khó nuôi con, đàn bà có mang dễ bị trụy thai, đàn ông dễ gặp ngục tù."},{"s":["Văn Khoa","Phượng Các"],"p":"dong_cung","t":"Có thể cứu giải những tai họa do Linh Riêu hội hợp gây ra.","d":"Linh Riêu hội hợp"},{"s":["Thái Âm","Văn Khúc","Văn Xương"],"p":"tam_hop","t":"Rất khá giả, tài lộc dồi dào.","d":"Mệnh an tại Hợi"},{"s":["Thái Âm","Hồng Loan","Thiên Riêu"],"p":"tam_hop","t":"Xuân tình phát động, khó kiềm lòng trước sự cám dỗ của sắc dục.","d":"Mệnh an tại Hợi"},{"s":["Thiên Tướng","Hồng Loan","Đào Hoa"],"p":"tam_hop","t":"Người vũ dũng, mặt đẹp như hoa nhưng dễ lẩn quẩn trong vòng tình ái.","d":"Mệnh an tại Mão"},{"s":["Vũ Khúc","Tham Lang"],"p":"tam_hop","t":"Người có tài nhưng không đức hạnh, dễ gặp tai họa.","d":"Tuổi Mậu, Canh, Âm nữ, Mệnh an tại Thìn hay Tuất"},{"s":["Sát","Kình Dương","Đà La"],"p":"tam_hop","t":"Dễ mắc phải những tai họa khủng khiếp.","d":"Mệnh, Thân có Sát tọa thủ"},{"s":["Sát","Thiên Hình","Linh Tinh"],"p":"tam_hop","t":"Khó tránh được tù tội.","d":"Mệnh có Sát hay Hình, Linh tọa thủ"},{"s":["Phá Quân","Hỏa Tinh","Thiên Việt"],"p":"tam_hop","t":"Giỏi về máy móc nhưng dễ gặp tai nạn què gãy chân tay.","d":"Tuổi Tân, Đinh, Mệnh an tại Dần, Thân"},{"s":["Liêm Trinh","Thiên Tướng","Tham Lang"],"p":"tam_hop","t":"Bị chết chém một cách thê thảm.","d":"Mệnh an tại Tý, Ngọ"},{"s":["Liêm Trinh","Sát"],"p":"tam_hop","t":"Hoạnh phát công danh và tài lộc.","d":"Tuổi Ất, Kỷ, Âm nam, Mệnh an tại Sửu, Mùi"},{"s":["Vũ Khúc","Thiên Lộc","Thiên Mã"],"p":"dong_cung","t":"Có danh chức và tài lộc."},{"s":["Hồng Loan","Đào Hoa"],"p":"dong_cung","t":"Thành gia thất, lấy vợ lấy chồng."},{"s":["Thiên Lương","Kỵ"],"p":"dong_cung","t":"Vật bằng gỗ, đá rơi xuống người gây thương tích."},{"s":["Thiên Riêu","Kỵ"],"p":"dong_cung","t":"Tai nạn về sông nước, mắc khẩu thiệt, hay kiện tụng."},{"s":["Địa Không","Địa Kiếp"],"p":"dong_cung","t":"Mọi sự đều bế tắc, hao tổn tiền tài, nếu có công danh tất bị truất giáng."},{"s":["Bạch Hổ"],"p":"dong_cung","t":"Súc vật hay ác thú cắn đá, nếu không, tất mắc tai nạn xe cộ.","d":"Tham nhập Hạn tại Dần, Tuất"},{"s":["Cự Môn"],"p":"dong_cung","t":"Mưu sự được toại lòng, hoạnh phát danh tài, nói được nhiều người nghe theo."},{"s":["Cự Môn"],"p":"dong_cung","t":"Hay phiền lòng, mắc khẩu thiệt, thị phi, kiện cáo, hao tán tiền tài.","d":"Cự nhập Hạn tại Tứ Mộ"},{"s":["Thiên Tướng"],"p":"dong_cung","t":"Mưu sự được toại lòng, danh tài hưng vượng, thường có hoạnh tài."},{"s":["Thiên Tướng"],"p":"dong_cung","t":"Hay mắc kiện cáo, đau ốm và mắc lừa."},{"s":["Địa Không","Địa Kiếp"],"p":"dong_cung","t":"Rắc rối trong công việc, thường bị tiểu nhân ghen ghét, ám hại."},{"s":["Thiên Khôi","Thiên Hình"],"p":"dong_cung","t":"Tai nạn về đao thương, đầu mặt bị hư hại."},{"s":["Tuần","Triệt"],"p":"dong_cung","t":"Đau ốm, tiểu nhân mưu hại, mắc tai nạn xe cộ hay đao thương.","d":"cung nhập hạn vào cung Thiên Di"},{"s":["Thiên Lương"],"p":"dong_cung","t":"Danh tài hưng vượng hay gặp vui mừng, nếu đau ốm cũng chóng qua khỏi."},{"s":["Thiên Lương"],"p":"dong_cung","t":"Tiền tài hao tán, sức khỏe bị suy kém, chắc chắn là phải đi xa hay thay đổi công việc.","d":"Lương nhập Hạn tại Tý, Hợi"},{"s":["Thất Sát"],"p":"dong_cung","t":"Trong nhà có hòa khí, danh tài hưng vượng, mưu sự tất thành một cách nhanh chóng.","d":"Sát nhập Hạn tại Dần, Thân"},{"s":["Thất Sát"],"p":"dong_cung","t":"Hay gặp những chuyện buồn bực, đau ốm, thường có tang, làm việc thất bại.","d":"Sát nhập Hạn tại Thìn, Tuất"},{"s":["Liêm Trinh","Tham Lang","Phượng Các"],"p":"dong_cung","t":"Bị trách oán."},{"s":["Phá Quân","Thiên Hình"],"p":"dong_cung","t":"Tù tội."},{"s":["Phá Quân","Hao","Mộc Dục","Kỵ"],"p":"dong_cung","t":"Mắc chứng ung thư hay có mụn nhọt phải mổ xẻ, châm chích."},{"s":["Kình Dương","Phục Binh","Địa Không","Hao","Hỏa Tinh","Linh Tinh","Kỵ","Địa Kiếp"],"p":"dong_cung","t":"Tính mạng lâm nguy, khó mà tránh thoát được những tai họa khủng khiếp."},{"s":["Hao"],"p":"dong_cung","t":"Đau ốm nặng, có tang."},{"s":["Kỵ"],"p":"dong_cung","t":"Thân thể bị đau đớn, hay mang tiếng nhục nhã."},{"s":["Phá Quân"],"p":"dong_cung","t":"Tài lộc dồi dào, công danh hiến đạt, tài quan song mỹ, phú quý đến cực độ."},{"s":["Phá Quân"],"p":"dong_cung","t":"Đau ốm nặng, thường mắc tội tù, có tang, nếu có quan chức tất bị bãi truất."},{"s":["Liêm Trinh","Hỏa Tinh"],"p":"dong_cung","t":"Hao tán, mắc tù tội."},{"s":["Sát tinh"],"p":"dong_cung","t":"Tù tội."},{"s":["Thiên Hình"],"p":"dong_cung","t":"Đòn đánh, ẩu đả, nếu không cũng mắc tù tội."},{"s":["Thiên Hình","Linh Tinh","Hỏa Tinh","Thiên Việt"],"p":"dong_cung","t":"Điện giật hay sét đánh, tai nạn về đao thương hay súng đạn."},{"s":["Phượng Các"],"p":"dong_cung","t":"Bị trách oán."},{"s":["Quả Tú"],"p":"dong_cung","t":"Tai nạn dọc đường."},{"s":["Phục Binh","Thiên Tướng","Thiên Riêu","Thai"],"p":"dong_cung","t":"Đàn ông rắc rối tơ duyên, đàn bà mắc lừa vì tình."},{"s":["Kình Dương"],"p":"dong_cung","t":"Khó tránh được tai họa."},{"s":["Văn Xương","Vũ Khúc","La Võng"],"p":"dong_cung","t":"Chết đuối hay mắc tù tội."},{"s":["Sát tinh","Phá Quân"],"p":"dong_cung","t":"Tù tội."},{"s":["Thiên Việt"],"p":"dong_cung","t":"Sét đánh."},{"s":["Địa Không","Địa Kiếp"],"p":"dong_cung","t":"Mưu sự tất thành một cách nhanh chóng, hoạnh phát danh tài nhưng hay đau yếu."},{"s":["Địa Không","Địa Kiếp"],"p":"dong_cung","t":"Đau yếu, mắc lừa mất của, nếu có quan chức tất bị truất giáng."},{"s":["Tham Lang"],"p":"dong_cung","t":"Mọi sự đều bế tắc, hao tán tiền tài."},{"s":["Tử Vi","Thiên Phủ","Thiên Khôi","Thiên Việt"],"p":"dong_cung","t":"Mắc lừa, mất của."},{"s":["Tả Phù","Hữu Bật"],"p":"dong_cung","t":"Đi lừa người khác."},{"s":["Hóa Quyền"],"p":"dong_cung","t":"Công danh trắc trở, thường bị người xung quanh nói xấu hay gièm pha."},{"s":["Lộc Tồn"],"p":"dong_cung","t":"Mọi sự hành thông, danh tài hưng vượng."},{"s":["Hóa Khoa","Hóa Quyền","Tả Phù","Hữu Bật"],"p":"dong_cung","t":"Hoạnh phát danh tài phú quý đến cực độ."},{"s":["Hóa Lộc"],"p":"dong_cung","t":"Đại phát tài, nếu cùng Lộc Tồn nhập Hạn đồng cung sự tốt đẹp tất bị chiết giảm.","d":"Hóa Lộc chiếu"},{"s":["Thiên Mã"],"p":"dong_cung","t":"Mưu sự được toại lòng, danh tài hưng vượng, nếu đi xa buôn bán chắc chắn là buôn một bán mười."},{"s":["Địa Không","Địa Kiếp"],"p":"dong_cung","t":"Tính mạng lâm nguy, nếu gốc đại hạn mười năm cũng xấu xa mờ ám phải quyết đoán là chết hay mắc tù tội."},{"s":["Tả Phù","Hữu Bật"],"p":"dong_cung","t":"Mọi sự hành thông, hoạnh phát danh tài, hay gặp quý nhân phù trợ.","d":"Tả Hữu nhập Hạn tại Tứ Mộ"},{"s":["Tả Phù","Hữu Bật"],"p":"dong_cung","t":"Nhân ly, tài tán, đau yếu, buồn phiền, ra ngoài bị nhiều người khinh bỉ.","d":"Nhiều sao mờ ám xấu xa"},{"s":["Hóa Khoa","Hóa Quyền","Hóa Lộc"],"p":"dong_cung","t":"Quan chức cao thăng, được lui tới gần bậc nguyên thủ, tài lộc phong túc."},{"s":["Sát tinh"],"p":"dong_cung","t":"Có tang, đau yếu, mắc lừa, mất của, mọi sự đều bế tắc.","d":"Nhiều sao mờ ám xấu xa"},{"s":["Văn Xương","Văn Khúc"],"p":"dong_cung","t":"Mưu sự được toại lòng, nếu đi thì tất đỗ cao, tài quan song mỹ.","d":"Khúc và Vũ nhập Hạn đồng cung"},{"s":["Văn Xương","Văn Khúc"],"p":"dong_cung","t":"Sức khỏe suy kém, hao tán tiền tài, phiền lòng về việc giấy tờ nhầm lẫn.","d":"Nhiều sao mờ ám xấu xa"},{"s":["Thiên Đồng","Tả Phù","Hữu Bật"],"p":"dong_cung","t":"Tài lộc dồi dào, cầu danh được toại lòng."},{"s":["Liêm Trinh","Kình Dương","Đà La"],"p":"dong_cung","t":"Mắc tai nạn khủng khiếp, nếu không cũng không thoát được tù tội.","d":"Nhiều sao mờ ám xấu xa"},{"s":["Kỵ"],"p":"dong_cung","t":"Công danh trắc trở, đau yếu, có tang.","d":"Nhiều sao mờ ám xấu xa"},{"s":["Mộc Dục"],"p":"dong_cung","t":"Phiền lòng vì giấy tờ nhầm lẫn.","d":"Nhiều sao mờ ám xấu xa"},{"s":["Sát tinh"],"p":"dong_cung","t":"Mắc tai nạn khủng khiếp, nếu không cũng mắc kiện cáo, hao tán tiền tài.","d":"Nhiều sao mờ ám xấu xa"},{"s":["Thiên Khốc"],"p":"dong_cung","t":"Hoạnh phát danh tài, phú quý đến cực độ, nếu có tranh chấp với ai cũng thắng lợi."},{"s":["Thiên Hình"],"p":"dong_cung","t":"Có thương tích ở đầu, hoặc bị đánh đập, hoặc mắc tai nạn về đao thương."},{"s":["Tuần","Triệt"],"p":"dong_cung","t":"Mắc tai nạn khủng khiếp, đầu bị thương rất nặng, nếu có quan chức tất bị bãi truất."},{"s":["Thiên Việt"],"p":"dong_cung","t":"Hoạnh phát danh tài, có tiếng tăm lừng lẫy."},{"s":["Thiên Hình","Linh Tinh"],"p":"dong_cung","t":"Bị sét đánh hay điện giật."},{"s":["Hóa Lộc"],"p":"dong_cung","t":"Giải trừ tai họa, tài lộc phong túc, nếu có ốm đau cũng chóng qua khỏi.","d":"Hóa Lộc nhập Hạn cần gặp Lộc Tồn chiếu"},{"s":["Tham Lang","Vũ Khúc"],"p":"dong_cung","t":"Mọi sự hành thông, danh tài hưng vượng, nếu kinh doanh lại càng phát đạt."},{"s":["Hóa Quyền"],"p":"dong_cung","t":"Thân thể khỏe mạnh, hoạnh phát danh tài, có uy quyền hiển hách.","d":"Nhiều sao sáng sủa tốt đẹp"},{"s":["Hóa Quyền"],"p":"dong_cung","t":"Tai họa liên miên, nếu ốm đau lại thêm phần trầm trọng, công danh trắc trở.","d":"Nhiều sao mờ ám xấu xa"},{"s":["Tham Lang","Vũ Khúc"],"p":"dong_cung","t":"Mưu sự được toại lòng, danh tài hưng vượng, có uy quyền hiển hách.","d":"Nhiều sao sáng sủa tốt đẹp"},{"s":["Tuần","Triệt"],"p":"dong_cung","t":"Công danh trắc trở, thường bị tiểu nhân gièm pha hay nói xấu."},{"s":["Hóa Khoa"],"p":"dong_cung","t":"Giải trừ tai họa, mọi sự hành thông, đang đau yếu hay mắc tai nạn, gặp Hạn có Khoa chắc chắn là qua khỏi được."},{"s":["Thiên Khôi","Thiên Việt","Văn Xương","Văn Khúc"],"p":"dong_cung","t":"Nếu đi thi tất đỗ cao, nếu có quan chức tất được cao thăng, mưu sự được toại lòng."},{"s":["Hóa Kỵ"],"p":"dong_cung","t":"Mưu sự được toại lòng, danh tài hưng vượng, nhưng kém sức khỏe và hay mắc thi phi.","d":"Nhật, Nguyệt sáng sủa tốt đẹp hội hợp"},{"s":["Hóa Kỵ"],"p":"dong_cung","t":"Đau yếu liên miên, có tang thương, mất của, mắc thị phi, kiện cáo.","d":"Nhiều sao mờ ám xấu xa"},{"s":["Phá Quân","Kình Dương"],"p":"dong_cung","t":"Đánh nhau lớn, bị thương nặng."},{"s":["Sát tinh","Đà La"],"p":"dong_cung","t":"Đau yếu nặng, nếu không, cũng bị nhục nhã, đi xa thường mắc nạn ở dọc đường.","d":"Nhiều sao mờ ám xấu xa"},{"s":["Đà La","Bạch Hổ"],"p":"dong_cung","t":"Mắc tai nạn khủng khiếp về xe cộ hay đao thương.","d":"Nhiều sao mờ ám xấu xa"},{"s":["Kình Dương","Đà La"],"p":"dong_cung","t":"Đau yếu, mắc thị phi, kiện cáo, có tang.","d":"Nhiều sao mờ ám xấu xa"},{"s":["Địa Không","Địa Kiếp"],"p":"dong_cung","t":"Tai nạn liên miên, mất của, nếu có quan chức tất bị bãi truất vì ăn hối lộ.","d":"Nhiều sao mờ ám xấu xa"},{"s":["Thiên Hình","Địa Kiếp"],"p":"dong_cung","t":"Mắc tai nạn về đao thương hay bị mổ xẻ.","d":"Nhiều sao mờ ám xấu xa"},{"s":["Hồng Loan","Đào Hoa"],"p":"dong_cung","t":"Đàn bà con gái gặp hạn này dễ gặp rắc rối về tình duyên, khó giữ toàn danh tiết.","d":"đàn bà con gái gặp Hạn này"},{"s":["Song Hao"],"p":"dong_cung","t":"Có thể thay đổi chỗ ở hay công việc, hoặc phải xa nhà."},{"s":["Song Hao"],"p":"dong_cung","t":"Dễ kiếm tiền, danh tài phát triển.","d":"Sáng sủa tốt đẹp"},{"s":["Song Hao"],"p":"dong_cung","t":"Mất tiền của, buôn bán thua lỗ, hay bị mất trộm.","d":"Mờ ám xấu xa"},{"s":["Song Hao"],"p":"tam_hop","t":"Có thể chết trong lao tù nếu gặp nhiều sao xấu.","d":"Gốc đại hạn mười năm có Song Hao hội hợp"},{"s":["Tang Môn"],"p":"dong_cung","t":"Có tang, nếu không cũng đau yếu hoặc mất của."},{"s":["Tang Môn","Phá Quân","Kỵ"],"p":"dong_cung","t":"Làm ơn nhưng lại bị oán trách.","d":"nhập Hạn tại cung Nô"},{"s":["Bạch Hổ"],"p":"dong_cung","t":"Có tang, mất của, đau yếu."},{"s":["Bạch Hổ","Tham Lang"],"p":"dong_cung","t":"Mắc tai nạn xe cộ hoặc bị ác thú cắn.","d":"nhập Hạn tại cung Dần, Tuất"},{"s":["Thiên Khốc"],"p":"dong_cung","t":"Đau yếu, buồn phiền, mưu sự trước khó sau dễ dàng."},{"s":["Thiên Hư"],"p":"dong_cung","t":"Buồn bực, kém sức khỏe, hay đau răng."},{"s":["Long Trì","Phượng Các"],"p":"dong_cung","t":"Trong nhà có việc vui mừng."},{"s":["Đào Hoa"],"p":"dong_cung","t":"Mọi sự hành thông, danh tài hưng vượng, hỉ khí đầy nhà.","d":"Nhiều sao sáng sủa tốt đẹp"},{"s":["Hồng Loan"],"p":"dong_cung","t":"Mọi sự hành thông, thăng quan tiến chức, hỉ khí đầy nhà.","d":"Nhiều sao sáng sủa tốt đẹp"}];
+
+// Matcher for Van Han: apply patterns to a dai van palace
+function matchVanHanData(dvPalace, lsCtx, gioitinh) {
+  if (!dvPalace) return [];
+  const results = [];
+  const { napAmHanh, menhPalace } = lsCtx;
+  const TU_MO = ['Thìn', 'Tuất', 'Sửu', 'Mùi'];
+  function resolveNames(name) {
+    const aliased = CACH_CUC_STAR_ALIAS[name];
+    if (aliased) return aliased;
+    return [name];
+  }
+  function palaceHasAny(p, candidates) {
+    return p && candidates.some(n => p.stars.some(s => s.ten === n));
+  }
+  function hasStarInPalaces(name, palaceList) {
+    const cands = resolveNames(name);
+    return palaceList.some(p => palaceHasAny(p, cands));
+  }
+  function getBright(p, name) {
+    if (!p) return '';
+    const cands = resolveNames(name);
+    for (const c of cands) {
+      const star = p.stars.find(s => s.ten === c);
+      if (star && star.brightness) return star.brightness;
+    }
+    return '';
+  }
+  function isSangCond(p, sao) {
+    return sao.some(name => ['Miếu', 'Vượng', 'Đắc'].includes(getBright(p, name)));
+  }
+  function isMoAmCond(p, sao) {
+    return sao.some(name => getBright(p, name) === 'Hãm');
+  }
+  function getTu(p) {
+    return [p, ...(p.tamHopCungs || []), p.xungChieuCung].filter(Boolean);
+  }
+  for (const pat of CACH_CUC_VH_DATA) {
+    const sao = pat.s || [], pv = pat.p, dc = pat.d || '';
+    let matched = false;
+    if (sao.length === 0) {
+      matched = true;
+    } else if (pv === 'dong_cung') {
+      matched = sao.every(name => hasStarInPalaces(name, [dvPalace]));
+    } else if (pv === 'tam_hop') {
+      const tu = getTu(dvPalace);
+      matched = sao.every(name =>
+        (name==='Tuần'||name==='Triệt') ? hasStarInPalaces(name, [dvPalace]) : hasStarInPalaces(name, tu));
+    } else if (pv === 'xung_chieu') {
+      const allP = [dvPalace, dvPalace.xungChieuCung].filter(Boolean);
+      matched = sao.every(name =>
+        (name==='Tuần'||name==='Triệt') ? hasStarInPalaces(name, [dvPalace]) : hasStarInPalaces(name, allP));
+    }
+    if (!matched) continue;
+    if (dc) {
+      let condOk = false;
+      const napAmM = dc.match(/^(Kim|Mộc|Thủy|Hỏa|Thổ)\s+Mệnh\s+hạn\s+đến\s+cung\s+(Tý|Sửu|Dần|Mão|Thìn|Tỵ|Ngọ|Mùi|Thân|Dậu|Tuất|Hợi)/);
+      if (napAmM) {
+        condOk = napAmHanh === napAmM[1] && dvPalace.diaChi === napAmM[2];
+      } else if (/Mệnh\s+an\s+tại/i.test(dc) && !/Tuổi|Thân|Sát|Kình|Đà|nữ|nam/i.test(dc)) {
+        const dcs = dc.match(/(?:Tý|Sửu|Dần|Mão|Thìn|Tỵ|Ngọ|Mùi|Thân|Dậu|Tuất|Hợi)/g) || [];
+        condOk = menhPalace ? dcs.includes(menhPalace.diaChi) : false;
+      } else if (/cung\s+nhập\s+[hH]ạn\s+vào\s+cung\s+(\S+)/i.test(dc)) {
+        const m = dc.match(/cung\s+nhập\s+[hH]ạn\s+vào\s+cung\s+(\S+)/i);
+        condOk = m ? dvPalace.cungName.includes(m[1]) : false;
+      } else if (/nhập\s+[hH]ạn\s+tại\s+cung\s+(\S+)/i.test(dc)) {
+        const m = dc.match(/nhập\s+[hH]ạn\s+tại\s+cung\s+(\S+)/i);
+        condOk = m ? dvPalace.cungName.includes(m[1]) : false;
+      } else if (/nhập\s+[hH]ạn\s+tại\s+Tứ\s+Mộ/i.test(dc)) {
+        condOk = TU_MO.includes(dvPalace.diaChi);
+      } else if (/nhập\s+[hH]ạn\s+tại\s+(?:Tý|Sửu|Dần|Mão|Thìn|Tỵ|Ngọ|Mùi|Thân|Dậu|Tuất|Hợi)/i.test(dc)) {
+        const dcs = dc.match(/(?:Tý|Sửu|Dần|Mão|Thìn|Tỵ|Ngọ|Mùi|Thân|Dậu|Tuất|Hợi)/g) || [];
+        condOk = dcs.includes(dvPalace.diaChi);
+      } else if (/sáng sủa/i.test(dc)) {
+        condOk = sao.length > 0 && isSangCond(dvPalace, sao);
+      } else if (/mờ ám/i.test(dc)) {
+        condOk = sao.length > 0 && isMoAmCond(dvPalace, sao);
+      } else if (/đàn bà/i.test(dc)) {
+        condOk = gioitinh === 'nu';
+      } else {
+        continue;
+      }
+      if (!condOk) continue;
+    }
+    const prefix = pat.s && pat.s.length > 0 ? `[${pat.s.join(', ')}] ` : '';
+    results.push(prefix + pat.t);
+  }
+  const seen = new Set();
+  return results.filter(t => { if (seen.has(t)) return false; seen.add(t); return true; });
+}
 
 // ================================================================
 // PHÂN TÍCH CUNG Ý NGHĨA — Rule-based module
@@ -2715,6 +3423,7 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam, tuoiXem) {
       if (isHam(p,'Thiên Khốc')||isHam(p,'Thiên Hư')) out.push('Khốc/Hư hãm: khốn khổ, buồn nhiều hơn vui');
     }
 
+    matchCachCucData(p, ls).forEach(t => { if (!out.some(x => x === t)) out.push(t); });
     tuanTrietNote(p).forEach(n => out.push(n));
     if (out.length > 0) results['Mệnh'] = out;
   })();
@@ -2762,6 +3471,7 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam, tuoiXem) {
     if (hasAny(p,['Tuần','Triệt'])) out.push('Tuần/Triệt tại Phụ Mẫu: sớm khắc thân, xa cách, có thể con nuôi');
     if (isVoChinhDieu(p)) out.push('Phụ Mẫu vô chính diệu: lấy chiếu từ cung xung');
 
+    matchCachCucData(p, ls).forEach(t => { if (!out.some(x => x === t)) out.push(t); });
     tuanTrietNote(p).forEach(n => out.push(n));
     if (out.length > 0) results['Phụ Mẫu'] = out;
   })();
@@ -2803,6 +3513,7 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam, tuoiXem) {
       else out.push('Phúc Đức vô chính diệu: kém phúc');
     }
 
+    matchCachCucData(p, ls).forEach(t => { if (!out.some(x => x === t)) out.push(t); });
     tuanTrietNote(p).forEach(n => out.push(n));
     if (out.length > 0) results['Phúc Đức'] = out;
   })();
@@ -2854,6 +3565,7 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam, tuoiXem) {
       else out.push('Thái Âm mờ tại Điền Trạch: không có nhà đất');
     }
 
+    matchCachCucData(p, ls).forEach(t => { if (!out.some(x => x === t)) out.push(t); });
     tuanTrietNote(p).forEach(n => out.push(n));
     if (out.length > 0) results['Điền Trạch'] = out;
   })();
@@ -2903,6 +3615,7 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam, tuoiXem) {
       else out.push('Quan Lộc vô chính diệu: công danh bình thường, không hiển đạt');
     }
 
+    matchCachCucData(p, ls).forEach(t => { if (!out.some(x => x === t)) out.push(t); });
     tuanTrietNote(p).forEach(n => out.push(n));
     if (out.length > 0) results['Quan Lộc'] = out;
   })();
@@ -2935,6 +3648,7 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam, tuoiXem) {
     if (hasSao(p,'Đào Hoa')) out.push('Đào Hoa tại Nô Bộc: mang lụy vì tình');
     if (dongCung(p,['Tả Phù','Hữu Bật','Địa Không','Địa Kiếp'])) out.push('Tả/Hữu + Không/Kiếp: gian quyệt, lừa đảo');
 
+    matchCachCucData(p, ls).forEach(t => { if (!out.some(x => x === t)) out.push(t); });
     tuanTrietNote(p).forEach(n => out.push(n));
     if (out.length > 0) results['Nô Bộc'] = out;
   })();
@@ -2974,6 +3688,7 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam, tuoiXem) {
     if (hasAny(p,['Tuần','Triệt'])) out.push('Tuần/Triệt tại Thiên Di: phiền lòng, chết xa nhà');
     if (isVoChinhDieu(p)) out.push('Thiên Di vô chính diệu: lấy chiếu từ cung xung');
 
+    matchCachCucData(p, ls).forEach(t => { if (!out.some(x => x === t)) out.push(t); });
     tuanTrietNote(p).forEach(n => out.push(n));
     if (out.length > 0) results['Thiên Di'] = out;
   })();
@@ -3017,6 +3732,7 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam, tuoiXem) {
     if (hasSao(p,'Bạch Hổ')) out.push('Bạch Hổ tại Tật Ách: máu xấu, đau xương');
     if (hasSao(p,'Thiên Hình')) out.push('Thiên Hình tại Tật Ách: bệnh phong, dao kéo');
 
+    matchCachCucData(p, ls).forEach(t => { if (!out.some(x => x === t)) out.push(t); });
     tuanTrietNote(p).forEach(n => out.push(n));
     if (out.length > 0) results['Tật Ách'] = out;
   })();
@@ -3071,12 +3787,21 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam, tuoiXem) {
       else out.push('Tài Bạch vô chính diệu: phụ thuộc cung xung chiếu');
     }
 
+    matchCachCucData(p, ls).forEach(t => { if (!out.some(x => x === t)) out.push(t); });
     tuanTrietNote(p).forEach(n => out.push(n));
     if (out.length > 0) results['Tài Bạch'] = out;
   })();
 
   // ─── CUNG TỬ TỨC ──────────────────────────────────────────────
-  // (Không có data riêng — skip, Claude tự luận từ laSoText)
+  (function() {
+    const p = getCungByName('Tử Tức');
+    if (!p) return;
+    const out = [];
+
+    matchCachCucData(p, ls).forEach(t => { if (!out.some(x => x === t)) out.push(t); });
+    tuanTrietNote(p).forEach(n => out.push(n));
+    if (out.length > 0) results['Tử Tức'] = out;
+  })();
 
   // ─── CUNG PHU THÊ ─────────────────────────────────────────────
   (function() {
@@ -3124,6 +3849,7 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam, tuoiXem) {
     if (hasAny(p,['Đào Hoa','Hồng Loan'])) out.push('Đào Hoa/Hồng Loan tại Phu Thê: vợ đẹp, ngoại tình, tình cảm phức tạp');
     if (hasAny(p,['Tuần','Triệt'])) out.push('Tuần/Triệt tại Phu Thê: nên muộn hôn nhân, dễ chia ly, nhiều lần trắc trở');
 
+    matchCachCucData(p, ls).forEach(t => { if (!out.some(x => x === t)) out.push(t); });
     tuanTrietNote(p).forEach(n => out.push(n));
     if (out.length > 0) results['Phu Thê'] = out;
   })();
@@ -3164,6 +3890,7 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam, tuoiXem) {
     if (hasSatTinh(p)) out.push('Sát tinh tại Huynh Đệ: giảm số anh chị em, bất hòa, có tật');
     if (isVoChinhDieu(p)) out.push('Huynh Đệ vô chính diệu: lấy chiếu từ cung xung');
 
+    matchCachCucData(p, ls).forEach(t => { if (!out.some(x => x === t)) out.push(t); });
     tuanTrietNote(p).forEach(n => out.push(n));
     if (out.length > 0) results['Huynh Đệ'] = out;
   })();
@@ -3172,293 +3899,158 @@ function phanTichCungYNghia(ls, gioitinh, gioIdx, canNam, chiNam, tuoiXem) {
 }
 
 
-// ================================================================
-// TÍNH CUNG SCORES — 6 metrics per cung cho radar chart
-// Metrics: Tiềm Năng, Bền Vững, Rủi Ro, Quý Nhân, Minh Bạch, Tương Hợp
-// Output: ls.cungScores = { [cungName]: { tiemNang, benVung, ruiRo, quyNhan, minhBach, tuongHop } }
+// Output: ls.cungScores = { [cungName]: { thienVan, canCo, mayMan, phuTro, binhYen, benVung, tong } }
 // ================================================================
 
-function tinhCungScores(ls, napAmHanh, tuoiXem) {
+function tinhCungScores(ls, napAmHanh, tuoiXem, chiNamSinh) {
   const { palaces, cachCuc, cachCucTungCung } = ls;
 
-  // ─── CONSTANTS ────────────────────────────────────────────────
   const SAT_TINH  = ['Kình Dương','Đà La','Hỏa Tinh','Linh Tinh','Địa Không','Địa Kiếp'];
   const BAI_TINH  = ['Thiên Khốc','Thiên Hư','Tang Môn','Bạch Hổ','Đại Hao','Tiểu Hao'];
-  const CAT_TINH  = ['Văn Xương','Văn Khúc','Thiên Khôi','Thiên Việt','Tả Phù','Hữu Bật','Lộc Tồn','Hóa Lộc'];
-  const BIEN_DONG = ['Thiên Mã','Phá Quân','Tham Lang'];
+  const BIEN_DONG = ['Phá Quân','Tham Lang','Thiên Mã'];
 
-  const STAR_HANH = {
-    'Tử Vi':'Thổ','Thiên Cơ':'Mộc','Thái Dương':'Hỏa','Vũ Khúc':'Kim',
-    'Thiên Đồng':'Thủy','Liêm Trinh':'Hỏa','Thiên Phủ':'Thổ','Thái Âm':'Thủy',
-    'Tham Lang':'Thủy','Cự Môn':'Thổ','Thiên Tướng':'Thủy','Thiên Lương':'Mộc',
-    'Thất Sát':'Kim','Phá Quân':'Thủy',
-  };
+  const KW_MM_POS = ['phú quý','giàu','tài lộc','lộc','phúc','thịnh','vinh','may mắn','thuận','hanh','thành đạt','tốt lành','hưởng','an khang','sang','được lợi'];
+  const KW_MM_NEG = ['hao tài','tán tài','nghèo','mất của','túng','bần','thất tài'];
+  const KW_PT_POS = ['quý nhân','giúp đỡ','hỗ trợ','kính trọng','được người','nhiều người','tôn trọng','phù trợ','được giúp','mến'];
+  const KW_PT_NEG = ['cô đơn','cô độc','không ai','bị khinh','gian manh','phản bạn','gian xảo'];
+  const KW_BY_NEG = ['hung','tai nạn','tai họa','bệnh','tật','chết','nguy','hao','tổn','thất bại','mất mát','suy','bại','yểu','lao','thị phi','gian nan','khổ sở','phá','lụy','nạn'];
+  const KW_BV_NEG = ['không bền','bất ổn','biến động','trắc trở','thay đổi','lưu ly','phiêu','giang hồ','ly tán','hay di','bôn ba','lận đận','bất định'];
 
-  const NGU_HANH_SINH_MAP = {'Mộc':'Hỏa','Hỏa':'Thổ','Thổ':'Kim','Kim':'Thủy','Thủy':'Mộc'};
-  const NGU_HANH_KHAC_MAP = {'Mộc':'Thổ','Thổ':'Thủy','Thủy':'Hỏa','Hỏa':'Kim','Kim':'Mộc'};
-
-  // Loai cachCuc → điểm (positive = tốt)
-  const LOAI_SCORE = {
-    'quy_cuc': 3,    // cách quý
-    'phu_cuc': 2.5,  // cách phú
-    'ban_tien_cuc': 2,
-    'tap_cuc': 1.5,
-    'than_cu': 1,
-    'menh_co_ban': 0.5,
-  };
-
-  // ─── HELPERS ──────────────────────────────────────────────────
   function clamp(v, min=0, max=10) { return Math.max(min, Math.min(max, v)); }
   function r1(v) { return Math.round(v * 10) / 10; }
-
   function getAllStars(p) {
     return [p, ...(p.tamHopCungs||[]), p.xungChieuCung]
       .filter(Boolean).flatMap(c => c.stars.map(s => s.ten));
   }
   function getOwnStars(p) { return p.stars.map(s => s.ten); }
-
-  function brightScore(brightness) {
-    return { 'Miếu':10, 'Vượng':8, 'Đắc':6, 'Bình':4, 'Hãm':2 }[brightness] ?? 4;
-  }
-
   function hasSao(p, name) { return p.stars.some(s => s.ten === name); }
-  function hasSaoTPTC(allStars, name) { return allStars.includes(name); }
+  function tuanActive(p) { return hasSao(p,'Tuần') && (!tuoiXem || tuoiXem > 30); }
+  function trietActive(p) { return hasSao(p,'Triệt') && (!tuoiXem || tuoiXem <= 30); }
+  function tuanLamHoaDia(p) { return hasSao(p,'Tuần') && (p.diaChi==='Tỵ'||p.diaChi==='Ngọ'); }
+  function trietDaoKimCung(p) { return hasSao(p,'Triệt') && (p.diaChi==='Thân'||p.diaChi==='Dậu'); }
 
-  function isVoChinhDieu(p) { return p.majorStars.length === 0; }
-
-  function tuanActive(p) {
-    if (!hasSao(p,'Tuần')) return false;
-    return !tuoiXem || tuoiXem > 30;
-  }
-  function trietActive(p) {
-    if (!hasSao(p,'Triệt')) return false;
-    return !tuoiXem || tuoiXem <= 30;
-  }
-  function tuanLamHoaDia(p) {
-    return hasSao(p,'Tuần') && (p.diaChi === 'Tỵ' || p.diaChi === 'Ngọ');
-  }
-  function trietDaoKimCung(p) {
-    return hasSao(p,'Triệt') && (p.diaChi === 'Thân' || p.diaChi === 'Dậu');
+  function kwScore(text, posKW, negKW) {
+    const t = (text||'').toLowerCase();
+    let s = 0;
+    posKW.forEach(k => { if (t.includes(k)) s += 0.4; });
+    negKW.forEach(k => { if (t.includes(k)) s -= 0.4; });
+    return s;
   }
 
-  // Bộ sao chính tinh
-  const BO_MAP = {
-    'TPVT': ['Tử Vi','Thiên Phủ','Vũ Khúc','Thiên Tướng'],
-    'CNDL': ['Thiên Cơ','Thái Âm','Thiên Đồng','Thiên Lương'],
-    'SPT':  ['Thất Sát','Phá Quân','Tham Lang','Liêm Trinh'],
-    'CN':   ['Cự Môn','Thái Dương'],
-  };
-  const SCORE_BO_MAP = {
-    'TPVT:TPVT':2,'CNDL:CNDL':2,'SPT:SPT':2,'CN:CN':2,
-    'TPVT:SPT':1.5,'SPT:TPVT':1.5,
-    'TPVT:CNDL':1,'CNDL:TPVT':1.5,
-    'TPVT:CN':0,'CN:TPVT':1,
-    'CNDL:SPT':0.5,'SPT:CNDL':0.5,
-    'CNDL:CN':0.5,'CN:CNDL':1.5,
-    'SPT:CN':0,'CN:SPT':0,
-  };
-  function getBo(stars) {
-    const names = stars.map(s => s.ten);
-    for (const [bo, list] of Object.entries(BO_MAP)) {
-      if (list.some(s => names.includes(s))) return bo;
+  function getPatternScores(cungName) {
+    const items = (cachCucTungCung || {})[cungName] || [];
+    let mm = 0, pt = 0, by = 0, bv = 0;
+    for (const txt of items) {
+      mm += kwScore(txt, KW_MM_POS, KW_MM_NEG);
+      pt += kwScore(txt, KW_PT_POS, KW_PT_NEG);
+      KW_BY_NEG.forEach(k => { if ((txt||'').toLowerCase().includes(k)) by -= 0.3; });
+      KW_BV_NEG.forEach(k => { if ((txt||'').toLowerCase().includes(k)) bv -= 0.3; });
     }
-    return null;
+    return { mm, pt, by, bv };
   }
 
-  // Mệnh palace info
-  const menhP = palaces.find(p => p.isMenh);
-  const boMenh = menhP ? getBo(menhP.majorStars) : null;
-
-  // cachCuc per cung (good loais)
   const cachCucByCung = {};
   for (const cc of (cachCuc || [])) {
     if (!cachCucByCung[cc.cung]) cachCucByCung[cc.cung] = [];
     cachCucByCung[cc.cung].push(cc);
   }
 
-  // cachCucTungCung tag scoring
-  function getYNghiaTags(cungName) {
-    const items = (cachCucTungCung || {})[cungName] || [];
-    let catScore = 0, hungScore = 0;
-    for (const s of items) {
-      if (s.includes('đại cát')) catScore += 1.5;
-      else if (s.includes('[cát]') || s.includes('cát') && !s.includes('không') && !s.includes('kém')) catScore += 0.5;
-      if (s.includes('đại hung')) hungScore += 2;
-      else if (s.includes('hung') && !s.includes('đại hung') && !s.includes('giảm hung')) hungScore += 1;
-    }
-    return { catScore: Math.min(catScore, 4), hungScore: Math.min(hungScore, 4) };
-  }
-
-  // ─── PER CUNG SCORING ─────────────────────────────────────────
   const scores = {};
 
   for (const p of palaces) {
     const cungName = p.cungName;
-    const dc = p.diaChi;
-    const allTPTC = getAllStars(p);
+    const dc       = p.diaChi;
+    const allTPTC  = getAllStars(p);
     const ownStars = getOwnStars(p);
-    const isVCD = isVoChinhDieu(p);
-    const tuanOn = tuanActive(p);
-    const trietOn = trietActive(p);
-    const tuanHoa = tuanLamHoaDia(p);
+    const tuanOn   = tuanActive(p);
+    const trietOn  = trietActive(p);
+    const tuanHoa  = tuanLamHoaDia(p);
     const trietKim = trietDaoKimCung(p);
-    const ynTags = getYNghiaTags(cungName);
-    const ccList = cachCucByCung[cungName] || [];
+    const ccList   = cachCucByCung[cungName] || [];
+    const pat      = getPatternScores(cungName);
 
-    // ── 1. TIỀM NĂNG (0-10) ──────────────────────────────────────
-    let tiemNang = 0;
-    if (isVCD) {
-      // Mượn cung xung chiếu
-      const xung = p.xungChieuCung;
-      if (xung && xung.majorStars.length > 0) {
-        const xungBright = xung.majorStars[0].brightness;
-        tiemNang = brightScore(xungBright) * 0.7;
-      } else {
-        tiemNang = 4;
-      }
-    } else {
-      // Chính tinh sáng nhất
-      const mainStar = p.majorStars[0];
-      if (mainStar) {
-        tiemNang = brightScore(mainStar.brightness);
-        // Hóa
-        if (mainStar.hoa === 'Lộc') tiemNang += 2;
-        else if (mainStar.hoa === 'Quyền') tiemNang += 1.5;
-        else if (mainStar.hoa === 'Khoa') tiemNang += 1;
-        else if (mainStar.hoa === 'Kỵ') tiemNang -= 2;
+    // ── 1. THIÊN VẬN (0-10): TAM_HOP ngũ hành cung vs chiNamSinh
+    let thienVan = 5;
+    if (chiNamSinh) {
+      const hCung = TAM_HOP_HANH[dc];
+      const hNam  = TAM_HOP_HANH[chiNamSinh];
+      if (hCung && hNam) {
+        const qh = soSanhHanh(hNam, hCung);
+        thienVan = {dong_hanh:10,sinh_nhap:8,khac_xuat:4,sinh_xuat:2,khac_nhap:0,unknown:5}[qh] ?? 5;
       }
     }
-    // Hóa trong TPTC
-    if (allTPTC.includes('Hóa Lộc') && !p.stars.some(s=>s.ten==='Hóa Lộc' && s.hoa)) tiemNang += 1;
-    if (allTPTC.includes('Lộc Tồn')) tiemNang += 1;
-    // cachCuc đặc biệt
-    for (const cc of ccList) {
-      tiemNang += LOAI_SCORE[cc.loai] ?? 0;
-    }
-    tiemNang += ynTags.catScore * 0.5;
-    tiemNang -= ynTags.hungScore * 0.5;
-    // Tuần/Triệt ảnh hưởng tiềm năng
-    if (tuanOn && !tuanHoa) tiemNang *= 0.8;
-    if (trietOn && !trietKim) tiemNang *= 0.6;
-    if (tuanHoa || trietKim) tiemNang = Math.min(tiemNang * 1.1, 10);
-    tiemNang = r1(clamp(tiemNang));
+    thienVan = r1(thienVan);
 
-    // ── 2. BỀN VỮNG (0-10) ───────────────────────────────────────
-    let benVung = 8;
-    // Biến động stars
-    for (const s of BIEN_DONG) {
-      if (allTPTC.includes(s)) benVung -= 1.5;
+    // ── 2. CĂN CƠ (0-10): DC ngũ hành cung vs napAmHanh + tràng sinh bonus
+    let canCo = 5;
+    if (napAmHanh) {
+      const hCung = DC_HANH[dc];
+      if (hCung) {
+        if (hCung === napAmHanh)                      canCo = 7.5;
+        else if (NGU_HANH_SINH[hCung] === napAmHanh)  canCo = 10;
+        else if (NGU_HANH_SINH[napAmHanh] === hCung)  canCo = 5;
+        else if (NGU_HANH_KHAC[napAmHanh] === hCung)  canCo = 2.5;
+        else if (NGU_HANH_KHAC[hCung] === napAmHanh)  canCo = 0;
+      }
     }
-    // Sát tinh
-    for (const s of SAT_TINH) {
-      if (allTPTC.includes(s)) benVung -= 0.8;
-    }
-    // Ổn định
-    if (allTPTC.includes('Lộc Tồn')) benVung += 1.5;
+    const tsBonus = {'Đế Vượng':1,'Trường Sinh':0.8,'Lâm Quan':0.5,'Quan Đới':0.3,'Mộ':-0.3,'Tử':-0.8,'Tuyệt':-1,'Thai':-0.2,'Dưỡng':0}[p.trangSinh] || 0;
+    canCo = r1(clamp(canCo + tsBonus));
+
+    // ── 3. MAY MẮN (0-10): lộc, thuận lợi, tài vật từ patterns + sao
+    let mayMan = 5 + pat.mm;
+    if (allTPTC.includes('Hóa Lộc')) mayMan += 1.5;
+    if (allTPTC.includes('Lộc Tồn')) mayMan += 1;
+    if (allTPTC.includes('Hóa Kỵ'))  mayMan -= 1.5;
+    for (const cc of ccList) mayMan += ({quy_cuc:2,phu_cuc:1.5,ban_tien_cuc:1,tap_cuc:0.5}[cc.loai] || 0);
+    if (tuanOn && !tuanHoa) mayMan *= 0.85;
+    if (trietOn && !trietKim) mayMan *= 0.7;
+    mayMan = r1(clamp(mayMan));
+
+    // ── 4. PHÙ TRỢ (0-10): quý nhân, hỗ trợ từ patterns + sao phụ tốt
+    let phuTro = 4 + pat.pt;
+    if (allTPTC.includes('Tả Phù'))     phuTro += 1.5;
+    if (allTPTC.includes('Hữu Bật'))    phuTro += 1.5;
+    if (allTPTC.includes('Thiên Khôi')) phuTro += 1.5;
+    if (allTPTC.includes('Thiên Việt')) phuTro += 1.5;
+    if (allTPTC.includes('Văn Xương'))  phuTro += 0.8;
+    if (allTPTC.includes('Văn Khúc'))   phuTro += 0.8;
+    if (allTPTC.includes('Hóa Khoa'))   phuTro += 1;
+    if (allTPTC.includes('Địa Không'))  phuTro -= 1;
+    if (allTPTC.includes('Địa Kiếp'))   phuTro -= 1;
+    if (allTPTC.includes('Hóa Kỵ'))     phuTro -= 0.5;
+    for (const cc of ccList) { if (['quy_cuc','phu_cuc'].includes(cc.loai)) phuTro += 1; }
+    phuTro = r1(clamp(phuTro));
+
+    // ── 5. BÌNH YÊN (0-10): ít hung sát, không tai họa (inverted)
+    let binhYen = 8 + pat.by;
+    for (const s of SAT_TINH) { if (allTPTC.includes(s)) binhYen -= 0.8; }
+    for (const s of BAI_TINH) { if (ownStars.includes(s)) binhYen -= 0.5; }
+    if (allTPTC.includes('Hóa Kỵ'))     binhYen -= 1.5;
+    if (allTPTC.includes('Thiên Hình')) binhYen -= 0.8;
+    for (const cc of ccList) { if (['quy_cuc','phu_cuc'].includes(cc.loai)) binhYen += 0.5; }
+    if (trietKim || tuanHoa) binhYen += 1;
+    binhYen = r1(clamp(binhYen));
+
+    // ── 6. BỀN VỮNG (0-10): ít biến động, ổn định lâu dài (inverted)
+    let benVung = 8 + pat.bv;
+    for (const s of BIEN_DONG) { if (allTPTC.includes(s)) benVung -= 1.5; }
+    if (ownStars.includes('Kình Dương')) benVung -= 0.5;
+    if (ownStars.includes('Đà La'))      benVung -= 0.5;
+    if (allTPTC.includes('Lộc Tồn'))     benVung += 1;
     if (p.majorStars.some(s=>['Thiên Phủ','Thiên Tướng'].includes(s.ten))) benVung += 1;
-    if (tuanOn) benVung += 0.5; // Tuần giảm biến động
-    // Hãm chính tinh → bất ổn
-    if (p.majorStars.some(s=>s.brightness==='Hãm')) benVung -= 1;
+    if (p.majorStars.some(s=>s.brightness==='Hãm')) benVung -= 0.8;
+    if (tuanOn) benVung += 0.5;
     benVung = r1(clamp(benVung));
 
-    // ── 3. AN TOÀN (0-10, cao = tốt) ───────────────────────────
-    // Tính ngược từ Rủi Ro: anToan = 10 - ruiRo
-    let _ruiRo = 2;
-    for (const s of SAT_TINH) {
-      if (allTPTC.includes(s)) _ruiRo += 1.2;
-    }
-    for (const s of BAI_TINH) {
-      if (ownStars.includes(s)) _ruiRo += 0.7;
-    }
-    if (allTPTC.includes('Hóa Kỵ')) _ruiRo += 1.5;
-    if (allTPTC.includes('Thiên Hình')) _ruiRo += 1;
-    if (p.majorStars.some(s=>['Thiên Phủ','Thiên Tướng'].includes(s.ten))) _ruiRo -= 1;
-    if (allTPTC.includes('Lộc Tồn')) _ruiRo -= 1;
-    for (const cc of ccList) {
-      if (['quy_cuc','phu_cuc'].includes(cc.loai)) _ruiRo -= 0.5;
-    }
-    _ruiRo += ynTags.hungScore * 0.4;
-    _ruiRo -= ynTags.catScore * 0.2;
-    if (trietOn) _ruiRo *= 0.3;
-    else if (tuanOn && !tuanHoa) _ruiRo *= 0.5;
-    if (tuanHoa || trietKim) _ruiRo *= 0.7;
-    const anToan = r1(clamp(10 - _ruiRo));
+    // ── TỔNG — same formula as DV: NH + nhRatio*DL + nhRatio*TT
+    const nhAvg  = (mayMan + phuTro + binhYen + benVung) / 4;
+    const nhNorm = nhAvg / 10 * 4;
+    const ttNorm = thienVan / 10 * 5;
+    const dlNorm = canCo / 10;
+    const nhRatio = nhNorm / 4;
+    const tong = r1(Math.min(10, nhNorm + nhRatio * dlNorm + nhRatio * ttNorm));
 
-    // ── 4. QUÝ NHÂN (0-10) ───────────────────────────────────────
-    let quyNhan = 2;
-    if (allTPTC.includes('Tả Phù')) quyNhan += 1.5;
-    if (allTPTC.includes('Hữu Bật')) quyNhan += 1.5;
-    if (allTPTC.includes('Thiên Khôi')) quyNhan += 1.5;
-    if (allTPTC.includes('Thiên Việt')) quyNhan += 1.5;
-    if (allTPTC.includes('Văn Xương')) {
-      const wx = p.tamHopCungs?.flatMap(c=>c.stars).concat(p.stars)
-        .find(s=>s.ten==='Văn Xương');
-      if (wx && ['Miếu','Vượng','Đắc'].includes(wx.brightness)) quyNhan += 1;
-      else quyNhan += 0.5;
-    }
-    if (allTPTC.includes('Văn Khúc')) quyNhan += 0.8;
-    if (allTPTC.includes('Hóa Khoa')) quyNhan += 1;
-    if (allTPTC.includes('Thiên Mã') && !allTPTC.includes('Hóa Kỵ')) quyNhan += 0.5;
-    // Sát tinh giảm quý nhân
-    if (allTPTC.includes('Địa Không')) quyNhan -= 1;
-    if (allTPTC.includes('Địa Kiếp')) quyNhan -= 1;
-    if (allTPTC.includes('Hóa Kỵ')) quyNhan -= 1;
-    // cachCuc
-    for (const cc of ccList) {
-      if (['quy_cuc','phu_cuc'].includes(cc.loai)) quyNhan += 1;
-    }
-    quyNhan = r1(clamp(quyNhan));
-
-    // ── 5. MINH BẠCH (0-10) ──────────────────────────────────────
-    let minhBach = 8;
-    if (isVCD) minhBach -= 2;
-    if (tuanOn && !tuanHoa) minhBach -= 1.5;
-    if (trietOn && !trietKim) minhBach -= 2.5;
-    if (tuanHoa || trietKim) minhBach += 1;
-    // Mâu thuẫn: vừa có cát cục vừa có hung cục
-    const hasDaiCat = (cachCucTungCung?.[cungName]||[]).some(s=>s.includes('đại cát'));
-    const hasDaiHung = (cachCucTungCung?.[cungName]||[]).some(s=>s.includes('đại hung'));
-    if (hasDaiCat && hasDaiHung) minhBach -= 2;
-    // Sao hãm và sao miếu cùng cung → mâu thuẫn
-    const hasMieu = p.majorStars.some(s=>['Miếu','Vượng'].includes(s.brightness));
-    const hasHam  = p.majorStars.some(s=>s.brightness==='Hãm');
-    if (hasMieu && hasHam) minhBach -= 1;
-    // Nhiều sát tinh trong cung → rối
-    const ownSatCount = SAT_TINH.filter(s=>ownStars.includes(s)).length;
-    minhBach -= ownSatCount * 0.5;
-    minhBach = r1(clamp(minhBach));
-
-    // ── 6. TƯƠNG HỢP (0-10) ──────────────────────────────────────
-    let tuongHop = 5;
-    // Ngũ hành chính tinh vs nạp âm bản mệnh
-    const mainStarName = p.majorStars[0]?.ten;
-    const starHanh = STAR_HANH[mainStarName];
-    const menhHanh = napAmHanh;
-    if (starHanh && menhHanh) {
-      if (starHanh === menhHanh)                           tuongHop += 3;   // đồng hành
-      else if (NGU_HANH_SINH_MAP[starHanh] === menhHanh)  tuongHop += 5;   // sinh nhập
-      else if (NGU_HANH_SINH_MAP[menhHanh] === starHanh)  tuongHop += 1;   // sinh xuất
-      else if (NGU_HANH_KHAC_MAP[menhHanh] === starHanh)  tuongHop -= 1;   // khắc xuất
-      else if (NGU_HANH_KHAC_MAP[starHanh] === menhHanh)  tuongHop -= 3;   // khắc nhập
-    }
-    // Bộ sao cung vs bộ sao Mệnh
-    const boCung = getBo(p.majorStars);
-    if (boMenh && boCung) {
-      const boKey = boMenh + ':' + boCung;
-      const boScoreRaw = SCORE_BO_MAP[boKey] ?? 1;
-      // scale 0-2 → -2 to +3
-      tuongHop += (boScoreRaw - 1) * 2;
-    }
-    tuongHop = r1(clamp(tuongHop));
-
-    scores[cungName] = {
-      tiemNang,
-      benVung,
-      anToan,
-      quyNhan,
-      minhBach,
-      tuongHop,
-    };
+    scores[cungName] = { thienVan, canCo, mayMan, phuTro, binhYen, benVung, tong };
   }
 
   return scores;
