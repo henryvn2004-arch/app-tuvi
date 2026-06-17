@@ -32,14 +32,12 @@
 }
 
 /* ── Full-screen app ── */
-html{height:100%}
+html,body{height:100%}
 body{
-  height:100%;
   display:flex;flex-direction:column;
   font-family:Arial,sans-serif;background:var(--bg);
   color:var(--text);font-size:15px;line-height:1.6;
   -webkit-font-smoothing:antialiased;
-  overflow:hidden; /* body only — html stays scrollable for sticky nav */
 }
 #site-nav{flex-shrink:0;position:relative;z-index:50}
 
@@ -356,23 +354,26 @@ body{
 ═══════════════════════════════════════ */
 @media(max-width:768px){
   :root{--sidebar-w:100%}
-  /* wa-app needs explicit height so absolute children fill correctly on iOS */
-  .wa-app{position:relative;height:100%}
-  .wa-sidebar{
-    position:absolute;top:0;left:0;right:0;bottom:0;z-index:10;
-    transform:translateX(0);
-    transition:transform .25s cubic-bezier(.4,0,.2,1);
-    overflow-y:auto;
+  /* Sidebar: full width, visible by default */
+  .wa-sidebar{width:100%}
+  .wa-sidebar.wa-hidden{display:none}
+  /* Main: fixed full-screen panel (position:fixed = visual viewport on iOS, no height bugs) */
+  .wa-main{display:none;flex:none}
+  .wa-main.wa-visible{
+    display:flex;
+    position:fixed;
+    top:0;left:0;right:0;bottom:0;
+    z-index:300; /* above nav (z-index 200) */
+    flex-direction:column;
+    background:var(--bg-soft);
   }
-  .wa-main{
-    position:absolute;top:0;left:0;right:0;bottom:0;z-index:10;
-    transform:translateX(100%);
-    transition:transform .25s cubic-bezier(.4,0,.2,1);
+  /* Add safe-area padding to chat header for notch/island */
+  .wa-chat-hdr{
+    padding-top:max(11px,env(safe-area-inset-top,11px));
   }
-  .wa-app.chat-open .wa-sidebar{transform:translateX(-100%)}
-  .wa-app.chat-open .wa-main{transform:translateX(0)}
   .wa-back-btn{display:block}
   .wa-hint{display:none}
+  .tc-bub{max-width:85%}
 }
 </style>
 </head>
@@ -730,7 +731,9 @@ body{
     _busy     = false;
     renderSidebar();
     renderMain();
-    document.getElementById('wa-app').classList.add('chat-open');
+    /* Mobile: fixed panel overlays sidebar */
+    document.getElementById('wa-sidebar').classList.add('wa-hidden');
+    document.getElementById('wa-main').classList.add('wa-visible');
     /* Focus input if messages shown */
     setTimeout(function() {
       var $msgArea = document.getElementById('wa-msg-area');
@@ -949,7 +952,8 @@ body{
     _activeId = null;
     _busy   = false;
     saveStorage();
-    document.getElementById('wa-app').classList.remove('chat-open');
+    document.getElementById('wa-sidebar').classList.remove('wa-hidden');
+    document.getElementById('wa-main').classList.remove('wa-visible');
     renderSidebar();
     renderMain();
     closeDropdown();
@@ -977,7 +981,8 @@ body{
 
     /* Mobile back button */
     document.getElementById('wa-back-btn').addEventListener('click', function() {
-      document.getElementById('wa-app').classList.remove('chat-open');
+      document.getElementById('wa-sidebar').classList.remove('wa-hidden');
+      document.getElementById('wa-main').classList.remove('wa-visible');
     });
 
     /* Menu */
