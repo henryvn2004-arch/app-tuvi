@@ -214,6 +214,11 @@ function extractLasoContext(lasoData: any, question: string): string {
         ctx += '  Cách cục — ' + ten + mota + '\n';
       });
     }
+    // Ý nghĩa cung từ CACH_CUC_DATA matching (patterns Khốc Hư, Thiên Mã, v.v.)
+    const ynItems: string[] = lasoData.cachCucTungCung?.[pName] || [];
+    if (ynItems.length) {
+      ctx += '  Ý nghĩa: ' + ynItems.slice(0, 6).join(' | ') + '\n';
+    }
   }
 
   if (relevant.has('__daiVan__') && lasoData.daiVans?.length) {
