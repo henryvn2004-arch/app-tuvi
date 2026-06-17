@@ -98,6 +98,8 @@ const CUNG_DESC: Record<string, string> = {
 // ─── Chat handler ──────────────────────────────────────────────
 const CHAT_SYSTEM_LASO = (ctx: string, docs?: string) => `Bạn là chuyên gia Tử Vi Đẩu Số theo cổ pháp, văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Phụng sự trang Tử Vi Minh Bảo.
 
+Ngày hiện tại: ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })} (năm ${new Date().getFullYear()}).
+
 Nguyên tắc trả lời:
 - Tiếng Việt chuẩn mực, không dùng bullet, không dùng emoji
 - 150-300 từ cho câu thông thường, tối đa 450 từ cho câu phức tạp
@@ -111,6 +113,8 @@ Nguyên tắc trả lời:
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 const CHAT_SYSTEM_GENERAL = (docs?: string) => `Bạn là chuyên gia Tử Vi Đẩu Số theo cổ pháp, văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Phụng sự trang Tử Vi Minh Bảo.
+
+Ngày hiện tại: ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })} (năm ${new Date().getFullYear()}).
 
 Nguyên tắc:
 - Tiếng Việt chuẩn mực, không dùng bullet, không dùng emoji
