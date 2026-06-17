@@ -166,7 +166,7 @@
   }
 
   // Active state detection
-  var TUVI_PATHS   = ['/', '/luan-giai.html','/xem-tuoi.html','/xem-lam-an.html','/tools/xem-tuoi-sinh-con.html','/tools/an-sao.html','/tools/sao-nam.html','/tools/cach-cuc.html','/tools/dai-van.html','/tools/van-thang.html'];
+  var TUVI_PATHS   = ['/', '/luan-giai.html','/xem-tuoi.html','/xem-lam-an.html','/tools/xem-tuoi-sinh-con.html','/tools/an-sao.html','/tools/sao-nam.html','/tools/cach-cuc.html','/tools/dai-van.html','/tools/van-thang.html','/tuvi-chat.html'];
   var TUONG_PATHS  = ['/tools/tuong-mat-ai.html','/tools/nhan-tuong-ai.html','/tools/thu-tuong-ai.html','/tools/thanh-tuong-ai.html','/tools/thanh-tuong-pro.html','/tools/khi-sac-ai.html'];
   var LAM_DEP_PATHS = ['/tools/kieu-toc-ai.html','/tools/mau-sac-hop-menh.html'];
   var PHONG_PATHS  = ['/tools/phong-thuy.html','/tools/ban-lam-viec.html','/tools/cua-hang-phong-thuy.html','/tools/bat-trach.html','/tools/kim-lau.html'];
@@ -242,6 +242,8 @@
   var dd1 = '<div class="nav-dd" id="nav-dd1">'
     + '<span class="nav-link' + (anyActive(TUVI_PATHS)?' active':'') + '" id="nav-dd1-toggle" role="button" tabindex="0">Tử Vi ' + CHEV + '</span>'
     + '<div class="nav-dd-menu" id="nav-dd1-menu">'
+    + ddSection('Chat AI')
+    + ddItem('/tuvi-chat.html',              'message-circle',  'Tử Vi Chat')
     + ddSection('Luận Giải')
     + ddItem('/luan-giai.html',              'sparkles',        'Luận Giải Lá Số')
     + ddItem('/xem-tuoi.html',               'heart-handshake', 'Xem Tuổi Vợ Chồng')
@@ -419,6 +421,7 @@
     var f = '<footer class="site-footer"><div class="ft-body"><div class="ft-top">'
       + '<div class="ft-brand"><div class="ft-brand-row"><img src="/seal.webp" alt=""><div><div class="ft-brand-name">Tử Vi Minh Bảo</div><div class="ft-brand-zh">Tri mệnh lý – Thuận thế hành</div></div></div><div class="ft-tagline">Tử vi đẩu số theo cổ pháp, luận giải bằng AI.</div></div>'
       + '<div class="ft-col"><div class="ft-col-title">Tử Vi</div>'
+      + '<a href="/tuvi-chat.html">Tử Vi Chat</a>'
       + '<a href="/luan-giai.html">Luận Giải Lá Số</a>'
       + '<a href="/tu-binh.html">Tử Bình Bát Tự</a>'
       + '<a href="/xem-tuoi.html">Xem Tuổi Vợ Chồng</a>'
