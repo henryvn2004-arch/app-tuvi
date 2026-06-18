@@ -3,6 +3,10 @@ export const maxDuration = 60;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
+import {
+  computeMonth, topDaysForActivity, ACTIVITY_META, ACTIVITY_LIST,
+  type ActivityKey,
+} from '../../../tuvi-engine/dist/ngay-tot/index.js';
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!;
 
@@ -240,6 +244,120 @@ function extractLasoContext(lasoData: any, question: string): string {
   return ctx;
 }
 
+// ─── Agent tools ───────────────────────────────────────────────
+const TOOLS_INSTRUCTION = (hasLaso: boolean) => `
+
+CÔNG CỤ (tool) — DÙNG ĐÚNG LÚC, TUYỆT ĐỐI KHÔNG bịa số liệu thời gian:
+${hasLaso ? '- Câu hỏi gắn với MỘT NĂM cụ thể (năm nay, năm sau, "bao giờ", một năm/tuổi nhất định) → GỌI tra_van_han để lấy điểm vận năm đó, tiểu hạn, lưu niên, sao cát/sát. Không tự đoán điểm/cung khi chưa gọi tool.\n' : ''}- Câu hỏi NGÀY TỐT để làm việc trọng đại (cưới hỏi, nhập trạch, khai trương, mua/bán nhà, khởi công, xuất hành...) trong một tháng → GỌI xem_ngay_tot.
+Sau khi có kết quả tool, luận giải dứt khoát và neo vào đúng các con số tool trả về (điểm thấp/nhiều sát tinh phải cảnh báo rõ). Câu nào không cần tool thì trả lời thẳng.`;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function buildTools(hasLaso: boolean): any[] {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const tools: any[] = [];
+  if (hasLaso) {
+    tools.push({
+      name: 'tra_van_han',
+      description: 'Tra vận hạn (tiểu vận) của lá số đang xem cho MỘT NĂM dương lịch cụ thể: điểm vận năm (0–10), xu hướng lên/xuống, cung tiểu hạn, cung lưu niên đại hạn, số sao cát/sát. Dùng cho mọi câu hỏi gắn với một năm hoặc "bao giờ".',
+      input_schema: {
+        type: 'object',
+        properties: { nam: { type: 'integer', description: 'Năm dương lịch cần tra, ví dụ 2027' } },
+        required: ['nam'],
+      },
+    });
+  }
+  tools.push({
+    name: 'xem_ngay_tot',
+    description: 'Tìm các ngày tốt nhất trong một tháng để làm một việc trọng đại, chấm theo 12 trực · 28 tú · sao hoàng/hắc đạo · ngày kỵ cổ truyền.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        viec: { type: 'string', enum: ACTIVITY_LIST as readonly string[], description: 'Loại việc: ' + (ACTIVITY_LIST as readonly string[]).map(k => `${k}=${ACTIVITY_META[k as ActivityKey]?.name || k}`).join(', ') },
+        thang: { type: 'integer', description: 'Tháng 1–12' },
+        nam: { type: 'integer', description: 'Năm dương lịch (2020–2036)' },
+      },
+      required: ['viec', 'thang', 'nam'],
+    },
+  });
+  return tools;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function execTraVanHan(lasoData: any, input: any): string {
+  const nam = Number(input?.nam);
+  if (!nam) return 'Thiếu tham số năm.';
+  const tvs = lasoData?.tieuVanScores;
+  if (!Array.isArray(tvs) || !tvs.length) return 'Lá số này chưa có dữ liệu tiểu vận theo năm — hãy luận theo đại vận hiện tại trong dữ liệu lá số.';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const tv = tvs.find((t: any) => Number(t.nam) === nam);
+  if (!tv) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const yrs = tvs.map((t: any) => Number(t.nam));
+    return `Năm ${nam} ngoài phạm vi lá số (chỉ có ${Math.min(...yrs)}–${Math.max(...yrs)}).`;
+  }
+  const palaces = lasoData.palaces || [];
+  const starsOf = (cungName: string): string => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const p = palaces.find((x: any) => x.cungName === cungName);
+    if (!p) return '';
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const major = (p.majorStars || []).map((s: any) => s.ten).filter(Boolean).join(', ');
+    return major || 'vô chính diệu';
+  };
+  const dir = tv.direction === 'up' ? 'xu hướng đi lên' : tv.direction === 'down' ? 'xu hướng đi xuống' : 'đi ngang';
+  const dv = (lasoData.daiVans || [])[tv.dvIdx];
+  let out = `TIỂU VẬN NĂM ${nam} (tuổi ${tv.tuoi}):\n`;
+  out += `- Điểm vận năm: ${tv.mainScore}/10, ${dir} (${tv.catCount} sao cát, ${tv.satCount} sao sát trong tổ hợp 3 cung hạn).\n`;
+  out += `- Tiểu hạn nhập cung ${tv.tieuHanCung} — chính tinh: ${starsOf(tv.tieuHanCung) || '?'}.\n`;
+  out += `- Lưu niên đại hạn vào cung ${tv.luuNienCung} — chính tinh: ${starsOf(tv.luuNienCung) || '?'}.\n`;
+  if (dv) out += `- Thuộc đại vận ${dv.diaChi} (${dv.tuoiStart}–${dv.tuoiEnd} tuổi)${dv.scoring?.tong != null ? `, điểm đại vận ${dv.scoring.tong}/10 ${dv.scoring.flag || ''}` : ''}.\n`;
+  return out;
+}
+
+function execXemNgayTot(input: { viec?: string; thang?: number; nam?: number }): string {
+  const key = String(input?.viec || '') as ActivityKey;
+  const thang = Number(input?.thang), nam = Number(input?.nam);
+  if (!(ACTIVITY_LIST as readonly string[]).includes(key)) return `Việc "${input?.viec}" không hỗ trợ. Các việc: ${(ACTIVITY_LIST as readonly string[]).join(', ')}.`;
+  if (!(nam >= 2020 && nam <= 2036)) return `Năm ${nam} ngoài phạm vi (2020–2036).`;
+  if (!(thang >= 1 && thang <= 12)) return `Tháng ${thang} không hợp lệ.`;
+  const meta = ACTIVITY_META[key];
+  const top = topDaysForActivity(computeMonth(nam, thang), key, 6);
+  if (!top.length) return `Tháng ${thang}/${nam} không có ngày đạt điểm ≥6 để ${meta.name.toLowerCase()} — nên cân nhắc tháng khác.`;
+  let out = `NGÀY TỐT để ${meta.name} — tháng ${thang}/${nam} (top ${top.length}):\n`;
+  for (const { info, score } of top) {
+    const gio = (info.gioHoangDao || []).map(g => g.chi).slice(0, 4).join(', ');
+    out += `- ${info.duongLich.day}/${info.duongLich.month} (${info.thuTrongTuan}, ÂL ${info.amLich.day}/${info.amLich.month}), can chi ${info.canChiNgay}, trực ${info.truc}: ${score.score}/10 ${score.level}`;
+    if (score.reasons?.length) out += ` — ${score.reasons.slice(0, 2).join('; ')}`;
+    if (gio) out += ` — giờ tốt: ${gio}`;
+    out += '\n';
+  }
+  return out;
+}
+
+const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function callAnthropic(systemPrompt: string, convo: any[], tools: any[], toolChoiceNone = false): Promise<any> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const payload: any = { model: 'claude-sonnet-4-6', max_tokens: 1500, system: systemPrompt, messages: convo };
+  if (tools.length) {
+    payload.tools = tools;
+    if (toolChoiceNone) payload.tool_choice = { type: 'none' };
+  }
+  const resp = await fetch(ANTHROPIC_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify(payload),
+  });
+  if (!resp.ok) throw new Error('API error: ' + (await resp.text()).slice(0, 200));
+  return resp.json();
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function textOf(content: any[]): string {
+  return (content || []).filter(b => b.type === 'text').map(b => b.text).join('\n').trim();
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function handleChat(body: any): Promise<Response> {
   const { messages, lasoData, docs } = body;
@@ -247,25 +365,55 @@ async function handleChat(body: any): Promise<Response> {
 
   const lastQ = messages[messages.length - 1]?.content || '';
   const hasLaso = !!(lasoData?.palaces?.length || lasoData?._lsA?.palaces?.length);
-  const systemPrompt = hasLaso
+  const systemPrompt = (hasLaso
     ? CHAT_SYSTEM_LASO(extractLasoContext(lasoData, lastQ), docs)
-    : CHAT_SYSTEM_GENERAL(docs);
+    : CHAT_SYSTEM_GENERAL(docs)) + TOOLS_INSTRUCTION(hasLaso);
+
+  const tools = buildTools(hasLaso);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const trimmed = messages.slice(-10).map((m: any) => ({
+  const convo: any[] = messages.slice(-10).map((m: any) => ({
     role: m.role,
     content: String(m.content).slice(0, 2000),
   }));
 
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1200, system: systemPrompt, messages: trimmed }),
-  });
+  const MAX_ROUNDS = 3;
+  const toolsUsed: string[] = [];
+  let finalText = '';
 
-  if (!resp.ok) return err('API error: ' + (await resp.text()).slice(0, 200));
-  const data = await resp.json();
-  return ok({ answer: data.content?.[0]?.text || '', scenario: hasLaso ? 'laso' : 'general' });
+  try {
+    for (let round = 0; round <= MAX_ROUNDS; round++) {
+      const lastRound = round === MAX_ROUNDS;
+      const data = await callAnthropic(systemPrompt, convo, tools, lastRound);
+      const content = data.content || [];
+
+      if (data.stop_reason === 'tool_use' && !lastRound) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const toolUses = content.filter((b: any) => b.type === 'tool_use');
+        convo.push({ role: 'assistant', content });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const results = toolUses.map((tu: any) => {
+          toolsUsed.push(tu.name);
+          let resultText = '';
+          try {
+            if (tu.name === 'tra_van_han') resultText = execTraVanHan(lasoData, tu.input);
+            else if (tu.name === 'xem_ngay_tot') resultText = execXemNgayTot(tu.input);
+            else resultText = 'Công cụ không tồn tại.';
+          } catch (e: unknown) { resultText = 'Lỗi chạy công cụ: ' + (e as Error).message; }
+          return { type: 'tool_result', tool_use_id: tu.id, content: resultText };
+        });
+        convo.push({ role: 'user', content: results });
+        continue;
+      }
+
+      finalText = textOf(content);
+      break;
+    }
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+
+  return ok({ answer: finalText || 'Xin lỗi, có lỗi xảy ra.', scenario: hasLaso ? 'laso' : 'general', toolsUsed });
 }
 
 // ─── Prompt builder ────────────────────────────────────────────
