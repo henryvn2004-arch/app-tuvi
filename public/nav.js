@@ -227,7 +227,7 @@
   }
   // Conversion script
   if (!document.getElementById('cv-script')) {
-    var cv=document.createElement('script'); cv.id='cv-script'; cv.src='/conversion.js'; document.body.appendChild(cv);
+    var cv=document.createElement('script'); cv.id='cv-script'; cv.src='/conversion.js?v=2'; document.body.appendChild(cv);
   }
   if (!document.getElementById('nav-css')) {
     var s=document.createElement('style'); s.id='nav-css'; s.textContent=css; document.head.appendChild(s);
