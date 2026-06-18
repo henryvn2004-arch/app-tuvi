@@ -111,6 +111,7 @@ Nguyên tắc trả lời:
 - Xét tam phương tứ chính, không đoán đơn sao
 - Trả lời dứt khoát: cung/việc được hỏi tốt hay xấu, mạnh hay yếu — neo vào "Điểm cung X/10" nếu có. Cấm tâng bốc, cấm nước đôi né tránh; có điểm mạnh phải kèm điểm yếu cụ thể.
 - Riêng kết quả tương lai mới dùng ngôn ngữ xác suất, không hứa hẹn tuyệt đối
+- Nếu context ghi "Tiểu vận năm X không có trong dữ liệu", hãy luận từ đại vận đó, không được bịa tiểu vận
 - Không tiết lộ trường phái hay tài liệu
 
 === DỮ LIỆU LÁ SỐ ===
@@ -174,6 +175,9 @@ function extractLasoContext(lasoData: any, question: string): string {
   }
   if (relevant.size === 1) ['Quan Lộc', 'Tài Bạch', 'Phu Thê'].forEach(n => relevant.add(n));
 
+  const yearMatch = q.match(/năm\s*(\d{4})/i);
+  if (yearMatch) relevant.add('__daiVan__');
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const starFmt = (s: any): string => {
     if (!s) return '';
@@ -210,6 +214,28 @@ function extractLasoContext(lasoData: any, question: string): string {
     if (dvStars.length) ctx += ' — Sao (tứ chính): ' + dvStars.join(', ');
     if (dv.scoring?.tong != null) ctx += ' — Điểm vận: ' + dv.scoring.tong + '/10 ' + (dv.scoring.flag||'');
     ctx += '\n';
+  }
+
+  if (yearMatch && lasoData.tuoiXem && lasoData.daiVans?.length) {
+    const queriedYear = parseInt(yearMatch[1]);
+    const NAM_XEM = 2027; // update annually
+    const birthYear = (NAM_XEM - (lasoData.tuoiXem as number)) + 1;
+    const ageInYear = (queriedYear - birthYear) + 1;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const dvForYear = (lasoData.daiVans as any[]).find((dv: any) => ageInYear >= dv.tuoiStart && ageInYear <= dv.tuoiEnd);
+    if (dvForYear) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const dvP: any = palaces[dvForYear.cungIdx] || {};
+      const dvStars = ((dvP.tuChinhStars || dvP.majorStars || []) as string[]).map(starName).filter(Boolean);
+      ctx += `\nNăm ${queriedYear} (tuổi âm ${ageInYear}): thuộc Đại Vận ${dvForYear.diaChi} (${dvForYear.tuoiStart}–${dvForYear.tuoiEnd} tuổi)`;
+      if (dvP.cungName) ctx += ` — Cung ${dvP.cungName}`;
+      if (dvStars.length) ctx += ` — Sao: ${dvStars.join(', ')}`;
+      if (dvForYear.scoring?.tong != null) ctx += ` — Điểm: ${dvForYear.scoring.tong}/10`;
+      ctx += '\n';
+      ctx += `(Tiểu vận năm ${queriedYear} không có trong dữ liệu — chỉ luận từ đại vận)\n`;
+    } else {
+      ctx += `\nNăm ${queriedYear} (tuổi âm ${ageInYear}): ngoài phạm vi đại vận trong dữ liệu.\n`;
+    }
   }
 
   ctx += '\n=== CUNG LIÊN QUAN ===\n';
