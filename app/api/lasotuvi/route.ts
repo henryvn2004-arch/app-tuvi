@@ -2,7 +2,7 @@
 export const maxDuration = 60;
 
 import { NextRequest } from 'next/server';
-import { ok, err, options, parseBody } from '@/lib/cors';
+import { ok, err, options, parseBody, CORS_HEADERS } from '@/lib/cors';
 import {
   computeMonth, topDaysForActivity, ACTIVITY_META, ACTIVITY_LIST,
   type ActivityKey,
@@ -488,6 +488,157 @@ async function handleChat(body: any): Promise<Response> {
   return ok({ answer: finalText || 'Xin lỗi, có lỗi xảy ra.', scenario: hasLaso ? 'laso' : 'general', toolsUsed, usage });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function handleChatStream(body: any): Promise<Response> {
+  const { messages, lasoData, docs } = body;
+  if (!messages?.length) return err('Missing messages', 400);
+
+  const lastQ = messages[messages.length - 1]?.content || '';
+  const hasLaso = !!(lasoData?.palaces?.length || lasoData?._lsA?.palaces?.length);
+
+  const bodyLaSoText = (body as { laSoText?: string }).laSoText;
+  const laSoText =
+    (typeof lasoData?._laSoText === 'string' && lasoData._laSoText.length > 100) ? lasoData._laSoText :
+    (typeof bodyLaSoText === 'string' && bodyLaSoText.length > 100) ? bodyLaSoText : '';
+  const hasFullLaso = laSoText.length > 100;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let systemForCall: any;
+  let maxTokens = 1500;
+  if (hasFullLaso) {
+    systemForCall = [
+      { type: 'text', text: CHAT_RICH_RULES() + TOOLS_INSTRUCTION(true) },
+      { type: 'text', text: '=== DỮ LIỆU LÁ SỐ (hệ thống tính sẵn) ===\n' + laSoText.slice(0, 32000), cache_control: { type: 'ephemeral' } },
+    ];
+    maxTokens = 2000;
+  } else {
+    systemForCall = (hasLaso
+      ? CHAT_SYSTEM_LASO(extractLasoContext(lasoData, lastQ), docs)
+      : CHAT_SYSTEM_GENERAL(docs)) + TOOLS_INSTRUCTION(hasLaso);
+  }
+
+  const tools = buildTools(hasLaso || hasFullLaso);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const convo: any[] = messages.slice(-10).map((m: any) => ({
+    role: m.role,
+    content: String(m.content).slice(0, 2000),
+  }));
+
+  const { readable, writable } = new TransformStream();
+  const writer = writable.getWriter();
+  const enc = new TextEncoder();
+
+  function send(obj: object) {
+    writer.write(enc.encode('data: ' + JSON.stringify(obj) + '\n\n'));
+  }
+
+  (async () => {
+    const MAX_ROUNDS = 3;
+    const toolsUsed: string[] = [];
+
+    try {
+      for (let round = 0; round <= MAX_ROUNDS; round++) {
+        const lastRound = round === MAX_ROUNDS;
+
+        if (lastRound) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const payload: any = {
+            model: 'claude-sonnet-4-6',
+            max_tokens: maxTokens,
+            stream: true,
+            system: systemForCall,
+            messages: convo,
+          };
+          if (tools.length) {
+            payload.tools = tools;
+            payload.tool_choice = { type: 'none' };
+          }
+          const resp = await fetch(ANTHROPIC_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-key': ANTHROPIC_API_KEY,
+              'anthropic-version': '2023-06-01',
+              'anthropic-beta': 'prompt-caching-2024-07-31',
+            },
+            body: JSON.stringify(payload),
+          });
+          if (!resp.ok) {
+            send({ type: 'error', message: 'API error: ' + (await resp.text()).slice(0, 200) });
+            break;
+          }
+          const streamReader = resp.body!.getReader();
+          const dec = new TextDecoder();
+          let buf = '';
+          while (true) {
+            const { done, value } = await streamReader.read();
+            if (done) break;
+            buf += dec.decode(value, { stream: true });
+            const lines = buf.split('\n');
+            buf = lines.pop() ?? '';
+            for (const line of lines) {
+              if (!line.startsWith('data: ')) continue;
+              const json = line.slice(6).trim();
+              if (json === '[DONE]') continue;
+              try {
+                const evt = JSON.parse(json);
+                if (evt.type === 'content_block_delta' && evt.delta?.type === 'text_delta') {
+                  send({ type: 'text', text: evt.delta.text });
+                }
+              } catch { /* ignore */ }
+            }
+          }
+          break;
+        }
+
+        const data = await callAnthropic(systemForCall, convo, tools, false, maxTokens);
+        const content = data.content || [];
+
+        if (data.stop_reason === 'tool_use') {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const toolUses = content.filter((b: any) => b.type === 'tool_use');
+          convo.push({ role: 'assistant', content });
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const results = toolUses.map((tu: any) => {
+            toolsUsed.push(tu.name);
+            const label = tu.name === 'tra_van_han' ? 'Đang tra vận hạn...' : 'Đang xem ngày tốt...';
+            send({ type: 'tool', name: tu.name, label });
+            let resultText = '';
+            try {
+              if (tu.name === 'tra_van_han') resultText = execTraVanHan(lasoData, tu.input);
+              else if (tu.name === 'xem_ngay_tot') resultText = execXemNgayTot(tu.input);
+              else resultText = 'Công cụ không tồn tại.';
+            } catch (e: unknown) { resultText = 'Lỗi chạy công cụ: ' + (e as Error).message; }
+            return { type: 'tool_result', tool_use_id: tu.id, content: resultText };
+          });
+          convo.push({ role: 'user', content: results });
+          continue;
+        }
+
+        // Model answered without tools — emit the text we already have
+        const text = textOf(content);
+        if (text) send({ type: 'text', text });
+        break;
+      }
+    } catch (e: unknown) {
+      send({ type: 'error', message: (e as Error).message });
+    }
+
+    send({ type: 'done', toolsUsed });
+    writer.close();
+  })();
+
+  return new Response(readable, {
+    headers: {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'X-Accel-Buffering': 'no',
+      ...CORS_HEADERS,
+    },
+  });
+}
+
 // ─── Prompt builder ────────────────────────────────────────────
 function buildPrompt(phan: number, laSoText: string, docs?: string): string {
   function trimLaSo(text: string, phan: number): string {
@@ -657,7 +808,7 @@ export async function POST(request: NextRequest) {
   const action = searchParams.get('action');
   const body = await parseBody(request);
 
-  if (action === 'chat') return handleChat(body);
+  if (action === 'chat') return body.stream ? handleChatStream(body) : handleChat(body);
 
   const { laSoText, phan, docs } = body as { laSoText?: string; phan?: number; docs?: string };
   if (!laSoText || !phan) return err('Thiếu dữ liệu', 400);
