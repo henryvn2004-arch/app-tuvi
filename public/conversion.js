@@ -389,8 +389,8 @@ function startPopup() {
 // ═══════════════════════════════════════════════════════════
 function init() {
   injectCSS();
-  startSocialProof();
-  startPopup();
+  // startSocialProof();
+  // startPopup();
 }
 
 if (document.readyState === 'loading') {
