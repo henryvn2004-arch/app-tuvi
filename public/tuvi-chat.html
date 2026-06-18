@@ -497,6 +497,7 @@ body{
   var _chats    = [];
   var _activeId = null;
   var _busy     = false;
+  var _pendingQuestion = '';   // câu hỏi đến từ homepage (?q=), gửi sau khi an sao
 
   /* ── localStorage ────────────────────────────────────────────── */
   function loadStorage() {
@@ -800,6 +801,18 @@ body{
         showSample:  false,
       });
       document.getElementById('error-msg').classList.remove('active');
+
+      /* Câu hỏi từ homepage: hiện ngay trên form để người dùng biết đang chờ trả lời */
+      var _introEl = document.querySelector('#wa-form-area .wa-form-intro');
+      if (_introEl) {
+        if (_pendingQuestion) {
+          _introEl.innerHTML = 'Câu hỏi của bạn: <strong>«' +
+            _pendingQuestion.replace(/</g, '&lt;').replace(/>/g, '&gt;') +
+            '»</strong><br>Nhập ngày sinh dương lịch để tôi <strong>an sao lá số</strong> rồi trả lời ngay.';
+        } else {
+          _introEl.innerHTML = 'Nhập ngày sinh dương lịch để <strong>an sao lá số</strong>, sau đó hỏi tôi bất cứ điều gì về số mệnh, sự nghiệp, tình duyên, vận hạn...';
+        }
+      }
     } else {
       $formArea.style.display = 'none';
       $msgArea.style.display  = 'flex';
@@ -906,6 +919,13 @@ body{
 
       renderSidebar();
       renderMain();
+
+      /* Câu hỏi đến từ homepage (?q=): an sao xong gửi luôn */
+      if (_pendingQuestion) {
+        var _pq = _pendingQuestion;
+        _pendingQuestion = '';
+        setTimeout(function() { doSend(_pq); }, 60);
+      }
 
     } catch(e) {
       console.error('[TuviChat] an sao error', e);
@@ -1120,6 +1140,16 @@ body{
       }
     });
     document.getElementById('tc-send').addEventListener('click', function() { doSend(); });
+
+    /* Homepage funnel: ?q=<câu hỏi> → tạo lá số mới, an sao xong tự gửi câu hỏi */
+    var pendingQ = '';
+    try { pendingQ = (new URLSearchParams(location.search).get('q') || '').trim().slice(0, 300); } catch(e) {}
+    if (pendingQ) {
+      _pendingQuestion = pendingQ;
+      try { history.replaceState({}, '', location.pathname); } catch(e) {}
+      createNewChat();
+      return;
+    }
 
     /* Auto-open first chat on desktop */
     if (window.innerWidth > 768 && _chats.length > 0) {
