@@ -8,6 +8,7 @@ const TuviPaywall = (() => {
   const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 
   const PRODUCTS = {
+    'tuvi-chat':   { cost:   1, title: 'Tử Vi Chat' },
     'laso':        { cost: 150, title: 'Luận Giải Lá Số' },
     'tu-binh':     { cost: 100, title: 'Tử Bình Bát Tự' },
     'xem-tuoi':    { cost:  50, title: 'Xem Tuổi Vợ Chồng' },
@@ -38,6 +39,7 @@ const TuviPaywall = (() => {
   };
 
   const TOOL_TYPE = {
+    'tuvi-chat': 'use_tuvi_chat',
     'laso': 'use_laso', 'tu-binh': 'use_tubinh',
     'xem-tuoi': 'use_xem_tuoi', 'xem-lam-an': 'use_xem_lam_an',
     'dien-tuong': 'use_dien_tuong', 'nhan-tuong': 'use_nhan_tuong',
@@ -263,6 +265,65 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     });
   }
 
+  // ── Silent flow (cho chat: trừ ngầm, KHÔNG confirm modal) ─────
+  async function _balanceFor(userId) {
+    try {
+      const r = await fetch('/api/payment?action=balance&userId=' + encodeURIComponent(userId));
+      return (await r.json()).balance ?? 0;
+    } catch (e) { return 0; }
+  }
+
+  // Lấy số dư hiện tại (null nếu chưa đăng nhập)
+  async function getBalance() {
+    if (!window.Auth?.isLoggedIn()) return null;
+    return await _balanceFor(window.Auth.getUser()?.id || '');
+  }
+
+  // Gate trước khi gửi: kiểm tra đăng nhập + đủ Lượng (KHÔNG trừ, KHÔNG confirm).
+  // reason: 'login' | 'insufficient'. Khi insufficient sẽ tự mở modal nạp.
+  async function ensureCredits(opts) {
+    opts = opts || {};
+    const product = opts.product;
+    const cost = opts.cost != null ? opts.cost : (PRODUCTS[product]?.cost ?? 1);
+    _css();
+    if (!window.Auth?.isLoggedIn()) return { ok: false, reason: 'login' };
+    const userId = window.Auth.getUser()?.id || '';
+    const token  = window.Auth.getSession()?.access_token || '';
+    if (!token) return { ok: false, reason: 'login' };
+    const balance = await _balanceFor(userId);
+    if (balance < cost) { _insufficient(cost, balance); return { ok: false, reason: 'insufficient', balance }; }
+    return { ok: true, balance };
+  }
+
+  // Trừ Lượng ngầm (gọi SAU khi có kết quả). Trả { ok, balance }.
+  async function deductSilent(opts) {
+    opts = opts || {};
+    const product = opts.product;
+    const cost = opts.cost != null ? opts.cost : (PRODUCTS[product]?.cost ?? 1);
+    if (!window.Auth?.isLoggedIn()) return { ok: false, reason: 'login' };
+    const token = window.Auth.getSession()?.access_token || '';
+    if (!token) return { ok: false, reason: 'login' };
+    try {
+      const res = await fetch('/api/payment?action=deduct', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({
+          amount: cost,
+          toolType: TOOL_TYPE[product] || ('use_' + (product || 'unknown')),
+          slug: '',  // rỗng = luôn trừ (mỗi câu một lần)
+          description: PRODUCTS[product]?.title || product || 'Tử Vi Chat',
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        window.refreshNavCredits && window.refreshNavCredits();
+        return { ok: true, balance: data.balance ?? null };
+      }
+      if (data.insufficientBalance) { _insufficient(cost, data.balance ?? 0); return { ok: false, reason: 'insufficient', balance: data.balance ?? 0 }; }
+      return { ok: false, reason: 'error', error: data.error };
+    } catch (e) { return { ok: false, reason: 'error', error: e.message }; }
+  }
+
   // ── Init ──────────────────────────────────────────────────────
   function init(config) {
     _cfg = config;
@@ -270,7 +331,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     _price().catch(() => {}); // prefetch
   }
 
-  return { init, requireCredits, generateToolSlug, _close };
+  return { init, requireCredits, generateToolSlug, ensureCredits, deductSilent, getBalance, _banner, _close };
 })();
 
 // Export to global window so cross-script checks (e.g. tu-binh.html line 1537) work

@@ -466,6 +466,7 @@ body{
 </div><!-- /wa-app -->
 
 <script src="/nav.js?v=15"></script>
+<script src="/tuvi-paywall.js?v=4"></script>
 <script>
 (function () {
   'use strict';
@@ -1002,6 +1003,17 @@ body{
     text = (text || $ta.value).trim();
     if (!text || _busy || !chat) return;
 
+    // ── Paywall: phải đăng nhập + đủ Lượng mới được hỏi ──
+    if (window.TuviPaywall && TuviPaywall.ensureCredits) {
+      var gate = await TuviPaywall.ensureCredits({ product: 'tuvi-chat' });
+      if (!gate || !gate.ok) {
+        if (gate && gate.reason === 'login' && window.showAuthModal) {
+          window.showAuthModal(function () { doSend(text); });
+        }
+        return;  // hết Lượng: modal nạp đã hiện trong ensureCredits
+      }
+    }
+
     $ta.value = '';
     autoResize();
     $send.disabled = true;
@@ -1044,6 +1056,15 @@ body{
 
       appendMsg('bot', answer);
       chat.messages.push({ role: 'assistant', content: answer });
+
+      // ── Trừ 1 Lượng sau khi trả lời xong (ngầm) + cảnh báo sắp hết ──
+      if (window.TuviPaywall && TuviPaywall.deductSilent) {
+        TuviPaywall.deductSilent({ product: 'tuvi-chat' }).then(function (d) {
+          if (d && d.ok && d.balance != null && d.balance <= 3 && TuviPaywall._banner) {
+            TuviPaywall._banner('Còn ' + d.balance + ' lượt — nạp thêm để hỏi tiếp');
+          }
+        });
+      }
       chat.lastMsg   = stripMd(answer);
       chat.updatedAt = Date.now();
       saveStorage();
