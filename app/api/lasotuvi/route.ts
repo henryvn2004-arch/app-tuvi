@@ -380,12 +380,16 @@ async function handleChat(body: any): Promise<Response> {
   const MAX_ROUNDS = 3;
   const toolsUsed: string[] = [];
   let finalText = '';
+  const usage = { input_tokens: 0, output_tokens: 0, rounds: 0 };
 
   try {
     for (let round = 0; round <= MAX_ROUNDS; round++) {
       const lastRound = round === MAX_ROUNDS;
       const data = await callAnthropic(systemPrompt, convo, tools, lastRound);
       const content = data.content || [];
+      usage.input_tokens += data.usage?.input_tokens || 0;
+      usage.output_tokens += data.usage?.output_tokens || 0;
+      usage.rounds += 1;
 
       if (data.stop_reason === 'tool_use' && !lastRound) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -413,7 +417,7 @@ async function handleChat(body: any): Promise<Response> {
     return err((e as Error).message);
   }
 
-  return ok({ answer: finalText || 'Xin lỗi, có lỗi xảy ra.', scenario: hasLaso ? 'laso' : 'general', toolsUsed });
+  return ok({ answer: finalText || 'Xin lỗi, có lỗi xảy ra.', scenario: hasLaso ? 'laso' : 'general', toolsUsed, usage });
 }
 
 // ─── Prompt builder ────────────────────────────────────────────
