@@ -2,7 +2,7 @@
 export const maxDuration = 60;
 
 import { NextRequest } from 'next/server';
-import { ok, err, options, parseBody } from '@/lib/cors';
+import { ok, err, options, parseBody, CORS_HEADERS } from '@/lib/cors';
 import {
   computeMonth, topDaysForActivity, ACTIVITY_META, ACTIVITY_LIST,
   type ActivityKey,
@@ -99,6 +99,75 @@ const CUNG_DESC: Record<string, string> = {
   'Huynh Đệ': 'Cung Huynh Đệ xem anh chị em, bạn bè cùng trang lứa, và một phần về tài chính lưu động.',
 };
 
+// ─── Chat context builder ──────────────────────────────────────
+interface ChatContext {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  systemForCall: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  tools: any[];
+  maxTokens: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  lasoDataForTools: any; // for execTraVanHan — null for non-laso tools
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function buildChatContext(body: any): ChatContext {
+  const toolType = body.toolType || 'laso';
+  const docs     = body.docs as string | undefined;
+
+  if (toolType === 'xem-tuoi' || toolType === 'xem-lam-an') {
+    return {
+      systemForCall:    CHAT_SYSTEM_COMPAT(extractCompatContext(body.compatData, toolType), toolType, docs),
+      tools:            buildTools(false),
+      maxTokens:        1500,
+      lasoDataForTools: null,
+    };
+  }
+
+  if (toolType === 'tu-binh') {
+    return {
+      systemForCall:    CHAT_SYSTEM_TU_BINH(extractTuBinhContext(body.tuBinhData), docs),
+      tools:            buildTools(false),
+      maxTokens:        1500,
+      lasoDataForTools: null,
+    };
+  }
+
+  // Default: laso / general
+  const messages  = body.messages as { role: string; content: string }[] | undefined;
+  const lasoData  = body.lasoData;
+  const lastQ     = messages?.[messages.length - 1]?.content || '';
+  const hasLaso   = !!(lasoData?.palaces?.length);
+
+  const bodyLaSoText = (body as { laSoText?: string }).laSoText;
+  const laSoText =
+    (typeof lasoData?._laSoText === 'string' && lasoData._laSoText.length > 100) ? lasoData._laSoText :
+    (typeof bodyLaSoText === 'string' && bodyLaSoText.length > 100) ? bodyLaSoText : '';
+  const hasFullLaso = laSoText.length > 100;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let systemForCall: any;
+  let maxTokens = 1500;
+  if (hasFullLaso) {
+    systemForCall = [
+      { type: 'text', text: CHAT_RICH_RULES() + TOOLS_INSTRUCTION(true) },
+      { type: 'text', text: '=== DỮ LIỆU LÁ SỐ (hệ thống tính sẵn) ===\n' + laSoText.slice(0, 32000), cache_control: { type: 'ephemeral' } },
+    ];
+    maxTokens = 2000;
+  } else {
+    systemForCall = (hasLaso
+      ? CHAT_SYSTEM_LASO(extractLasoContext(lasoData, lastQ), docs)
+      : CHAT_SYSTEM_GENERAL(docs)) + TOOLS_INSTRUCTION(hasLaso);
+  }
+
+  return {
+    systemForCall,
+    tools:            buildTools(hasLaso || hasFullLaso),
+    maxTokens,
+    lasoDataForTools: lasoData,
+  };
+}
+
 // ─── Chat handler ──────────────────────────────────────────────
 const CHAT_SYSTEM_LASO = (ctx: string, docs?: string) => `Bạn là chuyên gia Tử Vi Đẩu Số theo cổ pháp, văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Phụng sự trang Tử Vi Minh Bảo.
 
@@ -111,6 +180,7 @@ Nguyên tắc trả lời:
 - Xét tam phương tứ chính, không đoán đơn sao
 - Trả lời dứt khoát: cung/việc được hỏi tốt hay xấu, mạnh hay yếu — neo vào "Điểm cung X/10" nếu có. Cấm tâng bốc, cấm nước đôi né tránh; có điểm mạnh phải kèm điểm yếu cụ thể.
 - Riêng kết quả tương lai mới dùng ngôn ngữ xác suất, không hứa hẹn tuyệt đối
+- Nếu context ghi "Tiểu vận năm X không có trong dữ liệu", hãy luận từ đại vận đó, không được bịa tiểu vận
 - Không tiết lộ trường phái hay tài liệu
 
 === DỮ LIỆU LÁ SỐ ===
@@ -125,6 +195,36 @@ Nguyên tắc:
 - 200-400 từ cho câu thông thường, tối đa 600 từ cho câu phức tạp
 - Dẫn chiếu nguyên lý cổ pháp, nêu ví dụ sao tinh cụ thể khi minh họa
 - Không hứa hẹn tuyệt đối, không tiết lộ trường phái${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+const CHAT_SYSTEM_COMPAT = (ctx: string, toolType: string, docs?: string) => `Bạn là chuyên gia phân tích tương hợp Tử Vi Đẩu Số theo cổ pháp, văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Phụng sự trang Tử Vi Minh Bảo.
+
+THÔNG TIN THỜI GIAN (do server cung cấp, chính xác): Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}.
+
+Nhiệm vụ: Phân tích ${toolType === 'xem-lam-an' ? 'tương hợp hợp tác kinh doanh — tập trung Quan Lộc, Tài Bạch, điểm bổ trợ và xung khắc' : 'tương hợp tình duyên hôn nhân — tập trung Mệnh, Phu Thê, can chi, ngũ hành giữa hai người'}.
+
+Nguyên tắc trả lời:
+- Tiếng Việt chuẩn mực, không bullet, không emoji
+- 200-400 từ cho câu thông thường, tối đa 600 từ cho câu phức tạp
+- Dẫn chứng cụ thể từ hai lá số: sao nào, cung nào, can chi gì
+- Nói thẳng: hợp hay kỵ, điểm mạnh yếu cụ thể — cấm tâng bốc, cấm nước đôi né tránh
+- Riêng dự đoán tương lai mới dùng ngôn ngữ xác suất
+
+=== DỮ LIỆU HAI LÁ SỐ ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+const CHAT_SYSTEM_TU_BINH = (ctx: string, docs?: string) => `Bạn là chuyên gia Tử Bình Bát Tự (Tứ Trụ) theo cổ pháp, văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Phụng sự trang Tử Vi Minh Bảo.
+
+THÔNG TIN THỜI GIAN (do server cung cấp, chính xác): Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}.
+
+Nguyên tắc trả lời:
+- Tiếng Việt chuẩn mực, không bullet, không emoji
+- 200-400 từ cho câu thông thường, tối đa 600 từ cho câu phức tạp
+- Dẫn chứng cụ thể từ Tứ Trụ: Nhật Can, Dụng Thần, Cách Cục, Ngũ Hành
+- Nói thẳng mạnh/yếu — cấm tâng bốc, cấm nước đôi né tránh
+- Câu hỏi về ngày tốt → gọi tool xem_ngay_tot; không tự bịa số liệu vận hạn
+
+=== DỮ LIỆU BÁT TỰ TỨ TRỤ ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 // Prompt dày cho chat khi có NGUYÊN lá-số-text (giống luận giải) — chống thảo mai, neo điểm
 const CHAT_RICH_RULES = () => `Bạn là chuyên gia Tử Vi Đẩu Số theo cổ pháp, văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Phụng sự trang Tử Vi Minh Bảo.
@@ -174,6 +274,9 @@ function extractLasoContext(lasoData: any, question: string): string {
   }
   if (relevant.size === 1) ['Quan Lộc', 'Tài Bạch', 'Phu Thê'].forEach(n => relevant.add(n));
 
+  const yearMatch = q.match(/năm\s*(\d{4})/i);
+  if (yearMatch) relevant.add('__daiVan__');
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const starFmt = (s: any): string => {
     if (!s) return '';
@@ -210,6 +313,28 @@ function extractLasoContext(lasoData: any, question: string): string {
     if (dvStars.length) ctx += ' — Sao (tứ chính): ' + dvStars.join(', ');
     if (dv.scoring?.tong != null) ctx += ' — Điểm vận: ' + dv.scoring.tong + '/10 ' + (dv.scoring.flag||'');
     ctx += '\n';
+  }
+
+  if (yearMatch && lasoData.tuoiXem && lasoData.daiVans?.length) {
+    const queriedYear = parseInt(yearMatch[1]);
+    const NAM_XEM = 2027; // update annually
+    const birthYear = (NAM_XEM - (lasoData.tuoiXem as number)) + 1;
+    const ageInYear = (queriedYear - birthYear) + 1;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const dvForYear = (lasoData.daiVans as any[]).find((dv: any) => ageInYear >= dv.tuoiStart && ageInYear <= dv.tuoiEnd);
+    if (dvForYear) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const dvP: any = palaces[dvForYear.cungIdx] || {};
+      const dvStars = ((dvP.tuChinhStars || dvP.majorStars || []) as string[]).map(starName).filter(Boolean);
+      ctx += `\nNăm ${queriedYear} (tuổi âm ${ageInYear}): thuộc Đại Vận ${dvForYear.diaChi} (${dvForYear.tuoiStart}–${dvForYear.tuoiEnd} tuổi)`;
+      if (dvP.cungName) ctx += ` — Cung ${dvP.cungName}`;
+      if (dvStars.length) ctx += ` — Sao: ${dvStars.join(', ')}`;
+      if (dvForYear.scoring?.tong != null) ctx += ` — Điểm: ${dvForYear.scoring.tong}/10`;
+      ctx += '\n';
+      ctx += `(Tiểu vận năm ${queriedYear} không có trong dữ liệu — chỉ luận từ đại vận)\n`;
+    } else {
+      ctx += `\nNăm ${queriedYear} (tuổi âm ${ageInYear}): ngoài phạm vi đại vận trong dữ liệu.\n`;
+    }
   }
 
   ctx += '\n=== CUNG LIÊN QUAN ===\n';
@@ -262,6 +387,84 @@ function extractLasoContext(lasoData: any, question: string): string {
       if (dv.scoring?.tong != null) ctx += ' điểm=' + dv.scoring.tong + '/10';
       ctx += '\n';
     });
+  }
+  return ctx;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function extractCompatContext(compatData: any, toolType: string): string {
+  if (!compatData) return '';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function fmtLs(ls: any, name: string): string {
+    if (!ls?.palaces) return `${name}: Chưa có dữ liệu\n`;
+    const palaces = ls.palaces || [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const menh    = palaces.find((p: any) => p.isMenh);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const phuThe  = palaces.find((p: any) => p.cungName === 'Phu Thê');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const quanLoc = palaces.find((p: any) => p.cungName === 'Quan Lộc');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const taiBach = palaces.find((p: any) => p.cungName === 'Tài Bạch');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const starNames = (arr: any[]) => (arr || []).map((s: any) => (s.ten || '')).filter(Boolean).join(', ') || 'Vô chính diệu';
+
+    let ctx = `--- ${name} (${ls.canChiNam || '?'}) ---\n`;
+    ctx += `Can Chi: ${ls.canChiNam || ''}, Nạp Âm: ${ls.napAm || ''}, Bản Mệnh: ${ls.menhDC || ''}\n`;
+    if (menh)    ctx += `Cung Mệnh (${menh.diaChi}): ${starNames(menh.majorStars)}\n`;
+    if (toolType === 'xem-lam-an') {
+      if (quanLoc) ctx += `Quan Lộc (${quanLoc.diaChi}): ${starNames(quanLoc.majorStars)}\n`;
+      if (taiBach) ctx += `Tài Bạch (${taiBach.diaChi}): ${starNames(taiBach.majorStars)}\n`;
+    } else {
+      if (phuThe) ctx += `Phu Thê (${phuThe.diaChi}): ${starNames(phuThe.majorStars)}\n`;
+    }
+    const dvHT = ls.daiVanHienTai;
+    if (dvHT) {
+      ctx += `Đại Vận: ${dvHT.diaChi} (${dvHT.tuoiStart}–${dvHT.tuoiEnd}t)`;
+      if (dvHT.scoring?.tong != null) ctx += ` — Điểm: ${dvHT.scoring.tong}/10`;
+      ctx += '\n';
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const cc = (ls.cachCuc || []).map((c: any) => (typeof c === 'object' ? c.ten : c)).filter(Boolean);
+    if (cc.length) ctx += `Cách cục: ${cc.join(', ')}\n`;
+    return ctx;
+  }
+  const { lsA, lsB, nameA, nameB } = compatData;
+  return fmtLs(lsA, nameA || 'Người A') + '\n' + fmtLs(lsB, nameB || 'Người B');
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function extractTuBinhContext(tuBinhData: any): string {
+  if (!tuBinhData) return '';
+  let ctx = '';
+  const tt = tuBinhData.tuTru;
+  if (tt) {
+    ctx += 'Tứ Trụ:\n';
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const fmtTru = (t: any) => t ? `${t.can || ''}${t.chi || ''} (${t.hanh || ''})` : '?';
+    ctx += `  Năm:   ${fmtTru(tt.nam)}\n`;
+    ctx += `  Tháng: ${fmtTru(tt.thang)}\n`;
+    ctx += `  Ngày:  ${fmtTru(tt.ngay)}\n`;
+    ctx += `  Giờ:   ${fmtTru(tt.gio)}\n`;
+  }
+  if (tuBinhData.nhatCan)   ctx += `Nhật Can: ${tuBinhData.nhatCan} (${tuBinhData.nhatCanHanh || ''})\n`;
+  if (tuBinhData.cuongNhuoc) ctx += `Cường/Nhược: ${tuBinhData.cuongNhuoc}\n`;
+  if (tuBinhData.dungThan)  ctx += `Dụng Thần: ${tuBinhData.dungThan}\n`;
+  if (tuBinhData.cachCuc)   ctx += `Cách Cục: ${tuBinhData.cachCuc}\n`;
+  const nh = tuBinhData.nguHanh;
+  if (nh) {
+    const parts = ['Mộc','Hỏa','Thổ','Kim','Thủy'].map(k => nh[k] != null ? `${k}:${nh[k]}` : null).filter(Boolean);
+    if (parts.length) ctx += `Ngũ Hành: ${parts.join(', ')}\n`;
+  }
+  const dvHT = tuBinhData.daiVanHienTai;
+  if (dvHT) {
+    ctx += `Đại Vận hiện tại: ${dvHT.can || ''}${dvHT.chi || ''} (${dvHT.tuoiStart ?? '?'}–${dvHT.tuoiEnd ?? '?'}t)\n`;
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const thanSat = tuBinhData.thanSat;
+  if (thanSat && typeof thanSat === 'object') {
+    const parts = (Object.entries(thanSat) as [string, unknown][]).slice(0, 8).map(([k, v]) => `${k}:${v}`);
+    if (parts.length) ctx += `Thần Sát: ${parts.join(', ')}\n`;
   }
   return ctx;
 }
@@ -382,36 +585,10 @@ function textOf(content: any[]): string {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function handleChat(body: any): Promise<Response> {
-  const { messages, lasoData, docs } = body;
+  const { messages } = body;
   if (!messages?.length) return err('Missing messages', 400);
 
-  const lastQ = messages[messages.length - 1]?.content || '';
-  const hasLaso = !!(lasoData?.palaces?.length || lasoData?._lsA?.palaces?.length);
-
-  // Ưu tiên NGUYÊN lá-số-text (giống luận giải, do client dựng bằng formatLaSoV2) nếu có;
-  // không thì fallback context rút gọn theo từ khóa.
-  const bodyLaSoText = (body as { laSoText?: string }).laSoText;
-  const laSoText =
-    (typeof lasoData?._laSoText === 'string' && lasoData._laSoText.length > 100) ? lasoData._laSoText :
-    (typeof bodyLaSoText === 'string' && bodyLaSoText.length > 100) ? bodyLaSoText : '';
-  const hasFullLaso = laSoText.length > 100;
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let systemForCall: any;
-  let maxTokens = 1500;
-  if (hasFullLaso) {
-    systemForCall = [
-      { type: 'text', text: CHAT_RICH_RULES() + TOOLS_INSTRUCTION(true) },
-      { type: 'text', text: '=== DỮ LIỆU LÁ SỐ (hệ thống tính sẵn) ===\n' + laSoText.slice(0, 32000), cache_control: { type: 'ephemeral' } },
-    ];
-    maxTokens = 2000;
-  } else {
-    systemForCall = (hasLaso
-      ? CHAT_SYSTEM_LASO(extractLasoContext(lasoData, lastQ), docs)
-      : CHAT_SYSTEM_GENERAL(docs)) + TOOLS_INSTRUCTION(hasLaso);
-  }
-
-  const tools = buildTools(hasLaso || hasFullLaso);
+  const { systemForCall, tools, maxTokens, lasoDataForTools } = buildChatContext(body);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const convo: any[] = messages.slice(-10).map((m: any) => ({
@@ -442,7 +619,7 @@ async function handleChat(body: any): Promise<Response> {
           toolsUsed.push(tu.name);
           let resultText = '';
           try {
-            if (tu.name === 'tra_van_han') resultText = execTraVanHan(lasoData, tu.input);
+            if (tu.name === 'tra_van_han') resultText = execTraVanHan(lasoDataForTools, tu.input);
             else if (tu.name === 'xem_ngay_tot') resultText = execXemNgayTot(tu.input);
             else resultText = 'Công cụ không tồn tại.';
           } catch (e: unknown) { resultText = 'Lỗi chạy công cụ: ' + (e as Error).message; }
@@ -459,7 +636,136 @@ async function handleChat(body: any): Promise<Response> {
     return err((e as Error).message);
   }
 
-  return ok({ answer: finalText || 'Xin lỗi, có lỗi xảy ra.', scenario: hasLaso ? 'laso' : 'general', toolsUsed, usage });
+  const toolType = body.toolType || 'laso';
+  const hasLaso  = !!(lasoDataForTools?.palaces?.length);
+  return ok({ answer: finalText || 'Xin lỗi, có lỗi xảy ra.', scenario: hasLaso ? 'laso' : toolType, toolsUsed, usage });
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function handleChatStream(body: any): Promise<Response> {
+  const { messages } = body;
+  if (!messages?.length) return err('Missing messages', 400);
+
+  const { systemForCall, tools, maxTokens, lasoDataForTools } = buildChatContext(body);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const convo: any[] = messages.slice(-10).map((m: any) => ({
+    role: m.role,
+    content: String(m.content).slice(0, 2000),
+  }));
+
+  const { readable, writable } = new TransformStream();
+  const writer = writable.getWriter();
+  const enc = new TextEncoder();
+
+  function send(obj: object) {
+    writer.write(enc.encode('data: ' + JSON.stringify(obj) + '\n\n'));
+  }
+
+  (async () => {
+    const MAX_ROUNDS = 3;
+    const toolsUsed: string[] = [];
+
+    try {
+      for (let round = 0; round <= MAX_ROUNDS; round++) {
+        const lastRound = round === MAX_ROUNDS;
+
+        if (lastRound) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const payload: any = {
+            model: 'claude-sonnet-4-6',
+            max_tokens: maxTokens,
+            stream: true,
+            system: systemForCall,
+            messages: convo,
+          };
+          if (tools.length) {
+            payload.tools = tools;
+            payload.tool_choice = { type: 'none' };
+          }
+          const resp = await fetch(ANTHROPIC_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-key': ANTHROPIC_API_KEY,
+              'anthropic-version': '2023-06-01',
+              'anthropic-beta': 'prompt-caching-2024-07-31',
+            },
+            body: JSON.stringify(payload),
+          });
+          if (!resp.ok) {
+            send({ type: 'error', message: 'API error: ' + (await resp.text()).slice(0, 200) });
+            break;
+          }
+          const streamReader = resp.body!.getReader();
+          const dec = new TextDecoder();
+          let buf = '';
+          while (true) {
+            const { done, value } = await streamReader.read();
+            if (done) break;
+            buf += dec.decode(value, { stream: true });
+            const lines = buf.split('\n');
+            buf = lines.pop() ?? '';
+            for (const line of lines) {
+              if (!line.startsWith('data: ')) continue;
+              const json = line.slice(6).trim();
+              if (json === '[DONE]') continue;
+              try {
+                const evt = JSON.parse(json);
+                if (evt.type === 'content_block_delta' && evt.delta?.type === 'text_delta') {
+                  send({ type: 'text', text: evt.delta.text });
+                }
+              } catch { /* ignore */ }
+            }
+          }
+          break;
+        }
+
+        const data = await callAnthropic(systemForCall, convo, tools, false, maxTokens);
+        const content = data.content || [];
+
+        if (data.stop_reason === 'tool_use') {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const toolUses = content.filter((b: any) => b.type === 'tool_use');
+          convo.push({ role: 'assistant', content });
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const results = toolUses.map((tu: any) => {
+            toolsUsed.push(tu.name);
+            const label = tu.name === 'tra_van_han' ? 'Đang tra vận hạn...' : 'Đang xem ngày tốt...';
+            send({ type: 'tool', name: tu.name, label });
+            let resultText = '';
+            try {
+              if (tu.name === 'tra_van_han') resultText = execTraVanHan(lasoDataForTools, tu.input);
+              else if (tu.name === 'xem_ngay_tot') resultText = execXemNgayTot(tu.input);
+              else resultText = 'Công cụ không tồn tại.';
+            } catch (e: unknown) { resultText = 'Lỗi chạy công cụ: ' + (e as Error).message; }
+            return { type: 'tool_result', tool_use_id: tu.id, content: resultText };
+          });
+          convo.push({ role: 'user', content: results });
+          continue;
+        }
+
+        // Model answered without tools — emit the text we already have
+        const text = textOf(content);
+        if (text) send({ type: 'text', text });
+        break;
+      }
+    } catch (e: unknown) {
+      send({ type: 'error', message: (e as Error).message });
+    }
+
+    send({ type: 'done', toolsUsed });
+    writer.close();
+  })();
+
+  return new Response(readable, {
+    headers: {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'X-Accel-Buffering': 'no',
+      ...CORS_HEADERS,
+    },
+  });
 }
 
 // ─── Prompt builder ────────────────────────────────────────────
@@ -631,7 +937,7 @@ export async function POST(request: NextRequest) {
   const action = searchParams.get('action');
   const body = await parseBody(request);
 
-  if (action === 'chat') return handleChat(body);
+  if (action === 'chat') return body.stream ? handleChatStream(body) : handleChat(body);
 
   const { laSoText, phan, docs } = body as { laSoText?: string; phan?: number; docs?: string };
   if (!laSoText || !phan) return err('Thiếu dữ liệu', 400);
