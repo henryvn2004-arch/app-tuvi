@@ -126,6 +126,21 @@ Nguyên tắc:
 - Dẫn chiếu nguyên lý cổ pháp, nêu ví dụ sao tinh cụ thể khi minh họa
 - Không hứa hẹn tuyệt đối, không tiết lộ trường phái${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
+// Prompt dày cho chat khi có NGUYÊN lá-số-text (giống luận giải) — chống thảo mai, neo điểm
+const CHAT_RICH_RULES = () => `Bạn là chuyên gia Tử Vi Đẩu Số theo cổ pháp, văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Phụng sự trang Tử Vi Minh Bảo.
+
+THÔNG TIN THỜI GIAN (server cung cấp, chính xác): Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}. Khi user hỏi "năm nay/hôm nay là năm/ngày mấy" — trả lời thẳng theo đây.
+
+Bạn được cấp NGUYÊN LÁ SỐ ở phần dưới: đủ 12 cung (chính tinh, phụ tinh, cách cục đặc biệt, patterns, điểm 6 chiều từng cung, tam phương tứ chính), 9 đại vận có scoring, điểm tổng toàn lá số. Đây là dữ liệu hệ thống đã tính sẵn — BẮT BUỘC bám sát, không tự bịa.
+
+CÁCH TRẢ LỜI:
+- Đi thẳng TRỌNG TÂM câu hỏi, 250–500 từ (câu phức tạp tối đa 700). KHÔNG luận tràn cả lá số — chỉ lấy cung/sao/đại vận liên quan câu hỏi.
+- Dẫn chứng CỤ THỂ: tên sao, cung vị, cách cục, con số điểm. Xét tam phương tứ chính, không đoán đơn sao.
+- PHÁN DỨT KHOÁT, NEO VÀO ĐIỂM: mở đầu bằng một câu kết luận neo vào "Điểm cung X/10" hoặc "Luận sao" của cung được hỏi (tốt/khá/trung bình/yếu). Cấm tâng bốc, cấm nước đôi né tránh. Đã khen thì BẮT BUỘC nêu điểm yếu cụ thể ngang sức. Điểm <5 hoặc nhiều sát/bại tinh → cảnh báo rõ, không bọc đường.
+- Gọi ĐÍCH DANH cách cục đặc biệt trong [CÁCH CỤC...] nếu liên quan — nói rõ cát hay hung, kéo lá số lên hay xuống.
+- Phân biệt: đánh giá CẤU TRÚC lá số (mạnh/yếu) thì nói chắc; chỉ DỰ ĐOÁN tương lai mới dùng ngôn ngữ xác suất.
+- Văn xuôi liền mạch, tiếng Việt chuẩn mực. KHÔNG bullet, KHÔNG emoji, KHÔNG tiêu đề con. Không tiết lộ trường phái hay tài liệu.`;
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractLasoContext(lasoData: any, question: string): string {
   if (!lasoData) return '';
@@ -337,16 +352,16 @@ function execXemNgayTot(input: { viec?: string; thang?: number; nam?: number }):
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function callAnthropic(systemPrompt: string, convo: any[], tools: any[], toolChoiceNone = false): Promise<any> {
+async function callAnthropic(system: any, convo: any[], tools: any[], toolChoiceNone = false, maxTokens = 1500): Promise<any> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const payload: any = { model: 'claude-sonnet-4-6', max_tokens: 1500, system: systemPrompt, messages: convo };
+  const payload: any = { model: 'claude-sonnet-4-6', max_tokens: maxTokens, system, messages: convo };
   if (tools.length) {
     payload.tools = tools;
     if (toolChoiceNone) payload.tool_choice = { type: 'none' };
   }
   const resp = await fetch(ANTHROPIC_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+    headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01', 'anthropic-beta': 'prompt-caching-2024-07-31' },
     body: JSON.stringify(payload),
   });
   if (!resp.ok) throw new Error('API error: ' + (await resp.text()).slice(0, 200));
@@ -365,11 +380,31 @@ async function handleChat(body: any): Promise<Response> {
 
   const lastQ = messages[messages.length - 1]?.content || '';
   const hasLaso = !!(lasoData?.palaces?.length || lasoData?._lsA?.palaces?.length);
-  const systemPrompt = (hasLaso
-    ? CHAT_SYSTEM_LASO(extractLasoContext(lasoData, lastQ), docs)
-    : CHAT_SYSTEM_GENERAL(docs)) + TOOLS_INSTRUCTION(hasLaso);
 
-  const tools = buildTools(hasLaso);
+  // Ưu tiên NGUYÊN lá-số-text (giống luận giải, do client dựng bằng formatLaSoV2) nếu có;
+  // không thì fallback context rút gọn theo từ khóa.
+  const bodyLaSoText = (body as { laSoText?: string }).laSoText;
+  const laSoText =
+    (typeof lasoData?._laSoText === 'string' && lasoData._laSoText.length > 100) ? lasoData._laSoText :
+    (typeof bodyLaSoText === 'string' && bodyLaSoText.length > 100) ? bodyLaSoText : '';
+  const hasFullLaso = laSoText.length > 100;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let systemForCall: any;
+  let maxTokens = 1500;
+  if (hasFullLaso) {
+    systemForCall = [
+      { type: 'text', text: CHAT_RICH_RULES() + TOOLS_INSTRUCTION(true) },
+      { type: 'text', text: '=== DỮ LIỆU LÁ SỐ (hệ thống tính sẵn) ===\n' + laSoText.slice(0, 32000), cache_control: { type: 'ephemeral' } },
+    ];
+    maxTokens = 2000;
+  } else {
+    systemForCall = (hasLaso
+      ? CHAT_SYSTEM_LASO(extractLasoContext(lasoData, lastQ), docs)
+      : CHAT_SYSTEM_GENERAL(docs)) + TOOLS_INSTRUCTION(hasLaso);
+  }
+
+  const tools = buildTools(hasLaso || hasFullLaso);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const convo: any[] = messages.slice(-10).map((m: any) => ({
@@ -385,7 +420,7 @@ async function handleChat(body: any): Promise<Response> {
   try {
     for (let round = 0; round <= MAX_ROUNDS; round++) {
       const lastRound = round === MAX_ROUNDS;
-      const data = await callAnthropic(systemPrompt, convo, tools, lastRound);
+      const data = await callAnthropic(systemForCall, convo, tools, lastRound, maxTokens);
       const content = data.content || [];
       usage.input_tokens += data.usage?.input_tokens || 0;
       usage.output_tokens += data.usage?.output_tokens || 0;

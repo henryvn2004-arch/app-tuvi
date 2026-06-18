@@ -18,6 +18,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tuvi-form.js"></script>
+<script src="/tuvi-laso-format.js"></script>
 <style>
 /* ── Reset & tokens ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -900,6 +901,8 @@ body{
       });
 
       chat.lasoData = slimLaso(ls);
+      // Nạp NGUYÊN lá-số-text (giống luận giải) để chat luận sâu — server ưu tiên dùng cái này
+      try { if (window.formatLaSoV2) chat.lasoData._laSoText = formatLaSoV2(ls, conv); } catch (e) {}
 
       var menh  = (ls.palaces || []).find(function(p) { return p.isMenh; });
       var chinh = menh
