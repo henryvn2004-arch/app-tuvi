@@ -19,6 +19,8 @@
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tuvi-form.js"></script>
 <script src="/tuvi-laso-format.js"></script>
+<script src="/tool-configs.js"></script>
+<script src="/tubinh-ansao-engine.js"></script>
 <style>
 /* ── Reset & tokens ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -356,6 +358,85 @@ body{
 }
 
 /* ════════════════════════════════════
+   TOOL PICKER
+═══════════════════════════════════════ */
+.wa-tool-picker{
+  flex:1;overflow-y:auto;padding:28px 20px;
+  background:var(--bg-soft);display:flex;
+  flex-direction:column;align-items:center;
+}
+.wa-tp-hdr{text-align:center;margin-bottom:24px;width:100%;max-width:480px}
+.wa-tp-hdr h2{
+  font-size:19px;font-weight:700;color:var(--navy);
+  font-family:'Noto Serif',Georgia,serif;margin-bottom:6px;
+}
+.wa-tp-hdr p{font-size:13px;color:var(--text-mid);line-height:1.6}
+.wa-tp-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:10px;width:100%;max-width:480px;
+}
+@media(max-width:480px){.wa-tp-grid{grid-template-columns:1fr}}
+.wa-tp-card{
+  background:#fff;border:1.5px solid var(--border-lt);
+  border-radius:12px;padding:16px 14px;cursor:pointer;
+  transition:border-color .15s,box-shadow .15s;
+  text-align:left;font-family:Arial,sans-serif;
+}
+.wa-tp-card:hover{border-color:var(--gold);box-shadow:0 2px 12px rgba(0,0,0,.08)}
+.wa-tp-card:active{transform:scale(.98)}
+.wa-tp-icon{font-size:26px;margin-bottom:7px;line-height:1}
+.wa-tp-name{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.wa-tp-desc{font-size:12px;color:var(--text-lt);line-height:1.5}
+.wa-tp-cancel{
+  margin-top:18px;background:none;
+  border:1px solid var(--border);border-radius:20px;
+  padding:7px 22px;color:var(--text-lt);font-size:13px;
+  cursor:pointer;font-family:Arial,sans-serif;
+  transition:border-color .15s;
+}
+.wa-tp-cancel:hover{border-color:var(--text-lt)}
+
+/* ════════════════════════════════════
+   TWO-PERSON FORM (xem-tuoi, xem-lam-an)
+═══════════════════════════════════════ */
+.wa-compat-intro{
+  background:#fff;border:1px solid var(--border-lt);
+  border-radius:10px;padding:14px 16px;margin-bottom:16px;
+  font-size:13px;color:var(--text-mid);line-height:1.7;
+}
+.wa-compat-intro strong{color:var(--navy)}
+.wa-two-col{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:12px;margin-bottom:16px;
+}
+@media(max-width:640px){.wa-two-col{grid-template-columns:1fr}}
+.wa-person-card{background:#fff;border:1px solid var(--border-lt);border-radius:10px;overflow:hidden}
+.wa-person-hdr{
+  font-size:11px;font-weight:700;color:#fff;
+  text-transform:uppercase;letter-spacing:.5px;
+  padding:7px 14px;
+}
+.wa-person-body{padding:0}
+/* TuviForm person mode overrides inside person card */
+.wa-person-body .form-col{border-right:none!important;padding:12px!important}
+.wa-compat-submit{
+  background:var(--navy);color:var(--gold-bright);
+  border:none;padding:12px 28px;
+  font-size:15px;font-family:'Noto Serif',Georgia,serif;
+  font-weight:700;border-radius:4px;cursor:pointer;
+  transition:background .2s;
+}
+.wa-compat-submit:hover{background:var(--navy-mid)}
+.wa-name-input{
+  border:1.5px solid var(--border);border-radius:6px;
+  padding:7px 10px;font-size:14px;font-family:Arial,sans-serif;
+  color:var(--text);outline:none;background:#fff;
+  transition:border-color .15s;width:100%;
+  margin-bottom:8px;display:block;
+}
+.wa-name-input:focus{border-color:var(--navy)}
+
+/* ════════════════════════════════════
    MOBILE (< 768px): slide panels
 ═══════════════════════════════════════ */
 @media(max-width:768px){
@@ -392,7 +473,7 @@ body{
   <div class="wa-sidebar" id="wa-sidebar">
     <div class="wa-sidebar-top">
       <span class="wa-sidebar-title">Tử Vi Chat</span>
-      <button class="wa-new-btn" id="wa-new-btn">+ Thêm lá số</button>
+      <button class="wa-new-btn" id="wa-new-btn">+ Thêm mới</button>
     </div>
     <div class="wa-sidebar-list" id="wa-list"></div>
     <!-- sync banner: visible when not logged in -->
@@ -411,8 +492,18 @@ body{
         <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#9A7B3A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       </div>
       <h2>Tử Vi Chat</h2>
-      <p>Chọn một cuộc trò chuyện bên trái, hoặc nhấn <strong>+ Thêm lá số</strong> để bắt đầu hỏi đáp về lá số Tử Vi.</p>
-      <small>Lá số được lưu trên trình duyệt của bạn</small>
+      <p>Chọn một cuộc trò chuyện bên trái, hoặc nhấn <strong>+ Thêm mới</strong> để bắt đầu.</p>
+      <small>Dữ liệu được lưu trên trình duyệt của bạn</small>
+    </div>
+
+    <!-- Tool picker panel -->
+    <div id="wa-tool-picker" class="wa-tool-picker" style="display:none">
+      <div class="wa-tp-hdr">
+        <h2>Chọn công cụ</h2>
+        <p>Mỗi công cụ dùng phương pháp luận giải riêng</p>
+      </div>
+      <div class="wa-tp-grid" id="wa-tp-grid"></div>
+      <button class="wa-tp-cancel" id="wa-tp-cancel">Huỷ</button>
     </div>
 
     <!-- Active chat panel -->
@@ -503,6 +594,7 @@ body{
   var _activeId = null;
   var _busy     = false;
   var _pendingQuestion = '';   // câu hỏi đến từ homepage (?q=), gửi sau khi an sao
+  var _pendingTool     = null; // toolType đang chờ confirm trước khi tạo chat
 
   /* ── localStorage ────────────────────────────────────────────── */
   function loadStorage() {
@@ -525,14 +617,17 @@ body{
   function syncToCloud(chat) {
     var token = getAuthToken();
     if (!token || !chat || chat.id === GENERAL_ID) return;
+    var laso_data = (chat.toolType === 'laso' || !chat.toolType)
+      ? (chat.lasoData || null)
+      : (chat.contextData || null);
     fetch(SYNC_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
       body: JSON.stringify({
         id:         chat.id,
-        label:      chat.label || 'Lá số mới',
-        type:       chat.type  || null,
-        laso_data:  chat.lasoData || null,
+        label:      chat.label || defaultLabelForTool(chat.toolType),
+        type:       chat.toolType || null,
+        laso_data:  laso_data,
         summary:    chat.summary  || '',
         messages:   chat.messages || [],
         last_msg:   chat.lastMsg  || '',
@@ -563,18 +658,21 @@ body{
 
         /* Cloud → local: merge, cloud wins when newer */
         cloudChats.forEach(function(cc) {
-          var cloudTs = new Date(cc.updated_at).getTime() || 0;
-          var local   = localMap[cc.id];
+          var cloudTs  = new Date(cc.updated_at).getTime() || 0;
+          var local    = localMap[cc.id];
           if (!local || cloudTs > (local.updatedAt || 0)) {
+            var toolType = cc.type || 'laso';
+            var ld = cc.laso_data || null;
             var merged = {
-              id:        cc.id,
-              label:     cc.label,
-              type:      cc.type || undefined,
-              lasoData:  cc.laso_data || null,
-              summary:   cc.summary   || '',
-              messages:  cc.messages  || [],
-              lastMsg:   cc.last_msg  || '',
-              updatedAt: cloudTs,
+              id:          cc.id,
+              label:       cc.label,
+              toolType:    toolType,
+              lasoData:    (toolType === 'laso') ? ld : null,
+              contextData: (toolType !== 'laso') ? ld : null,
+              summary:     cc.summary   || '',
+              messages:    cc.messages  || [],
+              lastMsg:     cc.last_msg  || '',
+              updatedAt:   cloudTs,
             };
             if (!local) { _chats.push(merged); }
             else        { Object.assign(local, merged); }
@@ -606,15 +704,23 @@ body{
   }
 
   /* ── Chat factory ─────────────────────────────────────────────── */
-  function newChat(label) {
+  function defaultLabelForTool(toolType) {
+    var cfg = (window.TOOL_CONFIGS || []).find(function(t) { return t.id === toolType; });
+    return cfg ? cfg.name + ' mới' : 'Lá số mới';
+  }
+
+  function newChat(label, toolType) {
+    var tt = toolType || 'laso';
     return {
-      id:       Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
-      label:    label || 'Lá số mới',
-      lasoData: null,
-      summary:  '',
-      messages: [],
-      lastMsg:  '',
-      updatedAt: Date.now(),
+      id:          Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      label:       label || defaultLabelForTool(tt),
+      toolType:    tt,
+      lasoData:    null,
+      contextData: null,
+      summary:     '',
+      messages:    [],
+      lastMsg:     '',
+      updatedAt:   Date.now(),
     };
   }
 
@@ -740,22 +846,27 @@ body{
     if (laso.length > 0) {
       var sec = document.createElement('div');
       sec.className = 'wa-list-section';
-      sec.textContent = 'Lá số đã lưu';
+      sec.textContent = 'Đã lưu';
       list.appendChild(sec);
       laso.forEach(function(chat) { renderChatItem(list, chat, false); });
     } else if (!general) {
-      list.innerHTML = '<div class="wa-list-empty">Nhấn <b>+ Thêm lá số</b> để bắt đầu.</div>';
+      list.innerHTML = '<div class="wa-list-empty">Nhấn <b>+ Thêm mới</b> để bắt đầu.</div>';
     }
+  }
+
+  function toolCfg(toolType) {
+    return (window.TOOL_CONFIGS || []).find(function(t) { return t.id === toolType; }) || null;
   }
 
   function renderChatItem(list, chat, isGeneral) {
     var item = document.createElement('div');
     item.className = 'wa-ci' + (_activeId === chat.id ? ' active' : '');
 
-    var color  = isGeneral ? '#061A2E' : avatarColor(chat.label);
+    var cfg    = isGeneral ? null : toolCfg(chat.toolType);
+    var color  = isGeneral ? '#061A2E' : (cfg ? cfg.color : avatarColor(chat.label));
     var letter = isGeneral
       ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'
-      : escHtml(chat.label.charAt(0).toUpperCase());
+      : (cfg ? cfg.icon : escHtml(chat.label.charAt(0).toUpperCase()));
 
     item.innerHTML =
       '<div class="wa-ci-av' + (isGeneral ? ' icon' : '') + '" style="background:' + color + '">' + letter + '</div>' +
@@ -775,10 +886,14 @@ body{
   function renderMain() {
     var chat       = getActive();
     var $noChat    = document.getElementById('wa-no-chat');
+    var $picker    = document.getElementById('wa-tool-picker');
     var $chatPanel = document.getElementById('wa-chat-panel');
     var $formArea  = document.getElementById('wa-form-area');
     var $msgArea   = document.getElementById('wa-msg-area');
     var $deleteBtn = document.getElementById('wa-delete-btn');
+
+    /* Always hide tool picker when rendering normal state */
+    if ($picker) $picker.style.display = 'none';
 
     if (!chat) {
       $noChat.style.display    = '';
@@ -792,45 +907,37 @@ body{
     var isGeneral = chat.id === GENERAL_ID;
 
     /* Header */
-    var color  = isGeneral ? '#061A2E' : avatarColor(chat.label);
+    var cfg    = isGeneral ? null : toolCfg(chat.toolType);
+    var color  = isGeneral ? '#061A2E' : (cfg ? cfg.color : avatarColor(chat.label));
     var $hdAv  = document.getElementById('wa-hdr-av');
     $hdAv.style.background = color;
     if (isGeneral) {
       $hdAv.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
     } else {
-      $hdAv.textContent = chat.label.charAt(0).toUpperCase();
+      $hdAv.textContent = cfg ? cfg.icon : chat.label.charAt(0).toUpperCase();
     }
     document.getElementById('wa-hdr-name').textContent = chat.label;
-    document.getElementById('wa-hdr-sub').textContent  = chat.summary || (chat.lasoData ? '' : isGeneral ? 'Hỏi về Tử Vi' : 'Chưa an sao');
+    var hasChatData = !!(chat.lasoData || chat.contextData);
+    document.getElementById('wa-hdr-sub').textContent  = chat.summary || (hasChatData ? '' : isGeneral ? 'Hỏi về Tử Vi' : 'Chưa nhập thông tin');
 
     /* Hide delete for general chat */
     $deleteBtn.style.display = isGeneral ? 'none' : '';
 
     /* Show form or messages */
-    var needForm = !isGeneral && !chat.lasoData;
+    var hasChatData2 = !!(chat.lasoData || chat.contextData);
+    var needForm = !isGeneral && !hasChatData2;
 
     if (needForm) {
       $formArea.style.display = '';
       $msgArea.style.display  = 'none';
-      var labelInput = document.getElementById('tc-chat-label');
-      labelInput.value = chat.label !== 'Lá số mới' ? chat.label : '';
-      TuviForm.render('tc-form-container', {
-        onSubmit:    doAnSao,
-        submitLabel: 'An Sao & Chat →',
-        showSample:  false,
-      });
-      document.getElementById('error-msg').classList.remove('active');
-
-      /* Câu hỏi từ homepage: hiện ngay trên form để người dùng biết đang chờ trả lời */
-      var _introEl = document.querySelector('#wa-form-area .wa-form-intro');
-      if (_introEl) {
-        if (_pendingQuestion) {
-          _introEl.innerHTML = 'Câu hỏi của bạn: <strong>«' +
-            _pendingQuestion.replace(/</g, '&lt;').replace(/>/g, '&gt;') +
-            '»</strong><br>Nhập ngày sinh dương lịch để tôi <strong>an sao lá số</strong> rồi trả lời ngay.';
-        } else {
-          _introEl.innerHTML = 'Nhập ngày sinh dương lịch để <strong>an sao lá số</strong>, sau đó hỏi tôi bất cứ điều gì về số mệnh, sự nghiệp, tình duyên, vận hạn...';
-        }
+      document.getElementById('error-msg') && document.getElementById('error-msg').classList.remove('active');
+      /* Render the correct form based on toolType */
+      if (chat.toolType === 'xem-tuoi' || chat.toolType === 'xem-lam-an') {
+        renderCompatForm(chat.toolType);
+      } else if (chat.toolType === 'tu-binh') {
+        renderTuBinhForm();
+      } else {
+        renderLasoForm(chat);
       }
     } else {
       $formArea.style.display = 'none';
@@ -838,7 +945,7 @@ body{
 
       /* For general chat: seed greeting if no messages yet */
       if (isGeneral && chat.messages.length === 0) {
-        var greeting = 'Xin chào! Tôi là chuyên gia Tử Vi Đẩu Số.\n\nBạn có thể hỏi tôi bất cứ điều gì — ý nghĩa các sao, 12 cung, đại vận, cách cục, tứ hóa...\n\nHoặc nhấn **+ Thêm lá số** để an sao và được tư vấn cá nhân chi tiết hơn.';
+        var greeting = 'Xin chào! Tôi là chuyên gia Tử Vi Đẩu Số.\n\nBạn có thể hỏi tôi bất cứ điều gì — ý nghĩa các sao, 12 cung, đại vận, cách cục, tứ hóa...\n\nHoặc nhấn **+ Thêm mới** để bắt đầu tư vấn cá nhân chi tiết hơn.';
         chat.messages = [{ role: 'assistant', content: greeting }];
         chat.lastMsg  = 'Hỏi bất cứ điều gì về Tử Vi';
         saveStorage();
@@ -849,7 +956,9 @@ body{
       chat.messages.forEach(function(m) {
         appendMsg(m.role === 'assistant' ? 'bot' : 'user', m.content);
       });
-      renderSuggs(chat.lasoData ? SUGG_LASO : SUGG_INIT);
+      /* Show suggestions from TOOL_CONFIGS.suggs or fallback */
+      var activeCfg = toolCfg(chat.toolType);
+      renderSuggs(hasChatData2 && activeCfg ? activeCfg.suggs : SUGG_INIT);
       setTimeout(function() { $msgs.scrollTop = $msgs.scrollHeight; }, 0);
 
       /* Re-enable input */
@@ -879,11 +988,132 @@ body{
   }
 
   function createNewChat() {
-    var chat = newChat('Lá số mới');
+    openToolPicker();
+  }
+
+  /* ── Tool picker ──────────────────────────────────────────────── */
+  function openToolPicker() {
+    /* Hide sidebar on mobile, show main panel with picker */
+    document.getElementById('wa-sidebar').classList.add('wa-hidden');
+    document.getElementById('wa-main').classList.add('wa-visible');
+
+    document.getElementById('wa-no-chat').style.display    = 'none';
+    document.getElementById('wa-chat-panel').style.display = 'none';
+    document.getElementById('wa-tool-picker').style.display = 'flex';
+
+    /* Render grid from TOOL_CONFIGS */
+    var grid = document.getElementById('wa-tp-grid');
+    grid.innerHTML = '';
+    (window.TOOL_CONFIGS || []).forEach(function(cfg) {
+      var card = document.createElement('div');
+      card.className = 'wa-tp-card';
+      card.innerHTML =
+        '<div class="wa-tp-icon">' + cfg.icon + '</div>' +
+        '<div class="wa-tp-name">' + escHtml(cfg.name) + '</div>' +
+        '<div class="wa-tp-desc">' + escHtml(cfg.desc) + '</div>';
+      card.addEventListener('click', function() { selectTool(cfg.id); });
+      grid.appendChild(card);
+    });
+  }
+
+  function closeToolPicker() {
+    document.getElementById('wa-tool-picker').style.display = 'none';
+    /* Restore proper state */
+    if (_activeId) {
+      renderMain();
+    } else {
+      document.getElementById('wa-no-chat').style.display = '';
+      /* mobile: hide main panel again */
+      document.getElementById('wa-sidebar').classList.remove('wa-hidden');
+      document.getElementById('wa-main').classList.remove('wa-visible');
+    }
+  }
+
+  function selectTool(toolId) {
+    document.getElementById('wa-tool-picker').style.display = 'none';
+    var chat = newChat(null, toolId);
     _chats.push(chat);
     saveStorage();
     syncToCloud(chat);
     openChat(chat.id);
+  }
+
+  /* ── Form renderers ──────────────────────────────────────────── */
+  function renderLasoForm(chat) {
+    var inner = document.querySelector('.wa-form-inner');
+    inner.innerHTML =
+      '<div class="wa-form-intro">' +
+        (_pendingQuestion
+          ? 'Câu hỏi của bạn: <strong>«' + _pendingQuestion.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '»</strong><br>Nhập ngày sinh để tôi <strong>an sao lá số</strong> rồi trả lời ngay.'
+          : 'Nhập ngày sinh dương lịch để <strong>an sao lá số</strong>, sau đó hỏi tôi bất cứ điều gì về số mệnh, sự nghiệp, tình duyên, vận hạn...') +
+      '</div>' +
+      '<div class="wa-label-row">' +
+        '<label class="wa-label-label">Tên cho lá số này</label>' +
+        '<input type="text" id="tc-chat-label" class="wa-label-input" placeholder="Của tôi, Mẹ, Bạn Nam...">' +
+      '</div>' +
+      '<div id="tc-form-container"></div>' +
+      '<p id="error-msg" class="error-msg"></p>';
+    if (chat && chat.label && chat.label !== defaultLabelForTool('laso')) {
+      document.getElementById('tc-chat-label').value = chat.label;
+    }
+    TuviForm.render('tc-form-container', {
+      onSubmit:    doAnSao,
+      submitLabel: 'An Sao & Chat →',
+      showSample:  false,
+    });
+  }
+
+  function renderCompatForm(toolType) {
+    var cfg  = toolCfg(toolType);
+    var color = cfg ? cfg.color : '#061A2E';
+    var desc  = toolType === 'xem-lam-an'
+      ? 'Nhập thông tin hai người để phân tích <strong>tương hợp hợp tác kinh doanh</strong>.'
+      : 'Nhập thông tin hai người để phân tích <strong>tương hợp tình duyên hôn nhân</strong>.';
+    var inner = document.querySelector('.wa-form-inner');
+    inner.innerHTML =
+      '<div class="wa-compat-intro">' + desc + '</div>' +
+      '<div class="wa-two-col">' +
+        '<div class="wa-person-card">' +
+          '<div class="wa-person-hdr" style="background:' + color + '">Người A</div>' +
+          '<div class="wa-person-body">' +
+            '<div style="padding:10px 14px 0"><input type="text" id="tc-compat-name-a" class="wa-name-input" placeholder="Tên (tùy chọn)"></div>' +
+            '<div id="tc-form-a"></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="wa-person-card">' +
+          '<div class="wa-person-hdr" style="background:' + color + ';opacity:.8">Người B</div>' +
+          '<div class="wa-person-body">' +
+            '<div style="padding:10px 14px 0"><input type="text" id="tc-compat-name-b" class="wa-name-input" placeholder="Tên (tùy chọn)"></div>' +
+            '<div id="tc-form-b"></div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="margin-top:6px">' +
+        '<button class="wa-compat-submit" id="tc-compat-submit">' + (cfg ? cfg.name + ' →' : 'Xem →') + '</button>' +
+      '</div>' +
+      '<p id="error-msg" class="error-msg"></p>';
+    TuviForm.render('tc-form-a', { prefix: 'a', mode: 'person', gioitinh: 'nam', showSample: false });
+    TuviForm.render('tc-form-b', { prefix: 'b', mode: 'person', gioitinh: 'nu',  showSample: false });
+    document.getElementById('tc-compat-submit').addEventListener('click', function() { doComputeCompat(toolType); });
+  }
+
+  function renderTuBinhForm() {
+    var inner = document.querySelector('.wa-form-inner');
+    inner.innerHTML =
+      '<div class="wa-form-intro">' +
+        'Nhập ngày sinh dương lịch để tính <strong>Tứ Trụ Bát Tự</strong>, sau đó hỏi về Nhật Can, Dụng Thần, Ngũ Hành...' +
+      '</div>' +
+      '<div class="wa-label-row">' +
+        '<label class="wa-label-label">Tên</label>' +
+        '<input type="text" id="tc-chat-label" class="wa-label-input" placeholder="Của tôi, Mẹ...">' +
+      '</div>' +
+      '<div id="tc-form-container"></div>' +
+      '<p id="error-msg" class="error-msg"></p>';
+    TuviForm.render('tc-form-container', {
+      onSubmit:    doComputeTuBinh,
+      submitLabel: 'Tính Bát Tự & Chat →',
+      showSample:  false,
+    });
   }
 
   /* ── An Sao ───────────────────────────────────────────────────── */
@@ -953,6 +1183,124 @@ body{
       var errEl = document.getElementById('error-msg');
       errEl.textContent = 'Có lỗi khi an sao: ' + e.message;
       errEl.classList.add('active');
+    }
+  }
+
+  /* ── Compute Compat (xem-tuoi / xem-lam-an) ──────────────────── */
+  function slimCompatContext(lsA, lsB, nameA, nameB) {
+    return { lsA: slimLaso(lsA), lsB: slimLaso(lsB), nameA: nameA || 'Người A', nameB: nameB || 'Người B' };
+  }
+
+  function doComputeCompat(toolType) {
+    var chat = getActive();
+    if (!chat) return;
+
+    var dA = TuviForm.getData('a');
+    var dB = TuviForm.getData('b');
+    if (!dA.ngay || !dA.thang || !dA.nam || !dB.ngay || !dB.thang || !dB.nam) {
+      var errEl = document.getElementById('error-msg');
+      if (errEl) { errEl.textContent = 'Vui lòng nhập đầy đủ ngày sinh cho cả hai người.'; errEl.classList.add('active'); }
+      return;
+    }
+
+    var nameA = (document.getElementById('tc-compat-name-a') || {}).value || 'Người A';
+    var nameB = (document.getElementById('tc-compat-name-b') || {}).value || 'Người B';
+
+    try {
+      var convA = convertDuongToAm(dA.ngay, dA.thang, dA.nam, dA.gioHour);
+      var lsA   = anSaoLaSo({ ngayAL: convA.amLich.day, thangAL: convA.amLich.month, namAL: convA.amLich.year, canNam: convA.canNam, chiNam: convA.chiNam, gioIdx: dA.gioIdx, gioitinh: dA.gioitinh, namXem: NAM_XEM });
+
+      var convB = convertDuongToAm(dB.ngay, dB.thang, dB.nam, dB.gioHour);
+      var lsB   = anSaoLaSo({ ngayAL: convB.amLich.day, thangAL: convB.amLich.month, namAL: convB.amLich.year, canNam: convB.canNam, chiNam: convB.chiNam, gioIdx: dB.gioIdx, gioitinh: dB.gioitinh, namXem: NAM_XEM });
+
+      chat.contextData = slimCompatContext(lsA, lsB, nameA.trim(), nameB.trim());
+      chat.contextData.toolType = toolType;
+
+      /* Update label from names if still default */
+      if (nameA.trim() && nameB.trim()) {
+        chat.label = nameA.trim() + ' & ' + nameB.trim();
+      }
+      chat.summary  = (lsA.canChiNam || '') + ' & ' + (lsB.canChiNam || '');
+
+      var cfg = toolCfg(toolType);
+      var greeting = 'Đã tính xong! **' + (nameA.trim() || 'Người A') + '** (' + (lsA.canChiNam || '') + ', Mệnh ' + (lsA.menhDC || '') + ') và **' + (nameB.trim() || 'Người B') + '** (' + (lsB.canChiNam || '') + ', Mệnh ' + (lsB.menhDC || '') + ').\n\nBạn muốn biết điều gì về ' + (cfg ? cfg.name.toLowerCase() : 'hai người') + '?';
+
+      chat.messages  = [{ role: 'assistant', content: greeting }];
+      chat.lastMsg   = stripMd(greeting);
+      chat.updatedAt = Date.now();
+      saveStorage();
+      syncToCloud(chat);
+      renderSidebar();
+      renderMain();
+    } catch(e) {
+      console.error('[TuviChat] compat error', e);
+      var errEl2 = document.getElementById('error-msg');
+      if (errEl2) { errEl2.textContent = 'Có lỗi khi tính: ' + e.message; errEl2.classList.add('active'); }
+    }
+  }
+
+  /* ── Compute Tu Binh ──────────────────────────────────────────── */
+  function slimTuBinh(bt) {
+    if (!bt) return null;
+    return {
+      tuTru:          bt.tuTru,
+      nhatCan:        bt.nhatCan,
+      nhatChi:        bt.nhatChi,
+      nhatCanHanh:    bt.nhatCanHanh,
+      cuongNhuoc:     bt.cuongNhuoc,
+      dungThan:       bt.dungThan,
+      cachCuc:        bt.cachCuc,
+      nguHanh:        bt.nguHanh,
+      daiVanHienTai:  bt.daiVanHienTai,
+      thanSat:        bt.thanSat,
+      canChiNamSinh:  bt.canChiNamSinh,
+    };
+  }
+
+  function doComputeTuBinh() {
+    var chat = getActive();
+    if (!chat) return;
+
+    var labelVal = (document.getElementById('tc-chat-label') || {}).value || '';
+    if (labelVal.trim()) chat.label = labelVal.trim();
+
+    var d = TuviForm.getData();
+    if (!d.ngay || !d.thang || !d.nam) return;
+
+    try {
+      var bt = (window.tinhBatTu || function() { throw new Error('tubinh engine not loaded'); })({
+        ngayDL:   d.ngay,
+        thangDL:  d.thang,
+        namDL:    d.nam,
+        gio:      d.gioHour,
+        gioitinh: d.gioitinh,
+        namXem:   NAM_XEM,
+      });
+
+      chat.contextData = slimTuBinh(bt);
+      chat.contextData.toolType = 'tu-binh';
+      chat.summary = (bt.nhatCan || '') + ' · ' + (bt.cachCuc || '') + ' · ' + (bt.cuongNhuoc || '');
+
+      var dvHT     = bt.daiVanHienTai;
+      var dvTxt    = dvHT ? '\nĐại vận: **' + (dvHT.can || '') + (dvHT.chi || '') + '** (' + (dvHT.tuoiStart || '?') + '–' + (dvHT.tuoiEnd || '?') + ' tuổi).' : '';
+      var greeting =
+        'Đã tính Bát Tự xong! Nhật Can **' + (bt.nhatCan || '') + '** (' + (bt.nhatCanHanh || '') + '), ' +
+        (bt.cuongNhuoc ? '**' + bt.cuongNhuoc + '**' : '') + '. ' +
+        (bt.dungThan ? 'Dụng Thần: **' + bt.dungThan + '**.' : '') +
+        (bt.cachCuc ? ' Cách Cục: **' + bt.cachCuc + '**.' : '') +
+        dvTxt + '\n\nBạn muốn hỏi gì về Bát Tự của mình?';
+
+      chat.messages  = [{ role: 'assistant', content: greeting }];
+      chat.lastMsg   = stripMd(greeting);
+      chat.updatedAt = Date.now();
+      saveStorage();
+      syncToCloud(chat);
+      renderSidebar();
+      renderMain();
+    } catch(e) {
+      console.error('[TuviChat] tubinh error', e);
+      var errEl = document.getElementById('error-msg');
+      if (errEl) { errEl.textContent = 'Có lỗi khi tính Bát Tự: ' + e.message; errEl.classList.add('active'); }
     }
   }
 
@@ -1046,16 +1394,25 @@ body{
         docs = (await sr.json()).docs || '';
       } catch(e) { /* RAG optional */ }
 
+      var apiBody = {
+        stream:   true,
+        messages: chat.messages.slice(-12),
+        toolType: chat.toolType || 'laso',
+        docs:     docs,
+      };
+      if (chat.toolType === 'xem-tuoi' || chat.toolType === 'xem-lam-an') {
+        apiBody.compatData = chat.contextData;
+      } else if (chat.toolType === 'tu-binh') {
+        apiBody.tuBinhData = chat.contextData;
+      } else {
+        apiBody.lasoData = chat.lasoData;
+        apiBody.scenario = chat.lasoData ? 'laso' : 'general';
+      }
+
       var res = await fetch(API_PATH, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({
-          stream:   true,
-          messages: chat.messages.slice(-12),
-          lasoData: chat.lasoData,
-          scenario: chat.lasoData ? 'laso' : 'general',
-          docs:     docs,
-        }),
+        body:    JSON.stringify(apiBody),
       });
 
       var typing = document.getElementById('_tc_typing');
@@ -1140,7 +1497,9 @@ body{
       saveStorage();
       syncToCloud(chat);
       renderSidebar();
-      renderSuggs(chat.lasoData ? SUGG_LASO : SUGG_INIT);
+      var sendCfg = toolCfg(chat.toolType);
+      var sendHasData = !!(chat.lasoData || chat.contextData);
+      renderSuggs(sendHasData && sendCfg ? sendCfg.suggs : SUGG_INIT);
 
     } catch(e) {
       var typing = document.getElementById('_tc_typing');
@@ -1221,6 +1580,9 @@ body{
 
     /* New chat button */
     document.getElementById('wa-new-btn').addEventListener('click', createNewChat);
+
+    /* Tool picker cancel */
+    document.getElementById('wa-tp-cancel').addEventListener('click', closeToolPicker);
 
     /* Mobile back button */
     document.getElementById('wa-back-btn').addEventListener('click', function() {
