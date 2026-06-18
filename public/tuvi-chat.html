@@ -513,7 +513,7 @@ body{
   /* ── Cloud sync ───────────────────────────────────────────────── */
   function getAuthToken() {
     try {
-      var s = window.TuviAuth && TuviAuth.getSession && TuviAuth.getSession();
+      var s = window.Auth && Auth.getSession && Auth.getSession();
       return s ? s.access_token : null;
     } catch(e) { return null; }
   }
@@ -1135,8 +1135,19 @@ body{
     renderMain();
 
     /* Sync with cloud if user is logged in.
-       TuviAuth may not be ready yet — wait a tick for auth.js to restore session. */
-    setTimeout(loadFromCloud, 300);
+       auth.js được nav.js inject async → đợi window.Auth sẵn sàng + bắt sự kiện đăng nhập. */
+    var _authHooked = false;
+    function tryCloudSync() {
+      if (!window.Auth) return;  // auth.js chưa load xong
+      if (!_authHooked && window.Auth.onAuthChange) {
+        _authHooked = true;
+        window.Auth.onAuthChange(function () { loadFromCloud(); });
+      }
+      loadFromCloud();  // tự gate theo token: có → load + ẩn banner; không → hiện banner
+    }
+    setTimeout(tryCloudSync, 300);
+    setTimeout(tryCloudSync, 1500);
+    setTimeout(tryCloudSync, 3500);
 
     /* New chat button */
     document.getElementById('wa-new-btn').addEventListener('click', createNewChat);
