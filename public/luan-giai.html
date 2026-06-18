@@ -1367,6 +1367,7 @@ select.form-input { cursor: pointer; }
       ls._conv = conv; ls._hoTen = hoten;
 
       _laSoText = formatLaSoV2(ls, conv);
+      ls._laSoText = _laSoText;  // để ô chat (chatbot.js) gửi full text → luận sâu = chat đứng riêng
       _hoTen = hoten; _ngay = ngay; _thang = thang; _nam = nam;
       _gioitinh = gioitinh; _namXem = namXem; _astrolabe = ls;
       window._lasoResult = ls;  // feed chatbot
@@ -3592,6 +3593,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       ls._conv = conv; ls._hoTen = hoten;
 
       _laSoText = formatLaSoV2(ls, conv);
+      ls._laSoText = _laSoText;  // để ô chat (chatbot.js) gửi full text → luận sâu = chat đứng riêng
       _hoTen = hoten; _ngay = ngay; _thang = thang; _nam = nam;
       _gioitinh = gioitinh; _namXem = namXem; _astrolabe = ls;
       _currentPhan = cfg.phan;
@@ -3915,6 +3917,7 @@ TuviPaywall.init({
       _astrolabe = ls;
       window._lasoResult = ls; _pendingSlug = slug;
       _laSoText = formatLaSoV2(ls, conv);
+      ls._laSoText = _laSoText;  // để ô chat (chatbot.js) gửi full text → luận sâu = chat đứng riêng
       _currentPhan = 0;
 
       // Clear result + render
