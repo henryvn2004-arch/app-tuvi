@@ -372,13 +372,17 @@ a { color: var(--blue); text-decoration: none; }
   margin-bottom: 8px; padding-left: 6px;
 }
 .hc-persona {
-  display: flex; align-items: center; gap: 6px; width: 100%; text-align: left;
+  display: flex; align-items: center; gap: 7px; width: 100%; text-align: left;
   border: none; background: none; padding: 6px 6px; border-radius: 7px;
   font-size: 13px; color: var(--text-mid); cursor: pointer;
   transition: all .12s; line-height: 1.3; white-space: nowrap;
 }
+.hc-persona [data-icon] { width: 14px; height: 14px; flex-shrink: 0; display: flex; color: var(--text-mid); }
+.hc-persona [data-icon] svg { width: 14px; height: 14px; }
 .hc-persona:hover { background: var(--bg-soft); color: var(--navy); }
+.hc-persona:hover [data-icon] { color: var(--navy); }
 .hc-persona.active { background: rgba(9,36,64,0.07); color: var(--navy); font-weight: 600; }
+.hc-persona.active [data-icon] { color: var(--navy); }
 .hc-main { flex: 1; min-width: 0; }
 @media (max-width: 480px) { .hc-personas { display: none; } }
 .hc-greeting { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 14px; }
@@ -470,31 +474,31 @@ a { color: var(--blue); text-decoration: none; }
                 <button class="hc-persona active"
                   data-tool="laso"
                   data-placeholder="Năm nay vận của tôi thế nào?"
-                  data-bubble="Bạn muốn hỏi gì về vận mệnh, sự nghiệp, tình duyên hay vận năm nay?">👤 Bản thân</button>
+                  data-bubble="Bạn muốn hỏi gì về vận mệnh, sự nghiệp, tình duyên hay vận năm nay?"><span data-icon="user"></span> Bản thân</button>
                 <button class="hc-persona"
                   data-tool="laso"
                   data-placeholder="Lá số vợ/chồng tôi thế nào?"
-                  data-bubble="Bạn muốn xem lá số vợ/chồng — tình duyên, hôn nhân, vận hạn?">💑 Vợ / Chồng</button>
+                  data-bubble="Bạn muốn xem lá số vợ/chồng — tình duyên, hôn nhân, vận hạn?"><span data-icon="heart-handshake"></span> Vợ / Chồng</button>
                 <button class="hc-persona"
                   data-tool="laso"
                   data-placeholder="Lá số bố tôi — vận hạn năm nay?"
-                  data-bubble="Bạn muốn xem lá số của bố — vận hạn, sức khỏe, phúc đức?">👨 Bố</button>
+                  data-bubble="Bạn muốn xem lá số của bố — vận hạn, sức khỏe, phúc đức?"><span data-icon="user"></span> Bố</button>
                 <button class="hc-persona"
                   data-tool="laso"
                   data-placeholder="Lá số mẹ tôi — vận hạn năm nay?"
-                  data-bubble="Bạn muốn xem lá số của mẹ — vận hạn, sức khỏe, phúc đức?">👩 Mẹ</button>
+                  data-bubble="Bạn muốn xem lá số của mẹ — vận hạn, sức khỏe, phúc đức?"><span data-icon="user"></span> Mẹ</button>
                 <button class="hc-persona"
                   data-tool="laso"
                   data-placeholder="Lá số con trai tôi — sự nghiệp tương lai?"
-                  data-bubble="Bạn muốn xem lá số con trai — sự nghiệp, tình duyên, học hành?">👦 Con trai</button>
+                  data-bubble="Bạn muốn xem lá số con trai — sự nghiệp, tình duyên, học hành?"><span data-icon="baby"></span> Con trai</button>
                 <button class="hc-persona"
                   data-tool="laso"
                   data-placeholder="Lá số con gái tôi — tình duyên sự nghiệp?"
-                  data-bubble="Bạn muốn xem lá số con gái — tình duyên, sự nghiệp, học hành?">👧 Con gái</button>
+                  data-bubble="Bạn muốn xem lá số con gái — tình duyên, sự nghiệp, học hành?"><span data-icon="baby"></span> Con gái</button>
                 <button class="hc-persona"
                   data-tool="xem-lam-an"
                   data-placeholder="Tôi và bạn làm ăn có hợp kinh doanh không?"
-                  data-bubble="Bạn muốn xem tương hợp kinh doanh — quan lộc, tài bạch, bổ trợ?">🤝 Bạn làm ăn</button>
+                  data-bubble="Bạn muốn xem tương hợp kinh doanh — quan lộc, tài bạch, bổ trợ?"><span data-icon="handshake"></span> Bạn làm ăn</button>
               </div>
               <div class="hc-main">
                 <div class="hc-greeting">
