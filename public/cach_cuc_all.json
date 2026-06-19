@@ -13022,5 +13022,1904 @@
     "doManh": 2,
     "tomTat": "Năng lượng giảm, đời sống bình ổn.",
     "nguon": "Tử Vi Đẩu Số cổ điển"
+  },
+  {
+    "ten": "Lộc Mã giao trì",
+    "sao": [
+      "Thiên Mã"
+    ],
+    "saoPhuTro": [
+      "Lộc Tồn",
+      "Hóa Lộc"
+    ],
+    "dieuKien": "Lộc Tồn hoặc Hóa Lộc hội Thiên Mã (giao hội hoặc tứ chiếu)",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Lộc gặp Mã, tài lộc và công danh đều tốt đẹp. Giàu sang, phát đạt.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Mã hưu lan",
+    "sao": [
+      "Thiên Mã"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thiên Mã tại cung Dần",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 3,
+    "tomTat": "Ngựa còn bị giam trong chuồng, không nên đi xa quá. Hạn chế di chuyển, bôn ba không lợi.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Mã cùng đồ",
+    "sao": [
+      "Thiên Mã"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thiên Mã tại cung hãm địa (Hợi) hoặc Mã tại Tuyệt cung",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 3,
+    "tomTat": "Ngựa hết lối đi, không nên đi đâu cả. Công danh gãy đổ, bôn ba vô ích, gặp tai họa.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Mã ngộ Tràng sinh thanh vân đắc lộ",
+    "sao": [
+      "Thiên Mã"
+    ],
+    "saoPhuTro": [
+      "Tràng sinh"
+    ],
+    "dieuKien": "Thiên Mã tại cung có Trường Sinh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Ngựa gặp Trường Sinh, mây xanh đắc lộ. Sự nghiệp hanh thông, thăng tiến thuận lợi.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Tử Phủ Kình Dương tất cự thương",
+    "sao": [
+      "Tử Vi",
+      "Thiên Phủ",
+      "Kình Dương"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Tử Vi và Thiên Phủ hội Kình Dương",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Tử Phủ gặp Kình Dương ắt buôn bán lớn, kinh doanh quy mô. Giàu có nhưng theo con đường thương mại.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Phú quý bất khả ngôn",
+    "sao": [
+      "Tử Vi",
+      "Hóa Lộc"
+    ],
+    "saoPhuTro": [
+      "Thái Dương",
+      "Thái Âm"
+    ],
+    "dieuKien": "Tử Vi hội Hóa Lộc và Nhật Nguyệt",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 5,
+    "tomTat": "Giàu sang tột bậc, giàu đến mức không thể nói lên được. Người mạng Thổ, Kim hay Hỏa ứng nghiệm nhất.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Phúc lộc hà sa",
+    "sao": [
+      "Thái Dương",
+      "Hóa Lộc"
+    ],
+    "saoPhuTro": [
+      "Thiên Quan",
+      "Thiên Phúc"
+    ],
+    "dieuKien": "Thái Dương miếu địa hội Thiên Quan, Thiên Phúc và Hóa Lộc",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 5,
+    "tomTat": "Phúc lộc như sông như biển, làm ăn buôn bán thịnh vượng không tưởng, ngồi chơi cũng vẫn phát tài.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Mệnh vô chính diệu đắc tam không phú quý khả kỳ",
+    "sao": [
+      "Thiên Không",
+      "Địa Không"
+    ],
+    "saoPhuTro": [
+      "Tuần",
+      "Song Lộc"
+    ],
+    "dieuKien": "Mệnh vô chính diệu, đắc Tam Không (Thiên Không, Địa Không và Tuần hoặc Triệt), có Song Lộc hội chiếu",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Mệnh không có chính tinh nhưng đắc ba Không và Song Lộc, phú quý đến mức không thể ngờ được. Cần là con một và nhận vai trò phụ tá.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Phú hữu lâu dài",
+    "sao": [
+      "Thiên Cơ",
+      "Cự Môn"
+    ],
+    "saoPhuTro": [
+      "Lộc Tồn",
+      "Hóa Lộc"
+    ],
+    "dieuKien": "Thiên Cơ và Cự Môn ở Mão hoặc Dậu, có Song Lộc hội chiếu hoặc Song Hao",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Giàu sang bền vững lâu dài. Cơ Cự Mão Dậu cần Song Lộc hoặc Song Hao để tiền bạc sinh sôi, không bị phá tán.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Cự Nhật dần thân qua phong tam đại",
+    "sao": [
+      "Cự Môn",
+      "Thái Dương"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Cự Môn và Thái Dương ở cung Dần hoặc Thân",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Cự Môn và Thái Dương ở Dần Thân vượt qua phong trần ba đời, công danh lớn trong chính quyền, phú quý lâu bền.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Cự Nhật cư Tài phi quyền tắc phú",
+    "sao": [
+      "Cự Môn",
+      "Thái Dương"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Cự Môn và Thái Dương hội chiếu hoặc tọa cung Tài",
+    "phamVi": "hoi_hop",
+    "cung": "Tài",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Cự Nhật ở cung Tài, không có quyền thì ắt phú. Giàu sang hoặc nắm quyền hành.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Tam hóa liên châu",
+    "sao": [
+      "Hóa Khoa",
+      "Hóa Quyền",
+      "Hóa Lộc"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Hóa Khoa, Hóa Quyền, Hóa Lộc đóng tại 3 cung liền nhau (Quan, Nô, Di hoặc các cung liền nhau)",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 5,
+    "tomTat": "Ba hóa tinh liên tiếp như chuỗi ngọc trai, phú quý song toàn, cả ba lĩnh vực công danh, tài lộc, học hành đều phát triển.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Mã đầu đái kiếm",
+    "sao": [
+      "Thiên Mã",
+      "Kình Dương",
+      "Thất Sát"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thiên Mã, Kình Dương, Thất Sát tại cung Ngọ",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 4,
+    "tomTat": "Ngựa đầu đội kiếm. Hung hiểm, xung đột bạo lực. Tại cung Phu/Thê có thể gây xô xát lưu huyết. Tuổi Bính Mậu bị ảnh hưởng mạnh.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Tử Vi cư Ngọ vô Hình Kỵ Giáp Đinh Kỷ",
+    "sao": [
+      "Tử Vi"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Tử Vi ở cung Ngọ, không có Thiên Hình và Hóa Kỵ, tuổi Giáp Đinh Kỷ",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 5,
+    "tomTat": "Tử Vi ở Ngọ không Hình Kỵ, tuổi Giáp Đinh Kỷ đạt đến công khanh. Bố cục Tam hóa của các tuổi này bổ trợ hoàn hảo cho Tử Vi cư Ngọ.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Toái Quân lưỡng Phá",
+    "sao": [
+      "Phá Toái",
+      "Phá Quân"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Phá Toái đồng cung hoặc hội chiếu Phá Quân",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Phá Toái quy phục Phá Quân (Toái Quân - Lưỡng Phá). Bậc anh hùng lẫy lừng, tinh thần bất khuất, chí khí hiên ngang.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Tử Sát đồng lâm Tỵ Hợi nhất triều phú quý song toàn",
+    "sao": [
+      "Tử Vi",
+      "Thất Sát"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Tử Vi và Thất Sát ở cung Tỵ hoặc Hợi",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Tử Vi và Thất Sát cùng tại Tỵ Hợi, phú quý song toàn. Cách tốt đặc biệt cho phụ nữ: nghiêm nghị, vượng phu ích tử, tài năng kinh tế.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Đồng Lương tối hỉ dần thân hội",
+    "sao": [
+      "Thiên Đồng",
+      "Thiên Lương"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thiên Đồng và Thiên Lương ở cung Dần hoặc Thân",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Thiên Đồng và Thiên Lương ưa nhất ở Dần Thân. Tính tình nhẹ nhàng, dịu dàng, có sắc đẹp. Nhưng hay thay đổi, không chung tình tuyệt đối.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Thạch trung ẩn ngọc",
+    "sao": [
+      "Cự Môn"
+    ],
+    "saoPhuTro": [
+      "Hóa Khoa",
+      "Hóa Quyền",
+      "Hóa Lộc"
+    ],
+    "dieuKien": "Cự Môn ở cung Tý hoặc Ngọ, đắc Khoa Quyền Lộc hội chiếu",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Ngọc ẩn trong đá. Cự Môn ở Tý Ngọ gặp Khoa Quyền Lộc, phúc hưng long. Tài năng tiềm ẩn được phát lộ.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Phi yểu tắc bần",
+    "sao": [],
+    "saoPhuTro": [],
+    "dieuKien": "Mệnh vô chính diệu không đắc Tam Không, không có Song Lộc",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 3,
+    "tomTat": "Không yểu thì nghèo. Mệnh vô chính diệu mà không đắc Không tinh hay Lộc thì chỉ chết yểu hoặc bần hàn.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Đào Riêu",
+    "sao": [
+      "Đào Hoa",
+      "Thiên Riêu"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Đào Hoa và Thiên Riêu đồng cung hoặc hội chiếu cung Mệnh",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 3,
+    "tomTat": "Cách số gái long đong, dâm đãng. Phụ nữ có cách này dễ cắm sừng chồng, trắc nết, lăng loàn.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Sóng cồn đại hải",
+    "sao": [
+      "Phá Quân"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Phá Quân ở cung Tý (đại hải thủy)",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 4,
+    "tomTat": "Sóng cồn đại hải, biến động lớn, thiếu thời lận đận. Phá Quân ở Tý hình thành sóng dữ, gây xáo trộn mạnh mẽ.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Long Vân khánh hội",
+    "sao": [
+      "Thanh Long"
+    ],
+    "saoPhuTro": [
+      "Hóa Kỵ"
+    ],
+    "dieuKien": "Thanh Long ở cung Thìn (Long cư Long Vị), Hóa Kỵ như mây che chở",
+    "phamVi": "dong_cung",
+    "cung": "Huynh Đệ",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Rồng gặp mây khánh hội. Thanh Long ở Thìn là Long cư Long Vị, như rồng thực sự, Hóa Kỵ như mây che, rồng có mây mới linh động.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Phong Hổ đồng hành",
+    "sao": [
+      "Phi Liêm",
+      "Bạch Hổ"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Phi Liêm và Bạch Hổ đồng cung hoặc tam chiếu",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Gió (Phi Liêm) và Hổ (Bạch Hổ) cùng đi. Hổ tung hoành vào ban đêm, khi có Phi Liêm thêm uy lực. Cách đặc biệt trong cung Huynh Đệ.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Hổ ngậm kiếm",
+    "sao": [
+      "Thiên Hình"
+    ],
+    "saoPhuTro": [
+      "Bạch Hổ"
+    ],
+    "dieuKien": "Thiên Hình ở cung Dần trong cung Mệnh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Cung Mệnh có Thiên Hình ở Dần là Hổ ngậm kiếm, được oai dũng, có võ nghiệp hay công danh lớn.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Hổ đội hòm sắt",
+    "sao": [
+      "Bạch Hổ",
+      "Tấu Thư"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Bạch Hổ và Tấu Thư đồng cung",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Bạch Hổ đội hòm sắt (Tấu Thư), thi cử tốt, cầu công danh có lợi, lợi ích cho học hành và thi cử.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Hổ mọc cánh",
+    "sao": [
+      "Bạch Hổ",
+      "Phi Liêm"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Bạch Hổ và Phi Liêm đồng cung",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Bạch Hổ mọc cánh (gặp Phi Liêm), vui vẻ, nhanh nhẹn, may mắn, lợi ích cho việc thi cử và cầu công danh.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Hổ khiếu Tây Phương",
+    "sao": [
+      "Bạch Hổ"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Bạch Hổ ở cung Dậu (miếu địa)",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Hổ khiếu hướng Tây Phương. Bạch Hổ ở Dậu là miếu địa, lời nói thẳng nhưng có uy tín, dũng mãnh có oai.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Hình Hổ cư Dần Hổ đới kiếm hùng",
+    "sao": [
+      "Thiên Hình",
+      "Bạch Hổ"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thiên Hình và Bạch Hổ ở cung Dần, tuổi Giáp hoặc Kỷ",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Hình Hổ ở Dần, Hổ đeo kiếm hùng. Tuổi Giáp Kỷ uy vũ trấn động, tương phùng đế cách. Dành cho chỉ huy quân sự.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Liêm Tham Tị Hợi hình ngục nan đào",
+    "sao": [
+      "Liêm Trinh",
+      "Tham Lang"
+    ],
+    "saoPhuTro": [
+      "Bạch Hổ",
+      "Thiên Hình"
+    ],
+    "dieuKien": "Liêm Trinh và Tham Lang ở cung Tỵ hoặc Hợi, thêm Bạch Hổ hay Thiên Hình",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 4,
+    "tomTat": "Liêm Tham ở Tỵ Hợi, hình ngục khó thoát. Bạch Hổ thêm vào có thể bị tù và bị hành hình, chết trong tù ngục.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Hình Mã Tang Tướng",
+    "sao": [
+      "Thiên Hình",
+      "Thiên Mã",
+      "Tang Môn"
+    ],
+    "saoPhuTro": [
+      "Thiên Tướng"
+    ],
+    "dieuKien": "Thiên Hình, Thiên Mã, Tang Môn (và Tướng Quân) hội tụ",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 5,
+    "tomTat": "Cách tướng chết vì súng đạn. Hình Mã Tang Tướng hội tụ là dấu hiệu chết trong chiến trận hay bạo lực.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Chiến Mã",
+    "sao": [
+      "Thiên Mã",
+      "Hỏa Tinh"
+    ],
+    "saoPhuTro": [
+      "Linh Tinh"
+    ],
+    "dieuKien": "Thiên Mã đồng cung Hỏa Tinh hoặc Linh Tinh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Ngựa chiến, Thiên Mã gặp Hỏa hay Linh trở thành chiến mã. Công danh tốt đẹp về binh nghiệp.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Tử Phủ dần thân",
+    "sao": [
+      "Tử Vi",
+      "Thiên Phủ"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Tử Vi và Thiên Phủ ở cung Dần hoặc Thân",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 5,
+    "tomTat": "Tử Phủ ở Dần Thân, cách tốt nhất cho phụ nữ. Đoan trang, tiết hạnh, thông minh. Gặp Hóa Khoa hay Khôi Việt là hết chỗ chê.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Nhật xuất phù tang",
+    "sao": [
+      "Thái Dương"
+    ],
+    "saoPhuTro": [
+      "Hóa Quyền",
+      "Hóa Lộc",
+      "Tả Phụ",
+      "Hữu Bật"
+    ],
+    "dieuKien": "Thái Dương đắc cách Nhật xuất Phù Tang (mặt trời mọc ở hướng Đông), hội Quyền Lộc Tả Hữu",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Mặt trời mọc phía Đông rực rỡ. Đắc cách này hội thêm Quyền Lộc Tả Hữu Long Phượng là đại quý cách.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Nội Tướng Ngoại Binh",
+    "sao": [
+      "Thiên Tướng",
+      "Phục Binh"
+    ],
+    "saoPhuTro": [
+      "Hóa Quyền"
+    ],
+    "dieuKien": "Thiên Tướng cư Mệnh hoặc Quan, Phục Binh ở cung xung chiếu, đắc Hóa Quyền",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Bên trong có tướng cầm quyền, bên ngoài có binh trấn giữ. Cách chỉ huy quân sự, lãnh đạo tài ba.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Kình Đà giáp Mạng",
+    "sao": [
+      "Kình Dương",
+      "Đà La"
+    ],
+    "saoPhuTro": [
+      "Lộc Tồn"
+    ],
+    "dieuKien": "Kình Dương và Đà La kẹp hai bên cung Mệnh, có Lộc Tồn giữ giữa",
+    "phamVi": "giap_cung",
+    "cung": "Mệnh",
+    "loai": "trung",
+    "doManh": 3,
+    "tomTat": "Kình Đà kẹp Mệnh, nhưng nếu có Lộc Tồn thủ Mệnh thì giữ được kho Lộc. Người cứ ngồi chờ mà tiền lộc vẫn đến.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Trai bất nhân Phá Quân Thìn Tuất",
+    "sao": [
+      "Phá Quân"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Phá Quân ở cung Thìn hoặc Tuất trong lá số nam",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 3,
+    "tomTat": "Con trai bất nhân khi Phá Quân ở Thìn Tuất. Tính ngang bướng, bất cần đời, bất nhân bất nghĩa.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Gái bạc tình Tham Sát Dần Thân",
+    "sao": [
+      "Tham Lang",
+      "Thất Sát"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Tham Lang và Thất Sát ở cung Dần hoặc Thân trong lá số nữ",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 3,
+    "tomTat": "Người phụ nữ bạc tình khi Tham Lang và Thất Sát ở Dần Thân. Đào hoa, lẳng lơ, khó chung thủy.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Hình Riêu",
+    "sao": [
+      "Thiên Hình",
+      "Thiên Riêu"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thiên Hình và Thiên Riêu đồng cung hoặc hội chiếu",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 3,
+    "tomTat": "Thiên Hình và Thiên Riêu gặp nhau, oan trái nghiệp báo, dễ chết vì tội lỗi của kiếp trước, bị kiện tụng hình ngục.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Cơ Lương Thìn Tuất",
+    "sao": [
+      "Thiên Cơ",
+      "Thiên Lương"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thiên Cơ và Thiên Lương ở cung Thìn hoặc Tuất",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Thiên Cơ và Thiên Lương ở Thìn Tuất, giỏi mưu trí kế hoạch. Nam phát huy tốt; nữ có cách này thì khôn quá dễ lừa dối chồng.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Vũ Tướng Dần Thân",
+    "sao": [
+      "Vũ Khúc",
+      "Thiên Tướng"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Vũ Khúc và Thiên Tướng ở cung Dần hoặc Thân",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Vũ Khúc Thiên Tướng ở Dần Thân, đảm đang, đứng đắn, biết xoay xở quán xuyến. Tính cô đơn lạnh lùng, quả quyết như đàn ông.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Vũ Sát Mão Dậu",
+    "sao": [
+      "Vũ Khúc",
+      "Thất Sát"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Vũ Khúc và Thất Sát ở cung Mão hoặc Dậu",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Vũ Khúc Thất Sát ở Mão Dậu, đứng đắn, đoan trang, ghét tình ái bậy bạ. Người lo toan nội trợ hoặc tần tảo bán buôn.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Tử Phủ Giáp Mệnh",
+    "sao": [
+      "Tử Vi",
+      "Thiên Phủ"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Tử Vi và Thiên Phủ giáp hai bên cung Mệnh",
+    "phamVi": "giap_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 5,
+    "tomTat": "Tử Vi và Thiên Phủ kẹp giáp cung Mệnh, đại quý cách. Phú quý song toàn, quyền lực tột đỉnh.",
+    "nguon": "Vân Đằng Thái Thứ Lang Tử Vi đẩu số tân biên"
+  },
+  {
+    "ten": "Khoa Lộc Giáp Mệnh",
+    "sao": [
+      "Hóa Khoa",
+      "Hóa Lộc"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Hóa Khoa và Hóa Lộc giáp hai bên cung Mệnh",
+    "phamVi": "giap_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Khoa và Lộc kẹp giáp cung Mệnh, học hành khoa cử và tài lộc đều phát đạt. Quý cách văn học.",
+    "nguon": "Vân Đằng Thái Thứ Lang Tử Vi đẩu số tân biên"
+  },
+  {
+    "ten": "Tam Kỳ Giao Hội",
+    "sao": [
+      "Hóa Khoa",
+      "Hóa Quyền",
+      "Hóa Lộc"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Hóa Khoa, Hóa Quyền, Hóa Lộc cùng hội tụ tại cung Mệnh hoặc tam hợp chiếu",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 5,
+    "tomTat": "Ba kỳ (Khoa Quyền Lộc) giao hội tại Mệnh hoặc tam chiếu. Đại quý cách, phú quý song toàn, tài năng xuất chúng.",
+    "nguon": "Vân Đằng Thái Thứ Lang Tử Vi đẩu số tân biên"
+  },
+  {
+    "ten": "Nhật Nguyệt Tịnh Tranh Quang",
+    "sao": [
+      "Thái Dương",
+      "Thái Âm"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thái Dương và Thái Âm cùng sáng tỏ (Nhật không ở hãm, Nguyệt không ở hãm)",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Mặt trời và mặt trăng cùng sáng tỏ tranh quang. Phú quý song toàn, danh tiếng lẫy lừng, văn võ toàn tài.",
+    "nguon": "Vân Đằng Thái Thứ Lang Tử Vi đẩu số tân biên"
+  },
+  {
+    "ten": "Nhị Khúc Triều Viên",
+    "sao": [
+      "Văn Xương",
+      "Văn Khúc"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Văn Xương và Văn Khúc cùng triều hướng về cung Mệnh",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Hai sao Khúc (Văn Xương + Văn Khúc) triều về cung Mệnh. Văn học xuất chúng, học hành khoa cử thành danh, văn quý cách.",
+    "nguon": "Vân Đằng Thái Thứ Lang Tử Vi đẩu số tân biên"
+  },
+  {
+    "ten": "Văn Tinh Củng Chiếu",
+    "sao": [
+      "Văn Xương",
+      "Văn Khúc"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Văn Xương và Văn Khúc cùng cung hoặc đối chiếu, củng chiếu cung Mệnh",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Văn tinh củng chiếu, tài hoa học hành xuất sắc. Hai sao văn khúc hội hợp tạo nên vận mệnh học giả, văn nhân.",
+    "nguon": "Vân Đằng Thái Thứ Lang Tử Vi đẩu số tân biên"
+  },
+  {
+    "ten": "Uyên Ương Lộc Hội",
+    "sao": [
+      "Lộc Tồn",
+      "Hóa Lộc"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Lộc Tồn và Hóa Lộc đồng cung hoặc hội chiếu (Minh Lộc và Ám Lộc gặp nhau)",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Uyên ương lộc hội, Minh Lộc và Ám Lộc gặp nhau. Tài lộc dồi dào, phú quý toàn vẹn như đôi uyên ương.",
+    "nguon": "Vân Đằng Thái Thứ Lang Tử Vi đẩu số tân biên"
+  },
+  {
+    "ten": "Lộc Mã Giao Trì",
+    "sao": [
+      "Lộc Tồn",
+      "Thiên Mã"
+    ],
+    "saoPhuTro": [
+      "Hóa Lộc"
+    ],
+    "dieuKien": "Lộc Tồn và Thiên Mã đồng cung hoặc tam hợp (hay Hóa Lộc hội Thiên Mã)",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Lộc và Mã giao hội tại ao (địa bàn), tài lộc và danh tiếng cùng phát đạt. Phú cách tuyệt vời.",
+    "nguon": "Vân Đằng Thái Thứ Lang Tử Vi đẩu số tân biên"
+  },
+  {
+    "ten": "Lộ Thượng Mai Thi",
+    "sao": [
+      "Thất Sát",
+      "Liêm Trinh"
+    ],
+    "saoPhuTro": [
+      "Hỏa Tinh"
+    ],
+    "dieuKien": "Thất Sát và Liêm Trinh hãm địa ở cung Sửu hoặc Mùi, thêm Hỏa Tinh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 5,
+    "tomTat": "Xác chết trên đường. Thất Sát và Liêm Trinh hãm địa tại Sửu Mùi gặp Hỏa, chết bạo liệt ngoài đường, tai nạn thảm khốc.",
+    "nguon": "Vân Đằng Thái Thứ Lang Tử Vi đẩu số tân biên"
+  },
+  {
+    "ten": "Tự Ải Đầu Hà",
+    "sao": [
+      "Liêm Trinh",
+      "Phá Quân",
+      "Hỏa Tinh"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Liêm Trinh và Phá Quân hãm địa, thêm Hỏa Tinh",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 5,
+    "tomTat": "Tự treo cổ hoặc nhảy sông. Liêm Phá hãm địa gặp Hỏa, chết do tự tử thảm khốc, hoặc chết đuối.",
+    "nguon": "Vân Đằng Thái Thứ Lang Tử Vi đẩu số tân biên"
+  },
+  {
+    "ten": "Nhan Hồi Yểu Chiết",
+    "sao": [
+      "Thất Sát"
+    ],
+    "saoPhuTro": [
+      "Kình Dương",
+      "Đà La"
+    ],
+    "dieuKien": "Thất Sát ở cung Tuyệt địa, thêm Kình Dương và Đà La",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 5,
+    "tomTat": "Chết yểu như Nhan Hồi (học trò giỏi của Khổng Tử chết yểu). Thất Sát Tuyệt + Kình Đà là cách chết non, thọ mạng ngắn.",
+    "nguon": "Vân Đằng Thái Thứ Lang Tử Vi đẩu số tân biên"
+  },
+  {
+    "ten": "Liêm Trinh Bạch Hổ Hình Ngục Nan Đào",
+    "sao": [
+      "Liêm Trinh",
+      "Bạch Hổ"
+    ],
+    "saoPhuTro": [
+      "Thiên Hình"
+    ],
+    "dieuKien": "Cung Mệnh có Liêm Trinh tọa thủ, gặp Bạch Hổ đồng cung hoặc xung chiếu",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 4,
+    "tomTat": "Liêm Trinh Bạch Hổ, hình ngục khó thoát. Gặp Hổ đồng cung hay xung chiếu, khó tránh khỏi xiềng xích gông cùm.",
+    "nguon": "Vân Đằng Thái Thứ Lang Tử Vi đẩu số tân biên"
+  },
+  {
+    "ten": "Nhập Lao Quản Trọng",
+    "sao": [
+      "Liêm Trinh"
+    ],
+    "saoPhuTro": [
+      "Thiên Hình",
+      "Địa Kiếp"
+    ],
+    "dieuKien": "Liêm Trinh hãm địa, Thiên Hình và sát tinh hội tụ",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 4,
+    "tomTat": "Vào tù như Quản Trọng (tướng tài bị bắt tù). Cách tù tội giam cầm nhưng có thể được cứu thoát nếu có quý nhân.",
+    "nguon": "Vân Đằng Thái Thứ Lang Tử Vi đẩu số tân biên"
+  },
+  {
+    "ten": "Giáp Dương Giáp Đà Vi Khất Điếu",
+    "sao": [
+      "Kình Dương",
+      "Đà La"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Kình Dương và Đà La kẹp giáp cung Mệnh (không có chính tinh tốt)",
+    "phamVi": "giap_cung",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 4,
+    "tomTat": "Giáp Kình Giáp Đà là bại cục, ăn mày chết đường. Mệnh bị Kình Đà kẹp mà không có cứu giải.",
+    "nguon": "Vân Đằng Thái Thứ Lang Tử Vi đẩu số tân biên"
+  },
+  {
+    "ten": "Dương Đà Giáp Kỵ Vi Bại Cục",
+    "sao": [
+      "Kình Dương",
+      "Đà La",
+      "Hóa Kỵ"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Kình Dương và Đà La kẹp giáp, thêm Hóa Kỵ",
+    "phamVi": "giap_cung",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 4,
+    "tomTat": "Dương Đà giáp thêm Kỵ là bại cục hoàn toàn. Làm ăn thất bại, công danh gãy đổ, tiêu tan tất cả.",
+    "nguon": "Vân Đằng Thái Thứ Lang Tử Vi đẩu số tân biên"
+  },
+  {
+    "ten": "Hỏa Linh Giáp Mệnh Vi Bại Cục",
+    "sao": [
+      "Hỏa Tinh",
+      "Linh Tinh"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Hỏa Tinh và Linh Tinh kẹp giáp cung Mệnh",
+    "phamVi": "giap_cung",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 4,
+    "tomTat": "Hỏa Linh giáp Mệnh là bại cục. Hung hung lửa bao vây, mọi việc đều bị phá hoại, thiêu đốt.",
+    "nguon": "Vân Đằng Thái Thứ Lang Tử Vi đẩu số tân biên"
+  },
+  {
+    "ten": "Nhật Xuất Lôi Môn",
+    "sao": [
+      "Thái Dương"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thái Dương đắc địa, mọc lên từ cửa Lôi (cung Dần hoặc cung mộc phương đông)",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Mặt trời mọc cửa sấm, uy lực vang rội. Cát cách phú quý, danh tiếng lẫy lừng như mặt trời buổi sáng.",
+    "nguon": "Vân Đằng Thái Thứ Lang Tử Vi đẩu số tân biên"
+  },
+  {
+    "ten": "Nhật Lệ Trung Thiên",
+    "sao": [
+      "Thái Dương"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thái Dương ở cung Ngọ (giữa trời - Nhật Lệ Trung Thiên)",
+    "phamVi": "dong_cung",
+    "cung": "Quan",
+    "loai": "tốt",
+    "doManh": 5,
+    "tomTat": "Mặt trời rực rỡ giữa trời. Thái Dương ở Ngọ là quý cách, danh tiếng lẫy lừng, công danh hiển hách.",
+    "nguon": "Vân Đằng Thái Thứ Lang Tử Vi đẩu số tân biên"
+  },
+  {
+    "ten": "Nguyệt Lãng Thiên Môn",
+    "sao": [
+      "Thái Âm"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thái Âm ở cung Hợi (Thiên Môn - cửa trời)",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Trăng sáng vào cửa trời. Thái Âm ở Hợi là quý cách, thông minh xuất chúng, phú quý song toàn.",
+    "nguon": "Vân Đằng Thái Thứ Lang Tử Vi đẩu số tân biên"
+  },
+  {
+    "ten": "Tam Hợp Minh Châu",
+    "sao": [
+      "Thái Dương",
+      "Thái Âm"
+    ],
+    "saoPhuTro": [
+      "Hóa Lộc"
+    ],
+    "dieuKien": "Nhật Nguyệt tam hợp hội chiếu cung Mệnh, đắc Hóa Lộc",
+    "phamVi": "tam_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Tam hợp minh châu, ánh sáng ngọc trai ba chiều. Nhật Nguyệt tam chiếu cung Mệnh, phú quý rạng rỡ.",
+    "nguon": "Vân Đằng Thái Thứ Lang Tử Vi đẩu số tân biên"
+  },
+  {
+    "ten": "Khoa minh lộc ám",
+    "sao": [
+      "Hóa Khoa",
+      "Hóa Lộc"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Hóa Khoa thủ Mệnh, Hóa Lộc nhị hợp hội chiếu (hoặc ngược lại)",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Khoa minh (Khoa sáng) và Lộc ám (Lộc tối) hội nhau. Cách làm đến Công khanh, phú quý hiển đạt.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Lương Môn",
+    "sao": [
+      "Tang Môn",
+      "Cự Môn"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Tang Môn và Cự Môn đồng cung (hai sao Môn gặp nhau)",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Tang Môn + Cự Môn thành Lưỡng Môn, sống cảnh cửa cao nhà rộng, lầu son gác tía.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Lưỡng Lộc thủ Mệnh Thân",
+    "sao": [
+      "Lộc Tồn",
+      "Hóa Lộc"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Song Lộc (Lộc Tồn và Hóa Lộc) thủ cả cung Mệnh lẫn cung Thân",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 5,
+    "tomTat": "Lộc Tồn thủ Mệnh, Hóa Lộc thủ Thân (hoặc ngược lại). Đắc cách phú quý tuyệt vời, tài lộc từ hai nguồn.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Mệnh hội Tử Phủ Vũ Tướng cách",
+    "sao": [
+      "Tử Vi",
+      "Thiên Phủ",
+      "Vũ Khúc",
+      "Thiên Tướng"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Mệnh hội cả bốn sao Tử Vi, Thiên Phủ, Vũ Khúc, Thiên Tướng",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 5,
+    "tomTat": "Phi thường cách. Mệnh hội đủ Tứ chính tinh (Tử Phủ Vũ Tướng), cách của vua hoặc lãnh tụ tối cao.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Nhật Nguyệt tịnh minh",
+    "sao": [
+      "Thái Dương",
+      "Thái Âm"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thái Dương và Thái Âm cùng đắc địa sáng tỏ, chiếu hoặc đồng cung vào Mệnh",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Nhật Nguyệt cùng sáng, thông minh xuất chúng, công danh lớn. Cách của bậc cố vấn quân sư như Khổng Minh.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Phủ Tướng triều viên",
+    "sao": [
+      "Thiên Phủ",
+      "Thiên Tướng"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thiên Phủ và Thiên Tướng chiếu về cung Mệnh (tam chiếu)",
+    "phamVi": "xung_chieu",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Thiên Phủ và Thiên Tướng triều về Mệnh, công danh lớn, phong lưu cả đời, thực lộc vạn chúng.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Song Lộc triều viên",
+    "sao": [
+      "Lộc Tồn",
+      "Hóa Lộc"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Song Lộc (Lộc Tồn và Hóa Lộc) chiếu về cung Mệnh (không thủ Mệnh)",
+    "phamVi": "xung_chieu",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Song Lộc triều về Mệnh, đại phú, tài lộc từ xa đổ về, buôn bán phát đạt.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Tả Phủ cách",
+    "sao": [
+      "Tả Phụ",
+      "Thiên Phủ"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Tả Phụ đồng cung với Thiên Phủ tại cung Tuất (cả hai đều miếu ở Tuất)",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Tả Phụ và Thiên Phủ đều miếu tại Tuất, thượng cách. Phú quý song toàn, phụ tá đắc lực.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Văn Xương Vũ Khúc củng Mệnh cự phú",
+    "sao": [
+      "Văn Xương",
+      "Vũ Khúc"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Văn Xương ở cung Quan Lộc và Vũ Khúc ở cung Thiên Di (hoặc ngược lại) đều chiếu Mệnh",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Văn Xương và Vũ Khúc củng chiếu cung Mệnh, cực giàu, tài văn và tài kinh doanh kết hợp.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Vũ Khúc Thiên Phủ đôi kim tích ngọc",
+    "sao": [
+      "Vũ Khúc",
+      "Thiên Phủ"
+    ],
+    "saoPhuTro": [
+      "Lộc Tồn",
+      "Hóa Lộc"
+    ],
+    "dieuKien": "Vũ Khúc hội Thiên Phủ, thêm Song Lộc, người mạng Thổ/Kim",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Vũ Khúc Thiên Phủ đôi vàng chứa ngọc, buôn bán thịnh vượng với Song Lộc. Người mạng Thổ hay Kim hưởng lợi nhất.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Chúng thủy triều đông",
+    "sao": [
+      "Đại Hao",
+      "Tiểu Hao"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Song Hao (Đại Hao và Tiểu Hao) đắc địa ở Mão hoặc Dậu",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Mọi dòng nước đổ về Đông (Mão). Song Hao đắc địa ở Mão Dậu, kiếm tiền khá nhưng tiêu cũng nhiều. Có phát tài lớn.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Lưỡng Tướng",
+    "sao": [
+      "Thiên Tướng",
+      "Tướng Quân"
+    ],
+    "saoPhuTro": [
+      "Tả Phụ",
+      "Hữu Bật"
+    ],
+    "dieuKien": "Thiên Tướng và Tướng Quân hội chiếu cung Mệnh hoặc Quan Lộc",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Lưỡng Tướng (hai sao Tướng) hội chiếu, quý hiển, làm chỉ huy quân sự lớn.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Đại khoa vô hoạn thành danh",
+    "sao": [
+      "Thái Âm",
+      "Thiên Cơ"
+    ],
+    "saoPhuTro": [
+      "Hóa Lộc",
+      "Hóa Khoa"
+    ],
+    "dieuKien": "Mệnh có Thái Âm và Thiên Cơ cùng Hóa Lộc và Hóa Khoa",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Danh thơm bất tử dù không làm quan chức. Cách của học giả, nhà thơ, chí sĩ yêu nước (số Phan Bội Châu).",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Đồng Mệnh tương lân",
+    "sao": [
+      "Thất Sát",
+      "Phá Quân",
+      "Tham Lang"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Cung Ách có Thất Sát, Phá Quân hoặc Tham Lang thủ",
+    "phamVi": "dong_cung",
+    "cung": "Ách",
+    "loai": "xấu",
+    "doManh": 3,
+    "tomTat": "Cùng cảnh ngộ đau khổ giống nhau. Cung Ách gặp sát tinh, hay bị thế lực hung ác bủa vây, phải nếm mùi gian khổ.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Lý Quảng bất phong",
+    "sao": [
+      "Kình Dương"
+    ],
+    "saoPhuTro": [
+      "Lực Sĩ"
+    ],
+    "dieuKien": "Kình Dương gặp Lực Sĩ ở cung Mệnh, Thân hoặc Quan Lộc",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 3,
+    "tomTat": "Như tướng Lý Quảng dũng mãnh nhưng không được phong tước. Giỏi giang nhưng lận đận công danh, không được thưởng xứng đáng.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Nguyệt diện Thiên Lương nữ dâm bần",
+    "sao": [
+      "Thái Âm",
+      "Thiên Lương"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Nữ mệnh có Thái Âm và Thiên Lương tọa thủ hoặc chiếu cung Mệnh",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 3,
+    "tomTat": "Phụ nữ có Nguyệt Lương bị cho là dâm đãng và bần cùng. Câu phú cổ dành cho nữ mệnh.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Nhật Nguyệt đồng minh Sửu Mùi",
+    "sao": [
+      "Thái Dương",
+      "Thái Âm"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thái Dương và Thái Âm hội chiếu nhau ở Sửu và Mùi",
+    "phamVi": "xung_chieu",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 3,
+    "tomTat": "Nhật Nguyệt đối chiếu ở Sửu Mùi, không phát về công danh hiển hách vì hãm địa không miếu.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Nhật Nguyệt phản bội",
+    "sao": [
+      "Thái Dương",
+      "Thái Âm"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thái Dương ở Tuất (hãm địa) và Thái Âm ở Thìn (hãm địa)",
+    "phamVi": "xung_chieu",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 4,
+    "tomTat": "Nhật Nguyệt đều hãm địa, cả hai đều mờ nhạt. Không thể khá được, mọi việc đều trở thành phản bội.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Thiên Đồng Tuất cung vi phản bội",
+    "sao": [
+      "Thiên Đồng",
+      "Hóa Kỵ"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thiên Đồng ở cung Tuất gặp Hóa Kỵ",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 3,
+    "tomTat": "Thiên Đồng ở Tuất ngộ Hóa Kỵ trở thành phản bội, nguy hiểm. Mọi sự tốt trở thành xấu.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Hoạnh phát hoạnh phá",
+    "sao": [
+      "Địa Không",
+      "Địa Kiếp"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Địa Không và Địa Kiếp đắc địa (Tỵ Hợi)",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 3,
+    "tomTat": "Đột ngột phát rồi đột ngột phá. Không Kiếp đắc địa gây nên phát nhanh, phá nhanh, khó giữ được tài sản lâu dài.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Đế ngộ hung đồ",
+    "sao": [
+      "Tử Vi",
+      "Kình Dương",
+      "Đà La"
+    ],
+    "saoPhuTro": [
+      "Hỏa Tinh",
+      "Linh Tinh",
+      "Thiên Không",
+      "Địa Kiếp"
+    ],
+    "dieuKien": "Tử Vi tinh gặp toàn sát tinh (Sát Phá Liêm Tham + Kình Đà Hỏa Linh) tập trung ở Đại hạn",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 5,
+    "tomTat": "Bậc đế vương gặp toàn hung đồ. Uy quyền tối cao bị phá tan khi gặp đại nạn hung hiểm, thất bại thảm khốc.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Chiết túc Mã",
+    "sao": [
+      "Thiên Mã",
+      "Đà La"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thiên Mã ngộ Đà La đồng cung hoặc xung chiếu",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 3,
+    "tomTat": "Ngựa gãy chân. Thiên Mã gặp Đà La khiến công danh gãy đổ, có trở ngại lớn trong đường đi.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Tiền Cái hậu Mã",
+    "sao": [
+      "Hoa Cái",
+      "Thiên Mã"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Hoa Cái ở cung trước Mệnh, Thiên Mã ở cung sau Mệnh",
+    "phamVi": "giap_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Quan cưỡi ngựa che tàn. Cách tốt đẹp, danh vị và di chuyển đều thuận lợi.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Song Lộc Khoa Quyền hội họp",
+    "sao": [
+      "Lộc Tồn",
+      "Hóa Lộc",
+      "Hóa Khoa",
+      "Hóa Quyền"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Song Lộc (Lộc Tồn + Hóa Lộc) và Hóa Khoa + Hóa Quyền cùng tụ hội",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 5,
+    "tomTat": "Bốn hóa tinh và Lộc tụ hội. Đại quý, xuất thế vinh hoa, phú quý song toàn vượt bậc.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Nhật Nguyệt chiếu bích",
+    "sao": [
+      "Thái Dương",
+      "Thái Âm"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thái Dương ở Thìn, Thái Âm ở Tuất (hoặc ngược lại), đối chiếu nhau chiếu vào Mệnh",
+    "phamVi": "xung_chieu",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 5,
+    "tomTat": "Ánh Nhật Nguyệt chiếu vào ngọc bích. Cách quý hiển bậc nhất, sáng sủa tột bực, danh tiếng lẫy lừng.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Nhật trầm thủy bể loạn thế phùng quân",
+    "sao": [
+      "Thái Dương"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thái Dương cư Tý (hãm địa)",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "trung",
+    "doManh": 3,
+    "tomTat": "Mặt trời chìm dưới nước biển, đời loạn gặp anh quân. Cách đặc biệt của Thái Dương hãm: có tài nhưng phải gặp thời loạn mới phát huy.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Tham Linh tịnh thủ tướng chi danh",
+    "sao": [
+      "Tham Lang",
+      "Linh Tinh"
+    ],
+    "saoPhuTro": [
+      "Hỏa Tinh"
+    ],
+    "dieuKien": "Tham Lang đắc địa ở Thìn/Tuất/Sửu/Mùi cùng Linh Tinh (Hỏa Tinh chiếu)",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Tham Lang và Linh Tinh cùng thủ, được danh tướng. Đại thọ, dũng mãnh, thống lĩnh quân đội.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Tích ngọc đôi kim",
+    "sao": [
+      "Vũ Khúc",
+      "Thiên Phủ"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Vũ Khúc cư Dần, Thiên Phủ ở Tuất chiếu sang (hoặc ngược lại)",
+    "phamVi": "xung_chieu",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Chứa ngọc tích vàng. Vũ Khúc và Thiên Phủ chiếu nhau, cực giàu trong kinh doanh buôn bán.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Nội Binh ngoại Tướng",
+    "sao": [
+      "Phục Binh",
+      "Tướng Quân"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Phục Binh cư Mệnh hoặc Quan Lộc, Tướng Quân ở cung xung chiếu",
+    "phamVi": "xung_chieu",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 3,
+    "tomTat": "Ngược với Nội Tướng Ngoại Binh. Binh phục ở bên trong nhưng Tướng ở ngoài, dễ bị sai khiến, thiếu quyền hành thực tế.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Đế tọa La Võng hoàn vi phi nghĩa chi nhân",
+    "sao": [
+      "Tử Vi",
+      "Thiên Tướng"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Tử Vi và Thiên Tướng ở cung La Võng (Thìn hoặc Tuất)",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 3,
+    "tomTat": "Vua ngồi trên lưới trời, cuối cùng không theo chính nghĩa. Tử Tướng ở La Võng bị mắc bẫy bởi quyền lực, không trung thành với chánh đạo.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Không Kiếp Tài Phúc phi yểu tắc bần",
+    "sao": [
+      "Địa Không",
+      "Địa Kiếp"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Địa Không hoặc Địa Kiếp tọa thủ cung Tài Bạch hoặc Phúc Đức",
+    "phamVi": "dong_cung",
+    "cung": "Tài",
+    "loai": "xấu",
+    "doManh": 4,
+    "tomTat": "Không Kiếp ở Tài Phúc: giàu thì chết yểu, nghèo thì sống lâu. Hao tán tài lộc và phúc đức không bền.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Thái Âm hãm ngộ Triệt",
+    "sao": [
+      "Thái Âm"
+    ],
+    "saoPhuTro": [
+      "Triệt"
+    ],
+    "dieuKien": "Thái Âm ở cung hãm địa (Thìn/Tuất) gặp Triệt án ngữ",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Thái Âm hãm gặp Triệt hóa sáng bất thường. Thông minh đặc biệt, âm địa được chiếu sáng.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Sinh thọ tử bất tử",
+    "sao": [
+      "Thái Âm"
+    ],
+    "saoPhuTro": [
+      "Thanh Long"
+    ],
+    "dieuKien": "Thái Âm hãm địa hội Thanh Long và các sao quý chiếu",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Sống thì thọ, chết thì bất tử (tiếng thơm còn mãi). Người có cách này dù khi chết vẫn được người đời kính nể khâm phục.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Tham Lang miếu địa giáp Tràng Sinh",
+    "sao": [
+      "Tham Lang"
+    ],
+    "saoPhuTro": [
+      "Tràng sinh"
+    ],
+    "dieuKien": "Tham Lang ở miếu địa (Dần/Ngọ/Tuất/Hợi), Tràng Sinh giáp cung",
+    "phamVi": "giap_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Tham Lang miếu địa giáp Tràng Sinh là cách đại thọ. Người có cách này sống đến 80-90 tuổi, dũng mãnh và trường thọ.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Dĩ độc chế độc",
+    "sao": [
+      "Địa Không",
+      "Địa Kiếp"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Cung Phối của cả vợ lẫn chồng đều có Không hoặc Kiếp",
+    "phamVi": "dong_cung",
+    "cung": "Thê",
+    "loai": "trung",
+    "doManh": 2,
+    "tomTat": "Lấy độc chế độc. Vợ chồng cùng có Không Kiếp ở cung Phối bù trừ nhau, bền dù không hoàn hảo.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Lộc phùng xung phá",
+    "sao": [
+      "Lộc Tồn",
+      "Hóa Kỵ"
+    ],
+    "saoPhuTro": [
+      "Hóa Khoa"
+    ],
+    "dieuKien": "Mệnh có Lộc Tồn nhưng cung Thiên Di (xung chiếu) có Hóa Kỵ phá",
+    "phamVi": "xung_chieu",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 3,
+    "tomTat": "Lộc gặp xung phá. Tuy giàu nhưng không bền, Hóa Kỵ từ xung chiếu phá hỏng Lộc Tồn.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Nhật Thìn Nguyệt Tuất tịnh tranh quang",
+    "sao": [
+      "Thái Dương",
+      "Thái Âm"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thái Dương cư Thìn, Thái Âm cư Tuất (hoặc ngược lại), đối chiếu nhau",
+    "phamVi": "xung_chieu",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Nhật Thìn Nguyệt Tuất đối nhau, quyền và lộc không bao giờ hết, 10 năm đại hạn tốt nhất. Công danh rực rỡ, phú quý đầy đủ.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Hợp Lộc củng Lộc",
+    "sao": [
+      "Lộc Tồn",
+      "Hóa Lộc"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Mệnh có Lộc Tồn, Thân có Hóa Lộc (hoặc ngược lại); hai lộc nhập củng hỗ trợ nhau",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Hai lộc hội họp, chung thân phú quý, tài lộc sung mãn suốt đời. Cách giàu bền vững.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Tọa Lộc hướng Lộc",
+    "sao": [
+      "Lộc Tồn",
+      "Hóa Lộc"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Lộc Tồn thủ Mệnh, Hóa Lộc ở cung Tài Bạch chiếu vào (hoặc Hóa Lộc ở Mệnh, Lộc Tồn ở Tài chiếu vào)",
+    "phamVi": "xung_chieu",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Ngồi trên lộc, hướng về lộc — tài lộc song toàn, tiền bạc vào không ra. Cách phú hữu.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Cát xứ tàng hung",
+    "sao": [
+      "Hóa Kỵ"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Sao tốt (vd Thái Dương, Thái Âm, Thiên Phủ) đắc địa nhưng có Hóa Kỵ đồng cung ẩn núp",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "trung",
+    "doManh": 2,
+    "tomTat": "Ở nơi tốt lành nhưng ẩn chứa nguy hiểm. Bề ngoài tốt song bên trong tiềm ẩn họa hại, chỉ còn 7-8 phần tốt.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Tử Phủ Vũ Tướng",
+    "sao": [
+      "Tử Vi",
+      "Thiên Phủ",
+      "Vũ Khúc",
+      "Thiên Tướng"
+    ],
+    "saoPhuTro": [
+      "Tả Phụ",
+      "Hữu Bật"
+    ],
+    "dieuKien": "Tử Vi, Thiên Phủ, Vũ Khúc, Thiên Tướng hội chiếu Mệnh/Thân (bốn chính tinh của hệ thống)",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 5,
+    "tomTat": "Tứ chính tinh tụ hội, cách đại phú quý phi thường. Hội đủ Tả Hữu Khôi Việt trở thành cách vua chúa. Sự nghiệp vĩ đại, quyền lực tột đỉnh.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Tướng Phủ triều viên",
+    "sao": [
+      "Thiên Tướng",
+      "Thiên Phủ"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thiên Tướng và Thiên Phủ hội chiếu vào cung Mệnh hoặc Quan Lộc",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Tướng Phủ chầu về nguyên đình, cách chỉ huy quyền uy. Hội cùng Tử Phủ Vũ Tướng thành đại phú quý, làm quan lớn.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Sát Phá Liêm Tham",
+    "sao": [
+      "Thất Sát",
+      "Phá Quân",
+      "Liêm Trinh",
+      "Tham Lang"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thất Sát, Phá Quân, Liêm Trinh, Tham Lang hội chiếu vào cung Mệnh/Thân",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "trung",
+    "doManh": 3,
+    "tomTat": "Bộ tứ hung tinh (Sát Phá Liêm Tham) hội chiếu — bẩm tính xông xáo, phát mạnh về võ nghiệp. Đắc địa thì phú quý lớn, thất địa thì gian truân. Khi gặp Cơ Nguyệt Đồng Lương kém vận.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Cơ Nguyệt Đồng Lương",
+    "sao": [
+      "Thiên Cơ",
+      "Thái Âm",
+      "Thiên Đồng",
+      "Thiên Lương"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thiên Cơ, Thái Âm, Thiên Đồng, Thiên Lương hội chiếu vào cung Mệnh (tốt nhất ở cung Dần hoặc Thân)",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Bộ tứ cát tinh — cách văn nhân, công chức, trí tuệ. Khôn ngoan, tính toán giỏi, tinh tế trong công việc. Tốt nhất khi ở Dần/Thân. Đối lập với Sát Phá Liêm Tham.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Dần Thân tối hỉ Đồng Lương hội",
+    "sao": [
+      "Thiên Đồng",
+      "Thiên Lương"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Thiên Đồng và Thiên Lương đồng cung tại cung Dần hoặc Thân",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Thiên Đồng Thiên Lương hội tại Dần/Thân — không sợ tai ương, tật bệnh giải trừ, sức khỏe bền tốt. Cực tốt cho cung Tật Ách và thọ mệnh.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Kiến Tam Không",
+    "sao": [
+      "Tuần Không",
+      "Địa Không",
+      "Thiên Không"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Mệnh vô chính diệu đắc Tam Không nhưng cục đã xấu, không hội được hung tinh đắc cách; mọi thứ bị Không triệt hóa",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 3,
+    "tomTat": "Gặp đủ Tam Không nhưng thành phù vân, phú quý không bền. Thấy tốt mà không thực, giống như sương mờ tan khi nắng lên.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Ngộ Không",
+    "sao": [
+      "Địa Không",
+      "Thiên Không"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Mệnh vô chính diệu, hung tinh khắc mệnh, thêm Không chiếu vào (không đủ cách hóa giải)",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 3,
+    "tomTat": "Mệnh không sao mà gặp Không — bần khổ và chết yểu. Không có cơ hội phát triển, cuộc đời trống rỗng.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Vũ Sát Phá Liêm cư Mão địa",
+    "sao": [
+      "Vũ Khúc",
+      "Thất Sát",
+      "Phá Quân",
+      "Liêm Trinh"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Vũ Khúc, Thất Sát, Phá Quân, Liêm Trinh hội tụ tại cung Mão (hãm địa của Vũ Khúc)",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 4,
+    "tomTat": "Mộc (Mão) áp lôi kình — gỗ bị sấm sét, cực kỳ nguy hiểm đến tính mệnh. Cách tử vong đột ngột hoặc tai họa khốc liệt.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Mộc Không",
+    "sao": [
+      "Triệt Lộ"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Triệt Lộ án ngữ tại cung Dần hoặc Mão (hành Mộc bị Triệt cắt đứt)",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "xấu",
+    "doManh": 3,
+    "tomTat": "Gỗ bị gẫy — Triệt cắt đứt hành Mộc. Công danh gãy đổ, sự nghiệp dở dang, cực xấu cho mệnh Mộc.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Cơ lai bão khứ",
+    "sao": [],
+    "saoPhuTro": [],
+    "dieuKien": "Cung Nô Bộc có sao xấu (Phá Quân, Thất Sát, Kình Dương, Hóa Kỵ...) không có cát tinh trợ",
+    "phamVi": "dong_cung",
+    "cung": "Nô bộc",
+    "loai": "xấu",
+    "doManh": 2,
+    "tomTat": "Đói thì tìm đến, no thì bỏ đi — kẻ dưới không trung thành, nhân viên phụ bạc. Khó giữ người giúp việc tốt.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Cự Cơ Mão Dậu",
+    "sao": [
+      "Cự Môn",
+      "Thiên Cơ"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Cự Môn và Thiên Cơ thủ Mệnh tại cung Mão hoặc Dậu",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Người nói giỏi, thâm môi, có tài ăn nói và thuyết phục. Cách của những người xuất sắc về ngôn ngữ, sư phạm, luật sư, đàm phán.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Dĩ Không giải Kỵ",
+    "sao": [
+      "Địa Không",
+      "Hóa Kỵ"
+    ],
+    "saoPhuTro": [
+      "Thiên Không"
+    ],
+    "dieuKien": "Thiên Không hoặc Địa Không hội chiếu vào Hóa Kỵ, giải trừ tác hại của Kỵ",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 2,
+    "tomTat": "Lấy Không giải trừ Kỵ — Không gặp Kỵ hóa giải được một phần họa hại của Kỵ. Cuộc sống bớt trở ngại dù vẫn có lo toan.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Giáp Long Phượng",
+    "sao": [
+      "Long Trì",
+      "Phượng Các"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Long Trì và Phượng Các giáp hai bên cung Mệnh (một sao ở cung trước, một sao ở cung sau)",
+    "phamVi": "giap_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Long Phượng giáp Mệnh — phú hữu lâu dài. Có tài năng văn chương nghệ thuật, vẻ ngoài phong nhã, được quý nhân tương trợ.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Tứ đại dương mộ đắc địa",
+    "sao": [
+      "Thiên Phủ",
+      "Vũ Khúc"
+    ],
+    "saoPhuTro": [
+      "Thanh Long",
+      "Tử Vi",
+      "Thiên Tướng"
+    ],
+    "dieuKien": "Thiên Phủ và Vũ Khúc hội Thanh Long, Tử Tướng tứ mộ đắc địa (Thìn/Tuất/Sửu/Mùi)",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Bốn cung mộ đắc địa tụ hội — phú quý phát từ nền tảng tổ tiên (Phúc Đức cung). Tài sản bền vững, gia đình có phúc lớn.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Vượng phu ích tử",
+    "sao": [
+      "Tử Vi",
+      "Thiên Phủ"
+    ],
+    "saoPhuTro": [
+      "Hóa Lộc",
+      "Tả Phụ",
+      "Hữu Bật"
+    ],
+    "dieuKien": "Nữ mệnh hội Tử Phủ cùng Hóa Lộc và các cát tinh, không có hung sát tinh lấn át",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Phụ nữ có cách này giúp chồng phát đạt, con cái hiếu thảo thành đạt. Người vợ đảm đang, gia đình hưng thịnh nhờ bàn tay người phụ nữ.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Thực lộc tri danh",
+    "sao": [
+      "Cự Môn"
+    ],
+    "saoPhuTro": [
+      "Tuần Không"
+    ],
+    "dieuKien": "Cự Môn ở cung hãm địa (Tị) ngộ Tuần Không — Tuần hóa hãm thành tốt",
+    "phamVi": "dong_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Có tiền rồi có danh — Tuần giải hóa sự hãm của Cự Môn. Trước phú sau quý, thành danh nhờ nỗ lực bền bỉ.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Quần thần khánh hội",
+    "sao": [
+      "Tử Vi",
+      "Thiên Phủ",
+      "Vũ Khúc",
+      "Thiên Tướng"
+    ],
+    "saoPhuTro": [
+      "Tả Phụ",
+      "Hữu Bật",
+      "Long Trì",
+      "Phượng Các",
+      "Khôi",
+      "Việt",
+      "Xương",
+      "Khúc",
+      "Lộc Tồn"
+    ],
+    "dieuKien": "Mệnh và Thân đắc cách Tử Phủ Vũ Tướng, hội đủ Tả Hữu, Long Phượng, Khôi Việt, Xương Khúc, Thai Tọa, Mã ngộ Tràng Sinh, Đế Vượng, Lộc Tồn",
+    "phamVi": "hoi_hop",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 5,
+    "tomTat": "Quần thần cùng hội mừng — cực phú và cực quý. Tất cả triều thần tụ họp chầu hầu. Cách tối thượng, bậc nhất trong tử vi, hội đủ mọi cát tinh quý tướng.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Sinh thành chi lộc vưu vi thượng cách",
+    "sao": [
+      "Lộc Tồn"
+    ],
+    "saoPhuTro": [],
+    "dieuKien": "Lộc Tồn ở giữa cung Mệnh và cung Thân (nghĩa là Lộc ở cung kề Mệnh hoặc kề Thân, tạo thế giáp Lộc)",
+    "phamVi": "giap_cung",
+    "cung": "Mệnh",
+    "loai": "tốt",
+    "doManh": 4,
+    "tomTat": "Được hưởng cái lộc do cha mẹ để lại, bản thân nhàn hạ sung sướng, phúc thọ đầy đủ, giàu sang phú quý. Thượng cách về lộc — lộc từ nền tảng gia đình.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
+  },
+  {
+    "ten": "Ngọc Tụ Thiên Hương",
+    "sao": [
+      "Thiên Đồng"
+    ],
+    "saoPhuTro": [
+      "Văn Sinh"
+    ],
+    "dieuKien": "Thiên Đồng ở cung Phúc Đức cùng với Văn Sinh (hương thơm tụ lại cây ngọc)",
+    "phamVi": "dong_cung",
+    "cung": "Phúc Đức",
+    "loai": "tốt",
+    "doManh": 3,
+    "tomTat": "Hương thơm tụ lại cây ngọc — phúc đức dồi dào. Thiên Đồng là phúc tinh, cùng Văn Sinh tụ ở Phúc Đức: nhàn hạ giàu lớn nhờ phúc đức tích lũy.",
+    "nguon": "Tạp Chí KHHB Trước 1975"
   }
 ]
