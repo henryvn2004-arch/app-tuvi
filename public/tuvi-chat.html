@@ -125,6 +125,7 @@ body{
   font-size:18px;font-weight:700;color:#fff;flex-shrink:0;
 }
 .wa-ci-av.icon{background:var(--navy-mid)}
+.wa-ci-av svg{width:22px;height:22px;display:block}
 .wa-ci-info{flex:1;min-width:0}
 .wa-ci-row{
   display:flex;align-items:baseline;
@@ -190,6 +191,7 @@ body{
   display:flex;align-items:center;justify-content:center;
   font-size:15px;font-weight:700;color:#fff;flex-shrink:0;
 }
+.wa-hdr-av svg{width:18px;height:18px;display:block}
 .wa-hdr-info{flex:1;min-width:0}
 .wa-hdr-name{
   font-size:15px;font-weight:700;color:#fff;
@@ -960,6 +962,16 @@ body{
     };
   }
 
+  /* ── Tool icon helpers ────────────────────────────────────────── */
+  var _TOOL_ICON_MAP = {
+    '🔯':'sparkles','💑':'heart-handshake','🤝':'handshake',
+    '☯️':'aperture','👶':'baby','📅':'calendar','✏️':'pen-line',
+  };
+  function _toolIconSvg(icon) {
+    var key = _TOOL_ICON_MAP[icon];
+    return (key && window.ICONS && window.ICONS[key]) ? window.ICONS[key] : null;
+  }
+
   /* ── Sidebar rendering ────────────────────────────────────────── */
   function renderSidebar() {
     var list = document.getElementById('wa-list');
@@ -995,14 +1007,23 @@ body{
     var item = document.createElement('div');
     item.className = 'wa-ci' + (_activeId === chat.id ? ' active' : '');
 
-    var cfg    = isGeneral ? null : toolCfg(chat.toolType);
-    var color  = isGeneral ? '#061A2E' : (cfg ? cfg.color : avatarColor(chat.label));
-    var letter = isGeneral
-      ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'
-      : (cfg ? cfg.icon : escHtml(chat.label.charAt(0).toUpperCase()));
+    var cfg = isGeneral ? null : toolCfg(chat.toolType);
+    var isCustomLabel = !isGeneral && (chat.label !== defaultLabelForTool(chat.toolType));
+    var avColor, avContent;
+    if (isGeneral) {
+      avColor   = '#061A2E';
+      avContent = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
+    } else if (isCustomLabel) {
+      avColor   = avatarColor(chat.label);
+      avContent = escHtml(chat.label.charAt(0).toUpperCase());
+    } else {
+      avColor   = cfg ? cfg.color : avatarColor(chat.label);
+      var _svg  = cfg ? _toolIconSvg(cfg.icon) : null;
+      avContent = _svg || (cfg ? escHtml(cfg.icon) : escHtml(chat.label.charAt(0).toUpperCase()));
+    }
 
     item.innerHTML =
-      '<div class="wa-ci-av' + (isGeneral ? ' icon' : '') + '" style="background:' + color + '">' + letter + '</div>' +
+      '<div class="wa-ci-av" style="background:' + avColor + '">' + avContent + '</div>' +
       '<div class="wa-ci-info">' +
         '<div class="wa-ci-row">' +
           '<span class="wa-ci-name">' + (chat.pinned ? '📌 ' : '') + escHtml(chat.label) + '</span>' +
@@ -1048,14 +1069,20 @@ body{
     var isGeneral = chat.id === GENERAL_ID;
 
     /* Header */
-    var cfg    = isGeneral ? null : toolCfg(chat.toolType);
-    var color  = isGeneral ? '#061A2E' : (cfg ? cfg.color : avatarColor(chat.label));
-    var $hdAv  = document.getElementById('wa-hdr-av');
-    $hdAv.style.background = color;
+    var cfg = isGeneral ? null : toolCfg(chat.toolType);
+    var $hdAv = document.getElementById('wa-hdr-av');
+    var isCustomLabel2 = !isGeneral && (chat.label !== defaultLabelForTool(chat.toolType));
     if (isGeneral) {
+      $hdAv.style.background = '#061A2E';
       $hdAv.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
+    } else if (isCustomLabel2) {
+      $hdAv.style.background = avatarColor(chat.label);
+      $hdAv.textContent = chat.label.charAt(0).toUpperCase();
     } else {
-      $hdAv.textContent = cfg ? cfg.icon : chat.label.charAt(0).toUpperCase();
+      $hdAv.style.background = cfg ? cfg.color : avatarColor(chat.label);
+      var _hdrSvg = cfg ? _toolIconSvg(cfg.icon) : null;
+      if (_hdrSvg) { $hdAv.innerHTML = _hdrSvg; }
+      else { $hdAv.textContent = cfg ? cfg.icon : chat.label.charAt(0).toUpperCase(); }
     }
     document.getElementById('wa-hdr-name').textContent = chat.label;
     var hasChatData = !!(chat.lasoData || chat.contextData);
