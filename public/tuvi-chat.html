@@ -1370,15 +1370,18 @@ body{
 
       chat.contextData = slimTuBinh(bt);
       chat.contextData.toolType = 'tu-binh';
-      chat.summary = (bt.nhatCan || '') + ' · ' + (bt.cachCuc || '') + ' · ' + (bt.cuongNhuoc || '');
+      var cnLabel  = (bt.cuongNhuoc && bt.cuongNhuoc.label) ? bt.cuongNhuoc.label : '';
+      var dtLabel  = (bt.dungThan   && bt.dungThan.primary)  ? bt.dungThan.primary  : '';
+      var ccLabel  = (bt.cachCuc    && bt.cachCuc.name)      ? bt.cachCuc.name      : '';
+      chat.summary = (bt.nhatCan || '') + ' · ' + ccLabel + ' · ' + cnLabel;
 
       var dvHT     = bt.daiVanHienTai;
       var dvTxt    = dvHT ? '\nĐại vận: **' + (dvHT.can || '') + (dvHT.chi || '') + '** (' + (dvHT.tuoiStart || '?') + '–' + (dvHT.tuoiEnd || '?') + ' tuổi).' : '';
       var greeting =
         'Đã tính Bát Tự xong! Nhật Can **' + (bt.nhatCan || '') + '** (' + (bt.nhatCanHanh || '') + '), ' +
-        (bt.cuongNhuoc ? '**' + bt.cuongNhuoc + '**' : '') + '. ' +
-        (bt.dungThan ? 'Dụng Thần: **' + bt.dungThan + '**.' : '') +
-        (bt.cachCuc ? ' Cách Cục: **' + bt.cachCuc + '**.' : '') +
+        (cnLabel ? '**' + cnLabel + '**' : '') + '. ' +
+        (dtLabel ? 'Dụng Thần: **' + dtLabel + '**.' : '') +
+        (ccLabel ? ' Cách Cục: **' + ccLabel + '**.' : '') +
         dvTxt + '\n\nBạn muốn hỏi gì về Bát Tự của mình?';
 
       chat.messages  = [{ role: 'assistant', content: greeting }];
