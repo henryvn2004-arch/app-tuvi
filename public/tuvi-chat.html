@@ -1644,41 +1644,46 @@ body{
   /* ── Share (shared logic) ─────────────────────────────────────── */
   function shareChatObj(chat) {
     if (!chat) return;
-    var cfg      = toolCfg(chat.toolType);
-    var toolName = cfg ? cfg.name : 'Tử Vi Chat';
-    var shareUrl = 'https://tuviminhbao.com/tuvi-chat.html';
-    var lines    = ['✨ ' + toolName + ' — ' + chat.label];
-    if (chat.summary) lines.push(chat.summary);
-    var msgs = chat.messages.filter(function(m) { return m.role === 'user' || m.role === 'assistant'; });
-    if (msgs.length) {
-      lines.push('');
-      msgs.forEach(function(m) {
-        if (m.role === 'user') {
-          lines.push('👤 ' + (m.content || '').trim());
-        } else {
-          lines.push('🔮 ' + (m.content || '').trim());
-        }
-      });
-    }
-    lines.push('');
-    lines.push('— Tử Vi Minh Bảo · ' + shareUrl);
-    var text = lines.join('\n');
-    var doClipboard = function() {
-      var fullText = text;
+    var cfg        = toolCfg(chat.toolType);
+    var toolName   = cfg ? cfg.name : 'Tử Vi Chat';
+    var shareTitle = toolName + ' — ' + chat.label;
+
+    function doCopyUrl(url) {
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(fullText)
-          .then(function() { showToast('Đã sao chép vào clipboard ✓'); })
-          .catch(function() { prompt('Sao chép nội dung:', fullText); });
+        navigator.clipboard.writeText(url)
+          .then(function() { showToast('Đã sao chép link ✓'); })
+          .catch(function() { prompt('Link chia sẻ:', url); });
       } else {
-        prompt('Sao chép nội dung:', fullText);
+        prompt('Link chia sẻ:', url);
       }
-    };
-    if (navigator.share) {
-      navigator.share({ title: toolName + ' — ' + chat.label, text: text, url: shareUrl })
-        .catch(function(e) { if (e && e.name !== 'AbortError') doClipboard(); });
-    } else {
-      doClipboard();
     }
+
+    function doShareUrl(url) {
+      if (navigator.share) {
+        navigator.share({ title: shareTitle, url: url })
+          .catch(function(e) { if (e && e.name !== 'AbortError') doCopyUrl(url); });
+      } else {
+        doCopyUrl(url);
+      }
+    }
+
+    showToast('Đang tạo link…');
+    fetch('/api/share-chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        toolType: chat.toolType,
+        label:    chat.label,
+        summary:  chat.summary || '',
+        messages: chat.messages,
+      }),
+    })
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d.url) { doShareUrl(d.url); }
+        else { showToast('Không tạo được link'); }
+      })
+      .catch(function() { showToast('Lỗi kết nối, thử lại sau'); });
   }
 
   function shareActiveChat() {
