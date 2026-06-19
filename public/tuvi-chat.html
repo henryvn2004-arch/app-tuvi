@@ -1660,12 +1660,20 @@ body{
     lines.push('');
     lines.push('Xem thêm tại tuviminhbao.com');
     var text = lines.join('\n');
+    var doClipboard = function() {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text)
+          .then(function() { showToast('Đã sao chép vào clipboard ✓'); })
+          .catch(function() { prompt('Sao chép nội dung:', text); });
+      } else {
+        prompt('Sao chép nội dung:', text);
+      }
+    };
     if (navigator.share) {
-      navigator.share({ title: toolName + ' — ' + chat.label, text: text }).catch(function() {});
+      navigator.share({ title: toolName + ' — ' + chat.label, text: text })
+        .catch(function(e) { if (e && e.name !== 'AbortError') doClipboard(); });
     } else {
-      navigator.clipboard.writeText(text)
-        .then(function() { showToast('Đã sao chép vào clipboard'); })
-        .catch(function() { prompt('Sao chép nội dung:', text); });
+      doClipboard();
     }
   }
 
