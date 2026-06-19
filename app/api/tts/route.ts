@@ -1,15 +1,17 @@
-// app/api/tts/route.ts — Vietnamese TTS proxy (FPT.AI)
+// app/api/tts/route.ts — Vietnamese TTS via MS Edge Neural TTS (free, no API key)
 export const maxDuration = 20;
 
 import { NextRequest, NextResponse } from 'next/server';
-import { err, options as corsOptions, CORS_HEADERS } from '@/lib/cors';
+import { MsEdgeTTS, OUTPUT_FORMAT } from 'msedge-tts';
+import { CORS_HEADERS, err, options as corsOptions } from '@/lib/cors';
 
-const FPT_API_KEY  = process.env.FPT_TTS_API_KEY || '';
-const FPT_TTS_URL  = 'https://api.fpt.ai/hmi/tts/v5';
-const MAX_CHARS    = 1500; // FPT.AI supports ~5000 but cap for latency
+const MAX_CHARS = 1500;
 
-// Voices: banmai/linhsan/minhquang/giahuy (female/female/male/male)
-const ALLOWED_VOICES = new Set(['banmai', 'linhsan', 'minhquang', 'giahuy', 'thanhlam']);
+// Vietnamese Neural voices available in Edge TTS
+const ALLOWED_VOICES: Record<string, string> = {
+  'hoaimy':  'vi-VN-HoaiMyNeural',   // female (default)
+  'namminh': 'vi-VN-NamMinhNeural',  // male
+};
 
 function cleanText(raw: string): string {
   return raw
@@ -27,15 +29,11 @@ function cleanText(raw: string): string {
     .slice(0, MAX_CHARS);
 }
 
-export async function OPTIONS() {
+export function OPTIONS() {
   return corsOptions();
 }
 
 export async function POST(req: NextRequest) {
-  if (!FPT_API_KEY) {
-    return err('TTS chưa được cấu hình', 503);
-  }
-
   let body: { text?: string; voice?: string };
   try { body = await req.json(); }
   catch { return err('Invalid JSON', 400); }
@@ -43,37 +41,24 @@ export async function POST(req: NextRequest) {
   const text = cleanText(body.text || '');
   if (!text) return err('Thiếu text', 400);
 
-  const voice = ALLOWED_VOICES.has(body.voice || '') ? body.voice! : 'banmai';
+  const voiceName = ALLOWED_VOICES[body.voice || ''] ?? ALLOWED_VOICES['hoaimy'];
 
+  const tts = new MsEdgeTTS();
   try {
-    // Step 1: request synthesis
-    const synthRes = await fetch(FPT_TTS_URL, {
-      method:  'POST',
-      headers: { 'api-key': FPT_API_KEY, 'voice': voice },
-      body:    text,
+    await tts.setMetadata(voiceName, OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3);
+    const { audioStream } = tts.toStream(text);
+
+    const chunks: Buffer[] = [];
+    await new Promise<void>((resolve, reject) => {
+      audioStream.on('data', (chunk: Buffer) => chunks.push(chunk));
+      audioStream.on('end', resolve);
+      audioStream.on('error', reject);
     });
 
-    if (!synthRes.ok) {
-      console.error('[TTS] FPT synth error', synthRes.status);
-      return err('TTS service error', 502);
-    }
-
-    const synthData = await synthRes.json() as { error: number; async?: string };
-    if (synthData.error !== 0 || !synthData.async) {
-      console.error('[TTS] FPT bad response', synthData);
-      return err('TTS generation failed', 502);
-    }
-
-    // Step 2: fetch the audio file FPT.AI generated
-    const audioRes = await fetch(synthData.async);
-    if (!audioRes.ok) {
-      return err('Audio fetch failed', 502);
-    }
-
-    const audioBuffer = await audioRes.arrayBuffer();
+    const audioBuffer = Buffer.concat(chunks);
 
     return new NextResponse(audioBuffer, {
-      status:  200,
+      status: 200,
       headers: {
         ...CORS_HEADERS,
         'Content-Type':  'audio/mpeg',
@@ -81,7 +66,9 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (e) {
-    console.error('[TTS] error', e);
+    console.error('[TTS] msedge-tts error', e);
     return err('TTS error', 500);
+  } finally {
+    tts.close();
   }
 }
