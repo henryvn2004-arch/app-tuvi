@@ -1646,31 +1646,37 @@ body{
     if (!chat) return;
     var cfg      = toolCfg(chat.toolType);
     var toolName = cfg ? cfg.name : 'Tử Vi Chat';
-    var lines    = [toolName + ' — ' + chat.label];
+    var shareUrl = 'https://tuviminhbao.com/tuvi-chat.html';
+    var lines    = ['✨ ' + toolName + ' — ' + chat.label];
     if (chat.summary) lines.push(chat.summary);
+    var msgs = chat.messages.filter(function(m) { return m.role === 'user' || m.role === 'assistant'; });
+    if (msgs.length) {
+      lines.push('');
+      msgs.slice(-6).forEach(function(m) {
+        if (m.role === 'user') {
+          var q = (m.content || '').trim().slice(0, 300);
+          lines.push('👤 ' + q + (q.length >= 300 ? '...' : ''));
+        } else {
+          var a = (m.content || '').replace(/\*\*/g, '').replace(/#{1,6}\s/g, '').trim().slice(0, 500);
+          lines.push('🔮 ' + a + (a.length >= 500 ? '...' : ''));
+        }
+      });
+    }
     lines.push('');
-    chat.messages.slice(-4).forEach(function(m) {
-      if (m.role === 'user') {
-        lines.push('Hỏi: ' + m.content.slice(0, 200));
-      } else {
-        var c = (m.content || '').replace(/\*\*/g, '').slice(0, 300);
-        lines.push('Trả lời: ' + c + (c.length >= 300 ? '...' : ''));
-      }
-    });
-    lines.push('');
-    lines.push('Xem thêm tại tuviminhbao.com');
+    lines.push('— Tử Vi Minh Bảo · ' + shareUrl);
     var text = lines.join('\n');
     var doClipboard = function() {
+      var fullText = text;
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text)
+        navigator.clipboard.writeText(fullText)
           .then(function() { showToast('Đã sao chép vào clipboard ✓'); })
-          .catch(function() { prompt('Sao chép nội dung:', text); });
+          .catch(function() { prompt('Sao chép nội dung:', fullText); });
       } else {
-        prompt('Sao chép nội dung:', text);
+        prompt('Sao chép nội dung:', fullText);
       }
     };
     if (navigator.share) {
-      navigator.share({ title: toolName + ' — ' + chat.label, text: text })
+      navigator.share({ title: toolName + ' — ' + chat.label, text: text, url: shareUrl })
         .catch(function(e) { if (e && e.name !== 'AbortError') doClipboard(); });
     } else {
       doClipboard();
