@@ -1,6 +1,6 @@
 // Service Worker — Tử Vi Minh Bảo
 // Strategy: cache-first for static assets, network-first for HTML/API
-const CACHE_VERSION = 'tuvi-v1';
+const CACHE_VERSION = 'tuvi-v2';
 const STATIC_CACHE = CACHE_VERSION + '-static';
 const OFFLINE_URL = '/offline.html';
 
