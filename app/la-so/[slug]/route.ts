@@ -25,6 +25,12 @@ const SB_URL = process.env.SUPABASE_URL!;
 const SB_KEY = process.env.SUPABASE_SERVICE_KEY!;
 const BASE   = 'https://www.tuviminhbao.com';
 
+// Năm xem canonical — KHỚP với sitemap-pregen + hub menh-kho (NAM_XEM=2027).
+// Mọi ISR slug có namXem khác sẽ 301 về năm này để gom crawl/cache về 1 URL,
+// tránh recompute engine cho 21 biến thể năm (2020–2040) = chảy máu Fluid CPU.
+// ⚠️ Khi bump sang 2028: đổi đồng thời ở sitemap-pregen, hub menh-kho và đây.
+const CANONICAL_NAM_XEM = 2027;
+
 // ────────────────────────────────────────────────────────────────────────────
 // Shared helpers
 // ────────────────────────────────────────────────────────────────────────────
@@ -1421,6 +1427,21 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
   // 3. Try ISR compute (new 438K slug format)
   const isrParams = parseIsrSlug(slug);
   if (isrParams) {
+    // FIX cost: gom mọi năm xem về canonical (2027) bằng 301.
+    // parseIsrSlug cho phép namXem 2020–2040 = 21 biến thể × 587K lá số = 12.3M URL,
+    // mỗi cái 1 full compute, 0% cache reuse giữa các năm. Sitemap chỉ expose -2027.
+    // → biến thể năm khác chỉ redirect (rẻ, không chạy engine), gom link-juice về 1 URL.
+    // laso_public/pregen đã check ở bước 1–2 nên trang user trả tiền không bị đụng.
+    if (isrParams.namXem !== CANONICAL_NAM_XEM) {
+      const canonical = slug.slice(0, slug.lastIndexOf('-')) + '-' + CANONICAL_NAM_XEM;
+      return new NextResponse(null, {
+        status: 301,
+        headers: {
+          'Location': `${BASE}/la-so/${canonical}`,
+          'Cache-Control': 'public, s-maxage=31536000, stale-while-revalidate=86400',
+        },
+      });
+    }
     try {
       const { convertDuongToAm, anSaoLaSo } = loadEngine();
       const hour  = GIO_HOURS[isrParams.gioIdx];
@@ -1453,8 +1474,18 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
   // 4. Not found — trả về 404 thay vì redirect
   // Lý do: redirect 307 lãng phí crawl budget (GSC báo "Page with redirect")
   // 404 rõ ràng hơn: Google dừng crawl URL này, không follow redirect
+  //
+  // FIX cost: CACHE cái 404. Trước đây không set Cache-Control → max-age=0 →
+  // mỗi lần bot cào slug rác = 1 invocation, lặp vô hạn.
+  //   - parse fail (isrParams null): slug không đúng format → rác vĩnh viễn → cache 1 năm.
+  //   - parse ok nhưng engine trả null (vd ngày 31-02): hiếm, cache 1 ngày cho an toàn
+  //     (phòng trường hợp Supabase lỗi tạm thời khiến lá số thật rớt xuống đây).
+  const notFoundTtl = isrParams ? 86400 : 31536000;
   return new NextResponse(
     `<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><title>Không tìm thấy</title><meta name="robots" content="noindex"></head><body><p>Lá số này không tồn tại. <a href="${BASE}/menh-kho.html">Xem mệnh khố</a></p></body></html>`,
-    { status: 404, headers: { 'Content-Type': 'text/html; charset=utf-8' } }
+    { status: 404, headers: {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Cache-Control': `public, s-maxage=${notFoundTtl}, stale-while-revalidate=86400`,
+    }}
   );
 }
