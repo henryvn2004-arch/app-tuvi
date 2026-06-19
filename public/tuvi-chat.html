@@ -341,7 +341,8 @@ body{
 .tc-tool-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .tc-tool-btn{background:var(--bg-soft);border:1.5px solid var(--border-lt);border-radius:10px;padding:11px 13px;cursor:pointer;text-align:left;transition:border-color .15s,background .15s;font-family:inherit;width:100%}
 .tc-tool-btn:hover{border-color:var(--navy);background:#EEF3FB}
-.tc-tool-btn-icon{font-size:20px;margin-bottom:4px;display:block}
+.tc-tool-btn-icon{font-size:20px;margin-bottom:4px;display:flex;width:22px;height:22px}
+.tc-tool-btn-icon svg{width:22px;height:22px}
 .tc-tool-btn-name{font-size:13px;font-weight:600;color:var(--navy);display:block}
 .tc-tool-btn-desc{font-size:11px;color:var(--text-lt);margin-top:2px;display:block;line-height:1.4}
 @media(max-width:480px){.tc-tool-btns{grid-template-columns:1fr}}
@@ -445,7 +446,8 @@ body{
 }
 .wa-tp-card:hover{border-color:var(--gold);box-shadow:0 2px 12px rgba(0,0,0,.08)}
 .wa-tp-card:active{transform:scale(.98)}
-.wa-tp-icon{font-size:26px;margin-bottom:7px;line-height:1}
+.wa-tp-icon{margin-bottom:7px;display:flex;width:28px;height:28px;color:var(--navy)}
+.wa-tp-icon svg{width:28px;height:28px}
 .wa-tp-name{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:3px}
 .wa-tp-desc{font-size:12px;color:var(--text-lt);line-height:1.5}
 .wa-tp-cancel{
@@ -1172,7 +1174,7 @@ body{
       var card = document.createElement('div');
       card.className = 'wa-tp-card';
       card.innerHTML =
-        '<div class="wa-tp-icon">' + cfg.icon + '</div>' +
+        '<div class="wa-tp-icon">' + (_toolIconSvg(cfg.icon) || escHtml(cfg.icon)) + '</div>' +
         '<div class="wa-tp-name">' + escHtml(cfg.name) + '</div>' +
         '<div class="wa-tp-desc">' + escHtml(cfg.desc) + '</div>';
       card.addEventListener('click', function() { selectTool(cfg.id); });
@@ -1214,7 +1216,7 @@ body{
     bub.className = 'tc-bub';
     var btnsHtml = (window.TOOL_CONFIGS || []).map(function(cfg) {
       return '<button class="tc-tool-btn" data-tool="' + escHtml(cfg.id) + '">' +
-        '<span class="tc-tool-btn-icon">' + cfg.icon + '</span>' +
+        '<span class="tc-tool-btn-icon">' + (_toolIconSvg(cfg.icon) || escHtml(cfg.icon)) + '</span>' +
         '<span class="tc-tool-btn-name">' + escHtml(cfg.name) + '</span>' +
         '<span class="tc-tool-btn-desc">' + escHtml(cfg.desc) + '</span>' +
       '</button>';
