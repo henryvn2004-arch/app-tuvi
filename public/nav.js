@@ -225,8 +225,9 @@
     window.dataLayer=window.dataLayer||[]; function gtag(){dataLayer.push(arguments);} window.gtag=gtag;
     gtag('js',new Date()); gtag('config','G-F4XNRS2XT0');
   }
-  // Conversion script
-  if (!document.getElementById('cv-script')) {
+  // Conversion script — skip on chat page (social proof popup conflicts with chat UX)
+  var _noConv = ['/tuvi-chat.html'];
+  if (!document.getElementById('cv-script') && _noConv.indexOf(location.pathname) === -1) {
     var cv=document.createElement('script'); cv.id='cv-script'; cv.src='/conversion.js?v=2'; document.body.appendChild(cv);
   }
   if (!document.getElementById('nav-css')) {
