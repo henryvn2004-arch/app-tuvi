@@ -138,6 +138,33 @@ function buildChatContext(body: any): ChatContext {
     };
   }
 
+  if (toolType === 'xem-tuoi-sinh-con') {
+    return {
+      systemForCall:    CHAT_SYSTEM_SINH_CON(extractSinhConContext(body.sinhConData), docs, persona),
+      tools:            buildTools(false),
+      maxTokens:        1500,
+      lasoDataForTools: null,
+    };
+  }
+
+  if (toolType === 'chon-ngay-tot') {
+    return {
+      systemForCall:    CHAT_SYSTEM_CHON_NGAY(extractChonNgayContext(body.chonNgayData), docs, persona),
+      tools:            buildTools(false),
+      maxTokens:        1500,
+      lasoDataForTools: null,
+    };
+  }
+
+  if (toolType === 'dat-ten-con') {
+    return {
+      systemForCall:    CHAT_SYSTEM_DAT_TEN(extractDatTenContext(body.datTenData), docs, persona),
+      tools:            buildTools(false),
+      maxTokens:        1500,
+      lasoDataForTools: null,
+    };
+  }
+
   // Default: laso / general
   const messages  = body.messages as { role: string; content: string }[] | undefined;
   const lasoData  = body.lasoData;
@@ -215,6 +242,45 @@ Nguyên tắc trả lời:
 - Riêng dự đoán tương lai mới dùng ngôn ngữ xác suất
 
 === DỮ LIỆU HAI LÁ SỐ ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+const CHAT_SYSTEM_SINH_CON = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia địa chi học, tư vấn tuổi sinh con theo cổ pháp Việt Nam.${persona ? '\n' + persona : ''}
+
+THÔNG TIN THỜI GIAN: Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}.
+
+Nguyên tắc:
+- Tiếng Việt chuẩn mực, không bullet, không emoji
+- Giải thích rõ quan hệ địa chi: Lục Hợp, Tam Hợp, Lục Xung, Tam Hình
+- Nói thẳng năm nào tốt, năm nào kỵ và lý do cụ thể
+- Không phán quyết tuyệt đối về tương lai, chỉ phân tích quan hệ địa chi
+
+=== DỮ LIỆU TUỔI BỐ MẸ ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+const CHAT_SYSTEM_CHON_NGAY = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia chọn ngày tốt theo Tử Vi Đẩu Số và cổ pháp, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
+
+THÔNG TIN THỜI GIAN: Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}.
+
+Nguyên tắc:
+- Tiếng Việt chuẩn mực, không bullet, không emoji
+- Trả lời dựa trên kết quả phân tích ban đầu đã cung cấp
+- Giải thích cụ thể: ngày nào tốt/kỵ và tại sao theo can chi, ngũ hành, tuổi người
+- Nói thẳng, có ngày tốt thì nói rõ, không có thì cảnh báo
+
+=== DỮ LIỆU PHÂN TÍCH NGÀY TỐT ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+const CHAT_SYSTEM_DAT_TEN = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia đặt tên theo ngũ hành và cổ học Việt Nam, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
+
+THÔNG TIN THỜI GIAN: Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}.
+
+Nguyên tắc:
+- Tiếng Việt chuẩn mực, không bullet, không emoji
+- Khi đặt thêm tên: đề xuất đủ 5 tên, giải thích ý nghĩa chữ từng tên
+- Phân tích ngũ hành chữ trong tên hài hòa với bố mẹ và năm sinh con
+- Không dùng tên quá cũ kỹ hoặc khó đọc
+
+=== DỮ LIỆU ĐẶT TÊN CON ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 const CHAT_SYSTEM_TU_BINH = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia Tử Bình Bát Tự (Tứ Trụ) theo cổ pháp, văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
@@ -471,6 +537,49 @@ function extractTuBinhContext(tuBinhData: any): string {
     const parts = (Object.entries(thanSat) as [string, unknown][]).slice(0, 8).map(([k, v]) => `${k}:${v}`);
     if (parts.length) ctx += `Thần Sát: ${parts.join(', ')}\n`;
   }
+  return ctx;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function extractSinhConContext(data: any): string {
+  if (!data) return '';
+  const d = data.sinhConData || data;
+  let ctx = '';
+  if (d.bo) ctx += `Bố: ${d.bo.canChi} (${d.bo.napAm})\n`;
+  if (d.me) ctx += `Mẹ: ${d.me.canChi} (${d.me.napAm})\n`;
+  if (Array.isArray(d.rows) && d.rows.length) {
+    ctx += '\nBảng 15 năm tới:\n';
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    d.rows.forEach((r: any) => {
+      const ratingLabel = r.score >= 5 ? 'Rất Thuận' : r.score >= 2 ? 'Thuận' : r.score >= 0 ? 'Bình Thường' : 'Cần Lưu Ý';
+      ctx += `  ${r.year} — ${r.canChi} (${r.hanh}): ${ratingLabel} [điểm ${r.score}]${r.reasons?.length ? ' — ' + r.reasons.join(', ') : ''}\n`;
+    });
+  }
+  return ctx;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function extractChonNgayContext(data: any): string {
+  if (!data) return '';
+  const d = data.chonNgayData || data;
+  let ctx = '';
+  if (d.suKien)      ctx += `Sự kiện: ${d.suKien}\n`;
+  if (d.hoTen)       ctx += `Người xem: ${d.hoTen}\n`;
+  if (d.canChi)      ctx += `Tuổi: ${d.canChi} (${d.napAm || ''})\n`;
+  if (d.thangNum && d.namNum) ctx += `Tháng xem: ${d.thangNum}/${d.namNum} — Can chi: ${d.thangCanChi || ''}, năm ${d.namCanChi || ''}\n`;
+  return ctx;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function extractDatTenContext(data: any): string {
+  if (!data) return '';
+  const d = data.datTenData || data;
+  let ctx = '';
+  if (d.ho)        ctx += `Họ: ${d.ho}\n`;
+  if (d.gioiTinh)  ctx += `Giới tính: ${d.gioiTinh === 'nu' ? 'Nữ' : 'Nam'}\n`;
+  if (d.canChiCon) ctx += `Năm sinh bé: ${d.canChiCon} (${d.napAmCon || ''})\n`;
+  if (d.canChiBo)  ctx += `Bố: ${d.canChiBo} (${d.napAmBo || ''})\n`;
+  if (d.canChiMe)  ctx += `Mẹ: ${d.canChiMe} (${d.napAmMe || ''})\n`;
   return ctx;
 }
 
