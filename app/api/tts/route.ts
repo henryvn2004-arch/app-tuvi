@@ -1,11 +1,11 @@
 // app/api/tts/route.ts — Vietnamese TTS via Google Translate (free, no API key)
-export const maxDuration = 20;
+export const maxDuration = 30;
 
 import { NextRequest, NextResponse } from 'next/server';
 import { CORS_HEADERS, err, options as corsOptions } from '@/lib/cors';
 
-const CHUNK_MAX  = 180;   // Google TTS char limit per request
-const TEXT_MAX   = 1500;
+const CHUNK_MAX = 180;
+const TEXT_MAX  = 2000;
 
 function cleanText(raw: string): string {
   return raw
@@ -23,10 +23,8 @@ function cleanText(raw: string): string {
     .slice(0, TEXT_MAX);
 }
 
-// Split into chunks ≤ CHUNK_MAX chars, breaking at word boundaries
 function splitChunks(text: string): string[] {
   const chunks: string[] = [];
-  // Split on sentence-ending punctuation first
   const sentences = text.split(/(?<=[.!?,;:])\s+/);
   let buf = '';
   for (const s of sentences) {
@@ -35,7 +33,6 @@ function splitChunks(text: string): string[] {
       buf = candidate;
     } else {
       if (buf) chunks.push(buf);
-      // Sentence itself too long — split by words
       if (s.length > CHUNK_MAX) {
         const words = s.split(' ');
         buf = '';
@@ -53,18 +50,24 @@ function splitChunks(text: string): string[] {
   return chunks.filter(Boolean);
 }
 
-async function googleTTS(text: string): Promise<Buffer> {
-  const url = 'https://translate.google.com/translate_tts?' + new URLSearchParams({
-    ie: 'UTF-8', q: text, tl: 'vi', client: 'tw-ob', ttsspeed: '0.9',
-  });
-  const res = await fetch(url, {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-      'Referer':    'https://translate.google.com/',
-    },
-  });
-  if (!res.ok) throw new Error(`Google TTS ${res.status}`);
-  return Buffer.from(await res.arrayBuffer());
+// Returns null on failure instead of throwing, so one bad chunk doesn't kill the whole response
+async function googleTTS(text: string): Promise<Buffer | null> {
+  try {
+    const url = 'https://translate.google.com/translate_tts?' + new URLSearchParams({
+      ie: 'UTF-8', q: text, tl: 'vi', client: 'tw-ob', ttsspeed: '0.9',
+    });
+    const res = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Referer':    'https://translate.google.com/',
+      },
+    });
+    if (!res.ok) { console.warn('[TTS] chunk failed', res.status, text.slice(0, 40)); return null; }
+    return Buffer.from(await res.arrayBuffer());
+  } catch (e) {
+    console.warn('[TTS] chunk error', e);
+    return null;
+  }
 }
 
 export function OPTIONS() {
@@ -80,11 +83,18 @@ export async function POST(req: NextRequest) {
   if (!text) return err('Thiếu text', 400);
 
   try {
-    const chunks   = splitChunks(text);
-    const buffers  = await Promise.all(chunks.map(googleTTS));
-    const combined = Buffer.concat(buffers);
+    const chunks  = splitChunks(text);
+    const buffers: Buffer[] = [];
 
-    return new NextResponse(combined, {
+    // Sequential — tránh Google rate-limit khi fetch parallel nhiều chunk cùng lúc
+    for (const chunk of chunks) {
+      const buf = await googleTTS(chunk);
+      if (buf) buffers.push(buf);
+    }
+
+    if (buffers.length === 0) return err('TTS không phản hồi', 502);
+
+    return new NextResponse(Buffer.concat(buffers), {
       status: 200,
       headers: {
         ...CORS_HEADERS,
