@@ -303,11 +303,14 @@ body{
 .tc-msg{display:flex;gap:9px;align-items:flex-end;margin-bottom:10px;animation:tc-in .18s ease}
 @keyframes tc-in{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 .tc-msg.user{flex-direction:row-reverse}
+.tc-msg.bot{align-items:flex-start}
 .tc-av{
   width:28px;height:28px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
   font-size:10px;font-weight:700;flex-shrink:0;background:transparent;
 }
+.tc-av-col{display:flex;flex-direction:column;align-items:center;flex-shrink:0;gap:3px}
+.tc-av-name{font-size:9px;color:var(--text-lt);text-align:center;white-space:nowrap;max-width:44px;overflow:hidden;text-overflow:ellipsis;line-height:1}
 .tc-msg.user .tc-av{background:var(--blue);color:#fff}
 .tc-bub{
   max-width:75%;padding:9px 13px;
@@ -639,8 +642,27 @@ body{
   var STORAGE_KEY = 'tvc_chats_v1';
   var GENERAL_ID  = '__general__';
   var SYNC_API    = '/api/tuvi-chats';
+  var AUTHOR_KEY  = 'tvc_author_v1';
 
   var AVATAR_COLORS = ['#1455A4','#1E6B3C','#7B3F00','#6B21A8','#C0392B','#0D5D6C','#B45309'];
+
+  var AUTHOR_ROSTER = [
+    { id: 'bac-minh',    name: 'Bắc Minh',    style: 'Hệ thống, rõ ràng, luôn giải thích nguyên lý nền tảng trước khi luận sao. Văn phong học thuật, chắc chắn, chỉn chu.' },
+    { id: 'co-nguyet',   name: 'Cổ Nguyệt',   style: 'Nghiêng về vòng Tràng Sinh và triết học cổ đại. Văn phong sâu sắc, huyền bí nhưng có căn cứ, hay dẫn chiếu âm dương tiêu trưởng.' },
+    { id: 'dau-nam',     name: 'Đẩu Nam',      style: 'Chuyên về tình cảm, hôn nhân, phu thê. Văn phong ấm áp, tinh tế, hay đặt mình vào vị trí người hỏi để cảm nhận.' },
+    { id: 'dieu-khong',  name: 'Diệu Không',   style: 'Chuyên về nghề nghiệp, sự nghiệp, tài lộc. Văn phong thực tế, sắc sảo, đưa ra nhận định dứt khoát về hướng đi.' },
+    { id: 'huyen-khong', name: 'Huyền Không',  style: 'Nhìn tổng quan số mệnh, sắc bén và khái quát. Thường đánh giá toàn bộ lá số trước rồi mới đi vào chi tiết từng cung.' },
+    { id: 'linh-co',     name: 'Linh Cơ',      style: 'Uyên thâm về Dịch lý, âm dương ngũ hành. Hay liên hệ cổ thư và nguyên lý căn bản khi luận giải.' },
+    { id: 'linh-son',    name: 'Linh Sơn',     style: 'Kết hợp lá số với tướng số. Thực dụng, hay nhìn vào biểu hiện thực tế ngoài đời của sao tinh.' },
+    { id: 'ngoc-tinh',   name: 'Ngọc Tinh',    style: 'Học thuật, nghiêng về lịch sử và nhân vật thật. Hay dẫn chứng ví dụ từ lịch sử Việt Nam và nhân vật nổi tiếng.' },
+    { id: 'nhat-nguyen', name: 'Nhật Nguyên',  style: 'Chính xác về vòng sao và chu kỳ vận hạn ngắn hạn. Hay luận cụ thể từng tháng từng năm trong đại vận và tiểu vận.' },
+    { id: 'tam-kinh',    name: 'Tâm Kính',     style: 'Chú trọng thần khê và những điều ẩn khuất trong lá số. Hay để ý đến tâm lý chiều sâu và những gì không hiện rõ trên mặt sao.' },
+    { id: 'thai-hu',     name: 'Thái Hư',      style: 'Logic chặt chẽ về tương quan sinh khắc giữa các sao. Văn phong triết học hệ thống, phân tích mối quan hệ đa chiều.' },
+    { id: 'thanh-hu',    name: 'Thanh Hư',     style: 'Nhẹ nhàng, gần gũi, đôi khi dùng ví von hay chút hài hước nhẹ. Vẫn sâu sắc nhưng không cứng nhắc, tạo cảm giác gần gũi.' },
+    { id: 'thien-an',    name: 'Thiên Ẩn',     style: 'Tỉ mỉ về ý nghĩa từng sao, giải thích có hệ thống. Hay đi từng sao một cách đầy đủ trước khi luận tổng hợp.' },
+    { id: 'tinh-quang',  name: 'Tinh Quang',   style: 'Nhìn lá số như một chỉnh thể toàn diện. Ít khi tách rời từng cung riêng lẻ, hay tìm mối liên hệ xuyên suốt toàn bộ lá số.' },
+    { id: 'tu-nguyen',   name: 'Tử Nguyên',    style: 'Súc tích, thực tế, đi thẳng vào vấn đề không vòng vo. Chuyên về đại vận và tiểu vận, đưa nhận định ngắn gọn rõ ràng.' },
+  ];
 
   var SUGG_INIT = [
     'Tử Vi Đẩu Số là gì?',
@@ -663,8 +685,29 @@ body{
   var _busy     = false;
   var _ctxId           = null; // chat id đang mở sidebar context menu
   var _deferredInstall = null; // BeforeInstallPromptEvent
+  var _author   = null;        // randomly selected author persona for this session
   var _pendingQuestion = '';   // câu hỏi đến từ homepage (?q=), gửi sau khi an sao
   var _pendingTool     = null; // toolType đang chờ confirm trước khi tạo chat
+
+  /* ── Author persona ──────────────────────────────────────────── */
+  function pickAuthor() {
+    try {
+      var saved = localStorage.getItem(AUTHOR_KEY);
+      if (saved) {
+        var found = AUTHOR_ROSTER.filter(function(a) { return a.id === saved; })[0];
+        if (found) { _author = found; return; }
+      }
+      _author = AUTHOR_ROSTER[Math.floor(Math.random() * AUTHOR_ROSTER.length)];
+      localStorage.setItem(AUTHOR_KEY, _author.id);
+    } catch(e) {
+      _author = AUTHOR_ROSTER[0];
+    }
+  }
+
+  function authorAvatar() {
+    if (!_author) return '<img src="/thay-tuvi.webp" style="width:28px;height:28px;border-radius:50%;object-fit:cover;display:block;" alt="">';
+    return '<div class="tc-av-col"><img src="/authors/' + _author.id + '.jpg" style="width:28px;height:28px;border-radius:50%;object-fit:cover;display:block;" alt="' + _author.name + '"><span class="tc-av-name">' + _author.name + '</span></div>';
+  }
 
   /* ── localStorage ────────────────────────────────────────────── */
   function loadStorage() {
@@ -1408,7 +1451,7 @@ body{
     var av = document.createElement('div');
     av.className = 'tc-av';
     if (role === 'bot') {
-      av.innerHTML = '<img src="/thay-tuvi.webp" style="width:28px;height:28px;border-radius:50%;object-fit:cover;display:block;" alt="">';
+      av.innerHTML = authorAvatar();
     } else {
       av.textContent = 'Bạn';
     }
@@ -1489,10 +1532,12 @@ body{
       } catch(e) { /* RAG optional */ }
 
       var apiBody = {
-        stream:   true,
-        messages: chat.messages.slice(-12),
-        toolType: chat.toolType || 'laso',
-        docs:     docs,
+        stream:      true,
+        messages:    chat.messages.slice(-12),
+        toolType:    chat.toolType || 'laso',
+        docs:        docs,
+        authorName:  _author ? _author.name  : null,
+        authorStyle: _author ? _author.style : null,
       };
       if (chat.toolType === 'xem-tuoi' || chat.toolType === 'xem-lam-an') {
         apiBody.compatData = chat.contextData;
@@ -1520,7 +1565,7 @@ body{
       wrap.className = 'tc-msg bot';
       var av = document.createElement('div');
       av.className = 'tc-av';
-      av.innerHTML = '<img src="/thay-tuvi.webp" style="width:28px;height:28px;border-radius:50%;object-fit:cover;display:block;" alt="">';
+      av.innerHTML = authorAvatar();
       var bub = document.createElement('div');
       bub.className = 'tc-bub';
       wrap.appendChild(av);
@@ -1823,6 +1868,7 @@ body{
 
   /* ── Init ─────────────────────────────────────────────────────── */
   function init() {
+    pickAuthor();
     _chats = loadStorage();
 
     /* Ensure general chat always exists at top */
