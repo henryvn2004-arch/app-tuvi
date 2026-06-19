@@ -98,10 +98,26 @@ body{
   display:flex;align-items:center;gap:12px;
   padding:12px 16px;cursor:pointer;
   border-bottom:1px solid var(--border-lt);
-  transition:background .1s;
+  transition:background .1s;position:relative;
 }
 .wa-ci:hover{background:#f5f5f5}
 .wa-ci.active{background:var(--gold-lt)}
+.wa-ci-mbtn{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  background:none;border:none;color:var(--text-lt);
+  font-size:18px;cursor:pointer;padding:2px 7px;border-radius:4px;
+  opacity:0;transition:opacity .12s;line-height:1;z-index:1;flex-shrink:0;
+}
+.wa-ci:hover .wa-ci-mbtn,.wa-ci-mbtn:focus{opacity:1}
+.wa-ci-mbtn:hover{background:rgba(0,0,0,.08);color:var(--text)}
+@media(hover:none){.wa-ci-mbtn{opacity:.35}}
+.wa-ctx-drop{
+  position:fixed;background:#fff;
+  border:1px solid var(--border-lt);border-radius:8px;
+  box-shadow:0 4px 20px rgba(0,0,0,.15);
+  min-width:158px;z-index:500;display:none;overflow:hidden;
+}
+.wa-ctx-drop.open{display:block}
 .wa-ci-av{
   width:44px;height:44px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
@@ -572,6 +588,16 @@ body{
   </div><!-- /wa-main -->
 </div><!-- /wa-app -->
 
+<!-- Sidebar per-item context menu (shared, fixed position) -->
+<div id="wa-ctx-drop" class="wa-ctx-drop">
+  <div class="wa-dd-item" id="ctx-rename">Đổi tên</div>
+  <div class="wa-dd-item" id="ctx-pin">Ghim lên đầu</div>
+  <div class="wa-dd-item" id="ctx-share">Chia sẻ</div>
+  <div class="wa-dd-item" id="ctx-clear">Xóa tin nhắn</div>
+  <div class="wa-dd-sep"></div>
+  <div class="wa-dd-item wa-dd-del" id="ctx-delete">Xóa hội thoại</div>
+</div>
+
 <script src="/nav.js?v=15"></script>
 <script src="/tuvi-paywall.js?v=4"></script>
 <script>
@@ -605,6 +631,7 @@ body{
   var _chats    = [];
   var _activeId = null;
   var _busy     = false;
+  var _ctxId    = null;        // chat id đang mở sidebar context menu
   var _pendingQuestion = '';   // câu hỏi đến từ homepage (?q=), gửi sau khi an sao
   var _pendingTool     = null; // toolType đang chờ confirm trước khi tạo chat
 
@@ -892,8 +919,16 @@ body{
           (chat.updatedAt ? '<span class="wa-ci-time">' + fmtTime(chat.updatedAt) + '</span>' : '') +
         '</div>' +
         '<div class="wa-ci-preview">' + escHtml(chat.lastMsg || '') + '</div>' +
-      '</div>';
+      '</div>' +
+      (!isGeneral ? '<button class="wa-ci-mbtn" title="Tùy chọn">&#8942;</button>' : '');
 
+    if (!isGeneral) {
+      var mbtn = item.querySelector('.wa-ci-mbtn');
+      mbtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        openCtxMenu(chat.id, mbtn);
+      });
+    }
     item.addEventListener('click', function() { openChat(chat.id); });
     list.appendChild(item);
   }
@@ -1575,9 +1610,8 @@ body{
     closeDropdown();
   }
 
-  /* ── Share ────────────────────────────────────────────────────── */
-  function shareActiveChat() {
-    var chat = getActive();
+  /* ── Share (shared logic) ─────────────────────────────────────── */
+  function shareChatObj(chat) {
     if (!chat) return;
     var cfg      = toolCfg(chat.toolType);
     var toolName = cfg ? cfg.name : 'Tử Vi Chat';
@@ -1595,7 +1629,6 @@ body{
     lines.push('');
     lines.push('Xem thêm tại tuviminhbao.com');
     var text = lines.join('\n');
-    closeDropdown();
     if (navigator.share) {
       navigator.share({ title: toolName + ' — ' + chat.label, text: text }).catch(function() {});
     } else {
@@ -1603,6 +1636,11 @@ body{
         .then(function() { showToast('Đã sao chép vào clipboard'); })
         .catch(function() { prompt('Sao chép nội dung:', text); });
     }
+  }
+
+  function shareActiveChat() {
+    closeDropdown();
+    shareChatObj(getActive());
   }
 
   /* ── Clear chat ────────────────────────────────────────────────── */
@@ -1643,6 +1681,93 @@ body{
 
   function closeDropdown() {
     document.getElementById('wa-dropdown').classList.remove('open');
+  }
+
+  /* ── Sidebar context menu ─────────────────────────────────────── */
+  function openCtxMenu(chatId, btnEl) {
+    _ctxId = chatId;
+    var chat = _chats.find(function(c) { return c.id === chatId; });
+    document.getElementById('ctx-pin').textContent = (chat && chat.pinned) ? 'Bỏ ghim' : 'Ghim lên đầu';
+    var menu = document.getElementById('wa-ctx-drop');
+    var rect = btnEl.getBoundingClientRect();
+    var left = Math.min(rect.right + 4, window.innerWidth - 166);
+    var top  = Math.min(rect.top, window.innerHeight - 210);
+    top = Math.max(8, top);
+    menu.style.left = left + 'px';
+    menu.style.top  = top  + 'px';
+    menu.classList.add('open');
+  }
+
+  function closeCtxMenu() {
+    _ctxId = null;
+    document.getElementById('wa-ctx-drop').classList.remove('open');
+  }
+
+  function ctxGetChat() {
+    return _ctxId ? (_chats.find(function(c) { return c.id === _ctxId; }) || null) : null;
+  }
+
+  function ctxRename() {
+    var chat = ctxGetChat();
+    if (!chat) return;
+    closeCtxMenu();
+    var name = prompt('Đổi tên:', chat.label);
+    if (name && name.trim()) {
+      chat.label = name.trim();
+      chat.updatedAt = Date.now();
+      saveStorage();
+      syncToCloud(chat);
+      renderSidebar();
+      if (_activeId === chat.id) renderMain();
+    }
+  }
+
+  function ctxPin() {
+    var chat = ctxGetChat();
+    if (!chat) return;
+    chat.pinned = !chat.pinned;
+    saveStorage();
+    renderSidebar();
+    closeCtxMenu();
+  }
+
+  function ctxShare() {
+    var chat = ctxGetChat();
+    closeCtxMenu();
+    shareChatObj(chat);
+  }
+
+  function ctxClear() {
+    var chat = ctxGetChat();
+    if (!chat) return;
+    if (!confirm('Xóa toàn bộ tin nhắn?\nThông tin lá số vẫn được giữ lại.')) return;
+    chat.messages  = [];
+    chat.lastMsg   = '';
+    chat.updatedAt = Date.now();
+    saveStorage();
+    syncToCloud(chat);
+    renderSidebar();
+    if (_activeId === chat.id) renderMain();
+    closeCtxMenu();
+  }
+
+  function ctxDelete() {
+    var chat = ctxGetChat();
+    if (!chat || chat.id === GENERAL_ID) return;
+    closeCtxMenu();
+    if (!confirm('Xóa "' + chat.label + '"?\nToàn bộ lịch sử chat sẽ bị mất.')) return;
+    var id = chat.id;
+    _chats = _chats.filter(function(c) { return c.id !== id; });
+    deleteFromCloud(id);
+    if (_activeId === id) {
+      _activeId = null;
+      _busy = false;
+      document.getElementById('wa-sidebar').classList.remove('wa-hidden');
+      document.getElementById('wa-main').classList.remove('wa-visible');
+    }
+    saveStorage();
+    renderSidebar();
+    renderMain();
   }
 
   /* ── Init ─────────────────────────────────────────────────────── */
@@ -1695,7 +1820,16 @@ body{
     document.getElementById('wa-share-btn').addEventListener('click', shareActiveChat);
     document.getElementById('wa-clear-btn').addEventListener('click', clearActiveChat);
     document.getElementById('wa-delete-btn').addEventListener('click', deleteActiveChat);
-    document.addEventListener('click', closeDropdown);
+
+    /* Sidebar ctx menu */
+    document.getElementById('ctx-rename').addEventListener('click', ctxRename);
+    document.getElementById('ctx-pin').addEventListener('click', ctxPin);
+    document.getElementById('ctx-share').addEventListener('click', ctxShare);
+    document.getElementById('ctx-clear').addEventListener('click', ctxClear);
+    document.getElementById('ctx-delete').addEventListener('click', ctxDelete);
+    document.getElementById('wa-ctx-drop').addEventListener('click', function(e) { e.stopPropagation(); });
+
+    document.addEventListener('click', function() { closeDropdown(); closeCtxMenu(); });
 
     /* Input */
     document.getElementById('tc-input').addEventListener('input', function() {
