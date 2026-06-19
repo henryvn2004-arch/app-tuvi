@@ -521,6 +521,23 @@ body{
   .wa-hint{display:none}
   .tc-bub{max-width:85%}
 }
+/* ── Tool-specific form fields (sinh-con · chon-ngay · dat-ten) ── */
+.tc-sf-group{margin-bottom:14px}
+.tc-sf-label{display:block;font-size:12px;font-weight:600;color:var(--text-mid);margin-bottom:5px}
+.tc-sf-input,.tc-sf-select{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:var(--bg);color:var(--text);box-sizing:border-box}
+.tc-sf-input:focus,.tc-sf-select:focus{outline:none;border-color:var(--navy)}
+.tc-sf-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tc-sf-preview{background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:6px;padding:10px 12px;margin:10px 0;font-size:13px;display:none}
+.tc-sf-preview.show{display:block}
+.tc-sf-preview-row{display:flex;gap:8px;margin-bottom:4px;align-items:center}
+.tc-sf-preview-lbl{color:var(--text-lt);width:50px;font-size:12px;flex-shrink:0}
+.tc-sf-submit{width:100%;padding:12px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;margin-top:8px;background:var(--navy);color:#fff}
+.tc-sf-submit:hover:not(:disabled){background:var(--navy-mid)}
+.tc-sf-submit:disabled{opacity:.5;cursor:default}
+.tc-sf-rating-great{color:#1E6B3C;font-weight:700}
+.tc-sf-rating-good{color:#9A7B3A;font-weight:600}
+.tc-sf-rating-ok{color:#777}
+.tc-sf-rating-bad{color:#c0392b;font-weight:600}
 </style>
 </head>
 <body>
@@ -1206,6 +1223,9 @@ body{
     $msgs.appendChild(wrap);
     if (chat.toolType === 'xem-tuoi' || chat.toolType === 'xem-lam-an') renderCompatForm(chat.toolType);
     else if (chat.toolType === 'tu-binh') renderTuBinhForm();
+    else if (chat.toolType === 'xem-tuoi-sinh-con') renderXemSinhConForm();
+    else if (chat.toolType === 'chon-ngay-tot') renderChonNgayTotForm();
+    else if (chat.toolType === 'dat-ten-con') renderDatTenConForm();
     else renderLasoForm(chat);
   }
 
@@ -1285,6 +1305,412 @@ body{
       submitLabel: 'Tính Bát Tự & Chat →',
       showSample:  false,
     });
+  }
+
+  /* ── Can/Chi helpers (sinh-con · chon-ngay · dat-ten) ──────── */
+  var _CC_CAN = ['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
+  var _CC_CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+  var _CC_NA  = ['Kim','Hỏa','Mộc','Thổ','Kim','Hỏa','Thủy','Thổ','Kim','Mộc','Thủy','Thổ','Hỏa','Mộc','Thủy','Kim','Hỏa','Mộc','Thổ','Kim','Hỏa','Thủy','Thổ','Kim','Mộc','Thủy','Thổ','Hỏa','Mộc','Thủy'];
+  var _CC_NA_TEN = ['Hải Trung Kim','Lò Trung Hỏa','Đại Lâm Mộc','Lộ Bàng Thổ','Kiếm Phong Kim','Sơn Đầu Hỏa','Giản Hạ Thủy','Thành Đầu Thổ','Bạch Lạp Kim','Dương Liễu Mộc','Tuyền Trung Thủy','Ốc Thượng Thổ','Tích Lịch Hỏa','Tùng Bách Mộc','Trường Lưu Thủy','Sa Trung Kim','Sơn Hạ Hỏa','Bình Địa Mộc','Bích Thượng Thổ','Kim Bạc Kim','Phú Đăng Hỏa','Thiên Hà Thủy','Đại Dịch Thổ','Thoa Xuyến Kim','Tang Đố Mộc','Đại Khê Thủy','Sa Trung Thổ','Thiên Thượng Hỏa','Thạch Lựu Mộc','Đại Hải Thủy'];
+  var _CC_LUC_HOP  = [[0,1],[2,11],[3,10],[4,9],[5,8],[6,7]];
+  var _CC_LUC_XUNG = [[0,6],[1,7],[2,8],[3,9],[4,10],[5,11]];
+  var _CC_TAM_HOP  = [[8,0,4],[2,6,10],[5,9,1],[11,3,7]];
+  var _CC_TAM_HINH = [[2,11,8],[0,3,6],[1,4,7]];
+
+  function _ccInfo(year) {
+    if (!year || isNaN(year)) return null;
+    var pos = ((year-1924)%60+60)%60;
+    return { canChi: _CC_CAN[pos%10]+' '+_CC_CHI[pos%12], can: _CC_CAN[pos%10], chi: _CC_CHI[pos%12], chiIdx: pos%12, hanh: _CC_NA[Math.floor(pos/2)], napAm: _CC_NA_TEN[Math.floor(pos/2)] };
+  }
+  function _ccThangCanChi(thang, nam) {
+    var pos = ((nam-1924)%60+60)%60;
+    var base = [2,4,6,8,0,2,4,6,8,0][pos%10];
+    return _CC_CAN[(base+(thang-1)*2)%10]+' '+_CC_CHI[(2+thang-1)%12];
+  }
+  function _ccIsLucHop(a,b)  { return _CC_LUC_HOP.some(function(p){return(p[0]===a&&p[1]===b)||(p[0]===b&&p[1]===a);}); }
+  function _ccIsLucXung(a,b) { return _CC_LUC_XUNG.some(function(p){return(p[0]===a&&p[1]===b)||(p[0]===b&&p[1]===a);}); }
+  function _ccIsTamHop(a,b)  { return _CC_TAM_HOP.some(function(g){return g.indexOf(a)>-1&&g.indexOf(b)>-1;}); }
+  function _ccIsTamHinh(a,b) { return _CC_TAM_HINH.some(function(g){return g.indexOf(a)>-1&&g.indexOf(b)>-1;}); }
+  function _ccScoreYear(chiIdx, chiBoIdx, chiMeIdx) {
+    var score = 0, reasons = [];
+    if (_ccIsLucHop(chiIdx,chiBoIdx))       { score+=3; reasons.push('Lục Hợp bố ✓'); }
+    else if (_ccIsTamHop(chiIdx,chiBoIdx))  { score+=2; reasons.push('Tam Hợp bố'); }
+    else if (_ccIsLucXung(chiIdx,chiBoIdx)) { score-=3; reasons.push('Lục Xung bố ✗'); }
+    else if (_ccIsTamHinh(chiIdx,chiBoIdx)) { score-=2; reasons.push('Tam Hình bố'); }
+    if (_ccIsLucHop(chiIdx,chiMeIdx))       { score+=3; reasons.push('Lục Hợp mẹ ✓'); }
+    else if (_ccIsTamHop(chiIdx,chiMeIdx))  { score+=2; reasons.push('Tam Hợp mẹ'); }
+    else if (_ccIsLucXung(chiIdx,chiMeIdx)) { score-=3; reasons.push('Lục Xung mẹ ✗'); }
+    else if (_ccIsTamHinh(chiIdx,chiMeIdx)) { score-=2; reasons.push('Tam Hình mẹ'); }
+    return { score: score, reasons: reasons };
+  }
+  function _ccRatingLabel(score) {
+    if (score>=5) return 'Rất Thuận ★★★';
+    if (score>=2) return 'Thuận ★★';
+    if (score>=0) return 'Bình Thường';
+    return 'Cần Lưu Ý';
+  }
+
+  /* ── renderXemSinhConForm ───────────────────────────────────── */
+  function renderXemSinhConForm() {
+    var inner = document.querySelector('.wa-form-inner');
+    inner.innerHTML =
+      '<div class="wa-form-intro">Nhập năm sinh bố và mẹ để xem <strong>năm nào hợp sinh con</strong> trong 15 năm tới — theo địa chi học.</div>' +
+      '<div class="tc-sf-row">' +
+        '<div class="tc-sf-group">' +
+          '<label class="tc-sf-label">Năm sinh Bố (dương lịch)</label>' +
+          '<input type="number" id="tc-sc-bo" class="tc-sf-input" placeholder="VD: 1988" min="1930" max="2005">' +
+        '</div>' +
+        '<div class="tc-sf-group">' +
+          '<label class="tc-sf-label">Năm sinh Mẹ (dương lịch)</label>' +
+          '<input type="number" id="tc-sc-me" class="tc-sf-input" placeholder="VD: 1992" min="1930" max="2005">' +
+        '</div>' +
+      '</div>' +
+      '<div class="tc-sf-preview" id="tc-sc-preview">' +
+        '<div class="tc-sf-preview-row"><span class="tc-sf-preview-lbl">Bố:</span><strong id="tc-sc-bo-cc"></strong></div>' +
+        '<div class="tc-sf-preview-row"><span class="tc-sf-preview-lbl">Mẹ:</span><strong id="tc-sc-me-cc"></strong></div>' +
+      '</div>' +
+      '<button class="tc-sf-submit" id="tc-sc-btn" disabled>Xem 15 Năm Tới →</button>' +
+      '<p id="error-msg" class="error-msg"></p>';
+    document.getElementById('tc-sc-bo').addEventListener('input', tcSinhConPreview);
+    document.getElementById('tc-sc-me').addEventListener('input', tcSinhConPreview);
+    document.getElementById('tc-sc-btn').addEventListener('click', tcDoSinhCon);
+  }
+
+  function tcSinhConPreview() {
+    var iB = _ccInfo(parseInt((document.getElementById('tc-sc-bo')||{}).value));
+    var iM = _ccInfo(parseInt((document.getElementById('tc-sc-me')||{}).value));
+    var prev = document.getElementById('tc-sc-preview');
+    if (iB || iM) {
+      if (prev) prev.classList.add('show');
+      var bEl = document.getElementById('tc-sc-bo-cc'); if (bEl) bEl.textContent = iB ? iB.canChi+' — '+iB.napAm : '';
+      var mEl = document.getElementById('tc-sc-me-cc'); if (mEl) mEl.textContent = iM ? iM.canChi+' — '+iM.napAm : '';
+    } else {
+      if (prev) prev.classList.remove('show');
+    }
+    var btn = document.getElementById('tc-sc-btn');
+    if (btn) btn.disabled = !(iB && iM);
+  }
+
+  function tcDoSinhCon() {
+    var chat = getActive(); if (!chat) return;
+    var iB = _ccInfo(parseInt((document.getElementById('tc-sc-bo')||{}).value));
+    var iM = _ccInfo(parseInt((document.getElementById('tc-sc-me')||{}).value));
+    if (!iB || !iM) return;
+
+    var curYear = new Date().getFullYear();
+    var rows = [];
+    for (var y = curYear; y < curYear+15; y++) {
+      var info = _ccInfo(y);
+      var r = _ccScoreYear(info.chiIdx, iB.chiIdx, iM.chiIdx);
+      rows.push({ year: y, canChi: info.canChi, hanh: info.hanh, score: r.score, reasons: r.reasons });
+    }
+
+    var sorted = rows.slice().sort(function(a,b){return b.score-a.score;});
+    var top3 = sorted.slice(0,3).map(function(r){return '**'+r.year+' ('+r.canChi+')**';}).join(', ');
+
+    var lines = ['Bố tuổi **'+iB.canChi+'** ('+iB.napAm+'), Mẹ tuổi **'+iM.canChi+'** ('+iM.napAm+').', '', '**Năm thuận nhất (Top 3):** '+top3, ''];
+    rows.forEach(function(r) {
+      lines.push('• **'+r.year+' — '+r.canChi+' ('+r.hanh+')**: '+_ccRatingLabel(r.score)+(r.reasons.length?' — '+r.reasons.join(', '):''));
+    });
+    lines.push('', 'Bạn muốn hỏi về năm nào cụ thể, hoặc giải thích thêm?');
+
+    var greeting = lines.join('\n');
+
+    chat.contextData = { sinhConData: { bo: { canChi: iB.canChi, napAm: iB.napAm, chiIdx: iB.chiIdx }, me: { canChi: iM.canChi, napAm: iM.napAm, chiIdx: iM.chiIdx }, rows: rows } };
+    chat.summary   = 'Bố '+iB.canChi+' · Mẹ '+iM.canChi;
+    chat.messages  = [{ role: 'assistant', content: greeting }];
+    chat.lastMsg   = 'Xem tuổi sinh con: '+iB.canChi+' & '+iM.canChi;
+    chat.updatedAt = Date.now();
+    saveStorage(); syncToCloud(chat); renderSidebar(); renderMain();
+  }
+
+  /* ── renderChonNgayTotForm ──────────────────────────────────── */
+  function renderChonNgayTotForm() {
+    var inner = document.querySelector('.wa-form-inner');
+    var curY  = new Date().getFullYear();
+    var thangOpts = [1,2,3,4,5,6,7,8,9,10,11,12].map(function(i){return '<option value="'+i+'">'+(i<10?'0':'')+i+'</option>';}).join('');
+    var namOpts   = [0,1,2,3,4,5].map(function(i){return '<option value="'+(curY+i)+'">'+(curY+i)+'</option>';}).join('');
+    inner.innerHTML =
+      '<div class="wa-form-intro">Nhập thông tin để AI phân tích và chọn <strong>ngày tốt</strong> theo tuổi và sự kiện.</div>' +
+      '<div class="tc-sf-group">' +
+        '<label class="tc-sf-label">Sự kiện</label>' +
+        '<select id="tc-cn-sukien" class="tc-sf-select">' +
+          '<option value="">-- Chọn sự kiện --</option>' +
+          '<option>Cưới hỏi/đám cưới</option><option>Khai trương/khai nghiệp</option>' +
+          '<option>Ký hợp đồng/hợp tác</option><option>Mua nhà/BĐS</option>' +
+          '<option>Nhập trạch</option><option>Xuất hành</option>' +
+          '<option>Khởi công XD</option><option>Động thổ</option>' +
+          '<option>Kỳ thi/phỏng vấn</option><option>Sinh đẻ/mổ chủ động</option>' +
+        '</select>' +
+      '</div>' +
+      '<div class="tc-sf-group">' +
+        '<label class="tc-sf-label">Họ tên người xem</label>' +
+        '<input type="text" id="tc-cn-hoten" class="tc-sf-input" placeholder="Nguyễn Văn A">' +
+      '</div>' +
+      '<div class="tc-sf-group">' +
+        '<label class="tc-sf-label">Năm sinh (dương lịch)</label>' +
+        '<input type="number" id="tc-cn-namsinh" class="tc-sf-input" placeholder="VD: 1990" min="1930" max="2010">' +
+      '</div>' +
+      '<div class="tc-sf-preview" id="tc-cn-preview">' +
+        '<div class="tc-sf-preview-row"><span class="tc-sf-preview-lbl">Tuổi:</span><strong id="tc-cn-cc"></strong></div>' +
+      '</div>' +
+      '<div class="tc-sf-row">' +
+        '<div class="tc-sf-group">' +
+          '<label class="tc-sf-label">Tháng xem</label>' +
+          '<select id="tc-cn-thang" class="tc-sf-select"><option value="">-- Tháng --</option>'+thangOpts+'</select>' +
+        '</div>' +
+        '<div class="tc-sf-group">' +
+          '<label class="tc-sf-label">Năm xem</label>' +
+          '<select id="tc-cn-nam" class="tc-sf-select">'+namOpts+'</select>' +
+        '</div>' +
+      '</div>' +
+      '<button class="tc-sf-submit" id="tc-cn-btn" disabled>Phân Tích Ngày Tốt →</button>' +
+      '<p id="error-msg" class="error-msg"></p>';
+    document.getElementById('tc-cn-sukien').addEventListener('change', tcChonNgayPreview);
+    document.getElementById('tc-cn-hoten').addEventListener('input', tcChonNgayPreview);
+    document.getElementById('tc-cn-namsinh').addEventListener('input', tcChonNgayPreview);
+    document.getElementById('tc-cn-thang').addEventListener('change', tcChonNgayPreview);
+    document.getElementById('tc-cn-nam').addEventListener('change', tcChonNgayPreview);
+    document.getElementById('tc-cn-btn').addEventListener('click', tcDoChonNgay);
+  }
+
+  function tcChonNgayPreview() {
+    var info = _ccInfo(parseInt((document.getElementById('tc-cn-namsinh')||{}).value));
+    var prev = document.getElementById('tc-cn-preview');
+    if (info) {
+      if (prev) prev.classList.add('show');
+      var el = document.getElementById('tc-cn-cc'); if (el) el.textContent = info.canChi+' — '+info.napAm;
+    } else { if (prev) prev.classList.remove('show'); }
+    var suKien = (document.getElementById('tc-cn-sukien')||{}).value;
+    var hoTen  = ((document.getElementById('tc-cn-hoten')||{}).value||'').trim();
+    var thang  = (document.getElementById('tc-cn-thang')||{}).value;
+    var btn    = document.getElementById('tc-cn-btn');
+    if (btn) btn.disabled = !(suKien && hoTen && info && thang);
+  }
+
+  async function tcDoChonNgay() {
+    var chat = getActive(); if (!chat) return;
+    var suKien = (document.getElementById('tc-cn-sukien')||{}).value;
+    var hoTen  = ((document.getElementById('tc-cn-hoten')||{}).value||'').trim();
+    var ns     = parseInt((document.getElementById('tc-cn-namsinh')||{}).value);
+    var thang  = parseInt((document.getElementById('tc-cn-thang')||{}).value);
+    var nam    = parseInt((document.getElementById('tc-cn-nam')||{}).value);
+    var info   = _ccInfo(ns);
+    if (!suKien || !hoTen || !info || !thang || !nam) return;
+
+    if (window.TuviPaywall && TuviPaywall.ensureCredits) {
+      var gate = await TuviPaywall.ensureCredits({ product: 'tuvi-chat' });
+      if (!gate || !gate.ok) {
+        if (gate && gate.reason === 'login' && window.showAuthModal) window.showAuthModal(function(){tcDoChonNgay();});
+        return;
+      }
+    }
+
+    var btn   = document.getElementById('tc-cn-btn');
+    var errEl = document.getElementById('error-msg');
+    if (btn)   btn.disabled = true;
+    if (errEl) { errEl.textContent = ''; errEl.classList.remove('active'); }
+
+    var $formArea = document.getElementById('wa-form-area');
+    var $msgArea  = document.getElementById('wa-msg-area');
+    var $msgs     = document.getElementById('tc-messages');
+    if ($formArea) $formArea.style.display = 'none';
+    if ($msgArea)  $msgArea.style.display  = 'flex';
+    $msgs.innerHTML = '';
+
+    var wrap = document.createElement('div'); wrap.className = 'tc-msg bot';
+    var av   = document.createElement('div'); av.className = 'tc-av'; av.innerHTML = authorAvatar();
+    var bub  = document.createElement('div'); bub.className = 'tc-bub';
+    bub.innerHTML = '<span class="tc-dot"></span><span class="tc-dot"></span><span class="tc-dot"></span>';
+    wrap.appendChild(av); wrap.appendChild(bub); $msgs.appendChild(wrap);
+
+    try {
+      var thangCC = _ccThangCanChi(thang, nam);
+      var namCC   = (_ccInfo(nam)||{}).canChi || '';
+      var res = await fetch('/api/xem-tuoi?action=chon-ngay-tot', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ suKien: suKien, hoTen: hoTen, namSinh: ns, canChiNguoi: info.canChi, napAmNguoi: info.napAm, thangCanChi: thangCC, namCanChi: namCC, thangNum: thang, namNum: nam }),
+      });
+      if (!res.ok) throw new Error(res.status);
+
+      var cursor = document.createElement('span'); cursor.className = 'tc-cursor';
+      bub.innerHTML = ''; bub.appendChild(cursor);
+      var accumulated = ''; var reader = res.body.getReader(); var dec = new TextDecoder(); var buf = '';
+      while (true) {
+        var chunk = await reader.read(); if (chunk.done) break;
+        buf += dec.decode(chunk.value, { stream: true });
+        var lines = buf.split('\n'); buf = lines.pop()||'';
+        for (var i=0;i<lines.length;i++) {
+          var line = lines[i]; if (!line.startsWith('data: ')) continue;
+          var js = line.slice(6).trim(); if (!js) continue;
+          try { var evt = JSON.parse(js); if (evt.t) { accumulated += evt.t; bub.innerHTML = renderMd(accumulated); bub.appendChild(cursor); $msgs.scrollTop=$msgs.scrollHeight; } } catch(pe){}
+        }
+      }
+      cursor.remove();
+      var answer = accumulated || 'Không thể phân tích. Vui lòng thử lại.';
+      bub.innerHTML = renderMd(answer);
+
+      chat.contextData = { chonNgayData: { suKien: suKien, hoTen: hoTen, namSinh: ns, canChi: info.canChi, napAm: info.napAm, thangCanChi: thangCC, namCanChi: namCC, thangNum: thang, namNum: nam } };
+      chat.summary     = hoTen+' · '+suKien+' T'+thang+'/'+nam;
+      chat.messages    = [{ role: 'assistant', content: answer }];
+      chat.lastMsg     = suKien+' T'+thang+'/'+nam;
+      chat.updatedAt   = Date.now();
+      saveStorage(); syncToCloud(chat); renderSidebar();
+      var cnCfg = toolCfg('chon-ngay-tot');
+      renderSuggs(cnCfg ? cnCfg.suggs : []);
+
+      if (window.TuviPaywall && TuviPaywall.deductSilent) {
+        TuviPaywall.deductSilent({ product: 'tuvi-chat' }).then(function(d) {
+          if (d && d.ok && d.balance != null && d.balance <= 3 && TuviPaywall._banner) TuviPaywall._banner('Còn '+d.balance+' lượt — nạp thêm để hỏi tiếp');
+        });
+      }
+    } catch(e) {
+      console.error('[TuviChat] chon-ngay error', e);
+      bub.innerHTML = 'Có lỗi khi phân tích. Vui lòng thử lại.';
+      if (btn) btn.disabled = false;
+    }
+  }
+
+  /* ── renderDatTenConForm ────────────────────────────────────── */
+  function renderDatTenConForm() {
+    var inner = document.querySelector('.wa-form-inner');
+    inner.innerHTML =
+      '<div class="wa-form-intro">Nhập thông tin để AI <strong>đặt tên con</strong> theo ngũ hành bố mẹ và năm sinh.</div>' +
+      '<div class="tc-sf-group">' +
+        '<label class="tc-sf-label">Họ (của bé)</label>' +
+        '<input type="text" id="tc-dt-ho" class="tc-sf-input" placeholder="VD: Nguyễn">' +
+      '</div>' +
+      '<div class="tc-sf-row">' +
+        '<div class="tc-sf-group">' +
+          '<label class="tc-sf-label">Giới tính bé</label>' +
+          '<select id="tc-dt-gt" class="tc-sf-select">' +
+            '<option value="nam">Nam</option><option value="nu">Nữ</option>' +
+          '</select>' +
+        '</div>' +
+        '<div class="tc-sf-group">' +
+          '<label class="tc-sf-label">Năm sinh bé</label>' +
+          '<input type="number" id="tc-dt-namcon" class="tc-sf-input" placeholder="VD: 2025" min="2020" max="2035">' +
+        '</div>' +
+      '</div>' +
+      '<div class="tc-sf-row">' +
+        '<div class="tc-sf-group">' +
+          '<label class="tc-sf-label">Năm sinh Bố</label>' +
+          '<input type="number" id="tc-dt-nambo" class="tc-sf-input" placeholder="VD: 1988" min="1930" max="2010">' +
+        '</div>' +
+        '<div class="tc-sf-group">' +
+          '<label class="tc-sf-label">Năm sinh Mẹ</label>' +
+          '<input type="number" id="tc-dt-namme" class="tc-sf-input" placeholder="VD: 1992" min="1930" max="2010">' +
+        '</div>' +
+      '</div>' +
+      '<div class="tc-sf-preview" id="tc-dt-preview">' +
+        '<div class="tc-sf-preview-row"><span class="tc-sf-preview-lbl">Bé:</span><strong id="tc-dt-con-cc"></strong></div>' +
+        '<div class="tc-sf-preview-row"><span class="tc-sf-preview-lbl">Bố:</span><strong id="tc-dt-bo-cc"></strong></div>' +
+        '<div class="tc-sf-preview-row"><span class="tc-sf-preview-lbl">Mẹ:</span><strong id="tc-dt-me-cc"></strong></div>' +
+      '</div>' +
+      '<button class="tc-sf-submit" id="tc-dt-btn" disabled>Đặt Tên Con →</button>' +
+      '<p id="error-msg" class="error-msg"></p>';
+    document.getElementById('tc-dt-ho').addEventListener('input', tcDatTenPreview);
+    document.getElementById('tc-dt-gt').addEventListener('change', tcDatTenPreview);
+    document.getElementById('tc-dt-namcon').addEventListener('input', tcDatTenPreview);
+    document.getElementById('tc-dt-nambo').addEventListener('input', tcDatTenPreview);
+    document.getElementById('tc-dt-namme').addEventListener('input', tcDatTenPreview);
+    document.getElementById('tc-dt-btn').addEventListener('click', tcDoDatTen);
+  }
+
+  function tcDatTenPreview() {
+    var iCon = _ccInfo(parseInt((document.getElementById('tc-dt-namcon')||{}).value));
+    var iBo  = _ccInfo(parseInt((document.getElementById('tc-dt-nambo')||{}).value));
+    var iMe  = _ccInfo(parseInt((document.getElementById('tc-dt-namme')||{}).value));
+    var prev = document.getElementById('tc-dt-preview');
+    if (iCon || iBo || iMe) {
+      if (prev) prev.classList.add('show');
+      var cEl = document.getElementById('tc-dt-con-cc'); if (cEl) cEl.textContent = iCon ? iCon.canChi+' — '+iCon.napAm : '—';
+      var bEl = document.getElementById('tc-dt-bo-cc');  if (bEl) bEl.textContent = iBo  ? iBo.canChi +' — '+iBo.napAm  : '—';
+      var mEl = document.getElementById('tc-dt-me-cc');  if (mEl) mEl.textContent = iMe  ? iMe.canChi +' — '+iMe.napAm  : '—';
+    } else { if (prev) prev.classList.remove('show'); }
+    var ho  = ((document.getElementById('tc-dt-ho')||{}).value||'').trim();
+    var btn = document.getElementById('tc-dt-btn');
+    if (btn) btn.disabled = !(ho && iCon && iBo && iMe);
+  }
+
+  async function tcDoDatTen() {
+    var chat = getActive(); if (!chat) return;
+    var ho     = ((document.getElementById('tc-dt-ho')||{}).value||'').trim();
+    var gt     = (document.getElementById('tc-dt-gt')||{}).value||'nam';
+    var iCon   = _ccInfo(parseInt((document.getElementById('tc-dt-namcon')||{}).value));
+    var iBo    = _ccInfo(parseInt((document.getElementById('tc-dt-nambo')||{}).value));
+    var iMe    = _ccInfo(parseInt((document.getElementById('tc-dt-namme')||{}).value));
+    if (!ho || !iCon || !iBo || !iMe) return;
+
+    if (window.TuviPaywall && TuviPaywall.ensureCredits) {
+      var gate = await TuviPaywall.ensureCredits({ product: 'tuvi-chat' });
+      if (!gate || !gate.ok) {
+        if (gate && gate.reason === 'login' && window.showAuthModal) window.showAuthModal(function(){tcDoDatTen();});
+        return;
+      }
+    }
+
+    var btn   = document.getElementById('tc-dt-btn');
+    var errEl = document.getElementById('error-msg');
+    if (btn)   btn.disabled = true;
+    if (errEl) { errEl.textContent = ''; errEl.classList.remove('active'); }
+
+    var $formArea = document.getElementById('wa-form-area');
+    var $msgArea  = document.getElementById('wa-msg-area');
+    var $msgs     = document.getElementById('tc-messages');
+    if ($formArea) $formArea.style.display = 'none';
+    if ($msgArea)  $msgArea.style.display  = 'flex';
+    $msgs.innerHTML = '';
+
+    var wrap = document.createElement('div'); wrap.className = 'tc-msg bot';
+    var av   = document.createElement('div'); av.className = 'tc-av'; av.innerHTML = authorAvatar();
+    var bub  = document.createElement('div'); bub.className = 'tc-bub';
+    bub.innerHTML = '<span class="tc-dot"></span><span class="tc-dot"></span><span class="tc-dot"></span>';
+    wrap.appendChild(av); wrap.appendChild(bub); $msgs.appendChild(wrap);
+
+    try {
+      var res = await fetch('/api/xem-tuoi?action=dat-ten-con', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ho: ho, gioiTinh: gt, namSinhCon: parseInt((document.getElementById('tc-dt-namcon')||{}).value), canChiCon: iCon.canChi, napAmCon: iCon.napAm, canChiBo: iBo.canChi, napAmBo: iBo.napAm, canChiMe: iMe.canChi, napAmMe: iMe.napAm }),
+      });
+      if (!res.ok) throw new Error(res.status);
+
+      var cursor = document.createElement('span'); cursor.className = 'tc-cursor';
+      bub.innerHTML = ''; bub.appendChild(cursor);
+      var accumulated = ''; var reader = res.body.getReader(); var dec = new TextDecoder(); var buf = '';
+      while (true) {
+        var chunk = await reader.read(); if (chunk.done) break;
+        buf += dec.decode(chunk.value, { stream: true });
+        var lines = buf.split('\n'); buf = lines.pop()||'';
+        for (var i=0;i<lines.length;i++) {
+          var line = lines[i]; if (!line.startsWith('data: ')) continue;
+          var js = line.slice(6).trim(); if (!js) continue;
+          try { var evt = JSON.parse(js); if (evt.t) { accumulated += evt.t; bub.innerHTML = renderMd(accumulated); bub.appendChild(cursor); $msgs.scrollTop=$msgs.scrollHeight; } } catch(pe){}
+        }
+      }
+      cursor.remove();
+      var answer = accumulated || 'Không thể đặt tên. Vui lòng thử lại.';
+      bub.innerHTML = renderMd(answer);
+
+      chat.contextData = { datTenData: { ho: ho, gioiTinh: gt, canChiCon: iCon.canChi, napAmCon: iCon.napAm, canChiBo: iBo.canChi, napAmBo: iBo.napAm, canChiMe: iMe.canChi, napAmMe: iMe.napAm } };
+      chat.summary     = ho+' ??? · Bé '+iCon.canChi+' ('+(gt==='nu'?'gái':'trai')+')';
+      chat.messages    = [{ role: 'assistant', content: answer }];
+      chat.lastMsg     = 'Đặt tên bé '+(gt==='nu'?'gái':'trai')+' '+iCon.canChi;
+      chat.updatedAt   = Date.now();
+      saveStorage(); syncToCloud(chat); renderSidebar();
+      var dtCfg = toolCfg('dat-ten-con');
+      renderSuggs(dtCfg ? dtCfg.suggs : []);
+
+      if (window.TuviPaywall && TuviPaywall.deductSilent) {
+        TuviPaywall.deductSilent({ product: 'tuvi-chat' }).then(function(d) {
+          if (d && d.ok && d.balance != null && d.balance <= 3 && TuviPaywall._banner) TuviPaywall._banner('Còn '+d.balance+' lượt — nạp thêm để hỏi tiếp');
+        });
+      }
+    } catch(e) {
+      console.error('[TuviChat] dat-ten error', e);
+      bub.innerHTML = 'Có lỗi khi đặt tên. Vui lòng thử lại.';
+      if (btn) btn.disabled = false;
+    }
   }
 
   /* ── An Sao ───────────────────────────────────────────────────── */
@@ -1580,6 +2006,12 @@ body{
         apiBody.compatData = chat.contextData;
       } else if (chat.toolType === 'tu-binh') {
         apiBody.tuBinhData = chat.contextData;
+      } else if (chat.toolType === 'xem-tuoi-sinh-con') {
+        apiBody.sinhConData = chat.contextData;
+      } else if (chat.toolType === 'chon-ngay-tot') {
+        apiBody.chonNgayData = chat.contextData;
+      } else if (chat.toolType === 'dat-ten-con') {
+        apiBody.datTenData = chat.contextData;
       } else {
         apiBody.lasoData = chat.lasoData;
         apiBody.scenario = chat.lasoData ? 'laso' : 'general';
