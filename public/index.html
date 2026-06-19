@@ -453,10 +453,10 @@ a { color: var(--blue); text-decoration: none; }
           </div>
 
           <div class="chat-chips">
-            <a class="chat-chip" href="/tuvi-chat.html">Khi nào tôi lập gia đình?</a>
-            <a class="chat-chip" href="/tuvi-chat.html">Tháng tới có nên mua nhà?</a>
-            <a class="chat-chip" href="/tuvi-chat.html">Năm nay có nên đổi việc không?</a>
-            <a class="chat-chip" href="/tuvi-chat.html">Tài lộc năm 2026 thế nào?</a>
+            <a class="chat-chip" data-tool="laso"      href="/tuvi-chat.html?tool=laso&q=Khi+n%C3%A0o+t%C3%B4i+l%E1%BA%ADp+gia+%C4%91%C3%ACnh%3F">Khi nào tôi lập gia đình?</a>
+            <a class="chat-chip" data-tool="xem-tuoi"  href="/tuvi-chat.html?tool=xem-tuoi&q=T%C3%B4i+v%C3%A0+ng%C6%B0%E1%BB%9Di+y%C3%AAu+c%C3%B3+h%E1%BB%A3p+kh%C3%B4ng%3F">Tôi và người yêu có hợp không?</a>
+            <a class="chat-chip" data-tool="laso"      href="/tuvi-chat.html?tool=laso&q=N%C4%83m+nay+c%C3%B3+n%C3%AAn+%C4%91%E1%BB%95i+vi%E1%BB%87c+kh%C3%B4ng%3F">Năm nay có nên đổi việc không?</a>
+            <a class="chat-chip" data-tool="laso"      href="/tuvi-chat.html?tool=laso&q=T%C3%A0i+l%E1%BB%99c+n%C4%83m+2026+th%E1%BA%BF+n%C3%A0o%3F">Tài lộc năm 2026 thế nào?</a>
           </div>
 
           <div class="hero-skills">Hỏi được cả: tử vi · tướng số · phong thủy · ngày tốt · đặt tên</div>
@@ -1001,7 +1001,13 @@ loadTools();
   document.querySelectorAll('.chat-chip').forEach(function (c) {
     c.addEventListener('click', function (e) {
       e.preventDefault();
-      go(c.textContent.trim());
+      var q    = c.textContent.trim();
+      var tool = c.getAttribute('data-tool') || '';
+      var url  = '/tuvi-chat.html';
+      var parts = [];
+      if (tool) parts.push('tool=' + encodeURIComponent(tool));
+      if (q)    parts.push('q='    + encodeURIComponent(q));
+      window.location.href = url + (parts.length ? '?' + parts.join('&') : '');
     });
   });
 })();
