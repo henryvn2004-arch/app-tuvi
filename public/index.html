@@ -397,16 +397,32 @@ a { color: var(--blue); text-decoration: none; }
   padding: 10px 14px; font-size: 14px; color: var(--text-mid); line-height: 1.55;
 }
 .hc-composer {
-  display: flex; align-items: flex-end; gap: 10px;
-  border: 1px solid var(--border); border-radius: 12px; padding: 8px 8px 8px 14px;
-  transition: border-color 0.15s;
+  display: flex; flex-direction: column; gap: 0;
+  border: 1px solid var(--border); border-radius: 12px;
+  transition: border-color 0.15s; overflow: hidden;
 }
 .hc-composer:focus-within { border-color: var(--gold-bright); }
+.hc-composer-top {
+  display: flex; align-items: flex-end; gap: 10px;
+  padding: 8px 8px 8px 14px;
+}
 .hc-composer textarea {
   flex: 1; border: none; outline: none; resize: none; background: transparent;
   font-family: Arial, sans-serif; font-size: 15px; color: var(--text);
-  line-height: 1.5; min-height: 130px; max-height: 240px; padding: 8px 0;
+  line-height: 1.5; min-height: 72px; max-height: 160px; padding: 8px 0;
 }
+.hc-chips-inner {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  padding: 8px 12px 10px 12px;
+  border-top: 1px solid var(--border-lt);
+}
+.hc-chip-inner {
+  background: var(--bg-soft); border: 1px solid var(--border-lt);
+  border-radius: 8px; padding: 5px 11px; font-size: 12.5px;
+  color: var(--text-mid); text-decoration: none; transition: all 0.15s; cursor: pointer;
+  white-space: nowrap;
+}
+.hc-chip-inner:hover { background: var(--gold-lt); border-color: var(--gold-bright); color: var(--navy); }
 .hc-send {
   flex-shrink: 0; width: 38px; height: 38px; border-radius: 50%; border: none; cursor: pointer;
   background: var(--navy); color: var(--gold-bright); font-size: 18px; line-height: 1;
@@ -506,18 +522,19 @@ a { color: var(--blue); text-decoration: none; }
                   <div class="hc-bubble" id="hc-bubble">Bạn muốn hỏi gì về vận mệnh, sự nghiệp, tình duyên hay vận năm nay?</div>
                 </div>
                 <form class="hc-composer" action="/tuvi-chat.html" method="get">
-                  <textarea name="q" rows="1" placeholder="Năm nay vận của tôi thế nào?" aria-label="Câu hỏi về lá số của bạn"></textarea>
-                  <button type="submit" class="hc-send" aria-label="Gửi câu hỏi">↑</button>
+                  <div class="hc-composer-top">
+                    <textarea name="q" rows="1" placeholder="Năm nay vận của tôi thế nào?" aria-label="Câu hỏi về lá số của bạn"></textarea>
+                    <button type="submit" class="hc-send" aria-label="Gửi câu hỏi">↑</button>
+                  </div>
+                  <div class="hc-chips-inner">
+                    <a class="hc-chip-inner" data-tool="laso"      href="/tuvi-chat.html?tool=laso&q=Khi+n%C3%A0o+t%C3%B4i+l%E1%BA%ADp+gia+%C4%91%C3%ACnh%3F">Khi nào tôi lập gia đình?</a>
+                    <a class="hc-chip-inner" data-tool="xem-tuoi"  href="/tuvi-chat.html?tool=xem-tuoi&q=T%C3%B4i+v%C3%A0+ng%C6%B0%E1%BB%9Di+y%C3%AAu+c%C3%B3+h%E1%BB%A3p+kh%C3%B4ng%3F">Tôi và người yêu có hợp không?</a>
+                    <a class="hc-chip-inner" data-tool="laso"      href="/tuvi-chat.html?tool=laso&q=N%C4%83m+nay+c%C3%B3+c%C6%A1+h%E1%BB%99i+ki%E1%BA%BFm+ti%E1%BB%81n+kh%C3%B4ng%3F">Năm nay có cơ hội kiếm tiền không?</a>
+                    <a class="hc-chip-inner" data-tool="xem-lam-an" href="/tuvi-chat.html?tool=xem-lam-an&q=T%C3%B4i+v%C3%A0+%C4%91%E1%BB%91i+t%C3%A1c+l%C3%A0m+%C4%83n+c%C3%B3+h%E1%BB%A3p+ko%3F">Tôi và đối tác làm ăn có hợp ko?</a>
+                  </div>
                 </form>
               </div>
             </div>
-          </div>
-
-          <div class="chat-chips">
-            <a class="chat-chip" data-tool="laso"      href="/tuvi-chat.html?tool=laso&q=Khi+n%C3%A0o+t%C3%B4i+l%E1%BA%ADp+gia+%C4%91%C3%ACnh%3F">Khi nào tôi lập gia đình?</a>
-            <a class="chat-chip" data-tool="xem-tuoi"  href="/tuvi-chat.html?tool=xem-tuoi&q=T%C3%B4i+v%C3%A0+ng%C6%B0%E1%BB%9Di+y%C3%AAu+c%C3%B3+h%E1%BB%A3p+kh%C3%B4ng%3F">Tôi và người yêu có hợp không?</a>
-            <a class="chat-chip" data-tool="laso"      href="/tuvi-chat.html?tool=laso&q=N%C4%83m+nay+c%C3%B3+c%C6%A1+h%E1%BB%99i+ki%E1%BA%BFm+ti%E1%BB%81n+kh%C3%B4ng%3F">Năm nay có cơ hội kiếm tiền không?</a>
-            <a class="chat-chip" data-tool="xem-lam-an" href="/tuvi-chat.html?tool=xem-lam-an&q=T%C3%B4i+v%C3%A0+%C4%91%E1%BB%91i+t%C3%A1c+l%C3%A0m+%C4%83n+c%C3%B3+h%E1%BB%A3p+ko%3F">Tôi và đối tác làm ăn có hợp ko?</a>
           </div>
 
           <div class="hero-skills">Hỏi được cả: tử vi · tướng số · phong thủy · ngày tốt · đặt tên</div>
@@ -1023,7 +1040,7 @@ loadTools();
       if (hcBubble && bubble) hcBubble.textContent = bubble;
     });
   });
-  document.querySelectorAll('.chat-chip').forEach(function (c) {
+  document.querySelectorAll('.hc-chip-inner').forEach(function (c) {
     c.addEventListener('click', function (e) {
       e.preventDefault();
       var q    = c.textContent.trim();
