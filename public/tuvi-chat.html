@@ -1652,13 +1652,11 @@ body{
     var msgs = chat.messages.filter(function(m) { return m.role === 'user' || m.role === 'assistant'; });
     if (msgs.length) {
       lines.push('');
-      msgs.slice(-6).forEach(function(m) {
+      msgs.forEach(function(m) {
         if (m.role === 'user') {
-          var q = (m.content || '').trim().slice(0, 300);
-          lines.push('👤 ' + q + (q.length >= 300 ? '...' : ''));
+          lines.push('👤 ' + (m.content || '').trim());
         } else {
-          var a = (m.content || '').replace(/\*\*/g, '').replace(/#{1,6}\s/g, '').trim().slice(0, 500);
-          lines.push('🔮 ' + a + (a.length >= 500 ? '...' : ''));
+          lines.push('🔮 ' + (m.content || '').trim());
         }
       });
     }
