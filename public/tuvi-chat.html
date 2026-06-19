@@ -202,6 +202,14 @@ body{
 }
 .wa-dd-item:hover{background:#f5f5f5}
 .wa-dd-del{color:var(--red)}
+.wa-dd-sep{height:1px;background:var(--border-lt);margin:4px 0}
+.wa-toast{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
+  background:#333;color:#fff;padding:9px 20px;border-radius:20px;
+  font-size:13px;z-index:9999;pointer-events:none;white-space:nowrap;
+  animation:tc-toast .2s ease;
+}
+@keyframes tc-toast{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 
 /* ── Form area (before an sao) ── */
 .wa-form-area{
@@ -521,7 +529,11 @@ body{
           <button class="wa-menu-btn" id="wa-menu-btn">&#8942;</button>
           <div class="wa-dropdown" id="wa-dropdown">
             <div class="wa-dd-item" id="wa-rename-btn">Đổi tên</div>
-            <div class="wa-dd-item wa-dd-del" id="wa-delete-btn">Xóa lá số</div>
+            <div class="wa-dd-item" id="wa-pin-btn">Ghim lên đầu</div>
+            <div class="wa-dd-item" id="wa-share-btn">Chia sẻ</div>
+            <div class="wa-dd-item" id="wa-clear-btn">Xóa tin nhắn</div>
+            <div class="wa-dd-sep"></div>
+            <div class="wa-dd-item wa-dd-del" id="wa-delete-btn">Xóa hội thoại</div>
           </div>
         </div>
       </div>
@@ -848,6 +860,10 @@ body{
       sec.className = 'wa-list-section';
       sec.textContent = 'Đã lưu';
       list.appendChild(sec);
+      laso.sort(function(a, b) {
+        if (!!a.pinned !== !!b.pinned) return a.pinned ? -1 : 1;
+        return (b.updatedAt || 0) - (a.updatedAt || 0);
+      });
       laso.forEach(function(chat) { renderChatItem(list, chat, false); });
     } else if (!general) {
       list.innerHTML = '<div class="wa-list-empty">Nhấn <b>+ Thêm mới</b> để bắt đầu.</div>';
@@ -872,7 +888,7 @@ body{
       '<div class="wa-ci-av' + (isGeneral ? ' icon' : '') + '" style="background:' + color + '">' + letter + '</div>' +
       '<div class="wa-ci-info">' +
         '<div class="wa-ci-row">' +
-          '<span class="wa-ci-name">' + escHtml(chat.label) + '</span>' +
+          '<span class="wa-ci-name">' + (chat.pinned ? '📌 ' : '') + escHtml(chat.label) + '</span>' +
           (chat.updatedAt ? '<span class="wa-ci-time">' + fmtTime(chat.updatedAt) + '</span>' : '') +
         '</div>' +
         '<div class="wa-ci-preview">' + escHtml(chat.lastMsg || '') + '</div>' +
@@ -920,8 +936,17 @@ body{
     var hasChatData = !!(chat.lasoData || chat.contextData);
     document.getElementById('wa-hdr-sub').textContent  = chat.summary || (hasChatData ? '' : isGeneral ? 'Hỏi về Tử Vi' : 'Chưa nhập thông tin');
 
-    /* Hide delete for general chat */
+    /* Hide delete/rename/pin for general chat */
     $deleteBtn.style.display = isGeneral ? 'none' : '';
+    var $renameBtn = document.getElementById('wa-rename-btn');
+    var $pinBtn    = document.getElementById('wa-pin-btn');
+    var $ddSep     = document.querySelector('.wa-dd-sep');
+    if ($renameBtn) $renameBtn.style.display = isGeneral ? 'none' : '';
+    if ($pinBtn) {
+      $pinBtn.style.display = isGeneral ? 'none' : '';
+      $pinBtn.textContent   = chat.pinned ? 'Bỏ ghim' : 'Ghim lên đầu';
+    }
+    if ($ddSep) $ddSep.style.display = isGeneral ? 'none' : '';
 
     /* Show form or messages */
     var hasChatData2 = !!(chat.lasoData || chat.contextData);
@@ -1513,13 +1538,22 @@ body{
     $ta.focus();
   }
 
-  /* ── Rename / delete ──────────────────────────────────────────── */
+  /* ── Toast ────────────────────────────────────────────────────── */
+  function showToast(msg) {
+    var t = document.createElement('div');
+    t.className = 'wa-toast';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function() { if (t.parentNode) t.parentNode.removeChild(t); }, 2200);
+  }
+
+  /* ── Rename ───────────────────────────────────────────────────── */
   function renameActiveChat() {
     var chat = getActive();
     if (!chat) return;
-    var name = prompt('Đổi tên lá số:', chat.label);
+    var name = prompt('Đổi tên:', chat.label);
     if (name && name.trim()) {
-      chat.label = name.trim();
+      chat.label     = name.trim();
       chat.updatedAt = Date.now();
       saveStorage();
       syncToCloud(chat);
@@ -1529,14 +1563,75 @@ body{
     closeDropdown();
   }
 
+  /* ── Pin ──────────────────────────────────────────────────────── */
+  function pinActiveChat() {
+    var chat = getActive();
+    if (!chat || chat.id === GENERAL_ID) return;
+    chat.pinned = !chat.pinned;
+    saveStorage();
+    renderSidebar();
+    var btn = document.getElementById('wa-pin-btn');
+    if (btn) btn.textContent = chat.pinned ? 'Bỏ ghim' : 'Ghim lên đầu';
+    closeDropdown();
+  }
+
+  /* ── Share ────────────────────────────────────────────────────── */
+  function shareActiveChat() {
+    var chat = getActive();
+    if (!chat) return;
+    var cfg      = toolCfg(chat.toolType);
+    var toolName = cfg ? cfg.name : 'Tử Vi Chat';
+    var lines    = [toolName + ' — ' + chat.label];
+    if (chat.summary) lines.push(chat.summary);
+    lines.push('');
+    chat.messages.slice(-4).forEach(function(m) {
+      if (m.role === 'user') {
+        lines.push('Hỏi: ' + m.content.slice(0, 200));
+      } else {
+        var c = (m.content || '').replace(/\*\*/g, '').slice(0, 300);
+        lines.push('Trả lời: ' + c + (c.length >= 300 ? '...' : ''));
+      }
+    });
+    lines.push('');
+    lines.push('Xem thêm tại tuviminhbao.com');
+    var text = lines.join('\n');
+    closeDropdown();
+    if (navigator.share) {
+      navigator.share({ title: toolName + ' — ' + chat.label, text: text }).catch(function() {});
+    } else {
+      navigator.clipboard.writeText(text)
+        .then(function() { showToast('Đã sao chép vào clipboard'); })
+        .catch(function() { prompt('Sao chép nội dung:', text); });
+    }
+  }
+
+  /* ── Clear chat ────────────────────────────────────────────────── */
+  function clearActiveChat() {
+    var chat = getActive();
+    if (!chat) return;
+    var confirmMsg = chat.id === GENERAL_ID
+      ? 'Xóa toàn bộ tin nhắn?'
+      : 'Xóa toàn bộ tin nhắn?\nThông tin lá số vẫn được giữ lại.';
+    if (!confirm(confirmMsg)) return;
+    chat.messages  = [];
+    chat.lastMsg   = '';
+    chat.updatedAt = Date.now();
+    saveStorage();
+    syncToCloud(chat);
+    renderSidebar();
+    renderMain();
+    closeDropdown();
+  }
+
+  /* ── Delete ───────────────────────────────────────────────────── */
   function deleteActiveChat() {
     var chat = getActive();
     if (!chat || chat.id === GENERAL_ID) return;
-    if (!confirm('Xóa lá số "' + chat.label + '"?\nToàn bộ lịch sử chat sẽ bị mất.')) return;
+    if (!confirm('Xóa "' + chat.label + '"?\nToàn bộ lịch sử chat sẽ bị mất.')) return;
     var deletedId = _activeId;
-    _chats  = _chats.filter(function(c) { return c.id !== _activeId; });
+    _chats    = _chats.filter(function(c) { return c.id !== _activeId; });
     _activeId = null;
-    _busy   = false;
+    _busy     = false;
     saveStorage();
     deleteFromCloud(deletedId);
     document.getElementById('wa-sidebar').classList.remove('wa-hidden');
@@ -1596,6 +1691,9 @@ body{
       document.getElementById('wa-dropdown').classList.toggle('open');
     });
     document.getElementById('wa-rename-btn').addEventListener('click', renameActiveChat);
+    document.getElementById('wa-pin-btn').addEventListener('click', pinActiveChat);
+    document.getElementById('wa-share-btn').addEventListener('click', shareActiveChat);
+    document.getElementById('wa-clear-btn').addEventListener('click', clearActiveChat);
     document.getElementById('wa-delete-btn').addEventListener('click', deleteActiveChat);
     document.addEventListener('click', closeDropdown);
 
