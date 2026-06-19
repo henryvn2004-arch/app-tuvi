@@ -287,15 +287,17 @@ a { color: var(--blue); text-decoration: none; }
 .menh-kho-lead { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 28px; }
 .menh-kho-text p { color: rgba(255,255,255,0.82); font-size: 15px; line-height: 1.7; margin: 0; }
 .menh-kho-years {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 8px;
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
 }
 .menh-kho-year-pill {
   background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 6px; text-align: center; padding: 8px 4px; text-decoration: none;
+  border-radius: 6px; text-align: center; padding: 8px 12px; text-decoration: none;
   color: rgba(255,255,255,0.85); font-size: 13px; transition: all 0.15s;
-  font-family: 'Noto Serif', Georgia, serif;
+  font-family: 'Noto Serif', Georgia, serif; white-space: nowrap;
 }
 .menh-kho-year-pill:hover { background: rgba(201,168,76,0.25); border-color: var(--gold-bright); color: var(--gold-bright); }
+.menh-kho-see-all { font-size: 13px; color: rgba(201,168,76,0.75); text-decoration: none; white-space: nowrap; padding: 4px 2px; }
+.menh-kho-see-all:hover { color: var(--gold-bright); text-decoration: underline; }
 .menh-kho-year-pill.hot { border-color: var(--gold-bright); color: var(--gold-bright); }
 .menh-kho-cta {
   display: inline-flex; align-items: center; gap: 8px;
@@ -453,10 +455,10 @@ a { color: var(--blue); text-decoration: none; }
           </div>
 
           <div class="chat-chips">
-            <a class="chat-chip" href="/tuvi-chat.html">Khi nào tôi lập gia đình?</a>
-            <a class="chat-chip" href="/tuvi-chat.html">Tháng tới có nên mua nhà?</a>
-            <a class="chat-chip" href="/tuvi-chat.html">Năm nay có nên đổi việc không?</a>
-            <a class="chat-chip" href="/tuvi-chat.html">Tài lộc năm 2026 thế nào?</a>
+            <a class="chat-chip" data-tool="laso"      href="/tuvi-chat.html?tool=laso&q=Khi+n%C3%A0o+t%C3%B4i+l%E1%BA%ADp+gia+%C4%91%C3%ACnh%3F">Khi nào tôi lập gia đình?</a>
+            <a class="chat-chip" data-tool="xem-tuoi"  href="/tuvi-chat.html?tool=xem-tuoi&q=T%C3%B4i+v%C3%A0+ng%C6%B0%E1%BB%9Di+y%C3%AAu+c%C3%B3+h%E1%BB%A3p+kh%C3%B4ng%3F">Tôi và người yêu có hợp không?</a>
+            <a class="chat-chip" data-tool="laso"      href="/tuvi-chat.html?tool=laso&q=N%C4%83m+nay+c%C3%B3+n%C3%AAn+%C4%91%E1%BB%95i+vi%E1%BB%87c+kh%C3%B4ng%3F">Năm nay có nên đổi việc không?</a>
+            <a class="chat-chip" data-tool="laso"      href="/tuvi-chat.html?tool=laso&q=T%C3%A0i+l%E1%BB%99c+n%C4%83m+2026+th%E1%BA%BF+n%C3%A0o%3F">Tài lộc năm 2026 thế nào?</a>
           </div>
 
           <div class="hero-skills">Hỏi được cả: tử vi · tướng số · phong thủy · ngày tốt · đặt tên</div>
@@ -571,73 +573,22 @@ a { color: var(--blue); text-decoration: none; }
     </div>
 
     <div class="menh-kho-years">
-      <a href="/menh-kho/1960" class="menh-kho-year-pill">1960</a>
-      <a href="/menh-kho/1961" class="menh-kho-year-pill">1961</a>
-      <a href="/menh-kho/1962" class="menh-kho-year-pill">1962</a>
-      <a href="/menh-kho/1963" class="menh-kho-year-pill">1963</a>
-      <a href="/menh-kho/1964" class="menh-kho-year-pill">1964</a>
-      <a href="/menh-kho/1965" class="menh-kho-year-pill">1965</a>
-      <a href="/menh-kho/1966" class="menh-kho-year-pill">1966</a>
-      <a href="/menh-kho/1967" class="menh-kho-year-pill">1967</a>
-      <a href="/menh-kho/1968" class="menh-kho-year-pill">1968</a>
-      <a href="/menh-kho/1969" class="menh-kho-year-pill">1969</a>
-      <a href="/menh-kho/1970" class="menh-kho-year-pill">1970</a>
-      <a href="/menh-kho/1971" class="menh-kho-year-pill">1971</a>
-      <a href="/menh-kho/1972" class="menh-kho-year-pill">1972</a>
-      <a href="/menh-kho/1973" class="menh-kho-year-pill">1973</a>
-      <a href="/menh-kho/1974" class="menh-kho-year-pill">1974</a>
-      <a href="/menh-kho/1975" class="menh-kho-year-pill hot">1975</a>
-      <a href="/menh-kho/1976" class="menh-kho-year-pill hot">1976</a>
-      <a href="/menh-kho/1977" class="menh-kho-year-pill hot">1977</a>
-      <a href="/menh-kho/1978" class="menh-kho-year-pill hot">1978</a>
-      <a href="/menh-kho/1979" class="menh-kho-year-pill hot">1979</a>
       <a href="/menh-kho/1980" class="menh-kho-year-pill hot">1980</a>
-      <a href="/menh-kho/1981" class="menh-kho-year-pill hot">1981</a>
-      <a href="/menh-kho/1982" class="menh-kho-year-pill hot">1982</a>
       <a href="/menh-kho/1983" class="menh-kho-year-pill hot">1983</a>
-      <a href="/menh-kho/1984" class="menh-kho-year-pill hot">1984</a>
       <a href="/menh-kho/1985" class="menh-kho-year-pill hot">1985</a>
-      <a href="/menh-kho/1986" class="menh-kho-year-pill hot">1986</a>
       <a href="/menh-kho/1987" class="menh-kho-year-pill hot">1987</a>
       <a href="/menh-kho/1988" class="menh-kho-year-pill hot">1988</a>
-      <a href="/menh-kho/1989" class="menh-kho-year-pill hot">1989</a>
       <a href="/menh-kho/1990" class="menh-kho-year-pill hot">1990</a>
-      <a href="/menh-kho/1991" class="menh-kho-year-pill hot">1991</a>
       <a href="/menh-kho/1992" class="menh-kho-year-pill hot">1992</a>
       <a href="/menh-kho/1993" class="menh-kho-year-pill hot">1993</a>
-      <a href="/menh-kho/1994" class="menh-kho-year-pill hot">1994</a>
       <a href="/menh-kho/1995" class="menh-kho-year-pill hot">1995</a>
-      <a href="/menh-kho/1996" class="menh-kho-year-pill hot">1996</a>
       <a href="/menh-kho/1997" class="menh-kho-year-pill hot">1997</a>
       <a href="/menh-kho/1998" class="menh-kho-year-pill hot">1998</a>
-      <a href="/menh-kho/1999" class="menh-kho-year-pill hot">1999</a>
       <a href="/menh-kho/2000" class="menh-kho-year-pill hot">2000</a>
-      <a href="/menh-kho/2001" class="menh-kho-year-pill">2001</a>
-      <a href="/menh-kho/2002" class="menh-kho-year-pill">2002</a>
-      <a href="/menh-kho/2003" class="menh-kho-year-pill">2003</a>
-      <a href="/menh-kho/2004" class="menh-kho-year-pill">2004</a>
       <a href="/menh-kho/2005" class="menh-kho-year-pill">2005</a>
-      <a href="/menh-kho/2006" class="menh-kho-year-pill">2006</a>
-      <a href="/menh-kho/2007" class="menh-kho-year-pill">2007</a>
-      <a href="/menh-kho/2008" class="menh-kho-year-pill">2008</a>
-      <a href="/menh-kho/2009" class="menh-kho-year-pill">2009</a>
       <a href="/menh-kho/2010" class="menh-kho-year-pill">2010</a>
-      <a href="/menh-kho/2011" class="menh-kho-year-pill">2011</a>
-      <a href="/menh-kho/2012" class="menh-kho-year-pill">2012</a>
-      <a href="/menh-kho/2013" class="menh-kho-year-pill">2013</a>
-      <a href="/menh-kho/2014" class="menh-kho-year-pill">2014</a>
       <a href="/menh-kho/2015" class="menh-kho-year-pill">2015</a>
-      <a href="/menh-kho/2016" class="menh-kho-year-pill">2016</a>
-      <a href="/menh-kho/2017" class="menh-kho-year-pill">2017</a>
-      <a href="/menh-kho/2018" class="menh-kho-year-pill">2018</a>
-      <a href="/menh-kho/2019" class="menh-kho-year-pill">2019</a>
-      <a href="/menh-kho/2020" class="menh-kho-year-pill">2020</a>
-      <a href="/menh-kho/2021" class="menh-kho-year-pill">2021</a>
-      <a href="/menh-kho/2022" class="menh-kho-year-pill">2022</a>
-      <a href="/menh-kho/2023" class="menh-kho-year-pill">2023</a>
-      <a href="/menh-kho/2024" class="menh-kho-year-pill">2024</a>
-      <a href="/menh-kho/2025" class="menh-kho-year-pill">2025</a>
-      <a href="/menh-kho/2026" class="menh-kho-year-pill">2026</a>
+      <a href="/menh-kho.html" class="menh-kho-see-all">Xem tất cả năm →</a>
     </div>
   </div>
 </section>
@@ -661,16 +612,11 @@ a { color: var(--blue); text-decoration: none; }
       <a href="/ngay-tot/khoi-cong" class="menh-kho-year-pill hot">Khởi công</a>
       <a href="/ngay-tot/khai-truong" class="menh-kho-year-pill hot">Khai trương</a>
       <a href="/ngay-tot/nhap-trach" class="menh-kho-year-pill hot">Nhập trạch</a>
-      <a href="/ngay-tot/xuat-hanh" class="menh-kho-year-pill hot">Xuất hành</a>
-      <a href="/ngay-tot/cau-tai" class="menh-kho-year-pill">Cầu tài</a>
+      <a href="/ngay-tot/xuat-hanh" class="menh-kho-year-pill">Xuất hành</a>
       <a href="/ngay-tot/sinh-con" class="menh-kho-year-pill">Sinh con</a>
-      <a href="/ngay-tot/an-tang" class="menh-kho-year-pill">An táng</a>
-      <a href="/ngay-tot/dao-gieng" class="menh-kho-year-pill">Đào giếng</a>
-      <a href="/ngay-tot/sua-nha" class="menh-kho-year-pill">Sửa nhà</a>
-      <span style="display:inline-block;width:1px;background:rgba(255,255,255,0.2);margin:0 4px"></span>
       <a href="/ngay-tot/lich/2026" class="menh-kho-year-pill">Lịch 2026</a>
       <a href="/ngay-tot/lich/2027" class="menh-kho-year-pill">Lịch 2027</a>
-      <a href="/ngay-tot/lich/2028" class="menh-kho-year-pill">Lịch 2028</a>
+      <a href="/ngay-tot" class="menh-kho-see-all">Xem tất cả →</a>
     </div>
   </div>
 </section>
@@ -1001,7 +947,13 @@ loadTools();
   document.querySelectorAll('.chat-chip').forEach(function (c) {
     c.addEventListener('click', function (e) {
       e.preventDefault();
-      go(c.textContent.trim());
+      var q    = c.textContent.trim();
+      var tool = c.getAttribute('data-tool') || '';
+      var url  = '/tuvi-chat.html';
+      var parts = [];
+      if (tool) parts.push('tool=' + encodeURIComponent(tool));
+      if (q)    parts.push('q='    + encodeURIComponent(q));
+      window.location.href = url + (parts.length ? '?' + parts.join('&') : '');
     });
   });
 })();

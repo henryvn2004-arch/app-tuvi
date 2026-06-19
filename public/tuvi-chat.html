@@ -1978,13 +1978,23 @@ body{
     });
     document.getElementById('tc-send').addEventListener('click', function() { doSend(); });
 
-    /* Homepage funnel: ?q=<câu hỏi> → tạo lá số mới, an sao xong tự gửi câu hỏi */
-    var pendingQ = '';
-    try { pendingQ = (new URLSearchParams(location.search).get('q') || '').trim().slice(0, 300); } catch(e) {}
-    if (pendingQ) {
-      _pendingQuestion = pendingQ;
+    /* Homepage funnel: ?tool=<toolType>&q=<câu hỏi> → chọn tool thẳng, skip picker */
+    var _initTool = '';
+    var _initQ    = '';
+    try {
+      var _sp = new URLSearchParams(location.search);
+      _initQ    = (_sp.get('q')    || '').trim().slice(0, 300);
+      _initTool = (_sp.get('tool') || '').trim();
+    } catch(e) {}
+    if (_initQ || _initTool) {
+      if (_initQ) _pendingQuestion = _initQ;
       try { history.replaceState({}, '', location.pathname); } catch(e) {}
-      createNewChat();
+      var _validTool = _initTool && (window.TOOL_CONFIGS || []).some(function(c) { return c.id === _initTool; });
+      if (_validTool) {
+        selectTool(_initTool);
+      } else {
+        createNewChat();
+      }
       return;
     }
 
