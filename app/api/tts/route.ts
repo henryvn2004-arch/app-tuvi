@@ -1,17 +1,11 @@
-// app/api/tts/route.ts — Vietnamese TTS via MS Edge Neural TTS (free, no API key)
+// app/api/tts/route.ts — Vietnamese TTS via Google Translate (free, no API key)
 export const maxDuration = 20;
 
 import { NextRequest, NextResponse } from 'next/server';
-import { MsEdgeTTS, OUTPUT_FORMAT } from 'msedge-tts';
 import { CORS_HEADERS, err, options as corsOptions } from '@/lib/cors';
 
-const MAX_CHARS = 1500;
-
-// Vietnamese Neural voices available in Edge TTS
-const ALLOWED_VOICES: Record<string, string> = {
-  'hoaimy':  'vi-VN-HoaiMyNeural',   // female (default)
-  'namminh': 'vi-VN-NamMinhNeural',  // male
-};
+const CHUNK_MAX  = 180;   // Google TTS char limit per request
+const TEXT_MAX   = 1500;
 
 function cleanText(raw: string): string {
   return raw
@@ -26,7 +20,51 @@ function cleanText(raw: string): string {
     .replace(/\n/g, ' ')
     .replace(/\s{2,}/g, ' ')
     .trim()
-    .slice(0, MAX_CHARS);
+    .slice(0, TEXT_MAX);
+}
+
+// Split into chunks ≤ CHUNK_MAX chars, breaking at word boundaries
+function splitChunks(text: string): string[] {
+  const chunks: string[] = [];
+  // Split on sentence-ending punctuation first
+  const sentences = text.split(/(?<=[.!?,;:])\s+/);
+  let buf = '';
+  for (const s of sentences) {
+    const candidate = buf ? buf + ' ' + s : s;
+    if (candidate.length <= CHUNK_MAX) {
+      buf = candidate;
+    } else {
+      if (buf) chunks.push(buf);
+      // Sentence itself too long — split by words
+      if (s.length > CHUNK_MAX) {
+        const words = s.split(' ');
+        buf = '';
+        for (const w of words) {
+          const c = buf ? buf + ' ' + w : w;
+          if (c.length <= CHUNK_MAX) { buf = c; }
+          else { if (buf) chunks.push(buf); buf = w; }
+        }
+      } else {
+        buf = s;
+      }
+    }
+  }
+  if (buf) chunks.push(buf);
+  return chunks.filter(Boolean);
+}
+
+async function googleTTS(text: string): Promise<Buffer> {
+  const url = 'https://translate.google.com/translate_tts?' + new URLSearchParams({
+    ie: 'UTF-8', q: text, tl: 'vi', client: 'tw-ob', ttsspeed: '0.9',
+  });
+  const res = await fetch(url, {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'Referer':    'https://translate.google.com/',
+    },
+  });
+  if (!res.ok) throw new Error(`Google TTS ${res.status}`);
+  return Buffer.from(await res.arrayBuffer());
 }
 
 export function OPTIONS() {
@@ -34,30 +72,19 @@ export function OPTIONS() {
 }
 
 export async function POST(req: NextRequest) {
-  let body: { text?: string; voice?: string };
+  let body: { text?: string };
   try { body = await req.json(); }
   catch { return err('Invalid JSON', 400); }
 
   const text = cleanText(body.text || '');
   if (!text) return err('Thiếu text', 400);
 
-  const voiceName = ALLOWED_VOICES[body.voice || ''] ?? ALLOWED_VOICES['hoaimy'];
-
-  const tts = new MsEdgeTTS();
   try {
-    await tts.setMetadata(voiceName, OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3);
-    const { audioStream } = tts.toStream(text);
+    const chunks   = splitChunks(text);
+    const buffers  = await Promise.all(chunks.map(googleTTS));
+    const combined = Buffer.concat(buffers);
 
-    const chunks: Buffer[] = [];
-    await new Promise<void>((resolve, reject) => {
-      audioStream.on('data', (chunk: Buffer) => chunks.push(chunk));
-      audioStream.on('end', resolve);
-      audioStream.on('error', reject);
-    });
-
-    const audioBuffer = Buffer.concat(chunks);
-
-    return new NextResponse(audioBuffer, {
+    return new NextResponse(combined, {
       status: 200,
       headers: {
         ...CORS_HEADERS,
@@ -66,9 +93,7 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (e) {
-    console.error('[TTS] msedge-tts error', e);
+    console.error('[TTS] error', e);
     return err('TTS error', 500);
-  } finally {
-    tts.close();
   }
 }
