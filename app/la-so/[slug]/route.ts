@@ -1175,9 +1175,12 @@ function buildIsrHTML(ls: Rec, params: IsrParams, slug: string, relatedArticles:
   const sc = scores[cungMenh];
   const diemMenh = sc?.tong ?? 0;
 
-  // OG image
-  const ccNames = cachCuc.slice(0,3).map(c=>String(c.ten||'')).join(',');
-  const ogUrl   = `${BASE}/api/og/laso?cm=${encodeURIComponent(cungMenh)}&ct=${encodeURIComponent(chinhTinh)}&cc=${encodeURIComponent(ccNames)}&diem=${diemMenh.toFixed(1)}&gt=${encodeURIComponent(gtLabel)}&year=${year}&cc_nam=${encodeURIComponent(canChiNam)}`;
+  // OG image — CHỈ key theo cung mệnh (12 biến thể) để Vercel cache vĩnh viễn.
+  // Trước đây nhét cm+ct+cc+diem+gt+year+cc_nam = gần như unique mỗi lá số →
+  // 587K lượt gen ảnh edge (đốt Edge Requests + FDT). Trang ISR là trang bot cào,
+  // không phải trang user share (user share đi qua laso_public/buildPublicHTML),
+  // nên ảnh chung theo cung mệnh là đủ.
+  const ogUrl   = `${BASE}/api/og/laso?cm=${encodeURIComponent(cungMenh)}`;
 
   const url     = `${BASE}/la-so/${slug}`;
   const title   = `Lá Số Tử Vi ${canChiNam} ${gtLabel} — Sinh ${pad(dd)}/${pad(mm)}/${year} Giờ ${gioLabel} — Cung ${cungMenh}`;
