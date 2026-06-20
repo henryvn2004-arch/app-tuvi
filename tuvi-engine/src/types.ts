@@ -149,6 +149,8 @@ export interface LasoResult {
   cachCucTungCung: CungYNghia[];
   cungScores: Record<string, CungScores>;
   tieuVanScores?: unknown[];
+  thangSinhAL: number;  // tháng sinh âm lịch (1–12)
+  gioSinhIdx: number;   // giờ sinh: Tý=0, Sửu=1, … Hợi=11
 }
 
 // ─── Input params ────────────────────────────────────────────

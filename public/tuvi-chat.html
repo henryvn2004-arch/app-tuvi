@@ -1061,6 +1061,8 @@ var TuviTTS = (function() {
         ? Object.fromEntries(Object.entries(ls.cachCucTungCung).map(function(e) { return [e[0], e[1].slice(0, 8)]; }))
         : undefined,
       cungScores:    ls.cungScores || undefined,
+      thangSinhAL:   ls.thangSinhAL,
+      gioSinhIdx:    ls.gioSinhIdx,
       tieuVanScores: (ls.tieuVanScores || []).map(function(t) {
         return {
           nam: t.nam, tuoi: t.tuoi, dvIdx: t.dvIdx, mainScore: t.mainScore,

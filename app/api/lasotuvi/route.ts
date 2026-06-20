@@ -7,6 +7,8 @@ import {
   computeMonth, topDaysForActivity, ACTIVITY_META, ACTIVITY_LIST,
   type ActivityKey,
 } from '../../../tuvi-engine/dist/ngay-tot/index.js';
+import { tinhNguyetHan, tinhNhatHan } from '../../../tuvi-engine/dist/van-han/index.js';
+import { solarToLunar } from '../../../tuvi-engine/dist/lunar/convert.js';
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!;
 
@@ -306,7 +308,7 @@ Bạn được cấp NGUYÊN LÁ SỐ ở phần dưới: đủ 12 cung (chính 
 
 XÁC ĐỊNH PHẠM VI (câu hỏi của user thường NGẮN/MƠ HỒ — bạn PHẢI tự khoanh vùng cung, không được trả lời hời hợt):
 - Map lĩnh vực → cung cần đọc: công việc/sự nghiệp/thăng tiến/làm sếp → Quan Lộc + Mệnh; tiền bạc/đầu tư/làm giàu → Tài Bạch + Phúc Đức; tình duyên/hôn nhân/vợ chồng → Phu Thê + Mệnh; con cái → Tử Tức; sức khỏe/bệnh → Tật Ách; nhà đất/bất động sản → Điền Trạch; tính cách/vận mệnh/tổng quan → Mệnh + Thân; cha mẹ/gia đạo → Phụ Mẫu + Phúc Đức; bạn bè/cấp dưới/quý nhân → Nô Bộc; đi xa/định cư/nước ngoài → Thiên Di; anh em → Huynh Đệ.
-- Câu hỏi gắn THỜI GIAN cụ thể (một năm/tháng, "bao giờ", "năm nay/năm sau") → GỌI tool tra_van_han; ngày tốt làm việc lớn → GỌI xem_ngay_tot.
+- Câu hỏi gắn với MỘT NĂM cụ thể ("năm nay/năm sau", "bao giờ", "năm X tuổi") → GỌI tra_tieu_van. Câu hỏi về HẠN THÁNG / nguyệt hạn ("tháng X/YYYY thế nào") → GỌI tra_nguyet_van. Câu hỏi về HẠN NGÀY / nhật hạn ("ngày X tháng Y") → GỌI tra_nhat_van. Ngày tốt làm việc lớn → GỌI xem_ngay_tot.
 - Câu hỏi mơ hồ → tự chọn cung/lĩnh vực hợp lý nhất rồi luận ĐẦY ĐỦ, đừng hỏi lại lòng vòng.
 
 QUY TRÌNH LUẬN (bám sát như phần luận giải chuyên sâu — viết thành VĂN XUÔI liền mạch, KHÔNG đánh số, KHÔNG tiêu đề con):
@@ -587,7 +589,7 @@ function extractDatTenContext(data: any): string {
 const TOOLS_INSTRUCTION = (hasLaso: boolean) => `
 
 CÔNG CỤ (tool) — DÙNG ĐÚNG LÚC, TUYỆT ĐỐI KHÔNG bịa số liệu thời gian:
-${hasLaso ? '- Câu hỏi gắn với MỘT NĂM cụ thể (năm nay, năm sau, "bao giờ", một năm/tuổi nhất định) → GỌI tra_van_han để lấy điểm vận năm đó, tiểu hạn, lưu niên, sao cát/sát. Không tự đoán điểm/cung khi chưa gọi tool.\n' : ''}- Câu hỏi NGÀY TỐT để làm việc trọng đại (cưới hỏi, nhập trạch, khai trương, mua/bán nhà, khởi công, xuất hành...) trong một tháng → GỌI xem_ngay_tot.
+${hasLaso ? '- Câu hỏi gắn với MỘT NĂM cụ thể (năm nay, năm sau, "bao giờ", một năm/tuổi nhất định) → GỌI tra_tieu_van để lấy điểm vận năm đó, tiểu hạn, lưu niên, sao cát/sát. Không tự đoán điểm/cung khi chưa gọi tool.\n' : ''}${hasLaso ? '- Câu hỏi về HẠN THÁNG / nguyệt hạn ("tháng X/YYYY", "tháng này thế nào"...) → GỌI tra_nguyet_van; kết quả trả về 3 cách tính, ưu tiên luận theo Cách 1.\n' : ''}${hasLaso ? '- Câu hỏi về HẠN NGÀY / nhật hạn ("ngày X tháng Y", "hôm nay"...) → GỌI tra_nhat_van; kết quả trả về cung nhật hạn theo Cách 1.\n' : ''}- Câu hỏi NGÀY TỐT để làm việc trọng đại (cưới hỏi, nhập trạch, khai trương, mua/bán nhà, khởi công, xuất hành...) trong một tháng → GỌI xem_ngay_tot.
 Sau khi có kết quả tool, luận giải dứt khoát và neo vào đúng các con số tool trả về (điểm thấp/nhiều sát tinh phải cảnh báo rõ). Câu nào không cần tool thì trả lời thẳng.`;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -596,12 +598,39 @@ function buildTools(hasLaso: boolean): any[] {
   const tools: any[] = [];
   if (hasLaso) {
     tools.push({
-      name: 'tra_van_han',
+      name: 'tra_tieu_van',
       description: 'Tra vận hạn (tiểu vận) của lá số đang xem cho MỘT NĂM dương lịch cụ thể: điểm vận năm (0–10), xu hướng lên/xuống, cung tiểu hạn, cung lưu niên đại hạn, số sao cát/sát. Dùng cho mọi câu hỏi gắn với một năm hoặc "bao giờ".',
       input_schema: {
         type: 'object',
         properties: { nam: { type: 'integer', description: 'Năm dương lịch cần tra, ví dụ 2027' } },
         required: ['nam'],
+      },
+    });
+  }
+  if (hasLaso) {
+    tools.push({
+      name: 'tra_nguyet_van',
+      description: 'Tra lưu nguyệt hạn (hạn tháng) của lá số cho một tháng dương lịch cụ thể: cung nguyệt hạn theo 3 cách khởi, sao chính tại mỗi cung. Dùng khi user hỏi về một tháng cụ thể.',
+      input_schema: {
+        type: 'object',
+        properties: {
+          thang: { type: 'integer', description: 'Tháng dương lịch (1–12)' },
+          nam:   { type: 'integer', description: 'Năm dương lịch, ví dụ 2027' },
+        },
+        required: ['thang', 'nam'],
+      },
+    });
+    tools.push({
+      name: 'tra_nhat_van',
+      description: 'Tra lưu nhật hạn (hạn ngày) của lá số cho một ngày dương lịch cụ thể: cung nhật hạn, sao chính tại cung đó. Dùng khi user hỏi về một ngày cụ thể.',
+      input_schema: {
+        type: 'object',
+        properties: {
+          ngay:  { type: 'integer', description: 'Ngày dương lịch (1–31)' },
+          thang: { type: 'integer', description: 'Tháng dương lịch (1–12)' },
+          nam:   { type: 'integer', description: 'Năm dương lịch' },
+        },
+        required: ['ngay', 'thang', 'nam'],
       },
     });
   }
@@ -650,6 +679,100 @@ function execTraVanHan(lasoData: any, input: any): string {
   out += `- Tiểu hạn nhập cung ${tv.tieuHanCung} — chính tinh: ${starsOf(tv.tieuHanCung) || '?'}.\n`;
   out += `- Lưu niên đại hạn vào cung ${tv.luuNienCung} — chính tinh: ${starsOf(tv.luuNienCung) || '?'}.\n`;
   if (dv) out += `- Thuộc đại vận ${dv.diaChi} (${dv.tuoiStart}–${dv.tuoiEnd} tuổi)${dv.scoring?.tong != null ? `, điểm đại vận ${dv.scoring.tong}/10 ${dv.scoring.flag || ''}` : ''}.\n`;
+  return out;
+}
+
+const _DIA_CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tị','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+const _mod12 = (n: number) => ((n % 12) + 12) % 12;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function _starsOf(palaces: any[], idx: number): string {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const major = ((palaces[idx]?.majorStars || []) as any[]).map((s: any) => s.ten).filter(Boolean).join(', ');
+  return major || 'vô chính diệu';
+}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function _cungNameOf(palaces: any[], idx: number): string {
+  return palaces[idx]?.cungName || _DIA_CHI[idx] || '?';
+}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function _tieuHanIdxOf(palaces: any[], tieuHanCung: string): number {
+  return palaces.findIndex((p: any) => p.cungName === tieuHanCung);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function execTraNguyetVan(lasoData: any, input: any): string {
+  const thang = Number(input?.thang), nam = Number(input?.nam);
+  if (!thang || !nam) return 'Thiếu tham số tháng hoặc năm.';
+
+  const lunar = solarToLunar(1, thang, nam);
+  const thangAL = lunar.month;
+
+  const tvs = lasoData?.tieuVanScores;
+  if (!Array.isArray(tvs) || !tvs.length) return 'Lá số này chưa có dữ liệu tiểu vận theo năm.';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const tv = tvs.find((t: any) => Number(t.nam) === nam);
+  if (!tv) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const yrs = tvs.map((t: any) => Number(t.nam));
+    return `Năm ${nam} ngoài phạm vi lá số (chỉ có ${Math.min(...yrs)}–${Math.max(...yrs)}).`;
+  }
+
+  const palaces = lasoData.palaces || [];
+  const tieuHanIdx = _tieuHanIdxOf(palaces, tv.tieuHanCung);
+  if (tieuHanIdx === -1) return `Không tìm thấy cung tiểu hạn "${tv.tieuHanCung}" trong lá số.`;
+
+  const thangSinhAL = Number(lasoData.thangSinhAL);
+  const gioSinhIdx  = lasoData.gioSinhIdx != null ? Number(lasoData.gioSinhIdx) : -1;
+  if (!thangSinhAL || gioSinhIdx === -1) return 'Lá số thiếu dữ liệu tháng sinh / giờ sinh để tính nguyệt hạn.';
+
+  const khoi = tinhNguyetHan(tieuHanIdx, thangSinhAL, gioSinhIdx);
+  const c1 = _mod12(khoi.cach1 + thangAL - 1);
+  const c2 = _mod12(khoi.cach2 + thangAL - 1);
+  const c3 = _mod12(khoi.cach3 + thangAL - 1);
+
+  let out = `NGUYỆT HẠN THÁNG ${thang}/${nam} (ÂL tháng ${thangAL}, tuổi ${tv.tuoi}):\n`;
+  out += `- Tiểu hạn năm ${nam}: cung ${tv.tieuHanCung} (${_DIA_CHI[tieuHanIdx] || '?'}).\n`;
+  out += `- Cách 1 (hay dùng): cung ${_cungNameOf(palaces, c1)} — chính tinh: ${_starsOf(palaces, c1)}.\n`;
+  out += `- Cách 2: cung ${_cungNameOf(palaces, c2)} — chính tinh: ${_starsOf(palaces, c2)}.\n`;
+  out += `- Cách 3: cung ${_cungNameOf(palaces, c3)} — chính tinh: ${_starsOf(palaces, c3)}.\n`;
+  out += `Ưu tiên luận theo Cách 1; nếu cần, đối chiếu thêm Cách 2 và Cách 3 để kiểm chứng.\n`;
+  return out;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function execTraNhatVan(lasoData: any, input: any): string {
+  const ngay = Number(input?.ngay), thang = Number(input?.thang), nam = Number(input?.nam);
+  if (!ngay || !thang || !nam) return 'Thiếu tham số ngày, tháng hoặc năm.';
+
+  const lunar = solarToLunar(ngay, thang, nam);
+  const ngayAL = lunar.day, thangAL = lunar.month;
+
+  const tvs = lasoData?.tieuVanScores;
+  if (!Array.isArray(tvs) || !tvs.length) return 'Lá số này chưa có dữ liệu tiểu vận theo năm.';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const tv = tvs.find((t: any) => Number(t.nam) === nam);
+  if (!tv) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const yrs = tvs.map((t: any) => Number(t.nam));
+    return `Năm ${nam} ngoài phạm vi lá số (chỉ có ${Math.min(...yrs)}–${Math.max(...yrs)}).`;
+  }
+
+  const palaces = lasoData.palaces || [];
+  const tieuHanIdx = _tieuHanIdxOf(palaces, tv.tieuHanCung);
+  if (tieuHanIdx === -1) return `Không tìm thấy cung tiểu hạn "${tv.tieuHanCung}" trong lá số.`;
+
+  const thangSinhAL = Number(lasoData.thangSinhAL);
+  const gioSinhIdx  = lasoData.gioSinhIdx != null ? Number(lasoData.gioSinhIdx) : -1;
+  if (!thangSinhAL || gioSinhIdx === -1) return 'Lá số thiếu dữ liệu tháng sinh / giờ sinh.';
+
+  const khoi = tinhNguyetHan(tieuHanIdx, thangSinhAL, gioSinhIdx);
+  const nguyetHanIdx = _mod12(khoi.cach1 + thangAL - 1);
+  const nhatHanIdx   = tinhNhatHan(nguyetHanIdx, ngayAL);
+
+  let out = `NHẬT HẠN NGÀY ${ngay}/${thang}/${nam} (ÂL ngày ${ngayAL} tháng ${thangAL}, tuổi ${tv.tuoi}):\n`;
+  out += `- Nguyệt hạn ÂL tháng ${thangAL}: cung ${_cungNameOf(palaces, nguyetHanIdx)} — chính tinh: ${_starsOf(palaces, nguyetHanIdx)}.\n`;
+  out += `- Nhật hạn ÂL ngày ${ngayAL}: cung ${_cungNameOf(palaces, nhatHanIdx)} — chính tinh: ${_starsOf(palaces, nhatHanIdx)}.\n`;
   return out;
 }
 
@@ -733,7 +856,9 @@ async function handleChat(body: any): Promise<Response> {
           toolsUsed.push(tu.name);
           let resultText = '';
           try {
-            if (tu.name === 'tra_van_han') resultText = execTraVanHan(lasoDataForTools, tu.input);
+            if (tu.name === 'tra_tieu_van') resultText = execTraVanHan(lasoDataForTools, tu.input);
+            else if (tu.name === 'tra_nguyet_van') resultText = execTraNguyetVan(lasoDataForTools, tu.input);
+            else if (tu.name === 'tra_nhat_van') resultText = execTraNhatVan(lasoDataForTools, tu.input);
             else if (tu.name === 'xem_ngay_tot') resultText = execXemNgayTot(tu.input);
             else resultText = 'Công cụ không tồn tại.';
           } catch (e: unknown) { resultText = 'Lỗi chạy công cụ: ' + (e as Error).message; }
@@ -845,11 +970,16 @@ async function handleChatStream(body: any): Promise<Response> {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const results = toolUses.map((tu: any) => {
             toolsUsed.push(tu.name);
-            const label = tu.name === 'tra_van_han' ? 'Đang tra vận hạn...' : 'Đang xem ngày tốt...';
+            const label = tu.name === 'tra_tieu_van' ? 'Đang tra vận hạn...'
+              : tu.name === 'tra_nguyet_van' ? 'Đang tra nguyệt hạn...'
+              : tu.name === 'tra_nhat_van'   ? 'Đang tra nhật hạn...'
+              : 'Đang xem ngày tốt...';
             send({ type: 'tool', name: tu.name, label });
             let resultText = '';
             try {
-              if (tu.name === 'tra_van_han') resultText = execTraVanHan(lasoDataForTools, tu.input);
+              if (tu.name === 'tra_tieu_van') resultText = execTraVanHan(lasoDataForTools, tu.input);
+              else if (tu.name === 'tra_nguyet_van') resultText = execTraNguyetVan(lasoDataForTools, tu.input);
+              else if (tu.name === 'tra_nhat_van') resultText = execTraNhatVan(lasoDataForTools, tu.input);
               else if (tu.name === 'xem_ngay_tot') resultText = execXemNgayTot(tu.input);
               else resultText = 'Công cụ không tồn tại.';
             } catch (e: unknown) { resultText = 'Lỗi chạy công cụ: ' + (e as Error).message; }
