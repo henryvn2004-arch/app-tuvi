@@ -93,7 +93,11 @@ export function computeLaso(birth: BirthParams, namXem?: number): ComputeLasoRes
     const ls = (anSaoLaSo as (o: object) => Rec)({
       ngayAL: al.day,
       thangAL: al.month,
-      namAL: year,
+      // namAL = năm ÂM lịch (al.year), KHÔNG phải năm dương input. Người
+      // sinh tháng 1 trước Tết có năm âm = năm trước → tuổi mụ (tuoiXem)
+      // và tiểu vận phụ thuộc vào đây. Phải khớp client (anSaoLaSo dùng
+      // conv.amLich.year) để lá số/tuổi y hệt mọi nền tảng.
+      namAL: al.year,
       canNam: conv.canNam,
       chiNam: conv.chiNam,
       gioIdx: hourBranch,
