@@ -96,12 +96,15 @@
   }
   #composer button:disabled{opacity:.5;cursor:default}
   .hint{font-size:11px;color:var(--muted);padding:0 16px 8px;background:var(--card)}
+  .newbtn{font:inherit;font-size:12px;color:var(--accent);background:#fff;border:1px solid var(--line);border-radius:8px;padding:5px 11px;cursor:pointer}
+  .newbtn:hover{background:#fbf2f2}
 </style>
 </head>
 <body>
 <header>
   <img src="/thay-tuvi.webp" alt="">
   <div class="t">Tử Vi Minh Bảo</div>
+  <button id="newChat" class="newbtn" title="Cuộc trò chuyện mới">+ Mới</button>
   <div class="v" id="ver">v1 · web</div>
 </header>
 
@@ -146,10 +149,16 @@
   });
 
   // ── State hội thoại theo Contract v1 ─────────────────────────
-  var sessionId = (crypto.randomUUID ? crypto.randomUUID()
-                   : 'sess-' + Date.now() + '-' + Math.random().toString(36).slice(2));
-  var messages = [];            // [{role, content}]
-  var sending  = false;
+  function newId(){
+    return crypto.randomUUID ? crypto.randomUUID()
+      : 'sess-' + Date.now() + '-' + Math.random().toString(36).slice(2);
+  }
+  // Khôi phục cuộc trò chuyện đã lưu (giữ qua reload).
+  var restored = {};
+  try { restored = JSON.parse(localStorage.getItem('v1_chat') || '{}'); } catch(e){}
+  var sessionId = restored.sessionId || newId();
+  var messages  = Array.isArray(restored.messages) ? restored.messages : []; // [{role, content}]
+  var sending   = false;
 
   var thread   = document.getElementById('thread');
   var box      = document.getElementById('box');
@@ -188,6 +197,11 @@
     } catch(e){ return null; }
   }
 
+  // ── Lưu / khôi phục hội thoại ────────────────────────────────
+  function persist(){
+    try { localStorage.setItem('v1_chat', JSON.stringify({ sessionId: sessionId, messages: messages.slice(-40) })); } catch(e){}
+  }
+
   // ── Render helpers ───────────────────────────────────────────
   function el(cls, html){
     var d = document.createElement('div');
@@ -204,6 +218,7 @@
     sending = true; sendBtn.disabled = true;
 
     messages.push({ role:'user', content:text });
+    persist();
     el('msg user', esc(text));
     box.value = ''; autoGrow();
 
@@ -281,7 +296,7 @@
         botEl.querySelector('.bd').textContent = acc;
         scroll();
       } else if (name === 'done'){
-        if (acc) messages.push({ role:'assistant', content:acc });
+        if (acc) { messages.push({ role:'assistant', content:acc }); persist(); }
         if (data.paywall && typeof data.paywall.balance === 'number'){
           hint.textContent = 'Còn ' + data.paywall.balance + ' Lượng';
         }
@@ -308,6 +323,30 @@
   });
   document.getElementById('composer').addEventListener('submit', function(e){
     e.preventDefault(); send(box.value);
+  });
+
+  // Render lại các lượt đã lưu (sau khi el/esc đã định nghĩa).
+  function renderStored(){
+    messages.forEach(function(m){
+      if (m.role === 'user') el('msg user', esc(m.content));
+      else el('msg bot', '<div class="nm">THẦY TỬ VI</div>' + esc(m.content));
+    });
+  }
+  if (messages.length) renderStored();
+
+  // Cuộc trò chuyện mới: xoá lịch sử, phiên mới (giữ form ngày sinh).
+  document.getElementById('newChat').addEventListener('click', function(){
+    if (sending) return;
+    if (messages.length && !confirm('Bắt đầu cuộc trò chuyện mới? Lịch sử hiện tại sẽ bị xoá.')) return;
+    messages = [];
+    sessionId = newId();
+    try { localStorage.removeItem('v1_chat'); } catch(e){}
+    // Giữ lại lời chào đầu (phần tử .msg.bot đầu tiên), bỏ phần còn lại.
+    var first = thread.querySelector('.msg.bot');
+    thread.innerHTML = '';
+    if (first) thread.appendChild(first);
+    hint.textContent = '';
+    box.focus();
   });
 
   box.focus();
