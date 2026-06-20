@@ -25,6 +25,9 @@ import {
 } from '@/lib/contract/v1';
 import { buildToolDefs, executeTool, newToolContext } from '@/lib/tools/registry';
 import { computeLaso, formatLasoContext } from '@/lib/engine/laso';
+// Template prompt dùng CHUNG với /api/lasotuvi (một bộ não).
+import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL } from '@/lib/agent/prompts';
+import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
 import { getChatConfig, type ChatConfig } from '@/lib/config/appConfig';
 import {
   paywallDisabled,
@@ -142,16 +145,27 @@ async function runAgent(
   const toolsUsed: string[] = [];
 
   // Seed lá số nếu client gửi sẵn birth hợp lệ (đỡ phải hỏi lại).
-  // LUÔN inject thời gian thực (server) — nếu không LLM đoán "năm nay"
-  // theo mốc huấn luyện (sai). Tính theo múi giờ VN.
-  let system: string = cfg.systemPrompt + '\n\n' + timeContext();
+  let lasoCtx = '';
   if (req.birth) {
     const res = computeLaso(req.birth);
     if (res.ok && res.ls) {
       ctx.ls = res.ls;
-      system += '\n\n=== LÁ SỐ ĐÃ LẬP (luận trên dữ liệu này) ===\n' + formatLasoContext(res.ls);
+      lasoCtx = formatLasoContext(res.ls);
     }
   }
+  const hasLaso = !!ctx.ls;
+
+  // Prompt: ưu tiên OVERRIDE từ app_config (DB); mặc định dùng TEMPLATE
+  // chung lib/agent/prompts (một nguồn với /api/lasotuvi — sửa văn phong
+  // 1 chỗ). Template tự inject thời gian thực + luật chống tâng bốc.
+  let system: string;
+  if (cfg.systemPrompt) {
+    system = cfg.systemPrompt + '\n\n' + timeContext();
+    if (lasoCtx) system += '\n\n=== LÁ SỐ ĐÃ LẬP (luận trên dữ liệu này) ===\n' + lasoCtx;
+  } else {
+    system = hasLaso ? CHAT_SYSTEM_LASO(lasoCtx) : CHAT_SYSTEM_GENERAL();
+  }
+  system += TOOLS_INSTRUCTION(hasLaso);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const convo: any[] = (req.messages as ChatMessage[]).slice(-10).map((m) => ({

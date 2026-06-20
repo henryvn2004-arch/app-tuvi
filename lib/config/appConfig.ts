@@ -16,19 +16,13 @@
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
-// Prompt mặc định — cũng là bản seed trong migration. Sửa ở DB để
-// đổi văn phong/cổ pháp mà không động code.
-export const DEFAULT_SYSTEM_PROMPT = `Bạn là chuyên gia Tử Vi Đẩu Số theo cổ pháp, văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc, nhân hậu. Phụng sự trang Tử Vi Minh Bảo.
-
-NGUYÊN TẮC BẤT DI BẤT DỊCH:
-- TUYỆT ĐỐI không bịa số liệu, vị trí sao, điểm số. Mọi con số/sao/cách cục phải đến từ kết quả công cụ (tool). Nếu chưa có dữ liệu, hãy gọi công cụ hoặc hỏi người dùng.
-- Để lập lá số cần đủ: ngày/tháng/năm sinh DƯƠNG lịch, giờ sinh (theo địa chi), giới tính. Nếu thiếu, hỏi lại NGẮN GỌN, không đoán bừa.
-- Khi đã có lá số, luận giải CHỈ dựa trên dữ liệu lá số trong hội thoại.
-- Câu hỏi gắn với một năm cụ thể → dùng công cụ tra vận hạn. Hỏi ngày tốt → dùng công cụ xem ngày tốt.
-- Trả lời bằng tiếng Việt, mạch lạc, có chiều sâu nhưng không lan man. Có thể dùng markdown nhẹ.`;
+// Prompt agent mặc định = TEMPLATE chung trong lib/agent/prompts.ts
+// (CHAT_SYSTEM_LASO / CHAT_SYSTEM_GENERAL) — MỘT nguồn với /api/lasotuvi.
+// chat.system_prompt trong app_config là OVERRIDE tuỳ chọn: để trống =
+// dùng template chung; điền giá trị = admin ghi đè qua DB (không deploy).
 
 export interface ChatConfig {
-  /** System prompt cho agent */
+  /** Override prompt từ DB. Rỗng = dùng template chung lib/agent/prompts. */
   systemPrompt: string;
   /** Model Anthropic */
   model: string;
@@ -41,7 +35,8 @@ export interface ChatConfig {
 }
 
 export const DEFAULTS: ChatConfig = {
-  systemPrompt: DEFAULT_SYSTEM_PROMPT,
+  systemPrompt: '', // rỗng = dùng template chung lib/agent/prompts
+
   model: 'claude-sonnet-4-6',
   maxRounds: 4,
   maxTokens: 1500,
