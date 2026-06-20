@@ -5,6 +5,16 @@
 
 ---
 
+## 📍 TRẠNG THÁI HIỆN TẠI (2026-06-20)
+
+- ✅ **Phase 0** (bộ não `/api/v1/chat` + Contract v1 + config DB + paywall) — DONE, merged.
+- ✅ **Phase 1 một phần:** PWA + `chat-v2.html` (vỏ mỏng tham chiếu, lưu hội thoại).
+- 🔵 **Sprint 1.1 (laso-only) — ĐANG REVIEW (PR #78):** `tuvi-chat.html` luồng lá số gọi `/api/v1/chat` (server tính). Cờ `USE_V1_LASO` + escape hatch `localStorage.tvc_use_v1='0'`.
+- ⏭ **Kế tiếp:** merge #78 → Henry test preview → **Sprint 1.2** (kéo tu-binh/phong-thuy/xem-tuoi/dat-ten vào não rồi flip nốt 6 tool trong `tuvi-chat.html`).
+- Status chi tiết + quy ước phiên: xem `CLAUDE.md` mục "🟢 ĐANG LÀM".
+
+---
+
 ## ⏳ VIỆC TAY CẦN LÀM (chưa xong)
 
 - [ ] **Chạy `_patches/migration-app-config.sql`** trong Supabase SQL Editor
