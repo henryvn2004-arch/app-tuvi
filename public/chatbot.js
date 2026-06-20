@@ -429,7 +429,7 @@
         tieuHanCung: t.tieuHanCung, luuNienCung: t.luuNienCung,
       })),
       nguyetVanScores: (ls.nguyetVanScores || []).map(e => ({
-        nam: e.nam, tuoi: e.tuoi, khoi: e.khoi,
+        nam: e.nam, tuoi: e.tuoi, gieng: e.gieng,
       })),
       palaces,
       daiVans,

@@ -724,26 +724,22 @@ function execTraNguyetVan(lasoData: any, input: any): string {
 
   // Ưu tiên dùng nguyetVanScores pre-computed (engine mới); fallback về thangSinhAL/gioSinhIdx
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const preKhoi = (lasoData.nguyetVanScores || []).find((e: any) => Number(e.nam) === nam)?.khoi;
-  let khoi: { cach1: number; cach2: number; cach3: number };
-  if (preKhoi) {
-    khoi = preKhoi;
+  const preGieng = (lasoData.nguyetVanScores || []).find((e: any) => Number(e.nam) === nam)?.gieng;
+  let giengIdx: number;
+  if (preGieng != null) {
+    giengIdx = Number(preGieng);
   } else {
     const thangSinhAL = Number(lasoData.thangSinhAL);
     const gioSinhIdx  = lasoData.gioSinhIdx != null ? Number(lasoData.gioSinhIdx) : -1;
     if (!thangSinhAL || gioSinhIdx === -1) return 'Lá số thiếu dữ liệu tháng sinh / giờ sinh để tính nguyệt hạn.';
-    khoi = tinhNguyetHan(tieuHanIdx, thangSinhAL, gioSinhIdx);
+    const khoi = tinhNguyetHan(tieuHanIdx, thangSinhAL, gioSinhIdx);
+    giengIdx = khoi.cach1;
   }
-  const c1 = _mod12(khoi.cach1 + thangAL - 1);
-  const c2 = _mod12(khoi.cach2 + thangAL - 1);
-  const c3 = _mod12(khoi.cach3 + thangAL - 1);
+  const nguyetHanIdx = _mod12(giengIdx + thangAL - 1);
 
   let out = `NGUYỆT HẠN THÁNG ${thang}/${nam} (ÂL tháng ${thangAL}, tuổi ${tv.tuoi}):\n`;
-  out += `- Tiểu hạn năm ${nam}: cung ${tv.tieuHanCung} (${_DIA_CHI[tieuHanIdx] || '?'}).\n`;
-  out += `- Cách 1 (hay dùng): cung ${_cungNameOf(palaces, c1)} — chính tinh: ${_starsOf(palaces, c1)}.\n`;
-  out += `- Cách 2: cung ${_cungNameOf(palaces, c2)} — chính tinh: ${_starsOf(palaces, c2)}.\n`;
-  out += `- Cách 3: cung ${_cungNameOf(palaces, c3)} — chính tinh: ${_starsOf(palaces, c3)}.\n`;
-  out += `Ưu tiên luận theo Cách 1; nếu cần, đối chiếu thêm Cách 2 và Cách 3 để kiểm chứng.\n`;
+  out += `- Tiểu hạn năm ${nam}: cung ${tv.tieuHanCung}.\n`;
+  out += `- Nguyệt hạn tháng ${thangAL} ÂL: cung ${_cungNameOf(palaces, nguyetHanIdx)} — chính tinh: ${_starsOf(palaces, nguyetHanIdx)}.\n`;
   return out;
 }
 
@@ -771,17 +767,17 @@ function execTraNhatVan(lasoData: any, input: any): string {
 
   // Ưu tiên dùng nguyetVanScores pre-computed (engine mới); fallback về thangSinhAL/gioSinhIdx
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const preKhoiNhat = (lasoData.nguyetVanScores || []).find((e: any) => Number(e.nam) === nam)?.khoi;
-  let khoiNhat: { cach1: number; cach2: number; cach3: number };
-  if (preKhoiNhat) {
-    khoiNhat = preKhoiNhat;
+  const preGiengNhat = (lasoData.nguyetVanScores || []).find((e: any) => Number(e.nam) === nam)?.gieng;
+  let giengNhat: number;
+  if (preGiengNhat != null) {
+    giengNhat = Number(preGiengNhat);
   } else {
     const thangSinhAL = Number(lasoData.thangSinhAL);
     const gioSinhIdx  = lasoData.gioSinhIdx != null ? Number(lasoData.gioSinhIdx) : -1;
     if (!thangSinhAL || gioSinhIdx === -1) return 'Lá số thiếu dữ liệu tháng sinh / giờ sinh.';
-    khoiNhat = tinhNguyetHan(tieuHanIdx, thangSinhAL, gioSinhIdx);
+    giengNhat = tinhNguyetHan(tieuHanIdx, thangSinhAL, gioSinhIdx).cach1;
   }
-  const nguyetHanIdx = _mod12(khoiNhat.cach1 + thangAL - 1);
+  const nguyetHanIdx = _mod12(giengNhat + thangAL - 1);
   const nhatHanIdx   = tinhNhatHan(nguyetHanIdx, ngayAL);
 
   let out = `NHẬT HẠN NGÀY ${ngay}/${thang}/${nam} (ÂL ngày ${ngayAL} tháng ${thangAL}, tuổi ${tv.tuoi}):\n`;
