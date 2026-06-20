@@ -13,7 +13,7 @@ test.describe('Tu Binh Regression paywall', () => {
   test('REGRESSION paywall KHONG auto-popup khi submit', async ({ page }) => {
     const dialogs: string[] = [];
     page.on('dialog', d => { dialogs.push(d.message()); d.dismiss(); });
-    await fillVisibleSelects(page);
+    await fillRequired(page);
     const s = await findBtn(page);
     if (s) { await s.click(); await page.waitForTimeout(3000); }
     let modal = false;
@@ -23,7 +23,7 @@ test.describe('Tu Binh Regression paywall', () => {
   });
 
   test('sau submit DOM thay doi khong co modal', async ({ page }) => {
-    await fillVisibleSelects(page);
+    await fillRequired(page);
     const s = await findBtn(page);
     if (!s) { console.warn('No submit btn'); return; }
     const before = await page.locator('body *').count();
@@ -33,6 +33,17 @@ test.describe('Tu Binh Regression paywall', () => {
     expect(modal).toBe(false);
   });
 });
+
+// Điền ĐỦ các trường bắt buộc của form Tử Bình như người dùng thật:
+// hoten (text) + nam (number) KHÔNG phải <select> nên fillVisibleSelects
+// bỏ sót → analyze() bị chặn ở validation, DOM không render. Phải điền tay.
+async function fillRequired(page: any) {
+  const hoten = page.locator('#hoten');
+  if (await hoten.count() && await hoten.first().isVisible()) await hoten.first().fill('Nguyễn Văn Test');
+  const nam = page.locator('#nam');
+  if (await nam.count() && await nam.first().isVisible()) await nam.first().fill('1990');
+  await fillVisibleSelects(page);
+}
 
 async function fillVisibleSelects(page: any) {
   const s = page.locator('select');

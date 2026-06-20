@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Tử Vi Minh Bảo — Trò chuyện (bản mới)</title>
+<!--
+  chat-v2.html — VỎ MỎNG THAM CHIẾU (Phase 1).
+  Đây là client "chuẩn" gọi thẳng Contract v1: POST /api/v1/chat (SSE).
+  KHÔNG chứa nghiệp vụ tử vi — bộ não nằm hết ở server. Mọi nền tảng
+  sau (Zalo / TikTok / Android / iOS / bot) copy đúng vòng đời này:
+    1) Thu thập birth + câu hỏi
+    2) POST /api/v1/chat { session_id, messages, birth, client }
+    3) Đọc SSE 5 event: status | tool_call | text | done | error
+    4) Render. Hết.
+  Xem lib/contract/v1.ts + docs/KIEN-TRUC-VA-LO-TRINH.md.
+-->
+<link rel="icon" href="/favicon.ico">
+<!-- PWA: dùng chung manifest/sw/nút-cài của site (sw.js KHÔNG cache /api/) -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#061A2E">
+<link rel="apple-touch-icon" href="/seal.webp">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Tử Vi MB">
+<style>
+  :root{
+    --bg:#faf6ef; --ink:#2b2620; --muted:#7a7264; --line:#e7ddcd;
+    --accent:#8c1d1d; --accent2:#b8860b; --card:#fffdf8; --user:#f3e9d6;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:"Iowan Old Style",Georgia,"Times New Roman",serif;
+    display:flex; flex-direction:column; height:100dvh;
+  }
+  header{
+    padding:12px 16px; border-bottom:1px solid var(--line);
+    display:flex; align-items:center; gap:10px; background:var(--card);
+  }
+  header img{width:30px;height:30px;border-radius:50%;object-fit:cover}
+  header .t{font-weight:600;font-size:15px}
+  header .v{font-size:11px;color:var(--muted);margin-left:auto;font-family:ui-monospace,monospace}
+
+  /* Form ngày sinh */
+  .birth{
+    padding:10px 16px; border-bottom:1px solid var(--line);
+    display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+    background:#fff; font-size:13px;
+  }
+  .birth label{color:var(--muted);font-size:12px;margin-right:2px}
+  .birth input,.birth select{
+    font:inherit;font-size:13px;padding:6px 8px;border:1px solid var(--line);
+    border-radius:7px;background:#fff;color:var(--ink);
+  }
+  .birth input#d,.birth input#m{width:52px}
+  .birth input#y{width:66px}
+  .birth .sep{flex-basis:100%;height:0}
+
+  /* Hội thoại */
+  #thread{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+  .msg{max-width:90%;line-height:1.62;font-size:15px;white-space:pre-wrap;word-wrap:break-word}
+  .msg.user{align-self:flex-end;background:var(--user);padding:9px 13px;border-radius:13px 13px 3px 13px}
+  .msg.bot{align-self:flex-start}
+  .msg.bot .nm{font-size:11px;color:var(--accent);font-weight:600;margin-bottom:3px;letter-spacing:.3px}
+  .pill{
+    align-self:flex-start;font-size:12px;color:var(--muted);
+    background:#fff;border:1px solid var(--line);border-radius:20px;
+    padding:4px 11px;display:inline-flex;align-items:center;gap:6px;
+  }
+  .pill .dot{width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:pulse 1s infinite}
+  @keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
+  .tool{
+    align-self:flex-start;font-size:11px;color:var(--accent);
+    background:#fbf2f2;border:1px solid #e9d3d3;border-radius:7px;padding:3px 9px;
+    font-family:ui-monospace,monospace;
+  }
+  .err{align-self:flex-start;color:#b00;font-size:13px;background:#fee;border:1px solid #fbb;padding:8px 12px;border-radius:8px}
+  .paywall{align-self:center;font-size:13px;color:var(--accent);text-align:center;background:#fff8ec;border:1px solid #ecdcb6;padding:10px 14px;border-radius:10px;max-width:80%}
+  .paywall a{color:var(--accent);font-weight:600}
+
+  /* Ô nhập */
+  form#composer{
+    display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--line);
+    background:var(--card);
+  }
+  #composer textarea{
+    flex:1;resize:none;font:inherit;font-size:15px;padding:10px 12px;
+    border:1px solid var(--line);border-radius:11px;max-height:120px;background:#fff;color:var(--ink);
+  }
+  #composer button{
+    font:inherit;font-weight:600;font-size:14px;padding:0 18px;border:none;border-radius:11px;
+    background:var(--accent);color:#fff;cursor:pointer;
+  }
+  #composer button:disabled{opacity:.5;cursor:default}
+  .hint{font-size:11px;color:var(--muted);padding:0 16px 8px;background:var(--card)}
+</style>
+</head>
+<body>
+<header>
+  <img src="/thay-tuvi.webp" alt="">
+  <div class="t">Tử Vi Minh Bảo</div>
+  <div class="v" id="ver">v1 · web</div>
+</header>
+
+<div class="birth">
+  <span><label>Sinh (dương)</label>
+    <input id="d" type="number" min="1" max="31" placeholder="dd">
+    <input id="m" type="number" min="1" max="12" placeholder="mm">
+    <input id="y" type="number" min="1900" max="2100" placeholder="yyyy">
+  </span>
+  <span><label>Giờ</label>
+    <select id="h"></select>
+  </span>
+  <span><label>Giới</label>
+    <select id="g"><option value="nam">Nam</option><option value="nu">Nữ</option></select>
+  </span>
+</div>
+
+<div id="thread">
+  <div class="msg bot"><div class="nm">THẦY TỬ VI</div>Chào quý khách. Xin cho biết ngày giờ sinh (dương lịch) và điều muốn tỏ tường — lá số, vận hạn năm nay, hay chọn ngày tốt?</div>
+</div>
+
+<div class="hint" id="hint"></div>
+<form id="composer">
+  <textarea id="box" rows="1" placeholder="Hỏi điều muốn biết… (Enter để gửi)"></textarea>
+  <button type="submit" id="send">Gửi</button>
+</form>
+
+<!-- Auth dùng chung để lấy access_token (đăng nhập tuỳ chọn) -->
+<script src="/auth.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  // ── Địa chi giờ (index 0..11 = Tý..Hợi) — khớp BirthParams.hourBranch
+  var GIO = [
+    'Tý (23–1h)','Sửu (1–3h)','Dần (3–5h)','Mão (5–7h)','Thìn (7–9h)','Tỵ (9–11h)',
+    'Ngọ (11–13h)','Mùi (13–15h)','Thân (15–17h)','Dậu (17–19h)','Tuất (19–21h)','Hợi (21–23h)'
+  ];
+  var hSel = document.getElementById('h');
+  GIO.forEach(function(label, i){
+    var o = document.createElement('option'); o.value = i; o.textContent = label; hSel.appendChild(o);
+  });
+
+  // ── State hội thoại theo Contract v1 ─────────────────────────
+  var sessionId = (crypto.randomUUID ? crypto.randomUUID()
+                   : 'sess-' + Date.now() + '-' + Math.random().toString(36).slice(2));
+  var messages = [];            // [{role, content}]
+  var sending  = false;
+
+  var thread   = document.getElementById('thread');
+  var box      = document.getElementById('box');
+  var sendBtn  = document.getElementById('send');
+  var hint     = document.getElementById('hint');
+
+  // ── Khôi phục form sinh nếu lưu trước đó ─────────────────────
+  try {
+    var saved = JSON.parse(localStorage.getItem('v1_birth') || '{}');
+    if (saved.day)   document.getElementById('d').value = saved.day;
+    if (saved.month) document.getElementById('m').value = saved.month;
+    if (saved.year)  document.getElementById('y').value = saved.year;
+    if (saved.hourBranch != null) hSel.value = saved.hourBranch;
+    if (saved.gender) document.getElementById('g').value = saved.gender;
+  } catch(e){}
+
+  function readBirth(){
+    var day = parseInt(document.getElementById('d').value, 10);
+    var month = parseInt(document.getElementById('m').value, 10);
+    var year = parseInt(document.getElementById('y').value, 10);
+    if (!day || !month || !year) return null;     // thiếu → để agent tự hỏi
+    var birth = {
+      day: day, month: month, year: year,
+      hourBranch: parseInt(hSel.value, 10),
+      gender: document.getElementById('g').value,
+      isLunar: false
+    };
+    try { localStorage.setItem('v1_birth', JSON.stringify(birth)); } catch(e){}
+    return birth;
+  }
+
+  function getToken(){
+    try {
+      var s = window.Auth && Auth.getSession && Auth.getSession();
+      return s ? s.access_token : null;
+    } catch(e){ return null; }
+  }
+
+  // ── Render helpers ───────────────────────────────────────────
+  function el(cls, html){
+    var d = document.createElement('div');
+    d.className = cls; if (html != null) d.innerHTML = html;
+    thread.appendChild(d); scroll(); return d;
+  }
+  function scroll(){ thread.scrollTop = thread.scrollHeight; }
+  function esc(s){ return String(s).replace(/[&<>]/g, function(c){
+    return c === '&' ? '&amp;' : c === '<' ? '&lt;' : '&gt;'; }); }
+
+  // ── Gửi 1 lượt ───────────────────────────────────────────────
+  function send(text){
+    if (sending || !text.trim()) return;
+    sending = true; sendBtn.disabled = true;
+
+    messages.push({ role:'user', content:text });
+    el('msg user', esc(text));
+    box.value = ''; autoGrow();
+
+    var pill = el('pill', '<span class="dot"></span><span class="ptxt">Đang kết nối…</span>');
+    var botEl = null;             // tạo khi có text đầu tiên
+    var acc = '';
+
+    var payload = {
+      session_id: sessionId,
+      messages: messages.slice(-12),
+      stream: true,
+      client: { platform: 'web', version: '1.0.0' }
+    };
+    var birth = readBirth();
+    if (birth) payload.birth = birth;
+
+    var headers = { 'Content-Type':'application/json' };
+    var token = getToken();
+    if (token) headers['Authorization'] = 'Bearer ' + token;
+
+    fetch('/api/v1/chat', { method:'POST', headers:headers, body:JSON.stringify(payload) })
+      .then(function(res){
+        if (!res.ok) {
+          // Lỗi JSON (bad_request / unauthorized / paywall …)
+          return res.json().then(function(j){
+            removePill();
+            if (j.code === 'paywall') {
+              el('paywall', 'Hết Lượng (còn ' + (j.balance||0) + '). <a href="/topup.html">Nạp thêm</a> để tiếp tục.');
+            } else if (j.code === 'unauthorized') {
+              el('paywall', 'Cần <a href="#" onclick="window.Auth&&Auth.require&&Auth.require(function(){});return false">đăng nhập</a> để dùng tính năng này.');
+            } else {
+              el('err', esc(j.message || 'Lỗi không xác định'));
+            }
+            finish();
+          }, function(){ removePill(); el('err','Lỗi máy chủ'); finish(); });
+        }
+        return readSSE(res.body.getReader());
+      })
+      .catch(function(e){ removePill(); el('err', esc(e.message||'Mất kết nối')); finish(); });
+
+    function readSSE(reader){
+      var dec = new TextDecoder(); var buf = '';
+      return reader.read().then(function step(r){
+        if (r.done){ flushDone(); return; }
+        buf += dec.decode(r.value, { stream:true });
+        var blocks = buf.split('\n\n'); buf = blocks.pop();
+        blocks.forEach(handleBlock);
+        return reader.read().then(step);
+      });
+    }
+
+    // 1 block SSE: "event: <name>\ndata: <json>"
+    function handleBlock(block){
+      var name = null, dataStr = '';
+      block.split('\n').forEach(function(line){
+        if (line.indexOf('event:') === 0) name = line.slice(6).trim();
+        else if (line.indexOf('data:') === 0) dataStr += line.slice(5).trim();
+      });
+      if (!name) return;
+      var data = {}; try { data = JSON.parse(dataStr); } catch(e){ return; }
+      route(name, data);
+    }
+
+    function route(name, data){
+      if (name === 'status'){
+        setPill(data.text || '…');
+      } else if (name === 'tool_call'){
+        el('tool', '⚙ ' + esc(data.name) + (data.args ? ' ' + esc(JSON.stringify(data.args)) : ''));
+      } else if (name === 'text'){
+        if (!botEl){
+          removePill();
+          botEl = el('msg bot', '<div class="nm">THẦY TỬ VI</div><span class="bd"></span>');
+        }
+        acc += data.delta || '';
+        botEl.querySelector('.bd').textContent = acc;
+        scroll();
+      } else if (name === 'done'){
+        if (acc) messages.push({ role:'assistant', content:acc });
+        if (data.paywall && typeof data.paywall.balance === 'number'){
+          hint.textContent = 'Còn ' + data.paywall.balance + ' Lượng';
+        }
+        flushDone();
+      } else if (name === 'error'){
+        removePill();
+        if (data.code === 'paywall') el('paywall', esc(data.message));
+        else el('err', esc(data.message || 'Lỗi'));
+      }
+    }
+
+    function flushDone(){ removePill(); finish(); }
+    function setPill(t){ if (pill){ var s = pill.querySelector('.ptxt'); if (s) s.textContent = t; } }
+    function removePill(){ if (pill){ pill.remove(); pill = null; } }
+  }
+
+  function finish(){ sending = false; sendBtn.disabled = false; box.focus(); }
+
+  // ── UI wiring ────────────────────────────────────────────────
+  function autoGrow(){ box.style.height = 'auto'; box.style.height = Math.min(box.scrollHeight, 120) + 'px'; }
+  box.addEventListener('input', autoGrow);
+  box.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); send(box.value); }
+  });
+  document.getElementById('composer').addEventListener('submit', function(e){
+    e.preventDefault(); send(box.value);
+  });
+
+  box.focus();
+})();
+</script>
+
+<!-- PWA: đăng ký service worker (chat-v2 không nạp nav.js nên tự đăng ký) -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function () {});
+    });
+  }
+</script>
+<!-- Nút "Cài app" (beforeinstallprompt + iOS) — dùng chung toàn site -->
+<script src="/pwa-install.js" defer></script>
+</body>
+</html>
