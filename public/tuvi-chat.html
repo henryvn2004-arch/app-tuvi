@@ -1885,6 +1885,9 @@ var TuviTTS = (function() {
         gioitinh: d.gioitinh,
         namXem:   NAM_XEM,
       });
+      // Gắn thêm để slimLaso gửi lên server cho tool tra_nguyet_van / tra_nhat_van
+      ls.thangSinhAL = conv.amLich.month;
+      ls.gioSinhIdx  = d.gioIdx;
 
       chat.lasoData = slimLaso(ls);
       // Nạp NGUYÊN lá-số-text (giống luận giải) để chat luận sâu — server ưu tiên dùng cái này
