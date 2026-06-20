@@ -794,6 +794,18 @@ var TuviTTS = (function() {
 
   var NAM_XEM     = 2027;
   var API_PATH    = '/api/lasotuvi?action=chat';
+  // Sprint 1.1 — luồng LÁ SỐ gọi Contract v1 (/api/v1/chat): client gửi
+  // tham số sinh, SERVER tính lá số (một bộ não, mọi nền tảng giống nhau).
+  // Engine server == engine client (cùng tuvi-ansao-engine.js, đã verify
+  // parity) nên lá số không đổi. CHỈ áp cho toolType 'laso'; 6 tool khác
+  // giữ nguyên /api/lasotuvi. Escape hatch: localStorage tvc_use_v1='0'
+  // để tắt tức thì (về luồng cũ) không cần deploy.
+  var USE_V1_LASO = true;
+  try {
+    var _v1ov = localStorage.getItem('tvc_use_v1');
+    if (_v1ov === '0') USE_V1_LASO = false;
+    else if (_v1ov === '1') USE_V1_LASO = true;
+  } catch (e) {}
   var STORAGE_KEY = 'tvc_chats_v1';
   var GENERAL_ID  = '__general__';
   var SYNC_API    = '/api/tuvi-chats';
@@ -1932,6 +1944,13 @@ var TuviTTS = (function() {
       chat.lasoData = slimLaso(ls);
       // Nạp NGUYÊN lá-số-text (giống luận giải) để chat luận sâu — server ưu tiên dùng cái này
       try { if (window.formatLaSoV2) chat.lasoData._laSoText = formatLaSoV2(ls, conv); } catch (e) {}
+      // Tham số sinh thô để Contract v1 tự tính lá số server-side (USE_V1_LASO).
+      // gioitinh ('nam'/'nu') + gioIdx (0..11) khớp BirthParams. isLunar=false
+      // vì TuviForm nhận ngày dương.
+      chat.birth = {
+        day: d.ngay, month: d.thang, year: d.nam,
+        hourBranch: d.gioIdx, gender: d.gioitinh, isLunar: false,
+      };
 
       var menh  = (ls.palaces || []).find(function(p) { return p.isMenh; });
       var chinh = menh
@@ -2213,44 +2232,71 @@ var TuviTTS = (function() {
     appendMsg('bot', '', true);
 
     try {
-      var docs = '';
-      try {
-        var sr = await fetch('/api/search', {
+      // Sprint 1.1: luồng lá số gọi Contract v1 (server tự tính từ chat.birth).
+      // Điều kiện: cờ bật + toolType laso + ĐÃ có birth (đã an sao). Chat cũ nạp
+      // từ cloud không có birth → về luồng /api/lasotuvi cũ an toàn.
+      var isLasoTool = (chat.toolType === 'laso' || !chat.toolType);
+      var useV1 = USE_V1_LASO && isLasoTool && !!chat.birth;
+
+      var res;
+      if (useV1) {
+        // Não v1 tự RAG qua tool tra_cuu_tri_thuc → KHÔNG prefetch /api/search.
+        var v1Headers = { 'Content-Type': 'application/json' };
+        var v1Token = getAuthToken();
+        if (v1Token) v1Headers['Authorization'] = 'Bearer ' + v1Token;
+        res = await fetch('/api/v1/chat', {
+          method:  'POST',
+          headers: v1Headers,
+          body:    JSON.stringify({
+            session_id: chat.id,
+            messages:   chat.messages.slice(-12).map(function (m) {
+              return { role: m.role, content: m.content };
+            }),
+            birth:      chat.birth,
+            stream:     true,
+            client:     { platform: 'web', version: '1.0.0' },
+          }),
+        });
+      } else {
+        var docs = '';
+        try {
+          var sr = await fetch('/api/search', {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify({ query: text, matchCount: 5 }),
+          });
+          docs = (await sr.json()).docs || '';
+        } catch(e) { /* RAG optional */ }
+
+        var apiBody = {
+          stream:      true,
+          messages:    chat.messages.slice(-12),
+          toolType:    chat.toolType || 'laso',
+          docs:        docs,
+          authorName:  _author ? _author.name  : null,
+          authorStyle: _author ? _author.style : null,
+        };
+        if (chat.toolType === 'xem-tuoi' || chat.toolType === 'xem-lam-an') {
+          apiBody.compatData = chat.contextData;
+        } else if (chat.toolType === 'tu-binh') {
+          apiBody.tuBinhData = chat.contextData;
+        } else if (chat.toolType === 'xem-tuoi-sinh-con') {
+          apiBody.sinhConData = chat.contextData;
+        } else if (chat.toolType === 'chon-ngay-tot') {
+          apiBody.chonNgayData = chat.contextData;
+        } else if (chat.toolType === 'dat-ten-con') {
+          apiBody.datTenData = chat.contextData;
+        } else {
+          apiBody.lasoData = chat.lasoData;
+          apiBody.scenario = chat.lasoData ? 'laso' : 'general';
+        }
+
+        res = await fetch(API_PATH, {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify({ query: text, matchCount: 5 }),
+          body:    JSON.stringify(apiBody),
         });
-        docs = (await sr.json()).docs || '';
-      } catch(e) { /* RAG optional */ }
-
-      var apiBody = {
-        stream:      true,
-        messages:    chat.messages.slice(-12),
-        toolType:    chat.toolType || 'laso',
-        docs:        docs,
-        authorName:  _author ? _author.name  : null,
-        authorStyle: _author ? _author.style : null,
-      };
-      if (chat.toolType === 'xem-tuoi' || chat.toolType === 'xem-lam-an') {
-        apiBody.compatData = chat.contextData;
-      } else if (chat.toolType === 'tu-binh') {
-        apiBody.tuBinhData = chat.contextData;
-      } else if (chat.toolType === 'xem-tuoi-sinh-con') {
-        apiBody.sinhConData = chat.contextData;
-      } else if (chat.toolType === 'chon-ngay-tot') {
-        apiBody.chonNgayData = chat.contextData;
-      } else if (chat.toolType === 'dat-ten-con') {
-        apiBody.datTenData = chat.contextData;
-      } else {
-        apiBody.lasoData = chat.lasoData;
-        apiBody.scenario = chat.lasoData ? 'laso' : 'general';
       }
-
-      var res = await fetch(API_PATH, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(apiBody),
-      });
 
       var typing = document.getElementById('_tc_typing');
       if (typing) typing.remove();
@@ -2281,36 +2327,79 @@ var TuviTTS = (function() {
       var dec    = new TextDecoder();
       var sseBuffer = '';
 
-      while (true) {
-        var chunk = await reader.read();
-        if (chunk.done) break;
-        sseBuffer += dec.decode(chunk.value, { stream: true });
-        var lines = sseBuffer.split('\n');
-        sseBuffer = lines.pop() || '';
-        for (var i = 0; i < lines.length; i++) {
-          var line = lines[i];
-          if (!line.startsWith('data: ')) continue;
-          var jsonStr = line.slice(6).trim();
-          if (!jsonStr) continue;
-          try {
-            var evt = JSON.parse(jsonStr);
-            if (evt.type === 'tool') {
+      if (useV1) {
+        // Contract v1 SSE: block "event: <name>\ndata: {json}" ngăn bởi \n\n.
+        // 5 event: status | tool_call | text(delta) | done | error.
+        while (true) {
+          var chunkV = await reader.read();
+          if (chunkV.done) break;
+          sseBuffer += dec.decode(chunkV.value, { stream: true });
+          var blocks = sseBuffer.split('\n\n');
+          sseBuffer = blocks.pop() || '';
+          for (var b = 0; b < blocks.length; b++) {
+            var ename = null, dstr = '';
+            var blines = blocks[b].split('\n');
+            for (var L = 0; L < blines.length; L++) {
+              var bl = blines[L];
+              if (bl.indexOf('event:') === 0) ename = bl.slice(6).trim();
+              else if (bl.indexOf('data:') === 0) dstr += bl.slice(5).trim();
+            }
+            if (!ename) continue;
+            var d1 = {};
+            try { d1 = JSON.parse(dstr); } catch(pe) { continue; }
+            if (ename === 'status' || ename === 'tool_call') {
               if (!toolLabel) {
                 toolLabel = document.createElement('div');
                 toolLabel.className = 'tc-tool-label';
                 bub.insertBefore(toolLabel, cursor);
               }
-              toolLabel.textContent = evt.label || evt.name;
-            } else if (evt.type === 'text') {
+              toolLabel.textContent = ename === 'tool_call'
+                ? ('⚙ ' + (d1.name || ''))
+                : (d1.text || '…');
+            } else if (ename === 'text') {
               if (toolLabel) { toolLabel.remove(); toolLabel = null; }
-              accumulated += evt.text;
+              accumulated += (d1.delta || '');
               bub.innerHTML = renderMd(accumulated);
               bub.appendChild(cursor);
               $msgs.scrollTop = $msgs.scrollHeight;
-            } else if (evt.type === 'error') {
-              accumulated = accumulated || 'Xin lỗi, có lỗi xảy ra.';
+            } else if (ename === 'error') {
+              accumulated = accumulated || (d1.message || 'Xin lỗi, có lỗi xảy ra.');
             }
-          } catch(pe) { /* ignore bad JSON */ }
+            // 'done' → stream sẽ đóng, kết thúc vòng tự nhiên
+          }
+        }
+      } else {
+        while (true) {
+          var chunk = await reader.read();
+          if (chunk.done) break;
+          sseBuffer += dec.decode(chunk.value, { stream: true });
+          var lines = sseBuffer.split('\n');
+          sseBuffer = lines.pop() || '';
+          for (var i = 0; i < lines.length; i++) {
+            var line = lines[i];
+            if (!line.startsWith('data: ')) continue;
+            var jsonStr = line.slice(6).trim();
+            if (!jsonStr) continue;
+            try {
+              var evt = JSON.parse(jsonStr);
+              if (evt.type === 'tool') {
+                if (!toolLabel) {
+                  toolLabel = document.createElement('div');
+                  toolLabel.className = 'tc-tool-label';
+                  bub.insertBefore(toolLabel, cursor);
+                }
+                toolLabel.textContent = evt.label || evt.name;
+              } else if (evt.type === 'text') {
+                if (toolLabel) { toolLabel.remove(); toolLabel = null; }
+                accumulated += evt.text;
+                bub.innerHTML = renderMd(accumulated);
+                bub.appendChild(cursor);
+                $msgs.scrollTop = $msgs.scrollHeight;
+              } else if (evt.type === 'error') {
+                accumulated = accumulated || 'Xin lỗi, có lỗi xảy ra.';
+              }
+            } catch(pe) { /* ignore bad JSON */ }
+          }
         }
       }
 
