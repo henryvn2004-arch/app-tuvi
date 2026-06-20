@@ -2,12 +2,13 @@
 // ============================================================
 // CỔNG AGENT DUY NHẤT — Contract v1 (xem lib/contract/v1.ts)
 //
-// Phase 0 / Sprint 0.2: AGENT LOOP THẬT.
-//   - Validate request theo contract.
-//   - Agent tool-use (lap_la_so / tinh_van_han / xem_ngay_tot /
-//     tra_cuu_tri_thuc) chạy in-process, engine SERVER-SIDE.
+// Phase 0 / Sprint 0.3: CONFIG RUNTIME + PAYWALL hợp nhất.
+//   - Prompt / model / max_rounds / max_tokens / giá Lượng đọc từ
+//     bảng app_config (lib/config/appConfig.ts) — sửa ở DB, không deploy.
+//   - Paywall/Lượng gộp về đây (lib/billing/credits.ts): pre-check
+//     auth + số dư TRƯỚC khi stream; trừ Lượng SAU khi trả lời xong.
+//   - Agent tool-use chạy in-process, engine SERVER-SIDE.
 //   - Stream SSE 5-event: status → tool_call → text → done | error.
-//   - Vòng cuối stream text trực tiếp từ Anthropic.
 //
 // Tách biệt /api/lasotuvi đang chạy. Lật ruột client sang đây ở Phase 1.
 // ============================================================
@@ -20,18 +21,25 @@ import {
   validateChatRequest,
   type ChatRequestV1,
   type ChatMessage,
+  type DoneEvent,
 } from '@/lib/contract/v1';
 import { buildToolDefs, executeTool, newToolContext } from '@/lib/tools/registry';
 import { computeLaso, formatLasoContext } from '@/lib/engine/laso';
+import { getChatConfig, type ChatConfig } from '@/lib/config/appConfig';
+import {
+  paywallDisabled,
+  extractToken,
+  getUserFromToken,
+  getBalance,
+  deductCredits,
+  logTransaction,
+} from '@/lib/billing/credits';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!;
-const MODEL = 'claude-sonnet-4-6';
-const MAX_ROUNDS = 4;
-const MAX_TOKENS = 1500;
 
 const SSE_HEADERS = {
   ...CORS_HEADERS,
@@ -41,15 +49,6 @@ const SSE_HEADERS = {
   'X-Accel-Buffering': 'no',
   'X-Contract-Version': CONTRACT_VERSION,
 };
-
-const SYSTEM_PROMPT = `Bạn là chuyên gia Tử Vi Đẩu Số theo cổ pháp, văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc, nhân hậu. Phụng sự trang Tử Vi Minh Bảo.
-
-NGUYÊN TẮC BẤT DI BẤT DỊCH:
-- TUYỆT ĐỐI không bịa số liệu, vị trí sao, điểm số. Mọi con số/sao/cách cục phải đến từ kết quả công cụ (tool). Nếu chưa có dữ liệu, hãy gọi công cụ hoặc hỏi người dùng.
-- Để lập lá số cần đủ: ngày/tháng/năm sinh DƯƠNG lịch, giờ sinh (theo địa chi), giới tính. Nếu thiếu, hỏi lại NGẮN GỌN, không đoán bừa.
-- Khi đã có lá số, luận giải CHỈ dựa trên dữ liệu lá số trong hội thoại.
-- Câu hỏi gắn với một năm cụ thể → dùng công cụ tra vận hạn. Hỏi ngày tốt → dùng công cụ xem ngày tốt.
-- Trả lời bằng tiếng Việt, mạch lạc, có chiều sâu nhưng không lan man. Có thể dùng markdown nhẹ.`;
 
 export async function OPTIONS() {
   return options();
@@ -80,13 +79,47 @@ export async function POST(request: NextRequest) {
   if (!ANTHROPIC_API_KEY) return jsonError('internal', 'Thiếu cấu hình ANTHROPIC_API_KEY', 500);
 
   const req: ChatRequestV1 = parsed.value;
+  const cfg = await getChatConfig();
+
+  // ── Paywall pre-check (trước khi mở stream) ───────────────────
+  // Chỉ tính phí khi paywall bật VÀ giá cấu hình > 0. Trừ Lượng SAU
+  // khi trả lời xong (giữ userId ở đây để dùng lại trong stream).
+  let chargeUserId: string | null = null;
+  const cost = cfg.cost;
+  if (!paywallDisabled() && cost > 0) {
+    const token = extractToken(request);
+    if (!token) return jsonError('unauthorized', 'Cần đăng nhập để dùng tính năng này', 401);
+    const user = await getUserFromToken(token);
+    if (!user) return jsonError('unauthorized', 'Phiên đăng nhập không hợp lệ', 401);
+    const balance = await getBalance(user.id);
+    if (balance < cost) {
+      return jsonError('paywall', `Không đủ Lượng (cần ${cost}, còn ${balance})`, 402, { balance });
+    }
+    chargeUserId = user.id;
+  }
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
     async start(controller) {
       const send = (chunk: string) => controller.enqueue(encoder.encode(chunk));
       try {
-        await runAgent(req, send);
+        const { toolsUsed } = await runAgent(req, cfg, send);
+
+        // ── Trừ Lượng sau khi trả lời thành công ──────────────────
+        let paywall: DoneEvent['paywall'] = { blocked: false };
+        if (chargeUserId && cost > 0) {
+          const newBal = await deductCredits(chargeUserId, cost);
+          if (newBal != null) {
+            await logTransaction({
+              userId: chargeUserId,
+              amount: -cost,
+              type: 'chat',
+              description: 'Lượt luận giải /api/v1/chat',
+            });
+            paywall = { blocked: false, balance: newBal };
+          }
+        }
+        send(sse.done({ tools_used: toolsUsed, paywall }));
       } catch (e) {
         send(sse.error({ code: 'internal', message: e instanceof Error ? e.message : 'Lỗi không xác định' }));
       } finally {
@@ -99,13 +132,17 @@ export async function POST(request: NextRequest) {
 }
 
 // ── Agent loop ──────────────────────────────────────────────
-async function runAgent(req: ChatRequestV1, send: (s: string) => void): Promise<void> {
+async function runAgent(
+  req: ChatRequestV1,
+  cfg: ChatConfig,
+  send: (s: string) => void,
+): Promise<{ toolsUsed: string[] }> {
   const tools = buildToolDefs();
   const ctx = newToolContext();
   const toolsUsed: string[] = [];
 
   // Seed lá số nếu client gửi sẵn birth hợp lệ (đỡ phải hỏi lại).
-  let system: string = SYSTEM_PROMPT;
+  let system: string = cfg.systemPrompt;
   if (req.birth) {
     const res = computeLaso(req.birth);
     if (res.ok && res.ls) {
@@ -122,16 +159,16 @@ async function runAgent(req: ChatRequestV1, send: (s: string) => void): Promise<
 
   send(sse.status({ text: 'Đang suy xét...' }));
 
-  for (let round = 0; round <= MAX_ROUNDS; round++) {
-    const lastRound = round === MAX_ROUNDS;
+  for (let round = 0; round <= cfg.maxRounds; round++) {
+    const lastRound = round === cfg.maxRounds;
 
     // Vòng cuối: ép trả lời, stream text trực tiếp.
     if (lastRound) {
-      await streamFinal(system, convo, tools, send);
+      await streamFinal(system, convo, tools, cfg, send);
       break;
     }
 
-    const data = await callAnthropic(system, convo, tools, false);
+    const data = await callAnthropic(system, convo, tools, cfg, false);
     const content = data.content || [];
 
     if (data.stop_reason === 'tool_use') {
@@ -153,20 +190,20 @@ async function runAgent(req: ChatRequestV1, send: (s: string) => void): Promise<
 
     // Model trả lời thẳng (không tool) — stream lại cho mượt thay vì
     // dồn một cục: gọi vòng stream cuối với chính ngữ cảnh hiện tại.
-    await streamFinal(system, convo, tools, send);
+    await streamFinal(system, convo, tools, cfg, send);
     break;
   }
 
-  send(sse.done({ tools_used: toolsUsed, paywall: { blocked: false } }));
+  return { toolsUsed };
 }
 
 // ── Gọi Anthropic (non-stream, để quyết định tool) ──────────
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function callAnthropic(system: string, convo: any[], tools: any[], toolChoiceNone: boolean): Promise<any> {
+async function callAnthropic(system: string, convo: any[], tools: any[], cfg: ChatConfig, toolChoiceNone: boolean): Promise<any> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const payload: any = {
-    model: MODEL,
-    max_tokens: MAX_TOKENS,
+    model: cfg.model,
+    max_tokens: cfg.maxTokens,
     system: [{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }],
     messages: convo,
   };
@@ -190,11 +227,11 @@ async function callAnthropic(system: string, convo: any[], tools: any[], toolCho
 
 // ── Vòng cuối: stream text về client ────────────────────────
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function streamFinal(system: string, convo: any[], tools: any[], send: (s: string) => void): Promise<void> {
+async function streamFinal(system: string, convo: any[], tools: any[], cfg: ChatConfig, send: (s: string) => void): Promise<void> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const payload: any = {
-    model: MODEL,
-    max_tokens: MAX_TOKENS,
+    model: cfg.model,
+    max_tokens: cfg.maxTokens,
     stream: true,
     system: [{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }],
     messages: convo,
@@ -243,8 +280,8 @@ async function streamFinal(system: string, convo: any[], tools: any[], send: (s:
 }
 
 // ── helpers ──────────────────────────────────────────────────
-function jsonError(code: string, message: string, status: number) {
-  return new Response(JSON.stringify({ code, message }), {
+function jsonError(code: string, message: string, status: number, extra?: Record<string, unknown>) {
+  return new Response(JSON.stringify({ code, message, ...extra }), {
     status,
     headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
   });
