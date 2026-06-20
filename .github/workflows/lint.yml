@@ -25,3 +25,23 @@ jobs:
 
       - name: Prettier check
         run: npm run format:check
+
+  typecheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      # lib/agent/tools.ts import từ tuvi-engine/dist → cần build engine trước
+      - name: Build engine (dist cho @/lib/agent imports)
+        run: cd tuvi-engine && npm ci && npm run build
+
+      - name: Typecheck (tsc --noEmit toàn app)
+        run: npm run typecheck
