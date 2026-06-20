@@ -146,7 +146,11 @@ function execLapLaSo(input: Rec, ctx: ToolContext): ToolRunResult {
 }
 
 function execTinhVanHan(input: Rec, ctx: ToolContext): string {
-  const nam = Number(input?.nam);
+  // Lưới an toàn: thiếu năm → mặc định năm hiện tại (múi giờ VN),
+  // tránh trường hợp LLM quên truyền dẫn tới năm sai.
+  const nam =
+    Number(input?.nam) ||
+    Number(new Intl.DateTimeFormat('en', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric' }).format(new Date()));
   if (!nam) return 'Thiếu tham số năm.';
   if (!ctx.ls) return 'Chưa có lá số. Hãy lập lá số (lap_la_so) trước khi tra vận hạn.';
 

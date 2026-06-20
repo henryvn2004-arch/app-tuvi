@@ -142,7 +142,9 @@ async function runAgent(
   const toolsUsed: string[] = [];
 
   // Seed lá số nếu client gửi sẵn birth hợp lệ (đỡ phải hỏi lại).
-  let system: string = cfg.systemPrompt;
+  // LUÔN inject thời gian thực (server) — nếu không LLM đoán "năm nay"
+  // theo mốc huấn luyện (sai). Tính theo múi giờ VN.
+  let system: string = cfg.systemPrompt + '\n\n' + timeContext();
   if (req.birth) {
     const res = computeLaso(req.birth);
     if (res.ok && res.ls) {
@@ -277,6 +279,24 @@ async function streamFinal(system: string, convo: any[], tools: any[], cfg: Chat
       }
     }
   }
+}
+
+// ── Thời gian thực (múi giờ VN) tiêm vào prompt ──────────────
+// Không để trong app_config: prompt DB là text tĩnh, còn ngày phải
+// tính mỗi request. LLM dùng đây để hiểu "năm nay / hôm nay".
+function timeContext(): string {
+  const now = new Date();
+  const TZ = 'Asia/Ho_Chi_Minh';
+  const dateStr = new Intl.DateTimeFormat('vi-VN', {
+    timeZone: TZ, day: '2-digit', month: '2-digit', year: 'numeric',
+  }).format(now);
+  const year = new Intl.DateTimeFormat('en', { timeZone: TZ, year: 'numeric' }).format(now);
+  return (
+    `THÔNG TIN THỜI GIAN (server cung cấp, CHÍNH XÁC): Hôm nay là ngày ${dateStr}, năm hiện tại là ${year}. ` +
+    `Khi user hỏi "năm nay/hôm nay là năm/ngày mấy" — trả lời thẳng theo đây, KHÔNG nói không biết. ` +
+    `Khi user nói "năm nay" hãy hiểu là năm ${year}, "năm sau" là ${Number(year) + 1}; ` +
+    `gọi công cụ tra vận hạn với đúng năm đó, không dùng năm mặc định khác.`
+  );
 }
 
 // ── helpers ──────────────────────────────────────────────────
