@@ -1070,6 +1070,9 @@ var TuviTTS = (function() {
           tieuHanCung: t.tieuHanCung, luuNienCung: t.luuNienCung,
         };
       }),
+      nguyetVanScores: (ls.nguyetVanScores || []).map(function(e) {
+        return { nam: e.nam, tuoi: e.tuoi, khoi: e.khoi };
+      }),
       palaces:  palaces,
       daiVans:  daiVans,
       daiVanHienTai: dvHT ? {

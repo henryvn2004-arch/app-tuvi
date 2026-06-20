@@ -2434,6 +2434,12 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
     dv.yNghia = matchVanHanData(dvP, { napAmHanh, menhPalace: _menhP }, gioitinh);
   });
 
+  const _tieuVanScores = tinhTieuVanScores(
+    { palaces, daiVans: daiVansScored },
+    gioitinh, amDuong, chiNam, namSinhDL
+  );
+  const _nguyetVanScores = tinhNguyetVanScores(_tieuVanScores, palaces, thangAL, gioIdx);
+
   return {
     canChiNam, napAm, amDuong, cuc, canMenh,
     menhDC, thanDC, menhIdx, thanIdx,
@@ -2478,10 +2484,8 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
       },
       napAmHanh, tuoiXem, chiNam
     ),
-    tieuVanScores: tinhTieuVanScores(
-      { palaces, daiVans: daiVansScored },
-      gioitinh, amDuong, chiNam, namSinhDL
-    ),
+    tieuVanScores: _tieuVanScores,
+    nguyetVanScores: _nguyetVanScores,
   };
 }
 
@@ -4719,6 +4723,30 @@ function tinhTieuVanScores(ls, gioitinh, amDuong, chiNam, namSinhDL) {
   });
 
   return results;
+}
+
+// ================================================================
+// TÍNH NGUYỆT VẬN SCORES — pre-compute khởi điểm nguyệt hạn cho mọi năm
+// Logic mirror tinhNguyetHan() trong tuvi-engine/src/van-han/index.ts
+// Output: array of { nam, tuoi, khoi: {cach1, cach2, cach3} }
+// Trong đó: cung tháng m (AL) = mod12(cachX + m - 1)
+// ================================================================
+function tinhNguyetVanScores(tieuVanScores, palaces, thangSinhAL, gioSinhIdx) {
+  if (!tieuVanScores || !palaces || !thangSinhAL || gioSinhIdx == null) return [];
+  function _m12(n) { return ((n % 12) + 12) % 12; }
+  return tieuVanScores.map(function(tv) {
+    const tieuHanIdx = palaces.findIndex(function(p) { return p.cungName === tv.tieuHanCung; });
+    if (tieuHanIdx === -1) return { nam: tv.nam, tuoi: tv.tuoi, khoi: null };
+    // Cách 1: từ tiểu hạn đếm nghịch (thangSinh-1) → giờ Tý, rồi đếm thuận gioSinh bước
+    const p1    = _m12(tieuHanIdx - (thangSinhAL - 1));
+    const cach1 = _m12(p1 + gioSinhIdx);
+    // Cách 2: từ tiểu hạn đếm thuận (thangSinh-1) → giờ Tý, rồi đếm thuận gioSinh bước
+    const p2    = _m12(tieuHanIdx + (thangSinhAL - 1));
+    const cach2 = _m12(p2 + gioSinhIdx);
+    // Cách 3: tháng Giêng = cung tiểu hạn, đếm thuận
+    const cach3 = tieuHanIdx;
+    return { nam: tv.nam, tuoi: tv.tuoi, khoi: { cach1, cach2, cach3 } };
+  });
 }
 
 
