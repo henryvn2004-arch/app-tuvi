@@ -5,6 +5,15 @@
 
 ---
 
+## ⏳ VIỆC TAY CẦN LÀM (chưa xong)
+
+- [ ] **Chạy `_patches/migration-app-config.sql`** trong Supabase SQL Editor
+      (project `dciwkfdqhhddeymlisey`). Tạo bảng `app_config` + seed prompt/model/cost.
+      Cho tới khi chạy, `/api/v1/chat` vẫn hoạt động bằng giá trị DEFAULTS (miễn phí).
+      → Henry chạy khi rảnh. Nhắc lại mỗi phiên cho tới khi tick.
+
+---
+
 ## 0. Tầm nhìn một câu
 
 > **Một "bộ não" duy nhất trên server. Mọi nền tảng (Web → Zalo → TikTok → Android → iOS → bot chat) chỉ là vỏ mỏng gọi về cùng một API. Sửa 1 chỗ, tất cả app cập nhật theo.**
