@@ -421,6 +421,13 @@
         ? Object.fromEntries(Object.entries(ls.cachCucTungCung).map(([k, v]) => [k, v.slice(0, 8)]))
         : undefined,
       cungScores:    ls.cungScores || undefined,
+      thangSinhAL:   ls.thangSinhAL,
+      gioSinhIdx:    ls.gioSinhIdx,
+      tieuVanScores: (ls.tieuVanScores || []).map(t => ({
+        nam: t.nam, tuoi: t.tuoi, dvIdx: t.dvIdx, mainScore: t.mainScore,
+        direction: t.direction, catCount: t.catCount, satCount: t.satCount,
+        tieuHanCung: t.tieuHanCung, luuNienCung: t.luuNienCung,
+      })),
       palaces,
       daiVans,
       daiVanHienTai: dvHT ? {

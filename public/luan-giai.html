@@ -1365,6 +1365,8 @@ select.form-input { cursor: pointer; }
         namXem,
       });
       ls._conv = conv; ls._hoTen = hoten;
+      ls.thangSinhAL = conv.amLich.month;
+      ls.gioSinhIdx  = conv.gioIdx;
 
       _laSoText = formatLaSoV2(ls, conv);
       ls._laSoText = _laSoText;  // để ô chat (chatbot.js) gửi full text → luận sâu = chat đứng riêng
@@ -3591,6 +3593,8 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         gioitinh, namXem,
       });
       ls._conv = conv; ls._hoTen = hoten;
+      ls.thangSinhAL = conv.amLich.month;
+      ls.gioSinhIdx  = conv.gioIdx;
 
       _laSoText = formatLaSoV2(ls, conv);
       ls._laSoText = _laSoText;  // để ô chat (chatbot.js) gửi full text → luận sâu = chat đứng riêng
@@ -3910,6 +3914,8 @@ TuviPaywall.init({
       });
       ls._conv = conv;
       ls._hoTen = hoTen || '';
+      ls.thangSinhAL = conv.amLich.month;
+      ls.gioSinhIdx  = conv.gioIdx;
 
       // Set global state
       _hoTen = hoTen || ''; _ngay = ngay; _thang = thang; _nam = nam;
