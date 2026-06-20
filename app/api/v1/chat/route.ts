@@ -24,9 +24,9 @@ import {
   type DoneEvent,
 } from '@/lib/contract/v1';
 import { buildToolDefs, executeTool, newToolContext } from '@/lib/tools/registry';
-import { computeLaso, formatLasoContext } from '@/lib/engine/laso';
-// Template prompt dùng CHUNG với /api/lasotuvi (một bộ não).
-import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL } from '@/lib/agent/prompts';
+import { computeLaso } from '@/lib/engine/laso';
+// Template prompt + context formatter dùng CHUNG với /api/lasotuvi (một bộ não).
+import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext } from '@/lib/agent/prompts';
 import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
 import { getChatConfig, type ChatConfig } from '@/lib/config/appConfig';
 import {
@@ -144,13 +144,17 @@ async function runAgent(
   const ctx = newToolContext();
   const toolsUsed: string[] = [];
 
+  // Câu hỏi mới nhất — để extractLasoContext khoanh cung liên quan.
+  const lastQ = (req.messages as ChatMessage[])[req.messages.length - 1]?.content || '';
+
   // Seed lá số nếu client gửi sẵn birth hợp lệ (đỡ phải hỏi lại).
+  // Dùng CHUNG extractLasoContext với /api/lasotuvi → marker khớp prompt giàu.
   let lasoCtx = '';
   if (req.birth) {
     const res = computeLaso(req.birth);
     if (res.ok && res.ls) {
       ctx.ls = res.ls;
-      lasoCtx = formatLasoContext(res.ls);
+      lasoCtx = extractLasoContext(res.ls, lastQ);
     }
   }
   const hasLaso = !!ctx.ls;

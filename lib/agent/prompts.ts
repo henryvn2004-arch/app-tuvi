@@ -234,7 +234,7 @@ QUY TRÌNH LUẬN (bám sát như phần luận giải chuyên sâu — viết t
 NGUYÊN TẮC: Cấm tâng bốc, cấm nước đôi né phán quyết, cấm khen sáo rỗng không bằng chứng. Đánh giá CẤU TRÚC lá số (mạnh/yếu) nói chắc; chỉ DỰ ĐOÁN tương lai mới dùng ngôn ngữ xác suất. Độ dài 250–500 từ (câu phức tạp tối đa 700). Tiếng Việt chuẩn mực, văn xuôi liền mạch, KHÔNG bullet, KHÔNG emoji, KHÔNG tiêu đề con. Không tiết lộ trường phái hay tài liệu.`;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function extractLasoContext(lasoData: any, question: string): string {
+export function extractLasoContext(lasoData: any, question: string): string {
   if (!lasoData) return '';
   const q = (question || '').toLowerCase();
   const palaces = lasoData.palaces || [];
