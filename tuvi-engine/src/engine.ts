@@ -238,6 +238,8 @@ export function anSaoLaSo({
     daiVans: daiVansScored,
     daiVanHienTai,
     tieuHanIdx, tuoiXem, chiNamXem, luuNienDaiHanIdx,
+    thangSinhAL: thangAL,
+    gioSinhIdx: gioIdx,
     menhThaiTue,
     cachCuc,
     cachCucTungCung,
