@@ -230,62 +230,96 @@ body{
 }
 @keyframes tc-toast{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 
+/* ── Form base elements (shared across laso + compat forms) ── */
+.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.form-group:last-child{margin-bottom:0}
+.form-label{font-size:12px;font-weight:600;color:var(--text-mid);letter-spacing:.2px}
+.form-col-title{
+  font-size:11px;font-weight:700;color:var(--gold);letter-spacing:.7px;
+  text-transform:uppercase;padding-bottom:10px;margin-bottom:14px;
+  border-bottom:1px solid var(--border-lt);
+}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1.6fr;gap:8px}
+.form-group-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-group-row .form-group{margin-bottom:0}
+.form-input{
+  border:1.5px solid var(--border);border-radius:8px;
+  padding:10px 12px;font-size:15px;
+  color:var(--text);font-family:Arial,sans-serif;
+  outline:none;width:100%;box-sizing:border-box;
+  transition:border-color .2s,box-shadow .2s;
+  background:var(--bg-soft);-webkit-appearance:none;appearance:none;
+}
+.form-input:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(6,26,46,.07)}
+select.form-input{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;padding-right:30px;
+}
+.btn-submit{
+  display:block;width:100%;
+  background:var(--navy);color:var(--gold-bright);
+  border:none;padding:14px 20px;
+  font-size:15px;font-family:'Noto Serif',Georgia,serif;
+  font-weight:700;border-radius:10px;cursor:pointer;
+  transition:background .2s,transform .1s;
+  text-align:center;letter-spacing:.2px;
+}
+.btn-submit:hover{background:var(--navy-mid)}
+.btn-submit:active{transform:scale(.98)}
+
 /* ── Form area (before an sao) ── */
 .wa-form-area{
   flex:1;overflow-y:auto;
-  padding:24px 20px 120px;
+  padding:16px 14px 120px;
   background:var(--bg-soft);
 }
-.wa-form-inner{max-width:540px;margin:0 auto}
+.wa-form-inner{max-width:520px;margin:0 auto}
 .wa-form-intro{
   background:#fff;border:1px solid var(--border-lt);
-  border-radius:10px;padding:16px 18px;margin-bottom:20px;
-  font-size:13.5px;color:var(--text-mid);line-height:1.7;
+  border-radius:12px;padding:14px 16px;margin-bottom:12px;
+  font-size:13px;color:var(--text-mid);line-height:1.7;
 }
 .wa-form-intro strong{color:var(--navy)}
-.wa-label-row{margin-bottom:20px;display:flex;flex-direction:column;gap:6px}
-.wa-label-label{
-  font-size:11px;font-weight:700;color:var(--text-mid);
-  text-transform:uppercase;letter-spacing:.5px;
+
+.wa-label-row{
+  background:#fff;border:1px solid var(--border-lt);
+  border-radius:12px;padding:14px 16px;margin-bottom:10px;
+  display:flex;flex-direction:column;gap:7px;
 }
+.wa-label-label{font-size:11px;font-weight:700;color:var(--text-mid);text-transform:uppercase;letter-spacing:.5px}
 .wa-label-input{
   border:1.5px solid var(--border);border-radius:8px;
   padding:10px 12px;font-size:15px;font-family:Arial,sans-serif;
-  color:var(--text);outline:none;background:#fff;
-  transition:border-color .15s;
+  color:var(--text);outline:none;background:var(--bg-soft);
+  transition:border-color .15s,box-shadow .15s;
 }
-.wa-label-input:focus{border-color:var(--navy)}
+.wa-label-input:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(6,26,46,.07)}
 .wa-label-input::placeholder{color:#bbb}
 
-/* TuviForm overrides — single-col inside chat */
+/* TuviForm overrides — card layout inside chat */
 .wa-form-inner .form-section{padding:0;border:none}
 .wa-form-inner .section-eyebrow{margin-bottom:14px}
 .wa-form-inner .form-grid{
   grid-template-columns:1fr!important;
   display:flex;flex-direction:column;
-  border-radius:8px;overflow:hidden;
+  gap:10px;
 }
 .wa-form-inner .form-col{
-  border-right:none!important;
-  border-bottom:1px solid var(--border);
-  padding:16px!important;
+  background:#fff;
+  border:1px solid var(--border-lt)!important;
+  border-radius:12px;padding:16px!important;
 }
-.wa-form-inner .form-col:last-child{border-bottom:none}
-.wa-form-inner .btn-submit{
-  background:var(--navy);color:var(--gold-bright);
-  border:none;padding:13px 28px;
-  font-size:15px;font-family:'Noto Serif',Georgia,serif;
-  font-weight:700;border-radius:4px;cursor:pointer;
-  transition:background .2s;
+.wa-form-inner .form-col:last-child{border-bottom:1px solid var(--border-lt)!important}
+/* Instruction text in submit card — hide on small screens */
+.wa-form-inner .form-col:last-child>p{
+  font-size:13px;margin-bottom:16px;
 }
-.wa-form-inner .btn-submit:hover{background:var(--navy-mid)}
-.wa-form-inner .form-input{
-  background:transparent;border:none;border-bottom:1px solid var(--border);
-  padding:10px 0;font-size:16px;color:var(--text);
-  font-family:Arial,sans-serif;outline:none;
-  transition:border-color .2s;width:100%;
+@media(max-width:480px){.wa-form-inner .form-col:last-child>p{display:none}}
+/* Very small screens: day/month/year — year spans full width */
+@media(max-width:360px){
+  .form-row-3{grid-template-columns:1fr 1fr}
+  .form-row-3 input[type=number]{grid-column:1/-1}
 }
-.wa-form-inner .form-input:focus{border-color:var(--navy)}
 .error-msg{display:none;color:var(--red);font-size:13px;margin-top:10px}
 .error-msg.active{display:block}
 
@@ -473,40 +507,43 @@ body{
 ═══════════════════════════════════════ */
 .wa-compat-intro{
   background:#fff;border:1px solid var(--border-lt);
-  border-radius:10px;padding:14px 16px;margin-bottom:16px;
+  border-radius:12px;padding:14px 16px;margin-bottom:14px;
   font-size:13px;color:var(--text-mid);line-height:1.7;
 }
 .wa-compat-intro strong{color:var(--navy)}
 .wa-two-col{
   display:grid;grid-template-columns:1fr 1fr;
-  gap:12px;margin-bottom:16px;
+  gap:10px;margin-bottom:12px;
 }
 @media(max-width:640px){.wa-two-col{grid-template-columns:1fr}}
-.wa-person-card{background:#fff;border:1px solid var(--border-lt);border-radius:10px;overflow:hidden}
+.wa-person-card{background:#fff;border:1px solid var(--border-lt);border-radius:12px;overflow:hidden}
 .wa-person-hdr{
   font-size:11px;font-weight:700;color:#fff;
   text-transform:uppercase;letter-spacing:.5px;
-  padding:7px 14px;
+  padding:8px 14px;
 }
 .wa-person-body{padding:0}
 /* TuviForm person mode overrides inside person card */
-.wa-person-body .form-col{border-right:none!important;padding:12px!important}
+.wa-person-body .form-col{border-right:none!important;padding:14px!important;background:transparent!important;border:none!important;border-radius:0!important}
 .wa-compat-submit{
+  display:block;width:100%;
   background:var(--navy);color:var(--gold-bright);
-  border:none;padding:12px 28px;
+  border:none;padding:14px 20px;
   font-size:15px;font-family:'Noto Serif',Georgia,serif;
-  font-weight:700;border-radius:4px;cursor:pointer;
-  transition:background .2s;
+  font-weight:700;border-radius:10px;cursor:pointer;
+  transition:background .2s,transform .1s;
+  text-align:center;letter-spacing:.2px;
 }
 .wa-compat-submit:hover{background:var(--navy-mid)}
+.wa-compat-submit:active{transform:scale(.98)}
 .wa-name-input{
-  border:1.5px solid var(--border);border-radius:6px;
-  padding:7px 10px;font-size:14px;font-family:Arial,sans-serif;
-  color:var(--text);outline:none;background:#fff;
-  transition:border-color .15s;width:100%;
-  margin-bottom:8px;display:block;
+  border:1.5px solid var(--border);border-radius:8px;
+  padding:9px 12px;font-size:14px;font-family:Arial,sans-serif;
+  color:var(--text);outline:none;background:var(--bg-soft);
+  transition:border-color .15s,box-shadow .15s;width:100%;
+  margin-bottom:10px;display:block;box-sizing:border-box;
 }
-.wa-name-input:focus{border-color:var(--navy)}
+.wa-name-input:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(6,26,46,.07)}
 
 /* ════════════════════════════════════
    MOBILE (< 768px): slide panels
