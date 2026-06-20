@@ -308,7 +308,7 @@ Bạn được cấp NGUYÊN LÁ SỐ ở phần dưới: đủ 12 cung (chính 
 
 XÁC ĐỊNH PHẠM VI (câu hỏi của user thường NGẮN/MƠ HỒ — bạn PHẢI tự khoanh vùng cung, không được trả lời hời hợt):
 - Map lĩnh vực → cung cần đọc: công việc/sự nghiệp/thăng tiến/làm sếp → Quan Lộc + Mệnh; tiền bạc/đầu tư/làm giàu → Tài Bạch + Phúc Đức; tình duyên/hôn nhân/vợ chồng → Phu Thê + Mệnh; con cái → Tử Tức; sức khỏe/bệnh → Tật Ách; nhà đất/bất động sản → Điền Trạch; tính cách/vận mệnh/tổng quan → Mệnh + Thân; cha mẹ/gia đạo → Phụ Mẫu + Phúc Đức; bạn bè/cấp dưới/quý nhân → Nô Bộc; đi xa/định cư/nước ngoài → Thiên Di; anh em → Huynh Đệ.
-- Câu hỏi gắn với MỘT NĂM cụ thể ("năm nay/năm sau", "bao giờ", "năm X tuổi") → GỌI tra_van_han. Câu hỏi về HẠN THÁNG / nguyệt hạn ("tháng X/YYYY thế nào") → GỌI tra_nguyet_van. Câu hỏi về HẠN NGÀY / nhật hạn ("ngày X tháng Y") → GỌI tra_nhat_van. Ngày tốt làm việc lớn → GỌI xem_ngay_tot.
+- Câu hỏi gắn với MỘT NĂM cụ thể ("năm nay/năm sau", "bao giờ", "năm X tuổi") → GỌI tra_tieu_van. Câu hỏi về HẠN THÁNG / nguyệt hạn ("tháng X/YYYY thế nào") → GỌI tra_nguyet_van. Câu hỏi về HẠN NGÀY / nhật hạn ("ngày X tháng Y") → GỌI tra_nhat_van. Ngày tốt làm việc lớn → GỌI xem_ngay_tot.
 - Câu hỏi mơ hồ → tự chọn cung/lĩnh vực hợp lý nhất rồi luận ĐẦY ĐỦ, đừng hỏi lại lòng vòng.
 
 QUY TRÌNH LUẬN (bám sát như phần luận giải chuyên sâu — viết thành VĂN XUÔI liền mạch, KHÔNG đánh số, KHÔNG tiêu đề con):
@@ -589,7 +589,7 @@ function extractDatTenContext(data: any): string {
 const TOOLS_INSTRUCTION = (hasLaso: boolean) => `
 
 CÔNG CỤ (tool) — DÙNG ĐÚNG LÚC, TUYỆT ĐỐI KHÔNG bịa số liệu thời gian:
-${hasLaso ? '- Câu hỏi gắn với MỘT NĂM cụ thể (năm nay, năm sau, "bao giờ", một năm/tuổi nhất định) → GỌI tra_van_han để lấy điểm vận năm đó, tiểu hạn, lưu niên, sao cát/sát. Không tự đoán điểm/cung khi chưa gọi tool.\n' : ''}${hasLaso ? '- Câu hỏi về HẠN THÁNG / nguyệt hạn ("tháng X/YYYY", "tháng này thế nào"...) → GỌI tra_nguyet_van; kết quả trả về 3 cách tính, ưu tiên luận theo Cách 1.\n' : ''}${hasLaso ? '- Câu hỏi về HẠN NGÀY / nhật hạn ("ngày X tháng Y", "hôm nay"...) → GỌI tra_nhat_van; kết quả trả về cung nhật hạn theo Cách 1.\n' : ''}- Câu hỏi NGÀY TỐT để làm việc trọng đại (cưới hỏi, nhập trạch, khai trương, mua/bán nhà, khởi công, xuất hành...) trong một tháng → GỌI xem_ngay_tot.
+${hasLaso ? '- Câu hỏi gắn với MỘT NĂM cụ thể (năm nay, năm sau, "bao giờ", một năm/tuổi nhất định) → GỌI tra_tieu_van để lấy điểm vận năm đó, tiểu hạn, lưu niên, sao cát/sát. Không tự đoán điểm/cung khi chưa gọi tool.\n' : ''}${hasLaso ? '- Câu hỏi về HẠN THÁNG / nguyệt hạn ("tháng X/YYYY", "tháng này thế nào"...) → GỌI tra_nguyet_van; kết quả trả về 3 cách tính, ưu tiên luận theo Cách 1.\n' : ''}${hasLaso ? '- Câu hỏi về HẠN NGÀY / nhật hạn ("ngày X tháng Y", "hôm nay"...) → GỌI tra_nhat_van; kết quả trả về cung nhật hạn theo Cách 1.\n' : ''}- Câu hỏi NGÀY TỐT để làm việc trọng đại (cưới hỏi, nhập trạch, khai trương, mua/bán nhà, khởi công, xuất hành...) trong một tháng → GỌI xem_ngay_tot.
 Sau khi có kết quả tool, luận giải dứt khoát và neo vào đúng các con số tool trả về (điểm thấp/nhiều sát tinh phải cảnh báo rõ). Câu nào không cần tool thì trả lời thẳng.`;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -598,7 +598,7 @@ function buildTools(hasLaso: boolean): any[] {
   const tools: any[] = [];
   if (hasLaso) {
     tools.push({
-      name: 'tra_van_han',
+      name: 'tra_tieu_van',
       description: 'Tra vận hạn (tiểu vận) của lá số đang xem cho MỘT NĂM dương lịch cụ thể: điểm vận năm (0–10), xu hướng lên/xuống, cung tiểu hạn, cung lưu niên đại hạn, số sao cát/sát. Dùng cho mọi câu hỏi gắn với một năm hoặc "bao giờ".',
       input_schema: {
         type: 'object',
@@ -856,7 +856,7 @@ async function handleChat(body: any): Promise<Response> {
           toolsUsed.push(tu.name);
           let resultText = '';
           try {
-            if (tu.name === 'tra_van_han') resultText = execTraVanHan(lasoDataForTools, tu.input);
+            if (tu.name === 'tra_tieu_van') resultText = execTraVanHan(lasoDataForTools, tu.input);
             else if (tu.name === 'tra_nguyet_van') resultText = execTraNguyetVan(lasoDataForTools, tu.input);
             else if (tu.name === 'tra_nhat_van') resultText = execTraNhatVan(lasoDataForTools, tu.input);
             else if (tu.name === 'xem_ngay_tot') resultText = execXemNgayTot(tu.input);
@@ -970,14 +970,14 @@ async function handleChatStream(body: any): Promise<Response> {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const results = toolUses.map((tu: any) => {
             toolsUsed.push(tu.name);
-            const label = tu.name === 'tra_van_han' ? 'Đang tra vận hạn...'
+            const label = tu.name === 'tra_tieu_van' ? 'Đang tra vận hạn...'
               : tu.name === 'tra_nguyet_van' ? 'Đang tra nguyệt hạn...'
               : tu.name === 'tra_nhat_van'   ? 'Đang tra nhật hạn...'
               : 'Đang xem ngày tốt...';
             send({ type: 'tool', name: tu.name, label });
             let resultText = '';
             try {
-              if (tu.name === 'tra_van_han') resultText = execTraVanHan(lasoDataForTools, tu.input);
+              if (tu.name === 'tra_tieu_van') resultText = execTraVanHan(lasoDataForTools, tu.input);
               else if (tu.name === 'tra_nguyet_van') resultText = execTraNguyetVan(lasoDataForTools, tu.input);
               else if (tu.name === 'tra_nhat_van') resultText = execTraNhatVan(lasoDataForTools, tu.input);
               else if (tu.name === 'xem_ngay_tot') resultText = execXemNgayTot(tu.input);
