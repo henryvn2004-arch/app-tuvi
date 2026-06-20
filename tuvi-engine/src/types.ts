@@ -81,6 +81,16 @@ export interface DaiVan {
   label?: string;
 }
 
+// ─── Nguyệt Hạn ──────────────────────────────────────────────
+export interface NguyetHanKhoi {
+  /** Cách 1 (hay dùng): nghịch thangSinh bước → thuận gioSinh bước */
+  cach1: number;
+  /** Cách 2: thuận thangSinh bước → thuận gioSinh bước */
+  cach2: number;
+  /** Cách 3 (đơn giản): tháng Giêng = cung tiểu hạn, đếm thuận */
+  cach3: number;
+}
+
 // ─── Cung Scores ─────────────────────────────────────────────
 export interface CungScores {
   tiemNang: number;

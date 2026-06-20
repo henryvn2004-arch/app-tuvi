@@ -19,7 +19,7 @@ export { anPhuTinh } from './stars/phu-tinh.js';
 export { getTuanTriet } from './stars/star-data.js';
 
 // Vận hạn
-export { tinhDaiVan, tinhTieuHan, tinhLuuDaiHan } from './van-han/index.js';
+export { tinhDaiVan, tinhTieuHan, tinhLuuDaiHan, tinhNguyetHan, tinhNhatHan } from './van-han/index.js';
 
 // Scoring
 export { tinhThienThoi, tinhDiaLoi, scoreDaiVan } from './scoring/index.js';
@@ -41,6 +41,7 @@ export type {
   Palace,
   Star,
   DaiVan,
+  NguyetHanKhoi,
   CachCuc,
   CungYNghia,
   CungScores,
