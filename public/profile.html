@@ -974,7 +974,7 @@ async function sendChat() {
       })
     });
     const data = await resp.json();
-    const reply = data.content || data.text || data.reply || 'Xin lỗi, có lỗi xảy ra.';
+    const reply = data.answer || data.content || data.text || data.reply || 'Xin lỗi, có lỗi xảy ra.';
 
     typing.remove();
     _pChatState.messages.push({ role: 'assistant', content: reply });
