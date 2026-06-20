@@ -17,6 +17,13 @@
   Xem lib/contract/v1.ts + docs/KIEN-TRUC-VA-LO-TRINH.md.
 -->
 <link rel="icon" href="/favicon.ico">
+<!-- PWA: dùng chung manifest/sw/nút-cài của site (sw.js KHÔNG cache /api/) -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#061A2E">
+<link rel="apple-touch-icon" href="/seal.webp">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Tử Vi MB">
 <style>
   :root{
     --bg:#faf6ef; --ink:#2b2620; --muted:#7a7264; --line:#e7ddcd;
@@ -306,5 +313,16 @@
   box.focus();
 })();
 </script>
+
+<!-- PWA: đăng ký service worker (chat-v2 không nạp nav.js nên tự đăng ký) -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function () {});
+    });
+  }
+</script>
+<!-- Nút "Cài app" (beforeinstallprompt + iOS) — dùng chung toàn site -->
+<script src="/pwa-install.js" defer></script>
 </body>
 </html>
