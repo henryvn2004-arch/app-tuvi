@@ -233,16 +233,18 @@ const TuviForm = (() => {
             <label class="form-label">Họ và tên</label>
             <input class="form-input" type="text" id="${pid('hoten',prefix)}" placeholder="Nguyễn Văn A" autocomplete="name" />
           </div>
-          <div class="form-group">
-            <label class="form-label">Giới tính</label>
-            <select class="form-input" id="${pid('gioitinh',prefix)}">
-              <option value="nam">Nam</option>
-              <option value="nu">Nữ</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Năm xem vận</label>
-            <input class="form-input" type="number" id="${pid('namXem',prefix)}" value="${namXemDefault}" min="1900" max="2100" />
+          <div class="form-group-row">
+            <div class="form-group">
+              <label class="form-label">Giới tính</label>
+              <select class="form-input" id="${pid('gioitinh',prefix)}">
+                <option value="nam">Nam</option>
+                <option value="nu">Nữ</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Năm xem vận</label>
+              <input class="form-input" type="number" id="${pid('namXem',prefix)}" value="${namXemDefault}" min="1900" max="2100" />
+            </div>
           </div>
         </div>
 
