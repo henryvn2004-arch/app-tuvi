@@ -2436,9 +2436,9 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
 
   const _tieuVanScores = tinhTieuVanScores(
     { palaces, daiVans: daiVansScored },
-    gioitinh, amDuong, chiNam, namSinhDL
+    gioitinh, amDuong, chiNam, namSinhDL, namXem
   );
-  const _nguyetVanScores = tinhNguyetVanScores(_tieuVanScores, palaces, thangAL, gioIdx, namXem);
+  const _nguyetVanScores = tinhNguyetVanScores(_tieuVanScores, palaces, thangAL, gioIdx);
 
   return {
     canChiNam, napAm, amDuong, cuc, canMenh,
@@ -4558,7 +4558,7 @@ function phanTichDaiVanRules(dvPalace, menhPalace, ls) {
 // }
 // ================================================================
 
-function tinhTieuVanScores(ls, gioitinh, amDuong, chiNam, namSinhDL) {
+function tinhTieuVanScores(ls, gioitinh, amDuong, chiNam, namSinhDL, namXem) {
   const { palaces, daiVans } = ls;
   if (!daiVans || !palaces) return [];
 
@@ -4708,17 +4708,19 @@ function tinhTieuVanScores(ls, gioitinh, amDuong, chiNam, namSinhDL) {
       // open = mainScore this year, close = mainScore next year
       const closeScore = Math.round(interpolate(splinePts, tuoi + 1) * 10) / 10;
 
-      results.push({
-        nam, tuoi, dvIdx, diaChi,
-        open: mainScore,
-        close: closeScore,
-        high: maxScore,
-        low: minScore,
-        mainScore, maxScore, minScore, direction,
-        catCount, satCount,
-        tieuHanCung: tieuHanP?.cungName || '',
-        luuNienCung: luuNienP?.cungName || '',
-      });
+      if (!namXem || Math.abs(nam - namXem) <= 5) {
+        results.push({
+          nam, tuoi, dvIdx, diaChi,
+          open: mainScore,
+          close: closeScore,
+          high: maxScore,
+          low: minScore,
+          mainScore, maxScore, minScore, direction,
+          catCount, satCount,
+          tieuHanCung: tieuHanP?.cungName || '',
+          luuNienCung: luuNienP?.cungName || '',
+        });
+      }
     }
   });
 
@@ -4726,24 +4728,24 @@ function tinhTieuVanScores(ls, gioitinh, amDuong, chiNam, namSinhDL) {
 }
 
 // ================================================================
-// TÍNH NGUYỆT VẬN SCORES — pre-compute cung tháng Giêng (cách 1) cho namXem ±5
-// Logic: tinhNguyetHan cách 1 — từ tiểu hạn đếm nghịch (thangSinh-1) → giờ Tý,
-//        rồi đếm thuận gioSinh bước → cung tháng Giêng.
-// Output: array of { nam, tuoi, gieng } (gieng = palace index của tháng Giêng ÂL)
-// Cung tháng m (ÂL): mod12(gieng + m - 1)
+// TÍNH NGUYỆT VẬN SCORES — pre-compute 12 cung nguyệt hạn (ÂL) cho namXem ±5
+// months[i] = cung nguyệt hạn của tháng ÂL (i+1), i = 0..11
+// Nhật hạn: mod12(months[thangAL-1] + ngayAL - 1) — tính on-demand, 1 phép mod
 // ================================================================
-function tinhNguyetVanScores(tieuVanScores, palaces, thangSinhAL, gioSinhIdx, namXem) {
+function tinhNguyetVanScores(tieuVanScores, palaces, thangSinhAL, gioSinhIdx) {
   if (!tieuVanScores || !palaces || !thangSinhAL || gioSinhIdx == null) return [];
   function _m12(n) { return ((n % 12) + 12) % 12; }
   const results = [];
   for (let i = 0; i < tieuVanScores.length; i++) {
     const tv = tieuVanScores[i];
-    if (Math.abs(tv.nam - namXem) > 5) continue;
     const tieuHanIdx = palaces.findIndex(function(p) { return p.cungName === tv.tieuHanCung; });
     if (tieuHanIdx === -1) continue;
-    // Cách 1: đếm nghịch (thangSinh-1) từ tiểu hạn → giờ Tý, đếm thuận gioSinh → tháng Giêng
+    // Cách 1: đếm nghịch (thangSinh-1) → giờ Tý, đếm thuận gioSinh → cung tháng Giêng ÂL
     const gieng = _m12(_m12(tieuHanIdx - (thangSinhAL - 1)) + gioSinhIdx);
-    results.push({ nam: tv.nam, tuoi: tv.tuoi, gieng });
+    // Pre-compute tất cả 12 tháng ÂL
+    const months = [];
+    for (let m = 0; m < 12; m++) months.push(_m12(gieng + m));
+    results.push({ nam: tv.nam, tuoi: tv.tuoi, months });
   }
   return results;
 }
