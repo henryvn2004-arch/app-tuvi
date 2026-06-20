@@ -428,6 +428,9 @@
         direction: t.direction, catCount: t.catCount, satCount: t.satCount,
         tieuHanCung: t.tieuHanCung, luuNienCung: t.luuNienCung,
       })),
+      nguyetVanScores: (ls.nguyetVanScores || []).map(e => ({
+        nam: e.nam, tuoi: e.tuoi, months: e.months,
+      })),
       palaces,
       daiVans,
       daiVanHienTai: dvHT ? {
