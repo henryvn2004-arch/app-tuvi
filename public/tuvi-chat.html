@@ -2489,9 +2489,13 @@ var TuviTTS = (function() {
       chat.messages.push({ role: 'assistant', content: answer });
 
       // ── Trừ Lượng sau khi trả lời xong (ngầm), hoặc hiện signup gate ──
+      // Khi đi Contract v1 (useV1), SERVER /api/v1/chat đã trừ Lượng trong
+      // event done (lib/billing/credits.ts) → KHÔNG trừ lại ở client (tránh
+      // double-deduct khi cost>0). Path legacy /api/lasotuvi KHÔNG bill
+      // server-side nên client vẫn phải deductSilent.
       if (_isFirstTurnFree) {
         setTimeout(_showFirstTurnSignup, 1200);
-      } else if (window.TuviPaywall && TuviPaywall.deductSilent) {
+      } else if (!useV1 && window.TuviPaywall && TuviPaywall.deductSilent) {
         TuviPaywall.deductSilent({ product: 'tuvi-chat' }).then(function (d) {
           if (d && d.ok && d.balance != null && d.balance < 3 && TuviPaywall._banner) {
             TuviPaywall._banner('Hết lượng — nạp thêm để hỏi tiếp');
