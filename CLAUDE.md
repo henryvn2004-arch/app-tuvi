@@ -28,7 +28,8 @@ Một **bộ não** trên server (`/api/v1/chat`, Contract v1). Mọi nền tả
 - ✅ **Phase 1 một phần:** PWA (manifest/sw/pwa-install), `chat-v2.html` (vỏ mỏng tham chiếu, có lưu hội thoại + nút Mới).
 - ✅ **Sprint 1.1 (laso-only) — MERGED PR #78.** `tuvi-chat.html` luồng lá số → `/api/v1/chat` (server tính từ `chat.birth`). Cờ `USE_V1_LASO` + escape hatch `localStorage.tvc_use_v1='0'`.
 - ✅ **Sprint 1.2 (6 tool phi-lá-số) — MERGED PR #79.** Flip nốt xem-tuoi/xem-lam-an/tu-binh/sinh-con/chon-ngay/dat-ten trong `tuvi-chat.html` sang `/api/v1/chat` qua field additive `scenario:{type,data,docs?}`; `/api/v1/chat` dispatch qua CHÍNH `buildChatContext`. CÙNG cờ `USE_V1_LASO`. `/api/lasotuvi` GIỮ NGUYÊN cho 7 trang khác.
-- 🔵 **Sprint 1.3 (Tử Bình server-compute) — ĐANG REVIEW: PR #80.** Lát cắt dọc đầu tiên của "server tự tính kịch bản" (để Zalo/native không cần JS engine client). **2 phần:** (A) **Sửa bug** `extractTuBinhContext` trong `prompts.ts` — trước đọc sai shape (`tt.nam` object + in thẳng object) → tứ trụ ra `?`, field ra `[object Object]`; nay đọc đúng shape engine thật (mảng `tuTru` + object `cuongNhuoc/dungThan/cachCuc`), context giàu (tàng can, điểm, đại vận+factors, lưu niên, thần sát). Lợi cho cả luồng cũ. (B) **`lib/engine/tubinh.ts` `computeTuBinh(birth)`** — nạp `public/tubinh-ansao-engine.js` (đã CommonJS) qua `new Function`, parity vì cùng engine client. `/api/v1/chat`: kịch bản `tu-binh` + có `birth` → server lập bát tự, đè `scenario.data`. Client `tcDoTuBinh` set `chat.birth`, gửi kèm; vẫn giữ `contextData` cho fallback. Tử Bình dùng DƯƠNG lịch+tiết khí (không cần đổi âm).
+- ✅ **Sprint 1.3 (Tử Bình server-compute) — MERGED PR #80.** Lát cắt dọc đầu tiên của "server tự tính kịch bản". (A) **Sửa bug** `extractTuBinhContext` (`prompts.ts`) đọc sai shape → trước ra `?`/`[object Object]`; nay đọc đúng (mảng `tuTru` + object), context giàu. Lợi cho cả luồng cũ. (B) `lib/engine/tubinh.ts` `computeTuBinh(birth)` nạp `public/tubinh-ansao-engine.js` (CommonJS) qua `new Function`. `/api/v1/chat`: `tu-binh` + `birth` → server lập bát tự. Tử Bình dùng DƯƠNG lịch+tiết khí.
+- 🔵 **Sprint 1.4 (Tương hợp server-compute) — ĐANG REVIEW: PR #81.** Nhân pattern 1.3 cho `xem-tuoi`/`xem-lam-an`. DỄ hơn Tử Bình: compat chỉ là **2 lá số** → `computeLaso` ×2 (engine đã có từ 1.1, parity sẵn) — KHÔNG port engine mới. Client `doComputeCompat` lưu `chat.compatBirths={birthA,birthB}` (gioIdx khớp hourBranch), gửi qua `scenario.data={nameA,nameB,birthA,birthB}`; server lập 2 lá số, dựng `{lsA,lsB,nameA,nameB}` → `extractCompatContext`. Vẫn giữ `contextData` slim cho fallback. Cùng cờ/escape hatch.
 
 ### PR đã merge gần đây
 - **#74** Chat-first + Contract v1 (Phase 0–1 nền).
@@ -37,11 +38,12 @@ Một **bộ não** trên server (`/api/v1/chat`, Contract v1). Mọi nền tả
 - **#77** fix engine: `computeLaso` dùng năm ÂM cho `namAL` (sửa off-by-one tuổi mụ cho người sinh trước Tết). **→ tiền đề parity cho #78.**
 - **#78** Sprint 1.1: luồng lá số `tuvi-chat.html` gọi Contract v1.
 - **#79** Sprint 1.2: 6 kịch bản phi-lá-số gọi Contract v1 (`scenario`).
+- **#80** Sprint 1.3: Tử Bình server-compute + fix bug context.
 
 ### 🔴 Bước tiếp theo
-1. **Merge #80** (Tử Bình server-compute) khi CI xanh. Sau merge: `git reset --hard origin/main`.
-2. **Henry test preview**: `/tuvi-chat.html` → **Tử Bình** → nhập form → hỏi → verify luận bám đúng tứ trụ/cường nhược/dụng thần/đại vận. Network: request `/api/v1/chat` có cả `birth` lẫn `scenario`. So với bản cũ (context Tử Bình trước đây hỏng `[object Object]`) — câu trả lời phải sâu/chính xác hơn rõ.
-3. **Sprint 1.4+ (nhân pattern 1.3):** port nốt server-compute cho compat (xem-tuoi/xem-lam-an — engine `tuvi-engine/dist/compat`), sinh-con, chọn-ngày, đặt-tên. Mỗi kịch bản 1 PR. Khi cả 6 server-compute xong → Zalo/native chỉ gửi input thô.
+1. **Merge #81** (Tương hợp server-compute) khi CI xanh. Sau merge: `git reset --hard origin/main`.
+2. **Henry test preview**: `/tuvi-chat.html` → **Xem Tuổi / Xem Làm Ăn** → nhập 2 ngày sinh → hỏi → verify luận bám đúng 2 lá số. Network: `/api/v1/chat`, `scenario.data` có `birthA/birthB`. Tử Bình (#80) cũng test lại.
+3. **Sprint 1.5+ (nhân tiếp):** server-compute cho sinh-con, chọn-ngày, đặt-tên (logic địa chi/ngũ hành thuần, nhẹ). Mỗi kịch bản 1 PR. Khi cả 6 xong → Zalo/native chỉ gửi input thô.
 4. **Dọn nợ:** gỡ double-deduct billing (client `deductSilent` + server paywall) khi bật cost>0 — hiện cost=0 nên vô hại.
 5. **Phase 2 (Zalo)** — chờ Henry đăng ký OA/Mini App (oa.zalo.me, mini.zalo.me, cần CCCD/GPKD).
 

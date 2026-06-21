@@ -2023,6 +2023,12 @@ var TuviTTS = (function() {
 
       chat.contextData = slimCompatContext(lsA, lsB, nameA.trim(), nameB.trim());
       chat.contextData.toolType = toolType;
+      // Sprint 1.4: lưu 2 births thô để Contract v1 tự lập 2 lá số server-side
+      // (parity vì cùng engine). gioIdx (0..11) khớp BirthParams.hourBranch.
+      chat.compatBirths = {
+        birthA: { day: dA.ngay, month: dA.thang, year: dA.nam, hourBranch: dA.gioIdx, gender: dA.gioitinh, isLunar: false },
+        birthB: { day: dB.ngay, month: dB.thang, year: dB.nam, hourBranch: dB.gioIdx, gender: dB.gioitinh, isLunar: false },
+      };
 
       /* Update label from names if still default */
       if (nameA.trim() && nameB.trim()) {
@@ -2290,6 +2296,16 @@ var TuviTTS = (function() {
           // Sprint 1.3: Tử Bình có birth → server tự tính bát tự (server-compute).
           // Các kịch bản khác không set chat.birth nên bỏ qua.
           if (chat.birth) v1Body.birth = chat.birth;
+          // Sprint 1.4: tương hợp gửi 2 births thô → server tự lập 2 lá số.
+          // contextData (slim 2 lá số) vẫn giữ cho luồng fallback /api/lasotuvi.
+          if (chat.compatBirths) {
+            v1Body.scenario.data = {
+              nameA:  (chat.contextData && chat.contextData.nameA) || 'Người A',
+              nameB:  (chat.contextData && chat.contextData.nameB) || 'Người B',
+              birthA: chat.compatBirths.birthA,
+              birthB: chat.compatBirths.birthB,
+            };
+          }
         } else {
           // Lá số: não v1 tự RAG qua tool tra_cuu_tri_thuc → KHÔNG prefetch.
           v1Body.birth = chat.birth;
