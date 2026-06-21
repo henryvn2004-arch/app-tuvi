@@ -8,7 +8,7 @@
 ## 🟢 ĐANG LÀM — Chat-first / Contract v1 (đa nền tảng)
 
 **Branch:** `claude/astrology-app-design-urttcm`
-**Cập nhật:** 2026-06-20
+**Cập nhật:** 2026-06-21
 **Xương sống:** `docs/KIEN-TRUC-VA-LO-TRINH.md` (đọc file này trước khi làm tiếp).
 
 ### Tầm nhìn 1 câu
@@ -21,23 +21,25 @@ Một **bộ não** trên server (`/api/v1/chat`, Contract v1). Mọi nền tả
 - **Engine server-side:** `lib/engine/laso.ts` `computeLaso(birth)` — nạp ĐÚNG `public/tuvi-ansao-engine.js` mà client dùng → lá số y hệt (parity đã verify).
 - **Config runtime:** `app_config` (Supabase) qua `lib/config/appConfig.ts` — prompt/model/cost sửa ở DB, không deploy. `chat.system_prompt` rỗng = dùng template chung.
 - **Paywall/Lượng:** `lib/billing/credits.ts`, gộp trong `/api/v1/chat` (cost từ config, 0 = free). Cờ `PAYWALL_DISABLED`.
-- **Contract:** `lib/contract/v1.ts` — additive-only. SSE 5 event: status·tool_call·text(delta)·done·error.
+- **Contract:** `lib/contract/v1.ts` — additive-only. SSE 5 event: status·tool_call·text(delta)·done·error. Request: `birth` (luồng lá số) HOẶC `scenario:{type,data,docs?}` (6 kịch bản phi-lá-số).
 
 ### Tiến độ
 - ✅ **Phase 0** (bộ não + contract + config + paywall) — DONE.
 - ✅ **Phase 1 một phần:** PWA (manifest/sw/pwa-install), `chat-v2.html` (vỏ mỏng tham chiếu, có lưu hội thoại + nút Mới).
-- 🔵 **Sprint 1.1 (laso-only) — ĐANG REVIEW: PR #78.** `tuvi-chat.html` luồng lá số → `/api/v1/chat` (server tính từ `chat.birth`). Cờ `USE_V1_LASO` (mặc định bật) + escape hatch `localStorage.tvc_use_v1='0'` để rollback không deploy. 6 tool khác (xem-tuoi/tu-binh/dat-ten/...) GIỮ `/api/lasotuvi`.
+- ✅ **Sprint 1.1 (laso-only) — MERGED PR #78.** `tuvi-chat.html` luồng lá số → `/api/v1/chat` (server tính từ `chat.birth`). Cờ `USE_V1_LASO` + escape hatch `localStorage.tvc_use_v1='0'`.
+- 🔵 **Sprint 1.2 (6 tool phi-lá-số) — ĐANG REVIEW: PR #79.** Flip nốt xem-tuoi/xem-lam-an/tu-binh/sinh-con/chon-ngay/dat-ten trong `tuvi-chat.html` sang `/api/v1/chat`. Cách làm: thêm field additive `scenario:{type,data,docs?}` vào Contract v1; `/api/v1/chat` dispatch qua CHÍNH `buildChatContext` (prompt/tool y hệt `/api/lasotuvi`, parity tuyệt đối — shape `contextData` không đổi). Client tính context như cũ (server-compute để sau, contract không đổi). CÙNG cờ `USE_V1_LASO` + cùng escape hatch. `/api/lasotuvi` GIỮ NGUYÊN cho 7 trang khác (luan-giai/profile/tu-binh/xem-tuoi/xem-lam-an/chatbot.js) vẫn gọi nó.
 
 ### PR đã merge gần đây
 - **#74** Chat-first + Contract v1 (Phase 0–1 nền).
 - **#75** chat-v2 lưu hội thoại + nút Mới.
 - **#76** CI: thêm job `typecheck` (`tsc --noEmit` + build engine) — bịt lỗ refactor lọt lỗi type.
 - **#77** fix engine: `computeLaso` dùng năm ÂM cho `namAL` (sửa off-by-one tuổi mụ cho người sinh trước Tết). **→ tiền đề parity cho #78.**
+- **#78** Sprint 1.1: luồng lá số `tuvi-chat.html` gọi Contract v1.
 
 ### 🔴 Bước tiếp theo
-1. **Merge #78** khi CI xanh (đang chờ). Sau merge: `git reset --hard origin/main` để branch sạch.
-2. **Henry test preview**: `/tuvi-chat.html` → an sao lá số MỚI → hỏi → verify trả lời đúng, "năm nay"=2026, lá số y hệt. Lỗi → `localStorage.tvc_use_v1='0'`.
-3. **Sprint 1.2:** kéo tu-binh/phong-thuy/xem-tuoi/dat-ten vào não (`lib/agent/tools.ts`) rồi flip nốt 6 tool trong `tuvi-chat.html` sang `/api/v1/chat`. Giữ trang lẻ redirect cho SEO.
+1. **Merge #79** khi CI xanh. Sau merge: `git reset --hard origin/main` để branch sạch.
+2. **Henry test preview**: `/tuvi-chat.html` → mở từng tool (Tử Bình, Xem Tuổi, Sinh Con, Chọn Ngày, Đặt Tên) → nhập form → hỏi → verify trả lời đúng dữ liệu form. Network tab: request đi `/api/v1/chat` (không phải `/api/lasotuvi`). Lỗi → `localStorage.tvc_use_v1='0'` rollback cả cụm.
+3. **Sprint 1.3 (sau khi 1.2 ổn):** cân nhắc server-compute cho 6 kịch bản (port engine tu-binh/compat/... vào tool server) để Zalo/native không phải tự tính — contract đã sẵn sàng (`scenario.data` chỉ là context, ai tính cũng được). Đồng thời gỡ double-deduct billing (client `deductSilent` + server paywall) khi bật cost>0 — hiện cost=0 nên vô hại.
 4. **Phase 2 (Zalo)** — chờ Henry đăng ký OA/Mini App (oa.zalo.me, mini.zalo.me, cần CCCD/GPKD).
 
 ### ⏳ VIỆC TAY CỦA HENRY (chưa xong)
