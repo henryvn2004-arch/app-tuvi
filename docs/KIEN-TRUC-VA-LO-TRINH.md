@@ -1,16 +1,23 @@
 # Kiến Trúc & Lộ Trình — Tử Vi Minh Bảo (Chat-first, đa nền tảng)
 
 > Tài liệu xương sống. Mọi quyết định code đều quy chiếu về đây.
-> Cập nhật: 2026-06-20. Branch: `claude/astrology-app-design-urttcm`.
+> Cập nhật: 2026-06-21. Branch: `claude/astrology-app-design-urttcm`.
 
 ---
 
-## 📍 TRẠNG THÁI HIỆN TẠI (2026-06-20)
+## 📍 TRẠNG THÁI HIỆN TẠI (2026-06-21)
 
 - ✅ **Phase 0** (bộ não `/api/v1/chat` + Contract v1 + config DB + paywall) — DONE, merged.
-- ✅ **Phase 1 một phần:** PWA + `chat-v2.html` (vỏ mỏng tham chiếu, lưu hội thoại).
-- 🔵 **Sprint 1.1 (laso-only) — ĐANG REVIEW (PR #78):** `tuvi-chat.html` luồng lá số gọi `/api/v1/chat` (server tính). Cờ `USE_V1_LASO` + escape hatch `localStorage.tvc_use_v1='0'`.
-- ⏭ **Kế tiếp:** merge #78 → Henry test preview → **Sprint 1.2** (kéo tu-binh/phong-thuy/xem-tuoi/dat-ten vào não rồi flip nốt 6 tool trong `tuvi-chat.html`).
+- ✅ **Phase 1 (Web thin-client + PWA) — DONE phần lõi.** `tuvi-chat.html` chạy 100% qua Contract v1:
+  - Lá số + cả 6 kịch bản (xem-tuoi/xem-lam-an/tu-binh/sinh-con/chon-ngay/dat-ten) → `/api/v1/chat`, **server-compute** (PR #78–82). Engine deterministic là nguồn DUY NHẤT; client/Zalo/native chỉ gửi input thô.
+  - Parity năm xem chuẩn — năm xem = năm hiện tại giờ VN, nguồn chung `lib/engine/namxem.ts` (PR #83).
+  - Billing 1 nguồn — lượt v1 chỉ SERVER trừ Lượng (PR #84).
+  - PWA (manifest/sw/pwa-install) + E2E Playwright xanh. Cờ `USE_V1_LASO` + escape hatch `localStorage.tvc_use_v1='0'`.
+  - **→ Web đủ điều kiện ra mắt #1.**
+- ⏭ **Mở rộng tùy chọn (không chặn ra mắt):**
+  - Kéo **phong-thuy + tuong-mat** (ảnh/multimodal) vào agent chat (hiện vẫn trang/API riêng).
+  - `/api/lasotuvi` **GIỮ** (quyết định 2026-06-21): mode `phan` nuôi luận-giải 24 mục (chưa có bản v1), mode `action=chat` đã share CHUNG bộ não (`lib/agent/prompts.ts`+`tools.ts`) nên không drift → khai tử không đáng (lợi ích ~0, rủi ro gãy `luan-giai` thật).
+- 🔜 **Phase 2 (Zalo)** — bộ não đã sẵn; chờ Henry đăng ký OA/Mini App (mục 4.2).
 - Status chi tiết + quy ước phiên: xem `CLAUDE.md` mục "🟢 ĐANG LÀM".
 
 ---
