@@ -792,7 +792,16 @@ var TuviTTS = (function() {
 (function () {
   'use strict';
 
-  var NAM_XEM     = 2027;
+  // Năm xem = NĂM HIỆN TẠI giờ VN (Asia/Ho_Chi_Minh) — KHỚP server
+  // lib/engine/namxem.ts currentNamXem() để tuoiXem / đại vận hiện tại /
+  // tiểu vận / nguyệt vận parity tuyệt đối. KHÔNG hardcode năm.
+  var NAM_XEM = (function () {
+    try {
+      return Number(new Intl.DateTimeFormat('en', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric' }).format(new Date()));
+    } catch (e) {
+      return new Date().getFullYear();
+    }
+  })();
   var API_PATH    = '/api/lasotuvi?action=chat';
   // Sprint 1.1 — luồng LÁ SỐ gọi Contract v1 (/api/v1/chat): client gửi
   // tham số sinh, SERVER tính lá số (một bộ não, mọi nền tảng giống nhau).

@@ -10,6 +10,8 @@
 // → Zalo/native không cần JS helper.
 // ============================================================
 
+import { currentNamXem } from '@/lib/engine/namxem';
+
 const CAN = ['Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý'];
 const CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
 const NA = ['Kim', 'Hỏa', 'Mộc', 'Thổ', 'Kim', 'Hỏa', 'Thủy', 'Thổ', 'Kim', 'Mộc', 'Thủy', 'Thổ', 'Hỏa', 'Mộc', 'Thủy', 'Kim', 'Hỏa', 'Mộc', 'Thổ', 'Kim', 'Hỏa', 'Thủy', 'Thổ', 'Kim', 'Mộc', 'Thủy', 'Thổ', 'Hỏa', 'Mộc', 'Thủy'];
@@ -66,12 +68,6 @@ function scoreYear(chiIdx: number, chiBoIdx: number, chiMeIdx: number): { score:
   return { score, reasons };
 }
 
-function currentYearVN(): number {
-  return Number(
-    new Intl.DateTimeFormat('en', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric' }).format(new Date()),
-  );
-}
-
 type Rec = Record<string, unknown>;
 
 // ── SINH CON: bố + mẹ → bảng 15 năm tới (điểm địa chi) ──────
@@ -81,7 +77,7 @@ export function computeSinhCon(input: Rec): Rec | null {
   const iB = ccInfo(namBo);
   const iM = ccInfo(namMe);
   if (!iB || !iM) return null;
-  const cur = currentYearVN();
+  const cur = currentNamXem();
   const rows = [];
   for (let y = cur; y < cur + 15; y++) {
     const info = ccInfo(y)!;
