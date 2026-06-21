@@ -18,6 +18,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import type { BirthParams } from '@/lib/contract/v1';
+import { currentNamXem } from '@/lib/engine/namxem';
 
 type Rec = Record<string, unknown>;
 
@@ -41,12 +42,6 @@ function loadEngine() {
   }
   engineCache = { tinhBatTu: exp.tinhBatTu as (o: object) => Rec };
   return engineCache!;
-}
-
-function currentYearVN(): number {
-  return Number(
-    new Intl.DateTimeFormat('en', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric' }).format(new Date()),
-  );
 }
 
 export type TuBinh = Rec;
@@ -83,7 +78,7 @@ export function computeTuBinh(birth: BirthParams, namXem?: number): ComputeTuBin
       namDL: year,
       gio: hour,
       gioitinh: gender,
-      namXem: namXem ?? currentYearVN(),
+      namXem: namXem ?? currentNamXem(),
     });
     if (!bt || !bt.tuTru) return { ok: false, error: 'Engine không trả về tứ trụ.' };
     return { ok: true, data: bt };

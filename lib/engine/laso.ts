@@ -13,6 +13,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import type { BirthParams } from '@/lib/contract/v1';
+import { currentNamXem } from '@/lib/engine/namxem';
 
 type Rec = Record<string, unknown>;
 
@@ -89,7 +90,7 @@ export function computeLaso(birth: BirthParams, namXem?: number): ComputeLasoRes
     if (!conv?.amLich) return { ok: false, error: 'Không chuyển được sang âm lịch.' };
     const al = conv.amLich as Rec;
 
-    const view = namXem ?? new Date().getFullYear();
+    const view = namXem ?? currentNamXem();
     const ls = (anSaoLaSo as (o: object) => Rec)({
       ngayAL: al.day,
       thangAL: al.month,
