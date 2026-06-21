@@ -21,12 +21,13 @@ import {
   validateChatRequest,
   type ChatRequestV1,
   type ChatMessage,
+  type ScenarioInput,
   type DoneEvent,
 } from '@/lib/contract/v1';
 import { buildToolDefs, executeTool, newToolContext } from '@/lib/tools/registry';
 import { computeLaso } from '@/lib/engine/laso';
 // Template prompt + context formatter dùng CHUNG với /api/lasotuvi (một bộ não).
-import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext } from '@/lib/agent/prompts';
+import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext } from '@/lib/agent/prompts';
 import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
 import { getChatConfig, type ChatConfig } from '@/lib/config/appConfig';
 import {
@@ -140,36 +141,51 @@ async function runAgent(
   cfg: ChatConfig,
   send: (s: string) => void,
 ): Promise<{ toolsUsed: string[] }> {
-  const tools = buildToolDefs();
   const ctx = newToolContext();
   const toolsUsed: string[] = [];
 
   // Câu hỏi mới nhất — để extractLasoContext khoanh cung liên quan.
   const lastQ = (req.messages as ChatMessage[])[req.messages.length - 1]?.content || '';
 
-  // Seed lá số nếu client gửi sẵn birth hợp lệ (đỡ phải hỏi lại).
-  // Dùng CHUNG extractLasoContext với /api/lasotuvi → marker khớp prompt giàu.
-  let lasoCtx = '';
-  if (req.birth) {
-    const res = computeLaso(req.birth);
-    if (res.ok && res.ls) {
-      ctx.ls = res.ls;
-      lasoCtx = extractLasoContext(res.ls, lastQ);
-    }
-  }
-  const hasLaso = !!ctx.ls;
-
-  // Prompt: ưu tiên OVERRIDE từ app_config (DB); mặc định dùng TEMPLATE
-  // chung lib/agent/prompts (một nguồn với /api/lasotuvi — sửa văn phong
-  // 1 chỗ). Template tự inject thời gian thực + luật chống tâng bốc.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let tools: any[];
   let system: string;
-  if (cfg.systemPrompt) {
-    system = cfg.systemPrompt + '\n\n' + timeContext();
-    if (lasoCtx) system += '\n\n=== LÁ SỐ ĐÃ LẬP (luận trên dữ liệu này) ===\n' + lasoCtx;
+
+  const scenario = req.scenario;
+  if (scenario && scenario.type) {
+    // ── Kịch bản PHI-LÁ-SỐ (Sprint 1.2): tương hợp, tử bình, sinh con,
+    // chọn ngày, đặt tên. Dùng CHUNG buildChatContext (một bộ não) → prompt
+    // + tool y hệt /api/lasotuvi; client gửi context đã tính sẵn trong
+    // scenario.data. Không có lá số → ctx.ls null, tool chỉ còn xem_ngay_tot.
+    const bc = buildChatContext(scenarioToBody(scenario, req.messages as ChatMessage[]));
+    system = bc.systemForCall;
+    tools = bc.tools;
   } else {
-    system = hasLaso ? CHAT_SYSTEM_LASO(lasoCtx) : CHAT_SYSTEM_GENERAL();
+    // ── LÁ SỐ / GENERAL (Sprint 1.1): seed từ birth, prompt thương hiệu +
+    // công cụ đầy đủ (lap_la_so, vận hạn, RAG). Dùng CHUNG extractLasoContext
+    // với /api/lasotuvi → marker khớp prompt giàu.
+    let lasoCtx = '';
+    if (req.birth) {
+      const res = computeLaso(req.birth);
+      if (res.ok && res.ls) {
+        ctx.ls = res.ls;
+        lasoCtx = extractLasoContext(res.ls, lastQ);
+      }
+    }
+    const hasLaso = !!ctx.ls;
+
+    // Prompt: ưu tiên OVERRIDE từ app_config (DB); mặc định dùng TEMPLATE
+    // chung lib/agent/prompts (một nguồn với /api/lasotuvi — sửa văn phong
+    // 1 chỗ). Template tự inject thời gian thực + luật chống tâng bốc.
+    if (cfg.systemPrompt) {
+      system = cfg.systemPrompt + '\n\n' + timeContext();
+      if (lasoCtx) system += '\n\n=== LÁ SỐ ĐÃ LẬP (luận trên dữ liệu này) ===\n' + lasoCtx;
+    } else {
+      system = hasLaso ? CHAT_SYSTEM_LASO(lasoCtx) : CHAT_SYSTEM_GENERAL();
+    }
+    system += TOOLS_INSTRUCTION(hasLaso);
+    tools = buildToolDefs();
   }
-  system += TOOLS_INSTRUCTION(hasLaso);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const convo: any[] = (req.messages as ChatMessage[]).slice(-10).map((m) => ({
@@ -315,6 +331,32 @@ function timeContext(): string {
     `Khi user nói "năm nay" hãy hiểu là năm ${year}, "năm sau" là ${Number(year) + 1}; ` +
     `gọi công cụ tra vận hạn với đúng năm đó, không dùng năm mặc định khác.`
   );
+}
+
+// ── Map ScenarioInput → body cho buildChatContext (một bộ não) ──
+// Mỗi kịch bản đẩy context qua đúng field mà extract* trong prompts.ts
+// đang đọc — KHÔNG đổi shape so với /api/lasotuvi (giữ parity tuyệt đối).
+const SCENARIO_FIELD: Record<string, string> = {
+  'xem-tuoi': 'compatData',
+  'xem-lam-an': 'compatData',
+  'tu-binh': 'tuBinhData',
+  'xem-tuoi-sinh-con': 'sinhConData',
+  'chon-ngay-tot': 'chonNgayData',
+  'dat-ten-con': 'datTenData',
+};
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function scenarioToBody(scenario: ScenarioInput, messages: ChatMessage[]): any {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const body: any = {
+    toolType: scenario.type,
+    messages,
+    docs: scenario.docs,
+    authorName: scenario.authorName,
+    authorStyle: scenario.authorStyle,
+  };
+  const field = SCENARIO_FIELD[scenario.type];
+  if (field) body[field] = scenario.data;
+  return body;
 }
 
 // ── helpers ──────────────────────────────────────────────────

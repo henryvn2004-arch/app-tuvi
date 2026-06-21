@@ -2235,27 +2235,55 @@ var TuviTTS = (function() {
       // Sprint 1.1: luồng lá số gọi Contract v1 (server tự tính từ chat.birth).
       // Điều kiện: cờ bật + toolType laso + ĐÃ có birth (đã an sao). Chat cũ nạp
       // từ cloud không có birth → về luồng /api/lasotuvi cũ an toàn.
+      // Sprint 1.2: 6 kịch bản phi-lá-số (tương hợp/tử bình/sinh con/chọn
+      // ngày/đặt tên) cũng gọi Contract v1 — gửi context đã tính qua scenario.
+      // CÙNG cờ USE_V1_LASO + cùng escape hatch tvc_use_v1='0' để rollback cả cụm.
       var isLasoTool = (chat.toolType === 'laso' || !chat.toolType);
-      var useV1 = USE_V1_LASO && isLasoTool && !!chat.birth;
+      var SCENARIO_TYPES = ['xem-tuoi', 'xem-lam-an', 'tu-binh', 'xem-tuoi-sinh-con', 'chon-ngay-tot', 'dat-ten-con'];
+      var isScenarioTool = SCENARIO_TYPES.indexOf(chat.toolType) !== -1;
+      var useV1Laso     = USE_V1_LASO && isLasoTool && !!chat.birth;
+      var useV1Scenario = USE_V1_LASO && isScenarioTool && !!chat.contextData;
+      var useV1 = useV1Laso || useV1Scenario;
 
       var res;
       if (useV1) {
-        // Não v1 tự RAG qua tool tra_cuu_tri_thuc → KHÔNG prefetch /api/search.
         var v1Headers = { 'Content-Type': 'application/json' };
         var v1Token = getAuthToken();
         if (v1Token) v1Headers['Authorization'] = 'Bearer ' + v1Token;
+        var v1Body = {
+          session_id: chat.id,
+          messages:   chat.messages.slice(-12).map(function (m) {
+            return { role: m.role, content: m.content };
+          }),
+          stream:     true,
+          client:     { platform: 'web', version: '1.0.0' },
+        };
+        if (useV1Scenario) {
+          // Kịch bản không có tool tra cứu → prefetch RAG như luồng cũ (giữ parity).
+          var sdocs = '';
+          try {
+            var ssr = await fetch('/api/search', {
+              method:  'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body:    JSON.stringify({ query: text, matchCount: 5 }),
+            });
+            sdocs = (await ssr.json()).docs || '';
+          } catch (e) { /* RAG optional */ }
+          v1Body.scenario = {
+            type:        chat.toolType,
+            data:        chat.contextData,
+            docs:        sdocs,
+            authorName:  _author ? _author.name  : null,
+            authorStyle: _author ? _author.style : null,
+          };
+        } else {
+          // Lá số: não v1 tự RAG qua tool tra_cuu_tri_thuc → KHÔNG prefetch.
+          v1Body.birth = chat.birth;
+        }
         res = await fetch('/api/v1/chat', {
           method:  'POST',
           headers: v1Headers,
-          body:    JSON.stringify({
-            session_id: chat.id,
-            messages:   chat.messages.slice(-12).map(function (m) {
-              return { role: m.role, content: m.content };
-            }),
-            birth:      chat.birth,
-            stream:     true,
-            client:     { platform: 'web', version: '1.0.0' },
-          }),
+          body:    JSON.stringify(v1Body),
         });
       } else {
         var docs = '';

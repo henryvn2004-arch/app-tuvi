@@ -62,6 +62,30 @@ export interface ClientInfo {
   version: string;
 }
 
+// ── Kịch bản phi-lá-số (additive — Sprint 1.2) ──────────────
+// Các công cụ KHÔNG dựa trên lá số tử vi (tương hợp, tử bình, sinh
+// con, chọn ngày, đặt tên). `data` là context ĐÃ TÍNH SẴN (deterministic)
+// — client tính bây giờ, sau này có thể chuyển server-side, contract
+// không đổi. Bộ não dùng chung buildChatContext để chọn prompt + tool.
+export type ScenarioType =
+  | 'xem-tuoi'
+  | 'xem-lam-an'
+  | 'tu-binh'
+  | 'xem-tuoi-sinh-con'
+  | 'chon-ngay-tot'
+  | 'dat-ten-con';
+
+export interface ScenarioInput {
+  type: ScenarioType;
+  /** Context kịch bản đã tính (shape tùy type — khớp buildChatContext). */
+  data: Record<string, unknown>;
+  /** Tài liệu RAG kèm theo (tùy chọn — kịch bản không có tool tra cứu). */
+  docs?: string;
+  /** Persona tác giả (tùy chọn). */
+  authorName?: string;
+  authorStyle?: string;
+}
+
 // ── REQUEST: POST /api/v1/chat ──────────────────────────────
 export interface ChatRequestV1 {
   /** Định danh phiên để lưu/nối hội thoại. Client tự sinh uuid. */
@@ -69,8 +93,10 @@ export interface ChatRequestV1 {
   messages: ChatMessage[];
   /** true → SSE stream; false → JSON một lần. Mặc định true. */
   stream?: boolean;
-  /** Tham số sinh nếu đã có (đỡ phải hỏi lại). */
+  /** Tham số sinh nếu đã có (đỡ phải hỏi lại) — luồng LÁ SỐ. */
   birth?: BirthParams;
+  /** Kịch bản phi-lá-số (loại trừ với birth). */
+  scenario?: ScenarioInput;
   client: ClientInfo;
 }
 
@@ -161,6 +187,17 @@ export function validateChatRequest(body: unknown):
   const client = b.client as Record<string, unknown> | undefined;
   if (!client || typeof client.platform !== 'string' || typeof client.version !== 'string') {
     return { ok: false, error: 'Thiếu client.platform / client.version' };
+  }
+
+  if (b.scenario != null) {
+    const s = b.scenario as Record<string, unknown>;
+    const types: ScenarioType[] = ['xem-tuoi', 'xem-lam-an', 'tu-binh', 'xem-tuoi-sinh-con', 'chon-ngay-tot', 'dat-ten-con'];
+    if (!types.includes(s.type as ScenarioType)) {
+      return { ok: false, error: 'scenario.type không hợp lệ' };
+    }
+    if (!s.data || typeof s.data !== 'object') {
+      return { ok: false, error: 'scenario.data phải là object' };
+    }
   }
 
   return { ok: true, value: b as unknown as ChatRequestV1 };
