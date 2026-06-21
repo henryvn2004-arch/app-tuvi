@@ -22,6 +22,7 @@ import {
   type ChatRequestV1,
   type ChatMessage,
   type ScenarioInput,
+  type BirthParams,
   type DoneEvent,
 } from '@/lib/contract/v1';
 import { buildToolDefs, executeTool, newToolContext } from '@/lib/tools/registry';
@@ -166,6 +167,20 @@ async function runAgent(
       const tb = computeTuBinh(req.birth);
       if (tb.ok && tb.data) {
         scn = { ...scenario, data: tb.data as Record<string, unknown> };
+      }
+    }
+    // Sprint 1.4: TƯƠNG HỢP (xem-tuoi/xem-lam-an) tính SERVER-SIDE — chỉ là
+    // 2 lá số (computeLaso ×2, engine đã có, parity sẵn). Có birthA+birthB
+    // trong data → server lập 2 lá số, đè data; còn không → dùng lsA/lsB
+    // client gửi.
+    if (scenario.type === 'xem-tuoi' || scenario.type === 'xem-lam-an') {
+      const d = (scenario.data || {}) as Record<string, unknown>;
+      if (d.birthA && d.birthB) {
+        const a = computeLaso(d.birthA as BirthParams);
+        const b = computeLaso(d.birthB as BirthParams);
+        if (a.ok && a.ls && b.ok && b.ls) {
+          scn = { ...scenario, data: { lsA: a.ls, lsB: b.ls, nameA: d.nameA, nameB: d.nameB } };
+        }
       }
     }
     const bc = buildChatContext(scenarioToBody(scn, req.messages as ChatMessage[]));
