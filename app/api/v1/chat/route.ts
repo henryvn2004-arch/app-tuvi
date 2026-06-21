@@ -26,6 +26,7 @@ import {
 } from '@/lib/contract/v1';
 import { buildToolDefs, executeTool, newToolContext } from '@/lib/tools/registry';
 import { computeLaso } from '@/lib/engine/laso';
+import { computeTuBinh } from '@/lib/engine/tubinh';
 // Template prompt + context formatter dùng CHUNG với /api/lasotuvi (một bộ não).
 import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext } from '@/lib/agent/prompts';
 import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
@@ -157,7 +158,17 @@ async function runAgent(
     // chọn ngày, đặt tên. Dùng CHUNG buildChatContext (một bộ não) → prompt
     // + tool y hệt /api/lasotuvi; client gửi context đã tính sẵn trong
     // scenario.data. Không có lá số → ctx.ls null, tool chỉ còn xem_ngay_tot.
-    const bc = buildChatContext(scenarioToBody(scenario, req.messages as ChatMessage[]));
+    let scn = scenario;
+    // Sprint 1.3: TỬ BÌNH tính SERVER-SIDE từ birth (Zalo/native không cần
+    // tự tính). Có birth → engine server lập bát tự, đè scenario.data; còn
+    // không → dùng data client gửi (web có engine sẵn, vẫn chạy).
+    if (scenario.type === 'tu-binh' && req.birth) {
+      const tb = computeTuBinh(req.birth);
+      if (tb.ok && tb.data) {
+        scn = { ...scenario, data: tb.data as Record<string, unknown> };
+      }
+    }
+    const bc = buildChatContext(scenarioToBody(scn, req.messages as ChatMessage[]));
     system = bc.systemForCall;
     tools = bc.tools;
   } else {
