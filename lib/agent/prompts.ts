@@ -422,35 +422,93 @@ function extractCompatContext(compatData: any, toolType: string): string {
 function extractTuBinhContext(tuBinhData: any): string {
   if (!tuBinhData) return '';
   let ctx = '';
-  const tt = tuBinhData.tuTru;
-  if (tt) {
+
+  // Tứ Trụ — engine trả MẢNG 4 trụ [{ten,can,chi,napAm,tangCan:[{can,weight}]}]
+  if (Array.isArray(tuBinhData.tuTru) && tuBinhData.tuTru.length) {
     ctx += 'Tứ Trụ:\n';
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const fmtTru = (t: any) => t ? `${t.can || ''}${t.chi || ''} (${t.hanh || ''})` : '?';
-    ctx += `  Năm:   ${fmtTru(tt.nam)}\n`;
-    ctx += `  Tháng: ${fmtTru(tt.thang)}\n`;
-    ctx += `  Ngày:  ${fmtTru(tt.ngay)}\n`;
-    ctx += `  Giờ:   ${fmtTru(tt.gio)}\n`;
+    tuBinhData.tuTru.forEach((t: any) => {
+      ctx += '  ' + (t.ten || '') + ': ' + (t.can || '') + ' ' + (t.chi || '') + (t.napAm ? ' (' + t.napAm + ')' : '');
+      if (Array.isArray(t.tangCan) && t.tangCan.length) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ctx += ' — Tàng can: ' + t.tangCan.map((tc: any) => tc.can).filter(Boolean).join(', ');
+      }
+      ctx += '\n';
+    });
   }
-  if (tuBinhData.nhatCan)   ctx += `Nhật Can: ${tuBinhData.nhatCan} (${tuBinhData.nhatCanHanh || ''})\n`;
-  if (tuBinhData.cuongNhuoc) ctx += `Cường/Nhược: ${tuBinhData.cuongNhuoc}\n`;
-  if (tuBinhData.dungThan)  ctx += `Dụng Thần: ${tuBinhData.dungThan}\n`;
-  if (tuBinhData.cachCuc)   ctx += `Cách Cục: ${tuBinhData.cachCuc}\n`;
-  const nh = tuBinhData.nguHanh;
-  if (nh) {
-    const parts = ['Mộc','Hỏa','Thổ','Kim','Thủy'].map(k => nh[k] != null ? `${k}:${nh[k]}` : null).filter(Boolean);
-    if (parts.length) ctx += `Ngũ Hành: ${parts.join(', ')}\n`;
+  if (tuBinhData.nhatCan) {
+    ctx += 'Nhật Can: ' + tuBinhData.nhatCan + (tuBinhData.nhatCanHanh ? ' (' + tuBinhData.nhatCanHanh + ')' : '') + ' — tức bản thân đương số\n';
   }
-  const dvHT = tuBinhData.daiVanHienTai;
-  if (dvHT) {
-    ctx += `Đại Vận hiện tại: ${dvHT.can || ''}${dvHT.chi || ''} (${dvHT.tuoiStart ?? '?'}–${dvHT.tuoiEnd ?? '?'}t)\n`;
+  if (tuBinhData.cuongNhuoc) {
+    const cn = tuBinhData.cuongNhuoc;
+    ctx += 'Cường nhược nhật can: ' + (cn.label || '') + (cn.score != null ? ' (' + cn.score + '/10)' : '') + '\n';
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const thanSat = tuBinhData.thanSat;
-  if (thanSat && typeof thanSat === 'object') {
-    const parts = (Object.entries(thanSat) as [string, unknown][]).slice(0, 8).map(([k, v]) => `${k}:${v}`);
-    if (parts.length) ctx += `Thần Sát: ${parts.join(', ')}\n`;
+  if (tuBinhData.dungThan) {
+    const dt = tuBinhData.dungThan;
+    ctx += 'Dụng thần: ' + (dt.primary || '');
+    if (dt.secondary) ctx += ' / Hỉ thần: ' + dt.secondary;
+    if (dt.method) ctx += ' (' + dt.method + ')';
+    if (dt.rationale) ctx += ' — ' + dt.rationale;
+    ctx += '\n';
   }
+  if (tuBinhData.cachCuc) {
+    const cc = tuBinhData.cachCuc;
+    ctx += 'Cách cục: ' + (cc.primary || cc.name || '') + (cc.thanhPhaCach ? ' (' + cc.thanhPhaCach + ')' : '') + (cc.note ? ' — ' + cc.note : '') + '\n';
+  }
+  if (tuBinhData.nguHanh?.weighted) {
+    const w = tuBinhData.nguHanh.weighted;
+    const parts = ['Mộc', 'Hỏa', 'Thổ', 'Kim', 'Thủy'].map((k) => k + ' ' + (w[k] ?? 0));
+    ctx += 'Ngũ hành (trọng số): ' + parts.join(', ');
+    if (tuBinhData.nguHanh.dominant) ctx += ' — Vượng: ' + tuBinhData.nguHanh.dominant;
+    if (tuBinhData.nguHanh.deficient) ctx += ', Thiếu: ' + tuBinhData.nguHanh.deficient;
+    ctx += '\n';
+  }
+
+  // Đại vận hiện tại + yếu tố (factors) ảnh hưởng điểm
+  if (tuBinhData.daiVanHienTai) {
+    const dv = tuBinhData.daiVanHienTai;
+    ctx += '\nĐại vận hiện tại: ' + (dv.can || '') + (dv.chi || '') + ' (' + (dv.tuoiStart ?? '?') + '–' + (dv.tuoiEnd ?? '?') + ' tuổi';
+    if (dv.namStart) ctx += ', ' + dv.namStart + '–' + dv.namEnd;
+    ctx += ')';
+    if (dv.thapThanCan) ctx += ' — Thập thần: ' + dv.thapThanCan;
+    if (dv.score != null) ctx += ', điểm ' + dv.score + '/10 ' + (dv.label || '');
+    ctx += '\n';
+    if (Array.isArray(dv.factors) && dv.factors.length) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ctx += '  Yếu tố: ' + dv.factors.slice(0, 6).map((f: any) => f.text).filter(Boolean).join('; ') + '\n';
+    }
+  }
+  if (tuBinhData.daiVanKeTiep) {
+    const dv = tuBinhData.daiVanKeTiep;
+    ctx += 'Đại vận kế tiếp: ' + (dv.can || '') + (dv.chi || '') + ' (' + (dv.tuoiStart ?? '?') + '–' + (dv.tuoiEnd ?? '?') + 't)' + (dv.thapThanCan ? ' — ' + dv.thapThanCan : '') + (dv.score != null ? ', điểm ' + dv.score + '/10' : '') + '\n';
+  }
+  if (tuBinhData.luuNien) {
+    const ln = tuBinhData.luuNien;
+    ctx += 'Lưu niên ' + (ln.nam || '') + ': ' + (ln.can || '') + (ln.chi || '') + (ln.thapThanCan ? ' — ' + ln.thapThanCan : '') + (ln.score != null ? ', điểm ' + ln.score + '/10' : '') + '\n';
+  }
+
+  // Hợp/xung/hình/hại
+  if (tuBinhData.hinhXungHaiHop) {
+    const h = tuBinhData.hinhXungHaiHop;
+    const s: string[] = [];
+    if (h.tamHop?.length) s.push('Tam hợp ' + h.tamHop.length);
+    if (h.lucHop?.length) s.push('Lục hợp ' + h.lucHop.length);
+    if (h.lucXung?.length) s.push('Lục xung ' + h.lucXung.length);
+    if (h.tamHinh?.length) s.push('Tam hình ' + h.tamHinh.length);
+    if (h.lucHai?.length) s.push('Lục hại ' + h.lucHai.length);
+    if (h.canHop?.length) s.push('Can hợp ' + h.canHop.length);
+    if (s.length) ctx += 'Hợp/xung/hình/hại: ' + s.join(', ') + '\n';
+  }
+
+  // Thần sát đã phát hiện (chỉ liệt kê sao .found = true)
+  if (tuBinhData.thanSat && typeof tuBinhData.thanSat === 'object') {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const found = (Object.entries(tuBinhData.thanSat) as [string, any][])
+      .filter(([, v]) => v && v.found)
+      .map(([k]) => k);
+    if (found.length) ctx += 'Thần sát hiện diện: ' + found.join(', ') + '\n';
+  }
+
   return ctx;
 }
 

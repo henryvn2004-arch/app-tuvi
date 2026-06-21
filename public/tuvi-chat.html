@@ -2087,6 +2087,17 @@ var TuviTTS = (function() {
 
       chat.contextData = slimTuBinh(bt);
       chat.contextData.toolType = 'tu-binh';
+      // Sprint 1.3: lưu tham số sinh thô để Contract v1 tự tính bát tự
+      // server-side (parity vì cùng engine). hourBranch suy từ giờ dương:
+      // Tý=23-1h (branch 0). data client vẫn giữ cho luồng fallback cũ.
+      chat.birth = {
+        day:        d.ngay,
+        month:      d.thang,
+        year:       d.nam,
+        hourBranch: Math.floor((((d.gioHour | 0) + 1) % 24) / 2),
+        gender:     d.gioitinh,
+        isLunar:    false,
+      };
       var cnLabel  = (bt.cuongNhuoc && bt.cuongNhuoc.label) ? bt.cuongNhuoc.label : '';
       var dtLabel  = (bt.dungThan   && bt.dungThan.primary)  ? bt.dungThan.primary  : '';
       var ccLabel  = (bt.cachCuc    && bt.cachCuc.name)      ? bt.cachCuc.name      : '';
@@ -2276,6 +2287,9 @@ var TuviTTS = (function() {
             authorName:  _author ? _author.name  : null,
             authorStyle: _author ? _author.style : null,
           };
+          // Sprint 1.3: Tử Bình có birth → server tự tính bát tự (server-compute).
+          // Các kịch bản khác không set chat.birth nên bỏ qua.
+          if (chat.birth) v1Body.birth = chat.birth;
         } else {
           // Lá số: não v1 tự RAG qua tool tra_cuu_tri_thuc → KHÔNG prefetch.
           v1Body.birth = chat.birth;
