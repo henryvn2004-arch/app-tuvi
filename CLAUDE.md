@@ -29,7 +29,8 @@ Một **bộ não** trên server (`/api/v1/chat`, Contract v1). Mọi nền tả
 - ✅ **Sprint 1.1 (laso-only) — MERGED PR #78.** `tuvi-chat.html` luồng lá số → `/api/v1/chat` (server tính từ `chat.birth`). Cờ `USE_V1_LASO` + escape hatch `localStorage.tvc_use_v1='0'`.
 - ✅ **Sprint 1.2 (6 tool phi-lá-số) — MERGED PR #79.** Flip nốt xem-tuoi/xem-lam-an/tu-binh/sinh-con/chon-ngay/dat-ten trong `tuvi-chat.html` sang `/api/v1/chat` qua field additive `scenario:{type,data,docs?}`; `/api/v1/chat` dispatch qua CHÍNH `buildChatContext`. CÙNG cờ `USE_V1_LASO`. `/api/lasotuvi` GIỮ NGUYÊN cho 7 trang khác.
 - ✅ **Sprint 1.3 (Tử Bình server-compute) — MERGED PR #80.** Lát cắt dọc đầu tiên của "server tự tính kịch bản". (A) **Sửa bug** `extractTuBinhContext` (`prompts.ts`) đọc sai shape → trước ra `?`/`[object Object]`; nay đọc đúng (mảng `tuTru` + object), context giàu. Lợi cho cả luồng cũ. (B) `lib/engine/tubinh.ts` `computeTuBinh(birth)` nạp `public/tubinh-ansao-engine.js` (CommonJS) qua `new Function`. `/api/v1/chat`: `tu-binh` + `birth` → server lập bát tự. Tử Bình dùng DƯƠNG lịch+tiết khí.
-- 🔵 **Sprint 1.4 (Tương hợp server-compute) — ĐANG REVIEW: PR #81.** Nhân pattern 1.3 cho `xem-tuoi`/`xem-lam-an`. DỄ hơn Tử Bình: compat chỉ là **2 lá số** → `computeLaso` ×2 (engine đã có từ 1.1, parity sẵn) — KHÔNG port engine mới. Client `doComputeCompat` lưu `chat.compatBirths={birthA,birthB}` (gioIdx khớp hourBranch), gửi qua `scenario.data={nameA,nameB,birthA,birthB}`; server lập 2 lá số, dựng `{lsA,lsB,nameA,nameB}` → `extractCompatContext`. Vẫn giữ `contextData` slim cho fallback. Cùng cờ/escape hatch.
+- ✅ **Sprint 1.4 (Tương hợp server-compute) — MERGED PR #81.** Nhân pattern 1.3 cho `xem-tuoi`/`xem-lam-an`: compat chỉ là **2 lá số** → `computeLaso` ×2 (parity sẵn). Client gửi `scenario.data={nameA,nameB,birthA,birthB}`; server dựng `{lsA,lsB,nameA,nameB}`.
+- 🔵 **Sprint 1.5 (sinh-con/chọn-ngày/đặt-tên server-compute) — ĐANG REVIEW: PR #82.** 3 kịch bản cuối, gộp 1 PR (đều NHẸ, cùng pattern). Logic ĐỊA CHI/CAN CHI/NẠP ÂM thuần → `lib/engine/diachi.ts` (port nguyên hằng số + hàm `_cc*` từ `tuvi-chat.html`, KHÔNG nạp engine vanilla). `computeSinhCon`/`computeChonNgay`/`computeDatTen` trả CHÍNH shape `extract*Context` cần. `/api/v1/chat`: 3 type này → tính từ input thô trong `scenario.data`; trả null nếu thiếu → giữ data client (fallback). Client `tcDo*` lưu `chat.scenarioRaw`, `doSend` gửi thô. **→ Cả 6 kịch bản giờ server-compute → Zalo/native chỉ gửi input thô.**
 
 ### PR đã merge gần đây
 - **#74** Chat-first + Contract v1 (Phase 0–1 nền).
@@ -39,13 +40,13 @@ Một **bộ não** trên server (`/api/v1/chat`, Contract v1). Mọi nền tả
 - **#78** Sprint 1.1: luồng lá số `tuvi-chat.html` gọi Contract v1.
 - **#79** Sprint 1.2: 6 kịch bản phi-lá-số gọi Contract v1 (`scenario`).
 - **#80** Sprint 1.3: Tử Bình server-compute + fix bug context.
+- **#81** Sprint 1.4: Tương hợp server-compute (computeLaso ×2).
 
 ### 🔴 Bước tiếp theo
-1. **Merge #81** (Tương hợp server-compute) khi CI xanh. Sau merge: `git reset --hard origin/main`.
-2. **Henry test preview**: `/tuvi-chat.html` → **Xem Tuổi / Xem Làm Ăn** → nhập 2 ngày sinh → hỏi → verify luận bám đúng 2 lá số. Network: `/api/v1/chat`, `scenario.data` có `birthA/birthB`. Tử Bình (#80) cũng test lại.
-3. **Sprint 1.5+ (nhân tiếp):** server-compute cho sinh-con, chọn-ngày, đặt-tên (logic địa chi/ngũ hành thuần, nhẹ). Mỗi kịch bản 1 PR. Khi cả 6 xong → Zalo/native chỉ gửi input thô.
-4. **Dọn nợ:** gỡ double-deduct billing (client `deductSilent` + server paywall) khi bật cost>0 — hiện cost=0 nên vô hại.
-5. **Phase 2 (Zalo)** — chờ Henry đăng ký OA/Mini App (oa.zalo.me, mini.zalo.me, cần CCCD/GPKD).
+1. **Merge #82** (sinh-con/chọn-ngày/đặt-tên server-compute) khi CI xanh. Sau merge: `git reset --hard origin/main`. **→ Phase 1 (web thin-client) coi như XONG: cả 7 luồng `tuvi-chat` chạy Contract v1 + 6 kịch bản server-compute.**
+2. **Henry test preview**: `/tuvi-chat.html` → Sinh Con / Chọn Ngày / Đặt Tên → nhập form → hỏi → verify luận đúng. Network: `/api/v1/chat`, `scenario.data` là input thô (namBo/namMe, namSinh/thangNum/namNum, ho/namCon...).
+3. **Dọn nợ:** gỡ double-deduct billing (client `deductSilent` + server paywall) khi bật cost>0 — hiện cost=0 nên vô hại. Cân nhắc khai tử dần `/api/lasotuvi?action=chat` (sau khi 7 trang lẻ cũng chuyển v1 — việc lớn hơn, để sau).
+4. **Phase 2 (Zalo)** — chờ Henry đăng ký OA/Mini App (oa.zalo.me, mini.zalo.me, cần CCCD/GPKD). Bộ não đã sẵn: native/Zalo chỉ cần gửi `birth` hoặc `scenario.data` thô.
 
 ### ⏳ VIỆC TAY CỦA HENRY (chưa xong)
 - [ ] Chạy `_patches/migration-app-config.sql` trong Supabase SQL Editor (project `dciwkfdqhhddeymlisey`). Chưa chạy thì chat vẫn chạy free bằng DEFAULTS.
