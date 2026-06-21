@@ -5,7 +5,56 @@
 
 ---
 
-## 🔴 ĐANG LÀM — ISR Lá Số SEO (438K pages)
+## 🟢 ĐANG LÀM — Chat-first / Contract v1 (đa nền tảng)
+
+**Branch:** `claude/astrology-app-design-urttcm`
+**Cập nhật:** 2026-06-20
+**Xương sống:** `docs/KIEN-TRUC-VA-LO-TRINH.md` (đọc file này trước khi làm tiếp).
+
+### Tầm nhìn 1 câu
+Một **bộ não** trên server (`/api/v1/chat`, Contract v1). Mọi nền tảng (Web → Zalo → TikTok → Android → iOS → bot) là **vỏ mỏng** gọi cùng API. Sửa 1 chỗ, tất cả cập nhật. Engine deterministic là nguồn lá số DUY NHẤT — LLM không bịa số.
+
+### Kiến trúc "một bộ não" (đã hợp nhất — KHÔNG viết trùng)
+- **Tools dùng chung:** `lib/agent/tools.ts` (TOOLS_INSTRUCTION, buildTools, execLasoTool, toolLabel).
+- **Prompts dùng chung:** `lib/agent/prompts.ts` (CHAT_SYSTEM_LASO/GENERAL, extractLasoContext, buildChatContext).
+- Cả `/api/v1/chat` VÀ `/api/lasotuvi` đều ăn 2 module trên → sửa prompt/tool 1 chỗ.
+- **Engine server-side:** `lib/engine/laso.ts` `computeLaso(birth)` — nạp ĐÚNG `public/tuvi-ansao-engine.js` mà client dùng → lá số y hệt (parity đã verify).
+- **Config runtime:** `app_config` (Supabase) qua `lib/config/appConfig.ts` — prompt/model/cost sửa ở DB, không deploy. `chat.system_prompt` rỗng = dùng template chung.
+- **Paywall/Lượng:** `lib/billing/credits.ts`, gộp trong `/api/v1/chat` (cost từ config, 0 = free). Cờ `PAYWALL_DISABLED`.
+- **Contract:** `lib/contract/v1.ts` — additive-only. SSE 5 event: status·tool_call·text(delta)·done·error.
+
+### Tiến độ
+- ✅ **Phase 0** (bộ não + contract + config + paywall) — DONE.
+- ✅ **Phase 1 một phần:** PWA (manifest/sw/pwa-install), `chat-v2.html` (vỏ mỏng tham chiếu, có lưu hội thoại + nút Mới).
+- 🔵 **Sprint 1.1 (laso-only) — ĐANG REVIEW: PR #78.** `tuvi-chat.html` luồng lá số → `/api/v1/chat` (server tính từ `chat.birth`). Cờ `USE_V1_LASO` (mặc định bật) + escape hatch `localStorage.tvc_use_v1='0'` để rollback không deploy. 6 tool khác (xem-tuoi/tu-binh/dat-ten/...) GIỮ `/api/lasotuvi`.
+
+### PR đã merge gần đây
+- **#74** Chat-first + Contract v1 (Phase 0–1 nền).
+- **#75** chat-v2 lưu hội thoại + nút Mới.
+- **#76** CI: thêm job `typecheck` (`tsc --noEmit` + build engine) — bịt lỗ refactor lọt lỗi type.
+- **#77** fix engine: `computeLaso` dùng năm ÂM cho `namAL` (sửa off-by-one tuổi mụ cho người sinh trước Tết). **→ tiền đề parity cho #78.**
+
+### 🔴 Bước tiếp theo
+1. **Merge #78** khi CI xanh (đang chờ). Sau merge: `git reset --hard origin/main` để branch sạch.
+2. **Henry test preview**: `/tuvi-chat.html` → an sao lá số MỚI → hỏi → verify trả lời đúng, "năm nay"=2026, lá số y hệt. Lỗi → `localStorage.tvc_use_v1='0'`.
+3. **Sprint 1.2:** kéo tu-binh/phong-thuy/xem-tuoi/dat-ten vào não (`lib/agent/tools.ts`) rồi flip nốt 6 tool trong `tuvi-chat.html` sang `/api/v1/chat`. Giữ trang lẻ redirect cho SEO.
+4. **Phase 2 (Zalo)** — chờ Henry đăng ký OA/Mini App (oa.zalo.me, mini.zalo.me, cần CCCD/GPKD).
+
+### ⏳ VIỆC TAY CỦA HENRY (chưa xong)
+- [ ] Chạy `_patches/migration-app-config.sql` trong Supabase SQL Editor (project `dciwkfdqhhddeymlisey`). Chưa chạy thì chat vẫn chạy free bằng DEFAULTS.
+- [ ] Test preview sau mỗi lần deploy.
+- [ ] Đăng ký nền tảng Zalo trước Phase 2.
+
+### Quy ước phiên
+- Phát triển trên `claude/astrology-app-design-urttcm`. Mỗi việc = 1 PR draft → CI xanh → mark ready → squash-merge → `git reset --hard origin/main` cho branch.
+- Push branch sau squash-merge cần `--force-with-lease` (remote còn commit cũ).
+- `send_later` có thể không có trong phiên → re-check PR thủ công khi có webhook.
+
+---
+
+## 🗄️ Track cũ (song song) — ISR Lá Số SEO (438K pages)
+
+> Nhánh khác, không phải việc chat-first hiện tại. Giữ để tham khảo.
 
 **Branch:** `claude/serene-elion-e060cc`  
 **Status:** 24-section template DONE (commit c5dbc8a), sẵn sàng deploy + test
