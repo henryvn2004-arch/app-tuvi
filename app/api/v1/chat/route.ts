@@ -28,6 +28,7 @@ import {
 import { buildToolDefs, executeTool, newToolContext } from '@/lib/tools/registry';
 import { computeLaso } from '@/lib/engine/laso';
 import { computeTuBinh } from '@/lib/engine/tubinh';
+import { computeSinhCon, computeChonNgay, computeDatTen } from '@/lib/engine/diachi';
 // Template prompt + context formatter dùng CHUNG với /api/lasotuvi (một bộ não).
 import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext } from '@/lib/agent/prompts';
 import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
@@ -182,6 +183,19 @@ async function runAgent(
           scn = { ...scenario, data: { lsA: a.ls, lsB: b.ls, nameA: d.nameA, nameB: d.nameB } };
         }
       }
+    }
+    // Sprint 1.5: SINH CON / CHỌN NGÀY / ĐẶT TÊN — logic địa chi thuần
+    // (lib/engine/diachi). Client gửi input thô → server dựng context-data.
+    // compute* trả null nếu thiếu input thô → giữ data client (fallback).
+    if (scenario.type === 'xem-tuoi-sinh-con') {
+      const r = computeSinhCon(scenario.data || {});
+      if (r) scn = { ...scenario, data: r };
+    } else if (scenario.type === 'chon-ngay-tot') {
+      const r = computeChonNgay(scenario.data || {});
+      if (r) scn = { ...scenario, data: r };
+    } else if (scenario.type === 'dat-ten-con') {
+      const r = computeDatTen(scenario.data || {});
+      if (r) scn = { ...scenario, data: r };
     }
     const bc = buildChatContext(scenarioToBody(scn, req.messages as ChatMessage[]));
     system = bc.systemForCall;

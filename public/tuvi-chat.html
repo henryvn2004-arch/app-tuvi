@@ -1614,6 +1614,8 @@ var TuviTTS = (function() {
     var greeting = lines.join('\n');
 
     chat.contextData = { sinhConData: { bo: { canChi: iB.canChi, napAm: iB.napAm, chiIdx: iB.chiIdx }, me: { canChi: iM.canChi, napAm: iM.napAm, chiIdx: iM.chiIdx }, rows: rows } };
+    // Sprint 1.5: input thô để Contract v1 tự tính server-side (logic địa chi thuần).
+    chat.scenarioRaw = { namBo: parseInt((document.getElementById('tc-sc-bo')||{}).value), namMe: parseInt((document.getElementById('tc-sc-me')||{}).value) };
     chat.summary   = 'Bố '+iB.canChi+' · Mẹ '+iM.canChi;
     chat.messages  = [{ role: 'assistant', content: greeting }];
     chat.lastMsg   = 'Xem tuổi sinh con: '+iB.canChi+' & '+iM.canChi;
@@ -1750,6 +1752,8 @@ var TuviTTS = (function() {
       if (TuviTTS.getAuto() && _spBtn1) TuviTTS.speak(answer, _spBtn1);
 
       chat.contextData = { chonNgayData: { suKien: suKien, hoTen: hoTen, namSinh: ns, canChi: info.canChi, napAm: info.napAm, thangCanChi: thangCC, namCanChi: namCC, thangNum: thang, namNum: nam } };
+      // Sprint 1.5: input thô để Contract v1 tự tính server-side.
+      chat.scenarioRaw = { suKien: suKien, hoTen: hoTen, namSinh: ns, thangNum: thang, namNum: nam };
       chat.summary     = hoTen+' · '+suKien+' T'+thang+'/'+nam;
       chat.messages    = [{ role: 'assistant', content: answer }];
       chat.lastMsg     = suKien+' T'+thang+'/'+nam;
@@ -1894,6 +1898,8 @@ var TuviTTS = (function() {
       if (TuviTTS.getAuto() && _spBtn2) TuviTTS.speak(answer, _spBtn2);
 
       chat.contextData = { datTenData: { ho: ho, gioiTinh: gt, canChiCon: iCon.canChi, napAmCon: iCon.napAm, canChiBo: iBo.canChi, napAmBo: iBo.napAm, canChiMe: iMe.canChi, napAmMe: iMe.napAm } };
+      // Sprint 1.5: input thô để Contract v1 tự tính server-side.
+      chat.scenarioRaw = { ho: ho, gioiTinh: gt, namCon: parseInt((document.getElementById('tc-dt-namcon')||{}).value), namBo: parseInt((document.getElementById('tc-dt-nambo')||{}).value), namMe: parseInt((document.getElementById('tc-dt-namme')||{}).value) };
       chat.summary     = ho+' ??? · Bé '+iCon.canChi+' ('+(gt==='nu'?'gái':'trai')+')';
       chat.messages    = [{ role: 'assistant', content: answer }];
       chat.lastMsg     = 'Đặt tên bé '+(gt==='nu'?'gái':'trai')+' '+iCon.canChi;
@@ -2306,6 +2312,9 @@ var TuviTTS = (function() {
               birthB: chat.compatBirths.birthB,
             };
           }
+          // Sprint 1.5: sinh-con/chọn-ngày/đặt-tên gửi input thô → server
+          // tự dựng context-data (logic địa chi thuần). contextData giữ fallback.
+          if (chat.scenarioRaw) v1Body.scenario.data = chat.scenarioRaw;
         } else {
           // Lá số: não v1 tự RAG qua tool tra_cuu_tri_thuc → KHÔNG prefetch.
           v1Body.birth = chat.birth;
