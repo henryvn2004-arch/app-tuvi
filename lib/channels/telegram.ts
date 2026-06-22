@@ -5,7 +5,7 @@
 // Không chứa logic nghiệp vụ tử vi (đã ở engine + agent loop).
 // ============================================================
 
-import type { ChatMessage, BirthParams } from '@/lib/contract/v1';
+import type { ChatMessage, BirthParams, ChatImage } from '@/lib/contract/v1';
 
 const TG_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
 const TG_API = `https://api.telegram.org/bot${TG_TOKEN}`;
@@ -81,6 +81,43 @@ export async function tgEditMessage(chatId: number | string, messageId: number, 
   } catch {
     /* best-effort */
   }
+}
+
+// ── Tải ẢNH người dùng gửi → base64 (cho runAgent luận nhân tướng/phong thủy) ──
+// Telegram 2 bước: getFile(file_id) → file_path; rồi tải nội dung từ
+// api.telegram.org/file/bot<token>/<path>. Trả ChatImage {data(base64,
+// KHÔNG tiền tố), mediaType} đúng shape Contract v1. Giới hạn 5MB để
+// chặn payload phình + chi phí.
+const TG_FILE_MAX = 5 * 1024 * 1024;
+
+export async function tgFetchImage(fileId: string): Promise<ChatImage | null> {
+  if (!TG_TOKEN || !fileId) return null;
+  try {
+    const r = await fetch(`${TG_API}/getFile`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ file_id: fileId }),
+    });
+    const j = (await r.json()) as { result?: { file_path?: string; file_size?: number } };
+    const path = j?.result?.file_path;
+    if (!path) return null;
+    if ((j.result?.file_size || 0) > TG_FILE_MAX) return null;
+    const fr = await fetch(`https://api.telegram.org/file/bot${TG_TOKEN}/${path}`);
+    if (!fr.ok) return null;
+    const buf = Buffer.from(await fr.arrayBuffer());
+    if (buf.length > TG_FILE_MAX || buf.length === 0) return null;
+    return { data: buf.toString('base64'), mediaType: mediaTypeFromPath(path) };
+  } catch {
+    return null;
+  }
+}
+
+function mediaTypeFromPath(p: string): string {
+  const ext = (p.toLowerCase().split('.').pop() || '').trim();
+  if (ext === 'png') return 'image/png';
+  if (ext === 'webp') return 'image/webp';
+  if (ext === 'gif') return 'image/gif';
+  return 'image/jpeg';
 }
 
 export function splitText(s: string, max: number): string[] {
