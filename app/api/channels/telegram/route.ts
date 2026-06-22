@@ -4,14 +4,19 @@
 //
 // Vỏ mỏng: nhận update Telegram → gọi runAgent IN-PROCESS (cùng loop
 // với web) → gửi luận giải về. KHÔNG tính phí (user Telegram chưa gắn
-// tài khoản Supabase) → chargeUserId bỏ qua, lượt free. Khi cần thu phí
-// Telegram sau này: thêm bước liên kết tài khoản, KHÔNG đổi contract.
+// tài khoản Supabase) → lượt free.
 //
-// Bảo mật: verify header secret_token Telegram gửi (đặt khi setWebhook).
-// Phiên hội thoại lưu ở bảng telegram_sessions để slot-filling chạy.
+// QUAN TRỌNG — webhook PHẢI ack 200 NGAY rồi xử lý NỀN (waitUntil):
+//   luận giải mất 30–90s; nếu xử lý xong mới trả 200 thì Telegram
+//   "Read timeout" → retry → 504 dồn (lỗi đã gặp). Ack tức thì →
+//   Telegram yên, nền chạy tới maxDuration mới gửi kết quả.
+//
+// Bảo mật: verify header secret_token (đặt khi setWebhook).
+// Phiên hội thoại lưu ở telegram_sessions để slot-filling chạy.
 // ============================================================
 
 import { NextRequest } from 'next/server';
+import { waitUntil } from '@vercel/functions';
 import type { ChatRequestV1, ChatMessage } from '@/lib/contract/v1';
 import { runAgent } from '@/lib/agent/run';
 import { getChatConfig } from '@/lib/config/appConfig';
@@ -25,7 +30,7 @@ import {
 } from '@/lib/channels/telegram';
 
 export const runtime = 'nodejs';
-export const maxDuration = 60;
+export const maxDuration = 300; // Pro: nền có đủ thời gian lập lá số + luận
 
 const WEBHOOK_SECRET = process.env.TELEGRAM_WEBHOOK_SECRET || '';
 
@@ -58,26 +63,35 @@ export async function POST(request: NextRequest) {
     return ok(); // ack để Telegram không retry
   }
 
+  // ACK NGAY, xử lý NỀN — Telegram chỉ cần 200 nhanh.
+  waitUntil(handleUpdate(update));
+  return ok();
+}
+
+// ── Xử lý nền (sau khi đã ack 200) ──────────────────────────
+async function handleUpdate(update: TgUpdate): Promise<void> {
   const msg = update.message;
   const chatId = msg?.chat?.id;
   const text = (msg?.text || '').trim();
 
+  if (!chatId) return;
+
   // Bỏ qua update không phải tin nhắn text (ảnh, sticker, callback...).
-  if (!chatId || !text) {
-    if (chatId) await tgSendMessage(chatId, 'Hiện mình chỉ trả lời tin nhắn dạng chữ. Bạn gõ câu hỏi nhé!');
-    return ok();
+  if (!text) {
+    await tgSendMessage(chatId, 'Hiện mình chỉ trả lời tin nhắn dạng chữ. Bạn gõ câu hỏi nhé!');
+    return;
   }
 
   // ── Lệnh ─────────────────────────────────────────────────────
   if (text === '/start') {
     await clearSession(chatId);
     await tgSendMessage(chatId, WELCOME);
-    return ok();
+    return;
   }
   if (text === '/new' || text === '/reset') {
     await clearSession(chatId);
     await tgSendMessage(chatId, 'Đã bắt đầu cuộc trò chuyện mới. Bạn hỏi gì nào?');
-    return ok();
+    return;
   }
 
   // ── Hội thoại ────────────────────────────────────────────────
@@ -102,7 +116,7 @@ export async function POST(request: NextRequest) {
 
     if (err || !answer) {
       await tgSendMessage(chatId, 'Xin lỗi, mình gặp trục trặc khi xử lý. Bạn thử lại sau giây lát nhé.');
-      return ok();
+      return;
     }
 
     await tgSendMessage(chatId, answer);
@@ -111,8 +125,6 @@ export async function POST(request: NextRequest) {
   } catch {
     await tgSendMessage(chatId, 'Xin lỗi, mình gặp trục trặc khi xử lý. Bạn thử lại sau giây lát nhé.');
   }
-
-  return ok();
 }
 
 function ok() {
