@@ -53,7 +53,37 @@ export async function tgSendMessage(chatId: number | string, text: string): Prom
   }
 }
 
-function splitText(s: string, max: number): string[] {
+/** Gửi tin nhắn, TRẢ VỀ message_id để edit dần (tiến trình / câu trả lời). */
+export async function tgSendMessageReturnId(chatId: number | string, text: string): Promise<number | null> {
+  if (!TG_TOKEN) return null;
+  try {
+    const r = await fetch(`${TG_API}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: chatId, text: (text || '…').slice(0, TG_MSG_LIMIT), disable_web_page_preview: true }),
+    });
+    const j = (await r.json()) as { result?: { message_id?: number } };
+    return j?.result?.message_id ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/** Sửa nội dung 1 tin nhắn (dùng cho thanh tiến trình + chốt câu trả lời). */
+export async function tgEditMessage(chatId: number | string, messageId: number, text: string): Promise<void> {
+  if (!TG_TOKEN || !messageId) return;
+  try {
+    await fetch(`${TG_API}/editMessageText`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: chatId, message_id: messageId, text: (text || '…').slice(0, TG_MSG_LIMIT), disable_web_page_preview: true }),
+    });
+  } catch {
+    /* best-effort */
+  }
+}
+
+export function splitText(s: string, max: number): string[] {
   if (s.length <= max) return [s];
   const out: string[] = [];
   let rest = s;
@@ -119,7 +149,7 @@ export async function clearSession(chatId: number | string): Promise<void> {
 // ── Gom event 'text' từ runAgent (send nhận chuỗi SSE) ──────
 // runAgent gọi send(sse.text({delta})) / send(sse.error({...})). Ta bóc
 // các delta thành 1 chuỗi, và bắt error nếu có.
-export function createSSECollector() {
+export function createSSECollector(onStatus?: (status: string) => void) {
   let text = '';
   let error: string | null = null;
   let lastStatus = '';
@@ -139,6 +169,9 @@ export function createSSECollector() {
       text += (data as { delta?: string }).delta || '';
     } else if (name === 'status') {
       lastStatus = (data as { text?: string }).text || '';
+      if (lastStatus && onStatus) onStatus(lastStatus);
+    } else if (name === 'tool_call') {
+      // Nhãn tool đã tới qua status kèm theo; tool_call để dành nếu cần.
     } else if (name === 'error') {
       error = (data as { message?: string }).message || 'Lỗi không xác định';
     }
