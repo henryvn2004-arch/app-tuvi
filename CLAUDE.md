@@ -67,8 +67,9 @@ Một **bộ não** trên server (`/api/v1/chat`, Contract v1). Mọi nền tả
 
 ### ⏳ VIỆC TAY CỦA HENRY (chưa xong)
 - [x] Chạy `_patches/migration-app-config.sql` trong Supabase SQL Editor (project `dciwkfdqhhddeymlisey`). ✅ ĐÃ CHẠY 2026-06-22 (bảng `app_config` + 5 seed). Giờ chỉnh prompt/model/giá Lượng trong DB không cần deploy.
-- [ ] **Bật giá 5 Lượng/lượt trên DB (live):** `UPDATE app_config SET value=to_jsonb(5), updated_at=NOW() WHERE key='chat.cost';` (code DEFAULTS đã = 5; cache TTL 60s). ⚠️ Đồng thời kiểm `PAYWALL_DISABLED` KHÔNG = 'true' trên Vercel, không thì server bỏ qua thu phí.
-- [ ] **Chạy `_patches/migration-signup-bonus.sql`** → trigger tặng 25 Lượng cho user mới (grant này KHÔNG có trong repo trước đây — "+10" chỉ là nhãn UI). Đọc comment đầu file: kiểm trigger grant cũ trước khi chạy kẻo cấp 2 lần.
+- [x] **Bật giá 5 Lượng/lượt trên DB (live):** `UPDATE app_config SET value=to_jsonb(5) WHERE key='chat.cost';`. ✅ ĐÃ CHẠY 2026-06-22 (SELECT thấy 5). `PAYWALL_DISABLED=false` đã xác nhận. Code DEFAULTS=5.
+- [x] **Quà signup 25 Lượng** ✅ ĐÃ BẬT 2026-06-22. Thực tế prod đã có sẵn trigger `on_auth_user_created` → hàm `handle_new_user_signup()`; đã `CREATE OR REPLACE` đổi 10→25 (verify `pg_get_functiondef` = 25). File repo `_patches/migration-signup-bonus.sql` đã sửa khớp (PR #88).
+- [ ] **Telegram bot (PR kênh đầu tiên):** sau merge → (a) thêm env trên Vercel `TELEGRAM_BOT_TOKEN` + `TELEGRAM_WEBHOOK_SECRET` rồi Redeploy; (b) chạy `_patches/migration-telegram-sessions.sql`; (c) Claude đăng ký webhook (`setWebhook` + secret) rồi test nhắn bot.
 - [ ] Test preview sau mỗi lần deploy.
 - [ ] Đăng ký nền tảng Zalo trước Phase 2.
 
