@@ -8,8 +8,14 @@
 ## 🟢 ĐANG LÀM — Chat-first / Contract v1 (đa nền tảng)
 
 **Branch:** `claude/astrology-app-design-urttcm`
-**Cập nhật:** 2026-06-21
+**Cập nhật:** 2026-06-22
 **Xương sống:** `docs/KIEN-TRUC-VA-LO-TRINH.md` (đọc file này trước khi làm tiếp).
+
+### 🔖 RESUME HERE (mở máy khác đọc cái này trước)
+- **State:** Phase 0 + **Phase 1 (web thin-client) DONE.** Branch sạch, `git reset --hard origin/main` (tip = #85 docs). PR đã merge tới **#85**. Code KHÔNG có việc dở dang — không có WIP chưa commit.
+- **Chưa quyết — Henry chốt khi vào:** việc dev kế tiếp là **A** (Claude kéo *phong-thuy + tuong-mat* ảnh/multimodal vào agent chat — món dev duy nhất còn lại trong scope, ~1–2 sprint, KHÔNG chặn ra mắt) **HAY B** (Henry tự test prod #83/#84 + chạy SQL migration + đăng ký Zalo → mở Phase 2). Recommend B trước.
+- **Setup máy mới:** `npm ci` → `cd tuvi-engine && npm ci && cd ..` → `npx playwright install chromium` (xem mục "Cross-machine setup" cuối file).
+- **Quy ước:** 1 việc = 1 PR draft → CI xanh (7 checks) → ready → squash-merge → `git reset --hard origin/main`. Push sau merge cần `--force-with-lease`.
 
 ### Tầm nhìn 1 câu
 Một **bộ não** trên server (`/api/v1/chat`, Contract v1). Mọi nền tảng (Web → Zalo → TikTok → Android → iOS → bot) là **vỏ mỏng** gọi cùng API. Sửa 1 chỗ, tất cả cập nhật. Engine deterministic là nguồn lá số DUY NHẤT — LLM không bịa số.
@@ -52,6 +58,7 @@ Một **bộ não** trên server (`/api/v1/chat`, Contract v1). Mọi nền tả
 - **#82** Sprint 1.5: sinh-con/chọn-ngày/đặt-tên server-compute → cả 6 kịch bản server-compute.
 - **#83** Sprint 1.6: fix parity năm xem (currentNamXem chung, bỏ hardcode 2027).
 - **#84** Sprint 1.7: gỡ double-deduct billing (v1 → server là biller duy nhất).
+- **#85** docs: chốt Phase 1 DONE + ghi quyết định GIỮ `/api/lasotuvi` (cập nhật CLAUDE.md + xương sống).
 
 ### 🔴 Bước tiếp theo
 1. **Henry test preview prod #83/#84**: `/tuvi-chat.html` → hỏi "năm nay/năm sau", "tháng X/YYYY", tuổi mụ → verify dùng NĂM HIỆN TẠI (2026, không còn 2027); `tra_tieu_van`/`tra_nguyet_van` không báo "ngoài phạm vi" cho năm gần. Billing: khi bật cost>0, lượt v1 chỉ trừ Lượng 1 lần.
