@@ -25,5 +25,5 @@ INSERT INTO app_config (key, value, note) VALUES
   ('chat.model',       to_jsonb('claude-sonnet-4-6'::text), 'Model Anthropic'),
   ('chat.max_rounds',  to_jsonb(4),    'Số vòng tool-use tối đa'),
   ('chat.max_tokens',  to_jsonb(1500), 'max_tokens mỗi lượt'),
-  ('chat.cost',        to_jsonb(0),    'Giá Lượng trừ cho 1 lượt trả lời (0 = miễn phí)')
+  ('chat.cost',        to_jsonb(5),    'Giá Lượng trừ cho 1 lượt trả lời (0 = miễn phí)')
 ON CONFLICT (key) DO NOTHING;

@@ -66,7 +66,9 @@ Một **bộ não** trên server (`/api/v1/chat`, Contract v1). Mọi nền tả
 3. **Phase 2 (Zalo)** — chờ Henry đăng ký OA/Mini App (oa.zalo.me, mini.zalo.me, cần CCCD/GPKD). Bộ não đã sẵn: native/Zalo chỉ cần gửi `birth` hoặc `scenario.data` thô.
 
 ### ⏳ VIỆC TAY CỦA HENRY (chưa xong)
-- [ ] Chạy `_patches/migration-app-config.sql` trong Supabase SQL Editor (project `dciwkfdqhhddeymlisey`). Chưa chạy thì chat vẫn chạy free bằng DEFAULTS.
+- [x] Chạy `_patches/migration-app-config.sql` trong Supabase SQL Editor (project `dciwkfdqhhddeymlisey`). ✅ ĐÃ CHẠY 2026-06-22 (bảng `app_config` + 5 seed). Giờ chỉnh prompt/model/giá Lượng trong DB không cần deploy.
+- [ ] **Bật giá 5 Lượng/lượt trên DB (live):** `UPDATE app_config SET value=to_jsonb(5), updated_at=NOW() WHERE key='chat.cost';` (code DEFAULTS đã = 5; cache TTL 60s). ⚠️ Đồng thời kiểm `PAYWALL_DISABLED` KHÔNG = 'true' trên Vercel, không thì server bỏ qua thu phí.
+- [ ] **Chạy `_patches/migration-signup-bonus.sql`** → trigger tặng 25 Lượng cho user mới (grant này KHÔNG có trong repo trước đây — "+10" chỉ là nhãn UI). Đọc comment đầu file: kiểm trigger grant cũ trước khi chạy kẻo cấp 2 lần.
 - [ ] Test preview sau mỗi lần deploy.
 - [ ] Đăng ký nền tảng Zalo trước Phase 2.
 
