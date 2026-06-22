@@ -436,6 +436,31 @@ select.form-input{
 }
 .wa-send:hover:not(:disabled){background:var(--navy-mid)}
 .wa-send:disabled{background:#C4C4C4;cursor:not-allowed}
+/* Nút đính kèm ảnh (tướng mặt / phong thủy) */
+.wa-attach{
+  width:40px;height:40px;border-radius:50%;
+  background:var(--bg-soft);border:1.5px solid var(--border);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:all .15s;color:var(--navy);
+}
+.wa-attach:hover{background:#EBF3FF;border-color:var(--navy)}
+.wa-attach:disabled{opacity:.5;cursor:not-allowed}
+/* Hàng preview ảnh đã chọn (trên thanh nhập) */
+.wa-img-preview{
+  display:none;flex-wrap:wrap;gap:8px;
+  padding:8px 16px 0;flex-shrink:0;
+}
+.wa-img-preview.show{display:flex}
+.wa-img-chip{position:relative;width:54px;height:54px;border-radius:8px;overflow:hidden;border:1px solid var(--border-lt);flex-shrink:0}
+.wa-img-chip img{width:100%;height:100%;object-fit:cover;display:block}
+.wa-img-x{
+  position:absolute;top:1px;right:1px;width:18px;height:18px;border-radius:50%;
+  background:rgba(6,26,46,.78);color:#fff;border:none;cursor:pointer;
+  font-size:12px;line-height:18px;text-align:center;padding:0;
+}
+/* Thumbnail ảnh trong bong bóng tin của user */
+.tc-msg-imgs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.tc-msg-imgs img{max-width:140px;max-height:140px;border-radius:8px;display:block}
 .wa-hint{
   flex-shrink:0;text-align:center;
   font-size:10px;color:#D0D0D0;
@@ -677,7 +702,12 @@ select.form-input{
         <div class="wa-sugg-row">
           <div class="tc-suggs" id="tc-suggs"></div>
         </div>
+        <div class="wa-img-preview" id="tc-img-preview"></div>
         <div class="wa-input-bar">
+          <input type="file" id="tc-img-input" accept="image/*" style="display:none" />
+          <button id="tc-attach" class="wa-attach" title="Gửi ảnh tướng mặt / phong thủy" aria-label="Đính kèm ảnh">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </button>
           <textarea id="tc-input" class="wa-textarea" placeholder="Hỏi về lá số, vận hạn, tương hợp..." rows="1"></textarea>
           <button id="tc-send" class="wa-send" disabled>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
@@ -1297,7 +1327,9 @@ var TuviTTS = (function() {
       renderSuggs(SUGG_INIT);
     } else {
       chat.messages.forEach(function(m) {
-        appendMsg(m.role === 'assistant' ? 'bot' : 'user', m.content);
+        // Ảnh không lưu base64 → tin ảnh-only hiện nhãn nhẹ khi mở lại.
+        var c = m.content || (m.hasImages ? '_🖼️ (đã gửi ảnh)_' : '');
+        appendMsg(m.role === 'assistant' ? 'bot' : 'user', c);
       });
       var activeCfg = toolCfg(chat.toolType);
       renderSuggs(hasChatData2 && activeCfg ? activeCfg.suggs : SUGG_INIT);
@@ -2148,7 +2180,7 @@ var TuviTTS = (function() {
   }
 
   /* ── Message bubble ───────────────────────────────────────────── */
-  function appendMsg(role, content, isTyping) {
+  function appendMsg(role, content, isTyping, images) {
     var $msgs = document.getElementById('tc-messages');
     var wrap  = document.createElement('div');
     wrap.className = 'tc-msg ' + role + (isTyping ? ' typing' : '');
@@ -2167,7 +2199,17 @@ var TuviTTS = (function() {
     if (isTyping) {
       bub.innerHTML = '<span class="tc-dot"></span><span class="tc-dot"></span><span class="tc-dot"></span>';
     } else {
-      bub.innerHTML = renderMd(content);
+      if (images && images.length) {
+        var ib = document.createElement('div');
+        ib.className = 'tc-msg-imgs';
+        images.forEach(function(im) {
+          var el = document.createElement('img');
+          el.src = im.url || ('data:' + (im.mediaType || 'image/jpeg') + ';base64,' + im.data);
+          ib.appendChild(el);
+        });
+        bub.appendChild(ib);
+      }
+      bub.insertAdjacentHTML('beforeend', renderMd(content));
       if (role === 'bot' && content) {
         (function(c) { addSpeakBtn(bub, function() { return c; }); })(content);
       }
@@ -2226,6 +2268,78 @@ var TuviTTS = (function() {
     };
   }
 
+  /* ── Ảnh đính kèm (tướng mặt / phong thủy) ─────────────────────── */
+  var _pendingImages = []; // [{ data: base64, mediaType, url }]
+  var MAX_IMAGES = 3;
+
+  // Đọc + nén ảnh phía client: resize cạnh dài ≤1280px, JPEG q.82 → giảm
+  // base64 (đỡ payload + chi phí vision). Trả { data, mediaType }.
+  function _readImageFile(file) {
+    return new Promise(function(resolve, reject) {
+      if (!file || !/^image\//.test(file.type)) { reject(new Error('not-image')); return; }
+      var reader = new FileReader();
+      reader.onerror = function() { reject(new Error('read-fail')); };
+      reader.onload = function() {
+        var img = new Image();
+        img.onerror = function() { reject(new Error('decode-fail')); };
+        img.onload = function() {
+          var MAX = 1280;
+          var w = img.width, h = img.height;
+          if (w > MAX || h > MAX) {
+            if (w >= h) { h = Math.round(h * MAX / w); w = MAX; }
+            else        { w = Math.round(w * MAX / h); h = MAX; }
+          }
+          try {
+            var cv = document.createElement('canvas');
+            cv.width = w; cv.height = h;
+            cv.getContext('2d').drawImage(img, 0, 0, w, h);
+            var dataUrl = cv.toDataURL('image/jpeg', 0.82);
+            resolve({ data: dataUrl.split(',')[1], mediaType: 'image/jpeg', url: dataUrl });
+          } catch (e) { reject(e); }
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function _renderImgPreview() {
+    var box = document.getElementById('tc-img-preview');
+    if (!box) return;
+    box.innerHTML = '';
+    if (!_pendingImages.length) { box.classList.remove('show'); return; }
+    box.classList.add('show');
+    _pendingImages.forEach(function(im, idx) {
+      var chip = document.createElement('div');
+      chip.className = 'wa-img-chip';
+      var im2 = document.createElement('img'); im2.src = im.url; chip.appendChild(im2);
+      var x = document.createElement('button');
+      x.className = 'wa-img-x'; x.type = 'button'; x.innerHTML = '×';
+      x.onclick = function() { _pendingImages.splice(idx, 1); _renderImgPreview(); _refreshSendState(); };
+      chip.appendChild(x);
+      box.appendChild(chip);
+    });
+  }
+
+  function _refreshSendState() {
+    var ta = document.getElementById('tc-input');
+    var sb = document.getElementById('tc-send');
+    if (sb) sb.disabled = (!(ta && ta.value.trim()) && !_pendingImages.length) || _busy;
+  }
+
+  async function _onPickImages(files) {
+    if (!files || !files.length) return;
+    for (var i = 0; i < files.length && _pendingImages.length < MAX_IMAGES; i++) {
+      try {
+        var im = await _readImageFile(files[i]);
+        _pendingImages.push(im);
+      } catch (e) { showToast('Không đọc được ảnh. Thử ảnh khác nhé.'); }
+    }
+    if (files.length > MAX_IMAGES) showToast('Tối đa ' + MAX_IMAGES + ' ảnh mỗi lượt.');
+    _renderImgPreview();
+    _refreshSendState();
+  }
+
   /* ── Send message ─────────────────────────────────────────────── */
   function autoResize() {
     var $ta = document.getElementById('tc-input');
@@ -2238,7 +2352,9 @@ var TuviTTS = (function() {
     var $ta   = document.getElementById('tc-input');
     var $send = document.getElementById('tc-send');
     text = (text || $ta.value).trim();
-    if (!text || _busy || !chat) return;
+    // Ảnh của lượt này (snapshot) — cho phép gửi ảnh dù không có chữ.
+    var sendImages = _pendingImages.slice();
+    if ((!text && !sendImages.length) || _busy || !chat) return;
 
     // ── Paywall: turn 1 miễn phí cho khách; từ turn 2 cần đăng nhập + đủ Lượng ──
     var _isFirstTurnFree = !(window.Auth && window.Auth.isLoggedIn && window.Auth.isLoggedIn()) && chat.messages.length === 0;
@@ -2256,9 +2372,14 @@ var TuviTTS = (function() {
     autoResize();
     $send.disabled = true;
     document.getElementById('tc-suggs').innerHTML = '';
+    // Dọn khay ảnh ngay (đã snapshot vào sendImages).
+    _pendingImages = [];
+    _renderImgPreview();
 
-    chat.messages.push({ role: 'user', content: text });
-    appendMsg('user', text);
+    // Lưu hội thoại KHÔNG kèm base64 (tránh phình localStorage/cloud); ảnh chỉ
+    // gửi cho lượt này qua sendImages. Đánh dấu hasImages để render lại nếu cần.
+    chat.messages.push({ role: 'user', content: text, hasImages: sendImages.length > 0 });
+    appendMsg('user', text, false, sendImages);
 
     _busy = true;
     appendMsg('bot', '', true);
@@ -2275,7 +2396,9 @@ var TuviTTS = (function() {
       var isScenarioTool = SCENARIO_TYPES.indexOf(chat.toolType) !== -1;
       var useV1Laso     = USE_V1_LASO && isLasoTool && !!chat.birth;
       var useV1Scenario = USE_V1_LASO && isScenarioTool && !!chat.contextData;
-      var useV1 = useV1Laso || useV1Scenario;
+      // Có ảnh → luôn đi Contract v1 (vision đa phương thức), bất kể birth/scenario.
+      var useV1Image    = USE_V1_LASO && sendImages.length > 0;
+      var useV1 = useV1Laso || useV1Scenario || useV1Image;
 
       var res;
       if (useV1) {
@@ -2290,6 +2413,18 @@ var TuviTTS = (function() {
           stream:     true,
           client:     { platform: 'web', version: '1.0.0' },
         };
+        // Đính ảnh lượt này vào tin user CUỐI (ảnh cũ không gửi lại — vision
+        // mỗi lượt tươi). Server bơm thẳng vào call Anthropic đa phương thức.
+        if (sendImages.length) {
+          for (var mi = v1Body.messages.length - 1; mi >= 0; mi--) {
+            if (v1Body.messages[mi].role === 'user') {
+              v1Body.messages[mi].images = sendImages.map(function (im) {
+                return { data: im.data, mediaType: im.mediaType };
+              });
+              break;
+            }
+          }
+        }
         if (useV1Scenario) {
           // Kịch bản không có tool tra cứu → prefetch RAG như luồng cũ (giữ parity).
           var sdocs = '';
@@ -2519,7 +2654,7 @@ var TuviTTS = (function() {
     }
 
     _busy = false;
-    $send.disabled = !$ta.value.trim();
+    _refreshSendState();
     $ta.focus();
   }
 
@@ -2802,7 +2937,7 @@ var TuviTTS = (function() {
     /* Input */
     document.getElementById('tc-input').addEventListener('input', function() {
       autoResize();
-      document.getElementById('tc-send').disabled = !this.value.trim() || _busy;
+      _refreshSendState();
     });
     document.getElementById('tc-input').addEventListener('keydown', function(e) {
       if (e.key === 'Enter' && !e.shiftKey) {
@@ -2811,6 +2946,18 @@ var TuviTTS = (function() {
       }
     });
     document.getElementById('tc-send').addEventListener('click', function() { doSend(); });
+
+    /* Đính kèm ảnh (tướng mặt / phong thủy) */
+    (function() {
+      var ab = document.getElementById('tc-attach');
+      var fi = document.getElementById('tc-img-input');
+      if (!ab || !fi) return;
+      ab.addEventListener('click', function() { fi.click(); });
+      fi.addEventListener('change', function() {
+        _onPickImages(this.files);
+        this.value = ''; // cho phép chọn lại cùng file
+      });
+    })();
 
     /* TTS toggle */
     (function() {

@@ -29,12 +29,23 @@ export type ClientPlatform =
   | 'telegram'
   | 'messenger';
 
-// ── Tin nhắn hội thoại (client chỉ gửi role + content) ──────
+// ── Ảnh đính kèm tin nhắn (additive — tướng mặt / phong thủy) ──
+// base64 KHÔNG kèm tiền tố "data:...;base64," (chỉ phần dữ liệu).
+// Chỉ áp dụng cho message role 'user'. Client cũ không gửi field này.
+export interface ChatImage {
+  data: string;
+  /** 'image/jpeg' | 'image/png' | 'image/webp' | 'image/gif' */
+  mediaType: string;
+}
+
+// ── Tin nhắn hội thoại (client gửi role + content [+ images]) ──
 export type ChatRole = 'user' | 'assistant';
 
 export interface ChatMessage {
   role: ChatRole;
   content: string;
+  /** Ảnh đính kèm (vision) — additive, optional, chỉ role 'user'. */
+  images?: ChatImage[];
 }
 
 // ── Tham số sinh (để engine lập lá số server-side) ──────────
@@ -182,6 +193,21 @@ export function validateChatRequest(body: unknown):
     }
     if (typeof mm.content !== 'string') {
       return { ok: false, error: 'messages.content phải là string' };
+    }
+    // images optional (additive) — nếu có phải là mảng {data, mediaType}.
+    if (mm.images != null) {
+      if (!Array.isArray(mm.images)) {
+        return { ok: false, error: 'messages.images phải là mảng' };
+      }
+      for (const im of mm.images) {
+        const ii = im as Record<string, unknown>;
+        if (typeof ii.data !== 'string' || !ii.data) {
+          return { ok: false, error: 'images.data phải là base64 string' };
+        }
+        if (ii.mediaType != null && typeof ii.mediaType !== 'string') {
+          return { ok: false, error: 'images.mediaType phải là string' };
+        }
+      }
     }
   }
   const client = b.client as Record<string, unknown> | undefined;
