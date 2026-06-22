@@ -12,10 +12,12 @@
 **Xương sống:** `docs/KIEN-TRUC-VA-LO-TRINH.md` (đọc file này trước khi làm tiếp).
 
 ### 🔖 RESUME HERE (mở máy khác đọc cái này trước)
-- **State:** Phase 0 + **Phase 1 (web thin-client) DONE.** Branch sạch, `git reset --hard origin/main` (tip = #85 docs). PR đã merge tới **#85**. Code KHÔNG có việc dở dang — không có WIP chưa commit.
-- **Chưa quyết — Henry chốt khi vào:** việc dev kế tiếp là **A** (Claude kéo *phong-thuy + tuong-mat* ảnh/multimodal vào agent chat — món dev duy nhất còn lại trong scope, ~1–2 sprint, KHÔNG chặn ra mắt) **HAY B** (Henry tự test prod #83/#84 + chạy SQL migration + đăng ký Zalo → mở Phase 2). Recommend B trước.
-- **Setup máy mới:** `npm ci` → `cd tuvi-engine && npm ci && cd ..` → `npx playwright install chromium` (xem mục "Cross-machine setup" cuối file).
-- **Quy ước:** 1 việc = 1 PR draft → CI xanh (7 checks) → ready → squash-merge → `git reset --hard origin/main`. Push sau merge cần `--force-with-lease`.
+- **State (2026-06-22):** Phase 0 + Phase 1 web DONE. **Đã LIVE trên prod:** (1) **Pricing** 5 Lượng/lượt chat v1 + signup tặng 25 Lượng (#87, #88) — verify xong. (2) **Telegram bot** `@tuviminhbao_bot` (#91 webhook, #92 fix async, #93 UX tiến trình) — kênh thứ 2, chạy được, free (chưa gắn ví Lượng). PR đã merge tới **#93**. Branch sạch, không WIP.
+- **Kiến trúc mới quan trọng:** agent loop đã tách ra **`lib/agent/run.ts`** (`runAgent`) — web `/api/v1/chat` + bot Telegram dùng CHUNG, gọi in-process. Thêm kênh mới = thêm adapter mỏng gọi `runAgent`. Telegram adapter: `app/api/channels/telegram/route.ts` + `lib/channels/telegram.ts` (ack 200 ngay rồi `waitUntil` xử lý nền — BẮT BUỘC cho webhook).
+- **Chưa quyết — Henry chốt khi vào (về monetize Telegram):** **(1)** để Telegram FREE làm phễu, monetize trên web (recommend — margin cao nhất, khỏi làm gì thêm); **(2)** charge bằng Telegram Stars trong bot (chuẩn cho hàng số, có chiết khấu); **(3)** làm **Telegram/Zalo Mini App** (webview nạp `tuvi-chat.html`, cần cầu nối auth `initData`→Supabase, ~nửa-1 ngày, TÁI DÙNG cho Zalo). Cả 2/3 đều cần "gắn user Telegram → ví Lượng" trước. Gợi ý: gộp Mini App với Zalo khi tài khoản Zalo về.
+- **Việc tay Henry đang chạy:** đăng ký **Zalo OA** (oa.zalo.me, cần CCCD/GPKD, 2-3 ngày). Khi có token → adapter Zalo làm y hệt pattern Telegram.
+- **Setup máy mới:** `npm ci` → `cd tuvi-engine && npm ci && cd ..` → `npx playwright install chromium`. `gh` CLI: nếu chưa có, `winget install GitHub.cli` (phiên này dùng token mượn từ Git Credential Manager, scope `repo` đủ cho PR; full quyền thì `gh auth login`).
+- **Quy ước:** 1 việc = 1 PR draft/ready → CI xanh (7 checks: lint, typecheck, test×2 unit+e2e, lighthouse, Vercel, smoke-skip) → squash-merge → `git reset --hard origin/main`. Secrets (token bot, webhook secret) để ENV trên Vercel, KHÔNG commit.
 
 ### Tầm nhìn 1 câu
 Một **bộ não** trên server (`/api/v1/chat`, Contract v1). Mọi nền tảng (Web → Zalo → TikTok → Android → iOS → bot) là **vỏ mỏng** gọi cùng API. Sửa 1 chỗ, tất cả cập nhật. Engine deterministic là nguồn lá số DUY NHẤT — LLM không bịa số.
