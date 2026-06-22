@@ -5,7 +5,7 @@
 // Không chứa logic nghiệp vụ tử vi (đã ở engine + agent loop).
 // ============================================================
 
-import type { ChatMessage } from '@/lib/contract/v1';
+import type { ChatMessage, BirthParams } from '@/lib/contract/v1';
 
 const TG_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
 const TG_API = `https://api.telegram.org/bot${TG_TOKEN}`;
@@ -99,35 +99,53 @@ export function splitText(s: string, max: number): string[] {
 }
 
 // ── Phiên hội thoại (bảng telegram_sessions) ────────────────
-// chat_id text PK, messages jsonb (ChatMessage[]), updated_at.
-export async function loadSession(chatId: number | string): Promise<ChatMessage[]> {
-  if (!SUPABASE_URL || !SUPABASE_KEY) return [];
+// chat_id text PK, messages jsonb (ChatMessage[]), birth jsonb, updated_at.
+// birth = lá số đã lập (BirthParams) → lượt sau truyền req.birth, bot không
+// quên dù thông tin sinh trôi khỏi cửa sổ 12 tin.
+export interface TgSession {
+  messages: ChatMessage[];
+  birth: BirthParams | null;
+}
+
+export async function loadSession(chatId: number | string): Promise<TgSession> {
+  if (!SUPABASE_URL || !SUPABASE_KEY) return { messages: [], birth: null };
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/telegram_sessions?chat_id=eq.${encodeURIComponent(String(chatId))}&select=messages&limit=1`,
+      `${SUPABASE_URL}/rest/v1/telegram_sessions?chat_id=eq.${encodeURIComponent(String(chatId))}&select=messages,birth&limit=1`,
       { headers: SB_HEADERS },
     );
-    if (!res.ok) return [];
-    const rows = (await res.json()) as { messages?: ChatMessage[] }[];
+    if (!res.ok) return { messages: [], birth: null };
+    const rows = (await res.json()) as { messages?: ChatMessage[]; birth?: BirthParams | null }[];
     const msgs = rows[0]?.messages;
-    return Array.isArray(msgs) ? msgs : [];
+    return {
+      messages: Array.isArray(msgs) ? msgs : [],
+      birth: rows[0]?.birth ?? null,
+    };
   } catch {
-    return [];
+    return { messages: [], birth: null };
   }
 }
 
-export async function saveSession(chatId: number | string, messages: ChatMessage[]): Promise<void> {
+export async function saveSession(
+  chatId: number | string,
+  messages: ChatMessage[],
+  birth: BirthParams | null = null,
+): Promise<void> {
   if (!SUPABASE_URL || !SUPABASE_KEY) return;
   const trimmed = messages.slice(-HISTORY_KEEP);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const row: any = {
+    chat_id: String(chatId),
+    messages: trimmed,
+    updated_at: new Date().toISOString(),
+  };
+  // Chỉ ghi birth khi có (giữ lá số cũ nếu lượt này chưa lập được).
+  if (birth) row.birth = birth;
   try {
     await fetch(`${SUPABASE_URL}/rest/v1/telegram_sessions`, {
       method: 'POST',
       headers: { ...SB_HEADERS, Prefer: 'resolution=merge-duplicates' },
-      body: JSON.stringify({
-        chat_id: String(chatId),
-        messages: trimmed,
-        updated_at: new Date().toISOString(),
-      }),
+      body: JSON.stringify(row),
     });
   } catch {
     /* best-effort */

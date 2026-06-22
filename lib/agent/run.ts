@@ -49,9 +49,12 @@ export async function runAgent(
   req: ChatRequestV1,
   cfg: ChatConfig,
   send: (s: string) => void,
-): Promise<{ toolsUsed: string[] }> {
+): Promise<{ toolsUsed: string[]; birth: BirthParams | null }> {
   const ctx = newToolContext();
   const toolsUsed: string[] = [];
+  // Birth đã biết (req.birth truyền sẵn) hoặc do agent lập qua tool lap_la_so
+  // trong lượt này → trả về để adapter (Telegram) lưu theo phiên, đỡ hỏi lại.
+  let capturedBirth: BirthParams | null = req.birth ?? null;
 
   // Câu hỏi mới nhất — để extractLasoContext khoanh cung liên quan.
   const lastQ = (req.messages as ChatMessage[])[req.messages.length - 1]?.content || '';
@@ -181,6 +184,8 @@ export async function runAgent(
       const results = [];
       for (const tu of toolUses) {
         toolsUsed.push(tu.name);
+        // Agent vừa lập lá số từ text → ghi lại birth để phiên sau dùng thẳng.
+        if (tu.name === 'lap_la_so' && tu.input) capturedBirth = toBirth(tu.input);
         const run = await executeTool(tu.name, tu.input || {}, ctx);
         send(sse.toolCall({ name: tu.name, args: safeArgs(tu.input) }));
         send(sse.status({ text: run.label }));
@@ -196,7 +201,19 @@ export async function runAgent(
     break;
   }
 
-  return { toolsUsed };
+  return { toolsUsed, birth: capturedBirth };
+}
+
+// Chuẩn hóa input tool lap_la_so → BirthParams (để lưu phiên Telegram).
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function toBirth(input: any): BirthParams {
+  return {
+    day: Number(input.day),
+    month: Number(input.month),
+    year: Number(input.year),
+    hourBranch: Number(input.hourBranch),
+    gender: input.gender === 'nu' ? 'nu' : 'nam',
+  };
 }
 
 // ── Gọi Anthropic (non-stream, để quyết định tool) ──────────
