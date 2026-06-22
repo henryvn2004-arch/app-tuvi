@@ -329,6 +329,17 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
         </a>
       </div>
       <div class="account-section">
+        <h3>💬 Liên Kết Telegram</h3>
+        <p style="color:var(--text-lt);font-size:.85rem;margin:.25rem 0 .75rem">
+          Liên kết để chat với bot Telegram bằng đúng ví Lượng này — nạp ở đây, dùng được cả trên Telegram.
+        </p>
+        <div id="tgLinkBox" style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+          <span id="tgLinkStatus" style="font-size:.85rem;color:var(--text-lt)">Đang kiểm tra…</span>
+          <button id="btnTgLink" style="display:none;background:#229ED9;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">✈️ Liên kết Telegram</button>
+          <button id="btnTgUnlink" style="display:none;background:transparent;color:#c0392b;border:1px solid #c0392b;padding:.55rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer">Hủy liên kết</button>
+        </div>
+      </div>
+      <div class="account-section">
         <h3>Lịch Sử Giao Dịch</h3>
         <div id="transactionList"><div style="color:var(--text-lt);font-size:.85rem">Đang tải...</div></div>
       </div>
@@ -692,10 +703,71 @@ async function loadHeaderBalance() {
   }
 }
 
+// ── LIÊN KẾT TELEGRAM ──
+async function loadTelegramLink() {
+  const statusEl = document.getElementById('tgLinkStatus');
+  const btnLink  = document.getElementById('btnTgLink');
+  const btnUnlink = document.getElementById('btnTgUnlink');
+  if (!statusEl) return;
+  try {
+    const res = await fetch('/api/channels/telegram/link', {
+      headers: { Authorization: `Bearer ${_pToken}` }
+    });
+    const d = res.ok ? await res.json() : { linked: false };
+    if (d.linked) {
+      statusEl.textContent = '✅ Đã liên kết — bot Telegram dùng chung ví Lượng này.';
+      btnLink.style.display = 'none';
+      btnUnlink.style.display = 'inline-block';
+    } else {
+      statusEl.textContent = 'Chưa liên kết.';
+      btnLink.style.display = 'inline-block';
+      btnUnlink.style.display = 'none';
+    }
+  } catch {
+    statusEl.textContent = 'Không tải được trạng thái liên kết.';
+  }
+}
+
+document.getElementById('btnTgLink').onclick = async () => {
+  const btn = document.getElementById('btnTgLink');
+  btn.disabled = true; btn.textContent = 'Đang tạo liên kết…';
+  try {
+    const res = await fetch('/api/channels/telegram/link', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${_pToken}` }
+    });
+    const d = await res.json();
+    if (d.url) {
+      // Mở bot Telegram với token /start → bot tự gắn ví.
+      window.open(d.url, '_blank');
+      document.getElementById('tgLinkStatus').textContent =
+        '⏳ Đã mở Telegram — bấm "Bắt đầu / Start" trong bot để hoàn tất, rồi tải lại trang.';
+    } else {
+      alert('Không tạo được liên kết, thử lại sau nhé.');
+    }
+  } catch {
+    alert('Lỗi mạng, thử lại sau nhé.');
+  } finally {
+    btn.disabled = false; btn.textContent = '✈️ Liên kết Telegram';
+  }
+};
+
+document.getElementById('btnTgUnlink').onclick = async () => {
+  if (!confirm('Hủy liên kết Telegram? Bot sẽ không còn dùng ví Lượng của bạn.')) return;
+  try {
+    await fetch('/api/channels/telegram/link', {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${_pToken}` }
+    });
+  } catch {}
+  loadTelegramLink();
+};
+
 async function loadCredits() {
   if (!_pUser || !_pToken) return;
   // Balance
   await loadHeaderBalance();
+  loadTelegramLink();
   const t = document.getElementById('tabCreditBalance');
   if (t && t.textContent === '…') t.textContent = '...';
   // Transactions

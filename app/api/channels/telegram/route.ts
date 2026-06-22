@@ -3,8 +3,14 @@
 // KÊNH TELEGRAM — webhook ↔ "bộ não" /api/v1 (Contract v1).
 //
 // Vỏ mỏng: nhận update Telegram → gọi runAgent IN-PROCESS (cùng loop
-// với web) → gửi luận giải về. KHÔNG tính phí (user Telegram chưa gắn
-// tài khoản Supabase) → lượt free.
+// với web) → gửi luận giải về.
+//
+// Tính phí (Lượng) — dùng CHUNG ví với web:
+//   - User đã LIÊN KẾT tài khoản (telegram_links, qua /start <token> sinh
+//     từ web) → trừ Lượng trên ví đó y hệt /api/v1/chat. Hết Lượng → mời nạp.
+//   - CHƯA liên kết → cho FREE_DAILY_CAP lượt free/ngày (chống đốt token);
+//     hết quota → mời liên kết tài khoản. Xem lib/channels/telegramLink.
+//   - paywallDisabled() hoặc cost=0 → free toàn bộ (không đếm).
 //
 // QUAN TRỌNG — webhook PHẢI ack 200 NGAY rồi xử lý NỀN (waitUntil):
 //   luận giải mất 20–60s; nếu xử lý xong mới trả 200 thì Telegram
@@ -25,6 +31,14 @@ import { waitUntil } from '@vercel/functions';
 import type { ChatRequestV1, ChatMessage } from '@/lib/contract/v1';
 import { runAgent } from '@/lib/agent/run';
 import { getChatConfig } from '@/lib/config/appConfig';
+import { paywallDisabled, getBalance, deductCredits, logTransaction } from '@/lib/billing/credits';
+import {
+  resolveLinkedUser,
+  consumeLinkToken,
+  getFreeUsageToday,
+  incrFreeUsage,
+  FREE_DAILY_CAP,
+} from '@/lib/channels/telegramLink';
 import {
   tgSendMessage,
   tgSendMessageReturnId,
@@ -48,9 +62,35 @@ const WELCOME =
   'Hỏi mình bất cứ điều gì về tử vi, vận hạn, tuổi tác... Để lập lá số, ' +
   'cho mình biết: giới tính, ngày/tháng/năm sinh (dương lịch), và giờ sinh.\n\n' +
   'Ví dụ: "Nữ, 03/06/1998, giờ Sửu, năm nay làm ăn sao?"\n\n' +
-  'Gõ /new để bắt đầu cuộc trò chuyện mới.';
+  'Lệnh: /new — trò chuyện mới · /link — dùng ví Lượng của bạn (nạp trên web).';
 
 const ERR_MSG = 'Xin lỗi, mình gặp trục trặc khi xử lý. Bạn thử lại sau giây lát nhé.';
+
+const SITE = 'https://tuviminhbao.com';
+
+const LINK_OK =
+  '✅ Đã liên kết tài khoản thành công!\n\n' +
+  'Từ giờ bạn chat ở đây bằng ví Lượng của mình — nạp trên web là dùng được luôn tại Telegram. ' +
+  'Hỏi mình về tử vi, vận hạn, tuổi tác... nhé!';
+
+const LINK_FAIL =
+  '⚠️ Liên kết không thành công — mã đã hết hạn hoặc đã được dùng.\n\n' +
+  `Bạn tạo lại liên kết tại ${SITE} → Hồ sơ → Liên kết Telegram nhé.`;
+
+// Hướng dẫn liên kết (dùng cho lệnh /link và khi hết lượt free).
+const LINK_GUIDE =
+  'Để chat thoải mái bằng ví Lượng của bạn:\n' +
+  `1) Mở ${SITE}, đăng nhập\n` +
+  '2) Vào Hồ sơ → mục Credits → bấm "Liên kết Telegram"\n' +
+  '3) Bấm nút mở bot — xong, ví Lượng dùng chung ở đây.';
+
+const freeCapMsg = () =>
+  `Bạn đã dùng hết ${FREE_DAILY_CAP} lượt miễn phí hôm nay (reset mỗi ngày). 🌙\n\n` +
+  LINK_GUIDE;
+
+const noBalanceMsg = (balance: number, cost: number) =>
+  `Bạn còn ${balance} Lượng, mỗi lượt cần ${cost} Lượng.\n\n` +
+  `Nạp thêm tại ${SITE}/topup.html rồi quay lại chat nhé. 💳`;
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -89,6 +129,10 @@ async function handleUpdate(update: TgUpdate): Promise<void> {
 
   if (!chatId) return;
 
+  // Danh tính tính phí = telegram USER id (from.id). Ở chat riêng nó trùng
+  // chat.id, nhưng dùng from.id mới đúng (tránh nhầm khi group/forward).
+  const fromId = String(msg?.from?.id ?? chatId);
+
   // Bỏ qua update không phải tin nhắn text (ảnh, sticker, callback...).
   if (!text) {
     await tgSendMessage(chatId, 'Hiện mình chỉ trả lời tin nhắn dạng chữ. Bạn gõ câu hỏi nhé!');
@@ -96,14 +140,39 @@ async function handleUpdate(update: TgUpdate): Promise<void> {
   }
 
   // ── Lệnh ─────────────────────────────────────────────────────
-  if (text === '/start') {
+  // /start [token]: token sinh từ web → liên kết ví Lượng.
+  if (text === '/start' || text.startsWith('/start ')) {
+    const token = text.startsWith('/start ') ? text.slice(7).trim() : '';
     await clearSession(chatId);
+    if (token) {
+      const uid = await consumeLinkToken(token, fromId);
+      await tgSendMessage(chatId, uid ? LINK_OK : LINK_FAIL);
+      return;
+    }
     await tgSendMessage(chatId, WELCOME);
     return;
   }
   if (text === '/new' || text === '/reset') {
     await clearSession(chatId);
     await tgSendMessage(chatId, 'Đã bắt đầu cuộc trò chuyện mới. Bạn hỏi gì nào?');
+    return;
+  }
+  if (text === '/link') {
+    const uid = await resolveLinkedUser(fromId);
+    await tgSendMessage(
+      chatId,
+      uid
+        ? '✅ Tài khoản này đã được liên kết — bạn đang dùng ví Lượng của mình.'
+        : LINK_GUIDE,
+    );
+    return;
+  }
+
+  // ── Cổng tính phí (trước khi tốn token LLM) ──────────────────
+  const cfg = await getChatConfig();
+  const gate = await checkAccess(fromId, cfg.cost);
+  if (!gate.allowed) {
+    await tgSendMessage(chatId, gate.message || ERR_MSG);
     return;
   }
 
@@ -134,7 +203,6 @@ async function handleUpdate(update: TgUpdate): Promise<void> {
   };
 
   try {
-    const cfg = await getChatConfig();
     const req: ChatRequestV1 = {
       session_id: `tg-${chatId}`,
       messages,
@@ -153,6 +221,9 @@ async function handleUpdate(update: TgUpdate): Promise<void> {
       return;
     }
     await deliver(chatId, progressId, answer);
+    // Trả lời thành công → CHỐT tính phí (trừ Lượng / tăng lượt free).
+    // Lỗi/không có câu trả lời thì KHÔNG tính (return ở nhánh trên).
+    if (gate.commit) await gate.commit();
     // Lưu lịch sử (gồm câu trả lời) cho lượt sau slot-filling.
     await saveSession(chatId, [...messages, { role: 'assistant', content: answer }]);
   } catch {
@@ -179,10 +250,51 @@ function ok() {
   return new Response('ok', { status: 200 });
 }
 
+// ── Cổng tính phí ───────────────────────────────────────────
+// Trả { allowed, message?, commit? }. commit() gọi SAU khi trả lời
+// thành công (trừ Lượng nếu đã link / tăng lượt free nếu chưa link).
+interface AccessGate {
+  allowed: boolean;
+  message?: string;
+  commit?: () => Promise<void>;
+}
+
+async function checkAccess(fromId: string, cost: number): Promise<AccessGate> {
+  // Tắt paywall hoặc giá 0 → free, không đếm.
+  if (paywallDisabled() || cost <= 0) return { allowed: true };
+
+  const userId = await resolveLinkedUser(fromId);
+  if (userId) {
+    // Đã liên kết → dùng ví Lượng chung với web.
+    const balance = await getBalance(userId);
+    if (balance < cost) return { allowed: false, message: noBalanceMsg(balance, cost) };
+    return {
+      allowed: true,
+      commit: async () => {
+        const newBal = await deductCredits(userId, cost);
+        if (newBal != null) {
+          await logTransaction({
+            userId,
+            amount: -cost,
+            type: 'chat',
+            description: 'Lượt luận giải Telegram',
+          });
+        }
+      },
+    };
+  }
+
+  // Chưa liên kết → cap lượt free/ngày.
+  const used = await getFreeUsageToday(fromId);
+  if (used >= FREE_DAILY_CAP) return { allowed: false, message: freeCapMsg() };
+  return { allowed: true, commit: async () => void (await incrFreeUsage(fromId)) };
+}
+
 // ── Kiểu update tối thiểu của Telegram ──────────────────────
 interface TgUpdate {
   message?: {
     chat?: { id?: number };
+    from?: { id?: number };
     text?: string;
   };
 }
