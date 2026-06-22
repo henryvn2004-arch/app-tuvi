@@ -30,6 +30,20 @@ import { type ChatConfig } from '@/lib/config/appConfig';
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!;
 
+// Số ảnh tối đa xử lý mỗi tin nhắn (chặn payload phình + chi phí).
+const MAX_IMAGES_PER_MSG = 3;
+
+// Hướng dẫn luận ẢNH — chèn vào system khi tin nhắn có ảnh. Gộp 2 nghiệp
+// vụ ảnh (nhân tướng + phong thủy) vào CÙNG ô chat; model tự nhận diện.
+const VISION_INSTRUCTION = `
+
+=== XEM ẢNH (Nhân tướng học / Phong thủy) ===
+Người dùng vừa GỬI ẢNH. Quan sát kỹ rồi luận đúng nghiệp vụ:
+• Ảnh KHUÔN MẶT (nhân tướng): nhận xét tam đình (trán/mũi/cằm), ngũ quan (mắt, mũi, miệng, tai, lông mày), thần sắc, nốt ruồi/đặc điểm nổi bật → luận tính cách, sự nghiệp, tình duyên, tài lộc theo nhân tướng học Á Đông. Điềm đạm, có cơ sở; KHÔNG phán tuyệt đối hay hù dọa.
+• Ảnh KHÔNG GIAN / NHÀ CỬA (phong thủy): nhận xét bố cục, hướng, ánh sáng, vật phẩm, điểm được và chưa được → gợi ý hóa giải, sắp đặt hợp phong thủy.
+• Nếu KHÔNG rõ ảnh là mặt người hay không gian: mô tả những gì thấy rồi hỏi lại người dùng muốn xem theo hướng nào.
+TUYỆT ĐỐI không bịa chi tiết không có trong ảnh. Ảnh mờ/thiếu sáng thì nói thẳng và xin ảnh rõ hơn.`;
+
 // ── Agent loop ──────────────────────────────────────────────
 export async function runAgent(
   req: ChatRequestV1,
@@ -119,13 +133,33 @@ export async function runAgent(
     tools = buildToolDefs();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const convo: any[] = (req.messages as ChatMessage[]).slice(-10).map((m) => ({
-    role: m.role,
-    content: String(m.content).slice(0, 2000),
-  }));
+  // Có ảnh trong bất kỳ tin user nào → bật hướng dẫn luận ảnh (vision).
+  const hasImages = (req.messages as ChatMessage[]).some(
+    (m) => m.role === 'user' && Array.isArray(m.images) && m.images.length > 0,
+  );
+  if (hasImages) system += VISION_INSTRUCTION;
 
-  send(sse.status({ text: 'Đang suy xét...' }));
+  // Map về định dạng Anthropic. Tin user có ảnh → content là MẢNG block
+  // (image trước, text sau); còn lại giữ string cho gọn. Model đa phương
+  // thức (sonnet) đọc trực tiếp ảnh base64.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const convo: any[] = (req.messages as ChatMessage[]).slice(-10).map((m) => {
+    const text = String(m.content).slice(0, 2000);
+    const imgs = m.role === 'user' && Array.isArray(m.images) ? m.images : [];
+    if (imgs.length) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const blocks: any[] = imgs.slice(0, MAX_IMAGES_PER_MSG).map((im) => ({
+        type: 'image',
+        source: { type: 'base64', media_type: im.mediaType || 'image/jpeg', data: im.data },
+      }));
+      if (text) blocks.push({ type: 'text', text });
+      else blocks.push({ type: 'text', text: 'Nhờ thầy xem giúp ảnh này.' });
+      return { role: m.role, content: blocks };
+    }
+    return { role: m.role, content: text };
+  });
+
+  send(sse.status({ text: hasImages ? 'Đang xem ảnh...' : 'Đang suy xét...' }));
 
   for (let round = 0; round <= cfg.maxRounds; round++) {
     const lastRound = round === cfg.maxRounds;
