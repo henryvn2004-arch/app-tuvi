@@ -40,7 +40,7 @@ export const DEFAULTS: ChatConfig = {
   model: 'claude-sonnet-4-6',
   maxRounds: 4,
   maxTokens: 1500,
-  cost: 0,
+  cost: 5, // 5 Lượng / lượt — giá chuẩn; DB app_config 'chat.cost' override được (không cần deploy)
 };
 
 // Ánh xạ key trong DB → field. Thiếu key nào thì giữ default field đó.

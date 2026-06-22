@@ -2206,7 +2206,7 @@ var TuviTTS = (function() {
           '<div style="font-size:12px;color:rgba(255,255,255,.55);">Đăng ký để tiếp tục hỏi không giới hạn</div>' +
         '</div>' +
         '<div style="padding:20px 24px 14px;">' +
-          '<div style="font-size:13.5px;color:#333;line-height:1.75;">Đăng ký tài khoản miễn phí để nhận <strong style="color:#1E6B3C;">10 lượng</strong> — khoảng 3 câu hỏi tiếp theo.</div>' +
+          '<div style="font-size:13.5px;color:#333;line-height:1.75;">Đăng ký tài khoản miễn phí để nhận <strong style="color:#1E6B3C;">25 lượng</strong> — khoảng 5 câu hỏi tiếp theo.</div>' +
           '<div style="font-size:12px;color:#999;margin-top:6px;">Hoặc nạp thêm để hỏi không giới hạn.</div>' +
         '</div>' +
         '<div style="display:flex;gap:10px;padding:14px 24px;border-top:1px solid #f0f0f0;">' +
@@ -2497,7 +2497,7 @@ var TuviTTS = (function() {
         setTimeout(_showFirstTurnSignup, 1200);
       } else if (!useV1 && window.TuviPaywall && TuviPaywall.deductSilent) {
         TuviPaywall.deductSilent({ product: 'tuvi-chat' }).then(function (d) {
-          if (d && d.ok && d.balance != null && d.balance < 3 && TuviPaywall._banner) {
+          if (d && d.ok && d.balance != null && d.balance < 5 && TuviPaywall._banner) {
             TuviPaywall._banner('Hết lượng — nạp thêm để hỏi tiếp');
           }
         });

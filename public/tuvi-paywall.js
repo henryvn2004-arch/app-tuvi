@@ -8,7 +8,7 @@ const TuviPaywall = (() => {
   const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 
   const PRODUCTS = {
-    'tuvi-chat':   { cost:   3, title: 'Tử Vi Chat' },
+    'tuvi-chat':   { cost:   5, title: 'Tử Vi Chat' },
     'laso':        { cost: 150, title: 'Luận Giải Lá Số' },
     'tu-binh':     { cost: 100, title: 'Tử Bình Bát Tự' },
     'xem-tuoi':    { cost:  50, title: 'Xem Tuổi Vợ Chồng' },

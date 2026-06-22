@@ -271,7 +271,7 @@ function showAuthModal(callback) {
       <!-- Tabs -->
       <div style="display:flex;gap:0;margin-bottom:28px;border-bottom:2px solid #eee">
         <button id="tab-signin" onclick="switchTab('signin')" style="flex:1;padding:10px;border:none;background:none;font-size:14px;font-weight:600;color:#061A2E;border-bottom:2px solid #061A2E;margin-bottom:-2px;cursor:pointer;font-family:inherit">Đăng nhập</button>
-        <button id="tab-signup" onclick="switchTab('signup')" style="flex:1;padding:10px;border:none;background:none;font-size:14px;font-weight:500;color:#aaa;cursor:pointer;font-family:inherit">Đăng ký <span style="font-size:11px;color:#1E6B3C;font-weight:700">+10 credits</span></button>
+        <button id="tab-signup" onclick="switchTab('signup')" style="flex:1;padding:10px;border:none;background:none;font-size:14px;font-weight:500;color:#aaa;cursor:pointer;font-family:inherit">Đăng ký <span style="font-size:11px;color:#1E6B3C;font-weight:700">+25 credits</span></button>
       </div>
 
       <!-- Logo -->
@@ -386,7 +386,7 @@ function _showFreeCreditsWelcome() {
   const b = document.createElement('div');
   b.id = 'free-credits-banner';
   b.style.cssText = 'position:fixed;top:70px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1E6B3C,#155d32);color:#fff;padding:14px 28px;border-radius:10px;font-size:14px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.25);text-align:center;white-space:nowrap;animation:tpw-fade .3s ease';
-  b.innerHTML = '🎉 Chào mừng! Bạn đã nhận <strong>10 credits miễn phí</strong> — thử ngay Xem Tướng (5cr/lần)';
+  b.innerHTML = '🎉 Chào mừng! Bạn đã nhận <strong>25 credits miễn phí</strong> — thử ngay Xem Tướng (5cr/lần)';
   document.body.appendChild(b);
   setTimeout(() => { b.style.transition = 'opacity .6s'; b.style.opacity = '0'; }, 5000);
   setTimeout(() => b.remove(), 5700);
