@@ -6,6 +6,7 @@
 // ============================================================
 
 import type { ChatMessage, BirthParams, ChatImage } from '@/lib/contract/v1';
+import { splitText } from './core';
 
 const TG_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
 const TG_API = `https://api.telegram.org/bot${TG_TOKEN}`;
@@ -120,21 +121,6 @@ function mediaTypeFromPath(p: string): string {
   return 'image/jpeg';
 }
 
-export function splitText(s: string, max: number): string[] {
-  if (s.length <= max) return [s];
-  const out: string[] = [];
-  let rest = s;
-  while (rest.length > max) {
-    // cắt ở newline gần nhất trước max để câu không gãy giữa chừng
-    let cut = rest.lastIndexOf('\n', max);
-    if (cut < max * 0.5) cut = max; // không có newline hợp lý → cắt cứng
-    out.push(rest.slice(0, cut));
-    rest = rest.slice(cut).replace(/^\n+/, '');
-  }
-  if (rest) out.push(rest);
-  return out;
-}
-
 // ── Phiên hội thoại (bảng telegram_sessions) ────────────────
 // chat_id text PK, messages jsonb (ChatMessage[]), birth jsonb, updated_at.
 // birth = lá số đã lập (BirthParams) → lượt sau truyền req.birth, bot không
@@ -199,42 +185,4 @@ export async function clearSession(chatId: number | string): Promise<void> {
   } catch {
     /* best-effort */
   }
-}
-
-// ── Gom event 'text' từ runAgent (send nhận chuỗi SSE) ──────
-// runAgent gọi send(sse.text({delta})) / send(sse.error({...})). Ta bóc
-// các delta thành 1 chuỗi, và bắt error nếu có.
-export function createSSECollector(onStatus?: (status: string) => void) {
-  let text = '';
-  let error: string | null = null;
-  let lastStatus = '';
-  const send = (chunk: string) => {
-    // mỗi chunk: "event: <name>\ndata: <json>\n\n"
-    const nl = chunk.indexOf('\n');
-    if (nl < 0) return;
-    const name = chunk.slice(0, nl).replace(/^event:\s*/, '').trim();
-    const dataLine = chunk.slice(nl + 1).replace(/^data:\s*/, '').trim();
-    let data: unknown;
-    try {
-      data = JSON.parse(dataLine);
-    } catch {
-      return;
-    }
-    if (name === 'text') {
-      text += (data as { delta?: string }).delta || '';
-    } else if (name === 'status') {
-      lastStatus = (data as { text?: string }).text || '';
-      if (lastStatus && onStatus) onStatus(lastStatus);
-    } else if (name === 'tool_call') {
-      // Nhãn tool đã tới qua status kèm theo; tool_call để dành nếu cần.
-    } else if (name === 'error') {
-      error = (data as { message?: string }).message || 'Lỗi không xác định';
-    }
-  };
-  return {
-    send,
-    getText: () => text,
-    getError: () => error,
-    getLastStatus: () => lastStatus,
-  };
 }

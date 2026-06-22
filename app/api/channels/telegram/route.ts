@@ -28,10 +28,9 @@
 
 import { NextRequest } from 'next/server';
 import { waitUntil } from '@vercel/functions';
-import type { ChatRequestV1, ChatMessage, ChatImage } from '@/lib/contract/v1';
-import { runAgent } from '@/lib/agent/run';
 import { getChatConfig } from '@/lib/config/appConfig';
 import { paywallDisabled, getBalance, deductCredits, logTransaction } from '@/lib/billing/credits';
+import { runConversation, type ChannelIO, type SessionStore, type AccessGate } from '@/lib/channels/core';
 import {
   resolveLinkedUser,
   consumeLinkToken,
@@ -45,11 +44,9 @@ import {
   tgEditMessage,
   tgSendChatAction,
   tgFetchImage,
-  splitText,
   loadSession,
   saveSession,
   clearSession,
-  createSSECollector,
 } from '@/lib/channels/telegram';
 
 export const runtime = 'nodejs';
@@ -94,7 +91,19 @@ const noBalanceMsg = (balance: number, cost: number) =>
   `Bạn còn ${balance} Lượng, mỗi lượt cần ${cost} Lượng.\n\n` +
   `Nạp thêm tại ${SITE}/topup.html rồi quay lại chat nhé. 💳`;
 
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+// ── Adapter Telegram cho lõi kênh (lib/channels/core) ───────
+// I/O đặc thù + lưu phiên; điều phối 1 lượt nằm ở runConversation.
+const telegramIO: ChannelIO = {
+  platform: 'telegram',
+  msgLimit: MSG_LIMIT,
+  maxImages: MAX_TG_IMAGES,
+  typing: (chatId) => tgSendChatAction(chatId, 'typing'),
+  sendText: tgSendMessage,
+  sendProgress: tgSendMessageReturnId,
+  editText: (chatId, id, text) => tgEditMessage(chatId, Number(id), text),
+  fetchImage: tgFetchImage,
+};
+const telegramStore: SessionStore = { load: loadSession, save: saveSession };
 
 // Telegram health check / nhỡ mở bằng GET.
 export async function GET() {
@@ -195,103 +204,15 @@ async function handleUpdate(update: TgUpdate): Promise<void> {
     return;
   }
 
-  // ── Hội thoại ────────────────────────────────────────────────
-  await tgSendChatAction(chatId, 'typing');
-  const progressId = await tgSendMessageReturnId(
-    chatId,
-    hasImage ? '🔮 Đang xem ảnh của bạn, chờ một chút…' : '🔮 Đang xem lá số của bạn, chờ một chút…',
+  // ── Hội thoại — điều phối dùng CHUNG ở lib/channels/core ─────
+  await runConversation(
+    telegramIO,
+    telegramStore,
+    { chatId, text: userText, imageRefs: fileIds },
+    cfg,
+    ERR_MSG,
+    gate.commit,
   );
-
-  // Tải ảnh (nếu có) → base64 cho runAgent. Tải lỗi thì bỏ qua, vẫn luận theo chữ.
-  const images: ChatImage[] = [];
-  if (hasImage) {
-    for (const fid of fileIds.slice(0, MAX_TG_IMAGES)) {
-      const img = await tgFetchImage(fid);
-      if (img) images.push(img);
-    }
-  }
-
-  const session = await loadSession(chatId);
-  // Tin lượt này: gửi runAgent KÈM ảnh (base64). Nếu chỉ có ảnh không caption
-  // → mồi câu hỏi mặc định để model luận.
-  const userMsg: ChatMessage = { role: 'user', content: userText || 'Nhờ thầy xem giúp ảnh này.' };
-  if (images.length) userMsg.images = images;
-  const messages: ChatMessage[] = [...session.messages, userMsg];
-
-  // Giữ "typing…" sống suốt quá trình (Telegram tự tắt sau ~5s).
-  let working = true;
-  const keepTyping = (async () => {
-    while (working) {
-      await sleep(4000);
-      if (working) await tgSendChatAction(chatId, 'typing');
-    }
-  })();
-
-  // Edit thanh tiến trình theo status của agent (throttle 2.5s tránh rate-limit).
-  let lastEdit = Date.now();
-  const onStatus = (status: string) => {
-    const now = Date.now();
-    if (progressId && now - lastEdit > 2500) {
-      lastEdit = now;
-      void tgEditMessage(chatId, progressId, '🔮 ' + status);
-    }
-  };
-
-  try {
-    const req: ChatRequestV1 = {
-      session_id: `tg-${chatId}`,
-      messages,
-      stream: true,
-      // Đã có lá số từ phiên trước → truyền thẳng, server tính lại deterministic,
-      // bot không phải hỏi lại ngày sinh dù text đã trôi khỏi cửa sổ 12 tin.
-      ...(session.birth ? { birth: session.birth } : {}),
-      client: { platform: 'telegram', version: '1.0.0' },
-    };
-    const collector = createSSECollector(onStatus);
-    const { birth: agentBirth } = await runAgent(req, cfg, collector.send);
-    working = false;
-
-    const err = collector.getError();
-    const answer = collector.getText().trim();
-
-    if (err || !answer) {
-      await deliver(chatId, progressId, ERR_MSG);
-      return;
-    }
-    await deliver(chatId, progressId, answer);
-    // Trả lời thành công → CHỐT tính phí (trừ Lượng / tăng lượt free).
-    // Lỗi/không có câu trả lời thì KHÔNG tính (return ở nhánh trên).
-    if (gate.commit) await gate.commit();
-    // Lưu lịch sử + lá số đã lập (nếu có) cho lượt sau. KHÔNG lưu base64 ảnh:
-    // tránh phình jsonb telegram_sessions và gửi lại ảnh cũ ở mọi lượt sau
-    // (tốn token + sai ngữ cảnh). Giữ caption làm dấu vết "đã gửi ảnh".
-    const savedUserMsg: ChatMessage = {
-      role: 'user',
-      content: images.length ? (userText ? `[ảnh] ${userText}` : '[Đã gửi ảnh]') : userText,
-    };
-    await saveSession(
-      chatId,
-      [...session.messages, savedUserMsg, { role: 'assistant', content: answer }],
-      agentBirth,
-    );
-  } catch {
-    working = false;
-    await deliver(chatId, progressId, ERR_MSG);
-  } finally {
-    working = false;
-    await keepTyping.catch(() => {});
-  }
-}
-
-// Chốt nội dung vào tin tiến trình (edit); phần dư >4096 gửi thành tin mới.
-async function deliver(chatId: number, progressId: number | null, text: string): Promise<void> {
-  if (!progressId) {
-    await tgSendMessage(chatId, text);
-    return;
-  }
-  const parts = splitText(text, MSG_LIMIT);
-  await tgEditMessage(chatId, progressId, parts[0]);
-  for (const p of parts.slice(1)) await tgSendMessage(chatId, p);
 }
 
 function ok() {
@@ -301,12 +222,6 @@ function ok() {
 // ── Cổng tính phí ───────────────────────────────────────────
 // Trả { allowed, message?, commit? }. commit() gọi SAU khi trả lời
 // thành công (trừ Lượng nếu đã link / tăng lượt free nếu chưa link).
-interface AccessGate {
-  allowed: boolean;
-  message?: string;
-  commit?: () => Promise<void>;
-}
-
 async function checkAccess(fromId: string, cost: number): Promise<AccessGate> {
   // Tắt paywall hoặc giá 0 → free, không đếm.
   if (paywallDisabled() || cost <= 0) return { allowed: true };
