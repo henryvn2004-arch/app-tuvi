@@ -28,7 +28,7 @@
 
 import { NextRequest } from 'next/server';
 import { waitUntil } from '@vercel/functions';
-import type { ChatRequestV1, ChatMessage } from '@/lib/contract/v1';
+import type { ChatRequestV1, ChatMessage, ChatImage } from '@/lib/contract/v1';
 import { runAgent } from '@/lib/agent/run';
 import { getChatConfig } from '@/lib/config/appConfig';
 import { paywallDisabled, getBalance, deductCredits, logTransaction } from '@/lib/billing/credits';
@@ -44,6 +44,7 @@ import {
   tgSendMessageReturnId,
   tgEditMessage,
   tgSendChatAction,
+  tgFetchImage,
   splitText,
   loadSession,
   saveSession,
@@ -56,6 +57,7 @@ export const maxDuration = 300; // Pro: nền có đủ thời gian lập lá s�
 
 const WEBHOOK_SECRET = process.env.TELEGRAM_WEBHOOK_SECRET || '';
 const MSG_LIMIT = 4096;
+const MAX_TG_IMAGES = 3; // khớp MAX_IMAGES_PER_MSG trong runAgent
 
 const WELCOME =
   'Xin chào! Mình là trợ lý Tử Vi Minh Bảo 🔮\n\n' +
@@ -133,9 +135,26 @@ async function handleUpdate(update: TgUpdate): Promise<void> {
   // chat.id, nhưng dùng from.id mới đúng (tránh nhầm khi group/forward).
   const fromId = String(msg?.from?.id ?? chatId);
 
-  // Bỏ qua update không phải tin nhắn text (ảnh, sticker, callback...).
-  if (!text) {
-    await tgSendMessage(chatId, 'Hiện mình chỉ trả lời tin nhắn dạng chữ. Bạn gõ câu hỏi nhé!');
+  // ── Ảnh đính kèm (nhân tướng / phong thủy) ───────────────────
+  // Ảnh nén: photo[] (lấy bản LỚN NHẤT = phần tử cuối). Ảnh gửi dạng file
+  // (không nén): document mime image/*. Caption đi kèm làm câu hỏi.
+  const fileIds: string[] = [];
+  const photo = msg?.photo;
+  if (Array.isArray(photo) && photo.length) fileIds.push(photo[photo.length - 1].file_id);
+  if (msg?.document?.mime_type?.startsWith('image/') && msg.document.file_id) {
+    fileIds.push(msg.document.file_id);
+  }
+  const hasImage = fileIds.length > 0;
+  const caption = (msg?.caption || '').trim();
+  // Câu hỏi: text thường, hoặc caption của ảnh.
+  const userText = text || caption;
+
+  // Bỏ qua update không có chữ lẫn ảnh (sticker, vị trí, voice...).
+  if (!userText && !hasImage) {
+    await tgSendMessage(
+      chatId,
+      'Hiện mình trả lời tin nhắn dạng chữ hoặc ẢNH (khuôn mặt để xem tướng, không gian/nhà cửa để xem phong thủy). Bạn gõ câu hỏi hoặc gửi ảnh nhé!',
+    );
     return;
   }
 
@@ -178,10 +197,26 @@ async function handleUpdate(update: TgUpdate): Promise<void> {
 
   // ── Hội thoại ────────────────────────────────────────────────
   await tgSendChatAction(chatId, 'typing');
-  const progressId = await tgSendMessageReturnId(chatId, '🔮 Đang xem lá số của bạn, chờ một chút…');
+  const progressId = await tgSendMessageReturnId(
+    chatId,
+    hasImage ? '🔮 Đang xem ảnh của bạn, chờ một chút…' : '🔮 Đang xem lá số của bạn, chờ một chút…',
+  );
+
+  // Tải ảnh (nếu có) → base64 cho runAgent. Tải lỗi thì bỏ qua, vẫn luận theo chữ.
+  const images: ChatImage[] = [];
+  if (hasImage) {
+    for (const fid of fileIds.slice(0, MAX_TG_IMAGES)) {
+      const img = await tgFetchImage(fid);
+      if (img) images.push(img);
+    }
+  }
 
   const session = await loadSession(chatId);
-  const messages: ChatMessage[] = [...session.messages, { role: 'user', content: text }];
+  // Tin lượt này: gửi runAgent KÈM ảnh (base64). Nếu chỉ có ảnh không caption
+  // → mồi câu hỏi mặc định để model luận.
+  const userMsg: ChatMessage = { role: 'user', content: userText || 'Nhờ thầy xem giúp ảnh này.' };
+  if (images.length) userMsg.images = images;
+  const messages: ChatMessage[] = [...session.messages, userMsg];
 
   // Giữ "typing…" sống suốt quá trình (Telegram tự tắt sau ~5s).
   let working = true;
@@ -227,8 +262,18 @@ async function handleUpdate(update: TgUpdate): Promise<void> {
     // Trả lời thành công → CHỐT tính phí (trừ Lượng / tăng lượt free).
     // Lỗi/không có câu trả lời thì KHÔNG tính (return ở nhánh trên).
     if (gate.commit) await gate.commit();
-    // Lưu lịch sử (gồm câu trả lời) + lá số đã lập (nếu có) cho lượt sau.
-    await saveSession(chatId, [...messages, { role: 'assistant', content: answer }], agentBirth);
+    // Lưu lịch sử + lá số đã lập (nếu có) cho lượt sau. KHÔNG lưu base64 ảnh:
+    // tránh phình jsonb telegram_sessions và gửi lại ảnh cũ ở mọi lượt sau
+    // (tốn token + sai ngữ cảnh). Giữ caption làm dấu vết "đã gửi ảnh".
+    const savedUserMsg: ChatMessage = {
+      role: 'user',
+      content: images.length ? (userText ? `[ảnh] ${userText}` : '[Đã gửi ảnh]') : userText,
+    };
+    await saveSession(
+      chatId,
+      [...session.messages, savedUserMsg, { role: 'assistant', content: answer }],
+      agentBirth,
+    );
   } catch {
     working = false;
     await deliver(chatId, progressId, ERR_MSG);
@@ -299,5 +344,10 @@ interface TgUpdate {
     chat?: { id?: number };
     from?: { id?: number };
     text?: string;
+    caption?: string;
+    // Ảnh nén: mảng nhiều kích cỡ (tăng dần) → phần tử cuối là lớn nhất.
+    photo?: { file_id: string; file_size?: number }[];
+    // Ảnh/tệp gửi dạng "file" (không nén).
+    document?: { file_id?: string; mime_type?: string };
   };
 }
