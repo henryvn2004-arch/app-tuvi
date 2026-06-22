@@ -7,12 +7,17 @@
 // tài khoản Supabase) → lượt free.
 //
 // QUAN TRỌNG — webhook PHẢI ack 200 NGAY rồi xử lý NỀN (waitUntil):
-//   luận giải mất 30–90s; nếu xử lý xong mới trả 200 thì Telegram
-//   "Read timeout" → retry → 504 dồn (lỗi đã gặp). Ack tức thì →
-//   Telegram yên, nền chạy tới maxDuration mới gửi kết quả.
+//   luận giải mất 20–60s; nếu xử lý xong mới trả 200 thì Telegram
+//   "Read timeout" → retry → 504 dồn. Ack tức thì → Telegram yên.
 //
-// Bảo mật: verify header secret_token (đặt khi setWebhook).
-// Phiên hội thoại lưu ở telegram_sessions để slot-filling chạy.
+// UX khi chờ (Telegram không stream từng chữ như web):
+//   - gửi NGAY 1 tin "đang xem lá số…" rồi EDIT theo tiến trình agent
+//     (status: lập lá số → tra vận hạn → suy xét) → người dùng thấy
+//     "đang chạy", không tưởng treo.
+//   - giữ "typing…" sống (Telegram tự tắt sau ~5s) bằng vòng lặp 4s.
+//   - chốt: edit tin đó thành câu trả lời (phần dư >4096 gửi tin mới).
+//
+// Bảo mật: verify header secret_token. Phiên lưu ở telegram_sessions.
 // ============================================================
 
 import { NextRequest } from 'next/server';
@@ -22,7 +27,10 @@ import { runAgent } from '@/lib/agent/run';
 import { getChatConfig } from '@/lib/config/appConfig';
 import {
   tgSendMessage,
+  tgSendMessageReturnId,
+  tgEditMessage,
   tgSendChatAction,
+  splitText,
   loadSession,
   saveSession,
   clearSession,
@@ -33,6 +41,7 @@ export const runtime = 'nodejs';
 export const maxDuration = 300; // Pro: nền có đủ thời gian lập lá số + luận
 
 const WEBHOOK_SECRET = process.env.TELEGRAM_WEBHOOK_SECRET || '';
+const MSG_LIMIT = 4096;
 
 const WELCOME =
   'Xin chào! Mình là trợ lý Tử Vi Minh Bảo 🔮\n\n' +
@@ -40,6 +49,10 @@ const WELCOME =
   'cho mình biết: giới tính, ngày/tháng/năm sinh (dương lịch), và giờ sinh.\n\n' +
   'Ví dụ: "Nữ, 03/06/1998, giờ Sửu, năm nay làm ăn sao?"\n\n' +
   'Gõ /new để bắt đầu cuộc trò chuyện mới.';
+
+const ERR_MSG = 'Xin lỗi, mình gặp trục trặc khi xử lý. Bạn thử lại sau giây lát nhé.';
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 // Telegram health check / nhỡ mở bằng GET.
 export async function GET() {
@@ -96,9 +109,29 @@ async function handleUpdate(update: TgUpdate): Promise<void> {
 
   // ── Hội thoại ────────────────────────────────────────────────
   await tgSendChatAction(chatId, 'typing');
+  const progressId = await tgSendMessageReturnId(chatId, '🔮 Đang xem lá số của bạn, chờ một chút…');
 
   const history = await loadSession(chatId);
   const messages: ChatMessage[] = [...history, { role: 'user', content: text }];
+
+  // Giữ "typing…" sống suốt quá trình (Telegram tự tắt sau ~5s).
+  let working = true;
+  const keepTyping = (async () => {
+    while (working) {
+      await sleep(4000);
+      if (working) await tgSendChatAction(chatId, 'typing');
+    }
+  })();
+
+  // Edit thanh tiến trình theo status của agent (throttle 2.5s tránh rate-limit).
+  let lastEdit = Date.now();
+  const onStatus = (status: string) => {
+    const now = Date.now();
+    if (progressId && now - lastEdit > 2500) {
+      lastEdit = now;
+      void tgEditMessage(chatId, progressId, '🔮 ' + status);
+    }
+  };
 
   try {
     const cfg = await getChatConfig();
@@ -108,23 +141,38 @@ async function handleUpdate(update: TgUpdate): Promise<void> {
       stream: true,
       client: { platform: 'telegram', version: '1.0.0' },
     };
-    const collector = createSSECollector();
+    const collector = createSSECollector(onStatus);
     await runAgent(req, cfg, collector.send);
+    working = false;
 
     const err = collector.getError();
     const answer = collector.getText().trim();
 
     if (err || !answer) {
-      await tgSendMessage(chatId, 'Xin lỗi, mình gặp trục trặc khi xử lý. Bạn thử lại sau giây lát nhé.');
+      await deliver(chatId, progressId, ERR_MSG);
       return;
     }
-
-    await tgSendMessage(chatId, answer);
+    await deliver(chatId, progressId, answer);
     // Lưu lịch sử (gồm câu trả lời) cho lượt sau slot-filling.
     await saveSession(chatId, [...messages, { role: 'assistant', content: answer }]);
   } catch {
-    await tgSendMessage(chatId, 'Xin lỗi, mình gặp trục trặc khi xử lý. Bạn thử lại sau giây lát nhé.');
+    working = false;
+    await deliver(chatId, progressId, ERR_MSG);
+  } finally {
+    working = false;
+    await keepTyping.catch(() => {});
   }
+}
+
+// Chốt nội dung vào tin tiến trình (edit); phần dư >4096 gửi thành tin mới.
+async function deliver(chatId: number, progressId: number | null, text: string): Promise<void> {
+  if (!progressId) {
+    await tgSendMessage(chatId, text);
+    return;
+  }
+  const parts = splitText(text, MSG_LIMIT);
+  await tgEditMessage(chatId, progressId, parts[0]);
+  for (const p of parts.slice(1)) await tgSendMessage(chatId, p);
 }
 
 function ok() {
