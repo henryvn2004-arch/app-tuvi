@@ -180,8 +180,8 @@ async function handleUpdate(update: TgUpdate): Promise<void> {
   await tgSendChatAction(chatId, 'typing');
   const progressId = await tgSendMessageReturnId(chatId, '🔮 Đang xem lá số của bạn, chờ một chút…');
 
-  const history = await loadSession(chatId);
-  const messages: ChatMessage[] = [...history, { role: 'user', content: text }];
+  const session = await loadSession(chatId);
+  const messages: ChatMessage[] = [...session.messages, { role: 'user', content: text }];
 
   // Giữ "typing…" sống suốt quá trình (Telegram tự tắt sau ~5s).
   let working = true;
@@ -207,10 +207,13 @@ async function handleUpdate(update: TgUpdate): Promise<void> {
       session_id: `tg-${chatId}`,
       messages,
       stream: true,
+      // Đã có lá số từ phiên trước → truyền thẳng, server tính lại deterministic,
+      // bot không phải hỏi lại ngày sinh dù text đã trôi khỏi cửa sổ 12 tin.
+      ...(session.birth ? { birth: session.birth } : {}),
       client: { platform: 'telegram', version: '1.0.0' },
     };
     const collector = createSSECollector(onStatus);
-    await runAgent(req, cfg, collector.send);
+    const { birth: agentBirth } = await runAgent(req, cfg, collector.send);
     working = false;
 
     const err = collector.getError();
@@ -224,8 +227,8 @@ async function handleUpdate(update: TgUpdate): Promise<void> {
     // Trả lời thành công → CHỐT tính phí (trừ Lượng / tăng lượt free).
     // Lỗi/không có câu trả lời thì KHÔNG tính (return ở nhánh trên).
     if (gate.commit) await gate.commit();
-    // Lưu lịch sử (gồm câu trả lời) cho lượt sau slot-filling.
-    await saveSession(chatId, [...messages, { role: 'assistant', content: answer }]);
+    // Lưu lịch sử (gồm câu trả lời) + lá số đã lập (nếu có) cho lượt sau.
+    await saveSession(chatId, [...messages, { role: 'assistant', content: answer }], agentBirth);
   } catch {
     working = false;
     await deliver(chatId, progressId, ERR_MSG);
