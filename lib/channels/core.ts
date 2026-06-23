@@ -142,6 +142,11 @@ export async function runConversation(
     const err = collector.getError();
     const answer = collector.getText().trim();
     if (err || !answer) {
+      // Log RÕ nhánh thất bại (lỗi agent vs trả lời rỗng) để debug — trước đây
+      // im lặng gửi ERR_MSG, không biết do đâu.
+      console.error(
+        `[runConversation] Trả lời thất bại — err=${err ?? 'none'} answerLen=${answer.length} lastStatus="${collector.getLastStatus()}"`,
+      );
       await deliver(io, chatId, progressId, errMsg);
       return;
     }
@@ -160,8 +165,11 @@ export async function runConversation(
       [...session.messages, savedUserMsg, { role: 'assistant', content: answer }],
       agentBirth,
     );
-  } catch {
+  } catch (e) {
     working = false;
+    // Bắt cả exception bị ném (vd callAnthropic throw khi non-200) — trước đây
+    // `catch {}` nuốt sạch, không cả biến lỗi.
+    console.error('[runConversation] Lỗi không bắt được khi xử lý lượt:', e);
     await deliver(io, chatId, progressId, errMsg);
   } finally {
     working = false;
