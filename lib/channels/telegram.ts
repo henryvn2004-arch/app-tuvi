@@ -7,20 +7,15 @@
 
 import type { ChatMessage, BirthParams, ChatImage } from '@/lib/contract/v1';
 import { splitText } from './core';
+import { chatLoadSession, chatSaveSession, chatClearSession, type ChatSession } from './store';
 
 const TG_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
 const TG_API = `https://api.telegram.org/bot${TG_TOKEN}`;
 
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
-const SB_HEADERS = {
-  'Content-Type': 'application/json',
-  apikey: SUPABASE_KEY || '',
-  Authorization: `Bearer ${SUPABASE_KEY || ''}`,
-};
-
 const TG_MSG_LIMIT = 4096; // giới hạn 1 tin Telegram
-const HISTORY_KEEP = 12; // số message giữ lại cho slot-filling
+
+/** Nền tảng cho lớp lưu trữ generic (chat_sessions/chat_links… cột platform). */
+const PLATFORM = 'telegram';
 
 // ── Telegram Bot API ────────────────────────────────────────
 export async function tgSendChatAction(chatId: number | string, action = 'typing'): Promise<void> {
@@ -121,68 +116,14 @@ function mediaTypeFromPath(p: string): string {
   return 'image/jpeg';
 }
 
-// ── Phiên hội thoại (bảng telegram_sessions) ────────────────
-// chat_id text PK, messages jsonb (ChatMessage[]), birth jsonb, updated_at.
-// birth = lá số đã lập (BirthParams) → lượt sau truyền req.birth, bot không
-// quên dù thông tin sinh trôi khỏi cửa sổ 12 tin.
-export interface TgSession {
-  messages: ChatMessage[];
-  birth: BirthParams | null;
-}
+// ── Phiên hội thoại (generic chat_sessions, platform='telegram') ────
+// Lưu trữ đã gộp về lib/channels/store (đa-nền-tảng). Giữ nguyên các tên
+// hàm/chữ ký cũ để route Telegram không phải đổi.
+export type TgSession = ChatSession;
 
-export async function loadSession(chatId: number | string): Promise<TgSession> {
-  if (!SUPABASE_URL || !SUPABASE_KEY) return { messages: [], birth: null };
-  try {
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/telegram_sessions?chat_id=eq.${encodeURIComponent(String(chatId))}&select=messages,birth&limit=1`,
-      { headers: SB_HEADERS },
-    );
-    if (!res.ok) return { messages: [], birth: null };
-    const rows = (await res.json()) as { messages?: ChatMessage[]; birth?: BirthParams | null }[];
-    const msgs = rows[0]?.messages;
-    return {
-      messages: Array.isArray(msgs) ? msgs : [],
-      birth: rows[0]?.birth ?? null,
-    };
-  } catch {
-    return { messages: [], birth: null };
-  }
-}
+export const loadSession = (chatId: number | string) => chatLoadSession(PLATFORM, chatId);
 
-export async function saveSession(
-  chatId: number | string,
-  messages: ChatMessage[],
-  birth: BirthParams | null = null,
-): Promise<void> {
-  if (!SUPABASE_URL || !SUPABASE_KEY) return;
-  const trimmed = messages.slice(-HISTORY_KEEP);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const row: any = {
-    chat_id: String(chatId),
-    messages: trimmed,
-    updated_at: new Date().toISOString(),
-  };
-  // Chỉ ghi birth khi có (giữ lá số cũ nếu lượt này chưa lập được).
-  if (birth) row.birth = birth;
-  try {
-    await fetch(`${SUPABASE_URL}/rest/v1/telegram_sessions`, {
-      method: 'POST',
-      headers: { ...SB_HEADERS, Prefer: 'resolution=merge-duplicates' },
-      body: JSON.stringify(row),
-    });
-  } catch {
-    /* best-effort */
-  }
-}
+export const saveSession = (chatId: number | string, messages: ChatMessage[], birth: BirthParams | null = null) =>
+  chatSaveSession(PLATFORM, chatId, messages, birth);
 
-export async function clearSession(chatId: number | string): Promise<void> {
-  if (!SUPABASE_URL || !SUPABASE_KEY) return;
-  try {
-    await fetch(
-      `${SUPABASE_URL}/rest/v1/telegram_sessions?chat_id=eq.${encodeURIComponent(String(chatId))}`,
-      { method: 'DELETE', headers: SB_HEADERS },
-    );
-  } catch {
-    /* best-effort */
-  }
-}
+export const clearSession = (chatId: number | string) => chatClearSession(PLATFORM, chatId);
