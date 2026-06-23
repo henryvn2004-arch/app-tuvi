@@ -30,6 +30,43 @@ import { type ChatConfig } from '@/lib/config/appConfig';
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!;
 
+const ANTHROPIC_HEADERS = {
+  'Content-Type': 'application/json',
+  'x-api-key': ANTHROPIC_API_KEY,
+  'anthropic-version': '2023-06-01',
+  'anthropic-beta': 'prompt-caching-2024-07-31',
+};
+
+// Mã lỗi TẠM THỜI của Anthropic (rate limit / quá tải / lỗi server) → đáng thử
+// lại. Gọi qua fetch thô (không qua SDK) nên KHÔNG có auto-retry; tự retry ở
+// đây để 1 cú 529 (overloaded) thoáng qua không làm hỏng cả lượt — nghi phạm
+// chính khiến tin follow-up trả "gặp trục trặc".
+const ANTHROPIC_RETRYABLE = new Set([429, 500, 502, 503, 529]);
+const ANTHROPIC_MAX_TRIES = 3;
+
+// POST lên Anthropic, thử lại khi gặp lỗi tạm thời (backoff 0.5s/1s). Trả về
+// Response để caller tự đọc body (json/stream). Lỗi non-retryable hoặc thành
+// công → trả ngay; hết lượt thử → trả Response cuối (caller xử lý non-ok).
+async function postAnthropic(payload: unknown): Promise<Response> {
+  let lastResp: Response | null = null;
+  for (let attempt = 0; attempt < ANTHROPIC_MAX_TRIES; attempt++) {
+    if (attempt > 0) {
+      await new Promise((r) => setTimeout(r, 500 * 2 ** (attempt - 1)));
+    }
+    const resp = await fetch(ANTHROPIC_URL, {
+      method: 'POST',
+      headers: ANTHROPIC_HEADERS,
+      body: JSON.stringify(payload),
+    });
+    if (resp.ok || !ANTHROPIC_RETRYABLE.has(resp.status)) return resp;
+    lastResp = resp;
+    console.error(
+      `[runAgent] Anthropic ${resp.status} (lần ${attempt + 1}/${ANTHROPIC_MAX_TRIES}) — thử lại`,
+    );
+  }
+  return lastResp!;
+}
+
 // Số ảnh tối đa xử lý mỗi tin nhắn (chặn payload phình + chi phí).
 const MAX_IMAGES_PER_MSG = 3;
 
@@ -230,17 +267,14 @@ async function callAnthropic(system: string, convo: any[], tools: any[], cfg: Ch
     payload.tools = tools;
     if (toolChoiceNone) payload.tool_choice = { type: 'none' };
   }
-  const resp = await fetch(ANTHROPIC_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
-      'anthropic-beta': 'prompt-caching-2024-07-31',
-    },
-    body: JSON.stringify(payload),
-  });
-  if (!resp.ok) throw new Error('Anthropic error: ' + (await resp.text()).slice(0, 200));
+  const resp = await postAnthropic(payload);
+  if (!resp.ok) {
+    const body = (await resp.text()).slice(0, 500);
+    // Log nguyên do (status + body) — trước đây throw bị core.ts nuốt im, log
+    // Vercel rỗng nên không debug được tin follow-up "gặp trục trặc".
+    console.error(`[runAgent.callAnthropic] Anthropic non-200: ${resp.status} — ${body}`);
+    throw new Error('Anthropic error: ' + body);
+  }
   return resp.json();
 }
 
@@ -259,18 +293,13 @@ async function streamFinal(system: string, convo: any[], tools: any[], cfg: Chat
     payload.tools = tools;
     payload.tool_choice = { type: 'none' };
   }
-  const resp = await fetch(ANTHROPIC_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
-      'anthropic-beta': 'prompt-caching-2024-07-31',
-    },
-    body: JSON.stringify(payload),
-  });
+  const resp = await postAnthropic(payload);
   if (!resp.ok) {
-    send(sse.error({ code: 'internal', message: 'Anthropic error: ' + (await resp.text()).slice(0, 200) }));
+    const body = (await resp.text()).slice(0, 500);
+    // Log nguyên do — trước đây chỉ gửi sse.error (kênh nuốt thành ERR_MSG),
+    // không console.error nên log Vercel rỗng.
+    console.error(`[runAgent.streamFinal] Anthropic non-200: ${resp.status} — ${body}`);
+    send(sse.error({ code: 'internal', message: 'Anthropic error: ' + body }));
     return;
   }
   const reader = resp.body!.getReader();
