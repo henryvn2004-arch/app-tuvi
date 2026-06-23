@@ -27,7 +27,8 @@ export type ClientPlatform =
   | 'android'
   | 'ios'
   | 'telegram'
-  | 'messenger';
+  | 'messenger'
+  | 'whatsapp';
 
 // ── Ảnh đính kèm tin nhắn (additive — tướng mặt / phong thủy) ──
 // base64 KHÔNG kèm tiền tố "data:...;base64," (chỉ phần dữ liệu).

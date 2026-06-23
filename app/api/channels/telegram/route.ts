@@ -6,7 +6,7 @@
 // với web) → gửi luận giải về.
 //
 // Tính phí (Lượng) — dùng CHUNG ví với web:
-//   - User đã LIÊN KẾT tài khoản (telegram_links, qua /start <token> sinh
+//   - User đã LIÊN KẾT tài khoản (chat_links, qua /start <token> sinh
 //     từ web) → trừ Lượng trên ví đó y hệt /api/v1/chat. Hết Lượng → mời nạp.
 //   - CHƯA liên kết → cho FREE_DAILY_CAP lượt free/ngày (chống đốt token);
 //     hết quota → mời liên kết tài khoản. Xem lib/channels/telegramLink.
@@ -23,7 +23,8 @@
 //   - giữ "typing…" sống (Telegram tự tắt sau ~5s) bằng vòng lặp 4s.
 //   - chốt: edit tin đó thành câu trả lời (phần dư >4096 gửi tin mới).
 //
-// Bảo mật: verify header secret_token. Phiên lưu ở telegram_sessions.
+// Bảo mật: verify header secret_token. Phiên lưu ở chat_sessions (generic,
+// platform='telegram' — xem lib/channels/store + migration đa-nền-tảng).
 // ============================================================
 
 import { NextRequest } from 'next/server';
