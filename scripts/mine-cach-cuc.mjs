@@ -37,7 +37,12 @@ const cachDB = JSON.parse(readFileSync(join(ROOT, 'public/cach_cuc_all.json'), '
 const docs = [];
 const chunks = JSON.parse(readFileSync(join(ROOT, 'chunks_all.json'), 'utf-8'));
 for (const ch of chunks) {
-  docs.push({ content: ch.content || '', source: 'Tân Biên', docId: ch.source || '[TÂN BIÊN]', type: 'tan-bien' });
+  docs.push({
+    content: ch.content || '',
+    source: 'Tân Biên',
+    docId: ch.source || '[TÂN BIÊN]',
+    type: 'tan-bien',
+  });
 }
 const articles = JSON.parse(readFileSync(join(ROOT, 'sach/articles.json'), 'utf-8'));
 for (const a of articles) {
@@ -52,27 +57,91 @@ for (const a of articles) {
 // ── Map VIẾT-TẮT-SAO → tên đầy đủ ────────────────────────────
 // Tên cách ghép từ tên-ngắn các sao. 1 viết tắt có thể ứng nhiều sao.
 const SHORT2FULL = {
-  'Mã': ['Thiên Mã'], 'Khốc': ['Thiên Khốc'], 'Khách': ['Điếu Khách'],
-  'Hư': ['Thiên Hư'], 'Khôi': ['Thiên Khôi'], 'Việt': ['Thiên Việt'],
-  'Xương': ['Văn Xương'], 'Khúc': ['Văn Khúc'], 'Tả': ['Tả Phụ'],
-  'Hữu': ['Hữu Bật'], 'Phụ': ['Tả Phụ'], 'Bật': ['Hữu Bật'],
-  'Long': ['Long Trì'], 'Trì': ['Long Trì'], 'Phượng': ['Phượng Các'], 'Các': ['Phượng Các'],
-  'Tang': ['Tang Môn'], 'Hổ': ['Bạch Hổ'], 'Kình': ['Kình Dương'], 'Đà': ['Đà La'],
-  'Hỏa': ['Hỏa Tinh'], 'Linh': ['Linh Tinh'], 'Không': ['Địa Không'], 'Kiếp': ['Địa Kiếp'],
-  'Hồng': ['Hồng Loan'], 'Loan': ['Hồng Loan'], 'Đào': ['Đào Hoa'], 'Riêu': ['Thiên Riêu'],
-  'Hình': ['Thiên Hình'], 'Lộc': ['Hóa Lộc', 'Lộc Tồn'], 'Quyền': ['Hóa Quyền'],
-  'Khoa': ['Hóa Khoa'], 'Kỵ': ['Hóa Kỵ'], 'Tử': ['Tử Vi'], 'Phủ': ['Thiên Phủ'],
-  'Tướng': ['Thiên Tướng'], 'Vũ': ['Vũ Khúc'], 'Liêm': ['Liêm Trinh'], 'Tham': ['Tham Lang'],
-  'Cự': ['Cự Môn'], 'Đồng': ['Thiên Đồng'], 'Lương': ['Thiên Lương'], 'Cơ': ['Thiên Cơ'],
-  'Nhật': ['Thái Dương'], 'Nguyệt': ['Thái Âm'], 'Sát': ['Thất Sát'], 'Phá': ['Phá Quân'],
-  'Hao': ['Đại Hao', 'Tiểu Hao'], 'Tuế': ['Thái Tuế'], 'Quý': ['Thiên Quý'], 'Ấn': ['Quốc Ấn'],
-  'Cô': ['Cô Thần'], 'Quả': ['Quả Tú'], 'Tấu': ['Tấu Thư'], 'Binh': ['Phục Binh'],
+  Mã: ['Thiên Mã'],
+  Khốc: ['Thiên Khốc'],
+  Khách: ['Điếu Khách'],
+  Hư: ['Thiên Hư'],
+  Khôi: ['Thiên Khôi'],
+  Việt: ['Thiên Việt'],
+  Xương: ['Văn Xương'],
+  Khúc: ['Văn Khúc'],
+  Tả: ['Tả Phụ'],
+  Hữu: ['Hữu Bật'],
+  Phụ: ['Tả Phụ'],
+  Bật: ['Hữu Bật'],
+  Long: ['Long Trì'],
+  Trì: ['Long Trì'],
+  Phượng: ['Phượng Các'],
+  Các: ['Phượng Các'],
+  Tang: ['Tang Môn'],
+  Hổ: ['Bạch Hổ'],
+  Kình: ['Kình Dương'],
+  Đà: ['Đà La'],
+  Hỏa: ['Hỏa Tinh'],
+  Linh: ['Linh Tinh'],
+  Không: ['Địa Không'],
+  Kiếp: ['Địa Kiếp'],
+  Hồng: ['Hồng Loan'],
+  Loan: ['Hồng Loan'],
+  Đào: ['Đào Hoa'],
+  Riêu: ['Thiên Riêu'],
+  Hình: ['Thiên Hình'],
+  Lộc: ['Hóa Lộc', 'Lộc Tồn'],
+  Quyền: ['Hóa Quyền'],
+  Khoa: ['Hóa Khoa'],
+  Kỵ: ['Hóa Kỵ'],
+  Tử: ['Tử Vi'],
+  Phủ: ['Thiên Phủ'],
+  Tướng: ['Thiên Tướng'],
+  Vũ: ['Vũ Khúc'],
+  Liêm: ['Liêm Trinh'],
+  Tham: ['Tham Lang'],
+  Cự: ['Cự Môn'],
+  Đồng: ['Thiên Đồng'],
+  Lương: ['Thiên Lương'],
+  Cơ: ['Thiên Cơ'],
+  Nhật: ['Thái Dương'],
+  Nguyệt: ['Thái Âm'],
+  Sát: ['Thất Sát'],
+  Phá: ['Phá Quân'],
+  Hao: ['Đại Hao', 'Tiểu Hao'],
+  Tuế: ['Thái Tuế'],
+  Quý: ['Thiên Quý'],
+  Ấn: ['Quốc Ấn'],
+  Cô: ['Cô Thần'],
+  Quả: ['Quả Tú'],
+  Tấu: ['Tấu Thư'],
+  Binh: ['Phục Binh'],
 };
 // Token "mạnh" (hiếm trùng từ thường) — yêu cầu ≥1 trong chuỗi để giảm nhiễu.
 const STRONG = new Set([
-  'Khốc', 'Hư', 'Khôi', 'Việt', 'Xương', 'Khúc', 'Riêu', 'Kình', 'Đà', 'Phượng',
-  'Bật', 'Linh', 'Tham', 'Liêm', 'Cự', 'Vũ', 'Phủ', 'Lương', 'Tuế', 'Mã',
-  'Loan', 'Trì', 'Các', 'Tang', 'Đào', 'Khách', 'Tả',
+  'Khốc',
+  'Hư',
+  'Khôi',
+  'Việt',
+  'Xương',
+  'Khúc',
+  'Riêu',
+  'Kình',
+  'Đà',
+  'Phượng',
+  'Bật',
+  'Linh',
+  'Tham',
+  'Liêm',
+  'Cự',
+  'Vũ',
+  'Phủ',
+  'Lương',
+  'Tuế',
+  'Mã',
+  'Loan',
+  'Trì',
+  'Các',
+  'Tang',
+  'Đào',
+  'Khách',
+  'Tả',
 ]);
 const isUpper = (w) => w && /^[\p{Lu}]/u.test(w);
 const clean = (w) => w.replace(/^[^\p{L}]+|[^\p{L}]+$/gu, '');
@@ -93,8 +162,10 @@ const starKey = (arr) => [...new Set(arr.map(norm))].sort().join('|');
 const dbKeys = new Set(cachDB.map((c) => starKey([...(c.sao || []), ...(c.saoPhuTro || [])])));
 const dbNames = new Set(cachDB.map((c) => norm(c.ten || '')));
 
-const POS_RE = /tốt|đẹp|quý|giàu|sang|phú|vinh|hiển|công danh|may mắn|cát|phát|thành đạt|đại quý|phúc|danh|tài/i;
-const NEG_RE = /xấu|hung|bại|phá tán|hại|nghèo|khổ|tai|hoạ|họa|chết|yểu|cô đơn|hình|tù|tật|bệnh|yếu/i;
+const POS_RE =
+  /tốt|đẹp|quý|giàu|sang|phú|vinh|hiển|công danh|may mắn|cát|phát|thành đạt|đại quý|phúc|danh|tài/i;
+const NEG_RE =
+  /xấu|hung|bại|phá tán|hại|nghèo|khổ|tai|hoạ|họa|chết|yểu|cô đơn|hình|tù|tật|bệnh|yếu/i;
 
 // key candidate = bộ sao (gộp các tên ghép cùng bộ sao)
 const cands = new Map();
@@ -104,7 +175,16 @@ function addCand(stars, name, mode, doc, sent) {
   if (dbKeys.has(key)) return; // bộ sao đã có trong DB
   if (name && dbNames.has(norm(name))) return; // tên đã có
   if (!cands.has(key)) {
-    cands.set(key, { sao: stars, names: new Set(), modes: new Set(), evidence: [], sources: new Set(), docIds: new Set(), pos: 0, neg: 0 });
+    cands.set(key, {
+      sao: stars,
+      names: new Set(),
+      modes: new Set(),
+      evidence: [],
+      sources: new Set(),
+      docIds: new Set(),
+      pos: 0,
+      neg: 0,
+    });
   }
   const c = cands.get(key);
   if (name) c.names.add(name);
@@ -113,16 +193,24 @@ function addCand(stars, name, mode, doc, sent) {
   c.docIds.add(String(doc.docId));
   if (POS_RE.test(sent)) c.pos++;
   if (NEG_RE.test(sent)) c.neg++;
-  if (c.evidence.length < 3) c.evidence.push({ source: doc.source, docId: doc.docId, cau: sent.replace(/\s+/g, ' ').slice(0, 220) });
+  if (c.evidence.length < 3)
+    c.evidence.push({
+      source: doc.source,
+      docId: doc.docId,
+      cau: sent.replace(/\s+/g, ' ').slice(0, 220),
+    });
 }
 
 // Mode B: tên cách qua marker — 2 hướng:
 //   B1 SAU marker mạnh:  "(thành/gọi là/tên) cách <Tên>"
 //   B2 TRƯỚC marker:     "<Tên> (là|thành|gọi là) (một) cách"  ← tiếng Việt hay viết
 // Bỏ "cách" trần (quá nhiễu: "cách đây/cách nhau"...).
-const NAME_AFTER_RE = /(?:thành cách|hợp thành cách|gọi là cách|tên cách)\s+([\p{Lu}][\p{L}]+(?:\s+[\p{L}]+){1,4})/gu;
-const NAME_BEFORE_RE = /([\p{Lu}][\p{L}]+(?:\s+[\p{L}]+){1,4})\s+(?:là|thành|gọi là|hợp thành)\s+(?:một\s+)?cách\b/gu;
-const STOP_NAME = /^(đây|đó|này|kia|nhau|biệt|mạng|cục|tính|sống|làm|nói|xa|nhìn|gì|nào|trên|dưới|thức|thế|sách|một|các|cái|người|số|sao|bộ)\b/i;
+const NAME_AFTER_RE =
+  /(?:thành cách|hợp thành cách|gọi là cách|tên cách)\s+([\p{Lu}][\p{L}]+(?:\s+[\p{L}]+){1,4})/gu;
+const NAME_BEFORE_RE =
+  /([\p{Lu}][\p{L}]+(?:\s+[\p{L}]+){1,4})\s+(?:là|thành|gọi là|hợp thành)\s+(?:một\s+)?cách\b/gu;
+const STOP_NAME =
+  /^(đây|đó|này|kia|nhau|biệt|mạng|cục|tính|sống|làm|nói|xa|nhìn|gì|nào|trên|dưới|thức|thế|sách|một|các|cái|người|số|sao|bộ)\b/i;
 
 for (const doc of docs) {
   const content = doc.content || '';
@@ -141,8 +229,10 @@ for (const doc of docs) {
         let j = i + 1;
         while (j < words.length) {
           const wj = clean(words[j]);
-          if (SHORT2FULL[wj] && isUpper(wj) && run.length < 5) { run.push(wj); j++; }
-          else break;
+          if (SHORT2FULL[wj] && isUpper(wj) && run.length < 5) {
+            run.push(wj);
+            j++;
+          } else break;
         }
         if (run.length >= 2 && run.some((t) => STRONG.has(t))) {
           const stars = resolveRun(run);
@@ -167,11 +257,26 @@ for (const doc of docs) {
       else if (toks.length >= 2) {
         const k = 'NAME::' + norm(name);
         if (dbNames.has(norm(name))) continue;
-        if (!cands.has(k)) cands.set(k, { sao: [], names: new Set([name]), modes: new Set(['cach-marker-mota']), evidence: [], sources: new Set(), docIds: new Set(), pos: 0, neg: 0 });
+        if (!cands.has(k))
+          cands.set(k, {
+            sao: [],
+            names: new Set([name]),
+            modes: new Set(['cach-marker-mota']),
+            evidence: [],
+            sources: new Set(),
+            docIds: new Set(),
+            pos: 0,
+            neg: 0,
+          });
         const c = cands.get(k);
         c.sources.add(doc.source.startsWith('KHHB') ? 'KHHB' : doc.source);
         c.docIds.add(String(doc.docId));
-        if (c.evidence.length < 3) c.evidence.push({ source: doc.source, docId: doc.docId, cau: sent.replace(/\s+/g, ' ').slice(0, 220) });
+        if (c.evidence.length < 3)
+          c.evidence.push({
+            source: doc.source,
+            docId: doc.docId,
+            cau: sent.replace(/\s+/g, ' ').slice(0, 220),
+          });
       }
     }
   }
@@ -192,12 +297,14 @@ const list = [...cands.values()].map((c) => ({
 }));
 
 // hạng: có tên ghép-sao (rõ nhất) > có trong Tân Biên > nhiều nguồn
-const modeRank = (x) => (x.mode.includes('ten-ghep-sao') ? 2 : x.mode.includes('cach-marker') && x.sao.length ? 1 : 0);
-list.sort((a, b) =>
-  modeRank(b) - modeRank(a) ||
-  (b.trongTanBien ? 1 : 0) - (a.trongTanBien ? 1 : 0) ||
-  b.soNguon - a.soNguon ||
-  a.soSao - b.soSao
+const modeRank = (x) =>
+  x.mode.includes('ten-ghep-sao') ? 2 : x.mode.includes('cach-marker') && x.sao.length ? 1 : 0;
+list.sort(
+  (a, b) =>
+    modeRank(b) - modeRank(a) ||
+    (b.trongTanBien ? 1 : 0) - (a.trongTanBien ? 1 : 0) ||
+    b.soNguon - a.soNguon ||
+    a.soSao - b.soSao
 );
 
 writeFileSync(join(OUT, 'cach-cuc-candidates.json'), JSON.stringify(list, null, 2), 'utf-8');
@@ -215,13 +322,17 @@ lines.push('');
 lines.push('## A. CÁCH CÓ TÊN ghép viết-tắt-sao (duyệt trước)');
 for (const c of named) {
   lines.push('');
-  lines.push(`### [${c.loai}] "${c.ten}" = ${c.sao.join(' + ')}  (${c.soNguon} nguồn${c.trongTanBien ? ', có Tân Biên' : ''})`);
+  lines.push(
+    `### [${c.loai}] "${c.ten}" = ${c.sao.join(' + ')}  (${c.soNguon} nguồn${c.trongTanBien ? ', có Tân Biên' : ''})`
+  );
   for (const e of c.evidence) lines.push(`  > [${e.source}|${e.docId}] ${e.cau}`);
 }
 lines.push('');
 lines.push('## B. Tên qua marker "cách …" (gồm tên mô tả Hán-Việt)');
 for (const c of markerNamed.filter((x) => modeRank(x) < 2).slice(0, 80)) {
-  lines.push(`- [${c.loai}] "${c.ten}"${c.sao.length ? ' = ' + c.sao.join(' + ') : ' (chưa map được sao)'}  (${c.soNguon} nguồn)`);
+  lines.push(
+    `- [${c.loai}] "${c.ten}"${c.sao.length ? ' = ' + c.sao.join(' + ') : ' (chưa map được sao)'}  (${c.soNguon} nguồn)`
+  );
 }
 writeFileSync(join(OUT, 'cach-cuc-report.txt'), lines.join('\n'), 'utf-8');
 
