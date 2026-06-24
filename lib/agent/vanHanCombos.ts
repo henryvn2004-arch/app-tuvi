@@ -92,7 +92,9 @@ export interface ComboHit {
   tomTat: string;
   sao: string[];
   layers: string[]; // các tầng vận góp sao cho tổ hợp này
-  dieuKien: string; // điều kiện natal (nếu có) — LLM tự xét khớp lá số/ngữ cảnh
+  dieuKien: string; // điều kiện natal còn lại (nếu có) — LLM tự xét khớp lá số/ngữ cảnh
+  dongCung: boolean; // mọi sao của cách cùng nằm 1 cung hạn?
+  dongCungAt: string; // tên cung nếu đồng cung
 }
 
 // Tên hiển thị: nhiều `ten` trong data là mã (vd "VONG_THAI_TUE__...") → khi đó
@@ -111,15 +113,18 @@ export function matchVanHanCombos(layers: LayerCung[], cap = 8): ComboHit[] {
   const live = layers.filter((l) => l.palace && Array.isArray(l.palace.stars));
   if (!live.length) return [];
 
-  // pool: tên sao engine → tập nhãn tầng chứa nó
-  const pool = new Map<string, Set<string>>();
+  // pool: tên sao engine → { cungs: cung chứa nó, labels: nhãn tầng }
+  // Theo dõi CUNG (không chỉ tầng) để kiểm điều kiện "đồng cung".
+  const pool = new Map<string, { cungs: Set<string>; labels: Set<string> }>();
   for (const l of live) {
+    const cung = (l.palace.cungName as string) || l.label;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     for (const s of l.palace.stars as any[]) {
       const ten = s && s.ten;
       if (!ten) continue;
-      if (!pool.has(ten)) pool.set(ten, new Set());
-      pool.get(ten)!.add(l.label);
+      if (!pool.has(ten)) pool.set(ten, { cungs: new Set(), labels: new Set() });
+      pool.get(ten)!.cungs.add(cung);
+      pool.get(ten)!.labels.add(l.label);
     }
   }
   if (!pool.size) return [];
@@ -127,50 +132,66 @@ export function matchVanHanCombos(layers: LayerCung[], cap = 8): ComboHit[] {
   const hits: ComboHit[] = [];
   for (const combo of loadCombos()) {
     const layerSet = new Set<string>();
+    // giao của các tập cung qua từng sao → nếu KHÁC rỗng: mọi sao chung 1 cung = ĐỒNG CUNG
+    let commonCungs: Set<string> | null = null;
     let ok = true;
     for (const name of combo.sao) {
       const cands = resolveStar(name);
-      let found = false;
+      let entry: { cungs: Set<string>; labels: Set<string> } | undefined;
       for (const cand of cands) {
-        const labels = pool.get(cand);
-        if (labels) {
-          labels.forEach((x) => layerSet.add(x));
-          found = true;
-          break;
-        }
+        if (pool.has(cand)) { entry = pool.get(cand); break; }
       }
-      if (!found) {
-        ok = false;
-        break;
+      if (!entry) { ok = false; break; }
+      const cungs: Set<string> = entry.cungs;
+      entry.labels.forEach((x) => layerSet.add(x));
+      if (commonCungs == null) commonCungs = new Set(cungs);
+      else {
+        const prev: Set<string> = commonCungs;
+        commonCungs = new Set(Array.from(prev).filter((c: string) => cungs.has(c)));
       }
     }
     if (!ok) continue;
+
+    const dongCung = !!commonCungs && commonCungs.size > 0;
+    const dongCungAt = dongCung ? Array.from(commonCungs!)[0] : '';
+    // Điều kiện "đồng cung": chỉ thành cách khi các sao THỰC SỰ chung cung.
+    // Nếu yêu cầu đồng cung mà sao rải khác cung → cách KHÔNG hình thành → bỏ.
+    const needDongCung = /đồng cung/i.test(combo.dieuKien);
+    if (needDongCung && !dongCung) continue;
+
     hits.push({
       ten: displayName(combo.ten, combo.sao),
       loai: combo.loai,
       tomTat: combo.tomTat,
       sao: combo.sao,
       layers: Array.from(layerSet),
-      dieuKien: combo.dieuKien,
+      // điều kiện đồng cung đã thỏa → coi như hết điều kiện (không bắt LLM xét lại)
+      dieuKien: needDongCung && dongCung ? '' : combo.dieuKien,
+      dongCung,
+      dongCungAt,
     });
   }
 
   // Dedup theo BỘ SAO chuẩn hóa (gộp "Khốc,Hư" với "Thiên Khốc,Thiên Hư"...).
-  // Trong cùng bộ sao, giữ bản giàu nghĩa nhất: ưu tiên bản KHÔNG điều kiện
-  // (chắc chắn áp dụng) → loai ≠ 'trung' → tomTat dài hơn.
+  // Giữ bản giàu nghĩa nhất: ưu tiên KHÔNG điều kiện còn lại → đồng cung (chắc
+  // chắn thành cách) → loai ≠ 'trung' → tomTat dài hơn.
   const comboKey = (sao: string[]) =>
     Array.from(new Set(sao.map((n) => resolveStar(n)[0]))).sort().join('|');
   const score = (h: ComboHit) =>
-    (h.dieuKien ? 0 : 4) + (h.loai !== 'trung' ? 2 : 0) + Math.min(1, h.tomTat.length / 1e6);
+    (h.dieuKien ? 0 : 4) + (h.dongCung ? 1 : 0) + (h.loai !== 'trung' ? 2 : 0) + Math.min(0.5, h.tomTat.length / 1e6);
   const best = new Map<string, ComboHit>();
   for (const h of hits) {
     const k = comboKey(h.sao);
     const cur = best.get(k);
     if (!cur || score(h) > score(cur)) best.set(k, h);
   }
-  // ưu tiên trải nhiều tầng → nhiều sao
+  // ưu tiên: đồng cung (cách thật rõ) → trải nhiều tầng → nhiều sao
   return Array.from(best.values())
-    .sort((a, b) => b.layers.length - a.layers.length || b.sao.length - a.sao.length)
+    .sort((a, b) =>
+      (b.dongCung ? 1 : 0) - (a.dongCung ? 1 : 0) ||
+      b.layers.length - a.layers.length ||
+      b.sao.length - a.sao.length,
+    )
     .slice(0, cap);
 }
 
@@ -181,7 +202,11 @@ export function formatComboLines(hits: ComboHit[]): string {
   if (!hits.length) return '';
   let out = '- TỔ HỢP SAO trong các cung hạn (cách cục vận — nếu có, ƯU TIÊN luận theo đây vì ý nghĩa rõ hơn; vẫn đặt trong khung điểm đại vận). Combo ghi "(cần: …)" là CÓ ĐIỀU KIỆN — chỉ luận nếu điều kiện đó khớp lá số/ngữ cảnh, không khớp thì BỎ QUA:\n';
   for (const h of hits) {
-    const span = h.layers.length > 1 ? ` [chéo tầng: ${h.layers.join(' + ')}]` : ` [${h.layers.join('')}]`;
+    const span = h.dongCung
+      ? ` [ĐỒNG CUNG tại ${h.dongCungAt} — thành cách chắc chắn]`
+      : h.layers.length > 1
+        ? ` [chéo tầng: ${h.layers.join(' + ')}]`
+        : ` [${h.layers.join('')}]`;
     const cond = h.dieuKien ? ` (cần: ${h.dieuKien})` : '';
     out += `  • [${h.loai}] ${h.ten} (${h.sao.join(', ')})${span}${cond} — ${h.tomTat}\n`;
   }
