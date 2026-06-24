@@ -160,15 +160,18 @@ export async function runAgent(
     }
     const hasLaso = !!ctx.ls;
 
-    // Prompt: ưu tiên OVERRIDE từ app_config (DB); mặc định dùng TEMPLATE
-    // chung lib/agent/prompts (một nguồn với /api/lasotuvi — sửa văn phong
-    // 1 chỗ). Template tự inject thời gian thực + luật chống tâng bốc.
-    if (cfg.systemPrompt) {
-      system = cfg.systemPrompt + '\n\n' + timeContext();
-      if (lasoCtx) system += '\n\n=== LÁ SỐ ĐÃ LẬP (luận trên dữ liệu này) ===\n' + lasoCtx;
-    } else {
-      system = hasLaso ? CHAT_SYSTEM_LASO(lasoCtx) : CHAT_SYSTEM_GENERAL();
-    }
+    // Prompt: LUÔN dùng TEMPLATE chung lib/agent/prompts (một nguồn với
+    // /api/lasotuvi — sửa hình dạng/luật luận 1 chỗ; chứa shape 3 lớp +
+    // luật vận hạn theo tầng + độ dài chuẩn). app_config.chat.system_prompt
+    // (nếu có) KHÔNG còn thay thế template mà chèn vào như LỚP TÔNG (persona)
+    // — chỉnh giọng văn trong DB không cần deploy, shape vẫn được giữ.
+    const tone = cfg.systemPrompt
+      ? `TÔNG/PHONG CÁCH (tùy chỉnh — CHỈ đổi giọng văn, KHÔNG đổi hình dạng/độ dài/luật luận bên dưới):\n${cfg.systemPrompt}`
+      : undefined;
+    system = hasLaso
+      ? CHAT_SYSTEM_LASO(lasoCtx, undefined, tone)
+      : CHAT_SYSTEM_GENERAL(undefined, tone);
+    system += '\n\n' + timeContext(); // thời gian chuẩn múi giờ VN (đè bản inline của template)
     system += TOOLS_INSTRUCTION(hasLaso);
     tools = buildToolDefs();
   }
