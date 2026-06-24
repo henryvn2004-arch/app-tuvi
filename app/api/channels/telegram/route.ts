@@ -44,7 +44,6 @@ import {
   tgSendMessageReturnId,
   tgEditMessage,
   tgSendChatAction,
-  tgSendSuggestions,
   tgFetchImage,
   loadSession,
   saveSession,
@@ -104,7 +103,6 @@ const telegramIO: ChannelIO = {
   sendProgress: tgSendMessageReturnId,
   editText: (chatId, id, text) => tgEditMessage(chatId, Number(id), text),
   fetchImage: tgFetchImage,
-  sendSuggestions: tgSendSuggestions,
 };
 const telegramStore: SessionStore = { load: loadSession, save: saveSession };
 
