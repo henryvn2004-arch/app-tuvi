@@ -20,9 +20,9 @@ import { solarToLunar } from '../../tuvi-engine/dist/lunar/convert.js';
 export const TOOLS_INSTRUCTION = (hasLaso: boolean) => `
 
 CÔNG CỤ (tool) — DÙNG ĐÚNG LÚC, TUYỆT ĐỐI KHÔNG bịa số liệu thời gian:
-${hasLaso ? '- Câu hỏi gắn với MỘT NĂM cụ thể (năm nay, năm sau, "bao giờ", một năm/tuổi nhất định) → GỌI tra_tieu_van để lấy điểm vận năm đó, tiểu hạn, lưu niên, sao cát/sát. Không tự đoán điểm/cung khi chưa gọi tool.\n' : ''}${hasLaso ? '- Câu hỏi về HẠN THÁNG / nguyệt hạn ("tháng X/YYYY", "tháng này thế nào"...) → GỌI tra_nguyet_van; kết quả trả về 3 cách tính, ưu tiên luận theo Cách 1.\n' : ''}${hasLaso ? '- Câu hỏi về HẠN NGÀY / nhật hạn ("ngày X tháng Y", "hôm nay"...) → GỌI tra_nhat_van; kết quả trả về cung nhật hạn theo Cách 1.\n' : ''}- Câu hỏi NGÀY TỐT để làm việc trọng đại (cưới hỏi, nhập trạch, khai trương, mua/bán nhà, khởi công, xuất hành...) trong một tháng → GỌI xem_ngay_tot.
-Sau khi có kết quả tool, luận giải dứt khoát và neo vào đúng các con số tool trả về (điểm thấp/nhiều sát tinh phải cảnh báo rõ). Câu nào không cần tool thì trả lời thẳng.
-VẬN HẠN THEO TẦNG (đại vận là gốc): chỉ ĐẠI VẬN (và tiểu vận phái sinh) có điểm/10 thật. NGUYỆT VẬN và NHẬT VẬN KHÔNG có điểm — luận theo CUNG nhập hạn + chính tinh tại cung đó, TUYỆT ĐỐI không bịa "điểm/10" cho tháng/ngày. Luôn đặt vận tháng/ngày trong KHUNG đại vận: đại vận điểm cao thì sao xấu, cách xấu nhất thời chỉ là gợn, lướt qua được; đại vận điểm thấp thì cát tinh nhất thời khó kéo lại.`;
+${hasLaso ? '- Câu hỏi gắn với MỘT NĂM cụ thể (năm nay, năm sau, "bao giờ", một năm/tuổi nhất định) → GỌI tra_tieu_van để lấy cung tiểu hạn/lưu niên của năm + sao tại các cung đó + nền điểm ĐẠI VẬN. Tiểu vận KHÔNG có điểm riêng — luận theo nền đại vận + ý nghĩa sao của năm, KHÔNG tự gán "điểm/10" cho năm. Không tự đoán cung/sao khi chưa gọi tool.\n' : ''}${hasLaso ? '- Câu hỏi về HẠN THÁNG / nguyệt hạn ("tháng X/YYYY", "tháng này thế nào"...) → GỌI tra_nguyet_van; kết quả trả về 3 cách tính, ưu tiên luận theo Cách 1.\n' : ''}${hasLaso ? '- Câu hỏi về HẠN NGÀY / nhật hạn ("ngày X tháng Y", "hôm nay"...) → GỌI tra_nhat_van; kết quả trả về cung nhật hạn theo Cách 1.\n' : ''}- Câu hỏi NGÀY TỐT để làm việc trọng đại (cưới hỏi, nhập trạch, khai trương, mua/bán nhà, khởi công, xuất hành...) trong một tháng → GỌI xem_ngay_tot.
+Sau khi có kết quả tool, luận giải dứt khoát và neo vào đúng các con số tool trả về (đại vận điểm thấp / nhiều sát tinh phải cảnh báo rõ). Câu nào không cần tool thì trả lời thẳng.
+VẬN HẠN THEO TẦNG (đại vận là gốc): chỉ ĐẠI VẬN có điểm/10 thật. TIỂU VẬN (năm), NGUYỆT VẬN và NHẬT VẬN đều KHÔNG có điểm — luận theo CUNG nhập hạn + sao tại cung đó, TUYỆT ĐỐI không bịa "điểm/10" cho năm/tháng/ngày. Luôn đặt vận năm/tháng/ngày trong KHUNG đại vận: đại vận điểm cao thì sao xấu, cách xấu nhất thời chỉ là gợn, lướt qua được; đại vận điểm thấp thì cát tinh nhất thời khó kéo lại.`;
 
 // ─── Định nghĩa tool (Anthropic schema) ────────────────────────
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -98,21 +98,34 @@ export function execTraVanHan(lasoData: any, input: any): string {
     return `Năm ${nam} ngoài phạm vi lá số (chỉ có ${Math.min(...yrs)}–${Math.max(...yrs)}).`;
   }
   const palaces = lasoData.palaces || [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const fmtStar = (s: any): string => {
+    if (!s) return '';
+    if (typeof s !== 'object') return String(s);
+    let t = s.ten || '';
+    if (s.brightness) t += `(${s.brightness})`;
+    if (s.hoa) t += `[Hóa ${s.hoa}]`;
+    return t;
+  };
+  // Liệt kê SAO của cung hạn (chính tinh + phụ/sát tinh) để LLM luận theo ý nghĩa sao,
+  // KHÔNG quy thành điểm số cho năm.
   const starsOf = (cungName: string): string => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const p = palaces.find((x: any) => x.cungName === cungName);
-    if (!p) return '';
+    if (!p) return '?';
+    const chinh = (p.majorStars || []).map(fmtStar).filter(Boolean);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const major = (p.majorStars || []).map((s: any) => s.ten).filter(Boolean).join(', ');
-    return major || 'vô chính diệu';
+    const phu = (p.stars || []).filter((s: any) => typeof s === 'object' ? s.nhom !== 'chinh' : true).map(fmtStar).filter(Boolean);
+    let s = `chính tinh: ${chinh.length ? chinh.join(', ') : 'vô chính diệu'}`;
+    if (phu.length) s += `; phụ/sát tinh: ${phu.slice(0, 8).join(', ')}`;
+    return s;
   };
-  const dir = tv.direction === 'up' ? 'xu hướng đi lên' : tv.direction === 'down' ? 'xu hướng đi xuống' : 'đi ngang';
   const dv = (lasoData.daiVans || [])[tv.dvIdx];
-  let out = `TIỂU VẬN NĂM ${nam} (tuổi ${tv.tuoi}):\n`;
-  out += `- Điểm vận năm: ${tv.mainScore}/10, ${dir} (${tv.catCount} sao cát, ${tv.satCount} sao sát trong tổ hợp 3 cung hạn).\n`;
-  out += `- Tiểu hạn nhập cung ${tv.tieuHanCung} — chính tinh: ${starsOf(tv.tieuHanCung) || '?'}.\n`;
-  out += `- Lưu niên đại hạn vào cung ${tv.luuNienCung} — chính tinh: ${starsOf(tv.luuNienCung) || '?'}.\n`;
-  if (dv) out += `- Thuộc đại vận ${dv.diaChi} (${dv.tuoiStart}–${dv.tuoiEnd} tuổi)${dv.scoring?.tong != null ? `, điểm đại vận ${dv.scoring.tong}/10 ${dv.scoring.flag || ''}` : ''}.\n`;
+  let out = `VẬN NĂM ${nam} (tuổi ${tv.tuoi}) — TIỂU VẬN KHÔNG có điểm riêng; luận theo NỀN đại vận + ý nghĩa sao của các cung hạn năm này:\n`;
+  if (dv) out += `- NỀN ĐẠI VẬN ${dv.diaChi} (${dv.tuoiStart}–${dv.tuoiEnd} tuổi)${dv.scoring?.tong != null ? `: điểm ${dv.scoring.tong}/10 ${dv.scoring.flag || ''}` : ''} — đây là cơ sở chấm vận; năm nằm TRONG khung này.\n`;
+  out += `- Tiểu hạn nhập cung ${tv.tieuHanCung} — ${starsOf(tv.tieuHanCung)}.\n`;
+  out += `- Lưu niên đại hạn vào cung ${tv.luuNienCung} — ${starsOf(tv.luuNienCung)}.\n`;
+  out += `- Cách luận: lấy điểm + khí sắc ĐẠI VẬN làm nền; sao tốt/xấu của cung tiểu hạn & lưu niên năm nay chỉ làm năm này nhỉnh lên hoặc chùng xuống TRONG khung đó — KHÔNG tự gán "điểm/10" cho năm.\n`;
   return out;
 }
 
