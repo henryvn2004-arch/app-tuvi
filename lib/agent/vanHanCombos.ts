@@ -9,9 +9,10 @@
 // tháng = +nguyệt hạn; ngày = +nhật hạn), nếu đủ bộ sao của một cách cục thì
 // kích hoạt → luận giải rõ ràng hơn.
 //
-// Nguồn combo: public/cach_cuc_all.json (958 cách cục). CHỈ lấy combo ĐA-SAO
-// (≥2 sao) và KHÔNG kèm điều kiện natal (địa chi / mệnh-vị / tuổi) — vì các
-// điều kiện đó không áp dụng được cho vận, fire ra sẽ sai nghĩa.
+// Nguồn combo: public/cach_cuc_all.json (958 cách cục). Lấy MỌI combo ĐA-SAO
+// (≥2 sao). Combo CÓ điều kiện natal (địa chi / mệnh-vị / tuổi) vẫn lấy nhưng
+// đính kèm câu điều kiện để LLM tự xét có khớp lá số/ngữ cảnh không (Henry:
+// "tùy context luận") — không hard-filter để khỏi bỏ sót cách cục.
 //
 // Tính DETERMINISTIC ở server rồi truyền vào phần luận giải (tool van hạn) —
 // LLM không tự đoán tổ hợp. Đặt ở lớp tool (không nhét vào engine vanilla
@@ -52,7 +53,7 @@ function resolveStar(name: string): string[] {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type RawCombo = { ten?: string; sao?: string[]; dieuKien?: string; loai?: string; tomTat?: string; doManh?: number };
-interface Combo { ten: string; sao: string[]; loai: string; tomTat: string; doManh: number }
+interface Combo { ten: string; sao: string[]; loai: string; tomTat: string; doManh: number; dieuKien: string }
 
 // ── Nạp combo 1 lần (singleton) ──────────────────────────────
 let comboCache: Combo[] | null = null;
@@ -66,14 +67,17 @@ function loadCombos(): Combo[] {
     raw = [];
   }
   comboCache = raw
-    // CHỈ combo đa-sao (≥2) và KHÔNG kèm điều kiện natal → gộp chéo tầng được ngay
-    .filter((c) => Array.isArray(c.sao) && c.sao.length >= 2 && (!c.dieuKien || !c.dieuKien.trim()))
+    // Mọi combo ĐA-SAO (≥2). Combo CÓ điều kiện natal vẫn lấy — nhưng kèm câu
+    // điều kiện để LLM tự xét có khớp lá số/ngữ cảnh không (Henry: "tùy context
+    // luận"). KHÔNG hard-filter điều kiện để khỏi bỏ sót cách cục.
+    .filter((c) => Array.isArray(c.sao) && c.sao.length >= 2)
     .map((c) => ({
       ten: String(c.ten || ''),
       sao: c.sao as string[],
       loai: String(c.loai || 'trung'),
       tomTat: String(c.tomTat || ''),
       doManh: Number(c.doManh) || 0,
+      dieuKien: String(c.dieuKien || '').trim(),
     }));
   return comboCache;
 }
@@ -88,6 +92,7 @@ export interface ComboHit {
   tomTat: string;
   sao: string[];
   layers: string[]; // các tầng vận góp sao cho tổ hợp này
+  dieuKien: string; // điều kiện natal (nếu có) — LLM tự xét khớp lá số/ngữ cảnh
 }
 
 // Tên hiển thị: nhiều `ten` trong data là mã (vd "VONG_THAI_TUE__...") → khi đó
@@ -102,7 +107,7 @@ function displayName(ten: string, sao: string[]): string {
  * mức câu hỏi). Trả về tối đa `cap` cách cục, ưu tiên trải NHIỀU TẦNG + nhiều
  * sao (đặc trưng hơn). Mỗi hit ghi rõ tầng nào góp sao.
  */
-export function matchVanHanCombos(layers: LayerCung[], cap = 6): ComboHit[] {
+export function matchVanHanCombos(layers: LayerCung[], cap = 8): ComboHit[] {
   const live = layers.filter((l) => l.palace && Array.isArray(l.palace.stars));
   if (!live.length) return [];
 
@@ -146,22 +151,22 @@ export function matchVanHanCombos(layers: LayerCung[], cap = 6): ComboHit[] {
       tomTat: combo.tomTat,
       sao: combo.sao,
       layers: Array.from(layerSet),
+      dieuKien: combo.dieuKien,
     });
   }
 
   // Dedup theo BỘ SAO chuẩn hóa (gộp "Khốc,Hư" với "Thiên Khốc,Thiên Hư"...).
-  // Trong cùng bộ sao, giữ bản giàu nghĩa nhất: ưu tiên loai ≠ 'trung', rồi tomTat dài hơn.
+  // Trong cùng bộ sao, giữ bản giàu nghĩa nhất: ưu tiên bản KHÔNG điều kiện
+  // (chắc chắn áp dụng) → loai ≠ 'trung' → tomTat dài hơn.
   const comboKey = (sao: string[]) =>
     Array.from(new Set(sao.map((n) => resolveStar(n)[0]))).sort().join('|');
+  const score = (h: ComboHit) =>
+    (h.dieuKien ? 0 : 4) + (h.loai !== 'trung' ? 2 : 0) + Math.min(1, h.tomTat.length / 1e6);
   const best = new Map<string, ComboHit>();
   for (const h of hits) {
     const k = comboKey(h.sao);
     const cur = best.get(k);
-    if (!cur) { best.set(k, h); continue; }
-    const better =
-      (h.loai !== 'trung' && cur.loai === 'trung') ||
-      (h.loai !== 'trung' === (cur.loai !== 'trung') && h.tomTat.length > cur.tomTat.length);
-    if (better) best.set(k, h);
+    if (!cur || score(h) > score(cur)) best.set(k, h);
   }
   // ưu tiên trải nhiều tầng → nhiều sao
   return Array.from(best.values())
@@ -174,10 +179,11 @@ export function matchVanHanCombos(layers: LayerCung[], cap = 6): ComboHit[] {
  */
 export function formatComboLines(hits: ComboHit[]): string {
   if (!hits.length) return '';
-  let out = '- TỔ HỢP SAO trong các cung hạn (cách cục vận — nếu có, ƯU TIÊN luận theo đây vì ý nghĩa rõ hơn; vẫn đặt trong khung điểm đại vận):\n';
+  let out = '- TỔ HỢP SAO trong các cung hạn (cách cục vận — nếu có, ƯU TIÊN luận theo đây vì ý nghĩa rõ hơn; vẫn đặt trong khung điểm đại vận). Combo ghi "(cần: …)" là CÓ ĐIỀU KIỆN — chỉ luận nếu điều kiện đó khớp lá số/ngữ cảnh, không khớp thì BỎ QUA:\n';
   for (const h of hits) {
     const span = h.layers.length > 1 ? ` [chéo tầng: ${h.layers.join(' + ')}]` : ` [${h.layers.join('')}]`;
-    out += `  • [${h.loai}] ${h.ten} (${h.sao.join(', ')})${span} — ${h.tomTat}\n`;
+    const cond = h.dieuKien ? ` (cần: ${h.dieuKien})` : '';
+    out += `  • [${h.loai}] ${h.ten} (${h.sao.join(', ')})${span}${cond} — ${h.tomTat}\n`;
   }
   return out;
 }
