@@ -966,6 +966,31 @@ select.form-input { cursor: pointer; }
     .then(r => r.json())
     .then(data => { CACH_CUC_DB = data; console.log('Loaded', data.length, 'cach cuc'); })
     .catch(e => console.warn('Cannot load cach_cuc_all.json:', e));
+
+  // ── Matcher cách cục PER-CUNG (965) — ĐỒNG NHẤT với chat (lib/agent/vanHanCombos.ts).
+  // Dùng cho cách cục vận hạn trang luận giải: mọi sao của cách cùng 1 cung hạn =
+  // đồng cung → điều kiện "đồng cung" tự thỏa; điều kiện natal khác thì kèm "(cần…)".
+  const _VH_ALIAS = { 'Kỵ':['Hóa Kỵ'],'Khoa':['Hóa Khoa'],'Quyền':['Hóa Quyền'],'Lộc':['Hóa Lộc','Lộc Tồn'],'Tử':['Tử Vi'],'Cơ':['Thiên Cơ'],'Nhật':['Thái Dương'],'Nguyệt':['Thái Âm'],'Phủ':['Thiên Phủ'],'Đồng':['Thiên Đồng'],'Lương':['Thiên Lương'],'Sát':['Thất Sát'],'Tham':['Tham Lang'],'Phá':['Phá Quân'],'Cự':['Cự Môn'],'Liêm':['Liêm Trinh'],'Tướng':['Thiên Tướng'],'Vũ':['Vũ Khúc'],'Kình':['Kình Dương'],'Đà':['Đà La'],'Hỏa':['Hỏa Tinh'],'Linh':['Linh Tinh'],'Không':['Địa Không'],'Kiếp':['Địa Kiếp'],'Tả':['Tả Phụ'],'Hữu':['Hữu Bật'],'Phù':['Tả Phụ'],'Bật':['Hữu Bật'],'Khúc':['Văn Khúc'],'Xương':['Văn Xương'],'Khôi':['Thiên Khôi'],'Việt':['Thiên Việt'],'Mã':['Thiên Mã'],'Hổ':['Bạch Hổ'],'Hình':['Thiên Hình'],'Hư':['Thiên Hư'],'Khốc':['Thiên Khốc'],'Riêu':['Thiên Riêu'],'Hao':['Đại Hao','Tiểu Hao'],'Song Hao':['Đại Hao','Tiểu Hao'],'Hồng':['Hồng Loan'],'Đào':['Đào Hoa'],'Cô':['Cô Thần'],'Tang':['Tang Môn'],'Binh':['Phục Binh'],'Bệnh':['Bệnh Phù'],'Tấu':['Tấu Thư'],'Quả':['Quả Tú'],'Tuế':['Thái Tuế'],'Long':['Long Trì'],'La Võng':['Thiên La','Địa Võng'],'Quý':['Thiên Quý'],'Mộ':['Mộ'] };
+  function _vhResolve(n){ return _VH_ALIAS[n] || [n]; }
+  function _vhCombosForCung(palace){
+    if (!palace || !Array.isArray(palace.stars) || !CACH_CUC_DB.length) return [];
+    const pool = new Set(palace.stars.map(s => s.ten).filter(Boolean));
+    const key = sao => [...new Set(sao.map(n => _vhResolve(n)[0]))].sort().join('|');
+    const best = new Map();
+    for (const c of CACH_CUC_DB) {
+      const sao = c.sao || [];
+      if (sao.length < 2) continue;
+      let ok = true;
+      for (const n of sao) { if (!_vhResolve(n).some(x => pool.has(x))) { ok = false; break; } }
+      if (!ok) continue;
+      const dk = (c.dieuKien || '').trim();
+      const cond = (dk && !/đồng cung/i.test(dk)) ? ` (cần: ${dk})` : '';
+      const sc = (cond ? 0 : 2) + ((c.loai && c.loai !== 'trung') ? 1 : 0);
+      const k = key(sao), cur = best.get(k);
+      if (!cur || sc > cur.sc) best.set(k, { sc, txt: `[${c.loai || 'trung'}] ${c.ten || sao.join('+')} (${sao.join(', ')})${cond}` });
+    }
+    return [...best.values()].sort((a, b) => b.sc - a.sc).slice(0, 6).map(x => x.txt);
+  }
 </script>
 <script>
   // Set default năm xem = năm hiện tại
@@ -1293,6 +1318,9 @@ select.form-input { cursor: pointer; }
         const _ynDV = _sortYn(dv.yNghia).slice(0, 6);
         lines.push(`  [VẬN HẠN LUẬN]: ${_ynDV.join(' | ')}`);
       }
+      // Tổ hợp sao (cách cục 965, đồng cung trong cung đại vận) — đồng nhất với chat
+      const _dvCombos = _vhCombosForCung(p);
+      if (_dvCombos.length) lines.push(`  [TỔ HỢP SAO (cách cục)]: ${_dvCombos.join(' | ')}`);
     });
 
     // Cách cục phân tích
