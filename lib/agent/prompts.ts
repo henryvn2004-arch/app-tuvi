@@ -13,6 +13,7 @@
 // ============================================================
 
 import { buildTools, TOOLS_INSTRUCTION } from "@/lib/agent/tools";
+import { currentNamXem } from "@/lib/engine/namxem";
 
 interface ChatContext {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -304,7 +305,7 @@ export function extractLasoContext(lasoData: any, question: string): string {
 
   if (yearMatch && lasoData.tuoiXem && lasoData.daiVans?.length) {
     const queriedYear = parseInt(yearMatch[1]);
-    const NAM_XEM = 2027; // update annually
+    const NAM_XEM = currentNamXem(); // nguồn duy nhất — khớp năm xem dùng để tính tuoiXem
     const birthYear = (NAM_XEM - (lasoData.tuoiXem as number)) + 1;
     const ageInYear = (queriedYear - birthYear) + 1;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
