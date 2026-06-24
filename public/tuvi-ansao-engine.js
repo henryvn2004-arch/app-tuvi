@@ -1921,7 +1921,7 @@ const TAM_PHUONG_TU_CHINH = {
 
 // ─── VÒNG THÁI TUẾ — PHÂN NHÓM TẠI CUNG MỆNH ───────────────
 
-function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, namXem }) {
+function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, namXem, tieuVanWindow }) {
   const amDuong = ['Giáp','Bính','Mậu','Canh','Nhâm'].includes(canNam) ? 'dương' : 'âm';
   const canChiNam = `${canNam} ${chiNam}`;
   const napAm = NAP_AM[canChiNam] || '?';
@@ -2273,7 +2273,7 @@ function getStarBrightness(tenSao, diaChi) {
 // Export
 if (typeof module !== 'undefined') module.exports = { anSaoLaSo, STAR_DATA, getStarData, getStarBrightness };
 // ─── MAIN ENGINE ─────────────────────────────────────────────
-function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, namXem }) {
+function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, namXem, tieuVanWindow }) {
   const amDuong = ['Giáp','Bính','Mậu','Canh','Nhâm'].includes(canNam) ? 'dương' : 'âm';
   const canChiNam = `${canNam} ${chiNam}`;
   const napAm = NAP_AM[canChiNam] || '?';
@@ -2436,7 +2436,7 @@ function anSaoLaSo({ ngayAL, thangAL, namAL, canNam, chiNam, gioIdx, gioitinh, n
 
   const _tieuVanScores = tinhTieuVanScores(
     { palaces, daiVans: daiVansScored },
-    gioitinh, amDuong, chiNam, namSinhDL, namXem
+    gioitinh, amDuong, chiNam, namSinhDL, namXem, tieuVanWindow
   );
   const _nguyetVanScores = tinhNguyetVanScores(_tieuVanScores, palaces, thangAL, gioIdx);
 
@@ -4558,9 +4558,10 @@ function phanTichDaiVanRules(dvPalace, menhPalace, ls) {
 // }
 // ================================================================
 
-function tinhTieuVanScores(ls, gioitinh, amDuong, chiNam, namSinhDL, namXem) {
+function tinhTieuVanScores(ls, gioitinh, amDuong, chiNam, namSinhDL, namXem, windowYears) {
   const { palaces, daiVans } = ls;
   if (!daiVans || !palaces) return [];
+  const _winYrs = windowYears || 5; // cửa sổ năm quanh namXem (mặc định ±5; server chat truyền ±10)
 
   const DIA_CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
   function mod12(n) { return ((n % 12) + 12) % 12; }
@@ -4708,7 +4709,7 @@ function tinhTieuVanScores(ls, gioitinh, amDuong, chiNam, namSinhDL, namXem) {
       // open = mainScore this year, close = mainScore next year
       const closeScore = Math.round(interpolate(splinePts, tuoi + 1) * 10) / 10;
 
-      if (!namXem || Math.abs(nam - namXem) <= 5) {
+      if (!namXem || Math.abs(nam - namXem) <= _winYrs) {
         results.push({
           nam, tuoi, dvIdx, diaChi,
           open: mainScore,
