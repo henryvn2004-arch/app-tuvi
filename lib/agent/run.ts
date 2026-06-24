@@ -23,7 +23,7 @@ import { computeLaso } from '@/lib/engine/laso';
 import { computeTuBinh } from '@/lib/engine/tubinh';
 import { computeSinhCon, computeChonNgay, computeDatTen } from '@/lib/engine/diachi';
 // Template prompt + context formatter dùng CHUNG với /api/lasotuvi (một bộ não).
-import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext } from '@/lib/agent/prompts';
+import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, SUGGESTIONS_INSTRUCTION } from '@/lib/agent/prompts';
 import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
 import { type ChatConfig } from '@/lib/config/appConfig';
 
@@ -181,6 +181,10 @@ export async function runAgent(
     (m) => m.role === 'user' && Array.isArray(m.images) && m.images.length > 0,
   );
   if (hasImages) system += VISION_INSTRUCTION;
+
+  // PR2: yêu cầu emit chip gợi ý ở cuối (1 nơi → web-v1 + Telegram + scenario).
+  // Consumer (core.ts / client web) tách marker khỏi text rồi render nút.
+  system += SUGGESTIONS_INSTRUCTION;
 
   // Map về định dạng Anthropic. Tin user có ảnh → content là MẢNG block
   // (image trước, text sau); còn lại giữ string cho gọn. Model đa phương
