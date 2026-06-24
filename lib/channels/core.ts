@@ -23,7 +23,6 @@ import {
 } from '@/lib/contract/v1';
 import { runAgent } from '@/lib/agent/run';
 import { type ChatConfig } from '@/lib/config/appConfig';
-import { parseSuggestions } from '@/lib/agent/prompts';
 
 // id của tin "tiến trình" để edit dần — kiểu tùy nền tảng (Telegram: number).
 export type ProgressId = number | string | null;
@@ -46,10 +45,6 @@ export interface ChannelIO {
   editText(chatId: number | string, id: ProgressId, text: string): Promise<void>;
   /** Tải ảnh người dùng gửi (ref đặc thù nền tảng) → base64. */
   fetchImage(ref: string): Promise<ChatImage | null>;
-  /** (PR2) Render chip câu hỏi gợi ý dưới câu trả lời — nút bấm đặc thù nền
-   *  tảng (web=chip, Telegram=inline keyboard…). Optional: kênh chưa hỗ trợ
-   *  bỏ qua (câu MỞ NÚT trong văn xuôi vẫn mời hỏi tiếp). */
-  sendSuggestions?(chatId: number | string, suggestions: string[]): Promise<void>;
 }
 
 // ── Lưu phiên (adapter cài đặt — bảng tùy nền tảng) ─────────
@@ -145,27 +140,17 @@ export async function runConversation(
     working = false;
 
     const err = collector.getError();
-    const rawAnswer = collector.getText().trim();
-    if (err || !rawAnswer) {
+    const answer = collector.getText().trim();
+    if (err || !answer) {
       // Log RÕ nhánh thất bại (lỗi agent vs trả lời rỗng) để debug — trước đây
       // im lặng gửi ERR_MSG, không biết do đâu.
       console.error(
-        `[runConversation] Trả lời thất bại — err=${err ?? 'none'} answerLen=${rawAnswer.length} lastStatus="${collector.getLastStatus()}"`,
+        `[runConversation] Trả lời thất bại — err=${err ?? 'none'} answerLen=${answer.length} lastStatus="${collector.getLastStatus()}"`,
       );
       await deliver(io, chatId, progressId, errMsg);
       return;
     }
-    // PR2: tách chip gợi ý khỏi text hiển thị. `answer` = text sạch (đã bỏ
-    // marker) — dùng cho cả deliver lẫn lưu phiên.
-    const { text: answer, suggestions } = parseSuggestions(rawAnswer);
     await deliver(io, chatId, progressId, answer);
-    if (suggestions.length && io.sendSuggestions) {
-      try {
-        await io.sendSuggestions(chatId, suggestions);
-      } catch (e) {
-        console.error('[runConversation] sendSuggestions lỗi (bỏ qua):', e);
-      }
-    }
     // Trả lời thành công → CHỐT tính phí (lỗi thì không tính, đã return trên).
     if (gateCommit) await gateCommit();
 

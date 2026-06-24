@@ -242,35 +242,6 @@ NGUYÊN TẮC VẬN HẠN (đại vận là gốc — luận nhất quán theo t
 
 NGUYÊN TẮC CHUNG: Cấm tâng bốc, cấm nước đôi né phán quyết, cấm khen sáo rỗng không bằng chứng. Đánh giá CẤU TRÚC lá số (mạnh/yếu) nói chắc; chỉ DỰ ĐOÁN tương lai mới dùng ngôn ngữ xác suất. ĐỘ DÀI: mặc định 130–200 từ, câu phức tạp tối đa 280, lượt follow-up 80–140 — đây là CHAT, ngắn gọn súc tích hơn là dài dòng. Tiếng Việt chuẩn mực, văn xuôi liền mạch, KHÔNG bullet, KHÔNG emoji, KHÔNG tiêu đề con. Không tiết lộ trường phái hay tài liệu.`;
 
-// ─── Chip câu hỏi gợi ý (PR2) — BỘ NÃO CHUNG cho mọi kênh ──────
-// LLM emit 2–3 câu hỏi tiếp ở CUỐI câu trả lời, sau marker. Consumer
-// (core.ts cho kênh / client web) tách marker khỏi text hiển thị rồi
-// render thành nút (web=chip, Telegram=inline keyboard…). Giữ NGUYÊN
-// câu MỞ NÚT trong văn xuôi (shape #104) — chip là lựa chọn bấm nhanh.
-export const SUGGESTIONS_MARKER = '[[FOLLOWUPS]]';
-
-export const SUGGESTIONS_INSTRUCTION = `
-
-CUỐI CÙNG — GỢI Ý HỎI TIẾP (BẮT BUỘC, đặt SAU toàn bộ câu trả lời): xuống dòng, viết đúng marker ${SUGGESTIONS_MARKER} rồi 2–3 câu hỏi tiếp mà người dùng có thể muốn hỏi, NGĂN CÁCH bằng dấu "||". Mỗi câu NGẮN GỌN (tối đa ~50 ký tự), khác hướng nhau, bám đúng lá số/chủ đề vừa luận (vd hướng tới cung/sao/đại vận chưa khai thác). KHÔNG đánh số, KHÔNG giải thích thêm sau marker. Ví dụ:
-${SUGGESTIONS_MARKER} Cung Phu Thê thế nào? || Năm 2027 ra sao? || Sức khỏe có đáng lo?`;
-
-/** Tách câu trả lời hiển thị (trước marker) khỏi danh sách gợi ý (sau marker).
- *  Dùng chung: core.ts (kênh) + client web. An toàn nếu LLM quên emit. */
-export function parseSuggestions(raw: string): { text: string; suggestions: string[] } {
-  const text0 = raw || '';
-  const idx = text0.indexOf(SUGGESTIONS_MARKER);
-  if (idx < 0) return { text: text0.trim(), suggestions: [] };
-  const text = text0.slice(0, idx).trim();
-  const suggestions = text0
-    .slice(idx + SUGGESTIONS_MARKER.length)
-    .split('||')
-    .map((s) => s.replace(/\s+/g, ' ').trim())
-    .filter(Boolean)
-    .slice(0, 3)
-    .map((s) => (s.length > 60 ? s.slice(0, 57).trimEnd() + '…' : s));
-  return { text, suggestions };
-}
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function extractLasoContext(lasoData: any, question: string): string {
   if (!lasoData) return '';
