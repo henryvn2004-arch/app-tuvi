@@ -21,7 +21,8 @@ export const TOOLS_INSTRUCTION = (hasLaso: boolean) => `
 
 CÔNG CỤ (tool) — DÙNG ĐÚNG LÚC, TUYỆT ĐỐI KHÔNG bịa số liệu thời gian:
 ${hasLaso ? '- Câu hỏi gắn với MỘT NĂM cụ thể (năm nay, năm sau, "bao giờ", một năm/tuổi nhất định) → GỌI tra_tieu_van để lấy điểm vận năm đó, tiểu hạn, lưu niên, sao cát/sát. Không tự đoán điểm/cung khi chưa gọi tool.\n' : ''}${hasLaso ? '- Câu hỏi về HẠN THÁNG / nguyệt hạn ("tháng X/YYYY", "tháng này thế nào"...) → GỌI tra_nguyet_van; kết quả trả về 3 cách tính, ưu tiên luận theo Cách 1.\n' : ''}${hasLaso ? '- Câu hỏi về HẠN NGÀY / nhật hạn ("ngày X tháng Y", "hôm nay"...) → GỌI tra_nhat_van; kết quả trả về cung nhật hạn theo Cách 1.\n' : ''}- Câu hỏi NGÀY TỐT để làm việc trọng đại (cưới hỏi, nhập trạch, khai trương, mua/bán nhà, khởi công, xuất hành...) trong một tháng → GỌI xem_ngay_tot.
-Sau khi có kết quả tool, luận giải dứt khoát và neo vào đúng các con số tool trả về (điểm thấp/nhiều sát tinh phải cảnh báo rõ). Câu nào không cần tool thì trả lời thẳng.`;
+Sau khi có kết quả tool, luận giải dứt khoát và neo vào đúng các con số tool trả về (điểm thấp/nhiều sát tinh phải cảnh báo rõ). Câu nào không cần tool thì trả lời thẳng.
+VẬN HẠN THEO TẦNG (đại vận là gốc): chỉ ĐẠI VẬN (và tiểu vận phái sinh) có điểm/10 thật. NGUYỆT VẬN và NHẬT VẬN KHÔNG có điểm — luận theo CUNG nhập hạn + chính tinh tại cung đó, TUYỆT ĐỐI không bịa "điểm/10" cho tháng/ngày. Luôn đặt vận tháng/ngày trong KHUNG đại vận: đại vận điểm cao thì sao xấu, cách xấu nhất thời chỉ là gợn, lướt qua được; đại vận điểm thấp thì cát tinh nhất thời khó kéo lại.`;
 
 // ─── Định nghĩa tool (Anthropic schema) ────────────────────────
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
