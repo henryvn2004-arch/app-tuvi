@@ -14,6 +14,7 @@
 
 import { buildTools, TOOLS_INSTRUCTION } from "@/lib/agent/tools";
 import { currentNamXem } from "@/lib/engine/namxem";
+import { matchVanHanCombos, formatComboLines, type LayerCung } from "@/lib/agent/vanHanCombos";
 
 interface ChatContext {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -298,6 +299,16 @@ export function extractLasoContext(lasoData: any, question: string): string {
     if (cc.length) ctx += 'Cách cục: ' + cc.join(', ') + '\n';
   }
 
+  // Tổ hợp sao (cách cục vận) tại cung đại vận — DÙNG CHUNG matcher với
+  // tiểu/nguyệt/nhật vận (matchVanHanCombos, nguồn cach_cuc_all.json). PER-CUNG
+  // (chỉ cung đại vận) như các tầng khác → bắt cách đồng cung trong cung đại vận;
+  // cách chéo tầng (vd Mã Khốc Khách) do tool tra_tieu_van lo (đã gộp đại vận).
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const dvComboLines = (dvP: any): string => {
+    if (!dvP || !Array.isArray(dvP.stars)) return '';
+    return formatComboLines(matchVanHanCombos([{ label: 'đại vận', palace: dvP }]));
+  };
+
   if (lasoData.daiVanHienTai) {
     const dv = lasoData.daiVanHienTai;
     const dvCung = palaces[dv.cungIdx] || {};
@@ -307,6 +318,7 @@ export function extractLasoContext(lasoData: any, question: string): string {
     if (dvStars.length) ctx += ' — Sao (tứ chính): ' + dvStars.join(', ');
     if (dv.scoring?.tong != null) ctx += ' — Điểm vận: ' + dv.scoring.tong + '/10 ' + (dv.scoring.flag||'');
     ctx += '\n';
+    ctx += dvComboLines(dvCung);
   }
 
   if (yearMatch && lasoData.tuoiXem && lasoData.daiVans?.length) {
@@ -325,6 +337,7 @@ export function extractLasoContext(lasoData: any, question: string): string {
       if (dvStars.length) ctx += ` — Sao: ${dvStars.join(', ')}`;
       if (dvForYear.scoring?.tong != null) ctx += ` — Điểm: ${dvForYear.scoring.tong}/10`;
       ctx += '\n';
+      ctx += dvComboLines(dvP);
       ctx += `(Tiểu vận năm ${queriedYear} không có trong dữ liệu — chỉ luận từ đại vận)\n`;
     } else {
       ctx += `\nNăm ${queriedYear} (tuổi âm ${ageInYear}): ngoài phạm vi đại vận trong dữ liệu.\n`;
