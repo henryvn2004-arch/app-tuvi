@@ -79,6 +79,29 @@ export async function tgEditMessage(chatId: number | string, messageId: number, 
   }
 }
 
+/** (PR2) Chip câu hỏi gợi ý → reply keyboard. Bấm nút = GỬI text nút đó như
+ *  tin thường → đi qua đúng luồng handleUpdate hiện có (KHÔNG cần xử lý
+ *  callback_query, KHÔNG vướng giới hạn 64-byte callback_data). one_time =
+ *  ẩn sau khi bấm; câu hỏi không bị cắt vì nằm ở text nút (≤~256 ký tự). */
+export async function tgSendSuggestions(chatId: number | string, suggestions: string[]): Promise<void> {
+  if (!TG_TOKEN || !suggestions.length) return;
+  const keyboard = suggestions.slice(0, 3).map((q) => [{ text: q.slice(0, 120) }]);
+  try {
+    await fetch(`${TG_API}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: '💡 Bấm để hỏi tiếp:',
+        reply_markup: { keyboard, one_time_keyboard: true, resize_keyboard: true, selective: true },
+        disable_web_page_preview: true,
+      }),
+    });
+  } catch {
+    /* best-effort */
+  }
+}
+
 // ── Tải ẢNH người dùng gửi → base64 (cho runAgent luận nhân tướng/phong thủy) ──
 // Telegram 2 bước: getFile(file_id) → file_path; rồi tải nội dung từ
 // api.telegram.org/file/bot<token>/<path>. Trả ChatImage {data(base64,

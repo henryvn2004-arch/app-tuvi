@@ -2223,6 +2223,19 @@ var TuviTTS = (function() {
   }
 
   /* ── Suggestions ──────────────────────────────────────────────── */
+  // PR2: bot emit chip gợi ý ở cuối câu trả lời sau marker (đồng bộ
+  // SUGGESTIONS_MARKER / parseSuggestions ở lib/agent/prompts.ts).
+  var SUGG_MARKER = '[[FOLLOWUPS]]';
+  function tcParseSuggestions(raw) {
+    var s = raw || '';
+    var i = s.indexOf(SUGG_MARKER);
+    if (i < 0) return { text: s, suggestions: [] };
+    var suggestions = s.slice(i + SUGG_MARKER.length).split('||')
+      .map(function(x) { return x.replace(/\s+/g, ' ').trim(); })
+      .filter(Boolean).slice(0, 3)
+      .map(function(x) { return x.length > 60 ? x.slice(0, 57) + '…' : x; });
+    return { text: s.slice(0, i), suggestions: suggestions };
+  }
   function renderSuggs(list) {
     var $suggs = document.getElementById('tc-suggs');
     $suggs.innerHTML = '';
@@ -2570,7 +2583,7 @@ var TuviTTS = (function() {
             } else if (ename === 'text') {
               if (toolLabel) { toolLabel.remove(); toolLabel = null; }
               accumulated += (d1.delta || '');
-              bub.innerHTML = renderMd(accumulated);
+              bub.innerHTML = renderMd(tcParseSuggestions(accumulated).text);
               bub.appendChild(cursor);
               $msgs.scrollTop = $msgs.scrollHeight;
             } else if (ename === 'error') {
@@ -2603,7 +2616,7 @@ var TuviTTS = (function() {
               } else if (evt.type === 'text') {
                 if (toolLabel) { toolLabel.remove(); toolLabel = null; }
                 accumulated += evt.text;
-                bub.innerHTML = renderMd(accumulated);
+                bub.innerHTML = renderMd(tcParseSuggestions(accumulated).text);
                 bub.appendChild(cursor);
                 $msgs.scrollTop = $msgs.scrollHeight;
               } else if (evt.type === 'error') {
@@ -2615,7 +2628,10 @@ var TuviTTS = (function() {
       }
 
       cursor.remove();
-      var answer = accumulated || 'Xin lỗi, có lỗi xảy ra.';
+      // PR2: tách chip gợi ý của bot khỏi text hiển thị.
+      var _parsed = tcParseSuggestions(accumulated);
+      var _botSuggs = _parsed.suggestions;
+      var answer = (_parsed.text || '').trim() || 'Xin lỗi, có lỗi xảy ra.';
       bub.innerHTML = renderMd(answer);
       $msgs.scrollTop = $msgs.scrollHeight;
       var _spBtn3 = addSpeakBtn(bub, function() { return answer; });
@@ -2644,7 +2660,7 @@ var TuviTTS = (function() {
       renderSidebar();
       var sendCfg = toolCfg(chat.toolType);
       var sendHasData = !!(chat.lasoData || chat.contextData);
-      renderSuggs(sendHasData && sendCfg ? sendCfg.suggs : SUGG_INIT);
+      renderSuggs(_botSuggs && _botSuggs.length ? _botSuggs : (sendHasData && sendCfg ? sendCfg.suggs : SUGG_INIT));
 
     } catch(e) {
       var typing = document.getElementById('_tc_typing');
