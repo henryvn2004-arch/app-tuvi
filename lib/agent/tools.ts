@@ -15,6 +15,7 @@ import {
 } from '../../tuvi-engine/dist/ngay-tot/index.js';
 import { tinhNguyetHan, tinhNhatHan } from '../../tuvi-engine/dist/van-han/index.js';
 import { solarToLunar } from '../../tuvi-engine/dist/lunar/convert.js';
+import { matchVanHanCombos, formatComboLines, type LayerCung } from './vanHanCombos';
 
 // ─── Hướng dẫn dùng tool (chèn vào system prompt) ──────────────
 export const TOOLS_INSTRUCTION = (hasLaso: boolean) => `
@@ -22,7 +23,8 @@ export const TOOLS_INSTRUCTION = (hasLaso: boolean) => `
 CÔNG CỤ (tool) — DÙNG ĐÚNG LÚC, TUYỆT ĐỐI KHÔNG bịa số liệu thời gian:
 ${hasLaso ? '- Câu hỏi gắn với MỘT NĂM cụ thể (năm nay, năm sau, "bao giờ", một năm/tuổi nhất định) → GỌI tra_tieu_van để lấy cung tiểu hạn/lưu niên của năm + sao tại các cung đó + nền điểm ĐẠI VẬN. Tiểu vận KHÔNG có điểm riêng — luận theo nền đại vận + ý nghĩa sao của năm, KHÔNG tự gán "điểm/10" cho năm. Không tự đoán cung/sao khi chưa gọi tool.\n' : ''}${hasLaso ? '- Câu hỏi về HẠN THÁNG / nguyệt hạn ("tháng X/YYYY", "tháng này thế nào"...) → GỌI tra_nguyet_van; kết quả trả về 3 cách tính, ưu tiên luận theo Cách 1.\n' : ''}${hasLaso ? '- Câu hỏi về HẠN NGÀY / nhật hạn ("ngày X tháng Y", "hôm nay"...) → GỌI tra_nhat_van; kết quả trả về cung nhật hạn theo Cách 1.\n' : ''}- Câu hỏi NGÀY TỐT để làm việc trọng đại (cưới hỏi, nhập trạch, khai trương, mua/bán nhà, khởi công, xuất hành...) trong một tháng → GỌI xem_ngay_tot.
 Sau khi có kết quả tool, luận giải dứt khoát và neo vào đúng các con số tool trả về (đại vận điểm thấp / nhiều sát tinh phải cảnh báo rõ). Câu nào không cần tool thì trả lời thẳng.
-VẬN HẠN THEO TẦNG (đại vận là gốc): chỉ ĐẠI VẬN có điểm/10 thật. TIỂU VẬN (năm), NGUYỆT VẬN và NHẬT VẬN đều KHÔNG có điểm — luận theo CUNG nhập hạn + sao tại cung đó, TUYỆT ĐỐI không bịa "điểm/10" cho năm/tháng/ngày. Luôn đặt vận năm/tháng/ngày trong KHUNG đại vận: đại vận điểm cao thì sao xấu, cách xấu nhất thời chỉ là gợn, lướt qua được; đại vận điểm thấp thì cát tinh nhất thời khó kéo lại.`;
+VẬN HẠN THEO TẦNG (đại vận là gốc): chỉ ĐẠI VẬN có điểm/10 thật. TIỂU VẬN (năm), NGUYỆT VẬN và NHẬT VẬN đều KHÔNG có điểm — luận theo CUNG nhập hạn + sao tại cung đó, TUYỆT ĐỐI không bịa "điểm/10" cho năm/tháng/ngày. Luôn đặt vận năm/tháng/ngày trong KHUNG đại vận: đại vận điểm cao thì sao xấu, cách xấu nhất thời chỉ là gợn, lướt qua được; đại vận điểm thấp thì cát tinh nhất thời khó kéo lại.
+TỔ HỢP SAO CHÉO TẦNG: nếu kết quả tool có mục "TỔ HỢP SAO trong các cung hạn (cách cục vận)", ƯU TIÊN luận theo các tổ hợp đó — đây là cách cục hình thành khi đủ bộ sao rải qua nhiều tầng vận (vd Mã Khốc Khách), ý nghĩa rõ ràng và đáng tin hơn từng sao lẻ. Vẫn quy chiếu về khung điểm đại vận.`;
 
 // ─── Định nghĩa tool (Anthropic schema) ────────────────────────
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -120,12 +122,22 @@ export function execTraVanHan(lasoData: any, input: any): string {
     if (phu.length) s += `; phụ/sát tinh: ${phu.slice(0, 8).join(', ')}`;
     return s;
   };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const pByName = (cn: string): any => palaces.find((x: any) => x.cungName === cn);
   const dv = (lasoData.daiVans || [])[tv.dvIdx];
+  const dvPalace = dv ? palaces[dv.cungIdx] : null;
   let out = `VẬN NĂM ${nam} (tuổi ${tv.tuoi}) — TIỂU VẬN KHÔNG có điểm riêng; luận theo NỀN đại vận + ý nghĩa sao của các cung hạn năm này:\n`;
   if (dv) out += `- NỀN ĐẠI VẬN ${dv.diaChi} (${dv.tuoiStart}–${dv.tuoiEnd} tuổi)${dv.scoring?.tong != null ? `: điểm ${dv.scoring.tong}/10 ${dv.scoring.flag || ''}` : ''} — đây là cơ sở chấm vận; năm nằm TRONG khung này.\n`;
   out += `- Tiểu hạn nhập cung ${tv.tieuHanCung} — ${starsOf(tv.tieuHanCung)}.\n`;
   out += `- Lưu niên đại hạn vào cung ${tv.luuNienCung} — ${starsOf(tv.luuNienCung)}.\n`;
-  out += `- Cách luận: lấy điểm + khí sắc ĐẠI VẬN làm nền; sao tốt/xấu của cung tiểu hạn & lưu niên năm nay chỉ làm năm này nhỉnh lên hoặc chùng xuống TRONG khung đó — KHÔNG tự gán "điểm/10" cho năm.\n`;
+  // Tổ hợp sao chéo tầng (mức NĂM: đại vận + tiểu hạn + lưu niên)
+  const yearLayers: LayerCung[] = [
+    { label: 'đại vận', palace: dvPalace },
+    { label: 'tiểu hạn', palace: pByName(tv.tieuHanCung) },
+    { label: 'lưu niên', palace: pByName(tv.luuNienCung) },
+  ];
+  out += formatComboLines(matchVanHanCombos(yearLayers));
+  out += `- Cách luận: lấy điểm + khí sắc ĐẠI VẬN làm nền; sao tốt/xấu + tổ hợp sao của cung tiểu hạn & lưu niên năm nay chỉ làm năm này nhỉnh lên hoặc chùng xuống TRONG khung đó — KHÔNG tự gán "điểm/10" cho năm.\n`;
   return out;
 }
 
@@ -185,6 +197,16 @@ export function execTraNguyetVan(lasoData: any, input: any): string {
   let out = `NGUYỆT HẠN THÁNG ${thang}/${nam} (ÂL tháng ${thangAL}, tuổi ${tv.tuoi}):\n`;
   out += `- Tiểu hạn năm ${nam}: cung ${tv.tieuHanCung}.\n`;
   out += `- Nguyệt hạn tháng ${thangAL} ÂL: cung ${_cungNameOf(palaces, nguyetHanIdx)} — chính tinh: ${_starsOf(palaces, nguyetHanIdx)}.\n`;
+  // Tổ hợp sao chéo tầng (mức THÁNG: đại vận + tiểu hạn + lưu niên + nguyệt hạn)
+  const _dvM = (lasoData.daiVans || [])[tv.dvIdx];
+  const monthLayers: LayerCung[] = [
+    { label: 'đại vận', palace: _dvM ? palaces[_dvM.cungIdx] : null },
+    { label: 'tiểu hạn', palace: palaces[tieuHanIdx] },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    { label: 'lưu niên', palace: palaces.find((x: any) => x.cungName === tv.luuNienCung) },
+    { label: 'nguyệt hạn', palace: palaces[nguyetHanIdx] },
+  ];
+  out += formatComboLines(matchVanHanCombos(monthLayers));
   return out;
 }
 
@@ -227,6 +249,17 @@ export function execTraNhatVan(lasoData: any, input: any): string {
   let out = `NHẬT HẠN NGÀY ${ngay}/${thang}/${nam} (ÂL ngày ${ngayAL} tháng ${thangAL}, tuổi ${tv.tuoi}):\n`;
   out += `- Nguyệt hạn ÂL tháng ${thangAL}: cung ${_cungNameOf(palaces, nguyetHanIdx)} — chính tinh: ${_starsOf(palaces, nguyetHanIdx)}.\n`;
   out += `- Nhật hạn ÂL ngày ${ngayAL}: cung ${_cungNameOf(palaces, nhatHanIdx)} — chính tinh: ${_starsOf(palaces, nhatHanIdx)}.\n`;
+  // Tổ hợp sao chéo tầng (mức NGÀY: đại vận + tiểu hạn + lưu niên + nguyệt hạn + nhật hạn)
+  const _dvD = (lasoData.daiVans || [])[tv.dvIdx];
+  const dayLayers: LayerCung[] = [
+    { label: 'đại vận', palace: _dvD ? palaces[_dvD.cungIdx] : null },
+    { label: 'tiểu hạn', palace: palaces[tieuHanIdx] },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    { label: 'lưu niên', palace: palaces.find((x: any) => x.cungName === tv.luuNienCung) },
+    { label: 'nguyệt hạn', palace: palaces[nguyetHanIdx] },
+    { label: 'nhật hạn', palace: palaces[nhatHanIdx] },
+  ];
+  out += formatComboLines(matchVanHanCombos(dayLayers));
   return out;
 }
 
