@@ -1487,7 +1487,7 @@ select.form-input { cursor: pointer; }
         </div>
         <div style="margin:20px 0 8px">
           <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Tiểu Vận — Toàn Bộ 90 Năm (Candlestick)</div>
-          <div style="font-size:11px;color:#666;margin-bottom:8px">Mỗi nến = 1 năm · Xanh = nhiều sao tốt · Đỏ = nhiều sao xấu</div>
+          <div style="font-size:11px;color:#666;margin-bottom:8px">Đường điểm theo ĐẠI VẬN (mỗi bậc 10 năm — tầng vận hạn duy nhất có điểm) · Xanh = đại vận tốt · Đỏ = đại vận xấu · Năm/tháng/ngày luận theo sao của hạn, không có điểm riêng</div>
           <div class="candle-wrap"><div id="candle-90yr"></div></div>
         </div>`;
 
@@ -2103,7 +2103,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
 </div>
 <div style="margin:20px 0 8px">
   <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Tiểu Vận — Toàn Bộ 90 Năm (Candlestick)</div>
-  <div style="font-size:11px;color:#666;margin-bottom:8px">Mỗi nến = 1 năm · Thân nến = dao động · Xanh = nhiều sao tốt · Đỏ = nhiều sao xấu</div>
+  <div style="font-size:11px;color:#666;margin-bottom:8px">Đường điểm theo ĐẠI VẬN (mỗi bậc 10 năm — tầng vận hạn duy nhất có điểm) · Xanh = đại vận tốt · Đỏ = đại vận xấu · Năm/tháng/ngày luận theo sao của hạn, không có điểm riêng</div>
   <div class="candle-wrap"><div id="candle-90yr"></div></div>
 </div>`;
       } else if (_currentPhan === 1 && _astrolabe?.cungScores) {
@@ -3745,7 +3745,11 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     }
   }
 
-  // ── CANDLESTICK RENDERER ────────────────────────────────────────
+  // ── BIỂU ĐỒ ĐIỂM ĐẠI VẬN ────────────────────────────────────────
+  // Trước đây vẽ "nến" với râu high/low = ĐẾM SAO cát/sát cào bằng → vô cơ sở.
+  // Đại vận là tầng vận hạn DUY NHẤT có điểm/10 thật; tiểu/nguyệt/nhật vận
+  // KHÔNG có điểm riêng (luận định tính theo sao của hạn). Nên chart giờ vẽ
+  // đường điểm ĐẠI VẬN thật theo thời gian (mỗi bậc 10 năm), không bịa biên độ.
   function renderCandlestick(containerId, data, opts={}) {
     const el = document.getElementById(containerId);
     if (!el || !data?.length) return;
@@ -3755,14 +3759,28 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     const PAD  = { top:28, right:14, bottom:32, left:34 };
     const cw   = opts.candleW || Math.max(4, Math.floor((W - PAD.left - PAD.right) / data.length) - 2);
     const plotH = H - PAD.top - PAD.bottom;
+    const slot  = cw + 2;
 
-    const allVals = data.flatMap(d => [d.high ?? d.maxScore ?? 10, d.low ?? d.minScore ?? 0]);
-    const minVal  = Math.max(0, Math.min(...allVals) - 0.3);
-    const maxVal  = Math.min(10, Math.max(...allVals) + 0.3);
-    const range   = maxVal - minVal || 1;
+    // Điểm đại vận thật cho từng năm (qua dvIdx). Fallback mainScore nếu thiếu.
+    const dvs = _astrolabe?.daiVans || [];
+    const scoreOf = (d) => {
+      const dv = dvs[d.dvIdx];
+      const s = dv && dv.scoring ? dv.scoring.tong : undefined;
+      return (typeof s === 'number') ? s
+        : (typeof d.mainScore === 'number') ? d.mainScore
+        : (typeof d.open === 'number') ? d.open : 5;
+    };
+    const colOf = (s) => s >= 7 ? '#5FA8D3' : s <= 4 ? '#C0392B' : '#C9A227';
+
+    const vals   = data.map(scoreOf);
+    const minVal = Math.max(0, Math.min(...vals) - 0.6);
+    const maxVal = Math.min(10, Math.max(...vals) + 0.6);
+    const range  = (maxVal - minVal) || 1;
 
     function yv(v) { return PAD.top + plotH - ((v - minVal) / range * plotH); }
-    function xc(i) { return PAD.left + i * (cw + 2) + cw / 2; }
+    function xc(i) { return PAD.left + i * slot + cw / 2; }
+    const xl = (i) => xc(i) - slot / 2;
+    const xr = (i) => xc(i) + slot / 2;
 
     // Grid lines
     let grid = '';
@@ -3773,45 +3791,37 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       grid += `<text x="${PAD.left-5}" y="${gy+3}" font-size="8" fill="#4a5a6a" text-anchor="end">${v}</text>`;
     }
 
-    // Candles — proper OHLC
-    let candles = '';
+    // Đường bậc điểm đại vận + vùng nền + ranh giới giữa các đại vận
+    const base = yv(minVal);
+    let areaPath = `M ${xl(0)} ${base}`;
+    let line = '', bounds = '', labels = '';
     data.forEach((d, i) => {
-      const _rawOpen  = d.open  !== undefined ? d.open  : d.mainScore;
-      const _rawClose = d.close !== undefined ? d.close : d.mainScore;
-      const high  = d.high  !== undefined ? d.high  : d.maxScore;
-      const low   = d.low   !== undefined ? d.low   : d.minScore;
-      // Exaggerate body × 2.5 around mainScore for visibility
-      const _mid  = (_rawOpen + _rawClose) / 2;
-      const _exFactor = 3.5;
-      const open  = Math.max(low,  Math.min(high, _mid + (_rawOpen  - _mid) * _exFactor));
-      const close = Math.max(low,  Math.min(high, _mid + (_rawClose - _mid) * _exFactor));
-
-      const bullish  = close >= open;
-      const bodyCol  = bullish ? '#5FA8D3' : '#C0392B';
-      const wickCol  = bullish ? '#2F5BEA' : '#922B21';
-
-      const yOpen  = yv(open);
-      const yClose = yv(close);
-      const yHigh  = yv(high);
-      const yLow   = yv(low);
-      const cx     = xc(i);
-
-      const bodyTop = Math.min(yOpen, yClose);
-      const bodyHt  = Math.max(1.5, Math.abs(yOpen - yClose));
-
-      // Upper wick
-      candles += `<line x1="${cx}" y1="${yHigh}" x2="${cx}" y2="${bodyTop}" stroke="${wickCol}" stroke-width="1.2"/>`;
-      // Lower wick
-      candles += `<line x1="${cx}" y1="${bodyTop + bodyHt}" x2="${cx}" y2="${yLow}" stroke="${wickCol}" stroke-width="1.2"/>`;
-      // Body
-      candles += `<rect x="${cx - cw/2}" y="${bodyTop}" width="${cw}" height="${bodyHt}" fill="${bodyCol}" rx="1" opacity="0.92"/>`;
-
-      // X-axis label = tuổi
+      const s = scoreOf(d);
+      const y = yv(s);
+      areaPath += ` L ${xl(i)} ${y} L ${xr(i)} ${y}`;
+      // đoạn nằm ngang (điểm năm này), màu theo điểm đại vận
+      line += `<line x1="${xl(i)}" y1="${y}" x2="${xr(i)}" y2="${y}" stroke="${colOf(s)}" stroke-width="2"/>`;
+      // nối bậc với năm trước
+      if (i > 0) {
+        const yPrev = yv(scoreOf(data[i-1]));
+        if (yPrev !== y) line += `<line x1="${xl(i)}" y1="${yPrev}" x2="${xl(i)}" y2="${y}" stroke="${colOf(s)}" stroke-width="1.4" opacity="0.7"/>`;
+        // ranh giới đại vận
+        if (data[i-1].dvIdx !== d.dvIdx) bounds += `<line x1="${xl(i)}" y1="${PAD.top}" x2="${xl(i)}" y2="${H-PAD.bottom}" stroke="#2a3a52" stroke-width="0.8" stroke-dasharray="2,2"/>`;
+      }
+      // nhãn tuổi trục X
       const labelStep = data.length > 60 ? 10 : data.length > 20 ? 5 : 1;
       if (d.tuoi % labelStep === 0 || data.length <= 5) {
-        candles += `<text x="${cx}" y="${H - PAD.bottom + 14}" font-size="8" fill="#4a5a6a" text-anchor="middle">${d.tuoi}</text>`;
+        labels += `<text x="${xc(i)}" y="${H - PAD.bottom + 14}" font-size="8" fill="#4a5a6a" text-anchor="middle">${d.tuoi}</text>`;
       }
     });
+    areaPath += ` L ${xr(data.length-1)} ${base} Z`;
+
+    // Nhãn điểm đại vận (chart từng đại vận / 3 năm — đủ rộng để hiện)
+    let dvLabel = '';
+    if (cw >= 24) {
+      const s0 = scoreOf(data[0]);
+      dvLabel = `<text x="${PAD.left}" y="${PAD.top - 10}" font-size="11" fill="${colOf(s0)}" text-anchor="start" font-weight="600">Điểm đại vận ${s0}/10</text>`;
+    }
 
     // Current age marker
     let marker = '';
@@ -3826,7 +3836,9 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
     el.innerHTML = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:block;max-width:100%">
       <line x1="${PAD.left}" y1="${PAD.top-4}" x2="${PAD.left}" y2="${H-PAD.bottom}" stroke="#1e2d42" stroke-width="1"/>
       <line x1="${PAD.left}" y1="${H-PAD.bottom}" x2="${W-PAD.right}" y2="${H-PAD.bottom}" stroke="#1e2d42" stroke-width="1"/>
-      ${grid}${candles}${marker}
+      ${grid}
+      <path d="${areaPath}" fill="#5FA8D3" opacity="0.10"/>
+      ${bounds}${line}${dvLabel}${marker}${labels}
     </svg>`;
   }
 
