@@ -93,7 +93,7 @@ export async function tgSendSuggestions(chatId: number | string, suggestions: st
       body: JSON.stringify({
         chat_id: chatId,
         text: '💡 Bấm để hỏi tiếp:',
-        reply_markup: { keyboard, one_time_keyboard: true, resize_keyboard: true, selective: true },
+        reply_markup: { keyboard, one_time_keyboard: true, resize_keyboard: true },
         disable_web_page_preview: true,
       }),
     });
