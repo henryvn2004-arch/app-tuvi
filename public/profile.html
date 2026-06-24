@@ -340,6 +340,17 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
         </div>
       </div>
       <div class="account-section">
+        <h3>💬 Liên Kết WhatsApp</h3>
+        <p style="color:var(--text-lt);font-size:.85rem;margin:.25rem 0 .75rem">
+          Liên kết để chat với bot WhatsApp bằng đúng ví Lượng này — nạp ở đây, dùng được cả trên WhatsApp.
+        </p>
+        <div id="waLinkBox" style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+          <span id="waLinkStatus" style="font-size:.85rem;color:var(--text-lt)">Đang kiểm tra…</span>
+          <button id="btnWaLink" style="display:none;background:#25D366;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">💬 Liên kết WhatsApp</button>
+          <button id="btnWaUnlink" style="display:none;background:transparent;color:#c0392b;border:1px solid #c0392b;padding:.55rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer">Hủy liên kết</button>
+        </div>
+      </div>
+      <div class="account-section">
         <h3>Lịch Sử Giao Dịch</h3>
         <div id="transactionList"><div style="color:var(--text-lt);font-size:.85rem">Đang tải...</div></div>
       </div>
@@ -763,11 +774,72 @@ document.getElementById('btnTgUnlink').onclick = async () => {
   loadTelegramLink();
 };
 
+// ── LIÊN KẾT WHATSAPP ──
+async function loadWhatsappLink() {
+  const statusEl = document.getElementById('waLinkStatus');
+  const btnLink  = document.getElementById('btnWaLink');
+  const btnUnlink = document.getElementById('btnWaUnlink');
+  if (!statusEl) return;
+  try {
+    const res = await fetch('/api/channels/whatsapp/link', {
+      headers: { Authorization: `Bearer ${_pToken}` }
+    });
+    const d = res.ok ? await res.json() : { linked: false };
+    if (d.linked) {
+      statusEl.textContent = '✅ Đã liên kết — bot WhatsApp dùng chung ví Lượng này.';
+      btnLink.style.display = 'none';
+      btnUnlink.style.display = 'inline-block';
+    } else {
+      statusEl.textContent = 'Chưa liên kết.';
+      btnLink.style.display = 'inline-block';
+      btnUnlink.style.display = 'none';
+    }
+  } catch {
+    statusEl.textContent = 'Không tải được trạng thái liên kết.';
+  }
+}
+
+document.getElementById('btnWaLink').onclick = async () => {
+  const btn = document.getElementById('btnWaLink');
+  btn.disabled = true; btn.textContent = 'Đang tạo liên kết…';
+  try {
+    const res = await fetch('/api/channels/whatsapp/link', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${_pToken}` }
+    });
+    const d = await res.json();
+    if (d.url) {
+      // Mở WhatsApp với tin soạn sẵn "/link <token>" → gửi để bot gắn ví.
+      window.open(d.url, '_blank');
+      document.getElementById('waLinkStatus').textContent =
+        '⏳ Đã mở WhatsApp — bấm GỬI tin soạn sẵn để hoàn tất, rồi tải lại trang.';
+    } else {
+      alert('Không tạo được liên kết, thử lại sau nhé.');
+    }
+  } catch {
+    alert('Lỗi mạng, thử lại sau nhé.');
+  } finally {
+    btn.disabled = false; btn.textContent = '💬 Liên kết WhatsApp';
+  }
+};
+
+document.getElementById('btnWaUnlink').onclick = async () => {
+  if (!confirm('Hủy liên kết WhatsApp? Bot sẽ không còn dùng ví Lượng của bạn.')) return;
+  try {
+    await fetch('/api/channels/whatsapp/link', {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${_pToken}` }
+    });
+  } catch {}
+  loadWhatsappLink();
+};
+
 async function loadCredits() {
   if (!_pUser || !_pToken) return;
   // Balance
   await loadHeaderBalance();
   loadTelegramLink();
+  loadWhatsappLink();
   const t = document.getElementById('tabCreditBalance');
   if (t && t.textContent === '…') t.textContent = '...';
   // Transactions
