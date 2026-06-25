@@ -318,7 +318,10 @@ export function extractLasoContext(lasoData: any, question: string): string {
     return formatComboLines(matchVanHanCombos([{ label: 'đại vận', palace: dvP }]));
   };
 
-  if (lasoData.daiVanHienTai) {
+  // Đại vận CHỈ đưa vào khi câu hỏi thuộc về THỜI GIAN/vận hạn (relevant có
+  // __daiVan__). Hỏi bản chất một cung → KHÔNG kèm đại vận, để luận cung sạch
+  // (đại vận chỉ mượn cung đứng, không thuộc bản chất cung).
+  if (relevant.has('__daiVan__') && lasoData.daiVanHienTai) {
     const dv = lasoData.daiVanHienTai;
     const dvCung = palaces[dv.cungIdx] || {};
     ctx += '\nĐại Vận hiện tại: ' + (dv.diaChi||'') + ' (' + (dv.tuoiStart||'') + '–' + (dv.tuoiEnd||'') + ' tuổi)';
