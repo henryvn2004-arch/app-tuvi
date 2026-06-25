@@ -143,9 +143,13 @@ export function formatLasoContext(ls: Laso): string {
 
   if (Array.isArray(ls.cachCuc) && ls.cachCuc.length) {
     const cc = (ls.cachCuc as Rec[])
-      .map((c) => (typeof c === 'object' ? c.ten + (c.loai ? ` (${c.loai})` : '') : c))
+      .map((c) =>
+        typeof c === 'object'
+          ? `${c.ten}${c.cung ? ` [Cung ${c.cung}]` : ''}${c.loai ? ` (${c.loai})` : ''}`
+          : c,
+      )
       .filter(Boolean);
-    if (cc.length) ctx += 'Cách cục toàn cục: ' + cc.join(', ') + '\n';
+    if (cc.length) ctx += 'Cách cục toàn cục: ' + cc.join('; ') + '\n';
   }
 
   if (ls.daiVanHienTai) {
@@ -160,12 +164,18 @@ export function formatLasoContext(ls: Laso): string {
     ctx += '\n';
   }
 
+  // Cách cục đặc biệt gắn THEO CUNG (engine trả mảng global ls.cachCuc, mỗi
+  // phần tử có trường .cung) + ý nghĩa từng cung (ls.cachCucTungCung). Trước
+  // đây hàm đọc p.cachCuc (engine KHÔNG set per-palace) nên cách cục như
+  // "Nhật Nguyệt Chiếu Bích" của cung Điền không bao giờ hiện trong block cung
+  // → LLM bỏ sót. Nay filter đúng cung, kèm moTa/chiTiet.
+  const cachCucList = (Array.isArray(ls.cachCuc) ? ls.cachCuc : []) as Rec[];
+  const ynByCung = ((ls.cachCucTungCung as Record<string, string[]>) || {});
+
   ctx += '\n=== 12 CUNG ===\n';
   for (const p of palaces) {
     const pName = String(p.cungName || '');
     ctx += '\nCung ' + pName + ' (' + (p.diaChi || '') + ')' + (p.isMenh ? ' ★MỆNH' : '') + (p.isThan ? ' ◆THÂN' : '') + ':\n';
-    const sc = (ls.cungScores as Rec)?.[pName] as Rec | undefined;
-    if (sc?.tong != null) ctx += '  Điểm cung: ' + sc.tong + '/10\n';
     const chinh = ((p.majorStars as unknown[]) || []).map(starFmt).filter(Boolean);
     if (chinh.length) ctx += '  Chính tinh: ' + chinh.join(', ') + '\n';
     const phu = ((p.stars as Rec[]) || [])
@@ -173,13 +183,19 @@ export function formatLasoContext(ls: Laso): string {
       .map(starFmt)
       .filter(Boolean);
     if (phu.length) ctx += '  Phụ tinh: ' + phu.slice(0, 8).join(', ') + '\n';
-    if (Array.isArray(p.cachCuc) && p.cachCuc.length) {
-      (p.cachCuc as Rec[]).forEach((c) => {
-        const ten = c.ten || c;
-        const mota = c.moTa ? ': ' + c.moTa : '';
-        ctx += '  Cách cục — ' + ten + mota + '\n';
-      });
-    }
+    // Chỉ cách cục gắn ĐÍCH DANH cung này (hoặc Thân nếu đây là cung Thân).
+    // Cách cục toàn cục (cung==='') đã nằm ở dòng "Cách cục toàn cục" phía
+    // trên → không lặp vào từng cung cho đỡ rối/tốn token.
+    const ccThis = cachCucList.filter(
+      (c) => c.cung === pName || (p.isThan && c.cung === 'Thân'),
+    );
+    ccThis.forEach((c) => {
+      const mota = c.moTa ? ': ' + c.moTa : '';
+      const chiTiet = c.chiTiet ? ' — ' + c.chiTiet : '';
+      ctx += '  Cách cục — ' + (c.ten || '') + (c.loai ? ' (' + c.loai + ')' : '') + mota + chiTiet + '\n';
+    });
+    const ynThis = ynByCung[pName] || [];
+    if (ynThis.length) ctx += '  Ý nghĩa: ' + ynThis.slice(0, 6).join(' | ') + '\n';
   }
 
   if (Array.isArray(ls.daiVans) && ls.daiVans.length) {

@@ -25,28 +25,9 @@
     lines.push(`Tiểu hạn: ${ls.palaces[ls.tieuHanIdx]?.diaChi} (${ls.palaces[ls.tieuHanIdx]?.cungName}) | Lưu đại hạn: ${ls.palaces[ls.luuNienDaiHanIdx]?.diaChi} (${ls.palaces[ls.luuNienDaiHanIdx]?.cungName})`);
     lines.push('');
 
-    // Điểm đánh giá JS (anchor cho AI — chống luận chung chung, neo phán quyết vào con số)
-    if (ls.cungScores) {
-      const SC_DIMS = [['thienVan','Thiên Vận'],['canCo','Căn Cơ'],['mayMan','May Mắn'],['phuTro','Phù Trợ'],['binhYen','Bình Yên'],['benVung','Bền Vững']];
-      const CUNG_ORDER = ['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
-      const totals = [];
-      const scLines = [];
-      for (const cn of CUNG_ORDER) {
-        const sc = ls.cungScores[cn];
-        if (!sc) continue;
-        const dims = SC_DIMS.map(([k]) => sc[k]).filter(v => typeof v === 'number');
-        const tot = dims.length ? Math.round(dims.reduce((a,b)=>a+b,0) / dims.length * 10) / 10 : null;
-        if (tot != null) totals.push(tot);
-        const dimStr = SC_DIMS.map(([k,lbl]) => `${lbl} ${sc[k]}`).join(', ');
-        scLines.push(`[${cn}] Tổng ${tot}/10 — ${dimStr}`);
-      }
-      const overall = totals.length ? Math.round(totals.reduce((a,b)=>a+b,0) / totals.length * 10) / 10 : null;
-      lines.push('=== ĐIỂM ĐÁNH GIÁ (thang 0–10, hệ thống tính sẵn — BẮT BUỘC bám sát khi phán) ===');
-      if (overall != null) lines.push(`Tổng quan toàn lá số: ${overall}/10`);
-      lines.push('Quy ước: ≥7 = mạnh/tốt rõ · 5–6.9 = trung bình · <5 = yếu, phải nói thẳng điểm yếu.');
-      scLines.forEach(l => lines.push(l));
-      lines.push('');
-    }
+    // (Đã bỏ khối "ĐIỂM ĐÁNH GIÁ" 6 chiều/cung — cơ chế tính điểm từng cung
+    // không có cơ sở vững, từng khiến AI neo phán quyết vào con số sai. Phán
+    // quyết nay neo vào nhãn "Luận sao" định tính + cách cục + độ sáng sao.)
 
     // ── Helpers for pattern ranking + synthesis ──────────────────────────────
     const _CT_SET = new Set(['Tử Vi','Thiên Cơ','Thái Dương','Vũ Khúc','Thiên Đồng','Liêm Trinh',
@@ -92,10 +73,7 @@
       const _ynRaw  = (ls.cachCucTungCung && ls.cachCucTungCung[p.cungName]) || [];
       const _ynSorted = _sortYn(_ynRaw);
       const _xh = _xuHuong(_ccThis, _ynRaw);
-      const _scRow = ls.cungScores?.[p.cungName];
-      const _scDims = _scRow ? ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'].map(k=>_scRow[k]).filter(v=>typeof v==='number') : [];
-      const _scTot  = _scDims.length ? Math.round(_scDims.reduce((a,b)=>a+b,0)/_scDims.length*10)/10 : null;
-      lines.push(`[${p.cungName}] ${p.diaChi}${p.isThan?' THÂN':''}${p.isMenh?' MỆNH':''} ${van}${_scTot!=null?` | Điểm:${_scTot}`:''} | Luận sao: ${_xh}`);
+      lines.push(`[${p.cungName}] ${p.diaChi}${p.isThan?' THÂN':''}${p.isMenh?' MỆNH':''} ${van} | Luận sao: ${_xh}`);
       // Priority 1: Cách cục đặc biệt (hiếm, sức ảnh hưởng mạnh nhất)
       if (ls.cachCuc) {
         const cc = ls.cachCuc.filter(r => r.cung === p.cungName || r.cung === '' || r.cung === 'Thân');
