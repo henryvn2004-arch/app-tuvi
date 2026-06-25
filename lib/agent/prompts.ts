@@ -326,7 +326,7 @@ export function extractLasoContext(lasoData: any, question: string): string {
     const dvStars = (dvCung.tuChinhStars||dvCung.majorStars||[]).map(starName).filter(Boolean);
     if (dvStars.length) ctx += ' — Sao (tứ chính): ' + dvStars.join(', ');
     if (dv.scoring?.tong != null) ctx += ' — Điểm vận: ' + dv.scoring.tong + '/10 ' + (dv.scoring.flag||'');
-    ctx += '\n';
+    ctx += '\n(Điểm vận trên là điểm theo THỜI GIAN của giai đoạn này — KHÔNG phải điểm cung; chỉ dùng khi luận vận hạn, không dùng để chấm bản chất cung.)\n';
     ctx += dvComboLines(dvCung);
   }
 
@@ -391,7 +391,7 @@ export function extractLasoContext(lasoData: any, question: string): string {
   }
 
   if (relevant.has('__daiVan__') && lasoData.daiVans?.length) {
-    ctx += '\n=== ĐẠI VẬN ===\n';
+    ctx += '\n=== ĐẠI VẬN (lịch trình THỜI GIAN — điểm dưới đây là điểm VẬN của giai đoạn 10 năm; CHỈ dùng khi luận năm/vận hạn. TUYỆT ĐỐI KHÔNG dùng điểm đại vận để chấm hay làm điểm yếu của một CUNG — đại vận chỉ MƯỢN cung làm chỗ đứng, không đổi bản chất cung) ===\n';
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     lasoData.daiVans.slice(0, 9).forEach((dv: any, i: number) => {
       const dvP = palaces[dv.cungIdx] || {};

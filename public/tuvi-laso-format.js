@@ -65,7 +65,8 @@
     // 12 cung + tam phương tứ chính
     lines.push('=== 12 CUNG ===');
     for (const p of ls.palaces) {
-      const van = p.decadal ? `ĐV:${p.decadal.range[0]}-${p.decadal.range[1]}` : '';
+      // KHÔNG nhét đại vận vào dòng cung: đại vận chỉ MƯỢN cung làm chỗ đứng
+      // theo thời gian, không thuộc bản chất cung. Để riêng ở mục "9 ĐẠI VẬN".
       const chinh = p.majorStars.map(s => s.ten + (s.brightness?`(${s.brightness})`:'') + (s.hoa?`[${s.hoa}]`:'')).join(' ');
       const phu = p.stars.filter(s=>s.nhom!=='chinh').map(s => s.ten + (s.hoa?`[${s.hoa}]`:'')).join(' ');
       // Cách cục + patterns cho cung này
@@ -73,7 +74,7 @@
       const _ynRaw  = (ls.cachCucTungCung && ls.cachCucTungCung[p.cungName]) || [];
       const _ynSorted = _sortYn(_ynRaw);
       const _xh = _xuHuong(_ccThis, _ynRaw);
-      lines.push(`[${p.cungName}] ${p.diaChi}${p.isThan?' THÂN':''}${p.isMenh?' MỆNH':''} ${van} | Luận sao: ${_xh}`);
+      lines.push(`[${p.cungName}] ${p.diaChi}${p.isThan?' THÂN':''}${p.isMenh?' MỆNH':''} | Luận sao: ${_xh}`);
       // Priority 1: Cách cục đặc biệt (hiếm, sức ảnh hưởng mạnh nhất)
       if (ls.cachCuc) {
         const cc = ls.cachCuc.filter(r => r.cung === p.cungName || r.cung === '' || r.cung === 'Thân');
@@ -114,7 +115,7 @@
 
     // 9 đại vận với scoring JS thực tế
     lines.push('');
-    lines.push('=== 9 ĐẠI VẬN ===');
+    lines.push('=== 9 ĐẠI VẬN (lịch trình THỜI GIAN — điểm/scoring dưới đây là điểm VẬN của giai đoạn 10 năm; CHỈ dùng khi luận năm/vận hạn. TUYỆT ĐỐI KHÔNG dùng điểm đại vận để chấm hay làm điểm yếu của một CUNG — đại vận chỉ MƯỢN cung làm chỗ đứng, không đổi bản chất cung) ===');
     const BAD_T = new Set(['sát tinh','hung tinh','bại tinh']);
     const dvs = ls.daiVans.slice(0, 9);
     dvs.forEach((dv, i) => {

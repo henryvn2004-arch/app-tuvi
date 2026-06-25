@@ -161,7 +161,7 @@ export function formatLasoContext(ls: Laso): string {
     if (dvStars.length) ctx += ' — Sao: ' + dvStars.join(', ');
     const sc = dv.scoring as Rec | undefined;
     if (sc?.tong != null) ctx += ' — Điểm vận: ' + sc.tong + '/10 ' + (sc.flag || '');
-    ctx += '\n';
+    ctx += '\n(Điểm vận trên là điểm theo THỜI GIAN của giai đoạn này — KHÔNG phải điểm cung; chỉ dùng khi luận vận hạn, không dùng để chấm bản chất cung.)\n';
   }
 
   // Cách cục đặc biệt gắn THEO CUNG (engine trả mảng global ls.cachCuc, mỗi
@@ -199,7 +199,7 @@ export function formatLasoContext(ls: Laso): string {
   }
 
   if (Array.isArray(ls.daiVans) && ls.daiVans.length) {
-    ctx += '\n=== ĐẠI VẬN ===\n';
+    ctx += '\n=== ĐẠI VẬN (lịch trình THỜI GIAN — điểm dưới đây là điểm VẬN của giai đoạn 10 năm; CHỈ dùng khi luận năm/vận hạn. TUYỆT ĐỐI KHÔNG dùng điểm đại vận để chấm hay làm điểm yếu của một CUNG — đại vận chỉ MƯỢN cung làm chỗ đứng, không đổi bản chất cung) ===\n';
     (ls.daiVans as Rec[]).slice(0, 10).forEach((dv, i) => {
       const dvP = (palaces[dv.cungIdx as number] || {}) as Rec;
       const stars = (((dvP.tuChinhStars as unknown[]) || (dvP.majorStars as unknown[]) || []) as unknown[]).map(starName).filter(Boolean);
