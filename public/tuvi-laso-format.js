@@ -69,15 +69,17 @@
       // theo thời gian, không thuộc bản chất cung. Để riêng ở mục "9 ĐẠI VẬN".
       const chinh = p.majorStars.map(s => s.ten + (s.brightness?`(${s.brightness})`:'') + (s.hoa?`[${s.hoa}]`:'')).join(' ');
       const phu = p.stars.filter(s=>s.nhom!=='chinh').map(s => s.ten + (s.hoa?`[${s.hoa}]`:'')).join(' ');
-      // Cách cục + patterns cho cung này
-      const _ccThis = ls.cachCuc ? ls.cachCuc.filter(r => r.cung === p.cungName) : [];
+      // Cách cục + patterns cho cung này. Cách phủ ≥2 cung có cung GHÉP "X/Y"
+      // (vd Triệt Đáo Kim Cung = "Quan Lộc/Nô Bộc") → tách '/' kiểm tra thành viên.
+      const _inCung = (rc, cn) => String(rc || '').split('/').includes(cn);
+      const _ccThis = ls.cachCuc ? ls.cachCuc.filter(r => _inCung(r.cung, p.cungName)) : [];
       const _ynRaw  = (ls.cachCucTungCung && ls.cachCucTungCung[p.cungName]) || [];
       const _ynSorted = _sortYn(_ynRaw);
       const _xh = _xuHuong(_ccThis, _ynRaw);
       lines.push(`[${p.cungName}] ${p.diaChi}${p.isThan?' THÂN':''}${p.isMenh?' MỆNH':''} | Luận sao: ${_xh}`);
       // Priority 1: Cách cục đặc biệt (hiếm, sức ảnh hưởng mạnh nhất)
       if (ls.cachCuc) {
-        const cc = ls.cachCuc.filter(r => r.cung === p.cungName || r.cung === '' || r.cung === 'Thân');
+        const cc = ls.cachCuc.filter(r => _inCung(r.cung, p.cungName) || r.cung === '' || _inCung(r.cung, 'Thân'));
         cc.forEach(r => lines.push(`  [CÁCH CỤC · ${String(r.loai||'').toUpperCase()}${r.doManh?` ·★${r.doManh}`:''}] ${r.ten}: ${r.moTa}${r.chiTiet?` — ${r.chiTiet}`:''}`));
         // Priority 2+3: patterns sorted (chính tinh first, then phụ tinh)
         _ynSorted.forEach(y => {

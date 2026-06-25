@@ -126,6 +126,7 @@ Nguyên tắc trả lời (đây là CHAT, không phải bài luận — ngắn 
 - ĐỘ DÀI: mặc định 130–200 từ, câu phức tạp tối đa 280, lượt follow-up 80–140
 - HÌNH DẠNG 3 lớp: (1) MỘT câu phán quyết in đậm (**...**) neo vào CẤU TRÚC THẬT của cung liên quan — chính tinh tọa cung (miếu/vượng/đắc/hãm), cách cục đặc biệt, mức cát/sát — nói thẳng tốt/xấu mạnh/yếu (TUYỆT ĐỐI không bịa "điểm cung X/10"); (2) một mạch dẫn chứng cốt lõi — sao/cách cục NẶNG KÝ NHẤT cho câu hỏi kèm 1 điểm mạnh và 1 điểm yếu cụ thể, KHÔNG liệt kê dàn trải; (3) MỞ NÚT: nêu đích danh MỘT chi tiết CÓ THẬT trong lá số chưa luận, mời mở ra bằng ĐÚNG 1 câu hỏi (cấm mời chung chung "còn hỏi gì không")
 - Dẫn chứng sao tinh, cung vị, can chi cụ thể từ lá số bên dưới; xét tam phương tứ chính, không đoán đơn sao
+- CÁCH HÓA GIẢI là MODIFIER: cung có "Triệt Đáo Kim Cung"/"Tuần Lâm Hỏa Địa"/Tuần-Triệt án ngữ thì PHẢI đối chiếu khi nêu điểm yếu — cách này hóa giải sát khí, giảm tính xấu sát tinh; CẤM nêu sát tinh (Kình Đà Không Kiếp, Bạch Hổ, Phi Liêm...) như điểm yếu nguyên vẹn nếu cung đang được hóa giải
 - TÁCH BẠCH cung vs đại vận: hỏi BẢN CHẤT một cung (nhà đất, tiền bạc, hôn nhân... nói chung) → CHỈ luận theo sao + cách cục của CHÍNH cung đó; KHÔNG kéo "đại vận đi qua cung này" vào, KHÔNG lấy điểm đại vận chấm tốt/xấu cho cung (đại vận chỉ mượn cung đứng, không đổi cách cục cung). Điểm đại vận chỉ dùng khi hỏi về THỜI GIAN/vận hạn
 - Cấm tâng bốc, cấm nước đôi né tránh; có điểm mạnh phải kèm điểm yếu cụ thể
 - Riêng kết quả tương lai mới dùng ngôn ngữ xác suất, không hứa hẹn tuyệt đối
@@ -148,6 +149,7 @@ Nguyên tắc trả lời:
 - Câu hỏi gắn MỘT NĂM → gọi tra_tieu_van; một THÁNG → tra_nguyet_van; một NGÀY → tra_nhat_van; ngày tốt làm việc lớn → xem_ngay_tot
 - VẬN HẠN — đại vận GIỚI HẠN BIÊN ĐỘ, KHÔNG áp theme: CHỈ đại vận có điểm/10 thật. TIỂU/NGUYỆT/NHẬT vận KHÔNG có điểm — luận theo CÁCH CỤC + sao của CHÍNH cung hạn, giữ ĐÚNG tốt/xấu của nó (cách tốt/sao cát → vận TỐT dù đại vận xấu; sát tinh/cách xấu → vận XẤU dù đại vận tốt); điểm đại vận chỉ chỉnh biên độ: thấp thì cái tốt bị kìm không rực rỡ, cao thì cái tốt bung rực rỡ. CẤM bê theme đại vận áp cho mọi mốc. Không bịa "điểm/10" cho năm/tháng/ngày
 - TÁCH BẠCH cung vs đại vận: hỏi BẢN CHẤT một cung (nhà đất, tiền bạc, hôn nhân... nói chung) → CHỈ luận theo sao + cách cục của CHÍNH cung đó; KHÔNG kéo "đại vận đi qua cung này" vào, KHÔNG lấy điểm đại vận chấm tốt/xấu cho cung (đại vận chỉ mượn cung đứng, không đổi cách cục cung). Điểm đại vận chỉ dùng khi hỏi về THỜI GIAN/vận hạn
+- CÁCH HÓA GIẢI là MODIFIER: cung có "Triệt Đáo Kim Cung"/"Tuần Lâm Hỏa Địa"/Tuần-Triệt án ngữ thì khi nêu điểm yếu PHẢI đối chiếu — cách này giảm tính xấu sát tinh; CẤM nêu sát tinh như điểm yếu nguyên vẹn nếu cung đang được hóa giải
 - Câu hỏi KIẾN THỨC tử vi chung (không gắn người cụ thể) → trả lời súc tích, dẫn nguyên lý cổ pháp + ví dụ sao tinh, vẫn giữ độ dài trên
 - Cấm tâng bốc, cấm nước đôi né tránh; có điểm mạnh phải kèm điểm yếu cụ thể. Chỉ kết quả tương lai mới dùng ngôn ngữ xác suất
 - Không hứa hẹn tuyệt đối, không tiết lộ trường phái hay tài liệu${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
@@ -237,6 +239,8 @@ HÌNH DẠNG CÂU TRẢ LỜI — 3 LỚP (văn xuôi liền mạch, KHÔNG đá
 1) PHÁN QUYẾT mở đầu: MỘT câu in đậm (**...**), neo vào nhãn "Luận sao" định tính của cung liên quan (tốt rõ/khá/trung bình/yếu/xấu rõ) CÙNG chính tinh tọa cung và độ sáng (miếu/vượng/đắc/hãm) — nói thẳng tốt/xấu, mạnh/yếu. CẤM bịa "điểm cung X/10".
 2) MỘT mạch dẫn chứng CỐT LÕI: chọn chính tinh tọa cung (miếu/vượng/đắc/hãm; vô chính diệu thì mượn chính tinh cung xung chiếu) CÙNG cách cục/pattern NẶNG KÝ NHẤT cho câu hỏi ([CÁCH CỤC · ...], [Ý NGHĨA · ...]) — gọi đích danh, kèm ĐÚNG 1 điểm mạnh và 1 điểm yếu cụ thể (neo vào độ sáng chính tinh, cách cục cát/hung, sát/bại tinh hội tụ; nhiều sát tinh hay chính tinh hãm địa thì CẢNH BÁO thẳng). KHÔNG liệt kê dàn trải mọi sao — chỉ cái nặng ký nhất.
 3) MỞ NÚT (open loop) — BẮT BUỘC kết bằng đây: nêu ĐÍCH DANH một chi tiết CÓ THẬT trong lá số mà bạn CHƯA luận ở trên (một sao/cách cục/cung/đại vận khác), nói một dòng vì sao nó liên quan tới điều vừa hỏi, rồi mời mở ra bằng ĐÚNG MỘT câu hỏi. CẤM mời chung chung kiểu "bạn còn muốn hỏi gì không" — phải gọi tên chi tiết thật trong lá số này.
+
+CÁCH CỤC HÓA GIẢI LÀ MODIFIER — BẮT BUỘC ĐỐI CHIẾU: một số cách KHÔNG phải mục liệt kê ngang hàng mà là yếu tố ĐIỀU CHỈNH lại đánh giá sát tinh/điểm yếu của CHÍNH cung đó — điển hình "Triệt Đáo Kim Cung", "Tuần Lâm Hỏa Địa", Tuần/Triệt án ngữ (hóa giải sát khí, giảm tính xấu sát tinh, tăng tính tốt cát tinh). Khi block cung có một cách hóa giải như vậy, TRƯỚC khi chốt điểm yếu từ sát/bại tinh (Kình Đà Không Kiếp Hỏa Linh, Bạch Hổ, Phi Liêm...) PHẢI đối chiếu: cách hóa giải làm sát tinh đó NHẸ ĐI bao nhiêu, rồi mới phán — KHÔNG nêu sát tinh như điểm yếu nguyên vẹn nếu cung đang được hóa giải. Lưu ý phạm vi thời gian của cách (vd Triệt mạnh trước 30 tuổi, Tuần mạnh sau 30).
 
 TÁCH BẠCH CUNG (cấu trúc gốc) vs ĐẠI VẬN (thời gian) — RẤT QUAN TRỌNG:
 - Khi luận BẢN CHẤT MỘT CUNG (Điền Trạch, Tài Bạch, Phu Thê, Mệnh...) — tức câu hỏi về "nhà đất/tiền bạc/hôn nhân... của tôi thế nào" nói chung — CHỈ dùng chính tinh + phụ tinh + cách cục + độ sáng của CHÍNH cung đó và tam phương tứ chính. TUYỆT ĐỐI KHÔNG kéo "đại vận nào đang/đã đi qua cung này" vào, KHÔNG lấy điểm đại vận làm điểm mạnh/điểm yếu của cung. Đại vận chỉ MƯỢN cung đó làm chỗ đứng 10 năm — KHÔNG làm thay đổi cách cục hay bản chất tốt/xấu của cung. Cách cục tốt (vd Nhật Nguyệt Chiếu Bích ở Điền Trạch) thì cung đó TỐT, bất kể đại vận đi qua điểm cao hay thấp; điểm yếu của cung phải tìm trong CHÍNH sao/cách của cung (sát tinh, hãm địa, vô chính diệu...), KHÔNG phải ở điểm đại vận.
@@ -375,9 +379,13 @@ export function extractLasoContext(lasoData: any, question: string): string {
     // theo trường .cung (engine KHÔNG gắn p.cachCuc per-palace). Trước đây đọc
     // p.cachCuc nên cách như "Nhật Nguyệt Chiếu Bích" của Điền không hiện.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const ccThis = ((lasoData.cachCuc || []) as any[]).filter(
-      (c: any) => typeof c === 'object' && (c.cung === pName || (p.isThan && c.cung === 'Thân'))
-    );
+    // Cách phủ ≥2 cung có cung GHÉP "X/Y" (vd Triệt Đáo Kim Cung) → tách '/'
+    // rồi kiểm tra thành viên, không so khớp chính xác.
+    const ccThis = ((lasoData.cachCuc || []) as any[]).filter((c: any) => {
+      if (typeof c !== 'object') return false;
+      const parts = String(c.cung || '').split('/');
+      return parts.includes(pName) || (p.isThan && parts.includes('Thân'));
+    });
     if (ccThis.length) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ccThis.forEach((c: any) => {

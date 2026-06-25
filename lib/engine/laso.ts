@@ -181,9 +181,13 @@ export function formatLasoContext(ls: Laso): string {
     // Chỉ cách cục gắn ĐÍCH DANH cung này (hoặc Thân nếu đây là cung Thân).
     // Cách cục toàn cục (cung==='') đã nằm ở dòng "Cách cục toàn cục" phía
     // trên → không lặp vào từng cung cho đỡ rối/tốn token.
-    const ccThis = cachCucList.filter(
-      (c) => c.cung === pName || (p.isThan && c.cung === 'Thân'),
-    );
+    // LƯU Ý: cách phủ ≥2 cung được engine gán cung GHÉP "X/Y" (vd Triệt Đáo
+    // Kim Cung = "Quan Lộc/Nô Bộc"). Phải TÁCH '/' rồi kiểm tra thành viên,
+    // không so khớp chính xác — nếu không cách đó không neo vào cung nào.
+    const ccThis = cachCucList.filter((c) => {
+      const parts = String(c.cung || '').split('/');
+      return parts.includes(pName) || (p.isThan && parts.includes('Thân'));
+    });
     ccThis.forEach((c) => {
       const mota = c.moTa ? ': ' + c.moTa : '';
       const chiTiet = c.chiTiet ? ' — ' + c.chiTiet : '';
