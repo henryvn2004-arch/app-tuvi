@@ -254,34 +254,57 @@ NGUYÊN TẮC VẬN HẠN (đại vận GIỚI HẠN BIÊN ĐỘ, KHÔNG áp the
 
 NGUYÊN TẮC CHUNG: Cấm tâng bốc, cấm nước đôi né phán quyết, cấm khen sáo rỗng không bằng chứng. Đánh giá CẤU TRÚC lá số (mạnh/yếu) nói chắc; chỉ DỰ ĐOÁN tương lai mới dùng ngôn ngữ xác suất. ĐỘ DÀI: mặc định 130–200 từ, câu phức tạp tối đa 280, lượt follow-up 80–140 — đây là CHAT, ngắn gọn súc tích hơn là dài dòng. Tiếng Việt chuẩn mực, văn xuôi liền mạch, KHÔNG bullet, KHÔNG emoji, KHÔNG tiêu đề con. Không tiết lộ trường phái hay tài liệu.`;
 
+// Bản đồ chủ đề câu hỏi → cung liên quan (dùng chung extractLasoContext +
+// focusHint). '__daiVan__' = đánh dấu cần kèm đại vận, KHÔNG phải tên cung.
+const FOCUS_TOPICS: Record<string, string[]> = {
+  'tài chính|tài lộc|tiền|thu nhập|làm giàu|tài bạch': ['Tài Bạch', 'Phúc Đức'],
+  'sự nghiệp|công việc|nghề|quan lộc|thăng tiến':       ['Quan Lộc', 'Mệnh'],
+  'tình duyên|hôn nhân|vợ chồng|tình cảm|phu thê':      ['Phu Thê', 'Mệnh'],
+  'con cái|con cháu|tử tức':                             ['Tử Tức'],
+  'sức khỏe|bệnh|thân thể|tật ách':                     ['Tật Ách'],
+  'nhà đất|bất động sản|điền trạch':                    ['Điền Trạch'],
+  'anh em|huynh đệ':                                     ['Huynh Đệ'],
+  'bạn bè|nô bộc|nhân viên':                            ['Nô Bộc'],
+  'du lịch|di chuyển|thiên di|nước ngoài':               ['Thiên Di'],
+  'cha mẹ|phụ mẫu':                                      ['Phụ Mẫu'],
+  'đại vận|tiểu vận|vận hạn|vận trình':                 ['__daiVan__'],
+};
+
+// Cung liên quan tới câu hỏi (luôn có Mệnh; hỏi chung → thêm Quan/Tài/Phu Thê;
+// năm/vận → thêm '__daiVan__'). Giữ NGUYÊN logic cũ để parity /api/lasotuvi.
+export function relevantPalaces(question: string): Set<string> {
+  const q = (question || '').toLowerCase();
+  const relevant = new Set<string>(['Mệnh']);
+  for (const [pattern, names] of Object.entries(FOCUS_TOPICS)) {
+    if (new RegExp(pattern, 'i').test(q)) names.forEach((n) => relevant.add(n));
+  }
+  if (relevant.size === 1) ['Quan Lộc', 'Tài Bạch', 'Phu Thê'].forEach((n) => relevant.add(n));
+  if (/năm\s*\d{4}/i.test(q)) relevant.add('__daiVan__');
+  return relevant;
+}
+
+// 1 dòng gợi ý trọng tâm để nhét vào TIN NHẮN (không vào system) — nhờ vậy
+// system mang TOÀN BỘ lá số (full=true) giữ byte ổn định để prompt-cache trúng
+// qua mọi lượt, còn phần "ưu tiên cung nào" theo câu hỏi nằm ở message.
+export function focusHint(question: string): string {
+  const names = Array.from(relevantPalaces(question)).filter((n) => n !== '__daiVan__');
+  if (!names.length) return '';
+  return `(Trọng tâm câu hỏi — ưu tiên luận các cung: ${names.join(', ')}.)`;
+}
+
+// opts.full=true → BỎ lọc theo câu hỏi: lấy TOÀN BỘ 12 cung + đại vận (context
+// ổn định, độc lập câu hỏi → cache prefix trúng qua mọi lượt). Bỏ block "năm
+// XXXX" (đặc thù câu hỏi) — đã có tool tra_tieu_van lo. full=false (mặc định,
+// /api/lasotuvi) → giữ Y HỆT hành vi cũ (lọc cung liên quan).
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function extractLasoContext(lasoData: any, question: string): string {
+export function extractLasoContext(lasoData: any, question: string, opts?: { full?: boolean }): string {
   if (!lasoData) return '';
+  const full = !!opts?.full;
   const q = (question || '').toLowerCase();
   const palaces = lasoData.palaces || [];
 
-  const topics: Record<string, string[]> = {
-    'tài chính|tài lộc|tiền|thu nhập|làm giàu|tài bạch': ['Tài Bạch', 'Phúc Đức'],
-    'sự nghiệp|công việc|nghề|quan lộc|thăng tiến':       ['Quan Lộc', 'Mệnh'],
-    'tình duyên|hôn nhân|vợ chồng|tình cảm|phu thê':      ['Phu Thê', 'Mệnh'],
-    'con cái|con cháu|tử tức':                             ['Tử Tức'],
-    'sức khỏe|bệnh|thân thể|tật ách':                     ['Tật Ách'],
-    'nhà đất|bất động sản|điền trạch':                    ['Điền Trạch'],
-    'anh em|huynh đệ':                                     ['Huynh Đệ'],
-    'bạn bè|nô bộc|nhân viên':                            ['Nô Bộc'],
-    'du lịch|di chuyển|thiên di|nước ngoài':               ['Thiên Di'],
-    'cha mẹ|phụ mẫu':                                      ['Phụ Mẫu'],
-    'đại vận|tiểu vận|vận hạn|vận trình':                 ['__daiVan__'],
-  };
-
-  const relevant = new Set(['Mệnh']);
-  for (const [pattern, names] of Object.entries(topics)) {
-    if (new RegExp(pattern, 'i').test(q)) names.forEach(n => relevant.add(n));
-  }
-  if (relevant.size === 1) ['Quan Lộc', 'Tài Bạch', 'Phu Thê'].forEach(n => relevant.add(n));
-
+  const relevant = relevantPalaces(question);
   const yearMatch = q.match(/năm\s*(\d{4})/i);
-  if (yearMatch) relevant.add('__daiVan__');
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const starFmt = (s: any): string => {
@@ -325,7 +348,7 @@ export function extractLasoContext(lasoData: any, question: string): string {
   // Đại vận CHỈ đưa vào khi câu hỏi thuộc về THỜI GIAN/vận hạn (relevant có
   // __daiVan__). Hỏi bản chất một cung → KHÔNG kèm đại vận, để luận cung sạch
   // (đại vận chỉ mượn cung đứng, không thuộc bản chất cung).
-  if (relevant.has('__daiVan__') && lasoData.daiVanHienTai) {
+  if ((full || relevant.has('__daiVan__')) && lasoData.daiVanHienTai) {
     const dv = lasoData.daiVanHienTai;
     const dvCung = palaces[dv.cungIdx] || {};
     ctx += '\nĐại Vận hiện tại: ' + (dv.diaChi||'') + ' (' + (dv.tuoiStart||'') + '–' + (dv.tuoiEnd||'') + ' tuổi)';
@@ -337,7 +360,7 @@ export function extractLasoContext(lasoData: any, question: string): string {
     ctx += dvComboLines(dvCung);
   }
 
-  if (yearMatch && lasoData.tuoiXem && lasoData.daiVans?.length) {
+  if (!full && yearMatch && lasoData.tuoiXem && lasoData.daiVans?.length) {
     const queriedYear = parseInt(yearMatch[1]);
     const NAM_XEM = currentNamXem(); // nguồn duy nhất — khớp năm xem dùng để tính tuoiXem
     const birthYear = (NAM_XEM - (lasoData.tuoiXem as number)) + 1;
@@ -360,11 +383,11 @@ export function extractLasoContext(lasoData: any, question: string): string {
     }
   }
 
-  ctx += '\n=== CUNG LIÊN QUAN ===\n';
+  ctx += '\n=== ' + (full ? '12 CUNG (TOÀN BỘ LÁ SỐ)' : 'CUNG LIÊN QUAN') + ' ===\n';
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   for (const p of palaces as any[]) {
     const pName = p.cungName || '';
-    if (!relevant.has(pName) && !p.isMenh && !p.isThan) continue;
+    if (!full && !relevant.has(pName) && !p.isMenh && !p.isThan) continue;
     ctx += '\nCung ' + pName + ' (' + (p.diaChi||'') + ')' + (p.isMenh?' ★MỆNH':'') + (p.isThan?' ◆THÂN':'') + ':\n';
     const chinh = (p.majorStars||[]).map(starFmt).filter(Boolean);
     if (chinh.length) ctx += '  Chính tinh: ' + chinh.join(', ') + '\n';
@@ -401,7 +424,7 @@ export function extractLasoContext(lasoData: any, question: string): string {
     }
   }
 
-  if (relevant.has('__daiVan__') && lasoData.daiVans?.length) {
+  if ((full || relevant.has('__daiVan__')) && lasoData.daiVans?.length) {
     ctx += '\n=== ĐẠI VẬN (lịch trình THỜI GIAN — điểm dưới đây là điểm VẬN của giai đoạn 10 năm; CHỈ dùng khi luận năm/vận hạn. TUYỆT ĐỐI KHÔNG dùng điểm đại vận để chấm hay làm điểm yếu của một CUNG — đại vận chỉ MƯỢN cung làm chỗ đứng, không đổi bản chất cung) ===\n';
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     lasoData.daiVans.slice(0, 9).forEach((dv: any, i: number) => {

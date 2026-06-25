@@ -23,7 +23,7 @@ import { computeLaso } from '@/lib/engine/laso';
 import { computeTuBinh } from '@/lib/engine/tubinh';
 import { computeSinhCon, computeChonNgay, computeDatTen } from '@/lib/engine/diachi';
 // Template prompt + context formatter dùng CHUNG với /api/lasotuvi (một bộ não).
-import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext } from '@/lib/agent/prompts';
+import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint } from '@/lib/agent/prompts';
 import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
 import { type ChatConfig } from '@/lib/config/appConfig';
 
@@ -34,7 +34,7 @@ const ANTHROPIC_HEADERS = {
   'Content-Type': 'application/json',
   'x-api-key': ANTHROPIC_API_KEY,
   'anthropic-version': '2023-06-01',
-  'anthropic-beta': 'prompt-caching-2024-07-31',
+  'anthropic-beta': 'prompt-caching-2024-07-31,extended-cache-ttl-2025-04-11',
 };
 
 // Mã lỗi TẠM THỜI của Anthropic (rate limit / quá tải / lỗi server) → đáng thử
@@ -65,6 +65,17 @@ async function postAnthropic(payload: unknown): Promise<Response> {
     );
   }
   return lastResp!;
+}
+
+// Log hiệu quả prompt-cache để theo dõi trên prod (xác nhận hit, bắt
+// silent-invalidator). read>0 ở các lượt sau = cache đang trúng.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function logCacheUsage(where: string, usage: any): void {
+  if (!usage) return;
+  const read = usage.cache_read_input_tokens ?? 0;
+  const write = usage.cache_creation_input_tokens ?? 0;
+  const uncached = usage.input_tokens ?? 0;
+  console.log(`[runAgent.cache] ${where} read=${read} write=${write} uncached=${uncached}`);
 }
 
 // Số ảnh tối đa xử lý mỗi tin nhắn (chặn payload phình + chi phí).
@@ -99,6 +110,9 @@ export async function runAgent(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let tools: any[];
   let system: string;
+  // Gợi ý trọng tâm theo câu hỏi — nhét vào TIN NHẮN (không vào system) để
+  // system mang full lá số giữ byte ổn định → prompt-cache trúng qua mọi lượt.
+  let focusHintText = '';
 
   const scenario = req.scenario;
   if (scenario && scenario.type) {
@@ -155,7 +169,11 @@ export async function runAgent(
       const res = computeLaso(req.birth);
       if (res.ok && res.ls) {
         ctx.ls = res.ls;
-        lasoCtx = extractLasoContext(res.ls, lastQ);
+        // full=true: context TOÀN BỘ lá số, ĐỘC LẬP câu hỏi → system byte ổn
+        // định cả phiên để prompt-cache trúng (trước đây nhét câu hỏi vào
+        // system qua extractLasoContext(ls, lastQ) → cache vỡ mỗi tin).
+        lasoCtx = extractLasoContext(res.ls, '', { full: true });
+        focusHintText = focusHint(lastQ);
       }
     }
     const hasLaso = !!ctx.ls;
@@ -201,6 +219,22 @@ export async function runAgent(
     }
     return { role: m.role, content: text };
   });
+
+  // Nhét gợi ý trọng tâm vào CUỐI tin user mới nhất (không vào system, để
+  // system giữ ổn định cho cache). Xử lý cả content chuỗi lẫn mảng block (ảnh).
+  if (focusHintText && convo.length) {
+    const last = convo[convo.length - 1];
+    if (last?.role === 'user') {
+      if (typeof last.content === 'string') {
+        last.content = last.content + '\n\n' + focusHintText;
+      } else if (Array.isArray(last.content)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const tb = last.content.find((b: any) => b.type === 'text');
+        if (tb) tb.text += '\n\n' + focusHintText;
+        else last.content.push({ type: 'text', text: focusHintText });
+      }
+    }
+  }
 
   send(sse.status({ text: hasImages ? 'Đang xem ảnh...' : 'Đang suy xét...' }));
 
@@ -263,7 +297,10 @@ async function callAnthropic(system: string, convo: any[], tools: any[], cfg: Ch
   const payload: any = {
     model: cfg.model,
     max_tokens: cfg.maxTokens,
-    system: [{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }],
+    // TTL 1h: prefix (tools + system, gồm full lá số) giữ ấm qua khoảng nghĩ
+    // giữa các tin (Telegram/WhatsApp thường > 5 phút) → follow-up đọc cache
+    // 0.1× thay vì trả full. Cần beta 'extended-cache-ttl-2025-04-11'.
+    system: [{ type: 'text', text: system, cache_control: { type: 'ephemeral', ttl: '1h' } }],
     messages: convo,
   };
   if (tools.length) {
@@ -278,7 +315,9 @@ async function callAnthropic(system: string, convo: any[], tools: any[], cfg: Ch
     console.error(`[runAgent.callAnthropic] Anthropic non-200: ${resp.status} — ${body}`);
     throw new Error('Anthropic error: ' + body);
   }
-  return resp.json();
+  const data = await resp.json();
+  logCacheUsage('callAnthropic', data?.usage);
+  return data;
 }
 
 // ── Vòng cuối: stream text về client ────────────────────────
@@ -289,7 +328,10 @@ async function streamFinal(system: string, convo: any[], tools: any[], cfg: Chat
     model: cfg.model,
     max_tokens: cfg.maxTokens,
     stream: true,
-    system: [{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }],
+    // TTL 1h: prefix (tools + system, gồm full lá số) giữ ấm qua khoảng nghĩ
+    // giữa các tin (Telegram/WhatsApp thường > 5 phút) → follow-up đọc cache
+    // 0.1× thay vì trả full. Cần beta 'extended-cache-ttl-2025-04-11'.
+    system: [{ type: 'text', text: system, cache_control: { type: 'ephemeral', ttl: '1h' } }],
     messages: convo,
   };
   if (tools.length) {
@@ -320,6 +362,7 @@ async function streamFinal(system: string, convo: any[], tools: any[], cfg: Chat
       if (json === '[DONE]') continue;
       try {
         const evt = JSON.parse(json);
+        if (evt.type === 'message_start') logCacheUsage('streamFinal', evt.message?.usage);
         if (evt.type === 'content_block_delta' && evt.delta?.type === 'text_delta') {
           send(sse.text({ delta: evt.delta.text }));
         }
