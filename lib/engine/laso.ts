@@ -152,17 +152,12 @@ export function formatLasoContext(ls: Laso): string {
     if (cc.length) ctx += 'Cách cục toàn cục: ' + cc.join('; ') + '\n';
   }
 
-  if (ls.daiVanHienTai) {
-    const dv = ls.daiVanHienTai as Rec;
-    const dvCung = (palaces[dv.cungIdx as number] || {}) as Rec;
-    ctx += '\nĐại Vận hiện tại: ' + (dv.diaChi || '') + ' (' + (dv.tuoiStart || '') + '–' + (dv.tuoiEnd || '') + ' tuổi)';
-    if (dvCung.cungName) ctx += ' — Cung ' + dvCung.cungName;
-    const dvStars = (((dvCung.tuChinhStars as unknown[]) || (dvCung.majorStars as unknown[]) || []) as unknown[]).map(starName).filter(Boolean);
-    if (dvStars.length) ctx += ' — Sao: ' + dvStars.join(', ');
-    const sc = dv.scoring as Rec | undefined;
-    if (sc?.tong != null) ctx += ' — Điểm vận: ' + sc.tong + '/10 ' + (sc.flag || '');
-    ctx += '\n(Điểm vận trên là điểm theo THỜI GIAN của giai đoạn này — KHÔNG phải điểm cung; chỉ dùng khi luận vận hạn, không dùng để chấm bản chất cung.)\n';
-  }
+  // CỐ Ý KHÔNG đưa đại vận vào bản kê cấu trúc này. Đại vận là tầng THỜI
+  // GIAN, chỉ MƯỢN cung làm chỗ đứng — đưa kèm theo cung khiến LLM lấy điểm
+  // đại vận chấm cho cung khi luận cung (lỗi đã gặp). Khi user hỏi về
+  // năm/vận hạn, LLM gọi tool tra_tieu_van/tra_nguyet_van/tra_nhat_van —
+  // các tool đó trả đại vận đầy đủ (kèm cung nó đóng). Bản kê này CHỈ mô tả
+  // CẤU TRÚC tĩnh của lá số (12 cung + cách cục) để luận cung cho sạch.
 
   // Cách cục đặc biệt gắn THEO CUNG (engine trả mảng global ls.cachCuc, mỗi
   // phần tử có trường .cung) + ý nghĩa từng cung (ls.cachCucTungCung). Trước
@@ -198,18 +193,8 @@ export function formatLasoContext(ls: Laso): string {
     if (ynThis.length) ctx += '  Ý nghĩa: ' + ynThis.slice(0, 6).join(' | ') + '\n';
   }
 
-  if (Array.isArray(ls.daiVans) && ls.daiVans.length) {
-    ctx += '\n=== ĐẠI VẬN (lịch trình THỜI GIAN — điểm dưới đây là điểm VẬN của giai đoạn 10 năm; CHỈ dùng khi luận năm/vận hạn. TUYỆT ĐỐI KHÔNG dùng điểm đại vận để chấm hay làm điểm yếu của một CUNG — đại vận chỉ MƯỢN cung làm chỗ đứng, không đổi bản chất cung) ===\n';
-    (ls.daiVans as Rec[]).slice(0, 10).forEach((dv, i) => {
-      const dvP = (palaces[dv.cungIdx as number] || {}) as Rec;
-      const stars = (((dvP.tuChinhStars as unknown[]) || (dvP.majorStars as unknown[]) || []) as unknown[]).map(starName).filter(Boolean);
-      ctx += 'ĐV' + (i + 1) + ': ' + (dv.diaChi || '') + ' (' + dv.tuoiStart + '–' + dv.tuoiEnd + 't) cung=' + (dvP.cungName || '?');
-      if (stars.length) ctx += ' sao=' + stars.join(',');
-      const dsc = dv.scoring as Rec | undefined;
-      if (dsc?.tong != null) ctx += ' điểm=' + dsc.tong + '/10';
-      ctx += '\n';
-    });
-  }
+  // (Danh sách 9 đại vận CỐ Ý không đưa vào đây — xem ghi chú trên. Đại vận
+  // đến qua tool tra_* khi user hỏi về thời gian/vận hạn.)
 
   return ctx;
 }
