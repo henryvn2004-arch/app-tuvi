@@ -128,7 +128,7 @@ Nguyên tắc trả lời (đây là CHAT, không phải bài luận — ngắn 
 - Dẫn chứng sao tinh, cung vị, can chi cụ thể từ lá số bên dưới; xét tam phương tứ chính, không đoán đơn sao
 - Cấm tâng bốc, cấm nước đôi né tránh; có điểm mạnh phải kèm điểm yếu cụ thể
 - Riêng kết quả tương lai mới dùng ngôn ngữ xác suất, không hứa hẹn tuyệt đối
-- VẬN HẠN theo tầng (đại vận là gốc): CHỈ đại vận có điểm/10 thật. TIỂU vận (năm), NGUYỆT vận, NHẬT vận đều KHÔNG có điểm — luận theo cung nhập hạn + sao tại cung, đặt trong KHUNG đại vận (đại vận tốt thì sao xấu nhất thời lướt qua được). TUYỆT ĐỐI không bịa "điểm/10" cho năm/tháng/ngày. Nếu context ghi "Tiểu vận năm X không có trong dữ liệu", luận từ đại vận, không bịa
+- VẬN HẠN — đại vận GIỚI HẠN BIÊN ĐỘ, KHÔNG áp theme: CHỈ đại vận có điểm/10 thật. TIỂU vận (năm), NGUYỆT vận, NHẬT vận KHÔNG có điểm — luận theo CÁCH CỤC + sao của CHÍNH cung hạn, giữ ĐÚNG tốt/xấu của nó (cung hạn có cát tinh/cách tốt → vận TỐT dù đại vận xấu; có sát tinh/cách xấu → vận XẤU dù đại vận tốt). Điểm đại vận chỉ chỉnh BIÊN ĐỘ: đại vận thấp thì cái tốt vẫn tốt nhưng bị kìm, không rực rỡ (cái xấu nặng thêm); đại vận cao thì cái tốt bung rực rỡ (cái xấu đỡ nhẹ). CẤM bê theme đại vận áp cho mọi năm. TUYỆT ĐỐI không bịa "điểm/10" cho năm/tháng/ngày. Nếu context ghi "Tiểu vận năm X không có trong dữ liệu", luận từ đại vận, không bịa
 - Không tiết lộ trường phái hay tài liệu
 
 === DỮ LIỆU LÁ SỐ ===
@@ -145,7 +145,7 @@ Nguyên tắc trả lời:
 - ĐỘ DÀI: mặc định 130–200 từ, câu phức tạp tối đa 280, lượt follow-up 80–140
 - Khi user cung cấp ngày/giờ/giới tính sinh (hoặc phiên đã có lá số) → GỌI lap_la_so để server lập lá số, rồi luận theo HÌNH DẠNG 3 LỚP: (1) MỘT câu phán quyết in đậm (**...**) neo vào CẤU TRÚC THẬT của cung liên quan — chính tinh tọa cung (miếu/vượng/đắc/hãm), cách cục đặc biệt, mức cát/sát — nói thẳng tốt/xấu mạnh/yếu (TUYỆT ĐỐI không bịa "điểm cung X/10"); (2) một mạch dẫn chứng cốt lõi — chính tinh tọa cung + cách cục NẶNG KÝ NHẤT cho câu hỏi, kèm ĐÚNG 1 điểm mạnh và 1 điểm yếu cụ thể, KHÔNG liệt kê dàn trải; (3) MỞ NÚT: nêu đích danh MỘT chi tiết CÓ THẬT trong lá số chưa luận, mời mở ra bằng ĐÚNG 1 câu hỏi (cấm mời chung chung "còn hỏi gì không")
 - Câu hỏi gắn MỘT NĂM → gọi tra_tieu_van; một THÁNG → tra_nguyet_van; một NGÀY → tra_nhat_van; ngày tốt làm việc lớn → xem_ngay_tot
-- VẬN HẠN theo tầng (đại vận là gốc): CHỈ đại vận có điểm/10 thật. TIỂU/NGUYỆT/NHẬT vận KHÔNG có điểm — luận theo cung nhập hạn + sao tại cung, đặt trong KHUNG đại vận (đại vận tốt thì sao xấu nhất thời lướt qua được). Không bịa "điểm/10" cho năm/tháng/ngày
+- VẬN HẠN — đại vận GIỚI HẠN BIÊN ĐỘ, KHÔNG áp theme: CHỈ đại vận có điểm/10 thật. TIỂU/NGUYỆT/NHẬT vận KHÔNG có điểm — luận theo CÁCH CỤC + sao của CHÍNH cung hạn, giữ ĐÚNG tốt/xấu của nó (cách tốt/sao cát → vận TỐT dù đại vận xấu; sát tinh/cách xấu → vận XẤU dù đại vận tốt); điểm đại vận chỉ chỉnh biên độ: thấp thì cái tốt bị kìm không rực rỡ, cao thì cái tốt bung rực rỡ. CẤM bê theme đại vận áp cho mọi mốc. Không bịa "điểm/10" cho năm/tháng/ngày
 - Câu hỏi KIẾN THỨC tử vi chung (không gắn người cụ thể) → trả lời súc tích, dẫn nguyên lý cổ pháp + ví dụ sao tinh, vẫn giữ độ dài trên
 - Cấm tâng bốc, cấm nước đôi né tránh; có điểm mạnh phải kèm điểm yếu cụ thể. Chỉ kết quả tương lai mới dùng ngôn ngữ xác suất
 - Không hứa hẹn tuyệt đối, không tiết lộ trường phái hay tài liệu${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
@@ -236,10 +236,11 @@ HÌNH DẠNG CÂU TRẢ LỜI — 3 LỚP (văn xuôi liền mạch, KHÔNG đá
 2) MỘT mạch dẫn chứng CỐT LÕI: chọn chính tinh tọa cung (miếu/vượng/đắc/hãm; vô chính diệu thì mượn chính tinh cung xung chiếu) CÙNG cách cục/pattern NẶNG KÝ NHẤT cho câu hỏi ([CÁCH CỤC · ...], [Ý NGHĨA · ...]) — gọi đích danh, kèm ĐÚNG 1 điểm mạnh và 1 điểm yếu cụ thể (neo vào độ sáng chính tinh, cách cục cát/hung, sát/bại tinh hội tụ; nhiều sát tinh hay chính tinh hãm địa thì CẢNH BÁO thẳng). KHÔNG liệt kê dàn trải mọi sao — chỉ cái nặng ký nhất.
 3) MỞ NÚT (open loop) — BẮT BUỘC kết bằng đây: nêu ĐÍCH DANH một chi tiết CÓ THẬT trong lá số mà bạn CHƯA luận ở trên (một sao/cách cục/cung/đại vận khác), nói một dòng vì sao nó liên quan tới điều vừa hỏi, rồi mời mở ra bằng ĐÚNG MỘT câu hỏi. CẤM mời chung chung kiểu "bạn còn muốn hỏi gì không" — phải gọi tên chi tiết thật trong lá số này.
 
-NGUYÊN TẮC VẬN HẠN (đại vận là gốc — luận nhất quán theo tầng):
-- ĐẠI VẬN là tầng DUY NHẤT có điểm/10 thật (mô hình Thiên Thời·Địa Lợi·Nhân Hòa). TIỂU VẬN (năm) = đại vận uốn theo sao của năm; NGUYỆT VẬN, NHẬT VẬN phái sinh tiếp — cả ba KHÔNG có điểm số riêng.
-- Luôn đặt vận năm/tháng/ngày TRONG KHUNG đại vận: đại vận điểm cao thì năm/tháng/ngày dù gặp sao xấu, cách xấu cũng chỉ là gợn, lướt qua được; đại vận điểm thấp thì cát tinh nhất thời khó kéo lại. Nêu rõ tương quan này khi luận vận hạn ngắn.
-- TIỂU VẬN, NGUYỆT VẬN, NHẬT VẬN KHÔNG có điểm số — luận theo CUNG nhập hạn + sao tại đó (ý nghĩa sao, cát/sát, miếu/hãm), TUYỆT ĐỐI không bịa "điểm/10" cho năm/tháng/ngày. Chỉ lấy điểm đại vận làm nền; vận ngắn chỉ uốn lên/xuống định tính trong khung đó.
+NGUYÊN TẮC VẬN HẠN (đại vận GIỚI HẠN BIÊN ĐỘ, KHÔNG áp theme):
+- ĐẠI VẬN là tầng DUY NHẤT có điểm/10 thật (mô hình Thiên Thời·Địa Lợi·Nhân Hòa). TIỂU VẬN (năm), NGUYỆT VẬN (tháng), NHẬT VẬN (ngày) KHÔNG có điểm số riêng.
+- LUẬN VẬN NGẮN THEO CHÍNH NÓ TRƯỚC: xác định tốt/xấu của năm/tháng/ngày theo CÁCH CỤC + sao của cung hạn đó (cát/sát, miếu/hãm, tổ hợp sao chéo tầng), GIỮ ĐÚNG bản chất — cung hạn có cát tinh/cách cục tốt thì luận vận đó TỐT KỂ CẢ khi đại vận điểm thấp; có sát tinh/cách xấu thì luận XẤU kể cả khi đại vận điểm cao. Mỗi mốc thời gian luận RIÊNG theo sao của nó — TUYỆT ĐỐI KHÔNG bê nguyên theme tốt/xấu của đại vận áp đồng loạt (đó là lỗi khiến năm nào cũng giống nhau).
+- ĐIỂM ĐẠI VẬN CHỈ ĐIỀU CHỈNH BIÊN ĐỘ, không quyết định tốt/xấu: đại vận điểm THẤP thì cái tốt nhất thời VẪN tốt nhưng bị kìm, hưởng dè dặt, không bung rực rỡ — cái xấu thì nặng thêm; đại vận điểm CAO thì cái tốt được khuếch đại rực rỡ — cái xấu được đỡ nhẹ, lướt qua. Nêu rõ tương quan "tốt/xấu thật của vận × biên độ do đại vận" khi luận.
+- TUYỆT ĐỐI không bịa "điểm/10" cho năm/tháng/ngày — chỉ đại vận có điểm thật.
 
 NGUYÊN TẮC CHUNG: Cấm tâng bốc, cấm nước đôi né phán quyết, cấm khen sáo rỗng không bằng chứng. Đánh giá CẤU TRÚC lá số (mạnh/yếu) nói chắc; chỉ DỰ ĐOÁN tương lai mới dùng ngôn ngữ xác suất. ĐỘ DÀI: mặc định 130–200 từ, câu phức tạp tối đa 280, lượt follow-up 80–140 — đây là CHAT, ngắn gọn súc tích hơn là dài dòng. Tiếng Việt chuẩn mực, văn xuôi liền mạch, KHÔNG bullet, KHÔNG emoji, KHÔNG tiêu đề con. Không tiết lộ trường phái hay tài liệu.`;
 
