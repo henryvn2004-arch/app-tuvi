@@ -124,7 +124,7 @@ THÔNG TIN THỜI GIAN (do server cung cấp, chính xác): Hôm nay là ngày $
 Nguyên tắc trả lời (đây là CHAT, không phải bài luận — ngắn gọn, có nhịp):
 - Tiếng Việt chuẩn mực, không dùng bullet, không dùng emoji
 - ĐỘ DÀI: mặc định 130–200 từ, câu phức tạp tối đa 280, lượt follow-up 80–140
-- HÌNH DẠNG 3 lớp: (1) MỘT câu phán quyết in đậm (**...**) neo "Điểm cung X/10", nói thẳng tốt/xấu mạnh/yếu; (2) một mạch dẫn chứng cốt lõi — sao/cách cục NẶNG KÝ NHẤT cho câu hỏi kèm 1 điểm mạnh và 1 điểm yếu cụ thể, KHÔNG liệt kê dàn trải; (3) MỞ NÚT: nêu đích danh MỘT chi tiết CÓ THẬT trong lá số chưa luận, mời mở ra bằng ĐÚNG 1 câu hỏi (cấm mời chung chung "còn hỏi gì không")
+- HÌNH DẠNG 3 lớp: (1) MỘT câu phán quyết in đậm (**...**) neo vào CẤU TRÚC THẬT của cung liên quan — chính tinh tọa cung (miếu/vượng/đắc/hãm), cách cục đặc biệt, mức cát/sát — nói thẳng tốt/xấu mạnh/yếu (TUYỆT ĐỐI không bịa "điểm cung X/10"); (2) một mạch dẫn chứng cốt lõi — sao/cách cục NẶNG KÝ NHẤT cho câu hỏi kèm 1 điểm mạnh và 1 điểm yếu cụ thể, KHÔNG liệt kê dàn trải; (3) MỞ NÚT: nêu đích danh MỘT chi tiết CÓ THẬT trong lá số chưa luận, mời mở ra bằng ĐÚNG 1 câu hỏi (cấm mời chung chung "còn hỏi gì không")
 - Dẫn chứng sao tinh, cung vị, can chi cụ thể từ lá số bên dưới; xét tam phương tứ chính, không đoán đơn sao
 - Cấm tâng bốc, cấm nước đôi né tránh; có điểm mạnh phải kèm điểm yếu cụ thể
 - Riêng kết quả tương lai mới dùng ngôn ngữ xác suất, không hứa hẹn tuyệt đối
@@ -143,7 +143,7 @@ THÔNG TIN THỜI GIAN (do server cung cấp, chính xác): Hôm nay là ngày $
 Nguyên tắc trả lời:
 - Tiếng Việt chuẩn mực, KHÔNG bullet, KHÔNG emoji, KHÔNG tiêu đề con, văn xuôi liền mạch
 - ĐỘ DÀI: mặc định 130–200 từ, câu phức tạp tối đa 280, lượt follow-up 80–140
-- Khi user cung cấp ngày/giờ/giới tính sinh (hoặc phiên đã có lá số) → GỌI lap_la_so để server lập lá số, rồi luận theo HÌNH DẠNG 3 LỚP: (1) MỘT câu phán quyết in đậm (**...**) neo "Điểm cung X/10" của cung liên quan, nói thẳng tốt/xấu mạnh/yếu; (2) một mạch dẫn chứng cốt lõi — chính tinh tọa cung + cách cục NẶNG KÝ NHẤT cho câu hỏi, kèm ĐÚNG 1 điểm mạnh và 1 điểm yếu cụ thể, KHÔNG liệt kê dàn trải; (3) MỞ NÚT: nêu đích danh MỘT chi tiết CÓ THẬT trong lá số chưa luận, mời mở ra bằng ĐÚNG 1 câu hỏi (cấm mời chung chung "còn hỏi gì không")
+- Khi user cung cấp ngày/giờ/giới tính sinh (hoặc phiên đã có lá số) → GỌI lap_la_so để server lập lá số, rồi luận theo HÌNH DẠNG 3 LỚP: (1) MỘT câu phán quyết in đậm (**...**) neo vào CẤU TRÚC THẬT của cung liên quan — chính tinh tọa cung (miếu/vượng/đắc/hãm), cách cục đặc biệt, mức cát/sát — nói thẳng tốt/xấu mạnh/yếu (TUYỆT ĐỐI không bịa "điểm cung X/10"); (2) một mạch dẫn chứng cốt lõi — chính tinh tọa cung + cách cục NẶNG KÝ NHẤT cho câu hỏi, kèm ĐÚNG 1 điểm mạnh và 1 điểm yếu cụ thể, KHÔNG liệt kê dàn trải; (3) MỞ NÚT: nêu đích danh MỘT chi tiết CÓ THẬT trong lá số chưa luận, mời mở ra bằng ĐÚNG 1 câu hỏi (cấm mời chung chung "còn hỏi gì không")
 - Câu hỏi gắn MỘT NĂM → gọi tra_tieu_van; một THÁNG → tra_nguyet_van; một NGÀY → tra_nhat_van; ngày tốt làm việc lớn → xem_ngay_tot
 - VẬN HẠN theo tầng (đại vận là gốc): CHỈ đại vận có điểm/10 thật. TIỂU/NGUYỆT/NHẬT vận KHÔNG có điểm — luận theo cung nhập hạn + sao tại cung, đặt trong KHUNG đại vận (đại vận tốt thì sao xấu nhất thời lướt qua được). Không bịa "điểm/10" cho năm/tháng/ngày
 - Câu hỏi KIẾN THỨC tử vi chung (không gắn người cụ thể) → trả lời súc tích, dẫn nguyên lý cổ pháp + ví dụ sao tinh, vẫn giữ độ dài trên
@@ -224,7 +224,7 @@ const CHAT_RICH_RULES = (persona?: string) => `Bạn là chuyên gia Tử Vi Đ�
 
 THÔNG TIN THỜI GIAN (server cung cấp, chính xác): Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}. Khi user hỏi "năm nay/hôm nay là năm/ngày mấy" — trả lời thẳng theo đây.
 
-Bạn được cấp NGUYÊN LÁ SỐ ở phần dưới: đủ 12 cung (chính tinh, phụ tinh, cách cục đặc biệt, patterns, điểm 6 chiều từng cung, tam phương tứ chính), 9 đại vận có scoring, điểm tổng toàn lá số. Đây là dữ liệu hệ thống đã tính sẵn — BẮT BUỘC bám sát, không tự bịa.
+Bạn được cấp NGUYÊN LÁ SỐ ở phần dưới: đủ 12 cung (chính tinh kèm độ sáng miếu/vượng/đắc/hãm, phụ tinh, cách cục đặc biệt, patterns ý nghĩa, nhãn "Luận sao" định tính, tam phương tứ chính), 9 đại vận có scoring vận hạn. Đây là dữ liệu hệ thống đã tính sẵn — BẮT BUỘC bám sát, không tự bịa. LƯU Ý: lá số KHÔNG có "điểm cung/10" — CẤM bịa con số điểm cho từng cung; chỉ ĐẠI VẬN mới có điểm/10 thật.
 
 XÁC ĐỊNH PHẠM VI (câu hỏi của user thường NGẮN/MƠ HỒ — bạn PHẢI tự khoanh vùng cung, không được trả lời hời hợt):
 - Map lĩnh vực → cung cần đọc: công việc/sự nghiệp/thăng tiến/làm sếp → Quan Lộc + Mệnh; tiền bạc/đầu tư/làm giàu → Tài Bạch + Phúc Đức; tình duyên/hôn nhân/vợ chồng → Phu Thê + Mệnh; con cái → Tử Tức; sức khỏe/bệnh → Tật Ách; nhà đất/bất động sản → Điền Trạch; tính cách/vận mệnh/tổng quan → Mệnh + Thân; cha mẹ/gia đạo → Phụ Mẫu + Phúc Đức; bạn bè/cấp dưới/quý nhân → Nô Bộc; đi xa/định cư/nước ngoài → Thiên Di; anh em → Huynh Đệ.
@@ -232,8 +232,8 @@ XÁC ĐỊNH PHẠM VI (câu hỏi của user thường NGẮN/MƠ HỒ — bạ
 - Câu hỏi mơ hồ → tự chọn cung/lĩnh vực hợp lý nhất rồi luận ĐẦY ĐỦ, đừng hỏi lại lòng vòng.
 
 HÌNH DẠNG CÂU TRẢ LỜI — 3 LỚP (văn xuôi liền mạch, KHÔNG đánh số, KHÔNG tiêu đề con):
-1) PHÁN QUYẾT mở đầu: MỘT câu in đậm (**...**), neo vào "Điểm cung X/10" và nhãn "Luận sao" của cung liên quan (tốt rõ/khá/trung bình/yếu/xấu rõ) — nói thẳng tốt/xấu, mạnh/yếu.
-2) MỘT mạch dẫn chứng CỐT LÕI: chọn chính tinh tọa cung (miếu/vượng/đắc/hãm; vô chính diệu thì mượn chính tinh cung xung chiếu) CÙNG cách cục/pattern NẶNG KÝ NHẤT cho câu hỏi ([CÁCH CỤC · ...], [Ý NGHĨA · ...]) — gọi đích danh, kèm ĐÚNG 1 điểm mạnh và 1 điểm yếu cụ thể (neo 6 chiều điểm Thiên Vận/Căn Cơ/May Mắn/Phù Trợ/Bình Yên/Bền Vững, hoặc sát/bại tinh; điểm <5 hay nhiều sát tinh thì CẢNH BÁO thẳng). KHÔNG liệt kê dàn trải mọi sao — chỉ cái nặng ký nhất.
+1) PHÁN QUYẾT mở đầu: MỘT câu in đậm (**...**), neo vào nhãn "Luận sao" định tính của cung liên quan (tốt rõ/khá/trung bình/yếu/xấu rõ) CÙNG chính tinh tọa cung và độ sáng (miếu/vượng/đắc/hãm) — nói thẳng tốt/xấu, mạnh/yếu. CẤM bịa "điểm cung X/10".
+2) MỘT mạch dẫn chứng CỐT LÕI: chọn chính tinh tọa cung (miếu/vượng/đắc/hãm; vô chính diệu thì mượn chính tinh cung xung chiếu) CÙNG cách cục/pattern NẶNG KÝ NHẤT cho câu hỏi ([CÁCH CỤC · ...], [Ý NGHĨA · ...]) — gọi đích danh, kèm ĐÚNG 1 điểm mạnh và 1 điểm yếu cụ thể (neo vào độ sáng chính tinh, cách cục cát/hung, sát/bại tinh hội tụ; nhiều sát tinh hay chính tinh hãm địa thì CẢNH BÁO thẳng). KHÔNG liệt kê dàn trải mọi sao — chỉ cái nặng ký nhất.
 3) MỞ NÚT (open loop) — BẮT BUỘC kết bằng đây: nêu ĐÍCH DANH một chi tiết CÓ THẬT trong lá số mà bạn CHƯA luận ở trên (một sao/cách cục/cung/đại vận khác), nói một dòng vì sao nó liên quan tới điều vừa hỏi, rồi mời mở ra bằng ĐÚNG MỘT câu hỏi. CẤM mời chung chung kiểu "bạn còn muốn hỏi gì không" — phải gọi tên chi tiết thật trong lá số này.
 
 NGUYÊN TẮC VẬN HẠN (đại vận là gốc — luận nhất quán theo tầng):
@@ -294,9 +294,11 @@ export function extractLasoContext(lasoData: any, question: string): string {
   if (lasoData.cachCuc?.length) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cc = lasoData.cachCuc.map((c: any) =>
-      typeof c === 'object' ? c.ten + (c.loai ? ` (${c.loai})` : '') : c
+      typeof c === 'object'
+        ? `${c.ten}${c.cung ? ` [Cung ${c.cung}]` : ''}${c.loai ? ` (${c.loai})` : ''}`
+        : c
     ).filter(Boolean);
-    if (cc.length) ctx += 'Cách cục: ' + cc.join(', ') + '\n';
+    if (cc.length) ctx += 'Cách cục: ' + cc.join('; ') + '\n';
   }
 
   // Tổ hợp sao (cách cục vận) tại cung đại vận — DÙNG CHUNG matcher với
@@ -350,15 +352,6 @@ export function extractLasoContext(lasoData: any, question: string): string {
     const pName = p.cungName || '';
     if (!relevant.has(pName) && !p.isMenh && !p.isThan) continue;
     ctx += '\nCung ' + pName + ' (' + (p.diaChi||'') + ')' + (p.isMenh?' ★MỆNH':'') + (p.isThan?' ◆THÂN':'') + ':\n';
-    const sc = lasoData.cungScores?.[pName];
-    if (sc) {
-      const dims = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung']
-        .map(k => sc[k]).filter((v: number) => typeof v === 'number');
-      if (dims.length) {
-        const tot = sc.tong ?? Math.round(dims.reduce((a: number, b: number) => a + b, 0) / dims.length * 10) / 10;
-        ctx += '  Điểm cung: ' + tot + '/10 (thiên vận ' + sc.thienVan + ', căn cơ ' + sc.canCo + ', may mắn ' + sc.mayMan + ', phù trợ ' + sc.phuTro + ', bình yên ' + sc.binhYen + ', bền vững ' + sc.benVung + ')\n';
-      }
-    }
     const chinh = (p.majorStars||[]).map(starFmt).filter(Boolean);
     if (chinh.length) ctx += '  Chính tinh: ' + chinh.join(', ') + '\n';
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -368,12 +361,19 @@ export function extractLasoContext(lasoData: any, question: string): string {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const tptc = (p.tuChinhStars||[]).filter((s: any) => !p.stars?.includes(s)).map(starFmt).filter(Boolean);
     if (tptc.length) ctx += '  Tam phương tứ chính: ' + tptc.slice(0,12).join(', ') + '\n';
-    if (p.cachCuc?.length) {
+    // Cách cục đặc biệt của cung này — lọc từ mảng global lasoData.cachCuc
+    // theo trường .cung (engine KHÔNG gắn p.cachCuc per-palace). Trước đây đọc
+    // p.cachCuc nên cách như "Nhật Nguyệt Chiếu Bích" của Điền không hiện.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const ccThis = ((lasoData.cachCuc || []) as any[]).filter(
+      (c: any) => typeof c === 'object' && (c.cung === pName || (p.isThan && c.cung === 'Thân'))
+    );
+    if (ccThis.length) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      p.cachCuc.forEach((c: any) => {
-        const ten = c.ten || c;
+      ccThis.forEach((c: any) => {
         const mota = c.moTa ? ': ' + c.moTa : '';
-        ctx += '  Cách cục — ' + ten + mota + '\n';
+        const chiTiet = c.chiTiet ? ' — ' + c.chiTiet : '';
+        ctx += '  Cách cục — ' + (c.ten || '') + (c.loai ? ' (' + c.loai + ')' : '') + mota + chiTiet + '\n';
       });
     }
     // Ý nghĩa cung từ CACH_CUC_DATA matching (patterns Khốc Hư, Thiên Mã, v.v.)
