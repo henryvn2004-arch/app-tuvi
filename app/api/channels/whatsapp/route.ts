@@ -17,6 +17,7 @@ import { runConversation } from '@/lib/channels/core';
 import { buildAccessGate } from '@/lib/channels/gate';
 import { verifyMetaSignature, verifyWebhookChallenge } from '@/lib/channels/meta';
 import { whatsappIO, whatsappStore, waSendText, waClearSession } from '@/lib/channels/whatsapp';
+import { consumeLinkToken, resolveLinkedUser, LINK_CMD } from '@/lib/channels/whatsappLink';
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -35,6 +36,20 @@ const freeCapMsg =
 
 const noBalanceMsg = (balance: number, cost: number) =>
   `Bạn còn ${balance} Lượng, mỗi lượt cần ${cost} Lượng.\n\nNạp thêm tại ${SITE}/topup.html rồi quay lại chat nhé. 💳`;
+
+const LINK_OK =
+  '✅ Đã liên kết tài khoản thành công!\n\n' +
+  'Từ giờ bạn chat ở đây bằng ví Lượng của mình — nạp trên web là dùng được luôn tại WhatsApp.';
+
+const LINK_FAIL =
+  '⚠️ Liên kết không thành công — mã đã hết hạn hoặc đã được dùng.\n\n' +
+  `Bạn tạo lại liên kết tại ${SITE} → Hồ sơ → Liên kết WhatsApp nhé.`;
+
+const LINK_GUIDE =
+  'Để chat bằng ví Lượng của bạn:\n' +
+  `1) Mở ${SITE}, đăng nhập\n` +
+  '2) Vào Hồ sơ → mục Credits → bấm "Liên kết WhatsApp"\n' +
+  '3) Bấm mở WhatsApp rồi gửi tin soạn sẵn để hoàn tất.';
 
 // ── GET: xác thực đăng ký webhook ───────────────────────────
 export async function GET(request: NextRequest) {
@@ -101,6 +116,24 @@ async function handleMessage(msg: WaMessage, cfg: Awaited<ReturnType<typeof getC
   if (text === '/new' || text === '/reset') {
     await waClearSession(from);
     await waSendText(from, 'Đã bắt đầu cuộc trò chuyện mới. Bạn hỏi gì nào?');
+    return;
+  }
+
+  // /link <token>: token sinh từ web → liên kết ví Lượng. /link trống → hướng dẫn.
+  if (text === LINK_CMD || text.startsWith(`${LINK_CMD} `)) {
+    const token = text.startsWith(`${LINK_CMD} `) ? text.slice(LINK_CMD.length + 1).trim() : '';
+    if (token) {
+      const uid = await consumeLinkToken(token, from);
+      await waSendText(from, uid ? LINK_OK : LINK_FAIL);
+      return;
+    }
+    const linked = await resolveLinkedUser(from);
+    await waSendText(
+      from,
+      linked
+        ? '✅ Tài khoản này đã được liên kết — bạn đang dùng ví Lượng của mình.'
+        : LINK_GUIDE,
+    );
     return;
   }
 
