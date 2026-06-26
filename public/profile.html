@@ -351,6 +351,17 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
         </div>
       </div>
       <div class="account-section">
+        <h3>💬 Liên Kết Messenger</h3>
+        <p style="color:var(--text-lt);font-size:.85rem;margin:.25rem 0 .75rem">
+          Liên kết để chat với bot Facebook Messenger bằng đúng ví Lượng này — nạp ở đây, dùng được cả trên Messenger.
+        </p>
+        <div id="msgrLinkBox" style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+          <span id="msgrLinkStatus" style="font-size:.85rem;color:var(--text-lt)">Đang kiểm tra…</span>
+          <button id="btnMsgrLink" style="display:none;background:#0084FF;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">💬 Liên kết Messenger</button>
+          <button id="btnMsgrUnlink" style="display:none;background:transparent;color:#c0392b;border:1px solid #c0392b;padding:.55rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer">Hủy liên kết</button>
+        </div>
+      </div>
+      <div class="account-section">
         <h3>Lịch Sử Giao Dịch</h3>
         <div id="transactionList"><div style="color:var(--text-lt);font-size:.85rem">Đang tải...</div></div>
       </div>
@@ -834,12 +845,74 @@ document.getElementById('btnWaUnlink').onclick = async () => {
   loadWhatsappLink();
 };
 
+// ── LIÊN KẾT MESSENGER ──
+async function loadMessengerLink() {
+  const statusEl = document.getElementById('msgrLinkStatus');
+  const btnLink  = document.getElementById('btnMsgrLink');
+  const btnUnlink = document.getElementById('btnMsgrUnlink');
+  if (!statusEl) return;
+  try {
+    const res = await fetch('/api/channels/messenger/link', {
+      headers: { Authorization: `Bearer ${_pToken}` }
+    });
+    const d = res.ok ? await res.json() : { linked: false };
+    if (d.linked) {
+      statusEl.textContent = '✅ Đã liên kết — bot Messenger dùng chung ví Lượng này.';
+      btnLink.style.display = 'none';
+      btnUnlink.style.display = 'inline-block';
+    } else {
+      statusEl.textContent = 'Chưa liên kết.';
+      btnLink.style.display = 'inline-block';
+      btnUnlink.style.display = 'none';
+    }
+  } catch {
+    statusEl.textContent = 'Không tải được trạng thái liên kết.';
+  }
+}
+
+document.getElementById('btnMsgrLink').onclick = async () => {
+  const btn = document.getElementById('btnMsgrLink');
+  btn.disabled = true; btn.textContent = 'Đang tạo liên kết…';
+  try {
+    const res = await fetch('/api/channels/messenger/link', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${_pToken}` }
+    });
+    const d = await res.json();
+    if (d.url) {
+      // Mở Messenger với m.me/<page>?ref=<token> → bot tự gắn ví.
+      window.open(d.url, '_blank');
+      const fallback = d.token ? ` Nếu chưa tự liên kết, gửi tin: /link ${d.token}` : '';
+      document.getElementById('msgrLinkStatus').textContent =
+        '⏳ Đã mở Messenger — bấm "Bắt đầu / Get Started" hoặc gửi 1 tin để hoàn tất, rồi tải lại trang.' + fallback;
+    } else {
+      alert('Không tạo được liên kết, thử lại sau nhé.');
+    }
+  } catch {
+    alert('Lỗi mạng, thử lại sau nhé.');
+  } finally {
+    btn.disabled = false; btn.textContent = '💬 Liên kết Messenger';
+  }
+};
+
+document.getElementById('btnMsgrUnlink').onclick = async () => {
+  if (!confirm('Hủy liên kết Messenger? Bot sẽ không còn dùng ví Lượng của bạn.')) return;
+  try {
+    await fetch('/api/channels/messenger/link', {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${_pToken}` }
+    });
+  } catch {}
+  loadMessengerLink();
+};
+
 async function loadCredits() {
   if (!_pUser || !_pToken) return;
   // Balance
   await loadHeaderBalance();
   loadTelegramLink();
   loadWhatsappLink();
+  loadMessengerLink();
   const t = document.getElementById('tabCreditBalance');
   if (t && t.textContent === '…') t.textContent = '...';
   // Transactions
