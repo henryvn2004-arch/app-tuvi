@@ -7,7 +7,15 @@
 
 import type { ChatMessage, BirthParams, ChatImage } from '@/lib/contract/v1';
 import { splitText } from './core';
-import { chatLoadSession, chatSaveSession, chatClearSession, type ChatSession } from './store';
+import {
+  chatLoadSession,
+  chatSaveSession,
+  chatClearSession,
+  chatListProfiles,
+  chatGetProfile,
+  chatSaveProfile,
+  type ChatSession,
+} from './store';
 
 const TG_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
 const TG_API = `https://api.telegram.org/bot${TG_TOKEN}`;
@@ -127,3 +135,9 @@ export const saveSession = (chatId: number | string, messages: ChatMessage[], bi
   chatSaveSession(PLATFORM, chatId, messages, birth);
 
 export const clearSession = (chatId: number | string) => chatClearSession(PLATFORM, chatId);
+
+// ── Sổ lá số (generic chat_profiles, platform='telegram') ───
+export const listProfiles = (chatId: number | string) => chatListProfiles(PLATFORM, chatId);
+export const getProfile = (chatId: number | string, name: string) => chatGetProfile(PLATFORM, chatId, name);
+export const saveProfile = (chatId: number | string, name: string, birth: BirthParams) =>
+  chatSaveProfile(PLATFORM, chatId, name, birth);
