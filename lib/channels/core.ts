@@ -120,14 +120,18 @@ export async function runConversation(
   }
 
   const session = await store.load(chatId);
-  // Tin này chứa ngày sinh MỚI → lá số KHÁC, bỏ birth cũ của phiên để khỏi nhiễm
-  // chéo (xem messageHasNewBirth). Agent sẽ tự gọi lap_la_so cho ngày mới và
-  // capturedBirth mới sẽ được lưu lại ở cuối lượt cho các follow-up sau.
-  const carryBirth = session.birth && !messageHasNewBirth(incoming.text) ? session.birth : null;
+  // Tin này chứa ngày sinh MỚI → NGƯỜI KHÁC → bắt đầu THREAD MỚI: bỏ cả birth cũ
+  // LẪN lịch sử hội thoại của người trước. Nếu chỉ bỏ birth mà giữ history, lượt
+  // SAU (không kèm ngày sinh, carryBirth lại bật) vẫn nhiễm qua kênh messages —
+  // model bê giọng/cách cục của lá số cũ (vd Thất Sát của người 1984) sang lá số
+  // mới rồi tự an cung lệch. Đổi ngày sinh = xem người mới = quên hẳn người cũ.
+  const newSubject = messageHasNewBirth(incoming.text);
+  const priorMessages = newSubject ? [] : session.messages;
+  const carryBirth = newSubject ? null : session.birth;
   // Tin lượt này gửi runAgent KÈM ảnh. Chỉ ảnh, không caption → mồi câu hỏi.
   const userMsg: ChatMessage = { role: 'user', content: incoming.text || DEFAULT_IMG_Q };
   if (images.length) userMsg.images = images;
-  const messages: ChatMessage[] = [...session.messages, userMsg];
+  const messages: ChatMessage[] = [...priorMessages, userMsg];
 
   // Giữ "typing…" sống suốt quá trình (nền tảng tự tắt sau ~5s).
   let working = true;
@@ -185,7 +189,7 @@ export async function runConversation(
     };
     await store.save(
       chatId,
-      [...session.messages, savedUserMsg, { role: 'assistant', content: answer }],
+      [...priorMessages, savedUserMsg, { role: 'assistant', content: answer }],
       agentBirth,
     );
   } catch (e) {
