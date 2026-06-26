@@ -21,6 +21,7 @@ import { runConversation } from '@/lib/channels/core';
 import { buildAccessGate } from '@/lib/channels/gate';
 import { verifyMetaSignature, verifyWebhookChallenge } from '@/lib/channels/meta';
 import { messengerIO, messengerStore, msgrSendText, msgrClearSession } from '@/lib/channels/messenger';
+import { consumeLinkToken, resolveLinkedUser, LINK_CMD } from '@/lib/channels/messengerLink';
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -39,6 +40,22 @@ const freeCapMsg =
 
 const noBalanceMsg = (balance: number, cost: number) =>
   `Bạn còn ${balance} Lượng, mỗi lượt cần ${cost} Lượng.\n\nNạp thêm tại ${SITE}/topup.html rồi quay lại chat nhé. 💳`;
+
+const LINK_OK =
+  '✅ Đã liên kết tài khoản thành công!\n\n' +
+  'Từ giờ bạn chat ở đây bằng ví Lượng của mình — nạp trên web là dùng được luôn tại Messenger.';
+
+const LINK_FAIL =
+  '⚠️ Liên kết không thành công — mã đã hết hạn hoặc đã được dùng.\n\n' +
+  `Bạn tạo lại liên kết tại ${SITE} → Hồ sơ → Liên kết Messenger nhé.`;
+
+const LINK_ALREADY = '✅ Tài khoản này đã được liên kết — bạn đang dùng ví Lượng của mình.';
+
+const LINK_GUIDE =
+  'Để chat bằng ví Lượng của bạn:\n' +
+  `1) Mở ${SITE}, đăng nhập\n` +
+  '2) Vào Hồ sơ → mục Credits → bấm "Liên kết Messenger"\n' +
+  '3) Bấm mở Messenger để hoàn tất.';
 
 // ── GET: xác thực đăng ký webhook ───────────────────────────
 export async function GET(request: NextRequest) {
@@ -82,6 +99,15 @@ async function handleWebhook(body: MsgrWebhook): Promise<void> {
 async function handleEvent(ev: MsgrMessaging, cfg: Awaited<ReturnType<typeof getChatConfig>>): Promise<void> {
   const psid = ev.sender?.id;
   if (!psid) return;
+
+  // Liên kết ví qua deep link m.me?ref (thread cũ → messaging_referrals;
+  // thread mới → Get Started postback kèm referral). Tiêu thụ token rồi dừng.
+  const refToken = ev.referral?.ref || ev.postback?.referral?.ref;
+  if (refToken) {
+    await handleLinkToken(psid, refToken);
+    return;
+  }
+
   const m = ev.message;
   // Bỏ qua echo (tin do chính Page gửi) + sự kiện không phải tin nhắn.
   if (!m || m.is_echo) return;
@@ -104,6 +130,18 @@ async function handleEvent(ev: MsgrMessaging, cfg: Awaited<ReturnType<typeof get
   if (text === '/new' || text === '/reset') {
     await msgrClearSession(psid);
     await msgrSendText(psid, 'Đã bắt đầu cuộc trò chuyện mới. Bạn hỏi gì nào?');
+    return;
+  }
+
+  // /link <token> (fallback chữ nếu ref không tới). /link trống → hướng dẫn.
+  if (text === LINK_CMD || text.startsWith(`${LINK_CMD} `)) {
+    const token = text.startsWith(`${LINK_CMD} `) ? text.slice(LINK_CMD.length + 1).trim() : '';
+    if (token) {
+      await handleLinkToken(psid, token);
+      return;
+    }
+    const linked = await resolveLinkedUser(psid);
+    await msgrSendText(psid, linked ? LINK_ALREADY : LINK_GUIDE);
     return;
   }
 
@@ -132,6 +170,17 @@ async function handleEvent(ev: MsgrMessaging, cfg: Awaited<ReturnType<typeof get
   );
 }
 
+/** Tiêu thụ token liên kết (từ ref hoặc "/link <token>") rồi trả lời phù hợp. */
+async function handleLinkToken(psid: string, token: string): Promise<void> {
+  const uid = await consumeLinkToken(token, psid);
+  if (uid) {
+    await msgrSendText(psid, LINK_OK);
+    return;
+  }
+  const linked = await resolveLinkedUser(psid);
+  await msgrSendText(psid, linked ? LINK_ALREADY : LINK_FAIL);
+}
+
 function ok() {
   return new Response('EVENT_RECEIVED', { status: 200 });
 }
@@ -149,4 +198,7 @@ interface MsgrMessaging {
     is_echo?: boolean;
     attachments?: { type?: string; payload?: { url?: string } }[];
   };
+  // Liên kết ví: ref từ m.me?ref (referral) hoặc Get Started (postback.referral).
+  referral?: { ref?: string };
+  postback?: { payload?: string; referral?: { ref?: string } };
 }
