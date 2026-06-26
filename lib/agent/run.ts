@@ -18,7 +18,7 @@ import {
   type ScenarioInput,
   type BirthParams,
 } from '@/lib/contract/v1';
-import { buildToolDefs, executeTool, newToolContext } from '@/lib/tools/registry';
+import { buildToolDefs, executeTool, newToolContext, type ProfilePort } from '@/lib/tools/registry';
 import { computeLaso } from '@/lib/engine/laso';
 import { computeTuBinh } from '@/lib/engine/tubinh';
 import { computeSinhCon, computeChonNgay, computeDatTen } from '@/lib/engine/diachi';
@@ -97,8 +97,16 @@ export async function runAgent(
   req: ChatRequestV1,
   cfg: ChatConfig,
   send: (s: string) => void,
-): Promise<{ toolsUsed: string[]; birth: BirthParams | null }> {
-  const ctx = newToolContext();
+  profiles: ProfilePort | null = null,
+): Promise<{
+  toolsUsed: string[];
+  birth: BirthParams | null;
+  activeProfile: string | null;
+  subjectSwitched: boolean;
+}> {
+  // Seed ctx với birth đang xem (req.birth) → "lưu lá số này tên X" chạy được cả
+  // khi lượt này không gọi lại lap_la_so. profiles bật 3 tool sổ (kênh chat).
+  const ctx = newToolContext(null, { profiles, birth: req.birth ?? null });
   const toolsUsed: string[] = [];
   // Birth đã biết (req.birth truyền sẵn) hoặc do agent lập qua tool lap_la_so
   // trong lượt này → trả về để adapter (Telegram) lưu theo phiên, đỡ hỏi lại.
@@ -190,8 +198,8 @@ export async function runAgent(
       ? CHAT_SYSTEM_LASO(lasoCtx, undefined, tone)
       : CHAT_SYSTEM_GENERAL(undefined, tone);
     system += '\n\n' + timeContext(); // thời gian chuẩn múi giờ VN (đè bản inline của template)
-    system += TOOLS_INSTRUCTION(hasLaso);
-    tools = buildToolDefs();
+    system += TOOLS_INSTRUCTION(hasLaso, !!profiles);
+    tools = buildToolDefs(!!profiles);
   }
 
   // Có ảnh trong bất kỳ tin user nào → bật hướng dẫn luận ảnh (vision).
@@ -275,7 +283,14 @@ export async function runAgent(
     break;
   }
 
-  return { toolsUsed, birth: capturedBirth };
+  // ctx.birth phản ánh lá số đang xem cuối lượt (mo_la_so có thể đã đổi sang lá
+  // số khác) → ưu tiên nó. activeProfile/subjectSwitched cho kênh lưu & reset thread.
+  return {
+    toolsUsed,
+    birth: ctx.birth ?? capturedBirth,
+    activeProfile: ctx.activeProfile,
+    subjectSwitched: ctx.subjectSwitched,
+  };
 }
 
 // Chuẩn hóa input tool lap_la_so → BirthParams (để lưu phiên Telegram).

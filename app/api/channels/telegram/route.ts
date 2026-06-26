@@ -31,7 +31,13 @@ import { NextRequest } from 'next/server';
 import { waitUntil } from '@vercel/functions';
 import { getChatConfig } from '@/lib/config/appConfig';
 import { paywallDisabled, getBalance, deductCredits, logTransaction } from '@/lib/billing/credits';
-import { runConversation, type ChannelIO, type SessionStore, type AccessGate } from '@/lib/channels/core';
+import {
+  runConversation,
+  type ChannelIO,
+  type SessionStore,
+  type ProfileStore,
+  type AccessGate,
+} from '@/lib/channels/core';
 import {
   resolveLinkedUser,
   consumeLinkToken,
@@ -48,6 +54,9 @@ import {
   loadSession,
   saveSession,
   clearSession,
+  listProfiles,
+  getProfile,
+  saveProfile,
 } from '@/lib/channels/telegram';
 
 export const runtime = 'nodejs';
@@ -62,7 +71,8 @@ const WELCOME =
   'Hỏi mình bất cứ điều gì về tử vi, vận hạn, tuổi tác... Để lập lá số, ' +
   'cho mình biết: giới tính, ngày/tháng/năm sinh (dương lịch), và giờ sinh.\n\n' +
   'Ví dụ: "Nữ, 03/06/1998, giờ Sửu, năm nay làm ăn sao?"\n\n' +
-  'Lệnh: /new — trò chuyện mới · /link — dùng ví Lượng của bạn (nạp trên web).';
+  'Lưu nhiều lá số: sau khi lập, đặt tên (vd "anh Tony") để lần sau nhắn "xem lá số Tony".\n\n' +
+  'Lệnh: /new — trò chuyện mới · /laso — sổ lá số đã lưu · /link — dùng ví Lượng của bạn (nạp trên web).';
 
 const ERR_MSG = 'Xin lỗi, mình gặp trục trặc khi xử lý. Bạn thử lại sau giây lát nhé.';
 
@@ -105,6 +115,12 @@ const telegramIO: ChannelIO = {
   fetchImage: tgFetchImage,
 };
 const telegramStore: SessionStore = { load: loadSession, save: saveSession };
+const telegramProfiles: ProfileStore = { list: listProfiles, get: getProfile, save: saveProfile };
+
+// Nhãn ngắn cho 1 lá số trong sổ (giới + ngày sinh).
+function birthLabel(b: { gender?: string; day?: number; month?: number; year?: number }): string {
+  return `${b.gender === 'nu' ? 'Nữ' : 'Nam'} ${b.day}/${b.month}/${b.year}`;
+}
 
 // Telegram health check / nhỡ mở bằng GET.
 export async function GET() {
@@ -186,6 +202,19 @@ async function handleUpdate(update: TgUpdate): Promise<void> {
     await tgSendMessage(chatId, 'Đã bắt đầu cuộc trò chuyện mới. Bạn hỏi gì nào?');
     return;
   }
+  if (text === '/laso') {
+    const list = await listProfiles(chatId);
+    if (!list.length) {
+      await tgSendMessage(
+        chatId,
+        'Sổ lá số của bạn đang trống. Lập một lá số rồi đặt tên để lưu, lần sau nhắn "xem lá số <tên>" là mở lại được.',
+      );
+    } else {
+      const lines = list.map((p, i) => `${i + 1}. ${p.name} (${birthLabel(p.birth)})`).join('\n');
+      await tgSendMessage(chatId, '🔖 Sổ lá số của bạn:\n' + lines + '\n\nNhắn "xem lá số <tên>" để mở lại.');
+    }
+    return;
+  }
   if (text === '/link') {
     const uid = await resolveLinkedUser(fromId);
     await tgSendMessage(
@@ -213,6 +242,7 @@ async function handleUpdate(update: TgUpdate): Promise<void> {
     cfg,
     ERR_MSG,
     gate.commit,
+    telegramProfiles,
   );
 }
 

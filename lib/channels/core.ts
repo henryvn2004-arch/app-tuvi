@@ -22,6 +22,7 @@ import {
   type ClientPlatform,
 } from '@/lib/contract/v1';
 import { runAgent } from '@/lib/agent/run';
+import { type ProfilePort } from '@/lib/tools/registry';
 import { type ChatConfig } from '@/lib/config/appConfig';
 
 // id của tin "tiến trình" để edit dần — kiểu tùy nền tảng (Telegram: number).
@@ -51,6 +52,15 @@ export interface ChannelIO {
 export interface SessionStore {
   load(chatId: number | string): Promise<{ messages: ChatMessage[]; birth: BirthParams | null }>;
   save(chatId: number | string, messages: ChatMessage[], birth: BirthParams | null): Promise<void>;
+}
+
+// ── Sổ lá số (tùy chọn — kênh cài đặt, bind sẵn platform) ────
+// Có → bật 3 tool luu/mo/liet_ke_la_so cho agent. Không truyền → kênh không có
+// sổ (hành xử như cũ).
+export interface ProfileStore {
+  list(chatId: number | string): Promise<{ name: string; birth: BirthParams }[]>;
+  get(chatId: number | string, name: string): Promise<{ name: string; birth: BirthParams } | null>;
+  save(chatId: number | string, name: string, birth: BirthParams): Promise<boolean>;
 }
 
 // ── Cổng tính phí (adapter quyết, core chỉ gọi commit khi thành công) ──
@@ -103,9 +113,18 @@ export async function runConversation(
   cfg: ChatConfig,
   errMsg: string,
   gateCommit?: () => Promise<void>,
+  profiles?: ProfileStore,
 ): Promise<void> {
   const { chatId } = incoming;
   const hasImage = incoming.imageRefs.length > 0;
+  // Port sổ lá số đã bind chatId → trao cho runAgent để bật 3 tool sổ.
+  const profilePort: ProfilePort | null = profiles
+    ? {
+        list: () => profiles.list(chatId),
+        get: (name) => profiles.get(chatId, name),
+        save: (name, birth) => profiles.save(chatId, name, birth),
+      }
+    : null;
 
   await io.typing(chatId);
   const progressId = await io.sendProgress(chatId, hasImage ? WAIT_IMAGE : WAIT_LASO);
@@ -163,7 +182,7 @@ export async function runConversation(
       client: { platform: io.platform, version: '1.0.0' },
     };
     const collector = createSSECollector(onStatus);
-    const { birth: agentBirth } = await runAgent(req, cfg, collector.send);
+    const { birth: agentBirth, subjectSwitched } = await runAgent(req, cfg, collector.send, profilePort);
     working = false;
 
     const err = collector.getError();
@@ -187,9 +206,12 @@ export async function runConversation(
       role: 'user',
       content: images.length ? (incoming.text ? `[ảnh] ${incoming.text}` : '[Đã gửi ảnh]') : incoming.text,
     };
+    // Agent mở một lá số KHÁC giữa lượt (mo_la_so) → đổi chủ thể → lưu thread MỚI
+    // (bỏ lịch sử người trước) để lượt sau không nhiễm, giống khi nhập ngày sinh mới.
+    const savePrior = subjectSwitched ? [] : priorMessages;
     await store.save(
       chatId,
-      [...priorMessages, savedUserMsg, { role: 'assistant', content: answer }],
+      [...savePrior, savedUserMsg, { role: 'assistant', content: answer }],
       agentBirth,
     );
   } catch (e) {

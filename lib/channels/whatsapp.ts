@@ -12,8 +12,15 @@
 
 import type { ChatImage, ChatMessage, BirthParams } from '@/lib/contract/v1';
 import { GRAPH_BASE, graphPost, fetchGraphMedia } from './meta';
-import { splitText, type ChannelIO, type SessionStore } from './core';
-import { chatLoadSession, chatSaveSession, chatClearSession } from './store';
+import { splitText, type ChannelIO, type SessionStore, type ProfileStore } from './core';
+import {
+  chatLoadSession,
+  chatSaveSession,
+  chatClearSession,
+  chatListProfiles,
+  chatGetProfile,
+  chatSaveProfile,
+} from './store';
 
 const PLATFORM = 'whatsapp';
 const PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_NUMBER_ID || '';
@@ -75,3 +82,10 @@ export const whatsappStore: SessionStore = {
 };
 
 export const waClearSession = (waId: string) => chatClearSession(PLATFORM, waId);
+
+// ── Sổ lá số (generic chat_profiles, platform='whatsapp') ───
+export const whatsappProfiles: ProfileStore = {
+  list: (chatId) => chatListProfiles(PLATFORM, chatId),
+  get: (chatId, name) => chatGetProfile(PLATFORM, chatId, name),
+  save: (chatId, name, birth) => chatSaveProfile(PLATFORM, chatId, name, birth),
+};

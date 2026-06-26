@@ -92,6 +92,87 @@ export async function chatClearSession(platform: string, chatId: number | string
   }
 }
 
+// ── Sổ lá số (chat_profiles) ────────────────────────────────
+// Nhiều lá số ĐẶT TÊN cho mỗi (platform, chat_id). Cho phép 1 người dùng kênh
+// chat lưu & gọi lại "anh Tony", "con gái"… mà không lẫn. Best-effort: bảng
+// chưa có / lỗi → trả rỗng/false, KHÔNG ném (route không sập).
+export interface ChatProfile {
+  name: string;
+  birth: BirthParams;
+}
+
+const enc = (s: string) => encodeURIComponent(s);
+const PROFILE_NAME_MAX = 40;
+
+/** Liệt kê sổ lá số của 1 người (mới cập nhật trước). */
+export async function chatListProfiles(platform: string, chatId: number | string): Promise<ChatProfile[]> {
+  if (!ready()) return [];
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/chat_profiles?platform=eq.${enc(platform)}&chat_id=eq.${enc(String(chatId))}&select=name,birth&order=updated_at.desc`,
+      { headers: SB_HEADERS },
+    );
+    if (!res.ok) return [];
+    const rows = (await res.json()) as { name?: string; birth?: BirthParams }[];
+    return rows
+      .filter((r) => r.name && r.birth)
+      .map((r) => ({ name: r.name as string, birth: r.birth as BirthParams }));
+  } catch {
+    return [];
+  }
+}
+
+/** Lấy 1 lá số theo tên (KHÔNG phân biệt hoa/thường). Khớp trong JS để tránh
+ *  ký tự đặc biệt của ilike (% _) gây sai. Null nếu không có. */
+export async function chatGetProfile(
+  platform: string,
+  chatId: number | string,
+  name: string,
+): Promise<ChatProfile | null> {
+  const want = (name || '').trim().toLowerCase();
+  if (!want) return null;
+  const all = await chatListProfiles(platform, chatId);
+  return all.find((p) => p.name.toLowerCase() === want) || null;
+}
+
+/** Lưu/cập nhật 1 lá số theo tên (upsert thủ công: có thì PATCH, chưa thì POST
+ *  — vì unique index trên lower(name) là expression index, on_conflict của
+ *  PostgREST không kham). Trả true nếu thành công. */
+export async function chatSaveProfile(
+  platform: string,
+  chatId: number | string,
+  name: string,
+  birth: BirthParams,
+): Promise<boolean> {
+  if (!ready() || !birth) return false;
+  const clean = (name || '').trim().slice(0, PROFILE_NAME_MAX);
+  if (!clean) return false;
+  const nowIso = new Date().toISOString();
+  try {
+    const existing = await chatGetProfile(platform, chatId, clean);
+    if (existing) {
+      // Khớp theo tên ĐÃ LƯU (eq, an toàn vì là giá trị chính xác từ DB).
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/chat_profiles?platform=eq.${enc(platform)}&chat_id=eq.${enc(String(chatId))}&name=eq.${enc(existing.name)}`,
+        {
+          method: 'PATCH',
+          headers: SB_HEADERS,
+          body: JSON.stringify({ birth, name: clean, updated_at: nowIso }),
+        },
+      );
+      return res.ok;
+    }
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/chat_profiles`, {
+      method: 'POST',
+      headers: SB_HEADERS,
+      body: JSON.stringify({ platform, chat_id: String(chatId), name: clean, birth, updated_at: nowIso }),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
 // ── Liên kết ví Lượng (chat_links + chat_link_tokens) ───────
 /** Sinh token liên kết 1 lần cho user đang đăng nhập (web). Trả token, hoặc
  *  null nếu lỗi. Caller dựng deep link đặc thù nền tảng (t.me / m.me / wa.me). */

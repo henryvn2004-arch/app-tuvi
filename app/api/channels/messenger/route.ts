@@ -20,7 +20,7 @@ import { getChatConfig } from '@/lib/config/appConfig';
 import { runConversation } from '@/lib/channels/core';
 import { buildAccessGate } from '@/lib/channels/gate';
 import { verifyMetaSignature, verifyWebhookChallenge } from '@/lib/channels/meta';
-import { messengerIO, messengerStore, msgrSendText, msgrClearSession } from '@/lib/channels/messenger';
+import { messengerIO, messengerStore, messengerProfiles, msgrSendText, msgrClearSession } from '@/lib/channels/messenger';
 import { consumeLinkToken, resolveLinkedUser, LINK_CMD } from '@/lib/channels/messengerLink';
 
 export const runtime = 'nodejs';
@@ -167,6 +167,7 @@ async function handleEvent(ev: MsgrMessaging, cfg: Awaited<ReturnType<typeof get
     cfg,
     ERR_MSG,
     gate.commit,
+    messengerProfiles,
   );
 }
 

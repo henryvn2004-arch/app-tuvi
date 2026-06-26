@@ -13,17 +13,45 @@
 
 import { computeLaso, formatLasoContext, lasoSummary, type Laso } from '@/lib/engine/laso';
 import { buildTools, execLasoTool, toolLabel } from '@/lib/agent/tools';
+import type { BirthParams } from '@/lib/contract/v1';
 
 type Rec = Record<string, unknown>;
+
+// ── Sổ lá số (cài đặt ở tầng kênh, bind theo platform+chatId) ──
+// Cho phép tool luu_la_so / mo_la_so / liet_ke_la_so thao tác sổ mà KHÔNG
+// import Supabase trực tiếp (giữ tool layer trung lập). null = kênh không bật
+// (vd web /api/v1/chat) → 3 tool sổ không được đăng ký.
+export interface ProfilePort {
+  list(): Promise<{ name: string; birth: BirthParams }[]>;
+  get(name: string): Promise<{ name: string; birth: BirthParams } | null>;
+  save(name: string, birth: BirthParams): Promise<boolean>;
+}
 
 // Trạng thái dùng chung trong MỘT request (lá số đã lập được
 // chia sẻ cho các tool sau như tra_tieu_van).
 export interface ToolContext {
   ls: Laso | null;
+  // Birth của lá số ĐANG trong ngữ cảnh (seed từ req.birth, hoặc do lap_la_so/
+  // mo_la_so set) → để luu_la_so biết lưu cái gì.
+  birth: BirthParams | null;
+  profiles: ProfilePort | null;
+  // Tên lá số vừa mở/lưu trong lượt (để kênh hiển thị/ghi nhớ).
+  activeProfile: string | null;
+  // mo_la_so mở một lá số KHÁC → đổi chủ thể → kênh reset thread hội thoại.
+  subjectSwitched: boolean;
 }
 
-export function newToolContext(seedLs: Laso | null = null): ToolContext {
-  return { ls: seedLs };
+export function newToolContext(
+  seedLs: Laso | null = null,
+  opts?: { profiles?: ProfilePort | null; birth?: BirthParams | null },
+): ToolContext {
+  return {
+    ls: seedLs,
+    birth: opts?.birth ?? null,
+    profiles: opts?.profiles ?? null,
+    activeProfile: null,
+    subjectSwitched: false,
+  };
 }
 
 // Các tool cần lá số đã lập (guard nếu chưa có).
@@ -36,9 +64,41 @@ function currentYearVN(): number {
 }
 
 // ── Định nghĩa tool (Anthropic tool-use schema) ─────────────
+// hasProfiles=true (kênh chat có sổ lá số) → thêm 3 tool quản lý sổ.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function buildToolDefs(): any[] {
+export function buildToolDefs(hasProfiles = false): any[] {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const profileTools: any[] = hasProfiles
+    ? [
+        {
+          name: 'luu_la_so',
+          description:
+            'Lưu lá số VỪA lập (hoặc đang xem) vào sổ với một TÊN do người dùng đặt, để lần sau gọi lại nhanh. Gọi sau khi đã lập lá số và người dùng cho tên (vd "anh Tony", "con gái"). Nếu người dùng không muốn đặt tên thì tự đặt tên gợi ý ngắn gọn (vd "Nam 2019").',
+          input_schema: {
+            type: 'object',
+            properties: { ten: { type: 'string', description: 'Tên đặt cho lá số, vd "anh Tony"' } },
+            required: ['ten'],
+          },
+        },
+        {
+          name: 'mo_la_so',
+          description:
+            'Mở lại một lá số ĐÃ LƯU trong sổ theo tên (vd người dùng nói "xem lá số Tony", "lá số con gái"). Trả về toàn bộ lá số để luận. CHỈ luận trên lá số vừa mở, không trộn với lá số khác.',
+          input_schema: {
+            type: 'object',
+            properties: { ten: { type: 'string', description: 'Tên lá số cần mở' } },
+            required: ['ten'],
+          },
+        },
+        {
+          name: 'liet_ke_la_so',
+          description: 'Liệt kê các lá số đã lưu trong sổ của người dùng (khi họ hỏi "có những lá số nào", "danh sách lá số").',
+          input_schema: { type: 'object', properties: {} },
+        },
+      ]
+    : [];
   return [
+    ...profileTools,
     {
       name: 'lap_la_so',
       description:
@@ -87,6 +147,9 @@ export interface ToolRunResult {
 // ── Dispatcher ──────────────────────────────────────────────
 export async function executeTool(name: string, input: Rec, ctx: ToolContext): Promise<ToolRunResult> {
   if (name === 'lap_la_so') return execLapLaSo(input, ctx);
+  if (name === 'luu_la_so') return execLuuLaSo(input, ctx);
+  if (name === 'mo_la_so') return execMoLaSo(input, ctx);
+  if (name === 'liet_ke_la_so') return execLietKeLaSo(ctx);
   if (name === 'tra_cuu_tri_thuc') {
     return { content: await execTraCuu(input), label: 'Đang tra cứu sách cổ...' };
   }
@@ -105,21 +168,82 @@ export async function executeTool(name: string, input: Rec, ctx: ToolContext): P
 }
 
 function execLapLaSo(input: Rec, ctx: ToolContext): ToolRunResult {
-  const res = computeLaso({
+  const birth: BirthParams = {
     day: Number(input.day),
     month: Number(input.month),
     year: Number(input.year),
     hourBranch: Number(input.hourBranch),
     gender: input.gender === 'nu' ? 'nu' : 'nam',
-  });
+  };
+  const res = computeLaso(birth);
   if (!res.ok || !res.ls) {
     return { content: 'Không lập được lá số: ' + (res.error || 'lỗi không rõ'), label: 'Lỗi lập lá số' };
   }
   ctx.ls = res.ls;
+  ctx.birth = birth; // để luu_la_so lưu được lá số vừa lập
   return {
     content: 'ĐÃ LẬP LÁ SỐ. Dữ liệu (chỉ luận trên đây, không bịa thêm):\n\n' + formatLasoContext(res.ls),
     label: 'Đang lập lá số — ' + (lasoSummary(res.ls) || '...'),
   };
+}
+
+// ── Sổ lá số: lưu / mở / liệt kê ────────────────────────────
+function birthLabel(b: BirthParams): string {
+  const g = b.gender === 'nu' ? 'Nữ' : 'Nam';
+  return `${g} ${b.day}/${b.month}/${b.year}`;
+}
+
+async function execLuuLaSo(input: Rec, ctx: ToolContext): Promise<ToolRunResult> {
+  const ten = String(input?.ten || '').trim();
+  if (!ctx.profiles) return { content: 'Kênh này chưa hỗ trợ lưu sổ lá số.', label: 'Lưu lá số' };
+  if (!ten) return { content: 'Cần một TÊN để lưu (vd: anh Tony).', label: 'Lưu lá số' };
+  if (!ctx.birth) return { content: 'Chưa có lá số nào để lưu — hãy lập lá số trước đã.', label: 'Lưu lá số' };
+  const ok = await ctx.profiles.save(ten, ctx.birth);
+  if (!ok) return { content: 'Lưu chưa thành công, thử lại sau giúp mình.', label: 'Lưu lá số' };
+  ctx.activeProfile = ten;
+  return {
+    content: `Đã lưu lá số vào sổ với tên "${ten}". Lần sau chỉ cần nhắn "xem lá số ${ten}" là mở lại được.`,
+    label: 'Lưu sổ — ' + ten,
+  };
+}
+
+async function execMoLaSo(input: Rec, ctx: ToolContext): Promise<ToolRunResult> {
+  const ten = String(input?.ten || '').trim();
+  if (!ctx.profiles) return { content: 'Kênh này chưa hỗ trợ sổ lá số.', label: 'Mở lá số' };
+  if (!ten) return { content: 'Cần TÊN lá số cần mở.', label: 'Mở lá số' };
+  const p = await ctx.profiles.get(ten);
+  if (!p) {
+    const all = await ctx.profiles.list();
+    const names = all.map((x) => x.name).join(', ');
+    return {
+      content: `Trong sổ chưa có lá số tên "${ten}".` + (names ? ` Sổ hiện có: ${names}.` : ' Sổ đang trống.'),
+      label: 'Mở lá số',
+    };
+  }
+  const res = computeLaso(p.birth);
+  if (!res.ok || !res.ls) {
+    return { content: `Tìm thấy "${p.name}" nhưng lập lại lá số lỗi: ` + (res.error || 'không rõ'), label: 'Mở lá số' };
+  }
+  ctx.ls = res.ls;
+  ctx.birth = p.birth;
+  ctx.activeProfile = p.name;
+  ctx.subjectSwitched = true; // đổi chủ thể → kênh reset thread
+  return {
+    content:
+      `ĐÃ MỞ lá số "${p.name}" (${birthLabel(p.birth)}). CHỈ luận trên lá số này, KHÔNG trộn với lá số khác:\n\n` +
+      formatLasoContext(res.ls),
+    label: 'Mở sổ — ' + p.name,
+  };
+}
+
+async function execLietKeLaSo(ctx: ToolContext): Promise<ToolRunResult> {
+  if (!ctx.profiles) return { content: 'Kênh này chưa hỗ trợ sổ lá số.', label: 'Sổ lá số' };
+  const all = await ctx.profiles.list();
+  if (!all.length) {
+    return { content: 'Sổ lá số đang trống. Lập một lá số rồi đặt tên để lưu nhé.', label: 'Sổ lá số' };
+  }
+  const lines = all.map((p) => `- ${p.name} (${birthLabel(p.birth)})`).join('\n');
+  return { content: 'Các lá số đã lưu trong sổ:\n' + lines, label: 'Sổ lá số' };
 }
 
 // RAG: OpenAI embeddings + Supabase pgvector rpc (port từ app/api/search)
