@@ -75,6 +75,24 @@ const DEFAULT_IMG_Q = 'Nhờ thầy xem giúp ảnh này.';
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+// Tin nhắn có chứa MỘT NGÀY SINH MỚI (đủ ngày + tháng + năm) → người dùng muốn
+// xem lá số KHÁC, không phải hỏi tiếp về lá số đã nhớ trong phiên. Khi đó KHÔNG
+// được mang `birth` cũ vào request: nếu mang, lib/agent/run seed nguyên lá số cũ
+// vào system trong khi agent lại lập lá số mới qua lap_la_so → hai lá số đá nhau
+// trong ngữ cảnh, model an sai cung (đã gặp: nhớ lá số A rồi đưa ngày sinh B,
+// Mệnh bị dán lệch). Phải đủ NGÀY (không chỉ tháng+năm) để KHỎI nhầm câu hỏi vận
+// hạn kiểu "tháng 6 năm 2027" thành ngày sinh.
+export function messageHasNewBirth(text: string): boolean {
+  if (!text) return false;
+  const t = text.toLowerCase();
+  // dd/mm/yyyy · dd-mm-yyyy · dd.mm.yyyy (năm 1900–2099)
+  if (/\b[0-3]?\d[/\-.][01]?\d[/\-.](?:19|20)\d{2}\b/.test(t)) return true;
+  // "ngày <d> ... tháng <m> ... năm <yyyy>" (đúng thứ tự, cho phép chữ xen giữa)
+  if (/ngày\s*\d{1,2}\b[\s\S]{0,24}?tháng\s*\d{1,2}\b[\s\S]{0,24}?năm\s*(?:19|20)\d{2}\b/.test(t))
+    return true;
+  return false;
+}
+
 // ── Điều phối 1 lượt (dùng chung mọi kênh) ──────────────────
 // gateCommit: gọi SAU khi trả lời thành công (trừ Lượng / tăng lượt free).
 // Cổng từ chối (allowed=false) do adapter xử lý TRƯỚC khi gọi hàm này.
@@ -102,6 +120,10 @@ export async function runConversation(
   }
 
   const session = await store.load(chatId);
+  // Tin này chứa ngày sinh MỚI → lá số KHÁC, bỏ birth cũ của phiên để khỏi nhiễm
+  // chéo (xem messageHasNewBirth). Agent sẽ tự gọi lap_la_so cho ngày mới và
+  // capturedBirth mới sẽ được lưu lại ở cuối lượt cho các follow-up sau.
+  const carryBirth = session.birth && !messageHasNewBirth(incoming.text) ? session.birth : null;
   // Tin lượt này gửi runAgent KÈM ảnh. Chỉ ảnh, không caption → mồi câu hỏi.
   const userMsg: ChatMessage = { role: 'user', content: incoming.text || DEFAULT_IMG_Q };
   if (images.length) userMsg.images = images;
@@ -131,8 +153,9 @@ export async function runConversation(
       session_id: `${io.platform}-${chatId}`,
       messages,
       stream: true,
-      // Đã có lá số từ phiên trước → truyền thẳng, không hỏi lại ngày sinh.
-      ...(session.birth ? { birth: session.birth } : {}),
+      // Đã có lá số từ phiên trước (và tin này KHÔNG kèm ngày sinh mới) → truyền
+      // thẳng, không hỏi lại ngày sinh. Tin có ngày sinh mới → carryBirth=null.
+      ...(carryBirth ? { birth: carryBirth } : {}),
       client: { platform: io.platform, version: '1.0.0' },
     };
     const collector = createSSECollector(onStatus);
