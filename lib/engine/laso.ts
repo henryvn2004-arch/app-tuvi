@@ -131,9 +131,29 @@ function starName(s: unknown): string {
   return typeof s === 'object' && s ? String((s as Rec).ten || '') : String(s || '');
 }
 
+// Luật tối thượng: model phải ĐỌC nhãn cung engine, KHÔNG tự an lại. Đặt NGAY
+// đầu khối dữ liệu (cả tool_result lẫn embedded) — đã gặp lỗi model tự suy cung
+// Mệnh bằng cách quy đổi tháng dương↔âm SAI (dùng tháng 6 dương thay tháng 5 âm)
+// → dán Mệnh lệch 1 cung dù sao theo địa chi vẫn đúng.
+export const LASO_AUTHORITY_RULE =
+  '⚠️ DỮ LIỆU LÁ SỐ DƯỚI ĐÂY DO ENGINE AN SẴN — CHÍNH XÁC TUYỆT ĐỐI, KHÔNG ĐƯỢC TÍNH LẠI:\n' +
+  '• Cung Mệnh (nhãn ★MỆNH), Cung Thân (◆THÂN) và vị trí MỌI sao đã được engine an đúng (ngày DƯƠNG đã quy đổi ÂM LỊCH chuẩn rồi). TUYỆT ĐỐI KHÔNG tự an sao, KHÔNG tự suy/tính lại cung Mệnh–Thân, KHÔNG tự quy đổi tháng dương sang tháng âm để đoán cung.\n' +
+  '• Khi cần nói "Mệnh nằm cung nào / có chính tinh gì", ĐỌC ĐÚNG cung gắn nhãn ★MỆNH trong bảng — KHÔNG dịch sang cung bên cạnh. Nếu trí nhớ/suy luận của bạn khác bảng thì BẢNG ĐÚNG, bạn SAI.\n\n';
+
 export function formatLasoContext(ls: Laso): string {
   const palaces = (ls.palaces as Rec[]) || [];
-  let ctx = '';
+  let ctx = LASO_AUTHORITY_RULE;
+
+  // Khóa cứng kết luận an sao ngay đầu — anchor crisp để model không tự dời Mệnh.
+  const menhP = palaces.find((p) => p.isMenh);
+  const thanP = palaces.find((p) => p.isThan);
+  if (menhP) {
+    const ms =
+      ((menhP.majorStars as unknown[]) || []).map(starName).filter(Boolean).join(', ') || 'vô chính diệu';
+    ctx += `KẾT LUẬN AN SAO (khóa cứng — luận ĐÚNG theo đây): Mệnh tại cung ${menhP.diaChi} — chính tinh ${ms}.`;
+    if (thanP) ctx += ` Thân tại cung ${thanP.diaChi}.`;
+    ctx += '\n\n';
+  }
 
   if (ls.canChiNam) ctx += 'Can Chi năm sinh: ' + ls.canChiNam + '\n';
   if (ls.napAm) ctx += 'Nạp Âm: ' + ls.napAm + ' (' + (ls.napAmHanh || '') + ')\n';

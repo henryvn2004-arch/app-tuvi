@@ -13,6 +13,7 @@
 // ============================================================
 
 import { buildTools, TOOLS_INSTRUCTION } from "@/lib/agent/tools";
+import { LASO_AUTHORITY_RULE } from "@/lib/engine/laso";
 import { currentNamXem } from "@/lib/engine/namxem";
 import { matchVanHanCombos, formatComboLines, type LayerCung } from "@/lib/agent/vanHanCombos";
 
@@ -145,7 +146,7 @@ THÔNG TIN THỜI GIAN (do server cung cấp, chính xác): Hôm nay là ngày $
 Nguyên tắc trả lời:
 - Tiếng Việt chuẩn mực, KHÔNG bullet, KHÔNG emoji, KHÔNG tiêu đề con, văn xuôi liền mạch
 - ĐỘ DÀI: mặc định 130–200 từ, câu phức tạp tối đa 280, lượt follow-up 80–140
-- Khi user cung cấp ngày/giờ/giới tính sinh (hoặc phiên đã có lá số) → GỌI lap_la_so để server lập lá số, rồi luận theo HÌNH DẠNG 3 LỚP: (1) MỘT câu phán quyết in đậm (**...**) neo vào CẤU TRÚC THẬT của cung liên quan — chính tinh tọa cung (miếu/vượng/đắc/hãm), cách cục đặc biệt, mức cát/sát — nói thẳng tốt/xấu mạnh/yếu (TUYỆT ĐỐI không bịa "điểm cung X/10"); (2) một mạch dẫn chứng cốt lõi — chính tinh tọa cung + cách cục NẶNG KÝ NHẤT cho câu hỏi, kèm ĐÚNG 1 điểm mạnh và 1 điểm yếu cụ thể, KHÔNG liệt kê dàn trải; (3) MỞ NÚT: nêu đích danh MỘT chi tiết CÓ THẬT trong lá số chưa luận, mời mở ra bằng ĐÚNG 1 câu hỏi (cấm mời chung chung "còn hỏi gì không")
+- Khi user cung cấp ngày/giờ/giới tính sinh (hoặc phiên đã có lá số) → GỌI lap_la_so để server lập lá số. Lá số do lap_la_so trả về là DUY NHẤT đúng: cung Mệnh/Thân và mọi sao phải lấy Y NGUYÊN theo nhãn trong kết quả tool — TUYỆT ĐỐI không tự an cung, không tự quy đổi ngày dương sang tháng âm, không tự suy cung Mệnh. Rồi luận theo HÌNH DẠNG 3 LỚP: (1) MỘT câu phán quyết in đậm (**...**) neo vào CẤU TRÚC THẬT của cung liên quan — chính tinh tọa cung (miếu/vượng/đắc/hãm), cách cục đặc biệt, mức cát/sát — nói thẳng tốt/xấu mạnh/yếu (TUYỆT ĐỐI không bịa "điểm cung X/10"); (2) một mạch dẫn chứng cốt lõi — chính tinh tọa cung + cách cục NẶNG KÝ NHẤT cho câu hỏi, kèm ĐÚNG 1 điểm mạnh và 1 điểm yếu cụ thể, KHÔNG liệt kê dàn trải; (3) MỞ NÚT: nêu đích danh MỘT chi tiết CÓ THẬT trong lá số chưa luận, mời mở ra bằng ĐÚNG 1 câu hỏi (cấm mời chung chung "còn hỏi gì không")
 - Câu hỏi gắn MỘT NĂM → gọi tra_tieu_van; một THÁNG → tra_nguyet_van; một NGÀY → tra_nhat_van; ngày tốt làm việc lớn → xem_ngay_tot
 - VẬN HẠN — đại vận GIỚI HẠN BIÊN ĐỘ, KHÔNG áp theme: CHỈ đại vận có điểm/10 thật. TIỂU/NGUYỆT/NHẬT vận KHÔNG có điểm — luận theo CÁCH CỤC + sao của CHÍNH cung hạn, giữ ĐÚNG tốt/xấu của nó (cách tốt/sao cát → vận TỐT dù đại vận xấu; sát tinh/cách xấu → vận XẤU dù đại vận tốt); điểm đại vận chỉ chỉnh biên độ: thấp thì cái tốt bị kìm không rực rỡ, cao thì cái tốt bung rực rỡ. CẤM bê theme đại vận áp cho mọi mốc. Không bịa "điểm/10" cho năm/tháng/ngày
 - TÁCH BẠCH cung vs đại vận: hỏi BẢN CHẤT một cung (nhà đất, tiền bạc, hôn nhân... nói chung) → CHỈ luận theo sao + cách cục của CHÍNH cung đó; KHÔNG kéo "đại vận đi qua cung này" vào, KHÔNG lấy điểm đại vận chấm tốt/xấu cho cung (đại vận chỉ mượn cung đứng, không đổi cách cục cung). Điểm đại vận chỉ dùng khi hỏi về THỜI GIAN/vận hạn
@@ -318,7 +319,7 @@ export function extractLasoContext(lasoData: any, question: string, opts?: { ful
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const starName = (s: any): string => (typeof s === 'object' ? s.ten || '' : s || '');
 
-  let ctx = '';
+  let ctx = LASO_AUTHORITY_RULE;
   if (lasoData.canChiNam) ctx += 'Can Chi: ' + lasoData.canChiNam + '\n';
   if (lasoData.napAm)     ctx += 'Nạp Âm: ' + lasoData.napAm + ' (' + (lasoData.napAmHanh || '') + ')\n';
   if (lasoData.menhDC)    ctx += 'Mệnh DC: ' + lasoData.menhDC + '\n';
