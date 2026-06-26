@@ -19,7 +19,7 @@ import {
   type BirthParams,
 } from '@/lib/contract/v1';
 import { buildToolDefs, executeTool, newToolContext, type ProfilePort } from '@/lib/tools/registry';
-import { computeLaso } from '@/lib/engine/laso';
+import { computeLaso, renderLasoCard } from '@/lib/engine/laso';
 import { computeTuBinh } from '@/lib/engine/tubinh';
 import { computeSinhCon, computeChonNgay, computeDatTen } from '@/lib/engine/diachi';
 // Template prompt + context formatter dùng CHUNG với /api/lasotuvi (một bộ não).
@@ -103,6 +103,10 @@ export async function runAgent(
   birth: BirthParams | null;
   activeProfile: string | null;
   subjectSwitched: boolean;
+  // Thẻ lá số deterministic (engine render) khi vừa LẬP/MỞ lá số trong lượt —
+  // kênh chat chèn lên đầu câu trả lời để người dùng nhận BẢN CHUẨN, không phụ
+  // thuộc LLM. null nếu lượt này không lập/mở lá số (follow-up).
+  lasoCard: string | null;
 }> {
   // Seed ctx với birth đang xem (req.birth) → "lưu lá số này tên X" chạy được cả
   // khi lượt này không gọi lại lap_la_so. profiles bật 3 tool sổ (kênh chat).
@@ -285,11 +289,16 @@ export async function runAgent(
 
   // ctx.birth phản ánh lá số đang xem cuối lượt (mo_la_so có thể đã đổi sang lá
   // số khác) → ưu tiên nó. activeProfile/subjectSwitched cho kênh lưu & reset thread.
+  // Thẻ lá số CHỈ render khi lượt này vừa LẬP (lap_la_so) hoặc MỞ (mo_la_so) lá
+  // số — không lặp ở các lượt follow-up (lúc đó lá số đã hiện trước đó rồi).
+  const justBuilt = toolsUsed.includes('lap_la_so') || toolsUsed.includes('mo_la_so');
+  const lasoCard = justBuilt && ctx.ls ? renderLasoCard(ctx.ls, ctx.birth) : null;
   return {
     toolsUsed,
     birth: ctx.birth ?? capturedBirth,
     activeProfile: ctx.activeProfile,
     subjectSwitched: ctx.subjectSwitched,
+    lasoCard,
   };
 }
 

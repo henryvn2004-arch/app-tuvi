@@ -182,10 +182,19 @@ function execLapLaSo(input: Rec, ctx: ToolContext): ToolRunResult {
   ctx.ls = res.ls;
   ctx.birth = birth; // để luu_la_so lưu được lá số vừa lập
   return {
-    content: 'ĐÃ LẬP LÁ SỐ. Dữ liệu (chỉ luận trên đây, không bịa thêm):\n\n' + formatLasoContext(res.ls),
+    content:
+      'ĐÃ LẬP LÁ SỐ. Dữ liệu (chỉ luận trên đây, không bịa thêm):\n\n' +
+      formatLasoContext(res.ls) +
+      CARD_SHOWN_NOTE,
     label: 'Đang lập lá số — ' + (lasoSummary(res.ls) || '...'),
   };
 }
+
+// Lá số đã được render thành BẢNG gửi thẳng cho người dùng (thẻ deterministic ở
+// kênh chat / lưới ở web). Nhắc model: chỉ LUẬN, đừng chép lại bảng → tránh
+// model tự an cung sai khi liệt kê (lỗi Mệnh Dần đã gặp).
+const CARD_SHOWN_NOTE =
+  '\n\n(Lá số trên ĐÃ được hiển thị cho người dùng dưới dạng bảng. Bạn KHÔNG cần liệt kê lại 12 cung hay nhắc lại Mệnh/Thân nằm ở cung nào — chỉ LUẬN Ý NGHĨA theo câu hỏi, bám đúng nhãn cung trong dữ liệu.)';
 
 // ── Sổ lá số: lưu / mở / liệt kê ────────────────────────────
 function birthLabel(b: BirthParams): string {
@@ -231,7 +240,8 @@ async function execMoLaSo(input: Rec, ctx: ToolContext): Promise<ToolRunResult> 
   return {
     content:
       `ĐÃ MỞ lá số "${p.name}" (${birthLabel(p.birth)}). CHỈ luận trên lá số này, KHÔNG trộn với lá số khác:\n\n` +
-      formatLasoContext(res.ls),
+      formatLasoContext(res.ls) +
+      CARD_SHOWN_NOTE,
     label: 'Mở sổ — ' + p.name,
   };
 }

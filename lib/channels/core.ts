@@ -182,7 +182,7 @@ export async function runConversation(
       client: { platform: io.platform, version: '1.0.0' },
     };
     const collector = createSSECollector(onStatus);
-    const { birth: agentBirth, subjectSwitched } = await runAgent(req, cfg, collector.send, profilePort);
+    const { birth: agentBirth, subjectSwitched, lasoCard } = await runAgent(req, cfg, collector.send, profilePort);
     working = false;
 
     const err = collector.getError();
@@ -196,7 +196,12 @@ export async function runConversation(
       await deliver(io, chatId, progressId, errMsg);
       return;
     }
-    await deliver(io, chatId, progressId, answer);
+    // Vừa lập/mở lá số → chèn THẺ LÁ SỐ deterministic (engine render) lên đầu câu
+    // trả lời gửi đi. Đây là bản CHUẨN người dùng nhận, không phụ thuộc LLM (dù
+    // LLM luận lệch nhãn cung thì thẻ vẫn đúng). KHÔNG lưu thẻ vào history (giữ
+    // sạch + tránh model thấy lại; lượt sau có lá số trong system rồi).
+    const delivered = lasoCard ? lasoCard + '\n\n———\n\n' + answer : answer;
+    await deliver(io, chatId, progressId, delivered);
     // Trả lời thành công → CHỐT tính phí (lỗi thì không tính, đã return trên).
     if (gateCommit) await gateCommit();
 

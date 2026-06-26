@@ -37,6 +37,9 @@ type Rec = Record<string, unknown>;
 // Giờ sinh: index địa chi (0=Tý..11=Hợi) → giờ đại diện
 const GIO_HOURS = [23, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21];
 
+// Tên 12 địa chi theo index (cho nhãn giờ trong thẻ lá số).
+const CHI_NAMES = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
+
 // ── Engine loader (singleton) ───────────────────────────────
 let engineCache: {
   convertDuongToAm: (...a: unknown[]) => unknown;
@@ -221,6 +224,47 @@ export function formatLasoContext(ls: Laso): string {
   // đến qua tool tra_* khi user hỏi về thời gian/vận hạn.)
 
   return ctx;
+}
+
+/**
+ * Thẻ lá số DETERMINISTIC để GỬI THẲNG cho người dùng (kênh chat không có lưới
+ * trực quan như web). Đây là NGUỒN SỰ THẬT người dùng nhận — engine render,
+ * LLM KHÔNG đụng vào → dù LLM luận có lệch nhãn cung thì thẻ này vẫn đúng.
+ * Chỉ liệt kê chính tinh + tứ hóa (bộ khung); phụ tinh để LLM luận.
+ */
+export function renderLasoCard(ls: Laso, birth?: BirthParams | null): string {
+  const palaces = (ls.palaces as Rec[]) || [];
+  const menh = palaces.find((p) => p.isMenh) as Rec | undefined;
+  const than = palaces.find((p) => p.isThan) as Rec | undefined;
+  const menhStars =
+    ((menh?.majorStars as unknown[]) || []).map(starFmt).filter(Boolean).join(', ') || 'Vô chính diệu';
+
+  let s = '🗂 LÁ SỐ (hệ thống lập tự động — số liệu chuẩn xác):\n';
+  const bits: string[] = [];
+  if (birth) {
+    bits.push(birth.gender === 'nu' ? 'Nữ' : 'Nam');
+    bits.push(`${birth.day}/${birth.month}/${birth.year} DL`);
+    if (birth.hourBranch != null && birth.hourBranch >= 0 && birth.hourBranch < 12) {
+      bits.push('giờ ' + CHI_NAMES[birth.hourBranch]);
+    }
+  }
+  if (ls.canChiNam) bits.push(String(ls.canChiNam));
+  if (ls.cuc) bits.push(String(ls.cuc));
+  if (bits.length) s += bits.join(' · ') + '\n';
+  if (ls.napAm) {
+    const na = String(ls.napAm);
+    const hanh = ls.napAmHanh ? String(ls.napAmHanh) : '';
+    s += 'Nạp âm: ' + na + (hanh && hanh !== na ? ` (hành ${hanh})` : '') + '\n';
+  }
+  s += `★ Mệnh ${menh?.diaChi || '?'}: ${menhStars}` + (than ? ` · ◆ Thân ${than.diaChi}` : '') + '\n\n';
+
+  for (const p of palaces) {
+    const stars =
+      ((p.majorStars as unknown[]) || []).map(starFmt).filter(Boolean).join(', ') || 'Vô chính diệu';
+    const mark = p.isMenh ? '★' : p.isThan ? '◆' : '·';
+    s += `${mark} ${p.cungName || ''} (${p.diaChi || ''}): ${stars}\n`;
+  }
+  return s.trimEnd();
 }
 
 /** Tóm tắt 1 dòng để hiển thị nhãn tool_call cho client. */
