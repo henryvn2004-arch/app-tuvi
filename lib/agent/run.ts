@@ -18,7 +18,7 @@ import {
   type ScenarioInput,
   type BirthParams,
 } from '@/lib/contract/v1';
-import { buildToolDefs, executeTool, newToolContext, resolveHourBranch, type ProfilePort } from '@/lib/tools/registry';
+import { buildToolDefs, executeTool, newToolContext, buildBirthFromInput, type ProfilePort } from '@/lib/tools/registry';
 import { computeLaso, renderLasoCard } from '@/lib/engine/laso';
 import { computeTuBinh } from '@/lib/engine/tubinh';
 import { computeSinhCon, computeChonNgay, computeDatTen } from '@/lib/engine/diachi';
@@ -270,8 +270,12 @@ export async function runAgent(
       const results = [];
       for (const tu of toolUses) {
         toolsUsed.push(tu.name);
-        // Agent vừa lập lá số từ text → ghi lại birth để phiên sau dùng thẳng.
-        if (tu.name === 'lap_la_so' && tu.input) capturedBirth = toBirth(tu.input);
+        // Agent vừa lập lá số từ text → ghi lại birth (đã chuẩn hóa server-side:
+        // giờ/giới tính/năm/âm-dương) để phiên sau dùng thẳng.
+        if (tu.name === 'lap_la_so' && tu.input) {
+          const b = buildBirthFromInput(tu.input);
+          if (b) capturedBirth = b;
+        }
         const run = await executeTool(tu.name, tu.input || {}, ctx);
         send(sse.toolCall({ name: tu.name, args: safeArgs(tu.input) }));
         send(sse.status({ text: run.label }));
@@ -299,19 +303,6 @@ export async function runAgent(
     activeProfile: ctx.activeProfile,
     subjectSwitched: ctx.subjectSwitched,
     lasoCard,
-  };
-}
-
-// Chuẩn hóa input tool lap_la_so → BirthParams (để lưu phiên Telegram).
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function toBirth(input: any): BirthParams {
-  return {
-    day: Number(input.day),
-    month: Number(input.month),
-    year: Number(input.year),
-    // Dùng chung resolver: ưu tiên giờ đồng hồ (hour) → địa chi (server map).
-    hourBranch: resolveHourBranch(input) ?? 0,
-    gender: input.gender === 'nu' ? 'nu' : 'nam',
   };
 }
 

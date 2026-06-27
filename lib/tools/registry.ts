@@ -115,6 +115,12 @@ export function buildToolDefs(hasProfiles = false): any[] {
               'Giờ sinh theo ĐỒNG HỒ, hệ 24h (0–23) — CHỈ chép lại giờ người dùng nói, KHÔNG đổi sang địa chi. Quy đổi 12h→24h: 9h35 sáng→9, 12h trưa→12, 2h chiều→14, 9h tối→21, 11h đêm→23, 12h đêm/nửa đêm→0. Dùng field này khi có giờ đồng hồ.',
           },
           minute: { type: 'integer', description: 'Phút sinh (0–59), nếu biết — không bắt buộc.' },
+          calendar: {
+            type: 'string',
+            enum: ['duong', 'am'],
+            description:
+              'Loại lịch của NGÀY/THÁNG/NĂM ở trên: "duong" nếu dương/tây lịch (mặc định), "am" nếu người dùng nói âm/ta lịch ("ÂL", "âm lịch", "lịch ta"). CHỈ gắn cờ — TUYỆT ĐỐI không tự đổi âm sang dương, hệ thống tự quy đổi.',
+          },
           hourBranch: {
             type: 'integer',
             description:
@@ -173,9 +179,12 @@ export async function executeTool(name: string, input: Rec, ctx: ToolContext): P
   return { content: 'Công cụ không tồn tại.', label: 'Công cụ lạ' };
 }
 
-// Giải địa chi giờ từ input tool: ƯU TIÊN giờ ĐỒNG HỒ (hour) → clockToBranch
-// (server tự map, tránh LLM map sai); chỉ fallback hourBranch khi user cho giờ
-// địa chi trực tiếp. Trả null nếu không có giờ hợp lệ. Dùng chung với run.ts.
+// ── Chuẩn hóa input lá số SERVER-SIDE (LLM chỉ CHÉP, server SUY/ĐỔI) ──
+// Mọi phép biến đổi dễ sai của LLM được dời về đây: giờ→địa chi, giới tính đồng
+// nghĩa, năm 2 chữ số, âm/dương lịch. LLM chỉ cần trích đúng giá trị thô.
+
+// Giải địa chi giờ: ƯU TIÊN giờ ĐỒNG HỒ (hour) → clockToBranch (server tự map,
+// tránh LLM map sai); chỉ fallback hourBranch khi user cho giờ địa chi trực tiếp.
 export function resolveHourBranch(input: Rec): number | null {
   if (input.hour != null && input.hour !== '') {
     const h = Number(input.hour);
@@ -188,18 +197,49 @@ export function resolveHourBranch(input: Rec): number | null {
   return null;
 }
 
-function execLapLaSo(input: Rec, ctx: ToolContext): ToolRunResult {
+// Giới tính: chấp nhận đồng nghĩa (nữ/gái/female…) → 'nam'|'nu'. Mặc định nam.
+function normGender(g: unknown): 'nam' | 'nu' {
+  const s = String(g ?? '').toLowerCase().trim();
+  if (/(^|[^a-z])(nu|nữ|gai|gái|female|girl|woman|f)([^a-z]|$)|con\s*gái/.test(s)) return 'nu';
+  return 'nam';
+}
+
+// Năm: 2 chữ số → 4 chữ số (00–29 → 20xx, 30–99 → 19xx, hợp với năm sinh).
+function normYear(y: unknown): number {
+  let n = Number(y);
+  if (!Number.isFinite(n)) return NaN;
+  n = Math.floor(n);
+  if (n >= 0 && n < 100) n = n >= 30 ? 1900 + n : 2000 + n;
+  return n;
+}
+
+// Lịch âm? calendar='am' (hoặc isLunar=true) → ngày là ÂM lịch, computeLaso tự đổi.
+function isLunarInput(input: Rec): boolean {
+  if (input.isLunar === true) return true;
+  return /^(am|âm|lunar|al|ÂL)$/i.test(String(input.calendar ?? '').trim());
+}
+
+// Dựng BirthParams chuẩn từ input tool. null nếu thiếu giờ/năm hợp lệ. Dùng CHUNG
+// cho execLapLaSo và run.ts (capturedBirth) → một nguồn chuẩn hóa.
+export function buildBirthFromInput(input: Rec): BirthParams | null {
   const hb = resolveHourBranch(input);
-  if (hb == null) {
-    return { content: 'Thiếu giờ sinh — cho mình biết giờ đồng hồ (vd 9h35 sáng) hoặc giờ địa chi (vd giờ Tỵ).', label: 'Lỗi lập lá số' };
+  if (hb == null) return null;
+  const year = normYear(input.year);
+  const day = Math.floor(Number(input.day));
+  const month = Math.floor(Number(input.month));
+  if (!Number.isFinite(year) || !Number.isFinite(day) || !Number.isFinite(month)) return null;
+  return { day, month, year, hourBranch: hb, gender: normGender(input.gender), isLunar: isLunarInput(input) };
+}
+
+function execLapLaSo(input: Rec, ctx: ToolContext): ToolRunResult {
+  const birth = buildBirthFromInput(input);
+  if (!birth) {
+    return {
+      content:
+        'Thiếu thông tin để lập lá số — cần đủ ngày, tháng, năm sinh, GIỜ (giờ đồng hồ như 9h35, hoặc giờ địa chi như giờ Tỵ) và giới tính.',
+      label: 'Lỗi lập lá số',
+    };
   }
-  const birth: BirthParams = {
-    day: Number(input.day),
-    month: Number(input.month),
-    year: Number(input.year),
-    hourBranch: hb,
-    gender: input.gender === 'nu' ? 'nu' : 'nam',
-  };
   const res = computeLaso(birth);
   if (!res.ok || !res.ls) {
     return { content: 'Không lập được lá số: ' + (res.error || 'lỗi không rõ'), label: 'Lỗi lập lá số' };

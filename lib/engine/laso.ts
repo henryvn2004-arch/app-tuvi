@@ -69,6 +69,29 @@ function loadEngine() {
   return engineCache!;
 }
 
+/**
+ * Âm lịch → Dương lịch (DETERMINISTIC). Engine chỉ có chiều dương→âm, nên dò
+ * ngược: quét ngày dương trong [ly .. ly+1], lấy ngày mà convertDuongToAm ra
+ * đúng (ngày,tháng,năm) âm cần. Dùng CHÍNH convertDuongToAm của engine → parity
+ * tuyệt đối với cách anSaoLaSo hiểu ngày. Lấy match ĐẦU TIÊN (bỏ qua tháng nhuận).
+ * Trả null nếu không tìm thấy (ngày âm không hợp lệ).
+ */
+function lunarToSolar(ld: number, lm: number, ly: number): { day: number; month: number; year: number } | null {
+  const { convertDuongToAm } = loadEngine();
+  for (let yy = ly; yy <= ly + 1; yy++) {
+    for (let mm = 1; mm <= 12; mm++) {
+      const dim = new Date(yy, mm, 0).getDate(); // số ngày của tháng dương mm
+      for (let dd = 1; dd <= dim; dd++) {
+        const al = (convertDuongToAm(dd, mm, yy, 12) as Rec)?.amLich as Rec | undefined;
+        if (al && Number(al.day) === ld && Number(al.month) === lm && Number(al.year) === ly) {
+          return { day: dd, month: mm, year: yy };
+        }
+      }
+    }
+  }
+  return null;
+}
+
 export type Laso = Rec;
 
 export interface ComputeLasoResult {
@@ -93,14 +116,23 @@ export function computeLaso(birth: BirthParams, namXem?: number): ComputeLasoRes
   if (gender !== 'nam' && gender !== 'nu') {
     return { ok: false, error: 'Thiếu giới tính (nam/nu).' };
   }
-  if (isLunar) {
-    return { ok: false, error: 'Hiện chỉ hỗ trợ ngày dương lịch; vui lòng cung cấp ngày dương.' };
-  }
-
   try {
     const { convertDuongToAm, anSaoLaSo } = loadEngine();
+    // Ngày ÂM lịch → quy đổi sang DƯƠNG trước (server tự làm, KHÔNG để LLM đổi).
+    let dd = day,
+      mm = month,
+      yy = year;
+    if (isLunar) {
+      const solar = lunarToSolar(day, month, year);
+      if (!solar) {
+        return { ok: false, error: 'Không đổi được ngày âm lịch sang dương — kiểm tra lại ngày/tháng/năm âm.' };
+      }
+      dd = solar.day;
+      mm = solar.month;
+      yy = solar.year;
+    }
     const hour = GIO_HOURS[hourBranch];
-    const conv = convertDuongToAm(day, month, year, hour) as Rec;
+    const conv = convertDuongToAm(dd, mm, yy, hour) as Rec;
     if (!conv?.amLich) return { ok: false, error: 'Không chuyển được sang âm lịch.' };
     const al = conv.amLich as Rec;
 
