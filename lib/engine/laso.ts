@@ -40,6 +40,17 @@ const GIO_HOURS = [23, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21];
 // Tên 12 địa chi theo index (cho nhãn giờ trong thẻ lá số).
 const CHI_NAMES = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
 
+/**
+ * Giờ ĐỒNG HỒ (24h) → index địa chi giờ (0=Tý..11=Hợi) — DETERMINISTIC, server
+ * tự tính để KHÔNG để LLM map (đã gặp lỗi LLM chọn 9h35→Thìn thay vì Tỵ).
+ * Tý=23:00–00:59, Sửu=01:00–02:59, … Tỵ=09:00–10:59 … (khối 2 giờ, neo giờ lẻ).
+ * Phút không đổi khối nên bỏ qua. Ví dụ: 9→Tỵ(5), 13→Mùi(7), 23→Tý(0), 0→Tý(0).
+ */
+export function clockToBranch(hour: number): number {
+  const h = (((Math.floor(hour) % 24) + 24) % 24);
+  return Math.floor(((h + 1) % 24) / 2) % 12;
+}
+
 // ── Engine loader (singleton) ───────────────────────────────
 let engineCache: {
   convertDuongToAm: (...a: unknown[]) => unknown;

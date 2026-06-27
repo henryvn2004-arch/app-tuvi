@@ -18,7 +18,7 @@ import {
   type ScenarioInput,
   type BirthParams,
 } from '@/lib/contract/v1';
-import { buildToolDefs, executeTool, newToolContext, type ProfilePort } from '@/lib/tools/registry';
+import { buildToolDefs, executeTool, newToolContext, resolveHourBranch, type ProfilePort } from '@/lib/tools/registry';
 import { computeLaso, renderLasoCard } from '@/lib/engine/laso';
 import { computeTuBinh } from '@/lib/engine/tubinh';
 import { computeSinhCon, computeChonNgay, computeDatTen } from '@/lib/engine/diachi';
@@ -309,7 +309,8 @@ function toBirth(input: any): BirthParams {
     day: Number(input.day),
     month: Number(input.month),
     year: Number(input.year),
-    hourBranch: Number(input.hourBranch),
+    // Dùng chung resolver: ưu tiên giờ đồng hồ (hour) → địa chi (server map).
+    hourBranch: resolveHourBranch(input) ?? 0,
     gender: input.gender === 'nu' ? 'nu' : 'nam',
   };
 }

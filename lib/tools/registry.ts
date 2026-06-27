@@ -11,7 +11,7 @@
 //   tra_tieu_van · tra_nguyet_van · tra_nhat_van · xem_ngay_tot
 // ============================================================
 
-import { computeLaso, formatLasoContext, lasoSummary, type Laso } from '@/lib/engine/laso';
+import { computeLaso, formatLasoContext, lasoSummary, clockToBranch, type Laso } from '@/lib/engine/laso';
 import { buildTools, execLasoTool, toolLabel } from '@/lib/agent/tools';
 import type { BirthParams } from '@/lib/contract/v1';
 
@@ -102,21 +102,27 @@ export function buildToolDefs(hasProfiles = false): any[] {
     {
       name: 'lap_la_so',
       description:
-        'Lập lá số Tử Vi Đẩu Số từ ngày sinh DƯƠNG lịch. Gọi tool này NGAY khi đã biết đủ ngày/tháng/năm sinh dương lịch, giờ sinh và giới tính. Trả về toàn bộ 12 cung, sao, điểm, cách cục, đại vận — dùng làm cơ sở luận giải. Nếu còn thiếu thông tin thì HỎI người dùng trước, không được đoán.',
+        'Lập lá số Tử Vi Đẩu Số từ ngày sinh DƯƠNG lịch. Gọi NGAY khi đã biết đủ ngày/tháng/năm dương lịch, giờ sinh và giới tính. QUAN TRỌNG về giờ: nếu người dùng cho giờ kiểu ĐỒNG HỒ (vd "9h35 sáng", "2h chiều") thì truyền field "hour" (giờ 24h) — hệ thống TỰ đổi sang địa chi, TUYỆT ĐỐI không tự map giờ sang Tý/Sửu/…; chỉ dùng "hourBranch" khi người dùng nói thẳng GIỜ ÂM/ĐỊA CHI (vd "giờ Tỵ"). Thiếu thông tin thì HỎI, không đoán.',
       input_schema: {
         type: 'object',
         properties: {
           day: { type: 'integer', description: 'Ngày sinh dương lịch (1–31)' },
           month: { type: 'integer', description: 'Tháng sinh dương lịch (1–12)' },
           year: { type: 'integer', description: 'Năm sinh dương lịch, ví dụ 1998' },
+          hour: {
+            type: 'integer',
+            description:
+              'Giờ sinh theo ĐỒNG HỒ, hệ 24h (0–23) — CHỈ chép lại giờ người dùng nói, KHÔNG đổi sang địa chi. Quy đổi 12h→24h: 9h35 sáng→9, 12h trưa→12, 2h chiều→14, 9h tối→21, 11h đêm→23, 12h đêm/nửa đêm→0. Dùng field này khi có giờ đồng hồ.',
+          },
+          minute: { type: 'integer', description: 'Phút sinh (0–59), nếu biết — không bắt buộc.' },
           hourBranch: {
             type: 'integer',
             description:
-              'Giờ sinh theo địa chi: 0=Tý(23–1h) 1=Sửu(1–3h) 2=Dần(3–5h) 3=Mão(5–7h) 4=Thìn(7–9h) 5=Tỵ(9–11h) 6=Ngọ(11–13h) 7=Mùi(13–15h) 8=Thân(15–17h) 9=Dậu(17–19h) 10=Tuất(19–21h) 11=Hợi(21–23h)',
+              'CHỈ dùng khi người dùng cho GIỜ ĐỊA CHI/ÂM trực tiếp (vd "giờ Tỵ"): 0=Tý 1=Sửu 2=Dần 3=Mão 4=Thìn 5=Tỵ 6=Ngọ 7=Mùi 8=Thân 9=Dậu 10=Tuất 11=Hợi. Nếu đã truyền "hour" thì BỎ field này.',
           },
           gender: { type: 'string', enum: ['nam', 'nu'], description: 'Giới tính' },
         },
-        required: ['day', 'month', 'year', 'hourBranch', 'gender'],
+        required: ['day', 'month', 'year', 'gender'],
       },
     },
     // Nhóm vận-hạn/ngày-tốt: dùng CHUNG lõi lib/agent (hasLaso=true).
@@ -167,12 +173,31 @@ export async function executeTool(name: string, input: Rec, ctx: ToolContext): P
   return { content: 'Công cụ không tồn tại.', label: 'Công cụ lạ' };
 }
 
+// Giải địa chi giờ từ input tool: ƯU TIÊN giờ ĐỒNG HỒ (hour) → clockToBranch
+// (server tự map, tránh LLM map sai); chỉ fallback hourBranch khi user cho giờ
+// địa chi trực tiếp. Trả null nếu không có giờ hợp lệ. Dùng chung với run.ts.
+export function resolveHourBranch(input: Rec): number | null {
+  if (input.hour != null && input.hour !== '') {
+    const h = Number(input.hour);
+    if (Number.isFinite(h)) return clockToBranch(h);
+  }
+  if (input.hourBranch != null && input.hourBranch !== '') {
+    const b = Number(input.hourBranch);
+    if (Number.isFinite(b) && b >= 0 && b <= 11) return b;
+  }
+  return null;
+}
+
 function execLapLaSo(input: Rec, ctx: ToolContext): ToolRunResult {
+  const hb = resolveHourBranch(input);
+  if (hb == null) {
+    return { content: 'Thiếu giờ sinh — cho mình biết giờ đồng hồ (vd 9h35 sáng) hoặc giờ địa chi (vd giờ Tỵ).', label: 'Lỗi lập lá số' };
+  }
   const birth: BirthParams = {
     day: Number(input.day),
     month: Number(input.month),
     year: Number(input.year),
-    hourBranch: Number(input.hourBranch),
+    hourBranch: hb,
     gender: input.gender === 'nu' ? 'nu' : 'nam',
   };
   const res = computeLaso(birth);
