@@ -39,6 +39,16 @@ const GIO_HOURS = [23, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21];
 
 // Tên 12 địa chi theo index (cho nhãn giờ trong thẻ lá số).
 const CHI_NAMES = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
+const CAN_NAMES = ['Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý'];
+
+// Năm ÂM lịch → Can/Chi (parity với engine đã verify 96/96, 1940–2035). Dùng khi
+// người dùng NHẬP SẴN ngày âm → an sao thẳng, không cần vòng qua dương lịch.
+function yearCan(y: number): string {
+  return CAN_NAMES[(((y + 6) % 10) + 10) % 10];
+}
+function yearChi(y: number): string {
+  return CHI_NAMES[(((y + 8) % 12) + 12) % 12];
+}
 
 /**
  * Giờ ĐỒNG HỒ (24h) → index địa chi giờ (0=Tý..11=Hợi) — DETERMINISTIC, server
@@ -69,29 +79,6 @@ function loadEngine() {
   return engineCache!;
 }
 
-/**
- * Âm lịch → Dương lịch (DETERMINISTIC). Engine chỉ có chiều dương→âm, nên dò
- * ngược: quét ngày dương trong [ly .. ly+1], lấy ngày mà convertDuongToAm ra
- * đúng (ngày,tháng,năm) âm cần. Dùng CHÍNH convertDuongToAm của engine → parity
- * tuyệt đối với cách anSaoLaSo hiểu ngày. Lấy match ĐẦU TIÊN (bỏ qua tháng nhuận).
- * Trả null nếu không tìm thấy (ngày âm không hợp lệ).
- */
-function lunarToSolar(ld: number, lm: number, ly: number): { day: number; month: number; year: number } | null {
-  const { convertDuongToAm } = loadEngine();
-  for (let yy = ly; yy <= ly + 1; yy++) {
-    for (let mm = 1; mm <= 12; mm++) {
-      const dim = new Date(yy, mm, 0).getDate(); // số ngày của tháng dương mm
-      for (let dd = 1; dd <= dim; dd++) {
-        const al = (convertDuongToAm(dd, mm, yy, 12) as Rec)?.amLich as Rec | undefined;
-        if (al && Number(al.day) === ld && Number(al.month) === lm && Number(al.year) === ly) {
-          return { day: dd, month: mm, year: yy };
-        }
-      }
-    }
-  }
-  return null;
-}
-
 export type Laso = Rec;
 
 export interface ComputeLasoResult {
@@ -118,35 +105,42 @@ export function computeLaso(birth: BirthParams, namXem?: number): ComputeLasoRes
   }
   try {
     const { convertDuongToAm, anSaoLaSo } = loadEngine();
-    // Ngày ÂM lịch → quy đổi sang DƯƠNG trước (server tự làm, KHÔNG để LLM đổi).
-    let dd = day,
-      mm = month,
-      yy = year;
-    if (isLunar) {
-      const solar = lunarToSolar(day, month, year);
-      if (!solar) {
-        return { ok: false, error: 'Không đổi được ngày âm lịch sang dương — kiểm tra lại ngày/tháng/năm âm.' };
-      }
-      dd = solar.day;
-      mm = solar.month;
-      yy = solar.year;
-    }
-    const hour = GIO_HOURS[hourBranch];
-    const conv = convertDuongToAm(dd, mm, yy, hour) as Rec;
-    if (!conv?.amLich) return { ok: false, error: 'Không chuyển được sang âm lịch.' };
-    const al = conv.amLich as Rec;
-
     const view = namXem ?? currentNamXem();
+
+    // An sao VỐN dùng ÂM lịch. Hai đường vào cho ra cùng bộ tham số (ngayAL,
+    // thangAL, namAL, canNam, chiNam):
+    let ngayAL: number, thangAL: number, namAL: number, canNam: string, chiNam: string;
+    if (isLunar) {
+      // Người dùng NHẬP SẴN âm lịch → an THẲNG, KHÔNG vòng qua dương lịch rồi đổi
+      // ngược (vô ích + thừa rủi ro). Can/chi năm suy trực tiếp từ năm âm.
+      ngayAL = Math.floor(day);
+      thangAL = Math.floor(month);
+      namAL = Math.floor(year);
+      if (thangAL < 1 || thangAL > 12 || ngayAL < 1 || ngayAL > 30) {
+        return { ok: false, error: 'Ngày/tháng âm lịch không hợp lệ (tháng 1–12, ngày 1–30).' };
+      }
+      canNam = yearCan(namAL);
+      chiNam = yearChi(namAL);
+    } else {
+      // Người dùng nhập DƯƠNG → engine quy đổi sang âm. namAL = năm ÂM (al.year),
+      // KHÔNG phải năm dương: người sinh tháng 1 trước Tết có năm âm = năm trước
+      // → tuổi mụ (tuoiXem) + tiểu vận phụ thuộc vào đây (khớp client mọi nền tảng).
+      const conv = convertDuongToAm(day, month, year, GIO_HOURS[hourBranch]) as Rec;
+      if (!conv?.amLich) return { ok: false, error: 'Không chuyển được sang âm lịch.' };
+      const al = conv.amLich as Rec;
+      ngayAL = al.day as number;
+      thangAL = al.month as number;
+      namAL = al.year as number;
+      canNam = conv.canNam as string;
+      chiNam = conv.chiNam as string;
+    }
+
     const ls = (anSaoLaSo as (o: object) => Rec)({
-      ngayAL: al.day,
-      thangAL: al.month,
-      // namAL = năm ÂM lịch (al.year), KHÔNG phải năm dương input. Người
-      // sinh tháng 1 trước Tết có năm âm = năm trước → tuổi mụ (tuoiXem)
-      // và tiểu vận phụ thuộc vào đây. Phải khớp client (anSaoLaSo dùng
-      // conv.amLich.year) để lá số/tuổi y hệt mọi nền tảng.
-      namAL: al.year,
-      canNam: conv.canNam,
-      chiNam: conv.chiNam,
+      ngayAL,
+      thangAL,
+      namAL,
+      canNam,
+      chiNam,
       gioIdx: hourBranch,
       gioitinh: gender,
       namXem: view,
@@ -286,7 +280,7 @@ export function renderLasoCard(ls: Laso, birth?: BirthParams | null): string {
   const bits: string[] = [];
   if (birth) {
     bits.push(birth.gender === 'nu' ? 'Nữ' : 'Nam');
-    bits.push(`${birth.day}/${birth.month}/${birth.year} DL`);
+    bits.push(`${birth.day}/${birth.month}/${birth.year} ${birth.isLunar ? 'ÂL' : 'DL'}`);
     if (birth.hourBranch != null && birth.hourBranch >= 0 && birth.hourBranch < 12) {
       bits.push('giờ ' + CHI_NAMES[birth.hourBranch]);
     }
