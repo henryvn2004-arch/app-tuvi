@@ -33,7 +33,8 @@ const INSTRUCTIONS = [
   'TUYỆT ĐỐI không tự bịa quy tắc an sao, không tự tính lại cung/sao/tứ hóa, không tự suy vị trí sao.',
   'Khi người dùng đưa ngày sinh → gọi an_sao (lập lá số) hoặc luan_giai (phân tích chi tiết/24 mục).',
   'Hỏi một năm/tháng/ngày cụ thể → gọi van_han (thêm tham số thang/ngay cho hạn tháng/ngày). Hỏi hai người có',
-  'hợp không → gọi tuong_hop. Hỏi ý nghĩa một sao → gọi giai_thich_sao. LUÔN gọi tool thay vì tự suy.',
+  'hợp không → gọi tuong_hop. Hỏi ý nghĩa một sao → gọi giai_thich_sao.',
+  'QUY TẮC CỨNG: nếu định nói bất cứ điều gì về lá số/cung/sao/vận hạn mà CHƯA gọi tool cho đúng người/năm đó → DỪNG, gọi tool trước rồi mới luận. Không dựa vào kiến thức tử vi chung của bạn để thay số liệu tool.',
   'Mọi con số (cung, sao, đại vận, tiểu hạn, tứ hóa, điểm) là chính xác tuyệt đối — hãy luận giải, đừng tính lại.',
 ].join(' ');
 
@@ -41,8 +42,15 @@ const INSTRUCTIONS = [
 function textResult(text: string) {
   return { content: [{ type: 'text' as const, text }] };
 }
+// Nhét vào ĐẦU mỗi kết quả tool để ép AI của user luận đúng theo số liệu,
+// không tự an sao / tự tính lại / bịa số (giảm hallucination).
+const AUTHORITY_NOTE =
+  '⚠️ SỐ LIỆU DƯỚI ĐÂY DO ENGINE TỬ VI MINH BẢO TÍNH — CHÍNH XÁC TUYỆT ĐỐI. ' +
+  'Hãy luận giải DỰA HOÀN TOÀN vào dữ liệu này. TUYỆT ĐỐI KHÔNG tự an sao, KHÔNG tự tính lại cung/sao/tứ hóa/điểm, ' +
+  'KHÔNG bịa số liệu theo trí nhớ. Thiếu dữ liệu gì thì GỌI THÊM tool, đừng tự suy.\n\n';
+
 function jsonResult(data: unknown) {
-  return { content: [{ type: 'text' as const, text: JSON.stringify(data, null, 2) }] };
+  return { content: [{ type: 'text' as const, text: AUTHORITY_NOTE + JSON.stringify(data, null, 2) }] };
 }
 
 function buildHandler(key: string, pathname: string) {

@@ -102,14 +102,27 @@ export const luanGiaiTool: McpTool = {
       cung,
       cach_cuc_toan_cuc: cachCucList.map((c) => ({ ten: c.ten, loai: c.loai, cung: c.cung, mo_ta: c.moTa, chi_tiet: c.chiTiet })),
       tu_hoa_goc: tuHoaGoc,
-      dai_van: ((ls.daiVans as Rec[]) || []).map((dv) => ({
-        cung: palaces[dv.cungIdx as number]?.cungName ?? null,
-        dia_chi: dv.diaChi ?? null,
-        tuoi_tu: dv.tuoiStart ?? null,
-        tuoi_den: dv.tuoiEnd ?? null,
-        diem: (dv.scoring as Rec)?.tong ?? null,
-        flag: (dv.scoring as Rec)?.flag ?? null,
-      })),
+      dai_van: ((ls.daiVans as Rec[]) || []).map((dv, i) => {
+        const p = palaces[dv.cungIdx as number];
+        const sc = (dv.scoring as Rec) || {};
+        return {
+          thu_tu: i + 1, // đại vận thứ mấy (1..12) — để "luận đại vận N"
+          cung: p?.cungName ?? null,
+          dia_chi: dv.diaChi ?? null,
+          tuoi_tu: dv.tuoiStart ?? null,
+          tuoi_den: dv.tuoiEnd ?? null,
+          diem: sc.tong ?? null,
+          flag: sc.flag ?? null,
+          chinh_tinh: p ? majorStarsOf(p) : [],
+          chi_tiet_diem: {
+            thien_thoi: (sc.thienThoi as Rec)?.score ?? null,
+            dia_loi: (sc.diaLoi as Rec)?.score ?? null,
+            nhan_hoa: (sc.nhanHoa as Rec)?.score ?? null,
+          },
+          // Bộ nhận định deterministic của engine cho đại vận này (dùng để luận).
+          luan: ((dv.rules as Rec[]) || []).map((rr) => ({ y: rr.text, loai: rr.type })),
+        };
+      }),
     };
   },
 };
