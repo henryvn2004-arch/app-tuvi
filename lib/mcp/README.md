@@ -14,7 +14,9 @@ quy tắc an sao.
 | Tool | Khi nào dùng | Quota (free) |
 |---|---|---|
 | `an_sao` | Có ngày/giờ/giới tính sinh → lập lá số (12 cung, chính/phụ tinh, tứ hóa, đại vận). | **Không giới hạn** (hook). |
-| `van_han` | Hỏi vận hạn MỘT NĂM cụ thể → tuổi mụ, lưu Thái Tuế, lưu đại vận, tiểu hạn, lưu tứ hóa, đại vận hiện tại + điểm, blocks (tổ hợp sao chéo tầng). | Chỉ năm **quá khứ**, tối đa `backtest_years` năm khác nhau. Năm tương lai → mời nâng cấp. |
+| `van_han` | Vận hạn một NĂM (thêm `thang` → hạn tháng; thêm `thang`+`ngay` → hạn ngày): tuổi mụ, lưu Thái Tuế, lưu đại vận, tiểu hạn, tứ hóa, đại vận + điểm, blocks. | Chỉ năm **quá khứ**, tối đa `backtest_years` năm. Tương lai → mời nâng cấp. |
+| `luan_giai` | Phân tích chi tiết (24 mục): điểm từng cung, cung mạnh/yếu, cách cục, tứ hóa, thần sát, tuần/triệt, đại vận. | Không giới hạn. |
+| `tuong_hop` | So 2 lá số — hôn nhân (`loai=vo-chong`) hoặc làm ăn (`loai=lam-an`) + quan hệ địa chi năm sinh. | Không giới hạn. |
 | `giai_thich_sao` | Hỏi ý nghĩa một sao (tùy chọn theo cung). Nguồn: `public/cach_cuc_all.json`. | Không giới hạn. |
 
 `master` tier bỏ mọi giới hạn.

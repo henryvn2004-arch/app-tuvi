@@ -19,19 +19,22 @@ import type { McpTool } from '@/lib/mcp/tools/_shared';
 import { anSaoTool } from '@/lib/mcp/tools/an-sao';
 import { vanHanTool } from '@/lib/mcp/tools/van-han';
 import { giaiThichTool } from '@/lib/mcp/tools/giai-thich';
+import { tuongHopTool } from '@/lib/mcp/tools/tuong-hop';
+import { luanGiaiTool } from '@/lib/mcp/tools/luan-giai';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
-const TOOLS: McpTool[] = [anSaoTool, vanHanTool, giaiThichTool];
+const TOOLS: McpTool[] = [anSaoTool, vanHanTool, luanGiaiTool, tuongHopTool, giaiThichTool];
 
 const INSTRUCTIONS = [
   'Máy chủ Tử Vi Đẩu Số của tuviminhbao.com. CHỈ diễn giải dựa trên dữ liệu và block do tool trả về;',
   'TUYỆT ĐỐI không tự bịa quy tắc an sao, không tự tính lại cung/sao/tứ hóa, không tự suy vị trí sao.',
-  'Khi người dùng đưa ngày sinh → gọi an_sao trước. Khi hỏi một năm cụ thể (năm nay, năm sau, "năm 2027"…)',
-  'LUÔN gọi van_han(nam_xem) thay vì tự suy. Khi hỏi ý nghĩa một sao → gọi giai_thich_sao.',
-  'Mọi con số (cung, sao, đại vận, tiểu hạn, tứ hóa) là chính xác tuyệt đối — hãy luận giải, đừng tính lại.',
+  'Khi người dùng đưa ngày sinh → gọi an_sao (lập lá số) hoặc luan_giai (phân tích chi tiết/24 mục).',
+  'Hỏi một năm/tháng/ngày cụ thể → gọi van_han (thêm tham số thang/ngay cho hạn tháng/ngày). Hỏi hai người có',
+  'hợp không → gọi tuong_hop. Hỏi ý nghĩa một sao → gọi giai_thich_sao. LUÔN gọi tool thay vì tự suy.',
+  'Mọi con số (cung, sao, đại vận, tiểu hạn, tứ hóa, điểm) là chính xác tuyệt đối — hãy luận giải, đừng tính lại.',
 ].join(' ');
 
 // ── Kết quả MCP ──────────────────────────────────────────────

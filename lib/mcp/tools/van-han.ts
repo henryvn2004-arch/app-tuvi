@@ -18,6 +18,8 @@ import { z } from 'zod';
 import { computeLaso } from '@/lib/engine/laso';
 import { currentNamXem } from '@/lib/engine/namxem';
 import { matchVanHanCombos, type LayerCung, type ComboHit } from '@/lib/agent/vanHanCombos';
+import { solarToLunar } from '../../../tuvi-engine/dist/lunar/convert.js';
+import { tinhNhatHan } from '../../../tuvi-engine/dist/van-han/index.js';
 import type { BirthParams } from '@/lib/contract/v1';
 import { loadMcpEngine } from '../engine';
 import { distinctVanHanYears } from '../usage';
@@ -35,6 +37,8 @@ const schema = {
   gioi_tinh: z.enum(['nam', 'nu']),
   am_lich: z.boolean().optional().describe('true nếu ngay_duong là ngày ÂM lịch'),
   nam_xem: z.number().int().min(1930).max(2200).describe('Năm dương lịch muốn xem vận hạn, ví dụ 2026'),
+  thang: z.number().int().min(1).max(12).optional().describe('(Tùy chọn) Tháng dương lịch 1–12 → trả thêm hạn THÁNG (nguyệt hạn)'),
+  ngay: z.number().int().min(1).max(31).optional().describe('(Tùy chọn) Ngày dương lịch 1–31 (cần kèm thang) → trả thêm hạn NGÀY (nhật hạn)'),
 };
 
 function cungInfo(palaces: Rec[], idx: number): Rec | null {
@@ -58,7 +62,7 @@ function comboToBlock(h: ComboHit): Rec {
 export const vanHanTool: McpTool = {
   name: 'van_han',
   description:
-    'Tra vận hạn của một lá số cho MỘT NĂM dương lịch cụ thể (nam_xem). Trả về: tuổi mụ, can chi năm xem, lưu Thái Tuế, lưu đại vận, tiểu hạn, lưu tứ hóa (4 sao hóa theo can năm xem + cung đang đóng), đại vận hiện tại + điểm, và blocks = các tổ hợp sao chéo tầng (cách cục vận) đã tính sẵn. LUÔN dùng tool này khi người dùng hỏi về một năm cụ thể ("năm nay", "năm sau", "năm 2027…") thay vì tự suy. Hãy diễn giải dựa trên dữ liệu + blocks, không tự tính lại cung/sao/hóa.',
+    'Tra vận hạn của một lá số cho một NĂM dương lịch (nam_xem), và tùy chọn cả một THÁNG (thêm tham số thang) hoặc một NGÀY cụ thể (thêm thang + ngay). Trả về: tuổi mụ, can chi năm xem, lưu Thái Tuế, lưu đại vận, tiểu hạn, lưu tứ hóa, đại vận hiện tại + điểm, blocks (tổ hợp sao chéo tầng); nếu có thang → thêm hạn tháng (nguyệt hạn); nếu có thang+ngay → thêm hạn ngày (nhật hạn). LUÔN dùng tool này khi người dùng hỏi về một năm/tháng/ngày cụ thể ("năm nay", "tháng 3/2027", "ngày 10/2/2027…") thay vì tự suy. Diễn giải dựa trên dữ liệu, không tự tính lại cung/sao/hóa.',
   schema,
 
   quota: async (args, info, key) => {
@@ -156,8 +160,30 @@ export const vanHanTool: McpTool = {
     ];
     const blocks = matchVanHanCombos(layers).map(comboToBlock);
 
+    // Hạn THÁNG (nguyệt hạn) + NGÀY (nhật hạn) — tùy chọn.
+    let nguyet_han: Rec | undefined;
+    let nhat_han: Rec | undefined;
+    const thangNum = args.thang != null ? Number(args.thang) : null;
+    const ngayNum = args.ngay != null ? Number(args.ngay) : null;
+    if (thangNum && thangNum >= 1 && thangNum <= 12) {
+      const nvs = ((ls.nguyetVanScores as Rec[]) || []).find((e) => Number(e.nam) === nam);
+      const months = nvs?.months as number[] | undefined;
+      const thangAL = solarToLunar(1, thangNum, nam).month;
+      const nguyetHanIdx = Array.isArray(months) ? months[thangAL - 1] : undefined;
+      if (nguyetHanIdx != null) {
+        nguyet_han = { thang: thangNum, thang_al: thangAL, ...(cungInfo(palaces, nguyetHanIdx) || {}) };
+        if (ngayNum && ngayNum >= 1 && ngayNum <= 31) {
+          const ngayAL = solarToLunar(ngayNum, thangNum, nam).day;
+          const nhatHanIdx = tinhNhatHan(nguyetHanIdx, ngayAL);
+          nhat_han = { ngay: ngayNum, ngay_al: ngayAL, ...(cungInfo(palaces, nhatHanIdx) || {}) };
+        }
+      } else {
+        nguyet_han = { thang: thangNum, note: `Năm ${nam} ngoài phạm vi dữ liệu nguyệt hạn của lá số.` };
+      }
+    }
+
     return {
-      input: { ngay_duong: args.ngay_duong, gioi_tinh: gender, am_lich: !!args.am_lich, nam_xem: nam },
+      input: { ngay_duong: args.ngay_duong, gioi_tinh: gender, am_lich: !!args.am_lich, nam_xem: nam, thang: thangNum ?? undefined, ngay: ngayNum ?? undefined },
       tuoi_mu: ls.tuoiXem ?? (nam - ngay.year + 1),
       can_chi_nam_xem: `${canNamXem} ${chiNamXem}`,
       luu_thai_tue: thaiTuePalace
@@ -167,6 +193,8 @@ export const vanHanTool: McpTool = {
       tieu_han: cungInfo(palaces, ls.tieuHanIdx as number),
       luu_tu_hoa: luuTuHoa,
       dai_van_hien_tai: daiVanHienTai,
+      nguyet_han,
+      nhat_han,
       blocks,
       note: blocks.length
         ? undefined
