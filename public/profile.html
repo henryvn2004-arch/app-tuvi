@@ -260,6 +260,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
       <button class="tab-btn" data-tab="tuong"><span class="ic-inline" data-icon-emoji="🪬" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🪬</span> Xem Tướng <span id="countTuong" class="chat-count" style="margin-left:.35rem;display:none"></span></button>
       <button class="tab-btn" data-tab="chat"><span class="ic-inline" data-icon-emoji="💬" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">💬</span> Chat <span id="countChat" class="chat-count" style="margin-left:.35rem;display:none"></span></button>
       <button class="tab-btn" data-tab="credits"><span class="ic-inline" data-icon-emoji="💳" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">💳</span> Credits</button>
+      <button class="tab-btn" data-tab="ketnoi"><span class="ic-inline" data-icon-emoji="🔗" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🔗</span> Kết Nối</button>
       <button class="tab-btn" data-tab="account"><span class="ic-inline" data-icon-emoji="👤" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">👤</span> Tài Khoản</button>
     </div>
 
@@ -329,41 +330,144 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
         </a>
       </div>
       <div class="account-section">
-        <h3>💬 Liên Kết Telegram</h3>
-        <p style="color:var(--text-lt);font-size:.85rem;margin:.25rem 0 .75rem">
-          Liên kết để chat với bot Telegram bằng đúng ví Lượng này — nạp ở đây, dùng được cả trên Telegram.
-        </p>
-        <div id="tgLinkBox" style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
-          <span id="tgLinkStatus" style="font-size:.85rem;color:var(--text-lt)">Đang kiểm tra…</span>
-          <button id="btnTgLink" style="display:none;background:#229ED9;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">✈️ Liên kết Telegram</button>
-          <button id="btnTgUnlink" style="display:none;background:transparent;color:#c0392b;border:1px solid #c0392b;padding:.55rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer">Hủy liên kết</button>
-        </div>
-      </div>
-      <div class="account-section">
-        <h3>💬 Liên Kết WhatsApp</h3>
-        <p style="color:var(--text-lt);font-size:.85rem;margin:.25rem 0 .75rem">
-          Liên kết để chat với bot WhatsApp bằng đúng ví Lượng này — nạp ở đây, dùng được cả trên WhatsApp.
-        </p>
-        <div id="waLinkBox" style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
-          <span id="waLinkStatus" style="font-size:.85rem;color:var(--text-lt)">Đang kiểm tra…</span>
-          <button id="btnWaLink" style="display:none;background:#25D366;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">💬 Liên kết WhatsApp</button>
-          <button id="btnWaUnlink" style="display:none;background:transparent;color:#c0392b;border:1px solid #c0392b;padding:.55rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer">Hủy liên kết</button>
-        </div>
-      </div>
-      <div class="account-section">
-        <h3>💬 Liên Kết Messenger</h3>
-        <p style="color:var(--text-lt);font-size:.85rem;margin:.25rem 0 .75rem">
-          Liên kết để chat với bot Facebook Messenger bằng đúng ví Lượng này — nạp ở đây, dùng được cả trên Messenger.
-        </p>
-        <div id="msgrLinkBox" style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
-          <span id="msgrLinkStatus" style="font-size:.85rem;color:var(--text-lt)">Đang kiểm tra…</span>
-          <button id="btnMsgrLink" style="display:none;background:#0084FF;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">💬 Liên kết Messenger</button>
-          <button id="btnMsgrUnlink" style="display:none;background:transparent;color:#c0392b;border:1px solid #c0392b;padding:.55rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer">Hủy liên kết</button>
-        </div>
+        <p style="font-size:.82rem;color:var(--text-mid)">🔗 Kết nối lá số với AI chat (Claude, ChatGPT…) và các bot Telegram / WhatsApp / Messenger tại tab <strong><a href="#" onclick="document.querySelector('[data-tab=ketnoi]').click();return false" style="color:var(--gold)">Kết Nối</a></strong>.</p>
       </div>
       <div class="account-section">
         <h3>Lịch Sử Giao Dịch</h3>
         <div id="transactionList"><div style="color:var(--text-lt);font-size:.85rem">Đang tải...</div></div>
+      </div>
+    </div>
+
+    <!-- Tab: Kết Nối -->
+    <div class="tab-content" id="tab-ketnoi">
+      <style>
+        #tab-ketnoi .conn-intro{color:var(--text-mid);font-size:.9rem;line-height:1.55;margin:.15rem 0 1.15rem}
+        #tab-ketnoi .conn-card{background:#fff;border:1px solid var(--border-lt);border-radius:14px;padding:1.15rem 1.25rem;margin-bottom:1rem;transition:box-shadow .2s}
+        #tab-ketnoi .conn-card:hover{box-shadow:0 6px 22px rgba(6,26,46,.08)}
+        #tab-ketnoi .conn-hero{border:1px solid #d9c48a;background:linear-gradient(180deg,#fffdf7 0%,#fff 62%)}
+        #tab-ketnoi .conn-head{display:flex;align-items:center;gap:.85rem}
+        #tab-ketnoi .conn-ic{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex:none;color:#fff}
+        #tab-ketnoi .conn-title{font-size:1rem;font-weight:800;color:var(--navy);display:flex;align-items:center;gap:.5rem;line-height:1.2}
+        #tab-ketnoi .conn-sub{font-size:.8rem;color:var(--text-lt);margin-top:.15rem}
+        #tab-ketnoi .conn-badge{background:var(--gold);color:#fff;font-size:.62rem;font-weight:800;padding:.12rem .45rem;border-radius:999px;letter-spacing:.03em;text-transform:uppercase}
+        #tab-ketnoi .conn-desc{font-size:.84rem;color:var(--text-mid);line-height:1.55;margin:.8rem 0 .9rem}
+        #tab-ketnoi .conn-status{font-size:.85rem;color:var(--text-lt)}
+        #tab-ketnoi .conn-pill{display:inline-flex;align-items:center;gap:.35rem;font-size:.78rem;font-weight:700;padding:.28rem .7rem;border-radius:999px;background:#e8f7ee;color:#1e7d43}
+        #tab-ketnoi .conn-label{display:block;font-size:.72rem;font-weight:700;color:var(--text-lt);text-transform:uppercase;letter-spacing:.05em;margin:.2rem 0 .35rem}
+        #tab-ketnoi .conn-url-row{display:flex;gap:.5rem;align-items:stretch}
+        #tab-ketnoi .conn-url{flex:1;min-width:0;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.78rem;padding:.6rem .7rem;border:1px solid var(--border-lt);border-radius:9px;background:var(--bg-soft);color:var(--navy)}
+        #tab-ketnoi .conn-copy{background:var(--navy);color:#fff;border:none;padding:.6rem 1rem;border-radius:9px;font-size:.82rem;font-weight:700;cursor:pointer;white-space:nowrap}
+        #tab-ketnoi .conn-copy.ok{background:#1e7d43}
+        #tab-ketnoi .conn-btn{display:inline-flex;align-items:center;gap:.4rem;border:none;padding:.68rem 1.2rem;border-radius:9px;font-size:.86rem;font-weight:800;cursor:pointer;color:#fff}
+        #tab-ketnoi .conn-btn-ai{background:linear-gradient(120deg,#7b5cff,#4aa3ff)}
+        #tab-ketnoi .conn-steps{margin-top:1rem;border-top:1px solid var(--border-lt);padding-top:.4rem}
+        #tab-ketnoi .conn-steps details{border-bottom:1px solid var(--border-lt)}
+        #tab-ketnoi .conn-steps summary{cursor:pointer;padding:.6rem .1rem;font-size:.85rem;font-weight:700;color:var(--navy);list-style:none;display:flex;align-items:center;gap:.5rem}
+        #tab-ketnoi .conn-steps summary::-webkit-details-marker{display:none}
+        #tab-ketnoi .conn-steps summary::before{content:"\25B8";color:var(--gold);font-size:.8rem;transition:transform .15s}
+        #tab-ketnoi .conn-steps details[open] summary::before{transform:rotate(90deg)}
+        #tab-ketnoi .conn-steps ol{margin:.1rem 0 .7rem 1.7rem;padding:0;font-size:.82rem;color:var(--text-mid);line-height:1.7}
+        #tab-ketnoi .conn-steps code{background:var(--bg-soft);padding:.05rem .3rem;border-radius:4px;font-size:.78rem}
+        #tab-ketnoi .conn-revoke{margin-top:.9rem;background:transparent;color:#c0392b;border:1px solid #e2b6b0;padding:.5rem .9rem;border-radius:8px;font-size:.78rem;font-weight:600;cursor:pointer}
+        #tab-ketnoi .conn-row{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin-top:.7rem}
+        #tab-ketnoi .chan-desc{font-size:.83rem;color:var(--text-mid);line-height:1.5;margin:.55rem 0 0}
+      </style>
+
+      <p class="conn-intro">Dùng Tử Vi Minh Bảo ở mọi nơi bạn chat — trợ lý AI riêng, hoặc ngay trong Telegram · WhatsApp · Messenger, tất cả chung một ví Lượng.</p>
+
+      <!-- AI qua MCP -->
+      <div class="conn-card conn-hero">
+        <div class="conn-head">
+          <div class="conn-ic" style="background:linear-gradient(120deg,#7b5cff,#4aa3ff)">🤖</div>
+          <div>
+            <div class="conn-title">Trợ lý AI của bạn <span class="conn-badge">Mới</span></div>
+            <div class="conn-sub">Claude · ChatGPT · Gemini · Grok</div>
+          </div>
+        </div>
+        <p class="conn-desc">Tạo một đường kết nối riêng rồi dán vào AI chat của bạn. Sau đó hỏi thẳng "lập lá số cho nam sinh 9/5/1984 giờ Sửu", "năm 2027 vận hạn thế nào?" — AI lấy số liệu <strong>chuẩn xác từ engine</strong> của tuviminhbao.com, không bịa.</p>
+
+        <div id="mcpChecking"><span class="conn-status">⏳ Đang kiểm tra…</span></div>
+
+        <div id="mcpNoKey" style="display:none">
+          <button id="btnMcpGen" class="conn-btn conn-btn-ai">✨ Tạo đường kết nối</button>
+        </div>
+
+        <div id="mcpReady" style="display:none">
+          <span class="conn-pill">● Đã sẵn sàng</span>
+          <div style="margin-top:.75rem">
+            <label class="conn-label">Đường kết nối riêng của bạn</label>
+            <div class="conn-url-row">
+              <input id="mcpUrl" class="conn-url" readonly value="">
+              <button id="btnMcpCopy" class="conn-copy">Copy</button>
+            </div>
+          </div>
+          <div class="conn-steps">
+            <details open><summary>Kết nối vào Claude</summary>
+              <ol>
+                <li>Mở <strong>Settings → Connectors</strong> (Claude Desktop hoặc claude.ai).</li>
+                <li>Bấm <strong>Add custom connector</strong>.</li>
+                <li>Dán đường kết nối ở trên vào ô URL → <strong>Add</strong>.</li>
+                <li>Xong! Hỏi Claude "lập lá số…" là nó tự gọi công cụ.</li>
+              </ol>
+            </details>
+            <details><summary>Kết nối vào ChatGPT</summary>
+              <ol>
+                <li>Bật <strong>Settings → Connectors → Developer mode</strong>.</li>
+                <li><strong>Add MCP server</strong> → chọn <strong>Streamable HTTP</strong>.</li>
+                <li>Dán đường kết nối ở trên → lưu.</li>
+              </ol>
+            </details>
+            <details><summary>Gemini / Grok / AI khác</summary>
+              <ol>
+                <li>Tìm mục thêm <strong>MCP server</strong> / <strong>custom connector</strong> (Streamable HTTP).</li>
+                <li>Dán đường kết nối ở trên. Không cần cấu hình gì thêm — key nằm sẵn trong đường dẫn.</li>
+              </ol>
+            </details>
+          </div>
+          <button id="btnMcpRevoke" class="conn-revoke">Thu hồi &amp; tạo key mới</button>
+        </div>
+      </div>
+
+      <!-- Telegram -->
+      <div class="conn-card">
+        <div class="conn-head">
+          <div class="conn-ic" style="background:#229ED9">✈️</div>
+          <div><div class="conn-title">Telegram</div><div class="conn-sub">Chat với bot bằng đúng ví Lượng này</div></div>
+        </div>
+        <p class="chan-desc">Nạp Lượng ở đây, nhắn bot Telegram là dùng được luôn cùng ví.</p>
+        <div class="conn-row" id="tgLinkBox">
+          <span id="tgLinkStatus" class="conn-status">Đang kiểm tra…</span>
+          <button id="btnTgLink" style="display:none;background:#229ED9;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">✈️ Liên kết Telegram</button>
+          <button id="btnTgUnlink" style="display:none;background:transparent;color:#c0392b;border:1px solid #c0392b;padding:.55rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer">Hủy liên kết</button>
+        </div>
+      </div>
+
+      <!-- WhatsApp -->
+      <div class="conn-card">
+        <div class="conn-head">
+          <div class="conn-ic" style="background:#25D366">💬</div>
+          <div><div class="conn-title">WhatsApp</div><div class="conn-sub">Chat với bot bằng đúng ví Lượng này</div></div>
+        </div>
+        <p class="chan-desc">Nạp Lượng ở đây, nhắn bot WhatsApp là dùng được luôn cùng ví.</p>
+        <div class="conn-row" id="waLinkBox">
+          <span id="waLinkStatus" class="conn-status">Đang kiểm tra…</span>
+          <button id="btnWaLink" style="display:none;background:#25D366;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">💬 Liên kết WhatsApp</button>
+          <button id="btnWaUnlink" style="display:none;background:transparent;color:#c0392b;border:1px solid #c0392b;padding:.55rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer">Hủy liên kết</button>
+        </div>
+      </div>
+
+      <!-- Messenger -->
+      <div class="conn-card">
+        <div class="conn-head">
+          <div class="conn-ic" style="background:#0084FF">💬</div>
+          <div><div class="conn-title">Messenger</div><div class="conn-sub">Chat với bot bằng đúng ví Lượng này</div></div>
+        </div>
+        <p class="chan-desc">Nạp Lượng ở đây, nhắn bot Facebook Messenger là dùng được luôn cùng ví.</p>
+        <div class="conn-row" id="msgrLinkBox">
+          <span id="msgrLinkStatus" class="conn-status">Đang kiểm tra…</span>
+          <button id="btnMsgrLink" style="display:none;background:#0084FF;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">💬 Liên kết Messenger</button>
+          <button id="btnMsgrUnlink" style="display:none;background:transparent;color:#c0392b;border:1px solid #c0392b;padding:.55rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer">Hủy liên kết</button>
+        </div>
       </div>
     </div>
 
@@ -546,6 +650,7 @@ function setupTabs() {
       btn.classList.add('active');
       document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
       if (btn.dataset.tab === 'credits') loadCredits();
+      if (btn.dataset.tab === 'ketnoi') loadKetnoi();
     });
   });
 }
@@ -724,6 +829,58 @@ async function loadHeaderBalance() {
     if (h) h.innerHTML = '<small>—</small>';
   }
 }
+
+// ── AI QUA MCP (self-serve key riêng của user) ──
+function _mcpShow(state) { // 'checking' | 'nokey' | 'ready'
+  const c = document.getElementById('mcpChecking');
+  const n = document.getElementById('mcpNoKey');
+  const r = document.getElementById('mcpReady');
+  if (!c || !n || !r) return;
+  c.style.display = state === 'checking' ? 'block' : 'none';
+  n.style.display = state === 'nokey' ? 'block' : 'none';
+  r.style.display = state === 'ready' ? 'block' : 'none';
+}
+async function loadMcpKey() {
+  if (!_pToken) return;
+  _mcpShow('checking');
+  try {
+    const res = await fetch('/api/mcp/key', { headers: { Authorization: `Bearer ${_pToken}` } });
+    const d = res.ok ? await res.json() : {};
+    if (d && d.url) { document.getElementById('mcpUrl').value = d.url; _mcpShow('ready'); }
+    else _mcpShow('nokey');
+  } catch { _mcpShow('nokey'); }
+}
+async function genMcpKey() {
+  const btn = document.getElementById('btnMcpGen');
+  btn.disabled = true; btn.textContent = 'Đang tạo…';
+  try {
+    const res = await fetch('/api/mcp/key', { method: 'POST', headers: { Authorization: `Bearer ${_pToken}` } });
+    const d = await res.json();
+    if (d && d.url) { document.getElementById('mcpUrl').value = d.url; _mcpShow('ready'); }
+    else alert('Không tạo được key, thử lại sau nhé.');
+  } catch { alert('Lỗi mạng, thử lại sau nhé.'); }
+  finally { btn.disabled = false; btn.textContent = '✨ Tạo đường kết nối'; }
+}
+async function copyMcpUrl() {
+  const inp = document.getElementById('mcpUrl');
+  const btn = document.getElementById('btnMcpCopy');
+  try { await navigator.clipboard.writeText(inp.value); }
+  catch { inp.select(); document.execCommand('copy'); }
+  btn.textContent = '✓ Đã copy'; btn.classList.add('ok');
+  setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('ok'); }, 1800);
+}
+async function revokeMcpKey() {
+  if (!confirm('Thu hồi key hiện tại? Kết nối AI đang dùng key cũ sẽ ngừng — bạn sẽ có key mới ngay sau đó.')) return;
+  _mcpShow('checking');
+  try {
+    await fetch('/api/mcp/key', { method: 'DELETE', headers: { Authorization: `Bearer ${_pToken}` } });
+    await fetch('/api/mcp/key', { method: 'POST', headers: { Authorization: `Bearer ${_pToken}` } });
+  } catch {}
+  loadMcpKey();
+}
+document.getElementById('btnMcpGen')?.addEventListener('click', genMcpKey);
+document.getElementById('btnMcpCopy')?.addEventListener('click', copyMcpUrl);
+document.getElementById('btnMcpRevoke')?.addEventListener('click', revokeMcpKey);
 
 // ── LIÊN KẾT TELEGRAM ──
 async function loadTelegramLink() {
@@ -906,13 +1063,20 @@ document.getElementById('btnMsgrUnlink').onclick = async () => {
   loadMessengerLink();
 };
 
+// ── TAB KẾT NỐI (AI qua MCP + các kênh chat) ──
+let _ketnoiLoaded = false;
+function loadKetnoi() {
+  loadMcpKey();
+  loadTelegramLink();
+  loadWhatsappLink();
+  loadMessengerLink();
+  _ketnoiLoaded = true;
+}
+
 async function loadCredits() {
   if (!_pUser || !_pToken) return;
   // Balance
   await loadHeaderBalance();
-  loadTelegramLink();
-  loadWhatsappLink();
-  loadMessengerLink();
   const t = document.getElementById('tabCreditBalance');
   if (t && t.textContent === '…') t.textContent = '...';
   // Transactions
