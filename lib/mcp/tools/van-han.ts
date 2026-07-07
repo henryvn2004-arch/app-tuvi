@@ -27,7 +27,7 @@ import {
 
 type Rec = Record<string, unknown>;
 
-const LINK = 'https://tuviminhbao.com/mcp';
+const LINK = 'https://www.tuviminhbao.com/mcp';
 
 const schema = {
   ngay_duong: z.string().describe('Ngày sinh dương lịch YYYY-MM-DD'),
