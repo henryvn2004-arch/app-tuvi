@@ -25,6 +25,7 @@ import { loadMcpEngine } from '../engine';
 import { distinctVanHanYears } from '../usage';
 import {
   type McpTool, yearCan, yearChi, parseGioSinh, parseNgay, allStarNames, normVi,
+  majorStarsOf, minorStarsOf, tuChinhOf,
 } from './_shared';
 
 type Rec = Record<string, unknown>;
@@ -44,7 +45,13 @@ const schema = {
 function cungInfo(palaces: Rec[], idx: number): Rec | null {
   const p = palaces[idx];
   if (!p) return null;
-  return { cung: p.cungName ?? null, dia_chi: p.diaChi ?? null, sao: allStarNames(p) };
+  return {
+    cung: p.cungName ?? null,
+    dia_chi: p.diaChi ?? null,
+    chinh_tinh: majorStarsOf(p),
+    phu_tinh: minorStarsOf(p),
+    tam_phuong_tu_chinh: tuChinhOf(p), // sao hội chiếu vào cung hạn
+  };
 }
 
 function comboToBlock(h: ComboHit): Rec {

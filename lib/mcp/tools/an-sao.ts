@@ -11,7 +11,7 @@ import { computeLaso } from '@/lib/engine/laso';
 import type { BirthParams } from '@/lib/contract/v1';
 import {
   type McpTool, CHI_NAMES, parseGioSinh, parseNgay,
-  majorStarsOf, minorStarsOf,
+  majorStarsOf, minorStarsOf, tuChinhOf,
 } from './_shared';
 
 type Rec = Record<string, unknown>;
@@ -92,6 +92,7 @@ export const anSaoTool: McpTool = {
         is_than: !!p.isThan,
         chinh_tinh: majorStarsOf(p),
         phu_tinh: minorStarsOf(p),
+        tam_phuong_tu_chinh: tuChinhOf(p),
       })),
       tu_hoa_goc: tuHoaGoc,
       dai_van: ((ls.daiVans as Rec[]) || []).map((dv) => ({

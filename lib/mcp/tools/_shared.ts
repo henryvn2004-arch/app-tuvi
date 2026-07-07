@@ -116,6 +116,11 @@ export function minorStarsOf(p: Rec, cap = 12): StarOut[] {
     .slice(0, cap) as StarOut[];
 }
 
+/** Sao Tam Phương Tứ Chính (hội chiếu từ tam hợp + xung chiếu) — cốt lõi luận cung. */
+export function tuChinhOf(p: Rec, cap = 12): StarOut[] {
+  return ((p.tuChinhStars as unknown[]) || []).map(fmtStar).filter(Boolean).slice(0, cap) as StarOut[];
+}
+
 /** Tất cả tên sao (chính + phụ) của 1 cung — cho luu_thai_tue / hạn. */
 export function allStarNames(p: Rec | undefined): string[] {
   if (!p) return [];
