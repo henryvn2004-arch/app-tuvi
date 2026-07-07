@@ -22,7 +22,7 @@ import type { BirthParams } from '@/lib/contract/v1';
 import { loadMcpEngine } from '../engine';
 import { distinctVanHanYears } from '../usage';
 import {
-  type McpTool, yearCan, yearChi, parseGioSinh, parseNgay, allStarNames,
+  type McpTool, yearCan, yearChi, parseGioSinh, parseNgay, allStarNames, normVi,
 } from './_shared';
 
 type Rec = Record<string, unknown>;
@@ -115,7 +115,9 @@ export const vanHanTool: McpTool = {
 
     // A.4 — lưu tứ hóa theo can năm xem, tìm cung natal của từng sao.
     const { TU_HOA } = loadMcpEngine();
-    const hoaMap = TU_HOA[canNamXem];
+    // Khớp can NFC-an toàn (canNamXem là hằng số của mình, key TU_HOA từ engine).
+    const hoaMap = TU_HOA[canNamXem]
+      || Object.entries(TU_HOA).find(([k]) => normVi(k) === normVi(canNamXem))?.[1];
     const findPalaceOf = (starName: string): Rec | null =>
       palaces.find((p) =>
         [...((p.majorStars as Rec[]) || []), ...((p.stars as Rec[]) || [])].some(

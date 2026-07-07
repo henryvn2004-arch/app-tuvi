@@ -9,7 +9,7 @@
 import { z } from 'zod';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import type { McpTool } from './_shared';
+import { type McpTool, normVi } from './_shared';
 
 type Rec = Record<string, unknown>;
 interface CachCucRaw {
@@ -45,13 +45,15 @@ export const giaiThichTool: McpTool = {
     const cung = args.cung ? String(args.cung).trim() : '';
 
     const all = loadCachCuc();
-    // Ưu tiên mục có sao ở danh sách chính (sao[]), sau đó tới saoPhuTro.
-    const inSao = (c: CachCucRaw) => Array.isArray(c.sao) && c.sao.includes(sao);
-    const inPhu = (c: CachCucRaw) => Array.isArray(c.saoPhuTro) && c.saoPhuTro.includes(sao);
+    // So khớp CHUẨN HÓA NFC (tránh lỗi "Tử Vi" NFD ≠ NFC trong data).
+    const saoN = normVi(sao);
+    const cungN = normVi(cung);
+    const inSao = (c: CachCucRaw) => Array.isArray(c.sao) && c.sao.some((x) => normVi(x) === saoN);
+    const inPhu = (c: CachCucRaw) => Array.isArray(c.saoPhuTro) && c.saoPhuTro.some((x) => normVi(x) === saoN);
     let hits = all.filter((c) => inSao(c) || inPhu(c));
 
     if (cung) {
-      const byCung = hits.filter((c) => String(c.cung || '') === cung);
+      const byCung = hits.filter((c) => normVi(String(c.cung || '')) === cungN);
       if (byCung.length) hits = byCung; // lọc theo cung nếu có mục khớp, không thì giữ chung
     }
 

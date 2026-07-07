@@ -34,12 +34,23 @@ export function yearChi(y: number): string {
   return CHI_NAMES[(((y + 8) % 12) + 12) % 12];
 }
 
+/** Chuẩn hoá chuỗi tiếng Việt về NFC + lowercase — TRÁNH lỗi NFC/NFD khiến
+ *  "Sửu" (từ input) không khớp "sửu" (hardcode). Bắt buộc cho mọi so khớp
+ *  chuỗi tiếng Việt giữa INPUT người dùng và hằng số/dữ liệu của mình. */
+export function normVi(s: string): string {
+  return String(s || '').normalize('NFC').trim().toLowerCase();
+}
+
 // Bảng tên chi giờ (chấp nhận không dấu / biến thể Tị) → index 0..11.
-const CHI_GIO_ALIAS: Record<string, number> = {
+// Key CHUẨN HÓA NFC lúc dựng map để khớp bất kể input NFC/NFD.
+const _CHI_GIO_RAW: Record<string, number> = {
   ty: 0, tí: 0, tý: 0, suu: 1, sửu: 1, dan: 2, dần: 2, mao: 3, mão: 3,
   thin: 4, thìn: 4, ti: 5, tị: 5, tỵ: 5, ngo: 6, ngọ: 6, mui: 7, mùi: 7,
   than: 8, thân: 8, dau: 9, dậu: 9, tuat: 10, tuất: 10, hoi: 11, hợi: 11,
 };
+const CHI_GIO_ALIAS: Record<string, number> = Object.fromEntries(
+  Object.entries(_CHI_GIO_RAW).map(([k, v]) => [k.normalize('NFC'), v]),
+);
 
 /** Giờ ĐỒNG HỒ (0–23) → index địa chi giờ (khối 2h, neo giờ lẻ; Tý=23–00:59). */
 export function clockToBranchIdx(hour: number): number {
@@ -52,19 +63,13 @@ export function clockToBranchIdx(hour: number): number {
  * Trả -1 nếu không hiểu.
  */
 export function parseGioSinh(gio: number | string): number {
-  if (typeof gio === 'number' && Number.isFinite(gio)) {
-    if (gio >= 0 && gio <= 11 && Number.isInteger(gio)) {
-      // Nhập trực tiếp index địa chi (0..11) — nhưng cũng có thể là giờ đồng hồ.
-      // Ưu tiên coi là GIỜ ĐỒNG HỒ để nhất quán (0..23). 0..11 vẫn map đúng khối giờ.
-    }
-    return clockToBranchIdx(gio);
-  }
-  const s = String(gio).trim().toLowerCase();
-  if (s === '') return -1;
-  // Thuần số dạng chuỗi "9", "13"
-  if (/^\d{1,2}$/.test(s)) return clockToBranchIdx(Number(s));
-  // Tên chi (bỏ chữ "giờ" nếu có)
-  const key = s.replace(/^gi[oờ]\s+/i, '').trim();
+  if (typeof gio === 'number' && Number.isFinite(gio)) return clockToBranchIdx(gio);
+  const raw = String(gio).trim();
+  if (raw === '') return -1;
+  // Thuần số dạng chuỗi "9", "13" → giờ đồng hồ.
+  if (/^\d{1,2}$/.test(raw)) return clockToBranchIdx(Number(raw));
+  // Tên chi (chuẩn hoá NFC, bỏ tiền tố "giờ/gio" nếu có).
+  const key = normVi(raw).replace(/^gi[oờ]\s+/, '').trim();
   if (key in CHI_GIO_ALIAS) return CHI_GIO_ALIAS[key];
   return -1;
 }
