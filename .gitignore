@@ -14,3 +14,14 @@ node_modules/
 tuvi-engine/dist/
 tuvi-engine/coverage/
 tsconfig.tsbuildinfo
+
+# Claude Code / harness local state
+.claude/
+
+# Local data, generated outputs & scratch
+/qr/
+/scripts/out/
+/scripts/.gsc-verify-token.json
+/sach/
+/docs/miniapp-tool-inventory.md
+/sample-laso-*.html
