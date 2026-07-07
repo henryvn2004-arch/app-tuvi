@@ -224,7 +224,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 
   <!-- NOT LOGGED IN -->
   <div id="notLoggedIn" style="display:none;text-align:center;padding:4rem 1rem">
-    <div style="font-size:2.5rem;margin-bottom:1rem">🔮</div>
+    <div style="font-size:2.5rem;margin-bottom:1rem"><span data-icon="sparkles" style="width:40px;height:40px;color:#9A7B3A"></span></div>
     <h2 style="font-family:'Noto Serif',serif;color:var(--navy);margin-bottom:.75rem">Đăng nhập để xem hồ sơ</h2>
     <p style="color:var(--text-lt);margin-bottom:.6rem">Hồ sơ giúp bạn xem lại lá số, kết quả xem tuổi và lịch sử trò chuyện.</p>
     <p style="color:var(--text-lt);font-size:.82rem;margin-bottom:1.5rem">Hỗ trợ đăng nhập qua <strong>Google</strong>, <strong>Facebook</strong> hoặc email.</p>
@@ -245,9 +245,9 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
       </div>
       <div style="display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;justify-content:flex-end">
         <div class="credit-widget">
-          <div class="credit-widget-label">Credits</div>
+          <div class="credit-widget-label">Lượng</div>
           <div class="credit-widget-value" id="headerCreditBalance"><small>...</small></div>
-          <a href="/topup.html" class="btn-topup-sm">💳 Nạp thêm</a>
+          <a href="/topup.html" class="btn-topup-sm"><span data-icon="wallet" style="width:14px;height:14px;vertical-align:-2px"></span> Nạp thêm</a>
         </div>
         <button class="profile-signout" id="btnSignout">Đăng Xuất</button>
       </div>
@@ -255,40 +255,70 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 
     <!-- Tabs -->
     <div class="tabs">
-      <button class="tab-btn active" data-tab="lasos"><span class="ic-inline" data-icon-emoji="🔮" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🔮</span> Lá Số <span id="countLasos" class="chat-count" style="margin-left:.35rem;display:none"></span></button>
-      <button class="tab-btn" data-tab="xemtuoi"><span class="ic-inline" data-icon-emoji="💑" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">💑</span> Xem Tuổi <span id="countXemTuoi" class="chat-count" style="margin-left:.35rem;display:none"></span></button>
-      <button class="tab-btn" data-tab="tuong"><span class="ic-inline" data-icon-emoji="🪬" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🪬</span> Xem Tướng <span id="countTuong" class="chat-count" style="margin-left:.35rem;display:none"></span></button>
-      <button class="tab-btn" data-tab="chat"><span class="ic-inline" data-icon-emoji="💬" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">💬</span> Chat <span id="countChat" class="chat-count" style="margin-left:.35rem;display:none"></span></button>
-      <button class="tab-btn" data-tab="credits"><span class="ic-inline" data-icon-emoji="💳" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">💳</span> Credits</button>
-      <button class="tab-btn" data-tab="ketnoi"><span class="ic-inline" data-icon-emoji="🔗" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🔗</span> Kết Nối</button>
-      <button class="tab-btn" data-tab="account"><span class="ic-inline" data-icon-emoji="👤" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">👤</span> Tài Khoản</button>
+      <button class="tab-btn active" data-tab="lichsu"><span class="tab-ic" data-icon="layout-grid"></span> Lịch Sử <span id="countAll" class="chat-count" style="margin-left:.35rem;display:none"></span></button>
+      <button class="tab-btn" data-tab="credits"><span class="tab-ic" data-icon="wallet"></span> Ví Lượng</button>
+      <button class="tab-btn" data-tab="ketnoi"><span class="tab-ic" data-icon="link"></span> Kết Nối</button>
+      <button class="tab-btn" data-tab="account"><span class="tab-ic" data-icon="user"></span> Tài Khoản</button>
     </div>
 
-    <!-- Tab: Lá Số -->
-    <div class="tab-content active" id="tab-lasos">
-      <div id="lasosLoading" class="loading-cards">
-        <div class="loading-card"><div class="loading-card-top"></div><div class="loading-card-body"><div class="skeleton" style="width:70%;margin-bottom:.5rem"></div><div class="skeleton" style="width:50%"></div></div></div>
-        <div class="loading-card"><div class="loading-card-top"></div><div class="loading-card-body"><div class="skeleton" style="width:60%;margin-bottom:.5rem"></div><div class="skeleton" style="width:40%"></div></div></div>
+    <!-- Tab: Lịch Sử (gộp Lá Số + Xem Tuổi + Xem Tướng + Chat — đều là lịch sử dùng công cụ) -->
+    <div class="tab-content active" id="tab-lichsu">
+      <style>
+        .tab-ic{display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A}
+        .tab-ic svg{width:100%;height:100%}
+        /* Mọi icon Lucide trong dashboard lấp đầy span chứa */
+        #dashboard [data-icon]{display:inline-flex;align-items:center;justify-content:center}
+        #dashboard [data-icon] svg{width:100%;height:100%}
+        #tab-ketnoi .conn-ic [data-icon]{width:24px;height:24px}
+        .empty-state .icon [style*="width"]{width:44px !important;height:44px !important}
+        #tab-lichsu .hist-filters{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.15rem}
+        #tab-lichsu .hist-chip{display:inline-flex;align-items:center;gap:.4rem;background:#fff;border:1px solid var(--border-lt);color:var(--text-mid);border-radius:999px;padding:.45rem .9rem;font-size:.83rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
+        #tab-lichsu .hist-chip:hover{border-color:var(--gold);color:var(--navy)}
+        #tab-lichsu .hist-chip.active{background:var(--navy);border-color:var(--navy);color:#fff}
+        #tab-lichsu .hist-chip .chip-ic{display:inline-flex;width:15px;height:15px}
+        #tab-lichsu .hist-chip .chip-ic svg{width:100%;height:100%}
+        #tab-lichsu .hist-chip .chip-count{background:rgba(0,0,0,.08);border-radius:999px;padding:0 .4rem;font-size:.72rem;min-width:1.1rem;text-align:center}
+        #tab-lichsu .hist-chip.active .chip-count{background:rgba(255,255,255,.22)}
+        #tab-lichsu .hist-group{margin-bottom:1.6rem}
+        #tab-lichsu .hist-group-head{display:flex;align-items:center;gap:.5rem;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--text-lt);margin:0 0 .7rem}
+        #tab-lichsu .hist-group-head .gh-ic{display:inline-flex;width:16px;height:16px;color:var(--gold)}
+        #tab-lichsu .hist-group-head .gh-ic svg{width:100%;height:100%}
+      </style>
+
+      <div class="hist-filters">
+        <button class="hist-chip active" data-filter="all">Tất cả</button>
+        <button class="hist-chip" data-filter="lasos"><span class="chip-ic" data-icon="sparkles"></span> Lá Số <span id="countLasos" class="chip-count" style="display:none"></span></button>
+        <button class="hist-chip" data-filter="xemtuoi"><span class="chip-ic" data-icon="heart-handshake"></span> Xem Tuổi <span id="countXemTuoi" class="chip-count" style="display:none"></span></button>
+        <button class="hist-chip" data-filter="tuong"><span class="chip-ic" data-icon="eye"></span> Xem Tướng <span id="countTuong" class="chip-count" style="display:none"></span></button>
+        <button class="hist-chip" data-filter="chat"><span class="chip-ic" data-icon="message-circle"></span> Chat <span id="countChat" class="chip-count" style="display:none"></span></button>
       </div>
-      <div id="lasosContent" style="display:none"></div>
-    </div>
 
-    <!-- Tab: Xem Tuổi/Làm Ăn -->
-    <div class="tab-content" id="tab-xemtuoi">
-      <div id="xemTuoiLoading" style="text-align:center;padding:2rem;color:var(--text-lt)">Đang tải...</div>
-      <div id="xemTuoiContent" style="display:none"></div>
-    </div>
+      <div class="hist-group" data-group="lasos">
+        <div class="hist-group-head"><span class="gh-ic" data-icon="sparkles"></span> Lá Số</div>
+        <div id="lasosLoading" class="loading-cards">
+          <div class="loading-card"><div class="loading-card-top"></div><div class="loading-card-body"><div class="skeleton" style="width:70%;margin-bottom:.5rem"></div><div class="skeleton" style="width:50%"></div></div></div>
+          <div class="loading-card"><div class="loading-card-top"></div><div class="loading-card-body"><div class="skeleton" style="width:60%;margin-bottom:.5rem"></div><div class="skeleton" style="width:40%"></div></div></div>
+        </div>
+        <div id="lasosContent" style="display:none"></div>
+      </div>
 
-    <!-- Tab: Xem Tướng -->
-    <div class="tab-content" id="tab-tuong">
-      <div id="tuongLoading" style="text-align:center;padding:2rem;color:var(--text-lt)">Đang tải...</div>
-      <div id="tuongContent" style="display:none"></div>
-    </div>
+      <div class="hist-group" data-group="xemtuoi">
+        <div class="hist-group-head"><span class="gh-ic" data-icon="heart-handshake"></span> Xem Tuổi / Làm Ăn</div>
+        <div id="xemTuoiLoading" style="text-align:center;padding:1.5rem;color:var(--text-lt)">Đang tải...</div>
+        <div id="xemTuoiContent" style="display:none"></div>
+      </div>
 
-    <!-- Tab: Chat -->
-    <div class="tab-content" id="tab-chat">
-      <div id="chatListLoading" style="text-align:center;padding:2rem;color:var(--text-lt)">Đang tải...</div>
-      <div id="chatListContent" style="display:none"></div>
+      <div class="hist-group" data-group="tuong">
+        <div class="hist-group-head"><span class="gh-ic" data-icon="eye"></span> Xem Tướng</div>
+        <div id="tuongLoading" style="text-align:center;padding:1.5rem;color:var(--text-lt)">Đang tải...</div>
+        <div id="tuongContent" style="display:none"></div>
+      </div>
+
+      <div class="hist-group" data-group="chat">
+        <div class="hist-group-head"><span class="gh-ic" data-icon="message-circle"></span> Chat</div>
+        <div id="chatListLoading" style="text-align:center;padding:1.5rem;color:var(--text-lt)">Đang tải...</div>
+        <div id="chatListContent" style="display:none"></div>
+      </div>
     </div>
 
     <!-- Tab: Credits -->
@@ -296,16 +326,16 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
       <div style="background:var(--navy);border-radius:12px;padding:1.5rem 2rem;margin-bottom:1.25rem">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:.25rem">
           <div>
-            <div style="color:rgba(255,255,255,.55);font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem">Số Dư Credits</div>
+            <div style="color:rgba(255,255,255,.55);font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem">Số Dư Lượng</div>
             <div id="tabCreditBalance" style="color:#c9a84c;font-family:'Noto Serif',serif;font-size:2rem;font-weight:700">…</div>
-            <div style="color:rgba(255,255,255,.4);font-size:.75rem;margin-top:.3rem">$1 = 10 credits · Không hết hạn</div>
+            <div style="color:rgba(255,255,255,.4);font-size:.75rem;margin-top:.3rem">$1 = 10 lượng · Không hết hạn</div>
           </div>
-          <a href="/topup.html" style="background:#c9a84c;color:#061A2E;padding:.75rem 1.5rem;border-radius:8px;font-size:.88rem;font-weight:700;text-decoration:none;align-self:flex-start">💳 Nạp Credits</a>
+          <a href="/topup.html" style="background:#c9a84c;color:#061A2E;padding:.75rem 1.5rem;border-radius:8px;font-size:.88rem;font-weight:700;text-decoration:none;align-self:flex-start;display:inline-flex;align-items:center;gap:.4rem"><span data-icon="wallet" style="width:16px;height:16px"></span> Nạp Lượng</a>
         </div>
         <div class="credit-progress-wrap">
           <div class="credit-progress-label">
             <span>Đã dùng tháng này</span>
-            <span id="monthlyUsageLabel">0 credits</span>
+            <span id="monthlyUsageLabel">0 lượng</span>
           </div>
           <div class="credit-progress-track">
             <div class="credit-progress-fill" id="monthlyUsageBar" style="width:0%"></div>
@@ -314,23 +344,23 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
       </div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.25rem">
         <a href="/" style="background:#fff;border:1px solid var(--border-lt);border-radius:8px;padding:1rem;text-decoration:none;text-align:center;color:var(--navy)">
-          <div style="font-size:1.4rem;margin-bottom:.35rem">🔮</div>
+          <div style="font-size:1.4rem;margin-bottom:.35rem"><span data-icon="sparkles" style="width:22px;height:22px;color:#9A7B3A"></span></div>
           <div style="font-size:.8rem;font-weight:700">Luận Giải Lá Số</div>
-          <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin-top:.2rem">190 credits</div>
+          <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin-top:.2rem">190 lượng</div>
         </a>
         <a href="/xem-tuoi.html" style="background:#fff;border:1px solid var(--border-lt);border-radius:8px;padding:1rem;text-decoration:none;text-align:center;color:var(--navy)">
-          <div style="font-size:1.4rem;margin-bottom:.35rem">💑</div>
+          <div style="font-size:1.4rem;margin-bottom:.35rem"><span data-icon="heart-handshake" style="width:22px;height:22px;color:#9A7B3A"></span></div>
           <div style="font-size:.8rem;font-weight:700">Xem Tuổi Vợ Chồng</div>
-          <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin-top:.2rem">90 credits</div>
+          <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin-top:.2rem">90 lượng</div>
         </a>
         <a href="/xem-lam-an.html" style="background:#fff;border:1px solid var(--border-lt);border-radius:8px;padding:1rem;text-decoration:none;text-align:center;color:var(--navy)">
-          <div style="font-size:1.4rem;margin-bottom:.35rem">💼</div>
+          <div style="font-size:1.4rem;margin-bottom:.35rem"><span data-icon="briefcase" style="width:22px;height:22px;color:#9A7B3A"></span></div>
           <div style="font-size:.8rem;font-weight:700">Xem Tuổi Làm Ăn</div>
-          <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin-top:.2rem">90 credits</div>
+          <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin-top:.2rem">90 lượng</div>
         </a>
       </div>
       <div class="account-section">
-        <p style="font-size:.82rem;color:var(--text-mid)">🔗 Kết nối lá số với AI chat (Claude, ChatGPT…) và các bot Telegram / WhatsApp / Messenger tại tab <strong><a href="#" onclick="document.querySelector('[data-tab=ketnoi]').click();return false" style="color:var(--gold)">Kết Nối</a></strong>.</p>
+        <p style="font-size:.82rem;color:var(--text-mid)"><span data-icon="link" style="width:14px;height:14px;vertical-align:-2px"></span> Kết nối lá số với AI chat (Claude, ChatGPT…) và các bot Telegram / WhatsApp / Messenger tại tab <strong><a href="#" onclick="document.querySelector('[data-tab=ketnoi]').click();return false" style="color:var(--gold)">Kết Nối</a></strong>.</p>
       </div>
       <div class="account-section">
         <h3>Lịch Sử Giao Dịch</h3>
@@ -378,7 +408,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
       <!-- AI qua MCP -->
       <div class="conn-card conn-hero">
         <div class="conn-head">
-          <div class="conn-ic" style="background:linear-gradient(120deg,#7b5cff,#4aa3ff)">🤖</div>
+          <div class="conn-ic" style="background:linear-gradient(120deg,#7b5cff,#4aa3ff)"><span data-icon="sparkles"></span></div>
           <div>
             <div class="conn-title">Trợ lý AI của bạn <span class="conn-badge">Mới</span></div>
             <div class="conn-sub">Claude · ChatGPT · Gemini · Grok</div>
@@ -389,7 +419,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
         <div id="mcpChecking"><span class="conn-status">⏳ Đang kiểm tra…</span></div>
 
         <div id="mcpNoKey" style="display:none">
-          <button id="btnMcpGen" class="conn-btn conn-btn-ai">✨ Tạo đường kết nối</button>
+          <button id="btnMcpGen" class="conn-btn conn-btn-ai">Tạo đường kết nối</button>
         </div>
 
         <div id="mcpReady" style="display:none">
@@ -425,7 +455,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
             </details>
           </div>
           <div style="margin-top:1rem;background:var(--bg-soft);border-radius:10px;padding:.8rem .95rem">
-            <div style="font-size:.78rem;font-weight:800;color:var(--navy);margin-bottom:.4rem">💡 Kết nối xong thì hỏi thế nào?</div>
+            <div style="font-size:.78rem;font-weight:800;color:var(--navy);margin-bottom:.4rem"><span data-icon="lightbulb" style="width:14px;height:14px;vertical-align:-2px"></span> Kết nối xong thì hỏi thế nào?</div>
             <div style="font-size:.82rem;color:var(--text-mid);line-height:1.7">
               Không cần bấm gì — cứ chat bình thường, AI tự gọi công cụ. Nhớ <strong>nói đủ ngày + giờ + giới tính sinh</strong>. Ví dụ:
               <ul style="margin:.5rem 0 0 1.1rem;padding:0">
@@ -444,13 +474,13 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
       <!-- Telegram -->
       <div class="conn-card">
         <div class="conn-head">
-          <div class="conn-ic" style="background:#229ED9">✈️</div>
+          <div class="conn-ic" style="background:#229ED9"><span data-icon="message-circle"></span></div>
           <div><div class="conn-title">Telegram</div><div class="conn-sub">Chat với bot bằng đúng ví Lượng này</div></div>
         </div>
         <p class="chan-desc">Nạp Lượng ở đây, nhắn bot Telegram là dùng được luôn cùng ví.</p>
         <div class="conn-row" id="tgLinkBox">
           <span id="tgLinkStatus" class="conn-status">Đang kiểm tra…</span>
-          <button id="btnTgLink" style="display:none;background:#229ED9;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">✈️ Liên kết Telegram</button>
+          <button id="btnTgLink" style="display:none;background:#229ED9;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">Liên kết Telegram</button>
           <button id="btnTgUnlink" style="display:none;background:transparent;color:#c0392b;border:1px solid #c0392b;padding:.55rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer">Hủy liên kết</button>
         </div>
       </div>
@@ -458,13 +488,13 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
       <!-- WhatsApp -->
       <div class="conn-card">
         <div class="conn-head">
-          <div class="conn-ic" style="background:#25D366">💬</div>
+          <div class="conn-ic" style="background:#25D366"><span data-icon="message-circle"></span></div>
           <div><div class="conn-title">WhatsApp</div><div class="conn-sub">Chat với bot bằng đúng ví Lượng này</div></div>
         </div>
         <p class="chan-desc">Nạp Lượng ở đây, nhắn bot WhatsApp là dùng được luôn cùng ví.</p>
         <div class="conn-row" id="waLinkBox">
           <span id="waLinkStatus" class="conn-status">Đang kiểm tra…</span>
-          <button id="btnWaLink" style="display:none;background:#25D366;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">💬 Liên kết WhatsApp</button>
+          <button id="btnWaLink" style="display:none;background:#25D366;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">Liên kết WhatsApp</button>
           <button id="btnWaUnlink" style="display:none;background:transparent;color:#c0392b;border:1px solid #c0392b;padding:.55rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer">Hủy liên kết</button>
         </div>
       </div>
@@ -472,13 +502,13 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
       <!-- Messenger -->
       <div class="conn-card">
         <div class="conn-head">
-          <div class="conn-ic" style="background:#0084FF">💬</div>
+          <div class="conn-ic" style="background:#0084FF"><span data-icon="message-circle"></span></div>
           <div><div class="conn-title">Messenger</div><div class="conn-sub">Chat với bot bằng đúng ví Lượng này</div></div>
         </div>
         <p class="chan-desc">Nạp Lượng ở đây, nhắn bot Facebook Messenger là dùng được luôn cùng ví.</p>
         <div class="conn-row" id="msgrLinkBox">
           <span id="msgrLinkStatus" class="conn-status">Đang kiểm tra…</span>
-          <button id="btnMsgrLink" style="display:none;background:#0084FF;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">💬 Liên kết Messenger</button>
+          <button id="btnMsgrLink" style="display:none;background:#0084FF;color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">Liên kết Messenger</button>
           <button id="btnMsgrUnlink" style="display:none;background:transparent;color:#c0392b;border:1px solid #c0392b;padding:.55rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer">Hủy liên kết</button>
         </div>
       </div>
@@ -521,7 +551,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
         </div>
 
         <div class="account-section" style="border:1px solid var(--border-lt);border-radius:var(--radius);padding:1rem 1.2rem;background:var(--gold-lt)">
-          <p style="font-size:.82rem;color:var(--text-mid)">💳 Xem lịch sử giao dịch và số dư credits tại tab <strong><a href="#" onclick="document.querySelector('[data-tab=credits]').click();return false" style="color:var(--gold)">Credits</a></strong>.</p>
+          <p style="font-size:.82rem;color:var(--text-mid)"><span data-icon="wallet" style="width:14px;height:14px;vertical-align:-2px"></span> Xem lịch sử giao dịch và số dư Lượng tại tab <strong><a href="#" onclick="document.querySelector('[data-tab=credits]').click();return false" style="color:var(--gold)">Ví Lượng</a></strong>.</p>
         </div>
       </div>
     </div>
@@ -613,7 +643,28 @@ async function initProfile() {
   document.getElementById('dashboard').style.display = 'block';
   loadHistory();
   setupTabs();
+  setupHistFilters();
   loadHeaderBalance();
+  if (window.mountIcons) window.mountIcons();
+}
+
+// SVG icon inline (Lucide qua nav.js) — dùng trong template JS thay cho emoji.
+function ic(key, px) {
+  px = px || 14;
+  const svg = window.iconHtml ? window.iconHtml(key) : '';
+  return '<span style="display:inline-flex;width:' + px + 'px;height:' + px + 'px;vertical-align:-2px;color:currentColor">' + svg + '</span>';
+}
+
+// Chip lọc trong tab Lịch Sử: hiện/ẩn từng nhóm công cụ.
+function setupHistFilters() {
+  const chips = document.querySelectorAll('#tab-lichsu .hist-chip');
+  const groups = document.querySelectorAll('#tab-lichsu .hist-group');
+  chips.forEach(chip => chip.addEventListener('click', () => {
+    chips.forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    const f = chip.dataset.filter;
+    groups.forEach(g => { g.style.display = (f === 'all' || g.dataset.group === f) ? '' : 'none'; });
+  }));
 }
 
 function renderProfileHeader() {
@@ -635,12 +686,11 @@ function renderProfileHeader() {
   const isOAuthOnly = identities.length > 0 && !identities.find(i => i.provider === 'email');
 
   if (oauthIdentity) {
-    const PROVIDER_ICONS = { google: '🔵', facebook: '🔷' };
     const PROVIDER_NAMES = { google: 'Google', facebook: 'Facebook' };
     const badge = document.getElementById('providerBadge');
     if (badge) {
       badge.style.display = 'inline-flex';
-      badge.textContent = (PROVIDER_ICONS[oauthIdentity.provider] || '🔗') + ' via ' + (PROVIDER_NAMES[oauthIdentity.provider] || oauthIdentity.provider);
+      badge.textContent = 'via ' + (PROVIDER_NAMES[oauthIdentity.provider] || oauthIdentity.provider);
     }
   }
 
@@ -707,7 +757,7 @@ function renderLasos(lasos) {
   const el = document.getElementById('lasosContent');
   if (count === 0) {
     el.innerHTML = `<div class="empty-state">
-      <div class="icon">🔮</div>
+      <div class="icon">${ic('sparkles',44)}</div>
       <p>Bạn chưa có lá số nào được lưu.<br>Hãy lập lá số và đăng nhập để lưu lịch sử.</p>
       <a href="/" class="btn-primary">Lập Lá Số Ngay</a>
     </div>`;
@@ -739,10 +789,10 @@ function lasoCard(l) {
       <div class="card-badges" style="margin-bottom:.6rem">
         ${chinh}
       </div>
-      <div class="card-date">📅 ${date}</div>
+      <div class="card-date">${ic('calendar',13)} ${date}</div>
       <div class="card-actions">
-        <button class="btn-outline navy" onclick="event.stopPropagation();openLuanModal('${l.slug}','${escHtml(name)}')">📖 Xem Lại</button>
-        <button class="btn-outline gold" onclick="event.stopPropagation();openChatModal('${l.slug}','${escHtml(name)}','laso')">💬 Chat</button>
+        <button class="btn-outline navy" onclick="event.stopPropagation();openLuanModal('${l.slug}','${escHtml(name)}')">${ic('book-open',14)} Xem Lại</button>
+        <button class="btn-outline gold" onclick="event.stopPropagation();openChatModal('${l.slug}','${escHtml(name)}','laso')">${ic('message-circle',14)} Chat</button>
       </div>
     </div>
   </div>`;
@@ -761,7 +811,7 @@ function renderXemTuoi(list) {
   const el = document.getElementById('xemTuoiContent');
   if (list.length === 0) {
     el.innerHTML = `<div class="empty-state">
-      <div class="icon">💑</div>
+      <div class="icon">${ic('heart-handshake',44)}</div>
       <p>Chưa có kết quả xem tuổi nào được lưu.</p>
       <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap">
         <a href="/xem-tuoi.html" class="btn-primary">Xem Tuổi Vợ Chồng</a>
@@ -779,13 +829,13 @@ function xemItem(x) {
   const score = x.total_score || 0;
   const cls = score >= 75 ? 'high' : score >= 50 ? 'mid' : 'low';
   const typeLabel = x.product_type === 'xem-lam-an' ? 'Xem tuổi làm ăn' : 'Xem tuổi vợ chồng';
-  const icon = x.product_type === 'xem-lam-an' ? '💼' : '💑';
+  const icon = x.product_type === 'xem-lam-an' ? ic('briefcase',14) : ic('heart-handshake',14);
   return `<div class="xem-item">
     <div class="xem-score ${cls}">${score}</div>
     <div class="xem-info">
       <div class="xem-type">${icon} ${typeLabel}</div>
       <div class="xem-names">${escHtml(x.person_a || '')} × ${escHtml(x.person_b || '')}</div>
-      <div class="xem-date">📅 ${date}</div>
+      <div class="xem-date">${ic('calendar',13)} ${date}</div>
     </div>
     <button class="btn-outline navy btn-sm" onclick="openXemTuoiModal('${x.id}','${escHtml(x.person_a||'')}','${escHtml(x.person_b||'')}')">Xem Lại</button>
   </div>`;
@@ -804,7 +854,7 @@ function renderChatList(list) {
   const el = document.getElementById('chatListContent');
   if (list.length === 0) {
     el.innerHTML = `<div class="empty-state">
-      <div class="icon">💬</div>
+      <div class="icon">${ic('message-circle',44)}</div>
       <p>Chưa có lịch sử trò chuyện nào.</p>
     </div>`;
     return;
@@ -815,12 +865,12 @@ function renderChatList(list) {
 
 function chatListItem(c) {
   const date = new Date(c.updated_at).toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});
-  const icon = c.product === 'xem-tuoi' ? '💑' : c.product === 'xem-lam-an' ? '💼' : '🔮';
+  const icon = c.product === 'xem-tuoi' ? ic('heart-handshake',18) : c.product === 'xem-lam-an' ? ic('briefcase',18) : ic('sparkles',18);
   return `<div class="chat-item" onclick="openChatModal('${c.laso_slug}','${c.laso_slug}','${c.product}')">
     <div class="chat-icon">${icon}</div>
     <div class="chat-info">
       <div class="chat-slug">${c.laso_slug}</div>
-      <div class="chat-meta">💬 Cập nhật ${date}</div>
+      <div class="chat-meta">${ic('message-circle',13)} Cập nhật ${date}</div>
     </div>
     <span style="color:var(--gold);font-size:.8rem">Tiếp tục →</span>
   </div>`;
@@ -834,9 +884,9 @@ async function loadHeaderBalance() {
     const d = await res.json();
     const bal = d.balance ?? 0;
     const h = document.getElementById('headerCreditBalance');
-    if (h) h.innerHTML = bal + ' <small>cr</small>';
+    if (h) h.innerHTML = bal + ' <small>lượng</small>';
     const t = document.getElementById('tabCreditBalance');
-    if (t) t.textContent = bal + ' credits';
+    if (t) t.textContent = bal + ' lượng';
   } catch(e) {
     const h = document.getElementById('headerCreditBalance');
     if (h) h.innerHTML = '<small>—</small>';
@@ -872,7 +922,7 @@ async function genMcpKey() {
     if (d && d.url) { document.getElementById('mcpUrl').value = d.url; _mcpShow('ready'); }
     else alert('Không tạo được key, thử lại sau nhé.');
   } catch { alert('Lỗi mạng, thử lại sau nhé.'); }
-  finally { btn.disabled = false; btn.textContent = '✨ Tạo đường kết nối'; }
+  finally { btn.disabled = false; btn.textContent = 'Tạo đường kết nối'; }
 }
 async function copyMcpUrl() {
   const inp = document.getElementById('mcpUrl');
@@ -907,7 +957,7 @@ async function loadTelegramLink() {
     });
     const d = res.ok ? await res.json() : { linked: false };
     if (d.linked) {
-      statusEl.textContent = '✅ Đã liên kết — bot Telegram dùng chung ví Lượng này.';
+      statusEl.textContent = '✓ Đã liên kết — bot Telegram dùng chung ví Lượng này.';
       btnLink.style.display = 'none';
       btnUnlink.style.display = 'inline-block';
     } else {
@@ -940,7 +990,7 @@ document.getElementById('btnTgLink').onclick = async () => {
   } catch {
     alert('Lỗi mạng, thử lại sau nhé.');
   } finally {
-    btn.disabled = false; btn.textContent = '✈️ Liên kết Telegram';
+    btn.disabled = false; btn.textContent = 'Liên kết Telegram';
   }
 };
 
@@ -967,7 +1017,7 @@ async function loadWhatsappLink() {
     });
     const d = res.ok ? await res.json() : { linked: false };
     if (d.linked) {
-      statusEl.textContent = '✅ Đã liên kết — bot WhatsApp dùng chung ví Lượng này.';
+      statusEl.textContent = '✓ Đã liên kết — bot WhatsApp dùng chung ví Lượng này.';
       btnLink.style.display = 'none';
       btnUnlink.style.display = 'inline-block';
     } else {
@@ -1000,7 +1050,7 @@ document.getElementById('btnWaLink').onclick = async () => {
   } catch {
     alert('Lỗi mạng, thử lại sau nhé.');
   } finally {
-    btn.disabled = false; btn.textContent = '💬 Liên kết WhatsApp';
+    btn.disabled = false; btn.textContent = 'Liên kết WhatsApp';
   }
 };
 
@@ -1027,7 +1077,7 @@ async function loadMessengerLink() {
     });
     const d = res.ok ? await res.json() : { linked: false };
     if (d.linked) {
-      statusEl.textContent = '✅ Đã liên kết — bot Messenger dùng chung ví Lượng này.';
+      statusEl.textContent = '✓ Đã liên kết — bot Messenger dùng chung ví Lượng này.';
       btnLink.style.display = 'none';
       btnUnlink.style.display = 'inline-block';
     } else {
@@ -1061,7 +1111,7 @@ document.getElementById('btnMsgrLink').onclick = async () => {
   } catch {
     alert('Lỗi mạng, thử lại sau nhé.');
   } finally {
-    btn.disabled = false; btn.textContent = '💬 Liên kết Messenger';
+    btn.disabled = false; btn.textContent = 'Liên kết Messenger';
   }
 };
 
@@ -1118,7 +1168,7 @@ async function loadCredits() {
     const bar = document.getElementById('monthlyUsageBar');
     const label = document.getElementById('monthlyUsageLabel');
     if (bar) setTimeout(() => { bar.style.width = pct + '%'; }, 100);
-    if (label) label.textContent = monthUsed + ' credits';
+    if (label) label.textContent = monthUsed + ' lượng';
     // Color shift when high usage
     if (bar && pct >= 80) bar.style.background = 'linear-gradient(90deg,#c0392b,#e74c3c)';
   } catch(e) {
@@ -1132,7 +1182,7 @@ function renderTransactions(list) {
     el.innerHTML = '<div style="color:var(--text-lt);font-size:.85rem">Chưa có giao dịch nào.</div>';
     return;
   }
-  const LABELS = { topup:'💳 Nạp Credits', use_laso:'🔮 Luận Giải Lá Số', use_xem_tuoi:'💑 Xem Tuổi Vợ Chồng', use_xem_lam_an:'💼 Xem Tuổi Làm Ăn' };
+  const LABELS = { topup:'Nạp Lượng', use_laso:'Luận Giải Lá Số', use_xem_tuoi:'Xem Tuổi Vợ Chồng', use_xem_lam_an:'Xem Tuổi Làm Ăn' };
   el.innerHTML = '<div class="purchase-list">' + list.map(t => {
     const date = new Date(t.created_at).toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});
     const isAdd = t.amount > 0;
@@ -1147,11 +1197,11 @@ function renderTransactions(list) {
 
 // ── RENDER XEM TƯỚNG ──
 const TUONG_TOOL_LABELS = {
-  'dien-tuong':     { label: 'Diện Tướng', cls: 'dien', icon: '😶' },
-  'nhan-tuong':     { label: 'Nhãn Tướng', cls: 'nhan', icon: '👁' },
-  'thu-tuong':      { label: 'Thủ Tướng',  cls: 'thu',  icon: '✋' },
-  'thanh-tuong':    { label: 'Thanh Tướng', cls: 'thanh', icon: '🎙' },
-  'thanh-tuong-pro':{ label: 'Thanh Tướng Pro', cls: 'thanh', icon: '🎙' },
+  'dien-tuong':     { label: 'Diện Tướng', cls: 'dien', icon: 'smile' },
+  'nhan-tuong':     { label: 'Nhãn Tướng', cls: 'nhan', icon: 'eye' },
+  'thu-tuong':      { label: 'Thủ Tướng',  cls: 'thu',  icon: 'hand' },
+  'thanh-tuong':    { label: 'Thanh Tướng', cls: 'thanh', icon: 'mic' },
+  'thanh-tuong-pro':{ label: 'Thanh Tướng Pro', cls: 'thanh', icon: 'mic' },
 };
 
 function renderTuong(list) {
@@ -1166,7 +1216,7 @@ function renderTuong(list) {
   const el = document.getElementById('tuongContent');
   if (list.length === 0) {
     el.innerHTML = `<div class="empty-state">
-      <div class="icon">🪬</div>
+      <div class="icon">${ic('eye',44)}</div>
       <p>Chưa có kết quả xem tướng nào được lưu.<br>Đăng nhập trước khi xem tướng để lưu lịch sử.</p>
       <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap">
         <a href="/tuong-mat-ai.html" class="btn-primary">Diện Tướng</a>
@@ -1182,19 +1232,19 @@ function renderTuong(list) {
 }
 
 function tuongCard(t) {
-  const meta = TUONG_TOOL_LABELS[t.tool] || { label: t.tool, cls: 'dien', icon: '🪬' };
+  const meta = TUONG_TOOL_LABELS[t.tool] || { label: t.tool, cls: 'dien', icon: 'sparkles' };
   const date = new Date(t.created_at).toLocaleDateString('vi-VN', { day:'2-digit', month:'2-digit', year:'numeric' });
   // Strip markdown for preview
   const preview = (t.result_text || '').replace(/#{1,3} .+/g,'').replace(/\*\*/g,'').replace(/\n+/g,' ').trim().slice(0, 120) + '...';
   const thumbHtml = t.thumbnail
     ? `<img class="tuong-thumb" src="${escHtml(t.thumbnail)}" alt="${meta.label}" loading="lazy"/>`
-    : `<div class="tuong-thumb-placeholder"><span class="ic-inline" data-icon-emoji="${meta.icon}" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">${meta.icon}</span></div>`;
+    : `<div class="tuong-thumb-placeholder">${ic(meta.icon,32)}</div>`;
   return `<div class="tuong-card" onclick="openTuongModal('${escHtml(t.id)}','${meta.label}','${escHtml(t.thumbnail||'')}','${escHtml((t.result_text||'').replace(/'/g,'&#39;'))}')">
     ${thumbHtml}
     <div class="tuong-card-body">
-      <span class="tuong-tool-badge ${meta.cls}"><span class="ic-inline" data-icon-emoji="${meta.icon}" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">${meta.icon}</span> ${meta.label}</span>
+      <span class="tuong-tool-badge ${meta.cls}">${ic(meta.icon,14)} ${meta.label}</span>
       <div class="tuong-preview">${escHtml(preview)}</div>
-      <div class="tuong-date">📅 ${date}</div>
+      <div class="tuong-date">${ic('calendar',13)} ${date}</div>
     </div>
   </div>`;
 }
@@ -1328,7 +1378,7 @@ function appendMessage(role, content) {
   const el = document.getElementById('chatMessages');
   const div = document.createElement('div');
   div.className = `msg ${role}`;
-  if (role === 'assistant') div.innerHTML = `<div class="msg-sender">☽ Thầy Tử Vi</div>${marked.parse(content)}`;
+  if (role === 'assistant') div.innerHTML = `<div class="msg-sender">${ic("moon",13)} Thầy Tử Vi</div>${marked.parse(content)}`;
   else div.textContent = content;
   el.appendChild(div);
   el.scrollTop = el.scrollHeight;
@@ -1350,7 +1400,7 @@ async function sendChat() {
   const typing = document.createElement('div');
   typing.className = 'msg assistant';
   typing.id = 'typingIndicator';
-  typing.innerHTML = `<div class="msg-sender">☽ Thầy Tử Vi</div><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>`;
+  typing.innerHTML = `<div class="msg-sender">${ic("moon",13)} Thầy Tử Vi</div><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>`;
   document.getElementById('chatMessages').appendChild(typing);
   document.getElementById('chatMessages').scrollTop = 99999;
 
