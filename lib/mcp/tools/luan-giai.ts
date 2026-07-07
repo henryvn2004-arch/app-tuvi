@@ -10,7 +10,7 @@ import { z } from 'zod';
 import { computeLaso } from '@/lib/engine/laso';
 import type { BirthParams } from '@/lib/contract/v1';
 import {
-  type McpTool, parseGioSinh, parseNgay, majorStarsOf, minorStarsOf,
+  type McpTool, parseGioSinh, parseNgay, majorStarsOf, minorStarsOf, tuChinhOf,
 } from './_shared';
 
 type Rec = Record<string, unknown>;
@@ -53,12 +53,13 @@ export const luanGiaiTool: McpTool = {
 
     // 12 cung + điểm + cách cục gắn cung + thần sát + tuần/triệt.
     const cachCucList = (Array.isArray(ls.cachCuc) ? ls.cachCuc : []) as Rec[];
+    const ynByCung = (ls.cachCucTungCung as Record<string, string[]>) || {};
     const cung = palaces.map((p) => {
       const name = String(p.cungName || '');
       const names = starNamesOf(p);
       const ccThis = cachCucList
         .filter((c) => String(c.cung || '').split('/').includes(name))
-        .map((c) => ({ ten: c.ten, loai: c.loai, mo_ta: c.moTa }));
+        .map((c) => ({ ten: c.ten, loai: c.loai, mo_ta: c.moTa, chi_tiet: c.chiTiet }));
       return {
         ten: name,
         dia_chi: p.diaChi ?? null,
@@ -67,9 +68,11 @@ export const luanGiaiTool: McpTool = {
         diem: scores[name]?.tong ?? null,
         chinh_tinh: majorStarsOf(p),
         phu_tinh: minorStarsOf(p),
+        tam_phuong_tu_chinh: tuChinhOf(p), // sao hội chiếu — cốt lõi luận cung
         than_sat: names.filter((n) => SAT_TINH.has(n)),
         tuan_triet: names.filter((n) => n === 'Tuần' || n === 'Triệt' || n === 'Tuần+Triệt'),
         cach_cuc: ccThis,
+        y_nghia: (ynByCung[name] || []).slice(0, 8), // ý nghĩa chi tiết từng cung (như web)
       };
     });
 
