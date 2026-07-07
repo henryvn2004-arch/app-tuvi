@@ -49,13 +49,19 @@ test.describe('Profile (profile.html) — logged in', () => {
     }
   });
 
-  test('tab Lá Số — lịch sử hiện (hoặc empty state)', async ({ page }) => {
+  test('tab Lịch Sử — lịch sử hiện (hoặc empty state) + chip filter', async ({ page }) => {
     if (!await isDashboardVisible(page)) { console.warn('Chưa login, bỏ qua'); return; }
-    const lasoTab = page.locator('.tab-btn[data-tab="lasos"]').first();
-    if (await lasoTab.isVisible().catch(() => false)) {
-      await lasoTab.click();
+    const lichSuTab = page.locator('.tab-btn[data-tab="lichsu"]').first();
+    if (await lichSuTab.isVisible().catch(() => false)) {
+      await lichSuTab.click();
       await page.waitForTimeout(1000);
-      await expect(page.locator('#tab-lasos')).toBeVisible({ timeout: 3000 });
+      await expect(page.locator('#tab-lichsu')).toBeVisible({ timeout: 3000 });
+      // chip filter Lá Số → chỉ nhóm lasos hiện
+      const chip = page.locator('#tab-lichsu .hist-chip[data-filter="lasos"]');
+      if (await chip.isVisible().catch(() => false)) {
+        await chip.click();
+        await expect(page.locator('#tab-lichsu .hist-group[data-group="lasos"]')).toBeVisible();
+      }
     }
   });
 
