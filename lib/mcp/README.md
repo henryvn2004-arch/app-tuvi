@@ -5,7 +5,7 @@ nối từ Claude / ChatGPT / Gemini… của họ; token luận giải là củ
 chỉ trả **dữ liệu tính toán deterministic + block có sẵn**, không bao giờ dump
 quy tắc an sao.
 
-- **URL:** `https://tuviminhbao.com/mcp/<key>` (key nhúng trong path).
+- **URL:** `https://www.tuviminhbao.com/mcp/<key>` (key nhúng trong path).
 - **Transport:** Streamable HTTP (không dùng SSE cũ).
 - **Package:** [`mcp-handler`](https://www.npmjs.com/package/mcp-handler) (Vercel) + `zod`.
 
@@ -50,7 +50,7 @@ Nguồn lá số DUY NHẤT là engine deterministic `public/tuvi-ansao-engine.j
 ### Claude (Desktop / Web)
 Settings → **Connectors** → **Add custom connector** → dán URL:
 ```
-https://tuviminhbao.com/mcp/<key-của-bạn>
+https://www.tuviminhbao.com/mcp/<key-của-bạn>
 ```
 Không cần auth thêm (key nằm trong URL). Sau khi kết nối, 3 tool xuất hiện; hỏi
 "lập lá số cho nam sinh 9/5/1984 lúc 1h45" → Claude gọi `an_sao`.

@@ -35,7 +35,7 @@ const GET_KEY_URL = (kToLower: string) =>
 
 /** Thông điệp mời lấy key khi sai/không có key. */
 export const HUONG_DAN_LAY_KEY =
-  'Key MCP không hợp lệ hoặc đã bị khoá. Lấy key của bạn tại https://tuviminhbao.com/mcp rồi cập nhật lại đường dẫn kết nối dạng https://tuviminhbao.com/mcp/<key>.';
+  'Key MCP không hợp lệ hoặc đã bị khoá. Lấy key của bạn tại https://www.tuviminhbao.com/mcp rồi cập nhật lại đường dẫn kết nối dạng https://www.tuviminhbao.com/mcp/<key>.';
 
 export async function validateKey(key: string): Promise<ValidateResult> {
   const k = String(key || '').trim();
