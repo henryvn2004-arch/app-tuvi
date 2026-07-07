@@ -144,10 +144,6 @@ export function computeLaso(birth: BirthParams, namXem?: number): ComputeLasoRes
       gioIdx: hourBranch,
       gioitinh: gender,
       namXem: view,
-      // Chat hỏi tiểu/nguyệt/nhật vận nhiều năm → server nới cửa sổ ±10 năm
-      // (client/biểu đồ nến giữ mặc định ±5). Không tốn token LLM: mảng này
-      // chỉ dùng server-side cho tool tra_*, KHÔNG nhồi vào prompt.
-      tieuVanWindow: 10,
     });
     if (!ls) return { ok: false, error: 'Engine không trả về lá số.' };
     return { ok: true, ls };

@@ -1495,7 +1495,7 @@ select.form-input { cursor: pointer; }
         </div>`;
 
       } else if (phan === 14 && _astrolabe?.daiVans) {
-        // Line chart đại vận + timeline + candlestick 90 năm
+        // Line chart đại vận + timeline
         chartHtml = `
         <div style="margin:16px 0 8px">
           <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Vận Trình Toàn Đời</div>
@@ -1512,18 +1512,14 @@ select.form-input { cursor: pointer; }
               <span><span style="display:inline-block;width:10px;height:10px;background:#6b1a1a;border-radius:2px;margin-right:4px;vertical-align:middle"></span>Khó khăn</span>
             </div>
           </div>
-        </div>
-        <div style="margin:20px 0 8px">
-          <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Tiểu Vận — Toàn Bộ 90 Năm (Candlestick)</div>
-          <div style="font-size:11px;color:#666;margin-bottom:8px">Đường điểm theo ĐẠI VẬN (mỗi bậc 10 năm — tầng vận hạn duy nhất có điểm) · Xanh = đại vận tốt · Đỏ = đại vận xấu · Năm/tháng/ngày luận theo sao của hạn, không có điểm riêng</div>
-          <div class="candle-wrap"><div id="candle-90yr"></div></div>
         </div>`;
 
       } else if (phan >= 15 && phan <= 23 && _astrolabe) {
-        // Candlestick tiểu vận từng đại vận
+        // Vận trình toàn đời, highlight đại vận này
         chartHtml = `
         <div style="margin:16px 0 8px">
-          <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 Tiểu Vận 10 Năm</div>
+          <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 Đại Vận 10 Năm</div>
+          <div style="font-size:11px;color:#666;margin-bottom:8px">Vận trình toàn đời — chấm nổi bật là đại vận đang xem</div>
           <div class="candle-wrap"><div id="candle-dv${phan-14}"></div></div>
         </div>`;
 
@@ -1693,13 +1689,13 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         renderTimelinePhan14(_astrolabe);
       }
 
-      // Candlestick charts
-      if (_astrolabe?.tieuVanScores?.length) {
-        renderCandlestick('candle-90yr', _astrolabe.tieuVanScores, {candleW:9, height:360});
+      // Charts đại vận + candlestick 3 năm kế tiếp
+      if (_astrolabe?.daiVans) {
         for (let i = 1; i <= 9; i++) {
-          const dvData = _astrolabe.tieuVanScores.filter(tv => tv.dvIdx === i-1);
-          renderCandlestick('candle-dv' + i, dvData, {candleW:32, height:260});
+          renderDaiVanHighlight('candle-dv' + i, i-1);
         }
+      }
+      if (_astrolabe?.tieuVanScores?.length) {
         const tuoiNow = _astrolabe.tuoiXem || 0;
         const next3 = _astrolabe.tieuVanScores.filter(tv => tv.tuoi >= tuoiNow && tv.tuoi < tuoiNow + 3);
         renderCandlestick('candle-3yr', next3, {candleW:70, height:260, width:280});
@@ -2128,11 +2124,6 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       <span><span style="display:inline-block;width:10px;height:10px;background:#6b1a1a;border-radius:2px;margin-right:4px;vertical-align:middle"></span>Khó khăn</span>
     </div>
   </div>
-</div>
-<div style="margin:20px 0 8px">
-  <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">📊 Tiểu Vận — Toàn Bộ 90 Năm (Candlestick)</div>
-  <div style="font-size:11px;color:#666;margin-bottom:8px">Đường điểm theo ĐẠI VẬN (mỗi bậc 10 năm — tầng vận hạn duy nhất có điểm) · Xanh = đại vận tốt · Đỏ = đại vận xấu · Năm/tháng/ngày luận theo sao của hạn, không có điểm riêng</div>
-  <div class="candle-wrap"><div id="candle-90yr"></div></div>
 </div>`;
       } else if (_currentPhan === 1 && _astrolabe?.cungScores) {
         chartHtml = `
@@ -2170,7 +2161,8 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       } else if (_currentPhan >= 15 && _currentPhan <= 23 && _astrolabe) {
           chartHtml = `
 <div style="margin:16px 0 8px">
-  <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 Tiểu Vận 10 Năm</div>
+  <div style="font-size:11px;font-weight:600;color:#6699dd;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">📊 Đại Vận 10 Năm</div>
+  <div style="font-size:11px;color:#666;margin-bottom:8px">Vận trình toàn đời — chấm nổi bật là đại vận đang xem</div>
   <div class="candle-wrap"><div id="candle-dv${_currentPhan - 14}"></div></div>
 </div>`;
       } else if (_currentPhan === 24 && _astrolabe) {
@@ -2764,16 +2756,10 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       body.appendChild(section);
 
       // ── Render candlestick charts (after section in DOM) ────────
-      if (_currentPhan === 14 && _astrolabe?.tieuVanScores?.length) {
-        setTimeout(() => {
-          renderCandlestick('candle-90yr', _astrolabe.tieuVanScores, {candleW:9, height:360});
-        }, 100);
-      }
-      if (_currentPhan >= 15 && _currentPhan <= 23 && _astrolabe?.tieuVanScores) {
+      if (_currentPhan >= 15 && _currentPhan <= 23 && _astrolabe?.daiVans) {
         setTimeout(() => {
           const _dvN = _currentPhan - 14;
-          const _dvData = _astrolabe.tieuVanScores.filter(tv => tv.dvIdx === _dvN - 1);
-          renderCandlestick('candle-dv' + _dvN, _dvData, {candleW:32, height:260});
+          renderDaiVanHighlight('candle-dv' + _dvN, _dvN - 1);
         }, 200);
       }
       if (_currentPhan === 24 && _astrolabe?.tieuVanScores) {
@@ -3867,6 +3853,65 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
       ${grid}
       <path d="${areaPath}" fill="#5FA8D3" opacity="0.10"/>
       ${bounds}${line}${dvLabel}${marker}${labels}
+    </svg>`;
+  }
+
+  // Vận trình toàn đời (9 đại vận), highlight 1 đại vận — dùng trong phần 15-23
+  // thay cho candlestick phẳng (1 đại vận đứng riêng không có ý nghĩa so sánh).
+  function renderDaiVanHighlight(containerId, highlightIdx) {
+    const el = document.getElementById(containerId);
+    const dvs = (_astrolabe?.daiVans || []).slice(0, 9);
+    if (!el || !dvs.length) return;
+
+    const W = 700, H = 220;
+    const PAD = { top: 24, right: 20, bottom: 36, left: 34 };
+    const plotW = W - PAD.left - PAD.right, plotH = H - PAD.top - PAD.bottom;
+    const n = dvs.length;
+    const scores = dvs.map(dv => dv.scoring?.tong ?? 0);
+    const colOf = s => s >= 7 ? '#5FA8D3' : s <= 4 ? '#C0392B' : '#C9A227';
+    const yv = v => PAD.top + plotH - (v / 10 * plotH);
+    const xc = i => PAD.left + (n === 1 ? plotW / 2 : i * (plotW / (n - 1)));
+
+    let grid = '';
+    for (let v = 0; v <= 10; v += 2) {
+      const gy = yv(v);
+      grid += `<line x1="${PAD.left}" y1="${gy}" x2="${W-PAD.right}" y2="${gy}" stroke="#1a2535" stroke-width="0.5" stroke-dasharray="3,3"/>`;
+      grid += `<text x="${PAD.left-6}" y="${gy+3}" font-size="9" fill="#4a5a6a" text-anchor="end">${v}</text>`;
+    }
+
+    let band = '';
+    if (highlightIdx >= 0 && highlightIdx < n) {
+      const halfStep = (n > 1 ? plotW / (n - 1) : plotW) / 2;
+      const bx1 = Math.max(PAD.left, xc(highlightIdx) - halfStep);
+      const bx2 = Math.min(W - PAD.right, xc(highlightIdx) + halfStep);
+      band = `<rect x="${bx1}" y="${PAD.top}" width="${bx2-bx1}" height="${plotH}" fill="#5FA8D3" opacity="0.14"/>`;
+    }
+
+    let path = '', area = `M ${xc(0)} ${yv(0)}`;
+    dvs.forEach((dv, i) => {
+      const x = xc(i), y = yv(scores[i]);
+      path += (i === 0 ? 'M' : 'L') + ` ${x} ${y}`;
+      area += ` L ${x} ${y}`;
+    });
+    area += ` L ${xc(n-1)} ${yv(0)} Z`;
+
+    let points = '', labels = '';
+    dvs.forEach((dv, i) => {
+      const x = xc(i), y = yv(scores[i]);
+      const isCur = i === highlightIdx;
+      const col = colOf(scores[i]);
+      points += `<circle cx="${x}" cy="${y}" r="${isCur ? 8 : 5}" fill="${col}" stroke="#0b1622" stroke-width="${isCur ? 2 : 1}"/>`;
+      if (isCur) points += `<text x="${x}" y="${y-14}" font-size="11" fill="${col}" text-anchor="middle" font-weight="700">${scores[i]}/10</text>`;
+      labels += `<text x="${x}" y="${H-PAD.bottom+14}" font-size="9" fill="${isCur ? '#5FA8D3' : '#4a5a6a'}" text-anchor="middle" font-weight="${isCur ? 700 : 400}"><tspan x="${x}">ĐV${i+1}</tspan><tspan x="${x}" dy="11">${dv.tuoiStart}-${dv.tuoiEnd}t</tspan></text>`;
+    });
+
+    el.innerHTML = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:block;max-width:100%">
+      <line x1="${PAD.left}" y1="${PAD.top-4}" x2="${PAD.left}" y2="${H-PAD.bottom}" stroke="#1e2d42" stroke-width="1"/>
+      <line x1="${PAD.left}" y1="${H-PAD.bottom}" x2="${W-PAD.right}" y2="${H-PAD.bottom}" stroke="#1e2d42" stroke-width="1"/>
+      ${grid}${band}
+      <path d="${area}" fill="#5FA8D3" opacity="0.08"/>
+      <path d="${path}" fill="none" stroke="#2F5BEA" stroke-width="2"/>
+      ${points}${labels}
     </svg>`;
   }
 
