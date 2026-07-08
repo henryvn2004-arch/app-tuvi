@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Không gian làm việc — Tử Vi Minh Bảo</title>
+<meta name="description" content="Không gian mệnh lý AI: lá số Tử Vi, Bát Tự, xem tuổi, đặt tên, chọn ngày — chọn một công cụ để bắt đầu và hỏi trợ lý theo ngữ cảnh.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shell.css?v=3">
+<style>
+.home-body{max-width:920px}
+.hero{background:linear-gradient(135deg,var(--navy),#0d2a49);border-radius:16px;padding:26px 28px;margin-bottom:24px;color:#fff;position:relative;overflow:hidden}
+.hero .seal{position:absolute;right:-10px;top:-14px;font-size:150px;line-height:1;color:rgba(212,175,55,.13);font-family:var(--serif);pointer-events:none}
+.hero h1{font-family:var(--serif);font-size:24px;font-weight:700;margin-bottom:7px}
+.hero p{font-size:13.5px;color:rgba(255,255,255,.82);line-height:1.6;max-width:560px}
+.grp-title{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--text-mid);margin:22px 2px 12px;display:flex;align-items:center;gap:9px}
+.grp-title::after{content:"";flex:1;height:1px;background:var(--line)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.tcard{display:flex;gap:12px;align-items:flex-start;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px 15px;box-shadow:var(--shadow);text-decoration:none;transition:.15s;position:relative}
+.tcard:hover{border-color:var(--gold-soft);transform:translateY(-1px);box-shadow:0 6px 18px rgba(6,26,46,.09)}
+.tcard .ic{width:38px;height:38px;flex:0 0 auto;border-radius:10px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center}
+.tcard .ic svg{width:20px;height:20px}
+.tcard .tx b{display:block;font-family:var(--serif);font-size:14.5px;font-weight:600;color:var(--text);margin-bottom:3px}
+.tcard .tx span{font-size:12px;color:var(--text-lt);line-height:1.5}
+.tcard .cost{position:absolute;top:11px;right:12px;font-size:10.5px;font-weight:600;color:var(--gold-soft);background:var(--gold-lt);border:1px solid var(--gold-soft);border-radius:20px;padding:1px 8px}
+.tcard.ext .tx b::after{content:"↗";font-size:11px;color:var(--text-lt);margin-left:5px;font-family:var(--sans)}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Không gian làm việc</b><span>Chọn một công cụ mệnh lý để bắt đầu</span></div>
+    </div>
+    <div class="ws-body">
+      <div class="home-body">
+        <div class="hero">
+          <div class="seal">寶</div>
+          <h1>Chào mừng đến Tử Vi Minh Bảo</h1>
+          <p>Một không gian, mọi nghiệp vụ mệnh lý — lá số Tử Vi, Bát Tự, xem tuổi, đặt tên, chọn ngày. Số liệu do engine cổ pháp tính chính xác; trợ lý AI luận giải theo ngữ cảnh, không bịa số.</p>
+        </div>
+        <div id="homeCards"></div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='home';</script>
+<script src="/auth.js"></script>
+<script src="/shell.js?v=9"></script>
+<script>
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+var IC={
+  grid:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/>',
+  rows:'<path d="M4 5h16M4 12h16M4 19h16"/>',
+  doc:'<path d="M4 19V5a2 2 0 0 1 2-2h9l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M8 12h8"/>',
+  heart:'<path d="M12 21s-7-4.6-9.5-9A5.2 5.2 0 0 1 12 6a5.2 5.2 0 0 1 9.5 6c-2.5 4.4-9.5 9-9.5 9z"/>',
+  handshake:'<path d="M8 12l3 3 4-4 3 3"/><path d="M2 10l4-4 5 5"/><path d="M22 10l-4-4-3 3"/>',
+  tag:'<path d="M20 12l-8 8-9-9V4h7z"/><circle cx="7.5" cy="7.5" r="1.3"/>',
+  cal:'<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/>',
+  home:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',
+  compass:'<circle cx="12" cy="12" r="9"/><path d="M15 9l-2 5-4 1 2-5z"/>',
+  face:'<circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M9 15c1 1 5 1 6 0"/>'
+};
+var GROUPS=[
+  { g:'Tử Vi · Tứ Trụ', items:[
+    { i:'grid', t:'Lá số Tử Vi', d:'Lập lá số 12 cung, chính tinh, cách cục, đại vận', h:'/app/la-so' },
+    { i:'rows', t:'Lá số Bát Tự', d:'Tứ trụ Tử Bình: nhật can, dụng thần, cách cục', h:'/app/bat-tu' },
+    { i:'doc', t:'Luận giải chuyên sâu', d:'Chấm điểm 12 cung, đại vận, tứ hóa theo cổ pháp', h:'/app/luan-giai', c:5 },
+  ]},
+  { g:'Xem Tuổi · Đặt Tên', items:[
+    { i:'heart', t:'Xem tuổi vợ chồng', d:'So hòa hợp hai lá số theo 8 chiều', h:'/app/xem-tuoi' },
+    { i:'handshake', t:'Xem tuổi làm ăn', d:'So hợp hai người khi bắt tay hợp tác', h:'/app/xem-lam-an' },
+    { i:'tag', t:'Đặt tên con', d:'Tên hợp mệnh theo can chi & ngũ hành', h:'/app/dat-ten' },
+    { i:'cal', t:'Chọn ngày tốt', d:'Ngày giờ hợp tuổi cho việc trọng đại', h:'/app/chon-ngay' },
+  ]},
+  { g:'Phong Thủy · Tướng', items:[
+    { i:'compass', t:'Phong thủy', d:'Bố cục nhà, phòng, bàn làm việc qua ảnh', h:'/phong-thuy', ext:true },
+    { i:'face', t:'Xem tướng', d:'Tướng mặt, mắt, bàn tay qua ảnh', h:'/xem-tuong', ext:true },
+  ]},
+];
+function svg(n){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">'+(IC[n]||IC.grid)+'</svg>'; }
+document.getElementById('homeCards').innerHTML=GROUPS.map(function(grp){
+  var cards=grp.items.map(function(it){
+    return '<a class="tcard'+(it.ext?' ext':'')+'" href="'+it.h+'"'+(it.ext?' target="_blank" rel="noopener"':'')+'>'+
+      '<div class="ic">'+svg(it.i)+'</div>'+
+      '<div class="tx"><b>'+esc(it.t)+'</b><span>'+esc(it.d)+'</span></div>'+
+      (it.c?'<span class="cost">'+it.c+' Lượng</span>':'')+
+      '</a>';
+  }).join('');
+  return '<div class="grp-title">'+esc(grp.g)+'</div><div class="cards">'+cards+'</div>';
+}).join('');
+</script>
+</body>
+</html>
