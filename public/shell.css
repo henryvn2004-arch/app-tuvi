@@ -146,3 +146,10 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .intro-card .intro-d b{color:var(--text)}
 .intro-card .intro-x{position:absolute;top:9px;right:9px;width:24px;height:24px;border:none;background:transparent;color:var(--text-lt);font-size:19px;line-height:1;cursor:pointer;border-radius:6px}
 .intro-card .intro-x:hover{background:var(--paper-2);color:var(--text)}
+
+/* ── HÀNG GỢI Ý CÂU HỎI (chip cố định trên ô nhập rail, cuộn ngang) ── */
+.rail-sugg{padding:8px 13px 0}
+.sugg-row{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.sugg-row::-webkit-scrollbar{display:none}
+.sugg-row .chip{white-space:nowrap;flex:0 0 auto;font-family:inherit;font-size:12px;border:1px solid var(--line-2);background:var(--paper);color:var(--text-mid);border-radius:20px;padding:6px 12px;cursor:pointer}
+.sugg-row .chip:hover{border-color:var(--gold-soft);color:var(--text);background:var(--gold-lt)}
