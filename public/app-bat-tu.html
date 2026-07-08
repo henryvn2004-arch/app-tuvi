@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lá số Bát Tự — Tử Vi Minh Bảo</title>
+<meta name="description" content="Lập tứ trụ Bát Tự theo cổ pháp Tử Bình: nhật can, cường nhược, dụng thần, cách cục, đại vận, lưu niên — và hỏi trợ lý AI đào sâu từng phần.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shell.css?v=1">
+<style>
+/* Center riêng của trang Bát Tự */
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
+.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
+.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
+.gio-hint{font-size:12px;color:var(--text-lt);align-self:center;padding-bottom:4px;white-space:nowrap}
+.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
+.btn-go:disabled{opacity:.6;cursor:not-allowed}
+
+#btPanel{display:none}
+.bt-body{max-width:880px}
+.birth-bar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;background:var(--white);border:1px solid var(--line);border-radius:11px;padding:10px 13px;box-shadow:var(--shadow);margin-bottom:16px}
+.birth-bar .tag{font-size:12.5px;color:var(--text-mid);background:var(--paper-2);border:1px solid var(--line);border-radius:7px;padding:5px 10px}
+.birth-bar .tag b{color:var(--text)}
+.birth-bar .yr{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--text-mid)}
+.birth-bar .yr select{border:1px solid var(--line-2);border-radius:7px;padding:5px 8px;background:var(--white);color:var(--text);font-weight:600;font-family:inherit}
+/* score cards */
+.scores{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.sc{flex:1;min-width:120px;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:11px 13px;box-shadow:var(--shadow)}
+.sc .lb{font-size:11px;color:var(--text-lt);text-transform:uppercase;letter-spacing:.04em}
+.sc .vl{font-family:var(--serif);font-size:24px;font-weight:600;margin-top:2px;display:flex;align-items:baseline;gap:3px}
+.sc .vl small{font-size:12px;color:var(--text-lt);font-family:var(--sans)}
+.pbar{height:5px;border-radius:5px;background:var(--paper-2);margin-top:7px;overflow:hidden}
+.pbar i{display:block;height:100%;border-radius:5px}
+/* tứ trụ table (tài liệu trắng, không đổi theo dark mode) */
+.tutru-wrap{background:#fff;border:1px solid #e6e0d4;border-radius:12px;padding:6px;box-shadow:var(--shadow);margin-bottom:16px;overflow-x:auto}
+table.tutru{width:100%;border-collapse:collapse;min-width:420px;color:#2a2118}
+table.tutru th,table.tutru td{border:1px solid #efe9dd;padding:9px 6px;text-align:center;vertical-align:middle}
+table.tutru th{font-family:var(--serif);font-size:12.5px;font-weight:600;color:#7a6a4a;background:#faf7f0}
+table.tutru td.row-label{font-size:10.5px;color:#9a8a6a;text-transform:uppercase;letter-spacing:.03em;background:#faf7f0;width:64px}
+.tt-can{font-family:var(--serif);font-size:20px;font-weight:700;color:#8a1a1a;line-height:1.15}
+.tt-tt{font-size:10.5px;color:#9a8a6a;margin-top:1px}
+.tt-chi{font-family:var(--serif);font-size:18px;font-weight:600;color:#14417a}
+.tt-tang{font-size:11.5px;color:#6a5c44;line-height:1.5}
+.tt-tang b{color:#2a2118;font-weight:600}
+.tt-napam{font-size:11px;color:#9a8a6a}
+.tutru-nhat{background:#fdf6ee!important}
+.tutru-nhat .tt-can{color:#b8860b}
+/* sections + jump */
+.jump{position:sticky;top:51px;z-index:4;background:var(--paper);border-bottom:1px solid var(--line);padding:8px 0;margin:0 0 18px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.jump::-webkit-scrollbar{display:none}
+.jump a{white-space:nowrap;font-size:12px;color:var(--text-mid);border:1px solid var(--line-2);border-radius:20px;padding:4px 11px;cursor:pointer;background:var(--white)}
+.jump a.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.sec{margin-bottom:26px;scroll-margin-top:104px}
+.sec-h{display:flex;align-items:center;gap:11px;margin-bottom:11px}
+.sec-n{width:26px;height:26px;flex:0 0 auto;border-radius:7px;background:var(--navy);color:var(--gold);font-family:var(--serif);font-size:13px;display:flex;align-items:center;justify-content:center;font-weight:600}
+.sec-h h3{font-family:var(--serif);font-size:18px;font-weight:600}
+.sec-h .tag{margin-left:auto;font-size:11px;color:var(--text-lt);border:1px solid var(--line-2);border-radius:20px;padding:2px 9px}
+.card{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:15px 17px;box-shadow:var(--shadow)}
+.card p{color:var(--text-mid);margin-bottom:9px;line-height:1.68}
+.card p:last-child{margin-bottom:0}
+.card b{color:var(--text)}
+.em{color:var(--gold-soft);font-weight:600}
+.nh-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)}
+.nh-row:last-child{border-bottom:none}
+.nh-row .nm{font-family:var(--serif);font-size:14px;width:58px;flex:0 0 auto}
+.nh-row .mb{flex:1}
+.nh-row .num{width:40px;text-align:right;font-family:var(--serif);font-weight:600;font-size:14px;font-variant-numeric:tabular-nums}
+.dv-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.dv-row:last-child{border-bottom:none}
+.dv-row.cur{background:var(--gold-lt);margin:0 -8px;padding:8px;border-radius:8px;border-bottom:1px solid transparent}
+.dv-row .cc{font-family:var(--serif);font-size:14px;width:78px;flex:0 0 auto}
+.dv-row .cc b{color:var(--red)}
+.dv-row .rng{font-size:12px;color:var(--text-lt);width:120px;flex:0 0 auto}
+.dv-row .tt{font-size:12px;color:var(--text-mid);flex:1;min-width:0}
+.dv-row .num{width:34px;text-align:right;font-family:var(--serif);font-weight:600;font-size:14px}
+.chips{display:flex;gap:7px;flex-wrap:wrap}
+.chip{font-size:12px;padding:4px 10px;border-radius:20px;border:1px solid var(--line-2);color:var(--text-mid);background:var(--paper)}
+.chip.g{color:var(--green);border-color:var(--green)}
+.chip.r{color:var(--red);border-color:var(--red)}
+.chip.w{color:var(--gold-soft);border-color:var(--gold-soft)}
+.ask{margin-top:12px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
+.laso-error{color:var(--red);padding:14px;border:1px solid var(--red);border-radius:10px;background:var(--white)}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Lá số Bát Tự</b><span>Tứ trụ Tử Bình — can chi, dụng thần, đại vận</span></div>
+      <div class="ws-actions">
+        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa thông tin</button>
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div class="form-card" id="birthPanel">
+        <h2>Nhập thông tin ngày sinh (dương lịch)</h2>
+        <p class="sub">Bát Tự lập theo dương lịch và tiết khí. Càng chính xác giờ sinh, tứ trụ càng chuẩn. Có tứ trụ rồi, hỏi trợ lý ở khung bên phải.</p>
+        <div class="frow">
+          <div class="fg" style="flex:2;min-width:150px"><label>Họ và tên</label><input type="text" id="inpName" placeholder="Nguyễn Văn A"></div>
+          <div class="fg" style="width:90px"><label>Giới tính</label><select id="inpGender"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
+        </div>
+        <div class="frow">
+          <div class="fg" style="width:74px"><label>Ngày (DL)</label><select id="inpDd"></select></div>
+          <div class="fg" style="width:84px"><label>Tháng (DL)</label><select id="inpMm"></select></div>
+          <div class="fg" style="width:90px"><label>Năm (DL)</label><input type="number" id="inpYyyy" value="1990" min="1900" max="2099"></div>
+          <div class="fg" style="width:70px"><label>Giờ</label><select id="inpHh"></select></div>
+          <div class="fg" style="width:70px"><label>Phút</label><select id="inpPp"></select></div>
+          <span class="gio-hint" id="gioHint">Giờ: —</span>
+        </div>
+        <div class="frow" style="margin-bottom:0">
+          <div class="fg" style="width:90px"><label>Năm luận</label><input type="number" id="inpNamxem" value="2026" min="1900" max="2100"></div>
+          <button class="btn-go" id="btnGo" onclick="doBatTu()">Lập Bát Tự →</button>
+        </div>
+      </div>
+
+      <div id="btPanel">
+        <div class="birth-bar" id="birthBar"></div>
+        <div class="scores" id="btScores"></div>
+        <div class="tutru-wrap"><table class="tutru" id="tutruTable"></table></div>
+        <div class="jump" id="btJump"></div>
+        <div class="bt-body" id="btBody"></div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='bat-tu';</script>
+<script src="/laso-chart.js?v=2"></script>
+<script src="/tubinh-ansao-engine.js?v=5"></script>
+<script src="/tubinh-domain-scores.js?v=2"></script>
+<script src="/tubinh-cach-cuc-special.js?v=2"></script>
+<script src="/auth.js"></script>
+<script src="/shell.js?v=3"></script>
+<script>
+// Bát Tự dùng ĐÚNG giờ đại diện của địa chi giờ (23,1,3,…) để tứ trụ trên
+// trang KHỚP TUYỆT ĐỐI với bát tự server tính cho rail (server map hourBranch
+// → giờ đại diện). CHI/hourMinToGioAm/esc lấy từ laso-chart.js.
+var GIO_REP=[23,1,3,5,7,9,11,13,15,17,19,21];
+
+// ── Dropdowns ──
+(function(){
+  var dd=document.getElementById('inpDd'),mm=document.getElementById('inpMm'),hh=document.getElementById('inpHh'),pp=document.getElementById('inpPp');
+  dd.innerHTML='<option value="">Ngày</option>';mm.innerHTML='<option value="">Tháng</option>';
+  for(var i=1;i<=31;i++)dd.innerHTML+='<option value="'+i+'">'+i+'</option>';
+  for(var j=1;j<=12;j++)mm.innerHTML+='<option value="'+j+'">'+j+'</option>';
+  for(var h=0;h<=23;h++)hh.innerHTML+='<option value="'+h+'">'+String(h).padStart(2,'0')+'</option>';
+  for(var p=0;p<=59;p++)pp.innerHTML+='<option value="'+p+'">'+String(p).padStart(2,'0')+'</option>';
+  hh.addEventListener('change',updateGioAm);pp.addEventListener('change',updateGioAm);
+})();
+function updateGioAm(){
+  var h=parseInt(document.getElementById('inpHh').value)||0,p=parseInt(document.getElementById('inpPp').value)||0;
+  document.getElementById('gioHint').textContent='Giờ: '+CHI[hourMinToGioAm(h,p)];
+}
+function scoreColor(t){ return t>=6.5?'var(--green)':t>=4?'var(--gold-soft)':'var(--red)'; }
+var HANH_COLOR={'Mộc':'var(--green)','Hỏa':'var(--red)','Thổ':'var(--gold-soft)','Kim':'#8a8a8a','Thủy':'var(--blue)'};
+
+function doBatTu(){
+  var btn=document.getElementById('btnGo');
+  var name=document.getElementById('inpName').value.trim();
+  var gioitinh=document.getElementById('inpGender').value;
+  var namxem=parseInt(document.getElementById('inpNamxem').value)||new Date().getFullYear();
+  var dd=parseInt(document.getElementById('inpDd').value),mm=parseInt(document.getElementById('inpMm').value),yyyy=parseInt(document.getElementById('inpYyyy').value);
+  var hh=parseInt(document.getElementById('inpHh').value)||0,pp=parseInt(document.getElementById('inpPp').value)||0;
+  if(!dd||!mm||!yyyy){ alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh.'); return; }
+  btn.disabled=true;btn.textContent='Đang an tứ trụ…';
+  try{
+    var gioAmIdx=hourMinToGioAm(hh,pp),gioChi=CHI[gioAmIdx];
+    var bt=window.tinhBatTu({ngayDL:dd,thangDL:mm,namDL:yyyy,gio:GIO_REP[gioAmIdx],gioitinh:gioitinh,namXem:namxem});
+    renderBatTu(bt,namxem);
+    document.getElementById('birthBar').innerHTML=
+      '<span class="tag"><b>'+esc(name||'—')+'</b> · '+(gioitinh==='nam'?'Nam':'Nữ')+'</span>'+
+      '<span class="tag">'+dd+'/'+mm+'/'+yyyy+' DL</span>'+
+      '<span class="tag">'+String(hh).padStart(2,'0')+':'+String(pp).padStart(2,'0')+' · giờ '+gioChi+'</span>'+
+      '<span class="tag">Năm sinh '+esc(bt.canChiNamSinh.can+' '+bt.canChiNamSinh.chi)+'</span>'+
+      '<div class="yr">Năm luận <select id="barNamxem" onchange="reBatTu()"></select></div>';
+    var barSel=document.getElementById('barNamxem');
+    for(var y=namxem-2;y<=namxem+3;y++)barSel.innerHTML+='<option value="'+y+'"'+(y===namxem?' selected':'')+'>'+y+'</option>';
+    document.getElementById('birthPanel').style.display='none';
+    document.getElementById('btPanel').style.display='block';
+    document.getElementById('btnEdit').style.display='';
+    Shell.rememberBirth({name:name,gender:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,pp:pp,namxem:namxem});
+    // Rail: gửi CẢ birth (server lập bát tự) + scenario tu-binh (chọn đúng bộ não).
+    Shell.setContext({
+      birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,gender:gioitinh,name:name||undefined},
+      scenario:{type:'tu-binh',data:{}},
+      label:'Bát Tự '+(name||'')+' · '+dd+'/'+mm+'/'+yyyy+' · năm '+namxem,
+      greeting:'Tứ trụ của **'+(name||'bạn')+'** đã sẵn sàng. Hỏi tôi về nhật can, dụng thần, cách cục hay đại vận nhé.',
+      chips:['Nhật can của tôi vượng hay nhược?','Dụng thần là gì, nên bổ hành nào?','Cách cục này nói lên điều gì?','Đại vận hiện tại thuận hay nghịch?']
+    });
+  }catch(e){
+    document.getElementById('btBody').innerHTML='<div class="laso-error">Lỗi khi tính Bát Tự: '+esc(e.message)+'</div>';
+    document.getElementById('birthPanel').style.display='none';
+    document.getElementById('btPanel').style.display='block';
+    document.getElementById('btnEdit').style.display='';
+    if(window.console)console.error(e);
+  }finally{
+    btn.disabled=false;btn.textContent='Lập Bát Tự →';
+  }
+}
+function reBatTu(){ var y=parseInt(document.getElementById('barNamxem').value); if(y)document.getElementById('inpNamxem').value=y; doBatTu(); }
+
+function renderBatTu(bt,namxem){
+  renderTuTruTable(bt);
+  var cn=bt.cuongNhuoc,dt=bt.dungThan,cc=bt.cachCuc,dvh=bt.daiVanHienTai,ln=bt.luuNien;
+
+  // ── score cards ──
+  function card(lb,t,note){ var col=t!=null?scoreColor(t):'var(--text-lt)'; return '<div class="sc"><div class="lb">'+esc(lb)+'</div><div class="vl" style="color:'+col+'">'+(t!=null?t:'—')+'<small>/10</small></div><div class="pbar"><i style="width:'+(t!=null?t*10:0)+'%;background:'+col+'"></i></div></div>'; }
+  document.getElementById('btScores').innerHTML=
+    card('Cường nhược nhật can',cn?cn.score:null)+
+    (dvh?card('Đại vận '+dvh.tuoiStart+'–'+dvh.tuoiEnd+'t',dvh.score):'<div class="sc"><div class="lb">Khởi vận</div><div class="vl" style="font-size:19px;color:var(--navy)">'+(bt.tuoiKhoiVan||'—')+'t</div><div class="pbar"><i style="width:100%;background:var(--gold-soft)"></i></div></div>')+
+    '<div class="sc"><div class="lb">Cách cục</div><div class="vl" style="font-size:16px;color:var(--navy)">'+esc(cc?cc.primary:'—')+'</div><div class="pbar"><i style="width:100%;background:var(--gold-soft)"></i></div></div>';
+
+  var S=[];
+  // 1. Tổng quan
+  S.push(sec(1,'Tổng quan tứ trụ',(cn?cn.label:''),
+    '<div class="card"><p>Nhật chủ <b>'+esc(bt.nhatCan)+'</b> ('+esc(bt.nhatCanHanh)+' · '+esc(bt.nhatCanAmDuong)+'), sinh ngày <b>'+esc(bt.tuTru[2].can+' '+bt.tuTru[2].chi)+'</b>. Năm sinh <b>'+esc(bt.canChiNamSinh.can+' '+bt.canChiNamSinh.chi)+'</b>, tuổi xem <b>'+esc(bt.tuoiXem)+'</b>.</p>'+
+    (cn?'<p>Nhật can <span class="em">'+esc(cn.label)+'</span> — điểm '+esc(cn.score)+'/10 ('+(cn.dacLenh?'đắc lệnh':'không đắc lệnh')+', đắc địa '+esc(cn.dacDia||0)+', đắc thế '+esc(cn.dacThe||0)+').</p>':'')+
+    (dt?'<p>Dụng thần: <span class="em">'+esc(dt.primary)+(dt.secondary?' / '+esc(dt.secondary):'')+'</span> — '+esc(dt.method)+'.</p>':'')+
+    (cc?'<p>Cách cục: <span class="em">'+esc(cc.primary)+'</span>'+(cc.thanhPhaCach?' ('+esc(cc.thanhPhaCach)+')':'')+'.</p>':'')+
+    ask('Luận tổng quan bát tự của tôi cho kỹ')+'</div>'));
+
+  // 2. Ngũ hành
+  var w=bt.nguHanh&&bt.nguHanh.weighted||{};
+  var maxW=Math.max(1,...['Mộc','Hỏa','Thổ','Kim','Thủy'].map(function(k){return w[k]||0}));
+  var nhRows='';
+  ['Mộc','Hỏa','Thổ','Kim','Thủy'].forEach(function(k){
+    var v=w[k]||0,col=HANH_COLOR[k];
+    nhRows+='<div class="nh-row"><span class="nm" style="color:'+col+'">'+k+'</span><div class="mb"><div class="pbar"><i style="width:'+(v/maxW*100)+'%;background:'+col+'"></i></div></div><span class="num">'+v+'</span></div>';
+  });
+  S.push(sec(2,'Ngũ hành',(bt.nguHanh?'vượng '+bt.nguHanh.dominant+' · thiếu '+bt.nguHanh.deficient:''),
+    '<div class="card">'+nhRows+'<p style="margin-top:11px">Hành vượng nhất là <span class="em">'+esc(bt.nguHanh?bt.nguHanh.dominant:'—')+'</span>, yếu nhất là <span class="em">'+esc(bt.nguHanh?bt.nguHanh.deficient:'—')+'</span> (trọng số tính cả tàng can).</p>'+
+    ask('Ngũ hành của tôi mất cân bằng chỗ nào, bổ sao?')+'</div>'));
+
+  // 3. Đại vận
+  var dvRows='';
+  (bt.daiVans||[]).forEach(function(dv){
+    var cur=dvh&&dv.idx===dvh.idx,col=scoreColor(dv.score);
+    dvRows+='<div class="dv-row'+(cur?' cur':'')+'"><span class="cc"><b>'+esc(dv.can+' '+dv.chi)+'</b></span><span class="rng">'+esc(dv.tuoiStart+'–'+dv.tuoiEnd+'t · '+dv.namStart+'–'+dv.namEnd)+'</span><span class="tt">'+esc(dv.thapThanCan)+' · '+esc(dv.label)+'</span><span class="num" style="color:'+col+'">'+dv.score+'</span></div>';
+  });
+  S.push(sec(3,'Đại vận',(bt.daiVanThuan?'thuận hành':'nghịch hành')+' · khởi '+(bt.tuoiKhoiVan||'?')+'t',
+    '<div class="card">'+(dvRows||'<p>—</p>')+ask('Đại vận hiện tại nên làm gì, tránh gì?')+'</div>'));
+
+  // 4. Lưu niên (relations là OBJECT nhóm: hopVoi/xungVoi/hinhVoi/haiVoi/canHopVoi/canKhacVoi)
+  var lnRel=[];
+  if(ln&&ln.relations){
+    var RMAP={hopVoi:'hợp',xungVoi:'xung',hinhVoi:'hình',haiVoi:'hại',canHopVoi:'can hợp',canKhacVoi:'can khắc'};
+    Object.keys(RMAP).forEach(function(k){ (ln.relations[k]||[]).forEach(function(v){ lnRel.push(RMAP[k]+' '+v); }); });
+  }
+  S.push(sec(4,'Vận năm '+namxem,(ln?ln.label:''),
+    '<div class="card"><p>Năm <b>'+esc(ln?ln.can+' '+ln.chi:namxem)+'</b>'+(ln?' — thập thần <b>'+esc(ln.thapThanCan)+'</b>, điểm <b>'+esc(ln.score)+'/10</b> ('+esc(ln.label)+')':'')+'. '+
+    (lnRel.length?'Tương tác với tứ trụ: <span class="em">'+esc(lnRel.join(', '))+'</span>.':'')+'</p>'+
+    ask('Năm '+namxem+' của tôi thế nào, cần chú ý gì?')+'</div>'));
+
+  // 5. Hình xung hại hợp
+  var hx=bt.hinhXungHaiHop||{};
+  function rel(list,label,cls,fmt){ if(!list||!list.length)return ''; return list.map(function(x){return '<span class="chip '+cls+'">'+esc(label)+': '+esc(fmt(x))+'</span>'}).join(''); }
+  var pair=function(x){return (x.chiA||x.canA)+'–'+(x.chiB||x.canB)+' ('+x.cungA+'/'+x.cungB+')'};
+  var relHTML=
+    rel(hx.lucHop,'Lục hợp','g',pair)+
+    rel(hx.tamHop,'Tam hợp','g',function(x){return x.chis.join('-')+(x.full?' (đủ)':'')})+
+    rel(hx.canHop,'Can hợp','g',function(x){return (x.canA||'')+'–'+(x.canB||'')})+
+    rel(hx.lucXung,'Lục xung','r',pair)+
+    rel(hx.lucHai,'Lục hại','w',pair)+
+    rel(hx.tamHinh,'Tam hình','r',function(x){return (x.chis||[]).join('-')})+
+    rel(hx.tuHinh,'Tự hình','w',function(x){return (x.chi||x.chis||'')})+
+    rel(hx.canKhac,'Can khắc','w',function(x){return (x.canA||'')+'–'+(x.canB||'')});
+  S.push(sec(5,'Hình · Xung · Hại · Hợp',(relHTML?'':'không nổi bật'),
+    '<div class="card">'+(relHTML?'<div class="chips">'+relHTML+'</div>':'<p>Tứ trụ không có hình/xung/hại/hợp nổi bật giữa các trụ.</p>')+
+    ask('Các xung hợp trong tứ trụ ảnh hưởng đời tôi ra sao?')+'</div>'));
+
+  // 6. Thần sát
+  var ts=bt.thanSat||{},tsFound=[];
+  Object.keys(ts).forEach(function(k){ var v=ts[k]; if(v&&v.found){ var at=(v.details||[]).map(function(d){return d.at+' ('+(d.positions||[]).join(',')+')'}).join('; '); tsFound.push('<span class="chip w">'+esc(k)+(at?': '+esc(at):'')+'</span>'); } });
+  S.push(sec(6,'Thần sát',(tsFound.length?tsFound.length+' sao':'—'),
+    '<div class="card">'+(tsFound.length?'<div class="chips">'+tsFound.join('')+'</div>':'<p>Không có thần sát nổi bật trong tứ trụ.</p>')+
+    ask('Thần sát trong tứ trụ tôi nói lên điều gì?')+'</div>'));
+
+  document.getElementById('btBody').innerHTML=S.join('');
+
+  // jump nav
+  var labels=['Tổng quan','Ngũ hành','Đại vận','Vận năm','Hình xung','Thần sát'];
+  document.getElementById('btJump').innerHTML=labels.map(function(l,i){return '<a data-i="'+i+'"'+(i===0?' class="on"':'')+'>'+l+'</a>'}).join('');
+  bindJump(labels.length);
+  document.querySelectorAll('#btBody [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
+}
+
+function renderTuTruTable(bt){
+  var tuTru=bt.tuTru,h='<thead><tr><th class="row-label"></th>';
+  tuTru.forEach(function(t){ var isNhat=t.ten==='Ngày'; h+='<th class="'+(isNhat?'tutru-nhat':'')+'">'+esc(t.ten)+(isNhat?' (Nhật)':'')+'</th>'; });
+  h+='</tr></thead><tbody>';
+  // Thiên can + thập thần
+  h+='<tr><td class="row-label">Thiên Can</td>';
+  tuTru.forEach(function(t,i){ var isNhat=t.ten==='Ngày'; var tt=(i===2)?'—':((bt.thapThan[t.ten]||{}).thienCan||''); h+='<td class="'+(isNhat?'tutru-nhat':'')+'"><div class="tt-can">'+esc(t.can)+'</div><div class="tt-tt">'+esc(tt)+'</div></td>'; });
+  h+='</tr>';
+  // Địa chi
+  h+='<tr><td class="row-label">Địa Chi</td>';
+  tuTru.forEach(function(t){ var isNhat=t.ten==='Ngày'; h+='<td class="'+(isNhat?'tutru-nhat':'')+'"><div class="tt-chi">'+esc(t.chi)+'</div></td>'; });
+  h+='</tr>';
+  // Tàng can
+  h+='<tr><td class="row-label">Tàng Can</td>';
+  tuTru.forEach(function(t,i){
+    var isNhat=t.ten==='Ngày';
+    var tcs=(t.tangCan||[]).map(function(tc){ var tt=(i===2&&tc.can===bt.nhatCan)?'—':(((bt.thapThan[t.ten]||{}).tangCan||{})[tc.can]||''); return '<b>'+esc(tc.can)+'</b>'+(tt&&tt!=='—'?' <span style="color:#a89a7a">('+esc(tt)+')</span>':''); }).join('<br>');
+    h+='<td class="'+(isNhat?'tutru-nhat':'')+'"><div class="tt-tang">'+(tcs||'–')+'</div></td>';
+  });
+  h+='</tr>';
+  // Nạp âm
+  h+='<tr><td class="row-label">Nạp Âm</td>';
+  tuTru.forEach(function(t){ var isNhat=t.ten==='Ngày'; h+='<td class="'+(isNhat?'tutru-nhat':'')+'"><div class="tt-napam">'+esc(t.napAm||'')+'</div></td>'; });
+  h+='</tr></tbody>';
+  document.getElementById('tutruTable').innerHTML=h;
+}
+
+function sec(n,title,tag,inner){ return '<section class="sec" id="sec-'+n+'"><div class="sec-h"><div class="sec-n">'+n+'</div><h3>'+esc(title)+'</h3>'+(tag?'<span class="tag">'+esc(tag)+'</span>':'')+'</div>'+inner+'</section>'; }
+function ask(t){ return '<div class="ask" data-ask="'+esc(t)+'">✦ Hỏi trợ lý: "'+esc(t)+'"</div>'; }
+
+function bindJump(count){
+  var ws=document.getElementById('ws'),links=document.querySelectorAll('#btJump a');
+  links.forEach(function(a){ a.addEventListener('click',function(){ var s=document.getElementById('sec-'+(+a.getAttribute('data-i')+1)); if(s)ws.scrollTo({top:s.offsetTop-96,behavior:'smooth'}); }); });
+  ws.addEventListener('scroll',function(){
+    var y=ws.scrollTop+130,idx=0;
+    for(var i=1;i<=count;i++){ var s=document.getElementById('sec-'+i); if(s&&s.offsetTop<=y)idx=i-1; }
+    links.forEach(function(a,i){ a.classList.toggle('on',i===idx); });
+  });
+}
+
+function showForm(){
+  document.getElementById('btPanel').style.display='none';
+  document.getElementById('birthPanel').style.display='block';
+  document.getElementById('btnEdit').style.display='none';
+}
+// điền sẵn ngày sinh đã nhớ (nếu có); tự lập nếu đến qua ?auto=1.
+function _pageInit(){
+  Shell.prefillForm();
+  updateGioAm();
+  if(Shell.autoRun()&&document.getElementById('inpDd').value)doBatTu();
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_pageInit);
+else _pageInit();
+</script>
+</body>
+</html>

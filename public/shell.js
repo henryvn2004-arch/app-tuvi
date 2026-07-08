@@ -13,7 +13,7 @@
   var TOOLS = [
     { group: 'Tử Vi · Tứ Trụ', open: true, items: [
       { id: 'la-so',      label: 'Lá số Tử Vi',         href: '/app',            icon: 'grid' },
-      { id: 'bat-tu',     label: 'Lá số Bát Tự',        href: '/tu-binh.html',   icon: 'rows' },
+      { id: 'bat-tu',     label: 'Lá số Bát Tự',        href: '/app/bat-tu',     icon: 'rows' },
       { id: 'luan-giai',  label: 'Luận giải chuyên sâu', href: '/app/luan-giai',  icon: 'doc', cost: 5 },
     ] },
     { group: 'Xem Tuổi · Đặt Tên', items: [
@@ -143,7 +143,10 @@
   var Shell = {
     // Gắn ngữ cảnh (lá số / kịch bản) để bật rail chat.
     setContext: function (o) {
-      ctx = o.birth ? { birth: o.birth } : o.scenario ? { scenario: o.scenario } : null;
+      // birth và scenario có thể đi CÙNG nhau: birth để engine server lập lá
+      // số/bát tự, scenario.type để chọn ĐÚNG bộ não (vd 'tu-binh'). Trang Lá
+      // số chỉ truyền birth; trang Bát Tự truyền cả hai.
+      ctx = (o.birth || o.scenario) ? { birth: o.birth || null, scenario: o.scenario || null } : null;
       messages = [];
       sessionId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('s' + Date.now());
       var c = document.getElementById('railCtx'), t = document.getElementById('railCtxTxt');
@@ -207,7 +210,8 @@
       var headers = { 'Content-Type': 'application/json' };
       var token = getToken(); if (token) headers['Authorization'] = 'Bearer ' + token;
       var body = { session_id: sessionId, stream: true, messages: messages.slice(-12), client: { platform: 'web', version: '1.0.0' } };
-      if (ctx.birth) body.birth = ctx.birth; else if (ctx.scenario) body.scenario = ctx.scenario;
+      if (ctx.birth) body.birth = ctx.birth;
+      if (ctx.scenario) body.scenario = ctx.scenario;
       var res = await fetch('/api/v1/chat', { method: 'POST', headers: headers, body: JSON.stringify(body) });
       if (res.status === 401 || res.status === 402) {
         typing.innerHTML = '<p>Cần <a href="/profile" style="color:var(--blue);font-weight:600">đăng nhập</a> (và có Lượng) để hỏi trợ lý. Lá số vẫn xem miễn phí.</p>';
