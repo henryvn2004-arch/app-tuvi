@@ -44,6 +44,7 @@
       <div class="ws-title"><b>Lập lá số Tử Vi</b><span>Một thời khắc chào đời, cả vận mệnh hé lộ</span></div>
       <div class="ws-actions">
         <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa thông tin</button>
+        <a class="btn pri" id="btnLuan" href="/app/luan-giai?auto=1" style="display:none">Luận giải chi tiết →</a>
         <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
@@ -83,7 +84,7 @@
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/laso-chart.js?v=2"></script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=1"></script>
+<script src="/shell.js?v=2"></script>
 <script>
 // ── Dropdowns ──
 (function buildDropdowns(){
@@ -130,6 +131,9 @@ function doAnSao(){
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('chartPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
+    document.getElementById('btnLuan').style.display='';
+    // nhớ ngày sinh để chuyển tay sang Luận giải không phải nhập lại
+    Shell.rememberBirth({name:name,gender:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,pp:pp,namxem:namxem});
     // gắn context để bật rail
     Shell.setContext({
       birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,gender:gioitinh,name:name||undefined},
@@ -151,8 +155,17 @@ function showForm(){
   document.getElementById('chartPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
   document.getElementById('btnEdit').style.display='none';
+  document.getElementById('btnLuan').style.display='none';
 }
-updateGioAm();
+// điền sẵn ngày sinh đã nhớ (nếu có); tự lập nếu đến qua ?auto=1.
+// Chạy SAU khi shell.js render rail (boot ở DOMContentLoaded) để Shell.setContext không lỗi.
+function _pageInit(){
+  Shell.prefillForm();
+  updateGioAm();
+  if(Shell.autoRun()&&document.getElementById('inpDd').value)doAnSao();
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_pageInit);
+else _pageInit();
 </script>
 </body>
 </html>

@@ -157,6 +157,20 @@
     openCmd: openCmd,
     toggleTheme: toggleTheme,
     openRail: function () { var r = document.getElementById('shell-rail'); if (r) { r.classList.add('open'); syncBackdrop(); } },
+    // Nhớ thông tin sinh để chuyển tay giữa các tool trong shell (Lá số ↔ Luận giải)
+    // fd chuẩn hoá: {name,gender,dd,mm,yyyy,hh,pp,namxem}. localStorage, không server.
+    rememberBirth: function (fd) { try { localStorage.setItem('app_birth', JSON.stringify(fd)); } catch (e) { /* ignore */ } },
+    getRememberedBirth: function () { try { return JSON.parse(localStorage.getItem('app_birth') || 'null'); } catch (e) { return null; } },
+    // Điền sẵn form (các trang dùng chung ID input: inpName/inpGender/inpDd…).
+    prefillForm: function () {
+      var b = this.getRememberedBirth(); if (!b) return false;
+      var set = function (id, v) { var el = document.getElementById(id); if (el && v != null && v !== '') el.value = v; };
+      set('inpName', b.name); set('inpGender', b.gender); set('inpDd', b.dd); set('inpMm', b.mm);
+      set('inpYyyy', b.yyyy); set('inpHh', b.hh); set('inpPp', b.pp); set('inpNamxem', b.namxem);
+      return true;
+    },
+    // true nếu URL có ?auto=1 (đến từ nút chuyển tay giữa tool) → trang tự chạy.
+    autoRun: function () { return /[?&]auto=1\b/.test(window.location.search); },
   };
   window.Shell = Shell;
 
