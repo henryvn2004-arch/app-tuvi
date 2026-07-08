@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/shell.css?v=1">
+<link rel="stylesheet" href="/shell.css?v=2">
 <style>
 /* Center riêng của trang Bát Tự */
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
@@ -105,6 +105,7 @@ table.tutru td.row-label{font-size:10.5px;color:#9a8a6a;text-transform:uppercase
       </div>
     </div>
     <div class="ws-body">
+      <div id="introHost"></div>
       <div class="form-card" id="birthPanel">
         <h2>Nhập thông tin ngày sinh (dương lịch)</h2>
         <p class="sub">Bát Tự lập theo dương lịch và tiết khí. Càng chính xác giờ sinh, tứ trụ càng chuẩn. Có tứ trụ rồi, hỏi trợ lý ở khung bên phải.</p>
@@ -139,13 +140,14 @@ table.tutru td.row-label{font-size:10.5px;color:#9a8a6a;text-transform:uppercase
   <aside class="rail" id="shell-rail"></aside>
 </div>
 
-<script>window.SHELL_ACTIVE='bat-tu';</script>
+<script>window.SHELL_ACTIVE='bat-tu';
+window.SHELL_INTRO={key:'bat-tu',title:'Lá số Bát Tự (Tứ Trụ)',desc:'Lập tứ trụ Tử Bình theo dương lịch + tiết khí. Xem nhật can vượng/nhược, dụng thần, cách cục, đại vận - rồi hỏi <b>trợ lý AI</b> luận từng phần.'};</script>
 <script src="/laso-chart.js?v=2"></script>
 <script src="/tubinh-ansao-engine.js?v=5"></script>
 <script src="/tubinh-domain-scores.js?v=2"></script>
 <script src="/tubinh-cach-cuc-special.js?v=2"></script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=6"></script>
+<script src="/shell.js?v=7"></script>
 <script>
 // Bát Tự dùng ĐÚNG giờ đại diện của địa chi giờ (23,1,3,…) để tứ trụ trên
 // trang KHỚP TUYỆT ĐỐI với bát tự server tính cho rail (server map hourBranch
@@ -195,6 +197,7 @@ function doBatTu(){
     document.getElementById('btnEdit').style.display='';
     Shell.rememberBirth({name:name,gender:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,pp:pp,namxem:namxem});
     // Rail: gửi CẢ birth (server lập bát tự) + scenario tu-binh (chọn đúng bộ não).
+    if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
       birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,gender:gioitinh,name:name||undefined},
       scenario:{type:'tu-binh',data:{}},

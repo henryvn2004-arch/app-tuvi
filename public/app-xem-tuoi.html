@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/shell.css?v=1">
+<link rel="stylesheet" href="/shell.css?v=2">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:720px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -81,6 +81,7 @@
       </div>
     </div>
     <div class="ws-body">
+      <div id="introHost"></div>
       <div class="form-card" id="birthPanel">
         <h2 id="fH2">Nhập ngày sinh hai người (dương lịch)</h2>
         <p class="sub" id="fSub">So hòa hợp trên hai lá số theo cổ pháp: xét tuổi, ngũ hành, tư tưởng, quan hệ, con cái, tài chính. Có kết quả rồi, hỏi trợ lý luận sâu ở khung bên phải.</p>
@@ -134,12 +135,16 @@
   <aside class="rail" id="shell-rail"></aside>
 </div>
 
-<script>window.SHELL_ACTIVE=location.pathname.indexOf('lam-an')>=0?'xem-lam-an':'xem-tuoi';</script>
+<script>
+(function(){var biz=location.pathname.indexOf('lam-an')>=0;
+window.SHELL_ACTIVE=biz?'xem-lam-an':'xem-tuoi';
+window.SHELL_INTRO=biz?{key:'xem-lam-an',title:'Xem tuổi làm ăn',desc:'So hợp hai người khi bắt tay hợp tác theo <b>8 chiều</b> cổ pháp. Ra điểm hòa hợp rồi hỏi <b>trợ lý AI</b> ai nên nắm gì, dễ xung khắc ở đâu.'}:{key:'xem-tuoi',title:'Xem tuổi vợ chồng',desc:'So hòa hợp hai lá số theo <b>8 chiều</b> cổ pháp (tuổi, ngũ hành, tư tưởng, quan hệ, con cái, tài chính). Ra điểm rồi hỏi <b>trợ lý AI</b> luận sâu.'};})();
+</script>
 <script src="/laso-chart.js?v=2"></script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tuong-hop.js?v=1"></script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=6"></script>
+<script src="/shell.js?v=7"></script>
 <script>
 // ── MODE: 1 trang phục vụ 2 route — /app/xem-tuoi (vợ chồng) & /app/xem-lam-an
 // (hợp tác làm ăn). Cùng bộ máy calcTuongHop; chỉ khác khung diễn giải + kênh
@@ -219,6 +224,7 @@ function doCompat(){
     // Rail: gửi scenario xem-tuoi (server tự lập 2 lá số từ birthA/birthB).
     var birthA={day:A.dd,month:A.mm,year:A.yyyy,hourBranch:ca.hourBranch,gender:A.gender,name:nameA};
     var birthB={day:B.dd,month:B.mm,year:B.yyyy,hourBranch:cb.hourBranch,gender:B.gender,name:nameB};
+    if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
       scenario:{type:MODE.scenarioType,data:{birthA:birthA,birthB:birthB,nameA:nameA,nameB:nameB}},
       label:MODE.verb+' '+nameA+' × '+nameB,

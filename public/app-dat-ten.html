@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/shell.css?v=1">
+<link rel="stylesheet" href="/shell.css?v=2">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -50,6 +50,7 @@
       </div>
     </div>
     <div class="ws-body">
+      <div id="introHost"></div>
       <div class="form-card" id="birthPanel">
         <h2>Thông tin để đặt tên</h2>
         <p class="sub">Lấy can chi &amp; ngũ hành nạp âm của con và bố mẹ làm nền, rồi hỏi trợ lý gợi ý tên hợp mệnh, luận ý nghĩa từng tên.</p>
@@ -77,10 +78,11 @@
   <aside class="rail" id="shell-rail"></aside>
 </div>
 
-<script>window.SHELL_ACTIVE='dat-ten';</script>
+<script>window.SHELL_ACTIVE='dat-ten';
+window.SHELL_INTRO={key:'dat-ten',title:'Đặt tên con hợp mệnh',desc:'Lấy can chi &amp; ngũ hành nạp âm của con và bố mẹ làm nền, rồi hỏi <b>trợ lý AI</b> gợi ý tên hợp mệnh kèm ý nghĩa từng tên.'};</script>
 <script src="/can-chi.js?v=1"></script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=6"></script>
+<script src="/shell.js?v=7"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 var HANH_COLOR={'Mộc':'var(--green)','Hỏa':'var(--red)','Thổ':'var(--gold-soft)','Kim':'#8a8a8a','Thủy':'var(--blue)'};
@@ -105,6 +107,7 @@ function doDatTen(){
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('resPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
+    if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
       scenario:{type:'dat-ten-con',data:{ho:ho,gioiTinh:gt,namCon:namCon,namBo:namBo,namMe:namMe}},
       label:'Đặt tên '+gtLabel+' họ '+ho+' · '+iCon.canChi,

@@ -174,6 +174,25 @@
     },
     // true nếu URL có ?auto=1 (đến từ nút chuyển tay giữa tool) → trang tự chạy.
     autoRun: function () { return /[?&]auto=1\b/.test(window.location.search); },
+    // ── Empty-state intro (hướng B): hiện giới thiệu ngắn cho người MỚI, tự
+    // ẩn sau lần dùng đầu (nhớ qua localStorage) + nút ✕ tắt luôn. Gọi ở
+    // init: introOnce('bat-tu', {title, desc}); gọi markIntroSeen sau lần chạy
+    // đầu. Cần 1 phần tử #introHost trên trang (đặt trên form).
+    introSeen: function (key) { try { return !!localStorage.getItem('app_intro_' + key); } catch (e) { return false; } },
+    markIntroSeen: function (key) { try { localStorage.setItem('app_intro_' + key, '1'); } catch (e) { /* ignore */ } },
+    introOnce: function (key, opts) {
+      var host = document.getElementById('introHost');
+      if (!host) return;
+      if (this.introSeen(key)) { host.innerHTML = ''; return; }
+      host.innerHTML = '<div class="intro-card"><button class="intro-x" type="button" aria-label="Ẩn giới thiệu">×</button>' +
+        '<div class="intro-t"><span class="spark">✦</span> ' + esc(opts.title || '') + '</div>' +
+        '<div class="intro-d">' + (opts.desc || '') + '</div></div>';
+      var self = this;
+      var x = host.querySelector('.intro-x');
+      if (x) x.addEventListener('click', function () { self.markIntroSeen(key); host.innerHTML = ''; });
+    },
+    // Gọi khi trang đã chạy (có kết quả): nhớ đã xem + ẩn intro.
+    dismissIntro: function (key) { this.markIntroSeen(key); var h = document.getElementById('introHost'); if (h) h.innerHTML = ''; },
   };
   window.Shell = Shell;
 
@@ -333,6 +352,9 @@
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); var o = document.getElementById('cmdk'); (o && o.classList.contains('open')) ? closeCmd() : openCmd(); }
     });
     var tries = 0, t = setInterval(function () { paintAuth(); if (++tries > 20 || window.Auth) clearInterval(t); }, 300);
+    // Empty-state intro (hướng B): trang khai window.SHELL_INTRO={key,title,desc}
+    // + có #introHost → shell tự hiện cho người mới, ẩn sau lần dùng đầu.
+    if (window.SHELL_INTRO && window.SHELL_INTRO.key) Shell.introOnce(window.SHELL_INTRO.key, window.SHELL_INTRO);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
