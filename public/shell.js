@@ -98,6 +98,7 @@
         '<div class="rail-empty" id="railEmpty"><div class="ei">✦</div><b>Chưa có lá số nào</b>' +
         '<p>Lập lá số ở khung giữa, rồi hỏi tôi bất cứ điều gì —<br>vận sự nghiệp, tình duyên, năm nay, tháng tới…</p></div>' +
       '</div>' +
+      '<div class="rail-sugg" id="railSugg" style="display:none"></div>' +
       '<div class="rail-in"><textarea id="railInput" rows="1" placeholder="Lập lá số để bắt đầu hỏi…" disabled></textarea>' +
         '<button class="send" id="railSend" disabled data-act="send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button></div>';
     host.querySelector('[data-act="send"]').addEventListener('click', sendMsg);
@@ -110,6 +111,8 @@
 
   // ── CHAT STATE ──
   var ctx = null;            // { birth } | { scenario }
+  var ctxChips = [];         // gợi ý câu hỏi CÒN LẠI (đã bấm thì bỏ đi)
+  var ctxChipsOrig = [];     // bản gốc để reset khi "hội thoại mới"
   var messages = [];
   var sessionId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('s' + Date.now());
   var streaming = false;
@@ -130,12 +133,29 @@
 
   function greet(o) {
     var chat = document.getElementById('chat');
-    var chips = (o.chips || []).map(function (c) { return '<div class="chip" data-ask="' + esc(c) + '">' + esc(c) + '</div>'; }).join('');
     chat.innerHTML =
-      '<div class="msg a"><p>' + mdLite(o.greeting || 'Lá số đã sẵn sàng. Bạn muốn tôi soi điều gì trước?') + '</p></div>' +
-      (chips ? '<div class="chips-lbl">Gợi ý</div><div class="chips">' + chips + '</div>' : '');
-    chat.querySelectorAll('[data-ask]').forEach(function (el) {
-      el.addEventListener('click', function () { ask(el.getAttribute('data-ask')); });
+      '<div class="msg a"><p>' + mdLite(o.greeting || 'Lá số đã sẵn sàng. Bạn muốn tôi soi điều gì trước?') + '</p></div>';
+    // Gợi ý câu hỏi: hàng chip CỐ ĐỊNH trên ô nhập, còn suốt hội thoại (bấm
+    // thì bớt dần), thay vì chỉ hiện 1 lần ở lời chào.
+    if (o.chips !== undefined) { ctxChipsOrig = (o.chips || []).slice(); ctxChips = ctxChipsOrig.slice(); }
+    renderSuggs();
+  }
+
+  // Hàng gợi ý trên ô nhập: ẩn khi đang trả lời / hết gợi ý / chưa có ngữ cảnh.
+  function renderSuggs() {
+    var host = document.getElementById('railSugg');
+    if (!host) return;
+    if (!ctx || streaming || !ctxChips.length) { host.innerHTML = ''; host.style.display = 'none'; return; }
+    host.style.display = '';
+    host.innerHTML = '<div class="sugg-row">' +
+      ctxChips.map(function (c, i) { return '<button class="chip" type="button" data-i="' + i + '">' + esc(c) + '</button>'; }).join('') +
+      '</div>';
+    host.querySelectorAll('[data-i]').forEach(function (el) {
+      el.addEventListener('click', function () {
+        var i = +el.getAttribute('data-i'); var q = ctxChips[i];
+        if (q == null) return;
+        ctxChips.splice(i, 1); renderSuggs(); ask(q);
+      });
     });
   }
 
@@ -206,7 +226,7 @@
   function newChat() {
     messages = [];
     sessionId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('s' + Date.now());
-    if (ctx) greet({ greeting: 'Bắt đầu hội thoại mới. Bạn muốn hỏi gì về lá số này?', chips: [] });
+    if (ctx) { ctxChips = ctxChipsOrig.slice(); greet({ greeting: 'Bắt đầu hội thoại mới. Bạn muốn hỏi gì về lá số này?' }); }
   }
 
   async function sendMsg() {
@@ -222,7 +242,7 @@
     var typing = document.createElement('div'); typing.className = 'msg a';
     typing.innerHTML = '<span class="typing"><i></i><i></i><i></i></span>'; chat.appendChild(typing);
     chat.scrollTop = chat.scrollHeight;
-    streaming = true; setSend(false);
+    streaming = true; setSend(false); renderSuggs();
 
     var acc = '';
     try {
@@ -257,7 +277,7 @@
       messages.pop();
       if (window.console) console.error('[shell.rail]', e);
     } finally {
-      streaming = false; setSend(true); chat.scrollTop = chat.scrollHeight;
+      streaming = false; setSend(true); renderSuggs(); chat.scrollTop = chat.scrollHeight;
     }
   }
 
