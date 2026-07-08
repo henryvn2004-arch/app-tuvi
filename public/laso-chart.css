@@ -1,0 +1,64 @@
+/* ============================================================
+   laso-chart.css — CSS lưới lá số Tử Vi (dùng chung).
+   PARITY: lift NGUYÊN khối CSS V2 (.laso-grid + .v2-* + .cur-van +
+   center) từ public/luan-giai.html để /app hiển thị lá số ĐÚNG Y HỆT
+   trang luận giải. Màu hardcode (không dùng biến theme của shell) — lá
+   số luôn là "tài liệu trắng" nhất quán, không đổi theo dark mode.
+   ============================================================ */
+.laso-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,auto);border:2px solid #333;background:#fff;border-radius:8px;overflow:hidden;color:#1a1a1a}
+.cung-cell{border:1px solid #888;padding:7px 7px 20px;min-height:170px;position:relative;display:flex;flex-direction:column;background:#fff;overflow:hidden}
+.cung-cell:hover{background:#FFFDF7}
+.cung-cell.cur-van{outline:2px solid #1E6B3C;outline-offset:-2px}
+.v2-cell-header{display:flex;flex-direction:column;align-items:center;margin-bottom:4px;gap:2px}
+.v2-can-chi{font-size:9px;color:#777;font-weight:500;text-transform:uppercase;width:100%;text-align:left}
+.v2-cung-name{font-size:10px;color:#222;font-weight:700;text-transform:uppercase;text-align:center;width:100%;letter-spacing:.5px;display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap}
+.v2-badge-than{display:inline-block;padding:0 5px;font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:2px;border:1.5px solid #7B3FA0;color:#7B3FA0;vertical-align:middle}
+.v2-chinh-area{margin-bottom:4px;text-align:center}
+.v2-chinh-item{font-family:'Noto Serif',Georgia,serif;font-size:12.5px;font-weight:700;line-height:1.4;text-align:center}
+.v2-phu-area{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:0 4px;align-content:start}
+.v2-phu-col{display:flex;flex-direction:column;gap:1px}
+.v2-phu-col-right{text-align:right}
+.v2-phu-item{font-size:9.5px;line-height:1.45;font-weight:700}
+.v2-footer{display:flex;justify-content:space-between;align-items:flex-end;position:absolute;bottom:3px;left:7px;right:7px;border-top:1px solid #ddd;padding-top:2px}
+.v2-trang-sinh{font-size:9px;color:#777;font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.v2-dai-van{font-size:10px;color:#333;font-weight:700}
+.v2-tuan-tag,.v2-triet-tag{display:inline-block;padding:0 5px;font-size:8px;font-weight:700;letter-spacing:1px;border-radius:2px;text-transform:uppercase;position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);z-index:5}
+.v2-tuan-tag{background:#2c4a00;color:#fff}
+.v2-triet-tag{background:#4a0000;color:#fff}
+
+/* Star colors — ngũ hành đúng (V2) */
+.bright{font-size:8px;opacity:1;color:#7EC8E3;margin-left:1px}
+.hoa{font-size:9px;margin-left:1px}
+.hoa-Lộc{color:#1E6B3C;font-weight:700}
+.hoa-Quyền{color:#7B3FA0;font-weight:700}
+.hoa-Khoa{color:#1455A4;font-weight:700}
+.hoa-Kỵ{color:#C0392B;font-weight:700}
+.e-hoa{color:#C0392B}.e-kim{color:#8B6914}.e-tho{color:#6B3E1A}.e-moc{color:#1B6B2B}.e-thuy{color:#1A4E8C}
+.sc-hoa{color:#E74C3C}
+.sc-kim{color:#7F8C8D}
+.sc-thuy{color:#1a1a1a}
+.sc-moc{color:#27AE60}
+.sc-tho{color:#D4A017}
+.sc-neutral{color:#333}
+.sc-hoa-loc{color:#1E6B3C;font-weight:700}
+.sc-hoa-quyen{color:#7B3FA0;font-weight:700}
+.sc-hoa-khoa{color:#1455A4;font-weight:700}
+.sc-hoa-ky{color:#C0392B;font-weight:700}
+
+/* Center info (2×2) */
+.cung-center{border-right:1px solid #ccc;border-bottom:1px solid #ccc;grid-column:span 2;grid-row:span 2;background:#F5F4F0;display:flex;align-items:center;justify-content:center;padding:16px}
+.center-la-so{width:100%;display:flex;flex-direction:column;align-items:center}
+.center-title{color:#061A2E;font-weight:700;font-size:13px;margin-bottom:10px;text-align:center;letter-spacing:1px;font-family:'Noto Serif',Georgia,serif}
+.center-row{font-size:12px;color:#444;margin:3px 0;width:100%;text-align:left;padding-left:4px;line-height:1.7}
+.center-divider{width:80%;border:none;border-top:1px solid #ccc;margin:5px 0}
+
+.laso-error{text-align:center;padding:20px;color:#C0392B;font-size:13px;background:#fff9f9;border:1px solid #fcc;border-radius:6px}
+
+@media(max-width:700px){
+  .laso-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .laso-grid{min-width:480px;font-size:10px}
+  .cung-cell{min-height:100px;padding:4px 4px 20px}
+  .cung-center{padding:8px}
+  .center-title{font-size:12px}
+  .center-row{font-size:10px}
+}

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luận giải chuyên sâu — Tử Vi Minh Bảo</title>
+<meta name="description" content="Luận giải lá số Tử Vi theo điểm số cổ pháp: 12 cung, đại vận, tứ hóa — và hỏi trợ lý AI đào sâu từng phần.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shell.css?v=1">
+<link rel="stylesheet" href="/laso-chart.css?v=2">
+<style>
+/* Center riêng của trang Luận giải */
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
+.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
+.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
+.gio-hint{font-size:12px;color:var(--text-lt);align-self:center;padding-bottom:4px}
+.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
+
+#lgPanel{display:none}
+.lg-body{max-width:860px}
+/* jump nav */
+.jump{position:sticky;top:51px;z-index:4;background:var(--paper);border-bottom:1px solid var(--line);padding:8px 0;margin:0 0 18px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.jump::-webkit-scrollbar{display:none}
+.jump a{white-space:nowrap;font-size:12px;color:var(--text-mid);border:1px solid var(--line-2);border-radius:20px;padding:4px 11px;cursor:pointer;background:var(--white)}
+.jump a.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+/* score cards */
+.scores{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.sc{flex:1;min-width:120px;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:11px 13px;box-shadow:var(--shadow)}
+.sc .lb{font-size:11px;color:var(--text-lt);text-transform:uppercase;letter-spacing:.04em}
+.sc .vl{font-family:var(--serif);font-size:24px;font-weight:600;margin-top:2px;display:flex;align-items:baseline;gap:3px}
+.sc .vl small{font-size:12px;color:var(--text-lt);font-family:var(--sans)}
+.sc.good .vl{color:var(--green)}.sc.warn .vl{color:var(--gold-soft)}.sc.pri .vl{color:var(--red)}
+.pbar{height:5px;border-radius:5px;background:var(--paper-2);margin-top:7px;overflow:hidden}
+.pbar i{display:block;height:100%;border-radius:5px}
+/* sections */
+.sec{margin-bottom:28px;scroll-margin-top:104px}
+.sec-h{display:flex;align-items:center;gap:11px;margin-bottom:11px}
+.sec-n{width:26px;height:26px;flex:0 0 auto;border-radius:7px;background:var(--navy);color:var(--gold);font-family:var(--serif);font-size:13px;display:flex;align-items:center;justify-content:center;font-weight:600}
+.sec-h h3{font-family:var(--serif);font-size:18px;font-weight:600}
+.sec-h .tag{margin-left:auto;font-size:11px;color:var(--text-lt);border:1px solid var(--line-2);border-radius:20px;padding:2px 9px}
+.card{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:15px 17px;box-shadow:var(--shadow)}
+.card p{color:var(--text-mid);margin-bottom:9px;line-height:1.68}
+.card p:last-child{margin-bottom:0}
+.card b{color:var(--text)}
+.em{color:var(--gold-soft);font-weight:600}
+.cung-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.cung-row:last-child{border-bottom:none}
+.cung-row .nm{font-family:var(--serif);font-size:14px;width:96px;flex:0 0 auto}
+.cung-row .stars{font-size:12px;color:var(--text-lt);flex:1;min-width:0}
+.cung-row .stars b{color:var(--red);font-weight:600}
+.cung-row .mb{width:74px;flex:0 0 auto}
+.cung-row .num{width:34px;text-align:right;font-family:var(--serif);font-weight:600;font-size:14px;font-variant-numeric:tabular-nums}
+.ask{margin-top:11px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
+.hoa-list{display:flex;flex-direction:column;gap:8px}
+.hoa-item{display:flex;align-items:center;gap:10px;font-size:13px}
+.hoa-badge{font-family:var(--serif);font-weight:700;font-size:12px;padding:2px 9px;border-radius:6px;flex:0 0 auto;width:74px;text-align:center}
+.fold-toggle{font-size:12.5px;color:var(--blue);cursor:pointer;margin-bottom:14px;display:inline-block}
+#miniChart{display:none;margin-bottom:20px}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Luận giải chuyên sâu</b><span>Neo phán quyết vào điểm số cổ pháp</span></div>
+      <div class="ws-actions">
+        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa thông tin</button>
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div class="form-card" id="birthPanel">
+        <h2>Nhập thông tin để luận giải</h2>
+        <p class="sub">Lấy điểm số 12 cung, đại vận, tứ hóa theo cổ pháp — rồi hỏi trợ lý đào sâu từng phần bên phải.</p>
+        <div class="frow">
+          <div class="fg" style="flex:2;min-width:150px"><label>Họ và tên</label><input type="text" id="inpName" placeholder="Nguyễn Văn A"></div>
+          <div class="fg" style="width:90px"><label>Giới tính</label><select id="inpGender"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
+        </div>
+        <div class="frow">
+          <div class="fg" style="width:74px"><label>Ngày</label><select id="inpDd"></select></div>
+          <div class="fg" style="width:82px"><label>Tháng</label><select id="inpMm"></select></div>
+          <div class="fg" style="width:90px"><label>Năm</label><input type="number" id="inpYyyy" value="1990" min="1900" max="2099"></div>
+          <div class="fg" style="width:70px"><label>Giờ</label><select id="inpHh"></select></div>
+          <div class="fg" style="width:70px"><label>Phút</label><select id="inpPp"></select></div>
+          <span class="gio-hint" id="gioHint">Giờ âm: —</span>
+        </div>
+        <div class="frow" style="margin-bottom:0">
+          <div class="fg" style="width:90px"><label>Năm luận</label><input type="number" id="inpNamxem" value="2026" min="1900" max="2100"></div>
+          <button class="btn-go" id="btnGo" onclick="doLuan()">Luận giải →</button>
+        </div>
+      </div>
+
+      <div id="lgPanel">
+        <div class="scores" id="lgScores"></div>
+        <span class="fold-toggle" id="lgFold" onclick="toggleMini()">▸ Xem lá số đầy đủ</span>
+        <div class="chart-wrap" id="miniChart"></div>
+        <div class="jump" id="lgJump"></div>
+        <div class="lg-body" id="lgBody"></div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='luan-giai';</script>
+<script src="/tuvi-ansao-engine.js"></script>
+<script src="/laso-chart.js?v=2"></script>
+<script src="/auth.js"></script>
+<script src="/shell.js?v=2"></script>
+<script>
+// ── Dropdowns ──
+(function(){
+  var dd=document.getElementById('inpDd'),mm=document.getElementById('inpMm'),hh=document.getElementById('inpHh'),pp=document.getElementById('inpPp');
+  dd.innerHTML='<option value="">Ngày</option>';mm.innerHTML='<option value="">Tháng</option>';
+  for(var i=1;i<=31;i++)dd.innerHTML+='<option value="'+i+'">'+i+'</option>';
+  for(var j=1;j<=12;j++)mm.innerHTML+='<option value="'+j+'">'+j+'</option>';
+  for(var h=0;h<=23;h++)hh.innerHTML+='<option value="'+h+'">'+String(h).padStart(2,'0')+'</option>';
+  for(var p=0;p<=59;p++)pp.innerHTML+='<option value="'+p+'">'+String(p).padStart(2,'0')+'</option>';
+  hh.addEventListener('change',updateGioAm);pp.addEventListener('change',updateGioAm);
+})();
+function updateGioAm(){
+  var h=parseInt(document.getElementById('inpHh').value)||0,p=parseInt(document.getElementById('inpPp').value)||0;
+  document.getElementById('gioHint').textContent='Giờ âm: '+CHI[hourMinToGioAm(h,p)];
+}
+
+var CUNG_ORDER=['Mệnh','Phụ Mẫu','Phúc Đức','Điền Trạch','Quan Lộc','Nô Bộc','Thiên Di','Tật Ách','Tài Bạch','Tử Tức','Phu Thê','Huynh Đệ'];
+var SC_DIMS=['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
+function cungTotal(sc){ if(!sc)return null; var d=SC_DIMS.map(function(k){return sc[k]}).filter(function(v){return typeof v==='number'}); return d.length?Math.round(d.reduce(function(a,b){return a+b},0)/d.length*10)/10:null; }
+function scoreColor(t){ return t>=7?'var(--green)':t>=5?'var(--gold-soft)':'var(--red)'; }
+
+function doLuan(){
+  var btn=document.getElementById('btnGo');
+  var name=document.getElementById('inpName').value.trim();
+  var gioitinh=document.getElementById('inpGender').value;
+  var namxem=parseInt(document.getElementById('inpNamxem').value)||new Date().getFullYear();
+  var dd=parseInt(document.getElementById('inpDd').value),mm=parseInt(document.getElementById('inpMm').value),yyyy=parseInt(document.getElementById('inpYyyy').value);
+  var hh=parseInt(document.getElementById('inpHh').value)||0,pp=parseInt(document.getElementById('inpPp').value)||0;
+  if(!dd||!mm||!yyyy){ alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh.'); return; }
+  btn.disabled=true;btn.textContent='Đang luận…';
+  try{
+    var gioAmIdx=hourMinToGioAm(hh,pp),gioChi=CHI[gioAmIdx];
+    var conv=convertDuongToAm(dd,mm,yyyy,hh);conv.gioIdx=gioAmIdx;
+    var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioAmIdx,gioitinh:gioitinh,namXem:namxem});
+    var fd={name:name,gioitinh:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,pp:pp,gioChi:gioChi,amLich:conv.amLich};
+    renderLuan(ls,fd,namxem);
+    document.getElementById('miniChart').innerHTML=renderGrid(ls,fd);
+    document.getElementById('birthPanel').style.display='none';
+    document.getElementById('lgPanel').style.display='block';
+    document.getElementById('btnEdit').style.display='';
+    Shell.rememberBirth({name:name,gender:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,pp:pp,namxem:namxem});
+    Shell.setContext({
+      birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,gender:gioitinh,name:name||undefined},
+      label:'Luận giải '+(name||'lá số')+' · '+dd+'/'+mm+'/'+yyyy+' · năm '+namxem,
+      greeting:'Bản luận của **'+(name||'bạn')+'** đã sẵn sàng. Hỏi tôi để đào sâu bất kỳ phần nào — 12 cung, đại vận, tứ hóa.',
+      chips:['Vì sao cung điểm thấp nhất lại yếu?','Giải thích đại vận hiện tại','Năm '+namxem+' cần chú ý gì?','Điểm mạnh lớn nhất của tôi?']
+    });
+  }catch(e){
+    document.getElementById('lgBody').innerHTML='<div class="laso-error">Lỗi khi luận giải: '+esc(e.message)+'</div>';
+    document.getElementById('birthPanel').style.display='none';
+    document.getElementById('lgPanel').style.display='block';
+    if(window.console)console.error(e);
+  }finally{
+    btn.disabled=false;btn.textContent='Luận giải →';
+  }
+}
+
+function renderLuan(ls,fd,namxem){
+  // totals per cung
+  var totals={};var arr=[];
+  CUNG_ORDER.forEach(function(cn){ var t=cungTotal(ls.cungScores&&ls.cungScores[cn]); totals[cn]=t; if(t!=null)arr.push({cn:cn,t:t}); });
+  var overall=arr.length?Math.round(arr.reduce(function(a,b){return a+b.t},0)/arr.length*10)/10:null;
+  var dvHT=ls.daiVanHienTai, dvTong=dvHT&&dvHT.scoring?dvHT.scoring.tong:null;
+  var tvCung=ls.palaces&&ls.palaces[ls.tieuHanIdx];
+  var sorted=arr.slice().sort(function(a,b){return b.t-a.t});
+  var top3=sorted.slice(0,3), bot3=sorted.slice(-3).reverse();
+
+  // score cards
+  document.getElementById('lgScores').innerHTML=
+    card('Tổng quan lá số',overall) + card('Đại vận '+(dvHT?dvHT.tuoiStart+'–'+dvHT.tuoiEnd+'t':''),dvTong) +
+    '<div class="sc"><div class="lb">Cách cục</div><div class="vl" style="font-size:19px;color:var(--navy)">'+((ls.cachCuc&&ls.cachCuc.length)||0)+'</div><div class="pbar"><i style="width:100%;background:var(--gold-soft)"></i></div></div>';
+
+  function card(lb,t){ var col=t!=null?scoreColor(t):'var(--text-lt)'; return '<div class="sc"><div class="lb">'+esc(lb)+'</div><div class="vl" style="color:'+col+'">'+(t!=null?t:'—')+'<small>/10</small></div><div class="pbar"><i style="width:'+(t!=null?t*10:0)+'%;background:'+col+'"></i></div></div>'; }
+
+  var S=[]; // sections
+  // 1. Tổng quan
+  var menhP=ls.palaces&&ls.palaces.find(function(p){return p.isMenh});
+  var chinhMenh=menhP&&menhP.majorStars.length?menhP.majorStars.map(function(s){return s.ten}).join(' · '):'Vô Chính Diệu';
+  var topCC=(ls.cachCuc||[]).slice(0,3).map(function(r){return r.ten}).join(', ');
+  S.push(sec(1,'Tổng quan',(overall!=null?overall+'/10':''),
+    '<div class="card"><p>Bản mệnh <b>'+esc(ls.canChiNam)+'</b> · nạp âm <b>'+esc(ls.napAm||'')+'</b> · cục <b>'+esc(ls.cuc||'')+'</b>. Cung Mệnh tại <b>'+esc(menhP?menhP.diaChi:'?')+'</b> với <span class="em">'+esc(chinhMenh)+'</span>.</p>'+
+    (overall!=null?'<p>Điểm tổng quan toàn lá số <b>'+overall+'/10</b> — '+(overall>=7?'nền tảng mạnh, nhiều cung sáng.':overall>=5?'ở mức trung bình khá, có điểm sáng lẫn điểm cần giữ.':'nhiều cung cần lưu ý, phải biết chọn thời và giữ mình.')+'</p>':'')+
+    (topCC?'<p>Cách cục nổi bật: <span class="em">'+esc(topCC)+'</span>.</p>':'')+
+    ask('Luận tổng quan bản mệnh của tôi cho kỹ')+'</div>'));
+
+  // 2. 12 cung
+  var rows='';
+  CUNG_ORDER.forEach(function(cn){
+    var p=ls.palaces&&ls.palaces.find(function(x){return x.cungName===cn}); if(!p)return;
+    var t=totals[cn]; var col=t!=null?scoreColor(t):'var(--text-lt)';
+    var chinh=p.majorStars.length?p.majorStars.map(function(s){return s.ten}).join(' · '):'VCD';
+    rows+='<div class="cung-row"><span class="nm">'+esc(cn)+'</span><span class="stars"><b>'+esc(chinh)+'</b> · '+esc(p.diaChi)+'</span>'+
+      '<div class="mb"><div class="pbar"><i style="width:'+(t!=null?t*10:0)+'%;background:'+col+'"></i></div></div><span class="num" style="color:'+col+'">'+(t!=null?t:'—')+'</span></div>';
+  });
+  S.push(sec(2,'12 Cung',(arr.length?'điểm từng cung':''),'<div class="card">'+rows+ask('Cung nào đáng lo nhất và vì sao?')+'</div>'));
+
+  // 3. Đại vận
+  S.push(sec(3,'Đại vận hiện tại'+(dvHT?' · '+dvHT.tuoiStart+'–'+dvHT.tuoiEnd+' tuổi':''),(dvTong!=null?dvTong+'/10':''),
+    '<div class="card"><p>Đại vận đang đóng tại <b>'+esc(dvHT?dvHT.diaChi:'?')+'</b>'+(dvTong!=null?' — điểm <b>'+dvTong+'/10</b>':'')+'. '+
+    (dvTong!=null?(dvTong>=7?'Đây là giai đoạn thuận, nên chủ động bung sức.':dvTong>=4?'Giai đoạn trung bình, tiến chắc hơn tiến nhanh.':'Giai đoạn cần thủ, giữ sức và tránh phiêu lưu lớn.'):'')+'</p>'+
+    ask('Đại vận này nên làm gì, tránh gì?')+'</div>'));
+
+  // 4. Vận năm
+  S.push(sec(4,'Vận năm '+namxem,(tvCung?tvCung.cungName:''),
+    '<div class="card"><p>Năm <b>'+esc(ls.chiNamXem||namxem)+'</b> tiểu hạn tại <b>'+esc(tvCung?tvCung.diaChi:'?')+'</b> — cung <span class="em">'+esc(tvCung?tvCung.cungName:'')+'</span>. Trọng tâm năm nay xoay quanh lĩnh vực của cung này.</p>'+
+    ask('Năm '+namxem+' của tôi thế nào, tháng nào đáng chú ý?')+'</div>'));
+
+  // 5. Điểm mạnh
+  S.push(sec(5,'Điểm mạnh',(top3.length?'top '+top3.length+' cung':''),
+    '<div class="card">'+top3.map(function(x){return '<div class="cung-row"><span class="nm">'+esc(x.cn)+'</span><span class="stars">cung sáng của lá số</span><span class="num" style="color:var(--green)">'+x.t+'</span></div>'}).join('')+
+    ask('Làm sao tận dụng các cung mạnh này?')+'</div>'));
+
+  // 6. Điểm cần cải thiện
+  S.push(sec(6,'Điểm cần cải thiện',(bot3.length?bot3.length+' cung yếu nhất':''),
+    '<div class="card">'+bot3.map(function(x){return '<div class="cung-row"><span class="nm">'+esc(x.cn)+'</span><span class="stars">cung cần lưu ý</span><span class="num" style="color:'+scoreColor(x.t)+'">'+x.t+'</span></div>'}).join('')+
+    ask('Hóa giải các cung yếu này thế nào?')+'</div>'));
+
+  // 7. Tứ Hóa
+  var hoaMap={'Lộc':[],'Quyền':[],'Khoa':[],'Kỵ':[]};
+  (ls.palaces||[]).forEach(function(p){
+    var all=(p.majorStars||[]).concat(p.stars||[]);
+    all.forEach(function(s){ if(s.hoa&&hoaMap[s.hoa]&&!hoaMap[s.hoa].find(function(e){return e.star===s.ten&&e.cung===p.cungName})){ hoaMap[s.hoa].push({star:s.ten,cung:p.cungName}); } });
+  });
+  var hoaColors={'Lộc':'var(--green)','Quyền':'#7B3FA0','Khoa':'var(--blue)','Kỵ':'var(--red)'};
+  var hoaHTML='<div class="hoa-list">';
+  ['Lộc','Quyền','Khoa','Kỵ'].forEach(function(h){
+    var items=hoaMap[h]; var txt=items.length?items.map(function(e){return e.star+' ('+e.cung+')'}).join(', '):'—';
+    hoaHTML+='<div class="hoa-item"><span class="hoa-badge" style="color:'+hoaColors[h]+';border:1px solid '+hoaColors[h]+'">HÓA '+h.toUpperCase()+'</span> <span>'+esc(txt)+'</span></div>';
+  });
+  hoaHTML+='</div>';
+  S.push(sec(7,'Tứ Hóa',' Lộc·Quyền·Khoa·Kỵ','<div class="card">'+hoaHTML+ask('Tứ hóa ảnh hưởng đời tôi ra sao?')+'</div>'));
+
+  document.getElementById('lgBody').innerHTML=S.join('');
+
+  // jump nav
+  var labels=['Tổng quan','12 Cung','Đại vận','Vận năm','Điểm mạnh','Cần cải thiện','Tứ Hóa'];
+  document.getElementById('lgJump').innerHTML=labels.map(function(l,i){return '<a data-i="'+i+'"'+(i===0?' class="on"':'')+'>'+l+'</a>'}).join('');
+  bindJump();
+  // bind ask buttons
+  document.querySelectorAll('#lgBody [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
+}
+
+function sec(n,title,tag,inner){ return '<section class="sec" id="sec-'+n+'"><div class="sec-h"><div class="sec-n">'+n+'</div><h3>'+esc(title)+'</h3>'+(tag?'<span class="tag">'+esc(tag)+'</span>':'')+'</div>'+inner+'</section>'; }
+function ask(t){ return '<div class="ask" data-ask="'+esc(t)+'">✦ Hỏi trợ lý: "'+esc(t)+'"</div>'; }
+
+function bindJump(){
+  var ws=document.getElementById('ws');
+  var links=document.querySelectorAll('#lgJump a');
+  links.forEach(function(a){ a.addEventListener('click',function(){ var s=document.getElementById('sec-'+(+a.getAttribute('data-i')+1)); if(s)ws.scrollTo({top:s.offsetTop-96,behavior:'smooth'}); }); });
+  ws.addEventListener('scroll',function(){
+    var y=ws.scrollTop+130,idx=0;
+    for(var i=1;i<=7;i++){ var s=document.getElementById('sec-'+i); if(s&&s.offsetTop<=y)idx=i-1; }
+    links.forEach(function(a,i){ a.classList.toggle('on',i===idx); });
+  });
+}
+
+function toggleMini(){
+  var m=document.getElementById('miniChart'),f=document.getElementById('lgFold');
+  var open=m.style.display==='block';
+  m.style.display=open?'none':'block';
+  f.textContent=(open?'▸':'▾')+' Xem lá số đầy đủ';
+}
+function showForm(){
+  document.getElementById('lgPanel').style.display='none';
+  document.getElementById('birthPanel').style.display='block';
+  document.getElementById('btnEdit').style.display='none';
+}
+// điền sẵn ngày sinh đã nhớ (nếu có); tự luận nếu đến qua ?auto=1 (từ nút Lá số).
+// Chạy SAU khi shell.js render rail (boot ở DOMContentLoaded) để Shell.setContext không lỗi.
+function _pageInit(){
+  Shell.prefillForm();
+  updateGioAm();
+  if(Shell.autoRun()&&document.getElementById('inpDd').value)doLuan();
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_pageInit);
+else _pageInit();
+</script>
+</body>
+</html>
