@@ -74,7 +74,7 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Xem tuổi vợ chồng</b><span>So hòa hợp hai lá số theo cổ pháp</span></div>
+      <div class="ws-title"><b id="wsTitle">Xem tuổi vợ chồng</b><span id="wsSub">So hòa hợp hai lá số theo cổ pháp</span></div>
       <div class="ws-actions">
         <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa thông tin</button>
         <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
@@ -82,11 +82,11 @@
     </div>
     <div class="ws-body">
       <div class="form-card" id="birthPanel">
-        <h2>Nhập ngày sinh hai người (dương lịch)</h2>
-        <p class="sub">So hòa hợp trên hai lá số theo cổ pháp: xét tuổi, ngũ hành, tư tưởng, quan hệ, con cái, tài chính. Có kết quả rồi, hỏi trợ lý luận sâu ở khung bên phải.</p>
+        <h2 id="fH2">Nhập ngày sinh hai người (dương lịch)</h2>
+        <p class="sub" id="fSub">So hòa hợp trên hai lá số theo cổ pháp: xét tuổi, ngũ hành, tư tưởng, quan hệ, con cái, tài chính. Có kết quả rồi, hỏi trợ lý luận sâu ở khung bên phải.</p>
         <div class="two">
           <div class="person">
-            <h3><span class="dotA"></span> Người thứ nhất</h3>
+            <h3 id="pA"><span class="dotA"></span> Người thứ nhất</h3>
             <div class="frow">
               <div class="fg" style="flex:2;min-width:120px"><label>Họ tên</label><input type="text" id="aName" placeholder="Chồng / Người A"></div>
               <div class="fg" style="width:78px"><label>Giới tính</label><select id="aGender"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
@@ -103,7 +103,7 @@
             </div>
           </div>
           <div class="person">
-            <h3><span class="dotB"></span> Người thứ hai</h3>
+            <h3 id="pB"><span class="dotB"></span> Người thứ hai</h3>
             <div class="frow">
               <div class="fg" style="flex:2;min-width:120px"><label>Họ tên</label><input type="text" id="bName" placeholder="Vợ / Người B"></div>
               <div class="fg" style="width:78px"><label>Giới tính</label><select id="bGender"><option value="nu">Nữ</option><option value="nam">Nam</option></select></div>
@@ -134,13 +134,39 @@
   <aside class="rail" id="shell-rail"></aside>
 </div>
 
-<script>window.SHELL_ACTIVE='xem-tuoi';</script>
+<script>window.SHELL_ACTIVE=location.pathname.indexOf('lam-an')>=0?'xem-lam-an':'xem-tuoi';</script>
 <script src="/laso-chart.js?v=2"></script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tuong-hop.js?v=1"></script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=4"></script>
+<script src="/shell.js?v=5"></script>
 <script>
+// ── MODE: 1 trang phục vụ 2 route — /app/xem-tuoi (vợ chồng) & /app/xem-lam-an
+// (hợp tác làm ăn). Cùng bộ máy calcTuongHop; chỉ khác khung diễn giải + kênh
+// scenario (server run.ts xử lý xem-tuoi/xem-lam-an y hệt = 2 lá số).
+var IS_LAMAN=location.pathname.indexOf('lam-an')>=0;
+var MODE=IS_LAMAN?{
+  active:'xem-lam-an', scenarioType:'xem-lam-an',
+  title:'Xem tuổi làm ăn', sub:'So hợp hai người khi bắt tay hợp tác',
+  docTitle:'Xem tuổi làm ăn — Tử Vi Minh Bảo',
+  h2:'Nhập ngày sinh hai đối tác (dương lịch)',
+  formSub:'So hòa hợp hợp tác trên hai lá số theo cổ pháp: xét tuổi, ngũ hành, tư tưởng, quan hệ, tài chính, vận hành. Có kết quả rồi, hỏi trợ lý luận sâu ở khung bên phải.',
+  pA:'Đối tác thứ nhất', pB:'Đối tác thứ hai', phA:'Đối tác A', phB:'Đối tác B',
+  btn:'Xem hợp tác →', btnBusy:'Đang xét hợp tác…', verb:'Xét hợp tác',
+  chips:['Hai người hợp làm ăn chung không?','Ai nên nắm tài chính?','Chiều nào dễ xung đột khi hợp tác?','Nên góp vốn hay chia việc?'],
+  greetVerb:'Đã xét hợp tác'
+}:{
+  active:'xem-tuoi', scenarioType:'xem-tuoi',
+  title:'Xem tuổi vợ chồng', sub:'So hòa hợp hai lá số theo cổ pháp',
+  docTitle:'Xem tuổi vợ chồng — Tử Vi Minh Bảo',
+  h2:'Nhập ngày sinh hai người (dương lịch)',
+  formSub:'So hòa hợp trên hai lá số theo cổ pháp: xét tuổi, ngũ hành, tư tưởng, quan hệ, con cái, tài chính. Có kết quả rồi, hỏi trợ lý luận sâu ở khung bên phải.',
+  pA:'Người thứ nhất', pB:'Người thứ hai', phA:'Chồng / Người A', phB:'Vợ / Người B',
+  btn:'So tuổi →', btnBusy:'Đang so tuổi…', verb:'So tuổi',
+  chips:['Hai người có hợp làm vợ chồng không?','Chiều nào đáng lo nhất?','Cách hóa giải điểm khắc?','Đường con cái của hai người thế nào?'],
+  greetVerb:'Đã so tuổi'
+};
+
 // ── Dropdowns cho cả 2 người ──
 (function(){
   ['a','b'].forEach(function(k){
@@ -181,7 +207,7 @@ function doCompat(){
   var A=readPerson('a'),B=readPerson('b');
   if(!A.dd||!A.mm||!A.yyyy||!B.dd||!B.mm||!B.yyyy){ alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh cho cả hai người.'); return; }
   var namxem=new Date().getFullYear();
-  btn.disabled=true;btn.textContent='Đang so tuổi…';
+  btn.disabled=true;btn.textContent=MODE.btnBusy;
   try{
     var nameA=A.name||'Người A',nameB=B.name||'Người B';
     var ca=computeLs(A,namxem),cb=computeLs(B,namxem);
@@ -194,10 +220,10 @@ function doCompat(){
     var birthA={day:A.dd,month:A.mm,year:A.yyyy,hourBranch:ca.hourBranch,gender:A.gender,name:nameA};
     var birthB={day:B.dd,month:B.mm,year:B.yyyy,hourBranch:cb.hourBranch,gender:B.gender,name:nameB};
     Shell.setContext({
-      scenario:{type:'xem-tuoi',data:{birthA:birthA,birthB:birthB,nameA:nameA,nameB:nameB}},
-      label:'So tuổi '+nameA+' × '+nameB,
-      greeting:'Đã so tuổi **'+esc(nameA)+'** và **'+esc(nameB)+'** — hòa hợp **'+r.total+'/100**. Hỏi tôi để luận sâu bất kỳ chiều nào nhé.',
-      chips:['Hai người có hợp làm vợ chồng không?','Chiều nào đáng lo nhất?','Cách hóa giải điểm khắc?','Đường con cái của hai người thế nào?']
+      scenario:{type:MODE.scenarioType,data:{birthA:birthA,birthB:birthB,nameA:nameA,nameB:nameB}},
+      label:MODE.verb+' '+nameA+' × '+nameB,
+      greeting:MODE.greetVerb+' **'+esc(nameA)+'** và **'+esc(nameB)+'** — hòa hợp **'+r.total+'/100**. Hỏi tôi để luận sâu bất kỳ chiều nào nhé.',
+      chips:MODE.chips
     });
   }catch(e){
     document.getElementById('xtBody').innerHTML='<div class="laso-error">Lỗi khi so tuổi: '+esc(e.message)+'</div>';
@@ -206,7 +232,7 @@ function doCompat(){
     document.getElementById('btnEdit').style.display='';
     if(window.console)console.error(e);
   }finally{
-    btn.disabled=false;btn.textContent='So tuổi →';
+    btn.disabled=false;btn.textContent=MODE.btn;
   }
 }
 
@@ -247,7 +273,17 @@ function showForm(){
   document.getElementById('birthPanel').style.display='block';
   document.getElementById('btnEdit').style.display='none';
 }
-function _pageInit(){ updateGio('a'); updateGio('b'); }
+function applyMode(){
+  document.title=MODE.docTitle;
+  var set=function(id,txt){var el=document.getElementById(id);if(el)el.textContent=txt;};
+  set('wsTitle',MODE.title); set('wsSub',MODE.sub); set('fH2',MODE.h2); set('fSub',MODE.formSub);
+  document.getElementById('pA').innerHTML='<span class="dotA"></span> '+MODE.pA;
+  document.getElementById('pB').innerHTML='<span class="dotB"></span> '+MODE.pB;
+  document.getElementById('aName').placeholder=MODE.phA;
+  document.getElementById('bName').placeholder=MODE.phB;
+  document.getElementById('btnGo').textContent=MODE.btn;
+}
+function _pageInit(){ applyMode(); updateGio('a'); updateGio('b'); }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_pageInit);
 else _pageInit();
 </script>

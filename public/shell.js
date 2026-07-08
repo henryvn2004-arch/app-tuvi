@@ -18,7 +18,7 @@
     ] },
     { group: 'Xem Tuổi · Đặt Tên', items: [
       { id: 'xem-tuoi',   label: 'Xem tuổi vợ chồng',   href: '/app/xem-tuoi' },
-      { id: 'xem-lam-an', label: 'Xem tuổi làm ăn',     href: '/xem-lam-an.html' },
+      { id: 'xem-lam-an', label: 'Xem tuổi làm ăn',     href: '/app/xem-lam-an' },
       { id: 'dat-ten',    label: 'Đặt tên con',         href: '/dat-ten' },
       { id: 'chon-ngay',  label: 'Chọn ngày tốt',       href: '/chon-ngay' },
     ] },
