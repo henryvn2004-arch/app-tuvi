@@ -4,6 +4,7 @@ const nextConfig = {
   async rewrites() {
     return [
       { source: '/',                    destination: '/index.html'           },
+      { source: '/app',                 destination: '/app.html'             },
       { source: '/xem-tuoi',            destination: '/xem-tuoi.html'        },
       { source: '/xem-lam-an',          destination: '/xem-lam-an.html'      },
       { source: '/la-so',               destination: '/la-so.html'           },
