@@ -184,6 +184,19 @@ a { color: var(--blue); text-decoration: none; }
   .hero-attribution { font-size: 11px; letter-spacing: 0.1em; padding-left: 0; padding-right: 0; }
 }
 
+/* CTA vào không gian làm việc mới (/app) */
+.hero-cta {
+  display: inline-flex; align-items: center; gap: 9px;
+  margin-bottom: 26px;
+  font-family: 'Noto Serif', Georgia, serif; font-size: 15px;
+  color: #2a1e05; background: linear-gradient(135deg, var(--gold-bright), #b8963f);
+  padding: 12px 24px; border-radius: 8px; text-decoration: none;
+  box-shadow: 0 4px 18px rgba(201,168,76,0.28); transition: transform .15s, box-shadow .15s;
+}
+.hero-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(201,168,76,0.4); }
+.hero-cta .hc-spark { font-size: 16px; }
+.hero-cta .hc-tag { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; background: rgba(6,26,46,0.14); padding: 2px 7px; border-radius: 20px; font-family: Arial, sans-serif; }
+
 /* ── TAB NAV (sticky) ──────────────────────────────────────── */
 .tab-nav-wrap {
   position: sticky; top: 60px;
@@ -475,6 +488,11 @@ a { color: var(--blue); text-decoration: none; }
             Mệnh do trời định, vận do mình tạo. <em>Biết được mệnh để hiểu mình, biết được vận để chọn đúng đường.</em>
           </p>
         </div>
+
+        <a href="/app" class="hero-cta">
+          <span class="hc-spark">✦</span> Mở không gian làm việc
+          <span class="hc-tag">Mới</span>
+        </a>
 
         <div class="hero-attribution">
           Theo cổ pháp · 紫微鬥數 · 子平八字 · 麻衣神相 · 八宅明鏡
