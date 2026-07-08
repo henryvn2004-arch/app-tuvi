@@ -11,8 +11,11 @@
 
   // ── NGUỒN DUY NHẤT: danh sách công cụ (render cả sidebar lẫn Cmd+K) ──
   var TOOLS = [
+    { group: 'Không gian', open: true, items: [
+      { id: 'home',       label: 'Tổng quan',           href: '/app',            icon: 'home' },
+    ] },
     { group: 'Tử Vi · Tứ Trụ', open: true, items: [
-      { id: 'la-so',      label: 'Lá số Tử Vi',         href: '/app',            icon: 'grid' },
+      { id: 'la-so',      label: 'Lá số Tử Vi',         href: '/app/la-so',      icon: 'grid' },
       { id: 'bat-tu',     label: 'Lá số Bát Tự',        href: '/app/bat-tu',     icon: 'rows' },
       { id: 'luan-giai',  label: 'Luận giải chuyên sâu', href: '/app/luan-giai',  icon: 'doc', cost: 5 },
     ] },
@@ -41,6 +44,7 @@
     clock: '<path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="9"/>',
     bolt: '<path d="M13 2 3 14h7l-1 8 10-12h-7z"/>',
     dot: '<circle cx="12" cy="12" r="6"/>',
+    home: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',
   };
   function svg(name, cls) {
     return '<svg class="' + (cls || 'ic') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">' + (ICONS[name] || ICONS.dot) + '</svg>';
