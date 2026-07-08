@@ -9,6 +9,8 @@ const nextConfig = {
       { source: '/app/bat-tu',          destination: '/app-bat-tu.html'      },
       { source: '/app/xem-tuoi',        destination: '/app-xem-tuoi.html'    },
       { source: '/app/xem-lam-an',      destination: '/app-xem-tuoi.html'    },
+      { source: '/app/dat-ten',         destination: '/app-dat-ten.html'     },
+      { source: '/app/chon-ngay',       destination: '/app-chon-ngay.html'   },
       { source: '/xem-tuoi',            destination: '/xem-tuoi.html'        },
       { source: '/xem-lam-an',          destination: '/xem-lam-an.html'      },
       { source: '/la-so',               destination: '/la-so.html'           },

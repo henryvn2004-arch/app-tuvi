@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chọn ngày tốt — Tử Vi Minh Bảo</title>
+<meta name="description" content="Chọn ngày giờ tốt hợp tuổi theo can chi cho cưới hỏi, khai trương, nhập trạch, động thổ — hỏi trợ lý AI luận ngày đẹp và ngày cần tránh.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shell.css?v=1">
+<style>
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
+.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
+.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:13px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
+.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
+.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
+.btn-go:disabled{opacity:.6;cursor:not-allowed}
+#resPanel{display:none}
+.res-head{font-family:var(--serif);font-size:15px;font-weight:600;margin-bottom:12px}
+.cc-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.cc-card{flex:1;min-width:150px;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:12px 14px;box-shadow:var(--shadow)}
+.cc-card .who{font-size:10.5px;color:var(--text-lt);text-transform:uppercase;letter-spacing:.04em}
+.cc-card .cc{font-family:var(--serif);font-size:19px;font-weight:600;margin-top:2px}
+.cc-card .na{font-size:12px;color:var(--text-mid);margin-top:2px}
+.note{background:var(--gold-lt);border:1px solid var(--gold-soft);border-radius:10px;padding:12px 15px;font-size:13px;color:var(--text-mid);line-height:1.65;margin-bottom:6px}
+.note b{color:var(--text)}
+.ask{margin-top:12px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
+.laso-error{color:var(--red);padding:14px;border:1px solid var(--red);border-radius:10px;background:var(--white)}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Chọn ngày tốt</b><span>Ngày giờ hợp tuổi cho việc trọng đại</span></div>
+      <div class="ws-actions">
+        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa thông tin</button>
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div class="form-card" id="birthPanel">
+        <h2>Thông tin chọn ngày</h2>
+        <p class="sub">Lấy can chi tuổi người chủ sự và tháng/năm dự định làm nền, rồi hỏi trợ lý luận ngày đẹp, giờ hoàng đạo và ngày cần tránh.</p>
+        <div class="frow">
+          <div class="fg" style="flex:2;min-width:160px"><label>Việc cần chọn ngày</label>
+            <select id="inpSuKien">
+              <option value="Cưới hỏi">Cưới hỏi</option>
+              <option value="Ăn hỏi / dạm ngõ">Ăn hỏi / dạm ngõ</option>
+              <option value="Khai trương">Khai trương</option>
+              <option value="Nhập trạch (về nhà mới)">Nhập trạch (về nhà mới)</option>
+              <option value="Động thổ / khởi công">Động thổ / khởi công</option>
+              <option value="Ký kết hợp đồng">Ký kết hợp đồng</option>
+              <option value="Xuất hành">Xuất hành</option>
+              <option value="Mua xe">Mua xe</option>
+            </select>
+          </div>
+          <div class="fg" style="flex:1;min-width:130px"><label>Họ tên người chủ sự</label><input type="text" id="inpHoTen" placeholder="Nguyễn Văn A"></div>
+        </div>
+        <div class="frow" style="margin-bottom:4px">
+          <div class="fg" style="width:120px"><label>Năm sinh</label><input type="number" id="inpNamSinh" placeholder="1990" min="1900" max="2100"></div>
+          <div class="fg" style="width:90px"><label>Tháng (DL)</label><select id="inpThang"></select></div>
+          <div class="fg" style="width:110px"><label>Năm (DL)</label><input type="number" id="inpNam" value="2026" min="1900" max="2100"></div>
+          <button class="btn-go" id="btnGo" onclick="doChonNgay()">Lập nền →</button>
+        </div>
+      </div>
+
+      <div id="resPanel">
+        <div class="res-head" id="resHead"></div>
+        <div class="cc-row" id="ccRow"></div>
+        <div class="note" id="resNote"></div>
+        <div class="ask" data-ask="Trong tháng và năm này, những ngày nào đẹp nhất hợp tuổi tôi cho việc trên? Nêu vài ngày cụ thể kèm giờ hoàng đạo và ngày cần tránh.">✦ Hỏi trợ lý chọn ngày đẹp</div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='chon-ngay';</script>
+<script src="/can-chi.js?v=1"></script>
+<script src="/auth.js"></script>
+<script src="/shell.js?v=6"></script>
+<script>
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+(function(){ var t=document.getElementById('inpThang'); for(var i=1;i<=12;i++)t.innerHTML+='<option value="'+i+'">Tháng '+i+'</option>'; var now=new Date(); t.value=String(now.getMonth()+1); document.getElementById('inpNam').value=now.getFullYear(); })();
+
+function doChonNgay(){
+  var btn=document.getElementById('btnGo');
+  var suKien=document.getElementById('inpSuKien').value;
+  var hoTen=document.getElementById('inpHoTen').value.trim();
+  var namSinh=parseInt(document.getElementById('inpNamSinh').value);
+  var thangNum=parseInt(document.getElementById('inpThang').value);
+  var namNum=parseInt(document.getElementById('inpNam').value);
+  if(!hoTen||!namSinh||!thangNum||!namNum){ alert('Vui lòng nhập họ tên, năm sinh, tháng và năm dự định.'); return; }
+  btn.disabled=true;
+  try{
+    var info=CanChi.ccInfo(namSinh);
+    var thangCC=CanChi.ccThangCanChi(thangNum,namNum);
+    var namCC=(CanChi.ccInfo(namNum)||{}).canChi||'';
+    document.getElementById('resHead').textContent=suKien+' · '+esc(hoTen);
+    function ccCard(who,cc,na){ return '<div class="cc-card"><div class="who">'+esc(who)+'</div><div class="cc">'+esc(cc)+'</div>'+(na?'<div class="na">'+esc(na)+'</div>':'')+'</div>'; }
+    document.getElementById('ccRow').innerHTML=
+      ccCard('Tuổi chủ sự',info.canChi,info.napAm+' · '+info.hanh)+
+      ccCard('Tháng '+thangNum+'/'+namNum,thangCC,'')+
+      ccCard('Năm '+namNum,namCC,'');
+    document.getElementById('resNote').innerHTML='Chủ sự tuổi <b>'+esc(info.canChi)+'</b> ('+esc(info.hanh)+'). Tháng dự định <b>'+esc(thangCC)+'</b>, năm <b>'+esc(namCC)+'</b>. Ngày tốt cần <b>hợp</b> (lục hợp / tam hợp) với tuổi chủ sự và tránh <b>xung / hình</b>. Hỏi trợ lý để có ngày &amp; giờ hoàng đạo cụ thể cho việc <b>'+esc(suKien.toLowerCase())+'</b>.';
+    document.getElementById('birthPanel').style.display='none';
+    document.getElementById('resPanel').style.display='block';
+    document.getElementById('btnEdit').style.display='';
+    Shell.setContext({
+      scenario:{type:'chon-ngay-tot',data:{suKien:suKien,hoTen:hoTen,namSinh:namSinh,thangNum:thangNum,namNum:namNum}},
+      label:'Chọn ngày '+suKien+' · '+hoTen+' · T'+thangNum+'/'+namNum,
+      greeting:'Đã lập nền cho việc **'+esc(suKien)+'** (chủ sự tuổi **'+esc(info.canChi)+'**). Bạn muốn tôi tư vấn gì trước?',
+      chips:['Ngày nào đẹp nhất trong tháng này?','Giờ hoàng đạo cho việc này?','Ngày nào cần tuyệt đối tránh?','Hướng xuất hành tốt trong ngày đó?']
+    });
+    document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
+  }catch(e){
+    document.getElementById('ccRow').innerHTML='<div class="laso-error">Lỗi: '+esc(e.message)+'</div>';
+    document.getElementById('birthPanel').style.display='none';
+    document.getElementById('resPanel').style.display='block';
+    document.getElementById('btnEdit').style.display='';
+    if(window.console)console.error(e);
+  }finally{ btn.disabled=false; }
+}
+function showForm(){
+  document.getElementById('resPanel').style.display='none';
+  document.getElementById('birthPanel').style.display='block';
+  document.getElementById('btnEdit').style.display='none';
+}
+</script>
+</body>
+</html>
