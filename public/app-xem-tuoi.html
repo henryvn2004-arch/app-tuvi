@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xem tuổi vợ chồng — Tử Vi Minh Bảo</title>
+<meta name="description" content="So tuổi vợ chồng theo lá số Tử Vi: điểm hòa hợp 8 chiều (tuổi, ngũ hành, tư tưởng, quan hệ, con cái, tài chính) — và hỏi trợ lý AI luận sâu.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shell.css?v=1">
+<style>
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:720px}
+.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.two{display:flex;gap:16px;flex-wrap:wrap}
+.person{flex:1;min-width:270px;border:1px solid var(--line);border-radius:10px;padding:12px 13px;background:var(--paper)}
+.person h3{font-family:var(--serif);font-size:13.5px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.dotA,.dotB{width:10px;height:10px;border-radius:50%}
+.dotA{background:var(--red)}.dotB{background:var(--blue)}
+.frow{display:flex;gap:9px;flex-wrap:wrap;align-items:flex-end;margin-bottom:11px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:10px;font-weight:600;color:var(--text-lt);letter-spacing:.03em;text-transform:uppercase}
+.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:7px 9px;font-size:13px;font-family:inherit;color:var(--text);background:var(--white);outline:none}
+.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
+.gio-hint{font-size:11.5px;color:var(--text-lt);align-self:center;padding-bottom:4px}
+.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif);margin-top:14px}
+.btn-go:disabled{opacity:.6;cursor:not-allowed}
+
+#xtPanel{display:none}
+.xt-body{max-width:760px}
+/* verdict hero */
+.verdict{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);margin-bottom:16px;text-align:center}
+.verdict .who{font-size:13px;color:var(--text-mid);margin-bottom:10px}
+.verdict .who b{color:var(--text);font-family:var(--serif)}
+.verdict .big{font-family:var(--serif);font-size:52px;font-weight:700;line-height:1}
+.verdict .big small{font-size:20px;color:var(--text-lt);font-weight:400}
+.verdict .lbl{font-family:var(--serif);font-size:17px;font-weight:600;margin-top:4px}
+.meter{height:9px;border-radius:9px;background:var(--paper-2);margin:14px auto 0;max-width:420px;overflow:hidden}
+.meter i{display:block;height:100%;border-radius:9px;transition:width .5s}
+/* factor rows */
+.sec{margin-bottom:22px}
+.sec-h{display:flex;align-items:center;gap:11px;margin-bottom:11px}
+.sec-n{width:26px;height:26px;flex:0 0 auto;border-radius:7px;background:var(--navy);color:var(--gold);font-family:var(--serif);font-size:13px;display:flex;align-items:center;justify-content:center;font-weight:600}
+.sec-h h3{font-family:var(--serif);font-size:18px;font-weight:600}
+.card{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:6px 17px;box-shadow:var(--shadow)}
+.fac{padding:13px 0;border-bottom:1px solid var(--line)}
+.fac:last-child{border-bottom:none}
+.fac-top{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.fac-lb{font-family:var(--serif);font-size:14px;font-weight:600;width:98px;flex:0 0 auto}
+.fac-w{font-size:10.5px;color:var(--text-lt);border:1px solid var(--line-2);border-radius:20px;padding:1px 7px}
+.fac-detail{font-size:12px;color:var(--text-mid);flex:1;min-width:0;text-align:right}
+.fac-num{width:40px;text-align:right;font-family:var(--serif);font-weight:600;font-size:15px;font-variant-numeric:tabular-nums}
+.fac-bar{height:5px;border-radius:5px;background:var(--paper-2);overflow:hidden;margin-bottom:7px}
+.fac-bar i{display:block;height:100%;border-radius:5px}
+.fac-ab{display:flex;gap:8px;font-size:11.5px;color:var(--text-lt)}
+.fac-ab span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fac-ab .pa{color:var(--red)}.fac-ab .pb{color:var(--blue)}
+.who-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.who-card{flex:1;min-width:180px;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:11px 13px;box-shadow:var(--shadow)}
+.who-card .nm{font-family:var(--serif);font-size:14px;font-weight:600;display:flex;align-items:center;gap:7px}
+.who-card .meta{font-size:12px;color:var(--text-lt);margin-top:4px;line-height:1.6}
+.who-card .meta b{color:var(--text-mid)}
+.ask{margin-top:12px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
+.laso-error{color:var(--red);padding:14px;border:1px solid var(--red);border-radius:10px;background:var(--white)}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Xem tuổi vợ chồng</b><span>So hòa hợp hai lá số theo cổ pháp</span></div>
+      <div class="ws-actions">
+        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa thông tin</button>
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div class="form-card" id="birthPanel">
+        <h2>Nhập ngày sinh hai người (dương lịch)</h2>
+        <p class="sub">So hòa hợp trên hai lá số theo cổ pháp: xét tuổi, ngũ hành, tư tưởng, quan hệ, con cái, tài chính. Có kết quả rồi, hỏi trợ lý luận sâu ở khung bên phải.</p>
+        <div class="two">
+          <div class="person">
+            <h3><span class="dotA"></span> Người thứ nhất</h3>
+            <div class="frow">
+              <div class="fg" style="flex:2;min-width:120px"><label>Họ tên</label><input type="text" id="aName" placeholder="Chồng / Người A"></div>
+              <div class="fg" style="width:78px"><label>Giới tính</label><select id="aGender"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
+            </div>
+            <div class="frow">
+              <div class="fg" style="width:66px"><label>Ngày</label><select id="aDd"></select></div>
+              <div class="fg" style="width:72px"><label>Tháng</label><select id="aMm"></select></div>
+              <div class="fg" style="width:78px"><label>Năm</label><input type="number" id="aYyyy" value="1990" min="1900" max="2099"></div>
+            </div>
+            <div class="frow" style="margin-bottom:0">
+              <div class="fg" style="width:64px"><label>Giờ</label><select id="aHh"></select></div>
+              <div class="fg" style="width:64px"><label>Phút</label><select id="aPp"></select></div>
+              <span class="gio-hint" id="aGioHint">Giờ: —</span>
+            </div>
+          </div>
+          <div class="person">
+            <h3><span class="dotB"></span> Người thứ hai</h3>
+            <div class="frow">
+              <div class="fg" style="flex:2;min-width:120px"><label>Họ tên</label><input type="text" id="bName" placeholder="Vợ / Người B"></div>
+              <div class="fg" style="width:78px"><label>Giới tính</label><select id="bGender"><option value="nu">Nữ</option><option value="nam">Nam</option></select></div>
+            </div>
+            <div class="frow">
+              <div class="fg" style="width:66px"><label>Ngày</label><select id="bDd"></select></div>
+              <div class="fg" style="width:72px"><label>Tháng</label><select id="bMm"></select></div>
+              <div class="fg" style="width:78px"><label>Năm</label><input type="number" id="bYyyy" value="1992" min="1900" max="2099"></div>
+            </div>
+            <div class="frow" style="margin-bottom:0">
+              <div class="fg" style="width:64px"><label>Giờ</label><select id="bHh"></select></div>
+              <div class="fg" style="width:64px"><label>Phút</label><select id="bPp"></select></div>
+              <span class="gio-hint" id="bGioHint">Giờ: —</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn-go" id="btnGo" onclick="doCompat()">So tuổi →</button>
+      </div>
+
+      <div id="xtPanel">
+        <div class="verdict" id="xtVerdict"></div>
+        <div class="who-row" id="xtWho"></div>
+        <div class="xt-body" id="xtBody"></div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='xem-tuoi';</script>
+<script src="/laso-chart.js?v=2"></script>
+<script src="/tuvi-ansao-engine.js"></script>
+<script src="/tuong-hop.js?v=1"></script>
+<script src="/auth.js"></script>
+<script src="/shell.js?v=4"></script>
+<script>
+// ── Dropdowns cho cả 2 người ──
+(function(){
+  ['a','b'].forEach(function(k){
+    var dd=document.getElementById(k+'Dd'),mm=document.getElementById(k+'Mm'),hh=document.getElementById(k+'Hh'),pp=document.getElementById(k+'Pp');
+    dd.innerHTML='<option value="">Ngày</option>';mm.innerHTML='<option value="">Tháng</option>';
+    for(var i=1;i<=31;i++)dd.innerHTML+='<option value="'+i+'">'+i+'</option>';
+    for(var j=1;j<=12;j++)mm.innerHTML+='<option value="'+j+'">'+j+'</option>';
+    for(var h=0;h<=23;h++)hh.innerHTML+='<option value="'+h+'">'+String(h).padStart(2,'0')+'</option>';
+    for(var p=0;p<=59;p++)pp.innerHTML+='<option value="'+p+'">'+String(p).padStart(2,'0')+'</option>';
+    hh.addEventListener('change',function(){updateGio(k)});pp.addEventListener('change',function(){updateGio(k)});
+  });
+})();
+function updateGio(k){
+  var h=parseInt(document.getElementById(k+'Hh').value)||0,p=parseInt(document.getElementById(k+'Pp').value)||0;
+  document.getElementById(k+'GioHint').textContent='Giờ: '+CHI[hourMinToGioAm(h,p)];
+}
+function meterColor(s){ return s>=75?'var(--green)':s>=55?'var(--blue)':s>=35?'var(--gold-soft)':'var(--red)'; }
+function facColor(s){ return s>=8?'var(--green)':s>=6?'var(--blue)':s>=4?'var(--gold-soft)':'var(--red)'; }
+function verdictLabel(s){ return s>=75?'Rất hợp':s>=55?'Khá hợp':s>=35?'Bình hòa':'Cần lưu ý'; }
+
+function readPerson(k){
+  var name=document.getElementById(k+'Name').value.trim();
+  var gender=document.getElementById(k+'Gender').value;
+  var dd=parseInt(document.getElementById(k+'Dd').value),mm=parseInt(document.getElementById(k+'Mm').value),yyyy=parseInt(document.getElementById(k+'Yyyy').value);
+  var hh=parseInt(document.getElementById(k+'Hh').value)||0,pp=parseInt(document.getElementById(k+'Pp').value)||0;
+  return {name:name,gender:gender,dd:dd,mm:mm,yyyy:yyyy,hh:hh,pp:pp};
+}
+function computeLs(pr,namxem){
+  var gioAmIdx=hourMinToGioAm(pr.hh,pr.pp);
+  var conv=convertDuongToAm(pr.dd,pr.mm,pr.yyyy,pr.hh);
+  var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioAmIdx,gioitinh:pr.gender,namXem:namxem});
+  ls.chiNam=conv.chiNam; // anSaoLaSo không re-expose chiNam ở top-level → gắn lại (như xem-tuoi.html)
+  return {ls:ls,hourBranch:gioAmIdx};
+}
+
+function doCompat(){
+  var btn=document.getElementById('btnGo');
+  var A=readPerson('a'),B=readPerson('b');
+  if(!A.dd||!A.mm||!A.yyyy||!B.dd||!B.mm||!B.yyyy){ alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh cho cả hai người.'); return; }
+  var namxem=new Date().getFullYear();
+  btn.disabled=true;btn.textContent='Đang so tuổi…';
+  try{
+    var nameA=A.name||'Người A',nameB=B.name||'Người B';
+    var ca=computeLs(A,namxem),cb=computeLs(B,namxem);
+    var r=TuongHop.calcTuongHop(ca.ls,cb.ls,nameA,nameB);
+    renderCompat(r,nameA,nameB);
+    document.getElementById('birthPanel').style.display='none';
+    document.getElementById('xtPanel').style.display='block';
+    document.getElementById('btnEdit').style.display='';
+    // Rail: gửi scenario xem-tuoi (server tự lập 2 lá số từ birthA/birthB).
+    var birthA={day:A.dd,month:A.mm,year:A.yyyy,hourBranch:ca.hourBranch,gender:A.gender,name:nameA};
+    var birthB={day:B.dd,month:B.mm,year:B.yyyy,hourBranch:cb.hourBranch,gender:B.gender,name:nameB};
+    Shell.setContext({
+      scenario:{type:'xem-tuoi',data:{birthA:birthA,birthB:birthB,nameA:nameA,nameB:nameB}},
+      label:'So tuổi '+nameA+' × '+nameB,
+      greeting:'Đã so tuổi **'+esc(nameA)+'** và **'+esc(nameB)+'** — hòa hợp **'+r.total+'/100**. Hỏi tôi để luận sâu bất kỳ chiều nào nhé.',
+      chips:['Hai người có hợp làm vợ chồng không?','Chiều nào đáng lo nhất?','Cách hóa giải điểm khắc?','Đường con cái của hai người thế nào?']
+    });
+  }catch(e){
+    document.getElementById('xtBody').innerHTML='<div class="laso-error">Lỗi khi so tuổi: '+esc(e.message)+'</div>';
+    document.getElementById('birthPanel').style.display='none';
+    document.getElementById('xtPanel').style.display='block';
+    document.getElementById('btnEdit').style.display='';
+    if(window.console)console.error(e);
+  }finally{
+    btn.disabled=false;btn.textContent='So tuổi →';
+  }
+}
+
+function renderCompat(r,nameA,nameB){
+  var col=meterColor(r.total);
+  document.getElementById('xtVerdict').innerHTML=
+    '<div class="who"><b>'+esc(nameA)+'</b> <span style="color:var(--text-lt)">×</span> <b>'+esc(nameB)+'</b></div>'+
+    '<div class="big" style="color:'+col+'">'+r.total+'<small>/100</small></div>'+
+    '<div class="lbl" style="color:'+col+'">'+verdictLabel(r.total)+'</div>'+
+    '<div class="meter"><i style="width:'+r.total+'%;background:'+col+'"></i></div>';
+
+  // per-person summary
+  function who(ls,name,cls){
+    var menh=(ls.palaces||[]).find(function(p){return p.isMenh});
+    var chinh=menh&&menh.majorStars.length?menh.majorStars.map(function(s){return s.ten}).join(' · '):'VCD';
+    return '<div class="who-card"><div class="nm"><span class="dot'+cls+'"></span>'+esc(name)+'</div>'+
+      '<div class="meta"><b>'+esc(ls.canChiNam||'')+'</b> · nạp âm '+esc(ls.napAm||'')+'<br>Cung Mệnh '+esc(menh?menh.diaChi:'?')+' · '+esc(chinh)+'</div></div>';
+  }
+  document.getElementById('xtWho').innerHTML=who(r.lsA,nameA,'A')+who(r.lsB,nameB,'B');
+
+  // factor rows
+  var facs=r.items.map(function(m){
+    var c=facColor(m.score);
+    return '<div class="fac"><div class="fac-top"><span class="fac-lb">'+esc(m.label)+'</span><span class="fac-w">×'+Math.round(m.w*100)+'%</span><span class="fac-detail">'+esc(m.detail||'')+'</span><span class="fac-num" style="color:'+c+'">'+m.score+'</span></div>'+
+      '<div class="fac-bar"><i style="width:'+(m.score*10)+'%;background:'+c+'"></i></div>'+
+      '<div class="fac-ab"><span class="pa">'+esc(nameA)+': '+esc(m.a||'')+'</span><span class="pb">'+esc(nameB)+': '+esc(m.b||'')+'</span></div></div>';
+  }).join('');
+  document.getElementById('xtBody').innerHTML=
+    '<section class="sec"><div class="sec-h"><div class="sec-n">✦</div><h3>Điểm hòa hợp 8 chiều</h3></div>'+
+    '<div class="card">'+facs+'</div>'+
+    '<div class="ask" data-ask="Luận sâu mức độ hòa hợp của hai người, đâu là điểm mạnh và điểm cần lưu ý?">✦ Hỏi trợ lý luận sâu kết quả này</div>'+
+    '</section>';
+  document.querySelectorAll('#xtBody [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
+}
+
+function showForm(){
+  document.getElementById('xtPanel').style.display='none';
+  document.getElementById('birthPanel').style.display='block';
+  document.getElementById('btnEdit').style.display='none';
+}
+function _pageInit(){ updateGio('a'); updateGio('b'); }
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_pageInit);
+else _pageInit();
+</script>
+</body>
+</html>

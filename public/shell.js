@@ -17,7 +17,7 @@
       { id: 'luan-giai',  label: 'Luận giải chuyên sâu', href: '/app/luan-giai',  icon: 'doc', cost: 5 },
     ] },
     { group: 'Xem Tuổi · Đặt Tên', items: [
-      { id: 'xem-tuoi',   label: 'Xem tuổi vợ chồng',   href: '/xem-tuoi.html' },
+      { id: 'xem-tuoi',   label: 'Xem tuổi vợ chồng',   href: '/app/xem-tuoi' },
       { id: 'xem-lam-an', label: 'Xem tuổi làm ăn',     href: '/xem-lam-an.html' },
       { id: 'dat-ten',    label: 'Đặt tên con',         href: '/dat-ten' },
       { id: 'chon-ngay',  label: 'Chọn ngày tốt',       href: '/chon-ngay' },
