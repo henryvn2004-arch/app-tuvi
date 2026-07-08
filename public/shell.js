@@ -13,14 +13,14 @@
   var TOOLS = [
     { group: 'Tử Vi · Tứ Trụ', open: true, items: [
       { id: 'la-so',      label: 'Lá số Tử Vi',         href: '/app',            icon: 'grid' },
-      { id: 'bat-tu',     label: 'Lá số Bát Tự',        href: '/tu-binh.html',   icon: 'rows' },
+      { id: 'bat-tu',     label: 'Lá số Bát Tự',        href: '/app/bat-tu',     icon: 'rows' },
       { id: 'luan-giai',  label: 'Luận giải chuyên sâu', href: '/app/luan-giai',  icon: 'doc', cost: 5 },
     ] },
     { group: 'Xem Tuổi · Đặt Tên', items: [
-      { id: 'xem-tuoi',   label: 'Xem tuổi vợ chồng',   href: '/xem-tuoi.html' },
-      { id: 'xem-lam-an', label: 'Xem tuổi làm ăn',     href: '/xem-lam-an.html' },
-      { id: 'dat-ten',    label: 'Đặt tên con',         href: '/dat-ten' },
-      { id: 'chon-ngay',  label: 'Chọn ngày tốt',       href: '/chon-ngay' },
+      { id: 'xem-tuoi',   label: 'Xem tuổi vợ chồng',   href: '/app/xem-tuoi' },
+      { id: 'xem-lam-an', label: 'Xem tuổi làm ăn',     href: '/app/xem-lam-an' },
+      { id: 'dat-ten',    label: 'Đặt tên con',         href: '/app/dat-ten' },
+      { id: 'chon-ngay',  label: 'Chọn ngày tốt',       href: '/app/chon-ngay' },
     ] },
     { group: 'Phong Thủy · Tướng', items: [
       { id: 'phong-thuy', label: 'Phong thủy',          href: '/phong-thuy' },
@@ -143,7 +143,10 @@
   var Shell = {
     // Gắn ngữ cảnh (lá số / kịch bản) để bật rail chat.
     setContext: function (o) {
-      ctx = o.birth ? { birth: o.birth } : o.scenario ? { scenario: o.scenario } : null;
+      // birth và scenario có thể đi CÙNG nhau: birth để engine server lập lá
+      // số/bát tự, scenario.type để chọn ĐÚNG bộ não (vd 'tu-binh'). Trang Lá
+      // số chỉ truyền birth; trang Bát Tự truyền cả hai.
+      ctx = (o.birth || o.scenario) ? { birth: o.birth || null, scenario: o.scenario || null } : null;
       messages = [];
       sessionId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('s' + Date.now());
       var c = document.getElementById('railCtx'), t = document.getElementById('railCtxTxt');
@@ -171,6 +174,25 @@
     },
     // true nếu URL có ?auto=1 (đến từ nút chuyển tay giữa tool) → trang tự chạy.
     autoRun: function () { return /[?&]auto=1\b/.test(window.location.search); },
+    // ── Empty-state intro (hướng B): hiện giới thiệu ngắn cho người MỚI, tự
+    // ẩn sau lần dùng đầu (nhớ qua localStorage) + nút ✕ tắt luôn. Gọi ở
+    // init: introOnce('bat-tu', {title, desc}); gọi markIntroSeen sau lần chạy
+    // đầu. Cần 1 phần tử #introHost trên trang (đặt trên form).
+    introSeen: function (key) { try { return !!localStorage.getItem('app_intro_' + key); } catch (e) { return false; } },
+    markIntroSeen: function (key) { try { localStorage.setItem('app_intro_' + key, '1'); } catch (e) { /* ignore */ } },
+    introOnce: function (key, opts) {
+      var host = document.getElementById('introHost');
+      if (!host) return;
+      if (this.introSeen(key)) { host.innerHTML = ''; return; }
+      host.innerHTML = '<div class="intro-card"><button class="intro-x" type="button" aria-label="Ẩn giới thiệu">×</button>' +
+        '<div class="intro-t"><span class="spark">✦</span> ' + esc(opts.title || '') + '</div>' +
+        '<div class="intro-d">' + (opts.desc || '') + '</div></div>';
+      var self = this;
+      var x = host.querySelector('.intro-x');
+      if (x) x.addEventListener('click', function () { self.markIntroSeen(key); host.innerHTML = ''; });
+    },
+    // Gọi khi trang đã chạy (có kết quả): nhớ đã xem + ẩn intro.
+    dismissIntro: function (key) { this.markIntroSeen(key); var h = document.getElementById('introHost'); if (h) h.innerHTML = ''; },
   };
   window.Shell = Shell;
 
@@ -207,7 +229,8 @@
       var headers = { 'Content-Type': 'application/json' };
       var token = getToken(); if (token) headers['Authorization'] = 'Bearer ' + token;
       var body = { session_id: sessionId, stream: true, messages: messages.slice(-12), client: { platform: 'web', version: '1.0.0' } };
-      if (ctx.birth) body.birth = ctx.birth; else if (ctx.scenario) body.scenario = ctx.scenario;
+      if (ctx.birth) body.birth = ctx.birth;
+      if (ctx.scenario) body.scenario = ctx.scenario;
       var res = await fetch('/api/v1/chat', { method: 'POST', headers: headers, body: JSON.stringify(body) });
       if (res.status === 401 || res.status === 402) {
         typing.innerHTML = '<p>Cần <a href="/profile" style="color:var(--blue);font-weight:600">đăng nhập</a> (và có Lượng) để hỏi trợ lý. Lá số vẫn xem miễn phí.</p>';
@@ -329,6 +352,9 @@
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); var o = document.getElementById('cmdk'); (o && o.classList.contains('open')) ? closeCmd() : openCmd(); }
     });
     var tries = 0, t = setInterval(function () { paintAuth(); if (++tries > 20 || window.Auth) clearInterval(t); }, 300);
+    // Empty-state intro (hướng B): trang khai window.SHELL_INTRO={key,title,desc}
+    // + có #introHost → shell tự hiện cho người mới, ẩn sau lần dùng đầu.
+    if (window.SHELL_INTRO && window.SHELL_INTRO.key) Shell.introOnce(window.SHELL_INTRO.key, window.SHELL_INTRO);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();

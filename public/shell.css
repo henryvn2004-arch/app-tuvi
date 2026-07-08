@@ -137,3 +137,12 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
   .backdrop{position:fixed;inset:0;background:rgba(6,26,46,.4);z-index:55;display:none}
   .backdrop.on{display:block}
 }
+
+/* ── EMPTY-STATE INTRO (giới thiệu ngắn 1 lần, ẩn sau lần dùng đầu) ── */
+.intro-card{position:relative;background:linear-gradient(180deg,var(--gold-lt),var(--white));border:1px solid var(--gold-soft);border-radius:12px;padding:14px 40px 14px 16px;box-shadow:var(--shadow);margin-bottom:16px;max-width:720px}
+.intro-card .intro-t{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--text);margin-bottom:5px;display:flex;align-items:center;gap:8px}
+.intro-card .intro-t .spark{color:var(--gold-soft)}
+.intro-card .intro-d{font-size:13px;color:var(--text-mid);line-height:1.65}
+.intro-card .intro-d b{color:var(--text)}
+.intro-card .intro-x{position:absolute;top:9px;right:9px;width:24px;height:24px;border:none;background:transparent;color:var(--text-lt);font-size:19px;line-height:1;cursor:pointer;border-radius:6px}
+.intro-card .intro-x:hover{background:var(--paper-2);color:var(--text)}
