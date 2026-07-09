@@ -101,6 +101,8 @@ table.tutru td.row-label{font-size:10.5px;color:#9a8a6a;text-transform:uppercase
       <div class="ws-title"><b>Lá số Bát Tự</b><span>Tứ trụ Tử Bình — can chi, dụng thần, đại vận</span></div>
       <div class="ws-actions">
         <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa thông tin</button>
+        <a class="btn pri" id="btnLaSo" href="/app/la-so?auto=1" style="display:none">Lá số Tử Vi →</a>
+        <a class="btn" id="btnLuan" href="/app/luan-giai?auto=1" style="display:none">Luận giải →</a>
         <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
@@ -195,6 +197,8 @@ function doBatTu(){
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('btPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
+    document.getElementById('btnLaSo').style.display='';
+    document.getElementById('btnLuan').style.display='';
     Shell.rememberBirth({name:name,gender:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,pp:pp,namxem:namxem});
     // Rail: gửi CẢ birth (server lập bát tự) + scenario tu-binh (chọn đúng bộ não).
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
@@ -346,6 +350,8 @@ function showForm(){
   document.getElementById('btPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
   document.getElementById('btnEdit').style.display='none';
+  document.getElementById('btnLaSo').style.display='none';
+  document.getElementById('btnLuan').style.display='none';
 }
 // điền sẵn ngày sinh đã nhớ (nếu có); tự lập nếu đến qua ?auto=1.
 function _pageInit(){

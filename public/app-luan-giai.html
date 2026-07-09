@@ -77,6 +77,8 @@
       <div class="ws-title"><b>Luận giải chuyên sâu</b><span>Neo phán quyết vào điểm số cổ pháp</span></div>
       <div class="ws-actions">
         <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa thông tin</button>
+        <a class="btn" id="btnLaSo" href="/app/la-so?auto=1" style="display:none">Lá số →</a>
+        <a class="btn" id="btnBatTu" href="/app/bat-tu?auto=1" style="display:none">Bát Tự →</a>
         <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
@@ -162,6 +164,8 @@ function doLuan(){
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('lgPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
+    document.getElementById('btnLaSo').style.display='';
+    document.getElementById('btnBatTu').style.display='';
     Shell.rememberBirth({name:name,gender:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,pp:pp,namxem:namxem});
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
@@ -289,6 +293,8 @@ function showForm(){
   document.getElementById('lgPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
   document.getElementById('btnEdit').style.display='none';
+  document.getElementById('btnLaSo').style.display='none';
+  document.getElementById('btnBatTu').style.display='none';
 }
 // điền sẵn ngày sinh đã nhớ (nếu có); tự luận nếu đến qua ?auto=1 (từ nút Lá số).
 // Chạy SAU khi shell.js render rail (boot ở DOMContentLoaded) để Shell.setContext không lỗi.

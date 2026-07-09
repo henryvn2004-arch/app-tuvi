@@ -5,7 +5,41 @@
 
 ---
 
-## 🟢 ĐANG LÀM — Chat-first / Contract v1 (đa nền tảng)
+## 🟢 ĐANG LÀM — App-shell "/app" (không gian làm việc đa công cụ)
+
+**Branch:** `claude/part-x-continuation-tca4xh`
+**Cập nhật:** 2026-07-09
+
+### 🔖 RESUME HERE (mở máy khác đọc cái này trước)
+App-shell tại **`/app`** — vỏ 3 cột (sidebar tool · workspace giữa · rail "Trợ lý AI"), brand navy/gold kiểu Linear/Raycast. **ĐÃ LIVE PROD.** Mọi tool engine/deterministic đã vào shell; 2 tool ảnh (phong thủy/xem tướng) GIỮ trang cũ (đã quyết).
+
+**Đã merge vào main (mới→cũ):**
+- **hand-off giữa tool** (PR mới nhất, `part-x-continuation`): nút chéo **Lá số ↔ Bát Tự ↔ Luận giải** — cùng 1 ngày sinh nhảy tool khác điền sẵn + tự chạy (`Shell.rememberBirth`+`prefillForm`+`autoRun`, chung ID input `inp*`, link `?auto=1`). KHÔNG đổi shell.js (hạ tầng có sẵn).
+- **#150** trang chủ `/app` **dashboard** (đón + chọn công cụ); Lá số dời `/app` → `/app/la-so`; sidebar thêm mục "Tổng quan".
+- **#149** **chip gợi ý câu hỏi** cố định trên ô nhập rail (client, tái dùng bộ `chips` mỗi trang qua `Shell.setContext`; bấm bớt dần, ẩn khi streaming, newChat phục hồi). KHÔNG tốn LLM.
+- **#148** migrate **toàn bộ tool engine** vào shell: Bát Tự (`app-bat-tu.html`), Xem tuổi vợ chồng/làm ăn (`app-xem-tuoi.html` 2 chế độ theo path), Đặt tên (`app-dat-ten.html`), Chọn ngày (`app-chon-ngay.html`) + **empty-state intro** mỗi tool (`Shell.introOnce`, nhớ localStorage).
+- **#146/#147** nền app-shell + Lá số + rail + CTA trang chủ "Mở không gian làm việc"→/app.
+
+### Kiến trúc app-shell (ĐỌC trước khi làm tiếp)
+- **Chrome dùng chung:** `public/shell.js` (v9) + `public/shell.css` (v3). Trang tool chỉ cần: khai `window.SHELL_ACTIVE='<id>'`; tùy chọn `window.SHELL_INTRO={key,title,desc}` + `<div id="introHost">`; gọi `Shell.setContext({birth?,scenario?,label,greeting,chips})` để bật rail (`chips` nuôi hàng gợi ý). API: `rememberBirth/getRememberedBirth/prefillForm/autoRun` (hand-off), `introOnce/markIntroSeen/dismissIntro`, `ask/openRail`.
+- **Rail** gọi `/api/v1/chat` SSE, gửi `birth` VÀ/HOẶC `scenario` (đi CÙNG được — Bát Tự gửi cả 2 để chọn đúng bộ não `tu-binh`).
+- **Routes** (`next.config.mjs` rewrites): `/app`→`app-home.html` (dashboard) · `/app/la-so`→`app.html` · `/app/bat-tu` · `/app/luan-giai` · `/app/xem-tuoi` & `/app/xem-lam-an` (CÙNG `app-xem-tuoi.html`, MODE suy từ `location.pathname`) · `/app/dat-ten` · `/app/chon-ngay`.
+- **Module lift/port (NỢ DRY):** `public/tuong-hop.js` (`calcTuongHop` 8 chiều — lift từ `xem-tuoi.html`), `public/can-chi.js` (`ccInfo`/`ccThangCanChi` — port từ `lib/engine/diachi.ts`). Sau ổn định trỏ trang legacy sang dùng chung (giống `laso-chart.js`).
+- **Asset version:** bump `shell.js?v=` / `shell.css?v=` trên TẤT CẢ trang shell mỗi khi sửa (hiện js=9, css=3). Trang linter hay reflow HTML — vô hại.
+- **Verify:** serve `public/` bằng `python3 -m http.server` + Playwright (`/opt/pw-browsers/chromium`); test rewrite `/app/*` bằng `page.route` fulfill file, hoặc mở `*.html?auto=1` trực tiếp.
+
+### Bước tiếp theo (gợi ý, chọn 1)
+1. **`suggestions[]` do LLM sinh** theo từng câu trả lời (nâng cấp #149 — đụng brain `lib/agent/prompts.ts`+contract, áp cho cả kênh bot). Nặng hơn, tách PR.
+2. **Nợ DRY:** trỏ `xem-tuoi.html` (legacy) + trang khác sang `tuong-hop.js`/`can-chi.js`.
+3. **Kéo Phong thủy/Xem tướng vào shell** (ảnh/multimodal — nặng, đã quyết giữ trang cũ; mở lại nếu muốn: iframe hoặc native).
+4. **Setup máy mới:** `npm ci` → `cd tuvi-engine && npm ci && cd ..` → `npx playwright install chromium` (env này đã có Chromium sẵn ở `/opt/pw-browsers`).
+
+### Quy ước (giữ nguyên)
+1 việc = 1 PR draft → CI xanh (lint·typecheck·test×2·lighthouse·Vercel·smoke-skip) → mark ready → squash-merge → `git checkout -B <branch> origin/main` (branch reset, push `--force-with-lease`). Sau merge, session tự unsubscribe PR.
+
+---
+
+## 🗂️ Track cũ — Chat-first / Contract v1 (đa nền tảng)
 
 **Branch:** `claude/tuviminhbao-resume-tf8tcq`
 **Cập nhật:** 2026-06-24
