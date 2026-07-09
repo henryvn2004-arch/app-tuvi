@@ -37,7 +37,7 @@ export function buildChatContext(body: any): ChatContext {
     ? `Phong cách: Bạn đang thể hiện phong cách của ${authorName} — ${authorStyle}`
     : '';
 
-  if (toolType === 'xem-tuoi' || toolType === 'xem-lam-an') {
+  if (toolType === 'xem-tuoi' || toolType === 'xem-lam-an' || toolType === 'tuong-hop') {
     return {
       systemForCall:    CHAT_SYSTEM_COMPAT(extractCompatContext(body.compatData, toolType), toolType, docs, persona),
       tools:            buildTools(false),
@@ -76,6 +76,15 @@ export function buildChatContext(body: any): ChatContext {
   if (toolType === 'dat-ten-con') {
     return {
       systemForCall:    CHAT_SYSTEM_DAT_TEN(extractDatTenContext(body.datTenData), docs, persona),
+      tools:            buildTools(false),
+      maxTokens:        1500,
+      lasoDataForTools: null,
+    };
+  }
+
+  if (toolType === 'dat-ten-dn') {
+    return {
+      systemForCall:    CHAT_SYSTEM_DAT_TEN_DN(extractDatTenDnContext(body.datTenDnData), docs, persona),
       tools:            buildTools(false),
       maxTokens:        1500,
       lasoDataForTools: null,
@@ -177,7 +186,13 @@ const CHAT_SYSTEM_COMPAT = (ctx: string, toolType: string, docs?: string, person
 
 THÔNG TIN THỜI GIAN (do server cung cấp, chính xác): Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}.
 
-Nhiệm vụ: Phân tích ${toolType === 'xem-lam-an' ? 'tương hợp hợp tác kinh doanh — tập trung Quan Lộc, Tài Bạch, điểm bổ trợ và xung khắc' : 'tương hợp tình duyên hôn nhân — tập trung Mệnh, Phu Thê, can chi, ngũ hành giữa hai người'}.
+Nhiệm vụ: Phân tích ${
+  toolType === 'xem-lam-an'
+    ? 'tương hợp hợp tác kinh doanh — tập trung Quan Lộc, Tài Bạch, điểm bổ trợ và xung khắc'
+    : toolType === 'tuong-hop'
+      ? 'tương hợp giữa HAI NGƯỜI BẤT KỲ (bạn bè, người thân, đối tác, đôi lứa…) — xét Mệnh, can chi, ngũ hành nạp âm, tam hợp/lục hợp/xung/hình giữa hai tuổi; nói rõ hợp ở mặt nào, dễ va ở mặt nào. KHÔNG mặc định là quan hệ vợ chồng trừ khi người dùng nói vậy'
+      : 'tương hợp tình duyên hôn nhân — tập trung Mệnh, Phu Thê, can chi, ngũ hành giữa hai người'
+}.
 
 Nguyên tắc trả lời:
 - Tiếng Việt chuẩn mực, không bullet, không emoji
@@ -226,6 +241,20 @@ Nguyên tắc:
 - Không dùng tên quá cũ kỹ hoặc khó đọc
 
 === DỮ LIỆU ĐẶT TÊN CON ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+const CHAT_SYSTEM_DAT_TEN_DN = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia đặt tên thương hiệu / doanh nghiệp theo ngũ hành và cổ học Việt Nam, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
+
+THÔNG TIN THỜI GIAN: Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}.
+
+Nguyên tắc:
+- Tiếng Việt chuẩn mực, không bullet, không emoji
+- Khi đề xuất tên: đưa đủ 5 phương án, mỗi tên nêu ý nghĩa, ngũ hành chủ đạo của tên và VÌ SAO hợp — bồi/tương sinh cho mệnh người chủ VÀ hợp ngành nghề
+- Ưu tiên tên dễ đọc dễ nhớ, đọc thuận, gợi liên tưởng tốt cho ngành; tránh trùng thương hiệu lớn, tránh chữ tối nghĩa
+- Nếu người dùng đưa tên đang cân nhắc: chấm thẳng hợp/khắc với mệnh chủ và ngành, gợi cách chỉnh
+- Cân bằng phong thủy tên và tính thương mại; nói thẳng, không tâng bốc
+
+=== DỮ LIỆU NỀN ĐẶT TÊN DOANH NGHIỆP ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 // ── Vision: Xem tướng qua ảnh (native trong rail, thay vì API legacy) ──
@@ -662,5 +691,18 @@ function extractDatTenContext(data: any): string {
   if (d.canChiCon) ctx += `Năm sinh bé: ${d.canChiCon} (${d.napAmCon || ''})\n`;
   if (d.canChiBo)  ctx += `Bố: ${d.canChiBo} (${d.napAmBo || ''})\n`;
   if (d.canChiMe)  ctx += `Mẹ: ${d.canChiMe} (${d.napAmMe || ''})\n`;
+  return ctx;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function extractDatTenDnContext(data: any): string {
+  if (!data) return '';
+  const d = data.datTenDnData || data;
+  let ctx = '';
+  if (d.nganh)     ctx += `Ngành nghề: ${d.nganh}\n`;
+  if (d.loaiHinh)  ctx += `Loại hình: ${d.loaiHinh}\n`;
+  if (d.tenChu)    ctx += `Người chủ: ${d.tenChu}\n`;
+  if (d.canChiChu) ctx += `Tuổi chủ: ${d.canChiChu} — nạp âm ${d.napAmChu || ''} (hành ${d.hanhChu || ''})\n`;
+  if (d.tenGoiY)   ctx += `Tên đang cân nhắc: ${d.tenGoiY}\n`;
   return ctx;
 }

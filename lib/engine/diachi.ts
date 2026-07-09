@@ -111,6 +111,23 @@ export function computeChonNgay(input: Rec): Rec | null {
   };
 }
 
+// ── ĐẶT TÊN DOANH NGHIỆP: tuổi chủ + ngành + loại hình → can chi nền ──
+// Không có "engine" định danh — LLM gợi tên; server chỉ dựng nền ngũ hành
+// nạp âm của người chủ (dùng bồi/khắc cho tên) + ngành nghề làm ngữ cảnh.
+export function computeDatTenDn(input: Rec): Rec | null {
+  const iChu = ccInfo(Number(input.namChu));
+  if (!iChu || !input.nganh) return null;
+  return {
+    tenGoiY: input.tenGoiY || '',        // tên đang cân nhắc (tùy chọn)
+    nganh: input.nganh,                  // ngành nghề
+    loaiHinh: input.loaiHinh || '',      // cty/hộ KD/thương hiệu (tùy chọn)
+    tenChu: input.tenChu || '',
+    canChiChu: iChu.canChi,
+    napAmChu: iChu.napAm,
+    hanhChu: iChu.hanh,
+  };
+}
+
 // ── ĐẶT TÊN: họ + giới tính + năm sinh con/bố/mẹ → can chi ──
 export function computeDatTen(input: Rec): Rec | null {
   const iCon = ccInfo(Number(input.namCon));

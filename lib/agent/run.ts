@@ -21,7 +21,7 @@ import {
 import { buildToolDefs, executeTool, newToolContext, buildBirthFromInput, type ProfilePort } from '@/lib/tools/registry';
 import { computeLaso, renderLasoCard } from '@/lib/engine/laso';
 import { computeTuBinh } from '@/lib/engine/tubinh';
-import { computeSinhCon, computeChonNgay, computeDatTen } from '@/lib/engine/diachi';
+import { computeSinhCon, computeChonNgay, computeDatTen, computeDatTenDn } from '@/lib/engine/diachi';
 // Template prompt + context formatter dùng CHUNG với /api/lasotuvi (một bộ não).
 import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint } from '@/lib/agent/prompts';
 import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
@@ -146,7 +146,9 @@ export async function runAgent(
     // 2 lá số (computeLaso ×2, engine đã có, parity sẵn). Có birthA+birthB
     // trong data → server lập 2 lá số, đè data; còn không → dùng lsA/lsB
     // client gửi.
-    if (scenario.type === 'xem-tuoi' || scenario.type === 'xem-lam-an') {
+    // tuong-hop = tương hợp HAI NGƯỜI BẤT KỲ (bạn/người thân/đối tác/đôi lứa) —
+    // CÙNG cơ chế 2 lá số như xem-tuoi/xem-lam-an, chỉ khác khung luận (neutral).
+    if (scenario.type === 'xem-tuoi' || scenario.type === 'xem-lam-an' || scenario.type === 'tuong-hop') {
       const d = (scenario.data || {}) as Record<string, unknown>;
       if (d.birthA && d.birthB) {
         const a = computeLaso(d.birthA as BirthParams);
@@ -167,6 +169,9 @@ export async function runAgent(
       if (r) scn = { ...scenario, data: r };
     } else if (scenario.type === 'dat-ten-con') {
       const r = computeDatTen(scenario.data || {});
+      if (r) scn = { ...scenario, data: r };
+    } else if (scenario.type === 'dat-ten-dn') {
+      const r = computeDatTenDn(scenario.data || {});
       if (r) scn = { ...scenario, data: r };
     }
     const bc = buildChatContext(scenarioToBody(scn, req.messages as ChatMessage[]));
@@ -422,10 +427,12 @@ function timeContext(): string {
 const SCENARIO_FIELD: Record<string, string> = {
   'xem-tuoi': 'compatData',
   'xem-lam-an': 'compatData',
+  'tuong-hop': 'compatData',
   'tu-binh': 'tuBinhData',
   'xem-tuoi-sinh-con': 'sinhConData',
   'chon-ngay-tot': 'chonNgayData',
   'dat-ten-con': 'datTenData',
+  'dat-ten-dn': 'datTenDnData',
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function scenarioToBody(scenario: ScenarioInput, messages: ChatMessage[]): any {

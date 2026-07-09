@@ -136,21 +136,30 @@
 </div>
 
 <script>
-(function(){var biz=location.pathname.indexOf('lam-an')>=0;
-window.SHELL_ACTIVE=biz?'xem-lam-an':'xem-tuoi';
-window.SHELL_INTRO=biz?{key:'xem-lam-an',title:'Xem tuổi làm ăn',desc:'So hợp hai người khi bắt tay hợp tác theo <b>8 chiều</b> cổ pháp. Ra điểm hòa hợp rồi hỏi <b>trợ lý AI</b> ai nên nắm gì, dễ xung khắc ở đâu.'}:{key:'xem-tuoi',title:'Xem tuổi vợ chồng',desc:'So hòa hợp hai lá số theo <b>8 chiều</b> cổ pháp (tuổi, ngũ hành, tư tưởng, quan hệ, con cái, tài chính). Ra điểm rồi hỏi <b>trợ lý AI</b> luận sâu.'};})();
+(function(){
+  var p=location.pathname;
+  var key=p.indexOf('lam-an')>=0?'xem-lam-an':(p.indexOf('tuong-hop')>=0?'tuong-hop':'xem-tuoi');
+  var INTRO={
+    'xem-lam-an':{key:'xem-lam-an',title:'Xem tuổi làm ăn',desc:'So hợp hai người khi bắt tay hợp tác theo <b>8 chiều</b> cổ pháp. Ra điểm hòa hợp rồi hỏi <b>trợ lý AI</b> ai nên nắm gì, dễ xung khắc ở đâu.'},
+    'tuong-hop':{key:'tuong-hop',title:'Tương hợp tuổi',desc:'So hợp <b>hai người bất kỳ</b> (bạn bè, người thân, đối tác, đôi lứa) theo <b>8 chiều</b> cổ pháp. Ra điểm rồi hỏi <b>trợ lý AI</b> hợp ở mặt nào, dễ va ở đâu.'},
+    'xem-tuoi':{key:'xem-tuoi',title:'Xem tuổi vợ chồng',desc:'So hòa hợp hai lá số theo <b>8 chiều</b> cổ pháp (tuổi, ngũ hành, tư tưởng, quan hệ, con cái, tài chính). Ra điểm rồi hỏi <b>trợ lý AI</b> luận sâu.'}
+  };
+  window.SHELL_ACTIVE=key;
+  window.SHELL_INTRO=INTRO[key];
+})();
 </script>
 <script src="/laso-chart.js?v=2"></script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tuong-hop.js?v=1"></script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=16"></script>
+<script src="/shell.js?v=17"></script>
 <script>
-// ── MODE: 1 trang phục vụ 2 route — /app/xem-tuoi (vợ chồng) & /app/xem-lam-an
-// (hợp tác làm ăn). Cùng bộ máy calcTuongHop; chỉ khác khung diễn giải + kênh
-// scenario (server run.ts xử lý xem-tuoi/xem-lam-an y hệt = 2 lá số).
-var IS_LAMAN=location.pathname.indexOf('lam-an')>=0;
-var MODE=IS_LAMAN?{
+// ── MODE: 1 trang phục vụ 3 route — /app/xem-tuoi (vợ chồng), /app/xem-lam-an
+// (hợp tác làm ăn), /app/tuong-hop (hai người bất kỳ). Cùng bộ máy calcTuongHop;
+// chỉ khác khung diễn giải + kênh scenario (server run.ts xử lý cả 3 y hệt = 2 lá số).
+var MODE_KEY=location.pathname.indexOf('lam-an')>=0?'xem-lam-an':(location.pathname.indexOf('tuong-hop')>=0?'tuong-hop':'xem-tuoi');
+var MODES={
+'xem-lam-an':{
   active:'xem-lam-an', scenarioType:'xem-lam-an',
   title:'Xem tuổi làm ăn', sub:'So hợp hai người khi bắt tay hợp tác',
   docTitle:'Xem tuổi làm ăn — Tử Vi Minh Bảo',
@@ -160,7 +169,19 @@ var MODE=IS_LAMAN?{
   btn:'Xem hợp tác →', btnBusy:'Đang xét hợp tác…', verb:'Xét hợp tác',
   chips:['Hai người hợp làm ăn chung không?','Ai nên nắm tài chính?','Chiều nào dễ xung đột khi hợp tác?','Nên góp vốn hay chia việc?'],
   greetVerb:'Đã xét hợp tác'
-}:{
+},
+'tuong-hop':{
+  active:'tuong-hop', scenarioType:'tuong-hop',
+  title:'Tương hợp tuổi', sub:'So hợp hai người bất kỳ theo cổ pháp',
+  docTitle:'Tương hợp tuổi — Tử Vi Minh Bảo',
+  h2:'Nhập ngày sinh hai người (dương lịch)',
+  formSub:'So hòa hợp hai người bất kỳ (bạn bè, người thân, đối tác, đôi lứa) trên hai lá số theo cổ pháp: tuổi, ngũ hành, tư tưởng, quan hệ, tài chính. Có kết quả rồi, hỏi trợ lý luận sâu ở khung bên phải.',
+  pA:'Người thứ nhất', pB:'Người thứ hai', phA:'Người A', phB:'Người B',
+  btn:'So tương hợp →', btnBusy:'Đang so tương hợp…', verb:'So tương hợp',
+  chips:['Hai người này có hợp nhau không?','Hợp nhau ở mặt nào?','Dễ va chạm ở đâu?','Nên giữ khoảng cách hay gắn bó?'],
+  greetVerb:'Đã so tương hợp'
+},
+'xem-tuoi':{
   active:'xem-tuoi', scenarioType:'xem-tuoi',
   title:'Xem tuổi vợ chồng', sub:'So hòa hợp hai lá số theo cổ pháp',
   docTitle:'Xem tuổi vợ chồng — Tử Vi Minh Bảo',
@@ -170,7 +191,9 @@ var MODE=IS_LAMAN?{
   btn:'So tuổi →', btnBusy:'Đang so tuổi…', verb:'So tuổi',
   chips:['Hai người có hợp làm vợ chồng không?','Chiều nào đáng lo nhất?','Cách hóa giải điểm khắc?','Đường con cái của hai người thế nào?'],
   greetVerb:'Đã so tuổi'
+}
 };
+var MODE=MODES[MODE_KEY];
 
 // ── Dropdowns cho cả 2 người ──
 (function(){

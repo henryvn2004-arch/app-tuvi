@@ -19,6 +19,8 @@
       { id: 'luan-giai',  label: 'Luận giải chuyên sâu', href: '/app/luan-giai',  icon: 'doc', cost: 5 },
       { id: 'xem-tuoi',   label: 'Xem tuổi vợ chồng',   href: '/app/xem-tuoi' },
       { id: 'xem-lam-an', label: 'Xem tuổi làm ăn',     href: '/app/xem-lam-an' },
+      { id: 'tuong-hop',  label: 'Tương hợp tuổi',      href: '/app/tuong-hop' },
+      { id: 'sinh-con',   label: 'Xem tuổi sinh con',   href: '/app/sinh-con' },
     ] },
     { group: 'Tử Bình', open: true, items: [
       { id: 'bat-tu',     label: 'Lá số Bát Tự',        href: '/app/bat-tu',     icon: 'rows' },
@@ -34,6 +36,7 @@
     ] },
     { group: 'Đặt Tên', open: true, items: [
       { id: 'dat-ten',    label: 'Đặt tên con',         href: '/app/dat-ten' },
+      { id: 'dat-ten-dn', label: 'Đặt tên doanh nghiệp', href: '/app/dat-ten-dn' },
     ] },
     { group: 'Tài khoản', open: true, items: [
       { id: 'vi-luong',   label: 'Ví Lượng',            href: '/profile', icon: 'wallet', balance: true },
