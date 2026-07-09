@@ -179,6 +179,13 @@
       ta.disabled = false; ta.placeholder = 'Hỏi bất cứ điều gì về lá số này…';
       document.getElementById('railSend').disabled = false;
       greet(o);
+      // Pending-ask: câu hỏi mang từ trang chủ (hero "một cửa") vào — rail tự hỏi
+      // ngay khi đã có ngữ cảnh. Chỉ dùng 1 lần, bỏ qua nếu quá cũ (>10 phút).
+      try {
+        var pa = JSON.parse(sessionStorage.getItem('app_pending_ask') || 'null');
+        if (pa) sessionStorage.removeItem('app_pending_ask');
+        if (pa && pa.q && (Date.now() - (pa.t || 0) < 600000)) ask(pa.q);
+      } catch (e) { /* ignore */ }
     },
     ask: function (t) { ask(t); },
     openCmd: openCmd,
