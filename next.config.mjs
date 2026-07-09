@@ -17,6 +17,7 @@ const nextConfig = {
       { source: '/la-so',               destination: '/la-so.html'           },
       { source: '/la-so-v2',            destination: '/la-so-v2.html'        },
       { source: '/menh-kho',            destination: '/menh-kho.html'        },
+      { source: '/cong-cu',             destination: '/cong-cu.html'         },
       { source: '/profile',             destination: '/profile.html'         },
       { source: '/about',               destination: '/about.html'           },
       { source: '/contact',             destination: '/contact.html'         },
