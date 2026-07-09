@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ngũ hành tên — Tử Vi Minh Bảo</title>
+<meta name="description" content="Phân tích ngũ hành của tên có hợp mệnh nạp âm không, tên bồi hay khắc mệnh — gợi ý chỉnh. Hỏi trợ lý AI luận từng chữ.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shell.css?v=5">
+<style>
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
+.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
+.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:13px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.fg input{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
+.fg input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
+.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
+.btn-go:disabled{opacity:.6;cursor:not-allowed}
+#resPanel{display:none}
+.res-head{font-family:var(--serif);font-size:15px;font-weight:600;margin-bottom:12px}
+.cc-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.cc-card{flex:1;min-width:150px;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:12px 14px;box-shadow:var(--shadow)}
+.cc-card .who{font-size:10.5px;color:var(--text-lt);text-transform:uppercase;letter-spacing:.04em}
+.cc-card .cc{font-family:var(--serif);font-size:19px;font-weight:600;margin-top:2px}
+.cc-card .na{font-size:12px;color:var(--text-mid);margin-top:2px}
+.cc-card .na b{color:var(--hanh,var(--gold-soft))}
+.note{background:var(--gold-lt);border:1px solid var(--gold-soft);border-radius:10px;padding:12px 15px;font-size:13px;color:var(--text-mid);line-height:1.65;margin-bottom:6px}
+.note b{color:var(--text)}
+.ask{margin-top:12px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
+.laso-error{color:var(--red);padding:14px;border:1px solid var(--red);border-radius:10px;background:var(--white)}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Ngũ hành tên</b><span>Tên có hợp mệnh không</span></div>
+      <div class="ws-actions">
+        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa</button>
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div class="form-card" id="birthPanel">
+        <h2>Tên & năm sinh</h2>
+        <p class="sub">Lấy mệnh nạp âm theo năm sinh làm mốc, rồi hỏi trợ lý phân tích ngũ hành từng chữ trong tên có bồi mệnh hay khắc, và cách chỉnh.</p>
+        <div class="frow">
+          <div class="fg" style="flex:1;min-width:180px"><label>Họ và tên</label><input type="text" id="inpTen" placeholder="Nguyễn Minh Anh"></div>
+          <div class="fg" style="width:120px"><label>Năm sinh</label><input type="number" id="inpNam" placeholder="1990" min="1900" max="2100"></div>
+          <button class="btn-go" id="btnGo" onclick="doNguHanhTen()">Phân tích →</button>
+        </div>
+      </div>
+
+      <div id="resPanel">
+        <div class="res-head" id="resHead"></div>
+        <div class="cc-row" id="ccRow"></div>
+        <div class="note" id="resNote"></div>
+        <div class="ask" data-ask="Phân tích ngũ hành từng chữ trong tên tôi có hợp mệnh không, bồi hay khắc, và nên chỉnh thế nào?">✦ Hỏi trợ lý phân tích ngũ hành tên</div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='ngu-hanh-ten';
+window.SHELL_INTRO={key:'ngu-hanh-ten',title:'Ngũ hành tên',desc:'Lấy mệnh nạp âm theo năm sinh làm mốc, rồi hỏi <b>trợ lý AI</b> phân tích ngũ hành từng chữ trong tên có bồi mệnh hay khắc và cách chỉnh.'};</script>
+<script src="/can-chi.js?v=1"></script>
+<script src="/auth.js"></script>
+<script src="/shell.js?v=18"></script>
+<script>
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+var HANH_COLOR={'Mộc':'var(--green)','Hỏa':'var(--red)','Thổ':'var(--gold-soft)','Kim':'#8a8a8a','Thủy':'var(--blue)'};
+var SINH={'Mộc':'Hỏa','Hỏa':'Thổ','Thổ':'Kim','Kim':'Thủy','Thủy':'Mộc'};
+function hanhSinhCho(h){ for(var k in SINH){ if(SINH[k]===h)return k; } return h; }
+function doNguHanhTen(){
+  var btn=document.getElementById('btnGo');
+  var ten=document.getElementById('inpTen').value.trim();
+  var nam=parseInt(document.getElementById('inpNam').value);
+  if(!ten||!nam){ alert('Vui lòng nhập họ tên và năm sinh.'); return; }
+  btn.disabled=true;
+  try{
+    var i=CanChi.ccInfo(nam);
+    document.getElementById('resHead').textContent='Ngũ hành tên — '+esc(ten);
+    document.getElementById('ccRow').innerHTML=
+      '<div class="cc-card"><div class="who">Tên</div><div class="cc" style="font-size:16px">'+esc(ten)+'</div></div>'+
+      '<div class="cc-card"><div class="who">Mệnh (nạp âm)</div><div class="cc">'+esc(i.canChi)+'</div><div class="na" style="--hanh:'+HANH_COLOR[i.hanh]+'">'+esc(i.napAm)+' · <b>'+esc(i.hanh)+'</b></div></div>';
+    document.getElementById('resNote').innerHTML='Mệnh <b>'+esc(i.napAm)+'</b> — hành <b>'+esc(i.hanh)+'</b>. Tên hợp là tên có chữ ngũ hành <b>tương sinh</b> (hành <b>'+esc(hanhSinhCho(i.hanh))+'</b> sinh <b>'+esc(i.hanh)+'</b>) hoặc <b>đồng hành</b> để bồi mệnh, hạn chế chữ khắc. Hỏi trợ lý để luận từng chữ trong tên bạn.';
+    document.getElementById('birthPanel').style.display='none';document.getElementById('resPanel').style.display='block';document.getElementById('btnEdit').style.display='';
+    if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
+    Shell.setContext({
+      scenario:{type:'ngu-hanh-ten',data:{ten:ten,nam:nam}},
+      label:'Ngũ hành tên · '+ten,
+      greeting:'Tên **'+esc(ten)+'** — mệnh **'+esc(i.napAm)+'** (hành '+esc(i.hanh)+'). Bạn muốn tôi luận gì?',
+      chips:['Tên tôi hợp hay khắc mệnh?','Ngũ hành từng chữ là gì?','Nên thêm/đổi chữ nào?','Tên đệm nào bồi mệnh tốt hơn?']
+    });
+    document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
+  }catch(e){
+    document.getElementById('ccRow').innerHTML='<div class="laso-error">Lỗi: '+esc(e.message)+'</div>';
+    document.getElementById('birthPanel').style.display='none';document.getElementById('resPanel').style.display='block';document.getElementById('btnEdit').style.display='';
+    if(window.console)console.error(e);
+  }finally{ btn.disabled=false; }
+}
+function showForm(){document.getElementById('resPanel').style.display='none';document.getElementById('birthPanel').style.display='block';document.getElementById('btnEdit').style.display='none';}
+</script>
+</body>
+</html>

@@ -30,13 +30,23 @@
     ] },
     { group: 'Phong Thủy', open: true, items: [
       { id: 'phong-thuy', label: 'Phong thủy',          href: '/app/phong-thuy' },
+      { id: 'bat-trach',  label: 'Hướng Bát Trạch',     href: '/app/bat-trach' },
     ] },
     { group: 'Chọn Ngày', open: true, items: [
       { id: 'chon-ngay',  label: 'Chọn ngày tốt',       href: '/app/chon-ngay' },
+      { id: 'kim-lau',    label: 'Kim Lâu & Tam Tai',   href: '/app/kim-lau' },
     ] },
     { group: 'Đặt Tên', open: true, items: [
       { id: 'dat-ten',    label: 'Đặt tên con',         href: '/app/dat-ten' },
       { id: 'dat-ten-dn', label: 'Đặt tên doanh nghiệp', href: '/app/dat-ten-dn' },
+      { id: 'ngu-hanh-ten', label: 'Ngũ hành tên',      href: '/app/ngu-hanh-ten' },
+    ] },
+    { group: 'Mệnh Lý', open: true, items: [
+      { id: 'nap-am',     label: 'Nạp âm ngũ hành',     href: '/app/nap-am' },
+    ] },
+    { group: 'Huyền Học', open: true, items: [
+      { id: 'kinh-dich',  label: 'Kinh Dịch — Gieo quẻ', href: '/app/kinh-dich' },
+      { id: 'than-so-hoc', label: 'Thần số học',        href: '/app/than-so-hoc' },
     ] },
     { group: 'Tài khoản', open: true, items: [
       { id: 'vi-luong',   label: 'Ví Lượng',            href: '/profile', icon: 'wallet', balance: true },

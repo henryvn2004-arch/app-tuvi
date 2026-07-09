@@ -56,7 +56,7 @@
 
 <script>window.SHELL_ACTIVE='home';</script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=17"></script>
+<script src="/shell.js?v=18"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 var IC={
@@ -71,7 +71,10 @@ var IC={
   compass:'<circle cx="12" cy="12" r="9"/><path d="M15 9l-2 5-4 1 2-5z"/>',
   face:'<circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M9 15c1 1 5 1 6 0"/>',
   users:'<circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17.5" cy="9" r="2.2"/><path d="M16 20a5 5 0 0 1 5-4.6"/>',
-  baby:'<circle cx="12" cy="9" r="4"/><path d="M8.5 20c0-2.6 7-2.6 7 0"/><path d="M10 8h.01M14 8h.01"/>'
+  baby:'<circle cx="12" cy="9" r="4"/><path d="M8.5 20c0-2.6 7-2.6 7 0"/><path d="M10 8h.01M14 8h.01"/>',
+  yinyang:'<circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9"/><circle cx="12" cy="7.5" r=".7"/><circle cx="12" cy="16.5" r=".7"/>',
+  hash:'<path d="M4 9h16M4 15h16M10 3 8 21M16 3l-2 18"/>',
+  leaf:'<path d="M11 20A7 7 0 0 1 4 13C4 7 10 4 20 4c0 8-4 12-9 12z"/><path d="M11 20c0-5 2-8 6-10"/>'
 };
 var GROUPS=[
   { g:'Tử Vi', items:[
@@ -90,13 +93,23 @@ var GROUPS=[
   ]},
   { g:'Phong Thủy', items:[
     { i:'compass', t:'Phong thủy', d:'Bố cục nhà, phòng, bàn làm việc qua ảnh', h:'/app/phong-thuy' },
+    { i:'home', t:'Hướng Bát Trạch', d:'Cung phi & hướng nhà, bếp, giường hợp mệnh', h:'/app/bat-trach' },
   ]},
   { g:'Chọn Ngày', items:[
     { i:'cal', t:'Chọn ngày tốt', d:'Ngày giờ hợp tuổi cho việc trọng đại', h:'/app/chon-ngay' },
+    { i:'cal', t:'Kim Lâu & Tam Tai', d:'Tuổi làm nhà, cưới hỏi có phạm không', h:'/app/kim-lau' },
   ]},
   { g:'Đặt Tên', items:[
     { i:'tag', t:'Đặt tên con', d:'Tên hợp mệnh theo can chi & ngũ hành', h:'/app/dat-ten' },
     { i:'tag', t:'Đặt tên doanh nghiệp', d:'Tên công ty, thương hiệu hợp mệnh chủ & ngành', h:'/app/dat-ten-dn' },
+    { i:'leaf', t:'Ngũ hành tên', d:'Tên có hợp mệnh nạp âm không, bồi hay khắc', h:'/app/ngu-hanh-ten' },
+  ]},
+  { g:'Mệnh Lý', items:[
+    { i:'leaf', t:'Nạp âm ngũ hành', d:'Hành bản mệnh theo năm sinh, hợp màu, hướng, tuổi', h:'/app/nap-am' },
+  ]},
+  { g:'Huyền Học', items:[
+    { i:'yinyang', t:'Kinh Dịch — Gieo quẻ', d:'Chu Dịch 64 quẻ, quẻ chính, hào động, quẻ biến', h:'/app/kinh-dich' },
+    { i:'hash', t:'Thần số học', d:'Số chủ đạo theo ngày sinh, tính cách, sự nghiệp', h:'/app/than-so-hoc' },
   ]},
 ];
 function svg(n){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">'+(IC[n]||IC.grid)+'</svg>'; }

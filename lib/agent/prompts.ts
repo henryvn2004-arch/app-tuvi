@@ -91,6 +91,26 @@ export function buildChatContext(body: any): ChatContext {
     };
   }
 
+  // ── Batch 2: Mệnh Lý / Huyền Học (nhẹ, deterministic seed + rail luận) ──
+  if (toolType === 'nap-am') {
+    return { systemForCall: CHAT_SYSTEM_NAP_AM(extractGenericContext(body.napAmData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
+  }
+  if (toolType === 'kim-lau') {
+    return { systemForCall: CHAT_SYSTEM_KIM_LAU(extractKimLauContext(body.kimLauData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
+  }
+  if (toolType === 'ngu-hanh-ten') {
+    return { systemForCall: CHAT_SYSTEM_NGU_HANH_TEN(extractGenericContext(body.nguHanhTenData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
+  }
+  if (toolType === 'than-so-hoc') {
+    return { systemForCall: CHAT_SYSTEM_THAN_SO(extractGenericContext(body.thanSoData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
+  }
+  if (toolType === 'bat-trach') {
+    return { systemForCall: CHAT_SYSTEM_BAT_TRACH(extractGenericContext(body.batTrachData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
+  }
+  if (toolType === 'kinh-dich') {
+    return { systemForCall: CHAT_SYSTEM_KINH_DICH(extractKinhDichContext(body.kinhDichData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
+  }
+
   if (toolType === 'xem-tuong') {
     return {
       systemForCall:    CHAT_SYSTEM_XEM_TUONG(docs, persona),
@@ -255,6 +275,87 @@ Nguyên tắc:
 - Cân bằng phong thủy tên và tính thương mại; nói thẳng, không tâng bốc
 
 === DỮ LIỆU NỀN ĐẶT TÊN DOANH NGHIỆP ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+// ── Batch 2 prompts — Mệnh Lý / Huyền Học ──────────────────────
+const _TIME = () => `THÔNG TIN THỜI GIAN: Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}.`;
+
+const CHAT_SYSTEM_NAP_AM = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia mệnh lý ngũ hành nạp âm theo cổ pháp, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
+
+${_TIME()}
+
+Nguyên tắc:
+- Tiếng Việt chuẩn mực, không bullet, không emoji
+- Giải thích nạp âm (tên hoa giáp) và HÀNH của mệnh, ý nghĩa hình tượng (vd Hải Trung Kim = vàng trong biển)
+- Luận tương sinh/tương khắc với hành khác; hợp màu, hướng, vật phẩm, người tuổi nào
+- Nói thẳng, có căn cứ; không phán tuyệt đối về tương lai
+
+=== DỮ LIỆU NẠP ÂM ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+const CHAT_SYSTEM_KIM_LAU = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia chọn tuổi làm nhà / cưới hỏi theo Kim Lâu & Tam Tai cổ pháp, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
+
+${_TIME()}
+
+Nguyên tắc:
+- Tiếng Việt chuẩn mực, không bullet, không emoji
+- Giải thích rõ Kim Lâu (Thân/Thê/Tử/Lục Súc) và Tam Tai theo tuổi mụ; năm nào phạm, năm nào đẹp
+- Nêu cách hóa giải (mượn tuổi, chọn năm khác) khi phạm; nói thẳng năm nên/tránh cho việc làm nhà, cưới hỏi
+- Dựa trên bảng năm đã cung cấp, không bịa thêm
+
+=== DỮ LIỆU KIM LÂU & TAM TAI ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+const CHAT_SYSTEM_NGU_HANH_TEN = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia phân tích ngũ hành tên theo cổ học Việt Nam, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
+
+${_TIME()}
+
+Nguyên tắc:
+- Tiếng Việt chuẩn mực, không bullet, không emoji
+- Phân tích ngũ hành từng chữ trong tên (theo âm/nghĩa) và độ hài hòa với mệnh nạp âm của người
+- Nói thẳng tên bồi mệnh (tương sinh/đồng hành) hay khắc; gợi cách chỉnh (đổi tên đệm, thêm chữ hành thiếu)
+- Có căn cứ, không tâng bốc
+
+=== DỮ LIỆU NGŨ HÀNH TÊN ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+const CHAT_SYSTEM_THAN_SO = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia Thần Số Học (Numerology Pythagoras), phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
+
+${_TIME()}
+
+Nguyên tắc:
+- Tiếng Việt chuẩn mực, không bullet, không emoji
+- Luận theo SỐ CHỦ ĐẠO (Life Path) đã tính sẵn — KHÔNG tự tính lại; giải thích ý nghĩa con số, điểm mạnh/yếu, sự nghiệp, tình cảm hợp với số đó
+- Số bậc thầy (11/22/33) luận riêng; nói thẳng ưu/khuyết, không tâng bốc
+- Đây là numerology phương Tây, không trộn lẫn tử vi
+
+=== DỮ LIỆU THẦN SỐ HỌC ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+const CHAT_SYSTEM_BAT_TRACH = (ctx: string, docs?: string, persona?: string) => `Bạn là thầy phong thủy Bát Trạch (八宅) theo cổ pháp, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
+
+${_TIME()}
+
+Nguyên tắc:
+- Tiếng Việt chuẩn mực, không bullet, không emoji
+- Dựa MỆNH QUÁI (cung phi) và nhóm Đông/Tây tứ mệnh ĐÃ TÍNH SẴN — KHÔNG tự tính lại cung phi
+- Luận 8 hướng theo Du Niên Bát Biến (Sinh Khí, Thiên Y, Diên Niên, Phục Vị = cát; Tuyệt Mệnh, Ngũ Quỷ, Lục Sát, Họa Hại = hung) hợp với mệnh quái này; chỉ rõ hướng nhà/cửa/bếp/giường nên và tránh
+- Nói thẳng, cụ thể; nêu cách hóa giải khi buộc dùng hướng xấu
+
+=== DỮ LIỆU BÁT TRẠCH ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+const CHAT_SYSTEM_KINH_DICH = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia Kinh Dịch (易經) — Chu Dịch, 64 quẻ, hào từ — theo cổ pháp, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
+
+${_TIME()}
+
+Nguyên tắc:
+- Tiếng Việt chuẩn mực, không bullet, không emoji
+- Người hỏi đã GIEO QUẺ: dữ liệu dưới cho quái THƯỢNG/HẠ và hào ĐỘNG (đã tính sẵn, chính xác). Từ hai quái đơn này, ĐỊNH DANH đúng quẻ trong 64 quẻ (tên Hán-Việt + số) rồi luận — KHÔNG đổi quái đã cho
+- Luận: ý nghĩa quẻ chính (Thoán), trọng tâm ở HÀO ĐỘNG (hào từ), và QUẺ BIẾN (nếu có hào động) cho thấy xu hướng chuyển; áp vào ĐÚNG câu hỏi của người gieo
+- Nói thẳng cát/hung, nên/không nên; giữ tinh thần "quân tử vấn Dịch" — khuyên hành xử, không phán số phận tuyệt đối
+
+=== DỮ LIỆU QUẺ ĐÃ GIEO ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 // ── Vision: Xem tướng qua ảnh (native trong rail, thay vì API legacy) ──
@@ -704,5 +805,63 @@ function extractDatTenDnContext(data: any): string {
   if (d.tenChu)    ctx += `Người chủ: ${d.tenChu}\n`;
   if (d.canChiChu) ctx += `Tuổi chủ: ${d.canChiChu} — nạp âm ${d.napAmChu || ''} (hành ${d.hanhChu || ''})\n`;
   if (d.tenGoiY)   ctx += `Tên đang cân nhắc: ${d.tenGoiY}\n`;
+  return ctx;
+}
+
+// ── Batch 2 extracts (Mệnh Lý / Huyền Học) ────────────────────
+// Nhãn tiếng Việt cho các field flat của compute* trong lib/engine/menhly.ts.
+const GENERIC_LABELS: Record<string, string> = {
+  nam: 'Năm sinh', canChi: 'Can chi', napAm: 'Nạp âm', hanh: 'Hành',
+  ten: 'Tên', gioiTinh: 'Giới tính', menhQuai: 'Mệnh quái (cung phi)',
+  quaiHanh: 'Hành quái', nhom: 'Nhóm trạch', huongTot: 'Hướng tốt',
+  dob: 'Ngày sinh', soChuDao: 'Số chủ đạo (Life Path)', soNgaySinh: 'Số ngày sinh',
+  isMaster: 'Là số bậc thầy',
+};
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function extractGenericContext(data: any): string {
+  if (!data || typeof data !== 'object') return '';
+  let ctx = '';
+  for (const [k, v] of Object.entries(data)) {
+    if (v == null || v === '' || typeof v === 'object') continue;
+    const label = GENERIC_LABELS[k] || k;
+    const val = k === 'gioiTinh' ? (v === 'nu' ? 'Nữ' : 'Nam') : k === 'isMaster' ? (v ? 'Có' : 'Không') : v;
+    ctx += `${label}: ${val}\n`;
+  }
+  return ctx;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function extractKimLauContext(data: any): string {
+  if (!data) return '';
+  const d = data.kimLauData || data;
+  let ctx = '';
+  if (d.canChi) ctx += `Tuổi: ${d.canChi} (nạp âm ${d.napAm || ''}, hành ${d.hanh || ''})\n`;
+  if (d.cucTamHop) ctx += `Cục tam hợp: ${d.cucTamHop} — Tam Tai các năm chi: ${(d.tamTaiChi || []).join(', ')}\n`;
+  if (Array.isArray(d.rows) && d.rows.length) {
+    ctx += '\nBảng 10 năm tới:\n';
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    d.rows.forEach((r: any) => {
+      const flags = [r.kimLau ? `PHẠM ${r.kimLau}` : '', r.tamTai ? 'PHẠM Tam Tai' : ''].filter(Boolean).join(' · ');
+      ctx += `  ${r.year} (tuổi mụ ${r.tuoiMu}, ${r.canChiNam}): ${flags || 'đẹp — không phạm Kim Lâu/Tam Tai'}\n`;
+    });
+  }
+  return ctx;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function extractKinhDichContext(data: any): string {
+  if (!data) return '';
+  const d = data.kinhDichData || data;
+  let ctx = '';
+  if (d.question) ctx += `Câu hỏi người gieo: ${d.question}\n`;
+  if (d.quaiThuong && d.quaiHa) ctx += `Quẻ gieo được — Thượng quái: ${d.quaiThuong}, Hạ quái: ${d.quaiHa}\n`;
+  if (Array.isArray(d.haoLines) && d.haoLines.length) {
+    ctx += 'Sáu hào (từ dưới lên): ' +
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      d.haoLines.map((h: any) => `hào ${h.vi} ${h.am_duong}${h.dong ? ' (ĐỘNG)' : ''}`).join('; ') + '\n';
+  }
+  if (Array.isArray(d.dongHao) && d.dongHao.length) ctx += `Hào động: ${d.dongHao.join(', ')}\n`;
+  else ctx += 'Không có hào động (quẻ tĩnh)\n';
+  if (d.bienQuai) ctx += `Quẻ biến: ${d.bienQuai}\n`;
   return ctx;
 }
