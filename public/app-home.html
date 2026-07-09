@@ -56,7 +56,7 @@
 
 <script>window.SHELL_ACTIVE='home';</script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=15"></script>
+<script src="/shell.js?v=16"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 var IC={
@@ -72,20 +72,26 @@ var IC={
   face:'<circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M9 15c1 1 5 1 6 0"/>'
 };
 var GROUPS=[
-  { g:'Tử Vi · Tứ Trụ', items:[
+  { g:'Tử Vi', items:[
     { i:'grid', t:'Lá số Tử Vi', d:'Lập lá số 12 cung, chính tinh, cách cục, đại vận', h:'/app/la-so' },
-    { i:'rows', t:'Lá số Bát Tự', d:'Tứ trụ Tử Bình: nhật can, dụng thần, cách cục', h:'/app/bat-tu' },
     { i:'doc', t:'Luận giải chuyên sâu', d:'Chấm điểm 12 cung, đại vận, tứ hóa theo cổ pháp', h:'/app/luan-giai', c:5 },
-  ]},
-  { g:'Xem Tuổi · Đặt Tên', items:[
     { i:'heart', t:'Xem tuổi vợ chồng', d:'So hòa hợp hai lá số theo 8 chiều', h:'/app/xem-tuoi' },
     { i:'handshake', t:'Xem tuổi làm ăn', d:'So hợp hai người khi bắt tay hợp tác', h:'/app/xem-lam-an' },
-    { i:'tag', t:'Đặt tên con', d:'Tên hợp mệnh theo can chi & ngũ hành', h:'/app/dat-ten' },
+  ]},
+  { g:'Tử Bình', items:[
+    { i:'rows', t:'Lá số Bát Tự', d:'Tứ trụ Tử Bình: nhật can, dụng thần, cách cục', h:'/app/bat-tu' },
+  ]},
+  { g:'Xem Tướng', items:[
+    { i:'face', t:'Xem tướng', d:'Tướng mặt, mắt, bàn tay qua ảnh', h:'/app/xem-tuong' },
+  ]},
+  { g:'Phong Thủy', items:[
+    { i:'compass', t:'Phong thủy', d:'Bố cục nhà, phòng, bàn làm việc qua ảnh', h:'/app/phong-thuy' },
+  ]},
+  { g:'Chọn Ngày', items:[
     { i:'cal', t:'Chọn ngày tốt', d:'Ngày giờ hợp tuổi cho việc trọng đại', h:'/app/chon-ngay' },
   ]},
-  { g:'Phong Thủy · Tướng', items:[
-    { i:'compass', t:'Phong thủy', d:'Bố cục nhà, phòng, bàn làm việc qua ảnh', h:'/app/phong-thuy' },
-    { i:'face', t:'Xem tướng', d:'Tướng mặt, mắt, bàn tay qua ảnh', h:'/app/xem-tuong' },
+  { g:'Đặt Tên', items:[
+    { i:'tag', t:'Đặt tên con', d:'Tên hợp mệnh theo can chi & ngũ hành', h:'/app/dat-ten' },
   ]},
 ];
 function svg(n){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">'+(IC[n]||IC.grid)+'</svg>'; }
