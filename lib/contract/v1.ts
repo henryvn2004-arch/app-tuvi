@@ -82,10 +82,12 @@ export interface ClientInfo {
 export type ScenarioType =
   | 'xem-tuoi'
   | 'xem-lam-an'
+  | 'tuong-hop'
   | 'tu-binh'
   | 'xem-tuoi-sinh-con'
   | 'chon-ngay-tot'
   | 'dat-ten-con'
+  | 'dat-ten-dn'
   | 'xem-tuong'
   | 'phong-thuy';
 
@@ -223,7 +225,9 @@ export function validateChatRequest(body: unknown):
 
   if (b.scenario != null) {
     const s = b.scenario as Record<string, unknown>;
-    const types: ScenarioType[] = ['xem-tuoi', 'xem-lam-an', 'tu-binh', 'xem-tuoi-sinh-con', 'chon-ngay-tot', 'dat-ten-con'];
+    // NGUỒN DUY NHẤT phải khớp ScenarioType union trên — xưa thiếu xem-tuong/
+    // phong-thuy nên rail 2 tool vision bị chặn 400. Giữ đủ mọi type ở đây.
+    const types: ScenarioType[] = ['xem-tuoi', 'xem-lam-an', 'tuong-hop', 'tu-binh', 'xem-tuoi-sinh-con', 'chon-ngay-tot', 'dat-ten-con', 'dat-ten-dn', 'xem-tuong', 'phong-thuy'];
     if (!types.includes(s.type as ScenarioType)) {
       return { ok: false, error: 'scenario.type không hợp lệ' };
     }

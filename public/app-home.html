@@ -56,7 +56,7 @@
 
 <script>window.SHELL_ACTIVE='home';</script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=16"></script>
+<script src="/shell.js?v=17"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 var IC={
@@ -69,7 +69,9 @@ var IC={
   cal:'<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/>',
   home:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',
   compass:'<circle cx="12" cy="12" r="9"/><path d="M15 9l-2 5-4 1 2-5z"/>',
-  face:'<circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M9 15c1 1 5 1 6 0"/>'
+  face:'<circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M9 15c1 1 5 1 6 0"/>',
+  users:'<circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17.5" cy="9" r="2.2"/><path d="M16 20a5 5 0 0 1 5-4.6"/>',
+  baby:'<circle cx="12" cy="9" r="4"/><path d="M8.5 20c0-2.6 7-2.6 7 0"/><path d="M10 8h.01M14 8h.01"/>'
 };
 var GROUPS=[
   { g:'Tử Vi', items:[
@@ -77,6 +79,8 @@ var GROUPS=[
     { i:'doc', t:'Luận giải chuyên sâu', d:'Chấm điểm 12 cung, đại vận, tứ hóa theo cổ pháp', h:'/app/luan-giai', c:5 },
     { i:'heart', t:'Xem tuổi vợ chồng', d:'So hòa hợp hai lá số theo 8 chiều', h:'/app/xem-tuoi' },
     { i:'handshake', t:'Xem tuổi làm ăn', d:'So hợp hai người khi bắt tay hợp tác', h:'/app/xem-lam-an' },
+    { i:'users', t:'Tương hợp tuổi', d:'So hợp hai người bất kỳ: bạn, người thân, đối tác', h:'/app/tuong-hop' },
+    { i:'baby', t:'Xem tuổi sinh con', d:'Năm sinh con hợp tuổi bố mẹ theo địa chi', h:'/app/sinh-con' },
   ]},
   { g:'Tử Bình', items:[
     { i:'rows', t:'Lá số Bát Tự', d:'Tứ trụ Tử Bình: nhật can, dụng thần, cách cục', h:'/app/bat-tu' },
@@ -92,6 +96,7 @@ var GROUPS=[
   ]},
   { g:'Đặt Tên', items:[
     { i:'tag', t:'Đặt tên con', d:'Tên hợp mệnh theo can chi & ngũ hành', h:'/app/dat-ten' },
+    { i:'tag', t:'Đặt tên doanh nghiệp', d:'Tên công ty, thương hiệu hợp mệnh chủ & ngành', h:'/app/dat-ten-dn' },
   ]},
 ];
 function svg(n){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">'+(IC[n]||IC.grid)+'</svg>'; }
