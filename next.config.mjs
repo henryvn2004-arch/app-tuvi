@@ -12,6 +12,8 @@ const nextConfig = {
       { source: '/app/xem-lam-an',      destination: '/app-xem-tuoi.html'    },
       { source: '/app/dat-ten',         destination: '/app-dat-ten.html'     },
       { source: '/app/chon-ngay',       destination: '/app-chon-ngay.html'   },
+      { source: '/app/xem-tuong',       destination: '/app-xem-tuong.html'   },
+      { source: '/app/phong-thuy',      destination: '/app-phong-thuy.html'  },
       { source: '/xem-tuoi',            destination: '/xem-tuoi.html'        },
       { source: '/xem-lam-an',          destination: '/xem-lam-an.html'      },
       { source: '/la-so',               destination: '/la-so.html'           },

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phong thủy qua ảnh — Tử Vi Minh Bảo</title>
+<meta name="description" content="Luận phong thủy nhà ở, phòng, bàn làm việc qua ảnh theo Bát Trạch &amp; Ngũ Hành — gửi ảnh cho trợ lý AI trong Luận Đường.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shell.css?v=5">
+<style>
+.vis-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:22px 22px;box-shadow:var(--shadow);max-width:620px}
+.vis-card .ic{width:46px;height:46px;border-radius:12px;background:var(--gold-lt);border:1px solid var(--gold-soft);display:flex;align-items:center;justify-content:center;color:var(--gold-soft);margin-bottom:13px}
+.vis-card .ic svg{width:24px;height:24px}
+.vis-card h2{font-family:var(--serif);font-size:19px;font-weight:600;margin-bottom:7px}
+.vis-card p{font-size:13.5px;color:var(--text-mid);line-height:1.7;margin-bottom:8px}
+.vis-card ul{margin:6px 0 16px 2px;padding:0;list-style:none}
+.vis-card li{font-size:13px;color:var(--text-mid);line-height:1.7;padding-left:18px;position:relative}
+.vis-card li::before{content:"·";position:absolute;left:6px;color:var(--gold-soft);font-weight:700}
+.vis-go{background:var(--red);color:#fff;border:none;border-radius:9px;padding:11px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif);display:inline-flex;align-items:center;gap:8px}
+.vis-note{margin-top:14px;font-size:12px;color:var(--text-lt);line-height:1.6}
+.vis-note a{color:var(--gold-soft);font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Phong thủy qua ảnh</b><span>Bố cục nhà · phòng · bàn làm việc theo Bát Trạch</span></div>
+      <div class="ws-actions">
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div class="vis-card">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M15 9l-2 5-4 1 2-5z"/></svg></div>
+        <h2>Gửi ảnh không gian — thầy luận phong thủy</h2>
+        <p>Luận theo <b>Bát Trạch Minh Kính</b> kết hợp <b>Ngũ Hành</b>. Gửi ảnh ở khung <b>Trợ lý</b> bên phải, thầy quan sát bố cục rồi chỉ ra lỗi và cách sửa.</p>
+        <ul>
+          <li>Ảnh <b>toàn cảnh</b> phòng khách / ngủ / bếp — đủ sáng, thấy cửa và đồ chính.</li>
+          <li>Ảnh <b>bàn làm việc</b> — hướng ngồi, sắp xếp.</li>
+          <li>Ảnh <b>cửa hàng</b> — quầy, lối vào, trưng bày.</li>
+        </ul>
+        <button class="vis-go" onclick="Shell.openRail()">✦ Mở trợ lý &amp; gửi ảnh</button>
+        <div class="vis-note">Cần bản chấm điểm chi tiết (before/after, danh sách vật phẩm)? Dùng <a href="/cong-cu#phong-thuy">công cụ Phong thủy chuyên</a>.</div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='phong-thuy';
+window.SHELL_INTRO={key:'phong-thuy-app',title:'Phong thủy qua ảnh',desc:'Gửi ảnh không gian cho <b>trợ lý AI</b> ở khung bên phải — thầy luận bố cục theo Bát Trạch &amp; Ngũ Hành, chỉ lỗi và cách sửa.'};</script>
+<script src="/auth.js"></script>
+<script src="/shell.js?v=15"></script>
+<script>
+function initPhongThuy(){
+  Shell.setContext({
+    scenario:{type:'phong-thuy',data:{}},
+    label:'Phong thủy qua ảnh',
+    placeholder:'Gửi ảnh không gian rồi hỏi thầy…',
+    greeting:'Chào bạn. Gửi cho tôi ảnh **không gian** cần xem — phòng khách, phòng ngủ, bàn làm việc hay cửa hàng — bằng nút ảnh phía dưới, tôi sẽ luận phong thủy theo cổ pháp.',
+    chips:['Xem phong thủy phòng khách','Bàn làm việc đặt vậy ổn không?','Phòng ngủ có lỗi gì không?','Cách hóa giải hướng xấu?']
+  });
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initPhongThuy); else initPhongThuy();
+</script>
+</body>
+</html>

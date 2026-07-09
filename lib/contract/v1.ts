@@ -85,7 +85,9 @@ export type ScenarioType =
   | 'tu-binh'
   | 'xem-tuoi-sinh-con'
   | 'chon-ngay-tot'
-  | 'dat-ten-con';
+  | 'dat-ten-con'
+  | 'xem-tuong'
+  | 'phong-thuy';
 
 export interface ScenarioInput {
   type: ScenarioType;
