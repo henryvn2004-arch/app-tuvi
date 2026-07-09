@@ -11,7 +11,7 @@
 
   // ── NGUỒN DUY NHẤT: danh sách công cụ (render cả sidebar lẫn Cmd+K) ──
   var TOOLS = [
-    { group: 'Không gian', open: true, items: [
+    { group: 'Luận Đường', open: true, items: [
       { id: 'home',       label: 'Tổng quan',           href: '/app',            icon: 'home' },
     ] },
     { group: 'Tử Vi · Tứ Trụ', open: true, items: [
@@ -92,7 +92,7 @@
     if (!host) return;
     host.innerHTML =
       '<div class="rail-h"><div class="spark">✦</div>' +
-      '<div><b>Trợ lý Tử Vi</b><span>Hiểu đúng lá số đang mở</span></div>' +
+      '<div><b>Trợ lý Luận Đường</b><span>Hiểu đúng lá số đang mở</span></div>' +
       '<div class="tools">' +
         '<button class="rh-btn mobile-only" title="Đóng" data-act="rail-close">✕</button>' +
         '<button class="rh-btn" title="Hội thoại mới" data-act="newchat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 5v14M5 12h14"/></svg></button>' +
