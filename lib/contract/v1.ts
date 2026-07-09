@@ -109,6 +109,9 @@ export interface ChatRequestV1 {
   birth?: BirthParams;
   /** Kịch bản phi-lá-số (loại trừ với birth). */
   scenario?: ScenarioInput;
+  /** Persona tác giả cho luồng LÁ SỐ (birth). Với scenario, đặt trong scenario. */
+  authorName?: string;
+  authorStyle?: string;
   client: ClientInfo;
 }
 
