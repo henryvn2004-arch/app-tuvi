@@ -35,7 +35,23 @@ App-shell tại **`/app`** = **Luận Đường (論堂)** — vỏ 3 cột (sid
 - **Asset version:** bump `shell.js?v=` / `shell.css?v=` trên TẤT CẢ trang shell mỗi khi sửa (**hiện js=15, css=5**; `nav.js?v=16`). Linter hay reflow HTML — vô hại.
 - **Verify:** serve `public/` bằng `python3 -m http.server` + Playwright (`/opt/pw-browsers/chromium`); test rewrite `/app/*` bằng `page.route` fulfill file, hoặc mở `*.html?auto=1` trực tiếp.
 
-### Bước tiếp theo (gợi ý, chọn 1)
+### 🔜 ĐANG CHỜ HENRY CHỌN — kéo thêm tool vào shell (2026-07-09)
+Henry muốn chọn tiếp tool từ catalog để đưa vào Luận Đường. **Nguồn chuẩn = bảng `tool_pricing` (Supabase `dciwkfdqhhddeymlisey`, enabled=true) — 48 tool.** Đã liệt kê đầy đủ + phân loại độ dễ. **9 slot đã trong shell:** la-so, luan-giai, xem-tuoi, xem-lam-an, bat-tu(tu-binh), xem-tuong(prose gộp dien/nhan/thu-tuong), phong-thuy(prose gộp ban-lam-viec/cua-hang), chon-ngay(chon-ngay-tot), dat-ten(dat-ten-con).
+
+**Ứng viên CHƯA vào shell — phân theo độ khả thi:**
+- **Nhóm A (dễ nhất, hợp rail — engine/scenario sẵn):**
+  - `xem-tuoi-sinh-con` (Luận Giải, free) — scenario giống chọn-ngày, engine sẵn.
+  - `dat-ten-dn` (Đặt tên DN) — y hệt dat-ten-con, đổi prompt.
+  - `tuong-hop` (Tương hợp tuổi, Mệnh Lý free) — = 2 lá số, engine sẵn như xem-tuoi.
+  - `nap-am`, `tu-tru`, `bat-trach`, `kim-lau`, `ngu-hanh-ten` (Mệnh Lý free) — can-chi/ngũ hành thuần, `lib/engine/diachi.ts` sẵn.
+  - `an-sao`, `sao-nam`, `cach-cuc`, `dai-van`, `van-thang` (Công Cụ Tử Vi free) — **đều là lát cắt lá số, rail đã trả lời được khi có lá số** → cân nhắc có cần slot riêng không.
+  - `hoang-dao`, `ngay-tot`, `luc-nham`, `han-nam` (Lịch Số free) — lịch/ngày deterministic.
+- **Nhóm B (hợp rail prose, cần prompt riêng):** `kinh-dich` (64 quẻ), `than-so-hoc`, `khi-sac` (ảnh OK). `thanh-tuong`/`thanh-tuong-pro` = **giọng nói/audio → rail CHƯA nhận audio**.
+- **Nhóm C (KHÓ, KHÔNG hợp rail prose — cần UI riêng/sinh ảnh):** `tarot`/`oracle`/`boi-bai-tay` (rút bài tương tác); `phong-thuy-render` (sinh ảnh); 10 tool **Phong Cách AI / Làm Đẹp** (da-lieu/kieu-toc/personal-color/trang-diem/trang-phuc, nhất là *-tryon* = sinh/ghép ảnh, khác domain mệnh lý).
+
+**Gợi ý Claude: batch đầu = 3 tool Nhóm A có engine sẵn** (`xem-tuoi-sinh-con` → nhóm Chọn Ngày/Tử Vi · `dat-ten-dn` → Đặt Tên · `tuong-hop` → Tử Vi cạnh xem-tuoi). Pattern y hệt các trang scenario hiện có: tạo `app-<id>.html` khai `SHELL_ACTIVE` + `Shell.setContext({scenario})` bọc DOMContentLoaded, thêm route `next.config.mjs`, thêm item vào TOOLS (`shell.js`) + GROUPS (`app-home.html`), bump asset version. Backend: check `buildChatContext`/contract đã hỗ trợ scenario type chưa (xem-tuoi-sinh-con/tuong-hop có thể cần nhánh). **→ Chờ Henry chốt tool nào rồi gom 1 PR/batch.**
+
+### Bước tiếp theo (gợi ý khác, chọn 1)
 1. **`suggestions[]` do LLM sinh** theo từng câu trả lời (nâng cấp #149 — đụng brain `lib/agent/prompts.ts`+contract, áp cho cả kênh bot). Nặng hơn, tách PR.
 2. **Nợ DRY:** trỏ `xem-tuoi.html` (legacy) + trang khác sang `tuong-hop.js`/`can-chi.js`.
 3. **Tính phí Lượng cho vision** (xem-tuong/phong-thuy) nếu muốn — hiện bill qua `chat.cost` chung như mọi lượt rail.
