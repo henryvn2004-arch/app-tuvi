@@ -11,27 +11,34 @@
 **Cập nhật:** 2026-07-09
 
 ### 🔖 RESUME HERE (mở máy khác đọc cái này trước)
-App-shell tại **`/app`** — vỏ 3 cột (sidebar tool · workspace giữa · rail "Trợ lý AI"), brand navy/gold kiểu Linear/Raycast. **ĐÃ LIVE PROD.** Mọi tool engine/deterministic đã vào shell; 2 tool ảnh (phong thủy/xem tướng) GIỮ trang cũ (đã quyết).
+App-shell tại **`/app`** = **Luận Đường (論堂)** — vỏ 3 cột (sidebar tool · workspace giữa · rail "Trợ lý Luận Đường"), brand navy/gold. **ĐÃ LIVE PROD.** Mọi tool đã vào shell — **kể cả Phong thủy & Xem tướng qua ảnh** (đảo quyết định cũ). Trang chủ đã revamp "một cửa".
 
-**Đã merge vào main (mới→cũ):**
-- **hand-off giữa tool** (PR mới nhất, `part-x-continuation`): nút chéo **Lá số ↔ Bát Tự ↔ Luận giải** — cùng 1 ngày sinh nhảy tool khác điền sẵn + tự chạy (`Shell.rememberBirth`+`prefillForm`+`autoRun`, chung ID input `inp*`, link `?auto=1`). KHÔNG đổi shell.js (hạ tầng có sẵn).
-- **#150** trang chủ `/app` **dashboard** (đón + chọn công cụ); Lá số dời `/app` → `/app/la-so`; sidebar thêm mục "Tổng quan".
-- **#149** **chip gợi ý câu hỏi** cố định trên ô nhập rail (client, tái dùng bộ `chips` mỗi trang qua `Shell.setContext`; bấm bớt dần, ẩn khi streaming, newChat phục hồi). KHÔNG tốn LLM.
-- **#148** migrate **toàn bộ tool engine** vào shell: Bát Tự (`app-bat-tu.html`), Xem tuổi vợ chồng/làm ăn (`app-xem-tuoi.html` 2 chế độ theo path), Đặt tên (`app-dat-ten.html`), Chọn ngày (`app-chon-ngay.html`) + **empty-state intro** mỗi tool (`Shell.introOnce`, nhớ localStorage).
-- **#146/#147** nền app-shell + Lá số + rail + CTA trang chủ "Mở không gian làm việc"→/app.
+**Revamp trang chủ + Luận Đường (mới→cũ, ĐÃ MERGE):**
+- **#162** **Phong thủy & Xem tướng NATIVE vào shell** (vision): scenario type `xem-tuong`/`phong-thuy` + prompt vision (`prompts.ts`), rail **upload ảnh** (`shell.js`, gửi `images[{data,mediaType}]`), 2 trang `app-xem-tuong.html`/`app-phong-thuy.html` (setContext lúc load, rail active KHÔNG cần birth). Bản chấm điểm phong thủy structured (before/after) VẪN ở `/cong-cu`.
+- **#161** avatar thầy trên **từng tin** rail (`.msg.a` = avatar + `.msg-body`).
+- **#160** **author persona** cho rail: 15 thầy (`AUTHOR_ROSTER`), random/nhớ phiên (chung `localStorage['tvc_author_v1']` với tuvi-chat), avatar `/authors/<id>.jpg` + gửi `authorName/authorStyle` → văn phong. Vá `run.ts` birth-path áp văn phong cho cả Lá số.
+- **#159** seal.webp thật ở sidebar · nút "Đổi nền" vào sidebar · copy band.
+- **#158** menu **9→4 mục** (`nav.js`): ✦ Luận Đường · Khám phá · Cẩm nang · Tài khoản.
+- **#157** nén 3 khối SEO → 1 dải "Khám phá & Tra cứu".
+- **#156** dời catalog 47 tool → trang `/cong-cu` (`cong-cu.html`) + band "Một không gian".
+- **#155** hero **một cửa**: ô hỏi/persona → shell (pending-ask `sessionStorage`, rail tự hỏi sau khi lập lá số), bỏ nhánh `/tuvi-chat.html`.
+- **#154** đổi tên shell → **Luận Đường** (sidebar/rail/dashboard/CTA).
+- **#153** width card cố định. **#152** panel `/cong-cu` grouping khớp menu.
+- **#146–#151** (cũ): nền shell + migrate tool engine + intro + chip gợi ý + dashboard + hand-off.
 
 ### Kiến trúc app-shell (ĐỌC trước khi làm tiếp)
 - **Chrome dùng chung:** `public/shell.js` (v9) + `public/shell.css` (v3). Trang tool chỉ cần: khai `window.SHELL_ACTIVE='<id>'`; tùy chọn `window.SHELL_INTRO={key,title,desc}` + `<div id="introHost">`; gọi `Shell.setContext({birth?,scenario?,label,greeting,chips})` để bật rail (`chips` nuôi hàng gợi ý). API: `rememberBirth/getRememberedBirth/prefillForm/autoRun` (hand-off), `introOnce/markIntroSeen/dismissIntro`, `ask/openRail`.
-- **Rail** gọi `/api/v1/chat` SSE, gửi `birth` VÀ/HOẶC `scenario` (đi CÙNG được — Bát Tự gửi cả 2 để chọn đúng bộ não `tu-binh`).
-- **Routes** (`next.config.mjs` rewrites): `/app`→`app-home.html` (dashboard) · `/app/la-so`→`app.html` · `/app/bat-tu` · `/app/luan-giai` · `/app/xem-tuoi` & `/app/xem-lam-an` (CÙNG `app-xem-tuoi.html`, MODE suy từ `location.pathname`) · `/app/dat-ten` · `/app/chon-ngay`.
-- **Module lift/port (NỢ DRY):** `public/tuong-hop.js` (`calcTuongHop` 8 chiều — lift từ `xem-tuoi.html`), `public/can-chi.js` (`ccInfo`/`ccThangCanChi` — port từ `lib/engine/diachi.ts`). Sau ổn định trỏ trang legacy sang dùng chung (giống `laso-chart.js`).
-- **Asset version:** bump `shell.js?v=` / `shell.css?v=` trên TẤT CẢ trang shell mỗi khi sửa (hiện js=9, css=3). Trang linter hay reflow HTML — vô hại.
+- **Rail** gọi `/api/v1/chat` SSE, gửi `birth` VÀ/HOẶC `scenario` (đi CÙNG được). Có **author persona** (`authorName/authorStyle` top-level + trong scenario) + **upload ảnh** (`pendingImages` → `messages[].images=[{data,mediaType}]`, vision). `setContext` nhận thêm `placeholder`. Trang vision (`xem-tuong`/`phong-thuy`) gọi setContext lúc load (chờ `boot` bằng `DOMContentLoaded`) → rail active không cần birth.
+- **Routes** (`next.config.mjs` rewrites): `/app`→`app-home.html` · `/app/la-so`→`app.html` · `/app/bat-tu` · `/app/luan-giai` · `/app/xem-tuoi`&`/app/xem-lam-an` (chung `app-xem-tuoi.html`) · `/app/dat-ten` · `/app/chon-ngay` · **`/app/xem-tuong`** · **`/app/phong-thuy`**. Trang chủ `/`→`index.html` (revamp một-cửa); `/cong-cu`→`cong-cu.html` (catalog 47 tool).
+- **Backend scenario** (`lib/agent/prompts.ts` buildChatContext + `lib/contract/v1.ts`): thêm nhánh `xem-tuong`/`phong-thuy` (prompt vision prose). `run.ts` birth-path gộp văn phong thầy vào `tone`.
+- **Module lift/port (NỢ DRY):** `public/tuong-hop.js`, `public/can-chi.js` — sau ổn định trỏ trang legacy sang dùng chung.
+- **Asset version:** bump `shell.js?v=` / `shell.css?v=` trên TẤT CẢ trang shell mỗi khi sửa (**hiện js=15, css=5**; `nav.js?v=16`). Linter hay reflow HTML — vô hại.
 - **Verify:** serve `public/` bằng `python3 -m http.server` + Playwright (`/opt/pw-browsers/chromium`); test rewrite `/app/*` bằng `page.route` fulfill file, hoặc mở `*.html?auto=1` trực tiếp.
 
 ### Bước tiếp theo (gợi ý, chọn 1)
 1. **`suggestions[]` do LLM sinh** theo từng câu trả lời (nâng cấp #149 — đụng brain `lib/agent/prompts.ts`+contract, áp cho cả kênh bot). Nặng hơn, tách PR.
 2. **Nợ DRY:** trỏ `xem-tuoi.html` (legacy) + trang khác sang `tuong-hop.js`/`can-chi.js`.
-3. **Kéo Phong thủy/Xem tướng vào shell** (ảnh/multimodal — nặng, đã quyết giữ trang cũ; mở lại nếu muốn: iframe hoặc native).
+3. **Tính phí Lượng cho vision** (xem-tuong/phong-thuy) nếu muốn — hiện bill qua `chat.cost` chung như mọi lượt rail.
 4. **Setup máy mới:** `npm ci` → `cd tuvi-engine && npm ci && cd ..` → `npx playwright install chromium` (env này đã có Chromium sẵn ở `/opt/pw-browsers`).
 
 ### Quy ước (giữ nguyên)
