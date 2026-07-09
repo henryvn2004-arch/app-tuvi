@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kinh Dịch — Gieo quẻ — Tử Vi Minh Bảo</title>
+<meta name="description" content="Gieo quẻ Kinh Dịch (Chu Dịch 64 quẻ) theo lối 3 đồng tiền — quẻ chính, hào động và quẻ biến. Hỏi trợ lý AI luận theo câu hỏi của bạn.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shell.css?v=5">
+<style>
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
+.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:13px}
+.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.fg input{border:1px solid var(--line-2);border-radius:7px;padding:9px 11px;font-size:14px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
+.fg input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
+.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
+.btn-go:disabled{opacity:.6;cursor:not-allowed}
+#resPanel{display:none}
+.res-head{font-family:var(--serif);font-size:15px;font-weight:600;margin-bottom:12px}
+.hex-wrap{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:14px}
+.hex{display:flex;flex-direction:column-reverse;gap:6px}
+.hline{display:flex;align-items:center;gap:8px}
+.bar{display:flex;gap:8px;width:120px}
+.seg{height:11px;border-radius:2px;background:var(--navy)}
+.yang .seg{flex:1}
+.yin .seg{flex:1;max-width:50px}
+.hline.dong .seg{background:var(--red)}
+.hline .mk{font-size:11px;color:var(--red);font-weight:600;width:52px}
+.hex-meta{align-self:center}
+.hex-meta .q{font-family:var(--serif);font-size:17px;font-weight:600}
+.hex-meta .q small{color:var(--text-lt);font-weight:400;font-size:13px}
+.hex-meta .b{font-size:12.5px;color:var(--text-mid);margin-top:6px}
+.note{background:var(--gold-lt);border:1px solid var(--gold-soft);border-radius:10px;padding:12px 15px;font-size:13px;color:var(--text-mid);line-height:1.65;margin-bottom:6px}
+.note b{color:var(--text)}
+.ask{margin-top:12px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
+.regieo{margin-top:10px;font-size:12.5px;color:var(--blue);cursor:pointer;background:none;border:none;font-family:inherit;text-decoration:underline}
+.laso-error{color:var(--red);padding:14px;border:1px solid var(--red);border-radius:10px;background:var(--white)}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Kinh Dịch — Gieo quẻ</b><span>Chu Dịch 64 quẻ · 3 đồng tiền</span></div>
+      <div class="ws-actions">
+        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Gieo lại</button>
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div class="form-card" id="birthPanel">
+        <h2>Thành tâm nghĩ về việc muốn hỏi</h2>
+        <p class="sub">Nhập câu hỏi (một việc cụ thể đang phân vân), giữ tâm tĩnh rồi bấm gieo quẻ. Hệ thống mô phỏng gieo 3 đồng tiền 6 lần để lập quẻ, trợ lý sẽ luận theo Chu Dịch.</p>
+        <div class="fg">
+          <label>Câu hỏi</label>
+          <input type="text" id="inpQ" placeholder="Ví dụ: Công việc sắp tới có nên nhận không?">
+        </div>
+        <button class="btn-go" id="btnGo" onclick="doGieo()">🪙 Gieo quẻ →</button>
+      </div>
+
+      <div id="resPanel">
+        <div class="res-head" id="resHead"></div>
+        <div class="hex-wrap">
+          <div class="hex" id="hexLines"></div>
+          <div class="hex-meta" id="hexMeta"></div>
+        </div>
+        <div class="note" id="resNote"></div>
+        <div class="ask" data-ask="Luận giúp tôi quẻ này theo đúng câu hỏi: ý nghĩa quẻ chính, hào động và quẻ biến cho thấy điều gì?">✦ Hỏi trợ lý luận quẻ</div>
+        <br><button class="regieo" onclick="showForm()">↺ Gieo quẻ khác</button>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='kinh-dich';
+window.SHELL_INTRO={key:'kinh-dich',title:'Kinh Dịch — Gieo quẻ',desc:'Nhập câu hỏi, giữ tâm tĩnh rồi gieo quẻ (mô phỏng 3 đồng tiền). Trợ lý AI luận quẻ chính, hào động và quẻ biến theo <b>Chu Dịch 64 quẻ</b>.'};</script>
+<script src="/auth.js"></script>
+<script src="/shell.js?v=18"></script>
+<script>
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+var TRIGRAM=['Khôn','Cấn','Khảm','Tốn','Chấn','Ly','Đoài','Càn'];
+function trigram(b1,b2,b3){ return TRIGRAM[b1*4+b2*2+b3]; }
+function castHao(){ // 3 đồng: sấp=2, ngửa=3 → tổng 6/7/8/9
+  var s=0; for(var i=0;i<3;i++) s+=(Math.random()<0.5?2:3); return s;
+}
+function doGieo(){
+  var btn=document.getElementById('btnGo');
+  var q=document.getElementById('inpQ').value.trim();
+  if(!q){ alert('Vui lòng nhập câu hỏi bạn muốn gieo quẻ.'); return; }
+  btn.disabled=true;
+  try{
+    var hao=[]; for(var i=0;i<6;i++) hao.push(castHao());
+    var yang=hao.map(function(v){return (v===7||v===9)?1:0;});
+    var dong=hao.map(function(v){return v===6||v===9;});
+    var quaiHa=trigram(yang[0],yang[1],yang[2]),quaiThuong=trigram(yang[3],yang[4],yang[5]);
+    var dongHao=dong.map(function(d,i){return d?i+1:0;}).filter(Boolean);
+    // Render 6 hào (dưới → trên; CSS column-reverse nên append theo thứ tự 1..6)
+    var lines='';
+    for(var h=0;h<6;h++){
+      var isYang=yang[h]===1,isDong=dong[h];
+      var seg=isYang?'<span class="seg"></span>':'<span class="seg"></span><span class="seg"></span>';
+      lines+='<div class="hline '+(isYang?'yang':'yin')+(isDong?' dong':'')+'"><span class="bar">'+seg+'</span><span class="mk">'+(isDong?'động':'')+'</span></div>';
+    }
+    document.getElementById('hexLines').innerHTML=lines;
+    document.getElementById('hexMeta').innerHTML=
+      '<div class="q">Thượng '+esc(quaiThuong)+' <small>/</small> Hạ '+esc(quaiHa)+'</div>'+
+      '<div class="b">Hào động: '+(dongHao.length?dongHao.join(', '):'không (quẻ tĩnh)')+'</div>';
+    document.getElementById('resHead').textContent='Quẻ gieo cho: "'+esc(q)+'"';
+    document.getElementById('resNote').innerHTML='Quẻ lập từ hai quái đơn: <b>Thượng '+esc(quaiThuong)+'</b> chồng trên <b>Hạ '+esc(quaiHa)+'</b>'+(dongHao.length?', có <b>hào động</b> ở vị trí '+dongHao.join(', ')+' → sinh quẻ biến':', quẻ tĩnh (không hào động)')+'. Hỏi trợ lý để định danh quẻ trong 64 quẻ và luận theo đúng câu hỏi của bạn.';
+    document.getElementById('birthPanel').style.display='none';document.getElementById('resPanel').style.display='block';document.getElementById('btnEdit').style.display='';
+    if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
+    Shell.setContext({
+      scenario:{type:'kinh-dich',data:{question:q,hao:hao}},
+      label:'Gieo quẻ · '+quaiThuong+'/'+quaiHa,
+      greeting:'Quẻ đã lập — **Thượng '+esc(quaiThuong)+' / Hạ '+esc(quaiHa)+'**'+(dongHao.length?', hào động '+dongHao.join(', '):' (quẻ tĩnh)')+'. Tôi sẽ luận theo câu hỏi của bạn.',
+      chips:['Luận quẻ này cho câu hỏi của tôi','Hào động nói lên điều gì?','Quẻ biến cho thấy xu hướng nào?','Nên hành động thế nào lúc này?']
+    });
+    document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
+  }catch(e){
+    document.getElementById('hexMeta').innerHTML='<div class="laso-error">Lỗi: '+esc(e.message)+'</div>';
+    document.getElementById('birthPanel').style.display='none';document.getElementById('resPanel').style.display='block';document.getElementById('btnEdit').style.display='';
+    if(window.console)console.error(e);
+  }finally{ btn.disabled=false; }
+}
+function showForm(){document.getElementById('resPanel').style.display='none';document.getElementById('birthPanel').style.display='block';document.getElementById('btnEdit').style.display='none';}
+</script>
+</body>
+</html>

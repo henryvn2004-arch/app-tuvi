@@ -22,6 +22,10 @@ import { buildToolDefs, executeTool, newToolContext, buildBirthFromInput, type P
 import { computeLaso, renderLasoCard } from '@/lib/engine/laso';
 import { computeTuBinh } from '@/lib/engine/tubinh';
 import { computeSinhCon, computeChonNgay, computeDatTen, computeDatTenDn } from '@/lib/engine/diachi';
+import {
+  computeNapAm, computeKimLau, computeNguHanhTen,
+  computeThanSoHoc, computeBatTrach, computeKinhDich,
+} from '@/lib/engine/menhly';
 // Template prompt + context formatter dùng CHUNG với /api/lasotuvi (một bộ não).
 import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint } from '@/lib/agent/prompts';
 import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
@@ -172,6 +176,24 @@ export async function runAgent(
       if (r) scn = { ...scenario, data: r };
     } else if (scenario.type === 'dat-ten-dn') {
       const r = computeDatTenDn(scenario.data || {});
+      if (r) scn = { ...scenario, data: r };
+    } else if (scenario.type === 'nap-am') {
+      const r = computeNapAm(scenario.data || {});
+      if (r) scn = { ...scenario, data: r };
+    } else if (scenario.type === 'kim-lau') {
+      const r = computeKimLau(scenario.data || {});
+      if (r) scn = { ...scenario, data: r };
+    } else if (scenario.type === 'ngu-hanh-ten') {
+      const r = computeNguHanhTen(scenario.data || {});
+      if (r) scn = { ...scenario, data: r };
+    } else if (scenario.type === 'than-so-hoc') {
+      const r = computeThanSoHoc(scenario.data || {});
+      if (r) scn = { ...scenario, data: r };
+    } else if (scenario.type === 'bat-trach') {
+      const r = computeBatTrach(scenario.data || {});
+      if (r) scn = { ...scenario, data: r };
+    } else if (scenario.type === 'kinh-dich') {
+      const r = computeKinhDich(scenario.data || {});
       if (r) scn = { ...scenario, data: r };
     }
     const bc = buildChatContext(scenarioToBody(scn, req.messages as ChatMessage[]));
@@ -433,6 +455,12 @@ const SCENARIO_FIELD: Record<string, string> = {
   'chon-ngay-tot': 'chonNgayData',
   'dat-ten-con': 'datTenData',
   'dat-ten-dn': 'datTenDnData',
+  'nap-am': 'napAmData',
+  'kim-lau': 'kimLauData',
+  'ngu-hanh-ten': 'nguHanhTenData',
+  'than-so-hoc': 'thanSoData',
+  'bat-trach': 'batTrachData',
+  'kinh-dich': 'kinhDichData',
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function scenarioToBody(scenario: ScenarioInput, messages: ChatMessage[]): any {

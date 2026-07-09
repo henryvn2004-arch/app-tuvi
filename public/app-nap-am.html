@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Đặt tên con — Tử Vi Minh Bảo</title>
-<meta name="description" content="Gợi ý đặt tên con hợp mệnh theo can chi, ngũ hành nạp âm của con và bố mẹ — hỏi trợ lý AI gợi ý tên và luận ý nghĩa.">
+<title>Nạp âm ngũ hành — Tử Vi Minh Bảo</title>
+<meta name="description" content="Tra nạp âm ngũ hành theo năm sinh (Hải Trung Kim, Lư Trung Hỏa…) — hành bản mệnh, hợp màu, hướng, tuổi. Hỏi trợ lý AI luận sâu.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,26 +43,20 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Đặt tên con</b><span>Chọn tên hợp mệnh con theo ngũ hành cổ pháp</span></div>
+      <div class="ws-title"><b>Nạp âm ngũ hành</b><span>Hành bản mệnh theo năm sinh</span></div>
       <div class="ws-actions">
-        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa thông tin</button>
+        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa</button>
         <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
       <div id="introHost"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Thông tin để đặt tên</h2>
-        <p class="sub">Lấy can chi &amp; ngũ hành nạp âm của con và bố mẹ làm nền, rồi hỏi trợ lý gợi ý tên hợp mệnh, luận ý nghĩa từng tên.</p>
-        <div class="frow">
-          <div class="fg" style="flex:2;min-width:150px"><label>Họ (của con)</label><input type="text" id="inpHo" placeholder="Nguyễn"></div>
-          <div class="fg" style="width:110px"><label>Giới tính con</label><select id="inpGt"><option value="nam">Bé trai</option><option value="nu">Bé gái</option></select></div>
-        </div>
+        <h2>Năm sinh (âm lịch)</h2>
+        <p class="sub">Tra nạp âm ngũ hành (tên hoa giáp) và hành bản mệnh theo năm sinh, rồi hỏi trợ lý luận hợp màu, hướng, tuổi.</p>
         <div class="frow" style="margin-bottom:4px">
-          <div class="fg" style="width:120px"><label>Năm sinh con</label><input type="number" id="inpNamCon" placeholder="2025" min="1900" max="2100"></div>
-          <div class="fg" style="width:120px"><label>Năm sinh bố</label><input type="number" id="inpNamBo" placeholder="1990" min="1900" max="2100"></div>
-          <div class="fg" style="width:120px"><label>Năm sinh mẹ</label><input type="number" id="inpNamMe" placeholder="1992" min="1900" max="2100"></div>
-          <button class="btn-go" id="btnGo" onclick="doDatTen()">Lập nền →</button>
+          <div class="fg" style="width:140px"><label>Năm sinh</label><input type="number" id="inpNam" placeholder="1990" min="1900" max="2100"></div>
+          <button class="btn-go" id="btnGo" onclick="doNapAm()">Tra nạp âm →</button>
         </div>
       </div>
 
@@ -70,7 +64,7 @@
         <div class="res-head" id="resHead"></div>
         <div class="cc-row" id="ccRow"></div>
         <div class="note" id="resNote"></div>
-        <div class="ask" data-ask="Gợi ý cho tôi 12 tên đẹp hợp mệnh cho con, kèm ý nghĩa và ngũ hành từng tên.">✦ Hỏi trợ lý gợi ý tên hợp mệnh</div>
+        <div class="ask" data-ask="Mệnh nạp âm này hợp màu gì, hướng nào, tuổi nào; kỵ gì? Luận giúp tôi.">✦ Hỏi trợ lý luận sâu nạp âm</div>
       </div>
     </div>
   </main>
@@ -78,57 +72,44 @@
   <aside class="rail" id="shell-rail"></aside>
 </div>
 
-<script>window.SHELL_ACTIVE='dat-ten';
-window.SHELL_INTRO={key:'dat-ten',title:'Đặt tên con hợp mệnh',desc:'Lấy can chi &amp; ngũ hành nạp âm của con và bố mẹ làm nền, rồi hỏi <b>trợ lý AI</b> gợi ý tên hợp mệnh kèm ý nghĩa từng tên.'};</script>
+<script>window.SHELL_ACTIVE='nap-am';
+window.SHELL_INTRO={key:'nap-am',title:'Nạp âm ngũ hành',desc:'Tra nạp âm (tên hoa giáp) và hành bản mệnh theo năm sinh, rồi hỏi <b>trợ lý AI</b> hợp màu, hướng, tuổi và điều nên tránh.'};</script>
 <script src="/can-chi.js?v=1"></script>
 <script src="/auth.js"></script>
 <script src="/shell.js?v=18"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 var HANH_COLOR={'Mộc':'var(--green)','Hỏa':'var(--red)','Thổ':'var(--gold-soft)','Kim':'#8a8a8a','Thủy':'var(--blue)'};
-var SINH={'Mộc':'Hỏa','Hỏa':'Thổ','Thổ':'Kim','Kim':'Thủy','Thủy':'Mộc'};
-
-function doDatTen(){
+function doNapAm(){
   var btn=document.getElementById('btnGo');
-  var ho=document.getElementById('inpHo').value.trim();
-  var gt=document.getElementById('inpGt').value;
-  var namCon=parseInt(document.getElementById('inpNamCon').value);
-  var namBo=parseInt(document.getElementById('inpNamBo').value);
-  var namMe=parseInt(document.getElementById('inpNamMe').value);
-  if(!ho||!namCon||!namBo||!namMe){ alert('Vui lòng nhập họ và năm sinh của con, bố, mẹ.'); return; }
+  var nam=parseInt(document.getElementById('inpNam').value);
+  if(!nam){ alert('Vui lòng nhập năm sinh.'); return; }
   btn.disabled=true;
   try{
-    var iCon=CanChi.ccInfo(namCon),iBo=CanChi.ccInfo(namBo),iMe=CanChi.ccInfo(namMe);
-    var gtLabel=gt==='nu'?'Bé gái':'Bé trai';
-    document.getElementById('resHead').textContent='Nền can chi · ngũ hành '+esc(ho)+' — '+gtLabel;
-    function ccCard(who,i){ return '<div class="cc-card"><div class="who">'+esc(who)+'</div><div class="cc">'+esc(i.canChi)+'</div><div class="na" style="--hanh:'+HANH_COLOR[i.hanh]+'">'+esc(i.napAm)+' · <b>'+esc(i.hanh)+'</b></div></div>'; }
-    document.getElementById('ccRow').innerHTML=ccCard('Con ('+gtLabel+')',iCon)+ccCard('Bố',iBo)+ccCard('Mẹ',iMe);
-    document.getElementById('resNote').innerHTML='Mệnh con nạp âm <b>'+esc(iCon.napAm)+'</b> — hành <b>'+esc(iCon.hanh)+'</b>. Đặt tên nên chọn chữ có ngũ hành <b>tương sinh</b> cho con (hành <b>'+esc(_hanhSinhCho(iCon.hanh))+'</b> sinh <b>'+esc(iCon.hanh)+'</b>) hoặc <b>đồng hành</b> để bồi mệnh, tránh hành khắc. Hỏi trợ lý để có danh sách tên cụ thể hợp cả con lẫn bố mẹ.';
+    var i=CanChi.ccInfo(nam);
+    document.getElementById('resHead').textContent='Nạp âm năm '+nam;
+    document.getElementById('ccRow').innerHTML=
+      '<div class="cc-card"><div class="who">Can chi</div><div class="cc">'+esc(i.canChi)+'</div></div>'+
+      '<div class="cc-card"><div class="who">Nạp âm</div><div class="cc">'+esc(i.napAm)+'</div><div class="na" style="--hanh:'+HANH_COLOR[i.hanh]+'">hành <b>'+esc(i.hanh)+'</b></div></div>';
+    document.getElementById('resNote').innerHTML='Người tuổi <b>'+esc(i.canChi)+'</b> có bản mệnh <b>'+esc(i.napAm)+'</b> — thuộc hành <b>'+esc(i.hanh)+'</b>. Hỏi trợ lý để luận màu sắc, hướng, vật phẩm hợp mệnh và tuổi tương sinh/tương khắc.';
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('resPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
-      scenario:{type:'dat-ten-con',data:{ho:ho,gioiTinh:gt,namCon:namCon,namBo:namBo,namMe:namMe}},
-      label:'Đặt tên '+gtLabel+' họ '+ho+' · '+iCon.canChi,
-      greeting:'Nền mệnh của bé đã sẵn sàng (con **'+esc(iCon.canChi)+'** · '+esc(iCon.hanh)+'). Bạn muốn tôi gợi ý tên theo hướng nào?',
-      chips:['Gợi ý 12 tên hợp mệnh kèm ý nghĩa','Tên đệm nào hợp cho bé?','Con cần bổ ngũ hành gì?','Tên hợp cả tuổi bố và mẹ?']
+      scenario:{type:'nap-am',data:{nam:nam}},
+      label:'Nạp âm '+i.canChi+' · '+i.napAm,
+      greeting:'Năm **'+nam+'** — bản mệnh **'+esc(i.napAm)+'** (hành '+esc(i.hanh)+'). Bạn muốn tôi luận điều gì?',
+      chips:['Hợp màu gì, kỵ màu gì?','Hướng nhà/bàn làm việc nào hợp?','Tuổi nào hợp, tuổi nào khắc?','Vật phẩm phong thủy nào nên đeo?']
     });
     document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
   }catch(e){
     document.getElementById('ccRow').innerHTML='<div class="laso-error">Lỗi: '+esc(e.message)+'</div>';
-    document.getElementById('birthPanel').style.display='none';
-    document.getElementById('resPanel').style.display='block';
-    document.getElementById('btnEdit').style.display='';
+    document.getElementById('birthPanel').style.display='none';document.getElementById('resPanel').style.display='block';document.getElementById('btnEdit').style.display='';
     if(window.console)console.error(e);
   }finally{ btn.disabled=false; }
 }
-function _hanhSinhCho(h){ for(var k in SINH){ if(SINH[k]===h)return k; } return h; }
-function showForm(){
-  document.getElementById('resPanel').style.display='none';
-  document.getElementById('birthPanel').style.display='block';
-  document.getElementById('btnEdit').style.display='none';
-}
+function showForm(){document.getElementById('resPanel').style.display='none';document.getElementById('birthPanel').style.display='block';document.getElementById('btnEdit').style.display='none';}
 </script>
 </body>
 </html>
