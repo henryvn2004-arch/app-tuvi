@@ -14,20 +14,26 @@
     { group: 'Luận Đường', open: true, items: [
       { id: 'home',       label: 'Tổng quan',           href: '/app',            icon: 'home' },
     ] },
-    { group: 'Tử Vi · Tứ Trụ', open: true, items: [
+    { group: 'Tử Vi', open: true, items: [
       { id: 'la-so',      label: 'Lá số Tử Vi',         href: '/app/la-so',      icon: 'grid' },
-      { id: 'bat-tu',     label: 'Lá số Bát Tự',        href: '/app/bat-tu',     icon: 'rows' },
       { id: 'luan-giai',  label: 'Luận giải chuyên sâu', href: '/app/luan-giai',  icon: 'doc', cost: 5 },
-    ] },
-    { group: 'Xem Tuổi · Đặt Tên', items: [
       { id: 'xem-tuoi',   label: 'Xem tuổi vợ chồng',   href: '/app/xem-tuoi' },
       { id: 'xem-lam-an', label: 'Xem tuổi làm ăn',     href: '/app/xem-lam-an' },
-      { id: 'dat-ten',    label: 'Đặt tên con',         href: '/app/dat-ten' },
+    ] },
+    { group: 'Tử Bình', open: true, items: [
+      { id: 'bat-tu',     label: 'Lá số Bát Tự',        href: '/app/bat-tu',     icon: 'rows' },
+    ] },
+    { group: 'Xem Tướng', open: true, items: [
+      { id: 'xem-tuong',  label: 'Xem tướng',           href: '/app/xem-tuong' },
+    ] },
+    { group: 'Phong Thủy', open: true, items: [
+      { id: 'phong-thuy', label: 'Phong thủy',          href: '/app/phong-thuy' },
+    ] },
+    { group: 'Chọn Ngày', open: true, items: [
       { id: 'chon-ngay',  label: 'Chọn ngày tốt',       href: '/app/chon-ngay' },
     ] },
-    { group: 'Phong Thủy · Tướng', items: [
-      { id: 'phong-thuy', label: 'Phong thủy',          href: '/app/phong-thuy' },
-      { id: 'xem-tuong',  label: 'Xem tướng',           href: '/app/xem-tuong' },
+    { group: 'Đặt Tên', open: true, items: [
+      { id: 'dat-ten',    label: 'Đặt tên con',         href: '/app/dat-ten' },
     ] },
     { group: 'Tài khoản', open: true, items: [
       { id: 'vi-luong',   label: 'Ví Lượng',            href: '/profile', icon: 'wallet', balance: true },
