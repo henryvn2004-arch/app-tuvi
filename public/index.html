@@ -221,69 +221,22 @@ a { color: var(--blue); text-decoration: none; }
 .space-note { text-align: center; margin-top: 22px; font-size: 14px; color: var(--text-mid); }
 .space-note a { color: var(--gold); font-weight: 600; border-bottom: 1px solid rgba(201,168,76,0.4); }
 
-/* ── MỆNH KHỐ SECTION ─────────────────────────────────────── */
-.menh-kho-section {
-  background: linear-gradient(135deg, var(--navy) 0%, #1e2d47 100%);
-  color: #fff; border-top: 1px solid var(--border-lt);
-}
-.menh-kho-section .section-eyebrow { color: var(--gold-bright); }
-.menh-kho-section .section-title { color: #fff; }
-.menh-kho-section .section-desc { color: rgba(255,255,255,0.75); }
-.menh-kho-lead { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 28px; }
-.menh-kho-text p { color: rgba(255,255,255,0.82); font-size: 15px; line-height: 1.7; margin: 0; }
-.menh-kho-years {
-  display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
-}
-.menh-kho-year-pill {
-  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 6px; text-align: center; padding: 8px 12px; text-decoration: none;
-  color: rgba(255,255,255,0.85); font-size: 13px; transition: all 0.15s;
-  font-family: 'Noto Serif', Georgia, serif; white-space: nowrap;
-}
-.menh-kho-year-pill:hover { background: rgba(201,168,76,0.25); border-color: var(--gold-bright); color: var(--gold-bright); }
-.menh-kho-see-all { font-size: 13px; color: rgba(201,168,76,0.75); text-decoration: none; white-space: nowrap; padding: 4px 2px; }
-.menh-kho-see-all:hover { color: var(--gold-bright); text-decoration: underline; }
-.menh-kho-year-pill.hot { border-color: var(--gold-bright); color: var(--gold-bright); }
-.menh-kho-cta {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: var(--gold-bright); color: var(--navy); font-weight: 700;
-  padding: 13px 28px; border-radius: 8px; text-decoration: none; font-size: 15px;
-  transition: all 0.15s; margin-top: 20px;
-}
-.menh-kho-cta:hover { background: #e0bb5a; transform: translateY(-1px); }
-.menh-kho-sub { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 10px; }
-
-/* ── FREE HIGHLIGHTS ───────────────────────────────────────── */
-.free-section { background: var(--bg-soft); border-top: 1px solid var(--border-lt); }
-.free-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-}
-@media (max-width: 900px) { .free-grid { grid-template-columns: repeat(2, 1fr); } }
-.free-tile {
-  background: #fff; border: 1px solid var(--border-lt); border-radius: 8px;
-  padding: 18px 14px; text-decoration: none; color: inherit;
-  text-align: center; transition: all 0.15s;
-}
-.free-tile:hover { border-color: var(--gold-bright); transform: translateY(-1px); }
-.free-tile-icon { font-size: 26px; margin-bottom: 8px; color: #9A7B3A; display: flex; align-items: center; justify-content: center; height: 32px; }
-.free-tile-icon svg { width: 28px; height: 28px; }
-.free-tile-name {
-  font-family: 'Noto Serif', Georgia, serif; font-size: 14px;
-  color: var(--navy); margin-bottom: 4px;
-}
-.free-tile-desc { font-size: 11.5px; color: var(--text-lt); line-height: 1.4; }
-.free-cta-row {
-  text-align: center; margin-top: 28px;
-}
-.free-cta-link {
-  display: inline-block; background: var(--navy); color: var(--gold-bright);
-  padding: 12px 28px; border-radius: 6px; font-weight: 600;
-  font-family: 'Noto Serif', Georgia, serif; font-size: 14px;
-  text-decoration: none; transition: all 0.15s;
-}
-.free-cta-link:hover { background: var(--navy-mid); }
+/* ── KHÁM PHÁ & TRA CỨU (SEO nén) ──────────────────────────── */
+.seo-strip-section { background: var(--bg-soft); border-top: 1px solid var(--border-lt); }
+.seo-strip-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+.seo-strip-head h2 { font-family: 'Noto Serif', Georgia, serif; font-size: 20px; color: var(--navy); margin: 0; }
+.seo-strip-head span { font-size: 13px; color: var(--text-lt); }
+.seo-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+@media (max-width: 768px) { .seo-cols { grid-template-columns: 1fr; } }
+.seo-col { background: #fff; border: 1px solid var(--border-lt); border-radius: 11px; padding: 15px 17px; }
+.seo-col-t { display: flex; align-items: center; justify-content: space-between; margin-bottom: 11px; gap: 8px; }
+.seo-col-t b { font-family: 'Noto Serif', Georgia, serif; font-size: 15px; color: var(--navy); }
+.seo-cnt { font-size: 10.5px; color: var(--gold); background: var(--gold-lt); padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+.seo-links { display: flex; flex-wrap: wrap; gap: 6px 7px; }
+.seo-links a { font-size: 12.5px; color: var(--text-mid); background: var(--bg-soft); border: 1px solid var(--border-lt); border-radius: 7px; padding: 4px 10px; transition: all 0.12s; }
+.seo-links a:hover { border-color: var(--gold-bright); color: var(--navy); }
+.seo-all { display: block; margin-top: 11px; font-size: 12.5px; color: var(--gold); font-weight: 600; }
+.seo-all:hover { text-decoration: underline; }
 
 /* ── TRUST/VALUES ──────────────────────────────────────────── */
 .values-grid {
@@ -489,64 +442,6 @@ a { color: var(--blue); text-decoration: none; }
   </div>
 </section>
 
-<!-- ─── FREE HIGHLIGHTS (always visible, below tabs) ─────── -->
-<section class="section free-section">
-  <div class="page">
-    <div class="section-eyebrow">Miễn Phí Mãi Mãi</div>
-    <h2 class="section-title">8 Công Cụ Tra Cứu Phổ Biến</h2>
-    <p class="section-desc">Khởi đầu khám phá mệnh lý không cần tài khoản. 28 công cụ miễn phí khác trong trang Công cụ.</p>
-
-    <div class="free-grid" id="freeHub">
-      <a href="/tools/an-sao.html" class="free-tile">
-        <div class="free-tile-icon" data-icon="bar-chart-3"></div>
-        <div class="free-tile-name">An Sao Lá Số</div>
-        <div class="free-tile-desc">An sao theo cổ pháp, đầy đủ 12 cung</div>
-      </a>
-      <a href="/tools/tu-tru.html" class="free-tile">
-        <div class="free-tile-icon" data-icon="scroll-text"></div>
-        <div class="free-tile-name">Tứ Trụ Bát Tự</div>
-        <div class="free-tile-desc">Lập Tứ Trụ theo ngày giờ sinh</div>
-      </a>
-      <a href="/tools/xem-tuoi-sinh-con.html" class="free-tile">
-        <div class="free-tile-icon" data-icon="baby"></div>
-        <div class="free-tile-name">Xem Tuổi Sinh Con</div>
-        <div class="free-tile-desc">Năm sinh con hợp địa chi bố mẹ</div>
-      </a>
-      <a href="/tools/tuong-hop.html" class="free-tile">
-        <div class="free-tile-icon" data-icon="heart"></div>
-        <div class="free-tile-name">Tương Hợp Tuổi</div>
-        <div class="free-tile-desc">Xét hợp tuổi đôi người</div>
-      </a>
-      <a href="/tools/bat-trach.html" class="free-tile">
-        <div class="free-tile-icon" data-icon="compass"></div>
-        <div class="free-tile-name">Hướng Bát Trạch</div>
-        <div class="free-tile-desc">Tính hướng tốt xấu nhà ở</div>
-      </a>
-      <a href="/tools/hoang-dao.html" class="free-tile">
-        <div class="free-tile-icon" data-icon="sun"></div>
-        <div class="free-tile-name">Giờ Hoàng Đạo</div>
-        <div class="free-tile-desc">Tra giờ tốt trong ngày</div>
-      </a>
-      <a href="/tools/kim-lau.html" class="free-tile">
-        <div class="free-tile-icon" data-icon="home"></div>
-        <div class="free-tile-name">Kim Lâu & Tam Tai</div>
-        <div class="free-tile-desc">Kiểm tra tuổi cưới hỏi, làm nhà</div>
-      </a>
-      <a href="/tools/tarot.html" class="free-tile">
-        <div class="free-tile-icon" data-icon="wallet-cards"></div>
-        <div class="free-tile-name">Tarot 78 Lá</div>
-        <div class="free-tile-desc">Rút bài Tarot và luận giải</div>
-      </a>
-    </div>
-
-    <div class="free-cta-row">
-      <a href="/cong-cu#mien-phi" class="free-cta-link" id="freeAllLink">
-        Xem Tất Cả 28 Công Cụ Miễn Phí →
-      </a>
-    </div>
-  </div>
-</section>
-
 <!-- ─── MỘT KHÔNG GIAN ──────────────────────────────────── -->
 <section class="section space-section">
   <div class="page">
@@ -583,69 +478,6 @@ a { color: var(--blue); text-decoration: none; }
   </div>
 </section>
 
-<!-- ─── MỆNH KHỐ ──────────────────────────────────────────────── -->
-<section class="section menh-kho-section">
-  <div class="page">
-    <div class="section-eyebrow">Tra Cứu Lá Số Tử Vi Theo Năm Sinh</div>
-    <h2 class="section-title">Mệnh Khố — 438.000 Lá Số Đã Luận Sẵn</h2>
-    <p class="section-desc">Năm sinh 1960–2026 · Chọn ngày, giờ, giới tính · An sao cổ pháp · Luận giải 24 phần.</p>
-
-    <div class="menh-kho-lead">
-      <div class="menh-kho-text">
-        <p>An sao cổ pháp, luận giải 24 phần theo ngày · giờ · giới tính. Không cần đăng ký.</p>
-      </div>
-      <a href="/menh-kho.html" class="menh-kho-cta">Xem Mệnh Khố →</a>
-    </div>
-
-    <div class="menh-kho-years">
-      <a href="/menh-kho/1980" class="menh-kho-year-pill hot">1980</a>
-      <a href="/menh-kho/1983" class="menh-kho-year-pill hot">1983</a>
-      <a href="/menh-kho/1985" class="menh-kho-year-pill hot">1985</a>
-      <a href="/menh-kho/1987" class="menh-kho-year-pill hot">1987</a>
-      <a href="/menh-kho/1988" class="menh-kho-year-pill hot">1988</a>
-      <a href="/menh-kho/1990" class="menh-kho-year-pill hot">1990</a>
-      <a href="/menh-kho/1992" class="menh-kho-year-pill hot">1992</a>
-      <a href="/menh-kho/1993" class="menh-kho-year-pill hot">1993</a>
-      <a href="/menh-kho/1995" class="menh-kho-year-pill hot">1995</a>
-      <a href="/menh-kho/1997" class="menh-kho-year-pill hot">1997</a>
-      <a href="/menh-kho/1998" class="menh-kho-year-pill hot">1998</a>
-      <a href="/menh-kho/2000" class="menh-kho-year-pill hot">2000</a>
-      <a href="/menh-kho/2005" class="menh-kho-year-pill">2005</a>
-      <a href="/menh-kho/2010" class="menh-kho-year-pill">2010</a>
-      <a href="/menh-kho/2015" class="menh-kho-year-pill">2015</a>
-      <a href="/menh-kho.html" class="menh-kho-see-all">Xem tất cả năm →</a>
-    </div>
-  </div>
-</section>
-
-<!-- ─── NGÀY TỐT ──────────────────────────────────────────── -->
-<section class="section menh-kho-section">
-  <div class="page">
-    <div class="section-eyebrow">Xem Ngày Tốt — Lịch Vạn Niên Cổ Pháp</div>
-    <h2 class="section-title">Ngày Tốt 2020–2036 — 8.500+ Trang Tra Cứu</h2>
-    <p class="section-desc">Cưới hỏi, khởi công, khai trương, nhập trạch, xuất hành, cầu tài, sinh con, an táng, đào giếng, sửa nhà · 12 trực · 28 tú · Hoàng/hắc đạo.</p>
-
-    <div class="menh-kho-lead">
-      <div class="menh-kho-text">
-        <p>Mỗi tháng × mỗi việc 1 trang riêng — top ngày đẹp kèm can chi, trực, sao hoàng đạo, giờ tốt. Không cần đăng ký.</p>
-      </div>
-      <a href="/ngay-tot" class="menh-kho-cta">Xem Ngày Tốt →</a>
-    </div>
-
-    <div class="menh-kho-years">
-      <a href="/ngay-tot/cuoi-hoi" class="menh-kho-year-pill hot">Cưới hỏi</a>
-      <a href="/ngay-tot/khoi-cong" class="menh-kho-year-pill hot">Khởi công</a>
-      <a href="/ngay-tot/khai-truong" class="menh-kho-year-pill hot">Khai trương</a>
-      <a href="/ngay-tot/nhap-trach" class="menh-kho-year-pill hot">Nhập trạch</a>
-      <a href="/ngay-tot/xuat-hanh" class="menh-kho-year-pill">Xuất hành</a>
-      <a href="/ngay-tot/sinh-con" class="menh-kho-year-pill">Sinh con</a>
-      <a href="/ngay-tot/lich/2026" class="menh-kho-year-pill">Lịch 2026</a>
-      <a href="/ngay-tot/lich/2027" class="menh-kho-year-pill">Lịch 2027</a>
-      <a href="/ngay-tot" class="menh-kho-see-all">Xem tất cả →</a>
-    </div>
-  </div>
-</section>
-
 <!-- ─── VALUES / TRUST ───────────────────────────────────── -->
 <section class="section">
   <div class="page">
@@ -664,6 +496,39 @@ a { color: var(--blue); text-decoration: none; }
       <div class="value-card">
         <div class="value-title">Tự tra cứu, không phụ thuộc</div>
         <div class="value-desc">Mục đích của Tử Vi Minh Bảo không phải bán dịch vụ — mà giúp bạn tự hiểu mệnh lý của mình ở mức tương đương đến gặp một thầy chuyên môn. Biết để chủ động trong cuộc đời, không phải để mê tín hay phụ thuộc vào thầy bói.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── KHÁM PHÁ & TRA CỨU (SEO nén) ─────────────────────── -->
+<section class="section seo-strip-section">
+  <div class="page">
+    <div class="seo-strip-head">
+      <h2>Khám phá &amp; Tra cứu</h2>
+      <span>Thư viện tra cứu miễn phí — không cần tài khoản</span>
+    </div>
+    <div class="seo-cols">
+      <div class="seo-col">
+        <div class="seo-col-t"><b>Mệnh Khố</b><span class="seo-cnt">438.000 lá số</span></div>
+        <div class="seo-links">
+          <a href="/menh-kho/1980">1980</a><a href="/menh-kho/1985">1985</a><a href="/menh-kho/1990">1990</a><a href="/menh-kho/1992">1992</a><a href="/menh-kho/1995">1995</a><a href="/menh-kho/1998">1998</a><a href="/menh-kho/2000">2000</a>
+        </div>
+        <a class="seo-all" href="/menh-kho.html">Tra lá số theo năm sinh →</a>
+      </div>
+      <div class="seo-col">
+        <div class="seo-col-t"><b>Ngày Tốt</b><span class="seo-cnt">8.500+ trang</span></div>
+        <div class="seo-links">
+          <a href="/ngay-tot/cuoi-hoi">Cưới hỏi</a><a href="/ngay-tot/khoi-cong">Khởi công</a><a href="/ngay-tot/khai-truong">Khai trương</a><a href="/ngay-tot/nhap-trach">Nhập trạch</a><a href="/ngay-tot/xuat-hanh">Xuất hành</a><a href="/ngay-tot/lich/2026">Lịch 2026</a>
+        </div>
+        <a class="seo-all" href="/ngay-tot">Lịch vạn niên cổ pháp →</a>
+      </div>
+      <div class="seo-col">
+        <div class="seo-col-t"><b>Công cụ miễn phí</b><span class="seo-cnt">28 công cụ</span></div>
+        <div class="seo-links">
+          <a href="/tools/an-sao.html">An sao</a><a href="/tools/tu-tru.html">Tứ trụ</a><a href="/tools/tuong-hop.html">Tương hợp</a><a href="/tools/bat-trach.html">Bát trạch</a><a href="/tools/hoang-dao.html">Hoàng đạo</a><a href="/tools/tarot.html">Tarot</a>
+        </div>
+        <a class="seo-all" href="/cong-cu#mien-phi">Xem tất cả công cụ →</a>
       </div>
     </div>
   </div>
