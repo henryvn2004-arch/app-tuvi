@@ -59,7 +59,7 @@
     var host = document.getElementById('shell-sidebar');
     if (!host) return;
     var h = '';
-    h += '<a class="sb-brand" href="/"><div class="seal">寶</div><div class="brand-txt"><b>Tử Vi Minh Bảo</b><span>Mệnh Lý AI</span></div></a>';
+    h += '<a class="sb-brand" href="/"><img class="seal" src="/seal.webp" alt="Tử Vi Minh Bảo"><div class="brand-txt"><b>Tử Vi Minh Bảo</b><span>Mệnh Lý AI</span></div></a>';
     h += '<button class="kbtn" type="button" data-act="cmd">' +
          '<svg class="ic" style="opacity:.7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>' +
          ' Tìm công cụ, lệnh… <kbd>Ctrl K</kbd></button>';
@@ -77,8 +77,11 @@
       h += '</div>';
     });
     h += '</nav>';
+    h += '<button class="sb-theme" type="button" data-act="theme" title="Đổi nền sáng/tối">◐ Đổi nền</button>';
     h += '<a class="sb-foot" href="/profile"><div class="ava" id="sbAva">?</div><div><div class="nm" id="sbName">Khách</div><div class="sub" id="sbSub">Đăng nhập →</div></div></a>';
     host.innerHTML = h;
+    var themeBtn = host.querySelector('[data-act="theme"]');
+    if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
     // group collapse
     host.querySelectorAll('.grp-h').forEach(function (el) {
       el.addEventListener('click', function () { el.parentElement.classList.toggle('closed'); });
@@ -91,7 +94,7 @@
     var host = document.getElementById('shell-rail');
     if (!host) return;
     host.innerHTML =
-      '<div class="rail-h"><div class="spark">✦</div>' +
+      '<div class="rail-h"><img class="rail-ava" src="/thay-tuvi.webp" alt="Trợ lý Luận Đường">' +
       '<div><b>Trợ lý Luận Đường</b><span>Hiểu đúng lá số đang mở</span></div>' +
       '<div class="tools">' +
         '<button class="rh-btn mobile-only" title="Đóng" data-act="rail-close">✕</button>' +
@@ -99,7 +102,7 @@
       '</div></div>' +
       '<div class="ctx" id="railCtx" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:13px;height:13px;flex:0 0 auto"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg> <span id="railCtxTxt"></span></div>' +
       '<div class="chat" id="chat">' +
-        '<div class="rail-empty" id="railEmpty"><div class="ei">✦</div><b>Chưa có lá số nào</b>' +
+        '<div class="rail-empty" id="railEmpty"><div class="ei"><img src="/thay-tuvi.webp" alt=""></div><b>Chưa có lá số nào</b>' +
         '<p>Lập lá số ở khung giữa, rồi hỏi tôi bất cứ điều gì —<br>vận sự nghiệp, tình duyên, năm nay, tháng tới…</p></div>' +
       '</div>' +
       '<div class="rail-sugg" id="railSugg" style="display:none"></div>' +
@@ -374,10 +377,6 @@
         if (sb) sb.classList.remove('open'); if (rl) rl.classList.remove('open'); syncBackdrop();
       });
       document.body.appendChild(b);
-    }
-    if (!document.getElementById('shell-theme')) {
-      var tg = document.createElement('button'); tg.className = 'theme-tog'; tg.id = 'shell-theme'; tg.textContent = '◐ Nền';
-      tg.addEventListener('click', toggleTheme); document.body.appendChild(tg);
     }
     document.addEventListener('keydown', function (e) {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); var o = document.getElementById('cmdk'); (o && o.classList.contains('open')) ? closeCmd() : openCmd(); }
