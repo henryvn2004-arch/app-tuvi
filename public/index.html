@@ -628,11 +628,14 @@ a { color: var(--blue); text-decoration: none; }
 <div class="tab-nav-wrap">
   <div class="page">
     <div class="tab-nav" id="tabNav">
-      <button class="tab-btn active" data-tab="luan-giai">Luận Giải</button>
-      <button class="tab-btn" data-tab="phong-thuy">Phong Thủy</button>
+      <button class="tab-btn active" data-tab="tu-vi">Tử Vi</button>
+      <button class="tab-btn" data-tab="tu-binh">Tử Bình</button>
       <button class="tab-btn" data-tab="xem-tuong">Xem Tướng</button>
-      <button class="tab-btn" data-tab="dat-ten">Đặt Tên & Ngày</button>
-      <button class="tab-btn" data-tab="phong-cach">Phong Cách AI</button>
+      <button class="tab-btn" data-tab="phong-thuy">Phong Thủy</button>
+      <button class="tab-btn" data-tab="lam-dep">Làm Đẹp</button>
+      <button class="tab-btn" data-tab="chon-ngay">Chọn Ngày</button>
+      <button class="tab-btn" data-tab="dat-ten">Đặt Tên</button>
+      <button class="tab-btn" data-tab="cong-cu">Công Cụ</button>
       <button class="tab-btn" data-tab="mien-phi">Miễn Phí <span class="tab-count" id="freeCount">28</span></button>
     </div>
   </div>
@@ -794,15 +797,31 @@ const TOOL_URLS = {
   'kinh-dich': '/tools/kinh-dich.html', 'than-so-hoc': '/tools/than-so-hoc.html',
 };
 
-// Tab → category mapping (Miễn Phí gộp 5 free categories)
-const TAB_CATEGORIES = {
-  'luan-giai':   ['Luận Giải'],
-  'phong-thuy':  ['Phong Thủy'],
-  'xem-tuong':   ['Xem Tướng'],
-  'dat-ten':     ['Đặt Tên & Ngày'],
-  'phong-cach':  ['Phong Cách AI'],
-  'mien-phi':    ['Công Cụ Tử Vi', 'Mệnh Lý', 'Lịch Số', 'Bói Bài', 'Huyền Học'],
+// Tab grouping — MIRRORS the top nav (nav.js) so panel & menu stay consistent.
+// DB category (tool_pricing.category) → tab. Unknown categories fall back to 'cong-cu'.
+const CATEGORY_TO_TAB = {
+  'Luận Giải':      'tu-vi',
+  'Công Cụ Tử Vi':  'tu-vi',
+  'Xem Tướng':      'xem-tuong',
+  'Phong Thủy':     'phong-thuy',
+  'Phong Cách AI':  'lam-dep',
+  'Lịch Số':        'chon-ngay',
+  'Đặt Tên & Ngày': 'dat-ten',
+  'Mệnh Lý':        'cong-cu',
+  'Huyền Học':      'cong-cu',
+  'Bói Bài':        'cong-cu',
 };
+// Per-tool overrides: nav xếp các tool này khác nhóm với DB category của chúng.
+const TOOL_TAB_OVERRIDE = {
+  'tu-binh':       'tu-binh',    // nav: mục "Tử Bình" riêng (DB: Luận Giải)
+  'chon-ngay-tot': 'chon-ngay',  // nav: nhóm "Chọn Ngày" (DB: Đặt Tên & Ngày)
+  'bat-trach':     'phong-thuy', // nav: nhóm "Phong Thủy" (DB: Mệnh Lý)
+  'kim-lau':       'phong-thuy', // nav: nhóm "Phong Thủy" (DB: Mệnh Lý)
+};
+const TAB_IDS = new Set(['tu-vi','tu-binh','xem-tuong','phong-thuy','lam-dep','chon-ngay','dat-ten','cong-cu','mien-phi']);
+function tabOf(t) {
+  return TOOL_TAB_OVERRIDE[t.tool_id] || CATEGORY_TO_TAB[t.category] || 'cong-cu';
+}
 
 // Featured tool IDs — gold border for visual hierarchy (no commercial badge)
 const FEATURED = new Set(['laso', 'tu-binh', 'xem-tuoi', 'phong-thuy']);
@@ -840,8 +859,9 @@ function renderActiveTab() {
   const activeBtn = document.querySelector('.tab-btn.active');
   if (!activeBtn || !_tools) return;
   const tabId = activeBtn.dataset.tab;
-  const cats = TAB_CATEGORIES[tabId] || [];
-  const filtered = _tools.filter(t => cats.includes(t.category));
+  const filtered = tabId === 'mien-phi'
+    ? _tools.filter(t => t.is_free)
+    : _tools.filter(t => tabOf(t) === tabId);
   renderToolGrid(filtered, tabId === 'mien-phi');
 }
 
@@ -954,7 +974,7 @@ document.getElementById('freeAllLink')?.addEventListener('click', (e) => {
 // Restore tab from URL hash on load
 function restoreTabFromHash() {
   const hash = window.location.hash.replace('#', '');
-  if (hash && TAB_CATEGORIES[hash]) {
+  if (hash && TAB_IDS.has(hash)) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     const target = document.querySelector('[data-tab="' + hash + '"]');
     if (target) target.classList.add('active');
