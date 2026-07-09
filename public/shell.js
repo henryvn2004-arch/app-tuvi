@@ -173,7 +173,7 @@
   function greet(o) {
     var chat = document.getElementById('chat');
     chat.innerHTML =
-      '<div class="msg a"><p>' + mdLite(o.greeting || 'Lá số đã sẵn sàng. Bạn muốn tôi soi điều gì trước?') + '</p></div>';
+      '<div class="msg a"><img class="msg-ava" src="' + authorAva() + '" alt=""><div class="msg-body"><p>' + mdLite(o.greeting || 'Lá số đã sẵn sàng. Bạn muốn tôi soi điều gì trước?') + '</p></div></div>';
     // Gợi ý câu hỏi: hàng chip CỐ ĐỊNH trên ô nhập, còn suốt hội thoại (bấm
     // thì bớt dần), thay vì chỉ hiện 1 lần ở lời chào.
     if (o.chips !== undefined) { ctxChipsOrig = (o.chips || []).slice(); ctxChips = ctxChipsOrig.slice(); }
@@ -285,8 +285,11 @@
     var empty = document.getElementById('railEmpty'); if (empty) empty.remove();
     var u = document.createElement('div'); u.className = 'msg u'; u.textContent = text; chat.appendChild(u);
     messages.push({ role: 'user', content: text });
-    var typing = document.createElement('div'); typing.className = 'msg a';
-    typing.innerHTML = '<span class="typing"><i></i><i></i><i></i></span>'; chat.appendChild(typing);
+    var row = document.createElement('div'); row.className = 'msg a';
+    var av = document.createElement('img'); av.className = 'msg-ava'; av.src = authorAva(); av.alt = '';
+    var typing = document.createElement('div'); typing.className = 'msg-body';
+    row.appendChild(av); row.appendChild(typing);
+    typing.innerHTML = '<span class="typing"><i></i><i></i><i></i></span>'; chat.appendChild(row);
     chat.scrollTop = chat.scrollHeight;
     streaming = true; setSend(false); renderSuggs();
 
