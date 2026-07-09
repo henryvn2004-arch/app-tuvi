@@ -166,13 +166,13 @@
   }
 
   // Active state detection
-  var TUVI_PATHS   = ['/', '/luan-giai.html','/xem-tuoi.html','/xem-lam-an.html','/tools/xem-tuoi-sinh-con.html','/tools/an-sao.html','/tools/sao-nam.html','/tools/cach-cuc.html','/tools/dai-van.html','/tools/van-thang.html','/tuvi-chat.html'];
   var TUONG_PATHS  = ['/tools/tuong-mat-ai.html','/tools/nhan-tuong-ai.html','/tools/thu-tuong-ai.html','/tools/thanh-tuong-ai.html','/tools/thanh-tuong-pro.html','/tools/khi-sac-ai.html'];
   var LAM_DEP_PATHS = ['/tools/kieu-toc-ai.html','/tools/mau-sac-hop-menh.html'];
   var PHONG_PATHS  = ['/tools/phong-thuy.html','/tools/ban-lam-viec.html','/tools/cua-hang-phong-thuy.html','/tools/bat-trach.html','/tools/kim-lau.html'];
   var NGAY_PATHS   = ['/ngay-tot','/tools/hoang-dao.html','/tools/ngay-tot.html','/tools/luc-nham.html','/tools/han-nam.html','/tools/chon-ngay-tot.html'];
   var TENCHU_PATHS  = ['/tools/dat-ten-con.html','/tools/dat-ten-doanh-nghiep.html'];
   var BAIVIET_PATHS = ['/blog.html','/nghien-cuu','/tac-gia'];
+  var KP_PATHS = ['/cong-cu','/menh-kho','/ngay-tot'].concat(TUONG_PATHS, PHONG_PATHS, NGAY_PATHS, TENCHU_PATHS, LAM_DEP_PATHS);
 
   function anyActive(arr) { return arr.some(function(p){ return path === p || path.startsWith(p + '/') || path.startsWith(p); }); }
 
@@ -186,6 +186,8 @@
     '.nav-link{color:#8BAACC;font-size:13px;text-decoration:none;padding:6px 10px;border-radius:6px;transition:all .15s;white-space:nowrap;cursor:pointer;display:inline-flex;align-items:center;gap:4px}',
     '.nav-link:hover{color:#fff;background:rgba(255,255,255,.07)}',
     '.nav-link.active{color:#c9a84c}',
+    '.nav-cta-ld{background:#c9a84c;color:#061A2E!important;font-weight:700;padding:7px 15px;margin-right:6px}',
+    '.nav-cta-ld:hover{background:#d8bd6a;color:#061A2E!important}',
     '.nav-link svg{width:11px;height:11px;opacity:.7;flex-shrink:0}',
     '.nav-hamburger{display:none;background:none;border:none;color:#8BAACC;cursor:pointer;padding:8px;z-index:400;position:relative}',
     '.nav-hamburger svg{width:22px;height:22px;display:block}',
@@ -239,119 +241,35 @@
 
   // ── Build dropdowns ───────────────────────────────────────────
 
-  // DD1 — Tử Vi
-  var dd1 = '<div class="nav-dd" id="nav-dd1">'
-    + '<span class="nav-link' + (anyActive(TUVI_PATHS)?' active':'') + '" id="nav-dd1-toggle" role="button" tabindex="0">Tử Vi ' + CHEV + '</span>'
-    + '<div class="nav-dd-menu" id="nav-dd1-menu">'
-    + ddSection('Chat AI')
-    + ddItem('/tuvi-chat.html',              'message-circle',  'Tử Vi Chat')
-    + ddSection('Luận Giải')
-    + ddItem('/luan-giai.html',              'sparkles',        'Luận Giải Lá Số')
-    + ddItem('/xem-tuoi.html',               'heart-handshake', 'Xem Tuổi Vợ Chồng')
-    + ddItem('/xem-lam-an.html',             'handshake',       'Xem Tuổi Làm Ăn')
-    + ddItem('/tools/xem-tuoi-sinh-con.html','baby',            'Xem Tuổi Sinh Con — Miễn Phí')
-    + ddSection('Công Cụ Tử Vi')
-    + ddItem('/tools/an-sao.html',    'layout-grid',   'An Sao Lá Số')
-    + ddItem('/tools/sao-nam.html',   'sun',           'Tổng Quan Lá Số')
-    + ddItem('/tools/cach-cuc.html',  'gem',           'Cách Cục & Các Cung')
-    + ddItem('/tools/dai-van.html',   'trending-up',   'Đại Vận & Vận Trình')
-    + ddItem('/tools/van-thang.html', 'calendar-days', 'Vận Tháng')
+  // Khám phá — công cụ lẻ + tra cứu (gộp catalog + SEO hub)
+  var dd_kp = '<div class="nav-dd" id="nav-dd-kp">'
+    + '<span class="nav-link' + (anyActive(KP_PATHS)?' active':'') + '" id="nav-dd-kp-toggle" role="button" tabindex="0">Khám phá ' + CHEV + '</span>'
+    + '<div class="nav-dd-menu" id="nav-dd-kp-menu">'
+    + ddSection('Công cụ')
+    + ddItem('/cong-cu',                'layout-grid', 'Tất cả 47 công cụ')
+    + ddItem('/tools/tuong-mat-ai.html','smile',       'Xem tướng qua ảnh')
+    + ddItem('/tools/phong-thuy.html',  'compass',     'Phong thủy qua ảnh')
+    + ddSection('Tra cứu miễn phí')
+    + ddItem('/menh-kho.html', 'gem',           'Mệnh Khố — 438K lá số')
+    + ddItem('/ngay-tot',      'calendar-days', 'Ngày Tốt — Lịch vạn niên')
     + '</div></div>';
 
-  // DD2 — Xem Tướng
-  var dd2 = '<div class="nav-dd" id="nav-dd2">'
-    + '<span class="nav-link' + (anyActive(TUONG_PATHS)?' active':'') + '" id="nav-dd2-toggle" role="button" tabindex="0">Xem Tướng ' + CHEV + '</span>'
-    + '<div class="nav-dd-menu" id="nav-dd2-menu">'
-    + ddItem('/tools/tuong-mat-ai.html',   'smile',   'Diện Tướng — Xem Mặt')
-    + ddItem('/tools/nhan-tuong-ai.html',  'eye',     'Nhãn Tướng — Xem Mắt')
-    + ddItem('/tools/thu-tuong-ai.html',   'hand',    'Thủ Tướng — Chỉ Tay')
-    + ddItem('/tools/thanh-tuong-ai.html', 'mic',     'Thanh Tướng — Giọng Nói')
-    + ddItem('/tools/thanh-tuong-pro.html','music',   'Thanh Tướng Pro')
-    + ddItem('/tools/khi-sac-ai.html',     'sunrise', 'Khí Sắc — Vận Khí 1–3 Tháng')
-
-    + '</div></div>';
-
-  // DD3 — Phong Thủy
-  var dd3 = '<div class="nav-dd" id="nav-dd3">'
-    + '<span class="nav-link' + (anyActive(PHONG_PATHS)?' active':'') + '" id="nav-dd3-toggle" role="button" tabindex="0">Phong Thủy ' + CHEV + '</span>'
-    + '<div class="nav-dd-menu" id="nav-dd3-menu">'
-    + ddSection('Phân Tích Không Gian')
-    + ddItem('/tools/phong-thuy.html',           'compass', 'Phong Thủy Nội Thất')
-    + ddItem('/tools/ban-lam-viec.html',          'monitor', 'Phong Thủy Bàn Làm Việc')
-    + ddItem('/tools/cua-hang-phong-thuy.html',   'store',   'Phong Thủy Cửa Hàng & VP')
-    + ddSection('Mệnh Lý & Phong Thủy')
-    + ddItem('/tools/bat-trach.html',             'compass', 'Hướng Bát Trạch')
-    + ddItem('/tools/kim-lau.html',               'home',    'Kim Lâu & Tam Tai')
-
-    + '</div></div>';
-
-
-  // DD_LAM_DEP — Làm Đẹp
-  var dd_dep = '<div class="nav-dd" id="nav-dd-dep">'
-    + '<span class="nav-link' + (anyActive(LAM_DEP_PATHS)?' active':'') + '" id="nav-dd-dep-toggle" role="button" tabindex="0">Làm Đẹp ' + CHEV + '</span>'
-    + '<div class="nav-dd-menu" id="nav-dd-dep-menu">'
-    + ddSection('Tư Vấn Ngoại Hình')
-    + ddItem('/tools/kieu-toc-ai.html',       'scissors', 'Kiểu Tóc Hợp Tướng Mặt')
-    + ddItem('/tools/mau-sac-hop-menh.html',  'palette',  'Màu Sắc & Thử Trang Phục')
-    + '</div></div>';
-
-  // DD4 — Chọn Ngày
-  var dd4 = '<div class="nav-dd" id="nav-dd4">'
-    + '<span class="nav-link' + (anyActive(NGAY_PATHS)?' active':'') + '" id="nav-dd4-toggle" role="button" tabindex="0">Chọn Ngày ' + CHEV + '</span>'
-    + '<div class="nav-dd-menu" id="nav-dd4-menu">'
-    + ddItem('/ngay-tot',              'calendar-days', 'Ngày Tốt Theo Việc')
-    + ddItem('/ngay-tot/lich/2026',    'sparkles',      'Lịch Ngày Tốt 2026')
-    + ddItem('/tools/hoang-dao.html',  'sun',         'Giờ Hoàng Đạo')
-    + ddItem('/tools/ngay-tot.html',   'calendar',    'Ngày Tốt Trong Tháng')
-    + ddItem('/tools/chon-ngay-tot.html', 'pin',      'Chọn Ngày Tốt')
-    + ddItem('/tools/luc-nham.html',   'circle-dot',  'Lục Nhâm Giản')
-    + ddItem('/tools/han-nam.html',    'rotate-cw',   'Hạn Năm')
-    + '</div></div>';
-
-  // DD5 — Đặt Tên
-  var dd5 = '<div class="nav-dd" id="nav-dd5">'
-    + '<span class="nav-link' + (anyActive(TENCHU_PATHS)?' active':'') + '" id="nav-dd5-toggle" role="button" tabindex="0">Đặt Tên ' + CHEV + '</span>'
-    + '<div class="nav-dd-menu" id="nav-dd5-menu">'
-    + ddItem('/tools/dat-ten-con.html',          'baby',       'Đặt Tên Con Theo Ngũ Hành')
-    + ddItem('/tools/dat-ten-doanh-nghiep.html', 'building-2', 'Đặt Tên Doanh Nghiệp')
-    + '</div></div>';
-
-  // DD_BAIVIET — Bài Viết
-  var dd_baiviet = '<div class="nav-dd" id="nav-dd-baiviet">'
-    + '<span class="nav-link' + (anyActive(BAIVIET_PATHS)?' active':'') + '" id="nav-dd-baiviet-toggle" role="button" tabindex="0">Bài Viết ' + CHEV + '</span>'
-    + '<div class="nav-dd-menu" id="nav-dd-baiviet-menu">'
-    + ddItem('/nghien-cuu',  'file-text',      'Nghiên Cứu Tử Vi')
-    + ddItem('/tac-gia',     'user',           'Tác Giả')
-    + ddItem('/blog.html',   'message-circle', 'Khảo Luận')
-    + '</div></div>';
-
-  // DD6 — Công Cụ (còn lại)
-  var dd6 = '<div class="nav-dd" id="nav-dd6">'
-    + '<span class="nav-link" id="nav-dd6-toggle" role="button" tabindex="0">Công Cụ ' + CHEV + '</span>'
-    + '<div class="nav-dd-menu" id="nav-dd6-menu">'
-    + ddSection('Mệnh Lý')
-    + ddItem('/tools/nap-am.html',       'tornado',     'Nạp Âm Ngũ Hành')
-    + ddItem('/tools/tuong-hop.html',    'heart',       'Tương Hợp Tuổi')
-    + ddItem('/tools/ngu-hanh-ten.html', 'pen-line',    'Ngũ Hành Tên')
-    + ddItem('/tools/tu-tru.html',       'scroll-text', 'Tứ Trụ Bát Tự')
-    + ddSection('Huyền Học')
-    + ddItem('/tools/kinh-dich.html',   'aperture', 'Kinh Dịch 64 Quẻ')
-    + ddItem('/tools/than-so-hoc.html', 'hash',     'Thần Số Học')
-    + ddSection('Bói Bài')
-    + ddItem('/tools/tarot.html',       'wallet-cards', 'Tarot 78 Lá')
-    + ddItem('/tools/oracle.html',      'sparkles',     'Oracle Phương Đông')
-    + ddItem('/tools/boi-bai-tay.html', 'spade',        'Bói Bài Tây')
+  // Cẩm nang — nghiên cứu, tác giả, khảo luận
+  var dd_cn = '<div class="nav-dd" id="nav-dd-cn">'
+    + '<span class="nav-link' + (anyActive(BAIVIET_PATHS)?' active':'') + '" id="nav-dd-cn-toggle" role="button" tabindex="0">Cẩm nang ' + CHEV + '</span>'
+    + '<div class="nav-dd-menu" id="nav-dd-cn-menu">'
+    + ddItem('/nghien-cuu', 'file-text',      'Nghiên Cứu Tử Vi')
+    + ddItem('/tac-gia',    'user',           'Tác Giả')
+    + ddItem('/blog.html',  'message-circle', 'Khảo Luận')
     + '</div></div>';
 
   var html = '<nav class="topnav">'
     + '<a class="nav-logo" href="/"><img src="/seal.webp" alt="">'
     + '<div><div class="name">Tử Vi Minh Bảo</div><div class="url">Tri mệnh lý – Thuận thế hành</div></div></a>'
     + '<div class="nav-links" id="nav-links">'
-    + navLink('/', 'Trang Chủ')
-    + dd1
-    + navLink('/tu-binh.html', 'Tử Bình')
-    + dd2 + dd3 + dd_dep + dd4 + dd5 + dd6
-    + dd_baiviet
+    + '<a class="nav-link nav-cta-ld' + (isActive('/app')?' active':'') + '" href="/app">✦ Luận Đường</a>'
+    + dd_kp
+    + dd_cn
     + '</div>'
     + '<div id="nav-auth-area"></div>'
     + '<button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">' + ICONS.menu + '</button>'
@@ -368,7 +286,7 @@
   mountIcons();
 
   // ── Mobile dropdown events ─────────────────────────────────────
-  var menus = ['nav-dd1-menu','nav-dd2-menu','nav-dd3-menu','nav-dd-dep-menu','nav-dd4-menu','nav-dd5-menu','nav-dd6-menu','nav-dd-baiviet-menu'];
+  var menus = ['nav-dd-kp-menu','nav-dd-cn-menu'];
   function closeAll() { menus.forEach(function(id){ var m=document.getElementById(id); if(m)m.classList.remove('open'); }); }
 
   document.getElementById('nav-hamburger').addEventListener('click', function(e) {
@@ -376,7 +294,7 @@
     document.getElementById('nav-links').classList.toggle('open');
   });
 
-  ['nav-dd1-toggle','nav-dd2-toggle','nav-dd3-toggle','nav-dd-dep-toggle','nav-dd4-toggle','nav-dd5-toggle','nav-dd6-toggle','nav-dd-baiviet-toggle'].forEach(function(tid, idx) {
+  ['nav-dd-kp-toggle','nav-dd-cn-toggle'].forEach(function(tid, idx) {
     var busy = false;
     var el = document.getElementById(tid);
     if (!el) return;
