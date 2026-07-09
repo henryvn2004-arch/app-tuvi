@@ -26,8 +26,8 @@
       { id: 'chon-ngay',  label: 'Chọn ngày tốt',       href: '/app/chon-ngay' },
     ] },
     { group: 'Phong Thủy · Tướng', items: [
-      { id: 'phong-thuy', label: 'Phong thủy',          href: '/phong-thuy' },
-      { id: 'xem-tuong',  label: 'Xem tướng',           href: '/xem-tuong' },
+      { id: 'phong-thuy', label: 'Phong thủy',          href: '/app/phong-thuy' },
+      { id: 'xem-tuong',  label: 'Xem tướng',           href: '/app/xem-tuong' },
     ] },
     { group: 'Tài khoản', open: true, items: [
       { id: 'vi-luong',   label: 'Ví Lượng',            href: '/profile', icon: 'wallet', balance: true },
@@ -106,14 +106,48 @@
         '<p>Lập lá số ở khung giữa, rồi hỏi tôi bất cứ điều gì —<br>vận sự nghiệp, tình duyên, năm nay, tháng tới…</p></div>' +
       '</div>' +
       '<div class="rail-sugg" id="railSugg" style="display:none"></div>' +
-      '<div class="rail-in"><textarea id="railInput" rows="1" placeholder="Lập lá số để bắt đầu hỏi…" disabled></textarea>' +
+      '<div class="rail-thumbs" id="railThumbs" style="display:none"></div>' +
+      '<div class="rail-in">' +
+        '<button class="rail-attach" id="railAttach" data-act="attach" title="Gửi ảnh" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-5-5L5 21"/></svg></button>' +
+        '<input type="file" id="railFile" accept="image/*" multiple hidden>' +
+        '<textarea id="railInput" rows="1" placeholder="Lập lá số để bắt đầu hỏi…" disabled></textarea>' +
         '<button class="send" id="railSend" disabled data-act="send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button></div>';
     host.querySelector('[data-act="send"]').addEventListener('click', sendMsg);
     host.querySelector('[data-act="newchat"]').addEventListener('click', newChat);
     host.querySelector('[data-act="rail-close"]').addEventListener('click', function () { host.classList.remove('open'); syncBackdrop(); });
+    host.querySelector('[data-act="attach"]').addEventListener('click', function () { var f = document.getElementById('railFile'); if (f) f.click(); });
+    document.getElementById('railFile').addEventListener('change', onPickFiles);
     var ta = document.getElementById('railInput');
     ta.addEventListener('input', function () { autoGrow(ta); });
     ta.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); } });
+  }
+
+  // ── Ảnh đính kèm (vision): xem tướng / phong thủy qua ảnh ──
+  var pendingImages = [];
+  function onPickFiles(e) {
+    var files = Array.prototype.slice.call(e.target.files || []);
+    e.target.value = '';
+    files.slice(0, 4).forEach(function (f) {
+      if (!/^image\//.test(f.type)) return;
+      var rd = new FileReader();
+      rd.onload = function () {
+        var s = String(rd.result); var i = s.indexOf(',');
+        pendingImages.push({ data: s.slice(i + 1), mediaType: f.type || 'image/jpeg', url: s });
+        renderThumbs();
+      };
+      rd.readAsDataURL(f);
+    });
+  }
+  function renderThumbs() {
+    var host = document.getElementById('railThumbs'); if (!host) return;
+    if (!pendingImages.length) { host.style.display = 'none'; host.innerHTML = ''; return; }
+    host.style.display = '';
+    host.innerHTML = pendingImages.map(function (im, i) {
+      return '<div class="thumb"><img src="' + im.url + '" alt=""><button type="button" data-rm="' + i + '" aria-label="Bỏ ảnh">×</button></div>';
+    }).join('');
+    host.querySelectorAll('[data-rm]').forEach(function (b) {
+      b.addEventListener('click', function () { pendingImages.splice(parseInt(b.getAttribute('data-rm')), 1); renderThumbs(); });
+    });
   }
 
   // ── CHAT STATE ──
@@ -159,7 +193,7 @@
   function autoGrow(t) { t.style.height = 'auto'; t.style.height = Math.min(t.scrollHeight, 96) + 'px'; }
   function mdLite(s) { return esc(s).replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>').replace(/\n{2,}/g, '</p><p>').replace(/\n/g, '<br>'); }
   function getToken() { try { var s = window.Auth && Auth.getSession && Auth.getSession(); return s ? s.access_token : null; } catch (e) { return null; } }
-  function setSend(on) { var s = document.getElementById('railSend'), i = document.getElementById('railInput'); if (s) s.disabled = !on; if (i) { i.disabled = !on; if (on) i.focus(); } }
+  function setSend(on) { var s = document.getElementById('railSend'), i = document.getElementById('railInput'), a = document.getElementById('railAttach'); if (s) s.disabled = !on; if (a) a.disabled = !on; if (i) { i.disabled = !on; if (on) i.focus(); } }
 
   function parseSSE(block) {
     var name = null, data = null;
@@ -211,8 +245,9 @@
       var c = document.getElementById('railCtx'), t = document.getElementById('railCtxTxt');
       if (o.label) { c.style.display = ''; t.innerHTML = 'Đang gắn: <b>' + esc(o.label) + '</b>'; }
       var ta = document.getElementById('railInput');
-      ta.disabled = false; ta.placeholder = 'Hỏi bất cứ điều gì về lá số này…';
+      ta.disabled = false; ta.placeholder = o.placeholder || 'Hỏi bất cứ điều gì về lá số này…';
       document.getElementById('railSend').disabled = false;
+      var att = document.getElementById('railAttach'); if (att) att.disabled = false;
       greet(o);
       // Pending-ask: câu hỏi mang từ trang chủ (hero "một cửa") vào — rail tự hỏi
       // ngay khi đã có ngữ cảnh. Chỉ dùng 1 lần, bỏ qua nếu quá cũ (>10 phút).
@@ -279,12 +314,20 @@
     if (streaming || !ctx) return;
     var input = document.getElementById('railInput');
     var text = input.value.trim();
-    if (!text) return;
+    var imgs = pendingImages.slice();
+    if (!text && !imgs.length) return;
     input.value = ''; autoGrow(input);
     var chat = document.getElementById('chat');
     var empty = document.getElementById('railEmpty'); if (empty) empty.remove();
-    var u = document.createElement('div'); u.className = 'msg u'; u.textContent = text; chat.appendChild(u);
-    messages.push({ role: 'user', content: text });
+    var u = document.createElement('div'); u.className = 'msg u';
+    if (imgs.length) {
+      u.innerHTML = '<div class="msg-imgs">' + imgs.map(function (im) { return '<img src="' + im.url + '" alt="">'; }).join('') + '</div>' + (text ? '<div>' + esc(text) + '</div>' : '');
+    } else { u.textContent = text; }
+    chat.appendChild(u);
+    var um = { role: 'user', content: text };
+    if (imgs.length) um.images = imgs.map(function (im) { return { data: im.data, mediaType: im.mediaType }; });
+    messages.push(um);
+    pendingImages = []; renderThumbs();
     var row = document.createElement('div'); row.className = 'msg a';
     var av = document.createElement('img'); av.className = 'msg-ava'; av.src = authorAva(); av.alt = '';
     var typing = document.createElement('div'); typing.className = 'msg-body';
