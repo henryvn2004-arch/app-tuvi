@@ -541,7 +541,7 @@ a { color: var(--blue); text-decoration: none; }
                   <div class="hc-avatar">命</div>
                   <div class="hc-bubble" id="hc-bubble">Bạn muốn hỏi gì về vận mệnh, sự nghiệp, tình duyên hay vận năm nay?</div>
                 </div>
-                <form class="hc-composer" action="/tuvi-chat.html" method="get">
+                <form class="hc-composer" action="/app/la-so" method="get">
                   <div class="hc-composer-top">
                     <textarea name="q" rows="1" placeholder="Năm nay vận của tôi thế nào?" aria-label="Câu hỏi về lá số của bạn"></textarea>
                     <button type="submit" class="hc-send" aria-label="Gửi câu hỏi">↑</button>
@@ -1041,6 +1041,11 @@ loadTools();
 (function () {
   var _activeTool = 'laso';
 
+  // Một cửa: câu hỏi từ hero dẫn thẳng vào Luận Đường (shell), KHÔNG về chat cũ.
+  // Persona → tool trong shell; câu hỏi được gửi kèm dạng "pending-ask" để rail
+  // tự hỏi sau khi người dùng lập lá số (shell.js đọc app_pending_ask trong setContext).
+  var _TOOL_ROUTE = { laso: '/app/la-so', 'xem-tuoi': '/app/xem-tuoi', 'xem-lam-an': '/app/xem-lam-an' };
+
   var _PERSONA_CHIPS = {
     'ban-than':   [
       { q: 'Khi nào tôi lập gia đình?',            tool: 'laso' },
@@ -1084,17 +1089,18 @@ loadTools();
     if (!box) return;
     var chips = _PERSONA_CHIPS[persona] || _PERSONA_CHIPS['ban-than'];
     box.innerHTML = chips.map(function(c) {
-      var url = '/tuvi-chat.html?tool=' + encodeURIComponent(c.tool) + '&q=' + encodeURIComponent(c.q);
-      return '<a class="hc-chip-inner" data-tool="' + c.tool + '" href="' + url + '">' + c.q + '</a>';
+      var route = _TOOL_ROUTE[c.tool] || _TOOL_ROUTE.laso;
+      return '<a class="hc-chip-inner" data-tool="' + c.tool + '" href="' + route + '">' + c.q + '</a>';
     }).join('');
   }
 
+  // Dẫn vào Luận Đường: nhớ câu hỏi (pending-ask, kèm mốc thời gian) rồi mở tool tương ứng.
   function go(q, tool) {
-    var base  = '/tuvi-chat.html';
-    var parts = [];
-    if (tool) parts.push('tool=' + encodeURIComponent(tool));
-    if (q)    parts.push('q='    + encodeURIComponent(q));
-    window.location.href = base + (parts.length ? '?' + parts.join('&') : '');
+    var route = _TOOL_ROUTE[tool] || _TOOL_ROUTE.laso;
+    if (q) {
+      try { sessionStorage.setItem('app_pending_ask', JSON.stringify({ q: q, t: Date.now() })); } catch (e) { /* ignore */ }
+    }
+    window.location.href = route;
   }
 
   var form = document.querySelector('.hc-composer');
@@ -1133,14 +1139,9 @@ loadTools();
     chipsBox.addEventListener('click', function (e) {
       var c = e.target.closest('.hc-chip-inner');
       if (!c) return;
+      if (e.metaKey || e.ctrlKey || e.shiftKey) return; // cho phép mở tab mới
       e.preventDefault();
-      var q    = c.textContent.trim();
-      var tool = c.getAttribute('data-tool') || _activeTool;
-      var url  = '/tuvi-chat.html';
-      var parts = [];
-      if (tool) parts.push('tool=' + encodeURIComponent(tool));
-      if (q)    parts.push('q='    + encodeURIComponent(q));
-      window.location.href = url + (parts.length ? '?' + parts.join('&') : '');
+      go(c.textContent.trim(), c.getAttribute('data-tool') || _activeTool);
     });
   }
 })();
