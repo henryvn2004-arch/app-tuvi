@@ -45,6 +45,7 @@
       <div class="ws-actions">
         <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa thông tin</button>
         <a class="btn pri" id="btnLuan" href="/app/luan-giai?auto=1" style="display:none">Luận giải chi tiết →</a>
+        <a class="btn" id="btnBatTu" href="/app/bat-tu?auto=1" style="display:none">Bát Tự →</a>
         <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
@@ -134,7 +135,8 @@ function doAnSao(){
     document.getElementById('chartPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
     document.getElementById('btnLuan').style.display='';
-    // nhớ ngày sinh để chuyển tay sang Luận giải không phải nhập lại
+    document.getElementById('btnBatTu').style.display='';
+    // nhớ ngày sinh để chuyển tay sang Luận giải/Bát Tự không phải nhập lại
     Shell.rememberBirth({name:name,gender:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,pp:pp,namxem:namxem});
     // gắn context để bật rail
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
@@ -159,6 +161,7 @@ function showForm(){
   document.getElementById('birthPanel').style.display='block';
   document.getElementById('btnEdit').style.display='none';
   document.getElementById('btnLuan').style.display='none';
+  document.getElementById('btnBatTu').style.display='none';
 }
 // điền sẵn ngày sinh đã nhớ (nếu có); tự lập nếu đến qua ?auto=1.
 // Chạy SAU khi shell.js render rail (boot ở DOMContentLoaded) để Shell.setContext không lỗi.
