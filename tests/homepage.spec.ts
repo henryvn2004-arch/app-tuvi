@@ -10,8 +10,9 @@ test.describe('Homepage', () => {
     await expect(page.locator('h1, .hero-title, .hero h2').first()).toBeVisible();
   });
 
-  test('tabs render', async ({ page }) => {
-    await expect(page.locator('.tab-nav button, .tab-btn, [role="tablist"] button').first()).toBeVisible();
+  test('band "Một không gian" render', async ({ page }) => {
+    // Catalog tab đã dời sang /cong-cu; trang chủ giờ dẫn vào Luận Đường qua band.
+    await expect(page.locator('.space-card').first()).toBeVisible();
   });
 
   test('tool links render (it nhat 5)', async ({ page }) => {
@@ -36,5 +37,13 @@ test.describe('Homepage', () => {
       !e.includes('Sentry') && !e.includes('ERR_BLOCKED')
     );
     expect(critical).toHaveLength(0);
+  });
+});
+
+test.describe('Trang Công cụ (/cong-cu)', () => {
+  test('tabs catalog render', async ({ page }) => {
+    await page.goto('/cong-cu');
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('.tab-btn').first()).toBeVisible();
   });
 });
