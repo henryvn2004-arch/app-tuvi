@@ -94,15 +94,15 @@
     var host = document.getElementById('shell-rail');
     if (!host) return;
     host.innerHTML =
-      '<div class="rail-h"><img class="rail-ava" src="/thay-tuvi.webp" alt="Trợ lý Luận Đường">' +
-      '<div><b>Trợ lý Luận Đường</b><span>Hiểu đúng lá số đang mở</span></div>' +
+      '<div class="rail-h"><img class="rail-ava" src="' + authorAva() + '" alt="Trợ lý Luận Đường">' +
+      '<div><b>Trợ lý Luận Đường</b><span>' + esc(authorLabel()) + '</span></div>' +
       '<div class="tools">' +
         '<button class="rh-btn mobile-only" title="Đóng" data-act="rail-close">✕</button>' +
         '<button class="rh-btn" title="Hội thoại mới" data-act="newchat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 5v14M5 12h14"/></svg></button>' +
       '</div></div>' +
       '<div class="ctx" id="railCtx" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:13px;height:13px;flex:0 0 auto"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg> <span id="railCtxTxt"></span></div>' +
       '<div class="chat" id="chat">' +
-        '<div class="rail-empty" id="railEmpty"><div class="ei"><img src="/thay-tuvi.webp" alt=""></div><b>Chưa có lá số nào</b>' +
+        '<div class="rail-empty" id="railEmpty"><div class="ei"><img src="' + authorAva() + '" alt=""></div><b>Chưa có lá số nào</b>' +
         '<p>Lập lá số ở khung giữa, rồi hỏi tôi bất cứ điều gì —<br>vận sự nghiệp, tình duyên, năm nay, tháng tới…</p></div>' +
       '</div>' +
       '<div class="rail-sugg" id="railSugg" style="display:none"></div>' +
@@ -123,6 +123,38 @@
   var messages = [];
   var sessionId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('s' + Date.now());
   var streaming = false;
+
+  // ── Author persona (thầy) — CHUNG cơ chế + CHUNG localStorage key với
+  // tuvi-chat: mỗi phiên/máy random 1 thầy (avatar /authors/<id>.jpg + văn
+  // phong). Gửi authorName/authorStyle lên /api/v1/chat để đổi giọng luận. ──
+  var AUTHOR_ROSTER = [
+    { id: 'bac-minh',    name: 'Bắc Minh',    style: 'Hệ thống, rõ ràng, luôn giải thích nguyên lý nền tảng trước khi luận sao. Văn phong học thuật, chắc chắn, chỉn chu.' },
+    { id: 'co-nguyet',   name: 'Cổ Nguyệt',   style: 'Nghiêng về vòng Tràng Sinh và triết học cổ đại. Văn phong sâu sắc, huyền bí nhưng có căn cứ, hay dẫn chiếu âm dương tiêu trưởng.' },
+    { id: 'dau-nam',     name: 'Đẩu Nam',     style: 'Chuyên về tình cảm, hôn nhân, phu thê. Văn phong ấm áp, tinh tế, hay đặt mình vào vị trí người hỏi để cảm nhận.' },
+    { id: 'dieu-khong',  name: 'Diệu Không',  style: 'Chuyên về nghề nghiệp, sự nghiệp, tài lộc. Văn phong thực tế, sắc sảo, đưa ra nhận định dứt khoát về hướng đi.' },
+    { id: 'huyen-khong', name: 'Huyền Không', style: 'Nhìn tổng quan số mệnh, sắc bén và khái quát. Thường đánh giá toàn bộ lá số trước rồi mới đi vào chi tiết từng cung.' },
+    { id: 'linh-co',     name: 'Linh Cơ',     style: 'Uyên thâm về Dịch lý, âm dương ngũ hành. Hay liên hệ cổ thư và nguyên lý căn bản khi luận giải.' },
+    { id: 'linh-son',    name: 'Linh Sơn',    style: 'Kết hợp lá số với tướng số. Thực dụng, hay nhìn vào biểu hiện thực tế ngoài đời của sao tinh.' },
+    { id: 'ngoc-tinh',   name: 'Ngọc Tinh',   style: 'Học thuật, nghiêng về lịch sử và nhân vật thật. Hay dẫn chứng ví dụ từ lịch sử Việt Nam và nhân vật nổi tiếng.' },
+    { id: 'nhat-nguyen', name: 'Nhật Nguyên', style: 'Chính xác về vòng sao và chu kỳ vận hạn ngắn hạn. Hay luận cụ thể từng tháng từng năm trong đại vận và tiểu vận.' },
+    { id: 'tam-kinh',    name: 'Tâm Kính',    style: 'Chú trọng thần khê và những điều ẩn khuất trong lá số. Hay để ý đến tâm lý chiều sâu và những gì không hiện rõ trên mặt sao.' },
+    { id: 'thai-hu',     name: 'Thái Hư',     style: 'Logic chặt chẽ về tương quan sinh khắc giữa các sao. Văn phong triết học hệ thống, phân tích mối quan hệ đa chiều.' },
+    { id: 'thanh-hu',    name: 'Thanh Hư',    style: 'Nhẹ nhàng, gần gũi, đôi khi dùng ví von hay chút hài hước nhẹ. Vẫn sâu sắc nhưng không cứng nhắc, tạo cảm giác gần gũi.' },
+    { id: 'thien-an',    name: 'Thiên Ẩn',    style: 'Tỉ mỉ về ý nghĩa từng sao, giải thích có hệ thống. Hay đi từng sao một cách đầy đủ trước khi luận tổng hợp.' },
+    { id: 'tinh-quang',  name: 'Tinh Quang',  style: 'Nhìn lá số như một chỉnh thể toàn diện. Ít khi tách rời từng cung riêng lẻ, hay tìm mối liên hệ xuyên suốt toàn bộ lá số.' },
+    { id: 'tu-nguyen',   name: 'Tử Nguyên',   style: 'Súc tích, thực tế, đi thẳng vào vấn đề không vòng vo. Chuyên về đại vận và tiểu vận, đưa nhận định ngắn gọn rõ ràng.' },
+  ];
+  var _author = null;
+  function pickAuthor() {
+    try {
+      var saved = localStorage.getItem('tvc_author_v1');
+      if (saved) { var f = AUTHOR_ROSTER.filter(function (a) { return a.id === saved; })[0]; if (f) { _author = f; return; } }
+      _author = AUTHOR_ROSTER[Math.floor(Math.random() * AUTHOR_ROSTER.length)];
+      localStorage.setItem('tvc_author_v1', _author.id);
+    } catch (e) { _author = AUTHOR_ROSTER[0]; }
+  }
+  function authorAva() { return _author ? '/authors/' + _author.id + '.jpg' : '/thay-tuvi.webp'; }
+  function authorLabel() { return _author ? 'Thầy ' + _author.name : 'Hiểu đúng lá số đang mở'; }
 
   function autoGrow(t) { t.style.height = 'auto'; t.style.height = Math.min(t.scrollHeight, 96) + 'px'; }
   function mdLite(s) { return esc(s).replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>').replace(/\n{2,}/g, '</p><p>').replace(/\n/g, '<br>'); }
@@ -265,6 +297,11 @@
       var body = { session_id: sessionId, stream: true, messages: messages.slice(-12), client: { platform: 'web', version: '1.0.0' } };
       if (ctx.birth) body.birth = ctx.birth;
       if (ctx.scenario) body.scenario = ctx.scenario;
+      // Văn phong thầy: gửi top-level (luồng lá số) + trong scenario (luồng kịch bản).
+      if (_author) {
+        body.authorName = _author.name; body.authorStyle = _author.style;
+        if (body.scenario) { body.scenario = Object.assign({}, body.scenario, { authorName: _author.name, authorStyle: _author.style }); }
+      }
       var res = await fetch('/api/v1/chat', { method: 'POST', headers: headers, body: JSON.stringify(body) });
       if (res.status === 401 || res.status === 402) {
         typing.innerHTML = '<p>Cần <a href="/profile" style="color:var(--blue);font-weight:600">đăng nhập</a> (và có Lượng) để hỏi trợ lý. Lá số vẫn xem miễn phí.</p>';
@@ -367,6 +404,7 @@
 
   // ── BOOT ──
   function boot() {
+    pickAuthor();
     renderSidebar();
     renderRail();
     ensureCmdk();
