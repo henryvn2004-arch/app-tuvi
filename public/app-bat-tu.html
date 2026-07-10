@@ -88,6 +88,28 @@ table.tutru td.row-label{font-size:10.5px;color:#9a8a6a;text-transform:uppercase
 .chip.w{color:var(--gold-soft);border-color:var(--gold-soft)}
 .ask{margin-top:12px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
 .laso-error{color:var(--red);padding:14px;border:1px solid var(--red);border-radius:10px;background:var(--white)}
+/* ── Khối deterministic 16 phần (port từ tu-binh.html buildPreGenForPhan) ── */
+:root{--bg-soft:#f5f6f8;--navy-mid:#1a3a6a}
+.pregen-block{background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:8px;padding:14px 16px;margin-bottom:14px}
+.pregen-block.override{border-left:3px solid var(--gold);background:var(--gold-lt)}
+.pregen-block.warn{border-left:3px solid var(--red);background:#FDF6F5}
+.pregen-title{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.pregen-yn{font-size:13px;line-height:1.55;padding:4px 8px;border-radius:2px;margin-bottom:4px}
+.pregen-yn.yn-cat{background:rgba(30,107,60,0.08);color:var(--green)}
+.pregen-yn.yn-hung{background:rgba(192,57,43,0.07);color:var(--red)}
+.pregen-yn.yn-neutral{background:rgba(154,123,58,0.07);color:var(--text-mid)}
+.pregen-yn.yn-great-hung{background:var(--red);color:#fff;font-weight:600}
+.pregen-cach-name{font-family:'Noto Serif',serif;font-size:16px;color:var(--navy);margin-bottom:4px}
+.pregen-cach-desc{font-size:12px;color:var(--text-mid);line-height:1.6}
+.pregen-cach-source{font-size:10px;color:var(--text-lt);font-style:italic;margin-top:6px}
+.pregen-domain-bar{display:grid;grid-template-columns:110px 1fr 50px;gap:12px;align-items:center;margin:8px 0}
+.pregen-domain-name{font-size:13px;color:var(--navy);font-weight:600}
+.pregen-domain-track{background:var(--border-lt);height:14px;position:relative;overflow:hidden;border-radius:3px}
+.pregen-domain-fill{background:linear-gradient(90deg,var(--blue),var(--navy-mid));height:100%;transition:width .6s ease}
+.pregen-domain-score{font-size:14px;font-weight:700;color:var(--blue);text-align:right;font-family:'Noto Serif',serif}
+.pregen-domain-reasons{font-size:11px;color:var(--text-lt);margin-top:4px;padding-left:122px;line-height:1.5}
+@media (max-width:800px){.pregen-domain-reasons{padding-left:0}}
+.phan-empty{font-size:12.5px;color:var(--text-lt);font-style:italic;padding:4px 0}
 </style>
 </head>
 <body>
@@ -148,6 +170,8 @@ window.SHELL_INTRO={key:'bat-tu',title:'Lá số Bát Tự (Tứ Trụ)',desc:'L
 <script src="/tubinh-ansao-engine.js?v=5"></script>
 <script src="/tubinh-domain-scores.js?v=2"></script>
 <script src="/tubinh-cach-cuc-special.js?v=2"></script>
+<script src="/bat-tu-core.js?v=1"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 <script src="/auth.js"></script>
 <script src="/shell.js?v=18"></script>
 <script>
@@ -232,77 +256,21 @@ function renderBatTu(bt,namxem){
     (dvh?card('Đại vận '+dvh.tuoiStart+'–'+dvh.tuoiEnd+'t',dvh.score):'<div class="sc"><div class="lb">Khởi vận</div><div class="vl" style="font-size:19px;color:var(--navy)">'+(bt.tuoiKhoiVan||'—')+'t</div><div class="pbar"><i style="width:100%;background:var(--gold-soft)"></i></div></div>')+
     '<div class="sc"><div class="lb">Cách cục</div><div class="vl" style="font-size:16px;color:var(--navy)">'+esc(cc?cc.primary:'—')+'</div><div class="pbar"><i style="width:100%;background:var(--gold-soft)"></i></div></div>';
 
+  // ── 16 phần — port deterministic (BatTuCore.buildPreGenForPhan) + nút hỏi rail mỗi phần ──
+  var LABELS=BatTuCore.PHAN_LABELS;
   var S=[];
-  // 1. Tổng quan
-  S.push(sec(1,'Tổng quan tứ trụ',(cn?cn.label:''),
-    '<div class="card"><p>Nhật chủ <b>'+esc(bt.nhatCan)+'</b> ('+esc(bt.nhatCanHanh)+' · '+esc(bt.nhatCanAmDuong)+'), sinh ngày <b>'+esc(bt.tuTru[2].can+' '+bt.tuTru[2].chi)+'</b>. Năm sinh <b>'+esc(bt.canChiNamSinh.can+' '+bt.canChiNamSinh.chi)+'</b>, tuổi xem <b>'+esc(bt.tuoiXem)+'</b>.</p>'+
-    (cn?'<p>Nhật can <span class="em">'+esc(cn.label)+'</span> — điểm '+esc(cn.score)+'/10 ('+(cn.dacLenh?'đắc lệnh':'không đắc lệnh')+', đắc địa '+esc(cn.dacDia||0)+', đắc thế '+esc(cn.dacThe||0)+').</p>':'')+
-    (dt?'<p>Dụng thần: <span class="em">'+esc(dt.primary)+(dt.secondary?' / '+esc(dt.secondary):'')+'</span> — '+esc(dt.method)+'.</p>':'')+
-    (cc?'<p>Cách cục: <span class="em">'+esc(cc.primary)+'</span>'+(cc.thanhPhaCach?' ('+esc(cc.thanhPhaCach)+')':'')+'.</p>':'')+
-    ask('Luận tổng quan bát tự của tôi cho kỹ')+'</div>'));
-
-  // 2. Ngũ hành
-  var w=bt.nguHanh&&bt.nguHanh.weighted||{};
-  var maxW=Math.max(1,...['Mộc','Hỏa','Thổ','Kim','Thủy'].map(function(k){return w[k]||0}));
-  var nhRows='';
-  ['Mộc','Hỏa','Thổ','Kim','Thủy'].forEach(function(k){
-    var v=w[k]||0,col=HANH_COLOR[k];
-    nhRows+='<div class="nh-row"><span class="nm" style="color:'+col+'">'+k+'</span><div class="mb"><div class="pbar"><i style="width:'+(v/maxW*100)+'%;background:'+col+'"></i></div></div><span class="num">'+v+'</span></div>';
-  });
-  S.push(sec(2,'Ngũ hành',(bt.nguHanh?'vượng '+bt.nguHanh.dominant+' · thiếu '+bt.nguHanh.deficient:''),
-    '<div class="card">'+nhRows+'<p style="margin-top:11px">Hành vượng nhất là <span class="em">'+esc(bt.nguHanh?bt.nguHanh.dominant:'—')+'</span>, yếu nhất là <span class="em">'+esc(bt.nguHanh?bt.nguHanh.deficient:'—')+'</span> (trọng số tính cả tàng can).</p>'+
-    ask('Ngũ hành của tôi mất cân bằng chỗ nào, bổ sao?')+'</div>'));
-
-  // 3. Đại vận
-  var dvRows='';
-  (bt.daiVans||[]).forEach(function(dv){
-    var cur=dvh&&dv.idx===dvh.idx,col=scoreColor(dv.score);
-    dvRows+='<div class="dv-row'+(cur?' cur':'')+'"><span class="cc"><b>'+esc(dv.can+' '+dv.chi)+'</b></span><span class="rng">'+esc(dv.tuoiStart+'–'+dv.tuoiEnd+'t · '+dv.namStart+'–'+dv.namEnd)+'</span><span class="tt">'+esc(dv.thapThanCan)+' · '+esc(dv.label)+'</span><span class="num" style="color:'+col+'">'+dv.score+'</span></div>';
-  });
-  S.push(sec(3,'Đại vận',(bt.daiVanThuan?'thuận hành':'nghịch hành')+' · khởi '+(bt.tuoiKhoiVan||'?')+'t',
-    '<div class="card">'+(dvRows||'<p>—</p>')+ask('Đại vận hiện tại nên làm gì, tránh gì?')+'</div>'));
-
-  // 4. Lưu niên (relations là OBJECT nhóm: hopVoi/xungVoi/hinhVoi/haiVoi/canHopVoi/canKhacVoi)
-  var lnRel=[];
-  if(ln&&ln.relations){
-    var RMAP={hopVoi:'hợp',xungVoi:'xung',hinhVoi:'hình',haiVoi:'hại',canHopVoi:'can hợp',canKhacVoi:'can khắc'};
-    Object.keys(RMAP).forEach(function(k){ (ln.relations[k]||[]).forEach(function(v){ lnRel.push(RMAP[k]+' '+v); }); });
+  for(var phan=1; phan<=BatTuCore.TONG_PHAN; phan++){
+    var label=LABELS[phan]||('Phần '+phan);
+    var pre=BatTuCore.buildPreGenForPhan(phan,bt);
+    var body=pre||'<div class="phan-empty">Phần này luận theo tổng thể tứ trụ — bấm nút dưới để trợ lý luận sâu.</div>';
+    S.push(sec(phan,label,'','<div class="card">'+body+ask('Luận sâu phần: '+label)+'</div>'));
   }
-  S.push(sec(4,'Vận năm '+namxem,(ln?ln.label:''),
-    '<div class="card"><p>Năm <b>'+esc(ln?ln.can+' '+ln.chi:namxem)+'</b>'+(ln?' — thập thần <b>'+esc(ln.thapThanCan)+'</b>, điểm <b>'+esc(ln.score)+'/10</b> ('+esc(ln.label)+')':'')+'. '+
-    (lnRel.length?'Tương tác với tứ trụ: <span class="em">'+esc(lnRel.join(', '))+'</span>.':'')+'</p>'+
-    ask('Năm '+namxem+' của tôi thế nào, cần chú ý gì?')+'</div>'));
-
-  // 5. Hình xung hại hợp
-  var hx=bt.hinhXungHaiHop||{};
-  function rel(list,label,cls,fmt){ if(!list||!list.length)return ''; return list.map(function(x){return '<span class="chip '+cls+'">'+esc(label)+': '+esc(fmt(x))+'</span>'}).join(''); }
-  var pair=function(x){return (x.chiA||x.canA)+'–'+(x.chiB||x.canB)+' ('+x.cungA+'/'+x.cungB+')'};
-  var relHTML=
-    rel(hx.lucHop,'Lục hợp','g',pair)+
-    rel(hx.tamHop,'Tam hợp','g',function(x){return x.chis.join('-')+(x.full?' (đủ)':'')})+
-    rel(hx.canHop,'Can hợp','g',function(x){return (x.canA||'')+'–'+(x.canB||'')})+
-    rel(hx.lucXung,'Lục xung','r',pair)+
-    rel(hx.lucHai,'Lục hại','w',pair)+
-    rel(hx.tamHinh,'Tam hình','r',function(x){return (x.chis||[]).join('-')})+
-    rel(hx.tuHinh,'Tự hình','w',function(x){return (x.chi||x.chis||'')})+
-    rel(hx.canKhac,'Can khắc','w',function(x){return (x.canA||'')+'–'+(x.canB||'')});
-  S.push(sec(5,'Hình · Xung · Hại · Hợp',(relHTML?'':'không nổi bật'),
-    '<div class="card">'+(relHTML?'<div class="chips">'+relHTML+'</div>':'<p>Tứ trụ không có hình/xung/hại/hợp nổi bật giữa các trụ.</p>')+
-    ask('Các xung hợp trong tứ trụ ảnh hưởng đời tôi ra sao?')+'</div>'));
-
-  // 6. Thần sát
-  var ts=bt.thanSat||{},tsFound=[];
-  Object.keys(ts).forEach(function(k){ var v=ts[k]; if(v&&v.found){ var at=(v.details||[]).map(function(d){return d.at+' ('+(d.positions||[]).join(',')+')'}).join('; '); tsFound.push('<span class="chip w">'+esc(k)+(at?': '+esc(at):'')+'</span>'); } });
-  S.push(sec(6,'Thần sát',(tsFound.length?tsFound.length+' sao':'—'),
-    '<div class="card">'+(tsFound.length?'<div class="chips">'+tsFound.join('')+'</div>':'<p>Không có thần sát nổi bật trong tứ trụ.</p>')+
-    ask('Thần sát trong tứ trụ tôi nói lên điều gì?')+'</div>'));
-
   document.getElementById('btBody').innerHTML=S.join('');
+  try{ BatTuCore.renderInlineDomainRadar(bt); BatTuCore.renderInlineDaiVanLineChart(bt); }catch(e){ if(window.console)console.warn(e); }
 
-  // jump nav
-  var labels=['Tổng quan','Ngũ hành','Đại vận','Vận năm','Hình xung','Thần sát'];
-  document.getElementById('btJump').innerHTML=labels.map(function(l,i){return '<a data-i="'+i+'"'+(i===0?' class="on"':'')+'>'+l+'</a>'}).join('');
-  bindJump(labels.length);
+  var jl=[]; for(var _p=1;_p<=BatTuCore.TONG_PHAN;_p++)jl.push(LABELS[_p]);
+  document.getElementById('btJump').innerHTML=jl.map(function(l,i){return '<a data-i="'+i+'"'+(i===0?' class="on"':'')+'>'+esc(l)+'</a>'}).join('');
+  bindJump(BatTuCore.TONG_PHAN);
   document.querySelectorAll('#btBody [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
 }
 
