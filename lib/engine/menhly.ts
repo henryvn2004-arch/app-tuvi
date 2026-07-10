@@ -37,82 +37,12 @@ export function computeNguHanhTen(input: Rec): Rec | null {
   };
 }
 
-// ── THẦN SỐ HỌC: ngày sinh → số chủ đạo (Life Path, Pythagorean) ──
-function reduceToCore(n: number): number {
-  while (n > 9 && n !== 11 && n !== 22 && n !== 33) {
-    n = String(n).split('').reduce((s, d) => s + Number(d), 0);
-  }
-  return n;
-}
-export function computeThanSoHoc(input: Rec): Rec | null {
-  const dd = Number(input.dd), mm = Number(input.mm), yyyy = Number(input.yyyy);
-  if (!dd || !mm || !yyyy) return null;
-  const allDigits = String(dd) + String(mm) + String(yyyy);
-  const rawSum = allDigits.split('').reduce((s, d) => s + Number(d), 0);
-  const lifePath = reduceToCore(rawSum);
-  const birthday = reduceToCore(dd);
-  return {
-    ten: input.ten || '',
-    dob: `${String(dd).padStart(2, '0')}/${String(mm).padStart(2, '0')}/${yyyy}`,
-    soChuDao: lifePath,
-    soNgaySinh: birthday,
-    isMaster: [11, 22, 33].includes(lifePath),
-  };
-}
+// THẦN SỐ HỌC đã chuyển sang module client dùng chung
+// public/tools-shared/than-so-hoc.js (4 số Pythagoras). Rail pass-through.
 
-// ── BÁT TRẠCH: năm + giới → cung phi (mệnh quái) + đông/tây tứ mệnh ──
-// Cung phi Lạc Việt: t = tổng chữ số năm rút về 1 chữ số.
-//   Nam <2000: 11-t · Nam ≥2000: 9-t (>9 trừ 9; =5 → 2 Khôn)
-//   Nữ  <2000:  t+4 · Nữ  ≥2000: t+6 (>9 trừ 9; =5 → 8 Cấn)
-//   0 → 9. Đông tứ mệnh: 1,3,4,9 · Tây tứ mệnh: 2,6,7,8.
-const QUAI: Record<number, { ten: string; hanh: string }> = {
-  1: { ten: 'Khảm', hanh: 'Thủy' },
-  2: { ten: 'Khôn', hanh: 'Thổ' },
-  3: { ten: 'Chấn', hanh: 'Mộc' },
-  4: { ten: 'Tốn', hanh: 'Mộc' },
-  6: { ten: 'Càn', hanh: 'Kim' },
-  7: { ten: 'Đoài', hanh: 'Kim' },
-  8: { ten: 'Cấn', hanh: 'Thổ' },
-  9: { ten: 'Ly', hanh: 'Hỏa' },
-};
-function sumToOne(year: number): number {
-  let s = String(year).split('').reduce((a, d) => a + Number(d), 0);
-  while (s > 9) s = String(s).split('').reduce((a, d) => a + Number(d), 0);
-  return s === 0 ? 9 : s;
-}
-export function computeBatTrach(input: Rec): Rec | null {
-  const nam = Number(input.nam);
-  const gioiTinh = input.gioiTinh === 'nu' ? 'nu' : 'nam';
-  const info = ccInfo(nam);
-  if (!info) return null;
-  const t = sumToOne(nam);
-  let q: number;
-  if (gioiTinh === 'nam') {
-    q = (nam >= 2000 ? 9 - t : 11 - t);
-    if (q > 9) q -= 9;
-    if (q <= 0) q += 9;
-    if (q === 5) q = 2;
-  } else {
-    q = (nam >= 2000 ? t + 6 : t + 4);
-    if (q > 9) q -= 9;
-    if (q === 5) q = 8;
-  }
-  const quai = QUAI[q] || QUAI[2];
-  const dongTu = [1, 3, 4, 9].includes(q);
-  return {
-    nam,
-    gioiTinh,
-    canChi: info.canChi,
-    napAm: info.napAm,
-    hanh: info.hanh,
-    menhQuai: quai.ten,
-    quaiHanh: quai.hanh,
-    nhom: dongTu ? 'Đông tứ mệnh' : 'Tây tứ mệnh',
-    huongTot: dongTu
-      ? 'Bắc (Khảm), Nam (Ly), Đông (Chấn), Đông Nam (Tốn)'
-      : 'Tây Bắc (Càn), Tây Nam (Khôn), Tây (Đoài), Đông Bắc (Cấn)',
-  };
-}
+// BÁT TRẠCH đã chuyển sang module client dùng chung
+// public/tools-shared/bat-trach.js (getCungMenh nam%100 + bảng du niên 8 hướng =
+// nguồn chuẩn với trang standalone). Rail pass-through, không tính lại ở đây.
 
 // ── KINH DỊCH: 6 hào gieo (client random) → quái hạ/thượng + hào động ──
 // Hào: 6=lão âm(động→dương) · 7=thiếu dương · 8=thiếu âm · 9=lão dương(động→âm).
