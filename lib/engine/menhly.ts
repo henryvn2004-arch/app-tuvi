@@ -14,14 +14,6 @@
 // ============================================================
 
 import { ccInfo } from '@/lib/engine/diachi';
-import { currentNamXem } from '@/lib/engine/namxem';
-
-const CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
-// Tam hợp cục → 3 chi phạm TAM TAI của cục đó (theo cổ pháp).
-// Thân-Tý-Thìn: tam tai Dần Mão Thìn · Dần-Ngọ-Tuất: Thân Dậu Tuất
-// Tỵ-Dậu-Sửu: Hợi Tý Sửu · Hợi-Mão-Mùi: Tỵ Ngọ Mùi
-const TAM_HOP_CUC: number[][] = [[8, 0, 4], [2, 6, 10], [5, 9, 1], [11, 3, 7]];
-const TAM_TAI_CHI: number[][] = [[2, 3, 4], [8, 9, 10], [11, 0, 1], [5, 6, 7]];
 
 type Rec = Record<string, unknown>;
 
@@ -33,52 +25,9 @@ export function computeNapAm(input: Rec): Rec | null {
   return { nam, canChi: i.canChi, napAm: i.napAm, hanh: i.hanh, chi: i.chi };
 }
 
-// ── KIM LÂU & TAM TAI: năm sinh → tuổi mụ, kim lâu, tam tai ──
-// Kim lâu tính theo TUỔI MỤ: (tuổi mụ) mod 9 ∈ {1,3,6,8} → phạm
-//   1 Kim Lâu Thân (hại mình) · 3 Thê (hại vợ/chồng) · 6 Tử (hại con)
-//   · 8 Lục Súc (hại vật nuôi). Trả bảng 10 năm tới cho tiện xem.
-export function computeKimLau(input: Rec): Rec | null {
-  const nam = Number(input.nam);
-  const info = ccInfo(nam);
-  if (!info) return null;
-  const cur = currentNamXem();
-  // Cục tam hợp chứa chi tuổi → 3 chi phạm tam tai
-  const cucIdx = TAM_HOP_CUC.findIndex((g) => g.includes(info.chiIdx));
-  const tamTaiChi = cucIdx >= 0 ? TAM_TAI_CHI[cucIdx].map((c) => CHI[c]) : [];
-
-  const kimLauLoai: Record<number, string> = {
-    1: 'Kim Lâu Thân (hại bản thân)',
-    3: 'Kim Lâu Thê (hại vợ/chồng)',
-    6: 'Kim Lâu Tử (hại con cái)',
-    8: 'Kim Lâu Lục Súc (hại vật nuôi/của cải)',
-  };
-
-  const rows = [];
-  for (let y = cur; y < cur + 10; y++) {
-    const tuoiMu = y - nam + 1;
-    const r = tuoiMu % 9;
-    const phamKimLau = [1, 3, 6, 8].includes(r);
-    const yInfo = ccInfo(y)!;
-    const phamTamTai = cucIdx >= 0 && TAM_TAI_CHI[cucIdx].includes(yInfo.chiIdx);
-    rows.push({
-      year: y,
-      tuoiMu,
-      canChiNam: yInfo.canChi,
-      kimLau: phamKimLau ? kimLauLoai[r] : '',
-      tamTai: phamTamTai,
-    });
-  }
-  return {
-    nam,
-    canChi: info.canChi,
-    napAm: info.napAm,
-    hanh: info.hanh,
-    chi: info.chi,
-    cucTamHop: cucIdx >= 0 ? TAM_HOP_CUC[cucIdx].map((c) => CHI[c]).join('-') : '',
-    tamTaiChi,
-    rows,
-  };
-}
+// KIM LÂU & TAM TAI đã chuyển sang module client dùng chung
+// public/tools-shared/kim-lau.js (nguồn chuẩn = trang standalone). Rail nhận
+// data client gửi (run.ts pass-through) → không tính lại server-side ở đây.
 
 // ── NGŨ HÀNH TÊN: mệnh nạp âm của chủ + tên → ngũ hành nền ───
 // Ngũ hành từng CHỮ trong tên là bán-định-tính (theo âm/nghĩa) → để rail luận;
