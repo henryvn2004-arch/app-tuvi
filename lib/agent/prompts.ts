@@ -811,7 +811,7 @@ function extractDatTenDnContext(data: any): string {
 // ── Batch 2 extracts (Mệnh Lý / Huyền Học) ────────────────────
 // Nhãn tiếng Việt cho các field flat của compute* trong lib/engine/menhly.ts.
 const GENERIC_LABELS: Record<string, string> = {
-  nam: 'Năm sinh', canChi: 'Can chi', napAm: 'Nạp âm', hanh: 'Hành',
+  nam: 'Năm sinh', canChi: 'Can chi', napAm: 'Nạp âm', hanh: 'Hành', conGiap: 'Con giáp',
   ten: 'Tên', gioiTinh: 'Giới tính', menhQuai: 'Mệnh quái (cung phi)',
   quaiHanh: 'Hành quái', nhom: 'Nhóm trạch', huongTot: 'Hướng tốt',
   dob: 'Ngày sinh', soChuDao: 'Số chủ đạo (Life Path)', soNgaySinh: 'Số ngày sinh',
