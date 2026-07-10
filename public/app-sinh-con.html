@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Xem tuổi sinh con — Tử Vi Minh Bảo</title>
-<meta name="description" content="Xem năm sinh con hợp tuổi bố mẹ theo địa chi (lục hợp, tam hợp, xung, hình) — nền can chi bố mẹ rồi hỏi trợ lý AI năm nào tốt nhất để sinh con.">
+<meta name="description" content="Chấm điểm lục hợp/tam hợp/lục xung địa chi giữa năm sinh con và bố mẹ — bảng 15 năm tới, năm thuận nhất. Hỏi trợ lý AI luận sâu.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,24 +21,44 @@
 .fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
 .btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
 .btn-go:disabled{opacity:.6;cursor:not-allowed}
-#resPanel{display:none}
-.res-head{font-family:var(--serif);font-size:15px;font-weight:600;margin-bottom:12px}
-.cc-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.err{color:var(--red);font-size:13px;margin-top:8px;display:none}
+.err.active{display:block}
+#resPanel{display:none;max-width:820px}
+.cc-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
 .cc-card{flex:1;min-width:150px;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:12px 14px;box-shadow:var(--shadow)}
 .cc-card .who{font-size:10.5px;color:var(--text-lt);text-transform:uppercase;letter-spacing:.04em}
 .cc-card .cc{font-family:var(--serif);font-size:19px;font-weight:600;margin-top:2px}
 .cc-card .na{font-size:12px;color:var(--text-mid);margin-top:2px}
 .cc-card .na b{color:var(--hanh,var(--gold-soft))}
-/* Bảng năm sinh con (client tự chấm địa chi để xem nhanh; rail luận sâu) */
-.yr-wrap{max-width:600px;margin-bottom:6px}
-.yr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
-.yr{background:var(--white);border:1px solid var(--line);border-radius:9px;padding:8px 9px;text-align:center;box-shadow:var(--shadow)}
-.yr .y{font-family:var(--serif);font-size:16px;font-weight:600}
-.yr .cc{font-size:11px;color:var(--text-lt);margin-top:1px}
-.yr .tag{font-size:10.5px;font-weight:600;margin-top:5px;border-radius:20px;padding:1px 8px;display:inline-block}
-.note{background:var(--gold-lt);border:1px solid var(--gold-soft);border-radius:10px;padding:12px 15px;font-size:13px;color:var(--text-mid);line-height:1.65;margin:12px 0 6px}
-.note b{color:var(--text)}
-.ask{margin-top:12px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
+/* Bảng 15 năm — "tài liệu" nền sáng cố định, khớp bản standalone */
+.res-block{border:1px solid #E8E8E8;background:#fff;border-radius:10px;overflow:hidden}
+.res-block-header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:#F5F4F0;border-bottom:1px solid #E8E8E8;gap:12px;flex-wrap:wrap}
+.res-block-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#061A2E}
+.year-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
+.year-table th{background:#061A2E;color:#fff;padding:8px 10px;font-size:12px;font-weight:600;text-align:left}
+.year-table td{padding:9px 10px;border-bottom:1px solid #E8E8E8;vertical-align:middle;color:#1a1a1a}
+.year-table tr:hover td{background:#F5F4F0}
+.year-table tr.top-year td{background:#fdf8f0}
+.score-bar{display:flex;gap:2px;align-items:center}
+.score-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.dot-on-great{background:#27ae60}
+.dot-on-good{background:#c9a84c}
+.dot-on-ok{background:#ccc}
+.dot-on-bad{background:#c0392b}
+.label-great{color:#1E6B3C;font-weight:700;font-size:12px}
+.label-good{color:#9A7B3A;font-weight:600;font-size:12px}
+.label-ok{color:#777;font-size:12px}
+.label-bad{color:#c0392b;font-weight:600;font-size:12px}
+.year-num{font-weight:700;color:#061A2E}
+.can-chi-cell{color:#444;font-size:12px}
+.hanh-badge{display:inline-block;padding:1px 8px;border-radius:20px;font-size:11px;font-weight:700;color:#fff}
+.hb-Kim{background:#a0937d}.hb-Mộc{background:#27ae60}
+.hb-Hỏa{background:#c0392b}.hb-Thổ{background:#e67e22}
+.hb-Thủy{background:#2980b9}
+.reason-cell{font-size:12px;color:#444;line-height:1.4}
+.tbl-note{margin-top:16px;padding:12px;background:#F5F4F0;border-radius:8px;font-size:12px;color:#777;line-height:1.7}
+@media(max-width:640px){.year-table th:nth-child(5),.year-table td:nth-child(5){display:none}}
+.ask{margin-top:16px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
 .laso-error{color:var(--red);padding:14px;border:1px solid var(--red);border-radius:10px;background:var(--white)}
 </style>
 </head>
@@ -60,20 +80,32 @@
       <div id="introHost"></div>
       <div class="form-card" id="birthPanel">
         <h2>Năm sinh của bố và mẹ</h2>
-        <p class="sub">Lấy can chi tuổi bố mẹ làm nền, chấm hợp/xung địa chi cho từng năm 15 năm tới, rồi hỏi trợ lý luận sâu năm nào nên sinh con và vì sao.</p>
+        <p class="sub">Chấm điểm lục hợp / tam hợp / lục xung / tam hình giữa địa chi từng năm và tuổi bố mẹ cho 15 năm tới, rồi hỏi trợ lý luận sâu năm nào nên sinh con và vì sao.</p>
         <div class="frow" style="margin-bottom:4px">
           <div class="fg" style="width:130px"><label>Năm sinh bố</label><input type="number" id="inpNamBo" placeholder="1990" min="1900" max="2100"></div>
           <div class="fg" style="width:130px"><label>Năm sinh mẹ</label><input type="number" id="inpNamMe" placeholder="1992" min="1900" max="2100"></div>
-          <button class="btn-go" id="btnGo" onclick="doSinhCon()">Lập nền →</button>
+          <button class="btn-go" id="btnGo" onclick="doSinhCon()">Xem 15 năm →</button>
         </div>
+        <div class="err" id="error-msg"></div>
       </div>
 
       <div id="resPanel">
-        <div class="res-head" id="resHead"></div>
         <div class="cc-row" id="ccRow"></div>
-        <div class="yr-wrap"><div class="yr-grid" id="yrGrid"></div></div>
-        <div class="note" id="resNote"></div>
-        <div class="ask" data-ask="Trong 15 năm tới, năm nào tốt nhất để sinh con hợp tuổi cả bố và mẹ? Nêu vài năm cụ thể kèm lý do và năm nào nên tránh.">✦ Hỏi trợ lý năm nào nên sinh con</div>
+        <div class="res-block">
+          <div class="res-block-header">
+            <span class="res-block-title" id="resultTitle">Kết Quả 15 Năm</span>
+            <span style="font-size:11px;color:#777">Địa chi · Lục Hợp · Tam Hợp · Lục Xung</span>
+          </div>
+          <div class="res-block-body" style="overflow-x:auto;padding:24px">
+            <div id="topRecommend" style="margin-bottom:16px"></div>
+            <table class="year-table">
+              <thead><tr><th>Năm</th><th>Can Chi</th><th>Hành</th><th>Đánh Giá</th><th>Lý Do</th></tr></thead>
+              <tbody id="yearTableBody"></tbody>
+            </table>
+            <div class="tbl-note"><strong style="color:#444">Ghi chú:</strong> Kết quả dựa trên địa chi năm sinh (lịch dương). Nếu con sinh vào tháng 1–2 dương lịch, địa chi thực tế tính theo năm âm lịch có thể khác 1 năm — cần xem xét kỹ hơn.</div>
+          </div>
+        </div>
+        <div class="ask" data-ask="Trong 15 năm tới, năm nào tốt nhất để sinh con hợp tuổi cả bố và mẹ? Nêu vài năm cụ thể kèm lý do và năm nào nên tránh.">✦ Hỏi trợ lý luận sâu năm nào nên sinh con</div>
       </div>
     </div>
   </main>
@@ -82,52 +114,30 @@
 </div>
 
 <script>window.SHELL_ACTIVE='sinh-con';
-window.SHELL_INTRO={key:'sinh-con',title:'Xem tuổi sinh con',desc:'Lấy can chi tuổi bố mẹ, chấm hợp/xung địa chi cho 15 năm tới, rồi hỏi <b>trợ lý AI</b> năm nào nên sinh con hợp tuổi cả nhà.'};</script>
-<script src="/can-chi.js?v=1"></script>
+window.SHELL_INTRO={key:'sinh-con',title:'Xem tuổi sinh con',desc:'Chấm điểm hợp/xung địa chi năm sinh con với tuổi bố mẹ cho <b>15 năm tới</b>, chỉ ra năm thuận nhất, rồi hỏi <b>trợ lý AI</b> luận sâu năm nào nên sinh con.'};</script>
+<script src="/tools-shared/xem-tuoi-sinh-con.js?v=1"></script>
 <script src="/auth.js"></script>
 <script src="/shell.js?v=18"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 var HANH_COLOR={'Mộc':'var(--green)','Hỏa':'var(--red)','Thổ':'var(--gold-soft)','Kim':'#8a8a8a','Thủy':'var(--blue)'};
-// Địa chi (khớp lib/engine/diachi.ts để xem nhanh; server vẫn là nguồn chuẩn cho rail)
-var LUC_HOP=[[0,1],[2,11],[3,10],[4,9],[5,8],[6,7]];
-var LUC_XUNG=[[0,6],[1,7],[2,8],[3,9],[4,10],[5,11]];
-var TAM_HOP=[[8,0,4],[2,6,10],[5,9,1],[11,3,7]];
-var TAM_HINH=[[2,11,8],[0,3,6],[1,4,7]];
-function inPair(ps,a,b){return ps.some(function(p){return (p[0]===a&&p[1]===b)||(p[0]===b&&p[1]===a);});}
-function inGroup(gs,a,b){return gs.some(function(g){return g.indexOf(a)>-1&&g.indexOf(b)>-1;});}
-function scoreYear(ci,cb,cm){
-  var s=0;
-  if(inPair(LUC_HOP,ci,cb))s+=3;else if(inGroup(TAM_HOP,ci,cb))s+=2;else if(inPair(LUC_XUNG,ci,cb))s-=3;else if(inGroup(TAM_HINH,ci,cb))s-=2;
-  if(inPair(LUC_HOP,ci,cm))s+=3;else if(inGroup(TAM_HOP,ci,cm))s+=2;else if(inPair(LUC_XUNG,ci,cm))s-=3;else if(inGroup(TAM_HINH,ci,cm))s-=2;
-  return s;
-}
-function yrTag(s){
-  if(s>=5)return{t:'Rất thuận',c:'var(--green)',bg:'rgba(30,107,60,.1)'};
-  if(s>=2)return{t:'Thuận',c:'var(--blue)',bg:'rgba(20,85,164,.1)'};
-  if(s>=0)return{t:'Bình',c:'var(--gold-soft)',bg:'var(--gold-lt)'};
-  return{t:'Lưu ý',c:'var(--red)',bg:'rgba(192,57,43,.1)'};
-}
 
+// Ô giữa dùng CHUNG module /tools-shared/xem-tuoi-sinh-con.js với trang standalone.
 function doSinhCon(){
   var btn=document.getElementById('btnGo');
+  var err=document.getElementById('error-msg'); err.classList.remove('active');
   var namBo=parseInt(document.getElementById('inpNamBo').value);
   var namMe=parseInt(document.getElementById('inpNamMe').value);
-  if(!namBo||!namMe){ alert('Vui lòng nhập năm sinh của cả bố và mẹ.'); return; }
+  var r=XemTuoiSinhConTool.compute(namBo,namMe);
+  if(!r.ok){ err.textContent=r.error; err.classList.add('active'); return; }
   btn.disabled=true;
   try{
-    var iBo=CanChi.ccInfo(namBo),iMe=CanChi.ccInfo(namMe);
-    document.getElementById('resHead').textContent='Nền can chi bố mẹ · 15 năm tới';
+    var iBo=r.previewBo,iMe=r.previewMe;
     function ccCard(who,i){ return '<div class="cc-card"><div class="who">'+esc(who)+'</div><div class="cc">'+esc(i.canChi)+'</div><div class="na" style="--hanh:'+HANH_COLOR[i.hanh]+'">'+esc(i.napAm)+' · <b>'+esc(i.hanh)+'</b></div></div>'; }
     document.getElementById('ccRow').innerHTML=ccCard('Bố',iBo)+ccCard('Mẹ',iMe);
-    // Bảng 15 năm (xem nhanh)
-    var cur=new Date().getFullYear(),cells='';
-    for(var y=cur;y<cur+15;y++){
-      var info=CanChi.ccInfo(y);var sc=scoreYear(info.chiIdx,iBo.chiIdx,iMe.chiIdx);var tg=yrTag(sc);
-      cells+='<div class="yr"><div class="y">'+y+'</div><div class="cc">'+esc(info.canChi)+'</div><div class="tag" style="color:'+tg.c+';background:'+tg.bg+'">'+tg.t+'</div></div>';
-    }
-    document.getElementById('yrGrid').innerHTML=cells;
-    document.getElementById('resNote').innerHTML='Năm hợp là năm địa chi <b>lục hợp / tam hợp</b> với tuổi bố mẹ; năm cần lưu ý là <b>lục xung / tam hình</b>. Bảng trên chấm nhanh theo địa chi — hỏi trợ lý để luận sâu năm đẹp nhất, tháng hợp và điều nên chuẩn bị.';
+    document.getElementById('yearTableBody').innerHTML=r.tableRowsHTML;
+    document.getElementById('topRecommend').innerHTML=r.topRecommendHTML;
+    document.getElementById('resultTitle').textContent=r.resultTitle;
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('resPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
@@ -135,7 +145,7 @@ function doSinhCon(){
     Shell.setContext({
       scenario:{type:'xem-tuoi-sinh-con',data:{namBo:namBo,namMe:namMe}},
       label:'Sinh con · bố '+iBo.canChi+' × mẹ '+iMe.canChi,
-      greeting:'Đã lập nền địa chi (bố **'+esc(iBo.canChi)+'** · mẹ **'+esc(iMe.canChi)+'**), chấm hợp/xung 15 năm tới. Bạn muốn tôi tư vấn gì trước?',
+      greeting:'Đã chấm hợp/xung địa chi 15 năm tới (bố **'+esc(iBo.canChi)+'** · mẹ **'+esc(iMe.canChi)+'**). Năm thuận nhất: **'+esc(r.data.namTot)+'**. Bạn muốn tôi tư vấn gì trước?',
       chips:['Năm nào tốt nhất để sinh con?','Vì sao năm đó hợp cả bố lẫn mẹ?','Năm nào nên tránh sinh con?','Con tuổi gì hợp với bố mẹ nhất?']
     });
     document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
