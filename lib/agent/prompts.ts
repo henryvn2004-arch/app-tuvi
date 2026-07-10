@@ -325,9 +325,9 @@ ${_TIME()}
 
 Nguyên tắc:
 - Tiếng Việt chuẩn mực, không bullet, không emoji
-- Luận theo SỐ CHỦ ĐẠO (Life Path) đã tính sẵn — KHÔNG tự tính lại; giải thích ý nghĩa con số, điểm mạnh/yếu, sự nghiệp, tình cảm hợp với số đó
+- Luận theo 4 CON SỐ đã tính sẵn — KHÔNG tự tính lại: Số Đường Đời (hành trình chính), Số Định Mệnh (tài năng bẩm sinh), Số Linh Hồn (khao khát nội tâm), Số Sứ Mệnh (cách hiện ra ngoài); nêu ý nghĩa từng số, chúng bổ trợ hay mâu thuẫn, ứng vào sự nghiệp/tình cảm
 - Số bậc thầy (11/22/33) luận riêng; nói thẳng ưu/khuyết, không tâng bốc
-- Đây là numerology phương Tây, không trộn lẫn tử vi
+- Đây là numerology phương Tây (Pythagoras), không trộn lẫn tử vi
 
 === DỮ LIỆU THẦN SỐ HỌC ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
@@ -339,7 +339,7 @@ ${_TIME()}
 Nguyên tắc:
 - Tiếng Việt chuẩn mực, không bullet, không emoji
 - Dựa MỆNH QUÁI (cung phi) và nhóm Đông/Tây tứ mệnh ĐÃ TÍNH SẴN — KHÔNG tự tính lại cung phi
-- Luận 8 hướng theo Du Niên Bát Biến (Sinh Khí, Thiên Y, Diên Niên, Phục Vị = cát; Tuyệt Mệnh, Ngũ Quỷ, Lục Sát, Họa Hại = hung) hợp với mệnh quái này; chỉ rõ hướng nhà/cửa/bếp/giường nên và tránh
+- 8 hướng Du Niên Bát Biến (Sinh Khí, Thiên Y, Diên Niên, Phục Vị = cát; Họa Hại, Lục Sát, Ngũ Quỷ, Tuyệt Mệnh = hung) ĐÃ CHO SẴN trong "Hướng tốt"/"Hướng xấu" — dùng đúng, KHÔNG tự đổi; chỉ rõ hướng nhà/cửa/bếp/giường nên và tránh
 - Nói thẳng, cụ thể; nêu cách hóa giải khi buộc dùng hướng xấu
 
 === DỮ LIỆU BÁT TRẠCH ===
@@ -812,10 +812,11 @@ function extractDatTenDnContext(data: any): string {
 // Nhãn tiếng Việt cho các field flat của compute* trong lib/engine/menhly.ts.
 const GENERIC_LABELS: Record<string, string> = {
   nam: 'Năm sinh', canChi: 'Can chi', napAm: 'Nạp âm', hanh: 'Hành', conGiap: 'Con giáp',
-  ten: 'Tên', gioiTinh: 'Giới tính', menhQuai: 'Mệnh quái (cung phi)',
-  quaiHanh: 'Hành quái', nhom: 'Nhóm trạch', huongTot: 'Hướng tốt',
-  dob: 'Ngày sinh', soChuDao: 'Số chủ đạo (Life Path)', soNgaySinh: 'Số ngày sinh',
-  isMaster: 'Là số bậc thầy',
+  ten: 'Tên', gioiTinh: 'Giới tính', cung: 'Cung mệnh (số)', menhQuai: 'Mệnh quái (cung phi)',
+  quaiHanh: 'Hành quái', nhom: 'Nhóm trạch', huongTot: 'Hướng tốt', huongXau: 'Hướng xấu',
+  dob: 'Ngày sinh',
+  soDuongDoi: 'Số Đường Đời (Life Path)', soDinhMenh: 'Số Định Mệnh',
+  soLinhHon: 'Số Linh Hồn', soSuMenh: 'Số Sứ Mệnh',
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractGenericContext(data: any): string {

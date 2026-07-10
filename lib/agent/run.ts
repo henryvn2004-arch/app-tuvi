@@ -23,8 +23,7 @@ import { computeLaso, renderLasoCard } from '@/lib/engine/laso';
 import { computeTuBinh } from '@/lib/engine/tubinh';
 import { computeSinhCon, computeChonNgay, computeDatTen, computeDatTenDn } from '@/lib/engine/diachi';
 import {
-  computeNguHanhTen,
-  computeThanSoHoc, computeBatTrach, computeKinhDich,
+  computeNguHanhTen, computeKinhDich,
 } from '@/lib/engine/menhly';
 // Template prompt + context formatter dùng CHUNG với /api/lasotuvi (một bộ não).
 import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint } from '@/lib/agent/prompts';
@@ -183,12 +182,8 @@ export async function runAgent(
     } else if (scenario.type === 'ngu-hanh-ten') {
       const r = computeNguHanhTen(scenario.data || {});
       if (r) scn = { ...scenario, data: r };
-    } else if (scenario.type === 'than-so-hoc') {
-      const r = computeThanSoHoc(scenario.data || {});
-      if (r) scn = { ...scenario, data: r };
-    } else if (scenario.type === 'bat-trach') {
-      const r = computeBatTrach(scenario.data || {});
-      if (r) scn = { ...scenario, data: r };
+    // than-so-hoc + bat-trach: pass-through (client module dùng chung
+    // tools-shared/{than-so-hoc,bat-trach}.js = nguồn chuẩn với trang standalone).
     } else if (scenario.type === 'kinh-dich') {
       const r = computeKinhDich(scenario.data || {});
       if (r) scn = { ...scenario, data: r };
