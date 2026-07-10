@@ -23,7 +23,7 @@ import { computeLaso, renderLasoCard } from '@/lib/engine/laso';
 import { computeTuBinh } from '@/lib/engine/tubinh';
 import { computeSinhCon, computeChonNgay, computeDatTen, computeDatTenDn } from '@/lib/engine/diachi';
 import {
-  computeNapAm, computeKimLau, computeNguHanhTen,
+  computeNapAm, computeNguHanhTen,
   computeThanSoHoc, computeBatTrach, computeKinhDich,
 } from '@/lib/engine/menhly';
 // Template prompt + context formatter dùng CHUNG với /api/lasotuvi (một bộ não).
@@ -180,9 +180,9 @@ export async function runAgent(
     } else if (scenario.type === 'nap-am') {
       const r = computeNapAm(scenario.data || {});
       if (r) scn = { ...scenario, data: r };
-    } else if (scenario.type === 'kim-lau') {
-      const r = computeKimLau(scenario.data || {});
-      if (r) scn = { ...scenario, data: r };
+    // kim-lau: KHÔNG recompute server-side — client (module dùng chung
+    // tools-shared/kim-lau.js, = nguồn chuẩn với trang standalone) đã gửi data
+    // đầy đủ trong scenario.data; server chỉ luận trên đó → rail khớp ô giữa.
     } else if (scenario.type === 'ngu-hanh-ten') {
       const r = computeNguHanhTen(scenario.data || {});
       if (r) scn = { ...scenario, data: r };

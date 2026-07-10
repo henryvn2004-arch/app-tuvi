@@ -299,9 +299,9 @@ ${_TIME()}
 
 Nguyên tắc:
 - Tiếng Việt chuẩn mực, không bullet, không emoji
-- Giải thích rõ Kim Lâu (Thân/Thê/Tử/Lục Súc) và Tam Tai theo tuổi mụ; năm nào phạm, năm nào đẹp
-- Nêu cách hóa giải (mượn tuổi, chọn năm khác) khi phạm; nói thẳng năm nên/tránh cho việc làm nhà, cưới hỏi
-- Dựa trên bảng năm đã cung cấp, không bịa thêm
+- Ba hạn theo tuổi ta: Kim Lâu (chu kỳ 5 — kiêng cưới hỏi, xây dựng), Hoang Ốc (kiêng mua/xây nhà), Tam Tai (hạn 3 năm liền); giải thích năm nào phạm hạn nào, năm nào đẹp — DỰA ĐÚNG bảng đã cung cấp
+- Nêu cách hóa giải (mượn tuổi người hợp đứng chủ sự, chọn năm khác, chọn ngày giờ tốt) khi phạm; nói thẳng năm nên/tránh cho việc làm nhà, cưới hỏi
+- Đây là kiêng kỵ dân gian mang tính tham khảo; KHÔNG bịa thêm ngoài bảng
 
 === DỮ LIỆU KIM LÂU & TAM TAI ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
@@ -830,19 +830,26 @@ function extractGenericContext(data: any): string {
   return ctx;
 }
 
+// Shape từ module dùng chung tools-shared/kim-lau.js (nguồn chuẩn = trang
+// standalone): { nam, canChi, napAm, namHienTai, tuoiTaHienTai,
+// hienTai:{kimLau,hoangOc,tamTai}, rows:[{year,tuoiTa,canChi,kimLau,hoangOc,tamTai}] }.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractKimLauContext(data: any): string {
   if (!data) return '';
   const d = data.kimLauData || data;
   let ctx = '';
-  if (d.canChi) ctx += `Tuổi: ${d.canChi} (nạp âm ${d.napAm || ''}, hành ${d.hanh || ''})\n`;
-  if (d.cucTamHop) ctx += `Cục tam hợp: ${d.cucTamHop} — Tam Tai các năm chi: ${(d.tamTaiChi || []).join(', ')}\n`;
+  if (d.canChi) ctx += `Tuổi: ${d.canChi}${d.nam ? ` (${d.nam})` : ''} — nạp âm ${d.napAm || ''}\n`;
+  if (d.namHienTai) ctx += `Năm hiện tại: ${d.namHienTai}, tuổi ta ${d.tuoiTaHienTai}\n`;
+  if (d.hienTai) {
+    const now = [d.hienTai.kimLau && 'Kim Lâu', d.hienTai.hoangOc && 'Hoang Ốc', d.hienTai.tamTai && 'Tam Tai'].filter(Boolean);
+    ctx += `Năm nay: ${now.length ? 'PHẠM ' + now.join(', ') : 'không phạm hạn nào (bình thường)'}\n`;
+  }
   if (Array.isArray(d.rows) && d.rows.length) {
-    ctx += '\nBảng 10 năm tới:\n';
+    ctx += '\nBảng 20 năm tới:\n';
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     d.rows.forEach((r: any) => {
-      const flags = [r.kimLau ? `PHẠM ${r.kimLau}` : '', r.tamTai ? 'PHẠM Tam Tai' : ''].filter(Boolean).join(' · ');
-      ctx += `  ${r.year} (tuổi mụ ${r.tuoiMu}, ${r.canChiNam}): ${flags || 'đẹp — không phạm Kim Lâu/Tam Tai'}\n`;
+      const flags = [r.kimLau && 'Kim Lâu', r.hoangOc && 'Hoang Ốc', r.tamTai && 'Tam Tai'].filter(Boolean);
+      ctx += `  ${r.year} (tuổi ta ${r.tuoiTa}, ${r.canChi}): ${flags.length ? 'PHẠM ' + flags.join(', ') : 'đẹp'}\n`;
     });
   }
   return ctx;
