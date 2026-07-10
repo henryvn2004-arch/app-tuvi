@@ -13,29 +13,15 @@
 // input thô → Zalo/native không cần JS helper.
 // ============================================================
 
-import { ccInfo } from '@/lib/engine/diachi';
-
 type Rec = Record<string, unknown>;
 
 // NẠP ÂM & KIM LÂU & TAM TAI đã chuyển sang module client dùng chung
 // public/tools-shared/{nap-am,kim-lau}.js (nguồn chuẩn = trang standalone).
 // Rail nhận data client gửi (run.ts pass-through) → không tính lại ở đây.
 
-// ── NGŨ HÀNH TÊN: mệnh nạp âm của chủ + tên → ngũ hành nền ───
-// Ngũ hành từng CHỮ trong tên là bán-định-tính (theo âm/nghĩa) → để rail luận;
-// server chỉ cấp mệnh nạp âm/hành làm mốc bồi/khắc.
-export function computeNguHanhTen(input: Rec): Rec | null {
-  const nam = Number(input.nam);
-  const info = ccInfo(nam);
-  if (!info || !input.ten) return null;
-  return {
-    ten: input.ten,
-    nam,
-    canChi: info.canChi,
-    napAm: info.napAm,
-    hanh: info.hanh,
-  };
-}
+// NGŨ HÀNH TÊN đã chuyển sang module client dùng chung
+// public/tools-shared/ngu-hanh-ten.js (bảng tra số nét + ngũ hành từng chữ =
+// nguồn chuẩn với trang standalone). Rail pass-through, không tính lại ở đây.
 
 // THẦN SỐ HỌC đã chuyển sang module client dùng chung
 // public/tools-shared/than-so-hoc.js (4 số Pythagoras). Rail pass-through.

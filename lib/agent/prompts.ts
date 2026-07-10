@@ -312,9 +312,9 @@ ${_TIME()}
 
 Nguyên tắc:
 - Tiếng Việt chuẩn mực, không bullet, không emoji
-- Phân tích ngũ hành từng chữ trong tên (theo âm/nghĩa) và độ hài hòa với mệnh nạp âm của người
-- Nói thẳng tên bồi mệnh (tương sinh/đồng hành) hay khắc; gợi cách chỉnh (đổi tên đệm, thêm chữ hành thiếu)
-- Có căn cứ, không tâng bốc
+- Ngũ hành từng chữ (tính theo SỐ NÉT chữ Hán) + cân bằng ngũ hành ĐÃ CHO SẴN — dựa vào đó, KHÔNG tự tính lại số nét; có thể bổ sung sắc thái âm/nghĩa
+- Xét độ hài hòa với ngũ hành bản mệnh (nếu có): tên bồi mệnh (tương sinh/đồng hành) hay khắc; chữ tên chính quan trọng nhất
+- Nói thẳng, gợi cách chỉnh (đổi tên đệm, thêm chữ hành còn thiếu trong cân bằng); có căn cứ, không tâng bốc
 
 === DỮ LIỆU NGŨ HÀNH TÊN ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
@@ -815,6 +815,8 @@ const GENERIC_LABELS: Record<string, string> = {
   ten: 'Tên', gioiTinh: 'Giới tính', cung: 'Cung mệnh (số)', menhQuai: 'Mệnh quái (cung phi)',
   quaiHanh: 'Hành quái', nhom: 'Nhóm trạch', huongTot: 'Hướng tốt', huongXau: 'Hướng xấu',
   dob: 'Ngày sinh',
+  hoTen: 'Họ tên', tenChinh: 'Chữ tên chính', tenChinhHanh: 'Hành chữ tên chính',
+  menh: 'Ngũ hành bản mệnh', canBang: 'Cân bằng ngũ hành', tungChu: 'Ngũ hành từng chữ',
   soDuongDoi: 'Số Đường Đời (Life Path)', soDinhMenh: 'Số Định Mệnh',
   soLinhHon: 'Số Linh Hồn', soSuMenh: 'Số Sứ Mệnh',
 };

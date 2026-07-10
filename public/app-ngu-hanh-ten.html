@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ngũ hành tên — Tử Vi Minh Bảo</title>
-<meta name="description" content="Phân tích ngũ hành của tên có hợp mệnh nạp âm không, tên bồi hay khắc mệnh — gợi ý chỉnh. Hỏi trợ lý AI luận từng chữ.">
+<meta name="description" content="Nhập tên tiếng Việt — tra chữ Hán, số nét và ngũ hành từng chữ, cân bằng ngũ hành, đối chiếu mệnh cục. Hỏi trợ lý AI luận sâu.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,22 +17,44 @@
 .frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:13px}
 .fg{display:flex;flex-direction:column;gap:5px}
 .fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
-.fg input{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
-.fg input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
+.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
+.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
+.hint{font-size:11.5px;color:var(--text-lt);margin-top:-6px;margin-bottom:12px}
 .btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
 .btn-go:disabled{opacity:.6;cursor:not-allowed}
-#resPanel{display:none}
-.res-head{font-family:var(--serif);font-size:15px;font-weight:600;margin-bottom:12px}
-.cc-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-.cc-card{flex:1;min-width:150px;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:12px 14px;box-shadow:var(--shadow)}
-.cc-card .who{font-size:10.5px;color:var(--text-lt);text-transform:uppercase;letter-spacing:.04em}
-.cc-card .cc{font-family:var(--serif);font-size:19px;font-weight:600;margin-top:2px}
-.cc-card .na{font-size:12px;color:var(--text-mid);margin-top:2px}
-.cc-card .na b{color:var(--hanh,var(--gold-soft))}
-.note{background:var(--gold-lt);border:1px solid var(--gold-soft);border-radius:10px;padding:12px 15px;font-size:13px;color:var(--text-mid);line-height:1.65;margin-bottom:6px}
-.note b{color:var(--text)}
+.err{color:var(--red);font-size:13px;margin-top:8px;display:none}
+.err.active{display:block}
+#resPanel{display:none;max-width:720px}
+/* Ô giữa "tài liệu" nền sáng cố định, khớp bản standalone /tools/ngu-hanh-ten.html */
+.res-block{border:1px solid #E8E8E8;background:#fff;margin-bottom:20px;border-radius:10px;overflow:hidden}
+.res-block-header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:#F5F4F0;border-bottom:1px solid #E8E8E8}
+.res-block-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#061A2E}
+.res-block-body{padding:24px}
+.syl-cards{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin:24px 0 16px}
+.syl-card{min-width:88px;padding:16px 12px 14px;border-radius:10px;text-align:center;border:2px solid transparent}
+.syl-viet{font-size:20px;font-weight:700;margin-bottom:4px;color:#061A2E}
+.syl-han{font-size:30px;line-height:1;margin-bottom:6px;font-family:'Noto Serif',Georgia,serif}
+.syl-net{font-size:10px;color:#777;margin-bottom:6px}
+.syl-hanh{font-size:14px;font-weight:700}
+.syl-unknown{background:#F5F4F0;border-color:#CCCCCC}
+.syl-unknown .syl-hanh{color:#777;font-size:11px}
+.hanh-Mộc{background:#eaf4ed;border-color:#c3e0cc}.hanh-Mộc .syl-hanh{color:#1E6B3C}
+.hanh-Hỏa{background:#fff0ef;border-color:#f5c0bc}.hanh-Hỏa .syl-hanh{color:#C0392B}
+.hanh-Thổ{background:#fdf6e9;border-color:#e8d9b0}.hanh-Thổ .syl-hanh{color:#9A7B3A}
+.hanh-Kim{background:#f3f4f5;border-color:#ccc}.hanh-Kim .syl-hanh{color:#5a6a72}
+.hanh-Thủy{background:#e8f0fe;border-color:#c0d0f0}.hanh-Thủy .syl-hanh{color:#1455A4}
+.nh-balance{display:flex;border-radius:6px;overflow:hidden;height:32px;margin:12px 0 6px}
+.nh-seg{display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;overflow:hidden;white-space:nowrap;transition:flex .4s}
+.nh-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;margin-bottom:12px}
+.nh-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;display:inline-block;margin-right:4px}
+.rel-box{margin-top:12px;padding:14px 18px;border-radius:8px;font-size:13px;line-height:1.8}
+.rel-tot{background:#eaf4ed;border-left:4px solid #1E6B3C;color:#1E6B3C}
+.rel-xau{background:#fef0ef;border-left:4px solid #C0392B;color:#C0392B}
+.rel-trun{background:#F5F4F0;border-left:4px solid #CCCCCC;color:#444}
+.unk-wrap{margin:8px 0 20px;padding:16px;background:#F5F4F0;border-radius:8px;border:1px solid #E8E8E8}
+.uphead{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#777;margin-bottom:4px}
+.form-input{border:1px solid #ccc;border-radius:6px;font-family:inherit}
 .ask{margin-top:12px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
-.laso-error{color:var(--red);padding:14px;border:1px solid var(--red);border-radius:10px;background:var(--white)}
 </style>
 </head>
 <body>
@@ -43,7 +65,7 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Ngũ hành tên</b><span>Tên có hợp mệnh không</span></div>
+      <div class="ws-title"><b>Ngũ hành tên</b><span>Ngũ hành từng chữ & cân bằng</span></div>
       <div class="ws-actions">
         <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa</button>
         <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
@@ -52,20 +74,41 @@
     <div class="ws-body">
       <div id="introHost"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Tên & năm sinh</h2>
-        <p class="sub">Lấy mệnh nạp âm theo năm sinh làm mốc, rồi hỏi trợ lý phân tích ngũ hành từng chữ trong tên có bồi mệnh hay khắc, và cách chỉnh.</p>
-        <div class="frow">
-          <div class="fg" style="flex:1;min-width:180px"><label>Họ và tên</label><input type="text" id="inpTen" placeholder="Nguyễn Minh Anh"></div>
-          <div class="fg" style="width:120px"><label>Năm sinh</label><input type="number" id="inpNam" placeholder="1990" min="1900" max="2100"></div>
-          <button class="btn-go" id="btnGo" onclick="doNguHanhTen()">Phân tích →</button>
+        <h2>Họ và tên đầy đủ</h2>
+        <p class="sub">Nhập tên tiếng Việt — hệ thống tra chữ Hán, số nét và ngũ hành từng chữ, tính cân bằng ngũ hành, đối chiếu mệnh cục. Sau đó hỏi trợ lý luận sâu.</p>
+        <div class="frow" style="margin-bottom:4px">
+          <div class="fg" style="flex:1;min-width:200px"><label>Nhập đủ họ + tên, có dấu, cách nhau bằng dấu cách</label><input type="text" id="tenInput" placeholder="VD: Nguyễn Văn An" maxlength="60"></div>
+          <div class="fg" style="width:150px"><label>Ngũ hành bản mệnh (tùy chọn)</label>
+            <select id="menhInput">
+              <option value="">Không rõ / Bỏ qua</option>
+              <option value="Mộc">Mộc</option>
+              <option value="Hỏa">Hỏa</option>
+              <option value="Thổ">Thổ</option>
+              <option value="Kim">Kim</option>
+              <option value="Thủy">Thủy</option>
+            </select>
+          </div>
+          <button class="btn-go" id="btnGo" onclick="calculate()">Tra ngũ hành tên →</button>
         </div>
+        <div class="err" id="error-msg"></div>
       </div>
 
       <div id="resPanel">
-        <div class="res-head" id="resHead"></div>
-        <div class="cc-row" id="ccRow"></div>
-        <div class="note" id="resNote"></div>
-        <div class="ask" data-ask="Phân tích ngũ hành từng chữ trong tên tôi có hợp mệnh không, bồi hay khắc, và nên chỉnh thế nào?">✦ Hỏi trợ lý phân tích ngũ hành tên</div>
+        <div class="res-block">
+          <div class="res-block-header"><span class="res-block-title" id="resTitle">—</span></div>
+          <div class="res-block-body">
+            <div class="syl-cards" id="sylCards"></div>
+            <div id="unknownSection" class="unk-wrap" style="display:none">
+              <div style="font-size:12px;font-weight:600;color:#444;margin-bottom:10px">⚠ Chưa tìm thấy chữ Hán cho các chữ dưới — nhập số nét thủ công (tra tại <a href="https://hanzii.net" target="_blank" style="color:var(--blue)">hanzii.net</a>):</div>
+              <div id="unknownInputs" style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end"></div>
+            </div>
+            <div class="uphead">Cân Bằng Ngũ Hành</div>
+            <div class="nh-balance" id="nhBalance"></div>
+            <div class="nh-legend" id="nhLegend"></div>
+            <div id="menhResult"></div>
+          </div>
+        </div>
+        <div class="ask" data-ask="Phân tích ngũ hành từng chữ trong tên tôi có hợp mệnh không, bồi hay khắc, và nên chỉnh thế nào?">✦ Hỏi trợ lý luận sâu ngũ hành tên</div>
       </div>
     </div>
   </main>
@@ -74,44 +117,79 @@
 </div>
 
 <script>window.SHELL_ACTIVE='ngu-hanh-ten';
-window.SHELL_INTRO={key:'ngu-hanh-ten',title:'Ngũ hành tên',desc:'Lấy mệnh nạp âm theo năm sinh làm mốc, rồi hỏi <b>trợ lý AI</b> phân tích ngũ hành từng chữ trong tên có bồi mệnh hay khắc và cách chỉnh.'};</script>
-<script src="/can-chi.js?v=1"></script>
+window.SHELL_INTRO={key:'ngu-hanh-ten',title:'Ngũ hành tên',desc:'Nhập tên tiếng Việt — tra <b>chữ Hán, số nét và ngũ hành từng chữ</b>, cân bằng ngũ hành, đối chiếu mệnh cục, rồi hỏi <b>trợ lý AI</b> luận sâu.'};</script>
+<script src="/tools-shared/ngu-hanh-ten.js?v=1"></script>
 <script src="/auth.js"></script>
 <script src="/shell.js?v=18"></script>
 <script>
-function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-var HANH_COLOR={'Mộc':'var(--green)','Hỏa':'var(--red)','Thổ':'var(--gold-soft)','Kim':'#8a8a8a','Thủy':'var(--blue)'};
-var SINH={'Mộc':'Hỏa','Hỏa':'Thổ','Thổ':'Kim','Kim':'Thủy','Thủy':'Mộc'};
-function hanhSinhCho(h){ for(var k in SINH){ if(SINH[k]===h)return k; } return h; }
-function doNguHanhTen(){
-  var btn=document.getElementById('btnGo');
-  var ten=document.getElementById('inpTen').value.trim();
-  var nam=parseInt(document.getElementById('inpNam').value);
-  if(!ten||!nam){ alert('Vui lòng nhập họ tên và năm sinh.'); return; }
-  btn.disabled=true;
-  try{
-    var i=CanChi.ccInfo(nam);
-    document.getElementById('resHead').textContent='Ngũ hành tên — '+esc(ten);
-    document.getElementById('ccRow').innerHTML=
-      '<div class="cc-card"><div class="who">Tên</div><div class="cc" style="font-size:16px">'+esc(ten)+'</div></div>'+
-      '<div class="cc-card"><div class="who">Mệnh (nạp âm)</div><div class="cc">'+esc(i.canChi)+'</div><div class="na" style="--hanh:'+HANH_COLOR[i.hanh]+'">'+esc(i.napAm)+' · <b>'+esc(i.hanh)+'</b></div></div>';
-    document.getElementById('resNote').innerHTML='Mệnh <b>'+esc(i.napAm)+'</b> — hành <b>'+esc(i.hanh)+'</b>. Tên hợp là tên có chữ ngũ hành <b>tương sinh</b> (hành <b>'+esc(hanhSinhCho(i.hanh))+'</b> sinh <b>'+esc(i.hanh)+'</b>) hoặc <b>đồng hành</b> để bồi mệnh, hạn chế chữ khắc. Hỏi trợ lý để luận từng chữ trong tên bạn.';
-    document.getElementById('birthPanel').style.display='none';document.getElementById('resPanel').style.display='block';document.getElementById('btnEdit').style.display='';
-    if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
-    Shell.setContext({
-      scenario:{type:'ngu-hanh-ten',data:{ten:ten,nam:nam}},
-      label:'Ngũ hành tên · '+ten,
-      greeting:'Tên **'+esc(ten)+'** — mệnh **'+esc(i.napAm)+'** (hành '+esc(i.hanh)+'). Bạn muốn tôi luận gì?',
-      chips:['Tên tôi hợp hay khắc mệnh?','Ngũ hành từng chữ là gì?','Nên thêm/đổi chữ nào?','Tên đệm nào bồi mệnh tốt hơn?']
-    });
-    document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
-  }catch(e){
-    document.getElementById('ccRow').innerHTML='<div class="laso-error">Lỗi: '+esc(e.message)+'</div>';
-    document.getElementById('birthPanel').style.display='none';document.getElementById('resPanel').style.display='block';document.getElementById('btnEdit').style.display='';
-    if(window.console)console.error(e);
-  }finally{ btn.disabled=false; }
+// Ô giữa dùng CHUNG module /tools-shared/ngu-hanh-ten.js với trang standalone.
+let _syls = [];
+
+function calculate() {
+  const err = document.getElementById('error-msg');
+  err.classList.remove('active');
+  const r = NguHanhTenTool.parseSyls(document.getElementById('tenInput').value);
+  if (!r.ok) { err.textContent = r.error; err.classList.add('active'); return; }
+  _syls = r.syls;
+  render();
+  const menh = document.getElementById('menhInput').value;
+  document.getElementById('birthPanel').style.display = 'none';
+  document.getElementById('resPanel').style.display = 'block';
+  document.getElementById('btnEdit').style.display = '';
+  if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+  const d = NguHanhTenTool.railData(_syls, menh);
+  Shell.setContext({
+    scenario: { type: 'ngu-hanh-ten', data: d },
+    label: 'Ngũ hành tên · ' + d.hoTen,
+    greeting: 'Đã tra ngũ hành tên **' + d.hoTen + '** (' + d.tungChu + ').' + (menh ? ' Mệnh **' + menh + '**.' : '') + ' Bạn muốn tôi luận gì?',
+    chips: ['Tên tôi hợp hay khắc mệnh?', 'Ngũ hành có cân bằng không?', 'Nên thêm/đổi chữ nào?', 'Chữ tên chính bồi mệnh thế nào?']
+  });
+  document.querySelectorAll('#resPanel [data-ask]').forEach(function (el) { el.addEventListener('click', function () { Shell.ask(el.getAttribute('data-ask')); }); });
 }
-function showForm(){document.getElementById('resPanel').style.display='none';document.getElementById('birthPanel').style.display='block';document.getElementById('btnEdit').style.display='none';}
+
+function render() {
+  const menh = document.getElementById('menhInput').value;
+  document.getElementById('resTitle').textContent = NguHanhTenTool.titleText(_syls);
+  const c = NguHanhTenTool.cardsHTML(_syls);
+  document.getElementById('sylCards').innerHTML = c.html;
+  const uSec = document.getElementById('unknownSection');
+  if (c.unknowns.length > 0) {
+    uSec.style.display = 'block';
+    document.getElementById('unknownInputs').innerHTML = NguHanhTenTool.unknownInputsHTML(_syls, c.unknowns);
+  } else {
+    uSec.style.display = 'none';
+  }
+  renderBalance(menh);
+}
+
+function applyManual(idx) {
+  const inp = document.getElementById(`unk-${idx}`);
+  const v = parseInt(inp?.value);
+  if (!v || v < 1) return;
+  _syls[idx].n = v; _syls[idx].h = '?';
+  const hanh = NguHanhTenTool.netToHanh(v);
+  const card = document.getElementById(`scard-${idx}`);
+  if (card) {
+    card.className = `syl-card hanh-${hanh}`;
+    card.querySelector('.syl-han').textContent = '?';
+    card.querySelector('.syl-net').textContent = `${v} nét (đơn vị: ${v % 10 || 10})`;
+    card.querySelector('.syl-hanh').textContent = hanh;
+  }
+  renderBalance(document.getElementById('menhInput').value);
+}
+
+function renderBalance(menh) {
+  const b = NguHanhTenTool.balance(_syls);
+  document.getElementById('nhBalance').innerHTML = b.balanceHTML;
+  document.getElementById('nhLegend').innerHTML = b.legendHTML;
+  document.getElementById('menhResult').innerHTML = NguHanhTenTool.menhHTML(_syls, menh);
+}
+
+function showForm() {
+  document.getElementById('resPanel').style.display = 'none';
+  document.getElementById('birthPanel').style.display = 'block';
+  document.getElementById('btnEdit').style.display = 'none';
+}
 </script>
 </body>
 </html>
