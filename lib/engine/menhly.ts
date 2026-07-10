@@ -17,17 +17,9 @@ import { ccInfo } from '@/lib/engine/diachi';
 
 type Rec = Record<string, unknown>;
 
-// ── NẠP ÂM: năm → can chi + nạp âm + hành ──────────────────
-export function computeNapAm(input: Rec): Rec | null {
-  const nam = Number(input.nam);
-  const i = ccInfo(nam);
-  if (!i) return null;
-  return { nam, canChi: i.canChi, napAm: i.napAm, hanh: i.hanh, chi: i.chi };
-}
-
-// KIM LÂU & TAM TAI đã chuyển sang module client dùng chung
-// public/tools-shared/kim-lau.js (nguồn chuẩn = trang standalone). Rail nhận
-// data client gửi (run.ts pass-through) → không tính lại server-side ở đây.
+// NẠP ÂM & KIM LÂU & TAM TAI đã chuyển sang module client dùng chung
+// public/tools-shared/{nap-am,kim-lau}.js (nguồn chuẩn = trang standalone).
+// Rail nhận data client gửi (run.ts pass-through) → không tính lại ở đây.
 
 // ── NGŨ HÀNH TÊN: mệnh nạp âm của chủ + tên → ngũ hành nền ───
 // Ngũ hành từng CHỮ trong tên là bán-định-tính (theo âm/nghĩa) → để rail luận;
