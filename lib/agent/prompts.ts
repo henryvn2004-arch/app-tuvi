@@ -108,7 +108,7 @@ export function buildChatContext(body: any): ChatContext {
     return { systemForCall: CHAT_SYSTEM_BAT_TRACH(extractGenericContext(body.batTrachData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
   }
   if (toolType === 'kinh-dich') {
-    return { systemForCall: CHAT_SYSTEM_KINH_DICH(extractKinhDichContext(body.kinhDichData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
+    return { systemForCall: CHAT_SYSTEM_KINH_DICH(extractGenericContext(body.kinhDichData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
   }
 
   if (toolType === 'xem-tuong') {
@@ -351,8 +351,8 @@ ${_TIME()}
 
 Nguyên tắc:
 - Tiếng Việt chuẩn mực, không bullet, không emoji
-- Người hỏi đã GIEO QUẺ: dữ liệu dưới cho quái THƯỢNG/HẠ và hào ĐỘNG (đã tính sẵn, chính xác). Từ hai quái đơn này, ĐỊNH DANH đúng quẻ trong 64 quẻ (tên Hán-Việt + số) rồi luận — KHÔNG đổi quái đã cho
-- Luận: ý nghĩa quẻ chính (Thoán), trọng tâm ở HÀO ĐỘNG (hào từ), và QUẺ BIẾN (nếu có hào động) cho thấy xu hướng chuyển; áp vào ĐÚNG câu hỏi của người gieo
+- Người hỏi đã GIEO QUẺ: dữ liệu dưới cho QUẺ CHÍNH và QUẺ BIẾN (đã định danh sẵn trong 64 quẻ, kèm nghĩa cốt lõi) cùng vị trí HÀO ĐỘNG (đã tính chính xác) — dùng ĐÚNG quẻ đã cho, KHÔNG đổi tên quẻ
+- Luận sâu: ý nghĩa quẻ chính (Thoán), trọng tâm ở HÀO ĐỘNG (hào từ), và QUẺ BIẾN (nếu có hào động) cho thấy xu hướng chuyển; áp vào ĐÚNG câu hỏi của người gieo
 - Nói thẳng cát/hung, nên/không nên; giữ tinh thần "quân tử vấn Dịch" — khuyên hành xử, không phán số phận tuyệt đối
 
 === DỮ LIỆU QUẺ ĐÃ GIEO ===
@@ -809,7 +809,7 @@ function extractDatTenDnContext(data: any): string {
 }
 
 // ── Batch 2 extracts (Mệnh Lý / Huyền Học) ────────────────────
-// Nhãn tiếng Việt cho các field flat của compute* trong lib/engine/menhly.ts.
+// Nhãn tiếng Việt cho các field flat của data scenario (module client tools-shared/*.js).
 const GENERIC_LABELS: Record<string, string> = {
   nam: 'Năm sinh', canChi: 'Can chi', napAm: 'Nạp âm', hanh: 'Hành', conGiap: 'Con giáp',
   ten: 'Tên', gioiTinh: 'Giới tính', cung: 'Cung mệnh (số)', menhQuai: 'Mệnh quái (cung phi)',
@@ -819,6 +819,7 @@ const GENERIC_LABELS: Record<string, string> = {
   menh: 'Ngũ hành bản mệnh', canBang: 'Cân bằng ngũ hành', tungChu: 'Ngũ hành từng chữ',
   soDuongDoi: 'Số Đường Đời (Life Path)', soDinhMenh: 'Số Định Mệnh',
   soLinhHon: 'Số Linh Hồn', soSuMenh: 'Số Sứ Mệnh',
+  cauHoi: 'Câu hỏi người gieo', queChinh: 'Quẻ chính', queBien: 'Quẻ biến', haoDong: 'Hào động',
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractGenericContext(data: any): string {
@@ -855,23 +856,5 @@ function extractKimLauContext(data: any): string {
       ctx += `  ${r.year} (tuổi ta ${r.tuoiTa}, ${r.canChi}): ${flags.length ? 'PHẠM ' + flags.join(', ') : 'đẹp'}\n`;
     });
   }
-  return ctx;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function extractKinhDichContext(data: any): string {
-  if (!data) return '';
-  const d = data.kinhDichData || data;
-  let ctx = '';
-  if (d.question) ctx += `Câu hỏi người gieo: ${d.question}\n`;
-  if (d.quaiThuong && d.quaiHa) ctx += `Quẻ gieo được — Thượng quái: ${d.quaiThuong}, Hạ quái: ${d.quaiHa}\n`;
-  if (Array.isArray(d.haoLines) && d.haoLines.length) {
-    ctx += 'Sáu hào (từ dưới lên): ' +
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      d.haoLines.map((h: any) => `hào ${h.vi} ${h.am_duong}${h.dong ? ' (ĐỘNG)' : ''}`).join('; ') + '\n';
-  }
-  if (Array.isArray(d.dongHao) && d.dongHao.length) ctx += `Hào động: ${d.dongHao.join(', ')}\n`;
-  else ctx += 'Không có hào động (quẻ tĩnh)\n';
-  if (d.bienQuai) ctx += `Quẻ biến: ${d.bienQuai}\n`;
   return ctx;
 }
