@@ -1,7 +1,10 @@
 /* tuong-hop.js — Bộ máy so tuổi / tương hợp DETERMINISTIC (thuần logic, KHÔNG DOM).
-   Lift NGUYÊN từ public/xem-tuoi.html (calcTuongHop 8 chiều có trọng số) để
-   app-shell (/app/xem-tuoi) render y hệt. Nợ kỹ thuật: sau ổn định trỏ luôn
-   xem-tuoi.html sang file này để DRY (giống laso-chart.js).
+   NGUỒN DUY NHẤT cho calcTuongHop 8 chiều — dùng chung bởi:
+     • standalone /tools xem-tuoi.html (renderAllSections — cần đủ trường giàu)
+     • app-shell /app/{xem-tuoi,xem-lam-an,tuong-hop} (render gọn — bỏ qua trường thừa)
+   items[].{palA,palB,mc,ttr,ttSaoA,ttSaoB,ttNhomA,ttNhomB} + s8.a/b có emoji là
+   để renderAllSections vẽ pregen-cung/radar/thái-tuế; shell không đọc nên vô hại.
+   Byte-identical với bản inline cũ của xem-tuoi.html (đã verify Playwright).
    Public API: window.TuongHop = { calcTuongHop, chiRelation, nguHanhRel }.
    Nhận 2 lá số (anSaoLaSo) + tên → trả { items[8], total, ... }. */
 (function (root) {
@@ -87,19 +90,24 @@
     const mc = cungScore(pMenhA, pMenhB);
     const ttA = pMenhA && pMenhA.thaiTueNhom && pMenhA.thaiTueNhom.nhom, ttB = pMenhB && pMenhB.thaiTueNhom && pMenhB.thaiTueNhom.nhom;
     const ttr = ttNhomRel(ttA, ttB);
+    const ttSaoA = (pMenhA && pMenhA.thaiTueNhom && pMenhA.thaiTueNhom.sao) || '', ttSaoB = (pMenhB && pMenhB.thaiTueNhom && pMenhB.thaiTueNhom.sao) || '';
     const mScore = r1(clamp(mc.score * 0.7 + (5 + ttr.delta) * 0.3));
     const stars = (pal) => ((pal && pal.majorStars) || []).map(x => x.ten).join(',') || 'VCD';
     const s3 = { score: mScore, w: 0.20, label: 'Tư Tưởng', detail: [mc.chiRel && mc.chiRel.label, ttr.label].filter(Boolean).join(' · '),
-      a: (pMenhA ? pMenhA.diaChi : '?') + ' · ' + stars(pMenhA), b: (pMenhB ? pMenhB.diaChi : '?') + ' · ' + stars(pMenhB) };
+      a: (pMenhA ? pMenhA.diaChi : '?') + ' · ' + stars(pMenhA), b: (pMenhB ? pMenhB.diaChi : '?') + ' · ' + stars(pMenhB),
+      palA: pMenhA, palB: pMenhB, mc, ttr, ttSaoA, ttSaoB, ttNhomA: ttA, ttNhomB: ttB };
     const ptc = cungScore(pPTA, pPTB);
     const s4 = { score: ptc.score, w: 0.20, label: 'Quan Hệ', detail: (ptc.chiRel && ptc.chiRel.label) || '',
-      a: (pPTA ? pPTA.diaChi : '?') + ' · ' + stars(pPTA), b: (pPTB ? pPTB.diaChi : '?') + ' · ' + stars(pPTB) };
+      a: (pPTA ? pPTA.diaChi : '?') + ' · ' + stars(pPTA), b: (pPTB ? pPTB.diaChi : '?') + ' · ' + stars(pPTB),
+      palA: pPTA, palB: pPTB, mc: ptc };
     const ttc = cungScore(pTTA, pTTB);
     const s5 = { score: ttc.score, w: 0.10, label: 'Con Cái', detail: (ttc.chiRel && ttc.chiRel.label) || '',
-      a: (pTTA ? pTTA.diaChi : '?'), b: (pTTB ? pTTB.diaChi : '?') };
+      a: (pTTA ? pTTA.diaChi : '?'), b: (pTTB ? pTTB.diaChi : '?'),
+      palA: pTTA, palB: pTTB, mc: ttc };
     const tbc = cungScore(pTBA, pTBB);
     const s6 = { score: tbc.score, w: 0.15, label: 'Tài Chính', detail: (tbc.chiRel && tbc.chiRel.label) || '',
-      a: (pTBA ? pTBA.diaChi : '?'), b: (pTBB ? pTBB.diaChi : '?') };
+      a: (pTBA ? pTBA.diaChi : '?'), b: (pTBB ? pTBB.diaChi : '?'),
+      palA: pTBA, palB: pTBB, mc: tbc };
     const sr = mainStarRel(pMenhA, pMenhB);
     const s7 = { score: sr.score, w: 0.10, label: 'Tính Cách', detail: sr.label,
       a: ((pMenhA && pMenhA.majorStars) || []).map(x => x.ten).join(', ') || 'VCD',
@@ -107,7 +115,7 @@
     const dvA = (lsA.daiVanHienTai && lsA.daiVanHienTai.scoring && lsA.daiVanHienTai.scoring.tong) != null ? lsA.daiVanHienTai.scoring.tong : 5;
     const dvB = (lsB.daiVanHienTai && lsB.daiVanHienTai.scoring && lsB.daiVanHienTai.scoring.tong) != null ? lsB.daiVanHienTai.scoring.tong : 5;
     const s8 = { score: r1((dvA + dvB) / 2), w: 0.05, label: 'Vận Hành', detail: 'ĐV ' + nameA + ': ' + dvA + '/10 · ĐV ' + nameB + ': ' + dvB + '/10',
-      a: dvA + '/10', b: dvB + '/10' };
+      a: dvA + '/10 ' + (dvA >= 7 ? '🟢' : dvA >= 4 ? '🟡' : '🔴'), b: dvB + '/10 ' + (dvB >= 7 ? '🟢' : dvB >= 4 ? '🟡' : '🔴') };
 
     const items = [s1, s2, s3, s7, s4, s5, s6, s8];
     const total = r1(items.reduce((sum, m) => sum + m.score * m.w * 10, 0));

@@ -28,6 +28,34 @@
 .ph-canchi{font-size:18px;font-weight:600;color:var(--navy)}
 .ph-na{font-size:12px;color:var(--text-lt);margin-top:3px}
 .ph-vs{font-size:18px;color:var(--border)}
+/* Phân tích sâu theo lá số (additive — dùng chung engine tuong-hop.js) */
+.deep-section{margin-top:40px;padding-top:8px}
+.deep-lead{font-size:14px;color:var(--text-mid);line-height:1.7;margin:6px 0 18px;max-width:760px}
+.deep-lead b{color:var(--navy)}
+.deep-fields{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}
+.deep-fld{display:flex;flex-direction:column;gap:5px}
+.deep-fld label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.deep-fld input,.deep-fld select{border:1px solid var(--border-lt);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--navy);background:#fff;outline:none}
+.deep-fld input:focus,.deep-fld select:focus{border-color:var(--blue)}
+.deep-hint{font-size:11px;color:var(--text-lt);margin-top:4px;min-height:14px}
+.deep-res{display:none;margin-top:24px}
+.deep-score-head{display:flex;align-items:center;gap:18px;padding:20px 24px;background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:12px 12px 0 0}
+.deep-big{font-size:40px;font-weight:700;font-family:'Noto Serif',serif;line-height:1}
+.deep-big small{font-size:16px;color:var(--border)}
+.deep-verdict{font-size:16px;font-weight:600}
+.deep-fac-wrap{border:1px solid var(--border-lt);border-top:none;border-radius:0 0 12px 12px;padding:8px 24px 20px}
+.deep-fac{padding:14px 0;border-bottom:1px solid var(--border-lt)}
+.deep-fac:last-child{border-bottom:none}
+.deep-fac-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.deep-fac-lb{font-weight:600;color:var(--navy)}
+.deep-fac-w{font-size:11px;color:var(--text-lt)}
+.deep-fac-detail{font-size:12px;color:var(--text-mid);flex:1;min-width:120px}
+.deep-fac-num{font-weight:700;font-size:15px;margin-left:auto}
+.deep-fac-bar{height:5px;border-radius:3px;background:#eee;margin:7px 0;overflow:hidden}
+.deep-fac-bar i{display:block;height:100%}
+.deep-fac-ab{display:flex;gap:16px;font-size:12px;color:var(--text-mid);flex-wrap:wrap}
+.deep-cta{margin-top:20px;padding:18px 22px;background:var(--bg-soft);border:1px dashed var(--gold,#9A7B3A);border-radius:12px;text-align:center}
+.deep-cta a{display:inline-block;margin-top:10px;background:var(--navy);color:#fff;text-decoration:none;padding:11px 22px;border-radius:8px;font-size:13px;font-weight:600}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Xem tương hợp tuổi là gì?","acceptedAnswer":{"@type":"Answer","text":"Xem tương hợp tuổi là so sánh can chi năm sinh của hai người để xác định mức độ hài hòa trong quan hệ hôn nhân hoặc hợp tác theo ngũ hành, lục hợp và tam hợp."}},{"@type":"Question","name":"Tuổi xung khắc có nhất định không hợp nhau không?","acceptedAnswer":{"@type":"Answer","text":"Không nhất định. Tuổi xung chỉ là một yếu tố. Tổng thể lá số Tứ Trụ hoặc Tử Vi, tính cách và hoàn cảnh thực tế đóng vai trò quan trọng hơn trong quan hệ lâu dài."}},{"@type":"Question","name":"Những cặp tuổi nào được coi là đại kỵ?","acceptedAnswer":{"@type":"Answer","text":"Các cặp xung như Tý-Ngọ, Sửu-Mùi, Dần-Thân, Mão-Dậu, Thìn-Tuất, Tỵ-Hợi được coi là xung chiếu. Tuy nhiên cần xét thêm tam hợp và lục hợp để có kết luận toàn diện."}}]}
@@ -116,6 +144,50 @@
     </div>
   </div>
 
+  <div class="deep-section">
+    <div class="section-eyebrow">Phân Tích Sâu — Theo Lá Số</div>
+    <p class="deep-lead">Bản xem nhanh phía trên chỉ xét <b>địa chi năm sinh</b>. Muốn sâu hơn, nhập đủ <b>ngày · giờ · giới tính</b> của hai người để lập <b>hai lá số Tử Vi</b> và chấm hòa hợp <b>8 chiều</b> (xét tuổi, ngũ hành, tư tưởng, quan hệ, con cái, tài chính, tính cách, vận hành). Miễn phí — cùng bộ máy với không gian <b>Luận Đường</b>.</p>
+    <div class="form-grid cols-2">
+      <div class="form-col">
+        <div class="form-col-title">Người Thứ Nhất</div>
+        <div class="form-group"><label class="form-label">Tên / ký hiệu</label><input class="form-input" type="text" id="dNameA" placeholder="Người A"></div>
+        <div class="deep-fields">
+          <div class="deep-fld" style="width:96px"><label>Giới tính</label><select id="dGtA"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
+          <div class="deep-fld" style="width:74px"><label>Ngày</label><input type="number" id="dDdA" min="1" max="31" placeholder="Ngày"></div>
+          <div class="deep-fld" style="width:74px"><label>Tháng</label><input type="number" id="dMmA" min="1" max="12" placeholder="Tháng"></div>
+          <div class="deep-fld" style="width:88px"><label>Năm</label><input type="number" id="dYyA" min="1900" max="2100" placeholder="Năm"></div>
+          <div class="deep-fld" style="width:84px"><label>Giờ sinh</label><select id="dHhA"></select></div>
+        </div>
+        <div class="deep-hint" id="dHintA"></div>
+      </div>
+      <div class="form-col">
+        <div class="form-col-title">Người Thứ Hai</div>
+        <div class="form-group"><label class="form-label">Tên / ký hiệu</label><input class="form-input" type="text" id="dNameB" placeholder="Người B"></div>
+        <div class="deep-fields">
+          <div class="deep-fld" style="width:96px"><label>Giới tính</label><select id="dGtB"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
+          <div class="deep-fld" style="width:74px"><label>Ngày</label><input type="number" id="dDdB" min="1" max="31" placeholder="Ngày"></div>
+          <div class="deep-fld" style="width:74px"><label>Tháng</label><input type="number" id="dMmB" min="1" max="12" placeholder="Tháng"></div>
+          <div class="deep-fld" style="width:88px"><label>Năm</label><input type="number" id="dYyB" min="1900" max="2100" placeholder="Năm"></div>
+          <div class="deep-fld" style="width:84px"><label>Giờ sinh</label><select id="dHhB"></select></div>
+        </div>
+        <div class="deep-hint" id="dHintB"></div>
+        <button class="btn-submit" id="dBtn" onclick="deepAnalyze()">Phân Tích 8 Chiều Theo Lá Số</button>
+      </div>
+    </div>
+    <div class="error-msg" id="deep-error"></div>
+    <div class="deep-res" id="deep-res">
+      <div class="deep-score-head">
+        <div class="deep-big" id="dBig">—</div>
+        <div><div class="deep-verdict" id="dVerdict">—</div><div style="font-size:12.5px;color:var(--text-mid)" id="dPeople">—</div></div>
+      </div>
+      <div class="deep-fac-wrap" id="dFacs"></div>
+      <div class="deep-cta">
+        <div style="font-size:13px;color:var(--text-mid)">Muốn <b>luận sâu</b> từng chiều bằng trợ lý AI (điểm mạnh, điểm cần lưu ý, cách hóa giải)?</div>
+        <a href="/app/tuong-hop">✦ Hỏi trợ lý ở Luận Đường →</a>
+      </div>
+    </div>
+  </div>
+
   <div class="tool-cta">
     <div class="tool-cta-eyebrow">Phân Tích Sâu Hơn</div>
     <div class="tool-cta-title">Xem Tuổi Vợ Chồng theo Lá Số</div>
@@ -130,6 +202,8 @@
 </footer>
 
 <script>
+// IIFE: giữ const CAN/CHI/NAP_AM… cục bộ, tránh đụng global cùng tên khi nạp engine ở mode lá số bên dưới.
+(function(){
 const CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
 const CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
 const NAP_AM=['Hải Trung Kim','Lô Trung Hỏa','Đại Lâm Mộc','Lộ Bàng Thổ','Kiếm Phong Kim','Sơn Đầu Hỏa','Giản Hạ Thủy','Thành Đầu Thổ','Bạch Lạp Kim','Dương Liễu Mộc','Tuyền Trung Thủy','Ốc Thượng Thổ','Tích Lịch Hỏa','Tùng Bách Mộc','Trường Lưu Thủy','Sa Trung Kim','Sơn Hạ Hỏa','Bình Địa Mộc','Bích Thượng Thổ','Kim Bạch Kim','Phú Đăng Hỏa','Thiên Hà Thủy','Đại Trạch Thổ','Xoa Xuyến Kim','Tang Đố Mộc','Đại Khê Thủy','Sa Trung Thổ','Thiên Thượng Hỏa','Thạch Lựu Mộc','Đại Hải Thủy'];
@@ -188,6 +262,64 @@ function calculate(){
   document.getElementById('result-section').classList.add('active');
   document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
 }
+window.calculate=calculate;
+})();
+</script>
+<script>
+// ── Phân tích sâu theo lá số — dùng CHUNG engine public/tuong-hop.js (như /app/tuong-hop). ──
+// Lazy-load engine khi bấm để trang SEO nhẹ. hourMinToGioAm inline (khỏi nạp laso-chart.js).
+(function(){
+  function hourMinToGioAm(h,m){ return Math.floor((((h*60+m+60)%(24*60))/120))%12; }
+  ['A','B'].forEach(function(k){
+    var hh=document.getElementById('dHh'+k),opt='<option value="">Giờ</option>';
+    for(var h=0;h<=23;h++)opt+='<option value="'+h+'">'+String(h).padStart(2,'0')+':00</option>';
+    hh.innerHTML=opt;
+  });
+  var _engine=null;
+  function loadScript(src){return new Promise(function(res,rej){ if(document.querySelector('script[data-th="'+src+'"]'))return res(); var s=document.createElement('script'); s.src=src; s.dataset.th=src; s.onload=res; s.onerror=function(){rej(new Error('Không tải được '+src));}; document.head.appendChild(s); }); }
+  function ensureEngine(){ if(_engine)return _engine; _engine=loadScript('/tuvi-ansao-engine.js').then(function(){return loadScript('/tuong-hop.js?v=2');}); return _engine; }
+  function facColor(s){return s>=8?'#1E6B3C':s>=6?'#1455A4':s>=4?'#9A7B3A':'#C0392B';}
+  function meterColor(s){return s>=75?'#1E6B3C':s>=55?'#1455A4':s>=35?'#9A7B3A':'#C0392B';}
+  function verdictLabel(s){return s>=75?'Rất hợp':s>=55?'Khá hợp':s>=35?'Bình hòa':'Cần lưu ý';}
+  function esc(x){return String(x==null?'':x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function readP(k){ return {
+    name:document.getElementById('dName'+k).value.trim()||('Người '+k),
+    gender:document.getElementById('dGt'+k).value,
+    dd:parseInt(document.getElementById('dDd'+k).value),
+    mm:parseInt(document.getElementById('dMm'+k).value),
+    yyyy:parseInt(document.getElementById('dYy'+k).value),
+    hh:parseInt(document.getElementById('dHh'+k).value)||0 }; }
+  function computeLs(p,namxem){
+    var gioAmIdx=hourMinToGioAm(p.hh,0);
+    var conv=convertDuongToAm(p.dd,p.mm,p.yyyy,p.hh);
+    var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioAmIdx,gioitinh:p.gender,namXem:namxem});
+    ls.chiNam=conv.chiNam; return ls;
+  }
+  window.deepAnalyze=function(){
+    var err=document.getElementById('deep-error'); err.classList.remove('active');
+    var A=readP('A'),B=readP('B');
+    if(!A.dd||!A.mm||!A.yyyy||!B.dd||!B.mm||!B.yyyy){ err.textContent='Vui lòng nhập đủ ngày, tháng, năm sinh cho cả hai người.'; err.classList.add('active'); return; }
+    var btn=document.getElementById('dBtn'),old=btn.textContent; btn.disabled=true; btn.textContent='Đang lập hai lá số…';
+    ensureEngine().then(function(){
+      var namxem=new Date().getFullYear();
+      var lsA=computeLs(A,namxem),lsB=computeLs(B,namxem);
+      var r=TuongHop.calcTuongHop(lsA,lsB,A.name,B.name);
+      var col=meterColor(r.total);
+      var big=document.getElementById('dBig'); big.innerHTML=r.total+'<small>/100</small>'; big.style.color=col;
+      var vd=document.getElementById('dVerdict'); vd.textContent=verdictLabel(r.total); vd.style.color=col;
+      document.getElementById('dPeople').textContent=A.name+' × '+B.name;
+      document.getElementById('dFacs').innerHTML=r.items.map(function(m){
+        var c=facColor(m.score);
+        return '<div class="deep-fac"><div class="deep-fac-top"><span class="deep-fac-lb">'+esc(m.label)+'</span><span class="deep-fac-w">×'+Math.round(m.w*100)+'%</span><span class="deep-fac-detail">'+esc(m.detail||'')+'</span><span class="deep-fac-num" style="color:'+c+'">'+m.score+'</span></div>'+
+          '<div class="deep-fac-bar"><i style="width:'+(m.score*10)+'%;background:'+c+'"></i></div>'+
+          '<div class="deep-fac-ab"><span>'+esc(A.name)+': '+esc(m.a||'')+'</span><span>'+esc(B.name)+': '+esc(m.b||'')+'</span></div></div>';
+      }).join('');
+      document.getElementById('deep-res').style.display='block';
+      document.getElementById('deep-res').scrollIntoView({behavior:'smooth',block:'start'});
+    }).catch(function(e){ err.textContent='Lỗi khi lập lá số: '+((e&&e.message)||e); err.classList.add('active'); if(window.console)console.error(e); })
+      .finally(function(){ btn.disabled=false; btn.textContent=old; });
+  };
+})();
 </script>
 <section class="kb-section">
   <div class="page">
