@@ -158,6 +158,8 @@ export interface DoneEvent {
     reason?: string;
     balance?: number;
   };
+  /** gợi ý câu hỏi tiếp theo do LLM sinh, bám câu trả lời vừa rồi (chip động) */
+  suggestions?: string[];
 }
 
 /** event: error — lỗi có mã để client xử lý */

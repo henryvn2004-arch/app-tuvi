@@ -107,6 +107,8 @@ export async function runAgent(
   // kênh chat chèn lên đầu câu trả lời để người dùng nhận BẢN CHUẨN, không phụ
   // thuộc LLM. null nếu lượt này không lập/mở lá số (follow-up).
   lasoCard: string | null;
+  // Gợi ý câu hỏi tiếp theo do LLM sinh (bám câu trả lời) → chip động ở rail.
+  suggestions: string[];
 }> {
   // Seed ctx với birth đang xem (req.birth) → "lưu lá số này tên X" chạy được cả
   // khi lượt này không gọi lại lap_la_so. profiles bật 3 tool sổ (kênh chat).
@@ -266,6 +268,10 @@ export async function runAgent(
     }
   }
 
+  // Áp luật sinh gợi ý câu hỏi tiếp cho MỌI nhánh prompt (lá số / kịch bản / general).
+  system = system + '\n\n' + CHAT_SUGGEST_RULES;
+  let suggestions: string[] = [];
+
   send(sse.status({ text: hasImages ? 'Đang xem ảnh...' : 'Đang suy xét...' }));
 
   for (let round = 0; round <= cfg.maxRounds; round++) {
@@ -273,7 +279,7 @@ export async function runAgent(
 
     // Vòng cuối: ép trả lời, stream text trực tiếp.
     if (lastRound) {
-      await streamFinal(system, convo, tools, cfg, send);
+      suggestions = await streamFinal(system, convo, tools, cfg, send);
       break;
     }
 
@@ -305,7 +311,7 @@ export async function runAgent(
 
     // Model trả lời thẳng (không tool) — stream lại cho mượt thay vì
     // dồn một cục: gọi vòng stream cuối với chính ngữ cảnh hiện tại.
-    await streamFinal(system, convo, tools, cfg, send);
+    suggestions = await streamFinal(system, convo, tools, cfg, send);
     break;
   }
 
@@ -321,6 +327,7 @@ export async function runAgent(
     activeProfile: ctx.activeProfile,
     subjectSwitched: ctx.subjectSwitched,
     lasoCard,
+    suggestions,
   };
 }
 
@@ -356,7 +363,7 @@ async function callAnthropic(system: string, convo: any[], tools: any[], cfg: Ch
 
 // ── Vòng cuối: stream text về client ────────────────────────
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function streamFinal(system: string, convo: any[], tools: any[], cfg: ChatConfig, send: (s: string) => void): Promise<void> {
+async function streamFinal(system: string, convo: any[], tools: any[], cfg: ChatConfig, send: (s: string) => void): Promise<string[]> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const payload: any = {
     model: cfg.model,
@@ -379,11 +386,27 @@ async function streamFinal(system: string, convo: any[], tools: any[], cfg: Chat
     // không console.error nên log Vercel rỗng.
     console.error(`[runAgent.streamFinal] Anthropic non-200: ${resp.status} — ${body}`);
     send(sse.error({ code: 'internal', message: 'Anthropic error: ' + body }));
-    return;
+    return [];
   }
   const reader = resp.body!.getReader();
   const dec = new TextDecoder();
   let buf = '';
+  // ── Tách dòng gợi ý "SUGGEST: q1 | q2 | q3" ở CUỐI câu trả lời (mọi kênh) ──
+  // Model được yêu cầu kết thúc bằng dòng này; server cắt KHÔNG cho lộ ra text,
+  // trả về mảng suggestions để client làm chip gợi ý động theo từng câu trả lời.
+  const MARKER = 'SUGGEST:';
+  const GUARD = 24; // giữ lại đuôi để bắt marker bị cắt ngang nhiều delta
+  let full = '';
+  let sentLen = 0;
+  let markerAt = -1;
+  const flushSafe = () => {
+    if (markerAt >= 0) return;
+    const safe = full.length - GUARD;
+    if (safe > sentLen) {
+      send(sse.text({ delta: full.slice(sentLen, safe) }));
+      sentLen = safe;
+    }
+  };
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
@@ -398,14 +421,49 @@ async function streamFinal(system: string, convo: any[], tools: any[], cfg: Chat
         const evt = JSON.parse(json);
         if (evt.type === 'message_start') logCacheUsage('streamFinal', evt.message?.usage);
         if (evt.type === 'content_block_delta' && evt.delta?.type === 'text_delta') {
-          send(sse.text({ delta: evt.delta.text }));
+          full += evt.delta.text;
+          if (markerAt < 0) {
+            const i = full.indexOf(MARKER);
+            if (i >= 0) {
+              markerAt = i;
+              // gửi nốt phần trước marker, bỏ khoảng trắng/xuống dòng ngay trước nó
+              let cut = i;
+              while (cut > sentLen && /\s/.test(full[cut - 1])) cut--;
+              if (cut > sentLen) {
+                send(sse.text({ delta: full.slice(sentLen, cut) }));
+                sentLen = cut;
+              }
+            } else {
+              flushSafe();
+            }
+          }
         }
       } catch {
         /* ignore partial */
       }
     }
   }
+  // Hết stream: nếu không thấy marker, xả nốt phần đuôi đang giữ.
+  if (markerAt < 0 && full.length > sentLen) {
+    send(sse.text({ delta: full.slice(sentLen) }));
+  }
+  if (markerAt < 0) return [];
+  return full
+    .slice(markerAt + MARKER.length)
+    .split('|')
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .slice(0, 4);
 }
+
+// ── Luật sinh gợi ý câu hỏi tiếp theo (chip động) ────────────
+// Model kết thúc bằng 1 dòng "SUGGEST: q1 | q2 | q3"; streamFinal cắt dòng này
+// KHÔNG cho lộ ra câu trả lời, trả về mảng cho client làm chip gợi ý bám hội thoại.
+const CHAT_SUGGEST_RULES =
+  'CUỐI CÙNG, sau khi luận xong, xuống dòng và ghi ĐÚNG một dòng bắt đầu bằng "SUGGEST: " ' +
+  'gồm 3 câu hỏi ngắn (mỗi câu ≤ 12 từ) mà người dùng có thể muốn hỏi TIẾP, bám sát nội dung vừa luận, ' +
+  'ngăn cách bằng " | ". Ví dụ: SUGGEST: Cung Quan Lộc ra sao? | Năm sau công việc thế nào? | Có nên đổi nghề? ' +
+  'Dòng này KHÔNG phải nội dung luận (hệ thống tách ra làm nút gợi ý, không hiển thị). Không ghi gì sau 3 câu đó.';
 
 // ── Thời gian thực (múi giờ VN) tiêm vào prompt ──────────────
 // Không để trong app_config: prompt DB là text tĩnh, còn ngày phải
