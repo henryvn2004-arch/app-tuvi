@@ -2208,9 +2208,9 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
             preGenHtml += `<div class="pregen-row"><span class="pregen-bad">Yếu nhất: ${bot3.map(([c,s])=>`${c} (${s.toFixed(0)})`).join(', ')}</span></div>`;
             preGenHtml += `</div>`;
           }
-        } else if (cungForPhan && _astrolabe.cachCucTungCung?.[cungForPhan]) {
-          // Từng cung: hiển thị cách cục + ý nghĩa pre-computed
-          const ynItems = _astrolabe.cachCucTungCung[cungForPhan];
+        } else if (cungForPhan) {
+          // Từng cung: cách cục + phân tích sao (nếu có) + điểm 6 chiều (luôn có; KHÔNG gate theo cachCucTungCung để cung thiếu phân tích sao không bị trống)
+          const ynItems = _astrolabe.cachCucTungCung?.[cungForPhan] || [];
           const ccItems = (_astrolabe.cachCuc||[]).filter(c => c.cung === cungForPhan);
           const sc = _astrolabe.cungScores?.[cungForPhan];
 
@@ -3412,8 +3412,8 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         preGenHtml += `<div class="pregen-row"><span class="pregen-bad">Yếu nhất: ${bot3.map(([c,s])=>`${c} (${s.toFixed(0)})`).join(', ')}</span></div>`;
         preGenHtml += `</div>`;
       }
-    } else if (cungForPhan && _astrolabe.cachCucTungCung?.[cungForPhan]) {
-      const ynItems = _astrolabe.cachCucTungCung[cungForPhan];
+    } else if (cungForPhan) {
+      const ynItems = _astrolabe.cachCucTungCung?.[cungForPhan] || [];
       const ccItems = (_astrolabe.cachCuc||[]).filter(c => c.cung === cungForPhan);
       const sc = _astrolabe.cungScores?.[cungForPhan];
       if (ccItems.length > 0) {
@@ -3641,8 +3641,8 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
           preGenHtml += `<div class="pregen-row"><span class="pregen-bad">Yếu nhất: ${bot3.map(([c,s])=>`${c} (${s.toFixed(0)})`).join(', ')}</span></div>`;
           preGenHtml += `</div>`;
         }
-      } else if (cungForPhan && ls.cachCucTungCung?.[cungForPhan]) {
-        const ynItems = ls.cachCucTungCung[cungForPhan];
+      } else if (cungForPhan) {
+        const ynItems = ls.cachCucTungCung?.[cungForPhan] || [];
         const ccItems = (ls.cachCuc||[]).filter(c => c.cung === cungForPhan);
         const sc = ls.cungScores?.[cungForPhan];
 
