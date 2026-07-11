@@ -194,7 +194,7 @@ function doLuan(){
       birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,gender:gioitinh,name:name||undefined},
       label:'Luận giải '+(name||'lá số')+' · '+dd+'/'+mm+'/'+yyyy+' · năm '+namxem,
       greeting:'Bản luận của **'+(name||'bạn')+'** đã sẵn sàng. Hỏi tôi để đào sâu bất kỳ phần nào — 12 cung, đại vận, tứ hóa.',
-      chips:['Vì sao cung điểm thấp nhất lại yếu?','Giải thích đại vận hiện tại','Năm '+namxem+' cần chú ý gì?','Điểm mạnh lớn nhất của tôi?']
+      chips:buildLuanChips(ls,namxem)
     });
   }catch(e){
     document.getElementById('lgBody').innerHTML='<div class="laso-error">Lỗi khi luận giải: '+esc(e.message)+'</div>';
@@ -242,6 +242,17 @@ function renderLuan(ls,fd,namxem){
 
 function sec(n,title,tag,inner){ return '<section class="sec" id="sec-'+n+'"><div class="sec-h"><div class="sec-n">'+n+'</div><h3>'+esc(title)+'</h3>'+(tag?'<span class="tag">'+esc(tag)+'</span>':'')+'</div>'+inner+'</section>'; }
 function ask(t){ return '<div class="ask" data-ask="'+esc(t)+'">✦ Hỏi trợ lý: "'+esc(t)+'"</div>'; }
+// Chip gợi ý bám DỮ LIỆU THẬT của lá số (cung yếu/mạnh + điểm, đại vận hiện tại).
+function buildLuanChips(ls,namxem){
+  var arr=[]; CUNG_ORDER.forEach(function(cn){ var t=cungTotal(ls.cungScores&&ls.cungScores[cn]); if(t!=null)arr.push({cn:cn,t:t}); });
+  arr.sort(function(a,b){return a.t-b.t;});
+  var weak=arr[0], strong=arr[arr.length-1], dv=ls.daiVanHienTai, chips=[];
+  if(weak) chips.push('Vì sao cung '+weak.cn+' ('+weak.t+'/10) yếu nhất?');
+  if(dv) chips.push('Đại vận hiện tại '+dv.diaChi+' ('+dv.tuoiStart+'–'+dv.tuoiEnd+'t'+(dv.scoring&&dv.scoring.tong!=null?', '+dv.scoring.tong+'/10':'')+') nên làm gì?');
+  if(strong&&strong!==weak) chips.push('Cung mạnh nhất '+strong.cn+' ('+strong.t+'/10) — tận dụng sao?');
+  chips.push('Năm '+namxem+' trọng tâm vào việc gì?');
+  return chips;
+}
 
 function bindJump(){
   var ws=document.getElementById('ws');
