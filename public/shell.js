@@ -368,8 +368,35 @@
         if (body.scenario) { body.scenario = Object.assign({}, body.scenario, { authorName: _author.name, authorStyle: _author.style }); }
       }
       var res = await fetch('/api/v1/chat', { method: 'POST', headers: headers, body: JSON.stringify(body) });
-      if (res.status === 401 || res.status === 402) {
-        typing.innerHTML = '<p>Cần <a href="/profile" style="color:var(--blue);font-weight:600">đăng nhập</a> (và có Lượng) để hỏi trợ lý. Lá số vẫn xem miễn phí.</p>';
+      if (res.status === 401) {
+        // Chưa đăng nhập → LƯU câu hỏi + đường quay lại (kèm ?auto=1 để tự lập
+        // lại lá số) rồi mở đăng nhập. Email: đăng nhập tại chỗ → hỏi tiếp ngay.
+        // OAuth: auth-callback đưa về đúng trang này, autoRun lập lại lá số,
+        // setContext đọc app_pending_ask → tự hỏi tiếp. Không mất thông tin đã nhập.
+        var _q = text;
+        try {
+          sessionStorage.setItem('app_pending_ask', JSON.stringify({ q: _q, t: Date.now() }));
+          var _s = location.search;
+          var _back = location.pathname + (/[?&]auto=1\b/.test(_s) ? _s : (_s ? _s + '&auto=1' : '?auto=1'));
+          localStorage.setItem('auth_return_to', _back);
+        } catch (e) { /* ignore */ }
+        typing.innerHTML = '<p>Cần <a href="#" id="railLoginLink" style="color:var(--blue);font-weight:600">đăng nhập</a> để hỏi trợ lý — xong sẽ tự quay lại luận tiếp. Lá số vẫn xem miễn phí.</p>';
+        var _openLogin = function () {
+          if (window.Auth && Auth.require) {
+            Auth.require(function () {
+              // Đăng nhập bằng email (tại chỗ, không tải lại trang) → dọn cờ, hỏi lại ngay.
+              try { sessionStorage.removeItem('app_pending_ask'); localStorage.removeItem('auth_return_to'); } catch (e) { /* ignore */ }
+              ask(_q);
+            });
+          }
+        };
+        var _ll = document.getElementById('railLoginLink');
+        if (_ll) _ll.addEventListener('click', function (ev) { ev.preventDefault(); _openLogin(); });
+        _openLogin();
+        streaming = false; setSend(true); messages.pop(); return;
+      }
+      if (res.status === 402) {
+        typing.innerHTML = '<p>Bạn đã hết Lượng. <a href="/topup" style="color:var(--blue);font-weight:600">Nạp thêm</a> để hỏi trợ lý. Lá số vẫn xem miễn phí.</p>';
         streaming = false; setSend(true); messages.pop(); return;
       }
       if (!res.ok) throw new Error('HTTP ' + res.status);

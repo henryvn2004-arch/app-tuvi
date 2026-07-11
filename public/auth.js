@@ -165,13 +165,21 @@ async function signUpEmail(email, password) {
   return data;
 }
 
+// Lưu trang hiện tại để auth-callback quay về (nếu chưa có returnTo cụ thể do
+// rail đặt kèm ?auto=1). Tránh về homepage sau khi đăng nhập OAuth.
+function _rememberAuthReturn() {
+  try { if (!localStorage.getItem('auth_return_to')) localStorage.setItem('auth_return_to', window.location.pathname + window.location.search); } catch (e) {}
+}
+
 // ── Sign In with Google OAuth ──
 async function signInGoogle() {
+  _rememberAuthReturn();
   const redirectTo = encodeURIComponent(window.location.origin + '/auth-callback.html');
   window.location.href = `${SUPA_URL}/auth/v1/authorize?provider=google&redirect_to=${redirectTo}`;
 }
 
 async function signInFacebook() {
+  _rememberAuthReturn();
   const redirectTo = encodeURIComponent(window.location.origin + '/auth-callback.html');
   window.location.href = `${SUPA_URL}/auth/v1/authorize?provider=facebook&redirect_to=${redirectTo}`;
 }

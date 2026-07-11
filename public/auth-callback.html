@@ -18,6 +18,14 @@ body { font-family: sans-serif; display:flex; align-items:center; justify-conten
   const SESSION_KEY = 'tuvi_session';
   const USER_KEY    = 'tuvi_user';
 
+  // Quay lại đúng trang đã bấm đăng nhập (vd rail Luận Đường) thay vì về homepage.
+  // Được set bởi shell.js/auth.js trước khi chuyển sang OAuth.
+  function _dest() {
+    var r = null;
+    try { r = localStorage.getItem('auth_return_to'); localStorage.removeItem('auth_return_to'); } catch (e) {}
+    return r || '/';
+  }
+
   // Supabase returns tokens in URL hash after OAuth
   const hash   = window.location.hash.substring(1);
   const params = new URLSearchParams(hash || window.location.search);
@@ -46,11 +54,12 @@ body { font-family: sans-serif; display:flex; align-items:center; justify-conten
       session.user = user;
       localStorage.setItem(SESSION_KEY, JSON.stringify(session));
       localStorage.setItem(USER_KEY, JSON.stringify(user));
-      window.location.href = '/';
+      window.location.href = _dest();
     })
-    .catch(() => { window.location.href = '/'; });
+    .catch(() => { _dest(); window.location.href = '/'; });
   } else {
-    // No token — redirect home
+    // No token — clear return + redirect home
+    _dest();
     window.location.href = '/';
   }
 })();
