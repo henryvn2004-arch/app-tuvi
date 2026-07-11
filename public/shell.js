@@ -410,6 +410,7 @@
           if (ev.name === 'text' && ev.data.delta) { acc += ev.data.delta; typing.innerHTML = '<p>' + mdLite(acc) + '</p>'; chat.scrollTop = chat.scrollHeight; }
           else if (ev.name === 'status' && !acc) { typing.innerHTML = '<span class="typing" style="gap:6px">' + esc(ev.data.text || 'Đang xem…') + ' <i></i><i></i><i></i></span>'; }
           else if (ev.name === 'error') { acc = acc || ('Xin lỗi, gặp trục trặc: ' + esc(ev.data.message || '')); }
+          else if (ev.name === 'done' && ev.data && ev.data.suggestions && ev.data.suggestions.length) { ctxChips = ev.data.suggestions.slice(0, 4); }
         }
       }
       if (!acc) acc = '(không có nội dung)';

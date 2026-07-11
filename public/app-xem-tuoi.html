@@ -152,7 +152,7 @@
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tuong-hop.js?v=1"></script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=19"></script>
+<script src="/shell.js?v=20"></script>
 <script>
 // ── MODE: 1 trang phục vụ 3 route — /app/xem-tuoi (vợ chồng), /app/xem-lam-an
 // (hợp tác làm ăn), /app/tuong-hop (hai người bất kỳ). Cùng bộ máy calcTuongHop;
@@ -214,6 +214,16 @@ function updateGio(k){
 function meterColor(s){ return s>=75?'var(--green)':s>=55?'var(--blue)':s>=35?'var(--gold-soft)':'var(--red)'; }
 function facColor(s){ return s>=8?'var(--green)':s>=6?'var(--blue)':s>=4?'var(--gold-soft)':'var(--red)'; }
 function verdictLabel(s){ return s>=75?'Rất hợp':s>=55?'Khá hợp':s>=35?'Bình hòa':'Cần lưu ý'; }
+// Chip gợi ý bám DỮ LIỆU THẬT: chiều hoà hợp thấp/cao nhất + tổng điểm + 1 chip theo mode.
+function buildCompatChips(r,MODE){
+  var items=(r.items||[]).filter(function(m){return typeof m.score==='number';}).slice().sort(function(a,b){return a.score-b.score;});
+  var low=items[0], high=items[items.length-1], chips=[];
+  chips.push('Hai người hoà hợp '+r.total+'/100 — nên hiểu thế nào?');
+  if(low) chips.push('Chiều "'+low.label+'" thấp ('+low.score+'/10) — vì sao và hoá giải sao?');
+  if(high&&high!==low) chips.push('Chiều "'+high.label+'" cao ('+high.score+'/10) — phát huy thế nào?');
+  if(MODE.chips&&MODE.chips.length) chips.push(MODE.chips[MODE.chips.length-1]);
+  return chips;
+}
 
 function readPerson(k){
   var name=document.getElementById(k+'Name').value.trim();
@@ -252,7 +262,7 @@ function doCompat(){
       scenario:{type:MODE.scenarioType,data:{birthA:birthA,birthB:birthB,nameA:nameA,nameB:nameB}},
       label:MODE.verb+' '+nameA+' × '+nameB,
       greeting:MODE.greetVerb+' **'+esc(nameA)+'** và **'+esc(nameB)+'** — hòa hợp **'+r.total+'/100**. Hỏi tôi để luận sâu bất kỳ chiều nào nhé.',
-      chips:MODE.chips
+      chips:buildCompatChips(r,MODE)
     });
   }catch(e){
     document.getElementById('xtBody').innerHTML='<div class="laso-error">Lỗi khi so tuổi: '+esc(e.message)+'</div>';

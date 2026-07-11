@@ -87,7 +87,7 @@ window.SHELL_INTRO={key:'la-so',title:'Lá số Tử Vi Đẩu Số',desc:'Nhậ
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/laso-chart.js?v=2"></script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=19"></script>
+<script src="/shell.js?v=20"></script>
 <script>
 // ── Dropdowns ──
 (function buildDropdowns(){
@@ -144,7 +144,7 @@ function doAnSao(){
       birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,gender:gioitinh,name:name||undefined},
       label:(name||'Lá số')+' · '+dd+'/'+mm+'/'+yyyy+' · năm '+namxem,
       greeting:'Lá số của **'+(name||'bạn')+'** đã sẵn sàng. Bạn muốn tôi soi điều gì trước?',
-      chips:['Tổng quan mệnh của tôi?','Năm nay công việc thế nào?','Đường tình duyên ra sao?','Đại vận hiện tại tốt không?']
+      chips:buildLasoChips(ls,namxem)
     });
   }catch(e){
     document.getElementById('lasoContainer').innerHTML='<div class="laso-error">Lỗi khi an sao: '+esc(e.message)+'</div>';
@@ -156,6 +156,20 @@ function doAnSao(){
   }
 }
 function reAnSao(){ var y=parseInt(document.getElementById('barNamxem').value); if(y)document.getElementById('inpNamxem').value=y; doAnSao(); }
+// Chip gợi ý bám DỮ LIỆU THẬT của lá số (mệnh cung + chính tinh, đại vận, tiểu hạn, cách cục).
+function buildLasoChips(ls,namxem){
+  var chips=[];
+  var menh=(ls.palaces||[]).filter(function(p){return p.isMenh;})[0];
+  var mstars=menh&&menh.majorStars&&menh.majorStars.length?menh.majorStars.map(function(s){return s.ten;}).join(', '):'Vô Chính Diệu';
+  chips.push('Cung Mệnh ('+(menh?menh.diaChi:'?')+') có '+mstars+' — tính cách, vận mệnh thế nào?');
+  var dv=ls.daiVanHienTai;
+  if(dv) chips.push('Đại vận hiện tại '+dv.diaChi+' ('+dv.tuoiStart+'–'+dv.tuoiEnd+'t) tốt không?');
+  var th=ls.palaces&&ls.palaces[ls.tieuHanIdx];
+  if(th) chips.push('Năm '+namxem+' tiểu hạn cung '+th.cungName+' — cần chú ý gì?');
+  var cc=(ls.cachCuc||[])[0];
+  chips.push(cc?('Cách cục '+cc.ten+' ảnh hưởng đời tôi ra sao?'):'Tổng quan mệnh của tôi?');
+  return chips;
+}
 function showForm(){
   document.getElementById('chartPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
