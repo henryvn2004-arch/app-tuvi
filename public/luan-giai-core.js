@@ -62,8 +62,12 @@
         preGenHtml += `<div class="pregen-row"><span class="pregen-bad">Yếu nhất: ${bot3.map(([c,s])=>`${c} (${s.toFixed(0)})`).join(', ')}</span></div>`;
         preGenHtml += `</div>`;
       }
-    } else if (cungForPhan && _astrolabe.cachCucTungCung?.[cungForPhan]) {
-      const ynItems = _astrolabe.cachCucTungCung[cungForPhan];
+    } else if (cungForPhan) {
+      // FIX shell: KHÔNG gate cả khối cung theo cachCucTungCung — cung nào cũng
+      // render điểm 6 chiều (cungScores) + cách cục; standalone che được vì có
+      // AI prose lấp, còn shell không có AI ở giữa nên cung thiếu phân tích sao
+      // (vd Tử Tức/Huynh Đệ) bị TRỐNG. ynItems rỗng thì bỏ qua khối "phân tích sao".
+      const ynItems = _astrolabe.cachCucTungCung?.[cungForPhan] || [];
       const ccItems = (_astrolabe.cachCuc||[]).filter(c => c.cung === cungForPhan);
       const sc = _astrolabe.cungScores?.[cungForPhan];
       if (ccItems.length > 0) {
@@ -91,6 +95,22 @@
           const v=sc[m]; const pct=v*10;
           const col=v>=7?'#1FA3D6':v>=5?'#2F5BEA':v>=3?'#233E99':'#C0392B';
           preGenHtml += `<div class="score-bar-row"><span class="score-label">${MV[i]}</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${pct}%;background:${col}"></div></div><span class="score-val">${v}</span></div>`;
+        });
+        preGenHtml += `</div></div>`;
+      }
+    } else if (phan === 14) {
+      // Tổng quan đại vận: bảng điểm tất cả đại vận (shell không có chart như
+      // standalone → render danh sách deterministic để phần này không trống).
+      const dvs = _astrolabe.daiVans || [];
+      const cur = _astrolabe.daiVanHienTai;
+      if (dvs.length) {
+        preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📊</span> Điểm các đại vận</div><div class="score-bars">`;
+        dvs.forEach((dv) => {
+          const tong = dv.scoring ? dv.scoring.tong : null;
+          const pct = tong != null ? (tong / 10 * 100).toFixed(0) : 0;
+          const col = tong >= 7 ? '#4ade80' : tong >= 4 ? '#60a5fa' : '#f87171';
+          const isCur = cur && dv.cungIdx === cur.cungIdx;
+          preGenHtml += `<div class="score-bar-row"><span class="score-label">${dv.tuoiStart}–${dv.tuoiEnd}t${isCur ? ' ●' : ''}</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${pct}%;background:${col}"></div></div><span class="score-val">${tong != null ? tong : '—'}</span></div>`;
         });
         preGenHtml += `</div></div>`;
       }
