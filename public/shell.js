@@ -132,8 +132,10 @@
       '<div><b>Trợ lý Luận Đường</b><span>' + esc(authorLabel()) + '</span></div>' +
       '<div class="tools">' +
         '<button class="rh-btn mobile-only" title="Đóng" data-act="rail-close">✕</button>' +
+        (HIST_ON ? '<button class="rh-btn" title="Lịch sử hội thoại" data-act="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="9"/></svg></button>' : '') +
         '<button class="rh-btn" title="Hội thoại mới" data-act="newchat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 5v14M5 12h14"/></svg></button>' +
       '</div></div>' +
+      (HIST_ON ? '<div class="rail-hist" id="railHist" style="display:none"></div>' : '') +
       '<div class="ctx" id="railCtx" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:13px;height:13px;flex:0 0 auto"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg> <span id="railCtxTxt"></span></div>' +
       '<div class="chat" id="chat">' +
         '<div class="rail-empty" id="railEmpty"><div class="ei"><img src="' + authorAva() + '" alt=""></div><b>Chưa có lá số nào</b>' +
@@ -148,6 +150,7 @@
         '<button class="send" id="railSend" disabled data-act="send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button></div>';
     host.querySelector('[data-act="send"]').addEventListener('click', sendMsg);
     host.querySelector('[data-act="newchat"]').addEventListener('click', newChat);
+    var _hb = host.querySelector('[data-act="history"]'); if (_hb) _hb.addEventListener('click', toggleHistPanel);
     host.querySelector('[data-act="rail-close"]').addEventListener('click', function () { host.classList.remove('open'); syncBackdrop(); });
     host.querySelector('[data-act="attach"]').addEventListener('click', function () { var f = document.getElementById('railFile'); if (f) f.click(); });
     document.getElementById('railFile').addEventListener('change', onPickFiles);
@@ -191,6 +194,188 @@
   var messages = [];
   var sessionId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('s' + Date.now());
   var streaming = false;
+
+  // ── LỊCH SỬ HỘI THOẠI (per-tool) ─────────────────────────────────────────
+  // Lưu mỗi thread rail để sau quay lại xem/hỏi tiếp — như lịch sử ChatGPT.
+  // 2 lớp: localStorage (mọi user, kể cả khách) + đồng bộ server khi ĐĂNG NHẬP
+  // (tái dùng bảng tuvi_chats + REST /api/tuvi-chats sẵn có; type='app-'+toolId
+  // để KHÔNG trộn với lịch sử trang legacy tuvi-chat.html). Khôi phục = tính
+  // lại center (deterministic, FREE) + replay transcript đã lưu; KHÔNG gọi
+  // /api/v1/chat, KHÔNG trừ Lượng. Chỉ câu hỏi MỚI sau khi khôi phục mới tính
+  // phí. Bật per-tool bằng window.SHELL_HISTORY=true (tool đã hỗ trợ khôi phục).
+  var HIST_ON = !!window.SHELL_HISTORY;
+  var HIST_CAP = 40;
+  var newId = function () { return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('s' + Date.now() + Math.random().toString(36).slice(2, 8)); };
+  var curMeta = null; // {restore,title,createdAt} của thread đang mở
+  function histKey(t) { return 'app_hist_v1_' + t; }
+  function histLocal(t) { try { return JSON.parse(localStorage.getItem(histKey(t)) || '[]') || []; } catch (e) { return []; } }
+  function histWrite(t, arr) { try { localStorage.setItem(histKey(t), JSON.stringify(arr.slice(0, HIST_CAP))); } catch (e) { /* quota */ } }
+  function histLocalDelete(t, id) { histWrite(t, histLocal(t).filter(function (s) { return s.id !== id; })); }
+  function birthSnapshot() { try { return JSON.parse(localStorage.getItem('app_birth') || 'null'); } catch (e) { return null; } }
+  function stripImages(msgs) {
+    var out = [];
+    (msgs || []).forEach(function (m) {
+      var c = m.content || (m.images && m.images.length ? '[đã gửi ảnh]' : '');
+      if (c) out.push({ role: m.role, content: c });
+    });
+    return out;
+  }
+  function histLocalUpsert(rec) {
+    var arr = histLocal(rec.toolId).filter(function (s) { return s.id !== rec.id; });
+    arr.unshift(rec); histWrite(rec.toolId, arr);
+  }
+  // ── Đồng bộ server (best-effort, KHÔNG bao giờ ném lỗi vào tool) ──
+  function histSrvUpsert(rec) {
+    var tk = getToken(); if (!tk) return;
+    try {
+      fetch('/api/tuvi-chats', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + tk },
+        body: JSON.stringify({ id: rec.id, label: rec.title || 'Phiên', type: 'app-' + rec.toolId, laso_data: rec.restore || null,
+          messages: rec.messages || [], last_msg: rec.lastMsg || '', updated_at: new Date(rec.updatedAt).toISOString() }) }).catch(function () {});
+    } catch (e) { /* ignore */ }
+  }
+  function histSrvDelete(id) {
+    var tk = getToken(); if (!tk) return;
+    try { fetch('/api/tuvi-chats?id=' + encodeURIComponent(id), { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + tk } }).catch(function () {}); } catch (e) { /* ignore */ }
+  }
+  function histSrvList(tool, cb) {
+    var tk = getToken(); if (!tk) { cb(null); return; }
+    try {
+      fetch('/api/tuvi-chats', { headers: { 'Authorization': 'Bearer ' + tk } })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (j) {
+          if (!j || !j.chats) { cb(null); return; }
+          var want = 'app-' + tool, out = [];
+          j.chats.forEach(function (c) {
+            if (c.type !== want) return;
+            out.push({ id: c.id, toolId: tool, title: c.label, restore: c.laso_data, messages: c.messages || [],
+              lastMsg: c.last_msg || '', createdAt: +new Date(c.created_at || c.updated_at), updatedAt: +new Date(c.updated_at) });
+          });
+          cb(out);
+        }).catch(function () { cb(null); });
+    } catch (e) { cb(null); }
+  }
+  function histMerge(local, server) {
+    var map = {}, i, k, arr = [];
+    for (i = 0; i < (local || []).length; i++) map[local[i].id] = local[i];
+    for (i = 0; i < (server || []).length; i++) { var s = server[i], e = map[s.id]; if (!e || s.updatedAt >= e.updatedAt) map[s.id] = s; }
+    for (k in map) if (map.hasOwnProperty(k)) arr.push(map[k]);
+    arr.sort(function (a, b) { return b.updatedAt - a.updatedAt; });
+    return arr;
+  }
+  // Liệt kê hợp nhất: cb chạy ngay với local, rồi chạy lại khi có server.
+  function histList(tool, cb) {
+    var local = histLocal(tool);
+    cb(local);
+    histSrvList(tool, function (srv) {
+      if (!srv) return;
+      var merged = histMerge(local, srv);
+      histWrite(tool, merged);
+      cb(merged);
+    });
+  }
+  function histFind(tool, id, cb) {
+    var hit = null; histLocal(tool).forEach(function (s) { if (s.id === id) hit = s; });
+    if (hit) { cb(hit); return; }
+    histSrvList(tool, function (srv) { var h = null; (srv || []).forEach(function (s) { if (s.id === id) h = s; }); cb(h); });
+  }
+  // Lưu thread hiện tại sau mỗi lượt trả lời xong.
+  function saveCurrent() {
+    if (!HIST_ON || !ACTIVE || !curMeta) return;
+    var msgs = stripImages(messages);
+    if (!msgs.length) return;
+    var last = '';
+    for (var i = msgs.length - 1; i >= 0; i--) { if (msgs[i].role === 'assistant') { last = msgs[i].content; break; } }
+    var rec = { id: sessionId, toolId: ACTIVE, title: curMeta.title || 'Phiên', restore: curMeta.restore || null,
+      messages: msgs, lastMsg: (last || '').slice(0, 140), createdAt: curMeta.createdAt || Date.now(), updatedAt: Date.now() };
+    histLocalUpsert(rec); histSrvUpsert(rec);
+    renderRecentAll();
+  }
+  function relTime(ts) {
+    var s = Math.floor((Date.now() - ts) / 1000);
+    if (s < 60) return 'vừa xong';
+    if (s < 3600) return Math.floor(s / 60) + ' phút trước';
+    if (s < 86400) return Math.floor(s / 3600) + ' giờ trước';
+    if (s < 2592000) return Math.floor(s / 86400) + ' ngày trước';
+    return Math.floor(s / 2592000) + ' tháng trước';
+  }
+  function toolLabel(id) {
+    var lb = id;
+    TOOLS.forEach(function (g) { g.items.forEach(function (it) { if (it.id === id) lb = it.label; }); });
+    return lb;
+  }
+  function replay(msgs) {
+    var chat = document.getElementById('chat'); if (!chat) return;
+    var html = '';
+    (msgs || []).forEach(function (m) {
+      if (m.role === 'user') html += '<div class="msg u">' + esc(m.content) + '</div>';
+      else html += '<div class="msg a"><img class="msg-ava" src="' + authorAva() + '" alt=""><div class="msg-body"><p>' + mdLite(m.content) + '</p></div></div>';
+    });
+    chat.innerHTML = html; chat.scrollTop = chat.scrollHeight;
+  }
+  // Khôi phục 1 phiên: nạp lại center bằng cách reload trang với ?auto=1 (tính
+  // lại deterministic, FREE), transcript đưa qua sessionStorage cho setContext.
+  function restoreSession(id) {
+    if (!ACTIVE) return;
+    histFind(ACTIVE, id, function (sess) {
+      if (!sess) return;
+      try {
+        sessionStorage.setItem('app_restore', JSON.stringify({ id: sess.id, toolId: ACTIVE }));
+        sessionStorage.setItem('app_restore_data', JSON.stringify(sess));
+      } catch (e) { /* ignore */ }
+      if (sess.restore && sess.restore.birth) {
+        try { localStorage.setItem('app_birth', JSON.stringify(sess.restore.birth)); } catch (e) { /* ignore */ }
+      }
+      var p = location.pathname, s = location.search;
+      location.href = p + (/[?&]auto=1\b/.test(s) ? s : (s ? s + '&auto=1' : '?auto=1'));
+    });
+  }
+  // ── UI: panel lịch sử trong rail ──
+  function histPanelHTML(list) {
+    if (!list.length) return '<div class="rh-empty">Chưa có phiên nào được lưu.</div>';
+    return list.map(function (s) {
+      return '<div class="rh-item" data-id="' + esc(s.id) + '">' +
+        '<div class="rh-main"><div class="rh-t">' + esc(s.title || 'Phiên') + '</div>' +
+        '<div class="rh-sub">' + esc(relTime(s.updatedAt)) + (s.lastMsg ? ' · ' + esc(s.lastMsg.slice(0, 44)) : '') + '</div></div>' +
+        '<button class="rh-del" data-del="' + esc(s.id) + '" title="Xoá phiên" aria-label="Xoá">×</button></div>';
+    }).join('');
+  }
+  function renderHistInto(el) {
+    histList(ACTIVE, function (list) {
+      el.innerHTML = '<div class="rh-head"><span>Lịch sử · ' + esc(toolLabel(ACTIVE)) + '</span><button class="rh-x" data-act="hist-close" aria-label="Đóng">×</button></div>' +
+        '<div class="rh-list">' + histPanelHTML(list) + '</div>';
+      wireHist(el);
+    });
+  }
+  function wireHist(el) {
+    el.querySelectorAll('.rh-item').forEach(function (it) {
+      it.addEventListener('click', function (e) { if (e.target.getAttribute && e.target.getAttribute('data-del') != null) return; restoreSession(it.getAttribute('data-id')); });
+    });
+    el.querySelectorAll('[data-del]').forEach(function (b) {
+      b.addEventListener('click', function (e) { e.stopPropagation(); var id = b.getAttribute('data-del'); histLocalDelete(ACTIVE, id); histSrvDelete(id); renderHistInto(el); renderRecentAll(); });
+    });
+    var x = el.querySelector('[data-act="hist-close"]'); if (x) x.addEventListener('click', function () { el.style.display = 'none'; });
+  }
+  function toggleHistPanel() {
+    var el = document.getElementById('railHist'); if (!el) return;
+    if (!el.style.display || el.style.display === 'none') { el.style.display = 'block'; renderHistInto(el); }
+    else { el.style.display = 'none'; }
+  }
+  // ── UI: "Phiên gần đây" ở empty-state (tool đặt <div id="shellRecent">) ──
+  function renderRecent(el) {
+    if (!el || !ACTIVE || !HIST_ON) { if (el) { el.style.display = 'none'; el.innerHTML = ''; } return; }
+    histList(ACTIVE, function (list) {
+      if (!list.length) { el.style.display = 'none'; el.innerHTML = ''; return; }
+      el.style.display = '';
+      el.innerHTML = '<div class="recent-h">Phiên gần đây</div><div class="recent-list">' +
+        list.slice(0, 6).map(function (s) {
+          return '<button class="recent-item" type="button" data-id="' + esc(s.id) + '">' +
+            '<span class="ri-t">' + esc(s.title || 'Phiên') + '</span>' +
+            '<span class="ri-s">' + esc(relTime(s.updatedAt)) + '</span></button>';
+        }).join('') + '</div>';
+      el.querySelectorAll('.recent-item').forEach(function (b) { b.addEventListener('click', function () { restoreSession(b.getAttribute('data-id')); }); });
+    });
+  }
+  function renderRecentAll() { var el = document.getElementById('shellRecent'); if (el) renderRecent(el); }
 
   // ── Author persona (thầy) — CHUNG cơ chế + CHUNG localStorage key với
   // tuvi-chat: mỗi phiên/máy random 1 thầy (avatar /authors/<id>.jpg + văn
@@ -275,7 +460,10 @@
       // số chỉ truyền birth; trang Bát Tự truyền cả hai.
       ctx = (o.birth || o.scenario) ? { birth: o.birth || null, scenario: o.scenario || null } : null;
       messages = [];
-      sessionId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('s' + Date.now());
+      sessionId = newId();
+      // Meta cho thread mới: restore payload đủ để dựng lại center (mặc định =
+      // snapshot birth đã nhớ + scenario), title lấy từ label.
+      curMeta = { restore: o.restore || { birth: birthSnapshot(), scenario: o.scenario || null }, title: o.title || o.label || 'Phiên', createdAt: Date.now() };
       var c = document.getElementById('railCtx'), t = document.getElementById('railCtxTxt');
       if (o.label) { c.style.display = ''; t.innerHTML = 'Đang gắn: <b>' + esc(o.label) + '</b>'; }
       var ta = document.getElementById('railInput');
@@ -283,6 +471,21 @@
       document.getElementById('railSend').disabled = false;
       var att = document.getElementById('railAttach'); if (att) att.disabled = false;
       greet(o);
+      // KHÔI PHỤC phiên đã lưu (đi qua sessionStorage khi bấm 1 mục lịch sử):
+      // thay transcript + sessionId, replay — KHÔNG gọi API, KHÔNG trừ Lượng.
+      if (HIST_ON) try {
+        var rsMeta = JSON.parse(sessionStorage.getItem('app_restore') || 'null');
+        var rs = JSON.parse(sessionStorage.getItem('app_restore_data') || 'null');
+        if (rsMeta && rs && rsMeta.toolId === ACTIVE && rs.id) {
+          sessionStorage.removeItem('app_restore'); sessionStorage.removeItem('app_restore_data');
+          sessionId = rs.id;
+          messages = (rs.messages || []).map(function (m) { return { role: m.role, content: m.content }; });
+          curMeta = { restore: rs.restore || curMeta.restore, title: rs.title || curMeta.title, createdAt: rs.createdAt || Date.now() };
+          replay(messages);
+          Shell.openRail();
+          return;
+        }
+      } catch (e) { /* ignore */ }
       // Pending-ask: câu hỏi mang từ trang chủ (hero "một cửa") vào — rail tự hỏi
       // ngay khi đã có ngữ cảnh. Chỉ dùng 1 lần, bỏ qua nếu quá cũ (>10 phút).
       try {
@@ -295,6 +498,10 @@
     openCmd: openCmd,
     toggleTheme: toggleTheme,
     openRail: function () { var r = document.getElementById('shell-rail'); if (r) { r.classList.add('open'); syncBackdrop(); } },
+    // Empty-state "Phiên gần đây": tool đặt <div id="shellRecent"></div> ở khối
+    // nhập rồi gọi Shell.renderRecent() (hoặc shell tự gọi lúc boot). No-op nếu
+    // tool chưa bật window.SHELL_HISTORY.
+    renderRecent: function () { renderRecentAll(); },
     // Nhớ thông tin sinh để chuyển tay giữa các tool trong shell (Lá số ↔ Luận giải)
     // fd chuẩn hoá: {name,gender,dd,mm,yyyy,hh,pp,namxem}. localStorage, không server.
     rememberBirth: function (fd) { try { localStorage.setItem('app_birth', JSON.stringify(fd)); } catch (e) { /* ignore */ } },
@@ -340,8 +547,12 @@
 
   function newChat() {
     messages = [];
-    sessionId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('s' + Date.now());
-    if (ctx) { ctxChips = ctxChipsOrig.slice(); greet({ greeting: 'Bắt đầu hội thoại mới. Bạn muốn hỏi gì về lá số này?' }); }
+    sessionId = newId();
+    if (ctx) {
+      // Thread mới cùng ngữ cảnh: giữ restore/title, đổi id để không đè phiên cũ.
+      curMeta = { restore: (curMeta && curMeta.restore) || { birth: birthSnapshot(), scenario: ctx.scenario || null }, title: (curMeta && curMeta.title) || 'Phiên', createdAt: Date.now() };
+      ctxChips = ctxChipsOrig.slice(); greet({ greeting: 'Bắt đầu hội thoại mới. Bạn muốn hỏi gì về lá số này?' });
+    }
   }
 
   async function sendMsg() {
@@ -431,6 +642,7 @@
       if (!acc) acc = '(không có nội dung)';
       typing.innerHTML = '<p>' + mdLite(acc) + '</p>';
       messages.push({ role: 'assistant', content: acc });
+      saveCurrent();
     } catch (e) {
       typing.innerHTML = '<p>Xin lỗi, kết nối trục trặc. Thử lại giúp tôi nhé.</p>';
       messages.pop();
@@ -531,6 +743,7 @@
     // Empty-state intro (hướng B): trang khai window.SHELL_INTRO={key,title,desc}
     // + có #introHost → shell tự hiện cho người mới, ẩn sau lần dùng đầu.
     if (window.SHELL_INTRO && window.SHELL_INTRO.key) Shell.introOnce(window.SHELL_INTRO.key, window.SHELL_INTRO);
+    renderRecentAll();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();

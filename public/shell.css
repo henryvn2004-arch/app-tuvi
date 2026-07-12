@@ -167,3 +167,29 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .sugg-row::-webkit-scrollbar{display:none}
 .sugg-row .chip{white-space:nowrap;flex:0 0 auto;font-family:inherit;font-size:12px;border:1px solid var(--line-2);background:var(--paper);color:var(--text-mid);border-radius:20px;padding:6px 12px;cursor:pointer}
 .sugg-row .chip:hover{border-color:var(--gold-soft);color:var(--text);background:var(--gold-lt)}
+
+/* ── LỊCH SỬ HỘI THOẠI (panel trượt trong rail + "phiên gần đây" empty-state) ── */
+.rail{position:relative}
+.rail-hist{position:absolute;top:53px;left:0;right:0;bottom:0;z-index:8;background:var(--white);display:flex;flex-direction:column;animation:shFade .16s ease}
+@keyframes shFade{from{opacity:0}to{opacity:1}}
+.rh-head{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--line);font-size:12px;font-weight:600;color:var(--text-mid);font-family:var(--serif)}
+.rh-x{width:24px;height:24px;border:none;background:transparent;color:var(--text-lt);font-size:19px;line-height:1;cursor:pointer;border-radius:6px}
+.rh-x:hover{background:var(--paper-2);color:var(--text)}
+.rh-list{flex:1;overflow-y:auto;padding:6px}
+.rh-empty{padding:26px 16px;text-align:center;color:var(--text-lt);font-size:12.5px}
+.rh-item{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:9px;cursor:pointer}
+.rh-item:hover{background:var(--paper)}
+.rh-main{flex:1;min-width:0}
+.rh-t{font-size:12.8px;color:var(--text);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rh-sub{font-size:11px;color:var(--text-lt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.rh-del{flex:0 0 auto;width:24px;height:24px;border:none;background:transparent;color:var(--text-lt);font-size:17px;line-height:1;cursor:pointer;border-radius:6px;opacity:0}
+.rh-item:hover .rh-del{opacity:1}
+.rh-del:hover{background:var(--paper-2);color:var(--red)}
+/* "Phiên gần đây" ở khối nhập (empty-state) */
+#shellRecent{margin-top:14px}
+.recent-h{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-lt);margin-bottom:8px;font-weight:600}
+.recent-list{display:flex;flex-direction:column;gap:6px}
+.recent-item{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;border:1px solid var(--line);background:var(--white);border-radius:9px;padding:9px 12px;cursor:pointer;font-family:inherit}
+.recent-item:hover{border-color:var(--gold-soft);background:var(--gold-lt)}
+.recent-item .ri-t{font-size:12.8px;color:var(--text);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.recent-item .ri-s{font-size:11px;color:var(--text-lt);flex:0 0 auto}
