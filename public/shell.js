@@ -212,6 +212,18 @@
   function histWrite(t, arr) { try { localStorage.setItem(histKey(t), JSON.stringify(arr.slice(0, HIST_CAP))); } catch (e) { /* quota */ } }
   function histLocalDelete(t, id) { histWrite(t, histLocal(t).filter(function (s) { return s.id !== id; })); }
   function birthSnapshot() { try { return JSON.parse(localStorage.getItem('app_birth') || 'null'); } catch (e) { return null; } }
+  // Chụp toàn bộ input/select/textarea (trừ rail + command palette) để khôi phục
+  // form của bất kỳ tool nào mà KHÔNG cần liệt kê id từng tool.
+  function snapshotForm() {
+    var out = {}, els = document.querySelectorAll('input[id],select[id],textarea[id]');
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      if (el.closest('#shell-rail') || el.closest('.cmdk-wrap')) continue;
+      if (el.type === 'file' || el.type === 'button' || el.type === 'submit') continue;
+      out[el.id] = el.value;
+    }
+    return out;
+  }
   function stripImages(msgs) {
     var out = [];
     (msgs || []).forEach(function (m) {
@@ -463,7 +475,7 @@
       sessionId = newId();
       // Meta cho thread mới: restore payload đủ để dựng lại center (mặc định =
       // snapshot birth đã nhớ + scenario), title lấy từ label.
-      curMeta = { restore: o.restore || { birth: birthSnapshot(), scenario: o.scenario || null }, title: o.title || o.label || 'Phiên', createdAt: Date.now() };
+      curMeta = { restore: Object.assign({ birth: birthSnapshot(), scenario: o.scenario || null, form: snapshotForm() }, o.restore || {}), title: o.title || o.label || 'Phiên', createdAt: Date.now() };
       var c = document.getElementById('railCtx'), t = document.getElementById('railCtxTxt');
       if (o.label) { c.style.display = ''; t.innerHTML = 'Đang gắn: <b>' + esc(o.label) + '</b>'; }
       var ta = document.getElementById('railInput');
@@ -502,6 +514,23 @@
     // nhập rồi gọi Shell.renderRecent() (hoặc shell tự gọi lúc boot). No-op nếu
     // tool chưa bật window.SHELL_HISTORY.
     renderRecent: function () { renderRecentAll(); },
+    // Trả restore payload đang chờ cho tool hiện tại (peek, KHÔNG xoá — setContext
+    // sẽ xoá khi replay). Tool có form riêng gọi ở boot: nếu có → fillForm + chạy
+    // lại hàm compute của tool (deterministic, FREE) → setContext tự replay rail.
+    pendingRestore: function () {
+      if (!HIST_ON) return null;
+      try {
+        var m = JSON.parse(sessionStorage.getItem('app_restore') || 'null');
+        var d = JSON.parse(sessionStorage.getItem('app_restore_data') || 'null');
+        if (m && d && m.toolId === ACTIVE && d.id) return d.restore || {};
+      } catch (e) { /* ignore */ }
+      return null;
+    },
+    // Điền lại form theo map {id:value} (dùng với pendingRestore().form).
+    fillForm: function (map) {
+      if (!map) return;
+      Object.keys(map).forEach(function (id) { var el = document.getElementById(id); if (el && map[id] != null) el.value = map[id]; });
+    },
     // Nhớ thông tin sinh để chuyển tay giữa các tool trong shell (Lá số ↔ Luận giải)
     // fd chuẩn hoá: {name,gender,dd,mm,yyyy,hh,pp,namxem}. localStorage, không server.
     rememberBirth: function (fd) { try { localStorage.setItem('app_birth', JSON.stringify(fd)); } catch (e) { /* ignore */ } },

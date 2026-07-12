@@ -73,6 +73,7 @@
     </div>
     <div class="ws-body">
       <div id="introHost"></div>
+      <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Họ và tên đầy đủ</h2>
         <p class="sub">Nhập tên tiếng Việt — hệ thống tra chữ Hán, số nét và ngũ hành từng chữ, tính cân bằng ngũ hành, đối chiếu mệnh cục. Sau đó hỏi trợ lý luận sâu.</p>
@@ -116,11 +117,11 @@
   <aside class="rail" id="shell-rail"></aside>
 </div>
 
-<script>window.SHELL_ACTIVE='ngu-hanh-ten';
+<script>window.SHELL_ACTIVE='ngu-hanh-ten';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'ngu-hanh-ten',title:'Ngũ hành tên',desc:'Nhập tên tiếng Việt — tra <b>chữ Hán, số nét và ngũ hành từng chữ</b>, cân bằng ngũ hành, đối chiếu mệnh cục, rồi hỏi <b>trợ lý AI</b> luận sâu.'};</script>
 <script src="/tools-shared/ngu-hanh-ten.js?v=1"></script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=22"></script>
+<script src="/shell.js?v=23"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/ngu-hanh-ten.js với trang standalone.
 let _syls = [];
@@ -191,5 +192,6 @@ function showForm() {
   document.getElementById('btnEdit').style.display = 'none';
 }
 </script>
+<script>/*SHELL_RESTORE_BOOT*/(function(){function _r(){var r=window.Shell&&Shell.pendingRestore&&Shell.pendingRestore();if(r&&r.form){Shell.fillForm(r.form);calculate();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_r);else _r();})();</script>
 </body>
 </html>

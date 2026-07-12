@@ -54,6 +54,7 @@
     </div>
     <div class="ws-body">
       <div id="introHost"></div>
+      <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Năm sinh (dương lịch)</h2>
         <p class="sub">Tra Thiên Can, Địa Chi, nạp âm ngũ hành (tên hoa giáp) và hành bản mệnh theo năm sinh, rồi hỏi trợ lý luận hợp màu, hướng, tuổi.</p>
@@ -75,11 +76,11 @@
   <aside class="rail" id="shell-rail"></aside>
 </div>
 
-<script>window.SHELL_ACTIVE='nap-am';
+<script>window.SHELL_ACTIVE='nap-am';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'nap-am',title:'Nạp âm ngũ hành',desc:'Tra Thiên Can · Địa Chi · nạp âm (tên hoa giáp) và hành bản mệnh theo năm sinh, rồi hỏi <b>trợ lý AI</b> hợp màu, hướng, tuổi và điều nên tránh.'};</script>
 <script src="/tools-shared/nap-am.js?v=1"></script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=22"></script>
+<script src="/shell.js?v=23"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/nap-am.js với trang standalone
 // /tools/nap-am.html → kết quả y hệt. Rail nhận chính data module tính.
@@ -110,5 +111,6 @@ function showForm(){
 }
 document.getElementById('year').addEventListener('keydown',function(e){if(e.key==='Enter')calculate();});
 </script>
+<script>/*SHELL_RESTORE_BOOT*/(function(){function _r(){var r=window.Shell&&Shell.pendingRestore&&Shell.pendingRestore();if(r&&r.form){Shell.fillForm(r.form);calculate();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_r);else _r();})();</script>
 </body>
 </html>
