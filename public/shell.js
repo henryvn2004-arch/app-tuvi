@@ -17,36 +17,36 @@
     { group: 'Tử Vi', open: true, items: [
       { id: 'la-so',      label: 'Lá số Tử Vi',         href: '/app/la-so',      icon: 'grid' },
       { id: 'luan-giai',  label: 'Luận giải chuyên sâu', href: '/app/luan-giai',  icon: 'doc', cost: 5 },
-      { id: 'xem-tuoi',   label: 'Xem tuổi vợ chồng',   href: '/app/xem-tuoi' },
-      { id: 'xem-lam-an', label: 'Xem tuổi làm ăn',     href: '/app/xem-lam-an' },
-      { id: 'tuong-hop',  label: 'Tương hợp tuổi',      href: '/app/tuong-hop' },
-      { id: 'sinh-con',   label: 'Xem tuổi sinh con',   href: '/app/sinh-con' },
+      { id: 'xem-tuoi',   label: 'Xem tuổi vợ chồng',   href: '/app/xem-tuoi',   icon: 'users' },
+      { id: 'xem-lam-an', label: 'Xem tuổi làm ăn',     href: '/app/xem-lam-an', icon: 'briefcase' },
+      { id: 'tuong-hop',  label: 'Tương hợp tuổi',      href: '/app/tuong-hop',  icon: 'heart' },
+      { id: 'sinh-con',   label: 'Xem tuổi sinh con',   href: '/app/sinh-con',   icon: 'baby' },
     ] },
     { group: 'Tử Bình', open: true, items: [
       { id: 'bat-tu',     label: 'Lá số Bát Tự',        href: '/app/bat-tu',     icon: 'rows' },
     ] },
     { group: 'Xem Tướng', open: true, items: [
-      { id: 'xem-tuong',  label: 'Xem tướng',           href: '/app/xem-tuong' },
+      { id: 'xem-tuong',  label: 'Xem tướng',           href: '/app/xem-tuong',  icon: 'eye' },
     ] },
     { group: 'Phong Thủy', open: true, items: [
-      { id: 'phong-thuy', label: 'Phong thủy',          href: '/app/phong-thuy' },
-      { id: 'bat-trach',  label: 'Hướng Bát Trạch',     href: '/app/bat-trach' },
+      { id: 'phong-thuy', label: 'Phong thủy',          href: '/app/phong-thuy', icon: 'leaf' },
+      { id: 'bat-trach',  label: 'Hướng Bát Trạch',     href: '/app/bat-trach',  icon: 'compass' },
     ] },
     { group: 'Chọn Ngày', open: true, items: [
-      { id: 'chon-ngay',  label: 'Chọn ngày tốt',       href: '/app/chon-ngay' },
-      { id: 'kim-lau',    label: 'Kim Lâu & Tam Tai',   href: '/app/kim-lau' },
+      { id: 'chon-ngay',  label: 'Chọn ngày tốt',       href: '/app/chon-ngay',  icon: 'calendar' },
+      { id: 'kim-lau',    label: 'Kim Lâu & Tam Tai',   href: '/app/kim-lau',    icon: 'calcheck' },
     ] },
     { group: 'Đặt Tên', open: true, items: [
-      { id: 'dat-ten',    label: 'Đặt tên con',         href: '/app/dat-ten' },
-      { id: 'dat-ten-dn', label: 'Đặt tên doanh nghiệp', href: '/app/dat-ten-dn' },
-      { id: 'ngu-hanh-ten', label: 'Ngũ hành tên',      href: '/app/ngu-hanh-ten' },
+      { id: 'dat-ten',    label: 'Đặt tên con',         href: '/app/dat-ten',    icon: 'tag' },
+      { id: 'dat-ten-dn', label: 'Đặt tên doanh nghiệp', href: '/app/dat-ten-dn', icon: 'building' },
+      { id: 'ngu-hanh-ten', label: 'Ngũ hành tên',      href: '/app/ngu-hanh-ten', icon: 'star' },
     ] },
     { group: 'Mệnh Lý', open: true, items: [
-      { id: 'nap-am',     label: 'Nạp âm ngũ hành',     href: '/app/nap-am' },
+      { id: 'nap-am',     label: 'Nạp âm ngũ hành',     href: '/app/nap-am',     icon: 'wave' },
     ] },
     { group: 'Huyền Học', open: true, items: [
-      { id: 'kinh-dich',  label: 'Kinh Dịch — Gieo quẻ', href: '/app/kinh-dich' },
-      { id: 'than-so-hoc', label: 'Thần số học',        href: '/app/than-so-hoc' },
+      { id: 'kinh-dich',  label: 'Kinh Dịch — Gieo quẻ', href: '/app/kinh-dich', icon: 'yin' },
+      { id: 'than-so-hoc', label: 'Thần số học',        href: '/app/than-so-hoc', icon: 'hash' },
     ] },
     { group: 'Tài khoản', open: true, items: [
       { id: 'vi-luong',   label: 'Ví Lượng',            href: '/profile', icon: 'wallet', balance: true },
@@ -64,6 +64,21 @@
     bolt: '<path d="M13 2 3 14h7l-1 8 10-12h-7z"/>',
     dot: '<circle cx="12" cy="12" r="6"/>',
     home: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',
+    users: '<circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><path d="M16 5.5a3 3 0 0 1 0 5.5"/><path d="M18.5 20a6 6 0 0 0-3-5.2"/>',
+    heart: '<path d="M12 20s-7-4.6-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.4-7 10-7 10z"/>',
+    briefcase: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/>',
+    baby: '<circle cx="12" cy="6" r="3"/><path d="M12 9v4"/><path d="M6 21c1.2-4.5 3.4-6.5 6-6.5s4.8 2 6 6.5"/>',
+    eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>',
+    compass: '<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/>',
+    leaf: '<path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14z"/><path d="M5 19c4-5 8-7 12-8"/>',
+    calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/>',
+    calcheck: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/><path d="m9 15 2 2 4-4"/>',
+    tag: '<path d="M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
+    building: '<rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M10 21v-3h4v3"/>',
+    star: '<path d="m12 3 2.6 5.9 6.4.5-4.9 4.2 1.5 6.3L12 17l-5.6 3.4 1.5-6.3L3 9.9l6.4-.5z"/>',
+    wave: '<path d="M2 12c2 0 2-6 4-6s2 12 4 12 2-12 4-12 2 6 4 6"/>',
+    yin: '<circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9 9 9 0 0 1 0-18z"/><circle cx="12" cy="7.5" r="1"/><circle cx="12" cy="16.5" r="1"/>',
+    hash: '<path d="M9 3 7 21M17 3l-2 18M4 8h16M3 16h16"/>',
   };
   function svg(name, cls) {
     return '<svg class="' + (cls || 'ic') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">' + (ICONS[name] || ICONS.dot) + '</svg>';
