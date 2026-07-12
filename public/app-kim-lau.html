@@ -59,6 +59,7 @@
     </div>
     <div class="ws-body">
       <div id="introHost"></div>
+      <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Năm sinh (dương lịch)</h2>
         <p class="sub">Tra theo tuổi ta năm nào phạm Kim Lâu (chu kỳ 5), Hoang Ốc, Tam Tai — bảng 20 năm tới. Rồi hỏi trợ lý cách hóa giải, chọn năm đẹp làm nhà, cưới hỏi.</p>
@@ -86,11 +87,11 @@
   <aside class="rail" id="shell-rail"></aside>
 </div>
 
-<script>window.SHELL_ACTIVE='kim-lau';
+<script>window.SHELL_ACTIVE='kim-lau';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'kim-lau',title:'Kim Lâu & Tam Tai',desc:'Tra theo tuổi ta năm nào phạm <b>Kim Lâu</b> / <b>Tam Tai</b> / <b>Hoang Ốc</b> — bảng 20 năm tới. Rồi hỏi <b>trợ lý AI</b> cách hóa giải, chọn năm đẹp làm nhà, cưới hỏi.'};</script>
 <script src="/tools-shared/kim-lau.js?v=1"></script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=22"></script>
+<script src="/shell.js?v=23"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/kim-lau.js với trang standalone
 // /tools/kim-lau.html → kết quả y hệt, sửa 1 chỗ 2 nơi cập nhật. Rail nhận
@@ -123,5 +124,6 @@ function showForm(){
 }
 document.getElementById('birthYear').addEventListener('keydown',function(e){if(e.key==='Enter')calculate();});
 </script>
+<script>/*SHELL_RESTORE_BOOT*/(function(){function _r(){var r=window.Shell&&Shell.pendingRestore&&Shell.pendingRestore();if(r&&r.form){Shell.fillForm(r.form);calculate();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_r);else _r();})();</script>
 </body>
 </html>

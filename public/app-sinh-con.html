@@ -78,6 +78,7 @@
     </div>
     <div class="ws-body">
       <div id="introHost"></div>
+      <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Năm sinh của bố và mẹ</h2>
         <p class="sub">Chấm điểm lục hợp / tam hợp / lục xung / tam hình giữa địa chi từng năm và tuổi bố mẹ cho 15 năm tới, rồi hỏi trợ lý luận sâu năm nào nên sinh con và vì sao.</p>
@@ -113,11 +114,11 @@
   <aside class="rail" id="shell-rail"></aside>
 </div>
 
-<script>window.SHELL_ACTIVE='sinh-con';
+<script>window.SHELL_ACTIVE='sinh-con';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'sinh-con',title:'Xem tuổi sinh con',desc:'Chấm điểm hợp/xung địa chi năm sinh con với tuổi bố mẹ cho <b>15 năm tới</b>, chỉ ra năm thuận nhất, rồi hỏi <b>trợ lý AI</b> luận sâu năm nào nên sinh con.'};</script>
 <script src="/tools-shared/xem-tuoi-sinh-con.js?v=1"></script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=22"></script>
+<script src="/shell.js?v=23"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 var HANH_COLOR={'Mộc':'var(--green)','Hỏa':'var(--red)','Thổ':'var(--gold-soft)','Kim':'#8a8a8a','Thủy':'var(--blue)'};
@@ -163,5 +164,6 @@ function showForm(){
   document.getElementById('btnEdit').style.display='none';
 }
 </script>
+<script>/*SHELL_RESTORE_BOOT*/(function(){function _r(){var r=window.Shell&&Shell.pendingRestore&&Shell.pendingRestore();if(r&&r.form){Shell.fillForm(r.form);doSinhCon();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_r);else _r();})();</script>
 </body>
 </html>

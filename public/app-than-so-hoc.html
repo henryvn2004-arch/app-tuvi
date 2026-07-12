@@ -54,6 +54,7 @@
     </div>
     <div class="ws-body">
       <div id="introHost"></div>
+      <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Ngày sinh & tên đầy đủ</h2>
         <p class="sub">Tính 4 con số cốt lõi (Đường Đời · Định Mệnh · Linh Hồn · Sứ Mệnh) theo hệ Pythagoras, rồi hỏi trợ lý luận sâu tính cách, sự nghiệp, tình cảm.</p>
@@ -78,11 +79,11 @@
   <aside class="rail" id="shell-rail"></aside>
 </div>
 
-<script>window.SHELL_ACTIVE='than-so-hoc';
+<script>window.SHELL_ACTIVE='than-so-hoc';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'than-so-hoc',title:'Thần số học',desc:'Tính <b>4 con số cốt lõi</b> (Đường Đời · Định Mệnh · Linh Hồn · Sứ Mệnh) theo hệ Pythagoras, rồi hỏi <b>trợ lý AI</b> luận sâu tính cách, sự nghiệp, tình cảm.'};</script>
 <script src="/tools-shared/than-so-hoc.js?v=1"></script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=22"></script>
+<script src="/shell.js?v=23"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/than-so-hoc.js với trang standalone.
 function calculate(){
@@ -113,5 +114,6 @@ function showForm(){
   document.getElementById('btnEdit').style.display='none';
 }
 </script>
+<script>/*SHELL_RESTORE_BOOT*/(function(){function _r(){var r=window.Shell&&Shell.pendingRestore&&Shell.pendingRestore();if(r&&r.form){Shell.fillForm(r.form);calculate();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_r);else _r();})();</script>
 </body>
 </html>
