@@ -39,7 +39,7 @@ export const DEFAULTS: ChatConfig = {
 
   model: 'claude-sonnet-4-6',
   maxRounds: 4,
-  maxTokens: 1500,
+  maxTokens: 3000, // đủ cho câu luận sâu 1 phần (24-phần cho tới 3000); DB app_config 'chat.max_tokens' override được. Câu ngắn không tốn thêm (chỉ trả token thực sinh).
   cost: 5, // 5 Lượng / lượt — giá chuẩn; DB app_config 'chat.cost' override được (không cần deploy)
 };
 
