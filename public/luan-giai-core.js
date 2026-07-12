@@ -32,6 +32,50 @@
     return L;
   }
 
+  // Sao ở CUNG BẢN MỆNH (phan 2–13): chính tinh cung + sao tam phương tứ chính —
+  // deterministic, LUÔN có (không như "Phân tích sao"/cachCucTungCung có thể rỗng).
+  // Mirror đúng khối chính-tinh + tam-phương của phần đại vận (buildPreGenHtml 15–24)
+  // để cung thiếu cách cục (vd Tử Tức) vẫn hiện đủ sao. Trả '' nếu không tìm thấy cung.
+  var _SAT = ['Kình Dương','Đà La','Hỏa Tinh','Linh Tinh','Địa Không','Địa Kiếp'];
+  var _BAI = ['Thiên Khốc','Thiên Hư','Tang Môn','Bạch Hổ','Đại Hao','Tiểu Hao'];
+  var _CAT = ['Văn Xương','Văn Khúc','Thiên Khôi','Thiên Việt','Tả Phù','Hữu Bật','Lộc Tồn','Hóa Lộc','Hóa Quyền','Hóa Khoa'];
+  function buildCungStarHtml(cungForPhan, ls) {
+    const pal = (ls.palaces || []).find((p) => p.cungName === cungForPhan);
+    if (!pal) return '';
+    let h = '';
+    const majorStars = pal.majorStars || [];
+    const allStars = pal.stars || [];
+    h += `<div class="pregen-block"><div class="pregen-title">⭐ Chính tinh cung</div>`;
+    if (majorStars.length === 0) {
+      const xung = pal.xungChieuCung;
+      const xungStars = xung ? (xung.majorStars || []).map((s) => `${s.ten}(${s.brightness || ''})`).join(', ') : '';
+      h += `<div class="pregen-yn yn-neutral">Vô chính diệu${xungStars ? ` — mượn từ cung xung: <span style="color:#5FA8D3">${xungStars}</span>` : ''}</div>`;
+    } else {
+      majorStars.forEach((s) => {
+        const bCol = s.brightness === 'Miếu' || s.brightness === 'Vượng' ? '#4ade80' : s.brightness === 'Đắc' ? '#86efac' : s.brightness === 'Bình hòa' || s.brightness === 'Bình' ? '#60a5fa' : '#f87171';
+        h += `<div class="pregen-yn yn-neutral"><span style="font-weight:600;color:#ddd">${s.ten}</span> <span style="color:${bCol};font-size:11px">(${s.brightness || ''})</span>${s.hoa ? ` <span style="color:#5FA8D3">[Hóa ${s.hoa}]</span>` : ''}</div>`;
+      });
+    }
+    h += `</div>`;
+    const tptcPalaces = [pal, ...(pal.tamHopCungs || []), pal.xungChieuCung].filter(Boolean);
+    const tptcNames = tptcPalaces.flatMap((p) => (p.stars || []).map((s) => s.ten));
+    const satIn = _SAT.filter((s) => tptcNames.includes(s));
+    const baiIn = _BAI.filter((s) => tptcNames.includes(s));
+    const catIn = _CAT.filter((s) => tptcNames.includes(s));
+    const hasTuan = allStars.some((s) => s.ten === 'Tuần');
+    const hasTriet = allStars.some((s) => s.ten === 'Triệt');
+    if (catIn.length || satIn.length || baiIn.length || hasTuan || hasTriet) {
+      h += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔍" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🔍</span> Sao tam phương tứ chính</div>`;
+      if (catIn.length) h += `<div class="pregen-yn yn-cat">Cát tinh: ${catIn.join(', ')}</div>`;
+      if (satIn.length) h += `<div class="pregen-yn yn-hung">Sát tinh: ${satIn.join(', ')}</div>`;
+      if (baiIn.length) h += `<div class="pregen-yn yn-hung" style="color:#fca5a5">Bại tinh: ${baiIn.join(', ')}</div>`;
+      if (hasTuan) h += `<div class="pregen-yn yn-tuan">Tuần án ngữ cung</div>`;
+      if (hasTriet) h += `<div class="pregen-yn yn-tuan">Triệt án ngữ cung</div>`;
+      h += `</div>`;
+    }
+    return h;
+  }
+
   // Khối deterministic 1 phần — PORT NGUYÊN từ luan-giai.html:buildPreGenHtml (3388–3516),
   // chỉ đổi `_astrolabe` → `ls`. Trả HTML string ('' nếu phần không có khối, vd phần 14).
   function buildPreGenHtml(phan, ls) {
@@ -75,6 +119,9 @@
         ccItems.forEach(c => { preGenHtml += `<div class="pregen-item"><span class="cc-label cc-${c.loai}">${c.ten}</span></div>`; });
         preGenHtml += `</div>`;
       }
+      // Sao ở cung (LUÔN có) — chính tinh + tam phương tứ chính; đứng trước "Phân
+      // tích sao" (ý nghĩa cách cục, có thể rỗng) để cung nào cũng đủ dữ liệu sao.
+      preGenHtml += buildCungStarHtml(cungForPhan, _astrolabe);
       if (ynItems.length > 0) {
         preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📋" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📋</span> Phân tích sao</div>`;
         ynItems.forEach(y => {
@@ -185,7 +232,7 @@
     return preGenHtml;
   }
 
-  var API = { TONG_PHAN: TONG_PHAN, PHAN_LABELS_BASE: PHAN_LABELS_BASE, phanLabels: phanLabels, buildPreGenHtml: buildPreGenHtml };
+  var API = { TONG_PHAN: TONG_PHAN, PHAN_LABELS_BASE: PHAN_LABELS_BASE, phanLabels: phanLabels, buildPreGenHtml: buildPreGenHtml, buildCungStarHtml: buildCungStarHtml };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   else root.LuanGiaiCore = API;
 })(typeof window !== 'undefined' ? window : globalThis);
