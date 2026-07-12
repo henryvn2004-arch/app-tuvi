@@ -447,6 +447,23 @@ async function streamFinal(system: string, convo: any[], tools: any[], cfg: Chat
   if (markerAt < 0 && full.length > sentLen) {
     send(sse.text({ delta: full.slice(sentLen) }));
   }
+
+  // AN TOÀN: việc tách dòng "SUGGEST:" KHÔNG được nuốt trọn câu trả lời. Nếu chưa
+  // stream được ký tự nào (marker rơi ngay đầu, hoặc chỉ có khoảng trắng trước nó,
+  // hoặc model lỡ đặt SUGGEST lên trước phần luận) mà model VẪN sinh chữ → xả
+  // nguyên văn để người dùng thấy nội dung, thay vì client hiện "(không có nội dung)".
+  if (sentLen === 0 && full.trim()) {
+    console.warn(
+      `[runAgent.streamFinal] câu trả lời hiển thị rỗng sau khi tách SUGGEST (fullLen=${full.length}, markerAt=${markerAt}) — xả nguyên văn để không mất nội dung`,
+    );
+    send(sse.text({ delta: full }));
+    return [];
+  }
+  // Completion RỖNG thật (model không sinh chữ nào) — log để chẩn nếu tái diễn.
+  if (sentLen === 0 && !full.trim()) {
+    console.warn(`[runAgent.streamFinal] model trả completion RỖNG (fullLen=${full.length}) — client sẽ hiện "(không có nội dung)"`);
+  }
+
   if (markerAt < 0) return [];
   return full
     .slice(markerAt + MARKER.length)
