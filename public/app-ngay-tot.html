@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ngày Tốt Trong Tháng — Tử Vi Minh Bảo</title>
+<meta name="description" content="Lịch ngày tốt/xấu cả tháng theo âm lịch — Tam Nương, Nguyệt Kị, Dương Công Kị. Hỏi trợ lý AI chọn ngày đẹp cho cưới hỏi, khởi công.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shell.css?v=6">
+<style>
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
+.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
+.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:13px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.fg input{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none;width:90px}
+.fg input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
+.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
+.err{color:var(--red);font-size:13px;margin-top:8px;display:none}.err.active{display:block}
+#resPanel{display:none;max-width:820px}
+.res-block{background:#fff;border:1px solid var(--border-lt);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}
+.res-block-header{background:var(--navy);padding:12px 16px}
+.res-block-title{color:#fff;font-family:var(--serif);font-size:15px;font-weight:700}
+.res-block-body{padding:16px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--text-mid)}
+.leg-item{display:flex;align-items:center;gap:6px}
+.leg-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:12px}
+.cal-hdr{text-align:center;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-lt);padding:6px 0}
+.cal-day{border-radius:6px;padding:10px 6px;text-align:center;border:1px solid transparent;min-height:72px;display:flex;flex-direction:column;gap:3px;align-items:center}
+@media(max-width:700px){.cal-day{min-height:56px;padding:6px 3px}.cd-dl{font-size:14px}}
+.cal-day.empty{background:transparent;border:none}
+.cal-day.good{background:#eaf4ed;border-color:#c3e0cc}
+.cal-day.bad{background:#fef0ef;border-color:#f5c0bc}
+.cal-day.warn{background:#fdf6e9;border-color:#e8d9b0}
+.cal-day.today{outline:2px solid var(--blue);outline-offset:-2px}
+.cd-dl{font-size:16px;font-weight:700;color:var(--navy);line-height:1}
+.cd-al{font-size:10px;color:var(--text-lt)}
+.cd-tags{display:flex;flex-direction:column;gap:2px;align-items:center}
+.cd-tag{font-size:9px;font-weight:600;letter-spacing:.5px;padding:1px 5px;border-radius:2px}
+.t-good{background:#c3e0cc;color:#1E6B3C}.t-bad{background:#f5c0bc;color:#C0392B}.t-warn{background:#e8d9b0;color:#9A7B3A}
+.ask{margin-top:14px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Ngày tốt trong tháng</b><span>Lịch vạn niên · ngày tốt/xấu theo âm lịch</span></div>
+      <div class="ws-actions">
+        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa</button>
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div id="shellRecent"></div>
+      <div class="form-card" id="birthPanel">
+        <h2>Tháng cần xem (dương lịch)</h2>
+        <p class="sub">Xem lịch ngày tốt/xấu cả tháng theo âm lịch (Tam Nương, Nguyệt Kị, Dương Công Kị), rồi hỏi trợ lý chọn ngày đẹp cho việc trọng đại.</p>
+        <div class="frow" style="margin-bottom:4px">
+          <div class="fg"><label>Tháng</label><input type="number" id="thang" min="1" max="12" placeholder="1–12"></div>
+          <div class="fg"><label>Năm</label><input type="number" id="nam" min="2020" max="2030" placeholder="2026"></div>
+          <button class="btn-go" id="btnGo" onclick="calculate()">Xem lịch →</button>
+        </div>
+        <div class="err" id="error-msg"></div>
+      </div>
+
+      <div id="resPanel">
+        <div class="res-block">
+          <div class="res-block-header"><span class="res-block-title" id="resTitle">—</span></div>
+          <div class="res-block-body">
+            <div class="legend">
+              <div class="leg-item"><div class="leg-dot" style="background:#eaf4ed;border:1px solid #c3e0cc"></div>Ngày tốt — an toàn</div>
+              <div class="leg-item"><div class="leg-dot" style="background:#fdf6e9;border:1px solid #e8d9b0"></div>Lưu ý nhỏ (Dương Công Kị)</div>
+              <div class="leg-item"><div class="leg-dot" style="background:#fef0ef;border:1px solid #f5c0bc"></div>Ngày kị — tránh việc lớn</div>
+            </div>
+            <div class="cal-grid">
+              <div class="cal-hdr">CN</div><div class="cal-hdr">T2</div><div class="cal-hdr">T3</div><div class="cal-hdr">T4</div><div class="cal-hdr">T5</div><div class="cal-hdr">T6</div><div class="cal-hdr">T7</div>
+            </div>
+            <div class="cal-grid" id="calBody"></div>
+          </div>
+        </div>
+        <div class="ask" data-ask="Tháng này ngày nào đẹp nhất để cưới hỏi / khởi công / khai trương? Vì sao tránh những ngày kị? Luận giúp tôi.">✦ Hỏi trợ lý chọn ngày đẹp trong tháng</div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='ngay-tot';window.SHELL_HISTORY=true;
+window.SHELL_INTRO={key:'ngay-tot',title:'Ngày tốt trong tháng',desc:'Xem <b>lịch ngày tốt/xấu cả tháng</b> theo âm lịch (Tam Nương · Nguyệt Kị · Dương Công Kị), rồi hỏi <b>trợ lý AI</b> chọn ngày đẹp cho cưới hỏi, khởi công.'};</script>
+<script src="/tuvi-ansao-engine.js"></script>
+<script src="/tools-shared/ngay-tot.js?v=1"></script>
+<script src="/auth.js"></script>
+<script src="/shell.js?v=27"></script>
+<script>
+// Ô giữa dùng CHUNG /tools-shared/ngay-tot.js với /tools/ngay-tot.html.
+function calculate(){
+  var r=NgayTotTool.compute(document.getElementById('thang').value,document.getElementById('nam').value);
+  var err=document.getElementById('error-msg');err.classList.remove('active');
+  if(!r.ok){err.textContent=r.error;err.classList.add('active');return;}
+  document.getElementById('resTitle').textContent=r.titleText;
+  document.getElementById('calBody').innerHTML=r.calBodyHTML;
+  document.getElementById('birthPanel').style.display='none';
+  document.getElementById('resPanel').style.display='block';
+  document.getElementById('btnEdit').style.display='';
+  if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
+  Shell.setContext({
+    scenario:{type:'ngay-tot',data:r.data},
+    label:'Ngày tốt · tháng '+r.data.thang+'/'+r.data.nam,
+    greeting:'Đã xem lịch **tháng '+r.data.thang+'/'+r.data.nam+'**. Bạn định làm việc gì để tôi chọn ngày đẹp nhất?',
+    chips:['Ngày nào đẹp để cưới hỏi?','Ngày nào tốt để khởi công/nhập trạch?','Vì sao tránh ngày kị?','Khai trương nên chọn ngày nào?']
+  });
+  document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){el.addEventListener('click',function(){Shell.ask(el.getAttribute('data-ask'));});});
+}
+function showForm(){document.getElementById('resPanel').style.display='none';document.getElementById('birthPanel').style.display='block';document.getElementById('btnEdit').style.display='none';}
+(function(){var t=new Date();document.getElementById('thang').value=t.getMonth()+1;document.getElementById('nam').value=t.getFullYear();})();
+['thang','nam'].forEach(function(id){document.getElementById(id).addEventListener('keydown',function(e){if(e.key==='Enter')calculate();});});
+</script>
+<script>/*SHELL_RESTORE_BOOT*/(function(){function _r(){var r=window.Shell&&Shell.pendingRestore&&Shell.pendingRestore();if(r&&r.form){Shell.fillForm(r.form);calculate();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_r);else _r();})();</script>
+</body>
+</html>

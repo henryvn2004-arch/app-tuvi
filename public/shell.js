@@ -32,9 +32,11 @@
       { id: 'phong-thuy', label: 'Phong thủy',          href: '/app/phong-thuy', icon: 'leaf' },
       { id: 'bat-trach',  label: 'Hướng Bát Trạch',     href: '/app/bat-trach',  icon: 'compass' },
     ] },
-    { group: 'Chọn Ngày', open: true, items: [
+    { group: 'Chọn Ngày / Lịch', open: true, items: [
       { id: 'chon-ngay',  label: 'Chọn ngày tốt',       href: '/app/chon-ngay',  icon: 'calendar' },
       { id: 'kim-lau',    label: 'Kim Lâu & Tam Tai',   href: '/app/kim-lau',    icon: 'calcheck' },
+      { id: 'ngay-tot',   label: 'Ngày tốt trong tháng', href: '/app/ngay-tot',  icon: 'calcheck' },
+      { id: 'hoang-dao',  label: 'Giờ hoàng đạo',       href: '/app/hoang-dao',  icon: 'clock' },
     ] },
     { group: 'Đặt Tên', open: true, items: [
       { id: 'dat-ten',    label: 'Đặt tên con',         href: '/app/dat-ten',    icon: 'tag' },
@@ -46,6 +48,7 @@
     ] },
     { group: 'Huyền Học', open: true, items: [
       { id: 'kinh-dich',  label: 'Kinh Dịch — Gieo quẻ', href: '/app/kinh-dich', icon: 'yin' },
+      { id: 'luc-nham',   label: 'Lục Nhâm Giản',       href: '/app/luc-nham',   icon: 'compass' },
       { id: 'than-so-hoc', label: 'Thần số học',        href: '/app/than-so-hoc', icon: 'hash' },
     ] },
     { group: 'Tài khoản', open: true, items: [
