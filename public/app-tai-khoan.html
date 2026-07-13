@@ -305,7 +305,7 @@
         <button class="hist-chip" data-filter="lasos"><span class="chip-ic" data-icon="sparkles"></span> Lá Số <span id="countLasos" class="chip-count" style="display:none"></span></button>
         <button class="hist-chip" data-filter="xemtuoi"><span class="chip-ic" data-icon="heart-handshake"></span> Xem Tuổi <span id="countXemTuoi" class="chip-count" style="display:none"></span></button>
         <button class="hist-chip" data-filter="tuong"><span class="chip-ic" data-icon="eye"></span> Xem Tướng <span id="countTuong" class="chip-count" style="display:none"></span></button>
-        <button class="hist-chip" data-filter="chat"><span class="chip-ic" data-icon="message-circle"></span> Chat <span id="countChat" class="chip-count" style="display:none"></span></button>
+        <button class="hist-chip" data-filter="chat"><span class="chip-ic" data-icon="message-circle"></span> Hội thoại <span id="countChat" class="chip-count" style="display:none"></span></button>
       </div>
 
       <div class="hist-group" data-group="lasos">
@@ -330,7 +330,7 @@
       </div>
 
       <div class="hist-group" data-group="chat">
-        <div class="hist-group-head"><span class="gh-ic" data-icon="message-circle"></span> Chat</div>
+        <div class="hist-group-head"><span class="gh-ic" data-icon="message-circle"></span> Hội thoại</div>
         <div id="chatListLoading" style="text-align:center;padding:1.5rem;color:var(--text-lt)">Đang tải...</div>
         <div id="chatListContent" style="display:none"></div>
       </div>
@@ -636,8 +636,54 @@ window.mountIcons=window.mountIcons||function(root){var sc=root||document;sc.que
 window.iconHtml=window.iconHtml||function(k){return (window.ICONS&&window.ICONS[k])||'';};
 </script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=25"></script>
-<script src="/account-core.js?v=1"></script>
+<script src="/shell.js?v=26"></script>
+<script>
+// HỘI THOẠI (shell history) cho tab Lịch Sử của hub Tài khoản: gộp mọi công cụ
+// từ localStorage (app_hist_v1_*) + server (/api/tuvi-chats type app-*). Bấm 1
+// phiên → /app/<tool>?restore=<id> (shell.js boot khôi phục). Ẩn chat_history cũ.
+window.ACCOUNT_SHELL_CHAT = function () {
+  var TOOLMAP = { 'luan-giai': 'Luận giải chuyên sâu', 'la-so': 'Lá số Tử Vi', 'bat-tu': 'Lá số Bát Tự', 'xem-tuoi': 'Xem tuổi vợ chồng', 'xem-lam-an': 'Xem tuổi làm ăn', 'tuong-hop': 'Tương hợp tuổi', 'sinh-con': 'Xem tuổi sinh con', 'chon-ngay': 'Chọn ngày tốt', 'dat-ten': 'Đặt tên con', 'dat-ten-dn': 'Đặt tên doanh nghiệp', 'ngu-hanh-ten': 'Ngũ hành tên', 'nap-am': 'Nạp âm ngũ hành', 'than-so-hoc': 'Thần số học', 'kim-lau': 'Kim Lâu & Tam Tai', 'bat-trach': 'Hướng Bát Trạch', 'kinh-dich': 'Kinh Dịch', 'xem-tuong': 'Xem tướng', 'phong-thuy': 'Phong thủy' };
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function rel(ts) { var s = Math.floor((Date.now() - ts) / 1000); if (!ts || s < 0) return ''; if (s < 60) return 'vừa xong'; if (s < 3600) return Math.floor(s / 60) + ' phút trước'; if (s < 86400) return Math.floor(s / 3600) + ' giờ trước'; if (s < 2592000) return Math.floor(s / 86400) + ' ngày trước'; return Math.floor(s / 2592000) + ' tháng trước'; }
+  var loading = document.getElementById('chatListLoading'), content = document.getElementById('chatListContent');
+  if (loading) loading.style.display = 'none';
+  if (content) content.style.display = 'block';
+  function local() { var out = []; for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (k && k.indexOf('app_hist_v1_') === 0) { var tool = k.slice(12); try { (JSON.parse(localStorage.getItem(k)) || []).forEach(function (s) { out.push({ id: s.id, tool: tool, title: s.title, updatedAt: s.updatedAt, lastMsg: s.lastMsg }); }); } catch (e) { /* ignore */ } } } return out; }
+  function render(list) {
+    if (!content) return;
+    var seen = {}, arr = [];
+    list.forEach(function (s) { if (s && s.id && !seen[s.id]) { seen[s.id] = 1; arr.push(s); } });
+    arr.sort(function (a, b) { return (b.updatedAt || 0) - (a.updatedAt || 0); });
+    var badge = document.getElementById('countChat');
+    if (badge) { if (arr.length) { badge.style.display = 'inline-block'; badge.textContent = arr.length; } else badge.style.display = 'none'; }
+    if (!arr.length) { content.innerHTML = '<div class="empty-state"><div class="icon"><span data-icon="message-circle" style="width:40px;height:40px;color:#9A7B3A"></span></div><p>Chưa có hội thoại nào. Mở một công cụ, hỏi trợ lý — phiên sẽ hiện ở đây.</p></div>'; if (window.mountIcons) window.mountIcons(content); return; }
+    content.innerHTML = '<div class="chat-list">' + arr.map(function (s) {
+      var label = TOOLMAP[s.tool] || s.tool;
+      return '<a class="chat-item" href="/app/' + esc(s.tool) + '?restore=' + encodeURIComponent(s.id) + '" style="text-decoration:none">' +
+        '<div class="chat-icon"><span data-icon="message-circle" style="width:20px;height:20px"></span></div>' +
+        '<div class="chat-info"><div class="chat-slug">' + esc(s.title || label) + '</div>' +
+        '<div class="chat-meta">' + esc(label) + (s.updatedAt ? ' · ' + rel(s.updatedAt) : '') + (s.lastMsg ? ' · ' + esc(String(s.lastMsg).slice(0, 46)) : '') + '</div></div></a>';
+    }).join('') + '</div>';
+    if (window.mountIcons) window.mountIcons(content);
+  }
+  var loc = local();
+  render(loc);
+  try {
+    var ses = window.Auth && Auth.getSession && Auth.getSession();
+    var tok = ses && ses.access_token;
+    if (tok) {
+      fetch('/api/tuvi-chats', { headers: { Authorization: 'Bearer ' + tok } })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (j) {
+          if (!j || !j.chats) return;
+          var srv = j.chats.filter(function (c) { return (c.type || '').indexOf('app-') === 0; }).map(function (c) { return { id: c.id, tool: (c.type || '').slice(4), title: c.label, updatedAt: +new Date(c.updated_at), lastMsg: c.last_msg }; });
+          render(loc.concat(srv));
+        }).catch(function () { /* ignore */ });
+    }
+  } catch (e) { /* ignore */ }
+};
+</script>
+<script src="/account-core.js?v=2"></script>
 <script>
 // Mở đúng tab theo hash (#credits / #ketnoi / #account / #lichsu) khi vào từ sidebar.
 (function(){function openHash(){var h=(location.hash||'').replace('#','');if(h){var b=document.querySelector('[data-tab="'+h+'"]');if(b)b.click();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(openHash,300);});else setTimeout(openHash,300);})();
