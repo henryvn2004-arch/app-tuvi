@@ -297,7 +297,13 @@
     if (!msgs.length) return;
     var last = '';
     for (var i = msgs.length - 1; i >= 0; i--) { if (msgs[i].role === 'assistant') { last = msgs[i].content; break; } }
-    var rec = { id: sessionId, toolId: ACTIVE, title: curMeta.title || 'Phiên', restore: curMeta.restore || null,
+    // Tool thuần-rail (không form/birth/lines để dựng lại center — vd xem tướng /
+    // phong thủy qua ảnh): title generic giống nhau → lấy CÂU HỎI ĐẦU làm title
+    // cho dễ phân biệt phiên.
+    var title = curMeta.title || 'Phiên', r = curMeta.restore || {};
+    var hasCenter = (r.form && Object.keys(r.form).length) || r.birth || r.lines;
+    if (!hasCenter) { for (var k = 0; k < msgs.length; k++) { if (msgs[k].role === 'user' && msgs[k].content) { title = msgs[k].content.slice(0, 50); break; } } }
+    var rec = { id: sessionId, toolId: ACTIVE, title: title, restore: curMeta.restore || null,
       messages: msgs, lastMsg: (last || '').slice(0, 140), createdAt: curMeta.createdAt || Date.now(), updatedAt: Date.now() };
     histLocalUpsert(rec); histSrvUpsert(rec);
     renderRecentAll();

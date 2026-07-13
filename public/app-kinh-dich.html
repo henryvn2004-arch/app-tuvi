@@ -76,6 +76,7 @@
     </div>
     <div class="ws-body">
       <div id="introHost"></div>
+      <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Thành tâm nghĩ về việc muốn hỏi</h2>
         <p class="sub">Nhập câu hỏi (một việc cụ thể đang phân vân), giữ tâm tĩnh rồi bấm gieo — 6 lần gieo 3 đồng xu, mỗi lần xác định 1 hào. Nhận quẻ chính, hào động và quẻ biến, rồi hỏi trợ lý luận theo Chu Dịch.</p>
@@ -108,11 +109,11 @@
   <aside class="rail" id="shell-rail"></aside>
 </div>
 
-<script>window.SHELL_ACTIVE='kinh-dich';
+<script>window.SHELL_ACTIVE='kinh-dich';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'kinh-dich',title:'Kinh Dịch — Gieo quẻ',desc:'Nhập câu hỏi, giữ tâm tĩnh rồi gieo quẻ (3 đồng xu × 6 lần). Nhận <b>quẻ chính, hào động và quẻ biến</b> trong 64 quẻ Chu Dịch, rồi hỏi <b>trợ lý AI</b> luận theo câu hỏi.'};</script>
 <script src="/tools-shared/kinh-dich.js?v=1"></script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=23"></script>
+<script src="/shell.js?v=24"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/kinh-dich.js (bảng 64 quẻ + tra quẻ) với
 // trang standalone. Gieo/animation ở đây (DOM-specific), showResult gọi module.
@@ -201,6 +202,7 @@ function showResult() {
   const d = KinhDichTool.railData(r, cHoi, currentLines);
   Shell.setContext({
     scenario: { type: 'kinh-dich', data: d },
+    restore: { lines: currentLines },
     label: 'Gieo quẻ · ' + r.que.n + (r.cQue ? ' → ' + r.cQue.n : ''),
     greeting: 'Quẻ đã lập — quẻ chính **' + r.que.n + '** (' + r.que.zh + ')' + (r.cQue ? ', quẻ biến **' + r.cQue.n + '**' : ' (không hào động)') + '. Tôi sẽ luận theo câu hỏi của bạn.',
     chips: ['Luận quẻ này cho câu hỏi của tôi', 'Hào động nói lên điều gì?', 'Quẻ biến cho thấy xu hướng nào?', 'Nên hành động thế nào lúc này?']
@@ -230,6 +232,15 @@ function reset() {
     c.textContent = '?';
   });
 }
+// Khôi phục phiên: nạp lại quẻ ĐÃ GIEO (không tung lại) + câu hỏi → showResult
+// dựng lại center (FREE) → setContext replay rail.
+(function(){
+  function _restore(){
+    var r = window.Shell && Shell.pendingRestore && Shell.pendingRestore();
+    if (r && r.lines && r.lines.length){ currentLines = r.lines.slice(); step = 6; if (r.form) Shell.fillForm(r.form); showResult(); }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _restore); else _restore();
+})();
 </script>
 </body>
 </html>
