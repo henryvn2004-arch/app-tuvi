@@ -122,7 +122,10 @@ async function loadHistory() {
   renderLasos(_pHistoryData.lasos || []);
   renderXemTuoi(_pHistoryData.xemTuoi || []);
   renderTuong(_pHistoryData.tuong || []);
-  renderChatList(_pHistoryData.chatList || []);
+  // Hub shell (app-tai-khoan) thay danh sách chat cũ (chat_history theo trang SEO)
+  // bằng HỘI THOẠI shell (tuvi_chats app-* + localStorage). /profile giữ bản cũ.
+  if (window.ACCOUNT_SHELL_CHAT) window.ACCOUNT_SHELL_CHAT();
+  else renderChatList(_pHistoryData.chatList || []);
   renderPurchases(_pHistoryData.purchases || []);
 }
 

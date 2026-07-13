@@ -343,8 +343,9 @@
       if (sess.restore && sess.restore.birth) {
         try { localStorage.setItem('app_birth', JSON.stringify(sess.restore.birth)); } catch (e) { /* ignore */ }
       }
-      var p = location.pathname, s = location.search;
-      location.href = p + (/[?&]auto=1\b/.test(s) ? s : (s ? s + '&auto=1' : '?auto=1'));
+      // Reload về ?auto=1 SẠCH (bỏ mọi query cũ như ?restore) → tránh lặp khi
+      // đến từ deep-link hub Tài khoản; tool tự tính lại center + setContext replay.
+      location.href = location.pathname + '?auto=1';
     });
   }
   // ── UI: panel lịch sử trong rail ──
@@ -779,6 +780,12 @@
     // + có #introHost → shell tự hiện cho người mới, ẩn sau lần dùng đầu.
     if (window.SHELL_INTRO && window.SHELL_INTRO.key) Shell.introOnce(window.SHELL_INTRO.key, window.SHELL_INTRO);
     renderRecentAll();
+    // Deep-link khôi phục từ hub Tài khoản: /app/<tool>?restore=<id> → khôi phục
+    // đúng phiên (reload về ?auto=1 sạch trong restoreSession).
+    if (HIST_ON) {
+      var _rid = (location.search.match(/[?&]restore=([^&]+)/) || [])[1];
+      if (_rid) restoreSession(decodeURIComponent(_rid));
+    }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
