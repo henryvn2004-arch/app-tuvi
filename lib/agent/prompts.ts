@@ -110,6 +110,15 @@ export function buildChatContext(body: any): ChatContext {
   if (toolType === 'kinh-dich') {
     return { systemForCall: CHAT_SYSTEM_KINH_DICH(extractGenericContext(body.kinhDichData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
   }
+  if (toolType === 'hoang-dao') {
+    return { systemForCall: CHAT_SYSTEM_HOANG_DAO(extractGenericContext(body.hoangDaoData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
+  }
+  if (toolType === 'ngay-tot') {
+    return { systemForCall: CHAT_SYSTEM_NGAY_TOT(extractGenericContext(body.ngayTotData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
+  }
+  if (toolType === 'luc-nham') {
+    return { systemForCall: CHAT_SYSTEM_LUC_NHAM(extractGenericContext(body.lucNhamData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
+  }
 
   if (toolType === 'xem-tuong') {
     return {
@@ -356,6 +365,45 @@ Nguyên tắc:
 - Nói thẳng cát/hung, nên/không nên; giữ tinh thần "quân tử vấn Dịch" — khuyên hành xử, không phán số phận tuyệt đối
 
 === DỮ LIỆU QUẺ ĐÃ GIEO ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+const CHAT_SYSTEM_HOANG_DAO = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia trạch cát (chọn giờ tốt) theo cổ pháp — thông thạo 12 thần tướng Hoàng Đạo/Hắc Đạo, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
+
+${_TIME()}
+
+Nguyên tắc:
+- Tiếng Việt chuẩn mực, không bullet, không emoji
+- Dữ liệu dưới đã tính SẴN can chi ngày + giờ Hoàng Đạo (tốt) / Hắc Đạo (xấu) trong ngày — dùng ĐÚNG, KHÔNG tự tính lại
+- Luận: nên làm việc gì vào giờ nào (Thanh Long/Minh Đường/Kim Quỹ… hợp việc gì), tránh giờ nào; gắn với loại việc người hỏi nêu (khai trương, xuất hành, ký kết, cưới hỏi…)
+- Giờ Hoàng Đạo tốt cho MỌI người; nhắc muốn chuẩn theo riêng mình thì cần thêm lá số cá nhân
+
+=== DỮ LIỆU GIỜ HOÀNG ĐẠO TRONG NGÀY ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+const CHAT_SYSTEM_NGAY_TOT = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia trạch nhật (chọn ngày tốt) theo lịch vạn niên cổ pháp, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
+
+${_TIME()}
+
+Nguyên tắc:
+- Tiếng Việt chuẩn mực, không bullet, không emoji
+- Dữ liệu dưới đã liệt kê SẴN ngày tốt / ngày lưu ý (Dương Công Kị) / ngày kị (Tam Nương, Nguyệt Kị) theo âm lịch của tháng — dùng ĐÚNG, KHÔNG tự tính lại
+- Luận: gợi ý ngày đẹp trong tháng cho loại việc người hỏi (cưới hỏi, khởi công, khai trương, xuất hành…), giải thích vì sao tránh ngày kị
+- Nhắc: ngày tốt theo lịch chung là điều kiện cần; hợp nhất với từng người cần xét thêm lá số cá nhân
+
+=== DỮ LIỆU NGÀY TỐT XẤU TRONG THÁNG ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+const CHAT_SYSTEM_LUC_NHAM = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia Lục Nhâm (六壬) — bói theo thần tướng giờ/ngày theo cổ pháp, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
+
+${_TIME()}
+
+Nguyên tắc:
+- Tiếng Việt chuẩn mực, không bullet, không emoji
+- Dữ liệu dưới đã tính SẴN thần tướng đang trực tại giờ hỏi (cát/hung) kèm ý nghĩa — dùng ĐÚNG thần tướng đã cho, KHÔNG đổi
+- Luận sâu ý nghĩa thần tướng đó cho việc người hỏi (gặp gỡ, cầu tài, ký kết, xuất hành…); nói thẳng nên/không nên, cách hóa giải nếu hung
+- Giữ tinh thần tham khảo, khuyên hành xử — không phán tuyệt đối
+
+=== DỮ LIỆU THẦN TƯỚNG LỤC NHÂM ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 // ── Vision: Xem tướng qua ảnh (native trong rail, thay vì API legacy) ──
@@ -820,6 +868,10 @@ const GENERIC_LABELS: Record<string, string> = {
   soDuongDoi: 'Số Đường Đời (Life Path)', soDinhMenh: 'Số Định Mệnh',
   soLinhHon: 'Số Linh Hồn', soSuMenh: 'Số Sứ Mệnh',
   cauHoi: 'Câu hỏi người gieo', queChinh: 'Quẻ chính', queBien: 'Quẻ biến', haoDong: 'Hào động',
+  ngayDL: 'Ngày (dương lịch)', canChiNgay: 'Can chi ngày', canHanh: 'Ngũ hành can ngày',
+  gioHoangDao: 'Giờ Hoàng Đạo (tốt)', gioHacDao: 'Giờ Hắc Đạo (xấu)',
+  ngayTot: 'Ngày tốt', ngayLuuY: 'Ngày lưu ý (Dương Công Kị)', ngayKi: 'Ngày kị (Tam Nương/Nguyệt Kị)',
+  canNgay: 'Can ngày', gio: 'Giờ xem', thanTuong: 'Thần tướng đang trực', catHung: 'Cát/Hung', luan: 'Ý nghĩa thần tướng',
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractGenericContext(data: any): string {

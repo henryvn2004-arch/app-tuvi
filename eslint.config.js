@@ -20,6 +20,7 @@ const projectGlobals = {
   Auth: 'writable',
   supabase: 'writable',
   marked: 'readonly',
+  convertDuongToAm: 'readonly',
   paypal: 'readonly',
   gtag: 'readonly',
   dataLayer: 'readonly',
