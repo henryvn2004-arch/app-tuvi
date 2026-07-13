@@ -49,8 +49,8 @@
       { id: 'than-so-hoc', label: 'Thần số học',        href: '/app/than-so-hoc', icon: 'hash' },
     ] },
     { group: 'Tài khoản', open: true, items: [
-      { id: 'vi-luong',   label: 'Ví Lượng',            href: '/profile', icon: 'wallet', balance: true },
-      { id: 'ho-so',      label: 'Hồ sơ của tôi',       href: '/profile', icon: 'user' },
+      { id: 'vi-luong',   label: 'Ví Lượng',            href: '/app/tai-khoan#credits', icon: 'wallet', balance: true },
+      { id: 'ho-so',      label: 'Hồ sơ của tôi',       href: '/app/tai-khoan', icon: 'user' },
     ] },
   ];
 

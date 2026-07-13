@@ -23,6 +23,7 @@ const nextConfig = {
       { source: '/app/nap-am',          destination: '/app-nap-am.html'      },
       { source: '/app/than-so-hoc',     destination: '/app-than-so-hoc.html' },
       { source: '/app/kinh-dich',       destination: '/app-kinh-dich.html'   },
+      { source: '/app/tai-khoan',       destination: '/app-tai-khoan.html'   },
       { source: '/xem-tuoi',            destination: '/xem-tuoi.html'        },
       { source: '/xem-lam-an',          destination: '/xem-lam-an.html'      },
       { source: '/la-so',               destination: '/la-so.html'           },
