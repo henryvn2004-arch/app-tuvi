@@ -22,31 +22,31 @@
       { id: 'tuong-hop',  label: 'Tương hợp tuổi',      href: '/app/tuong-hop',  icon: 'heart' },
       { id: 'sinh-con',   label: 'Xem tuổi sinh con',   href: '/app/sinh-con',   icon: 'baby' },
     ] },
-    { group: 'Tử Bình', open: true, items: [
+    { group: 'Tử Bình', open: false, items: [
       { id: 'bat-tu',     label: 'Lá số Bát Tự',        href: '/app/bat-tu',     icon: 'rows' },
     ] },
-    { group: 'Xem Tướng', open: true, items: [
+    { group: 'Xem Tướng', open: false, items: [
       { id: 'xem-tuong',  label: 'Xem tướng',           href: '/app/xem-tuong',  icon: 'eye' },
     ] },
-    { group: 'Phong Thủy', open: true, items: [
+    { group: 'Phong Thủy', open: false, items: [
       { id: 'phong-thuy', label: 'Phong thủy',          href: '/app/phong-thuy', icon: 'leaf' },
       { id: 'bat-trach',  label: 'Hướng Bát Trạch',     href: '/app/bat-trach',  icon: 'compass' },
     ] },
-    { group: 'Chọn Ngày / Lịch', open: true, items: [
+    { group: 'Chọn Ngày / Lịch', open: false, items: [
       { id: 'chon-ngay',  label: 'Chọn ngày tốt',       href: '/app/chon-ngay',  icon: 'calendar' },
       { id: 'kim-lau',    label: 'Kim Lâu & Tam Tai',   href: '/app/kim-lau',    icon: 'calcheck' },
       { id: 'ngay-tot',   label: 'Ngày tốt trong tháng', href: '/app/ngay-tot',  icon: 'calcheck' },
       { id: 'hoang-dao',  label: 'Giờ hoàng đạo',       href: '/app/hoang-dao',  icon: 'clock' },
     ] },
-    { group: 'Đặt Tên', open: true, items: [
+    { group: 'Đặt Tên', open: false, items: [
       { id: 'dat-ten',    label: 'Đặt tên con',         href: '/app/dat-ten',    icon: 'tag' },
       { id: 'dat-ten-dn', label: 'Đặt tên doanh nghiệp', href: '/app/dat-ten-dn', icon: 'building' },
       { id: 'ngu-hanh-ten', label: 'Ngũ hành tên',      href: '/app/ngu-hanh-ten', icon: 'star' },
     ] },
-    { group: 'Mệnh Lý', open: true, items: [
+    { group: 'Mệnh Lý', open: false, items: [
       { id: 'nap-am',     label: 'Nạp âm ngũ hành',     href: '/app/nap-am',     icon: 'wave' },
     ] },
-    { group: 'Huyền Học', open: true, items: [
+    { group: 'Huyền Học', open: false, items: [
       { id: 'kinh-dich',  label: 'Kinh Dịch — Gieo quẻ', href: '/app/kinh-dich', icon: 'yin' },
       { id: 'luc-nham',   label: 'Lục Nhâm Giản',       href: '/app/luc-nham',   icon: 'compass' },
       { id: 'than-so-hoc', label: 'Thần số học',        href: '/app/than-so-hoc', icon: 'hash' },

@@ -107,73 +107,21 @@
   <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
   <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
 </footer>
+<script src="/tools-shared/hoang-dao.js?v=1"></script>
 <script>
-const CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
-const CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
-const GIO_TIME=['23–01h','01–03h','03–05h','05–07h','07–09h','09–11h','11–13h','13–15h','15–17h','17–19h','19–21h','21–23h'];
-// 12 thần tướng theo thứ tự vòng tròn
-const THAN=['Thanh Long','Minh Đường','Thiên Hình','Chu Tước','Kim Quỹ','Thiên Đức','Bạch Hổ','Ngọc Đường','Thiên Lao','Huyền Vũ','Tư Mệnh','Câu Trần'];
-const IS_HD=[true,true,false,false,true,true,false,true,false,false,true,false]; // HD index trong THAN
-// chi ngày → offset bắt đầu của Thanh Long (tại giờ chi nào)
-const HD_OFFSET=[0,2,1,2,2,3,0,2,1,2,2,3]; // Tý=0,Sửu=2,Dần=1,...
-const THAN_DESC={
-  'Thanh Long':'Tài lộc, mọi việc hanh thông',
-  'Minh Đường':'Quý nhân phù trợ, thuận lợi',
-  'Thiên Hình':'Kiện tụng, tranh chấp, hung',
-  'Chu Tước':'Khẩu thiệt, thị phi',
-  'Kim Quỹ':'Tài chính, thu nạp tiền',
-  'Thiên Đức':'Phúc đức, hóa giải hung',
-  'Bạch Hổ':'Sát khí, tai họa',
-  'Ngọc Đường':'Danh vọng, thành tựu',
-  'Thiên Lao':'Giam cầm, trở ngại',
-  'Huyền Vũ':'Trộm cướp, tổn thất',
-  'Tư Mệnh':'Bảo hộ, cầu phúc',
-  'Câu Trần':'Vướng mắc, trì trệ'
-};
-function toJDN(y,m,d){const a=Math.floor((14-m)/12),yr=y+4800-a,mn=m+12*a-3;return d+Math.floor((153*mn+2)/5)+365*yr+Math.floor(yr/4)-Math.floor(yr/100)+Math.floor(yr/400)-32045;}
-function getNgayCanChi(y,m,d){
-  const jdn=toJDN(y,m,d);
-  const ANCHOR=2434290; // Oct 4 1952 = Giáp Tý
-  const diff=((jdn-ANCHOR)%60+600)%60;
-  return{can:diff%10,chi:diff%12};
-}
+// Ô giữa dùng CHUNG /tools-shared/hoang-dao.js với shell /app/hoang-dao.
 function calculate(){
-  const ngay=parseInt(document.getElementById('ngay').value);
-  const thang=parseInt(document.getElementById('thang').value);
-  const nam=parseInt(document.getElementById('nam').value);
-  const err=document.getElementById('error-msg');
-  err.classList.remove('active');
-  if(!ngay||ngay<1||ngay>31||!thang||thang<1||thang>12||!nam){err.textContent='Vui lòng nhập ngày tháng năm hợp lệ.';err.classList.add('active');return;}
-  const {can,chi}=getNgayCanChi(nam,thang,ngay);
-  const canChiNgay=CAN[can]+' '+CHI[chi];
-  // Convert to AL for display
-  let alStr='';
-  try{const conv=convertDuongToAm(ngay,thang,nam,0);alStr=` (AL ${conv.amLich.day}/${conv.amLich.month})`;}catch(e){}
-  document.getElementById('resTitle').textContent=`${ngay}/${thang}/${nam}${alStr} — Ngày ${canChiNgay}`;
-  document.getElementById('ngayInfo').innerHTML=`<span class="ngay-item">Ngày <strong>${canChiNgay}</strong></span><span class="ngay-item">Can <strong>${CAN[can]}</strong> — Ngũ hành <strong>${['Mộc','Mộc','Hỏa','Hỏa','Thổ','Thổ','Kim','Kim','Thủy','Thủy'][can]}</strong></span>`;
-  // Build 12 thần for each giờ
-  const offset=HD_OFFSET[chi]; // Thanh Long bắt đầu tại giờ offset
-  const hdItems=[],hd2Items=[];
-  for(let g=0;g<12;g++){
-    const thanIdx=((g-offset+12)%12);
-    const than=THAN[thanIdx];
-    const isHD=IS_HD[thanIdx];
-    const card=`<div class="gio-card ${isHD?'hd':'hd2'}">
-      <div class="gio-chi">${CHI[g]}</div>
-      <div class="gio-time">${GIO_TIME[g]}</div>
-      <div class="gio-than ${isHD?'tag-hd':'tag-hd2'}">${than}</div>
-      <div class="gio-type ${isHD?'tag-hd':'tag-hd2'}">${isHD?'Hoàng Đạo':'Hắc Đạo'}</div>
-      <div style="font-size:10px;color:var(--text-lt);margin-top:4px;line-height:1.4">${THAN_DESC[than]||''}</div>
-    </div>`;
-    if(isHD)hdItems.push({g,card});else hd2Items.push({g,card});
-  }
-  document.getElementById('hdList').innerHTML=hdItems.map(x=>x.card).join('');
-  document.getElementById('hd2List').innerHTML=hd2Items.map(x=>x.card).join('');
+  var r=HoangDaoTool.compute(document.getElementById('ngay').value,document.getElementById('thang').value,document.getElementById('nam').value);
+  var err=document.getElementById('error-msg');err.classList.remove('active');
+  if(!r.ok){err.textContent=r.error;err.classList.add('active');return;}
+  document.getElementById('resTitle').textContent=r.titleText;
+  document.getElementById('ngayInfo').innerHTML=r.ngayInfoHTML;
+  document.getElementById('hdList').innerHTML=r.hdListHTML;
+  document.getElementById('hd2List').innerHTML=r.hd2ListHTML;
   document.getElementById('result-section').classList.add('active');
   document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
 }
-// Default today
-(function(){const t=new Date();document.getElementById('ngay').value=t.getDate();document.getElementById('thang').value=t.getMonth()+1;document.getElementById('nam').value=t.getFullYear();})();
+(function(){var t=new Date();document.getElementById('ngay').value=t.getDate();document.getElementById('thang').value=t.getMonth()+1;document.getElementById('nam').value=t.getFullYear();})();
 </script>
 <section class="kb-section">
   <div class="page">
