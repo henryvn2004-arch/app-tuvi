@@ -49,14 +49,13 @@ export const DEFAULTS: ChatConfig = {
   maxRounds: 4,
   maxTokens: 3000, // đủ cho câu luận sâu 1 phần (24-phần cho tới 3000); DB app_config 'chat.max_tokens' override được. Câu ngắn không tốn thêm (chỉ trả token thực sinh).
   cost: 5, // 5 Lượng / lượt — giá chuẩn; DB app_config 'chat.cost' override được (không cần deploy)
-  // Gemini Flash-Lite cho MỌI kịch bản đủ điều kiện (prose + vision) qua
-  // '_default'; các tool KHÔNG đủ điều kiện (laso/luận-giải, không thuộc
-  // GEMINI_PROSE/VISION_SCENARIOS) tự động giữ Sonnet. Ngoại lệ 'tu-binh'
-  // (Bát Tự — luận sâu như luận-giải) giữ Sonnet có chủ đích. Đổi route từng
-  // tool qua app_config 'chat.provider_routes' — không deploy, revert tức thì.
+  // Gemini (2.5 Flash) cho MỌI kịch bản đủ điều kiện (prose + vision + bát tự)
+  // qua '_default'. Các tool KHÔNG đủ điều kiện — laso (luận-giải/lá-số, dùng
+  // function-calling cho vận hạn) — KHÔNG thuộc GEMINI_PROSE/VISION_SCENARIOS
+  // nên tự động giữ Sonnet (chất cao nhất + paywall). Đổi route từng tool qua
+  // app_config 'chat.provider_routes' — không deploy, revert tức thì.
   providerRoutes: {
     _default: 'gemini',
-    'tu-binh': 'anthropic',
   },
 };
 
