@@ -16,9 +16,11 @@ import { sse } from '@/lib/contract/v1';
 import type { ChatConfig } from '@/lib/config/appConfig';
 
 const GEMINI_KEY = process.env.GEMINI_API_KEY || '';
-// Mặc định Flash-Lite (rẻ nhất, ~97% rẻ hơn Sonnet, tiếng Việt vẫn mượt).
-// Đổi model không cần sửa code: đặt env GEMINI_MODEL (vd 'gemini-2.5-flash').
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite';
+// Mặc định Gemini 2.5 Flash — A/B cho thấy trung thành với dữ liệu lá số/cổ
+// pháp (KHÔNG bịa sao, không lẫn miếu/hãm như Flash-Lite), tiếng Việt sát
+// Sonnet; vẫn rẻ ~85% so Sonnet. Đổi model không cần sửa code: đặt env
+// GEMINI_MODEL (vd 'gemini-2.5-flash-lite' cho tool nhẹ nếu muốn tiết kiệm thêm).
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 
 // Kịch bản AN TOÀN cho Gemini: prose-thuần, dữ liệu đã tính sẵn, KHÔNG cần
@@ -34,9 +36,16 @@ export const GEMINI_PROSE_SCENARIOS = new Set<string>([
   'xem-tuoi-sinh-con', 'chon-ngay-tot', 'dat-ten-con', 'dat-ten-dn',
 ]);
 
+// Kịch bản VISION (đọc ảnh): nhân tướng qua ảnh mặt + phong thủy qua ảnh nhà.
+// Gemini Flash-Lite đa phương thức → nhận ảnh base64 (inline_data). Đây là
+// nhóm DUY NHẤT được phép có ảnh khi đi Gemini.
+export const GEMINI_VISION_SCENARIOS = new Set<string>(['xem-tuong', 'phong-thuy']);
+
 /**
- * Kịch bản này có nên đi Gemini không? Đúng khi: có key, không ảnh, nằm
- * trong nhóm prose an toàn, và route trong app_config (hoặc _default) = 'gemini'.
+ * Kịch bản này có nên đi Gemini không? Đúng khi: có key; nằm trong nhóm prose
+ * HOẶC vision an toàn; ảnh CHỈ được phép ở nhóm vision; và route trong
+ * app_config (hoặc _default) = 'gemini'. laso/luận-giải/bát-tự (không thuộc
+ * nhóm nào) → luôn false → giữ Sonnet.
  */
 export function geminiEligible(
   scenarioType: string,
@@ -44,8 +53,10 @@ export function geminiEligible(
   routes: Record<string, string> | undefined,
 ): boolean {
   if (!GEMINI_KEY) return false;
-  if (hasImages) return false;
-  if (!GEMINI_PROSE_SCENARIOS.has(scenarioType)) return false;
+  const inProse = GEMINI_PROSE_SCENARIOS.has(scenarioType);
+  const inVision = GEMINI_VISION_SCENARIOS.has(scenarioType);
+  if (!inProse && !inVision) return false;
+  if (hasImages && !inVision) return false; // ảnh chỉ cho kịch bản vision
   const r = routes || {};
   const pick = r[scenarioType] || r._default || 'anthropic';
   return pick === 'gemini';
@@ -60,15 +71,24 @@ function toGeminiContents(convo: any[]): any[] {
   const out: any[] = [];
   for (const m of convo) {
     const role = m.role === 'assistant' ? 'model' : 'user';
-    let text = '';
-    if (typeof m.content === 'string') text = m.content;
-    else if (Array.isArray(m.content)) {
-      // Đường này không nhận ảnh, chỉ gom block text cho an toàn.
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      text = m.content.filter((b: any) => b.type === 'text').map((b: any) => b.text).join('\n');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const parts: any[] = [];
+    if (typeof m.content === 'string') {
+      if (m.content) parts.push({ text: m.content });
+    } else if (Array.isArray(m.content)) {
+      // Block Anthropic → part Gemini: text giữ nguyên; ảnh base64
+      // ({type:'image',source:{type:'base64',media_type,data}}) → inline_data.
+      for (const b of m.content) {
+        if (b.type === 'text' && b.text) {
+          parts.push({ text: b.text });
+        } else if (b.type === 'image' && b.source?.type === 'base64' && b.source.data) {
+          parts.push({
+            inline_data: { mime_type: b.source.media_type || 'image/jpeg', data: b.source.data },
+          });
+        }
+      }
     }
-    if (!text) continue;
-    out.push({ role, parts: [{ text }] });
+    if (parts.length) out.push({ role, parts });
   }
   return out;
 }
