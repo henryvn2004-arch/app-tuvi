@@ -15,8 +15,7 @@
       { id: 'home',       label: 'Tổng quan',           href: '/app',            icon: 'home' },
     ] },
     { group: 'Tử Vi', open: true, items: [
-      { id: 'la-so',      label: 'Lá số Tử Vi',         href: '/app/la-so',      icon: 'grid' },
-      { id: 'luan-giai',  label: 'Luận giải chuyên sâu', href: '/app/luan-giai',  icon: 'doc', cost: 5 },
+      { id: 'luan-giai',  label: 'Luận giải Tử Vi',     href: '/app/luan-giai',  icon: 'grid', cost: 5 },
       { id: 'xem-tuoi',   label: 'Xem tuổi vợ chồng',   href: '/app/xem-tuoi',   icon: 'users' },
       { id: 'xem-lam-an', label: 'Xem tuổi làm ăn',     href: '/app/xem-lam-an', icon: 'briefcase' },
       { id: 'tuong-hop',  label: 'Tương hợp tuổi',      href: '/app/tuong-hop',  icon: 'heart' },
@@ -210,6 +209,8 @@
   var HIST_CAP = 40;
   var newId = function () { return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('s' + Date.now() + Math.random().toString(36).slice(2, 8)); };
   var curMeta = null; // {restore,title,createdAt} của thread đang mở
+  // Tool đã gộp: đọc kèm phiên lịch sử của tool cũ (la-so đã gộp vào luan-giai).
+  var HIST_ALIAS = { 'luan-giai': ['la-so'] };
   function histKey(t) { return 'app_hist_v1_' + t; }
   function histLocal(t) { try { return JSON.parse(localStorage.getItem(histKey(t)) || '[]') || []; } catch (e) { return []; } }
   function histWrite(t, arr) { try { localStorage.setItem(histKey(t), JSON.stringify(arr.slice(0, HIST_CAP))); } catch (e) { /* quota */ } }
@@ -289,9 +290,18 @@
     });
   }
   function histFind(tool, id, cb) {
-    var hit = null; histLocal(tool).forEach(function (s) { if (s.id === id) hit = s; });
+    var tools = [tool].concat(HIST_ALIAS[tool] || []); // gồm cả tool cũ đã gộp
+    var hit = null;
+    tools.forEach(function (t) { histLocal(t).forEach(function (s) { if (s.id === id) hit = s; }); });
     if (hit) { cb(hit); return; }
-    histSrvList(tool, function (srv) { var h = null; (srv || []).forEach(function (s) { if (s.id === id) h = s; }); cb(h); });
+    var idx = 0;
+    (function next() {
+      if (idx >= tools.length) { cb(null); return; }
+      histSrvList(tools[idx++], function (srv) {
+        var h = null; (srv || []).forEach(function (s) { if (s.id === id) h = s; });
+        if (h) cb(h); else next();
+      });
+    })();
   }
   // Lưu thread hiện tại sau mỗi lượt trả lời xong.
   function saveCurrent() {
