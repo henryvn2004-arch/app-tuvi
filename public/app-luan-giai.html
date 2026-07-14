@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luận giải chuyên sâu — Tử Vi Minh Bảo</title>
-<meta name="description" content="Luận giải lá số Tử Vi theo điểm số cổ pháp: 12 cung, đại vận, tứ hóa — và hỏi trợ lý AI đào sâu từng phần.">
+<title>Luận giải Tử Vi — Tử Vi Minh Bảo</title>
+<meta name="description" content="Lập lá số Tử Vi 12 cung rồi luận giải chuyên sâu theo điểm số cổ pháp: chính tinh, cách cục, đại vận, tứ hóa — và hỏi trợ lý AI đào sâu từng phần.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -63,7 +63,7 @@
 .hoa-item{display:flex;align-items:center;gap:10px;font-size:13px}
 .hoa-badge{font-family:var(--serif);font-weight:700;font-size:12px;padding:2px 9px;border-radius:6px;flex:0 0 auto;width:74px;text-align:center}
 .fold-toggle{font-size:12.5px;color:var(--blue);cursor:pointer;margin-bottom:14px;display:inline-block}
-#miniChart{display:none;margin-bottom:20px}
+#miniChart{display:block;margin-bottom:20px}
 /* ── Khối deterministic 24 phần (port từ luan-giai.html buildPreGenHtml) ── */
 .pregen-block{background:#F5F5F5;border:1px solid #e0e0e0;border-radius:8px;padding:12px 16px;margin:12px 0}
 .pregen-title{font-size:11px;font-weight:600;color:#1a3a6a;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
@@ -95,10 +95,9 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Luận giải chuyên sâu</b><span>Neo phán quyết vào điểm số cổ pháp</span></div>
+      <div class="ws-title"><b>Luận giải Tử Vi</b><span>Lập lá số 12 cung rồi luận sâu theo điểm số cổ pháp</span></div>
       <div class="ws-actions">
         <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa thông tin</button>
-        <a class="btn" id="btnLaSo" href="/app/la-so?auto=1" style="display:none">Lá số →</a>
         <a class="btn" id="btnBatTu" href="/app/bat-tu?auto=1" style="display:none">Bát Tự →</a>
         <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
@@ -107,8 +106,8 @@
       <div id="introHost"></div>
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Nhập thông tin để luận giải</h2>
-        <p class="sub">Lấy điểm số 12 cung, đại vận, tứ hóa theo cổ pháp — rồi hỏi trợ lý đào sâu từng phần bên phải.</p>
+        <h2>Nhập thông tin để lập lá số &amp; luận giải</h2>
+        <p class="sub">Lập lá số 12 cung theo cổ pháp, chấm điểm đại vận, tứ hóa — rồi hỏi trợ lý đào sâu từng phần bên phải.</p>
         <div class="frow">
           <div class="fg" style="flex:2;min-width:150px"><label>Họ và tên</label><input type="text" id="inpName" placeholder="Nguyễn Văn A"></div>
           <div class="fg" style="width:90px"><label>Giới tính</label><select id="inpGender"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
@@ -129,7 +128,7 @@
 
       <div id="lgPanel">
         <div class="scores" id="lgScores"></div>
-        <span class="fold-toggle" id="lgFold" onclick="toggleMini()">▸ Xem lá số đầy đủ</span>
+        <span class="fold-toggle" id="lgFold" onclick="toggleMini()">▾ Ẩn lá số</span>
         <div class="chart-wrap" id="miniChart"></div>
         <div class="jump" id="lgJump"></div>
         <div class="lg-body" id="lgBody"></div>
@@ -141,12 +140,12 @@
 </div>
 
 <script>window.SHELL_ACTIVE='luan-giai';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'luan-giai',title:'Luận giải chuyên sâu',desc:'Chấm điểm 12 cung, đại vận, tứ hóa theo cổ pháp - neo phán quyết vào con số, không phán chung chung. Mỗi phần có nút <b>✦ Hỏi trợ lý</b> để đào sâu.'};</script>
+window.SHELL_INTRO={key:'luan-giai',title:'Luận giải Tử Vi',desc:'Lập lá số 12 cung theo cổ pháp, chấm điểm đại vận, tứ hóa - neo phán quyết vào con số, không phán chung chung. Mỗi phần có nút <b>✦ Hỏi trợ lý</b> để đào sâu.'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/laso-chart.js?v=2"></script>
 <script src="/luan-giai-core.js?v=3"></script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=28"></script>
+<script src="/shell.js?v=29"></script>
 <script>
 // ── Dropdowns ──
 (function(){
@@ -187,7 +186,6 @@ function doLuan(){
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('lgPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
-    document.getElementById('btnLaSo').style.display='';
     document.getElementById('btnBatTu').style.display='';
     Shell.rememberBirth({name:name,gender:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,pp:pp,namxem:namxem});
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
@@ -268,15 +266,14 @@ function bindJump(){
 
 function toggleMini(){
   var m=document.getElementById('miniChart'),f=document.getElementById('lgFold');
-  var open=m.style.display==='block';
-  m.style.display=open?'none':'block';
-  f.textContent=(open?'▸':'▾')+' Xem lá số đầy đủ';
+  var shown=getComputedStyle(m).display!=='none';
+  m.style.display=shown?'none':'block';
+  f.textContent=shown?'▸ Xem lá số đầy đủ':'▾ Ẩn lá số';
 }
 function showForm(){
   document.getElementById('lgPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
   document.getElementById('btnEdit').style.display='none';
-  document.getElementById('btnLaSo').style.display='none';
   document.getElementById('btnBatTu').style.display='none';
 }
 // điền sẵn ngày sinh đã nhớ (nếu có); tự luận nếu đến qua ?auto=1 (từ nút Lá số).

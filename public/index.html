@@ -424,7 +424,7 @@ a { color: var(--blue); text-decoration: none; }
                   <div class="hc-avatar">命</div>
                   <div class="hc-bubble" id="hc-bubble">Bạn muốn hỏi gì về vận mệnh, sự nghiệp, tình duyên hay vận năm nay?</div>
                 </div>
-                <form class="hc-composer" action="/app/la-so" method="get">
+                <form class="hc-composer" action="/app/luan-giai" method="get">
                   <div class="hc-composer-top">
                     <textarea name="q" rows="1" placeholder="Năm nay vận của tôi thế nào?" aria-label="Câu hỏi về lá số của bạn"></textarea>
                     <button type="submit" class="hc-send" aria-label="Gửi câu hỏi">↑</button>
@@ -449,10 +449,10 @@ a { color: var(--blue); text-decoration: none; }
     <h2 class="section-title">Mọi việc, trong cùng một Luận Đường</h2>
     <p class="section-desc">Luận Đường là nơi luận giải các môn huyền học cổ pháp — Tử Vi, Tử Bình, xem tuổi, tướng số, phong thủy. Lập lá số một lần rồi hỏi trợ lý AI mọi điều; chuyển sang công cụ khác vẫn giữ nguyên ngày sinh.</p>
     <div class="space-grid">
-      <a class="space-card" href="/app/la-so">
+      <a class="space-card" href="/app/luan-giai">
         <div class="space-ic">▦</div>
-        <h3>Lá số Tử Vi</h3>
-        <p>An sao 12 cung, chính tinh, cách cục, đại vận theo cổ pháp.</p>
+        <h3>Luận giải Tử Vi</h3>
+        <p>Lập lá số 12 cung, chính tinh, cách cục, đại vận — rồi luận giải chuyên sâu.</p>
         <span class="go">Mở trong Luận Đường →</span>
       </a>
       <a class="space-card" href="/app/bat-tu">
@@ -600,7 +600,7 @@ if (window.Auth?.onAuthChange) {
   // Một cửa: câu hỏi từ hero dẫn thẳng vào Luận Đường (shell), KHÔNG về chat cũ.
   // Persona → tool trong shell; câu hỏi được gửi kèm dạng "pending-ask" để rail
   // tự hỏi sau khi người dùng lập lá số (shell.js đọc app_pending_ask trong setContext).
-  var _TOOL_ROUTE = { laso: '/app/la-so', 'xem-tuoi': '/app/xem-tuoi', 'xem-lam-an': '/app/xem-lam-an' };
+  var _TOOL_ROUTE = { laso: '/app/luan-giai', 'xem-tuoi': '/app/xem-tuoi', 'xem-lam-an': '/app/xem-lam-an' };
 
   var _PERSONA_CHIPS = {
     'ban-than':   [

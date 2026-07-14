@@ -636,13 +636,13 @@ window.mountIcons=window.mountIcons||function(root){var sc=root||document;sc.que
 window.iconHtml=window.iconHtml||function(k){return (window.ICONS&&window.ICONS[k])||'';};
 </script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=28"></script>
+<script src="/shell.js?v=29"></script>
 <script>
 // HỘI THOẠI (shell history) cho tab Lịch Sử của hub Tài khoản: gộp mọi công cụ
 // từ localStorage (app_hist_v1_*) + server (/api/tuvi-chats type app-*). Bấm 1
 // phiên → /app/<tool>?restore=<id> (shell.js boot khôi phục). Ẩn chat_history cũ.
 window.ACCOUNT_SHELL_CHAT = function () {
-  var TOOLMAP = { 'luan-giai': 'Luận giải chuyên sâu', 'la-so': 'Lá số Tử Vi', 'bat-tu': 'Lá số Bát Tự', 'xem-tuoi': 'Xem tuổi vợ chồng', 'xem-lam-an': 'Xem tuổi làm ăn', 'tuong-hop': 'Tương hợp tuổi', 'sinh-con': 'Xem tuổi sinh con', 'chon-ngay': 'Chọn ngày tốt', 'dat-ten': 'Đặt tên con', 'dat-ten-dn': 'Đặt tên doanh nghiệp', 'ngu-hanh-ten': 'Ngũ hành tên', 'nap-am': 'Nạp âm ngũ hành', 'than-so-hoc': 'Thần số học', 'kim-lau': 'Kim Lâu & Tam Tai', 'bat-trach': 'Hướng Bát Trạch', 'kinh-dich': 'Kinh Dịch', 'xem-tuong': 'Xem tướng', 'phong-thuy': 'Phong thủy' };
+  var TOOLMAP = { 'luan-giai': 'Luận giải Tử Vi', 'la-so': 'Lá số Tử Vi', 'bat-tu': 'Lá số Bát Tự', 'xem-tuoi': 'Xem tuổi vợ chồng', 'xem-lam-an': 'Xem tuổi làm ăn', 'tuong-hop': 'Tương hợp tuổi', 'sinh-con': 'Xem tuổi sinh con', 'chon-ngay': 'Chọn ngày tốt', 'dat-ten': 'Đặt tên con', 'dat-ten-dn': 'Đặt tên doanh nghiệp', 'ngu-hanh-ten': 'Ngũ hành tên', 'nap-am': 'Nạp âm ngũ hành', 'than-so-hoc': 'Thần số học', 'kim-lau': 'Kim Lâu & Tam Tai', 'bat-trach': 'Hướng Bát Trạch', 'kinh-dich': 'Kinh Dịch', 'xem-tuong': 'Xem tướng', 'phong-thuy': 'Phong thủy' };
   function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   function rel(ts) { var s = Math.floor((Date.now() - ts) / 1000); if (!ts || s < 0) return ''; if (s < 60) return 'vừa xong'; if (s < 3600) return Math.floor(s / 60) + ' phút trước'; if (s < 86400) return Math.floor(s / 3600) + ' giờ trước'; if (s < 2592000) return Math.floor(s / 86400) + ' ngày trước'; return Math.floor(s / 2592000) + ' tháng trước'; }
   var loading = document.getElementById('chatListLoading'), content = document.getElementById('chatListContent');
