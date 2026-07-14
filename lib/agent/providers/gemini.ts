@@ -16,9 +16,11 @@ import { sse } from '@/lib/contract/v1';
 import type { ChatConfig } from '@/lib/config/appConfig';
 
 const GEMINI_KEY = process.env.GEMINI_API_KEY || '';
-// Mặc định Flash-Lite (rẻ nhất, ~97% rẻ hơn Sonnet, tiếng Việt vẫn mượt).
-// Đổi model không cần sửa code: đặt env GEMINI_MODEL (vd 'gemini-2.5-flash').
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite';
+// Mặc định Gemini 2.5 Flash — A/B cho thấy trung thành với dữ liệu lá số/cổ
+// pháp (KHÔNG bịa sao, không lẫn miếu/hãm như Flash-Lite), tiếng Việt sát
+// Sonnet; vẫn rẻ ~85% so Sonnet. Đổi model không cần sửa code: đặt env
+// GEMINI_MODEL (vd 'gemini-2.5-flash-lite' cho tool nhẹ nếu muốn tiết kiệm thêm).
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 
 // Kịch bản AN TOÀN cho Gemini: prose-thuần, dữ liệu đã tính sẵn, KHÔNG cần
