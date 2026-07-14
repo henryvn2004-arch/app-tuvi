@@ -32,6 +32,14 @@ export interface ChatConfig {
   maxTokens: number;
   /** Giá Lượng trừ cho 1 lượt trả lời thành công (0 = miễn phí) */
   cost: number;
+  /**
+   * Định tuyến provider LLM theo từng kịch bản (toolType) → 'gemini' | 'anthropic'.
+   * Key '_default' áp cho kịch bản không liệt kê. Chỉ có tác dụng cho các kịch
+   * bản prose-thuần an toàn (xem GEMINI_PROSE_SCENARIOS); laso/luận-giải/bát-tự
+   * và vision LUÔN dùng Anthropic bất kể cấu hình. Sửa `chat.provider_routes`
+   * trong app_config để bật/tắt từng tool — KHÔNG cần deploy.
+   */
+  providerRoutes: Record<string, string>;
 }
 
 export const DEFAULTS: ChatConfig = {
@@ -41,6 +49,17 @@ export const DEFAULTS: ChatConfig = {
   maxRounds: 4,
   maxTokens: 3000, // đủ cho câu luận sâu 1 phần (24-phần cho tới 3000); DB app_config 'chat.max_tokens' override được. Câu ngắn không tốn thêm (chỉ trả token thực sinh).
   cost: 5, // 5 Lượng / lượt — giá chuẩn; DB app_config 'chat.cost' override được (không cần deploy)
+  // Đợt thí điểm Gemini Flash-Lite: 6 tool Mệnh Lý / Huyền Học (nhẹ, prose,
+  // free). Còn lại mặc định Anthropic (Sonnet). Kéo thêm tool sang Gemini bằng
+  // cách set app_config 'chat.provider_routes' — không deploy, revert tức thì.
+  providerRoutes: {
+    'nap-am': 'gemini',
+    'kim-lau': 'gemini',
+    'ngu-hanh-ten': 'gemini',
+    'than-so-hoc': 'gemini',
+    'bat-trach': 'gemini',
+    'kinh-dich': 'gemini',
+  },
 };
 
 // Ánh xạ key trong DB → field. Thiếu key nào thì giữ default field đó.
@@ -50,6 +69,7 @@ const KEY_MAP: Record<string, keyof ChatConfig> = {
   'chat.max_rounds': 'maxRounds',
   'chat.max_tokens': 'maxTokens',
   'chat.cost': 'cost',
+  'chat.provider_routes': 'providerRoutes',
 };
 
 const TTL_MS = 60_000;
@@ -103,9 +123,21 @@ function applyField(cfg: ChatConfig, field: keyof ChatConfig, value: unknown) {
     if (typeof value === 'string' && value.trim()) cfg[field] = value;
     return;
   }
+  if (field === 'providerRoutes') {
+    // Object map { toolType: 'gemini'|'anthropic', _default?: ... }. Chỉ nhận
+    // giá trị chuỗi; DB ghi đè TOÀN BỘ map (không merge) để dễ suy luận.
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      const routes: Record<string, string> = {};
+      for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
+        if (typeof v === 'string') routes[k] = v;
+      }
+      cfg.providerRoutes = routes;
+    }
+    return;
+  }
   // maxRounds | maxTokens | cost — số
   const n = typeof value === 'number' ? value : Number(value);
-  if (Number.isFinite(n) && n >= 0) cfg[field] = n;
+  if (Number.isFinite(n) && n >= 0) (cfg as unknown as Record<string, unknown>)[field] = n;
 }
 
 /** Xoá cache (dùng sau khi admin sửa config, nếu cần áp dụng ngay). */
