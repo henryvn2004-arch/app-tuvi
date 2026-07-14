@@ -26,6 +26,7 @@ import { computeSinhCon, computeChonNgay, computeDatTen, computeDatTenDn } from 
 import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint } from '@/lib/agent/prompts';
 import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
 import { type ChatConfig } from '@/lib/config/appConfig';
+import { geminiEligible, streamGemini } from '@/lib/agent/providers/gemini';
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!;
@@ -273,6 +274,30 @@ export async function runAgent(
   let suggestions: string[] = [];
 
   send(sse.status({ text: hasImages ? 'Đang xem ảnh...' : 'Đang suy xét...' }));
+
+  // ── PROVIDER ROUTING: kịch bản prose-thuần nhẹ có thể đi GEMINI (rẻ ~97%,
+  // nhanh hơn) thay vì Sonnet. Bật/tắt từng tool qua app_config
+  // `chat.provider_routes` (không deploy). geminiEligible đã guard cứng: chỉ
+  // các kịch bản data-driven KHÔNG tool + KHÔNG ảnh mới vào đây; laso/luận-giải/
+  // bát-tự (tool-call) và vision LUÔN dùng Sonnet. Lỗi Gemini ở request-time →
+  // fallback SẠCH xuống loop Anthropic bên dưới (chưa gửi byte nào).
+  const scenarioType = scenario?.type || 'laso';
+  if (geminiEligible(scenarioType, hasImages, cfg.providerRoutes)) {
+    try {
+      suggestions = await streamGemini(system, convo, cfg, send);
+      return {
+        toolsUsed,
+        birth: capturedBirth,
+        activeProfile: ctx.activeProfile,
+        subjectSwitched: ctx.subjectSwitched,
+        lasoCard: null,
+        suggestions,
+      };
+    } catch (e) {
+      console.error('[runAgent] Gemini lỗi → fallback Sonnet:', (e as Error)?.message);
+      // rơi xuống loop Anthropic bên dưới (an toàn: chưa stream text nào)
+    }
+  }
 
   for (let round = 0; round <= cfg.maxRounds; round++) {
     const lastRound = round === cfg.maxRounds;
