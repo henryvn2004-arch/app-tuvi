@@ -33,6 +33,13 @@ export interface ChatConfig {
   /** Giá Lượng trừ cho 1 lượt trả lời thành công (0 = miễn phí) */
   cost: number;
   /**
+   * Provider cho các route STANDALONE (không qua runAgent): cron, /api/lasotuvi,
+   * tuong-mat, phong-thuy, tubinh, xem-tuoi. 'gemini' (mặc định) hoặc 'anthropic'.
+   * Đây là provider CHÍNH; helper llm luôn thử provider kia làm BACKUP nếu lỗi.
+   * Đổi qua app_config 'chat.standalone_provider' — không deploy.
+   */
+  standaloneProvider: string;
+  /**
    * Định tuyến provider LLM theo từng kịch bản (toolType) → 'gemini' | 'anthropic'.
    * Key '_default' áp cho kịch bản không liệt kê. Chỉ có tác dụng cho các kịch
    * bản prose-thuần an toàn (xem GEMINI_PROSE_SCENARIOS); laso/luận-giải/bát-tự
@@ -49,6 +56,7 @@ export const DEFAULTS: ChatConfig = {
   maxRounds: 4,
   maxTokens: 3000, // đủ cho câu luận sâu 1 phần (24-phần cho tới 3000); DB app_config 'chat.max_tokens' override được. Câu ngắn không tốn thêm (chỉ trả token thực sinh).
   cost: 5, // 5 Lượng / lượt — giá chuẩn; DB app_config 'chat.cost' override được (không cần deploy)
+  standaloneProvider: 'gemini', // route standalone dùng Gemini, Anthropic tự backup
   // Gemini (2.5 Flash) cho MỌI kịch bản đủ điều kiện (prose + vision + bát tự)
   // qua '_default'. Các tool KHÔNG đủ điều kiện — laso (luận-giải/lá-số, dùng
   // function-calling cho vận hạn) — KHÔNG thuộc GEMINI_PROSE/VISION_SCENARIOS
@@ -72,6 +80,7 @@ const KEY_MAP: Record<string, keyof ChatConfig> = {
   'chat.max_tokens': 'maxTokens',
   'chat.cost': 'cost',
   'chat.provider_routes': 'providerRoutes',
+  'chat.standalone_provider': 'standaloneProvider',
 };
 
 const TTL_MS = 60_000;
@@ -121,7 +130,7 @@ export async function getChatConfig(): Promise<ChatConfig> {
 
 // Gán value (đã coerce kiểu) vào đúng field, bỏ qua kiểu sai.
 function applyField(cfg: ChatConfig, field: keyof ChatConfig, value: unknown) {
-  if (field === 'systemPrompt' || field === 'model') {
+  if (field === 'systemPrompt' || field === 'model' || field === 'standaloneProvider') {
     if (typeof value === 'string' && value.trim()) cfg[field] = value;
     return;
   }

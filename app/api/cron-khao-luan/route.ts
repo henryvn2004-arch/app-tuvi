@@ -2,10 +2,10 @@
 export const maxDuration = 60;
 import { NextRequest } from 'next/server';
 import { ok, err, options } from '@/lib/cors';
+import { llmText } from '@/lib/llm/complete';
 
 const SUPABASE_URL  = process.env.SUPABASE_URL!;
 const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY!;
-const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY!;
 const OPENAI_KEY    = process.env.OPENAI_API_KEY!;
 const ARTICLES_PER_RUN = 1;
 
@@ -87,14 +87,7 @@ Trả lời trực tiếp, ≤300 từ, không dùng bullet. Có 1 ví dụ th�
 Trả về JSON thuần (KHÔNG backtick):
 {"title":"Tiêu đề có từ khóa","slug":"slug-ascii","excerpt":"Tóm tắt dưới 155 ký tự","category":"CHỌN 1 TRONG: hon-nhan|gia-dinh|tai-chinh|cong-viec|tinh-cach|van-han|dien-san|quan-he|benh-tat|con-cai","tags":["tag1","tag2"],"featured":false,"content":"markdown ≤300 từ"}`;
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method:'POST',
-    headers:{'Content-Type':'application/json','x-api-key':ANTHROPIC_KEY,'anthropic-version':'2023-06-01'},
-    body:JSON.stringify({model:'claude-sonnet-4-6', max_tokens:2000, messages:[{role:'user',content:prompt}]}),
-  });
-  if (!res.ok) { const e = await res.json() as {error:{message:string}}; throw new Error(e.error?.message||`Claude ${res.status}`); }
-  const data = await res.json() as {content:{text:string}[]};
-  const text = data.content[0].text.trim().replace(/^```json\s*/i,'').replace(/```\s*$/,'').trim();
+  const text = (await llmText({ prompt, maxTokens: 2000 })).trim().replace(/^```json\s*/i,'').replace(/```\s*$/,'').trim();
   const article = JSON.parse(text);
 
   if (!VALID_KL_CATS.includes(article.category)) article.category = 'tinh-cach';
