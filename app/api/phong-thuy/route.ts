@@ -9,8 +9,8 @@ export const runtime = 'nodejs';
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
+import { llmText, type LlmImage } from '@/lib/llm/complete';
 
-const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY!;
 const SUPABASE_URL  = process.env.SUPABASE_URL!;
 const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY!;
 
@@ -51,17 +51,23 @@ async function logTx(userId: string, amount: number, toolType: string, descripti
   });
 }
 
-// ── Claude helper ────────────────────────────────────────────────
-
-async function claude(messages: unknown[], system: string, maxTokens = 1800): Promise<string> {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_KEY, 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: maxTokens, system, messages }),
-  });
-  if (!res.ok) throw new Error(`Claude error: ${res.status}`);
-  const d = await res.json();
-  return d.content?.[0]?.text || '';
+// ── LLM helper (Gemini-primary + Anthropic-backup qua lib/llm/complete) ──────
+// Nhận messages theo shape Anthropic (content = string | [{type:'image'|'text'}])
+// như các call site cũ, tự tách text + ảnh → llmText (giữ nguyên vision).
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function claude(messages: any[], system: string, maxTokens = 1800): Promise<string> {
+  const content = messages?.[0]?.content;
+  let prompt = '';
+  const images: LlmImage[] = [];
+  if (typeof content === 'string') {
+    prompt = content;
+  } else if (Array.isArray(content)) {
+    for (const b of content) {
+      if (b?.type === 'text') prompt += b.text || '';
+      else if (b?.type === 'image' && b.source?.data) images.push({ data: b.source.data, mediaType: b.source.media_type });
+    }
+  }
+  return llmText({ system, prompt, images, maxTokens });
 }
 
 function parseJSON(text: string) {
@@ -744,19 +750,12 @@ Trả về JSON thuần túy:
   "tip": "Mẹo thực hành ngắn gọn — ví dụ vật phẩm, giờ xuất hành, hướng đi"
 }`;
 
-  const apiKey = process.env.ANTHROPIC_API_KEY!;
-  const aiResp = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1000,
-      messages: [{ role: 'user', content: prompt }],
-    }),
-  });
-  if (!aiResp.ok) return err('Lỗi AI.', 500);
-  const aiData = await aiResp.json() as { content?: Array<{text:string}> };
-  const raw = aiData.content?.[0]?.text || '{}';
+  let raw: string;
+  try {
+    raw = await llmText({ prompt, maxTokens: 1000 });
+  } catch {
+    return err('Lỗi AI.', 500);
+  }
   try {
     const parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
     return ok({ success: true, balance: auth.newBalance, ...parsed });

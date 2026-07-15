@@ -8,8 +8,7 @@ export const maxDuration = 60;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
-
-const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!;
+import { llmText, llmStreamResponse } from '@/lib/llm/complete';
 
 // ─── Chat system prompts ──────────────────────────────────────
 const CHAT_SYSTEM_LASO = (ctx: string) => `Bạn là chuyên gia Tử Vi Đẩu Số theo cổ pháp, luận giải sâu sắc, văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Bạn đang trả lời trên nền tảng Tử Vi Minh Bảo.
@@ -165,68 +164,19 @@ Lưu ý đặc biệt: Đây là chế độ so sánh tương hợp 2 lá số. 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const trimmed = messages.slice(-10).map((m: any) => ({ role: m.role, content: String(m.content).slice(0, 2000) }));
 
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 800, system: systemPrompt, messages: trimmed }),
-  });
-
-  if (!resp.ok) return err('API error: ' + (await resp.text()).slice(0, 200));
-  const data = await resp.json();
-  return ok({ answer: data.content?.[0]?.text || '', scenario: hasLaso ? 'laso' : 'general' });
+  try {
+    const answer = await llmText({ system: systemPrompt, messages: trimmed, maxTokens: 800 });
+    return ok({ answer, scenario: hasLaso ? 'laso' : 'general' });
+  } catch (e: unknown) {
+    return err('API error: ' + (e as Error).message);
+  }
 }
 
 // ─── Streaming helper ────────────────────────────────────────
+// Provider-agnostic (Gemini-primary + Anthropic-backup) qua lib/llm/complete.
+// GIỮ NGUYÊN shape SSE mà frontend parse: data:{t} / {err} / [DONE].
 async function streamAnthropicResponse(system: string, user: string, maxTokens: number): Promise<Response> {
-  const enc = new TextEncoder();
-  const sendErr = (msg: string) => new Response(
-    `data: ${JSON.stringify({ err: msg })}\n\ndata: [DONE]\n\n`,
-    { headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Access-Control-Allow-Origin': '*' } }
-  );
-
-  let upstream: globalThis.Response;
-  try {
-    upstream = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: maxTokens, stream: true, system, messages: [{ role: 'user', content: user }] }),
-    });
-  } catch (e: unknown) { return sendErr((e as Error).message); }
-
-  if (!upstream.ok) return sendErr((await upstream.text()).slice(0, 200));
-
-  const stream = new ReadableStream({
-    async start(controller) {
-      const reader = upstream.body!.getReader();
-      const dec = new TextDecoder();
-      let buf = '';
-      try {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          buf += dec.decode(value, { stream: true });
-          const lines = buf.split('\n'); buf = lines.pop() || '';
-          for (const line of lines) {
-            if (!line.startsWith('data: ')) continue;
-            const raw = line.slice(6).trim();
-            if (raw === '[DONE]') { controller.enqueue(enc.encode('data: [DONE]\n\n')); break; }
-            try {
-              const j = JSON.parse(raw);
-              if (j.type === 'content_block_delta' && j.delta?.text)
-                controller.enqueue(enc.encode(`data: ${JSON.stringify({ t: j.delta.text })}\n\n`));
-            } catch { /* skip malformed */ }
-          }
-        }
-      } catch (e: unknown) {
-        controller.enqueue(enc.encode(`data: ${JSON.stringify({ err: (e as Error).message })}\n\n`));
-      }
-      controller.close();
-    }
-  });
-
-  return new Response(stream, {
-    headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Access-Control-Allow-Origin': '*' }
-  });
+  return llmStreamResponse({ system, prompt: user, maxTokens }, 'delta');
 }
 
 // ─── Đặt tên con ─────────────────────────────────────────────
@@ -340,18 +290,12 @@ export async function POST(request: NextRequest) {
   const userPrompt = docs ? prompt + '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : prompt;
 
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1200,
-        system: 'Bạn là nhà luận giải Tử Vi Đẩu Số theo trường phái Tử Vi Minh Bảo. Văn phong: trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Viết văn xuôi, không dùng bullet. Không tiết lộ trường phái hay tài liệu.',
-        messages: [{ role: 'user', content: userPrompt }],
-      }),
+    const luanGiai = await llmText({
+      system: 'Bạn là nhà luận giải Tử Vi Đẩu Số theo trường phái Tử Vi Minh Bảo. Văn phong: trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Viết văn xuôi, không dùng bullet. Không tiết lộ trường phái hay tài liệu.',
+      prompt: userPrompt,
+      maxTokens: 1200,
     });
-    const data = await resp.json();
-    return ok({ luanGiai: data.content?.[0]?.text || '' });
+    return ok({ luanGiai });
   } catch (e: unknown) {
     return err((e as Error).message);
   }
