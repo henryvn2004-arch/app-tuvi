@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/shell.css?v=6">
+<link rel="stylesheet" href="/laso-chart.css?v=2">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:720px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -64,6 +65,11 @@
 .who-card .meta b{color:var(--text-mid)}
 .ask{margin-top:12px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
 .laso-error{color:var(--red);padding:14px;border:1px solid var(--red);border-radius:10px;background:var(--white)}
+.laso-pair{display:flex;flex-direction:column;gap:20px}
+.laso-one{min-width:0}
+.laso-cap{font-family:var(--serif);font-weight:700;font-size:14px;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.laso-cap .dotA,.laso-cap .dotB{width:10px;height:10px;border-radius:50%}
+@media(min-width:1200px){.laso-pair{flex-direction:row}.laso-one{flex:1}}
 </style>
 </head>
 <body>
@@ -239,7 +245,9 @@ function computeLs(pr,namxem){
   var conv=convertDuongToAm(pr.dd,pr.mm,pr.yyyy,pr.hh);
   var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioAmIdx,gioitinh:pr.gender,namXem:namxem});
   ls.chiNam=conv.chiNam; // anSaoLaSo không re-expose chiNam ở top-level → gắn lại (như xem-tuoi.html)
-  return {ls:ls,hourBranch:gioAmIdx};
+  // fd cho renderGrid (laso-chart.js) — vẽ lá số đầy đủ 12 cung như trang standalone.
+  var fd={name:pr.name,gioitinh:pr.gender,dd:pr.dd,mm:pr.mm,yyyy:pr.yyyy,hh:pr.hh,pp:pr.pp,gioChi:(typeof CHI!=='undefined'?CHI[gioAmIdx]:''),amLich:conv.amLich};
+  return {ls:ls,hourBranch:gioAmIdx,fd:fd};
 }
 
 function doCompat(){
@@ -251,8 +259,9 @@ function doCompat(){
   try{
     var nameA=A.name||'Người A',nameB=B.name||'Người B';
     var ca=computeLs(A,namxem),cb=computeLs(B,namxem);
+    ca.fd.name=nameA; cb.fd.name=nameB;
     var r=TuongHop.calcTuongHop(ca.ls,cb.ls,nameA,nameB);
-    renderCompat(r,nameA,nameB);
+    renderCompat(r,nameA,nameB,ca.fd,cb.fd);
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('xtPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
@@ -277,7 +286,7 @@ function doCompat(){
   }
 }
 
-function renderCompat(r,nameA,nameB){
+function renderCompat(r,nameA,nameB,fdA,fdB){
   var col=meterColor(r.total);
   document.getElementById('xtVerdict').innerHTML=
     '<div class="who"><b>'+esc(nameA)+'</b> <span style="color:var(--text-lt)">×</span> <b>'+esc(nameB)+'</b></div>'+
@@ -301,7 +310,19 @@ function renderCompat(r,nameA,nameB){
       '<div class="fac-bar"><i style="width:'+(m.score*10)+'%;background:'+c+'"></i></div>'+
       '<div class="fac-ab"><span class="pa">'+esc(nameA)+': '+esc(m.a||'')+'</span><span class="pb">'+esc(nameB)+': '+esc(m.b||'')+'</span></div></div>';
   }).join('');
+  // Hai lá số đầy đủ 12 cung (renderGrid từ laso-chart.js — parity trang standalone).
+  var pairH='';
+  if(fdA&&fdB&&typeof renderGrid==='function'){
+    try{
+      pairH='<section class="sec"><div class="sec-h"><div class="sec-n">☯</div><h3>Hai lá số</h3></div>'+
+        '<div class="laso-pair">'+
+        '<div class="laso-one"><div class="laso-cap"><span class="dotA"></span>'+esc(nameA)+'</div>'+renderGrid(r.lsA,fdA)+'</div>'+
+        '<div class="laso-one"><div class="laso-cap"><span class="dotB"></span>'+esc(nameB)+'</div>'+renderGrid(r.lsB,fdB)+'</div>'+
+        '</div></section>';
+    }catch(e){ if(window.console)console.error('renderGrid pair:',e); }
+  }
   document.getElementById('xtBody').innerHTML=
+    pairH+
     '<section class="sec"><div class="sec-h"><div class="sec-n">✦</div><h3>Điểm hòa hợp 8 chiều</h3></div>'+
     '<div class="card">'+facs+'</div>'+
     '<div class="ask" data-ask="Luận sâu mức độ hòa hợp của hai người, đâu là điểm mạnh và điểm cần lưu ý?">✦ Hỏi trợ lý luận sâu kết quả này</div>'+

@@ -174,6 +174,26 @@ export function buildChatContext(body: any): ChatContext {
 }
 
 // ─── Chat handler ──────────────────────────────────────────────
+// ─── Xưng hô theo tên + giới tính người xem (dùng chung mọi luồng) ──────────
+// Chèn vào system prompt. Luật CHỈ kích hoạt khi context có dòng "Người xem:"
+// (do nguoiXemLine sinh) → không lẫn với giới tính của đối tượng khác (vd tên bé
+// trong đặt-tên-con).
+export const XUNG_HO_RULE = `XƯNG HÔ VỚI NGƯỜI XEM (bắt buộc):
+· MẶC ĐỊNH — nếu KHÔNG có dòng "Người xem" hoặc không ghi rõ giới tính → BẮT BUỘC xưng "quý vị". TUYỆT ĐỐI KHÔNG tự đoán "anh" hay "chị", KHÔNG dùng "bạn/em".
+· Dòng "Người xem" ghi giới tính NAM → luôn gọi "anh" (kèm tên gọi = chữ cuối họ tên nếu có, vd "anh Tuấn"). CẤM dùng "em/chú/cháu/bạn/ông".
+· Dòng "Người xem" ghi giới tính NỮ → luôn gọi "chị" (kèm tên gọi nếu có, vd "chị Hà"). CẤM dùng "em/cô/cháu/bạn/bà".
+Chỉ gọi kèm tên thỉnh thoảng cho thân thiện, không lặp tên mỗi câu. TUYỆT ĐỐI không xưng hô sai giới tính và không tự hạ xuống "em/bạn".`;
+
+// Dòng "Người xem: <tên> (<giới tính>)" để nhét lên ĐẦU context. Nhận cả
+// nam/nu (contract) lẫn male/female (tuong-mat/phong-thuy). Rỗng nếu thiếu cả hai.
+export function nguoiXemLine(name?: string, gender?: string): string {
+  const g = gender === 'nu' || gender === 'female' ? 'nữ' : gender === 'nam' || gender === 'male' ? 'nam' : '';
+  const nm = (name || '').trim();
+  if (!nm && !g) return '';
+  const label = nm ? nm + (g ? ` (${g})` : '') : g;
+  return `Người xem: ${label}\n`;
+}
+
 export const CHAT_SYSTEM_LASO = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia Tử Vi Đẩu Số theo cổ pháp, văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
 
 THÔNG TIN THỜI GIAN (do server cung cấp, chính xác): Hôm nay là ngày ${new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}, năm ${new Date().getFullYear()}. Khi user hỏi "năm nay là năm mấy", "hôm nay là ngày mấy", hoặc tương tự — trả lời thẳng dựa vào thông tin này, KHÔNG nói "tôi không biết ngày hiện tại".
@@ -189,6 +209,7 @@ Nguyên tắc trả lời (đây là CHAT, không phải bài luận — ngắn 
 - Riêng kết quả tương lai mới dùng ngôn ngữ xác suất, không hứa hẹn tuyệt đối
 - VẬN HẠN — đại vận GIỚI HẠN BIÊN ĐỘ, KHÔNG áp theme: CHỈ đại vận có điểm/10 thật. TIỂU vận (năm), NGUYỆT vận, NHẬT vận KHÔNG có điểm — luận theo CÁCH CỤC + sao của CHÍNH cung hạn, giữ ĐÚNG tốt/xấu của nó (cung hạn có cát tinh/cách tốt → vận TỐT dù đại vận xấu; có sát tinh/cách xấu → vận XẤU dù đại vận tốt). Điểm đại vận chỉ chỉnh BIÊN ĐỘ: đại vận thấp thì cái tốt vẫn tốt nhưng bị kìm, không rực rỡ (cái xấu nặng thêm); đại vận cao thì cái tốt bung rực rỡ (cái xấu đỡ nhẹ). CẤM bê theme đại vận áp cho mọi năm. TUYỆT ĐỐI không bịa "điểm/10" cho năm/tháng/ngày. Nếu context ghi "Tiểu vận năm X không có trong dữ liệu", luận từ đại vận, không bịa
 - Không tiết lộ trường phái hay tài liệu
+- ${XUNG_HO_RULE}
 
 === DỮ LIỆU LÁ SỐ ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
@@ -209,7 +230,8 @@ Nguyên tắc trả lời:
 - CÁCH HÓA GIẢI là MODIFIER: cung có "Triệt Đáo Kim Cung"/"Tuần Lâm Hỏa Địa"/Tuần-Triệt án ngữ thì khi nêu điểm yếu PHẢI đối chiếu — cách này giảm tính xấu sát tinh; CẤM nêu sát tinh như điểm yếu nguyên vẹn nếu cung đang được hóa giải
 - Câu hỏi KIẾN THỨC tử vi chung (không gắn người cụ thể) → trả lời súc tích, dẫn nguyên lý cổ pháp + ví dụ sao tinh, vẫn giữ độ dài trên
 - Cấm tâng bốc, cấm nước đôi né tránh; có điểm mạnh phải kèm điểm yếu cụ thể. Chỉ kết quả tương lai mới dùng ngôn ngữ xác suất
-- Không hứa hẹn tuyệt đối, không tiết lộ trường phái hay tài liệu${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+- Không hứa hẹn tuyệt đối, không tiết lộ trường phái hay tài liệu
+- ${XUNG_HO_RULE}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 const CHAT_SYSTEM_COMPAT = (ctx: string, toolType: string, docs?: string, persona?: string) => `Bạn là chuyên gia phân tích tương hợp Tử Vi Đẩu Số theo cổ pháp, văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
 
@@ -444,6 +466,7 @@ Nguyên tắc trả lời:
 - Dẫn chứng cụ thể từ Tứ Trụ: Nhật Can, Dụng Thần, Cách Cục, Ngũ Hành
 - Nói thẳng mạnh/yếu — cấm tâng bốc, cấm nước đôi né tránh
 - Câu hỏi về ngày tốt → gọi tool xem_ngay_tot; không tự bịa số liệu vận hạn
+- ${XUNG_HO_RULE}
 
 === DỮ LIỆU BÁT TỰ TỨ TRỤ ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;

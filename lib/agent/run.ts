@@ -23,7 +23,7 @@ import { computeLaso, renderLasoCard } from '@/lib/engine/laso';
 import { computeTuBinh } from '@/lib/engine/tubinh';
 import { computeSinhCon, computeChonNgay, computeDatTen, computeDatTenDn } from '@/lib/engine/diachi';
 // Template prompt + context formatter dùng CHUNG với /api/lasotuvi (một bộ não).
-import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint } from '@/lib/agent/prompts';
+import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint, nguoiXemLine } from '@/lib/agent/prompts';
 import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
 import { type ChatConfig } from '@/lib/config/appConfig';
 import {
@@ -190,6 +190,13 @@ export async function runAgent(
     }
     const bc = buildChatContext(scenarioToBody(scn, req.messages as ChatMessage[]));
     system = bc.systemForCall;
+    // Bát Tự 1 người: đẩy "Người xem" (tên+giới tính từ birth) vào system → xưng
+    // hô đúng (luật XƯNG_HO_RULE trong CHAT_SYSTEM_TU_BINH). Các scenario 2 người
+    // (xem-tuoi/tương-hợp) đã có tên đôi bên trong context nên bỏ qua.
+    if (req.birth && scenario.type === 'tu-binh') {
+      const nx = nguoiXemLine(req.birth.name, req.birth.gender);
+      if (nx) system += '\n\n' + nx;
+    }
     tools = bc.tools;
   } else {
     // ── LÁ SỐ / GENERAL (Sprint 1.1): seed từ birth, prompt thương hiệu +
@@ -203,7 +210,9 @@ export async function runAgent(
         // full=true: context TOÀN BỘ lá số, ĐỘC LẬP câu hỏi → system byte ổn
         // định cả phiên để prompt-cache trúng (trước đây nhét câu hỏi vào
         // system qua extractLasoContext(ls, lastQ) → cache vỡ mỗi tin).
-        lasoCtx = extractLasoContext(res.ls, '', { full: true });
+        // "Người xem: <tên> (giới tính)" lên đầu context → model xưng hô đúng
+        // (luật XƯNG_HO_RULE trong CHAT_SYSTEM_LASO). birth.name/gender do client gửi.
+        lasoCtx = nguoiXemLine(req.birth.name, req.birth.gender) + extractLasoContext(res.ls, '', { full: true });
         focusHintText = focusHint(lastQ);
       }
     }

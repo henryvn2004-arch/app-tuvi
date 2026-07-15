@@ -5,7 +5,7 @@ import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody, CORS_HEADERS } from '@/lib/cors';
 // Lõi dùng chung — trích sang lib/agent (một bộ não).
 import { execLasoTool, toolLabel } from '@/lib/agent/tools';
-import { buildChatContext } from '@/lib/agent/prompts';
+import { buildChatContext, XUNG_HO_RULE, nguoiXemLine } from '@/lib/agent/prompts';
 // LLM Gemini-primary + Anthropic-backup (provider từ app_config
 // 'chat.standalone_provider'). callLLMTools trả shape Anthropic → giữ nguyên
 // vòng lặp tool bên dưới; llmText cho luận 24 phần (phan).
@@ -76,7 +76,8 @@ QUY TẮC CHUNG CHO MỌI PHẦN LUẬN GIẢI:
 - Quan hệ với Mệnh là ưu tiên: cung đang xét hỗ trợ hay khắc bản mệnh?
 - Tổ hợp sao: nhiều sao tốt → xu hướng tốt, nhiều sao xấu → dễ vấn đề; sát tinh/bại tinh mạnh thì phải cảnh báo rõ.
 - Cung rơi vào lĩnh vực nào thì chuyện xảy ra xoay quanh lĩnh vực đó.
-- Check nền Phúc–Mệnh–Thân: 3 cung này tốt thì giảm xấu, xấu thì khuếch đại rủi ro.`;
+- Check nền Phúc–Mệnh–Thân: 3 cung này tốt thì giảm xấu, xấu thì khuếch đại rủi ro.
+- ${XUNG_HO_RULE}`;
 
 // ─── Cung descriptions ─────────────────────────────────────────
 const CUNG_BY_PHAN: Record<number, string> = {
@@ -421,11 +422,15 @@ export async function POST(request: NextRequest) {
 
   if (action === 'chat') return body.stream ? handleChatStream(body) : handleChat(body);
 
-  const { laSoText, phan, docs } = body as { laSoText?: string; phan?: number; docs?: string };
+  const { laSoText, phan, docs, hoTen, gioiTinh } = body as { laSoText?: string; phan?: number; docs?: string; hoTen?: string; gioiTinh?: string };
   if (!laSoText || !phan) return err('Thiếu dữ liệu', 400);
 
   let prompt: string;
-  try { prompt = buildPrompt(Number(phan), laSoText, docs); }
+  try {
+    // "Người xem: <tên> (giới tính)" lên đầu prompt → xưng hô đúng (client gửi hoTen/gioiTinh).
+    const nx = nguoiXemLine(hoTen, gioiTinh);
+    prompt = (nx ? nx + '\n' : '') + buildPrompt(Number(phan), laSoText, docs);
+  }
   catch (e: unknown) { return err('buildPrompt error: ' + (e as Error).message); }
 
   try {
