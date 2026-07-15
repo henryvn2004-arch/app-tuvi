@@ -3,8 +3,8 @@ export const maxDuration = 60;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
+import { llmText, llmStreamResponse } from '@/lib/llm/complete';
 
-const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!;
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY!;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
@@ -256,19 +256,8 @@ async function handleChat(body: any): Promise<Response> {
   if (!trimmed.length) return err('Empty messages after filter', 400);
 
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 800, system: systemPrompt, messages: trimmed }),
-    });
-
-    if (!resp.ok) {
-      const errText = await resp.text();
-      console.error('[handleChat] Anthropic API error', resp.status, errText.slice(0, 500));
-      return err('Anthropic API ' + resp.status + ': ' + errText.slice(0, 200));
-    }
-    const apiResp = await resp.json();
-    return ok({ answer: apiResp.content?.[0]?.text || '', scenario: hasBatTu ? 'batTu' : 'general' });
+    const answer = await llmText({ system: systemPrompt, messages: trimmed, maxTokens: 800 });
+    return ok({ answer, scenario: hasBatTu ? 'batTu' : 'general' });
   } catch (e: unknown) {
     console.error('[handleChat] exception', e);
     return err('handleChat error: ' + (e as Error).message);
@@ -654,60 +643,20 @@ export async function POST(request: NextRequest) {
     return err('buildPrompt error: ' + (e as Error).message);
   }
 
-  // Build user content với 4 blocks — multiple cache breakpoints
-  // System prompt cached → ~1500 tokens
-  // Block 1 batTu cached → constant per lá số (~1500 tokens) — hit cho cả 16 phần
-  // Block 2 docs cached → constant trong cùng group (~1500-2500 tokens)
-  // Block 3 pregenContext varies per phần (~200-800 tokens) — không cache
-  // Block 4 instructions varies → ~300-500 tokens không cache
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const userContent: any[] = [
-    { type: 'text', text: parts.batTuBlock, cache_control: { type: 'ephemeral' } },
-  ];
-  if (parts.docsBlock) {
-    userContent.push({ type: 'text', text: parts.docsBlock, cache_control: { type: 'ephemeral' } });
-  }
-  if (parts.pregenBlock) {
-    userContent.push({ type: 'text', text: parts.pregenBlock });
-  }
-  userContent.push({ type: 'text', text: parts.instrBlock });
+  // Gộp 4 block (batTu · docs · pregen · instructions) thành 1 prompt — nội dung
+  // GIỮ NGUYÊN, chỉ bỏ các cache_control (tối ưu riêng của Anthropic; Gemini tự
+  // cache ngầm). Frontend tu-binh.html parse content_block_delta/text_delta →
+  // dùng format 'anthropic' để giữ đúng byte-shape.
+  const userPrompt = [parts.batTuBlock, parts.docsBlock, parts.pregenBlock, parts.instrBlock]
+    .filter(Boolean)
+    .join('\n\n');
 
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-        'anthropic-beta': 'prompt-caching-2024-07-31',
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: phanInfo.maxTokens,
-        stream: true,
-        system: [{ type: 'text', text: SYSTEM_PROMPT_TUBINH, cache_control: { type: 'ephemeral' } }],
-        messages: [{ role: 'user', content: userContent }],
-      }),
-    });
-
-    if (!resp.ok) {
-      const errText = await resp.text();
-      return err('API error: ' + errText.slice(0, 200));
-    }
-
-    // Forward Anthropic SSE stream directly to client.
-    // Frontend parses content_block_delta events to accumulate text.
-    return new Response(resp.body, {
-      headers: {
-        'Content-Type': 'text/event-stream; charset=utf-8',
-        'Cache-Control': 'no-cache, no-transform',
-        'Connection': 'keep-alive',
-        'X-Accel-Buffering': 'no',
-        'Access-Control-Allow-Origin': '*',
-        'X-Phan': String(phanNum),
-        'X-Phan-Ten': encodeURIComponent(phanInfo.ten),
-      },
-    });
+    return await llmStreamResponse(
+      { system: SYSTEM_PROMPT_TUBINH, prompt: userPrompt, maxTokens: phanInfo.maxTokens },
+      'anthropic',
+      { 'X-Phan': String(phanNum), 'X-Phan-Ten': encodeURIComponent(phanInfo.ten) },
+    );
   } catch (e: unknown) {
     return err((e as Error).message);
   }
