@@ -16,6 +16,7 @@
 // ============================================================
 
 import { getChatConfig } from '@/lib/config/appConfig';
+import { toGeminiTools } from '@/lib/agent/providers/gemini';
 
 const GEMINI_KEY = process.env.GEMINI_API_KEY || '';
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
@@ -304,3 +305,144 @@ export async function llmStreamResponse(
 
   return new Response(stream, { headers: sseHeaders(extraHeaders) });
 }
+
+// ─── Function-calling (Anthropic-shaped) ───────────────────────
+// Cho lasotuvi handleChat/handleChatStream: vòng lặp tool đang viết theo shape
+// Anthropic (content[].type='tool_use'/'tool_result', stop_reason='tool_use').
+// callLLMTools TRẢ VỀ ĐÚNG shape đó dù provider là Gemini → giữ nguyên vòng lặp.
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+// Rút text thuần từ system (string) — buildChatContext trả systemForCall là chuỗi;
+// phòng hờ nhận cả mảng block Anthropic [{type:'text',text}].
+function systemText(system: any): string {
+  if (typeof system === 'string') return system;
+  if (Array.isArray(system)) return system.map((b) => b?.text || '').filter(Boolean).join('\n');
+  return '';
+}
+
+// Convo Anthropic (kèm tool_use/tool_result) → Gemini contents (functionCall/
+// functionResponse). Map tool_use_id → name để dựng functionResponse (Gemini cần name).
+function convoToGeminiFC(convo: any[]): any[] {
+  const out: any[] = [];
+  const idToName: Record<string, string> = {};
+  for (const m of convo) {
+    const role = m.role === 'assistant' ? 'model' : 'user';
+    const c = m.content;
+    if (typeof c === 'string') {
+      if (c) out.push({ role, parts: [{ text: c }] });
+      continue;
+    }
+    if (!Array.isArray(c)) continue;
+    const parts: any[] = [];
+    for (const b of c) {
+      if (b?.type === 'text' && b.text) parts.push({ text: b.text });
+      else if (b?.type === 'tool_use') {
+        idToName[b.id] = b.name;
+        parts.push({ functionCall: { name: b.name, args: b.input || {} } });
+      } else if (b?.type === 'tool_result') {
+        const name = idToName[b.tool_use_id] || 'unknown';
+        const rc = typeof b.content === 'string' ? b.content : JSON.stringify(b.content);
+        parts.push({ functionResponse: { name, response: { result: rc } } });
+      } else if (b?.type === 'image' && b.source?.data) {
+        parts.push({ inline_data: { mime_type: b.source.media_type || 'image/jpeg', data: b.source.data } });
+      }
+    }
+    if (parts.length) out.push({ role, parts });
+  }
+  return out;
+}
+
+async function geminiCallTools(
+  system: any,
+  convo: any[],
+  tools: any[],
+  toolChoiceNone: boolean,
+  maxTokens: number,
+): Promise<any> {
+  if (!GEMINI_KEY) throw new Error('gemini: thiếu GEMINI_API_KEY');
+  const body: any = {
+    system_instruction: { parts: [{ text: systemText(system) }] },
+    contents: convoToGeminiFC(convo),
+    generationConfig: { maxOutputTokens: maxTokens, temperature: 0.7, thinkingConfig: { thinkingBudget: 0 } },
+  };
+  // toolChoiceNone (vòng chốt) → KHÔNG gửi tools → Gemini buộc trả text.
+  if (tools?.length && !toolChoiceNone) body.tools = toGeminiTools(tools);
+  const url = `${GEMINI_BASE}/${encodeURIComponent(GEMINI_MODEL)}:generateContent?key=${GEMINI_KEY}`;
+  const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  if (!r.ok) throw new Error(`gemini ${r.status}: ${(await r.text()).slice(0, 200)}`);
+  const j = await r.json();
+  const parts = (j?.candidates?.[0]?.content?.parts as any[]) || [];
+  const content: any[] = [];
+  let hasTool = false;
+  let idx = 0;
+  for (const p of parts) {
+    if (typeof p.text === 'string' && p.text) content.push({ type: 'text', text: p.text });
+    if (p.functionCall) {
+      hasTool = true;
+      content.push({ type: 'tool_use', id: `gem_${idx++}`, name: p.functionCall.name, input: p.functionCall.args || {} });
+    }
+  }
+  return {
+    content,
+    stop_reason: hasTool ? 'tool_use' : 'end_turn',
+    usage: {
+      input_tokens: j?.usageMetadata?.promptTokenCount || 0,
+      output_tokens: j?.usageMetadata?.candidatesTokenCount || 0,
+    },
+  };
+}
+
+async function anthropicCallTools(
+  system: any,
+  convo: any[],
+  tools: any[],
+  toolChoiceNone: boolean,
+  maxTokens: number,
+): Promise<any> {
+  if (!ANTHROPIC_KEY) throw new Error('anthropic: thiếu ANTHROPIC_API_KEY');
+  const payload: any = { model: ANTHROPIC_MODEL, max_tokens: maxTokens, system, messages: convo };
+  if (tools?.length) {
+    payload.tools = tools;
+    if (toolChoiceNone) payload.tool_choice = { type: 'none' };
+  }
+  const r = await fetch(ANTHROPIC_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': ANTHROPIC_KEY,
+      'anthropic-version': '2023-06-01',
+      'anthropic-beta': 'prompt-caching-2024-07-31',
+    },
+    body: JSON.stringify(payload),
+  });
+  if (!r.ok) throw new Error('anthropic ' + r.status + ': ' + (await r.text()).slice(0, 200));
+  return r.json();
+}
+
+/**
+ * Một lượt LLM có function-calling, TRẢ VỀ shape Anthropic
+ * ({content, stop_reason, usage}) dù provider là Gemini. Provider chính đọc từ
+ * config, tự fallback provider kia nếu lỗi.
+ */
+export async function callLLMTools(
+  system: any,
+  convo: any[],
+  tools: any[],
+  toolChoiceNone = false,
+  maxTokens = 1500,
+): Promise<any> {
+  const order = await providerOrder();
+  let lastErr: unknown;
+  for (const p of order) {
+    try {
+      if (p === 'gemini') return await geminiCallTools(system, convo, tools, toolChoiceNone, maxTokens);
+      return await anthropicCallTools(system, convo, tools, toolChoiceNone, maxTokens);
+    } catch (e) {
+      lastErr = e;
+      console.error(`[callLLMTools] ${p} lỗi → thử backup:`, (e as Error).message);
+    }
+  }
+  throw lastErr ?? new Error('callLLMTools: không provider nào khả dụng');
+}
+/* eslint-enable @typescript-eslint/no-explicit-any */
