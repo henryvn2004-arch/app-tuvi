@@ -26,7 +26,14 @@ import { computeSinhCon, computeChonNgay, computeDatTen, computeDatTenDn } from 
 import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint } from '@/lib/agent/prompts';
 import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
 import { type ChatConfig } from '@/lib/config/appConfig';
-import { geminiEligible, streamGemini } from '@/lib/agent/providers/gemini';
+import {
+  geminiEligible,
+  streamGemini,
+  geminiToolsEligible,
+  streamGeminiTurn,
+  toGeminiTools,
+  toGeminiContents,
+} from '@/lib/agent/providers/gemini';
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!;
@@ -296,6 +303,76 @@ export async function runAgent(
     } catch (e) {
       console.error('[runAgent] Gemini lỗi → fallback Sonnet:', (e as Error)?.message);
       // rơi xuống loop Anthropic bên dưới (an toàn: chưa stream text nào)
+    }
+  }
+
+  // ── PROVIDER ROUTING (LÁ SỐ có TOOL): luận-giải/lá-số ('laso') có thể đi
+  // GEMINI với function-calling THẬT (lap_la_so, tra_tieu_van, ...). Đây là
+  // nhóm VƯƠNG MIỆN có paywall → MẶC ĐỊNH giữ Sonnet (providerRoutes
+  // 'laso'='anthropic'); admin flip 'laso'='gemini' qua app_config để bật,
+  // revert 1 dòng không deploy. Fallback SẠCH về Sonnet nếu Gemini lỗi lúc
+  // chưa stream chữ nào (progressed=false). Prompt/data/tool/loop y hệt bản
+  // Sonnet — chỉ khác nơi gọi model.
+  if (geminiToolsEligible(scenarioType, hasImages, cfg.providerRoutes)) {
+    const gTools = toGeminiTools(tools);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const gContents: any[] = toGeminiContents(convo);
+    let progressed = false;
+    try {
+      for (let round = 0; round <= cfg.maxRounds; round++) {
+        const forceAnswer = round === cfg.maxRounds; // vòng cuối: bỏ tool để ép trả lời
+        const turn = await streamGeminiTurn(system, gContents, forceAnswer ? null : gTools, cfg, send);
+        progressed = progressed || turn.sentText || turn.functionCalls.length > 0;
+
+        if (!forceAnswer && turn.functionCalls.length) {
+          gContents.push({ role: 'model', parts: turn.modelParts });
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const respParts: any[] = [];
+          for (const fc of turn.functionCalls) {
+            toolsUsed.push(fc.name);
+            if (fc.name === 'lap_la_so' && fc.args) {
+              const b = buildBirthFromInput(fc.args);
+              if (b) capturedBirth = b;
+            }
+            const run = await executeTool(fc.name, (fc.args || {}) as Record<string, unknown>, ctx);
+            send(sse.toolCall({ name: fc.name, args: safeArgs(fc.args) }));
+            send(sse.status({ text: run.label }));
+            const rc = typeof run.content === 'string' ? run.content : JSON.stringify(run.content);
+            respParts.push({ functionResponse: { name: fc.name, response: { result: rc } } });
+          }
+          gContents.push({ role: 'user', parts: respParts });
+          continue;
+        }
+        suggestions = turn.suggestions;
+        break;
+      }
+      const justBuilt = toolsUsed.includes('lap_la_so') || toolsUsed.includes('mo_la_so');
+      const lasoCard = justBuilt && ctx.ls ? renderLasoCard(ctx.ls, ctx.birth) : null;
+      return {
+        toolsUsed,
+        birth: ctx.birth ?? capturedBirth,
+        activeProfile: ctx.activeProfile,
+        subjectSwitched: ctx.subjectSwitched,
+        lasoCard,
+        suggestions,
+      };
+    } catch (e) {
+      console.error('[runAgent] Gemini-tools lỗi:', (e as Error)?.message);
+      if (progressed) {
+        // Đã stream dở / đã chạy tool → KHÔNG fallback (tránh trả trùng); báo lỗi.
+        send(sse.error({ code: 'internal', message: 'Gemini error mid-stream' }));
+        const justBuilt = toolsUsed.includes('lap_la_so') || toolsUsed.includes('mo_la_so');
+        const lasoCard = justBuilt && ctx.ls ? renderLasoCard(ctx.ls, ctx.birth) : null;
+        return {
+          toolsUsed,
+          birth: ctx.birth ?? capturedBirth,
+          activeProfile: ctx.activeProfile,
+          subjectSwitched: ctx.subjectSwitched,
+          lasoCard,
+          suggestions,
+        };
+      }
+      // Chưa stream chữ nào → fallback SẠCH xuống loop Sonnet bên dưới.
     }
   }
 

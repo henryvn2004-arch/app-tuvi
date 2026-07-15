@@ -65,8 +65,11 @@ export function geminiEligible(
 const RETRYABLE = new Set([429, 500, 502, 503, 504]);
 const MAX_TRIES = 3;
 
+// Chuyển convo (message Anthropic: {role, content: string | blocks}) → Gemini
+// contents ({role:'user'|'model', parts:[{text}|{inline_data}]}). Dùng chung
+// cho cả luồng prose lẫn function-calling (laso).
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function toGeminiContents(convo: any[]): any[] {
+export function toGeminiContents(convo: any[]): any[] {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const out: any[] = [];
   for (const m of convo) {
@@ -230,4 +233,223 @@ export async function streamGemini(
     .map((s) => s.trim())
     .filter(Boolean)
     .slice(0, 4);
+}
+
+// ============================================================
+// FUNCTION-CALLING — cho luồng LÁ SỐ (luận-giải / lá-số), tool-call thật.
+// Đây là nhóm "vương miện" có paywall: mặc định GIỮ Sonnet (appConfig
+// providerRoutes 'laso'='anthropic'). Chỉ chạy Gemini khi admin flip route
+// sang 'gemini' qua app_config — revert 1 dòng, không deploy. run.ts còn có
+// fallback về Sonnet khi Gemini lỗi ở request-time (chưa stream gì).
+// ============================================================
+
+// Kịch bản dùng TOOL (chỉ 'laso' — luận-giải/lá-số). KHÔNG gộp vào
+// GEMINI_PROSE_SCENARIOS vì đường này cần function-calling, không phải prose.
+export const GEMINI_TOOLS_SCENARIOS = new Set<string>(['laso']);
+
+export function geminiToolsEligible(
+  scenarioType: string,
+  hasImages: boolean,
+  routes: Record<string, string> | undefined,
+): boolean {
+  if (!GEMINI_KEY) return false;
+  if (hasImages) return false; // luồng lá số có ảnh → giữ Sonnet cho chắc
+  if (!GEMINI_TOOLS_SCENARIOS.has(scenarioType)) return false;
+  const r = routes || {};
+  const pick = r[scenarioType] || r._default || 'anthropic';
+  return pick === 'gemini';
+}
+
+// JSON Schema (Anthropic input_schema) → Schema an toàn cho Gemini (OpenAPI
+// subset): giữ type/description/enum/items/properties(đệ quy)/required, bỏ field
+// lạ (additionalProperties, $schema...) để Gemini không từ chối.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function sanitizeGeminiSchema(s: any): any {
+  if (!s || typeof s !== 'object') return s;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const out: any = {};
+  if (s.type) out.type = s.type;
+  if (s.description) out.description = s.description;
+  if (s.enum) out.enum = s.enum;
+  if (s.items) out.items = sanitizeGeminiSchema(s.items);
+  if (s.properties && typeof s.properties === 'object') {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    out.properties = {} as any;
+    for (const [k, v] of Object.entries(s.properties)) out.properties[k] = sanitizeGeminiSchema(v);
+  }
+  if (Array.isArray(s.required) && s.required.length) out.required = s.required;
+  return out;
+}
+
+// Tool Anthropic ([{name,description,input_schema}]) → Gemini functionDeclarations.
+// Tool KHÔNG tham số (properties rỗng) → bỏ 'parameters' (Gemini hiểu là no-arg).
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function toGeminiTools(anthropicTools: any[]): any[] {
+  if (!anthropicTools?.length) return [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const decls = anthropicTools.map((t: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const d: any = { name: t.name, description: t.description };
+    const props = t.input_schema?.properties;
+    if (props && Object.keys(props).length) d.parameters = sanitizeGeminiSchema(t.input_schema);
+    return d;
+  });
+  return [{ functionDeclarations: decls }];
+}
+
+/**
+ * Một lượt STREAM Gemini có function-calling. Stream text về client (tách
+ * SUGGEST y hệt) + gom functionCall nếu model gọi tool. Trả:
+ *  - functionCalls: [{name,args}] để run.ts chạy tool
+ *  - modelParts: parts để append làm 'model' turn (giữ ngữ cảnh cho vòng sau)
+ *  - suggestions, sentText (có stream chữ nào chưa — để quyết fallback)
+ * Ném lỗi CHỈ ở request-time (chưa stream gì) → run.ts fallback Sonnet sạch.
+ */
+export async function streamGeminiTurn(
+  system: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  contents: any[],
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  geminiTools: any[] | null,
+  cfg: ChatConfig,
+  send: (s: string) => void,
+): Promise<{
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  functionCalls: { name: string; args: any }[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  modelParts: any[];
+  suggestions: string[];
+  sentText: boolean;
+}> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const body: any = {
+    system_instruction: { parts: [{ text: system }] },
+    contents,
+    generationConfig: { maxOutputTokens: cfg.maxTokens, temperature: 0.7, thinkingConfig: { thinkingBudget: 0 } },
+  };
+  if (geminiTools && geminiTools.length) body.tools = geminiTools;
+  const url =
+    `${GEMINI_BASE}/${encodeURIComponent(GEMINI_MODEL)}:streamGenerateContent?alt=sse&key=${GEMINI_KEY}`;
+
+  let resp: Response | null = null;
+  for (let attempt = 0; attempt < MAX_TRIES; attempt++) {
+    if (attempt > 0) await new Promise((r) => setTimeout(r, 500 * 2 ** (attempt - 1)));
+    try {
+      resp = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+    } catch (e) {
+      if (attempt === MAX_TRIES - 1) throw new Error('gemini fetch: ' + (e as Error).message);
+      continue;
+    }
+    if (resp.ok) break;
+    if (!RETRYABLE.has(resp.status) || attempt === MAX_TRIES - 1) {
+      const t = (await resp.text()).slice(0, 300);
+      throw new Error(`gemini non-200: ${resp.status} — ${t}`);
+    }
+  }
+  if (!resp || !resp.ok || !resp.body) throw new Error('gemini: không có response body');
+
+  const MARKER = 'SUGGEST:';
+  const GUARD = 24;
+  let full = '';
+  let sentLen = 0;
+  let markerAt = -1;
+  let sentText = false;
+  const flushSafe = () => {
+    if (markerAt >= 0) return;
+    const safe = full.length - GUARD;
+    if (safe > sentLen) {
+      send(sse.text({ delta: full.slice(sentLen, safe) }));
+      sentLen = safe;
+      sentText = true;
+    }
+  };
+  const onText = (t: string) => {
+    full += t;
+    if (markerAt < 0) {
+      const i = full.indexOf(MARKER);
+      if (i >= 0) {
+        markerAt = i;
+        let cut = i;
+        while (cut > sentLen && /\s/.test(full[cut - 1])) cut--;
+        if (cut > sentLen) {
+          send(sse.text({ delta: full.slice(sentLen, cut) }));
+          sentLen = cut;
+          sentText = true;
+        }
+      } else {
+        flushSafe();
+      }
+    }
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const functionCalls: { name: string; args: any }[] = [];
+  const reader = resp.body.getReader();
+  const dec = new TextDecoder();
+  let buf = '';
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      const lines = buf.split('\n');
+      buf = lines.pop() ?? '';
+      for (const line of lines) {
+        if (!line.startsWith('data:')) continue;
+        const json = line.slice(5).trim();
+        if (!json || json === '[DONE]') continue;
+        try {
+          const evt = JSON.parse(json);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const parts = evt?.candidates?.[0]?.content?.parts as any[] | undefined;
+          if (parts) {
+            for (const p of parts) {
+              if (typeof p.text === 'string') onText(p.text);
+              else if (p.functionCall) {
+                functionCalls.push({ name: p.functionCall.name, args: p.functionCall.args || {} });
+              }
+            }
+          }
+        } catch {
+          /* mảnh JSON dở — bỏ qua */
+        }
+      }
+    }
+  } catch (e) {
+    console.error('[gemini-tools] lỗi giữa stream:', (e as Error).message);
+  }
+
+  if (markerAt < 0 && full.length > sentLen) {
+    send(sse.text({ delta: full.slice(sentLen) }));
+    sentLen = full.length;
+    sentText = true;
+  }
+  let suppress = false;
+  if (sentLen === 0 && full.trim() && !functionCalls.length) {
+    send(sse.text({ delta: full }));
+    sentText = true;
+    suppress = true;
+  }
+
+  // modelParts = text (nếu có) + functionCall(s) — để append làm 'model' turn.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const modelParts: any[] = [];
+  if (full.trim()) modelParts.push({ text: full });
+  for (const fc of functionCalls) modelParts.push({ functionCall: { name: fc.name, args: fc.args } });
+
+  const suggestions =
+    suppress || markerAt < 0
+      ? []
+      : full
+          .slice(markerAt + MARKER.length)
+          .split('|')
+          .map((s) => s.trim())
+          .filter(Boolean)
+          .slice(0, 4);
+
+  return { functionCalls, modelParts, suggestions, sentText };
 }

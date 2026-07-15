@@ -56,6 +56,11 @@ export const DEFAULTS: ChatConfig = {
   // app_config 'chat.provider_routes' — không deploy, revert tức thì.
   providerRoutes: {
     _default: 'gemini',
+    // VƯƠNG MIỆN có paywall — MẶC ĐỊNH giữ Sonnet (chất cao nhất). Adapter
+    // Gemini function-calling ĐÃ có nhưng NGỦ: flip 'laso'='gemini' qua
+    // app_config để bật thử (revert 1 dòng, không deploy). Bao gồm cả luận-giải
+    // lẫn lá-số (đều đi path 'laso').
+    laso: 'anthropic',
   },
 };
 
