@@ -299,25 +299,21 @@ export async function runAgent(
     }
   }
 
+  // Mỗi vòng = 1 lượt STREAM DUY NHẤT (gộp "quyết định tool" + "trả lời"). Trước
+  // đây lượt KHÔNG dùng tool tốn 2 lần gọi model — 1 lần non-stream để quyết
+  // định (sinh full câu trả lời rồi VỨT) + 1 lần streamFinal sinh LẠI y hệt để
+  // stream → gấp đôi output (phần đắt nhất). Nay stream thẳng: nếu model đòi
+  // tool thì bắt tool_use ngay trong stream, chạy tool rồi lặp; nếu trả text
+  // thẳng thì chính stream đó LÀ câu trả lời (bỏ hẳn call thứ 2).
   for (let round = 0; round <= cfg.maxRounds; round++) {
-    const lastRound = round === cfg.maxRounds;
+    const forceAnswer = round === cfg.maxRounds; // vòng cuối: ép trả lời, cấm tool
+    const turn = await streamTurn(system, convo, tools, cfg, send, forceAnswer);
 
-    // Vòng cuối: ép trả lời, stream text trực tiếp.
-    if (lastRound) {
-      suggestions = await streamFinal(system, convo, tools, cfg, send);
-      break;
-    }
-
-    const data = await callAnthropic(system, convo, tools, cfg, false);
-    const content = data.content || [];
-
-    if (data.stop_reason === 'tool_use') {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const toolUses = content.filter((b: any) => b.type === 'tool_use');
-      convo.push({ role: 'assistant', content });
+    if (!forceAnswer && turn.stopReason === 'tool_use' && turn.toolUses.length) {
+      convo.push({ role: 'assistant', content: turn.assistantContent });
 
       const results = [];
-      for (const tu of toolUses) {
+      for (const tu of turn.toolUses) {
         toolsUsed.push(tu.name);
         // Agent vừa lập lá số từ text → ghi lại birth (đã chuẩn hóa server-side:
         // giờ/giới tính/năm/âm-dương) để phiên sau dùng thẳng.
@@ -334,9 +330,8 @@ export async function runAgent(
       continue;
     }
 
-    // Model trả lời thẳng (không tool) — stream lại cho mượt thay vì
-    // dồn một cục: gọi vòng stream cuối với chính ngữ cảnh hiện tại.
-    suggestions = await streamFinal(system, convo, tools, cfg, send);
+    // Không tool (hoặc vòng cuối bị ép) → câu trả lời đã stream xong trong turn này.
+    suggestions = turn.suggestions;
     break;
   }
 
@@ -356,71 +351,62 @@ export async function runAgent(
   };
 }
 
-// ── Gọi Anthropic (non-stream, để quyết định tool) ──────────
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function callAnthropic(system: string, convo: any[], tools: any[], cfg: ChatConfig, toolChoiceNone: boolean): Promise<any> {
+// ── STREAM 1 lượt: vừa stream text về client (tách "SUGGEST:") vừa BẮT tool_use ──
+// Gộp "quyết định tool" + "trả lời" vào MỘT lần gọi model (thay cặp
+// callAnthropic non-stream + streamFinal cũ) → lượt KHÔNG dùng tool hết bị gấp
+// đôi output. Trả về: stopReason, toolUses (đã parse input), assistantContent
+// (khối để đẩy vào convo khi có tool), suggestions (tách dòng SUGGEST cuối câu).
+async function streamTurn(
+  system: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const payload: any = {
-    model: cfg.model,
-    max_tokens: cfg.maxTokens,
-    // TTL 1h: prefix (tools + system, gồm full lá số) giữ ấm qua khoảng nghĩ
-    // giữa các tin (Telegram/WhatsApp thường > 5 phút) → follow-up đọc cache
-    // 0.1× thay vì trả full. Cần beta 'extended-cache-ttl-2025-04-11'.
-    system: [{ type: 'text', text: system, cache_control: { type: 'ephemeral', ttl: '1h' } }],
-    messages: convo,
-  };
-  if (tools.length) {
-    payload.tools = tools;
-    if (toolChoiceNone) payload.tool_choice = { type: 'none' };
-  }
-  const resp = await postAnthropic(payload);
-  if (!resp.ok) {
-    const body = (await resp.text()).slice(0, 500);
-    // Log nguyên do (status + body) — trước đây throw bị core.ts nuốt im, log
-    // Vercel rỗng nên không debug được tin follow-up "gặp trục trặc".
-    console.error(`[runAgent.callAnthropic] Anthropic non-200: ${resp.status} — ${body}`);
-    throw new Error('Anthropic error: ' + body);
-  }
-  const data = await resp.json();
-  logCacheUsage('callAnthropic', data?.usage);
-  return data;
-}
-
-// ── Vòng cuối: stream text về client ────────────────────────
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function streamFinal(system: string, convo: any[], tools: any[], cfg: ChatConfig, send: (s: string) => void): Promise<string[]> {
+  convo: any[],
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  tools: any[],
+  cfg: ChatConfig,
+  send: (s: string) => void,
+  forceAnswer: boolean,
+): Promise<{
+  stopReason: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  toolUses: { id: string; name: string; input: any }[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  assistantContent: any[];
+  suggestions: string[];
+}> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const payload: any = {
     model: cfg.model,
     max_tokens: cfg.maxTokens,
     stream: true,
-    // TTL 1h: prefix (tools + system, gồm full lá số) giữ ấm qua khoảng nghĩ
-    // giữa các tin (Telegram/WhatsApp thường > 5 phút) → follow-up đọc cache
-    // 0.1× thay vì trả full. Cần beta 'extended-cache-ttl-2025-04-11'.
+    // TTL 1h: prefix (tools + system, gồm full lá số) giữ ấm qua khoảng nghỉ giữa
+    // các tin → follow-up đọc cache 0.1×. Cần beta 'extended-cache-ttl-2025-04-11'.
     system: [{ type: 'text', text: system, cache_control: { type: 'ephemeral', ttl: '1h' } }],
     messages: convo,
   };
   if (tools.length) {
     payload.tools = tools;
-    payload.tool_choice = { type: 'none' };
+    // Vòng cuối: cấm tool để ÉP model trả lời (tránh lặp tool vô hạn).
+    if (forceAnswer) payload.tool_choice = { type: 'none' };
   }
   const resp = await postAnthropic(payload);
   if (!resp.ok) {
     const body = (await resp.text()).slice(0, 500);
-    // Log nguyên do — trước đây chỉ gửi sse.error (kênh nuốt thành ERR_MSG),
-    // không console.error nên log Vercel rỗng.
-    console.error(`[runAgent.streamFinal] Anthropic non-200: ${resp.status} — ${body}`);
+    console.error(`[runAgent.streamTurn] Anthropic non-200: ${resp.status} — ${body}`);
     send(sse.error({ code: 'internal', message: 'Anthropic error: ' + body }));
-    return [];
+    return { stopReason: 'error', toolUses: [], assistantContent: [], suggestions: [] };
   }
+
   const reader = resp.body!.getReader();
   const dec = new TextDecoder();
   let buf = '';
-  // ── Tách dòng gợi ý "SUGGEST: q1 | q2 | q3" ở CUỐI câu trả lời (mọi kênh) ──
-  // Model được yêu cầu kết thúc bằng dòng này; server cắt KHÔNG cho lộ ra text,
-  // trả về mảng suggestions để client làm chip gợi ý động theo từng câu trả lời.
+  let stopReason = 'end_turn';
+  // Khối nội dung theo index (text tích lũy text_delta; tool_use tích lũy input_json_delta).
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const blocks: any[] = [];
+
+  // ── Tách dòng "SUGGEST: q1 | q2 | q3" ở CUỐI câu trả lời (y hệt bản cũ) ──
   const MARKER = 'SUGGEST:';
-  const GUARD = 24; // giữ lại đuôi để bắt marker bị cắt ngang nhiều delta
+  const GUARD = 24; // giữ đuôi để bắt marker bị cắt ngang nhiều delta
   let full = '';
   let sentLen = 0;
   let markerAt = -1;
@@ -432,6 +418,24 @@ async function streamFinal(system: string, convo: any[], tools: any[], cfg: Chat
       sentLen = safe;
     }
   };
+  const onText = (t: string) => {
+    full += t;
+    if (markerAt < 0) {
+      const i = full.indexOf(MARKER);
+      if (i >= 0) {
+        markerAt = i;
+        let cut = i;
+        while (cut > sentLen && /\s/.test(full[cut - 1])) cut--;
+        if (cut > sentLen) {
+          send(sse.text({ delta: full.slice(sentLen, cut) }));
+          sentLen = cut;
+        }
+      } else {
+        flushSafe();
+      }
+    }
+  };
+
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
@@ -444,62 +448,83 @@ async function streamFinal(system: string, convo: any[], tools: any[], cfg: Chat
       if (json === '[DONE]') continue;
       try {
         const evt = JSON.parse(json);
-        if (evt.type === 'message_start') logCacheUsage('streamFinal', evt.message?.usage);
-        if (evt.type === 'content_block_delta' && evt.delta?.type === 'text_delta') {
-          full += evt.delta.text;
-          if (markerAt < 0) {
-            const i = full.indexOf(MARKER);
-            if (i >= 0) {
-              markerAt = i;
-              // gửi nốt phần trước marker, bỏ khoảng trắng/xuống dòng ngay trước nó
-              let cut = i;
-              while (cut > sentLen && /\s/.test(full[cut - 1])) cut--;
-              if (cut > sentLen) {
-                send(sse.text({ delta: full.slice(sentLen, cut) }));
-                sentLen = cut;
-              }
-            } else {
-              flushSafe();
-            }
+        if (evt.type === 'message_start') {
+          logCacheUsage('streamTurn', evt.message?.usage);
+        } else if (evt.type === 'content_block_start') {
+          const cb = evt.content_block || {};
+          blocks[evt.index] =
+            cb.type === 'tool_use'
+              ? { type: 'tool_use', id: cb.id, name: cb.name, partial: '' }
+              : { type: 'text', text: '' };
+        } else if (evt.type === 'content_block_delta') {
+          const b = blocks[evt.index];
+          if (evt.delta?.type === 'text_delta') {
+            if (b) b.text += evt.delta.text;
+            onText(evt.delta.text);
+          } else if (evt.delta?.type === 'input_json_delta') {
+            if (b) b.partial += evt.delta.partial_json;
           }
+        } else if (evt.type === 'message_delta') {
+          if (evt.delta?.stop_reason) stopReason = evt.delta.stop_reason;
         }
       } catch {
-        /* ignore partial */
+        /* mảnh JSON dở — bỏ qua */
       }
     }
   }
-  // Hết stream: nếu không thấy marker, xả nốt phần đuôi đang giữ.
+
+  // Hết stream: xả nốt đuôi text nếu chưa gặp marker.
   if (markerAt < 0 && full.length > sentLen) {
     send(sse.text({ delta: full.slice(sentLen) }));
+    sentLen = full.length;
   }
-
-  // AN TOÀN: việc tách dòng "SUGGEST:" KHÔNG được nuốt trọn câu trả lời. Nếu chưa
-  // stream được ký tự nào (marker rơi ngay đầu, hoặc chỉ có khoảng trắng trước nó,
-  // hoặc model lỡ đặt SUGGEST lên trước phần luận) mà model VẪN sinh chữ → xả
-  // nguyên văn để người dùng thấy nội dung, thay vì client hiện "(không có nội dung)".
+  // AN TOÀN: chưa stream ký tự nào mà VẪN có nội dung (marker rơi đầu) → xả nguyên văn.
+  let suppressSuggest = false;
   if (sentLen === 0 && full.trim()) {
     console.warn(
-      `[runAgent.streamFinal] câu trả lời hiển thị rỗng sau khi tách SUGGEST (fullLen=${full.length}, markerAt=${markerAt}) — xả nguyên văn để không mất nội dung`,
+      `[runAgent.streamTurn] câu trả lời hiển thị rỗng sau khi tách SUGGEST (fullLen=${full.length}, markerAt=${markerAt}) — xả nguyên văn`,
     );
     send(sse.text({ delta: full }));
-    return [];
-  }
-  // Completion RỖNG thật (model không sinh chữ nào) — log để chẩn nếu tái diễn.
-  if (sentLen === 0 && !full.trim()) {
-    console.warn(`[runAgent.streamFinal] model trả completion RỖNG (fullLen=${full.length}) — client sẽ hiện "(không có nội dung)"`);
+    suppressSuggest = true;
+  } else if (sentLen === 0 && !full.trim() && stopReason !== 'tool_use') {
+    console.warn(`[runAgent.streamTurn] model trả completion RỖNG (fullLen=${full.length})`);
   }
 
-  if (markerAt < 0) return [];
-  return full
-    .slice(markerAt + MARKER.length)
-    .split('|')
-    .map((s) => s.trim())
-    .filter(Boolean)
-    .slice(0, 4);
+  // Dựng assistantContent + toolUses từ các khối (input_json_delta → object).
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const assistantContent: any[] = [];
+  const toolUses: { id: string; name: string; input: unknown }[] = [];
+  for (const b of blocks) {
+    if (!b) continue;
+    if (b.type === 'tool_use') {
+      let input: unknown = {};
+      try {
+        input = b.partial ? JSON.parse(b.partial) : {};
+      } catch {
+        input = {};
+      }
+      assistantContent.push({ type: 'tool_use', id: b.id, name: b.name, input });
+      toolUses.push({ id: b.id, name: b.name, input });
+    } else if (b.type === 'text' && b.text) {
+      assistantContent.push({ type: 'text', text: b.text });
+    }
+  }
+
+  const suggestions =
+    suppressSuggest || markerAt < 0
+      ? []
+      : full
+          .slice(markerAt + MARKER.length)
+          .split('|')
+          .map((s) => s.trim())
+          .filter(Boolean)
+          .slice(0, 4);
+
+  return { stopReason, toolUses, assistantContent, suggestions };
 }
 
 // ── Luật sinh gợi ý câu hỏi tiếp theo (chip động) ────────────
-// Model kết thúc bằng 1 dòng "SUGGEST: q1 | q2 | q3"; streamFinal cắt dòng này
+// Model kết thúc bằng 1 dòng "SUGGEST: q1 | q2 | q3"; streamTurn cắt dòng này
 // KHÔNG cho lộ ra câu trả lời, trả về mảng cho client làm chip gợi ý bám hội thoại.
 const CHAT_SUGGEST_RULES =
   'CUỐI CÙNG, sau khi luận xong, xuống dòng và ghi ĐÚNG một dòng bắt đầu bằng "SUGGEST: " ' +
