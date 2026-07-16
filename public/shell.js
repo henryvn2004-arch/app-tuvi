@@ -135,6 +135,7 @@
       '<div class="tools">' +
         '<button class="rh-btn mobile-only" title="Đóng" data-act="rail-close">✕</button>' +
         (HIST_ON ? '<button class="rh-btn" title="Lịch sử hội thoại" data-act="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="9"/></svg></button>' : '') +
+        '<button class="rh-btn" title="Chia sẻ phiên" data-act="share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.7 7.4-4.4M8.3 13.3l7.4 4.4"/></svg></button>' +
         '<button class="rh-btn" title="Hội thoại mới" data-act="newchat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:15px;height:15px"><path d="M12 5v14M5 12h14"/></svg></button>' +
       '</div></div>' +
       (HIST_ON ? '<div class="rail-hist" id="railHist" style="display:none"></div>' : '') +
@@ -153,6 +154,7 @@
     host.querySelector('[data-act="send"]').addEventListener('click', sendMsg);
     host.querySelector('[data-act="newchat"]').addEventListener('click', newChat);
     var _hb = host.querySelector('[data-act="history"]'); if (_hb) _hb.addEventListener('click', toggleHistPanel);
+    var _shb = host.querySelector('[data-act="share"]'); if (_shb) _shb.addEventListener('click', shareSession);
     host.querySelector('[data-act="rail-close"]').addEventListener('click', function () { host.classList.remove('open'); syncBackdrop(); });
     host.querySelector('[data-act="attach"]').addEventListener('click', function () { var f = document.getElementById('railFile'); if (f) f.click(); });
     document.getElementById('railFile').addEventListener('change', onPickFiles);
@@ -440,6 +442,71 @@
   }
   function authorAva() { return _author ? '/authors/' + _author.id + '.jpg' : '/thay-tuvi.webp'; }
   function authorLabel() { return _author ? 'Thầy ' + _author.name : 'Hiểu đúng lá số đang mở'; }
+
+  // ── CHIA SẺ PHIÊN (share full session như link ChatGPT) ──
+  function _birthLabel() {
+    try {
+      var r = (curMeta && curMeta.restore) || {};
+      if (r.scenario && r.scenario.data && (r.scenario.data.nameA || r.scenario.data.nameB))
+        return (r.scenario.data.nameA || 'A') + ' × ' + (r.scenario.data.nameB || 'B');
+      var bd = r.birth;
+      if (bd && bd.dd) {
+        var g = bd.gender === 'nu' ? 'Nữ' : 'Nam';
+        var d = [bd.dd, bd.mm, bd.yyyy].filter(Boolean).join('/');
+        return [(bd.name || '').trim(), d, g].filter(Boolean).join(' · ');
+      }
+    } catch (e) { /* ignore */ }
+    return '';
+  }
+  function shareSession() {
+    if (!messages || !messages.length) { alert('Chưa có nội dung để chia sẻ — hãy hỏi thầy vài câu trước.'); return; }
+    var btn = document.querySelector('[data-act="share"]'); if (btn) btn.disabled = true;
+    var payload = {
+      toolId: ACTIVE || 'laso',
+      title: (curMeta && curMeta.title) || 'Luận Đường',
+      ctxLabel: _birthLabel(),
+      thay: _author ? { id: _author.id, name: _author.name } : null,
+      messages: (messages || []).map(function (m) { return { role: m.role, content: String(m.content || '') }; })
+    };
+    var headers = { 'Content-Type': 'application/json' };
+    var tk = getToken(); if (tk) headers['Authorization'] = 'Bearer ' + tk;
+    fetch('/api/share-session', { method: 'POST', headers: headers, body: JSON.stringify(payload) })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (btn) btn.disabled = false;
+        if (!j || !j.url) { alert('Không tạo được link chia sẻ, thử lại sau.'); return; }
+        openShareModal(location.origin + j.url);
+      })
+      .catch(function () { if (btn) btn.disabled = false; alert('Lỗi mạng khi tạo link chia sẻ.'); });
+  }
+  function openShareModal(url) {
+    var enc = encodeURIComponent(url);
+    var wrap = document.createElement('div');
+    wrap.className = 'sh-share-modal';
+    wrap.innerHTML =
+      '<div class="ssm-card">' +
+        '<button class="ssm-x" aria-label="Đóng">✕</button>' +
+        '<div class="ssm-t">Chia sẻ phiên Luận Đường</div>' +
+        '<div class="ssm-d">Ai có link đều đọc được lá số và toàn bộ hỏi đáp trong phiên này.</div>' +
+        '<div class="ssm-row"><input class="ssm-in" readonly value="' + esc(url) + '"><button class="ssm-copy">Sao chép</button></div>' +
+        '<div class="ssm-share">' +
+          '<a class="ssm-b fb" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=' + enc + '">Facebook</a>' +
+          '<a class="ssm-b zl" target="_blank" rel="noopener" href="https://zalo.me/share/link?u=' + enc + '">Zalo</a>' +
+          '<a class="ssm-b" target="_blank" rel="noopener" href="' + esc(url) + '">Mở ↗</a>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(wrap);
+    var close = function () { wrap.remove(); };
+    wrap.addEventListener('click', function (e) { if (e.target === wrap) close(); });
+    wrap.querySelector('.ssm-x').addEventListener('click', close);
+    var inp = wrap.querySelector('.ssm-in');
+    wrap.querySelector('.ssm-copy').addEventListener('click', function () {
+      inp.select();
+      var done = function () { var b = wrap.querySelector('.ssm-copy'); b.textContent = 'Đã chép ✓'; setTimeout(function () { b.textContent = 'Sao chép'; }, 1600); };
+      if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, function () { try { document.execCommand('copy'); done(); } catch (e) { /* ignore */ } });
+      else { try { document.execCommand('copy'); done(); } catch (e) { /* ignore */ } }
+    });
+  }
 
   function autoGrow(t) { t.style.height = 'auto'; t.style.height = Math.min(t.scrollHeight, 96) + 'px'; }
   function mdLite(s) { return esc(s).replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>').replace(/\n{2,}/g, '</p><p>').replace(/\n/g, '<br>'); }
