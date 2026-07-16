@@ -77,8 +77,16 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
   const url = `${SITE}/luan-duong/${esc(id)}`;
   // teaser mô tả = tin đầu tiên của thầy (cắt gọn) → OG unfurl hấp dẫn.
   const firstThay = (row.messages || []).find((m) => m.role === 'assistant');
-  const desc = esc((firstThay?.content || 'Luận giải Tử Vi bởi thầy Luận Đường.').replace(/[*#\n]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 180));
-  const ogImg = `${SITE}/seal.webp`;
+  const teaser = (firstThay?.content || 'Luận giải Tử Vi bởi thầy Luận Đường.').replace(/[*#\n]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 180);
+  const desc = esc(teaser);
+  // OG card ĐỘNG cá nhân hoá (tên/ngày + thầy + trích lời thầy) → preview hấp dẫn
+  // hơn ảnh seal tĩnh → tăng click vào phễu chia sẻ. (esc lần nữa cho ngoặc kép HTML.)
+  const ogParams = new URLSearchParams({
+    ctx: row.ctx_label || '',
+    thay: thayName,
+    q: teaser.slice(0, 150),
+  }).toString();
+  const ogImg = esc(`${SITE}/api/og/luan-duong?${ogParams}`);
 
   const bubbles = (row.messages || []).map((m) => {
     if (m.role === 'user') {
