@@ -199,6 +199,19 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .ssm-b:hover{border-color:var(--gold-soft);color:var(--text)}
 .ssm-b.fb{border-color:#1877F2;color:#1877F2}.ssm-b.zl{border-color:#0068FF;color:#0068FF}
 
+/* ── Modal HẾT LƯỢNG (giọng thầy) — bật khi rail nhận 402, mời nạp để luận tiếp ── */
+.sh-topup-modal{position:fixed;inset:0;z-index:72;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(6,26,46,.46);backdrop-filter:blur(3px)}
+.stm-card{position:relative;width:min(400px,94vw);background:var(--white);border:1px solid var(--line-2);border-radius:16px;box-shadow:var(--shadow-lg);padding:26px 22px 20px;text-align:center}
+.stm-x{position:absolute;top:10px;right:10px;width:26px;height:26px;border:none;background:transparent;color:var(--text-lt);font-size:18px;line-height:1;cursor:pointer;border-radius:6px}
+.stm-x:hover{background:var(--paper-2);color:var(--text)}
+.stm-ava{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);margin-bottom:12px}
+.stm-t{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.stm-d{font-size:13.5px;color:var(--text-mid);line-height:1.6;margin-bottom:18px}
+.stm-btn{display:block;background:var(--red,#C0392B);color:#fff;text-decoration:none;font-family:var(--serif);font-weight:600;font-size:15px;padding:12px 20px;border-radius:10px;margin-bottom:8px}
+.stm-btn:hover{filter:brightness(1.06)}
+.stm-later{border:none;background:transparent;color:var(--text-lt);font-size:12.5px;cursor:pointer;font-family:inherit;padding:4px}
+.stm-later:hover{color:var(--text-mid)}
+
 /* ── RESPONSIVE (max-width:900px) — PHẢI để CUỐI file: các rule .rail/.sb đặt
    sau media query (vd .rail{position:relative} cho panel lịch sử) sẽ override
    mobile nếu media đứng trước → giữ khối này ở cuối để mobile thắng. ── */

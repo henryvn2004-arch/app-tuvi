@@ -466,6 +466,8 @@
       title: (curMeta && curMeta.title) || 'Luận Đường',
       ctxLabel: _birthLabel(),
       thay: _author ? { id: _author.id, name: _author.name } : null,
+      // restore: khung giữa (lá số/kịch bản) để người nhận NỐI PHIÊN hỏi tiếp.
+      restore: (curMeta && curMeta.restore) || null,
       messages: (messages || []).map(function (m) { return { role: m.role, content: String(m.content || '') }; })
     };
     var headers = { 'Content-Type': 'application/json' };
@@ -506,6 +508,80 @@
       if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, function () { try { document.execCommand('copy'); done(); } catch (e) { /* ignore */ } });
       else { try { document.execCommand('copy'); done(); } catch (e) { /* ignore */ } }
     });
+  }
+
+  // ── NỐI PHIÊN từ link chia sẻ (?fromshare=<id>) ──
+  // Người nhận đọc /luan-duong/<id> rồi bấm "Hỏi thầy tiếp" → về /app/<tool>?fromshare=<id>.
+  // Ta tải snapshot (khung giữa + transcript + thầy), NHÉT qua đúng kênh khôi phục
+  // lịch sử (app_restore/app_restore_data + app_birth) rồi reload ?auto=1 — tool tự
+  // dựng lại lá số của người chia sẻ (deterministic, FREE) + replay hỏi đáp, sẵn
+  // sàng cho người nhận hỏi tiếp. Câu hỏi MỚI mới tính Lượng (401 → mời đăng nhập,
+  // tặng Lượng tân thủ). Trả true nếu đã tiếp quản (boot dừng, trang sắp reload).
+  var _fromshareId = null, _convFired = false;
+  function consumeFromShare() {
+    var m = (location.search.match(/[?&]fromshare=([A-Za-z0-9]{6,16})\b/) || [])[1];
+    if (!m) return false;
+    var toClean = function (withAuto) {
+      var s = location.search.replace(/([?&])fromshare=[^&]*/g, '$1').replace(/[?&]+$/, '').replace(/\?&/, '?').replace(/&&/g, '&');
+      if (withAuto && !/[?&]auto=1\b/.test(s)) s += (s.indexOf('?') >= 0 ? '&' : '?') + 'auto=1';
+      location.replace(location.pathname + s);
+    };
+    fetch('/api/share-session?id=' + encodeURIComponent(m))
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) {
+        if (!j || !j.id) { toClean(false); return; } // hỏng/gỡ → bỏ param, boot thường
+        try {
+          if (j.thay && j.thay.id) localStorage.setItem('tvc_author_v1', j.thay.id); // tiếp nối đúng thầy
+          var restore = j.restore || {};
+          if (restore.birth) localStorage.setItem('app_birth', JSON.stringify(restore.birth));
+          var sess = {
+            id: newId(), toolId: ACTIVE, restore: restore, title: j.title || 'Phiên',
+            messages: (j.messages || []).map(function (mm) { return { role: mm.role, content: mm.content }; }),
+            createdAt: Date.now(), updatedAt: Date.now(),
+          };
+          sessionStorage.setItem('app_restore', JSON.stringify({ id: sess.id, toolId: ACTIVE }));
+          sessionStorage.setItem('app_restore_data', JSON.stringify(sess));
+          sessionStorage.setItem('app_fromshare_id', m);
+        } catch (e) { /* ignore */ }
+        toClean(true);
+      })
+      .catch(function () { toClean(false); });
+    return true;
+  }
+  // Beacon đo phễu: người nhận nối phiên và hỏi thật lần đầu → +1 signup_count.
+  function trackConvert(id) {
+    try {
+      var body = JSON.stringify({ id: id, kind: 'signup' });
+      if (navigator.sendBeacon) navigator.sendBeacon('/api/share-session/track', new Blob([body], { type: 'application/json' }));
+      else fetch('/api/share-session/track', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: body, keepalive: true }).catch(function () {});
+    } catch (e) { /* ignore */ }
+  }
+
+  // ── Modal HẾT LƯỢNG (giọng thầy) — bật khi rail nhận 402 ──
+  function _viewerName() {
+    try { var r = (curMeta && curMeta.restore) || {}; if (r.birth && r.birth.name) return String(r.birth.name).trim(); } catch (e) { /* ignore */ }
+    return '';
+  }
+  function openTopupModal() {
+    if (document.querySelector('.sh-topup-modal')) return;
+    var nm = _viewerName(), thay = authorLabel();
+    var wrap = document.createElement('div');
+    wrap.className = 'sh-topup-modal';
+    wrap.innerHTML =
+      '<div class="stm-card">' +
+        '<button class="stm-x" aria-label="Đóng">✕</button>' +
+        '<img class="stm-ava" src="' + authorAva() + '" alt="">' +
+        '<div class="stm-t">Quẻ còn dở, xin phép dừng ở đây…</div>' +
+        '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn tỏ tường' + (nm ? ' cho ' + esc(nm) : '') +
+          ', nhưng phần Lượng trong ví đã cạn. Nạp thêm để thầy luận tiếp mạch còn dang dở nhé.</div>' +
+        '<a class="stm-btn" href="/topup.html">Nạp Lượng để hỏi tiếp →</a>' +
+        '<button class="stm-later" type="button">Để sau</button>' +
+      '</div>';
+    document.body.appendChild(wrap);
+    var close = function () { wrap.remove(); };
+    wrap.addEventListener('click', function (e) { if (e.target === wrap) close(); });
+    wrap.querySelector('.stm-x').addEventListener('click', close);
+    wrap.querySelector('.stm-later').addEventListener('click', close);
   }
 
   function autoGrow(t) { t.style.height = 'auto'; t.style.height = Math.min(t.scrollHeight, 96) + 'px'; }
@@ -738,7 +814,8 @@
         streaming = false; setSend(true); messages.pop(); return;
       }
       if (res.status === 402) {
-        typing.innerHTML = '<p>Bạn đã hết Lượng. <a href="/topup" style="color:var(--blue);font-weight:600">Nạp thêm</a> để hỏi trợ lý. Lá số vẫn xem miễn phí.</p>';
+        typing.innerHTML = '<p>Bạn đã hết Lượng. <a href="/topup.html" style="color:var(--blue);font-weight:600">Nạp thêm</a> để hỏi trợ lý. Lá số vẫn xem miễn phí.</p>';
+        openTopupModal();
         streaming = false; setSend(true); messages.pop(); return;
       }
       if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -759,6 +836,8 @@
       typing.innerHTML = '<p>' + mdLite(acc) + '</p>';
       messages.push({ role: 'assistant', content: acc });
       saveCurrent();
+      // Đến từ link chia sẻ + đã hỏi thật lần đầu → ghi nhận 1 lượt chuyển đổi.
+      if (_fromshareId && !_convFired) { _convFired = true; trackConvert(_fromshareId); }
     } catch (e) {
       typing.innerHTML = '<p>Xin lỗi, kết nối trục trặc. Thử lại giúp tôi nhé.</p>';
       messages.pop();
@@ -840,6 +919,10 @@
 
   // ── BOOT ──
   function boot() {
+    // Nối phiên từ link chia sẻ: tải snapshot rồi reload ?auto=1 (boot dừng ở đây).
+    if (consumeFromShare()) return;
+    // Sau reload: nhận cờ fromshare để bắn beacon chuyển đổi sau câu hỏi đầu tiên.
+    try { _fromshareId = sessionStorage.getItem('app_fromshare_id') || null; if (_fromshareId) sessionStorage.removeItem('app_fromshare_id'); } catch (e) { /* ignore */ }
     pickAuthor();
     renderSidebar();
     renderRail();

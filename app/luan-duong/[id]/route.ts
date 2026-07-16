@@ -58,7 +58,13 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
     const { data } = await sb.from('shared_sessions')
       .select('tool_id,title,ctx_label,thay,messages,revoked').eq('id', id).single();
     row = (data as ShareRow) || null;
-    // (Đếm view_count / signup_count để đo phễu = PR2, cần RPC atomic.)
+    // Đếm view_count (đo phễu lan truyền) — fire-and-forget, không chặn render.
+    if (row && !row.revoked) {
+      sb.rpc('incr_shared_counter', { p_id: id, p_kind: 'view' }).then(
+        () => {},
+        () => {},
+      );
+    }
   } catch {
     /* fall through → 404 */
   }
