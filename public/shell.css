@@ -197,7 +197,7 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .ssm-share{display:flex;gap:8px}
 .ssm-b{flex:1;text-align:center;text-decoration:none;font-size:12.5px;border:1px solid var(--line-2);border-radius:8px;padding:8px 10px;color:var(--text-mid);background:var(--paper)}
 .ssm-b:hover{border-color:var(--gold-soft);color:var(--text)}
-.ssm-b.fb{border-color:#1877F2;color:#1877F2}.ssm-b.zl{border-color:#0068FF;color:#0068FF}
+.ssm-b.fb{border-color:#1877F2;color:#1877F2}.ssm-b.zl{border-color:#0068FF;color:#0068FF}.ssm-b.wa{border-color:#25D366;color:#128C7E}
 
 /* ── Modal HẾT LƯỢNG (giọng thầy) — bật khi rail nhận 402, mời nạp để luận tiếp ── */
 .sh-topup-modal{position:fixed;inset:0;z-index:72;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(6,26,46,.46);backdrop-filter:blur(3px)}
