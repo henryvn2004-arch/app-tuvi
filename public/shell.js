@@ -410,6 +410,26 @@
     });
   }
   function renderRecentAll() { var el = document.getElementById('shellRecent'); if (el) renderRecent(el); }
+  // Nạp lại lịch sử khi đăng nhập SẴN SÀNG. Token access ngắn hạn (~1h) nên khi
+  // mở lại tab/hôm sau, lúc boot token thường HẾT HẠN → _session=null → lần nạp
+  // đầu bỏ qua server (chỉ thấy local, mà iOS ITP hay xoá local) → tưởng "mất
+  // lịch sử". Auth refresh bằng cookie chạy BẤT ĐỒNG BỘ; khi có token trở lại
+  // ta nạp lại + merge server rồi vẽ lại cả "Phiên gần đây" lẫn panel lịch sử. ──
+  function refreshHistoryUI() {
+    if (!HIST_ON) return;
+    renderRecentAll();
+    var el = document.getElementById('railHist');
+    if (el && el.style.display && el.style.display !== 'none') renderHistInto(el);
+  }
+  // Đẩy các phiên đang CHỈ có ở local (tạo lúc chưa đăng nhập) lên server sau khi
+  // đăng nhập sẵn sàng → lịch sử bền vững qua thiết bị/khi iOS xoá local. Best-effort.
+  function pushLocalToServer() {
+    if (!HIST_ON || !ACTIVE || !getToken()) return;
+    var tools = [ACTIVE].concat(HIST_ALIAS[ACTIVE] || []);
+    tools.forEach(function (t) {
+      histLocal(t).forEach(function (rec) { if (rec && rec.messages && rec.messages.length) histSrvUpsert(rec); });
+    });
+  }
 
   // ── Author persona (thầy) — CHUNG cơ chế + CHUNG localStorage key với
   // tuvi-chat: mỗi phiên/máy random 1 thầy (avatar /authors/<id>.jpg + văn
@@ -477,7 +497,17 @@
       .then(function (j) {
         if (btn) btn.disabled = false;
         if (!j || !j.url) { alert('Không tạo được link chia sẻ, thử lại sau.'); return; }
-        openShareModal(location.origin + j.url);
+        var url = location.origin + j.url;
+        // Điện thoại (iOS/Android): mở SHARE SHEET native của hệ điều hành —
+        // đủ WhatsApp, Messages, AirDrop, Zalo… đúng trải nghiệm quen thuộc.
+        // Người dùng bấm ✕ (AbortError) thì thôi; lỗi khác → rơi về modal tự dựng.
+        var titleTxt = (curMeta && curMeta.title) || 'Luận Đường';
+        if (navigator.share) {
+          navigator.share({ title: titleTxt + ' — Tử Vi Minh Bảo', text: 'Xem phần luận giải của thầy cho lá số này:', url: url })
+            .catch(function (e) { if (e && e.name === 'AbortError') return; openShareModal(url); });
+        } else {
+          openShareModal(url); // desktop → modal có sao chép + Facebook/Zalo/WhatsApp
+        }
       })
       .catch(function () { if (btn) btn.disabled = false; alert('Lỗi mạng khi tạo link chia sẻ.'); });
   }
@@ -494,6 +524,7 @@
         '<div class="ssm-share">' +
           '<a class="ssm-b fb" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=' + enc + '">Facebook</a>' +
           '<a class="ssm-b zl" target="_blank" rel="noopener" href="https://zalo.me/share/link?u=' + enc + '">Zalo</a>' +
+          '<a class="ssm-b wa" target="_blank" rel="noopener" href="https://api.whatsapp.com/send?text=' + encodeURIComponent('Xem phần luận giải của thầy cho lá số này: ' + url) + '">WhatsApp</a>' +
           '<a class="ssm-b" target="_blank" rel="noopener" href="' + esc(url) + '">Mở ↗</a>' +
         '</div>' +
       '</div>';
@@ -804,6 +835,7 @@
             Auth.require(function () {
               // Đăng nhập bằng email (tại chỗ, không tải lại trang) → dọn cờ, hỏi lại ngay.
               try { sessionStorage.removeItem('app_pending_ask'); localStorage.removeItem('auth_return_to'); } catch (e) { /* ignore */ }
+              pushLocalToServer(); refreshHistoryUI(); // đăng nhập xong → giữ + nạp lại lịch sử
               ask(_q);
             });
           }
@@ -938,7 +970,15 @@
     document.addEventListener('keydown', function (e) {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); var o = document.getElementById('cmdk'); (o && o.classList.contains('open')) ? closeCmd() : openCmd(); }
     });
-    var tries = 0, t = setInterval(function () { paintAuth(); if (++tries > 20 || window.Auth) clearInterval(t); }, 300);
+    // Theo dõi phiên đăng nhập tới khi SẴN SÀNG (Auth có thể refresh token async
+    // qua cookie): cập nhật avatar/tên + nạp lại lịch sử NGAY khi token xuất hiện.
+    var tries = 0, hadTok = !!getToken();
+    var t = setInterval(function () {
+      paintAuth();
+      var tok = !!getToken();
+      if (tok && !hadTok) { hadTok = true; pushLocalToServer(); refreshHistoryUI(); } // đăng nhập vừa sẵn sàng → đẩy local + kéo lịch sử server về
+      if (++tries > 30) clearInterval(t);
+    }, 300);
     // Empty-state intro (hướng B): trang khai window.SHELL_INTRO={key,title,desc}
     // + có #introHost → shell tự hiện cho người mới, ẩn sau lần dùng đầu.
     if (window.SHELL_INTRO && window.SHELL_INTRO.key) Shell.introOnce(window.SHELL_INTRO.key, window.SHELL_INTRO);
