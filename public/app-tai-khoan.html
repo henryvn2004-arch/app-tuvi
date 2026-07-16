@@ -12,6 +12,10 @@
 <style>
 /* Trang Tài khoản trong shell: 2 cột (sidebar + nội dung, không rail) */
 .shell{grid-template-columns:246px 1fr}
+/* Mobile: rule 246px 1fr ở trên (không media) sẽ đè bản collapse của shell.css
+   → sidebar fixed off-canvas nhưng grid vẫn chừa cột 246px → nội dung dồn trái +
+   dải xám phải. Ép 1 cột lại cho mobile. */
+@media(max-width:900px){.shell{grid-template-columns:1fr}}
 .ws-body{padding:0}
 /* Style account port từ profile.html — scope trong .acct-scope để không đụng shell */
 .acct-scope{color:var(--acct-text,#1a1a1a)}
