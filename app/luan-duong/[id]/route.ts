@@ -156,7 +156,7 @@ body{font-family:var(--sans);background:var(--paper2);color:var(--text);line-hei
   <div class="chat">${bubbles}</div>
   <div class="cta">
     <div class="cta-card">
-      <span class="pill">✦ Tặng 30 Lượng khi đăng ký</span>
+      <span class="pill">✦ Tặng Lượng miễn phí khi đăng ký</span>
       <b>Muốn hỏi thầy cho chính bạn?</b>
       <p>Đăng ký để hỏi tiếp thầy trong phiên này, hoặc tự lập lá số của riêng bạn — miễn phí.</p>
       <a class="cta-btn" href="${SITE}${ctaRoute}?fromshare=${esc(id)}">Hỏi Thầy ${esc(thayName)} →</a>
