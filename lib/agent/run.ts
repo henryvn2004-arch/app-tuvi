@@ -285,8 +285,8 @@ export async function runAgent(
     }
   }
 
-  // Áp luật sinh gợi ý câu hỏi tiếp cho MỌI nhánh prompt (lá số / kịch bản / general).
-  system = system + '\n\n' + CHAT_SUGGEST_RULES;
+  // Áp luật bám hội thoại + sinh gợi ý câu hỏi tiếp cho MỌI nhánh prompt.
+  system = system + '\n\n' + CHAT_FOLLOWUP_RULE + '\n\n' + CHAT_SUGGEST_RULES;
   let suggestions: string[] = [];
 
   send(sse.status({ text: hasImages ? 'Đang xem ảnh...' : 'Đang suy xét...' }));
@@ -612,6 +612,16 @@ async function streamTurn(
 // ── Luật sinh gợi ý câu hỏi tiếp theo (chip động) ────────────
 // Model kết thúc bằng 1 dòng "SUGGEST: q1 | q2 | q3"; streamTurn cắt dòng này
 // KHÔNG cho lộ ra câu trả lời, trả về mảng cho client làm chip gợi ý bám hội thoại.
+// Xử lý tin NGẮN/TIẾP NỐI: chống lỗi model coi "ok/ừ/có" là câu hỏi mới rồi luận
+// lại từ đầu. Lịch sử hội thoại ĐÃ được gửi kèm (10 tin gần nhất) → model có đủ
+// bối cảnh, chỉ cần buộc nó BÁM vào. Áp cho mọi nhánh (lá số/kịch bản/general).
+const CHAT_FOLLOWUP_RULE =
+  'BÁM HỘI THOẠI (QUAN TRỌNG): Các tin phía trên là bối cảnh — đọc kỹ và nối tiếp tự nhiên như một cuộc trò chuyện. ' +
+  'Nếu tin CUỐI của người dùng là lời đồng ý / tiếp nối NGẮN ("ok", "ừ", "có", "vâng", "được", "ừ đi", "tiếp", "tiếp đi", ' +
+  '"đồng ý", "sao nữa", "còn gì", "kể tiếp", "chi tiết hơn", "rồi sao"...) hoặc trỏ ngược ("cái đó", "vụ đó", "phần đó") — ' +
+  'đó là ĐỒNG Ý / yêu cầu nói tiếp về CHÍNH câu hỏi hay đề nghị mà CHÍNH BẠN vừa nêu ở lượt trả lời TRƯỚC. ' +
+  'Hãy luận TIẾP đúng chủ đề đó ngay, TUYỆT ĐỐI không hỏi lại "bạn muốn xem gì", không luận lại từ đầu, không đổi chủ đề.';
+
 const CHAT_SUGGEST_RULES =
   'CUỐI CÙNG, sau khi luận xong, xuống dòng và ghi ĐÚNG một dòng bắt đầu bằng "SUGGEST: " ' +
   'gồm 3 câu hỏi ngắn (mỗi câu ≤ 12 từ) mà người dùng có thể muốn hỏi TIẾP, bám sát nội dung vừa luận, ' +
