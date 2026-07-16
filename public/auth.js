@@ -192,7 +192,34 @@ function saveSession(data) {
   localStorage.setItem(USER_KEY, JSON.stringify(_user));
   if (data.refresh_token) _setCookie('tuvi_rt', data.refresh_token, 180);
   updateNavUI();
+  if (data.access_token) sendSignupSignal(data.access_token);
 }
+
+// ── Beacon chống lạm dụng thưởng Lượng ──
+// Gọi sau mỗi lần đăng nhập/đăng ký. Gửi device_id (ổn định theo trình duyệt) để
+// server áp cap thưởng theo thiết bị. Fire trên MỌI lần đăng nhập; server idempotent
+// theo user (chỉ xử user mới) → mỗi tài khoản mới trên cùng thiết bị đều được đếm.
+function _deviceId() {
+  try {
+    var d = localStorage.getItem('tvc_device_id');
+    if (!d) {
+      d = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('d' + Date.now() + Math.random().toString(36).slice(2));
+      localStorage.setItem('tvc_device_id', d);
+    }
+    return d;
+  } catch (e) { return ''; }
+}
+function sendSignupSignal(token) {
+  try {
+    fetch('/api/signup-signal', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ fp: _deviceId() }),
+      keepalive: true,
+    }).catch(function () {});
+  } catch (e) { /* ignore */ }
+}
+window.sendSignupSignal = sendSignupSignal;
 
 // ── Update Nav UI (show avatar or sign in button) ──
 function updateNavUI() {
@@ -278,7 +305,7 @@ function showAuthModal(callback) {
       <!-- Tabs -->
       <div style="display:flex;gap:0;margin-bottom:28px;border-bottom:2px solid #eee">
         <button id="tab-signin" onclick="switchTab('signin')" style="flex:1;padding:10px;border:none;background:none;font-size:14px;font-weight:600;color:#061A2E;border-bottom:2px solid #061A2E;margin-bottom:-2px;cursor:pointer;font-family:inherit">Đăng nhập</button>
-        <button id="tab-signup" onclick="switchTab('signup')" style="flex:1;padding:10px;border:none;background:none;font-size:14px;font-weight:500;color:#aaa;cursor:pointer;font-family:inherit">Đăng ký <span style="font-size:11px;color:#1E6B3C;font-weight:700">+25 credits</span></button>
+        <button id="tab-signup" onclick="switchTab('signup')" style="flex:1;padding:10px;border:none;background:none;font-size:14px;font-weight:500;color:#aaa;cursor:pointer;font-family:inherit">Đăng ký <span style="font-size:11px;color:#1E6B3C;font-weight:700">tặng Lượng</span></button>
       </div>
 
       <!-- Logo -->
@@ -393,7 +420,7 @@ function _showFreeCreditsWelcome() {
   const b = document.createElement('div');
   b.id = 'free-credits-banner';
   b.style.cssText = 'position:fixed;top:70px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1E6B3C,#155d32);color:#fff;padding:14px 28px;border-radius:10px;font-size:14px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.25);text-align:center;white-space:nowrap;animation:tpw-fade .3s ease';
-  b.innerHTML = '🎉 Chào mừng! Bạn đã nhận <strong>25 credits miễn phí</strong> — thử ngay Xem Tướng (5cr/lần)';
+  b.innerHTML = '🎉 Chào mừng! Bạn đã nhận <strong>Lượng miễn phí</strong> — thử ngay Xem Tướng (5 Lượng/lần)';
   document.body.appendChild(b);
   setTimeout(() => { b.style.transition = 'opacity .6s'; b.style.opacity = '0'; }, 5000);
   setTimeout(() => b.remove(), 5700);

@@ -54,6 +54,13 @@ body { font-family: sans-serif; display:flex; align-items:center; justify-conten
       session.user = user;
       localStorage.setItem(SESSION_KEY, JSON.stringify(session));
       localStorage.setItem(USER_KEY, JSON.stringify(user));
+      // Beacon chống lạm dụng thưởng Lượng (đăng nhập OAuth). Gửi device_id ổn định
+      // theo trình duyệt; server idempotent theo user. Không chặn điều hướng.
+      try {
+        var did = localStorage.getItem('tvc_device_id');
+        if (!did) { did = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('d' + Date.now() + Math.random().toString(36).slice(2)); localStorage.setItem('tvc_device_id', did); }
+        fetch('/api/signup-signal', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + access_token }, body: JSON.stringify({ fp: did }), keepalive: true }).catch(function () {});
+      } catch (e) { /* ignore */ }
       window.location.href = _dest();
     })
     .catch(() => { _dest(); window.location.href = '/'; });
