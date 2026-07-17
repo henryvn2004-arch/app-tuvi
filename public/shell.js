@@ -935,6 +935,8 @@
     var open = (document.getElementById('shell-sidebar') && document.getElementById('shell-sidebar').classList.contains('open')) ||
       (document.getElementById('shell-rail') && document.getElementById('shell-rail').classList.contains('open'));
     b.classList.toggle('on', open);
+    // Ẩn bottom tab khi drawer (sidebar/rail) đang mở để không đè input rail toàn màn.
+    document.body.classList.toggle('drawer-open', open);
   }
   window.shellSyncBackdrop = syncBackdrop;
   function paintAuth() {
@@ -949,6 +951,38 @@
     } catch (e) { /* ignore */ }
   }
 
+  // ── BOTTOM TAB BAR (mobile) ──
+  // Chèn 1 lần vào body; CSS chỉ hiện ≤900px. Cho phép chạm 1 phát tới Trợ lý
+  // (rail) và Công cụ (sidebar) thay vì chôn sau hamburger. Trang chủ / Tài
+  // khoản là link điều hướng. Active theo trang đang mở.
+  function renderTabbar() {
+    if (document.getElementById('shell-tabbar')) return;
+    var isHome = ACTIVE === 'home';
+    var isAcct = ACTIVE === 'ho-so' || ACTIVE === 'vi-luong' || ACTIVE === 'tai-khoan';
+    var isTool = !isHome && !isAcct;
+    var TI = {
+      home: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',
+      chat: '<path d="M4 5h16v11H8l-4 4V5Z" stroke-linejoin="round"/>',
+      grid: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/>',
+      user: '<circle cx="12" cy="8" r="3.6"/><path d="M5 20a7 7 0 0 1 14 0" stroke-linecap="round"/>',
+    };
+    function ti(n) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">' + TI[n] + '</svg>'; }
+    var nav = document.createElement('nav');
+    nav.className = 'tabbar'; nav.id = 'shell-tabbar';
+    nav.innerHTML =
+      '<a class="tab' + (isHome ? ' active' : '') + '" href="/app">' + ti('home') + 'Trang chủ</a>' +
+      '<button class="tab" type="button" data-tab="rail">' + ti('chat') + 'Trợ lý</button>' +
+      '<button class="tab' + (isTool ? ' active' : '') + '" type="button" data-tab="tools">' + ti('grid') + 'Công cụ</button>' +
+      '<a class="tab' + (isAcct ? ' active' : '') + '" href="/app/tai-khoan">' + ti('user') + 'Tài khoản</a>';
+    document.body.appendChild(nav);
+    nav.querySelector('[data-tab="rail"]').addEventListener('click', function () {
+      var r = document.getElementById('shell-rail'); if (r) { r.classList.add('open'); syncBackdrop(); }
+    });
+    nav.querySelector('[data-tab="tools"]').addEventListener('click', function () {
+      var s = document.getElementById('shell-sidebar'); if (s) { s.classList.add('open'); syncBackdrop(); }
+    });
+  }
+
   // ── BOOT ──
   function boot() {
     // Nối phiên từ link chia sẻ: tải snapshot rồi reload ?auto=1 (boot dừng ở đây).
@@ -958,6 +992,7 @@
     pickAuthor();
     renderSidebar();
     renderRail();
+    renderTabbar();
     ensureCmdk();
     if (!document.getElementById('shell-backdrop')) {
       var b = document.createElement('div'); b.className = 'backdrop'; b.id = 'shell-backdrop';

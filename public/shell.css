@@ -142,6 +142,16 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .mobile-only{display:none}
 .shell svg{display:block}
 
+/* ── BOTTOM TAB BAR (mobile) — điều hướng chạm bằng ngón cái. Thay lối
+   "chỉ mở drawer": Trợ lý (rail) + Công cụ (sidebar) chạm 1 phát tới được,
+   thay vì chôn sau hamburger. shell.js chèn #shell-tabbar vào body; chỉ hiện
+   ≤900px; ẩn khi drawer/cmdk đang mở. Desktop KHÔNG đụng tới. ── */
+.tabbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:49;grid-template-columns:repeat(4,1fr);background:linear-gradient(180deg,var(--navy-2),var(--navy));border-top:1px solid rgba(201,168,76,.18);padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -6px 20px rgba(6,26,46,.22)}
+.tabbar .tab{appearance:none;-webkit-appearance:none;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 4px 8px;color:var(--sb-txt-dim);font-family:inherit;font-size:10.5px;line-height:1;text-decoration:none;-webkit-tap-highlight-color:transparent}
+.tabbar .tab svg{width:22px;height:22px;display:block;stroke-width:1.7}
+.tabbar .tab.active{color:var(--gold)}
+.tabbar .tab:active{background:rgba(255,255,255,.05)}
+
 /* ── EMPTY-STATE INTRO (giới thiệu ngắn 1 lần, ẩn sau lần dùng đầu) ── */
 .intro-card{position:relative;background:linear-gradient(180deg,var(--gold-lt),var(--white));border:1px solid var(--gold-soft);border-radius:12px;padding:14px 40px 14px 16px;box-shadow:var(--shadow);margin-bottom:16px;max-width:720px}
 .intro-card .intro-t{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--text);margin-bottom:5px;display:flex;align-items:center;gap:8px}
@@ -221,9 +231,14 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
   .shell{grid-template-columns:1fr}
   .sb{position:fixed;left:0;top:0;bottom:0;width:270px;z-index:60;transform:translateX(-100%);transition:transform .25s}
   .sb.open{transform:none}
-  .rail{position:fixed;right:0;top:0;bottom:0;width:min(360px,90vw);z-index:60;transform:translateX(100%);transition:transform .25s;border-left:1px solid var(--line)}
+  /* Rail = trợ lý TOÀN MÀN trên điện thoại (was 360px drawer) → cảm giác app thật. */
+  .rail{position:fixed;right:0;top:0;bottom:0;width:100vw;max-width:none;z-index:60;transform:translateX(100%);transition:transform .25s;border-left:none}
   .rail.open{transform:none}
   .mobile-only{display:inline-flex}
   .backdrop{position:fixed;inset:0;background:rgba(6,26,46,.4);z-index:55;display:none}
   .backdrop.on{display:block}
+  /* Bottom tab: hiện trên mobile, chừa chỗ cuối trang, ẩn khi drawer đang mở. */
+  .tabbar{display:grid}
+  .ws-body{padding-bottom:76px}
+  body.drawer-open .tabbar{display:none}
 }
