@@ -59,17 +59,23 @@ npx cap sync
    `push_tokens` (gắn user nếu có Bearer). Dùng `SUPABASE_SERVICE_KEY` sẵn có.
 3. **Bảng** — `_patches/migration-push-tokens.sql` (Henry chạy trong Supabase).
 
-### ⏳ CÒN LẠI (Claude làm sau khi có Firebase + 1 device token thật để test)
-4. **Cron gửi sáng** `POST /api/cron/daily-push` + `vercel.json` cron (~0h UTC =
-   7h VN): đọc `push_tokens` → tính **Vận hôm nay** (dùng `HoangDaoTool`/engine,
-   đúng nguồn với thẻ web) → gửi FCM. Cá nhân hoá nếu token có `birth`.
-   - **Env cần** (Vercel): `FIREBASE_SERVICE_ACCOUNT` (JSON service account, để
-     gửi FCM v1). iOS đi qua Firebase→APNs nên không cần .p8 trực tiếp.
-   - Để sau vì gửi FCM cần verify đầu-cuối bằng máy thật — không ship mù.
+### ✅ ĐÃ VIẾT (verify tĩnh) — `app/api/cron/daily-push/route.ts` + cron trong `vercel.json`
+4. **Cron gửi sáng** `GET /api/cron/daily-push` (cron `0 0 * * *` = 7h VN): đọc
+   `push_tokens` → tính **Vận hôm nay** (can chi ngày, cùng công thức
+   `HoangDaoTool`) → gửi **FCM HTTP v1** (JWT RS256 từ service account → OAuth →
+   messages:send). Token chết (404/400) tự tắt. **KÊNH RIÊNG** với web-push cũ
+   (`/api/cron-push`), không đụng vào nhau.
+   - **Env**: `FIREBASE_SERVICE_ACCOUNT` (đã đặt) + `CRON_SECRET` (bảo vệ route).
+   - **Trơ khi chưa đủ**: thiếu env / 0 token → no-op (an toàn).
+   - Verify tĩnh: `tsc` 0 lỗi; can chi khớp (`Quý Dậu` 17/7); ký JWT RS256 chạy
+     đúng. **CHƯA** test gửi thật (cần device token thật + máy build).
 
-**Kiểm tra nhanh khi Henry build xong (trước cả bước 4):** cài app → mở → vào
-Supabase xem bảng `push_tokens` có dòng token mới không. Có = luồng đăng ký chạy
-đúng; lúc đó mới làm bước 4 (gửi).
+### ⏳ Còn lại — CHỈ test đầu-cuối (cần Henry)
+- Build app (Android Studio + `google-services.json`) → cài **máy thật** → mở →
+  token vào bảng `push_tokens`.
+- Merge #213 (bật cron) → chạy thử `/api/cron/daily-push` → nhận push trên máy.
+- Claude không build/cài được native trong sandbox Linux (không Xcode/Studio +
+  không có điện thoại) → khúc này bắt buộc Henry chạy.
 
 Nội dung push: *"Vận hôm nay đã sẵn sàng ☾ — Ngày <can chi>, giờ đẹp <…>. Chạm
 để xem."* Deterministic, không bịa số — **giữ nguyên** nguyên tắc engine.
