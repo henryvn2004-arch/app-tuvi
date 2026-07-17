@@ -1,0 +1,12 @@
+# Deps
+node_modules/
+
+# macOS
+.DS_Store
+
+# Capacitor build output
+www/dist/
+
+# Ghi chú: thư mục native android/ và ios/ do `npx cap add` sinh ra.
+# Sau khi tạo, NÊN commit chúng (chứa cấu hình signing, google-services.json
+# reference, Info.plist…) để versioning — nên KHÔNG ignore ở đây.
