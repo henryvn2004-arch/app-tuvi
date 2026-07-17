@@ -48,20 +48,28 @@ npx cap sync
 - Xcode: bật capability **Push Notifications** + **Background Modes › Remote
   notifications**; nạp APNs key lên Firebase (Cloud Messaging → Apple app config).
 
-## 4. Phần CODE push còn lại (Claude làm — SAU khi có Firebase + 1 device token thật để test)
+## 4. Phần CODE push
 
-Làm sau vì cần token thật để verify đầu-cuối (không ship mù):
+### ✅ ĐÃ XONG (không cần Firebase, đã verify) — trong PR native
+1. **Web glue đăng ký push** — nằm trong `public/shell.js` (`registerNativePush()`,
+   gọi lúc boot). **TRƠ** ở trình duyệt thường; trong app native: xin quyền → lấy
+   device token → `POST /api/push/register`. (Verify Playwright: browser thường
+   không gọi; giả lập `window.Capacitor` → POST token đúng.)
+2. **Endpoint lưu token** — `app/api/push/register/route.ts`: upsert token vào
+   `push_tokens` (gắn user nếu có Bearer). Dùng `SUPABASE_SERVICE_KEY` sẵn có.
+3. **Bảng** — `_patches/migration-push-tokens.sql` (Henry chạy trong Supabase).
 
-1. **Web glue** `public/native-push.js` (nạp trong shell, **trơ** ở trình duyệt
-   thường — chỉ chạy khi có `window.Capacitor`): xin quyền → đăng ký push →
-   POST token về `/api/push/register`.
-2. **Lưu token** — bảng Supabase `push_tokens (user_id?, platform, token,
-   created_at)` + endpoint `POST /api/push/register` (migration Henry chạy).
-3. **Cron gửi sáng** `POST /api/cron/daily-push` + `vercel.json` cron (~0h UTC =
-   7h VN): tính **Vận hôm nay** (dùng `HoangDaoTool`/engine, đúng nguồn với thẻ
-   web) → gửi FCM tới tokens. Cá nhân hoá nếu có lá số của user.
-4. **Env cần** (Vercel): `FIREBASE_SERVICE_ACCOUNT` (JSON, để gửi FCM). iOS đi
-   qua Firebase→APNs nên không cần gửi .p8 trực tiếp.
+### ⏳ CÒN LẠI (Claude làm sau khi có Firebase + 1 device token thật để test)
+4. **Cron gửi sáng** `POST /api/cron/daily-push` + `vercel.json` cron (~0h UTC =
+   7h VN): đọc `push_tokens` → tính **Vận hôm nay** (dùng `HoangDaoTool`/engine,
+   đúng nguồn với thẻ web) → gửi FCM. Cá nhân hoá nếu token có `birth`.
+   - **Env cần** (Vercel): `FIREBASE_SERVICE_ACCOUNT` (JSON service account, để
+     gửi FCM v1). iOS đi qua Firebase→APNs nên không cần .p8 trực tiếp.
+   - Để sau vì gửi FCM cần verify đầu-cuối bằng máy thật — không ship mù.
+
+**Kiểm tra nhanh khi Henry build xong (trước cả bước 4):** cài app → mở → vào
+Supabase xem bảng `push_tokens` có dòng token mới không. Có = luồng đăng ký chạy
+đúng; lúc đó mới làm bước 4 (gửi).
 
 Nội dung push: *"Vận hôm nay đã sẵn sàng ☾ — Ngày <can chi>, giờ đẹp <…>. Chạm
 để xem."* Deterministic, không bịa số — **giữ nguyên** nguyên tắc engine.

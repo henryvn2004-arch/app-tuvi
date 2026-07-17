@@ -983,6 +983,36 @@
     });
   }
 
+  // ── APP NATIVE (Capacitor): đăng ký PUSH ──
+  // TRƠ ở trình duyệt thường (window.Capacitor undefined → return ngay). Trong
+  // app native: xin quyền → lấy device token (FCM/APNs) → POST /api/push/register
+  // để server lưu, phục vụ push "Vận hôm nay" mỗi sáng. Không đụng web thường.
+  function registerNativePush() {
+    var Cap = window.Capacitor;
+    if (!Cap || !Cap.Plugins || !Cap.Plugins.PushNotifications) return;
+    var PN = Cap.Plugins.PushNotifications;
+    var platform = 'android';
+    try { if (Cap.getPlatform) platform = Cap.getPlatform(); } catch (e) { /* ignore */ }
+    var sendToken = function (token) {
+      if (!token) return;
+      var headers = { 'Content-Type': 'application/json' };
+      var tk = getToken(); if (tk) headers['Authorization'] = 'Bearer ' + tk;
+      var birth = null; try { birth = JSON.parse(localStorage.getItem('app_birth') || 'null'); } catch (e) { /* ignore */ }
+      try {
+        fetch('/api/push/register', { method: 'POST', headers: headers, keepalive: true,
+          body: JSON.stringify({ token: token, platform: platform, birth: birth }) }).catch(function () {});
+      } catch (e) { /* ignore */ }
+    };
+    try {
+      PN.addListener('registration', function (t) { sendToken(t && t.value); });
+      PN.addListener('registrationError', function (e) { if (window.console) console.error('[native-push]', e); });
+      Promise.resolve(PN.checkPermissions()).then(function (p) {
+        if (p && p.receive === 'granted') return PN.register();
+        return Promise.resolve(PN.requestPermissions()).then(function (r) { if (r && r.receive === 'granted') return PN.register(); });
+      }).catch(function () { /* ignore */ });
+    } catch (e) { /* ignore */ }
+  }
+
   // ── BOOT ──
   function boot() {
     // Nối phiên từ link chia sẻ: tải snapshot rồi reload ?auto=1 (boot dừng ở đây).
@@ -993,6 +1023,7 @@
     renderSidebar();
     renderRail();
     renderTabbar();
+    registerNativePush();
     ensureCmdk();
     if (!document.getElementById('shell-backdrop')) {
       var b = document.createElement('div'); b.className = 'backdrop'; b.id = 'shell-backdrop';
