@@ -341,7 +341,7 @@
     var html = '';
     (msgs || []).forEach(function (m) {
       if (m.role === 'user') html += '<div class="msg u">' + esc(m.content) + '</div>';
-      else html += '<div class="msg a"><img class="msg-ava" src="' + authorAva() + '" alt=""><div class="msg-body"><p>' + mdLite(m.content) + '</p></div></div>';
+      else html += '<div class="msg a"><img class="msg-ava" src="' + authorAva() + '" alt=""><div class="msg-body">' + mdLite(m.content) + '</div></div>';
     });
     chat.innerHTML = html; chat.scrollTop = chat.scrollHeight;
   }
@@ -616,7 +616,42 @@
   }
 
   function autoGrow(t) { t.style.height = 'auto'; t.style.height = Math.min(t.scrollHeight, 96) + 'px'; }
-  function mdLite(s) { return esc(s).replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>').replace(/\n{2,}/g, '</p><p>').replace(/\n/g, '<br>'); }
+  // Render Markdown nhẹ cho rail: **đậm** + đoạn văn + BẢNG GFM (| ô | với hàng
+  // phân cách ---) + list "- "/"* ". Trả về HTML KHỐI (tự bọc <p>/<table>/<ul>)
+  // → nơi gọi KHÔNG bọc thêm <p>. Bảng/list chỉ hiện khi model xuất; mặc định
+  // vẫn là văn xuôi nên hội thoại thường không đổi.
+  function mdInline(t) { return esc(t).replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>'); }
+  function mdRow(r) { return r.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map(function (c) { return c.trim(); }); }
+  function mdLite(s) {
+    var lines = String(s == null ? '' : s).split('\n');
+    var out = [], para = [], i = 0;
+    function flush() { if (para.length) { out.push('<p>' + para.map(mdInline).join('<br>') + '</p>'); para = []; } }
+    while (i < lines.length) {
+      var ln = lines[i];
+      if (ln.trim() === '') { flush(); i++; continue; }
+      // Bảng: dòng có '|' và dòng KẾ là hàng phân cách (chỉ - : | và khoảng trắng, có ≥1 '-').
+      if (ln.indexOf('|') >= 0 && i + 1 < lines.length && /-/.test(lines[i + 1]) && /^[\s|:-]+$/.test(lines[i + 1])) {
+        flush();
+        var head = mdRow(ln); i += 2; var rows = [];
+        while (i < lines.length && lines[i].indexOf('|') >= 0 && lines[i].trim() !== '') { rows.push(mdRow(lines[i])); i++; }
+        out.push('<div class="md-tblwrap"><table class="md-tbl"><thead><tr>' +
+          head.map(function (c) { return '<th>' + mdInline(c) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+          rows.map(function (r) { return '<tr>' + r.map(function (c) { return '<td>' + mdInline(c) + '</td>'; }).join('') + '</tr>'; }).join('') +
+          '</tbody></table></div>');
+        continue;
+      }
+      // List "- " / "* ".
+      if (/^\s*[-*]\s+/.test(ln)) {
+        flush(); var items = [];
+        while (i < lines.length && /^\s*[-*]\s+/.test(lines[i])) { items.push('<li>' + mdInline(lines[i].replace(/^\s*[-*]\s+/, '')) + '</li>'); i++; }
+        out.push('<ul class="md-ul">' + items.join('') + '</ul>');
+        continue;
+      }
+      para.push(ln); i++;
+    }
+    flush();
+    return out.join('');
+  }
   function getToken() { try { var s = window.Auth && Auth.getSession && Auth.getSession(); return s ? s.access_token : null; } catch (e) { return null; } }
   function setSend(on) { var s = document.getElementById('railSend'), i = document.getElementById('railInput'), a = document.getElementById('railAttach'); if (s) s.disabled = !on; if (a) a.disabled = !on; if (i) { i.disabled = !on; if (on) i.focus(); } }
 
@@ -632,7 +667,7 @@
   function greet(o) {
     var chat = document.getElementById('chat');
     chat.innerHTML =
-      '<div class="msg a"><img class="msg-ava" src="' + authorAva() + '" alt=""><div class="msg-body"><p>' + mdLite(o.greeting || 'Lá số đã sẵn sàng. Bạn muốn tôi soi điều gì trước?') + '</p></div></div>';
+      '<div class="msg a"><img class="msg-ava" src="' + authorAva() + '" alt=""><div class="msg-body">' + mdLite(o.greeting || 'Lá số đã sẵn sàng. Bạn muốn tôi soi điều gì trước?') + '</div></div>';
     // Gợi ý câu hỏi: hàng chip CỐ ĐỊNH trên ô nhập, còn suốt hội thoại (bấm
     // thì bớt dần), thay vì chỉ hiện 1 lần ở lời chào.
     if (o.chips !== undefined) { ctxChipsOrig = (o.chips || []).slice(); ctxChips = ctxChipsOrig.slice(); }
@@ -858,14 +893,14 @@
         var parts = buf.split('\n\n'); buf = parts.pop();
         for (var i = 0; i < parts.length; i++) {
           var ev = parseSSE(parts[i]); if (!ev) continue;
-          if (ev.name === 'text' && ev.data.delta) { acc += ev.data.delta; typing.innerHTML = '<p>' + mdLite(acc) + '</p>'; chat.scrollTop = chat.scrollHeight; }
+          if (ev.name === 'text' && ev.data.delta) { acc += ev.data.delta; typing.innerHTML = mdLite(acc); chat.scrollTop = chat.scrollHeight; }
           else if (ev.name === 'status' && !acc) { typing.innerHTML = '<span class="typing" style="gap:6px">' + esc(ev.data.text || 'Đang xem…') + ' <i></i><i></i><i></i></span>'; }
           else if (ev.name === 'error') { acc = acc || ('Xin lỗi, gặp trục trặc: ' + esc(ev.data.message || '')); }
           else if (ev.name === 'done' && ev.data && ev.data.suggestions && ev.data.suggestions.length) { ctxChips = ev.data.suggestions.slice(0, 4); }
         }
       }
       if (!acc) acc = '(không có nội dung)';
-      typing.innerHTML = '<p>' + mdLite(acc) + '</p>';
+      typing.innerHTML = mdLite(acc);
       messages.push({ role: 'assistant', content: acc });
       saveCurrent();
       // Đến từ link chia sẻ + đã hỏi thật lần đầu → ghi nhận 1 lượt chuyển đổi.
