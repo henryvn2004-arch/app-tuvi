@@ -70,14 +70,15 @@ describe('tinhTieuHan', () => {
     expect(tinhTieuHan('Tý', 'nam', 2)).toBe(dcIdx('Hợi'));
   });
 
-  it('nu, chiNam=Tý, tuổi 1 → Thìn (4)', () => {
-    // TIEU_HAN_KHOI['nu']['Tý'] = 'Thìn'
-    expect(tinhTieuHan('Tý', 'nu', 1)).toBe(dcIdx('Thìn'));
+  it('nu, chiNam=Tý, tuổi 1 → Tuất (10)', () => {
+    // Khởi tiểu hạn theo TAM HỢP giống nam (Thân-Tý-Thìn→Tuất); giới tính chỉ
+    // đổi chiều đếm. TIEU_HAN_KHOI['nu']['Tý'] = 'Tuất'.
+    expect(tinhTieuHan('Tý', 'nu', 1)).toBe(dcIdx('Tuất'));
   });
 
-  it('nu, chiNam=Tý, tuổi 2 → Mão (3)', () => {
-    // Thìn(4)-1=3=Mão
-    expect(tinhTieuHan('Tý', 'nu', 2)).toBe(dcIdx('Mão'));
+  it('nu, chiNam=Tý, tuổi 2 → Dậu (9)', () => {
+    // nu đếm NGHỊCH: Tuất(10)-1=9=Dậu
+    expect(tinhTieuHan('Tý', 'nu', 2)).toBe(dcIdx('Dậu'));
   });
 
   it('cycles every 12 years', () => {

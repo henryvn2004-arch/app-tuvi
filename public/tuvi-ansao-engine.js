@@ -4646,18 +4646,12 @@ function tinhTieuVanScores(ls, gioitinh, amDuong, chiNam, namSinhDL) {
     }
   }
 
-  // Tiểu hạn cung per year
-  const TIEU_HAN_KHOI = {
-    'nam': { 'Tý':'Dần','Sửu':'Sửu','Dần':'Tý','Mão':'Hợi','Thìn':'Tuất','Tỵ':'Dậu',
-             'Ngọ':'Thân','Mùi':'Mùi','Thân':'Ngọ','Dậu':'Tỵ','Tuất':'Thìn','Hợi':'Mão' },
-    'nu':  { 'Tý':'Thân','Sửu':'Dậu','Dần':'Tuất','Mão':'Hợi','Thìn':'Tý','Tỵ':'Sửu',
-             'Ngọ':'Dần','Mùi':'Mão','Thân':'Thìn','Dậu':'Tỵ','Tuất':'Ngọ','Hợi':'Mùi' },
-  };
+  // Tiểu hạn cung per year — DÙNG CHUNG tinhTieuHan() gốc (cùng bảng tam hợp
+  // TIEU_HAN_KHOI ở đầu file). Trước đây hàm này có bảng khởi RIÊNG tự chế
+  // (mod12(2-chiIdx)) lệch quy tắc tam hợp ở 10/12 chi → tieuVanScores &
+  // tra_tieu_van báo sai cung tiểu hạn. Nay gọi lại nguồn duy nhất, hết drift.
   function getTieuHanCungIdx(tuoi) {
-    const startDC = TIEU_HAN_KHOI[gioitinh]?.[chiNam] || 'Dần';
-    const startI  = dcIdx(startDC);
-    const offset  = (tuoi - 1) % 12;
-    return gioitinh === 'nam' ? mod12(startI + offset) : mod12(startI - offset);
+    return tinhTieuHan(chiNam, gioitinh, tuoi);
   }
 
   // ── Build spline ──────────────────────────────────────────────
