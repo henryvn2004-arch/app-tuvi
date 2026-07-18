@@ -19,6 +19,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     defaults:
       run:
         working-directory: mobile
@@ -71,9 +73,22 @@ jobs:
       - name: Build debug APK
         run: cd android && ./gradlew assembleDebug --no-daemon --stacktrace
 
-      - name: Upload APK
+      - name: Upload APK (artifact)
         uses: actions/upload-artifact@v4
         with:
           name: app-debug-apk
           path: mobile/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+
+      # Đăng APK lên Releases → tải trực tiếp file .apk trên điện thoại (không zip,
+      # không cần đăng nhập vì repo public). Tag cố định apk-latest → luôn ghi đè bản mới.
+      - name: Publish APK to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: apk-latest
+          name: APK mới nhất (debug)
+          prerelease: true
+          files: mobile/android/app/build/outputs/apk/debug/app-debug.apk
+          body: |
+            APK debug tự build từ CI. Tải **app-debug.apk** bên dưới → mở file trên
+            điện thoại → bật "Cài từ nguồn không xác định" → Cài. Build lại sẽ ghi đè.
