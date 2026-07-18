@@ -65,8 +65,10 @@ async function fcmAccessToken(sa: { client_email: string; private_key: string })
 export async function GET(request: NextRequest) {
   // Chỉ cho cron (Vercel gắn Authorization: Bearer CRON_SECRET) hoặc header cron.
   const auth = request.headers.get('authorization') || '';
-  const isVercelCron = request.headers.get('x-vercel-cron') != null;
-  if (CRON_SECRET && auth !== 'Bearer ' + CRON_SECRET && !isVercelCron) {
+  // Chỉ chạy khi có Bearer CRON_SECRET — Vercel cron TỰ gắn header này khi
+  // CRON_SECRET có trong env (cũng dùng khi bấm "Run" thủ công trên dashboard).
+  // KHÔNG tin x-vercel-cron (client ngoài giả được) → fail closed.
+  if (!CRON_SECRET || auth !== 'Bearer ' + CRON_SECRET) {
     return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
   }
   if (!FIREBASE_SA) return NextResponse.json({ ok: true, skipped: 'no FIREBASE_SERVICE_ACCOUNT' });
