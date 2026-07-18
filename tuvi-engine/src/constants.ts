@@ -169,10 +169,14 @@ export const TRIET_BANG: Record<ThienCan, DiaChi[]> = {
 
 // ─── TIỂU HẠN ────────────────────────────────────────────────
 export const TIEU_HAN_KHOI: Record<'nam'|'nu', Record<DiaChi, DiaChi>> = {
-  'nam': {'Tý':'Tuất','Sửu':'Dậu','Dần':'Thân','Mão':'Mùi','Thìn':'Ngọ','Tỵ':'Tỵ',
-          'Ngọ':'Thìn','Mùi':'Mão','Thân':'Dần','Dậu':'Sửu','Tuất':'Tý','Hợi':'Hợi'},
-  'nu':  {'Tý':'Thìn','Sửu':'Tỵ','Dần':'Ngọ','Mão':'Mùi','Thìn':'Thân','Tỵ':'Dậu',
-          'Ngọ':'Tuất','Mùi':'Hợi','Thân':'Tý','Dậu':'Sửu','Tuất':'Dần','Hợi':'Mão'},
+  // Khởi tiểu hạn tuổi 1 theo TAM HỢP tuổi (giống nhau nam/nữ — giới tính chỉ
+  // đổi CHIỀU đếm thuận/nghịch trong tinhTieuHan): Thân-Tý-Thìn→Tuất,
+  // Dần-Ngọ-Tuất→Thìn, Tỵ-Dậu-Sửu→Mùi, Hợi-Mão-Mùi→Sửu. (Trước đây bảng này
+  // tự chế mod12(10-chiIdx) → 12 giá trị khác nhau, sai quy tắc tam hợp.)
+  'nam': {'Tý':'Tuất','Sửu':'Mùi','Dần':'Thìn','Mão':'Sửu','Thìn':'Tuất','Tỵ':'Mùi',
+          'Ngọ':'Thìn','Mùi':'Sửu','Thân':'Tuất','Dậu':'Mùi','Tuất':'Thìn','Hợi':'Sửu'},
+  'nu':  {'Tý':'Tuất','Sửu':'Mùi','Dần':'Thìn','Mão':'Sửu','Thìn':'Tuất','Tỵ':'Mùi',
+          'Ngọ':'Thìn','Mùi':'Sửu','Thân':'Tuất','Dậu':'Mùi','Tuất':'Thìn','Hợi':'Sửu'},
 };
 
 // ─── SCORING CONSTANTS ──────────────────────────────────────
