@@ -87,6 +87,69 @@ export function buildTools(hasLaso: boolean): any[] {
 }
 
 // ─── Thực thi tool ─────────────────────────────────────────────
+
+const _DIA_CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tị','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+const _mod12 = (n: number) => ((n % 12) + 12) % 12;
+
+// ── Tam hợp xung chiếu theo INDEX địa chi ────────────────────────
+// palaces[] LUÔN xếp theo địa chi 0=Tý..11=Hợi ở cả hai đường vào (engine
+// server + lasoData client gửi qua JSON) → tính tam hợp/xung bằng index AN
+// TOÀN, kể cả khi ref palace.tamHopCungs/xungChieuCung (circular) không sống
+// sót sau JSON.stringify. Luận hạn cổ điển: một cung hạn phải đọc CẢ chùm tam
+// hợp xung chiếu (tam phương tứ chính), không chỉ sao tọa thủ.
+//   Tam hợp (tam giác chiếu) = i±4  → (i+4)%12, (i+8)%12
+//   Xung chiếu (đối cung)     = i+6
+const _tamHopIdx = (i: number): number[] => [(i + 4) % 12, (i + 8) % 12];
+const _xungChieuIdx = (i: number): number => (i + 6) % 12;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function _fmtStarT(s: any): string {
+  if (!s) return '';
+  if (typeof s !== 'object') return String(s);
+  let t = s.ten || '';
+  if (s.brightness) t += `(${s.brightness})`;
+  if (s.hoa) t += `[Hóa ${s.hoa}]`;
+  return t;
+}
+// Chính tinh + phụ/sát tinh của MỘT cung (đủ để LLM luận theo ý nghĩa sao).
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function _palaceStarText(p: any, capPhu = 6): string {
+  if (!p) return '?';
+  const chinh = (p.majorStars || []).map(_fmtStarT).filter(Boolean);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const phu = (p.stars || []).filter((s: any) => typeof s === 'object' ? s.nhom !== 'chinh' : true).map(_fmtStarT).filter(Boolean);
+  let s = `chính tinh ${chinh.length ? chinh.join(', ') : 'vô chính diệu'}`;
+  if (phu.length) s += `; phụ/sát tinh ${phu.slice(0, capPhu).join(', ')}`;
+  return s;
+}
+// Mô tả 1 cung hạn KÈM tam hợp xung chiếu, xếp theo trọng số: tọa thủ (nặng
+// nhất) → xung chiếu → tam hợp. Xuống dòng thụt lề cho dễ đọc.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function describeHanCungRich(palaces: any[], idx: number): string {
+  if (idx < 0 || !palaces[idx]) return '?';
+  const lines: string[] = [];
+  lines.push(`tọa thủ (${palaces[idx].cungName}): ${_palaceStarText(palaces[idx])}`);
+  const xu = _xungChieuIdx(idx);
+  if (palaces[xu]) lines.push(`xung chiếu (${palaces[xu].cungName}): ${_palaceStarText(palaces[xu], 4)}`);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const th = _tamHopIdx(idx).map((j) => palaces[j]).filter(Boolean) as any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if (th.length) lines.push(`tam hợp (${th.map((p: any) => p.cungName).join(', ')}): ${th.map((p: any) => _palaceStarText(p, 4)).join(' | ')}`);
+  return lines.join('\n    ');
+}
+// Các LayerCung của 1 cung hạn (tọa + xung + tam hợp) cho combo matcher — để
+// cách cục hình thành nhờ sao HỘI/XUNG CHIẾU cũng được bắt (không chỉ tọa thủ).
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function hanClusterLayers(palaces: any[], idx: number, label: string): LayerCung[] {
+  if (idx < 0) return [];
+  const out: LayerCung[] = [];
+  if (palaces[idx]) out.push({ label, palace: palaces[idx] });
+  const xu = _xungChieuIdx(idx);
+  if (palaces[xu]) out.push({ label: `${label} (xung)`, palace: palaces[xu] });
+  for (const j of _tamHopIdx(idx)) if (palaces[j]) out.push({ label: `${label} (tam hợp)`, palace: palaces[j] });
+  return out;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function execTraVanHan(lasoData: any, input: any): string {
   const nam = Number(input?.nam);
@@ -102,55 +165,28 @@ export function execTraVanHan(lasoData: any, input: any): string {
   }
   const palaces = lasoData.palaces || [];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const fmtStar = (s: any): string => {
-    if (!s) return '';
-    if (typeof s !== 'object') return String(s);
-    let t = s.ten || '';
-    if (s.brightness) t += `(${s.brightness})`;
-    if (s.hoa) t += `[Hóa ${s.hoa}]`;
-    return t;
-  };
-  // Liệt kê SAO của cung hạn (chính tinh + phụ/sát tinh) để LLM luận theo ý nghĩa sao,
-  // KHÔNG quy thành điểm số cho năm.
-  const starsOf = (cungName: string): string => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const p = palaces.find((x: any) => x.cungName === cungName);
-    if (!p) return '?';
-    const chinh = (p.majorStars || []).map(fmtStar).filter(Boolean);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const phu = (p.stars || []).filter((s: any) => typeof s === 'object' ? s.nhom !== 'chinh' : true).map(fmtStar).filter(Boolean);
-    let s = `chính tinh: ${chinh.length ? chinh.join(', ') : 'vô chính diệu'}`;
-    if (phu.length) s += `; phụ/sát tinh: ${phu.slice(0, 8).join(', ')}`;
-    return s;
-  };
+  const tieuHanIdx = palaces.findIndex((x: any) => x.cungName === tv.tieuHanCung);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const pByName = (cn: string): any => palaces.find((x: any) => x.cungName === cn);
+  const luuNienIdx = palaces.findIndex((x: any) => x.cungName === tv.luuNienCung);
   const dv = (lasoData.daiVans || [])[tv.dvIdx];
-  const dvPalace = dv ? palaces[dv.cungIdx] : null;
-  let out = `VẬN NĂM ${nam} (tuổi ${tv.tuoi}) — TIỂU VẬN KHÔNG có điểm riêng; luận theo CÁCH CỤC + sao của các cung hạn năm này, đại vận chỉ giới hạn biên độ:\n`;
-  if (dv) out += `- KHUNG ĐẠI VẬN ${dv.diaChi} (${dv.tuoiStart}–${dv.tuoiEnd} tuổi)${dvPalace?.cungName ? `, đóng tại cung ${dvPalace.cungName}` : ''}${dv.scoring?.tong != null ? `: điểm ${dv.scoring.tong}/10 ${dv.scoring.flag || ''}` : ''} — chỉ GIỚI HẠN BIÊN ĐỘ (cao = cái tốt rực rỡ/cái xấu đỡ nhẹ; thấp = cái tốt bị kìm/cái xấu nặng thêm), KHÔNG quyết định tốt/xấu của năm.\n`;
-  out += `- Tiểu hạn nhập cung ${tv.tieuHanCung} — ${starsOf(tv.tieuHanCung)}.\n`;
-  out += `- Lưu niên đại hạn vào cung ${tv.luuNienCung} — ${starsOf(tv.luuNienCung)}.\n`;
-  // Tổ hợp sao chéo tầng (mức NĂM: đại vận + tiểu hạn + lưu niên)
+  const dvIdx = dv && dv.cungIdx != null ? Number(dv.cungIdx) : -1;
+  const dvPalace = dvIdx >= 0 ? palaces[dvIdx] : null;
+  let out = `VẬN NĂM ${nam} (tuổi ${tv.tuoi}) — TIỂU VẬN KHÔNG có điểm riêng; luận theo CÁCH CỤC + sao (TỌA THỦ + TAM HỢP XUNG CHIẾU) của các cung hạn năm này, đại vận chỉ giới hạn biên độ:\n`;
+  if (dv) out += `- KHUNG ĐẠI VẬN ${dv.diaChi} (${dv.tuoiStart}–${dv.tuoiEnd} tuổi)${dvPalace?.cungName ? `, đóng tại cung ${dvPalace.cungName}` : ''}${dv.scoring?.tong != null ? `: điểm ${dv.scoring.tong}/10 ${dv.scoring.flag || ''}` : ''} — điểm này ĐÃ gói tam hợp xung chiếu của cung đại vận; chỉ GIỚI HẠN BIÊN ĐỘ (cao = cái tốt rực rỡ/cái xấu đỡ nhẹ; thấp = cái tốt bị kìm/cái xấu nặng thêm), KHÔNG quyết định tốt/xấu của năm.\n`;
+  out += `- Tiểu hạn nhập cung ${tv.tieuHanCung}:\n    ${describeHanCungRich(palaces, tieuHanIdx)}\n`;
+  out += `- Lưu niên đại hạn vào cung ${tv.luuNienCung}:\n    ${describeHanCungRich(palaces, luuNienIdx)}\n`;
+  // Tổ hợp sao chéo tầng (mức NĂM): đại vận (tọa — điểm đã gói tam hợp) + tiểu
+  // hạn & lưu niên KÈM tam hợp xung chiếu để bắt cách cục do sao chiếu tạo thành.
   const yearLayers: LayerCung[] = [
     { label: 'đại vận', palace: dvPalace },
-    { label: 'tiểu hạn', palace: pByName(tv.tieuHanCung) },
-    { label: 'lưu niên', palace: pByName(tv.luuNienCung) },
+    ...hanClusterLayers(palaces, tieuHanIdx, 'tiểu hạn'),
+    ...hanClusterLayers(palaces, luuNienIdx, 'lưu niên'),
   ];
   out += formatComboLines(matchVanHanCombos(yearLayers));
-  out += `- Cách luận: XÁC ĐỊNH tốt/xấu của năm TRƯỚC theo cách cục + sao (cát/sát, miếu/hãm) của cung tiểu hạn & lưu niên + tổ hợp sao năm nay — cách cục tốt/sao cát thì luận năm TỐT dù đại vận xấu, ngược lại luận năm XẤU dù đại vận tốt. SAU đó dùng điểm đại vận để chỉnh BIÊN ĐỘ: đại vận thấp thì cái tốt năm nay bị kìm, hưởng dè dặt, không rực rỡ (cái xấu nặng thêm); đại vận cao thì cái tốt bung rực rỡ (cái xấu đỡ nhẹ). KHÔNG bê theme đại vận áp đồng loạt, KHÔNG tự gán "điểm/10" cho năm.\n`;
+  out += `- Cách luận: XÁC ĐỊNH tốt/xấu của năm TRƯỚC theo cách cục + sao của cung tiểu hạn & lưu niên — ĐỌC CẢ tọa thủ + tam hợp xung chiếu, TRỌNG SỐ: tọa thủ nặng nhất → xung chiếu → tam hợp (cung hạn vô chính diệu thì MƯỢN chính tinh tam hợp/xung để luận) + tổ hợp sao năm nay. Cách cục tốt/sao cát thì luận năm TỐT dù đại vận xấu, ngược lại luận năm XẤU dù đại vận tốt. SAU đó dùng điểm đại vận để chỉnh BIÊN ĐỘ: đại vận thấp thì cái tốt năm nay bị kìm, hưởng dè dặt, không rực rỡ (cái xấu nặng thêm); đại vận cao thì cái tốt bung rực rỡ (cái xấu đỡ nhẹ). KHÔNG bê theme đại vận áp đồng loạt, KHÔNG tự gán "điểm/10" cho năm.\n`;
   return out;
 }
 
-const _DIA_CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tị','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
-const _mod12 = (n: number) => ((n % 12) + 12) % 12;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function _starsOf(palaces: any[], idx: number): string {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const major = ((palaces[idx]?.majorStars || []) as any[]).map((s: any) => s.ten).filter(Boolean).join(', ');
-  return major || 'vô chính diệu';
-}
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function _cungNameOf(palaces: any[], idx: number): string {
   return palaces[idx]?.cungName || _DIA_CHI[idx] || '?';
@@ -195,17 +231,19 @@ export function execTraNguyetVan(lasoData: any, input: any): string {
     nguyetHanIdx = _mod12(tinhNguyetHan(tieuHanIdx, thangSinhAL, gioSinhIdx).cach1 + thangAL - 1);
   }
 
-  let out = `NGUYỆT HẠN THÁNG ${thang}/${nam} (ÂL tháng ${thangAL}, tuổi ${tv.tuoi}):\n`;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const luuNienIdx = palaces.findIndex((x: any) => x.cungName === tv.luuNienCung);
+  let out = `NGUYỆT HẠN THÁNG ${thang}/${nam} (ÂL tháng ${thangAL}, tuổi ${tv.tuoi}) — đọc CẢ tọa thủ + tam hợp xung chiếu (tọa thủ nặng nhất → xung → tam hợp):\n`;
   out += `- Tiểu hạn năm ${nam}: cung ${tv.tieuHanCung}.\n`;
-  out += `- Nguyệt hạn tháng ${thangAL} ÂL: cung ${_cungNameOf(palaces, nguyetHanIdx)} — chính tinh: ${_starsOf(palaces, nguyetHanIdx)}.\n`;
-  // Tổ hợp sao chéo tầng (mức THÁNG: đại vận + tiểu hạn + lưu niên + nguyệt hạn)
+  out += `- Nguyệt hạn tháng ${thangAL} ÂL, cung ${_cungNameOf(palaces, nguyetHanIdx)}:\n    ${describeHanCungRich(palaces, nguyetHanIdx)}\n`;
+  // Tổ hợp sao chéo tầng (mức THÁNG): đại vận (tọa) + tiểu hạn/lưu niên/nguyệt
+  // hạn KÈM tam hợp xung chiếu.
   const _dvM = (lasoData.daiVans || [])[tv.dvIdx];
   const monthLayers: LayerCung[] = [
     { label: 'đại vận', palace: _dvM ? palaces[_dvM.cungIdx] : null },
-    { label: 'tiểu hạn', palace: palaces[tieuHanIdx] },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    { label: 'lưu niên', palace: palaces.find((x: any) => x.cungName === tv.luuNienCung) },
-    { label: 'nguyệt hạn', palace: palaces[nguyetHanIdx] },
+    ...hanClusterLayers(palaces, tieuHanIdx, 'tiểu hạn'),
+    ...hanClusterLayers(palaces, luuNienIdx, 'lưu niên'),
+    ...hanClusterLayers(palaces, nguyetHanIdx, 'nguyệt hạn'),
   ];
   out += formatComboLines(matchVanHanCombos(monthLayers));
   return out;
@@ -247,18 +285,20 @@ export function execTraNhatVan(lasoData: any, input: any): string {
   }
   const nhatHanIdx   = tinhNhatHan(nguyetHanIdx, ngayAL);
 
-  let out = `NHẬT HẠN NGÀY ${ngay}/${thang}/${nam} (ÂL ngày ${ngayAL} tháng ${thangAL}, tuổi ${tv.tuoi}):\n`;
-  out += `- Nguyệt hạn ÂL tháng ${thangAL}: cung ${_cungNameOf(palaces, nguyetHanIdx)} — chính tinh: ${_starsOf(palaces, nguyetHanIdx)}.\n`;
-  out += `- Nhật hạn ÂL ngày ${ngayAL}: cung ${_cungNameOf(palaces, nhatHanIdx)} — chính tinh: ${_starsOf(palaces, nhatHanIdx)}.\n`;
-  // Tổ hợp sao chéo tầng (mức NGÀY: đại vận + tiểu hạn + lưu niên + nguyệt hạn + nhật hạn)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const luuNienIdx = palaces.findIndex((x: any) => x.cungName === tv.luuNienCung);
+  let out = `NHẬT HẠN NGÀY ${ngay}/${thang}/${nam} (ÂL ngày ${ngayAL} tháng ${thangAL}, tuổi ${tv.tuoi}) — đọc CẢ tọa thủ + tam hợp xung chiếu (tọa thủ nặng nhất → xung → tam hợp):\n`;
+  out += `- Nguyệt hạn ÂL tháng ${thangAL}, cung ${_cungNameOf(palaces, nguyetHanIdx)}:\n    ${describeHanCungRich(palaces, nguyetHanIdx)}\n`;
+  out += `- Nhật hạn ÂL ngày ${ngayAL}, cung ${_cungNameOf(palaces, nhatHanIdx)}:\n    ${describeHanCungRich(palaces, nhatHanIdx)}\n`;
+  // Tổ hợp sao chéo tầng (mức NGÀY): đại vận (tọa) + tiểu hạn/lưu niên/nguyệt
+  // hạn/nhật hạn KÈM tam hợp xung chiếu.
   const _dvD = (lasoData.daiVans || [])[tv.dvIdx];
   const dayLayers: LayerCung[] = [
     { label: 'đại vận', palace: _dvD ? palaces[_dvD.cungIdx] : null },
-    { label: 'tiểu hạn', palace: palaces[tieuHanIdx] },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    { label: 'lưu niên', palace: palaces.find((x: any) => x.cungName === tv.luuNienCung) },
-    { label: 'nguyệt hạn', palace: palaces[nguyetHanIdx] },
-    { label: 'nhật hạn', palace: palaces[nhatHanIdx] },
+    ...hanClusterLayers(palaces, tieuHanIdx, 'tiểu hạn'),
+    ...hanClusterLayers(palaces, luuNienIdx, 'lưu niên'),
+    ...hanClusterLayers(palaces, nguyetHanIdx, 'nguyệt hạn'),
+    ...hanClusterLayers(palaces, nhatHanIdx, 'nhật hạn'),
   ];
   out += formatComboLines(matchVanHanCombos(dayLayers));
   return out;
