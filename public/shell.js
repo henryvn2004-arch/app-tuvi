@@ -130,7 +130,7 @@
     var host = document.getElementById('shell-rail');
     if (!host) return;
     host.innerHTML =
-      '<div class="rail-h"><img class="rail-ava" src="' + authorAva() + '" alt="Trợ lý Luận Đường">' +
+      '<div class="rail-h"><img class="rail-ava" src="' + authorAva() + '" alt="Trợ lý Luận Đường" title="Đổi thầy luận giải">' +
       '<div><b>Trợ lý Luận Đường</b><span>' + esc(authorLabel()) + '</span></div>' +
       '<div class="tools">' +
         '<button class="rh-btn mobile-only" title="Đóng" data-act="rail-close">✕</button>' +
@@ -156,6 +156,7 @@
     var _hb = host.querySelector('[data-act="history"]'); if (_hb) _hb.addEventListener('click', toggleHistPanel);
     var _shb = host.querySelector('[data-act="share"]'); if (_shb) _shb.addEventListener('click', shareSession);
     host.querySelector('[data-act="rail-close"]').addEventListener('click', function () { host.classList.remove('open'); syncBackdrop(); });
+    host.querySelector('.rail-ava').addEventListener('click', openAuthorModal);
     host.querySelector('[data-act="attach"]').addEventListener('click', function () { var f = document.getElementById('railFile'); if (f) f.click(); });
     document.getElementById('railFile').addEventListener('change', onPickFiles);
     var ta = document.getElementById('railInput');
@@ -462,6 +463,50 @@
   }
   function authorAva() { return _author ? '/authors/' + _author.id + '.jpg' : '/thay-tuvi.webp'; }
   function authorLabel() { return _author ? 'Thầy ' + _author.name : 'Hiểu đúng lá số đang mở'; }
+  function setAuthor(id) {
+    var f = AUTHOR_ROSTER.filter(function (a) { return a.id === id; })[0];
+    if (!f) return;
+    _author = f;
+    try { localStorage.setItem('tvc_author_v1', id); } catch (e) { /* ignore */ }
+    var host = document.getElementById('shell-rail'); if (!host) return;
+    var ava = host.querySelector('.rail-ava'); if (ava) ava.src = authorAva();
+    var lbl = host.querySelector('.rail-h span'); if (lbl) lbl.textContent = authorLabel();
+    var emptyAva = host.querySelector('#railEmpty img'); if (emptyAva) emptyAva.src = authorAva();
+  }
+  function openAuthorModal() {
+    var rows = AUTHOR_ROSTER.map(function (a) {
+      var sel = _author && _author.id === a.id;
+      var tagline = a.style.split(/\.\s/)[0] + '.';
+      return '<button class="sam-row' + (sel ? ' sel' : '') + '" data-id="' + a.id + '">' +
+        '<img class="sam-ava" src="/authors/' + a.id + '.jpg" alt="">' +
+        '<div class="sam-info"><b>' + esc(a.name) + '</b><span>' + esc(tagline) + '</span></div>' +
+        (sel ? '<svg class="sam-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" style="width:16px;height:16px"><path d="M20 6 9 17l-5-5"/></svg>' : '') +
+      '</button>';
+    }).join('');
+    var wrap = document.createElement('div');
+    wrap.className = 'sh-share-modal';
+    wrap.innerHTML =
+      '<div class="sam-card">' +
+        '<button class="ssm-x" aria-label="Đóng">✕</button>' +
+        '<div class="ssm-t">Chọn thầy luận giải</div>' +
+        '<div class="ssm-d">Mỗi thầy một văn phong riêng. Chọn thầy hợp gu, hoặc để hệ thống chọn ngẫu nhiên.</div>' +
+        '<button class="sam-rand">🎲 Để hệ thống chọn ngẫu nhiên</button>' +
+        '<div class="sam-list">' + rows + '</div>' +
+      '</div>';
+    document.body.appendChild(wrap);
+    var close = function () { wrap.remove(); };
+    wrap.addEventListener('click', function (e) { if (e.target === wrap) close(); });
+    wrap.querySelector('.ssm-x').addEventListener('click', close);
+    wrap.querySelector('.sam-rand').addEventListener('click', function () {
+      var pool = AUTHOR_ROSTER.filter(function (a) { return !_author || a.id !== _author.id; });
+      var pick = pool[Math.floor(Math.random() * pool.length)] || AUTHOR_ROSTER[0];
+      setAuthor(pick.id);
+      close();
+    });
+    wrap.querySelectorAll('.sam-row').forEach(function (btn) {
+      btn.addEventListener('click', function () { setAuthor(btn.getAttribute('data-id')); close(); });
+    });
+  }
 
   // ── CHIA SẺ PHIÊN (share full session như link ChatGPT) ──
   function _birthLabel() {
