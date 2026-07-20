@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thần số học — Tử Vi Minh Bảo</title>
+<meta name="description" content="Tính 4 con số cốt lõi Thần Số Học (Đường Đời, Định Mệnh, Linh Hồn, Sứ Mệnh) theo ngày sinh và tên — hệ Pythagoras. Hỏi trợ lý AI luận sâu.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shell.css?v=13">
+<style>
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
+.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
+.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:13px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.fg input{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
+.fg input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
+.hint{font-size:11.5px;color:var(--text-lt);margin-top:-6px;margin-bottom:12px}
+.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
+.btn-go:disabled{opacity:.6;cursor:not-allowed}
+.err{color:var(--red);font-size:13px;margin-top:8px;display:none}
+.err.active{display:block}
+#resPanel{display:none;max-width:680px}
+/* 4 num-card — "tài liệu" nền sáng cố định, khớp bản standalone */
+.res-block{border:1px solid #E8E8E8;border-radius:10px;background:#fff;overflow:hidden;margin-bottom:6px}
+.num-card{display:flex;gap:20px;align-items:flex-start;padding:20px 24px;border-bottom:1px solid #E8E8E8}
+.num-card:last-child{border-bottom:none}
+.num-circle{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;flex-shrink:0;color:#fff}
+.num-content{flex:1}
+.num-title{font-size:13px;font-weight:700;color:#061A2E;margin-bottom:4px}
+.num-desc{font-size:13px;color:#444;line-height:1.7}
+.num-keywords{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.num-kw{font-size:11px;padding:2px 8px;border-radius:2px;background:#F5F4F0;border:1px solid #E8E8E8;color:#444}
+.ask{margin-top:12px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Thần số học</b><span>4 con số cốt lõi theo Pythagoras</span></div>
+      <div class="ws-actions">
+        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa</button>
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div id="shellRecent"></div>
+      <div class="form-card" id="birthPanel">
+        <h2>Ngày sinh & tên đầy đủ</h2>
+        <p class="sub">Tính 4 con số cốt lõi (Đường Đời · Định Mệnh · Linh Hồn · Sứ Mệnh) theo hệ Pythagoras, rồi hỏi trợ lý luận sâu tính cách, sự nghiệp, tình cảm.</p>
+        <div class="frow">
+          <div class="fg" style="width:74px"><label>Ngày</label><input type="number" id="ngay" placeholder="15" min="1" max="31"></div>
+          <div class="fg" style="width:74px"><label>Tháng</label><input type="number" id="thang" placeholder="6" min="1" max="12"></div>
+          <div class="fg" style="width:90px"><label>Năm</label><input type="number" id="nam" placeholder="1990"></div>
+          <div class="fg" style="flex:1;min-width:160px"><label>Họ tên (không dấu, A–Z)</label><input type="text" id="ten" placeholder="Nguyen Van An"></div>
+        </div>
+        <div class="hint">Nhập tên khai sinh, không dấu, chỉ dùng ký tự A–Z.</div>
+        <button class="btn-go" id="btnGo" onclick="calculate()">Tính thần số →</button>
+        <div class="err" id="error-msg"></div>
+      </div>
+
+      <div id="resPanel">
+        <div class="res-block"><div id="numResults"></div></div>
+        <div class="ask" data-ask="Luận giúp tôi 4 con số này: tính cách, điểm mạnh yếu, sự nghiệp và tình cảm hợp.">✦ Hỏi trợ lý luận sâu thần số</div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='than-so-hoc';window.SHELL_HISTORY=true;
+window.SHELL_INTRO={key:'than-so-hoc',title:'Thần số học',desc:'Tính <b>4 con số cốt lõi</b> (Đường Đời · Định Mệnh · Linh Hồn · Sứ Mệnh) theo hệ Pythagoras, rồi hỏi <b>trợ lý AI</b> luận sâu tính cách, sự nghiệp, tình cảm.'};</script>
+<script src="/tools-shared/than-so-hoc.js?v=1"></script>
+<script src="/auth.js"></script>
+<script src="/shell.js?v=35"></script>
+<script>
+// Ô giữa dùng CHUNG module /tools-shared/than-so-hoc.js với trang standalone.
+function calculate(){
+  var err=document.getElementById('error-msg');
+  err.classList.remove('active');
+  var r=ThanSoTool.compute(
+    parseInt(document.getElementById('ngay').value),
+    parseInt(document.getElementById('thang').value),
+    parseInt(document.getElementById('nam').value),
+    document.getElementById('ten').value);
+  if(!r.ok){ err.textContent=r.error; err.classList.add('active'); return; }
+  document.getElementById('numResults').innerHTML=r.resultHTML;
+  document.getElementById('birthPanel').style.display='none';
+  document.getElementById('resPanel').style.display='block';
+  document.getElementById('btnEdit').style.display='';
+  if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
+  Shell.setContext({
+    scenario:{type:'than-so-hoc',data:r.data},
+    label:'Thần số học · '+r.data.ten,
+    greeting:'Đã tính 4 con số cho **'+r.data.ten+'** (Đường Đời **'+r.data.soDuongDoi+'**, Định Mệnh '+r.data.soDinhMenh+', Linh Hồn '+r.data.soLinhHon+', Sứ Mệnh '+r.data.soSuMenh+'). Bạn muốn tôi luận gì trước?',
+    chips:['Số Đường Đời nói gì về tôi?','Nghề nghiệp nào hợp?','Tình cảm hợp số mấy?','4 con số này bổ trợ hay mâu thuẫn?']
+  });
+  document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
+}
+function showForm(){
+  document.getElementById('resPanel').style.display='none';
+  document.getElementById('birthPanel').style.display='block';
+  document.getElementById('btnEdit').style.display='none';
+}
+</script>
+<script>/*SHELL_RESTORE_BOOT*/(function(){function _r(){var r=window.Shell&&Shell.pendingRestore&&Shell.pendingRestore();if(r&&r.form){Shell.fillForm(r.form);calculate();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_r);else _r();})();</script>
+</body>
+</html>

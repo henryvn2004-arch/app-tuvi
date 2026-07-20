@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
     async start(controller) {
       const send = (chunk: string) => controller.enqueue(encoder.encode(chunk));
       try {
-        const { toolsUsed } = await runAgent(req, cfg, send);
+        const { toolsUsed, suggestions } = await runAgent(req, cfg, send);
 
         // ── Trừ Lượng sau khi trả lời thành công ──────────────────
         let paywall: DoneEvent['paywall'] = { blocked: false };
@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
             paywall = { blocked: false, balance: newBal };
           }
         }
-        send(sse.done({ tools_used: toolsUsed, paywall }));
+        send(sse.done({ tools_used: toolsUsed, paywall, suggestions }));
       } catch (e) {
         send(sse.error({ code: 'internal', message: e instanceof Error ? e.message : 'Lỗi không xác định' }));
       } finally {

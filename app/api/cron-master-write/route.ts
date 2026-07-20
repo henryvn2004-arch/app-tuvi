@@ -3,10 +3,10 @@
 export const maxDuration = 300;
 import { NextRequest } from 'next/server';
 import { ok, err, options } from '@/lib/cors';
+import { llmText } from '@/lib/llm/complete';
 
 const SUPABASE_URL  = process.env.SUPABASE_URL!;
 const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY!;
-const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY!;
 const OPENAI_KEY    = process.env.OPENAI_API_KEY!;
 const ARTICLES_PER_RUN = 1;
 
@@ -126,27 +126,9 @@ async function ragTuviDocs(embedding: number[]): Promise<string> {
   } catch { return ''; }
 }
 
-// ── Claude call ────────────────────────────────────────────────────────────────
+// ── LLM call (Gemini-primary + Anthropic-backup qua helper chung) ───────────────
 async function callClaude(prompt: string, maxTokens = 2000): Promise<string> {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': ANTHROPIC_KEY,
-      'anthropic-version': '2023-06-01',
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
-      max_tokens: maxTokens,
-      messages: [{ role: 'user', content: prompt }],
-    }),
-  });
-  if (!res.ok) {
-    const e = await res.json() as { error: { message: string } };
-    throw new Error(e.error?.message || `Claude ${res.status}`);
-  }
-  const data = await res.json() as { content: { text: string }[] };
-  const raw = data.content[0].text.trim();
+  const raw = (await llmText({ prompt, maxTokens })).trim();
   // Strip outer ```json...``` only, not any inner backticks in content
   if (raw.startsWith('```')) {
     const inner = raw.replace(/^```(?:json)?\s*/, '');

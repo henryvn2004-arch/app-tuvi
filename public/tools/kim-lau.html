@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=15" as="script">
+<link rel="preload" href="/nav.js?v=16" as="script">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Xem Tuổi Làm Nhà — Kim Lâu, Tam Tai, Hoang Ốc | Tử Vi Minh Bảo</title>
 <meta property="og:title" content="Xem Tuổi Làm Nhà — Kim Lâu, Tam Tai, Hoang Ốc | Tử Vi Minh Bảo"/>
@@ -111,56 +111,24 @@
   <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
 </footer>
 
+<script src="/tools-shared/kim-lau.js?v=1"></script>
 <script>
-const CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
-const CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
-const NAP_AM=['Hải Trung Kim','Lô Trung Hỏa','Đại Lâm Mộc','Lộ Bàng Thổ','Kiếm Phong Kim','Sơn Đầu Hỏa','Giản Hạ Thủy','Thành Đầu Thổ','Bạch Lạp Kim','Dương Liễu Mộc','Tuyền Trung Thủy','Ốc Thượng Thổ','Tích Lịch Hỏa','Tùng Bách Mộc','Trường Lưu Thủy','Sa Trung Kim','Sơn Hạ Hỏa','Bình Địa Mộc','Bích Thượng Thổ','Kim Bạch Kim','Phú Đăng Hỏa','Thiên Hà Thủy','Đại Trạch Thổ','Xoa Xuyến Kim','Tang Đố Mộc','Đại Khê Thủy','Sa Trung Thổ','Thiên Thượng Hỏa','Thạch Lựu Mộc','Đại Hải Thủy'];
-const TAM_TAI={8:[2,3,4],0:[2,3,4],4:[2,3,4],5:[11,0,1],9:[11,0,1],1:[11,0,1],2:[8,9,10],6:[8,9,10],10:[8,9,10],11:[5,6,7],3:[5,6,7],7:[5,6,7]};
-const CURRENT_YEAR=2026;
-function isKimLau(t){const r=((t%5)+5)%5;return r===1||r===3;}
-function isHoangOc(t){return t>0&&t%5===0;}
-function isTamTai(bChi,yChi){const g=TAM_TAI[bChi];return g&&g.includes(yChi);}
-function getStatusHTML(kl,ho,tt){
-  const tags=[];
-  if(kl)tags.push('<span class="res-tag res-tag-bad">Kim Lâu</span>');
-  if(ho)tags.push('<span class="res-tag res-tag-warn">Hoang Ốc</span>');
-  if(tt)tags.push('<span class="res-tag res-tag-bad" style="background:#e8f0fe;color:#1455A4;border-color:#c5d4f5">Tam Tai</span>');
-  if(!tags.length)return '<span class="res-tag res-tag-good">Bình thường</span>';
-  return tags.join(' ');
-}
+// Logic + render đã chuyển vào module dùng chung /tools-shared/kim-lau.js
+// (dùng CHUNG với shell /app/kim-lau). Trang này chỉ wiring DOM — hành vi giữ
+// y nguyên; năm hiện tại nay lấy động (vnYear) thay hardcode 2026.
 function calculate(){
-  const by=parseInt(document.getElementById('birthYear').value);
-  const err=document.getElementById('error-msg');
+  var by=parseInt(document.getElementById('birthYear').value);
+  var err=document.getElementById('error-msg');
   err.classList.remove('active');
-  if(!by||by<1900||by>2010){err.textContent='Vui lòng nhập năm sinh hợp lệ (1900–2010).';err.classList.add('active');return;}
-  const idx60=((by-4)%60+60)%60;
-  const bCan=idx60%10,bChi=idx60%12;
-  const na=NAP_AM[Math.floor(idx60/2)];
-  const tuoiTa=CURRENT_YEAR-by+1;
-  document.getElementById('resTitle').textContent=CAN[bCan]+' '+CHI[bChi]+' ('+by+') — '+na+' · Tuổi ta năm '+CURRENT_YEAR+': '+tuoiTa;
-  const y60=((CURRENT_YEAR-4)%60+60)%60;
-  const yChi=y60%12;
-  const kl=isKimLau(tuoiTa),ho=isHoangOc(tuoiTa),tt=isTamTai(bChi,yChi);
-  let curHtml='';
-  if(kl||ho||tt){
-    const desc=kl&&tt?'Năm nay trùng Kim Lâu và Tam Tai — cần thận trọng đặc biệt với cưới hỏi và việc hệ trọng.':kl?'Năm nay là tuổi Kim Lâu — kiêng cưới hỏi, xây dựng, khởi công lớn.':ho?'Năm nay là tuổi Hoang Ốc — kiêng mua bán và xây nhà.':'Năm nay đang trong vận Tam Tai — cẩn thận với các quyết định lớn.';
-    curHtml=`<div style="background:#fef0ef;border-left:3px solid #c9a84c;padding:14px 16px;border-radius:0 6px 6px 0;margin-bottom:12px"><div style="font-size:13px;font-weight:700;margin-bottom:4px">Năm ${CURRENT_YEAR} (Tuổi ${tuoiTa}) — ${getStatusHTML(kl,ho,tt)}</div><div style="font-size:13px;color:var(--text-mid)">${desc}</div></div>`;
-  }else{curHtml=`<div style="background:#eaf4ed;border-left:3px solid #1E6B3C;padding:14px 16px;border-radius:0 6px 6px 0;margin-bottom:12px"><div style="font-size:13px;font-weight:700;margin-bottom:4px">Năm ${CURRENT_YEAR} (Tuổi ${tuoiTa}) — <span class="res-tag res-tag-good">Bình thường</span></div><div style="font-size:13px;color:var(--text-mid)">Năm nay không có Kim Lâu, Hoang Ốc hay Tam Tai.</div></div>`;}
-  document.getElementById('currentBox').innerHTML=curHtml;
-  const rows=[];
-  for(let y=CURRENT_YEAR;y<CURRENT_YEAR+20;y++){
-    const t=y-by+1;
-    const y60b=((y-4)%60+60)%60;
-    const yC=y60b%12,yN=y60b%10;
-    const kl2=isKimLau(t),ho2=isHoangOc(t),tt2=isTamTai(bChi,yC);
-    const bold=y===CURRENT_YEAR?'font-weight:700':'';
-    rows.push(`<tr${(kl2||ho2||tt2)?` class="highlight"`:''} style="${bold}"><td>${y}${y===CURRENT_YEAR?' ▶':''}</td><td>${t}</td><td>${CAN[yN]} ${CHI[yC]}</td><td>${getStatusHTML(kl2,ho2,tt2)}</td></tr>`);
-  }
-  document.getElementById('klBody').innerHTML=rows.join('');
+  var r=KimLauTool.compute(by,KimLauTool.vnYear());
+  if(!r.ok){err.textContent=r.error;err.classList.add('active');return;}
+  document.getElementById('resTitle').textContent=r.resTitleText;
+  document.getElementById('currentBox').innerHTML=r.currentBoxHTML;
+  document.getElementById('klBody').innerHTML=r.rowsHTML;
   document.getElementById('result-section').classList.add('active');
   document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
 }
-document.getElementById('birthYear').addEventListener('keydown',e=>{if(e.key==='Enter')calculate();});
+document.getElementById('birthYear').addEventListener('keydown',function(e){if(e.key==='Enter')calculate();});
 </script>
 <section class="kb-section">
   <div class="page">
@@ -179,6 +147,6 @@ document.getElementById('birthYear').addEventListener('keydown',e=>{if(e.key==='
 </section>
 <script src="/testimonials.js"></script>
 <script src="/related-tools.js"></script>
-<script src="/nav.js?v=15" defer></script>
+<script src="/nav.js?v=16" defer></script>
 </body>
 </html>

@@ -82,10 +82,23 @@ export interface ClientInfo {
 export type ScenarioType =
   | 'xem-tuoi'
   | 'xem-lam-an'
+  | 'tuong-hop'
   | 'tu-binh'
   | 'xem-tuoi-sinh-con'
   | 'chon-ngay-tot'
-  | 'dat-ten-con';
+  | 'dat-ten-con'
+  | 'dat-ten-dn'
+  | 'xem-tuong'
+  | 'phong-thuy'
+  | 'nap-am'
+  | 'kim-lau'
+  | 'ngu-hanh-ten'
+  | 'than-so-hoc'
+  | 'bat-trach'
+  | 'kinh-dich'
+  | 'hoang-dao'
+  | 'ngay-tot'
+  | 'luc-nham';
 
 export interface ScenarioInput {
   type: ScenarioType;
@@ -109,6 +122,9 @@ export interface ChatRequestV1 {
   birth?: BirthParams;
   /** Kịch bản phi-lá-số (loại trừ với birth). */
   scenario?: ScenarioInput;
+  /** Persona tác giả cho luồng LÁ SỐ (birth). Với scenario, đặt trong scenario. */
+  authorName?: string;
+  authorStyle?: string;
   client: ClientInfo;
 }
 
@@ -145,6 +161,8 @@ export interface DoneEvent {
     reason?: string;
     balance?: number;
   };
+  /** gợi ý câu hỏi tiếp theo do LLM sinh, bám câu trả lời vừa rồi (chip động) */
+  suggestions?: string[];
 }
 
 /** event: error — lỗi có mã để client xử lý */
@@ -218,7 +236,9 @@ export function validateChatRequest(body: unknown):
 
   if (b.scenario != null) {
     const s = b.scenario as Record<string, unknown>;
-    const types: ScenarioType[] = ['xem-tuoi', 'xem-lam-an', 'tu-binh', 'xem-tuoi-sinh-con', 'chon-ngay-tot', 'dat-ten-con'];
+    // NGUỒN DUY NHẤT phải khớp ScenarioType union trên — xưa thiếu xem-tuong/
+    // phong-thuy nên rail 2 tool vision bị chặn 400. Giữ đủ mọi type ở đây.
+    const types: ScenarioType[] = ['xem-tuoi', 'xem-lam-an', 'tuong-hop', 'tu-binh', 'xem-tuoi-sinh-con', 'chon-ngay-tot', 'dat-ten-con', 'dat-ten-dn', 'xem-tuong', 'phong-thuy', 'nap-am', 'kim-lau', 'ngu-hanh-ten', 'than-so-hoc', 'bat-trach', 'kinh-dich', 'hoang-dao', 'ngay-tot', 'luc-nham'];
     if (!types.includes(s.type as ScenarioType)) {
       return { ok: false, error: 'scenario.type không hợp lệ' };
     }

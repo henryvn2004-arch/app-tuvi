@@ -2,6 +2,11 @@
 export const dynamic = 'force-dynamic';
 export const maxDuration = 300;
 
+// LLM Gemini-primary + Anthropic-backup dùng chung (đọc provider từ app_config
+// 'chat.standalone_provider'). Vision + streaming đều qua helper — giữ Anthropic
+// backup switch-được, không đổi prompt/parse/paywall.
+import { llmText, llmStreamResponse } from '@/lib/llm/complete';
+
 // ── System Prompts ─────────────────────────────────────────────────────────
 const SP_DIEN = `Bạn là chuyên gia nhân tướng học (面相學) theo truyền thống phương Đông, am hiểu Ma Y Thần Tướng (麻衣神相), Liễu Trang Thần Tướng (柳莊神相) và Thủy Kính Tập (水鏡集).
 
@@ -553,7 +558,7 @@ async function _replicateRun(replKey, modelUrl, input, extraBody = {}) {
   throw new Error('Hết thời gian chờ. Vui lòng thử lại.');
 }
 
-async function handleKieuTocPhanTich(body, apiKey) {
+async function handleKieuTocPhanTich(body) {
   const { image, mediaType = 'image/jpeg', gender = 'nam', faceMeasurements } = body;
   if (!image) return Response.json({ error: 'Thiếu dữ liệu ảnh.' }, { status: 400 });
   if (image.length > 7 * 1024 * 1024) return Response.json({ error: 'Ảnh quá lớn.' }, { status: 400 });
@@ -579,29 +584,17 @@ async function handleKieuTocPhanTich(body, apiKey) {
 Dùng các số đo này để xác định hình dạng khuôn mặt CHÍNH XÁC, không chỉ dựa vào cảm quan.`;
   }
 
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 1500,
+  let text;
+  try {
+    text = await llmText({
       system: SP_NGOAI_HINH + measurementContext,
-      messages: [{
-        role: 'user',
-        content: [
-          { type: 'image', source: { type: 'base64', media_type: mediaType, data: image } },
-          { type: 'text', text: `Giới tính: ${genderLabel}. IDs kiểu tóc hợp lệ: ${validHairIds}. Phân tích và trả về JSON. Chọn TẤT CẢ ${gender === 'nu' ? '5-7' : '5'} kiểu phù hợp nhất trong danh sách.` }
-        ]
-      }]
-    })
-  });
-
-  if (!resp.ok) {
-    const e = await resp.json().catch(() => ({}));
-    return Response.json({ error: e.error?.message || 'Lỗi AI.' }, { status: 500 });
+      prompt: `Giới tính: ${genderLabel}. IDs kiểu tóc hợp lệ: ${validHairIds}. Phân tích và trả về JSON. Chọn TẤT CẢ ${gender === 'nu' ? '5-7' : '5'} kiểu phù hợp nhất trong danh sách.`,
+      images: [{ data: image, mediaType }],
+      maxTokens: 1500,
+    });
+  } catch (_) {
+    return Response.json({ error: 'Lỗi AI.' }, { status: 500 });
   }
-  const data = await resp.json();
-  const text = data.content?.[0]?.text || '{}';
   try {
     const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
     return Response.json(parsed);
@@ -751,7 +744,7 @@ Quy tắc:
 - colorPalette: hex codes thực tế phù hợp skinTone
 - Chỉ trả về JSON`;
 
-async function handleTrangDiemPhanTich(body, apiKey) {
+async function handleTrangDiemPhanTich(body) {
   const { image, mediaType = 'image/jpeg', namSinh, faceMeasurements } = body;
   if (!image) return Response.json({ error: 'Thiếu dữ liệu ảnh.' }, { status: 400 });
   if (image.length > 7 * 1024 * 1024) return Response.json({ error: 'Ảnh quá lớn.' }, { status: 400 });
@@ -778,22 +771,17 @@ Theo cổ pháp, người mệnh ${napAmHanh} hợp với phong cách: ${menhMak
     measurementContext = `\n\nĐO LƯỜNG KHUÔN MẶT:\n- Rộng/cao: ${m.widthToHeight} | Hàm/mặt: ${m.jawToFace} | Trán/hàm: ${m.foreToJaw}`;
   }
 
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 1200,
+  let text;
+  try {
+    text = await llmText({
       system: SP_TRANG_DIEM + napAmContext + measurementContext,
-      messages: [{ role: 'user', content: [
-        { type: 'image', source: { type: 'base64', media_type: mediaType, data: image } },
-        { type: 'text', text: 'Phân tích khuôn mặt và trả về JSON phong cách makeup phù hợp.' }
-      ]}]
-    })
-  });
-  if (!resp.ok) return Response.json({ error: 'Lỗi AI.' }, { status: 500 });
-  const data = await resp.json();
-  const text = data.content?.[0]?.text || '{}';
+      prompt: 'Phân tích khuôn mặt và trả về JSON phong cách makeup phù hợp.',
+      images: [{ data: image, mediaType }],
+      maxTokens: 1200,
+    });
+  } catch (_) {
+    return Response.json({ error: 'Lỗi AI.' }, { status: 500 });
+  }
   try {
     const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
     // Inject menh context vào response
@@ -937,7 +925,7 @@ Quy tắc:
 - Lồng ghép Đông y (ngũ tạng, âm dương, hành) VÀ Tây y (vitamin, peptide, SPF...) tự nhiên
 - Chỉ trả về JSON`;
 
-async function handleDaLieuAI(body, apiKey) {
+async function handleDaLieuAI(body) {
   const { image, mediaType = 'image/jpeg', namSinh, faceMeasurements } = body;
   if (!image) return Response.json({ error: 'Thiếu dữ liệu ảnh.' }, { status: 400 });
   if (image.length > 7 * 1024 * 1024) return Response.json({ error: 'Ảnh quá lớn (tối đa ~5MB).' }, { status: 400 });
@@ -961,26 +949,17 @@ Hãy lồng ghép thông tin mệnh vào phần dong_y.menh_lien_quan và my_pha
 Phần an_uong cũng phải tính đến mệnh ${menhHanh} (VD: mệnh Hỏa cần thanh nhiệt, mệnh Thủy cần bổ thận).`;
   }
 
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 2000,
+  let text;
+  try {
+    text = await llmText({
       system: SP_DA_LIEU + menhContext,
-      messages: [{
-        role: 'user',
-        content: [
-          { type: 'image', source: { type: 'base64', media_type: mediaType, data: image } },
-          { type: 'text', text: 'Phân tích tình trạng da trong ảnh và trả về JSON tư vấn holistic đầy đủ 4 phần.' }
-        ]
-      }]
-    })
-  });
-
-  if (!resp.ok) return Response.json({ error: 'Lỗi AI.' }, { status: 500 });
-  const data = await resp.json();
-  const text = data.content?.[0]?.text || '{}';
+      prompt: 'Phân tích tình trạng da trong ảnh và trả về JSON tư vấn holistic đầy đủ 4 phần.',
+      images: [{ data: image, mediaType }],
+      maxTokens: 2000,
+    });
+  } catch (_) {
+    return Response.json({ error: 'Lỗi AI.' }, { status: 500 });
+  }
   try {
     const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
     if (menhHanh) { parsed.menhHanh = menhHanh; parsed.menhFull = menhFull; parsed.canChi = canChi; }
@@ -1118,7 +1097,7 @@ Quy tắc quan trọng:
 - celebrity_inspo: chỉ celeb châu Á (Hàn/Nhật/Việt/Trung)
 - Chỉ trả về JSON`;
 
-async function handlePersonalColor(body, apiKey) {
+async function handlePersonalColor(body) {
   const { image, mediaType = 'image/jpeg', namSinh } = body;
   if (!image) return Response.json({ error: 'Thiếu ảnh.' }, { status: 400 });
   if (image.length > 7 * 1024 * 1024) return Response.json({ error: 'Ảnh quá lớn.' }, { status: 400 });
@@ -1138,23 +1117,17 @@ Theo cổ pháp, người mệnh ${menhHanh} thường hợp với season: ${sIn
 Nếu kết quả phân tích ảnh cho phép, ưu tiên season này. Nếu tông da thực tế khác hẳn, vẫn trả về season đúng và giải thích thêm về sự tương đồng/khác biệt với mệnh.`;
   }
 
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 1200,
+  let raw;
+  try {
+    raw = await llmText({
       system: SP_PERSONAL_COLOR + menhContext,
-      messages: [{ role: 'user', content: [
-        { type: 'image', source: { type: 'base64', media_type: mediaType, data: image } },
-        { type: 'text', text: 'Phân tích personal color từ ảnh này và trả về JSON.' }
-      ]}]
-    })
-  });
-
-  if (!resp.ok) return Response.json({ error: 'Lỗi AI.' }, { status: 500 });
-  const data = await resp.json();
-  const raw = data.content?.[0]?.text || '{}';
+      prompt: 'Phân tích personal color từ ảnh này và trả về JSON.',
+      images: [{ data: image, mediaType }],
+      maxTokens: 1200,
+    });
+  } catch (_) {
+    return Response.json({ error: 'Lỗi AI.' }, { status: 500 });
+  }
   try {
     const parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
     if (menhHanh) {
@@ -1198,7 +1171,7 @@ Quy tắc:
 - napam_hanh: Kim=trắng/xám/bạc, Mộc=xanh lá/nâu, Thủy=đen/navy/xanh đậm, Hỏa=đỏ/cam/hồng, Thổ=vàng/be/nâu đất
 - Chỉ trả về JSON`;
 
-async function handleWardrobeAdd(request, body, apiKey) {
+async function handleWardrobeAdd(request, body) {
   const authHeader = request.headers.get('authorization') || '';
   const token = authHeader.replace('Bearer ', '');
   if (!token) return Response.json({ error: 'Chưa đăng nhập.' }, { status: 401 });
@@ -1215,24 +1188,20 @@ async function handleWardrobeAdd(request, body, apiKey) {
   if (image.length > 6 * 1024 * 1024) return Response.json({ error: 'Ảnh quá lớn.' }, { status: 400 });
 
   // 1. AI classify
-  const aiResp = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 400,
+  let classifyText;
+  try {
+    classifyText = await llmText({
       system: SP_WARDROBE_CLASSIFY,
-      messages: [{ role: 'user', content: [
-        { type: 'image', source: { type: 'base64', media_type: mediaType, data: image } },
-        { type: 'text', text: 'Phân tích món đồ này.' }
-      ]}]
-    })
-  });
-  if (!aiResp.ok) return Response.json({ error: 'Lỗi AI phân tích.' }, { status: 500 });
-  const aiData = await aiResp.json();
+      prompt: 'Phân tích món đồ này.',
+      images: [{ data: image, mediaType }],
+      maxTokens: 400,
+    });
+  } catch (_) {
+    return Response.json({ error: 'Lỗi AI phân tích.' }, { status: 500 });
+  }
   let classified = {};
   try {
-    classified = JSON.parse(aiData.content?.[0]?.text?.replace(/```json|```/g,'').trim() || '{}');
+    classified = JSON.parse(classifyText?.replace(/```json|```/g,'').trim() || '{}');
   } catch(_) {}
 
   // 2. Upload ảnh lên Supabase Storage
@@ -1275,7 +1244,7 @@ async function handleWardrobeAdd(request, body, apiKey) {
   return Response.json({ success: true, item: saved[0] || item });
 }
 
-async function handleWardrobeMix(request, body, apiKey) {
+async function handleWardrobeMix(request, body) {
   const authHeader = request.headers.get('authorization') || '';
   const token = authHeader.replace('Bearer ', '');
   if (!token) return Response.json({ error: 'Chưa đăng nhập.' }, { status: 401 });
@@ -1346,19 +1315,14 @@ Quy tắc:
 - Ưu tiên outfit có màu sắc phối tốt với nhau
 - Chỉ trả về JSON`;
 
-  const aiResp = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1000,
-      messages: [{ role: 'user', content: prompt }]
-    })
-  });
-  if (!aiResp.ok) return Response.json({ error: 'Lỗi AI.' }, { status: 500 });
-  const aiData = await aiResp.json();
+  let mixText;
   try {
-    const parsed = JSON.parse(aiData.content?.[0]?.text?.replace(/```json|```/g,'').trim() || '{}');
+    mixText = await llmText({ prompt, maxTokens: 1000 });
+  } catch (_) {
+    return Response.json({ error: 'Lỗi AI.' }, { status: 500 });
+  }
+  try {
+    const parsed = JSON.parse(mixText?.replace(/```json|```/g,'').trim() || '{}');
     // Attach full item data to each outfit
     const itemMap = Object.fromEntries(wardrobe.map(i => [i.id, i]));
     (parsed.outfits || []).forEach(outfit => {
@@ -1458,21 +1422,18 @@ export async function POST(request) {
     const body = await request.json();
     const { image, mediaType = 'image/jpeg', irisNote = null, geoNote = null, action = 'dien-tuong' } = body;
 
-    // ── Replicate-based actions (không cần Anthropic key) ──────────────────
+    // ── Replicate-based actions (không cần LLM) ────────────────────────────
     if (action === 'kieu-toc-tryon') return await handleKieuTocTryon(body);
 
-    const apiKey = process.env.ANTHROPIC_API_KEY;
-    if (!apiKey) return Response.json({ error: 'API key chưa cấu hình.' }, { status: 500 });
-
-    // ── Non-streaming Claude Vision JSON actions ───────────────────────────
-    if (action === 'kieu-toc-phan-tich') return await handleKieuTocPhanTich(body, apiKey);
-    if (action === 'wardrobe-add')    return await handleWardrobeAdd(request, body, apiKey);
-    if (action === 'wardrobe-mix')    return await handleWardrobeMix(request, body, apiKey);
+    // ── Non-streaming Vision JSON actions (LLM qua llmText) ────────────────
+    if (action === 'kieu-toc-phan-tich') return await handleKieuTocPhanTich(body);
+    if (action === 'wardrobe-add')    return await handleWardrobeAdd(request, body);
+    if (action === 'wardrobe-mix')    return await handleWardrobeMix(request, body);
     if (action === 'wardrobe-delete') return await handleWardrobeDelete(request, body);
-    if (action === 'personal-color') return await handlePersonalColor(body, apiKey);
+    if (action === 'personal-color') return await handlePersonalColor(body);
     if (action === 'personal-color-tryon') return await handlePersonalColorTryon(body);
-    if (action === 'da-lieu-ai') return await handleDaLieuAI(body, apiKey);
-    if (action === 'trang-diem-phan-tich') return await handleTrangDiemPhanTich(body, apiKey);
+    if (action === 'da-lieu-ai') return await handleDaLieuAI(body);
+    if (action === 'trang-diem-phan-tich') return await handleTrangDiemPhanTich(body);
     if (action === 'trang-diem-tryon') return await handleTrangDiemTryon(body);
 
     // Validation: thanh-tuong & thanh-tuong-pro cần geoNote (text), còn lại cần image
@@ -1486,21 +1447,12 @@ export async function POST(request) {
     const systemPrompt = PROMPTS[action] || PROMPTS['dien-tuong'];
     const baseInstruction = INSTRUCTIONS[action] || INSTRUCTIONS['dien-tuong'];
 
-    // Build user message content
-    let userContent;
+    // Build user text (giữ nguyên nội dung prompt/instruction/extra như cũ)
     const extraText = [geoNote || '', irisNote || ''].filter(Boolean).join('\n\n');
     const userText = extraText ? baseInstruction + '\n\n' + extraText : baseInstruction;
-
-    if (action === 'thanh-tuong' || action === 'thanh-tuong-pro') {
-      // Text-only: no image
-      userContent = userText;
-    } else {
-      // Image + text
-      userContent = [
-        { type: 'image', source: { type: 'base64', media_type: mediaType, data: image } },
-        { type: 'text', text: userText }
-      ];
-    }
+    const images = (action === 'thanh-tuong' || action === 'thanh-tuong-pro')
+      ? []
+      : [{ data: image, mediaType }];
 
     const maxTokens =
       action === 'thanh-tuong-pro' ? 5000 :
@@ -1508,72 +1460,12 @@ export async function POST(request) {
       action === 'khi-sac'         ? 5000 :
       8000;
 
-    const anthropicResp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-beta': 'prompt-caching-2024-07-31',
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: maxTokens,
-        stream: true,
-        system: [{ type: 'text', text: systemPrompt, cache_control: { type: 'ephemeral' } }],
-        messages: [{ role: 'user', content: userContent }]
-      })
-    });
-
-    if (!anthropicResp.ok) {
-      const err = await anthropicResp.json().catch(() => ({}));
-      return Response.json({ error: err.error?.message || 'Lỗi gọi AI.' }, { status: 500 });
-    }
-
-    const encoder = new TextEncoder();
-    const readable = new ReadableStream({
-      async start(controller) {
-        const reader = anthropicResp.body.getReader();
-        const decoder = new TextDecoder();
-        let buf = '';
-        try {
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            buf += decoder.decode(value, { stream: true });
-            const lines = buf.split('\n');
-            buf = lines.pop() || '';
-            for (const line of lines) {
-              if (!line.startsWith('data: ')) continue;
-              const raw = line.slice(6).trim();
-              if (!raw || raw === '[DONE]') continue;
-              try {
-                const json = JSON.parse(raw);
-                if (json.type === 'content_block_delta' && json.delta?.type === 'text_delta') {
-                  controller.enqueue(encoder.encode('data: ' + JSON.stringify({ t: json.delta.text }) + '\n\n'));
-                }
-                if (json.type === 'message_stop') {
-                  controller.enqueue(encoder.encode('data: [DONE]\n\n'));
-                }
-              } catch (_) {}
-            }
-          }
-        } catch (e) {
-          controller.enqueue(encoder.encode('data: ' + JSON.stringify({ err: e.message }) + '\n\n'));
-        } finally {
-          controller.close();
-        }
-      }
-    });
-
-    return new Response(readable, {
-      headers: {
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive',
-        'Access-Control-Allow-Origin': '*',
-      }
-    });
+    // Stream qua helper Gemini-primary + Anthropic-backup. GIỮ NGUYÊN shape
+    // SSE mà frontend parse: data:{t} / {err} / [DONE] (format 'delta').
+    return await llmStreamResponse(
+      { system: systemPrompt, prompt: userText, images, maxTokens },
+      'delta',
+    );
 
   } catch (e) {
     return Response.json({ error: e.message || 'Unknown' }, { status: 500 });

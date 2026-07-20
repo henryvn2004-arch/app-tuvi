@@ -5,9 +5,11 @@ import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody, CORS_HEADERS } from '@/lib/cors';
 // Lõi dùng chung — trích sang lib/agent (một bộ não).
 import { execLasoTool, toolLabel } from '@/lib/agent/tools';
-import { buildChatContext } from '@/lib/agent/prompts';
-
-const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!;
+import { buildChatContext, XUNG_HO_RULE, nguoiXemLine } from '@/lib/agent/prompts';
+// LLM Gemini-primary + Anthropic-backup (provider từ app_config
+// 'chat.standalone_provider'). callLLMTools trả shape Anthropic → giữ nguyên
+// vòng lặp tool bên dưới; llmText cho luận 24 phần (phan).
+import { llmText, callLLMTools } from '@/lib/llm/complete';
 
 // ─── System prompt ─────────────────────────────────────────────
 const SYSTEM_PROMPT = `Bạn là nhà luận giải Tử Vi Đẩu Số, phụng sự trang Tử Vi Minh Bảo.
@@ -74,7 +76,8 @@ QUY TẮC CHUNG CHO MỌI PHẦN LUẬN GIẢI:
 - Quan hệ với Mệnh là ưu tiên: cung đang xét hỗ trợ hay khắc bản mệnh?
 - Tổ hợp sao: nhiều sao tốt → xu hướng tốt, nhiều sao xấu → dễ vấn đề; sát tinh/bại tinh mạnh thì phải cảnh báo rõ.
 - Cung rơi vào lĩnh vực nào thì chuyện xảy ra xoay quanh lĩnh vực đó.
-- Check nền Phúc–Mệnh–Thân: 3 cung này tốt thì giảm xấu, xấu thì khuếch đại rủi ro.`;
+- Check nền Phúc–Mệnh–Thân: 3 cung này tốt thì giảm xấu, xấu thì khuếch đại rủi ro.
+- ${XUNG_HO_RULE}`;
 
 // ─── Cung descriptions ─────────────────────────────────────────
 const CUNG_BY_PHAN: Record<number, string> = {
@@ -98,24 +101,12 @@ const CUNG_DESC: Record<string, string> = {
   'Huynh Đệ': 'Cung Huynh Đệ xem anh chị em, bạn bè cùng trang lứa, và một phần về tài chính lưu động.',
 };
 
-// ─── Anthropic client ──────────────────────────────────────────
-const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
-
+// ─── LLM client (Gemini-primary + Anthropic-backup) ────────────
+// Trả shape Anthropic ({content, stop_reason, usage}) dù provider nào → vòng
+// lặp tool phía dưới KHÔNG đổi.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function callAnthropic(system: any, convo: any[], tools: any[], toolChoiceNone = false, maxTokens = 1500): Promise<any> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const payload: any = { model: 'claude-sonnet-4-6', max_tokens: maxTokens, system, messages: convo };
-  if (tools.length) {
-    payload.tools = tools;
-    if (toolChoiceNone) payload.tool_choice = { type: 'none' };
-  }
-  const resp = await fetch(ANTHROPIC_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01', 'anthropic-beta': 'prompt-caching-2024-07-31' },
-    body: JSON.stringify(payload),
-  });
-  if (!resp.ok) throw new Error('API error: ' + (await resp.text()).slice(0, 200));
-  return resp.json();
+async function callLLM(system: any, convo: any[], tools: any[], toolChoiceNone = false, maxTokens = 1500): Promise<any> {
+  return callLLMTools(system, convo, tools, toolChoiceNone, maxTokens);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -144,7 +135,7 @@ async function handleChat(body: any): Promise<Response> {
   try {
     for (let round = 0; round <= MAX_ROUNDS; round++) {
       const lastRound = round === MAX_ROUNDS;
-      const data = await callAnthropic(systemForCall, convo, tools, lastRound, maxTokens);
+      const data = await callLLM(systemForCall, convo, tools, lastRound, maxTokens);
       const content = data.content || [];
       usage.input_tokens += data.usage?.input_tokens || 0;
       usage.output_tokens += data.usage?.output_tokens || 0;
@@ -206,57 +197,20 @@ async function handleChatStream(body: any): Promise<Response> {
         const lastRound = round === MAX_ROUNDS;
 
         if (lastRound) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const payload: any = {
-            model: 'claude-sonnet-4-6',
-            max_tokens: maxTokens,
-            stream: true,
-            system: systemForCall,
-            messages: convo,
-          };
-          if (tools.length) {
-            payload.tools = tools;
-            payload.tool_choice = { type: 'none' };
-          }
-          const resp = await fetch(ANTHROPIC_URL, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'x-api-key': ANTHROPIC_API_KEY,
-              'anthropic-version': '2023-06-01',
-              'anthropic-beta': 'prompt-caching-2024-07-31',
-            },
-            body: JSON.stringify(payload),
-          });
-          if (!resp.ok) {
-            send({ type: 'error', message: 'API error: ' + (await resp.text()).slice(0, 200) });
-            break;
-          }
-          const streamReader = resp.body!.getReader();
-          const dec = new TextDecoder();
-          let buf = '';
-          while (true) {
-            const { done, value } = await streamReader.read();
-            if (done) break;
-            buf += dec.decode(value, { stream: true });
-            const lines = buf.split('\n');
-            buf = lines.pop() ?? '';
-            for (const line of lines) {
-              if (!line.startsWith('data: ')) continue;
-              const json = line.slice(6).trim();
-              if (json === '[DONE]') continue;
-              try {
-                const evt = JSON.parse(json);
-                if (evt.type === 'content_block_delta' && evt.delta?.type === 'text_delta') {
-                  send({ type: 'text', text: evt.delta.text });
-                }
-              } catch { /* ignore */ }
-            }
+          // Vòng chốt: buộc trả text (không tool). Gemini generateContent không
+          // stream token-by-token qua đây → gửi 1 khối text (frontend cộng dồn
+          // như thường). Giữ đúng shape event {type:'text'} / {type:'error'}.
+          try {
+            const data = await callLLM(systemForCall, convo, tools, true, maxTokens);
+            const text = textOf(data.content || []);
+            if (text) send({ type: 'text', text });
+          } catch (e: unknown) {
+            send({ type: 'error', message: (e as Error).message });
           }
           break;
         }
 
-        const data = await callAnthropic(systemForCall, convo, tools, false, maxTokens);
+        const data = await callLLM(systemForCall, convo, tools, false, maxTokens);
         const content = data.content || [];
 
         if (data.stop_reason === 'tool_use') {
@@ -468,38 +422,25 @@ export async function POST(request: NextRequest) {
 
   if (action === 'chat') return body.stream ? handleChatStream(body) : handleChat(body);
 
-  const { laSoText, phan, docs } = body as { laSoText?: string; phan?: number; docs?: string };
+  const { laSoText, phan, docs, hoTen, gioiTinh } = body as { laSoText?: string; phan?: number; docs?: string; hoTen?: string; gioiTinh?: string };
   if (!laSoText || !phan) return err('Thiếu dữ liệu', 400);
 
   let prompt: string;
-  try { prompt = buildPrompt(Number(phan), laSoText, docs); }
+  try {
+    // "Người xem: <tên> (giới tính)" lên đầu prompt → xưng hô đúng (client gửi hoTen/gioiTinh).
+    const nx = nguoiXemLine(hoTen, gioiTinh);
+    prompt = (nx ? nx + '\n' : '') + buildPrompt(Number(phan), laSoText, docs);
+  }
   catch (e: unknown) { return err('buildPrompt error: ' + (e as Error).message); }
 
   try {
-    const model = 'claude-sonnet-4-6';
     const maxTok = phan === 1 ? 2000 : phan === 14 ? 3000 : phan === 24 ? 1400
       : (phan >= 2 && phan <= 13) ? 1100 : (phan >= 15 && phan <= 23) ? 1100 : 1000;
 
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-        'anthropic-beta': 'prompt-caching-2024-07-31',
-      },
-      body: JSON.stringify({
-        model, max_tokens: maxTok,
-        system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }],
-        messages: [{ role: 'user', content: [{ type: 'text', text: prompt, cache_control: { type: 'ephemeral' } }] }],
-      }),
-    });
+    // Prompt + dữ liệu GIỮ NGUYÊN; chỉ đổi backend provider (Gemini-primary,
+    // Anthropic-backup). Bỏ cache_control (tối ưu riêng Anthropic; Gemini cache ngầm).
+    const text = await llmText({ system: SYSTEM_PROMPT, prompt, maxTokens: maxTok });
 
-    if (!resp.ok) return err('API error: ' + (await resp.text()).slice(0, 200));
-    const data = await resp.json();
-    if (data.error) return err(data.error.message);
-
-    const text: string = data.content?.[0]?.text || '';
     let chartData = null;
     const chartMatch = text.match(/```chartdata\s*([\s\S]*?)```/);
     if (chartMatch) { try { chartData = JSON.parse(chartMatch[1].trim()); } catch { /* ignore */ } }

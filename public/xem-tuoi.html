@@ -12,6 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 <script src="/tuvi-ansao-engine.js"></script>
+<script src="/tuong-hop.js?v=2"></script>
 <script src="/auth.js"></script>
 <script src="/tuvi-form.js"></script>
 <script src="/tuvi-grid.js"></script>
@@ -1001,105 +1002,9 @@ function meterColor(s100){
   if(s100>=35)return'var(--gold)';return'var(--red)';
 }
 
-function chiRelation(dc1,dc2){
-  if(dc1===dc2)return{score:8,label:'Cùng chi',type:'same'};
-  if(LUC_HOP[dc1]===dc2)return{score:9,label:'Lục Hợp ✓',type:'luchop'};
-  if(TU_XUNG[dc1]===dc2)return{score:1,label:'Tứ Xung ✗',type:'tuxung'};
-  const g1=TAM_HOP_G.find(g=>g.includes(dc1)),g2=TAM_HOP_G.find(g=>g.includes(dc2));
-  if(g1&&g2&&g1===g2)return{score:9,label:'Tam Hợp ✓',type:'tamhop'};
-  if(TAM_HINH[dc1]?.includes(dc2))return{score:3,label:'Tam Hình ⚠',type:'tamhinh'};
-  return{score:5,label:'Bình thường',type:'neutral'};
-}
-function nguHanhRel(hA,hB){
-  if(!hA||!hB)return{score:5,label:'?'};
-  if(hA===hB)return{score:8,label:'Đồng hành'};
-  if(_NH_SINH[hB]===hA)return{score:9,label:hB+' sinh '+hA+' ✓'};
-  if(_NH_SINH[hA]===hB)return{score:6,label:hA+' sinh '+hB};
-  if(_NH_KHAC[hB]===hA)return{score:1,label:hB+' khắc '+hA+' ✗'};
-  if(_NH_KHAC[hA]===hB)return{score:4,label:hA+' khắc '+hB};
-  return{score:5,label:'Bình thường'};
-}
-function ttNhomRel(nA,nB){
-  if(!nA||!nB)return{delta:0,label:''};
-  if(nA===nB)return{delta:2,label:'Cùng nhóm Thái Tuế'};
-  if([[1,3],[3,1],[2,4],[4,2]].some(([a,b])=>a===nA&&b===nB))return{delta:-1,label:'Nhóm đối lập'};
-  if([[1,2],[2,1],[3,4],[4,3]].some(([a,b])=>a===nA&&b===nB))return{delta:1,label:'Nhóm bổ trợ'};
-  return{delta:0,label:'Nhóm trung tính'};
-}
-function cungScore(palA,palB){
-  if(!palA||!palB)return{score:5,chiRel:{label:'?'},details:[]};
-  const cr=chiRelation(palA.diaChi,palB.diaChi);
-  let s=cr.score*0.6+5*0.4;
-  const details=[cr.label];
-  const stA=(palA.stars||[]).map(s=>s.ten);
-  const stB=(palB.stars||[]).map(s=>s.ten);
-  if(stA.includes('Hóa Kỵ')){s-=1.5;details.push('Hóa Kỵ cung A ✗');}
-  if(stB.includes('Hóa Kỵ')){s-=1.5;details.push('Hóa Kỵ cung B ✗');}
-  if(stA.includes('Hóa Lộc')||stA.includes('Lộc Tồn')){s+=1;details.push('Lộc cung A ✓');}
-  if(stB.includes('Hóa Lộc')||stB.includes('Lộc Tồn')){s+=1;details.push('Lộc cung B ✓');}
-  return{score:r1(clamp(s)),chiRel:cr,details};
-}
-function mainStarRel(palA,palB){
-  const PAIRS=[['Tử Vi','Thiên Phủ'],['Thái Dương','Thái Âm'],['Thiên Cơ','Thiên Lương'],['Vũ Khúc','Tham Lang'],['Liêm Trinh','Thiên Tướng']];
-  const sA=(palA?.majorStars||[]).map(s=>s.ten);
-  const sB=(palB?.majorStars||[]).map(s=>s.ten);
-  for(const [s1,s2] of PAIRS){
-    if((sA.includes(s1)&&sB.includes(s2))||(sA.includes(s2)&&sB.includes(s1)))
-      return{score:9,label:`${s1} × ${s2} — Cặp hòa hợp ✓`};
-  }
-  for(const s of sA)if(sB.includes(s))return{score:8,label:`Cùng ${s} — Đồng khí`};
-  const SAT=['Thất Sát','Phá Quân'];
-  if(sA.some(s=>SAT.includes(s))&&sB.some(s=>SAT.includes(s)))
-    return{score:4,label:'Cả 2 cung có sao cứng — dễ xung đột'};
-  return{score:6,label:'Bình thường'};
-}
-
-function calcTuongHop(lsA,lsB,nameA,nameB){
-  const ccA=lsA.canChiNam||'',ccB=lsB.canChiNam||'';
-  const naA=_NA[ccA]||lsA.napAmHanh||'',naB=_NA[ccB]||lsB.napAmHanh||'';
-  const chiNamA=lsA.chiNam||'',chiNamB=lsB.chiNam||'';
-  const pMenhA=lsA.palaces?.find(p=>p.isMenh),pMenhB=lsB.palaces?.find(p=>p.isMenh);
-  const pPTA=lsA.palaces?.find(p=>p.cungName==='Phu Thê'),pPTB=lsB.palaces?.find(p=>p.cungName==='Phu Thê');
-  const pTTA=lsA.palaces?.find(p=>p.cungName==='Tử Tức'),pTTB=lsB.palaces?.find(p=>p.cungName==='Tử Tức');
-  const pTBA=lsA.palaces?.find(p=>p.cungName==='Tài Bạch'),pTBB=lsB.palaces?.find(p=>p.cungName==='Tài Bạch');
-
-  const cr1=chiRelation(chiNamA,chiNamB);
-  const s1={score:cr1.score,w:0.10,label:'Xét Tuổi',detail:cr1.label,a:`${ccA} (${chiNamA})`,b:`${ccB} (${chiNamB})`,chiRel:cr1};
-  const nr=nguHanhRel(naA,naB);
-  const s2={score:nr.score,w:0.10,label:'Ngũ Hành',detail:nr.label,a:`${ccA} — ${naA}`,b:`${ccB} — ${naB}`};
-  const mc=cungScore(pMenhA,pMenhB);
-  const ttA=pMenhA?.thaiTueNhom?.nhom,ttB=pMenhB?.thaiTueNhom?.nhom;
-  const ttr=ttNhomRel(ttA,ttB);
-  const ttSaoA=pMenhA?.thaiTueNhom?.sao||'',ttSaoB=pMenhB?.thaiTueNhom?.sao||'';
-  const mScore=r1(clamp(mc.score*0.7+(5+ttr.delta)*0.3));
-  const s3={score:mScore,w:0.20,label:'Tư Tưởng',detail:[mc.chiRel?.label,ttr.label].filter(Boolean).join(' · '),
-    a:`${pMenhA?.diaChi||'?'} · ${(pMenhA?.majorStars||[]).map(s=>s.ten).join(',')||'VCD'}`,
-    b:`${pMenhB?.diaChi||'?'} · ${(pMenhB?.majorStars||[]).map(s=>s.ten).join(',')||'VCD'}`,
-    palA:pMenhA,palB:pMenhB,mc,ttr,ttSaoA,ttSaoB,ttNhomA:ttA,ttNhomB:ttB};
-  const ptc=cungScore(pPTA,pPTB);
-  const s4={score:ptc.score,w:0.20,label:'Quan Hệ',detail:ptc.chiRel?.label||'',
-    a:`${pPTA?.diaChi||'?'} · ${(pPTA?.majorStars||[]).map(s=>s.ten).join(',')||'VCD'}`,
-    b:`${pPTB?.diaChi||'?'} · ${(pPTB?.majorStars||[]).map(s=>s.ten).join(',')||'VCD'}`,
-    palA:pPTA,palB:pPTB,mc:ptc};
-  const ttc=cungScore(pTTA,pTTB);
-  const s5={score:ttc.score,w:0.10,label:'Con Cái',detail:ttc.chiRel?.label||'',
-    a:`${pTTA?.diaChi||'?'}`,b:`${pTTB?.diaChi||'?'}`,palA:pTTA,palB:pTTB,mc:ttc};
-  const tbc=cungScore(pTBA,pTBB);
-  const s6={score:tbc.score,w:0.15,label:'Tài Chính',detail:tbc.chiRel?.label||'',
-    a:`${pTBA?.diaChi||'?'}`,b:`${pTBB?.diaChi||'?'}`,palA:pTBA,palB:pTBB,mc:tbc};
-  const sr=mainStarRel(pMenhA,pMenhB);
-  const s7={score:sr.score,w:0.10,label:'Tính Cách',detail:sr.label,
-    a:(pMenhA?.majorStars||[]).map(s=>s.ten).join(', ')||'VCD',
-    b:(pMenhB?.majorStars||[]).map(s=>s.ten).join(', ')||'VCD'};
-  const dvA=lsA.daiVanHienTai?.scoring?.tong??5,dvB=lsB.daiVanHienTai?.scoring?.tong??5;
-  const s8={score:r1((dvA+dvB)/2),w:0.05,label:'Vận Hành',
-    detail:`ĐV ${nameA}: ${dvA}/10 · ĐV ${nameB}: ${dvB}/10`,
-    a:`${dvA}/10 ${dvA>=7?'🟢':dvA>=4?'🟡':'🔴'}`,b:`${dvB}/10 ${dvB>=7?'🟢':dvB>=4?'🟡':'🔴'}`};
-
-  const items=[s1,s2,s3,s7,s4,s5,s6,s8]; // reordered: Tư Tưởng, Tính Cách, Quan Hệ, Con Cái, Tài Chính
-  const total=r1(items.reduce((sum,m)=>sum+m.score*m.w*10,0));
-  return{items,total,lsA,lsB,nameA,nameB,naA,naB};
-}
+// ── Tương hợp 8 chiều: engine DÙNG CHUNG public/tuong-hop.js (window.TuongHop). ──
+// Byte-identical bản inline cũ; shell /app/{xem-tuoi,xem-lam-an,tuong-hop} dùng cùng file → sửa 1 nơi, cả 2 nơi đổi.
+function calcTuongHop(lsA,lsB,nameA,nameB){ return TuongHop.calcTuongHop(lsA,lsB,nameA,nameB); }
 
 // ── PREGEN ──
 function pregenCung(pal,lsObj,name,colorVar){
@@ -1863,7 +1768,7 @@ async function analyze(){
 function toggleDropdown(btn){const menu=btn.nextElementSibling;const isOpen=menu.classList.contains('open');document.querySelectorAll('.nav-dropdown-menu').forEach(m=>m.classList.remove('open'));document.querySelectorAll('.nav-dropdown-btn').forEach(b=>b.classList.remove('open'));if(!isOpen){menu.classList.add('open');btn.classList.add('open');}}
 document.addEventListener('click',e=>{if(!e.target.closest('.nav-dropdown')){document.querySelectorAll('.nav-dropdown-menu').forEach(m=>m.classList.remove('open'));document.querySelectorAll('.nav-dropdown-btn').forEach(b=>b.classList.remove('open'));}});
 </script>
-<script src="/nav.js?v=15"></script>
+<script src="/nav.js?v=16"></script>
 <script src="/footer.js"></script>
 <script src="/chatbot.js"></script>
 <script>

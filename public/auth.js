@@ -24,6 +24,33 @@ function _delCookie(name) {
   document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;SameSite=Strict';
 }
 
+// ── Cookie phiên bền đặt TỪ SERVER (HttpOnly) — né giới hạn ITP 7-ngày của iOS
+//    Safari cho storage do script ghi. Cookie JS `tuvi_rt` ở trên vẫn giữ (dự phòng
+//    cho trình duyệt không ITP); cookie server `tvmb_rt` là lớp bền chính. ──
+function _serverStoreRt(token) {
+  if (!token) return;
+  try {
+    fetch('/api/auth/session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh_token: token }),
+      keepalive: true,
+    }).catch(function () {});
+  } catch (e) { /* ignore */ }
+}
+// Refresh phiên qua cookie HttpOnly (server đọc cookie, gọi Supabase, xoay token,
+// đặt lại cookie, trả session). Dùng khi localStorage + cookie JS đều mất (ITP xoá).
+async function _refreshViaServer() {
+  try {
+    const res = await fetch('/api/auth/session', { method: 'GET' });
+    if (!res.ok) { updateNavUI(); return false; }
+    const data = await res.json();
+    if (data && data.access_token) { _applySession(data); return true; }
+  } catch (e) { /* ignore */ }
+  updateNavUI();
+  return false;
+}
+
 // ── Auth state ──
 let _session = null;
 let _user    = null;
@@ -39,20 +66,24 @@ let _user    = null;
         _session = s;
         _user = JSON.parse(localStorage.getItem(USER_KEY) || 'null');
       } else {
-        // Hết hạn — ưu tiên refresh_token từ localStorage, fallback sang cookie
+        // Hết hạn — ưu tiên refresh_token từ localStorage, fallback cookie JS,
+        // cuối cùng cookie server bền (HttpOnly, sống sót ITP khi mọi thứ JS bị xoá).
         const rt = (s && s.refresh_token) || _getCookie('tuvi_rt');
         localStorage.removeItem(SESSION_KEY);
         localStorage.removeItem(USER_KEY);
         if (rt) { _refreshSession(rt); return; }
+        _refreshViaServer(); return;
       }
     } else {
-      // localStorage trống (bị iOS clear) — thử cookie
+      // localStorage trống (bị iOS clear) — thử cookie JS rồi cookie server bền
       const rt = _getCookie('tuvi_rt');
       if (rt) { _refreshSession(rt); return; }
+      _refreshViaServer(); return;
     }
   } catch(e) {
     const rt = _getCookie('tuvi_rt');
     if (rt) { _refreshSession(rt); return; }
+    _refreshViaServer(); return;
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', updateNavUI);
@@ -60,6 +91,23 @@ let _user    = null;
     updateNavUI();
   }
 })();
+
+// ── Áp session mới vào state + mọi lớp lưu trữ (localStorage + cookie JS + cookie
+//    server bền) + lịch tự refresh. Dùng chung cho refresh client & refresh server. ──
+function _applySession(data) {
+  _session = data;
+  _user = data.user || null;
+  localStorage.setItem(SESSION_KEY, JSON.stringify(data));
+  if (_user) localStorage.setItem(USER_KEY, JSON.stringify(_user));
+  if (data.refresh_token) {
+    _setCookie('tuvi_rt', data.refresh_token, 180); // dự phòng (bị ITP cap 7 ngày)
+    _serverStoreRt(data.refresh_token);             // lớp bền HttpOnly (né ITP)
+  }
+  updateNavUI();
+  // Auto-refresh 5 min before next expiry
+  const msLeft = (data.expires_at - Date.now() / 1000 - 300) * 1000;
+  if (msLeft > 0) setTimeout(() => _refreshSession(data.refresh_token), msLeft);
+}
 
 // ── Refresh session silently ──
   async function _refreshSession(refreshToken) {
@@ -70,24 +118,14 @@ let _user    = null;
         body: JSON.stringify({ refresh_token: refreshToken }),
       });
       if (!res.ok) {
+        // refresh_token client hỏng/cũ → thử cookie server bền (HttpOnly) trước khi bỏ.
         localStorage.removeItem(SESSION_KEY);
         localStorage.removeItem(USER_KEY);
-        updateNavUI();
+        await _refreshViaServer();
         return;
       }
       const data = await res.json();
-      if (data.access_token) {
-        _session = data;
-        _user = data.user || null;
-        localStorage.setItem(SESSION_KEY, JSON.stringify(data));
-        if (_user) localStorage.setItem(USER_KEY, JSON.stringify(_user));
-        // Lưu refresh_token vào cookie 6 tháng để sống sót iOS ITP
-        if (data.refresh_token) _setCookie('tuvi_rt', data.refresh_token, 180);
-        updateNavUI();
-        // Auto-refresh 5 min before next expiry
-        const msLeft = (data.expires_at - Date.now() / 1000 - 300) * 1000;
-        if (msLeft > 0) setTimeout(() => _refreshSession(data.refresh_token), msLeft);
-      }
+      if (data.access_token) _applySession(data);
     } catch(e) { console.warn('[auth] refresh failed:', e); }
   }
 
@@ -131,6 +169,7 @@ window.Auth = {
     localStorage.removeItem(SESSION_KEY);
     localStorage.removeItem(USER_KEY);
     _delCookie('tuvi_rt');
+    try { await fetch('/api/auth/session', { method: 'DELETE' }).catch(() => {}); } catch (e) {}
     updateNavUI();
     window.location.reload();
   },
@@ -165,13 +204,21 @@ async function signUpEmail(email, password) {
   return data;
 }
 
+// Lưu trang hiện tại để auth-callback quay về (nếu chưa có returnTo cụ thể do
+// rail đặt kèm ?auto=1). Tránh về homepage sau khi đăng nhập OAuth.
+function _rememberAuthReturn() {
+  try { if (!localStorage.getItem('auth_return_to')) localStorage.setItem('auth_return_to', window.location.pathname + window.location.search); } catch (e) {}
+}
+
 // ── Sign In with Google OAuth ──
 async function signInGoogle() {
+  _rememberAuthReturn();
   const redirectTo = encodeURIComponent(window.location.origin + '/auth-callback.html');
   window.location.href = `${SUPA_URL}/auth/v1/authorize?provider=google&redirect_to=${redirectTo}`;
 }
 
 async function signInFacebook() {
+  _rememberAuthReturn();
   const redirectTo = encodeURIComponent(window.location.origin + '/auth-callback.html');
   window.location.href = `${SUPA_URL}/auth/v1/authorize?provider=facebook&redirect_to=${redirectTo}`;
 }
@@ -182,9 +229,39 @@ function saveSession(data) {
   _user = data.user || null;
   localStorage.setItem(SESSION_KEY, JSON.stringify(data));
   localStorage.setItem(USER_KEY, JSON.stringify(_user));
-  if (data.refresh_token) _setCookie('tuvi_rt', data.refresh_token, 180);
+  if (data.refresh_token) {
+    _setCookie('tuvi_rt', data.refresh_token, 180); // dự phòng (ITP cap 7 ngày)
+    _serverStoreRt(data.refresh_token);             // lớp bền HttpOnly (né ITP)
+  }
   updateNavUI();
+  if (data.access_token) sendSignupSignal(data.access_token);
 }
+
+// ── Beacon chống lạm dụng thưởng Lượng ──
+// Gọi sau mỗi lần đăng nhập/đăng ký. Gửi device_id (ổn định theo trình duyệt) để
+// server áp cap thưởng theo thiết bị. Fire trên MỌI lần đăng nhập; server idempotent
+// theo user (chỉ xử user mới) → mỗi tài khoản mới trên cùng thiết bị đều được đếm.
+function _deviceId() {
+  try {
+    var d = localStorage.getItem('tvc_device_id');
+    if (!d) {
+      d = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('d' + Date.now() + Math.random().toString(36).slice(2));
+      localStorage.setItem('tvc_device_id', d);
+    }
+    return d;
+  } catch (e) { return ''; }
+}
+function sendSignupSignal(token) {
+  try {
+    fetch('/api/signup-signal', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ fp: _deviceId() }),
+      keepalive: true,
+    }).catch(function () {});
+  } catch (e) { /* ignore */ }
+}
+window.sendSignupSignal = sendSignupSignal;
 
 // ── Update Nav UI (show avatar or sign in button) ──
 function updateNavUI() {
@@ -270,7 +347,7 @@ function showAuthModal(callback) {
       <!-- Tabs -->
       <div style="display:flex;gap:0;margin-bottom:28px;border-bottom:2px solid #eee">
         <button id="tab-signin" onclick="switchTab('signin')" style="flex:1;padding:10px;border:none;background:none;font-size:14px;font-weight:600;color:#061A2E;border-bottom:2px solid #061A2E;margin-bottom:-2px;cursor:pointer;font-family:inherit">Đăng nhập</button>
-        <button id="tab-signup" onclick="switchTab('signup')" style="flex:1;padding:10px;border:none;background:none;font-size:14px;font-weight:500;color:#aaa;cursor:pointer;font-family:inherit">Đăng ký <span style="font-size:11px;color:#1E6B3C;font-weight:700">+25 credits</span></button>
+        <button id="tab-signup" onclick="switchTab('signup')" style="flex:1;padding:10px;border:none;background:none;font-size:14px;font-weight:500;color:#aaa;cursor:pointer;font-family:inherit">Đăng ký <span style="font-size:11px;color:#1E6B3C;font-weight:700">tặng Lượng</span></button>
       </div>
 
       <!-- Logo -->
@@ -385,7 +462,7 @@ function _showFreeCreditsWelcome() {
   const b = document.createElement('div');
   b.id = 'free-credits-banner';
   b.style.cssText = 'position:fixed;top:70px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1E6B3C,#155d32);color:#fff;padding:14px 28px;border-radius:10px;font-size:14px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.25);text-align:center;white-space:nowrap;animation:tpw-fade .3s ease';
-  b.innerHTML = '🎉 Chào mừng! Bạn đã nhận <strong>25 credits miễn phí</strong> — thử ngay Xem Tướng (5cr/lần)';
+  b.innerHTML = '🎉 Chào mừng! Bạn đã nhận <strong>Lượng miễn phí</strong> — thử ngay Xem Tướng (5 Lượng/lần)';
   document.body.appendChild(b);
   setTimeout(() => { b.style.transition = 'opacity .6s'; b.style.opacity = '0'; }, 5000);
   setTimeout(() => b.remove(), 5700);

@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=15" as="script">
+<link rel="preload" href="/nav.js?v=16" as="script">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Hướng Nhà Hợp Mệnh — Bát Trạch Minh Cảnh | Tử Vi Minh Bảo</title>
 <meta property="og:title" content="Hướng Nhà Hợp Mệnh — Bát Trạch Minh Cảnh | Tử Vi Minh Bảo"/>
@@ -126,78 +126,20 @@
   <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
   <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
 </footer>
+<script src="/tools-shared/bat-trach.js?v=1"></script>
 <script>
-// Cung mệnh theo năm sinh + giới tính
-function getCungMenh(nam, gioitinh) {
-  let s = 0, y = nam % 100; if(y===0) y=100;
-  while(y>9){s=0;while(y>0){s+=y%10;y=Math.floor(y/10);}y=s;}
-  let cung;
-  if(gioitinh==='nam'){ cung=10-y; if(cung===0)cung=9; if(cung===5)cung=2; }
-  else { cung=y+5; if(cung>9)cung-=9; if(cung===5)cung=8; }
-  return cung;
-}
-const CUNG_NAME=['','Khảm','Khôn','Chấn','Tốn','Trung Cung','Càn','Đoài','Cấn','Ly'];
-const CUNG_HANH=['','Thủy','Thổ','Mộc','Mộc','Thổ','Kim','Kim','Thổ','Hỏa'];
-const CUNG_DIR=['','N','SW','E','SE','—','NW','W','NE','S'];
-const NHOM=['','Đông','Tây','Đông','Đông','Tây','Tây','Tây','Tây','Đông'];
-// [Sinh Khí, Thiên Y, Diên Niên, Phục Vị, Họa Hại, Lục Sát, Ngũ Quỷ, Tuyệt Mệnh]
-const BT={
-  1:['SE','E','S','N','W','NW','NE','SW'],
-  2:['NE','W','NW','SW','E','SE','S','N'],
-  3:['S','N','SE','E','SW','NE','W','NW'],
-  4:['N','S','E','SE','NW','SW','NW','W'],  // fix: Phục Vị=SE
-  6:['W','NE','SW','NW','SE','E','N','S'],
-  7:['NW','SW','NE','W','N','S','SE','E'],
-  8:['SW','NW','W','NE','S','N','E','SE'],
-  9:['E','SE','N','S','NE','SW','SW','NW'],
-};
-// Fix cung 4 (Tốn): SK=N, TY=S, DN=E, PV=SE
-BT[4]=['N','S','E','SE','SW','NE','W','NW'];
-const CAT_NAMES=['Sinh Khí','Thiên Y','Diên Niên','Phục Vị'];
-const HUNG_NAMES=['Họa Hại','Lục Sát','Ngũ Quỷ','Tuyệt Mệnh'];
-const CAT_DESC=['Tài lộc, sức khỏe, phát triển tốt nhất','Sức khỏe, trường thọ, y duyên','Hôn nhân, sự nghiệp bền vững','Bình ổn, an cư, giữ vững'];
-const HUNG_DESC=['Hao tài, thị phi, chuyện không hay','Tình cảm trục trặc, sức khỏe suy','Tiểu nhân, phá hoại ngầm','Tuyệt vận, bệnh nặng, tai họa lớn'];
-const CAT_USE=['Cửa chính, phòng ngủ, bàn làm việc','Phòng ngủ, hướng đầu giường','Bàn thờ, phòng khách, bàn ăn','Kho, nhà vệ sinh, phòng phụ'];
-const HUNG_USE=['Tránh cửa chính, phòng ngủ','Tránh đặt bàn thờ, phòng ngủ','Tránh bếp, phòng chủ','Không đặt cửa, không kê giường'];
-const DIR_VI={'N':'Bắc','S':'Nam','E':'Đông','W':'Tây','NE':'Đông Bắc','NW':'Tây Bắc','SE':'Đông Nam','SW':'Tây Nam'};
-const DIR_POS={'N':{css:'dir-N'},'S':{css:'dir-S'},'E':{css:'dir-E'},'W':{css:'dir-W'},'NE':{css:'dir-NE'},'NW':{css:'dir-NW'},'SE':{css:'dir-SE'},'SW':{css:'dir-SW'}};
-
+// Logic + render DÙNG CHUNG module /tools-shared/bat-trach.js với shell /app/bat-trach.
 function calculate(){
   const year=parseInt(document.getElementById('year').value);
   const gender=document.getElementById('gender').value;
   const err=document.getElementById('error-msg');
   err.classList.remove('active');
-  if(!year||year<1900||year>2010){err.textContent='Vui lòng nhập năm sinh hợp lệ (1900–2010).';err.classList.add('active');return;}
-  let cung=getCungMenh(year,gender);
-  if(cung===5) cung=gender==='nam'?2:8;
-  const dirs=BT[cung];
-  if(!dirs){err.textContent='Không tính được cung mệnh.';err.classList.add('active');return;}
-  const nhom=NHOM[cung];
-  document.getElementById('resTitle').textContent=`Năm ${year} — Cung ${cung} ${CUNG_NAME[cung]} — ${nhom} Tứ Mệnh`;
-  document.getElementById('resInfo').innerHTML=`
-    <div style="margin-bottom:16px"><span class="nhom-badge ${nhom==='Đông'?'dong':'tay'}">${nhom} Tứ Mệnh</span></div>
-    <div style="display:flex;flex-direction:column;gap:8px">
-      <div class="res-row"><span class="res-row-label">Cung Mệnh</span><span class="res-row-val">${cung} — ${CUNG_NAME[cung]}</span></div>
-      <div class="res-row"><span class="res-row-label">Ngũ Hành</span><span class="res-row-val">${CUNG_HANH[cung]}</span></div>
-      <div class="res-row"><span class="res-row-label">Vị Trí Cung</span><span class="res-row-val">${DIR_VI[CUNG_DIR[cung]]||'Trung tâm'}</span></div>
-      <div class="res-row" style="border:none"><span class="res-row-label">Nhóm</span><span class="res-row-val">${nhom==='Đông'?'Đông Tứ Mệnh — hợp các hướng Đông, Đông Nam, Nam, Bắc':'Tây Tứ Mệnh — hợp các hướng Tây, Tây Bắc, Đông Bắc, Tây Nam'}</span></div>
-    </div>`;
-  // Compass
-  const compassHTML=Object.entries(DIR_POS).map(([d,p])=>{
-    const catIdx=dirs.slice(0,4).indexOf(d);
-    const hungIdx=dirs.slice(4).indexOf(d);
-    let cls='dir-neu',label='';
-    if(catIdx>=0){cls='dir-good';label=CAT_NAMES[catIdx];}
-    else if(hungIdx>=0){cls='dir-bad';label=HUNG_NAMES[hungIdx];}
-    return`<div class="compass-dir ${p.css} ${cls}"><div>${DIR_VI[d]}</div><div class="dir-label">${label}</div></div>`;
-  }).join('');
-  document.getElementById('compassWrap').innerHTML=`<div class="compass-ring"></div><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text-lt);font-weight:600">CUNG ${cung}</div>${compassHTML}`;
-  // Table
-  const rows=[
-    ...dirs.slice(0,4).map((d,i)=>`<tr class="good"><td><span class="dot-good"></span><strong>${DIR_VI[d]}</strong></td><td style="color:#1E6B3C;font-weight:600">${CAT_NAMES[i]}</td><td>${CAT_DESC[i]}</td><td style="font-size:12px">${CAT_USE[i]}</td></tr>`),
-    ...dirs.slice(4).map((d,i)=>`<tr class="bad"><td><span class="dot-bad"></span><strong>${DIR_VI[d]}</strong></td><td style="color:#C0392B;font-weight:600">${HUNG_NAMES[i]}</td><td>${HUNG_DESC[i]}</td><td style="font-size:12px;color:#999">${HUNG_USE[i]}</td></tr>`),
-  ];
-  document.getElementById('huongBody').innerHTML=rows.join('');
+  const r=BatTrachTool.compute(year,gender);
+  if(!r.ok){err.textContent=r.error;err.classList.add('active');return;}
+  document.getElementById('resTitle').textContent=r.resTitleText;
+  document.getElementById('resInfo').innerHTML=r.resInfoHTML;
+  document.getElementById('compassWrap').innerHTML=r.compassHTML;
+  document.getElementById('huongBody').innerHTML=r.huongRowsHTML;
   document.getElementById('result-section').classList.add('active');
   document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
 }
@@ -219,6 +161,6 @@ function calculate(){
 </section>
 <script src="/testimonials.js"></script>
 <script src="/related-tools.js"></script>
-<script src="/nav.js?v=15" defer></script>
+<script src="/nav.js?v=16" defer></script>
 </body>
 </html>

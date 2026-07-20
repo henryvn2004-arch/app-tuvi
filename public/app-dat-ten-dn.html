@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đặt tên doanh nghiệp — Tử Vi Minh Bảo</title>
+<meta name="description" content="Đặt tên công ty, thương hiệu, cửa hàng hợp mệnh chủ và ngành nghề theo ngũ hành nạp âm — hỏi trợ lý AI gợi ý tên và luận ý nghĩa, phong thủy tên.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shell.css?v=13">
+<style>
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
+.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
+.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:13px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
+.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
+.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
+.btn-go:disabled{opacity:.6;cursor:not-allowed}
+#resPanel{display:none}
+.res-head{font-family:var(--serif);font-size:15px;font-weight:600;margin-bottom:12px}
+.cc-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.cc-card{flex:1;min-width:150px;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:12px 14px;box-shadow:var(--shadow)}
+.cc-card .who{font-size:10.5px;color:var(--text-lt);text-transform:uppercase;letter-spacing:.04em}
+.cc-card .cc{font-family:var(--serif);font-size:19px;font-weight:600;margin-top:2px}
+.cc-card .na{font-size:12px;color:var(--text-mid);margin-top:2px}
+.cc-card .na b{color:var(--hanh,var(--gold-soft))}
+.note{background:var(--gold-lt);border:1px solid var(--gold-soft);border-radius:10px;padding:12px 15px;font-size:13px;color:var(--text-mid);line-height:1.65;margin-bottom:6px}
+.note b{color:var(--text)}
+.ask{margin-top:12px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
+.laso-error{color:var(--red);padding:14px;border:1px solid var(--red);border-radius:10px;background:var(--white)}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Đặt tên doanh nghiệp</b><span>Tên công ty · thương hiệu · cửa hàng hợp mệnh chủ</span></div>
+      <div class="ws-actions">
+        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa thông tin</button>
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div id="shellRecent"></div>
+      <div class="form-card" id="birthPanel">
+        <h2>Thông tin đặt tên doanh nghiệp</h2>
+        <p class="sub">Lấy ngũ hành nạp âm tuổi người chủ và ngành nghề làm nền, rồi hỏi trợ lý gợi ý tên hợp mệnh — bồi ngũ hành cho chủ, hợp ngành, dễ đọc dễ nhớ.</p>
+        <div class="frow">
+          <div class="fg" style="flex:1;min-width:150px"><label>Tên người chủ (tùy chọn)</label><input type="text" id="inpTenChu" placeholder="Nguyễn Văn A"></div>
+          <div class="fg" style="width:120px"><label>Năm sinh chủ</label><input type="number" id="inpNamChu" placeholder="1988" min="1900" max="2100"></div>
+        </div>
+        <div class="frow">
+          <div class="fg" style="flex:2;min-width:170px"><label>Ngành nghề</label>
+            <select id="inpNganh">
+              <option value="Thương mại / bán lẻ">Thương mại / bán lẻ</option>
+              <option value="Ăn uống / F&amp;B / nhà hàng">Ăn uống / F&amp;B / nhà hàng</option>
+              <option value="Bất động sản / xây dựng">Bất động sản / xây dựng</option>
+              <option value="Công nghệ / phần mềm">Công nghệ / phần mềm</option>
+              <option value="Thời trang / làm đẹp">Thời trang / làm đẹp</option>
+              <option value="Giáo dục / đào tạo">Giáo dục / đào tạo</option>
+              <option value="Y tế / sức khỏe">Y tế / sức khỏe</option>
+              <option value="Tài chính / dịch vụ">Tài chính / dịch vụ</option>
+              <option value="Sản xuất / công nghiệp">Sản xuất / công nghiệp</option>
+              <option value="Du lịch / khách sạn">Du lịch / khách sạn</option>
+              <option value="Khác">Khác</option>
+            </select>
+          </div>
+          <div class="fg" style="flex:1;min-width:130px"><label>Loại hình (tùy chọn)</label>
+            <select id="inpLoaiHinh">
+              <option value="">—</option>
+              <option value="Công ty">Công ty</option>
+              <option value="Thương hiệu / shop">Thương hiệu / shop</option>
+              <option value="Cửa hàng">Cửa hàng</option>
+              <option value="Hộ kinh doanh">Hộ kinh doanh</option>
+            </select>
+          </div>
+        </div>
+        <div class="frow" style="margin-bottom:4px">
+          <div class="fg" style="flex:1;min-width:200px"><label>Tên đang cân nhắc (tùy chọn)</label><input type="text" id="inpTenGoiY" placeholder="Để trống nếu muốn được gợi ý mới"></div>
+          <button class="btn-go" id="btnGo" onclick="doDatTenDn()">Lập nền →</button>
+        </div>
+      </div>
+
+      <div id="resPanel">
+        <div class="res-head" id="resHead"></div>
+        <div class="cc-row" id="ccRow"></div>
+        <div class="note" id="resNote"></div>
+        <div class="ask" data-ask="Gợi ý cho tôi 5 tên doanh nghiệp hợp mệnh chủ và ngành nghề, kèm ý nghĩa và ngũ hành từng tên.">✦ Hỏi trợ lý gợi ý tên hợp mệnh</div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='dat-ten-dn';window.SHELL_HISTORY=true;
+window.SHELL_INTRO={key:'dat-ten-dn',title:'Đặt tên doanh nghiệp',desc:'Lấy ngũ hành nạp âm tuổi người chủ + ngành nghề làm nền, rồi hỏi <b>trợ lý AI</b> gợi ý tên công ty / thương hiệu hợp mệnh, dễ đọc dễ nhớ.'};</script>
+<script src="/can-chi.js?v=1"></script>
+<script src="/auth.js"></script>
+<script src="/shell.js?v=35"></script>
+<script>
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+var HANH_COLOR={'Mộc':'var(--green)','Hỏa':'var(--red)','Thổ':'var(--gold-soft)','Kim':'#8a8a8a','Thủy':'var(--blue)'};
+var SINH={'Mộc':'Hỏa','Hỏa':'Thổ','Thổ':'Kim','Kim':'Thủy','Thủy':'Mộc'};
+function hanhSinhCho(h){ for(var k in SINH){ if(SINH[k]===h)return k; } return h; }
+
+function doDatTenDn(){
+  var btn=document.getElementById('btnGo');
+  var tenChu=document.getElementById('inpTenChu').value.trim();
+  var namChu=parseInt(document.getElementById('inpNamChu').value);
+  var nganh=document.getElementById('inpNganh').value;
+  var loaiHinh=document.getElementById('inpLoaiHinh').value;
+  var tenGoiY=document.getElementById('inpTenGoiY').value.trim();
+  if(!namChu||!nganh){ alert('Vui lòng nhập năm sinh người chủ và chọn ngành nghề.'); return; }
+  btn.disabled=true;
+  try{
+    var iChu=CanChi.ccInfo(namChu);
+    document.getElementById('resHead').textContent='Nền mệnh chủ · '+esc(nganh)+(loaiHinh?' · '+esc(loaiHinh):'');
+    function ccCard(who,val,sub,hanh){ return '<div class="cc-card"><div class="who">'+esc(who)+'</div><div class="cc">'+esc(val)+'</div>'+(sub?'<div class="na" style="--hanh:'+(HANH_COLOR[hanh]||'var(--gold-soft)')+'">'+esc(sub)+'</div>':'')+'</div>'; }
+    document.getElementById('ccRow').innerHTML=
+      ccCard('Tuổi chủ'+(tenChu?' · '+tenChu:''),iChu.canChi,iChu.napAm+' · '+iChu.hanh,iChu.hanh)+
+      ccCard('Ngành',nganh,'')+
+      (tenGoiY?ccCard('Tên cân nhắc',tenGoiY,''):'');
+    document.getElementById('resNote').innerHTML='Mệnh chủ nạp âm <b>'+esc(iChu.napAm)+'</b> — hành <b>'+esc(iChu.hanh)+'</b>. Tên doanh nghiệp nên chọn chữ có ngũ hành <b>tương sinh / đồng hành</b> để bồi mệnh chủ (hành <b>'+esc(hanhSinhCho(iChu.hanh))+'</b> sinh <b>'+esc(iChu.hanh)+'</b>), đồng thời hợp khí chất ngành <b>'+esc(nganh.toLowerCase())+'</b>, đọc thuận, dễ nhớ. Hỏi trợ lý để có danh sách tên cụ thể.';
+    document.getElementById('birthPanel').style.display='none';
+    document.getElementById('resPanel').style.display='block';
+    document.getElementById('btnEdit').style.display='';
+    if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
+    Shell.setContext({
+      scenario:{type:'dat-ten-dn',data:{tenChu:tenChu,namChu:namChu,nganh:nganh,loaiHinh:loaiHinh,tenGoiY:tenGoiY}},
+      label:'Đặt tên DN · '+nganh+' · chủ '+iChu.canChi,
+      greeting:'Nền mệnh chủ đã sẵn sàng (chủ **'+esc(iChu.canChi)+'** · '+esc(iChu.hanh)+', ngành '+esc(nganh.toLowerCase())+'). '+(tenGoiY?'Bạn muốn tôi chấm tên **'+esc(tenGoiY)+'** hay gợi ý tên mới?':'Bạn muốn tôi gợi ý tên theo hướng nào?'),
+      chips:tenGoiY
+        ?['Chấm tên "'+tenGoiY+'" hợp mệnh chủ và ngành không?','Gợi ý 5 tên khác hợp hơn','Tên nên bổ ngũ hành gì?','Slogan nào hợp với tên này?']
+        :['Gợi ý 5 tên hợp mệnh kèm ý nghĩa','Tên nên bổ ngũ hành gì cho chủ?','Tên nào hợp khí chất ngành này?','Tránh chữ/âm nào khi đặt tên?']
+    });
+    document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
+  }catch(e){
+    document.getElementById('ccRow').innerHTML='<div class="laso-error">Lỗi: '+esc(e.message)+'</div>';
+    document.getElementById('birthPanel').style.display='none';
+    document.getElementById('resPanel').style.display='block';
+    document.getElementById('btnEdit').style.display='';
+    if(window.console)console.error(e);
+  }finally{ btn.disabled=false; }
+}
+function showForm(){
+  document.getElementById('resPanel').style.display='none';
+  document.getElementById('birthPanel').style.display='block';
+  document.getElementById('btnEdit').style.display='none';
+}
+</script>
+<script>/*SHELL_RESTORE_BOOT*/(function(){function _r(){var r=window.Shell&&Shell.pendingRestore&&Shell.pendingRestore();if(r&&r.form){Shell.fillForm(r.form);doDatTenDn();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_r);else _r();})();</script>
+</body>
+</html>

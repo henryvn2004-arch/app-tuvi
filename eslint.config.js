@@ -19,6 +19,8 @@ const projectGlobals = {
   renderFooter: 'writable',
   Auth: 'writable',
   supabase: 'writable',
+  marked: 'readonly',
+  convertDuongToAm: 'readonly',
   paypal: 'readonly',
   gtag: 'readonly',
   dataLayer: 'readonly',

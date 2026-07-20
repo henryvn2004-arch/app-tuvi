@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<script src="https://js.sentry-cdn.com/f884fb7e9d257df10ecb6dbe562141cb.min.js" crossorigin="anonymous"></script>
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="apple-touch-icon" href="/seal.webp">
+<meta name="description" content="Cổng tử vi · tử bình · tướng số · phong thủy bằng AI theo cổ pháp. 47 công cụ — luận giải lá số, xem tướng, phong thủy, đặt tên, chọn ngày tốt, bói bài. Tri Mệnh Lý — Thuận Thế Hành.">
+<meta name="keywords" content="tử vi, tử bình, tướng số, phong thủy, xem tuổi, đặt tên con, ngày tốt, tarot, kinh dịch, ai">
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="https://www.tuviminhbao.com/cong-cu">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>47 Công Cụ Mệnh Lý — Tử Vi Minh Bảo</title>
+<meta property="og:title" content="47 Công Cụ Mệnh Lý — Tử Vi Minh Bảo">
+<meta property="og:description" content="Tử vi · Tử Bình · Tướng số · Phong thủy AI theo cổ pháp. Luận giải cá nhân hóa bằng trí tuệ nhân tạo.">
+<meta property="og:image" content="https://www.tuviminhbao.com/seal.webp">
+<meta property="og:url" content="https://www.tuviminhbao.com/cong-cu">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tử Vi Minh Bảo">
+<meta property="og:locale" content="vi_VN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tử Vi Minh Bảo — Cổng Mệnh Lý AI">
+<meta name="twitter:description" content="47 công cụ tử vi · tử bình · tướng số · phong thủy bằng AI theo cổ pháp.">
+<meta name="twitter:image" content="https://www.tuviminhbao.com/seal.webp">
+
+<!-- Fonts: Noto Serif (Vietnamese subset, auto via Google Fonts) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Tử Vi Minh Bảo",
+  "alternateName": "紫微明寶",
+  "url": "https://www.tuviminhbao.com",
+  "description": "Cổng mệnh lý AI: tử vi, tử bình, tướng số, phong thủy theo cổ pháp",
+  "inLanguage": "vi"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Tử Vi Minh Bảo",
+  "alternateName": "紫微明寶",
+  "url": "https://www.tuviminhbao.com",
+  "logo": { "@type": "ImageObject", "url": "https://www.tuviminhbao.com/seal.webp" },
+  "description": "Cổng mệnh lý AI tổng hợp 47 công cụ — tử vi, tử bình, tướng số, phong thủy theo cổ pháp",
+  "areaServed": ["VN", "US", "AU", "CA"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Tử Vi Minh Bảo",
+  "alternateName": "tuviminhbao.com",
+  "url": "https://www.tuviminhbao.com",
+  "applicationCategory": "LifestyleApplication",
+  "operatingSystem": "Web",
+  "inLanguage": "vi",
+  "description": "Xem lá số Tử Vi Đẩu Số online miễn phí theo cổ pháp — an sao chính xác, phân tích 12 cung, 9 đại vận, tiểu vận từng năm, cách cục đặc biệt. Luận giải AI chuyên sâu 24 phần bằng tiếng Việt.",
+  "featureList": [
+    "An sao Tử Vi Đẩu Số theo cổ pháp",
+    "Phân tích 12 cung, chính tinh, phụ tinh",
+    "9 đại vận và tiểu vận từng năm",
+    "Cách cục đặc biệt từ 200+ database",
+    "Luận giải AI 24 phần chuyên sâu",
+    "Xem vận hạn theo năm (namXem)",
+    "Miễn phí xem lá số cơ bản"
+  ],
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "VND",
+    "description": "Xem lá số miễn phí, mở khóa luận giải AI với phí"
+  },
+  "audience": {
+    "@type": "Audience",
+    "geographicArea": "Vietnam",
+    "audienceType": "Người Việt quan tâm tử vi, mệnh lý, vận hạn"
+  },
+  "provider": {
+    "@type": "Organization",
+    "name": "Tử Vi Minh Bảo",
+    "url": "https://www.tuviminhbao.com"
+  }
+}
+</script>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy:      #061A2E;
+  --navy-mid:  #0D3B5E;
+  --blue:      #1455A4;
+  --text:      #1a1a1a;
+  --text-mid:  #444;
+  --text-lt:   #777;
+  --border:    #CCCCCC;
+  --border-lt: #E8E8E8;
+  --bg:        #FFFFFF;
+  --bg-soft:   #F5F4F0;
+  --gold:      #9A7B3A;
+  --gold-lt:   #F9F4EB;
+  --gold-bright:#c9a84c;
+  --red:       #C0392B;
+  --green:     #1E6B3C;
+}
+body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+a { color: var(--blue); text-decoration: none; }
+.page { max-width: 1180px; margin: 0 auto; padding: 0 40px; }
+@media (max-width: 768px) { .page { padding: 0 18px; } }
+
+/* ── HERO ──────────────────────────────────────────────────── */
+.hero {
+  background: linear-gradient(180deg, var(--navy) 0%, var(--navy-mid) 100%);
+  color: #fff;
+  padding: 80px 0 72px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(201,168,76,.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(20,85,164,.10) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero > * { position: relative; z-index: 1; }
+
+.hero-mark {
+  font-family: 'Noto Serif', Georgia, serif;
+  font-size: 22px; color: var(--gold-bright);
+  letter-spacing: 0.55em; margin-bottom: 6px; padding-left: 0.55em;
+  font-weight: 400;
+}
+.hero-pretitle {
+  font-family: 'Noto Serif', Georgia, serif;
+  font-size: 11px;
+  color: rgba(201,168,76,0.65);
+  letter-spacing: 0.5em;
+  margin-bottom: 36px; padding-left: 0.5em;
+  text-transform: uppercase;
+}
+.hero h1 {
+  font-family: 'Noto Serif', Georgia, serif;
+  font-size: clamp(30px, 4.6vw, 44px);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.25;
+  margin-bottom: 32px;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+
+.hero-body {
+  max-width: 640px;
+  margin: 0 auto 40px;
+  font-family: 'Noto Serif', Georgia, serif;
+  font-size: 16px;
+  color: rgba(255,255,255,0.78);
+  line-height: 1.85;
+}
+.hero-body p { margin-bottom: 14px; }
+.hero-body p:last-child { margin-bottom: 0; }
+
+.hero-attribution {
+  font-family: 'Noto Serif', Georgia, serif;
+  font-size: 12px;
+  color: rgba(201,168,76,0.55);
+  letter-spacing: 0.18em;
+  padding-top: 28px;
+  border-top: 1px solid rgba(201,168,76,0.18);
+  display: inline-block;
+  padding-left: 32px; padding-right: 32px;
+}
+@media (max-width: 600px) {
+  .hero { padding: 56px 0 48px; }
+  .hero-attribution { font-size: 11px; letter-spacing: 0.1em; padding-left: 0; padding-right: 0; }
+}
+
+/* CTA vào Luận Đường — không gian làm việc (/app) */
+.hero-cta {
+  display: inline-flex; align-items: center; gap: 9px;
+  margin-bottom: 26px;
+  font-family: 'Noto Serif', Georgia, serif; font-size: 15px;
+  color: #2a1e05; background: linear-gradient(135deg, var(--gold-bright), #b8963f);
+  padding: 12px 24px; border-radius: 8px; text-decoration: none;
+  box-shadow: 0 4px 18px rgba(201,168,76,0.28); transition: transform .15s, box-shadow .15s;
+}
+.hero-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(201,168,76,0.4); }
+.hero-cta .hc-spark { font-size: 16px; }
+.hero-cta .hc-tag { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; background: rgba(6,26,46,0.14); padding: 2px 7px; border-radius: 20px; font-family: Arial, sans-serif; }
+
+/* ── TAB NAV (sticky) ──────────────────────────────────────── */
+.tab-nav-wrap {
+  position: sticky; top: 60px;
+  background: var(--bg); border-bottom: 1px solid var(--border-lt);
+  z-index: 100; box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.tab-nav {
+  display: flex; gap: 4px; overflow-x: auto;
+  padding: 0; -webkit-overflow-scrolling: touch;
+}
+.tab-nav::-webkit-scrollbar { height: 0; }
+.tab-btn {
+  flex-shrink: 0;
+  background: none; border: none; cursor: pointer;
+  padding: 18px 22px; font-family: 'Noto Serif', Georgia, serif;
+  font-size: 15px; color: var(--text-mid);
+  border-bottom: 3px solid transparent;
+  transition: all 0.15s; white-space: nowrap;
+}
+.tab-btn:hover { color: var(--navy); background: var(--bg-soft); }
+.tab-btn.active { color: var(--navy); border-bottom-color: var(--gold-bright); font-weight: 600; }
+.tab-count {
+  display: inline-block; background: var(--bg-soft); color: var(--text-lt);
+  border-radius: 10px; padding: 1px 8px; font-size: 11px; font-family: Arial;
+  margin-left: 6px; vertical-align: 1px;
+}
+.tab-btn.active .tab-count { background: var(--gold-lt); color: var(--gold); }
+
+/* ── TAB CONTENT GRID ──────────────────────────────────────── */
+.section { padding: 48px 0; }
+.section-eyebrow {
+  font-family: 'Noto Serif', Georgia, serif; font-size: 12px;
+  color: var(--gold); letter-spacing: 0.3em; text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.section-title {
+  font-family: 'Noto Serif', Georgia, serif; font-size: 28px;
+  color: var(--navy); margin-bottom: 8px;
+}
+.section-desc { color: var(--text-mid); margin-bottom: 28px; max-width: 620px; }
+
+.tools-grid {
+  display: grid;
+  /* auto-fill (KHÔNG phải auto-fit): giữ cột trống → card không giãn full-width
+     khi tab ít tool (vd Tử Bình chỉ 1 card). Card width đồng nhất mọi tab. */
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+@media (max-width: 600px) { .tools-grid { grid-template-columns: 1fr; gap: 12px; } }
+
+.tool-card {
+  background: #fff; border: 1px solid var(--border-lt); border-radius: 10px;
+  padding: 20px 18px; transition: all 0.18s;
+  display: flex; flex-direction: column; gap: 10px;
+  text-decoration: none; color: inherit;
+  position: relative;
+}
+.tool-card:hover {
+  border-color: var(--gold-bright); transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(6,26,46,0.08);
+}
+.tool-card.featured {
+  border: 1.5px solid var(--gold-bright);
+  background: linear-gradient(180deg, var(--gold-lt) 0%, #fff 60%);
+}
+.tool-icon { font-size: 26px; line-height: 1; color: #9A7B3A; display: flex; align-items: center; justify-content: center; min-height: 28px; }
+.tool-icon svg { width: 26px; height: 26px; }
+.tool-name {
+  font-family: 'Noto Serif', Georgia, serif; font-size: 17px;
+  color: var(--navy); font-weight: 700;
+}
+.tool-desc { font-size: 13px; color: var(--text-mid); flex: 1; line-height: 1.55; }
+.tool-footer {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  border-top: 1px dashed var(--border-lt); padding-top: 10px; margin-top: 4px;
+}
+.tool-price {
+  display: flex; flex-direction: column; gap: 1px;
+}
+.tool-price-credits {
+  font-family: 'Noto Serif', Georgia, serif; font-size: 17px;
+  color: var(--gold); font-weight: 700;
+}
+.tool-price-vnd { font-size: 11px; color: var(--text-lt); }
+.tool-price-free {
+  background: var(--green); color: #fff; padding: 4px 12px;
+  border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em;
+}
+.tool-cta {
+  font-size: 12px; color: var(--blue); font-weight: 600;
+}
+
+.tools-loading { padding: 40px; text-align: center; color: var(--text-lt); font-size: 14px; }
+
+/* ── MỆNH KHỐ SECTION ─────────────────────────────────────── */
+.menh-kho-section {
+  background: linear-gradient(135deg, var(--navy) 0%, #1e2d47 100%);
+  color: #fff; border-top: 1px solid var(--border-lt);
+}
+.menh-kho-section .section-eyebrow { color: var(--gold-bright); }
+.menh-kho-section .section-title { color: #fff; }
+.menh-kho-section .section-desc { color: rgba(255,255,255,0.75); }
+.menh-kho-lead { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 28px; }
+.menh-kho-text p { color: rgba(255,255,255,0.82); font-size: 15px; line-height: 1.7; margin: 0; }
+.menh-kho-years {
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+}
+.menh-kho-year-pill {
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px; text-align: center; padding: 8px 12px; text-decoration: none;
+  color: rgba(255,255,255,0.85); font-size: 13px; transition: all 0.15s;
+  font-family: 'Noto Serif', Georgia, serif; white-space: nowrap;
+}
+.menh-kho-year-pill:hover { background: rgba(201,168,76,0.25); border-color: var(--gold-bright); color: var(--gold-bright); }
+.menh-kho-see-all { font-size: 13px; color: rgba(201,168,76,0.75); text-decoration: none; white-space: nowrap; padding: 4px 2px; }
+.menh-kho-see-all:hover { color: var(--gold-bright); text-decoration: underline; }
+.menh-kho-year-pill.hot { border-color: var(--gold-bright); color: var(--gold-bright); }
+.menh-kho-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--gold-bright); color: var(--navy); font-weight: 700;
+  padding: 13px 28px; border-radius: 8px; text-decoration: none; font-size: 15px;
+  transition: all 0.15s; margin-top: 20px;
+}
+.menh-kho-cta:hover { background: #e0bb5a; transform: translateY(-1px); }
+.menh-kho-sub { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 10px; }
+
+/* ── FREE HIGHLIGHTS ───────────────────────────────────────── */
+.free-section { background: var(--bg-soft); border-top: 1px solid var(--border-lt); }
+.free-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+@media (max-width: 900px) { .free-grid { grid-template-columns: repeat(2, 1fr); } }
+.free-tile {
+  background: #fff; border: 1px solid var(--border-lt); border-radius: 8px;
+  padding: 18px 14px; text-decoration: none; color: inherit;
+  text-align: center; transition: all 0.15s;
+}
+.free-tile:hover { border-color: var(--gold-bright); transform: translateY(-1px); }
+.free-tile-icon { font-size: 26px; margin-bottom: 8px; color: #9A7B3A; display: flex; align-items: center; justify-content: center; height: 32px; }
+.free-tile-icon svg { width: 28px; height: 28px; }
+.free-tile-name {
+  font-family: 'Noto Serif', Georgia, serif; font-size: 14px;
+  color: var(--navy); margin-bottom: 4px;
+}
+.free-tile-desc { font-size: 11.5px; color: var(--text-lt); line-height: 1.4; }
+.free-cta-row {
+  text-align: center; margin-top: 28px;
+}
+.free-cta-link {
+  display: inline-block; background: var(--navy); color: var(--gold-bright);
+  padding: 12px 28px; border-radius: 6px; font-weight: 600;
+  font-family: 'Noto Serif', Georgia, serif; font-size: 14px;
+  text-decoration: none; transition: all 0.15s;
+}
+.free-cta-link:hover { background: var(--navy-mid); }
+
+/* ── TRUST/VALUES ──────────────────────────────────────────── */
+.values-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+}
+@media (max-width: 768px) { .values-grid { grid-template-columns: 1fr; } }
+.value-card {
+  background: #fff; border-left: 3px solid var(--gold);
+  padding: 18px 22px;
+}
+.value-title {
+  font-family: 'Noto Serif', Georgia, serif; font-size: 17px;
+  color: var(--navy); margin-bottom: 6px;
+}
+.value-desc { font-size: 13.5px; color: var(--text-mid); line-height: 1.6; }
+
+/* ── TỬ VI CHAT — Hero composer (ô chat) ────────────────────── */
+.hero-chat { max-width: 600px; margin: 34px auto 6px; }
+.hc-window {
+  background: #fff; border-radius: 16px; padding: 18px;
+  box-shadow: 0 16px 46px rgba(0,0,0,0.30); text-align: left;
+}
+.hc-layout { display: flex; gap: 14px; }
+.hc-personas {
+  flex-shrink: 0; width: 116px;
+  border-right: 1px solid var(--border-lt); padding-right: 12px;
+}
+.hc-personas-title {
+  font-size: 10px; font-weight: 700; color: var(--text-mid);
+  text-transform: uppercase; letter-spacing: 0.07em;
+  margin-bottom: 8px; padding-left: 6px;
+}
+.hc-persona {
+  display: flex; align-items: center; gap: 7px; width: 100%; text-align: left;
+  border: none; background: none; padding: 6px 6px; border-radius: 7px;
+  font-size: 13px; color: var(--text-mid); cursor: pointer;
+  transition: all .12s; line-height: 1.3; white-space: nowrap;
+}
+.hc-persona [data-icon] { width: 14px; height: 14px; flex-shrink: 0; display: flex; color: var(--text-mid); }
+.hc-persona [data-icon] svg { width: 14px; height: 14px; }
+.hc-persona:hover { background: var(--bg-soft); color: var(--navy); }
+.hc-persona:hover [data-icon] { color: var(--navy); }
+.hc-persona.active { background: rgba(9,36,64,0.07); color: var(--navy); font-weight: 600; }
+.hc-persona.active [data-icon] { color: var(--navy); }
+.hc-main { flex: 1; min-width: 0; }
+@media (max-width: 480px) { .hc-personas { display: none; } }
+.hc-greeting { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 14px; }
+.hc-avatar {
+  flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%;
+  background: var(--navy); color: var(--gold-bright);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Noto Serif', Georgia, serif; font-size: 16px;
+}
+.hc-bubble {
+  background: var(--bg-soft); border-radius: 3px 12px 12px 12px;
+  padding: 10px 14px; font-size: 14px; color: var(--text-mid); line-height: 1.55;
+}
+.hc-composer {
+  display: flex; flex-direction: column; gap: 0;
+  border: 1px solid var(--border); border-radius: 12px;
+  transition: border-color 0.15s; overflow: hidden;
+}
+.hc-composer:focus-within { border-color: var(--gold-bright); }
+.hc-composer-top {
+  display: flex; align-items: flex-end; gap: 10px;
+  padding: 8px 8px 8px 14px;
+}
+.hc-composer textarea {
+  flex: 1; border: none; outline: none; resize: none; background: transparent;
+  font-family: Arial, sans-serif; font-size: 15px; color: var(--text);
+  line-height: 1.5; min-height: 72px; max-height: 160px; padding: 8px 0;
+}
+.hc-chips-inner {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  padding: 8px 12px 10px 12px;
+  border-top: 1px solid var(--border-lt);
+}
+.hc-chip-inner {
+  background: var(--bg-soft); border: 1px solid var(--border-lt);
+  border-radius: 8px; padding: 5px 11px; font-size: 12.5px;
+  color: var(--text-mid); text-decoration: none; transition: all 0.15s; cursor: pointer;
+  white-space: nowrap;
+}
+.hc-chip-inner:hover { background: var(--gold-lt); border-color: var(--gold-bright); color: var(--navy); }
+.hc-send {
+  flex-shrink: 0; width: 38px; height: 38px; border-radius: 50%; border: none; cursor: pointer;
+  background: var(--navy); color: var(--gold-bright); font-size: 18px; line-height: 1;
+  display: flex; align-items: center; justify-content: center; transition: background 0.15s;
+}
+.hc-send:hover { background: var(--navy-mid); }
+.hero-skills {
+  font-family: 'Noto Serif', Georgia, serif; font-size: 12.5px;
+  color: rgba(201,168,76,0.72); margin-top: 18px; letter-spacing: 0.03em;
+}
+.chat-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 16px; }
+.chat-chip {
+  background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.20);
+  border-radius: 18px; padding: 7px 15px; font-size: 13px;
+  color: rgba(255,255,255,0.88); text-decoration: none; transition: all 0.15s; cursor: pointer;
+}
+.chat-chip:hover { background: rgba(201,168,76,0.20); border-color: var(--gold-bright); color: var(--gold-bright); }
+
+/* ── HERO side-by-side (wording trái · chat phải) ───────────── */
+.hero-grid { display: flex; align-items: center; gap: 52px; text-align: left; }
+.hero-left { flex: 1 1 50%; min-width: 0; }
+.hero-right { flex: 1 1 50%; min-width: 0; }
+.hero-grid .hero-body { max-width: 460px; margin: 0 0 22px; }
+.hero-grid .hero-attribution { padding-left: 0; padding-right: 0; }
+.hero-grid .hero-chat { margin: 0; }
+.hero-grid .chat-chips { justify-content: flex-start; }
+.hero-grid .hero-skills { text-align: left; }
+@media (max-width: 880px) {
+  .hero-grid { flex-direction: column; gap: 30px; text-align: center; }
+  .hero-grid .hero-body { margin: 0 auto 22px; }
+  .hero-grid .hero-chat { margin: 0 auto; max-width: 560px; }
+  .hero-grid .chat-chips { justify-content: center; }
+  .hero-grid .hero-skills { text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ─── CÔNG CỤ CHUYÊN SÂU ────────────────────────────────── -->
+<section class="section" style="padding-bottom:8px">
+  <div class="page">
+    <div class="section-eyebrow">Công Cụ Chuyên Sâu</div>
+    <h2 class="section-title">47 Công Cụ Mệnh Lý — Dùng Riêng Lẻ</h2>
+    <p class="section-desc">Trợ lý ở <a href="/app" style="color:var(--gold-bright);font-weight:600">Luận Đường</a> đã gọi được hầu hết những công cụ này khi bạn hỏi. Hoặc chọn trực tiếp từng công cụ: luận giải lá số, tử bình, xem tướng, phong thủy, đặt tên, chọn ngày, bói bài…</p>
+  </div>
+</section>
+
+<!-- ─── TAB NAVIGATION (sticky) ──────────────────────────── -->
+<div class="tab-nav-wrap">
+  <div class="page">
+    <div class="tab-nav" id="tabNav">
+      <button class="tab-btn active" data-tab="tu-vi">Tử Vi</button>
+      <button class="tab-btn" data-tab="tu-binh">Tử Bình</button>
+      <button class="tab-btn" data-tab="xem-tuong">Xem Tướng</button>
+      <button class="tab-btn" data-tab="phong-thuy">Phong Thủy</button>
+      <button class="tab-btn" data-tab="lam-dep">Làm Đẹp</button>
+      <button class="tab-btn" data-tab="chon-ngay">Chọn Ngày</button>
+      <button class="tab-btn" data-tab="dat-ten">Đặt Tên</button>
+      <button class="tab-btn" data-tab="cong-cu">Công Cụ</button>
+      <button class="tab-btn" data-tab="mien-phi">Miễn Phí <span class="tab-count" id="freeCount">28</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── TAB CONTENT ──────────────────────────────────────── -->
+<section class="section">
+  <div class="page">
+    <div id="tabContent">
+      <div class="tools-loading">⏳ Đang tải công cụ...</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SCRIPTS ──────────────────────────────────────────── -->
+<script src="/auth.js"></script>
+<script src="/tuvi-paywall.js?v=3"></script>
+<script src="/nav.js?v=16"></script>
+<script src="/footer.js"></script>
+
+<script>
+// ─────────────────────────────────────────────────────────────
+// Tool URL mapping (tool_id → page path)
+// ─────────────────────────────────────────────────────────────
+const TOOL_URLS = {
+  // Luận Giải
+  'laso':              '/luan-giai.html',
+  'tu-binh':           '/tu-binh.html',
+  'xem-tuoi':          '/xem-tuoi.html',
+  'xem-lam-an':        '/xem-lam-an.html',
+  'xem-tuoi-sinh-con': '/tools/xem-tuoi-sinh-con.html',
+  // Phong Thủy
+  'phong-thuy':           '/tools/phong-thuy.html',
+  'ban-lam-viec':         '/tools/ban-lam-viec.html',
+  'cua-hang-phong-thuy':  '/tools/cua-hang-phong-thuy.html',
+  'phong-thuy-render':    '/tools/phong-thuy-render.html',
+  // Xem Tướng
+  'dien-tuong':       '/tools/tuong-mat-ai.html',
+  'nhan-tuong':       '/tools/nhan-tuong-ai.html',
+  'thu-tuong':        '/tools/thu-tuong-ai.html',
+  'thanh-tuong':      '/tools/thanh-tuong-ai.html',
+  'thanh-tuong-pro':  '/tools/thanh-tuong-pro.html',
+  'khi-sac':          '/tools/khi-sac-ai.html',
+  // Đặt Tên & Ngày
+  'dat-ten-con':      '/tools/dat-ten-con.html',
+  'dat-ten-dn':       '/tools/dat-ten-doanh-nghiep.html',
+  'chon-ngay-tot':    '/tools/chon-ngay-tot.html',
+  // Phong Cách AI
+  'da-lieu-ai':            '/tools/da-lieu-ai.html',
+  'kieu-toc-phan-tich':    '/tools/kieu-toc-ai.html',
+  'kieu-toc-tryon':        '/tools/kieu-toc-ai.html',
+  'mau-sac-hop-menh':      '/tools/mau-sac-hop-menh.html',
+  'personal-color':        '/tools/personal-color.html',
+  'personal-color-tryon':  '/tools/personal-color.html',
+  'trang-diem-phan-tich':  '/tools/trang-diem-ai.html',
+  'trang-diem-tryon':      '/tools/trang-diem-ai.html',
+  'trang-phuc-tryon':      '/tools/trang-phuc-tryon.html',
+  'trang-phuc-theo-ngay':  '/tools/trang-phuc-theo-ngay.html',
+  // Free — Tử Vi
+  'an-sao': '/tools/an-sao.html', 'sao-nam': '/tools/sao-nam.html',
+  'cach-cuc': '/tools/cach-cuc.html', 'dai-van': '/tools/dai-van.html',
+  'van-thang': '/tools/van-thang.html',
+  // Free — Mệnh Lý
+  'bat-trach': '/tools/bat-trach.html', 'nap-am': '/tools/nap-am.html',
+  'tuong-hop': '/tools/tuong-hop.html', 'kim-lau': '/tools/kim-lau.html',
+  'ngu-hanh-ten': '/tools/ngu-hanh-ten.html', 'tu-tru': '/tools/tu-tru.html',
+  // Free — Lịch Số
+  'hoang-dao': '/tools/hoang-dao.html', 'ngay-tot': '/tools/ngay-tot.html',
+  'luc-nham': '/tools/luc-nham.html', 'han-nam': '/tools/han-nam.html',
+  // Free — Bói Bài + Huyền Học
+  'tarot': '/tools/tarot.html', 'oracle': '/tools/oracle.html',
+  'boi-bai-tay': '/tools/boi-bai-tay.html',
+  'kinh-dich': '/tools/kinh-dich.html', 'than-so-hoc': '/tools/than-so-hoc.html',
+};
+
+// Tab grouping — MIRRORS the top nav (nav.js) so panel & menu stay consistent.
+// DB category (tool_pricing.category) → tab. Unknown categories fall back to 'cong-cu'.
+const CATEGORY_TO_TAB = {
+  'Luận Giải':      'tu-vi',
+  'Công Cụ Tử Vi':  'tu-vi',
+  'Xem Tướng':      'xem-tuong',
+  'Phong Thủy':     'phong-thuy',
+  'Phong Cách AI':  'lam-dep',
+  'Lịch Số':        'chon-ngay',
+  'Đặt Tên & Ngày': 'dat-ten',
+  'Mệnh Lý':        'cong-cu',
+  'Huyền Học':      'cong-cu',
+  'Bói Bài':        'cong-cu',
+};
+// Per-tool overrides: nav xếp các tool này khác nhóm với DB category của chúng.
+const TOOL_TAB_OVERRIDE = {
+  'tu-binh':       'tu-binh',    // nav: mục "Tử Bình" riêng (DB: Luận Giải)
+  'chon-ngay-tot': 'chon-ngay',  // nav: nhóm "Chọn Ngày" (DB: Đặt Tên & Ngày)
+  'bat-trach':     'phong-thuy', // nav: nhóm "Phong Thủy" (DB: Mệnh Lý)
+  'kim-lau':       'phong-thuy', // nav: nhóm "Phong Thủy" (DB: Mệnh Lý)
+};
+const TAB_IDS = new Set(['tu-vi','tu-binh','xem-tuong','phong-thuy','lam-dep','chon-ngay','dat-ten','cong-cu','mien-phi']);
+function tabOf(t) {
+  return TOOL_TAB_OVERRIDE[t.tool_id] || CATEGORY_TO_TAB[t.category] || 'cong-cu';
+}
+
+// Featured tool IDs — gold border for visual hierarchy (no commercial badge)
+const FEATURED = new Set(['laso', 'tu-binh', 'xem-tuoi', 'phong-thuy']);
+
+// ─────────────────────────────────────────────────────────────
+// Fetch tool_pricing + render
+// ─────────────────────────────────────────────────────────────
+const SUPABASE_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
+
+let _tools = null;
+
+async function loadTools() {
+  try {
+    const res = await fetch(
+      SUPABASE_URL + '/rest/v1/tool_pricing?enabled=eq.true&select=tool_id,label,credits,icon,category,sort_order,is_free,description&order=sort_order.asc',
+      { headers: { apikey: SUPABASE_ANON } }
+    );
+    _tools = await res.json();
+    if (!_tools?.length) { document.getElementById('tabContent').innerHTML = '<div class="tools-loading">Không có dữ liệu.</div>'; return; }
+
+    // Update free count badge
+    const freeCount = _tools.filter(t => t.is_free).length;
+    document.getElementById('freeCount').textContent = freeCount;
+
+    renderActiveTab();
+  } catch(e) {
+    console.error('[loadTools]', e);
+    document.getElementById('tabContent').innerHTML = '<div class="tools-loading"><span data-icon="alert-triangle" style="display:inline-flex;width:14px;height:14px;vertical-align:middle"></span> Không tải được. Vui lòng F5 thử lại.</div>';
+    if (window.mountIcons) window.mountIcons(document.getElementById('tabContent'));
+  }
+}
+
+function renderActiveTab() {
+  const activeBtn = document.querySelector('.tab-btn.active');
+  if (!activeBtn || !_tools) return;
+  const tabId = activeBtn.dataset.tab;
+  const filtered = tabId === 'mien-phi'
+    ? _tools.filter(t => t.is_free)
+    : _tools.filter(t => tabOf(t) === tabId);
+  renderToolGrid(filtered, tabId === 'mien-phi');
+}
+
+function renderToolGrid(tools, isFreeTab) {
+  if (!tools.length) {
+    document.getElementById('tabContent').innerHTML = '<div class="tools-loading">Không có công cụ nào trong nhóm này.</div>';
+    return;
+  }
+
+  // For free tab, group by sub-category
+  let html = '';
+  if (isFreeTab) {
+    const subGroups = {};
+    tools.forEach(t => {
+      if (!subGroups[t.category]) subGroups[t.category] = [];
+      subGroups[t.category].push(t);
+    });
+    Object.entries(subGroups).forEach(([cat, items]) => {
+      html += '<div style="margin-top:24px;font-family:\'Noto Serif\',serif;font-size:14px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border-lt)">' + cat + ' · ' + items.length + ' công cụ</div>';
+      html += '<div class="tools-grid">' + items.map(toolCardHtml).join('') + '</div>';
+    });
+  } else {
+    html = '<div class="tools-grid">' + tools.map(toolCardHtml).join('') + '</div>';
+  }
+  document.getElementById('tabContent').innerHTML = html;
+}
+
+// Map emoji from Supabase tool_pricing.icon → Lucide key (loaded via nav.js window.ICONS)
+const EMOJI_TO_ICON = {
+  '🔮':'sparkles','💑':'heart-handshake','🤝':'handshake','📊':'bar-chart-3','☀':'sun','☀️':'sun',
+  '⚗':'gem','📈':'trending-up','🗓':'calendar-days','🔄':'rotate-cw','🌀':'tornado',
+  '😊':'smile','🙂':'smile','👁':'eye','✋':'hand','🎤':'mic','🎙':'mic','🌅':'sunrise',
+  '🧭':'compass','🧿':'compass','🖥':'monitor','🏪':'store','🏠':'home','🏢':'building-2',
+  '🎨':'palette','💄':'palette','👗':'palette','👔':'palette','🧴':'palette',
+  '⚡':'sun','📅':'calendar','📌':'pin','⚖':'circle-dot','👶':'baby','🍼':'baby',
+  '❤':'heart','❤️':'heart','📜':'scroll-text','🔢':'hash','☯':'aperture',
+  '🃏':'wallet-cards','🂠':'spade','✍':'pen-line','✍️':'pen-line','🔯':'sparkles',
+  '💇':'scissors','✂':'scissors','✂️':'scissors'
+};
+function iconHtml(raw) {
+  if (!raw) raw = '🔮';
+  var key = EMOJI_TO_ICON[raw];
+  if (key && window.ICONS && window.ICONS[key]) return window.ICONS[key];
+  // Already a known icon key (not emoji)?
+  if (window.ICONS && window.ICONS[raw]) return window.ICONS[raw];
+  // Fallback: render whatever came (emoji char)
+  return raw;
+}
+
+function toolCardHtml(t) {
+  const url = TOOL_URLS[t.tool_id] || '#';
+  const featured = FEATURED.has(t.tool_id) ? ' featured' : '';
+  const priceHtml = t.is_free
+    ? '<span class="tool-price-free">Miễn Phí</span>'
+    : '<div class="tool-price">' +
+        '<div class="tool-price-credits">' + t.credits + ' Lượng</div>' +
+        '<div class="tool-price-vnd">' + formatVnd(t.credits * 2500) + '</div>' +
+      '</div>';
+  return '<a href="' + url + '" class="tool-card' + featured + '">' +
+    '<div class="tool-icon">' + iconHtml(t.icon) + '</div>' +
+    '<div class="tool-name">' + t.label + '</div>' +
+    '<div class="tool-desc">' + (t.description || '') + '</div>' +
+    '<div class="tool-footer">' + priceHtml +
+      '<div class="tool-cta">Mở →</div>' +
+    '</div>' +
+  '</a>';
+}
+
+function formatVnd(vnd) {
+  // Round up to nearest 1,000đ
+  const rounded = Math.ceil(vnd / 1000) * 1000;
+  return rounded.toLocaleString('vi-VN') + 'đ';
+}
+
+// ─────────────────────────────────────────────────────────────
+// Tab switching
+// ─────────────────────────────────────────────────────────────
+function switchToTab(tabId) {
+  const target = document.querySelector('[data-tab="' + tabId + '"]');
+  if (!target) return;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  target.classList.add('active');
+  renderActiveTab();
+  history.replaceState(null, '', '#' + tabId);
+  // Scroll to tab nav area — use offsetTop để KHÔNG bị sticky position lừa
+  // (getBoundingClientRect().top = 60 khi tab-nav-wrap đang sticky stuck)
+  const nav = document.querySelector('.tab-nav-wrap');
+  if (nav) {
+    // offsetTop returns normal-flow position from document top
+    const y = nav.offsetTop - 70;  // 70 = topnav 60px + small gap
+    window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+  }
+}
+
+document.getElementById('tabNav').addEventListener('click', (e) => {
+  const btn = e.target.closest('.tab-btn');
+  if (!btn) return;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderActiveTab();
+  history.replaceState(null, '', '#' + btn.dataset.tab);
+});
+
+// "Xem tất cả 28 công cụ miễn phí" CTA — switch tab + scroll
+document.getElementById('freeAllLink')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  switchToTab('mien-phi');
+});
+
+// Restore tab from URL hash on load
+function restoreTabFromHash() {
+  const hash = window.location.hash.replace('#', '');
+  if (hash && TAB_IDS.has(hash)) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    const target = document.querySelector('[data-tab="' + hash + '"]');
+    if (target) target.classList.add('active');
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// TuviPaywall init (cho any embedded paywall trigger)
+// ─────────────────────────────────────────────────────────────
+if (typeof TuviPaywall !== 'undefined') {
+  TuviPaywall.init({ product: 'laso', title: 'Luận Giải Lá Số 24 Phần' });
+}
+
+// ─────────────────────────────────────────────────────────────
+// Referral capture: ?ref=CODE → sessionStorage → auto-submit
+// ─────────────────────────────────────────────────────────────
+(function captureRefCode() {
+  const refRaw = new URLSearchParams(window.location.search).get('ref');
+  if (refRaw && /^[A-Z0-9]{8}$/i.test(refRaw)) {
+    sessionStorage.setItem('pending_ref_code', refRaw.toUpperCase());
+    const u = new URL(window.location.href);
+    u.searchParams.delete('ref');
+    window.history.replaceState({}, '', u.toString());
+  }
+})();
+
+window.tryRegisterReferral = async function() {
+  const refCode = sessionStorage.getItem('pending_ref_code');
+  if (!refCode || !window.Auth?.isLoggedIn()) return;
+  const token = window.Auth.getSession()?.access_token;
+  if (!token) return;
+  try {
+    const res = await fetch('/api/payment?action=referral-register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ refCode }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      sessionStorage.removeItem('pending_ref_code');
+      console.log('[referral] registered:', data);
+    }
+  } catch(e) { console.warn('[referral]', e); }
+};
+
+setTimeout(() => window.tryRegisterReferral?.(), 1500);
+if (window.Auth?.onAuthChange) {
+  window.Auth.onAuthChange((event) => {
+    if (event === 'SIGNED_IN') setTimeout(() => window.tryRegisterReferral?.(), 500);
+  });
+}
+
+// ─────────────────────────────────────────────────────────────
+// Init
+// ─────────────────────────────────────────────────────────────
+restoreTabFromHash();
+loadTools();
+</script>
+
+</body>
+</html>

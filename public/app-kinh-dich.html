@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kinh Dịch — Gieo quẻ — Tử Vi Minh Bảo</title>
+<meta name="description" content="Gieo quẻ Kinh Dịch 64 quẻ theo lối 3 đồng xu — quẻ chính, hào động và quẻ biến kèm lời đoán. Hỏi trợ lý AI luận theo câu hỏi của bạn.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shell.css?v=13">
+<style>
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
+.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:13px}
+.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.fg input{border:1px solid var(--line-2);border-radius:7px;padding:9px 11px;font-size:14px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
+.fg input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
+.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif);display:block;margin:0 auto;width:100%;max-width:340px}
+.btn-go:disabled{opacity:.6;cursor:not-allowed}
+.step-counter{font-size:13px;color:#444;text-align:center;margin-bottom:8px}
+/* 3 đồng xu + hào — port CSS bản standalone /tools/kinh-dich.html */
+.coins-wrap{display:flex;gap:16px;justify-content:center;margin:24px 0}
+.coin{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;border:3px solid #CCCCCC;transition:all .3s;position:relative}
+.coin.flipping{animation:flip .6s ease-in-out}
+.coin.heads{background:#c9a84c;color:#fff;border-color:#a07a30}
+.coin.tails{background:#F5F4F0;color:#061A2E;border-color:#CCCCCC}
+@keyframes flip{0%{transform:rotateY(0)}50%{transform:rotateY(90deg) scale(1.1)}100%{transform:rotateY(0)}}
+.line-vis{display:flex;flex-direction:column;gap:8px;padding:16px;background:#F5F4F0;border-radius:8px}
+.lines-build{display:flex;flex-direction:column-reverse;gap:6px;align-items:center;min-height:180px}
+.line-row{display:flex;gap:8px;align-items:center;opacity:0;transform:translateY(8px);transition:all .4s}
+.line-row.visible{opacity:1;transform:translateY(0)}
+.line-yang{width:80px;height:12px;background:#061A2E;border-radius:2px}
+.line-yin{display:flex;gap:8px}
+.line-yin span{width:35px;height:12px;background:#061A2E;border-radius:2px}
+.line-changing .line-yang,.line-changing .line-yin span{background:#c9a84c}
+.line-num{width:16px;font-size:10px;color:#777;text-align:right}
+.line-tag{font-size:9px;font-weight:700;letter-spacing:1px;padding:1px 5px;border-radius:2px;margin-left:4px}
+.lt-change{background:#fff8e6;color:#9A7B3A;border:1px solid #c9a84c}
+/* Quẻ display */
+.que-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:6px}
+.que-card{border:1px solid #E8E8E8;border-radius:8px;padding:20px;background:#fff}
+.que-card.primary{border-color:#061A2E;background:#f5f7fa}
+.que-eyebrow{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#777;margin-bottom:10px}
+.que-symbol{font-size:64px;line-height:1;margin-bottom:8px;color:#061A2E}
+.que-name{font-size:22px;font-weight:700;color:#061A2E;margin-bottom:4px;font-family:var(--serif)}
+.que-zh{font-size:14px;color:#777;margin-bottom:12px}
+.que-meaning{font-size:13px;font-weight:600;color:#444;margin-bottom:10px}
+.que-guidance{font-size:14px;color:#444;line-height:1.8}
+.fortune-badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:2px;margin-bottom:14px}
+.fb-tot{background:#c3e0cc;color:#1E6B3C}
+.fb-trung{background:#e8f0fe;color:#1455A4}
+.fb-canh{background:#f5c0bc;color:#C0392B}
+@media(max-width:600px){.que-grid{grid-template-columns:1fr}}
+#resPanel{display:none;max-width:760px}
+.cauhoi-disp{font-size:13px;color:#777;font-style:italic;margin-bottom:16px;text-align:center}
+.ask{margin-top:16px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
+.regieo{margin-top:10px;font-size:12.5px;color:var(--blue);cursor:pointer;background:none;border:none;font-family:inherit;text-decoration:underline;display:block}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Kinh Dịch — Gieo quẻ</b><span>Chu Dịch 64 quẻ · 3 đồng xu</span></div>
+      <div class="ws-actions">
+        <button class="btn" id="btnEdit" onclick="reset()" style="display:none">Gieo lại</button>
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div id="shellRecent"></div>
+      <div class="form-card" id="birthPanel">
+        <h2>Thành tâm nghĩ về việc muốn hỏi</h2>
+        <p class="sub">Nhập câu hỏi (một việc cụ thể đang phân vân), giữ tâm tĩnh rồi bấm gieo — 6 lần gieo 3 đồng xu, mỗi lần xác định 1 hào. Nhận quẻ chính, hào động và quẻ biến, rồi hỏi trợ lý luận theo Chu Dịch.</p>
+        <div class="fg">
+          <label>Câu hỏi (tuỳ chọn)</label>
+          <input type="text" id="cauHoi" placeholder="VD: Công việc sắp tới của tôi thế nào?" maxlength="100">
+        </div>
+        <div class="step-counter" id="stepCounter">Bấm để bắt đầu gieo quẻ — 6 lần gieo, mỗi lần xác định 1 hào</div>
+        <div class="coins-wrap" id="coinsWrap" style="display:none">
+          <div class="coin" id="coin0">?</div>
+          <div class="coin" id="coin1">?</div>
+          <div class="coin" id="coin2">?</div>
+        </div>
+        <div id="linesBuild" class="line-vis" style="display:none">
+          <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#777;margin-bottom:4px">Quẻ đang hình thành (từ dưới lên)</div>
+          <div class="lines-build" id="linesContainer"></div>
+        </div>
+        <button class="btn-go" id="tossBtn" onclick="toss()">✦ Tập Trung &amp; Gieo Hào Đầu Tiên</button>
+      </div>
+
+      <div id="resPanel">
+        <div class="cauhoi-disp" id="cauHoiDisplay"></div>
+        <div class="que-grid" id="queGrid"></div>
+        <div class="ask" data-ask="Luận giúp tôi quẻ này theo đúng câu hỏi: ý nghĩa quẻ chính, hào động và quẻ biến cho thấy điều gì, nên hành động thế nào?">✦ Hỏi trợ lý luận quẻ theo câu hỏi</div>
+        <button class="regieo" onclick="reset()">↺ Gieo quẻ khác</button>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='kinh-dich';window.SHELL_HISTORY=true;
+window.SHELL_INTRO={key:'kinh-dich',title:'Kinh Dịch — Gieo quẻ',desc:'Nhập câu hỏi, giữ tâm tĩnh rồi gieo quẻ (3 đồng xu × 6 lần). Nhận <b>quẻ chính, hào động và quẻ biến</b> trong 64 quẻ Chu Dịch, rồi hỏi <b>trợ lý AI</b> luận theo câu hỏi.'};</script>
+<script src="/tools-shared/kinh-dich.js?v=1"></script>
+<script src="/auth.js"></script>
+<script src="/shell.js?v=35"></script>
+<script>
+// Ô giữa dùng CHUNG module /tools-shared/kinh-dich.js (bảng 64 quẻ + tra quẻ) với
+// trang standalone. Gieo/animation ở đây (DOM-specific), showResult gọi module.
+let currentLines = [];
+let step = 0;
+let isFlipping = false;
+
+function toss() {
+  if (isFlipping) return;
+  if (step >= 6) return;
+  isFlipping = true;
+  const tossBtn = document.getElementById('tossBtn');
+  tossBtn.disabled = true;
+  document.getElementById('coinsWrap').style.display = 'flex';
+  document.getElementById('linesBuild').style.display = 'block';
+  const coins = [0, 1, 2].map(i => document.getElementById('coin' + i));
+  coins.forEach(c => { c.classList.remove('heads', 'tails', 'flipping'); c.textContent = '?'; });
+  let flipCount = 0;
+  const interval = setInterval(() => {
+    coins.forEach(c => { c.classList.add('flipping'); c.textContent = Math.random() > 0.5 ? '正' : '反'; });
+    flipCount++;
+    if (flipCount >= 6) {
+      clearInterval(interval);
+      const results = [0, 1, 2].map(() => Math.random() < 0.5 ? 3 : 2);
+      const sum = results.reduce((a, b) => a + b, 0);
+      setTimeout(() => {
+        results.forEach((r, i) => {
+          const c = coins[i];
+          c.classList.remove('flipping');
+          c.classList.toggle('heads', r === 3);
+          c.classList.toggle('tails', r === 2);
+          c.textContent = r === 3 ? '正' : '反';
+        });
+        addLine(sum);
+        isFlipping = false;
+        tossBtn.disabled = false;
+      }, 100);
+    }
+  }, 100);
+}
+
+function addLine(val) {
+  const isYang = val === 7 || val === 9;
+  const isChanging = val === 6 || val === 9;
+  currentLines.push({ val, yang: isYang, changing: isChanging });
+  step++;
+  const container = document.getElementById('linesContainer');
+  container.innerHTML = '';
+  currentLines.forEach((l, i) => {
+    const row = document.createElement('div');
+    row.className = 'line-row visible' + (l.changing ? ' line-changing' : '');
+    const numEl = document.createElement('div');
+    numEl.className = 'line-num';
+    numEl.textContent = i + 1;
+    const lineEl = document.createElement('div');
+    if (l.yang) { lineEl.innerHTML = '<div class="line-yang"></div>'; }
+    else { lineEl.innerHTML = '<div class="line-yin"><span></span><span></span></div>'; }
+    const tagEl = document.createElement('div');
+    tagEl.style.minWidth = '50px';
+    if (l.changing) tagEl.innerHTML = `<span class="line-tag lt-change">Hào động ${l.val}</span>`;
+    row.appendChild(numEl);
+    row.appendChild(lineEl);
+    row.appendChild(tagEl);
+    container.appendChild(row);
+  });
+  const counter = document.getElementById('stepCounter');
+  if (step < 6) {
+    counter.textContent = `Đã gieo ${step}/6 hào — Bấm để gieo hào ${step + 1}`;
+    document.getElementById('tossBtn').textContent = `✦ Gieo Hào ${step + 1}`;
+  } else {
+    counter.textContent = 'Đã đủ 6 hào — Đang xem quẻ...';
+    document.getElementById('tossBtn').style.display = 'none';
+    setTimeout(showResult, 600);
+  }
+}
+
+function showResult() {
+  const r = KinhDichTool.resolve(currentLines);
+  const cHoi = document.getElementById('cauHoi').value.trim();
+  document.getElementById('cauHoiDisplay').textContent = cHoi ? `"${cHoi}"` : '';
+  document.getElementById('queGrid').innerHTML = KinhDichTool.gridHTML(r);
+  document.getElementById('birthPanel').style.display = 'none';
+  document.getElementById('resPanel').style.display = 'block';
+  document.getElementById('btnEdit').style.display = '';
+  if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+  const d = KinhDichTool.railData(r, cHoi, currentLines);
+  Shell.setContext({
+    scenario: { type: 'kinh-dich', data: d },
+    restore: { lines: currentLines },
+    label: 'Gieo quẻ · ' + r.que.n + (r.cQue ? ' → ' + r.cQue.n : ''),
+    greeting: 'Quẻ đã lập — quẻ chính **' + r.que.n + '** (' + r.que.zh + ')' + (r.cQue ? ', quẻ biến **' + r.cQue.n + '**' : ' (không hào động)') + '. Tôi sẽ luận theo câu hỏi của bạn.',
+    chips: ['Luận quẻ này cho câu hỏi của tôi', 'Hào động nói lên điều gì?', 'Quẻ biến cho thấy xu hướng nào?', 'Nên hành động thế nào lúc này?']
+  });
+  document.querySelectorAll('#resPanel [data-ask]').forEach(function (el) { el.addEventListener('click', function () { Shell.ask(el.getAttribute('data-ask')); }); });
+}
+
+function reset() {
+  currentLines = [];
+  step = 0;
+  isFlipping = false;
+  document.getElementById('coinsWrap').style.display = 'none';
+  document.getElementById('linesBuild').style.display = 'none';
+  document.getElementById('linesContainer').innerHTML = '';
+  document.getElementById('queGrid').innerHTML = '';
+  document.getElementById('resPanel').style.display = 'none';
+  document.getElementById('birthPanel').style.display = 'block';
+  document.getElementById('btnEdit').style.display = 'none';
+  document.getElementById('stepCounter').textContent = 'Bấm để bắt đầu gieo quẻ — 6 lần gieo, mỗi lần xác định 1 hào';
+  const tossBtn = document.getElementById('tossBtn');
+  tossBtn.textContent = '✦ Tập Trung & Gieo Hào Đầu Tiên';
+  tossBtn.style.display = 'block';
+  tossBtn.disabled = false;
+  [0, 1, 2].forEach(i => {
+    const c = document.getElementById('coin' + i);
+    c.className = 'coin';
+    c.textContent = '?';
+  });
+}
+// Khôi phục phiên: nạp lại quẻ ĐÃ GIEO (không tung lại) + câu hỏi → showResult
+// dựng lại center (FREE) → setContext replay rail.
+(function(){
+  function _restore(){
+    var r = window.Shell && Shell.pendingRestore && Shell.pendingRestore();
+    if (r && r.lines && r.lines.length){ currentLines = r.lines.slice(); step = 6; if (r.form) Shell.fillForm(r.form); showResult(); }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _restore); else _restore();
+})();
+</script>
+</body>
+</html>

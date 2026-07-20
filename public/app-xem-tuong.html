@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xem tướng qua ảnh — Tử Vi Minh Bảo</title>
+<meta name="description" content="Xem tướng mặt, mắt, bàn tay qua ảnh theo cổ pháp Ma Y Thần Tướng — gửi ảnh cho trợ lý AI luận tướng ngay trong Luận Đường.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shell.css?v=13">
+<style>
+.vis-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:22px 22px;box-shadow:var(--shadow);max-width:620px}
+.vis-card .ic{width:46px;height:46px;border-radius:12px;background:var(--gold-lt);border:1px solid var(--gold-soft);display:flex;align-items:center;justify-content:center;color:var(--gold-soft);margin-bottom:13px}
+.vis-card .ic svg{width:24px;height:24px}
+.vis-card h2{font-family:var(--serif);font-size:19px;font-weight:600;margin-bottom:7px}
+.vis-card p{font-size:13.5px;color:var(--text-mid);line-height:1.7;margin-bottom:8px}
+.vis-card ul{margin:6px 0 16px 2px;padding:0;list-style:none}
+.vis-card li{font-size:13px;color:var(--text-mid);line-height:1.7;padding-left:18px;position:relative}
+.vis-card li::before{content:"·";position:absolute;left:6px;color:var(--gold-soft);font-weight:700}
+.vis-go{background:var(--red);color:#fff;border:none;border-radius:9px;padding:11px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif);display:inline-flex;align-items:center;gap:8px}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Xem tướng qua ảnh</b><span>Diện tướng · nhãn tướng · thủ tướng theo cổ pháp</span></div>
+      <div class="ws-actions">
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div id="shellRecent"></div>
+      <div class="vis-card">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M9 15c1 1 5 1 6 0"/></svg></div>
+        <h2>Gửi ảnh — thầy luận tướng cho bạn</h2>
+        <p>Nhân tướng học theo <b>Ma Y Thần Tướng</b>, <b>Liễu Trang Thần Tướng</b>, <b>Thủy Kính Tập</b>. Gửi ảnh ở khung <b>Trợ lý</b> bên phải, thầy quan sát rồi luận.</p>
+        <ul>
+          <li>Ảnh <b>khuôn mặt</b> chính diện, đủ sáng — luận tam đình, ngũ quan, thần thái.</li>
+          <li>Ảnh <b>đôi mắt</b> cận — nhãn tướng, thần khí.</li>
+          <li>Ảnh <b>bàn tay</b> xòe — thủ tướng, đường chỉ tay.</li>
+        </ul>
+        <button class="vis-go" onclick="Shell.openRail()">✦ Mở trợ lý &amp; gửi ảnh</button>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='xem-tuong';window.SHELL_HISTORY=true;
+window.SHELL_INTRO={key:'xem-tuong',title:'Xem tướng qua ảnh',desc:'Gửi ảnh mặt / mắt / bàn tay cho <b>trợ lý AI</b> ở khung bên phải — thầy luận tướng theo cổ pháp Ma Y Thần Tướng.'};</script>
+<script src="/auth.js"></script>
+<script src="/shell.js?v=35"></script>
+<script>
+function initXemTuong(){
+  Shell.setContext({
+    scenario:{type:'xem-tuong',data:{}},
+    label:'Xem tướng qua ảnh',
+    placeholder:'Gửi ảnh rồi hỏi thầy…',
+    greeting:'Chào bạn. Gửi cho tôi một tấm ảnh — **khuôn mặt** chính diện, **đôi mắt**, hoặc **bàn tay** — bằng nút ảnh phía dưới, tôi sẽ luận tướng theo cổ pháp.',
+    chips:['Xem tướng khuôn mặt tôi','Tướng mắt nói lên điều gì?','Xem chỉ tay giúp tôi','Tướng tôi hợp nghề gì?']
+  });
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initXemTuong); else initXemTuong();
+</script>
+</body>
+</html>

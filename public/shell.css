@@ -31,7 +31,7 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 /* ── SIDEBAR ── */
 .sb{background:linear-gradient(180deg,var(--navy),var(--navy-2));color:var(--sb-txt);display:flex;flex-direction:column;overflow:hidden}
 .sb-brand{display:flex;align-items:center;gap:11px;padding:14px 16px;text-decoration:none}
-.seal{width:32px;height:32px;border-radius:7px;background:radial-gradient(circle at 30% 25%,#17324e,#0a1f33);border:1px solid rgba(201,168,76,.45);display:flex;align-items:center;justify-content:center;font-family:var(--serif);color:var(--gold);font-size:16px;flex:0 0 auto}
+.seal{width:34px;height:34px;border-radius:7px;object-fit:cover;border:1px solid rgba(201,168,76,.45);flex:0 0 auto;display:block}
 .brand-txt b{font-family:var(--serif);font-size:14.5px;color:#fff;font-weight:600;display:block;line-height:1.2}
 .brand-txt span{font-size:9.5px;color:var(--gold);letter-spacing:.32em;text-transform:uppercase}
 .kbtn{margin:6px 12px 4px;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);border:1px solid var(--sb-line);border-radius:9px;padding:8px 11px;color:var(--sb-txt-dim);font-size:12.5px;cursor:pointer;width:calc(100% - 24px);font-family:inherit}
@@ -51,6 +51,8 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .item:hover .ic,.item.active .ic{opacity:.9}.item.active .ic{color:var(--gold)}
 .pill{margin-left:auto;font-size:9.5px;padding:1px 6px;border-radius:20px;background:rgba(30,107,60,.22);color:#6fce97}
 .pill.cost{background:rgba(201,168,76,.16);color:var(--gold)}
+.sb-theme{margin:6px 12px;padding:7px 12px;background:rgba(255,255,255,.04);border:1px solid var(--sb-line);color:var(--sb-txt,#a9bdd0);border-radius:8px;font-size:12px;font-family:inherit;cursor:pointer;text-align:left;transition:background .15s}
+.sb-theme:hover{background:rgba(255,255,255,.08);color:#fff}
 .sb-foot{border-top:1px solid var(--sb-line);padding:10px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none}
 .sb-foot:hover{background:rgba(255,255,255,.03)}
 .ava{width:29px;height:29px;border-radius:50%;background:linear-gradient(135deg,var(--gold-soft),var(--gold));display:flex;align-items:center;justify-content:center;color:#2a1e05;font-weight:700;font-size:13px;flex:0 0 auto}
@@ -72,6 +74,7 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .rail{background:var(--white);border-left:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden}
 .rail-h{padding:12px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
 .spark{width:29px;height:29px;border-radius:8px;background:radial-gradient(circle at 30% 25%,var(--navy-3),var(--navy));border:1px solid rgba(201,168,76,.4);display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:14px;flex:0 0 auto}
+.rail-ava{width:32px;height:32px;border-radius:8px;object-fit:cover;border:1px solid rgba(201,168,76,.4);flex:0 0 auto;display:block}
 .rail-h b{font-size:13.5px;display:block;font-family:var(--serif)}
 .rail-h span{font-size:10.5px;color:var(--text-lt)}
 .rail-h .tools{margin-left:auto;display:flex;gap:4px}
@@ -82,12 +85,21 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .chat{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
 .msg{font-size:13px;line-height:1.62;max-width:100%}
 .msg.u{align-self:flex-end;background:var(--navy);color:#eef2f6;padding:9px 12px;border-radius:12px 12px 3px 12px;max-width:86%}
-.msg.a{color:var(--text)}
+.msg.a{color:var(--text);display:flex;gap:8px;align-items:flex-start;max-width:100%}
+.msg-ava{width:24px;height:24px;border-radius:6px;object-fit:cover;flex:0 0 auto;margin-top:1px;border:1px solid rgba(201,168,76,.35)}
+.msg-body{flex:1;min-width:0}
 .msg.a b,.msg.a strong{color:var(--text);font-weight:700}
 .msg.a p{margin-bottom:8px}
 .msg.a em{color:var(--gold-soft);font-style:normal;font-weight:600}
+.msg.a .md-tblwrap{overflow-x:auto;margin:8px 0;-webkit-overflow-scrolling:touch}
+.msg.a .md-tbl{border-collapse:collapse;width:100%;font-size:12.5px}
+.msg.a .md-tbl th,.msg.a .md-tbl td{border:1px solid var(--line-2);padding:5px 9px;text-align:left;vertical-align:top}
+.msg.a .md-tbl th{background:var(--paper-2);color:var(--text);font-weight:700;white-space:nowrap}
+.msg.a .md-ul{margin:6px 0 8px;padding-left:20px}
+.msg.a .md-ul li{margin:3px 0}
 .rail-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px;color:var(--text-lt);gap:10px}
-.rail-empty .ei{width:40px;height:40px;border-radius:11px;background:var(--paper-2);display:flex;align-items:center;justify-content:center;color:var(--gold-soft);font-size:20px}
+.rail-empty .ei{width:46px;height:46px;border-radius:12px;overflow:hidden;flex:0 0 auto}
+.rail-empty .ei img{width:100%;height:100%;object-fit:cover;display:block}
 .rail-empty b{color:var(--text-mid);font-size:13.5px;font-family:var(--serif)}
 .rail-empty p{font-size:12px;line-height:1.5}
 .chips{display:flex;flex-wrap:wrap;gap:7px}
@@ -98,6 +110,15 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .rail-in textarea{flex:1;border:1px solid var(--line-2);border-radius:18px;padding:9px 14px;color:var(--text);font-size:12.5px;background:var(--paper);font-family:inherit;resize:none;outline:none;max-height:96px;line-height:1.4}
 .rail-in textarea:focus{border-color:var(--gold-soft)}
 .rail-in textarea:disabled{opacity:.6}
+.rail-attach{flex:0 0 auto;width:34px;height:34px;border:none;background:none;color:var(--text-lt);cursor:pointer;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0}
+.rail-attach:hover:not(:disabled){background:var(--paper-2);color:var(--gold-soft)}
+.rail-attach:disabled{opacity:.4;cursor:not-allowed}
+.rail-thumbs{display:flex;flex-wrap:wrap;gap:6px;padding:8px 13px 0}
+.rail-thumbs .thumb{position:relative;width:52px;height:52px;border-radius:8px;overflow:hidden;border:1px solid var(--line)}
+.rail-thumbs .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.rail-thumbs .thumb button{position:absolute;top:1px;right:1px;width:16px;height:16px;border:none;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-size:12px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.msg.u .msg-imgs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:5px}
+.msg.u .msg-imgs img{width:120px;max-width:100%;border-radius:8px;display:block}
 .send{width:33px;height:33px;border-radius:50%;background:var(--red);color:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto}
 .send:disabled{opacity:.5;cursor:not-allowed}
 .typing{display:inline-flex;gap:3px;align-items:center;color:var(--text-lt);font-size:12px}
@@ -124,16 +145,106 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .cmdk-empty{padding:26px;text-align:center;color:var(--text-lt);font-size:13px}
 
 /* ── THEME TOGGLE + MOBILE ── */
-.theme-tog{position:fixed;bottom:14px;right:16px;z-index:40;background:var(--white);border:1px solid var(--line-2);color:var(--text-mid);border-radius:20px;padding:7px 13px;font-size:12px;cursor:pointer;box-shadow:var(--shadow);font-family:inherit}
 .mobile-only{display:none}
 .shell svg{display:block}
+
+/* ── BOTTOM TAB BAR (mobile) — điều hướng chạm bằng ngón cái. Thay lối
+   "chỉ mở drawer": Trợ lý (rail) + Công cụ (sidebar) chạm 1 phát tới được,
+   thay vì chôn sau hamburger. shell.js chèn #shell-tabbar vào body; chỉ hiện
+   ≤900px; ẩn khi drawer/cmdk đang mở. Desktop KHÔNG đụng tới. ── */
+.tabbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:49;grid-template-columns:repeat(4,1fr);background:linear-gradient(180deg,var(--navy-2),var(--navy));border-top:1px solid rgba(201,168,76,.18);padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -6px 20px rgba(6,26,46,.22)}
+.tabbar .tab{appearance:none;-webkit-appearance:none;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 4px 8px;color:var(--sb-txt-dim);font-family:inherit;font-size:10.5px;line-height:1;text-decoration:none;-webkit-tap-highlight-color:transparent}
+.tabbar .tab svg{width:22px;height:22px;display:block;stroke-width:1.7}
+.tabbar .tab.active{color:var(--gold)}
+.tabbar .tab:active{background:rgba(255,255,255,.05)}
+
+/* ── EMPTY-STATE INTRO (giới thiệu ngắn 1 lần, ẩn sau lần dùng đầu) ── */
+.intro-card{position:relative;background:linear-gradient(180deg,var(--gold-lt),var(--white));border:1px solid var(--gold-soft);border-radius:12px;padding:14px 40px 14px 16px;box-shadow:var(--shadow);margin-bottom:16px;max-width:720px}
+.intro-card .intro-t{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--text);margin-bottom:5px;display:flex;align-items:center;gap:8px}
+.intro-card .intro-t .spark{color:var(--gold-soft)}
+.intro-card .intro-d{font-size:13px;color:var(--text-mid);line-height:1.65}
+.intro-card .intro-d b{color:var(--text)}
+.intro-card .intro-x{position:absolute;top:9px;right:9px;width:24px;height:24px;border:none;background:transparent;color:var(--text-lt);font-size:19px;line-height:1;cursor:pointer;border-radius:6px}
+.intro-card .intro-x:hover{background:var(--paper-2);color:var(--text)}
+
+/* ── HÀNG GỢI Ý CÂU HỎI (chip cố định trên ô nhập rail, cuộn ngang) ── */
+.rail-sugg{padding:8px 13px 0}
+.sugg-row{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.sugg-row::-webkit-scrollbar{display:none}
+.sugg-row .chip{white-space:nowrap;flex:0 0 auto;font-family:inherit;font-size:12px;border:1px solid var(--line-2);background:var(--paper);color:var(--text-mid);border-radius:20px;padding:6px 12px;cursor:pointer}
+.sugg-row .chip:hover{border-color:var(--gold-soft);color:var(--text);background:var(--gold-lt)}
+
+/* ── LỊCH SỬ HỘI THOẠI (panel trượt trong rail + "phiên gần đây" empty-state) ── */
+.rail{position:relative}
+.rail-hist{position:absolute;top:53px;left:0;right:0;bottom:0;z-index:8;background:var(--white);display:flex;flex-direction:column;animation:shFade .16s ease}
+@keyframes shFade{from{opacity:0}to{opacity:1}}
+.rh-head{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--line);font-size:12px;font-weight:600;color:var(--text-mid);font-family:var(--serif)}
+.rh-x{width:24px;height:24px;border:none;background:transparent;color:var(--text-lt);font-size:19px;line-height:1;cursor:pointer;border-radius:6px}
+.rh-x:hover{background:var(--paper-2);color:var(--text)}
+.rh-list{flex:1;overflow-y:auto;padding:6px}
+.rh-empty{padding:26px 16px;text-align:center;color:var(--text-lt);font-size:12.5px}
+.rh-item{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:9px;cursor:pointer}
+.rh-item:hover{background:var(--paper)}
+.rh-main{flex:1;min-width:0}
+.rh-t{font-size:12.8px;color:var(--text);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rh-sub{font-size:11px;color:var(--text-lt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.rh-del{flex:0 0 auto;width:24px;height:24px;border:none;background:transparent;color:var(--text-lt);font-size:17px;line-height:1;cursor:pointer;border-radius:6px;opacity:0}
+.rh-item:hover .rh-del{opacity:1}
+.rh-del:hover{background:var(--paper-2);color:var(--red)}
+/* "Phiên gần đây" ở khối nhập (empty-state) */
+#shellRecent{margin-top:14px}
+.recent-h{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-lt);margin-bottom:8px;font-weight:600}
+.recent-list{display:flex;flex-direction:column;gap:6px}
+.recent-item{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;border:1px solid var(--line);background:var(--white);border-radius:9px;padding:9px 12px;cursor:pointer;font-family:inherit}
+.recent-item:hover{border-color:var(--gold-soft);background:var(--gold-lt)}
+.recent-item .ri-t{font-size:12.8px;color:var(--text);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.recent-item .ri-s{font-size:11px;color:var(--text-lt);flex:0 0 auto}
+
+/* ── MODAL CHIA SẺ PHIÊN ── */
+.sh-share-modal{position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(6,26,46,.42);backdrop-filter:blur(3px)}
+.ssm-card{position:relative;width:min(440px,94vw);background:var(--white);border:1px solid var(--line-2);border-radius:14px;box-shadow:var(--shadow-lg);padding:20px 20px 18px}
+.ssm-x{position:absolute;top:10px;right:10px;width:26px;height:26px;border:none;background:transparent;color:var(--text-lt);font-size:18px;line-height:1;cursor:pointer;border-radius:6px}
+.ssm-x:hover{background:var(--paper-2);color:var(--text)}
+.ssm-t{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px}
+.ssm-d{font-size:12.5px;color:var(--text-lt);margin-bottom:14px;line-height:1.5}
+.ssm-row{display:flex;gap:7px;margin-bottom:12px}
+.ssm-in{flex:1;min-width:0;border:1px solid var(--line-2);border-radius:8px;padding:8px 11px;font-size:12.5px;color:var(--text-mid);background:var(--paper);font-family:inherit}
+.ssm-copy{flex:0 0 auto;border:none;background:var(--navy);color:#fff;border-radius:8px;padding:8px 14px;font-size:12.5px;cursor:pointer;font-family:inherit}
+.ssm-share{display:flex;gap:8px}
+.ssm-b{flex:1;text-align:center;text-decoration:none;font-size:12.5px;border:1px solid var(--line-2);border-radius:8px;padding:8px 10px;color:var(--text-mid);background:var(--paper)}
+.ssm-b:hover{border-color:var(--gold-soft);color:var(--text)}
+.ssm-b.fb{border-color:#1877F2;color:#1877F2}.ssm-b.zl{border-color:#0068FF;color:#0068FF}.ssm-b.wa{border-color:#25D366;color:#128C7E}
+
+/* ── Modal HẾT LƯỢNG (giọng thầy) — bật khi rail nhận 402, mời nạp để luận tiếp ── */
+.sh-topup-modal{position:fixed;inset:0;z-index:72;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(6,26,46,.46);backdrop-filter:blur(3px)}
+.stm-card{position:relative;width:min(400px,94vw);background:var(--white);border:1px solid var(--line-2);border-radius:16px;box-shadow:var(--shadow-lg);padding:26px 22px 20px;text-align:center}
+.stm-x{position:absolute;top:10px;right:10px;width:26px;height:26px;border:none;background:transparent;color:var(--text-lt);font-size:18px;line-height:1;cursor:pointer;border-radius:6px}
+.stm-x:hover{background:var(--paper-2);color:var(--text)}
+.stm-ava{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);margin-bottom:12px}
+.stm-t{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.stm-d{font-size:13.5px;color:var(--text-mid);line-height:1.6;margin-bottom:18px}
+.stm-btn{display:block;background:var(--red,#C0392B);color:#fff;text-decoration:none;font-family:var(--serif);font-weight:600;font-size:15px;padding:12px 20px;border-radius:10px;margin-bottom:8px}
+.stm-btn:hover{filter:brightness(1.06)}
+.stm-later{border:none;background:transparent;color:var(--text-lt);font-size:12.5px;cursor:pointer;font-family:inherit;padding:4px}
+.stm-later:hover{color:var(--text-mid)}
+
+/* ── RESPONSIVE (max-width:900px) — PHẢI để CUỐI file: các rule .rail/.sb đặt
+   sau media query (vd .rail{position:relative} cho panel lịch sử) sẽ override
+   mobile nếu media đứng trước → giữ khối này ở cuối để mobile thắng. ── */
 @media (max-width:900px){
+  /* iOS Safari tự zoom khi focus field <16px và hay không zoom lại → 16px chặn hẳn. */
+  .rail-in textarea{font-size:16px}
   .shell{grid-template-columns:1fr}
   .sb{position:fixed;left:0;top:0;bottom:0;width:270px;z-index:60;transform:translateX(-100%);transition:transform .25s}
   .sb.open{transform:none}
-  .rail{position:fixed;right:0;top:0;bottom:0;width:min(360px,90vw);z-index:60;transform:translateX(100%);transition:transform .25s;border-left:1px solid var(--line)}
+  /* Rail = trợ lý TOÀN MÀN trên điện thoại (was 360px drawer) → cảm giác app thật. */
+  .rail{position:fixed;right:0;top:0;bottom:0;width:100vw;max-width:none;z-index:60;transform:translateX(100%);transition:transform .25s;border-left:none}
   .rail.open{transform:none}
   .mobile-only{display:inline-flex}
   .backdrop{position:fixed;inset:0;background:rgba(6,26,46,.4);z-index:55;display:none}
   .backdrop.on{display:block}
+  /* Bottom tab: hiện trên mobile, chừa chỗ cuối trang, ẩn khi drawer đang mở. */
+  .tabbar{display:grid}
+  .ws-body{padding-bottom:76px}
+  body.drawer-open .tabbar{display:none}
 }

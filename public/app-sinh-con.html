@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xem tuổi sinh con — Tử Vi Minh Bảo</title>
+<meta name="description" content="Chấm điểm lục hợp/tam hợp/lục xung địa chi giữa năm sinh con và bố mẹ — bảng 15 năm tới, năm thuận nhất. Hỏi trợ lý AI luận sâu.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shell.css?v=13">
+<style>
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
+.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
+.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:13px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
+.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
+.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
+.btn-go:disabled{opacity:.6;cursor:not-allowed}
+.err{color:var(--red);font-size:13px;margin-top:8px;display:none}
+.err.active{display:block}
+#resPanel{display:none;max-width:820px}
+.cc-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.cc-card{flex:1;min-width:150px;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:12px 14px;box-shadow:var(--shadow)}
+.cc-card .who{font-size:10.5px;color:var(--text-lt);text-transform:uppercase;letter-spacing:.04em}
+.cc-card .cc{font-family:var(--serif);font-size:19px;font-weight:600;margin-top:2px}
+.cc-card .na{font-size:12px;color:var(--text-mid);margin-top:2px}
+.cc-card .na b{color:var(--hanh,var(--gold-soft))}
+/* Bảng 15 năm — "tài liệu" nền sáng cố định, khớp bản standalone */
+.res-block{border:1px solid #E8E8E8;background:#fff;border-radius:10px;overflow:hidden}
+.res-block-header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:#F5F4F0;border-bottom:1px solid #E8E8E8;gap:12px;flex-wrap:wrap}
+.res-block-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#061A2E}
+.year-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
+.year-table th{background:#061A2E;color:#fff;padding:8px 10px;font-size:12px;font-weight:600;text-align:left}
+.year-table td{padding:9px 10px;border-bottom:1px solid #E8E8E8;vertical-align:middle;color:#1a1a1a}
+.year-table tr:hover td{background:#F5F4F0}
+.year-table tr.top-year td{background:#fdf8f0}
+.score-bar{display:flex;gap:2px;align-items:center}
+.score-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.dot-on-great{background:#27ae60}
+.dot-on-good{background:#c9a84c}
+.dot-on-ok{background:#ccc}
+.dot-on-bad{background:#c0392b}
+.label-great{color:#1E6B3C;font-weight:700;font-size:12px}
+.label-good{color:#9A7B3A;font-weight:600;font-size:12px}
+.label-ok{color:#777;font-size:12px}
+.label-bad{color:#c0392b;font-weight:600;font-size:12px}
+.year-num{font-weight:700;color:#061A2E}
+.can-chi-cell{color:#444;font-size:12px}
+.hanh-badge{display:inline-block;padding:1px 8px;border-radius:20px;font-size:11px;font-weight:700;color:#fff}
+.hb-Kim{background:#a0937d}.hb-Mộc{background:#27ae60}
+.hb-Hỏa{background:#c0392b}.hb-Thổ{background:#e67e22}
+.hb-Thủy{background:#2980b9}
+.reason-cell{font-size:12px;color:#444;line-height:1.4}
+.tbl-note{margin-top:16px;padding:12px;background:#F5F4F0;border-radius:8px;font-size:12px;color:#777;line-height:1.7}
+@media(max-width:640px){.year-table th:nth-child(5),.year-table td:nth-child(5){display:none}}
+.ask{margin-top:16px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
+.laso-error{color:var(--red);padding:14px;border:1px solid var(--red);border-radius:10px;background:var(--white)}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Xem tuổi sinh con</b><span>Năm sinh con hợp tuổi bố mẹ theo địa chi</span></div>
+      <div class="ws-actions">
+        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa thông tin</button>
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div id="shellRecent"></div>
+      <div class="form-card" id="birthPanel">
+        <h2>Năm sinh của bố và mẹ</h2>
+        <p class="sub">Chấm điểm lục hợp / tam hợp / lục xung / tam hình giữa địa chi từng năm và tuổi bố mẹ cho 15 năm tới, rồi hỏi trợ lý luận sâu năm nào nên sinh con và vì sao.</p>
+        <div class="frow" style="margin-bottom:4px">
+          <div class="fg" style="width:130px"><label>Năm sinh bố</label><input type="number" id="inpNamBo" placeholder="1990" min="1900" max="2100"></div>
+          <div class="fg" style="width:130px"><label>Năm sinh mẹ</label><input type="number" id="inpNamMe" placeholder="1992" min="1900" max="2100"></div>
+          <button class="btn-go" id="btnGo" onclick="doSinhCon()">Xem 15 năm →</button>
+        </div>
+        <div class="err" id="error-msg"></div>
+      </div>
+
+      <div id="resPanel">
+        <div class="cc-row" id="ccRow"></div>
+        <div class="res-block">
+          <div class="res-block-header">
+            <span class="res-block-title" id="resultTitle">Kết Quả 15 Năm</span>
+            <span style="font-size:11px;color:#777">Địa chi · Lục Hợp · Tam Hợp · Lục Xung</span>
+          </div>
+          <div class="res-block-body" style="overflow-x:auto;padding:24px">
+            <div id="topRecommend" style="margin-bottom:16px"></div>
+            <table class="year-table">
+              <thead><tr><th>Năm</th><th>Can Chi</th><th>Hành</th><th>Đánh Giá</th><th>Lý Do</th></tr></thead>
+              <tbody id="yearTableBody"></tbody>
+            </table>
+            <div class="tbl-note"><strong style="color:#444">Ghi chú:</strong> Kết quả dựa trên địa chi năm sinh (lịch dương). Nếu con sinh vào tháng 1–2 dương lịch, địa chi thực tế tính theo năm âm lịch có thể khác 1 năm — cần xem xét kỹ hơn.</div>
+          </div>
+        </div>
+        <div class="ask" data-ask="Trong 15 năm tới, năm nào tốt nhất để sinh con hợp tuổi cả bố và mẹ? Nêu vài năm cụ thể kèm lý do và năm nào nên tránh.">✦ Hỏi trợ lý luận sâu năm nào nên sinh con</div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='sinh-con';window.SHELL_HISTORY=true;
+window.SHELL_INTRO={key:'sinh-con',title:'Xem tuổi sinh con',desc:'Chấm điểm hợp/xung địa chi năm sinh con với tuổi bố mẹ cho <b>15 năm tới</b>, chỉ ra năm thuận nhất, rồi hỏi <b>trợ lý AI</b> luận sâu năm nào nên sinh con.'};</script>
+<script src="/tools-shared/xem-tuoi-sinh-con.js?v=1"></script>
+<script src="/auth.js"></script>
+<script src="/shell.js?v=35"></script>
+<script>
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+var HANH_COLOR={'Mộc':'var(--green)','Hỏa':'var(--red)','Thổ':'var(--gold-soft)','Kim':'#8a8a8a','Thủy':'var(--blue)'};
+
+// Ô giữa dùng CHUNG module /tools-shared/xem-tuoi-sinh-con.js với trang standalone.
+function doSinhCon(){
+  var btn=document.getElementById('btnGo');
+  var err=document.getElementById('error-msg'); err.classList.remove('active');
+  var namBo=parseInt(document.getElementById('inpNamBo').value);
+  var namMe=parseInt(document.getElementById('inpNamMe').value);
+  var r=XemTuoiSinhConTool.compute(namBo,namMe);
+  if(!r.ok){ err.textContent=r.error; err.classList.add('active'); return; }
+  btn.disabled=true;
+  try{
+    var iBo=r.previewBo,iMe=r.previewMe;
+    function ccCard(who,i){ return '<div class="cc-card"><div class="who">'+esc(who)+'</div><div class="cc">'+esc(i.canChi)+'</div><div class="na" style="--hanh:'+HANH_COLOR[i.hanh]+'">'+esc(i.napAm)+' · <b>'+esc(i.hanh)+'</b></div></div>'; }
+    document.getElementById('ccRow').innerHTML=ccCard('Bố',iBo)+ccCard('Mẹ',iMe);
+    document.getElementById('yearTableBody').innerHTML=r.tableRowsHTML;
+    document.getElementById('topRecommend').innerHTML=r.topRecommendHTML;
+    document.getElementById('resultTitle').textContent=r.resultTitle;
+    document.getElementById('birthPanel').style.display='none';
+    document.getElementById('resPanel').style.display='block';
+    document.getElementById('btnEdit').style.display='';
+    if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
+    Shell.setContext({
+      scenario:{type:'xem-tuoi-sinh-con',data:{namBo:namBo,namMe:namMe}},
+      label:'Sinh con · bố '+iBo.canChi+' × mẹ '+iMe.canChi,
+      greeting:'Đã chấm hợp/xung địa chi 15 năm tới (bố **'+esc(iBo.canChi)+'** · mẹ **'+esc(iMe.canChi)+'**). Năm thuận nhất: **'+esc(r.data.namTot)+'**. Bạn muốn tôi tư vấn gì trước?',
+      chips:['Năm nào tốt nhất để sinh con?','Vì sao năm đó hợp cả bố lẫn mẹ?','Năm nào nên tránh sinh con?','Con tuổi gì hợp với bố mẹ nhất?']
+    });
+    document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
+  }catch(e){
+    document.getElementById('ccRow').innerHTML='<div class="laso-error">Lỗi: '+esc(e.message)+'</div>';
+    document.getElementById('birthPanel').style.display='none';
+    document.getElementById('resPanel').style.display='block';
+    document.getElementById('btnEdit').style.display='';
+    if(window.console)console.error(e);
+  }finally{ btn.disabled=false; }
+}
+function showForm(){
+  document.getElementById('resPanel').style.display='none';
+  document.getElementById('birthPanel').style.display='block';
+  document.getElementById('btnEdit').style.display='none';
+}
+</script>
+<script>/*SHELL_RESTORE_BOOT*/(function(){function _r(){var r=window.Shell&&Shell.pendingRestore&&Shell.pendingRestore();if(r&&r.form){Shell.fillForm(r.form);doSinhCon();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_r);else _r();})();</script>
+</body>
+</html>

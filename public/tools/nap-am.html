@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=15" as="script">
+<link rel="preload" href="/nav.js?v=16" as="script">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Tra Nạp Âm Ngũ Hành — Hành Bản Mệnh Theo Năm Sinh | Tử Vi Minh Bảo</title>
 <meta property="og:title" content="Tra Nạp Âm Ngũ Hành — Hành Bản Mệnh Theo Năm Sinh | Tử Vi Minh Bảo"/>
@@ -102,34 +102,22 @@
   <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
 </footer>
 
+<script src="/tools-shared/nap-am.js?v=1"></script>
 <script>
-const CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
-const CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
-const CON_GIAP=['Chuột','Trâu','Hổ','Mèo','Rồng','Rắn','Ngựa','Dê','Khỉ','Gà','Chó','Lợn'];
-const NAP_AM=['Hải Trung Kim','Lô Trung Hỏa','Đại Lâm Mộc','Lộ Bàng Thổ','Kiếm Phong Kim','Sơn Đầu Hỏa','Giản Hạ Thủy','Thành Đầu Thổ','Bạch Lạp Kim','Dương Liễu Mộc','Tuyền Trung Thủy','Ốc Thượng Thổ','Tích Lịch Hỏa','Tùng Bách Mộc','Trường Lưu Thủy','Sa Trung Kim','Sơn Hạ Hỏa','Bình Địa Mộc','Bích Thượng Thổ','Kim Bạch Kim','Phú Đăng Hỏa','Thiên Hà Thủy','Đại Trạch Thổ','Xoa Xuyến Kim','Tang Đố Mộc','Đại Khê Thủy','Sa Trung Thổ','Thiên Thượng Hỏa','Thạch Lựu Mộc','Đại Hải Thủy'];
-const HANH_COLOR={Kim:'#9A7B3A',Hỏa:'#C0392B',Mộc:'#1E6B3C',Thủy:'#1455A4',Thổ:'#8B6914'};
-const HANH_DESC={Kim:'Ngũ hành Kim — cứng rắn, quyết đoán, có chính kiến. Kim tương sinh với Thủy, tương khắc với Mộc.',Hỏa:'Ngũ hành Hỏa — nhiệt tình, nhanh nhẹn, có sức lôi cuốn. Hỏa tương sinh với Thổ, tương khắc với Kim.',Mộc:'Ngũ hành Mộc — nhân từ, ngay thẳng, chí tiến thủ. Mộc tương sinh với Hỏa, tương khắc với Thổ.',Thủy:'Ngũ hành Thủy — thông minh, linh hoạt, nhạy bén. Thủy tương sinh với Mộc, tương khắc với Hỏa.',Thổ:'Ngũ hành Thổ — trung thực, bền bỉ, đáng tin cậy. Thổ tương sinh với Kim, tương khắc với Thủy.'};
-function getHanh(na){for(const h of ['Kim','Hỏa','Mộc','Thủy','Thổ'])if(na.includes(h))return h;return'';}
+// Logic + render chuyển vào module dùng chung /tools-shared/nap-am.js (dùng
+// CHUNG với shell /app/nap-am). Trang này chỉ wiring DOM — hành vi giữ y nguyên.
 function calculate(){
-  const y=parseInt(document.getElementById('year').value);
-  const err=document.getElementById('error-msg');
+  var y=parseInt(document.getElementById('year').value);
+  var err=document.getElementById('error-msg');
   err.classList.remove('active');
-  if(!y||y<1900||y>2100){err.textContent='Vui lòng nhập năm hợp lệ (1900–2100).';err.classList.add('active');return;}
-  const idx60=((y-4)%60+60)%60;
-  const canIdx=idx60%10,chiIdx=idx60%12;
-  const na=NAP_AM[Math.floor(idx60/2)];
-  const hanh=getHanh(na);
-  const color=HANH_COLOR[hanh]||'#444';
-  document.getElementById('res-eyebrow').textContent='Kết quả — Năm '+y;
-  document.getElementById('nap-am-result').innerHTML=`
-    <div class="na-cell"><div class="na-cell-label">Thiên Can</div><div class="na-cell-val" style="color:${color}">${CAN[canIdx]}</div></div>
-    <div class="na-cell"><div class="na-cell-label">Địa Chi</div><div class="na-cell-val">${CHI[chiIdx]}</div><div style="font-size:12px;color:var(--text-lt);margin-top:6px">Năm ${CON_GIAP[chiIdx]}</div></div>
-    <div class="na-cell"><div class="na-cell-label">Can Chi</div><div class="na-cell-val">${CAN[canIdx]} ${CHI[chiIdx]}</div></div>
-    <div class="na-cell"><div class="na-cell-label">Nạp Âm</div><div class="na-cell-val" style="font-size:22px"><span class="na-hanh-dot" style="background:${color}"></span>${na}</div><div class="na-info">${HANH_DESC[hanh]||''}</div></div>`;
+  var r=NapAmTool.compute(y);
+  if(!r.ok){err.textContent=r.error;err.classList.add('active');return;}
+  document.getElementById('res-eyebrow').textContent=r.eyebrowText;
+  document.getElementById('nap-am-result').innerHTML=r.resultHTML;
   document.getElementById('result-section').classList.add('active');
   document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
 }
-document.getElementById('year').addEventListener('keydown',e=>{if(e.key==='Enter')calculate();});
+document.getElementById('year').addEventListener('keydown',function(e){if(e.key==='Enter')calculate();});
 </script>
 <section class="kb-section">
   <div class="page">
@@ -147,6 +135,6 @@ document.getElementById('year').addEventListener('keydown',e=>{if(e.key==='Enter
 </section>
 <script src="/testimonials.js"></script>
 <script src="/related-tools.js"></script>
-<script src="/nav.js?v=15" defer></script>
+<script src="/nav.js?v=16" defer></script>
 </body>
 </html>

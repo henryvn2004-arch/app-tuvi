@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Giờ Hoàng Đạo — Tử Vi Minh Bảo</title>
+<meta name="description" content="Tra 12 giờ Hoàng Đạo / Hắc Đạo trong ngày theo can chi — giờ tốt cho khai trương, xuất hành, ký kết. Hỏi trợ lý AI luận theo việc của bạn.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shell.css?v=13">
+<style>
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
+.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
+.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:13px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.fg input{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none;width:90px}
+.fg input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
+.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
+.err{color:var(--red);font-size:13px;margin-top:8px;display:none}.err.active{display:block}
+#resPanel{display:none;max-width:760px}
+.res-block{background:#fff;border:1px solid var(--border-lt);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}
+.res-block-header{background:var(--navy);padding:12px 16px}
+.res-block-title{color:#fff;font-family:var(--serif);font-size:15px;font-weight:700}
+.res-block-body{padding:16px}
+.ngay-info{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:16px}
+.ngay-item{font-size:13px;color:var(--text-mid)}.ngay-item strong{color:var(--navy)}
+.gio-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+@media(max-width:700px){.gio-grid{grid-template-columns:repeat(3,1fr)}}
+.gio-card{padding:14px 8px;text-align:center;border-radius:6px;border:1px solid var(--border-lt)}
+.gio-card.hd{background:#eaf4ed;border-color:#c3e0cc}.gio-card.hd2{background:#fef0ef;border-color:#f5c0bc}
+.gio-chi{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.gio-time{font-size:10px;color:var(--text-lt);margin-bottom:6px}
+.gio-than{font-size:11px;font-weight:600}
+.gio-type{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-top:4px}
+.tag-hd{color:#1E6B3C}.tag-hd2{color:#C0392B}
+.ask{margin-top:14px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Giờ Hoàng Đạo</b><span>12 giờ tốt/xấu trong ngày theo can chi</span></div>
+      <div class="ws-actions">
+        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa</button>
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div id="shellRecent"></div>
+      <div class="form-card" id="birthPanel">
+        <h2>Ngày cần xem (dương lịch)</h2>
+        <p class="sub">Tra 12 giờ Hoàng Đạo (tốt) / Hắc Đạo (xấu) trong ngày, rồi hỏi trợ lý nên làm việc gì vào giờ nào.</p>
+        <div class="frow" style="margin-bottom:4px">
+          <div class="fg"><label>Ngày</label><input type="number" id="ngay" min="1" max="31" placeholder="1–31"></div>
+          <div class="fg"><label>Tháng</label><input type="number" id="thang" min="1" max="12" placeholder="1–12"></div>
+          <div class="fg"><label>Năm</label><input type="number" id="nam" min="1900" max="2100" placeholder="2026"></div>
+          <button class="btn-go" id="btnGo" onclick="calculate()">Xem giờ →</button>
+        </div>
+        <div class="err" id="error-msg"></div>
+      </div>
+
+      <div id="resPanel">
+        <div class="res-block">
+          <div class="res-block-header"><span class="res-block-title" id="resTitle">—</span></div>
+          <div class="res-block-body">
+            <div class="ngay-info" id="ngayInfo"></div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#1E6B3C;margin-bottom:8px">✦ Hoàng Đạo — 6 Giờ Tốt</div>
+            <div class="gio-grid" id="hdList"></div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#C0392B;margin:20px 0 8px">✗ Hắc Đạo — 6 Giờ Cần Tránh</div>
+            <div class="gio-grid" id="hd2List"></div>
+          </div>
+        </div>
+        <div class="ask" data-ask="Ngày này tôi nên khai trương / xuất hành / ký kết vào giờ nào là đẹp nhất, tránh giờ nào? Luận giúp tôi.">✦ Hỏi trợ lý nên làm việc vào giờ nào</div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='hoang-dao';window.SHELL_HISTORY=true;
+window.SHELL_INTRO={key:'hoang-dao',title:'Giờ Hoàng Đạo',desc:'Tra <b>12 giờ Hoàng Đạo/Hắc Đạo</b> trong ngày theo can chi — giờ tốt cho khai trương, xuất hành, ký kết. Rồi hỏi <b>trợ lý AI</b> nên làm việc gì vào giờ nào.'};</script>
+<script src="/tuvi-ansao-engine.js"></script>
+<script src="/tools-shared/hoang-dao.js?v=1"></script>
+<script src="/auth.js"></script>
+<script src="/shell.js?v=35"></script>
+<script>
+// Ô giữa dùng CHUNG /tools-shared/hoang-dao.js với /tools/hoang-dao.html.
+function calculate(){
+  var r=HoangDaoTool.compute(document.getElementById('ngay').value,document.getElementById('thang').value,document.getElementById('nam').value);
+  var err=document.getElementById('error-msg');err.classList.remove('active');
+  if(!r.ok){err.textContent=r.error;err.classList.add('active');return;}
+  document.getElementById('resTitle').textContent=r.titleText;
+  document.getElementById('ngayInfo').innerHTML=r.ngayInfoHTML;
+  document.getElementById('hdList').innerHTML=r.hdListHTML;
+  document.getElementById('hd2List').innerHTML=r.hd2ListHTML;
+  document.getElementById('birthPanel').style.display='none';
+  document.getElementById('resPanel').style.display='block';
+  document.getElementById('btnEdit').style.display='';
+  if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
+  Shell.setContext({
+    scenario:{type:'hoang-dao',data:r.data},
+    label:'Giờ Hoàng Đạo · '+r.data.ngayDL,
+    greeting:'Ngày **'+r.data.ngayDL+'** ('+r.data.canChiNgay+'). Đã tra giờ Hoàng Đạo / Hắc Đạo. Bạn định làm việc gì, để tôi chọn giờ đẹp?',
+    chips:['Giờ nào tốt để khai trương?','Xuất hành nên đi giờ nào?','Ký hợp đồng giờ nào hợp?','Giờ nào cần tránh tuyệt đối?']
+  });
+  document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){el.addEventListener('click',function(){Shell.ask(el.getAttribute('data-ask'));});});
+}
+function showForm(){document.getElementById('resPanel').style.display='none';document.getElementById('birthPanel').style.display='block';document.getElementById('btnEdit').style.display='none';}
+(function(){var t=new Date();document.getElementById('ngay').value=t.getDate();document.getElementById('thang').value=t.getMonth()+1;document.getElementById('nam').value=t.getFullYear();})();
+['ngay','thang','nam'].forEach(function(id){document.getElementById(id).addEventListener('keydown',function(e){if(e.key==='Enter')calculate();});});
+</script>
+<script>/*SHELL_RESTORE_BOOT*/(function(){function _r(){var r=window.Shell&&Shell.pendingRestore&&Shell.pendingRestore();if(r&&r.form){Shell.fillForm(r.form);calculate();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_r);else _r();})();</script>
+</body>
+</html>
