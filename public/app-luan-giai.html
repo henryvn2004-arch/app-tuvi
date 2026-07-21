@@ -515,6 +515,7 @@ function _saveLuanGiaiResult(){
     var headers={'Content-Type':'application/json'};
     if(tk)headers['Authorization']='Bearer '+tk;
     fetch('/api/save-laso',{method:'POST',headers:headers,body:JSON.stringify({
+      toolType:'laso',
       canChiNam:_astrolabe.canChiNam, gioiTinh:_gioitinh,
       namSinh:_nam, thangSinh:_thang, ngaySinh:_ngay,
       gioIdx:(_astrolabe._conv&&_astrolabe._conv.gioIdx!=null)?_astrolabe._conv.gioIdx:null,
