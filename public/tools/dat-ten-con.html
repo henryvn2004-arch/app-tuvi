@@ -264,12 +264,12 @@ async function _doAnalyze(ho, gt, con, infoC, infoB, infoM, bo, me) {
   try {
     const res = await fetch('/api/xem-tuoi?action=dat-ten-con', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({{
+      body: JSON.stringify({
         ho, gioiTinh: gt,
         namSinhCon: con, canChiCon: infoC.canChi, napAmCon: infoC.napAm,
         canChiBo: infoB.canChi, napAmBo: infoB.napAm,
         canChiMe: infoM.canChi, napAmMe: infoM.napAm
-      }})
+      })
     });
     if (!res.ok) { const d=await res.json().catch(()=>({})); throw new Error(d.error||'Lỗi '+res.status); }
 
@@ -282,8 +282,7 @@ async function _doAnalyze(ho, gt, con, infoC, infoB, infoM, bo, me) {
       const {done, value} = await reader.read();
       if (done) break;
       buf += dec.decode(value, {stream: true});
-      const lines = buf.split('
-'); buf = lines.pop() || '';
+      const lines = buf.split('\n'); buf = lines.pop() || '';
       for (const line of lines) {
         if (!line.startsWith('data: ')) continue;
         const raw = line.slice(6).trim();
