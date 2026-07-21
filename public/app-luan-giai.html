@@ -478,6 +478,10 @@ async function _loadNextPhanAI(){
   document.getElementById('lgProgress').textContent='Đang luận giải phần '+p+' / '+LuanGiaiCore.TONG_PHAN+'...';
   var box=document.getElementById('claude-content-'+p);
   if(box){ box.style.display='block'; box.innerHTML='<div class="phan-empty">Đang luận giải…</div>'; }
+  // Cuộn tới đúng phần đang stream — không thì user tưởng trang đứng im (đã fix
+  // theo phản hồi Henry). .sec đã có scroll-margin-top:104px (bù .jump sticky).
+  var secEl=document.getElementById('sec-'+p);
+  if(secEl)secEl.scrollIntoView({behavior:'smooth',block:'start'});
   try{
     var docs='';
     try{
