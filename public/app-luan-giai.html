@@ -85,6 +85,31 @@
 .rules-group{margin:4px 0}
 .rules-canh-bao{background:#fff0f0;border-radius:4px;padding:4px 6px;margin:4px 0;border-left:2px solid #f87171}
 .phan-empty{font-size:12.5px;color:var(--text-lt);font-style:italic;padding:4px 0}
+/* ── Luận giải chuyên sâu bằng AI (paid, port từ luan-giai.html — gate+RAG+stream+PDF) ── */
+.claude-content{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line-2)}
+.claude-content p{color:var(--text-mid);line-height:1.75;margin-bottom:12px;font-size:13.5px}
+.claude-content p:last-child{margin-bottom:0}
+.claude-content strong{color:var(--text)}
+.claude-content em{color:var(--gold-soft);font-style:italic}
+.claude-content h3{font-family:var(--serif);font-size:14.5px;font-weight:600;color:var(--navy);margin:14px 0 8px}
+.claude-content .md-table-wrap{overflow-x:auto;margin:12px 0}
+.claude-content .md-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.claude-content .md-table th{background:var(--navy);color:#fff;padding:8px 10px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.05em}
+.claude-content .md-table td{padding:7px 10px;border-bottom:1px solid var(--line)}
+.laso-error{font-size:12.5px;color:var(--red);padding:8px 0}
+.lg-unlock{background:var(--white);border:1px solid var(--gold-soft);border-radius:11px;padding:18px 20px;margin-bottom:22px;text-align:center}
+.lg-unlock p{font-size:12.5px;color:var(--text-lt);margin-top:8px}
+.lg-progress{font-size:12.5px;color:var(--text-lt);margin-bottom:16px;padding:10px 0;border-bottom:1px solid var(--line)}
+.lg-pdf-bar{display:none;margin:24px 0;text-align:center}
+.lg-pdf-bar.visible{display:block}
+@media print{
+  .sb,.rail,.ws-top,#introHost,#shellRecent,.mobile-only,.jump,.lg-unlock,.lg-progress,.ask,.lg-pdf-bar,.tabbar{display:none!important}
+  .shell{display:block!important;height:auto!important}
+  .ws{overflow:visible!important}
+  .ws-body{padding:0!important}
+  .sec{page-break-inside:avoid;break-inside:avoid}
+  body{font-size:12pt}
+}
 </style>
 </head>
 <body>
@@ -131,7 +156,13 @@
         <span class="fold-toggle" id="lgFold" onclick="toggleMini()">▾ Ẩn lá số</span>
         <div class="chart-wrap" id="miniChart"></div>
         <div class="jump" id="lgJump"></div>
+        <div class="lg-unlock" id="lgUnlock" style="display:none">
+          <button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau()">✦ Luận giải chuyên sâu bằng AI — 150 Lượng →</button>
+          <p>Viết riêng cho lá số này theo cổ pháp — 24 phần: cách cục, từng cung, đại vận và tiểu vận năm xem.</p>
+        </div>
+        <div class="lg-progress" id="lgProgress" style="display:none"></div>
         <div class="lg-body" id="lgBody"></div>
+        <div class="lg-pdf-bar" id="lgPdfBar"><button class="btn" onclick="window.print()">⬇ Tải PDF</button></div>
       </div>
     </div>
   </main>
@@ -144,7 +175,9 @@ window.SHELL_INTRO={key:'luan-giai',title:'Luận giải Tử Vi',desc:'Lập l�
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/laso-chart.js?v=2"></script>
 <script src="/luan-giai-core.js?v=3"></script>
+<script src="/tuvi-laso-format.js"></script>
 <script src="/auth.js"></script>
+<script src="/tuvi-paywall.js?v=3"></script>
 <script src="/shell.js?v=36"></script>
 <script>
 // ── Dropdowns ──
@@ -181,6 +214,10 @@ function doLuan(){
     var conv=convertDuongToAm(dd,mm,yyyy,hh);conv.gioIdx=gioAmIdx;
     var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioAmIdx,gioitinh:gioitinh,namXem:namxem});
     var fd={name:name,gioitinh:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,pp:pp,gioChi:gioChi,amLich:conv.amLich};
+    // ── Globals cho khối "Luận giải chuyên sâu AI" (gate+RAG+stream+PDF, port từ luan-giai.html) ──
+    ls._conv=conv; ls._hoTen=name;
+    _astrolabe=ls; _hoTen=name; _ngay=dd; _thang=mm; _nam=yyyy; _gioitinh=gioitinh; _namXem=namxem;
+    _laSoText=formatLaSoV2(ls,conv); ls._laSoText=_laSoText;
     renderLuan(ls,fd,namxem);
     document.getElementById('miniChart').innerHTML=renderGrid(ls,fd);
     document.getElementById('birthPanel').style.display='none';
@@ -195,6 +232,7 @@ function doLuan(){
       greeting:'Bản luận của **'+(name||'bạn')+'** đã sẵn sàng. Hỏi tôi để đào sâu bất kỳ phần nào — 12 cung, đại vận, tứ hóa.',
       chips:buildLuanChips(ls,namxem)
     });
+    initLuanGiaiGate(ls);
   }catch(e){
     document.getElementById('lgBody').innerHTML='<div class="laso-error">Lỗi khi luận giải: '+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
@@ -229,7 +267,7 @@ function renderLuan(ls,fd,namxem){
     var label=LABELS[phan]||('Phần '+phan);
     var pre=LuanGiaiCore.buildPreGenHtml(phan,ls);
     var body=pre||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để trợ lý luận sâu.</div>';
-    S.push(sec(phan,label,'','<div class="card">'+body+ask('Luận sâu phần: '+label)+'</div>'));
+    S.push(sec(phan,label,'','<div class="card">'+body+'<div class="claude-content" id="claude-content-'+phan+'" style="display:none"></div>'+ask('Luận sâu phần: '+label)+'</div>'));
   }
   document.getElementById('lgBody').innerHTML=S.join('');
 
@@ -270,11 +308,229 @@ function toggleMini(){
   m.style.display=shown?'none':'block';
   f.textContent=shown?'▸ Xem lá số đầy đủ':'▾ Ẩn lá số';
 }
+
+// ══════════════════════════════════════════════════════════════════════
+// Luận giải chuyên sâu bằng AI — port từ public/luan-giai.html (gate Lượng
+// qua TuviPaywall + RAG /api/search + generate /api/lasotuvi (24 phần,
+// tuần tự) + lưu /api/save-laso + Tải PDF). Giữ nguyên tên biến/hàm gốc
+// (_astrolabe, toSlugAscii, QUERIES, renderMarkdown...) để dễ đối chiếu —
+// theo quyết định GIỮ DUPLICATE thay vì tách module dùng chung (mỗi tool
+// RAG/phần khác nhau, tách sớm rủi ro hơn lợi).
+// ══════════════════════════════════════════════════════════════════════
+var _astrolabe=null, _hoTen='', _ngay=0, _thang=0, _nam=0, _gioitinh='nam', _namXem=0, _laSoText=null;
+var _pendingSlug=null, _currentPhan=0, _luanGiaiStore={};
+var SB_URL_LG='https://dciwkfdqhhddeymlisey.supabase.co';
+var SB_ANON_LG='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
+TuviPaywall.init({product:'laso'});
+
+function toSlugAscii(str){
+  return String(str||'')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g,'')
+    .replace(/[đĐ]/g,'d')
+    .replace(/[^a-z0-9\-]/g,'-')
+    .replace(/-+/g,'-')
+    .replace(/^-|-$/g,'');
+}
+
+var _TAM_HOP_LG={
+  'Dần':['Ngọ','Tuất'],'Ngọ':['Dần','Tuất'],'Tuất':['Dần','Ngọ'],
+  'Thân':['Tý','Thìn'],'Tý':['Thân','Thìn'],'Thìn':['Thân','Tý'],
+  'Tỵ':['Dậu','Sửu'],'Dậu':['Tỵ','Sửu'],'Sửu':['Tỵ','Dậu'],
+  'Hợi':['Mão','Mùi'],'Mão':['Hợi','Mùi'],'Mùi':['Hợi','Mão'],
+};
+var _XUNG_LG={
+  'Tý':'Ngọ','Ngọ':'Tý','Sửu':'Mùi','Mùi':'Sửu',
+  'Dần':'Thân','Thân':'Dần','Mão':'Dậu','Dậu':'Mão',
+  'Thìn':'Tuất','Tuất':'Thìn','Tỵ':'Hợi','Hợi':'Tỵ',
+};
+function _getTamPhuongStars(cungName){
+  if(!_astrolabe)return '';
+  var mainP=_astrolabe.palaces.find(function(p){return p.cungName===cungName;});
+  if(!mainP)return '';
+  var dc=mainP.diaChi;
+  var related=[dc].concat(_TAM_HOP_LG[dc]||[],[_XUNG_LG[dc]]).filter(Boolean);
+  var seen={}, stars=[];
+  related.forEach(function(chi){
+    var p=_astrolabe.palaces.find(function(p){return p.diaChi===chi;});
+    if(p)p.majorStars.forEach(function(s){ if(!seen[s.ten]){seen[s.ten]=1;stars.push(s.ten);} });
+  });
+  return stars.join(' ');
+}
+function _getDvInfo(dvNum){
+  if(!_astrolabe)return '';
+  var dv=_astrolabe.daiVans[dvNum-1];
+  if(!dv)return '';
+  var p=_astrolabe.palaces[dv.cungIdx];
+  return dv.diaChi+' '+(p?p.majorStars.map(function(s){return s.ten;}).join(' '):'');
+}
+var QUERIES={
+  1: function(){ return 'tổng quan lá số '+(_astrolabe&&_astrolabe.napAm||'')+' cục '+(_astrolabe&&_astrolabe.cuc||'')+' '+_getTamPhuongStars('Mệnh')+' khí chất bản mệnh'; },
+  2: function(){ return 'cung mệnh '+_getTamPhuongStars('Mệnh')+' cách cục ý nghĩa chính tinh'; },
+  3: function(){ return 'cung phụ mẫu '+_getTamPhuongStars('Phụ Mẫu')+' cha mẹ ý nghĩa'; },
+  4: function(){ return 'cung phúc đức '+_getTamPhuongStars('Phúc Đức')+' phúc khí tổ tiên'; },
+  5: function(){ return 'cung điền trạch '+_getTamPhuongStars('Điền Trạch')+' nhà đất bất động sản'; },
+  6: function(){ return 'cung quan lộc '+_getTamPhuongStars('Quan Lộc')+' sự nghiệp công danh'; },
+  7: function(){ return 'cung nô bộc '+_getTamPhuongStars('Nô Bộc')+' bạn bè cộng sự'; },
+  8: function(){ return 'cung thiên di '+_getTamPhuongStars('Thiên Di')+' xuất ngoại giao thiệp'; },
+  9: function(){ return 'cung tật ách '+_getTamPhuongStars('Tật Ách')+' sức khỏe bệnh tật'; },
+  10: function(){ return 'cung tài bạch '+_getTamPhuongStars('Tài Bạch')+' tiền bạc tài chính'; },
+  11: function(){ return 'cung tử tức '+_getTamPhuongStars('Tử Tức')+' con cái'; },
+  12: function(){ return 'cung phu thê '+_getTamPhuongStars('Phu Thê')+' hôn nhân vợ chồng'; },
+  13: function(){ return 'cung huynh đệ '+_getTamPhuongStars('Huynh Đệ')+' anh chị em'; },
+  14: function(){ return 'đại vận thiên thời địa lợi nhân hòa scoring '+(_astrolabe&&_astrolabe.daiVanHienTai&&_astrolabe.daiVanHienTai.diaChi||''); },
+  15: function(){ return 'đại vận '+_getDvInfo(1)+' vận hạn ý nghĩa'; },
+  16: function(){ return 'đại vận '+_getDvInfo(2)+' vận hạn ý nghĩa'; },
+  17: function(){ return 'đại vận '+_getDvInfo(3)+' vận hạn ý nghĩa'; },
+  18: function(){ return 'đại vận '+_getDvInfo(4)+' vận hạn ý nghĩa'; },
+  19: function(){ return 'đại vận '+_getDvInfo(5)+' vận hạn ý nghĩa'; },
+  20: function(){ return 'đại vận '+_getDvInfo(6)+' vận hạn ý nghĩa'; },
+  21: function(){ return 'đại vận '+_getDvInfo(7)+' vận hạn ý nghĩa'; },
+  22: function(){ return 'đại vận '+_getDvInfo(8)+' vận hạn ý nghĩa'; },
+  23: function(){ return 'đại vận '+_getDvInfo(9)+' vận hạn ý nghĩa'; },
+  24: function(){ return 'tiểu hạn lưu niên '+(_astrolabe&&_astrolabe.chiNamXem||'')+' '+(_astrolabe&&_astrolabe.palaces[_astrolabe.tieuHanIdx]&&_astrolabe.palaces[_astrolabe.tieuHanIdx].cungName||'')+' vận hiện tại'; },
+};
+
+function renderMarkdown(text){
+  var lines=text.split('\n'), out='', inTable=false, rows=[];
+  function flushTable(){
+    if(!rows.length)return;
+    out+='<div class="md-table-wrap"><table class="md-table">';
+    rows.forEach(function(row,i){
+      if(i===1&&/^\|[-| :]+\|$/.test(row.trim()))return;
+      var cells=row.split('|').filter(function(_,ci,a){return ci>0&&ci<a.length-1;});
+      var t=i===0?'th':'td';
+      out+='<tr>'+cells.map(function(c){return '<'+t+'>'+c.trim()+'</'+t+'>';}).join('')+'</tr>';
+    });
+    out+='</table></div>';
+    rows=[]; inTable=false;
+  }
+  lines.forEach(function(line){
+    if(line.trim().indexOf('|')===0){ inTable=true; rows.push(line.trim()); }
+    else{
+      if(inTable)flushTable();
+      var l=line
+        .replace(/^## (.+)$/,'<h3>$1</h3>')
+        .replace(/^### (.+)$/,'<h3>$1</h3>')
+        .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g,'<em>$1</em>');
+      if(l.indexOf('<h')===0)out+=l;
+      else if(l.trim())out+='<p>'+l+'</p>';
+    }
+  });
+  if(inTable)flushTable();
+  return out;
+}
+
+// Đọc thẳng laso_public (anon REST, giống check của luan-giai.html) — nếu
+// slug này đã luận giải rồi (bất kể tạo từ standalone hay shell) thì hiện
+// luôn, KHÔNG tính lại (khỏi tốn AI cost, giữ đúng bài cũ).
+async function _fetchCachedLuanGiai(slug){
+  try{
+    var r=await fetch(SB_URL_LG+'/rest/v1/laso_public?slug=eq.'+encodeURIComponent(slug)+'&select=slug,luan_giai&limit=1',{headers:{apikey:SB_ANON_LG}});
+    var rows=await r.json();
+    if(rows&&rows[0]&&rows[0].luan_giai&&Object.keys(rows[0].luan_giai).length>0)return rows[0].luan_giai;
+  }catch(e){}
+  return null;
+}
+function _renderCachedLuanGiai(store){
+  _luanGiaiStore=store;
+  for(var p=1;p<=LuanGiaiCore.TONG_PHAN;p++){
+    var box=document.getElementById('claude-content-'+p);
+    var text=store[p]||store[String(p)];
+    if(box&&text){ box.style.display='block'; box.innerHTML=renderMarkdown(text); }
+  }
+  document.getElementById('lgUnlock').style.display='none';
+  document.getElementById('lgProgress').style.display='none';
+  document.getElementById('lgPdfBar').classList.add('visible');
+}
+async function initLuanGiaiGate(ls){
+  var conv=ls._conv||{};
+  _pendingSlug=toSlugAscii([ls.canChiNam||'',String(_ngay).padStart(2,'0'),String(_thang).padStart(2,'0'),_nam,_gioitinh,'gio-'+(conv.gioChi||'unknown')].join('-'));
+  _luanGiaiStore={};
+  document.getElementById('lgUnlock').style.display='none';
+  document.getElementById('lgProgress').style.display='none';
+  document.getElementById('lgPdfBar').classList.remove('visible');
+  var cached=await _fetchCachedLuanGiai(_pendingSlug);
+  if(cached)_renderCachedLuanGiai(cached);
+  else document.getElementById('lgUnlock').style.display='block';
+}
+
+async function initiateLuanGiaiChuyenSau(){
+  await TuviPaywall.requireCredits(_pendingSlug, async function(){ await _startLuanGiaiAI(); });
+}
+async function _startLuanGiaiAI(){
+  document.getElementById('lgUnlock').style.display='none';
+  document.getElementById('lgProgress').style.display='block';
+  _currentPhan=0; _luanGiaiStore={};
+  await _loadNextPhanAI();
+}
+async function _loadNextPhanAI(){
+  if(_currentPhan>=LuanGiaiCore.TONG_PHAN){
+    document.getElementById('lgProgress').textContent='✓ Luận giải hoàn tất';
+    document.getElementById('lgPdfBar').classList.add('visible');
+    _saveLuanGiaiResult();
+    return;
+  }
+  _currentPhan++;
+  var p=_currentPhan;
+  document.getElementById('lgProgress').textContent='Đang luận giải phần '+p+' / '+LuanGiaiCore.TONG_PHAN+'...';
+  var box=document.getElementById('claude-content-'+p);
+  if(box){ box.style.display='block'; box.innerHTML='<div class="phan-empty">Đang luận giải…</div>'; }
+  try{
+    var docs='';
+    try{
+      var sr=await fetch('/api/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:QUERIES[p](),matchCount:p===1?10:7})});
+      docs=(await sr.json()).docs||'';
+    }catch(e){}
+    if(p>1)await new Promise(function(r){setTimeout(r,600);});
+    var resp=await fetch('/api/lasotuvi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({hoTen:_hoTen,ngay:_ngay,thang:_thang,nam:_nam,gioiTinh:_gioitinh,namXem:_namXem,laSoText:_laSoText,phan:p,docs:docs})});
+    var data=await resp.json();
+    if(data.error||!data.luanGiai){
+      if(box)box.innerHTML='<div class="laso-error">Lỗi khi luận giải phần '+p+'. <button class="btn" onclick="window._lgRetryPhan()">↻ Thử lại</button></div>';
+      return;
+    }
+    _luanGiaiStore[p]=data.luanGiai;
+    if(box)box.innerHTML=renderMarkdown(data.luanGiai);
+  }catch(e){
+    if(box)box.innerHTML='<div class="laso-error">Lỗi phần '+p+': '+esc(e.message)+' <button class="btn" onclick="window._lgRetryPhan()">↻ Thử lại</button></div>';
+    return;
+  }
+  await _loadNextPhanAI();
+}
+window._lgRetryPhan=function(){ _currentPhan--; _loadNextPhanAI(); };
+
+// Lưu như standalone — POST /api/save-laso (bảng laso_public, cùng slug) →
+// tự động vào "Lịch sử" ở Tài khoản (đã đọc laso_public qua /api/history)
+// và có thể xem lại/không tính lại khi quay lại đúng lá số này. Bearer token
+// luôn có ở bước này vì TuviPaywall.requireCredits đã bắt đăng nhập trước đó.
+function _saveLuanGiaiResult(){
+  try{
+    var tk=(window.Auth&&window.Auth.isLoggedIn())?window.Auth.getSession().access_token:null;
+    var headers={'Content-Type':'application/json'};
+    if(tk)headers['Authorization']='Bearer '+tk;
+    fetch('/api/save-laso',{method:'POST',headers:headers,body:JSON.stringify({
+      canChiNam:_astrolabe.canChiNam, gioiTinh:_gioitinh,
+      namSinh:_nam, thangSinh:_thang, ngaySinh:_ngay,
+      gioIdx:(_astrolabe._conv&&_astrolabe._conv.gioIdx!=null)?_astrolabe._conv.gioIdx:null,
+      gioChi:(_astrolabe._conv&&_astrolabe._conv.gioChi)||'',
+      canNam:(_astrolabe._conv&&_astrolabe._conv.canNam)||'', chiNam:(_astrolabe._conv&&_astrolabe._conv.chiNam)||'',
+      namXem:_namXem, cungMenh:_astrolabe.menhDC,
+      chinhTinh:(function(){ var mp=_astrolabe.palaces&&_astrolabe.palaces.find(function(p){return p.isMenh;}); return mp&&mp.majorStars?mp.majorStars.map(function(s){return s.ten;}).join(', '):''; })(),
+      napAm:_astrolabe.napAm, personName:_hoTen||null,
+      luanGiai:_luanGiaiStore, laSoText:_laSoText,
+    })}).catch(function(){});
+  }catch(e){}
+}
 function showForm(){
   document.getElementById('lgPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
   document.getElementById('btnEdit').style.display='none';
   document.getElementById('btnBatTu').style.display='none';
+  document.getElementById('lgUnlock').style.display='none';
+  document.getElementById('lgProgress').style.display='none';
+  document.getElementById('lgPdfBar').classList.remove('visible');
 }
 // điền sẵn ngày sinh đã nhớ (nếu có); tự luận nếu đến qua ?auto=1 (từ nút Lá số).
 // Chạy SAU khi shell.js render rail (boot ở DOMContentLoaded) để Shell.setContext không lỗi.
