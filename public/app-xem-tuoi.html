@@ -70,6 +70,28 @@
 .laso-cap{font-family:var(--serif);font-weight:700;font-size:14px;margin-bottom:8px;display:flex;align-items:center;gap:7px}
 .laso-cap .dotA,.laso-cap .dotB{width:10px;height:10px;border-radius:50%}
 @media(min-width:1200px){.laso-pair{flex-direction:row}.laso-one{flex:1}}
+/* jump nav (9 phần luận giải chuyên sâu) */
+.jump{position:sticky;top:51px;z-index:4;background:var(--paper);border-bottom:1px solid var(--line);padding:8px 0;margin:0 0 18px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.jump::-webkit-scrollbar{display:none}
+.jump a{white-space:nowrap;font-size:12px;color:var(--text-mid);border:1px solid var(--line-2);border-radius:20px;padding:4px 11px;cursor:pointer;background:var(--white)}
+.jump a.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+/* ── Luận giải chuyên sâu bằng AI (paid, port từ xem-tuoi.html/xem-lam-an.html — gate+RAG+PDF) ── */
+.claude-content{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line-2)}
+.claude-content p{color:var(--text-mid);line-height:1.75;margin-bottom:12px;font-size:13.5px}
+.claude-content p:last-child{margin-bottom:0}
+.xt-unlock{background:var(--white);border:1px solid var(--gold-soft);border-radius:11px;padding:18px 20px;margin-bottom:22px;text-align:center}
+.xt-unlock p{font-size:12.5px;color:var(--text-lt);margin-top:8px}
+.xt-progress{font-size:12.5px;color:var(--text-lt);margin-bottom:16px;padding:10px 0;border-bottom:1px solid var(--line)}
+.xt-pdf-bar{display:none;margin:24px 0;text-align:center}
+.xt-pdf-bar.visible{display:block}
+@media print{
+  .sb,.rail,.ws-top,#introHost,#shellRecent,.mobile-only,.jump,.xt-unlock,.xt-progress,.ask,.xt-pdf-bar,.tabbar{display:none!important}
+  .shell{display:block!important;height:auto!important}
+  .ws{overflow:visible!important}
+  .ws-body{padding:0!important}
+  .sec{page-break-inside:avoid;break-inside:avoid}
+  body{font-size:12pt}
+}
 </style>
 </head>
 <body>
@@ -134,7 +156,14 @@
       <div id="xtPanel">
         <div class="verdict" id="xtVerdict"></div>
         <div class="who-row" id="xtWho"></div>
+        <div class="jump" id="xtJump"></div>
+        <div class="xt-unlock" id="xtUnlock" style="display:none">
+          <button class="btn-go" id="btnUnlock" onclick="initiateXemTuoiChuyenSau()">✦ Luận giải chuyên sâu bằng AI — 50 Lượng →</button>
+          <p>Viết riêng cho hai người này theo cổ pháp — tổng quan và từng chiều hòa hợp.</p>
+        </div>
+        <div class="xt-progress" id="xtProgress" style="display:none"></div>
         <div class="xt-body" id="xtBody"></div>
+        <div class="xt-pdf-bar" id="xtPdfBar"><button class="btn" onclick="window.print()">⬇ Tải PDF</button></div>
       </div>
     </div>
   </main>
@@ -160,6 +189,7 @@
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tuong-hop.js?v=1"></script>
 <script src="/auth.js"></script>
+<script src="/tuvi-paywall.js?v=3"></script>
 <script src="/shell.js?v=36"></script>
 <script>
 // ── MODE: 1 trang phục vụ 3 route — /app/xem-tuoi (vợ chồng), /app/xem-lam-an
@@ -275,6 +305,7 @@ function doCompat(){
       greeting:MODE.greetVerb+' **'+esc(nameA)+'** và **'+esc(nameB)+'** — hòa hợp **'+r.total+'/100**. Hỏi tôi để luận sâu bất kỳ chiều nào nhé.',
       chips:buildCompatChips(r,MODE)
     });
+    initXemTuoiGate(r,nameA,nameB);
   }catch(e){
     document.getElementById('xtBody').innerHTML='<div class="laso-error">Lỗi khi so tuổi: '+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
@@ -303,13 +334,13 @@ function renderCompat(r,nameA,nameB,fdA,fdB){
   }
   document.getElementById('xtWho').innerHTML=who(r.lsA,nameA,'A')+who(r.lsB,nameB,'B');
 
-  // factor rows
-  var facs=r.items.map(function(m){
+  // factor row (1 chiều) — dùng lại cho cả khối "Tổng quan" (gộp 8) lẫn từng section riêng
+  function factorRowHtml(m){
     var c=facColor(m.score);
     return '<div class="fac"><div class="fac-top"><span class="fac-lb">'+esc(m.label)+'</span><span class="fac-w">×'+Math.round(m.w*100)+'%</span><span class="fac-detail">'+esc(m.detail||'')+'</span><span class="fac-num" style="color:'+c+'">'+m.score+'</span></div>'+
       '<div class="fac-bar"><i style="width:'+(m.score*10)+'%;background:'+c+'"></i></div>'+
       '<div class="fac-ab"><span class="pa">'+esc(nameA)+': '+esc(m.a||'')+'</span><span class="pb">'+esc(nameB)+': '+esc(m.b||'')+'</span></div></div>';
-  }).join('');
+  }
   // Hai lá số đầy đủ 12 cung (renderGrid từ laso-chart.js — parity trang standalone).
   var pairH='';
   if(fdA&&fdB&&typeof renderGrid==='function'){
@@ -321,19 +352,246 @@ function renderCompat(r,nameA,nameB,fdA,fdB){
         '</div></section>';
     }catch(e){ if(window.console)console.error('renderGrid pair:',e); }
   }
-  document.getElementById('xtBody').innerHTML=
-    pairH+
-    '<section class="sec"><div class="sec-h"><div class="sec-n">✦</div><h3>Điểm hòa hợp 8 chiều</h3></div>'+
-    '<div class="card">'+facs+'</div>'+
-    '<div class="ask" data-ask="Luận sâu mức độ hòa hợp của hai người, đâu là điểm mạnh và điểm cần lưu ý?">✦ Hỏi trợ lý luận sâu kết quả này</div>'+
-    '</section>';
+  // 9 phần (0=Tổng quan gộp 8 chiều, 1-8=từng chiều riêng) — port khung PHAN_LABELS
+  // của xem-tuoi.html/xem-lam-an.html, mỗi phần có slot claude-content cho AI + nút hỏi rail.
+  var S=[];
+  var overviewBody=r.items.map(factorRowHtml).join('');
+  S.push(sec(0,PHAN_LABELS[0],'','<div class="card">'+overviewBody+'</div><div class="claude-content" id="claude-content-0" style="display:none"></div>'+ask('Luận tổng quan mức độ hòa hợp của '+nameA+' và '+nameB)));
+  r.items.forEach(function(m,i){
+    var idx=i+1;
+    S.push(sec(idx,PHAN_LABELS[idx]||('Phần '+idx),'','<div class="card">'+factorRowHtml(m)+'</div><div class="claude-content" id="claude-content-'+idx+'" style="display:none"></div>'+ask('Luận sâu chiều "'+m.label+'" giữa '+nameA+' và '+nameB)));
+  });
+  document.getElementById('xtBody').innerHTML=pairH+S.join('');
+  document.getElementById('xtJump').innerHTML=PHAN_LABELS.map(function(l,i){return '<a data-i="'+i+'"'+(i===0?' class="on"':'')+'>'+esc(l)+'</a>'}).join('');
+  bindJump();
   document.querySelectorAll('#xtBody [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
+}
+function sec(n,title,tag,inner){ return '<section class="sec" id="sec-'+n+'"><div class="sec-h"><div class="sec-n">'+(n+1)+'</div><h3>'+esc(title)+'</h3>'+(tag?'<span class="tag">'+esc(tag)+'</span>':'')+'</div>'+inner+'</section>'; }
+function ask(t){ return '<div class="ask" data-ask="'+esc(t)+'">✦ Hỏi trợ lý: "'+esc(t)+'"</div>'; }
+function bindJump(){
+  var ws=document.getElementById('ws');
+  var links=document.querySelectorAll('#xtJump a');
+  links.forEach(function(a){ a.addEventListener('click',function(){ var s=document.getElementById('sec-'+a.getAttribute('data-i')); if(s)ws.scrollTo({top:s.offsetTop-96,behavior:'smooth'}); }); });
+  ws.addEventListener('scroll',function(){
+    var y=ws.scrollTop+130,idx=0;
+    for(var i=0;i<PHAN_LABELS.length;i++){ var s=document.getElementById('sec-'+i); if(s&&s.offsetTop<=y)idx=i; }
+    links.forEach(function(a,i){ a.classList.toggle('on',i===idx); });
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// Luận giải chuyên sâu bằng AI — port từ public/xem-tuoi.html (gate Lượng
+// qua TuviPaywall + RAG /api/search + generate /api/xem-tuoi (9 phần tuần
+// tự, JSON) + lưu /api/history?action=save_xem_tuoi + Tải PDF). Chỉ bật cho
+// mode xem-tuoi/xem-lam-an — tuong-hop free, không gate (đúng standalone).
+// Dùng NGUYÊN prompt/nhãn của xem-tuoi.html cho CẢ xem-lam-an — khớp với
+// free layer đã dùng chung TuongHop.calcTuongHop (Phu Thê/Tử Tức) cho cả 2
+// mode từ trước (xem tuong-hop.js), không port riêng công thức Nô Bộc của
+// xem-lam-an.html standalone để tránh lệch giữa số liệu hiện free và văn
+// AI sinh ra (mode đó vốn đã là bản "render gọn" theo comment gốc).
+// ══════════════════════════════════════════════════════════════════════
+var PAID_MODES={'xem-tuoi':true,'xem-lam-an':true};
+var PHAN_LABELS=['Tổng Quan','Xét Tuổi','Ngũ Hành','Tư Tưởng','Tính Cách','Quan Hệ','Con Cái','Tài Chính','Vận Hành'];
+var CUNG_MAP=[null,null,null,'Mệnh',null,'Phu Thê','Tử Tức','Tài Bạch',null];
+var _TH_XT={'Dần':['Ngọ','Tuất'],'Ngọ':['Dần','Tuất'],'Tuất':['Dần','Ngọ'],'Thân':['Tý','Thìn'],'Tý':['Thân','Thìn'],'Thìn':['Thân','Tý'],'Tỵ':['Dậu','Sửu'],'Dậu':['Tỵ','Sửu'],'Sửu':['Tỵ','Dậu'],'Hợi':['Mão','Mùi'],'Mão':['Hợi','Mùi'],'Mùi':['Hợi','Mão']};
+var _XC_XT={'Tý':'Ngọ','Ngọ':'Tý','Sửu':'Mùi','Mùi':'Sửu','Dần':'Thân','Thân':'Dần','Mão':'Dậu','Dậu':'Mão','Thìn':'Tuất','Tuất':'Thìn','Tỵ':'Hợi','Hợi':'Tỵ'};
+function _tpStars(ls,cungName){
+  if(!ls||!ls.palaces)return '';
+  var main=ls.palaces.find(function(p){return p.cungName===cungName;}); if(!main)return '';
+  var dc=main.diaChi, seen={}, stars=[];
+  [dc].concat(_TH_XT[dc]||[],[_XC_XT[dc]]).filter(Boolean).forEach(function(chi){
+    var p=ls.palaces.find(function(p){return p.diaChi===chi;});
+    if(p)(p.majorStars||[]).forEach(function(s){ if(!seen[s.ten]){seen[s.ten]=1;stars.push(s.ten);} });
+  });
+  return stars.join(' ');
+}
+var QUERIES=[
+  function(r){ return 'tương hợp lá số '+(r.lsA.canChiNam||'')+' '+(r.lsB.canChiNam||'')+' '+_tpStars(r.lsA,'Mệnh')+' '+_tpStars(r.lsB,'Mệnh')+' vợ chồng hôn nhân'; },
+  function(r){ return 'địa chi năm sinh lục hợp tứ xung xét tuổi '+(r.lsA.canChiNam||'')+' '+(r.lsB.canChiNam||''); },
+  function(r){ return 'nạp âm '+(r.naA||'')+' '+(r.naB||'')+' ngũ hành sinh khắc tương hợp'; },
+  function(r){ return 'cung mệnh '+_tpStars(r.lsA,'Mệnh')+' '+_tpStars(r.lsB,'Mệnh')+' cách cục tư tưởng'; },
+  function(r){ return 'nhóm thái tuế chính tinh '+_tpStars(r.lsA,'Mệnh')+' '+_tpStars(r.lsB,'Mệnh')+' tính cách'; },
+  function(r){ return 'cung phu thê '+_tpStars(r.lsA,'Phu Thê')+' '+_tpStars(r.lsB,'Phu Thê')+' hôn nhân tương hợp vợ chồng'; },
+  function(r){ return 'cung tử tức '+_tpStars(r.lsA,'Tử Tức')+' '+_tpStars(r.lsB,'Tử Tức')+' con cái'; },
+  function(r){ return 'cung tài bạch '+_tpStars(r.lsA,'Tài Bạch')+' '+_tpStars(r.lsB,'Tài Bạch')+' tài chính tiền bạc'; },
+  function(r){ return 'đại vận '+((r.lsA.daiVanHienTai&&r.lsA.daiVanHienTai.diaChi)||'')+' '+((r.lsB.daiVanHienTai&&r.lsB.daiVanHienTai.diaChi)||'')+' vận hạn hiện tại'; },
+];
+
+if(PAID_MODES[MODE_KEY])TuviPaywall.init({product:MODE_KEY, title: MODE.title});
+
+function toSlugAscii(str){
+  return String(str||'').toLowerCase().normalize('NFD')
+    .replace(/[̀-ͯ]/g,'').replace(/[đĐ]/g,'d')
+    .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+}
+function buildSlug(result,product){
+  var parts=[product, toSlugAscii(result.nameA||'a'), toSlugAscii(result.lsA.canChiNam||''), toSlugAscii(result.nameB||'b'), toSlugAscii(result.lsB.canChiNam||'')];
+  return parts.join('-').replace(/-+/g,'-').slice(0,80);
+}
+
+var _pendingSlug=null, _currentPhan=-1, _xemTuoiStore={}, _compatResult=null, _compatNameA='', _compatNameB='';
+
+// Xây prompt cho 1 phần (idx 0=Tổng Quan, 1-8=từng chiều) — port nguyên từ
+// xem-tuoi.html:luanGiaiSection, dùng chung cho cả xem-tuoi/xem-lam-an.
+function buildPhanPrompt(idx,m,result){
+  var nameA=result.nameA, nameB=result.nameB, lsA=result.lsA, lsB=result.lsB;
+  var palMenhA=lsA.palaces&&lsA.palaces.find(function(p){return p.isMenh;});
+  var palMenhB=lsB.palaces&&lsB.palaces.find(function(p){return p.isMenh;});
+  if(idx===0){
+    var itemsText=result.items.map(function(item,i){return (i+1)+'. '+item.label+': '+item.score+'/10 — '+item.detail;}).join('\n');
+    return 'Phân tích tương quan lá số vợ chồng theo Tử Vi Đẩu Số cổ pháp:\n'+
+      nameA+': '+lsA.canChiNam+' · Nạp Âm '+result.naA+' · Cung Mệnh '+(palMenhA?palMenhA.diaChi:'?')+' · Chính tinh: '+((palMenhA&&palMenhA.majorStars||[]).map(function(s){return s.ten;}).join(', ')||'VCD')+'\n'+
+      nameB+': '+lsB.canChiNam+' · Nạp Âm '+result.naB+' · Cung Mệnh '+(palMenhB?palMenhB.diaChi:'?')+' · Chính tinh: '+((palMenhB&&palMenhB.majorStars||[]).map(function(s){return s.ten;}).join(', ')||'VCD')+'\n\n'+
+      'Kết quả 8 yếu tố:\n'+itemsText+'\nTổng điểm tương hợp: '+result.total+'/100\n\n'+
+      'Viết 300-350 từ văn xuôi. Nhận định tổng quan, điểm mạnh, điểm cần lưu ý, 1 lời khuyên thực tiễn. Dùng tên '+nameA+' và '+nameB+'.';
+  }
+  var cungName=CUNG_MAP[idx];
+  var palA=cungName&&lsA.palaces&&lsA.palaces.find(function(p){return p.cungName===cungName;});
+  var palB=cungName&&lsB.palaces&&lsB.palaces.find(function(p){return p.cungName===cungName;});
+  var lines=[];
+  lines.push(nameA+': '+(m.a||''));
+  lines.push(nameB+': '+(m.b||''));
+  lines.push('Tương quan: '+(m.detail||'')+' → Điểm '+m.score+'/10');
+  var MK=['tiemNang','benVung','anToan','quyNhan','minhBach','tuongHop'], MV=['Tiềm Năng','Bền Vững','An Toàn','Quý Nhân','Minh Bạch','Tương Hợp'];
+  function fmtSc(sc){ return sc?MK.map(function(k,i){return MV[i]+'='+sc[k];}).join(' · '):''; }
+  if(idx===1){
+    lines.push('Nạp Âm: '+nameA+'='+(lsA.napAm||result.naA)+' · '+nameB+'='+(lsB.napAm||result.naB));
+  }else if(idx===2){
+    lines.push('Hành: '+nameA+'='+result.naA+' · '+nameB+'='+result.naB);
+  }else if(idx===3){
+    var ccA=(lsA.cachCuc||[]).filter(function(c){return c.cung==='Mệnh'||c.cung==='';});
+    var ccB=(lsB.cachCuc||[]).filter(function(c){return c.cung==='Mệnh'||c.cung==='';});
+    var ynA=((lsA.cachCucTungCung||{})['Mệnh']||[]);
+    var ynB=((lsB.cachCucTungCung||{})['Mệnh']||[]);
+    var scA=(lsA.cungScores||{})['Mệnh'], scB=(lsB.cungScores||{})['Mệnh'];
+    if(ccA.length)lines.push('Cách cục Mệnh '+nameA+': '+ccA.map(function(c){return c.ten+(c.moTa?' — '+c.moTa:'');}).join(' | '));
+    if(ccB.length)lines.push('Cách cục Mệnh '+nameB+': '+ccB.map(function(c){return c.ten+(c.moTa?' — '+c.moTa:'');}).join(' | '));
+    if(ynA.length)lines.push('Sao Mệnh '+nameA+': '+ynA.slice(0,3).join(' | '));
+    if(ynB.length)lines.push('Sao Mệnh '+nameB+': '+ynB.slice(0,3).join(' | '));
+    if(scA)lines.push('6 chiều Mệnh '+nameA+': '+fmtSc(scA));
+    if(scB)lines.push('6 chiều Mệnh '+nameB+': '+fmtSc(scB));
+  }else if(idx===4){
+    var ttA=palMenhA&&palMenhA.thaiTueNhom, ttB=palMenhB&&palMenhB.thaiTueNhom;
+    var tsA=palMenhA&&(palMenhA.stars||[]).find(function(s){return s.nhom==='trang_sinh';});
+    var tsB=palMenhB&&(palMenhB.stars||[]).find(function(s){return s.nhom==='trang_sinh';});
+    var locA=palMenhA&&(palMenhA.stars||[]).find(function(s){return s.ten==='Lộc Tồn';});
+    var locB=palMenhB&&(palMenhB.stars||[]).find(function(s){return s.ten==='Lộc Tồn';});
+    var NN={1:'Tuế Hổ Phù — ngay thẳng, lý tưởng, đàng hoàng',2:'Dương Phù Phúc — sáng suốt, hay cạnh tranh, cần hành thiện',3:'Tang Tuế Khách — thông minh, tháo vát, thường làm trái sở nguyện',4:'Âm Long Trực — làm công, phụ thuộc, được phúc an lành'};
+    lines.push('Nhóm Thái Tuế '+nameA+': '+(NN[ttA&&ttA.nhom]||'?'));
+    lines.push('Nhóm Thái Tuế '+nameB+': '+(NN[ttB&&ttB.nhom]||'?'));
+    lines.push('Trường Sinh: '+nameA+'='+(tsA?tsA.ten:'không có')+' · '+nameB+'='+(tsB?tsB.ten:'không có'));
+    lines.push('Lộc Tồn tại Mệnh: '+nameA+'='+(locA?'Có':'Không')+' · '+nameB+'='+(locB?'Có':'Không'));
+  }else if(idx>=5&&idx<=7){
+    var ccA2=(lsA.cachCuc||[]).filter(function(c){return c.cung===cungName;});
+    var ccB2=(lsB.cachCuc||[]).filter(function(c){return c.cung===cungName;});
+    var ynA2=((lsA.cachCucTungCung||{})[cungName]||[]);
+    var ynB2=((lsB.cachCucTungCung||{})[cungName]||[]);
+    var scA2=(lsA.cungScores||{})[cungName], scB2=(lsB.cungScores||{})[cungName];
+    if(ccA2.length)lines.push('Cách cục '+cungName+' '+nameA+': '+ccA2.map(function(c){return c.ten;}).join(', '));
+    if(ccB2.length)lines.push('Cách cục '+cungName+' '+nameB+': '+ccB2.map(function(c){return c.ten;}).join(', '));
+    if(ynA2.length)lines.push('Sao '+nameA+': '+ynA2.slice(0,3).join(' | '));
+    if(ynB2.length)lines.push('Sao '+nameB+': '+ynB2.slice(0,3).join(' | '));
+    if(scA2)lines.push('6 chiều '+nameA+': '+fmtSc(scA2));
+    if(scB2)lines.push('6 chiều '+nameB+': '+fmtSc(scB2));
+  }else if(idx===8){
+    var dvA=lsA.daiVanHienTai, dvB=lsB.daiVanHienTai;
+    if(dvA){
+      var scDvA=dvA.scoring||{};
+      lines.push('ĐV '+nameA+': '+dvA.diaChi+' ('+dvA.tuoiStart+'–'+dvA.tuoiEnd+'t) · Tổng='+scDvA.tong);
+      var totA=(dvA.rules||[]).filter(function(r){return r.type==='tot';}).slice(0,2).map(function(r){return r.text;});
+      var xauA=(dvA.rules||[]).filter(function(r){return r.type==='xau';}).slice(0,2).map(function(r){return r.text;});
+      if(totA.length)lines.push('Tốt: '+totA.join(' | '));
+      if(xauA.length)lines.push('Cần lưu ý: '+xauA.join(' | '));
+    }
+    if(dvB){
+      var scDvB=dvB.scoring||{};
+      lines.push('ĐV '+nameB+': '+dvB.diaChi+' ('+dvB.tuoiStart+'–'+dvB.tuoiEnd+'t) · Tổng='+scDvB.tong);
+      var totB=(dvB.rules||[]).filter(function(r){return r.type==='tot';}).slice(0,2).map(function(r){return r.text;});
+      var xauB=(dvB.rules||[]).filter(function(r){return r.type==='xau';}).slice(0,2).map(function(r){return r.text;});
+      if(totB.length)lines.push('Tốt: '+totB.join(' | '));
+      if(xauB.length)lines.push('Cần lưu ý: '+xauB.join(' | '));
+    }
+  }
+  return 'Luận giải "'+m.label+'" — tương quan lá số '+nameA+' và '+nameB+':\n'+lines.join('\n')+'\n\nViết 150-200 từ văn xuôi. Tác động thực tế, 1 điểm lưu ý. Dùng tên thật.';
+}
+
+async function initXemTuoiGate(result,nameA,nameB){
+  if(!PAID_MODES[MODE_KEY])return;
+  _compatResult=result; _compatNameA=nameA; _compatNameB=nameB;
+  _xemTuoiStore={};
+  document.getElementById('xtUnlock').style.display='block';
+  document.getElementById('xtProgress').style.display='none';
+  document.getElementById('xtPdfBar').classList.remove('visible');
+}
+
+async function initiateXemTuoiChuyenSau(){
+  _pendingSlug=buildSlug(_compatResult,MODE_KEY);
+  await TuviPaywall.requireCredits(_pendingSlug, async function(){ await _startXemTuoiAI(); });
+}
+async function _startXemTuoiAI(){
+  document.getElementById('xtUnlock').style.display='none';
+  document.getElementById('xtProgress').style.display='block';
+  _currentPhan=-1; _xemTuoiStore={};
+  await _loadNextPhanAI();
+}
+async function _loadNextPhanAI(){
+  if(_currentPhan>=8){
+    document.getElementById('xtProgress').textContent='✓ Luận giải hoàn tất';
+    document.getElementById('xtPdfBar').classList.add('visible');
+    _saveXemTuoiResult();
+    return;
+  }
+  _currentPhan++;
+  var idx=_currentPhan;
+  var m=idx===0?null:_compatResult.items[idx-1];
+  document.getElementById('xtProgress').textContent='Đang luận giải phần '+(idx+1)+' / 9...';
+  var box=document.getElementById('claude-content-'+idx);
+  if(box){ box.style.display='block'; box.innerHTML='<div class="phan-empty">Đang luận giải…</div>'; }
+  var secEl=document.getElementById('sec-'+idx);
+  if(secEl)secEl.scrollIntoView({behavior:'smooth',block:'start'});
+  try{
+    var prompt=buildPhanPrompt(idx,m,_compatResult);
+    var docs='';
+    try{
+      var q=QUERIES[idx]?QUERIES[idx](_compatResult):prompt.slice(0,300);
+      var sr=await fetch('/api/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:q,matchCount:5})});
+      docs=(await sr.json()).docs||'';
+    }catch(e){}
+    var resp=await fetch('/api/xem-tuoi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:prompt,docs:docs})});
+    var data=await resp.json();
+    var text=data.luanGiai||'';
+    _xemTuoiStore[idx]=text;
+    if(box)box.innerHTML=text.split('\n\n').filter(Boolean).map(function(p){return '<p>'+p+'</p>';}).join('');
+  }catch(e){
+    if(box)box.innerHTML='<div class="laso-error">Lỗi khi luận giải phần '+(idx+1)+': '+esc(e.message)+' <button class="btn" onclick="window._xtRetryPhan()">↻ Thử lại</button></div>';
+    return;
+  }
+  await _loadNextPhanAI();
+}
+window._xtRetryPhan=function(){ _currentPhan--; _loadNextPhanAI(); };
+
+// Lưu vào xem_tuoi_cache (KHÁC laso_public — đã namespace riêng theo bảng,
+// không cần sửa gì thêm) → tự vào Lịch sử ở Tài khoản.
+function _saveXemTuoiResult(){
+  try{
+    var tk=(window.Auth&&window.Auth.isLoggedIn())?window.Auth.getSession().access_token:null;
+    if(!tk||!_pendingSlug)return;
+    fetch('/api/history?action=save_xem_tuoi',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tk},body:JSON.stringify({
+      slug:_pendingSlug, product_type:MODE_KEY,
+      person_a:_compatNameA||'', person_b:_compatNameB||'',
+      total_score:(_compatResult&&_compatResult.total)||0,
+      result_json:_xemTuoiStore,
+    })}).catch(function(){});
+  }catch(e){}
 }
 
 function showForm(){
   document.getElementById('xtPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
   document.getElementById('btnEdit').style.display='none';
+  document.getElementById('xtUnlock').style.display='none';
+  document.getElementById('xtProgress').style.display='none';
+  document.getElementById('xtPdfBar').classList.remove('visible');
 }
 function applyMode(){
   document.title=MODE.docTitle;
