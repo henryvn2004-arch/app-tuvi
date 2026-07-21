@@ -33,6 +33,18 @@
 .note b{color:var(--text)}
 .ask{margin-top:12px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
 .laso-error{color:var(--red);padding:14px;border:1px solid var(--red);border-radius:10px;background:var(--white)}
+/* ── Gợi ý tên chuyên sâu bằng AI (paid, port từ tools/dat-ten-con.html — gate+SSE, không PDF) ── */
+.dt-unlock{background:var(--white);border:1px solid var(--gold-soft);border-radius:11px;padding:18px 20px;margin-top:16px;text-align:center}
+.dt-unlock p{font-size:12.5px;color:var(--text-lt);margin-top:8px}
+.dt-result{margin-top:18px}
+.dt-result h2{font-family:var(--serif);font-size:17px;font-weight:600;margin:18px 0 10px;color:var(--navy)}
+.dt-result h3{font-family:var(--serif);font-size:14.5px;font-weight:600;margin:14px 0 8px;color:var(--navy)}
+.dt-result p{color:var(--text-mid);line-height:1.75;margin-bottom:12px;font-size:13.5px}
+.dt-result strong{color:var(--text)}
+.dt-result em{color:var(--gold-soft);font-style:italic}
+.dt-result ul{margin:0 0 12px 18px}
+.dt-result li{color:var(--text-mid);line-height:1.7;font-size:13.5px;margin-bottom:4px}
+.dt-result blockquote{border-left:3px solid var(--gold-soft);padding-left:12px;color:var(--text-lt);font-style:italic;margin:0 0 12px}
 </style>
 </head>
 <body>
@@ -72,6 +84,11 @@
         <div class="cc-row" id="ccRow"></div>
         <div class="note" id="resNote"></div>
         <div class="ask" data-ask="Gợi ý cho tôi 12 tên đẹp hợp mệnh cho con, kèm ý nghĩa và ngũ hành từng tên.">✦ Hỏi trợ lý gợi ý tên hợp mệnh</div>
+        <div class="dt-unlock" id="dtUnlock">
+          <button class="btn-go" id="btnUnlock" onclick="initiateDatTenChuyenSau()">✦ Gợi ý 12 tên hợp mệnh bằng AI — 20 Lượng →</button>
+          <p>AI đọc ngũ hành nạp âm của con và bố mẹ, gợi ý 12 tên chia 3 nhóm kèm ý nghĩa Hán Việt.</p>
+        </div>
+        <div class="dt-result" id="dtResult"></div>
       </div>
     </div>
   </main>
@@ -83,6 +100,7 @@
 window.SHELL_INTRO={key:'dat-ten',title:'Đặt tên con hợp mệnh',desc:'Lấy can chi &amp; ngũ hành nạp âm của con và bố mẹ làm nền, rồi hỏi <b>trợ lý AI</b> gợi ý tên hợp mệnh kèm ý nghĩa từng tên.'};</script>
 <script src="/can-chi.js?v=1"></script>
 <script src="/auth.js"></script>
+<script src="/tuvi-paywall.js?v=3"></script>
 <script src="/shell.js?v=36"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -105,6 +123,9 @@ function doDatTen(){
     function ccCard(who,i){ return '<div class="cc-card"><div class="who">'+esc(who)+'</div><div class="cc">'+esc(i.canChi)+'</div><div class="na" style="--hanh:'+HANH_COLOR[i.hanh]+'">'+esc(i.napAm)+' · <b>'+esc(i.hanh)+'</b></div></div>'; }
     document.getElementById('ccRow').innerHTML=ccCard('Con ('+gtLabel+')',iCon)+ccCard('Bố',iBo)+ccCard('Mẹ',iMe);
     document.getElementById('resNote').innerHTML='Mệnh con nạp âm <b>'+esc(iCon.napAm)+'</b> — hành <b>'+esc(iCon.hanh)+'</b>. Đặt tên nên chọn chữ có ngũ hành <b>tương sinh</b> cho con (hành <b>'+esc(_hanhSinhCho(iCon.hanh))+'</b> sinh <b>'+esc(iCon.hanh)+'</b>) hoặc <b>đồng hành</b> để bồi mệnh, tránh hành khắc. Hỏi trợ lý để có danh sách tên cụ thể hợp cả con lẫn bố mẹ.';
+    // Globals cho khối "Gợi ý tên chuyên sâu AI" (gate+SSE, port từ tools/dat-ten-con.html)
+    _dtHo=ho; _dtGt=gt; _dtNamCon=namCon; _dtInfoC=iCon; _dtInfoB=iBo; _dtInfoM=iMe;
+    document.getElementById('dtResult').innerHTML='';
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('resPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
@@ -125,6 +146,81 @@ function doDatTen(){
   }finally{ btn.disabled=false; }
 }
 function _hanhSinhCho(h){ for(var k in SINH){ if(SINH[k]===h)return k; } return h; }
+
+// ══════════════════════════════════════════════════════════════════════
+// Gợi ý tên chuyên sâu bằng AI — port từ public/tools/dat-ten-con.html (gate
+// Lượng qua TuviPaywall + generate /api/xem-tuoi?action=dat-ten-con, SSE
+// 'delta' format + renderMarkdown đầy đủ hơn — không có RAG, không PDF,
+// không lưu kết quả, khớp đúng standalone). Mỗi lần bấm luôn trừ Lượng mới
+// (TuviPaywall.generateToolSlug nhúng Date.now() — không dedupe theo lần
+// trước, cho phép sinh lại ý tưởng khác).
+// ══════════════════════════════════════════════════════════════════════
+var _dtHo='', _dtGt='', _dtNamCon=0, _dtInfoC=null, _dtInfoB=null, _dtInfoM=null;
+TuviPaywall.init({product:'dat-ten-con'});
+
+function renderMarkdownDt(md){
+  return md
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>')
+    .replace(/^- (.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>[^]*?<\/li>\n?)+/g,function(s){return '<ul>'+s+'</ul>';})
+    .replace(/\n\n+/g,'</p><p>')
+    .replace(/^(?!<[hublp])(.+)$/gm,'<p>$1</p>')
+    .replace(/<p><\/p>/g,'')
+    .replace(/<p>(<[hul])/g,'$1')
+    .replace(/(<\/[hul][^>]*>)<\/p>/g,'$1');
+}
+
+async function initiateDatTenChuyenSau(){
+  if(!_dtHo||!_dtInfoC){ alert('Vui lòng nhập thông tin trước.'); return; }
+  var slug=TuviPaywall.generateToolSlug('dat-ten-con-'+_dtHo.replace(/\s+/g,'-')+'-'+_dtNamCon);
+  await TuviPaywall.requireCredits(slug, async function(){ await _doDatTenAI(); });
+}
+async function _doDatTenAI(){
+  var btn=document.getElementById('btnUnlock');
+  if(btn)btn.disabled=true;
+  var el=document.getElementById('dtResult');
+  el.innerHTML='<div class="phan-empty">✨ AI đang gợi ý tên con… thường mất 15–25 giây</div>';
+  el.scrollIntoView({behavior:'smooth',block:'nearest'});
+  try{
+    var res=await fetch('/api/xem-tuoi?action=dat-ten-con',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      ho:_dtHo, gioiTinh:_dtGt,
+      namSinhCon:_dtNamCon, canChiCon:_dtInfoC.canChi, napAmCon:_dtInfoC.napAm,
+      canChiBo:_dtInfoB.canChi, napAmBo:_dtInfoB.napAm,
+      canChiMe:_dtInfoM.canChi, napAmMe:_dtInfoM.napAm
+    })});
+    if(!res.ok){ var d=await res.json().catch(function(){return {};}); throw new Error(d.error||'Lỗi '+res.status); }
+    var reader=res.body.getReader(), dec=new TextDecoder(), full='', buf='';
+    el.innerHTML='';
+    while(true){
+      var _r=await reader.read();
+      if(_r.done)break;
+      buf+=dec.decode(_r.value,{stream:true});
+      var lines=buf.split('\n'); buf=lines.pop()||'';
+      for(var i=0;i<lines.length;i++){
+        var line=lines[i];
+        if(line.indexOf('data: ')!==0)continue;
+        var raw=line.slice(6).trim();
+        if(raw==='[DONE]')break;
+        try{
+          var j=JSON.parse(raw);
+          if(j.err)throw new Error(j.err);
+          if(j.t){ full+=j.t; el.innerHTML=renderMarkdownDt(full); }
+        }catch(e){ if(e.message&&e.message.indexOf('JSON')<0)throw e; }
+      }
+    }
+    if(!full)throw new Error('Không nhận được kết quả.');
+    el.innerHTML=renderMarkdownDt(full);
+  }catch(e){
+    el.innerHTML='<div class="laso-error">Lỗi: '+esc(e.message||'Không thể kết nối. Vui lòng thử lại.')+'</div>';
+  }
+  if(btn)btn.disabled=false;
+}
+
 function showForm(){
   document.getElementById('resPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
