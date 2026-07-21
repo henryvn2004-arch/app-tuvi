@@ -7,11 +7,18 @@ import { ok, err, options, parseBody } from '@/lib/cors';
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY!;
 
-function makeSlug(canChiNam: string, gioiTinh: string, ngaySinh: string, thangSinh: string, namSinh: string, gioChi: string): string {
+// toolType (vd 'tu-binh') thêm tiền tố để mỗi sản phẩm lưu vào slug RIÊNG,
+// tránh đè lẫn nhau khi CÙNG một lá số (canChiNam+ngày sinh+giờ) được dùng cho
+// nhiều tool khác nhau (laso_public dùng chung 1 bảng cho mọi tool). 'laso'
+// (hoặc rỗng) GIỮ NGUYÊN không tiền tố — tương thích ngược với slug/link cũ
+// đã tồn tại (la-so.html?slug=... đang chia sẻ ngoài kia).
+function makeSlug(canChiNam: string, gioiTinh: string, ngaySinh: string, thangSinh: string, namSinh: string, gioChi: string, toolType?: string): string {
   const rm = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[đĐ]/g,'d').toLowerCase().replace(/\s+/g,'-');
   const dd = ngaySinh ? String(ngaySinh).padStart(2,'0') : '';
   const mm = thangSinh ? String(thangSinh).padStart(2,'0') : '';
-  return [rm(canChiNam||''), dd, mm, namSinh||'', gioiTinh==='nu'?'nu':'nam', gioChi?'gio-'+rm(gioChi):''].filter(Boolean).join('-');
+  const base = [rm(canChiNam||''), dd, mm, namSinh||'', gioiTinh==='nu'?'nu':'nam', gioChi?'gio-'+rm(gioChi):''].filter(Boolean).join('-');
+  if (toolType && toolType !== 'laso') return rm(toolType) + '-' + base;
+  return base;
 }
 
 export async function OPTIONS() { return options(); }
@@ -37,7 +44,8 @@ export async function POST(request: NextRequest) {
       String(b.ngaySinh||''),
       String(b.thangSinh||''),
       String(b.namSinh),
-      String(b.gioChi||'')
+      String(b.gioChi||''),
+      String(b.toolType||'')
     );
 
     const payload: Record<string, unknown> = {
