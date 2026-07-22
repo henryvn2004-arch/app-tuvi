@@ -244,13 +244,25 @@ export function formatLasoContext(ls: Laso): string {
       const parts = String(c.cung || '').split('/');
       return parts.includes(pName) || (p.isThan && parts.includes('Thân'));
     });
-    ccThis.forEach((c) => {
+    // RANK theo độ quyết đoán: cách "tốt"/"xấu" (phán mạnh) lên trước, "trung"
+    // xuống sau → cái nặng ký nằm đầu, gắn nhãn [nặng ký] để LLM biết chỗ neo phán quyết.
+    const ccWeight = (c: Rec): number => {
+      const l = String(c.loai || '').toLowerCase();
+      // Bộ loai engine phanTichCachCuc: quý/phú/bần tiện cục = phán mạnh (nặng
+      // ký); thân cư / tạp cục = vừa; mệnh cơ bản = nền tảng. (+ tốt/xấu/trung
+      // của cach_cuc_all.json cho path khác — vô hại.)
+      if (l === 'quy_cuc' || l === 'phu_cuc' || l === 'ban_tien_cuc' || l === 'tốt' || l === 'xấu') return 2;
+      if (l === 'than_cu' || l === 'tap_cuc' || l === 'trung') return 1;
+      return 0;
+    };
+    [...ccThis].sort((a, b) => ccWeight(b) - ccWeight(a)).forEach((c) => {
       const mota = c.moTa ? ': ' + c.moTa : '';
       const chiTiet = c.chiTiet ? ' — ' + c.chiTiet : '';
-      ctx += '  Cách cục — ' + (c.ten || '') + (c.loai ? ' (' + c.loai + ')' : '') + mota + chiTiet + '\n';
+      const mark = ccWeight(c) === 2 ? '[nặng ký] ' : '';
+      ctx += '  Cách cục — ' + mark + (c.ten || '') + (c.loai ? ' (' + c.loai + ')' : '') + mota + chiTiet + '\n';
     });
     const ynThis = ynByCung[pName] || [];
-    if (ynThis.length) ctx += '  Ý nghĩa: ' + ynThis.slice(0, 6).join(' | ') + '\n';
+    if (ynThis.length) ctx += '  Ý nghĩa: ' + ynThis.slice(0, 10).join(' | ') + '\n';
   }
 
   // (Danh sách 9 đại vận CỐ Ý không đưa vào đây — xem ghi chú trên. Đại vận

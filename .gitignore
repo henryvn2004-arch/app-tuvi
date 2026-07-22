@@ -1,6 +1,10 @@
 node_modules/
 .next/
 
+# Local env files (secrets) — không bao giờ commit
+.env
+.env*.local
+
 # Playwright
 /playwright-report/
 /playwright-report-smoke/
