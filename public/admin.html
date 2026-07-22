@@ -872,19 +872,52 @@ audio { height: 32px; flex: 1; }
 
       <!-- ── PRICING ── -->
       <div class="page" id="page-pricing">
+        <div id="pricing-alert" style="margin-bottom:.75rem"></div>
+
+        <!-- KHỐI 1 · GIÁ CÔNG CỤ -->
         <div class="panel">
           <div class="panel-header">
-            <div class="panel-title">Quản Lý Giá Credits</div>
+            <div class="panel-title">🎛 Giá Công Cụ (Lượng)</div>
             <div class="panel-actions">
-              <span style="font-size:.72rem;color:var(--text-lt)">Thay đổi có hiệu lực ngay</span>
+              <span style="font-size:.72rem;color:var(--text-lt)">1 Lượng ≈ 2.500đ · hiệu lực ~1 phút (cache)</span>
+              <button class="btn btn-gold btn-sm" onclick="saveAllPricing()">💾 Lưu tất cả</button>
               <button class="btn btn-primary btn-sm" onclick="loadPricing()">↻</button>
             </div>
           </div>
-          <div id="pricing-alert" style="padding:0 1.25rem"></div>
-          <table>
-            <thead><tr><th>Công Cụ</th><th>Tool ID</th><th>Credits</th><th>Tương Đương</th><th>Bật</th><th>Lưu</th></tr></thead>
-            <tbody id="pricing-body"><tr><td colspan="6" class="loading"><span class="spin"></span>Đang tải...</td></tr></tbody>
-          </table>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Công Cụ</th><th>Tool ID</th><th>Lượng</th><th>≈ VNĐ</th><th>Free</th><th>Bật</th><th></th></tr></thead>
+              <tbody id="pricing-body"><tr><td colspan="7" class="loading"><span class="spin"></span>Đang tải...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- KHỐI 2 · GÓI NẠP -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">💳 Gói Nạp</div>
+            <div class="panel-actions">
+              <span style="font-size:.72rem;color:var(--text-lt)">Server đọc DB khi tạo đơn</span>
+              <button class="btn btn-primary btn-sm" onclick="loadPackages()">↻</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Gói</th><th>Nhãn</th><th>Lượng</th><th>VNĐ</th><th>USD</th><th>Bonus</th><th>Bật</th><th></th></tr></thead>
+              <tbody id="packages-body"><tr><td colspan="8" class="loading"><span class="spin"></span>Đang tải...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- KHỐI 3 · KHUYẾN MÃI -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">🎁 Khuyến Mãi & Referral</div>
+            <div class="panel-actions"><button class="btn btn-primary btn-sm" onclick="loadPromo()">↻</button></div>
+          </div>
+          <div class="panel-body" id="promo-body">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
         </div>
       </div>
 
@@ -1364,7 +1397,7 @@ function goTo(page) {
   document.getElementById('topbar-meta').textContent = new Date().toLocaleDateString('vi-VN', {weekday:'long',day:'numeric',month:'long',year:'numeric'});
   // Lazy load
   const loaders = { users: loadUsers, credits: loadCredits, lasos: loadLasos,
-                    pricing: loadPricing, tools: loadAdminUsers,
+                    pricing: loadPricingPage, tools: loadAdminUsers,
                     content: () => {
     if (showView) showView('dashboard');
     if (!window._contentInitialized) {
@@ -1597,57 +1630,184 @@ function filterLasos() {
   renderLasos(_allLasos.filter(l => (l.slug||'').includes(q) || (l.cung_menh||'').toLowerCase().includes(q) || (l.chinh_tinh||'').toLowerCase().includes(q)));
 }
 
-// ── PRICING ──
-const TOOL_LABELS = { 'laso':'🔮 Luận Giải Lá Số', 'xem-tuoi':'💑 Xem Tuổi Vợ Chồng', 'xem-lam-an':'💼 Xem Tuổi Làm Ăn', 'dien-tuong':'👁 Diện Tướng', 'nhan-tuong':'👁 Nhãn Tướng', 'thu-tuong':'✋ Thủ Tướng', 'thanh-tuong':'🎵 Thanh Tướng' };
+// ── PRICING (nhóm theo category, cho phép 0/free, lưu tất cả) ──
+const CAT_LABELS = { 'chat': '💬 Trợ Lý (Rail)' }; // còn lại dùng nguyên category từ DB
+const VND_PER_CREDIT = 2500; // 1 Lượng ≈ 2.500đ (anchor gói custom)
+let _pricingRows = [];
+
+function fmtVnd(cr) { return (Math.max(0, cr || 0) * VND_PER_CREDIT).toLocaleString('vi-VN') + 'đ'; }
+
+// Nav mở trang Pricing → nạp cả 3 khối.
+function loadPricingPage() { loadPricing(); loadPackages(); loadPromo(); }
 
 async function loadPricing() {
-  document.getElementById('pricing-body').innerHTML = '<tr><td colspan="6" class="loading"><span class="spin"></span>Đang tải...</td></tr>';
+  const body = document.getElementById('pricing-body');
+  body.innerHTML = '<tr><td colspan="7" class="loading"><span class="spin"></span>Đang tải...</td></tr>';
   try {
-    const rows = await sbGet('tool_pricing?order=credits.desc&select=*');
-    if (!rows.length) { document.getElementById('pricing-body').innerHTML = '<tr><td colspan="6" class="empty">Chưa có dữ liệu</td></tr>'; return; }
-    document.getElementById('pricing-body').innerHTML = rows.map(r => `
-      <tr id="pr-row-${r.tool_id}">
-        <td><strong>${TOOL_LABELS[r.tool_id]||r.tool_id}</strong></td>
-        <td class="mono" style="color:var(--text-lt);font-size:.7rem">${r.tool_id}</td>
-        <td><input type="number" id="pr-credits-${r.tool_id}" value="${r.credits}" min="1" class="price-input" oninput="updateUsd('${r.tool_id}')"></td>
-        <td id="pr-usd-${r.tool_id}" style="color:var(--text-lt)">≈ $${(r.credits/10).toFixed(r.credits%10===0?0:1)}</td>
-        <td>
-          <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer">
-            <input type="checkbox" id="pr-en-${r.tool_id}" ${r.enabled?'checked':''}> <span style="font-size:.72rem">${r.enabled?'Bật':'Tắt'}</span>
-          </label>
-        </td>
-        <td><button class="btn btn-primary btn-sm" id="pr-btn-${r.tool_id}" onclick="savePricingRow('${r.tool_id}')">Lưu</button></td>
-      </tr>`).join('');
-  } catch(e) { document.getElementById('pricing-body').innerHTML = `<tr><td colspan="6" class="empty">Lỗi: ${e.message}</td></tr>`; }
+    const rows = await sbGet('tool_pricing?select=*');
+    _pricingRows = rows;
+    rows.sort((a, b) => (a.sort_order - b.sort_order) || (b.credits - a.credits));
+    const groups = {};
+    rows.forEach(r => { const c = r.category || 'Khác'; (groups[c] = groups[c] || []).push(r); });
+    const cats = Object.keys(groups).sort((a, b) => (groups[a][0].sort_order || 999) - (groups[b][0].sort_order || 999));
+    let html = '';
+    cats.forEach(cat => {
+      html += `<tr><td colspan="7" style="background:var(--navy);color:#c9a84c;font-weight:700;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em">${CAT_LABELS[cat] || cat}</td></tr>`;
+      groups[cat].forEach(r => {
+        html += `<tr id="pr-row-${r.tool_id}">
+          <td><strong>${r.label || r.tool_id}</strong></td>
+          <td class="mono" style="color:var(--text-lt);font-size:.68rem">${r.tool_id}</td>
+          <td><input type="number" id="pr-credits-${r.tool_id}" value="${r.credits}" min="0" class="price-input" oninput="updVnd('${r.tool_id}')"></td>
+          <td id="pr-vnd-${r.tool_id}" style="color:var(--text-lt);font-size:.72rem">${fmtVnd(r.credits)}</td>
+          <td style="text-align:center"><input type="checkbox" id="pr-free-${r.tool_id}" ${r.is_free ? 'checked' : ''}></td>
+          <td style="text-align:center"><input type="checkbox" id="pr-en-${r.tool_id}" ${r.enabled ? 'checked' : ''}></td>
+          <td><button class="btn btn-primary btn-sm" id="pr-btn-${r.tool_id}" onclick="savePricingRow('${r.tool_id}')">Lưu</button></td>
+        </tr>`;
+      });
+    });
+    body.innerHTML = html;
+  } catch (e) { body.innerHTML = `<tr><td colspan="7" class="empty">Lỗi: ${e.message}</td></tr>`; }
 }
 
-function updateUsd(id) {
+function updVnd(id) {
   const cr = parseInt(document.getElementById('pr-credits-' + id)?.value || 0);
-  const el = document.getElementById('pr-usd-' + id);
-  if (el) el.textContent = '≈ $' + (cr/10).toFixed(cr%10===0?0:1);
+  const el = document.getElementById('pr-vnd-' + id);
+  if (el) el.textContent = fmtVnd(isNaN(cr) ? 0 : cr);
+}
+
+function pricingAlert(type, msg) {
+  const el = document.getElementById('pricing-alert');
+  el.innerHTML = `<div class="alert-box alert-${type === 'success' ? 'success' : 'error'}">${msg}</div>`;
+  setTimeout(() => { el.innerHTML = ''; }, 3000);
+}
+
+// PATCH 1 dòng giá (RLS cho phép admin ghi trực tiếp). Cho phép credits = 0.
+async function patchPricing(id) {
+  const credits = parseInt(document.getElementById('pr-credits-' + id)?.value);
+  const enabled = document.getElementById('pr-en-' + id)?.checked;
+  const is_free = document.getElementById('pr-free-' + id)?.checked;
+  if (isNaN(credits) || credits < 0) throw new Error('Lượng không hợp lệ');
+  const res = await fetch(`${SB_URL}/rest/v1/tool_pricing?tool_id=eq.${encodeURIComponent(id)}`, {
+    method: 'PATCH',
+    headers: { apikey: SB_ANON, Authorization: `Bearer ${_token}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+    body: JSON.stringify({ credits, enabled, is_free, updated_at: new Date().toISOString() }),
+  });
+  if (!res.ok) throw new Error(await res.text());
 }
 
 async function savePricingRow(id) {
-  const credits = parseInt(document.getElementById('pr-credits-' + id)?.value);
-  const enabled = document.getElementById('pr-en-' + id)?.checked;
   const btn = document.getElementById('pr-btn-' + id);
-  if (!credits || credits < 1) return;
   btn.disabled = true; btn.textContent = '...';
   try {
-    const res = await fetch(`${SB_URL}/rest/v1/tool_pricing?tool_id=eq.${encodeURIComponent(id)}`, {
-      method: 'PATCH',
-      headers: { apikey: SB_ANON, Authorization: `Bearer ${_token}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-      body: JSON.stringify({ credits, enabled, updated_at: new Date().toISOString() }),
-    });
-    if (!res.ok) throw new Error(await res.text());
+    await patchPricing(id);
     btn.textContent = '✓'; btn.style.background = 'var(--green)';
-    const alertEl = document.getElementById('pricing-alert');
-    alertEl.innerHTML = `<div class="alert-box alert-success" style="margin:0 0 .75rem">✓ Đã cập nhật <strong>${TOOL_LABELS[id]||id}</strong> → ${credits} credits</div>`;
-    setTimeout(() => { alertEl.innerHTML = ''; btn.textContent = 'Lưu'; btn.style.background = ''; btn.disabled = false; }, 2000);
-  } catch(e) {
+    pricingAlert('success', `✓ Đã lưu <strong>${id}</strong>`);
+  } catch (e) {
     btn.textContent = 'Lỗi'; btn.style.background = 'var(--red)';
-    setTimeout(() => { btn.textContent = 'Lưu'; btn.style.background = ''; btn.disabled = false; }, 2000);
+    pricingAlert('error', 'Lỗi: ' + e.message);
   }
+  setTimeout(() => { btn.textContent = 'Lưu'; btn.style.background = ''; btn.disabled = false; }, 1800);
+}
+
+async function saveAllPricing() {
+  let ok = 0, fail = 0;
+  for (const r of _pricingRows) { try { await patchPricing(r.tool_id); ok++; } catch (e) { fail++; } }
+  pricingAlert(fail ? 'error' : 'success', `Đã lưu ${ok} mục${fail ? `, lỗi ${fail}` : ''}`);
+}
+
+// ── PACKAGES (gói nạp) ──
+async function loadPackages() {
+  const body = document.getElementById('packages-body');
+  body.innerHTML = '<tr><td colspan="8" class="loading"><span class="spin"></span>Đang tải...</td></tr>';
+  try {
+    const rows = await sbGet('credit_packages?order=sort_order.asc&select=*');
+    body.innerHTML = rows.map(r => `
+      <tr>
+        <td class="mono">${r.package_id}</td>
+        <td><input class="price-input" style="width:110px;text-align:left" id="pk-label-${r.package_id}" value="${(r.label || '').replace(/"/g, '&quot;')}"></td>
+        <td><input type="number" class="price-input" id="pk-credits-${r.package_id}" value="${r.credits}"></td>
+        <td><input type="number" class="price-input" style="width:100px" id="pk-vnd-${r.package_id}" value="${r.amount_vnd}"></td>
+        <td><input type="number" step="0.01" class="price-input" style="width:75px" id="pk-usd-${r.package_id}" value="${r.amount_usd}"></td>
+        <td><input class="price-input" style="width:60px" id="pk-bonus-${r.package_id}" value="${(r.bonus_label || '').replace(/"/g, '&quot;')}"></td>
+        <td style="text-align:center"><input type="checkbox" id="pk-en-${r.package_id}" ${r.enabled ? 'checked' : ''}></td>
+        <td><button class="btn btn-primary btn-sm" id="pk-btn-${r.package_id}" onclick="savePackageRow('${r.package_id}')">Lưu</button></td>
+      </tr>`).join('');
+  } catch (e) { body.innerHTML = `<tr><td colspan="8" class="empty">Lỗi: ${e.message}</td></tr>`; }
+}
+
+async function savePackageRow(id) {
+  const btn = document.getElementById('pk-btn-' + id);
+  btn.disabled = true; btn.textContent = '...';
+  const payload = {
+    package_id: id,
+    label: document.getElementById('pk-label-' + id).value,
+    credits: parseInt(document.getElementById('pk-credits-' + id).value),
+    amount_vnd: parseInt(document.getElementById('pk-vnd-' + id).value),
+    amount_usd: parseFloat(document.getElementById('pk-usd-' + id).value),
+    bonus_label: document.getElementById('pk-bonus-' + id).value,
+    enabled: document.getElementById('pk-en-' + id).checked,
+  };
+  try {
+    const d = await apiPost('admin-save-package', payload);
+    if (!d.success) throw new Error(d.error || 'lỗi');
+    btn.textContent = '✓'; btn.style.background = 'var(--green)';
+    pricingAlert('success', `✓ Đã lưu gói ${id}`);
+  } catch (e) {
+    btn.textContent = 'Lỗi'; btn.style.background = 'var(--red)';
+    pricingAlert('error', 'Lỗi: ' + e.message);
+  }
+  setTimeout(() => { btn.textContent = 'Lưu'; btn.style.background = ''; btn.disabled = false; }, 1800);
+}
+
+// ── PROMO (khuyến mãi + referral, đọc/ghi app_config) ──
+const PROMO_KEYS = ['credits.signup_bonus_variants', 'credits.signup_bonus_device_cap', 'referral.signup_bonus_referrer', 'referral.signup_reward_cap'];
+
+async function loadPromo() {
+  const body = document.getElementById('promo-body');
+  body.innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
+  try {
+    const keyList = PROMO_KEYS.map(k => `"${k}"`).join(',');
+    const rows = await sbGet(`app_config?select=key,value&key=in.(${encodeURIComponent(keyList)})`);
+    const cfg = {}; rows.forEach(r => { cfg[r.key] = r.value; });
+    const jv = v => Array.isArray(v) ? JSON.stringify(v) : (v == null ? '' : v);
+    body.innerHTML = `
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Signup bonus — biến thể A/B (mảng JSON)</label>
+          <input class="form-control" id="cf-signup-variants" value='${jv(cfg['credits.signup_bonus_variants'])}'>
+          <div style="font-size:.7rem;color:var(--text-lt);margin-top:3px">Vd [20,30,40] random mỗi lần; khoá 1 số = [30]</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Signup — cap thưởng / thiết bị / 24h</label>
+          <input type="number" class="form-control" id="cf-signup-devicecap" value="${jv(cfg['credits.signup_bonus_device_cap'])}">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Referral tầng 1 — thưởng referrer khi referee đăng ký</label>
+          <input type="number" class="form-control" id="cf-ref-signup" value="${jv(cfg['referral.signup_bonus_referrer'])}">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Referral tầng 1 — cap lượt / referrer / 30 ngày</label>
+          <input type="number" class="form-control" id="cf-ref-cap" value="${jv(cfg['referral.signup_reward_cap'])}">
+        </div>
+      </div>
+      <button class="btn btn-gold" onclick="savePromo()">💾 Lưu khuyến mãi</button>
+      <div style="font-size:.72rem;color:var(--text-lt);margin-top:.6rem">Referral tầng 2 (30 Lượng mỗi bên khi referee nạp lần đầu) cố định trong <code>process_referral_reward</code>.</div>`;
+  } catch (e) { body.innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`; }
+}
+
+async function savePromo() {
+  const items = [];
+  const vt = document.getElementById('cf-signup-variants').value.trim();
+  try { const arr = JSON.parse(vt); if (!Array.isArray(arr)) throw 0; items.push(['credits.signup_bonus_variants', arr]); }
+  catch (e) { alert('Biến thể A/B phải là mảng JSON, vd [20,30,40]'); return; }
+  items.push(['credits.signup_bonus_device_cap', parseInt(document.getElementById('cf-signup-devicecap').value) || 0]);
+  items.push(['referral.signup_bonus_referrer', parseInt(document.getElementById('cf-ref-signup').value) || 0]);
+  items.push(['referral.signup_reward_cap', parseInt(document.getElementById('cf-ref-cap').value) || 0]);
+  let fail = 0;
+  for (const [key, value] of items) { try { const d = await apiPost('admin-set-config', { key, value }); if (!d.success) fail++; } catch (e) { fail++; } }
+  pricingAlert(fail ? 'error' : 'success', fail ? `Lỗi ${fail} mục` : '✓ Đã lưu khuyến mãi');
 }
 
 // ── ARTICLES ──

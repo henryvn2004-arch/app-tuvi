@@ -358,6 +358,58 @@ async function handleAdminGrant(request: NextRequest, body: Record<string, unkno
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
+// ── POST: admin set config (app_config upsert) ────────────────
+// Body: { key, value, note? }   value = JSON (số / mảng / chuỗi) → cột jsonb.
+async function handleAdminSetConfig(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized — admin only', 403);
+
+  const key = String(body.key || '').trim();
+  if (!key) return err('Missing key', 400);
+  if (!('value' in body)) return err('Missing value', 400);
+
+  const row: Record<string, unknown> = { key, value: body.value };
+  if (body.note != null) row.note = String(body.note);
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/app_config`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, Prefer: 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify(row),
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return ok({ success: true });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── POST: admin save credit package (upsert) ──────────────────
+async function handleAdminSavePackage(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized — admin only', 403);
+
+  const packageId = String(body.package_id || body.packageId || '').trim();
+  if (!packageId) return err('Missing package_id', 400);
+
+  const row: Record<string, unknown> = { package_id: packageId, updated_at: new Date().toISOString() };
+  if (body.credits     != null) row.credits     = parseInt(String(body.credits));
+  if (body.amount_vnd  != null) row.amount_vnd  = parseInt(String(body.amount_vnd));
+  if (body.amount_usd  != null) row.amount_usd  = Number(body.amount_usd);
+  if (body.label       != null) row.label       = String(body.label);
+  if (body.bonus_label != null) row.bonus_label = String(body.bonus_label);
+  if (body.enabled     != null) row.enabled     = !!body.enabled;
+  if (body.sort_order  != null) row.sort_order  = parseInt(String(body.sort_order));
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/credit_packages`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, Prefer: 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify(row),
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return ok({ success: true });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
 // ── POST: admin create user ───────────────────────────────────
 // Headers: Authorization: Bearer <admin_token>
 // Body: { email, password, credits? }
@@ -620,6 +672,8 @@ export async function POST(request: NextRequest) {
   if (action === 'capture')           return handleCapture(body);
   if (action === 'deduct')            return handleDeduct(request, body);
   if (action === 'admin-grant')       return handleAdminGrant(request, body);
+  if (action === 'admin-set-config')  return handleAdminSetConfig(request, body);
+  if (action === 'admin-save-package') return handleAdminSavePackage(request, body);
   if (action === 'admin-create-user') return handleAdminCreateUser(request, body);
   if (action === 'create-bank')       return handleCreateBank(body);
   if (action === 'referral-register') return handleReferralRegister(request, body);
