@@ -37,9 +37,14 @@ function computeLaso(b) {
   const conv = convertDuongToAm(b.day, b.month, b.year, GIO[b.hourBranch]);
   const al = conv.amLich;
   return anSaoLaSo({
-    ngayAL: al.day, thangAL: al.month, namAL: al.year,
-    canNam: conv.canNam, chiNam: conv.chiNam,
-    gioIdx: b.hourBranch, gioitinh: b.gender, namXem: NAM_XEM,
+    ngayAL: al.day,
+    thangAL: al.month,
+    namAL: al.year,
+    canNam: conv.canNam,
+    chiNam: conv.chiNam,
+    gioIdx: b.hourBranch,
+    gioitinh: b.gender,
+    namXem: NAM_XEM,
   });
 }
 
@@ -66,7 +71,8 @@ function buildContext(ls, variant) {
 
   const ccWeight = (c) => {
     const l = String(c.loai || '').toLowerCase();
-    if (l === 'quy_cuc' || l === 'phu_cuc' || l === 'ban_tien_cuc' || l === 'tốt' || l === 'xấu') return 2;
+    if (l === 'quy_cuc' || l === 'phu_cuc' || l === 'ban_tien_cuc' || l === 'tốt' || l === 'xấu')
+      return 2;
     if (l === 'than_cu' || l === 'tap_cuc' || l === 'trung') return 1;
     return 0;
   };
@@ -74,12 +80,26 @@ function buildContext(ls, variant) {
   ctx += '\n=== 12 CUNG ===\n';
   for (const p of palaces) {
     const pName = p.cungName || '';
-    ctx += '\nCung ' + pName + ' (' + (p.diaChi || '') + ')' + (p.isMenh ? ' ★MỆNH' : '') + (p.isThan ? ' ◆THÂN' : '') + ':\n';
+    ctx +=
+      '\nCung ' +
+      pName +
+      ' (' +
+      (p.diaChi || '') +
+      ')' +
+      (p.isMenh ? ' ★MỆNH' : '') +
+      (p.isThan ? ' ◆THÂN' : '') +
+      ':\n';
     const chinh = (p.majorStars || []).map(starFmt).filter(Boolean);
     if (chinh.length) ctx += '  Chính tinh: ' + chinh.join(', ') + '\n';
-    const phu = (p.stars || []).filter((s) => (typeof s === 'object' ? s.nhom !== 'chinh' : true)).map(starFmt).filter(Boolean);
+    const phu = (p.stars || [])
+      .filter((s) => (typeof s === 'object' ? s.nhom !== 'chinh' : true))
+      .map(starFmt)
+      .filter(Boolean);
     if (phu.length) ctx += '  Phụ tinh: ' + phu.slice(0, 8).join(', ') + '\n';
-    const tptc = (p.tuChinhStars || []).filter((s) => !p.stars?.includes(s)).map(starFmt).filter(Boolean);
+    const tptc = (p.tuChinhStars || [])
+      .filter((s) => !p.stars?.includes(s))
+      .map(starFmt)
+      .filter(Boolean);
     if (tptc.length) ctx += '  Tam phương tứ chính: ' + tptc.slice(0, 12).join(', ') + '\n';
 
     let ccThis = (ls.cachCuc || []).filter((c) => {
@@ -92,7 +112,14 @@ function buildContext(ls, variant) {
       const mota = c.moTa ? ': ' + c.moTa : '';
       const chiTiet = c.chiTiet ? ' — ' + c.chiTiet : '';
       const mark = variant === 'new' && ccWeight(c) === 2 ? '[nặng ký] ' : '';
-      ctx += '  Cách cục — ' + mark + (c.ten || '') + (c.loai ? ' (' + c.loai + ')' : '') + mota + chiTiet + '\n';
+      ctx +=
+        '  Cách cục — ' +
+        mark +
+        (c.ten || '') +
+        (c.loai ? ' (' + c.loai + ')' : '') +
+        mota +
+        chiTiet +
+        '\n';
     });
     const ynItems = ls.cachCucTungCung?.[pName] || [];
     const cap = variant === 'new' ? 10 : 6;
@@ -102,7 +129,11 @@ function buildContext(ls, variant) {
 }
 
 // ── System prompt: base shape chung + (chỉ AFTER) DIEM_NHAN_RULES thật ──
-const now = new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+const now = new Date().toLocaleDateString('vi-VN', {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
+});
 function extractDiemNhan() {
   const src = readFileSync('lib/agent/prompts.ts', 'utf8');
   const m = src.match(/export const DIEM_NHAN_RULES = `([\s\S]*?)`;/);
@@ -125,11 +156,16 @@ THÔNG TIN THỜI GIAN: Hôm nay ${now}. Đây là CHAT, không phải bài lu�
 - Dẫn chứng sao/cung/can chi cụ thể từ lá số dưới; xét tam phương tứ chính, không đoán đơn sao. Không bịa "điểm cung/10".
 - Xưng hô: người xem NAM → gọi "anh".`;
 
-const OLD_SYSTEM = (ctx) => SHAPE('ĐỘ DÀI: mặc định 130–200 từ, phức tạp tối đa 280.') +
-  '\n\n=== DỮ LIỆU LÁ SỐ ===\n' + ctx;
-const NEW_SYSTEM = (ctx) => SHAPE('ĐỘ DÀI: mặc định 150–230 từ, phức tạp tối đa 320; câu phán quyết & mạch hình ảnh được ưu tiên chỗ.') +
-  '\n\n' + extractDiemNhan() +
-  '\n\n=== DỮ LIỆU LÁ SỐ ===\n' + ctx;
+const OLD_SYSTEM = (ctx) =>
+  SHAPE('ĐỘ DÀI: mặc định 130–200 từ, phức tạp tối đa 280.') + '\n\n=== DỮ LIỆU LÁ SỐ ===\n' + ctx;
+const NEW_SYSTEM = (ctx) =>
+  SHAPE(
+    'ĐỘ DÀI: mặc định 150–230 từ, phức tạp tối đa 320; câu phán quyết & mạch hình ảnh được ưu tiên chỗ.'
+  ) +
+  '\n\n' +
+  extractDiemNhan() +
+  '\n\n=== DỮ LIỆU LÁ SỐ ===\n' +
+  ctx;
 
 // ── Gọi LLM (Gemini ưu tiên, khớp prod luận-giải) ────────────────
 async function callGemini(system, userMsg) {
@@ -143,7 +179,8 @@ async function callGemini(system, userMsg) {
       generationConfig: { maxOutputTokens: 1200, temperature: 1 },
     }),
   });
-  if (!resp.ok) throw new Error('Gemini ' + resp.status + ' — ' + (await resp.text()).slice(0, 300));
+  if (!resp.ok)
+    throw new Error('Gemini ' + resp.status + ' — ' + (await resp.text()).slice(0, 300));
   const j = await resp.json();
   return (j.candidates?.[0]?.content?.parts || []).map((p) => p.text || '').join('');
 }
@@ -155,13 +192,20 @@ async function callAnthropic(system, userMsg) {
       'x-api-key': ANTHROPIC_KEY,
       'anthropic-version': '2023-06-01',
     },
-    body: JSON.stringify({ model: ANTHROPIC_MODEL, max_tokens: 1200, system, messages: [{ role: 'user', content: userMsg }] }),
+    body: JSON.stringify({
+      model: ANTHROPIC_MODEL,
+      max_tokens: 1200,
+      system,
+      messages: [{ role: 'user', content: userMsg }],
+    }),
   });
-  if (!resp.ok) throw new Error('Anthropic ' + resp.status + ' — ' + (await resp.text()).slice(0, 300));
+  if (!resp.ok)
+    throw new Error('Anthropic ' + resp.status + ' — ' + (await resp.text()).slice(0, 300));
   const j = await resp.json();
   return (j.content || []).map((b) => b.text || '').join('');
 }
-const callLLM = (system, userMsg) => (USE_GEMINI ? callGemini(system, userMsg) : callAnthropic(system, userMsg));
+const callLLM = (system, userMsg) =>
+  USE_GEMINI ? callGemini(system, userMsg) : callAnthropic(system, userMsg);
 
 // ── Main ─────────────────────────────────────────────────────────
 const ls = computeLaso(BIRTH);
@@ -170,11 +214,17 @@ const oldSys = OLD_SYSTEM(buildContext(ls, 'old'));
 const newSys = NEW_SYSTEM(buildContext(ls, 'new'));
 
 const bar = (t) => '\n' + '═'.repeat(72) + '\n' + t + '\n' + '═'.repeat(72);
-console.log(`Lá số: ${ls.canChiNam}, Mệnh tại ${ls.menhDC}, Thân tại ${ls.thanDC} · năm xem ${NAM_XEM}`);
-console.log(`Câu hỏi: "${QUESTION}"  · provider: ${USE_GEMINI ? 'GEMINI' : 'ANTHROPIC'} · model: ${MODEL}`);
+console.log(
+  `Lá số: ${ls.canChiNam}, Mệnh tại ${ls.menhDC}, Thân tại ${ls.thanDC} · năm xem ${NAM_XEM}`
+);
+console.log(
+  `Câu hỏi: "${QUESTION}"  · provider: ${USE_GEMINI ? 'GEMINI' : 'ANTHROPIC'} · model: ${MODEL}`
+);
 
 if (!HAS_KEY) {
-  console.log(bar('KHÔNG có GEMINI_API_KEY / ANTHROPIC_API_KEY → in prompt đã ráp (không gọi LLM)'));
+  console.log(
+    bar('KHÔNG có GEMINI_API_KEY / ANTHROPIC_API_KEY → in prompt đã ráp (không gọi LLM)')
+  );
   console.log(bar('SYSTEM — AFTER (mới)'));
   console.log(newSys);
   console.log(bar('Đặt key rồi chạy lại để xem prose before/after'));
@@ -182,10 +232,7 @@ if (!HAS_KEY) {
 }
 
 console.log(bar('⏳ Đang gọi LLM 2 lần (before / after)…'));
-const [oldOut, newOut] = await Promise.all([
-  callLLM(oldSys, userMsg),
-  callLLM(newSys, userMsg),
-]);
+const [oldOut, newOut] = await Promise.all([callLLM(oldSys, userMsg), callLLM(newSys, userMsg)]);
 console.log(bar('❌ BEFORE — prompt CŨ'));
 console.log(oldOut.trim());
 console.log(bar('✅ AFTER — prompt MỚI (hình tượng + giọng người + nới trần)'));
