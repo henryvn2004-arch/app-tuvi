@@ -23,7 +23,7 @@ Trước đó admin CHỈ suy hành vi từ `credit_transactions` (bỏ sót too
 - **S4 — Retention + Revenue/LTV:** cohort giữ chân, doanh thu & LTV theo kênh (join `user_attribution` × `credit_transactions`), export CSV.
 
 ### ✅ Sprint 0 XONG (chờ merge) — hạ tầng tracking
-- **Migration `_patches/migration-events-tracking.sql`** (🔴 VIỆC TAY HENRY: chạy trong Supabase SQL Editor, project `dciwkfdqhhddeymlisey`):
+- **Migration `_patches/migration-events-tracking.sql`** (✅ ĐÃ CHẠY trên prod 2026-07-22 qua Supabase MCP — verify: events 17 cột, user_attribution 18 cột, 9 index, RLS bật + 2 policy admin_read. Không còn việc tay):
   - `events` (append-only): ts, event_type, anon_id, user_id, session_id, platform, tool_id, slug, path, referrer, utm_*, meta. Index ts/type/user/anon/utm_source.
   - `user_attribution` (1 dòng/user): first-touch + last-touch UTM/referrer/landing + signup_at.
   - RLS: GHI qua service key (`/api/track`); ĐỌC chỉ admin JWT (`email=admin@tuviminhbao.com`) — giống pattern `app_config`.
