@@ -20,6 +20,8 @@ const nextConfig = {
       { source: '/app/dien-tuong',      destination: '/app-dien-tuong.html'  },
       { source: '/app/nhan-tuong',      destination: '/app-nhan-tuong.html'  },
       { source: '/app/thu-tuong',       destination: '/app-thu-tuong.html'   },
+      { source: '/app/thanh-tuong',     destination: '/app-thanh-tuong.html' },
+      { source: '/app/thanh-tuong-pro', destination: '/app-thanh-tuong-pro.html' },
       { source: '/app/phong-thuy',      destination: '/app-phong-thuy.html'  },
       { source: '/app/bat-trach',       destination: '/app-bat-trach.html'   },
       { source: '/app/nap-am',          destination: '/app-nap-am.html'      },

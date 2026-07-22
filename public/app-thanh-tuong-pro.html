@@ -2,320 +2,195 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=16" as="script">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Thanh Tướng Pro — Phân Tích Giọng Nói Chuyên Sâu | Tử Vi Minh Bảo</title>
-<meta property="og:title" content="Thanh Tướng Pro — Phân Tích Giọng Nói Chuyên Sâu | Tử Vi Minh Bảo"/>
-<meta property="og:description" content="Phiên bản nâng cao của Thanh Tướng — phân tích giọng nói chuyên sâu theo nhiều chiều: âm vực, nhịp điệu, năng lượng giọng. Luận giải tính cách và vận mệnh chi tiết hơn."/>
-<meta property="og:url" content="https://www.tuviminhbao.com/tools/thanh-tuong-pro.html"/>
-<meta property="og:image" content="https://www.tuviminhbao.com/og-image.webp"/>
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="Thanh Tướng Pro — Phân Tích Giọng Nói Chuyên Sâu | Tử Vi Minh Bảo"/>
-<meta name="twitter:description" content="Phiên bản nâng cao của Thanh Tướng — phân tích giọng nói chuyên sâu theo nhiều chiều: âm vực, nhịp điệu, năng lượng giọng. Luận giải tính cách và vận mệnh chi tiết hơn."/>
-<meta name="twitter:image" content="https://www.tuviminhbao.com/og-image.webp"/>
-<meta name="keywords" content="thanh tướng pro, phân tích giọng nói chuyên sâu, xem tướng giọng nói, thanh tướng nâng cao"/>
-<meta name="description" content="Phiên bản nâng cao của Thanh Tướng — phân tích giọng nói chuyên sâu theo nhiều chiều: âm vực, nhịp điệu, năng lượng giọng. Luận giải tính cách và vận mệnh chi tiết hơn."/>
-<link rel="canonical" href="https://www.tuviminhbao.com/tools/thanh-tuong-pro.html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thanh Tướng Pro — Tử Vi Minh Bảo</title>
+<meta name="description" content="Bốn bài đo giọng nói chuyên sâu — AI phân tích Ngũ Âm theo Ma Y Thần Tướng, Thần Tướng Toàn Biên, Thủy Kính Tập.">
 <link rel="icon" type="image/webp" href="/seal.webp">
-<link rel="stylesheet" href="/tools/tools.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shell.css?v=14">
 <style>
-:root{--pro-accent:#8B1A1A;--pro-accent-lt:#FBEFEF}
-
-/* Hero */
-.pro-hero{background:linear-gradient(135deg,#061A2E 0%,#0D3B5E 100%);color:#fff;padding:48px 24px 40px;margin-bottom:0;position:relative;overflow:hidden}
-.pro-hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(circle at 20% 20%,rgba(154,123,58,.15) 0%,transparent 50%);pointer-events:none}
-.pro-hero-inner{max-width:860px;margin:0 auto;position:relative;z-index:1}
-.pro-badge{display:inline-block;padding:4px 12px;background:var(--gold);color:#061A2E;font-size:10px;font-weight:800;letter-spacing:2px;border-radius:4px;margin-bottom:16px;text-transform:uppercase}
-.pro-hero h1{font-family:'Noto Serif',Georgia,serif;font-size:36px;line-height:1.2;margin:0 0 14px;font-weight:700}
-.pro-hero .sub{font-size:16px;line-height:1.6;color:#e8d9b8;margin:0;max-width:640px}
-
-/* Intro */
-.pro-intro{background:#fff;padding:32px 24px 8px}
-.pro-intro-inner{max-width:860px;margin:0 auto}
-.pro-intro h2{font-family:'Noto Serif',serif;font-size:22px;color:var(--navy);margin:0 0 14px;font-weight:700}
-.pro-intro p{font-size:14.5px;line-height:1.75;color:var(--text-mid);margin:0 0 12px}
-.pro-intro .cite{font-style:italic;color:var(--gold);font-size:13px;padding-left:14px;border-left:3px solid var(--gold);margin:12px 0}
-
-/* Section dividers */
-.pro-section{max-width:860px;margin:0 auto;padding:24px}
-.pro-section-title{display:flex;align-items:center;gap:12px;font-family:'Noto Serif',serif;font-size:18px;color:var(--navy);margin:0 0 16px;font-weight:700}
-.pro-section-title::before{content:'';width:4px;height:20px;background:var(--gold);border-radius:2px}
-
-/* Differences card */
-.compare-card{background:var(--bg-soft);border:1px solid var(--border);border-radius:10px;padding:20px 22px;margin-bottom:20px}
-.compare-row{display:grid;grid-template-columns:110px 1fr 1fr;gap:14px;padding:10px 0;border-bottom:1px solid var(--border-lt);font-size:13.5px;line-height:1.55}
-.compare-row:last-child{border-bottom:none}
-.compare-row.head{font-weight:700;color:var(--navy);font-size:12px;letter-spacing:.5px;text-transform:uppercase;border-bottom:2px solid var(--gold)}
-.compare-row .old{color:var(--text-lt)}
-.compare-row .new{color:var(--navy);font-weight:600}
-
-/* Guide steps */
-.guide-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:8px}
-.guide-step{background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center}
-.guide-step .num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:var(--navy);color:#fff;border-radius:50%;font-family:'Noto Serif',serif;font-size:14px;font-weight:700;margin-bottom:10px}
-.guide-step .name{font-weight:700;color:var(--navy);font-size:14px;margin-bottom:4px}
-.guide-step .desc{font-size:12px;color:var(--text-mid);line-height:1.5}
-
-/* Setup — gender/age */
-.setup-card{background:#fff;border:2px solid var(--gold);border-radius:12px;padding:24px;margin-bottom:20px}
-.setup-label{font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--gold);margin-bottom:8px;text-transform:uppercase}
-.setup-title{font-family:'Noto Serif',serif;font-size:18px;color:var(--navy);margin:0 0 16px;font-weight:700}
+.dt-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:680px;margin-bottom:16px}
+.dt-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px}
+.dt-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
 .gender-opts{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
-.gender-opt{flex:1;min-width:100px;padding:12px 16px;background:#fff;border:2px solid var(--border);border-radius:8px;cursor:pointer;text-align:center;font-weight:600;color:var(--text-mid);transition:all .15s}
+.gender-opt{flex:1;min-width:100px;padding:12px 16px;background:var(--white);border:2px solid var(--line-2);border-radius:8px;cursor:pointer;text-align:center;font-weight:600;color:var(--text-mid);transition:all .15s}
 .gender-opt:hover{border-color:var(--gold)}
 .gender-opt.selected{background:var(--navy);border-color:var(--navy);color:#fff}
-.age-input{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit}
+.age-input{width:100%;padding:10px 14px;border:1.5px solid var(--line-2);border-radius:8px;font-size:14px;font-family:inherit;background:var(--paper);color:var(--text)}
 .age-input:focus{border-color:var(--gold);outline:none}
-
-/* Task progress */
-.task-progress{display:flex;gap:6px;margin:16px 0 20px}
+.setup-label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px}
+.task-progress{display:flex;gap:6px;margin:0 0 16px}
 .task-pip{flex:1;height:6px;background:var(--border-lt);border-radius:3px;position:relative;overflow:hidden}
-.task-pip.active{background:#C0392B}
+.task-pip.active{background:var(--red)}
 .task-pip.done{background:var(--green)}
-
-/* Task card */
-.task-card{background:linear-gradient(135deg,#fdf8f0,#fff9ef);border:2px solid var(--gold);border-radius:12px;padding:28px 28px 20px;margin-bottom:20px;display:none}
-.task-card.visible{display:block}
 .task-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px}
-.task-num{font-size:11px;font-weight:800;letter-spacing:2px;color:#8B1A1A;text-transform:uppercase}
+.task-num{font-size:11px;font-weight:800;letter-spacing:2px;color:var(--red);text-transform:uppercase}
 .task-time{font-size:12px;color:var(--text-lt);font-weight:600}
-.task-title{font-family:'Noto Serif',serif;font-size:20px;color:var(--navy);margin:0 0 10px;font-weight:700}
-.task-instruction{font-size:13px;color:var(--text-mid);margin-bottom:18px;line-height:1.6;padding:10px 14px;background:rgba(255,255,255,.7);border-left:3px solid var(--gold);border-radius:4px}
-.task-text{font-family:'Noto Serif',serif;font-size:20px;line-height:1.8;color:#061A2E;text-align:center;padding:20px 10px;background:#fff;border-radius:8px;border:1px solid var(--border-lt);margin-bottom:16px;min-height:80px;white-space:pre-line}
-.task-text.vowel{font-size:72px;letter-spacing:16px;font-weight:700;color:var(--navy)}
-
-/* Record controls */
-.record-wrap{text-align:center;padding:14px 0 6px}
-.btn-record{display:inline-flex;align-items:center;gap:10px;padding:14px 32px;background:var(--navy);color:#fff;border:none;border-radius:50px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;letter-spacing:.5px}
-.btn-record:hover{background:#0D3B5E;transform:scale(1.02)}
-.btn-record.recording{background:#C0392B;animation:pulse-red 1.2s ease-in-out infinite}
+.task-title{font-family:var(--serif);font-size:19px;color:var(--navy);margin:0 0 10px;font-weight:700}
+.task-instruction{font-size:12.5px;color:var(--text-mid);margin-bottom:16px;line-height:1.6;padding:10px 14px;background:var(--gold-lt);border-left:3px solid var(--gold);border-radius:4px}
+.task-text{font-family:var(--serif);font-size:18px;line-height:1.8;color:var(--navy);text-align:center;padding:18px 10px;background:var(--paper);border-radius:8px;border:1px solid var(--border-lt);margin-bottom:14px;min-height:70px;white-space:pre-line}
+.task-text.vowel{font-size:56px;letter-spacing:12px;font-weight:700}
+.record-wrap{text-align:center;padding:10px 0 4px}
+.btn-record{display:inline-flex;align-items:center;gap:10px;padding:13px 30px;background:var(--navy);color:#fff;border:none;border-radius:50px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;letter-spacing:.5px}
+.btn-record:hover{background:var(--navy-3)}
+.btn-record.recording{background:var(--red);animation:pulse-red 1.2s ease-in-out infinite}
 .btn-record.processing{background:#888;cursor:not-allowed;animation:none}
 .btn-record:disabled{opacity:.6;cursor:not-allowed}
 @keyframes pulse-red{0%,100%{box-shadow:0 0 0 0 rgba(192,57,43,0.4)}50%{box-shadow:0 0 0 12px rgba(192,57,43,0)}}
-
-.countdown-badge{display:none;font-size:56px;font-weight:700;color:#C0392B;margin:8px 0;font-family:'Noto Serif',Georgia,serif}
+.countdown-badge{display:none;font-size:50px;font-weight:700;color:var(--red);margin:8px 0;font-family:var(--serif)}
 .countdown-badge.visible{display:block}
 .timer-bar-wrap{height:4px;background:var(--border-lt);border-radius:2px;margin:12px 24px;overflow:hidden;display:none}
 .timer-bar-wrap.visible{display:block}
-.timer-bar{height:100%;background:#C0392B;border-radius:2px;width:0%;transition:width .1s linear}
+.timer-bar{height:100%;background:var(--red);border-radius:2px;width:0%;transition:width .1s linear}
 .waveform-wrap{margin:12px 0;display:none}
 .waveform-wrap.visible{display:block}
-#waveCanvas{width:100%;height:60px;background:#fff;border:1px solid var(--border-lt);border-radius:6px;display:block}
-.record-status{font-size:12px;color:var(--text-lt);margin-top:10px;min-height:16px}
-
-/* Task done summary */
+#waveCanvas{width:100%;height:56px;background:var(--white);border:1px solid var(--border-lt);border-radius:6px;display:block}
+.record-status{font-size:12px;color:var(--text-lt);margin-top:10px;min-height:16px;text-align:center}
 .task-done-mini{display:none;padding:12px 16px;background:#eef8f0;border:1px solid var(--green);border-radius:8px;margin-top:14px;font-size:13px;color:var(--green);font-weight:600}
 .task-done-mini.visible{display:block}
-.btn-next-task{display:inline-block;margin-top:12px;padding:10px 24px;background:var(--gold);color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
-.btn-next-task:hover{background:#8a6a2a}
-.btn-retry{display:inline-block;margin-left:8px;padding:10px 20px;background:#fff;color:var(--text-mid);border:1.5px solid var(--border);border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
-.btn-retry:hover{border-color:var(--text-mid)}
-
-/* Feature panel */
-.features-panel{background:#fff;border:2px solid var(--navy);border-radius:12px;padding:24px;margin-bottom:20px;display:none}
-.features-panel.visible{display:block}
-.features-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px}
-.features-title{font-family:'Noto Serif',serif;font-size:18px;color:var(--navy);margin:0;font-weight:700}
-.nguam-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:var(--gold);color:#fff;border-radius:50px;font-size:13px;font-weight:700;font-family:'Noto Serif',serif}
-.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
-.feature-item{padding:12px 14px;background:var(--bg-soft);border-radius:8px;border-left:3px solid var(--gold)}
-.feature-name{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--text-lt);text-transform:uppercase;margin-bottom:4px}
-.feature-value{font-family:'Noto Serif',serif;font-size:18px;color:var(--navy);font-weight:700;margin-bottom:4px}
-.feature-interp{font-size:12px;color:var(--text-mid);line-height:1.5}
-.feature-bar-wrap{height:4px;background:#e5e2dc;border-radius:2px;margin-top:6px;overflow:hidden}
+.btn-next-task{display:inline-block;margin-top:12px;padding:9px 20px;background:var(--gold);color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-retry{display:inline-block;margin-left:8px;padding:9px 18px;background:var(--white);color:var(--text-mid);border:1.5px solid var(--line-2);border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.features-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.nguam-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:var(--gold);color:#fff;border-radius:50px;font-size:12.5px;font-weight:700;font-family:var(--serif)}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.feature-item{padding:11px 13px;background:var(--paper);border-radius:8px;border-left:3px solid var(--gold)}
+.feature-name{font-size:10.5px;font-weight:700;letter-spacing:1px;color:var(--text-lt);text-transform:uppercase;margin-bottom:4px}
+.feature-value{font-family:var(--serif);font-size:17px;color:var(--navy);font-weight:700;margin-bottom:4px}
+.feature-interp{font-size:11.5px;color:var(--text-mid);line-height:1.5}
+.feature-bar-wrap{height:4px;background:var(--border-lt);border-radius:2px;margin-top:6px;overflow:hidden}
 .feature-bar{height:100%;background:var(--navy);border-radius:2px;transition:width .4s}
-
-/* Warnings */
-.warn-card{display:none;padding:14px 18px;background:#fff6f0;border-left:4px solid #d35400;border-radius:6px;margin:12px 0;font-size:13px;color:#7a3d00;line-height:1.6}
+.warn-card{display:none;padding:12px 16px;background:#fff6f0;border-left:4px solid #d35400;border-radius:6px;margin:12px 0 0;font-size:12.5px;color:#7a3d00;line-height:1.6}
 .warn-card.visible{display:block}
-
-/* Analyze */
-.analyze-wrap{text-align:center;margin:20px 0;display:none}
-.analyze-wrap.visible{display:block}
-.btn-analyze{padding:16px 40px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.5px}
-.btn-analyze:hover{background:#0D3B5E}
-.btn-analyze:disabled{background:#888;cursor:not-allowed}
-
-/* Results */
-.results-panel{background:#fff;border:1px solid var(--border);border-radius:12px;padding:28px 30px;margin-bottom:30px;display:none}
-.results-panel.visible{display:block}
-.results-panel h2{font-family:'Noto Serif',serif;font-size:22px;color:var(--navy);margin:22px 0 10px;font-weight:700;border-bottom:1px solid var(--border-lt);padding-bottom:6px}
-.results-panel h2:first-child{margin-top:0}
-.results-panel h3{font-family:'Noto Serif',serif;font-size:17px;color:var(--navy-mid);margin:16px 0 8px;font-weight:700}
-.results-panel p{font-size:14.5px;line-height:1.75;color:var(--text);margin:0 0 10px}
-.results-panel em{color:var(--gold);font-style:italic}
-.results-panel strong{color:var(--navy)}
-.results-panel blockquote{border-left:3px solid var(--gold);background:var(--gold-lt);padding:10px 16px;margin:14px 0;font-style:italic;color:var(--navy-mid)}
-
+.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:11px 26px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--serif)}
+.btn-go:disabled{opacity:.5;cursor:not-allowed}
+.btn-cancel{background:none;border:1px solid var(--line-2);border-radius:8px;padding:10px 18px;font-size:13px;color:var(--text-mid);cursor:pointer;font-family:inherit}
 .loading-dots::after{content:'…';display:inline-block;animation:dots 1.5s steps(4,end) infinite}
 @keyframes dots{0%,20%{content:''}40%{content:'.'}60%{content:'..'}80%,100%{content:'…'}}
-
-@media (max-width:640px){
-  .pro-hero{padding:36px 18px 30px}
-  .pro-hero h1{font-size:26px}
-  .task-text{font-size:17px;padding:16px 8px}
-  .task-text.vowel{font-size:54px;letter-spacing:10px}
-  .compare-row{grid-template-columns:90px 1fr 1fr;font-size:12.5px}
-}
+.dt-result{margin-top:8px}
+.dt-result h2{font-family:var(--serif);font-size:17px;font-weight:600;margin:18px 0 10px;color:var(--navy)}
+.dt-result h3{font-family:var(--serif);font-size:14.5px;font-weight:600;margin:14px 0 8px;color:var(--navy)}
+.dt-result p{color:var(--text-mid);line-height:1.75;margin-bottom:12px;font-size:13.5px}
+.dt-result strong{color:var(--text)}
+.dt-result em{color:var(--gold-soft);font-style:italic}
+.dt-result blockquote{border-left:3px solid var(--gold-soft);padding-left:12px;color:var(--text-lt);font-style:italic;margin:0 0 12px;background:var(--gold-lt)}
 </style>
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Thanh Tướng Pro khác phiên bản thông thường như thế nào?","acceptedAnswer":{"@type":"Answer","text":"Thanh Tướng Pro cung cấp phân tích sâu hơn về giọng nói, bao gồm nhiều chiều đánh giá hơn như cung bậc cảm xúc, nhịp thở và tương quan với các yếu tố ngũ hành phức tạp."}},{"@type":"Question","name":"Cần chuẩn bị gì trước khi phân tích thanh tướng?","acceptedAnswer":{"@type":"Answer","text":"Ghi âm trong môi trường yên tĩnh, giọng tự nhiên không gắng sức, nói đủ dài (tối thiểu 30 giây) để AI có đủ dữ liệu. Tránh thu âm khi đang mệt, bệnh hoặc cảm xúc không ổn định."}},{"@type":"Question","name":"Thanh tướng có thể thay đổi không?","acceptedAnswer":{"@type":"Answer","text":"Có. Giọng nói thay đổi theo sức khỏe, tuổi tác và rèn luyện. Người tu tập nội công và thiền định thường có giọng trầm ổn hơn theo thời gian, phản ánh sự cải thiện về khí huyết nội tạng."}}]}
-</script>
 </head>
 <body>
-<div id="nav-placeholder"></div>
-<div id="nav-ph" style="height:60px;background:#061A2E"></div>
 
-<main>
-  <!-- HERO -->
-  <section class="pro-hero">
-    <div class="pro-hero-inner">
-      <span class="pro-badge">Pro · Bản Nâng Cao</span>
-      <h1>Thanh Tướng Pro — Phân Tích Giọng Nói Theo Cổ Pháp</h1>
-      <p class="sub">Bốn bài đo chuyên sâu · Mười hai chỉ số âm học · Luận giải Ngũ Âm Kim-Mộc-Thủy-Hỏa-Thổ theo <em>Ma Y Thần Tướng</em>, <em>Thần Tướng Toàn Biên</em> và <em>Thủy Kính Tập</em>.</p>
-    </div>
-  </section>
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
 
-  <!-- INTRO -->
-  <section class="pro-intro">
-    <div class="pro-intro-inner">
-      <h2>Thanh Tướng Học Là Gì?</h2>
-      <p>Thanh tướng (聲相) là một trong <strong>năm phép tướng cổ pháp</strong> phương Đông, bên cạnh Diện tướng, Nhãn tướng, Thủ tướng và Cốt tướng. Người xưa tin rằng giọng nói là <strong>tiếng vọng của khí huyết</strong> — ai khí đầy thì giọng vang, ai khí suy thì giọng nhược; ai tâm chính thì giọng trong, ai tâm tạp thì giọng đục.</p>
-      <blockquote class="cite">"Thanh tại khí trung, khí túc tắc thanh viên, khí khuyết tắc thanh phá." — <em>Ma Y Thần Tướng · Thanh Tướng Chương</em></blockquote>
-      <p>Giọng thuộc một trong <strong>Ngũ Âm</strong>: Kim (chuông lớn — quý), Mộc (gió xuyên rừng — thanh tú), Thủy (suối chảy — uyển chuyển), Hỏa (lửa bốc — hiểm), Thổ (trống đất — phúc hậu). Trong mỗi hành lại phân <strong>Thanh</strong> (trong, vang) và <strong>Trọc</strong> (đục, rè), và có các <strong>dị cách</strong> như Hổ Hống, Oanh Minh, Phá La, Hữu Đầu Vô Vĩ…</p>
-      <p style="margin-top:14px">Bản Pro này khác với bản thường ở chỗ: <strong>đo Khí trực tiếp</strong> qua bài ngân âm dài, tính toán các chỉ số y học giọng (jitter, shimmer, HNR) mà bản thường không có, và luận giải có <strong>dẫn nguyên văn kinh điển</strong> thay vì mô tả chung chung.</p>
-    </div>
-  </section>
-
-  <!-- DIFFERENCES -->
-  <section class="pro-section">
-    <h3 class="pro-section-title">Thanh Tướng Thường vs Pro</h3>
-    <div class="compare-card">
-      <div class="compare-row head"><div>Hạng mục</div><div>Bản Thường</div><div>Bản Pro</div></div>
-      <div class="compare-row"><div>Số bài đo</div><div class="old">1 bài · 14s</div><div class="new">4 bài · ~40s</div></div>
-      <div class="compare-row"><div>Đo Khí</div><div class="old">Không đo trực tiếp</div><div class="new">Có — bài ngân âm 5s</div></div>
-      <div class="compare-row"><div>Chỉ số</div><div class="old">Pitch, ZCR, Rate</div><div class="new">F0, Jitter, Shimmer, HNR, Formants F1/F2, Sustain, Decay</div></div>
-      <div class="compare-row"><div>Thuật toán pitch</div><div class="old">Autocorrelation</div><div class="new">YIN (chuẩn y học giọng)</div></div>
-      <div class="compare-row"><div>Phân biệt Thanh/Trọc</div><div class="old">Không</div><div class="new">Có — qua HNR</div></div>
-      <div class="compare-row"><div>Dị cách</div><div class="old">Không</div><div class="new">Có — nhận diện 7 dị cách</div></div>
-      <div class="compare-row"><div>Nguồn kinh điển</div><div class="old">Mô tả tổng quan</div><div class="new">Dẫn nguyên văn Ma Y, Thần Tướng Toàn Biên, Thủy Kính</div></div>
-    </div>
-  </section>
-
-  <!-- GUIDE -->
-  <section class="pro-section">
-    <h3 class="pro-section-title">Hướng Dẫn — Bốn Bước Đo</h3>
-    <div class="guide-steps">
-      <div class="guide-step">
-        <div class="num">1</div>
-        <div class="name">Đọc Đoạn Văn</div>
-        <div class="desc">10 giây · ca dao quen thuộc · đo F0, tốc độ, nền giọng cơ bản</div>
-      </div>
-      <div class="guide-step">
-        <div class="num">2</div>
-        <div class="name">Ngân Âm "A"</div>
-        <div class="desc">5 giây · ngân một hơi · đo Khí, Jitter, Shimmer, HNR</div>
-      </div>
-      <div class="guide-step">
-        <div class="num">3</div>
-        <div class="name">Đếm Số</div>
-        <div class="desc">12 giây · đếm 1 → 15 · đo nhịp nói, độ đều</div>
-      </div>
-      <div class="guide-step">
-        <div class="num">4</div>
-        <div class="name">Đọc Thơ</div>
-        <div class="desc">10 giây · Truyện Kiều · đo độ uyển chuyển pitch</div>
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Thanh Tướng Pro</b><span>4 bài đo giọng nói chuyên sâu — 10 Lượng</span></div>
+      <div class="ws-actions">
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
-    <div class="warn-card visible" style="margin-top:16px">
-      <strong>Để kết quả chính xác nhất:</strong><br>
-      • Ở nơi <strong>yên tĩnh</strong>, không có tiếng quạt/điều hòa to, không có người nói xung quanh.<br>
-      • Giữ mic cách miệng <strong>15–25cm</strong>, không cầm sát mặt.<br>
-      • Nói bằng <strong>giọng tự nhiên</strong> hằng ngày — không cố lên giọng trầm hay cao.<br>
-      • Nếu ho, nấc, hay bị đứt quãng, nhấn <strong>"Thu lại"</strong> ở bài đó.
-    </div>
-  </section>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div id="shellRecent"></div>
 
-  <!-- SETUP -->
-  <section class="pro-section">
-    <h3 class="pro-section-title">Bước 1 · Thông Tin Cơ Bản</h3>
-    <div class="setup-card">
-      <div class="setup-label">Giới Tính</div>
-      <div class="gender-opts" id="genderOpts">
-        <div class="gender-opt" data-gender="nam">Nam</div>
-        <div class="gender-opt" data-gender="nu">Nữ</div>
+      <div class="dt-card" id="setupCard">
+        <h2>Bước 1 · Thông Tin Cơ Bản</h2>
+        <p class="sub">4 bài đo chuyên sâu · 12 chỉ số âm học · luận theo Ma Y Thần Tướng, Thần Tướng Toàn Biên, Thủy Kính Tập.</p>
+        <div class="setup-label">Giới Tính</div>
+        <div class="gender-opts" id="genderOpts">
+          <div class="gender-opt" data-gender="nam">Nam</div>
+          <div class="gender-opt" data-gender="nu">Nữ</div>
+        </div>
+        <div class="setup-label" style="margin-top:6px">Tuổi</div>
+        <input type="number" class="age-input" id="ageInput" placeholder="Ví dụ: 32" min="10" max="100">
+        <div class="record-wrap" style="padding-top:16px">
+          <button class="btn-record" id="startBtn" disabled>Bắt Đầu Bài Đo</button>
+        </div>
       </div>
-      <div class="setup-label" style="margin-top:6px">Tuổi</div>
-      <input type="number" class="age-input" id="ageInput" placeholder="Ví dụ: 32" min="10" max="100">
-      <div class="record-wrap" style="padding-top:16px">
-        <button class="btn-record" id="startBtn" disabled>Bắt Đầu Bài Đo</button>
+
+      <div class="dt-card" id="tasksSection" style="display:none">
+        <h2>Bước 2 · Bốn Bài Đo Giọng</h2>
+        <div class="task-progress" id="taskProgress">
+          <div class="task-pip" data-idx="0"></div>
+          <div class="task-pip" data-idx="1"></div>
+          <div class="task-pip" data-idx="2"></div>
+          <div class="task-pip" data-idx="3"></div>
+        </div>
+
+        <div id="taskCard">
+          <div class="task-header">
+            <span class="task-num" id="taskNum">Bài 1/4</span>
+            <span class="task-time" id="taskTime">10 giây</span>
+          </div>
+          <h3 class="task-title" id="taskTitle">Đọc Đoạn Văn</h3>
+          <div class="task-instruction" id="taskInstruction">Đọc bình thường, rõ ràng, không gấp.</div>
+          <div class="task-text" id="taskText"></div>
+
+          <div class="record-wrap">
+            <div class="countdown-badge" id="countdown"></div>
+            <button class="btn-record" id="recordBtn">Bắt Đầu Thu Âm</button>
+          </div>
+          <div class="timer-bar-wrap" id="timerWrap"><div class="timer-bar" id="timerBar"></div></div>
+          <div class="waveform-wrap" id="waveWrap"><canvas id="waveCanvas" width="800" height="56"></canvas></div>
+          <div class="record-status" id="recordStatus"></div>
+
+          <div class="task-done-mini" id="taskDone">
+            <div id="taskDoneText">✓ Đã ghi xong.</div>
+            <button class="btn-next-task" id="nextBtn">Bài Tiếp Theo →</button>
+            <button class="btn-retry" id="retryBtn">Thu Lại</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dt-card" id="featuresPanel" style="display:none">
+        <div class="features-head">
+          <h2 style="margin:0">Bước 3 · Kết Quả Đo</h2>
+          <span class="nguam-badge" id="nguamBadge">Ngũ Âm: —</span>
+        </div>
+        <div class="features-grid" id="featuresGrid"></div>
+        <div class="warn-card" id="featuresWarn"></div>
+      </div>
+
+      <div class="dt-card" id="analyzeWrap" style="display:none;text-align:center">
+        <button class="btn-go" id="analyzeBtn">Luận Giải Thanh Tướng — 10 Lượng</button>
+      </div>
+
+      <div class="dt-card" id="resultsCard" style="display:none">
+        <h2>Phân Tích Thanh Tướng Chuyên Sâu</h2>
+        <p class="sub">AI · Ngũ Âm Cổ Pháp · Ma Y · Thần Tướng Toàn Biên · Thủy Kính Tập</p>
+        <div class="dt-result" id="resultsPanel"></div>
       </div>
     </div>
-  </section>
+  </main>
 
-  <!-- TASKS -->
-  <section class="pro-section" id="tasksSection" style="display:none">
-    <h3 class="pro-section-title">Bước 2 · Bốn Bài Đo Giọng</h3>
-    <div class="task-progress" id="taskProgress">
-      <div class="task-pip" data-idx="0"></div>
-      <div class="task-pip" data-idx="1"></div>
-      <div class="task-pip" data-idx="2"></div>
-      <div class="task-pip" data-idx="3"></div>
-    </div>
+  <aside class="rail" id="shell-rail"></aside>
+</div>
 
-    <div class="task-card visible" id="taskCard">
-      <div class="task-header">
-        <span class="task-num" id="taskNum">Bài 1/4</span>
-        <span class="task-time" id="taskTime">10 giây</span>
-      </div>
-      <h3 class="task-title" id="taskTitle">Đọc Đoạn Văn</h3>
-      <div class="task-instruction" id="taskInstruction">Đọc bình thường, rõ ràng, không gấp.</div>
-      <div class="task-text" id="taskText"></div>
-
-      <div class="record-wrap">
-        <div class="countdown-badge" id="countdown"></div>
-        <button class="btn-record" id="recordBtn">Bắt Đầu Thu Âm</button>
-      </div>
-      <div class="timer-bar-wrap" id="timerWrap"><div class="timer-bar" id="timerBar"></div></div>
-      <div class="waveform-wrap" id="waveWrap"><canvas id="waveCanvas" width="800" height="60"></canvas></div>
-      <div class="record-status" id="recordStatus"></div>
-
-      <div class="task-done-mini" id="taskDone">
-        <div id="taskDoneText">✓ Đã ghi xong.</div>
-        <button class="btn-next-task" id="nextBtn">Bài Tiếp Theo →</button>
-        <button class="btn-retry" id="retryBtn">Thu Lại</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- FEATURES -->
-  <section class="pro-section">
-    <div class="features-panel" id="featuresPanel">
-      <div class="features-head">
-        <h3 class="features-title">Bước 3 · Kết Quả Đo</h3>
-        <span class="nguam-badge" id="nguamBadge">Ngũ Âm: —</span>
-      </div>
-      <div class="features-grid" id="featuresGrid"></div>
-      <div class="warn-card" id="featuresWarn"></div>
-    </div>
-
-    <div class="analyze-wrap" id="analyzeWrap">
-      <button class="btn-analyze" id="analyzeBtn">Luận Giải Thanh Tướng</button>
-    </div>
-  </section>
-
-  <!-- RESULTS -->
-  <section class="pro-section">
-    <div class="results-panel" id="resultsPanel"></div>
-  </section>
-</main>
-
+<script>window.SHELL_ACTIVE='thanh-tuong-pro';window.SHELL_HISTORY=true;
+window.SHELL_INTRO={key:'thanh-tuong-pro',title:'Thanh Tướng Pro',desc:'4 bài đo giọng nói chuyên sâu — <b>AI</b> phân tích Ngũ Âm theo Ma Y Thần Tướng, Thần Tướng Toàn Biên, Thủy Kính Tập.'};</script>
 <script src="/auth.js"></script>
+<script src="/tuvi-paywall.js?v=3"></script>
+<script src="/shell.js?v=39"></script>
 <script>
-/* ============================================================
-   THANH TƯỚNG PRO — Acoustic Analysis Engine
-   ============================================================ */
+function initThanhTuongPro(){
+  Shell.setContext({
+    label:'Thanh Tướng Pro',
+    placeholder:'Hỏi thầy về thanh tướng…',
+    greeting:'Chào bạn. Chọn giới tính, nhập tuổi rồi làm 4 bài đo giọng ở khung bên trái — AI sẽ phân tích chuyên sâu 12 chỉ số âm học. Sau khi có kết quả, cứ hỏi tôi thêm.',
+    chips:['Jitter và Shimmer là gì?','HNR thấp nói lên điều gì?','Khác gì bản Thanh Tướng thường?']
+  });
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initThanhTuongPro); else initThanhTuongPro();
 
+// ══════════════════════════════════════════════════════════════════════
+// Port từ public/tools/thanh-tuong-pro.html — giữ nguyên TOÀN BỘ acoustic
+// engine (YIN pitch, jitter/shimmer/HNR, FFT formants, sustain/speech-rate)
+// + gate Lượng + SSE stream tới /api/tuong-mat?action=thanh-tuong-pro.
+// FIX: standalone dùng nhầm product 'thanh-tuong' (8đ) thay vì
+// 'thanh-tuong-pro' (10đ) khi TuviPaywall.init — bản port này dùng đúng
+// product 'thanh-tuong-pro' ngay từ đầu.
+// ══════════════════════════════════════════════════════════════════════
 const TASKS = [
   {
     id: 'baseline',
@@ -355,7 +230,6 @@ const TASKS = [
   }
 ];
 
-/* ---------- State ---------- */
 let state = {
   gender: null,
   age: null,
@@ -367,7 +241,6 @@ let state = {
   isRecording: false
 };
 
-/* ---------- DOM refs ---------- */
 const $ = id => document.getElementById(id);
 const genderOpts = $('genderOpts');
 const ageInput = $('ageInput');
@@ -398,8 +271,8 @@ const nguamBadge = $('nguamBadge');
 const analyzeWrap = $('analyzeWrap');
 const analyzeBtn = $('analyzeBtn');
 const resultsPanel = $('resultsPanel');
+const resultsCard = $('resultsCard');
 
-/* ---------- Setup ---------- */
 genderOpts.addEventListener('click', e => {
   const opt = e.target.closest('.gender-opt');
   if (!opt) return;
@@ -421,7 +294,6 @@ startBtn.addEventListener('click', () => {
   tasksSection.scrollIntoView({behavior:'smooth',block:'start'});
 });
 
-/* ---------- Task loader ---------- */
 function loadTask(idx) {
   state.currentIdx = idx;
   const t = TASKS[idx];
@@ -450,7 +322,6 @@ function updateProgressPips() {
   });
 }
 
-/* ---------- Recording ---------- */
 recordBtn.addEventListener('click', startRecording);
 retryBtn.addEventListener('click', () => {
   delete state.results[TASKS[state.currentIdx].id];
@@ -460,7 +331,6 @@ nextBtn.addEventListener('click', () => {
   if (state.currentIdx < TASKS.length - 1) {
     loadTask(state.currentIdx + 1);
   } else {
-    // All tasks done
     compileAndShowFeatures();
   }
 });
@@ -474,7 +344,6 @@ async function startRecording() {
         audio: { echoCancellation:false, noiseSuppression:false, autoGainControl:false }
       });
     }
-    // Countdown 3-2-1
     recordBtn.disabled = true;
     countdown.classList.add('visible');
     for (let i = 3; i >= 1; i--) {
@@ -482,20 +351,17 @@ async function startRecording() {
       await wait(900);
     }
     countdown.classList.remove('visible');
-    // Record
     await recordBuffer(t.duration);
-    // Analyze
     recordBtn.classList.remove('recording');
     recordBtn.classList.add('processing');
     recordBtn.textContent = 'Đang phân tích…';
     recordStatus.textContent = 'Đang tính toán đặc trưng âm học…';
-    await wait(60); // let UI update
+    await wait(60);
     const features = analyzeTask(t.id, state._lastBuffer, state._sampleRate);
     state.results[t.id] = features;
     recordBtn.classList.remove('processing');
     recordBtn.disabled = true;
     recordBtn.textContent = 'Đã ghi xong';
-    // Quick summary
     const summary = miniSummary(t.id, features);
     taskDoneText.innerHTML = '✓ ' + summary;
     if (state.currentIdx < TASKS.length - 1) {
@@ -526,7 +392,6 @@ async function recordBuffer(durationSec) {
   const chunks = [];
   state._sampleRate = ac.sampleRate;
 
-  // Waveform setup
   const analyser = ac.createAnalyser();
   analyser.fftSize = 2048;
   const waveData = new Uint8Array(analyser.fftSize);
@@ -545,7 +410,6 @@ async function recordBuffer(durationSec) {
     chunks.push(new Float32Array(input));
   };
 
-  // Waveform + timer
   const startTime = performance.now();
   let stopRAF = false;
   function draw() {
@@ -578,7 +442,6 @@ async function recordBuffer(durationSec) {
   state.isRecording = false;
 
   processor.disconnect(); source.disconnect(); analyser.disconnect();
-  // Merge chunks
   let total = 0;
   chunks.forEach(c => total += c.length);
   const out = new Float32Array(total);
@@ -589,14 +452,9 @@ async function recordBuffer(durationSec) {
 
 function wait(ms){return new Promise(r=>setTimeout(r,ms))}
 
-/* ============================================================
-   ACOUSTIC FEATURE EXTRACTORS
-   ============================================================ */
-
-/* --- Voice Activity Detection (remove silences) --- */
 function vadTrim(buf, fs, thrFactor=0.05) {
-  const frame = Math.floor(fs * 0.025); // 25ms
-  const hop = Math.floor(fs * 0.01);     // 10ms
+  const frame = Math.floor(fs * 0.025);
+  const hop = Math.floor(fs * 0.01);
   const energies = [];
   for (let i = 0; i + frame < buf.length; i += hop) {
     let s = 0;
@@ -622,7 +480,6 @@ function vadTrim(buf, fs, thrFactor=0.05) {
   return out;
 }
 
-/* --- YIN pitch detection --- */
 function yinPitch(buf, fs, threshold=0.15) {
   const N = buf.length;
   const halfN = Math.floor(N / 2);
@@ -642,7 +499,6 @@ function yinPitch(buf, fs, threshold=0.15) {
     running += d[tau];
     d[tau] *= tau / (running || 1);
   }
-  // Search in F0 range 60-500Hz
   const minTau = Math.floor(fs / 500);
   const maxTau = Math.floor(fs / 60);
   let tau = minTau;
@@ -653,7 +509,6 @@ function yinPitch(buf, fs, threshold=0.15) {
     }
   }
   if (tau >= maxTau || d[tau] >= threshold) return -1;
-  // Parabolic interpolation
   const x0 = Math.max(0, tau - 1);
   const x2 = Math.min(halfN - 1, tau + 1);
   const s0 = d[x0], s1 = d[tau], s2 = d[x2];
@@ -662,10 +517,9 @@ function yinPitch(buf, fs, threshold=0.15) {
   return fs / better;
 }
 
-/* --- Frame-by-frame F0 track --- */
 function f0Track(buf, fs) {
-  const frame = Math.floor(fs * 0.040); // 40ms
-  const hop = Math.floor(fs * 0.020);    // 20ms
+  const frame = Math.floor(fs * 0.040);
+  const hop = Math.floor(fs * 0.020);
   const f0s = [];
   for (let i = 0; i + frame < buf.length; i += hop) {
     const f0 = yinPitch(buf.subarray(i, i + frame), fs);
@@ -674,12 +528,10 @@ function f0Track(buf, fs) {
   return f0s;
 }
 
-/* --- Stats helpers --- */
 function mean(a){ if(!a.length) return 0; let s=0; for(const x of a) s+=x; return s/a.length; }
 function stdev(a){ if(a.length<2) return 0; const m=mean(a); let v=0; for(const x of a) v+=(x-m)**2; return Math.sqrt(v/a.length); }
 function median(a){ if(!a.length) return 0; const s=[...a].sort((x,y)=>x-y); return s[Math.floor(s.length/2)]; }
 
-/* --- Jitter (local, %) --- */
 function localJitter(f0s) {
   if (f0s.length < 3) return 0;
   const periods = f0s.map(f => 1/f);
@@ -689,13 +541,11 @@ function localJitter(f0s) {
   return (diffSum / (periods.length - 1)) / avgPeriod * 100;
 }
 
-/* --- Shimmer (local, dB) --- */
 function localShimmer(buf, fs, f0s) {
   if (f0s.length < 3) return 0;
   const avgF0 = mean(f0s);
   if (avgF0 <= 0) return 0;
   const period = Math.floor(fs / avgF0);
-  // Find cycle peaks
   const peaks = [];
   for (let i = period; i + period < buf.length; i += period) {
     let maxAbs = 0;
@@ -718,12 +568,10 @@ function localShimmer(buf, fs, f0s) {
   return n > 0 ? sum / n : 0;
 }
 
-/* --- HNR (Boersma-style via normalized autocorrelation) --- */
 function hnrBoersma(buf, fs, f0) {
   if (f0 <= 0) return 0;
   const period = Math.round(fs / f0);
   if (period >= buf.length / 2 || period < 2) return 0;
-  // Window
   const N = Math.min(buf.length, period * 6);
   let r0 = 0, rT = 0;
   for (let i = 0; i < N - period; i++) {
@@ -753,11 +601,9 @@ function hnrTrack(buf, fs) {
   return hnrs;
 }
 
-/* --- FFT (radix-2) --- */
 function fft(real, imag) {
   const N = real.length;
   if ((N & (N-1)) !== 0) throw new Error('FFT size must be power of 2');
-  // Bit reverse
   for (let i = 1, j = 0; i < N; i++) {
     let b = N >> 1;
     for (; j & b; b >>= 1) j ^= b;
@@ -789,7 +635,6 @@ function fft(real, imag) {
 }
 
 function magSpectrum(buf, fs, fftSize=4096) {
-  // Hann window + zero-pad to fftSize
   const N = Math.min(buf.length, fftSize);
   const real = new Float32Array(fftSize);
   const imag = new Float32Array(fftSize);
@@ -805,7 +650,6 @@ function magSpectrum(buf, fs, fftSize=4096) {
   return mag;
 }
 
-/* --- Spectral centroid & rolloff --- */
 function spectralStats(mag, fs, fftSize) {
   const binW = fs / fftSize;
   let weighted = 0, total = 0;
@@ -814,7 +658,6 @@ function spectralStats(mag, fs, fftSize) {
     total += mag[i];
   }
   const centroid = total > 0 ? weighted / total : 0;
-  // Rolloff 85%
   const target = 0.85 * total;
   let cum = 0, rolloff = 0;
   for (let i = 0; i < mag.length; i++) {
@@ -824,10 +667,8 @@ function spectralStats(mag, fs, fftSize) {
   return { centroid, rolloff };
 }
 
-/* --- Formants via smoothed spectrum peak picking --- */
 function estimateFormants(mag, fs, fftSize) {
   const binW = fs / fftSize;
-  // Log-magnitude, smooth
   const log = new Float32Array(mag.length);
   for (let i = 0; i < mag.length; i++) log[i] = Math.log(mag[i] + 1e-10);
   const smoothed = new Float32Array(mag.length);
@@ -839,7 +680,6 @@ function estimateFormants(mag, fs, fftSize) {
     }
     smoothed[i] = s / c;
   }
-  // Find peaks in formant range
   const peaks = [];
   for (let i = 2; i < smoothed.length - 2; i++) {
     const f = i * binW;
@@ -857,7 +697,6 @@ function estimateFormants(mag, fs, fftSize) {
   };
 }
 
-/* --- Sustain metrics (for task 2) --- */
 function sustainMetrics(buf, fs) {
   const frame = Math.floor(fs * 0.025);
   const hop = Math.floor(fs * 0.010);
@@ -875,7 +714,6 @@ function sustainMetrics(buf, fs) {
   }
   if (start < 0 || end - start < 3) return { duration: 0, decaySlope: 0 };
   const duration = (end - start) * hop / fs;
-  // Decay slope: last 50% of sustained region, in dB/s
   const midIdx = start + Math.floor((end - start) * 0.5);
   let sx=0, sy=0, sxy=0, sxx=0, n=0;
   for (let i = midIdx; i <= end; i++) {
@@ -887,7 +725,6 @@ function sustainMetrics(buf, fs) {
   return { duration, decaySlope: slope };
 }
 
-/* --- Speech rate (syllables/second) --- */
 function speechRate(buf, fs) {
   const frame = Math.floor(fs * 0.025);
   const hop = Math.floor(fs * 0.010);
@@ -897,7 +734,6 @@ function speechRate(buf, fs) {
     for (let j = 0; j < frame; j++) s += buf[i+j] * buf[i+j];
     env.push(Math.sqrt(s / frame));
   }
-  // Smooth
   const smoothed = new Float32Array(env.length);
   const w = 5;
   for (let i = 0; i < env.length; i++) {
@@ -909,7 +745,6 @@ function speechRate(buf, fs) {
   }
   const maxE = Math.max(...smoothed);
   const thr = maxE * 0.35;
-  // Peak detection with minimum distance (syllable width ~150ms → 15 hops)
   const minDist = 15;
   const peaks = [];
   for (let i = 2; i < smoothed.length - 2; i++) {
@@ -923,9 +758,6 @@ function speechRate(buf, fs) {
   return { rate: peaks.length / durSec, syllables: peaks.length, duration: durSec };
 }
 
-/* ============================================================
-   TASK-SPECIFIC ANALYZERS
-   ============================================================ */
 function analyzeTask(taskId, buf, fs) {
   const trimmed = vadTrim(buf, fs, 0.04);
   const durTotal = buf.length / fs;
@@ -971,7 +803,7 @@ function analyzeTask(taskId, buf, fs) {
     return {
       f0Mean: mean(f0s), f0Std: stdev(f0s),
       speechRate: sr.rate, syllables: sr.syllables,
-      expectedSyllables: 18, // 1+2+3+4+5 + 1+2+2+2+2+3+3+3+3+3
+      expectedSyllables: 18,
       rateConsistency: stdev(f0s) / (mean(f0s) || 1),
       durVoiced, durTotal
     };
@@ -982,7 +814,6 @@ function analyzeTask(taskId, buf, fs) {
     const mag = magSpectrum(trimmed, fs, 4096);
     const { centroid } = spectralStats(mag, fs, 4096);
     const range = f0s.length ? Math.max(...f0s) - Math.min(...f0s) : 0;
-    // Pitch agility — mean abs delta
     let agil = 0;
     for (let i = 1; i < f0s.length; i++) agil += Math.abs(f0s[i] - f0s[i-1]);
     agil = f0s.length > 1 ? agil / (f0s.length - 1) : 0;
@@ -998,9 +829,6 @@ function analyzeTask(taskId, buf, fs) {
   return {};
 }
 
-/* ============================================================
-   MINI SUMMARIES (per-task quick feedback)
-   ============================================================ */
 function miniSummary(taskId, f) {
   if (taskId === 'baseline') {
     return 'Giọng nền: F0 trung bình <strong>' + f.f0Mean.toFixed(0) + 'Hz</strong>, tốc độ ' + f.speechRate.toFixed(1) + ' âm tiết/giây.';
@@ -1018,14 +846,10 @@ function miniSummary(taskId, f) {
   return 'Xong.';
 }
 
-/* ============================================================
-   COMPILE FEATURES + NGŨ ÂM HEURISTIC + WARNINGS
-   ============================================================ */
 function compileAndShowFeatures() {
   const r = state.results;
   const b = r.baseline, s = r.sustain, c = r.count, t = r.tonal;
 
-  // Build items
   const items = [
     { name: 'F0 Trung Bình', value: b.f0Mean.toFixed(0) + ' Hz', interp: interpF0(b.f0Mean), bar: clamp((b.f0Mean - 60) / 240, 0, 1) },
     { name: 'Khí (Sustain)', value: s.sustainDuration.toFixed(1) + ' s', interp: interpSustain(s.sustainDuration), bar: clamp(s.sustainDuration / 5, 0, 1) },
@@ -1041,7 +865,6 @@ function compileAndShowFeatures() {
     { name: 'Độ Ổn Định F0', value: (b.f0Std / (b.f0Mean || 1) * 100).toFixed(1) + ' %', interp: interpStability(b.f0Std / (b.f0Mean || 1)), bar: 1 - clamp(b.f0Std / (b.f0Mean || 1) / 0.4, 0, 1) }
   ];
 
-  // Render
   featuresGrid.innerHTML = items.map(it => `
     <div class="feature-item">
       <div class="feature-name">${it.name}</div>
@@ -1051,11 +874,9 @@ function compileAndShowFeatures() {
     </div>
   `).join('');
 
-  // Ngũ Âm heuristic
   const nguam = estimateNguAm(r, state.gender);
   nguamBadge.textContent = 'Ngũ Âm ước tính: ' + nguam.label;
 
-  // Warnings
   const warns = [];
   if (s.sustainDuration < 2.5) warns.push('⚠ Ngân âm quá ngắn (<2.5s) — khí bất túc hoặc mic không thu trọn. Nếu không cố ý, nên thu lại bài 2.');
   if (s.shimmer > 1.2) warns.push('⚠ Shimmer cao (>1.2dB) — giọng không ổn định khi ngân. Có thể do run giọng hoặc micro chất lượng thấp.');
@@ -1070,15 +891,14 @@ function compileAndShowFeatures() {
     featuresWarn.classList.remove('visible');
   }
 
-  featuresPanel.classList.add('visible');
-  analyzeWrap.classList.add('visible');
-  taskCard.classList.remove('visible');
+  featuresPanel.style.display = 'block';
+  analyzeWrap.style.display = 'block';
+  tasksSection.style.display = 'none';
   featuresPanel.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function clamp(x, lo, hi){ return Math.max(lo, Math.min(hi, x)); }
 
-/* --- Interpretations --- */
 function interpF0(f){
   if (state.gender === 'nam') {
     if (f < 90) return 'Rất trầm — vùng Thổ/Hổ Hống.';
@@ -1148,41 +968,34 @@ function interpStability(cv){
   return 'Biến động lớn.';
 }
 
-/* --- Ngũ Âm heuristic (sơ bộ, Claude sẽ luận sâu) --- */
 function estimateNguAm(r, gender){
   const b = r.baseline, s = r.sustain;
   const scores = { Kim:0, Moc:0, Thuy:0, Hoa:0, Tho:0 };
 
-  // Kim: HNR cao + sustain dài + jitter thấp + F0 trung bình
   if (s.hnrMean > 15) scores.Kim += 2;
   if (s.sustainDuration > 3.5) scores.Kim += 2;
   if (s.jitter < 0.8) scores.Kim += 1;
   if (b.centroid > 1500) scores.Kim += 1;
 
-  // Mộc: F0 cao, jitter thấp, stability cao, range thấp-vừa
   const f0HighThr = gender === 'nam' ? 145 : 230;
   if (b.f0Mean > f0HighThr) scores.Moc += 2;
   if (s.jitter < 1.0) scores.Moc += 1;
   if ((b.f0Std / (b.f0Mean || 1)) < 0.15) scores.Moc += 1;
 
-  // Thủy: F0 variance cao, pitch range cao, uyển chuyển
   if (r.tonal.f0Range > 80) scores.Thuy += 2;
   if (r.tonal.pitchAgility > 15) scores.Thuy += 2;
   if (s.hnrMean > 10) scores.Thuy += 1;
 
-  // Hỏa: shimmer cao, decay steep, sustain ngắn
   if (s.shimmer > 0.9) scores.Hoa += 2;
   if (s.decaySlope < -5) scores.Hoa += 2;
   if (s.sustainDuration < 2.8) scores.Hoa += 1;
 
-  // Thổ: F0 thấp, sustain dài, stability cao, centroid thấp
   const f0LowThr = gender === 'nam' ? 110 : 200;
   if (b.f0Mean < f0LowThr) scores.Tho += 2;
   if (s.sustainDuration > 3.5) scores.Tho += 1;
   if (b.centroid < 1200) scores.Tho += 2;
   if ((b.f0Std / (b.f0Mean || 1)) < 0.15) scores.Tho += 1;
 
-  // Pick top
   const sorted = Object.entries(scores).sort((a,b) => b[1] - a[1]);
   const top = sorted[0];
   const second = sorted[1];
@@ -1191,16 +1004,12 @@ function estimateNguAm(r, gender){
   if (second[1] >= top[1] - 1 && second[1] >= 3) {
     label += ' chen ' + names[second[0]].split(' ')[0];
   }
-  // Thanh / Trọc
   if (s.hnrMean >= 15) label = 'Thanh ' + label;
   else if (s.hnrMean < 8) label = 'Trọc ' + label;
 
   return { label, scores, primary: top[0], secondary: second[0] };
 }
 
-/* ============================================================
-   BUILD geoNote TEXT (format cho server)
-   ============================================================ */
 function buildGeoNote(gender, age, nguamEstimate, results) {
   const b = results.baseline || {};
   const s = results.sustain || {};
@@ -1263,13 +1072,10 @@ Spectral centroid: ${fmt(t.centroid, 0)} Hz
 Phân tích theo đúng 6 phần quy định. Bắt buộc dẫn nguyên văn kinh điển (phiên âm Hán-Việt kèm dịch). Nếu sustainDuration < 2.5s HOẶC shimmer > 1.2dB → bắt buộc phán "Khí bất túc" ở phần 2.`;
 }
 
-/* ============================================================
-   ANALYZE — call API với SSE streaming
-   ============================================================ */
+let _currentSlug = '';
+
 analyzeBtn.addEventListener('click', async () => {
-  // Option A: check + confirm credits before calling API
   _currentSlug = TuviPaywall.generateToolSlug('thanh-tuong-pro');
-  _saveStateForAuth();
   await TuviPaywall.requireCredits(_currentSlug, async () => {
     await _doThanhTuongAnalyze();
   });
@@ -1278,9 +1084,9 @@ analyzeBtn.addEventListener('click', async () => {
 async function _doThanhTuongAnalyze() {
   analyzeBtn.disabled = true;
   analyzeBtn.textContent = 'Đang luận giải…';
-  resultsPanel.classList.add('visible');
+  resultsCard.style.display = 'block';
   resultsPanel.innerHTML = '<p class="loading-dots" style="text-align:center;color:var(--text-lt);padding:30px 0">Đang phân tích theo cổ pháp</p>';
-  resultsPanel.scrollIntoView({behavior:'smooth',block:'start'});
+  resultsCard.scrollIntoView({behavior:'smooth',block:'start'});
 
   const nguam = estimateNguAm(state.results, state.gender);
   const geoNote = buildGeoNote(state.gender, state.age, nguam, state.results);
@@ -1303,7 +1109,6 @@ async function _doThanhTuongAnalyze() {
       throw new Error(errMsg);
     }
 
-    // Parse SSE stream: lines of "data: {"t":"..."}\n\n" and "data: [DONE]"
     const reader = res.body.getReader();
     const dec = new TextDecoder();
     let buf = '';
@@ -1347,9 +1152,8 @@ async function _doThanhTuongAnalyze() {
     analyzeBtn.textContent = 'Thử Lại';
     analyzeBtn.disabled = false;
   }
-} // end _doThanhTuongAnalyze
+}
 
-/* --- Light markdown renderer --- */
 function renderMarkdown(md){
   let h = md
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -1358,7 +1162,6 @@ function renderMarkdown(md){
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
     .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>');
-  // Paragraphs
   const blocks = h.split(/\n\n+/);
   h = blocks.map(b => {
     if (b.startsWith('<h2') || b.startsWith('<h3') || b.startsWith('<blockquote')) return b;
@@ -1366,13 +1169,6 @@ function renderMarkdown(md){
   }).join('\n');
   return h;
 }
-</script>
-<script src="/tuvi-paywall.js"></script>
-<script>
-// ── TuviPaywall init ──────────────────────────────────────────
-let _currentSlug = '';
-
-
 
 TuviPaywall.init({
   product: 'thanh-tuong-pro',
@@ -1380,95 +1176,17 @@ TuviPaywall.init({
   onUnlock: () => {},
 });
 
-// ── Restore state after OAuth login ──────────────────────────────
-(function() {
-  const restored = restoreStateAfterAuth();
-  if (restored) {
-    setTimeout(async () => {
-      const completedCount = Object.keys(state.results).length;
-      if (completedCount >= TASKS.length && window.Auth?.isLoggedIn()) {
-        analyzeBtn.click();
-      }
-    }, 1000);
-  }
-})();
-
-// ── State persistence ────────────────────────────────────────────
-const _TP_PRO_KEY = 'tvmb_thanh_tuong_pro_state';
-function _saveStateForAuth() {
-  try {
-    const toSave = {
-      gender: state.gender, age: state.age,
-      currentIdx: state.currentIdx, results: state.results,
-      _savedAt: Date.now()
-    };
-    sessionStorage.setItem(_TP_PRO_KEY, JSON.stringify(toSave));
-  } catch(e) {}
-}
-function _restoreStateAfterAuth() {
-  try {
-    const raw = sessionStorage.getItem(_TP_PRO_KEY);
-    if (!raw) return false;
-    const saved = JSON.parse(raw);
-    if (Date.now() - (saved._savedAt||0) > 10*60*1000) { sessionStorage.removeItem(_TP_PRO_KEY); return false; }
-    sessionStorage.removeItem(_TP_PRO_KEY);
-    state.gender = saved.gender; state.age = saved.age; state.results = saved.results||{};
-    if (state.gender) document.querySelectorAll('.gender-opt').forEach(o=>o.classList.toggle('selected',o.dataset.gender===state.gender));
-    const ageEl = document.getElementById('ageInput'); if(ageEl&&state.age) ageEl.value=state.age;
-    const done = Object.keys(state.results).length;
-    if (done > 0) {
-      const ts = document.getElementById('tasksSection'); if(ts) ts.style.display='block';
-      const nxt = TASKS.findIndex(t=>!state.results[t.id]);
-      state.currentIdx = nxt>=0?nxt:TASKS.length-1;
-      loadTask(state.currentIdx);
-      if (done>=TASKS.length) { const aw=document.getElementById('analyzeWrap'); if(aw) aw.classList.add('visible'); }
-    }
-    return true;
-  } catch(e) { return false; }
-}
-(function(){ if(_restoreStateAfterAuth()) setTimeout(()=>{ if(Object.keys(state.results).length>=TASKS.length&&window.Auth?.isLoggedIn()) analyzeBtn.click(); },1000); })();
-
-// ── Save tuong reading to profile ──────────────────────────
 async function _saveTuongReading(tool, resultText, imageData, mediaType) {
   try {
     const token = window.Auth?.getSession()?.access_token;
     if (!token || !resultText) return;
-    let thumbnail = null;
-    if (imageData) {
-      const img = new Image();
-      await new Promise(resolve => { img.onload = resolve; img.src = "data:" + (mediaType||"image/jpeg") + ";base64," + imageData; });
-      const canvas = document.createElement("canvas");
-      const maxW = 200;
-      const scale = Math.min(1, maxW / img.width);
-      canvas.width = Math.round(img.width * scale);
-      canvas.height = Math.round(img.height * scale);
-      canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
-      thumbnail = canvas.toDataURL("image/jpeg", 0.7);
-    }
     fetch("/api/history?action=save_tuong", {
       method: "POST",
       headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
-      body: JSON.stringify({ tool, result_text: resultText, thumbnail }),
+      body: JSON.stringify({ tool, result_text: resultText, thumbnail: null }),
     }).catch(() => {});
   } catch(e) {}
 }
 </script>
-<section class="kb-section">
-  <div class="page">
-    <div class="kb-inner">
-      <div class="kb-eyebrow">Kiến Thức Cổ Pháp</div>
-      <h2 class="kb-title">Năm Âm Cổ Pháp — Phân Tích Giọng Theo Chiều Sâu</h2>
-      <div class="kb-body">
-        <p>Thanh tướng chuyên sâu đi xa hơn việc phân loại giọng vào năm hành. Nó phân tích từng đặc điểm âm học riêng lẻ: <strong>âm vực</strong> (pitch range — giọng có sử dụng đầy đủ dải âm hay chỉ ở một vùng hẹp), <strong>cộng hưởng</strong> (giọng vang từ ngực hay từ mũi — phản ánh cách người đó "đặt" năng lượng), <strong>phách</strong> (tempo — nhịp điệu tự nhiên khi nói) và <strong>độ rõ</strong> của phụ âm.</p>
-        <p>Cổ văn ghi chép: giọng xuất phát từ "đan điền" (vùng bụng dưới) là giọng có nền tảng — thường ứng với người trầm tĩnh, quyết đoán. Giọng "phù" (nổi, chỉ ở ngực và mũi) thiếu chiều sâu — thường ứng với người dễ bị cảm xúc chi phối. "Thần" trong giọng nói — sự hiện diện và tập trung — được coi là dấu hiệu quan trọng nhất về ý chí và năng lực lãnh đạo.</p>
-        <p>Phân tích chuyên sâu không phủ nhận phân tích cơ bản mà bổ sung thêm độ phân giải: hai người cùng "Hỏa thanh" vẫn khác nhau ở chỗ một người có cộng hưởng ngực tốt (tự tin thực sự) còn một người giọng mỏng, nhanh (năng động nhưng thiếu nền tảng). Chi tiết tạo nên sự khác biệt.</p>
-        <p class="kb-links">Xem thêm: <a href="/tools/thanh-tuong-ai.html">Thanh Tướng — Giọng Nói</a>, <a href="/tools/tuong-mat-ai.html">Xem Tướng Mặt</a>, <a href="/tools/khi-sac-ai.html">Khí Sắc — Vận Khí</a></p>
-      </div>
-    </div>
-  </div>
-</section>
-<script src="/testimonials.js"></script>
-<script src="/related-tools.js"></script>
-<script src="/nav.js?v=16" defer></script>
 </body>
 </html>
