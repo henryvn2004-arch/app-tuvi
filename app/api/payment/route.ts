@@ -602,8 +602,42 @@ export async function GET(request: NextRequest) {
   if (action === 'balance')      return handleBalance(searchParams);
   if (action === 'check')        return handleCheck(searchParams);
   if (action === 'admin-users')  return handleAdminUsers(request, searchParams);
+  if (action === 'admin-marketing') return handleAdminMarketing(request, searchParams);
   if (action === 'check-bank')  return handleCheckBank(searchParams);
   return err('Invalid action.', 400);
+}
+
+// ── GET: admin-marketing (funnel + sources theo cửa sổ ngày) ──────
+// Dashboard Marketing đọc events/user_attribution/credit_transactions qua RPC
+// aggregate (marketing_funnel + marketing_sources). Chỉ admin (service key gọi RPC).
+async function handleAdminMarketing(request: NextRequest, sp: URLSearchParams): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  // from/to là ISO date (YYYY-MM-DD). Mặc định 30 ngày gần nhất → hết hôm nay.
+  const to = sp.get('to') ? new Date(sp.get('to') as string) : new Date();
+  const from = sp.get('from') ? new Date(sp.get('from') as string) : new Date(Date.now() - 30 * 864e5);
+  if (isNaN(from.getTime()) || isNaN(to.getTime())) return err('Invalid date range', 400);
+  // to = cuối ngày (exclusive nửa mở ở +1 ngày) để bao trọn ngày 'to'.
+  const toExcl = new Date(to.getTime() + 864e5);
+  const params = { p_from: from.toISOString(), p_to: toExcl.toISOString() };
+
+  try {
+    const [funnelRes, sourcesRes] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/rpc/marketing_funnel`, {
+        method: 'POST', headers: SB_HEADERS, body: JSON.stringify(params),
+      }),
+      fetch(`${SUPABASE_URL}/rest/v1/rpc/marketing_sources`, {
+        method: 'POST', headers: SB_HEADERS, body: JSON.stringify(params),
+      }),
+    ]);
+    if (!funnelRes.ok) throw new Error(await funnelRes.text());
+    if (!sourcesRes.ok) throw new Error(await sourcesRes.text());
+    const funnel = await funnelRes.json();
+    const sources = await sourcesRes.json();
+    return ok({ funnel, sources, from: from.toISOString(), to: to.toISOString() });
+  } catch (e: unknown) { return err((e as Error).message); }
 }
 
 // ── POST: referral-register ────────────────────────────────────
