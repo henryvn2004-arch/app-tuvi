@@ -9,6 +9,8 @@ export const maxDuration = 15;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
+import { getPackage, getPackages } from '@/lib/billing/packages';
+import { getToolPrice } from '@/lib/billing/pricing';
 
 const PAYPAL_BASE = process.env.PAYPAL_MODE === 'live'
   ? 'https://api-m.paypal.com'
@@ -21,22 +23,9 @@ const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY!;
 const SITE_URL      = 'https://www.tuviminhbao.com';
 const CURRENCY      = 'USD';
 
-// ── Credit packages (USD via PayPal) ──────────────────────────
-// Tỷ giá tham chiếu: 1 USD = 25.000đ → packages khớp với VND tier
-const PACKAGES: Record<string, { amount: string; credits: number; label: string }> = {
-  '50':  { amount:  '4.00', credits:  50, label: 'Khoi Dau – 50 Luong (+25%)'    },
-  '120': { amount:  '8.00', credits: 120, label: 'Pho Thong – 120 Luong (+50%)'  },
-  '350': { amount: '20.00', credits: 350, label: 'Cao Cap – 350 Luong (+75%)'    },
-  '800': { amount: '40.00', credits: 800, label: 'VIP – 800 Luong (+100%)'       },
-};
-
-// ── payOS Credit packages (VNĐ) ──────────────────────────────
-const PAYOS_PACKAGES: Record<string, { amountVND: number; credits: number; label: string }> = {
-  '50':  { amountVND:  99_000, credits:  50, label: 'Khoi Dau – 50 Luong (+25%)'    },
-  '120': { amountVND: 199_000, credits: 120, label: 'Pho Thong – 120 Luong (+50%)'  },
-  '350': { amountVND: 499_000, credits: 350, label: 'Cao Cap – 350 Luong (+75%)'    },
-  '800': { amountVND: 999_000, credits: 800, label: 'VIP – 800 Luong (+100%)'       },
-};
+// ── Gói nạp ───────────────────────────────────────────────────
+// Nguồn thật = bảng credit_packages (lib/billing/packages), admin sửa được;
+// module tự fallback hardcode nếu DB hụt. Tỷ giá tham chiếu 1 USD = 25.000đ.
 
 function createPayOSSignature(data: Record<string, unknown>): string {
   const checksumKey = process.env.PAYOS_CHECKSUM_KEY!;
@@ -175,9 +164,10 @@ async function handleTopup(body: Record<string, unknown>): Promise<Response> {
     pkg  = { amount: usdAmount.toFixed(2), credits, label: `Nap Tuy Chinh – ${credits} Luong` };
     slug = `topup-custom-${Math.round(customAmountVnd / 1000)}k`;
   } else {
-    const found = PACKAGES[packageId];
-    if (!found) return err(`packageId không hợp lệ. Dùng: ${Object.keys(PACKAGES).join(', ')} hoặc "custom"`, 400);
-    pkg  = found;
+    const pkgs  = await getPackages();
+    const found = pkgs[packageId];
+    if (!found) return err(`packageId không hợp lệ. Dùng: ${Object.keys(pkgs).join(', ')} hoặc "custom"`, 400);
+    pkg  = { amount: found.amountUsd, credits: found.credits, label: `${found.label} – ${found.credits} Luong` };
     slug = `topup-${packageId}`;
   }
   try {
@@ -227,8 +217,9 @@ async function handleCapture(body: Record<string, unknown>): Promise<Response> {
   if (!slug.startsWith('topup-')) return err('Only topup orders handled here', 400);
 
   const packageId = slug.replace('topup-', '');
-  const pkg = PACKAGES[packageId];
-  if (!pkg) return err('Invalid package in slug', 400);
+  const foundPkg = await getPackage(packageId);
+  if (!foundPkg) return err('Invalid package in slug', 400);
+  const pkg = { amount: foundPkg.amountUsd, credits: foundPkg.credits, label: `${foundPkg.label} – ${foundPkg.credits} Luong` };
 
   try {
     const ppToken = await getPayPalToken();
@@ -285,13 +276,20 @@ async function handleDeduct(request: NextRequest, body: Record<string, unknown>)
   const userToken  = authHeader.replace('Bearer ', '').trim();
   if (!userToken) return err('Missing Authorization token', 401);
 
-  const amount      = parseInt(String(body.amount || '0'));
-  const toolType    = String(body.toolType    || '');
-  const slug        = String(body.slug        || '');
-  const description = String(body.description || toolType);
+  const clientAmount = parseInt(String(body.amount || '0'));
+  const toolType     = String(body.toolType    || '');
+  const product      = String(body.product     || ''); // tool_id để tra giá server-side
+  const slug         = String(body.slug        || '');
+  const description  = String(body.description || toolType);
 
-  if (!amount || amount <= 0) return err('Invalid amount', 400);
-  if (!toolType)              return err('Missing toolType', 400);
+  if (!toolType) return err('Missing toolType', 400);
+
+  // GIÁ THẬT do server quyết theo tool_pricing (KHÔNG tin amount client gửi).
+  // Tool không có trong bảng / bị tắt → fallback amount client (tương thích ngược).
+  const serverPrice = product ? await getToolPrice(product) : null;
+  const amount = serverPrice != null ? serverPrice : clientAmount;
+  if (amount < 0 || (serverPrice == null && (!clientAmount || clientAmount <= 0)))
+    return err('Invalid amount', 400);
 
   if (process.env.PAYWALL_DISABLED === 'true') {
     return ok({ success: true, balance: 99999, _dev: 'paywall_disabled' });
@@ -300,6 +298,9 @@ async function handleDeduct(request: NextRequest, body: Record<string, unknown>)
   try {
     const user = await getUserFromToken(userToken);
     if (!user) return err('Invalid or expired token', 401);
+
+    // Giá server = 0 (tool miễn phí) → cho qua, không trừ.
+    if (amount === 0) return ok({ success: true, balance: await getBalance(user.id), free: true });
 
     if (slug) {
       const already = await hasSlugAccess(user.id, slug);
@@ -482,11 +483,12 @@ async function handleCreateBank(body: Record<string, unknown>): Promise<Response
     }
     label = `Nap ${credits} Luong`;
   } else {
-    const pkg = PAYOS_PACKAGES[packageId];
-    if (!pkg) return err(`Invalid packageId. Use: ${Object.keys(PAYOS_PACKAGES).join(', ')}`, 400);
-    amountVND = pkg.amountVND;
-    credits   = pkg.credits;
-    label     = pkg.label;
+    const pkgs  = await getPackages();
+    const found = pkgs[packageId];
+    if (!found) return err(`Invalid packageId. Use: ${Object.keys(pkgs).join(', ')}`, 400);
+    amountVND = found.amountVnd;
+    credits   = found.credits;
+    label     = `${found.label} – ${found.credits} Luong`;
   }
 
   const orderCode   = Date.now() % 999_999_999;

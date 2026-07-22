@@ -26,6 +26,7 @@ import {
 import { buildToolDefs } from '@/lib/tools/registry';
 import { runAgent } from '@/lib/agent/run';
 import { getChatConfig } from '@/lib/config/appConfig';
+import { getToolPrice } from '@/lib/billing/pricing';
 import {
   paywallDisabled,
   extractToken,
@@ -84,7 +85,10 @@ export async function POST(request: NextRequest) {
   // Chỉ tính phí khi paywall bật VÀ giá cấu hình > 0. Trừ Lượng SAU
   // khi trả lời xong (giữ userId ở đây để dùng lại trong stream).
   let chargeUserId: string | null = null;
-  const cost = cfg.cost;
+  // Giá rail = tool_pricing['rail-message'] (nguồn thật, admin sửa được);
+  // fallback cfg.cost (app_config 'chat.cost') nếu chưa có row / đọc hụt.
+  const railPrice = await getToolPrice('rail-message');
+  const cost = railPrice != null ? railPrice : cfg.cost;
   if (!paywallDisabled() && cost > 0) {
     const token = extractToken(request);
     if (!token) return jsonError('unauthorized', 'Cần đăng nhập để dùng tính năng này', 401);
