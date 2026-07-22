@@ -14,14 +14,6 @@ import { llmText, type LlmImage } from '@/lib/llm/complete';
 const SUPABASE_URL  = process.env.SUPABASE_URL!;
 const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY!;
 
-const COSTS: Record<string, number> = {
-  'analyze':              90,
-  'ban-lam-viec':         90,
-  'cua-hang':             90,
-  'mau-sac':              20,
-  'trang-phuc-theo-ngay': 10,
-};
-
 // ── Supabase helpers ─────────────────────────────────────────────
 
 async function getUserFromToken(token: string) {
@@ -31,24 +23,6 @@ async function getUserFromToken(token: string) {
   if (!res.ok) return null;
   const u = await res.json();
   return u?.id ? u : null;
-}
-
-async function sbRpc(fn: string, params: Record<string, unknown>) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` },
-    body: JSON.stringify(params),
-  });
-  if (!res.ok) { const t = await res.text(); throw new Error(t); }
-  return res.json();
-}
-
-async function logTx(userId: string, amount: number, toolType: string, description: string, slug: string) {
-  await fetch(`${SUPABASE_URL}/rest/v1/credit_transactions`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Prefer': 'return=minimal' },
-    body: JSON.stringify({ user_id: userId, amount: -amount, type: toolType, description, slug, created_at: new Date().toISOString() }),
-  });
 }
 
 // ── LLM helper (Gemini-primary + Anthropic-backup qua lib/llm/complete) ──────
@@ -192,27 +166,18 @@ function getNapAmFull(year: number): string {
 
 // ── Auth + credit deduct common ──────────────────────────────────
 
-async function authAndDeduct(request: NextRequest, action: string) {
+// Xác thực người dùng ĐƠN THUẦN — KHÔNG trừ Lượng ở đây. Trừ Lượng đã do
+// TuviPaywall.requireCredits phía client làm (qua /api/payment?action=deduct,
+// có dedup theo slug) trước khi gọi endpoint này — y hệt pattern handlePhongThuyRender
+// / handleTrangPhucTryon bên dưới. Trước đây hàm này TỰ trừ thêm lần 2 qua RPC
+// deduct_credits → double-charge thật (vd phong-thuy: 40đ client + 90đ server = 130đ).
+async function authUser(request: NextRequest) {
   const auth = request.headers.get('Authorization');
   if (!auth?.startsWith('Bearer ')) return { error: 'Unauthorized', status: 401 };
   const token = auth.slice(7);
   const user = await getUserFromToken(token);
   if (!user?.id) return { error: 'Unauthorized', status: 401 };
-
-  const cost = COSTS[action] || 90;
-  let balance: number;
-  try { balance = await sbRpc('get_credit_balance', { p_user_id: user.id }); } catch { balance = 0; }
-  if (balance < cost) return { error: 'insufficient_balance', balance, required: cost };
-
-  let newBalance: number;
-  try {
-    newBalance = await sbRpc('deduct_credits', { p_user_id: user.id, p_amount: cost });
-  } catch (e: unknown) {
-    const msg = (e as Error).message || '';
-    if (msg.includes('insufficient')) return { error: 'insufficient_balance', balance, required: cost };
-    throw e;
-  }
-  return { user, token, cost, newBalance };
+  return { user, token };
 }
 
 // ── Vision + Feng Shui shared handler ────────────────────────────
@@ -225,7 +190,7 @@ async function handleVisionTool(
   analysisSystemPrompt: string,
   analysisUserPrompt: (detected: Record<string, unknown>, guaCtx: string, body: Record<string, unknown>) => string,
 ) {
-  const auth = await authAndDeduct(request, action);
+  const auth = await authUser(request);
   if ('error' in auth) return ok(auth);
 
   const { imageBase64, imageType, doorDir, guaNumber, namSinh } = body as Record<string, string>;
@@ -256,10 +221,7 @@ async function handleVisionTool(
   );
   const analysis = parseJSON(analysisText) || { beforeScore: 40, afterScore: 72, recommendations: [], shoppingList: [], generalAdvice: analysisText };
 
-  const slug = `${action}-${auth.user.id.slice(0,8)}-${Date.now()}`;
-  await logTx(auth.user.id, auth.cost, action.replace('-','_'), `Phong Thủy ${action}`, slug);
-
-  return ok({ success: true, balance: auth.newBalance, detected, analysis });
+  return ok({ success: true, detected, analysis });
 }
 
 // ── Handler: Phong Thủy Nội Thất ────────────────────────────────
@@ -317,7 +279,7 @@ Trả về JSON: {"beforeScore":<0-100>,"afterScore":<cao hơn ít nhất 15>,"s
 // ── Handler: Màu Sắc Hợp Mệnh ────────────────────────────────────
 
 async function handleMauSac(request: NextRequest, body: Record<string, unknown>) {
-  const auth = await authAndDeduct(request, 'mau-sac');
+  const auth = await authUser(request);
   if ('error' in auth) return ok(auth);
 
   const { namSinh, gioiTinh } = body as Record<string, string>;
@@ -397,11 +359,7 @@ Trả về JSON:
     bonusTip: '',
   };
 
-  // Attach hex colors
-  const slug = `mau-sac-${auth.user.id.slice(0,8)}-${Date.now()}`;
-  await logTx(auth.user.id, auth.cost, 'mau_sac', 'Màu Sắc Hợp Mệnh', slug);
-
-  return ok({ success: true, balance: auth.newBalance, napAmHanh, napAmFull, canChi, colorData, styleGuide });
+  return ok({ success: true, napAmHanh, napAmFull, canChi, colorData, styleGuide });
 }
 
 // ── Phong Thủy Room Render (Replicate) ───────────────────────────
@@ -681,8 +639,8 @@ function getRelation(menhHanh: string, ngayHanh: string): 'binh_hoa' | 'ngay_sin
 }
 
 async function handleTrangPhucTheoNgay(request: NextRequest, body: Record<string, unknown>) {
-  const auth = await authAndDeduct(request, 'trang-phuc-theo-ngay');
-  if (auth.error) return ok({ error: auth.error, balance: auth.balance, insufficientBalance: !!(auth as Record<string,unknown>).insufficientBalance });
+  const auth = await authUser(request);
+  if ('error' in auth) return ok(auth);
 
   const { namSinh, gioiTinh, ngay, thang, nam, mucDich } = body as Record<string, unknown>;
   const yr = Number(namSinh); const g = String(gioiTinh || 'male');
@@ -758,7 +716,7 @@ Trả về JSON thuần túy:
   }
   try {
     const parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
-    return ok({ success: true, balance: auth.newBalance, ...parsed });
+    return ok({ success: true, ...parsed });
   } catch(_) {
     return err('Lỗi phân tích kết quả.', 500);
   }
