@@ -20,7 +20,7 @@ Trước đó admin CHỈ suy hành vi từ `credit_transactions` (bỏ sót too
 - **S1 — Phủ toàn site** ✅ (stack trên #239): track.js qua `shell.js` + emit tool_open/tool_run/chat_msg, topup_start (paywall + topup.html), cta_click (homepage).
 - **S2 — Dashboard Funnel + Sources** ✅ (PR mới): mục "Marketing" sidebar, trang Funnel (conv% từng bước) + bảng Traffic Sources + filter ngày (RPC aggregate).
 - **S3 — Acquisition + Campaign** ✅ (PR mới): chart signups/ngày theo kênh, bảng campaign UTM, top landing/referrer.
-- **S4 — Retention + Revenue/LTV:** cohort giữ chân, doanh thu & LTV theo kênh (join `user_attribution` × `credit_transactions`), export CSV.
+- **S4 — Retention + Revenue/LTV** ✅ (PR mới): cohort giữ chân, doanh thu & LTV theo kênh (join `user_attribution` × `credit_transactions`), export CSV.
 
 ### ✅ Sprint 0 XONG (chờ merge) — hạ tầng tracking
 - **Migration `_patches/migration-events-tracking.sql`** (✅ ĐÃ CHẠY trên prod 2026-07-22 qua Supabase MCP — verify: events 17 cột, user_attribution 18 cột, 9 index, RLS bật + 2 policy admin_read. Không còn việc tay):
@@ -60,6 +60,14 @@ Trước đó admin CHỈ suy hành vi từ `credit_transactions` (bỏ sót too
 - **`public/admin.html`** — thêm 3 panel vào `#page-marketing`: chart "Đăng ký theo ngày & kênh" (`renderMktAcq` = cột chồng CSS thuần, mỗi kênh 1 màu + chú thích, xoay nhãn ngày), bảng "Chiến dịch UTM" (`renderMktCampaigns`), 2 bảng cạnh nhau "Top Landing Pages" + "Top Referrers" (`renderMktTraffic`). `loadMarketing` render thêm 3 mục.
 - **Verify:** typecheck 0 lỗi, prettier route.ts sạch, node --check block JS admin (147 dòng) OK. 3 RPC test prod OK.
 - **CÒN LẠI:** S4 (cohort retention theo tuần signup + LTV theo kênh join credit_transactions + export CSV).
+
+### ✅ Sprint 4 XONG (PR mới, branch reset trên main sau khi #241 merge) — retention + LTV + export CSV — HOÀN TẤT WORKPLAN
+- **Migration `_patches/migration-marketing-cohorts.sql`** (✅ ĐÃ CHẠY prod qua Supabase MCP — test trả `[]` vì chưa có signup có attribution):
+  - `marketing_cohorts(p_weeks int default 8)` → JSON `[{cohort_week, size, retention:{woff:count}}]`. Cohort = TUẦN đăng ký (`user_attribution.signup_at`); retention = distinct user của cohort có events ở tuần offset 0..weeks-1. **Bug đã sửa khi áp:** `extract(epoch from (date-date))` lỗi (date−date ra int ngày) → dùng `((date_trunc('week',ts)::date - cw)/7)::int`.
+- **`app/api/payment/route.ts`** — `handleAdminMarketing` gọi thêm `marketing_cohorts` (RPC dùng `p_weeks`, suy từ khoảng ngày, kẹp 4..16), trả thêm `cohorts` + `cohortWeeks`. Tổng 6 RPC/lần tải.
+- **`public/admin.html`** — thêm: panel "Cohort Giữ Chân" (`renderMktCohorts` = lưới màu heat theo %, hàng=tuần signup, cột=T+N), cột **LTV/user** vào bảng Sources (revenue_credits/signups × 2500đ, tính client), nút **⬇ CSV** ở header funnel (`mktExportCSV` = funnel + sources ra CSV BOM UTF-8, tải client). `loadMarketing` lưu `_mktData` cho export.
+- **Verify:** typecheck 0 lỗi, prettier route.ts sạch, node --check block JS admin (200 dòng) OK. Cohort RPC test prod OK.
+- **🎉 XONG 5 sprint (S0–S4).** Dashboard Marketing đầy đủ: Funnel · Sources (+LTV) · Acquisition chart · Campaign UTM · Cohort retention · Top landing/referrer · Export CSV. Data tự chảy khi user duyệt/đăng nhập trên prod. **Ý tưởng mở rộng sau:** đo doanh thu TIỀN THẬT (hiện quy đổi credits×2500đ — `credit_transactions` chưa lưu VNĐ/gateway); gắn `utm_campaign` vào link quảng bá để bảng Campaign có số; admin revamp phần còn lại (user detail drawer, bỏ trần 100 user — xem brainstorm đầu track).
 
 ---
 

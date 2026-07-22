@@ -874,6 +874,7 @@ audio { height: 32px; flex: 1; }
               <button class="btn btn-ghost btn-sm" onclick="mktRange(30)">30N</button>
               <button class="btn btn-ghost btn-sm" onclick="mktRange(90)">90N</button>
               <button class="btn btn-primary btn-sm" onclick="loadMarketing()">↻</button>
+              <button class="btn btn-gold btn-sm" onclick="mktExportCSV()">⬇ CSV</button>
             </div>
           </div>
           <div class="panel-body" id="mkt-funnel">
@@ -905,6 +906,16 @@ audio { height: 32px; flex: 1; }
             <div class="panel-title">🎯 Chiến Dịch (UTM Campaign)</div>
           </div>
           <div class="table-wrap" id="mkt-campaigns">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">🔁 Cohort Giữ Chân (theo tuần đăng ký)</div>
+            <span style="font-size:.72rem;color:var(--text-lt)">% user của cohort còn hoạt động ở tuần thứ N</span>
+          </div>
+          <div class="table-wrap" id="mkt-cohorts">
             <div class="loading"><span class="spin"></span>Đang tải...</div>
           </div>
         </div>
@@ -1699,6 +1710,7 @@ function filterLasos() {
 
 // ── MARKETING (funnel chuyển đổi + nguồn traffic) ──
 const MKT_VND = 2500; // 1 Lượng ≈ 2.500đ (quy đổi doanh thu)
+let _mktData = null;  // dữ liệu Marketing lần tải gần nhất (cho export CSV)
 function mktVnd(cr) { return (Math.max(0, cr || 0) * MKT_VND).toLocaleString('vi-VN') + 'đ'; }
 function mktISO(d) { return d.toISOString().slice(0, 10); }
 
@@ -1720,14 +1732,16 @@ async function loadMarketing() {
   try {
     const d = await apiGet('admin-marketing', `&from=${fromEl.value}&to=${toEl.value}`);
     if (d.error) throw new Error(d.error);
+    _mktData = d;
     renderMktFunnel(d.funnel || {});
     renderMktSources(d.sources || []);
     renderMktAcq(d.acquisition || []);
     renderMktCampaigns(d.campaigns || []);
     renderMktTraffic(d.traffic || {});
+    renderMktCohorts(d.cohorts || [], d.cohortWeeks || 8);
   } catch (e) {
     document.getElementById('mkt-funnel').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
-    ['mkt-sources','mkt-acq','mkt-campaigns','mkt-paths','mkt-referrers'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
+    ['mkt-sources','mkt-acq','mkt-campaigns','mkt-paths','mkt-referrers','mkt-cohorts'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
   }
 }
 
@@ -1772,9 +1786,10 @@ function renderMktSources(rows) {
   if (!rows.length) { host.innerHTML = '<div class="empty">Chưa có dữ liệu đăng ký trong khoảng này</div>'; return; }
   const SRC_LABEL = { direct: '🔗 Trực tiếp', referral: '↗ Referral' };
   host.innerHTML = `<table>
-    <thead><tr><th>Nguồn</th><th style="text-align:right">Đăng Ký</th><th style="text-align:right">Trả Tiền</th><th style="text-align:right">Conv%</th><th style="text-align:right">Lượng Nạp</th><th style="text-align:right">≈ Doanh Thu</th></tr></thead>
+    <thead><tr><th>Nguồn</th><th style="text-align:right">Đăng Ký</th><th style="text-align:right">Trả Tiền</th><th style="text-align:right">Conv%</th><th style="text-align:right">Lượng Nạp</th><th style="text-align:right">≈ Doanh Thu</th><th style="text-align:right">LTV/user</th></tr></thead>
     <tbody>${rows.map(r => {
       const conv = r.signups > 0 ? (r.paid / r.signups * 100).toFixed(1) + '%' : '—';
+      const ltv = r.signups > 0 ? (r.revenue_credits || 0) / r.signups : 0;
       return `<tr>
         <td><strong>${SRC_LABEL[r.source] || ('🎯 ' + r.source)}</strong></td>
         <td style="text-align:right">${(r.signups||0).toLocaleString()}</td>
@@ -1782,6 +1797,7 @@ function renderMktSources(rows) {
         <td style="text-align:right;color:var(--blue);font-weight:700">${conv}</td>
         <td style="text-align:right;color:var(--gold);font-weight:700">⊙ ${(r.revenue_credits||0).toLocaleString()}</td>
         <td style="text-align:right;color:var(--green)">${mktVnd(r.revenue_credits)}</td>
+        <td style="text-align:right;color:var(--navy);font-weight:700" title="Doanh thu / số đăng ký">${mktVnd(ltv)}</td>
       </tr>`;
     }).join('')}</tbody>
   </table>`;
@@ -1842,6 +1858,54 @@ function renderMktTraffic(t) {
     : '<div class="empty">Chưa có dữ liệu</div>';
   document.getElementById('mkt-paths').innerHTML = rowsHtml(t.top_paths, 'path');
   document.getElementById('mkt-referrers').innerHTML = rowsHtml(t.top_referrers, 'referrer');
+}
+
+// Cohort giữ chân: hàng = tuần đăng ký, cột = tuần offset, ô = % còn hoạt động.
+function renderMktCohorts(rows, weeks) {
+  const host = document.getElementById('mkt-cohorts');
+  if (!rows.length) { host.innerHTML = '<div class="empty">Chưa có cohort (cần user đăng ký + hoạt động sau đó)</div>'; return; }
+  const cols = []; for (let i = 0; i < weeks; i++) cols.push(i);
+  const head = '<th>Cohort (tuần)</th><th style="text-align:right">Size</th>' + cols.map(i => `<th style="text-align:center">T+${i}</th>`).join('');
+  const body = rows.map(r => {
+    const size = r.size || 0, ret = r.retention || {};
+    const cells = cols.map(i => {
+      const c = ret[i];
+      if (c == null) return '<td style="text-align:center;color:var(--border)">·</td>';
+      const pct = size > 0 ? Math.round(c / size * 100) : 0;
+      const bg = `rgba(20,85,164,${(pct / 100 * 0.85 + 0.08).toFixed(2)})`;
+      const col = pct > 45 ? '#fff' : 'var(--text-mid)';
+      return `<td style="text-align:center;background:${bg};color:${col};font-weight:700" title="${c}/${size}">${pct}%</td>`;
+    }).join('');
+    return `<tr><td class="mono" style="font-size:.7rem">${r.cohort_week}</td><td style="text-align:right;font-weight:700">${size}</td>${cells}</tr>`;
+  }).join('');
+  host.innerHTML = `<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
+}
+
+// Export CSV: funnel + nguồn traffic (kèm doanh thu & LTV quy đổi VNĐ).
+function mktExportCSV() {
+  if (!_mktData) { alert('Chưa có dữ liệu — mở trang Marketing trước.'); return; }
+  const f = _mktData.funnel || {};
+  const rows = [];
+  rows.push(['# Funnel', (_mktData.from || '').slice(0, 10), '->', (_mktData.to || '').slice(0, 10)]);
+  rows.push(['visitors', 'signups', 'activated', 'topup_intent', 'paid', 'returned']);
+  rows.push([f.visitors || 0, f.signups || 0, f.activated || 0, f.topup_intent || 0, f.paid || 0, f.returned || 0]);
+  rows.push([]);
+  rows.push(['# Sources']);
+  rows.push(['source', 'signups', 'paid', 'conv_pct', 'revenue_credits', 'revenue_vnd', 'ltv_vnd']);
+  (_mktData.sources || []).forEach(r => {
+    const conv = r.signups > 0 ? (r.paid / r.signups * 100).toFixed(1) : '0';
+    const ltv = r.signups > 0 ? Math.round((r.revenue_credits || 0) / r.signups * MKT_VND) : 0;
+    rows.push([r.source, r.signups || 0, r.paid || 0, conv, r.revenue_credits || 0, (r.revenue_credits || 0) * MKT_VND, ltv]);
+  });
+  const csv = rows.map(r => r.map(c => {
+    const s = String(c == null ? '' : c);
+    return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  }).join(',')).join('\n');
+  const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `marketing_${(_mktData.from || '').slice(0, 10)}_${(_mktData.to || '').slice(0, 10)}.csv`;
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
 }
 
 // ── PRICING (nhóm theo category, cho phép 0/free, lưu tất cả) ──
