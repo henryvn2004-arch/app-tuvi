@@ -30,7 +30,7 @@
       { id: 'thu-tuong',  label: 'Thủ Tướng AI',        href: '/app/thu-tuong',  icon: 'hand', cost: 5 },
     ] },
     { group: 'Phong Thủy', open: false, items: [
-      { id: 'phong-thuy', label: 'Phong thủy',          href: '/app/phong-thuy', icon: 'leaf' },
+      { id: 'phong-thuy', label: 'Phong Thủy Nội Thất',  href: '/app/phong-thuy', icon: 'leaf', cost: 40 },
       { id: 'bat-trach',  label: 'Hướng Bát Trạch',     href: '/app/bat-trach',  icon: 'compass' },
     ] },
     { group: 'Chọn Ngày / Lịch', open: false, items: [
