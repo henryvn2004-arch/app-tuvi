@@ -25,7 +25,9 @@
       { id: 'bat-tu',     label: 'Lá số Bát Tự',        href: '/app/bat-tu',     icon: 'rows' },
     ] },
     { group: 'Xem Tướng', open: false, items: [
-      { id: 'xem-tuong',  label: 'Xem tướng',           href: '/app/xem-tuong',  icon: 'eye' },
+      { id: 'dien-tuong', label: 'Diện Tướng AI',       href: '/app/dien-tuong', icon: 'user', cost: 5 },
+      { id: 'nhan-tuong', label: 'Nhãn Tướng AI',       href: '/app/nhan-tuong', icon: 'eye', cost: 5 },
+      { id: 'thu-tuong',  label: 'Thủ Tướng AI',        href: '/app/thu-tuong',  icon: 'hand', cost: 5 },
     ] },
     { group: 'Phong Thủy', open: false, items: [
       { id: 'phong-thuy', label: 'Phong thủy',          href: '/app/phong-thuy', icon: 'leaf' },
@@ -81,6 +83,7 @@
     wave: '<path d="M2 12c2 0 2-6 4-6s2 12 4 12 2-12 4-12 2 6 4 6"/>',
     yin: '<circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9 9 9 0 0 1 0-18z"/><circle cx="12" cy="7.5" r="1"/><circle cx="12" cy="16.5" r="1"/>',
     hash: '<path d="M9 3 7 21M17 3l-2 18M4 8h16M3 16h16"/>',
+    hand: '<path d="M8 13V5a1.5 1.5 0 0 1 3 0v6M11 11V3.5a1.5 1.5 0 0 1 3 0V11m0-4.5a1.5 1.5 0 0 1 3 0V12m0 .5V10a1.5 1.5 0 0 1 3 0v5.5c0 3.6-2 6.5-6 6.5h-1.5c-2.6 0-3.6-.9-5.2-3.4L5 15c-.7-1.1.5-2.4 1.7-1.7L8 14"/>',
   };
   function svg(name, cls) {
     return '<svg class="' + (cls || 'ic') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">' + (ICONS[name] || ICONS.dot) + '</svg>';
