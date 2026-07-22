@@ -752,6 +752,13 @@ audio { height: 32px; flex: 1; }
     </div>
 
     <div class="sidebar-section">
+      <div class="sidebar-section-label">Marketing</div>
+      <button class="nav-item" onclick="goTo('marketing')">
+        <span class="ni">📈</span><span>Funnel & Nguồn</span>
+      </button>
+    </div>
+
+    <div class="sidebar-section">
       <div class="sidebar-section-label">Sản Phẩm</div>
       <button class="nav-item" onclick="goTo('lasos')">
         <span class="ni">🔮</span><span>Lá Số</span>
@@ -849,6 +856,37 @@ audio { height: 32px; flex: 1; }
             </div>
           </div>
           <div class="table-wrap" id="credits-table">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MARKETING ── -->
+      <div class="page" id="page-marketing">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">📈 Funnel Chuyển Đổi</div>
+            <div class="panel-actions">
+              <input type="date" class="search-input" id="mkt-from" style="width:150px" onchange="loadMarketing()">
+              <span style="color:var(--text-lt)">→</span>
+              <input type="date" class="search-input" id="mkt-to" style="width:150px" onchange="loadMarketing()">
+              <button class="btn btn-ghost btn-sm" onclick="mktRange(7)">7N</button>
+              <button class="btn btn-ghost btn-sm" onclick="mktRange(30)">30N</button>
+              <button class="btn btn-ghost btn-sm" onclick="mktRange(90)">90N</button>
+              <button class="btn btn-primary btn-sm" onclick="loadMarketing()">↻</button>
+            </div>
+          </div>
+          <div class="panel-body" id="mkt-funnel">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">🌐 Nguồn Traffic (theo first-touch)</div>
+            <span style="font-size:.72rem;color:var(--text-lt)">Quy đổi doanh thu: 1 Lượng ≈ 2.500đ</span>
+          </div>
+          <div class="table-wrap" id="mkt-sources">
             <div class="loading"><span class="spin"></span>Đang tải...</div>
           </div>
         </div>
@@ -1354,7 +1392,7 @@ let _currentPage = 'dashboard';
 
 const PAGE_TITLES = {
   dashboard: 'Dashboard', users: 'Users', credits: 'Credits & Giao Dịch',
-  lasos: 'Lá Số', pricing: 'Pricing', tools: 'Công Cụ',
+  lasos: 'Lá Số', pricing: 'Pricing', tools: 'Công Cụ', marketing: 'Marketing',
 };
 
 // ── AUTH ──
@@ -1397,7 +1435,7 @@ function goTo(page) {
   document.getElementById('topbar-meta').textContent = new Date().toLocaleDateString('vi-VN', {weekday:'long',day:'numeric',month:'long',year:'numeric'});
   // Lazy load
   const loaders = { users: loadUsers, credits: loadCredits, lasos: loadLasos,
-                    pricing: loadPricingPage, tools: loadAdminUsers,
+                    pricing: loadPricingPage, tools: loadAdminUsers, marketing: loadMarketing,
                     content: () => {
     if (showView) showView('dashboard');
     if (!window._contentInitialized) {
@@ -1628,6 +1666,93 @@ function renderLasos(list) {
 function filterLasos() {
   const q = document.getElementById('search-lasos').value.toLowerCase();
   renderLasos(_allLasos.filter(l => (l.slug||'').includes(q) || (l.cung_menh||'').toLowerCase().includes(q) || (l.chinh_tinh||'').toLowerCase().includes(q)));
+}
+
+// ── MARKETING (funnel chuyển đổi + nguồn traffic) ──
+const MKT_VND = 2500; // 1 Lượng ≈ 2.500đ (quy đổi doanh thu)
+function mktVnd(cr) { return (Math.max(0, cr || 0) * MKT_VND).toLocaleString('vi-VN') + 'đ'; }
+function mktISO(d) { return d.toISOString().slice(0, 10); }
+
+// Đặt sẵn khoảng ngày (mặc định 30N) rồi tải.
+function mktRange(days) {
+  const to = new Date();
+  const from = new Date(Date.now() - (days - 1) * 864e5);
+  document.getElementById('mkt-from').value = mktISO(from);
+  document.getElementById('mkt-to').value = mktISO(to);
+  loadMarketing();
+}
+
+async function loadMarketing() {
+  // Lần đầu mở trang chưa có ngày → mặc định 30 ngày.
+  const fromEl = document.getElementById('mkt-from'), toEl = document.getElementById('mkt-to');
+  if (!fromEl.value || !toEl.value) { mktRange(30); return; }
+  document.getElementById('mkt-funnel').innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
+  document.getElementById('mkt-sources').innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
+  try {
+    const d = await apiGet('admin-marketing', `&from=${fromEl.value}&to=${toEl.value}`);
+    if (d.error) throw new Error(d.error);
+    renderMktFunnel(d.funnel || {});
+    renderMktSources(d.sources || []);
+  } catch (e) {
+    document.getElementById('mkt-funnel').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
+    document.getElementById('mkt-sources').innerHTML = '';
+  }
+}
+
+function renderMktFunnel(f) {
+  // Bậc funnel chính (thang theo visitors) + conv% so với bậc trước.
+  const steps = [
+    { k: 'visitors',  label: 'Khách ghé (visit)',   icon: '👀' },
+    { k: 'signups',   label: 'Đăng ký',             icon: '✍️' },
+    { k: 'activated', label: 'Dùng tool (activate)', icon: '⚡' },
+    { k: 'paid',      label: 'Trả tiền (paid)',      icon: '💳' },
+  ];
+  const max = Math.max(1, f.visitors || 0);
+  let prev = null;
+  const rows = steps.map(s => {
+    const v = f[s.k] || 0;
+    const pct = Math.round((v / max) * 100);
+    const conv = (prev == null) ? '' : (prev > 0 ? ((v / prev) * 100).toFixed(1) + '%' : '0%');
+    const convHtml = conv ? `<span style="color:var(--text-lt);font-size:.7rem;margin-left:.5rem">↳ ${conv} từ bước trước</span>` : '';
+    prev = v;
+    return `<div style="margin-bottom:.85rem">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.25rem">
+        <span style="font-size:.8rem;color:var(--text-mid)">${s.icon} ${s.label}${convHtml}</span>
+        <strong style="font-family:'Noto Serif',serif;color:var(--navy)">${v.toLocaleString()}</strong>
+      </div>
+      <div style="background:var(--border-lt);border-radius:5px;height:14px;overflow:hidden">
+        <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,var(--navy),var(--blue));border-radius:5px"></div>
+      </div>
+    </div>`;
+  }).join('');
+  // Chỉ số phụ (không nằm thẳng trên trục funnel).
+  const secondary = `<div style="display:flex;gap:1rem;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border-lt)">
+    <div><div class="stat-label">Ý định nạp</div><div style="font-family:'Noto Serif',serif;font-size:1.2rem;color:var(--gold)">${(f.topup_intent||0).toLocaleString()}</div></div>
+    <div><div class="stat-label">Quay lại (≥2 ngày)</div><div style="font-family:'Noto Serif',serif;font-size:1.2rem;color:var(--green)">${(f.returned||0).toLocaleString()}</div></div>
+  </div>`;
+  const overall = (f.visitors > 0) ? ((f.paid || 0) / f.visitors * 100).toFixed(2) + '%' : '—';
+  document.getElementById('mkt-funnel').innerHTML = rows + secondary +
+    `<div style="margin-top:.75rem;font-size:.72rem;color:var(--text-lt)">Chuyển đổi tổng visit → paid: <strong style="color:var(--navy)">${overall}</strong></div>`;
+}
+
+function renderMktSources(rows) {
+  const host = document.getElementById('mkt-sources');
+  if (!rows.length) { host.innerHTML = '<div class="empty">Chưa có dữ liệu đăng ký trong khoảng này</div>'; return; }
+  const SRC_LABEL = { direct: '🔗 Trực tiếp', referral: '↗ Referral' };
+  host.innerHTML = `<table>
+    <thead><tr><th>Nguồn</th><th style="text-align:right">Đăng Ký</th><th style="text-align:right">Trả Tiền</th><th style="text-align:right">Conv%</th><th style="text-align:right">Lượng Nạp</th><th style="text-align:right">≈ Doanh Thu</th></tr></thead>
+    <tbody>${rows.map(r => {
+      const conv = r.signups > 0 ? (r.paid / r.signups * 100).toFixed(1) + '%' : '—';
+      return `<tr>
+        <td><strong>${SRC_LABEL[r.source] || ('🎯 ' + r.source)}</strong></td>
+        <td style="text-align:right">${(r.signups||0).toLocaleString()}</td>
+        <td style="text-align:right">${(r.paid||0).toLocaleString()}</td>
+        <td style="text-align:right;color:var(--blue);font-weight:700">${conv}</td>
+        <td style="text-align:right;color:var(--gold);font-weight:700">⊙ ${(r.revenue_credits||0).toLocaleString()}</td>
+        <td style="text-align:right;color:var(--green)">${mktVnd(r.revenue_credits)}</td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>`;
 }
 
 // ── PRICING (nhóm theo category, cho phép 0/free, lưu tất cả) ──

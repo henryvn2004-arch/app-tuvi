@@ -18,7 +18,7 @@ Trước đó admin CHỈ suy hành vi từ `credit_transactions` (bỏ sót too
 **Workplan 5 sprint (mỗi sprint = 1 PR draft):**
 - **S0 — Hạ tầng tracking** ✅ (PR #239): bảng `events` + `user_attribution`, `/api/track`, `public/track.js`, gắn homepage + hook signup/login attribution.
 - **S1 — Phủ toàn site** ✅ (stack trên #239): track.js qua `shell.js` + emit tool_open/tool_run/chat_msg, topup_start (paywall + topup.html), cta_click (homepage).
-- **S2 — Dashboard Funnel + Sources:** mục "Marketing" sidebar, trang Funnel (conv% từng bước) + bảng Traffic Sources + filter ngày (RPC aggregate).
+- **S2 — Dashboard Funnel + Sources** ✅ (PR mới): mục "Marketing" sidebar, trang Funnel (conv% từng bước) + bảng Traffic Sources + filter ngày (RPC aggregate).
 - **S3 — Acquisition + Campaign:** chart signups/ngày theo kênh, bảng campaign UTM, top landing/referrer.
 - **S4 — Retention + Revenue/LTV:** cohort giữ chân, doanh thu & LTV theo kênh (join `user_attribution` × `credit_transactions`), export CSV.
 
@@ -41,6 +41,15 @@ Trước đó admin CHỈ suy hành vi từ `credit_transactions` (bỏ sót too
 - **QUYẾT ĐỊNH:** KHÔNG emit `topup_success` riêng — đã có đủ trong `credit_transactions` (type=topup, có amount + created_at); dashboard S2 lấy "paid" từ đó, join `user_attribution` để quy doanh thu theo kênh. `tool_result` cũng gộp vào `tool_run` (kiến trúc tool tính client rồi setContext — 1 tín hiệu activation là đủ). `tool_run` có thể hơi over-count lúc restore phiên (chấp nhận v1).
 - **Verify:** eslint shell.js/paywall 0 lỗi; chỉ đụng client JS + HTML (prettier-ignore) + không .ts → typecheck/prettier không đổi. Version bump: shell.js=41 (25 trang), paywall=6 (19 trang).
 - **CÒN LẠI (S2+):** dashboard Marketing đọc events/attribution (RPC aggregate) — Funnel, Sources, Acquisition, Cohort, Revenue/LTV.
+
+### ✅ Sprint 2 XONG (PR mới, branch reset trên main sau khi #239 merge) — dashboard Funnel + Sources
+- **Migration `_patches/migration-marketing-rpcs.sql`** (✅ ĐÃ CHẠY prod qua Supabase MCP — verify RPC trả số thật: funnel visitors/paid/topup_intent > 0):
+  - `marketing_funnel(from,to)` → JSON: visitors (distinct anon page_view) · signups (user_attribution.signup_at) · activated (distinct user tool_run) · topup_intent (distinct topup_start) · paid (distinct user credit_transactions type=topup) · returned (user active ≥2 ngày). "Stage snapshot", KHÔNG cohort chặt.
+  - `marketing_sources(from,to)` → table theo KÊNH first-touch (`coalesce(first_utm_source, referral nếu có referrer, else direct)`): signups · paid · revenue_credits (sum topup amount). security definer + grant service_role.
+- **`app/api/payment/route.ts`** — thêm GET action `admin-marketing` (`handleAdminMarketing`, verifyAdmin): nhận from/to (ISO date, mặc định 30N, to→cuối ngày), gọi 2 RPC bằng service key, trả `{funnel, sources}`.
+- **`public/admin.html`** — sidebar section "Marketing" (nav `goTo('marketing')`) + `#page-marketing`: filter ngày (input date + nút 7N/30N/90N) → `loadMarketing()` gọi `apiGet('admin-marketing')`. `renderMktFunnel` = 4 bậc bar (visit→signup→activate→paid, conv% từng bước + tổng) + chỉ số phụ (topup_intent, returned). `renderMktSources` = bảng nguồn (conv%, Lượng nạp, doanh thu ≈ ×2500đ). Thêm `marketing` vào PAGE_TITLES + loaders.
+- **Verify:** typecheck 0 lỗi, prettier route.ts sạch, node --check block JS admin (125 dòng) OK. RPC test prod OK.
+- **CÒN LẠI:** S3 (acquisition chart theo ngày/kênh + campaign UTM + top landing/referrer), S4 (cohort retention + LTV theo kênh + export CSV).
 
 ---
 
