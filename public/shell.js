@@ -96,6 +96,31 @@
 
   var ACTIVE = window.SHELL_ACTIVE || '';
 
+  // ── MARKETING TRACKING ──
+  // Nạp /track.js (nếu trang chưa có) để có window.Track + page_view; phát các
+  // event funnel (tool_open/tool_run/chat_msg) từ shell. Emit an toàn: nếu Track
+  // chưa sẵn sàng thì xếp hàng, flush khi script tải xong. Không bao giờ ném lỗi.
+  var _trackQ = [];
+  function track(type, props) {
+    try {
+      if (window.Track && window.Track.event) window.Track.event(type, props || {});
+      else { _trackQ.push([type, props || {}]); ensureTrackJs(); }
+    } catch (e) { /* ignore */ }
+  }
+  function flushTrack() {
+    if (!(window.Track && window.Track.event)) return;
+    var q = _trackQ.splice(0);
+    q.forEach(function (a) { try { window.Track.event(a[0], a[1]); } catch (e) { /* ignore */ } });
+  }
+  function ensureTrackJs() {
+    if (window.Track) { flushTrack(); return; }
+    if (document.getElementById('tvmb-track-js')) return;
+    var s = document.createElement('script');
+    s.id = 'tvmb-track-js'; s.src = '/track.js?v=1'; s.async = true;
+    s.onload = flushTrack;
+    (document.head || document.documentElement).appendChild(s);
+  }
+
   // ── RENDER SIDEBAR ──
   function renderSidebar() {
     var host = document.getElementById('shell-sidebar');
@@ -750,6 +775,8 @@
       // số/bát tự, scenario.type để chọn ĐÚNG bộ não (vd 'tu-binh'). Trang Lá
       // số chỉ truyền birth; trang Bát Tự truyền cả hai.
       ctx = (o.birth || o.scenario) ? { birth: o.birth || null, scenario: o.scenario || null } : null;
+      // Funnel: tool đã tính ra kết quả + gắn ngữ cảnh = "đã dùng tool" (activation).
+      try { track('tool_run', { tool_id: ACTIVE, slug: (o.scenario && o.scenario.type) || null }); } catch (e) { /* ignore */ }
       messages = [];
       sessionId = newId();
       // Meta cho thread mới: restore payload đủ để dựng lại center (mặc định =
@@ -869,6 +896,7 @@
     var text = input.value.trim();
     var imgs = pendingImages.slice();
     if (!text && !imgs.length) return;
+    try { track('chat_msg', { tool_id: ACTIVE, slug: (ctx && ctx.scenario && ctx.scenario.type) || null, meta: { has_img: imgs.length > 0 } }); } catch (e) { /* ignore */ }
     input.value = ''; autoGrow(input);
     var chat = document.getElementById('chat');
     var empty = document.getElementById('railEmpty'); if (empty) empty.remove();
@@ -1100,6 +1128,9 @@
 
   // ── BOOT ──
   function boot() {
+    // Marketing: nạp track.js (page_view tự bắn) + đánh dấu mở tool trong shell.
+    ensureTrackJs();
+    try { track('tool_open', { tool_id: ACTIVE || 'app' }); } catch (e) { /* ignore */ }
     // Nối phiên từ link chia sẻ: tải snapshot rồi reload ?auto=1 (boot dừng ở đây).
     if (consumeFromShare()) return;
     // Sau reload: nhận cờ fromshare để bắn beacon chuyển đổi sau câu hỏi đầu tiên.
