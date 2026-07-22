@@ -5,6 +5,45 @@
 
 ---
 
+## 🟣 ĐANG LÀM — Admin Revamp + Marketing/Conversion Tracking
+
+**Branch:** `claude/admin-page-revamp-sgnhvg`
+**Cập nhật:** 2026-07-22
+
+### 🔖 RESUME HERE
+Revamp `public/admin.html` + thêm mảng **Marketing** để đo full funnel:
+`traffic source → visit → signup → free/activated → paid → return → repeat`.
+Trước đó admin CHỈ suy hành vi từ `credit_transactions` (bỏ sót tool free, page view, nguồn traffic). Đang dựng hạ tầng tracking riêng.
+
+**Workplan 5 sprint (mỗi sprint = 1 PR draft):**
+- **S0 — Hạ tầng tracking** ✅ (PR #239): bảng `events` + `user_attribution`, `/api/track`, `public/track.js`, gắn homepage + hook signup/login attribution.
+- **S1 — Phủ toàn site** ✅ (stack trên #239): track.js qua `shell.js` + emit tool_open/tool_run/chat_msg, topup_start (paywall + topup.html), cta_click (homepage).
+- **S2 — Dashboard Funnel + Sources:** mục "Marketing" sidebar, trang Funnel (conv% từng bước) + bảng Traffic Sources + filter ngày (RPC aggregate).
+- **S3 — Acquisition + Campaign:** chart signups/ngày theo kênh, bảng campaign UTM, top landing/referrer.
+- **S4 — Retention + Revenue/LTV:** cohort giữ chân, doanh thu & LTV theo kênh (join `user_attribution` × `credit_transactions`), export CSV.
+
+### ✅ Sprint 0 XONG (chờ merge) — hạ tầng tracking
+- **Migration `_patches/migration-events-tracking.sql`** (✅ ĐÃ CHẠY trên prod 2026-07-22 qua Supabase MCP — verify: events 17 cột, user_attribution 18 cột, 9 index, RLS bật + 2 policy admin_read. Không còn việc tay):
+  - `events` (append-only): ts, event_type, anon_id, user_id, session_id, platform, tool_id, slug, path, referrer, utm_*, meta. Index ts/type/user/anon/utm_source.
+  - `user_attribution` (1 dòng/user): first-touch + last-touch UTM/referrer/landing + signup_at.
+  - RLS: GHI qua service key (`/api/track`); ĐỌC chỉ admin JWT (`email=admin@tuviminhbao.com`) — giống pattern `app_config`.
+- **`app/api/track/route.ts`** (runtime nodejs): nhận `{events:[...]}` (batch ≤30), allowlist 11 loại event, ghi service key. Có Authorization token → gắn user_id; lần đầu thấy user → snapshot attribution first-touch + phát event `signup` (chỉ nếu `created_at` < 15 phút → né user cũ login lại bị tính signup mới). Beacon KHÔNG ném lỗi ra client.
+- **`public/track.js`** (vanilla, không lib): anon_id (localStorage `tvmb_anon`) + session_id (sessionStorage `tvmb_sid`) + first-touch (`tvmb_attr_first`). Auto `page_view`; `window.Track.event(type, props)`. Gửi sendBeacon (ẩn danh) hoặc fetch keepalive kèm token (đọc `tuvi_session`) khi đã đăng nhập.
+- **Wire:** `index.html` thêm `<script src="/track.js?v=1">` (TRƯỚC auth.js). `auth.js` `saveSession()` gọi `Track.event('login')` sau khi lưu session → server gắn user_id + attribution.
+- **Verify:** typecheck root 0 lỗi (sau build engine), eslint track.js/auth.js sạch, prettier route.ts sạch.
+- **Event types (allowlist):** `page_view · tool_open · tool_run · tool_result · chat_msg · signup · login · topup_start · topup_success · share · cta_click`. S0 mới emit `page_view` (homepage) + `login`/`signup`. Còn lại emit ở S1.
+
+### ✅ Sprint 1 XONG (stack trên #239) — phủ tracking toàn site
+- **`shell.js` (v40→v41, bump cả 25 trang /app):** thêm helper `track()` + `ensureTrackJs()` — tự nạp `/track.js` (page_view bắn) nếu trang chưa có, emit an toàn qua hàng đợi. Emit: `tool_open` (boot, tool_id=ACTIVE), `tool_run` (trong `setContext` = tool tính ra kết quả + gắn ngữ cảnh = activation; kèm scenario.type), `chat_msg` (trong `sendMsg`, kèm has_img).
+- **`tuvi-paywall.js` (v5→v6, bump 19 trang):** `topup_start` (meta from=paywall, need) khi bấm "Nạp Credits →".
+- **`topup.html`:** nạp track.js + `topup_start` (from=topup_page) lúc mở trang.
+- **`index.html`:** `cta_click` (tool_id + has_q) trong `go()` — chokepoint hero submit + chip → shell.
+- **QUYẾT ĐỊNH:** KHÔNG emit `topup_success` riêng — đã có đủ trong `credit_transactions` (type=topup, có amount + created_at); dashboard S2 lấy "paid" từ đó, join `user_attribution` để quy doanh thu theo kênh. `tool_result` cũng gộp vào `tool_run` (kiến trúc tool tính client rồi setContext — 1 tín hiệu activation là đủ). `tool_run` có thể hơi over-count lúc restore phiên (chấp nhận v1).
+- **Verify:** eslint shell.js/paywall 0 lỗi; chỉ đụng client JS + HTML (prettier-ignore) + không .ts → typecheck/prettier không đổi. Version bump: shell.js=41 (25 trang), paywall=6 (19 trang).
+- **CÒN LẠI (S2+):** dashboard Marketing đọc events/attribution (RPC aggregate) — Funnel, Sources, Acquisition, Cohort, Revenue/LTV.
+
+---
+
 ## 🟢 ĐANG LÀM — App-shell "/app" (không gian làm việc đa công cụ)
 
 **Branch:** `claude/part-x-continuation-tca4xh`

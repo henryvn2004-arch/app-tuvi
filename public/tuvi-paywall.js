@@ -168,7 +168,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       '<div class="tpw-center">' +
         '<div class="tpw-msg">Số dư: <strong>' + balance + ' lượng</strong> · Cần: <strong>' + cost + ' lượng</strong><br>' +
         '<span style="font-size:12px;color:#999">Nạp thêm credits để tiếp tục.</span></div>' +
-        '<a class="tpw-btn topup" href="/topup.html" onclick="TuviPaywall._close()">Nạp Credits →</a>' +
+        '<a class="tpw-btn topup" href="/topup.html" onclick="try{window.Track&&window.Track.event&&window.Track.event(\'topup_start\',{meta:{from:\'paywall\',need:' + need + '}})}catch(e){};TuviPaywall._close()">Nạp Credits →</a>' +
       '</div>' +
       '<div class="tpw-ft"><button class="tpw-btn cancel" onclick="TuviPaywall._close()">Đóng</button></div>'
     );

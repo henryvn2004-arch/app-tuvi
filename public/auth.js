@@ -235,6 +235,9 @@ function saveSession(data) {
   }
   updateNavUI();
   if (data.access_token) sendSignupSignal(data.access_token);
+  // Marketing: gắn user_id + snapshot attribution (first-touch) lên tài khoản.
+  // track.js đọc token vừa lưu trong localStorage; server phân biệt signup mới.
+  try { if (window.Track && window.Track.event) window.Track.event('login'); } catch (e) { /* ignore */ }
 }
 
 // ── Beacon chống lạm dụng thưởng Lượng ──
