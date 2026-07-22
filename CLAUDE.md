@@ -19,7 +19,7 @@ Trước đó admin CHỈ suy hành vi từ `credit_transactions` (bỏ sót too
 - **S0 — Hạ tầng tracking** ✅ (PR #239): bảng `events` + `user_attribution`, `/api/track`, `public/track.js`, gắn homepage + hook signup/login attribution.
 - **S1 — Phủ toàn site** ✅ (stack trên #239): track.js qua `shell.js` + emit tool_open/tool_run/chat_msg, topup_start (paywall + topup.html), cta_click (homepage).
 - **S2 — Dashboard Funnel + Sources** ✅ (PR mới): mục "Marketing" sidebar, trang Funnel (conv% từng bước) + bảng Traffic Sources + filter ngày (RPC aggregate).
-- **S3 — Acquisition + Campaign:** chart signups/ngày theo kênh, bảng campaign UTM, top landing/referrer.
+- **S3 — Acquisition + Campaign** ✅ (PR mới): chart signups/ngày theo kênh, bảng campaign UTM, top landing/referrer.
 - **S4 — Retention + Revenue/LTV:** cohort giữ chân, doanh thu & LTV theo kênh (join `user_attribution` × `credit_transactions`), export CSV.
 
 ### ✅ Sprint 0 XONG (chờ merge) — hạ tầng tracking
@@ -50,6 +50,16 @@ Trước đó admin CHỈ suy hành vi từ `credit_transactions` (bỏ sót too
 - **`public/admin.html`** — sidebar section "Marketing" (nav `goTo('marketing')`) + `#page-marketing`: filter ngày (input date + nút 7N/30N/90N) → `loadMarketing()` gọi `apiGet('admin-marketing')`. `renderMktFunnel` = 4 bậc bar (visit→signup→activate→paid, conv% từng bước + tổng) + chỉ số phụ (topup_intent, returned). `renderMktSources` = bảng nguồn (conv%, Lượng nạp, doanh thu ≈ ×2500đ). Thêm `marketing` vào PAGE_TITLES + loaders.
 - **Verify:** typecheck 0 lỗi, prettier route.ts sạch, node --check block JS admin (125 dòng) OK. RPC test prod OK.
 - **CÒN LẠI:** S3 (acquisition chart theo ngày/kênh + campaign UTM + top landing/referrer), S4 (cohort retention + LTV theo kênh + export CSV).
+
+### ✅ Sprint 3 XONG (PR mới, branch reset trên main sau khi #240 merge) — acquisition + campaign + traffic detail
+- **Migration `_patches/migration-marketing-acquisition.sql`** (✅ ĐÃ CHẠY prod qua Supabase MCP — 3 RPC chạy OK, camp_rows=0 vì chưa có UTM campaign):
+  - `marketing_acquisition(from,to)` → table(day, source, signups): signup theo NGÀY × KÊNH first-touch (nuôi chart).
+  - `marketing_campaigns(from,to)` → table(campaign, source, signups, paid, revenue_credits): chỉ user có `first_utm_campaign`.
+  - `marketing_traffic(from,to)` → JSON {top_paths, top_referrers}: distinct visitor page_view, top 15 mỗi loại. security definer + grant service_role.
+- **`app/api/payment/route.ts`** — `handleAdminMarketing` gộp helper `callRpc` + `Promise.all` 5 RPC (funnel/sources/acquisition/campaigns/traffic), trả thêm `acquisition/campaigns/traffic`.
+- **`public/admin.html`** — thêm 3 panel vào `#page-marketing`: chart "Đăng ký theo ngày & kênh" (`renderMktAcq` = cột chồng CSS thuần, mỗi kênh 1 màu + chú thích, xoay nhãn ngày), bảng "Chiến dịch UTM" (`renderMktCampaigns`), 2 bảng cạnh nhau "Top Landing Pages" + "Top Referrers" (`renderMktTraffic`). `loadMarketing` render thêm 3 mục.
+- **Verify:** typecheck 0 lỗi, prettier route.ts sạch, node --check block JS admin (147 dòng) OK. 3 RPC test prod OK.
+- **CÒN LẠI:** S4 (cohort retention theo tuần signup + LTV theo kênh join credit_transactions + export CSV).
 
 ---
 

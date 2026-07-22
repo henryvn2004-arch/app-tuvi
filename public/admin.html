@@ -890,6 +890,35 @@ audio { height: 32px; flex: 1; }
             <div class="loading"><span class="spin"></span>Đang tải...</div>
           </div>
         </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">📅 Đăng Ký Theo Ngày & Kênh</div>
+          </div>
+          <div class="panel-body" id="mkt-acq">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">🎯 Chiến Dịch (UTM Campaign)</div>
+          </div>
+          <div class="table-wrap" id="mkt-campaigns">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">🛬 Top Landing Pages</div></div>
+            <div class="table-wrap" id="mkt-paths"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+          </div>
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">↗ Top Referrers</div></div>
+            <div class="table-wrap" id="mkt-referrers"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+          </div>
+        </div>
       </div>
 
       <!-- ── LÁ SỐ ── -->
@@ -1693,9 +1722,12 @@ async function loadMarketing() {
     if (d.error) throw new Error(d.error);
     renderMktFunnel(d.funnel || {});
     renderMktSources(d.sources || []);
+    renderMktAcq(d.acquisition || []);
+    renderMktCampaigns(d.campaigns || []);
+    renderMktTraffic(d.traffic || {});
   } catch (e) {
     document.getElementById('mkt-funnel').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
-    document.getElementById('mkt-sources').innerHTML = '';
+    ['mkt-sources','mkt-acq','mkt-campaigns','mkt-paths','mkt-referrers'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
   }
 }
 
@@ -1753,6 +1785,63 @@ function renderMktSources(rows) {
       </tr>`;
     }).join('')}</tbody>
   </table>`;
+}
+
+// Acquisition: cột chồng theo ngày, mỗi kênh 1 màu. Gọn, không thư viện chart.
+const MKT_SRC_COLORS = { direct: '#1455A4', referral: '#1E6B3C', google: '#D97706', facebook: '#1877F2', zalo: '#0068FF', tiktok: '#9A7B3A' };
+function mktSrcColor(s) { return MKT_SRC_COLORS[s] || '#9A7B3A'; }
+function renderMktAcq(rows) {
+  const host = document.getElementById('mkt-acq');
+  if (!rows.length) { host.innerHTML = '<div class="empty">Chưa có đăng ký trong khoảng này</div>'; return; }
+  // Gom theo ngày → {source:count}. Thu tập kênh để làm chú thích.
+  const byDay = {}, srcSet = {};
+  rows.forEach(r => { (byDay[r.day] = byDay[r.day] || {})[r.source] = (r.signups || 0); srcSet[r.source] = 1; });
+  const days = Object.keys(byDay).sort();
+  const srcs = Object.keys(srcSet);
+  let maxTotal = 1;
+  days.forEach(d => { const t = srcs.reduce((s, k) => s + (byDay[d][k] || 0), 0); if (t > maxTotal) maxTotal = t; });
+  const legend = srcs.map(s => `<span style="display:inline-flex;align-items:center;gap:4px;margin-right:.9rem;font-size:.7rem;color:var(--text-mid)"><span style="width:10px;height:10px;border-radius:2px;background:${mktSrcColor(s)}"></span>${s}</span>`).join('');
+  const bars = days.map(d => {
+    const total = srcs.reduce((s, k) => s + (byDay[d][k] || 0), 0);
+    const h = Math.round((total / maxTotal) * 120);
+    const seg = srcs.filter(k => byDay[d][k]).map(k => `<div title="${d} · ${k}: ${byDay[d][k]}" style="height:${Math.round((byDay[d][k] / total) * h)}px;background:${mktSrcColor(k)}"></div>`).join('');
+    const label = d.slice(5); // MM-DD
+    return `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;min-width:26px">
+      <div style="font-size:.6rem;color:var(--navy);font-weight:700">${total || ''}</div>
+      <div style="display:flex;flex-direction:column-reverse;width:18px;height:120px;justify-content:flex-start;border-radius:3px 3px 0 0;overflow:hidden">${seg}</div>
+      <div style="font-size:.58rem;color:var(--text-lt);transform:rotate(-45deg);white-space:nowrap;margin-top:2px">${label}</div>
+    </div>`;
+  }).join('');
+  host.innerHTML = `<div style="margin-bottom:.75rem">${legend}</div>
+    <div style="display:flex;gap:6px;align-items:flex-end;overflow-x:auto;padding-bottom:1.5rem">${bars}</div>`;
+}
+
+function renderMktCampaigns(rows) {
+  const host = document.getElementById('mkt-campaigns');
+  if (!rows.length) { host.innerHTML = '<div class="empty">Chưa có chiến dịch UTM nào (thêm ?utm_campaign=... vào link quảng bá)</div>'; return; }
+  host.innerHTML = `<table>
+    <thead><tr><th>Campaign</th><th>Nguồn</th><th style="text-align:right">Đăng Ký</th><th style="text-align:right">Trả Tiền</th><th style="text-align:right">Conv%</th><th style="text-align:right">≈ Doanh Thu</th></tr></thead>
+    <tbody>${rows.map(r => {
+      const conv = r.signups > 0 ? (r.paid / r.signups * 100).toFixed(1) + '%' : '—';
+      return `<tr>
+        <td><strong>${r.campaign}</strong></td>
+        <td style="color:var(--text-lt)">${r.source}</td>
+        <td style="text-align:right">${(r.signups||0).toLocaleString()}</td>
+        <td style="text-align:right">${(r.paid||0).toLocaleString()}</td>
+        <td style="text-align:right;color:var(--blue);font-weight:700">${conv}</td>
+        <td style="text-align:right;color:var(--green)">${mktVnd(r.revenue_credits)}</td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>`;
+}
+
+function renderMktTraffic(t) {
+  const rowsHtml = (list, key) => (list && list.length)
+    ? `<table><thead><tr><th>${key === 'path' ? 'Trang' : 'Nguồn'}</th><th style="text-align:right">Khách</th></tr></thead>
+       <tbody>${list.map(r => `<tr><td class="mono" style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.68rem" title="${r[key]||''}">${r[key]||'—'}</td><td style="text-align:right;font-weight:700">${(r.visitors||0).toLocaleString()}</td></tr>`).join('')}</tbody></table>`
+    : '<div class="empty">Chưa có dữ liệu</div>';
+  document.getElementById('mkt-paths').innerHTML = rowsHtml(t.top_paths, 'path');
+  document.getElementById('mkt-referrers').innerHTML = rowsHtml(t.top_referrers, 'referrer');
 }
 
 // ── PRICING (nhóm theo category, cho phép 0/free, lưu tất cả) ──

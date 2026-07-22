@@ -623,20 +623,26 @@ async function handleAdminMarketing(request: NextRequest, sp: URLSearchParams): 
   const toExcl = new Date(to.getTime() + 864e5);
   const params = { p_from: from.toISOString(), p_to: toExcl.toISOString() };
 
+  const callRpc = async (fn: string) => {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`, {
+      method: 'POST', headers: SB_HEADERS, body: JSON.stringify(params),
+    });
+    if (!res.ok) throw new Error(`${fn}: ${await res.text()}`);
+    return res.json();
+  };
+
   try {
-    const [funnelRes, sourcesRes] = await Promise.all([
-      fetch(`${SUPABASE_URL}/rest/v1/rpc/marketing_funnel`, {
-        method: 'POST', headers: SB_HEADERS, body: JSON.stringify(params),
-      }),
-      fetch(`${SUPABASE_URL}/rest/v1/rpc/marketing_sources`, {
-        method: 'POST', headers: SB_HEADERS, body: JSON.stringify(params),
-      }),
+    const [funnel, sources, acquisition, campaigns, traffic] = await Promise.all([
+      callRpc('marketing_funnel'),
+      callRpc('marketing_sources'),
+      callRpc('marketing_acquisition'),
+      callRpc('marketing_campaigns'),
+      callRpc('marketing_traffic'),
     ]);
-    if (!funnelRes.ok) throw new Error(await funnelRes.text());
-    if (!sourcesRes.ok) throw new Error(await sourcesRes.text());
-    const funnel = await funnelRes.json();
-    const sources = await sourcesRes.json();
-    return ok({ funnel, sources, from: from.toISOString(), to: to.toISOString() });
+    return ok({
+      funnel, sources, acquisition, campaigns, traffic,
+      from: from.toISOString(), to: to.toISOString(),
+    });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
