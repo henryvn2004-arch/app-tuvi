@@ -15,7 +15,7 @@
       { id: 'home',       label: 'Tổng quan',           href: '/app',            icon: 'home' },
     ] },
     { group: 'Tử Vi', open: true, items: [
-      { id: 'luan-giai',  label: 'Luận giải Tử Vi',     href: '/app/luan-giai',  icon: 'grid', cost: 5 },
+      { id: 'luan-giai',  label: 'Luận giải Tử Vi',     href: '/app/luan-giai',  icon: 'grid' },
       { id: 'xem-tuoi',   label: 'Xem tuổi vợ chồng',   href: '/app/xem-tuoi',   icon: 'users' },
       { id: 'xem-lam-an', label: 'Xem tuổi làm ăn',     href: '/app/xem-lam-an', icon: 'briefcase' },
       { id: 'tuong-hop',  label: 'Tương hợp tuổi',      href: '/app/tuong-hop',  icon: 'heart' },
@@ -112,8 +112,7 @@
       h += '<div class="grp' + (closed ? ' closed' : '') + '"><div class="grp-h" data-act="grp">' + esc(g.group) + ' ' + CHEV + '</div>';
       g.items.forEach(function (it) {
         var active = it.id === ACTIVE ? ' active' : '';
-        var pill = it.cost ? '<span class="pill cost">' + it.cost + '</span>'
-          : it.balance ? '<span class="pill" id="sbBalance">—</span>' : '';
+        var pill = it.balance ? '<span class="pill" id="sbBalance">—</span>' : '';
         h += '<a class="item' + active + '" href="' + it.href + '">' + (it.icon ? svg(it.icon) : '') + ' ' + esc(it.label) + ' ' + pill + '</a>';
       });
       h += '</div>';
@@ -967,7 +966,7 @@
 
   // ── COMMAND PALETTE ──
   var CMDS = [];
-  TOOLS.forEach(function (g) { g.items.forEach(function (it) { if (it.balance || it.id === 'ho-so') return; CMDS.push({ g: 'Công cụ', i: it.icon || 'grid', t: it.label, href: it.href, s: it.cost ? it.cost + ' Lượng' : '' }); }); });
+  TOOLS.forEach(function (g) { g.items.forEach(function (it) { if (it.balance || it.id === 'ho-so') return; CMDS.push({ g: 'Công cụ', i: it.icon || 'grid', t: it.label, href: it.href, s: '' }); }); });
   CMDS.push({ g: 'Hành động', i: 'bolt', t: 'Đổi nền sáng / tối', act: 'theme' });
   CMDS.push({ g: 'Hành động', i: 'bolt', t: 'Nạp Lượng', href: '/topup' });
   var cSel = 0, cShown = CMDS;

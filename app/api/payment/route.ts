@@ -9,6 +9,8 @@ export const maxDuration = 15;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
+import { getPackage, getPackages } from '@/lib/billing/packages';
+import { getToolPrice } from '@/lib/billing/pricing';
 
 const PAYPAL_BASE = process.env.PAYPAL_MODE === 'live'
   ? 'https://api-m.paypal.com'
@@ -21,22 +23,9 @@ const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY!;
 const SITE_URL      = 'https://www.tuviminhbao.com';
 const CURRENCY      = 'USD';
 
-// ── Credit packages (USD via PayPal) ──────────────────────────
-// Tỷ giá tham chiếu: 1 USD = 25.000đ → packages khớp với VND tier
-const PACKAGES: Record<string, { amount: string; credits: number; label: string }> = {
-  '50':  { amount:  '4.00', credits:  50, label: 'Khoi Dau – 50 Luong (+25%)'    },
-  '120': { amount:  '8.00', credits: 120, label: 'Pho Thong – 120 Luong (+50%)'  },
-  '350': { amount: '20.00', credits: 350, label: 'Cao Cap – 350 Luong (+75%)'    },
-  '800': { amount: '40.00', credits: 800, label: 'VIP – 800 Luong (+100%)'       },
-};
-
-// ── payOS Credit packages (VNĐ) ──────────────────────────────
-const PAYOS_PACKAGES: Record<string, { amountVND: number; credits: number; label: string }> = {
-  '50':  { amountVND:  99_000, credits:  50, label: 'Khoi Dau – 50 Luong (+25%)'    },
-  '120': { amountVND: 199_000, credits: 120, label: 'Pho Thong – 120 Luong (+50%)'  },
-  '350': { amountVND: 499_000, credits: 350, label: 'Cao Cap – 350 Luong (+75%)'    },
-  '800': { amountVND: 999_000, credits: 800, label: 'VIP – 800 Luong (+100%)'       },
-};
+// ── Gói nạp ───────────────────────────────────────────────────
+// Nguồn thật = bảng credit_packages (lib/billing/packages), admin sửa được;
+// module tự fallback hardcode nếu DB hụt. Tỷ giá tham chiếu 1 USD = 25.000đ.
 
 function createPayOSSignature(data: Record<string, unknown>): string {
   const checksumKey = process.env.PAYOS_CHECKSUM_KEY!;
@@ -175,9 +164,10 @@ async function handleTopup(body: Record<string, unknown>): Promise<Response> {
     pkg  = { amount: usdAmount.toFixed(2), credits, label: `Nap Tuy Chinh – ${credits} Luong` };
     slug = `topup-custom-${Math.round(customAmountVnd / 1000)}k`;
   } else {
-    const found = PACKAGES[packageId];
-    if (!found) return err(`packageId không hợp lệ. Dùng: ${Object.keys(PACKAGES).join(', ')} hoặc "custom"`, 400);
-    pkg  = found;
+    const pkgs  = await getPackages();
+    const found = pkgs[packageId];
+    if (!found) return err(`packageId không hợp lệ. Dùng: ${Object.keys(pkgs).join(', ')} hoặc "custom"`, 400);
+    pkg  = { amount: found.amountUsd, credits: found.credits, label: `${found.label} – ${found.credits} Luong` };
     slug = `topup-${packageId}`;
   }
   try {
@@ -227,8 +217,9 @@ async function handleCapture(body: Record<string, unknown>): Promise<Response> {
   if (!slug.startsWith('topup-')) return err('Only topup orders handled here', 400);
 
   const packageId = slug.replace('topup-', '');
-  const pkg = PACKAGES[packageId];
-  if (!pkg) return err('Invalid package in slug', 400);
+  const foundPkg = await getPackage(packageId);
+  if (!foundPkg) return err('Invalid package in slug', 400);
+  const pkg = { amount: foundPkg.amountUsd, credits: foundPkg.credits, label: `${foundPkg.label} – ${foundPkg.credits} Luong` };
 
   try {
     const ppToken = await getPayPalToken();
@@ -285,13 +276,20 @@ async function handleDeduct(request: NextRequest, body: Record<string, unknown>)
   const userToken  = authHeader.replace('Bearer ', '').trim();
   if (!userToken) return err('Missing Authorization token', 401);
 
-  const amount      = parseInt(String(body.amount || '0'));
-  const toolType    = String(body.toolType    || '');
-  const slug        = String(body.slug        || '');
-  const description = String(body.description || toolType);
+  const clientAmount = parseInt(String(body.amount || '0'));
+  const toolType     = String(body.toolType    || '');
+  const product      = String(body.product     || ''); // tool_id để tra giá server-side
+  const slug         = String(body.slug        || '');
+  const description  = String(body.description || toolType);
 
-  if (!amount || amount <= 0) return err('Invalid amount', 400);
-  if (!toolType)              return err('Missing toolType', 400);
+  if (!toolType) return err('Missing toolType', 400);
+
+  // GIÁ THẬT do server quyết theo tool_pricing (KHÔNG tin amount client gửi).
+  // Tool không có trong bảng / bị tắt → fallback amount client (tương thích ngược).
+  const serverPrice = product ? await getToolPrice(product) : null;
+  const amount = serverPrice != null ? serverPrice : clientAmount;
+  if (amount < 0 || (serverPrice == null && (!clientAmount || clientAmount <= 0)))
+    return err('Invalid amount', 400);
 
   if (process.env.PAYWALL_DISABLED === 'true') {
     return ok({ success: true, balance: 99999, _dev: 'paywall_disabled' });
@@ -300,6 +298,9 @@ async function handleDeduct(request: NextRequest, body: Record<string, unknown>)
   try {
     const user = await getUserFromToken(userToken);
     if (!user) return err('Invalid or expired token', 401);
+
+    // Giá server = 0 (tool miễn phí) → cho qua, không trừ.
+    if (amount === 0) return ok({ success: true, balance: await getBalance(user.id), free: true });
 
     if (slug) {
       const already = await hasSlugAccess(user.id, slug);
@@ -354,6 +355,58 @@ async function handleAdminGrant(request: NextRequest, body: Record<string, unkno
     const newBal = await rpc('add_credits', { p_user_id: userId, p_amount: amount });
     await logTransaction({ userId, amount, type: 'admin_grant', description });
     return ok({ success: true, balance: newBal, userId });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── POST: admin set config (app_config upsert) ────────────────
+// Body: { key, value, note? }   value = JSON (số / mảng / chuỗi) → cột jsonb.
+async function handleAdminSetConfig(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized — admin only', 403);
+
+  const key = String(body.key || '').trim();
+  if (!key) return err('Missing key', 400);
+  if (!('value' in body)) return err('Missing value', 400);
+
+  const row: Record<string, unknown> = { key, value: body.value };
+  if (body.note != null) row.note = String(body.note);
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/app_config`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, Prefer: 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify(row),
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return ok({ success: true });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── POST: admin save credit package (upsert) ──────────────────
+async function handleAdminSavePackage(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized — admin only', 403);
+
+  const packageId = String(body.package_id || body.packageId || '').trim();
+  if (!packageId) return err('Missing package_id', 400);
+
+  const row: Record<string, unknown> = { package_id: packageId, updated_at: new Date().toISOString() };
+  if (body.credits     != null) row.credits     = parseInt(String(body.credits));
+  if (body.amount_vnd  != null) row.amount_vnd  = parseInt(String(body.amount_vnd));
+  if (body.amount_usd  != null) row.amount_usd  = Number(body.amount_usd);
+  if (body.label       != null) row.label       = String(body.label);
+  if (body.bonus_label != null) row.bonus_label = String(body.bonus_label);
+  if (body.enabled     != null) row.enabled     = !!body.enabled;
+  if (body.sort_order  != null) row.sort_order  = parseInt(String(body.sort_order));
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/credit_packages`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, Prefer: 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify(row),
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return ok({ success: true });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
@@ -482,11 +535,12 @@ async function handleCreateBank(body: Record<string, unknown>): Promise<Response
     }
     label = `Nap ${credits} Luong`;
   } else {
-    const pkg = PAYOS_PACKAGES[packageId];
-    if (!pkg) return err(`Invalid packageId. Use: ${Object.keys(PAYOS_PACKAGES).join(', ')}`, 400);
-    amountVND = pkg.amountVND;
-    credits   = pkg.credits;
-    label     = pkg.label;
+    const pkgs  = await getPackages();
+    const found = pkgs[packageId];
+    if (!found) return err(`Invalid packageId. Use: ${Object.keys(pkgs).join(', ')}`, 400);
+    amountVND = found.amountVnd;
+    credits   = found.credits;
+    label     = `${found.label} – ${found.credits} Luong`;
   }
 
   const orderCode   = Date.now() % 999_999_999;
@@ -601,7 +655,12 @@ async function handleReferralRegister(request: NextRequest, body: Record<string,
       return ok({ success: true, alreadyReferred: true });
     }
 
-    return ok({ success: true, referrerId, message: 'Đã ghi nhận. Khi bạn nạp Lượng lần đầu, cả 2 sẽ nhận 30 Lượng.' });
+    // Tầng 1: thưởng NGAY cho người giới thiệu khi referee vừa đăng ký (best-effort,
+    // có cap chống farm trong process_referral_signup). Tầng 2 (30 mỗi bên) vẫn fire
+    // khi referee nạp lần đầu qua trigger_referral_check_on_topup.
+    try { await rpc('process_referral_signup', { p_referee_user_id: user.id }); } catch { /* best-effort */ }
+
+    return ok({ success: true, referrerId, message: 'Đã ghi nhận! Người giới thiệu vừa nhận thưởng chào mừng. Khi bạn nạp Lượng lần đầu, cả hai nhận thêm 30 Lượng.' });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
@@ -613,6 +672,8 @@ export async function POST(request: NextRequest) {
   if (action === 'capture')           return handleCapture(body);
   if (action === 'deduct')            return handleDeduct(request, body);
   if (action === 'admin-grant')       return handleAdminGrant(request, body);
+  if (action === 'admin-set-config')  return handleAdminSetConfig(request, body);
+  if (action === 'admin-save-package') return handleAdminSavePackage(request, body);
   if (action === 'admin-create-user') return handleAdminCreateUser(request, body);
   if (action === 'create-bank')       return handleCreateBank(body);
   if (action === 'referral-register') return handleReferralRegister(request, body);

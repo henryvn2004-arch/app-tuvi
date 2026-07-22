@@ -520,9 +520,41 @@ function shareRef(channel) {
   window.open(urls[channel] || urls.facebook, '_blank', 'width=600,height=500');
 }
 
+// ── Đồng bộ GÓI NẠP từ credit_packages (admin sửa DB → trang cập nhật) ──
+// Ghi đè số/nhãn lên card tĩnh, GIỮ layout. Lỗi fetch → giữ HTML hardcode (fallback).
+async function syncPackagesFromDB() {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/credit_packages?select=package_id,credits,amount_vnd,amount_usd,label,bonus_label,enabled&order=sort_order.asc`,
+      { headers: { apikey: SUPABASE_ANON } }
+    );
+    const pkgs = await res.json();
+    if (!Array.isArray(pkgs) || !pkgs.length) return;
+    pkgs.forEach(p => {
+      const btn = document.getElementById('btn-' + p.package_id);
+      const card = btn && btn.closest('.pkg-card');
+      if (!card) return;
+      if (p.enabled === false) { card.style.display = 'none'; return; }
+      card.style.display = '';
+      const vnd = Number(p.amount_vnd);
+      const vndFmt = vnd.toLocaleString('vi-VN') + 'đ';
+      const rate = Math.round(vnd / p.credits).toLocaleString('vi-VN');
+      const cEl = card.querySelector('.pkg-credits');
+      if (cEl) cEl.innerHTML = `${p.credits}<span class="pkg-credits-unit">Lượng</span>`;
+      const pEl = card.querySelector('.pkg-price');
+      if (pEl) pEl.textContent = vndFmt;
+      const rEl = card.querySelector('.pkg-rate');
+      if (rEl) rEl.textContent = `≈ $${Math.round(Number(p.amount_usd))} · ${rate}đ / Lượng`;
+      btn.textContent = 'Nạp ' + vndFmt;
+      PACKAGE_LABELS[p.package_id] = 'Nạp ' + vndFmt;
+    });
+  } catch (e) { /* giữ card hardcode */ }
+}
+
 // Init
 loadBalance();
 loadToolPricing();
+syncPackagesFromDB();
 loadReferralInfo();
 </script>
 
