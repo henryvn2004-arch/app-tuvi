@@ -631,16 +631,28 @@ async function handleAdminMarketing(request: NextRequest, sp: URLSearchParams): 
     return res.json();
   };
 
+  // Cohort dùng tham số số TUẦN (không theo from/to) — số tuần suy từ khoảng ngày,
+  // kẹp 4..16 để bảng không quá rộng.
+  const cohortWeeks = Math.min(16, Math.max(4, Math.ceil((toExcl.getTime() - from.getTime()) / (7 * 864e5))));
+  const callCohorts = async () => {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/marketing_cohorts`, {
+      method: 'POST', headers: SB_HEADERS, body: JSON.stringify({ p_weeks: cohortWeeks }),
+    });
+    if (!res.ok) throw new Error(`marketing_cohorts: ${await res.text()}`);
+    return res.json();
+  };
+
   try {
-    const [funnel, sources, acquisition, campaigns, traffic] = await Promise.all([
+    const [funnel, sources, acquisition, campaigns, traffic, cohorts] = await Promise.all([
       callRpc('marketing_funnel'),
       callRpc('marketing_sources'),
       callRpc('marketing_acquisition'),
       callRpc('marketing_campaigns'),
       callRpc('marketing_traffic'),
+      callCohorts(),
     ]);
     return ok({
-      funnel, sources, acquisition, campaigns, traffic,
+      funnel, sources, acquisition, campaigns, traffic, cohorts, cohortWeeks,
       from: from.toISOString(), to: to.toISOString(),
     });
   } catch (e: unknown) { return err((e as Error).message); }
