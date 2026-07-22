@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thủ Tướng AI — Tử Vi Minh Bảo</title>
+<meta name="description" content="Tải hoặc chụp ảnh lòng bàn tay — AI phân tích thủ tướng: Tam Đại Chỉ, đường vận mệnh, các gò tay theo cổ pháp Đông Tây.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shell.css?v=14">
+<style>
+.dt-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:640px}
+.dt-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px}
+.dt-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.upload-area{border:2px dashed var(--line-2);border-radius:12px;padding:32px 20px;text-align:center;cursor:pointer;transition:all .2s;background:var(--paper);position:relative}
+.upload-area:hover,.upload-area.dragover{border-color:var(--gold);background:var(--gold-lt)}
+.upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{font-size:40px;margin-bottom:10px;display:block}
+.upload-title{font-size:14.5px;font-weight:700;color:var(--navy);margin-bottom:5px}
+.upload-sub{font-size:12.5px;color:var(--text-lt)}
+.preview-wrap{position:relative;display:inline-block;margin:0 auto}
+.preview-img{max-width:300px;max-height:420px;width:100%;border-radius:12px;display:block}
+.overlay-canvas{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;pointer-events:none}
+.preview-badge{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;font-size:11px;padding:4px 10px;border-radius:20px}
+.mp-badge{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);color:#fff;font-size:10px;padding:3px 10px;border-radius:20px;white-space:nowrap;display:none;background:rgba(20,85,164,.85)}
+.remove-btn{display:block;margin:10px auto 0;background:none;border:1px solid var(--line);border-radius:4px;padding:6px 16px;font-size:12px;color:var(--text-mid);cursor:pointer;font-family:inherit}
+.camera-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit;margin:12px auto 0}
+.dt-input-tabs{display:flex;gap:0;border-bottom:2px solid var(--border-lt);margin-bottom:16px}
+.dt-input-tab{padding:9px 18px;font-size:12.5px;font-weight:600;cursor:pointer;color:var(--text-lt);border-bottom:2px solid transparent;margin-bottom:-2px;font-family:inherit;background:none;border-top:none;border-left:none;border-right:none;transition:all .15s}
+.dt-input-tab.active{color:var(--navy);border-bottom-color:var(--gold)}
+.dt-input-pane{display:none}
+.dt-input-pane.active{display:block}
+.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
+.btn-go:disabled{opacity:.55;cursor:not-allowed}
+.btn-cancel{background:none;border:1px solid var(--line-2);border-radius:8px;padding:10px 18px;font-size:13px;color:var(--text-mid);cursor:pointer;font-family:inherit}
+.dt-privacy{display:flex;align-items:flex-start;gap:10px;padding:11px 15px;background:var(--gold-lt);border-radius:8px;border-left:3px solid var(--blue);font-size:12px;color:var(--blue);margin-bottom:16px}
+.dt-error{color:var(--red);padding:10px 14px;border:1px solid var(--red);border-radius:8px;background:var(--white);margin-top:12px;display:none;font-size:13px}
+.dt-error.active{display:block}
+.dt-loading{display:flex;flex-direction:column;align-items:center;gap:14px;padding:36px 0}
+.dt-loading-icon{font-size:40px;animation:dtpulse 1.5s ease-in-out infinite}
+@keyframes dtpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.95)}}
+.dt-loading-text{font-size:13.5px;color:var(--text-lt);text-align:center}
+.dt-result{margin-top:18px}
+.dt-result h2{font-family:var(--serif);font-size:17px;font-weight:600;margin:18px 0 10px;color:var(--navy)}
+.dt-result h3{font-family:var(--serif);font-size:14.5px;font-weight:600;margin:14px 0 8px;color:var(--navy)}
+.dt-result p{color:var(--text-mid);line-height:1.75;margin-bottom:12px;font-size:13.5px}
+.dt-result strong{color:var(--text)}
+.dt-result em{color:var(--gold-soft);font-style:italic}
+.dt-result ul{margin:0 0 12px 18px}
+.dt-result li{color:var(--text-mid);line-height:1.7;font-size:13.5px;margin-bottom:4px}
+.dt-result blockquote{border-left:3px solid var(--gold-soft);padding-left:12px;color:var(--text-lt);font-style:italic;margin:0 0 12px}
+.geom-tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;background:rgba(20,85,164,0.1);color:var(--blue);margin:1px;white-space:nowrap}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Thủ Tướng AI</b><span>Xem chỉ tay theo cổ pháp — 5 Lượng</span></div>
+      <div class="ws-actions">
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div id="shellRecent"></div>
+
+      <div class="dt-card" id="inputCard">
+        <h2>Tải ảnh lòng bàn tay</h2>
+        <p class="sub">AI phân tích Tam Đại Chỉ (Sinh Mệnh, Trí Tuệ, Tình Cảm), đường vận mệnh và các gò tay theo thủ tướng học cổ pháp Đông Tây.</p>
+        <div class="dt-privacy"><span>🔒</span><div>Ảnh chỉ gửi tới AI để phân tích, không lưu trên server. Xòe bàn tay phẳng, lòng bàn tay hướng lên, đủ sáng.</div></div>
+
+        <div class="dt-input-tabs">
+          <button class="dt-input-tab active" onclick="switchTab('upload',this)">📁 Tải Ảnh Lên</button>
+          <button class="dt-input-tab" onclick="switchTab('camera',this)">📷 Chụp Ảnh</button>
+        </div>
+
+        <div class="dt-input-pane active" id="pane-upload">
+          <div id="uploadArea" class="upload-area" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+            <input type="file" id="fileInput" accept="image/*" onchange="onFileSelect(event)">
+            <span class="upload-icon">✋</span>
+            <div class="upload-title">Kéo thả ảnh lòng bàn tay hoặc click để chọn</div>
+            <div class="upload-sub">JPG, PNG, WebP — tối đa 5MB · Chụp lòng bàn tay, thấy rõ đường chỉ</div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;justify-content:center">
+            <div style="font-size:12px;color:var(--navy);background:var(--gold-lt);border:1px solid var(--line-2);border-radius:20px;padding:3px 10px">Dùng tay <strong>thuận</strong> để xem vận trình hiện tại</div>
+          </div>
+        </div>
+
+        <div class="dt-input-pane" id="pane-camera">
+          <div style="text-align:center;padding:12px 0 16px">
+            <div id="preCamTips">
+              <button class="camera-btn" id="openCamBtn" onclick="openCamera()"><span>📷</span> Mở Camera</button>
+            </div>
+            <div id="camWrap" style="display:none;position:relative;width:280px;margin:0 auto">
+              <video id="camVideo" style="width:280px;border-radius:12px;display:block" autoplay playsinline></video>
+            </div>
+            <div id="camBtns" style="display:none;margin-top:14px;gap:10px;justify-content:center;flex-wrap:wrap">
+              <button class="btn-go" onclick="capturePhoto()" style="margin:0">📸 Chụp</button>
+              <button class="btn-cancel" onclick="stopCamera()">✕ Huỷ</button>
+            </div>
+            <canvas id="camCanvas" style="display:none"></canvas>
+          </div>
+        </div>
+
+        <div id="previewSection" style="display:none;text-align:center;margin:18px 0">
+          <div class="preview-wrap">
+            <img id="previewImg" class="preview-img" alt="Ảnh đã chọn">
+            <canvas id="overlayCanvas" class="overlay-canvas"></canvas>
+            <div class="preview-badge">✓ Ảnh đã chọn</div>
+            <div class="mp-badge" id="mpBadge">✋ Bàn tay đã xác định</div>
+          </div>
+          <div id="handGeomPanel" style="display:none;margin-top:10px;padding:10px 14px;background:var(--paper);border-radius:8px;border:1px solid var(--border-lt);font-size:12px;text-align:left;max-width:340px;margin-left:auto;margin-right:auto">
+            <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-lt);margin-bottom:6px">📐 Đo lường MediaPipe</div>
+            <div id="handGeomText" style="color:var(--text-mid);line-height:1.8"></div>
+          </div>
+          <button class="remove-btn" onclick="removePhoto()">✕ Xoá ảnh</button>
+        </div>
+
+        <div style="text-align:center;margin-top:18px">
+          <button class="btn-go" id="analyzeBtn" onclick="analyze()" disabled>✋ Phân Tích Thủ Tướng — 5 Lượng</button>
+        </div>
+        <div class="dt-error" id="error-msg"></div>
+      </div>
+
+      <div class="dt-card" id="resultCard" style="display:none;margin-top:16px">
+        <h2>Phân Tích Thủ Tướng Học</h2>
+        <p class="sub">AI · Thủ Tướng Cổ Pháp Đông Tây</p>
+        <div id="aiResult" class="dt-result"></div>
+        <div style="text-align:center;margin-top:8px">
+          <button class="btn-cancel" onclick="resetTool()">Phân Tích Ảnh Khác</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='thu-tuong';window.SHELL_HISTORY=true;
+window.SHELL_INTRO={key:'thu-tuong',title:'Thủ Tướng AI',desc:'Tải hoặc chụp ảnh lòng bàn tay — <b>AI</b> phân tích Tam Đại Chỉ, đường vận mệnh và các gò tay theo cổ pháp Đông Tây.'};</script>
+<script src="/auth.js"></script>
+<script src="/tuvi-paywall.js?v=5"></script>
+<script src="/shell.js?v=40"></script>
+<script>
+function initThuTuong(){
+  Shell.setContext({
+    label:'Thủ Tướng AI',
+    placeholder:'Hỏi thầy về thủ tướng…',
+    greeting:'Chào bạn. Tải hoặc chụp ảnh lòng bàn tay ở khung bên trái (xòe phẳng, hướng lên), tôi sẽ phân tích theo thủ tướng học cổ pháp. Sau khi có kết quả, cứ hỏi tôi thêm.',
+    chips:['Tam Đại Chỉ là gì?','Đường vận mệnh nói lên điều gì?','Tay thuận và tay không thuận khác nhau thế nào?']
+  });
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initThuTuong); else initThuTuong();
+
+// ══════════════════════════════════════════════════════════════════════
+// Port từ public/tools/thu-tuong-ai.html — MediaPipe Hands geometry
+// + gate Lượng + SSE 'delta' stream tới /api/tuong-mat?action=thu-tuong.
+// ══════════════════════════════════════════════════════════════════════
+let _imageData=null, _mediaType='image/jpeg', _camStream=null;
+let _mpHandsReady=false, _handGeoNote=null, _currentSlug='';
+
+function loadHands(cb) {
+  if (_mpHandsReady) { cb(null); return; }
+  if (window._handsLoading) { setTimeout(() => loadHands(cb), 150); return; }
+  window._handsLoading = true;
+  const s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js';
+  s.crossOrigin = 'anonymous';
+  s.onload = () => { _mpHandsReady = true; window._handsLoading = false; cb(null); };
+  s.onerror = () => { window._handsLoading = false; cb(new Error('Hands load failed')); };
+  document.head.appendChild(s);
+}
+
+const HAND_CONNECTIONS = [
+  [0,1],[1,2],[2,3],[3,4],
+  [0,5],[5,6],[6,7],[7,8],
+  [5,9],[9,10],[10,11],[11,12],
+  [9,13],[13,14],[14,15],[15,16],
+  [13,17],[17,18],[18,19],[19,20],
+  [0,17]
+];
+const FINGER_TIPS = [4,8,12,16,20];
+const FINGER_MCPS = [2,5,9,13,17];
+const FINGER_NAMES = ['Ngón cái','Ngón trỏ','Ngón giữa','Ngón áp út','Ngón út'];
+
+function detectHand(imgEl, cb) {
+  loadHands((err) => {
+    if (err || typeof Hands === 'undefined') { cb(null); return; }
+    try {
+      const h = new Hands({ locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${f}` });
+      h.setOptions({ maxNumHands:1, modelComplexity:1, minDetectionConfidence:0.5, minTrackingConfidence:0.5 });
+      h.onResults(r => { cb(r.multiHandLandmarks?.[0] || null); });
+      h.send({ image: imgEl });
+    } catch(e) { cb(null); }
+  });
+}
+
+function drawHandOverlay(lm, imgEl) {
+  const cv = document.getElementById('overlayCanvas');
+  const W = imgEl.clientWidth, H = imgEl.clientHeight;
+  cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d');
+  ctx.clearRect(0, 0, W, H);
+  if (!lm) return;
+
+  ctx.strokeStyle = 'rgba(201,168,76,0.55)';
+  ctx.lineWidth = 1.5;
+  HAND_CONNECTIONS.forEach(([a, b]) => {
+    ctx.beginPath();
+    ctx.moveTo(lm[a].x*W, lm[a].y*H);
+    ctx.lineTo(lm[b].x*W, lm[b].y*H);
+    ctx.stroke();
+  });
+  lm.forEach((pt, i) => {
+    ctx.beginPath();
+    ctx.arc(pt.x*W, pt.y*H, FINGER_TIPS.includes(i) ? 4 : 2.5, 0, Math.PI*2);
+    ctx.fillStyle = FINGER_TIPS.includes(i) ? 'rgba(255,220,0,0.85)' : 'rgba(201,168,76,0.65)';
+    ctx.fill();
+  });
+
+  document.getElementById('mpBadge').style.display = 'block';
+}
+
+function analyzeHandGeometry(lm, w, h) {
+  if (!lm) return null;
+  const palmLen = Math.hypot((lm[9].x-lm[0].x)*w, (lm[9].y-lm[0].y)*h);
+  const palmW = Math.hypot((lm[17].x-lm[5].x)*w, (lm[17].y-lm[5].y)*h);
+  const palmRatio = (palmW/palmLen).toFixed(2);
+
+  const fingerLens = FINGER_TIPS.map((tip, i) => {
+    const mcp = i === 0 ? 1 : FINGER_MCPS[i];
+    return Math.hypot((lm[tip].x-lm[mcp].x)*w, (lm[tip].y-lm[mcp].y)*h);
+  });
+
+  const ratio2D4D = (fingerLens[1]/fingerLens[3]).toFixed(2);
+
+  let handShape = 'bầu dục';
+  if (parseFloat(palmRatio) > 0.9) handShape = 'vuông/rộng';
+  else if (parseFloat(palmRatio) < 0.7) handShape = 'dài/thon';
+
+  const maxFinger = fingerLens.indexOf(Math.max(...fingerLens));
+
+  const geoLines = [
+    `[Số liệu MediaPipe bàn tay]`,
+    `Tỷ lệ rộng/dài lòng bàn tay: ${palmRatio} (${handShape})`,
+    `Ngón dài nhất: ${FINGER_NAMES[maxFinger]}`,
+    `Tỷ lệ ngón trỏ/áp út (2D:4D): ${ratio2D4D} (${parseFloat(ratio2D4D) > 1 ? 'ngón trỏ dài hơn' : 'ngón áp út dài hơn'})`,
+    `Chiều dài tương đối ngón (chuẩn hoá): ${fingerLens.map((l,i) => FINGER_NAMES[i].split(' ')[1]+':'+(l/palmLen).toFixed(2)).join(' · ')}`,
+  ];
+
+  const panel = document.getElementById('handGeomPanel');
+  const txt = document.getElementById('handGeomText');
+  if (panel && txt) {
+    panel.style.display = 'block';
+    txt.innerHTML = [
+      `<span class="geom-tag">Hình dạng: ${handShape}</span>`,
+      `<span class="geom-tag">Ngón dài nhất: ${FINGER_NAMES[maxFinger]}</span>`,
+      `<span class="geom-tag">2D:4D = ${ratio2D4D}</span>`,
+      `<span class="geom-tag">Rộng/Dài = ${palmRatio}</span>`,
+    ].join('');
+  }
+
+  return geoLines.join('\n');
+}
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.dt-input-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.dt-input-pane').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('pane-'+id).classList.add('active');
+  if (id !== 'camera') stopCamera();
+}
+function onDragOver(e){e.preventDefault();document.getElementById('uploadArea').classList.add('dragover');}
+function onDragLeave(){document.getElementById('uploadArea').classList.remove('dragover');}
+function onDrop(e){e.preventDefault();document.getElementById('uploadArea').classList.remove('dragover');const f=e.dataTransfer.files[0];if(f)processFile(f);}
+function onFileSelect(e){const f=e.target.files[0];if(f)processFile(f);}
+
+function processFile(file) {
+  const err=document.getElementById('error-msg'); err.classList.remove('active');
+  if (!file.type.startsWith('image/')) {err.textContent='Vui lòng chọn file ảnh.';err.classList.add('active');return;}
+  if (file.size>5*1024*1024) {err.textContent='Ảnh quá lớn.';err.classList.add('active');return;}
+  const img=new Image();
+  const ou=URL.createObjectURL(file);
+  img.onload=()=>{
+    URL.revokeObjectURL(ou);
+    const MAX=1200; let {width:ww,height:hh}=img;
+    if(ww>MAX||hh>MAX){if(ww>hh){hh=Math.round(hh*MAX/ww);ww=MAX;}else{ww=Math.round(ww*MAX/hh);hh=MAX;}}
+    const cv=document.createElement('canvas');cv.width=ww;cv.height=hh;
+    cv.getContext('2d').drawImage(img,0,0,ww,hh);
+    const dataUrl=cv.toDataURL('image/jpeg',0.90);
+    _imageData=dataUrl.split(',')[1];_mediaType='image/jpeg';
+    showPreview(dataUrl);
+  };
+  img.src=ou;
+}
+
+function showPreview(dataUrl) {
+  const imgEl=document.getElementById('previewImg');
+  imgEl.src=dataUrl;
+  document.getElementById('previewSection').style.display='block';
+  document.getElementById('uploadArea').style.display='none';
+  document.getElementById('analyzeBtn').disabled=false;
+  document.getElementById('mpBadge').style.display='none';
+  document.getElementById('handGeomPanel').style.display='none';
+  document.getElementById('error-msg').classList.remove('active');
+
+  const run = () => {
+    const w=imgEl.clientWidth, h=imgEl.clientHeight;
+    detectHand(imgEl, lm => {
+      drawHandOverlay(lm, imgEl);
+      if (lm) {
+        _handGeoNote = analyzeHandGeometry(lm, w, h);
+      } else {
+        const err=document.getElementById('error-msg');
+        err.textContent='⚠ Không nhận diện được bàn tay. Thử chụp rõ hơn với nền tương phản và ánh sáng đủ.';
+        err.classList.add('active');
+        _handGeoNote = null;
+      }
+    });
+  };
+  if (imgEl.complete && imgEl.naturalWidth) run(); else imgEl.onload = run;
+}
+
+function removePhoto() {
+  _imageData=null; _handGeoNote=null;
+  document.getElementById('previewSection').style.display='none';
+  document.getElementById('uploadArea').style.display='block';
+  document.getElementById('analyzeBtn').disabled=true;
+  document.getElementById('fileInput').value='';
+  document.getElementById('handGeomPanel').style.display='none';
+  const cv=document.getElementById('overlayCanvas');
+  cv.getContext('2d').clearRect(0,0,cv.width,cv.height);
+  stopCamera();
+}
+
+async function openCamera() {
+  try {
+    _camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:640,height:480}});
+    document.getElementById('camVideo').srcObject=_camStream;
+    document.getElementById('preCamTips').style.display='none';
+    document.getElementById('camWrap').style.display='block';
+    document.getElementById('camBtns').style.display='flex';
+  } catch(e) {
+    try {
+      _camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:640,height:480}});
+      document.getElementById('camVideo').srcObject=_camStream;
+      document.getElementById('preCamTips').style.display='none';
+      document.getElementById('camWrap').style.display='block';
+      document.getElementById('camBtns').style.display='flex';
+    } catch(e2) {
+      const err=document.getElementById('error-msg');
+      err.textContent='Không thể mở camera.'; err.classList.add('active');
+    }
+  }
+}
+function capturePhoto() {
+  const vid=document.getElementById('camVideo');
+  const cv=document.getElementById('camCanvas');
+  cv.width=vid.videoWidth; cv.height=vid.videoHeight;
+  cv.getContext('2d').drawImage(vid,0,0);
+  const dataUrl=cv.toDataURL('image/jpeg',0.88);
+  _imageData=dataUrl.split(',')[1]; _mediaType='image/jpeg';
+  stopCamera(); showPreview(dataUrl);
+}
+function stopCamera() {
+  if(_camStream){_camStream.getTracks().forEach(t=>t.stop());_camStream=null;}
+  const vid=document.getElementById('camVideo');
+  if(vid){vid.style.display='none'; vid.srcObject=null;}
+  document.getElementById('camBtns').style.display='none';
+  document.getElementById('preCamTips').style.display='block';
+  document.getElementById('camWrap').style.display='none';
+}
+
+async function analyze() {
+  if (!_imageData) return;
+  document.getElementById('error-msg').classList.remove('active');
+  document.getElementById('analyzeBtn').disabled=true;
+  _currentSlug = TuviPaywall.generateToolSlug('thu-tuong');
+  await TuviPaywall.requireCredits(_currentSlug, async () => {
+    await _doAnalyze();
+  });
+  document.getElementById('analyzeBtn').disabled=false;
+}
+
+async function _doAnalyze() {
+  document.getElementById('resultCard').style.display='block';
+  document.getElementById('aiResult').innerHTML='<div class="dt-loading"><span class="dt-loading-icon">✋</span><div class="dt-loading-text">AI đang đọc chỉ tay...<br><span style="font-size:12px;opacity:.7">Thường mất 15–20 giây</span></div></div>';
+  document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'start'});
+
+  try {
+    const res=await fetch('/api/tuong-mat',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ image:_imageData, mediaType:_mediaType, action:'thu-tuong', geoNote:_handGeoNote||null })
+    });
+    if(!res.ok){const d=await res.json().catch(()=>({}));throw new Error(d.error||'Lỗi '+res.status);}
+
+    const reader=res.body.getReader(); const dec=new TextDecoder();
+    let full='', buf='';
+    const el=document.getElementById('aiResult'); el.innerHTML='';
+
+    while(true){
+      const {done,value}=await reader.read(); if(done) break;
+      buf+=dec.decode(value,{stream:true});
+      const lines=buf.split('\n'); buf=lines.pop()||'';
+      for(const line of lines){
+        if(!line.startsWith('data: ')) continue;
+        const raw=line.slice(6).trim(); if(raw==='[DONE]') break;
+        try{const j=JSON.parse(raw);if(j.err)throw new Error(j.err);if(j.t){full+=j.t;el.innerHTML=renderMd(full);}}catch(e){if(e.message&&!e.message.includes('JSON'))throw e;}
+      }
+    }
+    if(!full) throw new Error('Không có kết quả.');
+    el.innerHTML=renderMd(full);
+    _saveTuongReading('thu-tuong', full, _imageData, _mediaType);
+  } catch(e){
+    document.getElementById('aiResult').innerHTML='';
+    document.getElementById('resultCard').style.display='none';
+    const err=document.getElementById('error-msg');
+    err.textContent='Lỗi: '+(e.message||'Không thể kết nối.'); err.classList.add('active');
+  }
+}
+
+function resetTool() {
+  removePhoto();
+  document.getElementById('resultCard').style.display='none';
+  document.getElementById('aiResult').innerHTML='';
+  document.getElementById('inputCard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function renderMd(md){
+  return md
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>')
+    .replace(/^- (.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>[^]*?<\/li>\n?)+/g,s=>'<ul>'+s+'</ul>')
+    .replace(/\n\n+/g,'</p><p>')
+    .replace(/^(?!<[hublp])(.+)$/gm,'<p>$1</p>')
+    .replace(/<p><\/p>/g,'')
+    .replace(/<p>(<[hul])/g,'$1')
+    .replace(/(<\/[hul][^>]*>)<\/p>/g,'$1');
+}
+
+TuviPaywall.init({
+  product: 'thu-tuong',
+  slug: () => _currentSlug,
+  onUnlock: () => {},
+});
+
+async function _saveTuongReading(tool, resultText, imageData, mediaType) {
+  try {
+    const token = window.Auth?.getSession()?.access_token;
+    if (!token || !resultText) return;
+    let thumbnail = null;
+    if (imageData) {
+      const img = new Image();
+      await new Promise(resolve => { img.onload = resolve; img.src = "data:" + (mediaType||"image/jpeg") + ";base64," + imageData; });
+      const canvas = document.createElement("canvas");
+      const maxW = 200;
+      const scale = Math.min(1, maxW / img.width);
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+      thumbnail = canvas.toDataURL("image/jpeg", 0.7);
+    }
+    fetch("/api/history?action=save_tuong", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+      body: JSON.stringify({ tool, result_text: resultText, thumbnail }),
+    }).catch(() => {});
+  } catch(e) {}
+}
+</script>
+</body>
+</html>
