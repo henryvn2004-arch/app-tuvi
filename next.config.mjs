@@ -17,7 +17,9 @@ const nextConfig = {
       { source: '/app/ngu-hanh-ten',    destination: '/app-ngu-hanh-ten.html'},
       { source: '/app/chon-ngay',       destination: '/app-chon-ngay.html'   },
       { source: '/app/kim-lau',         destination: '/app-kim-lau.html'     },
-      { source: '/app/xem-tuong',       destination: '/app-xem-tuong.html'   },
+      { source: '/app/dien-tuong',      destination: '/app-dien-tuong.html'  },
+      { source: '/app/nhan-tuong',      destination: '/app-nhan-tuong.html'  },
+      { source: '/app/thu-tuong',       destination: '/app-thu-tuong.html'   },
       { source: '/app/phong-thuy',      destination: '/app-phong-thuy.html'  },
       { source: '/app/bat-trach',       destination: '/app-bat-trach.html'   },
       { source: '/app/nap-am',          destination: '/app-nap-am.html'      },
@@ -54,6 +56,11 @@ const nextConfig = {
       { source: '/lam-dep',             destination: '/api/tu-vi-hub?cat=lam-dep'      },
       { source: '/dat-ten',             destination: '/api/tu-vi-hub?cat=dat-ten'      },
       { source: '/kien-thuc-tuvi',      destination: '/api/tu-vi-hub?cat=kien-thuc-tuvi' },
+    ];
+  },
+  async redirects() {
+    return [
+      { source: '/app/xem-tuong', destination: '/app/dien-tuong', permanent: false },
     ];
   },
 };
