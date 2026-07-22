@@ -603,7 +603,12 @@ async function handleReferralRegister(request: NextRequest, body: Record<string,
       return ok({ success: true, alreadyReferred: true });
     }
 
-    return ok({ success: true, referrerId, message: 'Đã ghi nhận. Khi bạn nạp Lượng lần đầu, cả 2 sẽ nhận 30 Lượng.' });
+    // Tầng 1: thưởng NGAY cho người giới thiệu khi referee vừa đăng ký (best-effort,
+    // có cap chống farm trong process_referral_signup). Tầng 2 (30 mỗi bên) vẫn fire
+    // khi referee nạp lần đầu qua trigger_referral_check_on_topup.
+    try { await rpc('process_referral_signup', { p_referee_user_id: user.id }); } catch { /* best-effort */ }
+
+    return ok({ success: true, referrerId, message: 'Đã ghi nhận! Người giới thiệu vừa nhận thưởng chào mừng. Khi bạn nạp Lượng lần đầu, cả hai nhận thêm 30 Lượng.' });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
