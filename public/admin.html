@@ -884,6 +884,16 @@ audio { height: 32px; flex: 1; }
 
         <div class="panel">
           <div class="panel-header">
+            <div class="panel-title">💰 Doanh Thu Tiền Thật</div>
+            <span style="font-size:.72rem;color:var(--text-lt)">giao dịch cũ chưa lưu VNĐ → ước lượng ×2.500đ</span>
+          </div>
+          <div class="panel-body" id="mkt-revenue">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
             <div class="panel-title">🌐 Nguồn Traffic (theo first-touch)</div>
             <span style="font-size:.72rem;color:var(--text-lt)">Quy đổi doanh thu: 1 Lượng ≈ 2.500đ</span>
           </div>
@@ -1522,16 +1532,19 @@ async function loadStats() {
   try {
     const [usersData, txns, lasos] = await Promise.all([
       apiGet('admin-users'),
-      sbGet('credit_transactions?select=amount,type,created_at'),
+      sbGet('credit_transactions?select=amount,amount_vnd,type,created_at'),
       sbGet('laso_public?select=slug&limit=1000'),
     ]);
 
     const users = usersData.users || [];
     document.getElementById('badge-users').textContent = users.length;
 
-    const topups = txns.filter(t => t.amount > 0);
+    // CHỈ topup thật (loại signup_bonus/admin_grant dương). Doanh thu = tiền thật
+    // (amount_vnd), fallback ước lượng ×2.500đ cho giao dịch cũ.
+    const topups = txns.filter(t => t.type === 'topup');
     const totalCr = topups.reduce((s, t) => s + t.amount, 0);
-    const revenue = '$' + (totalCr / 10).toFixed(0);
+    const revenueVnd = topups.reduce((s, t) => s + (t.amount_vnd != null ? t.amount_vnd : t.amount * 2500), 0);
+    const revenue = (revenueVnd / 1e6).toFixed(1) + 'tr';
 
     document.getElementById('stats-grid').innerHTML = `
       <div class="stat">
@@ -1545,9 +1558,9 @@ async function loadStats() {
         <div class="stat-sub">${topups.length} lần topup</div>
       </div>
       <div class="stat gold">
-        <div class="stat-label">Doanh Thu Est.</div>
+        <div class="stat-label">Doanh Thu</div>
         <div class="stat-value">${revenue}</div>
-        <div class="stat-sub">từ credit topup</div>
+        <div class="stat-sub">tiền thật · ${topups.length} topup</div>
       </div>
       <div class="stat blue">
         <div class="stat-label">Lá Số</div>
@@ -1845,9 +1858,10 @@ async function loadMarketing() {
     renderMktCampaigns(d.campaigns || []);
     renderMktTraffic(d.traffic || {});
     renderMktCohorts(d.cohorts || [], d.cohortWeeks || 8);
+    renderMktRevenue(d.revenue || {});
   } catch (e) {
     document.getElementById('mkt-funnel').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
-    ['mkt-sources','mkt-acq','mkt-campaigns','mkt-paths','mkt-referrers','mkt-cohorts'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
+    ['mkt-sources','mkt-acq','mkt-campaigns','mkt-paths','mkt-referrers','mkt-cohorts','mkt-revenue'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
   }
 }
 
@@ -1964,6 +1978,36 @@ function renderMktTraffic(t) {
     : '<div class="empty">Chưa có dữ liệu</div>';
   document.getElementById('mkt-paths').innerHTML = rowsHtml(t.top_paths, 'path');
   document.getElementById('mkt-referrers').innerHTML = rowsHtml(t.top_referrers, 'referrer');
+}
+
+// Doanh thu tiền thật: tổng + theo cổng + cột theo ngày.
+const GW_LABEL = { paypal: '🅿️ PayPal', bank: '🏦 Chuyển khoản', '(cũ)': '· Cũ (ước lượng)' };
+function fmtVndFull(v) { return (v || 0).toLocaleString('vi-VN') + 'đ'; }
+function renderMktRevenue(r) {
+  const host = document.getElementById('mkt-revenue');
+  const total = r.total_vnd || 0;
+  const gws = r.by_gateway || [];
+  const days = r.by_day || [];
+  if (!total && !days.length) { host.innerHTML = '<div class="empty">Chưa có doanh thu trong khoảng này</div>'; return; }
+  const gwHtml = gws.map(g => `<div style="flex:1;min-width:130px">
+      <div class="stat-label">${GW_LABEL[g.gateway] || g.gateway} · ${g.count}</div>
+      <div style="font-family:'Noto Serif',serif;font-size:1.15rem;color:var(--navy);font-weight:700">${fmtVndFull(g.vnd)}</div>
+    </div>`).join('');
+  const maxDay = Math.max(1, ...days.map(d => d.vnd || 0));
+  const bars = days.map(d => {
+    const h = Math.round((d.vnd / maxDay) * 110);
+    return `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;min-width:24px">
+      <div style="width:16px;height:${h}px;background:linear-gradient(180deg,var(--gold),#b8963f);border-radius:3px 3px 0 0" title="${d.day}: ${fmtVndFull(d.vnd)}"></div>
+      <div style="font-size:.56rem;color:var(--text-lt);transform:rotate(-45deg);white-space:nowrap;margin-top:2px">${String(d.day).slice(5)}</div>
+    </div>`;
+  }).join('');
+  host.innerHTML = `
+    <div style="display:flex;gap:1.5rem;align-items:baseline;margin-bottom:1rem;flex-wrap:wrap">
+      <div><div class="stat-label">Tổng doanh thu</div><div style="font-family:'Noto Serif',serif;font-size:1.9rem;color:var(--green);font-weight:700;line-height:1">${fmtVndFull(total)}</div></div>
+    </div>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border-lt)">${gwHtml}</div>
+    <div class="form-label" style="margin-bottom:.4rem">Theo ngày</div>
+    <div style="display:flex;gap:5px;align-items:flex-end;overflow-x:auto;padding-bottom:1.4rem">${bars || '<span style="color:var(--text-lt)">—</span>'}</div>`;
 }
 
 // Cohort giữ chân: hàng = tuần đăng ký, cột = tuần offset, ô = % còn hoạt động.

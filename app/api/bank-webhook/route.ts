@@ -88,7 +88,10 @@ export async function POST(request: NextRequest) {
       headers: { ...SB, 'Prefer': 'resolution=ignore-duplicates' },
       body: JSON.stringify({
         user_id: userId, amount: credits, type: 'topup',
-        description: label, created_at: new Date().toISOString(),
+        description: label,
+        amount_vnd: Number(data.amount) || Number(order.amount_vnd) || null,
+        gateway: 'bank',
+        created_at: new Date().toISOString(),
       }),
     });
 
