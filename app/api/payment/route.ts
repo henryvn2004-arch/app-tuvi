@@ -13,6 +13,7 @@ import { getPackage, getPackages } from '@/lib/billing/packages';
 import { getToolPrice } from '@/lib/billing/pricing';
 import { logCronRun } from '@/lib/cron/log';
 import { tgSendMessage } from '@/lib/channels/telegram';
+import { getGa4Sessions } from '@/lib/analytics/ga4';
 
 const PAYPAL_BASE = process.env.PAYPAL_MODE === 'live'
   ? 'https://api-m.paypal.com'
@@ -1187,7 +1188,7 @@ async function handleAdminMarketing(request: NextRequest, sp: URLSearchParams): 
   };
 
   try {
-    const [funnel, sources, acquisition, campaigns, traffic, revenue, cohorts] = await Promise.all([
+    const [funnel, sources, acquisition, campaigns, traffic, revenue, cohorts, ga4Sessions] = await Promise.all([
       callRpc('marketing_funnel'),
       callRpc('marketing_sources'),
       callRpc('marketing_acquisition'),
@@ -1195,7 +1196,16 @@ async function handleAdminMarketing(request: NextRequest, sp: URLSearchParams): 
       callRpc('marketing_traffic'),
       callRpc('marketing_revenue'),
       callCohorts(),
+      getGa4Sessions(from.toISOString().slice(0, 10), to.toISOString().slice(0, 10)),
     ]);
+    // GA4 sessions THẬT thay 'visitors' nội bộ (page_view) khi đã cấu hình env —
+    // nội bộ chỉ thấy traffic chạm track.js, thiếu organic/ads/social GA4 đo được.
+    if (ga4Sessions != null) {
+      funnel.visitors = ga4Sessions;
+      funnel.visitorsSource = 'ga4';
+    } else {
+      funnel.visitorsSource = 'internal';
+    }
     return ok({
       funnel, sources, acquisition, campaigns, traffic, revenue, cohorts, cohortWeeks,
       from: from.toISOString(), to: to.toISOString(),
