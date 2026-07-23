@@ -776,6 +776,173 @@ async function handleAdminSeo(request: NextRequest): Promise<Response> {
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
+// ── CONTENT BOARD / KHẢO LUẬN / NGHIÊN CỨU (Command Center S3) ──
+// 3 pipeline nội dung tự động (cron viết → lưu → xuất bản ngay, KHÔNG có bước
+// duyệt thủ công) + YouTube Studio (van_dap, có publish_status thật). "Board"
+// ở đây phản ánh trạng thái THẬT của hàng đợi (topic_queue: pending/processing/
+// done/error), không phải quy trình draft→review→scheduled bịa ra — 2 pipeline
+// tự viết không có bước duyệt tay.
+const MASTER_IDS_15 = ['huyen-khong', 'tu-nguyen', 'linh-son', 'dau-nam', 'ngoc-tinh', 'thien-an', 'thanh-hu', 'bac-minh', 'thai-hu', 'tam-kinh', 'co-nguyet', 'linh-co', 'nhat-nguyen', 'dieu-khong', 'tinh-quang'];
+
+function parseTopicLines(text: string): string[] {
+  return String(text || '')
+    .split('\n')
+    .map((l) => l.replace(/^["']|["']$/g, '').replace(/^\d+[.,]\s*/, '').trim())
+    .filter((l) => l.length > 5 && !l.toLowerCase().startsWith('topic') && !l.toLowerCase().startsWith('chủ đề'));
+}
+
+async function queueCounts(typeFilter: string): Promise<Record<string, number>> {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/topic_queue?${typeFilter}&select=status&limit=5000`, { headers: SB_HEADERS });
+  const rows: { status: string }[] = res.ok ? await res.json() : [];
+  const counts: Record<string, number> = { pending: 0, processing: 0, done: 0, error: 0 };
+  for (const r of rows) counts[r.status] = (counts[r.status] || 0) + 1;
+  return counts;
+}
+
+// ── GET: admin-content-board ──
+async function handleAdminContentBoard(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  try {
+    const [khCounts, ncCounts, khRes, ncRes, ytRes] = await Promise.all([
+      queueCounts('type=not.in.(master-article,tai-lieu)'),
+      queueCounts('type=eq.master-article'),
+      fetch(`${SUPABASE_URL}/rest/v1/khao_luan?select=slug,title,category,created_at&order=created_at.desc&limit=8`, { headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/master_articles?select=slug,title,master_id,created_at&order=created_at.desc&limit=8`, { headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/van_dap?publish_status=eq.published&select=id,title,chu_de,created_at&order=created_at.desc&limit=8`, { headers: SB_HEADERS }),
+    ]);
+    const khItems = (khRes.ok ? await khRes.json() : []) as { slug: string; title: string; category: string; created_at: string }[];
+    const ncItems = (ncRes.ok ? await ncRes.json() : []) as { slug: string; title: string; master_id: string; created_at: string }[];
+    const ytItems = (ytRes.ok ? await ytRes.json() : []) as { id: string; title: string; chu_de: string; created_at: string }[];
+
+    type BoardItem = { source: string; title: string; sub: string; createdAt: string; link: string | null };
+    const recent: BoardItem[] = [
+      ...khItems.map((i) => ({ source: 'khao-luan', title: i.title, sub: i.category, createdAt: i.created_at, link: `/kien-thuc/${i.slug}` })),
+      ...ncItems.map((i) => ({ source: 'nghien-cuu', title: i.title, sub: i.master_id, createdAt: i.created_at, link: `/nghien-cuu/${i.slug}` })),
+      ...ytItems.map((i) => ({ source: 'youtube', title: i.title, sub: i.chu_de, createdAt: i.created_at, link: null })),
+    ].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)).slice(0, 20);
+
+    return ok({
+      pipelines: { khaoLuan: khCounts, nghienCuu: ncCounts },
+      recent,
+    });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── GET: admin-khao-luan ──
+async function handleAdminKhaoLuan(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  try {
+    const [queueCountsRes, allRes, recentRes] = await Promise.all([
+      queueCounts('type=not.in.(master-article,tai-lieu)'),
+      fetch(`${SUPABASE_URL}/rest/v1/khao_luan?select=category,created_at&limit=2000`, { headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/khao_luan?select=slug,title,category,master_id,created_at&order=created_at.desc&limit=40`, { headers: SB_HEADERS }),
+    ]);
+    const all = (allRes.ok ? await allRes.json() : []) as { category: string; created_at: string }[];
+    const recent = recentRes.ok ? await recentRes.json() : [];
+
+    const sevenDaysAgo = new Date(Date.now() - 7 * 864e5).toISOString();
+    const byCategory: Record<string, number> = {};
+    let last7d = 0;
+    for (const r of all) {
+      byCategory[r.category] = (byCategory[r.category] || 0) + 1;
+      if (r.created_at > sevenDaysAgo) last7d++;
+    }
+    const categories = Object.entries(byCategory).map(([category, count]) => ({ category, count })).sort((a, b) => b.count - a.count);
+
+    return ok({ total: all.length, last7d, categories, queue: queueCountsRes, recent });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── POST: admin-khao-luan-topics (bulk add vào topic_queue, type='khao-luan') ──
+async function handleAdminKhaoLuanTopics(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized — admin only', 403);
+
+  const topics = parseTopicLines(String(body.text || ''));
+  if (!topics.length) return err('Không tìm thấy chủ đề hợp lệ (mỗi dòng 1 chủ đề, >5 ký tự)', 400);
+
+  const rows = topics.map((topic) => ({ topic: topic.slice(0, 500), type: 'khao-luan', priority: 5, status: 'pending' }));
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/topic_queue`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, Prefer: 'resolution=ignore-duplicates,return=minimal' },
+      body: JSON.stringify(rows),
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return ok({ inserted: rows.length });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── GET: admin-nghien-cuu ──
+async function handleAdminNghienCuu(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  try {
+    const [queueCountsRes, profilesRes, allRes, recentRes] = await Promise.all([
+      queueCounts('type=eq.master-article'),
+      fetch(`${SUPABASE_URL}/rest/v1/master_profiles?select=id,display_name,primary_article_type,specialty_topics&order=display_name.asc`, { headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/master_articles?select=master_id,word_count,created_at&limit=2000`, { headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/master_articles?select=slug,title,master_id,category,word_count,created_at&order=created_at.desc&limit=40`, { headers: SB_HEADERS }),
+    ]);
+    const profiles = (profilesRes.ok ? await profilesRes.json() : []) as { id: string; display_name: string; primary_article_type: string; specialty_topics: string[] }[];
+    const all = (allRes.ok ? await allRes.json() : []) as { master_id: string; word_count: number; created_at: string }[];
+    const recent = recentRes.ok ? await recentRes.json() : [];
+
+    const sevenDaysAgo = new Date(Date.now() - 7 * 864e5).toISOString();
+    const byMaster: Record<string, number> = {};
+    let last7d = 0, totalWords = 0;
+    for (const r of all) {
+      byMaster[r.master_id] = (byMaster[r.master_id] || 0) + 1;
+      totalWords += r.word_count || 0;
+      if (r.created_at > sevenDaysAgo) last7d++;
+    }
+    const authors = profiles.map((p) => ({ ...p, articleCount: byMaster[p.id] || 0 })).sort((a, b) => b.articleCount - a.articleCount);
+    const avgWords = all.length ? Math.round(totalWords / all.length) : 0;
+
+    return ok({ total: all.length, last7d, avgWords, authors, queue: queueCountsRes, recent });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── POST: admin-nghien-cuu-topics (bulk add vào topic_queue, type='master-article') ──
+async function handleAdminNghienCuuTopics(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized — admin only', 403);
+
+  const topics = parseTopicLines(String(body.text || ''));
+  if (!topics.length) return err('Không tìm thấy chủ đề hợp lệ (mỗi dòng 1 chủ đề, >5 ký tự)', 400);
+  const masterId = body.masterId ? String(body.masterId) : '';
+  const articleType = body.articleType ? String(body.articleType) : 'hoc-thuat';
+
+  const rows = topics.map((topic, i) => ({
+    topic: topic.slice(0, 500),
+    type: 'master-article',
+    priority: 5,
+    status: 'pending',
+    master_id: masterId || MASTER_IDS_15[i % MASTER_IDS_15.length],
+    article_type: articleType,
+    subject_name: '',
+  }));
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/topic_queue`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, Prefer: 'resolution=ignore-duplicates,return=minimal' },
+      body: JSON.stringify(rows),
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return ok({ inserted: rows.length });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
 export async function OPTIONS() { return options(); }
 
 export async function GET(request: NextRequest) {
@@ -789,6 +956,9 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-cron-runs') return handleAdminCronRuns(request);
   if (action === 'admin-channels') return handleAdminChannels(request);
   if (action === 'admin-seo')      return handleAdminSeo(request);
+  if (action === 'admin-content-board') return handleAdminContentBoard(request);
+  if (action === 'admin-khao-luan') return handleAdminKhaoLuan(request);
+  if (action === 'admin-nghien-cuu') return handleAdminNghienCuu(request);
   if (action === 'check-bank')  return handleCheckBank(searchParams);
   return err('Invalid action.', 400);
 }
@@ -969,6 +1139,8 @@ export async function POST(request: NextRequest) {
   if (action === 'admin-create-user') return handleAdminCreateUser(request, body);
   if (action === 'admin-cron-trigger') return handleAdminCronTrigger(request, body);
   if (action === 'admin-channel-broadcast') return handleAdminChannelBroadcast(request, body);
+  if (action === 'admin-khao-luan-topics') return handleAdminKhaoLuanTopics(request, body);
+  if (action === 'admin-nghien-cuu-topics') return handleAdminNghienCuuTopics(request, body);
   if (action === 'create-bank')       return handleCreateBank(body);
   if (action === 'referral-register') return handleReferralRegister(request, body);
   return err('Invalid action.', 400);

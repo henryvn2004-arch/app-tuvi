@@ -113,7 +113,10 @@ async function handle(request: NextRequest) {
 
   for (const t of topics as {id:string;topic:string;type:string}[]) {
     if (Date.now() - startTime > 55000) { await updateStatus(t.id, 'pending'); break; }
-    if (t.type === 'tai-lieu') { await updateStatus(t.id, 'pending'); continue; }
+    // popTopics không lọc theo type (chỉ cron-master-write lọc type=eq.master-article) →
+    // né cả 'tai-lieu' (tài liệu tham khảo, không phải chủ đề bài) LẪN 'master-article'
+    // (chủ đề đã dành riêng cho Nghiên Cứu) để không viết nhầm blog từ topic của kênh khác.
+    if (t.type === 'tai-lieu' || t.type === 'master-article') { await updateStatus(t.id, 'pending'); continue; }
     try {
       const [ctx, masterId] = await Promise.all([ragSearch(t.topic), pickAuthor()]);
       const article = await writeArticle(t.topic, ctx);
