@@ -69,6 +69,14 @@ Trước đó admin CHỈ suy hành vi từ `credit_transactions` (bỏ sót too
 - **Verify:** typecheck 0 lỗi, prettier route.ts sạch, node --check block JS admin (200 dòng) OK. Cohort RPC test prod OK.
 - **🎉 XONG 5 sprint (S0–S4).** Dashboard Marketing đầy đủ: Funnel · Sources (+LTV) · Acquisition chart · Campaign UTM · Cohort retention · Top landing/referrer · Export CSV. Data tự chảy khi user duyệt/đăng nhập trên prod. **Ý tưởng mở rộng sau:** đo doanh thu TIỀN THẬT (hiện quy đổi credits×2500đ — `credit_transactions` chưa lưu VNĐ/gateway); gắn `utm_campaign` vào link quảng bá để bảng Campaign có số; admin revamp phần còn lại (user detail drawer, bỏ trần 100 user — xem brainstorm đầu track).
 
+### 🔧 Admin Revamp (phase tiếp theo track Marketing) — R1/R2/R3
+Làm nốt "mấy mục còn mở" từ brainstorm. Workplan: **R1** bỏ trần 100 user + sửa tool_uses · **R2** user detail drawer · **R3** doanh thu tiền thật (amount_vnd/gateway).
+- **✅ R1+R2 XONG (PR mới, gộp vì cùng đụng trang Users):**
+  - **R1 — `handleAdminUsers` (`app/api/payment/route.ts`):** LOOP hết trang auth (`per_page=100` tới khi batch < 100, trần MAX_PAGES=100 ~10k user) thay vì chỉ page=1 → **bỏ trần 100 user**. Sửa `tool_uses`: đếm `credit_transactions amount<0` (lượt trừ Lượng = dùng tool trả phí) thay vì `type!=topup` (cũ tính cả signup_bonus/admin_grant → thổi phồng). `admin.html`: cột đổi nhãn "Trả Phí", panel hiện tổng số user (`#users-count`, filtered/total).
+  - **R2 — endpoint GET `admin-user-detail?userId=` (`handleAdminUserDetail`, verifyAdmin):** Promise.all đọc credit_transactions (100 gần nhất) + user_attribution + events (2000 gần nhất) + user_credits(balance,referral_code); trả balance/referral_code/attribution/transactions/totals(spent,topped_up,events)/activity(by_type,top_tools,last_active). `admin.html`: hàng user click → `openUserDrawerById` mở **drawer trượt phải** (dựng bằng JS, không markup) = số dư/đã nạp/đã tiêu/events + nút cấp credits + attribution (kênh/campaign/referrer/landing/signup) + hoạt động (by_type badges + top tool) + bảng giao dịch gần đây. Nút "+Credits" trên hàng có `stopPropagation`. `_drawerUserId` guard tránh race.
+  - **Verify:** typecheck 0 lỗi, prettier route.ts sạch, node --check admin script (845 loc) OK.
+- **⏳ R3 (chưa làm) — doanh thu tiền thật:** thêm cột `amount_vnd`+`gateway` vào `credit_transactions`; ghi lúc topup (`handleCapture` PayPal: pkg amount_vnd + gateway=paypal; `bank-webhook`: data.amount thật + gateway=bank); báo cáo doanh thu tiền thật (RPC/dashboard) dùng `coalesce(amount_vnd, amount*2500)` cho row cũ. Cân nhắc chart revenue/ngày theo gateway.
+
 ---
 
 ## 🟢 ĐANG LÀM — App-shell "/app" (không gian làm việc đa công cụ)

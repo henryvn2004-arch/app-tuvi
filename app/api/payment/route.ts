@@ -461,17 +461,22 @@ async function handleAdminUsers(request: NextRequest, sp: URLSearchParams): Prom
   if (!admin) return err('Unauthorized', 403);
 
   try {
-    const page = parseInt(sp.get('page') || '1');
     const perPage = 100;
+    const MAX_PAGES = 100; // trần an toàn 10k user (tránh vòng lặp vô hạn)
 
-    // Fetch all auth users via Admin API (service key)
-    const authRes = await fetch(
-      `${SUPABASE_URL}/auth/v1/admin/users?page=${page}&per_page=${perPage}`,
-      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-    );
-    if (!authRes.ok) throw new Error(`Auth API failed: ${authRes.status}`);
-    const authData = await authRes.json();
-    const authUsers = authData.users || [];
+    // Lấy TOÀN BỘ auth user (loop qua các trang tới khi hết) — bỏ trần 100 cũ.
+    const authUsers: any[] = [];
+    for (let page = 1; page <= MAX_PAGES; page++) {
+      const authRes = await fetch(
+        `${SUPABASE_URL}/auth/v1/admin/users?page=${page}&per_page=${perPage}`,
+        { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+      );
+      if (!authRes.ok) throw new Error(`Auth API failed: ${authRes.status}`);
+      const authData = await authRes.json();
+      const batch = authData.users || [];
+      authUsers.push(...batch);
+      if (batch.length < perPage) break; // trang cuối
+    }
 
     // Fetch all credit balances
     const credRes = await fetch(
@@ -482,14 +487,15 @@ async function handleAdminUsers(request: NextRequest, sp: URLSearchParams): Prom
     const creditMap: Record<string, number> = {};
     credits.forEach((c) => { creditMap[c.user_id] = c.balance; });
 
-    // Fetch transaction counts per user
-    const txnRes = await fetch(
-      `${SUPABASE_URL}/rest/v1/credit_transactions?select=user_id&type=neq.topup`,
+    // Số lượt DÙNG TOOL trả phí = giao dịch trừ Lượng (amount < 0). Loại topup/
+    // signup_bonus/admin_grant (đều amount > 0) → không còn thổi phồng như cũ.
+    const spendRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/credit_transactions?select=user_id&amount=lt.0`,
       { headers: SB_HEADERS }
     );
-    const txns: { user_id: string }[] = txnRes.ok ? await txnRes.json() : [];
-    const txnCount: Record<string, number> = {};
-    txns.forEach((t) => { txnCount[t.user_id] = (txnCount[t.user_id] || 0) + 1; });
+    const spends: { user_id: string }[] = spendRes.ok ? await spendRes.json() : [];
+    const useCount: Record<string, number> = {};
+    spends.forEach((t) => { useCount[t.user_id] = (useCount[t.user_id] || 0) + 1; });
 
     // Merge
     const users = authUsers.map((u: any) => ({
@@ -500,11 +506,11 @@ async function handleAdminUsers(request: NextRequest, sp: URLSearchParams): Prom
       created_at:   u.created_at,
       last_sign_in: u.last_sign_in_at,
       balance:      creditMap[u.id] ?? 0,
-      tool_uses:    txnCount[u.id] || 0,
+      tool_uses:    useCount[u.id] || 0,
       confirmed:    !!u.email_confirmed_at,
     }));
 
-    return ok({ users, total: authData.total || users.length });
+    return ok({ users, total: users.length });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
@@ -602,9 +608,63 @@ export async function GET(request: NextRequest) {
   if (action === 'balance')      return handleBalance(searchParams);
   if (action === 'check')        return handleCheck(searchParams);
   if (action === 'admin-users')  return handleAdminUsers(request, searchParams);
+  if (action === 'admin-user-detail') return handleAdminUserDetail(request, searchParams);
   if (action === 'admin-marketing') return handleAdminMarketing(request, searchParams);
   if (action === 'check-bank')  return handleCheckBank(searchParams);
   return err('Invalid action.', 400);
+}
+
+// ── GET: admin-user-detail (hồ sơ đầy đủ 1 user cho drawer) ──────
+async function handleAdminUserDetail(request: NextRequest, sp: URLSearchParams): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+  const userId = String(sp.get('userId') || '');
+  if (!userId) return err('Missing userId', 400);
+  const uid = encodeURIComponent(userId);
+
+  try {
+    const [txnRes, attrRes, evRes, credRes] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/credit_transactions?user_id=eq.${uid}&order=created_at.desc&limit=100&select=amount,type,description,slug,created_at`, { headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/user_attribution?user_id=eq.${uid}&limit=1&select=*`, { headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/events?user_id=eq.${uid}&order=ts.desc&limit=2000&select=event_type,tool_id,ts`, { headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/user_credits?user_id=eq.${uid}&limit=1&select=balance,referral_code`, { headers: SB_HEADERS }),
+    ]);
+
+    const transactions = txnRes.ok ? await txnRes.json() : [];
+    const attribution = attrRes.ok ? (await attrRes.json())[0] || null : null;
+    const events = evRes.ok ? await evRes.json() : [];
+    const cred = credRes.ok ? (await credRes.json())[0] || null : null;
+
+    // Tổng hợp tiền/Lượng.
+    let spent = 0, toppedUp = 0;
+    for (const t of transactions as { amount: number }[]) {
+      if (t.amount < 0) spent += -t.amount; else if ((t as any).type === 'topup') toppedUp += t.amount;
+    }
+
+    // Tổng hợp hoạt động từ events.
+    const byType: Record<string, number> = {};
+    const toolTally: Record<string, number> = {};
+    let lastActive: string | null = null;
+    for (const e of events as { event_type: string; tool_id?: string; ts: string }[]) {
+      byType[e.event_type] = (byType[e.event_type] || 0) + 1;
+      if (e.tool_id && (e.event_type === 'tool_run' || e.event_type === 'tool_open')) {
+        toolTally[e.tool_id] = (toolTally[e.tool_id] || 0) + 1;
+      }
+      if (!lastActive) lastActive = e.ts;
+    }
+    const topTools = Object.entries(toolTally).sort((a, b) => b[1] - a[1]).slice(0, 8)
+      .map(([tool_id, count]) => ({ tool_id, count }));
+
+    return ok({
+      balance: cred?.balance ?? 0,
+      referral_code: cred?.referral_code ?? null,
+      attribution,
+      transactions,
+      totals: { spent, topped_up: toppedUp, events: events.length },
+      activity: { by_type: byType, top_tools: topTools, last_active: lastActive },
+    });
+  } catch (e: unknown) { return err((e as Error).message); }
 }
 
 // ── GET: admin-marketing (funnel + sources theo cửa sổ ngày) ──────

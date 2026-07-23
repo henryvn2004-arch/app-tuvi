@@ -833,7 +833,7 @@ audio { height: 32px; flex: 1; }
       <div class="page" id="page-users">
         <div class="panel">
           <div class="panel-header">
-            <div class="panel-title">Tất Cả Users</div>
+            <div class="panel-title">Tất Cả Users <span id="users-count" style="font-size:.72rem;color:var(--text-lt);font-family:'JetBrains Mono',monospace"></span></div>
             <div class="panel-actions">
               <input class="search-input" id="search-users" placeholder="Tìm email, tên..." style="width:220px" oninput="filterUsers()">
               <button class="btn btn-primary btn-sm" onclick="loadUsers()">↻</button>
@@ -1609,11 +1609,13 @@ async function loadUsers() {
 }
 
 function renderUsers(list) {
+  const cnt = document.getElementById('users-count');
+  if (cnt) cnt.textContent = (list.length === _allUsers.length) ? `· ${_allUsers.length}` : `· ${list.length}/${_allUsers.length}`;
   if (!list.length) { document.getElementById('users-table').innerHTML = '<div class="empty">Không có user</div>'; return; }
   const providerBadge = p => p === 'google' ? '<span class="badge badge-blue">Google</span>' : p === 'facebook' ? '<span class="badge" style="background:#eef;color:#1877F2;border:1px solid #c7d5f5">FB</span>' : '<span class="badge badge-grey">Email</span>';
   document.getElementById('users-table').innerHTML = `<table>
-    <thead><tr><th>Email</th><th>Tên</th><th>Provider</th><th>Đăng Ký</th><th>Lần Cuối</th><th>Lượng</th><th>Tools Dùng</th><th>Xác Nhận</th><th></th></tr></thead>
-    <tbody>${list.map(u => `<tr>
+    <thead><tr><th>Email</th><th>Tên</th><th>Provider</th><th>Đăng Ký</th><th>Lần Cuối</th><th>Lượng</th><th title="Lượt dùng tool trả phí (giao dịch trừ Lượng)">Trả Phí</th><th>Xác Nhận</th><th></th></tr></thead>
+    <tbody>${list.map(u => `<tr style="cursor:pointer" onclick="openUserDrawerById('${u.id}')">
       <td>${u.email}</td>
       <td style="color:var(--text-lt)">${u.name||'—'}</td>
       <td>${providerBadge(u.provider)}</td>
@@ -1622,7 +1624,7 @@ function renderUsers(list) {
       <td><strong style="color:var(--gold)">⊙ ${u.balance}</strong></td>
       <td style="text-align:center">${u.tool_uses||0}</td>
       <td>${u.confirmed ? '<span class="badge badge-green">✓</span>' : '<span class="badge badge-red">✗</span>'}</td>
-      <td><button class="btn btn-ghost btn-sm" onclick="quickGrantUser('${u.id}','${u.email}')">+ Credits</button></td>
+      <td><button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();quickGrantUser('${u.id}','${u.email}')">+ Credits</button></td>
     </tr>`).join('')}</tbody>
   </table>`;
 }
@@ -1636,7 +1638,111 @@ function quickGrantUser(userId, email) {
   const amount = parseInt(prompt(`Cấp credits cho ${email}:`, '50') || '0');
   if (!amount) return;
   apiPost('admin-grant', { targetUserId: userId, amount, description: 'Admin quick grant' })
-    .then(d => { if (d.success) { alert(`✓ Số dư mới: ⊙ ${d.balance}`); loadUsers(); loadStats(); } else alert('Lỗi: ' + d.error); });
+    .then(d => { if (d.success) { alert(`✓ Số dư mới: ⊙ ${d.balance}`); loadUsers(); loadStats(); if (_drawerUserId === userId) openUserDrawerById(userId); } else alert('Lỗi: ' + d.error); });
+}
+
+// ── USER DETAIL DRAWER ──
+let _drawerUserId = null;
+const TXN_LABELS = { topup:'💳 Topup', use_laso:'🔮 Lá Số', use_xem_tuoi:'💑 Xem Tuổi', use_xem_lam_an:'💼 Làm Ăn', use_dien_tuong:'👁 Diện Tướng', use_nhan_tuong:'👁 Nhãn Tướng', use_thu_tuong:'✋ Thủ Tướng', use_thanh_tuong:'🎵 Thanh Tướng', signup_bonus:'🎁 Signup', signup_bonus_revoked:'↩ Thu hồi', admin_grant:'⚙️ Admin' };
+
+function ensureDrawer() {
+  let d = document.getElementById('user-drawer');
+  if (d) return d;
+  const bd = document.createElement('div');
+  bd.id = 'user-drawer-bd';
+  bd.style.cssText = 'position:fixed;inset:0;background:rgba(6,26,46,.45);z-index:200;display:none';
+  bd.onclick = closeUserDrawer;
+  d = document.createElement('div');
+  d.id = 'user-drawer';
+  d.style.cssText = 'position:fixed;top:0;right:0;width:min(560px,94vw);height:100vh;background:var(--card);z-index:201;box-shadow:-8px 0 40px rgba(0,0,0,.25);transform:translateX(100%);transition:transform .2s;overflow-y:auto;display:flex;flex-direction:column';
+  document.body.appendChild(bd);
+  document.body.appendChild(d);
+  return d;
+}
+function closeUserDrawer() {
+  _drawerUserId = null;
+  const d = document.getElementById('user-drawer'), bd = document.getElementById('user-drawer-bd');
+  if (d) d.style.transform = 'translateX(100%)';
+  if (bd) bd.style.display = 'none';
+}
+async function openUserDrawerById(userId) {
+  const u = (_allUsers || []).find(x => x.id === userId);
+  if (!u) return;
+  _drawerUserId = userId;
+  const d = ensureDrawer();
+  document.getElementById('user-drawer-bd').style.display = 'block';
+  d.style.transform = 'translateX(0)';
+  const provTxt = u.provider === 'google' ? 'Google' : u.provider === 'facebook' ? 'Facebook' : 'Email';
+  d.innerHTML = `
+    <div style="padding:1.1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;position:sticky;top:0;background:var(--card);z-index:1">
+      <div>
+        <div style="font-family:'Noto Serif',serif;font-size:1rem;color:var(--navy);font-weight:700;word-break:break-all">${u.email}</div>
+        <div style="font-size:.72rem;color:var(--text-lt);margin-top:.2rem">${u.name || '—'} · ${provTxt} · ${u.confirmed ? 'đã xác nhận' : 'chưa xác nhận'}</div>
+        <div class="mono" style="font-size:.62rem;color:var(--text-lt);margin-top:.2rem">${u.id}</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="closeUserDrawer()">✕</button>
+    </div>
+    <div style="padding:1.25rem" id="drawer-body"><div class="loading"><span class="spin"></span>Đang tải hồ sơ...</div></div>`;
+  try {
+    const data = await apiGet('admin-user-detail', `&userId=${encodeURIComponent(userId)}`);
+    if (data.error) throw new Error(data.error);
+    if (_drawerUserId !== userId) return; // đã đóng/đổi user
+    renderUserDrawer(u, data);
+  } catch (e) {
+    const b = document.getElementById('drawer-body'); if (b) b.innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
+  }
+}
+function renderUserDrawer(u, data) {
+  const body = document.getElementById('drawer-body');
+  if (!body) return;
+  const a = data.attribution || {};
+  const t = data.totals || {};
+  const act = data.activity || {};
+  const stat = (label, val, color) => `<div style="flex:1;min-width:90px"><div class="stat-label">${label}</div><div style="font-family:'Noto Serif',serif;font-size:1.25rem;color:${color||'var(--navy)'};font-weight:700">${val}</div></div>`;
+  const chan = a.first_utm_source || (a.first_referrer ? 'referral' : 'direct');
+  const topTools = (act.top_tools || []).map(x => `<span class="badge badge-grey" style="margin:2px">${x.tool_id} · ${x.count}</span>`).join('') || '<span style="color:var(--text-lt)">—</span>';
+  const byType = Object.entries(act.by_type || {}).map(([k, v]) => `<span class="badge badge-blue" style="margin:2px">${k}: ${v}</span>`).join('') || '<span style="color:var(--text-lt)">chưa có event</span>';
+  const txns = (data.transactions || []);
+  const txnRows = txns.length ? txns.map(x => `<tr>
+      <td style="font-size:.68rem;color:var(--text-lt);white-space:nowrap">${fmtDate(x.created_at)}</td>
+      <td>${TXN_LABELS[x.type] || x.type}</td>
+      <td style="text-align:right;font-weight:700;color:${x.amount>0?'var(--green)':'var(--red)'}">${x.amount>0?'+':''}${x.amount}</td>
+    </tr>`).join('') : '<tr><td colspan="3" class="empty">Chưa có giao dịch</td></tr>';
+  body.innerHTML = `
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.25rem">
+      ${stat('Số dư', '⊙ ' + (data.balance ?? 0), 'var(--gold)')}
+      ${stat('Đã nạp', '⊙ ' + (t.topped_up || 0), 'var(--green)')}
+      ${stat('Đã tiêu', '⊙ ' + (t.spent || 0), 'var(--red)')}
+      ${stat('Events', act && data.totals ? (t.events || 0) : 0)}
+    </div>
+    <div style="display:flex;gap:.75rem;margin-bottom:.5rem">
+      <button class="btn btn-gold btn-sm" onclick="quickGrantUser('${u.id}','${u.email}')">+ Cấp Credits</button>
+      ${data.referral_code ? `<span style="font-size:.72rem;color:var(--text-lt);align-self:center">Ref code: <b class="mono">${data.referral_code}</b></span>` : ''}
+    </div>
+
+    <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border-lt)">
+      <div class="form-label" style="margin-bottom:.4rem">🌐 Nguồn (attribution)</div>
+      ${a.first_utm_source || a.first_referrer || a.first_landing_path ? `
+      <div style="font-size:.75rem;color:var(--text-mid);line-height:1.7">
+        <div>Kênh: <b>${chan}</b>${a.first_utm_campaign ? ' · campaign <b>' + a.first_utm_campaign + '</b>' : ''}</div>
+        ${a.first_referrer ? `<div>Referrer: <span class="mono" style="font-size:.66rem">${a.first_referrer}</span></div>` : ''}
+        ${a.first_landing_path ? `<div>Landing: <span class="mono" style="font-size:.66rem">${a.first_landing_path}</span></div>` : ''}
+        ${a.signup_at ? `<div>Đăng ký: ${fmtDate(a.signup_at)}</div>` : ''}
+      </div>` : '<div style="font-size:.75rem;color:var(--text-lt)">Chưa có dữ liệu attribution (user cũ hoặc chưa login sau khi bật tracking)</div>'}
+    </div>
+
+    <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border-lt)">
+      <div class="form-label" style="margin-bottom:.4rem">⚡ Hoạt động</div>
+      <div style="font-size:.72rem;color:var(--text-lt);margin-bottom:.4rem">Hoạt động cuối: ${act.last_active ? fmtDate(act.last_active) : '—'}</div>
+      <div style="margin-bottom:.5rem">${byType}</div>
+      <div class="form-label" style="margin:.6rem 0 .3rem">🔧 Tool hay dùng</div>
+      <div>${topTools}</div>
+    </div>
+
+    <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border-lt)">
+      <div class="form-label" style="margin-bottom:.4rem">💳 Giao dịch gần đây (${txns.length})</div>
+      <div class="table-wrap"><table><tbody>${txnRows}</tbody></table></div>
+    </div>`;
 }
 
 // ── CREDITS ──
