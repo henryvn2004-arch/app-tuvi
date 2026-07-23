@@ -31,6 +31,7 @@ import { NextRequest } from 'next/server';
 import { waitUntil } from '@vercel/functions';
 import { getChatConfig } from '@/lib/config/appConfig';
 import { paywallDisabled, getBalance, deductCredits, logTransaction } from '@/lib/billing/credits';
+import { chatLogOutcome } from '@/lib/channels/store';
 import {
   runConversation,
   type ChannelIO,
@@ -243,6 +244,7 @@ async function handleUpdate(update: TgUpdate): Promise<void> {
     ERR_MSG,
     gate.commit,
     telegramProfiles,
+    (ok, reason) => void chatLogOutcome('telegram', chatId, ok, reason),
   );
 }
 

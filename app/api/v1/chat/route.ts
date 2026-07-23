@@ -27,6 +27,7 @@ import { buildToolDefs } from '@/lib/tools/registry';
 import { runAgent } from '@/lib/agent/run';
 import { getChatConfig } from '@/lib/config/appConfig';
 import { getToolPrice } from '@/lib/billing/pricing';
+import { chatLogOutcome } from '@/lib/channels/store';
 import {
   paywallDisabled,
   extractToken,
@@ -123,8 +124,10 @@ export async function POST(request: NextRequest) {
           }
         }
         send(sse.done({ tools_used: toolsUsed, paywall, suggestions }));
+        void chatLogOutcome('web', req.session_id, true);
       } catch (e) {
         send(sse.error({ code: 'internal', message: e instanceof Error ? e.message : 'Lỗi không xác định' }));
+        void chatLogOutcome('web', req.session_id, false, e instanceof Error ? e.message.slice(0, 200) : 'unknown_exception');
       } finally {
         controller.close();
       }
