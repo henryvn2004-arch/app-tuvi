@@ -86,6 +86,7 @@ async function rpc(fn: string, params: Record<string, unknown>): Promise<number>
 async function logTransaction(p: {
   userId: string; amount: number; type: string;
   description?: string; slug?: string; paypalOrderId?: string;
+  amountVnd?: number; gateway?: string;
 }) {
   await fetch(`${SUPABASE_URL}/rest/v1/credit_transactions`, {
     method: 'POST',
@@ -97,6 +98,8 @@ async function logTransaction(p: {
       description:     p.description   || null,
       slug:            p.slug          || null,
       paypal_order_id: p.paypalOrderId || null,
+      amount_vnd:      p.amountVnd      ?? null,
+      gateway:         p.gateway        || null,
       created_at:      new Date().toISOString(),
     }),
   });
@@ -244,7 +247,7 @@ async function handleCapture(body: Record<string, unknown>): Promise<Response> {
         return ok({ success: true, status: 'already_completed', credits: pkg.credits });
       }
       const newBal = await rpc('add_credits', { p_user_id: userId, p_amount: pkg.credits });
-      await logTransaction({ userId, amount: pkg.credits, type: 'topup', description: pkg.label, paypalOrderId: orderId });
+      await logTransaction({ userId, amount: pkg.credits, type: 'topup', description: pkg.label, paypalOrderId: orderId, amountVnd: foundPkg.amountVnd, gateway: 'paypal' });
       // Referral reward fire tự động qua Postgres trigger trg_referral_check_on_topup
       return ok({ success: true, credits: pkg.credits, balance: newBal });
     }
@@ -703,16 +706,17 @@ async function handleAdminMarketing(request: NextRequest, sp: URLSearchParams): 
   };
 
   try {
-    const [funnel, sources, acquisition, campaigns, traffic, cohorts] = await Promise.all([
+    const [funnel, sources, acquisition, campaigns, traffic, revenue, cohorts] = await Promise.all([
       callRpc('marketing_funnel'),
       callRpc('marketing_sources'),
       callRpc('marketing_acquisition'),
       callRpc('marketing_campaigns'),
       callRpc('marketing_traffic'),
+      callRpc('marketing_revenue'),
       callCohorts(),
     ]);
     return ok({
-      funnel, sources, acquisition, campaigns, traffic, cohorts, cohortWeeks,
+      funnel, sources, acquisition, campaigns, traffic, revenue, cohorts, cohortWeeks,
       from: from.toISOString(), to: to.toISOString(),
     });
   } catch (e: unknown) { return err((e as Error).message); }
