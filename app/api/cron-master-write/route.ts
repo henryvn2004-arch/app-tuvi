@@ -4,6 +4,7 @@ export const maxDuration = 300;
 import { NextRequest } from 'next/server';
 import { ok, err, options } from '@/lib/cors';
 import { llmText } from '@/lib/llm/complete';
+import { withCronLog } from '@/lib/cron/log';
 
 const SUPABASE_URL  = process.env.SUPABASE_URL!;
 const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY!;
@@ -391,5 +392,7 @@ async function handle(request: NextRequest) {
   });
 }
 
-export async function GET(request: NextRequest) { return handle(request); }
+export async function GET(request: NextRequest) {
+  return withCronLog('cron-master-write', 'vercel', () => handle(request));
+}
 export async function POST(request: NextRequest) { return handle(request); }

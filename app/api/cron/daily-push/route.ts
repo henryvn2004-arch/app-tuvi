@@ -13,6 +13,7 @@ export const maxDuration = 60;
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { createSign } from 'crypto';
+import { withCronLog } from '@/lib/cron/log';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -63,6 +64,10 @@ async function fcmAccessToken(sa: { client_email: string; private_key: string })
 }
 
 export async function GET(request: NextRequest) {
+  return withCronLog('cron-daily-push', 'vercel', () => handle(request));
+}
+
+async function handle(request: NextRequest) {
   // Chỉ cho cron (Vercel gắn Authorization: Bearer CRON_SECRET) hoặc header cron.
   const auth = request.headers.get('authorization') || '';
   // Chỉ chạy khi có Bearer CRON_SECRET — Vercel cron TỰ gắn header này khi
