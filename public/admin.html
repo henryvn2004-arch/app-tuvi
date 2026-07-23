@@ -131,11 +131,21 @@
 
       <!-- ── DASHBOARD ── -->
       <div class="page active" id="page-dashboard">
+        <div class="dash-alerts" id="dash-alerts"></div>
+
         <div class="stats" id="stats-grid">
           <div class="stat"><div class="stat-label">Users</div><div class="stat-value spin-val">…</div><div class="stat-sub">tổng tài khoản</div></div>
           <div class="stat green"><div class="stat-label">Credits Nạp</div><div class="stat-value spin-val">…</div><div class="stat-sub">tổng</div></div>
           <div class="stat gold"><div class="stat-label">Doanh Thu</div><div class="stat-value spin-val">…</div><div class="stat-sub">ước tính</div></div>
           <div class="stat blue"><div class="stat-label">Lá Số</div><div class="stat-value spin-val">…</div><div class="stat-sub">đã tạo</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 16.5 8.5 11.5 1 19"/><polyline points="17 6 23 6 23 12"/></svg>Funnel 7 Ngày Gần Đây</div>
+            <button class="btn btn-ghost btn-sm" onclick="goTo('marketing')">Xem chi tiết →</button>
+          </div>
+          <div class="panel-body" id="dash-funnel"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
         </div>
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
@@ -1781,34 +1791,90 @@ async function apiGet(action, params = '') {
 
 // ── LOAD ALL ──
 function loadAll() {
-  loadStats();
-  loadDashboardRecent();
+  loadDashboardAlerts();
+  loadDashFunnel();
+  loadStatsAndRecent();
 }
 
-// ── STATS ──
-async function loadStats() {
+// ── ALERTS (điều cần chú ý HÔM NAY — cron lỗi 24h + hàng đợi nội dung lỗi) ──
+const ALERT_WARN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+const ALERT_OK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
+
+async function loadDashboardAlerts() {
+  const host = document.getElementById('dash-alerts');
+  try {
+    const [cronData, cbData] = await Promise.all([apiGet('admin-cron-runs'), apiGet('admin-content-board')]);
+    const dayAgo = Date.now() - 86400000;
+    const cronErrors = (cronData.runs || []).filter(r => r.status === 'error' && new Date(r.started_at).getTime() >= dayAgo).length;
+    const p = (cbData && cbData.pipelines) || {};
+    const contentErrors = ((p.khaoLuan && p.khaoLuan.error) || 0) + ((p.nghienCuu && p.nghienCuu.error) || 0);
+
+    const chips = [];
+    if (cronErrors > 0) chips.push(`<div class="dash-alert warn" onclick="goTo('cron')">${ALERT_WARN_ICON}<strong>${cronErrors}</strong> job cron lỗi (24h) →</div>`);
+    if (contentErrors > 0) chips.push(`<div class="dash-alert warn" onclick="goTo('cboard')">${ALERT_WARN_ICON}<strong>${contentErrors}</strong> bài viết lỗi trong hàng đợi →</div>`);
+    host.innerHTML = chips.length ? chips.join('') : `<div class="dash-alert ok">${ALERT_OK_ICON}Không có lỗi cron hay hàng đợi nội dung cần xử lý</div>`;
+  } catch(e) {
+    host.innerHTML = '';
+  }
+}
+
+// ── FUNNEL SNAPSHOT (7 ngày, rút gọn từ marketing_funnel — chi tiết đầy đủ ở trang Funnel & Nguồn) ──
+async function loadDashFunnel() {
+  const host = document.getElementById('dash-funnel');
+  try {
+    const from = new Date(Date.now() - 7 * 864e5).toISOString().slice(0, 10);
+    const data = await apiGet('admin-marketing', `&from=${from}`);
+    renderDashFunnel(data.funnel || {});
+  } catch(e) {
+    host.innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
+  }
+}
+
+function renderDashFunnel(f) {
+  const steps = [['visitors', 'Khách ghé'], ['signups', 'Đăng ký'], ['activated', 'Dùng tool'], ['paid', 'Trả tiền']];
+  let prev = null;
+  const cells = steps.map(([k, label]) => {
+    const v = f[k] || 0;
+    const conv = prev == null ? '&nbsp;' : (prev > 0 ? `${((v / prev) * 100).toFixed(0)}% từ bước trước` : '0%');
+    prev = v;
+    return `<div style="flex:1;text-align:center">
+      <div style="font-family:var(--serif);font-size:1.55rem;font-weight:700;color:var(--navy)">${v.toLocaleString()}</div>
+      <div style="font-size:.74rem;color:var(--text-mid);margin-top:.15rem">${label}</div>
+      <div style="font-size:.66rem;color:var(--text-lt);margin-top:.15rem">${conv}</div>
+    </div>`;
+  });
+  const arrow = `<div style="color:var(--line-2);font-size:1.3rem;padding:0 .25rem;align-self:flex-start;margin-top:.2rem">→</div>`;
+  document.getElementById('dash-funnel').innerHTML = `<div style="display:flex;align-items:flex-start">${cells.join(arrow)}</div>`;
+}
+
+// ── STATS + RECENT (1 lần fetch users/txns dùng chung, tránh gọi admin-users 2 lần) ──
+async function loadStatsAndRecent() {
   try {
     const [usersData, txns, lasos] = await Promise.all([
       apiGet('admin-users'),
       sbGet('credit_transactions?select=amount,amount_vnd,type,created_at'),
       sbGet('laso_public?select=slug&limit=1000'),
     ]);
-
     const users = usersData.users || [];
     document.getElementById('badge-users').textContent = users.length;
+
+    const weekAgo = Date.now() - 7 * 864e5;
+    const newUsersWeek = users.filter(u => new Date(u.created_at).getTime() >= weekAgo).length;
 
     // CHỈ topup thật (loại signup_bonus/admin_grant dương). Doanh thu = tiền thật
     // (amount_vnd), fallback ước lượng ×2.500đ cho giao dịch cũ.
     const topups = txns.filter(t => t.type === 'topup');
     const totalCr = topups.reduce((s, t) => s + t.amount, 0);
-    const revenueVnd = topups.reduce((s, t) => s + (t.amount_vnd != null ? t.amount_vnd : t.amount * 2500), 0);
+    const vndOf = t => t.amount_vnd != null ? t.amount_vnd : t.amount * 2500;
+    const revenueVnd = topups.reduce((s, t) => s + vndOf(t), 0);
+    const revenueWeekVnd = topups.filter(t => new Date(t.created_at).getTime() >= weekAgo).reduce((s, t) => s + vndOf(t), 0);
     const revenue = (revenueVnd / 1e6).toFixed(1) + 'tr';
 
     document.getElementById('stats-grid').innerHTML = `
       <div class="stat">
         <div class="stat-label">Users</div>
         <div class="stat-value">${users.length}</div>
-        <div class="stat-sub">${users.filter(u => u.confirmed).length} đã xác nhận</div>
+        <div class="stat-sub">${newUsersWeek > 0 ? `+${newUsersWeek} tuần này` : `${users.filter(u => u.confirmed).length} đã xác nhận`}</div>
       </div>
       <div class="stat green">
         <div class="stat-label">Credits Nạp</div>
@@ -1818,41 +1884,30 @@ async function loadStats() {
       <div class="stat gold">
         <div class="stat-label">Doanh Thu</div>
         <div class="stat-value">${revenue}</div>
-        <div class="stat-sub">tiền thật · ${topups.length} topup</div>
+        <div class="stat-sub">tiền thật · +${(revenueWeekVnd/1e6).toFixed(1)}tr tuần này</div>
       </div>
       <div class="stat blue">
         <div class="stat-label">Lá Số</div>
         <div class="stat-value">${lasos.length}</div>
         <div class="stat-sub">tổng đã tạo</div>
       </div>`;
-  } catch(e) {
-    document.getElementById('stats-grid').innerHTML = `<div style="padding:1rem;color:var(--red);font-size:.8rem">Lỗi: ${e.message}</div>`;
-  }
-}
 
-// ── DASHBOARD RECENT ──
-async function loadDashboardRecent() {
-  try {
-    const [usersData, txns] = await Promise.all([
-      apiGet('admin-users'),
-      sbGet('credit_transactions?order=created_at.desc&limit=8&select=*'),
-    ]);
-    const users = (usersData.users || []).sort((a,b) => new Date(b.created_at) - new Date(a.created_at)).slice(0,8);
-
-    // Recent users
+    // Recent signups (top 8, đã có sẵn trong users)
+    const recentUsers = [...users].sort((a,b) => new Date(b.created_at) - new Date(a.created_at)).slice(0,8);
     document.getElementById('dash-recent-users').innerHTML = `<table>
       <thead><tr><th>Email</th><th>Đăng Ký</th><th>Lượng</th></tr></thead>
-      <tbody>${users.map(u => `<tr>
+      <tbody>${recentUsers.map(u => `<tr>
         <td>${u.email}</td>
         <td style="color:var(--text-lt)">${fmtDate(u.created_at)}</td>
         <td style="color:var(--gold);font-weight:700">⊙ ${u.balance}</td>
       </tr>`).join('')}</tbody>
     </table>`;
 
-    // Recent transactions
+    // Recent transactions (top 8, đã có sẵn trong txns — không gọi thêm request)
+    const recentTxns = [...txns].sort((a,b) => new Date(b.created_at) - new Date(a.created_at)).slice(0,8);
     document.getElementById('dash-recent-txns').innerHTML = `<table>
       <thead><tr><th>Thời Gian</th><th>Loại</th><th>Credits</th></tr></thead>
-      <tbody>${txns.map(t => {
+      <tbody>${recentTxns.map(t => {
         const isAdd = t.amount > 0;
         return `<tr>
           <td style="color:var(--text-lt)">${fmtDate(t.created_at)}</td>
@@ -1862,6 +1917,7 @@ async function loadDashboardRecent() {
       }).join('')}</tbody>
     </table>`;
   } catch(e) {
+    document.getElementById('stats-grid').innerHTML = `<div style="padding:1rem;color:var(--red);font-size:.8rem">Lỗi: ${e.message}</div>`;
     document.getElementById('dash-recent-users').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
   }
 }
