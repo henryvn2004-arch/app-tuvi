@@ -166,7 +166,7 @@
       <div class="page" id="page-users">
         <div class="panel">
           <div class="panel-header">
-            <div class="panel-title">Tất Cả Users <span id="users-count" style="font-size:.72rem;color:var(--text-lt);font-family:'JetBrains Mono',monospace"></span></div>
+            <div class="panel-title">Tất Cả Users <span id="users-count" class="mono" style="font-size:.72rem;color:var(--text-lt)"></span></div>
             <div class="panel-actions">
               <input class="search-input" id="search-users" placeholder="Tìm email, tên..." style="width:220px" oninput="filterUsers()">
               <button class="btn btn-primary btn-sm" onclick="loadUsers()">↻</button>
@@ -175,6 +175,7 @@
           <div class="table-wrap" id="users-table">
             <div class="loading"><span class="spin"></span>Đang tải...</div>
           </div>
+          <div class="table-toolbar" id="users-toolbar" style="display:none"></div>
         </div>
       </div>
 
@@ -1866,25 +1867,75 @@ async function loadDashboardRecent() {
 }
 
 // ── USERS ──
+let _usersView = [];
+let _usersSortKey = 'created_at';
+let _usersSortDir = 'desc';
+let _usersPage = 1;
+let _usersPageSize = 25;
+
 async function loadUsers() {
   document.getElementById('users-table').innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
+  document.getElementById('users-toolbar').style.display = 'none';
   try {
     const data = await apiGet('admin-users');
     _allUsers = (data.users || []).sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+    _usersPage = 1;
     renderUsers(_allUsers);
   } catch(e) {
     document.getElementById('users-table').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
   }
 }
 
+const USERS_SORT_ICON = '<svg class="sort-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+const USERS_COLS = [
+  { key: 'email',        label: 'Email' },
+  { key: 'name',         label: 'Tên' },
+  { key: 'provider',     label: 'Provider' },
+  { key: 'created_at',   label: 'Đăng Ký' },
+  { key: 'last_sign_in', label: 'Lần Cuối' },
+  { key: 'balance',      label: 'Lượng' },
+  { key: 'tool_uses',    label: 'Trả Phí', title: 'Lượt dùng tool trả phí (giao dịch trừ Lượng)' },
+  { key: 'confirmed',    label: 'Xác Nhận' },
+];
+
+function sortUsersBy(key) {
+  if (_usersSortKey === key) { _usersSortDir = _usersSortDir === 'asc' ? 'desc' : 'asc'; }
+  else { _usersSortKey = key; _usersSortDir = key === 'email' || key === 'name' || key === 'provider' ? 'asc' : 'desc'; }
+  _usersPage = 1;
+  renderUsers(_usersView);
+}
+
+function cmpUsers(a, b, key) {
+  let av = a[key], bv = b[key];
+  if (key === 'created_at' || key === 'last_sign_in') { av = av ? new Date(av).getTime() : -Infinity; bv = bv ? new Date(bv).getTime() : -Infinity; }
+  else if (key === 'balance' || key === 'tool_uses') { av = av || 0; bv = bv || 0; }
+  else if (key === 'confirmed') { av = av ? 1 : 0; bv = bv ? 1 : 0; }
+  else { av = (av || '').toString().toLowerCase(); bv = (bv || '').toString().toLowerCase(); }
+  if (av < bv) return -1;
+  if (av > bv) return 1;
+  return 0;
+}
+
 function renderUsers(list) {
+  _usersView = list;
   const cnt = document.getElementById('users-count');
   if (cnt) cnt.textContent = (list.length === _allUsers.length) ? `· ${_allUsers.length}` : `· ${list.length}/${_allUsers.length}`;
-  if (!list.length) { document.getElementById('users-table').innerHTML = '<div class="empty">Không có user</div>'; return; }
+  const tableHost = document.getElementById('users-table');
+  const toolbarHost = document.getElementById('users-toolbar');
+  if (!list.length) { tableHost.innerHTML = '<div class="empty">Không có user</div>'; toolbarHost.style.display = 'none'; return; }
+
+  const sorted = [...list].sort((a, b) => cmpUsers(a, b, _usersSortKey) * (_usersSortDir === 'asc' ? 1 : -1));
+  const totalPages = Math.max(1, Math.ceil(sorted.length / _usersPageSize));
+  if (_usersPage > totalPages) _usersPage = totalPages;
+  const start = (_usersPage - 1) * _usersPageSize;
+  const pageRows = sorted.slice(start, start + _usersPageSize);
+
   const providerBadge = p => p === 'google' ? '<span class="badge badge-blue">Google</span>' : p === 'facebook' ? '<span class="badge" style="background:#eef;color:#1877F2;border:1px solid #c7d5f5">FB</span>' : '<span class="badge badge-grey">Email</span>';
-  document.getElementById('users-table').innerHTML = `<table>
-    <thead><tr><th>Email</th><th>Tên</th><th>Provider</th><th>Đăng Ký</th><th>Lần Cuối</th><th>Lượng</th><th title="Lượt dùng tool trả phí (giao dịch trừ Lượng)">Trả Phí</th><th>Xác Nhận</th><th></th></tr></thead>
-    <tbody>${list.map(u => `<tr style="cursor:pointer" onclick="openUserDrawerById('${u.id}')">
+  const th = c => `<th class="sortable${_usersSortKey === c.key ? ' sort-active' : ''}" onclick="sortUsersBy('${c.key}')"${c.title ? ` title="${c.title}"` : ''}>${c.label}${_usersSortKey === c.key ? USERS_SORT_ICON : ''}</th>`;
+  tableHost.innerHTML = `<table>
+    <thead><tr><th class="td-num">#</th>${USERS_COLS.map(th).join('')}<th></th></tr></thead>
+    <tbody>${pageRows.map((u, i) => `<tr style="cursor:pointer" onclick="openUserDrawerById('${u.id}')">
+      <td class="td-num">${start + i + 1}</td>
       <td>${u.email}</td>
       <td style="color:var(--text-lt)">${u.name||'—'}</td>
       <td>${providerBadge(u.provider)}</td>
@@ -1896,10 +1947,46 @@ function renderUsers(list) {
       <td><button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();quickGrantUser('${u.id}','${u.email}')">+ Credits</button></td>
     </tr>`).join('')}</tbody>
   </table>`;
+
+  renderUsersToolbar(sorted.length, totalPages, start, pageRows.length);
+}
+
+function renderUsersToolbar(total, totalPages, start, pageCount) {
+  const host = document.getElementById('users-toolbar');
+  host.style.display = 'flex';
+  const sizes = [25, 50, 100, 200];
+  const pageBtns = [];
+  const addBtn = (label, page, opts = {}) => pageBtns.push(
+    `<button class="pg-btn${opts.active ? ' active' : ''}" ${opts.disabled ? 'disabled' : ''} onclick="goToUsersPage(${page})">${label}</button>`
+  );
+  addBtn('«', 1, { disabled: _usersPage === 1 });
+  addBtn('‹', _usersPage - 1, { disabled: _usersPage === 1 });
+  const lo = Math.max(1, _usersPage - 2), hi = Math.min(totalPages, _usersPage + 2);
+  for (let p = lo; p <= hi; p++) addBtn(String(p), p, { active: p === _usersPage });
+  addBtn('›', _usersPage + 1, { disabled: _usersPage === totalPages });
+  addBtn('»', totalPages, { disabled: _usersPage === totalPages });
+  host.innerHTML = `
+    <div class="tt-info">Hiển thị ${total ? start + 1 : 0}–${start + pageCount} / ${total}</div>
+    <div class="tt-pages">${pageBtns.join('')}</div>
+    <select class="pg-size" onchange="changeUsersPageSize(this.value)">${sizes.map(s => `<option value="${s}" ${s === _usersPageSize ? 'selected' : ''}>${s}/trang</option>`).join('')}</select>
+  `;
+}
+
+function goToUsersPage(p) {
+  const totalPages = Math.max(1, Math.ceil(_usersView.length / _usersPageSize));
+  _usersPage = Math.min(Math.max(1, p), totalPages);
+  renderUsers(_usersView);
+}
+
+function changeUsersPageSize(v) {
+  _usersPageSize = parseInt(v, 10) || 25;
+  _usersPage = 1;
+  renderUsers(_usersView);
 }
 
 function filterUsers() {
   const q = document.getElementById('search-users').value.toLowerCase();
+  _usersPage = 1;
   renderUsers(_allUsers.filter(u => (u.email||'').toLowerCase().includes(q) || (u.name||'').toLowerCase().includes(q)));
 }
 
