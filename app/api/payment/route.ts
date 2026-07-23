@@ -1225,7 +1225,7 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
   };
 
   try {
-    const [engagement, contentRevenue, atRisk, khTotal, kh7d, ncTotal, nc7d, ytTotal, yt7d, channelHealth] = await Promise.all([
+    const [engagement, contentRevenue, atRisk, khTotal, kh7d, ncTotal, nc7d, ytTotal, yt7d, channelHealth, margin] = await Promise.all([
       callRpc('dashboard_engagement', { p_days: 30 }),
       callRpc('dashboard_content_revenue', { p_from: from.toISOString(), p_to: to.toISOString() }),
       callRpc('dashboard_at_risk', { p_idle_days: 14, p_min_events: 3, p_limit: 20 }),
@@ -1236,6 +1236,7 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
       countExact('van_dap?select=id&limit=1&publish_status=eq.published'),
       countExact(`van_dap?select=id&limit=1&publish_status=eq.published&created_at=gte.${sevenDaysAgo}`),
       callRpc('channel_error_rate', { p_hours: 24 }),
+      callRpc('dashboard_margin', { p_from: from.toISOString(), p_to: to.toISOString() }),
     ]);
 
     return ok({
@@ -1243,6 +1244,7 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
       contentRevenue,
       atRisk,
       channelHealth,
+      margin,
       content: {
         khaoLuan:  { total: khTotal, last7d: kh7d },
         nghienCuu: { total: ncTotal, last7d: nc7d },
