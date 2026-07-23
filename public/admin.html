@@ -49,13 +49,13 @@
       <button class="nav-item" onclick="goTo('content')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg></span><span>YouTube Studio</span>
       </button>
-      <button class="nav-item" onclick="goToSoon(this,'Content Board','S3','Kanban gộp Khảo Luận + Nghiên Cứu + YouTube về một board draft→review→approved→scheduled→published.')">
+      <button class="nav-item" onclick="goTo('cboard')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h6v18H3z"/><path d="M15 3h6v11h-6z"/></svg></span><span>Content Board</span>
       </button>
-      <button class="nav-item" onclick="goToSoon(this,'Khảo Luận','S3','Quản lý + trigger cron cron-khao-luan (blog), xem hàng đợi bài khao_luan.')">
+      <button class="nav-item" onclick="goTo('khaoluan')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span><span>Khảo Luận</span>
       </button>
-      <button class="nav-item" onclick="goToSoon(this,'Nghiên Cứu','S3','15 author persona + master_articles + topic pipeline (cron-master-write).')">
+      <button class="nav-item" onclick="goTo('nghiencuu')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span><span>Nghiên Cứu</span>
       </button>
       <button class="nav-item" onclick="goTo('channels')">
@@ -866,6 +866,109 @@
         </div>
       </div>
 
+      <!-- ── CONTENT BOARD (Marketing & Nội Dung) ── -->
+      <div class="page" id="page-cboard">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">🗂 Hàng Đợi Theo Pipeline</div>
+            <button class="btn btn-primary btn-sm" onclick="loadContentBoard()">↻</button>
+          </div>
+          <div class="panel-body" id="cb-pipelines"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">📰 Xuất Bản Gần Đây (gộp 3 nguồn)</div>
+            <span style="font-size:.72rem;color:var(--text-lt)">Khảo Luận · Nghiên Cứu · YouTube — 2 nguồn đầu tự viết + xuất bản ngay, không có bước duyệt tay</span>
+          </div>
+          <div class="table-wrap" id="cb-recent"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+      </div>
+
+      <!-- ── KHẢO LUẬN (Marketing & Nội Dung) ── -->
+      <div class="page" id="page-khaoluan">
+        <div class="stats" id="kl-stats" style="grid-template-columns:repeat(4,1fr)">
+          <div class="stat"><div class="stat-label">Tổng Bài</div><div class="stat-value" id="kl-k-total">…</div><div class="stat-sub">khao_luan</div></div>
+          <div class="stat green"><div class="stat-label">+7 Ngày</div><div class="stat-value" id="kl-k-7d">…</div><div class="stat-sub">bài mới</div></div>
+          <div class="stat blue"><div class="stat-label">Đang Chờ Viết</div><div class="stat-value" id="kl-k-pending">…</div><div class="stat-sub">hàng đợi</div></div>
+          <div class="stat" style="--x:1"><div class="stat-label">Lỗi</div><div class="stat-value" id="kl-k-error" style="color:var(--red)">…</div><div class="stat-sub">cần để mắt</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">📂 Theo Danh Mục</div>
+            <span style="font-size:.72rem;color:var(--text-lt)">Trigger cron thủ công ở <a href="#" onclick="goTo('cron');return false" style="color:var(--blue)">Cron &amp; Jobs</a></span>
+          </div>
+          <div class="panel-body" id="kl-categories"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">➕ Thêm Chủ Đề Vào Hàng Đợi</div></div>
+          <div class="panel-body">
+            <div class="form-label">Mỗi dòng 1 chủ đề</div>
+            <textarea class="form-control" id="kl-topics" rows="4" placeholder="Ý nghĩa sao Tử Vi trong cung Mệnh&#10;Cách luận Tứ Hóa khi Lộc nhập cung Tài Bạch"></textarea>
+            <div style="margin-top:.6rem">
+              <button class="btn btn-gold btn-sm" onclick="submitKlTopics(this)">Thêm Vào Hàng Đợi →</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">📄 Bài Gần Đây</div></div>
+          <div class="table-wrap" id="kl-recent"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+      </div>
+
+      <!-- ── NGHIÊN CỨU (Marketing & Nội Dung) ── -->
+      <div class="page" id="page-nghiencuu">
+        <div class="stats" id="nc-stats" style="grid-template-columns:repeat(4,1fr)">
+          <div class="stat"><div class="stat-label">Tổng Bài</div><div class="stat-value" id="nc-k-total">…</div><div class="stat-sub">master_articles</div></div>
+          <div class="stat green"><div class="stat-label">+7 Ngày</div><div class="stat-value" id="nc-k-7d">…</div><div class="stat-sub">bài mới</div></div>
+          <div class="stat blue"><div class="stat-label">Từ / Bài (TB)</div><div class="stat-value" id="nc-k-words">…</div><div class="stat-sub">word_count</div></div>
+          <div class="stat" style="--x:1"><div class="stat-label">Đang Chờ Viết</div><div class="stat-value" id="nc-k-pending">…</div><div class="stat-sub">hàng đợi</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">🖋 15 Tác Giả</div>
+            <span style="font-size:.72rem;color:var(--text-lt)">Trigger cron thủ công ở <a href="#" onclick="goTo('cron');return false" style="color:var(--blue)">Cron &amp; Jobs</a></span>
+          </div>
+          <div class="table-wrap" id="nc-authors"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">➕ Thêm Chủ Đề Vào Hàng Đợi</div></div>
+          <div class="panel-body">
+            <div class="form-label">Mỗi dòng 1 chủ đề</div>
+            <textarea class="form-control" id="nc-topics" rows="4" placeholder="Luận về sao Thiên Cơ tại cung Quan Lộc&#10;Chiêm nghiệm một lá số doanh nhân thành đạt"></textarea>
+            <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.6rem">
+              <div>
+                <div class="form-label">Loại Bài</div>
+                <select class="form-control" id="nc-article-type">
+                  <option value="hoc-thuat">Học Thuật (round-robin tác giả)</option>
+                  <option value="luan-la-so">Luận Lá Số</option>
+                  <option value="chiem-nghiem">Chiêm Nghiệm</option>
+                  <option value="ly-luan">Lý Luận</option>
+                  <option value="thuc-hanh">Thực Hành</option>
+                </select>
+              </div>
+              <div>
+                <div class="form-label">Tác Giả (tùy chọn)</div>
+                <select class="form-control" id="nc-master-id"><option value="">— Round-robin —</option></select>
+              </div>
+            </div>
+            <div style="margin-top:.6rem">
+              <button class="btn btn-gold btn-sm" onclick="submitNcTopics(this)">Thêm Vào Hàng Đợi →</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">📄 Bài Gần Đây</div></div>
+          <div class="table-wrap" id="nc-recent"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+      </div>
+
       <!-- ── PLACEHOLDER (module chưa build) ── -->
       <div class="page" id="page-soon">
         <div class="soon-card">
@@ -895,6 +998,7 @@ const PAGE_TITLES = {
   lasos: 'Lá Số', pricing: 'Gói Nạp & Pricing', tools: 'Ví & Cấp Credits',
   marketing: 'Funnel & Nguồn', content: 'YouTube Studio', cron: 'Cron & Jobs',
   channels: 'Channels & Push', seo: 'SEO',
+  cboard: 'Content Board', khaoluan: 'Khảo Luận', nghiencuu: 'Nghiên Cứu',
 };
 
 // ── AUTH ──
@@ -954,6 +1058,7 @@ function goTo(page) {
   const loaders = { users: loadUsers, credits: loadCredits, lasos: loadLasos,
                     pricing: loadPricingPage, tools: loadAdminUsers, marketing: loadMarketing,
                     cron: loadCron, channels: loadChannels, seo: loadSeo,
+                    cboard: loadContentBoard, khaoluan: loadKhaoLuan, nghiencuu: loadNghienCuu,
                     content: () => {
     if (showView) showView('dashboard');
     if (!window._contentInitialized) {
@@ -1166,6 +1271,180 @@ async function loadSeo() {
         <td style="text-align:right">${s.ms}ms</td>
       </tr>`).join('')}</tbody>
   </table>`;
+}
+
+// ── CONTENT BOARD / KHẢO LUẬN / NGHIÊN CỨU ──
+const CB_SOURCE_LABEL = { 'khao-luan': '📰 Khảo Luận', 'nghien-cuu': '🖋 Nghiên Cứu', youtube: '▶ YouTube' };
+const CB_STAGE_LABEL = { pending: 'Chờ viết', processing: 'Đang viết', done: 'Đã xuất bản', error: 'Lỗi' };
+const CB_STAGE_COLOR = { pending: 'badge-grey', processing: 'badge-processing', done: 'badge-green', error: 'badge-error' };
+
+function renderPipelineStages(counts) {
+  return `<div style="display:flex;gap:1.2rem;flex-wrap:wrap">${['pending', 'processing', 'done', 'error'].map(s => `
+    <div>
+      <div class="stat-label">${CB_STAGE_LABEL[s]}</div>
+      <div style="font-family:'Noto Serif',serif;font-size:1.3rem;font-weight:700;color:${s === 'error' ? 'var(--red)' : 'var(--navy)'}">${(counts[s] || 0).toLocaleString()}</div>
+    </div>`).join('')}</div>`;
+}
+
+async function loadContentBoard() {
+  const pipeHost = document.getElementById('cb-pipelines');
+  const recentHost = document.getElementById('cb-recent');
+  pipeHost.innerHTML = `<div class="loading"><span class="spin"></span>Đang tải...</div>`;
+  recentHost.innerHTML = `<div class="loading"><span class="spin"></span>Đang tải...</div>`;
+  let data;
+  try { data = await apiGet('admin-content-board'); }
+  catch (e) { pipeHost.innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`; return; }
+  if (data && data.error) { pipeHost.innerHTML = `<div class="empty">Lỗi: ${data.error}</div>`; return; }
+
+  const pipelines = (data && data.pipelines) || {};
+  const recent = (data && data.recent) || [];
+
+  pipeHost.innerHTML = `
+    <div style="margin-bottom:1.1rem">
+      <div class="form-label" style="margin-bottom:.4rem">📰 Khảo Luận</div>
+      ${renderPipelineStages(pipelines.khaoLuan || {})}
+    </div>
+    <div>
+      <div class="form-label" style="margin-bottom:.4rem">🖋 Nghiên Cứu</div>
+      ${renderPipelineStages(pipelines.nghienCuu || {})}
+    </div>`;
+
+  recentHost.innerHTML = recent.length ? `<table>
+    <thead><tr><th>Nguồn</th><th>Tiêu Đề</th><th>Chi Tiết</th><th>Thời Điểm</th></tr></thead>
+    <tbody>${recent.map(r => `<tr>
+        <td><span class="badge badge-blue">${CB_SOURCE_LABEL[r.source] || r.source}</span></td>
+        <td>${r.link ? `<a href="${r.link}" target="_blank" style="color:var(--navy);font-weight:600">${escHtmlLocal(r.title)}</a>` : `<strong>${escHtmlLocal(r.title)}</strong>`}</td>
+        <td style="font-size:.74rem;color:var(--text-lt)">${escHtmlLocal(r.sub || '—')}</td>
+        <td style="font-size:.74rem;color:var(--text-lt);white-space:nowrap">${relTime(r.createdAt)}</td>
+      </tr>`).join('')}</tbody>
+  </table>` : '<div class="empty">Chưa có nội dung xuất bản</div>';
+}
+
+function escHtmlLocal(s) {
+  const d = document.createElement('div');
+  d.textContent = s == null ? '' : String(s);
+  return d.innerHTML;
+}
+
+async function loadKhaoLuan() {
+  const catHost = document.getElementById('kl-categories');
+  const recentHost = document.getElementById('kl-recent');
+  catHost.innerHTML = `<div class="loading"><span class="spin"></span>Đang tải...</div>`;
+  recentHost.innerHTML = `<div class="loading"><span class="spin"></span>Đang tải...</div>`;
+  let data;
+  try { data = await apiGet('admin-khao-luan'); }
+  catch (e) { catHost.innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`; return; }
+  if (data && data.error) { catHost.innerHTML = `<div class="empty">Lỗi: ${data.error}</div>`; return; }
+
+  document.getElementById('kl-k-total').textContent = (data.total || 0).toLocaleString();
+  document.getElementById('kl-k-7d').textContent = (data.last7d || 0).toLocaleString();
+  document.getElementById('kl-k-pending').textContent = ((data.queue && data.queue.pending) || 0).toLocaleString();
+  document.getElementById('kl-k-error').textContent = ((data.queue && data.queue.error) || 0).toLocaleString();
+
+  const cats = data.categories || [];
+  const maxCat = Math.max(1, ...cats.map(c => c.count || 0));
+  catHost.innerHTML = cats.length ? cats.map(c => {
+    const pct = Math.round((c.count / maxCat) * 100);
+    return `<div style="margin-bottom:.7rem">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.25rem">
+        <span style="font-size:.8rem;color:var(--text-mid)">${c.category}</span>
+        <strong style="font-family:'Noto Serif',serif;color:var(--navy)">${c.count.toLocaleString()}</strong>
+      </div>
+      <div style="background:var(--border-lt);border-radius:5px;height:12px;overflow:hidden">
+        <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,var(--navy),var(--blue));border-radius:5px"></div>
+      </div>
+    </div>`;
+  }).join('') : '<div class="empty">Chưa có bài</div>';
+
+  const recent = data.recent || [];
+  recentHost.innerHTML = recent.length ? `<table>
+    <thead><tr><th>Tiêu Đề</th><th>Danh Mục</th><th>Tác Giả</th><th>Thời Điểm</th></tr></thead>
+    <tbody>${recent.map(r => `<tr>
+        <td><a href="/kien-thuc/${r.slug}" target="_blank" style="color:var(--navy);font-weight:600">${escHtmlLocal(r.title)}</a></td>
+        <td style="font-size:.74rem;color:var(--text-lt)">${r.category || '—'}</td>
+        <td class="mono" style="font-size:.7rem">${r.master_id || '—'}</td>
+        <td style="font-size:.74rem;color:var(--text-lt);white-space:nowrap">${relTime(r.created_at)}</td>
+      </tr>`).join('')}</tbody>
+  </table>` : '<div class="empty">Chưa có bài</div>';
+}
+
+async function submitKlTopics(btn) {
+  const text = document.getElementById('kl-topics').value.trim();
+  if (!text) { toast('Nhập ít nhất 1 chủ đề', 'error'); return; }
+  const old = btn.innerHTML;
+  btn.disabled = true; btn.innerHTML = '<span class="spinner" style="border-color:rgba(0,0,0,.2);border-top-color:currentColor"></span> Đang thêm…';
+  try {
+    const res = await apiPost('admin-khao-luan-topics', { text });
+    if (res && !res.error) {
+      toast(`Đã thêm ${res.inserted} chủ đề vào hàng đợi`, 'success');
+      document.getElementById('kl-topics').value = '';
+      loadKhaoLuan();
+    } else { toast('Lỗi: ' + (res.error || 'không rõ'), 'error'); }
+  } catch (e) { toast('Lỗi: ' + e.message, 'error'); }
+  btn.disabled = false; btn.innerHTML = old;
+}
+
+async function loadNghienCuu() {
+  const authorsHost = document.getElementById('nc-authors');
+  const recentHost = document.getElementById('nc-recent');
+  authorsHost.innerHTML = `<div class="loading"><span class="spin"></span>Đang tải...</div>`;
+  recentHost.innerHTML = `<div class="loading"><span class="spin"></span>Đang tải...</div>`;
+  let data;
+  try { data = await apiGet('admin-nghien-cuu'); }
+  catch (e) { authorsHost.innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`; return; }
+  if (data && data.error) { authorsHost.innerHTML = `<div class="empty">Lỗi: ${data.error}</div>`; return; }
+
+  document.getElementById('nc-k-total').textContent = (data.total || 0).toLocaleString();
+  document.getElementById('nc-k-7d').textContent = (data.last7d || 0).toLocaleString();
+  document.getElementById('nc-k-words').textContent = (data.avgWords || 0).toLocaleString();
+  document.getElementById('nc-k-pending').textContent = ((data.queue && data.queue.pending) || 0).toLocaleString();
+
+  const authors = data.authors || [];
+  authorsHost.innerHTML = authors.length ? `<table>
+    <thead><tr><th>Tác Giả</th><th>Sở Trường</th><th>Loại Bài Chính</th><th style="text-align:right">Số Bài</th></tr></thead>
+    <tbody>${authors.map(a => `<tr>
+        <td><strong>${escHtmlLocal(a.display_name)}</strong><div class="td-sub mono" style="font-size:.68rem">${a.id}</div></td>
+        <td style="font-size:.74rem;color:var(--text-lt)">${(a.specialty_topics || []).slice(0, 3).join(', ') || '—'}</td>
+        <td style="font-size:.74rem">${a.primary_article_type || '—'}</td>
+        <td style="text-align:right;font-weight:700">${(a.articleCount || 0).toLocaleString()}</td>
+      </tr>`).join('')}</tbody>
+  </table>` : '<div class="empty">Chưa có tác giả (master_profiles rỗng)</div>';
+
+  // Nạp select tác giả cho form thêm chủ đề (chỉ 1 lần, tránh nạp lại mỗi khi loadNghienCuu chạy).
+  const sel = document.getElementById('nc-master-id');
+  if (sel && sel.options.length <= 1) {
+    authors.forEach(a => { const o = document.createElement('option'); o.value = a.id; o.textContent = a.display_name; sel.appendChild(o); });
+  }
+
+  const recent = data.recent || [];
+  recentHost.innerHTML = recent.length ? `<table>
+    <thead><tr><th>Tiêu Đề</th><th>Tác Giả</th><th>Danh Mục</th><th style="text-align:right">Số Từ</th><th>Thời Điểm</th></tr></thead>
+    <tbody>${recent.map(r => `<tr>
+        <td><a href="/nghien-cuu/${r.slug}" target="_blank" style="color:var(--navy);font-weight:600">${escHtmlLocal(r.title)}</a></td>
+        <td class="mono" style="font-size:.7rem">${r.master_id || '—'}</td>
+        <td style="font-size:.74rem;color:var(--text-lt)">${r.category || '—'}</td>
+        <td style="text-align:right;font-size:.74rem">${(r.word_count || 0).toLocaleString()}</td>
+        <td style="font-size:.74rem;color:var(--text-lt);white-space:nowrap">${relTime(r.created_at)}</td>
+      </tr>`).join('')}</tbody>
+  </table>` : '<div class="empty">Chưa có bài</div>';
+}
+
+async function submitNcTopics(btn) {
+  const text = document.getElementById('nc-topics').value.trim();
+  if (!text) { toast('Nhập ít nhất 1 chủ đề', 'error'); return; }
+  const articleType = document.getElementById('nc-article-type').value;
+  const masterId = document.getElementById('nc-master-id').value;
+  const old = btn.innerHTML;
+  btn.disabled = true; btn.innerHTML = '<span class="spinner" style="border-color:rgba(0,0,0,.2);border-top-color:currentColor"></span> Đang thêm…';
+  try {
+    const res = await apiPost('admin-nghien-cuu-topics', { text, articleType, masterId });
+    if (res && !res.error) {
+      toast(`Đã thêm ${res.inserted} chủ đề vào hàng đợi`, 'success');
+      document.getElementById('nc-topics').value = '';
+      loadNghienCuu();
+    } else { toast('Lỗi: ' + (res.error || 'không rõ'), 'error'); }
+  } catch (e) { toast('Lỗi: ' + e.message, 'error'); }
+  btn.disabled = false; btn.innerHTML = old;
 }
 
 // ── SUPABASE HELPERS ──
