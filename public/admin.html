@@ -105,7 +105,7 @@
       <button class="nav-item" onclick="goTo('lasos')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16 8 10.5 10.5 8 16 13.5 13.5 16 8"/></svg></span><span>Lá Số</span>
       </button>
-      <button class="nav-item" onclick="goToSoon(this,'Tools Registry','S6','Danh mục 47 công cụ + gán giá tool_pricing + phân tích dùng.')">
+      <button class="nav-item" onclick="goTo('registry')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg></span><span>Tools Registry</span>
       </button>
     </div>
@@ -288,6 +288,33 @@
           <div class="table-wrap" id="lasos-table">
             <div class="loading"><span class="spin"></span>Đang tải...</div>
           </div>
+        </div>
+      </div>
+
+      <!-- ── TOOLS REGISTRY (Sản Phẩm) ── -->
+      <div class="page" id="page-registry">
+        <div class="stats" id="reg-stats" style="grid-template-columns:repeat(4,1fr)">
+          <div class="stat"><div class="stat-label">Tổng Tool</div><div class="stat-value" id="reg-k-total">…</div><div class="stat-sub">tool_pricing</div></div>
+          <div class="stat green"><div class="stat-label">Miễn Phí</div><div class="stat-value" id="reg-k-free">…</div><div class="stat-sub">is_free</div></div>
+          <div class="stat blue"><div class="stat-label">Đang Bật</div><div class="stat-value" id="reg-k-enabled">…</div><div class="stat-sub">enabled</div></div>
+          <div class="stat gold"><div class="stat-label">Doanh Thu Khớp Tool</div><div class="stat-value" id="reg-k-revenue">…</div><div class="stat-sub">Lượng, toàn thời gian</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">📋 Danh Mục &amp; Phân Tích Dùng</div>
+            <div class="panel-actions">
+              <span style="font-size:.72rem;color:var(--text-lt)">Lượt Mở/Chạy từ <code>events</code> (toàn thời gian) · Doanh thu từ <code>credit_transactions</code></span>
+              <a href="#" onclick="goTo('pricing');return false" class="btn btn-primary btn-sm">Sửa Giá →</a>
+              <button class="btn btn-ghost btn-sm" onclick="loadRegistry()">↻</button>
+            </div>
+          </div>
+          <div class="table-wrap" id="reg-body"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">⚠️ Có Hoạt Động Nhưng Chưa Đăng Ký Giá</div></div>
+          <div class="table-wrap" id="reg-orphans"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
         </div>
       </div>
 
@@ -1057,7 +1084,7 @@ const PAGE_TITLES = {
   marketing: 'Funnel & Nguồn', content: 'YouTube Studio', cron: 'Cron & Jobs',
   channels: 'Channels & Push', seo: 'SEO',
   cboard: 'Content Board', khaoluan: 'Khảo Luận', nghiencuu: 'Nghiên Cứu',
-  sysconfig: 'System Config', apikeys: 'API & Keys',
+  sysconfig: 'System Config', apikeys: 'API & Keys', registry: 'Tools Registry',
 };
 
 // ── AUTH ──
@@ -1118,7 +1145,7 @@ function goTo(page) {
                     pricing: loadPricingPage, tools: loadAdminUsers, marketing: loadMarketing,
                     cron: loadCron, channels: loadChannels, seo: loadSeo,
                     cboard: loadContentBoard, khaoluan: loadKhaoLuan, nghiencuu: loadNghienCuu,
-                    sysconfig: loadSysConfig, apikeys: loadApiKeys,
+                    sysconfig: loadSysConfig, apikeys: loadApiKeys, registry: loadRegistry,
                     content: () => {
     if (showView) showView('dashboard');
     if (!window._contentInitialized) {
@@ -2290,6 +2317,76 @@ function mktExportCSV() {
   const a = document.createElement('a');
   a.href = url; a.download = `marketing_${(_mktData.from || '').slice(0, 10)}_${(_mktData.to || '').slice(0, 10)}.csv`;
   document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+
+// ── TOOLS REGISTRY (danh mục tool_pricing + phân tích dùng, đọc thẳng qua RLS admin_read) ──
+async function loadRegistry() {
+  const bodyHost = document.getElementById('reg-body');
+  const orphanHost = document.getElementById('reg-orphans');
+  bodyHost.innerHTML = `<div class="loading"><span class="spin"></span>Đang tải...</div>`;
+  orphanHost.innerHTML = `<div class="loading"><span class="spin"></span>Đang tải...</div>`;
+
+  let tools = [], events = [], spends = [];
+  try {
+    [tools, events, spends] = await Promise.all([
+      sbGet('tool_pricing?select=*'),
+      sbGet('events?select=tool_id,event_type&event_type=in.(tool_open,tool_run)&tool_id=not.is.null&limit=20000'),
+      sbGet('credit_transactions?select=type,amount&amount=lt.0&limit=20000'),
+    ]);
+  } catch (e) { bodyHost.innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`; orphanHost.innerHTML = ''; return; }
+
+  const opens = {}, runs = {};
+  events.forEach((e) => {
+    const bucket = e.event_type === 'tool_open' ? opens : runs;
+    bucket[e.tool_id] = (bucket[e.tool_id] || 0) + 1;
+  });
+  const spendCount = {}, spendCredits = {};
+  spends.forEach((s) => {
+    spendCount[s.type] = (spendCount[s.type] || 0) + 1;
+    spendCredits[s.type] = (spendCredits[s.type] || 0) + Math.abs(s.amount || 0);
+  });
+
+  document.getElementById('reg-k-total').textContent = tools.length;
+  document.getElementById('reg-k-free').textContent = tools.filter((t) => t.is_free).length;
+  document.getElementById('reg-k-enabled').textContent = tools.filter((t) => t.enabled).length;
+  const totalRevenueAllTools = tools.reduce((s, t) => s + (spendCredits[t.tool_id] || 0), 0);
+  document.getElementById('reg-k-revenue').textContent = totalRevenueAllTools.toLocaleString() + ' L';
+
+  const rows = tools.map((t) => ({
+    ...t,
+    opens: opens[t.tool_id] || 0,
+    runs: runs[t.tool_id] || 0,
+    paidUses: spendCount[t.tool_id] || 0,
+    revenue: spendCredits[t.tool_id] || 0,
+  })).sort((a, b) => (b.opens + b.runs + b.revenue) - (a.opens + a.runs + a.revenue));
+
+  bodyHost.innerHTML = rows.length ? `<table>
+    <thead><tr><th>Tool</th><th>Category</th><th style="text-align:right">Giá</th><th>Trạng Thái</th><th style="text-align:right">Lượt Mở</th><th style="text-align:right">Lượt Chạy</th><th style="text-align:right">GD Trả Phí</th><th style="text-align:right">Doanh Thu</th></tr></thead>
+    <tbody>${rows.map((r) => `<tr>
+        <td><strong>${escHtmlLocal(r.label || r.tool_id)}</strong><div class="td-sub mono">${escHtmlLocal(r.tool_id)}</div></td>
+        <td style="font-size:.74rem">${escHtmlLocal(r.category || '—')}</td>
+        <td style="text-align:right;font-size:.74rem">${r.is_free ? '<span class="badge badge-grey">Free</span>' : (r.credits || 0) + ' L'}</td>
+        <td>${r.enabled ? '<span class="badge badge-green">Bật</span>' : '<span class="badge badge-error">Tắt</span>'}</td>
+        <td style="text-align:right">${r.opens.toLocaleString()}</td>
+        <td style="text-align:right;font-weight:600">${r.runs.toLocaleString()}</td>
+        <td style="text-align:right">${r.paidUses.toLocaleString()}</td>
+        <td style="text-align:right;font-family:'Noto Serif',serif;color:var(--navy)">${r.revenue ? r.revenue.toLocaleString() + ' L' : '—'}</td>
+      </tr>`).join('')}</tbody>
+  </table>` : '<div class="empty">Chưa có tool nào trong tool_pricing</div>';
+
+  const knownIds = new Set(tools.map((t) => t.tool_id));
+  const activityIds = new Set([...Object.keys(opens), ...Object.keys(runs), ...Object.keys(spendCredits)]);
+  const orphanIds = Array.from(activityIds).filter((id) => !knownIds.has(id));
+  orphanHost.innerHTML = orphanIds.length ? `<table>
+    <thead><tr><th>Tool ID</th><th style="text-align:right">Lượt Mở</th><th style="text-align:right">Lượt Chạy</th><th style="text-align:right">GD Trả Phí</th><th style="text-align:right">Doanh Thu</th></tr></thead>
+    <tbody>${orphanIds.map((id) => `<tr>
+        <td class="mono" style="font-size:.74rem">${escHtmlLocal(id)}</td>
+        <td style="text-align:right">${(opens[id] || 0).toLocaleString()}</td>
+        <td style="text-align:right">${(runs[id] || 0).toLocaleString()}</td>
+        <td style="text-align:right">${(spendCount[id] || 0).toLocaleString()}</td>
+        <td style="text-align:right">${(spendCredits[id] || 0).toLocaleString()} L</td>
+      </tr>`).join('')}</tbody>
+  </table>` : '<div class="empty">Không có — mọi tool_id có hoạt động đều đã đăng ký giá 🎉</div>';
 }
 
 // ── PRICING (nhóm theo category, cho phép 0/free, lưu tất cả) ──
