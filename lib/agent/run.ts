@@ -34,6 +34,7 @@ import {
   toGeminiTools,
   toGeminiContents,
 } from '@/lib/agent/providers/gemini';
+import { logLlmUsage, type LlmUsage } from '@/lib/agent/usage';
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!;
@@ -391,9 +392,14 @@ export async function runAgent(
   // stream → gấp đôi output (phần đắt nhất). Nay stream thẳng: nếu model đòi
   // tool thì bắt tool_use ngay trong stream, chạy tool rồi lặp; nếu trả text
   // thẳng thì chính stream đó LÀ câu trả lời (bỏ hẳn call thứ 2).
+  const totalUsage: LlmUsage = { input_tokens: 0, cache_creation_input_tokens: 0, cache_read_input_tokens: 0, output_tokens: 0 };
   for (let round = 0; round <= cfg.maxRounds; round++) {
     const forceAnswer = round === cfg.maxRounds; // vòng cuối: ép trả lời, cấm tool
     const turn = await streamTurn(system, convo, tools, cfg, send, forceAnswer);
+    totalUsage.input_tokens += turn.usage.input_tokens;
+    totalUsage.cache_creation_input_tokens += turn.usage.cache_creation_input_tokens;
+    totalUsage.cache_read_input_tokens += turn.usage.cache_read_input_tokens;
+    totalUsage.output_tokens += turn.usage.output_tokens;
 
     if (!forceAnswer && turn.stopReason === 'tool_use' && turn.toolUses.length) {
       convo.push({ role: 'assistant', content: turn.assistantContent });
@@ -427,6 +433,10 @@ export async function runAgent(
   // số — không lặp ở các lượt follow-up (lúc đó lá số đã hiện trước đó rồi).
   const justBuilt = toolsUsed.includes('lap_la_so') || toolsUsed.includes('mo_la_so');
   const lasoCard = justBuilt && ctx.ls ? renderLasoCard(ctx.ls, ctx.birth) : null;
+  // Tag cost theo scenario.type nếu có (khớp tool_pricing), ngược lại 'chat' —
+  // CHÍNH type mà /api/v1/chat + gate.ts ghi vào credit_transactions cho MỌI
+  // lượt rail (kể cả có lá số) → bucket cost khớp thẳng bucket doanh thu thật.
+  void logLlmUsage(scenario?.type || 'chat', cfg.model, totalUsage);
   return {
     toolsUsed,
     birth: ctx.birth ?? capturedBirth,
@@ -458,7 +468,9 @@ async function streamTurn(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   assistantContent: any[];
   suggestions: string[];
+  usage: LlmUsage;
 }> {
+  const usage: LlmUsage = { input_tokens: 0, cache_creation_input_tokens: 0, cache_read_input_tokens: 0, output_tokens: 0 };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const payload: any = {
     model: cfg.model,
@@ -479,7 +491,7 @@ async function streamTurn(
     const body = (await resp.text()).slice(0, 500);
     console.error(`[runAgent.streamTurn] Anthropic non-200: ${resp.status} — ${body}`);
     send(sse.error({ code: 'internal', message: 'Anthropic error: ' + body }));
-    return { stopReason: 'error', toolUses: [], assistantContent: [], suggestions: [] };
+    return { stopReason: 'error', toolUses: [], assistantContent: [], suggestions: [], usage };
   }
 
   const reader = resp.body!.getReader();
@@ -536,6 +548,12 @@ async function streamTurn(
         const evt = JSON.parse(json);
         if (evt.type === 'message_start') {
           logCacheUsage('streamTurn', evt.message?.usage);
+          const u = evt.message?.usage;
+          if (u) {
+            usage.input_tokens = u.input_tokens || 0;
+            usage.cache_creation_input_tokens = u.cache_creation_input_tokens || 0;
+            usage.cache_read_input_tokens = u.cache_read_input_tokens || 0;
+          }
         } else if (evt.type === 'content_block_start') {
           const cb = evt.content_block || {};
           blocks[evt.index] =
@@ -552,6 +570,7 @@ async function streamTurn(
           }
         } else if (evt.type === 'message_delta') {
           if (evt.delta?.stop_reason) stopReason = evt.delta.stop_reason;
+          if (evt.usage?.output_tokens != null) usage.output_tokens = evt.usage.output_tokens;
         }
       } catch {
         /* mảnh JSON dở — bỏ qua */
@@ -606,7 +625,7 @@ async function streamTurn(
           .filter(Boolean)
           .slice(0, 4);
 
-  return { stopReason, toolUses, assistantContent, suggestions };
+  return { stopReason, toolUses, assistantContent, suggestions, usage };
 }
 
 // ── Luật sinh gợi ý câu hỏi tiếp theo (chip động) ────────────

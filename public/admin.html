@@ -181,6 +181,14 @@
 
         <div class="panel">
           <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>Biên Lợi Nhuận LLM</div>
+            <span style="font-size:.72rem;color:var(--text-lt)">30 ngày · chỉ Anthropic (chưa gồm Gemini)</span>
+          </div>
+          <div class="panel-body" id="dash-margin"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>User Sắp Rời Bỏ</div>
             <span style="font-size:.72rem;color:var(--text-lt)">≥3 lượt hoạt động · còn số dư · im lặng 14+ ngày</span>
           </div>
@@ -1971,9 +1979,10 @@ async function loadDashboardV2() {
     renderDashEngagement(data.engagement || {});
     renderDashContentProduction(data.content || {});
     renderDashContentRevenue(data.contentRevenue || []);
+    renderDashMargin(data.margin || {});
     renderDashAtRisk(data.atRisk || []);
   } catch (e) {
-    ['dash-channel-health', 'dash-engagement', 'dash-content-production', 'dash-content-revenue', 'dash-at-risk'].forEach((id) => {
+    ['dash-channel-health', 'dash-engagement', 'dash-content-production', 'dash-content-revenue', 'dash-margin', 'dash-at-risk'].forEach((id) => {
       document.getElementById(id).innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
     });
   }
@@ -2137,6 +2146,38 @@ function renderDashContentRevenue(rows) {
       <div class="mbar-track"><div class="mbar-fill" style="width:${Math.max(2, (r.revenue_vnd || 0) / max * 100)}%"></div></div>
     </div>
   `).join('');
+}
+
+function renderDashMargin(m) {
+  const host = document.getElementById('dash-margin');
+  const cost = m.chat_cost_vnd || 0;
+  const revenue = m.chat_revenue_vnd || 0;
+  const marginPct = revenue > 0 ? ((revenue - cost) / revenue) * 100 : null;
+  const byTool = m.by_tool || [];
+  const marginColor = marginPct == null ? 'var(--text-lt)' : marginPct >= 50 ? 'var(--green)' : marginPct >= 0 ? 'var(--orange)' : 'var(--red)';
+  const marginLabel = marginPct == null ? '—' : marginPct.toFixed(0).replace('-', '−') + '%';
+  let html = `
+    <div class="eng-tiles" style="grid-template-columns:repeat(3,1fr)">
+      <div class="eng-tile"><div class="v tabular">${fmtVndFull(revenue)}</div><div class="l">Doanh thu (Lượng tiêu ×2.500đ)</div></div>
+      <div class="eng-tile"><div class="v tabular">${fmtVndFull(cost)}</div><div class="l">Chi phí LLM (Anthropic)</div></div>
+      <div class="eng-tile"><div class="v tabular" style="color:${marginColor}">${marginLabel}</div><div class="l">Biên LN</div></div>
+    </div>
+    <div class="panel-sub" style="font-size:.68rem;color:var(--text-lt);margin-top:4px">"Doanh thu" = Lượng user tiêu qua rail chat (mọi kịch bản, kể cả lá số) quy đổi ×2.500đ — không phải tiền mặt nạp ngay lúc đó, mà từ số dư đã nạp trước. Chi phí tính theo token thật (input/output/cache) của model đang cấu hình, giá theo bảng giá Anthropic hiện hành.</div>
+  `;
+  if (byTool.length) {
+    html += `<div class="table-wrap" style="margin-top:14px"><table>
+      <thead><tr><th>Loại kịch bản</th><th style="text-align:right">Lượt</th><th style="text-align:right">Chi phí LLM</th></tr></thead>
+      <tbody>${byTool.map((t) => `<tr>
+        <td class="td-title">${escHtmlLocal(t.tool_id)}</td>
+        <td style="text-align:right" class="tabular">${(t.requests || 0).toLocaleString()}</td>
+        <td style="text-align:right" class="tabular">${fmtVndFull(t.cost_vnd)}</td>
+      </tr>`).join('')}</tbody>
+    </table></div>
+    <div class="panel-sub" style="padding:10px 0 0;font-size:.68rem;color:var(--text-lt)">Chỉ bucket <span class="mono">chat</span> có doanh thu khớp thật (billing rail tính phẳng theo tin nhắn, không tách theo kịch bản) — các mục còn lại chỉ để so sánh chi phí tương đối, chưa suy ra biên LN riêng.</div>`;
+  } else {
+    html += `<div class="empty">Chưa có dữ liệu chi phí — tính năng vừa bật, sẽ tự có số sau khi có lượt chat mới.</div>`;
+  }
+  host.innerHTML = html;
 }
 
 function renderDashAtRisk(rows) {
