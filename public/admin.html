@@ -92,7 +92,7 @@
       <button class="nav-item" onclick="goTo('cron')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><span>Cron &amp; Jobs</span>
       </button>
-      <button class="nav-item" onclick="goToSoon(this,'API &amp; Keys','S5','MCP keys/usage + channel tokens + provider keys.')">
+      <button class="nav-item" onclick="goTo('apikeys')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg></span><span>API &amp; Keys</span>
       </button>
       <button class="nav-item" onclick="goTo('sysconfig')">
@@ -819,6 +819,40 @@
         </div>
       </div>
 
+      <!-- ── API & KEYS (Vận Hành) ── -->
+      <div class="page" id="page-apikeys">
+        <div class="stats" id="mcp-stats" style="grid-template-columns:repeat(4,1fr)">
+          <div class="stat"><div class="stat-label">Key MCP</div><div class="stat-value" id="mcp-k-total">…</div><div class="stat-sub">self-serve</div></div>
+          <div class="stat green"><div class="stat-label">Key Active</div><div class="stat-value" id="mcp-k-active">…</div><div class="stat-sub">chưa bị khoá</div></div>
+          <div class="stat blue"><div class="stat-label">Tổng Lượt Gọi</div><div class="stat-value" id="mcp-k-calls">…</div><div class="stat-sub">mcp_usage</div></div>
+          <div class="stat gold"><div class="stat-label">Lượt Gọi (7N)</div><div class="stat-value" id="mcp-k-calls7d">…</div><div class="stat-sub">gần đây</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">🔑 MCP Keys Tự Phục Vụ</div>
+            <div class="panel-actions">
+              <span style="font-size:.72rem;color:var(--text-lt)">Server MCP tại <code>/mcp/&lt;key&gt;</code> — user tự tạo ở trang <code>/mcp</code></span>
+              <button class="btn btn-primary btn-sm" onclick="loadApiKeys()">↻</button>
+            </div>
+          </div>
+          <div class="table-wrap" id="mcp-keys-body"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">🛠 Lượt Gọi Theo Tool</div></div>
+          <div class="panel-body" id="mcp-tools"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">🔐 Trạng Thái API Keys &amp; Secrets</div></div>
+          <div class="panel-body" id="env-status">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+            <div style="font-size:.72rem;color:var(--text-lt);margin-top:.6rem">Token 3 kênh chat (Telegram/Messenger/WhatsApp) xem ở <a href="#" onclick="goTo('channels');return false" style="color:var(--blue)">Channels &amp; Push</a>. Chỉ hiện đã cấu hình hay chưa — KHÔNG bao giờ hiện giá trị thật.</div>
+          </div>
+        </div>
+      </div>
+
       <!-- ── CHANNELS & PUSH (Marketing & Nội Dung) ── -->
       <div class="page" id="page-channels">
         <div class="stats" id="ch-stats" style="grid-template-columns:repeat(4,1fr)">
@@ -1023,7 +1057,7 @@ const PAGE_TITLES = {
   marketing: 'Funnel & Nguồn', content: 'YouTube Studio', cron: 'Cron & Jobs',
   channels: 'Channels & Push', seo: 'SEO',
   cboard: 'Content Board', khaoluan: 'Khảo Luận', nghiencuu: 'Nghiên Cứu',
-  sysconfig: 'System Config',
+  sysconfig: 'System Config', apikeys: 'API & Keys',
 };
 
 // ── AUTH ──
@@ -1084,7 +1118,7 @@ function goTo(page) {
                     pricing: loadPricingPage, tools: loadAdminUsers, marketing: loadMarketing,
                     cron: loadCron, channels: loadChannels, seo: loadSeo,
                     cboard: loadContentBoard, khaoluan: loadKhaoLuan, nghiencuu: loadNghienCuu,
-                    sysconfig: loadSysConfig,
+                    sysconfig: loadSysConfig, apikeys: loadApiKeys,
                     content: () => {
     if (showView) showView('dashboard');
     if (!window._contentInitialized) {
@@ -1410,6 +1444,116 @@ async function saveSysConfig() {
   }
   toast(fail ? `Lỗi ${fail} mục` : '✓ Đã lưu cấu hình chat', fail ? 'error' : 'success');
   loadSysConfig();
+}
+
+// ── API & KEYS (MCP self-serve keys/usage + provider/infra key status) ──
+const MCP_TIER_BADGE = { free: 'badge-grey', paid: 'badge-blue', master: 'badge-gold' };
+const MCP_TOOL_LABEL = { an_sao: 'An Sao (lập lá số)', van_han: 'Vận Hạn', luan_giai: 'Luận Giải', tuong_hop: 'Tương Hợp', giai_thich_sao: 'Giải Thích Sao' };
+
+let _mcpKeys = [];
+
+async function loadApiKeys() {
+  const keysHost = document.getElementById('mcp-keys-body');
+  const toolsHost = document.getElementById('mcp-tools');
+  const envHost = document.getElementById('env-status');
+  keysHost.innerHTML = `<div class="loading"><span class="spin"></span>Đang tải...</div>`;
+  toolsHost.innerHTML = `<div class="loading"><span class="spin"></span>Đang tải...</div>`;
+  envHost.innerHTML = `<div class="loading"><span class="spin"></span>Đang tải...</div>`;
+
+  try {
+    const data = await apiGet('admin-mcp');
+    if (data && data.error) throw new Error(data.error);
+    const stats = data.stats || {};
+    document.getElementById('mcp-k-total').textContent = stats.totalKeys || 0;
+    document.getElementById('mcp-k-active').textContent = stats.activeKeys || 0;
+    document.getElementById('mcp-k-calls').textContent = (stats.totalCalls || 0).toLocaleString();
+    document.getElementById('mcp-k-calls7d').textContent = (stats.calls7d || 0).toLocaleString();
+
+    _mcpKeys = data.keys || [];
+    keysHost.innerHTML = _mcpKeys.length ? `<table>
+      <thead><tr><th>Key</th><th>User</th><th>Tier</th><th>Quota</th><th style="text-align:right">Lượt Gọi</th><th>Tạo Lúc</th><th>Trạng Thái</th><th></th></tr></thead>
+      <tbody>${_mcpKeys.map((k, i) => `<tr>
+          <td class="mono" style="font-size:.72rem">${escHtmlLocal(k.key)}${k.label ? `<div class="td-sub">${escHtmlLocal(k.label)}</div>` : ''}</td>
+          <td style="font-size:.74rem">${k.email ? escHtmlLocal(k.email) : '<span style="color:var(--text-lt)">—</span>'}</td>
+          <td>
+            <select class="form-control" id="mcp-tier-${i}" style="font-size:.72rem;padding:4px 6px;width:auto">
+              <option value="free" ${k.tier === 'free' ? 'selected' : ''}>free</option>
+              <option value="paid" ${k.tier === 'paid' ? 'selected' : ''}>paid</option>
+              <option value="master" ${k.tier === 'master' ? 'selected' : ''}>master</option>
+            </select>
+          </td>
+          <td style="font-size:.68rem;color:var(--text-lt)">lá số ${k.chartsAllowed} · sử ${k.backtestYears < 0 ? '∞' : k.backtestYears + 'N'} · tương lai ${k.futureYears}N</td>
+          <td style="text-align:right;font-weight:600">${(k.calls || 0).toLocaleString()}</td>
+          <td style="font-size:.72rem;white-space:nowrap">${relTime(k.createdAt)}</td>
+          <td><span class="badge ${k.active ? 'badge-green' : 'badge-error'}">${k.active ? 'Hoạt động' : 'Đã khoá'}</span></td>
+          <td style="white-space:nowrap">
+            <button class="btn btn-ghost btn-sm" onclick="mcpSaveTier(${i}, this)">Lưu Tier</button>
+            <button class="btn btn-ghost btn-sm" onclick="mcpToggleActive(${i}, this)">${k.active ? 'Khoá' : 'Mở'}</button>
+          </td>
+        </tr>`).join('')}</tbody>
+    </table>` : '<div class="empty">Chưa có ai tạo key MCP</div>';
+
+    const toolCounts = data.toolCounts || {};
+    const toolEntries = Object.entries(toolCounts).sort((a, b) => b[1] - a[1]);
+    const maxTool = Math.max(1, ...toolEntries.map((e) => e[1]));
+    toolsHost.innerHTML = toolEntries.length ? toolEntries.map(([tool, count]) => {
+      const pct = Math.round((count / maxTool) * 100);
+      return `<div style="margin-bottom:.7rem">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.25rem">
+          <span style="font-size:.8rem;color:var(--text-mid)">${MCP_TOOL_LABEL[tool] || tool}</span>
+          <strong style="font-family:'Noto Serif',serif;color:var(--navy)">${count.toLocaleString()}</strong>
+        </div>
+        <div style="background:var(--border-lt);border-radius:5px;height:12px;overflow:hidden">
+          <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,var(--navy),var(--blue));border-radius:5px"></div>
+        </div>
+      </div>`;
+    }).join('') : '<div class="empty">Chưa có lượt gọi nào</div>';
+  } catch (e) {
+    keysHost.innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
+    toolsHost.innerHTML = '';
+  }
+
+  try {
+    const envData = await apiGet('admin-env-status');
+    const groups = (envData && envData.groups) || [];
+    envHost.innerHTML = groups.map((g) => `
+      <div style="margin-bottom:.9rem">
+        <div style="font-size:.74rem;font-weight:700;color:var(--text-mid);margin-bottom:.4rem">${escHtmlLocal(g.label)}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+          ${g.items.map((it) => `<span class="badge ${it.configured ? 'badge-green' : 'badge-error'}" title="${escHtmlLocal(it.key)}">${it.configured ? '✓' : '✗'} ${escHtmlLocal(it.label)}</span>`).join('')}
+        </div>
+      </div>`).join('') + '<div style="font-size:.72rem;color:var(--text-lt);margin-top:.6rem">Token 3 kênh chat (Telegram/Messenger/WhatsApp) xem ở <a href="#" onclick="goTo(\'channels\');return false" style="color:var(--blue)">Channels &amp; Push</a>. Chỉ hiện đã cấu hình hay chưa — KHÔNG bao giờ hiện giá trị thật.</div>';
+  } catch (e) {
+    envHost.innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
+  }
+}
+
+async function mcpSaveTier(i, btn) {
+  const k = _mcpKeys[i];
+  if (!k) return;
+  const tier = document.getElementById(`mcp-tier-${i}`).value;
+  const old = btn.innerHTML;
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span>';
+  try {
+    const d = await apiPost('admin-mcp-update', { key: k.rawKeyForAction, tier });
+    if (d && d.success) { toast(`Đã đổi tier → ${tier}`, 'success'); loadApiKeys(); }
+    else { toast('Lỗi: ' + (d.error || 'không rõ'), 'error'); }
+  } catch (e) { toast('Lỗi: ' + e.message, 'error'); }
+  btn.disabled = false; btn.innerHTML = old;
+}
+
+async function mcpToggleActive(i, btn) {
+  const k = _mcpKeys[i];
+  if (!k) return;
+  if (!confirm(k.active ? 'Khoá key này? User sẽ không gọi được MCP nữa.' : 'Mở khoá key này?')) return;
+  const old = btn.innerHTML;
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span>';
+  try {
+    const d = await apiPost('admin-mcp-update', { key: k.rawKeyForAction, active: !k.active });
+    if (d && d.success) { toast(k.active ? 'Đã khoá key' : 'Đã mở khoá key', 'success'); loadApiKeys(); }
+    else { toast('Lỗi: ' + (d.error || 'không rõ'), 'error'); }
+  } catch (e) { toast('Lỗi: ' + e.message, 'error'); }
+  btn.disabled = false; btn.innerHTML = old;
 }
 
 // ── CONTENT BOARD / KHẢO LUẬN / NGHIÊN CỨU ──
