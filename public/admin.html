@@ -95,7 +95,7 @@
       <button class="nav-item" onclick="goToSoon(this,'API &amp; Keys','S5','MCP keys/usage + channel tokens + provider keys.')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg></span><span>API &amp; Keys</span>
       </button>
-      <button class="nav-item" onclick="goToSoon(this,'System Config','S2','Sửa app_config runtime (prompt/model/cost) + logs &amp; errors.')">
+      <button class="nav-item" onclick="goTo('sysconfig')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></span><span>System Config</span>
       </button>
     </div>
@@ -795,6 +795,30 @@
         </div>
       </div>
 
+      <!-- ── SYSTEM CONFIG (Vận Hành) ── -->
+      <div class="page" id="page-sysconfig">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">🧠 Cấu Hình Chat &amp; Agent</div>
+            <div class="panel-actions">
+              <span style="font-size:.72rem;color:var(--text-lt)">Đọc/ghi <code>app_config</code> — áp dụng trong ≤60s, không cần deploy</span>
+              <button class="btn btn-primary btn-sm" onclick="loadSysConfig()">↻</button>
+            </div>
+          </div>
+          <div class="panel-body" id="sc-chat-form"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">🗂 Toàn Bộ app_config (raw)</div></div>
+          <div class="table-wrap" id="sc-raw"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">🩺 Lỗi Cron Gần Đây</div></div>
+          <div class="table-wrap" id="sc-errors"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+      </div>
+
       <!-- ── CHANNELS & PUSH (Marketing & Nội Dung) ── -->
       <div class="page" id="page-channels">
         <div class="stats" id="ch-stats" style="grid-template-columns:repeat(4,1fr)">
@@ -999,6 +1023,7 @@ const PAGE_TITLES = {
   marketing: 'Funnel & Nguồn', content: 'YouTube Studio', cron: 'Cron & Jobs',
   channels: 'Channels & Push', seo: 'SEO',
   cboard: 'Content Board', khaoluan: 'Khảo Luận', nghiencuu: 'Nghiên Cứu',
+  sysconfig: 'System Config',
 };
 
 // ── AUTH ──
@@ -1059,6 +1084,7 @@ function goTo(page) {
                     pricing: loadPricingPage, tools: loadAdminUsers, marketing: loadMarketing,
                     cron: loadCron, channels: loadChannels, seo: loadSeo,
                     cboard: loadContentBoard, khaoluan: loadKhaoLuan, nghiencuu: loadNghienCuu,
+                    sysconfig: loadSysConfig,
                     content: () => {
     if (showView) showView('dashboard');
     if (!window._contentInitialized) {
@@ -1271,6 +1297,119 @@ async function loadSeo() {
         <td style="text-align:right">${s.ms}ms</td>
       </tr>`).join('')}</tbody>
   </table>`;
+}
+
+// ── SYSTEM CONFIG (chat/agent knobs + toàn bộ app_config + lỗi cron) ──
+const SC_CHAT_KEYS = ['chat.system_prompt', 'chat.model', 'chat.standalone_provider', 'chat.max_rounds', 'chat.max_tokens', 'chat.cost', 'chat.provider_routes'];
+const SC_OTHER_KNOWN_KEYS = ['credits.signup_bonus_variants', 'credits.signup_bonus_device_cap', 'referral.signup_bonus_referrer', 'referral.signup_reward_cap'];
+
+async function loadSysConfig() {
+  const formHost = document.getElementById('sc-chat-form');
+  const rawHost = document.getElementById('sc-raw');
+  const errHost = document.getElementById('sc-errors');
+  formHost.innerHTML = `<div class="loading"><span class="spin"></span>Đang tải...</div>`;
+  rawHost.innerHTML = `<div class="loading"><span class="spin"></span>Đang tải...</div>`;
+  errHost.innerHTML = `<div class="loading"><span class="spin"></span>Đang tải...</div>`;
+
+  let rows = [];
+  try { rows = await sbGet('app_config?select=*&order=key.asc'); }
+  catch (e) { formHost.innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`; rawHost.innerHTML = ''; return; }
+
+  const cfg = {}; rows.forEach(r => { cfg[r.key] = r.value; });
+  const jv = (v, dflt = '') => (v == null ? dflt : (typeof v === 'string' ? v : JSON.stringify(v)));
+
+  formHost.innerHTML = `
+    <div class="form-group">
+      <label class="form-label">System Prompt Override (rỗng = dùng template chung trong code, lib/agent/prompts.ts)</label>
+      <textarea class="form-control mono" id="sc-prompt" rows="5">${escHtmlLocal(jv(cfg['chat.system_prompt']))}</textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Model Anthropic</label>
+        <input class="form-control" id="sc-model" value="${escHtmlLocal(jv(cfg['chat.model'], 'claude-sonnet-4-6'))}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Provider Standalone (cron/route rời — luôn có Anthropic backup)</label>
+        <select class="form-control" id="sc-standalone-provider">
+          <option value="gemini" ${jv(cfg['chat.standalone_provider'], 'gemini') === 'gemini' ? 'selected' : ''}>Gemini</option>
+          <option value="anthropic" ${jv(cfg['chat.standalone_provider'], 'gemini') === 'anthropic' ? 'selected' : ''}>Anthropic</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Max Rounds (vòng tool-use tối đa)</label>
+        <input type="number" class="form-control" id="sc-max-rounds" value="${jv(cfg['chat.max_rounds'], 4)}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Max Tokens / lượt trả lời</label>
+        <input type="number" class="form-control" id="sc-max-tokens" value="${jv(cfg['chat.max_tokens'], 3000)}">
+      </div>
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label class="form-label">Giá Lượng / lượt chat (0 = miễn phí)</label>
+        <input type="number" class="form-control" id="sc-cost" value="${jv(cfg['chat.cost'], 5)}" style="max-width:200px">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Provider Routes theo kịch bản (JSON, vd {"_default":"gemini","laso":"anthropic"})</label>
+      <textarea class="form-control mono" id="sc-routes" rows="2">${escHtmlLocal(jv(cfg['chat.provider_routes'], '{}'))}</textarea>
+    </div>
+    <button class="btn btn-gold btn-sm" onclick="saveSysConfig()">💾 Lưu Cấu Hình Chat</button>
+    <div style="font-size:.72rem;color:var(--text-lt);margin-top:.6rem">Khuyến mãi/Referral sửa ở <a href="#" onclick="goTo('pricing');return false" style="color:var(--blue)">Gói Nạp &amp; Pricing</a>.</div>`;
+
+  const known = new Set(SC_CHAT_KEYS.concat(SC_OTHER_KNOWN_KEYS));
+  rawHost.innerHTML = rows.length ? `<table>
+    <thead><tr><th>Key</th><th>Value</th><th>Note</th><th>Cập nhật</th></tr></thead>
+    <tbody>${rows.map(r => {
+      const val = jv(r.value);
+      return `<tr>
+        <td class="mono" style="font-size:.74rem">${escHtmlLocal(r.key)}${known.has(r.key) ? ' <span class="badge badge-blue" style="font-size:.6rem">có form</span>' : ''}</td>
+        <td class="mono" style="font-size:.72rem;max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escHtmlLocal(val)}">${val ? escHtmlLocal(val) : '<i style="color:var(--text-lt)">(rỗng)</i>'}</td>
+        <td style="font-size:.72rem;color:var(--text-lt)">${escHtmlLocal(r.note || '')}</td>
+        <td style="font-size:.72rem;white-space:nowrap">${r.updated_at ? relTime(r.updated_at) : '—'}</td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>` : '<div class="empty">Chưa có app_config nào</div>';
+
+  try {
+    const cr = await apiGet('admin-cron-runs');
+    const errs = ((cr && cr.runs) || []).filter((r) => r.status === 'error').slice(0, 20);
+    errHost.innerHTML = errs.length ? `<table>
+      <thead><tr><th>Thời điểm</th><th>Job</th><th>Ghi chú</th></tr></thead>
+      <tbody>${errs.map((r) => `<tr>
+          <td style="font-size:.74rem;white-space:nowrap">${new Date(r.started_at).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })}</td>
+          <td class="mono" style="font-size:.72rem">${escHtmlLocal(r.job_key)}</td>
+          <td style="font-size:.72rem;color:var(--red)">${escHtmlLocal(r.note || '—')}</td>
+        </tr>`).join('')}</tbody>
+    </table>` : '<div class="empty">Không có lỗi cron gần đây 🎉</div>';
+  } catch (e) { errHost.innerHTML = `<div class="empty">Lỗi tải: ${e.message}</div>`; }
+}
+
+async function saveSysConfig() {
+  let routes;
+  try {
+    routes = JSON.parse(document.getElementById('sc-routes').value || '{}');
+    if (typeof routes !== 'object' || Array.isArray(routes) || routes === null) throw 0;
+  } catch (e) { toast('Provider Routes phải là JSON object hợp lệ', 'error'); return; }
+
+  const items = [
+    ['chat.system_prompt', document.getElementById('sc-prompt').value],
+    ['chat.model', document.getElementById('sc-model').value.trim() || 'claude-sonnet-4-6'],
+    ['chat.standalone_provider', document.getElementById('sc-standalone-provider').value],
+    ['chat.max_rounds', parseInt(document.getElementById('sc-max-rounds').value) || 4],
+    ['chat.max_tokens', parseInt(document.getElementById('sc-max-tokens').value) || 3000],
+    ['chat.cost', parseInt(document.getElementById('sc-cost').value) || 0],
+    ['chat.provider_routes', routes],
+  ];
+  let fail = 0;
+  for (const [key, value] of items) {
+    try { const d = await apiPost('admin-set-config', { key, value }); if (!d.success) fail++; }
+    catch (e) { fail++; }
+  }
+  toast(fail ? `Lỗi ${fail} mục` : '✓ Đã lưu cấu hình chat', fail ? 'error' : 'success');
+  loadSysConfig();
 }
 
 // ── CONTENT BOARD / KHẢO LUẬN / NGHIÊN CỨU ──
