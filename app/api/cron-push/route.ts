@@ -3,11 +3,16 @@
 export const maxDuration = 30;
 
 import { NextResponse } from 'next/server';
+import { withCronLog } from '@/lib/cron/log';
 
 const EDGE_URL    = `${process.env.SUPABASE_URL}/functions/v1/send-daily-push`;
 const CRON_SECRET = process.env.CRON_SECRET ?? '';
 
 export async function GET() {
+  return withCronLog('cron-push', 'vercel', handle);
+}
+
+async function handle() {
   try {
     const res = await fetch(EDGE_URL, {
       method: 'POST',

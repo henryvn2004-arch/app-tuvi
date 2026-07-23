@@ -11,6 +11,7 @@ import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { getPackage, getPackages } from '@/lib/billing/packages';
 import { getToolPrice } from '@/lib/billing/pricing';
+import { logCronRun } from '@/lib/cron/log';
 
 const PAYPAL_BASE = process.env.PAYPAL_MODE === 'live'
   ? 'https://api-m.paypal.com'
@@ -603,6 +604,67 @@ async function handleCheckBank(sp: URLSearchParams): Promise<Response> {
 }
 
 // ── Route handlers ────────────────────────────────────────────
+// ── Cron & Jobs (Vận Hành) ────────────────────────────────────
+// Đọc log cron_runs (admin) + trigger tay 1 job. cron_runs khoá RLS →
+// chỉ đọc/ghi qua service key ở đây. Job Vercel tự log qua withCronLog;
+// edge (auto-pipeline) log tay trong trigger.
+const CRON_SECRET = process.env.CRON_SECRET || '';
+const CRON_TRIGGERS: Record<string, { path?: string; edge?: string }> = {
+  'cron-khao-luan':    { path: '/api/cron-khao-luan' },
+  'cron-master-write': { path: '/api/cron-master-write' },
+  'cron-push':         { path: '/api/cron-push' },
+  'cron-daily-push':   { path: '/api/cron/daily-push' },
+  'auto-pipeline':     { edge: 'auto-pipeline' },
+};
+
+async function handleAdminCronRuns(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+  try {
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/cron_runs?select=job_key,source,status,started_at,finished_at,duration_ms,note&order=started_at.desc&limit=300`,
+      { headers: SB_HEADERS },
+    );
+    const runs = r.ok ? await r.json() : [];
+    return ok({ runs });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+async function handleAdminCronTrigger(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized — admin only', 403);
+  const job = String(body.job || '');
+  const t = CRON_TRIGGERS[job];
+  if (!t) return err('Unknown job', 400);
+
+  const startedAt = new Date().toISOString();
+  const t0 = Date.now();
+  try {
+    let res: Response;
+    if (t.path) {
+      // Job Vercel: gọi chính endpoint prod với CRON_SECRET → tự log qua withCronLog.
+      res = await fetch(`${SITE_URL}${t.path}`, { headers: { Authorization: `Bearer ${CRON_SECRET}` } });
+    } else {
+      // Edge fn (Supabase): gọi thẳng, log tay bên dưới.
+      res = await fetch(`${SUPABASE_URL}/functions/v1/${t.edge}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-cron-secret': CRON_SECRET, Authorization: `Bearer ${SUPABASE_KEY}` },
+        body: '{}',
+      });
+    }
+    const data = await res.json().catch(() => ({}));
+    if (t.edge) {
+      await logCronRun({ job_key: job, source: 'edge', status: res.ok ? 'ok' : 'error', started_at: startedAt, finished_at: new Date().toISOString(), duration_ms: Date.now() - t0, note: 'manual · ' + (res.ok ? 'ok' : `HTTP ${res.status}`) });
+    }
+    return ok({ triggered: job, httpStatus: res.status, result: data });
+  } catch (e: unknown) {
+    if (t.edge) await logCronRun({ job_key: job, source: 'edge', status: 'error', started_at: startedAt, duration_ms: Date.now() - t0, note: 'manual · ' + String(e) });
+    return err((e as Error).message);
+  }
+}
+
 export async function OPTIONS() { return options(); }
 
 export async function GET(request: NextRequest) {
@@ -613,6 +675,7 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-users')  return handleAdminUsers(request, searchParams);
   if (action === 'admin-user-detail') return handleAdminUserDetail(request, searchParams);
   if (action === 'admin-marketing') return handleAdminMarketing(request, searchParams);
+  if (action === 'admin-cron-runs') return handleAdminCronRuns(request);
   if (action === 'check-bank')  return handleCheckBank(searchParams);
   return err('Invalid action.', 400);
 }
@@ -791,6 +854,7 @@ export async function POST(request: NextRequest) {
   if (action === 'admin-set-config')  return handleAdminSetConfig(request, body);
   if (action === 'admin-save-package') return handleAdminSavePackage(request, body);
   if (action === 'admin-create-user') return handleAdminCreateUser(request, body);
+  if (action === 'admin-cron-trigger') return handleAdminCronTrigger(request, body);
   if (action === 'create-bank')       return handleCreateBank(body);
   if (action === 'referral-register') return handleReferralRegister(request, body);
   return err('Invalid action.', 400);

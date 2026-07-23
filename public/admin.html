@@ -89,7 +89,7 @@
 
     <div class="sidebar-section">
       <div class="sidebar-section-label">Vận Hành</div>
-      <button class="nav-item" onclick="goToSoon(this,'Cron &amp; Jobs','S2','1 bảng điều khiển MỌI cron (Vercel + Supabase pg_cron + edge fn): status, last-run, trigger tay.')">
+      <button class="nav-item" onclick="goTo('cron')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><span>Cron &amp; Jobs</span>
       </button>
       <button class="nav-item" onclick="goToSoon(this,'API &amp; Keys','S5','MCP keys/usage + channel tokens + provider keys.')">
@@ -760,6 +760,41 @@
         </div>
       </div>
 
+      <!-- ── CRON & JOBS (Vận Hành) ── -->
+      <div class="page" id="page-cron">
+        <div id="cron-alert" style="margin-bottom:.75rem"></div>
+        <div class="stats" id="cron-stats" style="grid-template-columns:repeat(4,1fr)">
+          <div class="stat"><div class="stat-label">Tổng Job</div><div class="stat-value" id="cron-k-total">…</div><div class="stat-sub">Vercel · pg_cron · edge</div></div>
+          <div class="stat green"><div class="stat-label">OK (24h)</div><div class="stat-value" id="cron-k-ok">…</div><div class="stat-sub">lượt chạy thành công</div></div>
+          <div class="stat" style="--x:1"><div class="stat-label">Lỗi (24h)</div><div class="stat-value" id="cron-k-err" style="color:var(--red)">…</div><div class="stat-sub">cần để mắt</div></div>
+          <div class="stat blue"><div class="stat-label">Lượt chạy</div><div class="stat-value" id="cron-k-runs">…</div><div class="stat-sub">đã ghi log</div></div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">⏱ Lịch & Trạng Thái Job</div>
+            <div class="panel-actions">
+              <span style="font-size:.72rem;color:var(--text-lt)">Log ghi vào <code>cron_runs</code> · giờ VN</span>
+              <button class="btn btn-primary btn-sm" onclick="loadCron()">↻</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Job</th><th>Nguồn</th><th>Lịch</th><th>Đổ về</th><th>Lần chạy cuối</th><th>Trạng thái</th><th></th></tr></thead>
+              <tbody id="cron-body"><tr><td colspan="7" class="loading"><span class="spin"></span>Đang tải...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">📜 Log gần đây</div></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Thời điểm</th><th>Job</th><th>Trạng thái</th><th>Thời lượng</th><th>Ghi chú</th></tr></thead>
+              <tbody id="cron-log-body"><tr><td colspan="5" class="empty">Chưa có log</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
       <!-- ── PLACEHOLDER (module chưa build) ── -->
       <div class="page" id="page-soon">
         <div class="soon-card">
@@ -787,7 +822,7 @@ let _currentPage = 'dashboard';
 const PAGE_TITLES = {
   dashboard: 'Dashboard', users: 'Users', credits: 'Doanh Thu & Giao Dịch',
   lasos: 'Lá Số', pricing: 'Gói Nạp & Pricing', tools: 'Ví & Cấp Credits',
-  marketing: 'Funnel & Nguồn', content: 'YouTube Studio',
+  marketing: 'Funnel & Nguồn', content: 'YouTube Studio', cron: 'Cron & Jobs',
 };
 
 // ── AUTH ──
@@ -846,6 +881,7 @@ function goTo(page) {
   // Lazy load
   const loaders = { users: loadUsers, credits: loadCredits, lasos: loadLasos,
                     pricing: loadPricingPage, tools: loadAdminUsers, marketing: loadMarketing,
+                    cron: loadCron,
                     content: () => {
     if (showView) showView('dashboard');
     if (!window._contentInitialized) {
@@ -869,6 +905,94 @@ function goToSoon(el, title, sprint, desc) {
   document.getElementById('page-soon').classList.add('active');
   document.getElementById('topbar-title').textContent = decode(title);
   document.getElementById('topbar-meta').textContent = 'Sắp có · ' + sprint;
+}
+
+// ── CRON & JOBS ──
+// Registry hiển thị (server /api/payment mới là nguồn "được phép trigger").
+const CRON_JOBS = [
+  { key:'cron-khao-luan',    label:'Viết Khảo Luận',   source:'vercel', schedule:'03·11·15h hằng ngày', sink:'khao_luan → blog',      trigger:true },
+  { key:'cron-master-write', label:'Viết Nghiên Cứu',  source:'vercel', schedule:'02·06·10·16·20h',     sink:'master_articles',       trigger:true },
+  { key:'cron-push',         label:'Push (web)',       source:'vercel', schedule:'00:00 hằng ngày',     sink:'edge send-daily-push',  trigger:true },
+  { key:'cron-daily-push',   label:'Push (app/FCM)',   source:'vercel', schedule:'00:00 hằng ngày',     sink:'push_tokens (FCM)',     trigger:true },
+  { key:'auto-pipeline',     label:'Pipeline YouTube', source:'edge',   schedule:'00:00 (pg_cron)',     sink:'auto-pipeline (edge)',  trigger:true },
+];
+const SRC_BADGE = { vercel:'badge-blue', edge:'badge-gold', pgcron:'badge-gold' };
+
+function relTime(iso) {
+  if (!iso) return '—';
+  const d = (Date.now() - new Date(iso).getTime()) / 1000;
+  if (d < 60) return 'vừa xong';
+  if (d < 3600) return Math.floor(d/60) + ' phút trước';
+  if (d < 86400) return Math.floor(d/3600) + ' giờ trước';
+  return Math.floor(d/86400) + ' ngày trước';
+}
+function fmtDur(ms) { if (ms==null) return '—'; return ms < 1000 ? ms+'ms' : (ms/1000).toFixed(1)+'s'; }
+function cronStatusBadge(s) {
+  const map = { ok:'badge-green', error:'badge-error', skip:'badge-grey', running:'badge-processing' };
+  const lbl = { ok:'OK', error:'Lỗi', skip:'Bỏ qua', running:'Đang chạy' };
+  return `<span class="badge ${map[s]||'badge-grey'}">${lbl[s]||s||'—'}</span>`;
+}
+
+async function loadCron() {
+  const body = document.getElementById('cron-body');
+  const logBody = document.getElementById('cron-log-body');
+  body.innerHTML = `<tr><td colspan="7" class="loading"><span class="spin"></span>Đang tải...</td></tr>`;
+  let runs = [];
+  try {
+    const res = await apiGet('admin-cron-runs');
+    runs = (res && res.runs) || [];
+  } catch (e) { /* vẫn render registry với last-run rỗng */ }
+
+  // latest run + stats
+  const latest = {};
+  for (const r of runs) { if (!latest[r.job_key]) latest[r.job_key] = r; }
+  const dayAgo = Date.now() - 86400000;
+  let ok24 = 0, err24 = 0;
+  for (const r of runs) {
+    if (new Date(r.started_at).getTime() < dayAgo) continue;
+    if (r.status === 'ok') ok24++; else if (r.status === 'error') err24++;
+  }
+  document.getElementById('cron-k-total').textContent = CRON_JOBS.length;
+  document.getElementById('cron-k-ok').textContent = ok24;
+  document.getElementById('cron-k-err').textContent = err24;
+  document.getElementById('cron-k-runs').textContent = runs.length;
+
+  body.innerHTML = CRON_JOBS.map(j => {
+    const r = latest[j.key];
+    return `<tr>
+      <td><span class="td-title">${j.label}</span><div class="td-sub mono">${j.key}</div></td>
+      <td><span class="badge ${SRC_BADGE[j.source]||'badge-grey'}">${j.source}</span></td>
+      <td style="font-size:.74rem">${j.schedule}</td>
+      <td style="font-size:.74rem;color:var(--text-lt)">${j.sink}</td>
+      <td style="font-size:.74rem">${r ? relTime(r.started_at) : '<span style="color:var(--text-lt)">chưa có log</span>'}${r&&r.duration_ms!=null?` · ${fmtDur(r.duration_ms)}`:''}</td>
+      <td>${r ? cronStatusBadge(r.status) : '<span class="badge badge-grey">—</span>'}</td>
+      <td>${j.trigger ? `<button class="btn btn-ghost btn-sm" onclick="triggerCron('${j.key}',this)">▶ Chạy ngay</button>` : ''}</td>
+    </tr>`;
+  }).join('');
+
+  logBody.innerHTML = runs.length ? runs.slice(0, 40).map(r => `<tr>
+      <td style="font-size:.74rem;white-space:nowrap">${new Date(r.started_at).toLocaleString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh',hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit'})}</td>
+      <td class="mono" style="font-size:.72rem">${r.job_key}</td>
+      <td>${cronStatusBadge(r.status)}</td>
+      <td style="font-size:.74rem">${fmtDur(r.duration_ms)}</td>
+      <td style="font-size:.74rem;color:var(--text-mid);max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${(r.note||'').replace(/"/g,'&quot;')}">${r.note||'—'}</td>
+    </tr>`).join('') : `<tr><td colspan="5" class="empty">Chưa có log — chạy thử một job để sinh dòng đầu tiên.</td></tr>`;
+}
+
+async function triggerCron(job, btn) {
+  if (!confirm('Chạy job "' + job + '" ngay bây giờ?')) return;
+  const old = btn.innerHTML;
+  btn.disabled = true; btn.innerHTML = '<span class="spinner" style="border-color:rgba(0,0,0,.2);border-top-color:currentColor"></span> Đang chạy…';
+  try {
+    const res = await apiPost('admin-cron-trigger', { job });
+    if (res && res.success !== false && !res.error) {
+      toast('Đã kích hoạt "' + job + '" (HTTP ' + (res.httpStatus ?? '?') + ')', 'success');
+    } else {
+      toast('Lỗi: ' + (res.error || 'không rõ'), 'error');
+    }
+  } catch (e) { toast('Lỗi: ' + e.message, 'error'); }
+  btn.disabled = false; btn.innerHTML = old;
+  setTimeout(loadCron, 1200);
 }
 
 // ── SUPABASE HELPERS ──
