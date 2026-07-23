@@ -142,10 +142,41 @@
 
         <div class="panel">
           <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Mức Độ Dùng — DAU / WAU / MAU</div>
+          </div>
+          <div class="panel-body" id="dash-engagement"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 16.5 8.5 11.5 1 19"/><polyline points="17 6 23 6 23 12"/></svg>Funnel 7 Ngày Gần Đây</div>
             <button class="btn btn-ghost btn-sm" onclick="goTo('marketing')">Xem chi tiết →</button>
           </div>
           <div class="panel-body" id="dash-funnel"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h6v18H3z"/><path d="M15 3h6v11h-6z"/></svg>Sản Xuất Nội Dung</div>
+            <span style="font-size:.72rem;color:var(--text-lt)">Khảo Luận + Nghiên Cứu (cron viết) · YouTube (van_dap)</span>
+          </div>
+          <div class="panel-body" id="dash-content-production"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Doanh Thu Theo Nội Dung</div>
+            <span style="font-size:.72rem;color:var(--text-lt)">30 ngày · quy theo trang landing lúc đăng ký</span>
+          </div>
+          <div class="panel-body" id="dash-content-revenue"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>User Sắp Rời Bỏ</div>
+            <span style="font-size:.72rem;color:var(--text-lt)">≥3 lượt hoạt động · còn số dư · im lặng 14+ ngày</span>
+          </div>
+          <div class="table-wrap" id="dash-at-risk"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
         </div>
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
@@ -1794,6 +1825,7 @@ function loadAll() {
   loadDashboardAlerts();
   loadDashFunnel();
   loadStatsAndRecent();
+  loadDashboardV2();
 }
 
 // ── ALERTS (điều cần chú ý HÔM NAY — cron lỗi 24h + hàng đợi nội dung lỗi) ──
@@ -1838,7 +1870,7 @@ function renderDashFunnel(f) {
     const conv = prev == null ? '&nbsp;' : (prev > 0 ? `${((v / prev) * 100).toFixed(0)}% từ bước trước` : '0%');
     prev = v;
     return `<div style="flex:1;text-align:center">
-      <div style="font-family:var(--serif);font-size:1.55rem;font-weight:700;color:var(--navy)">${v.toLocaleString()}</div>
+      <div style="font-family:var(--serif);font-size:1.55rem;font-weight:700;color:var(--text)">${v.toLocaleString()}</div>
       <div style="font-size:.74rem;color:var(--text-mid);margin-top:.15rem">${label}</div>
       <div style="font-size:.66rem;color:var(--text-lt);margin-top:.15rem">${conv}</div>
     </div>`;
@@ -1920,6 +1952,177 @@ async function loadStatsAndRecent() {
     document.getElementById('stats-grid').innerHTML = `<div style="padding:1rem;color:var(--red);font-size:.8rem">Lỗi: ${e.message}</div>`;
     document.getElementById('dash-recent-users').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
   }
+}
+
+// ── DASHBOARD v2 (Engagement DAU/WAU/MAU · Content Production · Content Revenue · At-risk) ──
+async function loadDashboardV2() {
+  try {
+    const data = await apiGet('admin-dashboard-v2');
+    if (data.error) throw new Error(data.error);
+    renderDashEngagement(data.engagement || {});
+    renderDashContentProduction(data.content || {});
+    renderDashContentRevenue(data.contentRevenue || []);
+    renderDashAtRisk(data.atRisk || []);
+  } catch (e) {
+    ['dash-engagement', 'dash-content-production', 'dash-content-revenue', 'dash-at-risk'].forEach((id) => {
+      document.getElementById(id).innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
+    });
+  }
+}
+
+function fmtPctChange(cur, prev, label) {
+  if (!prev) return `<div class="d" style="color:var(--text-lt)">chưa đủ dữ liệu ${label}</div>`;
+  const p = ((cur - prev) / prev) * 100;
+  const dir = p >= 0 ? 'up' : 'down';
+  const sign = p >= 0 ? '↑' : '↓';
+  return `<div class="d ${dir}">${sign} ${Math.abs(p).toFixed(0)}% ${label}</div>`;
+}
+
+function renderDashEngagement(eng) {
+  const host = document.getElementById('dash-engagement');
+  const days = eng.days || [];
+  const mau = eng.mau || 0;
+  const stickiness = mau > 0 ? ((eng.dau_today || 0) / mau) * 100 : 0;
+  host.innerHTML = `
+    <div class="eng-tiles">
+      <div class="eng-tile"><div class="v tabular">${(eng.dau_today || 0).toLocaleString()}</div><div class="l">DAU hôm nay</div>${fmtPctChange(eng.dau_today || 0, eng.dau_yesterday || 0, 'so hôm qua')}</div>
+      <div class="eng-tile"><div class="v tabular">${(eng.wau || 0).toLocaleString()}</div><div class="l">WAU (7 ngày)</div>${fmtPctChange(eng.wau || 0, eng.wau_prev || 0, 'so 7N trước')}</div>
+      <div class="eng-tile"><div class="v tabular">${(eng.mau || 0).toLocaleString()}</div><div class="l">MAU (30 ngày)</div>${fmtPctChange(eng.mau || 0, eng.mau_prev || 0, 'so 30N trước')}</div>
+      <div class="eng-tile"><div class="v tabular">${stickiness.toFixed(1).replace('.', ',')}%</div><div class="l">Stickiness (DAU/MAU)</div><div class="d" style="color:var(--text-lt)">trung bình ngành ~13%</div></div>
+    </div>
+    <div class="chart-wrap">
+      <svg id="dashDauChart" viewBox="0 0 900 160" style="width:100%;height:160px;overflow:visible" preserveAspectRatio="none"></svg>
+      <div class="chart-tip" id="dashDauTip"></div>
+    </div>
+    <div class="panel-sub" style="margin-top:6px;font-size:.68rem;color:var(--text-lt)">Người dùng hoạt động mỗi ngày (page_view/tool_run/chat...), ${days.length} ngày gần nhất · di chuột để xem chi tiết</div>
+  `;
+  initDashChart(days);
+}
+
+function initDashChart(days) {
+  const svg = document.getElementById('dashDauChart');
+  const tip = document.getElementById('dashDauTip');
+  if (!svg || !days.length) return;
+  const vals = days.map((d) => d.dau);
+  const W = 900, H = 160, PAD = 4;
+  const max = Math.max(1, ...vals), min = Math.min(...vals);
+  const range = Math.max(1, max - min);
+  const n = vals.length;
+  const xs = vals.map((v, i) => PAD + (i * (W - PAD * 2)) / Math.max(1, n - 1));
+  const ys = vals.map((v) => H - 22 - ((v - min) / range) * (H - 40));
+
+  const NS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs) {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  svg.innerHTML = '';
+
+  for (let g = 0; g < 3; g++) {
+    const gy = 12 + (g * (H - 34)) / 2;
+    svg.appendChild(el('line', { x1: PAD, x2: W - PAD, y1: gy, y2: gy, stroke: 'var(--line)', 'stroke-width': 1 }));
+  }
+
+  const areaPts = xs.map((x, i) => x + ',' + ys[i]).join(' ');
+  const areaD = `M${PAD},${H - 22} L${areaPts} L${W - PAD},${H - 22} Z`;
+  const defs = el('defs', {});
+  const grad = el('linearGradient', { id: 'dashDauGrad', x1: 0, y1: 0, x2: 0, y2: 1 });
+  grad.appendChild(el('stop', { offset: '0%', 'stop-color': 'var(--gold-soft)', 'stop-opacity': 0.28 }));
+  grad.appendChild(el('stop', { offset: '100%', 'stop-color': 'var(--gold-soft)', 'stop-opacity': 0 }));
+  defs.appendChild(grad);
+  svg.appendChild(defs);
+  svg.appendChild(el('path', { d: areaD, fill: 'url(#dashDauGrad)' }));
+
+  const lineD = 'M' + xs.map((x, i) => x + ',' + ys[i]).join(' L');
+  svg.appendChild(el('path', { d: lineD, fill: 'none', stroke: 'var(--gold-soft)', 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }));
+
+  const lastX = xs[xs.length - 1], lastY = ys[ys.length - 1];
+  svg.appendChild(el('circle', { cx: lastX, cy: lastY, r: 4, fill: 'var(--gold)', stroke: 'var(--white)', 'stroke-width': 1.5 }));
+
+  const guide = el('line', { x1: 0, x2: 0, y1: 8, y2: H - 22, stroke: 'var(--line-2)', 'stroke-width': 1, opacity: 0 });
+  const dot = el('circle', { r: 4, fill: 'var(--navy)', stroke: 'var(--white)', 'stroke-width': 1.5, opacity: 0 });
+  svg.appendChild(guide);
+  svg.appendChild(dot);
+
+  const hitArea = el('rect', { x: 0, y: 0, width: W, height: H, fill: 'transparent' });
+  svg.appendChild(hitArea);
+
+  hitArea.addEventListener('mousemove', (evt) => {
+    const rect = svg.getBoundingClientRect();
+    const mx = (evt.clientX - rect.left) * (W / rect.width);
+    let idx = Math.round((mx - PAD) / ((W - PAD * 2) / Math.max(1, n - 1)));
+    idx = Math.max(0, Math.min(n - 1, idx));
+    const x = xs[idx], y = ys[idx];
+    guide.setAttribute('x1', x); guide.setAttribute('x2', x); guide.setAttribute('opacity', 1);
+    dot.setAttribute('cx', x); dot.setAttribute('cy', y); dot.setAttribute('opacity', 1);
+    tip.style.left = (x / W) * rect.width + 'px';
+    tip.style.top = (y / H) * rect.height + 'px';
+    tip.innerHTML = `<strong>${vals[idx]}</strong> DAU · ${fmtDate(days[idx].day)}`;
+    tip.style.opacity = 1;
+  });
+  hitArea.addEventListener('mouseleave', () => {
+    guide.setAttribute('opacity', 0);
+    dot.setAttribute('opacity', 0);
+    tip.style.opacity = 0;
+  });
+}
+
+function renderDashContentProduction(content) {
+  const host = document.getElementById('dash-content-production');
+  const kh = content.khaoLuan || { total: 0, last7d: 0 };
+  const nc = content.nghienCuu || { total: 0, last7d: 0 };
+  const yt = content.youtube || { total: 0, last7d: 0 };
+  const total7d = (kh.last7d || 0) + (nc.last7d || 0) + (yt.last7d || 0);
+  host.innerHTML = `
+    <div class="eng-tiles">
+      <div class="eng-tile"><div class="v tabular">${kh.last7d}</div><div class="l">Khảo Luận mới (7N)</div><div class="d" style="color:var(--text-lt)">${kh.total.toLocaleString()} tổng</div></div>
+      <div class="eng-tile"><div class="v tabular">${nc.last7d}</div><div class="l">Nghiên Cứu mới (7N)</div><div class="d" style="color:var(--text-lt)">${nc.total.toLocaleString()} tổng</div></div>
+      <div class="eng-tile"><div class="v tabular">${yt.last7d}</div><div class="l">Video YouTube mới (7N)</div><div class="d" style="color:var(--text-lt)">${yt.total.toLocaleString()} tổng</div></div>
+      <div class="eng-tile"><div class="v tabular">${total7d}</div><div class="l">Tổng bài mới (7N)</div><div class="d" style="color:var(--text-lt)">3 pipeline tự động</div></div>
+    </div>
+    <div class="panel-sub" style="font-size:.68rem;color:var(--text-lt);margin-top:4px">Chỉ 3 nguồn này có pipeline tự động (Khảo Luận + Nghiên Cứu do cron viết, YouTube qua van_dap). TikTok/kênh khác hiện chưa có pipeline thật.</div>
+  `;
+}
+
+function renderDashContentRevenue(rows) {
+  const host = document.getElementById('dash-content-revenue');
+  if (!rows.length) {
+    host.innerHTML = `<div class="empty">Chưa có dữ liệu — cần user đăng ký (có gắn landing page) rồi nạp tiền mới lên số. Tracking mới bật gần đây.</div>`;
+    return;
+  }
+  const max = Math.max(...rows.map((r) => r.revenue_vnd || 0), 1);
+  host.innerHTML = rows.map((r) => `
+    <div class="mbar-row">
+      <div class="mbar-top"><span class="mbar-label" title="${escHtmlLocal(r.landing)}">${escHtmlLocal(r.landing)}</span><span class="mbar-val tabular">${fmtVndFull(r.revenue_vnd)}</span></div>
+      <div class="mbar-track"><div class="mbar-fill" style="width:${Math.max(2, (r.revenue_vnd || 0) / max * 100)}%"></div></div>
+    </div>
+  `).join('');
+}
+
+function renderDashAtRisk(rows) {
+  const host = document.getElementById('dash-at-risk');
+  if (!rows.length) {
+    host.innerHTML = `<div class="empty">Không có user nào sắp rời bỏ theo tiêu chí hiện tại — tín hiệu tốt.</div>`;
+    return;
+  }
+  const now = Date.now();
+  host.innerHTML = `<table>
+    <thead><tr><th>Email</th><th style="text-align:right">Còn Lại</th><th>Hoạt Động Cuối</th><th>Im Lặng</th><th></th></tr></thead>
+    <tbody>${rows.map((u) => {
+      const idleDays = Math.floor((now - new Date(u.last_active).getTime()) / 864e5);
+      const badgeClass = idleDays >= 30 ? 'badge-red' : 'badge-pending';
+      const suggest = idleDays >= 30 ? 'Gửi Push' : 'Nhắc qua Telegram';
+      return `<tr>
+        <td class="td-title">${escHtmlLocal(u.email || u.user_id)}</td>
+        <td style="text-align:right"><strong style="color:var(--gold)" class="tabular">⊙ ${u.balance}</strong></td>
+        <td style="color:var(--text-lt);font-size:.72rem">${fmtDate(u.last_active)}</td>
+        <td><span class="badge ${badgeClass}">${idleDays} ngày</span></td>
+        <td><span class="btn-mini">${suggest}</span></td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>
+  <div class="panel-sub" style="padding:10px 20px;font-size:.68rem;color:var(--text-lt)">Tiêu chí: từng hoạt động ≥3 lần, còn số dư &gt;0, không có event nào trong 14+ ngày. Sắp theo số dư còn lại.</div>`;
 }
 
 // ── USERS ──

@@ -90,6 +90,32 @@ svg{display:block}
 .dash-alert.warn:hover{background:rgba(192,57,43,.06)}
 .dash-alert.ok{color:var(--green);border-color:rgba(30,107,60,.24)}
 
+/* ── ENGAGEMENT / CONTENT-PRODUCTION TILES (Dashboard v2) ── */
+.tabular{font-variant-numeric:tabular-nums}
+.eng-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;margin-bottom:.9rem}
+.eng-tile{text-align:center;padding:6px 4px}
+.eng-tile .v{font-family:var(--serif);font-size:1.7rem;font-weight:700;color:var(--text)}
+.eng-tile .l{font-size:.7rem;color:var(--text-mid);margin-top:2px}
+.eng-tile .d{font-size:.66rem;margin-top:2px;font-weight:600;color:var(--text-lt)}
+.eng-tile .d.up{color:var(--green)}
+.eng-tile .d.down{color:var(--red)}
+.chart-wrap{position:relative;padding:6px 4px 0}
+.chart-tip{position:absolute;pointer-events:none;background:var(--navy);color:#fff;font-size:.68rem;padding:5px 9px;border-radius:6px;transform:translate(-50%,-115%);white-space:nowrap;opacity:0;transition:opacity .1s;font-family:var(--sans);box-shadow:var(--shadow);z-index:2}
+.chart-tip strong{font-family:var(--serif);color:var(--gold)}
+
+/* ── BAR-LIST (Doanh Thu Theo Nội Dung) ── */
+.mbar-row{margin-bottom:.65rem}
+.mbar-row:last-child{margin-bottom:0}
+.mbar-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.25rem;gap:1rem}
+.mbar-label{font-size:.78rem;color:var(--text-mid);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mbar-val{font-family:var(--serif);font-weight:700;color:var(--text);flex-shrink:0}
+.mbar-track{background:var(--border-lt);border-radius:5px;height:10px;overflow:hidden}
+.mbar-fill{height:100%;background:linear-gradient(90deg,var(--navy),var(--blue));border-radius:5px}
+:root[data-theme="dark"] .mbar-fill{background:linear-gradient(90deg,var(--gold-soft),var(--gold))}
+
+/* ── AT-RISK USERS (btn-mini action) ── */
+.btn-mini{padding:.32rem .65rem;border:1px solid var(--line-2);border-radius:6px;font-size:.68rem;font-weight:600;background:var(--white);color:var(--text-mid);cursor:default;white-space:nowrap;opacity:.75}
+
 /* ── STATS ── */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
 .stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:22px}
