@@ -943,6 +943,138 @@ async function handleAdminNghienCuuTopics(request: NextRequest, body: Record<str
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
+// ── API & KEYS (Command Center) ────────────────────────────────
+// MCP self-serve keys/usage (mcp_keys/mcp_usage — RLS chỉ service_role,
+// KHÔNG có admin_read policy như app_config → phải qua route này, không
+// đọc thẳng bằng sbGet) + trạng thái configured của provider/infra keys
+// (chỉ trả boolean, KHÔNG BAO GIỜ trả giá trị thật của secret).
+const ENV_KEY_GROUPS: { label: string; items: { key: string; label: string }[] }[] = [
+  { label: 'AI Providers', items: [
+    { key: 'ANTHROPIC_API_KEY', label: 'Anthropic (Claude — agent chat)' },
+    { key: 'GEMINI_API_KEY', label: 'Google Gemini (route rời + backup)' },
+    { key: 'OPENAI_API_KEY', label: 'OpenAI (embeddings RAG)' },
+    { key: 'REPLICATE_API_KEY', label: 'Replicate (sinh/ghép ảnh)' },
+  ]},
+  { label: 'Thanh Toán', items: [
+    { key: 'PAYPAL_CLIENT_ID', label: 'PayPal Client ID' },
+    { key: 'PAYPAL_CLIENT_SECRET', label: 'PayPal Client Secret' },
+    { key: 'PAYOS_CLIENT_ID', label: 'PayOS Client ID' },
+    { key: 'PAYOS_API_KEY', label: 'PayOS API Key' },
+    { key: 'PAYOS_CHECKSUM_KEY', label: 'PayOS Checksum Key' },
+  ]},
+  { label: 'Hạ Tầng', items: [
+    { key: 'SUPABASE_URL', label: 'Supabase URL' },
+    { key: 'SUPABASE_SERVICE_KEY', label: 'Supabase Service Key' },
+    { key: 'CRON_SECRET', label: 'Cron Secret (bảo vệ /api/cron-*)' },
+    { key: 'ADMIN_SECRET', label: 'Admin Secret' },
+    { key: 'SIGNUP_SIGNAL_SALT', label: 'Signup Signal Salt (anti-fraud)' },
+    { key: 'FIREBASE_SERVICE_ACCOUNT', label: 'Firebase (push notification)' },
+  ]},
+];
+
+async function handleAdminEnvStatus(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const groups = ENV_KEY_GROUPS.map((g) => ({
+    label: g.label,
+    items: g.items.map((it) => ({ key: it.key, label: it.label, configured: !!process.env[it.key] })),
+  }));
+  return ok({ groups });
+}
+
+// ── GET: admin-mcp (MCP self-serve keys + usage) ──
+async function handleAdminMcp(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  try {
+    const [keysRes, usageRes] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/mcp_keys?select=key,tier,label,charts_allowed,backtest_years,future_years,active,created_at,user_id&order=created_at.desc&limit=500`, { headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/mcp_usage?select=key,tool,created_at&order=created_at.desc&limit=5000`, { headers: SB_HEADERS }),
+    ]);
+    if (!keysRes.ok) throw new Error(await keysRes.text());
+    type McpKeyRow = { key: string; tier: string; label: string | null; charts_allowed: number; backtest_years: number; future_years: number; active: boolean; created_at: string; user_id: string | null };
+    const keys = (await keysRes.json()) as McpKeyRow[];
+    const usage = (usageRes.ok ? await usageRes.json() : []) as { key: string; tool: string; created_at: string }[];
+
+    const sevenDaysAgo = new Date(Date.now() - 7 * 864e5).toISOString();
+    const callsByKey: Record<string, number> = {};
+    const toolCounts: Record<string, number> = {};
+    let calls7d = 0;
+    for (const u of usage) {
+      callsByKey[u.key] = (callsByKey[u.key] || 0) + 1;
+      toolCounts[u.tool] = (toolCounts[u.tool] || 0) + 1;
+      if (u.created_at > sevenDaysAgo) calls7d++;
+    }
+
+    // Resolve user_id → email (chỉ user thật sự có key, thường ít — fetch từng
+    // id thay vì loop hết auth users như handleAdminUsers, tránh tốn quota).
+    const userIds = Array.from(new Set(keys.map((k) => k.user_id).filter((v): v is string => !!v)));
+    const emailMap: Record<string, string> = {};
+    await Promise.all(userIds.map(async (uid) => {
+      try {
+        const r = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${uid}`, {
+          headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
+        });
+        if (r.ok) { const u = await r.json(); if (u?.email) emailMap[uid] = u.email; }
+      } catch { /* bỏ qua, hiện user_id thô */ }
+    }));
+
+    const maskKey = (k: string) => (k.length > 14 ? `${k.slice(0, 10)}…${k.slice(-4)}` : k);
+    const keysOut = keys.map((k) => ({
+      key: maskKey(k.key),
+      rawKeyForAction: k.key, // cần nguyên vẹn để admin-mcp-update PATCH đúng dòng
+      tier: k.tier,
+      label: k.label,
+      email: k.user_id ? (emailMap[k.user_id] || null) : null,
+      chartsAllowed: k.charts_allowed,
+      backtestYears: k.backtest_years,
+      futureYears: k.future_years,
+      active: k.active,
+      createdAt: k.created_at,
+      calls: callsByKey[k.key] || 0,
+    }));
+
+    return ok({
+      stats: { totalKeys: keys.length, activeKeys: keys.filter((k) => k.active).length, totalCalls: usage.length, calls7d },
+      keys: keysOut,
+      toolCounts,
+    });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── POST: admin-mcp-update (đổi tier / khoá-mở key MCP) ──
+async function handleAdminMcpUpdate(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized — admin only', 403);
+
+  const key = String(body.key || '').trim();
+  if (!key) return err('Missing key', 400);
+
+  const row: Record<string, unknown> = {};
+  if (body.tier != null) {
+    const tier = String(body.tier);
+    if (!['free', 'paid', 'master'].includes(tier)) return err('Invalid tier', 400);
+    row.tier = tier;
+  }
+  if (body.active != null) row.active = !!body.active;
+  if (Object.keys(row).length === 0) return err('Nothing to update', 400);
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/mcp_keys?key=eq.${encodeURIComponent(key)}`, {
+      method: 'PATCH',
+      headers: { ...SB_HEADERS, Prefer: 'return=minimal' },
+      body: JSON.stringify(row),
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return ok({ success: true });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
 export async function OPTIONS() { return options(); }
 
 export async function GET(request: NextRequest) {
@@ -959,6 +1091,8 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-content-board') return handleAdminContentBoard(request);
   if (action === 'admin-khao-luan') return handleAdminKhaoLuan(request);
   if (action === 'admin-nghien-cuu') return handleAdminNghienCuu(request);
+  if (action === 'admin-mcp') return handleAdminMcp(request);
+  if (action === 'admin-env-status') return handleAdminEnvStatus(request);
   if (action === 'check-bank')  return handleCheckBank(searchParams);
   return err('Invalid action.', 400);
 }
@@ -1141,6 +1275,7 @@ export async function POST(request: NextRequest) {
   if (action === 'admin-channel-broadcast') return handleAdminChannelBroadcast(request, body);
   if (action === 'admin-khao-luan-topics') return handleAdminKhaoLuanTopics(request, body);
   if (action === 'admin-nghien-cuu-topics') return handleAdminNghienCuuTopics(request, body);
+  if (action === 'admin-mcp-update') return handleAdminMcpUpdate(request, body);
   if (action === 'create-bank')       return handleCreateBank(body);
   if (action === 'referral-register') return handleReferralRegister(request, body);
   return err('Invalid action.', 400);
