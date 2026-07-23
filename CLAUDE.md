@@ -83,6 +83,22 @@ Làm nốt "mấy mục còn mở" từ brainstorm. Workplan: **R1** bỏ trần
   - **Verify:** typecheck 0, prettier route+bank-webhook sạch, node --check admin (879 loc) OK. RPC prod OK.
 - **🎉 XONG R1+R2+R3 — đóng trọn "mấy mục còn mở".** Còn (tùy chọn tương lai): gắn `utm_campaign` vào link để bảng Campaign có số; các row topup CŨ chưa có `amount_vnd` (chỉ row mới từ giờ mới lưu tiền thật; muốn chuẩn tuyệt đối thì backfill từ `bank_orders`/PayPal history — chưa làm).
 
+### 🔵 Dashboard revamp — CEO brainstorm 6 metric ưu tiên (branch `claude/admin-command-center-s4-395w5n`)
+Sau R1-R3, brainstorm "act như CEO" ra 6 metric outside-the-box còn thiếu trên Dashboard. Henry chọn 5, xếp thứ tự tối ưu, duyệt qua prototype HTML gửi riêng (`SendUserFile`, không dùng `Artifact`) trước khi build thật — 3 vòng chỉnh (thêm marketing tracking → bỏ traffic/ads vì đã có GA4 → thêm Full Funnel nối GA4). Sau khi duyệt, Henry nói "build thật đi".
+- **✅ D1 XONG (PR mới, 4/6 mục — Supabase-only, không cần hạ tầng mới):**
+  - **Migration `_patches/migration-dashboard-v2.sql`** (✅ ĐÃ CHẠY prod qua Supabase MCP — verify RPC trả số thật: DAU hôm nay/qua = 87/22 từ events; at-risk logic đúng; content-revenue rỗng vì `user_attribution` chưa có signup nào — tracking mới bật gần đây, sẽ tự có số):
+    - `dashboard_engagement(days)` → JSON {days:[{day,dau}], dau_today, dau_yesterday, wau, wau_prev, mau, mau_prev} — DAU = distinct(user_id|anon_id) mỗi ngày từ `events`.
+    - `dashboard_content_revenue(from,to)` → table(landing,signups,paid,revenue_vnd) — quy doanh thu (`credit_transactions` topup, `amount_vnd` fallback ×2500) theo `user_attribution.first_landing_path`; `/la-so/*` gộp 1 dòng (438K trang SEO), còn lại giữ path riêng (kien-thuc/nghien-cuu đủ ít để có ý nghĩa).
+    - `dashboard_at_risk(idle_days,min_events,limit)` → user còn số dư >0, từng hoạt động ≥3 lần (join `auth.users` lấy email), im lặng 14+ ngày, sắp theo số dư.
+  - **`app/api/payment/route.ts`:** `handleAdminDashboardV2` (action=`admin-dashboard-v2`) gọi 3 RPC trên + đếm nhanh (`count=exact`, không tải nguyên bảng) tổng/7N của Khảo Luận/Nghiên Cứu/YouTube (`van_dap publish_status=published`) cho panel Sản Xuất Nội Dung.
+  - **`public/admin.html`+`admin.css`:** 4 panel mới trên Dashboard — **Mức Độ Dùng DAU/WAU/MAU** (4 tile + biểu đồ SVG area/line 30 ngày, hover tooltip, tự dựng không lib), **Sản Xuất Nội Dung** (tile 7N + tổng, 3 pipeline), **Doanh Thu Theo Nội Dung** (bar-list theo landing page), **User Sắp Rời Bỏ** (bảng, nút "Nhắc qua Telegram"/"Gửi Push" hiện CHỈ hiển thị gợi ý kênh — CHƯA nối hành động gửi thật, `cursor:default`). Class mới: `.eng-tiles/.eng-tile`, `.chart-wrap/.chart-tip`, `.mbar-row/.mbar-track/.mbar-fill`, `.btn-mini` (tái dùng `.td-title`/`.badge-*` có sẵn thay vì tạo trùng).
+  - **Tiện sửa bug có sẵn:** panel "Funnel 7 Ngày Gần Đây" (`renderDashFunnel`) số bị hardcode `color:var(--navy)` → mờ ở dark mode; đổi `var(--text)`. **NỢ KỸ THUẬT phát hiện thêm:** còn ~17 chỗ khác trong admin.html dùng `color:var(--navy)` y hệt (Content Board, Khảo Luận, Nghiên Cứu, Marketing LTV, System Config, user drawer...) — cùng 1 bug dark-mode, CHƯA sửa hết (ngoài phạm vi PR này, để audit riêng).
+  - **Verify:** typecheck 0 lỗi, prettier route.ts sạch, `node --check` cả 3 script block admin.html OK, Playwright screenshot light+dark (mock `admin-dashboard-v2` + REST) render đúng, không lỗi console.
+  - **CÒN LẠI (2/6 mục, cần hạ tầng mới trước khi làm thật):**
+    - **Sức Khỏe Kênh (bot error rate theo Telegram/Web/Messenger/WhatsApp):** hiện KHÔNG có log lỗi theo kênh — cần thêm ghi `event_type` lỗi (hoặc bảng riêng) trong `lib/channels/core.ts` + từng route kênh trước khi có số thật.
+    - **Biên Lợi Nhuận Theo Tool:** cần lưu token usage (đã capture trong `lib/agent/run.ts` nhưng KHÔNG persist) + bảng giá cost/1K token theo model → tính biên LN thật.
+  - **Full Funnel nối GA4** (Traffic GA4 → Đăng ký → Kích hoạt → Trả tiền → Quay lại): GA4 property "Tử Vi Minh Bảo" (`533053153`, Measurement ID `G-F4XNRS2XT0` trong `public/nav.js`) ĐÃ LIVE. Cần Henry tạo service account GCP (bật GA4 Data API, gán quyền Viewer cho property, add JSON key vào env Vercel) trước khi code phần gọi GA4 Data API — 4 bước còn lại (signup/activate/paid/return) tái dùng `marketing_funnel` RPC sẵn có, chỉ thay số "visitors" bằng session GA4 thật.
+
 ---
 
 ## 🟢 ĐANG LÀM — App-shell "/app" (không gian làm việc đa công cụ)

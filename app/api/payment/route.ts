@@ -1085,6 +1085,7 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-users')  return handleAdminUsers(request, searchParams);
   if (action === 'admin-user-detail') return handleAdminUserDetail(request, searchParams);
   if (action === 'admin-marketing') return handleAdminMarketing(request, searchParams);
+  if (action === 'admin-dashboard-v2') return handleAdminDashboardV2(request);
   if (action === 'admin-cron-runs') return handleAdminCronRuns(request);
   if (action === 'admin-channels') return handleAdminChannels(request);
   if (action === 'admin-seo')      return handleAdminSeo(request);
@@ -1198,6 +1199,53 @@ async function handleAdminMarketing(request: NextRequest, sp: URLSearchParams): 
     return ok({
       funnel, sources, acquisition, campaigns, traffic, revenue, cohorts, cohortWeeks,
       from: from.toISOString(), to: to.toISOString(),
+    });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── GET: admin-dashboard-v2 (Engagement + Content Revenue + At-risk + Content Production) ──
+// Đọc 3 RPC mới (dashboard_engagement/dashboard_content_revenue/dashboard_at_risk,
+// migration-dashboard-v2.sql) + đếm nhanh 3 pipeline nội dung (count=exact, không
+// tải nguyên bảng — khác handleAdminContentBoard vốn tải hàng để dựng "recent").
+async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const to = new Date();
+  const from = new Date(Date.now() - 30 * 864e5);
+  const sevenDaysAgo = new Date(Date.now() - 7 * 864e5).toISOString();
+
+  const callRpc = async (fn: string, params: Record<string, unknown>) => {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`, {
+      method: 'POST', headers: SB_HEADERS, body: JSON.stringify(params),
+    });
+    if (!res.ok) throw new Error(`${fn}: ${await res.text()}`);
+    return res.json();
+  };
+
+  try {
+    const [engagement, contentRevenue, atRisk, khTotal, kh7d, ncTotal, nc7d, ytTotal, yt7d] = await Promise.all([
+      callRpc('dashboard_engagement', { p_days: 30 }),
+      callRpc('dashboard_content_revenue', { p_from: from.toISOString(), p_to: to.toISOString() }),
+      callRpc('dashboard_at_risk', { p_idle_days: 14, p_min_events: 3, p_limit: 20 }),
+      countExact('khao_luan?select=slug&limit=1'),
+      countExact(`khao_luan?select=slug&limit=1&created_at=gte.${sevenDaysAgo}`),
+      countExact('master_articles?select=slug&limit=1'),
+      countExact(`master_articles?select=slug&limit=1&created_at=gte.${sevenDaysAgo}`),
+      countExact('van_dap?select=id&limit=1&publish_status=eq.published'),
+      countExact(`van_dap?select=id&limit=1&publish_status=eq.published&created_at=gte.${sevenDaysAgo}`),
+    ]);
+
+    return ok({
+      engagement,
+      contentRevenue,
+      atRisk,
+      content: {
+        khaoLuan:  { total: khTotal, last7d: kh7d },
+        nghienCuu: { total: ncTotal, last7d: nc7d },
+        youtube:   { total: ytTotal, last7d: yt7d },
+      },
     });
   } catch (e: unknown) { return err((e as Error).message); }
 }
