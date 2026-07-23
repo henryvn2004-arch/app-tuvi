@@ -21,6 +21,7 @@ import { runConversation } from '@/lib/channels/core';
 import { buildAccessGate } from '@/lib/channels/gate';
 import { verifyMetaSignature, verifyWebhookChallenge } from '@/lib/channels/meta';
 import { messengerIO, messengerStore, messengerProfiles, msgrSendText, msgrClearSession } from '@/lib/channels/messenger';
+import { chatLogOutcome } from '@/lib/channels/store';
 import { consumeLinkToken, resolveLinkedUser, LINK_CMD } from '@/lib/channels/messengerLink';
 
 export const runtime = 'nodejs';
@@ -168,6 +169,7 @@ async function handleEvent(ev: MsgrMessaging, cfg: Awaited<ReturnType<typeof get
     ERR_MSG,
     gate.commit,
     messengerProfiles,
+    (ok, reason) => void chatLogOutcome(PLATFORM, psid, ok, reason),
   );
 }
 

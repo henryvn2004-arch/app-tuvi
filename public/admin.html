@@ -133,6 +133,14 @@
       <div class="page active" id="page-dashboard">
         <div class="dash-alerts" id="dash-alerts"></div>
 
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Sức Khỏe Kênh Chat (24h)</div>
+            <span style="font-size:.72rem;color:var(--text-lt)">tỷ lệ lượt lỗi / tổng lượt</span>
+          </div>
+          <div class="panel-body" id="dash-channel-health"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+
         <div class="stats" id="stats-grid">
           <div class="stat"><div class="stat-label">Users</div><div class="stat-value spin-val">…</div><div class="stat-sub">tổng tài khoản</div></div>
           <div class="stat green"><div class="stat-label">Credits Nạp</div><div class="stat-value spin-val">…</div><div class="stat-sub">tổng</div></div>
@@ -1959,15 +1967,46 @@ async function loadDashboardV2() {
   try {
     const data = await apiGet('admin-dashboard-v2');
     if (data.error) throw new Error(data.error);
+    renderDashChannelHealth(data.channelHealth || []);
     renderDashEngagement(data.engagement || {});
     renderDashContentProduction(data.content || {});
     renderDashContentRevenue(data.contentRevenue || []);
     renderDashAtRisk(data.atRisk || []);
   } catch (e) {
-    ['dash-engagement', 'dash-content-production', 'dash-content-revenue', 'dash-at-risk'].forEach((id) => {
+    ['dash-channel-health', 'dash-engagement', 'dash-content-production', 'dash-content-revenue', 'dash-at-risk'].forEach((id) => {
       document.getElementById(id).innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
     });
   }
+}
+
+const CHAN_META = {
+  telegram:  { label: 'Telegram',  icon: '<path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/>' },
+  web:       { label: 'Web Chat',  icon: '<path d="M20 4H4a2 2 0 0 0-2 2v14l4-4h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/>' },
+  messenger: { label: 'Messenger', icon: '<path d="M2 8.5C2 5 5 2 12 2s10 3 10 6.5S19 15 12 15c-.8 0-1.6-.05-2.3-.15L5 17.5l1-3.8C3.3 12.2 2 10.5 2 8.5z"/>' },
+  whatsapp:  { label: 'WhatsApp',  icon: '<path d="M17 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/><path d="M12 18h.01"/>' },
+};
+
+function renderDashChannelHealth(rows) {
+  const host = document.getElementById('dash-channel-health');
+  const byPlatform = {};
+  rows.forEach((r) => { byPlatform[r.platform] = r; });
+  host.innerHTML = `<div class="chan-row">${Object.keys(CHAN_META).map((p) => {
+    const meta = CHAN_META[p];
+    const r = byPlatform[p] || { total: 0, errors: 0, error_rate: 0 };
+    const rate = Number(r.error_rate) || 0;
+    let pillClass = 'good', pillLabel = 'ổn', rateColor = 'var(--green)';
+    if (r.total === 0) { pillClass = 'warn'; pillLabel = 'chưa có lượt'; rateColor = 'var(--text-lt)'; }
+    else if (rate > 8) { pillClass = 'bad'; pillLabel = 'cao'; rateColor = 'var(--red)'; }
+    else if (rate > 2) { pillClass = 'warn'; pillLabel = 'theo dõi'; rateColor = 'var(--orange)'; }
+    return `<div class="chan-card">
+      <div class="chan-top">
+        <div class="chan-name"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${meta.icon}</svg>${meta.label}</div>
+        <span class="pill ${pillClass}"><i></i>${pillLabel}</span>
+      </div>
+      <div class="chan-rate" style="color:${rateColor}">${rate.toFixed(1).replace('.', ',')}%</div>
+      <div class="chan-note">${r.total.toLocaleString()} lượt · ${r.errors.toLocaleString()} lỗi</div>
+    </div>`;
+  }).join('')}</div>`;
 }
 
 function fmtPctChange(cur, prev, label) {

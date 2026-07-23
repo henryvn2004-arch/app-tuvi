@@ -17,6 +17,7 @@ import { runConversation } from '@/lib/channels/core';
 import { buildAccessGate } from '@/lib/channels/gate';
 import { verifyMetaSignature, verifyWebhookChallenge } from '@/lib/channels/meta';
 import { whatsappIO, whatsappStore, whatsappProfiles, waSendText, waClearSession } from '@/lib/channels/whatsapp';
+import { chatLogOutcome } from '@/lib/channels/store';
 import { consumeLinkToken, resolveLinkedUser, LINK_CMD } from '@/lib/channels/whatsappLink';
 
 export const runtime = 'nodejs';
@@ -151,7 +152,16 @@ async function handleMessage(msg: WaMessage, cfg: Awaited<ReturnType<typeof getC
     return;
   }
 
-  await runConversation(whatsappIO, whatsappStore, { chatId: from, text, imageRefs }, cfg, ERR_MSG, gate.commit, whatsappProfiles);
+  await runConversation(
+    whatsappIO,
+    whatsappStore,
+    { chatId: from, text, imageRefs },
+    cfg,
+    ERR_MSG,
+    gate.commit,
+    whatsappProfiles,
+    (ok, reason) => void chatLogOutcome(PLATFORM, from, ok, reason),
+  );
 }
 
 function ok() {

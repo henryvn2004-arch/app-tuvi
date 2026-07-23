@@ -319,3 +319,30 @@ export async function chatIncrFreeUsage(platform: string, externalId: string): P
     return null;
   }
 }
+
+// ── Sức khỏe kênh (events, event_type='bot_reply') ──────────
+// Log MỖI lượt (thành công lẫn lỗi) — nguồn ĐÚNG cho "tổng lượt" thay vì
+// chat_usage (chỉ đếm free-tier, bỏ sót user đã link ví). Best-effort,
+// KHÔNG throw — gọi từ core.runConversation qua onOutcome, không chặn trả lời.
+export async function chatLogOutcome(
+  platform: string,
+  chatId: number | string,
+  ok: boolean,
+  reason?: string,
+): Promise<void> {
+  if (!ready()) return;
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/events`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, Prefer: 'return=minimal' },
+      body: JSON.stringify({
+        event_type: 'bot_reply',
+        platform,
+        session_id: `${platform}-${chatId}`,
+        meta: { ok, reason: reason || null },
+      }),
+    });
+  } catch {
+    /* best-effort */
+  }
+}

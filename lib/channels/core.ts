@@ -114,6 +114,9 @@ export async function runConversation(
   errMsg: string,
   gateCommit?: () => Promise<void>,
   profiles?: ProfileStore,
+  /** Best-effort — báo kết quả lượt (thành công/lỗi) cho adapter log "Sức khỏe
+   *  kênh" (Dashboard). KHÔNG throw, KHÔNG chặn luồng chính. */
+  onOutcome?: (ok: boolean, reason?: string) => void,
 ): Promise<void> {
   const { chatId } = incoming;
   const hasImage = incoming.imageRefs.length > 0;
@@ -193,6 +196,7 @@ export async function runConversation(
       console.error(
         `[runConversation] Trả lời thất bại — err=${err ?? 'none'} answerLen=${answer.length} lastStatus="${collector.getLastStatus()}"`,
       );
+      onOutcome?.(false, err || 'empty_answer');
       await deliver(io, chatId, progressId, errMsg);
       return;
     }
@@ -202,6 +206,7 @@ export async function runConversation(
     // sạch + tránh model thấy lại; lượt sau có lá số trong system rồi).
     const delivered = lasoCard ? lasoCard + '\n\n———\n\n' + answer : answer;
     await deliver(io, chatId, progressId, delivered);
+    onOutcome?.(true);
     // Trả lời thành công → CHỐT tính phí (lỗi thì không tính, đã return trên).
     if (gateCommit) await gateCommit();
 
@@ -224,6 +229,7 @@ export async function runConversation(
     // Bắt cả exception bị ném (vd callAnthropic throw khi non-200) — trước đây
     // `catch {}` nuốt sạch, không cả biến lỗi.
     console.error('[runConversation] Lỗi không bắt được khi xử lý lượt:', e);
+    onOutcome?.(false, e instanceof Error ? e.message.slice(0, 200) : 'unknown_exception');
     await deliver(io, chatId, progressId, errMsg);
   } finally {
     working = false;
