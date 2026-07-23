@@ -58,10 +58,10 @@
       <button class="nav-item" onclick="goToSoon(this,'Nghiên Cứu','S3','15 author persona + master_articles + topic pipeline (cron-master-write).')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span><span>Nghiên Cứu</span>
       </button>
-      <button class="nav-item" onclick="goToSoon(this,'Channels &amp; Push','S4','Telegram/Zalo/FB + broadcast + push. Trạng thái kênh, gửi tin.')">
+      <button class="nav-item" onclick="goTo('channels')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span><span>Channels &amp; Push</span>
       </button>
-      <button class="nav-item" onclick="goToSoon(this,'SEO','S4','seo_pages (8958) + laso_pregen + sức khỏe sitemap.')">
+      <button class="nav-item" onclick="goTo('seo')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><span>SEO</span>
       </button>
     </div>
@@ -795,6 +795,77 @@
         </div>
       </div>
 
+      <!-- ── CHANNELS & PUSH (Marketing & Nội Dung) ── -->
+      <div class="page" id="page-channels">
+        <div class="stats" id="ch-stats" style="grid-template-columns:repeat(4,1fr)">
+          <div class="stat"><div class="stat-label">Kênh Đã Cấu Hình</div><div class="stat-value" id="ch-k-configured">…</div><div class="stat-sub">/4 nền tảng</div></div>
+          <div class="stat blue"><div class="stat-label">User Đã Chat</div><div class="stat-value" id="ch-k-users">…</div><div class="stat-sub">tất cả kênh</div></div>
+          <div class="stat green"><div class="stat-label">Đã Liên Kết Ví</div><div class="stat-value" id="ch-k-linked">…</div><div class="stat-sub">gắn tài khoản web</div></div>
+          <div class="stat gold"><div class="stat-label">Lượt Chat (7N)</div><div class="stat-value" id="ch-k-msgs">…</div><div class="stat-sub">tất cả kênh</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">📡 Trạng Thái Kênh</div>
+            <button class="btn btn-primary btn-sm" onclick="loadChannels()">↻</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Kênh</th><th>Cấu Hình</th><th style="text-align:right">User</th><th style="text-align:right">Đã Liên Kết</th><th style="text-align:right">Lượt Chat (7N)</th><th>Hoạt Động Gần Nhất</th></tr></thead>
+              <tbody id="ch-body"><tr><td colspan="6" class="loading"><span class="spin"></span>Đang tải...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">🔔 Push Notification</div></div>
+          <div class="panel-body" id="ch-push"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">📤 Gửi Tin (Broadcast)</div></div>
+          <div class="panel-body">
+            <div class="form-label">Kênh</div>
+            <select class="form-control" id="bc-platform" style="max-width:260px;margin-bottom:.6rem">
+              <option value="telegram">Telegram</option>
+              <option value="messenger" disabled>Messenger (chưa hỗ trợ gửi tự do)</option>
+              <option value="whatsapp" disabled>WhatsApp (chưa hỗ trợ gửi tự do)</option>
+              <option value="zalo" disabled>Zalo (chưa tích hợp)</option>
+            </select>
+            <div class="form-label">Nội dung</div>
+            <textarea class="form-control" id="bc-text" rows="4" maxlength="3500" oninput="document.getElementById('bc-count').textContent = this.value.length + ' ký tự'"></textarea>
+            <div class="char-count" id="bc-count">0 ký tự</div>
+            <div style="margin-top:.6rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+              <button class="btn btn-gold btn-sm" onclick="sendBroadcast(this)">Gửi Tin →</button>
+              <span style="font-size:.72rem;color:var(--text-lt)">Gửi thật tới TOÀN BỘ user từng chat trên kênh này — không thu hồi được.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SEO (Marketing & Nội Dung) ── -->
+      <div class="page" id="page-seo">
+        <div class="stats" id="seo-stats" style="grid-template-columns:repeat(4,1fr)">
+          <div class="stat"><div class="stat-label">SEO Pages</div><div class="stat-value" id="seo-k-total">…</div><div class="stat-sub">tổng đã sinh</div></div>
+          <div class="stat green"><div class="stat-label">+7 Ngày</div><div class="stat-value" id="seo-k-7d">…</div><div class="stat-sub">seo_pages mới</div></div>
+          <div class="stat blue"><div class="stat-label">Lá Số Pregen</div><div class="stat-value" id="seo-k-pregen">…</div><div class="stat-sub">tổng đã sinh</div></div>
+          <div class="stat gold"><div class="stat-label">+7 Ngày</div><div class="stat-value" id="seo-k-pregen7d">…</div><div class="stat-sub">laso_pregen mới</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">🗂 seo_pages Theo Danh Mục</div>
+            <button class="btn btn-primary btn-sm" onclick="loadSeo()">↻</button>
+          </div>
+          <div class="panel-body" id="seo-categories"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">🩺 Sức Khỏe Sitemap</div></div>
+          <div class="table-wrap" id="seo-sitemaps"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+        </div>
+      </div>
+
       <!-- ── PLACEHOLDER (module chưa build) ── -->
       <div class="page" id="page-soon">
         <div class="soon-card">
@@ -823,6 +894,7 @@ const PAGE_TITLES = {
   dashboard: 'Dashboard', users: 'Users', credits: 'Doanh Thu & Giao Dịch',
   lasos: 'Lá Số', pricing: 'Gói Nạp & Pricing', tools: 'Ví & Cấp Credits',
   marketing: 'Funnel & Nguồn', content: 'YouTube Studio', cron: 'Cron & Jobs',
+  channels: 'Channels & Push', seo: 'SEO',
 };
 
 // ── AUTH ──
@@ -881,7 +953,7 @@ function goTo(page) {
   // Lazy load
   const loaders = { users: loadUsers, credits: loadCredits, lasos: loadLasos,
                     pricing: loadPricingPage, tools: loadAdminUsers, marketing: loadMarketing,
-                    cron: loadCron,
+                    cron: loadCron, channels: loadChannels, seo: loadSeo,
                     content: () => {
     if (showView) showView('dashboard');
     if (!window._contentInitialized) {
@@ -993,6 +1065,107 @@ async function triggerCron(job, btn) {
   } catch (e) { toast('Lỗi: ' + e.message, 'error'); }
   btn.disabled = false; btn.innerHTML = old;
   setTimeout(loadCron, 1200);
+}
+
+// ── CHANNELS & PUSH ──
+const CH_LABEL = { telegram: '✈️ Telegram', messenger: '💬 Messenger', whatsapp: '🟢 WhatsApp', zalo: '🔵 Zalo' };
+
+async function loadChannels() {
+  const body = document.getElementById('ch-body');
+  body.innerHTML = `<tr><td colspan="6" class="loading"><span class="spin"></span>Đang tải...</td></tr>`;
+  let data;
+  try { data = await apiGet('admin-channels'); }
+  catch (e) { body.innerHTML = `<tr><td colspan="6" class="empty">Lỗi: ${e.message}</td></tr>`; return; }
+  if (data && data.error) { body.innerHTML = `<tr><td colspan="6" class="empty">Lỗi: ${data.error}</td></tr>`; return; }
+
+  const channels = (data && data.channels) || [];
+  const push = (data && data.push) || {};
+
+  document.getElementById('ch-k-configured').textContent = channels.filter(c => c.configured).length;
+  document.getElementById('ch-k-users').textContent = channels.reduce((s, c) => s + (c.users || 0), 0).toLocaleString();
+  document.getElementById('ch-k-linked').textContent = channels.reduce((s, c) => s + (c.linked || 0), 0).toLocaleString();
+  document.getElementById('ch-k-msgs').textContent = channels.reduce((s, c) => s + (c.msgs7d || 0), 0).toLocaleString();
+
+  body.innerHTML = channels.length ? channels.map(c => `<tr>
+      <td><strong>${CH_LABEL[c.platform] || c.platform}</strong></td>
+      <td>${c.configured ? '<span class="badge badge-green">Đã cấu hình</span>' : '<span class="badge badge-grey">Chưa cấu hình</span>'}</td>
+      <td style="text-align:right">${(c.users || 0).toLocaleString()}</td>
+      <td style="text-align:right">${(c.linked || 0).toLocaleString()}</td>
+      <td style="text-align:right">${(c.msgs7d || 0).toLocaleString()}</td>
+      <td style="font-size:.74rem;color:var(--text-lt)">${c.lastActive ? relTime(c.lastActive) : '—'}</td>
+    </tr>`).join('') : `<tr><td colspan="6" class="empty">Không có dữ liệu</td></tr>`;
+
+  document.getElementById('ch-push').innerHTML = `
+    <div style="display:flex;gap:2rem;flex-wrap:wrap">
+      <div><div class="stat-label">Web Push</div><div style="font-family:'Noto Serif',serif;font-size:1.3rem;color:var(--navy);font-weight:700">${(push.webSubscriptions || 0).toLocaleString()}</div><div class="stat-sub">subscription đang bật</div></div>
+      <div><div class="stat-label">App / FCM</div><div style="font-family:'Noto Serif',serif;font-size:1.3rem;color:var(--navy);font-weight:700">${(push.nativeTokensEnabled || 0).toLocaleString()} / ${(push.nativeTokensTotal || 0).toLocaleString()}</div><div class="stat-sub">token đang bật / tổng</div></div>
+    </div>
+    <div style="margin-top:.75rem;font-size:.72rem;color:var(--text-lt)">Job gửi push chạy tự động 07:00 hằng ngày (giờ VN) — xem lịch sử ở <a href="#" onclick="goTo('cron');return false" style="color:var(--blue)">Cron &amp; Jobs</a>.</div>`;
+}
+
+async function sendBroadcast(btn) {
+  const platform = document.getElementById('bc-platform').value;
+  const text = document.getElementById('bc-text').value.trim();
+  if (!text) { toast('Nhập nội dung trước đã', 'error'); return; }
+  if (!confirm(`Gửi tin này tới TOÀN BỘ user đã từng chat trên kênh "${platform}"?\n\nHành động này KHÔNG thể thu hồi.`)) return;
+  const old = btn.innerHTML;
+  btn.disabled = true; btn.innerHTML = '<span class="spinner" style="border-color:rgba(0,0,0,.2);border-top-color:currentColor"></span> Đang gửi…';
+  try {
+    const res = await apiPost('admin-channel-broadcast', { platform, text });
+    if (res && !res.error) {
+      toast(`Đã gửi ${res.sent}/${res.targeted} (lỗi ${res.failed})`, res.failed ? 'error' : 'success');
+      document.getElementById('bc-text').value = '';
+      document.getElementById('bc-count').textContent = '0 ký tự';
+    } else {
+      toast('Lỗi: ' + (res.error || 'không rõ'), 'error');
+    }
+  } catch (e) { toast('Lỗi: ' + e.message, 'error'); }
+  btn.disabled = false; btn.innerHTML = old;
+}
+
+// ── SEO ──
+async function loadSeo() {
+  const catHost = document.getElementById('seo-categories');
+  const smHost = document.getElementById('seo-sitemaps');
+  catHost.innerHTML = `<div class="loading"><span class="spin"></span>Đang tải...</div>`;
+  smHost.innerHTML = `<div class="loading"><span class="spin"></span>Đang tải...</div>`;
+  let data;
+  try { data = await apiGet('admin-seo'); }
+  catch (e) { catHost.innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`; return; }
+  if (data && data.error) { catHost.innerHTML = `<div class="empty">Lỗi: ${data.error}</div>`; return; }
+
+  const stats = (data && data.stats) || {};
+  const sitemaps = (data && data.sitemaps) || [];
+  const cats = stats.seo_pages_by_category || [];
+
+  document.getElementById('seo-k-total').textContent = (stats.seo_pages_total || 0).toLocaleString();
+  document.getElementById('seo-k-7d').textContent = (stats.seo_pages_7d || 0).toLocaleString();
+  document.getElementById('seo-k-pregen').textContent = (stats.laso_pregen_total || 0).toLocaleString();
+  document.getElementById('seo-k-pregen7d').textContent = (stats.laso_pregen_7d || 0).toLocaleString();
+
+  const maxCat = Math.max(1, ...cats.map(c => c.count || 0));
+  catHost.innerHTML = cats.length ? cats.map(c => {
+    const pct = Math.round((c.count / maxCat) * 100);
+    const share = stats.seo_pages_total ? ((c.count / stats.seo_pages_total) * 100).toFixed(1) + '%' : '—';
+    return `<div style="margin-bottom:.7rem">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.25rem">
+        <span style="font-size:.8rem;color:var(--text-mid)">${c.category}</span>
+        <strong style="font-family:'Noto Serif',serif;color:var(--navy)">${c.count.toLocaleString()} <span style="font-size:.68rem;color:var(--text-lt);font-family:inherit">(${share})</span></strong>
+      </div>
+      <div style="background:var(--border-lt);border-radius:5px;height:12px;overflow:hidden">
+        <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,var(--navy),var(--blue));border-radius:5px"></div>
+      </div>
+    </div>`;
+  }).join('') : '<div class="empty">Chưa có seo_pages</div>';
+
+  smHost.innerHTML = `<table>
+    <thead><tr><th>Sitemap</th><th>Trạng Thái</th><th style="text-align:right">Độ Trễ</th></tr></thead>
+    <tbody>${sitemaps.map(s => `<tr>
+        <td class="mono">${s.path}</td>
+        <td>${s.ok ? `<span class="badge badge-green">OK · ${s.status}</span>` : `<span class="badge badge-error">Lỗi · ${s.status || s.error || '—'}</span>`}</td>
+        <td style="text-align:right">${s.ms}ms</td>
+      </tr>`).join('')}</tbody>
+  </table>`;
 }
 
 // ── SUPABASE HELPERS ──
@@ -1895,7 +2068,8 @@ async function init() {
     document.getElementById('stat-ready').textContent = stats.ready ?? 0;
     document.getElementById('stat-published').textContent = stats.published ?? 0;
     document.getElementById('stat-yt').textContent = stats.yt_live ?? 0;
-    document.getElementById('db-status').textContent = '🟢 Đã kết nối DB';
+    const dbStatusOk = document.getElementById('db-status');
+    if (dbStatusOk) dbStatusOk.textContent = '🟢 Đã kết nối DB';
 
     allItems = await getItems();
     renderRecentTable(allItems.slice(0, 10));
@@ -1903,7 +2077,8 @@ async function init() {
     renderTTSQueue();
     renderYTQueue();
   } catch (e) {
-    document.getElementById('db-status').textContent = '🔴 Lỗi kết nối DB';
+    const dbStatusEl = document.getElementById('db-status');
+    if (dbStatusEl) dbStatusEl.textContent = '🔴 Lỗi kết nối DB';
     console.error(e);
     // Show sample data if DB not ready yet
     renderRecentTable([]);
@@ -2743,9 +2918,11 @@ function toast(msg, type = 'info') {
 
 
 // ────────────────────────────────────────────────
-// AUTH — Supabase login gate
+// AUTH — Supabase login gate (dùng ADMIN_EMAIL của script chính ở trên —
+// khai báo `const ADMIN_EMAIL` riêng ở đây từng đụng độ tên với script
+// chính, khiến toàn bộ block YouTube Studio này ném SyntaxError và không
+// chạy — phát hiện + sửa khi build Channels & Push, S4.)
 // ────────────────────────────────────────────────
-const ADMIN_EMAIL = null; // null = chấp nhận mọi account đăng nhập được vào Supabase
 
 
 function showLoginError(msg) {

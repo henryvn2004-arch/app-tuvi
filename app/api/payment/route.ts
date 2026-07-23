@@ -12,6 +12,7 @@ import { ok, err, options, parseBody } from '@/lib/cors';
 import { getPackage, getPackages } from '@/lib/billing/packages';
 import { getToolPrice } from '@/lib/billing/pricing';
 import { logCronRun } from '@/lib/cron/log';
+import { tgSendMessage } from '@/lib/channels/telegram';
 
 const PAYPAL_BASE = process.env.PAYPAL_MODE === 'live'
   ? 'https://api-m.paypal.com'
@@ -665,6 +666,116 @@ async function handleAdminCronTrigger(request: NextRequest, body: Record<string,
   }
 }
 
+// ── GET: admin-channels (trạng thái kênh chat + push, Command Center S4) ──
+// Đọc trực tiếp bảng generic chat_* (nguồn thật hiện tại — telegram_* cũ đã
+// "mồ côi" từ migration-channels-multiplatform). Zalo chưa có adapter → hard-code.
+const CHANNEL_PLATFORMS = ['telegram', 'messenger', 'whatsapp'] as const;
+
+async function countExact(path: string): Promise<number> {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+      headers: { ...SB_HEADERS, Prefer: 'count=exact' },
+    });
+    return parseInt(res.headers.get('content-range')?.split('/')[1] || '0', 10);
+  } catch { return 0; }
+}
+
+async function handleAdminChannels(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const sevenDaysAgo = new Date(Date.now() - 7 * 864e5).toISOString().slice(0, 10);
+  try {
+    const [sessionsRes, linksRes, usageRes, webPush, nativeTotal, nativeEnabled] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/chat_sessions?select=platform,chat_id,updated_at&limit=5000`, { headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/chat_links?select=platform&limit=5000`, { headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/chat_usage?select=platform,count,day&day=gte.${sevenDaysAgo}&limit=5000`, { headers: SB_HEADERS }),
+      countExact('push_subscriptions?select=id&limit=1'),
+      countExact('push_tokens?select=token&limit=1'),
+      countExact('push_tokens?select=token&enabled=eq.true&limit=1'),
+    ]);
+    const sessions = sessionsRes.ok ? await sessionsRes.json() : [];
+    const links = linksRes.ok ? await linksRes.json() : [];
+    const usage = usageRes.ok ? await usageRes.json() : [];
+
+    type ChannelStat = { platform: string; configured: boolean; users: number; linked: number; msgs7d: number; lastActive: string | null };
+    const channels: ChannelStat[] = CHANNEL_PLATFORMS.map((p) => {
+      const rows = (sessions as { platform: string; chat_id: string; updated_at: string }[]).filter((r) => r.platform === p);
+      const linked = (links as { platform: string }[]).filter((r) => r.platform === p).length;
+      const msgs7d = (usage as { platform: string; count: number }[]).filter((r) => r.platform === p).reduce((s, r) => s + (r.count || 0), 0);
+      const lastActive = rows.reduce<string | null>((max, r) => (!max || r.updated_at > max ? r.updated_at : max), null);
+      const configured = p === 'telegram' ? !!process.env.TELEGRAM_BOT_TOKEN
+        : p === 'messenger' ? !!process.env.MESSENGER_PAGE_ACCESS_TOKEN
+        : !!(process.env.WHATSAPP_PHONE_NUMBER_ID && process.env.WHATSAPP_TOKEN);
+      return { platform: p, configured, users: rows.length, linked, msgs7d, lastActive };
+    });
+    channels.push({ platform: 'zalo', configured: false, users: 0, linked: 0, msgs7d: 0, lastActive: null });
+
+    return ok({
+      channels,
+      push: { webSubscriptions: webPush, nativeTokensTotal: nativeTotal, nativeTokensEnabled: nativeEnabled },
+    });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── POST: admin-channel-broadcast (gửi tin thủ công tới toàn bộ user 1 kênh) ──
+// Hiện chỉ hỗ trợ Telegram (Bot API gửi tự do). Messenger/WhatsApp cần
+// template đã duyệt / trong cửa sổ 24h theo policy Meta → chưa làm.
+async function handleAdminChannelBroadcast(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized — admin only', 403);
+
+  const platform = String(body.platform || '');
+  const text = String(body.text || '').trim();
+  if (!text) return err('Thiếu nội dung', 400);
+  if (platform !== 'telegram') return err('Kênh này chưa hỗ trợ gửi broadcast', 400);
+  if (!process.env.TELEGRAM_BOT_TOKEN) return err('Chưa cấu hình TELEGRAM_BOT_TOKEN', 400);
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/chat_sessions?platform=eq.telegram&select=chat_id&limit=5000`, { headers: SB_HEADERS });
+    const rows: { chat_id: string }[] = res.ok ? await res.json() : [];
+    const chatIds = Array.from(new Set(rows.map((r) => r.chat_id)));
+
+    let sentCount = 0, failed = 0;
+    const BATCH = 20;
+    for (let i = 0; i < chatIds.length; i += BATCH) {
+      const batch = chatIds.slice(i, i + BATCH);
+      const results = await Promise.allSettled(batch.map((id) => tgSendMessage(id, text)));
+      for (const r of results) { if (r.status === 'fulfilled') sentCount++; else failed++; }
+    }
+    return ok({ targeted: chatIds.length, sent: sentCount, failed });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── GET: admin-seo (kho seo_pages/laso_pregen + sức khỏe sitemap) ──
+const SITEMAP_PATHS = ['/sitemap.xml', '/sitemap-hubs.xml', '/sitemap-pregen.xml', '/sitemap-ngay-tot.xml'];
+
+async function handleAdminSeo(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  try {
+    const [statsRes, sitemaps] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/rpc/admin_seo_stats`, { method: 'POST', headers: SB_HEADERS, body: '{}' }),
+      Promise.all(SITEMAP_PATHS.map(async (path) => {
+        const t0 = Date.now();
+        try {
+          const r = await fetch(`${SITE_URL}${path}`, { method: 'HEAD' });
+          return { path, ok: r.ok, status: r.status, ms: Date.now() - t0 };
+        } catch (e: unknown) {
+          return { path, ok: false, status: 0, ms: Date.now() - t0, error: String(e) };
+        }
+      })),
+    ]);
+    if (!statsRes.ok) throw new Error(await statsRes.text());
+    const stats = await statsRes.json();
+    return ok({ stats, sitemaps });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
 export async function OPTIONS() { return options(); }
 
 export async function GET(request: NextRequest) {
@@ -676,6 +787,8 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-user-detail') return handleAdminUserDetail(request, searchParams);
   if (action === 'admin-marketing') return handleAdminMarketing(request, searchParams);
   if (action === 'admin-cron-runs') return handleAdminCronRuns(request);
+  if (action === 'admin-channels') return handleAdminChannels(request);
+  if (action === 'admin-seo')      return handleAdminSeo(request);
   if (action === 'check-bank')  return handleCheckBank(searchParams);
   return err('Invalid action.', 400);
 }
@@ -855,6 +968,7 @@ export async function POST(request: NextRequest) {
   if (action === 'admin-save-package') return handleAdminSavePackage(request, body);
   if (action === 'admin-create-user') return handleAdminCreateUser(request, body);
   if (action === 'admin-cron-trigger') return handleAdminCronTrigger(request, body);
+  if (action === 'admin-channel-broadcast') return handleAdminChannelBroadcast(request, body);
   if (action === 'create-bank')       return handleCreateBank(body);
   if (action === 'referral-register') return handleReferralRegister(request, body);
   return err('Invalid action.', 400);
