@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Admin — Tử Vi Minh Bảo</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="/admin.css?v=1"/>
+<link rel="stylesheet" href="/admin.css?v=2"/>
 <script>(function(){try{var t=localStorage.getItem('tva_theme');if(t==='dark'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
@@ -42,13 +42,61 @@
     </div>
 
     <div class="sidebar-section">
-      <div class="sidebar-section-label">Người Dùng</div>
+      <div class="sidebar-section-label">Marketing &amp; Nội Dung</div>
+      <button class="nav-item" onclick="goToSoon(this,'Content Board','S3','Kanban gộp Khảo Luận + Nghiên Cứu + YouTube về một board draft→review→approved→scheduled→published.')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h6v18H3z"/><path d="M15 3h6v11h-6z"/></svg></span><span>Content Board</span>
+      </button>
+      <button class="nav-item" onclick="goTo('content')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg></span><span>YouTube Studio</span>
+      </button>
+      <button class="nav-item" onclick="goToSoon(this,'Khảo Luận','S3','Quản lý + trigger cron cron-khao-luan (blog), xem hàng đợi bài khao_luan.')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span><span>Khảo Luận</span>
+      </button>
+      <button class="nav-item" onclick="goToSoon(this,'Nghiên Cứu','S3','15 author persona + master_articles + topic pipeline (cron-master-write).')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span><span>Nghiên Cứu</span>
+      </button>
+      <button class="nav-item" onclick="goToSoon(this,'Channels &amp; Push','S4','Telegram/Zalo/FB + broadcast + push. Trạng thái kênh, gửi tin.')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span><span>Channels &amp; Push</span>
+      </button>
+      <button class="nav-item" onclick="goToSoon(this,'SEO','S4','seo_pages (8958) + laso_pregen + sức khỏe sitemap.')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 16.5 8.5 11.5 1 19"/><polyline points="17 6 23 6 23 12"/></svg></span><span>SEO</span>
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Sales &amp; Tài Chính</div>
+      <button class="nav-item" onclick="goTo('credits')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span><span>Doanh Thu &amp; Giao Dịch</span>
+      </button>
+      <button class="nav-item" onclick="goTo('pricing')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg></span><span>Gói Nạp &amp; Pricing</span>
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Người Dùng (CRM)</div>
       <button class="nav-item" onclick="goTo('users')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span>Users</span>
         <span class="badge" id="badge-users">—</span>
       </button>
-      <button class="nav-item" onclick="goTo('credits')">
-        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span><span>Credits &amp; Giao Dịch</span>
+      <button class="nav-item" onclick="goTo('tools')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span><span>Ví &amp; Cấp Credits</span>
+      </button>
+      <button class="nav-item" onclick="goToSoon(this,'Attribution &amp; Funnel','S4','Kích hoạt events/user_attribution/referrals/signup_signals → nguồn + phễu.')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></span><span>Attribution &amp; Funnel</span>
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Vận Hành</div>
+      <button class="nav-item" onclick="goToSoon(this,'Cron &amp; Jobs','S2','1 bảng điều khiển MỌI cron (Vercel + Supabase pg_cron + edge fn): status, last-run, trigger tay.')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><span>Cron &amp; Jobs</span>
+      </button>
+      <button class="nav-item" onclick="goToSoon(this,'API &amp; Keys','S5','MCP keys/usage + channel tokens + provider keys.')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg></span><span>API &amp; Keys</span>
+      </button>
+      <button class="nav-item" onclick="goToSoon(this,'System Config','S2','Sửa app_config runtime (prompt/model/cost) + logs &amp; errors.')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></span><span>System Config</span>
       </button>
     </div>
 
@@ -57,22 +105,8 @@
       <button class="nav-item" onclick="goTo('lasos')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16 8 10.5 10.5 8 16 13.5 13.5 16 8"/></svg></span><span>Lá Số</span>
       </button>
-      <button class="nav-item" onclick="goTo('pricing')">
-        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg></span><span>Pricing</span>
-      </button>
-    </div>
-
-    <div class="sidebar-section">
-      <div class="sidebar-section-label">Nội Dung</div>
-      <button class="nav-item" onclick="goTo('content')">
-        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span><span>Content Manager</span>
-      </button>
-    </div>
-
-    <div class="sidebar-section">
-      <div class="sidebar-section-label">Công Cụ</div>
-      <button class="nav-item" onclick="goTo('tools')">
-        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg></span><span>Quản Lý</span>
+      <button class="nav-item" onclick="goToSoon(this,'Tools Registry','S6','Danh mục 47 công cụ + gán giá tool_pricing + phân tích dùng.')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg></span><span>Tools Registry</span>
       </button>
     </div>
 
@@ -645,6 +679,17 @@
         </div>
       </div>
 
+      <!-- ── PLACEHOLDER (module chưa build) ── -->
+      <div class="page" id="page-soon">
+        <div class="soon-card">
+          <div class="soon-badge" id="soon-sprint">S?</div>
+          <svg class="soon-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/></svg>
+          <h2 class="soon-title" id="soon-title">Sắp có</h2>
+          <p class="soon-desc" id="soon-desc"></p>
+          <p class="soon-note">Module này nằm trong lộ trình Command Center — sẽ build ở sprint tương ứng.</p>
+        </div>
+      </div>
+
     </div><!-- /content -->
   </div><!-- /main -->
 </div><!-- /app -->
@@ -659,8 +704,9 @@ let _allUsers = [], _allCredits = [], _allLasos = [];
 let _currentPage = 'dashboard';
 
 const PAGE_TITLES = {
-  dashboard: 'Dashboard', users: 'Users', credits: 'Credits & Giao Dịch',
-  lasos: 'Lá Số', pricing: 'Pricing', tools: 'Công Cụ',
+  dashboard: 'Dashboard', users: 'Users', credits: 'Doanh Thu & Giao Dịch',
+  lasos: 'Lá Số', pricing: 'Gói Nạp & Pricing', tools: 'Ví & Cấp Credits',
+  content: 'YouTube Studio',
 };
 
 // ── AUTH ──
@@ -727,6 +773,21 @@ function goTo(page) {
     }
   } };
   if (loaders[page]) loaders[page]();
+}
+
+// ── PLACEHOLDER (module chưa build) ──
+function goToSoon(el, title, sprint, desc) {
+  _currentPage = 'soon';
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  if (el) el.classList.add('active');
+  const decode = s => { const d = document.createElement('textarea'); d.innerHTML = s || ''; return d.value; };
+  document.getElementById('soon-sprint').textContent = sprint;
+  document.getElementById('soon-title').textContent = decode(title);
+  document.getElementById('soon-desc').textContent = decode(desc);
+  document.getElementById('page-soon').classList.add('active');
+  document.getElementById('topbar-title').textContent = decode(title);
+  document.getElementById('topbar-meta').textContent = 'Sắp có · ' + sprint;
 }
 
 // ── SUPABASE HELPERS ──
