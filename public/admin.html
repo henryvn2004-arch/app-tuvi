@@ -2557,17 +2557,21 @@ function renderMktFunnel(f) {
     { k: 'paid',      label: 'Trả tiền (paid)',      icon: svgIc('<rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>') },
   ];
   const max = Math.max(1, f.visitors || 0);
+  const ga4Badge = f.visitorsSource === 'ga4'
+    ? `<span class="badge badge-green" style="margin-left:.4rem;vertical-align:1px" title="Số phiên (sessions) thật từ GA4 Data API">GA4</span>`
+    : `<span style="font-size:.62rem;margin-left:.4rem;vertical-align:1px;color:var(--text-lt)" title="Chưa nối GA4 (thiếu env GA4_PROPERTY_ID/GA4_SERVICE_ACCOUNT_JSON) — số suy từ page_view nội bộ, chỉ thấy traffic đã chạm track.js">nội bộ</span>`;
   let prev = null;
   const rows = steps.map(s => {
     const v = f[s.k] || 0;
     const pct = Math.round((v / max) * 100);
     const conv = (prev == null) ? '' : (prev > 0 ? ((v / prev) * 100).toFixed(1) + '%' : '0%');
     const convHtml = conv ? `<span style="color:var(--text-lt);font-size:.7rem;margin-left:.5rem">↳ ${conv} từ bước trước</span>` : '';
+    const badgeHtml = s.k === 'visitors' ? ga4Badge : '';
     prev = v;
     return `<div style="margin-bottom:.85rem">
       <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.25rem">
-        <span style="font-size:.8rem;color:var(--text-mid)">${s.icon} ${s.label}${convHtml}</span>
-        <strong style="font-family:'Noto Serif',serif;color:var(--navy)">${v.toLocaleString()}</strong>
+        <span style="font-size:.8rem;color:var(--text-mid)">${s.icon} ${s.label}${badgeHtml}${convHtml}</span>
+        <strong style="font-family:'Noto Serif',serif;color:var(--text)">${v.toLocaleString()}</strong>
       </div>
       <div style="background:var(--border-lt);border-radius:5px;height:14px;overflow:hidden">
         <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,var(--navy),var(--blue));border-radius:5px"></div>
@@ -2581,7 +2585,7 @@ function renderMktFunnel(f) {
   </div>`;
   const overall = (f.visitors > 0) ? ((f.paid || 0) / f.visitors * 100).toFixed(2) + '%' : '—';
   document.getElementById('mkt-funnel').innerHTML = rows + secondary +
-    `<div style="margin-top:.75rem;font-size:.72rem;color:var(--text-lt)">Chuyển đổi tổng visit → paid: <strong style="color:var(--navy)">${overall}</strong></div>`;
+    `<div style="margin-top:.75rem;font-size:.72rem;color:var(--text-lt)">Chuyển đổi tổng visit → paid: <strong style="color:var(--text)">${overall}</strong></div>`;
 }
 
 function renderMktSources(rows) {

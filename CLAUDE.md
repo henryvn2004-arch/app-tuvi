@@ -113,7 +113,15 @@ Sau R1-R3, brainstorm "act như CEO" ra 6 metric outside-the-box còn thiếu tr
   - **`app/api/payment/route.ts`:** `handleAdminDashboardV2` gọi thêm `dashboard_margin` (RPC thứ 8), trả `margin`.
   - **`public/admin.html`:** panel "Biên Lợi Nhuận LLM" trên Dashboard (`renderDashMargin`) — 3 tile (doanh thu/chi phí/margin%, màu theo ngưỡng xanh≥50%·cam≥0%·đỏ<0%) + bảng chi phí theo `tool_id` + 2 dòng caveat giải thích rõ "doanh thu" là Lượng tiêu quy đổi (không phải tiền mặt tức thời) và chỉ bucket `chat` có margin thật.
   - **Verify:** typecheck 0, prettier route+run+usage sạch, node --check 3 script block admin.html OK, Playwright screenshot light+dark render đúng.
-  - **🎉 XONG D2+D3 — chỉ còn D4 Full Funnel GA4** (chặn bởi việc tay Henry: tạo service account GCP, bật GA4 Data API, gán quyền Viewer property `533053153`, add JSON key vào env Vercel).
+  - **🎉 XONG D2+D3.**
+- **✅ D4 XONG (PR mới) — Full Funnel nối GA4 (việc tay Henry: service account GCP + GA4 Data API + Viewer property `533053153` — ĐÃ XONG):**
+  - **`lib/analytics/ga4.ts`** (mới): `getGa4Sessions(fromDate,toDate)` — tự ký JWT (RS256, `crypto.sign`, KHÔNG cần thư viện `googleapis`) bằng service-account key, đổi lấy access token (`oauth2.googleapis.com/token`, scope `analytics.readonly`, cache token tới gần hết hạn), gọi GA4 Data API `runReport` (metric `sessions`) cho property `GA4_PROPERTY_ID`. Best-effort: thiếu env/lỗi API → trả `null`, KHÔNG throw.
+  - **`app/api/payment/route.ts`:** `handleAdminMarketing` gọi thêm `getGa4Sessions(from,to)` song song 7 RPC cũ; có kết quả → **ghi đè `funnel.visitors`** bằng session GA4 thật (trước suy từ `page_view` nội bộ — chỉ thấy traffic đã chạm `track.js`, thiếu hẳn organic/ads/social) + gắn `funnel.visitorsSource='ga4'`; lỗi/thiếu env → giữ số nội bộ + `visitorsSource='internal'` (dashboard không vỡ khi chưa cấu hình).
+  - **`public/admin.html`:** badge nhỏ cạnh "Khách ghé (visit)" trong `renderMktFunnel` — xanh "GA4" khi dùng số thật, xám "nội bộ" (kèm tooltip giải thích) khi fallback.
+  - **🐞 Tiện sửa bug dark-mode (cùng nợ kỹ thuật `color:var(--navy)` D1 phát hiện):** 2 chỗ trong `renderMktFunnel` (số bậc funnel + % chuyển đổi tổng) mờ ở dark mode → đổi `var(--text)`. Còn lại ~15 chỗ khác trong file vẫn CHƯA sửa (ngoài phạm vi PR này).
+  - **Env Vercel cần add (Henry):** `GA4_PROPERTY_ID=533053153`, `GA4_SERVICE_ACCOUNT_JSON=<toàn bộ nội dung file JSON key>`.
+  - **Verify:** typecheck 0, lint sạch, prettier route+ga4.ts sạch, node --check 3 script block admin.html OK, Playwright screenshot light+dark (mock GA4 badge + verify dark-mode fix) render đúng.
+  - **🎉 XONG TOÀN BỘ 6 metric CEO brainstorm (D1–D4).** Track "Dashboard revamp" hoàn tất.
 
 ---
 
