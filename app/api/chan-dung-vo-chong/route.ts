@@ -60,12 +60,13 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   // prompt ảnh tiếng Anh + đoạn mô tả tiếng Việt — KHÔNG để LLM tự bịa sao/field,
   // chỉ tổng hợp văn phong từ field đã merge (xem lib/engine/portrait.ts).
   const sys =
-    'Bạn là chuyên gia mô tả chân dung (concept artist). Nhận bộ đặc điểm hình thể rời rạc (tiếng Việt) ' +
-    'của MỘT người, nhiệm vụ:\n' +
-    '1) "imagePrompt": MỘT đoạn tiếng ANH liền mạch (100-140 từ) mô tả khuôn mặt/vóc dáng/khí chất theo ' +
-    'giọng "professional concept artist describing a real human face" — bán thực/concept art, KHÔNG nhắc ' +
-    'chiêm tinh/tử vi/tên sao/tiếng Việt. Các đặc điểm KHÔNG được mâu thuẫn nhau (vd không vừa nói mặt tròn ' +
-    'vừa nói mặt dài) — nếu input có vẻ mâu thuẫn, ưu tiên đặc điểm liệt kê trước.\n' +
+    'Bạn là chuyên gia mô tả chân dung cho một họa sĩ khắc bản đồng (banknote engraver). Nhận bộ đặc điểm ' +
+    'hình thể rời rạc (tiếng Việt) của MỘT người, nhiệm vụ:\n' +
+    '1) "imagePrompt": MỘT đoạn tiếng ANH liền mạch (80-120 từ) mô tả khuôn mặt/vóc dáng/khí chất — CHỈ mô tả ' +
+    'HÌNH THỂ (face shape, eyes, nose, lips, hair, expression...), KHÔNG tự thêm mô tả phong cách nghệ thuật ' +
+    '(phần đó server tự ghép), KHÔNG nhắc chiêm tinh/tử vi/tên sao/tiếng Việt/màu sắc da/tóc (ảnh sẽ là đen ' +
+    'trắng). Các đặc điểm KHÔNG được mâu thuẫn nhau (vd không vừa nói mặt tròn vừa nói mặt dài) — nếu input có ' +
+    'vẻ mâu thuẫn, ưu tiên đặc điểm liệt kê trước.\n' +
     '2) "description": đoạn tiếng VIỆT (120-180 từ), văn xuôi tự nhiên mô tả khuôn mặt, hình dáng, phong thái ' +
     'và tính cách — KHÔNG nhắc tên sao/thuật ngữ tử vi, đọc như lời tả người thật.\n' +
     'CHỈ trả JSON hợp lệ: {"imagePrompt":"...","description":"..."}';
@@ -83,15 +84,21 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   const parsed = parseJSON(raw) as { imagePrompt?: string; description?: string } | null;
   if (!parsed?.imagePrompt || !parsed?.description) return err('Lỗi phân tích kết quả AI.', 500);
 
+  // Style cố định — banknote/steel-engraving portrait (tham chiếu ảnh mẫu Henry gửi):
+  // nét khắc cross-hatching mảnh, đen trắng tuyệt đối, khung viền hoa văn cổ điển.
   const genderWord = morph.spouseGender === 'nu' ? 'woman' : 'man';
   const finalPrompt =
-    `Semi-realistic digital concept art portrait bust of a Vietnamese ${genderWord} in their ${morph.spouseAge}s, ` +
-    `plain neutral studio background, soft even lighting. ${parsed.imagePrompt} ` +
-    'Painterly realism, high detail, no text, no watermark, no signature.';
+    `Banknote engraving portrait of a Vietnamese ${genderWord} in their ${morph.spouseAge}s, bust framed head ` +
+    `and shoulders, facing slightly off-center. ${parsed.imagePrompt} ` +
+    'Fine cross-hatching linework, intricate stipple and line engraving texture, vintage steel-engraving ' +
+    'style like antique currency or postage stamps, ornate decorative corner flourishes and thin double-line ' +
+    'border frame, aged cream paper background with faint radial guilloché pattern. Strictly monochrome ' +
+    'black and white, no color, no gray photographic shading — only engraved linework. No text, no watermark, ' +
+    'no signature.';
 
   let imageB64: string;
   try {
-    imageB64 = await generatePortraitImage({ prompt: finalPrompt });
+    imageB64 = await generatePortraitImage({ prompt: finalPrompt, size: '1024x1536' });
   } catch (e) {
     return err('Lỗi sinh ảnh: ' + (e instanceof Error ? e.message : 'không rõ'), 500);
   }
