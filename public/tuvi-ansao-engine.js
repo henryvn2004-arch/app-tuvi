@@ -2247,6 +2247,10 @@ const STAR_DATA = {
   'Thiên Không': { type:'sát tinh',  element:'hỏa', weight:9, traits:['hư vô','phá tán','mất mát bất ngờ'] },
   'Thiên Quan':  { type:'phúc tinh', element:'hỏa', weight:6, traits:['quý nhân','giải hạn','cứu nguy'] },
   'Thiên Phúc':  { type:'phúc tinh', element:'thổ', weight:6, traits:['phúc đức','quý nhân trợ giúp'] },
+  'Quan Phủ':    { type:'bại tinh',  element:'hỏa', weight:7, traits:['lý luận','biện luận','quan tụng','thưa kiện'] },
+  'Lưu Niên Văn Tinh': { type:'phụ tinh', element:'kim', weight:6, traits:['học hành','thi cử','thông minh'] },
+  'Thai Phụ':    { type:'phụ tinh',  element:'kim', weight:6, traits:['thông minh','học tập','nghiên cứu','thi cử'] },
+  'Phong Cáo':   { type:'phụ tinh',  element:'thổ', weight:6, traits:['phong tặng','công danh','vinh hiển','ấn tín'] },
 };
 
 /**
