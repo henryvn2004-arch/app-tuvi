@@ -33,6 +33,11 @@
 .cdvc-loading{text-align:center;padding:40px 10px}
 .cdvc-hist{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
 .cdvc-hist img{width:64px;height:64px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:border .15s}
+.cdvc-pt-row{font-size:14px;color:var(--text-mid);margin-bottom:8px;line-height:1.7}
+.cdvc-pt-title{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9A7B3A;margin:14px 0 6px}
+.cdvc-pt-list{margin:0;padding-left:20px;font-size:13.5px;line-height:1.8;color:#2a2118}
+.cdvc-pt-list li{margin-bottom:5px}
+.cdvc-pt-list b{color:#061A2E}
 .cdvc-hist img:hover{border-color:var(--gold)}
 </style>
 <script type="application/ld+json">
@@ -81,6 +86,21 @@
   </div>
 
   <div class="cdvc-result" id="result-section">
+    <div class="res-block" id="phuTheBlock" style="display:none">
+      <div class="res-block-header"><span class="res-block-title">Cung Phu Thê Trong Lá Số Của Bạn</span></div>
+      <div class="res-block-body">
+        <div class="cdvc-pt-row"><b>Chính tinh:</b> <span id="ptChinh">—</span></div>
+        <div class="cdvc-pt-row"><b>Phụ tinh:</b> <span id="ptPhu">—</span></div>
+        <div id="ptCachCucWrap" style="display:none">
+          <div class="cdvc-pt-title">Cách cục đặc biệt</div>
+          <ul class="cdvc-pt-list" id="ptCachCuc"></ul>
+        </div>
+        <div id="ptYNghiaWrap" style="display:none">
+          <div class="cdvc-pt-title">Ý nghĩa cổ pháp</div>
+          <ul class="cdvc-pt-list" id="ptYNghia"></ul>
+        </div>
+      </div>
+    </div>
     <div class="res-block">
       <div class="res-block-header"><span class="res-block-title">Chân Dung Người Phối Ngẫu</span></div>
       <div class="res-block-body">
@@ -155,6 +175,7 @@ async function _doGenerate(d) {
   document.getElementById('result-section').classList.add('active');
   document.getElementById('loading').style.display = 'block';
   document.getElementById('card').style.display = 'none';
+  document.getElementById('phuTheBlock').style.display = 'none';
   document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   try {
@@ -176,12 +197,38 @@ async function _doGenerate(d) {
     document.getElementById('descText').textContent = data.description;
     document.getElementById('loading').style.display = 'none';
     document.getElementById('card').style.display = 'flex';
+    renderPhuThe(data.phuThe);
     _loadHistory();
   } catch (e) {
     document.getElementById('loading').style.display = 'none';
     document.getElementById('result-section').classList.remove('active');
     showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
   }
+}
+
+function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+function renderPhuThe(pt) {
+  const block = document.getElementById('phuTheBlock');
+  if (!pt) { block.style.display = 'none'; return; }
+  document.getElementById('ptChinh').textContent = (pt.chinhTinh || []).join(', ') || 'Vô chính diệu';
+  document.getElementById('ptPhu').textContent = (pt.phuTinh || []).slice(0, 10).join(', ') || '—';
+
+  const ccWrap = document.getElementById('ptCachCucWrap');
+  if (pt.cachCuc && pt.cachCuc.length) {
+    document.getElementById('ptCachCuc').innerHTML = pt.cachCuc.map(c =>
+      '<li><b>' + esc(c.ten) + '</b>' + (c.moTa ? ' — ' + esc(c.moTa) : '') + '</li>'
+    ).join('');
+    ccWrap.style.display = 'block';
+  } else { ccWrap.style.display = 'none'; }
+
+  const ynWrap = document.getElementById('ptYNghiaWrap');
+  if (pt.yNghia && pt.yNghia.length) {
+    document.getElementById('ptYNghia').innerHTML = pt.yNghia.map(y => '<li>' + esc(y) + '</li>').join('');
+    ynWrap.style.display = 'block';
+  } else { ynWrap.style.display = 'none'; }
+
+  block.style.display = 'block';
 }
 
 async function downloadResult() {

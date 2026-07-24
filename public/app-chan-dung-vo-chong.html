@@ -39,6 +39,11 @@
 .cdvc-desc p{font-size:13.5px;line-height:1.8;color:#2a2118}
 #histList{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 #histList img{width:56px;height:56px;object-fit:cover;border-radius:8px;cursor:pointer}
+.cdvc-pt-row{font-size:14px;color:var(--text-mid);margin-bottom:8px;line-height:1.7}
+.cdvc-pt-title{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9A7B3A;margin:14px 0 6px}
+.cdvc-pt-list{margin:0;padding-left:20px;font-size:13.5px;line-height:1.8;color:#2a2118}
+.cdvc-pt-list li{margin-bottom:5px}
+.cdvc-pt-list b{color:#061A2E}
 </style>
 </head>
 <body>
@@ -76,6 +81,21 @@
       </div>
 
       <div id="resPanel" style="display:none">
+        <div class="res-block" id="phuTheBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Cung Phu Thê Trong Lá Số Của Bạn</span></div>
+          <div class="res-block-body">
+            <div class="cdvc-pt-row"><b>Chính tinh:</b> <span id="ptChinh">—</span></div>
+            <div class="cdvc-pt-row"><b>Phụ tinh:</b> <span id="ptPhu">—</span></div>
+            <div id="ptCachCucWrap" style="display:none">
+              <div class="cdvc-pt-title">Cách cục đặc biệt</div>
+              <ul class="cdvc-pt-list" id="ptCachCuc"></ul>
+            </div>
+            <div id="ptYNghiaWrap" style="display:none">
+              <div class="cdvc-pt-title">Ý nghĩa cổ pháp</div>
+              <ul class="cdvc-pt-list" id="ptYNghia"></ul>
+            </div>
+          </div>
+        </div>
         <div class="res-block">
           <div class="res-block-header"><span class="res-block-title">Chân Dung Người Phối Ngẫu</span></div>
           <div class="res-block-body">
@@ -168,6 +188,7 @@ async function _doGenerate() {
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('loading').style.display = 'block';
   document.getElementById('card').style.display = 'none';
+  document.getElementById('phuTheBlock').style.display = 'none';
 
   try {
     var token = window.Auth?.getSession()?.access_token || '';
@@ -188,6 +209,7 @@ async function _doGenerate() {
     document.getElementById('card').style.display = 'flex';
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+    renderPhuThe(data.phuThe);
     _loadHistory();
 
     Shell.setContext({
@@ -202,6 +224,30 @@ async function _doGenerate() {
     document.getElementById('birthPanel').style.display = 'block';
     showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
   }
+}
+
+// esc() dùng chung từ /laso-chart.js (đã load ở trên) — không khai lại.
+function renderPhuThe(pt) {
+  var block = document.getElementById('phuTheBlock');
+  if (!pt) { block.style.display = 'none'; return; }
+  document.getElementById('ptChinh').textContent = (pt.chinhTinh || []).join(', ') || 'Vô chính diệu';
+  document.getElementById('ptPhu').textContent = (pt.phuTinh || []).slice(0, 10).join(', ') || '—';
+
+  var ccWrap = document.getElementById('ptCachCucWrap');
+  if (pt.cachCuc && pt.cachCuc.length) {
+    document.getElementById('ptCachCuc').innerHTML = pt.cachCuc.map(function (c) {
+      return '<li><b>' + esc(c.ten) + '</b>' + (c.moTa ? ' — ' + esc(c.moTa) : '') + '</li>';
+    }).join('');
+    ccWrap.style.display = 'block';
+  } else { ccWrap.style.display = 'none'; }
+
+  var ynWrap = document.getElementById('ptYNghiaWrap');
+  if (pt.yNghia && pt.yNghia.length) {
+    document.getElementById('ptYNghia').innerHTML = pt.yNghia.map(function (y) { return '<li>' + esc(y) + '</li>'; }).join('');
+    ynWrap.style.display = 'block';
+  } else { ynWrap.style.display = 'none'; }
+
+  block.style.display = 'block';
 }
 
 async function downloadResult() {

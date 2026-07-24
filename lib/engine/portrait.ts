@@ -195,6 +195,12 @@ function ageOffsetFromPhuThe(phuThe: Rec | undefined): number {
 export interface SpouseMorphology {
   spouseGender: 'nam' | 'nu';
   spouseAge: number;
+  /** Tuổi hiện tại của lá số gốc — dùng làm mốc khi route.ts cần tính lại tuổi
+   * theo gợi ý cách cục (ưu tiên cao hơn heuristic sao thuần túy). */
+  baseAge: number;
+  /** Offset suy từ riêng bảng sao (AGE_OFFSET_STARS) — route.ts chỉ dùng làm
+   * fallback khi cách cục KHÔNG có gợi ý tuổi tác rõ ràng. */
+  starAgeOffset: number;
   fields: Record<string, string>;
   coreStar: string;
   contributingStars: string[];
@@ -223,15 +229,73 @@ export function computeSpouseMorphology(ls: Laso, userGender: 'nam' | 'nu'): Spo
   const fields = buildFields(core, ranked.length ? ranked : [DEFAULT_CORE]);
 
   const baseAge = Number(ls.tuoiXem) || 30;
-  const spouseAge = Math.max(18, Math.min(80, baseAge + ageOffsetFromPhuThe(phuThe)));
+  const starAgeOffset = ageOffsetFromPhuThe(phuThe);
+  const spouseAge = Math.max(18, Math.min(80, baseAge + starAgeOffset));
 
   return {
     spouseGender: userGender === 'nam' ? 'nu' : 'nam',
     spouseAge,
+    baseAge,
+    starAgeOffset,
     fields,
     coreStar: core.ten,
     contributingStars: ranked.map((r) => r.ten),
   };
+}
+
+// ── Cách cục / ý nghĩa cung Phu Thê (đọc thẳng từ engine, không tự suy) ────
+// Đây là dữ liệu ƯU TIÊN CAO NHẤT (Henry yêu cầu) — engine đã có sẵn diễn giải
+// định tính về hôn nhân (hôn nhân muộn, chênh lệch tuổi, xa cách, đa tình...)
+// qua phanTichCachCuc()/phanTichCungYNghia(). Route đưa văn bản này cho LLM
+// ĐỌC và rút tín hiệu (tuổi tác/tính cách/hoàn cảnh), thay vì tự đoán từ sao.
+export interface PhuTheReadout {
+  chinhTinh: string[];
+  phuTinh: string[];
+  cachCuc: { ten: string; loai: string; moTa: string; chiTiet: string }[];
+  yNghia: string[];
+}
+
+function fmtStarDisplay(s: StarObj): string {
+  return s.brightness ? `${s.ten} (${s.brightness})` : s.ten;
+}
+
+export function getPhuTheReadout(ls: Laso): PhuTheReadout {
+  const palaces = (ls.palaces as Rec[]) || [];
+  const p = palaces.find((x) => x.cungName === 'Phu Thê') as Rec | undefined;
+
+  const chinhTinh = ((p?.majorStars as StarObj[]) || []).map(fmtStarDisplay);
+  const phuTinh = ((p?.stars as StarObj[]) || [])
+    .filter((s) => s.nhom !== 'chinh')
+    .map(fmtStarDisplay);
+
+  const cachCucAll = Array.isArray(ls.cachCuc) ? (ls.cachCuc as Rec[]) : [];
+  const cachCuc = cachCucAll
+    .filter((c) => String(c.cung || '').split('/').includes('Phu Thê'))
+    .map((c) => ({
+      ten: String(c.ten || ''),
+      loai: String(c.loai || ''),
+      moTa: String(c.moTa || ''),
+      chiTiet: String(c.chiTiet || ''),
+    }));
+
+  const yNghia = ((ls.cachCucTungCung as Record<string, string[]>) || {})['Phu Thê'] || [];
+
+  return { chinhTinh, phuTinh, cachCuc, yNghia };
+}
+
+// Format gọn cho prompt LLM — đúng nguyên văn diễn giải engine, LLM chỉ ĐỌC
+// và rút tín hiệu, KHÔNG được tự bịa thêm cách cục không có trong danh sách.
+export function formatPhuTheForLLM(r: PhuTheReadout): string {
+  const lines: string[] = [];
+  if (r.chinhTinh.length) lines.push('Chính tinh tại Phu Thê: ' + r.chinhTinh.join(', '));
+  if (r.phuTinh.length) lines.push('Phụ tinh tại Phu Thê: ' + r.phuTinh.join(', '));
+  if (r.cachCuc.length) {
+    lines.push(
+      'Cách cục đặc biệt: ' + r.cachCuc.map((c) => `${c.ten} — ${c.moTa}`).join(' | '),
+    );
+  }
+  if (r.yNghia.length) lines.push('Ý nghĩa (cổ pháp): ' + r.yNghia.join(' | '));
+  return lines.join('\n') || '(Không có cách cục đặc biệt nổi bật tại Phu Thê.)';
 }
 
 // Format gọn cho prompt LLM (Vietnamese) — chỉ liệt kê field có giá trị.
