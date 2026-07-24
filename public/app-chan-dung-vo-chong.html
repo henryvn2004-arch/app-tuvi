@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chân Dung Vợ Chồng — Tử Vi Minh Bảo</title>
-<meta name="description" content="AI phân tích cung Phu Thê trong lá số rồi vẽ chân dung người vợ/chồng tương lai kèm mô tả tính cách, phong thái.">
+<meta name="description" content="AI phân tích cung Phu Thê trong lá số rồi vẽ chân dung người bạn đời kèm mô tả tính cách, phong thái.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -64,7 +64,7 @@
       <div id="introHost"></div>
       <div class="form-card" id="birthPanel">
         <h2>Nhập ngày sinh của bạn (dương lịch)</h2>
-        <p class="sub">AI sẽ lập lá số, phân tích cung Phu Thê rồi vẽ chân dung người vợ/chồng tương lai.</p>
+        <p class="sub">AI sẽ lập lá số, phân tích cung Phu Thê rồi vẽ chân dung người bạn đời.</p>
         <div class="frow">
           <div class="fg" style="width:90px"><label>Giới tính</label><select id="inpGender"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
           <div class="fg" style="width:74px"><label>Ngày (DL)</label><select id="inpDd"></select></div>
@@ -118,6 +118,9 @@
                   <p id="meetingText" style="margin:6px 0 0"></p>
                 </div>
               </div>
+              <div style="width:100%;margin-top:6px;background:#FBF3DE;border:1px solid #e8d9b0;border-radius:8px;padding:12px 14px;font-size:12.5px;line-height:1.6;color:#5a5145">
+                💡 Chân dung này chỉ mang tính minh hoạ và tham khảo, được AI mô phỏng từ đặc điểm hình dáng gắn với chính tinh, phụ tinh tại cung Phu Thê trong lá số của bạn — không phải ảnh chụp hay dự đoán chính xác diện mạo người bạn đời ngoài đời thực. Để có kết quả sát thực hơn, cần đối chiếu thêm với lá số thật của người đó.
+              </div>
             </div>
           </div>
         </div>
@@ -137,7 +140,7 @@
 </div>
 
 <script>window.SHELL_ACTIVE='chan-dung-vo-chong';
-window.SHELL_INTRO={key:'chan-dung-vo-chong',title:'Chân Dung Vợ Chồng',desc:'AI phân tích cung <b>Phu Thê</b> trong lá số rồi vẽ <b>chân dung</b> người vợ/chồng tương lai kèm mô tả tính cách, phong thái.'};</script>
+window.SHELL_INTRO={key:'chan-dung-vo-chong',title:'Chân Dung Vợ Chồng',desc:'AI phân tích cung <b>Phu Thê</b> trong lá số rồi vẽ <b>chân dung</b> người bạn đời kèm mô tả tính cách, phong thái.'};</script>
 <script src="/laso-chart.js?v=2"></script>
 <script src="/tuvi-paywall.js"></script>
 <script src="/auth.js"></script>
@@ -211,7 +214,7 @@ async function _doGenerate() {
 
     _resultImgUrl = data.imageUrl;
     document.getElementById('resultImg').src = data.imageUrl;
-    document.getElementById('descTitle').textContent = data.spouseGender === 'nu' ? 'Người Vợ Tương Lai' : 'Người Chồng Tương Lai';
+    document.getElementById('descTitle').textContent = data.spouseGender === 'nu' ? 'Người Vợ' : 'Người Chồng';
     document.getElementById('descMeta').textContent = 'Ước lượng khoảng ' + data.spouseAge + ' tuổi';
     document.getElementById('descText').textContent = data.description;
     var meetingBlock = document.getElementById('meetingBlock');
