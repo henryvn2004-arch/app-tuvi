@@ -75,13 +75,16 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     '1) "imagePrompt": MỘT đoạn tiếng ANH liền mạch (80-120 từ). BẮT ĐẦU bằng ĐÚNG 1 câu tổng quan/khái quát ' +
     '(overall gestalt — ấn tượng chung: vóc dáng, khí chất, độ trẻ trung) rồi MỚI đi vào liệt kê đặc điểm cụ thể ' +
     '(face shape, eyes, nose, lips, hair style và màu tóc tự nhiên, tông da tự nhiên...) — KHÔNG liệt kê chi tiết ' +
-    'ngay câu đầu, tránh cảm giác rời rạc như ráp từng mảnh. LUÔN mô tả theo hướng TRẺ TRUNG, THU HÚT, HIỆN ĐẠI ' +
-    'như một bức ảnh thời trang/beauty thật — nếu (A)/(B) gợi ý tính cách mạnh mẽ/nghiêm nghị/trầm tĩnh thì CHỈ ' +
-    'thể hiện qua ÁNH MẮT và THẦN THÁI (vd "sharp confident gaze", "calm composed expression"), TUYỆT ĐỐI KHÔNG ' +
-    'dùng từ ngữ gợi già dặn/khắc khổ/phong trần/nhiều nếp nhăn (cấm các ý kiểu "mature", "weathered", "aged", ' +
-    '"world-worn"). KHÔNG tự thêm mô tả phong cách nghệ thuật/ánh sáng/máy ảnh/chủng tộc (phần đó server tự ' +
-    'ghép), KHÔNG nhắc chiêm tinh/tử vi/tên sao. Các đặc điểm KHÔNG được mâu thuẫn nhau — nếu (A) và (B) mâu ' +
-    'thuẫn, ưu tiên (B) nhưng vẫn giữ tinh thần trẻ trung nói trên.\n' +
+    'ngay câu đầu, tránh cảm giác rời rạc như ráp từng mảnh. LUÔN mô tả theo hướng TRẺ TRUNG, TƯƠI TẮN, RẠNG RỠ, ' +
+    'THU HÚT như một bức ảnh đời thường tự nhiên — BẮT BUỘC biểu cảm là NỤ CƯỜI ẤM ÁP, NHẸ NHÀNG (a warm, gentle, ' +
+    'genuine smile), ánh mắt sáng, tươi vui, dễ gần. Dù (A)/(B) gợi ý tính cách mạnh mẽ/nghiêm nghị/lạnh lùng/ít ' +
+    'cười thì đó CHỈ là cá tính nội tâm — KHÔNG được chuyển thành biểu cảm lạnh/nghiêm/ít cười trên khuôn mặt; ' +
+    'cá tính mạnh CHỈ thể hiện qua ÁNH MẮT tự tin, sắc sảo (vd "confident, bright eyes") trong khi biểu cảm tổng ' +
+    'thể VẪN PHẢI ấm áp và tươi cười. TUYỆT ĐỐI CẤM các từ/ý: "cold", "stern", "serious", "intense", "unsmiling", ' +
+    '"rarely smiles", "menacing", "hardened" — và CẤM từ ngữ gợi già dặn/khắc khổ/phong trần/nhiều nếp nhăn (cấm ' +
+    '"mature", "weathered", "aged", "world-worn"). KHÔNG tự thêm mô tả phong cách nghệ thuật/ánh sáng/máy ảnh/' +
+    'chủng tộc (phần đó server tự ghép), KHÔNG nhắc chiêm tinh/tử vi/tên sao. Các đặc điểm KHÔNG được mâu thuẫn ' +
+    'nhau — nếu (A) và (B) mâu thuẫn, ưu tiên (B) nhưng vẫn giữ tinh thần tươi tắn, ấm áp nói trên.\n' +
     '2) "description": đoạn tiếng VIỆT (120-180 từ), văn xuôi tự nhiên mô tả khuôn mặt, hình dáng, phong thái, ' +
     'tính cách VÀ (nếu (B) có gợi ý) hoàn cảnh hôn nhân (vd duyên muộn, gặp nhau nơi xa, tính cách vui vẻ/trầm ' +
     'lặng...) — KHÔNG nhắc tên sao/thuật ngữ tử vi, đọc như lời tả người thật.\n' +
@@ -130,13 +133,11 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   const spouseAge = Math.max(18, Math.min(80, morph.baseAge + finalOffset));
   const spouseGender = parsed.sameSexHint ? userGender : morph.spouseGender;
 
-  // Style — modern Korean-style fashion/beauty portrait photography (THAY banknote/
-  // steel-engraving cũ). Lý do đổi: kỹ thuật khắc bản đồng vốn dùng cross-hatching
-  // dày đặc mô phỏng nét khắc cổ — mà nét khắc đó tự bản thân nó ĐÃ giống nếp nhăn/
-  // da khắc khổ, nên dù đã có disclaimer tuổi rõ ràng, ảnh ra vẫn già hơn tuổi thật
-  // khá nhiều (Henry phản hồi 2 lần). Ảnh chụp chân dung thời trang/beauty hiện đại
-  // (soft lighting, da láng mịn, phong cách Hàn Quốc) tự nhiên nghiêng về trẻ/đẹp,
-  // không cần "chống già" bằng kỹ thuật vẽ nữa.
+  // Style — bright natural lifestyle portrait photography, ngoài trời, tươi tắn (THAY
+  // bản "Korean studio/editorial beauty" trước — bản đó vẫn ra ảnh nghiêm/lạnh như
+  // headshot công sở vì thiếu chỉ định NỤ CƯỜI + bối cảnh ngoài trời + trang phục đời
+  // thường; Henry gửi ảnh mẫu tham chiếu: ngoài trời, nắng dịu, tán lá xanh bokeh phía
+  // sau, áo sơ mi denim khoác ngoài, cười nhẹ ấm áp — nay khớp đúng phong cách đó).
   // Nói RÕ tuổi bằng số cụ thể (không dùng "in their Xs" — dễ bị model đẩy về
   // cuối thập niên) + tách bạch rõ "cá tính/thần thái" khỏi "tuổi tác/làn da" để
   // model không tự già hóa khuôn mặt theo tính cách nghiêm nghị/sắc sảo.
@@ -149,17 +150,23 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   const ethnicityLine = parsed.foreignHint
     ? 'The person has Vietnamese Southeast Asian facial features, with a subtle hint of well-traveled or mixed heritage — as if the couple met while one of them was living or traveling far from home.'
     : 'The person has classic Vietnamese Southeast Asian facial features.';
+  // Nhắc "nụ cười ấm áp" CẢ TRƯỚC LẪN SAU đoạn imagePrompt (bracket kỹ thuật) — vì
+  // (A)/(B) hay mang cá tính lạnh/ít cười (vd sao Thất Sát/Liêm Trinh/Tham Lang),
+  // LLM có thể lỡ nhét chữ "cold/serious" vào dù đã cấm ở sys prompt; nhắc lại 2 lần
+  // để chỉ định thị giác THẮNG cá tính nội tâm khi ra ảnh.
   const finalPrompt =
-    `A modern professional portrait photograph of a ${spouseAge}-year-old ${genderWord}, shot in the style of ` +
-    'contemporary Korean fashion and beauty photography — soft diffused studio lighting, clean bright ' +
-    'background, natural glowing skin, trendy modern hairstyle and subtle makeup/styling, shallow depth of ' +
-    `field like a high-end editorial headshot or K-beauty campaign photo. ${ethnicityLine} The subject looks ` +
-    `youthful, attractive and healthy, with smooth even skin realistically appropriate for exactly ${spouseAge} ` +
-    'years old — NOT older, no visible wrinkles or signs of aging beyond what is natural for this exact age. ' +
-    'Any strong or serious personality traits should read through the eyes and expression only, never through ' +
-    `aged or weathered skin. ${parsed.imagePrompt} Photorealistic, high resolution, natural color photography, ` +
-    'sharp focus on the eyes, warm flattering color grade, half-body or head-and-shoulders framing. No text, ' +
-    'no watermark, no logo.';
+    `A bright, natural lifestyle portrait photograph of a ${spouseAge}-year-old ${genderWord}, taken outdoors in ` +
+    'soft natural daylight with a softly blurred green foliage bokeh background, wearing a casual modern ' +
+    `everyday outfit. ${ethnicityLine} The subject has a warm, genuine, gentle smile and a fresh, cheerful, ` +
+    'approachable expression — bright eyes, relaxed and happy, radiating positive energy. Regardless of any ' +
+    'strong, serious, or intense underlying personality, the facial expression here must stay warm and softly ' +
+    `smiling — NEVER cold, stern, unsmiling, or intense. The subject looks youthful, healthy and vibrant, with ` +
+    `smooth glowing skin realistically appropriate for exactly ${spouseAge} years old — NOT older, no visible ` +
+    `wrinkles or tired/serious features. ${parsed.imagePrompt} Regardless of the above, the final expression ` +
+    'must still read as warm and gently smiling above all else — bright, fresh, and full of life, like a candid ' +
+    'everyday snapshot, not a formal or corporate headshot. Photorealistic, high resolution, natural color ' +
+    'photography, soft natural lighting, sharp focus on the eyes, lively candid feel, half-body or ' +
+    'head-and-shoulders framing. No text, no watermark, no logo.';
 
   let imageB64: string;
   try {
