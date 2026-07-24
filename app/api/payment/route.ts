@@ -1090,6 +1090,7 @@ export async function GET(request: NextRequest) {
   if (action === 'check')        return handleCheck(searchParams);
   if (action === 'admin-users')  return handleAdminUsers(request, searchParams);
   if (action === 'admin-users-list') return handleAdminUsersList(request);
+  if (action === 'admin-login-attempts') return handleAdminLoginAttempts(request);
   if (action === 'admin-user-detail') return handleAdminUserDetail(request, searchParams);
   if (action === 'admin-marketing') return handleAdminMarketing(request, searchParams);
   if (action === 'admin-dashboard-v2') return handleAdminDashboardV2(request);
@@ -1122,6 +1123,22 @@ async function handleAdminUsersList(request: NextRequest): Promise<Response> {
   );
   if (!res.ok) return err('Lỗi tải danh sách', 500);
   return ok({ users: await res.json() });
+}
+
+// GET admin-login-attempts: audit log đăng nhập admin (owner-only — chứa
+// email/IP thử đăng nhập, xem _patches/migration-admin-login-attempts.sql).
+async function handleAdminLoginAttempts(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+  if (admin.role !== 'owner') return err('Chỉ Owner mới xem được audit log đăng nhập', 403);
+
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/admin_login_attempts?select=email,ip,success,method,detail,created_at&order=created_at.desc&limit=200`,
+    { headers: SB_HEADERS }
+  );
+  if (!res.ok) return err('Lỗi tải audit log', 500);
+  return ok({ attempts: await res.json() });
 }
 
 async function handleAdminUsersUpsert(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
