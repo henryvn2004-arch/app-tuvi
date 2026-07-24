@@ -68,10 +68,9 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   // (Henry yêu cầu) — LLM chỉ ĐỌC văn bản có sẵn để rút tín hiệu, KHÔNG được
   // tự bịa cách cục không có trong danh sách.
   const sys =
-    'Bạn là art director cho một bức tranh minh họa chân dung nghệ thuật (fine-art portrait illustration), nét ' +
-    'vẽ PHÓNG KHOÁNG, BIỂU CẢM (loose, expressive brushwork như phác họa/sketch nghệ thuật), MÀU SẮC RỰC RỠ, ' +
-    'TƯƠI TẮN, bão hòa (KHÔNG phải tranh sơn dầu tối màu cổ điển kiểu Rembrandt, KHÔNG đơn sắc/than chì), kiêm ' +
-    'luận giải Tử Vi. Nhận (A) bộ đặc điểm hình thể suy từ sao tại Phu Thê, và (B) cách cục/ý nghĩa cổ pháp tại ' +
+    'Bạn là art director cho một bức ẢNH chân dung editorial cao cấp (ultra-realistic premium editorial lifestyle ' +
+    'portrait photography, phong cách Korean luxury editorial — "quiet luxury", ấm áp, tinh tế, tự nhiên, KHÔNG ' +
+    'phải tranh vẽ/minh họa/phác họa, KHÔNG đơn sắc), kiêm luận giải Tử Vi. Nhận (A) bộ đặc điểm hình thể suy từ sao tại Phu Thê, và (B) cách cục/ý nghĩa cổ pháp tại ' +
     'Phu Thê (engine đã tính sẵn — ĐÂY LÀ NGUỒN ƯU TIÊN CAO NHẤT, cao hơn (A), vì phản ánh đúng cổ pháp chứ ' +
     'không chỉ suy diễn hình thể). Nhiệm vụ:\n' +
     '1) "imagePrompt": MỘT đoạn tiếng ANH liền mạch (80-120 từ). BẮT ĐẦU bằng ĐÚNG 1 câu tổng quan/khái quát ' +
@@ -137,13 +136,13 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   const spouseAge = Math.max(18, Math.min(80, morph.baseAge + finalOffset));
   const spouseGender = parsed.sameSexHint ? userGender : morph.spouseGender;
 
-  // Style — VIBRANT, loosely-painted fine-art portrait illustration (THAY bản "gouache/
-  // storybook" trước — Henry vẫn thấy màu chưa đủ rực rỡ/tươi tắn và muốn đổi cách vẽ
-  // chân dung, gửi 2 ảnh mẫu tham chiếu: (1) 1 bức phác họa than chì/graphite phóng
-  // khoáng, nét vẽ biểu cảm, khí chất nghệ thuật thanh lịch — lấy KỸ THUẬT vẽ phóng
-  // khoáng/biểu cảm này; (2) bức minh họa cô gái+ong đã dùng trước (nắng vàng, xanh lá,
-  // màu tươi) — lấy BẢNG MÀU rực rỡ, ấm. Kết hợp: vẽ phóng khoáng kiểu (1) NHƯNG lên
-  // màu SỐNG ĐỘNG bão hòa như (2), tuyệt đối không đơn sắc/than chì thuần.
+  // Style — chuyển hẳn từ tranh minh họa (illustration) SANG ảnh chụp editorial cao cấp
+  // (Henry gửi 1 ảnh mẫu tham chiếu dạng "premium editorial portrait board" — Korean
+  // luxury editorial, quiet luxury, ảnh chụp DSLR 85mm f/1.8, ánh sáng cửa sổ tự nhiên,
+  // bảng màu be/kem trung tính, KHÔNG beauty filter/KHÔNG giả AI). Bản gốc Henry gửi là
+  // layout NHIỀU ảnh (1 ảnh chính + 8-10 ảnh phụ khác góc/pose) cho 1 "character sheet" —
+  // KHÔNG áp dụng phần layout đó vì tool chỉ sinh 1 ảnh/lượt; chỉ lấy phần STYLE/
+  // PHOTOGRAPHY/WARDROBE/MOOD/QUALITY áp cho 1 chân dung đơn.
   // Tuổi: vẫn dùng RANGE lệch xuống dưới spouseAge (giữ nguyên cơ chế từ bản trước, ổn).
   const ageHigh = Math.max(20, spouseAge - 2);
   const ageLow = Math.max(18, ageHigh - 6);
@@ -161,21 +160,26 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   // thể lỡ nhét chữ "cold/serious/dark/muted" vào dù đã cấm ở sys prompt; nhắc lại 2 lần
   // để chỉ định thị giác THẮNG cá tính nội tâm khi ra ảnh.
   const finalPrompt =
-    `A vibrant, richly colored fine-art portrait illustration — loose, expressive brushwork with confident, ` +
-    `lively mark-making (like an artistic portrait sketch or plein-air painting, NOT a photograph, NOT a dark ` +
-    `classical oil painting, NOT a flat stock-photo look, NOT monochrome or grayscale) of a ${genderWord} who ` +
-    `appears to be roughly ${ageLow}-${ageHigh} years old, no older. ${ethnicityLine} Wearing stylish, modern ` +
-    'Asian fashion clothing. Vivid, saturated warm colors throughout — golden sunlight, lush green natural ' +
-    'background softly out of focus, glowing warm skin tones, a fresh and lively mood. BRIGHT and colorful in ' +
-    'tone throughout, NEVER dark, shadowy, muted, dull, desaturated, or somber; avoid heavy chiaroscuro or ' +
-    'dim/flat lighting entirely. The subject has a warm, gentle, soft smile and a bright, fresh, approachable ' +
-    'expression — relaxed and happy, NEVER cold, stern, unsmiling, or serious. The subject looks youthful and ' +
-    `vibrant, with smooth soft skin appropriate for someone between ${ageLow} and ${ageHigh} years old — not ` +
-    `older, no heavy wrinkles or tired features. ${parsed.imagePrompt} Regardless of the above, the overall ` +
-    'image must stay VIBRANT, colorful and warm — rich saturated colors full of light, never dull or dark; ' +
-    'keep the expression warm and the skin youthful. Elegant, expressive painterly illustration quality with ' +
-    'visible brushstrokes, soft-focus background, half-body or head-and-shoulders framing. No text, no ' +
-    'watermark, no signature.';
+    `An ultra-realistic, premium editorial lifestyle portrait photograph of a ${genderWord} who appears to be ` +
+    `roughly ${ageLow}-${ageHigh} years old, no older — Korean luxury editorial aesthetic, "quiet luxury", warm, ` +
+    'elegant, refined and timeless, Apple/Muji-inspired minimalism, natural and authentic premium feeling (NOT ' +
+    'a painting, NOT an illustration, NOT a sketch, NOT monochrome or grayscale, NOT a dark or moody image). ' +
+    `${ethnicityLine} Professional DSLR photography, 85mm portrait lens, f/1.8 shallow depth of field, soft ` +
+    'natural window light, diffused warm daylight, soft gentle shadows, cinematic but natural — ultra-realistic ' +
+    'skin texture, NO beauty filter, NO exaggerated AI look, NO plastic or airbrushed skin. Soft beige, cream ' +
+    'and neutral color palette throughout the scene and wardrobe; BRIGHT and warm in tone throughout, NEVER ' +
+    'dark, shadowy, muted, dull, desaturated, or somber; avoid heavy chiaroscuro or dim/flat lighting entirely. ' +
+    'Wearing minimalist, quiet-luxury clothing in cream, ivory, beige or white tones, elegant but simple, no ' +
+    'logos, no flashy accessories. Bright modern warm-neutral home interior, softly blurred background, ' +
+    'natural window lighting, no clutter. The subject has a warm, gentle, natural smile and a bright, ' +
+    'approachable, trustworthy expression — relaxed and happy, NEVER cold, stern, unsmiling, or serious. The ' +
+    'subject looks youthful and vibrant, with smooth soft natural skin appropriate for someone between ' +
+    `${ageLow} and ${ageHigh} years old — not older, no heavy wrinkles or tired features. ${parsed.imagePrompt} ` +
+    'Regardless of the above, the overall image must stay BRIGHT, warm and natural — soft beige and cream ' +
+    'tones full of gentle light, never dull or dark; keep the expression warm and gentle, the skin youthful, ' +
+    'natural and photorealistic (no beauty filter, no AI-plastic look). High-end magazine quality, 8K, ' +
+    'extremely detailed, natural skin texture, no artifacts, no distorted anatomy, single portrait only, ' +
+    'half-body or head-and-shoulders framing. No text, no watermark, no signature.';
 
   let imageB64: string;
   try {
