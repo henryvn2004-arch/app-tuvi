@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chân Dung Vợ Chồng — Tử Vi Minh Bảo</title>
+<meta name="description" content="AI phân tích cung Phu Thê trong lá số rồi vẽ chân dung người vợ/chồng tương lai kèm mô tả tính cách, phong thái.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shell.css?v=14">
+<style>
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
+.res-block{border:1px solid #E8E8E8;border-radius:10px;margin-bottom:16px;background:#fff;overflow:hidden}
+.res-block-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#F5F4F0;border-bottom:1px solid #E8E8E8}
+.res-block-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#061A2E}
+.res-block-body{padding:18px;color:#2a2118}
+.err{color:var(--red);font-size:13px;margin-top:8px;display:none}
+.err.active{display:block}
+#loading{display:none;text-align:center;padding:30px 10px;color:var(--text-lt)}
+#card{display:none;gap:26px;flex-wrap:wrap;align-items:flex-start}
+#card img{width:280px;max-width:100%;border-radius:12px;box-shadow:0 8px 24px rgba(6,26,46,.16);display:block}
+.cdvc-actions{display:flex;gap:8px;margin-top:12px}
+.cdvc-actions .btn{flex:1;text-align:center}
+.cdvc-desc{flex:1;min-width:240px}
+.cdvc-desc h3{font-family:var(--serif);color:#061A2E;margin-bottom:8px;font-size:15px}
+.cdvc-meta{font-size:12px;color:var(--text-lt);margin-bottom:10px}
+.cdvc-desc p{font-size:13.5px;line-height:1.8;color:#2a2118}
+#histList{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+#histList img{width:56px;height:56px;object-fit:cover;border-radius:8px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Chân Dung Vợ Chồng</b><span>Vẽ chân dung người phối ngẫu từ cung Phu Thê</span></div>
+      <div class="ws-actions">
+        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Vẽ Lại</button>
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div class="form-card" id="birthPanel">
+        <div id="tvf-container"></div>
+        <div class="err" id="error-msg"></div>
+      </div>
+
+      <div id="resPanel" style="display:none">
+        <div class="res-block">
+          <div class="res-block-header"><span class="res-block-title">Chân Dung Người Phối Ngẫu</span></div>
+          <div class="res-block-body">
+            <div id="loading">
+              <div>AI đang vẽ chân dung... (20–40 giây)</div>
+            </div>
+            <div id="card">
+              <div>
+                <img id="resultImg" alt="Chân dung người phối ngẫu">
+                <div class="cdvc-actions">
+                  <button class="btn" onclick="downloadResult()">⬇ Tải Ảnh</button>
+                </div>
+              </div>
+              <div class="cdvc-desc">
+                <h3 id="descTitle">Mô Tả</h3>
+                <div class="cdvc-meta" id="descMeta"></div>
+                <p id="descText"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="res-block" id="histBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Đã Vẽ Trước Đó</span></div>
+          <div class="res-block-body"><div id="histList"></div></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='chan-dung-vo-chong';
+window.SHELL_INTRO={key:'chan-dung-vo-chong',title:'Chân Dung Vợ Chồng',desc:'AI phân tích cung <b>Phu Thê</b> trong lá số rồi vẽ <b>chân dung</b> người vợ/chồng tương lai kèm mô tả tính cách, phong thái.'};</script>
+<script src="/tuvi-form.js"></script>
+<script src="/tuvi-paywall.js"></script>
+<script src="/auth.js"></script>
+<script src="/shell.js?v=42"></script>
+<script>
+let _currentSlug = '';
+let _resultImgUrl = '';
+let _lastBirth = null;
+
+TuviForm.render('tvf-container', { onSubmit: analyze, submitLabel: 'Vẽ Chân Dung →', mode: 'full', showSample: false });
+
+function showError(msg) {
+  const e = document.getElementById('error-msg');
+  if (msg) { e.textContent = msg; e.classList.add('active'); } else { e.classList.remove('active'); }
+}
+
+async function analyze() {
+  showError('');
+  const d = TuviForm.getData();
+  if (!d.ngay || !d.thang || !d.nam) { showError('Vui lòng nhập đầy đủ ngày tháng năm sinh.'); return; }
+
+  _currentSlug = TuviPaywall.generateToolSlug('chan-dung-vo-chong-' + d.ngay + '-' + d.thang + '-' + d.nam);
+  await TuviPaywall.requireCredits(_currentSlug, async () => { await _doGenerate(d); });
+}
+
+async function _doGenerate(d) {
+  _lastBirth = { day: d.ngay, month: d.thang, year: d.nam, hourBranch: d.gioIdx, gender: d.gioitinh, isLunar: false };
+
+  document.getElementById('birthPanel').style.display = 'none';
+  document.getElementById('resPanel').style.display = 'block';
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('card').style.display = 'none';
+
+  try {
+    const token = window.Auth?.getSession()?.access_token || '';
+    const res = await fetch('/api/chan-dung-vo-chong', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify({ birth: _lastBirth }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
+
+    _resultImgUrl = data.imageUrl;
+    document.getElementById('resultImg').src = data.imageUrl;
+    document.getElementById('descTitle').textContent = data.spouseGender === 'nu' ? 'Người Vợ Tương Lai' : 'Người Chồng Tương Lai';
+    document.getElementById('descMeta').textContent = 'Ước lượng khoảng ' + data.spouseAge + ' tuổi';
+    document.getElementById('descText').textContent = data.description;
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('card').style.display = 'flex';
+    document.getElementById('btnEdit').style.display = '';
+    if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+    _loadHistory();
+
+    Shell.setContext({
+      birth: _lastBirth,
+      label: 'Chân dung vợ chồng',
+      greeting: 'Đã vẽ xong chân dung dựa trên cung Phu Thê của bạn. Muốn hỏi thêm về hôn nhân, cung Phu Thê hay lá số?',
+      chips: ['Cung Phu Thê của tôi có gì đặc biệt?', 'Hôn nhân của tôi có thuận không?', 'Bao giờ tôi lập gia đình?', 'Xem thêm về tính cách của tôi'],
+    });
+  } catch (e) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('resPanel').style.display = 'none';
+    document.getElementById('birthPanel').style.display = 'block';
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+  }
+}
+
+async function downloadResult() {
+  if (!_resultImgUrl) return;
+  try {
+    const res = await fetch(_resultImgUrl);
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'chan-dung-vo-chong.png';
+    a.click(); URL.revokeObjectURL(url);
+  } catch (e) { window.open(_resultImgUrl, '_blank'); }
+}
+
+function showForm() {
+  document.getElementById('resPanel').style.display = 'none';
+  document.getElementById('birthPanel').style.display = 'block';
+  document.getElementById('btnEdit').style.display = 'none';
+}
+
+async function _loadHistory() {
+  try {
+    const token = window.Auth?.getSession()?.access_token || '';
+    if (!token) return;
+    const res = await fetch('/api/chan-dung-vo-chong?action=history', { headers: { Authorization: 'Bearer ' + token } });
+    const data = await res.json();
+    if (!data.success || !data.items?.length) return;
+    document.getElementById('histList').innerHTML = data.items.map(it =>
+      '<img src="' + it.image_url + '" title="' + (it.spouse_gender === 'nu' ? 'Vợ' : 'Chồng') + ' — ' + it.spouse_age + ' tuổi" onclick="window.open(\'' + it.image_url + '\',\'_blank\')">'
+    ).join('');
+    document.getElementById('histBlock').style.display = 'block';
+  } catch (e) {}
+}
+
+TuviPaywall.init({ product: 'chan-dung-vo-chong', slug: () => _currentSlug });
+</script>
+</body>
+</html>

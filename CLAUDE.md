@@ -5,6 +5,54 @@
 
 ---
 
+## 🆕 Tool mới — "Chân Dung Vợ Chồng" (2026-07-24, CHƯA COMMIT/CHƯA DEPLOY)
+
+Vẽ chân dung người phối ngẫu suy từ cung Phu Thê trong lá số (OpenAI `gpt-image-1`
+text-to-image — KHÔNG cần ảnh input, khác hẳn Replicate flux-kontext-pro đang dùng
+cho tool try-on). Cả 2 bản: standalone + shell, giống mọi tool khác.
+
+- **Dữ liệu nguồn:** Henry cung cấp file Excel "Hình dáng mệnh khi sao đóng vào.xlsx"
+  (bảng tra hình dáng theo 111 sao — Sheet1 mô tả ngắn VI, Sheet2 = 14 field chi tiết
+  + "Sketch Prompt" tiếng Anh sẵn) + file instructions thuật toán rank/merge sao
+  ("Portrait Generation Engine - Star..."). Đã port → `lib/engine/data/portrait-stars.json`
+  (script Python 1 lần, không lưu script — chỉ lưu output JSON).
+- **`lib/engine/portrait.ts`** — `computeSpouseMorphology(ls, gender)`: THUẦN
+  deterministic (không gọi LLM). Rank sao tại Phu Thê + tam-phương-tứ-chiếu (tái
+  dùng `p.tamHopCungs`/`p.xungChieuCung` có sẵn trong engine) theo 4 cấp ưu tiên +
+  bonus ngũ hành/độ sáng sao (đúng thuật toán file instructions) → khóa khung
+  mặt/vóc dáng từ sao core, sao phụ chỉ tinh chỉnh mắt/môi/da/khí chất. Độ tuổi
+  phối ngẫu = tuổi hiện tại ± offset suy từ vài sao tại Phu Thê (Cô Thần/Đào Hoa/...
+  — heuristic v1, biên độ nhỏ, có thể tinh chỉnh sau).
+- **`lib/image/openai-image.ts`** — gọi thẳng REST `images/generations` (không SDK,
+  theo pattern `lib/llm/complete.ts`), model `gpt-image-1` (env `OPENAI_IMAGE_MODEL`
+  override được), trả base64.
+- **`app/api/chan-dung-vo-chong/route.ts`** — POST: auth Bearer token → computeLaso
+  → computeSpouseMorphology → 1 lượt LLM (Gemini/Anthropic qua `lib/llm/complete.ts`)
+  dịch+đánh bóng field đã merge thành `{imagePrompt EN, description VI}` → gọi
+  OpenAI sinh ảnh → upload Supabase Storage bucket `portraits` (public) → ghi lịch
+  sử bảng `spouse_portraits`. GET `?action=history` trả lịch sử user.
+- **Migration `_patches/migration-chan-dung-vo-chong.sql`** (✅ ĐÃ CHẠY prod qua
+  Supabase MCP — verify: bucket `portraits` + bảng `spouse_portraits` (RLS: user đọc
+  own + admin) + `tool_pricing` row `chan-dung-vo-chong` = 22 Lượng, category
+  `Luận Giải` (để rơi tab "Tử Vi" trên `/cong-cu`), icon 🖼️.
+- **Trang:** `public/tools/chan-dung-vo-chong.html` (standalone, TuviForm mode='full'
+  + TuviPaywall + JSON POST, không SSE vì kết quả là ảnh+mô tả 1 lần) +
+  `public/app-chan-dung-vo-chong.html` (shell, cùng flow, sau khi vẽ xong gọi
+  `Shell.setContext({birth,...})` — TÁI DÙNG khả năng chat lá số chung sẵn có, KHÔNG
+  thêm scenario type mới vào contract v1 để giữ phạm vi PR gọn).
+- **Đăng ký:** `next.config.mjs` rewrite `/app/chan-dung-vo-chong`; `shell.js` TOOLS
+  (nhóm Tử Vi, icon mới `image`) + `app-home.html` GROUPS + `cong-cu.html` TOOL_URLS;
+  `tuvi-paywall.js` PRODUCTS/TOOL_TYPE fallback; bump `shell.js?v=42` toàn bộ trang shell.
+- **Verify:** typecheck 0 lỗi, eslint shell.js/tuvi-paywall.js sạch, node --check 2
+  script block HTML mới OK, Playwright smoke (dev server) cả 2 trang render đúng,
+  sidebar link + form + rail hiện đúng, không lỗi console.
+- **CÒN LẠI:** commit + PR; Henry xác nhận `OPENAI_API_KEY` đã set trên Vercel (đã
+  dùng cho embeddings, nên nhiều khả năng có sẵn — dùng chung, không cần thêm key
+  cho image); tùy chọn tinh chỉnh giá 22 Lượng + bảng age-offset heuristic sau khi
+  có phản hồi thật.
+
+---
+
 ## 🟣 ĐANG LÀM — Admin Revamp + Marketing/Conversion Tracking
 
 **Branch:** `claude/admin-page-revamp-sgnhvg`

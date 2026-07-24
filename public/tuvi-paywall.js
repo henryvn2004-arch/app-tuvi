@@ -39,6 +39,7 @@ const TuviPaywall = (() => {
     'dat-ten-con':         { cost:  20, title: 'Đặt Tên Con' },
     'dat-ten-dn':          { cost:  20, title: 'Đặt Tên Doanh Nghiệp' },
     'chon-ngay-tot':       { cost:  15, title: 'Chọn Ngày Tốt' },
+    'chan-dung-vo-chong':  { cost:  22, title: 'Chân Dung Vợ Chồng' },
   };
 
   const TOOL_TYPE = {
@@ -61,6 +62,7 @@ const TuviPaywall = (() => {
     'personal-color-tryon': 'use_personal_color_tryon',
     'dat-ten-con': 'use_dat_ten_con', 'dat-ten-dn': 'use_dat_ten_dn',
     'chon-ngay-tot': 'use_chon_ngay_tot',
+    'chan-dung-vo-chong': 'use_chan_dung_vo_chong',
   };
 
   let _cfg        = null;
