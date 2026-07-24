@@ -68,24 +68,25 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   // (Henry yêu cầu) — LLM chỉ ĐỌC văn bản có sẵn để rút tín hiệu, KHÔNG được
   // tự bịa cách cục không có trong danh sách.
   const sys =
-    'Bạn là art director cho một bức tranh minh họa chân dung (painterly illustration), có chút huyền ảo/' +
-    'mysterious, kiêm luận giải Tử Vi. Nhận (A) bộ đặc điểm hình thể suy từ sao tại Phu Thê, và (B) cách cục/ý ' +
-    'nghĩa cổ pháp tại Phu Thê (engine đã tính sẵn — ĐÂY LÀ NGUỒN ƯU TIÊN CAO NHẤT, cao hơn (A), vì phản ánh ' +
-    'đúng cổ pháp chứ không chỉ suy diễn hình thể). Nhiệm vụ:\n' +
+    'Bạn là art director cho một bức tranh minh họa chân dung (painterly illustration) ẤM ÁP, TƯƠI SÁNG, phong ' +
+    'cách gouache/storybook hiện đại (như tranh minh họa sách/editorial đương đại — KHÔNG phải tranh sơn dầu tối ' +
+    'màu cổ điển kiểu Rembrandt), kiêm luận giải Tử Vi. Nhận (A) bộ đặc điểm hình thể suy từ sao tại Phu Thê, và ' +
+    '(B) cách cục/ý nghĩa cổ pháp tại Phu Thê (engine đã tính sẵn — ĐÂY LÀ NGUỒN ƯU TIÊN CAO NHẤT, cao hơn (A), ' +
+    'vì phản ánh đúng cổ pháp chứ không chỉ suy diễn hình thể). Nhiệm vụ:\n' +
     '1) "imagePrompt": MỘT đoạn tiếng ANH liền mạch (80-120 từ). BẮT ĐẦU bằng ĐÚNG 1 câu tổng quan/khái quát ' +
-    '(overall gestalt — ấn tượng chung: vóc dáng, khí chất, độ trẻ trung, nét cuốn hút/huyền bí nhẹ) rồi MỚI đi ' +
-    'vào liệt kê đặc điểm cụ thể (face shape, eyes, nose, lips, hair style và màu tóc tự nhiên, tông da tự ' +
-    'nhiên...) — KHÔNG liệt kê chi tiết ngay câu đầu, tránh cảm giác rời rạc như ráp từng mảnh. LUÔN mô tả theo ' +
-    'hướng TRẺ TRUNG, CUỐN HÚT, có chút HUYỀN BÍ/MYSTERIOUS trong ÁNH MẮT và khí chất (vd "alluring, enigmatic ' +
-    'gaze") — nhưng biểu cảm tổng thể VẪN PHẢI ấm áp, dịu dàng hoặc nụ cười nhẹ (a warm, gentle expression or ' +
-    'soft smile), KHÔNG lạnh/dữ/nghiêm. Dù (A)/(B) gợi ý tính cách mạnh mẽ/nghiêm nghị/lạnh lùng/ít cười thì đó ' +
-    'CHỈ là cá tính nội tâm — KHÔNG được chuyển thành biểu cảm lạnh/nghiêm/ít cười trên khuôn mặt; cá tính mạnh ' +
-    'CHỈ thể hiện qua ÁNH MẮT sâu, cuốn hút, bí ẩn nhẹ trong khi biểu cảm tổng thể VẪN ấm áp, dễ gần. TUYỆT ĐỐI ' +
-    'CẤM các từ/ý: "cold", "stern", "serious", "intense", "unsmiling", "rarely smiles", "menacing", "hardened" — ' +
-    'và CẤM từ ngữ gợi già dặn/khắc khổ/phong trần/nhiều nếp nhăn (cấm "mature", "weathered", "aged", ' +
-    '"world-worn"). KHÔNG tự thêm mô tả phong cách nghệ thuật/ánh sáng/chủng tộc (phần đó server tự ghép), ' +
-    'KHÔNG nhắc chiêm tinh/tử vi/tên sao. Các đặc điểm KHÔNG được mâu thuẫn nhau — nếu (A) và (B) mâu thuẫn, ' +
-    'ưu tiên (B) nhưng vẫn giữ tinh thần trẻ trung, ấm áp nói trên.\n' +
+    '(overall gestalt — ấn tượng chung: vóc dáng, khí chất, độ trẻ trung, tươi sáng) rồi MỚI đi vào liệt kê đặc ' +
+    'điểm cụ thể (face shape, eyes, nose, lips, hair style và màu tóc tự nhiên, tông da tự nhiên, trang phục ' +
+    'thời trang châu Á hiện đại...) — KHÔNG liệt kê chi tiết ngay câu đầu, tránh cảm giác rời rạc như ráp từng ' +
+    'mảnh. LUÔN mô tả theo hướng TRẺ TRUNG, TƯƠI SÁNG, RẠNG RỠ, ẤM ÁP như tranh minh họa mùa hè nắng đẹp — biểu ' +
+    'cảm BẮT BUỘC là nụ cười nhẹ nhàng, ấm áp, ánh mắt sáng vui vẻ. Dù (A)/(B) gợi ý tính cách mạnh mẽ/nghiêm ' +
+    'nghị/lạnh lùng/ít cười thì đó CHỈ là cá tính nội tâm — KHÔNG được chuyển thành biểu cảm lạnh/nghiêm/ít cười ' +
+    'hay tông màu tối/u ám trên khuôn mặt; cá tính mạnh CHỈ thể hiện qua ÁNH MẮT tự tin trong khi biểu cảm và ' +
+    'ánh sáng tổng thể VẪN sáng sủa, ấm áp, dễ gần. TUYỆT ĐỐI CẤM các từ/ý: "cold", "stern", "serious", ' +
+    '"intense", "unsmiling", "rarely smiles", "menacing", "hardened", "mysterious", "enigmatic", "dark", ' +
+    '"moody", "somber", "shadowy", "muted", "dim" — và CẤM từ ngữ gợi già dặn/khắc khổ/phong trần/nhiều nếp ' +
+    'nhăn (cấm "mature", "weathered", "aged", "world-worn"). KHÔNG tự thêm mô tả phong cách nghệ thuật/ánh sáng/' +
+    'chủng tộc (phần đó server tự ghép), KHÔNG nhắc chiêm tinh/tử vi/tên sao. Các đặc điểm KHÔNG được mâu thuẫn ' +
+    'nhau — nếu (A) và (B) mâu thuẫn, ưu tiên (B) nhưng vẫn giữ tinh thần trẻ trung, tươi sáng nói trên.\n' +
     '2) "description": đoạn tiếng VIỆT (120-180 từ), văn xuôi tự nhiên mô tả khuôn mặt, hình dáng, phong thái, ' +
     'tính cách VÀ (nếu (B) có gợi ý) hoàn cảnh hôn nhân (vd duyên muộn, gặp nhau nơi xa, tính cách vui vẻ/trầm ' +
     'lặng...) — KHÔNG nhắc tên sao/thuật ngữ tử vi, đọc như lời tả người thật.\n' +
@@ -134,16 +135,14 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   const spouseAge = Math.max(18, Math.min(80, morph.baseAge + finalOffset));
   const spouseGender = parsed.sameSexHint ? userGender : morph.spouseGender;
 
-  // Style — artistic painterly PORTRAIT ILLUSTRATION, hơi mysterious (THAY bản "bright
-  // lifestyle photograph" trước — Henry phản hồi ảnh photoreal kiểu đó vẫn hơi già +
-  // "giống ảnh stock trên mạng quá", muốn chuyển hẳn khỏi hyper-realistic photography
-  // sang phác họa/minh họa nghệ thuật, có chút huyền bí, để (a) không lặp lại cảm giác
-  // stock-photo và (b) illustration/painterly vốn linh hoạt hơn ảnh thật, ít bị mô hình
-  // "làm già" theo phản xạ photoreal.
-  // Tuổi: đổi từ 1 SỐ CỤ THỂ sang MỘT KHOẢNG (range) LỆCH XUỐNG dưới spouseAge (thay vì
-  // quanh nó) — Henry yêu cầu thử range để bớt già; khác với "in their Xs" (tên thập
-  // niên mơ hồ, dễ bị đẩy về cuối thập niên) vì đây là range SỐ hẹp, chặn trần đúng ở
-  // mức spouseAge - 2 (không vượt quá), sàn spouseAge - 8.
+  // Style — warm, SUNLIT gouache/storybook illustration (THAY bản "painterly + mysterious"
+  // trước — bản đó ra tranh tối màu kiểu sơn dầu cổ điển/Rembrandt (nền tối, ánh sáng
+  // chiaroscuro, tông nâu trầm) vì "mysterious/moody atmospheric" bị model hiểu thành
+  // tranh cổ điển tối/nghiêm — TỆ hơn cả bản photoreal trước đó. Henry gửi ảnh mẫu tham
+  // chiếu: tranh gouache/minh họa hiện đại kiểu sách thiếu nhi/editorial — SÁNG, ấm, nắng
+  // vàng xuyên tán lá xanh, màu tươi. Bỏ HẲN "mysterious" (đã cấm luôn trong sys prompt)
+  // — chỉ giữ "painterly illustration" làm KỸ THUẬT vẽ, còn KHÔNG KHÍ phải sáng/ấm/vui.
+  // Tuổi: vẫn dùng RANGE lệch xuống dưới spouseAge (giữ nguyên cơ chế từ bản trước, ổn).
   const ageHigh = Math.max(20, spouseAge - 2);
   const ageLow = Math.max(18, ageHigh - 6);
   // "female"/"male" (thay vì "woman"/"man") — từ trung tính tuổi tác hơn, đỡ bị
@@ -155,23 +154,24 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   const ethnicityLine = parsed.foreignHint
     ? 'The person has Vietnamese Southeast Asian facial features, with a subtle hint of well-traveled or mixed heritage — as if the couple met while one of them was living or traveling far from home.'
     : 'The person has classic Vietnamese Southeast Asian facial features.';
-  // Nhắc "ấm áp, không lạnh" CẢ TRƯỚC LẪN SAU đoạn imagePrompt (bracket kỹ thuật) — vì
-  // (A)/(B) hay mang cá tính lạnh/ít cười (vd sao Thất Sát/Liêm Trinh/Tham Lang), LLM
-  // có thể lỡ nhét chữ "cold/serious" vào dù đã cấm ở sys prompt; nhắc lại 2 lần để chỉ
-  // định thị giác THẮNG cá tính nội tâm khi ra ảnh. "Mysterious" đặt ở KHÔNG KHÍ/ánh
-  // sáng/ánh mắt, KHÔNG đặt ở biểu cảm — tránh lại thành lạnh/dữ như bản trước.
+  // Nhắc "sáng, ấm, tươi" CẢ TRƯỚC LẪN SAU đoạn imagePrompt (bracket kỹ thuật) — vì
+  // (A)/(B) hay mang cá tính lạnh/ít cười (vd sao Thất Sát/Liêm Trinh/Tham Lang), LLM có
+  // thể lỡ nhét chữ "cold/serious/dark" vào dù đã cấm ở sys prompt; nhắc lại 2 lần để chỉ
+  // định thị giác THẮNG cá tính nội tâm khi ra ảnh.
   const finalPrompt =
-    `An artistic, semi-realistic painterly portrait illustration (digital painting, NOT a literal photograph, ` +
-    `NOT a stock-photo look) of a ${genderWord} who appears to be roughly ${ageLow}-${ageHigh} years old, no ` +
-    `older. ${ethnicityLine} Soft painterly brushwork, moody atmospheric lighting with gentle rim light and ` +
-    'soft shadows, a muted rich color palette, a subtle air of quiet mystery and intrigue in the atmosphere, ' +
-    'background and gaze — like a character portrait for a novel cover. The subject has a warm, gentle ' +
-    'expression with a soft, alluring, slightly enigmatic gaze — relaxed and approachable, NEVER cold, stern, ' +
-    'unsmiling, or intense; the mystery lives in the mood and lighting, not in a harsh expression. The subject ' +
-    `looks youthful and healthy, with smooth soft skin appropriate for someone between ${ageLow} and ${ageHigh} ` +
-    `years old — not older, no heavy wrinkles or tired features. ${parsed.imagePrompt} Regardless of the above, keep the ` +
-    'expression warm and the skin youthful — this is stylized illustration, not hyper-realistic aging detail. ' +
-    'Rich, evocative digital painting quality, soft-focus background, half-body or head-and-shoulders framing. ' +
+    `A warm, sunlit gouache-style painterly illustration (like a modern storybook or editorial illustration — ` +
+    `NOT a photograph, NOT a dark classical oil painting, NOT a stock-photo look) of a ${genderWord} who ` +
+    `appears to be roughly ${ageLow}-${ageHigh} years old, no older. ${ethnicityLine} Wearing stylish, modern ` +
+    'Asian fashion clothing. Soft visible brushstrokes, warm golden sunlight streaming through a softly ' +
+    'blurred green foliage background, bright warm highlights on the hair and skin, a light, dreamy, cheerful ' +
+    'mood — BRIGHT and warm in tone throughout, NEVER dark, shadowy, muted, brown-toned, somber, or moody; ' +
+    'avoid heavy chiaroscuro or dim/dramatic lighting entirely. The subject has a warm, gentle, soft smile and ' +
+    'a bright, fresh, approachable expression — relaxed and happy, NEVER cold, stern, unsmiling, or serious. ' +
+    `The subject looks youthful and vibrant, with smooth soft skin appropriate for someone between ${ageLow} ` +
+    `and ${ageHigh} years old — not older, no heavy wrinkles or tired features. ${parsed.imagePrompt} ` +
+    'Regardless of the above, the overall image must stay BRIGHT, warm and cheerful — a soft warm-toned color ' +
+    'palette full of light, never dark or somber; keep the expression warm and the skin youthful. Rich, ' +
+    'evocative painterly illustration quality, soft-focus background, half-body or head-and-shoulders framing. ' +
     'No text, no watermark, no signature.';
 
   let imageB64: string;
