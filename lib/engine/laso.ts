@@ -62,20 +62,31 @@ export function clockToBranch(hour: number): number {
 }
 
 // ── Engine loader (singleton) ───────────────────────────────
+// Nạp CHUNG tuvi-ansao-engine.js + tuvi-laso-format.js trong CÙNG một
+// new Function scope (nối chuỗi source rồi chạy 1 lần) — formatLaSoV2 tham
+// chiếu STAR_DATA như biến tự do (free variable), phải cùng closure với
+// engine mới resolve đúng (STAR_DATA là `const` top-level trong engine, KHÔNG
+// phải property của window/globalThis nếu load riêng qua 2 lần new Function).
 let engineCache: {
   convertDuongToAm: (...a: unknown[]) => unknown;
   anSaoLaSo: (...a: unknown[]) => unknown;
+  formatLaSoV2: (...a: unknown[]) => unknown;
 } | null = null;
 
 function loadEngine() {
   if (engineCache) return engineCache;
   const code = readFileSync(join(process.cwd(), 'public', 'tuvi-ansao-engine.js'), 'utf-8');
+  const formatCode = readFileSync(join(process.cwd(), 'public', 'tuvi-laso-format.js'), 'utf-8');
   const g = globalThis as Rec;
   g.window = g;
   if (!g.location) {
     g.location = { protocol: 'https:', hostname: 'tuviminhbao.com', host: 'tuviminhbao.com', port: '', href: 'https://tuviminhbao.com/', pathname: '/', search: '', hash: '' };
   }
-  engineCache = (new Function('window', 'globalThis', code + '\nreturn{convertDuongToAm,anSaoLaSo};'))(g, g) as typeof engineCache;
+  engineCache = (new Function(
+    'window',
+    'globalThis',
+    code + '\n' + formatCode + '\nreturn{convertDuongToAm,anSaoLaSo,formatLaSoV2:window.formatLaSoV2};',
+  ))(g, g) as typeof engineCache;
   return engineCache!;
 }
 
@@ -150,6 +161,19 @@ export function computeLaso(birth: BirthParams, namXem?: number): ComputeLasoRes
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'Lỗi engine' };
   }
+}
+
+/**
+ * Text đầy đủ "=== LÁ SỐ TỬ VI ===...=== 12 CUNG ===...=== 9 ĐẠI VẬN ===
+ * ...=== CÁCH CỤC & NHẬN ĐỊNH ===" — ĐÚNG format `formatLaSoV2()` mà
+ * luan-giai.html dùng client-side (tam phương/tứ chiếu, cách cục toàn cục,
+ * nhãn "Luận sao" xu hướng...). Dùng để tái sử dụng NGUYÊN flow luận giải
+ * 24-mục (`/api/lasotuvi` mode=phan) cho các route server-side khác cần
+ * luận 1 cung cụ thể (vd chân dung vợ chồng → luận Phu Thê).
+ */
+export function formatLaSoV2(ls: Laso): string {
+  const { formatLaSoV2: fn } = loadEngine();
+  return String((fn as (o: unknown) => unknown)(ls) || '');
 }
 
 // ── Format context lá số cho LLM (đầy đủ 12 cung) ───────────
