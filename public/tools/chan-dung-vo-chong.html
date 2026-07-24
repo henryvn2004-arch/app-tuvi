@@ -120,6 +120,10 @@
             <h3 id="descTitle">Mô Tả</h3>
             <div class="cdvc-meta" id="descMeta"></div>
             <p id="descText"></p>
+            <div id="meetingBlock" style="display:none;margin-top:14px">
+              <div class="cdvc-pt-title">Hoàn Cảnh Gặp Gỡ</div>
+              <p id="meetingText" style="margin:6px 0 0"></p>
+            </div>
           </div>
         </div>
       </div>
@@ -195,6 +199,11 @@ async function _doGenerate(d) {
     document.getElementById('descTitle').textContent = data.spouseGender === 'nu' ? 'Người Vợ Tương Lai' : 'Người Chồng Tương Lai';
     document.getElementById('descMeta').textContent = 'Ước lượng khoảng ' + data.spouseAge + ' tuổi';
     document.getElementById('descText').textContent = data.description;
+    const meetingBlock = document.getElementById('meetingBlock');
+    if (data.meetingContext) {
+      document.getElementById('meetingText').textContent = data.meetingContext;
+      meetingBlock.style.display = 'block';
+    } else { meetingBlock.style.display = 'none'; }
     document.getElementById('loading').style.display = 'none';
     document.getElementById('card').style.display = 'flex';
     renderPhuThe(data.phuThe);

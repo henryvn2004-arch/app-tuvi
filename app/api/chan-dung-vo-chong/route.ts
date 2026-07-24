@@ -68,27 +68,39 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   // (Henry yêu cầu) — LLM chỉ ĐỌC văn bản có sẵn để rút tín hiệu, KHÔNG được
   // tự bịa cách cục không có trong danh sách.
   const sys =
-    'Bạn là chuyên gia mô tả chân dung cho một họa sĩ khắc bản đồng (banknote engraver), kiêm luận giải Tử Vi. ' +
-    'Nhận (A) bộ đặc điểm hình thể suy từ sao tại Phu Thê, và (B) cách cục/ý nghĩa cổ pháp tại Phu Thê (engine ' +
-    'đã tính sẵn — ĐÂY LÀ NGUỒN ƯU TIÊN CAO NHẤT, cao hơn (A), vì phản ánh đúng cổ pháp chứ không chỉ suy diễn ' +
-    'hình thể). Nhiệm vụ:\n' +
+    'Bạn là giám đốc hình ảnh (art director) cho một buổi chụp chân dung thời trang/beauty hiện đại kiểu Hàn ' +
+    'Quốc, kiêm luận giải Tử Vi. Nhận (A) bộ đặc điểm hình thể suy từ sao tại Phu Thê, và (B) cách cục/ý nghĩa ' +
+    'cổ pháp tại Phu Thê (engine đã tính sẵn — ĐÂY LÀ NGUỒN ƯU TIÊN CAO NHẤT, cao hơn (A), vì phản ánh đúng cổ ' +
+    'pháp chứ không chỉ suy diễn hình thể). Nhiệm vụ:\n' +
     '1) "imagePrompt": MỘT đoạn tiếng ANH liền mạch (80-120 từ). BẮT ĐẦU bằng ĐÚNG 1 câu tổng quan/khái quát ' +
-    '(overall gestalt — ấn tượng chung: vóc dáng, khí chất, độ trẻ trung/điềm đạm...) rồi MỚI đi vào liệt kê ' +
-    'đặc điểm cụ thể (face shape, eyes, nose, lips, hair, expression...) — KHÔNG liệt kê chi tiết ngay câu đầu, ' +
-    'tránh cảm giác rời rạc như ráp từng mảnh. CHỈ mô tả HÌNH THỂ, KHÔNG tự thêm mô tả phong cách nghệ thuật/' +
-    'chủng tộc/quốc tịch (phần đó server tự ghép), KHÔNG nhắc chiêm tinh/tử vi/tên sao/tiếng Việt/màu sắc da/tóc ' +
-    '(ảnh sẽ là đen trắng). Các đặc điểm KHÔNG được mâu thuẫn nhau — nếu (A) và (B) mâu thuẫn, ưu tiên (B).\n' +
+    '(overall gestalt — ấn tượng chung: vóc dáng, khí chất, độ trẻ trung) rồi MỚI đi vào liệt kê đặc điểm cụ thể ' +
+    '(face shape, eyes, nose, lips, hair style và màu tóc tự nhiên, tông da tự nhiên...) — KHÔNG liệt kê chi tiết ' +
+    'ngay câu đầu, tránh cảm giác rời rạc như ráp từng mảnh. LUÔN mô tả theo hướng TRẺ TRUNG, THU HÚT, HIỆN ĐẠI ' +
+    'như một bức ảnh thời trang/beauty thật — nếu (A)/(B) gợi ý tính cách mạnh mẽ/nghiêm nghị/trầm tĩnh thì CHỈ ' +
+    'thể hiện qua ÁNH MẮT và THẦN THÁI (vd "sharp confident gaze", "calm composed expression"), TUYỆT ĐỐI KHÔNG ' +
+    'dùng từ ngữ gợi già dặn/khắc khổ/phong trần/nhiều nếp nhăn (cấm các ý kiểu "mature", "weathered", "aged", ' +
+    '"world-worn"). KHÔNG tự thêm mô tả phong cách nghệ thuật/ánh sáng/máy ảnh/chủng tộc (phần đó server tự ' +
+    'ghép), KHÔNG nhắc chiêm tinh/tử vi/tên sao. Các đặc điểm KHÔNG được mâu thuẫn nhau — nếu (A) và (B) mâu ' +
+    'thuẫn, ưu tiên (B) nhưng vẫn giữ tinh thần trẻ trung nói trên.\n' +
     '2) "description": đoạn tiếng VIỆT (120-180 từ), văn xuôi tự nhiên mô tả khuôn mặt, hình dáng, phong thái, ' +
     'tính cách VÀ (nếu (B) có gợi ý) hoàn cảnh hôn nhân (vd duyên muộn, gặp nhau nơi xa, tính cách vui vẻ/trầm ' +
     'lặng...) — KHÔNG nhắc tên sao/thuật ngữ tử vi, đọc như lời tả người thật.\n' +
-    '3) "ageAdjustYears": số nguyên (-10..15, mặc định 0) — CHỈ khác 0 nếu (B) có câu chữ RÕ RÀNG gợi ý chênh ' +
+    '3) "meetingContext": đoạn tiếng VIỆT NGẮN (30-60 từ) luận riêng về HOÀN CẢNH GẶP GỠ nhiều khả năng nhất ' +
+    '(vd qua công việc/học tập, qua bạn bè/người thân giới thiệu, tình cờ gặp gỡ, ở nơi xa quê hương/công tác/' +
+    'du học, quen biết lâu mới nên duyên, qua mai mối...). ƯU TIÊN bám sát gợi ý CỤ THỂ trong (B) nếu có (vd ' +
+    'Thiên Mã/Tuần/Triệt tại Phu Thê → gặp/thành hôn ở nơi xa; Phục Binh → quen biết, qua lại một thời gian rồi ' +
+    'mới cưới; Cự Môn gặp Hỏa/Linh → qua nhiều lần mai mối mới thành; Tả Phù Hữu Bật sáng sủa → có người thân/' +
+    'bạn bè mai mối, giúp đỡ). Nếu (B) KHÔNG có gợi ý cụ thể về cách gặp gỡ, chọn 1 hoàn cảnh phổ biến, tự ' +
+    'nhiên, hợp lý và diễn đạt như một khả năng nhẹ nhàng ("có thể", "nhiều khả năng") chứ không khẳng định ' +
+    'chắc chắn — KHÔNG bịa cách cục sao không có trong (B), KHÔNG nhắc tên sao/thuật ngữ tử vi.\n' +
+    '4) "ageAdjustYears": số nguyên (-10..15, mặc định 0) — CHỈ khác 0 nếu (B) có câu chữ RÕ RÀNG gợi ý chênh ' +
     'lệch tuổi với bạn đời (vd "nên lấy người lớn tuổi hơn" → số dương; "nên chênh lệch tuổi" mà không rõ ' +
     'chiều → vẫn có thể để 0 nếu không chắc). Không suy diễn nếu (B) không nhắc gì tới tuổi tác.\n' +
-    '4) "foreignHint": true CHỈ nếu (B) có gợi ý rõ ràng về việc kết hôn xa xứ/nơi xa (vd sao Thiên Mã "gặp ' +
+    '5) "foreignHint": true CHỈ nếu (B) có gợi ý rõ ràng về việc kết hôn xa xứ/nơi xa (vd sao Thiên Mã "gặp ' +
     'nhau nơi xa, kết hôn xa quê") — nếu không có gợi ý này, để false.\n' +
-    '5) "sameSexHint": true CHỈ nếu (B) có câu chữ rõ ràng gợi ý bạn đời cùng giới tính — trong tuyệt đại đa số ' +
+    '6) "sameSexHint": true CHỈ nếu (B) có câu chữ rõ ràng gợi ý bạn đời cùng giới tính — trong tuyệt đại đa số ' +
     'trường hợp sẽ là false (dữ liệu cổ pháp hiếm khi nói rõ điều này), KHÔNG tự suy diễn.\n' +
-    'CHỈ trả JSON hợp lệ: {"imagePrompt":"...","description":"...","ageAdjustYears":0,"foreignHint":false,"sameSexHint":false}';
+    'CHỈ trả JSON hợp lệ: {"imagePrompt":"...","description":"...","meetingContext":"...","ageAdjustYears":0,"foreignHint":false,"sameSexHint":false}';
 
   const userMsg =
     `Giới tính mặc định (đối lập lá số gốc): ${morph.spouseGender === 'nu' ? 'Nữ' : 'Nam'}, tuổi hiện tại của lá số gốc: ${morph.baseAge}.\n\n` +
@@ -104,6 +116,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   const parsed = parseJSON(raw) as {
     imagePrompt?: string;
     description?: string;
+    meetingContext?: string;
     ageAdjustYears?: number;
     foreignHint?: boolean;
     sameSexHint?: boolean;
@@ -117,11 +130,16 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   const spouseAge = Math.max(18, Math.min(80, morph.baseAge + finalOffset));
   const spouseGender = parsed.sameSexHint ? userGender : morph.spouseGender;
 
-  // Style cố định — banknote/steel-engraving portrait (tham chiếu ảnh mẫu Henry gửi):
-  // nét khắc cross-hatching mảnh, đen trắng tuyệt đối, khung viền hoa văn cổ điển.
+  // Style — modern Korean-style fashion/beauty portrait photography (THAY banknote/
+  // steel-engraving cũ). Lý do đổi: kỹ thuật khắc bản đồng vốn dùng cross-hatching
+  // dày đặc mô phỏng nét khắc cổ — mà nét khắc đó tự bản thân nó ĐÃ giống nếp nhăn/
+  // da khắc khổ, nên dù đã có disclaimer tuổi rõ ràng, ảnh ra vẫn già hơn tuổi thật
+  // khá nhiều (Henry phản hồi 2 lần). Ảnh chụp chân dung thời trang/beauty hiện đại
+  // (soft lighting, da láng mịn, phong cách Hàn Quốc) tự nhiên nghiêng về trẻ/đẹp,
+  // không cần "chống già" bằng kỹ thuật vẽ nữa.
   // Nói RÕ tuổi bằng số cụ thể (không dùng "in their Xs" — dễ bị model đẩy về
-  // cuối thập niên) + tách bạch "kỹ thuật khắc cổ" khỏi "tuổi tác nhân vật" để
-  // model không tự già hóa khuôn mặt theo phong cách vintage của bức khắc.
+  // cuối thập niên) + tách bạch rõ "cá tính/thần thái" khỏi "tuổi tác/làn da" để
+  // model không tự già hóa khuôn mặt theo tính cách nghiêm nghị/sắc sảo.
   // "female"/"male" (thay vì "woman"/"man") — từ trung tính tuổi tác hơn, đỡ bị
   // model liên tưởng phụ nữ/đàn ông trưởng thành/lớn tuổi.
   const genderWord = spouseGender === 'nu' ? 'female' : 'male';
@@ -132,15 +150,16 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     ? 'The person has Vietnamese Southeast Asian facial features, with a subtle hint of well-traveled or mixed heritage — as if the couple met while one of them was living or traveling far from home.'
     : 'The person has classic Vietnamese Southeast Asian facial features.';
   const finalPrompt =
-    `Banknote engraving portrait of a ${spouseAge}-year-old ${genderWord}, bust framed head and shoulders, ` +
-    `facing slightly off-center. ${ethnicityLine} IMPORTANT: the engraving TECHNIQUE is vintage steel-engraving ` +
-    `style, but the SUBJECT must look accurately like a real ${spouseAge}-year-old person today — youthful, ` +
-    `smooth healthy complexion appropriate for exactly ${spouseAge} years old, NOT older, no exaggerated ` +
-    `wrinkles or aged features beyond what is realistic for this exact age. ${parsed.imagePrompt} ` +
-    'Fine cross-hatching linework, intricate stipple and line engraving texture, like antique currency or ' +
-    'postage stamps, ornate decorative corner flourishes and thin double-line border frame, aged cream paper ' +
-    'background with faint radial guilloché pattern. Strictly monochrome black and white, no color, no gray ' +
-    'photographic shading — only engraved linework. No text, no watermark, no signature.';
+    `A modern professional portrait photograph of a ${spouseAge}-year-old ${genderWord}, shot in the style of ` +
+    'contemporary Korean fashion and beauty photography — soft diffused studio lighting, clean bright ' +
+    'background, natural glowing skin, trendy modern hairstyle and subtle makeup/styling, shallow depth of ' +
+    `field like a high-end editorial headshot or K-beauty campaign photo. ${ethnicityLine} The subject looks ` +
+    `youthful, attractive and healthy, with smooth even skin realistically appropriate for exactly ${spouseAge} ` +
+    'years old — NOT older, no visible wrinkles or signs of aging beyond what is natural for this exact age. ' +
+    'Any strong or serious personality traits should read through the eyes and expression only, never through ' +
+    `aged or weathered skin. ${parsed.imagePrompt} Photorealistic, high resolution, natural color photography, ` +
+    'sharp focus on the eyes, warm flattering color grade, half-body or head-and-shoulders framing. No text, ' +
+    'no watermark, no logo.';
 
   let imageB64: string;
   try {
@@ -184,6 +203,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
       core_star: morph.coreStar,
       image_url: imageUrl,
       description: parsed.description,
+      meeting_context: parsed.meetingContext || null,
     }),
   }).catch(() => {});
 
@@ -191,6 +211,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     success: true,
     imageUrl,
     description: parsed.description,
+    meetingContext: parsed.meetingContext || '',
     spouseGender,
     spouseAge,
     phuThe,
@@ -203,7 +224,7 @@ async function handleHistory(request: NextRequest) {
   if ('error' in auth) return err(auth.error, auth.status);
 
   const r = await fetch(
-    `${SUPABASE_URL}/rest/v1/spouse_portraits?user_id=eq.${auth.user.id}&select=id,created_at,image_url,description,spouse_gender,spouse_age&order=created_at.desc&limit=20`,
+    `${SUPABASE_URL}/rest/v1/spouse_portraits?user_id=eq.${auth.user.id}&select=id,created_at,image_url,description,meeting_context,spouse_gender,spouse_age&order=created_at.desc&limit=20`,
     { headers: { Authorization: `Bearer ${SUPABASE_KEY}`, apikey: SUPABASE_KEY } },
   );
   if (!r.ok) return err('Lỗi tải lịch sử.', 500);
