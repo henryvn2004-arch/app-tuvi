@@ -92,7 +92,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   // danh sách/đoạn luận giải.
   const sys =
     'Bạn là art director cho một bức ẢNH chân dung editorial cao cấp (ultra-realistic premium editorial lifestyle ' +
-    'portrait photography, phong cách Korean luxury editorial — "quiet luxury", ấm áp, tinh tế, tự nhiên, KHÔNG ' +
+    'portrait photography, phong cách Vietnamese luxury editorial — "quiet luxury", ấm áp, tinh tế, tự nhiên, KHÔNG ' +
     'phải tranh vẽ/minh họa/phác họa, KHÔNG đơn sắc), kiêm luận giải Tử Vi. Nhận (A) bộ đặc điểm hình thể suy từ sao tại Phu Thê, (B) cách cục/ý nghĩa cổ pháp tại ' +
     'Phu Thê (engine đã tính sẵn), và (C) đoạn luận giải Phu Thê đầy đủ (văn xuôi, đã phân tích tam phương/tứ ' +
     'chiếu) NẾU CÓ — (B) và (C) là NGUỒN ƯU TIÊN CAO NHẤT, cao hơn (A), vì phản ánh đúng cổ pháp chứ ' +
@@ -128,11 +128,17 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     '±5-8, chênh nhiều → ±9-15 (dấu DƯƠNG = bạn đời LỚN tuổi hơn lá số gốc, dấu ÂM = NHỎ tuổi hơn). Nếu (C) ' +
     'không có gợi ý rõ, xét tiếp (B) (vd "nên lấy người lớn tuổi hơn" → số dương). Nếu CẢ (B) VÀ (C) đều không ' +
     'nhắc gì rõ ràng tới tuổi tác, để 0 — không tự suy diễn.\n' +
-    '5) "foreignHint": true CHỈ nếu (B) có gợi ý rõ ràng về việc kết hôn xa xứ/nơi xa (vd sao Thiên Mã "gặp ' +
-    'nhau nơi xa, kết hôn xa quê") — nếu không có gợi ý này, để false.\n' +
-    '6) "sameSexHint": true CHỈ nếu (B) có câu chữ rõ ràng gợi ý bạn đời cùng giới tính — trong tuyệt đại đa số ' +
+    '5) "foreignHint": true CHỈ nếu (B)/(C) có gợi ý rõ ràng về việc kết hôn xa xứ/nơi xa, hai người ở xa nhau ' +
+    'nhiều (vd sao Thiên Mã "gặp nhau nơi xa, kết hôn xa quê") — ĐÂY LÀ TÍN HIỆU ĐỊA LÝ (xa quê), KHÔNG PHẢI ' +
+    'quốc tịch/dân tộc, người này vẫn có thể là người Việt. Nếu không có gợi ý này, để false.\n' +
+    '6) "foreignSpouseHint": true CHỈ nếu (B) hoặc (C) có nội dung RÕ RÀNG nói bạn đời là NGƯỜI NƯỚC NGOÀI/NGOẠI ' +
+    'QUỐC (khác quốc tịch, khác dân tộc/chủng tộc với đương số — vd chữ hoặc ý rõ ràng như "người nước ngoài", ' +
+    '"ngoại quốc", "khác quốc tịch", "Tây", "nước khác") — KHÁC với mục 5 (mục 5 chỉ là "xa quê" về ĐỊA LÝ, vẫn ' +
+    'có thể là người Việt xa xứ). CHỈ để true khi có tín hiệu cụ thể về QUỐC TỊCH/CHỦNG TỘC khác, không suy diễn ' +
+    'từ riêng "xa quê"/"di chuyển nhiều". Nếu không có, để false.\n' +
+    '7) "sameSexHint": true CHỈ nếu (B) có câu chữ rõ ràng gợi ý bạn đời cùng giới tính — trong tuyệt đại đa số ' +
     'trường hợp sẽ là false (dữ liệu cổ pháp hiếm khi nói rõ điều này), KHÔNG tự suy diễn.\n' +
-    'CHỈ trả JSON hợp lệ: {"imagePrompt":"...","description":"...","meetingContext":"...","ageAdjustYears":0,"foreignHint":false,"sameSexHint":false}';
+    'CHỈ trả JSON hợp lệ: {"imagePrompt":"...","description":"...","meetingContext":"...","ageAdjustYears":0,"foreignHint":false,"foreignSpouseHint":false,"sameSexHint":false}';
 
   const userMsg =
     `Giới tính mặc định (đối lập lá số gốc): ${morph.spouseGender === 'nu' ? 'Nữ' : 'Nam'}, tuổi hiện tại của lá số gốc: ${morph.baseAge}.\n\n` +
@@ -152,6 +158,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     meetingContext?: string;
     ageAdjustYears?: number;
     foreignHint?: boolean;
+    foreignSpouseHint?: boolean;
     sameSexHint?: boolean;
   } | null;
   if (!parsed?.imagePrompt || !parsed?.description) return err('Lỗi phân tích kết quả AI.', 500);
@@ -166,8 +173,9 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   const spouseGender = parsed.sameSexHint ? userGender : morph.spouseGender;
 
   // Style — chuyển hẳn từ tranh minh họa (illustration) SANG ảnh chụp editorial cao cấp
-  // (Henry gửi 1 ảnh mẫu tham chiếu dạng "premium editorial portrait board" — Korean
-  // luxury editorial, quiet luxury, ảnh chụp DSLR 85mm f/1.8, ánh sáng cửa sổ tự nhiên,
+  // (Henry gửi 1 ảnh mẫu tham chiếu dạng "premium editorial portrait board" — luxury
+  // editorial phong cách Việt Nam (đổi từ Korean theo yêu cầu), quiet luxury, ảnh chụp
+  // DSLR 85mm f/1.8, ánh sáng cửa sổ tự nhiên,
   // bảng màu be/kem trung tính, KHÔNG beauty filter/KHÔNG giả AI). Bản gốc Henry gửi là
   // layout NHIỀU ảnh (1 ảnh chính + 8-10 ảnh phụ khác góc/pose) cho 1 "character sheet" —
   // KHÔNG áp dụng phần layout đó vì tool chỉ sinh 1 ảnh/lượt; chỉ lấy phần STYLE/
@@ -178,19 +186,23 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   // "female"/"male" (thay vì "woman"/"man") — từ trung tính tuổi tác hơn, đỡ bị
   // model liên tưởng phụ nữ/đàn ông trưởng thành/lớn tuổi.
   const genderWord = spouseGender === 'nu' ? 'female' : 'male';
-  // Luôn neo gốc Việt Nam/Đông Nam Á — người dùng phần lớn là Việt, bỏ neo này
+  // Mặc định neo gốc Việt Nam/Đông Nam Á — người dùng phần lớn là Việt, bỏ neo này
   // dễ ra khuôn mặt "lạ" (Tây/lai không rõ vùng) dù chỉ vì sao kiểu Thiên Mã gợi ý
-  // "xa cách/xa quê". foreignHint CHỈ thêm sắc thái đa văn hóa, KHÔNG đổi hẳn chủng tộc.
-  const ethnicityLine = parsed.foreignHint
-    ? 'The person has Vietnamese Southeast Asian facial features, with a subtle hint of well-traveled or mixed heritage — as if the couple met while one of them was living or traveling far from home.'
-    : 'The person has classic Vietnamese Southeast Asian facial features.';
+  // "xa cách/xa quê" (foreignHint — CHỈ thêm sắc thái đa văn hóa, KHÔNG đổi hẳn chủng
+  // tộc). RIÊNG khi luận giải có tín hiệu RÕ RÀNG về bạn đời là người NGOẠI QUỐC
+  // (foreignSpouseHint — Henry yêu cầu), mới thực sự đổi hẳn sang diện mạo nước ngoài.
+  const ethnicityLine = parsed.foreignSpouseHint
+    ? 'The person has a foreign (non-Vietnamese) appearance, as the astrological reading points to a spouse of a different nationality/ethnicity — a natural, believable international look, still warm and approachable.'
+    : parsed.foreignHint
+      ? 'The person has Vietnamese Southeast Asian facial features, with a subtle hint of well-traveled or mixed heritage — as if the couple met while one of them was living or traveling far from home.'
+      : 'The person has classic Vietnamese Southeast Asian facial features.';
   // Nhắc "rực rỡ, sống động" CẢ TRƯỚC LẪN SAU đoạn imagePrompt (bracket kỹ thuật) — vì
   // (A)/(B) hay mang cá tính lạnh/ít cười (vd sao Thất Sát/Liêm Trinh/Tham Lang), LLM có
   // thể lỡ nhét chữ "cold/serious/dark/muted" vào dù đã cấm ở sys prompt; nhắc lại 2 lần
   // để chỉ định thị giác THẮNG cá tính nội tâm khi ra ảnh.
   const finalPrompt =
     `An ultra-realistic, premium editorial lifestyle portrait photograph of a ${genderWord} who appears to be ` +
-    `roughly ${ageLow}-${ageHigh} years old, no older — Korean luxury editorial aesthetic, "quiet luxury", warm, ` +
+    `roughly ${ageLow}-${ageHigh} years old, no older — Vietnamese luxury editorial aesthetic, "quiet luxury", warm, ` +
     'elegant, refined and timeless, Apple/Muji-inspired minimalism, natural and authentic premium feeling (NOT ' +
     'a painting, NOT an illustration, NOT a sketch, NOT monochrome or grayscale, NOT a dark or moody image). ' +
     `${ethnicityLine} Professional DSLR photography, 85mm portrait lens, f/1.8 shallow depth of field, soft ` +
