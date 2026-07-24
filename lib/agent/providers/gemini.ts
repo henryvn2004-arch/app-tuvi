@@ -256,7 +256,12 @@ export function geminiToolsEligible(
   if (hasImages) return false; // luồng lá số có ảnh → giữ Sonnet cho chắc
   if (!GEMINI_TOOLS_SCENARIOS.has(scenarioType)) return false;
   const r = routes || {};
-  const pick = r[scenarioType] || r._default || 'anthropic';
+  // KHÔNG rơi về r._default — vương miện chỉ đi Gemini khi admin CHỦ ĐỘNG
+  // flip đúng key scenarioType (vd routes.laso='gemini'). Trước đây fallback
+  // qua _default khiến chat.provider_routes={_default:'gemini'} (đặt để bật
+  // Gemini cho nhóm prose) vô tình kéo luôn laso — vương miện có paywall —
+  // sang Gemini ngoài ý muốn.
+  const pick = r[scenarioType] || 'anthropic';
   return pick === 'gemini';
 }
 
