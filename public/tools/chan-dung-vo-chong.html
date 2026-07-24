@@ -128,6 +128,10 @@
         </div>
       </div>
     </div>
+    <div class="res-block" id="luanGiaiBlock" style="display:none;margin-top:18px">
+      <div class="res-block-header"><span class="res-block-title">Luận Giải Cung Phu Thê</span></div>
+      <div class="res-block-body" id="luanGiaiText" style="font-size:14.5px;line-height:1.9;color:var(--text-mid)"></div>
+    </div>
     <div class="res-block" id="histBlock" style="display:none;margin-top:18px">
       <div class="res-block-header"><span class="res-block-title">Đã Vẽ Trước Đó</span></div>
       <div class="res-block-body">
@@ -180,6 +184,7 @@ async function _doGenerate(d) {
   document.getElementById('loading').style.display = 'block';
   document.getElementById('card').style.display = 'none';
   document.getElementById('phuTheBlock').style.display = 'none';
+  document.getElementById('luanGiaiBlock').style.display = 'none';
   document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   try {
@@ -204,6 +209,11 @@ async function _doGenerate(d) {
       document.getElementById('meetingText').textContent = data.meetingContext;
       meetingBlock.style.display = 'block';
     } else { meetingBlock.style.display = 'none'; }
+    const luanGiaiBlock = document.getElementById('luanGiaiBlock');
+    if (data.phuTheLuanGiai) {
+      document.getElementById('luanGiaiText').innerHTML = mdBoldParas(data.phuTheLuanGiai);
+      luanGiaiBlock.style.display = 'block';
+    } else { luanGiaiBlock.style.display = 'none'; }
     document.getElementById('loading').style.display = 'none';
     document.getElementById('card').style.display = 'flex';
     renderPhuThe(data.phuThe);
@@ -216,6 +226,15 @@ async function _doGenerate(d) {
 }
 
 function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+// Luận giải trả về văn xuôi có thể chứa **in đậm** (phán quyết mở đầu) — escape
+// HTML rồi convert markdown bold tối giản, tách đoạn theo dòng trống.
+function mdBoldParas(text) {
+  return String(text || '')
+    .split(/\n{2,}/)
+    .map((p) => '<p style="margin:0 0 12px">' + esc(p.trim()).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') + '</p>')
+    .join('');
+}
 
 function renderPhuThe(pt) {
   const block = document.getElementById('phuTheBlock');

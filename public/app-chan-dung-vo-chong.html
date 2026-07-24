@@ -121,6 +121,10 @@
             </div>
           </div>
         </div>
+        <div class="res-block" id="luanGiaiBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Luận Giải Cung Phu Thê</span></div>
+          <div class="res-block-body" id="luanGiaiText" style="font-size:13.5px;line-height:1.85;color:#2a2118"></div>
+        </div>
         <div class="res-block" id="histBlock" style="display:none">
           <div class="res-block-header"><span class="res-block-title">Đã Vẽ Trước Đó</span></div>
           <div class="res-block-body"><div id="histList"></div></div>
@@ -193,6 +197,7 @@ async function _doGenerate() {
   document.getElementById('loading').style.display = 'block';
   document.getElementById('card').style.display = 'none';
   document.getElementById('phuTheBlock').style.display = 'none';
+  document.getElementById('luanGiaiBlock').style.display = 'none';
 
   try {
     var token = window.Auth?.getSession()?.access_token || '';
@@ -214,6 +219,11 @@ async function _doGenerate() {
       document.getElementById('meetingText').textContent = data.meetingContext;
       meetingBlock.style.display = 'block';
     } else { meetingBlock.style.display = 'none'; }
+    var luanGiaiBlock = document.getElementById('luanGiaiBlock');
+    if (data.phuTheLuanGiai) {
+      document.getElementById('luanGiaiText').innerHTML = mdBoldParas(data.phuTheLuanGiai);
+      luanGiaiBlock.style.display = 'block';
+    } else { luanGiaiBlock.style.display = 'none'; }
     document.getElementById('loading').style.display = 'none';
     document.getElementById('card').style.display = 'flex';
     document.getElementById('btnEdit').style.display = '';
@@ -236,6 +246,12 @@ async function _doGenerate() {
 }
 
 // esc() dùng chung từ /laso-chart.js (đã load ở trên) — không khai lại.
+function mdBoldParas(text) {
+  return String(text || '').split(/\n{2,}/).map(function (p) {
+    return '<p style="margin:0 0 12px">' + esc(p.trim()).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') + '</p>';
+  }).join('');
+}
+
 function renderPhuThe(pt) {
   var block = document.getElementById('phuTheBlock');
   if (!pt) { block.style.display = 'none'; return; }

@@ -8,13 +8,14 @@ export const runtime = 'nodejs';
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmText } from '@/lib/llm/complete';
-import { computeLaso } from '@/lib/engine/laso';
+import { computeLaso, formatLaSoV2 } from '@/lib/engine/laso';
 import {
   computeSpouseMorphology,
   formatMorphologyForLLM,
   getPhuTheReadout,
   formatPhuTheForLLM,
 } from '@/lib/engine/portrait';
+import { PHU_THE_LUAN_GIAI_SYSTEM_PROMPT, buildPhuTheLuanGiaiPrompt } from '@/lib/agent/phu-the-luan-giai';
 import { generatePortraitImage } from '@/lib/image/openai-image';
 import type { BirthParams } from '@/lib/contract/v1';
 
@@ -62,17 +63,40 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   const morph = computeSpouseMorphology(lasoRes.ls, userGender);
   const phuThe = getPhuTheReadout(lasoRes.ls);
 
+  // Lượt LLM RIÊNG: luận giải cung Phu Thê ĐẦY ĐỦ, ĐÚNG flow/văn phong tool
+  // luan-giai (mode=phan, phan=12 — xem lib/agent/phu-the-luan-giai.ts) —
+  // hiển thị cho user bên dưới chân dung, và làm nguồn CHÍNH XÁC hơn cho việc
+  // suy đoán chênh lệch tuổi bạn đời (thay vì chỉ dựa danh sách cách cục thô
+  // (B) bên dưới). Best-effort: lỗi thì bỏ qua, không chặn luồng vẽ ảnh.
+  let phuTheLuanGiai = '';
+  try {
+    const laSoText = formatLaSoV2(lasoRes.ls);
+    phuTheLuanGiai = (
+      await llmText({
+        system: PHU_THE_LUAN_GIAI_SYSTEM_PROMPT,
+        prompt: buildPhuTheLuanGiaiPrompt(laSoText, undefined, userGender),
+        maxTokens: 900,
+      })
+    ).trim();
+  } catch {
+    /* best-effort — không chặn vẽ ảnh nếu luận giải lỗi */
+  }
+
   // 1 lượt LLM: nhận CẢ (a) morphology đã rank sẵn từ sao (deterministic) LẪN
   // (b) diễn giải cách cục/ý nghĩa Phu Thê engine đã tính sẵn (hôn nhân muộn,
-  // chênh lệch tuổi, xa cách, đa tình...). (b) là dữ liệu ƯU TIÊN CAO NHẤT
-  // (Henry yêu cầu) — LLM chỉ ĐỌC văn bản có sẵn để rút tín hiệu, KHÔNG được
-  // tự bịa cách cục không có trong danh sách.
+  // chênh lệch tuổi, xa cách, đa tình...) VÀ (c) đoạn luận giải Phu Thê ĐẦY ĐỦ
+  // (văn xuôi, vừa tính ở trên) — (c) là nguồn CHÍNH XÁC NHẤT cho câu hỏi tuổi
+  // tác vì đã tổng hợp cả tam phương/tứ chiếu, không chỉ danh sách cách cục
+  // rời rạc. (b)/(c) là dữ liệu ƯU TIÊN CAO NHẤT (Henry yêu cầu) — LLM chỉ ĐỌC
+  // văn bản có sẵn để rút tín hiệu, KHÔNG được tự bịa cách cục không có trong
+  // danh sách/đoạn luận giải.
   const sys =
     'Bạn là art director cho một bức ẢNH chân dung editorial cao cấp (ultra-realistic premium editorial lifestyle ' +
     'portrait photography, phong cách Korean luxury editorial — "quiet luxury", ấm áp, tinh tế, tự nhiên, KHÔNG ' +
-    'phải tranh vẽ/minh họa/phác họa, KHÔNG đơn sắc), kiêm luận giải Tử Vi. Nhận (A) bộ đặc điểm hình thể suy từ sao tại Phu Thê, và (B) cách cục/ý nghĩa cổ pháp tại ' +
-    'Phu Thê (engine đã tính sẵn — ĐÂY LÀ NGUỒN ƯU TIÊN CAO NHẤT, cao hơn (A), vì phản ánh đúng cổ pháp chứ ' +
-    'không chỉ suy diễn hình thể). Nhiệm vụ:\n' +
+    'phải tranh vẽ/minh họa/phác họa, KHÔNG đơn sắc), kiêm luận giải Tử Vi. Nhận (A) bộ đặc điểm hình thể suy từ sao tại Phu Thê, (B) cách cục/ý nghĩa cổ pháp tại ' +
+    'Phu Thê (engine đã tính sẵn), và (C) đoạn luận giải Phu Thê đầy đủ (văn xuôi, đã phân tích tam phương/tứ ' +
+    'chiếu) NẾU CÓ — (B) và (C) là NGUỒN ƯU TIÊN CAO NHẤT, cao hơn (A), vì phản ánh đúng cổ pháp chứ ' +
+    'không chỉ suy diễn hình thể; RIÊNG câu hỏi tuổi tác (mục 4) ưu tiên đọc (C) trước vì đầy đủ ngữ cảnh hơn. Nhiệm vụ:\n' +
     '1) "imagePrompt": MỘT đoạn tiếng ANH liền mạch (80-120 từ). BẮT ĐẦU bằng ĐÚNG 1 câu tổng quan/khái quát ' +
     '(overall gestalt — ấn tượng chung: vóc dáng, khí chất, độ trẻ trung, tươi sáng) rồi MỚI đi vào liệt kê đặc ' +
     'điểm cụ thể (face shape, eyes, nose, lips, hair style và màu tóc tự nhiên, tông da tự nhiên, trang phục ' +
@@ -99,9 +123,11 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     'bạn bè mai mối, giúp đỡ). Nếu (B) KHÔNG có gợi ý cụ thể về cách gặp gỡ, chọn 1 hoàn cảnh phổ biến, tự ' +
     'nhiên, hợp lý và diễn đạt như một khả năng nhẹ nhàng ("có thể", "nhiều khả năng") chứ không khẳng định ' +
     'chắc chắn — KHÔNG bịa cách cục sao không có trong (B), KHÔNG nhắc tên sao/thuật ngữ tử vi.\n' +
-    '4) "ageAdjustYears": số nguyên (-10..15, mặc định 0) — CHỈ khác 0 nếu (B) có câu chữ RÕ RÀNG gợi ý chênh ' +
-    'lệch tuổi với bạn đời (vd "nên lấy người lớn tuổi hơn" → số dương; "nên chênh lệch tuổi" mà không rõ ' +
-    'chiều → vẫn có thể để 0 nếu không chắc). Không suy diễn nếu (B) không nhắc gì tới tuổi tác.\n' +
+    '4) "ageAdjustYears": số nguyên (-15..15, mặc định 0). ĐỌC KỸ (C) trước — nếu (C) có 1 câu RÕ RÀNG nói bạn ' +
+    'đời LỚN TUỔI HƠN hay NHỎ TUỔI HƠN kèm mức độ, chọn số nguyên tương ứng: chênh nhẹ → ±2-4, chênh vừa → ' +
+    '±5-8, chênh nhiều → ±9-15 (dấu DƯƠNG = bạn đời LỚN tuổi hơn lá số gốc, dấu ÂM = NHỎ tuổi hơn). Nếu (C) ' +
+    'không có gợi ý rõ, xét tiếp (B) (vd "nên lấy người lớn tuổi hơn" → số dương). Nếu CẢ (B) VÀ (C) đều không ' +
+    'nhắc gì rõ ràng tới tuổi tác, để 0 — không tự suy diễn.\n' +
     '5) "foreignHint": true CHỈ nếu (B) có gợi ý rõ ràng về việc kết hôn xa xứ/nơi xa (vd sao Thiên Mã "gặp ' +
     'nhau nơi xa, kết hôn xa quê") — nếu không có gợi ý này, để false.\n' +
     '6) "sameSexHint": true CHỈ nếu (B) có câu chữ rõ ràng gợi ý bạn đời cùng giới tính — trong tuyệt đại đa số ' +
@@ -111,7 +137,8 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   const userMsg =
     `Giới tính mặc định (đối lập lá số gốc): ${morph.spouseGender === 'nu' ? 'Nữ' : 'Nam'}, tuổi hiện tại của lá số gốc: ${morph.baseAge}.\n\n` +
     `(A) Đặc điểm hình thể suy từ sao:\n${formatMorphologyForLLM(morph)}\n\n` +
-    `(B) Cách cục / ý nghĩa cổ pháp tại Phu Thê (ƯU TIÊN CAO NHẤT):\n${formatPhuTheForLLM(phuThe)}`;
+    `(B) Cách cục / ý nghĩa cổ pháp tại Phu Thê:\n${formatPhuTheForLLM(phuThe)}` +
+    (phuTheLuanGiai ? `\n\n(C) Đoạn luận giải Phu Thê đầy đủ (ƯU TIÊN CAO NHẤT cho câu hỏi tuổi tác):\n${phuTheLuanGiai}` : '');
 
   let raw: string;
   try {
@@ -129,9 +156,11 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   } | null;
   if (!parsed?.imagePrompt || !parsed?.description) return err('Lỗi phân tích kết quả AI.', 500);
 
-  // Cách cục (LLM đọc từ (B)) ưu tiên hơn heuristic sao thuần túy (starAgeOffset)
-  // — chỉ fallback về sao khi cách cục KHÔNG có gợi ý tuổi tác rõ ràng.
-  const llmAgeAdjust = Math.max(-10, Math.min(15, Math.round(Number(parsed.ageAdjustYears) || 0)));
+  // Cách cục (LLM đọc từ (B)/(C), ưu tiên (C) — luận giải Phu Thê đầy đủ) ưu
+  // tiên hơn heuristic sao thuần túy (starAgeOffset) — chỉ fallback về sao khi
+  // không có gợi ý tuổi tác rõ ràng. Range đối xứng ±15 (trước lệch -10..15) —
+  // chênh "nhỏ tuổi hơn nhiều" cũng cần biên độ ngang "lớn tuổi hơn nhiều".
+  const llmAgeAdjust = Math.max(-15, Math.min(15, Math.round(Number(parsed.ageAdjustYears) || 0)));
   const finalOffset = llmAgeAdjust !== 0 ? llmAgeAdjust : morph.starAgeOffset;
   const spouseAge = Math.max(18, Math.min(80, morph.baseAge + finalOffset));
   const spouseGender = parsed.sameSexHint ? userGender : morph.spouseGender;
@@ -224,6 +253,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
       image_url: imageUrl,
       description: parsed.description,
       meeting_context: parsed.meetingContext || null,
+      phu_the_luan_giai: phuTheLuanGiai || null,
     }),
   }).catch(() => {});
 
@@ -232,6 +262,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     imageUrl,
     description: parsed.description,
     meetingContext: parsed.meetingContext || '',
+    phuTheLuanGiai: phuTheLuanGiai || '',
     spouseGender,
     spouseAge,
     phuThe,
@@ -244,7 +275,7 @@ async function handleHistory(request: NextRequest) {
   if ('error' in auth) return err(auth.error, auth.status);
 
   const r = await fetch(
-    `${SUPABASE_URL}/rest/v1/spouse_portraits?user_id=eq.${auth.user.id}&select=id,created_at,image_url,description,meeting_context,spouse_gender,spouse_age&order=created_at.desc&limit=20`,
+    `${SUPABASE_URL}/rest/v1/spouse_portraits?user_id=eq.${auth.user.id}&select=id,created_at,image_url,description,meeting_context,phu_the_luan_giai,spouse_gender,spouse_age&order=created_at.desc&limit=20`,
     { headers: { Authorization: `Bearer ${SUPABASE_KEY}`, apikey: SUPABASE_KEY } },
   );
   if (!r.ok) return err('Lỗi tải lịch sử.', 500);
