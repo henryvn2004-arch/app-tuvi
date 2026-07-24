@@ -72,10 +72,12 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     'Nhận (A) bộ đặc điểm hình thể suy từ sao tại Phu Thê, và (B) cách cục/ý nghĩa cổ pháp tại Phu Thê (engine ' +
     'đã tính sẵn — ĐÂY LÀ NGUỒN ƯU TIÊN CAO NHẤT, cao hơn (A), vì phản ánh đúng cổ pháp chứ không chỉ suy diễn ' +
     'hình thể). Nhiệm vụ:\n' +
-    '1) "imagePrompt": MỘT đoạn tiếng ANH liền mạch (80-120 từ) mô tả khuôn mặt/vóc dáng/khí chất — CHỈ mô tả ' +
-    'HÌNH THỂ (face shape, eyes, nose, lips, hair, expression...), KHÔNG tự thêm mô tả phong cách nghệ thuật ' +
-    '(phần đó server tự ghép), KHÔNG nhắc chiêm tinh/tử vi/tên sao/tiếng Việt/màu sắc da/tóc (ảnh sẽ là đen ' +
-    'trắng). Các đặc điểm KHÔNG được mâu thuẫn nhau — nếu (A) và (B) mâu thuẫn, ưu tiên (B).\n' +
+    '1) "imagePrompt": MỘT đoạn tiếng ANH liền mạch (80-120 từ). BẮT ĐẦU bằng ĐÚNG 1 câu tổng quan/khái quát ' +
+    '(overall gestalt — ấn tượng chung: vóc dáng, khí chất, độ trẻ trung/điềm đạm...) rồi MỚI đi vào liệt kê ' +
+    'đặc điểm cụ thể (face shape, eyes, nose, lips, hair, expression...) — KHÔNG liệt kê chi tiết ngay câu đầu, ' +
+    'tránh cảm giác rời rạc như ráp từng mảnh. CHỈ mô tả HÌNH THỂ, KHÔNG tự thêm mô tả phong cách nghệ thuật/' +
+    'chủng tộc/quốc tịch (phần đó server tự ghép), KHÔNG nhắc chiêm tinh/tử vi/tên sao/tiếng Việt/màu sắc da/tóc ' +
+    '(ảnh sẽ là đen trắng). Các đặc điểm KHÔNG được mâu thuẫn nhau — nếu (A) và (B) mâu thuẫn, ưu tiên (B).\n' +
     '2) "description": đoạn tiếng VIỆT (120-180 từ), văn xuôi tự nhiên mô tả khuôn mặt, hình dáng, phong thái, ' +
     'tính cách VÀ (nếu (B) có gợi ý) hoàn cảnh hôn nhân (vd duyên muộn, gặp nhau nơi xa, tính cách vui vẻ/trầm ' +
     'lặng...) — KHÔNG nhắc tên sao/thuật ngữ tử vi, đọc như lời tả người thật.\n' +
@@ -120,9 +122,14 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   // Nói RÕ tuổi bằng số cụ thể (không dùng "in their Xs" — dễ bị model đẩy về
   // cuối thập niên) + tách bạch "kỹ thuật khắc cổ" khỏi "tuổi tác nhân vật" để
   // model không tự già hóa khuôn mặt theo phong cách vintage của bức khắc.
-  const genderWord = spouseGender === 'nu' ? 'woman' : 'man';
+  // "female"/"male" (thay vì "woman"/"man") — từ trung tính tuổi tác hơn, đỡ bị
+  // model liên tưởng phụ nữ/đàn ông trưởng thành/lớn tuổi.
+  const genderWord = spouseGender === 'nu' ? 'female' : 'male';
+  // Luôn neo gốc Việt Nam/Đông Nam Á — người dùng phần lớn là Việt, bỏ neo này
+  // dễ ra khuôn mặt "lạ" (Tây/lai không rõ vùng) dù chỉ vì sao kiểu Thiên Mã gợi ý
+  // "xa cách/xa quê". foreignHint CHỈ thêm sắc thái đa văn hóa, KHÔNG đổi hẳn chủng tộc.
   const ethnicityLine = parsed.foreignHint
-    ? 'The person appears to be of foreign or mixed (non-Vietnamese) heritage, as if met while living or traveling far from home.'
+    ? 'The person has Vietnamese Southeast Asian facial features, with a subtle hint of well-traveled or mixed heritage — as if the couple met while one of them was living or traveling far from home.'
     : 'The person has classic Vietnamese Southeast Asian facial features.';
   const finalPrompt =
     `Banknote engraving portrait of a ${spouseAge}-year-old ${genderWord}, bust framed head and shoulders, ` +
