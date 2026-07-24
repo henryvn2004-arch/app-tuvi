@@ -9,6 +9,18 @@
    ============================================================ */
 (function () {
   'use strict';
+
+  // CI (Playwright E2E — playwright.yml chạy trên MỌI push/PR, mặc định nhắm
+  // thẳng https://www.tuviminhbao.com PROD THẬT trừ nhánh dev) tạo browser có
+  // navigator.webdriver=true → nếu không chặn, mỗi lần CI chạy sẽ ghi page_view/
+  // topup_start/... THẬT vào bảng events, làm lệch Funnel/DAU/topup_intent.
+  // Không gửi gì cả (kể cả page_view tự động) khi phát hiện automation; Track
+  // vẫn expose API no-op để code gọi Track.event(...) khắp site không cần đổi.
+  if (navigator.webdriver) {
+    window.Track = { event: function () {}, anonId: null, sessionId: null };
+    return;
+  }
+
   var ANON_KEY = 'tvmb_anon', SID_KEY = 'tvmb_sid', FIRST_KEY = 'tvmb_attr_first';
 
   function uuid() {
