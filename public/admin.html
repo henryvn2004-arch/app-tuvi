@@ -1147,15 +1147,14 @@ async function doLogin() {
   const pwd   = document.getElementById('login-pwd').value;
   const err   = document.getElementById('login-err');
   err.textContent = '';
-  if (email !== ADMIN_EMAIL) { err.textContent = 'Không có quyền admin.'; return; }
   try {
-    const res = await fetch(`${SB_URL}/auth/v1/token?grant_type=password`, {
+    const res = await fetch('/api/admin/login', {
       method: 'POST',
-      headers: { apikey: SB_ANON, 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password: pwd }),
     });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error_description || 'Sai mật khẩu');
+    if (!res.ok) throw new Error(data.error || 'Sai thông tin đăng nhập');
     _token = data.access_token;
     document.getElementById('sidebar-user-info').textContent = email;
     document.getElementById('login-page').style.display = 'none';
