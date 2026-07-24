@@ -14,6 +14,7 @@ import { getToolPrice } from '@/lib/billing/pricing';
 import { logCronRun } from '@/lib/cron/log';
 import { tgSendMessage } from '@/lib/channels/telegram';
 import { getGa4Sessions } from '@/lib/analytics/ga4';
+import { getAdminUser } from '@/lib/admin/auth';
 
 const PAYPAL_BASE = process.env.PAYPAL_MODE === 'live'
   ? 'https://api-m.paypal.com'
@@ -117,15 +118,19 @@ async function hasSlugAccess(userId: string, slug: string): Promise<boolean> {
   return (await res.json()).length > 0;
 }
 
-// ── Admin: verify token is admin ─────────────────────────────
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@tuviminhbao.com';
-
-async function verifyAdmin(token: string): Promise<{ id: string; email: string } | null> {
+// ── Admin: verify token belongs to an active admin_users row ──
+// Nhiều admin (Google sign-in), không còn hardcode 1 email — tra bảng
+// admin_users (xem lib/admin/auth.ts + _patches/migration-admin-users.sql).
+async function verifyAdmin(
+  token: string
+): Promise<{ id: string; email: string; role: 'owner' | 'member'; team: string | null } | null> {
   const user = await getUserFromToken(token);
   if (!user) return null;
   const email = (user as any).email || '';
-  if (email !== ADMIN_EMAIL) return null;
-  return user as { id: string; email: string };
+  if (!email) return null;
+  const admin = await getAdminUser(email);
+  if (!admin) return null;
+  return { id: (user as any).id, email, role: admin.role, team: admin.team };
 }
 
 // ── GET: balance ──────────────────────────────────────────────────
@@ -1084,6 +1089,7 @@ export async function GET(request: NextRequest) {
   if (action === 'balance')      return handleBalance(searchParams);
   if (action === 'check')        return handleCheck(searchParams);
   if (action === 'admin-users')  return handleAdminUsers(request, searchParams);
+  if (action === 'admin-users-list') return handleAdminUsersList(request);
   if (action === 'admin-user-detail') return handleAdminUserDetail(request, searchParams);
   if (action === 'admin-marketing') return handleAdminMarketing(request, searchParams);
   if (action === 'admin-dashboard-v2') return handleAdminDashboardV2(request);
@@ -1097,6 +1103,78 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-env-status') return handleAdminEnvStatus(request);
   if (action === 'check-bank')  return handleCheckBank(searchParams);
   return err('Invalid action.', 400);
+}
+
+// ── Quản trị viên (admin_users) — CHỈ owner mới xem/sửa được ─────
+// v1: role owner = toàn quyền, member = gắn theo team (metadata, dùng để lọc
+// sidebar phía client). Enforcement server-side theo team CHƯA làm ở đây —
+// việc gắn từng action/RLS theo team là bước sau, khi thật sự có member
+// không-owner cần giới hạn (xem trao đổi PR).
+async function handleAdminUsersList(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+  if (admin.role !== 'owner') return err('Chỉ Owner mới xem được danh sách quản trị viên', 403);
+
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/admin_users?select=email,display_name,team,role,active,invited_by,created_at&order=created_at.asc`,
+    { headers: SB_HEADERS }
+  );
+  if (!res.ok) return err('Lỗi tải danh sách', 500);
+  return ok({ users: await res.json() });
+}
+
+async function handleAdminUsersUpsert(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+  if (admin.role !== 'owner') return err('Chỉ Owner mới thêm/sửa được quản trị viên', 403);
+
+  const email = String(body.email || '').trim().toLowerCase();
+  const displayName = String(body.display_name || '').trim() || null;
+  const team = String(body.team || '').trim() || null;
+  const role = body.role === 'owner' ? 'owner' : 'member';
+  if (!email || !email.includes('@')) return err('Email không hợp lệ', 400);
+
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/admin_users`, {
+    method: 'POST',
+    headers: { ...SB_HEADERS, Prefer: 'resolution=merge-duplicates,return=representation' },
+    body: JSON.stringify({ email, display_name: displayName, team, role, active: true, invited_by: admin.email }),
+  });
+  if (!res.ok) return err(`Lỗi lưu: ${await res.text()}`, 500);
+  const rows = await res.json();
+  return ok({ user: rows[0] });
+}
+
+async function handleAdminUsersSetActive(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+  if (admin.role !== 'owner') return err('Chỉ Owner mới thay đổi được trạng thái', 403);
+
+  const email = String(body.email || '').trim().toLowerCase();
+  const active = !!body.active;
+  if (!email) return err('Thiếu email', 400);
+  if (!active && email === admin.email) return err('Không thể tự khoá chính mình', 400);
+
+  if (!active) {
+    // Chặn khoá owner CUỐI CÙNG — tránh khoá hết quyền quản trị.
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/admin_users?role=eq.owner&active=eq.true&select=email`, {
+      headers: SB_HEADERS,
+    });
+    const owners = r.ok ? await r.json() : [];
+    if (owners.length <= 1 && owners.some((o: { email: string }) => o.email === email)) {
+      return err('Không thể khoá Owner cuối cùng', 400);
+    }
+  }
+
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/admin_users?email=eq.${encodeURIComponent(email)}`, {
+    method: 'PATCH',
+    headers: SB_HEADERS,
+    body: JSON.stringify({ active }),
+  });
+  if (!res.ok) return err(`Lỗi cập nhật: ${await res.text()}`, 500);
+  return ok({ ok: true });
 }
 
 // ── GET: admin-user-detail (hồ sơ đầy đủ 1 user cho drawer) ──────
@@ -1338,6 +1416,8 @@ export async function POST(request: NextRequest) {
   if (action === 'admin-khao-luan-topics') return handleAdminKhaoLuanTopics(request, body);
   if (action === 'admin-nghien-cuu-topics') return handleAdminNghienCuuTopics(request, body);
   if (action === 'admin-mcp-update') return handleAdminMcpUpdate(request, body);
+  if (action === 'admin-users-upsert') return handleAdminUsersUpsert(request, body);
+  if (action === 'admin-users-set-active') return handleAdminUsersSetActive(request, body);
   if (action === 'create-bank')       return handleCreateBank(body);
   if (action === 'referral-register') return handleReferralRegister(request, body);
   return err('Invalid action.', 400);

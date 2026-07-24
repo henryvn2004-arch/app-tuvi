@@ -46,6 +46,10 @@ svg{display:block}
 .login-btn{width:100%;padding:.8rem;background:var(--red);color:#fff;border:none;border-radius:9px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.03em}
 .login-btn:hover{filter:brightness(1.06)}
 .login-err{color:var(--red);font-size:.78rem;margin-top:.5rem;min-height:1.2em}
+.login-btn-google{width:100%;padding:.7rem;background:var(--white);color:var(--text);border:1.5px solid var(--line-2);border-radius:9px;font-size:.85rem;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:.55rem;margin-bottom:1rem}
+.login-btn-google:hover{border-color:var(--gold-soft);background:var(--paper-2)}
+.login-divider{display:flex;align-items:center;gap:.6rem;color:var(--text-lt);font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.85rem}
+.login-divider::before,.login-divider::after{content:"";flex:1;height:1px;background:var(--line-2)}
 
 /* ── LAYOUT ── */
 #app{display:none;min-height:100vh}
