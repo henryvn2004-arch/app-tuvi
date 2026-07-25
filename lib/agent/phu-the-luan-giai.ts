@@ -124,7 +124,7 @@ MỞ ĐẦU bằng câu phán quyết in đậm neo vào nhãn "Luận sao" củ
 Viết 2-3 đoạn văn xuôi súc tích. Cấu trúc:
 ① Nhận định chính: Dựa trên [CÁCH CỤC] và [Ý NGHĨA] tại Phu Thê — đây là phần quan trọng nhất, diễn giải thật rõ.
 ② Tam phương: Xét sao ở cung tam hợp/xung chiếu có hỗ trợ hay phá cách không (duyên đến sớm/muộn, hòa hợp/xung khắc, xa cách...).
-③ Kết luận thực tế: 1-2 câu về tác động cụ thể tới hôn nhân người này. NẾU dữ liệu gợi ý RÕ về CHÊNH LỆCH TUỔI với bạn đời (bạn đời lớn tuổi hơn hay nhỏ tuổi hơn, và mức độ — chênh ít/vừa/nhiều), hãy nêu THÀNH 1 CÂU RIÊNG RÀNH MẠCH về điều này; nếu dữ liệu không có gợi ý rõ thì không suy diễn, không nhắc tới tuổi tác.
+③ Kết luận thực tế: 1-2 câu về tác động cụ thể tới hôn nhân người này. TUYỆT ĐỐI KHÔNG ước lượng hay nêu số tuổi/số năm chênh lệch cụ thể với bạn đời (không nói "hơn khoảng X tuổi", không chốt số năm) — đây là đoạn văn xuôi hiển thị cho người đọc, không phải nơi tính toán tuổi tác.
 
 Không liệt kê lại tên sao, không mô tả lại dữ liệu thô. Nếu cung vô chính diệu thì nói rõ phải mượn cung xung chiếu để luận.`
   );
