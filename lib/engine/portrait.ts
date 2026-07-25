@@ -59,6 +59,12 @@ const LEVEL2_STRONG = new Set([
   'Kình Dương', 'Đà La', 'Địa Không', 'Địa Kiếp', 'Hỏa Tinh', 'Linh Tinh',
   'Đào Hoa', 'Hồng Loan', 'Thiên Riêu',
 ]);
+// Lục sát tinh — DUY NHẤT nhóm sao tại tam hợp/xung được phép ảnh hưởng tới
+// morphology (xem computeSpouseMorphology STEP 1b): theo cách luận giải cổ
+// pháp thật, tam hợp/xung chỉ đáng xét khi có cụm sát tinh mạnh gây PHÁ CÁCH —
+// không phải mọi sao đóng ở đó (Henry chỉ ra: xem chính tinh + phụ tinh tại
+// CHÍNH cung Phu Thê là chuẩn, ít khi xét tam hợp/xung trừ phi có lục sát).
+const LUC_SAT_TINH = new Set(['Kình Dương', 'Đà La', 'Địa Không', 'Địa Kiếp', 'Hỏa Tinh', 'Linh Tinh']);
 const LEVEL3_NOBLE = new Set([
   'Văn Xương', 'Văn Khúc', 'Hoa Cái', 'Long Trì', 'Phượng Các', 'Quốc Ấn',
   'Thiên Quan', 'Thiên Phúc', 'Tam Thai', 'Bát Tọa',
@@ -95,15 +101,17 @@ function palaceStars(p: Rec | null | undefined): StarObj[] {
   return out;
 }
 
-// Sao ĐÓNG THẲNG tại cung gốc (Phu Thê) là dấu hiệu CHỦ ĐẠO của cung — tam hợp
-// chỉ hỗ trợ, xung chiếu chỉ phản chiếu (yếu hơn tam hợp). LOC_MULT dùng để
-// xếp hạng trong `ranked` (ưu tiên sao ở nhà cho cả phần "reinforce" MOD_FIELDS
-// bên dưới) — riêng việc CHỌN CORE là quy tắc CỨNG ở `pickCore()` (core chỉ
-// đến từ home, KHÔNG bao giờ để tam hợp/xung thắng dù sáng đến đâu), không chỉ
-// dựa vào trọng số này (trước đây rankStars cho MỌI sao level-1 cùng 1 trọng
-// số gốc bất kể vị trí đóng, nên 1 chính tinh HÃM tại Phu Thê — vd Thất Sát
-// Hãm — có thể bị 1 sao sáng hơn từ tam hợp/xung áp đảo hoàn toàn).
-const LOC_MULT: Record<'home' | 'tamHop' | 'xung', number> = { home: 1.8, tamHop: 1.0, xung: 0.85 };
+// Sao ĐÓNG THẲNG tại cung gốc (Phu Thê) là dấu hiệu CHỦ ĐẠO của cung. Trước
+// đây gom TOÀN BỘ sao ở cả tam hợp/xung vào chung 1 pool rồi xếp hạng bằng
+// trọng số vị trí (LOC_MULT) — nhưng Henry chỉ ra cách luận giải cổ pháp THẬT
+// hẹp hơn nhiều: chỉ xem chính tinh + phụ tinh tại CHÍNH cung Phu Thê, tam
+// hợp/xung CHỈ đáng xét khi có lục sát tinh gây phá cách. Gom mọi sao (kể cả
+// các sao đẹp/trung tính như Văn Xương, Hồng Loan...) từ tam hợp/xung dễ khiến
+// nhiều lá số khác nhau hội tụ về cùng vài sao hay đóng ở Phúc Đức/Thiên Di/
+// Quan Lộc → ảnh sinh ra na ná nhau (pha loãng). Nay: home LUÔN là nguồn core
+// + tinh chỉnh bình thường (không cần trọng số vị trí nữa — xem
+// computeSpouseMorphology STEP 1/1b); tam hợp/xung chỉ góp mặt qua
+// LUC_SAT_TINH đã lọc sẵn TRƯỚC khi vào rankStars.
 interface LocatedStar extends StarObj {
   loc: 'home' | 'tamHop' | 'xung';
 }
@@ -120,8 +128,11 @@ export interface RankedStar {
   loc: 'home' | 'tamHop' | 'xung';
 }
 
-// STEP 1-4 — rank sao theo cấp ưu tiên + bonus ngũ hành + bonus sáng sao + vị
-// trí đóng (sao đóng thẳng tại cung > tam hợp > xung chiếu — xem LOC_MULT).
+// STEP 1-4 — rank sao theo cấp ưu tiên + bonus ngũ hành + bonus sáng sao. Vị
+// trí đóng KHÔNG còn là trọng số ở đây — pool đầu vào đã được CURATE trước
+// (chỉ home + lục sát tinh tam hợp/xung, xem computeSpouseMorphology) nên mọi
+// sao vào tới đây đều "đáng được xét" như nhau, chỉ còn cạnh tranh theo cấp/
+// độ sáng/ngũ hành.
 // STEP 8 — chỉ giữ tối đa 8 sao "có ý nghĩa" (bỏ sao không có dữ liệu hình dáng).
 function rankStars(pool: LocatedStar[], menhHanh: string): RankedStar[] {
   const seen = new Set<string>();
@@ -134,11 +145,10 @@ function rankStars(pool: LocatedStar[], menhHanh: string): RankedStar[] {
     const level = starLevel(s.ten);
     const bMult = BRIGHTNESS_MULT[s.brightness || ''] ?? 1.0;
     const eMult = menhHanh && primaryElement(entry.element) === menhHanh ? 1.2 : 1.0;
-    const locMult = LOC_MULT[s.loc];
     out.push({
       ten: s.ten,
       level,
-      weight: LEVEL_BASE[level] * bMult * eMult * locMult,
+      weight: LEVEL_BASE[level] * bMult * eMult,
       brightness: s.brightness,
       entry,
       loc: s.loc,
@@ -148,15 +158,36 @@ function rankStars(pool: LocatedStar[], menhHanh: string): RankedStar[] {
   return out.slice(0, 8);
 }
 
+// Ngoại lệ cổ pháp DUY NHẤT dùng tới xung chiếu cho CORE (không phải reinforce
+// — đây là mượn toàn bộ danh tính): Phu Thê VÔ CHÍNH DIỆU (không có chính
+// tinh nào đóng thẳng tại đó) → mượn CHÍNH TINH sáng nhất của cung XUNG CHIẾU
+// (đối cung) làm core, đúng quy tắc "vô chính diệu tất phải mượn đối cung
+// luận". TÁCH RIÊNG khỏi pool tam hợp/xung "reinforce" (chỉ lục sát tinh) ở
+// computeSpouseMorphology — vì đây không phải tinh chỉnh phụ, mà là core.
+function bestXungChinhTinh(xung: Rec | undefined, menhHanh: string): RankedStar | null {
+  const majors = ((xung?.majorStars as StarObj[]) || []).filter((s) => s?.ten && STAR_DATA[s.ten]);
+  if (!majors.length) return null;
+  const ranked = majors.map((s) => {
+    const entry = STAR_DATA[s.ten];
+    const bMult = BRIGHTNESS_MULT[s.brightness || ''] ?? 1.0;
+    const eMult = menhHanh && primaryElement(entry.element) === menhHanh ? 1.2 : 1.0;
+    return {
+      ten: s.ten,
+      level: 1 as const,
+      weight: LEVEL_BASE[1] * bMult * eMult,
+      brightness: s.brightness,
+      entry,
+      loc: 'xung' as const,
+    };
+  });
+  ranked.sort((a, b) => b.weight - a.weight);
+  return ranked[0];
+}
+
 // STEP 2 (chọn CORE) — core PHẢI đến từ sao đóng THẲNG tại Phu Thê (chính tinh
-// hay phụ tinh cũng được, miễn đóng tại đó) — tam hợp/xung KHÔNG được cạnh
-// tranh ngôi core, chỉ dùng để "reinforce" (tinh chỉnh MOD_FIELDS trong
-// buildFields). Ngoại lệ cổ pháp DUY NHẤT: Phu Thê VÔ CHÍNH DIỆU (không có
-// chính tinh nào đóng tại đó) → mượn CHÍNH TINH của cung XUNG CHIẾU (đối
-// cung) làm core, đúng quy tắc "vô chính diệu tất phải mượn đối cung luận" —
-// KHÔNG mượn tam hợp (tam hợp chỉ hỗ trợ, không phải cung đối chiếu trực
-// tiếp).
-function pickCore(ranked: RankedStar[], phuThe: Rec | undefined): RankedStar {
+// hay phụ tinh cũng được, miễn đóng tại đó). Ngoại lệ cổ pháp DUY NHẤT: Phu
+// Thê VÔ CHÍNH DIỆU → mượn chính tinh cung XUNG CHIẾU (xem bestXungChinhTinh).
+function pickCore(ranked: RankedStar[], phuThe: Rec | undefined, xung: Rec | undefined, menhHanh: string): RankedStar {
   // "Vô chính diệu" = KHÔNG có chính tinh (level 1) đóng tại Phu Thê — cung
   // vẫn có thể có phụ tinh (Văn Xương, Thiên Phúc...) nên phải kiểm tra
   // majorStars THÔ trước, KHÔNG được suy "có sao ở home" = "có chính tinh".
@@ -171,8 +202,8 @@ function pickCore(ranked: RankedStar[], phuThe: Rec | undefined): RankedStar {
     // VÔ CHÍNH DIỆU → mượn CHÍNH TINH cung XUNG CHIẾU (đối cung) làm core,
     // ưu tiên TRƯỚC CẢ phụ tinh lẻ tại home (đúng cổ pháp "vô chính diệu tất
     // phải mượn đối cung luận").
-    const xungChinhTinh = ranked.filter((r) => r.loc === 'xung' && r.level === 1);
-    if (xungChinhTinh.length) return xungChinhTinh[0];
+    const borrowed = bestXungChinhTinh(xung, menhHanh);
+    if (borrowed) return borrowed;
     // Xung cũng vô chính diệu (hiếm) → đành dùng phụ tinh lẻ tại home nếu có.
     const homeRanked = ranked.filter((r) => r.loc === 'home');
     if (homeRanked.length) return homeRanked[0];
@@ -293,19 +324,23 @@ export function computeSpouseMorphology(ls: Laso, userGender: 'nam' | 'nu'): Spo
   const tamHop = (phuThe?.tamHopCungs as Rec[]) || [];
   const xung = phuThe?.xungChieuCung as Rec | undefined;
 
-  // STEP 1 — thu thập sao tại Phu Thê + tam phương tứ chiếu (Phúc Đức, Thiên
-  // Di, xung Quan Lộc) — mirror đúng cách file instructions gom Mệnh+3 cung
-  // tam-chiếu, chỉ đổi cung gốc từ Mệnh sang Phu Thê. Gắn nhãn vị trí (home/
-  // tamHop/xung) để rankStars ưu tiên đúng sao đóng thẳng tại Phu Thê.
-  const pool: LocatedStar[] = [
-    ...locatedPalaceStars(phuThe, 'home'),
+  // STEP 1 — sao ĐÓNG THẲNG tại Phu Thê (chính tinh + phụ tinh) là nguồn DUY
+  // NHẤT cho core + tinh chỉnh bình thường — đúng cách luận giải cổ pháp thật
+  // (Henry: chỉ xem sao tại chính cung, ít khi xét tam hợp/xung).
+  const homePool = locatedPalaceStars(phuThe, 'home');
+  // STEP 1b — tam hợp/xung CHỈ góp mặt khi có LỤC SÁT TINH (tín hiệu phá cách
+  // thật sự) — bỏ qua mọi sao khác dù cũng đóng ở đó (Văn Xương, Hồng Loan,
+  // Đào Hoa...), tránh pha loãng khiến nhiều lá số khác nhau ra hình na ná.
+  const supportSat = [
     ...tamHop.flatMap((p) => locatedPalaceStars(p as Rec, 'tamHop')),
     ...locatedPalaceStars(xung, 'xung'),
-  ];
+  ].filter((s) => LUC_SAT_TINH.has(s.ten));
+
+  const pool: LocatedStar[] = [...homePool, ...supportSat];
 
   const menhHanh = primaryElement(String(ls.cuc || '').split(' ')[0]);
   const ranked = rankStars(pool, menhHanh);
-  const core = pickCore(ranked, phuThe);
+  const core = pickCore(ranked, phuThe, xung, menhHanh);
 
   const fields = buildFields(core, ranked.length ? ranked : [DEFAULT_CORE]);
 
@@ -321,7 +356,9 @@ export function computeSpouseMorphology(ls: Laso, userGender: 'nam' | 'nu'): Spo
     starAgeOffset,
     fields,
     coreStar: core.ten,
-    contributingStars: ranked.map((r) => r.ten),
+    // core có thể là chính tinh MƯỢN từ xung chiếu (vô chính diệu — xem
+    // pickCore) nên không nằm sẵn trong `ranked`; thêm vào đây cho đủ.
+    contributingStars: Array.from(new Set([core.ten, ...ranked.map((r) => r.ten)])),
   };
 }
 
