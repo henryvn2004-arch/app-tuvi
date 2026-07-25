@@ -36,6 +36,11 @@ export async function POST(request: NextRequest) {
   if (kind === 'image') {
     imageUrl = String(b.imageUrl || '').slice(0, 500);
     if (!/^https:\/\//.test(imageUrl)) return err('imageUrl không hợp lệ', 400);
+    // text đi kèm ảnh là TÙY CHỌN — mô tả/luận giải quanh kết quả (vd Chân Dung
+    // Vợ Chồng: tính cách + hoàn cảnh gặp gỡ + luận giải cung Phu Thê), để trang
+    // /ket-qua hiện ĐỦ nội dung workspace chứ không chỉ mỗi tấm ảnh.
+    const t = String(b.text || '').trim().slice(0, 6000);
+    if (t) textContent = t;
   } else {
     textContent = String(b.text || '').trim().slice(0, 4000);
     if (!textContent) return err('Chưa có nội dung để chia sẻ', 400);

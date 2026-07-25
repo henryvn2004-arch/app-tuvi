@@ -55,10 +55,12 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
   const title = esc(row.title || 'Kết quả Luận Đường');
   const url = `${SITE}/ket-qua/${esc(id)}`;
   const isImage = row.kind === 'image' && row.image_url;
+  const textBlocks = (t: string) => t.split(/\n{2,}/).map((p) => '<p>' + esc(p).replace(/\n/g, '<br>') + '</p>').join('');
 
-  const teaser = isImage
-    ? 'Xem kết quả AI luận từ lá số Tử Vi — Tử Vi Minh Bảo.'
-    : (row.text_content || '').replace(/[*#\n]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 180);
+  // Teaser cho OG description: ưu tiên text_content thật (mô tả/luận giải đi
+  // kèm ảnh) — chỉ rơi về câu chung chung khi ảnh KHÔNG có text đính kèm.
+  const teaser = (row.text_content || '').replace(/[*#\n]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 180)
+    || (isImage ? 'Xem kết quả AI luận từ lá số Tử Vi — Tử Vi Minh Bảo.' : '');
   const desc = esc(teaser || 'Luận giải Tử Vi bởi Tử Vi Minh Bảo.');
 
   // OG image: kind=image → dùng THẲNG ảnh AI (thumbnail đẹp có sẵn, không cần
@@ -69,9 +71,12 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
 
   const ctaRoute = `/app/${row.tool_id}`;
 
+  // Ảnh CÓ THỂ mang thêm text_content (mô tả/luận giải quanh kết quả) — hiện
+  // ĐỦ nội dung workspace, không chỉ mỗi tấm ảnh.
   const body = isImage
-    ? `<img class="res-img" src="${esc(row.image_url as string)}" alt="${title}">`
-    : `<div class="res-text">${esc(row.text_content || '').split(/\n{2,}/).map((p) => '<p>' + esc(p).replace(/\n/g, '<br>') + '</p>').join('')}</div>`;
+    ? `<img class="res-img" src="${esc(row.image_url as string)}" alt="${title}">` +
+      (row.text_content ? `<div class="res-text" style="margin-top:16px">${textBlocks(row.text_content)}</div>` : '')
+    : `<div class="res-text">${textBlocks(row.text_content || '')}</div>`;
 
   const html = `<!DOCTYPE html><html lang="vi"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">

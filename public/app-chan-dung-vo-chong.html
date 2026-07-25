@@ -251,11 +251,19 @@ async function _doGenerate() {
       greeting: 'Đã vẽ xong chân dung dựa trên cung Phu Thê của bạn. Muốn hỏi thêm về hôn nhân, cung Phu Thê hay lá số?',
       chips: ['Cung Phu Thê của tôi có gì đặc biệt?', 'Hôn nhân của tôi có thuận không?', 'Bao giờ tôi lập gia đình?', 'Xem thêm về tính cách của tôi'],
     });
+    // Gộp mô tả + hoàn cảnh gặp gỡ + luận giải cung Phu Thê vào cùng 1 khối text
+    // đi kèm ảnh — share ra ngoài phải mang ĐỦ nội dung workspace, không chỉ ảnh.
+    var spouseLabel = data.spouseGender === 'nu' ? 'Người Vợ' : 'Người Chồng';
+    var shareParts = [spouseLabel + ' — ước lượng khoảng ' + data.spouseAge + ' tuổi'];
+    if (data.description) shareParts.push(data.description);
+    if (data.meetingContext) shareParts.push('Hoàn cảnh gặp gỡ: ' + data.meetingContext);
+    if (data.phuTheLuanGiai) shareParts.push('Luận giải cung Phu Thê:\n' + data.phuTheLuanGiai);
     Shell.setShareable({
       kind: 'image',
       toolId: 'chan-dung-vo-chong',
       title: 'Chân dung ' + (data.spouseGender === 'nu' ? 'người vợ' : 'người chồng') + ' của tôi',
       imageUrl: data.imageUrl,
+      text: shareParts.join('\n\n'),
     });
   } catch (e) {
     _loadingCtl && _loadingCtl.stop();
