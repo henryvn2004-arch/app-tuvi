@@ -620,6 +620,9 @@ async function _doAnalyze() {
     if (!full) throw new Error('Không có kết quả.');
     el.innerHTML = renderMd(full);
     _saveTuongReading('thanh-tuong', full, null, null);
+    // Chia sẻ CHỈ text luận giải của AI — KHÔNG đính kèm bản ghi âm giọng nói
+    // thật của user (riêng tư, và cũng chưa có cơ chế lưu audio public).
+    Shell.setShareable({ kind:'text', toolId:'thanh-tuong', title:'Thanh Tướng của tôi', text:full });
   } catch(e) {
     document.getElementById('aiResult').innerHTML = '';
     document.getElementById('resultCard').style.display = 'none';
@@ -653,6 +656,7 @@ function resetTool() {
   document.getElementById('recordIcon').textContent = '🎙';
   document.getElementById('recordLabel').textContent = 'Bắt Đầu Thu Âm';
   document.getElementById('inputCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  Shell.setShareable(null);
 }
 
 function renderMd(md) {

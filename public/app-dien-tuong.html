@@ -524,6 +524,9 @@ async function _doAnalyze() {
     if(!full) throw new Error('AI không trả về kết quả.');
     el.innerHTML=renderMarkdown(full);
     _saveTuongReading('dien-tuong', full, _imageData, _mediaType);
+    // Chia sẻ CHỈ text luận giải của AI — KHÔNG bao giờ đính kèm ảnh khuôn mặt
+    // thật của user (riêng tư), dù ảnh đã tải lên để phân tích.
+    Shell.setShareable({ kind:'text', toolId:'dien-tuong', title:'Diện Tướng của tôi', text:full });
   } catch(e) {
     document.getElementById('aiResult').innerHTML='';
     document.getElementById('resultCard').style.display='none';
@@ -538,6 +541,7 @@ function resetTool() {
   document.getElementById('resultCard').style.display='none';
   document.getElementById('aiResult').innerHTML='';
   document.getElementById('inputCard').scrollIntoView({behavior:'smooth',block:'start'});
+  Shell.setShareable(null);
 }
 
 function renderMarkdown(md) {

@@ -418,6 +418,9 @@ async function _doAnalyze() {
     if(!full) throw new Error('Không có kết quả.');
     el.innerHTML=renderMd(full);
     _saveTuongReading('thu-tuong', full, _imageData, _mediaType);
+    // Chia sẻ CHỈ text luận giải của AI — KHÔNG bao giờ đính kèm ảnh bàn tay
+    // thật của user (riêng tư), dù ảnh đã tải lên để phân tích.
+    Shell.setShareable({ kind:'text', toolId:'thu-tuong', title:'Thủ Tướng của tôi', text:full });
   } catch(e){
     document.getElementById('aiResult').innerHTML='';
     document.getElementById('resultCard').style.display='none';
@@ -431,6 +434,7 @@ function resetTool() {
   document.getElementById('resultCard').style.display='none';
   document.getElementById('aiResult').innerHTML='';
   document.getElementById('inputCard').scrollIntoView({behavior:'smooth',block:'start'});
+  Shell.setShareable(null);
 }
 
 function renderMd(md){
