@@ -144,12 +144,18 @@ function calculate(){
     greeting:'Cung mệnh của bạn là **'+r.data.menhQuai+'** ('+r.data.nhom+'). Bạn muốn hỏi hướng cho việc gì?',
     chips:['Hướng nhà nào hợp nhất?','Bếp nên đặt hướng nào?','Giường ngủ quay hướng nào?','Buộc ở hướng xấu thì hóa giải sao?']
   });
+  var _btLines=['Hướng Bát Trạch — năm '+r.data.nam+' ('+(r.data.gioiTinh==='nam'?'Nam':'Nữ')+')'];
+  _btLines.push('Cung mệnh: '+r.data.cung+' — '+r.data.menhQuai+' ('+r.data.quaiHanh+') — '+r.data.nhom);
+  _btLines.push('Hướng tốt: '+r.data.huongTot);
+  _btLines.push('Hướng xấu: '+r.data.huongXau);
+  Shell.setShareable({kind:'text',toolId:'bat-trach',title:'Bát Trạch · '+r.data.menhQuai+' · '+r.data.nhom,text:_btLines.join('\n')});
   document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
 }
 function showForm(){
   document.getElementById('resPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
   document.getElementById('btnEdit').style.display='none';
+  Shell.setShareable(null);
 }
 </script>
 <script>/*SHELL_RESTORE_BOOT*/(function(){function _r(){var r=window.Shell&&Shell.pendingRestore&&Shell.pendingRestore();if(r&&r.form){Shell.fillForm(r.form);calculate();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_r);else _r();})();</script>

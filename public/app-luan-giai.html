@@ -194,7 +194,7 @@ function doLuan(){
     ls._conv=conv; ls._hoTen=name;
     _astrolabe=ls; _hoTen=name; _ngay=dd; _thang=mm; _nam=yyyy; _gioitinh=gioitinh; _namXem=namxem;
     _laSoText=formatLaSoV2(ls,conv); ls._laSoText=_laSoText;
-    renderLuan(ls,fd,namxem);
+    var _sum=renderLuan(ls,fd,namxem);
     document.getElementById('miniChart').innerHTML=renderGrid(ls,fd);
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('lgPanel').style.display='block';
@@ -207,6 +207,18 @@ function doLuan(){
       label:'Luận giải '+(name||'lá số')+' · '+dd+'/'+mm+'/'+yyyy+' · năm '+namxem,
       greeting:'Bản luận của **'+(name||'bạn')+'** đã sẵn sàng. Hỏi tôi để đào sâu bất kỳ phần nào — 12 cung, đại vận, tứ hóa.',
       chips:buildLuanChips(ls,namxem)
+    });
+    // Chia sẻ: tóm tắt tổng quan lá số (cục/nạp âm/điểm/cách cục) — dữ liệu
+    // THẬT đã tính, không phải dump 24 phần luận giải (quá dài cho 1 link share).
+    var _shareLines=[(name||'Lá số')+' · '+dd+'/'+mm+'/'+yyyy+' · '+(gioitinh==='nam'?'Nam':'Nữ')];
+    _shareLines.push('Cục: '+(ls.cuc||'—')+' · Nạp âm: '+(ls.napAm||'—'));
+    _shareLines.push('Điểm tổng quan lá số: '+(_sum.overall!=null?_sum.overall+'/10':'—')+(_sum.dvTong!=null?' · Đại vận hiện tại: '+_sum.dvTong+'/10':''));
+    if(ls.cachCuc&&ls.cachCuc.length) _shareLines.push('\nCách cục nổi bật: '+ls.cachCuc.map(function(c){return c.ten+(c.moTa?' — '+c.moTa:'');}).join('; '));
+    Shell.setShareable({
+      kind:'text',
+      toolId:'luan-giai',
+      title:'Lá số của '+(name||'tôi'),
+      text:_shareLines.join('\n')
     });
     initLuanGiaiGate(ls);
   }catch(e){
@@ -251,6 +263,7 @@ function renderLuan(ls,fd,namxem){
   document.getElementById('lgJump').innerHTML=LABELS.slice(1).map(function(l,i){return '<a data-i="'+i+'"'+(i===0?' class="on"':'')+'>'+esc(l)+'</a>'}).join('');
   bindJump();
   document.querySelectorAll('#lgBody [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
+  return {overall:overall, dvTong:dvTong};
 }
 
 function sec(n,title,tag,inner){ return '<section class="sec" id="sec-'+n+'"><div class="sec-h"><div class="sec-n">'+n+'</div><h3>'+esc(title)+'</h3>'+(tag?'<span class="tag">'+esc(tag)+'</span>':'')+'</div>'+inner+'</section>'; }
@@ -512,6 +525,7 @@ function showForm(){
   document.getElementById('lgUnlock').style.display='none';
   document.getElementById('lgProgress').style.display='none';
   document.getElementById('lgPdfBar').classList.remove('visible');
+  Shell.setShareable(null);
 }
 // điền sẵn ngày sinh đã nhớ (nếu có); tự luận nếu đến qua ?auto=1 (từ nút Lá số).
 // Chạy SAU khi shell.js render rail (boot ở DOMContentLoaded) để Shell.setContext không lỗi.

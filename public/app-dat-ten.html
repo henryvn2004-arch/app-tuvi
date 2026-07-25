@@ -136,6 +136,10 @@ function doDatTen(){
       greeting:'Nền mệnh của bé đã sẵn sàng (con **'+esc(iCon.canChi)+'** · '+esc(iCon.hanh)+'). Bạn muốn tôi gợi ý tên theo hướng nào?',
       chips:['Gợi ý 12 tên hợp mệnh kèm ý nghĩa','Tên đệm nào hợp cho bé?','Con cần bổ ngũ hành gì?','Tên hợp cả tuổi bố và mẹ?']
     });
+    var _dtLines=['Đặt tên '+gtLabel+' họ '+ho+' — nền mệnh con '+iCon.canChi+' ('+iCon.napAm+', '+iCon.hanh+')'];
+    _dtLines.push('Bố: '+iBo.canChi+' ('+iBo.napAm+', '+iBo.hanh+') · Mẹ: '+iMe.canChi+' ('+iMe.napAm+', '+iMe.hanh+')');
+    _dtLines.push('Nên chọn tên có ngũ hành '+_hanhSinhCho(iCon.hanh)+' (tương sinh) hoặc '+iCon.hanh+' (đồng hành) để bồi mệnh cho con.');
+    Shell.setShareable({ kind:'text', toolId:'dat-ten', title:'Đặt tên '+gtLabel+' họ '+ho+' · '+iCon.canChi, text:_dtLines.join('\n') });
     document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
   }catch(e){
     document.getElementById('ccRow').innerHTML='<div class="laso-error">Lỗi: '+esc(e.message)+'</div>';
@@ -225,6 +229,7 @@ function showForm(){
   document.getElementById('resPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
   document.getElementById('btnEdit').style.display='none';
+  Shell.setShareable(null);
 }
 </script>
 <script>/*SHELL_RESTORE_BOOT*/(function(){function _r(){var r=window.Shell&&Shell.pendingRestore&&Shell.pendingRestore();if(r&&r.form){Shell.fillForm(r.form);doDatTen();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_r);else _r();})();</script>

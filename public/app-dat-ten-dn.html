@@ -165,6 +165,10 @@ function doDatTenDn(){
         ?['Chấm tên "'+tenGoiY+'" hợp mệnh chủ và ngành không?','Gợi ý 5 tên khác hợp hơn','Tên nên bổ ngũ hành gì?','Slogan nào hợp với tên này?']
         :['Gợi ý 5 tên hợp mệnh kèm ý nghĩa','Tên nên bổ ngũ hành gì cho chủ?','Tên nào hợp khí chất ngành này?','Tránh chữ/âm nào khi đặt tên?']
     });
+    var _dtLines=['Đặt tên doanh nghiệp · ngành '+nganh+(loaiHinh?' · '+loaiHinh:'')+' — nền mệnh chủ '+iChu.canChi+' ('+iChu.napAm+', '+iChu.hanh+')'];
+    if(tenGoiY) _dtLines.push('Tên đang cân nhắc: '+tenGoiY);
+    _dtLines.push('Nên chọn tên có ngũ hành '+hanhSinhCho(iChu.hanh)+' (tương sinh) hoặc '+iChu.hanh+' (đồng hành) để bồi mệnh chủ.');
+    Shell.setShareable({ kind:'text', toolId:'dat-ten-dn', title:'Đặt tên DN · '+nganh+' · chủ '+iChu.canChi, text:_dtLines.join('\n') });
     document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
   }catch(e){
     document.getElementById('ccRow').innerHTML='<div class="laso-error">Lỗi: '+esc(e.message)+'</div>';
@@ -254,6 +258,7 @@ function showForm(){
   document.getElementById('resPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
   document.getElementById('btnEdit').style.display='none';
+  Shell.setShareable(null);
 }
 </script>
 <script>/*SHELL_RESTORE_BOOT*/(function(){function _r(){var r=window.Shell&&Shell.pendingRestore&&Shell.pendingRestore();if(r&&r.form){Shell.fillForm(r.form);doDatTenDn();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_r);else _r();})();</script>

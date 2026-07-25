@@ -106,12 +106,16 @@ function calculate(){
     greeting:'Đã tính 4 con số cho **'+r.data.ten+'** (Đường Đời **'+r.data.soDuongDoi+'**, Định Mệnh '+r.data.soDinhMenh+', Linh Hồn '+r.data.soLinhHon+', Sứ Mệnh '+r.data.soSuMenh+'). Bạn muốn tôi luận gì trước?',
     chips:['Số Đường Đời nói gì về tôi?','Nghề nghiệp nào hợp?','Tình cảm hợp số mấy?','4 con số này bổ trợ hay mâu thuẫn?']
   });
+  var _tsLines=['Thần số học — '+r.data.ten+' ('+r.data.dob+')'];
+  _tsLines.push('Đường Đời: '+r.data.soDuongDoi+' · Định Mệnh: '+r.data.soDinhMenh+' · Linh Hồn: '+r.data.soLinhHon+' · Sứ Mệnh: '+r.data.soSuMenh);
+  Shell.setShareable({kind:'text',toolId:'than-so-hoc',title:'Thần số học của '+r.data.ten,text:_tsLines.join('\n')});
   document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
 }
 function showForm(){
   document.getElementById('resPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
   document.getElementById('btnEdit').style.display='none';
+  Shell.setShareable(null);
 }
 </script>
 <script>/*SHELL_RESTORE_BOOT*/(function(){function _r(){var r=window.Shell&&Shell.pendingRestore&&Shell.pendingRestore();if(r&&r.form){Shell.fillForm(r.form);calculate();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_r);else _r();})();</script>

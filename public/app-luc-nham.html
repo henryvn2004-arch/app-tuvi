@@ -121,9 +121,18 @@ function calculate(){
     greeting:'Giờ **'+r.data.gio+'** ngày '+r.data.ngayDL+' — thần tướng đang trực là **'+r.data.thanTuong+'** ('+r.data.catHung+'). Bạn định làm việc gì?',
     chips:['Giờ này hợp gặp gỡ/cầu tài không?','Nên hay không nên ký kết lúc này?','Xuất hành giờ này thế nào?','Nếu hung thì hóa giải sao?']
   });
+  Shell.setShareable({
+    kind:'text',
+    toolId:'luc-nham',
+    title:'Lục Nhâm · '+r.data.thanTuong+' ('+r.data.catHung+')',
+    text:['Lục Nhâm Giản — ngày '+r.data.ngayDL+' (Can ngày '+r.data.canNgay+'), giờ '+r.data.gio,
+      'Thần tướng đang trực: '+r.data.thanTuong+' — '+r.data.catHung,
+      r.data.luan
+    ].join('\n')
+  });
   document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){el.addEventListener('click',function(){Shell.ask(el.getAttribute('data-ask'));});});
 }
-function showForm(){document.getElementById('resPanel').style.display='none';document.getElementById('birthPanel').style.display='block';document.getElementById('btnEdit').style.display='none';}
+function showForm(){document.getElementById('resPanel').style.display='none';document.getElementById('birthPanel').style.display='block';document.getElementById('btnEdit').style.display='none';Shell.setShareable(null);}
 (function(){var t=new Date();document.getElementById('ngay').value=t.getDate();document.getElementById('thang').value=t.getMonth()+1;document.getElementById('nam').value=t.getFullYear();var h=t.getHours();document.getElementById('gio').value=Math.floor(((h*60+60)%(24*60))/120)%12;})();
 ['ngay','thang','nam'].forEach(function(id){document.getElementById(id).addEventListener('keydown',function(e){if(e.key==='Enter')calculate();});});
 </script>

@@ -447,10 +447,21 @@ function renderResults(data){
     greeting:'Điểm phong thủy hiện tại: **'+before+'/100**, sau điều chỉnh có thể lên **'+after+'/100**. Bạn muốn hỏi thêm về đề xuất nào?',
     chips:['Vì sao điểm hiện tại thấp?','Ưu tiên làm gì trước?','Vật phẩm nào nên mua trước?']
   });
+  // Chia sẻ (chưa có ảnh AI render lúc này — CHỈ text điểm+lời khuyên; KHÔNG
+  // dùng ảnh phòng thật của user vì lý do riêng tư). Nâng cấp lên kind='image'
+  // khi _doRenderCall() xong (ảnh AI "sau phong thủy", không phải ảnh thật).
+  _ptBefore=before; _ptAfter=after; _ptAdvice=analysis.generalAdvice||'';
+  Shell.setShareable({
+    kind:'text',
+    toolId:'phong-thuy',
+    title:'Điểm Phong Thủy phòng của tôi',
+    text:'Điểm phong thủy hiện tại: '+before+'/100'+(after>before?' — sau điều chỉnh có thể lên '+after+'/100':'')+(_ptAdvice?'\n\n'+_ptAdvice:'')
+  });
 }
 
 // ── Room Render state ─────────────────────────────────────────
 let _renderGua = null, _renderRoomType = 'bedroom', _renderGioiTinh = 'male';
+let _ptBefore = null, _ptAfter = null, _ptAdvice = '';
 let _renderRecs = [], _renderResultUrl = null, _renderSlug = null;
 
 function resetRender() {
@@ -502,6 +513,15 @@ async function _doRenderCall() {
     document.getElementById('renderLoading').style.display = 'none';
     document.getElementById('renderResult').style.display = 'block';
     document.getElementById('renderIdle').style.display = 'block';
+    // Nâng cấp share lên ảnh AI "sau phong thủy" (KHÔNG dùng ảnh phòng thật
+    // trước đó — riêng tư) + giữ nguyên text điểm/lời khuyên đã có.
+    Shell.setShareable({
+      kind: 'image',
+      toolId: 'phong-thuy',
+      title: 'Phòng của tôi sau khi Phong Thủy hóa bằng AI',
+      imageUrl: data.imageUrl,
+      text: (_ptBefore != null ? 'Điểm phong thủy hiện tại: ' + _ptBefore + '/100' + (_ptAfter > _ptBefore ? ' — sau điều chỉnh có thể lên ' + _ptAfter + '/100' : '') : '') + (_ptAdvice ? '\n\n' + _ptAdvice : ''),
+    });
   } catch(e) {
     _renderLoadingCtl && _renderLoadingCtl.stop();
     document.getElementById('renderLoading').style.display = 'none';

@@ -1142,6 +1142,9 @@ async function _doThanhTuongAnalyze() {
       resultsPanel.innerHTML = '<p style="color:#C0392B;padding:20px;text-align:center">Không nhận được nội dung từ AI. Thử lại.</p>';
     } else {
       _saveTuongReading('thanh-tuong-pro', content, null, null);
+      // Chia sẻ CHỈ text luận giải của AI — KHÔNG đính kèm bản ghi âm giọng
+      // nói thật của user (riêng tư).
+      Shell.setShareable({ kind:'text', toolId:'thanh-tuong-pro', title:'Thanh Tướng Pro của tôi', text:content });
     }
 
     analyzeBtn.textContent = 'Luận Giải Lại';

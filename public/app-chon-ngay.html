@@ -149,6 +149,16 @@ function doChonNgay(){
       greeting:'Đã lập nền cho việc **'+esc(suKien)+'** (chủ sự tuổi **'+esc(info.canChi)+'**). Bạn muốn tôi tư vấn gì trước?',
       chips:['Ngày nào đẹp nhất trong tháng này?','Giờ hoàng đạo cho việc này?','Ngày nào cần tuyệt đối tránh?','Hướng xuất hành tốt trong ngày đó?']
     });
+    Shell.setShareable({
+      kind:'text',
+      toolId:'chon-ngay',
+      title:'Chọn ngày '+suKien+' cho '+(hoTen||'tôi'),
+      text:['Chọn ngày '+suKien+' · '+hoTen,
+        'Tuổi chủ sự: '+info.canChi+' ('+info.napAm+' · '+info.hanh+')',
+        'Tháng dự định: '+thangNum+'/'+namNum+' — '+thangCC,
+        'Năm '+namNum+': '+namCC
+      ].join('\n')
+    });
     document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
   }catch(e){
     document.getElementById('ccRow').innerHTML='<div class="laso-error">Lỗi: '+esc(e.message)+'</div>';
@@ -235,6 +245,7 @@ function showForm(){
   document.getElementById('resPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
   document.getElementById('btnEdit').style.display='none';
+  Shell.setShareable(null);
 }
 </script>
 <script>/*SHELL_RESTORE_BOOT*/(function(){function _r(){var r=window.Shell&&Shell.pendingRestore&&Shell.pendingRestore();if(r&&r.form){Shell.fillForm(r.form);doChonNgay();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_r);else _r();})();</script>

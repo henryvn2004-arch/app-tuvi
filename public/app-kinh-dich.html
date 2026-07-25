@@ -207,6 +207,12 @@ function showResult() {
     greeting: 'Quẻ đã lập — quẻ chính **' + r.que.n + '** (' + r.que.zh + ')' + (r.cQue ? ', quẻ biến **' + r.cQue.n + '**' : ' (không hào động)') + '. Tôi sẽ luận theo câu hỏi của bạn.',
     chips: ['Luận quẻ này cho câu hỏi của tôi', 'Hào động nói lên điều gì?', 'Quẻ biến cho thấy xu hướng nào?', 'Nên hành động thế nào lúc này?']
   });
+  var _kdLines = [];
+  if (d.cauHoi) _kdLines.push('Câu hỏi: "' + d.cauHoi + '"');
+  _kdLines.push('Quẻ chính: ' + d.queChinh);
+  if (d.queBien) _kdLines.push('Quẻ biến: ' + d.queBien);
+  _kdLines.push('Hào động: ' + d.haoDong);
+  Shell.setShareable({ kind: 'text', toolId: 'kinh-dich', title: 'Gieo quẻ Kinh Dịch · ' + r.que.n, text: _kdLines.join('\n') });
   document.querySelectorAll('#resPanel [data-ask]').forEach(function (el) { el.addEventListener('click', function () { Shell.ask(el.getAttribute('data-ask')); }); });
 }
 
@@ -221,6 +227,7 @@ function reset() {
   document.getElementById('resPanel').style.display = 'none';
   document.getElementById('birthPanel').style.display = 'block';
   document.getElementById('btnEdit').style.display = 'none';
+  Shell.setShareable(null);
   document.getElementById('stepCounter').textContent = 'Bấm để bắt đầu gieo quẻ — 6 lần gieo, mỗi lần xác định 1 hào';
   const tossBtn = document.getElementById('tossBtn');
   tossBtn.textContent = '✦ Tập Trung & Gieo Hào Đầu Tiên';

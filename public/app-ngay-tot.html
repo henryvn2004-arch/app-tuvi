@@ -121,9 +121,25 @@ function calculate(){
     greeting:'Đã xem lịch **tháng '+r.data.thang+'/'+r.data.nam+'**. Bạn định làm việc gì để tôi chọn ngày đẹp nhất?',
     chips:['Ngày nào đẹp để cưới hỏi?','Ngày nào tốt để khởi công/nhập trạch?','Vì sao tránh ngày kị?','Khai trương nên chọn ngày nào?']
   });
+  Shell.setShareable({
+    kind:'text',
+    toolId:'ngay-tot',
+    title:'Ngày tốt xấu tháng '+r.data.thang+'/'+r.data.nam,
+    text:['Lịch ngày tốt/xấu tháng '+r.data.thang+'/'+r.data.nam,
+      'Ngày tốt: '+_trimDayList(r.data.ngayTot),
+      'Ngày lưu ý (Dương Công Kị): '+_trimDayList(r.data.ngayLuuY),
+      'Ngày kị (Tam Nương/Nguyệt Kị): '+_trimDayList(r.data.ngayKi)
+    ].join('\n')
+  });
   document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){el.addEventListener('click',function(){Shell.ask(el.getAttribute('data-ask'));});});
 }
-function showForm(){document.getElementById('resPanel').style.display='none';document.getElementById('birthPanel').style.display='block';document.getElementById('btnEdit').style.display='none';}
+function _trimDayList(s){
+  if(!s)return '—';
+  var arr=s.split(', ');
+  if(arr.length<=8)return s;
+  return arr.slice(0,8).join(', ')+' và các ngày khác';
+}
+function showForm(){document.getElementById('resPanel').style.display='none';document.getElementById('birthPanel').style.display='block';document.getElementById('btnEdit').style.display='none';Shell.setShareable(null);}
 (function(){var t=new Date();document.getElementById('thang').value=t.getMonth()+1;document.getElementById('nam').value=t.getFullYear();})();
 ['thang','nam'].forEach(function(id){document.getElementById(id).addEventListener('keydown',function(e){if(e.key==='Enter')calculate();});});
 </script>

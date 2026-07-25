@@ -102,12 +102,16 @@ function calculate(){
     greeting:'Năm **'+r.data.nam+'** — bản mệnh **'+r.data.napAm+'** (hành '+r.data.hanh+'). Bạn muốn tôi luận điều gì?',
     chips:['Hợp màu gì, kỵ màu gì?','Hướng nhà/bàn làm việc nào hợp?','Tuổi nào hợp, tuổi nào khắc?','Vật phẩm phong thủy nào nên đeo?']
   });
+  var _naLines=['Nạp âm ngũ hành — năm '+r.data.nam+' ('+r.data.canChi+', năm '+r.data.conGiap+')'];
+  _naLines.push('Bản mệnh: '+r.data.napAm+' — hành '+r.data.hanh);
+  Shell.setShareable({kind:'text',toolId:'nap-am',title:'Nạp âm '+r.data.napAm+' — năm '+r.data.nam,text:_naLines.join('\n')});
   document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
 }
 function showForm(){
   document.getElementById('resPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
   document.getElementById('btnEdit').style.display='none';
+  Shell.setShareable(null);
 }
 document.getElementById('year').addEventListener('keydown',function(e){if(e.key==='Enter')calculate();});
 </script>
