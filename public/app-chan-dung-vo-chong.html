@@ -66,7 +66,10 @@
         <h2>Nhập ngày sinh của bạn (dương lịch)</h2>
         <p class="sub">AI sẽ lập lá số, phân tích cung Phu Thê rồi vẽ chân dung người bạn đời.</p>
         <div class="frow">
+          <div class="fg" style="flex:2;min-width:150px"><label>Họ và tên</label><input type="text" id="inpName" placeholder="Nguyễn Văn A"></div>
           <div class="fg" style="width:90px"><label>Giới tính</label><select id="inpGender"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
+        </div>
+        <div class="frow">
           <div class="fg" style="width:74px"><label>Ngày (DL)</label><select id="inpDd"></select></div>
           <div class="fg" style="width:84px"><label>Tháng (DL)</label><select id="inpMm"></select></div>
           <div class="fg" style="width:90px"><label>Năm (DL)</label><input type="number" id="inpYyyy" placeholder="1990" min="1900" max="2099"></div>
@@ -196,7 +199,8 @@ async function analyze() {
   if (!dd || !mm || !yyyy) { showError('Vui lòng nhập đầy đủ ngày tháng năm sinh.'); return; }
 
   var gioAmIdx = hourMinToGioAm(hh, pp);
-  _lastBirth = { day: dd, month: mm, year: yyyy, hourBranch: gioAmIdx, gender: gender, isLunar: false };
+  var hoTen = document.getElementById('inpName').value.trim();
+  _lastBirth = { day: dd, month: mm, year: yyyy, hourBranch: gioAmIdx, gender: gender, isLunar: false, name: hoTen };
 
   _currentSlug = TuviPaywall.generateToolSlug('chan-dung-vo-chong-' + dd + '-' + mm + '-' + yyyy);
   await TuviPaywall.requireCredits(_currentSlug, async function () { await _doGenerate(); });

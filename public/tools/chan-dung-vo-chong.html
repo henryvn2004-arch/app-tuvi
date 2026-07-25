@@ -206,7 +206,7 @@ async function _doGenerate(d) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
       body: JSON.stringify({
-        birth: { day: d.ngay, month: d.thang, year: d.nam, hourBranch: d.gioIdx, gender: d.gioitinh, isLunar: false },
+        birth: { day: d.ngay, month: d.thang, year: d.nam, hourBranch: d.gioIdx, gender: d.gioitinh, isLunar: false, name: d.hoten },
       }),
     });
     const data = await res.json();

@@ -74,7 +74,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     phuTheLuanGiai = (
       await llmText({
         system: PHU_THE_LUAN_GIAI_SYSTEM_PROMPT,
-        prompt: buildPhuTheLuanGiaiPrompt(laSoText, undefined, userGender),
+        prompt: buildPhuTheLuanGiaiPrompt(laSoText, birth.name, userGender),
         maxTokens: 900,
       })
     ).trim();
