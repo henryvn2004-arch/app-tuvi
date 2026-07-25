@@ -114,9 +114,18 @@ function calculate(){
     greeting:'Ngày **'+r.data.ngayDL+'** ('+r.data.canChiNgay+'). Đã tra giờ Hoàng Đạo / Hắc Đạo. Bạn định làm việc gì, để tôi chọn giờ đẹp?',
     chips:['Giờ nào tốt để khai trương?','Xuất hành nên đi giờ nào?','Ký hợp đồng giờ nào hợp?','Giờ nào cần tránh tuyệt đối?']
   });
+  Shell.setShareable({
+    kind:'text',
+    toolId:'hoang-dao',
+    title:'Giờ Hoàng Đạo ngày '+r.data.ngayDL,
+    text:['Giờ Hoàng Đạo — ngày '+r.data.ngayDL+' ('+r.data.canChiNgay+', Can hành '+r.data.canHanh+')',
+      'Giờ tốt (Hoàng Đạo): '+r.data.gioHoangDao,
+      'Giờ cần tránh (Hắc Đạo): '+r.data.gioHacDao
+    ].join('\n')
+  });
   document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){el.addEventListener('click',function(){Shell.ask(el.getAttribute('data-ask'));});});
 }
-function showForm(){document.getElementById('resPanel').style.display='none';document.getElementById('birthPanel').style.display='block';document.getElementById('btnEdit').style.display='none';}
+function showForm(){document.getElementById('resPanel').style.display='none';document.getElementById('birthPanel').style.display='block';document.getElementById('btnEdit').style.display='none';Shell.setShareable(null);}
 (function(){var t=new Date();document.getElementById('ngay').value=t.getDate();document.getElementById('thang').value=t.getMonth()+1;document.getElementById('nam').value=t.getFullYear();})();
 ['ngay','thang','nam'].forEach(function(id){document.getElementById(id).addEventListener('keydown',function(e){if(e.key==='Enter')calculate();});});
 </script>

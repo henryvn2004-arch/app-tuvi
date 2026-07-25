@@ -145,6 +145,11 @@ function calculate() {
     greeting: 'Đã tra ngũ hành tên **' + d.hoTen + '** (' + d.tungChu + ').' + (menh ? ' Mệnh **' + menh + '**.' : '') + ' Bạn muốn tôi luận gì?',
     chips: ['Tên tôi hợp hay khắc mệnh?', 'Ngũ hành có cân bằng không?', 'Nên thêm/đổi chữ nào?', 'Chữ tên chính bồi mệnh thế nào?']
   });
+  var _nhLines = ['Ngũ hành tên: ' + d.hoTen];
+  _nhLines.push('Từng chữ: ' + d.tungChu);
+  if (d.menh) _nhLines.push('Mệnh: ' + d.menh);
+  _nhLines.push('Cân bằng ngũ hành: ' + d.canBang);
+  Shell.setShareable({ kind: 'text', toolId: 'ngu-hanh-ten', title: 'Ngũ hành tên ' + d.hoTen, text: _nhLines.join('\n') });
   document.querySelectorAll('#resPanel [data-ask]').forEach(function (el) { el.addEventListener('click', function () { Shell.ask(el.getAttribute('data-ask')); }); });
 }
 
@@ -190,6 +195,7 @@ function showForm() {
   document.getElementById('resPanel').style.display = 'none';
   document.getElementById('birthPanel').style.display = 'block';
   document.getElementById('btnEdit').style.display = 'none';
+  Shell.setShareable(null);
 }
 </script>
 <script>/*SHELL_RESTORE_BOOT*/(function(){function _r(){var r=window.Shell&&Shell.pendingRestore&&Shell.pendingRestore();if(r&&r.form){Shell.fillForm(r.form);calculate();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_r);else _r();})();</script>
