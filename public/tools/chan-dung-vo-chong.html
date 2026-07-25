@@ -215,7 +215,6 @@ async function _doGenerate(d) {
     _resultImgUrl = data.imageUrl;
     document.getElementById('resultImg').src = data.imageUrl;
     document.getElementById('descTitle').textContent = data.spouseGender === 'nu' ? 'Người Vợ' : 'Người Chồng';
-    document.getElementById('descMeta').textContent = 'Ước lượng khoảng ' + data.spouseAge + ' tuổi';
     document.getElementById('descText').textContent = data.description;
     const meetingBlock = document.getElementById('meetingBlock');
     if (data.meetingContext) {

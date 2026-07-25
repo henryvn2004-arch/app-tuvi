@@ -172,34 +172,50 @@ function buildFields(core: RankedStar, ranked: RankedStar[]): Record<string, str
   return fields;
 }
 
-// ── Ước lượng chênh lệch tuổi vợ/chồng (v1 heuristic — có thể tinh chỉnh) ──
-// Chỉ tính sao đóng THẲNG tại Phu Thê (không tính tam chiếu, để tránh loãng).
-// Đây là suy diễn theo lore dân gian, KHÔNG phải quy tắc cổ pháp cứng — biên
-// độ cố ý giữ nhỏ (-6..+8 năm) để không tạo hình chân dung quá lệch tuổi thật.
-const AGE_OFFSET_STARS: Record<string, number> = {
-  'Cô Thần': 6, 'Quả Tú': 6, 'Tuần': 5, 'Triệt': 5, 'Tuần+Triệt': 7,
-  'Đào Hoa': -2, 'Hồng Loan': -2, 'Thiên Riêu': -2, 'Mộc Dục': -2,
-  'Thái Âm': -3, 'Thiên Đồng': -2,
-  'Cự Môn': 3, 'Phá Quân': 4, 'Thất Sát': 3, 'Kình Dương': 3, 'Đà La': 3,
-};
+// ── Ước lượng chênh lệch tuổi vợ/chồng ──────────────────────────────────
+// Mặc định dân gian: CHỒNG lớn hơn VỢ 3-8 tuổi. CHỈ lệch khỏi biên độ này khi
+// lá số CÓ GHI RÕ tín hiệu chênh lệch tuổi tại Phu Thê — đọc thẳng câu chữ
+// `cachCucTungCung` (engine đã tính sẵn, gồm cả cách cục lẫn ý nghĩa), KHÔNG
+// tự suy từ sao lẻ như bản v1 trước (vốn không theo hướng "chồng lớn hơn vợ"
+// nên range ra lệch, ví dụ vợ có thể lớn hơn chồng dù không có tín hiệu nào).
+const TYPICAL_MIN = 3;
+const TYPICAL_MAX = 8;
 
-function ageOffsetFromPhuThe(phuThe: Rec | undefined): number {
-  if (!phuThe) return 0;
-  let total = 0;
-  for (const s of palaceStars(phuThe)) {
-    if (s?.ten && AGE_OFFSET_STARS[s.ten] != null) total += AGE_OFFSET_STARS[s.ten];
-  }
-  return Math.max(-6, Math.min(8, total));
+function ageOffsetFromPhuThe(yNghia: string[], phuThe: Rec | undefined, userGender: 'nam' | 'nu'): number {
+  const text = yNghia.join(' | ');
+  // "nên lấy người lớn tuổi hơn" (vd Tử Phá) — CHÍNH NGƯỜI có lá số này hợp với
+  // bạn đời LỚN TUỔI HƠN MÌNH, bất kể giới tính — đảo hướng mặc định nếu cần.
+  const forceOlder = /lấy người lớn tuổi hơn/.test(text);
+  // "nên chênh lệch tuổi" (vd Tử Tướng, Thất Sát Dần/Thân) — chênh lệch RÕ
+  // nhưng không nói hướng — giữ hướng mặc định, chỉ nới biên độ.
+  const wideGap = /chênh lệch tuổi/.test(text);
+  // "gần tuổi" (vd Vũ Khúc Thìn/Tuất) — vợ chồng gần tuổi nhau.
+  const closeAge = /gần tuổi/.test(text);
+
+  let lo = TYPICAL_MIN;
+  let hi = TYPICAL_MAX;
+  if (forceOlder || wideGap) { lo = 9; hi = 14; }
+  if (closeAge) { lo = 0; hi = 2; }
+
+  // Chọn 1 giá trị ổn định (không đổi giữa các lần gọi lại cùng lá số) trong
+  // biên độ trên, dựa vào tên sao đóng tại Phu Thê — để mỗi lá số ra 1 số
+  // nhất quán nhưng không luôn đúng 1 con số cố định.
+  const seed = palaceStars(phuThe).reduce((acc, s) => acc + (s.ten ? s.ten.length : 0), 0);
+  const magnitude = lo + (hi > lo ? seed % (hi - lo + 1) : 0);
+
+  const partnerOlder = forceOlder || userGender === 'nu';
+  return partnerOlder ? magnitude : -magnitude;
 }
 
 export interface SpouseMorphology {
   spouseGender: 'nam' | 'nu';
   spouseAge: number;
   /** Tuổi hiện tại của lá số gốc — dùng làm mốc khi route.ts cần tính lại tuổi
-   * theo gợi ý cách cục (ưu tiên cao hơn heuristic sao thuần túy). */
+   * theo gợi ý cách cục (ưu tiên cao hơn fallback này). */
   baseAge: number;
-  /** Offset suy từ riêng bảng sao (AGE_OFFSET_STARS) — route.ts chỉ dùng làm
-   * fallback khi cách cục KHÔNG có gợi ý tuổi tác rõ ràng. */
+  /** Offset mặc định "chồng lớn hơn vợ 3-8 tuổi" (đảo hướng/nới biên độ nếu
+   * cachCucTungCung ghi rõ tín hiệu khác) — route.ts chỉ dùng làm fallback khi
+   * LLM đọc (B)/(C) không thấy gợi ý tuổi tác rõ ràng nào. */
   starAgeOffset: number;
   fields: Record<string, string>;
   coreStar: string;
@@ -229,7 +245,8 @@ export function computeSpouseMorphology(ls: Laso, userGender: 'nam' | 'nu'): Spo
   const fields = buildFields(core, ranked.length ? ranked : [DEFAULT_CORE]);
 
   const baseAge = Number(ls.tuoiXem) || 30;
-  const starAgeOffset = ageOffsetFromPhuThe(phuThe);
+  const yNghia = ((ls.cachCucTungCung as Record<string, string[]>) || {})['Phu Thê'] || [];
+  const starAgeOffset = ageOffsetFromPhuThe(yNghia, phuThe, userGender);
   const spouseAge = Math.max(18, Math.min(80, baseAge + starAgeOffset));
 
   return {

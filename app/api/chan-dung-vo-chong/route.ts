@@ -114,7 +114,8 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     'vẫn giữ tinh thần trẻ trung, rực rỡ nói trên.\n' +
     '2) "description": đoạn tiếng VIỆT (120-180 từ), văn xuôi tự nhiên mô tả khuôn mặt, hình dáng, phong thái, ' +
     'tính cách VÀ (nếu (B) có gợi ý) hoàn cảnh hôn nhân (vd duyên muộn, gặp nhau nơi xa, tính cách vui vẻ/trầm ' +
-    'lặng...) — KHÔNG nhắc tên sao/thuật ngữ tử vi, đọc như lời tả người thật.\n' +
+    'lặng...) — KHÔNG nhắc tên sao/thuật ngữ tử vi, KHÔNG ước lượng hay nêu số tuổi/số năm chênh lệch cụ thể với ' +
+    'bạn đời, đọc như lời tả người thật.\n' +
     '3) "meetingContext": đoạn tiếng VIỆT NGẮN (30-60 từ) luận riêng về HOÀN CẢNH GẶP GỠ nhiều khả năng nhất ' +
     '(vd qua công việc/học tập, qua bạn bè/người thân giới thiệu, tình cờ gặp gỡ, ở nơi xa quê hương/công tác/' +
     'du học, quen biết lâu mới nên duyên, qua mai mối...). ƯU TIÊN bám sát gợi ý CỤ THỂ trong (B) nếu có (vd ' +
