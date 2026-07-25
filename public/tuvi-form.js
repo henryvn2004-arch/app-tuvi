@@ -209,9 +209,10 @@ window.TuviForm = (() => {
   }
 
   // ── Compact fields (dùng .frow/.fg/.tooltip đã có sẵn của trang app-shell gọi) ──
-  function buildCompactPersonFields(prefix, opts, defaultGioitinh = 'nam', showName = true) {
+  function buildCompactPersonFields(prefix, opts, defaultGioitinh = 'nam', showName = true, showNamXem = false) {
     const { gioOpts, phutOpts, ngayOpts, thangOpts, utcOpts } = opts;
     const pf = prefix ? `'${prefix}'` : "''";
+    const namXemDefault = new Date().getFullYear();
     return `
     <div class="frow">
       ${showName ? `<div class="fg" style="flex:2;min-width:150px"><label>Họ và tên</label><input type="text" id="${pid('hoten',prefix)}" placeholder="Nguyễn Văn A" autocomplete="off"></div>` : ''}
@@ -221,6 +222,7 @@ window.TuviForm = (() => {
           <option value="nu"${defaultGioitinh==='nu'?' selected':''}>Nữ</option>
         </select>
       </div>
+      ${showNamXem ? `<div class="fg" style="width:90px"><label>Năm xem vận</label><input type="number" id="${pid('namXem',prefix)}" value="${namXemDefault}" min="1900" max="2100"></div>` : ''}
     </div>
     <div class="frow">
       <div class="fg" style="width:74px"><label>Ngày</label><select id="${pid('ngay',prefix)}" oninput="TuviForm._update(${pf})">${ngayOpts}</select></div>
@@ -253,7 +255,8 @@ window.TuviForm = (() => {
       label         = mode === 'person' ? 'Thông Tin' : 'Cá Nhân',
       gioitinh      = 'nam',
       showSample    = true,
-      showName      = true,       // mode:'compact' only — false nếu tool không cần Họ và tên (vd chân dung vợ chồng)
+      showName      = true,       // mode:'compact' only — false nếu tool không cần Họ và tên
+      showNamXem    = false,      // mode:'compact' only — true nếu tool cần Năm xem vận (khớp field mode:'full')
     } = options;
 
     const namXemDefault = new Date().getFullYear();
@@ -264,7 +267,7 @@ window.TuviForm = (() => {
 
     if (mode === 'compact') {
       // ── App-shell: chỉ trường người, tái dùng .frow/.fg/.btn-go sẵn có của trang gọi ──
-      html = buildCompactPersonFields(prefix, opts, gioitinh, showName);
+      html = buildCompactPersonFields(prefix, opts, gioitinh, showName, showNamXem);
     } else if (mode === 'person') {
       // ── Compact: chỉ 1 cột — dùng cho xem-tuoi (2 người cạnh nhau) ──
       html = `<div class="form-col" style="border-right:1px solid var(--border)">
