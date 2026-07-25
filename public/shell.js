@@ -661,26 +661,15 @@
         var url = location.origin + j.url;
         var shareTxt = 'Xem kết quả này trên Tử Vi Minh Bảo:';
         var modalOpts = { title: 'Chia sẻ ' + s.title, desc: 'Ai có link đều xem được kết quả này.', shareText: shareTxt + ' ' };
-        var toModalOrShare = function () {
-          if (navigator.share) {
-            navigator.share({ title: s.title + ' — Tử Vi Minh Bảo', text: shareTxt, url: url })
-              .catch(function (e) { if (e && e.name === 'AbortError') return; openShareModal(url, modalOpts); });
-          } else { openShareModal(url, modalOpts); }
-        };
-        // Ảnh: ưu tiên Web Share API level 2 (share THẲNG file ảnh vào
-        // Messenger/Zalo/FB app trên di động) — trải nghiệm 1-chạm cho tool
-        // ảnh (Chân Dung Vợ Chồng, Phong Thủy…), đúng thứ giúp lan truyền.
-        if (s.kind === 'image' && s.imageUrl && navigator.canShare) {
-          fetch(s.imageUrl).then(function (r) { return r.blob(); }).then(function (blob) {
-            var file = new File([blob], 'ket-qua.png', { type: blob.type || 'image/png' });
-            if (navigator.canShare({ files: [file] })) {
-              return navigator.share({ files: [file], title: s.title, text: shareTxt })
-                .catch(function (e) { if (e && e.name === 'AbortError') return; openShareModal(url, modalOpts); });
-            }
-            toModalOrShare();
-          }).catch(toModalOrShare);
+        // LUÔN share dạng LINK (giống hệt shareSession ở rail) — KHÔNG share
+        // file ảnh thô qua Web Share API level 2: nhiều app nhận file (Messenger,
+        // Zalo…) BỎ LUÔN url đi kèm, người nhận chỉ thấy ảnh, không bấm vào đâu
+        // được. Ảnh vẫn hiện đẹp nhờ OG:image khi link được unfurl.
+        if (navigator.share) {
+          navigator.share({ title: s.title + ' — Tử Vi Minh Bảo', text: shareTxt, url: url })
+            .catch(function (e) { if (e && e.name === 'AbortError') return; openShareModal(url, modalOpts); });
         } else {
-          toModalOrShare();
+          openShareModal(url, modalOpts);
         }
       })
       .catch(function () { reEnable(); alert('Lỗi mạng khi tạo link chia sẻ.'); });
