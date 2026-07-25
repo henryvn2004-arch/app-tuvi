@@ -12,6 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="/auth.js"></script>
 <script src="/tuvi-paywall.js"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=1"></script>
 <script src="/nav.js?v=16" defer></script>
 <style>
 :root {
@@ -210,9 +211,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 
   <!-- Loading -->
   <div class="loading" id="loading">
-    <div class="spinner"></div>
-    <div style="font-size:14px;font-weight:600;color:var(--navy);font-family:'Noto Serif',serif;">Đang tính can chi ngày...</div>
-    <div style="font-size:11px;color:var(--text-lt);margin-top:4px;">Phân tích Ngũ Hành Nạp Âm · ~5 giây</div>
+    <div id="analysisStepsHost"></div>
   </div>
 
   <!-- Results -->
@@ -308,9 +307,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
       </div>
 
       <div id="tryonLoading" style="display:none;text-align:center;padding:24px 0;">
-        <div class="tryon-spinner"></div>
-        <div style="font-size:13px;font-weight:600;color:var(--navy);">AI đang tạo trang phục...</div>
-        <div style="font-size:11px;color:var(--text-lt);margin-top:4px;">Thường mất 20–35 giây</div>
+        <div id="tryonStepsHost"></div>
       </div>
 
       <div id="tryonResult" style="display:none;margin-top:12px;">
@@ -406,6 +403,16 @@ const COLOR_HEX={'Trắng':'#FFFFFF','Bạc':'#C0C0C0','Xám nhạt':'#D3D3D3','
 let _mucDich='ra ngoài thông thường';
 let _resultData=null;
 let _tryonImgData=null,_tryonMediaType='image/jpeg',_tryonStyle='cong-so',_tryonResultUrl=null;
+const ANALYSIS_STEPS=[
+  {label:'Tính can chi ngày & quan hệ ngũ hành',ms:900},
+  {label:'AI tư vấn trang phục hợp ngày',ms:0},
+];
+const TRYON_STEPS=[
+  {label:'Chuẩn bị trang phục theo ngũ hành',ms:1200},
+  {label:'AI đang tạo ảnh trang phục',ms:0},
+];
+let _analysisLoadingCtl=null;
+let _tryonLoadingCtl=null;
 
 function setPurpose(el,val){
   document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
@@ -443,6 +450,8 @@ async function analyze(){
   document.getElementById('btnAnalyze').disabled=true;
   document.getElementById('loading').classList.add('show');
   document.getElementById('results').style.display='none';
+  _analysisLoadingCtl=AiLoadingSteps.mount('analysisStepsHost',ANALYSIS_STEPS);
+  _analysisLoadingCtl.start();
   const slug=TuviPaywall.generateToolSlug('trang-phuc-theo-ngay');
   TuviPaywall.init({product:'trang-phuc-theo-ngay'});
   try{
@@ -458,12 +467,13 @@ async function analyze(){
           if(!data.success)throw new Error(data.error||'Lỗi phân tích');
           _resultData=data;
           window.refreshNavCredits?.();
+          _analysisLoadingCtl&&_analysisLoadingCtl.finish();
           renderResults(data);
           resolve();
         }catch(e){reject(e);}
       });
     });
-  }catch(e){alert('Lỗi: '+(e.message||'Vui lòng thử lại.'));}
+  }catch(e){_analysisLoadingCtl&&_analysisLoadingCtl.stop();alert('Lỗi: '+(e.message||'Vui lòng thử lại.'));}
   finally{document.getElementById('btnAnalyze').disabled=false;document.getElementById('loading').classList.remove('show');}
 }
 
@@ -559,6 +569,8 @@ async function doTryon(){
     document.getElementById('tryonStep2').style.display='none';
     document.getElementById('tryonLoading').style.display='block';
     document.getElementById('tryonResult').style.display='none';
+    _tryonLoadingCtl=AiLoadingSteps.mount('tryonStepsHost',TRYON_STEPS);
+    _tryonLoadingCtl.start();
     try{
       const res=await fetch('/api/phong-thuy?action=trang-phuc-tryon',{
         method:'POST',
@@ -571,9 +583,10 @@ async function doTryon(){
       document.getElementById('tryonBefore').src='data:'+_tryonMediaType+';base64,'+_tryonImgData;
       document.getElementById('tryonAfter').src=data.imageUrl;
       document.getElementById('tryonAfterLabel').textContent='Mệnh '+_resultData.menhHanh+' · '+_tryonStyle;
+      _tryonLoadingCtl&&_tryonLoadingCtl.finish();
       document.getElementById('tryonResult').style.display='block';
       window.refreshNavCredits?.();
-    }catch(e){alert('Lỗi: '+(e.message||'Vui lòng thử lại.'));}
+    }catch(e){_tryonLoadingCtl&&_tryonLoadingCtl.stop();alert('Lỗi: '+(e.message||'Vui lòng thử lại.'));}
     finally{document.getElementById('tryonLoading').style.display='none';document.getElementById('tryonStep2').style.display='block';}
   });
 }

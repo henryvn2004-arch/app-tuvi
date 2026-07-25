@@ -21,6 +21,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&display=swap" rel="stylesheet"/>
 <script src="/auth.js"></script>
 <script src="/tuvi-paywall.js"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=1"></script>
 <style>
 :root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--gold-bright:#D4A843;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0;--red:#C0392B;--green:#1E6B3C;}
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -261,14 +262,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
   </div>
 
   <div class="loading-overlay" id="loadingOverlay">
-    <div class="loading-spinner"></div>
-    <div style="font-size:14px;font-weight:600;color:var(--navy);font-family:'Noto Serif',serif;">Đang phân tích phong thủy...</div>
-    <div style="margin-top:10px;">
-      <div class="ls-step" id="ls1">⟳ Nhận diện đồ vật trong phòng</div>
-      <div class="ls-step" id="ls2">⟳ Tính toán Bát Trạch & Ngũ Hành</div>
-      <div class="ls-step" id="ls3">⟳ Tạo đề xuất bố trí tối ưu</div>
-      <div class="ls-step" id="ls4">⟳ Chuẩn bị kết quả</div>
-    </div>
+    <div id="analysisStepsHost"></div>
   </div>
 
   <div id="results-section">
@@ -329,9 +323,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 
       <!-- Loading -->
       <div id="renderLoading" style="display:none;text-align:center;padding:20px 0;">
-        <div class="render-spinner"></div>
-        <div style="font-size:13px;font-weight:600;color:var(--navy);">AI đang render lại phòng...</div>
-        <div style="font-size:11px;color:var(--text-lt);margin-top:4px;">Thường mất 25–45 giây</div>
+        <div id="renderStepsHost"></div>
       </div>
 
       <!-- Result -->
@@ -376,6 +368,16 @@ function getQLabel(dir,gua){if(!gua)return'';const g=GUA_DATA[gua];return(g?.goo
 function getFIcon(id){return({bed:'🛏',desk:'🖥',sofa:'🛋',altar:'🏮',stove:'🔥',plant:'🌿',mirror:'🪞',door:'🚪',toilet:'🚿',water:'💧',wardrobe:'🚪',tv:'📺',table:'🪑'})[id]||'📦';}
 
 let _gua=null,_img64=null,_imgType='image/jpeg';
+const ANALYSIS_STEPS=[
+  {label:'AI nhận diện đồ vật trong ảnh',ms:6000},
+  {label:'AI phân tích Bát Trạch & đưa đề xuất',ms:0},
+];
+const RENDER_STEPS=[
+  {label:'Chuẩn bị prompt render theo ngũ hành',ms:1200},
+  {label:'AI đang render lại phòng',ms:0},
+];
+let _analysisLoadingCtl=null;
+let _renderLoadingCtl=null;
 
 function onYearChange(){
   const y=parseInt(document.getElementById('namSinh').value),g=document.getElementById('gioiTinh').value;
@@ -402,10 +404,6 @@ async function processFile(file){
 }
 function resizeImg(file){return new Promise((res,rej)=>{const r=new FileReader();r.onerror=()=>rej(new Error('Lỗi đọc file'));r.onload=e=>{const img=new Image();img.onerror=()=>rej(new Error('Lỗi tải ảnh'));img.onload=()=>{const M=1024;let{width:w,height:h}=img;if(w>M||h>M){if(w>h){h=Math.round(h*M/w);w=M;}else{w=Math.round(w*M/h);h=M;}}const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);res({base64:c.toDataURL('image/jpeg',.78).split(',')[1],type:'image/jpeg'});};img.src=e.target.result;};r.readAsDataURL(file);});}
 
-let _lsT=null;
-function startLoading(){['ls1','ls2','ls3','ls4'].forEach(id=>{const e=document.getElementById(id);e.className='ls-step';});let i=0;_lsT=setInterval(()=>{if(i<4){if(i>0){const p=document.getElementById('ls'+i);p.className='ls-step done';p.textContent=p.textContent.replace('⟳','✓');}document.getElementById('ls'+(i+1)).classList.add('active');i++;}},9000);}
-function stopLoading(){if(_lsT){clearInterval(_lsT);_lsT=null;}['ls1','ls2','ls3','ls4'].forEach(id=>{document.getElementById(id).className='ls-step done';});}
-
 async function doAnalyze(){
   document.getElementById('errorBox').style.display='none';
   const y=parseInt(document.getElementById('namSinh').value),g=document.getElementById('gioiTinh').value;
@@ -419,7 +417,8 @@ async function doAnalyze(){
   document.getElementById('btnAnalyze').disabled=true;
   document.getElementById('loadingOverlay').classList.add('show');
   document.getElementById('results-section').style.display='none';
-  startLoading();
+  _analysisLoadingCtl=AiLoadingSteps.mount('analysisStepsHost',ANALYSIS_STEPS);
+  _analysisLoadingCtl.start();
   const _slug=TuviPaywall.generateToolSlug('phong-thuy');
   try{
     await new Promise((resolve,reject)=>{
@@ -429,12 +428,13 @@ async function doAnalyze(){
           const data=await res.json();
           if(!data.success)throw new Error(data.error||'Phân tích thất bại');
           window.refreshNavCredits&&window.refreshNavCredits();
+          _analysisLoadingCtl&&_analysisLoadingCtl.finish();
           renderResults(data);resolve();
         }catch(e){reject(e);}
       });
     });
-  }catch(e){showErr('Lỗi: '+e.message);}
-  finally{stopLoading();document.getElementById('loadingOverlay').classList.remove('show');document.getElementById('btnAnalyze').disabled=false;}
+  }catch(e){_analysisLoadingCtl&&_analysisLoadingCtl.stop();showErr('Lỗi: '+e.message);}
+  finally{document.getElementById('loadingOverlay').classList.remove('show');document.getElementById('btnAnalyze').disabled=false;}
 }
 
 function showErr(m){const b=document.getElementById('errorBox');b.textContent=m;b.style.display='block';}
@@ -525,6 +525,8 @@ async function _doRenderCall() {
   document.getElementById('renderLoading').style.display = 'block';
   document.getElementById('renderResult').style.display = 'none';
   document.getElementById('btnRender').disabled = true;
+  _renderLoadingCtl = AiLoadingSteps.mount('renderStepsHost', RENDER_STEPS);
+  _renderLoadingCtl.start();
 
   const token = window.Auth?.getSession()?.access_token;
   try {
@@ -545,10 +547,12 @@ async function _doRenderCall() {
     _renderResultUrl = data.imageUrl;
     document.getElementById('renderBefore').src = 'data:' + _imgType + ';base64,' + _img64;
     document.getElementById('renderAfter').src = data.imageUrl;
+    _renderLoadingCtl && _renderLoadingCtl.finish();
     document.getElementById('renderLoading').style.display = 'none';
     document.getElementById('renderResult').style.display = 'block';
     document.getElementById('renderIdle').style.display = 'block';
   } catch(e) {
+    _renderLoadingCtl && _renderLoadingCtl.stop();
     document.getElementById('renderLoading').style.display = 'none';
     document.getElementById('renderIdle').style.display = 'block';
     const el = document.getElementById('renderErr');
