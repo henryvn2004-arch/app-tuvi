@@ -579,29 +579,36 @@
         // đủ WhatsApp, Messages, AirDrop, Zalo… đúng trải nghiệm quen thuộc.
         // Người dùng bấm ✕ (AbortError) thì thôi; lỗi khác → rơi về modal tự dựng.
         var titleTxt = (curMeta && curMeta.title) || 'Luận Đường';
+        var modalOpts = { title: 'Chia sẻ phiên Luận Đường', desc: 'Ai có link đều đọc được lá số và toàn bộ hỏi đáp trong phiên này.', shareText: 'Xem phần luận giải của thầy cho lá số này: ' };
         if (navigator.share) {
           navigator.share({ title: titleTxt + ' — Tử Vi Minh Bảo', text: 'Xem phần luận giải của thầy cho lá số này:', url: url })
-            .catch(function (e) { if (e && e.name === 'AbortError') return; openShareModal(url); });
+            .catch(function (e) { if (e && e.name === 'AbortError') return; openShareModal(url, modalOpts); });
         } else {
-          openShareModal(url); // desktop → modal có sao chép + Facebook/Zalo/WhatsApp
+          openShareModal(url, modalOpts); // desktop → modal có sao chép + Facebook/Zalo/WhatsApp
         }
       })
       .catch(function () { if (btn) btn.disabled = false; alert('Lỗi mạng khi tạo link chia sẻ.'); });
   }
-  function openShareModal(url) {
+  // opts: {title, desc, shareText} — cho phép tái dùng modal cho cả "chia sẻ
+  // phiên rail" (shareSession) lẫn "chia sẻ kết quả khung giữa" (shareWorkspace).
+  function openShareModal(url, opts) {
+    opts = opts || {};
+    var mTitle = opts.title || 'Chia sẻ';
+    var mDesc = opts.desc || 'Ai có link đều xem được nội dung này.';
+    var shareText = opts.shareText || '';
     var enc = encodeURIComponent(url);
     var wrap = document.createElement('div');
     wrap.className = 'sh-share-modal';
     wrap.innerHTML =
       '<div class="ssm-card">' +
         '<button class="ssm-x" aria-label="Đóng">✕</button>' +
-        '<div class="ssm-t">Chia sẻ phiên Luận Đường</div>' +
-        '<div class="ssm-d">Ai có link đều đọc được lá số và toàn bộ hỏi đáp trong phiên này.</div>' +
+        '<div class="ssm-t">' + esc(mTitle) + '</div>' +
+        '<div class="ssm-d">' + esc(mDesc) + '</div>' +
         '<div class="ssm-row"><input class="ssm-in" readonly value="' + esc(url) + '"><button class="ssm-copy">Sao chép</button></div>' +
         '<div class="ssm-share">' +
           '<a class="ssm-b fb" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=' + enc + '">Facebook</a>' +
           '<a class="ssm-b zl" target="_blank" rel="noopener" href="https://zalo.me/share/link?u=' + enc + '">Zalo</a>' +
-          '<a class="ssm-b wa" target="_blank" rel="noopener" href="https://api.whatsapp.com/send?text=' + encodeURIComponent('Xem phần luận giải của thầy cho lá số này: ' + url) + '">WhatsApp</a>' +
+          '<a class="ssm-b wa" target="_blank" rel="noopener" href="https://api.whatsapp.com/send?text=' + encodeURIComponent(shareText + url) + '">WhatsApp</a>' +
           '<a class="ssm-b" target="_blank" rel="noopener" href="' + esc(url) + '">Mở ↗</a>' +
         '</div>' +
       '</div>';
@@ -616,6 +623,67 @@
       if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, function () { try { document.execCommand('copy'); done(); } catch (e) { /* ignore */ } });
       else { try { document.execCommand('copy'); done(); } catch (e) { /* ignore */ } }
     });
+  }
+
+  // ── CHIA SẺ KẾT QUẢ KHUNG GIỮA (workspace) — dùng chung cho MỌI tool ──
+  // Tool gọi Shell.setShareable({kind:'image'|'text', title, imageUrl?, text?})
+  // ngay sau khi có kết quả → nút "Chia sẻ" tự hiện trong .ws-actions (nếu
+  // trang có toolbar đó), không cần tool tự vẽ nút/markup riêng. Khác
+  // shareSession (chia sẻ transcript rail): cái này chia sẻ ĐÚNG kết quả
+  // (ảnh AI hoặc trích văn bản) ra permalink /ket-qua/<id> có OG:image thật.
+  var shareable = null;
+  function renderShareBtn() {
+    var host = document.querySelector('.ws-actions');
+    var btn = document.getElementById('wsShareBtn');
+    if (!shareable) { if (btn) btn.remove(); return; }
+    if (!host) return; // trang chưa có toolbar .ws-actions → bỏ qua, không vỡ gì
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'btn'; btn.id = 'wsShareBtn';
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.7 7.4-4.4M8.3 13.3l7.4 4.4"/></svg>Chia sẻ';
+      btn.addEventListener('click', shareWorkspace);
+      host.insertBefore(btn, host.firstChild);
+    }
+  }
+  function shareWorkspace() {
+    if (!shareable) return;
+    var btn = document.getElementById('wsShareBtn'); if (btn) btn.disabled = true;
+    var s = shareable;
+    var reEnable = function () { if (btn) btn.disabled = false; };
+    fetch('/api/share-result', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ toolId: s.toolId, kind: s.kind, title: s.title, imageUrl: s.imageUrl, text: s.text }),
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        reEnable();
+        if (!j || !j.url) { alert('Không tạo được link chia sẻ, thử lại sau.'); return; }
+        var url = location.origin + j.url;
+        var shareTxt = 'Xem kết quả này trên Tử Vi Minh Bảo:';
+        var modalOpts = { title: 'Chia sẻ ' + s.title, desc: 'Ai có link đều xem được kết quả này.', shareText: shareTxt + ' ' };
+        var toModalOrShare = function () {
+          if (navigator.share) {
+            navigator.share({ title: s.title + ' — Tử Vi Minh Bảo', text: shareTxt, url: url })
+              .catch(function (e) { if (e && e.name === 'AbortError') return; openShareModal(url, modalOpts); });
+          } else { openShareModal(url, modalOpts); }
+        };
+        // Ảnh: ưu tiên Web Share API level 2 (share THẲNG file ảnh vào
+        // Messenger/Zalo/FB app trên di động) — trải nghiệm 1-chạm cho tool
+        // ảnh (Chân Dung Vợ Chồng, Phong Thủy…), đúng thứ giúp lan truyền.
+        if (s.kind === 'image' && s.imageUrl && navigator.canShare) {
+          fetch(s.imageUrl).then(function (r) { return r.blob(); }).then(function (blob) {
+            var file = new File([blob], 'ket-qua.png', { type: blob.type || 'image/png' });
+            if (navigator.canShare({ files: [file] })) {
+              return navigator.share({ files: [file], title: s.title, text: shareTxt })
+                .catch(function (e) { if (e && e.name === 'AbortError') return; openShareModal(url, modalOpts); });
+            }
+            toModalOrShare();
+          }).catch(toModalOrShare);
+        } else {
+          toModalOrShare();
+        }
+      })
+      .catch(function () { reEnable(); alert('Lỗi mạng khi tạo link chia sẻ.'); });
   }
 
   // ── NỐI PHIÊN từ link chia sẻ (?fromshare=<id>) ──
@@ -872,6 +940,21 @@
     },
     // Gọi khi trang đã chạy (có kết quả): nhớ đã xem + ẩn intro.
     dismissIntro: function (key) { this.markIntroSeen(key); var h = document.getElementById('introHost'); if (h) h.innerHTML = ''; },
+    // Chia sẻ kết quả khung giữa (workspace) — dùng chung cho mọi tool. Gọi
+    // ngay sau khi có kết quả: Shell.setShareable({kind:'image'|'text', title,
+    // imageUrl?, text?}). Gọi Shell.setShareable(null) để ẩn nút (vd tool quay
+    // lại form nhập để làm mới kết quả).
+    setShareable: function (o) {
+      if (!o) { shareable = null; renderShareBtn(); return; }
+      shareable = {
+        kind: o.kind === 'image' ? 'image' : 'text',
+        toolId: o.toolId || ACTIVE || 'app',
+        title: String(o.title || 'Kết quả Luận Đường').slice(0, 160),
+        imageUrl: o.imageUrl || null,
+        text: o.text || null,
+      };
+      renderShareBtn();
+    },
   };
   window.Shell = Shell;
 
