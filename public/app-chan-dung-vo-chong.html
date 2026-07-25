@@ -19,7 +19,6 @@
 .fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
 .fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
 .fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
-.gio-hint{font-size:12px;color:var(--text-lt);align-self:center;padding-bottom:4px;white-space:nowrap}
 .btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
 .btn-go:disabled{opacity:.6;cursor:not-allowed}
 .err{color:var(--red);font-size:13px;margin-top:8px;display:none}
@@ -65,16 +64,8 @@
       <div class="form-card" id="birthPanel">
         <h2>Nhập ngày sinh của bạn (dương lịch)</h2>
         <p class="sub">AI sẽ lập lá số, phân tích cung Phu Thê rồi vẽ chân dung người bạn đời.</p>
-        <div class="frow">
-          <div class="fg" style="width:90px"><label>Giới tính</label><select id="inpGender"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
-          <div class="fg" style="width:74px"><label>Ngày (DL)</label><select id="inpDd"></select></div>
-          <div class="fg" style="width:84px"><label>Tháng (DL)</label><select id="inpMm"></select></div>
-          <div class="fg" style="width:90px"><label>Năm (DL)</label><input type="number" id="inpYyyy" placeholder="1990" min="1900" max="2099"></div>
-        </div>
+        <div id="tuviFormHost"></div>
         <div class="frow" style="margin-bottom:0">
-          <div class="fg" style="width:70px"><label>Giờ</label><select id="inpHh"></select></div>
-          <div class="fg" style="width:70px"><label>Phút</label><select id="inpPp"></select></div>
-          <span class="gio-hint" id="gioHint">Giờ: —</span>
           <button class="btn-go" id="btnGo" onclick="analyze()">Vẽ Chân Dung →</button>
         </div>
         <div class="err" id="error-msg"></div>
@@ -142,14 +133,12 @@
 <script>window.SHELL_ACTIVE='chan-dung-vo-chong';
 window.SHELL_INTRO={key:'chan-dung-vo-chong',title:'Chân Dung Vợ Chồng',desc:'AI phân tích cung <b>Phu Thê</b> trong lá số rồi vẽ <b>chân dung</b> người bạn đời kèm mô tả tính cách, phong thái.'};</script>
 <script src="/laso-chart.js?v=2"></script>
+<script src="/tuvi-form.js?v=1"></script>
 <script src="/tuvi-paywall.js"></script>
 <script src="/auth.js"></script>
 <script src="/shell.js?v=43"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=1"></script>
 <script>
-// Giờ đại diện của địa chi giờ (23,1,3,…) — KHỚP cách computeLaso/hourBranch
-// map giờ đồng hồ → địa chi (xem app-bat-tu.html cùng pattern).
-var GIO_REP = [23, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21];
 var _currentSlug = '';
 var _resultImgUrl = '';
 var _lastBirth = null;
@@ -161,24 +150,9 @@ var CDVC_STEPS = [
 ];
 var _loadingCtl = null;
 
-(function () {
-  var dd = document.getElementById('inpDd'), mm = document.getElementById('inpMm');
-  var hh = document.getElementById('inpHh'), pp = document.getElementById('inpPp');
-  dd.innerHTML = '<option value="">Ngày</option>';
-  mm.innerHTML = '<option value="">Tháng</option>';
-  for (var i = 1; i <= 31; i++) dd.innerHTML += '<option value="' + i + '">' + i + '</option>';
-  for (var j = 1; j <= 12; j++) mm.innerHTML += '<option value="' + j + '">' + j + '</option>';
-  for (var h = 0; h <= 23; h++) hh.innerHTML += '<option value="' + h + '">' + String(h).padStart(2, '0') + '</option>';
-  for (var p = 0; p <= 59; p++) pp.innerHTML += '<option value="' + p + '">' + String(p).padStart(2, '0') + '</option>';
-  hh.addEventListener('change', updateGioAm);
-  pp.addEventListener('change', updateGioAm);
-})();
-
-function updateGioAm() {
-  var h = parseInt(document.getElementById('inpHh').value) || 0;
-  var p = parseInt(document.getElementById('inpPp').value) || 0;
-  document.getElementById('gioHint').textContent = 'Giờ: ' + CHI[hourMinToGioAm(h, p)];
-}
+// Form nhập (dùng chung TuviForm — có "Sinh ở ngoài Việt Nam?" + parity giờ
+// sinh lịch sử với standalone). Tool này không cần Họ và tên → showName:false.
+TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam', showName:false});
 
 function showError(msg) {
   var e = document.getElementById('error-msg');
@@ -187,15 +161,10 @@ function showError(msg) {
 
 async function analyze() {
   showError('');
-  var gender = document.getElementById('inpGender').value;
-  var dd = parseInt(document.getElementById('inpDd').value);
-  var mm = parseInt(document.getElementById('inpMm').value);
-  var yyyy = parseInt(document.getElementById('inpYyyy').value);
-  var hh = parseInt(document.getElementById('inpHh').value) || 0;
-  var pp = parseInt(document.getElementById('inpPp').value) || 0;
+  var fdIn = TuviForm.getData();
+  var gender = fdIn.gioitinh, dd = fdIn.ngay, mm = fdIn.thang, yyyy = fdIn.nam, gioAmIdx = fdIn.gioIdx;
   if (!dd || !mm || !yyyy) { showError('Vui lòng nhập đầy đủ ngày tháng năm sinh.'); return; }
 
-  var gioAmIdx = hourMinToGioAm(hh, pp);
   _lastBirth = { day: dd, month: mm, year: yyyy, hourBranch: gioAmIdx, gender: gender, isLunar: false };
 
   _currentSlug = TuviPaywall.generateToolSlug('chan-dung-vo-chong-' + dd + '-' + mm + '-' + yyyy);
