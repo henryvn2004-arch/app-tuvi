@@ -236,7 +236,7 @@ async function _doGenerate() {
       if (pt.yNghia && pt.yNghia.length) ptLines.push('Ý nghĩa cổ pháp: ' + pt.yNghia.join('; '));
       shareBlocks.push({ header: 'Cung Phu Thê Trong Lá Số Của Bạn', text: ptLines.join('\n') });
     }
-    var cdText = spouseLabel + ' — ước lượng khoảng ' + data.spouseAge + ' tuổi';
+    var cdText = spouseLabel;
     if (data.description) cdText += '\n\n' + data.description;
     if (data.meetingContext) cdText += '\n\nHoàn cảnh gặp gỡ: ' + data.meetingContext;
     shareBlocks.push({ header: 'Chân Dung Người Phối Ngẫu', image: data.imageUrl, text: cdText });
