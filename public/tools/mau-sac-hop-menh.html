@@ -21,6 +21,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&display=swap" rel="stylesheet"/>
 <script src="/auth.js"></script>
 <script src="/tuvi-paywall.js"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=1"></script>
 <style>
 :root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--gold-bright:#D4A843;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0;--red:#C0392B;--green:#1E6B3C;}
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -211,8 +212,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
   </div>
 
   <div class="loading-overlay" id="loadingOverlay">
-    <div class="loading-spinner"></div>
-    <div style="font-size:14px;font-weight:600;color:var(--navy);font-family:'Noto Serif',serif;">Đang tính màu sắc hợp mệnh...</div>
+    <div id="analysisStepsHost"></div>
   </div>
 
   <div id="results-section">
@@ -309,9 +309,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 
       <!-- Loading -->
       <div id="tryonLoading" style="display:none;text-align:center;padding:24px 0;">
-        <div class="tryon-spinner"></div>
-        <div style="font-size:13px;font-weight:600;color:var(--navy);">AI đang tạo trang phục...</div>
-        <div style="font-size:11px;color:var(--text-lt);margin-top:4px;">Thường mất 20–35 giây</div>
+        <div id="tryonStepsHost"></div>
       </div>
 
       <!-- Result -->
@@ -368,6 +366,16 @@ base.forEach(([y,h])=>{NAP_AM_MAP[y]=h;NAP_AM_MAP[y+1]=h;});
 function calcGua(y,g){let s=String(y).split('').reduce((a,c)=>a+parseInt(c),0);while(s>=10)s=String(s).split('').reduce((a,c)=>a+parseInt(c),0);let r;if(g==='male'){r=y>=2000?9-s:10-s;if(r<=0)r+=9;if(r===5)r=2;}else{r=y>=2000?s+6:s+5;while(r>=10)r=String(r).split('').reduce((a,c)=>a+parseInt(c),0);if(r===5)r=8;}return r;}
 
 let _gua=null;
+const ANALYSIS_STEPS=[
+  {label:'Tính quái số & nạp âm bản mệnh',ms:900},
+  {label:'AI tư vấn màu sắc & phối đồ',ms:0},
+];
+const TRYON_STEPS=[
+  {label:'Chuẩn bị trang phục theo mệnh',ms:1200},
+  {label:'AI đang tạo ảnh trang phục',ms:0},
+];
+let _analysisLoadingCtl=null;
+let _tryonLoadingCtl=null;
 
 function onYearChange(){
   const y=parseInt(document.getElementById('namSinh').value);
@@ -396,6 +404,8 @@ async function doAnalyze(){
   document.getElementById('btnAnalyze').disabled=true;
   document.getElementById('loadingOverlay').classList.add('show');
   document.getElementById('results-section').style.display='none';
+  _analysisLoadingCtl=AiLoadingSteps.mount('analysisStepsHost',ANALYSIS_STEPS);
+  _analysisLoadingCtl.start();
 
   const _slug=TuviPaywall.generateToolSlug('mau-sac-hop-menh');
   TuviPaywall.init({ product: 'mau-sac-hop-menh' }); // ensure correct product/cost
@@ -411,12 +421,13 @@ async function doAnalyze(){
           const data=await res.json();
           if(!data.success)throw new Error(data.error||'Phân tích thất bại');
           window.refreshNavCredits&&window.refreshNavCredits();
+          _analysisLoadingCtl&&_analysisLoadingCtl.finish();
           renderResults(data);
           resolve();
         }catch(e){reject(e);}
       });
     });
-  }catch(e){showErr('Lỗi: '+e.message);}
+  }catch(e){_analysisLoadingCtl&&_analysisLoadingCtl.stop();showErr('Lỗi: '+e.message);}
   finally{document.getElementById('loadingOverlay').classList.remove('show');document.getElementById('btnAnalyze').disabled=false;}
 }
 
@@ -594,6 +605,8 @@ async function _doTryonCall() {
   document.getElementById('tryonLoading').style.display = 'block';
   document.getElementById('tryonResult').style.display = 'none';
   document.getElementById('btnTryon').disabled = true;
+  _tryonLoadingCtl = AiLoadingSteps.mount('tryonStepsHost', TRYON_STEPS);
+  _tryonLoadingCtl.start();
 
   const token = window.Auth?.getSession()?.access_token;
   const styleLabels = { 'cong-so':'Công Sở', 'casual':'Casual', 'sang-trong':'Sang Trọng', 'dao-pho':'Dạo Phố' };
@@ -617,10 +630,12 @@ async function _doTryonCall() {
     document.getElementById('tryonBefore').src = 'data:' + _tryonMediaType + ';base64,' + _tryonImageData;
     document.getElementById('tryonAfter').src = data.imageUrl;
     document.getElementById('tryonAfterLabel').textContent = (styleLabels[_tryonStyle] || _tryonStyle) + ' · Mệnh ' + _napAmHanh;
+    _tryonLoadingCtl && _tryonLoadingCtl.finish();
     document.getElementById('tryonLoading').style.display = 'none';
     document.getElementById('tryonResult').style.display = 'block';
     document.getElementById('tryonStep2').style.display = 'block';
   } catch(e) {
+    _tryonLoadingCtl && _tryonLoadingCtl.stop();
     document.getElementById('tryonLoading').style.display = 'none';
     document.getElementById('tryonStep2').style.display = 'block';
     showTryonErr('Lỗi: ' + (e.message || 'Vui lòng thử lại.'));
