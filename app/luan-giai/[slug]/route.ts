@@ -396,7 +396,7 @@ h2.sec-title{font-family:'Noto Serif',serif;font-size:16px;text-transform:none;l
 </div>
 
 <script src="/footer.js"></script>
-<script src="/nav.js?v=15" defer></script>
+<script src="/track.js?v=1" defer></script><script src="/nav.js?v=15" defer></script>
 </body>
 </html>`;
 }

@@ -8,6 +8,7 @@ export const runtime = 'nodejs';
 
 import { NextRequest } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { GA4_TRACK_SNIPPET } from '@/lib/analytics/isr-tracking';
 
 const SB_URL = process.env.SUPABASE_URL!;
 const SB_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -37,7 +38,8 @@ function esc(s: string): string {
 function page404(): Response {
   const html = `<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Không tìm thấy kết quả</title>
 <style>body{font-family:-apple-system,Segoe UI,Arial,sans-serif;background:#F4F2EC;color:#1a1a1a;display:flex;min-height:100vh;align-items:center;justify-content:center;margin:0;text-align:center;padding:20px}a{color:#9A7B3A}</style></head>
-<body><div><h1 style="font-family:Georgia,serif">Kết quả không tồn tại</h1><p>Link chia sẻ đã bị gỡ hoặc không đúng.</p><p><a href="${SITE}/app">Vào Luận Đường →</a></p></div></body></html>`;
+<body><div><h1 style="font-family:Georgia,serif">Kết quả không tồn tại</h1><p>Link chia sẻ đã bị gỡ hoặc không đúng.</p><p><a href="${SITE}/app">Vào Luận Đường →</a></p></div>${GA4_TRACK_SNIPPET}
+</body></html>`;
   return new Response(html, { status: 404, headers: { 'content-type': 'text/html; charset=utf-8' } });
 }
 
@@ -168,6 +170,7 @@ body{font-family:var(--sans);background:var(--paper2);color:var(--text);line-hei
   </div>
   <div class="foot">© 2026 Tử Vi Minh Bảo · <a href="${SITE}/app">tuviminhbao.com</a> — Lá số lập bằng engine cổ pháp, AI chỉ luận, không bịa sao.</div>
 </div>
+${GA4_TRACK_SNIPPET}
 </body></html>`;
 
   return new Response(html, {

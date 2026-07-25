@@ -3,6 +3,7 @@ export const revalidate = 86400; // cache 24h
 
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
+import { GA4_TRACK_SNIPPET } from '@/lib/analytics/isr-tracking';
 
 const SB_URL  = process.env.SUPABASE_URL!;
 const SB_SERV = process.env.SUPABASE_SERVICE_KEY!;
@@ -120,6 +121,7 @@ ${msgHtml}
     <a href="${BASE}/tuvi-chat.html">Mở Tử Vi Chat →</a>
   </div>
 </div>
+${GA4_TRACK_SNIPPET}
 </body>
 </html>`;
 
