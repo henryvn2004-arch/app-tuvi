@@ -12,6 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="/auth.js"></script>
 <script src="/tuvi-paywall.js"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=1"></script>
 <script src="/nav.js?v=16" defer></script>
 <style>
 :root{
@@ -266,14 +267,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 
   <!-- Loading -->
   <div class="loading" id="loading">
-    <div class="spinner"></div>
-    <div style="font-size:14px;font-weight:600;color:#2E8B57;font-family:'Noto Serif',serif;">Đang phân tích da...</div>
-    <div class="loading-steps">
-      <div class="loading-step active" id="step1">🔬 Tây y: nhận diện loại da & tình trạng</div>
-      <div class="loading-step" id="step2">☯️ Đông y: luận giải tạng phủ & bản mệnh</div>
-      <div class="loading-step" id="step3">🌿 Lập kế hoạch ăn uống thực dưỡng</div>
-      <div class="loading-step" id="step4">✨ Gợi ý mỹ phẩm & routine</div>
-    </div>
+    <div id="analysisStepsHost"></div>
   </div>
 
   <!-- Results -->
@@ -352,7 +346,13 @@ const SKIN_TYPE_EMOJI = {
 const MENH_COLOR = {Kim:'#888',Mộc:'#2E8B57',Thủy:'#1455A4',Hỏa:'#C0392B',Thổ:'#9A7B3A'};
 
 let _imgData = null, _mediaType = 'image/jpeg';
-let _loadingStep = 0, _loadingTimer = null;
+const ANALYSIS_STEPS = [
+  { label: '🔬 Tây y: nhận diện loại da & tình trạng', ms: 2600 },
+  { label: '☯️ Đông y: luận giải tạng phủ & bản mệnh', ms: 2600 },
+  { label: '🌿 Lập kế hoạch ăn uống thực dưỡng', ms: 2600 },
+  { label: '✨ Gợi ý mỹ phẩm & routine', ms: 0 },
+];
+let _analysisLoadingCtl = null;
 
 function loadFile(file) {
   if (!file?.type?.startsWith('image/')) return;
@@ -397,19 +397,6 @@ function clearPhoto() {
   document.getElementById('results').style.display = 'none';
 }
 
-function startLoadingAnim() {
-  const steps = ['step1','step2','step3','step4'];
-  _loadingStep = 0;
-  steps.forEach(s => document.getElementById(s)?.classList.remove('active'));
-  document.getElementById('step1')?.classList.add('active');
-  _loadingTimer = setInterval(() => {
-    steps.forEach(s => document.getElementById(s)?.classList.remove('active'));
-    _loadingStep = (_loadingStep + 1) % steps.length;
-    document.getElementById(steps[_loadingStep])?.classList.add('active');
-  }, 2500);
-}
-function stopLoadingAnim() { if (_loadingTimer) { clearInterval(_loadingTimer); _loadingTimer = null; } }
-
 async function analyze() {
   if (!_imgData) return;
   const namSinh = parseInt(document.getElementById('namSinh').value) || null;
@@ -418,7 +405,8 @@ async function analyze() {
   document.getElementById('btnAnalyze').disabled = true;
   document.getElementById('loading').classList.add('show');
   document.getElementById('results').style.display = 'none';
-  startLoadingAnim();
+  _analysisLoadingCtl = AiLoadingSteps.mount('analysisStepsHost', ANALYSIS_STEPS);
+  _analysisLoadingCtl.start();
 
   const slug = TuviPaywall.generateToolSlug('da-lieu-ai');
   TuviPaywall.init({ product: 'da-lieu-ai' });
@@ -435,17 +423,18 @@ async function analyze() {
           const data = await res.json();
           if (!res.ok || data.error) throw new Error(data.error || 'Lỗi phân tích');
           window.refreshNavCredits?.();
+          _analysisLoadingCtl && _analysisLoadingCtl.finish();
           renderResults(data);
           resolve();
         } catch(e) { reject(e); }
       });
     });
   } catch(e) {
+    _analysisLoadingCtl && _analysisLoadingCtl.stop();
     alert('Lỗi: ' + (e.message || 'Vui lòng thử lại.'));
   } finally {
     document.getElementById('btnAnalyze').disabled = false;
     document.getElementById('loading').classList.remove('show');
-    stopLoadingAnim();
   }
 }
 

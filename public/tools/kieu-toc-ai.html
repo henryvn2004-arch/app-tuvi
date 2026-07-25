@@ -237,8 +237,7 @@
 
     <!-- Loading state -->
     <div id="analysisLoading" class="ai-loading" style="display:none">
-      <span class="ai-loading-icon"><span class="ic-inline" data-icon-emoji="🔮" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🔮</span></span>
-      <div class="ai-loading-text">AI đang phân tích khuôn mặt...<br><span style="font-size:12px;opacity:.7">Thường mất 5–8 giây</span></div>
+      <div id="analysisStepsHost"></div>
     </div>
 
     <!-- Face shape + age group card -->
@@ -283,8 +282,7 @@
     <div class="tryon-section" id="tryonSection" style="display:none">
       <div class="tryon-title" id="tryonTitle">Thử Trên Ảnh</div>
       <div class="tryon-loading" id="tryonLoading">
-        <div class="tryon-spinner"></div>
-        <div class="tryon-loading-text">AI đang render...<br><span style="font-size:12px;opacity:.7">Thường mất 20–40 giây</span></div>
+        <div id="tryonStepsHost"></div>
       </div>
       <div id="tryonResult" style="display:none">
         <div class="before-after">
@@ -615,6 +613,8 @@ async function _doPhanTich() {
   document.getElementById('tryonSection').style.display = 'none';
   document.getElementById('resetWrap').style.display = 'none';
   resultSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  _analysisLoadingCtl = AiLoadingSteps.mount('analysisStepsHost', ANALYSIS_STEPS);
+  _analysisLoadingCtl.start();
 
   // Measure face with MediaPipe in parallel with loading state
   const faceMeasurements = await _measureFace('data:' + _mediaType + ';base64,' + _imageData);
@@ -640,6 +640,7 @@ async function _doPhanTich() {
     _analysisResult = data;
     renderAnalysis(data);
   } catch(e) {
+    _analysisLoadingCtl && _analysisLoadingCtl.stop();
     document.getElementById('analysisLoading').style.display = 'none';
     showError('Lỗi phân tích: ' + (e.message || 'Vui lòng thử lại.'));
     resultSec.style.display = 'none';
@@ -655,6 +656,7 @@ function switchResultTab(tab, btn) {
 }
 
 function renderAnalysis(data) {
+  _analysisLoadingCtl && _analysisLoadingCtl.finish();
   document.getElementById('analysisLoading').style.display = 'none';
 
   // Face shape + age group
@@ -771,6 +773,8 @@ async function _doTryOn(styleId, meta, type = 'hair') {
   document.getElementById('tryonLoading').style.display = 'block';
   document.getElementById('tryonResult').style.display = 'none';
   tryonSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  _tryonLoadingCtl = AiLoadingSteps.mount('tryonStepsHost', TRYON_STEPS);
+  _tryonLoadingCtl.start();
 
   document.querySelectorAll('.try-btn').forEach(b => b.disabled = true);
 
@@ -798,10 +802,12 @@ async function _doTryOn(styleId, meta, type = 'hair') {
     document.getElementById('imgBefore').src = 'data:' + _mediaType + ';base64,' + _imageData;
     document.getElementById('imgAfter').src = data.imageUrl;
     document.getElementById('afterLabel').textContent = meta?.name || styleId;
+    _tryonLoadingCtl && _tryonLoadingCtl.finish();
     document.getElementById('tryonLoading').style.display = 'none';
     document.getElementById('tryonResult').style.display = 'block';
     _saveTryonReading(styleId, data.imageUrl);
   } catch(e) {
+    _tryonLoadingCtl && _tryonLoadingCtl.stop();
     document.getElementById('tryonLoading').style.display = 'none';
     showTryonError('Lỗi tạo ảnh: ' + (e.message || 'Vui lòng thử lại.'));
   } finally {
@@ -900,10 +906,21 @@ async function _saveTryonReading(styleId, imageUrl) {
 (function() { _restoreStateAfterAuth(); })();
 </script>
 <script src="/tuvi-paywall.js"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=1"></script>
 <script>
 // TuviPaywall được init per-action trong analyze() và selectStyle()
 // để dùng đúng product/cost cho từng loại (phan-tich vs tryon)
 TuviPaywall.init({ product: 'kieu-toc-phan-tich', slug: () => _currentSlug, onUnlock: () => {} });
+const ANALYSIS_STEPS = [
+  { label: 'Đo khuôn mặt bằng MediaPipe', ms: 1000 },
+  { label: 'AI phân tích hình dạng khuôn mặt', ms: 0 },
+];
+const TRYON_STEPS = [
+  { label: 'Chuẩn bị ảnh & prompt', ms: 1200 },
+  { label: 'AI đang tạo ảnh kiểu tóc mới', ms: 0 },
+];
+let _analysisLoadingCtl = null;
+let _tryonLoadingCtl = null;
 </script>
 <section class="kb-section">
   <div class="page">
