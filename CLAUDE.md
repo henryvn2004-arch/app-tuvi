@@ -5,6 +5,66 @@
 
 ---
 
+## 🧭 Marketing Autopilot + CMO Orchestrator Quân Sư
+
+**Branch:** `claude/marketing-autopilot-track-setup-vse38f`
+**Cập nhật:** 2026-07-25
+
+### 🔖 RESUME HERE
+Track MỚI (chưa từng có mục này trong CLAUDE.md trước phiên 2026-07-25 — khởi tạo
+track + làm milestone đầu trong CÙNG phiên vì Henry giao thẳng "làm M0.1"). Mục
+tiêu track (rộng, sẽ điền dần theo phiên): biến phần "đo lường" (track track.js/
+GA4/admin Marketing đã xong ở track Admin Revamp) thành phần **tự động hoá +
+CMO ảo tư vấn quyết định tăng trưởng** — nhưng **M0.1 KHÔNG động tới phần đó**,
+chỉ vá lỗ hổng đo lường nền tảng trước (garbage in → garbage out, autopilot
+build trên dữ liệu thiếu thì vô nghĩa).
+
+### ✅ M0.1 XONG (PR mới, session này) — track.js + GA4 phủ hết ISR + gộp share-widget.js
+**Audit phát hiện trước khi sửa:** dashboard Marketing (track Admin Revamp, S0-D6)
+đo qua `events`/`track.js`, nhưng **toàn bộ 20 route ISR SEO** (`la-so/[slug]`,
+`menh-kho/[year]` + `[day]`, `van-han` + `[slug]`, `nghien-cuu` + `[slug]`,
+`tu-vi/[slug]`, `khao-luan/[slug]`, `tu-vi-hub` (5 cat rewrite), `tu-dien` +
+`[slug]`, `tac-gia` + `[slug]`, `luan-giai/[slug]`) — tức phần lưu lượng SEO
+LỚN NHẤT site — **0 file có `track.js`**, nên toàn bộ traffic tổ chức/AI-crawler
+đổ vào các trang này hoàn toàn mù trong Funnel/Acquisition/DAU. 3 trang share/
+kết-quả công khai khác (`ket-qua/[id]`, `luan-duong/[id]`, `shared-chat/[id]`)
+**mù luôn cả GA4** (không load `nav.js` — thiết kế cố ý bỏ chrome nav để giữ
+layout branded độc lập cho link chia sẻ, nên GA4 chưa từng nạp qua đường đó).
+Ngoài ra `share-widget.js` (bar chia sẻ Web-Share/Zalo/Facebook/copy, dùng thật
+ở `la-so/[slug]` + `nghien-cuu/[slug]`) gọi endpoint chết `/api/share-event`
+(404 âm thầm, không dùng `Track.event`) — audit D6 (track Admin Revamp) từng ghi
+nhầm là "code chết, không nơi nào gọi" vì bỏ sót 2 trang ISR này.
+- **Sprint 1 — track.js vào 15 file ISR đã có `nav.js` (đã có GA4 sẵn qua đó):**
+  chèn `<script src="/track.js?v=1" defer></script>` ngay trước mọi tag
+  `nav.js` (20 vị trí — vài file có nhiều nhánh template). Cache `s-maxage`
+  dài của các route này không chặn gì — trang cũ tự có track.js khi CDN
+  revalidate/miss, không cần bump cache-bust.
+- **Sprint 2 — `ket-qua`/`luan-duong`/`shared-chat`:** không load `nav.js` (sẽ
+  phá layout branded — nav.js chèn nav bar lên đầu `<body>` nếu thiếu
+  `#nav-ph`). Thêm `lib/analytics/isr-tracking.ts` export `GA4_TRACK_SNIPPET`
+  (script GA4 gtag inline, CÙNG Measurement ID `G-F4XNRS2XT0` với `nav.js` +
+  `track.js?v=1`) — nạp trực tiếp, không qua `nav.js`.
+- **Sprint 3 — gộp `share-widget.js` vào `share.js`:** thêm `ShareButtons.renderBar()`
+  (Web Share API mobile + copy + Facebook + Zalo, UTM tự động qua `campaign`
+  param) vào `public/share.js` cạnh `ShareButtons.render()` (hàng nút inline cũ
+  của blog/khao-luan/tai-lieu/contact/tu-binh) — MỘT nguồn duy nhất. Track qua
+  `ShareButtons.track()` có sẵn (→ `Track.event('share', {meta:{medium}})`),
+  bỏ hẳn `gtag`/`fbq`/fetch `/api/share-event` chết của bản cũ. `la-so/[slug]`
+  + `nghien-cuu/[slug]` đổi sang gọi `ShareButtons.renderBar` + nạp `/share.js`
+  (nghien-cuu gắn `campaign:'nghiencuu'` để tách UTM khỏi `campaign:'laso'`
+  mặc định). **Xóa `public/share-widget.js`.**
+- **Verify:** `npx tsc --noEmit` 0 lỗi, `npm run lint` 0 lỗi (72 warning
+  pre-existing, không liên quan), `npx prettier --check` sạch cho mọi `.ts`
+  đụng tới, `node --check` share.js/track.js OK, `cd tuvi-engine && npm test`
+  181 pass (không liên quan nhưng xác nhận không đụng engine).
+- **CÒN LẠI (chưa định nghĩa — cần Henry chốt phạm vi M0.2+):** track này mới
+  chỉ có M0.1 (vá lỗ hổng đo lường). Chưa có workplan milestone M1+ cho phần
+  "autopilot"/"CMO quân sư" thật — cần Henry mô tả rõ autopilot làm gì (tự
+  động đề xuất/chạy campaign? tự viết nội dung theo insight funnel? cảnh báo
+  bất thường?) trước khi tách M1/M2/... như các track khác trong file này.
+
+---
+
 ## 🆕 Tool mới — "Chân Dung Vợ Chồng" (2026-07-24, CHƯA COMMIT/CHƯA DEPLOY)
 
 Vẽ chân dung người phối ngẫu suy từ cung Phu Thê trong lá số (OpenAI `gpt-image-1`
