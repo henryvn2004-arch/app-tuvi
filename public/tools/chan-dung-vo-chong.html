@@ -105,8 +105,7 @@
       <div class="res-block-header"><span class="res-block-title">Chân Dung Người Phối Ngẫu</span></div>
       <div class="res-block-body">
         <div class="cdvc-loading" id="loading" style="display:none">
-          <span class="ic-inline" data-icon-emoji="✨" style="display:inline-flex;width:28px;height:28px;color:#9A7B3A">✨</span>
-          <div style="margin-top:10px;color:var(--text-mid)">AI đang vẽ chân dung...<br><span style="font-size:12px;opacity:.7">Thường mất 20–40 giây</span></div>
+          <div id="loadingSteps"></div>
         </div>
         <div class="cdvc-card" id="card" style="display:none">
           <div class="cdvc-imgwrap">
@@ -159,9 +158,17 @@
 
 <script src="/tuvi-form.js"></script>
 <script src="/tuvi-paywall.js"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=1"></script>
 <script>
 let _currentSlug = '';
 let _resultImgUrl = '';
+const CDVC_STEPS = [
+  { label: 'Lập lá số & xác định cung Phu Thê', ms: 900 },
+  { label: 'Luận giải cung Phu Thê', ms: 4500 },
+  { label: 'Phác thảo mô tả & ước lượng tuổi bạn đời', ms: 3200 },
+  { label: 'AI đang vẽ chân dung', ms: 0 },
+];
+let _loadingCtl = null;
 
 TuviForm.render('tvf-container', { onSubmit: analyze, submitLabel: 'Vẽ Chân Dung →', mode: 'full', showSample: false });
 
@@ -190,6 +197,8 @@ async function _doGenerate(d) {
   document.getElementById('phuTheBlock').style.display = 'none';
   document.getElementById('luanGiaiBlock').style.display = 'none';
   document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDVC_STEPS);
+  _loadingCtl.start();
 
   try {
     const token = window.Auth?.getSession()?.access_token || '';
@@ -218,11 +227,13 @@ async function _doGenerate(d) {
       document.getElementById('luanGiaiText').innerHTML = mdBoldParas(data.phuTheLuanGiai);
       luanGiaiBlock.style.display = 'block';
     } else { luanGiaiBlock.style.display = 'none'; }
+    _loadingCtl && _loadingCtl.finish();
     document.getElementById('loading').style.display = 'none';
     document.getElementById('card').style.display = 'flex';
     renderPhuThe(data.phuThe);
     _loadHistory();
   } catch (e) {
+    _loadingCtl && _loadingCtl.stop();
     document.getElementById('loading').style.display = 'none';
     document.getElementById('result-section').classList.remove('active');
     showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
