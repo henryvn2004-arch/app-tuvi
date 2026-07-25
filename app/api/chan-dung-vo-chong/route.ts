@@ -100,7 +100,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     'chiếu) NẾU CÓ — (B) và (C) là NGUỒN ƯU TIÊN CAO NHẤT, cao hơn (A), vì phản ánh đúng cổ pháp chứ ' +
     'không chỉ suy diễn hình thể; RIÊNG câu hỏi tuổi tác (mục 4) ưu tiên đọc (C) trước vì đầy đủ ngữ cảnh hơn. Nhiệm vụ:\n' +
     '1) "imagePrompt": MỘT đoạn tiếng ANH liền mạch (80-120 từ). BẮT ĐẦU bằng ĐÚNG 1 câu tổng quan/khái quát ' +
-    '(overall gestalt — ấn tượng chung: vóc dáng, khí chất, độ trẻ trung, tươi sáng) rồi MỚI đi vào liệt kê đặc ' +
+    '(overall gestalt — ấn tượng chung: khí chất, độ trẻ trung, tươi sáng) rồi MỚI đi vào liệt kê đặc ' +
     'điểm cụ thể (face shape, eyes, nose, lips, màu tóc và chất tóc tự nhiên [KHÔNG mô tả kiểu tóc/kiểu cắt — ' +
     'phần đó server tự chọn riêng], tông da tự nhiên...) — KHÔNG mô ' +
     'tả trang phục/quần áo (phần đó server tự chọn riêng, tránh xung đột) — KHÔNG liệt kê chi tiết ngay câu đầu, tránh cảm giác rời rạc như ráp từng ' +
@@ -113,9 +113,15 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     'để đổi CẤU TRÚC khuôn mặt (hình dáng mặt, mũi, môi, gò má, hàm, lông mày) mà (A)/(B) đã cho: một khuôn mặt ' +
     'vuông/xương gò má cao/môi mỏng/mắt sâu sắc hoàn toàn có thể đang mỉm cười ấm áp — PHẢI giữ ĐÚNG các đặc ' +
     'điểm cấu trúc đó, KHÔNG được làm mềm/tròn hóa thành khuôn mặt trái xoan chung chung, môi đầy đặn, mắt hiền ' +
-    'chỉ vì cần giữ tông tích cực. TUYỆT ĐỐI CẤM các từ/ý: ' +
+    'chỉ vì cần giữ tông tích cực. RIÊNG VÓC DÁNG (bodyBuild trong (A)) thì NGƯỢC LẠI — TUYỆT ĐỐI KHÔNG đưa vào ' +
+    'imagePrompt bất kỳ ý nào gợi gầy gò/ốm yếu/mảnh khảnh/xương xẩu dù (A) có ghi "gầy" (dữ liệu cổ pháp hay mô ' +
+    'tả gầy cho rất nhiều sao, không phản ánh đúng thẩm mỹ hiện đại mong muốn) — LUÔN mô tả vóc dáng KHỎE MẠNH, ' +
+    'CÂN ĐỐI, có da thịt vừa phải (a healthy, balanced physique — KHÔNG BAO GIỜ slim/skinny/thin/bony/lean/gaunt); ' +
+    'chỉ giữ nguyên các gợi ý TÍCH CỰC về vóc dáng trong (A) (vd "cân đối", "chắc khỏe", "vạm vỡ", "đẫy đà"). ' +
+    'TUYỆT ĐỐI CẤM các từ/ý: ' +
     '"cold", "stern", "serious", "intense", "unsmiling", "rarely smiles", "menacing", "hardened", "mysterious", ' +
-    '"enigmatic", "dark", "moody", "somber", "shadowy", "muted", "dim", "monochrome", "desaturated" — và CẤM từ ' +
+    '"enigmatic", "dark", "moody", "somber", "shadowy", "muted", "dim", "monochrome", "desaturated", "slim", ' +
+    '"skinny", "thin", "bony", "lean", "gaunt", "frail", "underweight" — và CẤM từ ' +
     'ngữ gợi già dặn/khắc khổ/phong trần/nhiều nếp nhăn (cấm "mature", "weathered", "aged", "world-worn"). ' +
     'KHÔNG tự thêm mô tả phong cách nghệ thuật/ánh sáng/chủng tộc/trang phục/kiểu tóc (phần đó server tự ghép), KHÔNG nhắc chiêm ' +
     'tinh/tử vi/tên sao. Các đặc điểm KHÔNG được mâu thuẫn nhau — nếu (A) và (B) mâu thuẫn, ưu tiên (B) nhưng ' +
@@ -124,8 +130,9 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     'tính cách VÀ (nếu (B) có gợi ý) hoàn cảnh hôn nhân (vd duyên muộn, gặp nhau nơi xa, tính cách vui vẻ/trầm ' +
     'lặng...) — CÁC ĐẶC ĐIỂM CẤU TRÚC KHUÔN MẶT (hình dáng mặt, mũi, môi, gò má, mắt) PHẢI bám sát (A)/(B), ' +
     'KHÔNG tự đổi thành khuôn mặt chung chung dễ thương khác chỉ vì muốn giữ tông tích cực — CHỈ biểu cảm/phong ' +
-    'thái được phép luôn ấm áp, tích cực; KHÔNG nhắc tên sao/thuật ngữ tử vi, KHÔNG ước lượng hay nêu số tuổi/số ' +
-    'năm chênh lệch cụ thể với bạn đời, đọc như lời tả người thật.\n' +
+    'thái được phép luôn ấm áp, tích cực; RIÊNG VÓC DÁNG thì KHÔNG được viết "gầy/gầy gò/ốm/mảnh khảnh/xương xẩu" ' +
+    'dù (A) ghi vậy — luôn tả vóc dáng khỏe mạnh, cân đối, đầy đặn vừa phải; KHÔNG nhắc tên sao/thuật ngữ tử vi, ' +
+    'KHÔNG ước lượng hay nêu số tuổi/số năm chênh lệch cụ thể với bạn đời, đọc như lời tả người thật.\n' +
     '3) "meetingContext": đoạn tiếng VIỆT NGẮN (30-60 từ) luận riêng về HOÀN CẢNH GẶP GỠ nhiều khả năng nhất ' +
     '(vd qua công việc/học tập, qua bạn bè/người thân giới thiệu, tình cờ gặp gỡ, ở nơi xa quê hương/công tác/' +
     'du học, quen biết lâu mới nên duyên, qua mai mối...). ƯU TIÊN bám sát gợi ý CỤ THỂ trong (B) nếu có (vd ' +
@@ -226,28 +233,36 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   };
   const colorPool = ELEMENT_COLORS[phuTheElement] || ['warm cream beige', 'soft ivory'];
   const outfitColor = colorPool[Math.floor(Math.random() * colorPool.length)];
+  // Henry phản hồi ảnh ra "gầy gầy, quần áo rộng thùng thình, nhìn già đi" — trang phục
+  // kiểu "tailored/structured/blazer" (cắt may cứng cáp, dáng công sở) dễ đổ bóng
+  // rộng/thùng thình trên khung hình bán thân, cộng dồn với xu hướng thân hình gầy
+  // (xem quy tắc vóc dáng ở sys prompt) ra hiệu ứng già hơn tuổi. Đổi hẳn sang chất
+  // liệu MỀM, RỦ (soft draping fabric), form ÔM VỪA VẶN — không còn "tailored"/
+  // "structured"/"blazer" — theo gợi ý của Henry (tham khảo ChatGPT) để trẻ trung hơn.
   const FEMALE_OUTFITS = [
-    'a tailored {color} blouse with straight-leg trousers, quiet-luxury minimalist style',
+    'a soft {color} blouse with a relaxed, flattering fit, quiet-luxury minimalist style',
     'a soft {color} knit sweater with a flowing midi skirt, relaxed quiet-luxury style',
-    'a flowing {color} silk-blend blouse, elegant modern quiet-luxury style',
-    'a structured {color} blazer over a plain white top, refined quiet-luxury style',
+    'a flowing {color} silk-blend blouse with soft draping fabric, elegant modern quiet-luxury style',
+    'a soft {color} cardigan over a plain white top, relaxed quiet-luxury style',
     'a {color} wrap dress, elegant flowing silhouette, modern quiet-luxury style',
     'a traditional Vietnamese áo dài in a soft {color} tone, elegant flowing silhouette, quiet-luxury feel',
-    'a {color} cashmere-look turtleneck with tailored trousers, modern minimalist quiet-luxury style',
-    'a {color} linen shirt-dress, relaxed elegant quiet-luxury style',
+    'a {color} cashmere-look turtleneck with soft flowing trousers, modern minimalist quiet-luxury style',
+    'a {color} linen shirt-dress with soft draping fabric, relaxed elegant quiet-luxury style',
   ];
   const MALE_OUTFITS = [
-    'a tailored {color} button-up shirt with tapered trousers, quiet-luxury minimalist style',
-    'a {color} knit polo with tailored chinos, refined modern quiet-luxury style',
+    'a soft {color} button-up shirt with relaxed-fit trousers, quiet-luxury minimalist style',
+    'a {color} knit polo with relaxed-fit chinos, refined modern quiet-luxury style',
     'a {color} linen shirt with sleeves rolled up, relaxed quiet-luxury style',
-    'a structured {color} overshirt over a plain white tee, modern minimalist quiet-luxury style',
-    'a {color} merino sweater with tailored trousers, quiet-luxury style',
+    'a soft {color} overshirt over a plain white tee, modern minimalist quiet-luxury style',
+    'a {color} merino sweater with relaxed-fit trousers, quiet-luxury style',
     'a {color} bomber jacket over a plain white tee, modern refined quiet-luxury street style',
-    'a {color} Mandarin-collar shirt, understated modern quiet-luxury elegance',
+    'a {color} Mandarin-collar shirt with soft flowing fabric, understated modern quiet-luxury elegance',
   ];
   const outfitPool = spouseGender === 'nu' ? FEMALE_OUTFITS : MALE_OUTFITS;
   const outfitTemplate = outfitPool[Math.floor(Math.random() * outfitPool.length)];
-  const wardrobeLine = `Wearing ${outfitTemplate.replace('{color}', outfitColor)}, no logos, no flashy accessories.`;
+  const wardrobeLine =
+    `Wearing ${outfitTemplate.replace('{color}', outfitColor)}, no logos, no flashy accessories, well-fitted ` +
+    'and flattering to the body — NOT baggy, oversized, boxy, or ill-fitting; avoid sharp corporate tailoring.';
 
   // Kiểu tóc — RANDOM 1 hairstyle hiện đại/năng động/trẻ trung mỗi lượt gen (server
   // chọn, KHÔNG để LLM tự bịa để tránh xung đột với lựa chọn dưới đây — cùng cơ chế
@@ -255,11 +270,11 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   // tóc hài hòa, phù hợp khuôn mặt (Henry yêu cầu).
   const FEMALE_HAIRSTYLES = [
     'a modern shoulder-length wavy bob with soft face-framing layers',
-    'long layered hair with soft curtain bangs and effortlessly tousled waves',
+    'long soft wavy hair with soft curtain bangs and natural volume',
     'a sleek modern high ponytail with subtle volume',
     'soft voluminous beach waves past the shoulders',
     'a chic textured long bob with side-swept fringe',
-    'a modern shag haircut with feathered layers, youthful and dynamic',
+    'long soft wavy hair with effortless natural volume, youthful and dynamic',
     'long straight hair with a deep side part, glossy and sleek',
     'a trendy middle-part hairstyle with soft face-framing layers and natural volume',
   ];
@@ -279,15 +294,24 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   // (A)/(B) hay mang cá tính lạnh/ít cười (vd sao Thất Sát/Liêm Trinh/Tham Lang), LLM có
   // thể lỡ nhét chữ "cold/serious/dark/muted" vào dù đã cấm ở sys prompt; nhắc lại 2 lần
   // để chỉ định thị giác THẮNG cá tính nội tâm khi ra ảnh.
+  // Body type — bake trực tiếp vào wrapper (KHÔNG chỉ dựa vào sys prompt LLM ở trên)
+  // vì đây là điểm Henry phản hồi rõ nhất ("gầy gầy, quần áo rộng thùng thình, nhìn
+  // già đi") — phòng hờ khi LLM lỡ không tuân đúng quy tắc vóc dáng. Áp dụng chung
+  // cho cả nam/nữ theo gợi ý Henry (tham khảo ChatGPT, chỉ chỉnh chung chung).
+  const bodyLine =
+    'The subject has a healthy, balanced physique with soft, naturally rounded arms and shoulders and graceful, ' +
+    'relaxed posture — NEVER slim, skinny, thin, bony, lean, gaunt, or frail.';
   const finalPrompt =
     `An ultra-realistic, premium editorial lifestyle portrait photograph of a ${genderWord} who appears to be ` +
     `roughly ${ageLow}-${ageHigh} years old, no older — Vietnamese luxury editorial aesthetic, "quiet luxury", warm, ` +
-    'elegant, refined and timeless, Apple/Muji-inspired minimalism, natural and authentic premium feeling (NOT ' +
+    'elegant, refined and timeless, Apple/Muji-inspired minimalism, natural and authentic premium feeling, warm ' +
+    'creamy color palette, soft low-contrast tones, approachable and graceful lifestyle aesthetic (NOT ' +
     'a painting, NOT an illustration, NOT a sketch, NOT monochrome or grayscale, NOT a dark or moody image). ' +
-    `${ethnicityLine} Professional DSLR photography, 85mm portrait lens, f/1.8 shallow depth of field, soft ` +
-    'natural window light, diffused warm daylight, soft gentle shadows, cinematic but natural — ultra-realistic ' +
-    'skin texture, NO beauty filter, NO exaggerated AI look, NO plastic or airbrushed skin. Warm, softly lit ' +
-    'background with a gentle neutral tone; BRIGHT and warm in tone throughout, NEVER dark, shadowy, muted, ' +
+    `${ethnicityLine} ${bodyLine} Professional DSLR photography, 85mm portrait lens, f/1.8 shallow depth of ` +
+    'field, soft golden natural window light, diffused warm daylight, soft gentle low-contrast shadows, ' +
+    'cinematic but natural — ultra-realistic skin texture, NO beauty filter, NO exaggerated AI look, NO plastic ' +
+    'or airbrushed skin. Warm, softly lit background with a gentle warm creamy tone; BRIGHT and warm in tone ' +
+    'throughout, NEVER dark, shadowy, muted, ' +
     `dull, desaturated, or somber; avoid heavy chiaroscuro or dim/flat lighting entirely. ${wardrobeLine} ` +
     `${hairstyleLine} Bright ` +
     'modern warm-neutral home interior, softly blurred background, natural window lighting, no clutter. The ' +
@@ -296,7 +320,8 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     `natural skin appropriate for someone between ${ageLow} and ${ageHigh} years old — not older, no heavy ` +
     `wrinkles or tired features. ${parsed.imagePrompt} Regardless of the above, the overall image must stay ` +
     'BRIGHT, warm and natural — soft, gentle light throughout, never dull or dark; keep the expression warm ' +
-    'and gentle, the skin youthful, natural and photorealistic (no beauty filter, no AI-plastic look). ' +
+    'and gentle, the skin youthful, natural and photorealistic (no beauty filter, no AI-plastic look), and the ' +
+    'physique healthy and balanced (never slim, skinny, thin, or bony). ' +
     'High-end magazine quality, 8K, extremely detailed, natural skin texture, no artifacts, no distorted ' +
     'anatomy, single portrait only, half-body or head-and-shoulders framing. No text, no watermark, no signature.';
 
