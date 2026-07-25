@@ -151,8 +151,9 @@ var CDVC_STEPS = [
 var _loadingCtl = null;
 
 // Form nhập (dùng chung TuviForm — có "Sinh ở ngoài Việt Nam?" + parity giờ
-// sinh lịch sử với standalone). Tool này không cần Họ và tên → showName:false.
-TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam', showName:false});
+// sinh lịch sử với standalone). Field khớp ĐÚNG bản standalone tools/chan-dung-vo-chong.html
+// (mode:'full'): Họ và tên + Giới tính + Năm xem vận + ngày giờ sinh.
+TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam', showNamXem:true});
 
 function showError(msg) {
   var e = document.getElementById('error-msg');
