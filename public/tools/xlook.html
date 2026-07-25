@@ -11,6 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="/auth.js"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=1"></script>
 <script src="/nav.js?v=16" defer></script>
 <style>
 :root{
@@ -246,9 +247,7 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
       </div>
       <div>
         <div id="mixLoading" style="display:none;text-align:center;padding:40px 20px;">
-          <div class="spinner-sm spinner-dark" style="width:32px;height:32px;margin:0 auto 12px;border-width:3px;"></div>
-          <div style="font-size:14px;font-weight:600;color:var(--navy);font-family:'Noto Serif',serif;">AI đang mix outfit...</div>
-          <div style="font-size:11px;color:var(--text-lt);margin-top:4px;">Phân tích tủ đồ · ~5 giây</div>
+          <div id="mixStepsHost"></div>
         </div>
         <div id="mixResults" style="display:none">
           <div class="outfit-cards" id="outfitCards"></div>
@@ -323,6 +322,11 @@ const CAT_ICON = {top:'👕',bottom:'👖',outer:'🧥',shoes:'👟',accessory:'
 const OCC_VN = {daily:'Hàng ngày',work:'Đi làm',date:'Hẹn hò',party:'Tiệc',sport:'Thể thao',travel:'Du lịch'};
 
 let _wardrobe = [];
+const MIX_STEPS = [
+  { label: 'Đọc tủ đồ', ms: 1200 },
+  { label: 'AI tạo gợi ý phối đồ', ms: 0 },
+];
+let _mixLoadingCtl = null;
 let _addImgData = null, _addMediaType = 'image/jpeg', _addClassified = null;
 let _filterCat = 'all', _occasion = 'daily', _weather = 'hot';
 
@@ -541,6 +545,8 @@ async function doMix() {
   document.getElementById('mixLoading').style.display = 'block';
   document.getElementById('mixResults').style.display = 'none';
   document.getElementById('mixEmpty').style.display = 'none';
+  _mixLoadingCtl = AiLoadingSteps.mount('mixStepsHost', MIX_STEPS);
+  _mixLoadingCtl.start();
 
   try {
     const res = await fetch('/api/tuong-mat', {
@@ -550,8 +556,10 @@ async function doMix() {
     });
     const data = await res.json();
     if (!data.success) throw new Error(data.error || 'Lỗi mix outfit');
+    _mixLoadingCtl && _mixLoadingCtl.finish();
     renderMixResults(data);
   } catch(e) {
+    _mixLoadingCtl && _mixLoadingCtl.stop();
     alert('Lỗi: ' + (e.message || 'Vui lòng thử lại.'));
     document.getElementById('mixEmpty').style.display = 'block';
   } finally {

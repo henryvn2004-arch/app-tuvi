@@ -12,6 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="/auth.js"></script>
 <script src="/tuvi-paywall.js"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=1"></script>
 <script src="/nav.js?v=16" defer></script>
 <style>
 :root{
@@ -272,9 +273,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 
   <!-- Loading -->
   <div class="loading" id="loading">
-    <div class="spinner"></div>
-    <div style="font-size:14px;font-weight:600;color:#7b2fbe;font-family:'Noto Serif',serif;">Đang phân tích tông màu...</div>
-    <div style="font-size:12px;color:var(--text-lt);margin-top:6px;">Đọc undertone · Xác định season · ~10 giây</div>
+    <div id="analysisStepsHost"></div>
   </div>
 
   <!-- Results -->
@@ -404,9 +403,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
       <button class="btn-tryon" id="btnTryon" onclick="doTryon()" disabled>🪄 Thử Trang Phục Ngay</button>
 
       <div id="tryonLoading" style="display:none;text-align:center;padding:24px 0;">
-        <div class="tryon-spinner"></div>
-        <div style="font-size:13px;font-weight:600;color:#7b2fbe;">AI đang tạo outfit...</div>
-        <div style="font-size:11px;color:var(--text-lt);margin-top:4px;">~20-35 giây</div>
+        <div id="tryonStepsHost"></div>
       </div>
       <div id="tryonResult" style="display:none;margin-top:12px;">
         <div class="ba-grid">
@@ -461,6 +458,16 @@ const UNDERTONE_VN = { warm:'Ấm (Warm)', cool:'Lạnh (Cool)', neutral:'Trung 
 const CONFIDENCE_COLOR = { cao:'#2E8B57', 'trung bình':'#9A7B3A', thấp:'#c0392b' };
 
 let _imgData = null, _mediaType = 'image/jpeg';
+const ANALYSIS_STEPS = [
+  { label: 'Tính bản mệnh theo năm sinh', ms: 900 },
+  { label: 'AI phân tích tông da & season màu', ms: 0 },
+];
+const TRYON_STEPS = [
+  { label: 'Chuẩn bị outfit theo season', ms: 1200 },
+  { label: 'AI đang tạo ảnh outfit mới', ms: 0 },
+];
+let _analysisLoadingCtl = null;
+let _tryonLoadingCtl = null;
 
 function loadFile(file) {
   if (!file?.type?.startsWith('image/')) return;
@@ -512,6 +519,8 @@ async function analyze() {
   document.getElementById('btnAnalyze').disabled = true;
   document.getElementById('loading').classList.add('show');
   document.getElementById('results').style.display = 'none';
+  _analysisLoadingCtl = AiLoadingSteps.mount('analysisStepsHost', ANALYSIS_STEPS);
+  _analysisLoadingCtl.start();
 
   const slug = TuviPaywall.generateToolSlug('personal-color');
   TuviPaywall.init({ product: 'personal-color' });
@@ -528,12 +537,14 @@ async function analyze() {
           const data = await res.json();
           if (!res.ok || data.error) throw new Error(data.error || 'Lỗi phân tích');
           window.refreshNavCredits?.();
+          _analysisLoadingCtl && _analysisLoadingCtl.finish();
           renderResults(data);
           resolve();
         } catch(e) { reject(e); }
       });
     });
   } catch(e) {
+    _analysisLoadingCtl && _analysisLoadingCtl.stop();
     alert('Lỗi: ' + (e.message || 'Vui lòng thử lại.'));
   } finally {
     document.getElementById('btnAnalyze').disabled = false;
@@ -703,6 +714,8 @@ async function doTryon() {
     document.getElementById('tryonLoading').style.display = 'block';
     document.getElementById('tryonResult').style.display = 'none';
     document.getElementById('btnTryon').disabled = true;
+    _tryonLoadingCtl = AiLoadingSteps.mount('tryonStepsHost', TRYON_STEPS);
+    _tryonLoadingCtl.start();
     try {
       const res = await fetch('/api/tuong-mat', {
         method: 'POST',
@@ -715,9 +728,10 @@ async function doTryon() {
       document.getElementById('tryonBefore').src = 'data:' + _tryonMediaType + ';base64,' + _tryonImgData;
       document.getElementById('tryonAfter').src = data.imageUrl;
       document.getElementById('tryonAfterLabel').textContent = 'Season ' + _tryonSeason;
+      _tryonLoadingCtl && _tryonLoadingCtl.finish();
       document.getElementById('tryonResult').style.display = 'block';
       window.refreshNavCredits?.();
-    } catch(e) { alert('Lỗi: ' + (e.message || 'Vui lòng thử lại.')); }
+    } catch(e) { _tryonLoadingCtl && _tryonLoadingCtl.stop(); alert('Lỗi: ' + (e.message || 'Vui lòng thử lại.')); }
     finally { document.getElementById('tryonLoading').style.display = 'none'; document.getElementById('btnTryon').disabled = false; }
   });
 }
