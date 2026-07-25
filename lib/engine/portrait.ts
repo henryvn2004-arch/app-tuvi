@@ -298,11 +298,33 @@ function ageOffsetFromPhuThe(yNghia: string[], phuThe: Rec | undefined, userGend
   return partnerOlder ? magnitude : -magnitude;
 }
 
+// ── Mốc tuổi để sinh ảnh — độ tuổi LẬP GIA ĐÌNH, KHÔNG phải tuổi hiện tại ──
+// Henry chỉ ra: dùng tuổi hiện tại của lá số gốc (có thể 50-70+) làm mốc dễ
+// ra ảnh quá già — nên LUÔN neo theo độ tuổi lập gia đình phổ biến (22-31),
+// nới lên 30-35 nếu lá số CÓ GHI RÕ hôn nhân muộn (yNghia — "nên muộn hôn
+// nhân"/"nên muộn"). Random 1 số trong range mỗi lượt gen — đây là mốc GIẢ
+// ĐỊNH tuổi kết hôn, dùng để cộng/trừ starAgeOffset (±3-8 như cũ) ra
+// spouseAge, KHÔNG phải tuổi thật của người xem lá số.
+const MARRIAGE_AGE_MIN = 22;
+const MARRIAGE_AGE_MAX = 31;
+const LATE_MARRIAGE_AGE_MIN = 30;
+const LATE_MARRIAGE_AGE_MAX = 35;
+
+function pickMarriageAgeAnchor(yNghia: string[]): number {
+  const lateMarriage = /nên muộn/.test(yNghia.join(' | '));
+  const lo = lateMarriage ? LATE_MARRIAGE_AGE_MIN : MARRIAGE_AGE_MIN;
+  const hi = lateMarriage ? LATE_MARRIAGE_AGE_MAX : MARRIAGE_AGE_MAX;
+  return lo + Math.floor(Math.random() * (hi - lo + 1));
+}
+
 export interface SpouseMorphology {
   spouseGender: 'nam' | 'nu';
   spouseAge: number;
-  /** Tuổi hiện tại của lá số gốc — dùng làm mốc khi route.ts cần tính lại tuổi
-   * theo gợi ý cách cục (ưu tiên cao hơn fallback này). */
+  /** Mốc tuổi LẬP GIA ĐÌNH giả định (random 22-31, hoặc 30-35 nếu lá số ghi
+   * rõ hôn nhân muộn) — KHÔNG phải tuổi hiện tại của lá số gốc (xem
+   * pickMarriageAgeAnchor). route.ts dùng số này làm mốc cộng/trừ tuổi bạn
+   * đời (ưu tiên cao hơn fallback starAgeOffset khi cách cục không có gợi ý
+   * tuổi tác rõ ràng). */
   baseAge: number;
   /** Offset mặc định "chồng lớn hơn vợ 3-8 tuổi" (đảo hướng/nới biên độ nếu
    * cachCucTungCung ghi rõ tín hiệu khác) — route.ts chỉ dùng làm fallback khi
@@ -344,8 +366,8 @@ export function computeSpouseMorphology(ls: Laso, userGender: 'nam' | 'nu'): Spo
 
   const fields = buildFields(core, ranked.length ? ranked : [DEFAULT_CORE]);
 
-  const baseAge = Number(ls.tuoiXem) || 30;
   const yNghia = ((ls.cachCucTungCung as Record<string, string[]>) || {})['Phu Thê'] || [];
+  const baseAge = pickMarriageAgeAnchor(yNghia);
   const starAgeOffset = ageOffsetFromPhuThe(yNghia, phuThe, userGender);
   const spouseAge = Math.max(18, Math.min(80, baseAge + starAgeOffset));
 
