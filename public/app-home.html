@@ -26,6 +26,7 @@
 .tcard .tx b{display:block;font-family:var(--serif);font-size:14.5px;font-weight:600;color:var(--text);margin-bottom:3px}
 .tcard .tx span{font-size:12px;color:var(--text-lt);line-height:1.5}
 .tcard .cost{position:absolute;top:11px;right:12px;font-size:10.5px;font-weight:600;color:var(--gold-soft);background:var(--gold-lt);border:1px solid var(--gold-soft);border-radius:20px;padding:1px 8px}
+.tcard .cost.free{color:#fff;background:var(--green);border-color:var(--green)}
 .tcard.ext .tx b::after{content:"↗";font-size:11px;color:var(--text-lt);margin-left:5px;font-family:var(--sans)}
 /* ── VẬN HÔM NAY — thẻ hero theo ngày (deterministic, miễn phí) → mồi vào rail luận riêng ── */
 .today-card{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--navy),#0d2a49);border-radius:16px;padding:20px 22px;margin-bottom:22px;color:#fff}
@@ -110,36 +111,36 @@ var IC={
 };
 var GROUPS=[
   { g:'Tử Vi', items:[
-    { i:'grid', t:'Luận giải Tử Vi', d:'Lập lá số 12 cung rồi luận sâu cách cục, đại vận, tứ hóa', h:'/app/luan-giai', c:5 },
-    { i:'heart', t:'Xem tuổi vợ chồng', d:'So hòa hợp hai lá số theo 8 chiều', h:'/app/xem-tuoi' },
-    { i:'handshake', t:'Xem tuổi làm ăn', d:'So hợp hai người khi bắt tay hợp tác', h:'/app/xem-lam-an' },
+    { i:'grid', t:'Luận giải Tử Vi', d:'Lập lá số 12 cung rồi luận sâu cách cục, đại vận, tứ hóa', h:'/app/luan-giai', c:150 },
+    { i:'heart', t:'Xem tuổi vợ chồng', d:'So hòa hợp hai lá số theo 8 chiều', h:'/app/xem-tuoi', c:50 },
+    { i:'handshake', t:'Xem tuổi làm ăn', d:'So hợp hai người khi bắt tay hợp tác', h:'/app/xem-lam-an', c:50 },
     { i:'users', t:'Tương hợp tuổi', d:'So hợp hai người bất kỳ: bạn, người thân, đối tác', h:'/app/tuong-hop' },
     { i:'baby', t:'Xem tuổi sinh con', d:'Năm sinh con hợp tuổi bố mẹ theo địa chi', h:'/app/sinh-con' },
     { i:'image', t:'Chân dung vợ chồng', d:'AI vẽ chân dung người phối ngẫu suy từ cung Phu Thê', h:'/app/chan-dung-vo-chong', c:22 },
   ]},
   { g:'Tử Bình', items:[
-    { i:'rows', t:'Lá số Bát Tự', d:'Tứ trụ Tử Bình: nhật can, dụng thần, cách cục', h:'/app/bat-tu' },
+    { i:'rows', t:'Lá số Bát Tự', d:'Tứ trụ Tử Bình: nhật can, dụng thần, cách cục', h:'/app/bat-tu', c:100 },
   ]},
   { g:'Xem Tướng', items:[
-    { i:'face', t:'Diện Tướng AI', d:'Phân tích khuôn mặt qua ảnh theo Ma Y Thần Tướng', h:'/app/dien-tuong', c:5 },
-    { i:'eye', t:'Nhãn Tướng AI', d:'Phân tích đôi mắt qua ảnh theo Nhãn Pháp cổ truyền', h:'/app/nhan-tuong', c:5 },
-    { i:'hand', t:'Thủ Tướng AI', d:'Phân tích lòng bàn tay qua ảnh theo cổ pháp Đông Tây', h:'/app/thu-tuong', c:5 },
-    { i:'mic', t:'Thanh Tướng AI', d:'Ghi âm giọng nói, phân tích theo Ngũ Âm cổ pháp', h:'/app/thanh-tuong', c:8 },
-    { i:'mic', t:'Thanh Tướng Pro', d:'4 bài đo giọng chuyên sâu, 12 chỉ số âm học', h:'/app/thanh-tuong-pro', c:10 },
+    { i:'face', t:'Diện Tướng AI', d:'Phân tích khuôn mặt qua ảnh theo Ma Y Thần Tướng', h:'/app/dien-tuong', c:10 },
+    { i:'eye', t:'Nhãn Tướng AI', d:'Phân tích đôi mắt qua ảnh theo Nhãn Pháp cổ truyền', h:'/app/nhan-tuong', c:10 },
+    { i:'hand', t:'Thủ Tướng AI', d:'Phân tích lòng bàn tay qua ảnh theo cổ pháp Đông Tây', h:'/app/thu-tuong', c:10 },
+    { i:'mic', t:'Thanh Tướng AI', d:'Ghi âm giọng nói, phân tích theo Ngũ Âm cổ pháp', h:'/app/thanh-tuong', c:12 },
+    { i:'mic', t:'Thanh Tướng Pro', d:'4 bài đo giọng chuyên sâu, 12 chỉ số âm học', h:'/app/thanh-tuong-pro', c:18 },
   ]},
   { g:'Phong Thủy', items:[
-    { i:'compass', t:'Phong Thủy Nội Thất', d:'Chụp ảnh phòng — AI chấm điểm Bát Trạch trước/sau, đề xuất bố trí', h:'/app/phong-thuy', c:40 },
+    { i:'compass', t:'Phong Thủy Nội Thất', d:'Chụp ảnh phòng — AI chấm điểm Bát Trạch trước/sau, đề xuất bố trí', h:'/app/phong-thuy', c:50 },
     { i:'home', t:'Hướng Bát Trạch', d:'Cung phi & hướng nhà, bếp, giường hợp mệnh', h:'/app/bat-trach' },
   ]},
   { g:'Chọn Ngày / Lịch', items:[
-    { i:'cal', t:'Chọn ngày tốt', d:'Ngày giờ hợp tuổi cho việc trọng đại', h:'/app/chon-ngay' },
+    { i:'cal', t:'Chọn ngày tốt', d:'Ngày giờ hợp tuổi cho việc trọng đại', h:'/app/chon-ngay', c:15 },
     { i:'cal', t:'Kim Lâu & Tam Tai', d:'Tuổi làm nhà, cưới hỏi có phạm không', h:'/app/kim-lau' },
     { i:'cal', t:'Ngày tốt trong tháng', d:'Lịch ngày tốt/xấu cả tháng theo âm lịch', h:'/app/ngay-tot' },
     { i:'clock', t:'Giờ hoàng đạo', d:'12 giờ tốt/xấu trong ngày theo can chi', h:'/app/hoang-dao' },
   ]},
   { g:'Đặt Tên', items:[
-    { i:'tag', t:'Đặt tên con', d:'Tên hợp mệnh theo can chi & ngũ hành', h:'/app/dat-ten' },
-    { i:'tag', t:'Đặt tên doanh nghiệp', d:'Tên công ty, thương hiệu hợp mệnh chủ & ngành', h:'/app/dat-ten-dn' },
+    { i:'tag', t:'Đặt tên con', d:'Tên hợp mệnh theo can chi & ngũ hành', h:'/app/dat-ten', c:20 },
+    { i:'tag', t:'Đặt tên doanh nghiệp', d:'Tên công ty, thương hiệu hợp mệnh chủ & ngành', h:'/app/dat-ten-dn', c:20 },
     { i:'leaf', t:'Ngũ hành tên', d:'Tên có hợp mệnh nạp âm không, bồi hay khắc', h:'/app/ngu-hanh-ten' },
   ]},
   { g:'Mệnh Lý', items:[
@@ -157,7 +158,7 @@ document.getElementById('homeCards').innerHTML=GROUPS.map(function(grp){
     return '<a class="tcard'+(it.ext?' ext':'')+'" href="'+it.h+'"'+(it.ext?' target="_blank" rel="noopener"':'')+'>'+
       '<div class="ic">'+svg(it.i)+'</div>'+
       '<div class="tx"><b>'+esc(it.t)+'</b><span>'+esc(it.d)+'</span></div>'+
-      (it.c?'<span class="cost">'+it.c+' Lượng</span>':'')+
+      (it.c?'<span class="cost">'+it.c+' Lượng</span>':'<span class="cost free">Miễn Phí</span>')+
       '</a>';
   }).join('');
   return '<div class="grp-title">'+esc(grp.g)+'</div><div class="cards">'+cards+'</div>';
