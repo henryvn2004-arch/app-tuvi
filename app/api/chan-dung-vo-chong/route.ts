@@ -14,6 +14,7 @@ import {
   formatMorphologyForLLM,
   getPhuTheReadout,
   formatPhuTheForLLM,
+  getPhuTheChinhTinhElement,
 } from '@/lib/engine/portrait';
 import { PHU_THE_LUAN_GIAI_SYSTEM_PROMPT, buildPhuTheLuanGiaiPrompt } from '@/lib/agent/phu-the-luan-giai';
 import { generatePortraitImage } from '@/lib/image/openai-image';
@@ -62,6 +63,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   const userGender = birth.gender === 'nu' ? 'nu' : 'nam';
   const morph = computeSpouseMorphology(lasoRes.ls, userGender);
   const phuThe = getPhuTheReadout(lasoRes.ls);
+  const phuTheElement = getPhuTheChinhTinhElement(lasoRes.ls);
 
   // Lượt LLM RIÊNG: luận giải cung Phu Thê ĐẦY ĐỦ, ĐÚNG flow/văn phong tool
   // luan-giai (mode=phan, phan=12 — xem lib/agent/phu-the-luan-giai.ts) —
@@ -99,7 +101,8 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     'không chỉ suy diễn hình thể; RIÊNG câu hỏi tuổi tác (mục 4) ưu tiên đọc (C) trước vì đầy đủ ngữ cảnh hơn. Nhiệm vụ:\n' +
     '1) "imagePrompt": MỘT đoạn tiếng ANH liền mạch (80-120 từ). BẮT ĐẦU bằng ĐÚNG 1 câu tổng quan/khái quát ' +
     '(overall gestalt — ấn tượng chung: vóc dáng, khí chất, độ trẻ trung, tươi sáng) rồi MỚI đi vào liệt kê đặc ' +
-    'điểm cụ thể (face shape, eyes, nose, lips, hair style và màu tóc tự nhiên, tông da tự nhiên...) — KHÔNG mô ' +
+    'điểm cụ thể (face shape, eyes, nose, lips, màu tóc và chất tóc tự nhiên [KHÔNG mô tả kiểu tóc/kiểu cắt — ' +
+    'phần đó server tự chọn riêng], tông da tự nhiên...) — KHÔNG mô ' +
     'tả trang phục/quần áo (phần đó server tự chọn riêng, tránh xung đột) — KHÔNG liệt kê chi tiết ngay câu đầu, tránh cảm giác rời rạc như ráp từng ' +
     'mảnh. LUÔN mô tả theo hướng TRẺ TRUNG, TƯƠI SÁNG, RỰC RỠ, SỐNG ĐỘNG, MÀU SẮC BÃO HÒA như tranh minh họa mùa ' +
     'hè nắng đẹp — biểu cảm BẮT BUỘC là nụ cười nhẹ nhàng, ấm áp, ánh mắt sáng vui vẻ. Dù (A)/(B) gợi ý tính ' +
@@ -109,7 +112,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     '"cold", "stern", "serious", "intense", "unsmiling", "rarely smiles", "menacing", "hardened", "mysterious", ' +
     '"enigmatic", "dark", "moody", "somber", "shadowy", "muted", "dim", "monochrome", "desaturated" — và CẤM từ ' +
     'ngữ gợi già dặn/khắc khổ/phong trần/nhiều nếp nhăn (cấm "mature", "weathered", "aged", "world-worn"). ' +
-    'KHÔNG tự thêm mô tả phong cách nghệ thuật/ánh sáng/chủng tộc/trang phục (phần đó server tự ghép), KHÔNG nhắc chiêm ' +
+    'KHÔNG tự thêm mô tả phong cách nghệ thuật/ánh sáng/chủng tộc/trang phục/kiểu tóc (phần đó server tự ghép), KHÔNG nhắc chiêm ' +
     'tinh/tử vi/tên sao. Các đặc điểm KHÔNG được mâu thuẫn nhau — nếu (A) và (B) mâu thuẫn, ưu tiên (B) nhưng ' +
     'vẫn giữ tinh thần trẻ trung, rực rỡ nói trên.\n' +
     '2) "description": đoạn tiếng VIỆT (120-180 từ), văn xuôi tự nhiên mô tả khuôn mặt, hình dáng, phong thái, ' +
@@ -198,33 +201,73 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
       ? 'The person has Vietnamese Southeast Asian facial features, with a subtle hint of well-traveled or mixed heritage — as if the couple met while one of them was living or traveling far from home.'
       : 'The person has classic Vietnamese Southeast Asian facial features.';
   // Trang phục — TRƯỚC đây khóa cứng "cream/ivory/beige" cho MỌI lượt (cả nam lẫn nữ)
-  // → Henry phản hồi ảnh nào cũng na ná màu áo. Nay RANDOM 1 outfit mỗi lượt gen (server
-  // chọn, KHÔNG để LLM tự chọn) từ pool riêng theo giới tính — nữ có THÊM áo dài truyền
-  // thống Việt Nam màu tươi sáng (Henry yêu cầu) xen giữa các lựa chọn casual thường
-  // ngày; nam giữ casual thuần. Palette "be/kem/trung tính" tách riêng — CHỈ áp cho
-  // NỀN/ánh sáng (chống tối/xỉn màu), KHÔNG còn ép trang phục theo màu đó nữa.
+  // → Henry phản hồi ảnh nào cũng na ná màu áo. Nay RANDOM 1 KIỂU trang phục mỗi lượt
+  // gen (server chọn, KHÔNG để LLM tự chọn) từ pool riêng theo giới tính, phong cách
+  // "quiet luxury" hiện đại nhẹ nhàng, quý phái — nữ có THÊM áo dài truyền thống Việt
+  // Nam xen giữa các lựa chọn khác; nam giữ modern-casual tinh tế. MÀU trang phục
+  // KHÔNG còn random độc lập — nay chọn theo NGŨ HÀNH của sao chính tinh tại cung Phu
+  // Thê (Henry yêu cầu): Kim→trắng/be, Hỏa→đỏ nhạt, Thủy→xanh dương nhạt, Mộc→xanh lá
+  // nhạt, Thổ→vàng nhạt/be — tất cả đều tông NHẸ, luxury (không còn màu rực rỡ như
+  // bản trước). Vô chính diệu tại Phu Thê (không xác định được hành) → fallback tông
+  // kem/be trung tính.
+  const ELEMENT_COLORS: Record<string, string[]> = {
+    Kim: ['ivory white', 'warm champagne beige', 'soft pearl-grey'],
+    Hỏa: ['soft dusty rose', 'muted light red', 'pale terracotta blush'],
+    Thủy: ['soft powder blue', 'pale sky blue', 'muted slate blue'],
+    Mộc: ['soft sage green', 'muted mint green', 'pale moss green'],
+    Thổ: ['warm sand beige', 'soft butter yellow', 'warm oatmeal beige'],
+  };
+  const colorPool = ELEMENT_COLORS[phuTheElement] || ['warm cream beige', 'soft ivory'];
+  const outfitColor = colorPool[Math.floor(Math.random() * colorPool.length)];
   const FEMALE_OUTFITS = [
-    'a simple white blouse and straight-leg jeans, relaxed everyday style',
-    'a soft pastel-pink knit sweater, casual everyday style',
-    'a mint-green casual blouse, relaxed everyday style',
-    'a light-blue denim jacket over a plain white T-shirt, casual street style',
-    'a flowing casual dress in a warm terracotta tone',
-    'a traditional Vietnamese áo dài in a vivid, bright coral color, elegant flowing silhouette',
-    'a traditional Vietnamese áo dài in a vivid, bright turquoise color, elegant flowing silhouette',
-    'a traditional Vietnamese áo dài in a bright, sunny yellow color, elegant flowing silhouette',
-    'a traditional Vietnamese áo dài in a vivid fuchsia color, elegant flowing silhouette',
+    'a tailored {color} blouse with straight-leg trousers, quiet-luxury minimalist style',
+    'a soft {color} knit sweater with a flowing midi skirt, relaxed quiet-luxury style',
+    'a flowing {color} silk-blend blouse, elegant modern quiet-luxury style',
+    'a structured {color} blazer over a plain white top, refined quiet-luxury style',
+    'a {color} wrap dress, elegant flowing silhouette, modern quiet-luxury style',
+    'a traditional Vietnamese áo dài in a soft {color} tone, elegant flowing silhouette, quiet-luxury feel',
+    'a {color} cashmere-look turtleneck with tailored trousers, modern minimalist quiet-luxury style',
+    'a {color} linen shirt-dress, relaxed elegant quiet-luxury style',
   ];
   const MALE_OUTFITS = [
-    'a simple white or light-blue button-up shirt with jeans, relaxed everyday style',
-    'a casual navy bomber jacket over a plain T-shirt, casual street style',
-    'a relaxed olive-green button-up shirt with sleeves rolled up',
-    'a soft moss-green knit sweater, casual everyday style',
-    'a casual grey or charcoal polo shirt',
-    'a light denim jacket over a plain white T-shirt, casual street style',
-    'a warm mustard-yellow casual shirt',
+    'a tailored {color} button-up shirt with tapered trousers, quiet-luxury minimalist style',
+    'a {color} knit polo with tailored chinos, refined modern quiet-luxury style',
+    'a {color} linen shirt with sleeves rolled up, relaxed quiet-luxury style',
+    'a structured {color} overshirt over a plain white tee, modern minimalist quiet-luxury style',
+    'a {color} merino sweater with tailored trousers, quiet-luxury style',
+    'a {color} bomber jacket over a plain white tee, modern refined quiet-luxury street style',
+    'a {color} Mandarin-collar shirt, understated modern quiet-luxury elegance',
   ];
   const outfitPool = spouseGender === 'nu' ? FEMALE_OUTFITS : MALE_OUTFITS;
-  const wardrobeLine = `Wearing ${outfitPool[Math.floor(Math.random() * outfitPool.length)]}, no logos, no flashy accessories.`;
+  const outfitTemplate = outfitPool[Math.floor(Math.random() * outfitPool.length)];
+  const wardrobeLine = `Wearing ${outfitTemplate.replace('{color}', outfitColor)}, no logos, no flashy accessories.`;
+
+  // Kiểu tóc — RANDOM 1 hairstyle hiện đại/năng động/trẻ trung mỗi lượt gen (server
+  // chọn, KHÔNG để LLM tự bịa để tránh xung đột với lựa chọn dưới đây — cùng cơ chế
+  // với trang phục ở trên), pool riêng theo giới tính, 7-8 kiểu mỗi bên, đều là kiểu
+  // tóc hài hòa, phù hợp khuôn mặt (Henry yêu cầu).
+  const FEMALE_HAIRSTYLES = [
+    'a modern shoulder-length wavy bob with soft face-framing layers',
+    'long layered hair with soft curtain bangs and effortlessly tousled waves',
+    'a sleek modern high ponytail with subtle volume',
+    'soft voluminous beach waves past the shoulders',
+    'a chic textured long bob with side-swept fringe',
+    'a modern shag haircut with feathered layers, youthful and dynamic',
+    'long straight hair with a deep side part, glossy and sleek',
+    'a trendy middle-part hairstyle with soft face-framing layers and natural volume',
+  ];
+  const MALE_HAIRSTYLES = [
+    'a modern textured crop with a slight fringe, youthful and dynamic',
+    'a clean fade with a textured top, contemporary style',
+    'a short modern quiff with natural texture',
+    'a messy textured crop, effortless and youthful',
+    'a modern side-part haircut with subtle texture, neat and refined',
+    'a short buzz cut with a sharp fade, clean and athletic',
+    'medium-length textured hair swept back, modern and dynamic',
+    'a modern French crop with a textured fringe',
+  ];
+  const hairstylePool = spouseGender === 'nu' ? FEMALE_HAIRSTYLES : MALE_HAIRSTYLES;
+  const hairstyleLine = `Hairstyle: ${hairstylePool[Math.floor(Math.random() * hairstylePool.length)]}, well-suited and flattering to the face shape.`;
   // Nhắc "rực rỡ, sống động" CẢ TRƯỚC LẪN SAU đoạn imagePrompt (bracket kỹ thuật) — vì
   // (A)/(B) hay mang cá tính lạnh/ít cười (vd sao Thất Sát/Liêm Trinh/Tham Lang), LLM có
   // thể lỡ nhét chữ "cold/serious/dark/muted" vào dù đã cấm ở sys prompt; nhắc lại 2 lần
@@ -238,7 +281,8 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     'natural window light, diffused warm daylight, soft gentle shadows, cinematic but natural — ultra-realistic ' +
     'skin texture, NO beauty filter, NO exaggerated AI look, NO plastic or airbrushed skin. Warm, softly lit ' +
     'background with a gentle neutral tone; BRIGHT and warm in tone throughout, NEVER dark, shadowy, muted, ' +
-    `dull, desaturated, or somber; avoid heavy chiaroscuro or dim/flat lighting entirely. ${wardrobeLine} Bright ` +
+    `dull, desaturated, or somber; avoid heavy chiaroscuro or dim/flat lighting entirely. ${wardrobeLine} ` +
+    `${hairstyleLine} Bright ` +
     'modern warm-neutral home interior, softly blurred background, natural window lighting, no clutter. The ' +
     'subject has a warm, gentle, natural smile and a bright, approachable, trustworthy expression — relaxed and ' +
     'happy, NEVER cold, stern, unsmiling, or serious. The subject looks youthful and vibrant, with smooth soft ' +

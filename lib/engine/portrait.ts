@@ -300,6 +300,22 @@ export function getPhuTheReadout(ls: Laso): PhuTheReadout {
   return { chinhTinh, phuTinh, cachCuc, yNghia };
 }
 
+// Ngũ hành sao chính tinh tại Phu Thê — dùng để chọn TÔNG MÀU trang phục chân
+// dung (Henry yêu cầu: Kim→trắng/be, Hỏa→đỏ nhạt, Thủy→xanh dương nhạt,
+// Mộc→xanh lá nhạt, Thổ→vàng nhạt/be). Lấy sao chính tinh ĐẦU TIÊN có dữ liệu
+// (không phải sao rank cao nhất của morphology — có thể là phụ tinh/sát tinh).
+// Trả '' nếu Phu Thê vô chính diệu → route.ts tự fallback tông trung tính.
+export function getPhuTheChinhTinhElement(ls: Laso): string {
+  const palaces = (ls.palaces as Rec[]) || [];
+  const p = palaces.find((x) => x.cungName === 'Phu Thê') as Rec | undefined;
+  const majors = ((p?.majorStars as StarObj[]) || []).filter((s) => s?.ten);
+  for (const s of majors) {
+    const el = primaryElement(STAR_DATA[s.ten]?.element);
+    if (el) return el;
+  }
+  return '';
+}
+
 // Format gọn cho prompt LLM — đúng nguyên văn diễn giải engine, LLM chỉ ĐỌC
 // và rút tín hiệu, KHÔNG được tự bịa thêm cách cục không có trong danh sách.
 export function formatPhuTheForLLM(r: PhuTheReadout): string {
