@@ -159,7 +159,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     'CHỈ trả JSON hợp lệ: {"imagePrompt":"...","description":"...","meetingContext":"...","ageAdjustYears":0,"foreignHint":false,"foreignSpouseHint":false,"sameSexHint":false}';
 
   const userMsg =
-    `Giới tính mặc định (đối lập lá số gốc): ${morph.spouseGender === 'nu' ? 'Nữ' : 'Nam'}, tuổi hiện tại của lá số gốc: ${morph.baseAge}.\n\n` +
+    `Giới tính mặc định (đối lập lá số gốc): ${morph.spouseGender === 'nu' ? 'Nữ' : 'Nam'}, tuổi giả định lúc lập gia đình của lá số gốc: ${morph.baseAge}.\n\n` +
     `(A) Đặc điểm hình thể suy từ sao:\n${formatMorphologyForLLM(morph)}\n\n` +
     `(B) Cách cục / ý nghĩa cổ pháp tại Phu Thê:\n${formatPhuTheForLLM(phuThe)}` +
     (phuTheLuanGiai ? `\n\n(C) Đoạn luận giải Phu Thê đầy đủ (ƯU TIÊN CAO NHẤT cho câu hỏi tuổi tác):\n${phuTheLuanGiai}` : '');
