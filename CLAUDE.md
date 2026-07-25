@@ -57,11 +57,49 @@ nhầm là "code chết, không nơi nào gọi" vì bỏ sót 2 trang ISR này.
   pre-existing, không liên quan), `npx prettier --check` sạch cho mọi `.ts`
   đụng tới, `node --check` share.js/track.js OK, `cd tuvi-engine && npm test`
   181 pass (không liên quan nhưng xác nhận không đụng engine).
-- **CÒN LẠI (chưa định nghĩa — cần Henry chốt phạm vi M0.2+):** track này mới
-  chỉ có M0.1 (vá lỗ hổng đo lường). Chưa có workplan milestone M1+ cho phần
-  "autopilot"/"CMO quân sư" thật — cần Henry mô tả rõ autopilot làm gì (tự
-  động đề xuất/chạy campaign? tự viết nội dung theo insight funnel? cảnh báo
-  bất thường?) trước khi tách M1/M2/... như các track khác trong file này.
+### 📋 Workplan M0.2–M0.6 (Henry đã chốt thứ tự 2026-07-25)
+Phác thảo dựa trên hạ tầng ĐÃ CÓ (không thêm RPC/bảng mới trừ khi ghi rõ):
+`events`/`user_attribution` + 12 RPC marketing/dashboard (funnel/sources/
+acquisition/campaigns/traffic/cohorts/revenue/margin/engagement/content-revenue/
+at-risk/channel-error-rate), GA4 Data API, và kênh đẩy Telegram admin có sẵn
+(`lib/admin/alert.ts`, dùng cho alert đăng nhập).
+- **M0.2 — CMO Digest tự động** (gửi Henry, read-only): cron đọc RPC → LLM tóm
+  tắt → Telegram admin. 1 lần/ngày.
+- **M0.3 — Cảnh báo bất thường:** so số hôm nay/tuần với baseline, ngưỡng lưu
+  `app_config`, bắn ngay khi vượt (không đợi digest định kỳ). Vẫn read-only.
+- **M0.4 — Nối hành động "nhắc user sắp rời bỏ":** D1 (track Admin Revamp) đã
+  làm UI nút "Nhắc qua Telegram/Gửi Push" ở bảng User Sắp Rời Bỏ nhưng CHƯA nối
+  hành động thật (`cursor:default`). Mốc ĐẦU TIÊN động tới end-user — cần chốt
+  nội dung/tần suất trước khi bật (tránh spam/vi phạm chính sách nền tảng).
+- **M0.5 — Đề xuất content/campaign** (advisory, không tự chạy): LLM đọc
+  `marketing_sources`/`campaigns`/`traffic` → đề xuất kênh/nội dung nên đầu tư,
+  hiện trong admin dashboard, Henry tự quyết.
+- **M0.6 (để sau, rủi ro cao):** autopilot thực thi thật (tự chỉnh giá/khuyến
+  mãi/tự tạo campaign) — bàn riêng khi có nhu cầu, chưa trong phạm vi gần.
+
+### ✅ M0.2 XONG (PR mới, session này) — CMO Digest tự động
+- **`lib/marketing/cmo-digest.ts`** — `buildSnapshot()` gọi lại 9 RPC đã có
+  (KHÔNG thêm RPC mới): `marketing_funnel`/`marketing_revenue` 2 lần (tuần này
+  vs tuần trước, WoW) + `marketing_sources` + `dashboard_engagement` (đã có sẵn
+  wau/wau_prev/mau/mau_prev) + `dashboard_margin` + `channel_error_rate` +
+  `dashboard_at_risk` (đếm số lượng). `generateCmoDigestText()` gói snapshot
+  thành JSON, đưa 1 lượt `llmText()` (`lib/llm/complete.ts`, Gemini-primary/
+  Anthropic-backup có sẵn) với system prompt ép format "📈 Điểm sáng / ⚠️ Điểm
+  nghẽn / 💡 Đề xuất", dưới 350 từ, CẤM bịa số khi dữ liệu quá ít.
+- **`app/api/cron/cmo-digest/route.ts`** — cron Vercel (`vercel.json` thêm
+  `0 1 * * *` = 8h sáng VN), auth `CRON_SECRET` giống `cron/daily-push` có sẵn.
+  Gửi qua `tgSendMessage` (`lib/channels/telegram.ts`) tới CHÍNH
+  `ADMIN_TELEGRAM_CHAT_ID` đã dùng cho alert đăng nhập — **0 env mới cần set**.
+  No-op an toàn nếu thiếu `ADMIN_TELEGRAM_CHAT_ID`. Log qua `withCronLog` có
+  sẵn → tự hiện trong panel "Cron & Jobs" admin.html, không cần đăng ký thêm.
+- **Verify:** `npx tsc --noEmit` 0 lỗi, `npm run lint` 0 lỗi (2 file `.ts` mới
+  nằm ngoài phạm vi eslint theo thiết kế — repo chỉ lint `.js`, TS qua `tsc`),
+  `npx prettier --check` sạch.
+- **CÒN LẠI:** Henry xác nhận `ADMIN_TELEGRAM_CHAT_ID` đã set trên Vercel (nên
+  có sẵn — dùng chung với alert đăng nhập); theo dõi bản digest đầu tiên (8h
+  sáng VN hôm sau khi PR merge + deploy) xem chất lượng tóm tắt LLM có ổn
+  không, tinh chỉnh system prompt nếu cần. Tiếp theo: M0.3 (cảnh báo bất
+  thường).
 
 ---
 
