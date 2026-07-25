@@ -25,7 +25,6 @@
 .fg label{font-size:10px;font-weight:600;color:var(--text-lt);letter-spacing:.03em;text-transform:uppercase}
 .fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:7px 9px;font-size:13px;font-family:inherit;color:var(--text);background:var(--white);outline:none}
 .fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
-.gio-hint{font-size:11.5px;color:var(--text-lt);align-self:center;padding-bottom:4px}
 .btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif);margin-top:14px}
 .btn-go:disabled{opacity:.6;cursor:not-allowed}
 
@@ -117,37 +116,11 @@
         <div class="two">
           <div class="person">
             <h3 id="pA"><span class="dotA"></span> Người thứ nhất</h3>
-            <div class="frow">
-              <div class="fg" style="flex:2;min-width:120px"><label>Họ tên</label><input type="text" id="aName" placeholder="Chồng / Người A"></div>
-              <div class="fg" style="width:78px"><label>Giới tính</label><select id="aGender"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
-            </div>
-            <div class="frow">
-              <div class="fg" style="width:66px"><label>Ngày</label><select id="aDd"></select></div>
-              <div class="fg" style="width:72px"><label>Tháng</label><select id="aMm"></select></div>
-              <div class="fg" style="width:78px"><label>Năm</label><input type="number" id="aYyyy" value="1990" min="1900" max="2099"></div>
-            </div>
-            <div class="frow" style="margin-bottom:0">
-              <div class="fg" style="width:64px"><label>Giờ</label><select id="aHh"></select></div>
-              <div class="fg" style="width:64px"><label>Phút</label><select id="aPp"></select></div>
-              <span class="gio-hint" id="aGioHint">Giờ: —</span>
-            </div>
+            <div id="a-fields"></div>
           </div>
           <div class="person">
             <h3 id="pB"><span class="dotB"></span> Người thứ hai</h3>
-            <div class="frow">
-              <div class="fg" style="flex:2;min-width:120px"><label>Họ tên</label><input type="text" id="bName" placeholder="Vợ / Người B"></div>
-              <div class="fg" style="width:78px"><label>Giới tính</label><select id="bGender"><option value="nu">Nữ</option><option value="nam">Nam</option></select></div>
-            </div>
-            <div class="frow">
-              <div class="fg" style="width:66px"><label>Ngày</label><select id="bDd"></select></div>
-              <div class="fg" style="width:72px"><label>Tháng</label><select id="bMm"></select></div>
-              <div class="fg" style="width:78px"><label>Năm</label><input type="number" id="bYyyy" value="1992" min="1900" max="2099"></div>
-            </div>
-            <div class="frow" style="margin-bottom:0">
-              <div class="fg" style="width:64px"><label>Giờ</label><select id="bHh"></select></div>
-              <div class="fg" style="width:64px"><label>Phút</label><select id="bPp"></select></div>
-              <span class="gio-hint" id="bGioHint">Giờ: —</span>
-            </div>
+            <div id="b-fields"></div>
           </div>
         </div>
         <button class="btn-go" id="btnGo" onclick="doCompat()">So tuổi →</button>
@@ -188,9 +161,10 @@
 <script src="/laso-chart.js?v=2"></script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tuong-hop.js?v=1"></script>
+<script src="/tuvi-form.js"></script>
 <script src="/auth.js"></script>
 <script src="/tuvi-paywall.js?v=6"></script>
-<script src="/shell.js?v=42"></script>
+<script src="/shell.js?v=43"></script>
 <script>
 // ── MODE: 1 trang phục vụ 3 route — /app/xem-tuoi (vợ chồng), /app/xem-lam-an
 // (hợp tác làm ăn), /app/tuong-hop (hai người bất kỳ). Cùng bộ máy calcTuongHop;
@@ -233,22 +207,10 @@ var MODES={
 };
 var MODE=MODES[MODE_KEY];
 
-// ── Dropdowns cho cả 2 người ──
-(function(){
-  ['a','b'].forEach(function(k){
-    var dd=document.getElementById(k+'Dd'),mm=document.getElementById(k+'Mm'),hh=document.getElementById(k+'Hh'),pp=document.getElementById(k+'Pp');
-    dd.innerHTML='<option value="">Ngày</option>';mm.innerHTML='<option value="">Tháng</option>';
-    for(var i=1;i<=31;i++)dd.innerHTML+='<option value="'+i+'">'+i+'</option>';
-    for(var j=1;j<=12;j++)mm.innerHTML+='<option value="'+j+'">'+j+'</option>';
-    for(var h=0;h<=23;h++)hh.innerHTML+='<option value="'+h+'">'+String(h).padStart(2,'0')+'</option>';
-    for(var p=0;p<=59;p++)pp.innerHTML+='<option value="'+p+'">'+String(p).padStart(2,'0')+'</option>';
-    hh.addEventListener('change',function(){updateGio(k)});pp.addEventListener('change',function(){updateGio(k)});
-  });
-})();
-function updateGio(k){
-  var h=parseInt(document.getElementById(k+'Hh').value)||0,p=parseInt(document.getElementById(k+'Pp').value)||0;
-  document.getElementById(k+'GioHint').textContent='Giờ: '+CHI[hourMinToGioAm(h,p)];
-}
+// ── Form nhập cho cả 2 người (dùng chung TuviForm — có "Sinh ở ngoài Việt Nam?"
+// + parity giờ sinh lịch sử với standalone) ──
+TuviForm.render('a-fields', {prefix:'a', mode:'compact', gioitinh:'nam'});
+TuviForm.render('b-fields', {prefix:'b', mode:'compact', gioitinh:'nu'});
 function meterColor(s){ return s>=75?'var(--green)':s>=55?'var(--blue)':s>=35?'var(--gold-soft)':'var(--red)'; }
 function facColor(s){ return s>=8?'var(--green)':s>=6?'var(--blue)':s>=4?'var(--gold-soft)':'var(--red)'; }
 function verdictLabel(s){ return s>=75?'Rất hợp':s>=55?'Khá hợp':s>=35?'Bình hòa':'Cần lưu ý'; }
@@ -264,30 +226,26 @@ function buildCompatChips(r,MODE){
 }
 
 function readPerson(k){
-  var name=document.getElementById(k+'Name').value.trim();
-  var gender=document.getElementById(k+'Gender').value;
-  var dd=parseInt(document.getElementById(k+'Dd').value),mm=parseInt(document.getElementById(k+'Mm').value),yyyy=parseInt(document.getElementById(k+'Yyyy').value);
-  var hh=parseInt(document.getElementById(k+'Hh').value)||0,pp=parseInt(document.getElementById(k+'Pp').value)||0;
-  return {name:name,gender:gender,dd:dd,mm:mm,yyyy:yyyy,hh:hh,pp:pp};
+  return TuviForm.getData(k);
 }
 function computeLs(pr,namxem){
-  var gioAmIdx=hourMinToGioAm(pr.hh,pr.pp);
-  var conv=convertDuongToAm(pr.dd,pr.mm,pr.yyyy,pr.hh);
-  var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioAmIdx,gioitinh:pr.gender,namXem:namxem});
+  var gioAmIdx=pr.gioIdx;
+  var conv=convertDuongToAm(pr.ngay,pr.thang,pr.nam,pr.gioHour);
+  var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioAmIdx,gioitinh:pr.gioitinh,namXem:namxem});
   ls.chiNam=conv.chiNam; // anSaoLaSo không re-expose chiNam ở top-level → gắn lại (như xem-tuoi.html)
   // fd cho renderGrid (laso-chart.js) — vẽ lá số đầy đủ 12 cung như trang standalone.
-  var fd={name:pr.name,gioitinh:pr.gender,dd:pr.dd,mm:pr.mm,yyyy:pr.yyyy,hh:pr.hh,pp:pr.pp,gioChi:(typeof CHI!=='undefined'?CHI[gioAmIdx]:''),amLich:conv.amLich};
+  var fd={name:pr.hoten,gioitinh:pr.gioitinh,dd:pr.ngay,mm:pr.thang,yyyy:pr.nam,hh:pr.gioHour,pp:pr.gioPhut,gioChi:(typeof CHI!=='undefined'?CHI[gioAmIdx]:''),amLich:conv.amLich};
   return {ls:ls,hourBranch:gioAmIdx,fd:fd};
 }
 
 function doCompat(){
   var btn=document.getElementById('btnGo');
   var A=readPerson('a'),B=readPerson('b');
-  if(!A.dd||!A.mm||!A.yyyy||!B.dd||!B.mm||!B.yyyy){ alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh cho cả hai người.'); return; }
+  if(!A.ngay||!A.thang||!A.nam||!B.ngay||!B.thang||!B.nam){ alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh cho cả hai người.'); return; }
   var namxem=new Date().getFullYear();
   btn.disabled=true;btn.textContent=MODE.btnBusy;
   try{
-    var nameA=A.name||'Người A',nameB=B.name||'Người B';
+    var nameA=A.hoten||'Người A',nameB=B.hoten||'Người B';
     var ca=computeLs(A,namxem),cb=computeLs(B,namxem);
     ca.fd.name=nameA; cb.fd.name=nameB;
     var r=TuongHop.calcTuongHop(ca.ls,cb.ls,nameA,nameB);
@@ -296,8 +254,8 @@ function doCompat(){
     document.getElementById('xtPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
     // Rail: gửi scenario xem-tuoi (server tự lập 2 lá số từ birthA/birthB).
-    var birthA={day:A.dd,month:A.mm,year:A.yyyy,hourBranch:ca.hourBranch,gender:A.gender,name:nameA};
-    var birthB={day:B.dd,month:B.mm,year:B.yyyy,hourBranch:cb.hourBranch,gender:B.gender,name:nameB};
+    var birthA={day:A.ngay,month:A.thang,year:A.nam,hourBranch:ca.hourBranch,gender:A.gioitinh,name:nameA};
+    var birthB={day:B.ngay,month:B.thang,year:B.nam,hourBranch:cb.hourBranch,gender:B.gioitinh,name:nameB};
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
       scenario:{type:MODE.scenarioType,data:{birthA:birthA,birthB:birthB,nameA:nameA,nameB:nameB}},
@@ -599,14 +557,14 @@ function applyMode(){
   set('wsTitle',MODE.title); set('wsSub',MODE.sub); set('fH2',MODE.h2); set('fSub',MODE.formSub);
   document.getElementById('pA').innerHTML='<span class="dotA"></span> '+MODE.pA;
   document.getElementById('pB').innerHTML='<span class="dotB"></span> '+MODE.pB;
-  document.getElementById('aName').placeholder=MODE.phA;
-  document.getElementById('bName').placeholder=MODE.phB;
+  document.getElementById('a-hoten').placeholder=MODE.phA;
+  document.getElementById('b-hoten').placeholder=MODE.phB;
   document.getElementById('btnGo').textContent=MODE.btn;
 }
-function _pageInit(){ applyMode(); updateGio('a'); updateGio('b');
+function _pageInit(){ applyMode();
   // Khôi phục phiên lịch sử: điền lại form 2 người rồi tính lại (FREE) → replay rail.
   var r=window.Shell&&Shell.pendingRestore&&Shell.pendingRestore();
-  if(r&&r.form){ Shell.fillForm(r.form); updateGio('a'); updateGio('b'); doCompat(); }
+  if(r&&r.form){ Shell.fillForm(r.form); TuviForm._update('a'); TuviForm._update('b'); doCompat(); }
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_pageInit);
 else _pageInit();

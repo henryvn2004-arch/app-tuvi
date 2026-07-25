@@ -15,6 +15,7 @@ const projectGlobals = {
   menhTamPhuong: 'writable',
   domainScores: 'writable',
   tubinhCachCucSpecial: 'writable',
+  TuviForm: 'writable',
   renderNav: 'writable',
   renderFooter: 'writable',
   Auth: 'writable',

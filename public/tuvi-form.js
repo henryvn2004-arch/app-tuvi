@@ -12,9 +12,14 @@
  *   TuviForm.getData('a')  → { hoten, ngay, thang, nam, gioIdx, gioHour, gioPhut, gioitinh }
  *   TuviForm.getData('b')
  *   TuviForm.setData(d, 'a')
+ *
+ * Compact (app-shell "/app/*" — chỉ các trường người, tái dùng .frow/.fg/.btn-go
+ * đã có sẵn của trang gọi, KHÔNG có form-grid/cột/nút submit riêng):
+ *   TuviForm.render('container', { prefix:'', mode:'compact', gioitinh:'nam' })
+ *   TuviForm.getData()  → cùng shape với person/full ở trên
  */
 
-const TuviForm = (() => {
+window.TuviForm = (() => {
   const CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
   const _updaters = {}; // prefix → update fn
 
@@ -130,6 +135,10 @@ const TuviForm = (() => {
 .tvf-tooltip-title { font-weight:700; color:var(--navy); margin-bottom:8px; }
 .tvf-tooltip-wrap:hover .tvf-tooltip-box { display:block; }
 @media(max-width:700px){.tvf-tooltip-box{left:auto;right:0;width:280px;}}
+/* ── mode:'compact' (app-shell) — chỉ style phần KHÔNG có sẵn trong .frow/.fg của trang gọi ── */
+.tvf-compact-foreign { display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--text-mid); cursor:pointer; white-space:nowrap; padding-bottom:8px; }
+.tvf-compact-foreign input { cursor:pointer; margin:0; }
+.tvf-compact-utc { min-width:220px; }
 `;
     document.head.appendChild(style);
   }
@@ -199,6 +208,40 @@ const TuviForm = (() => {
     </div>`;
   }
 
+  // ── Compact fields (dùng .frow/.fg/.tooltip đã có sẵn của trang app-shell gọi) ──
+  function buildCompactPersonFields(prefix, opts, defaultGioitinh = 'nam') {
+    const { gioOpts, phutOpts, ngayOpts, thangOpts, utcOpts } = opts;
+    const pf = prefix ? `'${prefix}'` : "''";
+    return `
+    <div class="frow">
+      <div class="fg" style="flex:2;min-width:150px"><label>Họ và tên</label><input type="text" id="${pid('hoten',prefix)}" placeholder="Nguyễn Văn A" autocomplete="off"></div>
+      <div class="fg" style="width:90px"><label>Giới tính</label>
+        <select id="${pid('gioitinh',prefix)}">
+          <option value="nam"${defaultGioitinh==='nam'?' selected':''}>Nam</option>
+          <option value="nu"${defaultGioitinh==='nu'?' selected':''}>Nữ</option>
+        </select>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fg" style="width:74px"><label>Ngày</label><select id="${pid('ngay',prefix)}" oninput="TuviForm._update(${pf})">${ngayOpts}</select></div>
+      <div class="fg" style="width:82px"><label>Tháng</label><select id="${pid('thang',prefix)}" oninput="TuviForm._update(${pf})">${thangOpts}</select></div>
+      <div class="fg" style="width:90px"><label>Năm</label><input type="number" id="${pid('nam',prefix)}" placeholder="1990" min="1900" max="2099" oninput="TuviForm._update(${pf})"></div>
+      <div class="fg" style="width:70px"><label style="display:flex;align-items:center;gap:3px">Giờ<span class="tvf-tooltip-wrap"><span class="tvf-tooltip-icon">?</span>${TOOLTIP_CONTENT}</span></label><select id="${pid('tvf-gio',prefix)}" oninput="TuviForm._update(${pf})">${gioOpts}</select></div>
+      <div class="fg" style="width:70px"><label>Phút</label><select id="${pid('tvf-phut',prefix)}" oninput="TuviForm._update(${pf})">${phutOpts}</select></div>
+      <div class="tvf-gio-am-wrap"><span class="tvf-gio-am" id="${pid('tvf-gio-am',prefix)}">Giờ âm: Tý</span><span class="tvf-gio-vn" id="${pid('tvf-gio-vn',prefix)}"></span></div>
+    </div>
+    <div class="frow" style="align-items:flex-start">
+      <label class="tvf-compact-foreign">
+        <input type="checkbox" id="${pid('tvf-foreign',prefix)}" onchange="TuviForm._toggleUtc(${pf})">
+        Sinh ở ngoài Việt Nam?
+      </label>
+      <div class="fg tvf-compact-utc" id="${pid('tvf-utc-wrap',prefix)}" style="display:none">
+        <label>Múi giờ nơi sinh</label>
+        <select id="${pid('tvf-utc',prefix)}" oninput="TuviForm._update(${pf})">${utcOpts}</select>
+      </div>
+    </div>`;
+  }
+
   // ── render() ─────────────────────────────────────────────────
   function render(containerId, options = {}) {
     injectCss();
@@ -206,7 +249,7 @@ const TuviForm = (() => {
       onSubmit,
       submitLabel   = 'Luận Giải Lá Số →',
       prefix        = '',
-      mode          = 'full',     // 'full' | 'person'
+      mode          = 'full',     // 'full' | 'person' | 'compact'
       label         = mode === 'person' ? 'Thông Tin' : 'Cá Nhân',
       gioitinh      = 'nam',
       showSample    = true,
@@ -218,7 +261,10 @@ const TuviForm = (() => {
 
     let html = '';
 
-    if (mode === 'person') {
+    if (mode === 'compact') {
+      // ── App-shell: chỉ trường người, tái dùng .frow/.fg/.btn-go sẵn có của trang gọi ──
+      html = buildCompactPersonFields(prefix, opts, gioitinh);
+    } else if (mode === 'person') {
       // ── Compact: chỉ 1 cột — dùng cho xem-tuoi (2 người cạnh nhau) ──
       html = `<div class="form-col" style="border-right:1px solid var(--border)">
         <div class="form-col-title">${label}</div>
