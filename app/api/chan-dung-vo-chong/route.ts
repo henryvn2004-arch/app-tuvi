@@ -108,7 +108,12 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     'hè nắng đẹp — biểu cảm BẮT BUỘC là nụ cười nhẹ nhàng, ấm áp, ánh mắt sáng vui vẻ. Dù (A)/(B) gợi ý tính ' +
     'cách mạnh mẽ/nghiêm nghị/lạnh lùng/ít cười thì đó CHỈ là cá tính nội tâm — KHÔNG được chuyển thành biểu cảm ' +
     'lạnh/nghiêm/ít cười hay tông màu tối/u ám/nhạt nhòa trên khuôn mặt; cá tính mạnh CHỈ thể hiện qua ÁNH MẮT ' +
-    'tự tin trong khi biểu cảm và màu sắc tổng thể VẪN sáng sủa, rực rỡ, ấm áp, dễ gần. TUYỆT ĐỐI CẤM các từ/ý: ' +
+    'tự tin trong khi biểu cảm và màu sắc tổng thể VẪN sáng sủa, rực rỡ, ấm áp, dễ gần. QUAN TRỌNG: quy tắc "luôn ' +
+    'tươi tắn/ấm áp" ở trên CHỈ áp dụng cho BIỂU CẢM, ÁNH MẮT và TÔNG MÀU/ÁNH SÁNG — TUYỆT ĐỐI KHÔNG được dùng nó ' +
+    'để đổi CẤU TRÚC khuôn mặt (hình dáng mặt, mũi, môi, gò má, hàm, lông mày) mà (A)/(B) đã cho: một khuôn mặt ' +
+    'vuông/xương gò má cao/môi mỏng/mắt sâu sắc hoàn toàn có thể đang mỉm cười ấm áp — PHẢI giữ ĐÚNG các đặc ' +
+    'điểm cấu trúc đó, KHÔNG được làm mềm/tròn hóa thành khuôn mặt trái xoan chung chung, môi đầy đặn, mắt hiền ' +
+    'chỉ vì cần giữ tông tích cực. TUYỆT ĐỐI CẤM các từ/ý: ' +
     '"cold", "stern", "serious", "intense", "unsmiling", "rarely smiles", "menacing", "hardened", "mysterious", ' +
     '"enigmatic", "dark", "moody", "somber", "shadowy", "muted", "dim", "monochrome", "desaturated" — và CẤM từ ' +
     'ngữ gợi già dặn/khắc khổ/phong trần/nhiều nếp nhăn (cấm "mature", "weathered", "aged", "world-worn"). ' +
@@ -117,8 +122,10 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     'vẫn giữ tinh thần trẻ trung, rực rỡ nói trên.\n' +
     '2) "description": đoạn tiếng VIỆT (120-180 từ), văn xuôi tự nhiên mô tả khuôn mặt, hình dáng, phong thái, ' +
     'tính cách VÀ (nếu (B) có gợi ý) hoàn cảnh hôn nhân (vd duyên muộn, gặp nhau nơi xa, tính cách vui vẻ/trầm ' +
-    'lặng...) — KHÔNG nhắc tên sao/thuật ngữ tử vi, KHÔNG ước lượng hay nêu số tuổi/số năm chênh lệch cụ thể với ' +
-    'bạn đời, đọc như lời tả người thật.\n' +
+    'lặng...) — CÁC ĐẶC ĐIỂM CẤU TRÚC KHUÔN MẶT (hình dáng mặt, mũi, môi, gò má, mắt) PHẢI bám sát (A)/(B), ' +
+    'KHÔNG tự đổi thành khuôn mặt chung chung dễ thương khác chỉ vì muốn giữ tông tích cực — CHỈ biểu cảm/phong ' +
+    'thái được phép luôn ấm áp, tích cực; KHÔNG nhắc tên sao/thuật ngữ tử vi, KHÔNG ước lượng hay nêu số tuổi/số ' +
+    'năm chênh lệch cụ thể với bạn đời, đọc như lời tả người thật.\n' +
     '3) "meetingContext": đoạn tiếng VIỆT NGẮN (30-60 từ) luận riêng về HOÀN CẢNH GẶP GỠ nhiều khả năng nhất ' +
     '(vd qua công việc/học tập, qua bạn bè/người thân giới thiệu, tình cờ gặp gỡ, ở nơi xa quê hương/công tác/' +
     'du học, quen biết lâu mới nên duyên, qua mai mối...). ƯU TIÊN bám sát gợi ý CỤ THỂ trong (B) nếu có (vd ' +
