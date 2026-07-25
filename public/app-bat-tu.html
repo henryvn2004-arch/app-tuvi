@@ -242,6 +242,20 @@ function doBatTu(){
       greeting:'Tứ trụ của **'+(name||'bạn')+'** đã sẵn sàng. Hỏi tôi về nhật can, dụng thần, cách cục hay đại vận nhé.',
       chips:buildBatTuChips(bt)
     });
+    // Chia sẻ: tóm tắt tứ trụ (nhật can/cường nhược/cách cục/đại vận) — dữ
+    // liệu THẬT đã tính, gọn hơn nhiều so với formatBatTuToText (dump kỹ thuật
+    // cho AI context, không phù hợp hiển thị công khai).
+    var _btLines=[(name||'Tứ trụ')+' · '+dd+'/'+mm+'/'+yyyy+' · '+(gioitinh==='nam'?'Nam':'Nữ')];
+    _btLines.push('Nhật Can: '+bt.nhatCan+' ('+bt.nhatCanHanh+')');
+    if(bt.cuongNhuoc) _btLines.push('Cường nhược nhật can: '+bt.cuongNhuoc.score+'/10 — '+bt.cuongNhuoc.label);
+    if(bt.cachCuc&&bt.cachCuc.primary) _btLines.push('Cách cục: '+bt.cachCuc.primary);
+    if(bt.daiVanHienTai) _btLines.push('Đại vận hiện tại ('+bt.daiVanHienTai.tuoiStart+'–'+bt.daiVanHienTai.tuoiEnd+'t): '+bt.daiVanHienTai.score+'/10');
+    Shell.setShareable({
+      kind:'text',
+      toolId:'bat-tu',
+      title:'Tứ trụ Bát Tự của '+(name||'tôi'),
+      text:_btLines.join('\n')
+    });
     initBatTuGate(bt);
   }catch(e){
     document.getElementById('btBody').innerHTML='<div class="laso-error">Lỗi khi tính Bát Tự: '+esc(e.message)+'</div>';
@@ -821,6 +835,7 @@ function showForm(){
   document.getElementById('btUnlock').style.display='none';
   document.getElementById('btProgress').style.display='none';
   document.getElementById('btPdfBar').classList.remove('visible');
+  Shell.setShareable(null);
 }
 // điền sẵn ngày sinh đã nhớ (nếu có); tự lập nếu đến qua ?auto=1.
 function _pageInit(){

@@ -115,12 +115,20 @@ function calculate(){
     greeting:'Đã tra Kim Lâu · Tam Tai · Hoang Ốc cho tuổi **'+r.data.canChi+'** (20 năm tới). Bạn muốn hỏi gì?',
     chips:['Năm nào đẹp nhất để làm nhà?','Năm nào cưới hỏi được?','Phạm Kim Lâu thì hóa giải sao?','Tam Tai kiêng những gì?']
   });
+  var _klLines=['Kim Lâu · Tam Tai · Hoang Ốc — tuổi '+r.data.canChi+' ('+r.data.nam+')'];
+  _klLines.push('Nạp âm: '+r.data.napAm+' · Tuổi ta năm '+r.data.namHienTai+': '+r.data.tuoiTaHienTai);
+  var _klTags=[]; if(r.data.hienTai.kimLau)_klTags.push('Kim Lâu'); if(r.data.hienTai.hoangOc)_klTags.push('Hoang Ốc'); if(r.data.hienTai.tamTai)_klTags.push('Tam Tai');
+  _klLines.push('Năm '+r.data.namHienTai+': '+(_klTags.length?_klTags.join(', '):'Bình thường'));
+  var _klDep=r.data.rows.filter(function(x){return !x.kimLau&&!x.hoangOc&&!x.tamTai;}).slice(0,5).map(function(x){return x.year;}).join(', ');
+  if(_klDep) _klLines.push('Các năm tới không phạm gì (làm nhà/cưới hỏi tốt): '+_klDep);
+  Shell.setShareable({kind:'text',toolId:'kim-lau',title:'Kim Lâu · Tam Tai tuổi '+r.data.canChi,text:_klLines.join('\n')});
   document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
 }
 function showForm(){
   document.getElementById('resPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
   document.getElementById('btnEdit').style.display='none';
+  Shell.setShareable(null);
 }
 document.getElementById('birthYear').addEventListener('keydown',function(e){if(e.key==='Enter')calculate();});
 </script>

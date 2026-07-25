@@ -149,6 +149,10 @@ function doSinhCon(){
       greeting:'Đã chấm hợp/xung địa chi 15 năm tới (bố **'+esc(iBo.canChi)+'** · mẹ **'+esc(iMe.canChi)+'**). Năm thuận nhất: **'+esc(r.data.namTot)+'**. Bạn muốn tôi tư vấn gì trước?',
       chips:['Năm nào tốt nhất để sinh con?','Vì sao năm đó hợp cả bố lẫn mẹ?','Năm nào nên tránh sinh con?','Con tuổi gì hợp với bố mẹ nhất?']
     });
+    var _scLines=['Xem tuổi sinh con · bố '+iBo.canChi+' ('+iBo.napAm+', '+iBo.hanh+') · mẹ '+iMe.canChi+' ('+iMe.napAm+', '+iMe.hanh+')'];
+    _scLines.push(r.resultTitle);
+    _scLines.push('Năm thuận nhất (Top 3): '+r.data.namTot);
+    Shell.setShareable({ kind:'text', toolId:'sinh-con', title:'Xem tuổi sinh con · bố '+iBo.canChi+' × mẹ '+iMe.canChi, text:_scLines.join('\n') });
     document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
   }catch(e){
     document.getElementById('ccRow').innerHTML='<div class="laso-error">Lỗi: '+esc(e.message)+'</div>';
@@ -162,6 +166,7 @@ function showForm(){
   document.getElementById('resPanel').style.display='none';
   document.getElementById('birthPanel').style.display='block';
   document.getElementById('btnEdit').style.display='none';
+  Shell.setShareable(null);
 }
 </script>
 <script>/*SHELL_RESTORE_BOOT*/(function(){function _r(){var r=window.Shell&&Shell.pendingRestore&&Shell.pendingRestore();if(r&&r.form){Shell.fillForm(r.form);doSinhCon();}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_r);else _r();})();</script>
