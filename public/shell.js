@@ -652,7 +652,7 @@
     var reEnable = function () { if (btn) btn.disabled = false; };
     fetch('/api/share-result', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ toolId: s.toolId, kind: s.kind, title: s.title, imageUrl: s.imageUrl, text: s.text }),
+      body: JSON.stringify({ toolId: s.toolId, kind: s.kind, title: s.title, imageUrl: s.imageUrl, text: s.text, blocks: s.blocks }),
     })
       .then(function (r) { return r.json(); })
       .then(function (j) {
@@ -942,8 +942,11 @@
     dismissIntro: function (key) { this.markIntroSeen(key); var h = document.getElementById('introHost'); if (h) h.innerHTML = ''; },
     // Chia sẻ kết quả khung giữa (workspace) — dùng chung cho mọi tool. Gọi
     // ngay sau khi có kết quả: Shell.setShareable({kind:'image'|'text', title,
-    // imageUrl?, text?}). Gọi Shell.setShareable(null) để ẩn nút (vd tool quay
-    // lại form nhập để làm mới kết quả).
+    // imageUrl?, text?, blocks?}). blocks (tùy chọn) = mảng {header?,image?,text?}
+    // để trang /ket-qua render lại y hệt layout card (.res-block) của workspace
+    // thay vì chỉ ảnh+text phẳng — dùng khi kết quả có nhiều "thẻ" như workspace
+    // (vd Cung Phu Thê / Chân Dung / Luận Giải). Gọi Shell.setShareable(null) để
+    // ẩn nút (vd tool quay lại form nhập để làm mới kết quả).
     setShareable: function (o) {
       if (!o) { shareable = null; renderShareBtn(); return; }
       shareable = {
@@ -952,6 +955,7 @@
         title: String(o.title || 'Kết quả Luận Đường').slice(0, 160),
         imageUrl: o.imageUrl || null,
         text: o.text || null,
+        blocks: Array.isArray(o.blocks) ? o.blocks : null,
       };
       renderShareBtn();
     },
