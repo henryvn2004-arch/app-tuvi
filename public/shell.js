@@ -907,16 +907,18 @@
       if (!map) return;
       Object.keys(map).forEach(function (id) { var el = document.getElementById(id); if (el && map[id] != null) el.value = map[id]; });
     },
-    // Nhớ thông tin sinh để chuyển tay giữa các tool trong shell (Lá số ↔ Luận giải)
-    // fd chuẩn hoá: {name,gender,dd,mm,yyyy,hh,pp,namxem}. localStorage, không server.
+    // Nhớ thông tin sinh để chuyển tay giữa các tool trong shell (Lá số ↔ Luận giải ↔
+    // Bát Tự) — fd = TuviForm.getData() (hoten/ngay/thang/nam/gioHour/gioPhut/gioitinh)
+    // + namxem riêng của trang (năm luận, ngoài field TuviForm). localStorage, không server.
     rememberBirth: function (fd) { try { localStorage.setItem('app_birth', JSON.stringify(fd)); } catch (e) { /* ignore */ } },
     getRememberedBirth: function () { try { return JSON.parse(localStorage.getItem('app_birth') || 'null'); } catch (e) { return null; } },
-    // Điền sẵn form (các trang dùng chung ID input: inpName/inpGender/inpDd…).
+    // Điền sẵn form (3 trang la-so/luan-giai/bat-tu dùng chung TuviForm mode:'compact'
+    // + input #inpNamxem riêng cho năm luận).
     prefillForm: function () {
       var b = this.getRememberedBirth(); if (!b) return false;
-      var set = function (id, v) { var el = document.getElementById(id); if (el && v != null && v !== '') el.value = v; };
-      set('inpName', b.name); set('inpGender', b.gender); set('inpDd', b.dd); set('inpMm', b.mm);
-      set('inpYyyy', b.yyyy); set('inpHh', b.hh); set('inpPp', b.pp); set('inpNamxem', b.namxem);
+      if (typeof TuviForm !== 'undefined') TuviForm.setData(b);
+      var namxemEl = document.getElementById('inpNamxem');
+      if (namxemEl && b.namxem != null && b.namxem !== '') namxemEl.value = b.namxem;
       return true;
     },
     // true nếu URL có ?auto=1 (đến từ nút chuyển tay giữa tool) → trang tự chạy.

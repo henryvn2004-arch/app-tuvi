@@ -21,7 +21,6 @@
 .fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
 .fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none;transition:.15s}
 .fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
-.gio-hint{font-size:12px;color:var(--text-lt);align-self:center;padding-bottom:4px;white-space:nowrap}
 .btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
 .btn-go:disabled{opacity:.6;cursor:not-allowed}
 #chartPanel{display:none}
@@ -55,18 +54,7 @@
       <div class="form-card" id="birthPanel">
         <h2>Nhập thông tin ngày sinh</h2>
         <p class="sub">Lá số lập theo cổ pháp, chính xác giờ sinh càng tốt. Sau khi có lá số, hỏi trợ lý ở khung bên phải.</p>
-        <div class="frow">
-          <div class="fg" style="flex:2;min-width:170px"><label>Họ và tên</label><input type="text" id="inpName" placeholder="Nguyễn Văn A"></div>
-          <div class="fg" style="width:96px"><label>Giới tính</label><select id="inpGender"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
-        </div>
-        <div class="frow">
-          <div class="fg" style="width:78px"><label>Ngày (DL)</label><select id="inpDd"></select></div>
-          <div class="fg" style="width:88px"><label>Tháng (DL)</label><select id="inpMm"></select></div>
-          <div class="fg" style="width:96px"><label>Năm (DL)</label><input type="number" id="inpYyyy" value="1990" min="1900" max="2099"></div>
-          <div class="fg" style="width:74px"><label>Giờ</label><select id="inpHh"></select></div>
-          <div class="fg" style="width:74px"><label>Phút</label><select id="inpPp"></select></div>
-          <span class="gio-hint" id="gioHint">Giờ âm: —</span>
-        </div>
+        <div id="tuviFormHost"></div>
         <div class="frow" style="margin-bottom:4px">
           <div class="fg" style="width:96px"><label>Năm luận</label><input type="number" id="inpNamxem" value="2026" min="1900" max="2100"></div>
           <button class="btn-go" id="btnGo" onclick="doAnSao()">Lập lá số →</button>
@@ -87,48 +75,32 @@
 window.SHELL_INTRO={key:'la-so',title:'Lá số Tử Vi Đẩu Số',desc:'Nhập giờ sinh để lập lá số theo cổ pháp - 12 cung, chính tinh, cách cục, đại vận. Xong rồi hỏi <b>trợ lý AI</b> ở khung bên phải luận sâu bất cứ điều gì.'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/laso-chart.js?v=2"></script>
+<script src="/tuvi-form.js"></script>
 <script src="/auth.js"></script>
 <script src="/shell.js?v=43"></script>
 <script>
-// ── Dropdowns ──
-(function buildDropdowns(){
-  var dd=document.getElementById('inpDd'),mm=document.getElementById('inpMm'),hh=document.getElementById('inpHh'),pp=document.getElementById('inpPp');
-  dd.innerHTML='<option value="">Ngày</option>';mm.innerHTML='<option value="">Tháng</option>';
-  for(var i=1;i<=31;i++)dd.innerHTML+='<option value="'+i+'">'+i+'</option>';
-  for(var j=1;j<=12;j++)mm.innerHTML+='<option value="'+j+'">'+j+'</option>';
-  for(var h=0;h<=23;h++)hh.innerHTML+='<option value="'+h+'">'+String(h).padStart(2,'0')+'</option>';
-  for(var p=0;p<=59;p++)pp.innerHTML+='<option value="'+p+'">'+String(p).padStart(2,'0')+'</option>';
-  hh.addEventListener('change',updateGioAm);pp.addEventListener('change',updateGioAm);
-})();
-function updateGioAm(){
-  var h=parseInt(document.getElementById('inpHh').value)||0;
-  var p=parseInt(document.getElementById('inpPp').value)||0;
-  document.getElementById('gioHint').textContent='Giờ âm: '+CHI[hourMinToGioAm(h,p)];
-}
+// ── Form nhập (dùng chung TuviForm — có "Sinh ở ngoài Việt Nam?" + parity giờ
+// sinh lịch sử với standalone) ──
+TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam'});
 
 // ── An sao + render (tái dùng engine + laso-chart.js), gắn context cho rail ──
 function doAnSao(){
   var btn=document.getElementById('btnGo');
-  var name=document.getElementById('inpName').value.trim();
-  var gioitinh=document.getElementById('inpGender').value;
   var namxem=parseInt(document.getElementById('inpNamxem').value)||new Date().getFullYear();
-  var dd=parseInt(document.getElementById('inpDd').value);
-  var mm=parseInt(document.getElementById('inpMm').value);
-  var yyyy=parseInt(document.getElementById('inpYyyy').value);
-  var hh=parseInt(document.getElementById('inpHh').value)||0;
-  var pp=parseInt(document.getElementById('inpPp').value)||0;
-  if(!dd||!mm||!yyyy){ alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh.'); return; }
+  var fdIn=TuviForm.getData();
+  var name=fdIn.hoten, gioitinh=fdIn.gioitinh, ngay=fdIn.ngay, thang=fdIn.thang, nam=fdIn.nam, gioHour=fdIn.gioHour, gioPhut=fdIn.gioPhut, gioIdx=fdIn.gioIdx;
+  if(!ngay||!thang||!nam){ alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh.'); return; }
   btn.disabled=true;btn.textContent='Đang an sao…';
   try{
-    var gioAmIdx=hourMinToGioAm(hh,pp),gioChi=CHI[gioAmIdx];
-    var conv=convertDuongToAm(dd,mm,yyyy,hh);conv.gioIdx=gioAmIdx;
-    var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioAmIdx,gioitinh:gioitinh,namXem:namxem});
-    var fd={name:name,gioitinh:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,pp:pp,gioChi:gioChi,amLich:conv.amLich};
+    var gioChi=CHI[gioIdx];
+    var conv=convertDuongToAm(ngay,thang,nam,gioHour);conv.gioIdx=gioIdx;
+    var ls=anSaoLaSo({ngayAL:conv.amLich.day,thangAL:conv.amLich.month,namAL:conv.amLich.year,canNam:conv.canNam,chiNam:conv.chiNam,gioIdx:gioIdx,gioitinh:gioitinh,namXem:namxem});
+    var fd={name:name,gioitinh:gioitinh,dd:ngay,mm:thang,yyyy:nam,hh:gioHour,pp:gioPhut,gioChi:gioChi,amLich:conv.amLich};
     document.getElementById('lasoContainer').innerHTML=renderGrid(ls,fd);
     document.getElementById('birthBar').innerHTML=
       '<span class="tag"><b>'+esc(name||'—')+'</b> · '+(gioitinh==='nam'?'Nam':'Nữ')+'</span>'+
-      '<span class="tag">'+dd+'/'+mm+'/'+yyyy+' DL</span>'+
-      '<span class="tag">'+String(hh).padStart(2,'0')+':'+String(pp).padStart(2,'0')+' · giờ '+gioChi+'</span>'+
+      '<span class="tag">'+ngay+'/'+thang+'/'+nam+' DL</span>'+
+      '<span class="tag">'+String(gioHour).padStart(2,'0')+':'+String(gioPhut).padStart(2,'0')+' · giờ '+gioChi+'</span>'+
       '<div class="yr">Năm luận <select id="barNamxem" onchange="reAnSao()"></select></div>';
     var barSel=document.getElementById('barNamxem');
     for(var y=namxem-2;y<=namxem+3;y++)barSel.innerHTML+='<option value="'+y+'"'+(y===namxem?' selected':'')+'>'+y+'</option>';
@@ -138,12 +110,12 @@ function doAnSao(){
     document.getElementById('btnLuan').style.display='';
     document.getElementById('btnBatTu').style.display='';
     // nhớ ngày sinh để chuyển tay sang Luận giải/Bát Tự không phải nhập lại
-    Shell.rememberBirth({name:name,gender:gioitinh,dd:dd,mm:mm,yyyy:yyyy,hh:hh,pp:pp,namxem:namxem});
+    Shell.rememberBirth(Object.assign({}, fdIn, {namxem:namxem}));
     // gắn context để bật rail
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
-      birth:{day:dd,month:mm,year:yyyy,hourBranch:gioAmIdx,gender:gioitinh,name:name||undefined},
-      label:(name||'Lá số')+' · '+dd+'/'+mm+'/'+yyyy+' · năm '+namxem,
+      birth:{day:ngay,month:thang,year:nam,hourBranch:gioIdx,gender:gioitinh,name:name||undefined},
+      label:(name||'Lá số')+' · '+ngay+'/'+thang+'/'+nam+' · năm '+namxem,
       greeting:'Lá số của **'+(name||'bạn')+'** đã sẵn sàng. Bạn muốn tôi soi điều gì trước?',
       chips:buildLasoChips(ls,namxem)
     });
@@ -182,8 +154,7 @@ function showForm(){
 // Chạy SAU khi shell.js render rail (boot ở DOMContentLoaded) để Shell.setContext không lỗi.
 function _pageInit(){
   Shell.prefillForm();
-  updateGioAm();
-  if(Shell.autoRun()&&document.getElementById('inpDd').value)doAnSao();
+  if(Shell.autoRun()&&document.getElementById('ngay').value)doAnSao();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_pageInit);
 else _pageInit();
