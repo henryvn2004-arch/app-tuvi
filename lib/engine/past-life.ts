@@ -78,8 +78,23 @@ export const ERAS: Record<EraId, Era> = {
   },
 };
 
+/** Bối cảnh MẶC ĐỊNH khi client không truyền gì.
+ *
+ * Henry bỏ nút cho người dùng chọn ("mày tự chọn được rồi") nên server chốt
+ * một bối cảnh. Chọn Trung Hoa cổ vì hai lý do:
+ *   1. Đúng với định vị của tool. Cả trang giải thích rằng từ vựng gốc của Tử
+ *      Vi là từ vựng triều đình phong kiến Trung Hoa, và tool "trả lá số về
+ *      đúng bối cảnh cổ thư viết ra nó" — cổ thư đó là sách Trung Hoa. Đặt mặc
+ *      định sang Việt Nam thì lập luận của chính trang bị lung lay.
+ *   2. Model gen ảnh cổ trang Trung Hoa tốt hơn hẳn, và vì đã chốt KHÔNG ghì
+ *      trang phục Việt nên hai bối cảnh vốn cho ra ảnh gần giống nhau.
+ *
+ * `viet-nam` vẫn giữ nguyên trong ERAS và route vẫn nhận tham số `era`, nên
+ * đổi mặc định chỉ là sửa đúng dòng dưới đây — không phải dựng lại gì. */
+const DEFAULT_ERA: EraId = 'trung-hoa';
+
 export function resolveEra(id?: string): Era {
-  return ERAS[(id as EraId) in ERAS ? (id as EraId) : 'trung-hoa'];
+  return ERAS[(id as EraId) in ERAS ? (id as EraId) : DEFAULT_ERA];
 }
 
 // ── Chính tinh × TẦNG → chức phận thời xưa ──────────────────────────────
