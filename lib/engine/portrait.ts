@@ -232,35 +232,72 @@ const DEFAULT_CORE: RankedStar = {
 
 // STEP 5 — khung xương/tỷ lệ KHÓA CỨNG theo sao core, không cho sao phụ ghi đè.
 const CORE_FIELDS = ['faceShape', 'forehead', 'nose', 'bodyBuild', 'height'] as const;
-// STEP 6 — các nét sao phụ ĐƯỢC PHÉP tinh chỉnh (không đụng khung xương).
-const MOD_FIELDS = ['eyebrows', 'eyes', 'lips', 'chin', 'cheekbones', 'skin', 'hair', 'expression', 'aura'] as const;
+// STEP 6 — các nét sao phụ ĐƯỢC PHÉP tinh chỉnh (không đụng khung xương). Bỏ
+// "hair" (tóc) — Henry chỉ ra tử vi không có cơ sở đáng tin cho mái tóc, và
+// kiểu tóc thật trong ảnh do server random riêng (không liên quan sao nào) —
+// để LLM vẫn nhận field này dễ tự bịa mô tả mâu thuẫn với ảnh.
+const MOD_FIELDS = ['eyebrows', 'eyes', 'lips', 'chin', 'cheekbones', 'skin', 'expression', 'aura'] as const;
+
+export interface FieldSource {
+  value: string;
+  starTen: string;
+  isCore: boolean;
+}
 
 // STEP 5-7 — build core morphology rồi merge modifier theo thứ tự ưu tiên
 // (sao rank cao hơn thắng — Rule 1; sao thấp hơn CHỈ điền field còn trống).
-function buildFields(core: RankedStar, ranked: RankedStar[]): Record<string, string> {
+// Trả thêm `attribution` (field → sao nào quyết định) để route.ts đưa LLM diễn
+// giải ĐÚNG "chính tinh định khung, phụ tinh X tô điểm/phá cách nét Y" thay vì
+// đoán mò xem sao nào ảnh hưởng field nào (Henry yêu cầu).
+function buildFields(
+  core: RankedStar,
+  ranked: RankedStar[],
+): { fields: Record<string, string>; attribution: Record<string, FieldSource> } {
   const fields: Record<string, string> = {};
+  const attribution: Record<string, FieldSource> = {};
 
   for (const f of CORE_FIELDS) {
     const v = core.entry[f as keyof StarEntry];
-    if (v) fields[f] = String(v);
+    if (v) {
+      fields[f] = String(v);
+      attribution[f] = { value: fields[f], starTen: core.ten, isCore: true };
+    }
   }
-  if (!fields.faceShape && core.entry.faceShapeVi) fields.faceShape = core.entry.faceShapeVi;
-  if (!fields.bodyBuild && core.entry.bodyVi) fields.bodyBuild = core.entry.bodyVi;
+  if (!fields.faceShape && core.entry.faceShapeVi) {
+    fields.faceShape = core.entry.faceShapeVi;
+    attribution.faceShape = { value: fields.faceShape, starTen: core.ten, isCore: true };
+  }
+  if (!fields.bodyBuild && core.entry.bodyVi) {
+    fields.bodyBuild = core.entry.bodyVi;
+    attribution.bodyBuild = { value: fields.bodyBuild, starTen: core.ten, isCore: true };
+  }
 
   const secondary = ranked.filter((r) => r.ten !== core.ten);
   for (const f of MOD_FIELDS) {
+    let matched = false;
     for (const s of secondary) {
       const v = s.entry[f as keyof StarEntry];
-      if (v) { fields[f] = String(v); break; }
+      if (v) {
+        fields[f] = String(v);
+        attribution[f] = { value: fields[f], starTen: s.ten, isCore: false };
+        matched = true;
+        break;
+      }
     }
-    if (!fields[f]) {
+    if (!matched) {
       const v = core.entry[f as keyof StarEntry];
-      if (v) fields[f] = String(v);
+      if (v) {
+        fields[f] = String(v);
+        attribution[f] = { value: fields[f], starTen: core.ten, isCore: true };
+      }
     }
   }
-  if (!fields.aura && core.entry.phongThaiVi) fields.aura = core.entry.phongThaiVi;
+  if (!fields.aura && core.entry.phongThaiVi) {
+    fields.aura = core.entry.phongThaiVi;
+    attribution.aura = { value: fields.aura, starTen: core.ten, isCore: true };
+  }
 
-  return fields;
+  return { fields, attribution };
 }
 
 // ── Ước lượng chênh lệch tuổi vợ/chồng ──────────────────────────────────
@@ -331,7 +368,18 @@ export interface SpouseMorphology {
    * LLM đọc (B)/(C) không thấy gợi ý tuổi tác rõ ràng nào. */
   starAgeOffset: number;
   fields: Record<string, string>;
+  /** field → sao nào quyết định giá trị đó (core hay phụ tinh) — dùng để LLM
+   * diễn giải ĐÚNG "chính tinh X định khung..., phụ tinh Y tô điểm/phá cách
+   * nét Z" thay vì đoán mò (Henry yêu cầu). */
+  attribution: Record<string, FieldSource>;
   coreStar: string;
+  /** Độ sáng của core star (Miếu/Vượng/Đắc/Bình/Hãm) nếu có — để LLM nhắc
+   * kèm khi diễn giải (vd "Tham Lang (Đắc)"). */
+  coreBrightness?: string;
+  /** true nếu core là 1 trong lục sát tinh (Kình Dương/Đà La/Địa Không/Địa
+   * Kiếp/Hỏa Tinh/Linh Tinh) — LLM dùng để biết core đang "phá cách" thay vì
+   * "tô điểm" thuận. */
+  coreIsSatTinh: boolean;
   contributingStars: string[];
 }
 
@@ -364,7 +412,7 @@ export function computeSpouseMorphology(ls: Laso, userGender: 'nam' | 'nu'): Spo
   const ranked = rankStars(pool, menhHanh);
   const core = pickCore(ranked, phuThe, xung, menhHanh);
 
-  const fields = buildFields(core, ranked.length ? ranked : [DEFAULT_CORE]);
+  const { fields, attribution } = buildFields(core, ranked.length ? ranked : [DEFAULT_CORE]);
 
   const yNghia = ((ls.cachCucTungCung as Record<string, string[]>) || {})['Phu Thê'] || [];
   const baseAge = pickMarriageAgeAnchor(yNghia);
@@ -377,7 +425,10 @@ export function computeSpouseMorphology(ls: Laso, userGender: 'nam' | 'nu'): Spo
     baseAge,
     starAgeOffset,
     fields,
+    attribution,
     coreStar: core.ten,
+    coreBrightness: core.brightness,
+    coreIsSatTinh: LUC_SAT_TINH.has(core.ten),
     // core có thể là chính tinh MƯỢN từ xung chiếu (vô chính diệu — xem
     // pickCore) nên không nằm sẵn trong `ranked`; thêm vào đây cho đủ.
     contributingStars: Array.from(new Set([core.ten, ...ranked.map((r) => r.ten)])),
@@ -459,11 +510,26 @@ export function formatPhuTheForLLM(r: PhuTheReadout): string {
 export function formatMorphologyForLLM(m: SpouseMorphology): string {
   const LABELS: Record<string, string> = {
     faceShape: 'Hình dáng khuôn mặt', forehead: 'Trán', eyebrows: 'Lông mày', eyes: 'Mắt',
-    nose: 'Mũi', lips: 'Môi', chin: 'Cằm', cheekbones: 'Gò má', skin: 'Da', hair: 'Tóc',
+    nose: 'Mũi', lips: 'Môi', chin: 'Cằm', cheekbones: 'Gò má', skin: 'Da',
     bodyBuild: 'Vóc dáng', height: 'Chiều cao', expression: 'Biểu cảm', aura: 'Phong thái/khí chất',
   };
+  const coreLabel = m.coreBrightness ? `${m.coreStar} (${m.coreBrightness})` : m.coreStar;
+  // Kèm SAO NÀO quyết định mỗi field — để route.ts yêu cầu LLM diễn giải ĐÚNG
+  // "chính tinh X định khung..., phụ tinh Y tô điểm/phá cách nét Z" (Henry yêu
+  // cầu) thay vì để LLM tự đoán mò sao nào ảnh hưởng field nào.
+  const header =
+    `Chính tinh CORE tại Phu Thê: ${coreLabel}${m.coreIsSatTinh ? ' (BẢN THÂN LÀ SÁT TINH — phá cách ngay từ gốc)' : ''} — định khung xương/vóc dáng nền tảng (hình dáng mặt, trán, mũi, vóc dáng, chiều cao).`;
   const lines = Object.entries(m.fields)
     .filter(([, v]) => v)
-    .map(([k, v]) => `- ${LABELS[k] || k}: ${v}`);
-  return lines.join('\n');
+    .map(([k, v]) => {
+      const src = m.attribution[k];
+      let roleNote = '';
+      if (src) {
+        roleNote = src.isCore
+          ? ` — theo CHÍNH TINH core ${coreLabel}`
+          : ` — theo PHỤ TINH ${src.starTen}${LUC_SAT_TINH.has(src.starTen) ? ' (sát tinh — có thể phá cách)' : ' (tô điểm/tinh chỉnh)'}`;
+      }
+      return `- ${LABELS[k] || k}: ${v}${roleNote}`;
+    });
+  return [header, ...lines].join('\n');
 }
