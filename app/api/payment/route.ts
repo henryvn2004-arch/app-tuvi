@@ -1161,6 +1161,7 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-marketing') return handleAdminMarketing(request, searchParams);
   if (action === 'admin-marketing-suggestions') return handleAdminMarketingSuggestions(request, searchParams);
   if (action === 'admin-dashboard-v2') return handleAdminDashboardV2(request);
+  if (action === 'admin-autopilot-log') return handleAdminAutopilotLog(request);
   if (action === 'admin-cron-runs') return handleAdminCronRuns(request);
   if (action === 'admin-channels') return handleAdminChannels(request);
   if (action === 'admin-seo')      return handleAdminSeo(request);
@@ -1391,6 +1392,38 @@ async function handleAdminMarketingSuggestions(request: NextRequest, sp: URLSear
   try {
     const text = await generateContentSuggestions(from.toISOString(), toExcl.toISOString());
     return ok({ text });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── GET: admin-autopilot-log (M0.6, track Marketing Autopilot) — nhật ký
+// hành động autopilot (shadow/live) + trạng thái cấu hình hiện tại. THUẦN
+// ĐỌC — không có action bật/tắt qua API này có chủ đích (rủi ro cao, Henry
+// tự bật qua app_config/SQL, tránh bấm nhầm 1 click trên UI). ──
+async function handleAdminAutopilotLog(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  try {
+    const cfgKeys = ['marketing.autopilot_enabled', 'marketing.autopilot_price_bounds', 'marketing.autopilot_promo', 'marketing.autopilot_segment_nudge'];
+    const [actionsRes, cfgRes] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/autopilot_actions?select=id,ts,action_type,mode,target,before,after,reason,meta&order=ts.desc&limit=100`, { headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/app_config?key=in.(${cfgKeys.map((k) => `"${k}"`).join(',')})&select=key,value`, { headers: SB_HEADERS }),
+    ]);
+    const actions = actionsRes.ok ? await actionsRes.json() : [];
+    const cfgRows: { key: string; value: unknown }[] = cfgRes.ok ? await cfgRes.json() : [];
+    const cfgMap: Record<string, unknown> = {};
+    for (const row of cfgRows) cfgMap[row.key] = row.value;
+
+    return ok({
+      enabled: cfgMap['marketing.autopilot_enabled'] === true,
+      config: {
+        priceBounds: cfgMap['marketing.autopilot_price_bounds'] || {},
+        promo: cfgMap['marketing.autopilot_promo'] || { budgetCreditsPerRun: 0 },
+        segmentNudge: cfgMap['marketing.autopilot_segment_nudge'] || { enabledBudgetPerRun: 0 },
+      },
+      actions,
+    });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
