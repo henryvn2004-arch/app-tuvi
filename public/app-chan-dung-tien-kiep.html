@@ -53,8 +53,6 @@
 .cdtk-badge.low{background:#F1E2E2;color:#7A4A4A}
 .cdtk-act p{font-size:13.5px;line-height:1.85;color:#2a2118;margin:0}
 .cdtk-ketluan{margin-top:16px;padding:13px 15px;background:#FBF8F1;border:1px solid #EADFC8;border-radius:10px;font-size:13.5px;line-height:1.82;color:#3a3226}
-.cdtk-basis{font-size:13px;line-height:1.8;color:#2a2118}
-.cdtk-basis b{color:#061A2E}
 #histList{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 #histList img{width:56px;height:56px;object-fit:cover;border-radius:8px;cursor:pointer}
 </style>
@@ -122,14 +120,9 @@
           </div>
         </div>
 
-        <div class="res-block" id="basisBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Cơ Sở Trong Lá Số</span></div>
-          <div class="res-block-body cdtk-basis" id="basisBody"></div>
-        </div>
-
         <div class="res-block" style="background:#FBF3DE;border-color:#e8d9b0">
           <div class="res-block-body" style="font-size:12.5px;line-height:1.6;color:#5a5145">
-            💡 Tử Vi Đẩu Số không có cung nào luận về kiếp trước. Đây là một phóng chiếu: đặt chính lá số của bạn vào bối cảnh phong kiến mà cổ thư vốn dùng để viết ra nó — mang tính tham khảo và giải trí, không phải khẳng định về một kiếp sống có thật.
+            💡 Chân dung và câu chuyện phía trên được phác hoạ dựa trên các dữ liệu trong lá số Tử Vi của bạn, kết hợp với kinh nghiệm nghiên cứu của tiền nhân để lại. Mang tính tham khảo và giải trí.
           </div>
         </div>
 
@@ -224,7 +217,6 @@ async function _doGenerate() {
   document.getElementById('loading').style.display = 'block';
   document.getElementById('card').style.display = 'none';
   document.getElementById('storyBlock').style.display = 'none';
-  document.getElementById('basisBlock').style.display = 'none';
   document.getElementById('imgLoadStatus').style.display = 'none';
   document.getElementById('imgActions').style.display = 'none';
   document.getElementById('resultImg').style.display = 'none';
@@ -316,36 +308,6 @@ function renderStory(data) {
   if (data.ketLuan) { kl.textContent = data.ketLuan; kl.style.display = 'block'; }
   else { kl.style.display = 'none'; }
   document.getElementById('storyBlock').style.display = 'block';
-
-  renderBasis(data);
-}
-
-function renderBasis(data) {
-  var o = data.occupation || {};
-  var m = data.menh || {};
-  var rows = [];
-  if (o.star) {
-    rows.push('<b>Chức phận</b> — ' + esc(o.title || '') + ', suy từ chính tinh <b>' + esc(o.star) + '</b>' +
-      (o.brightness ? ' (' + esc(o.brightness) + ')' : '') + ' tại cung Quan Lộc' +
-      (o.borrowed ? ' (Quan Lộc vô chính diệu → mượn chính tinh cung xung chiếu theo cổ pháp)' : '') + '.');
-  }
-  if (o.tierLabel) {
-    rows.push('<b>Tầng chức phận</b> — ' + esc(o.tierLabel) +
-      (o.tierBreakdown && o.tierBreakdown.length ? ' (' + o.tierBreakdown.map(esc).join(', ') + ')' : '') +
-      '. Cùng một chính tinh, lá số khác nhau ra tầng khác nhau.');
-  }
-  if (o.source) rows.push('<b>Căn cứ cổ thư</b> — ' + esc(o.source) + '.');
-  if (o.notes && o.notes.length) rows.push('<b>Sắc thái nghề nghiệp</b> — ' + o.notes.map(esc).join('; ') + '.');
-  if (m.chinhTinh && m.chinhTinh.length) rows.push('<b>Cung Mệnh</b> — chính tinh ' + m.chinhTinh.map(esc).join(', ') + '.');
-  if (data.thanCungName) rows.push('<b>Cung Thân</b> — đóng tại cung ' + esc(data.thanCungName) + '.');
-  if (m.cachCuc && m.cachCuc.length) rows.push('<b>Cách cục tại Mệnh</b> — ' + m.cachCuc.map(function (c) { return esc(c.ten); }).join(', ') + '.');
-  rows.push('<b>Dòng đời</b> — 5 hồi chia từ 9 đại vận; hồi đánh dấu ★ là đại vận có điểm cao nhất, ▼ là thấp nhất trong chính lá số này.');
-  if (data.era && data.era.label) rows.push('<b>Bối cảnh</b> — ' + esc(data.era.label) + '.');
-  if (data.portraitAge) rows.push('<b>Chân dung</b> — vẽ ở tuổi khoảng ' + data.portraitAge + ', neo theo đại vận rực rỡ nhất trong quãng đời trưởng thành.');
-  rows.push('<b>Nhân vật</b> — tên và mọi tình tiết trong truyện là hư cấu, dựng riêng cho lá số này; không phải nhân vật lịch sử có thật.');
-
-  document.getElementById('basisBody').innerHTML = rows.map(function (r) { return '<p style="margin:0 0 8px">' + r + '</p>'; }).join('');
-  document.getElementById('basisBlock').style.display = 'block';
 }
 
 // Dựng trang /ket-qua chia sẻ được — CỐ Ý cho người xem link đọc trọn cả ảnh

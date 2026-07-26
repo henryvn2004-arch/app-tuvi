@@ -336,6 +336,36 @@ UPDATE public.tool_pricing SET enabled = true, updated_at = now()
 số thật** (chức phận/5 hồi/nhãn đỉnh-đáy/mốc tuổi/tuổi vẽ đều hợp lệ, 8 arc khác
 nhau) · Playwright render đúng cả 2 trang.
 
+### Vòng chỉnh sau khi Henry test prod (PR mới, session này)
+Henry: truyện "chủ yếu kể về công việc". Đúng — flow cũ chỉ đưa vào prompt **5 cung**
+(Mệnh · Quan Lộc · Tài Bạch · Phúc Đức · Thiên Di, cộng cung Thân trùng lên 1 trong
+số đó), mà **3/5 thuộc mảng bản thân–công danh–tiền bạc** → truyện dồn vào sự nghiệp
+là hệ quả trực tiếp. Thiếu hẳn Phu Thê, Tử Tức, Huynh Đệ, Nô Bộc, Tật Ách, Điền
+Trạch, Phụ Mẫu.
+- **`computeLifeThreads(ls)`** (`past-life.ts`) — quét cách cục **cả 12 cung** (trừ
+  Mệnh/Quan Lộc đã có khối riêng), chấm `cachCucWeight×3 + min(yNghia,8)×0.4` (cách
+  cục quý/phú/bần tiện nặng gấp 3 cách cục thường), bỏ cung không tín hiệu, lấy **top
+  5**. `CUNG_ROLE` gán mỗi cung một *vai trong truyện* ("Nô Bộc → bạn bè, thuộc hạ";
+  "Tật Ách → bệnh tật, tai ách mang trên thân") để LLM biết dùng làm gì.
+  `formatCharacterForLLM` thêm khối "CÁC TUYẾN ĐỜI NGOÀI CÔNG DANH"; cung nào đã in
+  đủ ở trên thì chỉ trỏ ngược, không lặp dữ liệu.
+- **`past-life-story.ts`** — luật mới "đây là một đời người, không phải bản lý lịch
+  công tác": MỖI tuyến phải hiện ra ít nhất 1 lần bằng một CẢNH hoặc NHÂN VẬT cụ thể,
+  rải theo lẽ thường (cha mẹ/anh em hồi đầu; hôn nhân/con cái/bệnh tật hồi giữa-cuối),
+  không dồn 1 hồi. Thêm luật **chuyển vật hiện đại sang tương đương thời xưa** — dữ
+  liệu cổ pháp trong engine có chỗ diễn đạt kiểu "tai nạn xe cộ", "đầu tư", "bảo lãnh"
+  (phát hiện khi test 6 lá số). `text` mỗi hồi 90–140 → **100–160 từ** cho đủ chỗ.
+- **Bỏ khối "Cơ Sở Trong Lá Số"** (markup + `renderBasis()` + CSS `.cdtk-basis`) khỏi
+  cả 2 trang. **Caveat viết lại** theo lời Henry, chung chung: *"phác hoạ dựa trên các
+  dữ liệu trong lá số Tử Vi của bạn, kết hợp với kinh nghiệm nghiên cứu của tiền nhân
+  để lại"*. Trang standalone trước đây KHÔNG có caveat ở khu kết quả → nay thêm.
+  **⚠️ KHÔNG viết "query database nhân vật lịch sử có lá số giống nhất"** như Henry
+  gợi ý lúc đầu — hệ thống không có database đó và không có bước so khớp nào; viết vậy
+  là mô tả một tính năng không tồn tại cho người dùng trả tiền.
+- **Verify:** `npx tsc --noEmit` 0 lỗi · `npm run lint` 0 lỗi · `npx prettier --check .`
+  (dạng QUÉT CẢ CÂY, đúng như CI chạy) sạch · `node --check` mọi script block · chạy
+  thử 6 lá số thật: threads ra 10 cung khác nhau, cách cục thật, không lá nào trùng bộ.
+
 ### CÒN LẠI
 - Bật `enabled=true` sau deploy (câu SQL ở trên).
 - Henry gen thử vài lá số trên prod → soi chất lượng ảnh cổ trang + văn phong

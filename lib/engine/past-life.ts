@@ -832,6 +832,80 @@ function computeLifeArc(ls: Laso): LifeArc {
   };
 }
 
+
+// ── Quét cách cục CẢ 12 CUNG → các tuyến đời đan vào truyện ──────────────
+// Henry đọc bản đầu và chỉ ra truyện "chủ yếu kể về công việc". Đúng: prompt
+// chỉ được nạp 5 cung riêng biệt (Mệnh, Quan Lộc, Tài Bạch, Phúc Đức, Thiên
+// Di) + cung Thân trùng lên một trong số đó — mà 3 trong 5 cung ấy đều thuộc
+// mảng bản thân/công danh/tiền bạc, nên nhân vật chỉ có đời làm việc. Thiếu
+// hẳn hôn nhân, con cái, anh em, bạn bè, bệnh tật, nhà cửa, cha mẹ.
+//
+// Nay quét CẢ 12 CUNG, chấm độ nổi bật theo cách cục đặc biệt mà engine đã
+// tính sẵn, rồi lấy các cung có tín hiệu THẬT làm tuyến phụ cho truyện. Cung
+// nào lá số không nói gì thì không ép vào — tránh bịa cho đủ mảng.
+const CUNG_ROLE: Record<string, string> = {
+  'Mệnh': 'cốt cách, tính khí gốc',
+  'Phụ Mẫu': 'cha mẹ, bậc bề trên đỡ đầu hoặc đè nén',
+  'Phúc Đức': 'xuất thân, phúc phần tổ tiên, đời sống tinh thần',
+  'Điền Trạch': 'nhà cửa, ruộng vườn, chốn an cư',
+  'Quan Lộc': 'đường công danh, chức phận',
+  'Nô Bộc': 'bạn bè, thuộc hạ, kẻ dưới quyền',
+  'Thiên Di': 'đi lại, tha hương, chuyện xảy ra khi rời nhà',
+  'Tật Ách': 'bệnh tật, thương tích, tai ách mang trên thân',
+  'Tài Bạch': 'tiền bạc, của cải, cách kiếm sống',
+  'Tử Tức': 'con cái, người nối nghiệp hoặc học trò',
+  'Phu Thê': 'hôn nhân, người bạn đời',
+  'Huynh Đệ': 'anh em, người cùng vai cùng lứa',
+};
+
+export interface LifeThread {
+  cung: string;
+  /** Tuyến đời mà cung này phụ trách trong truyện. */
+  role: string;
+  weight: number;
+  chinhTinh: string[];
+  cachCuc: { ten: string; moTa: string }[];
+  yNghia: string[];
+}
+
+/** Cách cục "nặng ký" (phán mạnh) đáng để dựng thành tình tiết. */
+function cachCucWeight(loai: string): number {
+  const l = loai.toLowerCase();
+  if (l === 'quy_cuc' || l === 'phu_cuc' || l === 'ban_tien_cuc' || l === 'tốt' || l === 'xấu') return 3;
+  return 1;
+}
+
+/**
+ * Chọn các tuyến đời phụ cho truyện: quét 12 cung, bỏ những cung đã là trụ
+ * chính (Mệnh, Quan Lộc — nhân vật và chức phận đã dựng từ đó), chấm điểm theo
+ * cách cục đặc biệt + số câu ý nghĩa cổ pháp, lấy các cung nổi bật nhất.
+ */
+export function computeLifeThreads(ls: Laso, maxThreads = 5): LifeThread[] {
+  const CORE = new Set(['Mệnh', 'Quan Lộc']);
+  const out: LifeThread[] = [];
+
+  for (const cung of Object.keys(CUNG_ROLE)) {
+    if (CORE.has(cung)) continue;
+    const r = getPalaceReadout(ls, cung);
+    const ccWeight = r.cachCuc.reduce((n, c) => n + cachCucWeight(String(c.loai || '')), 0);
+    // Cách cục đặc biệt là tín hiệu mạnh nhất; ý nghĩa cổ pháp chỉ phụ trợ để
+    // phân định khi nhiều cung cùng không có cách cục nào.
+    const weight = ccWeight * 3 + Math.min(r.yNghia.length, 8) * 0.4;
+    if (weight <= 0) continue;
+    out.push({
+      cung,
+      role: CUNG_ROLE[cung],
+      weight: Math.round(weight * 10) / 10,
+      chinhTinh: r.chinhTinh,
+      cachCuc: r.cachCuc.map((c) => ({ ten: c.ten, moTa: c.moTa })),
+      yNghia: r.yNghia.slice(0, 6),
+    });
+  }
+
+  out.sort((a, b) => b.weight - a.weight);
+  return out.slice(0, maxThreads);
+}
+
 // ── Tổng hợp ────────────────────────────────────────────────────────────
 export interface PastLifeProfile {
   gender: 'nam' | 'nu';
@@ -842,6 +916,9 @@ export interface PastLifeProfile {
   arc: LifeArc;
   /** Tên cung mà Thân đóng vào (Thân luôn trùng 1 trong 12 cung). */
   thanCungName: string;
+  /** Các tuyến đời phụ (hôn nhân, con cái, bạn bè, bệnh tật…) quét từ cách cục
+   * cả 12 cung — để truyện không chỉ xoay quanh công việc. */
+  threads: LifeThread[];
   /** Readout 6 cung dùng dựng nhân vật. */
   readouts: {
     menh: PhuTheReadout;
@@ -871,6 +948,7 @@ export function computePastLife(ls: Laso, gender: 'nam' | 'nu', era: Era = ERAS[
     characterName: pickCharacterName(ls, gender, era),
     occupation: computeOccupation(ls, gender),
     arc: computeLifeArc(ls),
+    threads: computeLifeThreads(ls),
     thanCungName,
     readouts: {
       menh: getPalaceReadout(ls, 'Mệnh'),
@@ -951,6 +1029,34 @@ export function formatCharacterForLLM(profile: PastLifeProfile): string {
   lines.push(block('CUNG TÀI BẠCH', R.taiBach, 'gia cảnh, cách kiếm sống, giàu nghèo'));
   lines.push(block('CUNG PHÚC ĐỨC', R.phucDuc, 'xuất thân, phúc phần tổ tiên, kết cục tinh thần'));
   lines.push(block('CUNG THIÊN DI', R.thienDi, 'không gian sống: kinh thành, biên ải, tha hương hay ở quê'));
+
+  // Các tuyến đời NGOÀI công danh. Sáu block ở trên đều xoay quanh bản thân —
+  // công danh — tiền bạc, nên nếu chỉ đưa từng ấy thì truyện dồn hết vào công
+  // việc. Khối này quét cách cục cả 12 cung, lấy những cung có tín hiệu mạnh
+  // nhất (hôn nhân, con cái, anh em, bạn bè, bệnh tật, nhà cửa, cha mẹ...) để
+  // truyện có đời sống chứ không chỉ có sự nghiệp.
+  const printed = new Set(['Mệnh', 'Quan Lộc', 'Tài Bạch', 'Phúc Đức', 'Thiên Di', profile.thanCungName]);
+  if (profile.threads.length) {
+    const t = profile.threads
+      .map((th) => {
+        const seg: string[] = [`• ${th.cung.toUpperCase()} — ${th.role}`];
+        if (printed.has(th.cung)) {
+          seg.push('  (dữ liệu chi tiết đã ghi ở khối cung phía trên)');
+        } else {
+          seg.push(`  Sao: ${th.chinhTinh.length ? th.chinhTinh.join(', ') : 'vô chính diệu'}`);
+          if (th.yNghia.length) seg.push(`  Ý nghĩa cổ pháp: ${th.yNghia.join(' | ')}`);
+        }
+        if (th.cachCuc.length)
+          seg.push(`  Cách cục đặc biệt: ${th.cachCuc.map((c) => `${c.ten} — ${c.moTa}`).join(' | ')}`);
+        return seg.join('\n');
+      })
+      .join('\n');
+    lines.push(
+      'CÁC TUYẾN ĐỜI NGOÀI CÔNG DANH (xếp theo mức độ nổi bật trong lá số này — ' +
+        'MỖI tuyến phải xuất hiện ít nhất một lần trong 5 hồi):\n' +
+        t,
+    );
+  }
 
   if (profile.napAm) lines.push(`Nạp âm: ${profile.napAm}${profile.cuc ? ` · ${profile.cuc}` : ''}`);
   return lines.join('\n\n');
