@@ -110,6 +110,7 @@
         <div class="cdvc-card" id="card" style="display:none">
           <div class="cdvc-imgwrap">
             <img id="resultImg" alt="Chân dung người phối ngẫu">
+            <div id="imgLoadStatus" style="display:none;margin-top:8px;font-size:12.5px;color:var(--text-lt);text-align:center"></div>
             <div class="cdvc-actions">
               <button class="btn-submit" onclick="downloadResult()">⬇ Tải Ảnh</button>
               <button class="btn-submit" style="background:transparent;color:var(--navy);border:1.5px solid var(--navy)" onclick="regenerate()">↻ Vẽ Lại</button>
@@ -169,6 +170,36 @@ const CDVC_STEPS = [
   { label: 'AI đang vẽ chân dung', ms: 0 },
 ];
 let _loadingCtl = null;
+let _imgRetryTimer = null;
+
+// Ảnh vừa upload lên Supabase Storage đôi khi tải chậm/đứng (mạng yếu hoặc độ
+// trễ lan truyền của storage) — <img src> mặc định không có onerror/timeout
+// nên trước đây lỗi này hiện ra là 1 khung trắng đứng im, không có phản hồi
+// gì (Henry báo cáo). Nay: theo dõi onload/onerror + timeout 6s, hiện thông
+// báo kèm nút "Tải lại" nếu ảnh chưa load xong — không tự ý hủy request đang
+// tải dở (chỉ đặt lại src khi user bấm Tải lại, tránh phá tải chậm nhưng vẫn
+// đang chạy).
+function setResultImage(url) {
+  const img = document.getElementById('resultImg');
+  const status = document.getElementById('imgLoadStatus');
+  const showWaiting = () => {
+    if (!status) return;
+    status.innerHTML = 'Ảnh đang tải, có thể hơi chậm — vui lòng đợi hoặc <button type="button" class="btn-submit" style="padding:2px 10px;font-size:12px;margin-left:4px" onclick="retryResultImage()">Tải lại</button>';
+    status.style.display = 'block';
+  };
+  const hideWaiting = () => { if (status) status.style.display = 'none'; };
+  clearTimeout(_imgRetryTimer);
+  img.onload = () => { hideWaiting(); clearTimeout(_imgRetryTimer); };
+  img.onerror = () => { showWaiting(); };
+  img.src = url;
+  _imgRetryTimer = setTimeout(() => {
+    if (!img.complete || img.naturalWidth === 0) showWaiting();
+  }, 6000);
+}
+function retryResultImage() {
+  if (!_resultImgUrl) return;
+  setResultImage(_resultImgUrl + (_resultImgUrl.indexOf('?') >= 0 ? '&' : '?') + 'retry=' + Date.now());
+}
 
 TuviForm.render('tvf-container', { onSubmit: analyze, submitLabel: 'Vẽ Chân Dung →', mode: 'full', showSample: false });
 
@@ -196,6 +227,7 @@ async function _doGenerate(d) {
   document.getElementById('card').style.display = 'none';
   document.getElementById('phuTheBlock').style.display = 'none';
   document.getElementById('luanGiaiBlock').style.display = 'none';
+  document.getElementById('imgLoadStatus').style.display = 'none';
   document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDVC_STEPS);
   _loadingCtl.start();
@@ -213,7 +245,7 @@ async function _doGenerate(d) {
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
 
     _resultImgUrl = data.imageUrl;
-    document.getElementById('resultImg').src = data.imageUrl;
+    setResultImage(data.imageUrl);
     document.getElementById('descTitle').textContent = data.spouseGender === 'nu' ? 'Người Vợ' : 'Người Chồng';
     document.getElementById('descText').textContent = data.description;
     const meetingBlock = document.getElementById('meetingBlock');
