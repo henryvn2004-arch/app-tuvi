@@ -253,6 +253,107 @@ bật; khi bật, cùng logic, chỉ khác bước cuối áp dụng thật (pre
 
 ---
 
+## 🏯 Tool mới — "Chân Dung Tiền Kiếp" (2026-07-26, PR #298)
+
+**Branch:** `claude/viral-use-cases-brainstorm-8zoydi`
+
+Xuất phát từ phiên brainstorm "làm gì để viral" (Henry: tool Chân Dung Vợ Chồng
+có vẻ viral được, còn use case nào nữa?). Chốt làm **Chân Dung Tiền Kiếp** trước
+vì tái dùng ~90% hạ tầng tool vợ chồng.
+
+### ⚠️ ĐỊNH VỊ — đọc trước khi sửa bất cứ thứ gì trong tool này
+Tử Vi Đẩu Số **KHÔNG có cung nào nói về tiền kiếp** (luân hồi là khái niệm Phật
+giáo, không thuộc mệnh lý Trung Hoa) — Henry hỏi thẳng điều này lúc brainstorm.
+Tool KHÔNG bói tiền kiếp. Điểm tựa thật: toàn bộ từ vựng gốc của Tử Vi là từ
+vựng **triều đình phong kiến** (cách cục tên "Quân Thần Khánh Hội", "Tướng Tinh
+Đắc Địa"; diễn giải cổ ghi thẳng "công hầu khanh tướng", "trấn thủ biên ải").
+Luận tử vi cho người hiện đại vốn là **dịch xuôi** thứ ngôn ngữ đó (Thất Sát →
+"nghề áp lực cao"); tool này bỏ bước dịch đi, trả lá số về đúng bối cảnh cổ thư
+viết ra nó. Bối cảnh chốt: **Trung Hoa cổ** (Henry chọn — model gen ảnh cổ trang
+Trung Hoa tốt hơn hẳn cổ trang Việt). Disclaimer có ở cả 2 trang + FAQ schema.
+
+### Kiến trúc
+- **`lib/engine/past-life.ts`** (THUẦN deterministic, không gọi LLM):
+  - **Chức phận**: bảng tra cứng 14 chính tinh tại **Quan Lộc** → nghề thời xưa
+    (Thất Sát → tướng trấn biên, Thiên Cơ → mưu sĩ, Cự Môn → biện sĩ, Thiên Đồng
+    → thầy thuốc…), mỗi nghề kèm `attireEn` (trang phục) + `backdropEn` (bối cảnh
+    nền) cho prompt ảnh — đây là thứ khiến ảnh TRÔNG đúng nghề. Quan Lộc vô chính
+    diệu → mượn chính tinh cung xung chiếu theo cổ pháp. Phụ tinh + tứ hóa tại
+    Quan Lộc chỉ thêm *sắc thái*, KHÔNG đổi nghề gốc.
+  - **Dòng đời**: 9 đại vận → 5 hồi gộp cố định `[ĐV1-2][3-4][5-6][7-8][9]` theo
+    THỜI GIAN, rồi mới GẮN NHÃN `dinh-cao`/`bien-co` vào đúng hồi chứa đại vận có
+    `scoring.tong` cao nhất/thấp nhất (2 cái rơi cùng hồi → `thang-tram`). **CỐ Ý
+    không cố định "hồi 3 = đỉnh cao"** — ép thế thì mọi lá số ra cùng một hình
+    dáng truyện; để nhãn tự trôi thì mỗi người ra một arc thật khác nhau.
+  - **Tuổi vẽ ảnh**: neo vào đại vận cao điểm nhất **trong quãng đời trưởng thành**
+    (`tuoiStart < 56`) rồi kẹp 25–55. Bản đầu neo vào đỉnh cao TOÀN CỤC → test 8 lá
+    số thấy 4/8 chạm trần 55 vì đỉnh cao hay rơi vào 86–95 tuổi (vẽ cụ già hỏng cả
+    bức). Đỉnh cao toàn cục vẫn giữ nguyên cho phần TRUYỆN.
+- **`lib/engine/portrait.ts`** — tách `computeMorphologyForPalace(ls, cungName)`
+  ra khỏi `computeSpouseMorphology` (trước cố định cứng `'Phu Thê'`) để dùng cho
+  cung **Mệnh**. Thuật toán rank/merge sao KHÔNG đổi; wrapper cũ giữ nguyên chữ ký
+  → tool vợ chồng không đổi hành vi. Tương tự `getPalaceReadout` /
+  `getPalaceChinhTinhElement` / `formatPalaceReadoutForLLM`.
+- **`app/api/chan-dung-tien-kiep/route.ts`** — **2 PHA** (`phase=story|image`):
+  truyện (~20s) và ảnh (~60s) độc lập nhau nên client gọi SONG SONG, truyện hiện
+  trước để đọc, ảnh chèn vào khung chờ sau. Khác tool vợ chồng (1 request tuần tự,
+  người dùng nhìn màn hình trắng cả phút) — với tool nhắm viral thì đó là chỗ rơi
+  rụng lớn nhất. Giá lá số bị tính 2 lần (deterministic, vài chục ms — không đáng).
+- **`lib/agent/past-life-story.ts`** — mở đầu BẮT BUỘC là đoạn **"soi gương"** nói
+  về CHÍNH người đọc (không phải nhân vật), gọi đích danh ≥2 chi tiết thật của lá
+  số, nêu cả mạnh lẫn yếu, rồi mới bắc cầu sang truyện. Nếu người đọc không thấy
+  mình ở đoạn này thì cả phần truyện thành chuyện người dưng. Cấm: đặt tên riêng
+  cho nhân vật (tránh trùng nhân vật lịch sử), nhắc nhân vật/triều đại có thật, mô
+  tả cái chết trực diện, nêu điểm số trong phần truyện.
+- **Trang**: `public/tools/chan-dung-tien-kiep.html` (standalone/SEO) +
+  `public/app-chan-dung-tien-kiep.html` (shell). Shell gọi `Shell.setShareable`
+  dựng trang `/ket-qua` — **người xem link đọc trọn ảnh + truyện KHÔNG mất Lượng**,
+  chỉ người sinh mới trả phí (Henry chốt mô hình trả phí toàn bộ; đây là cách vá
+  đường lan mà không đụng giá).
+- **Đăng ký**: `next.config.mjs` rewrite `/app/chan-dung-tien-kiep`; `shell.js`
+  TOOLS (nhóm Tử Vi, icon mới `temple`) + `app-home.html` GROUPS (thêm icon
+  `temple` vào map riêng của file này) + `cong-cu.html` TOOL_URLS +
+  `tuvi-paywall.js` PRODUCTS/TOOL_TYPE. Bump `shell.js?v=45` toàn bộ trang shell.
+- **Cost tracking (D3 margin)**: `llmTextFull` + `logLlmUsage` cho CẢ 2 lượt LLM,
+  `logImageUsage` cho lượt sinh ảnh — `tool_id='chan-dung-tien-kiep'`.
+
+### Migration
+`_patches/migration-chan-dung-tien-kiep.sql` — ✅ **ĐÃ CHẠY PROD** qua Supabase MCP
+(verify: `past_life_portraits` 8 cột / 2 index / 2 policy / RLS bật; bucket
+`portraits` dùng lại của tool vợ chồng). **⚠️ Row `tool_pricing` đang
+`enabled=false` CÓ CHỦ ĐÍCH** — `cong-cu.html` và `tuvi-paywall.js` đều lọc
+`enabled=eq.true`, bật trước khi deploy thì tool hiện trên trang Công Cụ mà trang
+`/tools/chan-dung-tien-kiep.html` chưa tồn tại → 404 cho người dùng thật. Bật sau
+khi deploy xong:
+```sql
+UPDATE public.tool_pricing SET enabled = true, updated_at = now()
+ WHERE tool_id = 'chan-dung-tien-kiep';
+```
+
+### Verify
+`npx tsc --noEmit` 0 lỗi · `npm run lint` 0 lỗi (72 warning pre-existing) ·
+`npx prettier --check` sạch · `node --check` mọi script block · **engine test 8 lá
+số thật** (chức phận/5 hồi/nhãn đỉnh-đáy/mốc tuổi/tuổi vẽ đều hợp lệ, 8 arc khác
+nhau) · Playwright render đúng cả 2 trang.
+
+### CÒN LẠI
+- Bật `enabled=true` sau deploy (câu SQL ở trên).
+- Henry gen thử vài lá số trên prod → soi chất lượng ảnh cổ trang + văn phong
+  truyện. Hai chỗ nhiều khả năng phải tinh chỉnh: bảng tra 14 sao → nghề
+  (`past-life.ts`) và độ dài/giọng 5 hồi (`past-life-story.ts`). Cả hai sửa gọn,
+  không đụng kiến trúc.
+
+### 💡 Ý tưởng viral khác đã brainstorm (chưa làm, Henry có thể chọn tiếp)
+Thẻ Định Mệnh + độ hiếm lá số (lớp share gắn được vào MỌI tool, chi phí LLM ≈ 0) ·
+chân dung con cái tương lai (cung Tử Tức) · "bạn ở đỉnh cao vận mệnh" dùng ảnh
+THẬT qua flux-kontext-pro · duyên nợ tiền kiếp với người ấy · biệt đội hội bạn
+thân (mỗi post kéo 5 người) · xem sếp/crush/người yêu cũ · đếm ngược ngày gặp
+chân ái · "nếu bạn sinh giờ khác" · roast mode. Cơ chế lan truyền còn thiếu:
+ảnh tải về 9:16 có watermark, OG image riêng từng kết quả, gate bằng share
+(`referral_code` đã có sẵn), gắn `utm_campaign` cho từng tool.
+
+---
+
 ## 🆕 Tool mới — "Chân Dung Vợ Chồng" (2026-07-24, CHƯA COMMIT/CHƯA DEPLOY)
 
 Vẽ chân dung người phối ngẫu suy từ cung Phu Thê trong lá số (OpenAI `gpt-image-1`
