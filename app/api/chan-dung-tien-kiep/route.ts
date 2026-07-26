@@ -108,14 +108,14 @@ async function handleStory(birth: BirthParams, eraId?: string) {
 
   const parsed = parseJSON(raw) as {
     biDanh?: string;
-    soiGuong?: string;
+    moTaNhanVat?: string;
     acts?: StoryAct[];
     ketLuan?: string;
   } | null;
   // biDanh (vế thơ) là phần TRANG TRÍ — thiếu vẫn hiển thị được vì danh xưng
-  // chính (chức phận) do engine chốt, không phụ thuộc LLM. Chỉ soiGuong + acts
+  // chính (chức phận) do engine chốt, không phụ thuộc LLM. Chỉ moTaNhanVat + acts
   // là bắt buộc.
-  if (!parsed?.soiGuong || !Array.isArray(parsed.acts) || !parsed.acts.length) {
+  if (!parsed?.moTaNhanVat || !Array.isArray(parsed.acts) || !parsed.acts.length) {
     return err('Lỗi phân tích kết quả AI.', 500);
   }
 
@@ -141,7 +141,7 @@ async function handleStory(birth: BirthParams, eraId?: string) {
     danhXung: profile.occupation.title,
     biDanh: String(parsed.biDanh || ''),
     characterName: profile.characterName,
-    soiGuong: parsed.soiGuong,
+    moTaNhanVat: parsed.moTaNhanVat,
     acts,
     ketLuan: parsed.ketLuan || '',
     occupation: {
