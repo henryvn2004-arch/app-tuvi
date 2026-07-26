@@ -27,17 +27,30 @@ export const PAST_LIFE_STORY_SYSTEM_PROMPT = `Bạn vừa là nhà luận giải
 BỐI CẢNH SẢN PHẨM (hiểu đúng để không viết sai bản chất):
 Đây KHÔNG phải bói tiền kiếp. Tử Vi Đẩu Số không có cung nào nói về kiếp trước. Cái đang làm là: toàn bộ từ vựng gốc của Tử Vi vốn là từ vựng triều đình phong kiến (cách cục mang tên "Quân Thần Khánh Hội", "Tướng Tinh Đắc Địa"; diễn giải cổ ghi thẳng "công hầu khanh tướng", "trấn thủ biên ải"). Khi luận tử vi cho người hiện đại, ta vẫn đang dịch xuôi thứ ngôn ngữ đó sang đời sống hôm nay. Ở đây ta bỏ bước dịch: đặt CHÍNH lá số này vào bối cảnh TRUNG HOA CỔ ĐẠI mà cổ thư viết ra nó, xem con người ấy sẽ là ai và sống một đời thế nào.
 
-VĂN PHONG: trầm, gọn, có sức nặng — như sử ký kể lại một đời người. Văn xuôi liên tục. KHÔNG bullet, KHÔNG emoji, KHÔNG tiêu đề con bên trong đoạn. Tiếng Việt chuẩn mực, không sáo rỗng, không hoa mỹ rỗng tuếch.
+VAI TRÒ: bạn đang VIẾT TRUYỆN, không phải luận giải lá số. Người đọc thừa biết nội dung dựng từ lá số của họ — nói lại điều đó trong lời văn chỉ làm hỏng truyện.
 
-QUY TẮC TỐI THƯỢNG — BÁM DỮ LIỆU:
-- Chức phận nhân vật ĐÃ ĐƯỢC CHỐT trong dữ liệu. TUYỆT ĐỐI không đổi sang nghề khác, không "thăng cấp" cho oai.
-- Dòng đời đã được chia sẵn thành các HỒI, mỗi hồi ghi rõ đây là giai đoạn bình thường, ĐỈNH CAO hay BIẾN CỐ. Phải viết ĐÚNG theo nhãn đó: hồi gắn nhãn đỉnh cao thì đó là lúc huy hoàng nhất đời; hồi gắn nhãn biến cố thì đó là lúc gãy đổ nặng nhất. KHÔNG được tự đảo thứ tự, KHÔNG tự dời đỉnh cao sang hồi khác cho "hợp truyện".
-- Mỗi hồi đều kèm dữ liệu thật (cung, chính tinh, các câu luận thuận/nghịch/cảnh báo). Chi tiết trong truyện phải mọc ra từ những câu đó, không bịa sự kiện không có căn cứ nào.
-- CẤM nêu điểm số, cấm nhắc "điểm vận", cấm nhắc tên cung/tên sao trong phần TRUYỆN (các hồi) — truyện phải đọc như truyện. Tên sao/cách cục CHỈ được gọi tên trong phần "soi gương".
+VĂN PHONG: trầm, gọn, có sức nặng — như một thiên truyện kể lại đời người. Văn xuôi liên tục. KHÔNG bullet, KHÔNG emoji, KHÔNG tiêu đề con bên trong đoạn. Tiếng Việt chuẩn mực, không sáo rỗng.
+
+CẤM TUYỆT ĐỐI MỌI THUẬT NGỮ TỬ VI TRONG PHẦN CHỮ TRẢ VỀ (đây là luật quan trọng nhất):
+- Cấm nhắc tên sao (Thất Sát, Cự Môn, Tham Lang, Hóa Kỵ...), tên cung (cung Mệnh, Quan Lộc, Phúc Đức...), tên cách cục, "đại vận", "tiểu vận", "lá số", "tử vi", "mệnh lý", "chính tinh", "sát tinh".
+- Cấm nêu điểm số dưới mọi hình thức.
+- Dữ liệu lá số bên dưới là NGUYÊN LIỆU để bạn hiểu con người và dòng đời nhân vật — hãy CHUYỂN HÓA nó thành tính cách, hoàn cảnh, sự kiện. Ví dụ: thay vì "Cự Môn hãm nên hay gặp thị phi", hãy viết "lời nói của ông sắc tới mức mỗi lần mở miệng là thêm một kẻ ghi thù".
+
+QUY TẮC BÁM DỮ LIỆU:
+- TÊN và CHỨC PHẬN nhân vật ĐÃ ĐƯỢC CHỐT. Dùng ĐÚNG tên đã cho, KHÔNG đặt tên khác. TUYỆT ĐỐI không đổi sang nghề khác, không "thăng cấp" cho oai.
+- Dòng đời đã chia sẵn thành các HỒI, mỗi hồi ghi rõ là giai đoạn bình thường, ĐỈNH CAO hay BIẾN CỐ. Viết ĐÚNG theo nhãn đó: hồi đỉnh cao là lúc huy hoàng nhất đời; hồi biến cố là lúc gãy đổ nặng nhất. KHÔNG tự đảo thứ tự, KHÔNG dời đỉnh cao sang hồi khác cho "hợp truyện".
+- Chi tiết trong truyện phải mọc ra từ các câu luận thuận/nghịch/cảnh báo của hồi đó, không bịa sự kiện không có căn cứ nào.
+
+BỐI CẢNH — PHẢI NHẤT QUÁN TỪ ĐẦU TỚI CUỐI:
+- Bối cảnh cụ thể được chỉ định trong phần dữ liệu bên dưới. Trong bối cảnh đó, chọn MỘT khung duy nhất (vùng đất nào, đang thời bình hay loạn lạc) rồi GIỮ NGUYÊN suốt 5 hồi — cùng địa danh, cùng thể chế, cùng tuyến nhân vật phụ. Không được hồi này ở biên ải phương bắc, hồi sau nhảy sang phủ chúa phương nam mà không có lý do trong truyện.
+- KHÔNG nhắc bất kỳ nhân vật lịch sử/triều đại CÓ THẬT nào.
+
+ĐIỂM NHẤN — truyện phải có chỗ để nhớ:
+- Mỗi hồi phải có ÍT NHẤT MỘT cảnh cụ thể, nhìn thấy được (một hành động, một vật, một câu nói, một hình ảnh) — không được chỉ tóm tắt suông kiểu "ông trải qua nhiều thăng trầm".
+- Cả truyện phải có MỘT khoảnh khắc bước ngoặt rõ ràng, đặt đúng vào hồi đỉnh cao hoặc hồi biến cố, và các hồi sau phải vọng lại nó.
+- Nên có một CHI TIẾT XUYÊN SUỐT (một vật, một người, một thói quen) xuất hiện lại ở nhiều hồi để nối cả đời người thành một khối.
 
 CẤM TUYỆT ĐỐI:
-- KHÔNG đặt họ tên riêng cho nhân vật. Chỉ gọi bằng chức phận ("vị tướng quân", "người thầy thuốc ấy", "ông"). Lý do: đặt tên dễ trùng nhân vật lịch sử có thật.
-- KHÔNG nhắc tới bất kỳ nhân vật lịch sử/triều đại có thật nào (không Tần Thủy Hoàng, không Gia Cát Lượng, không nhà Đường/Tống cụ thể...). Bối cảnh để chung chung: "triều đình", "kinh thành", "biên ải".
 - KHÔNG mô tả cái chết một cách trực diện, bi thảm hay rùng rợn. Nếu dữ liệu cho thấy kết cục xấu, viết theo hướng "cái gì còn lại sau khi người ấy đi qua" — lặng lẽ, có sức nặng, KHÔNG hù dọa.
 - KHÔNG khẳng định đây là kiếp trước có thật của người đọc. Đây là một phóng chiếu.
 
@@ -46,7 +59,10 @@ ${XUNG_HO_RULE}`;
 /** Prompt viết truyện — nhận profile đã tính sẵn (deterministic). */
 export function buildPastLifeStoryPrompt(profile: PastLifeProfile): string {
   const genderWord = profile.gender === 'nu' ? 'NỮ' : 'NAM';
-  return `=== HỒ SƠ NHÂN VẬT (suy từ lá số, đã chốt) ===
+  return `=== BỐI CẢNH (đã chốt, KHÔNG được đổi) ===
+${profile.era.storySetting}
+
+=== HỒ SƠ NHÂN VẬT (suy từ lá số, đã chốt) ===
 Giới tính nhân vật: ${genderWord} (giữ đúng giới tính của người xem lá số).
 
 ${formatCharacterForLLM(profile)}
@@ -56,17 +72,17 @@ ${formatArcForLLM(profile.arc)}
 
 === NHIỆM VỤ ===
 Trả về JSON hợp lệ, KHÔNG kèm giải thích ngoài JSON:
-{"danhXung":"...","soiGuong":"...","acts":[{"title":"...","text":"..."}],"ketLuan":"..."}
+{"biDanh":"...","soiGuong":"...","acts":[{"title":"...","text":"..."}],"ketLuan":"..."}
 
-1) "danhXung": danh xưng của nhân vật, dạng "<Chức phận> — <một vế ngắn gợi bi kịch hoặc cốt cách>". Tối đa 14 chữ, KHÔNG có họ tên riêng. Ví dụ hình thức (KHÔNG sao chép nội dung): "Tướng quân trấn ải — người giữ được biên cương mà không giữ nổi lòng vua". Vế sau phải rút từ dữ liệu thật của lá số này, không phải câu chung chung dùng cho ai cũng được.
+1) "biDanh": MỘT vế ngắn tối đa 12 chữ, đứng sau chức phận đã chốt để gợi bi kịch hoặc cốt cách riêng của nhân vật này. KHÔNG lặp lại tên chức phận, KHÔNG chứa tên nhân vật. Ví dụ hình thức (KHÔNG chép nội dung): "người giữ được biên ải mà không giữ nổi lòng vua". Phải rút từ dữ liệu thật của lá số này, không phải câu dùng cho ai cũng đúng.
 
-2) "soiGuong": 3-4 câu, nói về CHÍNH NGƯỜI ĐỌC ở hiện tại (xưng "bạn"), KHÔNG phải nhân vật. Đây là phần quan trọng nhất — nếu người đọc không thấy mình trong đây thì cả phần truyện phía sau thành chuyện người dưng. Rút từ cung Mệnh và cung Thân: tính khí thật, cách hành xử, và MỘT nỗi khổ tâm cụ thể mà kiểu người này hay gặp. Phải gọi ĐÍCH DANH ít nhất 2 chi tiết thật của lá số (tên chính tinh hoặc tên cách cục) — cấm nói chung chung kiểu "bạn là người có chí lớn". Nêu cả mặt mạnh lẫn mặt yếu, không tâng bốc. Câu CUỐI phải là câu bắc cầu sang truyện, đại ý: chính cái cốt cách đó, nếu sinh vào thời xưa, sẽ thành con người thế nào.
+2) "soiGuong": 3-4 câu nói về CHÍNH NGƯỜI ĐỌC ở hiện tại (xưng "bạn"), KHÔNG phải nhân vật. Đây là phần quan trọng nhất — nếu người đọc không thấy mình trong đây thì cả phần truyện phía sau thành chuyện người dưng. Mô tả cho ĐÚNG và CỤ THỂ: tính khí thật, một cách hành xử quen thuộc, và MỘT nỗi khổ tâm mà kiểu người này hay gặp; nêu cả mặt mạnh lẫn mặt yếu, không tâng bốc. Viết bằng NGÔN NGỮ ĐỜI THƯỜNG — TUYỆT ĐỐI không nhắc tên sao, tên cung, tên cách cục hay bất kỳ thuật ngữ tử vi nào (người đọc đã biết nguồn dữ liệu, nói ra chỉ làm đoạn văn thành bản luận giải). Câu CUỐI bắc cầu sang truyện, đại ý: chính cái cốt cách đó, nếu sinh vào thời xưa, sẽ thành con người thế nào.
 
 3) "acts": ĐÚNG ${profile.arc.acts.length} phần tử, theo ĐÚNG thứ tự các hồi đã cho. Mỗi phần tử:
    - "title": 3-7 chữ, gợi được nội dung hồi đó (vd "Đứa trẻ trong quân doanh").
-   - "text": 90-140 từ văn xuôi, ngôi thứ ba, kể về nhân vật. Bám sát dữ liệu của hồi đó. Hồi gắn nhãn ĐỈNH CAO phải rõ là lúc rực rỡ nhất; hồi gắn nhãn BIẾN CỐ phải rõ là lúc gãy đổ nặng nhất; hồi "vừa đỉnh cao vừa biến cố" thì viết cả hai chiều trong cùng một giai đoạn. Các hồi phải nối được vào nhau thành một đời liền mạch, không rời rạc.
+   - "text": 90-140 từ văn xuôi, ngôi thứ ba, gọi nhân vật bằng ĐÚNG tên đã chốt (dùng tên ở lần nhắc đầu mỗi hồi, sau đó có thể dùng đại từ). Bám dữ liệu của hồi đó nhưng CHUYỂN HÓA thành cảnh và sự kiện, không giải thích. Hồi gắn nhãn ĐỈNH CAO phải rõ là lúc rực rỡ nhất; hồi gắn nhãn BIẾN CỐ phải rõ là lúc gãy đổ nặng nhất; hồi "vừa đỉnh cao vừa biến cố" thì viết cả hai chiều trong cùng giai đoạn. Mỗi hồi phải có ít nhất một cảnh cụ thể nhìn thấy được. Các hồi nối vào nhau thành một đời liền mạch, cùng một bối cảnh, có một chi tiết xuyên suốt lặp lại.
 
-4) "ketLuan": 40-70 từ. Khép lại: cái cốt cách ấy đi qua một đời như vậy, và nó vẫn còn trong người đọc hôm nay dưới dạng nào (điểm mạnh nào, vết thương nào). Nhẹ nhàng, không phán chắc, không hù dọa, không hứa hẹn tương lai.
+4) "ketLuan": 40-70 từ. Khép lại: cái cốt cách ấy đi qua một đời như vậy, và nó còn lại trong người đọc hôm nay dưới dạng nào (điểm mạnh nào, vết thương nào). Ngôn ngữ đời thường, không thuật ngữ tử vi, không phán chắc, không hù dọa, không hứa hẹn tương lai.
 
 LƯU Ý GIỚI TÍNH: nhân vật là ${genderWord}. Nếu chức phận đã chốt hiếm gặp ở giới tính này trong xã hội phong kiến, ĐỪNG đổi nghề — hãy để chính điều đó thành một phần của câu chuyện (con đường khó hơn, phải giấu mình, phải chứng minh nhiều hơn người khác).`;
 }
@@ -74,7 +90,7 @@ LƯU Ý GIỚI TÍNH: nhân vật là ${genderWord}. Nếu chức phận đã ch
 // ── 2. Ảnh ──────────────────────────────────────────────────────────────
 export const PAST_LIFE_IMAGE_SYSTEM_PROMPT =
   'Bạn là art director cho một bức chân dung điện ảnh lịch sử (cinematic historical portrait photography, ' +
-  'bối cảnh Trung Hoa cổ đại). Bạn nhận (A) bộ đặc điểm hình thể suy từ các sao tại cung Mệnh trong lá số ' +
+  'bối cảnh Á Đông thời phong kiến). Bạn nhận (A) bộ đặc điểm hình thể suy từ các sao tại cung Mệnh trong lá số ' +
   'Tử Vi và (B) chức phận của nhân vật. Nhiệm vụ: viết MỘT đoạn tiếng ANH liền mạch 70-110 từ mô tả gương ' +
   'mặt và thần thái nhân vật, để ghép vào một prompt sinh ảnh lớn hơn.\n' +
   'BẮT ĐẦU bằng đúng 1 câu tổng quan về khí chất/thần thái, rồi mới đi vào nét cụ thể (face shape, brow, ' +
@@ -113,12 +129,13 @@ export function buildFinalPastLifeImagePrompt(
   const ageLow = Math.max(20, age - 4);
   const ageHigh = age + 4;
   const genderWord = profile.gender === 'nu' ? 'woman' : 'man';
+  const era = profile.era;
 
   return (
-    `A cinematic, ultra-realistic historical portrait photograph of an East Asian ${genderWord} who appears to be ` +
-    `roughly ${ageLow}-${ageHigh} years old, set in ancient imperial China. ` +
-    `Wearing ${o.attireEn}. Historically plausible ancient Chinese costume and grooming, authentic period detail, ` +
-    'no modern clothing, no modern haircut, no anachronistic objects. ' +
+    `A cinematic, ultra-realistic historical portrait photograph of a ${genderWord} with ${era.ethnicityEn}, who appears to be ` +
+    `roughly ${ageLow}-${ageHigh} years old, set in ${era.settingEn}. ` +
+    `Wearing ${o.attireEn}. ${era.extraEn} Historically plausible pre-modern East Asian court costume and grooming, ` +
+    'authentic period detail, no modern clothing, no modern haircut, no anachronistic objects. ' +
     `Background: ${o.backdropEn}. ` +
     `${faceDescriptionEn} ` +
     'Photographed like a still from a high-budget historical film: professional cinematography, 85mm lens, ' +

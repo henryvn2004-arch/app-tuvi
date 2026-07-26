@@ -28,12 +28,73 @@ interface StarObj {
   brightness?: string;
 }
 
+
+// ── Bối cảnh (era) ──────────────────────────────────────────────────────
+// Henry chọn thêm Việt Nam cổ, và chỉ ra một điều làm việc này rẻ hẳn: trang
+// phục cung đình Việt xưa vốn chịu ảnh hưởng nặng của Trung Hoa nên KHÔNG cần
+// bộ mô tả riêng — dùng chung `attireEn` của bảng OCCUPATION_BY_STAR cho cả
+// hai bối cảnh. Danh xưng cũng dùng chung luôn: Tể tướng / Thượng thư / Thái y
+// / Quan án / Tướng quân đều là từ Hán-Việt, đúng cho cả triều đình Đại Việt.
+//
+// ĐÁNH ĐỔI ĐÃ BIẾT (Henry chốt: "không cần ghì"): vì không ép các dấu hiệu
+// nhận diện riêng của trang phục Việt (áo giao lĩnh, áo ngũ thân, khăn vấn,
+// mũ cánh chuồn), ảnh bối cảnh Việt Nam nhiều khả năng trông gần giống ảnh
+// bối cảnh Trung Hoa. Nếu sau khi xem ảnh thật thấy cần tách bạch hơn thì chỗ
+// cần sửa là `extraEn` dưới đây, không phải cả bảng nghề.
+export type EraId = 'trung-hoa' | 'viet-nam';
+
+export interface Era {
+  id: EraId;
+  label: string;
+  /** Câu định vị bối cảnh trong prompt ảnh. */
+  settingEn: string;
+  /** Nét mặt/chủng tộc cho prompt ảnh. */
+  ethnicityEn: string;
+  /** Vài dấu hiệu nhẹ để ảnh không trôi hẳn sang bối cảnh kia. */
+  extraEn: string;
+  /** Ràng buộc bối cảnh cho prompt viết truyện. */
+  storySetting: string;
+}
+
+export const ERAS: Record<EraId, Era> = {
+  'trung-hoa': {
+    id: 'trung-hoa',
+    label: 'Trung Hoa cổ',
+    settingEn: 'ancient imperial China',
+    ethnicityEn: 'East Asian (Chinese) facial features',
+    extraEn: 'Classical Chinese imperial aesthetic.',
+    storySetting:
+      'Trung Hoa cổ đại, một triều đại HƯ CẤU không tên. Dùng chữ chung: triều đình, kinh thành, biên ải, hoàng thượng.',
+  },
+  'viet-nam': {
+    id: 'viet-nam',
+    label: 'Việt Nam cổ',
+    settingEn: 'pre-modern Vietnam (Đại Việt), an old Vietnamese imperial capital',
+    ethnicityEn: 'Vietnamese Southeast Asian facial features',
+    extraEn:
+      'Vietnamese imperial aesthetic — court dress of Đại Việt, historically close to Chinese court dress of the same era but in a Vietnamese setting.',
+    storySetting:
+      'Đại Việt thời phong kiến, một triều đại HƯ CẤU không tên. Dùng chữ chung: triều đình, kinh thành, biên ải, bệ hạ. Địa danh nếu có phải là địa danh hư cấu mang âm hưởng Việt, KHÔNG dùng tên triều đại/nhân vật lịch sử Việt Nam có thật (không Lý, Trần, Lê, Nguyễn, không Trần Hưng Đạo, không Nguyễn Trãi).',
+  },
+};
+
+export function resolveEra(id?: string): Era {
+  return ERAS[(id as EraId) in ERAS ? (id as EraId) : 'trung-hoa'];
+}
+
 // ── Chính tinh → chức phận thời xưa ─────────────────────────────────────
 // Nguồn: chính diễn giải cổ pháp của từng chính tinh (Thất Sát = tướng ở
 // biên ải, Cự Môn = khẩu thiệt/biện luận, Thiên Cơ = mưu trí...). CHỦ ĐỘNG
 // giữ dạng BẢNG TRA CỨNG thay vì để LLM tự nghĩ nghề — cùng triết lý với
 // portrait-stars.json: phần "suy ra cái gì" phải deterministic, LLM chỉ được
 // viết văn trên dữ liệu đã chốt.
+//
+// `title` CỐ Ý ngắn và cụ thể (Tể tướng / Thái y / Quan án / Tướng quân trấn
+// ải…) thay vì mô tả dài kiểu "người nắm giữ luật lệ mà lòng không dễ lay
+// chuyển" — Henry test prod xong phản hồi: thứ người dùng KỂ LẠI cho bạn bè là
+// một danh từ chức phận ("tao kiếp trước làm Tể tướng"), mô tả dài thì đọc
+// xong không nhớ nổi để mà kể. Vế thơ/bi kịch vẫn có, nhưng do LLM sinh riêng
+// (`biDanh`) và hiển thị nhỏ bên dưới, không trộn vào danh xưng.
 //
 // `attireEn` đi thẳng vào prompt ảnh — đây là thứ khiến bức chân dung TRÔNG
 // đúng nghề (giáp trụ vs áo the vs áo quan), nên phải cụ thể chứ không tả
@@ -52,98 +113,98 @@ export interface Occupation {
 
 const OCCUPATION_BY_STAR: Record<string, Occupation> = {
   'Tử Vi': {
-    title: 'Hoàng thân quốc thích',
+    title: 'Vương gia',
     domain: 'quyen',
     desc: 'Người mang dòng dõi tôn quý, đứng ở hàng cao nhất trong triều, quen với việc ra lệnh hơn là nhận lệnh.',
     attireEn:
       'an imperial court robe of deep purple and crimson silk with elaborate gold-thread embroidery, a formal jade-inlaid belt and a tall ceremonial headdress',
   },
   'Thiên Phủ': {
-    title: 'Quan coi kho lẫm',
+    title: 'Quan quốc khố',
     domain: 'quyen',
     desc: 'Người nắm giữ kho tàng, tiền lương và vật tư của triều đình — chức không hào nhoáng nhưng ai cũng phải qua tay.',
     attireEn:
       'a senior official’s robe of deep indigo silk with restrained silver-thread trim, a jade belt and a black gauze official’s cap',
   },
   'Thiên Cơ': {
-    title: 'Mưu sĩ',
+    title: 'Quân sư',
     domain: 'van',
     desc: 'Người bày mưu định kế sau lưng chủ soái — không cầm quân nhưng quyết định thắng bại.',
     attireEn:
       'a plain slate-blue scholar’s robe with wide sleeves and a simple cloth headband, holding a closed folding fan',
   },
   'Thái Dương': {
-    title: 'Quan văn hiển đạt',
+    title: 'Thượng thư',
     domain: 'van',
     desc: 'Người đứng giữa công đường, danh tiếng rạng rỡ, tiếng nói vang xa nhưng cũng dễ chói mắt kẻ khác.',
     attireEn:
       'a bright vermilion court official’s robe with a gold-embroidered rank badge on the chest and a black gauze official’s cap',
   },
   'Thái Âm': {
-    title: 'Quan nội chính',
+    title: 'Quan nội đình',
     domain: 'van',
     desc: 'Người lo việc trong, giấy tờ sổ sách, tính toán thầm lặng phía sau — ít ai thấy mặt nhưng thiếu thì rối loạn.',
     attireEn:
       'a soft pale silver-blue silk robe with delicate embroidery, understated and refined, with a simple hairpin',
   },
   'Vũ Khúc': {
-    title: 'Võ quan nắm tài',
+    title: 'Tổng binh',
     domain: 'vo',
     desc: 'Người vừa cầm quân vừa cầm tiền — cứng rắn, thực tế, quyết đoán trong cả trận mạc lẫn tính toán.',
     attireEn:
       'dark lamellar armor worn over a deep-toned robe, a broad leather belt with metal fittings, disciplined and functional',
   },
   'Thiên Đồng': {
-    title: 'Thầy thuốc',
+    title: 'Thái y',
     domain: 'y',
     desc: 'Người chữa bệnh cứu người, sống hiền hòa, hưởng phúc lành hơn là tranh đoạt.',
     attireEn:
       'a simple cream and soft-brown physician’s robe of coarse but clean fabric, with a cloth medicine satchel',
   },
   'Liêm Trinh': {
-    title: 'Quan hình ngục',
+    title: 'Quan án',
     domain: 'quyen',
     desc: 'Người coi việc xét xử, hình phạt, luật lệ — nghiêm khắc, không dễ lay chuyển, dễ chuốc oán.',
     attireEn:
       'a severe black judicial robe with crimson trim and a dark rank insignia, a stiff black official’s cap',
   },
   'Tham Lang': {
-    title: 'Nghệ nhân giang hồ',
+    title: 'Lãng tử giang hồ',
     domain: 'nghe',
     desc: 'Người đa tài đa nghệ, giao du rộng, sống bằng tài khéo và sức hút riêng hơn là bằng chức tước.',
     attireEn:
       'a richly colored layered silk robe of a wandering artisan-merchant, with decorative sash and small ornaments',
   },
   'Cự Môn': {
-    title: 'Biện sĩ',
+    title: 'Trạng sư',
     domain: 'van',
     desc: 'Người sống bằng lời nói — biện luận, dạy học, tranh tụng; sắc bén nhưng cũng vì miệng lưỡi mà mang họa.',
     attireEn:
       'a dark charcoal scholar’s robe with a plain sash and a simple cloth cap, carrying a bamboo scroll',
   },
   'Thiên Tướng': {
-    title: 'Tể phụ cầm ấn',
+    title: 'Tể tướng',
     domain: 'quyen',
     desc: 'Người phụ tá bậc nhất, giữ ấn tín, thay chủ điều hành — trung thành, chỉn chu, quyền lớn mà không phải chủ.',
     attireEn:
       'a formal minister’s robe of deep teal and gold with a ceremonial seal pouch at the waist and a black gauze cap',
   },
   'Thiên Lương': {
-    title: 'Ngự y kiêm quan giám sát',
+    title: 'Gián quan',
     domain: 'y',
-    desc: 'Bậc trưởng thượng được kính trọng, coi việc chữa bệnh và can gián — điềm đạm, cứu người, hay nói lời trái tai.',
+    desc: 'Người giữ việc can gián, nói thẳng điều bề trên không muốn nghe — được kính trọng nhưng cô độc, hay chuốc ghét vì lẽ phải.',
     attireEn:
       'an elder’s robe in muted earth tones with a long grey beard, a plain wooden hairpin and a scholarly bearing',
   },
   'Thất Sát': {
-    title: 'Tướng quân trấn biên',
+    title: 'Tướng quân trấn ải',
     domain: 'vo',
     desc: 'Người cầm quân giữ ải nơi biên cương — quyết liệt, cô độc, quen sống giữa sinh tử.',
     attireEn:
       'battle-worn dark iron armor with a fur-lined cloak over the shoulders, a weathered leather belt, commanding and austere',
   },
   'Phá Quân': {
-    title: 'Tiên phong khai phá',
+    title: 'Tiên phong',
     domain: 'vo',
     desc: 'Người đi đầu phá trận, mở đường — dám đập bỏ cái cũ, đời nhiều lần dựng lại từ đầu.',
     attireEn:
@@ -153,9 +214,9 @@ const OCCUPATION_BY_STAR: Record<string, Occupation> = {
 
 // Fallback khi Quan Lộc (và cả cung xung chiếu) vô chính diệu — hiếm.
 const DEFAULT_OCCUPATION: Occupation = {
-  title: 'Kẻ sĩ không chức phận',
+  title: 'Hàn sĩ',
   domain: 'van',
-  desc: 'Người có học, có chí, nhưng cả đời không rơi vào một chức phận rõ ràng nào — sống bên lề thời cuộc.',
+  desc: 'Kẻ sĩ nghèo có học, có chí, nhưng cả đời không rơi vào một chức phận rõ ràng nào — sống bên lề thời cuộc.',
   attireEn:
     'a plain undyed hemp scholar’s robe without rank insignia, simple and worn, a modest cloth headband',
 };
@@ -193,6 +254,54 @@ const HOA_NOTES: Record<string, string> = {
   'Khoa': 'có danh tiếng, được ghi nhận về học vấn hoặc tài năng',
   'Kỵ': 'công danh nhiều trắc trở, dễ mắc kẹt hoặc bị cản phá',
 };
+
+// ── Tên nhân vật ────────────────────────────────────────────────────────
+// Bản đầu CẤM đặt tên riêng (sợ trùng nhân vật lịch sử có thật). Henry test
+// prod xong chỉ ra hệ quả: 5 hồi truyện gọi nhân vật bằng "vị tướng quân ấy",
+// "người thầy thuốc ấy" suốt từ đầu tới cuối thì đọc như bản báo cáo, không ra
+// truyện, và không có gì để người đọc bám vào mà nhớ.
+//
+// Nay CÓ tên, nhưng tên do CODE chọn từ pool cố định (không để LLM tự bịa —
+// LLM rất dễ rơi trúng Gia Cát Lượng/Tào Tháo). Pool chỉ gồm họ + tên phổ
+// thông, cố ý TRÁNH các tổ hợp gắn với nhân vật lịch sử nổi tiếng. Chọn
+// deterministic theo lá số → cùng một lá số luôn ra cùng một tên (gen lại
+// không đổi người), nhưng lá số khác nhau thì tên khác nhau.
+// Pool tên tách theo BỐI CẢNH. Henry chốt không ghì trang phục Việt (vốn gần
+// giống Trung Hoa), nên tên nhân vật thành dấu hiệu nhận diện mạnh nhất còn
+// lại — và nó rẻ hơn hẳn bộ mô tả trang phục riêng.
+const NAME_POOLS: Record<EraId, { ho: string[]; nam: string[]; nu: string[] }> = {
+  'trung-hoa': {
+    ho: ['Lục', 'Doãn', 'Tạ', 'Mạnh', 'Thôi', 'Hạ', 'Vương', 'Tô', 'Kỷ', 'Tần', 'Diệp', 'Hàn'],
+    nam: ['Tử Kỳ', 'Bá Nhiên', 'Duy Cẩn', 'Mộ Ngôn', 'Thanh Vân', 'Trọng Khiêm', 'Hữu Đạo', 'Nguyên Thực'],
+    nu: ['Thanh Lam', 'Tố Nghi', 'Diệu Hoa', 'Vân Thư', 'Tuệ Kỳ', 'Diệu Linh', 'Nhu Gia', 'Uyển Chi'],
+  },
+  'viet-nam': {
+    ho: ['Trần', 'Lê', 'Phạm', 'Đặng', 'Vũ', 'Đinh', 'Hoàng', 'Bùi', 'Ngô', 'Đỗ', 'Dương', 'Trịnh'],
+    nam: ['Đức Toàn', 'Văn Cẩn', 'Hữu Nghiêm', 'Đình Khuê', 'Bá Lộc', 'Trọng Nghĩa', 'Quang Đán', 'Sĩ Liêm'],
+    nu: ['Ngọc Diệp', 'Thục Trinh', 'Ngọc Uyển', 'Thanh Nhàn', 'Diệu Thường', 'Ngọc Chân', 'Tố Liên', 'Thu Nương'],
+  },
+};
+
+/** Hash ổn định (không dùng Math.random — cùng lá số phải ra cùng tên). */
+function stableHash(seed: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < seed.length; i++) {
+    h ^= seed.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return Math.abs(h);
+}
+
+function pickCharacterName(ls: Laso, gender: 'nam' | 'nu', era: Era): string {
+  // Seed CỐ Ý không chứa era: cùng một lá số đổi bối cảnh vẫn là "cùng một
+  // người" được hình dung lại ở nơi khác, nên chọn cùng vị trí trong pool —
+  // chỉ pool đổi, thứ tự bốc thì giữ nguyên.
+  const seed = [ls.canChiNam, ls.menhDC, ls.thanDC, ls.napAm, ls.cuc, gender].join('|');
+  const h = stableHash(seed);
+  const pool = NAME_POOLS[era.id];
+  const ten = gender === 'nu' ? pool.nu : pool.nam;
+  return `${pool.ho[h % pool.ho.length]} ${ten[Math.floor(h / pool.ho.length) % ten.length]}`;
+}
 
 function palaceStarObjs(p: Rec | undefined, majorsOnly = false): StarObj[] {
   if (!p) return [];
@@ -404,6 +513,9 @@ function computeLifeArc(ls: Laso): LifeArc {
 // ── Tổng hợp ────────────────────────────────────────────────────────────
 export interface PastLifeProfile {
   gender: 'nam' | 'nu';
+  era: Era;
+  /** Tên nhân vật — chọn deterministic từ pool (xem pickCharacterName). */
+  characterName: string;
   occupation: OccupationResult;
   arc: LifeArc;
   /** Tên cung mà Thân đóng vào (Thân luôn trùng 1 trong 12 cung). */
@@ -426,13 +538,15 @@ export interface PastLifeProfile {
  * Dựng toàn bộ dữ liệu nhân vật tiền kiếp từ lá số đã tính. Thuần
  * deterministic — mọi thứ LLM cần đã được chốt ở đây, LLM chỉ viết văn.
  */
-export function computePastLife(ls: Laso, gender: 'nam' | 'nu'): PastLifeProfile {
+export function computePastLife(ls: Laso, gender: 'nam' | 'nu', era: Era = ERAS['trung-hoa']): PastLifeProfile {
   const palaces = (ls.palaces as Rec[]) || [];
   const thanP = palaces.find((p) => p.isThan) as Rec | undefined;
   const thanCungName = String(thanP?.cungName || 'Mệnh');
 
   return {
     gender,
+    era,
+    characterName: pickCharacterName(ls, gender, era),
     occupation: computeOccupation(ls),
     arc: computeLifeArc(ls),
     thanCungName,
@@ -486,6 +600,10 @@ export function formatArcForLLM(arc: LifeArc): string {
 export function formatCharacterForLLM(profile: PastLifeProfile): string {
   const o = profile.occupation;
   const lines: string[] = [];
+  lines.push(
+    `TÊN NHÂN VẬT (đã chốt, dùng ĐÚNG tên này, KHÔNG đổi, KHÔNG đặt tên khác): ${profile.characterName}` +
+      ` — ${profile.gender === 'nu' ? 'nữ' : 'nam'}.`,
+  );
   lines.push(
     `CHỨC PHẬN (đã chốt, KHÔNG được đổi sang nghề khác): ${o.title}` +
       ` — suy từ chính tinh ${o.star}${o.brightness ? ` (${o.brightness})` : ''} tại cung Quan Lộc` +

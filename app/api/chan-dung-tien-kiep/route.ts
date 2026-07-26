@@ -17,7 +17,7 @@ import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmTextFull } from '@/lib/llm/complete';
 import { logLlmUsage, logImageUsage } from '@/lib/agent/usage';
 import { computeLaso, type Laso } from '@/lib/engine/laso';
-import { computePastLife, type PastLifeProfile } from '@/lib/engine/past-life';
+import { computePastLife, resolveEra, type PastLifeProfile } from '@/lib/engine/past-life';
 import { computeMorphologyForPalace } from '@/lib/engine/portrait';
 import {
   PAST_LIFE_STORY_SYSTEM_PROMPT,
@@ -65,13 +65,16 @@ type BuiltProfile =
   | { ok: false; error: string }
   | { ok: true; ls: Laso; profile: PastLifeProfile };
 
-function buildProfile(birth: BirthParams): BuiltProfile {
+function buildProfile(birth: BirthParams, eraId?: string): BuiltProfile {
   const lasoRes = computeLaso(birth);
   if (!lasoRes.ok || !lasoRes.ls) {
     return { ok: false, error: lasoRes.error || 'Không lập được lá số.' };
   }
   const gender = birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
-  return { ok: true, ls: lasoRes.ls, profile: computePastLife(lasoRes.ls, gender) };
+  // resolveEra() tự rơi về 'trung-hoa' nếu id lạ/thiếu — client cũ (nếu có
+  // cache) vẫn chạy đúng, không cần bắt lỗi riêng.
+  const era = resolveEra(eraId);
+  return { ok: true, ls: lasoRes.ls, profile: computePastLife(lasoRes.ls, gender, era) };
 }
 
 // ── Pha 1: truyện ───────────────────────────────────────────────────────
@@ -80,8 +83,8 @@ interface StoryAct {
   text?: string;
 }
 
-async function handleStory(birth: BirthParams) {
-  const built = buildProfile(birth);
+async function handleStory(birth: BirthParams, eraId?: string) {
+  const built = buildProfile(birth, eraId);
   if (!built.ok) return err(built.error, 400);
   const { profile } = built;
 
@@ -104,12 +107,15 @@ async function handleStory(birth: BirthParams) {
   }
 
   const parsed = parseJSON(raw) as {
-    danhXung?: string;
+    biDanh?: string;
     soiGuong?: string;
     acts?: StoryAct[];
     ketLuan?: string;
   } | null;
-  if (!parsed?.danhXung || !parsed?.soiGuong || !Array.isArray(parsed.acts) || !parsed.acts.length) {
+  // biDanh (vế thơ) là phần TRANG TRÍ — thiếu vẫn hiển thị được vì danh xưng
+  // chính (chức phận) do engine chốt, không phụ thuộc LLM. Chỉ soiGuong + acts
+  // là bắt buộc.
+  if (!parsed?.soiGuong || !Array.isArray(parsed.acts) || !parsed.acts.length) {
     return err('Lỗi phân tích kết quả AI.', 500);
   }
 
@@ -128,7 +134,13 @@ async function handleStory(birth: BirthParams) {
 
   return ok({
     success: true,
-    danhXung: parsed.danhXung,
+    // Danh xưng chính = chức phận do BẢNG TRA chốt (Tể tướng / Thái y / Quan
+    // án…) — ngắn, cụ thể, người dùng kể lại được. biDanh chỉ là vế phụ hiển
+    // thị nhỏ bên dưới (Henry phản hồi: danh xưng dài kiểu mô tả thì đọc xong
+    // không nhớ nổi để mà kể cho bạn bè).
+    danhXung: profile.occupation.title,
+    biDanh: String(parsed.biDanh || ''),
+    characterName: profile.characterName,
     soiGuong: parsed.soiGuong,
     acts,
     ketLuan: parsed.ketLuan || '',
@@ -143,12 +155,13 @@ async function handleStory(birth: BirthParams) {
     menh: profile.readouts.menh,
     thanCungName: profile.thanCungName,
     portraitAge: profile.arc.portraitAge,
+    era: { id: profile.era.id, label: profile.era.label },
   });
 }
 
 // ── Pha 2: ảnh ──────────────────────────────────────────────────────────
-async function handleImage(userId: string, birth: BirthParams) {
-  const built = buildProfile(birth);
+async function handleImage(userId: string, birth: BirthParams, eraId?: string) {
+  const built = buildProfile(birth, eraId);
   if (!built.ok) return err(built.error, 400);
   const { ls, profile } = built;
 
@@ -219,6 +232,7 @@ async function handleImage(userId: string, birth: BirthParams) {
       occupation_title: profile.occupation.title,
       occupation_star: profile.occupation.star,
       portrait_age: profile.arc.portraitAge,
+      era: profile.era.id,
       image_url: imageUrl,
     }),
   }).catch(() => {});
@@ -228,6 +242,7 @@ async function handleImage(userId: string, birth: BirthParams) {
     imageUrl,
     occupationTitle: profile.occupation.title,
     portraitAge: profile.arc.portraitAge,
+    era: { id: profile.era.id, label: profile.era.label },
   });
 }
 
@@ -238,7 +253,7 @@ async function handleHistory(request: NextRequest) {
 
   const r = await fetch(
     `${SUPABASE_URL}/rest/v1/past_life_portraits?user_id=eq.${auth.user.id}` +
-      '&select=id,created_at,image_url,occupation_title,occupation_star,portrait_age' +
+      '&select=id,created_at,image_url,occupation_title,occupation_star,portrait_age,era' +
       '&order=created_at.desc&limit=20',
     { headers: { Authorization: `Bearer ${SUPABASE_KEY}`, apikey: SUPABASE_KEY } },
   );
@@ -260,8 +275,9 @@ export async function POST(request: NextRequest) {
   if (!birth) return err('Thiếu thông tin ngày sinh.', 400);
 
   const phase = String(body.phase || 'story');
-  if (phase === 'story') return handleStory(birth);
-  if (phase === 'image') return handleImage(auth.user.id, birth);
+  const eraId = body.era ? String(body.era) : undefined;
+  if (phase === 'story') return handleStory(birth, eraId);
+  if (phase === 'image') return handleImage(auth.user.id, birth, eraId);
   return err('phase không hợp lệ (story|image).', 400);
 }
 
