@@ -21,6 +21,7 @@
       { id: 'tuong-hop',  label: 'Tương hợp tuổi',      href: '/app/tuong-hop',  icon: 'heart' },
       { id: 'sinh-con',   label: 'Xem tuổi sinh con',   href: '/app/sinh-con',   icon: 'baby' },
       { id: 'chan-dung-vo-chong', label: 'Chân dung vợ chồng', href: '/app/chan-dung-vo-chong', icon: 'image', cost: 22 },
+      { id: 'chan-dung-tien-kiep', label: 'Chân dung tiền kiếp', href: '/app/chan-dung-tien-kiep', icon: 'temple', cost: 25 },
     ] },
     { group: 'Tử Bình', open: false, items: [
       { id: 'bat-tu',     label: 'Lá số Bát Tự',        href: '/app/bat-tu',     icon: 'rows' },
@@ -89,6 +90,7 @@
     hand: '<path d="M8 13V5a1.5 1.5 0 0 1 3 0v6M11 11V3.5a1.5 1.5 0 0 1 3 0V11m0-4.5a1.5 1.5 0 0 1 3 0V12m0 .5V10a1.5 1.5 0 0 1 3 0v5.5c0 3.6-2 6.5-6 6.5h-1.5c-2.6 0-3.6-.9-5.2-3.4L5 15c-.7-1.1.5-2.4 1.7-1.7L8 14"/>',
     mic: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/>',
     image: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.8"/><path d="m21 15-5-5-9 9"/>',
+    temple: '<path d="m12 3 8 5H4z"/><path d="M3 8h18"/><path d="M6 8v9M18 8v9"/><path d="M10 17v-5h4v5"/><path d="M3 21h18"/>',
   };
   function svg(name, cls) {
     return '<svg class="' + (cls || 'ic') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">' + (ICONS[name] || ICONS.dot) + '</svg>';
