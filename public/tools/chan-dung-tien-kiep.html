@@ -45,8 +45,6 @@
 .cdtk-badge.low{background:#F1E2E2;color:#7A4A4A}
 .cdtk-act p{font-size:14px;line-height:1.88;color:var(--text-mid);margin:0}
 .cdtk-ketluan{margin-top:18px;padding:14px 16px;background:#FBF8F1;border:1px solid #EADFC8;border-radius:10px;font-size:14px;line-height:1.85;color:#3a3226}
-.cdtk-basis{font-size:13.5px;line-height:1.8;color:var(--text-mid)}
-.cdtk-basis b{color:var(--navy)}
 .cdtk-loading{text-align:center;padding:40px 10px}
 .cdtk-hist{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
 .cdtk-hist img{width:64px;height:64px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:border .15s}
@@ -137,9 +135,10 @@
       </div>
     </div>
 
-    <div class="res-block" id="basisBlock" style="display:none;margin-top:18px">
-      <div class="res-block-header"><span class="res-block-title">Cơ Sở Trong Lá Số</span></div>
-      <div class="res-block-body cdtk-basis" id="basisBody"></div>
+    <div class="res-block" id="caveatBlock" style="display:none;margin-top:18px;background:#FBF3DE;border-color:#e8d9b0">
+      <div class="res-block-body" style="font-size:12.5px;line-height:1.7;color:#5a5145">
+        💡 Chân dung và câu chuyện phía trên được phác hoạ dựa trên các dữ liệu trong lá số Tử Vi của bạn, kết hợp với kinh nghiệm nghiên cứu của tiền nhân để lại. Mang tính tham khảo và giải trí.
+      </div>
     </div>
 
     <div class="res-block" id="histBlock" style="display:none;margin-top:18px">
@@ -240,7 +239,7 @@ async function _doGenerate(d) {
   document.getElementById('loading').style.display = 'block';
   document.getElementById('card').style.display = 'none';
   document.getElementById('storyBlock').style.display = 'none';
-  document.getElementById('basisBlock').style.display = 'none';
+  document.getElementById('caveatBlock').style.display = 'none';
   document.getElementById('imgLoadStatus').style.display = 'none';
   document.getElementById('imgActions').style.display = 'none';
   document.getElementById('resultImg').style.display = 'none';
@@ -322,35 +321,7 @@ function renderStory(data) {
   else { kl.style.display = 'none'; }
   document.getElementById('storyBlock').style.display = 'block';
 
-  renderBasis(data);
-}
-
-function renderBasis(data) {
-  const o = data.occupation || {};
-  const m = data.menh || {};
-  const rows = [];
-  if (o.star) {
-    rows.push('<b>Chức phận</b> — ' + esc(o.title || '') + ', suy từ chính tinh <b>' + esc(o.star) + '</b>' +
-      (o.brightness ? ' (' + esc(o.brightness) + ')' : '') + ' tại cung Quan Lộc' +
-      (o.borrowed ? ' (Quan Lộc vô chính diệu → mượn chính tinh cung xung chiếu theo cổ pháp)' : '') + '.');
-  }
-  if (o.tierLabel) {
-    rows.push('<b>Tầng chức phận</b> — ' + esc(o.tierLabel) +
-      (o.tierBreakdown && o.tierBreakdown.length ? ' (' + o.tierBreakdown.map(esc).join(', ') + ')' : '') +
-      '. Cùng một chính tinh, lá số khác nhau ra tầng khác nhau.');
-  }
-  if (o.source) rows.push('<b>Căn cứ cổ thư</b> — ' + esc(o.source) + '.');
-  if (o.notes && o.notes.length) rows.push('<b>Sắc thái nghề nghiệp</b> — ' + o.notes.map(esc).join('; ') + '.');
-  if (m.chinhTinh && m.chinhTinh.length) rows.push('<b>Cung Mệnh</b> — chính tinh ' + m.chinhTinh.map(esc).join(', ') + '.');
-  if (data.thanCungName) rows.push('<b>Cung Thân</b> — đóng tại cung ' + esc(data.thanCungName) + '.');
-  if (m.cachCuc && m.cachCuc.length) rows.push('<b>Cách cục tại Mệnh</b> — ' + m.cachCuc.map((c) => esc(c.ten)).join(', ') + '.');
-  rows.push('<b>Dòng đời</b> — 5 hồi chia từ 9 đại vận; hồi đánh dấu ★ là đại vận có điểm cao nhất, ▼ là thấp nhất trong chính lá số này.');
-  if (data.era && data.era.label) rows.push('<b>Bối cảnh</b> — ' + esc(data.era.label) + '.');
-  if (data.portraitAge) rows.push('<b>Chân dung</b> — vẽ ở tuổi khoảng ' + data.portraitAge + ', neo theo đại vận rực rỡ nhất trong quãng đời trưởng thành.');
-  rows.push('<b>Nhân vật</b> — tên và mọi tình tiết trong truyện là hư cấu, dựng riêng cho lá số này; không phải nhân vật lịch sử có thật.');
-
-  document.getElementById('basisBody').innerHTML = rows.map((r) => '<p style="margin:0 0 8px">' + r + '</p>').join('');
-  document.getElementById('basisBlock').style.display = 'block';
+  document.getElementById('caveatBlock').style.display = 'block';
 }
 
 async function downloadResult() {

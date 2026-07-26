@@ -41,6 +41,12 @@ QUY TẮC BÁM DỮ LIỆU:
 - Dòng đời đã chia sẵn thành các HỒI, mỗi hồi ghi rõ là giai đoạn bình thường, ĐỈNH CAO hay BIẾN CỐ. Viết ĐÚNG theo nhãn đó: hồi đỉnh cao là lúc huy hoàng nhất đời; hồi biến cố là lúc gãy đổ nặng nhất. KHÔNG tự đảo thứ tự, KHÔNG dời đỉnh cao sang hồi khác cho "hợp truyện".
 - Chi tiết trong truyện phải mọc ra từ các câu luận thuận/nghịch/cảnh báo của hồi đó, không bịa sự kiện không có căn cứ nào.
 
+ĐÂY LÀ MỘT ĐỜI NGƯỜI, KHÔNG PHẢI MỘT BẢN LÝ LỊCH CÔNG TÁC:
+- Chức phận chỉ là cái khung. Một đời người còn có hôn nhân, con cái, anh em, cha mẹ, bạn bè và kẻ dưới quyền, những chuyến đi xa, bệnh tật mang trên thân, chốn ở, tiền bạc. Truyện chỉ kể chuyện làm quan/làm nghề là truyện hỏng.
+- Phần dữ liệu bên dưới có khối "CÁC TUYẾN ĐỜI NGOÀI CÔNG DANH". MỖI tuyến trong đó phải hiện ra ít nhất một lần trong 5 hồi, bằng một CẢNH hoặc một NHÂN VẬT cụ thể — không phải một câu nhắc cho có. Tuyến nào có cách cục đặc biệt thì cho nó thành một mạch đáng kể của truyện, không phải một dòng đưa đẩy.
+- Dữ liệu cổ pháp đôi khi được diễn đạt bằng vật/khái niệm hiện đại ("tai nạn xe cộ", "đầu tư", "bảo lãnh"). Chuyển sang tương đương của thời xưa (ngã ngựa, đắm thuyền; bỏ vốn buôn chuyến; đứng ra bảo lãnh cho người trong họ) — TUYỆT ĐỐI không để vật hiện đại lọt vào truyện.
+- Rải các tuyến này ra nhiều hồi khác nhau theo lẽ thường của đời người (cha mẹ và anh em ở hồi đầu; hôn nhân, con cái, bạn bè, bệnh tật ở các hồi giữa và cuối) — đừng dồn hết vào một hồi.
+
 BỐI CẢNH — PHẢI NHẤT QUÁN TỪ ĐẦU TỚI CUỐI:
 - Bối cảnh cụ thể được chỉ định trong phần dữ liệu bên dưới. Trong bối cảnh đó, chọn MỘT khung duy nhất (vùng đất nào, đang thời bình hay loạn lạc) rồi GIỮ NGUYÊN suốt 5 hồi — cùng địa danh, cùng thể chế, cùng tuyến nhân vật phụ. Không được hồi này ở biên ải phương bắc, hồi sau nhảy sang phủ chúa phương nam mà không có lý do trong truyện.
 - KHÔNG nhắc bất kỳ nhân vật lịch sử/triều đại CÓ THẬT nào.
@@ -80,7 +86,7 @@ Trả về JSON hợp lệ, KHÔNG kèm giải thích ngoài JSON:
 
 3) "acts": ĐÚNG ${profile.arc.acts.length} phần tử, theo ĐÚNG thứ tự các hồi đã cho. Mỗi phần tử:
    - "title": 3-7 chữ, gợi được nội dung hồi đó (vd "Đứa trẻ trong quân doanh").
-   - "text": 90-140 từ văn xuôi, ngôi thứ ba, gọi nhân vật bằng ĐÚNG tên đã chốt (dùng tên ở lần nhắc đầu mỗi hồi, sau đó có thể dùng đại từ). Bám dữ liệu của hồi đó nhưng CHUYỂN HÓA thành cảnh và sự kiện, không giải thích. Hồi gắn nhãn ĐỈNH CAO phải rõ là lúc rực rỡ nhất; hồi gắn nhãn BIẾN CỐ phải rõ là lúc gãy đổ nặng nhất; hồi "vừa đỉnh cao vừa biến cố" thì viết cả hai chiều trong cùng giai đoạn. Mỗi hồi phải có ít nhất một cảnh cụ thể nhìn thấy được. Các hồi nối vào nhau thành một đời liền mạch, cùng một bối cảnh, có một chi tiết xuyên suốt lặp lại.
+   - "text": 100-160 từ văn xuôi, ngôi thứ ba, gọi nhân vật bằng ĐÚNG tên đã chốt (dùng tên ở lần nhắc đầu mỗi hồi, sau đó có thể dùng đại từ). Bám dữ liệu của hồi đó nhưng CHUYỂN HÓA thành cảnh và sự kiện, không giải thích. Hồi gắn nhãn ĐỈNH CAO phải rõ là lúc rực rỡ nhất; hồi gắn nhãn BIẾN CỐ phải rõ là lúc gãy đổ nặng nhất; hồi "vừa đỉnh cao vừa biến cố" thì viết cả hai chiều trong cùng giai đoạn. Mỗi hồi phải có ít nhất một cảnh cụ thể nhìn thấy được. Các hồi nối vào nhau thành một đời liền mạch, cùng một bối cảnh, có một chi tiết xuyên suốt lặp lại.
 
 4) "ketLuan": 40-70 từ. Khép lại: cái cốt cách ấy đi qua một đời như vậy, và nó còn lại trong người đọc hôm nay dưới dạng nào (điểm mạnh nào, vết thương nào). Ngôn ngữ đời thường, không thuật ngữ tử vi, không phán chắc, không hù dọa, không hứa hẹn tương lai.
 
