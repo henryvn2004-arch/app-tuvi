@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chân Dung Tiền Kiếp — Tử Vi Minh Bảo</title>
+<meta name="description" content="Đặt chính lá số của bạn vào bối cảnh Trung Hoa cổ — chân dung và câu chuyện một đời người kể qua 9 đại vận.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shell.css?v=14">
+<style>
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
+.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
+.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
+.btn-go:disabled{opacity:.6;cursor:not-allowed}
+.err{color:var(--red);font-size:13px;margin-top:8px;display:none}
+.err.active{display:block}
+.res-block{border:1px solid #E8E8E8;border-radius:10px;margin-bottom:16px;background:#fff;overflow:hidden;max-width:880px}
+.res-block-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#F5F4F0;border-bottom:1px solid #E8E8E8}
+.res-block-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#061A2E}
+.res-block-body{padding:18px;color:#2a2118}
+#loading{display:none;text-align:center;padding:30px 10px;color:var(--text-lt)}
+.cdtk-hero{text-align:center;padding:2px 6px 16px}
+.cdtk-danhxung{font-family:var(--serif);font-size:21px;line-height:1.45;color:#061A2E;font-weight:700;margin-bottom:5px}
+.cdtk-sub{font-size:12px;color:var(--text-lt)}
+.cdtk-top{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start}
+.cdtk-imgwrap{flex:0 0 260px;max-width:260px}
+.cdtk-imgwrap img{width:100%;border-radius:12px;box-shadow:0 8px 24px rgba(6,26,46,.2);display:block;background:#EFEBE3}
+.cdtk-imgph{width:100%;aspect-ratio:2/3;border-radius:12px;background:#EFEBE3;display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;color:var(--text-lt);padding:14px}
+.cdtk-actions{display:flex;gap:8px;margin-top:10px}
+.cdtk-actions .btn{flex:1;text-align:center}
+.cdtk-mirror{flex:1;min-width:250px}
+.cdtk-mirror p{font-size:13.5px;line-height:1.88;color:#2a2118;margin:0}
+.cdtk-eyebrow{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9A7B3A;margin:0 0 8px}
+.cdtk-act{border-left:2px solid #E0D6C0;padding:0 0 18px 16px;position:relative}
+.cdtk-act:last-child{padding-bottom:0}
+.cdtk-act::before{content:'';position:absolute;left:-6px;top:4px;width:10px;height:10px;border-radius:50%;background:#C8B084}
+.cdtk-act.peak::before{background:#9A7B3A;box-shadow:0 0 0 4px rgba(154,123,58,.16)}
+.cdtk-act.low::before{background:#8A5A5A;box-shadow:0 0 0 4px rgba(138,90,90,.16)}
+.cdtk-act-head{display:flex;gap:8px;flex-wrap:wrap;align-items:baseline;margin-bottom:5px}
+.cdtk-act-title{font-family:var(--serif);font-size:15px;font-weight:700;color:#061A2E}
+.cdtk-act-age{font-size:11px;color:var(--text-lt)}
+.cdtk-badge{font-size:9.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;padding:2px 7px;border-radius:999px}
+.cdtk-badge.peak{background:#F3EAD6;color:#7A5F26}
+.cdtk-badge.low{background:#F1E2E2;color:#7A4A4A}
+.cdtk-act p{font-size:13.5px;line-height:1.85;color:#2a2118;margin:0}
+.cdtk-ketluan{margin-top:16px;padding:13px 15px;background:#FBF8F1;border:1px solid #EADFC8;border-radius:10px;font-size:13.5px;line-height:1.82;color:#3a3226}
+.cdtk-basis{font-size:13px;line-height:1.8;color:#2a2118}
+.cdtk-basis b{color:#061A2E}
+#histList{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+#histList img{width:56px;height:56px;object-fit:cover;border-radius:8px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Chân Dung Tiền Kiếp</b><span>Lá số của bạn nếu sinh vào thời xưa</span></div>
+      <div class="ws-actions">
+        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Làm Lại</button>
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div class="form-card" id="birthPanel">
+        <h2>Nhập ngày sinh của bạn (dương lịch)</h2>
+        <p class="sub">AI lập lá số, suy chức phận từ cung Quan Lộc rồi kể lại một đời người qua 9 đại vận.</p>
+        <div id="tuviFormHost"></div>
+        <div class="frow" style="margin-bottom:0">
+          <button class="btn-go" id="btnGo" onclick="analyze()">Xem Tiền Kiếp →</button>
+        </div>
+        <div class="err" id="error-msg"></div>
+      </div>
+
+      <div id="resPanel" style="display:none">
+        <div class="res-block">
+          <div class="res-block-header"><span class="res-block-title">Chân Dung &amp; Cốt Cách</span></div>
+          <div class="res-block-body">
+            <div id="loading"><div id="loadingSteps"></div></div>
+            <div id="card" style="display:none">
+              <div class="cdtk-hero">
+                <div class="cdtk-danhxung" id="danhXung"></div>
+                <div class="cdtk-sub" id="danhXungSub"></div>
+              </div>
+              <div class="cdtk-top">
+                <div class="cdtk-imgwrap">
+                  <div class="cdtk-imgph" id="imgPlaceholder">Đang vẽ chân dung…<br>(khoảng 30–60 giây)</div>
+                  <img id="resultImg" alt="Chân dung tiền kiếp" style="display:none">
+                  <div id="imgLoadStatus" style="display:none;margin-top:8px;font-size:12px;color:var(--text-lt);text-align:center"></div>
+                  <div class="cdtk-actions" id="imgActions" style="display:none">
+                    <button class="btn" onclick="downloadResult()">⬇ Tải Ảnh</button>
+                  </div>
+                </div>
+                <div class="cdtk-mirror">
+                  <div class="cdtk-eyebrow">Trước hết — nói về chính bạn</div>
+                  <p id="soiGuong"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="res-block" id="storyBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Một Đời Người — 5 Hồi</span></div>
+          <div class="res-block-body">
+            <div id="actList"></div>
+            <div class="cdtk-ketluan" id="ketLuan" style="display:none"></div>
+          </div>
+        </div>
+
+        <div class="res-block" id="basisBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Cơ Sở Trong Lá Số</span></div>
+          <div class="res-block-body cdtk-basis" id="basisBody"></div>
+        </div>
+
+        <div class="res-block" style="background:#FBF3DE;border-color:#e8d9b0">
+          <div class="res-block-body" style="font-size:12.5px;line-height:1.6;color:#5a5145">
+            💡 Tử Vi Đẩu Số không có cung nào luận về kiếp trước. Đây là một phóng chiếu: đặt chính lá số của bạn vào bối cảnh phong kiến mà cổ thư vốn dùng để viết ra nó — mang tính tham khảo và giải trí, không phải khẳng định về một kiếp sống có thật.
+          </div>
+        </div>
+
+        <div class="res-block" id="histBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Đã Vẽ Trước Đó</span></div>
+          <div class="res-block-body"><div id="histList"></div></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='chan-dung-tien-kiep';
+window.SHELL_INTRO={key:'chan-dung-tien-kiep',title:'Chân Dung Tiền Kiếp',desc:'Đặt <b>chính lá số của bạn</b> vào bối cảnh Trung Hoa cổ — chức phận suy từ cung <b>Quan Lộc</b>, dung mạo từ cung <b>Mệnh</b>, cả một đời người kể qua <b>9 đại vận</b>.'};</script>
+<script src="/laso-chart.js?v=2"></script>
+<script src="/tuvi-form.js?v=1"></script>
+<script src="/tuvi-paywall.js"></script>
+<script src="/auth.js"></script>
+<script src="/shell.js?v=45"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=1"></script>
+<script>
+var _currentSlug = '';
+var _resultImgUrl = '';
+var _lastBirth = null;
+var _lastStory = null;
+var CDTK_STEPS = [
+  { label: 'Lập lá số & xác định chức phận thời xưa', ms: 1200 },
+  { label: 'Đọc 9 đại vận, chia dòng đời thành 5 hồi', ms: 2600 },
+  { label: 'Viết câu chuyện cuộc đời', ms: 0 },
+];
+var _loadingCtl = null;
+var _imgRetryTimer = null;
+
+var ROLE_BADGE = {
+  'dinh-cao': { cls: 'peak', label: '★ Đỉnh cao' },
+  'bien-co': { cls: 'low', label: '▼ Biến cố' },
+  'thang-tram': { cls: 'peak', label: '★▼ Thăng trầm' },
+};
+
+function setResultImage(url) {
+  var img = document.getElementById('resultImg');
+  var status = document.getElementById('imgLoadStatus');
+  function showWaiting() {
+    if (!status) return;
+    status.innerHTML = 'Ảnh đang tải, có thể hơi chậm — vui lòng đợi hoặc <button type="button" class="btn" style="padding:2px 10px;font-size:12px;margin-left:4px" onclick="retryResultImage()">Tải lại</button>';
+    status.style.display = 'block';
+  }
+  function hideWaiting() { if (status) status.style.display = 'none'; }
+  clearTimeout(_imgRetryTimer);
+  img.onload = function () {
+    hideWaiting();
+    clearTimeout(_imgRetryTimer);
+    document.getElementById('imgPlaceholder').style.display = 'none';
+    img.style.display = 'block';
+    document.getElementById('imgActions').style.display = 'flex';
+  };
+  img.onerror = function () { showWaiting(); };
+  img.src = url;
+  _imgRetryTimer = setTimeout(function () {
+    if (!img.complete || img.naturalWidth === 0) showWaiting();
+  }, 6000);
+}
+function retryResultImage() {
+  if (!_resultImgUrl) return;
+  setResultImage(_resultImgUrl + (_resultImgUrl.indexOf('?') >= 0 ? '&' : '?') + 'retry=' + Date.now());
+}
+
+TuviForm.render('tuviFormHost', {mode:'compact', gioitinh:'nam', showNamXem:true});
+
+function showError(msg) {
+  var e = document.getElementById('error-msg');
+  if (msg) { e.textContent = msg; e.classList.add('active'); } else { e.classList.remove('active'); }
+}
+
+async function analyze() {
+  showError('');
+  var fdIn = TuviForm.getData();
+  var gender = fdIn.gioitinh, dd = fdIn.ngay, mm = fdIn.thang, yyyy = fdIn.nam, gioAmIdx = fdIn.gioIdx;
+  if (!dd || !mm || !yyyy) { showError('Vui lòng nhập đầy đủ ngày tháng năm sinh.'); return; }
+
+  _lastBirth = { day: dd, month: mm, year: yyyy, hourBranch: gioAmIdx, gender: gender, isLunar: false };
+  _currentSlug = TuviPaywall.generateToolSlug('chan-dung-tien-kiep-' + dd + '-' + mm + '-' + yyyy);
+  await TuviPaywall.requireCredits(_currentSlug, async function () { await _doGenerate(); });
+}
+
+async function _doGenerate() {
+  document.getElementById('birthPanel').style.display = 'none';
+  document.getElementById('resPanel').style.display = 'block';
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('card').style.display = 'none';
+  document.getElementById('storyBlock').style.display = 'none';
+  document.getElementById('basisBlock').style.display = 'none';
+  document.getElementById('imgLoadStatus').style.display = 'none';
+  document.getElementById('imgActions').style.display = 'none';
+  document.getElementById('resultImg').style.display = 'none';
+  document.getElementById('imgPlaceholder').style.display = 'flex';
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDTK_STEPS);
+  _loadingCtl.start();
+
+  var token = window.Auth?.getSession()?.access_token || '';
+  var birth = _lastBirth;
+  var call = function (phase) {
+    return fetch('/api/chan-dung-tien-kiep', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify({ birth: birth, phase: phase }),
+    });
+  };
+
+  // Hai pha SONG SONG — truyện hiện trước, ảnh chèn vào sau (xem route.ts).
+  var storyP = call('story');
+  var imageP = call('image');
+
+  try {
+    var res = await storyP;
+    var data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
+    _lastStory = data;
+    renderStory(data);
+    _loadingCtl && _loadingCtl.finish();
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('card').style.display = 'block';
+    document.getElementById('btnEdit').style.display = '';
+    if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+
+    Shell.setContext({
+      birth: _lastBirth,
+      label: 'Chân dung tiền kiếp',
+      greeting: 'Đã dựng xong nhân vật và câu chuyện từ lá số của bạn. Muốn hỏi thêm về cung Quan Lộc, các đại vận hay cốt cách của mình?',
+      chips: ['Cung Quan Lộc của tôi nói gì?', 'Đại vận nào là đỉnh cao của tôi?', 'Cung Mệnh của tôi có gì đặc biệt?', 'Giai đoạn khó khăn nhất của tôi là khi nào?'],
+    });
+  } catch (e) {
+    _loadingCtl && _loadingCtl.stop();
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('resPanel').style.display = 'none';
+    document.getElementById('birthPanel').style.display = 'block';
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+    imageP.catch(function () {});
+    return;
+  }
+
+  try {
+    var ires = await imageP;
+    var idata = await ires.json();
+    if (!ires.ok || !idata.success) throw new Error(idata.error || 'Lỗi ' + ires.status);
+    _resultImgUrl = idata.imageUrl;
+    setResultImage(idata.imageUrl);
+    publishShareable(idata.imageUrl);
+    _loadHistory();
+  } catch (e2) {
+    document.getElementById('imgPlaceholder').textContent = 'Không vẽ được chân dung lần này. Phần câu chuyện phía dưới vẫn đầy đủ.';
+    publishShareable('');
+  }
+}
+
+// esc() dùng chung từ /laso-chart.js (đã load ở trên) — không khai lại.
+
+function renderStory(data) {
+  document.getElementById('danhXung').textContent = data.danhXung || '';
+  var o = data.occupation || {};
+  var sub = [];
+  if (o.star) sub.push('Chính tinh ' + o.star + (o.brightness ? ' (' + o.brightness + ')' : '') + ' tại cung Quan Lộc');
+  if (data.portraitAge) sub.push('chân dung ở tuổi ' + data.portraitAge);
+  document.getElementById('danhXungSub').textContent = sub.join(' · ');
+  document.getElementById('soiGuong').textContent = data.soiGuong || '';
+
+  document.getElementById('actList').innerHTML = (data.acts || []).map(function (a) {
+    var badge = ROLE_BADGE[a.role];
+    return '<div class="cdtk-act' + (badge ? ' ' + badge.cls : '') + '">' +
+      '<div class="cdtk-act-head">' +
+        '<span class="cdtk-act-title">' + esc(a.title) + '</span>' +
+        '<span class="cdtk-act-age">' + esc(a.stage) + ' · ' + a.ageFrom + '–' + a.ageTo + ' tuổi</span>' +
+        (badge ? '<span class="cdtk-badge ' + badge.cls + '">' + badge.label + '</span>' : '') +
+      '</div><p>' + esc(a.text) + '</p></div>';
+  }).join('');
+
+  var kl = document.getElementById('ketLuan');
+  if (data.ketLuan) { kl.textContent = data.ketLuan; kl.style.display = 'block'; }
+  else { kl.style.display = 'none'; }
+  document.getElementById('storyBlock').style.display = 'block';
+
+  renderBasis(data);
+}
+
+function renderBasis(data) {
+  var o = data.occupation || {};
+  var m = data.menh || {};
+  var rows = [];
+  if (o.star) {
+    rows.push('<b>Chức phận</b> — ' + esc(o.title || '') + ', suy từ chính tinh <b>' + esc(o.star) + '</b>' +
+      (o.brightness ? ' (' + esc(o.brightness) + ')' : '') + ' tại cung Quan Lộc' +
+      (o.borrowed ? ' (Quan Lộc vô chính diệu → mượn chính tinh cung xung chiếu theo cổ pháp)' : '') + '.');
+  }
+  if (o.notes && o.notes.length) rows.push('<b>Sắc thái nghề nghiệp</b> — ' + o.notes.map(esc).join('; ') + '.');
+  if (m.chinhTinh && m.chinhTinh.length) rows.push('<b>Cung Mệnh</b> — chính tinh ' + m.chinhTinh.map(esc).join(', ') + '.');
+  if (data.thanCungName) rows.push('<b>Cung Thân</b> — đóng tại cung ' + esc(data.thanCungName) + '.');
+  if (m.cachCuc && m.cachCuc.length) rows.push('<b>Cách cục tại Mệnh</b> — ' + m.cachCuc.map(function (c) { return esc(c.ten); }).join(', ') + '.');
+  rows.push('<b>Dòng đời</b> — 5 hồi chia từ 9 đại vận; hồi đánh dấu ★ là đại vận có điểm cao nhất, ▼ là thấp nhất trong chính lá số này.');
+
+  document.getElementById('basisBody').innerHTML = rows.map(function (r) { return '<p style="margin:0 0 8px">' + r + '</p>'; }).join('');
+  document.getElementById('basisBlock').style.display = 'block';
+}
+
+// Dựng trang /ket-qua chia sẻ được — CỐ Ý cho người xem link đọc trọn cả ảnh
+// lẫn truyện mà không phải trả Lượng: chỉ NGƯỜI SINH mới bị tính phí, còn mỗi
+// lượt sinh vẫn đẻ ra một đường link lan được.
+function publishShareable(imageUrl) {
+  var d = _lastStory;
+  if (!d) return;
+  var blocks = [];
+  blocks.push({
+    header: 'Chân Dung Tiền Kiếp',
+    image: imageUrl || undefined,
+    text: (d.danhXung || '') + '\n\n' + (d.soiGuong || ''),
+  });
+  var storyText = (d.acts || []).map(function (a) {
+    var badge = ROLE_BADGE[a.role];
+    return a.title + ' (' + a.stage + ' · ' + a.ageFrom + '–' + a.ageTo + ' tuổi)' +
+      (badge ? ' — ' + badge.label : '') + '\n' + a.text;
+  }).join('\n\n');
+  if (storyText) blocks.push({ header: 'Một Đời Người — 5 Hồi', text: storyText });
+  if (d.ketLuan) blocks.push({ header: 'Lời Kết', text: d.ketLuan });
+
+  Shell.setShareable({
+    kind: imageUrl ? 'image' : 'text',
+    toolId: 'chan-dung-tien-kiep',
+    title: d.danhXung || 'Chân dung tiền kiếp của tôi',
+    imageUrl: imageUrl || undefined,
+    blocks: blocks,
+  });
+}
+
+async function downloadResult() {
+  if (!_resultImgUrl) return;
+  try {
+    var res = await fetch(_resultImgUrl);
+    var blob = await res.blob();
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'chan-dung-tien-kiep.png';
+    a.click(); URL.revokeObjectURL(url);
+  } catch (e) { window.open(_resultImgUrl, '_blank'); }
+}
+
+function showForm() {
+  document.getElementById('resPanel').style.display = 'none';
+  document.getElementById('birthPanel').style.display = 'block';
+  document.getElementById('btnEdit').style.display = 'none';
+  Shell.setShareable(null);
+}
+
+async function _loadHistory() {
+  try {
+    var token = window.Auth?.getSession()?.access_token || '';
+    if (!token) return;
+    var res = await fetch('/api/chan-dung-tien-kiep?action=history', { headers: { Authorization: 'Bearer ' + token } });
+    var data = await res.json();
+    if (!data.success || !data.items?.length) return;
+    document.getElementById('histList').innerHTML = data.items.map(function (it) {
+      return '<img src="' + it.image_url + '" title="' + esc(it.occupation_title || '') + '" onclick="window.open(\'' + it.image_url + '\',\'_blank\')">';
+    }).join('');
+    document.getElementById('histBlock').style.display = 'block';
+  } catch (e) {}
+}
+
+TuviPaywall.init({ product: 'chan-dung-tien-kiep', slug: function () { return _currentSlug; } });
+</script>
+</body>
+</html>

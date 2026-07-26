@@ -354,7 +354,26 @@ function pickMarriageAgeAnchor(yNghia: string[]): number {
   return lo + Math.floor(Math.random() * (hi - lo + 1));
 }
 
-export interface SpouseMorphology {
+/** Phần morphology THUẦN hình thể — KHÔNG kèm suy đoán tuổi tác/giới tính bạn
+ * đời (phần đó chỉ có nghĩa với cung Phu Thê). Tách riêng để dùng lại cho cung
+ * khác: tool "Chân Dung Tiền Kiếp" suy hình thể từ cung MỆNH (chính đương số),
+ * không phải Phu Thê. Xem computeMorphologyForPalace. */
+export interface PalaceMorphology {
+  fields: Record<string, string>;
+  /** field → sao nào quyết định giá trị đó (core hay phụ tinh) — dùng để LLM
+   * diễn giải ĐÚNG "chính tinh X định khung..., phụ tinh Y tô điểm/phá cách
+   * nét Z" thay vì đoán mò (Henry yêu cầu). */
+  attribution: Record<string, FieldSource>;
+  coreStar: string;
+  /** Độ sáng của core star (Miếu/Vượng/Đắc/Bình/Hãm) nếu có. */
+  coreBrightness?: string;
+  /** true nếu core là 1 trong lục sát tinh — LLM dùng để biết core đang "phá
+   * cách" thay vì "tô điểm" thuận. */
+  coreIsSatTinh: boolean;
+  contributingStars: string[];
+}
+
+export interface SpouseMorphology extends PalaceMorphology {
   spouseGender: 'nam' | 'nu';
   spouseAge: number;
   /** Mốc tuổi LẬP GIA ĐÌNH giả định (random 22-31, hoặc 30-35 nếu lá số ghi
@@ -367,37 +386,27 @@ export interface SpouseMorphology {
    * cachCucTungCung ghi rõ tín hiệu khác) — route.ts chỉ dùng làm fallback khi
    * LLM đọc (B)/(C) không thấy gợi ý tuổi tác rõ ràng nào. */
   starAgeOffset: number;
-  fields: Record<string, string>;
-  /** field → sao nào quyết định giá trị đó (core hay phụ tinh) — dùng để LLM
-   * diễn giải ĐÚNG "chính tinh X định khung..., phụ tinh Y tô điểm/phá cách
-   * nét Z" thay vì đoán mò (Henry yêu cầu). */
-  attribution: Record<string, FieldSource>;
-  coreStar: string;
-  /** Độ sáng của core star (Miếu/Vượng/Đắc/Bình/Hãm) nếu có — để LLM nhắc
-   * kèm khi diễn giải (vd "Tham Lang (Đắc)"). */
-  coreBrightness?: string;
-  /** true nếu core là 1 trong lục sát tinh (Kình Dương/Đà La/Địa Không/Địa
-   * Kiếp/Hỏa Tinh/Linh Tinh) — LLM dùng để biết core đang "phá cách" thay vì
-   * "tô điểm" thuận. */
-  coreIsSatTinh: boolean;
-  contributingStars: string[];
 }
 
 /**
- * Suy hình dáng người phối ngẫu từ lá số đã tính (computeLaso). Thuần
- * deterministic — KHÔNG gọi LLM. Route gọi tiếp LLM để dịch/đánh bóng
- * `fields` thành prompt ảnh (EN) + đoạn mô tả (VI).
+ * Suy hình thể từ MỘT cung bất kỳ trong lá số đã tính (computeLaso). Thuần
+ * deterministic — KHÔNG gọi LLM.
+ *
+ * Trước đây hàm này cố định cứng cung "Phu Thê" (tool Chân Dung Vợ Chồng —
+ * hình thể NGƯỜI BẠN ĐỜI). Nay tham số hóa `cungName` để tool "Chân Dung Tiền
+ * Kiếp" dùng lại cùng thuật toán rank/merge sao cho cung MỆNH (hình thể CHÍNH
+ * đương số). Thuật toán KHÔNG đổi một dòng nào — chỉ đổi cung đầu vào.
  */
-export function computeSpouseMorphology(ls: Laso, userGender: 'nam' | 'nu'): SpouseMorphology {
+export function computeMorphologyForPalace(ls: Laso, cungName: string): PalaceMorphology {
   const palaces = (ls.palaces as Rec[]) || [];
-  const phuThe = palaces.find((p) => p.cungName === 'Phu Thê') as Rec | undefined;
-  const tamHop = (phuThe?.tamHopCungs as Rec[]) || [];
-  const xung = phuThe?.xungChieuCung as Rec | undefined;
+  const home = palaces.find((p) => p.cungName === cungName) as Rec | undefined;
+  const tamHop = (home?.tamHopCungs as Rec[]) || [];
+  const xung = home?.xungChieuCung as Rec | undefined;
 
-  // STEP 1 — sao ĐÓNG THẲNG tại Phu Thê (chính tinh + phụ tinh) là nguồn DUY
+  // STEP 1 — sao ĐÓNG THẲNG tại cung gốc (chính tinh + phụ tinh) là nguồn DUY
   // NHẤT cho core + tinh chỉnh bình thường — đúng cách luận giải cổ pháp thật
   // (Henry: chỉ xem sao tại chính cung, ít khi xét tam hợp/xung).
-  const homePool = locatedPalaceStars(phuThe, 'home');
+  const homePool = locatedPalaceStars(home, 'home');
   // STEP 1b — tam hợp/xung CHỈ góp mặt khi có LỤC SÁT TINH (tín hiệu phá cách
   // thật sự) — bỏ qua mọi sao khác dù cũng đóng ở đó (Văn Xương, Hồng Loan,
   // Đào Hoa...), tránh pha loãng khiến nhiều lá số khác nhau ra hình na ná.
@@ -410,20 +419,11 @@ export function computeSpouseMorphology(ls: Laso, userGender: 'nam' | 'nu'): Spo
 
   const menhHanh = primaryElement(String(ls.cuc || '').split(' ')[0]);
   const ranked = rankStars(pool, menhHanh);
-  const core = pickCore(ranked, phuThe, xung, menhHanh);
+  const core = pickCore(ranked, home, xung, menhHanh);
 
   const { fields, attribution } = buildFields(core, ranked.length ? ranked : [DEFAULT_CORE]);
 
-  const yNghia = ((ls.cachCucTungCung as Record<string, string[]>) || {})['Phu Thê'] || [];
-  const baseAge = pickMarriageAgeAnchor(yNghia);
-  const starAgeOffset = ageOffsetFromPhuThe(yNghia, phuThe, userGender);
-  const spouseAge = Math.max(18, Math.min(80, baseAge + starAgeOffset));
-
   return {
-    spouseGender: userGender === 'nam' ? 'nu' : 'nam',
-    spouseAge,
-    baseAge,
-    starAgeOffset,
     fields,
     attribution,
     coreStar: core.ten,
@@ -432,6 +432,33 @@ export function computeSpouseMorphology(ls: Laso, userGender: 'nam' | 'nu'): Spo
     // core có thể là chính tinh MƯỢN từ xung chiếu (vô chính diệu — xem
     // pickCore) nên không nằm sẵn trong `ranked`; thêm vào đây cho đủ.
     contributingStars: Array.from(new Set([core.ten, ...ranked.map((r) => r.ten)])),
+  };
+}
+
+/**
+ * Suy hình dáng người phối ngẫu từ lá số đã tính (computeLaso). Thuần
+ * deterministic — KHÔNG gọi LLM. Route gọi tiếp LLM để dịch/đánh bóng
+ * `fields` thành prompt ảnh (EN) + đoạn mô tả (VI).
+ *
+ * = computeMorphologyForPalace('Phu Thê') + phần suy đoán giới tính/tuổi bạn
+ * đời (chỉ có nghĩa với riêng cung Phu Thê nên KHÔNG nằm trong hàm generic).
+ */
+export function computeSpouseMorphology(ls: Laso, userGender: 'nam' | 'nu'): SpouseMorphology {
+  const palaces = (ls.palaces as Rec[]) || [];
+  const phuThe = palaces.find((p) => p.cungName === 'Phu Thê') as Rec | undefined;
+  const base = computeMorphologyForPalace(ls, 'Phu Thê');
+
+  const yNghia = ((ls.cachCucTungCung as Record<string, string[]>) || {})['Phu Thê'] || [];
+  const baseAge = pickMarriageAgeAnchor(yNghia);
+  const starAgeOffset = ageOffsetFromPhuThe(yNghia, phuThe, userGender);
+  const spouseAge = Math.max(18, Math.min(80, baseAge + starAgeOffset));
+
+  return {
+    ...base,
+    spouseGender: userGender === 'nam' ? 'nu' : 'nam',
+    spouseAge,
+    baseAge,
+    starAgeOffset,
   };
 }
 
@@ -451,9 +478,12 @@ function fmtStarDisplay(s: StarObj): string {
   return s.brightness ? `${s.ten} (${s.brightness})` : s.ten;
 }
 
-export function getPhuTheReadout(ls: Laso): PhuTheReadout {
+/** Đọc chính tinh/phụ tinh/cách cục/ý nghĩa của MỘT cung bất kỳ. Tham số hóa
+ * từ `getPhuTheReadout` cũ để tool "Chân Dung Tiền Kiếp" đọc được 6 cung
+ * (Mệnh/Thân/Quan Lộc/Tài Bạch/Phúc Đức/Thiên Di) bằng cùng một hàm. */
+export function getPalaceReadout(ls: Laso, cungName: string): PhuTheReadout {
   const palaces = (ls.palaces as Rec[]) || [];
-  const p = palaces.find((x) => x.cungName === 'Phu Thê') as Rec | undefined;
+  const p = palaces.find((x) => x.cungName === cungName) as Rec | undefined;
 
   const chinhTinh = ((p?.majorStars as StarObj[]) || []).map(fmtStarDisplay);
   const phuTinh = ((p?.stars as StarObj[]) || [])
@@ -462,7 +492,7 @@ export function getPhuTheReadout(ls: Laso): PhuTheReadout {
 
   const cachCucAll = Array.isArray(ls.cachCuc) ? (ls.cachCuc as Rec[]) : [];
   const cachCuc = cachCucAll
-    .filter((c) => String(c.cung || '').split('/').includes('Phu Thê'))
+    .filter((c) => String(c.cung || '').split('/').includes(cungName))
     .map((c) => ({
       ten: String(c.ten || ''),
       loai: String(c.loai || ''),
@@ -470,9 +500,13 @@ export function getPhuTheReadout(ls: Laso): PhuTheReadout {
       chiTiet: String(c.chiTiet || ''),
     }));
 
-  const yNghia = ((ls.cachCucTungCung as Record<string, string[]>) || {})['Phu Thê'] || [];
+  const yNghia = ((ls.cachCucTungCung as Record<string, string[]>) || {})[cungName] || [];
 
   return { chinhTinh, phuTinh, cachCuc, yNghia };
+}
+
+export function getPhuTheReadout(ls: Laso): PhuTheReadout {
+  return getPalaceReadout(ls, 'Phu Thê');
 }
 
 // Ngũ hành sao chính tinh tại Phu Thê — dùng để chọn TÔNG MÀU trang phục chân
@@ -480,9 +514,9 @@ export function getPhuTheReadout(ls: Laso): PhuTheReadout {
 // Mộc→xanh lá nhạt, Thổ→vàng nhạt/be). Lấy sao chính tinh ĐẦU TIÊN có dữ liệu
 // (không phải sao rank cao nhất của morphology — có thể là phụ tinh/sát tinh).
 // Trả '' nếu Phu Thê vô chính diệu → route.ts tự fallback tông trung tính.
-export function getPhuTheChinhTinhElement(ls: Laso): string {
+export function getPalaceChinhTinhElement(ls: Laso, cungName: string): string {
   const palaces = (ls.palaces as Rec[]) || [];
-  const p = palaces.find((x) => x.cungName === 'Phu Thê') as Rec | undefined;
+  const p = palaces.find((x) => x.cungName === cungName) as Rec | undefined;
   const majors = ((p?.majorStars as StarObj[]) || []).filter((s) => s?.ten);
   for (const s of majors) {
     const el = primaryElement(STAR_DATA[s.ten]?.element);
@@ -491,23 +525,31 @@ export function getPhuTheChinhTinhElement(ls: Laso): string {
   return '';
 }
 
+export function getPhuTheChinhTinhElement(ls: Laso): string {
+  return getPalaceChinhTinhElement(ls, 'Phu Thê');
+}
+
 // Format gọn cho prompt LLM — đúng nguyên văn diễn giải engine, LLM chỉ ĐỌC
 // và rút tín hiệu, KHÔNG được tự bịa thêm cách cục không có trong danh sách.
-export function formatPhuTheForLLM(r: PhuTheReadout): string {
+export function formatPalaceReadoutForLLM(r: PhuTheReadout, cungName: string): string {
   const lines: string[] = [];
-  if (r.chinhTinh.length) lines.push('Chính tinh tại Phu Thê: ' + r.chinhTinh.join(', '));
-  if (r.phuTinh.length) lines.push('Phụ tinh tại Phu Thê: ' + r.phuTinh.join(', '));
+  if (r.chinhTinh.length) lines.push(`Chính tinh tại ${cungName}: ` + r.chinhTinh.join(', '));
+  if (r.phuTinh.length) lines.push(`Phụ tinh tại ${cungName}: ` + r.phuTinh.join(', '));
   if (r.cachCuc.length) {
     lines.push(
       'Cách cục đặc biệt: ' + r.cachCuc.map((c) => `${c.ten} — ${c.moTa}`).join(' | '),
     );
   }
   if (r.yNghia.length) lines.push('Ý nghĩa (cổ pháp): ' + r.yNghia.join(' | '));
-  return lines.join('\n') || '(Không có cách cục đặc biệt nổi bật tại Phu Thê.)';
+  return lines.join('\n') || `(Không có cách cục đặc biệt nổi bật tại ${cungName}.)`;
+}
+
+export function formatPhuTheForLLM(r: PhuTheReadout): string {
+  return formatPalaceReadoutForLLM(r, 'Phu Thê');
 }
 
 // Format gọn cho prompt LLM (Vietnamese) — chỉ liệt kê field có giá trị.
-export function formatMorphologyForLLM(m: SpouseMorphology): string {
+export function formatMorphologyForLLM(m: PalaceMorphology, cungName = 'Phu Thê'): string {
   const LABELS: Record<string, string> = {
     faceShape: 'Hình dáng khuôn mặt', forehead: 'Trán', eyebrows: 'Lông mày', eyes: 'Mắt',
     nose: 'Mũi', lips: 'Môi', chin: 'Cằm', cheekbones: 'Gò má', skin: 'Da',
@@ -518,7 +560,7 @@ export function formatMorphologyForLLM(m: SpouseMorphology): string {
   // "chính tinh X định khung..., phụ tinh Y tô điểm/phá cách nét Z" (Henry yêu
   // cầu) thay vì để LLM tự đoán mò sao nào ảnh hưởng field nào.
   const header =
-    `Chính tinh CORE tại Phu Thê: ${coreLabel}${m.coreIsSatTinh ? ' (BẢN THÂN LÀ SÁT TINH — phá cách ngay từ gốc)' : ''} — định khung xương/vóc dáng nền tảng (hình dáng mặt, trán, mũi, vóc dáng, chiều cao).`;
+    `Chính tinh CORE tại ${cungName}: ${coreLabel}${m.coreIsSatTinh ? ' (BẢN THÂN LÀ SÁT TINH — phá cách ngay từ gốc)' : ''} — định khung xương/vóc dáng nền tảng (hình dáng mặt, trán, mũi, vóc dáng, chiều cao).`;
   const lines = Object.entries(m.fields)
     .filter(([, v]) => v)
     .map(([k, v]) => {
