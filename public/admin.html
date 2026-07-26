@@ -321,6 +321,18 @@
 
         <div class="panel">
           <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5.76.76 1.23 1.52 1.41 2.5"/></svg>Đề Xuất AI (Content/Campaign)</div>
+            <div class="panel-actions">
+              <button class="btn btn-gold btn-sm" onclick="mktGenSuggestions(this)">✨ Sinh Đề Xuất</button>
+            </div>
+          </div>
+          <div class="panel-body" id="mkt-suggestions">
+            <div class="empty">Bấm "Sinh Đề Xuất" để AI đọc dữ liệu Nguồn Traffic/Chiến Dịch/Top Trang (khoảng ngày đang chọn ở trên) và gợi ý kênh/nội dung nên đầu tư. Chỉ tham khảo — không tự chạy campaign/nội dung nào.</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>Cohort Giữ Chân (theo tuần đăng ký)</div>
             <span style="font-size:.72rem;color:var(--text-lt)">% user của cohort còn hoạt động ở tuần thứ N</span>
           </div>
@@ -2991,6 +3003,24 @@ function mktExportCSV() {
   const a = document.createElement('a');
   a.href = url; a.download = `marketing_${(_mktData.from || '').slice(0, 10)}_${(_mktData.to || '').slice(0, 10)}.csv`;
   document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+
+// M0.5 (track Marketing Autopilot) — đề xuất content/campaign ADVISORY, sinh
+// ON-DEMAND (không tự chạy nền, không cron) cho khoảng ngày đang chọn.
+async function mktGenSuggestions(btn) {
+  const fromEl = document.getElementById('mkt-from'), toEl = document.getElementById('mkt-to');
+  const host = document.getElementById('mkt-suggestions');
+  const old = btn.innerHTML;
+  btn.disabled = true; btn.innerHTML = '<span class="spinner" style="border-color:rgba(0,0,0,.2);border-top-color:currentColor"></span> Đang sinh…';
+  host.innerHTML = '<div class="loading"><span class="spin"></span>AI đang đọc dữ liệu...</div>';
+  try {
+    const res = await apiGet('admin-marketing-suggestions', `&from=${fromEl.value}&to=${toEl.value}`);
+    if (res.error) throw new Error(res.error);
+    host.innerHTML = `<div style="white-space:pre-wrap;font-size:.82rem;line-height:1.7;color:var(--text)">${escHtmlLocal(res.text || '')}</div>`;
+  } catch (e) {
+    host.innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
+  }
+  btn.disabled = false; btn.innerHTML = old;
 }
 
 // ── TOOLS REGISTRY (danh mục tool_pricing + phân tích dùng, đọc thẳng qua RLS admin_read) ──

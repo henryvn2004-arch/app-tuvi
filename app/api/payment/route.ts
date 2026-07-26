@@ -16,6 +16,7 @@ import { tgSendMessage } from '@/lib/channels/telegram';
 import { parseFirebaseServiceAccount, sendFcmPush } from '@/lib/channels/push';
 import { getGa4Sessions } from '@/lib/analytics/ga4';
 import { getAdminUser } from '@/lib/admin/auth';
+import { generateContentSuggestions } from '@/lib/marketing/content-suggestions';
 
 const PAYPAL_BASE = process.env.PAYPAL_MODE === 'live'
   ? 'https://api-m.paypal.com'
@@ -1158,6 +1159,7 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-login-attempts') return handleAdminLoginAttempts(request);
   if (action === 'admin-user-detail') return handleAdminUserDetail(request, searchParams);
   if (action === 'admin-marketing') return handleAdminMarketing(request, searchParams);
+  if (action === 'admin-marketing-suggestions') return handleAdminMarketingSuggestions(request, searchParams);
   if (action === 'admin-dashboard-v2') return handleAdminDashboardV2(request);
   if (action === 'admin-cron-runs') return handleAdminCronRuns(request);
   if (action === 'admin-channels') return handleAdminChannels(request);
@@ -1370,6 +1372,25 @@ async function handleAdminMarketing(request: NextRequest, sp: URLSearchParams): 
       funnel, sources, acquisition, campaigns, traffic, revenue, cohorts, cohortWeeks,
       from: from.toISOString(), to: to.toISOString(),
     });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── GET: admin-marketing-suggestions (M0.5, track Marketing Autopilot — đề
+// xuất content/campaign ADVISORY). Sinh ON-DEMAND (nút trong dashboard
+// Marketing), CÙNG khoảng ngày admin đang xem — không cron, không tự chạy gì. ──
+async function handleAdminMarketingSuggestions(request: NextRequest, sp: URLSearchParams): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const to = sp.get('to') ? new Date(sp.get('to') as string) : new Date();
+  const from = sp.get('from') ? new Date(sp.get('from') as string) : new Date(Date.now() - 30 * 864e5);
+  if (isNaN(from.getTime()) || isNaN(to.getTime())) return err('Invalid date range', 400);
+  const toExcl = new Date(to.getTime() + 864e5);
+
+  try {
+    const text = await generateContentSuggestions(from.toISOString(), toExcl.toISOString());
+    return ok({ text });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 

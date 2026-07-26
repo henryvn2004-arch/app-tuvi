@@ -157,8 +157,32 @@ Telegram) — không thêm UI mới.
 - **CÒN LẠI:** test tay 1 lượt thật (cả Telegram lẫn Push) sau khi merge+deploy
   để xác nhận `chat_links`/`push_tokens` tra đúng user; theo dõi vài lượt đầu
   xem admin có thấy prompt() đủ dùng không hay cần nâng cấp thành modal đẹp
-  hơn (không cấp bách — tool nội bộ). Tiếp theo: M0.5 (đề xuất content/
-  campaign, advisory, không tự chạy).
+  hơn (không cấp bách — tool nội bộ).
+
+### ✅ M0.5 XONG (PR mới, session này) — đề xuất content/campaign (advisory)
+- **`lib/marketing/content-suggestions.ts`** — `generateContentSuggestions(from,to)`
+  đọc lại 3 RPC đã có (`marketing_sources`/`marketing_campaigns`/`marketing_traffic`,
+  KHÔNG thêm RPC mới), đưa 1 lượt `llmText()` với system prompt ép 2 phần
+  "📊 Kênh nên đầu tư thêm/xem lại" (dựa `sources`) + "✍️ Ý tưởng nội dung"
+  (dựa `traffic.top_paths/top_referrers`), CẤM bịa số, nói thẳng "chưa có
+  chiến dịch nào gắn utm_campaign" khi `campaigns` rỗng (đúng thực trạng hiện
+  tại — D6 đã ghi nhận bảng Campaign trống), luôn chốt 1 dòng nhắc đây là gợi
+  ý tham khảo.
+- **`handleAdminMarketingSuggestions`** (`app/api/payment/route.ts`, action
+  `admin-marketing-suggestions`, verifyAdmin) — nhận `from`/`to` CÙNG khoảng
+  ngày admin đang xem trên trang Marketing (không tự chọn khoảng riêng).
+- **`public/admin.html`** — panel mới "Đề Xuất AI (Content/Campaign)" trong
+  `#page-marketing`, nút **"✨ Sinh Đề Xuất"** — sinh ON-DEMAND (không tự tải
+  khi mở trang, tránh tốn LLM mỗi lần vào dashboard), `mktGenSuggestions()`
+  gọi API rồi render text (escape qua `escHtmlLocal`, `white-space:pre-wrap`
+  giữ xuống dòng).
+- **Verify:** `npx tsc --noEmit` 0 lỗi, `npm run lint` 0 lỗi, `npx prettier
+  --check` sạch, `node --check` 2 script block admin.html OK.
+- **🎉 XONG M0.1–M0.5 (toàn bộ workplan đã chốt với Henry).** Còn M0.6 (autopilot
+  thực thi thật — tự chỉnh giá/khuyến mãi/tự tạo campaign) để sau, rủi ro cao,
+  bàn riêng khi có nhu cầu. **CÒN LẠI:** dùng thử "Sinh Đề Xuất" vài lần sau
+  khi có đủ dữ liệu sources/traffic để đánh giá chất lượng gợi ý LLM, tinh
+  chỉnh system prompt nếu cần.
 
 ---
 
