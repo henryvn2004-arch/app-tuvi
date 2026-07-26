@@ -366,6 +366,23 @@ Trạch, Phụ Mẫu.
   (dạng QUÉT CẢ CÂY, đúng như CI chạy) sạch · `node --check` mọi script block · chạy
   thử 6 lá số thật: threads ra 10 cung khác nhau, cách cục thật, không lá nào trùng bộ.
 
+### Vòng chỉnh tiếp — bỏ đoạn "soi gương", đổi thành mô tả nhân vật (PR mới)
+Henry: đoạn mở đầu *"TRƯỚC HẾT — NÓI VỀ CHÍNH BẠN"* nói về người đọc ở hiện tại
+→ **trái theme** khi cả trang đang kể chuyện tiền kiếp. Đổi thành **"MÔ TẢ <tên
+nhân vật>"**, viết về chính nhân vật.
+- Field `soiGuong` → **`moTaNhanVat`** (prompt + `route.ts` + 2 trang + block
+  chia sẻ `/ket-qua`). Không có cache/lưu JSON truyện nên đổi tên an toàn.
+- Nội dung mới: 3–4 câu ngôi thứ ba, gọi đúng tên đã chốt, nói về **khí chất và
+  cốt cách** (tính khí gốc + một cách hành xử nhận ra ngay + một chỗ yếu/nỗi khổ
+  tâm), cấm xưng "bạn", cấm nhắc đời sống hiện tại. **Giữ nguyên giá trị cũ theo
+  cách khác:** cốt cách vẫn rút thẳng từ cung Mệnh nên prompt yêu cầu tả đúng tới
+  mức người đọc tự soi ra mình — chỉ khác là để họ TỰ nhận ra thay vì gọi thẳng.
+  Thêm luật cấm tả ngũ quan/vóc dáng/trang phục (bức tranh đã lo, tả thêm dễ đá
+  nhau với ảnh).
+- Tiêu đề khối giờ **động**: `moTaTitle.textContent = 'Mô tả ' + characterName`.
+- **Verify:** `npx tsc --noEmit` 0 lỗi · `npm run lint` 0 lỗi · `npx prettier
+  --check .` sạch · `node --check` mọi script block.
+
 ### CÒN LẠI
 - Bật `enabled=true` sau deploy (câu SQL ở trên).
 - Henry gen thử vài lá số trên prod → soi chất lượng ảnh cổ trang + văn phong

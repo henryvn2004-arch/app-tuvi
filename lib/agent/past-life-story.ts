@@ -1,7 +1,7 @@
 // lib/agent/past-life-story.ts
 // ============================================================
 // Prompt cho tool "Chân Dung Tiền Kiếp":
-//   1) PAST_LIFE_STORY_* — viết "soi gương" + 5 hồi truyện + lời kết.
+//   1) PAST_LIFE_STORY_* — viết mô tả nhân vật + 5 hồi truyện + lời kết.
 //   2) PAST_LIFE_IMAGE_* — rút mô tả ngoại hình (EN) cho prompt vẽ ảnh.
 //
 // Hai lượt LLM này ĐỘC LẬP nhau (đều chỉ ăn dữ liệu deterministic từ
@@ -78,11 +78,13 @@ ${formatArcForLLM(profile.arc)}
 
 === NHIỆM VỤ ===
 Trả về JSON hợp lệ, KHÔNG kèm giải thích ngoài JSON:
-{"biDanh":"...","soiGuong":"...","acts":[{"title":"...","text":"..."}],"ketLuan":"..."}
+{"biDanh":"...","moTaNhanVat":"...","acts":[{"title":"...","text":"..."}],"ketLuan":"..."}
 
 1) "biDanh": MỘT vế ngắn tối đa 12 chữ, đứng sau chức phận đã chốt để gợi bi kịch hoặc cốt cách riêng của nhân vật này. KHÔNG lặp lại tên chức phận, KHÔNG chứa tên nhân vật. Ví dụ hình thức (KHÔNG chép nội dung): "người giữ được biên ải mà không giữ nổi lòng vua". Phải rút từ dữ liệu thật của lá số này, không phải câu dùng cho ai cũng đúng.
 
-2) "soiGuong": 3-4 câu nói về CHÍNH NGƯỜI ĐỌC ở hiện tại (xưng "bạn"), KHÔNG phải nhân vật. Đây là phần quan trọng nhất — nếu người đọc không thấy mình trong đây thì cả phần truyện phía sau thành chuyện người dưng. Mô tả cho ĐÚNG và CỤ THỂ: tính khí thật, một cách hành xử quen thuộc, và MỘT nỗi khổ tâm mà kiểu người này hay gặp; nêu cả mặt mạnh lẫn mặt yếu, không tâng bốc. Viết bằng NGÔN NGỮ ĐỜI THƯỜNG — TUYỆT ĐỐI không nhắc tên sao, tên cung, tên cách cục hay bất kỳ thuật ngữ tử vi nào (người đọc đã biết nguồn dữ liệu, nói ra chỉ làm đoạn văn thành bản luận giải). Câu CUỐI bắc cầu sang truyện, đại ý: chính cái cốt cách đó, nếu sinh vào thời xưa, sẽ thành con người thế nào.
+2) "moTaNhanVat": 3-4 câu giới thiệu CHÍNH NHÂN VẬT, ngôi thứ ba, gọi đúng tên đã chốt. Đoạn này đứng ngay cạnh bức chân dung nên phải làm người xem hình dung ra con người đó là ai. Nói về KHÍ CHẤT và CỐT CÁCH: tính khí gốc, một cách hành xử quen thuộc khiến người quanh nhận ra ngay, và MỘT chỗ yếu hoặc nỗi khổ tâm đeo đẳng — nêu cả mạnh lẫn yếu, không tâng bốc, không biến nhân vật thành người hoàn hảo.
+   Đây là phần quan trọng nhất: cốt cách này rút thẳng từ cung Mệnh của người đọc, nên phải mô tả CỤ THỂ và ĐÚNG tới mức người đọc soi vào tự nhận ra mình — nhưng TUYỆT ĐỐI không được xưng "bạn" hay nói về đời sống hiện tại của họ; giữ nguyên trong truyện, để họ tự nhận ra.
+   KHÔNG mô tả chi tiết ngũ quan, vóc dáng, trang phục hay bối cảnh (bức tranh đã lo phần đó, tả thêm dễ đá nhau). KHÔNG nhắc tên sao, tên cung, tên cách cục hay bất kỳ thuật ngữ tử vi nào. Câu CUỐI bắc cầu sang truyện, đại ý: con người như thế bước vào một đời như thế nào.
 
 3) "acts": ĐÚNG ${profile.arc.acts.length} phần tử, theo ĐÚNG thứ tự các hồi đã cho. Mỗi phần tử:
    - "title": 3-7 chữ, gợi được nội dung hồi đó (vd "Đứa trẻ trong quân doanh").

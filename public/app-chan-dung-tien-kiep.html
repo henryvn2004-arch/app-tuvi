@@ -104,8 +104,8 @@
                   </div>
                 </div>
                 <div class="cdtk-mirror">
-                  <div class="cdtk-eyebrow">Trước hết — nói về chính bạn</div>
-                  <p id="soiGuong"></p>
+                  <div class="cdtk-eyebrow" id="moTaTitle">Mô tả nhân vật</div>
+                  <p id="moTaNhanVat"></p>
                 </div>
               </div>
             </div>
@@ -292,7 +292,9 @@ function renderStory(data) {
   if (data.characterName) sub.push(data.characterName);
   if (data.biDanh) sub.push(data.biDanh);
   document.getElementById('danhXungSub').textContent = sub.join(' — ');
-  document.getElementById('soiGuong').textContent = data.soiGuong || '';
+  document.getElementById('moTaTitle').textContent =
+    'Mô tả ' + (data.characterName || 'nhân vật');
+  document.getElementById('moTaNhanVat').textContent = data.moTaNhanVat || '';
 
   document.getElementById('actList').innerHTML = (data.acts || []).map(function (a) {
     var badge = ROLE_BADGE[a.role];
@@ -320,7 +322,7 @@ function publishShareable(imageUrl) {
   blocks.push({
     header: 'Chân Dung Tiền Kiếp',
     image: imageUrl || undefined,
-    text: [d.characterName, d.danhXung, d.biDanh].filter(Boolean).join(' — ') + '\n\n' + (d.soiGuong || ''),
+    text: [d.characterName, d.danhXung, d.biDanh].filter(Boolean).join(' — ') + '\n\n' + (d.moTaNhanVat || ''),
   });
   var storyText = (d.acts || []).map(function (a) {
     var badge = ROLE_BADGE[a.role];
