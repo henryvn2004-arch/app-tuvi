@@ -13,8 +13,10 @@ import { getPackage, getPackages } from '@/lib/billing/packages';
 import { getToolPrice } from '@/lib/billing/pricing';
 import { logCronRun } from '@/lib/cron/log';
 import { tgSendMessage } from '@/lib/channels/telegram';
+import { parseFirebaseServiceAccount, sendFcmPush } from '@/lib/channels/push';
 import { getGa4Sessions } from '@/lib/analytics/ga4';
 import { getAdminUser } from '@/lib/admin/auth';
+import { generateContentSuggestions } from '@/lib/marketing/content-suggestions';
 
 const PAYPAL_BASE = process.env.PAYPAL_MODE === 'live'
   ? 'https://api-m.paypal.com'
@@ -755,6 +757,70 @@ async function handleAdminChannelBroadcast(request: NextRequest, body: Record<st
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
+// ── POST: admin-nudge-user (M0.4, track Marketing Autopilot — nhắc 1 user sắp
+// rời bỏ). Thao tác TAY, không tự động/cron: admin chọn user từ bảng "Sắp Rời
+// Bỏ" (dashboard_at_risk), soạn/sửa nội dung ở client trước khi bấm gửi — nội
+// dung không cố định cứng ở server, admin duyệt mỗi lần. Cooldown 24h/user
+// (đọc lại events event_type=retention_nudge) né spam nếu bấm nhầm/lặp. ──
+async function handleAdminNudgeUser(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized — admin only', 403);
+
+  const userId = String(body.userId || '').trim();
+  const channel = String(body.channel || '').trim();
+  const text = String(body.text || '').trim();
+  if (!userId) return err('Thiếu userId', 400);
+  if (channel !== 'telegram' && channel !== 'push') return err('Kênh không hợp lệ', 400);
+  if (!text) return err('Thiếu nội dung', 400);
+
+  try {
+    const since = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
+    const cooldownRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/events?user_id=eq.${userId}&event_type=eq.retention_nudge&ts=gte.${since}&select=id&limit=1`,
+      { headers: SB_HEADERS },
+    );
+    const cooldownRows: unknown[] = cooldownRes.ok ? await cooldownRes.json() : [];
+    if (cooldownRows.length) return err('Đã nhắc user này trong 24h qua — đợi thêm để tránh spam', 429);
+
+    if (channel === 'telegram') {
+      if (!process.env.TELEGRAM_BOT_TOKEN) return err('Chưa cấu hình TELEGRAM_BOT_TOKEN', 400);
+      const linkRes = await fetch(
+        `${SUPABASE_URL}/rest/v1/chat_links?platform=eq.telegram&user_id=eq.${userId}&select=external_id&limit=1`,
+        { headers: SB_HEADERS },
+      );
+      const linkRows: { external_id: string }[] = linkRes.ok ? await linkRes.json() : [];
+      if (!linkRows.length) return err('User chưa liên kết Telegram', 400);
+      await tgSendMessage(linkRows[0].external_id, text);
+    } else {
+      const FIREBASE_SA = process.env.FIREBASE_SERVICE_ACCOUNT || '';
+      if (!FIREBASE_SA) return err('Chưa cấu hình FIREBASE_SERVICE_ACCOUNT', 400);
+      const tokRes = await fetch(
+        `${SUPABASE_URL}/rest/v1/push_tokens?user_id=eq.${userId}&enabled=eq.true&select=token`,
+        { headers: SB_HEADERS },
+      );
+      const tokRows: { token: string }[] = tokRes.ok ? await tokRes.json() : [];
+      if (!tokRows.length) return err('User chưa có thiết bị đăng ký nhận Push', 400);
+      const sa = parseFirebaseServiceAccount(FIREBASE_SA);
+      const result = await sendFcmPush(sa, tokRows.map((r) => r.token), 'Tử Vi Minh Bảo', text, { url: '/app', kind: 'retention' });
+      if (result.dead.length) {
+        await fetch(`${SUPABASE_URL}/rest/v1/push_tokens?token=in.(${result.dead.map((t) => `"${t}"`).join(',')})`, {
+          method: 'PATCH', headers: SB_HEADERS, body: JSON.stringify({ enabled: false }),
+        });
+      }
+      if (!result.sent) return err('Gửi Push thất bại (thiết bị có thể đã gỡ app)', 500);
+    }
+
+    await fetch(`${SUPABASE_URL}/rest/v1/events`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, Prefer: 'return=minimal' },
+      body: JSON.stringify({ event_type: 'retention_nudge', user_id: userId, meta: { channel, admin_email: admin.email } }),
+    });
+
+    return ok({ success: true });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
 // ── GET: admin-seo (kho seo_pages/laso_pregen + sức khỏe sitemap) ──
 const SITEMAP_PATHS = ['/sitemap.xml', '/sitemap-hubs.xml', '/sitemap-pregen.xml', '/sitemap-ngay-tot.xml'];
 
@@ -1093,6 +1159,7 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-login-attempts') return handleAdminLoginAttempts(request);
   if (action === 'admin-user-detail') return handleAdminUserDetail(request, searchParams);
   if (action === 'admin-marketing') return handleAdminMarketing(request, searchParams);
+  if (action === 'admin-marketing-suggestions') return handleAdminMarketingSuggestions(request, searchParams);
   if (action === 'admin-dashboard-v2') return handleAdminDashboardV2(request);
   if (action === 'admin-cron-runs') return handleAdminCronRuns(request);
   if (action === 'admin-channels') return handleAdminChannels(request);
@@ -1308,6 +1375,25 @@ async function handleAdminMarketing(request: NextRequest, sp: URLSearchParams): 
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
+// ── GET: admin-marketing-suggestions (M0.5, track Marketing Autopilot — đề
+// xuất content/campaign ADVISORY). Sinh ON-DEMAND (nút trong dashboard
+// Marketing), CÙNG khoảng ngày admin đang xem — không cron, không tự chạy gì. ──
+async function handleAdminMarketingSuggestions(request: NextRequest, sp: URLSearchParams): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const to = sp.get('to') ? new Date(sp.get('to') as string) : new Date();
+  const from = sp.get('from') ? new Date(sp.get('from') as string) : new Date(Date.now() - 30 * 864e5);
+  if (isNaN(from.getTime()) || isNaN(to.getTime())) return err('Invalid date range', 400);
+  const toExcl = new Date(to.getTime() + 864e5);
+
+  try {
+    const text = await generateContentSuggestions(from.toISOString(), toExcl.toISOString());
+    return ok({ text });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
 // ── GET: admin-dashboard-v2 (Engagement + Content Revenue + At-risk + Content Production) ──
 // Đọc 3 RPC mới (dashboard_engagement/dashboard_content_revenue/dashboard_at_risk,
 // migration-dashboard-v2.sql) + đếm nhanh 3 pipeline nội dung (count=exact, không
@@ -1430,6 +1516,7 @@ export async function POST(request: NextRequest) {
   if (action === 'admin-create-user') return handleAdminCreateUser(request, body);
   if (action === 'admin-cron-trigger') return handleAdminCronTrigger(request, body);
   if (action === 'admin-channel-broadcast') return handleAdminChannelBroadcast(request, body);
+  if (action === 'admin-nudge-user') return handleAdminNudgeUser(request, body);
   if (action === 'admin-khao-luan-topics') return handleAdminKhaoLuanTopics(request, body);
   if (action === 'admin-nghien-cuu-topics') return handleAdminNghienCuuTopics(request, body);
   if (action === 'admin-mcp-update') return handleAdminMcpUpdate(request, body);

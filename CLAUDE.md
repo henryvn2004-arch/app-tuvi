@@ -5,6 +5,187 @@
 
 ---
 
+## 🧭 Marketing Autopilot + CMO Orchestrator Quân Sư
+
+**Branch:** `claude/marketing-autopilot-track-setup-vse38f`
+**Cập nhật:** 2026-07-25
+
+### 🔖 RESUME HERE
+Track MỚI (chưa từng có mục này trong CLAUDE.md trước phiên 2026-07-25 — khởi tạo
+track + làm milestone đầu trong CÙNG phiên vì Henry giao thẳng "làm M0.1"). Mục
+tiêu track (rộng, sẽ điền dần theo phiên): biến phần "đo lường" (track track.js/
+GA4/admin Marketing đã xong ở track Admin Revamp) thành phần **tự động hoá +
+CMO ảo tư vấn quyết định tăng trưởng** — nhưng **M0.1 KHÔNG động tới phần đó**,
+chỉ vá lỗ hổng đo lường nền tảng trước (garbage in → garbage out, autopilot
+build trên dữ liệu thiếu thì vô nghĩa).
+
+### ✅ M0.1 XONG (PR mới, session này) — track.js + GA4 phủ hết ISR + gộp share-widget.js
+**Audit phát hiện trước khi sửa:** dashboard Marketing (track Admin Revamp, S0-D6)
+đo qua `events`/`track.js`, nhưng **toàn bộ 20 route ISR SEO** (`la-so/[slug]`,
+`menh-kho/[year]` + `[day]`, `van-han` + `[slug]`, `nghien-cuu` + `[slug]`,
+`tu-vi/[slug]`, `khao-luan/[slug]`, `tu-vi-hub` (5 cat rewrite), `tu-dien` +
+`[slug]`, `tac-gia` + `[slug]`, `luan-giai/[slug]`) — tức phần lưu lượng SEO
+LỚN NHẤT site — **0 file có `track.js`**, nên toàn bộ traffic tổ chức/AI-crawler
+đổ vào các trang này hoàn toàn mù trong Funnel/Acquisition/DAU. 3 trang share/
+kết-quả công khai khác (`ket-qua/[id]`, `luan-duong/[id]`, `shared-chat/[id]`)
+**mù luôn cả GA4** (không load `nav.js` — thiết kế cố ý bỏ chrome nav để giữ
+layout branded độc lập cho link chia sẻ, nên GA4 chưa từng nạp qua đường đó).
+Ngoài ra `share-widget.js` (bar chia sẻ Web-Share/Zalo/Facebook/copy, dùng thật
+ở `la-so/[slug]` + `nghien-cuu/[slug]`) gọi endpoint chết `/api/share-event`
+(404 âm thầm, không dùng `Track.event`) — audit D6 (track Admin Revamp) từng ghi
+nhầm là "code chết, không nơi nào gọi" vì bỏ sót 2 trang ISR này.
+- **Sprint 1 — track.js vào 15 file ISR đã có `nav.js` (đã có GA4 sẵn qua đó):**
+  chèn `<script src="/track.js?v=1" defer></script>` ngay trước mọi tag
+  `nav.js` (20 vị trí — vài file có nhiều nhánh template). Cache `s-maxage`
+  dài của các route này không chặn gì — trang cũ tự có track.js khi CDN
+  revalidate/miss, không cần bump cache-bust.
+- **Sprint 2 — `ket-qua`/`luan-duong`/`shared-chat`:** không load `nav.js` (sẽ
+  phá layout branded — nav.js chèn nav bar lên đầu `<body>` nếu thiếu
+  `#nav-ph`). Thêm `lib/analytics/isr-tracking.ts` export `GA4_TRACK_SNIPPET`
+  (script GA4 gtag inline, CÙNG Measurement ID `G-F4XNRS2XT0` với `nav.js` +
+  `track.js?v=1`) — nạp trực tiếp, không qua `nav.js`.
+- **Sprint 3 — gộp `share-widget.js` vào `share.js`:** thêm `ShareButtons.renderBar()`
+  (Web Share API mobile + copy + Facebook + Zalo, UTM tự động qua `campaign`
+  param) vào `public/share.js` cạnh `ShareButtons.render()` (hàng nút inline cũ
+  của blog/khao-luan/tai-lieu/contact/tu-binh) — MỘT nguồn duy nhất. Track qua
+  `ShareButtons.track()` có sẵn (→ `Track.event('share', {meta:{medium}})`),
+  bỏ hẳn `gtag`/`fbq`/fetch `/api/share-event` chết của bản cũ. `la-so/[slug]`
+  + `nghien-cuu/[slug]` đổi sang gọi `ShareButtons.renderBar` + nạp `/share.js`
+  (nghien-cuu gắn `campaign:'nghiencuu'` để tách UTM khỏi `campaign:'laso'`
+  mặc định). **Xóa `public/share-widget.js`.**
+- **Verify:** `npx tsc --noEmit` 0 lỗi, `npm run lint` 0 lỗi (72 warning
+  pre-existing, không liên quan), `npx prettier --check` sạch cho mọi `.ts`
+  đụng tới, `node --check` share.js/track.js OK, `cd tuvi-engine && npm test`
+  181 pass (không liên quan nhưng xác nhận không đụng engine).
+### 📋 Workplan M0.2–M0.6 (Henry đã chốt thứ tự 2026-07-25)
+Phác thảo dựa trên hạ tầng ĐÃ CÓ (không thêm RPC/bảng mới trừ khi ghi rõ):
+`events`/`user_attribution` + 12 RPC marketing/dashboard (funnel/sources/
+acquisition/campaigns/traffic/cohorts/revenue/margin/engagement/content-revenue/
+at-risk/channel-error-rate), GA4 Data API, và kênh đẩy Telegram admin có sẵn
+(`lib/admin/alert.ts`, dùng cho alert đăng nhập).
+- **M0.2 — CMO Digest tự động** (gửi Henry, read-only): cron đọc RPC → LLM tóm
+  tắt → Telegram admin. 1 lần/ngày.
+- **M0.3 — Cảnh báo bất thường:** so số hôm nay/tuần với baseline, ngưỡng lưu
+  `app_config`, bắn ngay khi vượt (không đợi digest định kỳ). Vẫn read-only.
+- **M0.4 — Nối hành động "nhắc user sắp rời bỏ":** D1 (track Admin Revamp) đã
+  làm UI nút "Nhắc qua Telegram/Gửi Push" ở bảng User Sắp Rời Bỏ nhưng CHƯA nối
+  hành động thật (`cursor:default`). Mốc ĐẦU TIÊN động tới end-user — cần chốt
+  nội dung/tần suất trước khi bật (tránh spam/vi phạm chính sách nền tảng).
+- **M0.5 — Đề xuất content/campaign** (advisory, không tự chạy): LLM đọc
+  `marketing_sources`/`campaigns`/`traffic` → đề xuất kênh/nội dung nên đầu tư,
+  hiện trong admin dashboard, Henry tự quyết.
+- **M0.6 (để sau, rủi ro cao):** autopilot thực thi thật (tự chỉnh giá/khuyến
+  mãi/tự tạo campaign) — bàn riêng khi có nhu cầu, chưa trong phạm vi gần.
+
+### ✅ M0.2 XONG (PR mới, session này) — CMO Digest tự động
+- **`lib/marketing/cmo-digest.ts`** — `buildSnapshot()` gọi lại 9 RPC đã có
+  (KHÔNG thêm RPC mới): `marketing_funnel`/`marketing_revenue` 2 lần (tuần này
+  vs tuần trước, WoW) + `marketing_sources` + `dashboard_engagement` (đã có sẵn
+  wau/wau_prev/mau/mau_prev) + `dashboard_margin` + `channel_error_rate` +
+  `dashboard_at_risk` (đếm số lượng). `generateCmoDigestText()` gói snapshot
+  thành JSON, đưa 1 lượt `llmText()` (`lib/llm/complete.ts`, Gemini-primary/
+  Anthropic-backup có sẵn) với system prompt ép format "📈 Điểm sáng / ⚠️ Điểm
+  nghẽn / 💡 Đề xuất", dưới 350 từ, CẤM bịa số khi dữ liệu quá ít.
+- **`app/api/cron/cmo-digest/route.ts`** — cron Vercel (`vercel.json` thêm
+  `0 1 * * *` = 8h sáng VN), auth `CRON_SECRET` giống `cron/daily-push` có sẵn.
+  Gửi qua `tgSendMessage` (`lib/channels/telegram.ts`) tới CHÍNH
+  `ADMIN_TELEGRAM_CHAT_ID` đã dùng cho alert đăng nhập — **0 env mới cần set**.
+  No-op an toàn nếu thiếu `ADMIN_TELEGRAM_CHAT_ID`. Log qua `withCronLog` có
+  sẵn → tự hiện trong panel "Cron & Jobs" admin.html, không cần đăng ký thêm.
+- **Verify:** `npx tsc --noEmit` 0 lỗi, `npm run lint` 0 lỗi (2 file `.ts` mới
+  nằm ngoài phạm vi eslint theo thiết kế — repo chỉ lint `.js`, TS qua `tsc`),
+  `npx prettier --check` sạch.
+- **CÒN LẠI:** Henry xác nhận `ADMIN_TELEGRAM_CHAT_ID` đã set trên Vercel (nên
+  có sẵn — dùng chung với alert đăng nhập); theo dõi bản digest đầu tiên (8h
+  sáng VN hôm sau khi PR merge + deploy) xem chất lượng tóm tắt LLM có ổn
+  không, tinh chỉnh system prompt nếu cần.
+
+### ✅ M0.3 XONG (PR mới, session này) — Cảnh báo bất thường
+- **`lib/marketing/anomaly-alerts.ts`** — `checkAnomalies()` đọc lại 5 RPC đã
+  có (`channel_error_rate`, `dashboard_margin`, `dashboard_engagement`,
+  `marketing_revenue` ×2 hôm nay/tuần trước), so với ngưỡng/baseline, trả
+  danh sách cảnh báo THẬT SỰ vượt ngưỡng. 4 loại:
+  - **Sức khỏe kênh:** error rate 24h/kênh > 8% (khớp ngưỡng "đỏ" đã có trên
+    UI D2), mẫu tối thiểu 20 lượt (né noise).
+  - **Biên LN chat âm:** margin < 0 trong ngày, chỉ xét khi doanh thu chat đủ
+    lớn (≥50k đ, né noise mẫu nhỏ).
+  - **DAU sụt / doanh thu sụt:** so hôm nay với TB 7 ngày trước — CHỈ xét sau
+    20h VN (đợi dữ liệu trong ngày tích đủ, tránh báo giả lúc mới đầu ngày vì
+    so sánh 1 ngày CHƯA XONG với baseline cả-ngày sẽ luôn trông như "sụt").
+  - Ngưỡng lưu `app_config` key `marketing.anomaly_thresholds` (đổi không cần
+    deploy). Cooldown 20h/loại (key `marketing.anomaly_last_fired`) — tránh
+    spam lặp cùng 1 cảnh báo mỗi lần cron chạy.
+- **`app/api/cron/anomaly-alerts/route.ts`** — cron Vercel mỗi 3 giờ
+  (`0 */3 * * *`), CÙNG pattern auth/log/kênh gửi với `cron/cmo-digest`. **Im
+  lặng khi không có gì bất thường** (khác digest — luôn gửi đều đặn) — chỉ
+  gửi Telegram admin khi thật sự vượt ngưỡng, prefix `🚨` để phân biệt trực
+  quan với `🎖️ CMO Digest`.
+- **Verify:** `npx tsc --noEmit` 0 lỗi, `npm run lint` 0 lỗi, `npx prettier
+  --check` sạch.
+- **CÒN LẠI:** theo dõi vài ngày đầu xem ngưỡng mặc định (30% DAU/40% doanh
+  thu/8% lỗi kênh) có hợp lý không — false positive thì nới `app_config`,
+  im lặng hoài thì siết lại.
+
+### ✅ M0.4 XONG (PR mới, session này) — nối hành động "nhắc user sắp rời bỏ"
+Mốc ĐẦU TIÊN động tới end-user. **Quyết định giảm rủi ro:** KHÔNG tự động hoá
+nội dung/gửi — nút ở bảng "Sắp Rời Bỏ" (D1) mở `prompt()` cho admin tự soạn/sửa
+nội dung TRƯỚC MỖI LẦN gửi (có sẵn text gợi ý điền sẵn), không có LLM hay
+template cứng tự bắn. "Tần suất" bị chặn tự nhiên vì cần admin bấm tay từng
+người — cộng thêm cooldown server-side 24h/user (chống bấm nhầm/lặp). Tự chọn
+kênh theo đúng gợi ý D1 đã có sẵn trên UI (im lặng ≥30 ngày → Push, <30 ngày →
+Telegram) — không thêm UI mới.
+- **`lib/channels/push.ts`** (mới) — lift phần gửi FCM HTTP v1 (JWT RS256 tự
+  ký → OAuth token → `messages:send`) ra khỏi `app/api/cron/daily-push/route.ts`
+  thành `parseFirebaseServiceAccount`/`fcmAccessToken`/`sendFcmPush` DÙNG
+  CHUNG — cron broadcast-tất-cả-token và nhánh gửi-1-người-mới đều gọi cùng 1
+  nguồn (behavior-preserving refactor, daily-push route không đổi hành vi).
+- **`handleAdminNudgeUser`** (`app/api/payment/route.ts`, action
+  `admin-nudge-user`, verifyAdmin) — nhận `{userId,channel,text}`. Cooldown:
+  đọc lại `events` (`event_type=retention_nudge`) 24h gần nhất, có rồi thì từ
+  chối (429). Telegram: tra `chat_links` (platform=telegram) lấy `external_id`
+  → `tgSendMessage`; chưa liên kết → lỗi rõ ràng, KHÔNG âm thầm bỏ qua. Push:
+  tra `push_tokens` theo `user_id` (cột đã có sẵn từ đầu, cron daily-push
+  trước giờ chỉ chưa lọc theo user) → `sendFcmPush`, tắt token chết. Gửi xong
+  ghi `events` (`event_type=retention_nudge`, meta `{channel,admin_email}`)
+  làm mốc cooldown lần sau.
+- **`public/admin.html`** — nút gợi ý (span, `cursor:default`, KHÔNG bấm được)
+  ở bảng At-Risk đổi thành `<button>` thật, `nudgeAtRiskUser()` mở `prompt()`
+  soạn nội dung (điền sẵn câu gợi ý nhắc số dư Lượng + link `/app`) → xác nhận
+  → `apiPost('admin-nudge-user', ...)` → `toast()` kết quả.
+- **Verify:** `npx tsc --noEmit` 0 lỗi, `npm run lint` 0 lỗi, `npx prettier
+  --check` sạch, `node --check` 2 script block admin.html OK.
+- **CÒN LẠI:** test tay 1 lượt thật (cả Telegram lẫn Push) sau khi merge+deploy
+  để xác nhận `chat_links`/`push_tokens` tra đúng user; theo dõi vài lượt đầu
+  xem admin có thấy prompt() đủ dùng không hay cần nâng cấp thành modal đẹp
+  hơn (không cấp bách — tool nội bộ).
+
+### ✅ M0.5 XONG (PR mới, session này) — đề xuất content/campaign (advisory)
+- **`lib/marketing/content-suggestions.ts`** — `generateContentSuggestions(from,to)`
+  đọc lại 3 RPC đã có (`marketing_sources`/`marketing_campaigns`/`marketing_traffic`,
+  KHÔNG thêm RPC mới), đưa 1 lượt `llmText()` với system prompt ép 2 phần
+  "📊 Kênh nên đầu tư thêm/xem lại" (dựa `sources`) + "✍️ Ý tưởng nội dung"
+  (dựa `traffic.top_paths/top_referrers`), CẤM bịa số, nói thẳng "chưa có
+  chiến dịch nào gắn utm_campaign" khi `campaigns` rỗng (đúng thực trạng hiện
+  tại — D6 đã ghi nhận bảng Campaign trống), luôn chốt 1 dòng nhắc đây là gợi
+  ý tham khảo.
+- **`handleAdminMarketingSuggestions`** (`app/api/payment/route.ts`, action
+  `admin-marketing-suggestions`, verifyAdmin) — nhận `from`/`to` CÙNG khoảng
+  ngày admin đang xem trên trang Marketing (không tự chọn khoảng riêng).
+- **`public/admin.html`** — panel mới "Đề Xuất AI (Content/Campaign)" trong
+  `#page-marketing`, nút **"✨ Sinh Đề Xuất"** — sinh ON-DEMAND (không tự tải
+  khi mở trang, tránh tốn LLM mỗi lần vào dashboard), `mktGenSuggestions()`
+  gọi API rồi render text (escape qua `escHtmlLocal`, `white-space:pre-wrap`
+  giữ xuống dòng).
+- **Verify:** `npx tsc --noEmit` 0 lỗi, `npm run lint` 0 lỗi, `npx prettier
+  --check` sạch, `node --check` 2 script block admin.html OK.
+- **🎉 XONG M0.1–M0.5 (toàn bộ workplan đã chốt với Henry).** Còn M0.6 (autopilot
+  thực thi thật — tự chỉnh giá/khuyến mãi/tự tạo campaign) để sau, rủi ro cao,
+  bàn riêng khi có nhu cầu. **CÒN LẠI:** dùng thử "Sinh Đề Xuất" vài lần sau
+  khi có đủ dữ liệu sources/traffic để đánh giá chất lượng gợi ý LLM, tinh
+  chỉnh system prompt nếu cần.
+
+---
+
 ## 🆕 Tool mới — "Chân Dung Vợ Chồng" (2026-07-24, CHƯA COMMIT/CHƯA DEPLOY)
 
 Vẽ chân dung người phối ngẫu suy từ cung Phu Thê trong lá số (OpenAI `gpt-image-1`

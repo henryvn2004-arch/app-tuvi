@@ -225,7 +225,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
   </div>
 </div>
 <script src="/footer.js"></script>
-<script src="/nav.js?v=15" defer></script>
+<script src="/track.js?v=1" defer></script><script src="/nav.js?v=15" defer></script>
 </body></html>`;
 }
 
@@ -276,7 +276,7 @@ ${commonHead}
 ${bcHTML}
 ${row.rendered_html}
 <script src="/footer.js"></script>
-<script src="/nav.js?v=15" defer></script>
+<script src="/track.js?v=1" defer></script><script src="/nav.js?v=15" defer></script>
 </body></html>`;
   }
   const luanGiai: Record<string,string> = (row.luan_giai as Record<string,string>) || {};
@@ -293,7 +293,7 @@ ${bcHTML}
 <h1>${title}</h1>
 <div>${bodyHTML}</div>
 <script src="/footer.js"></script>
-<script src="/nav.js?v=15" defer></script>
+<script src="/track.js?v=1" defer></script><script src="/nav.js?v=15" defer></script>
 </body></html>`;
 }
 
@@ -1362,13 +1362,13 @@ ${relatedArticles.length ? `<div style="background:#F9F4EB;border-top:2px solid 
 </div>` : ''}
 ${relatedHTML}
 <script src="/footer.js"></script>
-<script src="/nav.js?v=15" defer></script>
-<script src="/share-widget.js" defer></script>
+<script src="/track.js?v=1" defer></script><script src="/nav.js?v=15" defer></script>
+<script src="/share.js" defer></script>
 <script src="/pwa-push.js" defer></script>
 <script>
 window.addEventListener('load', function () {
-  if (window.showShareWidget) {
-    window.showShareWidget('share-bar-isr', {
+  if (window.ShareButtons) {
+    window.ShareButtons.renderBar('share-bar-isr', {
       url: 'https://www.tuviminhbao.com/la-so/${slug}',
       title: 'Lá Số ${esc(canChiNam)} ${esc(gtLabel)} — ${pad(dd)}/${pad(mm)}/${year} Giờ ${esc(gioLabel)}',
       text: 'Xem lá số tử vi của tôi tại Tử Vi Minh Bảo'

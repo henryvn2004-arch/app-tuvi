@@ -254,15 +254,16 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
 </article>
 <script src="/related-tools.js"></script>
 <script src="/testimonials.js"></script>
-<script src="/nav.js?v=15" defer></script>
-<script src="/share-widget.js" defer></script>
+<script src="/track.js?v=1" defer></script><script src="/nav.js?v=15" defer></script>
+<script src="/share.js" defer></script>
 <script>
 window.addEventListener('load', function () {
-  if (window.showShareWidget) {
-    window.showShareWidget('share-bar-nghiencuu', {
+  if (window.ShareButtons) {
+    window.ShareButtons.renderBar('share-bar-nghiencuu', {
       url: '${url}',
       title: '${title} — Tử Vi Minh Bảo',
-      text: '${desc}'
+      text: '${desc}',
+      campaign: 'nghiencuu'
     });
   }
 });
@@ -279,7 +280,7 @@ function buildNotFound() {
 <h1 style="color:#061A2E;font-family:Georgia,serif;margin-bottom:16px">Không tìm thấy bài viết</h1>
 <p style="color:#777;margin-bottom:24px">Bài viết không tồn tại hoặc đã bị xóa.</p>
 <a href="/nghien-cuu" style="color:#1455A4">← Về Nghiên Cứu</a>
-<script src="/nav.js?v=15" defer></script>
+<script src="/track.js?v=1" defer></script><script src="/nav.js?v=15" defer></script>
 </body></html>`;
 }
 
