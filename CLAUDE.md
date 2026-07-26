@@ -8,16 +8,18 @@
 ## 🧭 Marketing Autopilot + CMO Orchestrator Quân Sư
 
 **Branch:** `claude/marketing-autopilot-track-setup-vse38f`
-**Cập nhật:** 2026-07-25
+**Cập nhật:** 2026-07-26
 
 ### 🔖 RESUME HERE
-Track MỚI (chưa từng có mục này trong CLAUDE.md trước phiên 2026-07-25 — khởi tạo
-track + làm milestone đầu trong CÙNG phiên vì Henry giao thẳng "làm M0.1"). Mục
-tiêu track (rộng, sẽ điền dần theo phiên): biến phần "đo lường" (track track.js/
-GA4/admin Marketing đã xong ở track Admin Revamp) thành phần **tự động hoá +
-CMO ảo tư vấn quyết định tăng trưởng** — nhưng **M0.1 KHÔNG động tới phần đó**,
-chỉ vá lỗ hổng đo lường nền tảng trước (garbage in → garbage out, autopilot
-build trên dữ liệu thiếu thì vô nghĩa).
+**🎉 TOÀN BỘ WORKPLAN M0.1–M0.6 ĐÃ XONG.** Track khởi tạo 2026-07-25 (Henry giao
+thẳng "làm M0.1"), đi hết 6 milestone trong ~2 phiên: M0.1 vá lỗ hổng đo lường
+ISR → M0.2 CMO Digest → M0.3 cảnh báo bất thường → M0.4 nối hành động nhắc user
+→ M0.5 đề xuất content/campaign (advisory) → **M0.6 autopilot THỰC THI THẬT**
+(tự chỉnh giá/khuyến mãi/nhắc segment — mốc rủi ro cao nhất track, xem chi tiết
+thiết kế an toàn ở mục M0.6 bên dưới). M0.6 **shadow-mode mặc định trên prod**
+— Henry tự bật từng phần qua `app_config`/SQL sau khi xem log. Không còn
+milestone nào đã chốt còn tồn đọng; việc tiếp theo (nếu có) là ý tưởng MỚI,
+chưa bàn.
 
 ### ✅ M0.1 XONG (PR mới, session này) — track.js + GA4 phủ hết ISR + gộp share-widget.js
 **Audit phát hiện trước khi sửa:** dashboard Marketing (track Admin Revamp, S0-D6)
@@ -178,11 +180,76 @@ Telegram) — không thêm UI mới.
   giữ xuống dòng).
 - **Verify:** `npx tsc --noEmit` 0 lỗi, `npm run lint` 0 lỗi, `npx prettier
   --check` sạch, `node --check` 2 script block admin.html OK.
-- **🎉 XONG M0.1–M0.5 (toàn bộ workplan đã chốt với Henry).** Còn M0.6 (autopilot
-  thực thi thật — tự chỉnh giá/khuyến mãi/tự tạo campaign) để sau, rủi ro cao,
-  bàn riêng khi có nhu cầu. **CÒN LẠI:** dùng thử "Sinh Đề Xuất" vài lần sau
-  khi có đủ dữ liệu sources/traffic để đánh giá chất lượng gợi ý LLM, tinh
-  chỉnh system prompt nếu cần.
+- **🎉 XONG M0.1–M0.5 (toàn bộ workplan đã chốt với Henry).** **CÒN LẠI:** dùng
+  thử "Sinh Đề Xuất" vài lần sau khi có đủ dữ liệu sources/traffic để đánh giá
+  chất lượng gợi ý LLM, tinh chỉnh system prompt nếu cần.
+
+### ✅ M0.6 XONG (PR mới, session này) — autopilot THỰC THI THẬT, mốc rủi ro cao
+Henry: "Scope m0.6 đi. Cứ làm theo workplan cho xong hết đi" — tự scope 4 sub-
+milestone (6.1–6.4) + panel admin (6.5) trong 1 phiên. **An toàn nằm ở THIẾT KẾ,
+không phải "nhớ tắt"** — 2 lớp khoá độc lập: (1) công tắc tổng
+`app_config['marketing.autopilot_enabled']` mặc định **false**, code KHÔNG BAO
+GIỜ tự bật, lỗi đọc config → coi như false; (2) mỗi loại hành động còn có khoá
+phụ riêng (bound giá rỗng / budget khuyến mãi=0 / budget nudge=0 mặc định) —
+tắt tổng CHƯA đủ, phải khai rõ từng loại. Khi tắt, cron vẫn chạy đều — chỉ TÍNH
++ LOG (`autopilot_actions`) + Telegram admin (prefix 🧪) để Henry xem trước khi
+bật; khi bật, cùng logic, chỉ khác bước cuối áp dụng thật (prefix 🤖). Mọi hành
+động LIVE có cooldown riêng (đọc lại `autopilot_actions`).
+- **Migration `_patches/migration-autopilot-actions.sql`** (✅ ĐÃ CHẠY prod qua
+  Supabase MCP — verify 9 cột + RLS policy `autopilot_actions_admin_read`):
+  bảng `autopilot_actions` (ts, action_type, mode shadow/live, target,
+  before/after jsonb, reason, meta) — nhật ký DUY NHẤT mọi hành động, dùng cho
+  cooldown lẫn panel admin. RLS đọc chỉ admin JWT (giống pattern events).
+- **`lib/marketing/autopilot.ts`** (hạ tầng dùng chung) — `isAutopilotEnabled()`
+  (fail-safe → false), `logAutopilotAction()`, `inCooldown(actionType,target,days)`
+  (chỉ tính LIVE — shadow không giới hạn, vì không có hiệu lực thật),
+  `notifyUserBestChannel()` (Telegram trước qua `chat_links`, else Push qua
+  `push_tokens`, dùng chung cho promo_grant + segment_nudge), `notifyAutopilotRun()`
+  (gộp N hành động/lượt cron thành 1 tin Telegram admin, tránh spam).
+- **M0.6.2 — `lib/marketing/autopilot-price.ts`** — CỐ Ý THU HẸP: `dashboard_margin`
+  (D3) chỉ có margin THẬT (doanh thu khớp chi phí) cho bucket `chat`
+  (`rail-message`) — mọi bucket khác theo `scenario.type` CHỈ có cost, không có
+  doanh thu riêng (billing rail phẳng). Tự chỉnh giá dựa số không khớp doanh thu
+  là bịa → CHỈ áp `rail-message`. Hành động DUY NHẤT: TĂNG giá khi margin ÂM đủ
+  lâu (tự vệ, ngăn lỗ tiếp) — KHÔNG BAO GIỜ tự giảm giá (tối ưu tăng trưởng bằng
+  hạ giá cần con người quyết, rủi ro/lợi ích không đối xứng). Cần Henry khai
+  `app_config['marketing.autopilot_price_bounds']['rail-message']={max,step}`
+  mới đủ điều kiện (map rỗng mặc định = chưa tool nào bật). Cooldown 14N/tool.
+- **M0.6.3 — `lib/marketing/autopilot-promo.ts`** — cấp Lượng bonus (mặc định
+  5 Lượng) cho user tại `dashboard_at_risk` (CÙNG RPC bảng At-Risk D1 + nút nhắc
+  tay M0.4, nhưng cooldown 30N ĐỘC LẬP — nhắc tay không tính vào đây). Budget/
+  lượt `app_config['marketing.autopilot_promo'].budgetCreditsPerRun` mặc định
+  **0 = tắt**, Henry phải tự đặt số dương. Hết budget giữa lượt chạy → phần còn
+  lại rơi về shadow (không chặn cứng cả lượt). Gắn `credit_transactions
+  type='autopilot_promo'`.
+- **M0.6.4 — `lib/marketing/autopilot-nudge.ts`** — "tự tạo campaign" KHÔNG có
+  tích hợp Facebook/Google Ads API (ngoài phạm vi, cần Henry cấp key) nên nghĩa
+  là chiến dịch NHẮC LẠI qua kênh sở hữu (Telegram/Push) tới segment "sắp im
+  lặng SỚM HƠN" promo (idle 7–13N, dùng lại `dashboard_at_risk(idle_days=7)`
+  rồi lọc bớt phần ≥14N để không trùng segment M0.6.3). Message CỐ ĐỊNH (không
+  LLM mỗi lượt — tránh chi phí + nội dung không kiểm soát), chỉ nhắc, không
+  tặng gì. Budget/lượt mặc định **0 = tắt**.
+- **3 cron mới** (`app/api/cron/autopilot-{price,promo,nudge}/route.ts`,
+  pattern CRON_SECRET giống `cmo-digest`/`anomaly-alerts`) — TUẦN, dàn 3 ngày
+  khác nhau tránh dồn tải: giá T2, khuyến mãi T4, nhắc segment T6 (8h sáng VN,
+  `vercel.json`).
+- **M0.6.5 — `handleAdminAutopilotLog`** (`app/api/payment/route.ts`, action
+  `admin-autopilot-log`, verifyAdmin) — THUẦN ĐỌC: 100 hành động gần nhất +
+  snapshot config hiện tại. **CỐ Ý KHÔNG có action bật/tắt qua API/UI** — Henry
+  tự bật qua `app_config`/SQL trực tiếp, tránh 1-click bấm nhầm cho tính năng
+  rủi ro cao. `public/admin.html` — panel "Autopilot — Nhật Ký Hành Động" trong
+  `#page-marketing` (badge trạng thái BẬT/TẮT + bảng log mode shadow/live +
+  before→after + lý do), load cùng lúc `loadMarketing()`.
+- **Verify:** `npx tsc --noEmit` 0 lỗi, `npm run lint` 0 lỗi (72 warning
+  pre-existing), `npx prettier --check` sạch cho mọi `.ts`/`.json` đụng tới,
+  `node --check` 3 script block admin.html OK, `cd tuvi-engine && npm test`
+  181 pass. Migration verify trực tiếp qua Supabase MCP.
+- **CÒN LẠI (việc tay Henry, KHÔNG code):** mọi thứ M0.6 đang **shadow-mode**
+  trên prod ngay khi merge (an toàn, không hành động thật) — theo dõi vài tuần
+  log ở panel Autopilot trước khi cân nhắc bật thật từng loại qua `app_config`.
+  Bật `marketing.autopilot_enabled=true` KHÔNG tự làm gì nếu chưa khai thêm
+  bound/budget riêng từng loại (price bounds / promo budget / nudge budget đều
+  mặc định rỗng/0).
 
 ---
 
