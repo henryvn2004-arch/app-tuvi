@@ -226,13 +226,14 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   // Trang phục — TRƯỚC đây khóa cứng "cream/ivory/beige" cho MỌI lượt (cả nam lẫn nữ)
   // → Henry phản hồi ảnh nào cũng na ná màu áo. Nay RANDOM 1 KIỂU trang phục mỗi lượt
   // gen (server chọn, KHÔNG để LLM tự chọn) từ pool riêng theo giới tính, phong cách
-  // "quiet luxury" hiện đại nhẹ nhàng, quý phái — nữ có THÊM áo dài truyền thống Việt
-  // Nam xen giữa các lựa chọn khác; nam giữ modern-casual tinh tế. MÀU trang phục
-  // KHÔNG còn random độc lập — nay chọn theo NGŨ HÀNH của sao chính tinh tại cung Phu
-  // Thê (Henry yêu cầu): Kim→trắng/be, Hỏa→đỏ nhạt, Thủy→xanh dương nhạt, Mộc→xanh lá
-  // nhạt, Thổ→vàng nhạt/be — tất cả đều tông NHẸ, luxury (không còn màu rực rỡ như
-  // bản trước). Vô chính diệu tại Phu Thê (không xác định được hành) → fallback tông
-  // kem/be trung tính.
+  // Modern Luxury / Clean Minimal / Korean Contemporary (Henry chốt, xem pool bên
+  // dưới) — nữ có THÊM áo dài truyền thống Việt Nam xen giữa các lựa chọn khác; nam
+  // giữ modern-casual tinh tế. MÀU trang phục KHÔNG random độc lập — chọn theo NGŨ
+  // HÀNH của SAO CHÍNH TINH tại cung Phu Thê (`getPhuTheChinhTinhElement`, KHÔNG phải
+  // hành của cục lá số) (Henry yêu cầu): Kim→trắng/be, Hỏa→đỏ nhạt, Thủy→xanh dương
+  // nhạt, Mộc→xanh lá nhạt, Thổ→vàng nhạt/be — tất cả đều tông NHẸ, luxury (không còn
+  // màu rực rỡ như bản trước). Vô chính diệu tại Phu Thê (không xác định được hành)
+  // → fallback tông kem/be trung tính.
   const ELEMENT_COLORS: Record<string, string[]> = {
     Kim: ['ivory white', 'warm champagne beige', 'soft pearl-grey'],
     Hỏa: ['soft dusty rose', 'muted light red', 'pale terracotta blush'],
@@ -242,36 +243,41 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   };
   const colorPool = ELEMENT_COLORS[phuTheElement] || ['warm cream beige', 'soft ivory'];
   const outfitColor = colorPool[Math.floor(Math.random() * colorPool.length)];
-  // Henry phản hồi ảnh ra "gầy gầy, quần áo rộng thùng thình, nhìn già đi" — trang phục
-  // kiểu "tailored/structured/blazer" (cắt may cứng cáp, dáng công sở) dễ đổ bóng
-  // rộng/thùng thình trên khung hình bán thân, cộng dồn với xu hướng thân hình gầy
-  // (xem quy tắc vóc dáng ở sys prompt) ra hiệu ứng già hơn tuổi. Đổi hẳn sang chất
-  // liệu MỀM, RỦ (soft draping fabric), form ÔM VỪA VẶN — không còn "tailored"/
-  // "structured"/"blazer" — theo gợi ý của Henry (tham khảo ChatGPT) để trẻ trung hơn.
+  // Henry phản hồi ảnh ra "gầy gầy, quần áo rộng thùng thình, nhìn già đi" — bản trước
+  // dùng chữ "quiet luxury" lặp lại ở MỌI outfit khiến model chọn phom old-money (cắt
+  // may cứng cáp, dáng công sở lớn tuổi). Đổi hẳn sang pool outfit Henry chốt (tham
+  // khảo ChatGPT): Modern Luxury / Clean Minimal / Korean Contemporary (na ná COS,
+  // Arket, Uniqlo U, Studio Nicholson, Lemaire, Ami Paris) — trẻ trung, casual-sang
+  // hơn hẳn "quiet luxury" cũ. BỎ chữ "quiet luxury" khỏi mọi outfit string.
   const FEMALE_OUTFITS = [
-    'a soft {color} blouse with a relaxed, flattering fit, quiet-luxury minimalist style',
-    'a soft {color} knit sweater with a flowing midi skirt, relaxed quiet-luxury style',
-    'a flowing {color} silk-blend blouse with soft draping fabric, elegant modern quiet-luxury style',
-    'a soft {color} cardigan over a plain white top, relaxed quiet-luxury style',
-    'a {color} wrap dress, elegant flowing silhouette, modern quiet-luxury style',
-    'a traditional Vietnamese áo dài in a soft {color} tone, elegant flowing silhouette, quiet-luxury feel',
-    'a {color} cashmere-look turtleneck with soft flowing trousers, modern minimalist quiet-luxury style',
-    'a {color} linen shirt-dress with soft draping fabric, relaxed elegant quiet-luxury style',
+    'a relaxed {color} linen shirt with straight-leg light-wash jeans, modern minimalist Korean-European style',
+    'a fitted {color} baby tee with high-waisted wide-leg trousers, modern youthful minimalist style',
+    'an oversized {color} blazer over a plain crop top with tailored trousers, modern office-chic Gen-Z style',
+    'a soft {color} knit polo with a pleated midi skirt, feminine yet youthful modern style',
+    'a {color} satin camisole under a relaxed blazer with straight-leg jeans, elegant modern minimalist style',
+    'a minimal {color} satin slip dress with no pattern, sleek modern minimalist style',
+    'an oversized crisp white shirt with tailored {color} shorts, breezy Korean-contemporary minimalist style',
+    'a matching {color} knit two-piece set (knit top with knit skirt or knit pants in the same tone), modern luxury minimalist style',
   ];
   const MALE_OUTFITS = [
-    'a soft {color} button-up shirt with relaxed-fit trousers, quiet-luxury minimalist style',
-    'a {color} knit polo with relaxed-fit chinos, refined modern quiet-luxury style',
-    'a {color} linen shirt with sleeves rolled up, relaxed quiet-luxury style',
-    'a soft {color} overshirt over a plain white tee, modern minimalist quiet-luxury style',
-    'a {color} merino sweater with relaxed-fit trousers, quiet-luxury style',
-    'a {color} bomber jacket over a plain white tee, modern refined quiet-luxury street style',
-    'a {color} Mandarin-collar shirt with soft flowing fabric, understated modern quiet-luxury elegance',
+    'a relaxed {color} Oxford shirt with tailored chinos, modern minimalist style',
+    'a premium oversized {color} T-shirt with tailored trousers, modern Gen-Z office-casual style',
+    'a soft {color} knit polo with straight-leg trousers, refined youthful modern style',
+    'a {color} linen shirt worn open over a plain white T-shirt with tailored chinos, resort-casual modern style',
+    'a {color} overshirt over a plain white crewneck T-shirt with straight-leg jeans, modern Korean-casual style',
+    'a minimal {color} bomber jacket over a plain white T-shirt with tailored trousers, youthful modern style',
+    'a {color} half-zip knit sweater with tailored chinos, modern refined style',
+    'a {color} camp-collar short-sleeve shirt with tailored shorts, summer luxury minimalist style',
   ];
   const outfitPool = spouseGender === 'nu' ? FEMALE_OUTFITS : MALE_OUTFITS;
   const outfitTemplate = outfitPool[Math.floor(Math.random() * outfitPool.length)];
   const wardrobeLine =
-    `Wearing ${outfitTemplate.replace('{color}', outfitColor)}, no logos, no flashy accessories, well-fitted ` +
-    'and flattering to the body — NOT baggy, oversized, boxy, or ill-fitting; avoid sharp corporate tailoring.';
+    `Wearing ${outfitTemplate.replace('{color}', outfitColor)}, neutral premium color palette (white, cream, ` +
+    'beige, taupe, camel, gray, navy, olive), premium natural fabrics (linen, cotton, merino wool, ' +
+    'cashmere-blend, silk, knit), clean tailoring, wrinkle-free, no logos, no graphic prints, no flashy ' +
+    'accessories, premium leather shoes or clean white sneakers, understated elegance, contemporary ' +
+    'Korean-European minimalism — well-proportioned and flattering to the body; any oversized piece should ' +
+    'look deliberate and stylish, never sloppy, shapeless, or boxy.';
 
   // Kiểu tóc — RANDOM 1 hairstyle hiện đại/năng động/trẻ trung mỗi lượt gen (server
   // chọn, KHÔNG để LLM tự bịa để tránh xung đột với lựa chọn dưới đây — cùng cơ chế
@@ -312,8 +318,9 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     'relaxed posture — NEVER slim, skinny, thin, bony, lean, gaunt, or frail.';
   const finalPrompt =
     `An ultra-realistic, premium editorial lifestyle portrait photograph of a ${genderWord} who appears to be ` +
-    `roughly ${ageLow}-${ageHigh} years old, no older — Vietnamese luxury editorial aesthetic, "quiet luxury", warm, ` +
-    'elegant, refined and timeless, Apple/Muji-inspired minimalism, natural and authentic premium feeling, warm ' +
+    `roughly ${ageLow}-${ageHigh} years old, no older — Vietnamese modern-luxury editorial aesthetic, contemporary ` +
+    'Korean-European minimalism (in the style of COS, Arket, Lemaire, Ami Paris), youthful, warm, elegant, ' +
+    'refined and timeless, natural and authentic premium feeling, warm ' +
     'creamy color palette, soft low-contrast tones, approachable and graceful lifestyle aesthetic (NOT ' +
     'a painting, NOT an illustration, NOT a sketch, NOT monochrome or grayscale, NOT a dark or moody image). ' +
     `${ethnicityLine} ${bodyLine} Professional DSLR photography, 85mm portrait lens, f/1.8 shallow depth of ` +
