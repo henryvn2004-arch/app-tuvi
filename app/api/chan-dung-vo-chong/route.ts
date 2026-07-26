@@ -101,18 +101,19 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     'không chỉ suy diễn hình thể; RIÊNG câu hỏi tuổi tác (mục 4) ưu tiên đọc (C) trước vì đầy đủ ngữ cảnh hơn. Nhiệm vụ:\n' +
     '1) "imagePrompt": MỘT đoạn tiếng ANH liền mạch (80-120 từ). BẮT ĐẦU bằng ĐÚNG 1 câu tổng quan/khái quát ' +
     '(overall gestalt — ấn tượng chung: khí chất, độ trẻ trung, tươi sáng) rồi MỚI đi vào liệt kê đặc ' +
-    'điểm cụ thể (face shape, eyes, nose, lips, màu tóc và chất tóc tự nhiên [KHÔNG mô tả kiểu tóc/kiểu cắt — ' +
-    'phần đó server tự chọn riêng], tông da tự nhiên...) — KHÔNG mô ' +
+    'điểm cụ thể (face shape, eyes, nose, lips, chin, cheekbones, tông da tự nhiên...) — KHÔNG mô tả tóc/kiểu tóc/màu ' +
+    'tóc dưới bất kỳ hình thức nào (server tự chọn hairstyle riêng, tránh xung đột) — KHÔNG mô ' +
     'tả trang phục/quần áo (phần đó server tự chọn riêng, tránh xung đột) — KHÔNG liệt kê chi tiết ngay câu đầu, tránh cảm giác rời rạc như ráp từng ' +
     'mảnh. LUÔN mô tả theo hướng TRẺ TRUNG, TƯƠI SÁNG, RỰC RỠ, SỐNG ĐỘNG, MÀU SẮC BÃO HÒA như tranh minh họa mùa ' +
     'hè nắng đẹp — biểu cảm BẮT BUỘC là nụ cười nhẹ nhàng, ấm áp, ánh mắt sáng vui vẻ. Dù (A)/(B) gợi ý tính ' +
     'cách mạnh mẽ/nghiêm nghị/lạnh lùng/ít cười thì đó CHỈ là cá tính nội tâm — KHÔNG được chuyển thành biểu cảm ' +
     'lạnh/nghiêm/ít cười hay tông màu tối/u ám/nhạt nhòa trên khuôn mặt; cá tính mạnh CHỈ thể hiện qua ÁNH MẮT ' +
     'tự tin trong khi biểu cảm và màu sắc tổng thể VẪN sáng sủa, rực rỡ, ấm áp, dễ gần. QUAN TRỌNG: quy tắc "luôn ' +
-    'tươi tắn/ấm áp" ở trên CHỈ áp dụng cho BIỂU CẢM, ÁNH MẮT và TÔNG MÀU/ÁNH SÁNG — TUYỆT ĐỐI KHÔNG được dùng nó ' +
-    'để đổi CẤU TRÚC khuôn mặt (hình dáng mặt, mũi, môi, gò má, hàm, lông mày) mà (A)/(B) đã cho: một khuôn mặt ' +
-    'vuông/xương gò má cao/môi mỏng/mắt sâu sắc hoàn toàn có thể đang mỉm cười ấm áp — PHẢI giữ ĐÚNG các đặc ' +
-    'điểm cấu trúc đó, KHÔNG được làm mềm/tròn hóa thành khuôn mặt trái xoan chung chung, môi đầy đặn, mắt hiền ' +
+    'tươi tắn/ấm áp" ở trên CHỈ áp dụng cho BIỂU CẢM, ÁNH MẮT và TÔNG MÀU/ÁNH SÁNG CỦA ẢNH (lighting/mood) — TUYỆT ' +
+    'ĐỐI KHÔNG được dùng nó để đổi CẤU TRÚC khuôn mặt VÀ MÀU DA THẬT của nhân vật (hình dáng mặt, mũi, môi, gò má, ' +
+    'cằm, hàm, lông mày, tông da/màu da) mà (A)/(B) đã cho: một khuôn mặt vuông/xương gò má cao/môi mỏng/mắt sâu ' +
+    'sắc/da ngăm hoàn toàn có thể đang mỉm cười ấm áp dưới ánh sáng ấm — PHẢI giữ ĐÚNG các đặc điểm cấu trúc và ' +
+    'màu da đó, KHÔNG được làm mềm/tròn hóa thành khuôn mặt trái xoan chung chung, môi đầy đặn, mắt hiền, da sáng ' +
     'chỉ vì cần giữ tông tích cực. RIÊNG VÓC DÁNG (bodyBuild trong (A)) thì NGƯỢC LẠI — TUYỆT ĐỐI KHÔNG đưa vào ' +
     'imagePrompt bất kỳ ý nào gợi gầy gò/ốm yếu/mảnh khảnh/xương xẩu dù (A) có ghi "gầy" (dữ liệu cổ pháp hay mô ' +
     'tả gầy cho rất nhiều sao, không phản ánh đúng thẩm mỹ hiện đại mong muốn) — LUÔN mô tả vóc dáng KHỎE MẠNH, ' +
@@ -123,16 +124,24 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     '"enigmatic", "dark", "moody", "somber", "shadowy", "muted", "dim", "monochrome", "desaturated", "slim", ' +
     '"skinny", "thin", "bony", "lean", "gaunt", "frail", "underweight" — và CẤM từ ' +
     'ngữ gợi già dặn/khắc khổ/phong trần/nhiều nếp nhăn (cấm "mature", "weathered", "aged", "world-worn"). ' +
-    'KHÔNG tự thêm mô tả phong cách nghệ thuật/ánh sáng/chủng tộc/trang phục/kiểu tóc (phần đó server tự ghép), KHÔNG nhắc chiêm ' +
+    'KHÔNG tự thêm mô tả phong cách nghệ thuật/ánh sáng/chủng tộc/trang phục (phần đó server tự ghép), KHÔNG nhắc chiêm ' +
     'tinh/tử vi/tên sao. Các đặc điểm KHÔNG được mâu thuẫn nhau — nếu (A) và (B) mâu thuẫn, ưu tiên (B) nhưng ' +
     'vẫn giữ tinh thần trẻ trung, rực rỡ nói trên.\n' +
-    '2) "description": đoạn tiếng VIỆT (120-180 từ), văn xuôi tự nhiên mô tả khuôn mặt, hình dáng, phong thái, ' +
-    'tính cách VÀ (nếu (B) có gợi ý) hoàn cảnh hôn nhân (vd duyên muộn, gặp nhau nơi xa, tính cách vui vẻ/trầm ' +
-    'lặng...) — CÁC ĐẶC ĐIỂM CẤU TRÚC KHUÔN MẶT (hình dáng mặt, mũi, môi, gò má, mắt) PHẢI bám sát (A)/(B), ' +
-    'KHÔNG tự đổi thành khuôn mặt chung chung dễ thương khác chỉ vì muốn giữ tông tích cực — CHỈ biểu cảm/phong ' +
-    'thái được phép luôn ấm áp, tích cực; RIÊNG VÓC DÁNG thì KHÔNG được viết "gầy/gầy gò/ốm/mảnh khảnh/xương xẩu" ' +
-    'dù (A) ghi vậy — luôn tả vóc dáng khỏe mạnh, cân đối, đầy đặn vừa phải; KHÔNG nhắc tên sao/thuật ngữ tử vi, ' +
-    'KHÔNG ước lượng hay nêu số tuổi/số năm chênh lệch cụ thể với bạn đời, đọc như lời tả người thật.\n' +
+    '2) "description": đoạn tiếng VIỆT (150-220 từ), văn xuôi VỪA mô tả ngoại hình VỪA DIỄN GIẢI THEO SAO — (A) ' +
+    'đã ghi rõ "Chính tinh CORE tại Phu Thê: <tên sao> (<độ sáng>)" ở đầu và mỗi đặc điểm đều kèm "theo CHÍNH TINH ' +
+    'core..." hoặc "theo PHỤ TINH <tên sao> (tô điểm/tinh chỉnh)" hoặc "(sát tinh — có thể phá cách)". BẮT BUỘC mở ' +
+    'đầu bằng câu nêu ĐÍCH DANH chính tinh core (kèm độ sáng) là nền tảng khung mặt/vóc dáng (vd "Cung Phu Thê có ' +
+    'chính tinh Tham Lang đắc địa trấn giữ, báo hiệu người bạn đời có khuôn mặt..., vóc dáng..."), rồi khi mô tả ' +
+    'mắt/môi/gò má/cằm/da/lông mày/biểu cảm, GỌI TÊN phụ tinh tương ứng đã "tô điểm thêm" (nếu là phụ tinh phù ' +
+    'trợ) hay "phá cách" (nếu là sát tinh) khiến nét đó khác đi so với chính tinh core — CHỈ dùng đúng tên sao và ' +
+    'vai trò (A) đã cho cho MỖI đặc điểm, KHÔNG tự bịa sao khác. CÁC ĐẶC ĐIỂM CẤU TRÚC KHUÔN MẶT VÀ MÀU DA (hình ' +
+    'dáng mặt, mũi, môi, gò má, cằm, mắt, tông da) PHẢI bám sát giá trị (A) đã cho cho từng sao, KHÔNG tự đổi ' +
+    'thành khuôn mặt/màu da chung chung dễ thương khác chỉ vì muốn giữ tông tích cực — CHỈ biểu cảm/phong thái ' +
+    'được phép luôn ấm áp, tích cực; RIÊNG VÓC DÁNG thì KHÔNG được viết "gầy/gầy gò/ốm/mảnh khảnh/xương xẩu" dù ' +
+    '(A) ghi vậy — luôn tả vóc dáng khỏe mạnh, cân đối, đầy đặn vừa phải. TUYỆT ĐỐI KHÔNG nhắc tới tóc/mái tóc/kiểu ' +
+    'tóc (không có dữ liệu đáng tin, để trống). KHÔNG ước lượng hay nêu số tuổi/số năm chênh lệch cụ thể với bạn ' +
+    'đời. Sau phần diễn giải theo sao, tiếp tục mô tả phong thái/tính cách và hoàn cảnh hôn nhân (nếu (B) có gợi ' +
+    'ý) tự nhiên như lời tả người thật.\n' +
     '3) "meetingContext": đoạn tiếng VIỆT NGẮN (30-60 từ) luận riêng về HOÀN CẢNH GẶP GỠ nhiều khả năng nhất ' +
     '(vd qua công việc/học tập, qua bạn bè/người thân giới thiệu, tình cờ gặp gỡ, ở nơi xa quê hương/công tác/' +
     'du học, quen biết lâu mới nên duyên, qua mai mối...). ƯU TIÊN bám sát gợi ý CỤ THỂ trong (B) nếu có (vd ' +
@@ -166,7 +175,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
 
   let raw: string;
   try {
-    raw = await llmText({ system: sys, prompt: userMsg, maxTokens: 900 });
+    raw = await llmText({ system: sys, prompt: userMsg, maxTokens: 1100 });
   } catch {
     return err('Lỗi AI mô tả chân dung. Vui lòng thử lại.', 500);
   }
