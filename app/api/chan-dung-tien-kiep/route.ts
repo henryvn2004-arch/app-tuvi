@@ -104,12 +104,15 @@ async function handleStory(birth: BirthParams) {
   }
 
   const parsed = parseJSON(raw) as {
-    danhXung?: string;
+    biDanh?: string;
     soiGuong?: string;
     acts?: StoryAct[];
     ketLuan?: string;
   } | null;
-  if (!parsed?.danhXung || !parsed?.soiGuong || !Array.isArray(parsed.acts) || !parsed.acts.length) {
+  // biDanh (vế thơ) là phần TRANG TRÍ — thiếu vẫn hiển thị được vì danh xưng
+  // chính (chức phận) do engine chốt, không phụ thuộc LLM. Chỉ soiGuong + acts
+  // là bắt buộc.
+  if (!parsed?.soiGuong || !Array.isArray(parsed.acts) || !parsed.acts.length) {
     return err('Lỗi phân tích kết quả AI.', 500);
   }
 
@@ -128,7 +131,13 @@ async function handleStory(birth: BirthParams) {
 
   return ok({
     success: true,
-    danhXung: parsed.danhXung,
+    // Danh xưng chính = chức phận do BẢNG TRA chốt (Tể tướng / Thái y / Quan
+    // án…) — ngắn, cụ thể, người dùng kể lại được. biDanh chỉ là vế phụ hiển
+    // thị nhỏ bên dưới (Henry phản hồi: danh xưng dài kiểu mô tả thì đọc xong
+    // không nhớ nổi để mà kể cho bạn bè).
+    danhXung: profile.occupation.title,
+    biDanh: String(parsed.biDanh || ''),
+    characterName: profile.characterName,
     soiGuong: parsed.soiGuong,
     acts,
     ketLuan: parsed.ketLuan || '',

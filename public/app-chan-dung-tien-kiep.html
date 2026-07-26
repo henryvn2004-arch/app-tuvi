@@ -286,11 +286,14 @@ async function _doGenerate() {
 
 function renderStory(data) {
   document.getElementById('danhXung').textContent = data.danhXung || '';
-  var o = data.occupation || {};
+  // Hero CỐ Ý chỉ còn: chức phận (to) + tên nhân vật & vế bí danh (nhỏ).
+  // Phần "chính tinh nào tại cung nào" đã dời hẳn xuống khối "Cơ Sở Trong Lá
+  // Số" — Henry phản hồi: để thuật ngữ tử vi lẫn vào phần đọc chính khiến nó
+  // nghe như bản luận giải chứ không phải một câu chuyện.
   var sub = [];
-  if (o.star) sub.push('Chính tinh ' + o.star + (o.brightness ? ' (' + o.brightness + ')' : '') + ' tại cung Quan Lộc');
-  if (data.portraitAge) sub.push('chân dung ở tuổi ' + data.portraitAge);
-  document.getElementById('danhXungSub').textContent = sub.join(' · ');
+  if (data.characterName) sub.push(data.characterName);
+  if (data.biDanh) sub.push(data.biDanh);
+  document.getElementById('danhXungSub').textContent = sub.join(' — ');
   document.getElementById('soiGuong').textContent = data.soiGuong || '';
 
   document.getElementById('actList').innerHTML = (data.acts || []).map(function (a) {
@@ -325,6 +328,8 @@ function renderBasis(data) {
   if (data.thanCungName) rows.push('<b>Cung Thân</b> — đóng tại cung ' + esc(data.thanCungName) + '.');
   if (m.cachCuc && m.cachCuc.length) rows.push('<b>Cách cục tại Mệnh</b> — ' + m.cachCuc.map(function (c) { return esc(c.ten); }).join(', ') + '.');
   rows.push('<b>Dòng đời</b> — 5 hồi chia từ 9 đại vận; hồi đánh dấu ★ là đại vận có điểm cao nhất, ▼ là thấp nhất trong chính lá số này.');
+  if (data.portraitAge) rows.push('<b>Chân dung</b> — vẽ ở tuổi khoảng ' + data.portraitAge + ', neo theo đại vận rực rỡ nhất trong quãng đời trưởng thành.');
+  rows.push('<b>Nhân vật</b> — tên và mọi tình tiết trong truyện là hư cấu, dựng riêng cho lá số này; không phải nhân vật lịch sử có thật.');
 
   document.getElementById('basisBody').innerHTML = rows.map(function (r) { return '<p style="margin:0 0 8px">' + r + '</p>'; }).join('');
   document.getElementById('basisBlock').style.display = 'block';
@@ -340,7 +345,7 @@ function publishShareable(imageUrl) {
   blocks.push({
     header: 'Chân Dung Tiền Kiếp',
     image: imageUrl || undefined,
-    text: (d.danhXung || '') + '\n\n' + (d.soiGuong || ''),
+    text: [d.characterName, d.danhXung, d.biDanh].filter(Boolean).join(' — ') + '\n\n' + (d.soiGuong || ''),
   });
   var storyText = (d.acts || []).map(function (a) {
     var badge = ROLE_BADGE[a.role];
@@ -353,7 +358,7 @@ function publishShareable(imageUrl) {
   Shell.setShareable({
     kind: imageUrl ? 'image' : 'text',
     toolId: 'chan-dung-tien-kiep',
-    title: d.danhXung || 'Chân dung tiền kiếp của tôi',
+    title: (d.characterName ? d.characterName + ' — ' : '') + (d.danhXung || 'Chân dung tiền kiếp của tôi'),
     imageUrl: imageUrl || undefined,
     blocks: blocks,
   });
