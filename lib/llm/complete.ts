@@ -78,7 +78,12 @@ function buildGeminiBody(o: LlmTextOpts, maxTokens: number) {
   return body;
 }
 
-async function geminiText(o: LlmTextOpts, maxTokens: number): Promise<string> {
+interface RawLlmResult {
+  text: string;
+  usage: { input_tokens: number; output_tokens: number };
+}
+
+async function geminiText(o: LlmTextOpts, maxTokens: number): Promise<RawLlmResult> {
   if (!GEMINI_KEY) throw new Error('gemini: thiếu GEMINI_API_KEY');
   const url = `${GEMINI_BASE}/${encodeURIComponent(GEMINI_MODEL)}:generateContent?key=${GEMINI_KEY}`;
   const r = await fetch(url, {
@@ -91,7 +96,13 @@ async function geminiText(o: LlmTextOpts, maxTokens: number): Promise<string> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const t = (j?.candidates?.[0]?.content?.parts as any[] | undefined)?.map((p) => p.text).filter(Boolean).join('') || '';
   if (!t) throw new Error('gemini: completion rỗng');
-  return t;
+  return {
+    text: t,
+    usage: {
+      input_tokens: j?.usageMetadata?.promptTokenCount || 0,
+      output_tokens: j?.usageMetadata?.candidatesTokenCount || 0,
+    },
+  };
 }
 
 async function openGeminiStream(o: LlmTextOpts, maxTokens: number): Promise<Response> {
@@ -137,7 +148,7 @@ function buildAnthropicBody(o: LlmTextOpts, maxTokens: number, stream: boolean) 
   return body;
 }
 
-async function anthropicText(o: LlmTextOpts, maxTokens: number): Promise<string> {
+async function anthropicText(o: LlmTextOpts, maxTokens: number): Promise<RawLlmResult> {
   if (!ANTHROPIC_KEY) throw new Error('anthropic: thiếu ANTHROPIC_API_KEY');
   const r = await fetch(ANTHROPIC_URL, {
     method: 'POST',
@@ -149,7 +160,13 @@ async function anthropicText(o: LlmTextOpts, maxTokens: number): Promise<string>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const t = (j?.content as any[] | undefined)?.map((b) => b.text).filter(Boolean).join('') || '';
   if (!t) throw new Error('anthropic: completion rỗng');
-  return t;
+  return {
+    text: t,
+    usage: {
+      input_tokens: j?.usage?.input_tokens || 0,
+      output_tokens: j?.usage?.output_tokens || 0,
+    },
+  };
 }
 
 async function openAnthropicStream(o: LlmTextOpts, maxTokens: number): Promise<Response> {
@@ -179,24 +196,40 @@ async function providerOrder(): Promise<string[]> {
   return primary === 'anthropic' ? ['anthropic', 'gemini'] : ['gemini', 'anthropic'];
 }
 
+export interface LlmTextFullResult {
+  text: string;
+  provider: 'gemini' | 'anthropic';
+  model: string;
+  usage: { input_tokens: number; output_tokens: number };
+}
+
 /**
  * Sinh text (non-stream) qua provider chính, tự fallback provider kia nếu lỗi.
- * Trả về text thuần (route tự parse/JSON như cũ).
+ * Trả full kết quả (kèm provider/model/usage) — cho các route cần log chi phí
+ * thật (vd chan-dung-vo-chong qua lib/agent/usage.ts logLlmUsage).
  */
-export async function llmText(o: LlmTextOpts): Promise<string> {
+export async function llmTextFull(o: LlmTextOpts): Promise<LlmTextFullResult> {
   const maxTokens = o.maxTokens ?? 2000;
   const order = await providerOrder();
   let lastErr: unknown;
   for (const p of order) {
     try {
-      if (p === 'gemini') return await geminiText(o, maxTokens);
-      return await anthropicText(o, maxTokens);
+      const r = p === 'gemini' ? await geminiText(o, maxTokens) : await anthropicText(o, maxTokens);
+      return { text: r.text, usage: r.usage, provider: p as 'gemini' | 'anthropic', model: p === 'gemini' ? GEMINI_MODEL : ANTHROPIC_MODEL };
     } catch (e) {
       lastErr = e;
       console.error(`[llmText] ${p} lỗi → thử backup:`, (e as Error).message);
     }
   }
   throw lastErr ?? new Error('llmText: không provider nào khả dụng');
+}
+
+/**
+ * Sinh text (non-stream) qua provider chính, tự fallback provider kia nếu lỗi.
+ * Trả về text thuần (route tự parse/JSON như cũ).
+ */
+export async function llmText(o: LlmTextOpts): Promise<string> {
+  return (await llmTextFull(o)).text;
 }
 
 // ─── Streaming ─────────────────────────────────────────────────

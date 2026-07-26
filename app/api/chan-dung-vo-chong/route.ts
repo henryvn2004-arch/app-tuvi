@@ -7,7 +7,8 @@ export const runtime = 'nodejs';
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
-import { llmText } from '@/lib/llm/complete';
+import { llmTextFull } from '@/lib/llm/complete';
+import { logLlmUsage, logImageUsage } from '@/lib/agent/usage';
 import { computeLaso, formatLaSoV2 } from '@/lib/engine/laso';
 import {
   computeSpouseMorphology,
@@ -73,13 +74,18 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   let phuTheLuanGiai = '';
   try {
     const laSoText = formatLaSoV2(lasoRes.ls);
-    phuTheLuanGiai = (
-      await llmText({
-        system: PHU_THE_LUAN_GIAI_SYSTEM_PROMPT,
-        prompt: buildPhuTheLuanGiaiPrompt(laSoText, undefined, userGender),
-        maxTokens: 900,
-      })
-    ).trim();
+    const llmRes = await llmTextFull({
+      system: PHU_THE_LUAN_GIAI_SYSTEM_PROMPT,
+      prompt: buildPhuTheLuanGiaiPrompt(laSoText, undefined, userGender),
+      maxTokens: 900,
+    });
+    phuTheLuanGiai = llmRes.text.trim();
+    void logLlmUsage('chan-dung-vo-chong', llmRes.model, {
+      input_tokens: llmRes.usage.input_tokens,
+      output_tokens: llmRes.usage.output_tokens,
+      cache_creation_input_tokens: 0,
+      cache_read_input_tokens: 0,
+    });
   } catch {
     /* best-effort — không chặn vẽ ảnh nếu luận giải lỗi */
   }
@@ -175,7 +181,14 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
 
   let raw: string;
   try {
-    raw = await llmText({ system: sys, prompt: userMsg, maxTokens: 1100 });
+    const llmRes = await llmTextFull({ system: sys, prompt: userMsg, maxTokens: 1100 });
+    raw = llmRes.text;
+    void logLlmUsage('chan-dung-vo-chong', llmRes.model, {
+      input_tokens: llmRes.usage.input_tokens,
+      output_tokens: llmRes.usage.output_tokens,
+      cache_creation_input_tokens: 0,
+      cache_read_input_tokens: 0,
+    });
   } catch {
     return err('Lỗi AI mô tả chân dung. Vui lòng thử lại.', 500);
   }
@@ -343,7 +356,9 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
 
   let imageB64: string;
   try {
-    imageB64 = await generatePortraitImage({ prompt: finalPrompt, size: '1024x1536' });
+    const imgRes = await generatePortraitImage({ prompt: finalPrompt, size: '1024x1536' });
+    imageB64 = imgRes.b64;
+    void logImageUsage('chan-dung-vo-chong', 'gpt-image-1', imgRes.usage);
   } catch (e) {
     return err('Lỗi sinh ảnh: ' + (e instanceof Error ? e.message : 'không rõ'), 500);
   }
