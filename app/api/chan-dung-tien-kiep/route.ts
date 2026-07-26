@@ -14,7 +14,8 @@ export const runtime = 'nodejs';
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
-import { llmText } from '@/lib/llm/complete';
+import { llmTextFull } from '@/lib/llm/complete';
+import { logLlmUsage, logImageUsage } from '@/lib/agent/usage';
 import { computeLaso, type Laso } from '@/lib/engine/laso';
 import { computePastLife, type PastLifeProfile } from '@/lib/engine/past-life';
 import { computeMorphologyForPalace } from '@/lib/engine/portrait';
@@ -86,10 +87,17 @@ async function handleStory(birth: BirthParams) {
 
   let raw: string;
   try {
-    raw = await llmText({
+    const llmRes = await llmTextFull({
       system: PAST_LIFE_STORY_SYSTEM_PROMPT,
       prompt: buildPastLifeStoryPrompt(profile),
       maxTokens: 2600,
+    });
+    raw = llmRes.text;
+    void logLlmUsage('chan-dung-tien-kiep', llmRes.model, {
+      input_tokens: llmRes.usage.input_tokens,
+      output_tokens: llmRes.usage.output_tokens,
+      cache_creation_input_tokens: 0,
+      cache_read_input_tokens: 0,
     });
   } catch {
     return err('Lỗi AI khi viết câu chuyện. Vui lòng thử lại.', 500);
@@ -150,12 +158,18 @@ async function handleImage(userId: string, birth: BirthParams) {
 
   let faceDescriptionEn = '';
   try {
-    const raw = await llmText({
+    const llmRes = await llmTextFull({
       system: PAST_LIFE_IMAGE_SYSTEM_PROMPT,
       prompt: buildPastLifeImagePrompt(profile, morph),
       maxTokens: 600,
     });
-    const parsed = parseJSON(raw) as { imagePrompt?: string } | null;
+    void logLlmUsage('chan-dung-tien-kiep', llmRes.model, {
+      input_tokens: llmRes.usage.input_tokens,
+      output_tokens: llmRes.usage.output_tokens,
+      cache_creation_input_tokens: 0,
+      cache_read_input_tokens: 0,
+    });
+    const parsed = parseJSON(llmRes.text) as { imagePrompt?: string } | null;
     faceDescriptionEn = String(parsed?.imagePrompt || '').trim();
   } catch {
     /* best-effort — thiếu đoạn tả mặt vẫn vẽ được bằng phần khung server ghép */
@@ -165,7 +179,9 @@ async function handleImage(userId: string, birth: BirthParams) {
 
   let imageB64: string;
   try {
-    imageB64 = await generatePortraitImage({ prompt: finalPrompt, size: '1024x1536' });
+    const imgRes = await generatePortraitImage({ prompt: finalPrompt, size: '1024x1536' });
+    imageB64 = imgRes.b64;
+    void logImageUsage('chan-dung-tien-kiep', 'gpt-image-1', imgRes.usage);
   } catch (e) {
     return err('Lỗi sinh ảnh: ' + (e instanceof Error ? e.message : 'không rõ'), 500);
   }

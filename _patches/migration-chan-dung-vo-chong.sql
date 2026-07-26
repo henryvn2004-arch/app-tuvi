@@ -53,8 +53,10 @@ end $$;
 -- ── Giá Lượng (tool_pricing — nguồn giá thật cho paywall.js + server) ──
 -- category='Luận Giải' để rơi vào tab "Tử Vi" trên /cong-cu (giống xem-tuoi,
 -- xem-tuoi-sinh-con — CATEGORY_TO_TAB trong cong-cu.html không nhận 'vision').
+-- Giá 20 Lượng (đã chỉnh từ 22 ban đầu — 2026-07-26, tròn số + đo chi phí thật
+-- qua logLlmUsage/logImageUsage cho thấy biên lợi nhuận còn rất cao ở mức này).
 INSERT INTO public.tool_pricing (tool_id, credits, label, enabled, category, is_free, sort_order, description, icon, updated_at)
-VALUES ('chan-dung-vo-chong', 22, 'Chân Dung Vợ Chồng', true, 'Luận Giải', false, 60,
+VALUES ('chan-dung-vo-chong', 20, 'Chân Dung Vợ Chồng', true, 'Luận Giải', false, 60,
         'Vẽ chân dung người phối ngẫu suy từ cung Phu Thê (OpenAI gpt-image-1, text-to-image).', '🖼️', now())
 ON CONFLICT (tool_id) DO UPDATE
   SET credits = EXCLUDED.credits, label = EXCLUDED.label, category = EXCLUDED.category,

@@ -16,8 +16,14 @@ export interface GeneratePortraitOpts {
   quality?: 'low' | 'medium' | 'high';
 }
 
-/** Trả về base64 PNG (không kèm data: prefix). Ném lỗi nếu API thất bại. */
-export async function generatePortraitImage(opts: GeneratePortraitOpts): Promise<string> {
+export interface GeneratePortraitResult {
+  b64: string;
+  /** Token usage thật từ OpenAI (0 nếu API không trả — vẫn ghi log được, chỉ cost=0). */
+  usage: { text_tokens: number; image_input_tokens: number; image_output_tokens: number };
+}
+
+/** Trả về base64 PNG (không kèm data: prefix) + usage token thật. Ném lỗi nếu API thất bại. */
+export async function generatePortraitImage(opts: GeneratePortraitOpts): Promise<GeneratePortraitResult> {
   if (!OPENAI_KEY) throw new Error('openai-image: thiếu OPENAI_API_KEY');
 
   const r = await fetch(OPENAI_IMAGES_URL, {
@@ -40,8 +46,18 @@ export async function generatePortraitImage(opts: GeneratePortraitOpts): Promise
     throw new Error(`openai-image ${r.status}: ${body.slice(0, 300)}`);
   }
 
-  const j = (await r.json()) as { data?: { b64_json?: string }[] };
+  const j = (await r.json()) as {
+    data?: { b64_json?: string }[];
+    usage?: { output_tokens?: number; input_tokens_details?: { text_tokens?: number; image_tokens?: number } };
+  };
   const b64 = j?.data?.[0]?.b64_json;
   if (!b64) throw new Error('openai-image: không nhận được ảnh.');
-  return b64;
+  return {
+    b64,
+    usage: {
+      text_tokens: j?.usage?.input_tokens_details?.text_tokens || 0,
+      image_input_tokens: j?.usage?.input_tokens_details?.image_tokens || 0,
+      image_output_tokens: j?.usage?.output_tokens || 0,
+    },
+  };
 }

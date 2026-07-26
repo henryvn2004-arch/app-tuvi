@@ -39,7 +39,7 @@ const TuviPaywall = (() => {
     'dat-ten-con':         { cost:  20, title: 'Đặt Tên Con' },
     'dat-ten-dn':          { cost:  20, title: 'Đặt Tên Doanh Nghiệp' },
     'chon-ngay-tot':       { cost:  15, title: 'Chọn Ngày Tốt' },
-    'chan-dung-vo-chong':  { cost:  22, title: 'Chân Dung Vợ Chồng' },
+    'chan-dung-vo-chong':  { cost:  20, title: 'Chân Dung Vợ Chồng' },
     'chan-dung-tien-kiep': { cost:  25, title: 'Chân Dung Tiền Kiếp' },
   };
 
