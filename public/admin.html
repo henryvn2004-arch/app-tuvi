@@ -2413,7 +2413,7 @@ function renderDashAtRisk(rows) {
   const now = Date.now();
   host.innerHTML = `<table>
     <thead><tr><th>Email</th><th style="text-align:right">Còn Lại</th><th>Hoạt Động Cuối</th><th>Im Lặng</th><th></th></tr></thead>
-    <tbody>${rows.map((u) => {
+    <tbody>${rows.map((u, i) => {
       const idleDays = Math.floor((now - new Date(u.last_active).getTime()) / 864e5);
       const badgeClass = idleDays >= 30 ? 'badge-red' : 'badge-pending';
       const suggest = idleDays >= 30 ? 'Gửi Push' : 'Nhắc qua Telegram';
@@ -2422,11 +2422,35 @@ function renderDashAtRisk(rows) {
         <td style="text-align:right"><strong style="color:var(--gold)" class="tabular">⊙ ${u.balance}</strong></td>
         <td style="color:var(--text-lt);font-size:.72rem">${fmtDate(u.last_active)}</td>
         <td><span class="badge ${badgeClass}">${idleDays} ngày</span></td>
-        <td><span class="btn-mini">${suggest}</span></td>
+        <td><button class="btn-mini" style="cursor:pointer;opacity:1" data-idx="${i}">${suggest}</button></td>
       </tr>`;
     }).join('')}</tbody>
   </table>
-  <div class="panel-sub" style="padding:10px 20px;font-size:.68rem;color:var(--text-lt)">Tiêu chí: từng hoạt động ≥3 lần, còn số dư &gt;0, không có event nào trong 14+ ngày. Sắp theo số dư còn lại.</div>`;
+  <div class="panel-sub" style="padding:10px 20px;font-size:.68rem;color:var(--text-lt)">Tiêu chí: từng hoạt động ≥3 lần, còn số dư &gt;0, không có event nào trong 14+ ngày. Sắp theo số dư còn lại. Nút nhắc mở form soạn nội dung — xem/sửa trước khi gửi, tối đa 1 lần/24h/user.</div>`;
+  host.querySelectorAll('button[data-idx]').forEach((btn) => {
+    const u = rows[Number(btn.dataset.idx)];
+    const idleDays = Math.floor((now - new Date(u.last_active).getTime()) / 864e5);
+    btn.addEventListener('click', () => nudgeAtRiskUser(btn, u, idleDays >= 30 ? 'push' : 'telegram'));
+  });
+}
+
+// M0.4 (track Marketing Autopilot) — nhắc TAY 1 user sắp rời bỏ. Admin xem/sửa
+// nội dung trong prompt() trước khi gửi (không có nội dung cố định server-side
+// tự động gửi) — server chỉ chặn spam qua cooldown 24h/user.
+async function nudgeAtRiskUser(btn, u, channel) {
+  const label = channel === 'telegram' ? 'Telegram' : 'Push';
+  const suggested = `Chào bạn! Bạn đang còn ${u.balance} Lượng chưa dùng tại Tử Vi Minh Bảo — quay lại xem vận mới hoặc hỏi thầy điều gì đó nhé: https://www.tuviminhbao.com/app`;
+  const text = prompt(`Soạn tin nhắn gửi qua ${label} cho ${u.email || u.user_id} (sửa thoải mái trước khi gửi):`, suggested);
+  if (text === null) return;
+  if (!text.trim()) { toast('Nội dung trống, đã hủy', 'error'); return; }
+  const old = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Đang gửi…';
+  try {
+    const res = await apiPost('admin-nudge-user', { userId: u.user_id, channel, text: text.trim() });
+    if (res && res.success) toast('Đã gửi nhắc nhở qua ' + label, 'success');
+    else toast('Lỗi: ' + (res.error || 'không rõ'), 'error');
+  } catch (e) { toast('Lỗi: ' + e.message, 'error'); }
+  btn.disabled = false; btn.textContent = old;
 }
 
 // ── USERS ──

@@ -124,9 +124,41 @@ at-risk/channel-error-rate), GA4 Data API, và kênh đẩy Telegram admin có s
   --check` sạch.
 - **CÒN LẠI:** theo dõi vài ngày đầu xem ngưỡng mặc định (30% DAU/40% doanh
   thu/8% lỗi kênh) có hợp lý không — false positive thì nới `app_config`,
-  im lặng hoài thì siết lại. Tiếp theo: M0.4 (nối hành động nhắc user sắp rời
-  bỏ — mốc đầu tiên động tới end-user, cần Henry chốt nội dung/tần suất
-  trước khi bật).
+  im lặng hoài thì siết lại.
+
+### ✅ M0.4 XONG (PR mới, session này) — nối hành động "nhắc user sắp rời bỏ"
+Mốc ĐẦU TIÊN động tới end-user. **Quyết định giảm rủi ro:** KHÔNG tự động hoá
+nội dung/gửi — nút ở bảng "Sắp Rời Bỏ" (D1) mở `prompt()` cho admin tự soạn/sửa
+nội dung TRƯỚC MỖI LẦN gửi (có sẵn text gợi ý điền sẵn), không có LLM hay
+template cứng tự bắn. "Tần suất" bị chặn tự nhiên vì cần admin bấm tay từng
+người — cộng thêm cooldown server-side 24h/user (chống bấm nhầm/lặp). Tự chọn
+kênh theo đúng gợi ý D1 đã có sẵn trên UI (im lặng ≥30 ngày → Push, <30 ngày →
+Telegram) — không thêm UI mới.
+- **`lib/channels/push.ts`** (mới) — lift phần gửi FCM HTTP v1 (JWT RS256 tự
+  ký → OAuth token → `messages:send`) ra khỏi `app/api/cron/daily-push/route.ts`
+  thành `parseFirebaseServiceAccount`/`fcmAccessToken`/`sendFcmPush` DÙNG
+  CHUNG — cron broadcast-tất-cả-token và nhánh gửi-1-người-mới đều gọi cùng 1
+  nguồn (behavior-preserving refactor, daily-push route không đổi hành vi).
+- **`handleAdminNudgeUser`** (`app/api/payment/route.ts`, action
+  `admin-nudge-user`, verifyAdmin) — nhận `{userId,channel,text}`. Cooldown:
+  đọc lại `events` (`event_type=retention_nudge`) 24h gần nhất, có rồi thì từ
+  chối (429). Telegram: tra `chat_links` (platform=telegram) lấy `external_id`
+  → `tgSendMessage`; chưa liên kết → lỗi rõ ràng, KHÔNG âm thầm bỏ qua. Push:
+  tra `push_tokens` theo `user_id` (cột đã có sẵn từ đầu, cron daily-push
+  trước giờ chỉ chưa lọc theo user) → `sendFcmPush`, tắt token chết. Gửi xong
+  ghi `events` (`event_type=retention_nudge`, meta `{channel,admin_email}`)
+  làm mốc cooldown lần sau.
+- **`public/admin.html`** — nút gợi ý (span, `cursor:default`, KHÔNG bấm được)
+  ở bảng At-Risk đổi thành `<button>` thật, `nudgeAtRiskUser()` mở `prompt()`
+  soạn nội dung (điền sẵn câu gợi ý nhắc số dư Lượng + link `/app`) → xác nhận
+  → `apiPost('admin-nudge-user', ...)` → `toast()` kết quả.
+- **Verify:** `npx tsc --noEmit` 0 lỗi, `npm run lint` 0 lỗi, `npx prettier
+  --check` sạch, `node --check` 2 script block admin.html OK.
+- **CÒN LẠI:** test tay 1 lượt thật (cả Telegram lẫn Push) sau khi merge+deploy
+  để xác nhận `chat_links`/`push_tokens` tra đúng user; theo dõi vài lượt đầu
+  xem admin có thấy prompt() đủ dùng không hay cần nâng cấp thành modal đẹp
+  hơn (không cấp bách — tool nội bộ). Tiếp theo: M0.5 (đề xuất content/
+  campaign, advisory, không tự chạy).
 
 ---
 
