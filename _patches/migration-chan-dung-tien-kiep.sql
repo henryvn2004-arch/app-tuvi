@@ -75,3 +75,10 @@ VALUES ('chan-dung-tien-kiep', 25, 'Chân Dung Tiền Kiếp', false, 'Luận Gi
 ON CONFLICT (tool_id) DO UPDATE
   SET credits = EXCLUDED.credits, label = EXCLUDED.label, category = EXCLUDED.category,
       description = EXCLUDED.description, icon = EXCLUDED.icon, updated_at = now();
+
+-- ── Bổ sung (2026-07-26): cột `era` cho lịch sử ──────────────────────────
+-- Tool nay có 2 bối cảnh cho người dùng chọn: 'trung-hoa' (mặc định, bản đầu)
+-- và 'viet-nam'. Cột nullable — các dòng cũ sinh trước khi có lựa chọn bối
+-- cảnh đều thuộc bối cảnh Trung Hoa, backfill luôn cho sạch.
+alter table public.past_life_portraits add column if not exists era text;
+update public.past_life_portraits set era = 'trung-hoa' where era is null;

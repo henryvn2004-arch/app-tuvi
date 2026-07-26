@@ -42,8 +42,8 @@ QUY TẮC BÁM DỮ LIỆU:
 - Chi tiết trong truyện phải mọc ra từ các câu luận thuận/nghịch/cảnh báo của hồi đó, không bịa sự kiện không có căn cứ nào.
 
 BỐI CẢNH — PHẢI NHẤT QUÁN TỪ ĐẦU TỚI CUỐI:
-- Trung Hoa cổ đại, một triều đại HƯ CẤU không tên. Chọn một bối cảnh duy nhất (kinh thành nào, vùng đất nào, đang thời bình hay loạn lạc) rồi GIỮ NGUYÊN suốt 5 hồi — cùng địa danh, cùng thể chế, cùng tuyến nhân vật phụ. Không được hồi này ở biên ải phương bắc, hồi sau nhảy sang phủ chúa phương nam mà không có lý do trong truyện.
-- KHÔNG nhắc bất kỳ nhân vật lịch sử/triều đại CÓ THẬT nào (không Tần Thủy Hoàng, không Gia Cát Lượng, không nhà Đường/Tống). Dùng chữ chung: "triều đình", "kinh thành", "biên ải", "hoàng thượng".
+- Bối cảnh cụ thể được chỉ định trong phần dữ liệu bên dưới. Trong bối cảnh đó, chọn MỘT khung duy nhất (vùng đất nào, đang thời bình hay loạn lạc) rồi GIỮ NGUYÊN suốt 5 hồi — cùng địa danh, cùng thể chế, cùng tuyến nhân vật phụ. Không được hồi này ở biên ải phương bắc, hồi sau nhảy sang phủ chúa phương nam mà không có lý do trong truyện.
+- KHÔNG nhắc bất kỳ nhân vật lịch sử/triều đại CÓ THẬT nào.
 
 ĐIỂM NHẤN — truyện phải có chỗ để nhớ:
 - Mỗi hồi phải có ÍT NHẤT MỘT cảnh cụ thể, nhìn thấy được (một hành động, một vật, một câu nói, một hình ảnh) — không được chỉ tóm tắt suông kiểu "ông trải qua nhiều thăng trầm".
@@ -59,7 +59,10 @@ ${XUNG_HO_RULE}`;
 /** Prompt viết truyện — nhận profile đã tính sẵn (deterministic). */
 export function buildPastLifeStoryPrompt(profile: PastLifeProfile): string {
   const genderWord = profile.gender === 'nu' ? 'NỮ' : 'NAM';
-  return `=== HỒ SƠ NHÂN VẬT (suy từ lá số, đã chốt) ===
+  return `=== BỐI CẢNH (đã chốt, KHÔNG được đổi) ===
+${profile.era.storySetting}
+
+=== HỒ SƠ NHÂN VẬT (suy từ lá số, đã chốt) ===
 Giới tính nhân vật: ${genderWord} (giữ đúng giới tính của người xem lá số).
 
 ${formatCharacterForLLM(profile)}
@@ -87,7 +90,7 @@ LƯU Ý GIỚI TÍNH: nhân vật là ${genderWord}. Nếu chức phận đã ch
 // ── 2. Ảnh ──────────────────────────────────────────────────────────────
 export const PAST_LIFE_IMAGE_SYSTEM_PROMPT =
   'Bạn là art director cho một bức chân dung điện ảnh lịch sử (cinematic historical portrait photography, ' +
-  'bối cảnh Trung Hoa cổ đại). Bạn nhận (A) bộ đặc điểm hình thể suy từ các sao tại cung Mệnh trong lá số ' +
+  'bối cảnh Á Đông thời phong kiến). Bạn nhận (A) bộ đặc điểm hình thể suy từ các sao tại cung Mệnh trong lá số ' +
   'Tử Vi và (B) chức phận của nhân vật. Nhiệm vụ: viết MỘT đoạn tiếng ANH liền mạch 70-110 từ mô tả gương ' +
   'mặt và thần thái nhân vật, để ghép vào một prompt sinh ảnh lớn hơn.\n' +
   'BẮT ĐẦU bằng đúng 1 câu tổng quan về khí chất/thần thái, rồi mới đi vào nét cụ thể (face shape, brow, ' +
@@ -126,12 +129,13 @@ export function buildFinalPastLifeImagePrompt(
   const ageLow = Math.max(20, age - 4);
   const ageHigh = age + 4;
   const genderWord = profile.gender === 'nu' ? 'woman' : 'man';
+  const era = profile.era;
 
   return (
-    `A cinematic, ultra-realistic historical portrait photograph of an East Asian ${genderWord} who appears to be ` +
-    `roughly ${ageLow}-${ageHigh} years old, set in ancient imperial China. ` +
-    `Wearing ${o.attireEn}. Historically plausible ancient Chinese costume and grooming, authentic period detail, ` +
-    'no modern clothing, no modern haircut, no anachronistic objects. ' +
+    `A cinematic, ultra-realistic historical portrait photograph of a ${genderWord} with ${era.ethnicityEn}, who appears to be ` +
+    `roughly ${ageLow}-${ageHigh} years old, set in ${era.settingEn}. ` +
+    `Wearing ${o.attireEn}. ${era.extraEn} Historically plausible pre-modern East Asian court costume and grooming, ` +
+    'authentic period detail, no modern clothing, no modern haircut, no anachronistic objects. ' +
     `Background: ${o.backdropEn}. ` +
     `${faceDescriptionEn} ` +
     'Photographed like a still from a high-budget historical film: professional cinematography, 85mm lens, ' +

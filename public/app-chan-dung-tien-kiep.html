@@ -53,6 +53,10 @@
 .cdtk-basis b{color:#061A2E}
 #histList{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 #histList img{width:56px;height:56px;object-fit:cover;border-radius:8px;cursor:pointer}
+.cdtk-era{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.cdtk-era-btn{border:1.5px solid #DCD3C0;background:#fff;color:#5a5145;border-radius:999px;padding:7px 16px;font-size:13.5px;font-family:inherit;cursor:pointer;transition:all .15s}
+.cdtk-era-btn.active{border-color:#9A7B3A;background:#F6EFE1;color:#6b5322;font-weight:600}
+.cdtk-era-lbl{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9A7B3A;margin:0 0 7px}
 </style>
 </head>
 <body>
@@ -75,6 +79,12 @@
         <h2>Nhập ngày sinh của bạn (dương lịch)</h2>
         <p class="sub">AI lập lá số, suy chức phận từ cung Quan Lộc rồi kể lại một đời người qua 9 đại vận.</p>
         <div id="tuviFormHost"></div>
+      <div class="cdtk-era-lbl">Chọn bối cảnh</div>
+      <div class="cdtk-era" id="eraPick">
+        <button type="button" class="cdtk-era-btn active" data-era="trung-hoa" onclick="pickEra('trung-hoa')">Trung Hoa cổ</button>
+        <button type="button" class="cdtk-era-btn" data-era="viet-nam" onclick="pickEra('viet-nam')">Việt Nam cổ</button>
+      </div>
+
         <div class="frow" style="margin-bottom:0">
           <button class="btn-go" id="btnGo" onclick="analyze()">Xem Tiền Kiếp →</button>
         </div>
@@ -148,6 +158,18 @@ window.SHELL_INTRO={key:'chan-dung-tien-kiep',title:'Chân Dung Tiền Kiếp',d
 <script src="/shell.js?v=45"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=1"></script>
 <script>
+// Bối cảnh — người dùng CHỌN thay vì random: random thì họ không lấy được cái
+// mình muốn, còn cho chọn thì cùng một lá số gen được nhiều lần (mỗi bối cảnh
+// một bức khác nhau để chia sẻ).
+var _era = 'trung-hoa';
+function pickEra(id) {
+  _era = id;
+  var btns = document.querySelectorAll('#eraPick .cdtk-era-btn');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].classList.toggle('active', btns[i].getAttribute('data-era') === id);
+  }
+}
+
 var _currentSlug = '';
 var _resultImgUrl = '';
 var _lastBirth = null;
@@ -232,7 +254,7 @@ async function _doGenerate() {
     return fetch('/api/chan-dung-tien-kiep', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
-      body: JSON.stringify({ birth: birth, phase: phase }),
+      body: JSON.stringify({ birth: birth, phase: phase, era: _era }),
     });
   };
 
@@ -328,6 +350,7 @@ function renderBasis(data) {
   if (data.thanCungName) rows.push('<b>Cung Thân</b> — đóng tại cung ' + esc(data.thanCungName) + '.');
   if (m.cachCuc && m.cachCuc.length) rows.push('<b>Cách cục tại Mệnh</b> — ' + m.cachCuc.map(function (c) { return esc(c.ten); }).join(', ') + '.');
   rows.push('<b>Dòng đời</b> — 5 hồi chia từ 9 đại vận; hồi đánh dấu ★ là đại vận có điểm cao nhất, ▼ là thấp nhất trong chính lá số này.');
+  if (data.era && data.era.label) rows.push('<b>Bối cảnh</b> — ' + esc(data.era.label) + ' (bạn chọn; cùng lá số đổi bối cảnh sẽ ra một bức và một câu chuyện khác).');
   if (data.portraitAge) rows.push('<b>Chân dung</b> — vẽ ở tuổi khoảng ' + data.portraitAge + ', neo theo đại vận rực rỡ nhất trong quãng đời trưởng thành.');
   rows.push('<b>Nhân vật</b> — tên và mọi tình tiết trong truyện là hư cấu, dựng riêng cho lá số này; không phải nhân vật lịch sử có thật.');
 

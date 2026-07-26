@@ -28,6 +28,60 @@ interface StarObj {
   brightness?: string;
 }
 
+
+// ── Bối cảnh (era) ──────────────────────────────────────────────────────
+// Henry chọn thêm Việt Nam cổ, và chỉ ra một điều làm việc này rẻ hẳn: trang
+// phục cung đình Việt xưa vốn chịu ảnh hưởng nặng của Trung Hoa nên KHÔNG cần
+// bộ mô tả riêng — dùng chung `attireEn` của bảng OCCUPATION_BY_STAR cho cả
+// hai bối cảnh. Danh xưng cũng dùng chung luôn: Tể tướng / Thượng thư / Thái y
+// / Quan án / Tướng quân đều là từ Hán-Việt, đúng cho cả triều đình Đại Việt.
+//
+// ĐÁNH ĐỔI ĐÃ BIẾT (Henry chốt: "không cần ghì"): vì không ép các dấu hiệu
+// nhận diện riêng của trang phục Việt (áo giao lĩnh, áo ngũ thân, khăn vấn,
+// mũ cánh chuồn), ảnh bối cảnh Việt Nam nhiều khả năng trông gần giống ảnh
+// bối cảnh Trung Hoa. Nếu sau khi xem ảnh thật thấy cần tách bạch hơn thì chỗ
+// cần sửa là `extraEn` dưới đây, không phải cả bảng nghề.
+export type EraId = 'trung-hoa' | 'viet-nam';
+
+export interface Era {
+  id: EraId;
+  label: string;
+  /** Câu định vị bối cảnh trong prompt ảnh. */
+  settingEn: string;
+  /** Nét mặt/chủng tộc cho prompt ảnh. */
+  ethnicityEn: string;
+  /** Vài dấu hiệu nhẹ để ảnh không trôi hẳn sang bối cảnh kia. */
+  extraEn: string;
+  /** Ràng buộc bối cảnh cho prompt viết truyện. */
+  storySetting: string;
+}
+
+export const ERAS: Record<EraId, Era> = {
+  'trung-hoa': {
+    id: 'trung-hoa',
+    label: 'Trung Hoa cổ',
+    settingEn: 'ancient imperial China',
+    ethnicityEn: 'East Asian (Chinese) facial features',
+    extraEn: 'Classical Chinese imperial aesthetic.',
+    storySetting:
+      'Trung Hoa cổ đại, một triều đại HƯ CẤU không tên. Dùng chữ chung: triều đình, kinh thành, biên ải, hoàng thượng.',
+  },
+  'viet-nam': {
+    id: 'viet-nam',
+    label: 'Việt Nam cổ',
+    settingEn: 'pre-modern Vietnam (Đại Việt), an old Vietnamese imperial capital',
+    ethnicityEn: 'Vietnamese Southeast Asian facial features',
+    extraEn:
+      'Vietnamese imperial aesthetic — court dress of Đại Việt, historically close to Chinese court dress of the same era but in a Vietnamese setting.',
+    storySetting:
+      'Đại Việt thời phong kiến, một triều đại HƯ CẤU không tên. Dùng chữ chung: triều đình, kinh thành, biên ải, bệ hạ. Địa danh nếu có phải là địa danh hư cấu mang âm hưởng Việt, KHÔNG dùng tên triều đại/nhân vật lịch sử Việt Nam có thật (không Lý, Trần, Lê, Nguyễn, không Trần Hưng Đạo, không Nguyễn Trãi).',
+  },
+};
+
+export function resolveEra(id?: string): Era {
+  return ERAS[(id as EraId) in ERAS ? (id as EraId) : 'trung-hoa'];
+}
+
 // ── Chính tinh → chức phận thời xưa ─────────────────────────────────────
 // Nguồn: chính diễn giải cổ pháp của từng chính tinh (Thất Sát = tướng ở
 // biên ải, Cự Môn = khẩu thiệt/biện luận, Thiên Cơ = mưu trí...). CHỦ ĐỘNG
@@ -212,9 +266,21 @@ const HOA_NOTES: Record<string, string> = {
 // thông, cố ý TRÁNH các tổ hợp gắn với nhân vật lịch sử nổi tiếng. Chọn
 // deterministic theo lá số → cùng một lá số luôn ra cùng một tên (gen lại
 // không đổi người), nhưng lá số khác nhau thì tên khác nhau.
-const HO_POOL = ['Trần', 'Lục', 'Doãn', 'Tạ', 'Mạnh', 'Thôi', 'Bùi', 'Đỗ', 'Hạ', 'Vương', 'Tô', 'Kỷ'];
-const TEN_NAM = ['Tử Kỳ', 'Bá Nhiên', 'Duy Cẩn', 'Mộ Ngôn', 'Thanh Vân', 'Trọng Khiêm', 'Hữu Đạo', 'Nguyên Thực'];
-const TEN_NU = ['Thanh Lam', 'Tố Nghi', 'Diệu Hoa', 'Vân Thư', 'Tuệ Kỳ', 'Diệu Linh', 'Nhu Gia', 'Uyển Chi'];
+// Pool tên tách theo BỐI CẢNH. Henry chốt không ghì trang phục Việt (vốn gần
+// giống Trung Hoa), nên tên nhân vật thành dấu hiệu nhận diện mạnh nhất còn
+// lại — và nó rẻ hơn hẳn bộ mô tả trang phục riêng.
+const NAME_POOLS: Record<EraId, { ho: string[]; nam: string[]; nu: string[] }> = {
+  'trung-hoa': {
+    ho: ['Lục', 'Doãn', 'Tạ', 'Mạnh', 'Thôi', 'Hạ', 'Vương', 'Tô', 'Kỷ', 'Tần', 'Diệp', 'Hàn'],
+    nam: ['Tử Kỳ', 'Bá Nhiên', 'Duy Cẩn', 'Mộ Ngôn', 'Thanh Vân', 'Trọng Khiêm', 'Hữu Đạo', 'Nguyên Thực'],
+    nu: ['Thanh Lam', 'Tố Nghi', 'Diệu Hoa', 'Vân Thư', 'Tuệ Kỳ', 'Diệu Linh', 'Nhu Gia', 'Uyển Chi'],
+  },
+  'viet-nam': {
+    ho: ['Trần', 'Lê', 'Phạm', 'Đặng', 'Vũ', 'Đinh', 'Hoàng', 'Bùi', 'Ngô', 'Đỗ', 'Dương', 'Trịnh'],
+    nam: ['Đức Toàn', 'Văn Cẩn', 'Hữu Nghiêm', 'Đình Khuê', 'Bá Lộc', 'Trọng Nghĩa', 'Quang Đán', 'Sĩ Liêm'],
+    nu: ['Ngọc Diệp', 'Thục Trinh', 'Ngọc Uyển', 'Thanh Nhàn', 'Diệu Thường', 'Ngọc Chân', 'Tố Liên', 'Thu Nương'],
+  },
+};
 
 /** Hash ổn định (không dùng Math.random — cùng lá số phải ra cùng tên). */
 function stableHash(seed: string): number {
@@ -226,11 +292,15 @@ function stableHash(seed: string): number {
   return Math.abs(h);
 }
 
-function pickCharacterName(ls: Laso, gender: 'nam' | 'nu'): string {
+function pickCharacterName(ls: Laso, gender: 'nam' | 'nu', era: Era): string {
+  // Seed CỐ Ý không chứa era: cùng một lá số đổi bối cảnh vẫn là "cùng một
+  // người" được hình dung lại ở nơi khác, nên chọn cùng vị trí trong pool —
+  // chỉ pool đổi, thứ tự bốc thì giữ nguyên.
   const seed = [ls.canChiNam, ls.menhDC, ls.thanDC, ls.napAm, ls.cuc, gender].join('|');
   const h = stableHash(seed);
-  const ten = gender === 'nu' ? TEN_NU : TEN_NAM;
-  return `${HO_POOL[h % HO_POOL.length]} ${ten[Math.floor(h / HO_POOL.length) % ten.length]}`;
+  const pool = NAME_POOLS[era.id];
+  const ten = gender === 'nu' ? pool.nu : pool.nam;
+  return `${pool.ho[h % pool.ho.length]} ${ten[Math.floor(h / pool.ho.length) % ten.length]}`;
 }
 
 function palaceStarObjs(p: Rec | undefined, majorsOnly = false): StarObj[] {
@@ -443,6 +513,7 @@ function computeLifeArc(ls: Laso): LifeArc {
 // ── Tổng hợp ────────────────────────────────────────────────────────────
 export interface PastLifeProfile {
   gender: 'nam' | 'nu';
+  era: Era;
   /** Tên nhân vật — chọn deterministic từ pool (xem pickCharacterName). */
   characterName: string;
   occupation: OccupationResult;
@@ -467,14 +538,15 @@ export interface PastLifeProfile {
  * Dựng toàn bộ dữ liệu nhân vật tiền kiếp từ lá số đã tính. Thuần
  * deterministic — mọi thứ LLM cần đã được chốt ở đây, LLM chỉ viết văn.
  */
-export function computePastLife(ls: Laso, gender: 'nam' | 'nu'): PastLifeProfile {
+export function computePastLife(ls: Laso, gender: 'nam' | 'nu', era: Era = ERAS['trung-hoa']): PastLifeProfile {
   const palaces = (ls.palaces as Rec[]) || [];
   const thanP = palaces.find((p) => p.isThan) as Rec | undefined;
   const thanCungName = String(thanP?.cungName || 'Mệnh');
 
   return {
     gender,
-    characterName: pickCharacterName(ls, gender),
+    era,
+    characterName: pickCharacterName(ls, gender, era),
     occupation: computeOccupation(ls),
     arc: computeLifeArc(ls),
     thanCungName,
