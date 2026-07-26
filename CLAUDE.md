@@ -98,8 +98,35 @@ at-risk/channel-error-rate), GA4 Data API, và kênh đẩy Telegram admin có s
 - **CÒN LẠI:** Henry xác nhận `ADMIN_TELEGRAM_CHAT_ID` đã set trên Vercel (nên
   có sẵn — dùng chung với alert đăng nhập); theo dõi bản digest đầu tiên (8h
   sáng VN hôm sau khi PR merge + deploy) xem chất lượng tóm tắt LLM có ổn
-  không, tinh chỉnh system prompt nếu cần. Tiếp theo: M0.3 (cảnh báo bất
-  thường).
+  không, tinh chỉnh system prompt nếu cần.
+
+### ✅ M0.3 XONG (PR mới, session này) — Cảnh báo bất thường
+- **`lib/marketing/anomaly-alerts.ts`** — `checkAnomalies()` đọc lại 5 RPC đã
+  có (`channel_error_rate`, `dashboard_margin`, `dashboard_engagement`,
+  `marketing_revenue` ×2 hôm nay/tuần trước), so với ngưỡng/baseline, trả
+  danh sách cảnh báo THẬT SỰ vượt ngưỡng. 4 loại:
+  - **Sức khỏe kênh:** error rate 24h/kênh > 8% (khớp ngưỡng "đỏ" đã có trên
+    UI D2), mẫu tối thiểu 20 lượt (né noise).
+  - **Biên LN chat âm:** margin < 0 trong ngày, chỉ xét khi doanh thu chat đủ
+    lớn (≥50k đ, né noise mẫu nhỏ).
+  - **DAU sụt / doanh thu sụt:** so hôm nay với TB 7 ngày trước — CHỈ xét sau
+    20h VN (đợi dữ liệu trong ngày tích đủ, tránh báo giả lúc mới đầu ngày vì
+    so sánh 1 ngày CHƯA XONG với baseline cả-ngày sẽ luôn trông như "sụt").
+  - Ngưỡng lưu `app_config` key `marketing.anomaly_thresholds` (đổi không cần
+    deploy). Cooldown 20h/loại (key `marketing.anomaly_last_fired`) — tránh
+    spam lặp cùng 1 cảnh báo mỗi lần cron chạy.
+- **`app/api/cron/anomaly-alerts/route.ts`** — cron Vercel mỗi 3 giờ
+  (`0 */3 * * *`), CÙNG pattern auth/log/kênh gửi với `cron/cmo-digest`. **Im
+  lặng khi không có gì bất thường** (khác digest — luôn gửi đều đặn) — chỉ
+  gửi Telegram admin khi thật sự vượt ngưỡng, prefix `🚨` để phân biệt trực
+  quan với `🎖️ CMO Digest`.
+- **Verify:** `npx tsc --noEmit` 0 lỗi, `npm run lint` 0 lỗi, `npx prettier
+  --check` sạch.
+- **CÒN LẠI:** theo dõi vài ngày đầu xem ngưỡng mặc định (30% DAU/40% doanh
+  thu/8% lỗi kênh) có hợp lý không — false positive thì nới `app_config`,
+  im lặng hoài thì siết lại. Tiếp theo: M0.4 (nối hành động nhắc user sắp rời
+  bỏ — mốc đầu tiên động tới end-user, cần Henry chốt nội dung/tần suất
+  trước khi bật).
 
 ---
 
