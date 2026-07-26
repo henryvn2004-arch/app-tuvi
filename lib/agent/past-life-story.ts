@@ -89,21 +89,58 @@ LƯU Ý GIỚI TÍNH: nhân vật là ${genderWord}. Nếu chức phận đã ch
 
 // ── 2. Ảnh ──────────────────────────────────────────────────────────────
 export const PAST_LIFE_IMAGE_SYSTEM_PROMPT =
-  'Bạn là art director cho một bức chân dung điện ảnh lịch sử (cinematic historical portrait photography, ' +
-  'bối cảnh Á Đông thời phong kiến). Bạn nhận (A) bộ đặc điểm hình thể suy từ các sao tại cung Mệnh trong lá số ' +
-  'Tử Vi và (B) chức phận của nhân vật. Nhiệm vụ: viết MỘT đoạn tiếng ANH liền mạch 70-110 từ mô tả gương ' +
-  'mặt và thần thái nhân vật, để ghép vào một prompt sinh ảnh lớn hơn.\n' +
+  'Bạn là art director cho một bức MINH HOẠ cổ điển Á Đông (refined East Asian classical illustration, vẽ ' +
+  'painterly mềm mại, KHÔNG phải ảnh chụp), bối cảnh Á Đông thời phong kiến. Bạn nhận (A) bộ đặc điểm hình ' +
+  'thể suy từ các sao tại cung Mệnh trong lá số Tử Vi và (B) chức phận của nhân vật. Nhiệm vụ: viết MỘT ' +
+  'đoạn tiếng ANH liền mạch 70-110 từ mô tả gương mặt và thần thái nhân vật, để ghép vào một prompt sinh ' +
+  'ảnh lớn hơn.\n' +
   'BẮT ĐẦU bằng đúng 1 câu tổng quan về khí chất/thần thái, rồi mới đi vào nét cụ thể (face shape, brow, ' +
   'eyes, nose, lips, chin, cheekbones, skin tone, build). Các nét PHẢI bám sát (A) — một khuôn mặt vuông, ' +
   'gò má cao, mắt sâu sắc thì phải giữ nguyên như vậy, KHÔNG làm mềm thành khuôn mặt trái xoan chung chung ' +
   'cho dễ nhìn.\n' +
+  'CẢNH BÁO RIÊNG CHO PHONG CÁCH NÀY: bức tranh được vẽ theo lối dịu, pastel, thanh thoát. Đó là quy định ' +
+  'về CHẤT LIỆU VẼ và ÁNH SÁNG, TUYỆT ĐỐI không được dùng nó làm cớ để bào mòn cấu trúc gương mặt — không ' +
+  'tự ý làm thon gọn hàm bạnh, hạ gò má cao, làm to mắt nhỏ, hay làm trắng nước da ngăm chỉ vì tổng thể ' +
+  'trông cần mềm mại. Một khuôn mặt góc cạnh, rám nắng vẫn vẽ được bằng nét mềm và màu dịu.\n' +
   'Thần thái phải khớp với chức phận (B): võ tướng thì trầm, gan lì, dạn dày sương gió; quan văn thì tỉnh ' +
-  'táo, sắc sảo; thầy thuốc thì điềm đạm, nhân hậu. KHÁC với chân dung thương mại — ở đây KHÔNG bắt buộc ' +
-  'phải tươi cười; một vẻ mặt nghiêm nghị, trầm mặc hay mỏi mệt là hoàn toàn phù hợp nếu hợp với nhân vật.\n' +
-  'TUYỆT ĐỐI KHÔNG mô tả: trang phục, mũ mão, giáp trụ, kiểu tóc, bối cảnh phía sau, ánh sáng, phong cách ' +
-  'nghệ thuật (server tự ghép các phần đó, mô tả thêm sẽ gây xung đột). KHÔNG nhắc chiêm tinh/tử vi/tên sao. ' +
-  'KHÔNG dùng tên người thật.\n' +
+  'táo, sắc sảo; thầy thuốc thì điềm đạm, nhân hậu. KHÔNG bắt buộc phải tươi cười; một vẻ mặt nghiêm nghị, ' +
+  'trầm mặc hay mỏi mệt là hoàn toàn phù hợp nếu hợp với nhân vật.\n' +
+  'TUYỆT ĐỐI KHÔNG mô tả: trang phục, mũ mão, giáp trụ, kiểu tóc, bối cảnh phía sau, ánh sáng, bảng màu, ' +
+  'phong cách nghệ thuật (server tự ghép các phần đó, mô tả thêm sẽ gây xung đột). KHÔNG nhắc chiêm tinh/' +
+  'tử vi/tên sao. KHÔNG dùng tên người thật.\n' +
   'CHỈ trả JSON hợp lệ: {"imagePrompt":"..."}';
+
+// ── Phong cách vẽ (áp CHUNG mọi bức) ───────────────────────────────────
+// Xuất phát từ một prompt Henry đưa (ChatGPT đề xuất). Tao giữ phần PHONG
+// CÁCH và bỏ/sửa 3 phần không dùng nguyên được:
+//
+//  1. Bản gốc là "ảnh chụp điện ảnh, KHÔNG phải tranh vẽ" — ngược hẳn. Nên
+//     đây là THAY THẾ khối tả ảnh chụp cũ, không phải nối thêm (nối thêm thì
+//     hai chỉ dẫn đánh nhau, kết quả hên xui).
+//  2. Bản gốc trộn phong cách với NỘI DUNG ("elegant silk with floral
+//     embroidery", "gardens, pavilions"). Tool này đã suy trang phục theo
+//     chức phận và bối cảnh nền theo nhóm nghề từ lá số — áp đè thì Tướng
+//     quân trấn ải mặc giáp sờn trận đứng trên thành biên ải sẽ thành người
+//     mặc lụa thêu hoa trong vườn cảnh, mất đúng chỗ khiến bức tranh khớp với
+//     câu chuyện. Nên khối này CHỈ nói về chất liệu vẽ / ánh sáng / không
+//     khí, tuyệt đối không chạm tới trang phục và bối cảnh.
+//  3. Bản gốc khoá cứng 5 màu (dusty pink, ivory, jade, pale cyan, peach).
+//     14 chức phận đang có màu riêng (Vương gia tím thẫm kim tuyến, Quan án
+//     đen viền đỏ, Tướng quân giáp sắt tối) — ép hết về một bảng màu thì mọi
+//     bức nhìn như một. Nay giữ CÁCH XỬ LÝ pastel (dịu, tương phản thấp, phát
+//     sáng nhẹ) nhưng cho màu gốc của trang phục đi xuyên qua ở sắc độ nhạt
+//     hơn. Bỏ chữ "romantic" — hợp Quan nội đình, sai với Quan án/Tướng quân.
+export const PORTRAIT_STYLE_EN =
+  'Rendered as a refined East Asian classical illustration: soft painterly digital brushwork, smooth ' +
+  'gradients and subtle watercolour-inspired texture. Gentle diffused lighting with a delicate bloom, ' +
+  'luminous and airy. Keep overall contrast low — avoid harsh shadows, heavy black shading and ' +
+  'over-saturated colour. Render the subject\u2019s own garment, armour and background colours in a muted, ' +
+  'softened pastel register rather than replacing them, so each character still reads as their own rank ' +
+  'and role; let ivory, dusty rose, jade green, pale cyan and soft peach sit underneath as supporting ' +
+  'tones. Finely observed textile and material detail, with flowing drapery where the costume allows. ' +
+  'Graceful, serene, dignified and timeless. ' +
+  'Premium illustration quality. Not a photograph, no photographic realism, no 3D render, no anime or ' +
+  'manga styling, no harsh digital outlines.';
 
 export function buildPastLifeImagePrompt(profile: PastLifeProfile, morph: PalaceMorphology): string {
   const o = profile.occupation;
@@ -132,18 +169,14 @@ export function buildFinalPastLifeImagePrompt(
   const era = profile.era;
 
   return (
-    `A cinematic, ultra-realistic historical portrait photograph of a ${genderWord} with ${era.ethnicityEn}, who appears to be ` +
+    `A refined East Asian classical illustration, a painted half-body portrait of a ${genderWord} with ${era.ethnicityEn}, appearing ` +
     `roughly ${ageLow}-${ageHigh} years old, set in ${era.settingEn}. ` +
     `Wearing ${o.attireEn}. ${era.extraEn} Historically plausible pre-modern East Asian court costume and grooming, ` +
     'authentic period detail, no modern clothing, no modern haircut, no anachronistic objects. ' +
-    `Background: ${o.backdropEn}. ` +
+    `Background: ${o.backdropEn}, rendered with atmospheric perspective and kept secondary to the figure. ` +
     `${faceDescriptionEn} ` +
-    'Photographed like a still from a high-budget historical film: professional cinematography, 85mm lens, ' +
-    'f/2.0 shallow depth of field, warm directional natural light with soft falloff, rich but natural color ' +
-    'grading, fine skin texture with visible pores and natural imperfections, NO beauty filter, NO plastic ' +
-    'airbrushed AI look. Dignified and grounded, a real human being rather than a fantasy illustration. ' +
-    'NOT a painting, NOT an illustration, NOT anime, NOT a video game render. ' +
-    'Single subject only, half-body or head-and-shoulders framing, subject facing the camera. ' +
+    `${PORTRAIT_STYLE_EN} ` +
+    'Single subject only, half-body or head-and-shoulders framing, subject facing the viewer. ' +
     'No text, no watermark, no signature, no logo, no subtitles.'
   );
 }

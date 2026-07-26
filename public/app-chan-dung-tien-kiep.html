@@ -345,6 +345,12 @@ function renderBasis(data) {
       (o.brightness ? ' (' + esc(o.brightness) + ')' : '') + ' tại cung Quan Lộc' +
       (o.borrowed ? ' (Quan Lộc vô chính diệu → mượn chính tinh cung xung chiếu theo cổ pháp)' : '') + '.');
   }
+  if (o.tierLabel) {
+    rows.push('<b>Tầng chức phận</b> — ' + esc(o.tierLabel) +
+      (o.tierBreakdown && o.tierBreakdown.length ? ' (' + o.tierBreakdown.map(esc).join(', ') + ')' : '') +
+      '. Cùng một chính tinh, lá số khác nhau ra tầng khác nhau.');
+  }
+  if (o.source) rows.push('<b>Căn cứ cổ thư</b> — ' + esc(o.source) + '.');
   if (o.notes && o.notes.length) rows.push('<b>Sắc thái nghề nghiệp</b> — ' + o.notes.map(esc).join('; ') + '.');
   if (m.chinhTinh && m.chinhTinh.length) rows.push('<b>Cung Mệnh</b> — chính tinh ' + m.chinhTinh.map(esc).join(', ') + '.');
   if (data.thanCungName) rows.push('<b>Cung Thân</b> — đóng tại cung ' + esc(data.thanCungName) + '.');

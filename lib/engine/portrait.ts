@@ -514,6 +514,13 @@ export function getPhuTheReadout(ls: Laso): PhuTheReadout {
 // Mộc→xanh lá nhạt, Thổ→vàng nhạt/be). Lấy sao chính tinh ĐẦU TIÊN có dữ liệu
 // (không phải sao rank cao nhất của morphology — có thể là phụ tinh/sát tinh).
 // Trả '' nếu Phu Thê vô chính diệu → route.ts tự fallback tông trung tính.
+/** Ngũ hành của MỘT sao (đọc từ portrait-stars.json). Trả '' nếu không có dữ
+ * liệu. Dùng cho luật chọn chính tinh khi một cung có 2 chính tinh: ưu tiên sao
+ * cùng hành với mệnh, kế đến sao có hành SINH cho hành mệnh. */
+export function starElement(ten: string): string {
+  return primaryElement(STAR_DATA[ten]?.element);
+}
+
 export function getPalaceChinhTinhElement(ls: Laso, cungName: string): string {
   const palaces = (ls.palaces as Rec[]) || [];
   const p = palaces.find((x) => x.cungName === cungName) as Rec | undefined;
