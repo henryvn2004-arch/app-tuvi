@@ -574,6 +574,31 @@ không có Shell nên tự dựng chuỗi).
   "Nguyễn Văn Henry · Nam · 09/05/1984 (dương lịch) · giờ Sửu (01–03h)": dòng
   trên trang · payload gửi `/api/share-result` · trang standalone.
 
+### 🐞 Vòng sửa lỗi — "Lỗi phân tích kết quả AI." (PR mới)
+Henry chạy tool trên prod báo lỗi này, nghi hết credit. **KHÔNG phải credit** —
+route có 2 lỗi tách bạch: LLM ném lỗi → *"Lỗi AI khi viết câu chuyện"*; LLM CÓ
+trả text nhưng JSON không parse được → *"Lỗi phân tích kết quả AI."* (cái này).
+- **Bằng chứng từ prod** (query `events` where `event_type='llm_usage'`,
+  `tool_id='chan-dung-tien-kiep'`): lượt truyện 06:59 có `input_tokens=9177`,
+  `output_tokens=1279` — model **trả lời bình thường**, và 1279 < `maxTokens`
+  2600 nên **không phải bị cắt vì chạm trần**; `thinkingConfig.thinkingBudget`
+  cũng đã = 0 nên không phải thinking token ăn mất chỗ.
+- **Căn nguyên: `parseJSON` quá giòn** — chỉ `JSON.parse(strip fences)`. Chỉ
+  cần model thêm một câu dẫn ("Đây là câu chuyện:") hoặc ghi chú cuối là hỏng
+  cả lượt dù nội dung đủ. Prompt truyện nay ~9k token đầu vào (5 nền + luật
+  lịch sử + tuyến đời) nên Flash càng dễ nói thêm ngoài JSON.
+- **Sửa:** `parseJSON` quét **từng khối `{...}` cân bằng** từ trái sang, bỏ qua
+  ngoặc nằm trong chuỗi (lời thoại) và ký tự escape, khối đầu tiên parse được
+  thì lấy — cố ý không dừng ở khối đầu tìm thấy vì model hay chèn `{...}` trong
+  lời dẫn và khối rác đó nuốt mất JSON thật. Thêm **thử lại 1 lượt** kèm nhắc
+  định dạng khi parse hỏng (trước đây fail là mất Lượng mà không có gì), và
+  **log độ dài + đầu/đuôi bản thô** để lần sau chẩn được ngay là lạc định dạng
+  hay bị cắt. Nâng `maxTokens` 2600 → 4200 cho 5 hồi 100–160 từ tiếng Việt.
+- **Verify:** test `parseJSON` với 10 dạng output thật — JSON sạch · bọc fence ·
+  câu dẫn trước · ghi chú sau · cả hai · lời thoại có ngoặc kép · `{}` rác
+  trong lời dẫn → **đều bóc đúng**; JSON cụt / không có JSON / rỗng → trả null
+  đúng như mong đợi để rơi vào nhánh thử lại.
+
 ### CÒN LẠI
 - Bật `enabled=true` sau deploy (câu SQL ở trên).
 - Henry gen thử trên prod đủ 5 nền để soi ảnh — tao chỉ verify được tới tầng
