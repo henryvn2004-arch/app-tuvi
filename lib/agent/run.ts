@@ -28,8 +28,10 @@ import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
 import { type ChatConfig } from '@/lib/config/appConfig';
 import {
   geminiEligible,
+  geminiProseCapable,
   streamGemini,
   geminiToolsEligible,
+  geminiToolsCapable,
   streamGeminiTurn,
   toGeminiTools,
   toGeminiContents,
@@ -101,13 +103,11 @@ Người dùng vừa GỬI ẢNH. Quan sát kỹ rồi luận đúng nghiệp v�
 • Nếu KHÔNG rõ ảnh là mặt người hay không gian: mô tả những gì thấy rồi hỏi lại người dùng muốn xem theo hướng nào.
 TUYỆT ĐỐI không bịa chi tiết không có trong ảnh. Ảnh mờ/thiếu sáng thì nói thẳng và xin ảnh rõ hơn.`;
 
-// ── Agent loop ──────────────────────────────────────────────
-export async function runAgent(
-  req: ChatRequestV1,
-  cfg: ChatConfig,
-  send: (s: string) => void,
-  profiles: ProfilePort | null = null,
-): Promise<{
+// Kết quả 1 lượt agent. Tách thành interface có TÊN (thay vì object literal
+// inline trong chữ ký) để các nhánh provider bên trong tham chiếu lại được —
+// trước đây phải viết Awaited<ReturnType<typeof runAgent>>, mà kiểu tự tham
+// chiếu đó bị tsc hạ xuống 'any', nuốt luôn lỗi kiểu ở nhánh fallback.
+export interface AgentResult {
   toolsUsed: string[];
   birth: BirthParams | null;
   activeProfile: string | null;
@@ -118,7 +118,20 @@ export async function runAgent(
   lasoCard: string | null;
   // Gợi ý câu hỏi tiếp theo do LLM sinh (bám câu trả lời) → chip động ở rail.
   suggestions: string[];
-}> {
+}
+
+/** Kết cục một lượt thử provider. `midStream` = đã stream chữ/chạy tool rồi mới
+ *  hỏng → TUYỆT ĐỐI không được thử provider khác (sẽ ra hai câu trả lời chồng
+ *  nhau trên màn hình người dùng). */
+type ProviderOutcome = { ok: true; result: AgentResult } | { ok: false; midStream: boolean };
+
+// ── Agent loop ──────────────────────────────────────────────
+export async function runAgent(
+  req: ChatRequestV1,
+  cfg: ChatConfig,
+  send: (s: string) => void,
+  profiles: ProfilePort | null = null,
+): Promise<AgentResult> {
   // Seed ctx với birth đang xem (req.birth) → "lưu lá số này tên X" chạy được cả
   // khi lượt này không gọi lại lap_la_so. profiles bật 3 tool sổ (kênh chat).
   const ctx = newToolContext(null, { profiles, birth: req.birth ?? null });
@@ -323,7 +336,13 @@ export async function runAgent(
   // revert 1 dòng không deploy. Fallback SẠCH về Sonnet nếu Gemini lỗi lúc
   // chưa stream chữ nào (progressed=false). Prompt/data/tool/loop y hệt bản
   // Sonnet — chỉ khác nơi gọi model.
-  if (geminiToolsEligible(scenarioType, hasImages, cfg.providerRoutes)) {
+  // Đường Gemini function-calling, gói thành closure vì được gọi ở HAI chỗ:
+  //   1) route chỉ định Gemini  → chạy trước, lỗi thì rơi xuống Anthropic;
+  //   2) Anthropic chết sạch    → fallback ngược lên đây (xem cuối hàm).
+  // Trả về kết quả khi xong; trả null khi hỏng mà CHƯA stream chữ nào (caller
+  // được phép thử provider khác); trả {failedMidStream:true} khi đã stream dở
+  // (caller KHÔNG được thử lại — sẽ ra hai câu trả lời chồng nhau).
+  const runGeminiTools = async (): Promise<ProviderOutcome> => {
     const gTools = toGeminiTools(tools);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const gContents: any[] = toGeminiContents(convo);
@@ -359,32 +378,48 @@ export async function runAgent(
       const justBuilt = toolsUsed.includes('lap_la_so') || toolsUsed.includes('mo_la_so');
       const lasoCard = justBuilt && ctx.ls ? renderLasoCard(ctx.ls, ctx.birth) : null;
       return {
-        toolsUsed,
-        birth: ctx.birth ?? capturedBirth,
-        activeProfile: ctx.activeProfile,
-        subjectSwitched: ctx.subjectSwitched,
-        lasoCard,
-        suggestions,
-      };
-    } catch (e) {
-      console.error('[runAgent] Gemini-tools lỗi:', (e as Error)?.message);
-      if (progressed) {
-        // Đã stream dở / đã chạy tool → KHÔNG fallback (tránh trả trùng); báo lỗi.
-        send(sse.error({ code: 'internal', message: 'Gemini error mid-stream' }));
-        const justBuilt = toolsUsed.includes('lap_la_so') || toolsUsed.includes('mo_la_so');
-        const lasoCard = justBuilt && ctx.ls ? renderLasoCard(ctx.ls, ctx.birth) : null;
-        return {
+        ok: true,
+        result: {
           toolsUsed,
           birth: ctx.birth ?? capturedBirth,
           activeProfile: ctx.activeProfile,
           subjectSwitched: ctx.subjectSwitched,
           lasoCard,
           suggestions,
-        };
-      }
-      // Chưa stream chữ nào → fallback SẠCH xuống loop Sonnet bên dưới.
+        },
+      };
+    } catch (e) {
+      console.error('[runAgent] Gemini-tools lỗi:', (e as Error)?.message);
+      // progressed = đã stream dở / đã chạy tool → caller không được thử lại.
+      return { ok: false, midStream: progressed };
     }
+    // Vòng lặp kết thúc mà không return (không thể xảy ra — vòng cuối luôn ép
+    // trả lời rồi break) → coi như hỏng sạch, caller thử provider khác.
+    return { ok: false, midStream: false };
+  };
+
+  // Gọi lượt 1: route chỉ định Gemini cho nhóm lá số → chạy Gemini trước.
+  let geminiToolsTried = false;
+  if (geminiToolsEligible(scenarioType, hasImages, cfg.providerRoutes)) {
+    geminiToolsTried = true;
+    const r = await runGeminiTools();
+    if (r.ok) return r.result;
+    if (r.midStream) {
+      // Đã stream dở → báo lỗi và đóng lượt, KHÔNG thử Anthropic (tránh trả trùng).
+      send(sse.error({ code: 'internal', message: 'Gemini error mid-stream' }));
+      const justBuilt = toolsUsed.includes('lap_la_so') || toolsUsed.includes('mo_la_so');
+      return {
+        toolsUsed,
+        birth: ctx.birth ?? capturedBirth,
+        activeProfile: ctx.activeProfile,
+        subjectSwitched: ctx.subjectSwitched,
+        lasoCard: justBuilt && ctx.ls ? renderLasoCard(ctx.ls, ctx.birth) : null,
+        suggestions,
+      };
+    }
+    // Hỏng sạch → rơi xuống loop Anthropic bên dưới.
   }
+
 
   // Mỗi vòng = 1 lượt STREAM DUY NHẤT (gộp "quyết định tool" + "trả lời"). Trước
   // đây lượt KHÔNG dùng tool tốn 2 lần gọi model — 1 lần non-stream để quyết
@@ -393,6 +428,9 @@ export async function runAgent(
   // tool thì bắt tool_use ngay trong stream, chạy tool rồi lặp; nếu trả text
   // thẳng thì chính stream đó LÀ câu trả lời (bỏ hẳn call thứ 2).
   const totalUsage: LlmUsage = { input_tokens: 0, cache_creation_input_tokens: 0, cache_read_input_tokens: 0, output_tokens: 0 };
+  // Mốc để biết loop Anthropic đã LÀM GÌ chưa: nếu nó chết mà chưa chạy tool
+  // nào và chưa stream chữ nào thì fallback sang Gemini vẫn SẠCH.
+  const toolsBeforeAnthropic = toolsUsed.length;
   for (let round = 0; round <= cfg.maxRounds; round++) {
     const forceAnswer = round === cfg.maxRounds; // vòng cuối: ép trả lời, cấm tool
     const turn = await streamTurn(system, convo, tools, cfg, send, forceAnswer);
@@ -400,6 +438,41 @@ export async function runAgent(
     totalUsage.cache_creation_input_tokens += turn.usage.cache_creation_input_tokens;
     totalUsage.cache_read_input_tokens += turn.usage.cache_read_input_tokens;
     totalUsage.output_tokens += turn.usage.output_tokens;
+
+    // ── FALLBACK NGƯỢC: Anthropic chết (hết credit, 5xx kéo dài) → thử Gemini.
+    // Trước đây streamTurn bắn thẳng sse.error tại chỗ, nên một mình Anthropic
+    // hết tiền là kéo sập cả rail dù Gemini vẫn sống — đúng ca Henry gặp. Chỉ
+    // fallback khi CHƯA stream gì (round 0, chưa tool nào) để không trả trùng,
+    // và chỉ sang đường Gemini mà kịch bản này thật sự đi được (guard prose/
+    // vision/tools giữ nguyên; route bị bỏ qua vì đây là cứu hộ, không phải
+    // lựa chọn ưu tiên).
+    if (turn.stopReason === 'error') {
+      const cleanSoFar = round === 0 && toolsUsed.length === toolsBeforeAnthropic;
+      if (cleanSoFar && !geminiToolsTried && geminiToolsCapable(scenarioType, hasImages)) {
+        console.error('[runAgent] Anthropic chết → fallback Gemini (tools):', turn.errorBody);
+        geminiToolsTried = true;
+        const r = await runGeminiTools();
+        if (r.ok) return r.result;
+      } else if (cleanSoFar && geminiProseCapable(scenarioType, hasImages)) {
+        console.error('[runAgent] Anthropic chết → fallback Gemini (prose):', turn.errorBody);
+        try {
+          suggestions = await streamGemini(system, convo, cfg, send);
+          return {
+            toolsUsed,
+            birth: capturedBirth,
+            activeProfile: ctx.activeProfile,
+            subjectSwitched: ctx.subjectSwitched,
+            lasoCard: null,
+            suggestions,
+          };
+        } catch (e) {
+          console.error('[runAgent] Fallback Gemini cũng lỗi:', (e as Error)?.message);
+        }
+      }
+      // Hết đường → giờ mới báo lỗi cho người dùng.
+      send(sse.error({ code: 'internal', message: turn.errorBody || 'Anthropic error' }));
+      break;
+    }
 
     if (!forceAnswer && turn.stopReason === 'tool_use' && turn.toolUses.length) {
       convo.push({ role: 'assistant', content: turn.assistantContent });
@@ -469,6 +542,9 @@ async function streamTurn(
   assistantContent: any[];
   suggestions: string[];
   usage: LlmUsage;
+  /** Chỉ có khi stopReason==='error' — nội dung lỗi để caller báo NẾU không
+   *  fallback được. Xem ghi chú ở nhánh non-200 bên dưới. */
+  errorBody?: string;
 }> {
   const usage: LlmUsage = { input_tokens: 0, cache_creation_input_tokens: 0, cache_read_input_tokens: 0, output_tokens: 0 };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -490,8 +566,18 @@ async function streamTurn(
   if (!resp.ok) {
     const body = (await resp.text()).slice(0, 500);
     console.error(`[runAgent.streamTurn] Anthropic non-200: ${resp.status} — ${body}`);
-    send(sse.error({ code: 'internal', message: 'Anthropic error: ' + body }));
-    return { stopReason: 'error', toolUses: [], assistantContent: [], suggestions: [], usage };
+    // CỐ Ý KHÔNG gửi sse.error ở đây. Trước đây gửi ngay tại chỗ, nghĩa là mọi
+    // lỗi Anthropic (hết credit, 5xx kéo dài) đều đập thẳng vào mặt người dùng
+    // và KHÔNG còn đường cứu — dù Gemini vẫn sống. Nay trả lỗi lên cho caller:
+    // caller thử fallback sang Gemini trước, chỉ khi hết đường mới báo lỗi.
+    return {
+      stopReason: 'error',
+      errorBody: 'Anthropic error: ' + body,
+      toolUses: [],
+      assistantContent: [],
+      suggestions: [],
+      usage,
+    };
   }
 
   const reader = resp.body!.getReader();

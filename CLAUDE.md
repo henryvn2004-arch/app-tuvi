@@ -445,6 +445,38 @@ chân ái · "nếu bạn sinh giờ khác" · roast mode. Cơ chế lan truyề
 
 ---
 
+## 🔀 Provider routing rail — fallback HAI CHIỀU (2026-07-27)
+
+Henry test prod: rail chat sau khi dùng tool báo `Anthropic error: … credit
+balance is too low …`, trong khi tài khoản Gemini còn tiền. Henry tưởng rail
+đã chạy Gemini-primary/Anthropic-backup.
+- **Chẩn đoán — hai chỗ lệch với kỳ vọng:**
+  1. Rail CÓ dùng Gemini, nhưng **`laso` bị ghim Anthropic**: prod
+     `chat.provider_routes = {"_default":"gemini","laso":"anthropic"}`, và
+     `geminiToolsEligible` CỐ Ý không đọc `_default` (fix D6). Mà mọi tool gọi
+     `Shell.setContext({birth})` đều biến rail thành luồng `laso` → luôn
+     Anthropic. Tool thì chạy ngon vì `lib/llm/complete.ts` (đường KHÁC) vốn
+     đã Gemini-primary + fallback thật.
+  2. **Chiều fallback ngược với kỳ vọng:** code chỉ có Gemini lỗi → rơi về
+     Anthropic. Không có chiều ngược. `streamTurn` gặp non-200 còn bắn thẳng
+     `sse.error` tại chỗ → Anthropic hết tiền là kéo sập rail dù Gemini sống.
+- **Henry chốt:** (a) `laso` → Gemini; (b) làm fallback hai chiều.
+- **Đã làm:** ✅ vá `app_config` prod → `{"_default":"gemini","laso":"gemini"}`
+  (cache TTL 60s, không cần deploy, revert 1 dòng SQL). `streamTurn` **hoãn**
+  `sse.error`, trả `errorBody` lên caller. Khối Gemini-tools tách thành closure
+  `runGeminiTools()` dùng lại được ở 2 chỗ. Loop Anthropic thêm nhánh: lỗi mà
+  CHƯA stream gì (round 0, chưa tool nào) → thử Gemini; hết đường mới báo lỗi.
+  Thêm `geminiProseCapable`/`geminiToolsCapable` (bản BỎ QUA route — cứu hộ thì
+  route hết nghĩa, nhưng guard prose/vision/ảnh GIỮ NGUYÊN).
+  `Awaited<ReturnType<typeof runAgent>>` (tự tham chiếu) → `interface AgentResult`
+  + `type ProviderOutcome` tường minh.
+- **Verify:** tsc · lint · prettier · **test stub fetch 4 ca**: prose route-ép-
+  anthropic → `anthropic→gemini` + ra chữ Gemini; laso route-ép-anthropic →
+  `anthropic→gemini` + ra chữ; đối chứng Anthropic OK → **không** gọi Gemini;
+  cả hai cùng chết → bắn `sse.error`.
+
+---
+
 ## 🆕 Tool mới — "Chân Dung Vợ Chồng" (2026-07-24, CHƯA COMMIT/CHƯA DEPLOY)
 
 Vẽ chân dung người phối ngẫu suy từ cung Phu Thê trong lá số (OpenAI `gpt-image-1`
