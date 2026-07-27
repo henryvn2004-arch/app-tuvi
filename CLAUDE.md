@@ -512,10 +512,23 @@ nghe như thuật lại chứ không như phán về người đang sống. Upse
     nêu năm là bịa). Danh sách triều đại **khớp với `ageLabel` đang hiện trên
     badge**: Nhật bỏ Edo (badge ghi "lãnh chúa cát cứ" = Sengoku, Edo là thái
     bình → mâu thuẫn); Hàn bỏ Silla (chưa có khoa cử).
-  - **Ranh giới giữ lại:** nhân vật chính LUÔN hư cấu; người có thật chỉ được
-    nhắc như BỐI CẢNH XA (ai đang trị vì, cuộc chiến nào đang diễn ra) —
-    **không cho họ xuất hiện, nói năng, gặp gỡ hay khen thưởng nhân vật**, vì
-    đó là bịa lịch sử về người có thật. Không sửa kết cục sự kiện lịch sử.
+  - **Vòng 2 — Henry chốt mở hẳn tên vua/nhân vật lịch sử** ("phải đặt vào bối
+    cảnh lịch sử có thật… users có thể search google… cũng là cách để họ học
+    thêm về lịch sử"). Prompt nay có luật **HAI TẦNG**: *tầng bối cảnh* = lịch
+    sử THẬT (địa danh, triều đại, đời vua, chiến tranh — tra Google ra được, đó
+    chính là giá trị); *tầng nhân vật* = HƯ CẤU, chỉ là một người bình thường
+    sống trong thời đó. BẮT nêu thẳng "dưới thời Hán Vũ Đế", "đời vua Thành
+    Thái". Nới `ageLabel` mấy nền tự bó mình: Việt "giữ nước phương Nam" →
+    "quân chủ phương Nam" (để có cả Nguyễn), Nhật "lãnh chúa cát cứ" → "thời
+    mạc phủ" (có cả Kamakura/Edo), Hàn "triều đình khoa cử" → "các vương triều
+    cổ" (có cả Silla).
+  - **Ranh giới CÒN GIỮ:** nhân vật không được LÀ người có thật, không chiếm vị
+    trí độc nhất của triều ("Tể tướng của vua X" → "làm quan trong triều dưới
+    thời vua X"); người thật là NỀN chứ không phải bạn diễn (không dựng cảnh họ
+    trò chuyện/khen thưởng nhân vật). **Vẫn cấm năm dương lịch + niên hiệu kèm
+    số** — engine chỉ có TUỔI, không có mốc lịch, nêu năm là tự bịa VÀ biến cả
+    9 đại vận thành thứ tra ngược được rồi sai; muốn rõ hơn thì "đầu/giữa/cuối
+    thời X".
 - **Verify:** tsc · lint · prettier · `node --check` · Playwright 3 ca share
   (desktop → modal + link; mobile → native; native ném lỗi → rơi về modal) ·
   5 nền đều có đủ địa danh riêng, **0 rò rỉ địa danh chéo**, badge khớp thời kỳ.

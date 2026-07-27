@@ -112,14 +112,14 @@ export const ERAS: Record<EraId, Era> = {
     geographyVi:
       'Trường Giang, Hoàng Hà, Chiết Giang, Giang Nam, Tứ Xuyên, Sơn Đông, Cam Túc, Hà Bắc, Lĩnh Nam, Trường An, Lạc Dương, Khai Phong, Kim Lăng, Tô Châu, Hàng Châu, Đôn Hoàng, Ngọc Môn Quan, Thái Sơn, Tần Lĩnh, Vạn Lý Trường Thành.',
     periodVi:
-      'thời Hán, thời Đường, thời Tống, thời Minh — chọn MỘT. Có thể nhắc tên hoàng đế mở đầu triều đó (Hán Cao Tổ, Đường Thái Tông, Tống Thái Tổ, Minh Thái Tổ) như MỐC THỜI GIAN.',
+      'Chọn MỘT triều và MỘT đời vua có thật để neo: nhà Hán (Hán Cao Tổ, Hán Vũ Đế, Hán Quang Vũ Đế) · nhà Đường (Đường Thái Tông, Võ Tắc Thiên, Đường Huyền Tông) · nhà Tống (Tống Thái Tổ, Tống Nhân Tông) · nhà Minh (Minh Thái Tổ, Minh Thành Tổ, Vạn Lịch) · nhà Thanh (Khang Hy, Càn Long).',
     cultureVi:
       'khoa cử và quan trường, biên ải phương bắc, ấm trà và bàn trà, bút lông – nghiên mực – thư pháp, đèn lồng đêm hội, ngựa trạm đưa thư, chợ phiên, rượu hâm.',
   },
   'viet-nam': {
     id: 'viet-nam',
     label: 'Việt Nam cổ',
-    ageLabel: 'thời giữ nước phương Nam',
+    ageLabel: 'thời quân chủ phương Nam',
     settingEn: 'pre-modern Đại Việt, an old Vietnamese royal capital',
     ethnicityEn: 'Vietnamese Southeast Asian facial features',
     regionEn: 'East Asian',
@@ -133,14 +133,14 @@ export const ERAS: Record<EraId, Era> = {
     geographyVi:
       'sông Hồng, sông Mã, sông Lam, sông Đáy, Thăng Long, Phố Hiến, Vân Đồn, Kinh Bắc, Sơn Nam, Hải Dương, Thanh Hóa, Nghệ An, Hoan Châu, ải Chi Lăng, Tam Điệp, Yên Tử, Hoa Lư, Lam Sơn.',
     periodVi:
-      'thời Lý, thời Trần, thời Lê sơ, thời Lê trung hưng — chọn MỘT. Có thể nhắc tên vua mở đầu triều (Lý Thái Tổ, Trần Thái Tông, Lê Thái Tổ) như MỐC THỜI GIAN.',
+      'Chọn MỘT triều và MỘT đời vua có thật để neo: nhà Lý (Lý Thái Tổ, Lý Thánh Tông, Lý Nhân Tông) · nhà Trần (Trần Thái Tông, Trần Nhân Tông) · nhà Hồ · nhà Lê sơ (Lê Thái Tổ, Lê Thánh Tông) · thời Lê trung hưng – Trịnh Nguyễn phân tranh · nhà Tây Sơn (Quang Trung) · nhà Nguyễn (Gia Long, Minh Mạng, Tự Đức, Thành Thái).',
     cultureVi:
       'luỹ tre và đình làng, đồng ruộng nước và mùa gặt, sông và đò ngang, chợ quê, chùa làng tiếng chuông chiều, khoa cử chữ Nho, trầu cau, giặc phương bắc tràn xuống.',
   },
   'nhat-ban': {
     id: 'nhat-ban',
     label: 'Nhật Bản cổ',
-    ageLabel: 'thời các lãnh chúa cát cứ',
+    ageLabel: 'thời mạc phủ',
     settingEn: 'pre-modern feudal Japan, the domain of a provincial lord',
     ethnicityEn: 'Japanese East Asian facial features',
     regionEn: 'East Asian',
@@ -154,14 +154,14 @@ export const ERAS: Record<EraId, Era> = {
     geographyVi:
       'Kyoto, Osaka, Edo, Kamakura, Nara, Sakai, đảo Kyushu, đảo Shikoku, vùng Kanto, vùng Kansai, vùng Tohoku, núi Phú Sĩ, hồ Biwa, sông Yodo, eo biển Shimonoseki, đường Tokaido.',
     periodVi:
-      'thời Muromachi hoặc thời Chiến Quốc (Sengoku) — chọn MỘT. Đây là thời các lãnh chúa cát cứ, KHÔNG phải thời Edo thái bình. Dòng họ tướng quân đương thời là Ashikaga; có thể nhắc như MỐC THỜI GIAN.',
+      'Chọn MỘT thời kỳ và dòng họ/nhân vật cầm quyền có thật để neo: thời Kamakura (mạc phủ Minamoto) · thời Muromachi (mạc phủ Ashikaga) · thời Chiến Quốc – Sengoku (Oda Nobunaga, Toyotomi Hideyoshi) · thời Edo (mạc phủ Tokugawa, Tokugawa Ieyasu).',
     cultureVi:
       'lãnh chúa và phiên trấn, thành gỗ trên nền đá, phòng chiếu tatami sau cửa giấy, trà thất và nghi thức pha trà, thanh kiếm đeo bên hông, hoa anh đào và lá phong đỏ, tiếng chuông chùa, cầu gỗ bắc qua suối.',
   },
   'han-quoc': {
     id: 'han-quoc',
     label: 'Hàn Quốc cổ',
-    ageLabel: 'thời triều đình khoa cử',
+    ageLabel: 'thời các vương triều cổ',
     settingEn: 'pre-modern Korea, an old Korean royal capital',
     ethnicityEn: 'Korean East Asian facial features',
     regionEn: 'East Asian',
@@ -175,7 +175,7 @@ export const ERAS: Record<EraId, Era> = {
     geographyVi:
       'Hanyang (nay là Seoul), Kaesong, Pyongyang, Gyeongju, đảo Jeju, sông Hàn, sông Đại Đồng, núi Kumgang, núi Halla, vùng Gyeongsang, vùng Jeolla, vùng Hamgyong, đèo Mungyong.',
     periodVi:
-      'thời Goryeo hoặc thời Joseon — chọn MỘT (đây là hai triều có chế độ khoa cử, khớp với thời đại đã nêu). Có thể nhắc vua khai quốc hoặc vua nổi tiếng của triều đó (Taejo, Sejong) như MỐC THỜI GIAN.',
+      'Chọn MỘT vương triều và MỘT đời vua có thật để neo: Tân La – Silla (Munmu) · Cao Ly – Goryeo (Taejo Wang Geon, Gongmin) · Triều Tiên – Joseon (Taejo Yi Seong-gye, Sejong Đại đế, Yeongjo, Jeongjo). Chế độ khoa cử có từ thời Goryeo trở đi.',
     cultureVi:
       'khoa cử và bè phái trong triều, nhà hanok sàn sưởi ondol, áo trắng thường phục, nhân sâm và thuốc bắc, đàn gayageum, rượu gạo đục, đèo núi mùa đông dài, chùa trên núi.',
   },
@@ -196,7 +196,7 @@ export const ERAS: Record<EraId, Era> = {
     geographyVi:
       'sông Chao Phraya, sông Mê Kông, sông Ping, Ayutthaya, Sukhothai, Lopburi, Chiang Mai, Nakhon Si Thammarat, Phitsanulok, cao nguyên Khorat, eo Kra, vịnh Xiêm La, rừng Tenasserim.',
     periodVi:
-      'thời Sukhothai, thời Ayutthaya, thời vương quốc Lan Na — chọn MỘT. Có thể nhắc vua nổi tiếng của thời đó (Ramkhamhaeng, Naresuan) như MỐC THỜI GIAN.',
+      'Chọn MỘT vương quốc và MỘT đời vua có thật để neo: Sukhothai (Ramkhamhaeng) · Ayutthaya (Ramathibodi I, Naresuan, Narai) · Lan Na (Mangrai, Tilokkarat) · Thonburi – Rattanakosin (Taksin, Rama I).',
     cultureVi:
       'chùa mái nhọn dát vàng, sư khất thực buổi sớm, voi trong đội quân và trong lễ, chợ họp trên sông, nhà sàn gỗ tếch, mùa mưa và mùa khô rõ rệt, thuyền dài, hoa sen trên ao chùa.',
   },
