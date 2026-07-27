@@ -127,7 +127,7 @@ body{font-family:var(--sans);background:var(--paper2);color:var(--text);line-hei
 .top .t{flex:1;min-width:0}
 .top .t b{font-family:var(--serif);font-size:16px;display:block}
 .top .t span{font-size:12px;color:var(--gold)}
-.top .brand{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);opacity:.85;text-align:right}
+.top .brand{width:40px;height:40px;flex:0 0 auto;object-fit:contain;opacity:.92}
 .ctxbar{background:var(--gold-lt);border-bottom:1px solid var(--line);padding:9px 20px;font-size:12.5px;color:var(--text-mid)}
 .ctxbar b{color:var(--text)}
 .chat{padding:20px;display:flex;flex-direction:column;gap:16px}
@@ -153,7 +153,7 @@ body{font-family:var(--sans);background:var(--paper2);color:var(--text);line-hei
   <div class="top">
     <img src="${esc(ava)}" alt="">
     <div class="t"><b>${title}</b><span>Luận bởi ${esc(thayName)} · Luận Đường</span></div>
-    <div class="brand">紫微<br>明寶</div>
+    <img class="brand" src="/seal.webp" alt="Tử Vi Minh Bảo" width="40" height="40">
   </div>
   ${row.ctx_label ? `<div class="ctxbar">✦ <b>${esc(row.ctx_label)}</b></div>` : ''}
   <div class="chat">${bubbles}</div>
@@ -165,7 +165,7 @@ body{font-family:var(--sans);background:var(--paper2);color:var(--text);line-hei
       <a class="cta-btn" href="${SITE}${ctaRoute}?fromshare=${esc(id)}">Hỏi Thầy ${esc(thayName)} →</a>
     </div>
   </div>
-  <div class="foot">© 2026 Tử Vi Minh Bảo · <a href="${SITE}/app">tuviminhbao.com</a> — Lá số lập bằng engine cổ pháp, thầy chỉ luận, không bịa sao.</div>
+  <div class="foot">© 2026 Tử Vi Minh Bảo · <a href="${SITE}/app">tuviminhbao.com</a> — Lá số được lập bằng engine cổ pháp; phần luận giải do thầy thực hiện trên chính dữ liệu đó.</div>
 </div>
 ${GA4_TRACK_SNIPPET}
 </body></html>`;

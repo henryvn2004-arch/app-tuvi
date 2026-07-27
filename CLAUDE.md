@@ -425,6 +425,26 @@ Henry: thêm Nhật Bản cổ · Hàn Quốc cổ · Thái Lan cổ vào 2 nề
   nào**, thêm 5) · quét rò rỉ từ vựng chéo trên 20 prompt = **0** · Playwright
   2 trang render badge đúng, không lỗi console.
 
+### Vòng chỉnh tiếp — trang chia sẻ /ket-qua (PR #305)
+Henry gửi ảnh chụp trang chia sẻ, 3 việc:
+- **Tóm tắt lá số ở đầu trang.** Người nhận link không có ngữ cảnh gì → không
+  biết chân dung gắn với lá số nào. `publishShareable` (trang shell) chèn block
+  ĐẦU TIÊN "Lá số dùng để phác hoạ" = `birthSummary(_lastBirth)` →
+  "Nam · 03/06/1998 (dương lịch) · giờ Sửu (01–03h)". Làm ở TOOL chứ không ở
+  `shell.js` `setShareable` — sửa shell.js phải bump version trên ~25 trang;
+  nếu muốn mọi tool đều có thì đó là việc riêng, gọn nhưng diện rộng.
+- **Logo:** `<div class="brand">紫微明寶</div>` → `<img src="/seal.webp">` ở CẢ
+  `/ket-qua/[id]` lẫn `/luan-duong/[id]` (hai trang chia sẻ dùng chung layout).
+  **CỐ Ý KHÔNG thay 40+ chỗ 紫微 còn lại** trong repo: phần lớn là
+  `alternateName` trong JSON-LD (tên tiếng Hoa hợp lệ cho SEO, không nhét ảnh
+  vào được), `紫微斗數` = TÊN BỘ MÔN không phải brand, và watermark vẽ trong
+  canvas lá số. Chỉ đổi chỗ dùng như DẤU HIỆU THƯƠNG HIỆU.
+- **Footer bỏ khẩu ngữ:** "AI chỉ luận, không bịa sao" → "Lá số được lập bằng
+  engine cổ pháp; phần luận giải do AI thực hiện trên chính dữ liệu đó."
+  `/luan-duong` giữ ngôi "thầy" (trang đó có persona thầy xuyên suốt), chỉ bỏ
+  từ "bịa". Rà cả repo: từ "bịa" chỉ còn trong PROMPT gửi LLM và comment code —
+  không phải chữ người dùng đọc, giữ nguyên.
+
 ### CÒN LẠI
 - Bật `enabled=true` sau deploy (câu SQL ở trên).
 - Henry gen thử trên prod đủ 5 nền để soi ảnh — tao chỉ verify được tới tầng
