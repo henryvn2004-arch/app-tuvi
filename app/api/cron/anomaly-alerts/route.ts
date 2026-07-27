@@ -15,6 +15,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { withCronLog } from '@/lib/cron/log';
 import { checkAnomalies } from '@/lib/marketing/anomaly-alerts';
 import { tgSendMessage } from '@/lib/channels/telegram';
+import { logOpsAlerts } from '@/lib/ops/alerts';
 
 const CRON_SECRET = process.env.CRON_SECRET || '';
 const TG_CHAT_ID = process.env.ADMIN_TELEGRAM_CHAT_ID || '';
@@ -28,16 +29,40 @@ async function handle(request: NextRequest) {
   if (!CRON_SECRET || auth !== 'Bearer ' + CRON_SECRET) {
     return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
   }
-  if (!TG_CHAT_ID) return NextResponse.json({ ok: true, skipped: 'no ADMIN_TELEGRAM_CHAT_ID' });
-
+  // CỐ Ý KHÔNG thoát sớm khi thiếu ADMIN_TELEGRAM_CHAT_ID.
+  //
+  // Bản trước thoát ngay ở đây, tức một kênh GỬI chưa cấu hình làm chết luôn cả
+  // hệ PHÁT HIỆN — hệ quả là suốt 14 ngày không có cảnh báo nào được TÍNH, chứ
+  // không phải "tính rồi mà không gửi được". Nhìn từ ngoài, im lặng vì đã chết
+  // trông y hệt im lặng vì mọi thứ đều ổn (lỗ P0-1, track COO).
+  //
+  // Nay: luôn chạy check, luôn ghi vào `events` cho panel Vận Hành đọc; Telegram
+  // chỉ là đường ĐẨY THÊM. Chưa cấu hình thì cảnh báo vẫn còn nguyên chỗ để xem,
+  // và `note` dưới đây nói rõ là chưa ai được báo.
   try {
     const { fired, checked } = await checkAnomalies();
-    if (fired.length) {
+
+    let delivered = false;
+    if (fired.length && TG_CHAT_ID) {
       const time = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
       const text = `🚨 Cảnh báo bất thường — ${time}\n\n` + fired.map((f) => `• ${f.text}`).join('\n');
       await tgSendMessage(TG_CHAT_ID, text);
+      delivered = true;
     }
-    return NextResponse.json({ ok: true, checked, fired: fired.length });
+    if (fired.length) await logOpsAlerts(fired, delivered);
+
+    return NextResponse.json({
+      ok: true,
+      checked,
+      fired: fired.length,
+      // Hiện thẳng trong panel "Cron & Jobs": có cảnh báo mà chưa đẩy đi được là
+      // một sự cố riêng, phải nhìn thấy chứ không được lẫn vào "chạy ok".
+      note: TG_CHAT_ID
+        ? undefined
+        : fired.length
+          ? `${fired.length} cảnh báo ĐÃ GHI nhưng CHƯA ĐẨY — thiếu ADMIN_TELEGRAM_CHAT_ID`
+          : 'chưa có ADMIN_TELEGRAM_CHAT_ID (không có cảnh báo nào để đẩy)',
+    });
   } catch (e: unknown) {
     return NextResponse.json({ ok: false, error: (e as Error).message }, { status: 500 });
   }
