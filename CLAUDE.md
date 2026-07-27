@@ -453,6 +453,36 @@ Henry gửi ảnh chụp trang chia sẻ, 3 việc:
   từ "bịa". Rà cả repo: từ "bịa" chỉ còn trong PROMPT gửi LLM và comment code —
   không phải chữ người dùng đọc, giữ nguyên.
 
+### Vòng chỉnh tiếp — RAIL là upsell thật của tool (PR mới)
+Henry chỉ ra insight quan trọng: đọc xong truyện, phản ứng đầu tiên của user là
+**qua rail hỏi về NHÂN VẬT** ("ông ấy có giàu không?", "lấy vợ thế nào?", "có
+bệnh tật gì?") — mà bản chất chính là **luận giải lá số của chính họ, bọc qua
+một nhân vật cổ xưa**. Vỏ bọc đó dễ tin hơn vì nhân vật đã đi trọn một đời,
+nghe như thuật lại chứ không như phán về người đang sống. Upsell = số lượt rail.
+- **Audit trước khi sửa:** phần DỮ LIỆU đã đúng sẵn — cả 2 tool gọi
+  `Shell.setContext({birth})` cùng shape, backend không phân biệt tool nào:
+  `computeLaso` → `extractLasoContext(ls,'',{full:true})` → `CHAT_SYSTEM_LASO` +
+  đủ bộ tool. Thiếu 3 thứ: (a) rail KHÔNG biết nhân vật là ai → hỏi "nhân vật
+  này" là model không có referent; (b) prompt vẫn giọng luận thẳng ("cung Tài
+  Bạch của bạn…"); (c) chips dùng thuật ngữ tử vi + ngôi "tôi", kéo user ra
+  khỏi mạch truyện.
+- **Bẫy đã tránh:** KHÔNG nhét nhân vật qua `scenario` — `runAgent` rẽ nhánh
+  scenario sẽ **mất sạch full lá số**, đúng thứ cần giữ.
+- **Cách làm:** thêm cờ `wrap?: 'past-life'` vào contract (additive, ENUM chứ
+  KHÔNG phải chuỗi tự do — cho client gửi prose vào system là mở cửa
+  prompt-injection). Trên nhánh birth, server **tự gọi `computePastLife(ls,
+  gender)`** (deterministic → trùng đúng nhân vật đang hiện trên màn hình) rồi
+  nối `pastLifeRailWrapper()` vào system.
+- **Luật đóng vai:** trả lời *cái gì* qua nhân vật (không thuật ngữ tử vi);
+  hỏi *"vì sao"* thì **được phép lộ cơ sở lá số** — đúng khoảnh khắc bán được
+  Luận Giải; user xưng "tôi" thì bỏ vỏ, luận thẳng.
+- Greeting + chips đổi sang hỏi về nhân vật bằng lời thường.
+- **Verify:** stub fetch bắt system thật gửi lên provider — **gỡ khối đóng vai
+  ra khỏi system có wrap → khớp bản không wrap BYTE-EXACT** (chỉ thêm, không
+  sửa/bớt); system chứa đủ 12/12 cung + đại vận + tứ hóa + cách cục + luật luận;
+  nhân vật trong prompt đúng bản engine chốt. tsc · lint · prettier · node
+  --check. Bump `shell.js?v=46→47` (27 trang).
+
 ### CÒN LẠI
 - Bật `enabled=true` sau deploy (câu SQL ở trên).
 - Henry gen thử trên prod đủ 5 nền để soi ảnh — tao chỉ verify được tới tầng

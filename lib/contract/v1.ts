@@ -125,6 +125,21 @@ export interface ChatRequestV1 {
   /** Persona tác giả cho luồng LÁ SỐ (birth). Với scenario, đặt trong scenario. */
   authorName?: string;
   authorStyle?: string;
+  /**
+   * "Vỏ bọc" kể chuyện cho luồng LÁ SỐ — KHÔNG đổi dữ liệu, chỉ đổi cách nói.
+   *
+   * `past-life`: rail của tool Chân Dung Tiền Kiếp. Người dùng vừa đọc xong
+   * truyện về một nhân vật dựng từ chính lá số của họ, nên câu hỏi tiếp theo
+   * bật ra tự nhiên là hỏi VỀ NHÂN VẬT ("ông ấy có giàu không?", "lấy vợ thế
+   * nào?") — mà bản chất chính là luận lá số của họ. Cờ này bật lớp đóng vai,
+   * KHÔNG đụng tới lá số nạp vào system (vẫn full như tool Luận Giải).
+   *
+   * CỐ Ý là ENUM chứ không phải chuỗi tự do: nếu cho client gửi prose để ghép
+   * vào system thì mở toang cửa prompt-injection. Nội dung nhân vật do SERVER
+   * tự tính lại từ birth (computePastLife deterministic) — vừa an toàn, vừa
+   * chắc chắn trùng nhân vật đang hiện trên màn hình.
+   */
+  wrap?: 'past-life';
   client: ClientInfo;
 }
 
@@ -232,6 +247,10 @@ export function validateChatRequest(body: unknown):
   const client = b.client as Record<string, unknown> | undefined;
   if (!client || typeof client.platform !== 'string' || typeof client.version !== 'string') {
     return { ok: false, error: 'Thiếu client.platform / client.version' };
+  }
+
+  if (b.wrap != null && b.wrap !== 'past-life') {
+    return { ok: false, error: 'wrap không hợp lệ' };
   }
 
   if (b.scenario != null) {

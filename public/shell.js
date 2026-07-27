@@ -227,7 +227,7 @@
   }
 
   // ── CHAT STATE ──
-  var ctx = null;            // { birth } | { scenario }
+  var ctx = null;            // { birth } | { scenario }  (+ wrap tùy chọn)
   var ctxChips = [];         // gợi ý câu hỏi CÒN LẠI (đã bấm thì bỏ đi)
   var ctxChipsOrig = [];     // bản gốc để reset khi "hội thoại mới"
   var messages = [];
@@ -872,7 +872,10 @@
       // birth và scenario có thể đi CÙNG nhau: birth để engine server lập lá
       // số/bát tự, scenario.type để chọn ĐÚNG bộ não (vd 'tu-binh'). Trang Lá
       // số chỉ truyền birth; trang Bát Tự truyền cả hai.
-      ctx = (o.birth || o.scenario) ? { birth: o.birth || null, scenario: o.scenario || null } : null;
+      // wrap: vỏ bọc kể chuyện cho luồng lá số (hiện chỉ 'past-life' — rail
+      // tool Chân Dung Tiền Kiếp trả lời qua nhân vật thay vì luận thẳng).
+      // Chỉ là CỜ, nội dung nhân vật do server tự tính lại từ birth.
+      ctx = (o.birth || o.scenario) ? { birth: o.birth || null, scenario: o.scenario || null, wrap: o.wrap || null } : null;
       // Funnel: tool đã tính ra kết quả + gắn ngữ cảnh = "đã dùng tool" (activation).
       try { track('tool_run', { tool_id: ACTIVE, slug: (o.scenario && o.scenario.type) || null }); } catch (e) { /* ignore */ }
       messages = [];
@@ -1056,6 +1059,7 @@
       var body = { session_id: sessionId, stream: true, messages: messages.slice(-12), client: { platform: 'web', version: '1.0.0' } };
       if (ctx.birth) body.birth = ctx.birth;
       if (ctx.scenario) body.scenario = ctx.scenario;
+      if (ctx.wrap) body.wrap = ctx.wrap;
       // Văn phong thầy: gửi top-level (luồng lá số) + trong scenario (luồng kịch bản).
       if (_author) {
         body.authorName = _author.name; body.authorStyle = _author.style;
