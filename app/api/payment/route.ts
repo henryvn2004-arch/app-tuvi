@@ -627,13 +627,35 @@ async function handleAdminCronRuns(request: NextRequest): Promise<Response> {
   const admin = await verifyAdmin(token);
   if (!admin) return err('Unauthorized', 403);
   try {
-    const r = await fetch(
-      `${SUPABASE_URL}/rest/v1/cron_runs?select=job_key,source,status,started_at,finished_at,duration_ms,note&order=started_at.desc&limit=300`,
-      { headers: SB_HEADERS },
-    );
+    // Trang này là trung tâm VẬN HÀNH của admin (track COO) — trả kèm sức khoẻ
+    // tool để panel không phải gọi thêm một vòng API nữa.
+    const [r, health24, health7d] = await Promise.all([
+      fetch(
+        `${SUPABASE_URL}/rest/v1/cron_runs?select=job_key,source,status,started_at,finished_at,duration_ms,note&order=started_at.desc&limit=300`,
+        { headers: SB_HEADERS },
+      ),
+      // Sức khoẻ tool là THÔNG TIN THÊM: hỏng thì trả mảng rỗng chứ không được
+      // làm sập cả trang Cron vốn đã chạy tốt từ trước.
+      toolHealth(24),
+      toolHealth(24 * 7),
+    ]);
     const runs = r.ok ? await r.json() : [];
-    return ok({ runs });
+    return ok({ runs, toolHealth24: health24, toolHealth7d: health7d });
   } catch (e: unknown) { return err((e as Error).message); }
+}
+
+/** Gọi RPC tool_health — best-effort, lỗi trả mảng rỗng. */
+async function toolHealth(hours: number): Promise<unknown[]> {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/tool_health`, {
+      method: 'POST',
+      headers: SB_HEADERS,
+      body: JSON.stringify({ p_hours: hours }),
+    });
+    return res.ok ? await res.json() : [];
+  } catch {
+    return [];
+  }
 }
 
 async function handleAdminCronTrigger(request: NextRequest, body: Record<string, unknown>): Promise<Response> {

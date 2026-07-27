@@ -95,7 +95,7 @@
     <div class="sidebar-section" data-team="operations">
       <div class="sidebar-section-label">Vận Hành</div>
       <button class="nav-item" onclick="goTo('cron')">
-        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><span>Cron &amp; Jobs</span>
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><span>Sức Khỏe &amp; Jobs</span>
       </button>
       <button class="nav-item" onclick="goTo('apikeys')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg></span><span>API &amp; Keys</span>
@@ -927,6 +927,39 @@
       <!-- ── CRON & JOBS (Vận Hành) ── -->
       <div class="page" id="page-cron">
         <div id="cron-alert" style="margin-bottom:.75rem"></div>
+
+        <!-- Sức Khỏe Tool (track COO, S1) — đặt TRƯỚC phần cron vì đây là thứ
+             ảnh hưởng trực tiếp tới người dùng đang trả tiền; job chạy trễ thì
+             sửa sau cũng được, tool hỏng thì mất khách ngay. -->
+        <div class="panel" style="margin-bottom:1rem">
+          <div class="panel-header">
+            <div class="panel-title">🩺 Sức Khỏe Tool</div>
+            <div class="panel-actions">
+              <select id="th-range" onchange="renderToolHealth()" style="font-size:.72rem;padding:.2rem .4rem">
+                <option value="24">24 giờ</option>
+                <option value="7d">7 ngày</option>
+              </select>
+              <button class="btn btn-primary btn-sm" onclick="loadCron()">↻</button>
+            </div>
+          </div>
+          <div id="th-empty" style="padding:.9rem 1rem;font-size:.78rem;color:var(--text-lt);display:none"></div>
+          <div class="table-wrap" id="th-wrap" style="display:none">
+            <table>
+              <thead><tr>
+                <th>Tool</th><th>Lượt</th><th>Lỗi hệ thống</th><th>Tỷ lệ lỗi</th>
+                <th>p95</th><th>Lỗi người dùng</th><th>Lỗi gần nhất</th>
+              </tr></thead>
+              <tbody id="th-body"></tbody>
+            </table>
+          </div>
+          <div style="padding:.6rem 1rem;font-size:.7rem;color:var(--text-lt);line-height:1.6">
+            Tỷ lệ lỗi = lỗi hệ thống ÷ số lượt <b>lẽ ra phải chạy được</b>. Lỗi do người dùng
+            (thiếu ngày sinh, chưa đăng nhập, chưa thanh toán) bị loại khỏi cả tử số lẫn mẫu số —
+            để chúng trong đó thì tool đang hỏng nặng vẫn hiện tỷ lệ thấp giả tạo.
+            Phản hồi dạng stream chốt trạng thái ngay khi mở nên hỏng giữa chừng chưa đếm được.
+          </div>
+        </div>
+
         <div class="stats" id="cron-stats" style="grid-template-columns:repeat(4,1fr)">
           <div class="stat"><div class="stat-label">Tổng Job</div><div class="stat-value" id="cron-k-total">…</div><div class="stat-sub">Vercel · pg_cron · edge</div></div>
           <div class="stat green"><div class="stat-label">OK (24h)</div><div class="stat-value" id="cron-k-ok">…</div><div class="stat-sub">lượt chạy thành công</div></div>
@@ -1244,7 +1277,7 @@ let _currentPage = 'dashboard';
 const PAGE_TITLES = {
   dashboard: 'Dashboard', users: 'Users', credits: 'Doanh Thu & Giao Dịch',
   lasos: 'Lá Số', pricing: 'Gói Nạp & Pricing', tools: 'Ví & Cấp Credits',
-  marketing: 'Funnel & Nguồn', content: 'YouTube Studio', cron: 'Cron & Jobs',
+  marketing: 'Funnel & Nguồn', content: 'YouTube Studio', cron: 'Vận Hành — Sức Khỏe & Jobs',
   channels: 'Channels & Push', seo: 'SEO',
   cboard: 'Content Board', khaoluan: 'Khảo Luận', nghiencuu: 'Nghiên Cứu',
   sysconfig: 'System Config', apikeys: 'API & Keys', registry: 'Tools Registry',
@@ -1411,6 +1444,48 @@ function cronStatusBadge(s) {
   return `<span class="badge ${map[s]||'badge-grey'}">${lbl[s]||s||'—'}</span>`;
 }
 
+// ── Sức Khỏe Tool (track COO, S1) ──
+// Dữ liệu do RPC tool_health đọc từ events(event_type='tool_outcome').
+let _toolHealth = { '24': [], '7d': [] };
+
+function renderToolHealth() {
+  const rows = _toolHealth[document.getElementById('th-range').value] || [];
+  const wrap = document.getElementById('th-wrap');
+  const empty = document.getElementById('th-empty');
+  if (!rows.length) {
+    wrap.style.display = 'none';
+    empty.style.display = 'block';
+    empty.textContent =
+      'Chưa có lượt chạy nào được ghi nhận trong khoảng này. Dữ liệu bắt đầu chảy sau khi bản có ' +
+      'đo lường được deploy — trống ở đây KHÔNG có nghĩa là mọi tool đều khoẻ.';
+    return;
+  }
+  empty.style.display = 'none';
+  wrap.style.display = '';
+  document.getElementById('th-body').innerHTML = rows.map(r => {
+    const rate = Number(r.error_rate || 0);
+    // Cùng ngưỡng VÀ cùng biến màu với panel Sức Khỏe Kênh Chat (D2) — đỏ >8%,
+    // cam >2%, còn lại xanh. Không đặt fallback tự chế: --red/--orange/--green
+    // đều có sẵn trong admin.css cho cả light lẫn dark mode, tự chế màu là lệch
+    // bảng màu và hỏng dark mode.
+    const color = rate > 8 ? 'var(--red)' : rate > 2 ? 'var(--orange)' : 'var(--green)';
+    const when = r.last_error_at
+      ? new Date(r.last_error_at).toLocaleString('vi-VN', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' })
+      : '';
+    return `<tr>
+      <td style="font-weight:600;color:var(--text)">${escHtmlLocal(r.tool_id)}</td>
+      <td>${r.attempts}</td>
+      <td style="color:${Number(r.errors) ? 'var(--red)' : 'var(--text-lt)'}">${r.errors}</td>
+      <td style="font-weight:700;color:${color}">${rate}%</td>
+      <td>${r.p95_ms ? (Number(r.p95_ms) / 1000).toFixed(1) + 's' : '—'}</td>
+      <td style="color:var(--text-lt)">${r.user_errors}</td>
+      <td style="font-size:.72rem;color:var(--text-lt);max-width:280px">${
+        r.last_error ? escHtmlLocal(r.last_error) + (when ? ` <span style="opacity:.7">(${when})</span>` : '') : '—'
+      }</td>
+    </tr>`;
+  }).join('');
+}
+
 async function loadCron() {
   const body = document.getElementById('cron-body');
   const logBody = document.getElementById('cron-log-body');
@@ -1419,6 +1494,8 @@ async function loadCron() {
   try {
     const res = await apiGet('admin-cron-runs');
     runs = (res && res.runs) || [];
+    _toolHealth = { '24': (res && res.toolHealth24) || [], '7d': (res && res.toolHealth7d) || [] };
+    renderToolHealth();
   } catch (e) { /* vẫn render registry với last-run rỗng */ }
 
   // latest run + stats
