@@ -1203,7 +1203,7 @@ const ROLE_LABEL: Record<ActRole, string> = {
 
 function fmtDaiVan(d: DaiVanBrief): string {
   const lines = [
-    `  • Đại vận ${d.idx} (${d.tuoiStart}–${d.tuoiEnd} tuổi), cung ${d.cungName} (${d.diaChi})` +
+    `  • Đại vận ${d.idx}, cung ${d.cungName} (${d.diaChi})` +
       (d.score != null ? ` — điểm vận ${d.score}/10` : ''),
   ];
   if (d.chinhTinh.length) lines.push(`    Chính tinh: ${d.chinhTinh.join(', ')}`);
@@ -1214,12 +1214,20 @@ function fmtDaiVan(d: DaiVanBrief): string {
   return lines.join('\n');
 }
 
-/** Khối "dòng đời 5 hồi" cho prompt viết truyện. */
+/** Khối "dòng đời 5 hồi" cho prompt viết truyện.
+ *
+ * CỐ Ý KHÔNG đưa mốc tuổi (ageFrom–ageTo) vào prompt, dù engine có sẵn. Lý do:
+ * 9 đại vận × 10 năm bắt đầu từ số cục (2–6) nên nhóm hồi cố định luôn cho ra
+ * ĐÚNG MỘT dải tuổi ở MỌI lá số — hồi cuối luôn rơi vào 82–95. Đưa số đó vào
+ * prompt thì lá số nào cũng thành chuyện một người sống tới ngoài tám mươi, phi
+ * lý với bối cảnh cổ và làm mọi truyện giống nhau ở chỗ dễ thấy nhất. Nhãn giai
+ * đoạn (Thiếu thời → Cuối đời) đã đủ để LLM biết thứ tự và chặng đời; tuổi thật
+ * vẫn giữ trong engine cho phần tính tuổi vẽ chân dung. */
 export function formatArcForLLM(arc: LifeArc): string {
   return arc.acts
     .map(
       (a) =>
-        `HỒI ${a.index} — ${a.stage} (${a.ageFrom}–${a.ageTo} tuổi) — ${ROLE_LABEL[a.role]}\n` +
+        `HỒI ${a.index} — ${a.stage} — ${ROLE_LABEL[a.role]}\n` +
         a.daiVans.map(fmtDaiVan).join('\n'),
     )
     .join('\n\n');

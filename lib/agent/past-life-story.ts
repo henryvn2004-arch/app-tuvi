@@ -39,6 +39,12 @@ CẤM TUYỆT ĐỐI MỌI THUẬT NGỮ TỬ VI TRONG PHẦN CHỮ TRẢ VỀ (
 QUY TẮC BÁM DỮ LIỆU:
 - TÊN và CHỨC PHẬN nhân vật ĐÃ ĐƯỢC CHỐT. Dùng ĐÚNG tên đã cho, KHÔNG đặt tên khác. TUYỆT ĐỐI không đổi sang nghề khác, không "thăng cấp" cho oai.
 - Dòng đời đã chia sẵn thành các HỒI, mỗi hồi ghi rõ là giai đoạn bình thường, ĐỈNH CAO hay BIẾN CỐ. Viết ĐÚNG theo nhãn đó: hồi đỉnh cao là lúc huy hoàng nhất đời; hồi biến cố là lúc gãy đổ nặng nhất. KHÔNG tự đảo thứ tự, KHÔNG dời đỉnh cao sang hồi khác cho "hợp truyện".
+- ĐƯỜNG LÊN XUỐNG CỦA CẢ ĐỜI PHẢI BÁM ĐIỂM VẬN CỦA 9 ĐẠI VẬN, không chỉ riêng hai hồi đỉnh cao và biến cố. Mỗi đại vận trong dữ liệu có một điểm vận — đó là chỉ dấu thuận/nghịch của chặng đó:
+  • điểm cao (từ 7 trở lên): chặng thuận — được việc, được người, đường mở ra.
+  • điểm giữa (từ 4 đến dưới 7): chặng chật vật — giữ được nhưng phải trả giá.
+  • điểm thấp (dưới 4): chặng nghịch — mất mát, bế tắc, phải lùi.
+- Hồi nào có HAI đại vận thì đọc theo ĐÚNG THỨ TỰ: điểm đi lên nghĩa là trong hồi đó đời ngóc lên; điểm đi xuống nghĩa là hồi đó có một cú trượt. Cái chuyển ấy phải hiện ra thành một khúc ngoặt bên trong hồi, đừng viết phẳng từ đầu đến cuối.
+- Vì vậy ĐỪNG viết mọi hồi "bình thường" phẳng lặng như nhau — chúng vẫn có cao thấp riêng theo điểm vận, và chính chuỗi cao thấp đó mới làm nên hình dáng một đời người. Nhưng TUYỆT ĐỐI không nêu con số ra: điểm chỉ để bạn định hướng, người đọc chỉ được thấy cảnh và sự việc.
 - Chi tiết trong truyện phải mọc ra từ các câu luận thuận/nghịch/cảnh báo của hồi đó, không bịa sự kiện không có căn cứ nào.
 
 ĐÂY LÀ MỘT ĐỜI NGƯỜI, KHÔNG PHẢI MỘT BẢN LÝ LỊCH CÔNG TÁC:
@@ -64,7 +70,12 @@ PHÂN BIỆT HAI TẦNG — đây là luật quan trọng nhất của phần b�
 - Sự kiện và hoàn cảnh của thời đó (chiến tranh, dời đô, mở mang bờ cõi, mất mùa, khoa cử) được kể như bối cảnh nhân vật sống qua — kể ĐÚNG như lịch sử, KHÔNG sửa kết cục.
 - Nhưng nhân vật thì TUYỆT ĐỐI không được là một người có thật: không gán cho nhân vật chiến công, chức vụ hay số phận của một nhân vật lịch sử; không đặt nhân vật vào vị trí độc nhất của một triều (đừng viết "ông là Tể tướng của vua X" — hãy viết "ông làm quan trong triều dưới thời vua X", một trong nhiều người).
 - Người có thật là NỀN, không phải bạn diễn: được nhắc như "vua đang trị vì", "quân của tướng X vừa đi qua", "chiếu chỉ từ kinh đô ban xuống". KHÔNG dựng cảnh họ trò chuyện, khen thưởng hay kết thân với nhân vật — cái đó là bịa chuyện về một người có thật, khác hẳn với việc kể chuyện một người hư cấu.
-- KHÔNG nêu năm dương lịch cụ thể hay niên hiệu kèm số ("năm 1428", "năm Thuận Thiên thứ ba"). Lý do kỹ thuật: dữ liệu chỉ cho TUỔI nhân vật, không có mốc lịch nào — nêu một con số năm là tự bịa ra, và nó biến toàn bộ các giai đoạn đời nhân vật thành thứ tra ngược được rồi sai. Muốn nói rõ hơn thì dùng "đầu/giữa/cuối thời <triều đại>".
+- KHÔNG nêu năm dương lịch cụ thể hay niên hiệu kèm số ("năm 1428", "năm Thuận Thiên thứ ba"). Lý do kỹ thuật: dữ liệu không có mốc lịch nào — nêu một con số năm là tự bịa ra, và nó biến toàn bộ các giai đoạn đời nhân vật thành thứ tra ngược được rồi sai. Muốn nói rõ hơn thì dùng "đầu/giữa/cuối thời <triều đại>".
+
+TUỔI TÁC — đừng biến ai cũng thành người sống thọ:
+- KHÔNG nêu tuổi nhân vật bằng con số ("năm ba mươi tuổi", "ngoài tám mươi"). Dữ liệu chia đời thành các CHẶNG, không cho tuổi thật của một người sống ở thời đó.
+- Các hồi đi theo thứ tự Thiếu thời → Lập thân → Trung niên → Hậu vận → Cuối đời. Hiểu đúng chừng mực của thời xưa: "Cuối đời" là chặng già của MỘT ĐỜI NGƯỜI THỜI ĐÓ, không phải đại thọ ngoài tám mươi. Đa số người thời phong kiến không sống lâu như người thời nay.
+- Diễn đạt thời gian bằng chặng đời và bằng cảnh (tóc đã bạc, con đã lớn, người cùng lứa đã đi gần hết), đừng bằng số.
 
 NỀN VĂN MINH PHẢI NHẬN RA ĐƯỢC — luật quan trọng, đừng bỏ qua:
 - Tool này có nhiều nền văn minh khác nhau. Nếu bỏ tên nhân vật đi mà truyện đọc như nhau ở mọi nền thì truyện hỏng: người đọc không có gì để nhận ra mình đang ở đâu.

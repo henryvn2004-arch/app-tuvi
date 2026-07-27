@@ -224,14 +224,17 @@ async function handleStory(birth: BirthParams, eraId?: string) {
     return err('Lỗi phân tích kết quả AI.', 500);
   }
 
-  // Ghép nhãn giai đoạn/tuổi/vai trò kịch (deterministic, do engine chốt) vào
-  // từng hồi LLM viết — client hiển thị nhãn của ENGINE, không dùng nhãn LLM
-  // tự nghĩ, để mốc tuổi và vị trí đỉnh cao/biến cố luôn khớp lá số.
+  // Ghép nhãn giai đoạn/vai trò kịch (deterministic, do engine chốt) vào từng
+  // hồi LLM viết — client hiển thị nhãn của ENGINE, không dùng nhãn LLM tự
+  // nghĩ, để vị trí đỉnh cao/biến cố luôn khớp lá số.
+  //
+  // CỐ Ý không trả ageFrom/ageTo nữa (engine vẫn có): nhóm hồi cố định trên 9
+  // đại vận cho ra CÙNG một dải tuổi ở mọi lá số, hồi cuối luôn 82–95 — hiển
+  // thị lên thì lá số nào cũng thành người sống thọ ngoài tám mươi. Bỏ khỏi
+  // payload luôn thay vì chỉ ẩn ở client, để không ai vô tình render lại.
   const acts = profile.arc.acts.map((a, i) => ({
     index: a.index,
     stage: a.stage,
-    ageFrom: a.ageFrom,
-    ageTo: a.ageTo,
     role: a.role,
     title: String(parsed.acts?.[i]?.title || a.stage),
     text: String(parsed.acts?.[i]?.text || ''),
