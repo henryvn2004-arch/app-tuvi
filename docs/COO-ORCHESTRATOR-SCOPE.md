@@ -1,255 +1,244 @@
 # COO Orchestrator — "Quân Sư Vận Hành"
 
-**Trạng thái:** ĐỀ XUẤT (chưa code gì) · **Ngày:** 2026-07-27
-**Người đề xuất:** Claude · **Chờ Henry chốt phạm vi + thứ tự**
+**Trạng thái:** ĐỀ XUẤT v2 (chưa code gì) · **Ngày:** 2026-07-27
+**v2 bổ sung:** Bảo mật / chống hack (Henry yêu cầu) + 3 lĩnh vực còn thiếu
+**Chờ Henry chốt scope trước khi làm bất cứ thứ gì**
 
 ---
 
-## 0. Một câu định vị
+## 0. Định vị
 
-**CMO Orchestrator** trả lời *"việc kinh doanh đang ra sao?"*.
-**COO Orchestrator** trả lời *"cái máy đẻ ra những con số đó có còn chạy không?"*
+**CMO** trả lời *"việc kinh doanh đang ra sao?"* — **COO** trả lời *"cái máy đẻ ra
+những con số đó có còn chạy, có còn đúng, có còn an toàn không?"*
 
-Hai vai này KHÔNG trùng nhau, và chỗ khác nhau quan trọng nhất là:
-CMO đọc số để báo cáo, còn **COO phải nghi ngờ chính con số đó** — vì một hệ
-thống chết cũng tạo ra dashboard xanh y hệt một hệ thống khỏe. Cái chết im lặng
-mới là kẻ thù, không phải cái chết ồn ào.
-
-Bằng chứng cho định vị này không phải lý thuyết — nó nằm ngay trong mục 1.
+Chỗ khác nhau cốt lõi: CMO đọc số để báo cáo. **COO phải nghi ngờ chính con số
+đó** — vì một hệ thống chết, hoặc bị chiếm, cũng tạo ra dashboard xanh y hệt một
+hệ thống khỏe.
 
 ---
 
-## 1. Audit prod trước khi đề xuất (2026-07-27)
+## 1. 🚨 PHÁT HIỆN NGHIÊM TRỌNG NHẤT — đọc trước mọi thứ khác
 
-Tao không viết scope theo cảm tính. Trước khi brainstorm, tao quét prod. Kết quả
-dưới đây là **thực trạng đang chạy**, không phải giả định:
-
-### 🔴 P0-1 — Toàn bộ hệ cảnh báo Marketing chưa từng chạy MỘT LẦN NÀO
-
-`ADMIN_TELEGRAM_CHAT_ID` **chưa được set trên Vercel**. Hệ quả trong 14 ngày qua:
-
-| Job | ok | skip | Ghi chú thật từ `cron_runs` |
-|---|---|---|---|
-| `cmo-digest` | **0** | 1+ | `no ADMIN_TELEGRAM_CHAT_ID` |
-| `anomaly-alerts` | **0** | 8+ | `no ADMIN_TELEGRAM_CHAT_ID` |
-
-CMO Digest (M0.2) và Cảnh báo bất thường (M0.3) — hai thứ đã ship và ghi "XONG"
-trong CLAUDE.md — **chưa gửi được một tin nào**. CLAUDE.md M0.2 có ghi *"Henry
-xác nhận `ADMIN_TELEGRAM_CHAT_ID` đã set trên Vercel (nên có sẵn — dùng chung
-với alert đăng nhập)"*. Giả định đó **sai**, và không có gì kiểm chứng lại nó.
-
-**Đây chính xác là bài học thiết kế đắt nhất của cả track:** job "skip" đều đặn
-mỗi ngày được coi là *không lỗi*, nên panel Cron vẫn không đỏ, và **sự im lặng
-của hệ cảnh báo trông y hệt như "mọi thứ đều ổn"**. Henry đã chờ bản digest đầu
-tiên suốt 2 tuần cho một thứ không bao giờ tới.
-
-### 🔴 P0-2 — 5 user trả tiền nhưng không nhận được hàng
+### CRIT-1 — Bất kỳ ai trên Internet đều tự cấp Lượng vô hạn được, không cần đăng nhập
 
 ```
-chan-dung-vo-chong:  37 lượt bị trừ Lượng  →  32 bản ghi kết quả
-chan-dung-tien-kiep: 14 lượt bị trừ Lượng  →  14 bản ghi kết quả
+add_credits(p_user_id uuid, p_amount integer)
+  → SECURITY DEFINER
+  → EXECUTE granted to: anon, authenticated
 ```
 
-**5 user mất 20 Lượng mỗi người (~100 Lượng ≈ 250k đ) và không nhận được gì.**
-Không ai biết. Không có refund. Không có bản ghi nào nói chuyện đó đã xảy ra.
+`anon` key nằm công khai trong **26 file** dưới `public/` (đúng thiết kế Supabase —
+nó vốn được bảo vệ bằng RLS và bằng việc KHÔNG cấp quyền các hàm nhạy cảm).
+Nhưng hàm `add_credits` lại **được cấp quyền cho `anon`** và chạy dưới quyền
+`SECURITY DEFINER`, tức bỏ qua mọi RLS.
 
-Căn nguyên nằm ở thứ tự trong `public/tuvi-paywall.js`:
+Hệ quả: chỉ cần xem source trang web lấy `anon` key rồi gọi thẳng REST endpoint
+`/rest/v1/rpc/add_credits` với `p_user_id` + `p_amount` tùy ý là **tự nạp bao
+nhiêu Lượng cũng được, không cần tài khoản.** Toàn bộ mô hình kiếm tiền bị vô
+hiệu bằng một request.
 
-```js
-// requireCredits(): trừ Lượng TRƯỚC, rồi mới làm việc
-const data = await res.json();          // ← /api/payment?action=deduct
-if (data.success) { await callback(); } // ← sinh ảnh/truyện; hỏng thì mất tiền
+Cùng lỗ hổng, cùng mức quyền:
+| Hàm | Khai thác được gì |
+|---|---|
+| `add_credits` | Tự nạp Lượng vô hạn cho bất kỳ ai |
+| `deduct_credits` | **Trừ sạch Lượng của user khác** (phá hoại) |
+| `process_referral_reward` | Tự phát thưởng giới thiệu |
+| `revoke_signup_bonus` | Tước quà đăng ký của user khác |
+
+> ⚠️ Tao **không thử khai thác** — không gọi RPC nào để đổi dữ liệu prod. Kết
+> luận rút từ bảng phân quyền (`has_function_privilege`) + `prosecdef`, đủ chắc
+> và không đụng vào tiền của ai.
+
+**Cách vá — đã kiểm chứng là an toàn tuyệt đối:**
+
+Tao đã rà **toàn bộ** nơi gọi 4 hàm này. Tất cả đều **server-side, dùng service
+key**: `lib/billing/credits.ts` · `lib/marketing/autopilot-promo.ts` ·
+`app/api/payment/route.ts` · `app/api/bank-webhook/route.ts` ·
+`app/api/signup-signal/route.ts`. **Không có một caller client-side nào**
+(`admin.html` chỉ *nhắc tên* `process_referral_reward` trong một dòng mô tả).
+`service_role` vẫn giữ nguyên quyền EXECUTE.
+
+```sql
+REVOKE EXECUTE ON FUNCTION public.add_credits(uuid,int)             FROM anon, authenticated;
+REVOKE EXECUTE ON FUNCTION public.deduct_credits(uuid,int)          FROM anon, authenticated;
+REVOKE EXECUTE ON FUNCTION public.process_referral_reward(uuid)     FROM anon, authenticated;
+REVOKE EXECUTE ON FUNCTION public.revoke_signup_bonus(uuid,int)     FROM anon, authenticated;
 ```
 
-Và không có đường hoàn tiền nào trong repo — `grep -ri "refund"` trả về **0 kết quả**.
+→ **Vá được ngay hôm nay, không cần deploy, không gãy gì.** Cần Henry gật.
+Sau khi vá nên soát `credit_transactions` xem đã có ai lợi dụng chưa.
 
-Tệ hơn: `generateToolSlug()` gắn `Date.now()`, nên **mỗi lần user bấm thử lại là
-một slug mới = bị trừ tiền lần nữa**. Tool hỏng càng làm user mất càng nhiều.
+### CRIT-2 — Tool trả phí không hề kiểm tra thanh toán ở server
 
-### 🟡 P0-3 — 6 cron route lỗi ở mọi lần deploy, làm nhiễu chính panel giám sát
+`app/api/chan-dung-tien-kiep` và `app/api/chan-dung-vo-chong` chỉ xác thực
+`Authorization: Bearer` là **user hợp lệ**, rồi sinh ảnh + gọi LLM luôn. Đếm số
+lần hai file này nhắc tới `tool_pricing` / `getToolPrice` / `deductCredits` /
+`credit_transactions`: **0**.
 
-Cả 6 route `app/api/cron/*` khai `runtime = 'nodejs'` nhưng **thiếu
-`export const dynamic = 'force-dynamic'`**. Chúng đọc `request.headers`
-(auth `CRON_SECRET`) nên Next 14 prerender thất bại mỗi lần build:
+Việc trừ Lượng nằm hoàn toàn ở client (`tuvi-paywall.js` gọi
+`/api/payment?action=deduct` như **một request riêng biệt**). Nghĩa là bất kỳ
+tài khoản miễn phí nào cũng `curl` thẳng endpoint để sinh ảnh + truyện **không
+mất Lượng, không giới hạn số lần** — mỗi lượt tốn tiền thật của Henry
+(OpenAI `gpt-image-1` + 2 lượt LLM ~9k token đầu vào).
 
-```
-Error: Dynamic server usage: Route /api/cron/cmo-digest couldn't be rendered
-statically because it used `request.headers`.
-```
+Điểm sáng: `handleDeduct` làm **đúng** — tra giá server-side qua `tool_pricing`,
+không tin `amount` client gửi. Vấn đề là các tool không đi qua nó.
 
-~465 dòng lỗi giả trong `cron_runs` 14 ngày qua (duration 0–5ms). Sáu route
-`app/api/cron-*` kiểu cũ không khai `runtime` thì **không dính**. Hệ quả thật
-không phải là job chết (job thật vẫn chạy) mà là **alert fatigue**: panel "Cron
-& Jobs" đầy lỗi giả, nên lỗi thật sẽ chìm nghỉm trong đó.
+### CRIT-3 — Không có rate limit ở bất kỳ endpoint tốn tiền nào
 
-### 🟡 P0-4 — Kênh push chết, và có hai hệ push song song
+Toàn repo chỉ có 2 chỗ trả 429 vì rate limit: `admin/login` và
+`admin/oauth-verify`. `/api/v1/chat`, 2 tool sinh ảnh, `/api/track` — **không có
+gì**. Cộng với CRIT-2 thì đây là đường rút tiền không đáy.
 
-`cron-daily-push` chạy OK mỗi ngày với kết quả `sent=0 · note=no tokens` —
-không có token nào trong DB. Đồng thời tồn tại **hai** cron push
-(`/api/cron-push` và `/api/cron/daily-push`) cùng lịch `0 0 * * *`. Chưa rõ cái
-nào là thật. Đáng nói: M0.4 (nhắc user sắp rời bỏ) có nhánh gửi Push — nhánh đó
-**không thể hoạt động** trong tình trạng này.
+`/api/track` còn nhận ghi **không cần auth** bằng service key. Kẻ xấu bơm hàng
+triệu event giả → **đầu độc chính số liệu mà CMO autopilot dùng để tự quyết
+định giá và tự phát khuyến mãi (M0.6)**. Khi autopilot được bật, toàn vẹn dữ
+liệu không còn là chuyện báo cáo nữa — nó trở thành **ranh giới bảo mật**.
 
-### ⚪ P0-5 — Không tồn tại khái niệm "tool lỗi" trong toàn hệ thống
+### Mức thấp hơn (từ 205 cảnh báo của Supabase advisor)
 
-Allowlist của `/api/track`:
+| Vấn đề | Chi tiết |
+|---|---|
+| `van_dap` | policy tên **"anon full access for now"** cho `ALL` — anon đọc/ghi/xóa toàn bảng. Policy tạm để lại prod. |
+| `laso_public` | anon `INSERT` **và** `UPDATE` always-true — ai cũng sửa được lá số công khai |
+| `shared_results`/`shared_sessions`/`push_subscriptions` | anon INSERT always-true — spam/phình storage |
+| 20 bảng | bật RLS nhưng **không có policy nào** (`bank_orders`, `mcp_keys`, `push_tokens`, `chat_links`, `cron_runs`…) |
+| 15 hàm | `search_path` khả biến — đường leo thang quyền kinh điển |
+| `van_dap_stats` | view `SECURITY DEFINER` (mức **ERROR** duy nhất) |
+| 3 bucket | `hair-templates`/`samples`/`wardrobe-items` cho liệt kê nội dung |
+| Auth | **chống mật khẩu rò rỉ đang TẮT** |
+| CORS | `Access-Control-Allow-Origin: '*'` áp cho **mọi** route kể cả `/api/payment` |
+| Service key | dùng trong **52 file** — bán kính thiệt hại rất rộng nếu lộ |
 
-```js
-'page_view','tool_open','tool_run','tool_result','chat_msg',
-'signup','login','topup_start','topup_success','share','cta_click'
-```
+Ghi nhận công bằng: chống gian lận đăng ký **đã có nền** — `blocked_email_domains`,
+`signup_signals`, `revoke_signup_bonus`. Không phải làm từ đầu.
 
-**Không có một event type nào biểu thị thất bại.** `tool_run` bắn lúc *bắt đầu*.
-`tool_result` có trong allowlist nhưng CLAUDE.md ghi rõ đã gộp vào `tool_run` —
-tức không nơi nào emit.
+### Nhắc lại 4 lỗ vận hành từ v1 (vẫn nguyên)
 
-Nghĩa là: **45 tool standalone + 26 trang shell + 58 API route có ZERO tín hiệu
-lỗi.** Chỉ 4 kênh chat có `bot_reply{ok,reason}` (D2). Khi tool `chan-dung-tien-kiep`
-ném *"Lỗi phân tích kết quả AI."*, cách duy nhất phát hiện là **Henry tự chạy thử
-trên prod rồi báo**. Đó không phải quy trình vận hành, đó là may mắn.
-
-### Tóm lại
-
-Bốn trong sáu thứ ship gần nhất **chưa từng làm được việc của nó trên prod**, và
-mọi dashboard vẫn xanh. Đó là lý do cần COO — và cũng là bản thiết kế cho nó.
+1. `ADMIN_TELEGRAM_CHAT_ID` chưa set → CMO Digest + cảnh báo bất thường **0 lần
+   gửi trong 14 ngày**, mà panel vẫn không đỏ vì `skip` không tính là lỗi.
+2. `chan-dung-vo-chong`: **37 lượt trừ Lượng → 32 kết quả**. 5 user mất tiền,
+   không refund, không ai biết. `grep -ri "refund"` toàn repo = 0.
+3. 6 route `app/api/cron/*` thiếu `dynamic='force-dynamic'` → ~465 lỗi giả.
+4. Push chết (`sent=0 · no tokens`) + hai hệ push song song cùng lịch.
+5. Không tồn tại event type nào biểu thị lỗi — 45 tool + 26 trang + 58 route mù hoàn toàn.
 
 ---
 
-## 2. Nguyên tắc thiết kế (rút từ chính mục 1)
+## 2. Nguyên tắc thiết kế
 
-1. **Im lặng ≠ khỏe mạnh.** Mọi thành phần giám sát phải chứng minh mình còn
-   sống bằng nhịp tim (heartbeat), không phải bằng việc không kêu. P0-1 xảy ra
-   chính vì vi phạm điều này.
-2. **COO phải tự giám sát đường báo cáo của chính nó.** Nếu kênh Telegram hỏng,
-   COO phải biết và ghi cờ đỏ vào chỗ khác (DB + dashboard), không được chết câm.
-3. **Không đợi user làm chuột bạch.** Canary tự chạy tool thật theo lịch là cách
-   duy nhất đáp ứng đúng yêu cầu *"break là báo tao NGAY"*.
-4. **Tách lỗi hệ thống khỏi lỗi người dùng.** Hết Lượng / sai input / chưa đăng
-   nhập KHÔNG phải sự cố. Gộp chung là tự tạo nhiễu.
-5. **Ngưỡng theo tỷ lệ THAY ĐỔI, không theo con số tuyệt đối.** Tool chạy 3
-   lượt/ngày không bao giờ chạm ngưỡng "8% lỗi", nhưng 2/3 lượt hỏng là chết rồi.
-6. **An toàn nằm ở thiết kế, không ở "nhớ tắt".** Kế thừa nguyên mô hình 2 lớp
-   khóa của M0.6: công tắc tổng mặc định tắt + khóa phụ từng loại hành động.
+1. **Im lặng ≠ khỏe mạnh.** Mọi thành phần giám sát phải chứng minh còn sống
+   bằng nhịp tim, không phải bằng việc không kêu.
+2. **COO tự giám sát đường báo cáo của chính nó.** Telegram hỏng → ghi cờ đỏ chỗ
+   khác, không được chết câm.
+3. **Không đợi user làm chuột bạch.** Canary tự chạy là cách duy nhất đáp ứng
+   đúng *"break là báo tao NGAY"*.
+4. **Tách lỗi hệ thống khỏi lỗi người dùng.** Hết Lượng / sai input không phải sự cố.
+5. **Ngưỡng theo tỷ lệ THAY ĐỔI, không theo số tuyệt đối.**
+6. **Giả định sẽ bị tấn công, không phải "nếu".** Mọi thứ client gửi lên đều là
+   thù địch cho tới khi server tự kiểm chứng.
+7. **An toàn nằm ở thiết kế, không ở "nhớ tắt"** — kế thừa mô hình 2 lớp khoá M0.6.
 
 ---
 
-## 3. Phạm vi đề xuất — 7 trụ
+## 3. PHẠM VI ĐỀ XUẤT — 4 lĩnh vực, 19 trụ
 
-Henry mới nêu trụ 1. Sáu trụ còn lại là phần tao brainstorm thêm.
+v1 có 7 trụ rời. v2 gom lại thành 4 lĩnh vực cho dễ cắt gọt, và **bổ sung
+lĩnh vực C (bảo mật) theo yêu cầu của Henry + lĩnh vực D mà tao thấy còn thiếu**.
 
-### Trụ 1 — Sức khỏe Tool & Route *(đúng thứ Henry yêu cầu)*
-- `tool_error` / `tool_outcome` event type + wrapper `logToolOutcome()` dùng
-  chung cho 58 API route và lớp client (`shell.js`, `tuvi-paywall.js`).
-- Phân loại lỗi: `upstream_5xx` · `llm_parse` · `timeout` · `auth` ·
-  `insufficient_credits` · `bad_input` · `unknown`. Ba loại cuối = lỗi người
-  dùng, **không tính vào tỷ lệ sự cố**.
-- Tỷ lệ thành công + p95 độ trễ **theo từng tool**, so với baseline chính nó.
-- Phát hiện **chuyển trạng thái** (đang chạy → hỏng), không phải ngưỡng tĩnh.
+### 🟦 A. ỔN ĐỊNH — *nó có chạy không?*
 
-### Trụ 2 — Canary: tự chạy thử tool thật *(trái tim của "báo tao NGAY")*
-- Tài khoản test riêng + budget Lượng riêng, chạy **end-to-end tool thật** theo
-  lịch (paid tool: 1–4 lần/ngày; free tool: thưa hơn).
-- Assert theo tầng: HTTP 200 → đúng shape → nội dung hợp lệ (ảnh có kích thước,
-  truyện đủ 5 hồi) → độ trễ trong ngưỡng.
-- **Chạy sau mỗi lần deploy**, đối chiếu với commit → chỉ thẳng deploy nào làm hỏng.
-- Đây là thứ sẽ bắt bug *"Lỗi phân tích kết quả AI."* trong 1 giờ thay vì chờ Henry.
+| # | Trụ | Nội dung |
+|---|---|---|
+| **A1** | **Sức khỏe tool & route** ← *yêu cầu gốc* | `tool_error` event + wrapper dùng chung 58 route; phân loại lỗi (upstream_5xx · llm_parse · timeout · auth · bad_input); tỷ lệ thành công + p95 **theo từng tool**; phát hiện **chuyển trạng thái** thay vì ngưỡng tĩnh |
+| **A2** | **Canary tự chạy tool thật** | Tài khoản test + budget riêng, chạy end-to-end theo lịch **và sau mỗi deploy**; assert theo tầng (HTTP → shape → nội dung → độ trễ) |
+| **A3** | **Đội job & cấu hình** | Sổ lịch kỳ vọng → bắt "đáng lẽ chạy mà không chạy"; **`skip` lặp lại = LỖI**; preflight biến môi trường; phát hiện trôi migration |
+| **A4** | **Phụ thuộc ngoài** | 10+ API bên thứ ba: tỷ lệ lỗi, độ trễ, **hiện trạng fallback** (fallback LLM 2 chiều đang vô hình), cảnh báo cạn quota **trước** khi user dính |
+| **A5** | **An toàn phát hành** | Canary sau deploy → chỉ thẳng commit làm hỏng; gợi ý rollback |
+| **A6** | **Hiệu năng & sức chứa** | p95, tỷ lệ chạm timeout Vercel, kích thước DB/storage, chi phí trên đầu user khi scale |
 
-### Trụ 3 — Toàn vẹn dòng tiền *(trụ tự trả tiền cho chính nó)*
-- Đối soát **trừ Lượng ↔ giao hàng**: mỗi giao dịch âm phải có bản ghi kết quả
-  tương ứng. Lệch = sự cố tiền bạc, báo ngay. (Đang lệch 5 ca.)
-- **Auto-refund** khi lượt chạy hỏng — idempotent, ghi log, có trần/ngày.
-- Vá `generateToolSlug` để **thử lại không bị trừ tiền lần hai** (slug tất định
-  theo input thay vì `Date.now()`).
-- Đối soát cổng thanh toán: PayOS / PayPal / bank webhook — đơn đã trả mà chưa
-  cộng Lượng, hoặc cộng hai lần.
+### 🟩 B. TOÀN VẸN — *nó có đúng không?*
 
-### Trụ 4 — Giám sát đội job & cấu hình
-- **Sổ đăng ký lịch kỳ vọng**: mỗi job khai cadence của nó → COO phát hiện
-  **"đáng lẽ phải chạy mà không chạy"** (hiện hoàn toàn vô hình).
-- **`skip` lặp lại là LỖI**, không phải trạng thái bình thường. Job skip 14 ngày
-  liền = hỏng. (Bắt được P0-1 ngay ngày đầu.)
-- **Preflight biến môi trường**: khai báo env bắt buộc theo từng tính năng, quét
-  và báo cái thiếu. (Bắt được P0-1 trước khi ship.)
-- **Trôi migration**: `_patches/*.sql` khai đã chạy vs thực tế trên prod — hiện
-  đang theo dõi bằng tay trong CLAUDE.md, rất dễ sai.
+| # | Trụ | Nội dung |
+|---|---|---|
+| **B1** | **Dòng tiền** | Đối soát **trừ-Lượng ↔ giao-hàng** (đang lệch 5 ca); auto-refund; vá slug `Date.now()` để **thử lại không mất tiền lần hai**; đối soát PayOS/PayPal/bank |
+| **B2** | **Dữ liệu** | Parity engine client↔server; ISR trả 404/rỗng; link chia sẻ chết; file rác trong Storage; embedding cũ |
+| **B3** | **Nội dung tự động** ⭐mới | 3 cron đang **tự xuất bản nội dung AI không ai duyệt** (`cron-khao-luan`, `cron-master-write`, YouTube `van_dap`). Nội dung sai/trùng lặp có thể khiến **Google phạt cả site**. Cần QC: trùng lặp, ảo giác, chất lượng |
+| **B4** | **Sự thật của tài liệu** ⭐mới | CLAUDE.md ghi "XONG" cho những thứ **chưa từng chạy** (P0-1 là bằng chứng). Đối chiếu điều tài liệu tuyên bố với thực tế prod — nghe lạ, nhưng dự án này vận hành dựa trên độ chính xác của CLAUDE.md |
 
-### Trụ 5 — Phụ thuộc ngoài & chi phí
-- 10+ API bên thứ ba (Anthropic · Gemini · OpenAI · Replicate · PayOS · PayPal ·
-  Telegram · Meta ×2 · FCM · GA4 · Supabase). Theo dõi tỷ lệ lỗi + độ trễ + chi
-  phí **theo từng nhà cung cấp**.
-- **Hiện trạng fallback**: cơ chế fallback LLM hai chiều vừa làm đang **vô hình**
-  — Henry không thấy nó phải cứu hộ bao nhiêu lần. Fallback chạy liên tục =
-  provider chính đang chết, cần biết.
-- **Cảnh báo cạn quota TRƯỚC khi user dính** (đúng sự cố *"credit balance is too
-  low"* đã xảy ra).
-- Trần chi phí: chi phí LLM/ảnh mỗi ngày so với doanh thu. D3 đã có phần *đo*,
-  còn thiếu phần *cảnh báo* và *chặn*.
+### 🟥 C. BẢO MẬT & CHỐNG LẠM DỤNG — *yêu cầu mới của Henry*
 
-### Trụ 6 — Hiệu năng & toàn vẹn dữ liệu
-- p95 theo tool, tỷ lệ chạm timeout của Vercel function, kích thước payload.
-- Trang ISR trả 404/rỗng, link chia sẻ chết, file rác trong Storage (ảnh sinh ra
-  nhưng bản ghi hỏng), embedding/RAG cũ.
-- Parity engine: lá số client vs server lệch nhau (đã từng có bug này — #83).
-- Lighthouse tụt sau deploy.
+| # | Trụ | Nội dung |
+|---|---|---|
+| **C1** | **Nền tảng bảo mật ứng dụng** | Rà phân quyền RPC/RLS định kỳ (bắt CRIT-1); **bắt buộc kiểm tra thanh toán server-side** (CRIT-2); siết CORS; giảm bán kính service key; quét CVE phụ thuộc; kiểm tra bí mật bị commit |
+| **C2** | **Chống lạm dụng & gian lận** | Rate limit **theo user + theo IP** cho mọi endpoint tốn tiền; phát hiện cày Lượng / đa tài khoản / gian lận giới thiệu; chống cào 438K trang ISR; phát hiện bơm event giả vào `/api/track` |
+| **C3** | **Phát hiện & ứng cứu sự cố** | Cảnh báo bất thường **bảo mật** (đăng nhập admin lạ, số dư nhảy vọt, dùng key bất thường); runbook cách ly; **đường truy vết** — hiện gần như không thể dựng lại chuyện gì đã xảy ra |
+| **C4** | **Quản trị truy cập & khoá** | Lịch xoay khoá (CLAUDE.md còn ghi service key **cần xoay từ 2026-06-24** — chưa rõ đã làm chưa); hạn token Meta/GA4; bật chống mật khẩu rò rỉ; 2FA tài khoản admin; nguyên tắc quyền tối thiểu |
+| **C5** | **An toàn AI** | Bề mặt prompt-injection (`wrap` để dạng ENUM là **đúng** — giữ nguyên tắc đó); chống lạm dụng ảnh người dùng tải lên; chặn nội dung AI đưa lời khuyên y tế/tài chính gây trách nhiệm pháp lý |
 
-### Trụ 7 — An toàn phát hành
-- Sau mỗi deploy: chạy bộ canary → so sánh với deploy trước → *"tool X hỏng từ
-  commit Y"*.
-- Nối vào quy trình PR sẵn có; nếu deploy làm hỏng tool trả phí thì báo kèm gợi
-  ý rollback.
+### 🟨 D. BỀN VỮNG — *nó sống được lâu không?* ⭐lĩnh vực mới
+
+| # | Trụ | Nội dung |
+|---|---|---|
+| **D1** | **Sao lưu & phục hồi thảm hoạ** | **Đã bao giờ thử phục hồi chưa?** Bản sao lưu chưa test = không có sao lưu. Chính sách PITR/retention, RTO/RPO |
+| **D2** | **Rủi ro nhà cung cấp & tài khoản** | Một Supabase, một Vercel, một domain, một bot token, một tài khoản admin. **Thẻ thanh toán hết hạn = sập toàn bộ.** Theo dõi hạn khoá/hạn thẻ/bậc quota/thay đổi ToS |
+| **D3** | **Riêng tư & tuân thủ** | **NĐ 13/2023** về bảo vệ dữ liệu cá nhân. Đang lưu ngày sinh, email, lịch sử chat, và **ảnh khuôn mặt** (xem-tướng, thử đồ) — dữ liệu sinh trắc học. Cần: chính sách lưu giữ, quyền xoá, quyền xuất dữ liệu, tuân thủ chính sách nhắn tin Meta/Telegram (**quan trọng cho M0.4/M0.6 vì chúng chủ động nhắn user**) |
+| **D4** | **Hỗ trợ & xử lý thiệt hại user** | **Hiện KHÔNG có đường nào** để user báo "tôi mất Lượng mà không nhận được gì" — 5 nạn nhân đã có thật. Cần kênh tiếp nhận, SLA phản hồi, quy trình hoàn tiền |
+| **D5** | **Sức khỏe SEO/organic** | 438K trang ISR là nguồn lưu lượng lớn nhất. Google Search Console: độ phủ index, án phạt thủ công, lỗi crawl, Core Web Vitals. **Mất index = mất kênh chính**, hiện không ai theo dõi |
 
 ---
 
-## 4. Mô hình vận hành (kế thừa nguyên mô hình CMO)
+## 4. Mô hình vận hành
 
 Ba mức, mở dần — **giống hệt M0.1→M0.6 nên không phải học lại gì**:
 
 | Mức | Nội dung | Rủi ro |
 |---|---|---|
-| **Quan sát** | Đo + hiện trên dashboard. Không gửi gì. | 0 |
-| **Cảnh báo** | Telegram khi có sự cố thật + Digest Vận Hành hằng ngày. | Thấp (chỉ tốn sự chú ý) |
-| **Tự xử lý** | Refund tự động · thử lại tự động · **tự tắt bán tool đang hỏng**. | Cao — mặc định TẮT, shadow-mode như M0.6 |
+| **Quan sát** | Đo + hiện dashboard. Không gửi gì. | 0 |
+| **Cảnh báo** | Telegram khi có sự cố thật + Digest Vận Hành. | Thấp |
+| **Tự xử lý** | Refund tự động · thử lại · **tự tắt bán tool đang hỏng** · **tự chặn IP/user đang lạm dụng**. | Cao — mặc định TẮT, shadow-mode, 2 lớp khoá |
 
-**"Tự tắt bán tool đang hỏng"** là hành động giá trị nhất trong nhóm 3: hiện tại
-một tool trả phí bị hỏng **vẫn tiếp tục thu tiền user** cho tới khi Henry phát
-hiện bằng mắt. Tắt `tool_pricing.enabled` tự động chặn đứng thiệt hại — và vẫn
-nằm sau hai lớp khóa như M0.6.
+Hai hành động đáng giá nhất ở mức 3:
+- **Tự tắt bán tool đang hỏng** — hiện tool hỏng **vẫn tiếp tục thu tiền** tới khi Henry phát hiện bằng mắt.
+- **Tự chặn nguồn lạm dụng** — nhưng chặn nhầm user thật thì tệ hơn, nên mức này phải shadow lâu.
 
-**Điều kiện bắt buộc với Digest Vận Hành:** nó phải tự kiểm tra đường gửi của
-chính mình. Nếu Telegram hỏng → ghi cờ đỏ vào DB + hiện băng đỏ trên admin.
-Không bao giờ được lặp lại P0-1.
+**Bắt buộc:** Digest Vận Hành phải tự kiểm tra đường gửi của chính nó. Không bao giờ lặp lại P0-1.
 
 ---
 
-## 5. Thứ tự đề xuất
+## 5. Workplan đề xuất
 
-| Mốc | Nội dung | Vì sao xếp ở đây |
+**Nguyên tắc xếp thứ tự:** cầm máu trước → dựng giác quan → rồi mới tự động hoá.
+
+| Mốc | Nội dung | Phụ thuộc |
 |---|---|---|
-| **O0.0** | **Vá 4 lỗ đang chảy máu** (P0-1→P0-4) | Đang mất tiền và mất tín hiệu mỗi ngày. Phần lớn là one-liner. |
-| **O0.1** | Telemetry tool (`tool_error` + wrapper) | Nền móng — mọi mốc sau đều đọc từ đây. |
-| **O0.2** | **Canary + cảnh báo tool hỏng** | Đúng yêu cầu gốc của Henry, giao trọn vẹn. |
-| **O0.3** | Đối soát tiền + auto-refund | Tự trả tiền cho chính nó; đã có 5 ca chứng minh. |
-| **O0.4** | Giám sát job + preflight env | Chống tái diễn P0-1/P0-3. |
-| **O0.5** | Phụ thuộc ngoài + chi phí | Cần O0.1 có dữ liệu trước. |
-| **O0.6** | Digest Vận Hành + dashboard COO | Gói mọi thứ trên thành thứ đọc được. |
-| **O0.7** | Tự xử lý (shadow-first) | Mốc rủi ro cao nhất, làm cuối — đúng như M0.6. |
+| **O0.0** 🚨 | **Vá khẩn cấp** — REVOKE 4 RPC (CRIT-1) · chặn thanh toán server-side 2 tool (CRIT-2) · rate limit endpoint tốn tiền (CRIT-3) · set env · `force-dynamic` · refund 5 user | Không. **Nên làm ngay, không chờ chốt scope** |
+| **O0.1** | Telemetry tool (`tool_error` + wrapper) — nền móng mọi mốc sau | O0.0 |
+| **O0.2** | **Canary + cảnh báo tool hỏng** ← *trả lời trọn vẹn câu hỏi gốc của Henry* | O0.1 |
+| **O0.3** | Đối soát tiền + auto-refund + vá slug | O0.1 |
+| **O0.4** | Rà bảo mật định kỳ + preflight env + giám sát job | O0.1 |
+| **O0.5** | Chống lạm dụng (rate limit đầy đủ, phát hiện cày Lượng/gian lận) | O0.1 |
+| **O0.6** | Phụ thuộc ngoài + chi phí + sức chứa | O0.1 |
+| **O0.7** | Digest Vận Hành + dashboard COO (gói mọi thứ trên) | O0.2–O0.6 |
+| **O0.8** | Bền vững: sao lưu/DR · tuân thủ · hỗ trợ user · SEO | Độc lập, làm song song được |
+| **O0.9** | Tự xử lý (shadow-first) — mốc rủi ro cao nhất, làm cuối | Toàn bộ trên |
 
-**Đề xuất của tao:** làm **O0.0 ngay trong 1 PR nhỏ** (độc lập, không chờ chốt
-scope), rồi **O0.1 + O0.2 gộp một PR** — hai cái đó cộng lại đã trả lời trọn vẹn
-câu hỏi ban đầu của Henry.
+**Đề xuất cụ thể của tao:**
+- **O0.0 tách riêng 1 PR, làm ngay.** CRIT-1 đang mở cho cả Internet.
+- **O0.1 + O0.2 gộp 1 PR** — hai cái đó cộng lại đã trả lời trọn vẹn yêu cầu gốc.
+- Phần còn lại làm tuần tự, 1 mốc = 1 PR, đúng quy ước sẵn có.
 
 ---
 
 ## 6. Điểm cần Henry quyết
 
-1. **O0.0 làm luôn hay chờ?** Ba trong bốn lỗ vá được bằng one-liner
-   (`force-dynamic`; set env). Riêng **refund 5 user** là động vào tiền → cần
-   Henry gật.
-2. **Ngân sách canary.** Chạy thử tool thật là tốn tiền thật (LLM + ảnh). Đề
-   xuất bắt đầu: ~50–100 Lượng/ngày cho toàn bộ tool trả phí. Henry chốt số.
-3. **Kênh báo động.** Dùng chung Telegram admin (nhanh nhất, 0 env mới **sau
-   khi vá P0-1**) hay tách riêng để sự cố vận hành không lẫn với digest marketing?
-4. **Auto-refund: tự chạy hay chờ duyệt?** Tao nghiêng về **tự chạy có trần/ngày**
-   — bắt user đợi Henry duyệt mới được hoàn tiền thì thà không làm.
-5. **Trụ nào cắt khỏi phạm vi?** Bảy trụ là bản đầy đủ. Nếu muốn gọn, tao đề
-   xuất giữ 1–2–3 và hoãn 5–6–7.
+1. **O0.0 làm ngay không?** CRIT-1 là 4 câu `REVOKE`, tao đã kiểm chứng không
+   gãy gì. **Refund 5 user là động vào tiền → tao không tự làm.**
+2. **Phạm vi:** giữ đủ 4 lĩnh vực (19 trụ) hay cắt? Nếu muốn gọn, tao đề xuất
+   giữ **A + B1 + C** và hoãn D.
+3. **Budget canary** — chạy tool thật tốn tiền thật. Khởi điểm ~50–100 Lượng/ngày?
+4. **Kênh báo động:** sự cố vận hành/bảo mật nên **tách riêng** khỏi digest
+   marketing — cảnh báo bảo mật lẫn vào báo cáo tăng trưởng là công thức bỏ sót.
+5. **Auto-refund tự chạy (có trần/ngày) hay chờ duyệt?** Tao nghiêng về tự chạy.
+6. **Service key đã xoay chưa?** CLAUDE.md ghi cần xoay từ 2026-06-24 sau khi
+   paste qua chat. Nếu chưa, gộp luôn vào O0.0.
