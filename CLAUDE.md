@@ -533,6 +533,26 @@ nghe như thuật lại chứ không như phán về người đang sống. Upse
   (desktop → modal + link; mobile → native; native ném lỗi → rơi về modal) ·
   5 nền đều có đủ địa danh riêng, **0 rò rỉ địa danh chéo**, badge khớp thời kỳ.
 
+### Vòng chỉnh tiếp — NÂNG THANG CHỨC PHẬN (PR #307)
+Henry: *"user thường thích nghe những thứ hơi shocked, ngạc nhiên, thì mới viral
+được… giờ đang đọc thầy thuốc này, chủ tiệm vải này, nghe tầm tầm không catchy.
+Upgrade position nhưng vẫn giữ nguyên tính chất các sao, các cung."*
+- **Cả 42 chức phận nâng 1–2 bậc VỀ QUY MÔ**, giữ nguyên `domain` và bản chất
+  sao: Vũ Khúc vẫn tiền + võ (chủ hiệu vàng bạc → **cự phú buôn vàng bạc khắp
+  mấy châu**), Thiên Đồng vẫn y (thầy lang → **ngự y trưởng** / **đại danh y
+  trấn một phương**), Cự Môn vẫn khẩu thiệt (trạng sư → **ngự sử đại phu**),
+  Tử Vi (quan viên ngoại → **tổng trấn một phương**, đúng ví dụ Henry đưa).
+  `attireEn` chỉnh theo cấp mới; `source` (trích Tân Biên) **không đụng**.
+- **CHỈ DỊCH CẢ THANG LÊN, KHÔNG NÉN 3 TẦNG.** Nén lại thì điểm cung Quan Lộc
+  mất hết ý nghĩa, mọi lá số ra na ná nhau, và mất luôn khả năng nói "chức phận
+  này chỉ rơi vào X% lá số". **Đo lại sau khi nâng: cao/giữa/thấp = 24/52/24%
+  trên 552 lá số** (trước 20/56/24 — giữ nguyên độ trải), **79 chức phận khác
+  nhau** xuất hiện, cái phổ biến nhất chỉ 4,2%.
+- Không mâu thuẫn với phản hồi cũ "toàn quan với tướng": lần đó vấn đề là **đơn
+  điệu** (11/14 đều là quan triều), lần này nâng **trong đúng domain của từng
+  sao** nên vẫn có cự phú, danh y, tông sư, chủ đội thương thuyền, thủ lĩnh
+  khai hoang — không dồn hết về triều đình.
+
 ### CÒN LẠI
 - Bật `enabled=true` sau deploy (câu SQL ở trên).
 - Henry gen thử trên prod đủ 5 nền để soi ảnh — tao chỉ verify được tới tầng
