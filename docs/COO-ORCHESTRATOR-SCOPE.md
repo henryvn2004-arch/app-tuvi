@@ -206,27 +206,42 @@ Hai hành động đáng giá nhất ở mức 3:
 
 ---
 
-## 5. Workplan đề xuất
+## 5. WORKPLAN — 7 sprint tuần tự
 
-**Nguyên tắc xếp thứ tự:** cầm máu trước → dựng giác quan → rồi mới tự động hoá.
+**Henry đã chốt scope 2026-07-27, kèm yêu cầu: KHÔNG over-engineer.**
 
-| Mốc | Nội dung | Phụ thuộc |
-|---|---|---|
-| **O0.0** 🚨 | **Vá khẩn cấp** — REVOKE 4 RPC (CRIT-1) · chặn thanh toán server-side 2 tool (CRIT-2) · rate limit endpoint tốn tiền (CRIT-3) · set env · `force-dynamic` · refund 5 user | Không. **Nên làm ngay, không chờ chốt scope** |
-| **O0.1** | Telemetry tool (`tool_error` + wrapper) — nền móng mọi mốc sau | O0.0 |
-| **O0.2** | **Canary + cảnh báo tool hỏng** ← *trả lời trọn vẹn câu hỏi gốc của Henry* | O0.1 |
-| **O0.3** | Đối soát tiền + auto-refund + vá slug | O0.1 |
-| **O0.4** | Rà bảo mật định kỳ + preflight env + giám sát job | O0.1 |
-| **O0.5** | Chống lạm dụng (rate limit đầy đủ, phát hiện cày Lượng/gian lận) | O0.1 |
-| **O0.6** | Phụ thuộc ngoài + chi phí + sức chứa | O0.1 |
-| **O0.7** | Digest Vận Hành + dashboard COO (gói mọi thứ trên) | O0.2–O0.6 |
-| **O0.8** | Bền vững: sao lưu/DR · tuân thủ · hỗ trợ user · SEO | Độc lập, làm song song được |
-| **O0.9** | Tự xử lý (shadow-first) — mốc rủi ro cao nhất, làm cuối | Toàn bộ trên |
+### Luật chống phình (áp cho mọi sprint)
 
-**Đề xuất cụ thể của tao:**
-- **O0.0 tách riêng 1 PR, làm ngay.** CRIT-1 đang mở cho cả Internet.
-- **O0.1 + O0.2 gộp 1 PR** — hai cái đó cộng lại đã trả lời trọn vẹn yêu cầu gốc.
-- Phần còn lại làm tuần tự, 1 mốc = 1 PR, đúng quy ước sẵn có.
+1. **Tái dùng, không dựng mới.** Hạ tầng đã có và phải dùng lại:
+   `events` (telemetry) · `cron_runs` + `withCronLog` (job) · `app_config`
+   (ngưỡng, đổi không cần deploy) · `tgSendMessage` (báo động) · panel
+   `admin.html` (hiển thị). **Bảng mới chỉ khi thật sự không nhét vừa `events`.**
+2. **Một helper dùng chung, không dựng framework.**
+3. **Đi theo giá trị, không theo độ phủ.** Gắn telemetry cho tool **trả phí +
+   lưu lượng cao trước**, không gắn đủ 58 route rồi mới dùng.
+4. **1 sprint = 1 PR.** Sprint nào phình quá thì cắt đôi, không nống ra.
+5. **Lĩnh vực D phần lớn là CHECKLIST/quy trình, không phải code.** Đừng biến
+   sao lưu/tuân thủ/SEO thành một hệ thống tự động — chi phí không đáng.
+
+### Bảng sprint
+
+| Sprint | Tên | Mục đích một câu | Đầu ra | Phụ thuộc |
+|---|---|---|---|---|
+| **S0** 🚨 | **Cầm máu** | Bịt 3 lỗ đang khai thác được + 2 lỗi vận hành | SQL `REVOKE` · kiểm tra thanh toán server-side · rate limit · `force-dynamic` | — |
+| **S1** | **Giác quan** | Cho hệ thống biết đau ở đâu | `tool_error` + helper `logToolOutcome()` gắn vào tool trả phí & lưu lượng cao | S0 |
+| **S2** | **Canary** ⭐ | *Break là báo NGAY* — yêu cầu gốc | Cron tự chạy tool thật + cảnh báo Telegram | S1 |
+| **S3** | **Dòng tiền** | Không để user trả tiền mà mất trắng | Đối soát trừ-Lượng ↔ giao-hàng · auto-refund · vá slug `Date.now()` | S1 |
+| **S4** | **Job & cấu hình** | Không lặp lại vụ "chạy 14 ngày mà chưa gửi được gì" | Sổ lịch kỳ vọng · `skip` lặp = LỖI · preflight env | S1 |
+| **S5** | **Digest & panel COO** | Gói mọi thứ thành thứ đọc được mỗi sáng | Digest Vận Hành (tự kiểm tra đường gửi của chính nó) + panel admin | S1–S4 |
+| **S6** | **Chống lạm dụng & rà bảo mật định kỳ** | Giữ cho lỗ đã vá không mở lại | Rà phân quyền RPC/RLS định kỳ · phát hiện cày Lượng/gian lận | S1 |
+
+**Để sau, chỉ làm khi Henry thấy cần** (cố ý KHÔNG xếp sprint để tránh phình):
+phụ thuộc ngoài & chi phí · sức chứa · QC nội dung AI · đối chiếu tài liệu ·
+toàn bộ lĩnh vực D (sao lưu/DR · tuân thủ · hỗ trợ user · SEO) · tự xử lý
+(auto-tắt tool hỏng, auto-chặn lạm dụng).
+
+**Quy trình mỗi sprint:** tao giải thích gọn *làm để làm gì* → hỏi những điểm
+cần chốt → làm → 1 PR draft → CI xanh → Henry duyệt → sprint kế.
 
 ---
 
