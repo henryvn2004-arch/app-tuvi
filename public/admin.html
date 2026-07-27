@@ -283,6 +283,16 @@
 
         <div class="panel">
           <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>Vòng Lặp Viral</div>
+            <span style="font-size:.72rem;color:var(--text-lt)">K-factor = lượt giới thiệu ăn được ÷ số người đã tạo kết quả</span>
+          </div>
+          <div class="panel-body" id="mkt-viral">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Doanh Thu Tiền Thật</div>
             <span style="font-size:.72rem;color:var(--text-lt)">giao dịch cũ chưa lưu VNĐ → ước lượng ×2.500đ</span>
           </div>
@@ -2821,7 +2831,96 @@ async function loadMarketing() {
     document.getElementById('mkt-funnel').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
     ['mkt-sources','mkt-acq','mkt-campaigns','mkt-paths','mkt-referrers','mkt-cohorts','mkt-revenue'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
   }
+  loadViral(fromEl.value, toEl.value);
   loadAutopilotLog();
+}
+
+// V2.4 (track Viral Loop) — phễu vòng lặp giới thiệu. Gọi RIÊNG khỏi
+// admin-marketing (7 RPC + GA4) để panel này không bị kéo chậm/gãy theo, và để
+// thêm/bớt sau cũng không đụng vào endpoint đang chạy ổn.
+async function loadViral(from, to) {
+  const host = document.getElementById('mkt-viral');
+  if (!host) return;
+  try {
+    const d = await apiGet('admin-viral', `&from=${from}&to=${to}`);
+    if (d.error) throw new Error(d.error);
+    renderMktViral(d.viral || {});
+  } catch (e) {
+    host.innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
+  }
+}
+
+const VIRAL_STEPS = [
+  { k: 'gen_runs',    label: 'Tạo kết quả',   hint: 'lượt tool_run' },
+  { k: 'share_links', label: 'Tạo link chia sẻ', hint: 'dòng shared_results' },
+  { k: 'share_acts',  label: 'Chia sẻ thật',  hint: 'đã chọn kênh phát tán' },
+  { k: 'share_views', label: 'Mở link',       hint: 'người nhận xem /ket-qua' },
+  { k: 'cta_clicks',  label: 'Bấm CTA',       hint: 'từ trang chia sẻ' },
+  { k: 'ref_signups', label: 'Đăng ký qua mã', hint: 'referral ăn được' },
+];
+
+function renderMktViral(v) {
+  const host = document.getElementById('mkt-viral');
+  const t = v.totals || {}, rows = v.by_tool || [], ref = v.referral || {};
+  const max = Math.max(1, ...VIRAL_STEPS.map(s => t[s.k] || 0));
+
+  const bars = VIRAL_STEPS.map((s, i) => {
+    const n = t[s.k] || 0;
+    const prev = i === 0 ? null : (t[VIRAL_STEPS[i - 1].k] || 0);
+    const conv = prev ? Math.round(n / prev * 100) : null;
+    return `<div style="margin-bottom:.55rem">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;font-size:.78rem;margin-bottom:.2rem">
+        <span>${s.label} <span style="color:var(--text-lt);font-size:.68rem">· ${s.hint}</span></span>
+        <span><b style="color:var(--text)">${n.toLocaleString('vi-VN')}</b>${conv != null ? ` <span style="color:var(--text-lt);font-size:.7rem">(${conv}%)</span>` : ''}</span>
+      </div>
+      <div style="height:9px;background:var(--border-lt);border-radius:5px;overflow:hidden">
+        <div style="height:100%;width:${Math.max(2, Math.round(n / max * 100))}%;background:linear-gradient(90deg,var(--navy),#1455a4);border-radius:5px"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const k = t.k_factor;
+  const kCol = k == null ? 'var(--text-lt)' : k >= 0.5 ? 'var(--green)' : k >= 0.3 ? 'var(--gold)' : 'var(--red)';
+  const cps = t.cost_per_signup_vnd;
+  const tiles = `<div style="display:flex;gap:1.4rem;flex-wrap:wrap;margin-bottom:1rem">
+      <div><div class="stat-label">K-factor (chung)</div><div style="font-family:'Noto Serif',serif;font-size:1.9rem;font-weight:700;line-height:1;color:${kCol}">${k == null ? '—' : Number(k).toFixed(2)}</div></div>
+      <div><div class="stat-label">Chi phí / user đăng ký</div><div style="font-family:'Noto Serif',serif;font-size:1.9rem;font-weight:700;line-height:1;color:var(--text)">${cps ? fmtVndFull(cps) : '—'}</div></div>
+      <div><div class="stat-label">Lượng thưởng đã phát</div><div style="font-family:'Noto Serif',serif;font-size:1.9rem;font-weight:700;line-height:1;color:var(--text)">${(ref.credits_awarded || 0).toLocaleString('vi-VN')}</div><div style="font-size:.66rem;color:var(--text-lt)">≈ ${fmtVndFull(ref.reward_vnd || 0)}</div></div>
+      <div><div class="stat-label">Referral ghi nhận</div><div style="font-family:'Noto Serif',serif;font-size:1.9rem;font-weight:700;line-height:1;color:var(--text)">${(ref.created || 0).toLocaleString('vi-VN')}</div><div style="font-size:.66rem;color:var(--text-lt)">${ref.rewarded || 0} đã thưởng</div></div>
+    </div>`;
+
+  const body = rows.map(r => {
+    const rk = r.k_factor;
+    const c = rk == null ? 'var(--text-lt)' : rk >= 0.5 ? 'var(--green)' : rk >= 0.3 ? 'var(--gold)' : 'var(--red)';
+    return `<tr>
+      <td class="mono" style="font-size:.72rem">${escHtmlLocal(r.tool_id)}</td>
+      <td style="text-align:right">${r.gen_runs}</td>
+      <td style="text-align:right">${r.gen_users}</td>
+      <td style="text-align:right">${r.share_links}</td>
+      <td style="text-align:right">${r.share_acts}</td>
+      <td style="text-align:right">${r.share_views}</td>
+      <td style="text-align:right">${r.cta_clicks}</td>
+      <td style="text-align:right;font-weight:700">${r.ref_signups}</td>
+      <td style="text-align:right;font-weight:700;color:${c}">${rk == null ? '—' : Number(rk).toFixed(2)}</td>
+      <td style="text-align:right;color:var(--text-mid)">${fmtVndFull(r.cost_vnd || 0)}</td>
+    </tr>`;
+  }).join('');
+
+  host.innerHTML = tiles + bars + `
+    <div class="table-wrap" style="margin-top:1rem">
+      <table><thead><tr>
+        <th>Tool</th><th style="text-align:right">Gen</th><th style="text-align:right">Người gen</th>
+        <th style="text-align:right">Link</th><th style="text-align:right">Share</th><th style="text-align:right">Mở link</th>
+        <th style="text-align:right">CTA</th><th style="text-align:right">Đăng ký</th><th style="text-align:right">K</th>
+        <th style="text-align:right">Chi phí</th>
+      </tr></thead><tbody>${body || '<tr><td colspan="10" class="empty">Chưa có dữ liệu</td></tr>'}</tbody></table>
+    </div>
+    <div style="font-size:.68rem;color:var(--text-lt);margin-top:.6rem;line-height:1.5">
+      · <b>Người gen</b> là mẫu số của K (một người vẽ nhiều bức vẫn là một người có thể đi mời bạn).<br>
+      · <b>Link</b> đếm từ <code>shared_results</code>, <b>Share</b> chỉ tính khi người dùng đã chọn kênh phát tán — chênh nhau = tạo link rồi bỏ.<br>
+      · <b>Chi phí</b> là tiền LLM + ảnh của chính tool đó (<code>events.llm_usage</code>), chưa gồm chi phí hạ tầng.<br>
+      · Ngưỡng tham chiếu đã chốt: K ≥ 0,5 và chi phí/user ≤ 6.000đ trong 2 tuần liên tiếp → cân nhắc nâng trần ngân sách; K &lt; 0,3 sau 3–4 tuần → 2 tool này không lan tự nhiên.
+    </div>`;
 }
 
 // M0.6 (track Marketing Autopilot) — nhật ký hành động autopilot, THUẦN ĐỌC.

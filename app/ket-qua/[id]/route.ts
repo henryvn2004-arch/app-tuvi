@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
 import { NextRequest } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { GA4_TRACK_SNIPPET } from '@/lib/analytics/isr-tracking';
 
 const SB_URL = process.env.SUPABASE_URL!;
@@ -35,6 +35,33 @@ function esc(s: string): string {
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+interface SignupOffer { bonus: number | null; price: number | null; }
+
+/** Quà đăng ký (mức thấp nhất trong các biến thể A/B) + giá tool đang chia sẻ.
+ *  Best-effort: lỗi/thiếu dữ liệu → trả null, copy CTA lùi về câu chung chung. */
+async function signupOffer(
+  sb: SupabaseClient | null,
+  toolId: string,
+): Promise<SignupOffer> {
+  if (!sb) return { bonus: null, price: null };
+  try {
+    const [cfg, price] = await Promise.all([
+      sb.from('app_config').select('value').eq('key', 'credits.signup_bonus_variants').maybeSingle(),
+      sb.from('tool_pricing').select('credits').eq('tool_id', toolId).maybeSingle(),
+    ]);
+    const raw = cfg.data?.value as unknown;
+    const variants = (Array.isArray(raw) ? raw : [raw])
+      .map((v) => Number(v)).filter((n) => Number.isFinite(n) && n > 0);
+    const p = Number((price.data as { credits?: unknown } | null)?.credits);
+    return {
+      bonus: variants.length ? Math.min(...variants) : null,
+      price: Number.isFinite(p) && p > 0 ? p : null,
+    };
+  } catch {
+    return { bonus: null, price: null };
+  }
+}
+
 function page404(): Response {
   const html = `<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Không tìm thấy kết quả</title>
 <style>body{font-family:-apple-system,Segoe UI,Arial,sans-serif;background:#F4F2EC;color:#1a1a1a;display:flex;min-height:100vh;align-items:center;justify-content:center;margin:0;text-align:center;padding:20px}a{color:#9A7B3A}</style></head>
@@ -43,13 +70,20 @@ function page404(): Response {
   return new Response(html, { status: 404, headers: { 'content-type': 'text/html; charset=utf-8' } });
 }
 
-export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string }> }): Promise<Response> {
+export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }): Promise<Response> {
   const { id } = await ctx.params;
   if (!id || !/^[A-Za-z0-9]{6,16}$/.test(id)) return page404();
 
   let row: ShareRow | null = null;
+  let sb: SupabaseClient | null = null;
   try {
-    const sb = createClient(SB_URL, SB_KEY);
+    // `cache:'no-store'`: Next BỌC fetch toàn cục và ghi nhớ kết quả (kể cả với
+    // `dynamic='force-dynamic'` — bắt được khi test: đổi giá trị dưới DB xong
+    // trang vẫn trả số cũ). Với trang này thì cache là sai hẳn — link vừa bị gỡ
+    // (revoked) phải 404 ngay, và câu chữ CTA phải bám giá/quà thật.
+    sb = createClient(SB_URL, SB_KEY, {
+      global: { fetch: (input, init) => fetch(input, { ...init, cache: 'no-store' }) },
+    });
     const { data } = await sb.from('shared_results')
       .select('tool_id,kind,title,image_url,text_content,blocks,revoked').eq('id', id).single();
     row = (data as ShareRow) || null;
@@ -60,6 +94,13 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
     /* fall through → 404 */
   }
   if (!row || row.revoked) return page404();
+
+  // Quà đăng ký + giá tool: đọc THẲNG từ nguồn thật (app_config/tool_pricing)
+  // thay vì viết cứng con số vào copy. Quà hiện là A/B nhiều mức nên lấy mức
+  // THẤP NHẤT — hứa cái ai cũng nhận được; nếu sau này Henry chốt một mức duy
+  // nhất thì câu chữ tự khớp, không phải sửa code. Chỉ nói "đủ dùng thử ngay"
+  // khi quà THẬT SỰ ≥ giá tool — hứa hụt ngay lần đầu là mất niềm tin.
+  const offer = await signupOffer(sb, row.tool_id);
 
   const title = esc(row.title || 'Kết quả Luận Đường');
   const url = `${SITE}/ket-qua/${esc(id)}`;
@@ -84,7 +125,25 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
     ? esc(ogImgSrc)
     : esc(`${SITE}/api/og/luan-duong?${new URLSearchParams({ ctx: row.title || '', thay: 'Tử Vi Minh Bảo', q: teaser.slice(0, 150) }).toString()}`);
 
-  const ctaRoute = `/app/${row.tool_id}`;
+  // ── MẮT XÍCH VIRAL ──
+  // shell.js gắn ?ref=<mã của người chia sẻ> vào link này. Trước đây trang chỉ
+  // trỏ CTA sang /app/<tool> TRẦN → người mở link có đăng ký cũng không ai được
+  // thưởng, hệ thống không biết họ tới từ đâu (bảng referrals đứng yên 0 dòng).
+  // Nay chuyển tiếp mã + UTM sang CTA để referral.js bên /app bắt được.
+  const refRaw = req.nextUrl.searchParams.get('ref') || '';
+  const ref = /^[A-Za-z0-9]{8}$/.test(refRaw) ? refRaw.toUpperCase() : '';
+  const ctaParams = new URLSearchParams({ utm_source: 'share', utm_medium: 'link', utm_campaign: row.tool_id });
+  if (ref) ctaParams.set('ref', ref);
+  const ctaRoute = `/app/${row.tool_id}?${ctaParams.toString()}`;
+
+  const pillTxt = offer.bonus
+    ? `✦ Đăng ký nhận ${offer.bonus} Lượng miễn phí`
+    : '✦ Tặng Lượng miễn phí khi đăng ký';
+  const ctaDesc = offer.bonus && offer.price && offer.bonus >= offer.price
+    ? `Đăng ký nhận ${offer.bonus} Lượng — đủ dùng công cụ này cho lá số của chính bạn.`
+    : offer.bonus
+      ? `Đăng ký nhận ${offer.bonus} Lượng miễn phí để tự lập lá số và dùng công cụ này.`
+      : 'Đăng ký để tự lập lá số và dùng công cụ này — miễn phí.';
 
   // Render Y HỆT layout card (.blk) của workspace khi có blocks có cấu trúc —
   // mỗi block là 1 card riêng (header + ảnh/text), giống hệt .res-block trong
@@ -162,15 +221,30 @@ body{font-family:var(--sans);background:var(--paper2);color:var(--text);line-hei
   <div class="body">${body}</div>
   <div class="cta">
     <div class="cta-card">
-      <span class="pill">✦ Tặng Lượng miễn phí khi đăng ký</span>
+      <span class="pill">${esc(pillTxt)}</span>
       <b>Muốn xem kết quả của riêng bạn?</b>
-      <p>Đăng ký để tự lập lá số và dùng công cụ này — miễn phí.</p>
-      <a class="cta-btn" href="${SITE}${ctaRoute}">Thử ngay →</a>
+      <p>${esc(ctaDesc)}</p>
+      <a class="cta-btn" id="ctaBtn" href="${SITE}${ctaRoute}">Thử ngay →</a>
     </div>
   </div>
   <div class="foot">© 2026 Tử Vi Minh Bảo · <a href="${SITE}/app">tuviminhbao.com</a> — Lá số được lập bằng engine cổ pháp; phần luận giải do AI thực hiện trên chính dữ liệu đó.</div>
 </div>
 ${GA4_TRACK_SNIPPET}
+<script>
+// Đo vòng lặp viral ở đúng khúc trước nay MÙ: người mở link chia sẻ (share_view)
+// và người bấm CTA (cta_click). track.js đã được GA4_TRACK_SNIPPET nạp sẵn
+// (defer) — KHÔNG thêm thẻ script thứ hai, nạp hai lần là page_view đếm đôi.
+// defer chạy xong trước DOMContentLoaded → window.Track chắc chắn sẵn sàng.
+document.addEventListener('DOMContentLoaded', function () {
+  if (!window.Track || !window.Track.event) return;
+  var t = ${JSON.stringify(row.tool_id)}, sid = ${JSON.stringify(id)};
+  window.Track.event('share_view', { tool_id: t, slug: sid, meta: { with_ref: ${ref ? 'true' : 'false'} } });
+  var b = document.getElementById('ctaBtn');
+  if (b) b.addEventListener('click', function () {
+    window.Track.event('cta_click', { tool_id: t, slug: sid, meta: { from: 'share', with_ref: ${ref ? 'true' : 'false'} } });
+  });
+});
+</script>
 </body></html>`;
 
   return new Response(html, {

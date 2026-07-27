@@ -539,6 +539,7 @@ a { color: var(--blue); text-decoration: none; }
 <script src="/auth.js"></script>
 <script src="/tuvi-paywall.js?v=7"></script>
 <script src="/nav.js?v=16"></script>
+<script src="/referral.js?v=1"></script>
 <script src="/footer.js"></script>
 
 <script>
@@ -549,44 +550,9 @@ if (typeof TuviPaywall !== 'undefined') {
   TuviPaywall.init({ product: 'laso', title: 'Luận Giải Lá Số 24 Phần' });
 }
 
-// ─────────────────────────────────────────────────────────────
-// Referral capture: ?ref=CODE → sessionStorage → auto-submit
-// ─────────────────────────────────────────────────────────────
-(function captureRefCode() {
-  const refRaw = new URLSearchParams(window.location.search).get('ref');
-  if (refRaw && /^[A-Z0-9]{8}$/i.test(refRaw)) {
-    sessionStorage.setItem('pending_ref_code', refRaw.toUpperCase());
-    const u = new URL(window.location.href);
-    u.searchParams.delete('ref');
-    window.history.replaceState({}, '', u.toString());
-  }
-})();
-
-window.tryRegisterReferral = async function() {
-  const refCode = sessionStorage.getItem('pending_ref_code');
-  if (!refCode || !window.Auth?.isLoggedIn()) return;
-  const token = window.Auth.getSession()?.access_token;
-  if (!token) return;
-  try {
-    const res = await fetch('/api/payment?action=referral-register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-      body: JSON.stringify({ refCode }),
-    });
-    const data = await res.json();
-    if (data.success) {
-      sessionStorage.removeItem('pending_ref_code');
-      console.log('[referral] registered:', data);
-    }
-  } catch(e) { console.warn('[referral]', e); }
-};
-
-setTimeout(() => window.tryRegisterReferral?.(), 1500);
-if (window.Auth?.onAuthChange) {
-  window.Auth.onAuthChange((event) => {
-    if (event === 'SIGNED_IN') setTimeout(() => window.tryRegisterReferral?.(), 500);
-  });
-}
+// Referral capture (?ref=CODE → sessionStorage → auto-submit) nay nằm trong
+// /referral.js — nguồn DÙNG CHUNG cho homepage, /cong-cu và mọi trang /app
+// (shell.js tự nạp), để link chia sẻ /ket-qua mang mã cũng ăn được.
 
 // ─────────────────────────────────────────────────────────────
 // Init
