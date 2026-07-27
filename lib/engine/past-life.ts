@@ -262,6 +262,11 @@ export function pickEraForLaso(ls: Laso, gender: 'nam' | 'nu'): Era {
 //   sao: Vũ Khúc vẫn là tiền + võ (chủ hiệu vàng bạc → cự phú buôn vàng bạc
 //   khắp mấy châu), Thiên Đồng vẫn là y (thầy lang → ngự y trưởng / đại danh
 //   y), Cự Môn vẫn là khẩu thiệt (trạng sư → ngự sử đại phu).
+// TITLE PHẢI NGẮN (Henry chốt tiếp): title là DANH XƯNG, đọc xong nhớ được để
+//   kể lại — "Đại đô đốc", "Ngự sử đại phu", "Cự phú". Râu ria ("nắm binh
+//   quyền và quân lương", "tiếng nói vang cả triều") dồn hết vào `desc`, KHÔNG
+//   nhét vào title. Bản đầu tao viết title dài, vừa khó nhớ vừa nghe như đang
+//   cố khoe.
 // QUAN TRỌNG: chỉ DỊCH CẢ THANG lên, KHÔNG nén khoảng cách giữa 3 tầng — tầng
 // thấp vẫn phải đọc ra là lận đận so với tầng cao của CÙNG sao. Nén lại thì
 // điểm cung Quan Lộc mất hết ý nghĩa, mọi lá số ra na ná nhau, và mất luôn
@@ -292,14 +297,14 @@ export interface Occupation {
 const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
   'Tử Vi': {
     cao: {
-      titleNam: 'Phiên vương trấn giữ một cõi', titleNu: 'Trưởng công chúa nhiếp chính', domain: 'quyen',
+      titleNam: 'Phiên vương', titleNu: 'Công chúa nhiếp chính', domain: 'quyen',
       desc: 'Người được ban đất phong, cai quản cả một vùng như tiểu quốc riêng — trên chỉ có vua, dưới là muôn dân trong cõi ấy.',
       attireEn:
         'a princely court robe of deep purple and crimson silk with gold-thread dragon-rank embroidery, a jewelled ceremonial belt and a tall coronet of rank',
       source: 'Tân Biên 8.1: "công danh hiển hách, phú quý song toàn"',
     },
     giua: {
-      titleNam: 'Tổng trấn một phương', titleNu: 'Mệnh phụ nắm quyền cả một phủ', domain: 'quyen',
+      titleNam: 'Tổng trấn', titleNu: 'Mệnh phụ phu nhân', domain: 'quyen',
       desc: 'Người thay triều đình cai quản cả một vùng rộng — quyền uy trong tay, nhưng vẫn phải ngoái nhìn về kinh đô.',
       attireEn:
         'a provincial governor’s formal robe of deep indigo silk with rank embroidery, a jewelled belt of office and a tall cap of authority',
@@ -315,21 +320,21 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
   },
   'Thiên Phủ': {
     cao: {
-      titleNam: 'Thượng thư nắm quốc khố', titleNu: 'Nữ quan chưởng quản nội khố hoàng cung', domain: 'quyen',
+      titleNam: 'Thượng thư bộ Hộ', titleNu: 'Nữ quan chưởng khố', domain: 'quyen',
       desc: 'Người nắm toàn bộ tiền lương thuế má của cả nước — không hào nhoáng, nhưng mọi việc lớn đều phải qua tay.',
       attireEn:
         'a senior minister’s robe of deep indigo silk with silver-thread trim, a belt of office and the formal rank headwear of his post',
       source: 'Tân Biên 8.7: Vũ đồng cung — "chức vụ thuộc về tài chánh hay kinh tế"',
     },
     giua: {
-      titleNam: 'Đại thương gia nắm mạch hàng cả vùng', titleNu: 'Nữ chủ nhân thương hội tơ lụa', domain: 'thuong',
+      titleNam: 'Đại thương gia', titleNu: 'Chủ thương hội tơ lụa', domain: 'thuong',
       desc: 'Người gây dựng cả một mạng lưới buôn bán, tính toán chắc tay, của cải bền vững qua nhiều đời.',
       attireEn:
         'a wealthy merchant-prince’s layered robe of fine brown and bronze silk with a broad embroidered sash and a heavy seal at the waist',
       source: 'Tân Biên 8.7: "thành công trong việc kinh doanh buôn bán"',
     },
     thap: {
-      titleNam: 'Quản sự trông coi kho lẫm cho phủ chúa', titleNu: 'Nữ quản sự giữ sổ sách một thương hội', domain: 'thuong',
+      titleNam: 'Quản sự kho lẫm', titleNu: 'Nữ quản sự thương hội', domain: 'thuong',
       desc: 'Người giữ của cho kẻ khác, cẩn thận tỉ mỉ cả đời — kho ấy đầy ắp mà chưa từng là của mình.',
       attireEn:
         'a neat dark work robe of good cloth with rolled sleeves, an ink-stained sash and a bundle of tally slips',
@@ -338,21 +343,21 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
   },
   'Thiên Cơ': {
     cao: {
-      titleNam: 'Quốc sư bày mưu định quốc', titleNu: 'Nữ quân sư trong màn trướng', domain: 'van',
+      titleNam: 'Quốc sư', titleNu: 'Nữ quân sư', domain: 'van',
       desc: 'Người bày mưu định kế sau lưng bậc chí tôn — không cầm quân, nhưng quyết định thắng bại của cả cuộc chiến.',
       attireEn:
         'a slate-blue scholar-strategist’s robe with wide sleeves and a fine embroidered headband, holding a closed fan',
       source: 'Tân Biên 8.6: "chuyên việc tham mưu, tất có chức vị lớn lao"',
     },
     giua: {
-      titleNam: 'Tông sư chế tác cơ quan khí giới', titleNu: 'Nữ danh sư nghề đỡ, phủ đệ nào cũng mời', domain: 'nghe',
-      desc: 'Người sống bằng đôi tay khéo và cái đầu tính toán — cả vùng có việc khó là tìm tới, triều đình cũng từng vời.',
+      titleNam: 'Tông sư chế tác', titleNu: 'Nữ danh sư nghề đỡ', domain: 'nghe',
+      desc: 'Người sống bằng đôi tay khéo và cái đầu tính toán, chế ra những cơ quan khí giới mà kẻ khác không làm nổi — cả vùng có việc khó là tìm tới, triều đình cũng từng vời.',
       attireEn:
         'a fine hemp master-craftsman’s robe with sleeves tied back, a leather tool apron and precisely made implements at the belt',
       source: 'Tân Biên 8.6: "nên chuyên về kỹ nghệ, máy móc"; 8.23: Cơ-Nguyệt gặp Tả Hữu — "đàn bà hay làm nghề cô đỡ"',
     },
     thap: {
-      titleNam: 'Thuật sĩ xem tướng đoán mệnh nơi phố thị', titleNu: 'Nữ thuật sĩ bói quẻ có tiếng trong vùng', domain: 'tu',
+      titleNam: 'Thuật sĩ đoán mệnh', titleNu: 'Nữ thuật sĩ bói quẻ', domain: 'tu',
       desc: 'Người thông minh nhanh trí, sống bằng lời đoán và lòng tin của thiên hạ — nay đây mai đó, không chốn nào giữ chân được lâu.',
       attireEn:
         'a travelling robe of good grey cloth, a shoulder bag of divination slips and a small cloth banner',
@@ -361,21 +366,21 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
   },
   'Thái Dương': {
     cao: {
-      titleNam: 'Thượng thư đầu triều', titleNu: 'Nữ quan chưởng ấn đầu triều', domain: 'van',
+      titleNam: 'Thượng thư đầu triều', titleNu: 'Nữ thượng thư', domain: 'van',
       desc: 'Người đứng giữa công đường, tiếng nói vang xa khắp thiên hạ — danh tiếng rạng rỡ mà cũng chói mắt kẻ khác.',
       attireEn:
         'a bright vermilion court official’s robe with a gold-embroidered rank badge and the formal rank headwear of high office',
       source: 'Tân Biên 8.5: "công danh sớm đạt, văn võ kiêm toàn"',
     },
     giua: {
-      titleNam: 'Tri phủ cầm cân nảy mực cả một phủ', titleNu: 'Nữ sư phó dạy học trong vương phủ', domain: 'van',
+      titleNam: 'Tri phủ', titleNu: 'Nữ sư phó vương phủ', domain: 'van',
       desc: 'Người cầm cân nảy mực hoặc cầm sách dạy người ở cả một vùng — uy tín đủ để một lời nói ra là có người nghe theo.',
       attireEn:
         'a dignified dark red robe of plain silk with an embroidered rank panel and a scholar’s headwear, carrying a bound register',
       source: 'Tân Biên 8.5: Cự đồng tại Dần — "nên chuyên về hình luật"; Lương đồng tại Mão — "y dược, sư phạm"',
     },
     thap: {
-      titleNam: 'Danh sĩ có tài mà không gặp thời', titleNu: 'Nữ sĩ tài hoa ẩn danh', domain: 'van',
+      titleNam: 'Danh sĩ lỡ vận', titleNu: 'Nữ sĩ ẩn danh', domain: 'van',
       desc: 'Người có tài thật, danh tiếng cũng có, nhưng cả đời không gặp cơ hội thi thố — giữ chữ nghĩa cho riêng mình.',
       attireEn:
         'a plain undyed scholar’s robe worn thin at the cuffs, a modest cloth headband and a single well-read book',
@@ -384,21 +389,21 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
   },
   'Thái Âm': {
     cao: {
-      titleNam: 'Quan nội đình chưởng quản văn thư cơ mật', titleNu: 'Thượng cung đứng đầu lục cung', domain: 'van',
+      titleNam: 'Quan chưởng cơ mật', titleNu: 'Thượng cung', domain: 'van',
       desc: 'Người lo việc bên trong — giấy tờ cơ mật, sổ sách, tính toán thầm lặng. Ít ai thấy mặt, nhưng thiếu thì cả cung rối loạn.',
       attireEn:
         'a soft pale silver-blue silk robe with delicate rank embroidery, understated and refined, with a fine hairpin of office',
       source: 'Tân Biên 8.8: Đồng đồng cung tại Tý — "công danh hiển hách, có tài can gián người trên"',
     },
     giua: {
-      titleNam: 'Đại điền chủ ruộng thẳng cánh cò bay', titleNu: 'Nữ chủ xưởng dệt cung ứng cho triều đình', domain: 'thuong',
-      desc: 'Người trông coi ruộng vườn hoặc khung cửi trên quy mô lớn — cơ nghiệp lặng lẽ mà nuôi được cả một vùng.',
+      titleNam: 'Đại điền chủ', titleNu: 'Chủ xưởng dệt ngự dụng', domain: 'thuong',
+      desc: 'Người trông coi ruộng vườn thẳng cánh cò bay, hoặc khung cửi dệt hàng tiến cung — cơ nghiệp lặng lẽ mà nuôi được cả một vùng.',
       attireEn:
         'a comfortable robe of soft undyed silk and pale blue cotton with a fine sash, sleeves tied for work, a bundle of keys at the waist',
       source: 'Tân Biên 8.8: Đồng đồng cung tại Ngọ — "nên chuyên về kỹ nghệ hay doanh thương"',
     },
     thap: {
-      titleNam: 'Thư lại tin cẩn trong phủ quan', titleNu: 'Nữ nghệ nhân dệt gấm được đặt hàng riêng', domain: 'nghe',
+      titleNam: 'Thư lại phủ quan', titleNu: 'Nghệ nhân dệt gấm', domain: 'nghe',
       desc: 'Người cần mẫn với công việc tỉ mỉ dưới đèn — làm cho người khác, tay nghề được trọng mà tên tuổi thì không.',
       attireEn:
         'a simple pale robe of good cotton, sleeves bound with cord, ink or fine thread staining the fingers',
@@ -407,21 +412,21 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
   },
   'Vũ Khúc': {
     cao: {
-      titleNam: 'Đại đô đốc nắm binh quyền và quân lương', titleNu: 'Nữ tướng coi quân nhu ba đạo quân', domain: 'vo',
+      titleNam: 'Đại đô đốc', titleNu: 'Nữ tướng coi quân nhu', domain: 'vo',
       desc: 'Người vừa cầm quân vừa cầm tiền — cứng rắn, thực tế, quyết đoán trong cả trận mạc lẫn sổ sách.',
       attireEn:
         'dark plated commander’s armour over a deep-toned robe, a broad leather belt with metal fittings and a commander’s sash',
       source: 'Tân Biên 8.4: "võ nghiệp hiển đạt"; Phủ đồng cung — "chức vụ thuộc về tài chánh hay kinh tế"',
     },
     giua: {
-      titleNam: 'Cự phú buôn vàng bạc khắp mấy châu', titleNu: 'Nữ cự phú nắm nghề kim hoàn cả vùng', domain: 'thuong',
-      desc: 'Người buôn vật quý trên quy mô lớn — mắt tinh tay chắc, nói ít, mà giá đã chốt thì không ai cãi được.',
+      titleNam: 'Cự phú', titleNu: 'Nữ cự phú kim hoàn', domain: 'thuong',
+      desc: 'Người buôn vàng bạc châu báu khắp mấy châu — mắt tinh tay chắc, nói ít, mà giá đã chốt thì không ai cãi được.',
       attireEn:
         'a solid rich merchant’s robe of dark fine cloth with a metal-clasped belt, a small brass scale and a locked strongbox within reach',
       source: 'Tân Biên 8.4: "chuyên về doanh thương cũng có nhiều tài lộc"',
     },
     thap: {
-      titleNam: 'Chủ lò rèn cung ứng binh khí cho quân triều', titleNu: 'Nữ chủ hiệu kim khí lớn nhất chợ huyện', domain: 'nghe',
+      titleNam: 'Chủ lò rèn binh khí', titleNu: 'Chủ hiệu kim khí', domain: 'nghe',
       desc: 'Người sống bằng kim khí và sức vóc, tay chai vì lửa — ngay thẳng, ít lời, nhưng hàng làm ra thì quân đội cũng phải dùng.',
       attireEn:
         'a sturdy dark work robe with a heavy leather apron, forearms bared, soot marking the cloth, fine finished blades on the rack behind',
@@ -430,21 +435,21 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
   },
   'Thiên Đồng': {
     cao: {
-      titleNam: 'Ngự y trưởng, đứng đầu Thái y viện', titleNu: 'Nữ ngự y được hoàng thất tin cậy', domain: 'y',
+      titleNam: 'Ngự y trưởng', titleNu: 'Nữ ngự y', domain: 'y',
       desc: 'Người đứng đầu việc chữa bệnh chốn cung đình — tay nghề được cả hoàng tộc đặt tính mạng vào.',
       attireEn:
         'a refined pale robe of fine cream silk with subtle rank insignia of the imperial medical office, a lacquered medicine case at hand',
       source: 'Tân Biên 8.3: Lương đồng cung — "rất nổi tiếng nếu chuyên về y khoa hay sư phạm"',
     },
     giua: {
-      titleNam: 'Đại danh y trấn một phương', titleNu: 'Nữ danh y cả vùng tìm đến', domain: 'y',
+      titleNam: 'Đại danh y', titleNu: 'Nữ danh y', domain: 'y',
       desc: 'Người chữa bệnh cứu người có tiếng khắp vùng, sống hiền hòa — hưởng phúc lành hơn là tranh đoạt.',
       attireEn:
         'a well-made cream and soft-brown physician’s robe of clean fine fabric, with an embroidered medicine satchel',
       source: 'Tân Biên 8.3: "nên chuyên về thương mại hay kỹ nghệ"; Lương đồng — y khoa',
     },
     thap: {
-      titleNam: 'Lương y ẩn cư nơi sơn dã', titleNu: 'Nữ lương y rong ruổi cứu người', domain: 'y',
+      titleNam: 'Lương y ẩn cư', titleNu: 'Nữ lương y vân du', domain: 'y',
       desc: 'Người đi khắp nơi tìm cây thuốc, ưa dịch chuyển hơn ưa danh phận — nhưng ai bệnh nặng thì vẫn lặn lội tìm tới tận nơi.',
       attireEn:
         'a weathered travelling robe of good undyed hemp, a large woven basket of rare herbs on the back, straw sandals',
@@ -453,22 +458,22 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
   },
   'Liêm Trinh': {
     cao: {
-      titleNam: 'Thượng thư bộ Hình', titleNu: 'Nữ quan chưởng hình luật hậu cung', domain: 'quyen',
+      titleNam: 'Thượng thư bộ Hình', titleNu: 'Nữ quan chưởng hình', domain: 'quyen',
       desc: 'Người đứng đầu việc xét xử và luật lệ cả nước — nghiêm khắc, không dễ lay chuyển, và vì thế chuốc oán không ít.',
       attireEn:
         'a severe black judicial robe with crimson trim and a high rank insignia, severe formal rank headwear',
       source: 'Tân Biên 8.2: "võ nghiệp hiển đạt, kiêm nhiếp cả việc chính trị, được nhiều người kính nể"',
     },
     giua: {
-      titleNam: 'Chủ xưởng lớn cung ứng cho triều đình', titleNu: 'Nữ chủ lò gốm ngự dụng', domain: 'nghe',
+      titleNam: 'Chủ xưởng ngự dụng', titleNu: 'Chủ lò gốm ngự dụng', domain: 'nghe',
       desc: 'Người gây dựng nghề bằng kỷ luật và tay nghề — quản người chặt, sản phẩm làm ra tiến được vào cung.',
       attireEn:
         'a sturdy dark master’s robe with sleeves tied back, clay or dye marking the hem, fine finished wares on the shelf behind',
       source: 'Tân Biên 8.2: Phá đồng cung — "nên chuyên về kỹ nghệ, hay thương mại"',
     },
     thap: {
-      titleNam: 'Đô úy coi ngục thất kinh thành', titleNu: 'Nữ quan coi ngục nội đình', domain: 'quyen',
-      desc: 'Người giữ kỷ luật ở nơi ít ai muốn đến — ngày qua ngày đối diện với phần khắc nghiệt nhất của luật lệ.',
+      titleNam: 'Đô úy coi ngục', titleNu: 'Nữ quan coi ngục', domain: 'quyen',
+      desc: 'Người giữ kỷ luật ở ngục thất kinh thành, nơi ít ai muốn đến — ngày qua ngày đối diện với phần khắc nghiệt nhất của luật lệ.',
       attireEn:
         'a dark uniform robe of office with a leather belt of rank and a ring of heavy keys, austere and worn',
       source: 'Tân Biên 8.2: Tham đồng cung — "thường gặp nhiều trở ngại, tai ương, nhất là hình ngục"',
@@ -476,22 +481,22 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
   },
   'Tham Lang': {
     cao: {
-      titleNam: 'Quan chưởng lễ nhạc cả triều đình', titleNu: 'Nữ quan đứng đầu ca vũ trong cung', domain: 'nghe',
+      titleNam: 'Quan chưởng lễ nhạc', titleNu: 'Nữ quan chưởng ca vũ', domain: 'nghe',
       desc: 'Người cai quản phần hoa lệ nhất của triều đình — tài hoa và giỏi giao tế bậc nhất thiên hạ.',
       attireEn:
         'an ornate court robe of warm russet and gold silk with elaborate patterning and precious ornaments',
       source: 'Tân Biên 8.23: Tham + Xương/Khúc tại Hợi, Tý — "có danh chức, được nhiều người biết tiếng"',
     },
     giua: {
-      titleNam: 'Chủ nhân đệ nhất tửu lâu kinh thành', titleNu: 'Nữ chủ đệ nhất ca lâu', domain: 'thuong',
+      titleNam: 'Chủ đệ nhất tửu lâu', titleNu: 'Chủ đệ nhất ca lâu', domain: 'thuong',
       desc: 'Người quen biết khắp chốn, từ quan lại tới thương nhân — sống bằng tài khéo và sức hút riêng hơn là bằng chức tước.',
       attireEn:
         'a richly colored layered silk robe with a decorative sash and fine small ornaments, worldly and welcoming',
       source: 'Tân Biên 8.9: "công danh trắc trở nhưng nếu buôn bán lại phát đạt"',
     },
     thap: {
-      titleNam: 'Danh kép được các phủ tranh nhau mời', titleNu: 'Đào nương nức tiếng một vùng', domain: 'nghe',
-      desc: 'Người có tài thật, đi hát khắp các phủ đệ và bến chợ — được yêu mến một đêm rồi lại lên đường.',
+      titleNam: 'Danh kép', titleNu: 'Đào nương nức tiếng', domain: 'nghe',
+      desc: 'Người có tài thật, đi hát khắp các phủ đệ và bến chợ, phủ nào cũng tranh nhau mời — được yêu mến một đêm rồi lại lên đường.',
       attireEn:
         'a colourful performer’s robe of good cloth, a little worn at the sleeves, a fine instrument carried on the back',
       source: 'Tân Biên 8.9: "chức vị nhỏ thấp, thăng giáng thất thường"',
@@ -499,21 +504,21 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
   },
   'Cự Môn': {
     cao: {
-      titleNam: 'Ngự sử đại phu, tiếng nói vang cả triều', titleNu: 'Nữ quan biện sự trước ngự tiền', domain: 'van',
+      titleNam: 'Ngự sử đại phu', titleNu: 'Nữ quan biện sự', domain: 'van',
       desc: 'Người sống bằng lời nói — biện luận sắc bén, đàn hặc cả bậc quyền quý, đứng được giữa chốn tranh tụng khốc liệt nhất.',
       attireEn:
         'a dark charcoal formal censor’s robe with an embroidered rank panel and a scholar’s headwear, holding a rolled memorial',
       source: 'Tân Biên 8.10: Nhật đồng cung tại Dần — "công danh hiển hách. Nên chuyên về hình luật"',
     },
     giua: {
-      titleNam: 'Đại nho mở trường, học trò khắp vùng', titleNu: 'Nữ sư dạy lễ nghi cho các phủ', domain: 'van',
+      titleNam: 'Đại nho mở trường', titleNu: 'Nữ sư dạy lễ nghi', domain: 'van',
       desc: 'Người dạy chữ dạy nghề cho cả một vùng, được kính trọng — nhưng cái miệng thẳng cũng hay gây chuyện.',
       attireEn:
         'a dark blue master-teacher’s robe of good cloth, with writing implements and a stack of manuscripts on the desk beside',
       source: 'Tân Biên 8.10: "làm thầy giáo cũng nổi tiếng, có nhiều tài năng, nhất là ăn nói"',
     },
     thap: {
-      titleNam: 'Người môi giới khét tiếng chốn thương trường', titleNu: 'Bà mối mát tay khắp mấy huyện', domain: 'thuong',
+      titleNam: 'Tay môi giới lão luyện', titleNu: 'Bà mối mát tay', domain: 'thuong',
       desc: 'Người sống bằng tài ăn nói, việc khó mấy cũng dàn xếp được — được việc cho thiên hạ mà mang tiếng thị phi.',
       attireEn:
         'a practical everyday robe of good coarse cloth with a shoulder bag, weather-worn and quick-eyed',
@@ -522,21 +527,21 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
   },
   'Thiên Tướng': {
     cao: {
-      titleNam: 'Tể tướng đầu triều', titleNu: 'Nữ quan chưởng ấn thay vua phê duyệt', domain: 'quyen',
+      titleNam: 'Tể tướng', titleNu: 'Nữ quan chưởng ấn', domain: 'quyen',
       desc: 'Người phụ tá bậc nhất, giữ ấn tín, thay chủ điều hành cả bộ máy — quyền lớn mà không phải là chủ.',
       attireEn:
         'a formal chancellor’s robe of deep teal and gold with a ceremonial seal pouch at the waist and the formal rank headwear of high office',
       source: 'Tân Biên 8.11: "công danh nhẹ bước, văn võ kiêm toàn"',
     },
     giua: {
-      titleNam: 'Tông sư một nghề, tác phẩm tiến cống hoàng cung', titleNu: 'Nữ tông sư nghề thêu ngự dụng', domain: 'nghe',
-      desc: 'Người làm ra những thứ tinh xảo mà kẻ khác không làm nổi — danh tiếng nằm ở tay nghề chứ không ở chức tước.',
+      titleNam: 'Tông sư ngự dụng', titleNu: 'Tông sư thêu ngự dụng', domain: 'nghe',
+      desc: 'Người làm ra những thứ tinh xảo mà kẻ khác không làm nổi, tác phẩm tiến cống vào cung — danh tiếng nằm ở tay nghề chứ không ở chức tước.',
       attireEn:
         'a fine craftsman-master’s robe of soft grey-green silk with sleeve guards, exquisite tools and half-finished work at hand',
       source: 'Tân Biên 8.11: đơn thủ tại Tỵ, Hợi — "nên chuyên về kỹ thuật hay mỹ thuật"',
     },
     thap: {
-      titleNam: 'Tổng quản đại phủ, thay chủ điều hành mọi việc', titleNu: 'Nữ tổng quản nội phủ', domain: 'quyen',
+      titleNam: 'Tổng quản đại phủ', titleNu: 'Nữ tổng quản nội phủ', domain: 'quyen',
       desc: 'Người tin cẩn đứng sau một gia chủ quyền thế, thu xếp mọi việc trơn tru — mà tên tuổi không bao giờ được nhắc.',
       attireEn:
         'a tidy dark steward’s robe of good cloth with a sash of office and a set of household keys',
@@ -545,21 +550,21 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
   },
   'Thiên Lương': {
     cao: {
-      titleNam: 'Thái phó, thầy dạy của hoàng đế', titleNu: 'Thái phó dạy dỗ hoàng tử công chúa', domain: 'van',
-      desc: 'Người giữ việc can gián và dạy dỗ bậc chí tôn — nói thẳng điều mà cả triều không ai dám mở miệng.',
+      titleNam: 'Thái phó', titleNu: 'Nữ thái phó', domain: 'van',
+      desc: 'Người giữ việc can gián và dạy dỗ bậc chí tôn, thầy của cả hoàng đế — nói thẳng điều mà cả triều không ai dám mở miệng.',
       attireEn:
         'an elder tutor’s formal robe in muted earth tones with a rank panel, scholarly bearing, a plain wooden hairpin',
       source: 'Tân Biên 8.12: đơn thủ tại Tý, Ngọ — "phú quý đến tột bực, có danh tiếng lừng lẫy"',
     },
     giua: {
-      titleNam: 'Danh y kiêm đại nho, cả vùng gọi bằng thầy', titleNu: 'Nữ danh y kiêm dạy học', domain: 'y',
+      titleNam: 'Danh y kiêm đại nho', titleNu: 'Nữ danh y kiêm đại nho', domain: 'y',
       desc: 'Người vừa chữa bệnh vừa dạy người — cả vùng gọi bằng thầy và tìm đến lúc hoạn nạn.',
       attireEn:
         'a calm robe of muted olive and cream of good cloth, a medicine chest and a stack of books sharing the same table',
       source: 'Tân Biên 8.12: "nên chuyên về y dược hay sư phạm. Buôn bán cũng phát đạt"',
     },
     thap: {
-      titleNam: 'Cao nhân ẩn dật, người tìm đến tận núi', titleNu: 'Sư bà trụ trì một am lớn', domain: 'tu',
+      titleNam: 'Cao nhân ẩn dật', titleNu: 'Sư bà trụ trì', domain: 'tu',
       desc: 'Người rời chốn đông người, cứu giúp lặng lẽ và không màng danh phận — nhưng tiếng lành đồn xa, người vẫn lặn lội tìm tới.',
       attireEn:
         'a simple well-worn monastic robe, a wooden staff and prayer beads, sandals of woven straw',
@@ -568,21 +573,21 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
   },
   'Thất Sát': {
     cao: {
-      titleNam: 'Đại tướng quân trấn thủ biên cương', titleNu: 'Nữ đại tướng thống lĩnh ba quân', domain: 'vo',
+      titleNam: 'Đại tướng quân trấn ải', titleNu: 'Nữ đại tướng quân', domain: 'vo',
       desc: 'Người cầm đại quân giữ cả một dải biên cương — quyết liệt, cô độc, quen sống giữa sinh tử.',
       attireEn:
         'battle-worn dark commander’s armour with a heavy weathered cloak over the shoulders, a general’s sash, commanding and austere',
       source: 'Tân Biên 8.13: đơn thủ tại Dần, Thân — "thành công trong những việc thật khó khăn… uy quyền lớn lao"',
     },
     giua: {
-      titleNam: 'Đại đương gia tiêu cục lớn nhất vùng', titleNu: 'Nữ đương gia tiêu cục', domain: 'vo',
+      titleNam: 'Đại đương gia tiêu cục', titleNu: 'Nữ đương gia tiêu cục', domain: 'vo',
       desc: 'Người nhận những chuyến hàng nguy hiểm mà kẻ khác từ chối — giữ chữ tín bằng chính tính mạng mình và cả cơ nghiệp.',
       attireEn:
         'well-made travelling garb of tough dark cloth with leather guards, a fine blade at the hip and a road-worn cloak',
       source: 'Tân Biên 8.13: Liêm đồng cung — "kinh doanh, buôn bán hay chuyên về kỹ nghệ, cũng phát đạt và được yên thân"',
     },
     thap: {
-      titleNam: 'Thủ lĩnh toán thợ săn cả vùng núi', titleNu: 'Nữ thủ lĩnh phường săn', domain: 'vo',
+      titleNam: 'Thủ lĩnh phường săn', titleNu: 'Nữ thủ lĩnh phường săn', domain: 'vo',
       desc: 'Người gan lì, quen với rừng núi và hiểm nguy — sống bằng sức mình, cầm đầu một toán người và không nợ ai điều gì.',
       attireEn:
         'rugged hunting clothes of hide and stout cloth, a fur collar, a good bow or carrying frame across the back',
@@ -591,21 +596,21 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
   },
   'Phá Quân': {
     cao: {
-      titleNam: 'Tiên phong đại tướng, mở đường phá trận', titleNu: 'Nữ tiên phong phá trận', domain: 'vo',
+      titleNam: 'Tiên phong đại tướng', titleNu: 'Nữ tiên phong đại tướng', domain: 'vo',
       desc: 'Người đi đầu mở đường, dám đập bỏ cái cũ — làm nên tên tuổi giữa thời loạn bằng chính lưỡi dao của mình.',
       attireEn:
         'light commander’s scouting armor of dark leather and metal plates, a travel-worn officer’s cloak, rugged and mobile',
       source: 'Tân Biên 8.14: đơn thủ tại Tý, Ngọ — "lập công danh trong thời loạn… có nhiều mưu trí và rất dũng mãnh"',
     },
     giua: {
-      titleNam: 'Chủ đội thương thuyền vượt biển', titleNu: 'Nữ chủ đội thương thuyền', domain: 'thuong',
+      titleNam: 'Chủ đội thương thuyền', titleNu: 'Nữ chủ đội thương thuyền', domain: 'thuong',
       desc: 'Người dựng cơ nghiệp trên sóng nước, cầm cả một đội thuyền — mấy lần trắng tay rồi lại làm lại từ đầu.',
       attireEn:
         'a windworn robe of sturdy fine indigo cloth with a wide sash, sun-darkened skin, rope and cargo tallies nearby',
       source: 'Tân Biên 8.14: đơn thủ tại Dần, Thân — "nên kinh doanh, buôn bán hay chuyên về kỹ nghệ"',
     },
     thap: {
-      titleNam: 'Thủ lĩnh đoàn khai hoang lập ấp mới', titleNu: 'Nữ thủ lĩnh đoàn khai hoang', domain: 'vo',
+      titleNam: 'Thủ lĩnh khai hoang', titleNu: 'Nữ thủ lĩnh khai hoang', domain: 'vo',
       desc: 'Người bỏ chốn cũ đi mở đất mới, dẫn theo cả một đoàn người — cực nhọc nhưng tự do, đời dựng lại nhiều lần từ hai bàn tay.',
       attireEn:
         'hard-wearing work clothes of undyed hemp, a broad conical hat, tools slung across the shoulder, dust on everything',
@@ -618,7 +623,7 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
 // Sách (8.45) nói "coi Chính diệu xung chiếu như Chính diệu tọa thủ", nên
 // nhánh này chỉ chạy khi cả hai cung đều trống chính tinh.
 const DEFAULT_OCCUPATION: Occupation = {
-  titleNam: 'Danh sĩ không màng công danh', titleNu: 'Nữ sĩ tài danh sống ngoài vòng cương tỏa', domain: 'van',
+  titleNam: 'Danh sĩ ẩn thế', titleNu: 'Nữ sĩ ẩn thế', domain: 'van',
   desc: 'Người có học, có chí, tiếng tăm cũng có, nhưng cả đời không rơi vào một chức phận rõ ràng nào — đứng ngoài thời cuộc mà nhìn vào.',
   attireEn: 'a plain undyed hemp scholar’s robe without rank insignia, simple and worn, a modest cloth headband',
   source: 'Tân Biên 8.45: "Cung Quan Lộc vô Chính diệu… công danh không thể hiển đạt được"',

@@ -543,6 +543,11 @@ Upgrade position nhưng vẫn giữ nguyên tính chất các sao, các cung."*
   trấn một phương**), Cự Môn vẫn khẩu thiệt (trạng sư → **ngự sử đại phu**),
   Tử Vi (quan viên ngoại → **tổng trấn một phương**, đúng ví dụ Henry đưa).
   `attireEn` chỉnh theo cấp mới; `source` (trích Tân Biên) **không đụng**.
+- **Title phải NGẮN** (Henry chốt tiếp — bản đầu tao viết dài quá): title là
+  **danh xưng**, đọc xong nhớ được để kể lại. "Đại đô đốc nắm binh quyền và
+  quân lương" → **Đại đô đốc**; "Ngự sử đại phu, tiếng nói vang cả triều" →
+  **Ngự sử đại phu**; "Cự phú buôn vàng bạc khắp mấy châu" → **Cự phú**. Râu
+  ria dồn hết vào `desc` (chỉnh 7 desc để không mất chi tiết vừa rút ra).
 - **CHỈ DỊCH CẢ THANG LÊN, KHÔNG NÉN 3 TẦNG.** Nén lại thì điểm cung Quan Lộc
   mất hết ý nghĩa, mọi lá số ra na ná nhau, và mất luôn khả năng nói "chức phận
   này chỉ rơi vào X% lá số". **Đo lại sau khi nâng: cao/giữa/thấp = 24/52/24%
