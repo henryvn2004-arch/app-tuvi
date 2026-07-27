@@ -145,7 +145,7 @@ window.SHELL_INTRO={key:'chan-dung-tien-kiep',title:'Chân Dung Tiền Kiếp',d
 <script src="/tuvi-form.js?v=1"></script>
 <script src="/tuvi-paywall.js"></script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=45"></script>
+<script src="/shell.js?v=46"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=1"></script>
 <script>
 
@@ -330,26 +330,10 @@ function renderStory(data) {
 // Dựng trang /ket-qua chia sẻ được — CỐ Ý cho người xem link đọc trọn cả ảnh
 // lẫn truyện mà không phải trả Lượng: chỉ NGƯỜI SINH mới bị tính phí, còn mỗi
 // lượt sinh vẫn đẻ ra một đường link lan được.
-var CHI_GIO = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
-var GIO_KHUNG = ['23–01h','01–03h','03–05h','05–07h','07–09h','09–11h','11–13h','13–15h','15–17h','17–19h','19–21h','21–23h'];
-
-/** Một dòng tóm tắt lá số đã nhập, cho trang chia sẻ. */
-function birthSummary(b) {
-  if (!b) return '';
-  var parts = [b.gender === 'nu' ? 'Nữ' : 'Nam'];
-  var dd = String(b.day).padStart(2, '0'), mm = String(b.month).padStart(2, '0');
-  parts.push(dd + '/' + mm + '/' + b.year + (b.isLunar ? ' (âm lịch)' : ' (dương lịch)'));
-  var i = Number(b.hourBranch);
-  if (i >= 0 && i < 12) parts.push('giờ ' + CHI_GIO[i] + ' (' + GIO_KHUNG[i] + ')');
-  return parts.join(' · ');
-}
-
 function publishShareable(imageUrl) {
   var d = _lastStory;
   if (!d) return;
   var blocks = [];
-  var bs = birthSummary(_lastBirth);
-  if (bs) blocks.push({ header: 'Lá số dùng để phác hoạ', text: bs });
   blocks.push({
     header: 'Chân Dung Tiền Kiếp',
     image: imageUrl || undefined,
@@ -366,6 +350,7 @@ function publishShareable(imageUrl) {
   Shell.setShareable({
     kind: imageUrl ? 'image' : 'text',
     toolId: 'chan-dung-tien-kiep',
+    birth: _lastBirth,
     title: (d.characterName ? d.characterName + ' — ' : '') + (d.danhXung || 'Chân dung tiền kiếp của tôi'),
     imageUrl: imageUrl || undefined,
     blocks: blocks,

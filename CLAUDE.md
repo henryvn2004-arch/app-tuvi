@@ -430,9 +430,17 @@ Henry gửi ảnh chụp trang chia sẻ, 3 việc:
 - **Tóm tắt lá số ở đầu trang.** Người nhận link không có ngữ cảnh gì → không
   biết chân dung gắn với lá số nào. `publishShareable` (trang shell) chèn block
   ĐẦU TIÊN "Lá số dùng để phác hoạ" = `birthSummary(_lastBirth)` →
-  "Nam · 03/06/1998 (dương lịch) · giờ Sửu (01–03h)". Làm ở TOOL chứ không ở
-  `shell.js` `setShareable` — sửa shell.js phải bump version trên ~25 trang;
-  nếu muốn mọi tool đều có thì đó là việc riêng, gọn nhưng diện rộng.
+  "Nam · 03/06/1998 (dương lịch) · giờ Sửu (01–03h)". **Henry chốt làm bản DÙNG
+  CHUNG** → chuyển hẳn vào `shell.js` `setShareable`, mọi tool tự có (bump
+  `shell.js?v=45→46` trên 27 trang). `birthSummaryLine()` đọc birth theo NHIỀU
+  tên khoá vì shape không thống nhất giữa các tool (`day/month/year` vs
+  `ngay/thang/nam` vs `dd/mm/yyyy`); thiếu ngày-tháng-năm → trả '' và KHÔNG
+  chèn gì. Nguồn birth CHỈ lấy `o.birth` hoặc `ctx.birth` của chính lượt đó —
+  **cố ý không đụng `birthSnapshot()`/localStorage**, lá số sót từ tool khác sẽ
+  gắn nhầm chủ nhân cho bản chia sẻ. Ba nhánh: có `blocks` → chèn block đầu;
+  text phẳng → nối dòng lên đầu `text` (không đổi layout); ảnh phẳng → dựng
+  blocks. Test Playwright 5 ca (có blocks / text phẳng / ảnh phẳng / không lá
+  số / birth thiếu ngày) đều đúng.
 - **Logo:** `<div class="brand">紫微明寶</div>` → `<img src="/seal.webp">` ở CẢ
   `/ket-qua/[id]` lẫn `/luan-duong/[id]` (hai trang chia sẻ dùng chung layout).
   **CỐ Ý KHÔNG thay 40+ chỗ 紫微 còn lại** trong repo: phần lớn là
