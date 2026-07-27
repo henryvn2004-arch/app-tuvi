@@ -253,6 +253,113 @@ bật; khi bật, cùng logic, chỉ khác bước cuối áp dụng thật (pre
 
 ---
 
+## 🔁 TRACK MỚI — Viral Loop cho 2 tool chân dung (chốt 2026-07-27, CHƯA CODE)
+
+**Nguồn:** phiên brainstorm "làm sao cho Chân Dung Vợ Chồng + Chân Dung Tiền Kiếp viral".
+Plan này là OUTPUT của phiên; code làm ở session sau, mỗi PR reset branch trên main.
+
+### 🔴 PHÁT HIỆN CHÍNH — vòng lặp đứt đúng 1 mắt xích
+Link chia sẻ `/ket-qua/<id>` **KHÔNG mang mã giới thiệu**; nút CTA "Thử ngay →" trỏ
+`/app/<tool_id>` cũng **không mang mã**. Nên: A share → B đăng ký → **A không được
+thưởng gì**, hệ thống không biết B đến từ A.
+**Bằng chứng: bảng `referrals` = 0 dòng** dù backend referral 2 tầng + chống gian lận
+đã viết đầy đủ từ lâu — chưa từng có 1 lượt nào, vì con đường tự nhiên duy nhất mà
+người ta chia sẻ lại không gắn mã. Đây là thứ phải sửa TRƯỚC mọi thứ khác.
+
+### 📊 Số thật lúc chốt plan (2026-07-27)
+- `spouse_portraits` 32 bản / **1 user** · `past_life_portraits` 15 bản / **1 user**
+  · `shared_results` 26 link (15 vợ chồng · 10 tiền kiếp) — **TẤT CẢ do Henry test.
+  Chưa có một người ngoài nào chạm vào 2 tool này.** Mọi kỳ vọng viral hiện là giả thuyết.
+- `events` có **0 dòng `share`** dù 26 link đã tạo → luồng `shareWorkspace` của
+  `shell.js` không bắn `Track.event` → phần quan trọng nhất của viral đang MÙ.
+- Giá: tiền kiếp **25 Lượng**, vợ chồng **20 Lượng** (`tool_pricing`, cả 2 `enabled=true`).
+- Hạ tầng ĐÃ TỐT (không phải làm lại): `/ket-qua/[id]` công khai, người xem KHÔNG mất
+  Lượng, **OG image lấy ĐÚNG ảnh chân dung thật** (`firstBlockImage`, không phải logo),
+  `twitter:card=summary_large_image`, có sẵn CTA card cuối trang.
+- Chống gian lận có sẵn: `blocked_email_domains` (chặn email tạm), device cap 5
+  (`credits.signup_bonus_device_cap`), chặn tự refer, UNIQUE `referee_user_id`.
+
+### ✅ Bộ số Henry đã chốt
+| Tham số | Giá trị chốt | Hiện tại trong DB | Ghi chú |
+|---|---|---|---|
+| Quà đăng ký | **25 Lượng cố định** | random `[20,30,40]` (A/B) | dừng A/B, set `credits.signup_bonus_variants=[25]` |
+| Thưởng mời bạn | **15 Lượng** | 10 (`referral.signup_bonus_referrer`) | **CỐ Ý thấp hơn giá tool** để ép mời nhiều |
+| Thưởng kích hoạt khi | **referee ĐĂNG KÝ** | đã đúng (`process_referral_signup`) | giữ nguyên |
+| Trần lượt mời được thưởng | **15** | 20 (`referral.signup_reward_cap`) | = tối đa 225 Lượng/người |
+| Trần chi ảnh free | **$15/tháng**, chỉnh qua `app_config` | chưa có | Henry tăng sau khi thấy tín hiệu |
+
+**Hệ quả số học (cố ý, Henry đã cân nhắc):** mời 1 bạn = 15 Lượng → KHÔNG đủ tool nào
+(20/25). **Mời 2 bạn = 30 Lượng = 1 lượt tiền kiếp (dư 5) hoặc 1 lượt vợ chồng (dư 10).**
+→ **Câu chữ BẮT BUỘC phải nói thẳng "mời 2 bạn = thêm 1 lượt vẽ"**, tuyệt đối không hứa
+lửng lơ kiểu "mời bạn để xem tiếp" — hứa hụt là mất niềm tin ngay lần đầu.
+
+**⚠️ Tension đã flag:** 25 quà − 25 giá tiền kiếp = **0 Lượng còn lại**, mà rail chat
+tốn 5 Lượng/lượt → user mới KHÔNG hỏi được nhân vật câu nào, trong khi vòng chỉnh
+PR #306 vừa biến rail thành upsell chính của tool. **Mặc định trong plan: tặng 2 lượt
+rail miễn phí ngay sau khi vẽ xong** (chi phí chat ≪ chi phí ảnh) để giữ móc upsell.
+Henry có thể bỏ nếu không ưng.
+
+### 💰 Kinh tế (con số để Quân Sư canh + để quyết nâng trần)
+- 1 lượt gen thật ≈ **$0.08–0.10** (ảnh `gpt-image-1` 1024×1536 ~$0.05–0.08 + truyện LLM ~$0.02).
+- 1 mắt xích referral trọn vẹn ≈ **$0.16** (gen của referee + gen mua bằng thưởng của referrer)
+  → **~4.000đ cho 1 user đăng ký thật** — rẻ hơn mọi kênh trả phí, đáng làm.
+- $15/tháng → **~150–190 lượt gen free/tháng ≈ 5–6/ngày** → cỡ 90–180 user mới/tháng.
+  Đây là **thí nghiệm có kiểm soát**, không phải scale — đúng với thực tế "chưa có
+  validation ngoài nào".
+- **Điều kiện nâng trần (Quân Sư đề xuất khi đạt):** K-factor ≥ 0.5 VÀ chi phí/user
+  đăng ký ≤ 6.000đ trong 2 tuần liên tiếp → đề xuất nâng $15 → $50.
+
+### 📋 WORKPLAN V2 (mỗi PR = 1 việc, draft → CI xanh → squash-merge)
+
+**V2.1 + V2.4 — LÀM CÙNG 1 ĐỢT (nối mã giới thiệu + đo), ưu tiên cao nhất:**
+- `shell.js` tạo link share: người tạo đã đăng nhập → gắn `?ref=<referral_code>` vào
+  URL `/ket-qua/<id>` (đọc code từ `user_credits.referral_code`, đã có sẵn).
+- `app/ket-qua/[id]/route.ts`: đọc `?ref=` → truyền vào nút CTA (`/app/<tool>?ref=CODE`)
+  → tái dùng cơ chế **ĐÃ CÓ SẴN** ở homepage (`sessionStorage.pending_ref_code` +
+  `tryRegisterReferral()` → `POST /api/payment?action=referral-register`), KHÔNG viết mới.
+- Đổi copy CTA trang chia sẻ: "Đăng ký nhận **25 Lượng** — đủ vẽ chân dung của chính bạn".
+- **Đo:** bắn `Track.event('share',{tool_id,medium})` trong `shareWorkspace`/`shareLink`
+  (hiện mù); nạp `track.js` vào `/ket-qua/[id]` → `share_view` + `cta_click`; event
+  `referral_signup` khi thưởng thành công. Gắn `utm_source=share&utm_campaign=<tool_id>`.
+- **Panel admin "Vòng Lặp Viral"**: phễu gen → share → người mở link → bấm CTA → đăng ký
+  → gen lại, kèm **K-factor** từng tool + chi phí/user + số Lượng thưởng đã phát.
+
+**V2.2 — Sửa số + cầu dao ngân sách:**
+- Set 4 config theo bảng trên (SQL, không cần deploy).
+- Bảng/RPC đếm **lượt gen free toàn hệ thống theo ngày** + trần đọc từ `app_config`
+  (`viral.free_gen_daily_cap`, mặc định suy từ $15/tháng ≈ 6/ngày) → chạm trần thì
+  thông điệp tử tế ("hết lượt tặng hôm nay, quay lại mai hoặc nạp Lượng"), KHÔNG ném lỗi.
+- Tặng 2 lượt rail free sau khi vẽ xong (xem tension ở trên).
+
+**V2.3 — Chỗ xin mời bạn (không có chỗ này thì không ai mời):**
+- Ngay sau khi xem xong chân dung + số dư không đủ lượt nữa → hiện: *"Còn X Lượng.
+  **Mời 2 bạn đăng ký → +30 Lượng, đủ thêm 1 lượt vẽ**"* + nút copy link kèm mã.
+- Thêm mục referral vào `profile.html` (hiện CHỈ có ở `topup.html`) + hiện tiến độ
+  "đã mời N/15 bạn · đã nhận M Lượng" để tạo cảm giác tiến triển.
+
+**V3 — Ảnh để đăng (làm song song được):** bản tải về **9:16 (1080×1920)** ghép ảnh
+chân dung + 1 câu đắt nhất trong truyện + seal + `tuviminhbao.com`, dựng bằng canvas
+client hoặc route OG (**không tốn thêm tiền model**); nút "Tải ảnh" cạnh nút Chia sẻ.
+Lý do: người Việt share ẢNH lên Story/TikTok nhiều hơn share link — ảnh không mang
+thương hiệu thì lan mà không về.
+
+**V4 — Mồi phân phối (viral là bộ khuếch đại, không phải nguồn):** 80 visit/ngày thì
+vòng lặp không tự khởi động. Dùng content-pack TikTok (M2.3 của track Marketing) đẩy
+5 chân dung đẹp nhất tuần → script 30–60s, Henry đăng tay 10–15ph/ngày + seed 3–5 group
+tử vi/tarot FB.
+
+**V5 — Khuếch đại (chỉ làm SAU khi V2.4 có số thật):** gate "chia sẻ để mở khóa hồi 4–5"
+· **duyên nợ tiền kiếp với người ấy** (2 lá số → 1 truyện, mỗi lượt kéo 2 người — K cao
+nhất, tái dùng ~90% hạ tầng) · Thẻ Định Mệnh + độ hiếm lá số (chi phí LLM ≈ 0, gắn được
+vào MỌI tool).
+
+### 🚦 Tiêu chí dừng/đổi hướng (đặt trước để khỏi tự lừa mình)
+Sau khi xong V2 + V4 chạy đủ 3–4 tuần: **K-factor < 0.3** → kết luận 2 tool này không lan
+tự nhiên ở thị trường VN; chuyển vai chúng thành **mồi trả phí thấp / hook quảng cáo**
+thay vì trông chờ viral, và dồn ngân sách sang kênh khác. Không cố đấm.
+
+---
+
 ## 🏯 Tool mới — "Chân Dung Tiền Kiếp" (2026-07-26, PR #298)
 
 **Branch:** `claude/viral-use-cases-brainstorm-8zoydi`
