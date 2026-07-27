@@ -30,71 +30,181 @@ interface StarObj {
 
 
 // ── Bối cảnh (era) ──────────────────────────────────────────────────────
-// Henry chọn thêm Việt Nam cổ, và chỉ ra một điều làm việc này rẻ hẳn: trang
-// phục cung đình Việt xưa vốn chịu ảnh hưởng nặng của Trung Hoa nên KHÔNG cần
-// bộ mô tả riêng — dùng chung `attireEn` của bảng OCCUPATION_BY_STAR cho cả
-// hai bối cảnh. Danh xưng cũng dùng chung luôn: Tể tướng / Thượng thư / Thái y
-// / Quan án / Tướng quân đều là từ Hán-Việt, đúng cho cả triều đình Đại Việt.
+// 5 nền văn minh: Trung Hoa · Việt Nam · Nhật Bản · Hàn Quốc · Thái Lan.
 //
-// ĐÁNH ĐỔI ĐÃ BIẾT (Henry chốt: "không cần ghì"): vì không ép các dấu hiệu
-// nhận diện riêng của trang phục Việt (áo giao lĩnh, áo ngũ thân, khăn vấn,
-// mũ cánh chuồn), ảnh bối cảnh Việt Nam nhiều khả năng trông gần giống ảnh
-// bối cảnh Trung Hoa. Nếu sau khi xem ảnh thật thấy cần tách bạch hơn thì chỗ
-// cần sửa là `extraEn` dưới đây, không phải cả bảng nghề.
-export type EraId = 'trung-hoa' | 'viet-nam';
+// KIẾN TRÚC — vì sao KHÔNG viết trang phục riêng cho từng nền:
+// Bản 2 nền cũ dùng CHUNG `attireEn` của bảng nghề cho cả Trung Hoa lẫn Việt
+// Nam (Henry: "trang phục cổ Việt Nam cũng giống Trung Quốc, không cần ghì").
+// Mẹo đó KHÔNG dùng lại được cho Nhật/Hàn/Thái: quan Hàn mặc dallyeongpo đội
+// mũ samo, võ tướng Nhật mặc giáp ō-yoroi, quan Thái mặc chong kraben đội mũ
+// chóp nhọn — không nền nào có "mũ sa đen" hay "đai ngọc" kiểu Trung Hoa. Giữ
+// nguyên chuỗi cũ thì ra người Trung Hoa mặc đồ Trung Hoa đứng trước phông
+// Thái, tệ hơn là không làm.
+//
+// Nhưng viết ma trận 44 chức phận × 5 nền = 220 chuỗi trang phục thì vừa đồ sộ
+// vừa dễ sai, mà phần lớn không ai nhìn tới. Nên tách 2 tầng:
+//   Tầng 1 — `attireEn` trong bảng nghề viết TRUNG LẬP: tả CẤP BẬC, chất liệu
+//            và tinh thần ("a high official's formal court robe…"), không gắn
+//            dấu hiệu của nền nào.
+//   Tầng 2 — `costumeGrammarEn`/`sceneGrammarEn` dưới đây dạy model cấp bậc đó
+//            ăn mặc và sống trong không gian nào ở NỀN NÀY. 5 khối thay cho
+//            220 chuỗi.
+// Trung Hoa KHÔNG bị đổi output: khối grammar của nó cấp lại đúng những dấu
+// hiệu vừa gỡ khỏi bảng nghề (lụa hanfu, mũ sa đen, đai ngọc).
+//
+// ĐÁNH ĐỔI CÒN LẠI: 44 danh xưng (Tể tướng / Thượng thư / Thái y / Quan án…)
+// vẫn dùng CHUNG cho cả 5 nền. Với Trung/Việt/Hàn/Nhật thì đúng (cùng hệ quan
+// chế Hán). Với Thái Lan thì KHÔNG chuẩn — Ayutthaya có hệ sakdina riêng. Giữ
+// nguyên vì đây là NHÃN TIẾNG VIỆT cho người đọc Việt: "Thái y" đọc ra ngay là
+// ngự y trong cung, còn dịch sang chức danh Thái thì không ai hiểu. Bản sắc để
+// ẢNH và TRUYỆN gánh.
+export type EraId = 'trung-hoa' | 'viet-nam' | 'nhat-ban' | 'han-quoc' | 'thai-lan';
 
 export interface Era {
   id: EraId;
   label: string;
+  /** Nhãn THỜI ĐẠI hiện cho người đọc — mô tả được mà không claim lịch sử.
+   *  Cố ý KHÔNG dùng tên triều đại có thật (Edo/Joseon/Ayutthaya): người đọc
+   *  sẽ đi tra rồi bắt lỗi, và dễ đụng nhân vật lịch sử thật. */
+  ageLabel: string;
   /** Câu định vị bối cảnh trong prompt ảnh. */
   settingEn: string;
   /** Nét mặt/chủng tộc cho prompt ảnh. */
   ethnicityEn: string;
-  /** Vài dấu hiệu nhẹ để ảnh không trôi hẳn sang bối cảnh kia. */
-  extraEn: string;
+  /** Vùng văn hoá — thay chỗ "East Asian" từng hardcode (Thái là Đông Nam Á). */
+  regionEn: string;
+  /** Truyền thống hội hoạ để quy chiếu — KHÔNG đổi chất liệu vẽ (vẫn painterly
+   *  pastel như Henry đã duyệt), chỉ đổi hệ quy chiếu văn hoá. */
+  artTraditionEn: string;
+  /** Cấp bậc trong bảng nghề ăn mặc thế nào ở nền này. */
+  costumeGrammarEn: string;
+  /** Kiến trúc/cảnh vật của nền này. */
+  sceneGrammarEn: string;
   /** Ràng buộc bối cảnh cho prompt viết truyện. */
   storySetting: string;
+  /** Chất liệu văn hoá BẮT BUỘC dùng trong truyện — đây mới là thứ phân biệt
+   *  5 nền, chứ không phải cái tên nhân vật. */
+  cultureVi: string;
 }
 
 export const ERAS: Record<EraId, Era> = {
   'trung-hoa': {
     id: 'trung-hoa',
     label: 'Trung Hoa cổ',
+    ageLabel: 'thời đế chế thống nhất',
     settingEn: 'ancient imperial China',
-    ethnicityEn: 'East Asian (Chinese) facial features',
-    extraEn: 'Classical Chinese imperial aesthetic.',
+    ethnicityEn: 'Han Chinese East Asian facial features',
+    regionEn: 'East Asian',
+    artTraditionEn: 'classical Chinese gongbi ink-and-colour court painting',
+    costumeGrammarEn:
+      'Render every garment as Chinese imperial dress: officials in wide-sleeved cross-collared silk court robes with a woven square rank badge, a jade-plaque belt and a black gauze futou cap; the highest nobility in richly patterned court robes with jade ornaments; warriors in Chinese lamellar armour with shoulder guards and a war cloak; scholars in cross-collared hanfu with a cloth headband; physicians, merchants and artisans in plain cross-collared hemp or cotton robes with a waist sash; hair grown long and bound in a topknot beneath cap or pin.',
+    sceneGrammarEn:
+      'Architecture and objects are Chinese: red lacquered timber columns, upturned glazed-tile eaves, wooden lattice windows, bamboo scrolls and ink stones, paved courtyards with old pines.',
     storySetting:
-      'Trung Hoa cổ đại, một triều đại HƯ CẤU không tên. Dùng chữ chung: triều đình, kinh thành, biên ải, hoàng thượng.',
+      'Trung Hoa cổ đại, một triều đại HƯ CẤU không tên. Dùng chữ chung: triều đình, kinh thành, biên ải, hoàng thượng. KHÔNG nhắc triều đại/nhân vật lịch sử Trung Hoa có thật (không Hán, Đường, Tống, Minh, Thanh; không Gia Cát Lượng, Tào Tháo, Tần Thủy Hoàng).',
+    cultureVi:
+      'khoa cử và quan trường, biên ải phương bắc, ấm trà và bàn trà, bút lông – nghiên mực – thư pháp, đèn lồng đêm hội, ngựa trạm đưa thư, chợ phiên, rượu hâm.',
   },
   'viet-nam': {
     id: 'viet-nam',
     label: 'Việt Nam cổ',
-    settingEn: 'pre-modern Vietnam (Đại Việt), an old Vietnamese imperial capital',
+    ageLabel: 'thời giữ nước phương Nam',
+    settingEn: 'pre-modern Đại Việt, an old Vietnamese royal capital',
     ethnicityEn: 'Vietnamese Southeast Asian facial features',
-    extraEn:
-      'Vietnamese imperial aesthetic — court dress of Đại Việt, historically close to Chinese court dress of the same era but in a Vietnamese setting.',
+    regionEn: 'East Asian',
+    artTraditionEn: 'classical Vietnamese court painting and folk woodblock-print tradition',
+    costumeGrammarEn:
+      'Render every garment as Vietnamese court and village dress: officials in a cross-collared áo giao lĩnh or áo tấc robe with an embroidered rank panel and a winged mũ cánh chuồn cap; men of standing wearing a khăn vấn wrapped cloth turban; warriors in lamellar or brigandine over a fitted tunic with a sash; commoners and artisans in plain brown or indigo tunics, wide trousers, a woven conical nón hat and bare or sandalled feet; women in layered áo with a long skirt and a wrapped turban.',
+    sceneGrammarEn:
+      'Architecture and landscape are Vietnamese: dark tiled communal-hall roofs with curved ridges, carved timber posts, bamboo groves and banyan trees, flooded rice terraces, river landings with wooden sampans, a village gate and pond.',
     storySetting:
-      'Đại Việt thời phong kiến, một triều đại HƯ CẤU không tên. Dùng chữ chung: triều đình, kinh thành, biên ải, bệ hạ. Địa danh nếu có phải là địa danh hư cấu mang âm hưởng Việt, KHÔNG dùng tên triều đại/nhân vật lịch sử Việt Nam có thật (không Lý, Trần, Lê, Nguyễn, không Trần Hưng Đạo, không Nguyễn Trãi).',
+      'Đại Việt thời phong kiến, một triều đại HƯ CẤU không tên. Dùng chữ chung: triều đình, kinh thành, biên ải, bệ hạ. Địa danh nếu có phải là địa danh hư cấu mang âm hưởng Việt, KHÔNG dùng tên triều đại/nhân vật lịch sử Việt Nam có thật (không Lý, Trần, Lê, Nguyễn; không Trần Hưng Đạo, Nguyễn Trãi).',
+    cultureVi:
+      'luỹ tre và đình làng, đồng ruộng nước và mùa gặt, sông và đò ngang, chợ quê, chùa làng tiếng chuông chiều, khoa cử chữ Nho, trầu cau, giặc phương bắc tràn xuống.',
+  },
+  'nhat-ban': {
+    id: 'nhat-ban',
+    label: 'Nhật Bản cổ',
+    ageLabel: 'thời các lãnh chúa cát cứ',
+    settingEn: 'pre-modern feudal Japan, the domain of a provincial lord',
+    ethnicityEn: 'Japanese East Asian facial features',
+    regionEn: 'East Asian',
+    artTraditionEn: 'classical Japanese nihonga painting with ukiyo-e-influenced portraiture',
+    costumeGrammarEn:
+      'Render every garment as Japanese dress — NEVER Chinese robes or gauze caps: retainers and officials in a kamishimo with stiff winged shoulders over a kimono, or a wide-sleeved kariginu court robe with a small lacquered eboshi cap; warriors in Japanese lamellar armour of small plates laced with coloured silk cords, a shoulder guard and a crested helmet; scholars, physicians and monks in a plain dark kimono with a haori overcoat, or a monastic kesa; commoners in a short indigo kimono with a narrow sash, straw sandals; men’s hair oiled and tied in a small topknot, women’s hair long, straight and glossy, held by a lacquered pin.',
+    sceneGrammarEn:
+      'Architecture and landscape are Japanese: a timber castle keep on a fitted stone base with white plaster walls and dark tiled gables, tatami rooms behind sliding shoji paper doors, a raked stone garden, a torii gate, cherry and maple, a wooden bridge over a stream.',
+    storySetting:
+      'Nhật Bản thời phong kiến, một PHIÊN TRẤN HƯ CẤU không tên do một lãnh chúa cai quản. Dùng chữ chung: lãnh chúa, phiên trấn, thành chủ, gia thần, võ sĩ. KHÔNG nhắc triều đại/dòng họ/nhân vật lịch sử Nhật có thật (không Tokugawa, Oda, Toyotomi, Minamoto, Taira; không Edo, Kyoto, Kamakura).',
+    cultureVi:
+      'lãnh chúa và phiên trấn, thành gỗ trên nền đá, phòng chiếu tatami sau cửa giấy, trà thất và nghi thức pha trà, thanh kiếm đeo bên hông, hoa anh đào và lá phong đỏ, tiếng chuông chùa, cầu gỗ bắc qua suối.',
+  },
+  'han-quoc': {
+    id: 'han-quoc',
+    label: 'Hàn Quốc cổ',
+    ageLabel: 'thời triều đình khoa cử',
+    settingEn: 'pre-modern Korea, an old Korean royal capital',
+    ethnicityEn: 'Korean East Asian facial features',
+    regionEn: 'East Asian',
+    artTraditionEn: 'classical Korean court portraiture with minhwa folk-painting colour',
+    costumeGrammarEn:
+      'Render every garment as Korean hanbok — NEVER Chinese or Japanese cut: officials in a round-collared dallyeongpo robe with a rank badge on the chest and a black horsehair samo cap with side wings; scholars in a pale wide-sleeved robe with a broad-brimmed black horsehair gat hat; warriors in Korean lamellar with a red-tasselled conical helmet; men in a short jeogori jacket over full baji trousers with a durumagi overcoat; women in a very short jeogori above a high-waisted, wide chima skirt; hair in a topknot held by a manggeon headband, or braided and pinned for women.',
+    sceneGrammarEn:
+      'Architecture and landscape are Korean: hanok timber halls with brightly painted dancheong beams under deep tiled eaves, paper doors and warm ondol floors, low stone walls, persimmon trees, ridged mountains and a temple on a mountain pass.',
+    storySetting:
+      'Triều Tiên thời phong kiến, một vương triều HƯ CẤU không tên. Dùng chữ chung: triều đình, kinh đô, quan văn quan võ, khoa cử, bệ hạ. KHÔNG nhắc triều đại/nhân vật lịch sử Triều Tiên có thật (không Joseon, Goryeo, Silla; không Yi Sun-sin, Sejong; không Hanyang, Seoul).',
+    cultureVi:
+      'khoa cử và bè phái trong triều, nhà hanok sàn sưởi ondol, áo trắng thường phục, nhân sâm và thuốc bắc, đàn gayageum, rượu gạo đục, đèo núi mùa đông dài, chùa trên núi.',
+  },
+  'thai-lan': {
+    id: 'thai-lan',
+    label: 'Thái Lan cổ',
+    ageLabel: 'thời vương quốc bên sông',
+    settingEn: 'a pre-modern Tai kingdom in mainland Southeast Asia',
+    ethnicityEn: 'Thai Southeast Asian facial features',
+    regionEn: 'Southeast Asian',
+    artTraditionEn: 'classical Thai temple mural painting with gold-leaf detailing',
+    costumeGrammarEn:
+      'Render every garment as Thai court and village dress — NEVER Chinese silk court robes, NEVER gauze or horsehair caps: nobles and officials in a wrapped chong kraben lower garment with a fitted brocade court coat, a jewelled collar, gold armlets and a tall spired ceremonial headdress; lesser officials with a sabai sash draped over one shoulder and a bare or lightly covered chest; warriors in quilted and lacquered armour with a crested helmet; monks in saffron robes; commoners in a simple wrapped cloth with a sabai or short jacket, barefoot; women in a sabai across one shoulder over a wrapped skirt, hair short-cropped or coiled with gold pins.',
+    sceneGrammarEn:
+      'Architecture and landscape are Thai: a gilded temple with steep multi-tiered roofs and curving naga finials, whitewashed stupas, teak stilt houses above water, a river landing with long slender boats, banana and palm, heavy monsoon light.',
+    storySetting:
+      'Một vương quốc HƯ CẤU không tên của người Thái ở lục địa Đông Nam Á, bên một dòng sông lớn, Phật giáo là quốc đạo. Dùng chữ chung: đức vua, triều đình, kinh đô, quan lớn, nhà chùa, sư. KHÔNG nhắc triều đại/nhân vật lịch sử Thái có thật (không Ayutthaya, Sukhothai, Rattanakosin; không Rama, Naresuan; không Bangkok).',
+    cultureVi:
+      'chùa mái nhọn dát vàng, sư khất thực buổi sớm, voi trong đội quân và trong lễ, chợ họp trên sông, nhà sàn gỗ tếch, mùa mưa và mùa khô rõ rệt, thuyền dài, hoa sen trên ao chùa.',
   },
 };
 
-/** Bối cảnh MẶC ĐỊNH khi client không truyền gì.
+/** Bối cảnh MẶC ĐỊNH khi không suy được từ lá số (chỉ dùng làm lưới an toàn).
  *
- * Henry bỏ nút cho người dùng chọn ("mày tự chọn được rồi") nên server chốt
- * một bối cảnh. Chọn Trung Hoa cổ vì hai lý do:
- *   1. Đúng với định vị của tool. Cả trang giải thích rằng từ vựng gốc của Tử
- *      Vi là từ vựng triều đình phong kiến Trung Hoa, và tool "trả lá số về
- *      đúng bối cảnh cổ thư viết ra nó" — cổ thư đó là sách Trung Hoa. Đặt mặc
- *      định sang Việt Nam thì lập luận của chính trang bị lung lay.
- *   2. Model gen ảnh cổ trang Trung Hoa tốt hơn hẳn, và vì đã chốt KHÔNG ghì
- *      trang phục Việt nên hai bối cảnh vốn cho ra ảnh gần giống nhau.
- *
- * `viet-nam` vẫn giữ nguyên trong ERAS và route vẫn nhận tham số `era`, nên
- * đổi mặc định chỉ là sửa đúng dòng dưới đây — không phải dựng lại gì. */
+ * Trung Hoa cổ vì đúng với định vị của tool: cả trang giải thích rằng từ vựng
+ * gốc của Tử Vi là từ vựng triều đình phong kiến, và tool "trả lá số về đúng
+ * bối cảnh cổ thư viết ra nó". Cũng là nền model gen ảnh làm tốt nhất. */
 const DEFAULT_ERA: EraId = 'trung-hoa';
+
+const ERA_IDS = Object.keys(ERAS) as EraId[];
 
 export function resolveEra(id?: string): Era {
   return ERAS[(id as EraId) in ERAS ? (id as EraId) : DEFAULT_ERA];
+}
+
+/** Chọn nền văn minh TỪ CHÍNH LÁ SỐ — deterministic.
+ *
+ * Henry đã bỏ nút cho người dùng chọn, mà giữ mặc định Trung Hoa thì 4 nền kia
+ * không ai thấy. Nay bốc theo hash lá số: cùng một lá số LUÔN ra cùng một nền
+ * (sinh lại không đổi người, không đổi thế giới), lá số khác nhau thì trải đều
+ * 5 nền — nhóm bạn cùng bấm ra 5 nền khác nhau, tự nhiên có chuyện để so.
+ *
+ * CỐ Ý KHÔNG suy từ ngũ hành mệnh. Nghe thì hợp lý (5 hành ↔ 5 nền) nhưng
+ * tương ứng ngũ hành – phương vị chỉ cho ra NHÓM (Nhật/Hàn cùng phương Đông,
+ * Việt/Thái cùng phương Nam), không phải 1-1. Ép thành 1-1 rồi gọi là cổ pháp
+ * là bịa một quy tắc không có trong sách.
+ *
+ * Salt 'era|' để chỉ số nền độc lập với chỉ số bốc tên nhân vật (cùng seed gốc
+ * nhưng khác nhánh) — không thì tên và nền dính chặt vào nhau. */
+export function pickEraForLaso(ls: Laso, gender: 'nam' | 'nu'): Era {
+  const seed = 'era|' + [ls.canChiNam, ls.menhDC, ls.thanDC, ls.napAm, ls.cuc, gender].join('|');
+  return ERAS[ERA_IDS[stableHash(seed) % ERA_IDS.length]];
 }
 
 // ── Chính tinh × TẦNG → chức phận thời xưa ──────────────────────────────
@@ -142,19 +252,19 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
     cao: {
       titleNam: 'Vương gia nhiếp chính', titleNu: 'Trưởng công chúa nhiếp sự', domain: 'quyen',
       desc: 'Người đứng ở hàng cao nhất trong triều, quen ra lệnh hơn là nhận lệnh.',
-      attireEn: 'an imperial court robe of deep purple and crimson silk with gold-thread embroidery, a jade-inlaid belt and a tall ceremonial headdress',
+      attireEn: 'an imperial court robe of deep purple and crimson silk with gold-thread embroidery, a jewelled ceremonial belt and a tall ceremonial headdress',
       source: 'Tân Biên 8.1: "công danh hiển hách, phú quý song toàn"',
     },
     giua: {
       titleNam: 'Quan viên ngoại coi phủ đệ', titleNu: 'Mệnh phụ quản gia nghiệp', domain: 'quyen',
       desc: 'Người có danh phận và gia sản, cai quản một phủ đệ hơn là cai quản thiên hạ.',
-      attireEn: 'a well-made but restrained silk robe of deep indigo with modest embroidery and a plain jade ornament',
+      attireEn: 'a well-made but restrained silk robe of deep indigo with modest embroidery and a single plain ornament of polished stone',
       source: 'Tân Biên 8.1: đơn thủ tại Tý — "bình thường"',
     },
     thap: {
       titleNam: 'Tông thất sa sút', titleNu: 'Con nhà quyền quý sa cơ', domain: 'quyen',
       desc: 'Người mang dòng dõi cao quý nhưng thời thế đã đổi, giữ được cốt cách mà không giữ được vị thế.',
-      attireEn: 'a once-fine silk robe now faded and carefully mended, an old jade pendant kept from better days',
+      attireEn: 'a once-fine silk robe now faded and carefully mended, an old pendant of some worth kept from better days',
       source: 'Tân Biên 8.1: Tham đồng cung — "công danh rực rỡ tất sinh tai họa"',
     },
   },
@@ -162,7 +272,7 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
     cao: {
       titleNam: 'Quan coi quốc khố', titleNu: 'Nữ quan coi kho nội phủ', domain: 'quyen',
       desc: 'Người nắm kho tàng và tiền lương của triều đình — chức không hào nhoáng nhưng ai cũng phải qua tay.',
-      attireEn: 'a senior official’s robe of deep indigo silk with silver-thread trim, a jade belt and a black gauze official’s cap',
+      attireEn: 'a senior official’s robe of deep indigo silk with silver-thread trim, an official’s belt and the formal rank headwear of his office',
       source: 'Tân Biên 8.7: Vũ đồng cung — "chức vụ thuộc về tài chánh hay kinh tế"',
     },
     giua: {
@@ -182,7 +292,7 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
     cao: {
       titleNam: 'Quân sư tham mưu', titleNu: 'Nữ mưu sĩ trong phủ', domain: 'van',
       desc: 'Người bày mưu định kế sau lưng chủ soái — không cầm quân nhưng quyết định thắng bại.',
-      attireEn: 'a slate-blue scholar’s robe with wide sleeves and a fine cloth headband, holding a closed folding fan',
+      attireEn: 'a slate-blue scholar’s robe with wide sleeves and a fine cloth headband, holding a closed fan',
       source: 'Tân Biên 8.6: "chuyên việc tham mưu, tất có chức vị lớn lao"',
     },
     giua: {
@@ -194,7 +304,7 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
     thap: {
       titleNam: 'Thầy bói dạo', titleNu: 'Bà xem quẻ ngoài chợ', domain: 'tu',
       desc: 'Người thông minh nhanh trí nhưng nay đây mai đó, sống bằng lời đoán và lòng tin của người qua đường.',
-      attireEn: 'a worn grey travelling robe, a shoulder bag of bamboo slips and a small cloth banner rolled up',
+      attireEn: 'a worn grey travelling robe, a shoulder bag of divination slips and a small cloth banner rolled up',
       source: 'Tân Biên 8.6: "công danh muộn màng và chật vật"',
     },
   },
@@ -202,13 +312,13 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
     cao: {
       titleNam: 'Thượng thư', titleNu: 'Nữ quan chưởng ấn', domain: 'van',
       desc: 'Người đứng giữa công đường, tiếng nói vang xa, danh tiếng rạng rỡ mà cũng chói mắt kẻ khác.',
-      attireEn: 'a bright vermilion court official’s robe with a gold-embroidered rank badge and a black gauze official’s cap',
+      attireEn: 'a bright vermilion court official’s robe with a gold-embroidered rank badge and the formal rank headwear of her office',
       source: 'Tân Biên 8.5: "công danh sớm đạt, văn võ kiêm toàn"',
     },
     giua: {
       titleNam: 'Quan hình luật cấp phủ', titleNu: 'Bà giáo dạy chữ trong phủ', domain: 'van',
       desc: 'Người cầm cân nảy mực hoặc cầm sách dạy người ở một vùng, có uy tín trong phạm vi của mình.',
-      attireEn: 'a dignified dark red robe of plain silk with a simple sash and a scholar’s cap, carrying a bound register',
+      attireEn: 'a dignified dark red robe of plain silk with a simple sash and a scholar’s headwear, carrying a bound register',
       source: 'Tân Biên 8.5: Cự đồng tại Dần — "nên chuyên về hình luật"; Lương đồng tại Mão — "y dược, sư phạm"',
     },
     thap: {
@@ -242,7 +352,7 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
     cao: {
       titleNam: 'Tổng binh coi lương thảo', titleNu: 'Nữ quan coi quân nhu', domain: 'vo',
       desc: 'Người vừa cầm quân vừa cầm tiền — cứng rắn, thực tế, quyết đoán trong cả trận mạc lẫn tính toán.',
-      attireEn: 'dark lamellar armor over a deep-toned robe, a broad leather belt with metal fittings, disciplined and functional',
+      attireEn: 'dark plated armour over a deep-toned robe, a broad leather belt with metal fittings, disciplined and functional',
       source: 'Tân Biên 8.4: "võ nghiệp hiển đạt"; Phủ đồng cung — "chức vụ thuộc về tài chánh hay kinh tế"',
     },
     giua: {
@@ -282,7 +392,7 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
     cao: {
       titleNam: 'Quan án hình bộ', titleNu: 'Nữ quan coi hình luật hậu cung', domain: 'quyen',
       desc: 'Người coi việc xét xử và luật lệ — nghiêm khắc, không dễ lay chuyển, và vì thế dễ chuốc oán.',
-      attireEn: 'a severe black judicial robe with crimson trim and a dark rank insignia, a stiff black official’s cap',
+      attireEn: 'a severe black judicial robe with crimson trim and a dark rank insignia and severe formal rank headwear',
       source: 'Tân Biên 8.2: "võ nghiệp hiển đạt, kiêm nhiếp cả việc chính trị, được nhiều người kính nể"',
     },
     giua: {
@@ -302,7 +412,7 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
     cao: {
       titleNam: 'Quan coi lễ nhạc', titleNu: 'Nữ quan coi ca vũ trong cung', domain: 'nghe',
       desc: 'Người cai quản phần hoa lệ nhất của triều đình, tài hoa và giỏi giao tế bậc nhất.',
-      attireEn: 'an ornate court robe of warm russet and gold silk with elaborate patterning and jade ornaments',
+      attireEn: 'an ornate court robe of warm russet and gold silk with elaborate patterning and precious ornaments',
       source: 'Tân Biên 8.23: Tham + Xương/Khúc tại Hợi, Tý — "có danh chức, được nhiều người biết tiếng"',
     },
     giua: {
@@ -322,13 +432,13 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
     cao: {
       titleNam: 'Trạng sư nơi công đường', titleNu: 'Nữ quan biện sự', domain: 'van',
       desc: 'Người sống bằng lời nói — biện luận sắc bén, xét đoán rành mạch, đứng được giữa chốn tranh tụng.',
-      attireEn: 'a dark charcoal formal robe with a plain sash and a scholar’s cap, holding a bamboo scroll',
+      attireEn: 'a dark charcoal formal robe with a plain sash and a scholar’s headwear, holding a rolled document',
       source: 'Tân Biên 8.10: Nhật đồng cung tại Dần — "công danh hiển hách. Nên chuyên về hình luật"',
     },
     giua: {
       titleNam: 'Thầy đồ làng', titleNu: 'Bà giáo dạy nữ công', domain: 'van',
       desc: 'Người dạy chữ dạy nghề cho cả vùng, được kính trọng, nhưng cái miệng thẳng cũng hay gây chuyện.',
-      attireEn: 'a plain dark blue teacher’s robe, well-worn, with an ink stone and brushes on the desk beside',
+      attireEn: 'a plain dark blue teacher’s robe, well-worn, with writing implements and a stack of manuscripts on the desk beside',
       source: 'Tân Biên 8.10: "làm thầy giáo cũng nổi tiếng, có nhiều tài năng, nhất là ăn nói"',
     },
     thap: {
@@ -342,7 +452,7 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
     cao: {
       titleNam: 'Tể tướng', titleNu: 'Nữ quan chưởng ấn', domain: 'quyen',
       desc: 'Người phụ tá bậc nhất, giữ ấn tín, thay chủ điều hành — quyền lớn mà không phải là chủ.',
-      attireEn: 'a formal minister’s robe of deep teal and gold with a ceremonial seal pouch at the waist and a black gauze cap',
+      attireEn: 'a formal minister’s robe of deep teal and gold with a ceremonial seal pouch at the waist and the formal rank headwear of high office',
       source: 'Tân Biên 8.11: "công danh nhẹ bước, văn võ kiêm toàn"',
     },
     giua: {
@@ -374,7 +484,7 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
     thap: {
       titleNam: 'Đạo sĩ vân du chữa bệnh', titleNu: 'Ni cô coi am nhỏ', domain: 'tu',
       desc: 'Người rời chốn đông người, đi hoặc ở một mình, cứu giúp lặng lẽ và không màng danh phận.',
-      attireEn: 'a simple ash-grey monastic robe, well-worn, a wooden staff or prayer beads, sandals of woven straw',
+      attireEn: 'a simple well-worn monastic robe, a wooden staff or prayer beads, sandals of woven straw',
       source: 'Tân Biên 8.12: đơn thủ tại Tỵ, Hợi — "công danh phú quý như đám mây nổi… nên làm công việc lưu động"',
     },
   },
@@ -382,7 +492,7 @@ const OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
     cao: {
       titleNam: 'Tướng quân trấn ải', titleNu: 'Nữ tướng thống lĩnh thân binh', domain: 'vo',
       desc: 'Người cầm quân giữ ải nơi biên cương — quyết liệt, cô độc, quen sống giữa sinh tử.',
-      attireEn: 'battle-worn dark iron armor with a fur-lined cloak over the shoulders, a weathered leather belt, commanding and austere',
+      attireEn: 'battle-worn dark armour with a heavy weathered cloak over the shoulders, a weathered leather belt, commanding and austere',
       source: 'Tân Biên 8.13: đơn thủ tại Dần, Thân — "thành công trong những việc thật khó khăn… uy quyền lớn lao"',
     },
     giua: {
@@ -433,12 +543,12 @@ const DEFAULT_OCCUPATION: Occupation = {
 // Bối cảnh nền cho ảnh, theo nhóm nghề.
 const DOMAIN_BACKDROP: Record<Occupation['domain'], string> = {
   vo: 'a windswept frontier fortress rampart at dawn, distant banners and mountains softly blurred behind',
-  van: 'a quiet imperial study with wooden shelves of bamboo scrolls, soft light through a lattice window',
-  quyen: 'a grand palace hall with red lacquered columns and hanging silk banners, softly blurred',
+  van: 'a quiet study with wooden shelves of manuscripts and scrolls, soft light through a carved window screen',
+  quyen: 'a grand palace hall with tall carved timber columns and hanging ceremonial banners, softly blurred',
   thuong: 'a prosperous old trading street with wooden storefronts and hanging lanterns, softly blurred',
   y: 'an apothecary room with rows of small wooden medicine drawers and hanging dried herbs, warm and calm',
   nghe: 'a lantern-lit artisan quarter at dusk, silk banners and warm scattered lights softly blurred',
-  tu: 'a mountain temple courtyard in morning mist, old stone steps and pine trees softly blurred',
+  tu: 'a mountain temple courtyard in morning mist, old stone steps and ancient trees softly blurred',
 };
 
 // ── Phụ tinh tại Quan Lộc → sắc thái nghề nghiệp ────────────────────────
@@ -475,9 +585,14 @@ const HOA_NOTES: Record<string, string> = {
 // thông, cố ý TRÁNH các tổ hợp gắn với nhân vật lịch sử nổi tiếng. Chọn
 // deterministic theo lá số → cùng một lá số luôn ra cùng một tên (gen lại
 // không đổi người), nhưng lá số khác nhau thì tên khác nhau.
-// Pool tên tách theo BỐI CẢNH. Henry chốt không ghì trang phục Việt (vốn gần
-// giống Trung Hoa), nên tên nhân vật thành dấu hiệu nhận diện mạnh nhất còn
-// lại — và nó rẻ hơn hẳn bộ mô tả trang phục riêng.
+// Pool tên tách theo BỐI CẢNH — mỗi nền một bộ.
+//
+// GHI CHÚ VỀ POOL THÁI: người Thái KHÔNG có họ cho tới đạo luật năm 1913, nên
+// cấu trúc "họ + tên" áp vào bối cảnh cổ là sai lịch sử. Nhưng cấu trúc 2 slot
+// dùng chung cho cả 5 nền, và tên một chữ trơ trọi thì đọc như biệt danh chứ
+// không như tên người. Nên slot đầu ở đây KHÔNG phải họ mà là một yếu tố tên
+// gốc Phạn/Pali thường gặp trong tên Thái — ghép lại vẫn đọc ra Thái mà không
+// khẳng định một dòng họ nào có thật.
 const NAME_POOLS: Record<EraId, { ho: string[]; nam: string[]; nu: string[] }> = {
   'trung-hoa': {
     ho: ['Lục', 'Doãn', 'Tạ', 'Mạnh', 'Thôi', 'Hạ', 'Vương', 'Tô', 'Kỷ', 'Tần', 'Diệp', 'Hàn'],
@@ -488,6 +603,28 @@ const NAME_POOLS: Record<EraId, { ho: string[]; nam: string[]; nu: string[] }> =
     ho: ['Trần', 'Lê', 'Phạm', 'Đặng', 'Vũ', 'Đinh', 'Hoàng', 'Bùi', 'Ngô', 'Đỗ', 'Dương', 'Trịnh'],
     nam: ['Đức Toàn', 'Văn Cẩn', 'Hữu Nghiêm', 'Đình Khuê', 'Bá Lộc', 'Trọng Nghĩa', 'Quang Đán', 'Sĩ Liêm'],
     nu: ['Ngọc Diệp', 'Thục Trinh', 'Ngọc Uyển', 'Thanh Nhàn', 'Diệu Thường', 'Ngọc Chân', 'Tố Liên', 'Thu Nương'],
+  },
+  // Họ Nhật: tránh các dòng họ gắn chặt lịch sử (Tokugawa, Oda, Toyotomi,
+  // Minamoto, Taira, Takeda, Date) — chọn họ phổ thông, không gợi ai cả.
+  'nhat-ban': {
+    ho: ['Kurata', 'Ishikawa', 'Sagara', 'Nishimura', 'Katsura', 'Morikawa', 'Takeuchi', 'Hoshino', 'Yagi', 'Shimizu', 'Kanzaki', 'Ono'],
+    nam: ['Hidemasa', 'Ryosuke', 'Takahiro', 'Nobuharu', 'Masaki', 'Tsuneo', 'Yorihisa', 'Sadatoshi'],
+    nu: ['Ayame', 'Chiyo', 'Sanae', 'Mitsuko', 'Kaede', 'Sumire', 'Yaeko', 'Nobuko'],
+  },
+  // Họ Hàn: kho họ Triều Tiên vốn chỉ vài chục chữ và ai cũng mang, nên dùng
+  // họ thật là chuyện thường — không chỉ đích danh ai. Tên đệm-tên chọn kiểu
+  // Hán-Hàn hai âm tiết cho hợp bối cảnh cổ.
+  'han-quoc': {
+    ho: ['Kim', 'Lee', 'Park', 'Choi', 'Jung', 'Yoon', 'Han', 'Seo', 'Song', 'Nam', 'Hwang', 'Ryu'],
+    nam: ['Seon-ho', 'Jae-mun', 'Byung-ju', 'Do-hyeon', 'Sang-yeol', 'Tae-heon', 'Min-seok', 'Yeong-jun'],
+    nu: ['Seo-yeon', 'Ji-hwa', 'Eun-bi', 'Hye-rin', 'Yun-seo', 'Da-eun', 'Mi-ok', 'So-hui'],
+  },
+  // Thái: xem ghi chú trên — slot đầu là yếu tố tên gốc Phạn/Pali, KHÔNG phải
+  // họ. Tránh Rama / Naresuan / Chakri (vương triều và nhân vật có thật).
+  'thai-lan': {
+    ho: ['Suriya', 'Kanok', 'Mani', 'Inthra', 'Thep', 'Sawat', 'Bunma', 'Wichai', 'Ratana', 'Somphong', 'Chaiya', 'Nakhon'],
+    nam: ['Prasit', 'Narong', 'Kasem', 'Anan', 'Thawee', 'Decha', 'Sunthon', 'Boonchu'],
+    nu: ['Ampha', 'Sunan', 'Chanthra', 'Malai', 'Wanida', 'Pimchan', 'Duangjai', 'Sarocha'],
   },
 };
 
@@ -937,7 +1074,10 @@ export interface PastLifeProfile {
  * Dựng toàn bộ dữ liệu nhân vật tiền kiếp từ lá số đã tính. Thuần
  * deterministic — mọi thứ LLM cần đã được chốt ở đây, LLM chỉ viết văn.
  */
-export function computePastLife(ls: Laso, gender: 'nam' | 'nu', era: Era = ERAS['trung-hoa']): PastLifeProfile {
+/** `era` bỏ trống → suy từ chính lá số (xem pickEraForLaso). Truyền tay chỉ
+ *  dùng khi cần ép một nền cụ thể (test, hoặc dữ liệu lịch sử đã lưu era). */
+export function computePastLife(ls: Laso, gender: 'nam' | 'nu', era?: Era): PastLifeProfile {
+  era = era || pickEraForLaso(ls, gender);
   const palaces = (ls.palaces as Rec[]) || [];
   const thanP = palaces.find((p) => p.isThan) as Rec | undefined;
   const thanCungName = String(thanP?.cungName || 'Mệnh');

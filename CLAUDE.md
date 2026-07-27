@@ -383,8 +383,52 @@ nhân vật>"**, viết về chính nhân vật.
 - **Verify:** `npx tsc --noEmit` 0 lỗi · `npm run lint` 0 lỗi · `npx prettier
   --check .` sạch · `node --check` mọi script block.
 
+### Vòng chỉnh tiếp — 5 nền văn minh (PR mới)
+Henry: thêm Nhật Bản cổ · Hàn Quốc cổ · Thái Lan cổ vào 2 nền đang có → **5 nền**.
+- **Vì sao KHÔNG chỉ thêm 3 dòng vào `ERAS`:** mẹo "trang phục Việt ≈ Trung Hoa
+  nên dùng chung `attireEn`" KHÔNG dùng lại được cho Nhật/Hàn/Thái (quan Hàn
+  mặc dallyeongpo + mũ samo, võ tướng Nhật mặc ō-yoroi, quan Thái mặc chong
+  kraben) — 44 chuỗi `attireEn` + 7 `DOMAIN_BACKDROP` đang viết bằng từ vựng
+  Trung Hoa cứng ("black gauze cap", "jade belt", "bamboo scrolls", "red
+  lacquered columns"). Giữ nguyên = người Trung Hoa mặc đồ Trung Hoa đứng
+  trước phông Thái.
+- **Kiến trúc 2 tầng** (thay vì ma trận 44×5 = 220 chuỗi): tầng 1 — trung lập
+  hoá 44 `attireEn` + 7 backdrop, chỉ tả CẤP BẬC/chất liệu, không thuộc nền
+  nào; tầng 2 — mỗi era một khối `costumeGrammarEn` + `sceneGrammarEn` dạy cấp
+  bậc đó ăn mặc/sống ra sao ở nền này. 5 khối thay 220 chuỗi. **Trung Hoa
+  không hồi quy** — grammar cấp lại đúng các dấu hiệu vừa gỡ.
+- **Chọn nền = hash lá số** (`pickEraForLaso`, Henry chốt phương án A): cùng lá
+  số LUÔN ra cùng nền, trải đều 5 nền (test 1.104 lá: 18,7–20,8%). **CỐ Ý
+  KHÔNG suy từ ngũ hành mệnh** — tương ứng ngũ hành–phương vị chỉ cho ra NHÓM
+  (Nhật/Hàn cùng Đông, Việt/Thái cùng Nam), ép 1-1 rồi gọi là cổ pháp là bịa.
+  Seed có salt `'era|'` để chỉ số nền độc lập với chỉ số bốc tên.
+- **Phân biệt ngoài cái tên** (Henry hỏi đúng chỗ): mỗi era thêm `ageLabel`
+  (nhãn THỜI ĐẠI mô tả — "thời các lãnh chúa cát cứ" — **không** dùng tên triều
+  đại thật Edo/Joseon/Ayutthaya, tránh người đọc đi tra rồi bắt lỗi) hiện thành
+  badge dưới danh xưng, + `cultureVi` (thiết chế/đồ vật/tập tục đặc trưng) mà
+  prompt truyện BẮT dùng ≥3 thứ rải các hồi, đồng thời CẤM mượn chi tiết của
+  nền khác. **KHÔNG viết "kiếp trước bạn là người Nhật"** — đá vào disclaimer
+  và kéo lại ngôi "bạn" vừa bỏ ở vòng trước.
+- **Vá vênh định vị:** system prompt truyện + copy SEO 2 trang đang nói cứng
+  "bối cảnh TRUNG HOA CỔ ĐẠI mà cổ thư viết ra nó" → sai với 4 nền kia. Đổi
+  thành "thế giới phong kiến Á châu", nêu rõ 5 nền + nói thật là nền do lá số
+  quyết định. **Điểm yếu đã biết:** Thái Lan nằm ngoài vùng Hán tự (Phật giáo
+  Nam tông, quan chế gốc Ấn, không dùng Tử Vi) nên lập luận yếu nhất; 44 danh
+  xưng Hán-Việt cũng không chuẩn cho Thái — giữ vì đây là nhãn tiếng Việt cho
+  người đọc Việt, để ảnh + truyện gánh bản sắc.
+- Gỡ 5 chỗ hardcode "East Asian" (Thái là Đông Nam Á) → `regionEn` +
+  `artTraditionEn` từng nền. Giữ nguyên lối vẽ painterly pastel Henry đã duyệt.
+- **Không cần migration** — cột `era` đã có sẵn trên `past_life_portraits`.
+- **Verify:** `tsc` · `lint` · `prettier --check .` · `node --check` · phân bố
+  era trên 1.104 lá số · gọi lại cùng lá số ra cùng nền + cùng tên · chức phận
+  ĐỘC LẬP với nền · so prompt ảnh Trung Hoa trước/sau (**không mất dấu hiệu
+  nào**, thêm 5) · quét rò rỉ từ vựng chéo trên 20 prompt = **0** · Playwright
+  2 trang render badge đúng, không lỗi console.
+
 ### CÒN LẠI
 - Bật `enabled=true` sau deploy (câu SQL ở trên).
+- Henry gen thử trên prod đủ 5 nền để soi ảnh — tao chỉ verify được tới tầng
+  prompt, chất lượng ảnh thật (nhất là Thái Lan và Hàn Quốc) phải nhìn mới biết.
 - Henry gen thử vài lá số trên prod → soi chất lượng ảnh cổ trang + văn phong
   truyện. Hai chỗ nhiều khả năng phải tinh chỉnh: bảng tra 14 sao → nghề
   (`past-life.ts`) và độ dài/giọng 5 hồi (`past-life-story.ts`). Cả hai sửa gọn,

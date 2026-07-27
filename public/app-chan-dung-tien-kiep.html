@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chân Dung Tiền Kiếp — Tử Vi Minh Bảo</title>
-<meta name="description" content="Đặt chính lá số của bạn vào bối cảnh Trung Hoa cổ — chân dung và câu chuyện một đời người kể qua 9 đại vận.">
+<meta name="description" content="Đặt chính lá số của bạn vào một trong 5 nền văn minh Á Đông cổ — chân dung và câu chuyện một đời người kể qua 9 đại vận.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,6 +31,7 @@
 .cdtk-hero{text-align:center;padding:2px 6px 16px}
 .cdtk-danhxung{font-family:var(--serif);font-size:21px;line-height:1.45;color:#061A2E;font-weight:700;margin-bottom:5px}
 .cdtk-sub{font-size:12px;color:var(--text-lt)}
+.cdtk-era{display:inline-block;margin-top:8px;padding:4px 11px;border-radius:999px;background:#F3EAD6;color:#7A5F26;font-size:11px;font-weight:700;letter-spacing:.3px}
 .cdtk-top{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start}
 .cdtk-imgwrap{flex:0 0 260px;max-width:260px}
 .cdtk-imgwrap img{width:100%;border-radius:12px;box-shadow:0 8px 24px rgba(6,26,46,.2);display:block;background:#EFEBE3}
@@ -93,6 +94,7 @@
               <div class="cdtk-hero">
                 <div class="cdtk-danhxung" id="danhXung"></div>
                 <div class="cdtk-sub" id="danhXungSub"></div>
+                <div class="cdtk-era" id="eraLine" style="display:none"></div>
               </div>
               <div class="cdtk-top">
                 <div class="cdtk-imgwrap">
@@ -138,7 +140,7 @@
 </div>
 
 <script>window.SHELL_ACTIVE='chan-dung-tien-kiep';
-window.SHELL_INTRO={key:'chan-dung-tien-kiep',title:'Chân Dung Tiền Kiếp',desc:'Đặt <b>chính lá số của bạn</b> vào bối cảnh <b>Trung Hoa cổ</b> — chức phận suy từ cung <b>Quan Lộc</b>, dung mạo từ cung <b>Mệnh</b>, cả một đời người kể qua <b>9 đại vận</b>.'};</script>
+window.SHELL_INTRO={key:'chan-dung-tien-kiep',title:'Chân Dung Tiền Kiếp',desc:'Đặt <b>chính lá số của bạn</b> vào <b>một trong 5 nền văn minh Á Đông cổ</b> (Trung Hoa · Việt Nam · Nhật Bản · Hàn Quốc · Thái Lan, do chính lá số quyết định) — chức phận suy từ cung <b>Quan Lộc</b>, dung mạo từ cung <b>Mệnh</b>, cả một đời người kể qua <b>9 đại vận</b>.'};</script>
 <script src="/laso-chart.js?v=2"></script>
 <script src="/tuvi-form.js?v=1"></script>
 <script src="/tuvi-paywall.js"></script>
@@ -217,6 +219,7 @@ async function _doGenerate() {
   document.getElementById('loading').style.display = 'block';
   document.getElementById('card').style.display = 'none';
   document.getElementById('storyBlock').style.display = 'none';
+  document.getElementById('eraLine').style.display = 'none';
   document.getElementById('imgLoadStatus').style.display = 'none';
   document.getElementById('imgActions').style.display = 'none';
   document.getElementById('resultImg').style.display = 'none';
@@ -282,6 +285,17 @@ async function _doGenerate() {
 
 // esc() dùng chung từ /laso-chart.js (đã load ở trên) — không khai lại.
 
+// Nhãn nền văn minh — 5 nền nên đây là thứ người đọc chụp màn hình gửi nhau.
+// Nhãn THỜI ĐẠI cố ý mô tả ("thời các lãnh chúa cát cứ") chứ không phải tên
+// triều đại có thật, xem ghi chú trong lib/engine/past-life.ts.
+function renderEraLine(data) {
+  var el = document.getElementById('eraLine');
+  var e = data.era || {};
+  if (!e.label) { el.style.display = 'none'; return; }
+  el.textContent = e.label + (e.ageLabel ? ' · ' + e.ageLabel : '');
+  el.style.display = 'inline-block';
+}
+
 function renderStory(data) {
   document.getElementById('danhXung').textContent = data.danhXung || '';
   // Hero CỐ Ý chỉ còn: chức phận (to) + tên nhân vật & vế bí danh (nhỏ).
@@ -292,6 +306,7 @@ function renderStory(data) {
   if (data.characterName) sub.push(data.characterName);
   if (data.biDanh) sub.push(data.biDanh);
   document.getElementById('danhXungSub').textContent = sub.join(' — ');
+  renderEraLine(data);
   document.getElementById('moTaTitle').textContent =
     'Mô tả ' + (data.characterName || 'nhân vật');
   document.getElementById('moTaNhanVat').textContent = data.moTaNhanVat || '';
