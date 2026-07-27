@@ -229,7 +229,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
   <!-- Referral Program -->
   <div class="costs-section" id="referralSection" style="display:none">
     <h3>🎁 Mời Bạn — Cùng Nhận Lượng</h3>
-    <p class="costs-subtitle">Bạn của bạn nạp lần đầu → cả 2 cùng nhận <strong>30 Lượng</strong> (bằng 75.000đ). Tối đa 10 lượt mời / tháng.</p>
+    <p class="costs-subtitle" id="refPitchTopup">Mời bạn đăng ký → bạn nhận Lượng ngay. Khi họ nạp lần đầu, cả 2 cùng nhận thêm <strong>30 Lượng</strong>.</p>
     <div style="background:#fff;border:1px solid var(--border-lt);border-radius:10px;padding:1.25rem;display:flex;flex-direction:column;gap:.85rem">
       <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
         <div style="font-size:.82rem;color:var(--text-lt)">Mã giới thiệu của bạn:</div>
@@ -477,6 +477,21 @@ async function loadReferralInfo() {
 
     document.getElementById('referralSection').style.display = 'block';
     document.getElementById('refCode').textContent = code;
+    // Con số thưởng/trần lấy từ server (app_config) chứ không viết cứng vào
+    // câu chữ — đã từng lệch: trang này ghi "tối đa 10 lượt/tháng" trong khi DB
+    // là 20, rồi 15. Hỏng câu này là hứa sai với người đang định mời bạn.
+    try {
+      const rr = await fetch('/api/payment?action=my-referral', {
+        headers: { Authorization: 'Bearer ' + (window.Auth.getSession()?.access_token || '') },
+      });
+      const rd = await rr.json();
+      const el = document.getElementById('refPitchTopup');
+      if (el && rd && rd.rewardPerInvite) {
+        el.innerHTML = `Mỗi người đăng ký qua link của bạn: <strong>+${rd.rewardPerInvite} Lượng</strong> ngay khi họ tạo tài khoản` +
+          (rd.cap ? ` (tối đa ${rd.cap} lượt mời được thưởng / 30 ngày)` : '') +
+          `. Khi họ nạp Lượng lần đầu, cả 2 cùng nhận thêm <strong>30 Lượng</strong>.`;
+      }
+    } catch (e) { /* giữ nguyên câu mặc định */ }
     const link = `${window.location.origin}/?ref=${code}`;
     document.getElementById('refLink').textContent = link;
     document.getElementById('refLink').dataset.url = link;

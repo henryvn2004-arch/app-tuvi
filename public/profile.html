@@ -367,6 +367,30 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
       <div class="account-section">
         <p style="font-size:.82rem;color:var(--text-mid)"><span data-icon="link" style="width:14px;height:14px;vertical-align:-2px"></span> Kết nối lá số với AI chat (Claude, ChatGPT…) và các bot Telegram / WhatsApp / Messenger tại tab <strong><a href="#" onclick="document.querySelector('[data-tab=ketnoi]').click();return false" style="color:var(--gold)">Kết Nối</a></strong>.</p>
       </div>
+      <!-- Mời bạn (V2.3) — trước đây chỉ có ở topup.html, tức là chỉ ai đã
+           định nạp tiền mới thấy. Người dùng hết Lượng thường vào đây trước. -->
+      <div class="account-section" id="refSection" style="display:none">
+        <h3>Mời Bạn — Nhận Thêm Lượng</h3>
+        <p id="refPitch" style="font-size:.85rem;color:var(--text-mid);line-height:1.7;margin-bottom:1rem"></p>
+        <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-bottom:.9rem">
+          <input id="refLinkInput" readonly style="flex:1;min-width:220px;font-family:ui-monospace,Menlo,monospace;font-size:.78rem;padding:.55rem .7rem;border:1px solid var(--border-lt);border-radius:7px;background:var(--bg-soft);color:var(--text)">
+          <button id="refCopyBtn" style="background:var(--navy);color:#c9a84c;border:none;padding:.6rem 1.1rem;border-radius:7px;font-weight:700;cursor:pointer;font-size:.85rem">Sao chép</button>
+        </div>
+        <div id="refProgressWrap">
+          <div style="display:flex;justify-content:space-between;font-size:.78rem;color:var(--text-lt);margin-bottom:.35rem">
+            <span>Đã mời được thưởng (30 ngày qua)</span>
+            <span id="refProgressLabel">—</span>
+          </div>
+          <div style="height:8px;background:var(--border-lt);border-radius:5px;overflow:hidden">
+            <div id="refProgressBar" style="height:100%;width:0%;background:linear-gradient(90deg,#c9a84c,#9A7B3A);border-radius:5px;transition:width .4s"></div>
+          </div>
+          <div style="margin-top:.6rem;font-size:.8rem;color:var(--text-lt)">
+            Tổng đã mời: <strong id="refTotalCount" style="color:var(--navy)">0</strong> ·
+            Đã nhận: <strong id="refEarnedCount" style="color:#9A7B3A">0</strong> Lượng
+          </div>
+        </div>
+      </div>
+
       <div class="account-section">
         <h3>Lịch Sử Giao Dịch</h3>
         <div id="transactionList"><div style="color:var(--text-lt);font-size:.85rem">Đang tải...</div></div>

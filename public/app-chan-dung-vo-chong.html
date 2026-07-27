@@ -284,6 +284,9 @@ async function _doGenerate() {
       imageUrl: data.imageUrl,
       blocks: shareBlocks,
     });
+
+    // Xem xong mà hết Lượng → chỗ xin mời bạn (V2.3). Tự ẩn nếu còn đủ Lượng.
+    _mountInviteCta();
   } catch (e) {
     _loadingCtl && _loadingCtl.stop();
     document.getElementById('loading').style.display = 'none';
@@ -357,6 +360,20 @@ async function _loadHistory() {
 }
 
 TuviPaywall.init({ product: 'chan-dung-vo-chong', slug: function () { return _currentSlug; } });
+
+function _mountInviteCta() {
+  var host = document.getElementById('resPanel');
+  if (!host) return;
+  var go = function () {
+    if (window.InviteCta) window.InviteCta.mount(host, { toolId: 'chan-dung-vo-chong', toolLabel: 'lượt vẽ' });
+  };
+  if (window.InviteCta) return go();
+  if (document.getElementById('_ivc_js')) return;
+  var s = document.createElement('script');
+  s.id = '_ivc_js'; s.src = '/invite-cta.js?v=1'; s.async = true; s.onload = go;
+  document.head.appendChild(s);
+}
+
 </script>
 </body>
 </html>

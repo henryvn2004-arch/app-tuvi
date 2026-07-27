@@ -13,6 +13,7 @@ import { getPackage, getPackages } from '@/lib/billing/packages';
 import { getToolPrice } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
 import { freeGenGate, FREE_GEN_CAP_MESSAGE } from '@/lib/billing/viral-budget';
+import { getConfigValue } from '@/lib/config/appConfig';
 import { evaluateJobs } from '@/lib/ops/jobs';
 import { checkEnv } from '@/lib/ops/preflight';
 import { logCronRun } from '@/lib/cron/log';
@@ -1253,7 +1254,7 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-nghien-cuu') return handleAdminNghienCuu(request);
   if (action === 'admin-mcp') return handleAdminMcp(request);
   if (action === 'admin-env-status') return handleAdminEnvStatus(request);
-  if (action === 'my-referral') return handleMyReferral(request);
+  if (action === 'my-referral') return handleMyReferral(request, searchParams);
   if (action === 'admin-viral') return handleAdminViral(request, searchParams);
   if (action === 'check-bank')  return handleCheckBank(searchParams);
   return err('Invalid action.', 400);
@@ -1592,25 +1593,44 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
 // vào link chia sẻ. CỐ Ý là endpoint có auth chứ không nhét referral_code vào
 // `action=balance` (endpoint đó nhận userId qua query, không xác thực — thêm mã
 // vào đó là phát mã của người khác cho bất kỳ ai đoán được userId).
-async function handleMyReferral(request: NextRequest): Promise<Response> {
+async function handleMyReferral(request: NextRequest, sp: URLSearchParams): Promise<Response> {
   const userToken = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
   if (!userToken) return err('Missing Authorization token', 401);
   try {
     const user = await getUserFromToken(userToken);
     if (!user) return err('Invalid token', 401);
     const uid = encodeURIComponent(user.id);
-    const [credRes, refRes] = await Promise.all([
-      fetch(`${SUPABASE_URL}/rest/v1/user_credits?user_id=eq.${uid}&limit=1&select=referral_code`, { headers: SB_HEADERS }),
+    // `tool` (tuỳ chọn) — cho widget "mời bạn" tự tính được "còn thiếu bao nhiêu
+    // Lượng / cần mời mấy người" trong MỘT lượt mạng, thay vì bắt trang tự đi
+    // hỏi giá + số dư ở hai nơi khác nhau (và phải nhúng anon key để đọc
+    // tool_pricing).
+    const tool = String(sp.get('tool') || '').slice(0, 60);
+    const [credRes, refRes, reward, cap, toolPrice] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/user_credits?user_id=eq.${uid}&limit=1&select=referral_code,balance`, { headers: SB_HEADERS }),
       fetch(`${SUPABASE_URL}/rest/v1/referrals?referrer_user_id=eq.${uid}&select=status,signup_rewarded_at,credits_to_referrer`, { headers: SB_HEADERS }),
+      getConfigValue<number>('referral.signup_bonus_referrer', 10),
+      getConfigValue<number>('referral.signup_reward_cap', 20),
+      tool ? getToolPrice(tool) : Promise.resolve(null),
     ]);
-    const code = credRes.ok ? (await credRes.json())[0]?.referral_code || null : null;
+    const cred = credRes.ok ? (await credRes.json())[0] || null : null;
     const refs: { status?: string; signup_rewarded_at?: string | null; credits_to_referrer?: number }[] =
       refRes.ok ? await refRes.json() : [];
+    // Trần thưởng đếm theo CỬA SỔ 30 NGÀY (khớp process_referral_signup) — lấy
+    // tổng mọi thời sẽ báo "hết lượt mời" cho người thật ra vẫn còn.
+    const since = Date.now() - 30 * 864e5;
+    const rewardedRecent = refs.filter(
+      (r) => r.signup_rewarded_at && Date.parse(r.signup_rewarded_at) >= since,
+    ).length;
     return ok({
-      code,
+      code: cred?.referral_code ?? null,
+      balance: cred?.balance ?? 0,
       invited: refs.length,
       rewarded: refs.filter((r) => !!r.signup_rewarded_at).length,
+      rewardedRecent,
       creditsEarned: refs.reduce((s, r) => s + (r.credits_to_referrer || 0), 0),
+      rewardPerInvite: Number(reward) || 0,
+      cap: Number(cap) || 0,
+      toolPrice,
     });
   } catch (e: unknown) { return err((e as Error).message); }
 }
