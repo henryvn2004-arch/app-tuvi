@@ -64,7 +64,12 @@ PHÂN BIỆT HAI TẦNG — đây là luật quan trọng nhất của phần b�
 - Sự kiện và hoàn cảnh của thời đó (chiến tranh, dời đô, mở mang bờ cõi, mất mùa, khoa cử) được kể như bối cảnh nhân vật sống qua — kể ĐÚNG như lịch sử, KHÔNG sửa kết cục.
 - Nhưng nhân vật thì TUYỆT ĐỐI không được là một người có thật: không gán cho nhân vật chiến công, chức vụ hay số phận của một nhân vật lịch sử; không đặt nhân vật vào vị trí độc nhất của một triều (đừng viết "ông là Tể tướng của vua X" — hãy viết "ông làm quan trong triều dưới thời vua X", một trong nhiều người).
 - Người có thật là NỀN, không phải bạn diễn: được nhắc như "vua đang trị vì", "quân của tướng X vừa đi qua", "chiếu chỉ từ kinh đô ban xuống". KHÔNG dựng cảnh họ trò chuyện, khen thưởng hay kết thân với nhân vật — cái đó là bịa chuyện về một người có thật, khác hẳn với việc kể chuyện một người hư cấu.
-- KHÔNG nêu năm dương lịch cụ thể hay niên hiệu kèm số ("năm 1428", "năm Thuận Thiên thứ ba"). Lý do kỹ thuật: dữ liệu chỉ cho TUỔI nhân vật, không có mốc lịch nào — nêu một con số năm là tự bịa ra, và nó biến toàn bộ các giai đoạn đời nhân vật thành thứ tra ngược được rồi sai. Muốn nói rõ hơn thì dùng "đầu/giữa/cuối thời <triều đại>".
+- KHÔNG nêu năm dương lịch cụ thể hay niên hiệu kèm số ("năm 1428", "năm Thuận Thiên thứ ba"). Lý do kỹ thuật: dữ liệu không có mốc lịch nào — nêu một con số năm là tự bịa ra, và nó biến toàn bộ các giai đoạn đời nhân vật thành thứ tra ngược được rồi sai. Muốn nói rõ hơn thì dùng "đầu/giữa/cuối thời <triều đại>".
+
+TUỔI TÁC — đừng biến ai cũng thành người sống thọ:
+- KHÔNG nêu tuổi nhân vật bằng con số ("năm ba mươi tuổi", "ngoài tám mươi"). Dữ liệu chia đời thành các CHẶNG, không cho tuổi thật của một người sống ở thời đó.
+- Các hồi đi theo thứ tự Thiếu thời → Lập thân → Trung niên → Hậu vận → Cuối đời. Hiểu đúng chừng mực của thời xưa: "Cuối đời" là chặng già của MỘT ĐỜI NGƯỜI THỜI ĐÓ, không phải đại thọ ngoài tám mươi. Đa số người thời phong kiến không sống lâu như người thời nay.
+- Diễn đạt thời gian bằng chặng đời và bằng cảnh (tóc đã bạc, con đã lớn, người cùng lứa đã đi gần hết), đừng bằng số.
 
 NỀN VĂN MINH PHẢI NHẬN RA ĐƯỢC — luật quan trọng, đừng bỏ qua:
 - Tool này có nhiều nền văn minh khác nhau. Nếu bỏ tên nhân vật đi mà truyện đọc như nhau ở mọi nền thì truyện hỏng: người đọc không có gì để nhận ra mình đang ở đâu.

@@ -347,7 +347,7 @@ function renderStory(data) {
     return '<div class="cdtk-act' + (badge ? ' ' + badge.cls : '') + '">' +
       '<div class="cdtk-act-head">' +
         '<span class="cdtk-act-title">' + esc(a.title) + '</span>' +
-        '<span class="cdtk-act-age">' + esc(a.stage) + ' · ' + a.ageFrom + '–' + a.ageTo + ' tuổi</span>' +
+        '<span class="cdtk-act-age">' + esc(a.stage) + '</span>' +
         (badge ? '<span class="cdtk-badge ' + badge.cls + '">' + badge.label + '</span>' : '') +
       '</div><p>' + esc(a.text) + '</p></div>';
   }).join('');
@@ -377,7 +377,7 @@ function publishShareable(imageUrl) {
   });
   var storyText = (d.acts || []).map(function (a) {
     var badge = ROLE_BADGE[a.role];
-    return a.title + ' (' + a.stage + ' · ' + a.ageFrom + '–' + a.ageTo + ' tuổi)' +
+    return a.title + ' (' + a.stage + ')' +
       (badge ? ' — ' + badge.label : '') + '\n' + a.text;
   }).join('\n\n');
   if (storyText) blocks.push({ header: 'Một Đời Người — 5 Hồi', text: storyText });
