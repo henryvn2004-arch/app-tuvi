@@ -61,12 +61,27 @@ const SB_HEADERS = {
   'Authorization': `Bearer ${SUPABASE_KEY}`,
 };
 
-async function getUserFromToken(token: string): Promise<{ id: string; email?: string } | null> {
+async function getUserFromToken(token: string): Promise<{ id: string; email?: string; created_at?: string } | null> {
   const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
     headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}` },
   });
   if (!res.ok) return null;
   return await res.json();
+}
+
+// Cửa sổ coi là "tài khoản vừa đăng ký" cho mã giới thiệu (xem handleReferralRegister).
+const REFERRAL_NEW_ACCOUNT_MS = 24 * 60 * 60 * 1000;
+
+/** Ghi 1 dòng vào bảng events (service key, bỏ qua RLS). Best-effort — beacon
+ *  hành vi không bao giờ được làm hỏng luồng nghiệp vụ gọi nó. */
+async function logEvent(row: Record<string, unknown>): Promise<void> {
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/events`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ platform: 'web', ...row }),
+    });
+  } catch { /* best-effort */ }
 }
 
 async function getBalance(userId: string): Promise<number> {
@@ -1208,6 +1223,8 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-nghien-cuu') return handleAdminNghienCuu(request);
   if (action === 'admin-mcp') return handleAdminMcp(request);
   if (action === 'admin-env-status') return handleAdminEnvStatus(request);
+  if (action === 'my-referral') return handleMyReferral(request);
+  if (action === 'admin-viral') return handleAdminViral(request, searchParams);
   if (action === 'check-bank')  return handleCheckBank(searchParams);
   return err('Invalid action.', 400);
 }
@@ -1414,6 +1431,30 @@ async function handleAdminMarketing(request: NextRequest, sp: URLSearchParams): 
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
+// ── GET: admin-viral (V2.4 — panel "Vòng Lặp Viral") ─────────────
+// Phễu gen → chia sẻ → người mở link → bấm CTA → đăng ký qua mã giới thiệu,
+// kèm K-factor từng tool + chi phí/user đăng ký. CÙNG khoảng ngày trang
+// Marketing đang xem (client truyền from/to y hệt admin-marketing).
+async function handleAdminViral(request: NextRequest, sp: URLSearchParams): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const to = sp.get('to') ? new Date(sp.get('to') as string) : new Date();
+  const from = sp.get('from') ? new Date(sp.get('from') as string) : new Date(Date.now() - 30 * 864e5);
+  if (isNaN(from.getTime()) || isNaN(to.getTime())) return err('Invalid date range', 400);
+  const toExcl = new Date(to.getTime() + 864e5);
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/viral_loop_funnel`, {
+      method: 'POST', headers: SB_HEADERS,
+      body: JSON.stringify({ p_from: from.toISOString(), p_to: toExcl.toISOString() }),
+    });
+    if (!res.ok) throw new Error(`viral_loop_funnel: ${await res.text()}`);
+    return ok({ viral: await res.json(), from: from.toISOString(), to: to.toISOString() });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
 // ── GET: admin-marketing-suggestions (M0.5, track Marketing Autopilot — đề
 // xuất content/campaign ADVISORY). Sinh ON-DEMAND (nút trong dashboard
 // Marketing), CÙNG khoảng ngày admin đang xem — không cron, không tự chạy gì. ──
@@ -1516,6 +1557,34 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
+// ── GET: my-referral (mã giới thiệu + tiến độ của CHÍNH mình) ────
+// Headers: Authorization: Bearer <user_token>. shell.js gọi để gắn ?ref=<mã>
+// vào link chia sẻ. CỐ Ý là endpoint có auth chứ không nhét referral_code vào
+// `action=balance` (endpoint đó nhận userId qua query, không xác thực — thêm mã
+// vào đó là phát mã của người khác cho bất kỳ ai đoán được userId).
+async function handleMyReferral(request: NextRequest): Promise<Response> {
+  const userToken = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  if (!userToken) return err('Missing Authorization token', 401);
+  try {
+    const user = await getUserFromToken(userToken);
+    if (!user) return err('Invalid token', 401);
+    const uid = encodeURIComponent(user.id);
+    const [credRes, refRes] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/user_credits?user_id=eq.${uid}&limit=1&select=referral_code`, { headers: SB_HEADERS }),
+      fetch(`${SUPABASE_URL}/rest/v1/referrals?referrer_user_id=eq.${uid}&select=status,signup_rewarded_at,credits_to_referrer`, { headers: SB_HEADERS }),
+    ]);
+    const code = credRes.ok ? (await credRes.json())[0]?.referral_code || null : null;
+    const refs: { status?: string; signup_rewarded_at?: string | null; credits_to_referrer?: number }[] =
+      refRes.ok ? await refRes.json() : [];
+    return ok({
+      code,
+      invited: refs.length,
+      rewarded: refs.filter((r) => !!r.signup_rewarded_at).length,
+      creditsEarned: refs.reduce((s, r) => s + (r.credits_to_referrer || 0), 0),
+    });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
 // ── POST: referral-register ────────────────────────────────────
 // Body: { refCode: string }   Headers: Authorization: Bearer <user_token>
 // Frontend gọi sau khi user mới đăng ký xong + có ?ref=CODE trong URL/sessionStorage.
@@ -1527,10 +1596,25 @@ async function handleReferralRegister(request: NextRequest, body: Record<string,
 
   const refCode = String(body.refCode || '').toUpperCase().trim();
   if (!refCode || refCode.length !== 8) return err('Invalid referral code format', 400);
+  // Nguồn của mã (referral.js đọc từ utm_campaign/utm_source của link chia sẻ) —
+  // chỉ dùng để gắn nhãn event, KHÔNG ảnh hưởng việc thưởng.
+  const srcTool = String(body.srcTool || '').slice(0, 60) || null;
+  const srcSource = String(body.srcSource || '').slice(0, 60) || null;
 
   try {
     const user = await getUserFromToken(userToken);
     if (!user) return err('Invalid token', 401);
+
+    // Chỉ ghi nhận giới thiệu cho TÀI KHOẢN MỚI. Trước đây không có chốt này:
+    // một người đã có tài khoản chỉ cần mở link ?ref= của bạn là referrer được
+    // thưởng ngay — vô hại khi chưa ai chia sẻ, nhưng V2.1 vừa gắn ?ref= vào
+    // MỌI link chia sẻ nên đó thành đường farm rẻ nhất. 24h đủ rộng cho luồng
+    // thật (đáp trang → đăng ký → SIGNED_IN, tính bằng giây).
+    const createdMs = user.created_at ? Date.parse(user.created_at) : NaN;
+    if (Number.isFinite(createdMs) && Date.now() - createdMs > REFERRAL_NEW_ACCOUNT_MS) {
+      return ok({ success: false, settled: true, skipped: 'existing_account',
+        message: 'Mã giới thiệu chỉ áp dụng cho tài khoản đăng ký mới.' });
+    }
 
     // Lookup referrer by code
     const lookupRes = await fetch(
@@ -1568,9 +1652,27 @@ async function handleReferralRegister(request: NextRequest, body: Record<string,
     // Tầng 1: thưởng NGAY cho người giới thiệu khi referee vừa đăng ký (best-effort,
     // có cap chống farm trong process_referral_signup). Tầng 2 (30 mỗi bên) vẫn fire
     // khi referee nạp lần đầu qua trigger_referral_check_on_topup.
-    try { await rpc('process_referral_signup', { p_referee_user_id: user.id }); } catch { /* best-effort */ }
+    let rewarded = false, creditsGranted = 0;
+    try {
+      const r = (await rpc('process_referral_signup', { p_referee_user_id: user.id })) as unknown;
+      const first = Array.isArray(r) ? (r[0] as Record<string, unknown> | undefined) : null;
+      rewarded = first?.rewarded === true;
+      creditsGranted = Number(first?.credits_granted) || 0;
+    } catch { /* best-effort */ }
 
-    return ok({ success: true, referrerId, message: 'Đã ghi nhận! Người giới thiệu vừa nhận thưởng chào mừng. Khi bạn nạp Lượng lần đầu, cả hai nhận thêm 30 Lượng.' });
+    // Mắt xích cuối của vòng lặp viral (V2.4): mã ĐÃ ăn. tool_id = tool của link
+    // chia sẻ đưa người này tới → panel Vòng Lặp Viral tính được K-factor TỪNG
+    // tool. Best-effort, không chặn phản hồi.
+    void logEvent({
+      event_type: 'referral_signup',
+      user_id: user.id,
+      tool_id: srcTool,
+      utm_source: srcSource,
+      utm_campaign: srcTool,
+      meta: { referrer_user_id: referrerId, code: refCode, rewarded, credits_granted: creditsGranted },
+    });
+
+    return ok({ success: true, referrerId, rewarded, creditsGranted, message: 'Đã ghi nhận! Người giới thiệu vừa nhận thưởng chào mừng. Khi bạn nạp Lượng lần đầu, cả hai nhận thêm 30 Lượng.' });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 

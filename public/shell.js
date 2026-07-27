@@ -125,6 +125,47 @@
     (document.head || document.documentElement).appendChild(s);
   }
 
+  // ── VÒNG LẶP GIỚI THIỆU (viral loop) ──
+  // Người nhận link chia sẻ đáp xuống /app/<tool>?ref=CODE — trước đây CHỈ
+  // homepage và /cong-cu bắt được ?ref=, nên mắt xích "A chia sẻ → B đăng ký →
+  // A được thưởng" đứt ngay tại đây (bảng referrals 0 dòng dù backend thưởng đã
+  // viết xong từ lâu). Nạp /referral.js để mọi trang /app bắt mã.
+  function ensureReferralJs() {
+    if (window.Referral) return;
+    if (document.getElementById('tvmb-referral-js')) return;
+    var s = document.createElement('script');
+    s.id = 'tvmb-referral-js'; s.src = '/referral.js?v=1'; s.async = true;
+    (document.head || document.documentElement).appendChild(s);
+  }
+
+  // Mã giới thiệu CỦA CHÍNH người đang đăng nhập — nạp sẵn để lúc bấm "Chia sẻ"
+  // gắn được ?ref= vào link mà không phải chờ thêm một vòng mạng.
+  var _refCode = null, _refCodeBusy = false;
+  function loadRefCode() {
+    if (_refCode || _refCodeBusy) return;
+    var tk = getToken(); if (!tk) return;
+    _refCodeBusy = true;
+    fetch('/api/payment?action=my-referral', { headers: { 'Authorization': 'Bearer ' + tk } })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { _refCodeBusy = false; if (j && j.code) _refCode = j.code; })
+      .catch(function () { _refCodeBusy = false; });
+  }
+
+  // Gắn mã giới thiệu + UTM vào link chia sẻ. utm_campaign = tool_id để panel
+  // "Vòng Lặp Viral" tách được K-factor từng tool; ?ref= để người mở link đăng
+  // ký thì người chia sẻ được thưởng. Chưa đăng nhập (hoặc chưa kịp có mã) thì
+  // vẫn chia sẻ được, chỉ là không quy về ai — KHÔNG chặn luồng chia sẻ.
+  function withViralParams(url, toolId) {
+    try {
+      var u = new URL(url);
+      u.searchParams.set('utm_source', 'share');
+      u.searchParams.set('utm_medium', 'link');
+      if (toolId) u.searchParams.set('utm_campaign', toolId);
+      if (_refCode) u.searchParams.set('ref', _refCode);
+      return u.toString();
+    } catch (e) { return url; }
+  }
+
   // ── RENDER SIDEBAR ──
   function renderSidebar() {
     var host = document.getElementById('shell-sidebar');
@@ -576,13 +617,15 @@
       .then(function (j) {
         if (btn) btn.disabled = false;
         if (!j || !j.url) { alert('Không tạo được link chia sẻ, thử lại sau.'); return; }
-        var url = location.origin + j.url;
+        var sessTool = ACTIVE || 'laso';
+        var url = withViralParams(location.origin + j.url, sessTool);
+        var onMedium = function (m) { track('share', { tool_id: sessTool, meta: { medium: m, kind: 'session', with_ref: !!_refCode } }); };
         // Điện thoại (iOS/Android): mở SHARE SHEET native của hệ điều hành —
         // đủ WhatsApp, Messages, AirDrop, Zalo… đúng trải nghiệm quen thuộc.
         // Người dùng bấm ✕ (AbortError) thì thôi; lỗi khác → rơi về modal tự dựng.
         var titleTxt = (curMeta && curMeta.title) || 'Luận Đường';
         var modalOpts = { title: 'Chia sẻ phiên Luận Đường', desc: 'Ai có link đều đọc được lá số và toàn bộ hỏi đáp trong phiên này.', shareText: 'Xem phần luận giải của thầy cho lá số này: ' };
-        shareLink(url, { title: titleTxt + ' — Tử Vi Minh Bảo', text: 'Xem phần luận giải của thầy cho lá số này:', url: url }, modalOpts);
+        shareLink(url, { title: titleTxt + ' — Tử Vi Minh Bảo', text: 'Xem phần luận giải của thầy cho lá số này:', url: url }, modalOpts, onMedium);
       })
       .catch(function () { if (btn) btn.disabled = false; alert('Lỗi mạng khi tạo link chia sẻ.'); });
   }
@@ -609,20 +652,28 @@
     } catch (e) { /* ignore */ }
     return !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
   }
-  function shareLink(url, payload, modalOpts) {
-    if (!navigator.share || !isTouchDevice()) { openShareModal(url, modalOpts); return; }
+  //
+  // onMedium(medium): gọi khi người dùng THẬT SỰ chọn một kênh để phát tán
+  // (share sheet native / sao chép / Facebook / Zalo / WhatsApp). Bắn event
+  // 'share' ở ĐÂY chứ không phải lúc tạo link — số dòng shared_results đã đếm
+  // sẵn "link đã tạo", nên đo thêm ở đây mới tách được "tạo rồi bỏ" với "chia
+  // sẻ thật", và không đếm trùng một lượt thành hai.
+  function shareLink(url, payload, modalOpts, onMedium) {
+    if (!navigator.share || !isTouchDevice()) { openShareModal(url, modalOpts, onMedium); return; }
     try {
       var p = navigator.share(payload);
-      if (p && p.catch) {
-        p.catch(function (e) { if (e && e.name === 'AbortError') return; openShareModal(url, modalOpts); });
+      if (p && p.then) {
+        p.then(function () { if (onMedium) onMedium('native'); },
+          function (e) { if (e && e.name === 'AbortError') return; openShareModal(url, modalOpts, onMedium); });
       }
     } catch (e) {
-      openShareModal(url, modalOpts);
+      openShareModal(url, modalOpts, onMedium);
     }
   }
 
-  function openShareModal(url, opts) {
+  function openShareModal(url, opts, onMedium) {
     opts = opts || {};
+    var medium = function (m) { try { if (onMedium) onMedium(m); } catch (e) { /* ignore */ } };
     var mTitle = opts.title || 'Chia sẻ';
     var mDesc = opts.desc || 'Ai có link đều xem được nội dung này.';
     var shareText = opts.shareText || '';
@@ -646,8 +697,16 @@
     var close = function () { wrap.remove(); };
     wrap.addEventListener('click', function (e) { if (e.target === wrap) close(); });
     wrap.querySelector('.ssm-x').addEventListener('click', close);
+    wrap.querySelectorAll('.ssm-b').forEach(function (a) {
+      a.addEventListener('click', function () {
+        medium(a.classList.contains('fb') ? 'facebook'
+          : a.classList.contains('zl') ? 'zalo'
+            : a.classList.contains('wa') ? 'whatsapp' : 'open');
+      });
+    });
     var inp = wrap.querySelector('.ssm-in');
     wrap.querySelector('.ssm-copy').addEventListener('click', function () {
+      medium('copy');
       inp.select();
       var done = function () { var b = wrap.querySelector('.ssm-copy'); b.textContent = 'Đã chép ✓'; setTimeout(function () { b.textContent = 'Sao chép'; }, 1600); };
       if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, function () { try { document.execCommand('copy'); done(); } catch (e) { /* ignore */ } });
@@ -704,6 +763,7 @@
     var btn = document.getElementById('wsShareBtn');
     if (!shareable) { if (btn) btn.remove(); return; }
     if (!host) return; // trang chưa có toolbar .ws-actions → bỏ qua, không vỡ gì
+    loadRefCode(); // lúc boot có thể chưa đăng nhập; thử lại khi sắp có nút Chia sẻ
     if (!btn) {
       btn = document.createElement('button');
       btn.type = 'button'; btn.className = 'btn'; btn.id = 'wsShareBtn';
@@ -717,22 +777,27 @@
     var btn = document.getElementById('wsShareBtn'); if (btn) btn.disabled = true;
     var s = shareable;
     var reEnable = function () { if (btn) btn.disabled = false; };
+    // Gửi kèm token: server ghi shared_results.owner_user_id → panel Vòng Lặp
+    // Viral đếm được SỐ NGƯỜI chia sẻ (mẫu số của K-factor), không chỉ số link.
+    var headers = { 'Content-Type': 'application/json' };
+    var tk0 = getToken(); if (tk0) headers['Authorization'] = 'Bearer ' + tk0;
     fetch('/api/share-result', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: headers,
       body: JSON.stringify({ toolId: s.toolId, kind: s.kind, title: s.title, imageUrl: s.imageUrl, text: s.text, blocks: s.blocks }),
     })
       .then(function (r) { return r.json(); })
       .then(function (j) {
         reEnable();
         if (!j || !j.url) { alert('Không tạo được link chia sẻ, thử lại sau.'); return; }
-        var url = location.origin + j.url;
+        var url = withViralParams(location.origin + j.url, s.toolId);
+        var onMedium = function (m) { track('share', { tool_id: s.toolId, meta: { medium: m, kind: 'workspace', with_ref: !!_refCode } }); };
         var shareTxt = 'Xem kết quả này trên Tử Vi Minh Bảo:';
         var modalOpts = { title: 'Chia sẻ ' + s.title, desc: 'Ai có link đều xem được kết quả này.', shareText: shareTxt + ' ' };
         // LUÔN share dạng LINK (giống hệt shareSession ở rail) — KHÔNG share
         // file ảnh thô qua Web Share API level 2: nhiều app nhận file (Messenger,
         // Zalo…) BỎ LUÔN url đi kèm, người nhận chỉ thấy ảnh, không bấm vào đâu
         // được. Ảnh vẫn hiện đẹp nhờ OG:image khi link được unfurl.
-        shareLink(url, { title: s.title + ' — Tử Vi Minh Bảo', text: shareTxt, url: url }, modalOpts);
+        shareLink(url, { title: s.title + ' — Tử Vi Minh Bảo', text: shareTxt, url: url }, modalOpts, onMedium);
       })
       .catch(function () { reEnable(); alert('Lỗi mạng khi tạo link chia sẻ.'); });
   }
@@ -1292,6 +1357,9 @@
   function boot() {
     // Marketing: nạp track.js (page_view tự bắn) + đánh dấu mở tool trong shell.
     ensureTrackJs();
+    // Viral: bắt ?ref= (người tới từ link chia sẻ) + nạp sẵn mã của chính mình.
+    ensureReferralJs();
+    loadRefCode();
     try { track('tool_open', { tool_id: ACTIVE || 'app' }); } catch (e) { /* ignore */ }
     // Nối phiên từ link chia sẻ: tải snapshot rồi reload ?auto=1 (boot dừng ở đây).
     if (consumeFromShare()) return;

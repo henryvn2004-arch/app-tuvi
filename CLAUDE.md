@@ -258,6 +258,13 @@ bật; khi bật, cùng logic, chỉ khác bước cuối áp dụng thật (pre
 **Nguồn:** phiên brainstorm "làm sao cho Chân Dung Vợ Chồng + Chân Dung Tiền Kiếp viral".
 Plan này là OUTPUT của phiên; code làm ở session sau, mỗi PR reset branch trên main.
 
+### 🔖 RESUME HERE (track viral)
+**V2.1 + V2.4 ĐÃ XONG (PR #314)** — mắt xích đứt đã nối: link chia sẻ nay mang mã
+giới thiệu, và toàn bộ vòng lặp đã có chỗ đo (panel admin "Vòng Lặp Viral").
+**Việc tiếp theo: V2.2** (set 4 config đã chốt — thuần SQL, không cần deploy —
++ cầu dao ngân sách ảnh free), rồi **V2.3** (chỗ xin mời bạn). Số liệu sẽ tự chảy
+vào panel khi có người thật dùng; trước đó K-factor còn 0 là ĐÚNG, không phải lỗi.
+
 ### 🔴 PHÁT HIỆN CHÍNH — vòng lặp đứt đúng 1 mắt xích
 Link chia sẻ `/ket-qua/<id>` **KHÔNG mang mã giới thiệu**; nút CTA "Thử ngay →" trỏ
 `/app/<tool_id>` cũng **không mang mã**. Nên: A share → B đăng ký → **A không được
@@ -323,6 +330,60 @@ Henry có thể bỏ nếu không ưng.
   `referral_signup` khi thưởng thành công. Gắn `utm_source=share&utm_campaign=<tool_id>`.
 - **Panel admin "Vòng Lặp Viral"**: phễu gen → share → người mở link → bấm CTA → đăng ký
   → gen lại, kèm **K-factor** từng tool + chi phí/user + số Lượng thưởng đã phát.
+
+### ✅ V2.1 + V2.4 XONG (PR #314, session này) — nối mã giới thiệu + đo vòng lặp
+- **`public/referral.js` (MỚI) — nguồn DUY NHẤT bắt `?ref=`.** Audit lúc làm phát
+  hiện chỗ đứt sâu hơn plan ghi: cơ chế `sessionStorage.pending_ref_code` +
+  `tryRegisterReferral()` KHÔNG phải "đã có sẵn dùng lại được" — nó bị **chép
+  inline 2 bản** trong `index.html` + `cong-cu.html`, nên trang `/app` (đúng nơi
+  CTA đổ về) chưa từng bắt được mã. Gom thành file dùng chung; `shell.js` nạp
+  động (`ensureReferralJs`) cho mọi trang `/app`; 2 trang cũ bỏ bản inline, giữ
+  global `window.tryRegisterReferral` để không gãy chỗ nào.
+- **`shell.js`** — `withViralParams()` gắn `?ref=<mã>` + `utm_source=share&utm_medium=link&utm_campaign=<tool_id>`
+  vào link chia sẻ (CẢ `shareWorkspace` lẫn `shareSession`). Mã lấy qua endpoint
+  mới `GET /api/payment?action=my-referral` (**có auth** — CỐ Ý không nhét
+  `referral_code` vào `action=balance` vì endpoint đó nhận `userId` qua query
+  không xác thực, thêm mã vào đó là phát mã người khác cho bất kỳ ai đoán được
+  userId). Chưa đăng nhập vẫn chia sẻ bình thường, chỉ không quy về ai.
+  `shareWorkspace` nay gửi kèm token khi tạo link → `shared_results.owner_user_id`
+  hết null (mẫu số "số người chia sẻ" của K-factor).
+- **`/ket-qua/[id]`** — chuyển tiếp `?ref=` (validate 8 ký tự, rác thì bỏ) + UTM
+  sang CTA. **Copy CTA đọc `app_config`/`tool_pricing` THẲNG** thay vì viết cứng
+  "25 Lượng" như plan: quà hiện còn A/B `[20,30,40]` mà tiền kiếp giá 25 → viết
+  cứng là hứa hụt ngay lần đầu. Lấy mức quà THẤP NHẤT, chỉ nói "đủ dùng công cụ
+  này" khi quà ≥ giá → V2.2 set `[25]` thì câu chữ tự khớp, không sửa code lại.
+- **🔒 Chốt an toàn BẮT BUỘC đi kèm:** `handleReferralRegister` nay chỉ ăn cho
+  **tài khoản mới (<24h)**. Trước đây không có chốt: user CŨ chỉ cần mở link
+  `?ref=` của bạn là referrer được thưởng. Vô hại khi chưa ai chia sẻ, nhưng V2.1
+  vừa gắn `?ref=` vào MỌI link → thành đường farm rẻ nhất. Luồng thật (đáp trang
+  → đăng ký → `SIGNED_IN`) tính bằng giây nên 24h rất rộng.
+- **Đo (V2.4):** `share` (bắn khi CHỌN KÊNH phát tán — native/copy/FB/Zalo/WhatsApp,
+  KHÔNG bắn lúc tạo link để khỏi đếm trùng với `shared_results`), `share_view`,
+  `cta_click` (`meta.from='share'`), `referral_signup` (server ghi, `tool_id` lấy
+  từ `utm_campaign` của chính link → **quy được K-factor TỪNG tool**; chỉ dựa
+  `user_attribution.first_utm_*` thì trình duyệt đã ghé site trước đó mãi mang
+  first-touch cũ). Thêm `share_view`/`referral_signup` vào allowlist `/api/track`.
+- **Migration `_patches/migration-viral-loop.sql`** (✅ ĐÃ CHẠY prod qua Supabase
+  MCP — verify khớp thực trạng: 26 link chia sẻ, 0 event `share`, 0 dòng
+  `referrals`): RPC `viral_loop_funnel(from,to)`, KHÔNG tạo bảng mới.
+- **Panel admin "Vòng Lặp Viral"** (`#page-marketing`, `admin-viral` gọi RIÊNG khỏi
+  `admin-marketing` để không bị 7 RPC + GA4 kéo chậm/gãy theo): phễu 6 bậc +
+  conv% từng bậc, K-factor/tool, chi phí/user đăng ký, Lượng thưởng đã phát.
+- **🐞 2 lỗi bắt được khi test, không phải Henry báo:** (a) `GA4_TRACK_SNIPPET`
+  ĐÃ kèm `track.js` từ M0.1 → bản đầu thêm thẻ nữa là `page_view` đếm đôi trên
+  trang chia sẻ; (b) Next **bọc `fetch` toàn cục và nhớ kết quả kể cả khi
+  `dynamic='force-dynamic'`** — đổi dữ liệu dưới DB xong `/ket-qua` vẫn trả số
+  cũ, nghĩa là link vừa gỡ (`revoked`) vẫn render. Vá bằng `cache:'no-store'`
+  trong `createClient`.
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier
+  --check .` sạch · `node --check` referral.js/shell.js + 2 script block admin ·
+  **Playwright trên trang shell thật** 3 ca (đăng nhập → link đúng ref+utm, bắn
+  ĐÚNG 1 event share; chưa đăng nhập → vẫn share được, không ref; đáp `/app?ref=`
+  → dọn ref khỏi URL, giữ utm, gọi register 1 lần kèm `srcTool`) · **Playwright
+  trên `/ket-qua` render thật** (dev server + PostgREST stub): track.js nạp đúng
+  1 lần, page_view/share_view/cta_click mỗi thứ đúng 1, ref rác bị loại, revoked
+  → 404, copy CTA đúng cả 2 nhánh · panel admin sạch light+dark. Bump
+  `shell.js?v=47→48` (27 trang).
 
 **V2.2 — Sửa số + cầu dao ngân sách:**
 - Set 4 config theo bảng trên (SQL, không cần deploy).

@@ -15,9 +15,14 @@ const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY!;
 
 // Allowlist loại sự kiện — ngoài danh sách ghi thành 'other' để tránh rác.
+// share_view/referral_signup: các mắt xích vòng lặp viral (V2.4) — người MỞ link
+// chia sẻ, và lượt giới thiệu được ghi nhận. referral_signup do server tự ghi
+// (app/api/payment referral-register), có mặt ở đây để client không bị coi là rác
+// nếu sau này cần bắn thêm.
 const ALLOWED = new Set([
   'page_view', 'tool_open', 'tool_run', 'tool_result', 'chat_msg',
   'signup', 'login', 'topup_start', 'topup_success', 'share', 'cta_click',
+  'share_view', 'referral_signup',
 ]);
 
 // Coi là "vừa đăng ký" nếu tài khoản tạo trong 15 phút gần đây (né tính nhầm
