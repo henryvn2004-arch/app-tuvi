@@ -250,7 +250,7 @@ Hai hành động đáng giá nhất ở mức 3:
 | Sprint | Tên | Mục đích một câu | Đầu ra | Phụ thuộc |
 |---|---|---|---|---|
 | **S0** 🚨 | **Cầm máu** | Bịt lỗ đang khai thác được + dọn nhiễu giám sát | ✅ SQL `REVOKE` · ✅ chốt thanh toán server-side · ✅ `force-dynamic` · ⏭️ rate limit → dời S6 (xem ghi chú) | — |
-| **S1** | **Giác quan** | Cho hệ thống biết đau ở đâu | `tool_error` + helper `logToolOutcome()` gắn vào tool trả phí & lưu lượng cao | S0 |
+| **S1** | **Giác quan** | Cho hệ thống biết đau ở đâu | ✅ `lib/ops/tool-outcome.ts` (`logToolOutcome` + `withToolOutcome`) gắn vào **7 route** đang mù | S0 |
 | **S2** | **Canary** ⭐ | *Break là báo NGAY* — yêu cầu gốc | Cron tự chạy tool thật + cảnh báo Telegram | S1 |
 | **S3** | **Dòng tiền** | Không để user trả tiền mà mất trắng | Đối soát trừ-Lượng ↔ giao-hàng · auto-refund · vá slug `Date.now()` | S1 |
 | **S4** | **Job & cấu hình** | Không lặp lại vụ "chạy 14 ngày mà chưa gửi được gì" | Sổ lịch kỳ vọng · `skip` lặp = LỖI · preflight env | S1 |
@@ -264,6 +264,26 @@ toàn bộ lĩnh vực D (sao lưu/DR · tuân thủ · hỗ trợ user · SEO) 
 
 **Quy trình mỗi sprint:** tao giải thích gọn *làm để làm gì* → hỏi những điểm
 cần chốt → làm → 1 PR draft → CI xanh → Henry duyệt → sprint kế.
+
+### Ghi chú S1: phạm vi hoá ra NHỎ hơn "mọi route gọi LLM/ảnh"
+
+Henry chốt phủ mọi route có gọi LLM/ảnh — grep ra 15 route. Nhưng rà kỹ thì
+**8 trong số đó đã có tín hiệu outcome rồi**, gắn thêm là ghi trùng:
+
+| Nhóm | Route | Xử lý |
+|---|---|---|
+| Đã có `chatLogOutcome` (D2) | `v1/chat` + 3 kênh chat | Bỏ qua |
+| Đã có `withCronLog` | `cron-khao-luan`, `cron-master-write` | Bỏ qua |
+| Không phải tool người dùng | `embed`, `embed-tai-lieu`, `setup/hair-templates` | Bỏ qua |
+| **Thật sự đang mù** | `chan-dung-tien-kiep` · `chan-dung-vo-chong` · `lasotuvi` · `phong-thuy` · `tubinh` · `tuong-mat` · `xem-tuoi` | **7 route — phạm vi S1** |
+
+**Hạn chế đã biết** (ghi ra để đọc số ở S2/S5 không tưởng nhầm đã phủ kín):
+phản hồi dạng stream (SSE) chốt status 200 ngay khi mở stream, nên hỏng giữa
+chừng vẫn ghi `ok=true`. Phần lớn nhánh chat đã được `chatLogOutcome` phủ qua
+`/api/v1/chat`, nên đổi lấy phức tạp để bịt nốt là không đáng.
+
+`user_id` để null ở S1 — mục tiêu là "tool có hỏng không", chưa cần cắt theo
+người dùng. Thêm sau nếu S5 cần.
 
 ### Ghi chú: vì sao rate limit rời S0 sang S6
 

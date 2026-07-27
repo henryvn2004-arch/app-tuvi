@@ -10,6 +10,7 @@ import { buildChatContext, XUNG_HO_RULE, nguoiXemLine } from '@/lib/agent/prompt
 // 'chat.standalone_provider'). callLLMTools trả shape Anthropic → giữ nguyên
 // vòng lặp tool bên dưới; llmText cho luận 24 phần (phan).
 import { llmText, callLLMTools } from '@/lib/llm/complete';
+import { withToolOutcome } from '@/lib/ops/tool-outcome';
 
 // ─── System prompt ─────────────────────────────────────────────
 const SYSTEM_PROMPT = `Bạn là nhà luận giải Tử Vi Đẩu Số, phụng sự trang Tử Vi Minh Bảo.
@@ -415,7 +416,7 @@ Không giải thích lý thuyết. Đi thẳng vào tác động với người 
 // ─── Route handlers ───────────────────────────────────────────
 export async function OPTIONS() { return options(); }
 
-export async function POST(request: NextRequest) {
+async function runPost(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const action = searchParams.get('action');
   const body = await parseBody(request);
@@ -449,4 +450,10 @@ export async function POST(request: NextRequest) {
   } catch (e: unknown) {
     return err((e as Error).message);
   }
+}
+
+// S1 (track COO) — bọc để tự ghi lượt chạy thành công/hỏng vào `events`.
+// Chỉ QUAN SÁT: ngoại lệ vẫn ném lại nguyên vẹn, Response trả về không đổi.
+export async function POST(request: NextRequest) {
+  return withToolOutcome('lasotuvi', () => runPost(request));
 }

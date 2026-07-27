@@ -6,6 +6,7 @@ export const maxDuration = 300;
 // 'chat.standalone_provider'). Vision + streaming đều qua helper — giữ Anthropic
 // backup switch-được, không đổi prompt/parse/paywall.
 import { llmText, llmStreamResponse } from '@/lib/llm/complete';
+import { withToolOutcome } from '@/lib/ops/tool-outcome';
 
 // ── System Prompts ─────────────────────────────────────────────────────────
 const SP_DIEN = `Bạn là chuyên gia nhân tướng học (面相學) theo truyền thống phương Đông, am hiểu Ma Y Thần Tướng (麻衣神相), Liễu Trang Thần Tướng (柳莊神相) và Thủy Kính Tập (水鏡集).
@@ -1417,7 +1418,7 @@ const INSTRUCTIONS = {
   'khi-sac':     'Hãy luận KHÍ SẮC của khuôn mặt trong ảnh theo Ma Y Thần Tướng, đầy đủ 6 phần. Quan sát kỹ Ấn Đường và 5 vùng Ngũ Nhạc. Nếu khí sắc bình hoà, nói thẳng thay vì bịa drama. Nếu ảnh có dấu hiệu ánh sáng bất thường ảnh hưởng đánh giá sắc, phải nêu cảnh báo ở phần 1.',
 };
 
-export async function POST(request) {
+async function runPost(request) {
   try {
     const body = await request.json();
     const { image, mediaType = 'image/jpeg', irisNote = null, geoNote = null, action = 'dien-tuong' } = body;
@@ -1480,4 +1481,10 @@ export async function OPTIONS() {
       'Access-Control-Allow-Headers': 'Content-Type'
     }
   });
+}
+
+// S1 (track COO) — bọc để tự ghi lượt chạy thành công/hỏng vào `events`.
+// Chỉ QUAN SÁT: ngoại lệ vẫn ném lại nguyên vẹn, Response trả về không đổi.
+export async function POST(request) {
+  return withToolOutcome('tuong-mat', () => runPost(request));
 }

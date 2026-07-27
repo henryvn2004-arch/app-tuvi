@@ -9,6 +9,7 @@ export const maxDuration = 60;
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmText, llmStreamResponse } from '@/lib/llm/complete';
+import { withToolOutcome } from '@/lib/ops/tool-outcome';
 
 // ─── Chat system prompts ──────────────────────────────────────
 const CHAT_SYSTEM_LASO = (ctx: string) => `Bạn là chuyên gia Tử Vi Đẩu Số theo cổ pháp, luận giải sâu sắc, văn phong trí thức Hà Nội xưa — điềm đạm, súc tích, sâu sắc. Bạn đang trả lời trên nền tảng Tử Vi Minh Bảo.
@@ -275,7 +276,7 @@ Phân tích và gợi ý các khoảng ngày tốt trong tháng này cho sự ki
 // ─── Route handlers ───────────────────────────────────────────
 export async function OPTIONS() { return options(); }
 
-export async function POST(request: NextRequest) {
+async function runPost(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const body = await parseBody(request);
   const action = searchParams.get('action');
@@ -299,4 +300,10 @@ export async function POST(request: NextRequest) {
   } catch (e: unknown) {
     return err((e as Error).message);
   }
+}
+
+// S1 (track COO) — bọc để tự ghi lượt chạy thành công/hỏng vào `events`.
+// Chỉ QUAN SÁT: ngoại lệ vẫn ném lại nguyên vẹn, Response trả về không đổi.
+export async function POST(request: NextRequest) {
+  return withToolOutcome('xem-tuoi', () => runPost(request));
 }

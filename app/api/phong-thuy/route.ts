@@ -10,6 +10,7 @@ export const runtime = 'nodejs';
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmText, type LlmImage } from '@/lib/llm/complete';
+import { withToolOutcome } from '@/lib/ops/tool-outcome';
 
 const SUPABASE_URL  = process.env.SUPABASE_URL!;
 const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY!;
@@ -578,7 +579,7 @@ async function handleTrangPhucTryon(request: NextRequest, body: Record<string, u
 
 export async function OPTIONS() { return options(); }
 
-export async function POST(request: NextRequest) {
+async function runPost(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const action = searchParams.get('action') || 'analyze';
   const body = await parseBody(request) as Record<string, unknown>;
@@ -723,3 +724,9 @@ Trả về JSON thuần túy:
 }
 
 // ── End Trang Phục Theo Ngày ──────────────────────────────────────────────────
+
+// S1 (track COO) — bọc để tự ghi lượt chạy thành công/hỏng vào `events`.
+// Chỉ QUAN SÁT: ngoại lệ vẫn ném lại nguyên vẹn, Response trả về không đổi.
+export async function POST(request: NextRequest) {
+  return withToolOutcome('phong-thuy', () => runPost(request));
+}

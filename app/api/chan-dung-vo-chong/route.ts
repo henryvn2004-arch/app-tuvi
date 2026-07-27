@@ -21,6 +21,7 @@ import {
 import { PHU_THE_LUAN_GIAI_SYSTEM_PROMPT, buildPhuTheLuanGiaiPrompt } from '@/lib/agent/phu-the-luan-giai';
 import { generatePortraitImage } from '@/lib/image/openai-image';
 import type { BirthParams } from '@/lib/contract/v1';
+import { withToolOutcome } from '@/lib/ops/tool-outcome';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -444,7 +445,7 @@ export async function OPTIONS() {
   return options();
 }
 
-export async function POST(request: NextRequest) {
+async function runPost(request: NextRequest) {
   const body = await parseBody(request);
   return handleGenerate(request, body);
 }
@@ -454,4 +455,10 @@ export async function GET(request: NextRequest) {
   const action = searchParams.get('action') || 'history';
   if (action === 'history') return handleHistory(request);
   return err('Invalid action', 400);
+}
+
+// S1 (track COO) — bọc để tự ghi lượt chạy thành công/hỏng vào `events`.
+// Chỉ QUAN SÁT: ngoại lệ vẫn ném lại nguyên vẹn, Response trả về không đổi.
+export async function POST(request: NextRequest) {
+  return withToolOutcome('chan-dung-vo-chong', () => runPost(request));
 }
