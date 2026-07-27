@@ -8,7 +8,8 @@
 // credit_transactions.type cho MỌI lượt rail (bất kể scenario/lá số), nên
 // bucket cost này khớp thẳng với bucket doanh thu thật khi tính biên LN.
 // Ghi vào events (event_type='llm_usage') — cùng bảng dùng chung toàn hệ thống,
-// không cần bảng riêng.
+// không cần bảng riêng. Cùng file còn logLlmParseFail() ghi bản thô khi output
+// LLM không parse được (event_type='llm_parse_fail') — chẩn đoán, không phải chi phí.
 //
 // logImageUsage() — thêm cho route "Chân Dung Vợ Chồng" (gpt-image-1, text-to-
 // image): cấu trúc giá 3 loại token (text input / image input / image output)
@@ -102,6 +103,40 @@ export async function logImageUsage(toolId: string, model: string, usage: ImageU
         event_type: 'llm_usage',
         tool_id: toolId,
         meta: { model, ...usage, cost_vnd: calcImageCostVnd(model, usage) },
+      }),
+    });
+  } catch {
+    /* best-effort */
+  }
+}
+
+/** Ghi lại BẢN THÔ khi parse JSON của LLM hỏng (event_type='llm_parse_fail').
+ *
+ * Lý do tồn tại: log runtime Vercel không phải lúc nào cũng đọc được, mà đây
+ * đúng loại lỗi không tái hiện nổi nếu không có chính chuỗi model đã trả. Cắt
+ * đầu/đuôi (không lưu nguyên bản) — đủ để phân biệt "lạc định dạng" với "bị cắt
+ * giữa chừng", không phình bảng events. Best-effort, không throw. */
+export async function logLlmParseFail(
+  toolId: string,
+  model: string,
+  raw: string,
+  attempt: number,
+): Promise<void> {
+  if (!SUPABASE_URL || !SUPABASE_KEY) return;
+  const t = String(raw || '');
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/events`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+        Prefer: 'return=minimal',
+      },
+      body: JSON.stringify({
+        event_type: 'llm_parse_fail',
+        tool_id: toolId,
+        meta: { model, attempt, len: t.length, head: t.slice(0, 700), tail: t.slice(-400) },
       }),
     });
   } catch {

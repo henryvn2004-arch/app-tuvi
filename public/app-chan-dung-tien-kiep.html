@@ -107,7 +107,7 @@
                     <button class="btn" onclick="downloadResult()">⬇ Tải Ảnh</button>
                   </div>
                 </div>
-                <div class="cdtk-mirror">
+                <div class="cdtk-mirror" id="moTaBlock">
                   <div class="cdtk-eyebrow" id="moTaTitle">Mô tả nhân vật</div>
                   <p id="moTaNhanVat"></p>
                 </div>
@@ -338,6 +338,9 @@ function renderStory(data) {
   document.getElementById('moTaTitle').textContent =
     'Mô tả ' + (data.characterName || 'nhân vật');
   document.getElementById('moTaNhanVat').textContent = data.moTaNhanVat || '';
+  // Thiếu phần mô tả (LLM trả không đủ) → giấu cả khối, đừng để tiêu đề trơ
+  // trên một đoạn rỗng. Truyện vẫn hiển thị bình thường.
+  document.getElementById('moTaBlock').style.display = data.moTaNhanVat ? '' : 'none';
 
   document.getElementById('actList').innerHTML = (data.acts || []).map(function (a) {
     var badge = ROLE_BADGE[a.role];
