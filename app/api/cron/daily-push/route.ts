@@ -7,6 +7,11 @@
 // Trơ nếu chưa cấu hình: thiếu FIREBASE_SERVICE_ACCOUNT hoặc 0 token → no-op.
 // Bảo vệ: chỉ chạy khi Vercel cron (Authorization: Bearer CRON_SECRET) hoặc
 // header x-vercel-cron. Xem _patches/migration-push-tokens.sql.
+// Route đọc request.headers (auth CRON_SECRET) nên KHÔNG prerender tĩnh được.
+// Thiếu dòng này, Next 14 vẫn thử prerender lúc build → withCronLog bắt được
+// lỗi "Dynamic server usage" rồi ghi vào cron_runs, sinh hàng trăm dòng lỗi
+// GIẢ mỗi lần deploy và chôn vùi lỗi thật (S0 track COO).
+export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 export const maxDuration = 60;
 

@@ -7,6 +7,7 @@ export const runtime = 'nodejs';
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
+import { toolPaymentDenied } from '@/lib/billing/credits';
 import { llmTextFull } from '@/lib/llm/complete';
 import { logLlmUsage, logImageUsage } from '@/lib/agent/usage';
 import { computeLaso, formatLaSoV2 } from '@/lib/engine/laso';
@@ -57,6 +58,15 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
 
   const birth = body.birth as BirthParams | undefined;
   if (!birth) return err('Thiếu thông tin ngày sinh.', 400);
+
+  // Chốt chặn thanh toán PHÍA SERVER (S0 track COO) — xem chú thích cùng loại
+  // ở app/api/chan-dung-tien-kiep/route.ts.
+  const denied = await toolPaymentDenied(
+    'chan-dung-vo-chong',
+    auth.user.id,
+    String(body.slug || ''),
+  );
+  if (denied) return err(denied, 402);
 
   const lasoRes = computeLaso(birth);
   if (!lasoRes.ok || !lasoRes.ls) return err(lasoRes.error || 'Không lập được lá số.', 400);

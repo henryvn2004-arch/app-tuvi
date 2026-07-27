@@ -11,6 +11,7 @@ import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { getPackage, getPackages } from '@/lib/billing/packages';
 import { getToolPrice } from '@/lib/billing/pricing';
+import { hasSlugAccess } from '@/lib/billing/credits';
 import { logCronRun } from '@/lib/cron/log';
 import { tgSendMessage } from '@/lib/channels/telegram';
 import { parseFirebaseServiceAccount, sendFcmPush } from '@/lib/channels/push';
@@ -111,14 +112,9 @@ async function logTransaction(p: {
   });
 }
 
-async function hasSlugAccess(userId: string, slug: string): Promise<boolean> {
-  const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/credit_transactions?user_id=eq.${encodeURIComponent(userId)}&slug=eq.${encodeURIComponent(slug)}&amount=lt.0&limit=1&select=id`,
-    { headers: SB_HEADERS }
-  );
-  if (!res.ok) return false;
-  return (await res.json()).length > 0;
-}
+// hasSlugAccess đã chuyển sang lib/billing/credits.ts (nguồn DUY NHẤT) để các
+// route tool trả phí dùng chung cho chốt chặn thanh toán server-side — xem
+// `toolPaymentDenied`. Logic không đổi.
 
 // ── Admin: verify token belongs to an active admin_users row ──
 // Nhiều admin (Google sign-in), không còn hardcode 1 email — tra bảng

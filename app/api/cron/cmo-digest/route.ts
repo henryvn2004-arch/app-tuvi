@@ -4,6 +4,11 @@
 // tóm tắt, gửi Telegram cho admin qua CHÍNH kênh đã dùng cho alert đăng nhập
 // (ADMIN_TELEGRAM_CHAT_ID, lib/admin/alert.ts) — không cần thêm env mới.
 // Read-only tuyệt đối, no-op an toàn nếu thiếu cấu hình.
+// Route đọc request.headers (auth CRON_SECRET) nên KHÔNG prerender tĩnh được.
+// Thiếu dòng này, Next 14 vẫn thử prerender lúc build → withCronLog bắt được
+// lỗi "Dynamic server usage" rồi ghi vào cron_runs, sinh hàng trăm dòng lỗi
+// GIẢ mỗi lần deploy và chôn vùi lỗi thật (S0 track COO).
+export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 export const maxDuration = 60;
 

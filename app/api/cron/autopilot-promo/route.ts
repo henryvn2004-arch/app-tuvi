@@ -3,6 +3,11 @@
 // giữ chân cho user sắp rời bỏ (xem lib/marketing/autopilot-promo.ts). MẶC
 // ĐỊNH tắt (budgetCreditsPerRun=0 trong app_config['marketing.autopilot_promo'])
 // — Henry phải tự đặt budget dương mới có hiệu lực, kể cả khi autopilot_enabled=true.
+// Route đọc request.headers (auth CRON_SECRET) nên KHÔNG prerender tĩnh được.
+// Thiếu dòng này, Next 14 vẫn thử prerender lúc build → withCronLog bắt được
+// lỗi "Dynamic server usage" rồi ghi vào cron_runs, sinh hàng trăm dòng lỗi
+// GIẢ mỗi lần deploy và chôn vùi lỗi thật (S0 track COO).
+export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 export const maxDuration = 60;
 

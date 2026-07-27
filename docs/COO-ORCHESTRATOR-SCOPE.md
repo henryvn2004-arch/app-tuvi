@@ -249,7 +249,7 @@ Hai hành động đáng giá nhất ở mức 3:
 
 | Sprint | Tên | Mục đích một câu | Đầu ra | Phụ thuộc |
 |---|---|---|---|---|
-| **S0** 🚨 | **Cầm máu** | Bịt 3 lỗ đang khai thác được + 2 lỗi vận hành | SQL `REVOKE` · kiểm tra thanh toán server-side · rate limit · `force-dynamic` | — |
+| **S0** 🚨 | **Cầm máu** | Bịt lỗ đang khai thác được + dọn nhiễu giám sát | ✅ SQL `REVOKE` · ✅ chốt thanh toán server-side · ✅ `force-dynamic` · ⏭️ rate limit → dời S6 (xem ghi chú) | — |
 | **S1** | **Giác quan** | Cho hệ thống biết đau ở đâu | `tool_error` + helper `logToolOutcome()` gắn vào tool trả phí & lưu lượng cao | S0 |
 | **S2** | **Canary** ⭐ | *Break là báo NGAY* — yêu cầu gốc | Cron tự chạy tool thật + cảnh báo Telegram | S1 |
 | **S3** | **Dòng tiền** | Không để user trả tiền mà mất trắng | Đối soát trừ-Lượng ↔ giao-hàng · auto-refund · vá slug `Date.now()` | S1 |
@@ -264,6 +264,29 @@ toàn bộ lĩnh vực D (sao lưu/DR · tuân thủ · hỗ trợ user · SEO) 
 
 **Quy trình mỗi sprint:** tao giải thích gọn *làm để làm gì* → hỏi những điểm
 cần chốt → làm → 1 PR draft → CI xanh → Henry duyệt → sprint kế.
+
+### Ghi chú: vì sao rate limit rời S0 sang S6
+
+Lúc lên kế hoạch, rate limit là phanh chính cho các endpoint tốn tiền. **Chốt
+thanh toán server-side (làm ngay trong S0) đã đổi điều đó:**
+
+| Bề mặt | Sau S0 |
+|---|---|
+| 2 tool sinh ảnh | Đã bị chốt thanh toán ở server → **hệ thống Lượng chính là bộ giới hạn** |
+| `/api/v1/chat` | Vốn đã trừ Lượng server-side (`deductCredits`) |
+| `/api/track` | **Vẫn hở** — không cần auth, và là đường đầu độc số liệu autopilot |
+
+Rate limit giờ là phòng thủ lớp hai, không còn là thứ cầm máu. Mà làm cho tử tế
+thì cần **bảng trạng thái dùng chung** (serverless không giữ bộ đếm trong RAM
+được) — đúng là hạ tầng của S6, nơi nó được dùng lại cho phát hiện cày Lượng và
+gian lận giới thiệu. Nhét vào S0 là dựng hạ tầng cho một sprint cầm máu:
+vi phạm luật chống phình số 4.
+
+**Lỗ còn lại đã biết sau S0** (cố ý chấp nhận, đóng ở S6):
+- `/api/track` chưa có phanh.
+- Cửa sổ 20 phút của đường lùi trong `toolPaymentDenied` cho phép dùng lại
+  trong cùng lượt mua. So với lỗ đang vá (miễn phí VÔ HẠN, VĨNH VIỄN) thì đây
+  là thu hẹp rất lớn, không phải để ngỏ.
 
 ---
 

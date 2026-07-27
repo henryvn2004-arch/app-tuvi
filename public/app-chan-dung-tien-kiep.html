@@ -240,7 +240,9 @@ async function _doGenerate() {
     return fetch('/api/chan-dung-tien-kiep', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
-      body: JSON.stringify({ birth: birth, phase: phase }),
+      // slug = mã lượt mua; server đối chiếu lại với credit_transactions để tự
+      // xác minh đã thanh toán, không tin riêng phía client (S0 track COO).
+      body: JSON.stringify({ birth: birth, phase: phase, slug: _currentSlug }),
     });
   };
 

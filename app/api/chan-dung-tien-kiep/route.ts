@@ -14,6 +14,7 @@ export const runtime = 'nodejs';
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
+import { toolPaymentDenied } from '@/lib/billing/credits';
 import { llmTextFull } from '@/lib/llm/complete';
 import { logLlmUsage, logImageUsage } from '@/lib/agent/usage';
 import { computeLaso, type Laso } from '@/lib/engine/laso';
@@ -349,6 +350,18 @@ export async function POST(request: NextRequest) {
   const body = await parseBody(request);
   const birth = body.birth as BirthParams | undefined;
   if (!birth) return err('Thiếu thông tin ngày sinh.', 400);
+
+  // Chốt chặn thanh toán PHÍA SERVER (S0 track COO). Trước đây route chỉ kiểm
+  // "user hợp lệ" rồi chạy luôn, còn việc trừ Lượng nằm hoàn toàn ở client —
+  // nên gọi thẳng endpoint này là sinh ảnh + truyện miễn phí không giới hạn.
+  // Dùng cùng quy ước slug với paywall nên hai pha story/image chạy song song
+  // của CÙNG một lượt mua vẫn qua được.
+  const denied = await toolPaymentDenied(
+    'chan-dung-tien-kiep',
+    auth.user.id,
+    String(body.slug || ''),
+  );
+  if (denied) return err(denied, 402);
 
   const phase = String(body.phase || 'story');
   const eraId = body.era ? String(body.era) : undefined;
