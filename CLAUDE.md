@@ -259,11 +259,14 @@ bật; khi bật, cùng logic, chỉ khác bước cuối áp dụng thật (pre
 Plan này là OUTPUT của phiên; code làm ở session sau, mỗi PR reset branch trên main.
 
 ### 🔖 RESUME HERE (track viral)
-**V2.1 + V2.4 ĐÃ XONG (PR #314)** — mắt xích đứt đã nối: link chia sẻ nay mang mã
+**V2.1 + V2.4 XONG (PR #314)** — mắt xích đứt đã nối: link chia sẻ nay mang mã
 giới thiệu, và toàn bộ vòng lặp đã có chỗ đo (panel admin "Vòng Lặp Viral").
-**Việc tiếp theo: V2.2** (set 4 config đã chốt — thuần SQL, không cần deploy —
-+ cầu dao ngân sách ảnh free), rồi **V2.3** (chỗ xin mời bạn). Số liệu sẽ tự chảy
-vào panel khi có người thật dùng; trước đó K-factor còn 0 là ĐÚNG, không phải lỗi.
+**V2.2 XONG (PR sau đó)** — bộ số đã chốt đã vào prod (quà 25 · thưởng mời 15 ·
+trần mời 15) + cầu dao ngân sách ảnh free 6 lượt/ngày + 2 lượt rail tặng sau khi
+vẽ. **Việc tiếp theo: V2.3** (chỗ xin mời bạn + mục referral ở `profile.html`),
+rồi **V4** (mồi phân phối — viral là bộ khuếch đại, không phải nguồn).
+Số liệu tự chảy vào panel khi có người thật dùng; trước đó K-factor còn 0 là
+ĐÚNG, không phải lỗi.
 
 ### 🔴 PHÁT HIỆN CHÍNH — vòng lặp đứt đúng 1 mắt xích
 Link chia sẻ `/ket-qua/<id>` **KHÔNG mang mã giới thiệu**; nút CTA "Thử ngay →" trỏ
@@ -391,6 +394,63 @@ Henry có thể bỏ nếu không ưng.
   (`viral.free_gen_daily_cap`, mặc định suy từ $15/tháng ≈ 6/ngày) → chạm trần thì
   thông điệp tử tế ("hết lượt tặng hôm nay, quay lại mai hoặc nạp Lượng"), KHÔNG ném lỗi.
 - Tặng 2 lượt rail free sau khi vẽ xong (xem tension ở trên).
+
+### ✅ V2.2 XONG (PR mới, session này) — sửa số + cầu dao ngân sách
+- **4 config đã set thẳng prod** (`_patches/migration-viral-budget.sql`, ✅ ĐÃ CHẠY
+  qua Supabase MCP): `credits.signup_bonus_variants=[25]` (dừng A/B `[20,30,40]`),
+  `referral.signup_bonus_referrer=15` (từ 10), `referral.signup_reward_cap=15`
+  (từ 20). Verify `handle_new_user_signup` ăn được mảng 1 phần tử. **Hệ quả tức
+  thì: copy CTA trang `/ket-qua` tự đổi sang "25 Lượng — đủ dùng công cụ này"**
+  cho tiền kiếp (giá 25) mà KHÔNG cần deploy — đúng như V2.1 đã tính trước.
+- **Cầu dao ngân sách ảnh free** — `viral_free_gen_gate(user, tool)` +
+  `lib/billing/viral-budget.ts`. Chặn ở **`handleDeduct`**, TRƯỚC `deduct_credits`:
+  đây là điểm cuối cùng còn chặn được mà chưa đụng ví ai. Chặn ở route tool thì
+  đã trừ Lượng rồi — người dùng mất Lượng để đổi lấy một lời từ chối.
+  - **"Free" = lượt của người CHƯA TỪNG NẠP** (`credit_transactions type='topup'`).
+    Lượng của họ 100% là quà (signup + thưởng giới thiệu) nên mỗi lượt gen là
+    tiền túi mình bỏ ra. Ai đã nạp đang tiêu tiền của chính họ → KHÔNG BAO GIỜ
+    bị chặn. Đây là lý do trần này an toàn: nó không bao giờ chặn doanh thu.
+  - Đếm theo `credit_transactions` (nơi lượt dùng được ghi TRƯỚC khi gọi model),
+    khớp CẢ `slug` (`<tool_id>-...`) LẪN `type` **cả 2 biến thể gạch-ngang và
+    gạch-dưới** — prod có đủ `use_chan_dung_vo_chong`, `use_chan-dung-vo-chong`
+    và `use_chan-dung-tien-kiep`; bỏ sót một dạng là đếm hụt (đã verify trên dữ
+    liệu thật). Ngày tính theo **giờ VN**, không phải UTC.
+  - Config: `viral.free_gen_daily_cap=6` (suy từ $15/tháng ÷ ~$0.09/lượt ÷ 30),
+    `viral.free_gen_tools` (chỉ 2 tool ảnh đắt tiền — tool chữ rẻ hơn 2 bậc,
+    chặn chúng chỉ hỏng trải nghiệm mà không tiết kiệm bao nhiêu),
+    `viral.free_gen_monthly_usd=15` (ghi lại để biết số 6 suy từ đâu).
+    **Trần ≤ 0 = TẮT cầu dao** (Henry mở van nhanh không cần sửa code).
+  - **FAIL-OPEN có chủ đích**: lỗi RPC/mạng → cho qua. Cầu dao này giữ NGÂN SÁCH
+    chứ không giữ an toàn — chặn oan người đã trả tiền vì Supabase chớp một nhịp
+    thì tệ hơn lỡ vài lượt quá trần.
+  - `tuvi-paywall.js`: `capReached` → modal **tử tế** dùng lại khung `.tpw-*` của
+    `_insufficient` ("Hết lượt tặng hôm nay · Chưa trừ Lượng nào của bạn" + lối
+    nạp Lượng), KHÔNG phải `alert('Lỗi: …')` làm người ta tưởng hỏng.
+- **2 lượt rail tặng sau khi vẽ xong** — vá "tension" đã flag: quà 25 − giá tiền
+  kiếp 25 = **0 Lượng**, mà rail tốn 5/lượt → người mới không hỏi được nhân vật
+  câu nào, trong khi PR #306 vừa biến rail thành upsell chính của tool.
+  - **CỐ Ý KHÔNG tặng bằng Lượng**: Lượng tiêu được vào bất cứ đâu nên tặng 10
+    Lượng sau MỖI lần vẽ là mở đường tích góp thành một lượt vẽ free nữa. Quầy
+    đếm riêng `rail_free_turns` chỉ tiêu được ở rail, không quy đổi ngược.
+  - `rail_free_grant` **ĐẶT** về mức n chứ không CỘNG DỒN → vẽ 3 lần không thành
+    6 lượt. `rail_free_consume` atomic (`UPDATE … WHERE remaining > 0`).
+  - `/api/v1/chat`: tiêu lượt tặng TRƯỚC Lượng; còn lượt tặng thì không chặn dù
+    ví rỗng. **KHÔNG ghi `credit_transactions`** khi tiêu lượt tặng — không có
+    Lượng nào đổi chủ, ghi giao dịch 0 đồng chỉ làm bẩn báo cáo doanh thu D3.
+- **Dọn nợ nhỏ:** `getConfig` (đọc 1 khoá `app_config`) chuyển từ
+  `lib/marketing/autopilot.ts` sang `lib/config/appConfig.ts` (`getConfigValue`)
+  để billing không phải import marketing; tên cũ giữ làm alias.
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi · `prettier --check .` sạch ·
+  `node --check` paywall · **RPC test trên prod**: grant(2)→2, grant(2) lần nữa
+  vẫn 2 (không cộng dồn), consume ×2 = true/true, lần 3 = false, `granted_total`
+  đúng 2 · **nhánh chạm trần** kiểm bằng 6 lượt gen giả trong transaction rồi
+  `RAISE EXCEPTION` để rollback (`used:0→allowed` ⇒ `used:6/cap:6→daily_cap`,
+  verify prod **0 dòng rác còn sót**) · **Playwright**: chạm trần → hiện modal
+  đúng chữ, KHÔNG alert thô, và **callback sinh ảnh KHÔNG chạy** (không tốn
+  tiền model).
+- **CÒN LẠI:** theo dõi vài ngày xem trần 6/ngày có chạm thật không — chạm sớm
+  mỗi ngày nghĩa là nhu cầu thật đang vượt ngân sách thí nghiệm, lúc đó xét điều
+  kiện nâng trần đã chốt (K ≥ 0,5 và ≤ 6.000đ/user trong 2 tuần liên tiếp).
 
 **V2.3 — Chỗ xin mời bạn (không có chỗ này thì không ai mời):**
 - Ngay sau khi xem xong chân dung + số dư không đủ lượt nữa → hiện: *"Còn X Lượng.

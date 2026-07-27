@@ -266,11 +266,34 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
           return;
         }
         if (data.insufficientBalance) { _insufficient(cost, balance); return; }
+        // Chạm trần lượt dùng thử miễn phí trong ngày (cầu dao ngân sách ảnh
+        // free). KHÔNG phải lỗi và KHÔNG mất Lượng — server chặn trước khi trừ
+        // — nên nói tử tế, đừng ném alert 'Lỗi:' làm người ta tưởng hỏng.
+        if (data.capReached) { _capReached(data.message); return; }
         alert('Lỗi: ' + (data.error || 'Vui lòng thử lại.'));
       } catch(e) {
         alert('Lỗi kết nối: ' + e.message);
       }
     });
+  }
+
+  // Dùng lại đúng khung modal của _insufficient (tpw-*) — cùng cảm giác, không
+  // đẻ thêm bộ class/CSS riêng cho một thông báo.
+  function _capReached(msg) {
+    const text = msg || 'Hôm nay số lượt dùng thử miễn phí đã hết. Bạn quay lại vào ngày mai nhé.';
+    _open(
+      '<div class="tpw-hd"><div class="tpw-hd-t">⊙ Hết lượt tặng hôm nay</div><div class="tpw-hd-s">Chưa trừ Lượng nào của bạn</div></div>' +
+      '<div class="tpw-center">' +
+        '<div class="tpw-msg">' + _esc(text) + '</div>' +
+        '<a class="tpw-btn topup" href="/topup.html" onclick="try{window.Track&&window.Track.event&&window.Track.event(\'topup_start\',{meta:{from:\'free_cap\'}})}catch(e){};TuviPaywall._close()">Nạp Lượng →</a>' +
+      '</div>' +
+      '<div class="tpw-ft"><button class="tpw-btn cancel" onclick="TuviPaywall._close()">Để mai</button></div>'
+    );
+  }
+
+  function _esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
   // ── Silent flow (cho chat: trừ ngầm, KHÔNG confirm modal) ─────

@@ -155,3 +155,29 @@ function applyField(cfg: ChatConfig, field: keyof ChatConfig, value: unknown) {
 export function invalidateChatConfig() {
   cache = null;
 }
+
+/**
+ * Đọc MỘT khoá `app_config` bất kỳ (ngoài bộ khoá `chat.*` của ChatConfig).
+ *
+ * Ở đây thay vì trong module nghiệp vụ nào đó vì nhiều mảng đều cần
+ * (marketing autopilot, cầu dao ngân sách viral…) — để mỗi nơi tự viết lại một
+ * bản `fetch app_config` là kiểu trùng lặp chắc chắn sẽ trôi lệch nhau.
+ * KHÔNG cache: các khoá này được đọc thưa, và đọc số cũ ở đây (trần ngân sách,
+ * công tắc) nguy hiểm hơn nhiều so với tốn thêm một lượt mạng.
+ * Không bao giờ throw — lỗi/thiếu khoá đều trả `fallback`.
+ */
+export async function getConfigValue<T>(key: string, fallback: T): Promise<T> {
+  if (!SUPABASE_URL || !SUPABASE_KEY) return fallback;
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/app_config?key=eq.${encodeURIComponent(key)}&select=value`,
+      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }, cache: 'no-store' },
+    );
+    if (!res.ok) return fallback;
+    const rows = (await res.json()) as { value?: unknown }[];
+    const v = rows?.[0]?.value;
+    return v == null ? fallback : (v as T);
+  } catch {
+    return fallback;
+  }
+}

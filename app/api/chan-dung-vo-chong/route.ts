@@ -10,6 +10,7 @@ import { ok, err, options, parseBody } from '@/lib/cors';
 import { toolPaymentDenied } from '@/lib/billing/credits';
 import { llmTextFull } from '@/lib/llm/complete';
 import { logLlmUsage, logImageUsage } from '@/lib/agent/usage';
+import { railFreeGrant, railFreeTurnsPerGen } from '@/lib/billing/viral-budget';
 import { computeLaso, formatLaSoV2 } from '@/lib/engine/laso';
 import {
   computeSpouseMorphology,
@@ -413,6 +414,9 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
       phu_the_luan_giai: phuTheLuanGiai || null,
     }),
   }).catch(() => {});
+
+  // Vẽ xong → tặng lượt rail miễn phí (V2.2, xem chan-dung-tien-kiep/route.ts).
+  void railFreeTurnsPerGen().then((n) => railFreeGrant(auth.user.id, n)).catch(() => {});
 
   return ok({
     success: true,

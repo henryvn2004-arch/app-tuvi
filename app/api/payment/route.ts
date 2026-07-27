@@ -12,6 +12,7 @@ import { ok, err, options, parseBody } from '@/lib/cors';
 import { getPackage, getPackages } from '@/lib/billing/packages';
 import { getToolPrice } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
+import { freeGenGate, FREE_GEN_CAP_MESSAGE } from '@/lib/billing/viral-budget';
 import { logCronRun } from '@/lib/cron/log';
 import { tgSendMessage } from '@/lib/channels/telegram';
 import { parseFirebaseServiceAccount, sendFcmPush } from '@/lib/channels/push';
@@ -329,6 +330,19 @@ async function handleDeduct(request: NextRequest, body: Record<string, unknown>)
     if (slug) {
       const already = await hasSlugAccess(user.id, slug);
       if (already) return ok({ success: true, alreadyPaid: true });
+    }
+
+    // ── CẦU DAO NGÂN SÁCH ẢNH FREE (V2.2) ──
+    // Chặn ở ĐÂY, trước `deduct_credits`: đây là điểm cuối cùng còn chặn được
+    // mà chưa đụng vào ví ai. Chặn ở route tool thì đã trừ Lượng rồi — người
+    // dùng mất Lượng để đổi lấy một lời từ chối.
+    // Chỉ chạm tới người tiêu Lượng QUÀ TẶNG; ai đã nạp không bao giờ bị chặn.
+    if (product) {
+      const gate = await freeGenGate(user.id, product);
+      if (!gate.allowed) {
+        return ok({ success: false, capReached: true, message: FREE_GEN_CAP_MESSAGE,
+          balance: await getBalance(user.id) });
+      }
     }
 
     let newBal: number;

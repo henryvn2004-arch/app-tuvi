@@ -17,6 +17,7 @@ import { ok, err, options, parseBody } from '@/lib/cors';
 import { toolPaymentDenied } from '@/lib/billing/credits';
 import { llmTextFull } from '@/lib/llm/complete';
 import { logLlmUsage, logImageUsage, logLlmParseFail } from '@/lib/agent/usage';
+import { railFreeGrant, railFreeTurnsPerGen } from '@/lib/billing/viral-budget';
 import { computeLaso, type Laso } from '@/lib/engine/laso';
 import { computePastLife, resolveEra, type PastLifeProfile } from '@/lib/engine/past-life';
 import { computeMorphologyForPalace } from '@/lib/engine/portrait';
@@ -356,6 +357,11 @@ async function handleImage(userId: string, birth: BirthParams, eraId?: string) {
       image_url: imageUrl,
     }),
   }).catch(() => {});
+
+  // Vẽ xong → tặng lượt rail miễn phí (V2.2). Người mới tiêu hết quà đăng ký
+  // cho đúng lượt vẽ này, mà hỏi nhân vật qua rail mới là chỗ tool bán được —
+  // hết sạch Lượng ngay lúc vừa xem xong ảnh là chặn đúng khúc quan trọng nhất.
+  void railFreeTurnsPerGen().then((n) => railFreeGrant(userId, n)).catch(() => {});
 
   return ok({
     success: true,
