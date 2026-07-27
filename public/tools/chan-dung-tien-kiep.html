@@ -122,7 +122,7 @@
                 <button class="btn-submit" style="background:transparent;color:var(--navy);border:1.5px solid var(--navy)" onclick="regenerate()">↻ Làm Lại</button>
               </div>
             </div>
-            <div class="cdtk-mirror">
+            <div class="cdtk-mirror" id="moTaBlock">
               <div class="cdtk-pt-title" id="moTaTitle" style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9A7B3A;margin:0 0 8px">Mô tả nhân vật</div>
               <p id="moTaNhanVat"></p>
             </div>
@@ -349,6 +349,9 @@ function renderStory(data) {
   document.getElementById('moTaTitle').textContent =
     'Mô tả ' + (data.characterName || 'nhân vật');
   document.getElementById('moTaNhanVat').textContent = data.moTaNhanVat || '';
+  // Thiếu phần mô tả (LLM trả không đủ) → giấu cả khối, đừng để tiêu đề trơ
+  // trên một đoạn rỗng. Truyện vẫn hiển thị bình thường.
+  document.getElementById('moTaBlock').style.display = data.moTaNhanVat ? '' : 'none';
 
   document.getElementById('actList').innerHTML = (data.acts || []).map((a) => {
     const badge = ROLE_BADGE[a.role];

@@ -42,6 +42,15 @@ export interface LlmTextOpts {
   images?: LlmImage[];
   maxTokens?: number;
   temperature?: number;
+  /** Ép model trả JSON hợp lệ ở TẦNG API (Gemini responseMimeType /
+   * Anthropic prefill), thay vì chỉ dặn trong prompt rồi tự parse. Dặn suông
+   * không chặn được lỗi cú pháp thật sự hay gặp: dấu " trong lời thoại không
+   * escape, xuống dòng thật giữa chuỗi. */
+  json?: boolean;
+  /** Schema (OpenAPI subset của Gemini) đi kèm `json` — ép luôn ĐÚNG SHAPE,
+   * không chỉ đúng cú pháp. Bỏ qua với Anthropic (API không có). */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  jsonSchema?: any;
 }
 
 // ─── Gemini ────────────────────────────────────────────────────
@@ -75,6 +84,10 @@ function buildGeminiBody(o: LlmTextOpts, maxTokens: number) {
     },
   };
   if (o.system) body.system_instruction = { parts: [{ text: o.system }] };
+  if (o.json) {
+    body.generationConfig.responseMimeType = 'application/json';
+    if (o.jsonSchema) body.generationConfig.responseSchema = o.jsonSchema;
+  }
   return body;
 }
 
@@ -141,6 +154,11 @@ function buildAnthropicBody(o: LlmTextOpts, maxTokens: number, stream: boolean) 
   } else {
     messages = [{ role: 'user', content: o.prompt || '' }];
   }
+  // Anthropic không có JSON mode; tương đương gần nhất là PREFILL — mở sẵn lượt
+  // trả lời bằng '{' để model buộc phải viết tiếp thân JSON, hết đường thêm câu
+  // dẫn. Chỉ dùng cho non-stream (nhánh streaming không parse JSON).
+  // `anthropicText` nối lại '{' đã bị prefill nuốt mất.
+  if (o.json && !stream) messages = [...messages, { role: 'assistant', content: '{' }];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const body: any = { model: ANTHROPIC_MODEL, max_tokens: maxTokens, messages };
   if (o.system) body.system = o.system;
@@ -161,7 +179,9 @@ async function anthropicText(o: LlmTextOpts, maxTokens: number): Promise<RawLlmR
   const t = (j?.content as any[] | undefined)?.map((b) => b.text).filter(Boolean).join('') || '';
   if (!t) throw new Error('anthropic: completion rỗng');
   return {
-    text: t,
+    // Nối lại dấu '{' của prefill (xem buildAnthropicBody) — API chỉ trả phần
+    // model viết TIẾP, không lặp lại phần đã mồi.
+    text: o.json ? '{' + t : t,
     usage: {
       input_tokens: j?.usage?.input_tokens || 0,
       output_tokens: j?.usage?.output_tokens || 0,

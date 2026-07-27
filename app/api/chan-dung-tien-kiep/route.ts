@@ -15,7 +15,7 @@ export const runtime = 'nodejs';
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmTextFull } from '@/lib/llm/complete';
-import { logLlmUsage, logImageUsage } from '@/lib/agent/usage';
+import { logLlmUsage, logImageUsage, logLlmParseFail } from '@/lib/agent/usage';
 import { computeLaso, type Laso } from '@/lib/engine/laso';
 import { computePastLife, resolveEra, type PastLifeProfile } from '@/lib/engine/past-life';
 import { computeMorphologyForPalace } from '@/lib/engine/portrait';
@@ -122,6 +122,28 @@ interface StoryAct {
   text?: string;
 }
 
+// Schema ép ở TẦNG API (Gemini responseSchema) — khác hẳn việc dặn shape trong
+// prompt: model không còn đường trả thiếu khoá hay kèm câu dẫn ngoài JSON.
+// `title`/`text` để required vì thiếu một trong hai là hồi đó rỗng trên màn hình.
+const STORY_SCHEMA = {
+  type: 'OBJECT',
+  properties: {
+    biDanh: { type: 'STRING' },
+    moTaNhanVat: { type: 'STRING' },
+    acts: {
+      type: 'ARRAY',
+      items: {
+        type: 'OBJECT',
+        properties: { title: { type: 'STRING' }, text: { type: 'STRING' } },
+        required: ['title', 'text'],
+      },
+    },
+    ketLuan: { type: 'STRING' },
+  },
+  required: ['biDanh', 'moTaNhanVat', 'acts', 'ketLuan'],
+  propertyOrdering: ['biDanh', 'moTaNhanVat', 'acts', 'ketLuan'],
+};
+
 async function handleStory(birth: BirthParams, eraId?: string) {
   const built = buildProfile(birth, eraId);
   if (!built.ok) return err(built.error, 400);
@@ -135,10 +157,14 @@ async function handleStory(birth: BirthParams, eraId?: string) {
   };
   // Type guard (không phải boolean thuần) để TS narrow được `parsed` sau khi
   // kiểm — nếu không thì mọi chỗ đọc parsed.acts phía dưới đều báo possibly null.
-  const okShape = (v: StoryJson | null): v is StoryJson & { moTaNhanVat: string; acts: StoryAct[] } =>
-    !!v?.moTaNhanVat && Array.isArray(v.acts) && v.acts.length > 0;
+  //
+  // CHỈ đòi `acts`: truyện là món hàng chính. moTaNhanVat thiếu thì giấu khối đó
+  // đi (client đã xử lý) chứ KHÔNG vứt cả lượt đã trả tiền — trước đây thiếu nó
+  // là người dùng mất Lượng mà không nhận được gì.
+  const okShape = (v: StoryJson | null): v is StoryJson & { acts: StoryAct[] } =>
+    Array.isArray(v?.acts) && v.acts.length > 0;
 
-  const askStory = async (nudge: boolean): Promise<{ raw: string } | null> => {
+  const askStory = async (nudge: boolean): Promise<{ raw: string; model: string } | null> => {
     try {
       const llmRes = await llmTextFull({
         system: PAST_LIFE_STORY_SYSTEM_PROMPT,
@@ -147,6 +173,11 @@ async function handleStory(birth: BirthParams, eraId?: string) {
           (nudge
             ? '\n\nLƯU Ý: lượt trước bạn trả về không đúng định dạng. Lần này CHỈ trả về đúng một object JSON hợp lệ, bắt đầu bằng { và kết thúc bằng }, KHÔNG kèm bất kỳ chữ nào ngoài JSON.'
             : ''),
+        // Ép JSON ở tầng API (xem STORY_SCHEMA) — chốt chặn thật, prompt chỉ là
+        // lớp nhắc. parseJSON + lượt thử lại bên dưới vẫn giữ làm lưới an toàn
+        // cho nhánh backup Anthropic (API không có JSON mode).
+        json: true,
+        jsonSchema: STORY_SCHEMA,
         // 5 hồi × 100-160 từ tiếng Việt + mô tả nhân vật + lời kết — 2600 quá
         // sát, hết chỗ là JSON cụt và parse hỏng.
         maxTokens: 4200,
@@ -157,7 +188,7 @@ async function handleStory(birth: BirthParams, eraId?: string) {
         cache_creation_input_tokens: 0,
         cache_read_input_tokens: 0,
       });
-      return { raw: llmRes.text };
+      return { raw: llmRes.text, model: llmRes.model };
     } catch (e) {
       console.error('[chan-dung-tien-kiep] LLM lỗi:', (e as Error)?.message);
       return null;
@@ -176,6 +207,7 @@ async function handleStory(birth: BirthParams, eraId?: string) {
     console.error(
       `[chan-dung-tien-kiep] parse hỏng (len=${t.length}, đuôi=${JSON.stringify(t.slice(-60))}) — thử lại`,
     );
+    void logLlmParseFail('chan-dung-tien-kiep', res.model, t, 1);
     res = await askStory(true);
     if (!res) return err('Lỗi AI khi viết câu chuyện. Vui lòng thử lại.', 500);
     parsed = parseJSON(res.raw) as StoryJson | null;
@@ -188,6 +220,7 @@ async function handleStory(birth: BirthParams, eraId?: string) {
     console.error(
       `[chan-dung-tien-kiep] parse hỏng LẦN 2 (len=${t.length}, đầu=${JSON.stringify(t.slice(0, 160))})`,
     );
+    void logLlmParseFail('chan-dung-tien-kiep', res.model, t, 2);
     return err('Lỗi phân tích kết quả AI.', 500);
   }
 
@@ -213,7 +246,7 @@ async function handleStory(birth: BirthParams, eraId?: string) {
     danhXung: profile.occupation.title,
     biDanh: String(parsed.biDanh || ''),
     characterName: profile.characterName,
-    moTaNhanVat: parsed.moTaNhanVat,
+    moTaNhanVat: String(parsed.moTaNhanVat || ''),
     acts,
     ketLuan: parsed.ketLuan || '',
     occupation: {
@@ -250,6 +283,12 @@ async function handleImage(userId: string, birth: BirthParams, eraId?: string) {
     const llmRes = await llmTextFull({
       system: PAST_LIFE_IMAGE_SYSTEM_PROMPT,
       prompt: buildPastLifeImagePrompt(profile, morph),
+      json: true,
+      jsonSchema: {
+        type: 'OBJECT',
+        properties: { imagePrompt: { type: 'STRING' } },
+        required: ['imagePrompt'],
+      },
       maxTokens: 600,
     });
     void logLlmUsage('chan-dung-tien-kiep', llmRes.model, {
