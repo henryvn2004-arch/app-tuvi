@@ -36,6 +36,7 @@ import {
   deductCredits,
   logTransaction,
 } from '@/lib/billing/credits';
+import { railFreeRemaining, railFreeConsume } from '@/lib/billing/viral-budget';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -86,6 +87,7 @@ export async function POST(request: NextRequest) {
   // Chỉ tính phí khi paywall bật VÀ giá cấu hình > 0. Trừ Lượng SAU
   // khi trả lời xong (giữ userId ở đây để dùng lại trong stream).
   let chargeUserId: string | null = null;
+  let freeTurnLeft = 0;
   // Giá rail = tool_pricing['rail-message'] (nguồn thật, admin sửa được);
   // fallback cfg.cost (app_config 'chat.cost') nếu chưa có row / đọc hụt.
   const railPrice = await getToolPrice('rail-message');
@@ -95,8 +97,12 @@ export async function POST(request: NextRequest) {
     if (!token) return jsonError('unauthorized', 'Cần đăng nhập để dùng tính năng này', 401);
     const user = await getUserFromToken(token);
     if (!user) return jsonError('unauthorized', 'Phiên đăng nhập không hợp lệ', 401);
+    // Lượt rail TẶNG (sau khi vẽ chân dung xong) tiêu trước Lượng — nếu còn
+    // lượt tặng thì không chặn dù ví rỗng. Đây đúng là tình huống nó sinh ra
+    // để cứu: quà đăng ký vừa đủ 1 lượt vẽ, vẽ xong là ví về 0.
+    freeTurnLeft = await railFreeRemaining(user.id);
     const balance = await getBalance(user.id);
-    if (balance < cost) {
+    if (freeTurnLeft <= 0 && balance < cost) {
       return jsonError('paywall', `Không đủ Lượng (cần ${cost}, còn ${balance})`, 402, { balance });
     }
     chargeUserId = user.id;
@@ -112,15 +118,24 @@ export async function POST(request: NextRequest) {
         // ── Trừ Lượng sau khi trả lời thành công ──────────────────
         let paywall: DoneEvent['paywall'] = { blocked: false };
         if (chargeUserId && cost > 0) {
-          const newBal = await deductCredits(chargeUserId, cost);
-          if (newBal != null) {
-            await logTransaction({
-              userId: chargeUserId,
-              amount: -cost,
-              type: 'chat',
-              description: 'Lượt luận giải /api/v1/chat',
-            });
-            paywall = { blocked: false, balance: newBal };
+          // Tiêu lượt TẶNG trước, và chỉ khi thật sự còn (kiểm tra lại atomic ở
+          // DB — số đọc lúc pre-check có thể đã cũ nếu người dùng mở 2 tab).
+          const usedFreeTurn = freeTurnLeft > 0 && (await railFreeConsume(chargeUserId));
+          if (usedFreeTurn) {
+            // KHÔNG ghi credit_transactions: không có Lượng nào đổi chủ, ghi
+            // giao dịch 0 đồng chỉ làm bẩn báo cáo doanh thu/chi phí.
+            paywall = { blocked: false, balance: await getBalance(chargeUserId) };
+          } else {
+            const newBal = await deductCredits(chargeUserId, cost);
+            if (newBal != null) {
+              await logTransaction({
+                userId: chargeUserId,
+                amount: -cost,
+                type: 'chat',
+                description: 'Lượt luận giải /api/v1/chat',
+              });
+              paywall = { blocked: false, balance: newBal };
+            }
           }
         }
         send(sse.done({ tools_used: toolsUsed, paywall, suggestions }));

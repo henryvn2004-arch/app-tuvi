@@ -20,6 +20,7 @@
 //    không có action nào lặp lại tự do.
 // ============================================================
 
+import { getConfigValue } from '@/lib/config/appConfig';
 import { tgSendMessage } from '@/lib/channels/telegram';
 import { parseFirebaseServiceAccount, sendFcmPush } from '@/lib/channels/push';
 
@@ -43,18 +44,9 @@ export async function callRpc<T>(fn: string, params: Record<string, unknown>): P
   return res.json();
 }
 
-export async function getConfig<T>(key: string, fallback: T): Promise<T> {
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/app_config?key=eq.${encodeURIComponent(key)}&select=value`, {
-      headers: SB_HEADERS,
-    });
-    if (!res.ok) return fallback;
-    const rows = await res.json();
-    return rows?.[0]?.value ?? fallback;
-  } catch {
-    return fallback;
-  }
-}
+// Đọc app_config nay nằm ở lib/config/appConfig (dùng chung với cầu dao ngân
+// sách viral) — giữ tên cũ ở đây để không phải sửa hàng loạt nơi gọi.
+export const getConfig = getConfigValue;
 
 // Công tắc tổng — fail-safe: bất kỳ lỗi/thiếu cấu hình nào đều → false.
 export async function isAutopilotEnabled(): Promise<boolean> {
