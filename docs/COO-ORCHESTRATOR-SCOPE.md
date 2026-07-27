@@ -117,8 +117,30 @@ Ghi nhận công bằng: chống gian lận đăng ký **đã có nền** — `b
 
 1. `ADMIN_TELEGRAM_CHAT_ID` chưa set → CMO Digest + cảnh báo bất thường **0 lần
    gửi trong 14 ngày**, mà panel vẫn không đỏ vì `skip` không tính là lỗi.
-2. `chan-dung-vo-chong`: **37 lượt trừ Lượng → 32 kết quả**. 5 user mất tiền,
-   không refund, không ai biết. `grep -ri "refund"` toàn repo = 0.
+2. **Trừ tiền trước khi giao hàng, không có đường hoàn.** `requireCredits()`
+   trừ Lượng rồi mới chạy việc; `grep -ri "refund"` toàn repo = **0**; và
+   `generateToolSlug()` gắn `Date.now()` nên **thử lại sau khi hỏng là bị trừ
+   lần nữa**.
+
+   > ⚠️ **ĐÍNH CHÍNH (2026-07-27).** Bản v1/v2 của tài liệu này từng ghi
+   > *"37 lượt trừ Lượng → 32 kết quả, 5 user mất tiền ~250k đ"*. **SAI.** Con
+   > số đó lấy bằng cách so HAI TỔNG với nhau, và bộ lọc
+   > `description ilike '%vợ chồng%'` còn hút nhầm 3 dòng `xem-tuoi` không liên
+   > quan. Đối chiếu lại **từng giao dịch** với bản ghi kết quả sinh ra sau nó:
+   >
+   > | Tool | Lượt trừ | Người trả | Không ra kết quả |
+   > |---|---|---|---|
+   > | `chan-dung-vo-chong` | 34 | **1** | **2** |
+   > | `chan-dung-tien-kiep` | 15 | **1** | 0 |
+   >
+   > "Người trả" duy nhất của cả hai tool là `henryvn2004@gmail.com` — chính
+   > Henry lúc test. **Không có khách hàng thật nào bị ảnh hưởng, không cần
+   > hoàn tiền.**
+   >
+   > Bài học phương pháp: **so tổng-với-tổng không bao giờ chỉ ra được lượt nào
+   > hỏng** — phải khớp theo từng giao dịch. Sprint S3 dựng đối soát đúng cách.
+   > Cơ chế lỗi vẫn CÓ THẬT (2 lượt hỏng đã xảy ra thật), nên S3 giữ nguyên
+   > nhưng đổi vai từ *khắc phục* sang *phòng ngừa*.
 3. 6 route `app/api/cron/*` thiếu `dynamic='force-dynamic'` → ~465 lỗi giả.
 4. Push chết (`sent=0 · no tokens`) + hai hệ push song song cùng lịch.
 5. Không tồn tại event type nào biểu thị lỗi — 45 tool + 26 trang + 58 route mù hoàn toàn.
@@ -161,7 +183,7 @@ lĩnh vực C (bảo mật) theo yêu cầu của Henry + lĩnh vực D mà tao 
 
 | # | Trụ | Nội dung |
 |---|---|---|
-| **B1** | **Dòng tiền** | Đối soát **trừ-Lượng ↔ giao-hàng** (đang lệch 5 ca); auto-refund; vá slug `Date.now()` để **thử lại không mất tiền lần hai**; đối soát PayOS/PayPal/bank |
+| **B1** | **Dòng tiền** | Đối soát **trừ-Lượng ↔ giao-hàng** khớp theo TỪNG giao dịch (không so tổng-với-tổng); auto-refund; vá slug `Date.now()` để **thử lại không mất tiền lần hai**; đối soát PayOS/PayPal/bank |
 | **B2** | **Dữ liệu** | Parity engine client↔server; ISR trả 404/rỗng; link chia sẻ chết; file rác trong Storage; embedding cũ |
 | **B3** | **Nội dung tự động** ⭐mới | 3 cron đang **tự xuất bản nội dung AI không ai duyệt** (`cron-khao-luan`, `cron-master-write`, YouTube `van_dap`). Nội dung sai/trùng lặp có thể khiến **Google phạt cả site**. Cần QC: trùng lặp, ảo giác, chất lượng |
 | **B4** | **Sự thật của tài liệu** ⭐mới | CLAUDE.md ghi "XONG" cho những thứ **chưa từng chạy** (P0-1 là bằng chứng). Đối chiếu điều tài liệu tuyên bố với thực tế prod — nghe lạ, nhưng dự án này vận hành dựa trên độ chính xác của CLAUDE.md |
@@ -245,15 +267,14 @@ cần chốt → làm → 1 PR draft → CI xanh → Henry duyệt → sprint k�
 
 ---
 
-## 6. Điểm cần Henry quyết
+## 6. Trạng thái quyết định (Henry chốt 2026-07-27)
 
-1. **O0.0 làm ngay không?** CRIT-1 là 4 câu `REVOKE`, tao đã kiểm chứng không
-   gãy gì. **Refund 5 user là động vào tiền → tao không tự làm.**
-2. **Phạm vi:** giữ đủ 4 lĩnh vực (19 trụ) hay cắt? Nếu muốn gọn, tao đề xuất
-   giữ **A + B1 + C** và hoãn D.
-3. **Budget canary** — chạy tool thật tốn tiền thật. Khởi điểm ~50–100 Lượng/ngày?
-4. **Kênh báo động:** sự cố vận hành/bảo mật nên **tách riêng** khỏi digest
-   marketing — cảnh báo bảo mật lẫn vào báo cáo tăng trưởng là công thức bỏ sót.
-5. **Auto-refund tự chạy (có trần/ngày) hay chờ duyệt?** Tao nghiêng về tự chạy.
-6. **Service key đã xoay chưa?** CLAUDE.md ghi cần xoay từ 2026-06-24 sau khi
-   paste qua chat. Nếu chưa, gộp luôn vào O0.0.
+| # | Điểm | Chốt |
+|---|---|---|
+| 1 | Phạm vi | ✅ **Duyệt cả 4 lĩnh vực**, kèm yêu cầu KHÔNG over-engineer |
+| 2 | CRIT-1 `REVOKE` | ✅ Cho chạy thẳng prod — **ĐÃ CHẠY & kiểm chứng xong** |
+| 3 | Refund | ❌ **Không còn áp dụng** — đính chính ở mục 1 cho thấy không có khách nào bị ảnh hưởng |
+| 4 | Ngưỡng rate limit | ✅ Claude chọn mặc định, lưu `app_config` để chỉnh không cần deploy |
+| 5 | Xoay service key | ⏳ Henry tự kiểm rồi báo lại — **không chặn** phần còn lại của S0 |
+| 6 | Kênh báo động | ⏳ Chưa chốt — đề xuất **tách riêng** khỏi digest marketing, quyết ở S5 |
+| 7 | Budget canary | ⏳ Chưa chốt — quyết ở S2 |

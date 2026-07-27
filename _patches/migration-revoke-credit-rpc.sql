@@ -1,0 +1,79 @@
+-- ============================================================================
+-- S0 (COO) — BỊT LỖ TỰ CẤP LƯỢNG QUA RPC CÔNG KHAI
+-- ============================================================================
+-- VẤN ĐỀ
+-- 4 hàm dưới đây là SECURITY DEFINER (chạy bỏ qua RLS) NHƯNG lại được cấp
+-- quyền EXECUTE cho `anon` và `authenticated`. Khoá `anon` nằm công khai trong
+-- 26 file dưới public/ (đúng thiết kế Supabase — nó vốn được bảo vệ bằng RLS
+-- và bằng việc KHÔNG cấp quyền các hàm nhạy cảm).
+--
+-- Hệ quả: bất kỳ ai xem source trang web, lấy anon key rồi gọi thẳng
+--   POST /rest/v1/rpc/add_credits  { "p_user_id": "...", "p_amount": 999999 }
+-- là tự nạp Lượng vô hạn — KHÔNG CẦN ĐĂNG NHẬP. Toàn bộ mô hình kiếm tiền bị
+-- vô hiệu bằng một request. `deduct_credits` còn cho phép trừ sạch số dư của
+-- người khác (phá hoại).
+--
+-- VÌ SAO REVOKE LÀ AN TOÀN
+-- Đã rà toàn bộ nơi gọi 4 hàm này trong repo — TẤT CẢ đều server-side và dùng
+-- service key, không có một caller client-side nào:
+--   • lib/billing/credits.ts            → deduct_credits
+--   • lib/marketing/autopilot-promo.ts  → add_credits
+--   • app/api/payment/route.ts          → add_credits, deduct_credits
+--   • app/api/bank-webhook/route.ts     → add_credits
+--   • app/api/signup-signal/route.ts    → revoke_signup_bonus
+--   (public/admin.html chỉ NHẮC TÊN process_referral_reward trong một dòng mô
+--    tả trên giao diện, không gọi.)
+-- `service_role` giữ nguyên quyền EXECUTE nên mọi luồng server không đổi.
+--
+-- Hiệu lực TỨC THÌ, không cần deploy lại app.
+-- ============================================================================
+
+-- ⚠️ PHẢI REVOKE KHỎI `PUBLIC`, KHÔNG PHẢI KHỎI anon/authenticated.
+--
+-- Lần chạy đầu tao revoke khỏi `anon, authenticated` — Postgres báo thành công
+-- nhưng kiểm chứng lại thì hai role đó VẪN gọi được. Soi `proacl` mới ra căn
+-- nguyên:
+--
+--     {=X/postgres, postgres=X/postgres, service_role=X/postgres}
+--      ^^^ grantee RỖNG = PUBLIC
+--
+-- Postgres mặc định cấp EXECUTE cho PUBLIC với mọi hàm mới. `anon` và
+-- `authenticated` chưa bao giờ có grant riêng — chúng THỪA HƯỞNG từ PUBLIC,
+-- nên revoke khỏi chúng không gỡ được gì (revoke một quyền chưa từng cấp là
+-- no-op, và Postgres không hề cảnh báo).
+--
+-- `service_role`/`postgres` có grant RIÊNG nên không bị ảnh hưởng.
+REVOKE EXECUTE ON FUNCTION public.add_credits(uuid, integer)          FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION public.deduct_credits(uuid, integer)       FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION public.process_referral_reward(uuid)       FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION public.revoke_signup_bonus(uuid, integer)  FROM PUBLIC;
+
+-- ============================================================================
+-- ĐÃ CHẠY PROD 2026-07-27 qua Supabase MCP. Kết quả kiểm chứng:
+--   • proacl còn đúng {postgres=X/postgres, service_role=X/postgres}
+--   • anon=false · authenticated=false · service_role=true
+--   • Đối soát user_credits.balance ↔ sum(credit_transactions.amount):
+--     LỆCH 0 DÒNG → chưa ai kịp khai thác lỗ này.
+-- ============================================================================
+-- KIỂM CHỨNG — sau khi chạy, câu này phải trả về ĐÚNG 0 dòng.
+-- ============================================================================
+-- select p.proname, r.rolname
+-- from pg_proc p
+-- join pg_namespace n on n.oid = p.pronamespace
+-- cross join pg_roles r
+-- where n.nspname = 'public'
+--   and r.rolname in ('anon', 'authenticated')
+--   and p.proname in ('add_credits','deduct_credits',
+--                     'process_referral_reward','revoke_signup_bonus')
+--   and has_function_privilege(r.oid, p.oid, 'EXECUTE');
+-- ============================================================================
+-- CÒN LẠI (cố ý CHƯA làm ở S0 — để sprint S6 "rà bảo mật định kỳ"):
+--   • get_credit_balance / is_admin — anon gọi được, chỉ lộ thông tin chứ
+--     không đổi dữ liệu. get_credit_balance còn trùng với endpoint
+--     /api/payment?action=balance vốn đã không cần auth, nên gỡ riêng một
+--     mình nó không thu được gì; xử lý cả cụm ở S6.
+--   • handle_new_user_credits / trigger_referral_check_on_topup — hàm TRIGGER,
+--     PostgREST không gọi trực tiếp được (kiểu trả về `trigger`).
+--   • 20 bảng bật RLS nhưng không có policy, 15 hàm search_path khả biến,
+--     policy "anon full access for now" trên van_dap, v.v.
+-- ============================================================================
