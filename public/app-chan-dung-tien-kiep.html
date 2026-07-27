@@ -393,6 +393,23 @@ function publishShareable(imageUrl) {
     imageUrl: imageUrl || undefined,
     blocks: blocks,
   });
+
+  // Xem xong mà hết Lượng = đúng khoảnh khắc vừa thích vừa hụt → chỗ xin mời
+  // bạn (V2.3). Widget tự ẩn nếu còn đủ Lượng cho lượt nữa.
+  _mountInviteCta();
+}
+
+function _mountInviteCta() {
+  var host = document.getElementById('resPanel');
+  if (!host) return;
+  var go = function () {
+    if (window.InviteCta) window.InviteCta.mount(host, { toolId: 'chan-dung-tien-kiep', toolLabel: 'lượt vẽ' });
+  };
+  if (window.InviteCta) return go();
+  if (document.getElementById('_ivc_js')) return;
+  var s = document.createElement('script');
+  s.id = '_ivc_js'; s.src = '/invite-cta.js?v=1'; s.async = true; s.onload = go;
+  document.head.appendChild(s);
 }
 
 async function downloadResult() {

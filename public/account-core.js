@@ -532,10 +532,55 @@ function loadKetnoi() {
   _ketnoiLoaded = true;
 }
 
+// Mời bạn (V2.3). Mọi con số lấy từ server (`my-referral`) — thưởng/trần đều
+// chỉnh được bằng SQL nên viết cứng vào đây là sớm muộn cũng nói sai với người
+// dùng. Trần đếm theo CỬA SỔ 30 NGÀY, khớp process_referral_signup.
+async function loadReferralPanel() {
+  const sec = document.getElementById('refSection');
+  if (!sec || !_pToken) return;
+  let d;
+  try {
+    const r = await fetch('/api/payment?action=my-referral', { headers: { Authorization: 'Bearer ' + _pToken } });
+    d = await r.json();
+  } catch (e) { return; }
+  if (!d || !d.code) return;
+
+  const reward = Number(d.rewardPerInvite) || 0;
+  const cap = Number(d.cap) || 0;
+  const used = Number(d.rewardedRecent) || 0;
+  const left = Math.max(0, cap - used);
+
+  const link = window.location.origin + '/?ref=' + encodeURIComponent(d.code);
+  document.getElementById('refLinkInput').value = link;
+  document.getElementById('refPitch').innerHTML = left > 0
+    ? 'Mỗi người đăng ký qua link của bạn: <strong>+' + reward + ' Lượng</strong> vào ví bạn ngay khi họ tạo tài khoản. '
+      + 'Khi họ nạp Lượng lần đầu, cả hai nhận thêm <strong>30 Lượng</strong> nữa.'
+    : 'Bạn đã dùng hết <strong>' + cap + '</strong> lượt mời được thưởng trong 30 ngày qua — '
+      + 'lượt mời sẽ mở lại dần khi qua mốc 30 ngày của từng người.';
+  document.getElementById('refProgressLabel').textContent = used + '/' + (cap || '—');
+  const bar = document.getElementById('refProgressBar');
+  if (bar && cap > 0) setTimeout(() => { bar.style.width = Math.min(100, Math.round(used / cap * 100)) + '%'; }, 100);
+  document.getElementById('refTotalCount').textContent = d.invited || 0;
+  document.getElementById('refEarnedCount').textContent = d.creditsEarned || 0;
+
+  const btn = document.getElementById('refCopyBtn');
+  if (btn && !btn.dataset.wired) {
+    btn.dataset.wired = '1';
+    btn.addEventListener('click', () => {
+      const done = () => { btn.textContent = 'Đã chép ✓'; setTimeout(() => { btn.textContent = 'Sao chép'; }, 1600); };
+      if (navigator.clipboard) navigator.clipboard.writeText(link).then(done, done);
+      else { document.getElementById('refLinkInput').select(); try { document.execCommand('copy'); done(); } catch (e) { /* ignore */ } }
+      try { window.Track && window.Track.event && window.Track.event('cta_click', { meta: { from: 'invite', action: 'copy', page: 'profile' } }); } catch (e) { /* ignore */ }
+    });
+  }
+  sec.style.display = '';
+}
+
 async function loadCredits() {
   if (!_pUser || !_pToken) return;
   // Balance
   await loadHeaderBalance();
+  loadReferralPanel();
   const t = document.getElementById('tabCreditBalance');
   if (t && t.textContent === '…') t.textContent = '...';
   // Transactions
