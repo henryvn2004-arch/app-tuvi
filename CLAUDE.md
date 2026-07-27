@@ -261,10 +261,12 @@ Plan này là OUTPUT của phiên; code làm ở session sau, mỗi PR reset bra
 ### 🔖 RESUME HERE (track viral)
 **V2.1 + V2.4 XONG (PR #314)** — mắt xích đứt đã nối: link chia sẻ nay mang mã
 giới thiệu, và toàn bộ vòng lặp đã có chỗ đo (panel admin "Vòng Lặp Viral").
-**V2.2 XONG (PR sau đó)** — bộ số đã chốt đã vào prod (quà 25 · thưởng mời 15 ·
+**V2.2 XONG (#318)** — bộ số đã chốt đã vào prod (quà 25 · thưởng mời 15 ·
 trần mời 15) + cầu dao ngân sách ảnh free 6 lượt/ngày + 2 lượt rail tặng sau khi
-vẽ. **Việc tiếp theo: V2.3** (chỗ xin mời bạn + mục referral ở `profile.html`),
-rồi **V4** (mồi phân phối — viral là bộ khuếch đại, không phải nguồn).
+vẽ. **V2.3 XONG (PR sau đó)** — chỗ xin mời bạn sau khi hết Lượng + mục referral
+ở `profile.html`. **→ TOÀN BỘ V2 ĐÃ XONG.** Việc tiếp theo: **V4** (mồi phân
+phối — viral là bộ khuếch đại, không phải nguồn; 80 visit/ngày thì vòng lặp
+không tự khởi động) hoặc **V3** (ảnh 9:16 để đăng Story/TikTok).
 Số liệu tự chảy vào panel khi có người thật dùng; trước đó K-factor còn 0 là
 ĐÚNG, không phải lỗi.
 
@@ -457,6 +459,39 @@ Henry có thể bỏ nếu không ưng.
   **Mời 2 bạn đăng ký → +30 Lượng, đủ thêm 1 lượt vẽ**"* + nút copy link kèm mã.
 - Thêm mục referral vào `profile.html` (hiện CHỈ có ở `topup.html`) + hiện tiến độ
   "đã mời N/15 bạn · đã nhận M Lượng" để tạo cảm giác tiến triển.
+
+### ✅ V2.3 XONG (PR mới, session này) — chỗ xin mời bạn
+- **`public/invite-cta.js` (MỚI)** — thẻ mời hiện NGAY SAU khi xem xong chân dung
+  mà số dư KHÔNG còn đủ một lượt nữa. Đây là khoảnh khắc DUY NHẤT trong cả vòng
+  lặp mà người ta vừa thích thú vừa hụt hẫng cùng lúc; không có chỗ xin ở đây
+  thì không ai mời. Tự ẩn khi còn đủ Lượng (chưa hụt thì chưa phải lúc xin).
+- **3 luật câu chữ** (viết thẳng trong file, đừng sửa nếu chưa đọc): (1) nói
+  THẲNG con số — *"mời 2 bạn = +30 Lượng = đủ thêm 1 lượt vẽ"*, hứa lửng lơ
+  kiểu "mời bạn để xem tiếp" là mất niềm tin ngay lần đầu; (2) mọi con số lấy
+  từ SERVER, không viết cứng — thưởng/giá đều chỉnh bằng SQL; (3) chạm trần
+  lượt mời thì NGỪNG hứa, nói thật là hết lượt trong 30 ngày.
+- **Link mời trỏ vào CHÍNH tool vừa dùng** (`/app/<tool>?ref=…&utm_*`), không
+  phải trang chủ — người được mời đáp xuống đúng thứ vừa khiến bạn mình khoe,
+  và `referral.js` (V2.1) bắt `?ref=` sẵn ở đó.
+- **`profile.html` + `account-core.js`** — thêm mục referral (link + thanh tiến
+  độ mời được thưởng/30 ngày + tổng đã mời/đã nhận). Trước đây referral CHỈ có ở
+  `topup.html`, tức chỉ ai đã định nạp tiền mới thấy, trong khi người hết Lượng
+  thường vào profile trước.
+- **🐞 Bắt được chỗ đang nói SAI với người dùng:** `topup.html` ghi *"Tối đa 10
+  lượt mời / tháng"* trong khi DB là 20 (nay 15), và KHÔNG hề nhắc phần thưởng
+  lúc bạn mình **đăng ký** — chỉ nhắc lúc nạp tiền. Đổi sang đọc từ server.
+- **`my-referral`** trả thêm `balance`/`cap`/`rewardPerInvite`/`rewardedRecent`/
+  `toolPrice` (nhận `?tool=`) để widget tính được trong MỘT lượt mạng, khỏi
+  nhúng anon key vào thêm trang. `rewardedRecent` đếm theo **cửa sổ 30 ngày**
+  khớp `process_referral_signup` — lấy tổng mọi thời sẽ báo "hết lượt mời" cho
+  người thật ra vẫn còn.
+- **Verify:** `tsc` · `lint` · `prettier --check .` · `node --check` · Playwright
+  5 ca câu chữ: 0 Lượng/giá 25/thưởng 15 → "mời 2 bạn, +30, đủ thêm 1 lượt vẽ";
+  10 Lượng → tự tính lại "mời 1 bạn"; còn đủ Lượng → **im lặng**; chạm trần →
+  **không hứa nữa**; thiếu mã → không dựng gì.
+- **CÒN LẠI:** widget mới gắn ở 2 trang shell `/app/chan-dung-*`; bản standalone
+  `/tools/chan-dung-*.html` chưa gắn (CTA từ link chia sẻ đổ về `/app` nên đường
+  chính đã phủ) — gắn nốt khi cần.
 
 **V3 — Ảnh để đăng (làm song song được):** bản tải về **9:16 (1080×1920)** ghép ảnh
 chân dung + 1 câu đắt nhất trong truyện + seal + `tuviminhbao.com`, dựng bằng canvas
