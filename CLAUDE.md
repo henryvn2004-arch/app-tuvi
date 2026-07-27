@@ -483,6 +483,81 @@ nghe như thuật lại chứ không như phán về người đang sống. Upse
   nhân vật trong prompt đúng bản engine chốt. tsc · lint · prettier · node
   --check. Bump `shell.js?v=46→47` (27 trang).
 
+### Vòng chỉnh tiếp — neo mốc lịch sử thật + vá nút Chia sẻ desktop (PR mới)
+- **🐞 Nút "Chia sẻ" trên desktop bấm KHÔNG RA GÌ.** Căn nguyên: `shareWorkspace`
+  chỉ hỏi `if (navigator.share)` — trên **desktop Chrome hàm đó VẪN TỒN TẠI**,
+  nhưng bị gọi SAU `await fetch('/api/share-result')` nên "user gesture" của cú
+  click đã hết hạn, trình duyệt từ chối; nhánh `catch` lại `return` im lặng khi
+  gặp `AbortError` → không hiện gì cả. Sửa: helper `shareLink()` — share sheet
+  native CHỈ dùng trên thiết bị cảm ứng, desktop luôn mở modal có nút Sao chép;
+  bọc thêm `try/catch` vì vài bản Chrome ném lỗi ĐỒNG BỘ. Áp cho cả
+  `shareWorkspace` lẫn `shareSession` (cùng bug). **Tự dính bug khi test:**
+  bản đầu `isTouchDevice()` ƯU TIÊN `navigator.userAgentData.mobile`, mà cờ đó
+  false ngay trên máy mobile khi UA-CH không được set → mobile rơi nhầm vào
+  modal. Sửa thành OR các tín hiệu, `pointer: coarse` là tín hiệu chính.
+- **Dòng lá số hiện NGAY TRÊN TRANG** (trước chỉ có trong link chia sẻ nên Henry
+  không thấy): "Lá số: Nam · 03/06/1998 (dương lịch) · giờ Sửu (01–03h)" dưới
+  badge nền văn minh, ở cả 2 trang. Shell mở `Shell.birthSummary()` để trang
+  dùng CHUNG chuỗi với bản chèn vào `/ket-qua`; trang standalone không có Shell
+  nên tự dựng theo đúng định dạng đó.
+- **NEO MỐC LỊCH SỬ THẬT** (Henry: không có mốc thì người đọc không biết chuyện
+  xảy ra ở đâu, thời nào). Đây là **đảo luật cũ** vốn cấm sạch nhân vật/triều
+  đại có thật. Mở theo TỪNG MỨC RỦI RO chứ không mở toang:
+  - `geographyVi` mỗi era — **địa danh có thật** (Trường Giang/Chiết Giang,
+    sông Hồng/Thăng Long, Kyoto/Kyushu, Hanyang/Gyeongju, Chao Phraya/
+    Ayutthaya). Mức an toàn nhất: sông núi tỉnh thành hầu như không đổi. Cho
+    phép chú "(nay thuộc …)" để người đọc định vị.
+  - `periodVi` mỗi era — **triều đại có thật**, nói ở mức "dưới thời X",
+    **CẤM nêu năm/niên hiệu** (engine chỉ có TUỔI nhân vật, không có mốc lịch —
+    nêu năm là bịa). Danh sách triều đại **khớp với `ageLabel` đang hiện trên
+    badge**: Nhật bỏ Edo (badge ghi "lãnh chúa cát cứ" = Sengoku, Edo là thái
+    bình → mâu thuẫn); Hàn bỏ Silla (chưa có khoa cử).
+  - **Vòng 2 — Henry chốt mở hẳn tên vua/nhân vật lịch sử** ("phải đặt vào bối
+    cảnh lịch sử có thật… users có thể search google… cũng là cách để họ học
+    thêm về lịch sử"). Prompt nay có luật **HAI TẦNG**: *tầng bối cảnh* = lịch
+    sử THẬT (địa danh, triều đại, đời vua, chiến tranh — tra Google ra được, đó
+    chính là giá trị); *tầng nhân vật* = HƯ CẤU, chỉ là một người bình thường
+    sống trong thời đó. BẮT nêu thẳng "dưới thời Hán Vũ Đế", "đời vua Thành
+    Thái". Nới `ageLabel` mấy nền tự bó mình: Việt "giữ nước phương Nam" →
+    "quân chủ phương Nam" (để có cả Nguyễn), Nhật "lãnh chúa cát cứ" → "thời
+    mạc phủ" (có cả Kamakura/Edo), Hàn "triều đình khoa cử" → "các vương triều
+    cổ" (có cả Silla).
+  - **Ranh giới CÒN GIỮ:** nhân vật không được LÀ người có thật, không chiếm vị
+    trí độc nhất của triều ("Tể tướng của vua X" → "làm quan trong triều dưới
+    thời vua X"); người thật là NỀN chứ không phải bạn diễn (không dựng cảnh họ
+    trò chuyện/khen thưởng nhân vật). **Vẫn cấm năm dương lịch + niên hiệu kèm
+    số** — engine chỉ có TUỔI, không có mốc lịch, nêu năm là tự bịa VÀ biến cả
+    9 đại vận thành thứ tra ngược được rồi sai; muốn rõ hơn thì "đầu/giữa/cuối
+    thời X".
+- **Verify:** tsc · lint · prettier · `node --check` · Playwright 3 ca share
+  (desktop → modal + link; mobile → native; native ném lỗi → rơi về modal) ·
+  5 nền đều có đủ địa danh riêng, **0 rò rỉ địa danh chéo**, badge khớp thời kỳ.
+
+### Vòng chỉnh tiếp — NÂNG THANG CHỨC PHẬN (PR #307)
+Henry: *"user thường thích nghe những thứ hơi shocked, ngạc nhiên, thì mới viral
+được… giờ đang đọc thầy thuốc này, chủ tiệm vải này, nghe tầm tầm không catchy.
+Upgrade position nhưng vẫn giữ nguyên tính chất các sao, các cung."*
+- **Cả 42 chức phận nâng 1–2 bậc VỀ QUY MÔ**, giữ nguyên `domain` và bản chất
+  sao: Vũ Khúc vẫn tiền + võ (chủ hiệu vàng bạc → **cự phú buôn vàng bạc khắp
+  mấy châu**), Thiên Đồng vẫn y (thầy lang → **ngự y trưởng** / **đại danh y
+  trấn một phương**), Cự Môn vẫn khẩu thiệt (trạng sư → **ngự sử đại phu**),
+  Tử Vi (quan viên ngoại → **tổng trấn một phương**, đúng ví dụ Henry đưa).
+  `attireEn` chỉnh theo cấp mới; `source` (trích Tân Biên) **không đụng**.
+- **Title phải NGẮN** (Henry chốt tiếp — bản đầu tao viết dài quá): title là
+  **danh xưng**, đọc xong nhớ được để kể lại. "Đại đô đốc nắm binh quyền và
+  quân lương" → **Đại đô đốc**; "Ngự sử đại phu, tiếng nói vang cả triều" →
+  **Ngự sử đại phu**; "Cự phú buôn vàng bạc khắp mấy châu" → **Cự phú**. Râu
+  ria dồn hết vào `desc` (chỉnh 7 desc để không mất chi tiết vừa rút ra).
+- **CHỈ DỊCH CẢ THANG LÊN, KHÔNG NÉN 3 TẦNG.** Nén lại thì điểm cung Quan Lộc
+  mất hết ý nghĩa, mọi lá số ra na ná nhau, và mất luôn khả năng nói "chức phận
+  này chỉ rơi vào X% lá số". **Đo lại sau khi nâng: cao/giữa/thấp = 24/52/24%
+  trên 552 lá số** (trước 20/56/24 — giữ nguyên độ trải), **79 chức phận khác
+  nhau** xuất hiện, cái phổ biến nhất chỉ 4,2%.
+- Không mâu thuẫn với phản hồi cũ "toàn quan với tướng": lần đó vấn đề là **đơn
+  điệu** (11/14 đều là quan triều), lần này nâng **trong đúng domain của từng
+  sao** nên vẫn có cự phú, danh y, tông sư, chủ đội thương thuyền, thủ lĩnh
+  khai hoang — không dồn hết về triều đình.
+
 ### CÒN LẠI
 - Bật `enabled=true` sau deploy (câu SQL ở trên).
 - Henry gen thử trên prod đủ 5 nền để soi ảnh — tao chỉ verify được tới tầng

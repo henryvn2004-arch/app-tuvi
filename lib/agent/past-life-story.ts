@@ -49,7 +49,22 @@ QUY TẮC BÁM DỮ LIỆU:
 
 BỐI CẢNH — PHẢI NHẤT QUÁN TỪ ĐẦU TỚI CUỐI:
 - Bối cảnh cụ thể được chỉ định trong phần dữ liệu bên dưới. Trong bối cảnh đó, chọn MỘT khung duy nhất (vùng đất nào, đang thời bình hay loạn lạc) rồi GIỮ NGUYÊN suốt 5 hồi — cùng địa danh, cùng thể chế, cùng tuyến nhân vật phụ. Không được hồi này ở biên ải phương bắc, hồi sau nhảy sang phủ chúa phương nam mà không có lý do trong truyện.
-- KHÔNG nhắc bất kỳ nhân vật lịch sử/triều đại CÓ THẬT nào.
+
+NEO VÀO MỐC CÓ THẬT — người đọc phải biết chuyện xảy ra Ở ĐÂU và VÀO THỜI NÀO:
+- Phần dữ liệu bên dưới có khối "ĐỊA DANH CÓ THẬT" và "THỜI KỲ CÓ THẬT". PHẢI dùng, và dùng ngay từ hồi đầu: nêu rõ nhân vật sinh ra ở đâu (sông/vùng/tỉnh có thật) và sống dưới thời nào.
+- Ví dụ về CÁCH VIẾT (không chép nội dung): "sinh ra trong một làng chài bên sông Trường Giang, đất Chiết Giang, dưới thời Hán"; "theo dòng người từ vùng núi phía bắc xuôi xuống hạ lưu sông Hồng, dựng nghiệp ở đất Sơn Nam (nay thuộc Thái Bình)".
+- Có thể chú thích ĐỊA DANH NAY LÀ ĐÂU bằng ngoặc "(nay thuộc ...)" — giúp người đọc định vị. Chỉ chú cho địa danh, KHÔNG chú cho niên đại.
+- Địa danh phải khớp nhau về mặt địa lý và giữ nguyên suốt truyện: nhân vật đi từ đâu tới đâu phải hợp lý, không nhảy cóc giữa hai đầu đất nước mà không có lý do.
+
+PHÂN BIỆT HAI TẦNG — đây là luật quan trọng nhất của phần bối cảnh:
+  TẦNG BỐI CẢNH là LỊCH SỬ THẬT. Địa danh thật, triều đại thật, vua chúa thật, chiến tranh thật. Người đọc phải gõ được tên đó lên mạng và tra ra — đó chính là cái làm câu chuyện đáng đọc và tiện thể cho họ biết thêm về một thời đã qua.
+  TẦNG NHÂN VẬT là HƯ CẤU. Nhân vật chỉ là MỘT NGƯỜI BÌNH THƯỜNG sống trong thời đó, không phải người có tên trong sử sách.
+
+- PHẢI neo rõ: dưới triều nào, đời vua nào. Viết thẳng tên thật — "dưới thời Hán Vũ Đế", "đời vua Thành Thái", "thời mạc phủ Tokugawa". Chọn MỘT rồi giữ nguyên cả truyện.
+- Sự kiện và hoàn cảnh của thời đó (chiến tranh, dời đô, mở mang bờ cõi, mất mùa, khoa cử) được kể như bối cảnh nhân vật sống qua — kể ĐÚNG như lịch sử, KHÔNG sửa kết cục.
+- Nhưng nhân vật thì TUYỆT ĐỐI không được là một người có thật: không gán cho nhân vật chiến công, chức vụ hay số phận của một nhân vật lịch sử; không đặt nhân vật vào vị trí độc nhất của một triều (đừng viết "ông là Tể tướng của vua X" — hãy viết "ông làm quan trong triều dưới thời vua X", một trong nhiều người).
+- Người có thật là NỀN, không phải bạn diễn: được nhắc như "vua đang trị vì", "quân của tướng X vừa đi qua", "chiếu chỉ từ kinh đô ban xuống". KHÔNG dựng cảnh họ trò chuyện, khen thưởng hay kết thân với nhân vật — cái đó là bịa chuyện về một người có thật, khác hẳn với việc kể chuyện một người hư cấu.
+- KHÔNG nêu năm dương lịch cụ thể hay niên hiệu kèm số ("năm 1428", "năm Thuận Thiên thứ ba"). Lý do kỹ thuật: dữ liệu chỉ cho TUỔI nhân vật, không có mốc lịch nào — nêu một con số năm là tự bịa ra, và nó biến toàn bộ các giai đoạn đời nhân vật thành thứ tra ngược được rồi sai. Muốn nói rõ hơn thì dùng "đầu/giữa/cuối thời <triều đại>".
 
 NỀN VĂN MINH PHẢI NHẬN RA ĐƯỢC — luật quan trọng, đừng bỏ qua:
 - Tool này có nhiều nền văn minh khác nhau. Nếu bỏ tên nhân vật đi mà truyện đọc như nhau ở mọi nền thì truyện hỏng: người đọc không có gì để nhận ra mình đang ở đâu.
@@ -76,6 +91,12 @@ ${profile.era.storySetting}
 
 CHẤT LIỆU VĂN HÓA của nền này (dùng ít nhất BA thứ, rải ra các hồi khác nhau, thành cảnh sống chứ không phải liệt kê):
 ${profile.era.cultureVi}
+
+ĐỊA DANH CÓ THẬT (chọn ra vài cái hợp nhau về địa lý rồi dùng xuyên suốt; được chú "(nay thuộc ...)"):
+${profile.era.geographyVi}
+
+TRIỀU ĐẠI & ĐỜI VUA CÓ THẬT (chọn ĐÚNG MỘT, nêu THẲNG TÊN, giữ nguyên cả truyện; được dùng "đầu/giữa/cuối thời ...", KHÔNG nêu năm dương lịch hay niên hiệu kèm số):
+${profile.era.periodVi}
 
 === HỒ SƠ NHÂN VẬT (suy từ lá số, đã chốt) ===
 Giới tính nhân vật: ${genderWord} (giữ đúng giới tính của người xem lá số).
