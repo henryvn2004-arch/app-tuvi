@@ -29,6 +29,7 @@ import {
 } from '@/lib/agent/past-life-story';
 import { generatePortraitImage } from '@/lib/image/openai-image';
 import type { BirthParams } from '@/lib/contract/v1';
+import { withToolOutcome } from '@/lib/ops/tool-outcome';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -385,7 +386,7 @@ export async function OPTIONS() {
   return options();
 }
 
-export async function POST(request: NextRequest) {
+async function runPost(request: NextRequest) {
   const auth = await authUser(request);
   if ('error' in auth) return err(auth.error, auth.status);
 
@@ -417,4 +418,10 @@ export async function GET(request: NextRequest) {
   const action = searchParams.get('action') || 'history';
   if (action === 'history') return handleHistory(request);
   return err('Invalid action', 400);
+}
+
+// S1 (track COO) — bọc để tự ghi lượt chạy thành công/hỏng vào `events`.
+// Chỉ QUAN SÁT: ngoại lệ vẫn ném lại nguyên vẹn, Response trả về không đổi.
+export async function POST(request: NextRequest) {
+  return withToolOutcome('chan-dung-tien-kiep', () => runPost(request));
 }
