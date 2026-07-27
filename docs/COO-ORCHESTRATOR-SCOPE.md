@@ -265,6 +265,22 @@ toàn bộ lĩnh vực D (sao lưu/DR · tuân thủ · hỗ trợ user · SEO) 
 **Quy trình mỗi sprint:** tao giải thích gọn *làm để làm gì* → hỏi những điểm
 cần chốt → làm → 1 PR draft → CI xanh → Henry duyệt → sprint kế.
 
+### 📺 Mặt bằng giám sát: trang admin, không phải Telegram (Henry chốt 2026-07-27)
+
+> *"Page đó sẽ là cái mà tao dùng monitor mọi thứ, ngoài kênh telegram."*
+
+- **Trang admin = nơi xem CHÍNH.** Mọi thứ COO đo phải hiện ở đây.
+- **Telegram = kênh ĐẨY, chỉ cho cái khẩn.** Không nhét báo cáo định kỳ vào.
+- **Nhà chung: `#page-cron`** — trang này vốn đã tên "Cron & Jobs (Vận Hành)"
+  nên **mở rộng chính nó** thay vì đẻ mục nav mới trùng chức năng. Nhãn đổi
+  thành **"Sức Khỏe & Jobs"**.
+- **Đổi cách xếp workplan:** trước đây dồn toàn bộ phần hiển thị vào S5. Nay
+  **mỗi sprint ship luôn panel của nó**. Henry thấy tiến độ từng chặng thay vì
+  chờ tới gần cuối track, và S5 co lại còn phần digest + tổng hợp.
+
+Panel đầu tiên (**🩺 Sức Khỏe Tool**, dữ liệu của S1) đặt **TRƯỚC** khối cron
+có chủ đích: job chạy trễ thì sửa sau cũng được, **tool hỏng là mất khách ngay**.
+
 ### Ghi chú S1: phạm vi hoá ra NHỎ hơn "mọi route gọi LLM/ảnh"
 
 Henry chốt phủ mọi route có gọi LLM/ảnh — grep ra 15 route. Nhưng rà kỹ thì
