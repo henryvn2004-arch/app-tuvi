@@ -937,6 +937,7 @@
       <!-- ── CRON & JOBS (Vận Hành) ── -->
       <div class="page" id="page-cron">
         <div id="cron-alert" style="margin-bottom:.75rem"></div>
+        <div id="ops-digest"></div>
         <div id="env-preflight"></div>
 
         <!-- Sức Khỏe Tool (track COO, S1) — đặt TRƯỚC phần cron vì đây là thứ
@@ -1456,6 +1457,42 @@ function cronStatusBadge(s) {
   return `<span class="badge ${map[s]||'badge-grey'}">${lbl[s]||s||'—'}</span>`;
 }
 
+// ── Digest Vận Hành (track COO, S5) ──
+// Bản tóm tắt do cron ops-digest dựng hằng ngày. Hiện Ở ĐÂY kể cả khi chưa đẩy
+// được ra Telegram — trang admin là mặt bằng giám sát chính.
+function renderOpsDigest(row) {
+  const host = document.getElementById('ops-digest');
+  if (!host) return;
+  if (!row) {
+    host.innerHTML = `<div class="panel" style="margin-bottom:1rem">
+      <div class="panel-header"><div class="panel-title">🛠️ Digest Vận Hành</div></div>
+      <div style="padding:.8rem 1rem;font-size:.76rem;color:var(--text-lt)">
+        Chưa có bản digest nào. Cron <code>ops-digest</code> chạy 07:30 VN hằng ngày —
+        hoặc bấm “▶ Chạy ngay” ở bảng job bên dưới để dựng ngay một bản.
+      </div></div>`;
+    return;
+  }
+  const m = row.meta || {};
+  const when = new Date(row.ts).toLocaleString('vi-VN', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' });
+  host.innerHTML = `
+    <div class="panel" style="margin-bottom:1rem">
+      <div class="panel-header">
+        <div class="panel-title">🛠️ Digest Vận Hành</div>
+        <div class="panel-actions">
+          <span class="badge ${m.has_issues ? 'badge-red' : 'badge-green'}">
+            ${m.has_issues ? 'có việc cần xem' : 'bình thường'}
+          </span>
+          <span style="font-size:.72rem;color:var(--text-lt)">${when}</span>
+        </div>
+      </div>
+      <pre style="margin:0;padding:.8rem 1rem;font-family:var(--mono);font-size:.72rem;line-height:1.7;
+                  color:var(--text);white-space:pre-wrap;word-break:break-word">${escHtmlLocal(String(m.text || ''))}</pre>
+      ${m.delivered === false ? `<div style="padding:0 1rem .7rem;font-size:.72rem;color:var(--orange)">
+        ⚠ Bản này chỉ được ghi lại, chưa đẩy ra Telegram — chưa đặt <code>ADMIN_TELEGRAM_CHAT_ID</code>.
+      </div>` : ''}
+    </div>`;
+}
+
 // ── Preflight biến môi trường (track COO, S4) ──
 // CHỈ hiện CÓ / KHÔNG CÓ — không bao giờ hiện giá trị, độ dài hay ký tự đầu.
 // Trang này sau xác thực admin, nhưng bí mật không có lý do gì rời khỏi server.
@@ -1612,6 +1649,7 @@ async function loadCron() {
     // cmo-digest/anomaly-alerts/3 job autopilot chưa từng hiện trên trang này.
     if (res && res.jobs && res.jobs.length) _jobs = res.jobs;
     renderEnvPreflight((res && res.env) || []);
+    renderOpsDigest((res && res.digest) || null);
   } catch (e) { /* vẫn render registry với last-run rỗng */ }
 
   // latest run + stats

@@ -631,12 +631,21 @@ async function handleCheckBank(sp: URLSearchParams): Promise<Response> {
 // chỉ đọc/ghi qua service key ở đây. Job Vercel tự log qua withCronLog;
 // edge (auto-pipeline) log tay trong trigger.
 const CRON_SECRET = process.env.CRON_SECRET || '';
+// Phải khớp với sổ job ở lib/ops/jobs.ts. Bảng này TRƯỚC ĐÂY cũng chỉ có 5
+// mục như sổ cũ trong admin.html, nên nút "Chạy ngay" của 5 job mới thêm không
+// hoạt động — cùng một kiểu trôi lệch giữa hai danh sách chép tay.
 const CRON_TRIGGERS: Record<string, { path?: string; edge?: string }> = {
   'cron-khao-luan':    { path: '/api/cron-khao-luan' },
   'cron-master-write': { path: '/api/cron-master-write' },
   'cron-push':         { path: '/api/cron-push' },
   'cron-daily-push':   { path: '/api/cron/daily-push' },
   'auto-pipeline':     { edge: 'auto-pipeline' },
+  'ops-digest':        { path: '/api/cron/ops-digest' },
+  'cmo-digest':        { path: '/api/cron/cmo-digest' },
+  'anomaly-alerts':    { path: '/api/cron/anomaly-alerts' },
+  'autopilot-price':   { path: '/api/cron/autopilot-price' },
+  'autopilot-promo':   { path: '/api/cron/autopilot-promo' },
+  'autopilot-nudge':   { path: '/api/cron/autopilot-nudge' },
 };
 
 async function handleAdminCronRuns(request: NextRequest): Promise<Response> {
@@ -669,6 +678,7 @@ async function handleAdminCronRuns(request: NextRequest): Promise<Response> {
       // admin.html đã trôi khỏi thực tế (khai 5 job trong khi có 9).
       jobs: evaluateJobs(runs),
       env: checkEnv(),
+      digest: await latestOpsDigest(),
     });
   } catch (e: unknown) { return err((e as Error).message); }
 }
@@ -689,6 +699,21 @@ async function opsAlerts(): Promise<unknown[]> {
     return res.ok ? await res.json() : [];
   } catch {
     return [];
+  }
+}
+
+/** Bản Digest Vận Hành gần nhất (S5) — hiện trên panel kể cả khi chưa đẩy được. */
+async function latestOpsDigest(): Promise<unknown | null> {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/events?event_type=eq.ops_digest&select=ts,meta&order=ts.desc&limit=1`,
+      { headers: SB_HEADERS },
+    );
+    if (!res.ok) return null;
+    const rows = (await res.json()) as unknown[];
+    return rows[0] || null;
+  } catch {
+    return null;
   }
 }
 

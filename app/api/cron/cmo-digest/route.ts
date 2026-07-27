@@ -29,13 +29,57 @@ async function handle(request: NextRequest) {
   if (!CRON_SECRET || auth !== 'Bearer ' + CRON_SECRET) {
     return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
   }
-  if (!TG_CHAT_ID) return NextResponse.json({ ok: true, skipped: 'no ADMIN_TELEGRAM_CHAT_ID' });
-
+  // CỐ Ý KHÔNG thoát sớm khi thiếu ADMIN_TELEGRAM_CHAT_ID — cùng lỗi thiết kế
+  // đã vá ở anomaly-alerts (S2): một kênh GỬI chưa cấu hình làm chết luôn cả
+  // việc DỰNG báo cáo, nên suốt 14 ngày không có bản digest nào TỒN TẠI, chứ
+  // không phải có mà không gửi được. Nay vẫn dựng và vẫn ghi vào events để
+  // panel admin đọc; Telegram chỉ là đường đẩy thêm.
+  //
+  // ⚠️ Digest này gọi LLM nên KHÔNG dựng khi thiếu cấu hình sẽ tiết kiệm tiền
+  // — nhưng đổi lại là mù hoàn toàn. Chi phí một lượt tóm tắt/ngày là nhỏ so
+  // với việc không biết gì suốt hai tuần.
   try {
     const text = await generateCmoDigestText();
-    await tgSendMessage(TG_CHAT_ID, '🎖️ CMO Digest — ' + new Date().toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }) + '\n\n' + text);
-    return NextResponse.json({ ok: true, sent: true });
+    let delivered = false;
+    if (TG_CHAT_ID) {
+      await tgSendMessage(
+        TG_CHAT_ID,
+        '🎖️ CMO Digest — ' + new Date().toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }) + '\n\n' + text,
+      );
+      delivered = true;
+    }
+    await logCmoDigest(text, delivered);
+    return NextResponse.json({
+      ok: true,
+      sent: delivered,
+      note: TG_CHAT_ID ? undefined : 'đã dựng + ghi log, CHƯA đẩy — thiếu ADMIN_TELEGRAM_CHAT_ID',
+    });
   } catch (e: unknown) {
     return NextResponse.json({ ok: false, error: (e as Error).message }, { status: 500 });
+  }
+}
+
+/** Lưu bản digest vào `events` để panel đọc kể cả khi chưa có kênh Telegram. */
+async function logCmoDigest(text: string, delivered: boolean): Promise<void> {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_KEY;
+  if (!url || !key) return;
+  try {
+    await fetch(`${url}/rest/v1/events`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+        Prefer: 'return=minimal',
+      },
+      body: JSON.stringify({
+        event_type: 'cmo_digest',
+        platform: 'web',
+        meta: { text, delivered },
+      }),
+    });
+  } catch {
+    /* best-effort */
   }
 }
