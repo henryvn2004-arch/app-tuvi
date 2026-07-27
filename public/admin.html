@@ -1444,6 +1444,40 @@ function cronStatusBadge(s) {
   return `<span class="badge ${map[s]||'badge-grey'}">${lbl[s]||s||'—'}</span>`;
 }
 
+// ── Cảnh báo vận hành (track COO, S2) ──
+// Nguồn: events(event_type='ops_alert') do cron anomaly-alerts ghi. Hiện Ở ĐÂY
+// kể cả khi Telegram chưa cấu hình — trang admin là mặt bằng giám sát chính.
+function renderOpsAlerts(alerts) {
+  const host = document.getElementById('cron-alert');
+  if (!alerts.length) { host.innerHTML = ''; return; }
+
+  // Gộp theo key, giữ bản mới nhất: cron chạy 3h/lần nên cùng một sự cố sẽ lặp
+  // lại nhiều dòng — hiện hết thì băng cảnh báo dài lê thê mà không thêm thông tin.
+  const seen = new Map();
+  for (const a of alerts) {
+    const k = (a.meta && a.meta.key) || '?';
+    if (!seen.has(k)) seen.set(k, a);
+  }
+  const rows = [...seen.values()];
+  const undelivered = rows.filter(a => a.meta && !a.meta.delivered).length;
+
+  host.innerHTML = `
+    <div style="border:1px solid var(--red);border-radius:var(--radius);background:color-mix(in srgb,var(--red) 8%,transparent);padding:.7rem .9rem">
+      <div style="font-weight:700;color:var(--red);font-size:.82rem;margin-bottom:.4rem">
+        🚨 ${rows.length} cảnh báo vận hành (48h qua)
+      </div>
+      ${rows.map(a => `
+        <div style="font-size:.76rem;color:var(--text);margin:.25rem 0;white-space:pre-wrap">
+          • ${escHtmlLocal(String((a.meta && a.meta.text) || ''))}
+          <span style="opacity:.65">— ${new Date(a.ts).toLocaleString('vi-VN',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</span>
+        </div>`).join('')}
+      ${undelivered ? `<div style="margin-top:.5rem;font-size:.72rem;color:var(--orange)">
+        ⚠ ${undelivered} cảnh báo mới chỉ được GHI LẠI, chưa đẩy đi đâu cả —
+        chưa đặt <code>ADMIN_TELEGRAM_CHAT_ID</code>. Nếu không mở trang này thì không ai biết.
+      </div>` : ''}
+    </div>`;
+}
+
 // ── Sức Khỏe Tool (track COO, S1) ──
 // Dữ liệu do RPC tool_health đọc từ events(event_type='tool_outcome').
 let _toolHealth = { '24': [], '7d': [] };
@@ -1496,6 +1530,7 @@ async function loadCron() {
     runs = (res && res.runs) || [];
     _toolHealth = { '24': (res && res.toolHealth24) || [], '7d': (res && res.toolHealth7d) || [] };
     renderToolHealth();
+    renderOpsAlerts((res && res.opsAlerts) || []);
   } catch (e) { /* vẫn render registry với last-run rỗng */ }
 
   // latest run + stats

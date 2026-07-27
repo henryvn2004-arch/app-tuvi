@@ -61,6 +61,9 @@ interface Thresholds {
   revenueDropPct: number; // doanh thu hôm nay thấp hơn TB/ngày 7 ngày trước bao nhiêu % thì cảnh báo
   cooldownHours: number; // tối thiểu giữa 2 lần cảnh báo CÙNG loại
   dayCheckHourVn: number; // giờ VN (24h) bắt đầu xét DAU/doanh thu sụt — đợi dữ liệu trong ngày tích đủ
+  toolErrorPct: number; // % lỗi HỆ THỐNG 24h/tool vượt thì cảnh báo (khớp ngưỡng đỏ panel Sức Khỏe Tool)
+  toolMinSample: number; // tối thiểu số lượt "lẽ ra phải chạy được" trong 24h mới xét
+  toolHardFailSample: number; // tool hỏng SẠCH (100%) thì chỉ cần chừng này lượt là báo ngay
 }
 
 const THRESHOLD_DEFAULTS: Thresholds = {
@@ -71,6 +74,12 @@ const THRESHOLD_DEFAULTS: Thresholds = {
   revenueDropPct: 40,
   cooldownHours: 20,
   dayCheckHourVn: 20,
+  toolErrorPct: 8,
+  toolMinSample: 10,
+  // Mẫu nhỏ hơn hẳn cho ca hỏng SẠCH: tool trả phí ít lượt (vd Chân Dung Tiền
+  // Kiếp) có thể cả ngày chỉ vài lượt, đợi đủ 10 mẫu mới báo thì người thứ 3-4
+  // đã mất tiền rồi. Hỏng 3/3 lượt gần như chắc chắn là hỏng thật, không phải noise.
+  toolHardFailSample: 3,
 };
 
 function vnHourNow(): number {
@@ -124,6 +133,36 @@ export async function checkAnomalies(): Promise<{ fired: FiredAlert[]; checked: 
         text: `Kênh ${c.platform}: lỗi ${c.error_rate}% (${c.errors}/${c.total} lượt, 24h qua) — vượt ngưỡng ${th.channelErrorPct}%`,
       });
     }
+  }
+
+  // ── Sức khỏe TOOL (track COO, S2) — canh trên lưu lượng THẬT ───────────
+  // Đọc RPC tool_health, tức chính số nuôi panel "Sức Khỏe Tool" trong admin →
+  // cảnh báo và bảng KHÔNG BAO GIỜ lệch nhau. Không dựng hệ cảnh báo thứ hai:
+  // dùng lại nguyên ngưỡng/cooldown/đường gửi của M0.3.
+  //
+  // `attempts` đã loại lỗi người dùng (thiếu ngày sinh, chưa đăng nhập, chưa
+  // thanh toán) khỏi cả tử số lẫn mẫu số — xem _patches/migration-tool-health.sql.
+  //
+  // ĐÁNH ĐỔI ĐÃ BIẾT: cách này bắt được mọi tool CÓ người dùng, nhưng phải có
+  // user dính lỗi trước. Tool ít/không có lượt thì ở đây mù — đó là phần việc
+  // của canary (chạy thử chủ động), làm sau vì tốn tiền thật mỗi lượt.
+  checked.push('tool_health');
+  const tools = await callRpc<
+    { tool_id: string; attempts: number; errors: number; error_rate: number; last_error: string | null }[]
+  >('tool_health', { p_hours: 24 });
+  for (const t of tools) {
+    if (!t.errors) continue;
+    const hardFail = t.errors === t.attempts && t.attempts >= th.toolHardFailSample;
+    const rateBreach = t.attempts >= th.toolMinSample && t.error_rate > th.toolErrorPct;
+    const key = `tool_error:${t.tool_id}`;
+    if (!(hardFail || rateBreach) || inCooldown(key)) continue;
+    fired.push({
+      key,
+      text:
+        `Tool ${t.tool_id}: ${hardFail ? 'HỎNG SẠCH' : 'lỗi'} ${t.error_rate}% ` +
+        `(${t.errors}/${t.attempts} lượt, 24h qua)` +
+        (t.last_error ? `\n   ↳ ${t.last_error}` : ''),
+    });
   }
 
   // ── Biên lợi nhuận chat âm (từ đầu ngày VN tới giờ) ──

@@ -629,7 +629,7 @@ async function handleAdminCronRuns(request: NextRequest): Promise<Response> {
   try {
     // Trang này là trung tâm VẬN HÀNH của admin (track COO) — trả kèm sức khoẻ
     // tool để panel không phải gọi thêm một vòng API nữa.
-    const [r, health24, health7d] = await Promise.all([
+    const [r, health24, health7d, alerts] = await Promise.all([
       fetch(
         `${SUPABASE_URL}/rest/v1/cron_runs?select=job_key,source,status,started_at,finished_at,duration_ms,note&order=started_at.desc&limit=300`,
         { headers: SB_HEADERS },
@@ -638,10 +638,30 @@ async function handleAdminCronRuns(request: NextRequest): Promise<Response> {
       // làm sập cả trang Cron vốn đã chạy tốt từ trước.
       toolHealth(24),
       toolHealth(24 * 7),
+      opsAlerts(),
     ]);
     const runs = r.ok ? await r.json() : [];
-    return ok({ runs, toolHealth24: health24, toolHealth7d: health7d });
+    return ok({ runs, toolHealth24: health24, toolHealth7d: health7d, opsAlerts: alerts });
   } catch (e: unknown) { return err((e as Error).message); }
+}
+
+/**
+ * Cảnh báo vận hành 48h gần nhất (events.event_type='ops_alert', do cron
+ * anomaly-alerts ghi). Panel hiện chúng ngay cả khi Telegram chưa cấu hình —
+ * trang admin là mặt bằng giám sát chính, Telegram chỉ là đường đẩy thêm.
+ */
+async function opsAlerts(): Promise<unknown[]> {
+  try {
+    const since = new Date(Date.now() - 48 * 3600 * 1000).toISOString();
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/events?event_type=eq.ops_alert&ts=gte.${encodeURIComponent(since)}` +
+        `&select=ts,meta&order=ts.desc&limit=50`,
+      { headers: SB_HEADERS },
+    );
+    return res.ok ? await res.json() : [];
+  } catch {
+    return [];
+  }
 }
 
 /** Gọi RPC tool_health — best-effort, lỗi trả mảng rỗng. */
