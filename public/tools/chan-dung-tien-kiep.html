@@ -255,7 +255,8 @@ async function _doGenerate(d) {
   _loadingCtl.start();
 
   const token = window.Auth?.getSession()?.access_token || '';
-  const birth = { day: d.ngay, month: d.thang, year: d.nam, hourBranch: d.gioIdx, gender: d.gioitinh, isLunar: false };
+  const birth = { day: d.ngay, month: d.thang, year: d.nam, hourBranch: d.gioIdx, gender: d.gioitinh,
+    isLunar: false, name: (d.hoten || '').trim() || undefined };
   _lastBirth = birth;
   const call = (phase) => fetch('/api/chan-dung-tien-kiep', {
     method: 'POST',
@@ -313,7 +314,10 @@ function renderBirthLine() {
   const el = document.getElementById('birthLine');
   const b = _lastBirth;
   if (!b || !b.day || !b.month || !b.year) { el.style.display = 'none'; return; }
-  const parts = [b.gender === 'nu' ? 'Nữ' : 'Nam'];
+  const parts = [];
+  const nm = (b.name || b.hoten || '').trim();
+  if (nm) parts.push(nm);
+  parts.push(b.gender === 'nu' ? 'Nữ' : 'Nam');
   parts.push(('0' + b.day).slice(-2) + '/' + ('0' + b.month).slice(-2) + '/' + b.year +
     (b.isLunar ? ' (âm lịch)' : ' (dương lịch)'));
   const i = Number(b.hourBranch);

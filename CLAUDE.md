@@ -558,6 +558,22 @@ Upgrade position nhưng vẫn giữ nguyên tính chất các sao, các cung."*
   sao** nên vẫn có cự phú, danh y, tông sư, chủ đội thương thuyền, thủ lĩnh
   khai hoang — không dồn hết về triều đình.
 
+### Vòng chỉnh tiếp — gắn TÊN vào dòng lá số (PR mới)
+Henry: form có ô "Họ và tên" mà dòng tóm tắt chỉ ra "Lá số: Nam · 09/05/1984…".
+`birthSummaryLine()` trong `shell.js` VỐN ĐÃ xử lý tên (`b.hoten || b.name`) —
+nhưng **cả 2 trang đều bỏ rơi `hoten` khi dựng `_lastBirth`** nên nó không bao
+giờ nhận được. Thêm `name` vào birth ở cả trang shell lẫn standalone, và bổ
+sung phần tên vào `renderBirthLine()` riêng của trang standalone (trang này
+không có Shell nên tự dựng chuỗi).
+- **Lợi kèm:** `req.birth.name` cũng là thứ `nguoiXemLine()` dùng để dựng
+  "Người xem: <tên>" trong system prompt — nên rail giờ xưng hô đúng tên luôn.
+  KHÔNG ảnh hưởng lá số/nhân vật: `computeLaso` không đọc `name`, và
+  `pickCharacterName`/`pickEraForLaso` seed từ dữ liệu lá số chứ không từ birth.
+- Bỏ trống ô tên → chuỗi tự lược phần tên, không hiện dấu · thừa.
+- **Verify:** Playwright kiểm 3 nơi đều ra
+  "Nguyễn Văn Henry · Nam · 09/05/1984 (dương lịch) · giờ Sửu (01–03h)": dòng
+  trên trang · payload gửi `/api/share-result` · trang standalone.
+
 ### CÒN LẠI
 - Bật `enabled=true` sau deploy (câu SQL ở trên).
 - Henry gen thử trên prod đủ 5 nền để soi ảnh — tao chỉ verify được tới tầng
