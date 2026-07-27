@@ -145,7 +145,7 @@ window.SHELL_INTRO={key:'chan-dung-tien-kiep',title:'Chân Dung Tiền Kiếp',d
 <script src="/tuvi-form.js?v=1"></script>
 <script src="/tuvi-paywall.js"></script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=46"></script>
+<script src="/shell.js?v=47"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=1"></script>
 <script>
 
@@ -253,11 +253,25 @@ async function _doGenerate() {
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
 
+    // Rail = phần đọc SÂU của tool này. Hỏi về nhân vật thực chất là hỏi về
+    // chính lá số của người xem, chỉ khác cái vỏ — và vỏ đó dễ tiếp nhận hơn
+    // vì nhân vật đã đi trọn một đời, nghe như thuật lại chứ không như phán.
+    // Nên chips CỐ Ý hỏi về nhân vật bằng lời thường, KHÔNG dùng thuật ngữ tử
+    // vi và không xưng "tôi" — bản cũ ("Cung Quan Lộc của tôi nói gì?") kéo
+    // người đọc ra khỏi mạch truyện vừa đọc xong.
+    var nv = data.characterName || 'nhân vật này';
+    var ba = profileIsFemale() ? 'Bà' : 'Ông';
     Shell.setContext({
       birth: _lastBirth,
+      wrap: 'past-life',
       label: 'Chân dung tiền kiếp',
-      greeting: 'Đã dựng xong nhân vật và câu chuyện từ lá số của bạn. Muốn hỏi thêm về cung Quan Lộc, các đại vận hay cốt cách của mình?',
-      chips: ['Cung Quan Lộc của tôi nói gì?', 'Đại vận nào là đỉnh cao của tôi?', 'Cung Mệnh của tôi có gì đặc biệt?', 'Giai đoạn khó khăn nhất của tôi là khi nào?'],
+      greeting: 'Chuyện đời **' + nv + '** đến đây là hết phần chính. Còn nhiều điều nữa nằm trong lá số mà truyện chưa kể — bạn muốn hỏi gì về ' + nv.split(' ').slice(-1)[0] + '?',
+      chips: [
+        nv + ' có giàu không?',
+        ba + ' ấy lấy vợ chồng thế nào?',
+        ba + ' ấy có bệnh tật hay tai ách gì không?',
+        'Vì sao lại luận ra như vậy?',
+      ],
     });
   } catch (e) {
     _loadingCtl && _loadingCtl.stop();
@@ -330,6 +344,11 @@ function renderStory(data) {
 // Dựng trang /ket-qua chia sẻ được — CỐ Ý cho người xem link đọc trọn cả ảnh
 // lẫn truyện mà không phải trả Lượng: chỉ NGƯỜI SINH mới bị tính phí, còn mỗi
 // lượt sinh vẫn đẻ ra một đường link lan được.
+/** Nhân vật mang giới tính của người xem lá số (engine chốt theo birth). */
+function profileIsFemale() {
+  return !!(_lastBirth && _lastBirth.gender === 'nu');
+}
+
 function publishShareable(imageUrl) {
   var d = _lastStory;
   if (!d) return;

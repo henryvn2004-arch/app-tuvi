@@ -37,6 +37,8 @@ import {
   toGeminiContents,
 } from '@/lib/agent/providers/gemini';
 import { logLlmUsage, type LlmUsage } from '@/lib/agent/usage';
+import { computePastLife } from '@/lib/engine/past-life';
+import { pastLifeRailWrapper } from '@/lib/agent/past-life-story';
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!;
@@ -254,6 +256,23 @@ export async function runAgent(
       : CHAT_SYSTEM_GENERAL(undefined, tone);
     system += '\n\n' + timeContext(); // thời gian chuẩn múi giờ VN (đè bản inline của template)
     system += TOOLS_INSTRUCTION(hasLaso, !!profiles);
+
+    // ── Vỏ bọc kể chuyện (req.wrap) — CHỈ thêm lớp giọng, KHÔNG đụng dữ liệu.
+    // Rail của tool Chân Dung Tiền Kiếp: người xem vừa đọc xong đời một nhân
+    // vật dựng từ chính lá số này, nên hỏi tiếp về nhân vật thay vì hỏi thẳng
+    // về cung/sao. Nhân vật được tính LẠI Ở SERVER từ birth (deterministic —
+    // cùng lá số ra cùng người) nên chắc chắn trùng bản đang hiện trên màn
+    // hình, và client không phải gửi chữ nào vào system.
+    if (req.wrap === 'past-life' && ctx.ls && req.birth) {
+      try {
+        const g = req.birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
+        system += '\n\n' + pastLifeRailWrapper(computePastLife(ctx.ls, g));
+      } catch (e) {
+        // Hỏng lớp vỏ thì vẫn trả lời được như luận giải thường — không chặn lượt.
+        console.error('[runAgent] pastLifeRailWrapper lỗi:', (e as Error)?.message);
+      }
+    }
+
     tools = buildToolDefs(!!profiles);
   }
 

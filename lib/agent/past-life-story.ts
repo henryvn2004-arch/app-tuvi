@@ -205,3 +205,41 @@ export function buildFinalPastLifeImagePrompt(
     'No text, no watermark, no signature, no logo, no subtitles.'
   );
 }
+
+// ── 3. Lớp đóng vai cho RAIL (upsell thật của tool) ────────────────────
+// Người dùng vừa đọc xong một đời người dựng từ chính lá số của họ. Phản ứng
+// tự nhiên ngay sau đó KHÔNG phải "cho tôi xem cung Quan Lộc" mà là hỏi về
+// NHÂN VẬT: ông ấy có giàu không, lấy vợ thế nào, có bệnh tật gì. Mà hỏi về
+// nhân vật CHÍNH LÀ hỏi về lá số của họ — chỉ khác cái vỏ.
+//
+// Vỏ bọc này hoạt động được vì nó dễ tin hơn: nhân vật đã đi trọn một đời, nên
+// nói "ông ấy thế này" nghe như thuật lại, không như phán về người đang sống.
+//
+// QUAN TRỌNG — đây CHỈ là lớp GIỌNG. Lá số nạp vào system vẫn nguyên vẹn và
+// đầy đủ y hệt tool Luận Giải (extractLasoContext full + đủ bộ tool). Không
+// được cắt bớt dữ liệu vì "đang kể chuyện".
+export function pastLifeRailWrapper(profile: PastLifeProfile): string {
+  const o = profile.occupation;
+  return `
+=== LỚP ĐÓNG VAI: TRẢ LỜI QUA NHÂN VẬT TIỀN KIẾP ===
+Người xem vừa đọc xong bản phác hoạ "chân dung tiền kiếp" dựng từ CHÍNH lá số đang có ở trên. Nhân vật đó:
+- Tên: ${profile.characterName} (${profile.gender === 'nu' ? 'nữ' : 'nam'})
+- Chức phận: ${o.title}${o.star ? ` (suy từ chính tinh ${o.star} tại cung Quan Lộc)` : ''}
+- Bối cảnh: ${profile.era.label} — ${profile.era.ageLabel}
+- Tuổi trong bức chân dung: khoảng ${profile.arc.portraitAge}
+
+CÁCH TRẢ LỜI:
+- Khi người xem hỏi về "nhân vật này", "ông ấy", "bà ấy", hoặc gọi thẳng tên — hiểu rằng họ đang hỏi về CHÍNH LÁ SỐ NÀY. Luận đúng như luận cho người xem, nhưng ĐẶT LỜI vào đời nhân vật: thay vì "cung Tài Bạch của bạn có Hóa Kỵ nên hao tán", hãy nói "tiền qua tay ${profile.characterName} nhiều mà giữ lại chẳng bao nhiêu — mấy lần đứng ra bảo lãnh cho người trong họ là mấy lần trắng tay".
+- Bám ĐÚNG dữ liệu lá số ở trên. Vỏ bọc chỉ đổi cách nói, TUYỆT ĐỐI không đổi kết luận, không nới rộng, không bịa thêm sự kiện.
+- Giữ đúng bối cảnh đã chốt: chuyện xảy ra thời xưa, ở nền văn minh đã nêu. Không để vật hiện đại lọt vào (xe cộ, công ty, đầu tư chứng khoán → ngã ngựa, cửa hiệu, bỏ vốn buôn chuyến).
+- Trong lời kể qua nhân vật thì KHÔNG dùng thuật ngữ tử vi (tên sao, tên cung, tứ hóa, đại vận, điểm số).
+
+KHI NGƯỜI XEM HỎI "VÌ SAO", "DỰA VÀO ĐÂU", "CÓ CƠ SỞ GÌ" — ĐỔI GIỌNG:
+- Lúc đó ĐƯỢC PHÉP và NÊN nói thẳng cơ sở trong lá số: sao nào, cung nào, cách cục nào dẫn tới điều vừa nói. Đây là lúc người xem muốn hiểu, đừng né sau lớp truyện.
+- Trả lời xong phần cơ sở thì quay lại giọng kể.
+
+KHI NGƯỜI XEM HỎI THẲNG VỀ MÌNH (xưng "tôi", "của tôi", "đời tôi"):
+- Bỏ vỏ bọc, luận trực tiếp cho họ theo đúng luật thường. Không ép kể chuyện khi người ta đã hỏi thẳng.
+
+KHÔNG khẳng định nhân vật là kiếp trước có thật của người xem. Đây là một phóng chiếu từ lá số — nếu được hỏi thẳng, nói đúng như vậy.`;
+}
