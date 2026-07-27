@@ -115,3 +115,99 @@ export async function logTransaction(p: {
     /* best-effort */
   }
 }
+
+// ── Chốt chặn thanh toán PHÍA SERVER (S0 track COO) ───────────
+// VÌ SAO CẦN: paywall hiện nằm HOÀN TOÀN ở client — `tuvi-paywall.js` gọi
+// `/api/payment?action=deduct` như một request RIÊNG, rồi mới gọi API của tool.
+// Nên các route tool trả phí trước đây chỉ xác thực "user hợp lệ" là chạy luôn:
+// gọi thẳng endpoint bằng curl là dùng miễn phí không giới hạn, mỗi lượt tốn
+// tiền thật (OpenAI image + LLM). Hai hàm dưới cho route tự kiểm chứng ở server.
+
+/**
+ * true nếu user ĐÃ trả cho lượt dùng mang `slug` này (có một dòng
+ * `credit_transactions` âm gắn đúng slug).
+ *
+ * Dùng CHÍNH quy ước "slug = một lượt mua, mở lại được" mà paywall client và
+ * `/api/payment?action=check` đang dùng — nên tool gọi API nhiều lần cho cùng
+ * một lượt mua (vd Chân Dung Tiền Kiếp chạy song song 2 pha story+image) vẫn
+ * qua được, không cần cơ chế "tiêu thụ một lần" phức tạp.
+ */
+export async function hasSlugAccess(userId: string, slug: string): Promise<boolean> {
+  if (!SUPABASE_URL || !SUPABASE_KEY || !userId || !slug) return false;
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/credit_transactions` +
+        `?user_id=eq.${encodeURIComponent(userId)}` +
+        `&slug=eq.${encodeURIComponent(slug)}&amount=lt.0&limit=1&select=id`,
+      { headers: SB_HEADERS },
+    );
+    if (!res.ok) return false;
+    return ((await res.json()) as unknown[]).length > 0;
+  } catch {
+    return false;
+  }
+}
+
+/** Cửa sổ (phút) cho đường lùi khi client chưa gửi slug — xem `toolPaymentDenied`. */
+const RECENT_PAYMENT_MIN = 20;
+
+/**
+ * true nếu user vừa trả tiền cho tool này trong `minutes` phút gần đây, xét
+ * theo tiền tố slug (`generateToolSlug` luôn dựng slug dạng `<toolId>-...`).
+ */
+async function hasRecentToolPayment(
+  userId: string,
+  toolId: string,
+  minutes: number,
+): Promise<boolean> {
+  if (!SUPABASE_URL || !SUPABASE_KEY || !userId) return false;
+  const since = new Date(Date.now() - minutes * 60_000).toISOString();
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/credit_transactions` +
+        `?user_id=eq.${encodeURIComponent(userId)}` +
+        `&slug=like.${encodeURIComponent(toolId + '*')}` +
+        `&amount=lt.0&created_at=gte.${encodeURIComponent(since)}&limit=1&select=id`,
+      { headers: SB_HEADERS },
+    );
+    if (!res.ok) return false;
+    return ((await res.json()) as unknown[]).length > 0;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Chốt chặn cho route tool TRẢ PHÍ. Trả `null` nếu được phép chạy, hoặc chuỗi
+ * lý do nếu phải từ chối (nơi gọi tự dựng Response cho khớp shape lỗi của mình).
+ *
+ * Cho qua khi:
+ *  1. Tắt paywall (dev/soft-launch).
+ *  2. `tool_pricing` khai giá 0 — miễn phí hợp lệ. `handleDeduct` KHÔNG ghi
+ *     giao dịch cho tool giá 0, nên đòi slug ở đây sẽ chặn oan tool free.
+ *     (`getToolPrice` trả null khi tool vắng mặt/bị tắt — lúc đó `handleDeduct`
+ *     vẫn trừ tiền theo giá client gửi, nên vẫn phải đòi thanh toán.)
+ *  3. Có slug và slug đó đã được thanh toán — đường chính, chính xác nhất vì
+ *     buộc đúng lượt chạy vào đúng lượt mua.
+ *  4. ĐƯỜNG LÙI: user vừa trả cho CHÍNH tool này trong 20 phút qua.
+ *
+ * Vì sao cần (4): trang tool là HTML tĩnh trong `public/`, và không xác minh
+ * được nó có bị CDN giữ lại hay không. Nếu server mới đòi slug trong lúc trình
+ * duyệt còn chạy bản HTML cũ (chưa gửi slug), khách ĐÃ TRẢ TIỀN sẽ ăn 402 —
+ * đúng cái vòng "trả tiền mà không nhận được hàng" mà sprint này sinh ra để
+ * dập. (4) vẫn xác minh ở server, chỉ lỏng hơn (4) cho phép dùng lại trong 20
+ * phút; so với lỗ đang vá (dùng miễn phí VÔ HẠN, VĨNH VIỄN) thì vẫn là bịt.
+ * Siết bỏ (4) được sau khi lưu lượng đã chuyển hết sang client mới.
+ */
+export async function toolPaymentDenied(
+  toolId: string,
+  userId: string,
+  slug: string,
+): Promise<string | null> {
+  if (paywallDisabled()) return null;
+  const { getToolPrice } = await import('./pricing');
+  if ((await getToolPrice(toolId)) === 0) return null;
+  if (slug && (await hasSlugAccess(userId, slug))) return null;
+  if (await hasRecentToolPayment(userId, toolId, RECENT_PAYMENT_MIN)) return null;
+  return 'Lượt dùng này chưa được thanh toán.';
+}

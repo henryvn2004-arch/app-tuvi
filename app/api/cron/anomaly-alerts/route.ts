@@ -3,6 +3,11 @@
 // checkAnomalies() (lib/marketing/anomaly-alerts.ts) — chỉ gửi Telegram admin
 // khi THẬT SỰ có bất thường vượt ngưỡng (im lặng nếu không, khác CMO Digest
 // vốn gửi đều đặn 1 lần/ngày). Read-only, no-op an toàn nếu thiếu cấu hình.
+// Route đọc request.headers (auth CRON_SECRET) nên KHÔNG prerender tĩnh được.
+// Thiếu dòng này, Next 14 vẫn thử prerender lúc build → withCronLog bắt được
+// lỗi "Dynamic server usage" rồi ghi vào cron_runs, sinh hàng trăm dòng lỗi
+// GIẢ mỗi lần deploy và chôn vùi lỗi thật (S0 track COO).
+export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 export const maxDuration = 30;
 

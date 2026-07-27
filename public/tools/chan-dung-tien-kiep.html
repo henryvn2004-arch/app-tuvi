@@ -261,7 +261,9 @@ async function _doGenerate(d) {
   const call = (phase) => fetch('/api/chan-dung-tien-kiep', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
-    body: JSON.stringify({ birth, phase }),
+    // slug = mã lượt mua; server đối chiếu lại với credit_transactions để tự
+    // xác minh đã thanh toán, không tin riêng phía client (S0 track COO).
+    body: JSON.stringify({ birth, phase, slug: _currentSlug }),
   });
 
   // Hai pha chạy SONG SONG: truyện (~20s) hiện ra trước để đọc, ảnh (~60s)

@@ -239,6 +239,9 @@ async function _doGenerate(d) {
       headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
       body: JSON.stringify({
         birth: { day: d.ngay, month: d.thang, year: d.nam, hourBranch: d.gioIdx, gender: d.gioitinh, isLunar: false },
+        // slug = mã lượt mua; server đối chiếu lại với credit_transactions để tự
+        // xác minh đã thanh toán, không tin riêng phía client (S0 track COO).
+        slug: _currentSlug,
       }),
     });
     const data = await res.json();

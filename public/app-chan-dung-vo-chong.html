@@ -219,7 +219,9 @@ async function _doGenerate() {
     var res = await fetch('/api/chan-dung-vo-chong', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
-      body: JSON.stringify({ birth: _lastBirth }),
+      // slug = mã lượt mua; server đối chiếu lại với credit_transactions để tự
+      // xác minh đã thanh toán, không tin riêng phía client (S0 track COO).
+      body: JSON.stringify({ birth: _lastBirth, slug: _currentSlug }),
     });
     var data = await res.json();
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
