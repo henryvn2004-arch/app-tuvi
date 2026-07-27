@@ -483,6 +483,43 @@ nghe như thuật lại chứ không như phán về người đang sống. Upse
   nhân vật trong prompt đúng bản engine chốt. tsc · lint · prettier · node
   --check. Bump `shell.js?v=46→47` (27 trang).
 
+### Vòng chỉnh tiếp — neo mốc lịch sử thật + vá nút Chia sẻ desktop (PR mới)
+- **🐞 Nút "Chia sẻ" trên desktop bấm KHÔNG RA GÌ.** Căn nguyên: `shareWorkspace`
+  chỉ hỏi `if (navigator.share)` — trên **desktop Chrome hàm đó VẪN TỒN TẠI**,
+  nhưng bị gọi SAU `await fetch('/api/share-result')` nên "user gesture" của cú
+  click đã hết hạn, trình duyệt từ chối; nhánh `catch` lại `return` im lặng khi
+  gặp `AbortError` → không hiện gì cả. Sửa: helper `shareLink()` — share sheet
+  native CHỈ dùng trên thiết bị cảm ứng, desktop luôn mở modal có nút Sao chép;
+  bọc thêm `try/catch` vì vài bản Chrome ném lỗi ĐỒNG BỘ. Áp cho cả
+  `shareWorkspace` lẫn `shareSession` (cùng bug). **Tự dính bug khi test:**
+  bản đầu `isTouchDevice()` ƯU TIÊN `navigator.userAgentData.mobile`, mà cờ đó
+  false ngay trên máy mobile khi UA-CH không được set → mobile rơi nhầm vào
+  modal. Sửa thành OR các tín hiệu, `pointer: coarse` là tín hiệu chính.
+- **Dòng lá số hiện NGAY TRÊN TRANG** (trước chỉ có trong link chia sẻ nên Henry
+  không thấy): "Lá số: Nam · 03/06/1998 (dương lịch) · giờ Sửu (01–03h)" dưới
+  badge nền văn minh, ở cả 2 trang. Shell mở `Shell.birthSummary()` để trang
+  dùng CHUNG chuỗi với bản chèn vào `/ket-qua`; trang standalone không có Shell
+  nên tự dựng theo đúng định dạng đó.
+- **NEO MỐC LỊCH SỬ THẬT** (Henry: không có mốc thì người đọc không biết chuyện
+  xảy ra ở đâu, thời nào). Đây là **đảo luật cũ** vốn cấm sạch nhân vật/triều
+  đại có thật. Mở theo TỪNG MỨC RỦI RO chứ không mở toang:
+  - `geographyVi` mỗi era — **địa danh có thật** (Trường Giang/Chiết Giang,
+    sông Hồng/Thăng Long, Kyoto/Kyushu, Hanyang/Gyeongju, Chao Phraya/
+    Ayutthaya). Mức an toàn nhất: sông núi tỉnh thành hầu như không đổi. Cho
+    phép chú "(nay thuộc …)" để người đọc định vị.
+  - `periodVi` mỗi era — **triều đại có thật**, nói ở mức "dưới thời X",
+    **CẤM nêu năm/niên hiệu** (engine chỉ có TUỔI nhân vật, không có mốc lịch —
+    nêu năm là bịa). Danh sách triều đại **khớp với `ageLabel` đang hiện trên
+    badge**: Nhật bỏ Edo (badge ghi "lãnh chúa cát cứ" = Sengoku, Edo là thái
+    bình → mâu thuẫn); Hàn bỏ Silla (chưa có khoa cử).
+  - **Ranh giới giữ lại:** nhân vật chính LUÔN hư cấu; người có thật chỉ được
+    nhắc như BỐI CẢNH XA (ai đang trị vì, cuộc chiến nào đang diễn ra) —
+    **không cho họ xuất hiện, nói năng, gặp gỡ hay khen thưởng nhân vật**, vì
+    đó là bịa lịch sử về người có thật. Không sửa kết cục sự kiện lịch sử.
+- **Verify:** tsc · lint · prettier · `node --check` · Playwright 3 ca share
+  (desktop → modal + link; mobile → native; native ném lỗi → rơi về modal) ·
+  5 nền đều có đủ địa danh riêng, **0 rò rỉ địa danh chéo**, badge khớp thời kỳ.
+
 ### CÒN LẠI
 - Bật `enabled=true` sau deploy (câu SQL ở trên).
 - Henry gen thử trên prod đủ 5 nền để soi ảnh — tao chỉ verify được tới tầng

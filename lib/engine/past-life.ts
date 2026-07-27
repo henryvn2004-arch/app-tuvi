@@ -85,6 +85,13 @@ export interface Era {
   /** Chất liệu văn hoá BẮT BUỘC dùng trong truyện — đây mới là thứ phân biệt
    *  5 nền, chứ không phải cái tên nhân vật. */
   cultureVi: string;
+  /** ĐỊA DANH CÓ THẬT để neo câu chuyện. Henry: không có mốc thật thì người
+   *  đọc không biết chuyện xảy ra ở đâu, truyện bị trôi. Địa danh là loại mốc
+   *  AN TOÀN nhất — sông núi tỉnh thành hầu như không đổi, khó sai. */
+  geographyVi: string;
+  /** TRIỀU ĐẠI/THỜI KỲ CÓ THẬT khớp với `ageLabel`. Rủi ro cao hơn địa danh
+   *  (dễ sai niên đại) nên prompt bắt nói ở mức "thời X", cấm nêu năm cụ thể. */
+  periodVi: string;
 }
 
 export const ERAS: Record<EraId, Era> = {
@@ -101,7 +108,11 @@ export const ERAS: Record<EraId, Era> = {
     sceneGrammarEn:
       'Architecture and objects are Chinese: red lacquered timber columns, upturned glazed-tile eaves, wooden lattice windows, bamboo scrolls and ink stones, paved courtyards with old pines.',
     storySetting:
-      'Trung Hoa cổ đại, một triều đại HƯ CẤU không tên. Dùng chữ chung: triều đình, kinh thành, biên ải, hoàng thượng. KHÔNG nhắc triều đại/nhân vật lịch sử Trung Hoa có thật (không Hán, Đường, Tống, Minh, Thanh; không Gia Cát Lượng, Tào Tháo, Tần Thủy Hoàng).',
+      'Trung Hoa thời phong kiến. Neo vào MỘT triều đại có thật rồi giữ nguyên suốt truyện; nhân vật là người HƯ CẤU sống trong triều đại đó.',
+    geographyVi:
+      'Trường Giang, Hoàng Hà, Chiết Giang, Giang Nam, Tứ Xuyên, Sơn Đông, Cam Túc, Hà Bắc, Lĩnh Nam, Trường An, Lạc Dương, Khai Phong, Kim Lăng, Tô Châu, Hàng Châu, Đôn Hoàng, Ngọc Môn Quan, Thái Sơn, Tần Lĩnh, Vạn Lý Trường Thành.',
+    periodVi:
+      'thời Hán, thời Đường, thời Tống, thời Minh — chọn MỘT. Có thể nhắc tên hoàng đế mở đầu triều đó (Hán Cao Tổ, Đường Thái Tông, Tống Thái Tổ, Minh Thái Tổ) như MỐC THỜI GIAN.',
     cultureVi:
       'khoa cử và quan trường, biên ải phương bắc, ấm trà và bàn trà, bút lông – nghiên mực – thư pháp, đèn lồng đêm hội, ngựa trạm đưa thư, chợ phiên, rượu hâm.',
   },
@@ -118,7 +129,11 @@ export const ERAS: Record<EraId, Era> = {
     sceneGrammarEn:
       'Architecture and landscape are Vietnamese: dark tiled communal-hall roofs with curved ridges, carved timber posts, bamboo groves and banyan trees, flooded rice terraces, river landings with wooden sampans, a village gate and pond.',
     storySetting:
-      'Đại Việt thời phong kiến, một triều đại HƯ CẤU không tên. Dùng chữ chung: triều đình, kinh thành, biên ải, bệ hạ. Địa danh nếu có phải là địa danh hư cấu mang âm hưởng Việt, KHÔNG dùng tên triều đại/nhân vật lịch sử Việt Nam có thật (không Lý, Trần, Lê, Nguyễn; không Trần Hưng Đạo, Nguyễn Trãi).',
+      'Đại Việt thời phong kiến. Neo vào MỘT triều đại có thật rồi giữ nguyên suốt truyện; nhân vật là người HƯ CẤU sống trong triều đại đó.',
+    geographyVi:
+      'sông Hồng, sông Mã, sông Lam, sông Đáy, Thăng Long, Phố Hiến, Vân Đồn, Kinh Bắc, Sơn Nam, Hải Dương, Thanh Hóa, Nghệ An, Hoan Châu, ải Chi Lăng, Tam Điệp, Yên Tử, Hoa Lư, Lam Sơn.',
+    periodVi:
+      'thời Lý, thời Trần, thời Lê sơ, thời Lê trung hưng — chọn MỘT. Có thể nhắc tên vua mở đầu triều (Lý Thái Tổ, Trần Thái Tông, Lê Thái Tổ) như MỐC THỜI GIAN.',
     cultureVi:
       'luỹ tre và đình làng, đồng ruộng nước và mùa gặt, sông và đò ngang, chợ quê, chùa làng tiếng chuông chiều, khoa cử chữ Nho, trầu cau, giặc phương bắc tràn xuống.',
   },
@@ -135,7 +150,11 @@ export const ERAS: Record<EraId, Era> = {
     sceneGrammarEn:
       'Architecture and landscape are Japanese: a timber castle keep on a fitted stone base with white plaster walls and dark tiled gables, tatami rooms behind sliding shoji paper doors, a raked stone garden, a torii gate, cherry and maple, a wooden bridge over a stream.',
     storySetting:
-      'Nhật Bản thời phong kiến, một PHIÊN TRẤN HƯ CẤU không tên do một lãnh chúa cai quản. Dùng chữ chung: lãnh chúa, phiên trấn, thành chủ, gia thần, võ sĩ. KHÔNG nhắc triều đại/dòng họ/nhân vật lịch sử Nhật có thật (không Tokugawa, Oda, Toyotomi, Minamoto, Taira; không Edo, Kyoto, Kamakura).',
+      'Nhật Bản thời phong kiến, dưới quyền một lãnh chúa. Neo vào MỘT thời kỳ có thật rồi giữ nguyên suốt truyện; nhân vật và phiên trấn của nhân vật là HƯ CẤU, đặt trong thời kỳ đó.',
+    geographyVi:
+      'Kyoto, Osaka, Edo, Kamakura, Nara, Sakai, đảo Kyushu, đảo Shikoku, vùng Kanto, vùng Kansai, vùng Tohoku, núi Phú Sĩ, hồ Biwa, sông Yodo, eo biển Shimonoseki, đường Tokaido.',
+    periodVi:
+      'thời Muromachi hoặc thời Chiến Quốc (Sengoku) — chọn MỘT. Đây là thời các lãnh chúa cát cứ, KHÔNG phải thời Edo thái bình. Dòng họ tướng quân đương thời là Ashikaga; có thể nhắc như MỐC THỜI GIAN.',
     cultureVi:
       'lãnh chúa và phiên trấn, thành gỗ trên nền đá, phòng chiếu tatami sau cửa giấy, trà thất và nghi thức pha trà, thanh kiếm đeo bên hông, hoa anh đào và lá phong đỏ, tiếng chuông chùa, cầu gỗ bắc qua suối.',
   },
@@ -152,7 +171,11 @@ export const ERAS: Record<EraId, Era> = {
     sceneGrammarEn:
       'Architecture and landscape are Korean: hanok timber halls with brightly painted dancheong beams under deep tiled eaves, paper doors and warm ondol floors, low stone walls, persimmon trees, ridged mountains and a temple on a mountain pass.',
     storySetting:
-      'Triều Tiên thời phong kiến, một vương triều HƯ CẤU không tên. Dùng chữ chung: triều đình, kinh đô, quan văn quan võ, khoa cử, bệ hạ. KHÔNG nhắc triều đại/nhân vật lịch sử Triều Tiên có thật (không Joseon, Goryeo, Silla; không Yi Sun-sin, Sejong; không Hanyang, Seoul).',
+      'Triều Tiên thời phong kiến. Neo vào MỘT vương triều có thật rồi giữ nguyên suốt truyện; nhân vật là người HƯ CẤU sống trong vương triều đó.',
+    geographyVi:
+      'Hanyang (nay là Seoul), Kaesong, Pyongyang, Gyeongju, đảo Jeju, sông Hàn, sông Đại Đồng, núi Kumgang, núi Halla, vùng Gyeongsang, vùng Jeolla, vùng Hamgyong, đèo Mungyong.',
+    periodVi:
+      'thời Goryeo hoặc thời Joseon — chọn MỘT (đây là hai triều có chế độ khoa cử, khớp với thời đại đã nêu). Có thể nhắc vua khai quốc hoặc vua nổi tiếng của triều đó (Taejo, Sejong) như MỐC THỜI GIAN.',
     cultureVi:
       'khoa cử và bè phái trong triều, nhà hanok sàn sưởi ondol, áo trắng thường phục, nhân sâm và thuốc bắc, đàn gayageum, rượu gạo đục, đèo núi mùa đông dài, chùa trên núi.',
   },
@@ -169,7 +192,11 @@ export const ERAS: Record<EraId, Era> = {
     sceneGrammarEn:
       'Architecture and landscape are Thai: a gilded temple with steep multi-tiered roofs and curving naga finials, whitewashed stupas, teak stilt houses above water, a river landing with long slender boats, banana and palm, heavy monsoon light.',
     storySetting:
-      'Một vương quốc HƯ CẤU không tên của người Thái ở lục địa Đông Nam Á, bên một dòng sông lớn, Phật giáo là quốc đạo. Dùng chữ chung: đức vua, triều đình, kinh đô, quan lớn, nhà chùa, sư. KHÔNG nhắc triều đại/nhân vật lịch sử Thái có thật (không Ayutthaya, Sukhothai, Rattanakosin; không Rama, Naresuan; không Bangkok).',
+      'Một vương quốc của người Thái ở lục địa Đông Nam Á, Phật giáo Nam tông là quốc đạo. Neo vào MỘT vương quốc có thật rồi giữ nguyên suốt truyện; nhân vật là người HƯ CẤU sống trong vương quốc đó.',
+    geographyVi:
+      'sông Chao Phraya, sông Mê Kông, sông Ping, Ayutthaya, Sukhothai, Lopburi, Chiang Mai, Nakhon Si Thammarat, Phitsanulok, cao nguyên Khorat, eo Kra, vịnh Xiêm La, rừng Tenasserim.',
+    periodVi:
+      'thời Sukhothai, thời Ayutthaya, thời vương quốc Lan Na — chọn MỘT. Có thể nhắc vua nổi tiếng của thời đó (Ramkhamhaeng, Naresuan) như MỐC THỜI GIAN.',
     cultureVi:
       'chùa mái nhọn dát vàng, sư khất thực buổi sớm, voi trong đội quân và trong lễ, chợ họp trên sông, nhà sàn gỗ tếch, mùa mưa và mùa khô rõ rệt, thuyền dài, hoa sen trên ao chùa.',
   },

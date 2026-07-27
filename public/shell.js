@@ -582,17 +582,45 @@
         // Người dùng bấm ✕ (AbortError) thì thôi; lỗi khác → rơi về modal tự dựng.
         var titleTxt = (curMeta && curMeta.title) || 'Luận Đường';
         var modalOpts = { title: 'Chia sẻ phiên Luận Đường', desc: 'Ai có link đều đọc được lá số và toàn bộ hỏi đáp trong phiên này.', shareText: 'Xem phần luận giải của thầy cho lá số này: ' };
-        if (navigator.share) {
-          navigator.share({ title: titleTxt + ' — Tử Vi Minh Bảo', text: 'Xem phần luận giải của thầy cho lá số này:', url: url })
-            .catch(function (e) { if (e && e.name === 'AbortError') return; openShareModal(url, modalOpts); });
-        } else {
-          openShareModal(url, modalOpts); // desktop → modal có sao chép + Facebook/Zalo/WhatsApp
-        }
+        shareLink(url, { title: titleTxt + ' — Tử Vi Minh Bảo', text: 'Xem phần luận giải của thầy cho lá số này:', url: url }, modalOpts);
       })
       .catch(function () { if (btn) btn.disabled = false; alert('Lỗi mạng khi tạo link chia sẻ.'); });
   }
   // opts: {title, desc, shareText} — cho phép tái dùng modal cho cả "chia sẻ
   // phiên rail" (shareSession) lẫn "chia sẻ kết quả khung giữa" (shareWorkspace).
+  // ── Chia sẻ: chọn giữa share sheet native và modal tự dựng ────────────
+  // BUG đã sửa: trước đây chỉ hỏi `if (navigator.share)`. Trên DESKTOP Chrome
+  // hàm đó VẪN TỒN TẠI, nhưng ta gọi nó SAU `await fetch` — lúc đó "user
+  // gesture" của cú click đã hết hạn, nên trình duyệt từ chối. Nhánh catch lại
+  // return im lặng khi gặp AbortError → bấm Chia sẻ trên desktop KHÔNG RA GÌ.
+  //
+  // Nay: share sheet native CHỈ dùng trên thiết bị cảm ứng (nơi nó thật sự
+  // tiện — Zalo/Messages/AirDrop). Desktop luôn mở modal có nút Sao chép +
+  // Facebook/Zalo/WhatsApp. Bọc thêm try/catch vì vài bản Chrome ném lỗi ĐỒNG
+  // BỘ chứ không trả promise lỗi.
+  // OR các tín hiệu, KHÔNG ưu tiên cái nào: `userAgentData.mobile` chỉ đáng
+  // tin khi nó TRUE (nhiều môi trường không set UA-CH nên trả false trên đúng
+  // máy mobile — tự tay dính lúc test). `pointer: coarse` là tín hiệu chắc
+  // nhất cho điện thoại/tablet thật. CỐ Ý không xét maxTouchPoints: laptop
+  // Windows có màn cảm ứng vẫn là desktop, chuột vẫn là con trỏ chính.
+  function isTouchDevice() {
+    try {
+      if (navigator.userAgentData && navigator.userAgentData.mobile === true) return true;
+    } catch (e) { /* ignore */ }
+    return !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+  }
+  function shareLink(url, payload, modalOpts) {
+    if (!navigator.share || !isTouchDevice()) { openShareModal(url, modalOpts); return; }
+    try {
+      var p = navigator.share(payload);
+      if (p && p.catch) {
+        p.catch(function (e) { if (e && e.name === 'AbortError') return; openShareModal(url, modalOpts); });
+      }
+    } catch (e) {
+      openShareModal(url, modalOpts);
+    }
+  }
+
   function openShareModal(url, opts) {
     opts = opts || {};
     var mTitle = opts.title || 'Chia sẻ';
@@ -704,12 +732,7 @@
         // file ảnh thô qua Web Share API level 2: nhiều app nhận file (Messenger,
         // Zalo…) BỎ LUÔN url đi kèm, người nhận chỉ thấy ảnh, không bấm vào đâu
         // được. Ảnh vẫn hiện đẹp nhờ OG:image khi link được unfurl.
-        if (navigator.share) {
-          navigator.share({ title: s.title + ' — Tử Vi Minh Bảo', text: shareTxt, url: url })
-            .catch(function (e) { if (e && e.name === 'AbortError') return; openShareModal(url, modalOpts); });
-        } else {
-          openShareModal(url, modalOpts);
-        }
+        shareLink(url, { title: s.title + ' — Tử Vi Minh Bảo', text: shareTxt, url: url }, modalOpts);
       })
       .catch(function () { reEnable(); alert('Lỗi mạng khi tạo link chia sẻ.'); });
   }
@@ -980,6 +1003,9 @@
     // thay vì chỉ ảnh+text phẳng — dùng khi kết quả có nhiều "thẻ" như workspace
     // (vd Cung Phu Thê / Chân Dung / Luận Giải). Gọi Shell.setShareable(null) để
     // ẩn nút (vd tool quay lại form nhập để làm mới kết quả).
+    /** Một dòng tóm tắt lá số — trang tự render để hiện trên màn hình, dùng
+     *  CHUNG chuỗi với bản chèn vào link chia sẻ (không lệch nhau). */
+    birthSummary: function (b) { return birthSummaryLine(b); },
     setShareable: function (o) {
       if (!o) { shareable = null; renderShareBtn(); return; }
       var kind = o.kind === 'image' ? 'image' : 'text';
