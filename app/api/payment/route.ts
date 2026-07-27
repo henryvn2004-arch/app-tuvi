@@ -12,6 +12,8 @@ import { ok, err, options, parseBody } from '@/lib/cors';
 import { getPackage, getPackages } from '@/lib/billing/packages';
 import { getToolPrice } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
+import { evaluateJobs } from '@/lib/ops/jobs';
+import { checkEnv } from '@/lib/ops/preflight';
 import { logCronRun } from '@/lib/cron/log';
 import { tgSendMessage } from '@/lib/channels/telegram';
 import { parseFirebaseServiceAccount, sendFcmPush } from '@/lib/channels/push';
@@ -657,7 +659,17 @@ async function handleAdminCronRuns(request: NextRequest): Promise<Response> {
     ]);
     const runs = r.ok ? await r.json() : [];
     const reconcile = await rpcSafe('payment_reconcile', { p_days: 30 });
-    return ok({ runs, toolHealth24: health24, toolHealth7d: health7d, opsAlerts: alerts, reconcile });
+    return ok({
+      runs,
+      toolHealth24: health24,
+      toolHealth7d: health7d,
+      opsAlerts: alerts,
+      reconcile,
+      // S4: sổ job giờ ở SERVER (lib/ops/jobs.ts) — sổ hardcode cũ trong
+      // admin.html đã trôi khỏi thực tế (khai 5 job trong khi có 9).
+      jobs: evaluateJobs(runs),
+      env: checkEnv(),
+    });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
