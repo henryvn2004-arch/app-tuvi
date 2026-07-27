@@ -165,6 +165,53 @@ export async function checkAnomalies(): Promise<{ fired: FiredAlert[]; checked: 
     });
   }
 
+  // ── Job quá hạn / skip liên tiếp + env bắt buộc thiếu (track COO, S4) ────
+  // Ba loại hỏng ÂM THẦM — không sinh ra dòng lỗi nào nên mọi dashboard vẫn
+  // xanh. Đây đúng là bộ ba đã để CMO Digest chết 14 ngày mà không ai biết.
+  checked.push('job_health', 'env_preflight');
+  try {
+    const { evaluateJobs } = await import('@/lib/ops/jobs');
+    const { missingCriticalEnv } = await import('@/lib/ops/preflight');
+
+    const runsRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/cron_runs?select=job_key,status,started_at,note` +
+        `&order=started_at.desc&limit=300`,
+      { headers: SB_HEADERS },
+    );
+    if (runsRes.ok) {
+      for (const j of evaluateJobs(await runsRes.json())) {
+        if (j.overdue && !inCooldown(`job_overdue:${j.key}`)) {
+          fired.push({
+            key: `job_overdue:${j.key}`,
+            text: j.lastRun
+              ? `Job "${j.label}" QUÁ HẠN — lịch ${j.schedule}, lần chạy cuối cách đây ${Math.round((Date.now() - new Date(j.lastRun).getTime()) / 3600000)} giờ`
+              : `Job "${j.label}" CHƯA HỀ có lượt chạy nào được ghi log — lịch ${j.schedule}`,
+          });
+        }
+        // 3 lượt skip liên tiếp = job đang không làm được việc, chỉ im lặng
+        // thay vì báo lỗi. `skip` KHÔNG phải trạng thái bình thường.
+        if (j.skipStreak >= 3 && !inCooldown(`job_skip:${j.key}`)) {
+          fired.push({
+            key: `job_skip:${j.key}`,
+            text: `Job "${j.label}" đã SKIP ${j.skipStreak} lượt liên tiếp — chạy đều nhưng không làm được việc gì`,
+          });
+        }
+      }
+    }
+
+    const missing = missingCriticalEnv();
+    if (missing.length && !inCooldown('env_missing')) {
+      fired.push({
+        key: 'env_missing',
+        text:
+          `Thiếu ${missing.length} biến môi trường BẮT BUỘC:\n` +
+          missing.map((e) => `   ↳ ${e.key} — ${e.feature}`).join('\n'),
+      });
+    }
+  } catch {
+    /* không để phần này làm hỏng các check khác */
+  }
+
   // ── Biên lợi nhuận chat âm (từ đầu ngày VN tới giờ) ──
   checked.push('margin');
   const margin = await callRpc<{ chat_cost_vnd: number; chat_revenue_vnd: number }>('dashboard_margin', {

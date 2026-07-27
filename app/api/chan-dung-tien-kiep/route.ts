@@ -15,6 +15,7 @@ export const runtime = 'nodejs';
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { toolPaymentDenied } from '@/lib/billing/credits';
+import { refundIfSystemFailure } from '@/lib/ops/refund';
 import { llmTextFull } from '@/lib/llm/complete';
 import { logLlmUsage, logImageUsage, logLlmParseFail } from '@/lib/agent/usage';
 import { railFreeGrant, railFreeTurnsPerGen } from '@/lib/billing/viral-budget';
@@ -414,9 +415,14 @@ async function runPost(request: NextRequest) {
 
   const phase = String(body.phase || 'story');
   const eraId = body.era ? String(body.era) : undefined;
-  if (phase === 'story') return handleStory(birth, eraId);
-  if (phase === 'image') return handleImage(auth.user.id, birth, eraId);
-  return err('phase không hợp lệ (story|image).', 400);
+  if (phase !== 'story' && phase !== 'image') return err('phase không hợp lệ (story|image).', 400);
+
+  const res = phase === 'story' ? await handleStory(birth, eraId) : await handleImage(auth.user.id, birth, eraId);
+  return refundIfSystemFailure(res, {
+    toolId: 'chan-dung-tien-kiep',
+    userId: auth.user.id,
+    slug: String(body.slug || ''),
+  });
 }
 
 export async function GET(request: NextRequest) {

@@ -937,6 +937,7 @@
       <!-- ── CRON & JOBS (Vận Hành) ── -->
       <div class="page" id="page-cron">
         <div id="cron-alert" style="margin-bottom:.75rem"></div>
+        <div id="env-preflight"></div>
 
         <!-- Sức Khỏe Tool (track COO, S1) — đặt TRƯỚC phần cron vì đây là thứ
              ảnh hưởng trực tiếp tới người dùng đang trả tiền; job chạy trễ thì
@@ -962,6 +963,7 @@
               <tbody id="th-body"></tbody>
             </table>
           </div>
+          <div id="reconcile-host"></div>
           <div style="padding:.6rem 1rem;font-size:.7rem;color:var(--text-lt);line-height:1.6">
             Tỷ lệ lỗi = lỗi hệ thống ÷ số lượt <b>lẽ ra phải chạy được</b>. Lỗi do người dùng
             (thiếu ngày sinh, chưa đăng nhập, chưa thanh toán) bị loại khỏi cả tử số lẫn mẫu số —
@@ -1454,6 +1456,69 @@ function cronStatusBadge(s) {
   return `<span class="badge ${map[s]||'badge-grey'}">${lbl[s]||s||'—'}</span>`;
 }
 
+// ── Preflight biến môi trường (track COO, S4) ──
+// CHỈ hiện CÓ / KHÔNG CÓ — không bao giờ hiện giá trị, độ dài hay ký tự đầu.
+// Trang này sau xác thực admin, nhưng bí mật không có lý do gì rời khỏi server.
+let _jobs = [];
+function renderEnvPreflight(envs) {
+  const host = document.getElementById('env-preflight');
+  if (!host || !envs.length) return;
+  const missing = envs.filter(e => !e.present);
+  const missCrit = missing.filter(e => e.critical);
+  host.innerHTML = `
+    <div class="panel" style="margin-bottom:1rem">
+      <div class="panel-header">
+        <div class="panel-title">🔧 Cấu Hình Bắt Buộc</div>
+        <div class="panel-actions"><span style="font-size:.72rem;color:var(--text-lt)">
+          ${envs.length - missing.length}/${envs.length} biến đã đặt
+        </span></div>
+      </div>
+      ${missCrit.length ? `
+        <div style="margin:.6rem 1rem;padding:.6rem .8rem;border:1px solid var(--red);border-radius:var(--radius);background:color-mix(in srgb,var(--red) 8%,transparent)">
+          <div style="font-weight:700;color:var(--red);font-size:.8rem;margin-bottom:.3rem">
+            ⚠ ${missCrit.length} biến BẮT BUỘC đang thiếu — tính năng dưới đây KHÔNG chạy
+          </div>
+          ${missCrit.map(e => `<div style="font-size:.75rem;color:var(--text);margin:.15rem 0">
+            <code>${escHtmlLocal(e.key)}</code> — ${escHtmlLocal(e.feature)}
+          </div>`).join('')}
+        </div>` : `
+        <div style="margin:.6rem 1rem;font-size:.78rem;color:var(--green);font-weight:600">
+          ✓ Đủ toàn bộ biến bắt buộc
+        </div>`}
+      ${missing.filter(e => !e.critical).length ? `
+        <div style="padding:0 1rem .7rem;font-size:.72rem;color:var(--text-lt);line-height:1.6">
+          Chưa đặt (tuỳ chọn — chỉ tắt tính năng tương ứng):
+          ${missing.filter(e => !e.critical).map(e => `<code>${escHtmlLocal(e.key)}</code>`).join(' · ')}
+        </div>` : ''}
+    </div>`;
+}
+
+// ── Đối soát trừ-Lượng ↔ giao-hàng (track COO, S3) ──
+// Khớp TỪNG giao dịch với bản ghi kết quả, không so tổng-với-tổng (cách đó
+// không chỉ ra được lượt nào hỏng). credits_at_risk = Lượng đã thu mà chưa
+// giao và cũng chưa hoàn — con số này cần bằng 0.
+function renderReconcile(rows) {
+  const host = document.getElementById('reconcile-host');
+  if (!rows || !rows.length) { host.innerHTML = ''; return; }
+  const atRisk = rows.reduce((s, r) => s + Number(r.credits_at_risk || 0), 0);
+  host.innerHTML = `
+    <div style="padding:.7rem 1rem;border-top:1px solid var(--line)">
+      <div style="font-size:.76rem;font-weight:700;color:var(--text);margin-bottom:.45rem">
+        💰 Đối soát trừ Lượng ↔ giao hàng (30 ngày)
+        ${atRisk
+          ? `<span style="color:var(--red);font-weight:700"> — ${atRisk} Lượng đang treo</span>`
+          : `<span style="color:var(--green);font-weight:600"> — cân đối</span>`}
+      </div>
+      ${rows.map(r => `
+        <div style="font-size:.74rem;color:var(--text-lt);margin:.18rem 0">
+          <b style="color:var(--text)">${escHtmlLocal(r.tool_id)}</b>:
+          ${r.charges} lượt thu · ${r.delivered} giao
+          ${Number(r.undelivered) ? `· <span style="color:var(--red)">${r.undelivered} CHƯA GIAO (${r.credits_at_risk} Lượng)</span>` : ''}
+          ${Number(r.refunded) ? `· ${r.refunded} đã hoàn` : ''}
+        </div>`).join('')}
+    </div>`;
+}
+
 // ── Cảnh báo vận hành (track COO, S2) ──
 // Nguồn: events(event_type='ops_alert') do cron anomaly-alerts ghi. Hiện Ở ĐÂY
 // kể cả khi Telegram chưa cấu hình — trang admin là mặt bằng giám sát chính.
@@ -1541,6 +1606,12 @@ async function loadCron() {
     _toolHealth = { '24': (res && res.toolHealth24) || [], '7d': (res && res.toolHealth7d) || [] };
     renderToolHealth();
     renderOpsAlerts((res && res.opsAlerts) || []);
+    renderReconcile((res && res.reconcile) || []);
+    // S4: sổ job nay do SERVER cấp (lib/ops/jobs.ts). Sổ hardcode CRON_JOBS cũ
+    // đã trôi khỏi thực tế — khai 5 job trong khi vercel.json có 9, nên
+    // cmo-digest/anomaly-alerts/3 job autopilot chưa từng hiện trên trang này.
+    if (res && res.jobs && res.jobs.length) _jobs = res.jobs;
+    renderEnvPreflight((res && res.env) || []);
   } catch (e) { /* vẫn render registry với last-run rỗng */ }
 
   // latest run + stats
@@ -1552,19 +1623,27 @@ async function loadCron() {
     if (new Date(r.started_at).getTime() < dayAgo) continue;
     if (r.status === 'ok') ok24++; else if (r.status === 'error') err24++;
   }
-  document.getElementById('cron-k-total').textContent = CRON_JOBS.length;
+  const jobList = _jobs.length ? _jobs : CRON_JOBS;
+  document.getElementById('cron-k-total').textContent = jobList.length;
   document.getElementById('cron-k-ok').textContent = ok24;
   document.getElementById('cron-k-err').textContent = err24;
   document.getElementById('cron-k-runs').textContent = runs.length;
 
-  body.innerHTML = CRON_JOBS.map(j => {
+  body.innerHTML = jobList.map(j => {
     const r = latest[j.key];
-    return `<tr>
-      <td><span class="td-title">${j.label}</span><div class="td-sub mono">${j.key}</div></td>
+    // Hai kiểu hỏng ÂM THẦM, không sinh dòng lỗi nào: job quá hạn, và job chạy
+    // đều nhưng lượt nào cũng skip. Đánh dấu ngay trên hàng để không phải suy ra.
+    const flags = [];
+    if (j.overdue) flags.push('<span class="badge badge-red" style="margin-left:.3rem">QUÁ HẠN</span>');
+    // badge-pending (cam) chứ không phải badge-orange — class đó không tồn tại
+    // trong admin.css, dùng vào là badge ra không màu.
+    if (j.skipStreak >= 3) flags.push(`<span class="badge badge-pending" style="margin-left:.3rem">SKIP ×${j.skipStreak}</span>`);
+    return `<tr${j.overdue ? ' style="background:color-mix(in srgb,var(--red) 6%,transparent)"' : ''}>
+      <td><span class="td-title">${escHtmlLocal(j.label)}</span>${flags.join('')}<div class="td-sub mono">${escHtmlLocal(j.key)}</div></td>
       <td><span class="badge ${SRC_BADGE[j.source]||'badge-grey'}">${j.source}</span></td>
-      <td style="font-size:.74rem">${j.schedule}</td>
-      <td style="font-size:.74rem;color:var(--text-lt)">${j.sink}</td>
-      <td style="font-size:.74rem">${r ? relTime(r.started_at) : '<span style="color:var(--text-lt)">chưa có log</span>'}${r&&r.duration_ms!=null?` · ${fmtDur(r.duration_ms)}`:''}</td>
+      <td style="font-size:.74rem">${escHtmlLocal(j.schedule)}</td>
+      <td style="font-size:.74rem;color:var(--text-lt)">${escHtmlLocal(j.sink)}</td>
+      <td style="font-size:.74rem">${r ? relTime(r.started_at) : '<span style="color:var(--red)">chưa có log</span>'}${r&&r.duration_ms!=null?` · ${fmtDur(r.duration_ms)}`:''}</td>
       <td>${r ? cronStatusBadge(r.status) : '<span class="badge badge-grey">—</span>'}</td>
       <td>${j.trigger ? `<button class="btn btn-ghost btn-sm" onclick="triggerCron('${j.key}',this)">▶ Chạy ngay</button>` : ''}</td>
     </tr>`;
