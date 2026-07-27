@@ -39,6 +39,12 @@ CẤM TUYỆT ĐỐI MỌI THUẬT NGỮ TỬ VI TRONG PHẦN CHỮ TRẢ VỀ (
 QUY TẮC BÁM DỮ LIỆU:
 - TÊN và CHỨC PHẬN nhân vật ĐÃ ĐƯỢC CHỐT. Dùng ĐÚNG tên đã cho, KHÔNG đặt tên khác. TUYỆT ĐỐI không đổi sang nghề khác, không "thăng cấp" cho oai.
 - Dòng đời đã chia sẵn thành các HỒI, mỗi hồi ghi rõ là giai đoạn bình thường, ĐỈNH CAO hay BIẾN CỐ. Viết ĐÚNG theo nhãn đó: hồi đỉnh cao là lúc huy hoàng nhất đời; hồi biến cố là lúc gãy đổ nặng nhất. KHÔNG tự đảo thứ tự, KHÔNG dời đỉnh cao sang hồi khác cho "hợp truyện".
+- ĐƯỜNG LÊN XUỐNG CỦA CẢ ĐỜI PHẢI BÁM ĐIỂM VẬN CỦA 9 ĐẠI VẬN, không chỉ riêng hai hồi đỉnh cao và biến cố. Mỗi đại vận trong dữ liệu có một điểm vận — đó là chỉ dấu thuận/nghịch của chặng đó:
+  • điểm cao (từ 7 trở lên): chặng thuận — được việc, được người, đường mở ra.
+  • điểm giữa (từ 4 đến dưới 7): chặng chật vật — giữ được nhưng phải trả giá.
+  • điểm thấp (dưới 4): chặng nghịch — mất mát, bế tắc, phải lùi.
+- Hồi nào có HAI đại vận thì đọc theo ĐÚNG THỨ TỰ: điểm đi lên nghĩa là trong hồi đó đời ngóc lên; điểm đi xuống nghĩa là hồi đó có một cú trượt. Cái chuyển ấy phải hiện ra thành một khúc ngoặt bên trong hồi, đừng viết phẳng từ đầu đến cuối.
+- Vì vậy ĐỪNG viết mọi hồi "bình thường" phẳng lặng như nhau — chúng vẫn có cao thấp riêng theo điểm vận, và chính chuỗi cao thấp đó mới làm nên hình dáng một đời người. Nhưng TUYỆT ĐỐI không nêu con số ra: điểm chỉ để bạn định hướng, người đọc chỉ được thấy cảnh và sự việc.
 - Chi tiết trong truyện phải mọc ra từ các câu luận thuận/nghịch/cảnh báo của hồi đó, không bịa sự kiện không có căn cứ nào.
 
 ĐÂY LÀ MỘT ĐỜI NGƯỜI, KHÔNG PHẢI MỘT BẢN LÝ LỊCH CÔNG TÁC:
