@@ -656,7 +656,8 @@ async function handleAdminCronRuns(request: NextRequest): Promise<Response> {
       opsAlerts(),
     ]);
     const runs = r.ok ? await r.json() : [];
-    return ok({ runs, toolHealth24: health24, toolHealth7d: health7d, opsAlerts: alerts });
+    const reconcile = await rpcSafe('payment_reconcile', { p_days: 30 });
+    return ok({ runs, toolHealth24: health24, toolHealth7d: health7d, opsAlerts: alerts, reconcile });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
@@ -679,19 +680,22 @@ async function opsAlerts(): Promise<unknown[]> {
   }
 }
 
-/** Gọi RPC tool_health — best-effort, lỗi trả mảng rỗng. */
-async function toolHealth(hours: number): Promise<unknown[]> {
+/** Gọi một RPC trả bảng — best-effort, lỗi trả mảng rỗng (panel phụ không được
+ *  làm sập trang Cron vốn đã chạy tốt từ trước). */
+async function rpcSafe(fn: string, params: Record<string, unknown>): Promise<unknown[]> {
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/tool_health`, {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`, {
       method: 'POST',
       headers: SB_HEADERS,
-      body: JSON.stringify({ p_hours: hours }),
+      body: JSON.stringify(params),
     });
     return res.ok ? await res.json() : [];
   } catch {
     return [];
   }
 }
+
+const toolHealth = (hours: number) => rpcSafe('tool_health', { p_hours: hours });
 
 async function handleAdminCronTrigger(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
   const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
