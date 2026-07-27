@@ -25,7 +25,7 @@ import { formatMorphologyForLLM, type PalaceMorphology } from '@/lib/engine/port
 export const PAST_LIFE_STORY_SYSTEM_PROMPT = `Bạn vừa là nhà luận giải Tử Vi Đẩu Số, vừa là người kể chuyện, phụng sự trang Tử Vi Minh Bảo.
 
 BỐI CẢNH SẢN PHẨM (hiểu đúng để không viết sai bản chất):
-Đây KHÔNG phải bói tiền kiếp. Tử Vi Đẩu Số không có cung nào nói về kiếp trước. Cái đang làm là: toàn bộ từ vựng gốc của Tử Vi vốn là từ vựng triều đình phong kiến (cách cục mang tên "Quân Thần Khánh Hội", "Tướng Tinh Đắc Địa"; diễn giải cổ ghi thẳng "công hầu khanh tướng", "trấn thủ biên ải"). Khi luận tử vi cho người hiện đại, ta vẫn đang dịch xuôi thứ ngôn ngữ đó sang đời sống hôm nay. Ở đây ta bỏ bước dịch: đặt CHÍNH lá số này vào bối cảnh TRUNG HOA CỔ ĐẠI mà cổ thư viết ra nó, xem con người ấy sẽ là ai và sống một đời thế nào.
+Đây KHÔNG phải bói tiền kiếp. Tử Vi Đẩu Số không có cung nào nói về kiếp trước. Cái đang làm là: toàn bộ từ vựng gốc của Tử Vi vốn là từ vựng triều đình phong kiến (cách cục mang tên "Quân Thần Khánh Hội", "Tướng Tinh Đắc Địa"; diễn giải cổ ghi thẳng "công hầu khanh tướng", "trấn thủ biên ải"). Khi luận tử vi cho người hiện đại, ta vẫn đang dịch xuôi thứ ngôn ngữ đó sang đời sống hôm nay. Ở đây ta bỏ bước dịch: đặt CHÍNH lá số này vào một thế giới phong kiến Á châu — nền văn minh cụ thể được chỉ định ở phần dữ liệu bên dưới — rồi xem con người ấy sẽ là ai và sống một đời thế nào.
 
 VAI TRÒ: bạn đang VIẾT TRUYỆN, không phải luận giải lá số. Người đọc thừa biết nội dung dựng từ lá số của họ — nói lại điều đó trong lời văn chỉ làm hỏng truyện.
 
@@ -51,6 +51,11 @@ BỐI CẢNH — PHẢI NHẤT QUÁN TỪ ĐẦU TỚI CUỐI:
 - Bối cảnh cụ thể được chỉ định trong phần dữ liệu bên dưới. Trong bối cảnh đó, chọn MỘT khung duy nhất (vùng đất nào, đang thời bình hay loạn lạc) rồi GIỮ NGUYÊN suốt 5 hồi — cùng địa danh, cùng thể chế, cùng tuyến nhân vật phụ. Không được hồi này ở biên ải phương bắc, hồi sau nhảy sang phủ chúa phương nam mà không có lý do trong truyện.
 - KHÔNG nhắc bất kỳ nhân vật lịch sử/triều đại CÓ THẬT nào.
 
+NỀN VĂN MINH PHẢI NHẬN RA ĐƯỢC — luật quan trọng, đừng bỏ qua:
+- Tool này có nhiều nền văn minh khác nhau. Nếu bỏ tên nhân vật đi mà truyện đọc như nhau ở mọi nền thì truyện hỏng: người đọc không có gì để nhận ra mình đang ở đâu.
+- Phần dữ liệu bên dưới có khối "CHẤT LIỆU VĂN HÓA" liệt kê thiết chế, đồ vật, không gian và tập tục ĐẶC TRƯNG của nền này. Phải dùng ÍT NHẤT BA thứ trong đó, rải ra các hồi khác nhau, và dùng như CHI TIẾT SỐNG trong cảnh — không phải liệt kê cho có.
+- Ngược lại, TUYỆT ĐỐI không mượn chi tiết đặc trưng của nền văn minh KHÁC. Truyện Nhật Bản không có khoa cử kiểu Trung Hoa; truyện Thái Lan không có bút lông nghiên mực; truyện Hàn Quốc không có võ sĩ đeo kiếm kiểu Nhật.
+
 ĐIỂM NHẤN — truyện phải có chỗ để nhớ:
 - Mỗi hồi phải có ÍT NHẤT MỘT cảnh cụ thể, nhìn thấy được (một hành động, một vật, một câu nói, một hình ảnh) — không được chỉ tóm tắt suông kiểu "ông trải qua nhiều thăng trầm".
 - Cả truyện phải có MỘT khoảnh khắc bước ngoặt rõ ràng, đặt đúng vào hồi đỉnh cao hoặc hồi biến cố, và các hồi sau phải vọng lại nó.
@@ -66,7 +71,11 @@ ${XUNG_HO_RULE}`;
 export function buildPastLifeStoryPrompt(profile: PastLifeProfile): string {
   const genderWord = profile.gender === 'nu' ? 'NỮ' : 'NAM';
   return `=== BỐI CẢNH (đã chốt, KHÔNG được đổi) ===
+Nền văn minh: ${profile.era.label} — ${profile.era.ageLabel}.
 ${profile.era.storySetting}
+
+CHẤT LIỆU VĂN HÓA của nền này (dùng ít nhất BA thứ, rải ra các hồi khác nhau, thành cảnh sống chứ không phải liệt kê):
+${profile.era.cultureVi}
 
 === HỒ SƠ NHÂN VẬT (suy từ lá số, đã chốt) ===
 Giới tính nhân vật: ${genderWord} (giữ đúng giới tính của người xem lá số).
@@ -97,8 +106,8 @@ LƯU Ý GIỚI TÍNH: nhân vật là ${genderWord}. Nếu chức phận đã ch
 
 // ── 2. Ảnh ──────────────────────────────────────────────────────────────
 export const PAST_LIFE_IMAGE_SYSTEM_PROMPT =
-  'Bạn là art director cho một bức MINH HOẠ cổ điển Á Đông (refined East Asian classical illustration, vẽ ' +
-  'painterly mềm mại, KHÔNG phải ảnh chụp), bối cảnh Á Đông thời phong kiến. Bạn nhận (A) bộ đặc điểm hình ' +
+  'Bạn là art director cho một bức MINH HOẠ cổ điển (vẽ painterly mềm mại, KHÔNG phải ảnh chụp), bối cảnh ' +
+  'một nền văn minh Á châu thời phong kiến. Bạn nhận (A) bộ đặc điểm hình ' +
   'thể suy từ các sao tại cung Mệnh trong lá số Tử Vi và (B) chức phận của nhân vật. Nhiệm vụ: viết MỘT ' +
   'đoạn tiếng ANH liền mạch 70-110 từ mô tả gương mặt và thần thái nhân vật, để ghép vào một prompt sinh ' +
   'ảnh lớn hơn.\n' +
@@ -139,7 +148,7 @@ export const PAST_LIFE_IMAGE_SYSTEM_PROMPT =
 //     sáng nhẹ) nhưng cho màu gốc của trang phục đi xuyên qua ở sắc độ nhạt
 //     hơn. Bỏ chữ "romantic" — hợp Quan nội đình, sai với Quan án/Tướng quân.
 export const PORTRAIT_STYLE_EN =
-  'Rendered as a refined East Asian classical illustration: soft painterly digital brushwork, smooth ' +
+  'Rendered with soft painterly digital brushwork, smooth ' +
   'gradients and subtle watercolour-inspired texture. Gentle diffused lighting with a delicate bloom, ' +
   'luminous and airy. Keep overall contrast low — avoid harsh shadows, heavy black shading and ' +
   'over-saturated colour. Render the subject\u2019s own garment, armour and background colours in a muted, ' +
@@ -176,12 +185,20 @@ export function buildFinalPastLifeImagePrompt(
   const genderWord = profile.gender === 'nu' ? 'woman' : 'man';
   const era = profile.era;
 
+  // THỨ TỰ CÓ CHỦ Ý: `attireEn` trong bảng nghề chỉ tả CẤP BẬC (trung lập,
+  // không thuộc nền nào), rồi `costumeGrammarEn` mới nói cấp bậc đó ăn mặc thế
+  // nào ở nền này. Grammar đứng SAU để nó là chỉ dẫn cuối cùng model đọc về
+  // trang phục — nếu đứng trước thì chuỗi cấp bậc dễ được coi là bản ghi đè.
   return (
-    `A refined East Asian classical illustration, a painted half-body portrait of a ${genderWord} with ${era.ethnicityEn}, appearing ` +
-    `roughly ${ageLow}-${ageHigh} years old, set in ${era.settingEn}. ` +
-    `Wearing ${o.attireEn}. ${era.extraEn} Historically plausible pre-modern East Asian court costume and grooming, ` +
-    'authentic period detail, no modern clothing, no modern haircut, no anachronistic objects. ' +
+    `A refined classical illustration in the manner of ${era.artTraditionEn}, a painted half-body portrait of a ` +
+    `${genderWord} with ${era.ethnicityEn}, appearing roughly ${ageLow}-${ageHigh} years old, set in ${era.settingEn}. ` +
+    `The figure's rank and role: ${o.attireEn}. ` +
+    `COSTUME RULE — this is ${era.label} and the clothing must read unmistakably as such: ${era.costumeGrammarEn} ` +
+    `Historically plausible pre-modern ${era.regionEn} costume and grooming, authentic period detail, ` +
+    'no modern clothing, no modern haircut, no anachronistic objects, and no costume elements borrowed from a ' +
+    'neighbouring culture. ' +
     `Background: ${o.backdropEn}, rendered with atmospheric perspective and kept secondary to the figure. ` +
+    `SETTING RULE: ${era.sceneGrammarEn} ` +
     `${faceDescriptionEn} ` +
     `${PORTRAIT_STYLE_EN} ` +
     'Single subject only, half-body or head-and-shoulders framing, subject facing the viewer. ' +

@@ -71,9 +71,12 @@ function buildProfile(birth: BirthParams, eraId?: string): BuiltProfile {
     return { ok: false, error: lasoRes.error || 'Không lập được lá số.' };
   }
   const gender = birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
-  // resolveEra() tự rơi về 'trung-hoa' nếu id lạ/thiếu — client cũ (nếu có
-  // cache) vẫn chạy đúng, không cần bắt lỗi riêng.
-  const era = resolveEra(eraId);
+  // KHÔNG truyền era → computePastLife tự bốc nền văn minh từ chính lá số
+  // (deterministic, cùng lá số luôn ra cùng nền). Chỉ khi client ÉP một nền cụ
+  // thể mới dùng resolveEra — hiện không trang nào gửi, giữ lại vì pha `image`
+  // gọi lại buildProfile sau pha `story` và phải ra ĐÚNG nền đó; nếu sau này
+  // muốn cho phép sinh lại ở nền khác thì đường đã sẵn.
+  const era = eraId ? resolveEra(eraId) : undefined;
   return { ok: true, ls: lasoRes.ls, profile: computePastLife(lasoRes.ls, gender, era) };
 }
 
@@ -159,7 +162,7 @@ async function handleStory(birth: BirthParams, eraId?: string) {
     menh: profile.readouts.menh,
     thanCungName: profile.thanCungName,
     portraitAge: profile.arc.portraitAge,
-    era: { id: profile.era.id, label: profile.era.label },
+    era: { id: profile.era.id, label: profile.era.label, ageLabel: profile.era.ageLabel },
   });
 }
 
@@ -246,7 +249,7 @@ async function handleImage(userId: string, birth: BirthParams, eraId?: string) {
     imageUrl,
     occupationTitle: profile.occupation.title,
     portraitAge: profile.arc.portraitAge,
-    era: { id: profile.era.id, label: profile.era.label },
+    era: { id: profile.era.id, label: profile.era.label, ageLabel: profile.era.ageLabel },
   });
 }
 
