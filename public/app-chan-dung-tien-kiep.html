@@ -210,7 +210,11 @@ async function analyze() {
   var gender = fdIn.gioitinh, dd = fdIn.ngay, mm = fdIn.thang, yyyy = fdIn.nam, gioAmIdx = fdIn.gioIdx;
   if (!dd || !mm || !yyyy) { showError('Vui lòng nhập đầy đủ ngày tháng năm sinh.'); return; }
 
-  _lastBirth = { day: dd, month: mm, year: yyyy, hourBranch: gioAmIdx, gender: gender, isLunar: false };
+  // name: form có ô "Họ và tên" nhưng trước đây bị bỏ rơi ở đây, nên dòng
+  // tóm tắt lá số (trên trang lẫn trong link chia sẻ) không biết của ai.
+  // Kèm luôn vào birth để rail cũng xưng hô đúng tên.
+  _lastBirth = { day: dd, month: mm, year: yyyy, hourBranch: gioAmIdx, gender: gender, isLunar: false,
+    name: (fdIn.hoten || '').trim() || undefined };
   _currentSlug = TuviPaywall.generateToolSlug('chan-dung-tien-kiep-' + dd + '-' + mm + '-' + yyyy);
   await TuviPaywall.requireCredits(_currentSlug, async function () { await _doGenerate(); });
 }

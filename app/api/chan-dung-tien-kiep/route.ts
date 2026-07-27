@@ -52,12 +52,48 @@ async function authUser(
   return { user };
 }
 
+// Bóc JSON từ câu trả lời LLM.
+//
+// Bản cũ chỉ `JSON.parse(text.replace(fences).trim())` — giòn tới mức chỉ cần
+// model thêm một câu dẫn ("Đây là câu chuyện:") hoặc một dòng ghi chú ở cuối là
+// hỏng cả lượt, và người dùng nhận "Lỗi phân tích kết quả AI." dù model đã trả
+// nội dung đầy đủ. Prompt truyện nay dài (~9k token đầu vào) nên Flash càng dễ
+// thêm chữ ngoài JSON.
+//
+// Nay: gỡ fence → nếu parse thẳng không được thì CẮT LẤY KHỐI {...} cân bằng
+// ngoài cùng rồi parse lại (bỏ mọi thứ trước/sau nó).
 function parseJSON(text: string): unknown {
+  const t = String(text || '').replace(/```json|```/g, '').trim();
   try {
-    return JSON.parse(text.replace(/```json|```/g, '').trim());
+    return JSON.parse(t);
   } catch {
-    return null;
+    /* thử cắt khối {...} bên dưới */
   }
+  // Thử TỪNG khối {...} cân bằng, từ trái sang: khối đầu tiên parse được thì
+  // lấy. Cố ý không dừng ở khối đầu tiên tìm thấy — model hay chèn ngoặc nhọn
+  // trong lời dẫn ("{quan trọng}") và khối rác đó sẽ nuốt mất JSON thật.
+  for (let i = t.indexOf('{'); i >= 0; i = t.indexOf('{', i + 1)) {
+    let depth = 0;
+    let inStr = false;
+    let esc = false;
+    for (let k = i; k < t.length; k++) {
+      const c = t[k];
+      if (esc) { esc = false; continue; }
+      if (c === '\\') { esc = true; continue; }
+      if (c === '"') { inStr = !inStr; continue; }
+      if (inStr) continue; // ngoặc nhọn trong lời thoại không tính
+      if (c === '{') depth++;
+      else if (c === '}' && --depth === 0) {
+        try {
+          return JSON.parse(t.slice(i, k + 1));
+        } catch {
+          /* khối này không phải JSON ta cần → thử khối kế tiếp */
+        }
+        break;
+      }
+    }
+  }
+  return null;
 }
 
 /** Lập lá số + dựng hồ sơ nhân vật — dùng chung cho cả 2 pha. */
@@ -91,34 +127,67 @@ async function handleStory(birth: BirthParams, eraId?: string) {
   if (!built.ok) return err(built.error, 400);
   const { profile } = built;
 
-  let raw: string;
-  try {
-    const llmRes = await llmTextFull({
-      system: PAST_LIFE_STORY_SYSTEM_PROMPT,
-      prompt: buildPastLifeStoryPrompt(profile),
-      maxTokens: 2600,
-    });
-    raw = llmRes.text;
-    void logLlmUsage('chan-dung-tien-kiep', llmRes.model, {
-      input_tokens: llmRes.usage.input_tokens,
-      output_tokens: llmRes.usage.output_tokens,
-      cache_creation_input_tokens: 0,
-      cache_read_input_tokens: 0,
-    });
-  } catch {
-    return err('Lỗi AI khi viết câu chuyện. Vui lòng thử lại.', 500);
-  }
-
-  const parsed = parseJSON(raw) as {
+  type StoryJson = {
     biDanh?: string;
     moTaNhanVat?: string;
     acts?: StoryAct[];
     ketLuan?: string;
-  } | null;
+  };
+  // Type guard (không phải boolean thuần) để TS narrow được `parsed` sau khi
+  // kiểm — nếu không thì mọi chỗ đọc parsed.acts phía dưới đều báo possibly null.
+  const okShape = (v: StoryJson | null): v is StoryJson & { moTaNhanVat: string; acts: StoryAct[] } =>
+    !!v?.moTaNhanVat && Array.isArray(v.acts) && v.acts.length > 0;
+
+  const askStory = async (nudge: boolean): Promise<{ raw: string } | null> => {
+    try {
+      const llmRes = await llmTextFull({
+        system: PAST_LIFE_STORY_SYSTEM_PROMPT,
+        prompt:
+          buildPastLifeStoryPrompt(profile) +
+          (nudge
+            ? '\n\nLƯU Ý: lượt trước bạn trả về không đúng định dạng. Lần này CHỈ trả về đúng một object JSON hợp lệ, bắt đầu bằng { và kết thúc bằng }, KHÔNG kèm bất kỳ chữ nào ngoài JSON.'
+            : ''),
+        // 5 hồi × 100-160 từ tiếng Việt + mô tả nhân vật + lời kết — 2600 quá
+        // sát, hết chỗ là JSON cụt và parse hỏng.
+        maxTokens: 4200,
+      });
+      void logLlmUsage('chan-dung-tien-kiep', llmRes.model, {
+        input_tokens: llmRes.usage.input_tokens,
+        output_tokens: llmRes.usage.output_tokens,
+        cache_creation_input_tokens: 0,
+        cache_read_input_tokens: 0,
+      });
+      return { raw: llmRes.text };
+    } catch (e) {
+      console.error('[chan-dung-tien-kiep] LLM lỗi:', (e as Error)?.message);
+      return null;
+    }
+  };
+
+  let res = await askStory(false);
+  if (!res) return err('Lỗi AI khi viết câu chuyện. Vui lòng thử lại.', 500);
+  let parsed = parseJSON(res.raw) as StoryJson | null;
+
+  // Parse hỏng → THỬ LẠI MỘT LƯỢT. Trước đây fail là trả lỗi luôn, người dùng
+  // mất Lượng mà không có gì. Log kèm độ dài + đầu/đuôi bản thô để lần sau
+  // chẩn được ngay là model lạc định dạng hay bị cắt giữa chừng.
+  if (!okShape(parsed)) {
+    const t = String(res.raw || '');
+    console.error(
+      `[chan-dung-tien-kiep] parse hỏng (len=${t.length}, đuôi=${JSON.stringify(t.slice(-60))}) — thử lại`,
+    );
+    res = await askStory(true);
+    if (!res) return err('Lỗi AI khi viết câu chuyện. Vui lòng thử lại.', 500);
+    parsed = parseJSON(res.raw) as StoryJson | null;
+  }
   // biDanh (vế thơ) là phần TRANG TRÍ — thiếu vẫn hiển thị được vì danh xưng
   // chính (chức phận) do engine chốt, không phụ thuộc LLM. Chỉ moTaNhanVat + acts
   // là bắt buộc.
-  if (!parsed?.moTaNhanVat || !Array.isArray(parsed.acts) || !parsed.acts.length) {
+  if (!okShape(parsed)) {
+    const t = String(res.raw || '');
+    console.error(
+      `[chan-dung-tien-kiep] parse hỏng LẦN 2 (len=${t.length}, đầu=${JSON.stringify(t.slice(0, 160))})`,
+    );
     return err('Lỗi phân tích kết quả AI.', 500);
   }
 
