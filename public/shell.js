@@ -628,6 +628,43 @@
   }
 
   // ── CHIA SẺ KẾT QUẢ KHUNG GIỮA (workspace) — dùng chung cho MỌI tool ──
+  // ── Tóm tắt lá số cho trang chia sẻ ──────────────────────────────────
+  // Người nhận link /ket-qua không có ngữ cảnh gì: không nói rõ lá số nào thì
+  // kết quả thành vô danh (Henry bắt được ở tool Chân Dung Tiền Kiếp). Nên MỌI
+  // tool có ngữ cảnh lá số đều tự kèm một dòng tóm tắt ở đầu bản chia sẻ.
+  //
+  // Shape birth KHÔNG thống nhất giữa các tool (tool tử vi dùng
+  // {day,month,year,hourBranch,gender}, TuviForm.getData trả
+  // {ngay,thang,nam,gioIdx,gioitinh}, vài chỗ dùng {dd,mm,yyyy}) nên đọc theo
+  // nhiều tên; thiếu ngày/tháng/năm thì trả '' và KHÔNG chèn gì — thà không có
+  // còn hơn hiện nửa vời.
+  var SHARE_CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+  var SHARE_GIO = ['23–01h','01–03h','03–05h','05–07h','07–09h','09–11h','11–13h','13–15h','15–17h','17–19h','19–21h','21–23h'];
+  function pick2(o, a, b, c) {
+    if (!o) return undefined;
+    if (o[a] !== undefined && o[a] !== null && o[a] !== '') return o[a];
+    if (o[b] !== undefined && o[b] !== null && o[b] !== '') return o[b];
+    if (c && o[c] !== undefined && o[c] !== null && o[c] !== '') return o[c];
+    return undefined;
+  }
+  function birthSummaryLine(b) {
+    if (!b || typeof b !== 'object') return '';
+    var d = Number(pick2(b, 'day', 'ngay', 'dd'));
+    var m = Number(pick2(b, 'month', 'thang', 'mm'));
+    var y = Number(pick2(b, 'year', 'nam', 'yyyy'));
+    if (!d || !m || !y) return '';
+    var g = pick2(b, 'gender', 'gioitinh');
+    var parts = [];
+    var nm = (b.hoten || b.name || '').trim();
+    if (nm) parts.push(nm);
+    if (g) parts.push(g === 'nu' ? 'Nữ' : 'Nam');
+    var lunar = b.isLunar === true || b.amlich === true || b.duongLich === false;
+    parts.push(('0' + d).slice(-2) + '/' + ('0' + m).slice(-2) + '/' + y + (lunar ? ' (âm lịch)' : ' (dương lịch)'));
+    var hi = Number(pick2(b, 'hourBranch', 'gioIdx', 'gio'));
+    if (hi >= 0 && hi < 12) parts.push('giờ ' + SHARE_CHI[hi] + ' (' + SHARE_GIO[hi] + ')');
+    return parts.join(' · ');
+  }
+
   // Tool gọi Shell.setShareable({kind:'image'|'text', title, imageUrl?, text?})
   // ngay sau khi có kết quả → nút "Chia sẻ" tự hiện trong .ws-actions (nếu
   // trang có toolbar đó), không cần tool tự vẽ nút/markup riêng. Khác
@@ -942,13 +979,26 @@
     // ẩn nút (vd tool quay lại form nhập để làm mới kết quả).
     setShareable: function (o) {
       if (!o) { shareable = null; renderShareBtn(); return; }
+      var kind = o.kind === 'image' ? 'image' : 'text';
+      var blocks = Array.isArray(o.blocks) ? o.blocks.slice() : null;
+      var text = o.text || null;
+      // Lá số của CHÍNH lượt này: tool truyền thẳng (o.birth) hoặc lấy từ ngữ
+      // cảnh tool đã set. CỐ Ý không đụng birthSnapshot()/localStorage — lá số
+      // còn sót từ tool khác sẽ gắn nhầm chủ nhân cho bản chia sẻ.
+      var bLine = birthSummaryLine(o.birth || (ctx && ctx.birth) || null);
+      if (bLine) {
+        if (blocks) blocks.unshift({ header: 'Lá số dùng để luận', text: bLine });
+        else if (kind === 'text') text = bLine + '\n\n' + (text || '');
+        else blocks = [{ header: 'Lá số dùng để luận', text: bLine },
+          { header: null, image: o.imageUrl || null, text: text }];
+      }
       shareable = {
-        kind: o.kind === 'image' ? 'image' : 'text',
+        kind: kind,
         toolId: o.toolId || ACTIVE || 'app',
         title: String(o.title || 'Kết quả Luận Đường').slice(0, 160),
         imageUrl: o.imageUrl || null,
-        text: o.text || null,
-        blocks: Array.isArray(o.blocks) ? o.blocks : null,
+        text: text,
+        blocks: blocks,
       };
       renderShareBtn();
     },

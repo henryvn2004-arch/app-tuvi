@@ -132,7 +132,7 @@ body{font-family:var(--sans);background:var(--paper2);color:var(--text);line-hei
 .top .t{flex:1;min-width:0}
 .top .t b{font-family:var(--serif);font-size:16px;display:block}
 .top .t span{font-size:12px;color:var(--gold)}
-.top .brand{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);opacity:.85;text-align:right}
+.top .brand{width:40px;height:40px;flex:0 0 auto;object-fit:contain;opacity:.92}
 .body{padding:20px}
 .res-img{display:block;width:100%;border-radius:12px;box-shadow:0 8px 24px rgba(6,26,46,.16)}
 .res-text{font-size:14.5px;color:var(--text)}
@@ -157,7 +157,7 @@ body{font-family:var(--sans);background:var(--paper2);color:var(--text);line-hei
 <div class="wrap">
   <div class="top">
     <div class="t"><b>${title}</b><span>Tử Vi Minh Bảo · Luận Đường</span></div>
-    <div class="brand">紫微<br>明寶</div>
+    <img class="brand" src="/seal.webp" alt="Tử Vi Minh Bảo" width="40" height="40">
   </div>
   <div class="body">${body}</div>
   <div class="cta">
@@ -168,7 +168,7 @@ body{font-family:var(--sans);background:var(--paper2);color:var(--text);line-hei
       <a class="cta-btn" href="${SITE}${ctaRoute}">Thử ngay →</a>
     </div>
   </div>
-  <div class="foot">© 2026 Tử Vi Minh Bảo · <a href="${SITE}/app">tuviminhbao.com</a> — Lá số lập bằng engine cổ pháp, AI chỉ luận, không bịa sao.</div>
+  <div class="foot">© 2026 Tử Vi Minh Bảo · <a href="${SITE}/app">tuviminhbao.com</a> — Lá số được lập bằng engine cổ pháp; phần luận giải do AI thực hiện trên chính dữ liệu đó.</div>
 </div>
 ${GA4_TRACK_SNIPPET}
 </body></html>`;

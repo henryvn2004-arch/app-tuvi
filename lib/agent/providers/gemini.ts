@@ -62,6 +62,24 @@ export function geminiEligible(
   return pick === 'gemini';
 }
 
+/**
+ * Kịch bản này có ĐI ĐƯỢC Gemini prose không, BỎ QUA cấu hình route?
+ *
+ * Khác `geminiEligible` ở đúng một chỗ: không đọc `providerRoutes`. Dùng cho
+ * FALLBACK KHẨN CẤP khi Anthropic chết (hết credit, 5xx kéo dài) — lúc đó
+ * "route nói dùng Anthropic" không còn nghĩa lý gì, cái cần biết chỉ là đường
+ * Gemini có xử lý nổi kịch bản này không. Các guard an toàn (prose/vision,
+ * ảnh chỉ cho vision) GIỮ NGUYÊN — fallback không được phép phá chúng.
+ */
+export function geminiProseCapable(scenarioType: string, hasImages: boolean): boolean {
+  if (!GEMINI_KEY) return false;
+  const inProse = GEMINI_PROSE_SCENARIOS.has(scenarioType);
+  const inVision = GEMINI_VISION_SCENARIOS.has(scenarioType);
+  if (!inProse && !inVision) return false;
+  if (hasImages && !inVision) return false;
+  return true;
+}
+
 const RETRYABLE = new Set([429, 500, 502, 503, 504]);
 const MAX_TRIES = 3;
 
@@ -263,6 +281,14 @@ export function geminiToolsEligible(
   // sang Gemini ngoài ý muốn.
   const pick = r[scenarioType] || 'anthropic';
   return pick === 'gemini';
+}
+
+/** Bản BỎ QUA route của `geminiToolsEligible` — xem ghi chú ở
+ *  `geminiProseCapable`. Chỉ dùng cho fallback khẩn cấp khi Anthropic chết. */
+export function geminiToolsCapable(scenarioType: string, hasImages: boolean): boolean {
+  if (!GEMINI_KEY) return false;
+  if (hasImages) return false;
+  return GEMINI_TOOLS_SCENARIOS.has(scenarioType);
 }
 
 // JSON Schema (Anthropic input_schema) → Schema an toàn cho Gemini (OpenAPI

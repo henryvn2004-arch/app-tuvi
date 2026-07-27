@@ -425,6 +425,34 @@ Henry: thêm Nhật Bản cổ · Hàn Quốc cổ · Thái Lan cổ vào 2 nề
   nào**, thêm 5) · quét rò rỉ từ vựng chéo trên 20 prompt = **0** · Playwright
   2 trang render badge đúng, không lỗi console.
 
+### Vòng chỉnh tiếp — trang chia sẻ /ket-qua (PR #305)
+Henry gửi ảnh chụp trang chia sẻ, 3 việc:
+- **Tóm tắt lá số ở đầu trang.** Người nhận link không có ngữ cảnh gì → không
+  biết chân dung gắn với lá số nào. `publishShareable` (trang shell) chèn block
+  ĐẦU TIÊN "Lá số dùng để phác hoạ" = `birthSummary(_lastBirth)` →
+  "Nam · 03/06/1998 (dương lịch) · giờ Sửu (01–03h)". **Henry chốt làm bản DÙNG
+  CHUNG** → chuyển hẳn vào `shell.js` `setShareable`, mọi tool tự có (bump
+  `shell.js?v=45→46` trên 27 trang). `birthSummaryLine()` đọc birth theo NHIỀU
+  tên khoá vì shape không thống nhất giữa các tool (`day/month/year` vs
+  `ngay/thang/nam` vs `dd/mm/yyyy`); thiếu ngày-tháng-năm → trả '' và KHÔNG
+  chèn gì. Nguồn birth CHỈ lấy `o.birth` hoặc `ctx.birth` của chính lượt đó —
+  **cố ý không đụng `birthSnapshot()`/localStorage**, lá số sót từ tool khác sẽ
+  gắn nhầm chủ nhân cho bản chia sẻ. Ba nhánh: có `blocks` → chèn block đầu;
+  text phẳng → nối dòng lên đầu `text` (không đổi layout); ảnh phẳng → dựng
+  blocks. Test Playwright 5 ca (có blocks / text phẳng / ảnh phẳng / không lá
+  số / birth thiếu ngày) đều đúng.
+- **Logo:** `<div class="brand">紫微明寶</div>` → `<img src="/seal.webp">` ở CẢ
+  `/ket-qua/[id]` lẫn `/luan-duong/[id]` (hai trang chia sẻ dùng chung layout).
+  **CỐ Ý KHÔNG thay 40+ chỗ 紫微 còn lại** trong repo: phần lớn là
+  `alternateName` trong JSON-LD (tên tiếng Hoa hợp lệ cho SEO, không nhét ảnh
+  vào được), `紫微斗數` = TÊN BỘ MÔN không phải brand, và watermark vẽ trong
+  canvas lá số. Chỉ đổi chỗ dùng như DẤU HIỆU THƯƠNG HIỆU.
+- **Footer bỏ khẩu ngữ:** "AI chỉ luận, không bịa sao" → "Lá số được lập bằng
+  engine cổ pháp; phần luận giải do AI thực hiện trên chính dữ liệu đó."
+  `/luan-duong` giữ ngôi "thầy" (trang đó có persona thầy xuyên suốt), chỉ bỏ
+  từ "bịa". Rà cả repo: từ "bịa" chỉ còn trong PROMPT gửi LLM và comment code —
+  không phải chữ người dùng đọc, giữ nguyên.
+
 ### CÒN LẠI
 - Bật `enabled=true` sau deploy (câu SQL ở trên).
 - Henry gen thử trên prod đủ 5 nền để soi ảnh — tao chỉ verify được tới tầng
@@ -442,6 +470,38 @@ thân (mỗi post kéo 5 người) · xem sếp/crush/người yêu cũ · đế
 chân ái · "nếu bạn sinh giờ khác" · roast mode. Cơ chế lan truyền còn thiếu:
 ảnh tải về 9:16 có watermark, OG image riêng từng kết quả, gate bằng share
 (`referral_code` đã có sẵn), gắn `utm_campaign` cho từng tool.
+
+---
+
+## 🔀 Provider routing rail — fallback HAI CHIỀU (2026-07-27)
+
+Henry test prod: rail chat sau khi dùng tool báo `Anthropic error: … credit
+balance is too low …`, trong khi tài khoản Gemini còn tiền. Henry tưởng rail
+đã chạy Gemini-primary/Anthropic-backup.
+- **Chẩn đoán — hai chỗ lệch với kỳ vọng:**
+  1. Rail CÓ dùng Gemini, nhưng **`laso` bị ghim Anthropic**: prod
+     `chat.provider_routes = {"_default":"gemini","laso":"anthropic"}`, và
+     `geminiToolsEligible` CỐ Ý không đọc `_default` (fix D6). Mà mọi tool gọi
+     `Shell.setContext({birth})` đều biến rail thành luồng `laso` → luôn
+     Anthropic. Tool thì chạy ngon vì `lib/llm/complete.ts` (đường KHÁC) vốn
+     đã Gemini-primary + fallback thật.
+  2. **Chiều fallback ngược với kỳ vọng:** code chỉ có Gemini lỗi → rơi về
+     Anthropic. Không có chiều ngược. `streamTurn` gặp non-200 còn bắn thẳng
+     `sse.error` tại chỗ → Anthropic hết tiền là kéo sập rail dù Gemini sống.
+- **Henry chốt:** (a) `laso` → Gemini; (b) làm fallback hai chiều.
+- **Đã làm:** ✅ vá `app_config` prod → `{"_default":"gemini","laso":"gemini"}`
+  (cache TTL 60s, không cần deploy, revert 1 dòng SQL). `streamTurn` **hoãn**
+  `sse.error`, trả `errorBody` lên caller. Khối Gemini-tools tách thành closure
+  `runGeminiTools()` dùng lại được ở 2 chỗ. Loop Anthropic thêm nhánh: lỗi mà
+  CHƯA stream gì (round 0, chưa tool nào) → thử Gemini; hết đường mới báo lỗi.
+  Thêm `geminiProseCapable`/`geminiToolsCapable` (bản BỎ QUA route — cứu hộ thì
+  route hết nghĩa, nhưng guard prose/vision/ảnh GIỮ NGUYÊN).
+  `Awaited<ReturnType<typeof runAgent>>` (tự tham chiếu) → `interface AgentResult`
+  + `type ProviderOutcome` tường minh.
+- **Verify:** tsc · lint · prettier · **test stub fetch 4 ca**: prose route-ép-
+  anthropic → `anthropic→gemini` + ra chữ Gemini; laso route-ép-anthropic →
+  `anthropic→gemini` + ra chữ; đối chứng Anthropic OK → **không** gọi Gemini;
+  cả hai cùng chết → bắn `sse.error`.
 
 ---
 
