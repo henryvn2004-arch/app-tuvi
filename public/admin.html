@@ -952,6 +952,7 @@
               <tbody id="th-body"></tbody>
             </table>
           </div>
+          <div id="reconcile-host"></div>
           <div style="padding:.6rem 1rem;font-size:.7rem;color:var(--text-lt);line-height:1.6">
             Tỷ lệ lỗi = lỗi hệ thống ÷ số lượt <b>lẽ ra phải chạy được</b>. Lỗi do người dùng
             (thiếu ngày sinh, chưa đăng nhập, chưa thanh toán) bị loại khỏi cả tử số lẫn mẫu số —
@@ -1444,6 +1445,32 @@ function cronStatusBadge(s) {
   return `<span class="badge ${map[s]||'badge-grey'}">${lbl[s]||s||'—'}</span>`;
 }
 
+// ── Đối soát trừ-Lượng ↔ giao-hàng (track COO, S3) ──
+// Khớp TỪNG giao dịch với bản ghi kết quả, không so tổng-với-tổng (cách đó
+// không chỉ ra được lượt nào hỏng). credits_at_risk = Lượng đã thu mà chưa
+// giao và cũng chưa hoàn — con số này cần bằng 0.
+function renderReconcile(rows) {
+  const host = document.getElementById('reconcile-host');
+  if (!rows || !rows.length) { host.innerHTML = ''; return; }
+  const atRisk = rows.reduce((s, r) => s + Number(r.credits_at_risk || 0), 0);
+  host.innerHTML = `
+    <div style="padding:.7rem 1rem;border-top:1px solid var(--line)">
+      <div style="font-size:.76rem;font-weight:700;color:var(--text);margin-bottom:.45rem">
+        💰 Đối soát trừ Lượng ↔ giao hàng (30 ngày)
+        ${atRisk
+          ? `<span style="color:var(--red);font-weight:700"> — ${atRisk} Lượng đang treo</span>`
+          : `<span style="color:var(--green);font-weight:600"> — cân đối</span>`}
+      </div>
+      ${rows.map(r => `
+        <div style="font-size:.74rem;color:var(--text-lt);margin:.18rem 0">
+          <b style="color:var(--text)">${escHtmlLocal(r.tool_id)}</b>:
+          ${r.charges} lượt thu · ${r.delivered} giao
+          ${Number(r.undelivered) ? `· <span style="color:var(--red)">${r.undelivered} CHƯA GIAO (${r.credits_at_risk} Lượng)</span>` : ''}
+          ${Number(r.refunded) ? `· ${r.refunded} đã hoàn` : ''}
+        </div>`).join('')}
+    </div>`;
+}
+
 // ── Cảnh báo vận hành (track COO, S2) ──
 // Nguồn: events(event_type='ops_alert') do cron anomaly-alerts ghi. Hiện Ở ĐÂY
 // kể cả khi Telegram chưa cấu hình — trang admin là mặt bằng giám sát chính.
@@ -1531,6 +1558,7 @@ async function loadCron() {
     _toolHealth = { '24': (res && res.toolHealth24) || [], '7d': (res && res.toolHealth7d) || [] };
     renderToolHealth();
     renderOpsAlerts((res && res.opsAlerts) || []);
+    renderReconcile((res && res.reconcile) || []);
   } catch (e) { /* vẫn render registry với last-run rỗng */ }
 
   // latest run + stats

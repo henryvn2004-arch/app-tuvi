@@ -8,6 +8,7 @@ export const runtime = 'nodejs';
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { toolPaymentDenied } from '@/lib/billing/credits';
+import { refundIfSystemFailure } from '@/lib/ops/refund';
 import { llmTextFull } from '@/lib/llm/complete';
 import { logLlmUsage, logImageUsage } from '@/lib/agent/usage';
 import { computeLaso, formatLaSoV2 } from '@/lib/engine/laso';
@@ -447,7 +448,19 @@ export async function OPTIONS() {
 
 async function runPost(request: NextRequest) {
   const body = await parseBody(request);
-  return handleGenerate(request, body);
+  const res = await handleGenerate(request, body);
+  // Hoàn Lượng nếu hỏng vì lỗi HỆ THỐNG (S3 track COO). userId lấy lại từ token
+  // ở đây thay vì luồn ra từ handleGenerate — rẻ hơn nhiều so với chi phí một
+  // lượt sinh ảnh, và giữ handleGenerate không phải đổi chữ ký.
+  const auth = await authUser(request);
+  if ('user' in auth) {
+    return refundIfSystemFailure(res, {
+      toolId: 'chan-dung-vo-chong',
+      userId: auth.user.id,
+      slug: String(body.slug || ''),
+    });
+  }
+  return res;
 }
 
 export async function GET(request: NextRequest) {
