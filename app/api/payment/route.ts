@@ -22,6 +22,7 @@ import { parseFirebaseServiceAccount, sendFcmPush } from '@/lib/channels/push';
 import { getGa4Sessions } from '@/lib/analytics/ga4';
 import { getAdminUser } from '@/lib/admin/auth';
 import { generateContentSuggestions } from '@/lib/marketing/content-suggestions';
+import { generateContentPackText } from '@/lib/marketing/content-pack';
 
 const PAYPAL_BASE = process.env.PAYPAL_MODE === 'live'
   ? 'https://api-m.paypal.com'
@@ -1281,6 +1282,7 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-env-status') return handleAdminEnvStatus(request);
   if (action === 'my-referral') return handleMyReferral(request, searchParams);
   if (action === 'admin-viral') return handleAdminViral(request, searchParams);
+  if (action === 'admin-content-pack') return handleAdminContentPack(request, searchParams);
   if (action === 'check-bank')  return handleCheckBank(searchParams);
   return err('Invalid action.', 400);
 }
@@ -1527,6 +1529,23 @@ async function handleAdminMarketingSuggestions(request: NextRequest, sp: URLSear
   try {
     const text = await generateContentSuggestions(from.toISOString(), toExcl.toISOString());
     return ok({ text });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── GET: admin-content-pack (V4, track Viral Loop) — kịch bản TikTok soạn
+// sẵn cho các bản chân dung đã được chia sẻ công khai. CÙNG hàm mà cron tuần
+// dùng, chỉ khác là bấm lúc nào ra lúc đó: cron gửi Telegram sáng Chủ Nhật,
+// lỡ tin thì phải đợi tuần sau — nút này gỡ đúng chỗ kẹt đó. THUẦN SOẠN,
+// không đăng đi đâu. ──
+async function handleAdminContentPack(request: NextRequest, sp: URLSearchParams): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const days = Math.min(90, Math.max(1, Number(sp.get('days')) || 7));
+  try {
+    const text = await generateContentPackText(days);
+    return ok({ text, days });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 

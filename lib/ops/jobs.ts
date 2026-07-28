@@ -54,6 +54,8 @@ export const JOBS: JobSpec[] = [
     schedule: 'T4 hằng tuần', sink: 'autopilot_actions', trigger: true },
   { key: 'autopilot-nudge', label: 'Autopilot — nhắc segment', source: 'vercel', everyMinutes: 7 * D,
     schedule: 'T6 hằng tuần', sink: 'autopilot_actions', trigger: true },
+  { key: 'content-pack', label: 'Content Pack TikTok', source: 'vercel', everyMinutes: 7 * D,
+    schedule: 'CN hằng tuần', sink: 'Telegram admin', trigger: true },
 ];
 
 export interface CronRun {
