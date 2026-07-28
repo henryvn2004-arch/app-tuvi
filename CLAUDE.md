@@ -253,6 +253,39 @@ bật; khi bật, cùng logic, chỉ khác bước cuối áp dụng thật (pre
 
 ---
 
+## 🔌 Đọc GA4 từ terminal — `scripts/ga4.mjs` (2026-07-28)
+
+Henry hỏi "làm sao nối Google Analytics vào cho mày đọc rồi phân tích". Trước đó
+repo CÓ `lib/analytics/ga4.ts` nhưng nó chỉ lấy ĐÚNG 1 con số (tổng `sessions`,
+để vá ô "Khách ghé" panel Funnel D4) — không phải cửa để ngồi phân tích.
+- **`scripts/ga4.mjs`** — CLI thuần Node (0 dependency mới), auth service-account
+  JWT tự ký giống `ga4.ts`/`indexing-api.mjs`, scope **`analytics.readonly`**.
+  11 preset (`overview`/`daily`/`traffic`/`channels`/`campaigns`/`pages`/`landing`/
+  `events`/`devices`/`countries`/`referrers`/`realtime`) + `report` tự chọn
+  dimension/metric + `metadata` tra tên hợp lệ. Cờ `--from/--to` (nhận
+  `28daysAgo`/`yesterday`/`YYYY-MM-DD`), `--filter dim==val | =~ | !=`, `--order`,
+  `--limit`, `--json`.
+- **Credential:** env `GA4_PROPERTY_ID` + `GA4_SERVICE_ACCOUNT_JSON` (**CÙNG TÊN**
+  với env Vercel của `ga4.ts` — set 1 bộ dùng được cả hai), hoặc `--sa <file.json>`
+  khi chạy ở máy Henry. **Không dán private key vào khung chat** (nằm lại trong
+  lịch sử hội thoại — cùng lý do đã phải rotate service_role key Supabase).
+- **`docs/GA4-CLI.md`** — bảng cờ + so sánh với `lib/analytics/ga4.ts`. **Bước 1–3
+  (enable Data API → service account → cấp Viewer property `533053153`) HENRY ĐÃ
+  LÀM XONG TỪ D4**, doc giữ lại dạng `<details>` để tham chiếu. **Chỉ còn bước 4**:
+  env của Vercel KHÔNG chảy vào container phiên Claude Code (quét 127 biến env
+  trong phiên: 0 biến GA4/GOOGLE/SERVICE_ACCOUNT) → phải đặt riêng
+  `GA4_PROPERTY_ID`/`GA4_SERVICE_ACCOUNT_JSON` cho environment Claude Code (copy y
+  hệt giá trị bên Vercel, không phải đụng lại Google), hoặc chạy `--sa` ở máy Henry.
+- **Verify:** `node --check` · `eslint` sạch · `prettier --check .` sạch · chạy
+  thật với RSA key tự sinh + stub OAuth (JWT đúng 3 phần, scope đúng, đổi được
+  token) và stub Data API (bảng render đúng, TỔNG + "hiển thị 3/9 dòng", request
+  body đúng cho `traffic`/`report`/`realtime`→`:runRealtimeReport`/`metadata`) ·
+  gọi thật `analyticsdata.googleapis.com` với token giả → **401 + thông điệp lỗi
+  của Google hiện đúng** (chuỗi auth chạy tới cùng). **CHƯA chạy được lượt có
+  quyền thật** vì container phiên chưa có credential — đó chính là việc tay Henry.
+
+---
+
 ## 🔁 TRACK MỚI — Viral Loop cho 2 tool chân dung (chốt 2026-07-27, CHƯA CODE)
 
 **Nguồn:** phiên brainstorm "làm sao cho Chân Dung Vợ Chồng + Chân Dung Tiền Kiếp viral".
