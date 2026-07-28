@@ -42,6 +42,8 @@ export const JOBS: JobSpec[] = [
   { key: 'auto-pipeline', label: 'Pipeline YouTube', source: 'edge', everyMinutes: D,
     schedule: '00:00 (pg_cron)', sink: 'auto-pipeline (edge)', trigger: true },
   // ── 5 job dưới đây TRƯỚC ĐÂY KHÔNG có trong sổ admin ──
+  { key: 'ops-digest', label: 'Digest Vận Hành', source: 'vercel', everyMinutes: D,
+    schedule: '07:30 VN hằng ngày', sink: 'Telegram admin + events', trigger: true },
   { key: 'cmo-digest', label: 'CMO Digest', source: 'vercel', everyMinutes: D,
     schedule: '08:00 VN hằng ngày', sink: 'Telegram admin', trigger: true },
   { key: 'anomaly-alerts', label: 'Cảnh báo bất thường', source: 'vercel', everyMinutes: 3 * H,
