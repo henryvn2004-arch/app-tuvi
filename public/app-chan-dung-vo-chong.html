@@ -98,7 +98,7 @@
                 <img id="resultImg" alt="Chân dung người phối ngẫu">
                 <div id="imgLoadStatus" style="display:none;margin-top:8px;font-size:12.5px;color:var(--text-lt);text-align:center"></div>
                 <div class="cdvc-actions">
-                  <button class="btn" onclick="downloadResult()">⬇ Tải Ảnh</button>
+                  <button class="btn" id="btnDownload" onclick="downloadResult()">⬇ Tải Ảnh Đăng Story</button>
                 </div>
               </div>
               <div class="cdvc-desc">
@@ -143,6 +143,7 @@ window.SHELL_INTRO={key:'chan-dung-vo-chong',title:'Chân Dung Vợ Chồng',des
 var _currentSlug = '';
 var _resultImgUrl = '';
 var _lastBirth = null;
+var _lastData = null;
 var CDVC_STEPS = [
   { label: 'Lập lá số & xác định cung Phu Thê', ms: 900 },
   { label: 'Luận giải cung Phu Thê', ms: 4500 },
@@ -227,6 +228,7 @@ async function _doGenerate() {
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
 
     _resultImgUrl = data.imageUrl;
+    _lastData = data;
     setResultImage(data.imageUrl);
     document.getElementById('descTitle').textContent = data.spouseGender === 'nu' ? 'Người Vợ' : 'Người Chồng';
     document.getElementById('descText').textContent = data.description;
@@ -326,7 +328,57 @@ function renderPhuThe(pt) {
   block.style.display = 'block';
 }
 
+// ── Tải ảnh 9:16 để đăng Story/TikTok (V3) ───────────────────────────────
+// Trước đây nút này trả về đúng file thô model sinh ra — ảnh lan đi mà không
+// mang dấu hiệu nào dẫn ngược về site. Nay ghép thêm câu trích + triện + tên
+// miền và cắt về khung 9:16. Dựng ở máy người dùng, không tốn thêm tiền model.
+function _ensurePoster() {
+  if (window.Poster) return Promise.resolve();
+  return new Promise(function (resolve, reject) {
+    var s = document.getElementById('_poster_js');
+    if (!s) {
+      s = document.createElement('script');
+      s.id = '_poster_js'; s.src = '/poster.js?v=1';
+      document.head.appendChild(s);
+    }
+    s.addEventListener('load', function () { resolve(); });
+    s.addEventListener('error', function () { reject(new Error('poster_js')); });
+  });
+}
+
+function _posterOpts() {
+  var d = _lastData || {};
+  var chinh = ((d.phuThe || {}).chinhTinh || []).join(', ');
+  return {
+    imageUrl: _resultImgUrl,
+    title: d.spouseGender === 'nu' ? 'Chân dung người vợ của tôi' : 'Chân dung người chồng của tôi',
+    subtitle: chinh ? 'Cung Phu Thê: ' + chinh : 'Phác hoạ từ cung Phu Thê trong lá số',
+    // Hoàn cảnh gặp gỡ trước phần mô tả ngoại hình: câu kể một khung cảnh đọc
+    // hấp dẫn hơn câu tả mũi tả mắt, mà đây là ảnh để người ta đăng lên khoe.
+    quote: Poster.pickQuote([d.meetingContext, d.description, d.phuTheLuanGiai]),
+  };
+}
+
 async function downloadResult() {
+  if (!_resultImgUrl) return;
+  var btn = document.getElementById('btnDownload');
+  var label = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = 'Đang dựng ảnh…'; }
+  try {
+    await _ensurePoster();
+    await Poster.download(_posterOpts(), 'chan-dung-vo-chong-tuviminhbao.png');
+    if (window.Track) Track.event('poster_download', { tool_id: 'chan-dung-vo-chong' });
+  } catch (e) {
+    await _downloadRaw();
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = label; }
+  }
+}
+
+// Dựng poster hỏng thì vẫn phải đưa được ảnh cho người ta — rơi về file thô.
+// CỐ Ý không gọi gì trong Poster ở đây: nhánh này chạy đúng lúc poster.js nạp
+// không được, tức lúc Poster không tồn tại.
+async function _downloadRaw() {
   if (!_resultImgUrl) return;
   try {
     var res = await fetch(_resultImgUrl);

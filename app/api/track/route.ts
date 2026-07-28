@@ -23,6 +23,11 @@ const ALLOWED = new Set([
   'page_view', 'tool_open', 'tool_run', 'tool_result', 'chat_msg',
   'signup', 'login', 'topup_start', 'topup_success', 'share', 'cta_click',
   'share_view', 'referral_signup',
+  // Tải ảnh 9:16 để đăng Story/TikTok (V3). CỐ Ý là loại RIÊNG, không gộp vào
+  // 'share': phễu Vòng Lặp Viral đếm 'share' làm mẫu số của K-factor, mà ảnh
+  // tải về không mang link bấm được nên không bao giờ sinh ra share_view/
+  // cta_click tương ứng — nhét chung vào chỉ làm K tụt giả.
+  'poster_download',
 ]);
 
 // Coi là "vừa đăng ký" nếu tài khoản tạo trong 15 phút gần đây (né tính nhầm
