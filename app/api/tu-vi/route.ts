@@ -78,6 +78,25 @@ function buildHTML(page: any, slug: string, relatedHtml = '') {
     'tuong-hop-lam-an': 'Tương Hợp Làm Ăn', 'phong-thuy': 'Phong Thủy',
     'xem-tuong': 'Xem Tướng', 'chon-ngay': 'Chọn Ngày', 'lam-dep': 'Làm Đẹp', 'dat-ten': 'Đặt Tên',
   };
+  // Mỗi chuyên mục có một CÔNG CỤ tương ứng trong Luận Đường — CTA cũ trỏ chung
+  // về trang chủ ("Xem Tử Vi Minh Bảo →"), tức bắt người đọc tự mò lại từ đầu
+  // đúng thứ họ vừa đọc. Đo 7 ngày (28/07): 35 khách đọc trang nội dung SEO,
+  // đúng 1 người đi tiếp sang tool. Nay mỗi bài dẫn thẳng tới tool đúng chủ đề.
+  // 'lam-dep' KHÔNG có tool trong shell (nhóm Làm Đẹp còn ở trang standalone)
+  // nên trỏ về catalog /cong-cu; thiếu map thì rơi về /app/luan-giai.
+  const catTool: Record<string, { href: string; label: string }> = {
+    'tu-vi-nam-sinh':     { href: '/app/luan-giai',  label: 'Luận Giải Lá Số Của Bạn' },
+    'y-nghia-sao':        { href: '/app/la-so',      label: 'Lập Lá Số Xem Sao Của Bạn' },
+    'van-han':            { href: '/app/luan-giai',  label: 'Xem Vận Hạn Lá Số Của Bạn' },
+    'tuong-hop-hon-nhan': { href: '/app/xem-tuoi',   label: 'Xem Tuổi Hai Người' },
+    'tuong-hop-lam-an':   { href: '/app/xem-lam-an', label: 'Xem Tuổi Hợp Tác Làm Ăn' },
+    'phong-thuy':         { href: '/app/phong-thuy', label: 'Xem Phong Thủy Nhà Bạn' },
+    'xem-tuong':          { href: '/app/dien-tuong', label: 'Xem Tướng Qua Ảnh' },
+    'chon-ngay':          { href: '/app/chon-ngay',  label: 'Chọn Ngày Tốt Cho Bạn' },
+    'dat-ten':            { href: '/app/dat-ten',    label: 'Đặt Tên Theo Mệnh' },
+    'lam-dep':            { href: '/cong-cu',        label: 'Xem Công Cụ Theo Mệnh' },
+  };
+  const tool = catTool[page.category] || { href: '/app/luan-giai', label: 'Luận Giải Lá Số Của Bạn' };
   const hubUrl  = catHubUrl[page.category]  || BASE_URL+'/kien-thuc-tuvi';
   const hubName = catHubName[page.category] || 'Tử Vi';
   const img     = `${BASE_URL}/api/og?${new URLSearchParams({ title: String(page.title||'').slice(0,80), sub: hubName }).toString()}`;
@@ -164,9 +183,9 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
   <h1 class="article-title">${h1}</h1>
   <div class="article-body">${body}</div>
   <div class="cta-box">
-    <h3>Xem Lá Số Tử Vi Đầy Đủ Của Bạn</h3>
+    <h3>Áp dụng cho chính bạn</h3>
     <p>Luận giải AI chi tiết — tính cách, vận hạn, tình duyên, sự nghiệp theo giờ sinh cụ thể</p>
-    <a class="cta-btn" href="/">Xem Tử Vi Minh Bảo →</a>
+    <a class="cta-btn" href="${tool.href}">${escHtml(tool.label)} →</a>
   </div>
   ${relatedHtml}
 </article>

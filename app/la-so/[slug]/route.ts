@@ -220,8 +220,8 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
   ${contentHTML ? `<div class="section"><div class="body-content">${contentHTML}</div></div>` : ''}
   <div class="cta-box">
     <h3>Luận Giải AI Đầy Đủ — 24 Phần</h3>
-    <p>Nhập đúng giờ sinh để có luận giải chuyên sâu về tính cách, sự nghiệp, tình duyên, vận hạn theo cổ pháp Tử Vi Đẩu Số.</p>
-    <a class="cta-btn" href="/luan-giai.html">Xem Luận Giải →</a>
+    <p>Luận giải chuyên sâu về tính cách, sự nghiệp, tình duyên, vận hạn theo cổ pháp Tử Vi Đẩu Số — ngày giờ sinh đã điền sẵn, không phải nhập lại.</p>
+    <a class="cta-btn" href="${appLuanGiaiHref(parseIsrSlug(slug))}">Xem Luận Giải →</a>
   </div>
 </div>
 <script src="/footer.js"></script>
@@ -347,6 +347,35 @@ function parseIsrSlug(slug: string): IsrParams | null {
   if (canIdx < 0 || chiIdx < 0) return null;
 
   return { canIdx, chiIdx, dd, mm, year: yyyy, gioIdx, gioi, namXem };
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// CTA: mang ngày sinh sang thẳng công cụ
+// ────────────────────────────────────────────────────────────────────────────
+// Slug của trang này ĐÃ chứa đủ ngày/tháng/năm/giờ/giới tính, nhưng CTA cũ trỏ
+// trơ tới `/luan-giai.html` (không query, không sessionStorage) → người đọc nhận
+// một form TRỐNG và phải gõ lại đúng cái ngày sinh vừa xem. Đo 7 ngày (28/07):
+// 35 khách đọc trang nội dung SEO, đúng 1 người đi tiếp sang tool.
+//
+// Nay đẩy thẳng dữ liệu qua query sang `/app/luan-giai` (Luận Đường — bản 24 phần
+// vẫn xem miễn phí, chỉ phần AI chuyên sâu mới tính Lượng); `Shell.prefillForm`
+// đọc query rồi `?auto=1` tự chạy (public/shell.js). `gio` là giờ DƯƠNG 0–23 lấy
+// từ GIO_HOURS — khớp field gioHour của TuviForm.setData, KHÔNG dùng nhánh gioIdx.
+function appLuanGiaiHref(p: IsrParams | null): string {
+  if (!p) return '/app/luan-giai';
+  const q = new URLSearchParams({
+    ngay: String(p.dd),
+    thang: String(p.mm),
+    nam: String(p.year),
+    gio: String(GIO_HOURS[p.gioIdx]),
+    gioitinh: p.gioi,
+    namxem: String(p.namXem),
+    auto: '1',
+  });
+  // esc() để `&` giữa các tham số thành `&amp;` — hàm này chỉ dùng trong thuộc
+  // tính href, mà `&` trần trong HTML attribute là sai chuẩn (trình duyệt hiện
+  // nay vẫn đọc đúng, nhưng trang này render ~438K lần và bị bộ máy SEO soi).
+  return esc(`/app/luan-giai?${q.toString()}`);
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -712,7 +741,7 @@ function render24Sections(ls: Rec, params: IsrParams): string {
 
   function cta(label: string): string {
     return `<div style="margin-top:16px;padding-top:12px;border-top:1px solid #E8E3D9;text-align:right">
-<a href="/luan-giai.html" style="display:inline-block;background:#9A7B3A;color:#fff;font-size:12px;font-weight:600;padding:7px 16px;border-radius:5px;text-decoration:none">${esc(label)} →</a>
+<a href="${appLuanGiaiHref(params)}" style="display:inline-block;background:#9A7B3A;color:#fff;font-size:12px;font-weight:600;padding:7px 16px;border-radius:5px;text-decoration:none">${esc(label)} →</a>
 </div>`;
   }
 
@@ -1329,8 +1358,8 @@ a.sao-link:hover{opacity:1;border-bottom-style:solid}
     <div>
       <div class="cta-box">
         <h3>Luận Giải AI — 24 Phần</h3>
-        <p>Nhập đúng giờ sinh để nhận phân tích chuyên sâu: tính cách, sự nghiệp, tình duyên, vận hạn năm ${namXem}.</p>
-        <a class="cta-btn" href="/">Xem Luận Giải Miễn Phí →</a>
+        <p>Phân tích chuyên sâu tính cách, sự nghiệp, tình duyên, vận hạn năm ${namXem} — ngày giờ sinh đã điền sẵn, không phải nhập lại.</p>
+        <a class="cta-btn" href="${appLuanGiaiHref(params)}">Xem Luận Giải Miễn Phí →</a>
       </div>
 
       <div id="share-bar-isr"></div>
