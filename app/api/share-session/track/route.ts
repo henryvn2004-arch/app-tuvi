@@ -8,7 +8,12 @@ import { createClient } from '@supabase/supabase-js';
 import { ok, err, options, parseBody } from '@/lib/cors';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
-const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY!;
+// S6 (track COO): TRƯỚC ĐÂY dùng SUPABASE_ANON_KEY. Đây là route SERVER, không
+// có lý do gì phải đi bằng khoá công khai — mà chính chỗ đó buộc RPC
+// `incr_shared_counter` phải mở EXECUTE cho `anon`, tức ai cũng gọi thẳng vào
+// PostgREST để thổi phồng bộ đếm chia sẻ. Đổi sang service key để rào chắn
+// nằm ở ĐÂY (validate id + ép kind='signup'), rồi mới thu được quyền của anon.
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
 
 export async function OPTIONS() { return options(); }
 

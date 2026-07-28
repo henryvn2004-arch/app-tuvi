@@ -10,6 +10,7 @@ export const runtime = 'nodejs';
 import { NextRequest } from 'next/server';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { ok, options, parseBody } from '@/lib/cors';
+import { checkTrackRate } from '@/lib/ops/rate-limit';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -49,6 +50,25 @@ export async function POST(request: NextRequest) {
     const b = (await parseBody(request)) as Record<string, unknown>;
     const rawEvents: Ev[] = Array.isArray(b.events) ? (b.events as Ev[]) : [b];
     if (!rawEvents.length) return ok({ ok: true, n: 0 });
+
+    // S6 — chặn bơm sự kiện. Danh tính lấy theo anon_id (ổn định giữa các
+    // request của cùng trình duyệt); không có thì rơi về IP. CỐ Ý ưu tiên
+    // anon_id: nhiều người Việt dùng chung IP nhà mạng/CGNAT, khoá theo IP là
+    // vạ lây cả một khu.
+    const ip =
+      request.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
+      request.headers.get('x-real-ip') ||
+      'unknown';
+    const identity = s(rawEvents[0]?.anon_id, 64) || `ip:${ip}`;
+    const verdict = await checkTrackRate(identity, Math.min(rawEvents.length, 30));
+    if (!verdict.allowed) {
+      // Trả `ok` chứ KHÔNG phải 429: đây là beacon, client dùng sendBeacon và
+      // không đọc phản hồi. Trả lỗi chỉ tổ làm bẩn console của người dùng thật
+      // bị chặn nhầm, mà không ngăn thêm được gì. Việc cần làm là ghi log để
+      // `security_audit()` và panel Bảo Mật nhìn thấy.
+      console.warn(`[track] vuot nguong: ${identity} — ${verdict.count}/${verdict.limit} event/phut`);
+      return ok({ ok: true, n: 0, throttled: true });
+    }
 
     const sb = createClient(SUPABASE_URL, SERVICE_KEY);
 

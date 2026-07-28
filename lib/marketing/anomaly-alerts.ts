@@ -212,6 +212,81 @@ export async function checkAnomalies(): Promise<{ fired: FiredAlert[]; checked: 
     /* không để phần này làm hỏng các check khác */
   }
 
+  // ── Bảo mật & lạm dụng (track COO, S6) ──────────────────────────────────
+  // Đây là hàng phòng thủ THẬT cho lớp quyền RPC, không phải thứ trang trí:
+  // thực nghiệm trong migration-revoke-secdef-sweep.sql cho thấy KHÔNG chặn
+  // được hở-mặc-định ở tầng Postgres (quyền EXECUTE cho PUBLIC là dựng sẵn,
+  // ALTER DEFAULT PRIVILEGES không gỡ nổi). Nên mỗi migration tương lai vẫn có
+  // thể vô tình đẻ ra một hàm hở, và cách duy nhất còn lại là đo lại đều đặn.
+  checked.push('security_audit');
+  try {
+    const audit = await callRpc<{
+      ham_ho_cho_anon: string[];
+      bom_su_kien: { anon_id: string; events_24h: number }[];
+      thiet_bi_cay: { anon_id: string; so_tai_khoan: number }[];
+      referral_bat_thuong: { referrer: string; so_nguoi_7d: number }[];
+      lech_so_du: { user_id: string; so_du: number; tong_so: number }[];
+    }>('security_audit', {});
+
+    if (audit.ham_ho_cho_anon?.length && !inCooldown('sec_exposed_fn')) {
+      fired.push({
+        key: 'sec_exposed_fn',
+        text:
+          `🔓 ${audit.ham_ho_cho_anon.length} hàm SECURITY DEFINER đang cho anon gọi ` +
+          `(tức ai mở trang web cũng gọi được):\n` +
+          audit.ham_ho_cho_anon.map((f) => `   ↳ ${f}`).join('\n') +
+          `\n   Vá: revoke execute on function <tên> from public, anon, authenticated;`,
+      });
+    }
+
+    // Lệch số dư = tiền tự sinh ra mà không có dòng giao dịch nào giải thích.
+    // Đúng dấu vết của loại lỗ đã vá ở S0. Không có ngưỡng — một dòng cũng phải báo.
+    if (audit.lech_so_du?.length && !inCooldown('sec_credit_drift')) {
+      fired.push({
+        key: 'sec_credit_drift',
+        text:
+          `🚨 ${audit.lech_so_du.length} ví có số dư LỆCH khỏi sổ giao dịch — điều tra ngay:\n` +
+          audit.lech_so_du
+            .slice(0, 5)
+            .map((d) => `   ↳ ${d.user_id}: số dư ${d.so_du} vs sổ ${d.tong_so}`)
+            .join('\n'),
+      });
+    }
+
+    if (audit.bom_su_kien?.length && !inCooldown('sec_track_flood')) {
+      fired.push({
+        key: 'sec_track_flood',
+        text:
+          `${audit.bom_su_kien.length} nguồn bơm sự kiện bất thường vào /api/track ` +
+          `(số liệu này nuôi autopilot M0.6):\n` +
+          audit.bom_su_kien.slice(0, 5).map((f) => `   ↳ ${f.anon_id}: ${f.events_24h} event/24h`).join('\n'),
+      });
+    }
+
+    if (audit.thiet_bi_cay?.length && !inCooldown('sec_device_farm')) {
+      fired.push({
+        key: 'sec_device_farm',
+        text:
+          `${audit.thiet_bi_cay.length} thiết bị gắn nhiều tài khoản — nghi cày quà đăng ký:\n` +
+          audit.thiet_bi_cay.slice(0, 5).map((d) => `   ↳ ${d.anon_id}: ${d.so_tai_khoan} tài khoản`).join('\n'),
+      });
+    }
+
+    if (audit.referral_bat_thuong?.length && !inCooldown('sec_referral')) {
+      fired.push({
+        key: 'sec_referral',
+        text:
+          `${audit.referral_bat_thuong.length} người giới thiệu có lượt mời tăng vọt trong 7 ngày:\n` +
+          audit.referral_bat_thuong
+            .slice(0, 5)
+            .map((r) => `   ↳ ${r.referrer}: ${r.so_nguoi_7d} người`)
+            .join('\n'),
+      });
+    }
+  } catch {
+    /* không để phần này làm hỏng các check khác */
+  }
+
   // ── Biên lợi nhuận chat âm (từ đầu ngày VN tới giờ) ──
   checked.push('margin');
   const margin = await callRpc<{ chat_cost_vnd: number; chat_revenue_vnd: number }>('dashboard_margin', {

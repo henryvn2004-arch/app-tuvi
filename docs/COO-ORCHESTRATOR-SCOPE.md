@@ -255,7 +255,9 @@ Hai hành động đáng giá nhất ở mức 3:
 | **S3** | **Dòng tiền** | Không để user trả tiền mà mất trắng | Đối soát trừ-Lượng ↔ giao-hàng · auto-refund · vá slug `Date.now()` | S1 |
 | **S4** | **Job & cấu hình** | Không lặp lại vụ "chạy 14 ngày mà chưa gửi được gì" | Sổ lịch kỳ vọng · `skip` lặp = LỖI · preflight env | S1 |
 | **S5** | **Digest & panel COO** | Gói mọi thứ thành thứ đọc được mỗi sáng | Digest Vận Hành (tự kiểm tra đường gửi của chính nó) + panel admin | S1–S4 |
-| **S6** | **Chống lạm dụng & rà bảo mật định kỳ** | Giữ cho lỗ đã vá không mở lại | Rà phân quyền RPC/RLS định kỳ · phát hiện cày Lượng/gian lận | S1 |
+| **S6** | **Chống lạm dụng & rà bảo mật định kỳ** | Giữ cho lỗ đã vá không mở lại | ✅ thu quyền **26 hàm RPC** hở cho `anon` · ✅ `security_audit()` quét 5 tín hiệu mỗi 3h · ✅ rate limit `/api/track` · ✅ panel **Rà Bảo Mật** | S1 |
+
+**🎉 XONG S0–S6 — track COO hoàn tất.**
 
 **Để sau, chỉ làm khi Henry thấy cần** (cố ý KHÔNG xếp sprint để tránh phình):
 phụ thuộc ngoài & chi phí · sức chứa · QC nội dung AI · đối chiếu tài liệu ·
@@ -312,17 +314,49 @@ thanh toán server-side (làm ngay trong S0) đã đổi điều đó:**
 | `/api/v1/chat` | Vốn đã trừ Lượng server-side (`deductCredits`) |
 | `/api/track` | **Vẫn hở** — không cần auth, và là đường đầu độc số liệu autopilot |
 
-Rate limit giờ là phòng thủ lớp hai, không còn là thứ cầm máu. Mà làm cho tử tế
-thì cần **bảng trạng thái dùng chung** (serverless không giữ bộ đếm trong RAM
-được) — đúng là hạ tầng của S6, nơi nó được dùng lại cho phát hiện cày Lượng và
-gian lận giới thiệu. Nhét vào S0 là dựng hạ tầng cho một sprint cầm máu:
-vi phạm luật chống phình số 4.
+Rate limit giờ là phòng thủ lớp hai, không còn là thứ cầm máu.
 
-**Lỗ còn lại đã biết sau S0** (cố ý chấp nhận, đóng ở S6):
-- `/api/track` chưa có phanh.
-- Cửa sổ 20 phút của đường lùi trong `toolPaymentDenied` cho phép dùng lại
-  trong cùng lượt mua. So với lỗ đang vá (miễn phí VÔ HẠN, VĨNH VIỄN) thì đây
-  là thu hẹp rất lớn, không phải để ngỏ.
+**Đã làm ở S6 — và làm KHÁC dự tính ban đầu.** Ghi chú lúc lên kế hoạch nói
+phải có **bảng trạng thái dùng chung** (Redis/DB) vì serverless không giữ được
+bộ đếm trong RAM. Khi bắt tay mới thấy cái giá thật: trạng thái dùng chung
+nghĩa là thêm **một vòng mạng vào MỌI beacon**, trả giá trên đường nóng để
+chống một mối đe doạ **chưa từng xảy ra** — nền đo được trên prod là cao nhất
+41 event/anon trong 24h, trong khi trần đặt 300/phút.
+
+Nên chốt: bộ đếm **trong bộ nhớ từng instance** (`lib/ops/rate-limit.ts`), chặn
+được vòng lặp client chạy loạn / script một máy / người tò mò curl; KHÔNG chặn
+được tấn công phân tán qua nhiều IP. Phần bỏ lọt đó giao cho `security_audit()`
+— nó soi TOÀN CỤC trên dữ liệu đã ghi nên thấy đúng cái mà bộ đếm cục bộ bỏ sót.
+Đổi một lớp phòng thủ "kín nhưng đắt" lấy hai lớp "rẻ + bù nhau", đúng tinh
+thần luật chống phình.
+
+**Lỗ còn lại sau S0 — trạng thái sau S6:**
+- ✅ `/api/track` đã có phanh (kèm giới hạn ghi rõ ở trên).
+- ⏳ Cửa sổ 20 phút của đường lùi trong `toolPaymentDenied` — GIỮ NGUYÊN, cố ý.
+  So với lỗ đã vá (miễn phí VÔ HẠN, VĨNH VIỄN) thì đây là thu hẹp rất lớn. Siết
+  tiếp chỉ nên làm khi lưu lượng đã chuyển hết sang client mới (CDN còn cache
+  bản cũ không gửi `slug`), nếu không là chặn nhầm người đã trả tiền.
+
+### Ghi chú: không chặn được hở-mặc-định ở tầng Postgres (đo được, không phải phỏng đoán)
+
+Ý định ban đầu của S6 là **dập gốc**: chỉnh `ALTER DEFAULT PRIVILEGES` để hàm
+sinh sau này không tự hở cho `anon`. Đã thử **ba cách viết** (có/không
+`FOR ROLE`, `FUNCTIONS`/`ROUTINES`, `REVOKE EXECUTE`/`REVOKE ALL`), mỗi lần tạo
+một hàm canary rồi đo lại. Cả ba lần ACL của hàm mới đều là:
+
+```
+{=X/postgres, postgres=X/postgres, service_role=X/postgres}
+```
+
+Mục `=X/postgres` (grantee rỗng = `PUBLIC`) là quyền EXECUTE **dựng sẵn** của
+Postgres cho mọi hàm, và không gỡ được bằng đường này. `anon` là thành viên của
+`PUBLIC` → vẫn gọi được.
+
+**Hệ quả thiết kế:** không được coi mặc định là hàng phòng thủ. Hai thứ thật sự
+giữ trận địa là (a) quy ước mỗi migration tự kết bằng `revoke ... from public,
+anon, authenticated` — vốn đã có từ S3/S4; và (b) `security_audit()` chạy mỗi
+3 giờ. Quy ước thì người ta quên, bộ dò thì không — nên bộ dò mới là cái chính,
+không phải phụ.
 
 ---
 

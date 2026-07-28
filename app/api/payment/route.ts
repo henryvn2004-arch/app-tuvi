@@ -694,6 +694,8 @@ async function handleAdminCronRuns(request: NextRequest): Promise<Response> {
       jobs: evaluateJobs(runs),
       env: checkEnv(),
       digest: await latestOpsDigest(),
+      // S6: rà bảo mật. `rpcSafe` để panel không sập nếu RPC chưa được áp.
+      security: await rpcSafe('security_audit', {}),
     });
   } catch (e: unknown) { return err((e as Error).message); }
 }
