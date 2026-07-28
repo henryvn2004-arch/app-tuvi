@@ -1031,10 +1031,33 @@
     // + namxem riêng của trang (năm luận, ngoài field TuviForm). localStorage, không server.
     rememberBirth: function (fd) { try { localStorage.setItem('app_birth', JSON.stringify(fd)); } catch (e) { /* ignore */ } },
     getRememberedBirth: function () { try { return JSON.parse(localStorage.getItem('app_birth') || 'null'); } catch (e) { return null; } },
+    // Ngày sinh truyền THẲNG qua URL (?ngay=&thang=&nam=&gio=&gioitinh=&namxem=),
+    // `gio` là giờ DƯƠNG 0–23 (không phải chỉ số địa chi) — khớp field gioHour của
+    // TuviForm.setData, tránh nhánh gioIdx của nó.
+    //
+    // Dùng cho link từ các trang SEO tĩnh (/la-so/*): slug ĐÃ chứa đủ ngày/giờ/giới
+    // nhưng trước đây CTA trỏ trơ tới /luan-giai.html, nên người đọc bị trả về một
+    // form TRỐNG và phải gõ lại đúng cái ngày sinh vừa xem — đo 7 ngày (28/07):
+    // 35 khách đọc trang SEO, đúng 1 người đi tiếp sang tool.
+    _birthFromQuery: function () {
+      var p, ngay, thang, nam, gio, nx, b;
+      try { p = new URLSearchParams(window.location.search); } catch (e) { return null; }
+      ngay = parseInt(p.get('ngay'), 10); thang = parseInt(p.get('thang'), 10); nam = parseInt(p.get('nam'), 10);
+      // parseInt(null) = NaN → mọi so sánh false → thiếu tham số là tự loại.
+      if (!(ngay >= 1 && ngay <= 31) || !(thang >= 1 && thang <= 12) || !(nam >= 1900 && nam <= 2100)) return null;
+      b = { ngay: ngay, thang: thang, nam: nam, gioitinh: p.get('gioitinh') === 'nu' ? 'nu' : 'nam' };
+      gio = parseInt(p.get('gio'), 10);
+      if (gio >= 0 && gio <= 23) { b.gioHour = gio; b.gioPhut = 0; }
+      nx = parseInt(p.get('namxem'), 10);
+      if (nx >= 2000 && nx <= 2100) b.namxem = nx;
+      return b;
+    },
     // Điền sẵn form (3 trang la-so/luan-giai/bat-tu dùng chung TuviForm mode:'compact'
     // + input #inpNamxem riêng cho năm luận).
+    // URL ĐÈ localStorage: người bấm một link lá số cụ thể muốn xem lá số TRONG link
+    // đó, không phải lá số họ tra lần trước.
     prefillForm: function () {
-      var b = this.getRememberedBirth(); if (!b) return false;
+      var b = this._birthFromQuery() || this.getRememberedBirth(); if (!b) return false;
       if (typeof TuviForm !== 'undefined') TuviForm.setData(b);
       var namxemEl = document.getElementById('inpNamxem');
       if (namxemEl && b.namxem != null && b.namxem !== '') namxemEl.value = b.namxem;
