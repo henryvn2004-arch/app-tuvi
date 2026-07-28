@@ -170,7 +170,7 @@ export async function checkAnomalies(): Promise<{ fired: FiredAlert[]; checked: 
   // xanh. Đây đúng là bộ ba đã để CMO Digest chết 14 ngày mà không ai biết.
   checked.push('job_health', 'env_preflight');
   try {
-    const { evaluateJobs } = await import('@/lib/ops/jobs');
+    const { evaluateJobs, fetchPgcronRuns } = await import('@/lib/ops/jobs');
     const { missingCriticalEnv } = await import('@/lib/ops/preflight');
 
     const runsRes = await fetch(
@@ -179,7 +179,11 @@ export async function checkAnomalies(): Promise<{ fired: FiredAlert[]; checked: 
       { headers: SB_HEADERS },
     );
     if (runsRes.ok) {
-      for (const j of evaluateJobs(await runsRes.json())) {
+      // Gộp cả lịch sử pg_cron: job `auto-pipeline` không đi qua withCronLog nên
+      // vắng mặt hoàn toàn trong cron_runs, chỉ dựa vào đó thì nó "chưa hề chạy"
+      // vĩnh viễn và bắn cảnh báo sai mỗi ngày.
+      const allRuns = [...(await runsRes.json()), ...(await fetchPgcronRuns())];
+      for (const j of evaluateJobs(allRuns)) {
         if (j.overdue && !inCooldown(`job_overdue:${j.key}`)) {
           fired.push({
             key: `job_overdue:${j.key}`,
