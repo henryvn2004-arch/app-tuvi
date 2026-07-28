@@ -39,7 +39,7 @@ async function handle(request: NextRequest) {
   // — nhưng đổi lại là mù hoàn toàn. Chi phí một lượt tóm tắt/ngày là nhỏ so
   // với việc không biết gì suốt hai tuần.
   try {
-    const text = await generateCmoDigestText();
+    const { text, ga4 } = await generateCmoDigestText();
     let delivered = false;
     if (TG_CHAT_ID) {
       await tgSendMessage(
@@ -48,7 +48,7 @@ async function handle(request: NextRequest) {
       );
       delivered = true;
     }
-    await logCmoDigest(text, delivered);
+    await logCmoDigest(text, delivered, ga4);
     return NextResponse.json({
       ok: true,
       sent: delivered,
@@ -59,8 +59,19 @@ async function handle(request: NextRequest) {
   }
 }
 
-/** Lưu bản digest vào `events` để panel đọc kể cả khi chưa có kênh Telegram. */
-async function logCmoDigest(text: string, delivered: boolean): Promise<void> {
+/**
+ * Lưu bản digest vào `events` để panel đọc kể cả khi chưa có kênh Telegram.
+ *
+ * Kèm luôn `meta.ga4` = snapshot GA4 THÔ (sessions/kênh/landing/activeNow +
+ * internalVisitors). Lý do: GA4 chỉ đọc được ở nơi có service-account key, mà
+ * key đó nằm trên Vercel — routine chat "Báo cáo CMO 8h10" chạy trong một phiên
+ * Claude KHÁC, không có key, nên tự nó không bao giờ thấy GA4. Cron này chạy 8h00
+ * ngay trước đó và đã có sẵn số, nên chỉ cần ghi lại một lượt là mọi thứ đọc được
+ * Supabase (routine chat, panel admin, truy vấn tay) đều dùng chung được — không
+ * phải phát tán credential thêm chỗ nào. Ghi cả khi `ga4=null` để phân biệt
+ * "hôm đó GA4 hỏng" với "hôm đó cron không chạy".
+ */
+async function logCmoDigest(text: string, delivered: boolean, ga4: unknown): Promise<void> {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_KEY;
   if (!url || !key) return;
@@ -76,7 +87,7 @@ async function logCmoDigest(text: string, delivered: boolean): Promise<void> {
       body: JSON.stringify({
         event_type: 'cmo_digest',
         platform: 'web',
-        meta: { text, delivered },
+        meta: { text, delivered, ga4: ga4 ?? null },
       }),
     });
   } catch {
