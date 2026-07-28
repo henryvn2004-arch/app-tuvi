@@ -5,11 +5,15 @@
 // (ket-qua, luan-duong, shared-chat) cố ý bỏ nav bar để giữ layout branded
 // độc lập, nên GA4 phải nạp trực tiếp). Cùng Measurement ID với nav.js
 // (public/nav.js) — sửa 1 chỗ nếu đổi ID.
+//
+// Điều kiện `!navigator.webdriver` khớp với nav.js và track.js: bộ E2E Playwright
+// chạy thẳng vào prod mỗi lần push/PR, không chặn thì mỗi lượt CI đổ hàng chục
+// phiên giả vào GA4 (dồn hết vào kênh Direct vì không có referrer).
 // ============================================================
 
 export const GA4_TRACK_SNIPPET =
   '<script src="/track.js?v=2" defer></script>' +
-  "<script>(function(){if(!document.getElementById('gtag-js')){" +
+  "<script>(function(){if(!document.getElementById('gtag-js')&&!navigator.webdriver){" +
   "var ga=document.createElement('script');ga.id='gtag-js';ga.async=true;" +
   "ga.src='https://www.googletagmanager.com/gtag/js?id=G-F4XNRS2XT0';document.head.appendChild(ga);" +
   "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;" +

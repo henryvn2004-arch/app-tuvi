@@ -154,7 +154,7 @@ export function renderPage(opts: PageOpts): string {
 <div class="bc">${bcHTML}</div>
 <div class="page">${opts.body}</div>
 <script src="/footer.js"></script>
-<script src="/nav.js?v=15" defer></script>
+<script src="/nav.js?v=18" defer></script>
 </body></html>`;
 }
 

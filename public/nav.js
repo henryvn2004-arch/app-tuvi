@@ -220,8 +220,13 @@
     '}'
   ].join('');
 
-  // GA4
-  if (!document.getElementById('gtag-js')) {
+  // GA4 — bỏ qua trình duyệt tự động (navigator.webdriver). Bộ E2E Playwright
+  // chạy THẲNG vào prod mỗi lần push/PR nên mỗi lượt CI đổ hàng chục phiên vào
+  // GA4: kênh dồn hết vào Direct (không referrer) và top landing page biến thành
+  // đúng danh sách URL trong tests/. D6 đã chặn chuyện này cho track.js nhưng bỏ
+  // sót GA4 — hệ quả là hai nguồn đếm hai tập khách khác nhau, khiến "% đo được"
+  // trên panel GA4 vs Nội Bộ thấp giả.
+  if (!document.getElementById('gtag-js') && !navigator.webdriver) {
     var ga = document.createElement('script'); ga.id='gtag-js'; ga.async=true;
     ga.src='https://www.googletagmanager.com/gtag/js?id=G-F4XNRS2XT0'; document.head.appendChild(ga);
     window.dataLayer=window.dataLayer||[]; function gtag(){dataLayer.push(arguments);} window.gtag=gtag;
