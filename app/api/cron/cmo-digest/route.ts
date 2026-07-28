@@ -39,7 +39,7 @@ async function handle(request: NextRequest) {
   // — nhưng đổi lại là mù hoàn toàn. Chi phí một lượt tóm tắt/ngày là nhỏ so
   // với việc không biết gì suốt hai tuần.
   try {
-    const { text, ga4 } = await generateCmoDigestText();
+    const { text, ga4, gsc } = await generateCmoDigestText();
     let delivered = false;
     if (TG_CHAT_ID) {
       await tgSendMessage(
@@ -48,7 +48,7 @@ async function handle(request: NextRequest) {
       );
       delivered = true;
     }
-    await logCmoDigest(text, delivered, ga4);
+    await logCmoDigest(text, delivered, ga4, gsc);
     return NextResponse.json({
       ok: true,
       sent: delivered,
@@ -70,8 +70,18 @@ async function handle(request: NextRequest) {
  * Supabase (routine chat, panel admin, truy vấn tay) đều dùng chung được — không
  * phải phát tán credential thêm chỗ nào. Ghi cả khi `ga4=null` để phân biệt
  * "hôm đó GA4 hỏng" với "hôm đó cron không chạy".
+ *
+ * `meta.gsc` = snapshot Search Console, lưu vì ĐÚNG lý do đó: cùng một service
+ * account chỉ có trên Vercel. Kèm lợi phụ giống ga4 — có LỊCH SỬ theo ngày để
+ * truy vấn SQL, thay vì đọc tức thời rồi vứt; SEO chỉ đọc được qua so sánh
+ * nhiều tuần, một lát cắt đơn lẻ gần như vô nghĩa.
  */
-async function logCmoDigest(text: string, delivered: boolean, ga4: unknown): Promise<void> {
+async function logCmoDigest(
+  text: string,
+  delivered: boolean,
+  ga4: unknown,
+  gsc: unknown,
+): Promise<void> {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_KEY;
   if (!url || !key) return;
@@ -87,7 +97,7 @@ async function logCmoDigest(text: string, delivered: boolean, ga4: unknown): Pro
       body: JSON.stringify({
         event_type: 'cmo_digest',
         platform: 'web',
-        meta: { text, delivered, ga4: ga4 ?? null },
+        meta: { text, delivered, ga4: ga4 ?? null, gsc: gsc ?? null },
       }),
     });
   } catch {
