@@ -29,16 +29,32 @@ export interface JobSpec {
 const H = 60;
 const D = 24 * 60;
 
-/** Nguồn DUY NHẤT. Thêm cron mới trong `vercel.json` thì thêm ở đây luôn. */
+/**
+ * Nguồn DUY NHẤT. Thêm cron mới trong `vercel.json` thì thêm ở đây luôn.
+ *
+ * ⚠️ HAI CÁI BẪY đã cắn một lần, đọc trước khi thêm dòng mới:
+ *
+ * 1. **Cron của Vercel chạy theo UTC.** `"0 3 * * *"` KHÔNG phải 3h sáng VN mà
+ *    là 10h sáng VN. Bản đầu chép thẳng con số trong `vercel.json` vào `schedule`
+ *    nên 4 job hiện sai giờ trên panel — lệch đúng 7 tiếng, đủ để nhìn vào sổ
+ *    rồi kết luận sai xem job có chạy đúng hẹn không.
+ *
+ * 2. **`everyMinutes` là khoảng trống LỚN NHẤT giữa hai lượt, không phải khoảng
+ *    trung bình.** Lịch chạy cụm (10·18·22h) có gap 8h → 4h → 12h; khai 8h thì
+ *    ngưỡng quá hạn (1.5×) thành 12h, trùng khít gap thật, nên sáng nào job cũng
+ *    bị báo trễ oan vài phút trước lượt chạy đầu ngày. Một bộ dò kêu nhầm mỗi
+ *    ngày thì chẳng mấy chốc bị ngó lơ — hỏng y như khi nó im lặng.
+ */
 export const JOBS: JobSpec[] = [
-  { key: 'cron-khao-luan', label: 'Viết Khảo Luận', source: 'vercel', everyMinutes: 8 * H,
-    schedule: '03·11·15h hằng ngày', sink: 'khao_luan → blog', trigger: true },
+  // 0/3/11/15 UTC → 10·18·22h VN. Gap lớn nhất là 22h→10h hôm sau = 12 tiếng.
+  { key: 'cron-khao-luan', label: 'Viết Khảo Luận', source: 'vercel', everyMinutes: 12 * H,
+    schedule: '10·18·22h VN hằng ngày', sink: 'khao_luan → blog', trigger: true },
   { key: 'cron-master-write', label: 'Viết Nghiên Cứu', source: 'vercel', everyMinutes: 6 * H,
-    schedule: '02·06·10·16·20h', sink: 'master_articles', trigger: true },
+    schedule: '03·09·13·17·23h VN', sink: 'master_articles', trigger: true },
   { key: 'cron-push', label: 'Push (web)', source: 'vercel', everyMinutes: D,
-    schedule: '00:00 hằng ngày', sink: 'edge send-daily-push', trigger: true },
+    schedule: '07:00 VN hằng ngày', sink: 'edge send-daily-push', trigger: true },
   { key: 'cron-daily-push', label: 'Push (app/FCM)', source: 'vercel', everyMinutes: D,
-    schedule: '00:00 hằng ngày', sink: 'push_tokens (FCM)', trigger: true },
+    schedule: '07:00 VN hằng ngày', sink: 'push_tokens (FCM)', trigger: true },
   { key: 'auto-pipeline', label: 'Pipeline YouTube', source: 'edge', everyMinutes: D,
     schedule: '00:00 (pg_cron)', sink: 'auto-pipeline (edge)', trigger: true },
   // ── 5 job dưới đây TRƯỚC ĐÂY KHÔNG có trong sổ admin ──
