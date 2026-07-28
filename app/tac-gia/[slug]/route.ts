@@ -189,7 +189,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
     </div>` : ''}
   </aside>
 </div>
-<script src="/track.js?v=1" defer></script><script src="/nav.js?v=15" defer></script>
+<script src="/track.js?v=2" defer></script><script src="/nav.js?v=15" defer></script>
 </body></html>`;
 }
 
@@ -201,7 +201,7 @@ function buildNotFound() {
 </head><body style="font-family:sans-serif;text-align:center;padding:80px">
 <h1 style="color:#061A2E;font-family:Georgia,serif;margin-bottom:16px">Không tìm thấy tác giả</h1>
 <a href="/tac-gia" style="color:#1455A4">← Về danh sách tác giả</a>
-<script src="/track.js?v=1" defer></script><script src="/nav.js?v=15" defer></script>
+<script src="/track.js?v=2" defer></script><script src="/nav.js?v=15" defer></script>
 </body></html>`;
 }
 
