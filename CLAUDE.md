@@ -269,9 +269,13 @@ repo CÓ `lib/analytics/ga4.ts` nhưng nó chỉ lấy ĐÚNG 1 con số (tổng
   với env Vercel của `ga4.ts` — set 1 bộ dùng được cả hai), hoặc `--sa <file.json>`
   khi chạy ở máy Henry. **Không dán private key vào khung chat** (nằm lại trong
   lịch sử hội thoại — cùng lý do đã phải rotate service_role key Supabase).
-- **`docs/GA4-CLI.md`** — 4 bước việc tay (enable Data API → dùng lại key GSC đang
-  có → cấp Viewer cho property `533053153` → đặt env) + bảng cờ + so sánh với
-  `lib/analytics/ga4.ts`.
+- **`docs/GA4-CLI.md`** — bảng cờ + so sánh với `lib/analytics/ga4.ts`. **Bước 1–3
+  (enable Data API → service account → cấp Viewer property `533053153`) HENRY ĐÃ
+  LÀM XONG TỪ D4**, doc giữ lại dạng `<details>` để tham chiếu. **Chỉ còn bước 4**:
+  env của Vercel KHÔNG chảy vào container phiên Claude Code (quét 127 biến env
+  trong phiên: 0 biến GA4/GOOGLE/SERVICE_ACCOUNT) → phải đặt riêng
+  `GA4_PROPERTY_ID`/`GA4_SERVICE_ACCOUNT_JSON` cho environment Claude Code (copy y
+  hệt giá trị bên Vercel, không phải đụng lại Google), hoặc chạy `--sa` ở máy Henry.
 - **Verify:** `node --check` · `eslint` sạch · `prettier --check .` sạch · chạy
   thật với RSA key tự sinh + stub OAuth (JWT đúng 3 phần, scope đúng, đổi được
   token) và stub Data API (bảng render đúng, TỔNG + "hiển thị 3/9 dòng", request

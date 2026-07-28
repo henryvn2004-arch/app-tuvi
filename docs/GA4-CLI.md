@@ -11,36 +11,48 @@ Property của site: **`533053153`** (Measurement ID `G-F4XNRS2XT0`, khai trong 
 
 ---
 
-## 1. Việc tay một lần (Henry làm, ~10 phút)
+## 1. Phần đã làm rồi (đừng làm lại)
 
-### Bước 1 — Bật API
+Bước 1–3 dưới đây **Henry đã làm xong hồi D4** (track "Dashboard revamp", mục
+Full Funnel nối GA4) — CLAUDE.md ghi rõ *"việc tay Henry: service account GCP +
+GA4 Data API + Viewer property `533053153` — ĐÃ XONG"*. Giữ lại ở đây làm hồ sơ
+tham chiếu, phòng khi phải tạo key mới hoặc đổi service account:
 
-Google Cloud Console → chọn project đang chứa service account của site →
-**APIs & Services → Library** → tìm **"Google Analytics Data API"** → **Enable**.
+<details>
+<summary>Bước 1–3 (đã xong — bấm để xem lại)</summary>
 
-### Bước 2 — Có sẵn service account thì dùng lại
+**Bước 1 — Bật API.** Google Cloud Console → project chứa service account của site
+→ **APIs & Services → Library** → **"Google Analytics Data API"** → **Enable**.
 
-Repo đã dùng service account cho Search Console + Indexing API
-(`scripts/indexing-api.mjs`, `scripts/gsc-self-verify.mjs`) — file key JSON
-Henry đang giữ ở máy (`tuvi-minh-bao-*.json`). **Dùng lại đúng key đó được**,
-không cần tạo mới. Nếu muốn key riêng: IAM → Service Accounts → Create → Keys →
-Add key → JSON.
+**Bước 2 — Service account.** Repo đã dùng service account cho Search Console +
+Indexing API (`scripts/indexing-api.mjs`, `scripts/gsc-self-verify.mjs`) — file key
+JSON Henry giữ ở máy (`tuvi-minh-bao-*.json`). Dùng lại đúng key đó được, không cần
+tạo mới. Muốn key riêng: IAM → Service Accounts → Create → Keys → Add key → JSON.
 
-### Bước 3 — Cấp quyền đọc property GA4
+**Bước 3 — Cấp quyền đọc property.** GA4 → **Admin** → cột Property →
+**Property Access Management** → `+` → dán email service account (khoá
+`client_email` trong file JSON) → vai trò **Viewer** → Add.
 
-GA4 → **Admin** → cột Property → **Property Access Management** → nút `+` →
-dán **email của service account** (dạng `...@....iam.gserviceaccount.com`,
-nằm trong file JSON ở khoá `client_email`) → vai trò **Viewer** → Add.
+> Thiếu bước này thì API trả **403** — script nói thẳng lý do và nhắc lại đúng bước này.
 
-> Bỏ bước này thì API trả **403** — script sẽ nói thẳng lý do và nhắc lại bước này.
+</details>
 
-### Bước 4 — Đưa credential vào chỗ Claude chạy được
+---
 
-Có 2 đường, chọn 1:
+## 2. Phần CÒN LẠI — chỉ mỗi bước 4
 
-**A. Phiên Claude Code trên web (khuyên dùng — set 1 lần, phiên nào cũng đọc được).**
-Vào cấu hình environment của Claude Code (nơi đang set `SUPABASE_SERVICE_KEY`,
-`GA4_PROPERTY_ID`… cho session), thêm 2 biến:
+Việc mày đã làm ở D4 là cấp quyền cho **service account** và (nhiều khả năng) đặt env
+trên **Vercel** — đó là để code prod (`lib/analytics/ga4.ts`) đọc được GA4.
+**Container của phiên Claude Code là môi trường KHÁC**, không thấy env của Vercel.
+Kiểm chứng: quét 127 biến env trong phiên, **không có biến nào tên GA4/GOOGLE/
+SERVICE_ACCOUNT** — nên `scripts/ga4.mjs` chưa chạy được, dù phía Google đã sẵn sàng.
+
+Chọn 1 trong 2 đường:
+
+**A. Đặt env cho environment của Claude Code** (khuyên dùng — set 1 lần, phiên nào
+cũng đọc được). Vào cấu hình environment của Claude Code (xem
+https://code.claude.com/docs/en/claude-code-on-the-web), thêm 2 biến — **giá trị y
+hệt cái đã đặt trên Vercel, copy sang là xong, không đụng gì tới Google nữa**:
 
 | Biến | Giá trị |
 |---|---|
@@ -61,7 +73,7 @@ rồi dán output vào chat.
 
 ---
 
-## 2. Dùng
+## 3. Dùng
 
 ```bash
 node scripts/ga4.mjs help                 # xem toàn bộ preset + cú pháp
@@ -102,7 +114,7 @@ Cờ chung:
 
 ---
 
-## 3. Chỗ này khác gì `lib/analytics/ga4.ts`
+## 4. Chỗ này khác gì `lib/analytics/ga4.ts`
 
 | | `lib/analytics/ga4.ts` | `scripts/ga4.mjs` |
 |---|---|---|
@@ -110,6 +122,11 @@ Cờ chung:
 | Đọc được | ĐÚNG 1 số: tổng `sessions` để thay ô "Khách ghé" trên panel Funnel | bất kỳ dimension/metric nào |
 | Env | `GA4_PROPERTY_ID` + `GA4_SERVICE_ACCOUNT_JSON` trên Vercel | cùng tên biến, nhưng ở môi trường phiên (hoặc `--sa`) |
 
-Hai đường độc lập nhau — **cùng service account, cùng tên biến môi trường**, nên
-làm xong bước 1–3 ở trên thì tiện set luôn cả trên Vercel để badge cạnh
-"Khách ghé" trong panel Funnel đổi từ xám **"nội bộ"** sang xanh **"GA4"**.
+Hai đường **độc lập nhau** — cùng service account, cùng tên biến, nhưng env phải
+đặt ở CẢ HAI nơi vì đó là hai môi trường khác nhau. Đặt trên Vercel không làm
+terminal đọc được, và ngược lại.
+
+Cách tự kiểm phía Vercel (không có tool đọc env Vercel): mở admin → panel Funnel
+→ nhìn badge cạnh **"Khách ghé (visit)"** — xanh **"GA4"** là env đã set và số đang
+lấy thật từ GA4; xám **"nội bộ"** là chưa set (hoặc API lỗi) và số đang suy từ
+`page_view` của `track.js`.
