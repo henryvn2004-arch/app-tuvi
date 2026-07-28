@@ -104,7 +104,7 @@
                   <img id="resultImg" alt="Chân dung tiền kiếp" style="display:none">
                   <div id="imgLoadStatus" style="display:none;margin-top:8px;font-size:12px;color:var(--text-lt);text-align:center"></div>
                   <div class="cdtk-actions" id="imgActions" style="display:none">
-                    <button class="btn" onclick="downloadResult()">⬇ Tải Ảnh</button>
+                    <button class="btn" id="btnDownload" onclick="downloadResult()">⬇ Tải Ảnh Đăng Story</button>
                   </div>
                 </div>
                 <div class="cdtk-mirror" id="moTaBlock">
@@ -412,7 +412,56 @@ function _mountInviteCta() {
   document.head.appendChild(s);
 }
 
+// ── Tải ảnh 9:16 để đăng Story/TikTok (V3) ───────────────────────────────
+// Trước đây nút này trả về đúng file thô model sinh ra — ảnh lan đi mà không
+// mang dấu hiệu nào dẫn ngược về site. Nay ghép thêm câu trích + triện + tên
+// miền và cắt về khung 9:16. Dựng ở máy người dùng, không tốn thêm tiền model.
+function _ensurePoster() {
+  if (window.Poster) return Promise.resolve();
+  return new Promise(function (resolve, reject) {
+    var s = document.getElementById('_poster_js');
+    if (!s) {
+      s = document.createElement('script');
+      s.id = '_poster_js'; s.src = '/poster.js?v=1';
+      document.head.appendChild(s);
+    }
+    s.addEventListener('load', function () { resolve(); });
+    s.addEventListener('error', function () { reject(new Error('poster_js')); });
+  });
+}
+
+function _posterOpts() {
+  var d = _lastStory || {};
+  return {
+    imageUrl: _resultImgUrl,
+    title: d.characterName || d.danhXung || 'Chân dung tiền kiếp',
+    subtitle: [d.danhXung, (d.era || {}).label].filter(Boolean).join(' · '),
+    // Lời Kết trước: đó là câu chốt của cả truyện, tách ra đứng một mình vẫn
+    // có nghĩa. Mô tả nhân vật là lớp đỡ, cuối cùng mới bới trong 5 hồi.
+    quote: Poster.pickQuote([d.ketLuan, d.moTaNhanVat, ((d.acts || []).map(function (a) { return a.text || ''; }).join(' '))]),
+  };
+}
+
 async function downloadResult() {
+  if (!_resultImgUrl) return;
+  var btn = document.getElementById('btnDownload');
+  var label = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = 'Đang dựng ảnh…'; }
+  try {
+    await _ensurePoster();
+    await Poster.download(_posterOpts(), 'chan-dung-tien-kiep-tuviminhbao.png');
+    if (window.Track) Track.event('poster_download', { tool_id: 'chan-dung-tien-kiep' });
+  } catch (e) {
+    await _downloadRaw();
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = label; }
+  }
+}
+
+// Dựng poster hỏng thì vẫn phải đưa được ảnh cho người ta — rơi về file thô.
+// CỐ Ý không gọi gì trong Poster ở đây: nhánh này chạy đúng lúc poster.js nạp
+// không được, tức lúc Poster không tồn tại.
+async function _downloadRaw() {
   if (!_resultImgUrl) return;
   try {
     var res = await fetch(_resultImgUrl);

@@ -296,10 +296,12 @@ Plan này là OUTPUT của phiên; code làm ở session sau, mỗi PR reset bra
 giới thiệu, và toàn bộ vòng lặp đã có chỗ đo (panel admin "Vòng Lặp Viral").
 **V2.2 XONG (#318)** — bộ số đã chốt đã vào prod (quà 25 · thưởng mời 15 ·
 trần mời 15) + cầu dao ngân sách ảnh free 6 lượt/ngày + 2 lượt rail tặng sau khi
-vẽ. **V2.3 XONG (PR sau đó)** — chỗ xin mời bạn sau khi hết Lượng + mục referral
-ở `profile.html`. **→ TOÀN BỘ V2 ĐÃ XONG.** Việc tiếp theo: **V4** (mồi phân
-phối — viral là bộ khuếch đại, không phải nguồn; 80 visit/ngày thì vòng lặp
-không tự khởi động) hoặc **V3** (ảnh 9:16 để đăng Story/TikTok).
+vẽ. **V2.3 XONG (#320)** — chỗ xin mời bạn sau khi hết Lượng + mục referral
+ở `profile.html`. **V3 XONG (PR mới)** — nút Tải Ảnh nay trả về poster 9:16 có
+thương hiệu thay vì file thô. **→ V2 + V3 ĐÃ XONG.** Việc tiếp theo: **V4**
+(mồi phân phối — viral là bộ khuếch đại, không phải nguồn; 80 visit/ngày thì
+vòng lặp không tự khởi động; phần lớn là việc tay Henry, phần code chỉ là
+content-pack).
 Số liệu tự chảy vào panel khi có người thật dùng; trước đó K-factor còn 0 là
 ĐÚNG, không phải lỗi.
 
@@ -531,6 +533,63 @@ chân dung + 1 câu đắt nhất trong truyện + seal + `tuviminhbao.com`, d�
 client hoặc route OG (**không tốn thêm tiền model**); nút "Tải ảnh" cạnh nút Chia sẻ.
 Lý do: người Việt share ẢNH lên Story/TikTok nhiều hơn share link — ảnh không mang
 thương hiệu thì lan mà không về.
+
+### ✅ V3 XONG (PR mới, session này) — ảnh 9:16 để đăng Story/TikTok
+Audit lúc làm: nút "⬇ Tải Ảnh" **đã có sẵn** trên cả 4 trang (2 shell + 2
+standalone) nhưng nó tải đúng file thô model sinh ra (1024×1536, trần trụi) —
+tức đường lan MẠNH NHẤT ở thị trường VN đang chảy đi mà không mang một dấu hiệu
+nào dẫn ngược về site. V3 = nâng cấp chính nút đó, không thêm nút thứ hai.
+- **`public/poster.js` (MỚI)** — dựng poster bằng `<canvas>` NGAY TRÊN MÁY NGƯỜI
+  DÙNG: ảnh chân dung cắt `cover` vào khung 9:16 → dải chuyển xuống nền navy →
+  nhãn `TỬ VI MINH BẢO` → tiêu đề → dòng phụ → câu trích → **triện `seal.webp` +
+  `tuviminhbao.com` neo CỨNG ở đáy**. Không gọi thêm lượt model nào.
+- **"1 câu đắt nhất" chọn bằng LUẬT, không bằng LLM** (`Poster.pickQuote`): thêm
+  một lượt model cho mỗi lần bấm Tải Ảnh là chi phí thật, trong khi thứ cần chỉ
+  là một câu đọc lọt tai. Luật: lấy câu TRỌN VẸN có độ dài gần 95 ký tự nhất
+  trong khoảng 45–155 (ngắn quá thì cụt lủn, dài quá thì tràn 3 dòng), duyệt các
+  nguồn theo thứ tự ưu tiên. Tiền kiếp: `ketLuan` → `moTaNhanVat` → 5 hồi (Lời
+  Kết là câu chốt của cả truyện, tách ra đứng một mình vẫn có nghĩa). Vợ chồng:
+  `meetingContext` → `description` → `phuTheLuanGiai` (câu kể một khung cảnh đọc
+  hấp dẫn hơn câu tả mũi tả mắt, mà đây là ảnh để người ta đăng lên khoe).
+- **`app/api/portrait-image/route.ts` (MỚI)** — proxy CÙNG-ORIGIN cho bucket
+  `portraits`. Vì sao cần: canvas vẽ ảnh khác origin thiếu header CORS sẽ bị
+  "tainted", `toBlob()` ném SecurityError và mất trắng nút Tải Ảnh. poster.js
+  vẫn thử đường THẲNG trước (nhanh hơn), đây là lối thoát. **ALLOWLIST CỨNG**
+  theo origin + prefix `/storage/v1/object/public/portraits/` + bắt buộc
+  `content-type: image/*` — nhận URL tự do là biến endpoint này thành công cụ
+  SSRF.
+- **`poster_download` là loại event RIÊNG** (thêm vào allowlist `/api/track`),
+  CỐ Ý không gộp vào `share`: phễu Vòng Lặp Viral đếm `share` làm mẫu số của
+  K-factor, mà ảnh tải về không mang link bấm được nên không bao giờ sinh ra
+  `share_view`/`cta_click` tương ứng — nhét chung vào chỉ làm K tụt giả.
+- **Dựng poster hỏng vẫn phải đưa được ảnh cho người ta** → mọi trang giữ nhánh
+  `_downloadRaw()` tải file thô như cũ, và nhánh đó CỐ Ý không đụng gì trong
+  `Poster` (nó chạy đúng lúc `poster.js` nạp không được).
+- **🐞 2 lỗi bắt được khi nhìn ảnh render, không phải Henry báo:** (a) `drawImage`
+  KHÔNG tự cắt theo khung — ảnh dọc 2:3 phủ đủ bề ngang 9:16 thì cao hơn vùng
+  ảnh, tràn xuống đè nền khối chữ (nền chữ đổi màu theo từng bức, có bức mất
+  sạch tương phản) → phải `ctx.clip()`; (b) neo ảnh lệch lên 0.15 cắt mất mép
+  trên, mà nhân vật đội mũ quan/mũ giáp — cụt mũ là thứ nhìn ra ngay → neo mép
+  TRÊN (0), cắt hết phần dư ở dưới nơi chỉ có thân/nền.
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier
+  --check .` (quét cả cây) sạch · `node --check` poster.js + mọi script block ·
+  engine test 181 pass · **Playwright**: `pickQuote` 5 ca (chọn câu vừa khung /
+  rơi xuống nguồn sau khi nguồn đầu rỗng / toàn câu ngắn thì cắt gọn / bỏ dấu
+  `**` markdown / rỗng hết trả '') · `build()` ra **đúng PNG 1080×1920** (đọc
+  IHDR, không tin tên file) ở cả 3 ca thường/tiêu-đề-dài/không-có-câu-trích ·
+  **bấm nút thật trên CẢ 4 TRANG** → tên file + kích thước + event
+  `poster_download` đúng tool_id · chặn `poster.js` → cả 4 trang rơi đúng về
+  file thô (phải `serviceWorkers:'block'` mới mô phỏng được, vì `nav.js` đăng ký
+  SW mà SW tự đi mạng ngoài tầm `page.route` — test artifact, không phải bug) ·
+  **proxy 10 ca** (hợp lệ / query rác bị lược / host khác kể cả
+  `169.254.169.254` / sai đường dẫn / bucket khác / không phải ảnh → 415 / 404 /
+  `../` traversal / không phải URL) · **fallback CORS chạy thật đầu-cuối** trên
+  Next dev + stub không gửi header CORS: nạp thẳng hỏng → tự đi qua
+  `/api/portrait-image` → vẫn ra ảnh 1080×1920.
+- **CÒN LẠI:** Henry gen thử 1 lá số trên prod rồi bấm Tải Ảnh để soi poster với
+  ảnh THẬT — tao chỉ verify được bố cục bằng ảnh giả đúng tỉ lệ 1024×1536; chỗ
+  nhiều khả năng phải chỉnh là vùng cắt (`IMG_H`/neo) nếu model hay đặt mặt nhân
+  vật thấp hơn dự kiến. Sửa gọn, chỉ vài hằng số đầu `poster.js`.
 
 **V4 — Mồi phân phối (viral là bộ khuếch đại, không phải nguồn):** 80 visit/ngày thì
 vòng lặp không tự khởi động. Dùng content-pack TikTok (M2.3 của track Marketing) đẩy

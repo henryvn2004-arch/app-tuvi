@@ -118,7 +118,7 @@
               <img id="resultImg" alt="Chân dung tiền kiếp" style="display:none">
               <div id="imgLoadStatus" style="display:none;margin-top:8px;font-size:12.5px;color:var(--text-lt);text-align:center"></div>
               <div class="cdtk-actions" id="imgActions" style="display:none">
-                <button class="btn-submit" onclick="downloadResult()">⬇ Tải Ảnh</button>
+                <button class="btn-submit" id="btnDownload" onclick="downloadResult()">⬇ Tải Ảnh Đăng Story</button>
                 <button class="btn-submit" style="background:transparent;color:var(--navy);border:1.5px solid var(--navy)" onclick="regenerate()">↻ Làm Lại</button>
               </div>
             </div>
@@ -173,6 +173,7 @@
 
 let _currentSlug = '';
 let _resultImgUrl = '';
+let _lastStory = null;
 const CDTK_STEPS = [
   { label: 'Lập lá số & xác định chức phận thời xưa', ms: 1200 },
   { label: 'Đọc 9 đại vận, chia dòng đời thành 5 hồi', ms: 2600 },
@@ -337,6 +338,7 @@ function renderEraLine(data) {
 }
 
 function renderStory(data) {
+  _lastStory = data;
   document.getElementById('danhXung').textContent = data.danhXung || '';
   // Hero CỐ Ý chỉ còn: chức phận (to) + tên nhân vật & vế bí danh (nhỏ).
   // Phần "chính tinh nào tại cung nào" đã dời hẳn xuống khối "Cơ Sở Trong Lá
@@ -374,7 +376,54 @@ function renderStory(data) {
   document.getElementById('caveatBlock').style.display = 'block';
 }
 
+// ── Tải ảnh 9:16 để đăng Story/TikTok (V3) ───────────────────────────────
+// Trước đây nút này trả về đúng file thô model sinh ra — ảnh lan đi mà không
+// mang dấu hiệu nào dẫn ngược về site. Nay ghép thêm câu trích + triện + tên
+// miền và cắt về khung 9:16. Dựng ở máy người dùng, không tốn thêm tiền model.
+function _ensurePoster() {
+  if (window.Poster) return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    let s = document.getElementById('_poster_js');
+    if (!s) {
+      s = document.createElement('script');
+      s.id = '_poster_js'; s.src = '/poster.js?v=1';
+      document.head.appendChild(s);
+    }
+    s.addEventListener('load', () => resolve());
+    s.addEventListener('error', () => reject(new Error('poster_js')));
+  });
+}
+
+function _posterOpts() {
+  const d = _lastStory || {};
+  return {
+    imageUrl: _resultImgUrl,
+    title: d.characterName || d.danhXung || 'Chân dung tiền kiếp',
+    subtitle: [d.danhXung, (d.era || {}).label].filter(Boolean).join(' · '),
+    // Lời Kết trước: đó là câu chốt của cả truyện, tách ra đứng một mình vẫn
+    // có nghĩa. Mô tả nhân vật là lớp đỡ, cuối cùng mới bới trong 5 hồi.
+    quote: Poster.pickQuote([d.ketLuan, d.moTaNhanVat, (d.acts || []).map(a => a.text || '').join(' ')]),
+  };
+}
+
 async function downloadResult() {
+  if (!_resultImgUrl) return;
+  const btn = document.getElementById('btnDownload');
+  const label = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = 'Đang dựng ảnh…'; }
+  try {
+    await _ensurePoster();
+    await Poster.download(_posterOpts(), 'chan-dung-tien-kiep-tuviminhbao.png');
+    if (window.Track) Track.event('poster_download', { tool_id: 'chan-dung-tien-kiep' });
+  } catch (e) {
+    await _downloadRaw();
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = label; }
+  }
+}
+
+// Dựng poster hỏng thì vẫn phải đưa được ảnh cho người ta — rơi về file thô.
+async function _downloadRaw() {
   if (!_resultImgUrl) return;
   try {
     const res = await fetch(_resultImgUrl);
