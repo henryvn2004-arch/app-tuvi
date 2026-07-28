@@ -24,18 +24,34 @@ function base64url(input: Buffer | string): string {
   return Buffer.from(input).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
+// Nhận CẢ raw JSON lẫn base64 (Vercel/CI hay lưu key dạng base64 cho gọn 1 dòng —
+// `scripts/ga4.mjs` đã nhận cả hai từ đầu, bản này thì chưa). Khớp dạng là quan
+// trọng: parse hỏng ở đây trả null IM LẶNG → dashboard tụt về số nội bộ mà không
+// báo gì, nên thêm cảnh báo để lần sau lộ ra ngay thay vì phải đi dò.
+function parseServiceAccount(input: string): ServiceAccount | null {
+  let raw = input.trim();
+  if (!raw.startsWith('{')) {
+    try {
+      raw = Buffer.from(raw, 'base64').toString('utf8');
+    } catch {
+      /* để JSON.parse bên dưới quyết */
+    }
+  }
+  try {
+    return JSON.parse(raw) as ServiceAccount;
+  } catch {
+    console.warn('[ga4] GA4_SERVICE_ACCOUNT_JSON không đọc được (cần raw JSON hoặc base64) — bỏ qua GA4, dùng số nội bộ.');
+    return null;
+  }
+}
+
 async function getAccessToken(): Promise<string | null> {
   if (!SERVICE_ACCOUNT_JSON) return null;
   const now = Math.floor(Date.now() / 1000);
   if (cachedToken && cachedToken.exp - 60 > now) return cachedToken.token;
 
-  let sa: ServiceAccount;
-  try {
-    sa = JSON.parse(SERVICE_ACCOUNT_JSON);
-  } catch {
-    return null;
-  }
-  if (!sa.client_email || !sa.private_key) return null;
+  const sa = parseServiceAccount(SERVICE_ACCOUNT_JSON);
+  if (!sa || !sa.client_email || !sa.private_key) return null;
 
   const tokenUri = sa.token_uri || 'https://oauth2.googleapis.com/token';
   const header = { alg: 'RS256', typ: 'JWT' };

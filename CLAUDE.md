@@ -284,6 +284,38 @@ repo CÓ `lib/analytics/ga4.ts` nhưng nó chỉ lấy ĐÚNG 1 con số (tổng
   của Google hiện đúng** (chuỗi auth chạy tới cùng). **CHƯA chạy được lượt có
   quyền thật** vì container phiên chưa có credential — đó chính là việc tay Henry.
 
+### 🐞 Vòng sau (2026-07-28) — env đã set nhưng BỊ CẮT, và lộ bug prod thật
+Henry set `GA4_PROPERTY_ID`/`GA4_SERVICE_ACCOUNT_JSON` cho container Claude Code
+rồi bảo chạy thử. Kết quả: vẫn chưa đọc được GA4 — **nhưng lần này lỗi nằm ở
+giá trị env, không phải ở quyền Google**, và lúc lần ra thì lộ thêm một bug đang
+sống trên prod.
+- **Trong container:** `GA4_SERVICE_ACCOUNT_JSON` dài đúng **18 ký tự** =
+  `ewogICJ0eXBlIjo...` — tức bản RÚT GỌN mà UI Vercel hiển thị, không phải giá
+  trị đầy đủ. `GA4_PROPERTY_ID=533053153` thì đúng. → **việc tay Henry: mở đúng
+  ô đó trên Vercel, Show/Copy giá trị đầy đủ, dán lại vào environment của Claude
+  Code.** Chưa có bản đầy đủ thì không có cách nào chạy thật.
+- **🔴 Bug prod (quan trọng hơn):** cái tiền tố `ewogICJ0eXBlIjo` **base64-decode
+  ra `{\n  "type":`** → giá trị Henry lưu bên Vercel là **base64**, trong khi
+  `lib/analytics/ga4.ts` chỉ `JSON.parse` thô (CLI `scripts/ga4.mjs` thì nhận cả
+  hai từ đầu). Parse hỏng → `getAccessToken` trả `null` **im lặng** →
+  `handleAdminMarketing` lặng lẽ rơi về số nội bộ. Nghĩa là D4 nhiều khả năng
+  **chưa từng chạy bằng số GA4 thật** kể từ lúc ship, mà không có gì báo. Sửa:
+  tách `parseServiceAccount()` nhận **raw JSON hoặc base64** (chỉ NỚI ra, raw
+  vẫn chạy y như cũ) + `console.warn` khi parse hỏng để lần sau lộ ra ngay.
+  **Henry check lại badge cạnh "Khách ghé" trong panel Funnel sau khi deploy —
+  xanh "GA4" là đã ăn số thật.**
+- **CLI:** thêm bẫy phát hiện bản bị cắt (kết thúc bằng `...`/`…` hoặc < 100 ký
+  tự) → chỉ thẳng "copy ô rút gọn trên Vercel" thay vì để người ta đọc "JSON
+  không hợp lệ" rồi đi dò nhầm sang phía Google.
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier
+  --check .` sạch · `node --check` · **test `getGa4Sessions` với RSA key tự sinh
+  + stub OAuth/Data API**: raw JSON và base64 **ra cùng 1 kết quả** (JWT RS256,
+  scope + URL `properties/533053153:runReport` + body đúng), bản bị cắt và chuỗi
+  rác → `null` + cảnh báo, KHÔNG gọi mạng · CLI với key giả gọi thật
+  `oauth2.googleapis.com` → `400 invalid_grant: account not found` (chuỗi auth
+  chạy tới cùng, chỉ thiếu key thật). Gặp 1 nhịp `503` rỗng từ token endpoint
+  rồi tự khỏi ở lượt sau — nhiễu tạm thời, không phải lỗi code.
+
 ---
 
 ## 🔁 TRACK MỚI — Viral Loop cho 2 tool chân dung (chốt 2026-07-27, CHƯA CODE)
