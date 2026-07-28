@@ -372,7 +372,10 @@ function appLuanGiaiHref(p: IsrParams | null): string {
     namxem: String(p.namXem),
     auto: '1',
   });
-  return `/app/luan-giai?${q.toString()}`;
+  // esc() để `&` giữa các tham số thành `&amp;` — hàm này chỉ dùng trong thuộc
+  // tính href, mà `&` trần trong HTML attribute là sai chuẩn (trình duyệt hiện
+  // nay vẫn đọc đúng, nhưng trang này render ~438K lần và bị bộ máy SEO soi).
+  return esc(`/app/luan-giai?${q.toString()}`);
 }
 
 // ────────────────────────────────────────────────────────────────────────────
