@@ -680,6 +680,56 @@ TikTok 10–15ph/ngày, seed group FB) — code CHỈ soạn sẵn chất liệu
 nhất, tái dùng ~90% hạ tầng) · Thẻ Định Mệnh + độ hiếm lá số (chi phí LLM ≈ 0, gắn được
 vào MỌI tool).
 
+### 🚧 V5 — "Duyên Nợ Tiền Kiếp": ENGINE XONG (PR mới), TOOL CHƯA DỰNG
+**Chọn mục nào trong 3 mục V5, và vì sao:** làm **duyên nợ tiền kiếp**, BỎ 2 mục kia.
+Gate của V5 ("chỉ làm sau khi V2.4 có số thật") tồn tại vì *khuếch đại* cần biết mình
+đang khuếch đại cái gì — nhưng duyên nợ là **tool MỚI tạo nhu cầu mới**, không phải
+khuếch đại, nên không dính gate đó. Hai mục kia thì dính: "Thẻ Định Mệnh" là lớp share
+gắn lên tool sẵn có, còn gate "chia sẻ để mở khoá hồi 4–5" **nên cân nhắc bỏ hẳn** —
+ép chia sẻ mới cho đọc tiếp là đúng thứ mà cả track này tránh ("hứa hụt là mất niềm
+tin ngay lần đầu"), và nó bóp trải nghiệm để đổi lấy một vòng lặp CHƯA đo được.
+- **`lib/engine/past-life-bond.ts` (MỚI)** — `computePastLifeBond(lsA,gA,lsB,gB)` THUẦN
+  deterministic: nền văn minh CHUNG + 2 nhân vật (dùng lại `computePastLife`, đúng chỗ
+  "tái dùng ~90% hạ tầng" mà plan nói) + **loại duyên nợ** suy từ cổ pháp thật.
+- **7 loại duyên:** phu thê · kim lan · ơn cứu mạng · thầy trò · nợ chưa trả · hai bờ
+  chiến tuyến · tao ngộ. Mỗi loại gắn với dấu hiệu TRA ĐƯỢC trong lá số, và dấu hiệu đó
+  trả ra trong `signals` để hiện thẳng cho người đọc — không bốc thăm chỗ nào.
+- **Nền chung phải ĐỘC LẬP THỨ TỰ:** `pickSharedEra` sắp seed 2 lá số trước khi hash.
+  Không làm vậy thì nhập A trước B ra một thế giới, B trước A ra thế giới khác — hai
+  người bạn cùng bấm nhận 2 kết quả mâu thuẫn, mất tin ngay. Verify 950 cặp: 0 lệch.
+- **🐞 Bắt được khi ĐO, không phải khi đọc code** (đo trên 950 cặp từ 96 lá số thật):
+  - Bản 1: **36% ra "hai bờ chiến tuyến", 30% ra "ơn cứu mạng"** — 2/3 số cặp bị phán
+    bởi MỘT tín hiệu yếu (ngũ hành nạp âm, gần như ngẫu nhiên giữa 2 người bất kỳ).
+    Nói với một phần ba số cặp rằng kiếp trước họ là kẻ thù, chỉ vì nạp âm khắc nhau,
+    là kết luận nặng dựa trên chứng cứ mỏng. → Đổi trục chính sang **địa chi cung Mệnh**
+    (hợp/xung/hình — tín hiệu mạnh, rõ trong cổ pháp), ngũ hành/chính tinh chỉ tinh chỉnh.
+  - Bản 2: lệch ngược, **68% ra "bằng hữu"** — thành thật nhưng nhạt, quá nửa người dùng
+    nhận đúng câu trả lời chán nhất cho một tool mà cả cái hook là "kiếp trước hai ta là
+    gì của nhau". Căn nguyên: cặp Mệnh HỢP mà chính tinh trung tính bị rơi tuột xuống
+    nhánh mặc định, tức vứt bỏ đúng thứ vừa đọc được từ lá số. → mọi cặp Mệnh hợp đều
+    vào nhánh dương.
+  - **Lỗi đúng/sai thật:** nhánh `same` trong `chiRelation` KHÔNG BAO GIỜ chạy được vì
+    tam hợp chặn trước (mỗi địa chi nằm trong đúng 1 nhóm tam hợp nên a===b luôn thoả
+    "cùng nhóm") → cặp cùng địa chi bị **báo sai cổ pháp** là "cùng Tam Hợp", ngay trong
+    phần dùng để chứng minh mình không bịa. Đảo thứ tự xét.
+  - **Trục phụ cung Phu Thê:** Mệnh trung tính là >50% số cặp; cổ pháp không chỉ đọc
+    duyên ở cung Mệnh — Phu Thê mới là cung nói về ràng buộc đôi lứa. Bỏ qua nó rồi trả
+    "tao ngộ" cho quá nửa người dùng mới là làm hỏng.
+- **Phân bố cuối (950 cặp):** tao ngộ 48,6% · kim lan 26,6% · hai bờ chiến tuyến 8,3% ·
+  phu thê 7,7% · thầy trò 3,1% · nợ chưa trả 2,9% · ơn cứu mạng 2,7%. Mẫu là lưới lá số
+  đều nên tỉ lệ THẬT sẽ lệch đi ít nhiều — đừng coi đây là con số prod.
+- **Bất biến đã verify:** đảo A/B ra y hệt (0/950 lệch) · 2 nhân vật LUÔN cùng nền
+  (0/950 lệch) · không bao giờ gán "phu thê" cho cặp cùng giới · mọi kết quả đều có
+  `signals` · gọi lại cùng cặp ra y hệt · 5 nền trải đều (180–202/950) · 54 chức phận.
+- **Xuất thêm từ `past-life.ts`:** `stableHash`, `ERA_IDS` — CỐ Ý dùng chung thay vì
+  chép: hash mà có 2 bản thì hai bản trôi khỏi nhau lúc nào không biết.
+- **⚠️ CÒN LẠI (tool chưa dùng được, engine hiện CHƯA có ai gọi):** prompt viết truyện
+  đôi · prompt ảnh 2 nhân vật chung một khung · route 2 pha (`phase=story|image` như
+  `chan-dung-tien-kiep`) · trang shell `/app/duyen-no-tien-kiep` · migration bảng lưu +
+  `tool_pricing` · đăng ký (`next.config.mjs` rewrite, `shell.js` TOOLS, `app-home.html`
+  GROUPS, `cong-cu.html`, `tuvi-paywall.js`) + bump `shell.js?v=`. Trang standalone SEO
+  có thể làm sau — CTA từ link chia sẻ đổ về `/app` nên đường chính là trang shell.
+
 ### 🚦 Tiêu chí dừng/đổi hướng (đặt trước để khỏi tự lừa mình)
 Sau khi xong V2 + V4 chạy đủ 3–4 tuần: **K-factor < 0.3** → kết luận 2 tool này không lan
 tự nhiên ở thị trường VN; chuyển vai chúng thành **mồi trả phí thấp / hook quảng cáo**
