@@ -316,6 +316,50 @@ sống trên prod.
   chạy tới cùng, chỉ thiếu key thật). Gặp 1 nhịp `503` rỗng từ token endpoint
   rồi tự khỏi ở lượt sau — nhiễu tạm thời, không phải lỗi code.
 
+### ✅ Vòng sau — GA4 nhiều chiều: panel "GA4 vs Nội Bộ" + nối vào CMO digest (PR mới)
+Henry hỏi "lấy được live data chưa, realtime không, admin bổ sung được data gì, và
+mỗi ngày gửi report cho CMO orchestrator được không". Audit trả lời: phễu
+**không thiếu bậc** (visit→signup→activate→topup_intent→paid→returned đã đủ), chỗ
+đứt là **GA4 chỉ đóng góp ĐÚNG bậc 1** — bậc 2–6 toàn dữ liệu nội bộ, nên không
+quy kết được kênh GA4 nào đẻ ra người trả tiền, mà bảng Sources lại dựa
+`user_attribution` từ `track.js` (chỉ thấy khách đã chạy JS) nên luôn hụt.
+- **`lib/analytics/ga4.ts`** — tách `runReport()` dùng chung + `getGa4Breakdown()`:
+  tổng sessions · **kênh** (`sessionDefaultChannelGroup`) · **landing page**
+  (`landingPage`) · **`activeNow`** (`:runRealtimeReport`, 30 phút gần nhất — chiều
+  DUY NHẤT thật sự "realtime"; Data API thường có độ trễ). 4 report chạy SONG SONG
+  trên CÙNG 1 access token đã cache; **mỗi report hỏng độc lập** (realtime 403 thì
+  `activeNow=null`, phần còn lại vẫn dùng được). `getGa4Sessions` giữ nguyên chữ ký.
+  Thêm `console.warn` khi report lỗi — cùng lý do với bug base64: im lặng thì hỏng
+  âm thầm hàng tháng.
+- **`handleAdminMarketing`** đổi sang `getGa4Breakdown`, trả thêm `ga4` kèm
+  **`internalVisitors`** (số nội bộ TRƯỚC khi bị GA4 ghi đè) — đó chính là vế còn
+  lại để so hai nguồn.
+- **Panel "GA4 vs Nội Bộ"** (`renderMktGa4`, ngay dưới Funnel): 4 tile (Phiên GA4 ·
+  Nội bộ đo được · **% đo được** với ngưỡng xanh ≥80/cam ≥60/đỏ <60 · Đang online
+  30ph) + 2 bảng kênh/landing. Tooltip nói rõ **% đo được thấp KHÔNG phải traffic
+  giảm** mà là bảng Nguồn/Traffic đang dựa trên mẫu thiếu — đây là chỗ dễ đọc sai
+  nhất nên viết thẳng vào UI.
+- **`cmo-digest.ts`** — `buildSnapshot()` gọi thêm `getGa4Breakdown` (best-effort,
+  `.catch(() => null)`, KHÔNG kéo sập digest). System prompt thêm nguyên một khối
+  luật đọc GA4: `ga4=null` → nói thẳng "chưa đọc được GA4", cấm đoán lưu lượng;
+  chênh GA4 vs nội bộ là đo hụt chứ không phải sụt; tỉ lệ ghép 2 nguồn phải ghi rõ
+  là ước lượng. **→ digest Telegram 8h sáng tự có GA4, 0 cron mới, 0 env mới.**
+- **Routine chat "Báo cáo CMO hàng ngày 8h10"** (`trig_01MDKn384hYTyLxbdRtunuoc`)
+  **CHƯA sửa được bằng tool** — nó bind vào phiên khác (`update_trigger` từ chối
+  sửa prompt của routine bắn vào session không phải của mình). Việc tay Henry: thêm
+  bước chạy `scripts/ga4.mjs overview|channels|landing --from 7daysAgo` vào prompt.
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier
+  --check .` sạch · `node --check` cả 3 script block admin · **stub test
+  `getGa4Breakdown`**: đúng 1 token + 4 report, đúng dimension/metric/limit,
+  `orderBys` giảm dần theo sessions, realtime KHÔNG gửi `dateRanges`, realtime 403
+  → chỉ `activeNow=null`, thiếu `GA4_PROPERTY_ID` → null và **0 call mạng** ·
+  **test `generateCmoDigestText` trên file thật** (chỉ thay import LLM bằng stub):
+  GA4 vào snapshot kèm `internalVisitors` đúng, **KHÔNG ghi đè
+  `funnelThisWeek.visitors`** (giữ được cả 2 vế để so), GA4 chết → `ga4:null` mà
+  digest vẫn chạy đủ RPC nội bộ · **Playwright render panel thật** light + dark:
+  nhãn/số/`% đo được` đúng công thức, landing page chứa HTML **bị escape** (không
+  chèn được thẻ), ca `null` hiện hướng dẫn kiểm env.
+
 ---
 
 ## 🔁 TRACK MỚI — Viral Loop cho 2 tool chân dung (chốt 2026-07-27, CHƯA CODE)

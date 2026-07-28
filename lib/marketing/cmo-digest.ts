@@ -8,6 +8,7 @@
 // ============================================================
 
 import { llmText } from '@/lib/llm/complete';
+import { getGa4Breakdown, type Ga4Breakdown } from '@/lib/analytics/ga4';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -37,6 +38,8 @@ interface CmoSnapshot {
   margin: unknown;
   channelHealth: unknown;
   atRiskCount: number;
+  /** GA4 7 ngày qua — null khi chưa cấu hình env hoặc API lỗi (digest tự nói thiếu). */
+  ga4: (Ga4Breakdown & { internalVisitors: unknown }) | null;
 }
 
 // Snapshot 7 ngày gần nhất SO VỚI 7 ngày trước đó (WoW) — đủ để LLM thấy xu
@@ -46,9 +49,11 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
   const now = new Date();
   const d = (days: number) => new Date(now.getTime() - days * 864e5).toISOString();
 
+  const day = (days: number) => d(days).slice(0, 10); // GA4 Data API nhận YYYY-MM-DD
+
   const [
     funnelThisWeek, funnelPrevWeek, sourcesThisWeek, engagement,
-    revenueThisWeek, revenuePrevWeek, margin, channelHealth, atRisk,
+    revenueThisWeek, revenuePrevWeek, margin, channelHealth, atRisk, ga4,
   ] = await Promise.all([
     callRpc('marketing_funnel', { p_from: d(7), p_to: d(0) }),
     callRpc('marketing_funnel', { p_from: d(14), p_to: d(7) }),
@@ -59,12 +64,18 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
     callRpc('dashboard_margin', { p_from: d(7), p_to: d(0) }),
     callRpc('channel_error_rate', { p_hours: 24 }),
     callRpc<unknown[]>('dashboard_at_risk', { p_idle_days: 14, p_min_events: 3, p_limit: 50 }),
+    // GA4 là nguồn DUY NHẤT thấy được organic/ads/social; thiếu nó thì digest chỉ
+    // nhìn được phần traffic đã chạm track.js và dễ kết luận sai về kênh.
+    // Best-effort: hỏng → null, không kéo sập cả digest.
+    getGa4Breakdown(day(7), day(0)).catch(() => null),
   ]);
 
+  const funnel = funnelThisWeek as { visitors?: unknown };
   return {
     funnelThisWeek, funnelPrevWeek, sourcesThisWeek, engagement,
     revenueThisWeek, revenuePrevWeek, margin, channelHealth,
     atRiskCount: Array.isArray(atRisk) ? atRisk.length : 0,
+    ga4: ga4 ? { ...ga4, internalVisitors: funnel?.visitors ?? null } : null,
   };
 }
 
@@ -77,7 +88,21 @@ cho founder. Yêu cầu:
   để nêu xu hướng (tăng/giảm bao nhiêu %) — CHỈ nêu số có trong dữ liệu, KHÔNG bịa số.
 - Nếu dữ liệu quá ít để kết luận (vd 0 hoặc gần 0 ở cả 2 tuần), NÓI THẲNG "chưa đủ dữ liệu" thay vì
   suy diễn.
-- Tổng độ dài dưới 350 từ.`;
+- Tổng độ dài dưới 350 từ.
+
+VỀ KHỐI "ga4" (Google Analytics 4, 7 ngày qua) — đọc kỹ, đây là chỗ dễ kết luận sai nhất:
+- ga4 = null nghĩa là CHƯA nối được GA4. Khi đó nói thẳng một câu "chưa đọc được GA4" và chỉ luận
+  trên số nội bộ; TUYỆT ĐỐI không đoán lưu lượng.
+- ga4.sessions là lưu lượng THẬT (thấy cả organic/ads/social). ga4.internalVisitors là số nội bộ suy
+  từ track.js, vốn CHỈ đếm được khách đã chạy JS trên site. Chênh lệch giữa hai số là phần đo hụt của
+  hệ thống nội bộ — KHÔNG phải traffic sụt, KHÔNG phải lỗi. Nếu chênh lớn (nội bộ < 60% GA4), nêu ở
+  "điểm nghẽn" rằng mọi phân tích theo kênh của bảng nội bộ đang dựa trên mẫu thiếu.
+- ga4.channels (kênh) và ga4.landing (trang đáp) là căn cứ tốt nhất để nói kênh/nội dung nào đang kéo
+  khách. Ưu tiên dùng chúng thay vì đoán.
+- ga4.activeNow là số người online 30 phút gần nhất, mang tính tức thời — dùng làm màu sắc, ĐỪNG suy ra
+  xu hướng cả tuần từ nó.
+- Mọi tỉ lệ ghép GA4 với số nội bộ (vd sessions GA4 ÷ số người trả tiền) là ƯỚC LƯỢNG vì hai nguồn đo
+  khác nhau — nếu nêu thì phải nói rõ là ước lượng.`;
 
 export async function generateCmoDigestText(): Promise<string> {
   const snapshot = await buildSnapshot();

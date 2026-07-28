@@ -19,7 +19,7 @@ import { checkEnv } from '@/lib/ops/preflight';
 import { logCronRun } from '@/lib/cron/log';
 import { tgSendMessage } from '@/lib/channels/telegram';
 import { parseFirebaseServiceAccount, sendFcmPush } from '@/lib/channels/push';
-import { getGa4Sessions } from '@/lib/analytics/ga4';
+import { getGa4Breakdown } from '@/lib/analytics/ga4';
 import { getAdminUser } from '@/lib/admin/auth';
 import { generateContentSuggestions } from '@/lib/marketing/content-suggestions';
 import { generateContentPackText } from '@/lib/marketing/content-pack';
@@ -1466,7 +1466,7 @@ async function handleAdminMarketing(request: NextRequest, sp: URLSearchParams): 
   };
 
   try {
-    const [funnel, sources, acquisition, campaigns, traffic, revenue, cohorts, ga4Sessions] = await Promise.all([
+    const [funnel, sources, acquisition, campaigns, traffic, revenue, cohorts, ga4] = await Promise.all([
       callRpc('marketing_funnel'),
       callRpc('marketing_sources'),
       callRpc('marketing_acquisition'),
@@ -1474,18 +1474,22 @@ async function handleAdminMarketing(request: NextRequest, sp: URLSearchParams): 
       callRpc('marketing_traffic'),
       callRpc('marketing_revenue'),
       callCohorts(),
-      getGa4Sessions(from.toISOString().slice(0, 10), to.toISOString().slice(0, 10)),
+      getGa4Breakdown(from.toISOString().slice(0, 10), to.toISOString().slice(0, 10)),
     ]);
     // GA4 sessions THẬT thay 'visitors' nội bộ (page_view) khi đã cấu hình env —
     // nội bộ chỉ thấy traffic chạm track.js, thiếu organic/ads/social GA4 đo được.
-    if (ga4Sessions != null) {
-      funnel.visitors = ga4Sessions;
+    // `internalVisitors` giữ lại số nội bộ để panel GA4 so hai bên (chênh lệch
+    // chính là phần track.js đo hụt).
+    const internalVisitors = funnel.visitors;
+    if (ga4?.sessions != null) {
+      funnel.visitors = ga4.sessions;
       funnel.visitorsSource = 'ga4';
     } else {
       funnel.visitorsSource = 'internal';
     }
     return ok({
       funnel, sources, acquisition, campaigns, traffic, revenue, cohorts, cohortWeeks,
+      ga4: ga4 ? { ...ga4, internalVisitors } : null,
       from: from.toISOString(), to: to.toISOString(),
     });
   } catch (e: unknown) { return err((e as Error).message); }
