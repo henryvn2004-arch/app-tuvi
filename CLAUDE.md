@@ -298,10 +298,12 @@ giới thiệu, và toàn bộ vòng lặp đã có chỗ đo (panel admin "Vòn
 trần mời 15) + cầu dao ngân sách ảnh free 6 lượt/ngày + 2 lượt rail tặng sau khi
 vẽ. **V2.3 XONG (#320)** — chỗ xin mời bạn sau khi hết Lượng + mục referral
 ở `profile.html`. **V3 XONG (PR mới)** — nút Tải Ảnh nay trả về poster 9:16 có
-thương hiệu thay vì file thô. **→ V2 + V3 ĐÃ XONG.** Việc tiếp theo: **V4**
-(mồi phân phối — viral là bộ khuếch đại, không phải nguồn; 80 visit/ngày thì
-vòng lặp không tự khởi động; phần lớn là việc tay Henry, phần code chỉ là
-content-pack).
+thương hiệu thay vì file thô (#322). **V4 phần CODE XONG (PR mới)** — content-pack
+TikTok: cron CN gom 5 bản chân dung đã được chia sẻ công khai, LLM viết sẵn kịch
+bản 30–60 giây, gửi Telegram admin + nút sinh on-demand trong admin. **→ V2 + V3 +
+V4(code) ĐÃ XONG.** Việc tiếp theo là **việc tay Henry** (đăng TikTok 10–15ph/ngày,
+seed 3–5 group FB) rồi **V5** — nhưng V5 chốt rõ là *chỉ làm SAU khi V2.4 có số
+thật*, nên đừng code V5 trước khi panel Vòng Lặp Viral có dữ liệu người thật.
 Số liệu tự chảy vào panel khi có người thật dùng; trước đó K-factor còn 0 là
 ĐÚNG, không phải lỗi.
 
@@ -595,6 +597,51 @@ nào dẫn ngược về site. V3 = nâng cấp chính nút đó, không thêm n
 vòng lặp không tự khởi động. Dùng content-pack TikTok (M2.3 của track Marketing) đẩy
 5 chân dung đẹp nhất tuần → script 30–60s, Henry đăng tay 10–15ph/ngày + seed 3–5 group
 tử vi/tarot FB.
+
+### ✅ V4 (phần CODE) XONG (PR mới, session này) — content-pack TikTok
+"M2.3 của track Marketing" mà plan trỏ tới **không tồn tại** (track đó đi M0.1–M0.6),
+nên content-pack dựng mới ở đây. Phần còn lại của V4 là **việc tay Henry** (đăng
+TikTok 10–15ph/ngày, seed group FB) — code CHỈ soạn sẵn chất liệu, KHÔNG tự đăng
+đi đâu (không có tích hợp TikTok/FB API, cố ý).
+- **`lib/marketing/content-pack.ts`** — gom 5 bản chân dung của tuần rồi nhờ 1 lượt
+  `llmText()` viết kịch bản 30–60 giây cho từng cái (HOOK 0–3s / THÂN 3–45s / CHỐT
+  45–60s + 5 hashtag), kết bằng gợi ý seed group FB.
+- **🔑 Nguồn dữ liệu là `shared_results`, KHÔNG phải 2 bảng portrait** — hai lý do
+  trùng khít nhau: (1) **riêng tư** — đó là những kết quả CHÍNH CHỦ đã bấm Chia sẻ,
+  tức đã tự công khai; `past_life_portraits`/`spouse_portraits` chứa cả lượt vẽ riêng
+  tư chưa ai cho phép đem đăng; (2) **chất liệu** — cột `blocks` của bản chia sẻ lưu
+  TRỌN phần chữ (tên nhân vật, danh xưng, mô tả, 5 hồi, Lời Kết), trong khi 2 bảng
+  portrait chỉ giữ vài cột meta. Kho được phép đăng cũng chính là kho giàu nhất.
+- **Xếp theo `view_count`**, và nói thẳng trong header là "xếp theo lượt mở link,
+  không phải máy chấm ảnh đẹp" — không có tín hiệu nào nói được "đẹp", giả vờ có là
+  nói dối Henry về thứ anh đang đọc.
+- **Tuần không ai chia sẻ → KHÔNG gọi LLM**, trả lời thẳng là chưa có chất liệu +
+  chỉ ra việc cần làm. Nhờ LLM viết vo cho có là tốn tiền để sinh ra rác.
+- **KHÔNG đụng hot path & KHÔNG đổi schema.** Cân nhắc lưu truyện vào
+  `past_life_portraits` cho giàu chất liệu, nhưng truyện và ảnh là **2 request chạy
+  SONG SONG** (thiết kế 2 pha) nên phải bịa thêm khoá tương quan để ghép — đổi kiến
+  trúc một tool đang live để lấy lợi ích còn giả định. Bỏ. Script 45 giây cần *chức
+  phận + nền + ảnh* (đã có sẵn); 5 hồi là thứ người ta đọc trên site.
+- **`app/api/cron/content-pack/route.ts`** — CN hằng tuần (`0 1 * * 0` = 8h sáng VN),
+  cùng pattern CRON_SECRET/`withCronLog`/Telegram admin với `cmo-digest`, prefix 🎬.
+  0 env mới. **Đăng ký vào `lib/ops/jobs.ts`** — sổ job của S4 (track COO) mới lập
+  chính vì mấy cron marketing từng VẮNG MẶT khỏi trang giám sát; thêm cron mà quên
+  ghi sổ là tái lập đúng lỗ hổng vừa vá.
+- **Nút "🎬 Sinh Content Pack"** (`admin-content-pack`, verifyAdmin) trong
+  `#page-marketing` + chọn 7/30/90 ngày — CÙNG hàm cron dùng. Lý do có nút: cron gửi
+  sáng CN, lỡ tin thì phải đợi cả tuần.
+- **Verify:** `tsc` · `lint` 0 lỗi · `prettier --check .` · `node --check` 3 script
+  block admin · `vercel.json` parse được · **unit test trên CHÍNH file thật** (chỉ
+  thay 1 dòng import LLM bằng stub): query PostgREST đúng bộ lọc/sắp xếp, map đúng
+  URL/label/views, excerpt gộp `blocks` và rơi về `text_content` khi blocks null,
+  **payload gửi LLM KHÔNG chứa user_id/email/ngày sinh**, rỗng → không gọi LLM, lỗi
+  PostgREST → ném lên cho `withCronLog` ghi · **cron route chạy thật** trên Next dev
+  + stub: không auth/sai secret → 401, đúng secret + rỗng → 200 `sent:true` và
+  `cron_runs` ghi `status=ok` đúng `job_key`, có dữ liệu → đi tiếp tới LLM · panel
+  admin render + bấm nút thật, **light + dark**, 0 lỗi console.
+- **CÒN LẠI:** bản digest đầu tiên gửi 8h sáng CN sau khi merge. Hiện 26 link chia sẻ
+  đều là bản test của Henry nên pack đầu sẽ lấy từ đó — đúng như thiết kế, không phải
+  lỗi. Việc tay: đăng đều 10–15ph/ngày + seed 3–5 group FB.
 
 **V5 — Khuếch đại (chỉ làm SAU khi V2.4 có số thật):** gate "chia sẻ để mở khóa hồi 4–5"
 · **duyên nợ tiền kiếp với người ấy** (2 lá số → 1 truyện, mỗi lượt kéo 2 người — K cao
