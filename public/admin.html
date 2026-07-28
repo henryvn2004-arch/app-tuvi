@@ -955,6 +955,7 @@
       <div class="page" id="page-cron">
         <div id="cron-alert" style="margin-bottom:.75rem"></div>
         <div id="ops-digest"></div>
+        <div id="security-audit"></div>
         <div id="env-preflight"></div>
 
         <!-- Sức Khỏe Tool (track COO, S1) — đặt TRƯỚC phần cron vì đây là thứ
@@ -1547,6 +1548,65 @@ function renderEnvPreflight(envs) {
     </div>`;
 }
 
+// ── Rà bảo mật (track COO, S6) ──
+// Panel này CỐ Ý hiện cả khi mọi thứ sạch. Một bảng chỉ xuất hiện lúc có sự cố
+// thì không phân biệt được với một bảng đã chết — đúng bài học CMO Digest im
+// 14 ngày. Trạng thái "sạch" cũng là thông tin, và là thông tin hay gặp nhất.
+function renderSecurityAudit(a) {
+  const host = document.getElementById('security-audit');
+  if (!host) return;
+  if (!a) { host.innerHTML = ''; return; }
+
+  const groups = [
+    { key: 'lech_so_du', icon: '🚨', label: 'Ví lệch số dư so với sổ giao dịch', crit: true,
+      hint: 'Tiền tự sinh ra mà không có giao dịch nào giải thích — điều tra ngay.',
+      line: r => `${r.user_id} — số dư ${r.so_du} vs sổ ${r.tong_so}` },
+    { key: 'ham_ho_cho_anon', icon: '🔓', label: 'Hàm RPC hở cho khách vãng lai', crit: true,
+      hint: 'Vá: revoke execute on function &lt;tên&gt; from public, anon, authenticated;',
+      line: r => String(r) },
+    { key: 'bom_su_kien', icon: '📈', label: 'Nguồn bơm sự kiện bất thường', crit: false,
+      hint: 'Số liệu này nuôi autopilot M0.6 — bơm được là lái được hành động thật.',
+      line: r => `${r.anon_id} — ${r.events_24h} event/24h` },
+    { key: 'thiet_bi_cay', icon: '👥', label: 'Thiết bị gắn nhiều tài khoản', crit: false,
+      hint: 'Nghi cày quà đăng ký. anon_id nằm localStorage nên chỉ bắt được loại lười.',
+      line: r => `${r.anon_id} — ${r.so_tai_khoan} tài khoản` },
+    { key: 'referral_bat_thuong', icon: '🎁', label: 'Lượt mời tăng vọt (7 ngày)', crit: false,
+      hint: '', line: r => `${r.referrer} — ${r.so_nguoi_7d} người` },
+  ];
+
+  const hits = groups.filter(g => (a[g.key] || []).length);
+  const critHit = hits.some(g => g.crit);
+
+  host.innerHTML = `
+    <div class="panel" style="margin-bottom:1rem">
+      <div class="panel-header">
+        <div class="panel-title">🛡️ Rà Bảo Mật</div>
+        <div class="panel-actions"><span class="badge ${hits.length ? (critHit ? 'badge-red' : 'badge-pending') : 'badge-green'}">
+          ${hits.length ? hits.length + ' MỤC CẦN XEM' : 'SẠCH'}
+        </span></div>
+      </div>
+      ${hits.length ? hits.map(g => `
+        <div style="margin:.6rem 1rem;padding:.6rem .8rem;border:1px solid ${g.crit ? 'var(--red)' : 'var(--orange)'};border-radius:var(--radius);background:color-mix(in srgb,${g.crit ? 'var(--red)' : 'var(--orange)'} 8%,transparent)">
+          <div style="font-weight:700;color:${g.crit ? 'var(--red)' : 'var(--orange)'};font-size:.8rem;margin-bottom:.3rem">
+            ${g.icon} ${g.label} — ${(a[g.key] || []).length}
+          </div>
+          ${(a[g.key] || []).slice(0, 8).map(r => `<div style="font-size:.74rem;color:var(--text);margin:.15rem 0;font-family:ui-monospace,monospace">
+            ${escHtmlLocal(g.line(r))}
+          </div>`).join('')}
+          ${g.hint ? `<div style="font-size:.7rem;color:var(--text-lt);margin-top:.35rem">${g.hint}</div>` : ''}
+        </div>`).join('') : `
+        <div style="margin:.6rem 1rem;font-size:.78rem;color:var(--green);font-weight:600">
+          ✓ Không phát hiện dấu hiệu bất thường
+        </div>`}
+      <div style="padding:0 1rem .7rem;font-size:.7rem;color:var(--text-lt);line-height:1.6">
+        Quét mỗi 3 giờ cùng nhịp cảnh báo bất thường. Ngưỡng hiện tại:
+        ${a.nguong ? `${a.nguong.flood_events} event/24h · ${a.nguong.device_users} tài khoản/thiết bị · ${a.nguong.referral_burst} lượt mời/7 ngày` : '—'}.
+        <br>Hàm <code>is_admin</code> CỐ Ý được bỏ qua — nó nằm trong 8 policy RLS,
+        thu quyền là khách vãng lai đọc bảng giá cũng gãy.
+      </div>
+    </div>`;
+}
+
 // ── Đối soát trừ-Lượng ↔ giao-hàng (track COO, S3) ──
 // Khớp TỪNG giao dịch với bản ghi kết quả, không so tổng-với-tổng (cách đó
 // không chỉ ra được lượt nào hỏng). credits_at_risk = Lượng đã thu mà chưa
@@ -1667,6 +1727,7 @@ async function loadCron() {
     if (res && res.jobs && res.jobs.length) _jobs = res.jobs;
     renderEnvPreflight((res && res.env) || []);
     renderOpsDigest((res && res.digest) || null);
+    renderSecurityAudit((res && res.security) || null);
   } catch (e) { /* vẫn render registry với last-run rỗng */ }
 
   // latest run + stats
