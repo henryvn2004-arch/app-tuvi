@@ -349,6 +349,36 @@ quy kết được kênh GA4 nào đẻ ra người trả tiền, mà bảng Sou
   sửa prompt của routine bắn vào session không phải của mình). Việc tay Henry: thêm
   bước chạy `scripts/ga4.mjs overview|channels|landing --from 7daysAgo` vào prompt.
 
+### 🐞 Vòng sau — GA4 ĐANG BỊ CI THỔI PHỒNG, vá nốt nửa còn lại của D6 (PR mới)
+Henry set env đầy đủ trên Vercel + Redeploy → panel "GA4 vs Nội Bộ" ra số THẬT
+(2.088 phiên · nội bộ 531 · đang online 6 — nhánh realtime cũng chạy). **Nhưng
+đọc số thì lộ bug:** top trang đáp là `/` · `/xem-lam-an.html` · `/xem-tuoi.html`
+· `/luan-giai.html` · `/khao-luan.html` · `/blog.html` · `/profile.html` ·
+`/resources.html` — **gần đúng danh sách URL trong `tests/*.spec.ts`**, mà
+`playwright.yml` chạy E2E **thẳng vào prod** mỗi push/PR.
+- **Căn nguyên: D6 vá đúng một nửa.** `track.js` có `if (navigator.webdriver)
+  return` từ D6, nhưng GA4 nạp qua `nav.js` + `GA4_TRACK_SNIPPET` thì KHÔNG có
+  chốt đó → CI vào GA4 nhưng không vào `events`. Hai nguồn đếm hai tập khách
+  khác nhau.
+- **Ba hệ quả trên chính bảng đang xem:** (a) Direct 1.783/2.088 = **85%** vì CI
+  không có referrer; (b) **"% đo được 25%" là số ảo** — thấp một phần do GA4 đếm
+  CI còn nội bộ thì không, khoảng hụt THẬT hẹp hơn; (c) Organic Search chỉ **36
+  phiên** và **không có `/la-so/*` nào** trong top landing dù log Vercel đầy
+  request `/la-so/…` → 438K trang SEO đang được **crawler quét chứ chưa kéo
+  người thật** (bot không chạy JS nên không vào GA4). (c) mới là con số đáng lo,
+  và chỉ lộ ra nhờ có GA4.
+- **Vá:** thêm `&& !navigator.webdriver` vào cả `public/nav.js` lẫn
+  `lib/analytics/isr-tracking.ts` — khớp đúng chốt `track.js` đã dùng. Bump
+  `nav.js?v=16/15/17 → 18` (89 file; trước đó version đang lệch 3 mức khác nhau,
+  gộp luôn về 1).
+- **⚠️ Số GA4 sẽ TỤT RÕ sau khi deploy — đó là fix chạy đúng, không phải traffic
+  chết.** Từ mốc đó "% đo được" mới là con số đọc được.
+- **Verify:** `tsc` 0 lỗi · `eslint nav.js` sạch · `prettier --check .` sạch ·
+  `node --check` · **Playwright 4 ca trên nav.js THẬT và trên chính chuỗi
+  `GA4_TRACK_SNIPPET` đọc từ file `.ts`**: webdriver=true → không dựng thẻ
+  `#gtag-js`, không có `window.gtag`, `dataLayer` rỗng; giả lập người thật
+  (`navigator.webdriver=false`) → đủ cả ba, `dataLayer` có sự kiện.
+
 ### ✅ Vòng sau — GA4 lưu vào `events` để routine chat đọc được (PR mới)
 Henry thử `scripts/ga4.mjs` ở phiên mới: **vẫn báo thiếu credential** (env của
 container chưa nhận giá trị đầy đủ) — và chốt "không sao, tao chỉ cần data feed
