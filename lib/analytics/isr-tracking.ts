@@ -12,7 +12,7 @@
 // ============================================================
 
 export const GA4_TRACK_SNIPPET =
-  '<script src="/track.js?v=1" defer></script>' +
+  '<script src="/track.js?v=2" defer></script>' +
   "<script>(function(){if(!document.getElementById('gtag-js')&&!navigator.webdriver){" +
   "var ga=document.createElement('script');ga.id='gtag-js';ga.async=true;" +
   "ga.src='https://www.googletagmanager.com/gtag/js?id=G-F4XNRS2XT0';document.head.appendChild(ga);" +

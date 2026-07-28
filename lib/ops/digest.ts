@@ -18,7 +18,7 @@
 //     S2 là chuông báo cháy, cái này là điểm danh.)
 // ============================================================
 
-import { evaluateJobs, type CronRun } from './jobs';
+import { evaluateJobs, fetchPgcronRuns, type CronRun } from './jobs';
 import { checkEnv } from './preflight';
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -66,16 +66,19 @@ export interface OpsDigest {
 
 /** Dựng digest vận hành 24h. Thuần dữ liệu, không gọi LLM. */
 export async function buildOpsDigest(): Promise<OpsDigest> {
-  const [tools, recon, runsRes] = await Promise.all([
+  const [tools, recon, runsRes, pgcronRuns] = await Promise.all([
     rpc<ToolRow[]>('tool_health', { p_hours: 24 }, []),
     rpc<ReconRow[]>('payment_reconcile', { p_days: 30 }, []),
     fetch(
       `${SUPABASE_URL}/rest/v1/cron_runs?select=job_key,status,started_at,note&order=started_at.desc&limit=300`,
       { headers: SB_HEADERS },
     ).catch(() => null),
+    // Job pg_cron (auto-pipeline) không ghi cron_runs — thiếu nguồn này thì nó
+    // luôn hiện "chưa hề chạy" dù thực tế chạy đủ mỗi ngày.
+    fetchPgcronRuns(),
   ]);
 
-  const runs: CronRun[] = runsRes && runsRes.ok ? await runsRes.json() : [];
+  const runs: CronRun[] = [...(runsRes && runsRes.ok ? await runsRes.json() : []), ...pgcronRuns];
   const jobs = evaluateJobs(runs);
   const envs = checkEnv();
 

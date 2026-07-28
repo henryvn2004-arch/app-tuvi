@@ -1756,7 +1756,12 @@ async function loadCron() {
   document.getElementById('cron-k-runs').textContent = runs.length;
 
   body.innerHTML = jobList.map(j => {
-    const r = latest[j.key];
+    // Ưu tiên lastRun/lastStatus do SERVER tính (lib/ops/jobs.ts) — job pg_cron
+    // để lại vết dưới tên pg_cron của nó và không nằm trong `runs` (log thô của
+    // cron_runs), tra `latest[j.key]` sẽ ra rỗng rồi hiện "chưa có log" cho một
+    // job vẫn chạy đủ mỗi ngày. `latest` chỉ còn dùng để lấy thêm duration.
+    const raw = latest[j.key];
+    const r = j.lastRun ? { started_at: j.lastRun, status: j.lastStatus, duration_ms: raw ? raw.duration_ms : null } : raw;
     // Hai kiểu hỏng ÂM THẦM, không sinh dòng lỗi nào: job quá hạn, và job chạy
     // đều nhưng lượt nào cũng skip. Đánh dấu ngay trên hàng để không phải suy ra.
     const flags = [];
@@ -1764,6 +1769,9 @@ async function loadCron() {
     // badge-pending (cam) chứ không phải badge-orange — class đó không tồn tại
     // trong admin.css, dùng vào là badge ra không màu.
     if (j.skipStreak >= 3) flags.push(`<span class="badge badge-pending" style="margin-left:.3rem">SKIP ×${j.skipStreak}</span>`);
+    // Job vừa đăng ký, chưa tới lượt chạy đầu — nói rõ là "chờ", đừng để trống
+    // rồi người đọc tự suy thành hỏng.
+    if (j.awaitingFirstRun) flags.push('<span class="badge badge-grey" style="margin-left:.3rem">CHỜ LƯỢT ĐẦU</span>');
     return `<tr${j.overdue ? ' style="background:color-mix(in srgb,var(--red) 6%,transparent)"' : ''}>
       <td><span class="td-title">${escHtmlLocal(j.label)}</span>${flags.join('')}<div class="td-sub mono">${escHtmlLocal(j.key)}</div></td>
       <td><span class="badge ${SRC_BADGE[j.source]||'badge-grey'}">${j.source}</span></td>
