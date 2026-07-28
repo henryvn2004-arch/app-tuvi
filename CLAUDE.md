@@ -348,6 +348,30 @@ quy kết được kênh GA4 nào đẻ ra người trả tiền, mà bảng Sou
   **CHƯA sửa được bằng tool** — nó bind vào phiên khác (`update_trigger` từ chối
   sửa prompt của routine bắn vào session không phải của mình). Việc tay Henry: thêm
   bước chạy `scripts/ga4.mjs overview|channels|landing --from 7daysAgo` vào prompt.
+
+### ✅ Vòng sau — GA4 lưu vào `events` để routine chat đọc được (PR mới)
+Henry thử `scripts/ga4.mjs` ở phiên mới: **vẫn báo thiếu credential** (env của
+container chưa nhận giá trị đầy đủ) — và chốt "không sao, tao chỉ cần data feed
+cho routine CMO + admin page theo dõi". Nhưng đó chính là chỗ còn hụt: panel admin
+và digest Telegram chạy trên **Vercel** (có key, đã xong ở vòng trước), còn routine
+chat 8h10 chạy trong **một phiên Claude khác không có key** → tự nó KHÔNG BAO GIỜ
+thấy GA4, dù prompt có bảo chạy CLI.
+- **Cách vá — không phát tán thêm credential, không thêm bảng:** cron `cmo-digest`
+  (8h00, chạy trên Vercel, vốn ĐÃ lấy GA4 cho snapshot) nay ghi luôn snapshot GA4
+  thô vào `meta.ga4` của chính dòng `events` `event_type='cmo_digest'` mà nó vẫn
+  ghi sẵn. Routine chat chạy 8h10 — 10 phút sau — chỉ cần đọc dòng mới nhất qua
+  Supabase MCP là có đủ sessions/kênh/landing/activeNow/internalVisitors.
+  `generateCmoDigestText()` đổi từ trả `string` → `{ text, ga4 }` (chỉ 1 caller).
+- **Ghi cả khi `ga4=null`** — để phân biệt "hôm đó GA4 hỏng" với "hôm đó cron
+  không chạy"; hai ca này mà lẫn nhau thì lần sau không chẩn được.
+- **Lợi kèm:** có LỊCH SỬ GA4 theo ngày nằm trong `events`, truy vấn SQL được —
+  trước đây GA4 chỉ đọc tức thời rồi vứt, không so được hôm nay với tuần trước.
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi · `prettier --check .` sạch · test
+  `generateCmoDigestText` trên file thật (stub LLM/GA4/RPC): trả đúng
+  `{text, ga4}`, `ga4` đủ 5 trường, GA4 chết → `ga4:null` mà digest vẫn chạy.
+  **CHƯA chạy được test đầu-cuối cho route cron** — nạp `next/server` ngoài
+  Next runtime làm V8 OOM lúc biên dịch regex; phần route chỉ là truyền thêm 1
+  tham số vào body insert sẵn có, đã soi tay + `tsc` phủ.
 - **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier
   --check .` sạch · `node --check` cả 3 script block admin · **stub test
   `getGa4Breakdown`**: đúng 1 token + 4 report, đúng dimension/metric/limit,

@@ -104,11 +104,18 @@ VỀ KHỐI "ga4" (Google Analytics 4, 7 ngày qua) — đọc kỹ, đây là c
 - Mọi tỉ lệ ghép GA4 với số nội bộ (vd sessions GA4 ÷ số người trả tiền) là ƯỚC LƯỢNG vì hai nguồn đo
   khác nhau — nếu nêu thì phải nói rõ là ước lượng.`;
 
-export async function generateCmoDigestText(): Promise<string> {
+export interface CmoDigestResult {
+  text: string;
+  /** Snapshot GA4 THÔ để caller lưu lại — xem chú thích ở route cron. */
+  ga4: CmoSnapshot['ga4'];
+}
+
+export async function generateCmoDigestText(): Promise<CmoDigestResult> {
   const snapshot = await buildSnapshot();
-  return llmText({
+  const text = await llmText({
     system: SYSTEM_PROMPT,
     prompt: JSON.stringify(snapshot),
     maxTokens: 1200,
   });
+  return { text, ga4: snapshot.ga4 };
 }
