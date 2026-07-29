@@ -24,6 +24,18 @@ import { PHU_THE_LUAN_GIAI_SYSTEM_PROMPT, buildPhuTheLuanGiaiPrompt } from '@/li
 import { generatePortraitImage } from '@/lib/image/openai-image';
 import type { BirthParams } from '@/lib/contract/v1';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
+import {
+  lookupPortraitCache,
+  putCachedPortrait,
+  touchCache,
+  insertHistoryRow,
+  lasoKey,
+  getCachedPortrait,
+  userOwnsLaso,
+  birthFromQuery,
+} from '@/lib/portraits/cache';
+
+const TOOL_ID = 'chan-dung-vo-chong';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -62,14 +74,31 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   const birth = body.birth as BirthParams | undefined;
   if (!birth) return err('Thiếu thông tin ngày sinh.', 400);
 
-  // Chốt chặn thanh toán PHÍA SERVER (S0 track COO) — xem chú thích cùng loại
-  // ở app/api/chan-dung-tien-kiep/route.ts.
-  const denied = await toolPaymentDenied(
-    'chan-dung-vo-chong',
-    auth.user.id,
-    String(body.slug || ''),
-  );
-  if (denied) return err(denied, 402);
+  // ── Cache theo lá số (xem lib/portraits/cache.ts) ─────────────────────
+  // Tra TRƯỚC cả chốt thanh toán, vì kết quả tra quyết định luôn có phải trả
+  // tiền hay không: người đã từng trả cho đúng lá số này thì xem lại miễn phí.
+  const look = await lookupPortraitCache(TOOL_ID, 'main', auth.user.id, birth);
+
+  if (!look.free) {
+    // Chốt chặn thanh toán PHÍA SERVER (S0 track COO) — xem chú thích cùng loại
+    // ở app/api/chan-dung-tien-kiep/route.ts.
+    const denied = await toolPaymentDenied(TOOL_ID, auth.user.id, String(body.slug || ''));
+    if (denied) return err(denied, 402);
+  }
+
+  if (look.cached) {
+    touchCache(TOOL_ID, 'main', look.key);
+    // Người mới (vừa trả đủ tiền) cần dòng lịch sử của RIÊNG họ: để thấy trong
+    // mục Lịch sử, và để lần sau được nhận diện là đã trả cho lá số này.
+    if (!look.owns && look.cached.row) {
+      insertHistoryRow(TOOL_ID, { ...look.cached.row, user_id: auth.user.id, laso_key: look.key });
+      // Tặng lượt rail CHỈ cho lượt có trả tiền. Tặng cả ở lượt xem lại miễn
+      // phí thì mở đúng một đường farm: mở lại chân dung cũ vài lần là có lượt
+      // rail vô hạn.
+      void railFreeTurnsPerGen().then((n) => railFreeGrant(auth.user.id, n)).catch(() => {});
+    }
+    return ok({ ...look.cached.payload, cached: true, freeRerun: look.free });
+  }
 
   const lasoRes = computeLaso(birth);
   if (!lasoRes.ok || !lasoRes.ls) return err(lasoRes.error || 'Không lập được lá số.', 400);
@@ -394,32 +423,26 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   }
   const imageUrl = `${SUPABASE_URL}/storage/v1/object/public/portraits/${path}`;
 
+  // Bộ cột lịch sử — dựng MỘT lần rồi dùng cho cả dòng của người sinh gốc lẫn
+  // dòng của những người trúng cache về sau (`user_id` gắn lúc ghi, nên không
+  // để trong này).
+  const historyRow = {
+    user_gender: userGender,
+    spouse_gender: spouseGender,
+    spouse_age: spouseAge,
+    core_star: morph.coreStar,
+    image_url: imageUrl,
+    description: parsed.description,
+    meeting_context: parsed.meetingContext || null,
+    phu_the_luan_giai: phuTheLuanGiai || null,
+  };
   // Lưu lịch sử — best-effort, không chặn response nếu lỗi ghi DB.
-  fetch(`${SUPABASE_URL}/rest/v1/spouse_portraits`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${SUPABASE_KEY}`,
-      apikey: SUPABASE_KEY,
-      'Content-Type': 'application/json',
-      Prefer: 'return=minimal',
-    },
-    body: JSON.stringify({
-      user_id: auth.user.id,
-      user_gender: userGender,
-      spouse_gender: spouseGender,
-      spouse_age: spouseAge,
-      core_star: morph.coreStar,
-      image_url: imageUrl,
-      description: parsed.description,
-      meeting_context: parsed.meetingContext || null,
-      phu_the_luan_giai: phuTheLuanGiai || null,
-    }),
-  }).catch(() => {});
+  insertHistoryRow(TOOL_ID, { ...historyRow, user_id: auth.user.id, laso_key: look.key });
 
   // Vẽ xong → tặng lượt rail miễn phí (V2.2, xem chan-dung-tien-kiep/route.ts).
   void railFreeTurnsPerGen().then((n) => railFreeGrant(auth.user.id, n)).catch(() => {});
 
-  return ok({
+  const payload = {
     success: true,
     imageUrl,
     description: parsed.description,
@@ -428,7 +451,9 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
     spouseGender,
     spouseAge,
     phuThe,
-  });
+  };
+  void putCachedPortrait(TOOL_ID, 'main', look.key, { payload, row: historyRow }, auth.user.id);
+  return ok(payload);
 }
 
 // ── History ───────────────────────────────────────────────────────────
@@ -443,6 +468,23 @@ async function handleHistory(request: NextRequest) {
   if (!r.ok) return err('Lỗi tải lịch sử.', 500);
   const items = await r.json();
   return ok({ success: true, items });
+}
+
+// ── Cache status ──────────────────────────────────────────────────────
+// Client hỏi TRƯỚC khi mở hộp thoại trừ Lượng: lá số này đã có sẵn kết quả
+// chưa, và người đang hỏi có được xem lại miễn phí không. Thuần ĐỌC, không
+// sinh gì, không trừ gì. Server vẫn tự kiểm lại y hệt lúc POST — endpoint này
+// chỉ để khỏi hiện hộp thoại đòi tiền cho một lượt vốn không mất tiền.
+async function handleCacheStatus(request: NextRequest, sp: URLSearchParams) {
+  const auth = await authUser(request);
+  if ('error' in auth) return err(auth.error, auth.status);
+
+  const key = lasoKey(birthFromQuery(sp));
+  const [cached, owns] = await Promise.all([
+    getCachedPortrait(TOOL_ID, 'main', key),
+    userOwnsLaso(TOOL_ID, auth.user.id, key),
+  ]);
+  return ok({ success: true, cached: Boolean(cached), free: Boolean(cached) && owns });
 }
 
 // ── Routes ────────────────────────────────────────────────────────────
@@ -471,6 +513,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const action = searchParams.get('action') || 'history';
   if (action === 'history') return handleHistory(request);
+  if (action === 'cache-status') return handleCacheStatus(request, searchParams);
   return err('Invalid action', 400);
 }
 
