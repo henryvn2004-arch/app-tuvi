@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <title>Đang xác thực — Tử Vi Minh Bảo</title>
+<!-- Trạm trung chuyển OAuth, KHÔNG phải một lượt xem trang: TRACK_QUIET tắt
+     page_view tự động và chặn trang này ghi first-touch (referrer lúc đó là
+     accounts.google.com — ghi vào là mọi user Google đều bị quy sai nguồn).
+     Ở đây chỉ bắn đúng một event 'login' sau khi đã lưu phiên. -->
+<script>window.TRACK_QUIET = true;</script>
+<script src="/track.js?v=2"></script>
 <style>
 body { font-family: sans-serif; display:flex; align-items:center; justify-content:center; min-height:100vh; background:#061A2E; color:#fff; flex-direction:column; gap:16px; }
 .spinner { width:36px; height:36px; border:3px solid rgba(255,255,255,0.2); border-top-color:#c9a84c; border-radius:50%; animation:spin 0.8s linear infinite; }
@@ -54,6 +60,19 @@ body { font-family: sans-serif; display:flex; align-items:center; justify-conten
       session.user = user;
       localStorage.setItem(SESSION_KEY, JSON.stringify(session));
       localStorage.setItem(USER_KEY, JSON.stringify(user));
+      // MẮT XÍCH ĐO LƯỜNG DUY NHẤT của đường đăng nhập Google. Trang này không
+      // nạp auth.js nên `saveSession()` (nơi có Track.event('login')) KHÔNG hề
+      // chạy — trước đây cả luồng OAuth mù hoàn toàn. Mà /api/track chỉ snapshot
+      // `user_attribution` khi nhận đúng event 'login'/'signup', và chỉ từ đó
+      // mới phát ra event 'signup' cho tài khoản mới → thiếu dòng này là bậc
+      // "đăng ký" trên mọi dashboard Marketing trống rỗng dù có người đăng ký thật.
+      //
+      // PHẢI đứng SAU setItem(SESSION_KEY): track.js đọc token từ localStorage
+      // ngay lúc gửi, chưa có token thì server không gắn được user_id.
+      // Gửi bằng fetch keepalive nên sống sót qua cú chuyển hướng bên dưới.
+      try {
+        if (window.Track && window.Track.event) window.Track.event('login', { meta: { method: 'oauth' } });
+      } catch (e) { /* ignore — không được chặn đăng nhập */ }
       // Lưu refresh_token vào cookie server HttpOnly bền (né giới hạn ITP 7-ngày
       // của iOS Safari cho cookie/localStorage do script ghi). Không chặn điều hướng.
       try {

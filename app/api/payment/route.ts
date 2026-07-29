@@ -14,12 +14,12 @@ import { getToolPrice } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
 import { freeGenGate, FREE_GEN_CAP_MESSAGE } from '@/lib/billing/viral-budget';
 import { getConfigValue } from '@/lib/config/appConfig';
-import { evaluateJobs } from '@/lib/ops/jobs';
+import { evaluateJobs, fetchPgcronRuns } from '@/lib/ops/jobs';
 import { checkEnv } from '@/lib/ops/preflight';
 import { logCronRun } from '@/lib/cron/log';
 import { tgSendMessage } from '@/lib/channels/telegram';
 import { parseFirebaseServiceAccount, sendFcmPush } from '@/lib/channels/push';
-import { getGa4Sessions } from '@/lib/analytics/ga4';
+import { getGa4Breakdown } from '@/lib/analytics/ga4';
 import { getAdminUser } from '@/lib/admin/auth';
 import { generateContentSuggestions } from '@/lib/marketing/content-suggestions';
 import { generateContentPackText } from '@/lib/marketing/content-pack';
@@ -671,7 +671,7 @@ async function handleAdminCronRuns(request: NextRequest): Promise<Response> {
   try {
     // Trang này là trung tâm VẬN HÀNH của admin (track COO) — trả kèm sức khoẻ
     // tool để panel không phải gọi thêm một vòng API nữa.
-    const [r, health24, health7d, alerts] = await Promise.all([
+    const [r, health24, health7d, alerts, pgcronRuns] = await Promise.all([
       fetch(
         `${SUPABASE_URL}/rest/v1/cron_runs?select=job_key,source,status,started_at,finished_at,duration_ms,note&order=started_at.desc&limit=300`,
         { headers: SB_HEADERS },
@@ -681,6 +681,8 @@ async function handleAdminCronRuns(request: NextRequest): Promise<Response> {
       toolHealth(24),
       toolHealth(24 * 7),
       opsAlerts(),
+      // Job pg_cron không ghi cron_runs — xem lib/ops/jobs.ts.
+      fetchPgcronRuns(),
     ]);
     const runs = r.ok ? await r.json() : [];
     const reconcile = await rpcSafe('payment_reconcile', { p_days: 30 });
@@ -692,7 +694,10 @@ async function handleAdminCronRuns(request: NextRequest): Promise<Response> {
       reconcile,
       // S4: sổ job giờ ở SERVER (lib/ops/jobs.ts) — sổ hardcode cũ trong
       // admin.html đã trôi khỏi thực tế (khai 5 job trong khi có 9).
-      jobs: evaluateJobs(runs),
+      // CỐ Ý chỉ gộp pg_cron cho phần ĐÁNH GIÁ, không nhét vào `runs` — bảng
+      // "Cron & Jobs" bên dưới là log thô của cron_runs, trộn nguồn khác vào
+      // sẽ thành một bảng không còn khớp với bất kỳ truy vấn SQL nào.
+      jobs: evaluateJobs([...runs, ...pgcronRuns]),
       env: checkEnv(),
       digest: await latestOpsDigest(),
       // S6: rà bảo mật. `rpcSafe` để panel không sập nếu RPC chưa được áp.
@@ -1466,7 +1471,7 @@ async function handleAdminMarketing(request: NextRequest, sp: URLSearchParams): 
   };
 
   try {
-    const [funnel, sources, acquisition, campaigns, traffic, revenue, cohorts, ga4Sessions] = await Promise.all([
+    const [funnel, sources, acquisition, campaigns, traffic, revenue, cohorts, ga4] = await Promise.all([
       callRpc('marketing_funnel'),
       callRpc('marketing_sources'),
       callRpc('marketing_acquisition'),
@@ -1474,18 +1479,22 @@ async function handleAdminMarketing(request: NextRequest, sp: URLSearchParams): 
       callRpc('marketing_traffic'),
       callRpc('marketing_revenue'),
       callCohorts(),
-      getGa4Sessions(from.toISOString().slice(0, 10), to.toISOString().slice(0, 10)),
+      getGa4Breakdown(from.toISOString().slice(0, 10), to.toISOString().slice(0, 10)),
     ]);
     // GA4 sessions THẬT thay 'visitors' nội bộ (page_view) khi đã cấu hình env —
     // nội bộ chỉ thấy traffic chạm track.js, thiếu organic/ads/social GA4 đo được.
-    if (ga4Sessions != null) {
-      funnel.visitors = ga4Sessions;
+    // `internalVisitors` giữ lại số nội bộ để panel GA4 so hai bên (chênh lệch
+    // chính là phần track.js đo hụt).
+    const internalVisitors = funnel.visitors;
+    if (ga4?.sessions != null) {
+      funnel.visitors = ga4.sessions;
       funnel.visitorsSource = 'ga4';
     } else {
       funnel.visitorsSource = 'internal';
     }
     return ok({
       funnel, sources, acquisition, campaigns, traffic, revenue, cohorts, cohortWeeks,
+      ga4: ga4 ? { ...ga4, internalVisitors } : null,
       from: from.toISOString(), to: to.toISOString(),
     });
   } catch (e: unknown) { return err((e as Error).message); }

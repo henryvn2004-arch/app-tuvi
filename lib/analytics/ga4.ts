@@ -7,72 +7,50 @@
 // hoặc lỗi API → trả null, caller tự fallback về số nội bộ, KHÔNG chặn dashboard.
 // ============================================================
 
-import crypto from 'crypto';
+import { getGoogleAccessToken } from './google-auth';
 
 const PROPERTY_ID = process.env.GA4_PROPERTY_ID;
-const SERVICE_ACCOUNT_JSON = process.env.GA4_SERVICE_ACCOUNT_JSON;
 
-interface ServiceAccount {
-  client_email: string;
-  private_key: string;
-  token_uri?: string;
+// Auth service-account nằm ở ./google-auth (dùng CHUNG với Search Console —
+// cùng một bộ credential, chỉ khác scope). Trước đây khối JWT/token nằm ngay
+// trong file này; tách ra để không có hai bản trôi khỏi nhau.
+const GA4_SCOPE = 'https://www.googleapis.com/auth/analytics.readonly';
+const getAccessToken = () => getGoogleAccessToken(GA4_SCOPE);
+
+interface Ga4ReportRow {
+  dimensionValues?: Array<{ value?: string }>;
+  metricValues?: Array<{ value?: string }>;
 }
 
-let cachedToken: { token: string; exp: number } | null = null;
-
-function base64url(input: Buffer | string): string {
-  return Buffer.from(input).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-}
-
-async function getAccessToken(): Promise<string | null> {
-  if (!SERVICE_ACCOUNT_JSON) return null;
-  const now = Math.floor(Date.now() / 1000);
-  if (cachedToken && cachedToken.exp - 60 > now) return cachedToken.token;
-
-  let sa: ServiceAccount;
+// Gọi Data API. `realtime` đổi sang :runRealtimeReport (30 phút gần nhất — endpoint
+// KHÁC, không nhận dateRanges). Lỗi → null, caller tự xử; KHÔNG throw vì mọi thứ ở
+// đây chỉ làm giàu dashboard, không được phép kéo sập trang admin. Cảnh báo ra log
+// để lỗi cấu hình/quyền lộ ra thay vì im lặng như bug base64 vừa rồi.
+async function runReport(
+  token: string,
+  body: Record<string, unknown>,
+  realtime = false,
+): Promise<Ga4ReportRow[] | null> {
+  const method = realtime ? 'runRealtimeReport' : 'runReport';
   try {
-    sa = JSON.parse(SERVICE_ACCOUNT_JSON);
-  } catch {
-    return null;
-  }
-  if (!sa.client_email || !sa.private_key) return null;
-
-  const tokenUri = sa.token_uri || 'https://oauth2.googleapis.com/token';
-  const header = { alg: 'RS256', typ: 'JWT' };
-  const claims = {
-    iss: sa.client_email,
-    scope: 'https://www.googleapis.com/auth/analytics.readonly',
-    aud: tokenUri,
-    iat: now,
-    exp: now + 3600,
-  };
-  const unsigned = `${base64url(JSON.stringify(header))}.${base64url(JSON.stringify(claims))}`;
-  let signature: Buffer;
-  try {
-    signature = crypto.sign('RSA-SHA256', Buffer.from(unsigned), sa.private_key);
-  } catch {
-    return null;
-  }
-  const jwt = `${unsigned}.${base64url(signature)}`;
-
-  try {
-    const res = await fetch(tokenUri, {
+    const res = await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${PROPERTY_ID}:${method}`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-        assertion: jwt,
-      }),
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
     });
-    if (!res.ok) return null;
-    const data = (await res.json()) as { access_token?: string; expires_in?: number };
-    if (!data.access_token) return null;
-    cachedToken = { token: data.access_token, exp: now + (data.expires_in || 3600) };
-    return data.access_token;
-  } catch {
+    if (!res.ok) {
+      console.warn(`[ga4] ${method} lỗi ${res.status}: ${(await res.text()).slice(0, 200)}`);
+      return null;
+    }
+    const data = (await res.json()) as { rows?: Ga4ReportRow[] };
+    return data.rows || [];
+  } catch (e) {
+    console.warn(`[ga4] ${method} ném lỗi:`, (e as Error).message);
     return null;
   }
 }
+
+const num = (r: Ga4ReportRow, i: number) => Number(r.metricValues?.[i]?.value || 0);
 
 // Tổng sessions GA4 trong [fromDate, toDate] (YYYY-MM-DD, cả 2 đầu inclusive
 // theo quy ước GA4 Data API). Trả null nếu chưa cấu hình/env thiếu/API lỗi.
@@ -80,21 +58,67 @@ export async function getGa4Sessions(fromDate: string, toDate: string): Promise<
   if (!PROPERTY_ID) return null;
   const token = await getAccessToken();
   if (!token) return null;
+  const rows = await runReport(token, {
+    dateRanges: [{ startDate: fromDate, endDate: toDate }],
+    metrics: [{ name: 'sessions' }],
+  });
+  if (!rows) return null;
+  return rows[0] ? num(rows[0], 0) : 0;
+}
 
-  try {
-    const res = await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${PROPERTY_ID}:runReport`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        dateRanges: [{ startDate: fromDate, endDate: toDate }],
-        metrics: [{ name: 'sessions' }],
-      }),
-    });
-    if (!res.ok) return null;
-    const data = (await res.json()) as { rows?: Array<{ metricValues?: Array<{ value?: string }> }> };
-    const val = data.rows?.[0]?.metricValues?.[0]?.value;
-    return val != null ? Number(val) : 0;
-  } catch {
-    return null;
-  }
+export interface Ga4Row {
+  key: string;
+  sessions: number;
+  users: number;
+}
+
+export interface Ga4Breakdown {
+  sessions: number | null;
+  channels: Ga4Row[];
+  landing: Ga4Row[];
+  /** Người đang online 30 phút gần nhất — chiều DUY NHẤT thật sự "realtime". */
+  activeNow: number | null;
+}
+
+// Nhiều chiều GA4 cho panel "GA4 vs nội bộ": tổng sessions + kênh + landing page
+// + số người đang online. Vì sao cần: `track.js` chỉ thấy traffic đã chạm JS trên
+// site, nên bảng Sources/Traffic nội bộ luôn hụt so với thực tế; bày cạnh nhau thì
+// khoảng hụt đó thành con số đọc được thay vì phải đoán.
+//
+// 4 report chạy SONG SONG trên CÙNG một access token (token cache sẵn trong
+// module) — mỗi phần hỏng độc lập, phần còn lại vẫn dùng được.
+export async function getGa4Breakdown(fromDate: string, toDate: string): Promise<Ga4Breakdown | null> {
+  if (!PROPERTY_ID) return null;
+  const token = await getAccessToken();
+  if (!token) return null;
+
+  const range = { dateRanges: [{ startDate: fromDate, endDate: toDate }] };
+  const byDim = (dimension: string, limit: number) => ({
+    ...range,
+    dimensions: [{ name: dimension }],
+    metrics: [{ name: 'sessions' }, { name: 'totalUsers' }],
+    orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
+    limit,
+  });
+
+  const [totalRows, channelRows, landingRows, realtimeRows] = await Promise.all([
+    runReport(token, { ...range, metrics: [{ name: 'sessions' }] }),
+    runReport(token, byDim('sessionDefaultChannelGroup', 10)),
+    runReport(token, byDim('landingPage', 15)),
+    runReport(token, { metrics: [{ name: 'activeUsers' }] }, true),
+  ]);
+
+  const toRows = (rows: Ga4ReportRow[] | null): Ga4Row[] =>
+    (rows || []).map((r) => ({
+      key: r.dimensionValues?.[0]?.value || '(không rõ)',
+      sessions: num(r, 0),
+      users: num(r, 1),
+    }));
+
+  return {
+    sessions: totalRows ? (totalRows[0] ? num(totalRows[0], 0) : 0) : null,
+    channels: toRows(channelRows),
+    landing: toRows(landingRows),
+    activeNow: realtimeRows ? (realtimeRows[0] ? num(realtimeRows[0], 0) : 0) : null,
+  };
 }

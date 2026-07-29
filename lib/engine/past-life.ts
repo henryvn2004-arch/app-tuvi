@@ -209,7 +209,7 @@ export const ERAS: Record<EraId, Era> = {
  * bối cảnh cổ thư viết ra nó". Cũng là nền model gen ảnh làm tốt nhất. */
 const DEFAULT_ERA: EraId = 'trung-hoa';
 
-const ERA_IDS = Object.keys(ERAS) as EraId[];
+export const ERA_IDS = Object.keys(ERAS) as EraId[];
 
 export function resolveEra(id?: string): Era {
   return ERAS[(id as EraId) in ERAS ? (id as EraId) : DEFAULT_ERA];
@@ -718,7 +718,7 @@ const NAME_POOLS: Record<EraId, { ho: string[]; nam: string[]; nu: string[] }> =
 };
 
 /** Hash ổn định (không dùng Math.random — cùng lá số phải ra cùng tên). */
-function stableHash(seed: string): number {
+export function stableHash(seed: string): number {
   let h = 2166136261;
   for (let i = 0; i < seed.length; i++) {
     h ^= seed.charCodeAt(i);

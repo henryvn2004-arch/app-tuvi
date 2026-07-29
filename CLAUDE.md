@@ -284,6 +284,136 @@ repo CÓ `lib/analytics/ga4.ts` nhưng nó chỉ lấy ĐÚNG 1 con số (tổng
   của Google hiện đúng** (chuỗi auth chạy tới cùng). **CHƯA chạy được lượt có
   quyền thật** vì container phiên chưa có credential — đó chính là việc tay Henry.
 
+### 🐞 Vòng sau (2026-07-28) — env đã set nhưng BỊ CẮT, và lộ bug prod thật
+Henry set `GA4_PROPERTY_ID`/`GA4_SERVICE_ACCOUNT_JSON` cho container Claude Code
+rồi bảo chạy thử. Kết quả: vẫn chưa đọc được GA4 — **nhưng lần này lỗi nằm ở
+giá trị env, không phải ở quyền Google**, và lúc lần ra thì lộ thêm một bug đang
+sống trên prod.
+- **Trong container:** `GA4_SERVICE_ACCOUNT_JSON` dài đúng **18 ký tự** =
+  `ewogICJ0eXBlIjo...` — tức bản RÚT GỌN mà UI Vercel hiển thị, không phải giá
+  trị đầy đủ. `GA4_PROPERTY_ID=533053153` thì đúng. → **việc tay Henry: mở đúng
+  ô đó trên Vercel, Show/Copy giá trị đầy đủ, dán lại vào environment của Claude
+  Code.** Chưa có bản đầy đủ thì không có cách nào chạy thật.
+- **🔴 Bug prod (quan trọng hơn):** cái tiền tố `ewogICJ0eXBlIjo` **base64-decode
+  ra `{\n  "type":`** → giá trị Henry lưu bên Vercel là **base64**, trong khi
+  `lib/analytics/ga4.ts` chỉ `JSON.parse` thô (CLI `scripts/ga4.mjs` thì nhận cả
+  hai từ đầu). Parse hỏng → `getAccessToken` trả `null` **im lặng** →
+  `handleAdminMarketing` lặng lẽ rơi về số nội bộ. Nghĩa là D4 nhiều khả năng
+  **chưa từng chạy bằng số GA4 thật** kể từ lúc ship, mà không có gì báo. Sửa:
+  tách `parseServiceAccount()` nhận **raw JSON hoặc base64** (chỉ NỚI ra, raw
+  vẫn chạy y như cũ) + `console.warn` khi parse hỏng để lần sau lộ ra ngay.
+  **Henry check lại badge cạnh "Khách ghé" trong panel Funnel sau khi deploy —
+  xanh "GA4" là đã ăn số thật.**
+- **CLI:** thêm bẫy phát hiện bản bị cắt (kết thúc bằng `...`/`…` hoặc < 100 ký
+  tự) → chỉ thẳng "copy ô rút gọn trên Vercel" thay vì để người ta đọc "JSON
+  không hợp lệ" rồi đi dò nhầm sang phía Google.
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier
+  --check .` sạch · `node --check` · **test `getGa4Sessions` với RSA key tự sinh
+  + stub OAuth/Data API**: raw JSON và base64 **ra cùng 1 kết quả** (JWT RS256,
+  scope + URL `properties/533053153:runReport` + body đúng), bản bị cắt và chuỗi
+  rác → `null` + cảnh báo, KHÔNG gọi mạng · CLI với key giả gọi thật
+  `oauth2.googleapis.com` → `400 invalid_grant: account not found` (chuỗi auth
+  chạy tới cùng, chỉ thiếu key thật). Gặp 1 nhịp `503` rỗng từ token endpoint
+  rồi tự khỏi ở lượt sau — nhiễu tạm thời, không phải lỗi code.
+
+### ✅ Vòng sau — GA4 nhiều chiều: panel "GA4 vs Nội Bộ" + nối vào CMO digest (PR mới)
+Henry hỏi "lấy được live data chưa, realtime không, admin bổ sung được data gì, và
+mỗi ngày gửi report cho CMO orchestrator được không". Audit trả lời: phễu
+**không thiếu bậc** (visit→signup→activate→topup_intent→paid→returned đã đủ), chỗ
+đứt là **GA4 chỉ đóng góp ĐÚNG bậc 1** — bậc 2–6 toàn dữ liệu nội bộ, nên không
+quy kết được kênh GA4 nào đẻ ra người trả tiền, mà bảng Sources lại dựa
+`user_attribution` từ `track.js` (chỉ thấy khách đã chạy JS) nên luôn hụt.
+- **`lib/analytics/ga4.ts`** — tách `runReport()` dùng chung + `getGa4Breakdown()`:
+  tổng sessions · **kênh** (`sessionDefaultChannelGroup`) · **landing page**
+  (`landingPage`) · **`activeNow`** (`:runRealtimeReport`, 30 phút gần nhất — chiều
+  DUY NHẤT thật sự "realtime"; Data API thường có độ trễ). 4 report chạy SONG SONG
+  trên CÙNG 1 access token đã cache; **mỗi report hỏng độc lập** (realtime 403 thì
+  `activeNow=null`, phần còn lại vẫn dùng được). `getGa4Sessions` giữ nguyên chữ ký.
+  Thêm `console.warn` khi report lỗi — cùng lý do với bug base64: im lặng thì hỏng
+  âm thầm hàng tháng.
+- **`handleAdminMarketing`** đổi sang `getGa4Breakdown`, trả thêm `ga4` kèm
+  **`internalVisitors`** (số nội bộ TRƯỚC khi bị GA4 ghi đè) — đó chính là vế còn
+  lại để so hai nguồn.
+- **Panel "GA4 vs Nội Bộ"** (`renderMktGa4`, ngay dưới Funnel): 4 tile (Phiên GA4 ·
+  Nội bộ đo được · **% đo được** với ngưỡng xanh ≥80/cam ≥60/đỏ <60 · Đang online
+  30ph) + 2 bảng kênh/landing. Tooltip nói rõ **% đo được thấp KHÔNG phải traffic
+  giảm** mà là bảng Nguồn/Traffic đang dựa trên mẫu thiếu — đây là chỗ dễ đọc sai
+  nhất nên viết thẳng vào UI.
+- **`cmo-digest.ts`** — `buildSnapshot()` gọi thêm `getGa4Breakdown` (best-effort,
+  `.catch(() => null)`, KHÔNG kéo sập digest). System prompt thêm nguyên một khối
+  luật đọc GA4: `ga4=null` → nói thẳng "chưa đọc được GA4", cấm đoán lưu lượng;
+  chênh GA4 vs nội bộ là đo hụt chứ không phải sụt; tỉ lệ ghép 2 nguồn phải ghi rõ
+  là ước lượng. **→ digest Telegram 8h sáng tự có GA4, 0 cron mới, 0 env mới.**
+- **Routine chat "Báo cáo CMO hàng ngày 8h10"** (`trig_01MDKn384hYTyLxbdRtunuoc`)
+  **CHƯA sửa được bằng tool** — nó bind vào phiên khác (`update_trigger` từ chối
+  sửa prompt của routine bắn vào session không phải của mình). Việc tay Henry: thêm
+  bước chạy `scripts/ga4.mjs overview|channels|landing --from 7daysAgo` vào prompt.
+
+### 🐞 Vòng sau — GA4 ĐANG BỊ CI THỔI PHỒNG, vá nốt nửa còn lại của D6 (PR mới)
+Henry set env đầy đủ trên Vercel + Redeploy → panel "GA4 vs Nội Bộ" ra số THẬT
+(2.088 phiên · nội bộ 531 · đang online 6 — nhánh realtime cũng chạy). **Nhưng
+đọc số thì lộ bug:** top trang đáp là `/` · `/xem-lam-an.html` · `/xem-tuoi.html`
+· `/luan-giai.html` · `/khao-luan.html` · `/blog.html` · `/profile.html` ·
+`/resources.html` — **gần đúng danh sách URL trong `tests/*.spec.ts`**, mà
+`playwright.yml` chạy E2E **thẳng vào prod** mỗi push/PR.
+- **Căn nguyên: D6 vá đúng một nửa.** `track.js` có `if (navigator.webdriver)
+  return` từ D6, nhưng GA4 nạp qua `nav.js` + `GA4_TRACK_SNIPPET` thì KHÔNG có
+  chốt đó → CI vào GA4 nhưng không vào `events`. Hai nguồn đếm hai tập khách
+  khác nhau.
+- **Ba hệ quả trên chính bảng đang xem:** (a) Direct 1.783/2.088 = **85%** vì CI
+  không có referrer; (b) **"% đo được 25%" là số ảo** — thấp một phần do GA4 đếm
+  CI còn nội bộ thì không, khoảng hụt THẬT hẹp hơn; (c) Organic Search chỉ **36
+  phiên** và **không có `/la-so/*` nào** trong top landing dù log Vercel đầy
+  request `/la-so/…` → 438K trang SEO đang được **crawler quét chứ chưa kéo
+  người thật** (bot không chạy JS nên không vào GA4). (c) mới là con số đáng lo,
+  và chỉ lộ ra nhờ có GA4.
+- **Vá:** thêm `&& !navigator.webdriver` vào cả `public/nav.js` lẫn
+  `lib/analytics/isr-tracking.ts` — khớp đúng chốt `track.js` đã dùng. Bump
+  `nav.js?v=16/15/17 → 18` (89 file; trước đó version đang lệch 3 mức khác nhau,
+  gộp luôn về 1).
+- **⚠️ Số GA4 sẽ TỤT RÕ sau khi deploy — đó là fix chạy đúng, không phải traffic
+  chết.** Từ mốc đó "% đo được" mới là con số đọc được.
+- **Verify:** `tsc` 0 lỗi · `eslint nav.js` sạch · `prettier --check .` sạch ·
+  `node --check` · **Playwright 4 ca trên nav.js THẬT và trên chính chuỗi
+  `GA4_TRACK_SNIPPET` đọc từ file `.ts`**: webdriver=true → không dựng thẻ
+  `#gtag-js`, không có `window.gtag`, `dataLayer` rỗng; giả lập người thật
+  (`navigator.webdriver=false`) → đủ cả ba, `dataLayer` có sự kiện.
+
+### ✅ Vòng sau — GA4 lưu vào `events` để routine chat đọc được (PR mới)
+Henry thử `scripts/ga4.mjs` ở phiên mới: **vẫn báo thiếu credential** (env của
+container chưa nhận giá trị đầy đủ) — và chốt "không sao, tao chỉ cần data feed
+cho routine CMO + admin page theo dõi". Nhưng đó chính là chỗ còn hụt: panel admin
+và digest Telegram chạy trên **Vercel** (có key, đã xong ở vòng trước), còn routine
+chat 8h10 chạy trong **một phiên Claude khác không có key** → tự nó KHÔNG BAO GIỜ
+thấy GA4, dù prompt có bảo chạy CLI.
+- **Cách vá — không phát tán thêm credential, không thêm bảng:** cron `cmo-digest`
+  (8h00, chạy trên Vercel, vốn ĐÃ lấy GA4 cho snapshot) nay ghi luôn snapshot GA4
+  thô vào `meta.ga4` của chính dòng `events` `event_type='cmo_digest'` mà nó vẫn
+  ghi sẵn. Routine chat chạy 8h10 — 10 phút sau — chỉ cần đọc dòng mới nhất qua
+  Supabase MCP là có đủ sessions/kênh/landing/activeNow/internalVisitors.
+  `generateCmoDigestText()` đổi từ trả `string` → `{ text, ga4 }` (chỉ 1 caller).
+- **Ghi cả khi `ga4=null`** — để phân biệt "hôm đó GA4 hỏng" với "hôm đó cron
+  không chạy"; hai ca này mà lẫn nhau thì lần sau không chẩn được.
+- **Lợi kèm:** có LỊCH SỬ GA4 theo ngày nằm trong `events`, truy vấn SQL được —
+  trước đây GA4 chỉ đọc tức thời rồi vứt, không so được hôm nay với tuần trước.
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi · `prettier --check .` sạch · test
+  `generateCmoDigestText` trên file thật (stub LLM/GA4/RPC): trả đúng
+  `{text, ga4}`, `ga4` đủ 5 trường, GA4 chết → `ga4:null` mà digest vẫn chạy.
+  **CHƯA chạy được test đầu-cuối cho route cron** — nạp `next/server` ngoài
+  Next runtime làm V8 OOM lúc biên dịch regex; phần route chỉ là truyền thêm 1
+  tham số vào body insert sẵn có, đã soi tay + `tsc` phủ.
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier
+  --check .` sạch · `node --check` cả 3 script block admin · **stub test
+  `getGa4Breakdown`**: đúng 1 token + 4 report, đúng dimension/metric/limit,
+  `orderBys` giảm dần theo sessions, realtime KHÔNG gửi `dateRanges`, realtime 403
+  → chỉ `activeNow=null`, thiếu `GA4_PROPERTY_ID` → null và **0 call mạng** ·
+  **test `generateCmoDigestText` trên file thật** (chỉ thay import LLM bằng stub):
+  GA4 vào snapshot kèm `internalVisitors` đúng, **KHÔNG ghi đè
+  `funnelThisWeek.visitors`** (giữ được cả 2 vế để so), GA4 chết → `ga4:null` mà
+  digest vẫn chạy đủ RPC nội bộ · **Playwright render panel thật** light + dark:
+  nhãn/số/`% đo được` đúng công thức, landing page chứa HTML **bị escape** (không
+  chèn được thẻ), ca `null` hiện hướng dẫn kiểm env.
+
 ---
 
 ## 🔁 TRACK MỚI — Viral Loop cho 2 tool chân dung (chốt 2026-07-27, CHƯA CODE)
@@ -647,6 +777,56 @@ TikTok 10–15ph/ngày, seed group FB) — code CHỈ soạn sẵn chất liệu
 · **duyên nợ tiền kiếp với người ấy** (2 lá số → 1 truyện, mỗi lượt kéo 2 người — K cao
 nhất, tái dùng ~90% hạ tầng) · Thẻ Định Mệnh + độ hiếm lá số (chi phí LLM ≈ 0, gắn được
 vào MỌI tool).
+
+### 🚧 V5 — "Duyên Nợ Tiền Kiếp": ENGINE XONG (PR mới), TOOL CHƯA DỰNG
+**Chọn mục nào trong 3 mục V5, và vì sao:** làm **duyên nợ tiền kiếp**, BỎ 2 mục kia.
+Gate của V5 ("chỉ làm sau khi V2.4 có số thật") tồn tại vì *khuếch đại* cần biết mình
+đang khuếch đại cái gì — nhưng duyên nợ là **tool MỚI tạo nhu cầu mới**, không phải
+khuếch đại, nên không dính gate đó. Hai mục kia thì dính: "Thẻ Định Mệnh" là lớp share
+gắn lên tool sẵn có, còn gate "chia sẻ để mở khoá hồi 4–5" **nên cân nhắc bỏ hẳn** —
+ép chia sẻ mới cho đọc tiếp là đúng thứ mà cả track này tránh ("hứa hụt là mất niềm
+tin ngay lần đầu"), và nó bóp trải nghiệm để đổi lấy một vòng lặp CHƯA đo được.
+- **`lib/engine/past-life-bond.ts` (MỚI)** — `computePastLifeBond(lsA,gA,lsB,gB)` THUẦN
+  deterministic: nền văn minh CHUNG + 2 nhân vật (dùng lại `computePastLife`, đúng chỗ
+  "tái dùng ~90% hạ tầng" mà plan nói) + **loại duyên nợ** suy từ cổ pháp thật.
+- **7 loại duyên:** phu thê · kim lan · ơn cứu mạng · thầy trò · nợ chưa trả · hai bờ
+  chiến tuyến · tao ngộ. Mỗi loại gắn với dấu hiệu TRA ĐƯỢC trong lá số, và dấu hiệu đó
+  trả ra trong `signals` để hiện thẳng cho người đọc — không bốc thăm chỗ nào.
+- **Nền chung phải ĐỘC LẬP THỨ TỰ:** `pickSharedEra` sắp seed 2 lá số trước khi hash.
+  Không làm vậy thì nhập A trước B ra một thế giới, B trước A ra thế giới khác — hai
+  người bạn cùng bấm nhận 2 kết quả mâu thuẫn, mất tin ngay. Verify 950 cặp: 0 lệch.
+- **🐞 Bắt được khi ĐO, không phải khi đọc code** (đo trên 950 cặp từ 96 lá số thật):
+  - Bản 1: **36% ra "hai bờ chiến tuyến", 30% ra "ơn cứu mạng"** — 2/3 số cặp bị phán
+    bởi MỘT tín hiệu yếu (ngũ hành nạp âm, gần như ngẫu nhiên giữa 2 người bất kỳ).
+    Nói với một phần ba số cặp rằng kiếp trước họ là kẻ thù, chỉ vì nạp âm khắc nhau,
+    là kết luận nặng dựa trên chứng cứ mỏng. → Đổi trục chính sang **địa chi cung Mệnh**
+    (hợp/xung/hình — tín hiệu mạnh, rõ trong cổ pháp), ngũ hành/chính tinh chỉ tinh chỉnh.
+  - Bản 2: lệch ngược, **68% ra "bằng hữu"** — thành thật nhưng nhạt, quá nửa người dùng
+    nhận đúng câu trả lời chán nhất cho một tool mà cả cái hook là "kiếp trước hai ta là
+    gì của nhau". Căn nguyên: cặp Mệnh HỢP mà chính tinh trung tính bị rơi tuột xuống
+    nhánh mặc định, tức vứt bỏ đúng thứ vừa đọc được từ lá số. → mọi cặp Mệnh hợp đều
+    vào nhánh dương.
+  - **Lỗi đúng/sai thật:** nhánh `same` trong `chiRelation` KHÔNG BAO GIỜ chạy được vì
+    tam hợp chặn trước (mỗi địa chi nằm trong đúng 1 nhóm tam hợp nên a===b luôn thoả
+    "cùng nhóm") → cặp cùng địa chi bị **báo sai cổ pháp** là "cùng Tam Hợp", ngay trong
+    phần dùng để chứng minh mình không bịa. Đảo thứ tự xét.
+  - **Trục phụ cung Phu Thê:** Mệnh trung tính là >50% số cặp; cổ pháp không chỉ đọc
+    duyên ở cung Mệnh — Phu Thê mới là cung nói về ràng buộc đôi lứa. Bỏ qua nó rồi trả
+    "tao ngộ" cho quá nửa người dùng mới là làm hỏng.
+- **Phân bố cuối (950 cặp):** tao ngộ 48,6% · kim lan 26,6% · hai bờ chiến tuyến 8,3% ·
+  phu thê 7,7% · thầy trò 3,1% · nợ chưa trả 2,9% · ơn cứu mạng 2,7%. Mẫu là lưới lá số
+  đều nên tỉ lệ THẬT sẽ lệch đi ít nhiều — đừng coi đây là con số prod.
+- **Bất biến đã verify:** đảo A/B ra y hệt (0/950 lệch) · 2 nhân vật LUÔN cùng nền
+  (0/950 lệch) · không bao giờ gán "phu thê" cho cặp cùng giới · mọi kết quả đều có
+  `signals` · gọi lại cùng cặp ra y hệt · 5 nền trải đều (180–202/950) · 54 chức phận.
+- **Xuất thêm từ `past-life.ts`:** `stableHash`, `ERA_IDS` — CỐ Ý dùng chung thay vì
+  chép: hash mà có 2 bản thì hai bản trôi khỏi nhau lúc nào không biết.
+- **⚠️ CÒN LẠI (tool chưa dùng được, engine hiện CHƯA có ai gọi):** prompt viết truyện
+  đôi · prompt ảnh 2 nhân vật chung một khung · route 2 pha (`phase=story|image` như
+  `chan-dung-tien-kiep`) · trang shell `/app/duyen-no-tien-kiep` · migration bảng lưu +
+  `tool_pricing` · đăng ký (`next.config.mjs` rewrite, `shell.js` TOOLS, `app-home.html`
+  GROUPS, `cong-cu.html`, `tuvi-paywall.js`) + bump `shell.js?v=`. Trang standalone SEO
+  có thể làm sau — CTA từ link chia sẻ đổ về `/app` nên đường chính là trang shell.
 
 ### 🚦 Tiêu chí dừng/đổi hướng (đặt trước để khỏi tự lừa mình)
 Sau khi xong V2 + V4 chạy đủ 3–4 tuần: **K-factor < 0.3** → kết luận 2 tool này không lan

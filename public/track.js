@@ -21,6 +21,18 @@
     return;
   }
 
+  // Trang KỸ THUẬT (auth-callback.html) chỉ mượn Track để bắn MỘT event có chủ
+  // đích rồi chuyển hướng đi ngay. Đặt window.TRACK_QUIET=true TRƯỚC thẻ script
+  // này để tắt hai hành vi mặc định:
+  //   • page_view tự động — đó là trạm trung chuyển OAuth, không phải lượt xem
+  //     trang; đếm vào thì thổi phồng "khách ghé" và đẻ ra một landing path rác.
+  //   • ghi FIRST-TOUCH — nguy hiểm hơn nhiều. Lúc đó referrer là
+  //     accounts.google.com, nên nếu đây là trang đầu tiên có track.js mà trình
+  //     duyệt chạm tới, MỌI user đăng nhập bằng Google sẽ bị quy về kênh "Google
+  //     OAuth" vĩnh viễn (first-touch chỉ ghi một lần). Thà để trống — không
+  //     biết nguồn còn hơn tin vào một nguồn sai.
+  var quiet = !!window.TRACK_QUIET;
+
   var ANON_KEY = 'tvmb_anon', SID_KEY = 'tvmb_sid', FIRST_KEY = 'tvmb_attr_first';
 
   function uuid() {
@@ -55,7 +67,7 @@
   // First-touch: ghi 1 lần duy nhất (giữ nguyên kênh đưa khách đến lần đầu).
   var first = null;
   try { first = JSON.parse(lget(FIRST_KEY) || 'null'); } catch (e) { /* ignore */ }
-  if (!first) { first = touch; lset(FIRST_KEY, JSON.stringify(first)); }
+  if (!first && !quiet) { first = touch; lset(FIRST_KEY, JSON.stringify(first)); }
 
   function authToken() {
     try {
@@ -112,6 +124,6 @@
 
   window.Track = { event: event, anonId: anonId, sessionId: sid };
 
-  // Tự động page_view mỗi lần tải trang.
-  event('page_view');
+  // Tự động page_view mỗi lần tải trang (trừ trang kỹ thuật — xem TRACK_QUIET).
+  if (!quiet) event('page_view');
 })();

@@ -283,6 +283,16 @@
 
         <div class="panel">
           <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-6 4 3 5-8"/></svg>GA4 vs Nội Bộ</div>
+            <span style="font-size:.72rem;color:var(--text-lt)">GA4 thấy cả organic/ads/social · nội bộ chỉ thấy khách đã chạy track.js</span>
+          </div>
+          <div class="panel-body" id="mkt-ga4">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>Vòng Lặp Viral</div>
             <span style="font-size:.72rem;color:var(--text-lt)">K-factor = lượt giới thiệu ăn được ÷ số người đã tạo kết quả</span>
           </div>
@@ -1746,7 +1756,12 @@ async function loadCron() {
   document.getElementById('cron-k-runs').textContent = runs.length;
 
   body.innerHTML = jobList.map(j => {
-    const r = latest[j.key];
+    // Ưu tiên lastRun/lastStatus do SERVER tính (lib/ops/jobs.ts) — job pg_cron
+    // để lại vết dưới tên pg_cron của nó và không nằm trong `runs` (log thô của
+    // cron_runs), tra `latest[j.key]` sẽ ra rỗng rồi hiện "chưa có log" cho một
+    // job vẫn chạy đủ mỗi ngày. `latest` chỉ còn dùng để lấy thêm duration.
+    const raw = latest[j.key];
+    const r = j.lastRun ? { started_at: j.lastRun, status: j.lastStatus, duration_ms: raw ? raw.duration_ms : null } : raw;
     // Hai kiểu hỏng ÂM THẦM, không sinh dòng lỗi nào: job quá hạn, và job chạy
     // đều nhưng lượt nào cũng skip. Đánh dấu ngay trên hàng để không phải suy ra.
     const flags = [];
@@ -1754,6 +1769,9 @@ async function loadCron() {
     // badge-pending (cam) chứ không phải badge-orange — class đó không tồn tại
     // trong admin.css, dùng vào là badge ra không màu.
     if (j.skipStreak >= 3) flags.push(`<span class="badge badge-pending" style="margin-left:.3rem">SKIP ×${j.skipStreak}</span>`);
+    // Job vừa đăng ký, chưa tới lượt chạy đầu — nói rõ là "chờ", đừng để trống
+    // rồi người đọc tự suy thành hỏng.
+    if (j.awaitingFirstRun) flags.push('<span class="badge badge-grey" style="margin-left:.3rem">CHỜ LƯỢT ĐẦU</span>');
     return `<tr${j.overdue ? ' style="background:color-mix(in srgb,var(--red) 6%,transparent)"' : ''}>
       <td><span class="td-title">${escHtmlLocal(j.label)}</span>${flags.join('')}<div class="td-sub mono">${escHtmlLocal(j.key)}</div></td>
       <td><span class="badge ${SRC_BADGE[j.source]||'badge-grey'}">${j.source}</span></td>
@@ -3122,12 +3140,14 @@ async function loadMarketing() {
   const fromEl = document.getElementById('mkt-from'), toEl = document.getElementById('mkt-to');
   if (!fromEl.value || !toEl.value) { mktRange(30); return; }
   document.getElementById('mkt-funnel').innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
+  document.getElementById('mkt-ga4').innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
   document.getElementById('mkt-sources').innerHTML = '<div class="loading"><span class="spin"></span>Đang tải...</div>';
   try {
     const d = await apiGet('admin-marketing', `&from=${fromEl.value}&to=${toEl.value}`);
     if (d.error) throw new Error(d.error);
     _mktData = d;
     renderMktFunnel(d.funnel || {});
+    renderMktGa4(d.ga4 || null);
     renderMktSources(d.sources || []);
     renderMktAcq(d.acquisition || []);
     renderMktCampaigns(d.campaigns || []);
@@ -3136,7 +3156,7 @@ async function loadMarketing() {
     renderMktRevenue(d.revenue || {});
   } catch (e) {
     document.getElementById('mkt-funnel').innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
-    ['mkt-sources','mkt-acq','mkt-campaigns','mkt-paths','mkt-referrers','mkt-cohorts','mkt-revenue'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
+    ['mkt-ga4','mkt-sources','mkt-acq','mkt-campaigns','mkt-paths','mkt-referrers','mkt-cohorts','mkt-revenue'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
   }
   loadViral(fromEl.value, toEl.value);
   loadAutopilotLog();
@@ -3261,6 +3281,50 @@ function renderApLog(rows) {
       <td style="font-size:.76rem;max-width:320px">${escHtmlLocal(r.reason || '')}</td>
     </tr>`).join('')
   }</tbody></table>`;
+}
+
+// GA4 vs nội bộ. Lý do panel này tồn tại: phễu lấy bậc 1 (visit) từ GA4 nhưng
+// mọi bậc sau lại từ dữ liệu nội bộ, nên nếu track.js đo hụt nhiều thì bảng
+// Sources/Traffic đang mô tả một mẫu thiếu — bày cạnh nhau để thấy hụt bao nhiêu.
+function renderMktGa4(g) {
+  const host = document.getElementById('mkt-ga4');
+  if (!g) {
+    host.innerHTML = '<div class="empty">Chưa đọc được GA4 — kiểm tra env <code>GA4_PROPERTY_ID</code> / <code>GA4_SERVICE_ACCOUNT_JSON</code> trên Vercel (đã Redeploy chưa?) và quyền Viewer của service account trên property.</div>';
+    return;
+  }
+  const ga4Sessions = g.sessions;
+  const internal = g.internalVisitors || 0;
+  // % đo được: nội bộ so với GA4. Chỉ có nghĩa khi GA4 trả số > 0.
+  const coverage = (ga4Sessions > 0) ? Math.round((internal / ga4Sessions) * 100) : null;
+  const covColor = coverage == null ? 'var(--text-lt)' : (coverage >= 80 ? 'var(--green)' : coverage >= 60 ? 'var(--gold)' : 'var(--red)');
+  const tile = (label, value, color, title) => `<div style="flex:1;min-width:150px" ${title ? `title="${title}"` : ''}>
+      <div class="stat-label">${label}</div>
+      <div style="font-family:'Noto Serif',serif;font-size:1.35rem;font-weight:700;color:${color}">${value}</div>
+    </div>`;
+  const tiles = `<div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem">
+    ${tile('Phiên (GA4)', ga4Sessions == null ? '—' : ga4Sessions.toLocaleString(), 'var(--text)')}
+    ${tile('Nội bộ đo được', internal.toLocaleString(), 'var(--text-mid)', 'Suy từ page_view của track.js — chỉ đếm khách đã chạy JS trên site')}
+    ${tile('% đo được', coverage == null ? '—' : coverage + '%', covColor, 'Nội bộ ÷ GA4. Thấp nghĩa là bảng Nguồn/Traffic đang dựa trên mẫu thiếu, không phải traffic giảm')}
+    ${tile('Đang online (30ph)', g.activeNow == null ? '—' : g.activeNow.toLocaleString(), 'var(--green)', 'GA4 Realtime — người hoạt động trong 30 phút gần nhất')}
+  </div>`;
+  const table = (title, list, keyLabel) => {
+    if (!list || !list.length) return `<div><div class="stat-label" style="margin-bottom:.4rem">${title}</div><div class="empty">Chưa có dữ liệu</div></div>`;
+    const max = Math.max(1, ...list.map(r => r.sessions || 0));
+    return `<div><div class="stat-label" style="margin-bottom:.4rem">${title}</div>
+      <table><thead><tr><th>${keyLabel}</th><th style="text-align:right">Phiên</th><th style="text-align:right">Khách</th></tr></thead>
+      <tbody>${list.map(r => `<tr>
+        <td style="max-width:230px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.7rem" title="${escHtmlLocal(r.key)}">
+          <div style="position:relative;z-index:1">${escHtmlLocal(r.key)}</div>
+          <div style="height:3px;width:${Math.round((r.sessions / max) * 100)}%;background:var(--blue);opacity:.35;border-radius:2px;margin-top:2px"></div>
+        </td>
+        <td style="text-align:right;font-weight:700">${(r.sessions || 0).toLocaleString()}</td>
+        <td style="text-align:right;color:var(--text-lt)">${(r.users || 0).toLocaleString()}</td>
+      </tr>`).join('')}</tbody></table></div>`;
+  };
+  host.innerHTML = tiles + `<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
+    ${table('Kênh (GA4)', g.channels, 'Kênh')}
+    ${table('Trang đáp (GA4)', g.landing, 'Trang')}
+  </div>`;
 }
 
 function renderMktFunnel(f) {

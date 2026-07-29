@@ -68,6 +68,18 @@ function loadServiceAccount() {
   let raw = process.env.GA4_SERVICE_ACCOUNT_JSON || process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
   if (!raw) return null;
   raw = raw.trim();
+  // Bẫy thường gặp: copy Ô ĐÃ RÚT GỌN trên UI Vercel (hiện "ewogICJ0eXBl…") thay vì
+  // giá trị đầy đủ. Nói thẳng ra chỗ sai, đừng để người ta đọc "JSON không hợp lệ"
+  // rồi đi dò nhầm sang phía Google.
+  if (raw.endsWith('...') || raw.endsWith('…') || raw.length < 100) {
+    die(
+      `❌ GA4_SERVICE_ACCOUNT_JSON trông như bản BỊ CẮT (dài ${raw.length} ký tự, ` +
+        `bắt đầu bằng "${raw.slice(0, 16)}").\n` +
+        '   Nhiều khả năng đã copy ô rút gọn trên UI Vercel. Mở đúng giá trị đầy đủ\n' +
+        '   (Vercel → Settings → Environment Variables → biến đó → Show/Copy) rồi đặt lại,\n' +
+        '   hoặc chạy kèm: --sa <đường-dẫn-file-key.json>'
+    );
+  }
   if (!raw.startsWith('{')) {
     try {
       raw = Buffer.from(raw, 'base64').toString('utf8');
