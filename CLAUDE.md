@@ -416,6 +416,60 @@ thấy GA4, dù prompt có bảo chạy CLI.
 
 ---
 
+## 🎭 Chức phận theo CẶP chính tinh — 82 → 194 danh xưng (2026-07-29, cùng PR cache)
+
+Henry: *"Chỉ có 84 nhân vật thôi hả? Ít quá, phải tăng lên… tao sợ trùng nhau
+sẽ nhiều."* 84 đúng = **14 chính tinh × 3 bậc × 2 giới**. Đo trước khi sửa
+(10.080 lá số thật, lưới 5 năm × 12 tháng × 7 ngày × 12 giờ × 2 giới):
+
+| Trục | Trước | Sau |
+|---|---|---|
+| Danh xưng phân biệt | 82 | **194** |
+| 2 người bất kỳ trùng danh xưng | 1,94% (1/52) | **0,85% (1/118)** |
+| Trùng cả danh xưng + nền văn minh | 0,40% | **0,18% (1/550)** |
+| Nhóm 50 người, có người trùng danh xưng | 62% | **34%** |
+| Danh xưng phổ biến nhất chiếm | 3,9% | **1,9%** |
+
+- **Trục dùng: BỘ chính tinh tại Quan Lộc, không phải một sao chủ.** Cung Quan
+  Lộc rất thường có HAI chính tinh — đo được **39 bộ** phân biệt (24 cặp + 14
+  đơn thủ + VCD), trong khi `pickQuanMajor` chọn 1 sao rồi **vứt sao kia đi**.
+  Mà CHÍNH chương Quan Lộc của Tân Biên luận theo cặp (**64 câu "X đồng cung"**):
+  Vũ Khúc đơn thủ là võ nghiệp, nhưng "Vũ + Phủ" là *"chức vụ thuộc về tài chánh
+  hay kinh tế"*, "Vũ + Tham" là *"giàu có và thành công trong việc kinh doanh"*.
+  Tức bảng cũ đang bỏ đúng phần chi tiết nhất của cổ thư.
+- **`PAIR_OCCUPATION_TABLE`** (`past-life.ts`) — 24 cặp × 3 bậc = **72 entry**,
+  mỗi entry `titleNam`/`titleNu`/`domain`/`desc`/`attireEn`/`source`. **Mọi
+  `source` trích NGUYÊN VĂN** từ `chunks_all.json` (`[TÂN BIÊN][CUNG QUAN LỘC]`,
+  26 chunk) — kiểm corpus TRƯỚC khi viết chính vì không được bịa trích dẫn cổ thư.
+  Dùng chung 1 trích dẫn cho cả 3 bậc: **sách luận CẶP chứ không luận BẬC**, chia
+  bậc là lớp chấm điểm của engine.
+- **Khoá `pairKey`** sắp theo `STAR_ORDER` chứ không theo thứ tự gặp trong lá số
+  — cùng một cặp xuất hiện đảo thứ tự tuỳ lá số, không sắp thì tra trượt.
+- **Khoá lấy từ CUNG NGUỒN THẬT**, không phải Quan Lộc cứng: Quan Lộc vô chính
+  diệu thì mượn cung xung chiếu (cổ pháp 8.45) — lấy cặp ở cung trống là tra
+  nhầm. Đo được **50,2% lá số** đi nhánh cặp.
+- **`star` nhánh cặp nêu CẢ HAI sao** ("Vũ Khúc + Thiên Phủ đồng cung") và **bỏ
+  `brightness`** — độ sáng đó là của riêng sao chủ, gắn vào tên cặp thì đọc
+  thành độ sáng của cả hai.
+- **KHÔNG đụng `scoreQuanTier`** → phân bố bậc giữ nguyên **cao 22,0% / giữa
+  50,6% / thấp 27,4%**, ngưỡng đã hiệu chỉnh trước đây không phải chỉnh lại.
+- **Chi phí: 0 đồng.** Tra bảng thuần, deterministic — không thêm lượt LLM hay
+  ảnh nào. (Đo thật trên prod: ảnh 1.658đ/lượt · chữ ~35đ/lượt LLM ⇒ **ảnh chiếm
+  ~96% chi phí**, bảng tra không nằm trong đó.)
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi · `prettier --check .` sạch · engine
+  test 181 pass · **đo lại nguyên lưới 10.080 lá số**: 194 danh xưng, `capThieu
+  TrongBang` **rỗng** (không cặp nào rơi vào nhánh dự phòng), phân bố bậc không
+  đổi · **soi tay 24 ca** đủ mọi cặp/bậc/giới: sao ở cung nguồn khớp khoá tra,
+  nhánh mượn xung chiếu lấy đúng cung đối, danh xưng nam/nữ và trích dẫn đều khớp.
+- **CÒN LẠI (chưa làm, đo sẵn số để quyết sau):** trục **5 bậc** thay 3 (ngưỡng
+  phân vị đo được `[-2, 1, 2, 4]`, chia cân, +28 entry) và trục **nhóm sát tinh
+  tại Quan Lộc** (sạch 60,6% · không-kiếp 14,6% · hỏa-linh 13,7% · kình-đà 11,2%).
+  Cảnh báo đã đo: làm trục sát tinh dạng *hậu tố* ("Tri phủ vùng biên") thì
+  `attireEn` không đổi → **ảnh vẫn y hệt**, chỉ khác mấy chữ; tăng số danh xưng
+  mà cảm giác không đổi.
+
+---
+
 ## 💾 Cache kết quả 2 tool chân dung theo lá số (2026-07-29, PR mới)
 
 Henry: *"2 tool chân dung vợ chồng và chân dung tiền kiếp, nếu cùng lá số input
