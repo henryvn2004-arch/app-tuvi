@@ -13,7 +13,7 @@ export const maxDuration = 30;
 
 import { NextRequest, NextResponse } from 'next/server';
 import { withCronLog } from '@/lib/cron/log';
-import { checkAnomalies } from '@/lib/marketing/anomaly-alerts';
+import { checkAnomalies, commitAnomalyCooldown } from '@/lib/marketing/anomaly-alerts';
 import { tgSendMessage } from '@/lib/channels/telegram';
 import { logOpsAlerts } from '@/lib/ops/alerts';
 
@@ -48,6 +48,9 @@ async function handle(request: NextRequest) {
       const text = `🚨 Cảnh báo bất thường — ${time}\n\n` + fired.map((f) => `• ${f.text}`).join('\n');
       await tgSendMessage(TG_CHAT_ID, text);
       delivered = true;
+      // Chỉ đóng dấu cooldown khi tin đã tới nơi. tgSendMessage ném lỗi thì
+      // dòng này không chạy, lượt sau (3 giờ nữa) sẽ báo lại — đúng ý muốn.
+      await commitAnomalyCooldown(fired.map((f) => f.key));
     }
     if (fired.length) await logOpsAlerts(fired, delivered);
 
@@ -55,12 +58,17 @@ async function handle(request: NextRequest) {
       ok: true,
       checked,
       fired: fired.length,
-      // Hiện thẳng trong panel "Cron & Jobs": có cảnh báo mà chưa đẩy đi được là
-      // một sự cố riêng, phải nhìn thấy chứ không được lẫn vào "chạy ok".
-      note: TG_CHAT_ID
-        ? undefined
-        : fired.length
-          ? `${fired.length} cảnh báo ĐÃ GHI nhưng CHƯA ĐẨY — thiếu ADMIN_TELEGRAM_CHAT_ID`
+      // Hiện thẳng trong panel "Cron & Jobs". Ba trạng thái phải phân biệt được
+      // bằng mắt, vì chúng đòi ba phản ứng khác hẳn nhau: đã báo N chuyện · có
+      // chuyện mà chưa báo được cho ai · không có gì để báo. Bản trước để trống
+      // note ở nhánh đẩy thành công, nên một lượt gửi 3 cảnh báo trông giống hệt
+      // một lượt yên ắng khi nhìn từ panel.
+      note: fired.length
+        ? delivered
+          ? `đã đẩy ${fired.length} cảnh báo qua Telegram`
+          : `${fired.length} cảnh báo ĐÃ GHI nhưng CHƯA ĐẨY — thiếu ADMIN_TELEGRAM_CHAT_ID`
+        : TG_CHAT_ID
+          ? undefined
           : 'chưa có ADMIN_TELEGRAM_CHAT_ID (không có cảnh báo nào để đẩy)',
     });
   } catch (e: unknown) {

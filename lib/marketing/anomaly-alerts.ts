@@ -349,11 +349,32 @@ export async function checkAnomalies(): Promise<{ fired: FiredAlert[]; checked: 
     }
   }
 
-  if (fired.length) {
-    const updated = { ...lastFired };
-    for (const f of fired) updated[f.key] = new Date().toISOString();
-    await setConfig('marketing.anomaly_last_fired', updated);
-  }
-
+  // CỐ Ý KHÔNG đóng dấu cooldown ở đây — xem commitAnomalyCooldown() bên dưới.
   return { fired, checked };
+}
+
+/**
+ * Đóng dấu cooldown cho các cảnh báo ĐÃ ĐẨY ĐI THÀNH CÔNG.
+ *
+ * Tách khỏi checkAnomalies() sau khi dính đúng cái bẫy mà cả track COO đi vá:
+ * bản trước đóng dấu ngay trong hàm PHÁT HIỆN, nên một lượt chạy lúc chưa có
+ * ADMIN_TELEGRAM_CHAT_ID vẫn ghi "đã báo" cho 2 cảnh báo nó không gửi được cho
+ * ai — bịt miệng chúng trọn 20 giờ sau đó, kể cả khi Telegram đã thông. Cảnh
+ * báo bị nuốt trông y hệt cảnh báo không tồn tại.
+ *
+ * Cooldown sinh ra để khỏi làm phiền người nhận cùng một chuyện nhiều lần, nên
+ * mốc đúng của nó là lúc người nhận THẬT SỰ nhận được. Chưa đẩy được thì lượt
+ * sau (3 giờ nữa) phải thử lại — cảnh báo chưa tới tai ai thì phải còn ồn.
+ *
+ * Đọc lại config ngay trước khi ghi thay vì dùng bản đã đọc đầu lượt: giữa hai
+ * mốc đó là toàn bộ phần gọi RPC + gửi Telegram, đủ lâu để một lượt cron khác
+ * xen vào, và ghi đè bằng bản cũ sẽ xoá mất dấu vừa đóng của nó.
+ */
+export async function commitAnomalyCooldown(keys: string[]): Promise<void> {
+  if (!keys.length) return;
+  const current = await getConfig<Record<string, string>>('marketing.anomaly_last_fired', {});
+  const stamp = new Date().toISOString();
+  const updated = { ...current };
+  for (const k of keys) updated[k] = stamp;
+  await setConfig('marketing.anomaly_last_fired', updated);
 }
