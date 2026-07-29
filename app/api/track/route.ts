@@ -106,13 +106,21 @@ export async function POST(request: NextRequest) {
 
     await sb.from('events').insert(rows);
 
-    // Snapshot attribution khi có sự kiện auth (login/signup).
+    // Snapshot attribution. CỐ Ý xét MỌI event đã đăng nhập, không chỉ
+    // 'login'/'signup': trước đây chỉ nhận đúng 2 loại đó, mà chúng chỉ bắn
+    // được ở trang có nạp track.js — đăng nhập ở trang khác là user vĩnh viễn
+    // KHÔNG có dòng attribution, và bậc "đăng ký" của mọi dashboard đọc thành 0
+    // trong im lặng (đúng chuyện đã xảy ra với tài khoản 24/7). Mọi event đều
+    // mang sẵn `first` (first-touch client lưu 1 lần) nên dữ liệu ghi vào y hệt.
+    // Last-touch vẫn CHỈ cập nhật ở event auth thật: nó có nghĩa là "lần gần
+    // nhất kênh nào đưa họ quay lại", đạp lại nó mỗi lần bắn beacon là biến mọi
+    // user thành last-touch nội bộ.
     if (userId) {
       const authEvt = rawEvents.find((e) => {
         const t = evType(e);
         return t === 'login' || t === 'signup';
       });
-      if (authEvt) await upsertAttribution(sb, userId, createdAt, authEvt);
+      await upsertAttribution(sb, userId, createdAt, authEvt || rawEvents[0], !!authEvt);
     }
 
     return ok({ ok: true, n: rows.length });
@@ -127,6 +135,8 @@ async function upsertAttribution(
   userId: string,
   createdAt: string | null,
   e: Ev,
+  /** Batch có event 'login'/'signup' thật hay không — quyết định có đụng last-touch. */
+  isAuthEvent: boolean,
 ): Promise<void> {
   try {
     const { data: existing } = await sb
@@ -136,6 +146,7 @@ async function upsertAttribution(
     const now = new Date().toISOString();
 
     if (existing) {
+      if (!isAuthEvent) return; // đã có dòng, không phải lượt đăng nhập → không cần ghi gì
       // Đã có → chỉ cập nhật last-touch.
       await sb.from('user_attribution').update({
         last_utm_source: s(e.utm_source, 120),

@@ -39,6 +39,14 @@ interface CmoSnapshot {
   margin: unknown;
   channelHealth: unknown;
   atRiskCount: number;
+  /**
+   * Số tài khoản THẬT tạo trong tuần, đếm thẳng auth.users (marketing_signup_truth).
+   * Mỏ neo độc lập với beacon client: `funnel.signups` đi qua user_attribution,
+   * vốn chỉ có khi /api/track nhận được event đăng nhập — hụt một mắt xích là
+   * bậc "đăng ký" tụt về 0 trong im lặng và đọc y hệt một tin xấu có thật.
+   */
+  signupTruthThisWeek: unknown;
+  signupTruthPrevWeek: unknown;
   /** GA4 7 ngày qua — null khi chưa cấu hình env hoặc API lỗi (digest tự nói thiếu). */
   ga4: (Ga4Breakdown & { internalVisitors: unknown }) | null;
   /**
@@ -61,7 +69,8 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
 
   const [
     funnelThisWeek, funnelPrevWeek, sourcesThisWeek, engagement,
-    revenueThisWeek, revenuePrevWeek, margin, channelHealth, atRisk, ga4, gsc,
+    revenueThisWeek, revenuePrevWeek, margin, channelHealth, atRisk,
+    signupTruthThisWeek, signupTruthPrevWeek, ga4, gsc,
   ] = await Promise.all([
     callRpc('marketing_funnel', { p_from: d(7), p_to: d(0) }),
     callRpc('marketing_funnel', { p_from: d(14), p_to: d(7) }),
@@ -72,6 +81,9 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
     callRpc('dashboard_margin', { p_from: d(7), p_to: d(0) }),
     callRpc('channel_error_rate', { p_hours: 24 }),
     callRpc<unknown[]>('dashboard_at_risk', { p_idle_days: 14, p_min_events: 3, p_limit: 50 }),
+    // Số đăng ký THẬT + mốc bật tracking. Xem chú thích ở CmoSnapshot.
+    callRpc('marketing_signup_truth', { p_from: d(7), p_to: d(0) }),
+    callRpc('marketing_signup_truth', { p_from: d(14), p_to: d(7) }),
     // GA4 là nguồn DUY NHẤT thấy được organic/ads/social; thiếu nó thì digest chỉ
     // nhìn được phần traffic đã chạm track.js và dễ kết luận sai về kênh.
     // Best-effort: hỏng → null, không kéo sập cả digest.
@@ -89,6 +101,7 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
     funnelThisWeek, funnelPrevWeek, sourcesThisWeek, engagement,
     revenueThisWeek, revenuePrevWeek, margin, channelHealth,
     atRiskCount: Array.isArray(atRisk) ? atRisk.length : 0,
+    signupTruthThisWeek, signupTruthPrevWeek,
     ga4: ga4 ? { ...ga4, internalVisitors: funnel?.visitors ?? null } : null,
     gsc,
   };
@@ -104,6 +117,21 @@ cho founder. Yêu cầu:
 - Nếu dữ liệu quá ít để kết luận (vd 0 hoặc gần 0 ở cả 2 tuần), NÓI THẲNG "chưa đủ dữ liệu" thay vì
   suy diễn.
 - Tổng độ dài dưới 350 từ.
+
+VỀ SỐ ĐĂNG KÝ — đọc sai chỗ này là báo động giả cho founder:
+- "signupTruth*.accounts" là SỰ THẬT (đếm thẳng bảng tài khoản). "funnel*.signups" đi qua lớp đo
+  attribution nên có thể HỤT. Khi nói về đăng ký, LUÔN lấy accounts làm số chính.
+- accounts > attributed nghĩa là hệ thống ĐANG ĐO HỤT — nêu ở "điểm nghẽn" như một lỗi ĐO LƯỜNG,
+  và TUYỆT ĐỐI không được viết thành "không ai đăng ký" hay "sản phẩm có vấn đề".
+- Chỉ khi accounts = 0 mới được nói là thật sự không có ai đăng ký.
+
+VỀ TUỔI DỮ LIỆU ("signupTruthThisWeek.tracking_since" = event sớm nhất từng ghi):
+- Nếu mốc đó nằm SAU thời điểm bắt đầu tuần trước, thì tuần trước KHÔNG có dữ liệu đầy đủ, và mọi
+  phép so tuần này/tuần trước trên số suy từ events (visitors, activated, returned, DAU/WAU/MAU)
+  đang so với một số 0 giả.
+- Trong trường hợp đó CẤM gọi mức tăng là tăng trưởng hay "điểm sáng". Nói thẳng một câu rằng
+  tracking mới bật nên chưa có nền so sánh. Doanh thu và số tài khoản KHÔNG dính lỗi này (đọc từ
+  bảng giao dịch/tài khoản, có từ trước) nên vẫn so bình thường được.
 
 VỀ KHỐI "ga4" (Google Analytics 4, 7 ngày qua) — đọc kỹ, đây là chỗ dễ kết luận sai nhất:
 - ga4 = null nghĩa là CHƯA nối được GA4. Khi đó nói thẳng một câu "chưa đọc được GA4" và chỉ luận
