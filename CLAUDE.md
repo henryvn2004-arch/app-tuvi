@@ -471,9 +471,58 @@ người trùng 34% → **21%**.
   (riêng CUNG MỆNH 192 chunk / 166K ký tự) **VÀ 498 chunk Vương Đình Chi**
   (`luc-thap-tinh-he`, mỗi chunk gắn sẵn `[NGUỒN: Trung Châu Phái Lục Thập
   Tinh Hệ (Vương Đình Chi)]`). **Lần sau tra RAG trước khi nói là thiếu nguồn.**
-- **CÒN LẠI:** muốn lấy lại 39% biến thể đã bỏ thì viết thêm bản hậu tố NGẮN
-  (≤8 ký tự) cho các danh xưng gốc dài — 42 chuỗi nữa, đưa 566 → ~900 mà vẫn
-  giữ trần 30. Chưa làm.
+### ✅ Vòng sau — hậu tố NGẮN lấy lại phần bị trần cắt: 566 → 865 (PR mới)
+Bản trước bỏ thẳng hậu tố khi vượt trần 30 → mất **39%** biến thể (926 → 566)
+chỉ vì danh xưng gốc dài. Nay hạ dần thay vì bỏ ngay: **hậu tố đầy đủ → bản
+NGẮN (`suffixShort`, 5–10 ký tự) → mới bỏ**.
+
+| | Trước | Sau |
+|---|---|---|
+| Danh xưng phân biệt | 566 | **865** |
+| 2 người trùng danh xưng | 0,47% (1/210) | **0,21% (1/485)** |
+| Trùng cả danh xưng + nền | 0,11% (1/930) | **0,055% (1/1.830)** |
+| Nhóm 50 người, có người trùng | 21% | **10%** |
+| Bị bỏ hậu tố vì dài | ~39% | **8,1%** |
+| Độ dài (TB / dài nhất) | 21,7 / 30 | 24,8 / **30** (giữ nguyên trần) |
+
+- **🐞 Bắt được khi ĐỌC MẪU, không phải khi đo:** 3 hậu tố ngắn bị cắt mất
+  động từ nên đọc thành danh từ trơ — *"Chủ đội thương thuyền **mối quan**"*,
+  *"Nữ vệ sĩ áp tải thuê **nghiệp tổ**"*. Số liệu vẫn đẹp, chỉ đọc mới lộ.
+  Sửa: `mối quan`→`giữ mối`, `nghiệp tổ`→`giữ nghiệp`, `tế khí`→`làm tế khí`.
+  **Rút gọn hậu tố phải giữ động từ**; bỏ động từ chỉ được khi phần còn lại tự
+  nó là một NƠI CHỐN (`nội phủ`, `hậu đình`, `ngự y`) chứ không phải một vật.
+- 16,7% vẫn không có hậu tố vì **Thân cư Mệnh** — cố ý, không phải thiếu sót.
+
+### ✅ Vòng sau — 4 BẬC thay 3 bậc: 865 → 1.150 (PR mới)
+Henry bảo làm trục "5 bậc" đã ghi trong CÒN LẠI. **Đo trước thì 4 bậc thắng 5
+bậc**, nên đổi hướng:
+
+| | Tổ hợp | Trùng | Entry phải viết |
+|---|---|---|---|
+| 3 bậc (cũ) | 926 | 0,153% | 114 |
+| **4 bậc** ✅ | **1.213** | **0,120%** | **+38** |
+| 5 bậc | 1.388 | 0,114% | +76 |
+
+- **4 bậc lấy 79% mức lãi với đúng một nửa công**, và phân bố **đều**
+  (27,4/26,5/24,1/22,0) trong khi 5 bậc **lệch** (20/33,8/14,5/17,3/14,4 —
+  bậc 2 phình gấp đôi bậc 3). Thang điểm là số NGUYÊN và hẹp nên chia 5 không
+  cắt mượt được.
+- **Điểm quyết định:** phân vị 4 bậc rơi đúng `[-1, 1, 3]` → **giữ nguyên y
+  hệt `cao` (≥4) và `thap` (≤−1)**, chỉ tách cái bụng phình `giua` (50,6%)
+  làm đôi. Toàn bộ 114 entry cũ giữ nguyên nghĩa, hiệu chỉnh ngưỡng đã duyệt
+  không phải làm lại, chỉ viết thêm MỘT bậc `kha` ("khá giả") cho 38 khoá.
+- **🐞 Lại bắt được một danh xưng trùng** — `Nữ ngự y` dùng ở cả bậc **cao**
+  của Thiên Đồng đơn thủ lẫn bậc **kha** mới của cặp Thiên Đồng+Thiên Lương.
+  Cùng loại lỗi đã vá ở #339. → đổi thành `Thị y`/`Nữ thị y`. **Mỗi lần thêm
+  bậc/khoá phải quét lại trùng title trên toàn bảng** — số liệu phân bố không
+  bắt được lỗi này.
+
+**Kết quả cuối track:** **1.150 danh xưng** · trùng **0,153%** (1/655) · kèm
+nền văn minh **3.812 tổ hợp**, trùng **0,044%** (1/2.280) · nhóm 50 người có
+người trùng **7%** · độ dài TB 24,5, dài nhất vẫn đúng trần 30 · phân bố bậc
+thấp 27,4 / giữa 26,5 / khá 24,1 / cao 22,0%.
+
+**Cả track: 84 → 1.150 danh xưng (×13,7), chi phí model thêm 0 đồng.**
 
 ---
 
