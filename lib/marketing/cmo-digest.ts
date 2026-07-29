@@ -47,6 +47,14 @@ interface CmoSnapshot {
    */
   signupTruthThisWeek: unknown;
   signupTruthPrevWeek: unknown;
+  /**
+   * Phân loại chất lượng lưu lượng (traffic_quality). Mọi con số "khách ghé"
+   * khác trong snapshot đều đếm THÔ, mà GA4 cho thấy 78% khách đến từ các thành
+   * phố data center với 4 giây tương tác — tức phần lớn là máy. Không có khối
+   * này thì digest lấy mẫu số bot chia cho tử số người và kết luận "conversion
+   * thấp", trong khi thật ra là "chưa có ai vào".
+   */
+  trafficQuality: unknown;
   /** GA4 7 ngày qua — null khi chưa cấu hình env hoặc API lỗi (digest tự nói thiếu). */
   ga4: (Ga4Breakdown & { internalVisitors: unknown }) | null;
   /**
@@ -70,7 +78,7 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
   const [
     funnelThisWeek, funnelPrevWeek, sourcesThisWeek, engagement,
     revenueThisWeek, revenuePrevWeek, margin, channelHealth, atRisk,
-    signupTruthThisWeek, signupTruthPrevWeek, ga4, gsc,
+    signupTruthThisWeek, signupTruthPrevWeek, trafficQuality, ga4, gsc,
   ] = await Promise.all([
     callRpc('marketing_funnel', { p_from: d(7), p_to: d(0) }),
     callRpc('marketing_funnel', { p_from: d(14), p_to: d(7) }),
@@ -84,6 +92,8 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
     // Số đăng ký THẬT + mốc bật tracking. Xem chú thích ở CmoSnapshot.
     callRpc('marketing_signup_truth', { p_from: d(7), p_to: d(0) }),
     callRpc('marketing_signup_truth', { p_from: d(14), p_to: d(7) }),
+    // Bao nhiêu trong số "khách" là người thật. Xem chú thích ở CmoSnapshot.
+    callRpc('traffic_quality', { p_from: d(7), p_to: d(0) }),
     // GA4 là nguồn DUY NHẤT thấy được organic/ads/social; thiếu nó thì digest chỉ
     // nhìn được phần traffic đã chạm track.js và dễ kết luận sai về kênh.
     // Best-effort: hỏng → null, không kéo sập cả digest.
@@ -101,7 +111,7 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
     funnelThisWeek, funnelPrevWeek, sourcesThisWeek, engagement,
     revenueThisWeek, revenuePrevWeek, margin, channelHealth,
     atRiskCount: Array.isArray(atRisk) ? atRisk.length : 0,
-    signupTruthThisWeek, signupTruthPrevWeek,
+    signupTruthThisWeek, signupTruthPrevWeek, trafficQuality,
     ga4: ga4 ? { ...ga4, internalVisitors: funnel?.visitors ?? null } : null,
     gsc,
   };
@@ -132,6 +142,19 @@ VỀ TUỔI DỮ LIỆU ("signupTruthThisWeek.tracking_since" = event sớm nh�
 - Trong trường hợp đó CẤM gọi mức tăng là tăng trưởng hay "điểm sáng". Nói thẳng một câu rằng
   tracking mới bật nên chưa có nền so sánh. Doanh thu và số tài khoản KHÔNG dính lỗi này (đọc từ
   bảng giao dịch/tài khoản, có từ trước) nên vẫn so bình thường được.
+
+VỀ KHỐI "trafficQuality" — ĐỌC KHỐI NÀY TRƯỚC MỌI KHỐI KHÁC, nó quyết định cách đọc tất cả phần còn lại:
+- Đây là phân loại khách theo hành vi: engaged (có tương tác thật hoặc quay lại ngày khác) / drive_by
+  (đúng 1 lượt rồi biến mất) / browsed (xem vài trang, không tương tác) / known_bot (User-Agent tự khai).
+- "engaged" là con số DUY NHẤT được phép gọi là NGƯỜI DÙNG THẬT. Mọi số "khách ghé"/visitors/sessions ở
+  các khối khác đều đếm THÔ, gồm cả máy.
+- Nếu drive_by chiếm đa số, PHẢI nói thẳng ở đầu bản tin rằng phần lớn lưu lượng không phải người thật,
+  và mọi tỉ lệ chuyển đổi tính trên mẫu số thô là VÔ NGHĨA. TUYỆT ĐỐI không viết "tỉ lệ chuyển đổi thấp"
+  hay "trải nghiệm người dùng có vấn đề" khi mẫu số chưa lọc — đó là kết luận sai về sản phẩm dựa trên
+  một phép chia sai.
+- Khi cần nêu tỉ lệ chuyển đổi, LUÔN lấy mẫu số là trafficQuality.engaged và nói rõ đã lọc.
+- ua_coverage.with_ua = 0 nghĩa là CHƯA thu được User-Agent nào trong khoảng này. Khi đó known_bot = 0 là
+  "chưa đo được", KHÔNG phải "không có bot" — cấm đọc thành tin tốt.
 
 VỀ KHỐI "ga4" (Google Analytics 4, 7 ngày qua) — đọc kỹ, đây là chỗ dễ kết luận sai nhất:
 - ga4 = null nghĩa là CHƯA nối được GA4. Khi đó nói thẳng một câu "chưa đọc được GA4" và chỉ luận
