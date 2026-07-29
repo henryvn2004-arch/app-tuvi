@@ -39,6 +39,22 @@ interface CmoSnapshot {
   margin: unknown;
   channelHealth: unknown;
   atRiskCount: number;
+  /**
+   * Số tài khoản THẬT tạo trong tuần, đếm thẳng auth.users (marketing_signup_truth).
+   * Mỏ neo độc lập với beacon client: `funnel.signups` đi qua user_attribution,
+   * vốn chỉ có khi /api/track nhận được event đăng nhập — hụt một mắt xích là
+   * bậc "đăng ký" tụt về 0 trong im lặng và đọc y hệt một tin xấu có thật.
+   */
+  signupTruthThisWeek: unknown;
+  signupTruthPrevWeek: unknown;
+  /**
+   * Phân loại chất lượng lưu lượng (traffic_quality). Mọi con số "khách ghé"
+   * khác trong snapshot đều đếm THÔ, mà GA4 cho thấy 78% khách đến từ các thành
+   * phố data center với 4 giây tương tác — tức phần lớn là máy. Không có khối
+   * này thì digest lấy mẫu số bot chia cho tử số người và kết luận "conversion
+   * thấp", trong khi thật ra là "chưa có ai vào".
+   */
+  trafficQuality: unknown;
   /** GA4 7 ngày qua — null khi chưa cấu hình env hoặc API lỗi (digest tự nói thiếu). */
   ga4: (Ga4Breakdown & { internalVisitors: unknown }) | null;
   /**
@@ -61,7 +77,8 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
 
   const [
     funnelThisWeek, funnelPrevWeek, sourcesThisWeek, engagement,
-    revenueThisWeek, revenuePrevWeek, margin, channelHealth, atRisk, ga4, gsc,
+    revenueThisWeek, revenuePrevWeek, margin, channelHealth, atRisk,
+    signupTruthThisWeek, signupTruthPrevWeek, trafficQuality, ga4, gsc,
   ] = await Promise.all([
     callRpc('marketing_funnel', { p_from: d(7), p_to: d(0) }),
     callRpc('marketing_funnel', { p_from: d(14), p_to: d(7) }),
@@ -72,6 +89,11 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
     callRpc('dashboard_margin', { p_from: d(7), p_to: d(0) }),
     callRpc('channel_error_rate', { p_hours: 24 }),
     callRpc<unknown[]>('dashboard_at_risk', { p_idle_days: 14, p_min_events: 3, p_limit: 50 }),
+    // Số đăng ký THẬT + mốc bật tracking. Xem chú thích ở CmoSnapshot.
+    callRpc('marketing_signup_truth', { p_from: d(7), p_to: d(0) }),
+    callRpc('marketing_signup_truth', { p_from: d(14), p_to: d(7) }),
+    // Bao nhiêu trong số "khách" là người thật. Xem chú thích ở CmoSnapshot.
+    callRpc('traffic_quality', { p_from: d(7), p_to: d(0) }),
     // GA4 là nguồn DUY NHẤT thấy được organic/ads/social; thiếu nó thì digest chỉ
     // nhìn được phần traffic đã chạm track.js và dễ kết luận sai về kênh.
     // Best-effort: hỏng → null, không kéo sập cả digest.
@@ -89,6 +111,7 @@ async function buildSnapshot(): Promise<CmoSnapshot> {
     funnelThisWeek, funnelPrevWeek, sourcesThisWeek, engagement,
     revenueThisWeek, revenuePrevWeek, margin, channelHealth,
     atRiskCount: Array.isArray(atRisk) ? atRisk.length : 0,
+    signupTruthThisWeek, signupTruthPrevWeek, trafficQuality,
     ga4: ga4 ? { ...ga4, internalVisitors: funnel?.visitors ?? null } : null,
     gsc,
   };
@@ -104,6 +127,34 @@ cho founder. Yêu cầu:
 - Nếu dữ liệu quá ít để kết luận (vd 0 hoặc gần 0 ở cả 2 tuần), NÓI THẲNG "chưa đủ dữ liệu" thay vì
   suy diễn.
 - Tổng độ dài dưới 350 từ.
+
+VỀ SỐ ĐĂNG KÝ — đọc sai chỗ này là báo động giả cho founder:
+- "signupTruth*.accounts" là SỰ THẬT (đếm thẳng bảng tài khoản). "funnel*.signups" đi qua lớp đo
+  attribution nên có thể HỤT. Khi nói về đăng ký, LUÔN lấy accounts làm số chính.
+- accounts > attributed nghĩa là hệ thống ĐANG ĐO HỤT — nêu ở "điểm nghẽn" như một lỗi ĐO LƯỜNG,
+  và TUYỆT ĐỐI không được viết thành "không ai đăng ký" hay "sản phẩm có vấn đề".
+- Chỉ khi accounts = 0 mới được nói là thật sự không có ai đăng ký.
+
+VỀ TUỔI DỮ LIỆU ("signupTruthThisWeek.tracking_since" = event sớm nhất từng ghi):
+- Nếu mốc đó nằm SAU thời điểm bắt đầu tuần trước, thì tuần trước KHÔNG có dữ liệu đầy đủ, và mọi
+  phép so tuần này/tuần trước trên số suy từ events (visitors, activated, returned, DAU/WAU/MAU)
+  đang so với một số 0 giả.
+- Trong trường hợp đó CẤM gọi mức tăng là tăng trưởng hay "điểm sáng". Nói thẳng một câu rằng
+  tracking mới bật nên chưa có nền so sánh. Doanh thu và số tài khoản KHÔNG dính lỗi này (đọc từ
+  bảng giao dịch/tài khoản, có từ trước) nên vẫn so bình thường được.
+
+VỀ KHỐI "trafficQuality" — ĐỌC KHỐI NÀY TRƯỚC MỌI KHỐI KHÁC, nó quyết định cách đọc tất cả phần còn lại:
+- Đây là phân loại khách theo hành vi: engaged (có tương tác thật hoặc quay lại ngày khác) / drive_by
+  (đúng 1 lượt rồi biến mất) / browsed (xem vài trang, không tương tác) / known_bot (User-Agent tự khai).
+- "engaged" là con số DUY NHẤT được phép gọi là NGƯỜI DÙNG THẬT. Mọi số "khách ghé"/visitors/sessions ở
+  các khối khác đều đếm THÔ, gồm cả máy.
+- Nếu drive_by chiếm đa số, PHẢI nói thẳng ở đầu bản tin rằng phần lớn lưu lượng không phải người thật,
+  và mọi tỉ lệ chuyển đổi tính trên mẫu số thô là VÔ NGHĨA. TUYỆT ĐỐI không viết "tỉ lệ chuyển đổi thấp"
+  hay "trải nghiệm người dùng có vấn đề" khi mẫu số chưa lọc — đó là kết luận sai về sản phẩm dựa trên
+  một phép chia sai.
+- Khi cần nêu tỉ lệ chuyển đổi, LUÔN lấy mẫu số là trafficQuality.engaged và nói rõ đã lọc.
+- ua_coverage.with_ua = 0 nghĩa là CHƯA thu được User-Agent nào trong khoảng này. Khi đó known_bot = 0 là
+  "chưa đo được", KHÔNG phải "không có bot" — cấm đọc thành tin tốt.
 
 VỀ KHỐI "ga4" (Google Analytics 4, 7 ngày qua) — đọc kỹ, đây là chỗ dễ kết luận sai nhất:
 - ga4 = null nghĩa là CHƯA nối được GA4. Khi đó nói thẳng một câu "chưa đọc được GA4" và chỉ luận
@@ -129,6 +180,18 @@ VỀ KHỐI "gsc" (Google Search Console, 28 ngày, KẾT THÚC TRƯỚC 3 NGÀY
   trăm nghìn trang SEO, nên con số này so với gsc.sitemaps[].submitted là chỉ dấu quan trọng nhất về
   sức khoẻ SEO. Nếu capped=true thì phải đọc là "≥ count", KHÔNG được nêu như số chính xác.
 - gsc.totals.position là thứ hạng trung bình: càng NHỎ càng tốt (1 = đầu trang 1). Đừng đọc ngược.
+- gsc.topQueries/topPages đã được sắp theo IMPRESSIONS giảm dần, tức theo NHU CẦU tìm kiếm thật.
+  Một dòng thứ hạng rất tốt (position 1-5) mà impressions chỉ 1-2 KHÔNG phải thành tích: nó nghĩa là
+  đứng đầu cho một truy vấn gần như không ai gõ. Ngược lại, dòng impressions cao mà position 50-100 là
+  nhu cầu CÓ THẬT đang bị bỏ lỡ — đó mới là chỗ đáng đề xuất đầu tư. Khi nêu một truy vấn, LUÔN kèm
+  impressions của nó để founder biết nó lớn cỡ nào; nêu trần trụi mỗi thứ hạng là gây hiểu nhầm.
+- So gsc.namedQueryTotals.impressions với gsc.totals.impressions: phần chênh là lưu lượng đến từ những
+  truy vấn hiếm tới mức Google ẩn danh, không cho biết là gì. Nếu phần ẩn danh chiếm ĐA SỐ, nói thẳng
+  rằng site đang hiện ra chủ yếu cho các truy vấn siêu hiếm — dấu hiệu kho trang tổ hợp tự sinh nhắm
+  vào nhu cầu không tồn tại. Đây là kết luận về CHIẾN LƯỢC nội dung, KHÔNG phải lỗi dữ liệu, và KHÔNG
+  được diễn đạt thành "thiếu dữ liệu" hay "GSC lỗi".
+- gsc.queriesWithImpressions.count = số truy vấn riêng biệt đọc được tên. Con số này nhỏ trong khi
+  impressions tổng lớn cũng chỉ đúng một chuyện đó — đừng đọc thành "ít người tìm".
 - KHÔNG kết luận "Google chưa index" chỉ vì impressions thấp — báo cáo Lập chỉ mục KHÔNG có trong API,
   nên số ở đây là cận dưới. Nói "chưa hiện ra trong tìm kiếm" thì đúng, nói "chưa được index" là vượt
   quá dữ liệu.

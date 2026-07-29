@@ -29,6 +29,9 @@ const BASE = 'https://searchconsole.googleapis.com/webmasters/v3';
 /** Giới hạn cứng của searchAnalytics.query. Chạm trần = số thật còn cao hơn. */
 const MAX_ROWS = 25000;
 
+/** Số dòng giữ lại trong snapshot sau khi đã sắp theo impressions. */
+const TOP_N = 50;
+
 export interface GscRow {
   key: string;
   clicks: number;
@@ -51,6 +54,7 @@ export interface GscSnapshot {
   /** Property thật sự đọc được (sc-domain:... hoặc https://...). */
   siteUrl: string;
   totals: { clicks: number; impressions: number; ctr: number; position: number } | null;
+  /** Sắp theo IMPRESSIONS giảm dần, không theo thứ tự mặc định của API — xem `topBy`. */
   topQueries: GscRow[];
   topPages: GscRow[];
   /**
@@ -59,6 +63,21 @@ export interface GscSnapshot {
    * HƠN, phải đọc là "≥", đừng báo cáo như số chính xác.
    */
   pagesWithImpressions: { count: number; capped: boolean } | null;
+  /** Như trên nhưng đếm TRUY VẤN riêng biệt. Xem `namedQueryTotals` để đọc đúng. */
+  queriesWithImpressions: { count: number; capped: boolean } | null;
+  /**
+   * Tổng clicks/impressions cộng từ các dòng truy vấn ĐỌC ĐƯỢC TÊN.
+   *
+   * PHẢI so với `totals` mới đọc đúng: Google GIẤU hẳn những truy vấn quá hiếm
+   * (ngưỡng ẩn danh, không công bố) — chúng vẫn được cộng vào `totals` nhưng
+   * KHÔNG xuất hiện thành dòng nào. Nên `totals.impressions` trừ đi số này là
+   * phần lưu lượng đến từ các truy vấn hiếm tới mức Google không cho biết là gì.
+   *
+   * Chênh lệch lớn KHÔNG phải lỗi đọc dữ liệu — nó tự nó là một kết luận: nội
+   * dung đang hiện ra cho những truy vấn gần như không ai gõ. Đó chính là hình
+   * dạng dữ liệu của một kho trang tổ hợp tự sinh.
+   */
+  namedQueryTotals: { clicks: number; impressions: number } | null;
   sitemaps: GscSitemap[];
   /** Ghi lại để người đọc biết mấy ngày cuối có thể còn thiếu do độ trễ. */
   range: { from: string; to: string };
@@ -104,6 +123,34 @@ const toRow = (r: ApiRow): GscRow => ({
   ctr: Number(r.ctr || 0),
   position: Number(r.position || 0),
 });
+
+/**
+ * Top N theo IMPRESSIONS. CỐ Ý tự sắp thay vì cắt top-N thẳng từ API:
+ * searchAnalytics.query sắp mặc định theo CLICKS giảm dần và KHÔNG nhận tham số
+ * orderBy. Trên site ít click, gần như mọi dòng đều 0 click nên phần đuôi trả về
+ * theo thứ tự alphabet — cắt 25 dòng đầu ra một danh sách bắt đầu bằng "1976 12"
+ * chứ không phải truy vấn nhiều người tìm nhất. Muốn biết NHU CẦU nằm ở đâu thì
+ * phải sắp theo impressions.
+ */
+const topBy = (rows: ApiRow[] | undefined, n: number): GscRow[] =>
+  (rows || [])
+    .map(toRow)
+    .sort((a, b) => b.impressions - a.impressions || b.clicks - a.clicks)
+    .slice(0, n);
+
+type RowTotals = { clicks: number; impressions: number };
+
+// reduce<RowTotals> tường minh: mọi field của ApiRow đều optional nên
+// `{clicks:0,impressions:0}` cũng hợp lệ như một ApiRow, và TS chọn nhầm overload
+// "accumulator cùng kiểu phần tử" → acc thành ApiRow với clicks có thể undefined.
+const sumRows = (rows: ApiRow[]): RowTotals =>
+  rows.reduce<RowTotals>(
+    (acc, r) => ({
+      clicks: acc.clicks + Number(r.clicks || 0),
+      impressions: acc.impressions + Number(r.impressions || 0),
+    }),
+    { clicks: 0, impressions: 0 },
+  );
 
 /**
  * Chọn property để đọc. CỐ Ý tự dò thay vì bắt khai bằng env: Search Console có
@@ -157,17 +204,21 @@ export async function getSearchConsoleSnapshot(
       rowLimit,
     });
 
-  const [totalsRes, queriesRes, pagesRes, allPagesRes, sitemapsRes] = await Promise.all([
+  // Kéo TOÀN BỘ dòng cho cả hai chiều rồi mới cắt top-N ở client. Trước đây có
+  // thêm 2 lượt gọi lấy sẵn 25 dòng, nhưng chúng nhận về thứ tự mặc định theo
+  // clicks nên vô dụng trên site ít click (xem `topBy`) — bỏ đi, lấy top-N từ
+  // chính bản đầy đủ. Ít hơn 2 lượt gọi mạng mà dữ liệu giàu hơn.
+  const [totalsRes, allQueriesRes, allPagesRes, sitemapsRes] = await Promise.all([
     query([], 1),
-    query(['query'], 25),
-    query(['page'], 25),
-    // Đếm trang riêng biệt: lấy tối đa rồi đếm dòng. Không có metric "số trang"
-    // nào sẵn trong API, đây là cách duy nhất.
+    // Đếm truy vấn/trang riêng biệt: lấy tối đa rồi đếm dòng. Không có metric
+    // "số truy vấn"/"số trang" nào sẵn trong API, đây là cách duy nhất.
+    query(['query'], MAX_ROWS),
     query(['page'], MAX_ROWS),
     gscFetch<{ sitemap?: Array<Record<string, unknown>> }>(token, `/sites/${site}/sitemaps`),
   ]);
 
   const t = totalsRes?.rows?.[0];
+  const allQueries = allQueriesRes?.rows;
   const allPages = allPagesRes?.rows;
 
   return {
@@ -182,9 +233,13 @@ export async function getSearchConsoleSnapshot(
       : totalsRes
         ? { clicks: 0, impressions: 0, ctr: 0, position: 0 }
         : null,
-    topQueries: (queriesRes?.rows || []).map(toRow),
-    topPages: (pagesRes?.rows || []).map(toRow),
+    topQueries: topBy(allQueries, TOP_N),
+    topPages: topBy(allPages, TOP_N),
     pagesWithImpressions: allPages ? { count: allPages.length, capped: allPages.length >= MAX_ROWS } : null,
+    queriesWithImpressions: allQueries
+      ? { count: allQueries.length, capped: allQueries.length >= MAX_ROWS }
+      : null,
+    namedQueryTotals: allQueries ? sumRows(allQueries) : null,
     sitemaps: (sitemapsRes?.sitemap || []).map((s) => {
       // `contents[].indexed` từng tồn tại nhưng Google đã bỏ (luôn trả 0) — CỐ Ý
       // không đọc, bày một cột 0 vĩnh viễn chỉ khiến người xem tưởng chưa index gì.
