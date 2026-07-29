@@ -493,6 +493,37 @@ NGẮN (`suffixShort`, 5–10 ký tự) → mới bỏ**.
   nó là một NƠI CHỐN (`nội phủ`, `hậu đình`, `ngự y`) chứ không phải một vật.
 - 16,7% vẫn không có hậu tố vì **Thân cư Mệnh** — cố ý, không phải thiếu sót.
 
+### ✅ Vòng sau — 4 BẬC thay 3 bậc: 865 → 1.150 (PR mới)
+Henry bảo làm trục "5 bậc" đã ghi trong CÒN LẠI. **Đo trước thì 4 bậc thắng 5
+bậc**, nên đổi hướng:
+
+| | Tổ hợp | Trùng | Entry phải viết |
+|---|---|---|---|
+| 3 bậc (cũ) | 926 | 0,153% | 114 |
+| **4 bậc** ✅ | **1.213** | **0,120%** | **+38** |
+| 5 bậc | 1.388 | 0,114% | +76 |
+
+- **4 bậc lấy 79% mức lãi với đúng một nửa công**, và phân bố **đều**
+  (27,4/26,5/24,1/22,0) trong khi 5 bậc **lệch** (20/33,8/14,5/17,3/14,4 —
+  bậc 2 phình gấp đôi bậc 3). Thang điểm là số NGUYÊN và hẹp nên chia 5 không
+  cắt mượt được.
+- **Điểm quyết định:** phân vị 4 bậc rơi đúng `[-1, 1, 3]` → **giữ nguyên y
+  hệt `cao` (≥4) và `thap` (≤−1)**, chỉ tách cái bụng phình `giua` (50,6%)
+  làm đôi. Toàn bộ 114 entry cũ giữ nguyên nghĩa, hiệu chỉnh ngưỡng đã duyệt
+  không phải làm lại, chỉ viết thêm MỘT bậc `kha` ("khá giả") cho 38 khoá.
+- **🐞 Lại bắt được một danh xưng trùng** — `Nữ ngự y` dùng ở cả bậc **cao**
+  của Thiên Đồng đơn thủ lẫn bậc **kha** mới của cặp Thiên Đồng+Thiên Lương.
+  Cùng loại lỗi đã vá ở #339. → đổi thành `Thị y`/`Nữ thị y`. **Mỗi lần thêm
+  bậc/khoá phải quét lại trùng title trên toàn bảng** — số liệu phân bố không
+  bắt được lỗi này.
+
+**Kết quả cuối track:** **1.150 danh xưng** · trùng **0,153%** (1/655) · kèm
+nền văn minh **3.812 tổ hợp**, trùng **0,044%** (1/2.280) · nhóm 50 người có
+người trùng **7%** · độ dài TB 24,5, dài nhất vẫn đúng trần 30 · phân bố bậc
+thấp 27,4 / giữa 26,5 / khá 24,1 / cao 22,0%.
+
+**Cả track: 84 → 1.150 danh xưng (×13,7), chi phí model thêm 0 đồng.**
+
 ---
 
 ## 🎭 Chức phận theo CẶP chính tinh — 82 → 194 danh xưng (2026-07-29, cùng PR cache)
