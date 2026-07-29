@@ -471,9 +471,27 @@ người trùng 34% → **21%**.
   (riêng CUNG MỆNH 192 chunk / 166K ký tự) **VÀ 498 chunk Vương Đình Chi**
   (`luc-thap-tinh-he`, mỗi chunk gắn sẵn `[NGUỒN: Trung Châu Phái Lục Thập
   Tinh Hệ (Vương Đình Chi)]`). **Lần sau tra RAG trước khi nói là thiếu nguồn.**
-- **CÒN LẠI:** muốn lấy lại 39% biến thể đã bỏ thì viết thêm bản hậu tố NGẮN
-  (≤8 ký tự) cho các danh xưng gốc dài — 42 chuỗi nữa, đưa 566 → ~900 mà vẫn
-  giữ trần 30. Chưa làm.
+### ✅ Vòng sau — hậu tố NGẮN lấy lại phần bị trần cắt: 566 → 865 (PR mới)
+Bản trước bỏ thẳng hậu tố khi vượt trần 30 → mất **39%** biến thể (926 → 566)
+chỉ vì danh xưng gốc dài. Nay hạ dần thay vì bỏ ngay: **hậu tố đầy đủ → bản
+NGẮN (`suffixShort`, 5–10 ký tự) → mới bỏ**.
+
+| | Trước | Sau |
+|---|---|---|
+| Danh xưng phân biệt | 566 | **865** |
+| 2 người trùng danh xưng | 0,47% (1/210) | **0,21% (1/485)** |
+| Trùng cả danh xưng + nền | 0,11% (1/930) | **0,055% (1/1.830)** |
+| Nhóm 50 người, có người trùng | 21% | **10%** |
+| Bị bỏ hậu tố vì dài | ~39% | **8,1%** |
+| Độ dài (TB / dài nhất) | 21,7 / 30 | 24,8 / **30** (giữ nguyên trần) |
+
+- **🐞 Bắt được khi ĐỌC MẪU, không phải khi đo:** 3 hậu tố ngắn bị cắt mất
+  động từ nên đọc thành danh từ trơ — *"Chủ đội thương thuyền **mối quan**"*,
+  *"Nữ vệ sĩ áp tải thuê **nghiệp tổ**"*. Số liệu vẫn đẹp, chỉ đọc mới lộ.
+  Sửa: `mối quan`→`giữ mối`, `nghiệp tổ`→`giữ nghiệp`, `tế khí`→`làm tế khí`.
+  **Rút gọn hậu tố phải giữ động từ**; bỏ động từ chỉ được khi phần còn lại tự
+  nó là một NƠI CHỐN (`nội phủ`, `hậu đình`, `ngự y`) chứ không phải một vật.
+- 16,7% vẫn không có hậu tố vì **Thân cư Mệnh** — cố ý, không phải thiếu sót.
 
 ---
 

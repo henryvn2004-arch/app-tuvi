@@ -1259,6 +1259,14 @@ interface ThanAspect {
   /** Hậu tố danh xưng theo NHÓM NGHỀ. Cố ý không theo tên sao: ghép theo sao
    * rất dễ ra danh xưng vô nghĩa kiểu "Thầy lang coi kỵ binh". */
   suffix: Record<Occupation['domain'], string>;
+  /** Bản NGẮN của cùng hậu tố, dùng khi bản đầy đủ vượt `TITLE_MAX_LEN`.
+   *
+   * Vì sao cần: nhiều danh xưng gốc vốn đã là một mệnh đề dài ("Nữ võ quan
+   * vướng lao lý" — 22 ký tự), ghép hậu tố đầy đủ vào là vượt trần nên bị bỏ
+   * sạch. Đo được: trần 30 cắt mất 39% biến thể (926 → 566 danh xưng). Bản
+   * ngắn giữ đúng nghĩa mà chỉ tốn 5–10 ký tự, nên phần lớn số đó lấy lại
+   * được mà danh xưng vẫn đọc một hơi. */
+  suffixShort: Record<Occupation['domain'], string>;
 }
 
 const THAN_ASPECT: Record<string, ThanAspect> = {
@@ -1267,6 +1275,7 @@ const THAN_ASPECT: Record<string, ThanAspect> = {
     propEn: '',
     source: 'Thân đồng cung Mệnh — cả đời chỉ một hướng, không phân nhánh sang cung nào khác',
     suffix: { vo: '', van: '', quyen: '', thuong: '', y: '', nghe: '', tu: '' },
+    suffixShort: { vo: '', van: '', quyen: '', thuong: '', y: '', nghe: '', tu: '' },
   },
   'Quan Lộc': {
     aspect: 'dốc toàn lực vào chính nghiệp, thăng tiến bằng chính công việc của mình',
@@ -1275,6 +1284,10 @@ const THAN_ASPECT: Record<string, ThanAspect> = {
     suffix: {
       vo: 'ngoài trận', van: 'nơi miếu đường', quyen: 'nắm thực quyền',
       thuong: 'giữ mối quan', y: 'chốn ngự y', nghe: 'hàng ngự dụng', tu: 'trụ trì',
+    },
+    suffixShort: {
+      vo: 'ra trận', van: 'ở triều', quyen: 'cầm quyền',
+      thuong: 'giữ mối', y: 'ngự y', nghe: 'ngự dụng', tu: 'trụ trì',
     },
   },
   'Tài Bạch': {
@@ -1285,6 +1298,10 @@ const THAN_ASPECT: Record<string, ThanAspect> = {
       vo: 'coi quân lương', van: 'coi sổ sách', quyen: 'coi thuế khoá',
       thuong: 'gây cơ nghiệp', y: 'mở hiệu thuốc', nghe: 'mở xưởng lớn', tu: 'coi hương hoả',
     },
+    suffixShort: {
+      vo: 'coi lương', van: 'coi sổ', quyen: 'coi thuế',
+      thuong: 'gây nghiệp', y: 'mở hiệu', nghe: 'mở xưởng', tu: 'coi hương',
+    },
   },
   'Thiên Di': {
     aspect: 'đời ở ngoài đường nhiều hơn ở nhà — việc lớn đều xảy ra lúc rời khỏi cửa',
@@ -1293,6 +1310,10 @@ const THAN_ASPECT: Record<string, ThanAspect> = {
     suffix: {
       vo: 'trấn viễn xứ', van: 'đi sứ', quyen: 'trấn phương xa',
       thuong: 'buôn đường xa', y: 'vân du', nghe: 'nghề lưu động', tu: 'hoá duyên',
+    },
+    suffixShort: {
+      vo: 'trấn xa', van: 'đi sứ', quyen: 'trấn xa',
+      thuong: 'buôn xa', y: 'vân du', nghe: 'lưu động', tu: 'hoá duyên',
     },
   },
   'Phu Thê': {
@@ -1303,6 +1324,10 @@ const THAN_ASPECT: Record<string, ThanAspect> = {
       vo: 'giữ phủ đệ', van: 'trong nội phủ', quyen: 'chốn hậu đình',
       thuong: 'cùng bạn đời', y: 'trong nội phủ', nghe: 'nghề gia truyền', tu: 'tu tại gia',
     },
+    suffixShort: {
+      vo: 'giữ phủ', van: 'nội phủ', quyen: 'hậu đình',
+      thuong: 'việc nhà', y: 'nội phủ', nghe: 'gia truyền', tu: 'tại gia',
+    },
   },
   'Phúc Đức': {
     aspect: 'đời ngả về phúc thọ và việc họ hàng — lo phần gốc rễ hơn phần danh lợi trước mắt',
@@ -1311,6 +1336,10 @@ const THAN_ASPECT: Record<string, ThanAspect> = {
     suffix: {
       vo: 'coi tế cờ', van: 'coi lễ nghi', quyen: 'coi tông miếu',
       thuong: 'giữ nghiệp tổ', y: 'coi dưỡng sinh', nghe: 'làm đồ tế khí', tu: 'coi tế tự',
+    },
+    suffixShort: {
+      vo: 'tế cờ', van: 'lễ nghi', quyen: 'tông miếu',
+      thuong: 'giữ nghiệp', y: 'dưỡng sinh', nghe: 'làm tế khí', tu: 'tế tự',
     },
   },
 };
@@ -1715,10 +1744,18 @@ function computeOccupation(ls: Laso, gender: 'nam' | 'nu', thanCungName: string)
 
   // TRẦN ĐỘ DÀI — danh xưng là thứ người ta đọc xong phải nhớ được để kể lại
   // (luật đã chốt: title ngắn, râu ria dồn vào `desc`). Vài danh xưng gốc vốn
-  // đã là một mệnh đề dài ("Nữ võ quan vướng lao lý"); ghép thêm hậu tố vào là
-  // ra chuỗi 43 ký tự không ai nhớ nổi. Quá trần thì BỎ hậu tố — mảng đời vẫn
-  // vào truyện và vào ảnh qua `aspect`/`propEn`, chỉ không chen vào danh xưng.
-  if (suffix && baseTitle.length + 1 + suffix.length > TITLE_MAX_LEN) suffix = '';
+  // đã là một mệnh đề dài ("Nữ võ quan vướng lao lý"); ghép thêm hậu tố đầy đủ
+  // là ra chuỗi 43 ký tự không ai nhớ nổi.
+  //
+  // Hạ dần chứ không bỏ ngay: hậu tố đầy đủ → bản NGẮN → mới bỏ. Bỏ thẳng như
+  // bản trước cắt mất 39% biến thể (926 → 566) chỉ vì danh xưng gốc dài, mà
+  // bản ngắn giữ đúng nghĩa với 5–10 ký tự nên phần lớn lấy lại được.
+  //
+  // Rơi tới nhánh bỏ hẳn thì mảng đời vẫn vào truyện và vào ảnh qua
+  // `aspect`/`propEn` — chỉ là không chen vào danh xưng.
+  const fits = (sfx: string) => !sfx || baseTitle.length + 1 + sfx.length <= TITLE_MAX_LEN;
+  if (!fits(suffix)) suffix = than.suffixShort[base.domain] || '';
+  if (!fits(suffix)) suffix = '';
 
   // TƯ CÁCH (chính tinh chủ cung Mệnh) — chỉ vào prompt, không vào danh xưng.
   // Mệnh vô chính diệu thì mượn chính tinh cung xung chiếu, CÙNG cổ pháp 8.45
