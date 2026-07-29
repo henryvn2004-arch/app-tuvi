@@ -1223,6 +1223,166 @@ const DEFAULT_OCCUPATION: Occupation = {
   source: 'Tân Biên 8.45: "Cung Quan Lộc vô Chính diệu… công danh không thể hiển đạt được"',
 };
 
+// ── MẢNG ĐỜI theo CUNG THÂN ─────────────────────────────────────────────
+//
+// VÌ SAO TRỤC NÀY (đo trước khi làm, đừng bỏ khi refactor):
+// Bộ chính tinh ở Quan Lộc và ở Mệnh KHÔNG độc lập — 14 chính tinh được an
+// theo đúng một thuật toán từ vị trí Tử Vi nên cả 12 cung chỉ có 12 thế, mà
+// Mệnh với Quan Lộc lại cách nhau cố định 4 cung. Đo trên 10.080 lá số: mỗi
+// bộ ở Quan Lộc chỉ ứng với TRUNG BÌNH 1,54 bộ ở Mệnh, nên ghép hai cung này
+// chỉ ra 60 tổ hợp chứ không phải 39×39.
+//
+// Cung THÂN thì khác: nó đóng vào 1 trong 6 cung (Mệnh · Phúc Đức · Quan Lộc
+// · Thiên Di · Tài Bạch · Phu Thê) do GIỜ SINH + THÁNG SINH quyết định, độc
+// lập với thế an sao — đo được trải đều đúng 16,7% mỗi cung. Đây mới là trục
+// nhân thật: 60 → 372 tổ hợp (×6).
+//
+// Ý nghĩa mỗi mảng bám đúng lời Tân Biên nói cung đó dùng để xem gì (xem
+// `source`). Cùng một chức phận ở Quan Lộc, Thân đóng chỗ khác nhau thì ra
+// người khác nhau: cùng là tướng, Thân cư Tài Bạch thì coi quân lương, Thân
+// cư Thiên Di thì trấn viễn xứ.
+//
+// `propEn` — ĐẠO CỤ đưa vào prompt ảnh. Đây là điểm khác hẳn các trục từng
+// cân nhắc rồi bỏ (nhóm sát tinh): trục đó chỉ đổi được mấy chữ trong danh
+// xưng còn `attireEn` giữ nguyên nên ẢNH Y HỆT. Mảng Thân đổi được đạo cụ
+// trong tay nhân vật, nên bức tranh khác thật.
+//
+// `suffix` để RỖNG là hợp lệ và có chủ ý (Thân cư Mệnh): cổ pháp coi đó là
+// người dồn cả đời vào đúng một hướng, không rẽ nhánh — thêm hậu tố vào là
+// bịa ra một mảng không có.
+interface ThanAspect {
+  /** Mảng đời — vào `desc` và prompt truyện. */
+  aspect: string;
+  /** Đạo cụ cho prompt ảnh (rỗng = không thêm gì). */
+  propEn: string;
+  source: string;
+  /** Hậu tố danh xưng theo NHÓM NGHỀ. Cố ý không theo tên sao: ghép theo sao
+   * rất dễ ra danh xưng vô nghĩa kiểu "Thầy lang coi kỵ binh". */
+  suffix: Record<Occupation['domain'], string>;
+}
+
+const THAN_ASPECT: Record<string, ThanAspect> = {
+  'Mệnh': {
+    aspect: 'dồn trọn đời vào đúng một hướng, không rẽ sang ngả nào khác',
+    propEn: '',
+    source: 'Thân đồng cung Mệnh — cả đời chỉ một hướng, không phân nhánh sang cung nào khác',
+    suffix: { vo: '', van: '', quyen: '', thuong: '', y: '', nghe: '', tu: '' },
+  },
+  'Quan Lộc': {
+    aspect: 'dốc toàn lực vào chính nghiệp, thăng tiến bằng chính công việc của mình',
+    propEn: 'the seal and documents of their office placed prominently within reach',
+    source: 'Tân Biên, cung Quan Lộc: "Xem cung Quan Lộc để biết rõ công danh, sự nghiệp, cũng như là khả năng chuyên môn"',
+    suffix: {
+      vo: 'ngoài trận', van: 'nơi miếu đường', quyen: 'nắm thực quyền',
+      thuong: 'giữ mối quan', y: 'chốn ngự y', nghe: 'hàng ngự dụng', tu: 'trụ trì',
+    },
+  },
+  'Tài Bạch': {
+    aspect: 'đời gắn với tiền nong và sinh kế — phần việc nào ra của cải thì rơi vào tay người này',
+    propEn: 'an account ledger and a small hand-scale for weighing silver at their side',
+    source: 'Tân Biên, cung Tài Bạch: "Xem cung Tài Bạch để biết rõ sự giàu nghèo, và sinh kế"',
+    suffix: {
+      vo: 'coi quân lương', van: 'coi sổ sách', quyen: 'coi thuế khoá',
+      thuong: 'gây cơ nghiệp', y: 'mở hiệu thuốc', nghe: 'mở xưởng lớn', tu: 'coi hương hoả',
+    },
+  },
+  'Thiên Di': {
+    aspect: 'đời ở ngoài đường nhiều hơn ở nhà — việc lớn đều xảy ra lúc rời khỏi cửa',
+    propEn: 'travelling gear beside them — a road bundle and a broad weathered hat',
+    source: 'Tân Biên, cung Thiên Di: "Xem cung Thiên Di để biết rõ những điều có liên quan đến việc giao thiệp bên ngoài cùng với những sự may rủi có thể xảy đến trong lúc rời khỏi nhà"',
+    suffix: {
+      vo: 'trấn viễn xứ', van: 'đi sứ', quyen: 'trấn phương xa',
+      thuong: 'buôn đường xa', y: 'vân du', nghe: 'nghề lưu động', tu: 'hoá duyên',
+    },
+  },
+  'Phu Thê': {
+    aspect: 'đời buộc chặt vào chuyện gia thất — công việc và hôn nhân không tách rời nhau được',
+    propEn: 'a domestic interior behind them rather than a public hall, quiet and lived-in',
+    source: 'Tân Biên, cung Phu Thê: "Xem cung Thê Thiếp (Phu Quân) để biết rõ những điều có liên quan đến vợ chồng, đến việc lập gia đình và hạnh phúc của cả một đời"',
+    suffix: {
+      vo: 'giữ phủ đệ', van: 'trong nội phủ', quyen: 'chốn hậu đình',
+      thuong: 'cùng bạn đời', y: 'trong nội phủ', nghe: 'nghề gia truyền', tu: 'tu tại gia',
+    },
+  },
+  'Phúc Đức': {
+    aspect: 'đời ngả về phúc thọ và việc họ hàng — lo phần gốc rễ hơn phần danh lợi trước mắt',
+    propEn: 'ritual implements nearby — an incense burner and a offering vessel',
+    source: 'Tân Biên, cung Phúc Đức: "Xem cung Phúc Đức để biết rõ sự thọ yểu, cùng là sự thịnh suy, tụ tán của họ hàng. Ngoài ra, còn được biết rõ về âm phần"',
+    suffix: {
+      vo: 'coi tế cờ', van: 'coi lễ nghi', quyen: 'coi tông miếu',
+      thuong: 'giữ nghiệp tổ', y: 'coi dưỡng sinh', nghe: 'làm đồ tế khí', tu: 'coi tế tự',
+    },
+  },
+};
+
+// ── TƯ CÁCH theo chính tinh chủ cung MỆNH ───────────────────────────────
+//
+// Cùng một ngành, người là chủ soái, người là tham mưu, người là thợ giỏi —
+// đó là phần cung Mệnh nói, và Vương Đình Chi nói thẳng nhất về nó.
+//
+// CỐ Ý KHÔNG đưa vào danh xưng, chỉ vào `desc` + prompt truyện. Danh xưng đã
+// mã hoá CẤP qua bậc (Quan Lộc), nhét thêm tư cách vào là tự mâu thuẫn: bậc
+// cao ra "Đại nguyên soái" mà Mệnh lại nói "hợp làm tham mưu" thì đọc thành
+// hai câu đá nhau. Để riêng thì hai lớp bổ nghĩa cho nhau thay vì tranh chỗ.
+const MENH_ROLE: Record<string, { role: string; source: string }> = {
+  'Thất Sát': {
+    role: 'đứng đầu, tự gánh lấy trách nhiệm chứ không chịu làm kẻ dưới trướng',
+    source: 'Vương Đình Chi, Lục Thập Tinh Hệ: "Quản lý rất mạnh. Có thể độc lập gánh vác một phương. Dù làm ngành nào cũng dễ ở vị trí chủ quản – lãnh đạo"',
+  },
+  'Thiên Cơ': {
+    role: 'bày mưu tính kế cho người khác, mạnh ở chỗ nghĩ chứ không ở chỗ cầm quyền',
+    source: 'Vương Đình Chi, Lục Thập Tinh Hệ: "Không hợp tự kinh doanh. Phù hợp nhất: Phụ tá, Tham mưu, Cố vấn, Người lập kế hoạch"',
+  },
+  'Thiên Tướng': {
+    role: 'làm nên việc nhờ dựa vào người khác, một mình thì không đứng vững',
+    source: 'Vương Đình Chi, Lục Thập Tinh Hệ: "ổn định – bền – có khai sáng lực. Nhưng thiếu độc lập, rất kỵ đơn thương độc mã. Dựa người mà thành"',
+  },
+  'Phá Quân': {
+    role: 'sống bằng tay nghề và sức phá cách, không đi con đường chung của thiên hạ',
+    source: 'Vương Đình Chi, Lục Thập Tinh Hệ: "Không đi đại lộ, không hợp công việc đại trà. Phải có: chuyên môn, kỹ thuật, tay nghề, năng lực xử lý thực tế"',
+  },
+  'Tử Vi': {
+    role: 'ở vị trí trên người khác, được hưởng phúc và được kính nể từ sớm',
+    source: 'Tân Biên 4.2.1, cung Mệnh: Tử Vi miếu vượng — "có trí thông minh, suốt đời được hưởng phúc, tuổi thọ cũng gia tăng"',
+  },
+  'Liêm Trinh': {
+    role: 'cứng cỏi, thẳng tính tới mức va chạm, làm việc bằng nguyên tắc chứ không bằng mềm mỏng',
+    source: 'Tân Biên 4.2.2, cung Mệnh: Liêm miếu vượng — "người liêm khiết thẳng thắn, can đảm, dũng mãnh"',
+  },
+  'Thiên Đồng': {
+    role: 'ôn hoà, dễ chịu, nhưng thiếu quyết đoán nên hay để việc lớn tuột khỏi tay',
+    source: 'Tân Biên 4.2.3, cung Mệnh: Đồng miếu vượng — "khoan hòa, nhân hậu, từ thiện, nhưng không quả quyết, không bền chí"',
+  },
+  'Vũ Khúc': {
+    role: 'quyết đoán, làm là làm tới, hợp việc cầm tiền cầm quân hơn việc bàn suông',
+    source: 'Vương Đình Chi, Lục Thập Tinh Hệ: "tổ hợp rất mạnh về hành động – cải biến – chuyên môn, nhưng không phải cách quý hiển truyền thống"',
+  },
+  'Thái Dương': {
+    role: 'đứng chỗ sáng, được người ta trông vào, uy nghi mà cũng dễ bị ghen ghét',
+    source: 'Tân Biên 4.2.5, cung Mệnh: Nhật miếu vượng — "có vẻ uy nghi, dáng điệu đường hoàng, bệ vệ, rất thông minh, tính thẳng thắn"',
+  },
+  'Thiên Phủ': {
+    role: 'giữ của, giữ nền nếp, xoay xở được những việc rối mà người khác bó tay',
+    source: 'Tân Biên 4.2.7, cung Mệnh: "khoan hồng nhân hậu, biết suy tính và có nhiều mưu cơ để giải quyết những công việc khó khăn"',
+  },
+  'Thái Âm': {
+    role: 'thiên về văn chương mỹ thuật, làm việc bằng sự tinh tế chứ không bằng sức mạnh',
+    source: 'Tân Biên 4.2.8, cung Mệnh: Nguyệt miếu vượng — "rất thông minh, tính khoan hòa, nhân hậu, từ thiện, ưa thích văn chương, mỹ thuật"',
+  },
+  'Tham Lang': {
+    role: 'ham hoạt động, hiếu thắng, xoay được nhiều nghề nhưng khó ngồi yên một chỗ',
+    source: 'Tân Biên 4.2.9, cung Mệnh: Tham miếu vượng — "tính trung hậu, nhưng hiếu thắng và tự đắc, ưa hoạt động"',
+  },
+  'Cự Môn': {
+    role: 'sống bằng lời nói và lý lẽ, thắng người bằng miệng lưỡi nhưng cũng chuốc thị phi vì nó',
+    source: 'Tân Biên 4.2.10, cung Mệnh: Cự miếu vượng — "thông minh, nhân hậu, vui vẻ, có mưu cơ, có trí xét đoán sáng suốt, ăn nói đanh thép"',
+  },
+  'Thiên Lương': {
+    role: 'đứng ra che chở cho người khác, được trọng vì đức chứ không vì thế lực',
+    source: 'Tân Biên 4.2.12, cung Mệnh: Lương miếu vượng — "rất thông minh, lại có tính nhân hậu, và từ thiện"',
+  },
+};
+
 // Bối cảnh nền cho ảnh, theo nhóm nghề.
 const DOMAIN_BACKDROP: Record<Occupation['domain'], string> = {
   vo: 'a windswept frontier fortress rampart at dawn, distant banners and mountains softly blurred behind',
@@ -1461,6 +1621,10 @@ function scoreQuanTier(ls: Laso, quan: Rec | undefined, lead: StarObj | null): T
 // 20/55/25 đã chốt với Henry. Cặp cũ (3 / −2) cho 34% tầng cao — tức một phần
 // ba người dùng đều làm quan lớn, vẫn còn hiện tượng "toàn quan với tướng".
 // Để riêng thành hằng số cho dễ chỉnh lại khi bảng nghề đổi.
+/** Trần độ dài danh xưng sau khi ghép hậu tố mảng (xem computeOccupation).
+ * 30 ký tự ≈ 6 chữ tiếng Việt — vẫn đọc một hơi và nhớ được. */
+const TITLE_MAX_LEN = 30;
+
 const TIER_CUTOFF_CAO = 4;
 const TIER_CUTOFF_THAP = -1;
 
@@ -1485,9 +1649,17 @@ export interface OccupationResult extends Occupation {
   /** Sắc thái thêm từ phụ tinh + tứ hóa tại Quan Lộc. */
   notes: string[];
   backdropEn: string;
+  /** Đạo cụ cho ảnh, suy từ MẢNG (cung Thân). Rỗng khi Thân cư Mệnh. */
+  propEn: string;
+  /** Mảng đời (cung Thân) — vào prompt truyện. */
+  aspect: string;
+  aspectSource: string;
+  /** Tư cách (chính tinh chủ cung Mệnh) — vào prompt truyện, KHÔNG vào danh xưng. */
+  role: string;
+  roleSource: string;
 }
 
-function computeOccupation(ls: Laso, gender: 'nam' | 'nu'): OccupationResult {
+function computeOccupation(ls: Laso, gender: 'nam' | 'nu', thanCungName: string): OccupationResult {
   const palaces = (ls.palaces as Rec[]) || [];
   const quan = palaces.find((p) => p.cungName === 'Quan Lộc') as Rec | undefined;
   // Hành của mệnh lấy từ cục (vd "Kim tứ cục" → Kim) — cùng cách portrait.ts dùng.
@@ -1535,9 +1707,30 @@ function computeOccupation(ls: Laso, gender: 'nam' | 'nu'): OccupationResult {
     if (s.hoa && HOA_NOTES[s.hoa]) notes.push(`${s.ten} hóa ${s.hoa} → ${HOA_NOTES[s.hoa]}`);
   }
 
+  // MẢNG (cung Thân) → hậu tố danh xưng + đạo cụ cho ảnh. Thân cư Mệnh thì
+  // hậu tố rỗng, danh xưng giữ nguyên bản gốc — xem chú thích ở THAN_ASPECT.
+  const than = THAN_ASPECT[thanCungName] || THAN_ASPECT['Mệnh'];
+  const baseTitle = gender === 'nu' ? base.titleNu : base.titleNam;
+  let suffix = than.suffix[base.domain] || '';
+
+  // TRẦN ĐỘ DÀI — danh xưng là thứ người ta đọc xong phải nhớ được để kể lại
+  // (luật đã chốt: title ngắn, râu ria dồn vào `desc`). Vài danh xưng gốc vốn
+  // đã là một mệnh đề dài ("Nữ võ quan vướng lao lý"); ghép thêm hậu tố vào là
+  // ra chuỗi 43 ký tự không ai nhớ nổi. Quá trần thì BỎ hậu tố — mảng đời vẫn
+  // vào truyện và vào ảnh qua `aspect`/`propEn`, chỉ không chen vào danh xưng.
+  if (suffix && baseTitle.length + 1 + suffix.length > TITLE_MAX_LEN) suffix = '';
+
+  // TƯ CÁCH (chính tinh chủ cung Mệnh) — chỉ vào prompt, không vào danh xưng.
+  // Mệnh vô chính diệu thì mượn chính tinh cung xung chiếu, CÙNG cổ pháp 8.45
+  // đang dùng cho Quan Lộc — không mượn thì 15,4% lá số mất hẳn lớp tư cách.
+  const menhP = palaces.find((p) => p.cungName === 'Mệnh') as Rec | undefined;
+  const menhLead =
+    pickQuanMajor(menhP, menhHanh) || pickQuanMajor(menhP?.xungChieuCung as Rec | undefined, menhHanh);
+  const menhRole = menhLead ? MENH_ROLE[menhLead.ten] : undefined;
+
   return {
     ...base,
-    title: gender === 'nu' ? base.titleNu : base.titleNam,
+    title: suffix ? `${baseTitle} ${suffix}` : baseTitle,
     // Cặp thì nêu CẢ HAI sao — chức phận suy từ cả cặp, ghi mỗi sao chủ là nói
     // sai căn cứ. Bỏ độ sáng ở nhánh cặp vì đó là độ sáng của riêng sao chủ,
     // gắn vào tên cặp sẽ đọc thành độ sáng của cả hai.
@@ -1550,6 +1743,11 @@ function computeOccupation(ls: Laso, gender: 'nam' | 'nu'): OccupationResult {
     borrowed,
     notes,
     backdropEn: DOMAIN_BACKDROP[base.domain],
+    propEn: than.propEn,
+    aspect: than.aspect,
+    aspectSource: than.source,
+    role: menhRole?.role || '',
+    roleSource: menhRole?.source || '',
   };
 }
 
@@ -1807,7 +2005,7 @@ export function computePastLife(ls: Laso, gender: 'nam' | 'nu', era?: Era): Past
     gender,
     era,
     characterName: pickCharacterName(ls, gender, era),
-    occupation: computeOccupation(ls, gender),
+    occupation: computeOccupation(ls, gender, thanCungName),
     arc: computeLifeArc(ls),
     threads: computeLifeThreads(ls),
     thanCungName,
@@ -1880,6 +2078,23 @@ export function formatCharacterForLLM(profile: PastLifeProfile): string {
       `.\n${o.desc}`,
   );
   if (o.notes.length) lines.push('Sắc thái nghề nghiệp (từ phụ tinh/tứ hóa tại Quan Lộc):\n- ' + o.notes.join('\n- '));
+
+  // Hai lớp bổ nghĩa cho chức phận. Cố ý tách khỏi khối CHỨC PHẬN ở trên:
+  // chức phận là CÁI GÌ (ngành + cấp, từ Quan Lộc), còn hai lớp này là
+  // NGHIÊNG VỀ ĐÂU (mảng, từ cung Thân) và ĐỨNG Ở VAI NÀO (tư cách, từ cung
+  // Mệnh). Trộn cả ba vào một dòng thì LLM hay bỏ mất hai cái sau.
+  if (o.role) {
+    lines.push(
+      `TƯ CÁCH (từ chính tinh cung Mệnh — người này đứng ở vai nào trong nghề của mình): ${o.role}.\n` +
+        `  Căn cứ: ${o.roleSource}`,
+    );
+  }
+  lines.push(
+    `MẢNG ĐỜI (từ cung Thân đóng tại ${profile.thanCungName}): ${o.aspect}.\n` +
+      `  Căn cứ: ${o.aspectSource}\n` +
+      '  Đây là phần đời mà nhân vật nghiêng về — phải hiện ra trong truyện bằng CẢNH và VIỆC cụ thể, ' +
+      'không phải nhắc suông một câu.',
+  );
 
   const block = (label: string, r: PhuTheReadout, note: string) => {
     const parts: string[] = [];

@@ -416,6 +416,67 @@ thấy GA4, dù prompt có bảo chạy CLI.
 
 ---
 
+## 🧭 Ba lớp danh xưng: Quan Lộc × Mệnh × Thân — 194 → 566 (2026-07-29, PR mới)
+
+Henry: *"vẫn dựa trên cung Quan làm core mà giờ mày tổ hợp nó với cung Mệnh,
+cung an Thân… tao nghĩ nó sẽ lên cả ngàn danh xưng."* Đo trước khi code
+(10.080 lá số) — **đúng một nửa**:
+
+| Trục | Tổ hợp | 2 người trùng |
+|---|---|---|
+| Quan Lộc (đang có) | 39 | 4,90% |
+| Quan × **Mệnh** | **60** | 2,09% |
+| Quan × Mệnh × **Thân** | 372 | 0,33% |
+| + bậc + giới | **1.316** | 0,11% |
+
+- **🔴 Cung MỆNH gần như không nhân được gì.** Mỗi bộ chính tinh ở Quan Lộc
+  chỉ ứng với **TRUNG BÌNH 1,54 bộ ở Mệnh** (min 1, max 10) → Quan × Mệnh chỉ
+  ra 60 chứ không phải 39×39. Lý do cấu trúc: 14 chính tinh an theo một thuật
+  toán từ vị trí Tử Vi nên cả 12 cung chỉ có **12 thế**, mà Mệnh với Quan Lộc
+  **cách nhau cố định 4 cung** → biết cái này suy ra cái kia. Hai cung KHÔNG
+  độc lập. Đừng thiết kế như thể chúng độc lập.
+- **✅ Cung THÂN mới là trục nhân thật (×6).** Thân đóng vào 1 trong 6 cung
+  (Mệnh · Phúc Đức · Quan Lộc · Thiên Di · Tài Bạch · Phu Thê) do **giờ sinh +
+  tháng sinh** quyết định — độc lập với thế an sao, đo được trải đều đúng
+  16,7%/cung.
+- **`THAN_ASPECT`** (6 cung × 7 nhóm nghề = 42 hậu tố + `propEn` + `aspect`).
+  Hậu tố theo **NHÓM NGHỀ chứ không theo tên sao** — ghép theo sao rất dễ ra
+  "Thầy lang coi kỵ binh". Thân cư Mệnh → hậu tố **RỖNG có chủ ý** (cổ pháp:
+  dồn cả đời một hướng, không rẽ nhánh).
+- **`propEn` = ĐẠO CỤ vào prompt ảnh** — đây là chỗ khác hẳn trục sát tinh đã
+  cân nhắc rồi bỏ: trục đó chỉ đổi chữ, `attireEn` giữ nguyên nên **ảnh y hệt**.
+  Mảng Thân đổi được vật trong tay nhân vật (sổ sách + cân, hành trang, đồ tế
+  khí…) nên bức tranh khác thật. Phủ 83,3% (16,7% còn lại là Thân cư Mệnh).
+- **`MENH_ROLE`** (14 sao) — tư cách: thống lĩnh / tham mưu / dựa người / tay
+  nghề. **CỐ Ý KHÔNG vào danh xưng**, chỉ vào `desc` + prompt truyện: danh xưng
+  đã mã hoá CẤP qua bậc, nhét tư cách vào là tự mâu thuẫn (bậc cao ra "Đại
+  nguyên soái" mà Mệnh lại nói "hợp làm tham mưu"). Mệnh vô chính diệu thì
+  **mượn xung chiếu** (cổ pháp 8.45, cùng cách Quan Lộc) — không mượn thì 15,4%
+  lá số mất hẳn lớp này (đã đo, đã vá → phủ 100%).
+- **`TITLE_MAX_LEN = 30`** — bản đầu KHÔNG có trần: ra 926 danh xưng nhưng
+  trung bình **28,7 ký tự**, dài nhất **43** (*"Nữ võ quan vướng lao lý trấn
+  nhậm phương xa"*), 60% vượt 28 — phá thẳng luật "title ngắn để nhớ mà kể
+  lại" Henry đã chốt. Thêm trần → **566 danh xưng**, trung bình 21,7, dài nhất
+  đúng 30. **Đánh đổi có ý thức: mất 39% biến thể để giữ danh xưng đọc được.**
+  Danh xưng gốc vốn đã dài thì bỏ hậu tố — mảng đời vẫn vào truyện và vào ảnh
+  qua `aspect`/`propEn`, chỉ không chen vào danh xưng.
+
+**Kết quả:** 194 → **566 danh xưng** · trùng 0,85% → **0,47%** (1/210) · kèm
+nền văn minh **2.167 tổ hợp**, trùng **0,11%** (1/930) · nhóm 50 người có
+người trùng 34% → **21%**.
+
+- **🔑 Nguồn: RAG chứ không phải file trong repo.** `chunks_all.json` chỉ có 5
+  chương Tân Biên → tao đã kết luận nhầm là "không có nguồn cho Mệnh/Thân".
+  Thật ra bảng **`tuvi_docs`** trên Supabase có **trọn 12 cung Tân Biên**
+  (riêng CUNG MỆNH 192 chunk / 166K ký tự) **VÀ 498 chunk Vương Đình Chi**
+  (`luc-thap-tinh-he`, mỗi chunk gắn sẵn `[NGUỒN: Trung Châu Phái Lục Thập
+  Tinh Hệ (Vương Đình Chi)]`). **Lần sau tra RAG trước khi nói là thiếu nguồn.**
+- **CÒN LẠI:** muốn lấy lại 39% biến thể đã bỏ thì viết thêm bản hậu tố NGẮN
+  (≤8 ký tự) cho các danh xưng gốc dài — 42 chuỗi nữa, đưa 566 → ~900 mà vẫn
+  giữ trần 30. Chưa làm.
+
+---
+
 ## 🎭 Chức phận theo CẶP chính tinh — 82 → 194 danh xưng (2026-07-29, cùng PR cache)
 
 Henry: *"Chỉ có 84 nhân vật thôi hả? Ít quá, phải tăng lên… tao sợ trùng nhau
