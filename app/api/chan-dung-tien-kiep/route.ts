@@ -32,6 +32,19 @@ import {
 import { generatePortraitImage } from '@/lib/image/openai-image';
 import type { BirthParams } from '@/lib/contract/v1';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
+import {
+  lookupPortraitCache,
+  putCachedPortrait,
+  touchCache,
+  insertHistoryRow,
+  lasoKey,
+  getCachedPortrait,
+  userOwnsLaso,
+  birthFromQuery,
+  type PortraitPhase,
+} from '@/lib/portraits/cache';
+
+const TOOL_ID = 'chan-dung-tien-kiep';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -148,7 +161,7 @@ const STORY_SCHEMA = {
   propertyOrdering: ['biDanh', 'moTaNhanVat', 'acts', 'ketLuan'],
 };
 
-async function handleStory(birth: BirthParams, eraId?: string) {
+async function handleStory(birth: BirthParams, userId: string, key: string, eraId?: string) {
   const built = buildProfile(birth, eraId);
   if (!built.ok) return err(built.error, 400);
   const { profile } = built;
@@ -244,7 +257,7 @@ async function handleStory(birth: BirthParams, eraId?: string) {
     text: String(parsed.acts?.[i]?.text || ''),
   }));
 
-  return ok({
+  const payload = {
     success: true,
     // Danh xưng chính = chức phận do BẢNG TRA chốt (Tể tướng / Thái y / Quan
     // án…) — ngắn, cụ thể, người dùng kể lại được. biDanh chỉ là vế phụ hiển
@@ -272,11 +285,15 @@ async function handleStory(birth: BirthParams, eraId?: string) {
     thanCungName: profile.thanCungName,
     portraitAge: profile.arc.portraitAge,
     era: { id: profile.era.id, label: profile.era.label, ageLabel: profile.era.ageLabel },
-  });
+  };
+  // Pha `story` KHÔNG có dòng lịch sử riêng (`past_life_portraits` chỉ ghi ở
+  // pha `image`) → `row: null`.
+  void putCachedPortrait(TOOL_ID, 'story', key, { payload, row: null }, userId);
+  return ok(payload);
 }
 
 // ── Pha 2: ảnh ──────────────────────────────────────────────────────────
-async function handleImage(userId: string, birth: BirthParams, eraId?: string) {
+async function handleImage(userId: string, birth: BirthParams, key: string, eraId?: string) {
   const built = buildProfile(birth, eraId);
   if (!built.ok) return err(built.error, 400);
   const { ls, profile } = built;
@@ -339,38 +356,33 @@ async function handleImage(userId: string, birth: BirthParams, eraId?: string) {
   }
   const imageUrl = `${SUPABASE_URL}/storage/v1/object/public/portraits/${path}`;
 
+  // Bộ cột lịch sử — dựng MỘT lần rồi dùng cho cả dòng của người sinh gốc lẫn
+  // dòng của những người trúng cache về sau (`user_id` gắn lúc ghi).
+  const historyRow = {
+    gender: profile.gender,
+    occupation_title: profile.occupation.title,
+    occupation_star: profile.occupation.star,
+    portrait_age: profile.arc.portraitAge,
+    era: profile.era.id,
+    image_url: imageUrl,
+  };
   // Lịch sử — best-effort, không chặn response nếu lỗi ghi DB.
-  fetch(`${SUPABASE_URL}/rest/v1/past_life_portraits`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${SUPABASE_KEY}`,
-      apikey: SUPABASE_KEY,
-      'Content-Type': 'application/json',
-      Prefer: 'return=minimal',
-    },
-    body: JSON.stringify({
-      user_id: userId,
-      gender: profile.gender,
-      occupation_title: profile.occupation.title,
-      occupation_star: profile.occupation.star,
-      portrait_age: profile.arc.portraitAge,
-      era: profile.era.id,
-      image_url: imageUrl,
-    }),
-  }).catch(() => {});
+  insertHistoryRow(TOOL_ID, { ...historyRow, user_id: userId, laso_key: key });
 
   // Vẽ xong → tặng lượt rail miễn phí (V2.2). Người mới tiêu hết quà đăng ký
   // cho đúng lượt vẽ này, mà hỏi nhân vật qua rail mới là chỗ tool bán được —
   // hết sạch Lượng ngay lúc vừa xem xong ảnh là chặn đúng khúc quan trọng nhất.
   void railFreeTurnsPerGen().then((n) => railFreeGrant(userId, n)).catch(() => {});
 
-  return ok({
+  const payload = {
     success: true,
     imageUrl,
     occupationTitle: profile.occupation.title,
     portraitAge: profile.arc.portraitAge,
     era: { id: profile.era.id, label: profile.era.label, ageLabel: profile.era.ageLabel },
-  });
+  };
+  void putCachedPortrait(TOOL_ID, 'image', key, { payload, row: historyRow }, userId);
+  return ok(payload);
 }
 
 // ── History ─────────────────────────────────────────────────────────────
@@ -388,6 +400,25 @@ async function handleHistory(request: NextRequest) {
   return ok({ success: true, items: await r.json() });
 }
 
+// ── Cache status ────────────────────────────────────────────────────────
+// Thuần ĐỌC — xem chú thích cùng loại ở app/api/chan-dung-vo-chong/route.ts.
+// Khác một chỗ: tool này 2 pha, và client chỉ được phép đi đường miễn phí khi
+// CẢ HAI pha đều có sẵn trong cache. Thiếu một pha thì pha đó vẫn phải gen
+// thật (tốn tiền model) nên vẫn phải trả tiền như thường.
+async function handleCacheStatus(request: NextRequest, sp: URLSearchParams) {
+  const auth = await authUser(request);
+  if ('error' in auth) return err(auth.error, auth.status);
+
+  const key = lasoKey(birthFromQuery(sp), sp.get('era') || undefined);
+  const [story, image, owns] = await Promise.all([
+    getCachedPortrait(TOOL_ID, 'story', key),
+    getCachedPortrait(TOOL_ID, 'image', key),
+    userOwnsLaso(TOOL_ID, auth.user.id, key),
+  ]);
+  const cached = Boolean(story) && Boolean(image);
+  return ok({ success: true, cached, free: cached && owns });
+}
+
 // ── Routes ──────────────────────────────────────────────────────────────
 export async function OPTIONS() {
   return options();
@@ -401,25 +432,46 @@ async function runPost(request: NextRequest) {
   const birth = body.birth as BirthParams | undefined;
   if (!birth) return err('Thiếu thông tin ngày sinh.', 400);
 
-  // Chốt chặn thanh toán PHÍA SERVER (S0 track COO). Trước đây route chỉ kiểm
-  // "user hợp lệ" rồi chạy luôn, còn việc trừ Lượng nằm hoàn toàn ở client —
-  // nên gọi thẳng endpoint này là sinh ảnh + truyện miễn phí không giới hạn.
-  // Dùng cùng quy ước slug với paywall nên hai pha story/image chạy song song
-  // của CÙNG một lượt mua vẫn qua được.
-  const denied = await toolPaymentDenied(
-    'chan-dung-tien-kiep',
-    auth.user.id,
-    String(body.slug || ''),
-  );
-  if (denied) return err(denied, 402);
-
-  const phase = String(body.phase || 'story');
+  const phase = String(body.phase || 'story') as PortraitPhase;
   const eraId = body.era ? String(body.era) : undefined;
   if (phase !== 'story' && phase !== 'image') return err('phase không hợp lệ (story|image).', 400);
 
-  const res = phase === 'story' ? await handleStory(birth, eraId) : await handleImage(auth.user.id, birth, eraId);
+  // ── Cache theo lá số (xem lib/portraits/cache.ts) ─────────────────────
+  // Tra RIÊNG từng pha: hai pha chạy song song, lượt gốc có thể hỏng giữa
+  // chừng và chỉ một pha kịp vào cache. Coi cả hai là một khối thì nửa còn
+  // thiếu sẽ được phát miễn phí.
+  const look = await lookupPortraitCache(TOOL_ID, phase, auth.user.id, birth, eraId);
+
+  if (!look.free) {
+    // Chốt chặn thanh toán PHÍA SERVER (S0 track COO). Trước đây route chỉ kiểm
+    // "user hợp lệ" rồi chạy luôn, còn việc trừ Lượng nằm hoàn toàn ở client —
+    // nên gọi thẳng endpoint này là sinh ảnh + truyện miễn phí không giới hạn.
+    // Dùng cùng quy ước slug với paywall nên hai pha story/image chạy song song
+    // của CÙNG một lượt mua vẫn qua được.
+    const denied = await toolPaymentDenied(TOOL_ID, auth.user.id, String(body.slug || ''));
+    if (denied) return err(denied, 402);
+  }
+
+  if (look.cached) {
+    touchCache(TOOL_ID, phase, look.key);
+    // Dòng lịch sử chỉ có ở pha `image` (đúng như luồng gen thật) — nên chỉ pha
+    // đó mới ghi dòng cho người mới, và cũng chỉ pha đó tặng lượt rail, để một
+    // lượt mua không tặng hai lần.
+    if (phase === 'image' && !look.owns && look.cached.row) {
+      insertHistoryRow(TOOL_ID, { ...look.cached.row, user_id: auth.user.id, laso_key: look.key });
+      // Tặng lượt rail CHỈ cho lượt có trả tiền — xem chú thích cùng loại ở
+      // app/api/chan-dung-vo-chong/route.ts.
+      void railFreeTurnsPerGen().then((n) => railFreeGrant(auth.user.id, n)).catch(() => {});
+    }
+    return ok({ ...look.cached.payload, cached: true, freeRerun: look.free });
+  }
+
+  const res =
+    phase === 'story'
+      ? await handleStory(birth, auth.user.id, look.key, eraId)
+      : await handleImage(auth.user.id, birth, look.key, eraId);
   return refundIfSystemFailure(res, {
-    toolId: 'chan-dung-tien-kiep',
+    toolId: TOOL_ID,
     userId: auth.user.id,
     slug: String(body.slug || ''),
   });
@@ -429,6 +481,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const action = searchParams.get('action') || 'history';
   if (action === 'history') return handleHistory(request);
+  if (action === 'cache-status') return handleCacheStatus(request, searchParams);
   return err('Invalid action', 400);
 }
 

@@ -277,6 +277,52 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     });
   }
 
+  // ── Lượt XEM LẠI miễn phí (2 tool chân dung cache theo lá số) ─────────
+  //
+  // Hai tool chân dung lưu kết quả theo LÁ SỐ: cùng ngày/tháng/năm + giờ sinh
+  // + giới tính thì kết quả y hệt, nên lượt sau chỉ là đọc lại bản đã có,
+  // KHÔNG tốn tiền model. Ai đã từng trả cho đúng lá số đó thì xem lại miễn
+  // phí — hỏi server trước để khỏi hiện hộp thoại đòi tiền cho một lượt vốn
+  // không mất gì.
+  //
+  // FAIL-CLOSED: mạng lỗi / chưa đăng nhập / server trả lạ → coi như PHẢI trả
+  // tiền và đi đường paywall như cũ. Đoán nhầm sang "miễn phí" thì server cũng
+  // chặn lại bằng 402, người dùng lãnh một lỗi khó hiểu — thà hỏi tiền rồi
+  // server tự bỏ qua còn hơn.
+  async function _isFreeRerun(endpoint, birth) {
+    try {
+      const token = window.Auth?.getSession()?.access_token || '';
+      if (!token || !birth) return false;
+      const q =
+        'd=' + (birth.day || 0) + '&m=' + (birth.month || 0) + '&y=' + (birth.year || 0) +
+        '&h=' + (birth.hourBranch == null ? -1 : birth.hourBranch) +
+        '&g=' + (birth.gender === 'nu' ? 'nu' : 'nam') +
+        '&lunar=' + (birth.isLunar ? '1' : '0');
+      const r = await fetch(endpoint + '?action=cache-status&' + q, {
+        headers: { Authorization: 'Bearer ' + token },
+      });
+      if (!r.ok) return false;
+      const d = await r.json();
+      return !!(d && d.free);
+    } catch (e) { return false; }
+  }
+
+  /**
+   * Như `requireCredits`, nhưng bỏ qua hộp thoại trừ Lượng khi lượt này là
+   * XEM LẠI một lá số người dùng đã trả tiền từ trước.
+   * `callback(freeRerun)` — cờ để trang biết mình đang đi đường miễn phí, và
+   * quay lại đường trả phí nếu server vẫn đòi (402).
+   */
+  async function requireCreditsCached(endpoint, birth, slug, callback) {
+    if (await _isFreeRerun(endpoint, birth)) {
+      _css();
+      _banner('✓ Bạn đã tạo kết quả cho lá số này — mở lại, không trừ Lượng');
+      await callback(true);
+      return;
+    }
+    return requireCredits(slug, function () { return callback(false); });
+  }
+
   // Dùng lại đúng khung modal của _insufficient (tpw-*) — cùng cảm giác, không
   // đẻ thêm bộ class/CSS riêng cho một thông báo.
   function _capReached(msg) {
@@ -363,7 +409,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     _price().catch(() => {}); // prefetch
   }
 
-  return { init, requireCredits, generateToolSlug, ensureCredits, deductSilent, getBalance, _banner, _close };
+  return { init, requireCredits, requireCreditsCached, generateToolSlug, ensureCredits, deductSilent, getBalance, _banner, _close };
 })();
 
 // Export to global window so cross-script checks (e.g. tu-binh.html line 1537) work

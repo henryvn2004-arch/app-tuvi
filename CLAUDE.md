@@ -416,6 +416,130 @@ thấy GA4, dù prompt có bảo chạy CLI.
 
 ---
 
+## 🎭 Chức phận theo CẶP chính tinh — 82 → 194 danh xưng (2026-07-29, cùng PR cache)
+
+Henry: *"Chỉ có 84 nhân vật thôi hả? Ít quá, phải tăng lên… tao sợ trùng nhau
+sẽ nhiều."* 84 đúng = **14 chính tinh × 3 bậc × 2 giới**. Đo trước khi sửa
+(10.080 lá số thật, lưới 5 năm × 12 tháng × 7 ngày × 12 giờ × 2 giới):
+
+| Trục | Trước | Sau |
+|---|---|---|
+| Danh xưng phân biệt | 82 | **194** |
+| 2 người bất kỳ trùng danh xưng | 1,94% (1/52) | **0,85% (1/118)** |
+| Trùng cả danh xưng + nền văn minh | 0,40% | **0,18% (1/550)** |
+| Nhóm 50 người, có người trùng danh xưng | 62% | **34%** |
+| Danh xưng phổ biến nhất chiếm | 3,9% | **1,9%** |
+
+- **Trục dùng: BỘ chính tinh tại Quan Lộc, không phải một sao chủ.** Cung Quan
+  Lộc rất thường có HAI chính tinh — đo được **39 bộ** phân biệt (24 cặp + 14
+  đơn thủ + VCD), trong khi `pickQuanMajor` chọn 1 sao rồi **vứt sao kia đi**.
+  Mà CHÍNH chương Quan Lộc của Tân Biên luận theo cặp (**64 câu "X đồng cung"**):
+  Vũ Khúc đơn thủ là võ nghiệp, nhưng "Vũ + Phủ" là *"chức vụ thuộc về tài chánh
+  hay kinh tế"*, "Vũ + Tham" là *"giàu có và thành công trong việc kinh doanh"*.
+  Tức bảng cũ đang bỏ đúng phần chi tiết nhất của cổ thư.
+- **`PAIR_OCCUPATION_TABLE`** (`past-life.ts`) — 24 cặp × 3 bậc = **72 entry**,
+  mỗi entry `titleNam`/`titleNu`/`domain`/`desc`/`attireEn`/`source`. **Mọi
+  `source` trích NGUYÊN VĂN** từ `chunks_all.json` (`[TÂN BIÊN][CUNG QUAN LỘC]`,
+  26 chunk) — kiểm corpus TRƯỚC khi viết chính vì không được bịa trích dẫn cổ thư.
+  Dùng chung 1 trích dẫn cho cả 3 bậc: **sách luận CẶP chứ không luận BẬC**, chia
+  bậc là lớp chấm điểm của engine.
+- **Khoá `pairKey`** sắp theo `STAR_ORDER` chứ không theo thứ tự gặp trong lá số
+  — cùng một cặp xuất hiện đảo thứ tự tuỳ lá số, không sắp thì tra trượt.
+- **Khoá lấy từ CUNG NGUỒN THẬT**, không phải Quan Lộc cứng: Quan Lộc vô chính
+  diệu thì mượn cung xung chiếu (cổ pháp 8.45) — lấy cặp ở cung trống là tra
+  nhầm. Đo được **50,2% lá số** đi nhánh cặp.
+- **`star` nhánh cặp nêu CẢ HAI sao** ("Vũ Khúc + Thiên Phủ đồng cung") và **bỏ
+  `brightness`** — độ sáng đó là của riêng sao chủ, gắn vào tên cặp thì đọc
+  thành độ sáng của cả hai.
+- **KHÔNG đụng `scoreQuanTier`** → phân bố bậc giữ nguyên **cao 22,0% / giữa
+  50,6% / thấp 27,4%**, ngưỡng đã hiệu chỉnh trước đây không phải chỉnh lại.
+- **Chi phí: 0 đồng.** Tra bảng thuần, deterministic — không thêm lượt LLM hay
+  ảnh nào. (Đo thật trên prod: ảnh 1.658đ/lượt · chữ ~35đ/lượt LLM ⇒ **ảnh chiếm
+  ~96% chi phí**, bảng tra không nằm trong đó.)
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi · `prettier --check .` sạch · engine
+  test 181 pass · **đo lại nguyên lưới 10.080 lá số**: 194 danh xưng, `capThieu
+  TrongBang` **rỗng** (không cặp nào rơi vào nhánh dự phòng), phân bố bậc không
+  đổi · **soi tay 24 ca** đủ mọi cặp/bậc/giới: sao ở cung nguồn khớp khoá tra,
+  nhánh mượn xung chiếu lấy đúng cung đối, danh xưng nam/nữ và trích dẫn đều khớp.
+- **CÒN LẠI (chưa làm, đo sẵn số để quyết sau):** trục **5 bậc** thay 3 (ngưỡng
+  phân vị đo được `[-2, 1, 2, 4]`, chia cân, +28 entry) và trục **nhóm sát tinh
+  tại Quan Lộc** (sạch 60,6% · không-kiếp 14,6% · hỏa-linh 13,7% · kình-đà 11,2%).
+  Cảnh báo đã đo: làm trục sát tinh dạng *hậu tố* ("Tri phủ vùng biên") thì
+  `attireEn` không đổi → **ảnh vẫn y hệt**, chỉ khác mấy chữ; tăng số danh xưng
+  mà cảm giác không đổi.
+
+---
+
+## 💾 Cache kết quả 2 tool chân dung theo lá số (2026-07-29, PR mới)
+
+Henry: *"2 tool chân dung vợ chồng và chân dung tiền kiếp, nếu cùng lá số input
+thì xong cache lại nhỉ? Sau này user input cùng lá số thì load ra thôi."* Đúng —
+nhưng audit trước khi code lộ ra lợi ích KHÔNG nằm ở chỗ tưởng, nên ghi lại đây:
+- **Cache liên-user gần như vô dụng ở quy mô hiện tại.** Không gian input ≈ 30
+  năm × 365 ngày × 12 giờ × 2 giới ≈ **260K tổ hợp** → 1.000 user thật mới ra ~2
+  cặp trùng lá số, 10.000 user mới ~190 cặp. Đừng kỳ vọng tiết kiệm từ đường này
+  cho tới khi rất đông.
+- **Chỗ ăn tiền THẬT bây giờ là cùng MỘT user chạy lại cùng lá số** (prod lúc
+  làm: 32 bản vợ chồng + 16 bản tiền kiếp, **1 user duy nhất** — toàn bản test).
+- **Kết quả 2 tool KHÔNG phụ thuộc năm xem** → cache không cũ đi theo thời gian
+  (tuổi vẽ neo vào đại vận; mốc tuổi cưới là 22–31 giả định, không phải tuổi hiện
+  tại). Khoá không cần xoay theo năm.
+
+**3 điều Henry chốt** (hỏi trước khi code vì đều là quyết định sản phẩm/tiền):
+cache **chung toàn hệ thống** · **ai đã trả cho lá số đó thì xem lại free, người
+mới vẫn trả đủ** · **một lá số một kết quả, KHÔNG có nút "vẽ lại"**.
+
+- **Migration `_patches/migration-portrait-cache.sql`** (✅ ĐÃ CHẠY prod qua
+  Supabase MCP — verify 8 cột · RLS bật · **0 policy** = chỉ service key chạm
+  được · `laso_key` có trên cả 2 bảng lịch sử): bảng `portrait_cache`
+  (PK `tool_id+phase+laso_key`) + cột `laso_key` trên `spouse_portraits`/
+  `past_life_portraits` + RPC `portrait_cache_touch` (đếm hit, atomic).
+  **Bảng RIÊNG chứ không nhét vào 2 bảng lịch sử:** bảng lịch sử trả lời "ai đã
+  sinh cái gì" (nhiều dòng/người, RLS theo chủ), cache trả lời "lá số này ra kết
+  quả gì" (1 dòng, không thuộc về ai); tiền kiếp còn chạy 2 pha SONG SONG nên ghi
+  chung một dòng là hai request đua nhau ghi đè; và `past_life_portraits` **vốn
+  không có chỗ chứa truyện**.
+- **`lib/portraits/cache.ts`** — `lasoKey(birth)` = sha256 canonical
+  `[âm/dương|năm|tháng|ngày|giờ|giới]`. **CỐ Ý BỎ `name`**: engine không đọc tên
+  (tên nhân vật/nền văn minh đều seed từ dữ liệu lá số), tính vào khoá thì hai
+  người cùng lá số khác tên lại tốn thêm một lượt gen mà ra hai kết quả — đúng
+  thứ luật "chung toàn hệ thống" muốn tránh.
+- **`free` = CÓ cache **VÀ** user đã sở hữu lá số đó.** Thiếu vế "có cache" là mở
+  đường gen thật miễn phí: ai từng vẽ một lá số sẽ vẽ lại vô hạn ở mọi pha còn
+  thiếu cache. Đây là lỗ nguy hiểm nhất của thiết kế này, có test riêng.
+- **Hướng fail cố ý NGƯỢC NHAU trong cùng một file:** tra cache/ghi cache hỏng →
+  rơi về gen như cũ (mất tiền model còn hơn chặn oan người đã trả); nhưng
+  `userOwnsLaso` lỗi → trả **false** (fail-CLOSED), vì đoán nhầm thành "đã trả"
+  là phát không hàng.
+- **Không tặng lượt rail cho lượt xem lại** — tặng cả ở đó thì mở đúng một đường
+  farm: mở lại chân dung cũ vài lần là có lượt rail vô hạn. Tiền kiếp chỉ tặng ở
+  pha `image` để một lượt mua không tặng hai lần.
+- **`requireCreditsCached()`** (`tuvi-paywall.js`, bump `?v=8→9` trên 19 trang) —
+  hỏi `action=cache-status` TRƯỚC, free thì chạy thẳng + banner "không trừ Lượng",
+  không free thì đi paywall như cũ. **FAIL-CLOSED**: mạng lỗi/chưa đăng nhập →
+  coi như phải trả. 4 trang tool (2 shell + 2 standalone) có thêm nhánh **402 trên
+  đường miễn phí** → quay lại paywall thay vì ném lỗi khó hiểu.
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier
+  --check .` sạch · `node --check` JS + JSON-LD của cả 4 trang · engine test 181
+  pass · **37 ca chạy THẬT route trên Next dev + stub PostgREST**: khoá lá số
+  (đọc thẳng `laso_key` code thật gửi lên — đổi giới/giờ/ngày/lịch đều ra khoá
+  khác) · chủ sở hữu xem lại **200 dù không có thanh toán nào**, không gọi model,
+  không đẻ dòng lịch sử, không tặng rail · người lạ chưa trả **402** · người lạ
+  đã trả **200 + đúng 1 dòng lịch sử mang `laso_key`** + tặng rail đúng 1 lần cho
+  cả 2 pha · **sở hữu lá số mà chưa có cache → vẫn 402** (lỗ nguy hiểm nhất) ·
+  thiếu 1 trong 2 pha → `cached=false` · ghi cache lần 2 **không đè bản đầu** ·
+  round-trip `put`↔`get` trên module thật (giữ nguyên dấu tiếng Việt) ·
+  **Playwright trên `tuvi-paywall.js` thật**: free → không modal + banner đúng
+  chữ + query lá số đúng + không gọi `action=deduct`; 4 ca không-free (chưa trả /
+  chưa có cache / server 500 / mạng chết) đều rơi về modal.
+- **CÒN LẠI:** dòng lịch sử CŨ (trước migration) `laso_key` NULL → mấy bản Henry
+  đã sinh trước đây không được nhận là "đã trả", lần tới vẽ lại vẫn tính tiền một
+  lượt rồi từ đó mới free. Không backfill được vì 2 bảng chưa từng lưu ngày sinh —
+  cố suy ngược là bịa dữ liệu. Theo dõi `portrait_cache.hit_count` để biết cache
+  có tiết kiệm thật không.
+
+---
+
 ## 🔁 TRACK MỚI — Viral Loop cho 2 tool chân dung (chốt 2026-07-27, CHƯA CODE)
 
 **Nguồn:** phiên brainstorm "làm sao cho Chân Dung Vợ Chồng + Chân Dung Tiền Kiếp viral".

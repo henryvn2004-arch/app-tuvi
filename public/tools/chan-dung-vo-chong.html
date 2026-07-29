@@ -217,12 +217,15 @@ async function analyze() {
 
   _saveStateForAuth();
   _currentSlug = TuviPaywall.generateToolSlug('chan-dung-vo-chong-' + d.ngay + '-' + d.thang + '-' + d.nam);
-  await TuviPaywall.requireCredits(_currentSlug, async () => {
-    await _doGenerate(d);
+  // Kết quả được cache theo LÁ SỐ (xem lib/portraits/cache.ts): đã trả cho lá
+  // số này rồi thì mở lại không mất Lượng, và không hiện hộp thoại đòi tiền.
+  const birth = { day: d.ngay, month: d.thang, year: d.nam, hourBranch: d.gioIdx, gender: d.gioitinh, isLunar: false };
+  await TuviPaywall.requireCreditsCached('/api/chan-dung-vo-chong', birth, _currentSlug, async (freeRerun) => {
+    await _doGenerate(d, freeRerun);
   });
 }
 
-async function _doGenerate(d) {
+async function _doGenerate(d, freeRerun) {
   document.getElementById('result-section').classList.add('active');
   document.getElementById('loading').style.display = 'block';
   document.getElementById('card').style.display = 'none';
@@ -246,6 +249,15 @@ async function _doGenerate(d) {
       }),
     });
     const data = await res.json();
+    // Đi đường miễn phí mà server vẫn đòi tiền (bản cache vừa bị xoá giữa hai
+    // lần hỏi) → quay lại đường trả phí thay vì ném một lỗi khó hiểu.
+    if (res.status === 402 && freeRerun) {
+      _loadingCtl && _loadingCtl.stop();
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('result-section').classList.remove('active');
+      await TuviPaywall.requireCredits(_currentSlug, async () => { await _doGenerate(d, false); });
+      return;
+    }
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
 
     _resultImgUrl = data.imageUrl;
