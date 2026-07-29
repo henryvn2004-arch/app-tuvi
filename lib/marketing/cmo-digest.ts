@@ -157,6 +157,18 @@ VỀ KHỐI "gsc" (Google Search Console, 28 ngày, KẾT THÚC TRƯỚC 3 NGÀY
   trăm nghìn trang SEO, nên con số này so với gsc.sitemaps[].submitted là chỉ dấu quan trọng nhất về
   sức khoẻ SEO. Nếu capped=true thì phải đọc là "≥ count", KHÔNG được nêu như số chính xác.
 - gsc.totals.position là thứ hạng trung bình: càng NHỎ càng tốt (1 = đầu trang 1). Đừng đọc ngược.
+- gsc.topQueries/topPages đã được sắp theo IMPRESSIONS giảm dần, tức theo NHU CẦU tìm kiếm thật.
+  Một dòng thứ hạng rất tốt (position 1-5) mà impressions chỉ 1-2 KHÔNG phải thành tích: nó nghĩa là
+  đứng đầu cho một truy vấn gần như không ai gõ. Ngược lại, dòng impressions cao mà position 50-100 là
+  nhu cầu CÓ THẬT đang bị bỏ lỡ — đó mới là chỗ đáng đề xuất đầu tư. Khi nêu một truy vấn, LUÔN kèm
+  impressions của nó để founder biết nó lớn cỡ nào; nêu trần trụi mỗi thứ hạng là gây hiểu nhầm.
+- So gsc.namedQueryTotals.impressions với gsc.totals.impressions: phần chênh là lưu lượng đến từ những
+  truy vấn hiếm tới mức Google ẩn danh, không cho biết là gì. Nếu phần ẩn danh chiếm ĐA SỐ, nói thẳng
+  rằng site đang hiện ra chủ yếu cho các truy vấn siêu hiếm — dấu hiệu kho trang tổ hợp tự sinh nhắm
+  vào nhu cầu không tồn tại. Đây là kết luận về CHIẾN LƯỢC nội dung, KHÔNG phải lỗi dữ liệu, và KHÔNG
+  được diễn đạt thành "thiếu dữ liệu" hay "GSC lỗi".
+- gsc.queriesWithImpressions.count = số truy vấn riêng biệt đọc được tên. Con số này nhỏ trong khi
+  impressions tổng lớn cũng chỉ đúng một chuyện đó — đừng đọc thành "ít người tìm".
 - KHÔNG kết luận "Google chưa index" chỉ vì impressions thấp — báo cáo Lập chỉ mục KHÔNG có trong API,
   nên số ở đây là cận dưới. Nói "chưa hiện ra trong tìm kiếm" thì đúng, nói "chưa được index" là vượt
   quá dữ liệu.
