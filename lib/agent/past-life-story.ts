@@ -229,6 +229,11 @@ export function buildFinalPastLifeImagePrompt(
     `Historically plausible pre-modern ${era.regionEn} costume and grooming, authentic period detail, ` +
     'no modern clothing, no modern haircut, no anachronistic objects, and no costume elements borrowed from a ' +
     'neighbouring culture. ' +
+    // Đạo cụ theo MẢNG (cung Thân) — đứng ngay sau trang phục vì nó là thứ
+    // nhân vật cầm/bày quanh mình, không phải phông nền. Đây là chỗ khiến hai
+    // người CÙNG chức phận mà khác cung Thân ra hai bức ảnh khác nhau thật,
+    // chứ không chỉ khác mấy chữ trong danh xưng.
+    (o.propEn ? `Also visible in the scene: ${o.propEn}. ` : '') +
     `Background: ${o.backdropEn}, rendered with atmospheric perspective and kept secondary to the figure. ` +
     `SETTING RULE: ${era.sceneGrammarEn} ` +
     `${faceDescriptionEn} ` +
