@@ -857,7 +857,10 @@ const PAIR_OCCUPATION_TABLE: Record<string, Record<OccTier, Occupation>> = {
   },
   'Liêm Trinh+Tham Lang': {
     cao: {
-      titleNam: 'Quan coi ngục', titleNu: 'Nữ quan coi ngục', domain: 'quyen',
+      // KHÔNG đặt là "Quan coi ngục": trùng với bậc THẤP của Liêm Trinh đơn thủ
+      // ('Đô úy coi ngục' / 'Nữ quan coi ngục'). Trùng chữ đã dở, mà trùng giữa
+      // ĐỈNH thang của cặp này với ĐÁY thang của sao kia thì bậc mất hết ý nghĩa.
+      titleNam: 'Quan đề lao', titleNu: 'Nữ quan đề lao', domain: 'quyen',
       desc: 'Người nắm chìa khoá nhà lao của cả một phủ — có chức có quyền thật, nhưng suốt đời sống giữa chỗ hình ngục mà cổ thư đã cảnh báo.',
       attireEn:
         'a prison warden’s dark uniform robe with a heavy iron key ring and a leather baton, a lantern in hand',
