@@ -102,28 +102,62 @@ Thêm vào `ICONS` trong `public/nav.js`, **không nhét emoji tạm**:
   trong luồng chat. Giữ.
 - **Dữ liệu engine** (`public/*-ansao-engine.js`): không phải UI.
 
-## 6. Nợ kỹ thuật đã biết
+## 6. Nợ kỹ thuật đã biết — và một chẩn đoán SAI đã sửa
 
-**`public/shell.js` có bộ `ICONS` THỨ HAI** — 28 icon, khai trong closure nên
-chỉ trang `/app/*` dùng được, và khuôn khác (`stroke-width="1.8"`, không
-`stroke-linecap`). Chính vì nó không với ra ngoài mà các trang như `topup.html`
-đành dùng emoji — đó là căn nguyên kỹ thuật của cả vụ này.
+**`public/shell.js` có bộ `ICONS` THỨ HAI** — 28 icon, khai trong closure, khuôn
+khác (`stroke-width="1.8"`, không `stroke-linecap`). 15 tên trùng với nav.js
+nhưng path khác nhau; 13 tên chỉ shell có (`grid` `rows` `doc` `clock` `bolt`
+`dot` `calcheck` `tag` `building` `wave` `yin` `image` `temple`).
 
-Chưa gộp vì shell.js đang chạy trên 27 trang, gộp phải thêm thẻ script + bump
-version cả 27 → để một PR riêng. Khi gộp: giữ `svg(name, cls)` làm vỏ mỏng gọi
-`window.ICONS`, và bù các icon shell có mà nav thiếu (`temple`, `yin`, `rows`,
-`calcheck`, `bolt`, `wave`).
+> ⚠️ **Bản trước của mục này viết SAI:** *"chính vì shell.js không với ra ngoài
+> mà `topup.html` đành dùng emoji — đó là căn nguyên kỹ thuật của cả vụ này."*
+> Không phải. `topup.html` **vốn đã nạp `nav.js`** nên `data-icon` dùng được từ
+> đầu; nó dùng emoji đơn giản vì chưa ai nối, không phải vì bị chặn.
+
+**Không gộp hai bộ, và đây là lý do đo được:** **0/27 trang shell nạp `nav.js`**
+— shell có chrome riêng (sidebar, cố ý không có nav bar trên). Thêm `nav.js` vào
+để lấy icon sẽ kèm theo việc nó **tự chèn nav bar lên đầu `<body>`** khi thiếu
+`#nav-ph`, tức phá layout 27 trang để đổi lấy vài icon.
+
+Muốn gộp thật thì phải tách bộ icon ra `public/icons.js` riêng rồi cho **cả**
+nav.js lẫn shell.js nạp — chạm 116 file. Đo lại thấy chưa đáng: trang shell chỉ
+còn **62 emoji / 9 file**, trong khi phần cần dọn thật (`tools/*` 612 ·
+trang gốc 343) đều đã có `nav.js` sẵn. Làm khi nào shell cần tới bảng
+`EMOJI_TO_ICON` hoặc cần hơn 28 icon.
 
 ## 7. Còn bao nhiêu phải dọn
 
-Đo ngày 2026-07-30: **1.865 emoji màu trong 132 file UI**.
+Bắt đầu 2026-07-30 với **1.865 emoji màu / 132 file UI** → còn **1.148 / 83 file**.
 
 | Đợt | Phạm vi | Trạng thái |
 |---|---|---|
-| 1 | `nav.js` (bộ icon) · `topup.html` · `cong-cu.html` | ✅ xong |
-| 2 | `public/tools/*.html` (~700 lượt) — nặng nhất: `tarot` 95, `ban-lam-viec` 70, `cua-hang-phong-thuy` 68 | chưa |
-| 3 | `luan-giai.html` 69 · `kien-thuc-tuvi.html` 54 · `related-tools.js` 45 · `app-*.html` | chưa |
-| 4 | `admin*.html` (~171 lượt) — nội bộ, ưu tiên thấp nhất | chưa |
+| 1 | `topup.html` · `cong-cu.html` · bộ icon `nav.js` | ✅ xong |
+| 2 | `public/tools/*.html` — **113 chỗ / 26 file** | ✅ xong |
+| 3 | trang gốc `public/*.html` — **25 chỗ / 15 file** | ✅ xong |
+| 4 | `public/*.js` (`related-tools.js` 37 …) — chuỗi dựng động, phải thêm `mountIcons()` sau mỗi chỗ render | chưa |
+| 5 | `admin*.html` (~171) — nội bộ, ưu tiên thấp nhất | chưa |
+
+### KHÔNG dọn — cố ý, đừng “sửa” lại
+
+| Chỗ | Vì sao giữ |
+|---|---|
+| `nav.js` 146 | Chính là **khoá** của bảng `EMOJI_TO_ICON`. Đổi là phá đúng công cụ dùng để bỏ emoji. |
+| `tarot.html` 66 · `oracle.html` | `sym:'🌟'` là **ký hiệu lá bài** (lá "Kẻ Khờ"), tức nội dung. Đổi sang Lucide là gộp 78 lá khác nhau thành vài glyph giống hệt. |
+| Map đồ vật phong thuỷ (`{mirror:'🪞', door:'🚪'…}`) | Cùng lý do: emoji là token của từng vật, không phải icon trang trí. |
+| Chấm màu `🔴 🟡 🔵` | **Màu chính là thông điệp** (đèn báo tốt/vừa/xấu). Icon đơn sắc ăn `currentColor` sẽ xoá đúng phần mang nghĩa. |
+| `alert()` / `confirm()` / `<title>` / `<meta>` | Không nhét được thẻ HTML vào. |
+| `app-*.html` (trang shell) | Không nạp `nav.js` nên `mountIcons` không chạy — đổi ở đó chỉ để lại `<span>` rỗng. Xem §6. |
+
+### Công cụ
+
+Script quét nửa tự động ở `scripts/sweep-emoji.py` (dry-run mặc định, `--apply`
+để ghi). Ba chốt an toàn nằm sẵn trong đó, đều là lỗi đã vấp phải thật:
+1. **Bỏ qua vùng `<script>`/`<style>`** — thân script cũng nằm giữa `>` và `<`
+   nên regex ngây thơ sẽ biến dữ liệu JS thành thẻ HTML.
+2. **Bỏ qua file không nạp `nav.js`** — không có `mountIcons` thì `data-icon`
+   nằm rỗng vĩnh viễn.
+3. **Emoji chưa có trong `EMOJI_TO_ICON` thì để nguyên + báo cáo**, không đoán
+   tên icon.
 
 Đếm lại bất cứ lúc nào:
 

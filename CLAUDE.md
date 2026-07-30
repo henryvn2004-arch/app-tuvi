@@ -22,7 +22,10 @@ mục + `mountIcons()`), nạp trên gần như mọi trang, export ra `window.I
   model) và tin Telegram admin (Telegram không render SVG).
 - Thêm icon → sửa `ICONS` trong nav.js **và bump `nav.js?v=` trên cả 89 file**.
 - Còn nợ: ~1.865 emoji màu trong 132 file UI, dọn theo đợt (bảng ở `docs/ICONS.md §7`).
-  `public/shell.js` có bộ ICONS thứ hai (28 icon, private) — nợ DRY, chưa gộp.
+- **`shell.js` có bộ ICONS thứ hai (28 icon) — CỐ Ý không gộp.** 0/27 trang shell
+  nạp `nav.js` (chrome riêng); thêm vào để lấy icon thì nav.js tự chèn nav bar
+  lên đầu `<body>` → phá layout 27 trang. Gộp thật phải tách `public/icons.js`
+  cho cả hai cùng nạp = chạm 116 file, chưa đáng khi shell chỉ còn 62 emoji.
 
 ### Dùng thử rail cho khách CHƯA đăng nhập — cầu dao 3 lớp
 `/api/v1/chat` KHÔNG còn 401 cứng khi thiếu token: khách vô danh được vài câu

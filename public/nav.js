@@ -35,6 +35,7 @@
     'flower': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3" /><path d="M12 16.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 1 1 12 7.5a4.5 4.5 0 1 1 4.5 4.5 4.5 4.5 0 1 1-4.5 4.5" /><path d="M12 7.5V9" /><path d="M7.5 12H9" /><path d="M16.5 12H15" /><path d="M12 16.5V15" /><path d="m8 8 1.88 1.88" /><path d="M14.12 9.88 16 8" /><path d="m8 16 1.88-1.88" /><path d="M14.12 14.12 16 16" /></svg>',
     'gem': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 3 8 9l4 13 4-13-2.5-6" /><path d="M17 3a2 2 0 0 1 1.6.8l3 4a2 2 0 0 1 .013 2.382l-7.99 10.986a2 2 0 0 1-3.247 0l-7.99-10.986A2 2 0 0 1 2.4 7.8l2.998-3.997A2 2 0 0 1 7 3z" /><path d="M2 9h20" /></svg>',
     'gift': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1" /><path d="M12 8v13" /><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7" /><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5" /></svg>',
+    'folder': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" /></svg>',
     'glasses': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="15" r="4" /><circle cx="18" cy="15" r="4" /><path d="M14 15a2 2 0 0 0-2-2 2 2 0 0 0-2 2" /><path d="M2.5 13 5 7c.7-1.3 1.4-2 3-2" /><path d="M21.5 13 19 7c-.7-1.3-1.5-2-3-2" /></svg>',
     'globe': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /><path d="M2 12h20" /></svg>',
     'hand': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2" /><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2" /><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8" /><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" /></svg>',
@@ -142,7 +143,13 @@
     '➡':'chevron-down','➡️':'chevron-down','⬆':'chevron-down','⬇':'chevron-down','⬅':'chevron-down','↗':'chevron-down','↘':'chevron-down','↙':'chevron-down','↖':'chevron-down',
     '🏦':'landmark','🏛':'landmark','🏛️':'landmark','🎁':'gift','🎀':'gift',
     '⏳':'hourglass','⌛':'hourglass','⏰':'hourglass','⏱':'hourglass',
-    '👥':'users','👪':'users','👨‍👩‍👧':'users','ℹ':'info','ℹ️':'info','💠':'info'
+    '👥':'users','👪':'users','👨‍👩‍👧':'users','ℹ':'info','ℹ️':'info','💠':'info',
+    '👤':'user','👦':'user','👧':'user','👕':'shirt','🎽':'shirt','🪄':'sparkles',
+    '🚫':'x-circle','📁':'folder','🗂':'folder','📂':'folder','📍':'pin','📺':'monitor',
+    '📱':'monitor','🖱':'monitor','📒':'book-open','🚿':'droplet'
+    // CỐ Ý KHÔNG map 🔴 🟡 🔵 (và các chấm màu khác): ở đó MÀU chính là thông
+    // điệp (đèn báo tốt/vừa/xấu). Đổi sang icon đơn sắc ăn currentColor là xoá
+    // đúng phần mang nghĩa, đổi xong trông gọn hơn mà đọc không ra gì nữa.
   };
 
   function iconHtml(raw, fallback) {
@@ -187,6 +194,14 @@
   function anyActive(arr) { return arr.some(function(p){ return path === p || path.startsWith(p + '/') || path.startsWith(p); }); }
 
   var css = [
+    // Khung icon dùng chung — bơm MỘT lần ở đây thay vì lặp
+    // style="display:inline-flex;width:1em;height:1em;…" ở từng chỗ dùng (mẫu
+    // di sản `ic-inline` đang lặp chuỗi đó hàng trăm lần). Kích thước theo 1em
+    // nên icon tự khớp cỡ chữ xung quanh; màu theo currentColor nên tự đúng ở
+    // cả light lẫn dark. Markup mới chỉ cần:
+    //     <span class="ic" data-icon="wallet"></span>
+    '.ic,.ic-inline{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;vertical-align:-.125em}',
+    '.ic>svg,.ic-inline>svg{width:1em;height:1em;display:block}',
     '.topnav{position:sticky;top:0;z-index:200;background:#061A2E;display:flex;align-items:center;height:60px;padding:0 40px;gap:28px}',
     '.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}',
     '.nav-logo img{width:38px;height:38px;object-fit:contain;border-radius:5px}',
@@ -299,6 +314,21 @@
 
   // Auto-swap any [data-icon] elements present on the page (incl. those outside nav)
   mountIcons();
+
+  // 🔴 …và quét LẠI khi DOM đã dựng xong.
+  //
+  // Lần quét trên chỉ thấy phần markup nằm TRƯỚC thẻ <script src="/nav.js">.
+  // Nhiều trang nạp nav.js ngay đầu <body> (dòng ~42) trong khi icon nằm ở thân
+  // trang (dòng ~50+) → quét lúc đó không thấy gì, và <span data-icon> ở lại
+  // RỖNG: thay một emoji đọc được bằng một khoảng trắng, mà không có lỗi nào
+  // báo ra. Đo được 4/8 trang mẫu dính đúng lỗi này.
+  //
+  // Vá ở đây thay vì đi dịch thẻ script ở từng file: vị trí thẻ là thứ người
+  // viết trang sau này lại đặt sai, còn quét hai lần thì đúng dù đặt ở đâu.
+  // `mountIcons` bỏ qua phần tử đã có <svg> nên lượt hai không làm gì thừa.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { mountIcons(); });
+  }
 
   // ── Mobile dropdown events ─────────────────────────────────────
   var menus = ['nav-dd-kp-menu','nav-dd-cn-menu'];

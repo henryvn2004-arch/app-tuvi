@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=19" as="script">
+<link rel="preload" href="/nav.js?v=20" as="script">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Thanh Tướng — Xem Tướng Giọng Nói Bằng AI | Tử Vi Minh Bảo</title>
 <meta property="og:title" content="Thanh Tướng — Xem Tướng Giọng Nói Bằng AI | Tử Vi Minh Bảo"/>
@@ -120,7 +120,7 @@
   <div class="form-section" id="inputSection">
     <div class="section-eyebrow">Thu Âm Giọng Nói</div>
     <div class="privacy-notice">
-      <span>🔒</span>
+      <span><span class="ic" data-icon="lock"></span></span>
       <div><strong>Quyền riêng tư:</strong> Âm thanh được xử lý hoàn toàn trong trình duyệt. Chỉ gửi các chỉ số đo được (không gửi file audio) lên server để AI phân tích.</div>
     </div>
 
@@ -140,7 +140,7 @@
     <div class="record-wrap">
       <div class="countdown-badge" id="countdownBadge"></div>
       <button class="btn-record" id="recordBtn" onclick="toggleRecord()">
-        <span id="recordIcon">🎙</span>
+        <span id="recordIcon"><span class="ic" data-icon="mic"></span></span>
         <span id="recordLabel">Bắt Đầu Thu Âm</span>
       </button>
       <div class="status-msg" id="statusMsg">Nhấn để bắt đầu thu âm · Cho phép truy cập microphone khi trình duyệt hỏi</div>
@@ -165,7 +165,7 @@
 
     <div style="text-align:center;margin-top:20px">
       <button class="btn-submit" id="analyzeBtn" onclick="analyze()" disabled style="padding:14px 40px;font-size:15px">
-        🎵 Phân Tích Thanh Tướng
+        <span class="ic" data-icon="music"></span> Phân Tích Thanh Tướng
       </button>
     </div>
     <div class="error-msg" id="error-msg"></div>
@@ -837,6 +837,6 @@ async function _saveTuongReading(tool, resultText, imageData, mediaType) {
 </section>
 <script src="/testimonials.js"></script>
 <script src="/related-tools.js"></script>
-<script src="/nav.js?v=19" defer></script>
+<script src="/nav.js?v=20" defer></script>
 </body>
 </html>

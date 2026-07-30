@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=19" as="script">
+<link rel="preload" href="/nav.js?v=20" as="script">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Thủ Tướng — Xem Chỉ Tay Bằng AI | Tử Vi Minh Bảo</title>
 <meta property="og:title" content="Thủ Tướng — Xem Chỉ Tay Bằng AI | Tử Vi Minh Bảo"/>
@@ -97,13 +97,13 @@
   <div class="form-section" id="inputSection">
     <div class="section-eyebrow">Tải Ảnh Lên</div>
     <div class="privacy-notice">
-      <span>🔒</span>
+      <span><span class="ic" data-icon="lock"></span></span>
       <div><strong>Quyền riêng tư:</strong> Ảnh chỉ gửi đến Claude AI để phân tích, không lưu trên server. Chụp lòng bàn tay mở phẳng, đủ sáng, thấy rõ các đường chỉ.</div>
     </div>
 
     <div class="input-tabs" style="margin-top:20px">
-      <button class="input-tab active" onclick="switchTab('upload',this)">📁 Tải Ảnh Lên</button>
-      <button class="input-tab" onclick="switchTab('camera',this)">📷 Chụp Ảnh</button>
+      <button class="input-tab active" onclick="switchTab('upload',this)"><span class="ic" data-icon="folder"></span> Tải Ảnh Lên</button>
+      <button class="input-tab" onclick="switchTab('camera',this)"><span class="ic" data-icon="camera"></span> Chụp Ảnh</button>
     </div>
 
     <div class="input-pane active" id="pane-upload">
@@ -144,14 +144,14 @@
     <div class="input-pane" id="pane-camera">
       <div style="text-align:center;padding:16px 20px">
         <div id="preCamTips">
-          <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px">📋 Trước khi chụp</div>
+          <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px"><span class="ic" data-icon="clipboard"></span> Trước khi chụp</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;max-width:340px;margin:0 auto;text-align:left;margin-bottom:14px">
             <div style="font-size:12px;color:var(--text-mid);display:flex;gap:5px"><span style="color:var(--green)">✓</span>Xòe tay phẳng, hướng lên</div>
             <div style="font-size:12px;color:var(--text-mid);display:flex;gap:5px"><span style="color:var(--green)">✓</span>Camera thẳng góc với tay</div>
             <div style="font-size:12px;color:var(--text-mid);display:flex;gap:5px"><span style="color:var(--green)">✓</span>Ánh sáng đủ, đều</div>
             <div style="font-size:12px;color:var(--text-mid);display:flex;gap:5px"><span style="color:var(--red)">✗</span>Không che ngón tay</div>
           </div>
-          <button class="camera-btn" id="openCamBtn" onclick="openCamera()"><span>📷</span> Mở Camera</button>
+          <button class="camera-btn" id="openCamBtn" onclick="openCamera()"><span><span class="ic" data-icon="camera"></span></span> Mở Camera</button>
         </div>
         <div id="camWrap" style="display:none;position:relative;width:300px;margin:0 auto">
           <video id="camVideo" style="width:300px;border-radius:12px;display:block" autoplay playsinline></video>
@@ -165,7 +165,7 @@
           </svg>
         </div>
         <div id="camBtns" style="display:none;margin-top:14px;gap:10px;justify-content:center;flex-wrap:wrap">
-          <button class="btn-submit" onclick="capturePhoto()" style="margin:0">📸 Chụp</button>
+          <button class="btn-submit" onclick="capturePhoto()" style="margin:0"><span class="ic" data-icon="camera"></span> Chụp</button>
           <button class="btn-prev" onclick="stopCamera()">✕ Huỷ</button>
         </div>
         <canvas id="camCanvas" style="display:none"></canvas>
@@ -652,6 +652,6 @@ async function _saveTuongReading(tool, resultText, imageData, mediaType) {
 </section>
 <script src="/testimonials.js"></script>
 <script src="/related-tools.js"></script>
-<script src="/nav.js?v=19" defer></script>
+<script src="/nav.js?v=20" defer></script>
 </body>
 </html>

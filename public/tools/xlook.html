@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=19" as="script">
+<link rel="preload" href="/nav.js?v=20" as="script">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>xLook — Tủ Đồ AI | Tử Vi Minh Bảo</title>
 <meta name="description" content="Quản lý tủ đồ thông minh — AI mix & match outfit theo lịch trình, thời tiết và bản mệnh ngũ hành.">
@@ -12,7 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="/auth.js"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=1"></script>
-<script src="/nav.js?v=19" defer></script>
+<script src="/nav.js?v=20" defer></script>
 <style>
 :root{
   --navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;
@@ -180,7 +180,7 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 <div class="wrap">
 
   <div class="page-tabs">
-    <button class="page-tab active" onclick="showPage('wardrobe',this)">👔 Tủ Đồ <span id="wardrobeCount" style="background:var(--navy);color:#fff;font-size:9px;padding:1px 6px;border-radius:10px;margin-left:3px;">0</span></button>
+    <button class="page-tab active" onclick="showPage('wardrobe',this)"><span class="ic" data-icon="shirt"></span> Tủ Đồ <span id="wardrobeCount" style="background:var(--navy);color:#fff;font-size:9px;padding:1px 6px;border-radius:10px;margin-left:3px;">0</span></button>
     <button class="page-tab" onclick="showPage('mix',this)">✨ Mix & Match</button>
     <button class="page-tab" onclick="showPage('add',this)">＋ Thêm Đồ</button>
   </div>
@@ -189,10 +189,10 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
   <div class="page-content show" id="page-wardrobe">
     <div id="statsBar" class="stats-bar" style="display:none"></div>
     <div class="wardrobe-filters">
-      <button class="filter-btn active" onclick="filterWardrobe('all',this)">🗂 Tất cả</button>
-      <button class="filter-btn" onclick="filterWardrobe('top',this)">👕 Áo</button>
+      <button class="filter-btn active" onclick="filterWardrobe('all',this)"><span class="ic" data-icon="folder"></span> Tất cả</button>
+      <button class="filter-btn" onclick="filterWardrobe('top',this)"><span class="ic" data-icon="shirt"></span> Áo</button>
       <button class="filter-btn" onclick="filterWardrobe('bottom',this)">👖 Quần/Váy</button>
-      <button class="filter-btn" onclick="filterWardrobe('dress',this)">👗 Đầm</button>
+      <button class="filter-btn" onclick="filterWardrobe('dress',this)"><span class="ic" data-icon="shirt"></span> Đầm</button>
       <button class="filter-btn" onclick="filterWardrobe('outer',this)">🧥 Áo khoác</button>
       <button class="filter-btn" onclick="filterWardrobe('shoes',this)">👟 Giày</button>
       <button class="filter-btn" onclick="filterWardrobe('accessory',this)">💍 Phụ kiện</button>
@@ -216,9 +216,9 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
             <div class="form-group">
               <label class="form-label">Dịp</label>
               <div class="occasion-pills" id="occasionPills">
-                <div class="occ-pill active" onclick="setOcc(this,'daily')">🌿 Hàng ngày</div>
-                <div class="occ-pill" onclick="setOcc(this,'work')">💼 Đi làm</div>
-                <div class="occ-pill" onclick="setOcc(this,'date')">💕 Hẹn hò</div>
+                <div class="occ-pill active" onclick="setOcc(this,'daily')"><span class="ic" data-icon="leaf"></span> Hàng ngày</div>
+                <div class="occ-pill" onclick="setOcc(this,'work')"><span class="ic" data-icon="briefcase"></span> Đi làm</div>
+                <div class="occ-pill" onclick="setOcc(this,'date')"><span class="ic" data-icon="heart"></span> Hẹn hò</div>
                 <div class="occ-pill" onclick="setOcc(this,'party')">🎉 Tiệc</div>
                 <div class="occ-pill" onclick="setOcc(this,'sport')">🏃 Thể thao</div>
                 <div class="occ-pill" onclick="setOcc(this,'travel')">✈️ Du lịch</div>
@@ -645,6 +645,6 @@ window.addEventListener('DOMContentLoaded', async () => {
     </div>
   </div>
 </section>
-<script src="/nav.js?v=19" defer></script>
+<script src="/nav.js?v=20" defer></script>
 </body>
 </html>
