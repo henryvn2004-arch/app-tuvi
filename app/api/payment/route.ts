@@ -12,7 +12,7 @@ import { ok, err, options, parseBody } from '@/lib/cors';
 import { getPackage, getPackages, VND_PER_CREDIT } from '@/lib/billing/packages';
 import { getToolPrice } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
-import { freeGenGate, FREE_GEN_CAP_MESSAGE } from '@/lib/billing/viral-budget';
+import { freeGenGate, FREE_GEN_CAP_MESSAGE, railFreeRemaining } from '@/lib/billing/viral-budget';
 import { getConfigValue } from '@/lib/config/appConfig';
 import { evaluateJobs, fetchPgcronRuns } from '@/lib/ops/jobs';
 import { checkEnv } from '@/lib/ops/preflight';
@@ -1288,6 +1288,7 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-mcp') return handleAdminMcp(request);
   if (action === 'admin-env-status') return handleAdminEnvStatus(request);
   if (action === 'my-referral') return handleMyReferral(request, searchParams);
+  if (action === 'rail-status') return handleRailStatus(request);
   if (action === 'admin-viral') return handleAdminViral(request, searchParams);
   if (action === 'admin-content-pack') return handleAdminContentPack(request, searchParams);
   if (action === 'check-bank')  return handleCheckBank(searchParams);
@@ -1648,6 +1649,45 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
 // vào link chia sẻ. CỐ Ý là endpoint có auth chứ không nhét referral_code vào
 // `action=balance` (endpoint đó nhận userId qua query, không xác thực — thêm mã
 // vào đó là phát mã của người khác cho bất kỳ ai đoán được userId).
+/**
+ * GET ?action=rail-status — trạng thái ví cho ĐỒNG HỒ ĐẾM CÂU của rail chat.
+ *
+ * Vì sao cần một endpoint riêng: rail muốn hiện "còn N câu hỏi" NGAY khi mở,
+ * trước khi người dùng hỏi câu nào — mà để tính N thì cần cả số dư, giá một lượt
+ * rail, và số lượt tặng. Ba thứ đó nằm ở ba nơi (`user_credits`, `tool_pricing`,
+ * RPC `rail_free_*`). Không có endpoint này thì `shell.js` phải nhúng anon key
+ * để đọc `tool_pricing`, hoặc tự viết cứng giá — mà viết cứng giá là nói sai với
+ * người dùng ngay lần đổi giá đầu tiên (đúng lỗi đã xảy ra ở topup.html: FAQ ghi
+ * 5 Lượng khi DB là 10).
+ *
+ * Trả kèm `lasoPrice` để tường hết-Lượng nói được bằng LÁ SỐ ("xem trọn 24 mục
+ * — 25 Lượng") thay vì "nạp Lượng" chung chung.
+ */
+async function handleRailStatus(request: NextRequest): Promise<Response> {
+  const userToken = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  if (!userToken) return err('Missing Authorization token', 401);
+  try {
+    const user = await getUserFromToken(userToken);
+    if (!user) return err('Invalid token', 401);
+    const [balance, railPrice, lasoPrice, freeTurns, vndPerCredit] = await Promise.all([
+      getBalance(user.id),
+      getToolPrice('rail-message'),
+      getToolPrice('laso'),
+      railFreeRemaining(user.id),
+      getConfigValue<number>('credits.vnd_per_credit', 1000),
+    ]);
+    return ok({
+      balance,
+      railPrice: railPrice != null ? railPrice : null,
+      lasoPrice: lasoPrice != null ? lasoPrice : null,
+      freeTurns,
+      vndPerCredit,
+    });
+  } catch (e) {
+    return err(e instanceof Error ? e.message : 'rail-status failed', 500);
+  }
+}
+
 async function handleMyReferral(request: NextRequest, sp: URLSearchParams): Promise<Response> {
   const userToken = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
   if (!userToken) return err('Missing Authorization token', 401);

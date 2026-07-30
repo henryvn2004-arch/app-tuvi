@@ -219,6 +219,7 @@
         '<div class="rail-empty" id="railEmpty"><div class="ei"><img src="' + authorAva() + '" alt=""></div><b>Chưa có lá số nào</b>' +
         '<p>Lập lá số ở khung giữa, rồi hỏi tôi bất cứ điều gì —<br>vận sự nghiệp, tình duyên, năm nay, tháng tới…</p></div>' +
       '</div>' +
+      '<div class="rail-meter" id="railMeter" style="display:none"></div>' +
       '<div class="rail-sugg" id="railSugg" style="display:none"></div>' +
       '<div class="rail-thumbs" id="railThumbs" style="display:none"></div>' +
       '<div class="rail-in">' +
@@ -849,14 +850,185 @@
     } catch (e) { /* ignore */ }
   }
 
+  // ══════════════════════════════════════════════════════════════
+  // CONVERT TRONG RAIL — đếm bằng CÂU, mời bằng LÁ SỐ
+  // ══════════════════════════════════════════════════════════════
+  //
+  // Bối cảnh (đo prod 2026-07-30): người dùng an sao xong (miễn phí) là qua rail
+  // hỏi ngay — đó là khoảnh khắc quan tâm cao nhất trong cả phễu. Trước đây rail
+  // KHÔNG nói gì về số lượt còn lại, rồi đến lúc cạn thì bật một modal đòi tiền.
+  // Tức là bán đúng vào lúc người ta vừa mới bắt đầu tin.
+  //
+  // Bốn thay đổi, không cái nào cần thêm lượt LLM:
+  //   1. Đồng hồ tính bằng CÂU, không bằng Lượng ("còn 12 câu hỏi").
+  //   2. Thẻ mời sau câu thứ 3, gọi tên ĐÚNG CUNG theo chủ đề đã hỏi.
+  //   3. Tường hết-lượt liệt kê CỤ THỂ mục chưa đọc trong 24 mục.
+  //   4. Câu chữ nói bằng lá số, không bằng tiền.
+
+  // 24 mục của Luận Giải — KHỚP `PHAN_LABELS` trong luan-giai.html. Dùng để nói
+  // CỤ THỂ người ta đang bỏ lỡ cái gì; "nạp Lượng để xem thêm" thì không ai biết
+  // thêm là thêm gì.
+  var LG_PHAN = [
+    'Tổng Quan Lá Số',
+    'Cung Mệnh', 'Cung Phụ Mẫu', 'Cung Phúc Đức', 'Cung Điền Trạch',
+    'Cung Quan Lộc', 'Cung Nô Bộc', 'Cung Thiên Di', 'Cung Tật Ách',
+    'Cung Tài Bạch', 'Cung Tử Tức', 'Cung Phu Thê', 'Cung Huynh Đệ',
+    'Tổng quan đại vận',
+    'Đại Vận 1', 'Đại Vận 2', 'Đại Vận 3', 'Đại Vận 4', 'Đại Vận 5',
+    'Đại Vận 6', 'Đại Vận 7', 'Đại Vận 8', 'Đại Vận 9',
+    'Tiểu Vận năm nay',
+  ];
+
+  // Chủ đề câu hỏi → cung. Tra bằng TỪ KHOÁ, deterministic, 0 đồng — cố ý không
+  // nhờ LLM phân loại: thêm một lượt model cho mỗi câu hỏi là chi phí thật, mà
+  // thứ cần chỉ là gọi đúng tên một cung.
+  var TOPIC_CUNG = [
+    { cung: 'Cung Tài Bạch', kw: ['tiền', 'tài chính', 'giàu', 'lương', 'thu nhập', 'đầu tư', 'nợ', 'lỗ', 'lãi', 'buôn', 'kinh doanh'] },
+    { cung: 'Cung Quan Lộc', kw: ['công việc', 'sự nghiệp', 'nghề', 'thăng tiến', 'chức', 'công danh', 'thi', 'việc làm', 'sếp', 'nghỉ việc'] },
+    { cung: 'Cung Phu Thê', kw: ['vợ', 'chồng', 'hôn nhân', 'kết hôn', 'cưới', 'yêu', 'người ấy', 'tình duyên', 'ly hôn', 'bạn gái', 'bạn trai'] },
+    { cung: 'Cung Tử Tức', kw: ['con', 'con cái', 'sinh con', 'thai', 'hiếm muộn'] },
+    { cung: 'Cung Tật Ách', kw: ['bệnh', 'sức khỏe', 'tai nạn', 'mổ', 'ốm', 'thương tích'] },
+    { cung: 'Cung Phụ Mẫu', kw: ['cha', 'mẹ', 'bố', 'ba mẹ', 'phụ mẫu', 'song thân'] },
+    { cung: 'Cung Điền Trạch', kw: ['nhà', 'đất', 'bất động sản', 'mua nhà', 'xây nhà', 'chung cư'] },
+    { cung: 'Cung Thiên Di', kw: ['nước ngoài', 'xuất ngoại', 'đi xa', 'di cư', 'chuyển chỗ', 'du học', 'định cư'] },
+    { cung: 'Cung Nô Bộc', kw: ['bạn bè', 'đồng nghiệp', 'cấp dưới', 'nhân viên', 'đối tác'] },
+    { cung: 'Cung Huynh Đệ', kw: ['anh', 'chị', 'em ruột', 'huynh đệ', 'anh em'] },
+    { cung: 'Cung Phúc Đức', kw: ['phúc', 'tâm linh', 'bình an', 'tổ tiên', 'nghiệp'] },
+    { cung: 'Cung Mệnh', kw: ['tính cách', 'bản thân', 'con người tôi', 'mệnh của tôi', 'tôi là người'] },
+  ];
+  function detectCung(txt) {
+    var s = String(txt || '').toLowerCase();
+    for (var i = 0; i < TOPIC_CUNG.length; i++) {
+      var e = TOPIC_CUNG[i];
+      for (var j = 0; j < e.kw.length; j++) if (s.indexOf(e.kw[j]) >= 0) return e.cung;
+    }
+    return null;
+  }
+
+  // Trạng thái ví cho rail. `price` để null nghĩa là CHƯA BIẾT giá → đồng hồ im
+  // lặng thay vì đoán. Đoán giá rồi hiện sai số câu là nói sai với người dùng
+  // ngay trên thứ họ dùng để quyết định.
+  var _rc = { balance: null, price: null, freeTurns: 0, lasoPrice: null, vndPerCredit: 1000, loaded: false };
+  var _askCount = 0;      // số câu người dùng đã hỏi trong phiên này
+  var _upsellShown = false;
+  var _cungAsked = [];    // các cung đã chạm tới, theo thứ tự hỏi
+
+  function railTurnsLeft() {
+    if (_rc.price == null || _rc.balance == null) return null;
+    if (_rc.price <= 0) return Infinity;
+    return _rc.freeTurns + Math.floor(_rc.balance / _rc.price);
+  }
+
+  function loadRailStatus() {
+    var token = getToken();
+    if (!token) { _rc.loaded = false; renderRailMeter(); return; }
+    fetch('/api/payment?action=rail-status', { headers: { Authorization: 'Bearer ' + token } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d) return;
+        _rc.balance = typeof d.balance === 'number' ? d.balance : null;
+        _rc.price = typeof d.railPrice === 'number' ? d.railPrice : null;
+        _rc.lasoPrice = typeof d.lasoPrice === 'number' ? d.lasoPrice : null;
+        _rc.freeTurns = d.freeTurns || 0;
+        _rc.vndPerCredit = d.vndPerCredit || 1000;
+        _rc.loaded = true;
+        renderRailMeter();
+      })
+      .catch(function () { /* đồng hồ chỉ là trợ giúp — hỏng thì im lặng, không chặn hỏi */ });
+  }
+
+  // Đồng hồ đếm CÂU. "Còn 24 Lượng" là con số trừu tượng — không ai biết nhiều
+  // hay ít. "Còn 12 câu hỏi" thì biết ngay.
+  function renderRailMeter() {
+    var el = document.getElementById('railMeter');
+    if (!el) return;
+    var n = railTurnsLeft();
+    if (!ctx || n === null || n === Infinity) { el.style.display = 'none'; el.innerHTML = ''; return; }
+    el.style.display = '';
+    var cls = n === 0 ? ' out' : (n <= 3 ? ' low' : '');
+    var txt;
+    if (n === 0) {
+      txt = 'Đã dùng hết lượt hỏi';
+    } else if (_rc.freeTurns > 0) {
+      txt = 'Còn <b>' + n + '</b> câu hỏi <span class="rm-sub">(' + _rc.freeTurns + ' lượt tặng)</span>';
+    } else {
+      txt = 'Còn <b>' + n + '</b> câu hỏi';
+    }
+    el.className = 'rail-meter' + cls;
+    el.innerHTML = '<span class="rm-t">' + txt + '</span>' +
+      (n <= 3 ? '<a class="rm-a" href="/topup.html">Nạp thêm</a>' : '');
+  }
+
+  // Đọc lại ví từ event `done` của server — nguồn chính xác nhất, và không tốn
+  // thêm một lượt mạng nào.
+  function applyPaywallInfo(pw) {
+    if (!pw) return;
+    if (typeof pw.balance === 'number') _rc.balance = pw.balance;
+    if (typeof pw.price === 'number') _rc.price = pw.price;
+    if (typeof pw.freeTurns === 'number') _rc.freeTurns = pw.freeTurns;
+    if (_rc.price != null && _rc.balance != null) _rc.loaded = true;
+    renderRailMeter();
+  }
+
+  function creditVnd(c) {
+    var v = Math.ceil((c * (_rc.vndPerCredit || 1000)) / 1000) * 1000;
+    return v.toLocaleString('vi-VN') + 'đ';
+  }
+
+  // Thẻ mời — chèn vào giữa dòng hội thoại SAU câu thứ 3, gọi tên đúng cung mà
+  // người ta vừa hỏi. Bán ở khoảnh khắc đã tỏ ý quan tâm, không phải lúc cạn ví.
+  function maybeShowUpsell() {
+    if (_upsellShown || !ctx || !ctx.birth) return;   // cần lá số thật mới mời Luận Giải
+    if (ACTIVE === 'luan-giai') return;               // đang ở chính tool đó rồi
+    if (_askCount < 3) return;
+    if (_rc.lasoPrice == null) return;                // chưa biết giá thì không hứa gì
+    _upsellShown = true;
+
+    var cung = null;
+    for (var i = _cungAsked.length - 1; i >= 0; i--) { if (_cungAsked[i]) { cung = _cungAsked[i]; break; } }
+    var rest = LG_PHAN.filter(function (p) { return p !== cung; });
+    var preview = rest.slice(0, 5).join(' · ');
+
+    var lead = cung
+      ? 'Mấy câu vừa rồi của bạn xoay quanh <b>' + esc(cung) + '</b>.'
+      : 'Bạn đang hỏi khá sâu về lá số này.';
+
+    var chat = document.getElementById('chat');
+    if (!chat) return;
+    var card = document.createElement('div');
+    card.className = 'rail-upsell';
+    card.innerHTML =
+      '<div class="ru-t">' + lead + '</div>' +
+      '<div class="ru-d">Bản <b>Luận Giải</b> soi trọn <b>' + LG_PHAN.length + ' mục</b> của chính lá số này — ' +
+        (cung ? esc(cung) + ' có mục riêng, cùng ' : '') + rest.length + ' mục còn lại: ' +
+        '<span class="ru-list">' + esc(preview) + '…</span></div>' +
+      '<div class="ru-f">' +
+        '<a class="ru-btn" href="/app/luan-giai">Xem trọn ' + LG_PHAN.length + ' mục — ' + _rc.lasoPrice + ' Lượng</a>' +
+        '<span class="ru-price">≈ ' + creditVnd(_rc.lasoPrice) + '</span>' +
+      '</div>';
+    chat.appendChild(card);
+    chat.scrollTop = chat.scrollHeight;
+    try { track('cta_click', { tool_id: ACTIVE, meta: { from: 'rail_upsell_shown', cung: cung || null } }); } catch (e) { /* ignore */ }
+    var btn = card.querySelector('.ru-btn');
+    if (btn) btn.addEventListener('click', function () {
+      try { track('cta_click', { tool_id: 'laso', meta: { from: 'rail_upsell', cung: cung || null } }); } catch (e) { /* ignore */ }
+    });
+  }
+
   // ── Modal HẾT LƯỢNG (giọng thầy) — bật khi rail nhận 402 ──
   function _viewerName() {
     try { var r = (curMeta && curMeta.restore) || {}; if (r.birth && r.birth.name) return String(r.birth.name).trim(); } catch (e) { /* ignore */ }
     return '';
   }
+  // Tường hết-lượt. CỐ Ý nói bằng LÁ SỐ chứ không bằng tiền: dẫn bằng thứ người
+  // ta nhận được (trọn 24 mục của CHÍNH lá số này, kể tên vài mục cụ thể), rồi
+  // mới tới giá. Bản cũ chỉ nói "phần Lượng trong ví đã cạn — nạp thêm", tức là
+  // đòi tiền mà không cho biết đang mua cái gì.
   function openTopupModal() {
     if (document.querySelector('.sh-topup-modal')) return;
     var nm = _viewerName(), thay = authorLabel();
+    var hasLaso = !!(ctx && ctx.birth) && ACTIVE !== 'luan-giai' && _rc.lasoPrice != null;
+    var preview = LG_PHAN.slice(1, 6).join(' · ');
     var wrap = document.createElement('div');
     wrap.className = 'sh-topup-modal';
     wrap.innerHTML =
@@ -864,12 +1036,19 @@
         '<button class="stm-x" aria-label="Đóng">✕</button>' +
         '<img class="stm-ava" src="' + authorAva() + '" alt="">' +
         '<div class="stm-t">Quẻ còn dở, xin phép dừng ở đây…</div>' +
-        '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn tỏ tường' + (nm ? ' cho ' + esc(nm) : '') +
-          ', nhưng phần Lượng trong ví đã cạn. Nạp thêm để thầy luận tiếp mạch còn dang dở nhé.</div>' +
-        '<a class="stm-btn" href="/topup.html">Nạp Lượng để hỏi tiếp →</a>' +
+        (hasLaso
+          ? '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn tỏ tường' + (nm ? ' cho ' + esc(nm) : '') +
+              '. Bản <b>Luận Giải</b> soi trọn <b>' + LG_PHAN.length + ' mục</b> của chính lá số này — ' +
+              esc(preview) + '… — thay vì hỏi lẻ từng câu.</div>' +
+            '<a class="stm-btn" href="/app/luan-giai">Xem trọn ' + LG_PHAN.length + ' mục — ' + _rc.lasoPrice + ' Lượng (≈ ' + creditVnd(_rc.lasoPrice) + ')</a>' +
+            '<a class="stm-alt" href="/topup.html">Hoặc nạp Lượng để hỏi tiếp từng câu →</a>'
+          : '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn tỏ tường' + (nm ? ' cho ' + esc(nm) : '') +
+              ', nhưng phần Lượng trong ví đã cạn. Nạp thêm để thầy luận tiếp mạch còn dang dở nhé.</div>' +
+            '<a class="stm-btn" href="/topup.html">Nạp Lượng để hỏi tiếp →</a>') +
         '<button class="stm-later" type="button">Để sau</button>' +
       '</div>';
     document.body.appendChild(wrap);
+    try { track('cta_click', { tool_id: ACTIVE, meta: { from: hasLaso ? 'rail_wall_laso' : 'rail_wall_topup' } }); } catch (e) { /* ignore */ }
     var close = function () { wrap.remove(); };
     wrap.addEventListener('click', function (e) { if (e.target === wrap) close(); });
     wrap.querySelector('.stm-x').addEventListener('click', close);
@@ -978,6 +1157,10 @@
       document.getElementById('railSend').disabled = false;
       var att = document.getElementById('railAttach'); if (att) att.disabled = false;
       greet(o);
+      // Ngữ cảnh mới = phiên hỏi mới: đếm lại từ đầu và cho thẻ mời hiện lại.
+      _askCount = 0; _upsellShown = false; _cungAsked = [];
+      // Nạp ví để đồng hồ hiện "còn N câu" NGAY khi mở rail, chưa cần hỏi câu nào.
+      loadRailStatus();
       // KHÔI PHỤC phiên đã lưu (đi qua sessionStorage khi bấm 1 mục lịch sử):
       // thay transcript + sessionId, replay — KHÔNG gọi API, KHÔNG trừ Lượng.
       if (HIST_ON) try {
@@ -1136,6 +1319,10 @@
       // Thread mới cùng ngữ cảnh: giữ restore/title, đổi id để không đè phiên cũ.
       curMeta = { restore: (curMeta && curMeta.restore) || { birth: birthSnapshot(), scenario: ctx.scenario || null }, title: (curMeta && curMeta.title) || 'Phiên', createdAt: Date.now() };
       ctxChips = ctxChipsOrig.slice(); greet({ greeting: 'Bắt đầu hội thoại mới. Bạn muốn hỏi gì về lá số này?' });
+      // Hội thoại mới → đếm lại câu, và cho thẻ mời có cơ hội hiện lại (một lần
+      // mỗi hội thoại, không phải một lần mỗi phiên trình duyệt).
+      _askCount = 0; _upsellShown = false; _cungAsked = [];
+      renderRailMeter();
     }
   }
 
@@ -1146,6 +1333,10 @@
     var imgs = pendingImages.slice();
     if (!text && !imgs.length) return;
     try { track('chat_msg', { tool_id: ACTIVE, slug: (ctx && ctx.scenario && ctx.scenario.type) || null, meta: { has_img: imgs.length > 0 } }); } catch (e) { /* ignore */ }
+    // Đếm câu + ghi nhận chủ đề (cho thẻ mời) TRƯỚC khi gọi API — chủ đề suy từ
+    // chính câu hỏi, không cần đợi câu trả lời.
+    _askCount++;
+    _cungAsked.push(detectCung(text));
     input.value = ''; autoGrow(input);
     var chat = document.getElementById('chat');
     var empty = document.getElementById('railEmpty'); if (empty) empty.remove();
@@ -1209,7 +1400,13 @@
         streaming = false; setSend(true); messages.pop(); return;
       }
       if (res.status === 402) {
-        typing.innerHTML = '<p>Bạn đã hết Lượng. <a href="/topup.html" style="color:var(--blue);font-weight:600">Nạp thêm</a> để hỏi trợ lý. Lá số vẫn xem miễn phí.</p>';
+        // Đồng bộ ví từ chính lỗi 402 (server trả balance + price) → đồng hồ về 0
+        // đúng lúc, không đợi lần tải sau.
+        try {
+          var _pd = await res.clone().json();
+          if (_pd) applyPaywallInfo({ balance: _pd.balance, price: _pd.price });
+        } catch (e) { /* ignore */ }
+        typing.innerHTML = '<p>Đã hết lượt hỏi. Lá số vẫn xem miễn phí — bạn có thể xem <a href="/app/luan-giai" style="color:var(--blue);font-weight:600">bản Luận Giải trọn ' + LG_PHAN.length + ' mục</a> hoặc <a href="/topup.html" style="color:var(--blue);font-weight:600">nạp thêm</a> để hỏi tiếp.</p>';
         openTopupModal();
         streaming = false; setSend(true); messages.pop(); return;
       }
@@ -1224,13 +1421,19 @@
           if (ev.name === 'text' && ev.data.delta) { acc += ev.data.delta; typing.innerHTML = mdLite(acc); chat.scrollTop = chat.scrollHeight; }
           else if (ev.name === 'status' && !acc) { typing.innerHTML = '<span class="typing" style="gap:6px">' + esc(ev.data.text || 'Đang xem…') + ' <i></i><i></i><i></i></span>'; }
           else if (ev.name === 'error') { acc = acc || ('Xin lỗi, gặp trục trặc: ' + esc(ev.data.message || '')); }
-          else if (ev.name === 'done' && ev.data && ev.data.suggestions && ev.data.suggestions.length) { ctxChips = ev.data.suggestions.slice(0, 4); }
+          else if (ev.name === 'done' && ev.data) {
+            if (ev.data.suggestions && ev.data.suggestions.length) ctxChips = ev.data.suggestions.slice(0, 4);
+            applyPaywallInfo(ev.data.paywall);
+          }
         }
       }
       if (!acc) acc = '(không có nội dung)';
       typing.innerHTML = mdLite(acc);
       messages.push({ role: 'assistant', content: acc });
       saveCurrent();
+      // Thẻ mời SAU khi câu trả lời đã hiện xong — chèn trước lúc đó thì nó đứng
+      // chen giữa lúc người ta đang đọc, thành quảng cáo cắt ngang.
+      maybeShowUpsell();
       // Đến từ link chia sẻ + đã hỏi thật lần đầu → ghi nhận 1 lượt chuyển đổi.
       if (_fromshareId && !_convFired) { _convFired = true; trackConvert(_fromshareId); }
     } catch (e) {

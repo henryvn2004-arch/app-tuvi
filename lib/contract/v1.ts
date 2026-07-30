@@ -175,6 +175,14 @@ export interface DoneEvent {
     blocked: boolean;
     reason?: string;
     balance?: number;
+    /**
+     * Giá MỘT lượt rail (Lượng) và số lượt TẶNG còn lại — additive, thêm để
+     * client đếm được "còn N câu hỏi" thay vì hiện số Lượng trừu tượng.
+     * Không có hai số này thì client phải tự đoán giá, và đoán sai là nói sai
+     * với người dùng ngay trên đồng hồ đếm.
+     */
+    price?: number;
+    freeTurns?: number;
   };
   /** gợi ý câu hỏi tiếp theo do LLM sinh, bám câu trả lời vừa rồi (chip động) */
   suggestions?: string[];

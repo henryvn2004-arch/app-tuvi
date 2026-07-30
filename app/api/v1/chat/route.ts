@@ -103,7 +103,9 @@ export async function POST(request: NextRequest) {
     freeTurnLeft = await railFreeRemaining(user.id);
     const balance = await getBalance(user.id);
     if (freeTurnLeft <= 0 && balance < cost) {
-      return jsonError('paywall', `Không đủ Lượng (cần ${cost}, còn ${balance})`, 402, { balance });
+      // Trả kèm `price` để client dịch được sang "còn N câu hỏi" / "cần thêm N
+      // câu" — nói bằng CÂU thì người dùng hiểu ngay, nói bằng Lượng thì không.
+      return jsonError('paywall', `Không đủ Lượng (cần ${cost}, còn ${balance})`, 402, { balance, price: cost });
     }
     chargeUserId = user.id;
   }
@@ -124,7 +126,12 @@ export async function POST(request: NextRequest) {
           if (usedFreeTurn) {
             // KHÔNG ghi credit_transactions: không có Lượng nào đổi chủ, ghi
             // giao dịch 0 đồng chỉ làm bẩn báo cáo doanh thu/chi phí.
-            paywall = { blocked: false, balance: await getBalance(chargeUserId) };
+            paywall = {
+              blocked: false,
+              balance: await getBalance(chargeUserId),
+              price: cost,
+              freeTurns: await railFreeRemaining(chargeUserId),
+            };
           } else {
             const newBal = await deductCredits(chargeUserId, cost);
             if (newBal != null) {
@@ -134,9 +141,13 @@ export async function POST(request: NextRequest) {
                 type: 'chat',
                 description: 'Lượt luận giải /api/v1/chat',
               });
-              paywall = { blocked: false, balance: newBal };
+              paywall = { blocked: false, balance: newBal, price: cost, freeTurns: freeTurnLeft };
             }
           }
+        } else if (cost > 0) {
+          // Paywall tắt / chưa đăng nhập nhưng vẫn nên cho client biết giá, để
+          // đồng hồ đếm câu không phải đoán.
+          paywall = { blocked: false, price: cost };
         }
         send(sse.done({ tools_used: toolsUsed, paywall, suggestions }));
         void chatLogOutcome('web', req.session_id, true);
