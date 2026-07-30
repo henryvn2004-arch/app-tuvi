@@ -103,16 +103,26 @@ export async function buildOpsDigest(): Promise<OpsDigest> {
   }
 
   // ── Job ──
-  const overdue = jobs.filter((j) => j.overdue);
+  // `stuck` loại khỏi `overdue` — cùng lý do như trong anomaly-alerts: một lượt
+  // treo lâu thoả cả hai, kể hai lần cho một sự cố làm digest đọc như đang có
+  // hai vấn đề.
+  const stuck = jobs.filter((j) => j.stuck);
+  const overdue = jobs.filter((j) => j.overdue && !j.stuck);
+  const failing = jobs.filter((j) => j.failing);
   const skipping = jobs.filter((j) => j.skipStreak >= 3);
-  if (!overdue.length && !skipping.length) {
+  if (!stuck.length && !overdue.length && !failing.length && !skipping.length) {
     lines.push(`\n⏰ JOB: ${jobs.length} job, tất cả chạy đúng lịch.`);
   } else {
-    issues += overdue.length + skipping.length;
-    lines.push(`\n⏰ JOB — ${overdue.length} quá hạn, ${skipping.length} skip liên tiếp:`);
+    issues += stuck.length + overdue.length + failing.length + skipping.length;
+    lines.push(
+      `\n⏰ JOB — ${stuck.length} chết giữa lượt, ${overdue.length} quá hạn, ` +
+        `${failing.length} lượt cuối lỗi, ${skipping.length} skip liên tiếp:`,
+    );
+    for (const j of stuck) lines.push(`   • ${j.label}: CHẾT GIỮA LƯỢT (nhịp tim còn treo)`);
     for (const j of overdue) {
       lines.push(`   • ${j.label}: ${j.lastRun ? 'trễ so với lịch ' + j.schedule : 'CHƯA HỀ có log'}`);
     }
+    for (const j of failing) lines.push(`   • ${j.label}: lượt gần nhất LỖI`);
     for (const j of skipping) lines.push(`   • ${j.label}: skip ${j.skipStreak} lượt liên tiếp`);
   }
 
