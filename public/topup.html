@@ -7,280 +7,343 @@
 <title>Bảng Giá & Nạp Lượng — Tử Vi Minh Bảo</title>
 <meta name="description" content="Nạp lượng để sử dụng các công cụ Tử Vi Minh Bảo. Đăng ký nhận Lượng miễn phí. Không hết hạn.">
 <link rel="icon" type="image/webp" href="/seal.webp">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&family=Be+Vietnam+Pro:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;
-  --gold:#9A7B3A;--gold-lt:#F9F4EB;
+  --gold:#9A7B3A;--gold-lt:#F9F4EB;--gold-bright:#c9a84c;
   --text:#1a1a1a;--text-mid:#444;--text-lt:#777;
   --border:#CCCCCC;--border-lt:#E8E8E8;
   --bg:#FFFFFF;--bg-soft:#F5F4F0;
   --red:#C0392B;--green:#1E6B3C;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh}
+/* Be Vietnam Pro = font body của phần lớn trang trong site; topup trước đây
+   dùng Arial nên lệch tông với mọi trang khác. */
+body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh;line-height:1.6}
 
-.wrap{max-width:1120px;margin:0 auto;padding:3rem 1.5rem 5rem}
+/* Icon SVG dùng chung (nav.js). KHÔNG dùng emoji — xem docs/ICONS.md */
+.ic{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.ic svg{width:1em;height:1em;display:block}
 
-/* HEADER */
-.page-header{text-align:center;margin-bottom:3rem}
+.wrap{max-width:1120px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
+
+/* ── 1. HEADER + SỐ DƯ ─────────────────────────────────────── */
+.page-header{text-align:center;margin-bottom:1.5rem}
 .page-header .eyebrow{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem}
-.page-header h1{font-family:'Noto Serif',serif;font-size:2.2rem;color:var(--navy);margin-bottom:.75rem}
-.page-header p{font-size:.95rem;color:var(--text-mid);max-width:540px;margin:0 auto;line-height:1.7}
+.page-header h1{font-family:'Noto Serif',serif;font-size:2.1rem;color:var(--navy);margin-bottom:.7rem;line-height:1.25}
+.page-header p{font-size:.93rem;color:var(--text-mid);max-width:560px;margin:0 auto;line-height:1.75}
 
-/* FREE BANNER */
-.free-banner{background:linear-gradient(135deg,#1E6B3C 0%,#27ae60 100%);border-radius:14px;padding:1.5rem 2rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
-.free-banner-left{color:#fff}
-.free-banner-tag{font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.8;margin-bottom:.35rem}
-.free-banner-title{font-family:'Noto Serif',serif;font-size:1.3rem;font-weight:700}
-.free-banner-sub{font-size:.85rem;opacity:.85;margin-top:.25rem}
-.btn-free{background:#fff;color:#1E6B3C;font-size:.88rem;font-weight:700;padding:.75rem 1.5rem;border-radius:8px;text-decoration:none;white-space:nowrap;border:none;cursor:pointer;font-family:inherit;transition:all .2s}
+.balance-bar{background:var(--navy);border-radius:12px;padding:1.15rem 1.75rem;display:none;align-items:center;justify-content:space-between;margin-bottom:2rem;gap:1rem;flex-wrap:wrap}
+.balance-bar.show{display:flex}
+.balance-label{color:rgba(255,255,255,.55);font-size:.78rem;margin-bottom:.15rem}
+.balance-value{color:#fff;font-family:'Noto Serif',serif;font-size:1.7rem;font-weight:700;line-height:1.1}
+.balance-value span{font-size:.85rem;font-weight:400;color:rgba(255,255,255,.5);margin-left:.25rem}
+.balance-can{color:var(--gold-bright);font-size:.82rem;margin-top:.3rem}
+.balance-link{color:rgba(255,255,255,.6);font-size:.82rem;text-decoration:none}
+.balance-link:hover{color:#fff}
+
+/* ── 2. QUÀ ĐĂNG KÝ ────────────────────────────────────────── */
+.free-banner{background:linear-gradient(135deg,#1E6B3C 0%,#27ae60 100%);border-radius:14px;padding:1.4rem 1.9rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.free-banner-left{color:#fff;display:flex;gap:1rem;align-items:flex-start}
+.free-banner-ic{font-size:1.6rem;opacity:.9;margin-top:.1rem}
+.free-banner-tag{font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.8;margin-bottom:.3rem}
+.free-banner-title{font-family:'Noto Serif',serif;font-size:1.22rem;font-weight:700;line-height:1.35}
+.free-banner-sub{font-size:.84rem;opacity:.88;margin-top:.3rem}
+.btn-free{background:#fff;color:#1E6B3C;font-size:.88rem;font-weight:700;padding:.75rem 1.5rem;border-radius:8px;text-decoration:none;white-space:nowrap;border:none;cursor:pointer;font-family:inherit;transition:background .2s}
 .btn-free:hover{background:#f0faf4}
 
-/* BALANCE */
-.balance-bar{background:var(--navy);border-radius:12px;padding:1.25rem 2rem;display:none;align-items:center;justify-content:space-between;margin-bottom:2rem;gap:1rem;flex-wrap:wrap}
-.balance-bar.show{display:flex}
-.balance-label{color:rgba(255,255,255,.6);font-size:.82rem;margin-bottom:.2rem}
-.balance-value{color:#fff;font-family:'Noto Serif',serif;font-size:1.75rem;font-weight:700}
-.balance-value span{font-size:.9rem;font-weight:400;color:rgba(255,255,255,.5);margin-left:.25rem}
+/* ── SECTION chung ─────────────────────────────────────────── */
+.sec{background:#fff;border:1px solid var(--border-lt);border-radius:14px;padding:1.75rem;margin-bottom:1.75rem}
+.sec-head{display:flex;align-items:baseline;gap:.6rem;margin-bottom:.3rem;flex-wrap:wrap}
+.sec h2{font-family:'Noto Serif',serif;font-size:1.18rem;color:var(--navy);font-weight:700}
+.sec-num{font-size:.7rem;font-weight:700;letter-spacing:2px;color:var(--gold);text-transform:uppercase}
+.sec-sub{font-size:.83rem;color:var(--text-lt);margin-bottom:1.4rem;line-height:1.65}
 
-/* PACKAGES */
-.section-label{font-size:.7rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-lt);margin-bottom:1.25rem}
-.packages{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1rem}
-@media(max-width:1100px){.packages{grid-template-columns:repeat(2,1fr);gap:1.25rem}}
-@media(max-width:560px){.packages{grid-template-columns:1fr}}
+/* ── 3. LƯỢNG DÙNG ĐƯỢC GÌ ─────────────────────────────────── */
+.highlight-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));gap:.75rem;margin-bottom:1.5rem}
+.hl-card{background:var(--gold-lt);border:1px solid rgba(154,123,58,.22);border-radius:10px;padding:.9rem 1rem}
+.hl-ic{font-size:1.15rem;color:var(--gold);margin-bottom:.4rem}
+.hl-name{font-size:.82rem;font-weight:600;color:var(--navy);line-height:1.35}
+.hl-cost{font-family:'Noto Serif',serif;font-size:1.35rem;font-weight:700;color:var(--navy);margin-top:.35rem;line-height:1}
+.hl-cost small{font-size:.62rem;font-weight:400;color:var(--text-lt);margin-left:.2rem}
+.hl-vnd{font-size:.74rem;color:var(--text-lt);margin-top:.2rem}
 
-.pkg-card{background:#fff;border:2px solid var(--border-lt);border-radius:14px;padding:1.5rem 1.25rem;text-align:center;position:relative;transition:border-color .2s,box-shadow .2s;display:flex;flex-direction:column}
-.pkg-card:hover{border-color:#c9a84c;box-shadow:0 6px 24px rgba(154,123,58,.12)}
+.cost-category{font-size:.66rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);padding:.9rem 0 .35rem;border-top:1px solid var(--border-lt);margin-top:.5rem}
+.cost-row{display:flex;align-items:center;justify-content:space-between;padding:.62rem 0;border-bottom:1px solid #f5f5f5;gap:.75rem}
+.cost-row:last-child{border-bottom:none}
+.cost-left{display:flex;align-items:center;gap:.75rem;min-width:0}
+.cost-icon-wrap{font-size:1.1rem;width:26px;color:var(--gold);flex-shrink:0}
+.cost-name{font-size:.86rem;color:var(--text);font-weight:600}
+.cost-desc{font-size:.74rem;color:var(--text-lt);margin-top:.08rem}
+.cost-right{text-align:right;flex-shrink:0}
+.cost-credits{font-weight:700;color:var(--navy);font-size:.9rem}
+.cost-usd{font-size:.72rem;color:var(--text-lt);margin-top:.05rem}
+.cost-free-badge{background:#e8f7ee;color:var(--green);font-size:.72rem;font-weight:700;padding:.18rem .55rem;border-radius:10px}
+.costs-loading{text-align:center;padding:1.75rem;color:var(--text-lt);font-size:.85rem}
+.free-note{margin-top:1.1rem;padding:.8rem 1rem;background:#F0FAF4;border-left:3px solid var(--green);border-radius:6px;font-size:.83rem;color:var(--text-mid);line-height:1.65;display:flex;gap:.6rem;align-items:flex-start}
+.free-note .ic{color:var(--green);font-size:1rem;margin-top:.1rem}
+
+/* ── 4. GÓI NẠP ────────────────────────────────────────────── */
+.pay-toggle{display:flex;background:var(--bg-soft);border:1.5px solid var(--border-lt);border-radius:9px;padding:.25rem;margin-bottom:1.4rem;max-width:430px}
+.pay-opt{flex:1;padding:.6rem .75rem;border:none;background:none;border-radius:6px;font-family:inherit;font-size:.84rem;font-weight:600;color:var(--text-mid);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.45rem;transition:all .15s}
+.pay-opt.on{background:var(--navy);color:#fff}
+.pay-opt .ic{font-size:1rem}
+
+.packages{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.25rem}
+@media(max-width:1000px){.packages{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:540px){.packages{grid-template-columns:1fr}}
+
+.pkg-card{background:#fff;border:2px solid var(--border-lt);border-radius:13px;padding:1.5rem 1.1rem 1.35rem;text-align:center;position:relative;transition:border-color .2s,box-shadow .2s;display:flex;flex-direction:column}
+.pkg-card:hover{border-color:var(--gold-bright);box-shadow:0 6px 24px rgba(154,123,58,.12)}
 .pkg-card.featured{border-color:var(--gold)}
-.pkg-icon{font-size:1.7rem;margin-bottom:.5rem}
-.pkg-name{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text-lt);margin-bottom:.5rem}
-.pkg-credits{font-family:'Noto Serif',serif;font-size:2.4rem;font-weight:700;color:var(--navy);line-height:1}
-.pkg-credits-unit{font-size:.8rem;font-weight:400;color:var(--text-lt);display:block;margin-top:.2rem}
-.pkg-price{font-size:1.05rem;color:var(--navy);margin:.85rem 0 .15rem;font-weight:700}
-.pkg-rate{font-size:.72rem;color:var(--text-lt);margin-bottom:.6rem}
-.pkg-note{font-size:.78rem;color:var(--text-mid);line-height:1.55;margin:.5rem 0 1rem;padding:.6rem .5rem;background:var(--bg-soft);border-radius:6px;flex:1}
-.btn-pkg{width:100%;padding:.9rem;border:none;border-radius:8px;font-size:.92rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;background:var(--navy);color:#fff}
+.pkg-flag{position:absolute;top:0;left:50%;transform:translate(-50%,-50%);background:var(--gold);color:#fff;font-size:.62rem;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;padding:.2rem .7rem;border-radius:20px;white-space:nowrap}
+.pkg-icon{font-size:1.5rem;color:var(--gold);margin-bottom:.45rem;display:flex;justify-content:center}
+.pkg-name{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.8px;color:var(--text-lt);margin-bottom:.45rem}
+.pkg-credits{font-family:'Noto Serif',serif;font-size:2.15rem;font-weight:700;color:var(--navy);line-height:1}
+.pkg-credits-unit{font-size:.75rem;font-weight:400;color:var(--text-lt);display:block;margin-top:.2rem}
+.pkg-price{font-size:1rem;color:var(--navy);margin:.7rem 0 .1rem;font-weight:700}
+.pkg-rate{font-size:.7rem;color:var(--text-lt);margin-bottom:.55rem}
+.pkg-note{font-size:.76rem;color:var(--text-mid);line-height:1.5;margin:.45rem 0 .9rem;padding:.55rem .5rem;background:var(--bg-soft);border-radius:6px;flex:1;display:flex;align-items:center;justify-content:center}
+.pkg-note strong{color:var(--navy)}
+.btn-pkg{width:100%;padding:.82rem;border:none;border-radius:8px;font-size:.88rem;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s;background:var(--navy);color:#fff}
 .btn-pkg:hover{background:var(--navy-mid)}
-.btn-pkg.gold{background:var(--gold);color:#fff}
-.btn-pkg.gold:hover{background:#7d6230}
+.pkg-card.featured .btn-pkg{background:var(--gold)}
+.pkg-card.featured .btn-pkg:hover{background:#7d6230}
 .btn-pkg:disabled{opacity:.6;cursor:not-allowed}
 
-/* CUSTOM TOPUP */
-.custom-card{background:#fff;border:2px solid var(--border-lt);border-radius:14px;padding:1.5rem 2rem;margin-bottom:2.5rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
-.custom-card-label{flex:1;min-width:200px}
-.custom-card-label strong{display:block;font-size:.95rem;color:var(--navy);margin-bottom:.25rem}
-.custom-card-label span{font-size:.82rem;color:var(--text-lt)}
-.custom-input-wrap{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
-.custom-prefix{font-size:1.1rem;font-weight:700;color:var(--text-mid)}
-.custom-input{width:90px;padding:.7rem .75rem;border:1.5px solid var(--border);border-radius:6px;font-size:1rem;font-weight:700;font-family:inherit;color:var(--navy);text-align:center}
-.custom-input:focus{outline:none;border-color:#c9a84c}
-.custom-credits-preview{font-size:.82rem;color:var(--text-lt);min-width:100px}
-.btn-custom{padding:.75rem 1.5rem;background:var(--navy);color:#fff;border:none;border-radius:8px;font-size:.88rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;white-space:nowrap}
+.custom-card{background:var(--bg-soft);border:1.5px dashed var(--border);border-radius:11px;padding:1.1rem 1.35rem;display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap}
+.custom-card-label{flex:1;min-width:185px}
+.custom-card-label strong{display:block;font-size:.9rem;color:var(--navy);margin-bottom:.15rem}
+.custom-card-label span{font-size:.78rem;color:var(--text-lt)}
+.custom-input-wrap{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap}
+.custom-input{width:118px;padding:.62rem .7rem;border:1.5px solid var(--border);border-radius:6px;font-size:.95rem;font-weight:700;font-family:inherit;color:var(--navy);text-align:right}
+.custom-input:focus{outline:none;border-color:var(--gold-bright)}
+.custom-suffix{font-size:1rem;font-weight:700;color:var(--text-mid)}
+.custom-credits-preview{font-size:.8rem;color:var(--text-lt);min-width:92px}
+.btn-custom{padding:.68rem 1.25rem;background:var(--navy);color:#fff;border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s;white-space:nowrap}
 .btn-custom:hover{background:var(--navy-mid)}
+.btn-custom:disabled{opacity:.6;cursor:not-allowed}
 
-/* TOOL COSTS — DYNAMIC */
-.costs-section{background:#fff;border:1px solid var(--border-lt);border-radius:14px;padding:2rem;margin-bottom:2rem}
-.costs-section h3{font-family:'Noto Serif',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.35rem}
-.costs-subtitle{font-size:.82rem;color:var(--text-lt);margin-bottom:1.5rem}
-.cost-category{font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);padding:.5rem 0 .4rem;margin-top:.75rem}
-.cost-row{display:flex;align-items:center;justify-content:space-between;padding:.7rem 0;border-bottom:1px solid var(--border-lt)}
-.cost-row:last-child{border-bottom:none}
-.cost-left{display:flex;align-items:center;gap:.75rem}
-.cost-icon-wrap{font-size:1.25rem;width:32px;text-align:center;flex-shrink:0}
-.cost-info{}
-.cost-name{font-size:.88rem;color:var(--text);font-weight:600}
-.cost-desc{font-size:.75rem;color:var(--text-lt);margin-top:.1rem}
-.cost-right{text-align:right;flex-shrink:0}
-.cost-credits{font-weight:700;color:var(--navy);font-size:.92rem}
-.cost-usd{font-size:.72rem;color:var(--text-lt);margin-top:.1rem}
-.cost-free-badge{background:#e8f7ee;color:var(--green);font-size:.72rem;font-weight:700;padding:.15rem .5rem;border-radius:10px}
-.costs-loading{text-align:center;padding:2rem;color:var(--text-lt);font-size:.85rem}
+/* ── 5. MỜI BẠN ────────────────────────────────────────────── */
+.ref-box{background:var(--bg-soft);border:1px solid var(--border-lt);border-radius:10px;padding:1.15rem;display:flex;flex-direction:column;gap:.85rem}
+.ref-line{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap}
+.ref-lbl{font-size:.8rem;color:var(--text-lt)}
+.ref-code{font-family:'Noto Serif',serif;font-size:1.5rem;font-weight:700;color:var(--navy);letter-spacing:.15em;padding:.35rem .8rem;background:#fff;border:1px solid var(--border-lt);border-radius:6px}
+.ref-link-code{flex:1;min-width:180px;background:#fff;border:1px solid var(--border-lt);padding:.5rem .7rem;border-radius:6px;font-size:.78rem;color:var(--text);overflow-x:auto;white-space:nowrap;font-family:inherit}
+.btn-sm{background:#fff;border:1.5px solid var(--navy);color:var(--navy);padding:.5rem .85rem;border-radius:6px;font-weight:600;cursor:pointer;font-size:.82rem;font-family:inherit;display:inline-flex;align-items:center;gap:.35rem;transition:all .15s}
+.btn-sm:hover{background:var(--navy);color:#fff}
+.btn-sm.solid{background:var(--navy);color:var(--gold-bright);border-color:var(--navy)}
+.btn-sm.solid:hover{background:var(--navy-mid)}
+.ref-share{display:flex;gap:.5rem;flex-wrap:wrap}
+.btn-chan{color:#fff;border:none;padding:.5rem 1rem;border-radius:6px;font-weight:600;cursor:pointer;font-size:.82rem;font-family:inherit}
+.ref-stats{display:flex;gap:1.5rem;padding-top:.75rem;border-top:1px dashed var(--border-lt);font-size:.83rem;color:var(--text-lt);flex-wrap:wrap}
 
-/* FAQ */
-.faq{background:#fff;border:1px solid var(--border-lt);border-radius:14px;padding:2rem;margin-bottom:2rem}
-.faq h3{font-family:'Noto Serif',serif;font-size:1.1rem;color:var(--navy);margin-bottom:1.25rem}
-.faq-item{margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border-lt)}
+/* ── 6. FAQ ────────────────────────────────────────────────── */
+.faq-item{margin-bottom:.9rem;padding-bottom:.9rem;border-bottom:1px solid var(--border-lt)}
 .faq-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
-.faq-q{font-size:.88rem;font-weight:700;color:var(--navy);margin-bottom:.35rem}
-.faq-a{font-size:.84rem;color:var(--text-mid);line-height:1.7}
+.faq-q{font-size:.87rem;font-weight:700;color:var(--navy);margin-bottom:.3rem}
+.faq-a{font-size:.83rem;color:var(--text-mid);line-height:1.7}
 
-/* ALERT */
-.alert{padding:.85rem 1.1rem;border-radius:8px;font-size:.85rem;margin-bottom:1.25rem;display:none}
-.alert.error{background:#FFF5F5;color:var(--red);border:1px solid #f5c6c6;display:block}
-.alert.success{background:#F0FAF4;color:var(--green);border:1px solid #c3e6d0;display:block}
+/* ── ALERT ─────────────────────────────────────────────────── */
+.alert{padding:.85rem 1.1rem;border-radius:8px;font-size:.85rem;margin-bottom:1.25rem;display:none;align-items:center;gap:.55rem}
+.alert.error{background:#FFF5F5;color:var(--red);border:1px solid #f5c6c6;display:flex}
+.alert.success{background:#F0FAF4;color:var(--green);border:1px solid #c3e6d0;display:flex}
 </style>
 <script src="/track.js?v=2"></script>
 <script>try{window.Track&&window.Track.event&&window.Track.event('topup_start',{meta:{from:'topup_page'}})}catch(e){}</script>
 <script src="/auth.js"></script>
 </head>
 <body>
-<script src="/nav.js?v=18"></script>
+<script src="/nav.js?v=19"></script>
 
 <div class="wrap">
+
+  <!-- ══ 1. HEADER + SỐ DƯ ══════════════════════════════════ -->
   <div class="page-header">
     <div class="eyebrow">Đóng Góp Duy Trì</div>
     <h1>Nạp Lượng để Tra Cứu Mệnh Lý</h1>
-    <p>Tử Vi Minh Bảo là dự án nghiên cứu mệnh lý cổ pháp được hỗ trợ bởi AI. Việc nạp Lượng giúp duy trì server, chi trả API mô hình ngôn ngữ lớn, và phát triển thêm công cụ. <strong>1 Lượng = 2.500đ</strong>, không hết hạn.</p>
+    <p>Tử Vi Minh Bảo là dự án nghiên cứu mệnh lý cổ pháp được hỗ trợ bởi AI. Việc nạp Lượng giúp duy trì server, chi trả API mô hình ngôn ngữ, và phát triển thêm công cụ. <strong>Lượng không hết hạn.</strong></p>
   </div>
 
-  <!-- Balance -->
   <div class="balance-bar" id="balanceBar">
     <div>
       <div class="balance-label">Số dư hiện tại</div>
-      <div class="balance-value" id="balanceDisplay">0 <span>lượng</span></div>
+      <div class="balance-value" id="balanceDisplay">0 <span>Lượng</span></div>
+      <div class="balance-can" id="balanceCan"></div>
     </div>
-    <a href="/profile.html" style="color:rgba(255,255,255,.6);font-size:.82rem;text-decoration:none">Xem lịch sử →</a>
+    <a href="/profile.html" class="balance-link">Xem lịch sử <span aria-hidden="true">→</span></a>
   </div>
 
-  <div id="alertBox" class="alert"></div>
+  <div id="alertBox" class="alert"><span class="ic" data-icon="info"></span><span id="alertText"></span></div>
 
-  <!-- Free signup banner -->
+  <!-- ══ 2. QUÀ ĐĂNG KÝ (ẩn khi đã đăng nhập) ═══════════════ -->
   <div class="free-banner" id="freeBanner">
     <div class="free-banner-left">
-      <div class="free-banner-tag">Quà Chào Mừng</div>
-      <div class="free-banner-title">Tặng Lượng miễn phí cho thành viên mới</div>
-      <div class="free-banner-sub">Đủ để bạn dùng thử các công cụ Xem Tướng. Không cần thẻ, không cam kết.</div>
-    </div>
-    <button class="btn-free" id="freeBannerBtn" onclick="handleFreeSignup()">Đăng Ký →</button>
-  </div>
-
-  <!-- Packages -->
-  <div class="section-label" style="margin-bottom:1.25rem">Mức Đóng Góp</div>
-  <div class="packages">
-
-    <!-- Khởi Đầu -->
-    <div class="pkg-card">
-      <div class="pkg-icon"><span class="ic-inline" data-icon-emoji="🌱" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🌱</span></div>
-      <div class="pkg-name">Khởi Đầu</div>
-      <div class="pkg-credits">50<span class="pkg-credits-unit">Lượng</span></div>
-      <div class="pkg-price">99.000đ</div>
-      <div class="pkg-rate">≈ $4 · 1.980đ / Lượng</div>
-      <div class="pkg-note">Phù hợp để trải nghiệm các công cụ Xem Tướng, Đặt Tên, Chọn Ngày Tốt.</div>
-      <button class="btn-pkg" onclick="initiateTopup('50')" id="btn-50">Nạp 99.000đ</button>
-      <button class="btn-pkg" style="margin-top:.5rem;background:#fff;color:var(--navy);border:2px solid var(--navy)" onclick="initiateBankTopup('50')">🏦 Chuyển khoản</button>
-    </div>
-
-    <!-- Phổ Thông -->
-    <div class="pkg-card featured">
-      <div class="pkg-icon">⭐</div>
-      <div class="pkg-name">Phổ Thông</div>
-      <div class="pkg-credits">120<span class="pkg-credits-unit">Lượng</span></div>
-      <div class="pkg-price">199.000đ</div>
-      <div class="pkg-rate">≈ $8 · 1.660đ / Lượng</div>
-      <div class="pkg-note">Đủ cho 1 Tử Bình Bát Tự đầy đủ hoặc 2 lần Xem Tuổi.</div>
-      <button class="btn-pkg gold" onclick="initiateTopup('120')" id="btn-120">Nạp 199.000đ</button>
-      <button class="btn-pkg" style="margin-top:.5rem;background:#fff;color:var(--navy);border:2px solid var(--navy)" onclick="initiateBankTopup('120')">🏦 Chuyển khoản</button>
-    </div>
-
-    <!-- Cao Cấp -->
-    <div class="pkg-card">
-      <div class="pkg-icon"><span class="ic-inline" data-icon-emoji="💎" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">💎</span></div>
-      <div class="pkg-name">Cao Cấp</div>
-      <div class="pkg-credits">350<span class="pkg-credits-unit">Lượng</span></div>
-      <div class="pkg-price">499.000đ</div>
-      <div class="pkg-rate">≈ $20 · 1.425đ / Lượng</div>
-      <div class="pkg-note">Đủ cho 2 Luận Giải Lá Số đầy đủ + Xem Tuổi cho cả nhà.</div>
-      <button class="btn-pkg" onclick="initiateTopup('350')" id="btn-350">Nạp 499.000đ</button>
-      <button class="btn-pkg" style="margin-top:.5rem;background:#fff;color:var(--navy);border:2px solid var(--navy)" onclick="initiateBankTopup('350')">🏦 Chuyển khoản</button>
-    </div>
-
-    <!-- VIP -->
-    <div class="pkg-card">
-      <div class="pkg-icon"><span class="ic-inline" data-icon-emoji="👑" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">👑</span></div>
-      <div class="pkg-name">VIP</div>
-      <div class="pkg-credits">800<span class="pkg-credits-unit">Lượng</span></div>
-      <div class="pkg-price">999.000đ</div>
-      <div class="pkg-rate">≈ $40 · 1.250đ / Lượng</div>
-      <div class="pkg-note">Phù hợp cho gia đình hoặc dùng nghiên cứu thường xuyên.</div>
-      <button class="btn-pkg" onclick="initiateTopup('800')" id="btn-800">Nạp 999.000đ</button>
-      <button class="btn-pkg" style="margin-top:.5rem;background:#fff;color:var(--navy);border:2px solid var(--navy)" onclick="initiateBankTopup('800')">🏦 Chuyển khoản</button>
-    </div>
-
-  </div>
-
-  <!-- Academic note about why payment exists -->
-  <div style="margin:1rem 0 2rem;padding:1.1rem 1.4rem;background:var(--bg-soft);border-left:3px solid var(--gold);border-radius:6px;font-size:.85rem;color:var(--text-mid);line-height:1.7">
-    <strong style="color:var(--navy)">Vì sao có thanh toán?</strong> Mỗi luận giải AI gọi API mô hình ngôn ngữ lớn (Claude/GPT), tốn khoảng 0.05–0.10 USD mỗi lần. Cộng với chi phí lưu trữ Supabase, hosting Vercel, và phát triển công cụ mới — Lượng là cách giúp dự án tự duy trì để giữ <strong>28 công cụ tra cứu khác miễn phí</strong> cho mọi người.
-  </div>
-
-  <!-- Custom topup -->
-  <div class="custom-card" id="customCard">
-    <div class="custom-card-label">
-      <strong>Nạp Số Tiền Tùy Chỉnh</strong>
-      <span>Tối thiểu 50.000đ · Không bonus · 2.500đ / Lượng</span>
-    </div>
-    <div class="custom-input-wrap">
-      <input type="number" class="custom-input" id="customInput" min="50000" max="5000000" step="1000" placeholder="100000" oninput="onCustomInput()">
-      <span class="custom-prefix" style="left:auto;right:1rem">đ</span>
-      <span class="custom-credits-preview" id="customPreview">= 40 Lượng</span>
-      <button class="btn-custom" id="btnCustom" onclick="initiateTopup('custom')">PayPal</button>
-      <button class="btn-custom" style="background:#fff;color:var(--navy);border:2px solid var(--navy)" onclick="initiateBankTopup('custom')">🏦 CK</button>
-    </div>
-  </div>
-
-  <!-- Tool Costs — Dynamic -->
-  <div class="costs-section">
-    <h3>Chi Phí Các Công Cụ</h3>
-    <p class="costs-subtitle">Cập nhật tự động khi có công cụ mới. 1 Lượng = 2.500đ.</p>
-    <div id="costsContent"><div class="costs-loading">⏳ Đang tải...</div></div>
-  </div>
-
-  <!-- Referral Program -->
-  <div class="costs-section" id="referralSection" style="display:none">
-    <h3>🎁 Mời Bạn — Cùng Nhận Lượng</h3>
-    <p class="costs-subtitle" id="refPitchTopup">Mời bạn đăng ký → bạn nhận Lượng ngay. Khi họ nạp lần đầu, cả 2 cùng nhận thêm <strong>30 Lượng</strong>.</p>
-    <div style="background:#fff;border:1px solid var(--border-lt);border-radius:10px;padding:1.25rem;display:flex;flex-direction:column;gap:.85rem">
-      <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
-        <div style="font-size:.82rem;color:var(--text-lt)">Mã giới thiệu của bạn:</div>
-        <div id="refCode" style="font-family:'Noto Serif',serif;font-size:1.6rem;font-weight:700;color:var(--navy);letter-spacing:.15em;padding:.4rem .85rem;background:var(--bg-soft);border-radius:6px">—</div>
-        <button id="btnCopyRef" onclick="copyRefCode()" style="margin-left:auto;background:var(--navy);color:#c9a84c;border:none;padding:.55rem 1rem;border-radius:6px;font-weight:600;cursor:pointer;font-size:.85rem">📋 Copy</button>
+      <span class="ic free-banner-ic" data-icon="gift"></span>
+      <div>
+        <div class="free-banner-tag">Quà Chào Mừng</div>
+        <div class="free-banner-title" id="freeBannerTitle">Tặng Lượng miễn phí cho thành viên mới</div>
+        <div class="free-banner-sub">Không cần thẻ, không cam kết. Lượng tặng dùng được ngay.</div>
       </div>
-      <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
-        <div style="font-size:.82rem;color:var(--text-lt)">Link mời:</div>
-        <code id="refLink" style="flex:1;background:var(--bg-soft);padding:.5rem .75rem;border-radius:6px;font-size:.8rem;color:var(--text);overflow-x:auto;white-space:nowrap">—</code>
-        <button id="btnCopyLink" onclick="copyRefLink()" style="background:#fff;border:1.5px solid var(--navy);color:var(--navy);padding:.5rem .85rem;border-radius:6px;font-weight:600;cursor:pointer;font-size:.85rem">📋 Copy Link</button>
+    </div>
+    <button class="btn-free" id="freeBannerBtn" onclick="handleFreeSignup()">Đăng Ký <span aria-hidden="true">→</span></button>
+  </div>
+
+  <!-- ══ 3. LƯỢNG DÙNG ĐƯỢC GÌ (đặt TRƯỚC bảng giá) ═════════ -->
+  <!-- Thứ tự cũ bán trước khi thuyết phục: 4 gói nằm trên, bảng "Lượng mua được
+       gì" nằm dưới → người ta thấy giá trước khi biết Lượng là gì. Đảo lại. -->
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">Bước 1</span><h2>Lượng dùng được gì</h2></div>
+    <p class="sec-sub">Giá cập nhật tự động khi có công cụ mới. <span id="rateNote"></span></p>
+    <div class="highlight-row" id="highlightRow"></div>
+    <div id="costsContent"><div class="costs-loading">Đang tải bảng giá…</div></div>
+    <div class="free-note">
+      <span class="ic" data-icon="check-circle"></span>
+      <div id="freeToolsNote">Ngoài ra còn nhiều công cụ tra cứu cổ pháp <strong>hoàn toàn miễn phí</strong>, không cần Lượng.</div>
+    </div>
+  </div>
+
+  <!-- ══ 4. GÓI NẠP ═════════════════════════════════════════ -->
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">Bước 2</span><h2>Chọn mức đóng góp</h2></div>
+    <p class="sec-sub">Chọn cách thanh toán trước, rồi bấm gói bạn muốn.</p>
+
+    <!-- Trước đây MỖI card có 2 nút (PayPal + Chuyển khoản) → 8 nút cho 4 gói,
+         rối và lặp. Nay chọn phương thức MỘT LẦN, mỗi card còn 1 nút. -->
+    <div class="pay-toggle" role="group" aria-label="Phương thức thanh toán">
+      <button class="pay-opt on" id="payBank" onclick="setPayMethod('bank')">
+        <span class="ic" data-icon="landmark"></span> Chuyển khoản VND
+      </button>
+      <button class="pay-opt" id="payPaypal" onclick="setPayMethod('paypal')">
+        <span class="ic" data-icon="credit-card"></span> PayPal / Thẻ
+      </button>
+    </div>
+
+    <div class="packages">
+      <div class="pkg-card" data-pkg="50">
+        <div class="pkg-icon"><span class="ic" data-icon="leaf"></span></div>
+        <div class="pkg-name">Khởi Đầu</div>
+        <div class="pkg-credits">100<span class="pkg-credits-unit">Lượng</span></div>
+        <div class="pkg-price">99.000đ</div>
+        <div class="pkg-rate">990đ / Lượng</div>
+        <div class="pkg-note"></div>
+        <button class="btn-pkg" onclick="startTopup('50')" id="btn-50">Nạp 99.000đ</button>
       </div>
-      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
-        <button onclick="shareRef('zalo')" style="background:#0068ff;color:#fff;border:none;padding:.5rem 1rem;border-radius:6px;font-weight:600;cursor:pointer;font-size:.85rem">Zalo</button>
-        <button onclick="shareRef('messenger')" style="background:#0084ff;color:#fff;border:none;padding:.5rem 1rem;border-radius:6px;font-weight:600;cursor:pointer;font-size:.85rem">Messenger</button>
-        <button onclick="shareRef('facebook')" style="background:#1877f2;color:#fff;border:none;padding:.5rem 1rem;border-radius:6px;font-weight:600;cursor:pointer;font-size:.85rem">Facebook</button>
-        <button onclick="shareRef('whatsapp')" style="background:#25d366;color:#fff;border:none;padding:.5rem 1rem;border-radius:6px;font-weight:600;cursor:pointer;font-size:.85rem">WhatsApp</button>
+
+      <div class="pkg-card featured" data-pkg="120">
+        <div class="pkg-flag">Phổ biến nhất</div>
+        <div class="pkg-icon"><span class="ic" data-icon="star"></span></div>
+        <div class="pkg-name">Phổ Thông</div>
+        <div class="pkg-credits">240<span class="pkg-credits-unit">Lượng</span></div>
+        <div class="pkg-price">199.000đ</div>
+        <div class="pkg-rate">829đ / Lượng</div>
+        <div class="pkg-note"></div>
+        <button class="btn-pkg" onclick="startTopup('120')" id="btn-120">Nạp 199.000đ</button>
       </div>
-      <div id="refStats" style="display:flex;gap:1.5rem;padding-top:.75rem;border-top:1px dashed var(--border-lt);font-size:.85rem;color:var(--text-lt)">
+
+      <div class="pkg-card" data-pkg="350">
+        <div class="pkg-icon"><span class="ic" data-icon="gem"></span></div>
+        <div class="pkg-name">Cao Cấp</div>
+        <div class="pkg-credits">700<span class="pkg-credits-unit">Lượng</span></div>
+        <div class="pkg-price">499.000đ</div>
+        <div class="pkg-rate">713đ / Lượng</div>
+        <div class="pkg-note"></div>
+        <button class="btn-pkg" onclick="startTopup('350')" id="btn-350">Nạp 499.000đ</button>
+      </div>
+
+      <div class="pkg-card" data-pkg="800">
+        <div class="pkg-icon"><span class="ic" data-icon="crown"></span></div>
+        <div class="pkg-name">VIP</div>
+        <div class="pkg-credits">1600<span class="pkg-credits-unit">Lượng</span></div>
+        <div class="pkg-price">999.000đ</div>
+        <div class="pkg-rate">624đ / Lượng</div>
+        <div class="pkg-note"></div>
+        <button class="btn-pkg" onclick="startTopup('800')" id="btn-800">Nạp 999.000đ</button>
+      </div>
+    </div>
+
+    <div class="custom-card">
+      <div class="custom-card-label">
+        <strong>Hoặc nạp số tiền tùy chỉnh</strong>
+        <span>Tối thiểu 50.000đ · không có ưu đãi theo bậc</span>
+      </div>
+      <div class="custom-input-wrap">
+        <input type="number" class="custom-input" id="customInput" min="50000" max="5000000" step="1000" placeholder="100000" oninput="onCustomInput()">
+        <span class="custom-suffix">đ</span>
+        <span class="custom-credits-preview" id="customPreview"></span>
+        <button class="btn-custom" id="btnCustom" onclick="startTopup('custom')">Nạp</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 5. MỜI BẠN (kéo LÊN khỏi đáy trang) ════════════════ -->
+  <!-- Đây là đường lấy Lượng KHÔNG mất tiền — để nó nằm dưới FAQ ở đáy trang thì
+       người đang cân nhắc chi tiền không bao giờ thấy. -->
+  <div class="sec" id="referralSection" style="display:none">
+    <div class="sec-head"><span class="sec-num">Miễn phí</span><h2>Mời bạn — cùng nhận Lượng</h2></div>
+    <p class="sec-sub" id="refPitchTopup">Mời bạn đăng ký → bạn nhận Lượng ngay.</p>
+    <div class="ref-box">
+      <div class="ref-line">
+        <span class="ref-lbl">Mã giới thiệu của bạn:</span>
+        <span class="ref-code" id="refCode">—</span>
+        <button class="btn-sm solid" id="btnCopyRef" onclick="copyRefCode()" style="margin-left:auto">
+          <span class="ic" data-icon="clipboard"></span><span>Copy mã</span>
+        </button>
+      </div>
+      <div class="ref-line">
+        <span class="ref-lbl">Link mời:</span>
+        <code class="ref-link-code" id="refLink">—</code>
+        <button class="btn-sm" id="btnCopyLink" onclick="copyRefLink()">
+          <span class="ic" data-icon="link"></span><span>Copy link</span>
+        </button>
+      </div>
+      <div class="ref-share">
+        <button class="btn-chan" style="background:#0068ff" onclick="shareRef('zalo')">Zalo</button>
+        <button class="btn-chan" style="background:#0084ff" onclick="shareRef('messenger')">Messenger</button>
+        <button class="btn-chan" style="background:#1877f2" onclick="shareRef('facebook')">Facebook</button>
+        <button class="btn-chan" style="background:#25d366" onclick="shareRef('whatsapp')">WhatsApp</button>
+      </div>
+      <div class="ref-stats">
         <div>Đã mời: <strong id="refTotal" style="color:var(--navy)">—</strong></div>
         <div>Đã nạp lần đầu: <strong id="refQualified" style="color:var(--green)">—</strong></div>
-        <div>Đã nhận: <strong id="refEarned" style="color:#9A7B3A">—</strong> Lượng</div>
+        <div>Đã nhận: <strong id="refEarned" style="color:var(--gold)">—</strong> Lượng</div>
       </div>
     </div>
   </div>
 
-  <!-- FAQ -->
-  <div class="faq">
-    <h3>Câu Hỏi Thường Gặp</h3>
-    <div class="faq-item">
-      <div class="faq-q">Lượng có hết hạn không?</div>
-      <div class="faq-a">Không bao giờ. Lượng được lưu vĩnh viễn trong tài khoản.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">Xem lại kết quả có bị trừ lượng tiếp không?</div>
-      <div class="faq-a">Không. Mỗi lá số / kết quả chỉ trừ Lượng một lần. Sau đó xem lại tùy ý miễn phí.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">Tôi có thể thanh toán bằng cách nào?</div>
-      <div class="faq-a">Hai phương thức: <strong>(1) PayPal</strong> — chấp nhận thẻ Visa/Mastercard quốc tế (chọn "Pay with Debit or Credit Card" trong cửa sổ PayPal, không cần tài khoản). <strong>(2) Chuyển khoản ngân hàng VND</strong> qua payOS — quét QR từ app ngân hàng Việt Nam, ghi credit tự động.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">Quà Lượng chào mừng khi đăng ký dùng được gì?</div>
-      <div class="faq-a">Dùng được nhiều lần Xem Tướng (5 Lượng/lần), hỏi Tử Vi Chat, hoặc trải nghiệm nhiều công cụ phong cách AI khác. 28 công cụ tra cứu khác (an sao, tứ trụ, hoàng đạo, tarot...) hoàn toàn miễn phí, không cần Lượng.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">Lượng có dùng chung tài khoản được không?</div>
-      <div class="faq-a">Lượng gắn với một tài khoản. Nếu muốn dùng cho cả nhà, có thể chọn mức đóng góp lớn hơn (Cao Cấp / VIP) và dùng chung 1 tài khoản.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">Vì sao có thanh toán mà không phải hoàn toàn miễn phí?</div>
-      <div class="faq-a">28 công cụ tra cứu cổ pháp (an sao, tứ trụ, hoàng đạo...) hoàn toàn miễn phí. Các công cụ luận giải bằng AI thì cần Lượng vì mỗi lần gọi API mô hình ngôn ngữ lớn (Claude/GPT) tốn 0.05–0.10 USD. Lượng giúp dự án bù đắp chi phí AI, server và phát triển công cụ mới.</div>
+  <!-- ══ 6. FAQ (gộp luôn "vì sao có thanh toán") ═══════════ -->
+  <!-- Trước đây "Vì sao có thanh toán?" xuất hiện HAI LẦN: một khối riêng giữa
+       trang và một mục FAQ. Gộp về một chỗ, để ở đầu FAQ. -->
+  <div class="sec">
+    <div class="sec-head"><h2>Câu hỏi thường gặp</h2></div>
+    <div style="margin-top:1rem">
+      <div class="faq-item">
+        <div class="faq-q">Vì sao có thanh toán mà không miễn phí hoàn toàn?</div>
+        <div class="faq-a">Các công cụ tra cứu cổ pháp (an sao, tứ trụ, hoàng đạo, tarot…) hoàn toàn miễn phí. Riêng phần luận giải bằng AI thì mỗi lượt phải gọi API mô hình ngôn ngữ và mô hình sinh ảnh — đó là chi phí thật, trả theo từng lượt. Lượng giúp dự án bù chi phí đó, trả tiền server, và giữ phần còn lại miễn phí cho mọi người.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Lượng có hết hạn không?</div>
+        <div class="faq-a">Không bao giờ. Lượng được lưu vĩnh viễn trong tài khoản.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Xem lại kết quả có bị trừ Lượng tiếp không?</div>
+        <div class="faq-a">Không. Mỗi lá số / kết quả chỉ trừ Lượng một lần. Sau đó xem lại tùy ý, miễn phí.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Tôi thanh toán bằng cách nào?</div>
+        <div class="faq-a"><strong>Chuyển khoản ngân hàng VND</strong> qua payOS — quét QR bằng app ngân hàng Việt Nam, Lượng vào tài khoản tự động. Hoặc <strong>PayPal</strong> — chấp nhận thẻ Visa/Mastercard quốc tế (chọn "Pay with Debit or Credit Card" trong cửa sổ PayPal, không cần có tài khoản PayPal).</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Quà Lượng chào mừng dùng được gì?</div>
+        <div class="faq-a" id="faqWelcome">Dùng được ngay cho công cụ luận giải và hỏi đáp với trợ lý.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Lượng có dùng chung tài khoản được không?</div>
+        <div class="faq-a">Lượng gắn với một tài khoản. Muốn xem cho cả nhà thì cứ dùng chung một tài khoản và chọn mức đóng góp lớn hơn — càng lên bậc cao, giá mỗi Lượng càng rẻ.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -290,16 +353,62 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 const SUPABASE_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 
-// ── Load balance ──────────────────────────────────────────────
+// Neo quy đổi 1 Lượng ≈ VNĐ. GIỮ KHỚP `app_config['credits.vnd_per_credit']`
+// (RPC báo cáo đọc qua credit_vnd()) và `VND_PER_CREDIT` ở lib/billing/packages.ts.
+// Xem _patches/migration-pricing-v2.sql.
+const VND_PER_CREDIT = 1000;
+
+// Tool đưa lên dải nổi bật — thứ người ta thật sự tới trang này để mua.
+const HIGHLIGHT = [
+  { id: 'laso',            icon: 'sparkles',        label: 'Luận Giải Lá Số',     unit: 'mỗi lá số' },
+  { id: 'rail-message',    icon: 'message-circle',  label: 'Hỏi trợ lý',          unit: 'mỗi câu hỏi' },
+  { id: 'tu-binh',         icon: 'scroll-text',     label: 'Tử Bình Bát Tự',      unit: 'mỗi lá số' },
+  { id: 'xem-tuoi',        icon: 'heart-handshake', label: 'Xem Tuổi Vợ Chồng',   unit: 'mỗi cặp' },
+];
+
+let _tools = null;        // tool_pricing đã tải
+let _payMethod = 'bank';  // 'bank' | 'paypal' — chuyển khoản là đường chính ở VN
+
+function fmtVnd(v) { return (Math.ceil(v / 1000) * 1000).toLocaleString('vi-VN') + 'đ'; }
+function esc(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function priceOf(id) { const t = (_tools || []).find(x => x.tool_id === id); return t ? t.credits : null; }
+function icon(name) { return (window.ICONS && window.ICONS[name]) || ''; }
+
+// ── Phương thức thanh toán ───────────────────────────────────
+function setPayMethod(m) {
+  _payMethod = m;
+  document.getElementById('payBank').classList.toggle('on', m === 'bank');
+  document.getElementById('payPaypal').classList.toggle('on', m === 'paypal');
+  refreshPayLabels();
+}
+function refreshPayLabels() {
+  const via = _payMethod === 'bank' ? 'Chuyển khoản' : 'PayPal';
+  document.querySelectorAll('.pkg-card').forEach(card => {
+    const btn = card.querySelector('.btn-pkg');
+    const price = card.querySelector('.pkg-price');
+    if (btn && price && !btn.disabled) btn.textContent = via + ' ' + price.textContent;
+  });
+  const bc = document.getElementById('btnCustom');
+  if (bc && !bc.disabled) bc.textContent = via;
+}
+function startTopup(pkgId) {
+  return _payMethod === 'bank' ? initiateBankTopup(pkgId) : initiateTopup(pkgId);
+}
+
+// ── Số dư ────────────────────────────────────────────────────
 async function loadBalance() {
   const deadline = Date.now() + 3000;
   while (!window.Auth?.isLoggedIn() && Date.now() < deadline)
     await new Promise(r => setTimeout(r, 100));
 
   const loggedIn = window.Auth?.isLoggedIn();
-
-  // Hide free banner if already logged in
   if (loggedIn) document.getElementById('freeBanner').style.display = 'none';
+
+  const p = new URLSearchParams(window.location.search);
+  if (p.get('payment') === 'cancelled') {
+    showAlert('error', 'Thanh toán đã bị hủy. Bạn có thể thử lại bất kỳ lúc nào.');
+    window.history.replaceState({}, '', '/topup.html');
+  }
 
   if (!loggedIn) return;
   const userId = window.Auth.getUser()?.id;
@@ -309,99 +418,166 @@ async function loadBalance() {
     const res  = await fetch(`/api/payment?action=balance&userId=${encodeURIComponent(userId)}`);
     const data = await res.json();
     const bal  = data.balance ?? 0;
-    document.getElementById('balanceDisplay').innerHTML = `${bal} <span>lượng</span>`;
+    document.getElementById('balanceDisplay').innerHTML = `${bal} <span>Lượng</span>`;
     document.getElementById('balanceBar').classList.add('show');
+    renderBalanceCan(bal);
   } catch(e) {}
-
-  // Cancelled payment banner
-  const p = new URLSearchParams(window.location.search);
-  if (p.get('payment') === 'cancelled') {
-    showAlert('error', 'Thanh toán đã bị hủy. Bạn có thể thử lại bất kỳ lúc nào.');
-    window.history.replaceState({}, '', '/topup.html');
-  }
 }
 
-// ── Load tool pricing from Supabase ──────────────────────────
+// "Còn 240 Lượng" là con số trừu tượng — dịch thẳng sang thứ mua được.
+function renderBalanceCan(bal) {
+  const el = document.getElementById('balanceCan');
+  if (!el) return;
+  const laso = priceOf('laso'), rail = priceOf('rail-message');
+  if (!laso || !bal) { el.textContent = ''; return; }
+  const parts = [];
+  if (bal >= laso) parts.push(`${Math.floor(bal / laso)} lá số Luận Giải`);
+  if (rail) parts.push(`${Math.floor(bal / rail)} câu hỏi trợ lý`);
+  el.textContent = parts.length ? '≈ ' + parts.join(' · ') : '';
+}
+function currentBalance() {
+  const t = document.getElementById('balanceDisplay')?.textContent || '';
+  const n = parseInt(t, 10);
+  return isNaN(n) ? null : n;
+}
+
+// ── Bảng giá tool ────────────────────────────────────────────
 async function loadToolPricing() {
   try {
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/tool_pricing?enabled=eq.true&select=tool_id,label,credits,icon,category,sort_order,is_free,description&order=sort_order.asc`,
       { headers: { 'apikey': SUPABASE_ANON } }
     );
-    const tools = await res.json();
-    if (!tools?.length) { document.getElementById('costsContent').innerHTML = '<div class="costs-loading">Không có dữ liệu.</div>'; return; }
-
-    // Group by category
-    const groups = {};
-    tools.forEach(t => {
-      if (!groups[t.category]) groups[t.category] = [];
-      groups[t.category].push(t);
-    });
-
-    const catOrder = ['Luận Giải', 'Phong Thủy', 'Xem Tướng', 'Đặt Tên & Ngày', 'Phong Cách AI'];
-    const sortedCats = Object.keys(groups).sort((a, b) => {
-      const ia = catOrder.indexOf(a), ib = catOrder.indexOf(b);
-      return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
-    });
-
-    // Hide free categories from costs section (free is free, no need to display price)
-    const FREE_CATS = ['Công Cụ Tử Vi', 'Mệnh Lý', 'Lịch Số', 'Bói Bài', 'Huyền Học'];
-
-    let html = '';
-    sortedCats.forEach(cat => {
-      if (FREE_CATS.includes(cat)) return;
-      html += `<div class="cost-category">${cat}</div>`;
-      groups[cat].forEach(t => {
-        // Round up VND to nearest 1.000đ
-        const vnd = Math.ceil((t.credits * 2500) / 1000) * 1000;
-        const vndFmt = vnd.toLocaleString('vi-VN') + 'đ';
-        const creditsHtml = t.is_free
-          ? `<span class="cost-free-badge">Miễn Phí</span>`
-          : `<div class="cost-credits">${t.credits} Lượng</div><div class="cost-usd">≈ ${vndFmt}</div>`;
-        html += `
-          <div class="cost-row">
-            <div class="cost-left">
-              <div class="cost-icon-wrap">${t.icon || '🔮'}</div>
-              <div class="cost-info">
-                <div class="cost-name">${t.label}</div>
-                ${t.description ? `<div class="cost-desc">${t.description}</div>` : ''}
-              </div>
-            </div>
-            <div class="cost-right">${creditsHtml}</div>
-          </div>`;
-      });
-    });
-
-    document.getElementById('costsContent').innerHTML = html;
+    _tools = await res.json();
+    if (!_tools?.length) { document.getElementById('costsContent').innerHTML = '<div class="costs-loading">Không có dữ liệu.</div>'; return; }
+    renderHighlights();
+    renderCostTable();
+    renderDerivedCopy();
+    const bal = currentBalance();
+    if (bal != null) renderBalanceCan(bal);
   } catch(e) {
-    document.getElementById('costsContent').innerHTML = '<div class="costs-loading">Không tải được. Vui lòng thử lại.</div>';
+    document.getElementById('costsContent').innerHTML = '<div class="costs-loading">Không tải được bảng giá. Vui lòng thử lại.</div>';
   }
 }
 
-// ── Custom input (VND-based) ──────────────────────────────────
+function renderHighlights() {
+  document.getElementById('highlightRow').innerHTML = HIGHLIGHT.map(h => {
+    const c = priceOf(h.id);
+    if (c == null) return '';
+    return '<div class="hl-card">' +
+      '<div class="hl-ic ic">' + icon(h.icon) + '</div>' +
+      '<div class="hl-name">' + esc(h.label) + '</div>' +
+      '<div class="hl-cost">' + c + '<small>Lượng</small></div>' +
+      '<div class="hl-vnd">' + fmtVnd(c * VND_PER_CREDIT) + ' · ' + esc(h.unit) + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function renderCostTable() {
+  const groups = {};
+  _tools.forEach(t => { (groups[t.category] = groups[t.category] || []).push(t); });
+
+  const catOrder = ['Luận Giải', 'Phong Thủy', 'Xem Tướng', 'Đặt Tên & Ngày', 'Phong Cách AI'];
+  const FREE_CATS = ['Công Cụ Tử Vi', 'Mệnh Lý', 'Lịch Số', 'Bói Bài', 'Huyền Học'];
+  const sortedCats = Object.keys(groups).sort((a, b) => {
+    const ia = catOrder.indexOf(a), ib = catOrder.indexOf(b);
+    return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+  });
+
+  let html = '';
+  sortedCats.forEach(cat => {
+    if (FREE_CATS.includes(cat)) return;
+    html += `<div class="cost-category">${esc(cat)}</div>`;
+    groups[cat].forEach(t => {
+      const creditsHtml = t.is_free
+        ? `<span class="cost-free-badge">Miễn Phí</span>`
+        : `<div class="cost-credits">${t.credits} Lượng</div><div class="cost-usd">${fmtVnd(t.credits * VND_PER_CREDIT)}</div>`;
+      // icon từ DB CÒN LÀ EMOJI → window.iconHtml (nav.js) nhận cả emoji lẫn tên icon
+      const ic = window.iconHtml ? window.iconHtml(t.icon) : '';
+      html += `
+        <div class="cost-row">
+          <div class="cost-left">
+            <div class="cost-icon-wrap ic">${ic}</div>
+            <div>
+              <div class="cost-name">${esc(t.label)}</div>
+              ${t.description ? `<div class="cost-desc">${esc(t.description)}</div>` : ''}
+            </div>
+          </div>
+          <div class="cost-right">${creditsHtml}</div>
+        </div>`;
+    });
+  });
+  document.getElementById('costsContent').innerHTML = html;
+}
+
+// Câu chữ SUY TỪ DỮ LIỆU, không viết cứng. Trang này từng ghi "Xem Tướng
+// 5 Lượng/lần" khi DB là 10, và "28 công cụ miễn phí" khi DB có 21 — sai số ở
+// đúng trang bảng giá là chỗ mất niềm tin nặng nhất.
+function renderDerivedCopy() {
+  const freeCount = _tools.filter(t => t.is_free || t.credits === 0).length;
+  const note = document.getElementById('freeToolsNote');
+  if (note && freeCount) {
+    note.innerHTML = `Ngoài ra <strong>${freeCount} công cụ</strong> tra cứu cổ pháp (an sao, tứ trụ, hoàng đạo, tarot…) <strong>hoàn toàn miễn phí</strong> — không cần Lượng.`;
+  }
+  const rn = document.getElementById('rateNote');
+  if (rn) rn.textContent = `1 Lượng ≈ ${VND_PER_CREDIT.toLocaleString('vi-VN')}đ theo gói vào cửa; mua gói lớn hơn thì mỗi Lượng còn rẻ hơn.`;
+
+  const laso = priceOf('laso'), rail = priceOf('rail-message');
+  const fw = document.getElementById('faqWelcome');
+  if (fw && laso && rail) {
+    fw.innerHTML = `Quà chào mừng đủ cho <strong>1 bản Luận Giải Lá Số đầy đủ</strong> (${laso} Lượng) hoặc <strong>${Math.floor(25 / rail)} câu hỏi</strong> với trợ lý. Các công cụ tra cứu cổ pháp thì miễn phí sẵn, không tiêu Lượng.`;
+  }
+  const fbt = document.getElementById('freeBannerTitle');
+  if (fbt && laso) fbt.innerHTML = 'Đăng ký nhận Lượng — đủ đọc trọn <strong>1 lá số Luận Giải</strong>';
+
+  // Ghi chú "gói này mua được gì" — tính từ giá THẬT, không viết cứng.
+  if (laso) {
+    document.querySelectorAll('.pkg-card').forEach(card => {
+      const cEl = card.querySelector('.pkg-credits');
+      const nEl = card.querySelector('.pkg-note');
+      if (!cEl || !nEl) return;
+      const credits = parseInt(cEl.textContent, 10);
+      if (isNaN(credits)) return;
+      const n = Math.floor(credits / laso);
+      const q = rail ? Math.floor((credits % laso) / rail) : 0;
+      nEl.innerHTML = `<span><strong>${n} lá số Luận Giải</strong>` + (q > 0 ? ` + ${q} câu hỏi trợ lý` : '') + '</span>';
+    });
+  }
+  if (window.mountIcons) window.mountIcons(document.body);
+}
+
+// ── Nạp tùy chỉnh ────────────────────────────────────────────
 function onCustomInput() {
   const val = parseFloat(document.getElementById('customInput').value) || 0;
-  const credits = Math.floor(val / 2500);   // 2.500đ = 1 Lượng
+  const credits = Math.floor(val / VND_PER_CREDIT);
   document.getElementById('customPreview').textContent =
     val >= 50000 ? `= ${credits} Lượng` : 'Tối thiểu 50.000đ';
 }
 
-// ── Package label restore (sau khi disable, restore lại label gốc) ────
-const PACKAGE_LABELS = {
-  '50':  'Nạp 99.000đ',
-  '120': 'Nạp 199.000đ',
-  '350': 'Nạp 499.000đ',
-  '800': 'Nạp 999.000đ',
-  'custom': 'PayPal',
-};
+// ── Nút: khoá / phục hồi nhãn ────────────────────────────────
+function pkgPriceLabel(pkgId) {
+  const card = document.querySelector(`.pkg-card[data-pkg="${pkgId}"]`);
+  const p = card && card.querySelector('.pkg-price');
+  return p ? p.textContent : '';
+}
+function lockBtn(pkgId) {
+  const b = document.getElementById(pkgId === 'custom' ? 'btnCustom' : 'btn-' + pkgId);
+  if (b) { b.disabled = true; b.textContent = 'Đang kết nối…'; }
+}
+function restoreBtn(pkgId) {
+  const via = _payMethod === 'bank' ? 'Chuyển khoản' : 'PayPal';
+  const b = document.getElementById(pkgId === 'custom' ? 'btnCustom' : 'btn-' + pkgId);
+  if (!b) return;
+  b.disabled = false;
+  b.textContent = pkgId === 'custom' ? via : via + ' ' + pkgPriceLabel(pkgId);
+}
 
-// ── Initiate topup ────────────────────────────────────────────
+// ── PayPal ───────────────────────────────────────────────────
 async function initiateTopup(packageId) {
   if (!window.Auth?.isLoggedIn()) {
     window.showAuthModal(async () => { await initiateTopup(packageId); });
     return;
   }
-
   const userId = window.Auth.getUser()?.id;
   let customAmountVnd = null;
 
@@ -413,61 +589,47 @@ async function initiateTopup(packageId) {
     }
   }
 
-  // Disable button
-  const btnId = packageId === 'custom' ? 'btnCustom' : `btn-${packageId}`;
-  const btn = document.getElementById(btnId);
-  if (btn) { btn.disabled = true; btn.textContent = 'Đang kết nối...'; }
-
+  lockBtn(packageId);
   try {
     const body = { packageId, userId };
     if (customAmountVnd) body.customAmountVnd = customAmountVnd;
-
     const res  = await fetch('/api/payment?action=topup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
     const data = await res.json();
-    if (data.approvalUrl) {
-      window.location.href = data.approvalUrl;
-    } else {
-      throw new Error(data.error || 'Không tạo được đơn PayPal');
-    }
+    if (data.approvalUrl) { window.location.href = data.approvalUrl; return; }
+    throw new Error(data.error || 'Không tạo được đơn PayPal');
   } catch(e) {
-    if (btn) {
-      btn.disabled = false;
-      btn.textContent = PACKAGE_LABELS[packageId] || 'Nạp Ngay';
-    }
+    restoreBtn(packageId);
     showAlert('error', 'Lỗi kết nối PayPal: ' + (e.message || 'Vui lòng thử lại.'));
   }
 }
 
-// ── Free signup ───────────────────────────────────────────────
+// ── Đăng ký / alert ──────────────────────────────────────────
 function handleFreeSignup() {
-  if (window.Auth?.isLoggedIn()) {
-    document.getElementById('freeBanner').style.display = 'none';
-    return;
-  }
+  if (window.Auth?.isLoggedIn()) { document.getElementById('freeBanner').style.display = 'none'; return; }
   window.showAuthModal(() => {
     document.getElementById('freeBanner').style.display = 'none';
     loadBalance();
+    loadReferralInfo();
   });
 }
 
 function showAlert(type, msg) {
   const el = document.getElementById('alertBox');
+  document.getElementById('alertText').textContent = msg;
   el.className = 'alert ' + type;
-  el.textContent = msg;
-  el.style.display = 'block';
-  setTimeout(() => { el.style.display = 'none'; }, 6000);
+  if (window.mountIcons) window.mountIcons(el);
+  setTimeout(() => { el.className = 'alert'; }, 6000);
 }
 
-// ── Referral program ──────────────────────────────────────────
+// ── Mời bạn ──────────────────────────────────────────────────
 async function loadReferralInfo() {
   const userId = window.Auth?.getUser()?.id;
   if (!userId) return;
   try {
-    // Fetch own referral_code from user_credits
     const r = await fetch(`${SUPABASE_URL}/rest/v1/user_credits?user_id=eq.${userId}&select=referral_code,balance`, {
       headers: { apikey: SUPABASE_ANON, Authorization: 'Bearer ' + (window.Auth.getSession()?.access_token || '') }
     });
@@ -477,9 +639,9 @@ async function loadReferralInfo() {
 
     document.getElementById('referralSection').style.display = 'block';
     document.getElementById('refCode').textContent = code;
-    // Con số thưởng/trần lấy từ server (app_config) chứ không viết cứng vào
-    // câu chữ — đã từng lệch: trang này ghi "tối đa 10 lượt/tháng" trong khi DB
-    // là 20, rồi 15. Hỏng câu này là hứa sai với người đang định mời bạn.
+    // Con số thưởng/trần lấy từ server (app_config) chứ không viết cứng vào câu
+    // chữ — đã từng lệch: trang này ghi "tối đa 10 lượt/tháng" trong khi DB là
+    // 20, rồi 15. Hỏng câu này là hứa sai với người đang định mời bạn.
     try {
       const rr = await fetch('/api/payment?action=my-referral', {
         headers: { Authorization: 'Bearer ' + (window.Auth.getSession()?.access_token || '') },
@@ -487,58 +649,59 @@ async function loadReferralInfo() {
       const rd = await rr.json();
       const el = document.getElementById('refPitchTopup');
       if (el && rd && rd.rewardPerInvite) {
+        const laso = priceOf('laso');
+        const need = laso ? Math.ceil(laso / rd.rewardPerInvite) : null;
         el.innerHTML = `Mỗi người đăng ký qua link của bạn: <strong>+${rd.rewardPerInvite} Lượng</strong> ngay khi họ tạo tài khoản` +
-          (rd.cap ? ` (tối đa ${rd.cap} lượt mời được thưởng / 30 ngày)` : '') +
-          `. Khi họ nạp Lượng lần đầu, cả 2 cùng nhận thêm <strong>30 Lượng</strong>.`;
+          (rd.cap ? ` (tối đa ${rd.cap} lượt mời được thưởng / 30 ngày)` : '') + '. ' +
+          (need ? `Mời <strong>${need} bạn</strong> là đủ thêm 1 lá số Luận Giải. ` : '') +
+          'Khi họ nạp Lượng lần đầu, cả 2 cùng nhận thêm <strong>30 Lượng</strong>.';
       }
     } catch (e) { /* giữ nguyên câu mặc định */ }
+
     const link = `${window.location.origin}/?ref=${code}`;
     document.getElementById('refLink').textContent = link;
     document.getElementById('refLink').dataset.url = link;
 
-    // Stats: count from referrals table
     const stats = await fetch(`${SUPABASE_URL}/rest/v1/referrals?referrer_user_id=eq.${userId}&select=status,credits_to_referrer`, {
       headers: { apikey: SUPABASE_ANON, Authorization: 'Bearer ' + (window.Auth.getSession()?.access_token || '') }
     });
     const refs = await stats.json();
-    const total = refs?.length || 0;
-    const qualified = (refs || []).filter(r => r.status === 'rewarded' || r.status === 'qualified').length;
-    const earned = (refs || []).filter(r => r.status === 'rewarded').reduce((s, r) => s + (r.credits_to_referrer || 0), 0);
-    document.getElementById('refTotal').textContent = total;
-    document.getElementById('refQualified').textContent = qualified;
-    document.getElementById('refEarned').textContent = earned;
+    document.getElementById('refTotal').textContent = refs?.length || 0;
+    document.getElementById('refQualified').textContent = (refs || []).filter(r => r.status === 'rewarded' || r.status === 'qualified').length;
+    document.getElementById('refEarned').textContent = (refs || []).filter(r => r.status === 'rewarded').reduce((s, r) => s + (r.credits_to_referrer || 0), 0);
   } catch(e) { console.warn('[referral] load failed', e); }
 }
 
+function flashBtn(id, txt) {
+  const b = document.getElementById(id);
+  if (!b) return;
+  const span = b.querySelector('span:last-child') || b;
+  const old = span.textContent;
+  span.textContent = txt;
+  setTimeout(() => { span.textContent = old; }, 1500);
+}
 function copyRefCode() {
-  const code = document.getElementById('refCode').textContent;
-  navigator.clipboard.writeText(code).then(() => {
-    const b = document.getElementById('btnCopyRef');
-    const old = b.textContent; b.textContent = '✓ Copied'; setTimeout(() => b.textContent = old, 1500);
-  });
+  navigator.clipboard.writeText(document.getElementById('refCode').textContent)
+    .then(() => flashBtn('btnCopyRef', 'Đã copy'));
 }
 function copyRefLink() {
   const link = document.getElementById('refLink').dataset.url || document.getElementById('refLink').textContent;
-  navigator.clipboard.writeText(link).then(() => {
-    const b = document.getElementById('btnCopyLink');
-    const old = b.textContent; b.textContent = '✓ Copied'; setTimeout(() => b.textContent = old, 1500);
-  });
+  navigator.clipboard.writeText(link).then(() => flashBtn('btnCopyLink', 'Đã copy'));
 }
 function shareRef(channel) {
   const link = document.getElementById('refLink').dataset.url || document.getElementById('refLink').textContent;
-  const msg = `Mình đang dùng Tử Vi Minh Bảo — luận giải lá số bằng AI theo cổ pháp. Đăng ký qua link này, cả 2 cùng nhận 30 Lượng (75.000đ): ${link}`;
-  const enc = encodeURIComponent(msg);
+  const msg = `Mình đang dùng Tử Vi Minh Bảo — luận giải lá số bằng AI theo cổ pháp. Đăng ký qua link này, cả 2 cùng nhận thêm Lượng: ${link}`;
   const urls = {
     zalo:      `https://zalo.me/share/url?url=${encodeURIComponent(link)}`,
     messenger: `fb-messenger://share?link=${encodeURIComponent(link)}`,
     facebook:  `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`,
-    whatsapp:  `https://wa.me/?text=${enc}`,
+    whatsapp:  `https://wa.me/?text=${encodeURIComponent(msg)}`,
   };
   window.open(urls[channel] || urls.facebook, '_blank', 'width=600,height=500');
 }
 
 // ── Đồng bộ GÓI NẠP từ credit_packages (admin sửa DB → trang cập nhật) ──
-// Ghi đè số/nhãn lên card tĩnh, GIỮ layout. Lỗi fetch → giữ HTML hardcode (fallback).
+// Ghi đè số/nhãn lên card tĩnh, GIỮ layout. Lỗi fetch → giữ HTML hardcode.
 async function syncPackagesFromDB() {
   try {
     const res = await fetch(
@@ -548,27 +711,26 @@ async function syncPackagesFromDB() {
     const pkgs = await res.json();
     if (!Array.isArray(pkgs) || !pkgs.length) return;
     pkgs.forEach(p => {
-      const btn = document.getElementById('btn-' + p.package_id);
-      const card = btn && btn.closest('.pkg-card');
+      const card = document.querySelector(`.pkg-card[data-pkg="${p.package_id}"]`);
       if (!card) return;
       if (p.enabled === false) { card.style.display = 'none'; return; }
       card.style.display = '';
       const vnd = Number(p.amount_vnd);
-      const vndFmt = vnd.toLocaleString('vi-VN') + 'đ';
-      const rate = Math.round(vnd / p.credits).toLocaleString('vi-VN');
       const cEl = card.querySelector('.pkg-credits');
       if (cEl) cEl.innerHTML = `${p.credits}<span class="pkg-credits-unit">Lượng</span>`;
       const pEl = card.querySelector('.pkg-price');
-      if (pEl) pEl.textContent = vndFmt;
+      if (pEl) pEl.textContent = vnd.toLocaleString('vi-VN') + 'đ';
       const rEl = card.querySelector('.pkg-rate');
-      if (rEl) rEl.textContent = `≈ $${Math.round(Number(p.amount_usd))} · ${rate}đ / Lượng`;
-      btn.textContent = 'Nạp ' + vndFmt;
-      PACKAGE_LABELS[p.package_id] = 'Nạp ' + vndFmt;
+      if (rEl) rEl.textContent = Math.round(vnd / p.credits).toLocaleString('vi-VN') + 'đ / Lượng';
     });
+    refreshPayLabels();
+    if (_tools) renderDerivedCopy();
   } catch (e) { /* giữ card hardcode */ }
 }
 
 // Init
+setPayMethod('bank');
+onCustomInput();
 loadBalance();
 loadToolPricing();
 syncPackagesFromDB();
@@ -576,28 +738,28 @@ loadReferralInfo();
 </script>
 
 <!-- ── payOS Bank Transfer Modal ─────────────────────────── -->
-<div id="bankModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center">
-  <div style="background:#fff;border-radius:14px;padding:2rem 1.75rem;max-width:380px;width:94%;text-align:center;position:relative;box-shadow:0 8px 40px rgba(0,0,0,.25)">
-    <button onclick="closeBankModal()" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:22px;cursor:pointer;color:#999">&times;</button>
-    <div style="font-family:'Noto Serif',serif;font-size:1.1rem;font-weight:700;color:#061A2E;margin-bottom:4px">Chuyển Khoản Ngân Hàng</div>
-    <div id="bm-credits" style="font-size:.85rem;color:#777;margin-bottom:14px"></div>
-    <div id="bm-amount" style="font-size:1.6rem;font-weight:700;color:#9A7B3A;margin-bottom:14px"></div>
+<div id="bankModal" style="display:none;position:fixed;inset:0;background:rgba(6,26,46,.65);z-index:9999;align-items:center;justify-content:center;padding:16px">
+  <div style="background:#fff;border-radius:14px;padding:1.9rem 1.7rem;max-width:390px;width:100%;text-align:center;position:relative;box-shadow:0 8px 40px rgba(0,0,0,.25)">
+    <button onclick="closeBankModal()" aria-label="Đóng" style="position:absolute;top:10px;right:12px;background:none;border:none;font-size:22px;cursor:pointer;color:#999;line-height:1">&times;</button>
+    <div style="font-family:'Noto Serif',serif;font-size:1.08rem;font-weight:700;color:#061A2E;margin-bottom:4px">Chuyển Khoản Ngân Hàng</div>
+    <div id="bm-credits" style="font-size:.84rem;color:#777;margin-bottom:12px"></div>
+    <div id="bm-amount" style="font-size:1.55rem;font-weight:700;color:#9A7B3A;margin-bottom:14px;font-family:'Noto Serif',serif"></div>
 
-    <!-- QR -->
     <div id="bm-qr" style="margin:0 auto 14px;width:200px;height:200px;background:#f5f4f0;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center">
-      <span style="color:#aaa;font-size:.8rem">Đang tải QR...</span>
+      <span style="color:#aaa;font-size:.8rem">Đang tải QR…</span>
     </div>
 
-    <!-- Bank info -->
     <div id="bm-info" style="background:#f5f4f0;border-radius:8px;padding:10px 14px;font-size:.82rem;text-align:left;margin-bottom:10px;line-height:1.8"></div>
 
-    <div style="font-size:.75rem;color:#777;margin-bottom:12px">
-      Mở app ngân hàng → Quét QR hoặc chuyển khoản thủ công<br>
-      <span style="color:#C0392B;font-weight:600">⚠ Giữ nguyên nội dung CK để xác nhận tự động</span>
+    <div style="font-size:.75rem;color:#777;margin-bottom:12px;line-height:1.6">
+      Mở app ngân hàng → quét QR hoặc chuyển khoản thủ công<br>
+      <span style="color:#C0392B;font-weight:600;display:inline-flex;align-items:center;gap:.3rem;margin-top:.25rem">
+        <span class="ic" data-icon="alert-triangle" style="font-size:.9rem"></span> Giữ nguyên nội dung CK để xác nhận tự động
+      </span>
     </div>
 
-    <div id="bm-status" style="font-size:.88rem;color:#555;margin-bottom:10px">⏳ Đang chờ thanh toán...</div>
-    <button onclick="checkBankPoll(true)" style="background:#061A2E;color:#fff;border:none;padding:9px 22px;border-radius:6px;cursor:pointer;font-size:.88rem">Tôi đã chuyển khoản</button>
+    <div id="bm-status" style="font-size:.87rem;color:#555;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:.4rem"></div>
+    <button onclick="checkBankPoll(true)" style="background:#061A2E;color:#fff;border:none;padding:.6rem 1.4rem;border-radius:6px;cursor:pointer;font-size:.87rem;font-family:inherit;font-weight:600">Tôi đã chuyển khoản</button>
   </div>
 </div>
 
@@ -605,22 +767,38 @@ loadReferralInfo();
 (function(){
   let _oc=null, _timer=null, _cnt=0;
 
+  // Trạng thái dùng icon SVG thay cho emoji (⏳ ✅ ❌ ⏰ trước đây).
+  function bmStatus(iconName, text, color) {
+    const el = document.getElementById('bm-status');
+    el.innerHTML = '<span class="ic" data-icon="'+iconName+'"></span><span></span>';
+    el.querySelector('span:last-child').textContent = text;
+    el.style.color = color || '#555';
+    if (window.mountIcons) window.mountIcons(el);
+  }
+
   window.initiateBankTopup = async function(packageId) {
     if (!window.Auth?.isLoggedIn()) {
       window.showAuthModal(async()=>{ await initiateBankTopup(packageId); });
       return;
     }
     const userId = window.Auth.getUser()?.id;
-    let customAmount = null;
+    let customAmountVnd = null;
     if (packageId === 'custom') {
-      customAmount = parseFloat(document.getElementById('customInput').value)||0;
-      if (customAmount < 5 || customAmount > 500) { showAlert('error','Vui lòng nhập $5–$500.'); return; }
+      // 🐞 BUG CŨ: ô input này là VNĐ (min 50.000) nhưng chỗ này validate bằng
+      // ngưỡng USD `< 5 || > 500` → MỌI số hợp lệ đều rơi vào nhánh lỗi, nên
+      // nạp-tùy-chỉnh-qua-chuyển-khoản CHƯA TỪNG tạo được QR. Nhánh PayPal thì
+      // đúng vì gửi `customAmountVnd`. Nay dùng cùng ngưỡng VNĐ với server
+      // (handleCreateBank: 50.000–5.000.000).
+      customAmountVnd = parseFloat(document.getElementById('customInput').value) || 0;
+      if (customAmountVnd < 50000 || customAmountVnd > 5000000) {
+        showAlert('error','Vui lòng nhập số tiền từ 50.000đ đến 5.000.000đ.');
+        return;
+      }
     }
 
-    // Reset & show modal
     _oc=null; _cnt=0;
-    document.getElementById('bm-status').textContent='⏳ Đang tạo mã QR...';
-    document.getElementById('bm-qr').innerHTML='<span style="color:#aaa;font-size:.8rem">Đang tải QR...</span>';
+    bmStatus('hourglass','Đang tạo mã QR…');
+    document.getElementById('bm-qr').innerHTML='<span style="color:#aaa;font-size:.8rem">Đang tải QR…</span>';
     document.getElementById('bm-info').innerHTML='';
     document.getElementById('bm-amount').textContent='';
     document.getElementById('bm-credits').textContent='';
@@ -628,17 +806,41 @@ loadReferralInfo();
 
     try {
       const body={packageId,userId};
-      if(customAmount) body.customAmount=customAmount;
+      // Gửi ĐÚNG tên field VNĐ. Trước đây gửi `customAmount`, mà server hiểu
+      // field đó là USD (nhánh legacy) → 100.000 bị đọc thành $100.000.
+      if(customAmountVnd) body.customAmountVnd=customAmountVnd;
       const r=await fetch('/api/payment?action=create-bank',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
       const d=await r.json();
       if(!r.ok) throw new Error(d.error||'Lỗi tạo đơn');
       _oc=d.orderCode;
 
-      document.getElementById('bm-credits').textContent=d.credits+' lượng';
+      document.getElementById('bm-credits').textContent=d.credits+' Lượng';
       document.getElementById('bm-amount').textContent=new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(d.amountVND);
 
       const qrUrl=`https://api.vietqr.io/image/${d.bin}-${d.accountNumber}-compact2.jpg?amount=${d.amountVND}&addInfo=${encodeURIComponent('TVMB'+_oc)}&accountName=${encodeURIComponent(d.accountName||'')}`;
-      document.getElementById('bm-qr').innerHTML=`<img src="${qrUrl}" style="width:200px;height:200px;object-fit:contain" onerror="this.parentNode.innerHTML='<a href=\'${d.checkoutUrl}\' target=\'_blank\' style=\'font-size:.8rem;color:#1455A4\'>Mở trang payOS →</a>'" />`;
+      // 🐞 BUG CŨ: chỗ này dùng `onerror="…innerHTML='<a href=\'${url}\'…'"` trong
+      // một TEMPLATE LITERAL. Trong template literal `\'` chỉ ra dấu ' TRƠN, nên
+      // HTML sinh ra thành `innerHTML='<a href='https://…'` → JS gãy ngay
+      // ("Unexpected identifier 'https'"). Nghĩa là mỗi khi ảnh VietQR không tải
+      // được, người dùng nhận ô trắng + lỗi console CHỨ KHÔNG có link payOS dự
+      // phòng. Nay gắn handler bằng JS, không nhồi code vào thuộc tính HTML.
+      const qrBox = document.getElementById('bm-qr');
+      qrBox.innerHTML = '';
+      const img = document.createElement('img');
+      img.alt = 'Mã QR chuyển khoản';
+      img.style.cssText = 'width:200px;height:200px;object-fit:contain';
+      img.onerror = () => {
+        qrBox.innerHTML = '';
+        const a = document.createElement('a');
+        a.href = d.checkoutUrl || '#';
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.style.cssText = 'font-size:.82rem;color:#1455A4;padding:0 12px;text-align:center';
+        a.textContent = 'Không tải được mã QR — mở trang payOS →';
+        qrBox.appendChild(a);
+      };
+      img.src = qrUrl;
+      qrBox.appendChild(img);
 
       document.getElementById('bm-info').innerHTML=
         `<b>Ngân hàng:</b> MB Bank<br>`+
@@ -646,11 +848,11 @@ loadReferralInfo();
         `<b>Chủ TK:</b> ${d.accountName||'—'}<br>`+
         `<b>Nội dung CK:</b> <span style="font-weight:700;color:#061A2E">TVMB${_oc}</span>`;
 
-      document.getElementById('bm-status').textContent='⏳ Đang chờ thanh toán...';
+      bmStatus('hourglass','Đang chờ thanh toán…');
       clearInterval(_timer);
-      _timer=setInterval(()=>{ _cnt++; if(_cnt>300){clearInterval(_timer);document.getElementById('bm-status').textContent='⏰ Hết giờ chờ.';return;} checkBankPoll(false); },3000);
+      _timer=setInterval(()=>{ _cnt++; if(_cnt>300){clearInterval(_timer);bmStatus('hourglass','Hết giờ chờ.','#C0392B');return;} checkBankPoll(false); },3000);
     } catch(e){
-      document.getElementById('bm-status').textContent='❌ '+e.message;
+      bmStatus('x-circle', e.message, '#C0392B');
     }
   };
 
@@ -661,12 +863,12 @@ loadReferralInfo();
       const d=await r.json();
       if(d.paid){
         clearInterval(_timer);
-        document.getElementById('bm-status').innerHTML='✅ <b style="color:#1E6B3C">Thanh toán thành công!</b> Đang cập nhật...';
-        setTimeout(()=>{ closeBankModal(); loadBalance(); showAlert('success',`Nạp thành công ${d.credits} lượng!`); },1500);
+        bmStatus('check-circle','Thanh toán thành công! Đang cập nhật…','#1E6B3C');
+        setTimeout(()=>{ closeBankModal(); loadBalance(); showAlert('success',`Nạp thành công ${d.credits} Lượng!`); },1500);
       } else if(manual){
-        document.getElementById('bm-status').textContent='⏳ Chưa ghi nhận. Chờ thêm vài giây...';
+        bmStatus('hourglass','Chưa ghi nhận. Chờ thêm vài giây…');
       }
-    } catch(e){ if(manual) document.getElementById('bm-status').textContent='❌ Lỗi kiểm tra. Thử lại.'; }
+    } catch(e){ if(manual) bmStatus('x-circle','Lỗi kiểm tra. Thử lại.','#C0392B'); }
   };
 
   window.closeBankModal=function(){

@@ -5,6 +5,36 @@
 
 ---
 
+## 📐 QUY ƯỚC BẮT BUỘC (đọc trước khi viết UI mới)
+
+### Icon: KHÔNG dùng emoji màu — chi tiết ở `docs/ICONS.md`
+`public/nav.js` là bộ icon dùng chung (85 icon SVG Lucide + `EMOJI_TO_ICON` 159
+mục + `mountIcons()`), nạp trên gần như mọi trang, export ra `window.ICONS` /
+`window.iconHtml` / `window.mountIcons` / `window.EMOJI_TO_ICON`.
+- UI mới: `<span class="ic" data-icon="wallet"></span>` — **không** emoji màu.
+- HTML dựng động bằng `innerHTML` → phải gọi lại `window.mountIcons(el)`, vì
+  `mountIcons()` chỉ tự chạy MỘT lần lúc nav.js load.
+- Dữ liệu còn lưu emoji (`tool_pricing.icon`) → đưa qua `window.iconHtml(raw)`,
+  nó nhận cả emoji lẫn tên icon. Đừng viết map emoji riêng cho từng trang.
+- **GIỮ** ký tự đơn sắc theo font: `→ ← ✦ ★ ✓ ✗ ✕ ⚠ ☰` (riêng `→` có ~1.430 chỗ
+  trong CTA). Chúng ăn `currentColor`, là phần của nhận diện — đổi là phá theme.
+- **KHÔNG áp dụng** cho prompt gửi LLM (emoji ở đó là chỉ dẫn định dạng cho
+  model) và tin Telegram admin (Telegram không render SVG).
+- Thêm icon → sửa `ICONS` trong nav.js **và bump `nav.js?v=` trên cả 89 file**.
+- Còn nợ: ~1.865 emoji màu trong 132 file UI, dọn theo đợt (bảng ở `docs/ICONS.md §7`).
+  `public/shell.js` có bộ ICONS thứ hai (28 icon, private) — nợ DRY, chưa gộp.
+
+### Giá trị 1 Lượng: neo ở MỘT chỗ
+`app_config['credits.vnd_per_credit']` (hiện **1.000đ**) là nguồn thật; RPC đọc
+qua hàm SQL `credit_vnd()`. Bản sao phía code phải giữ khớp:
+`lib/billing/packages.ts` `VND_PER_CREDIT`, `public/topup.html`,
+`public/cong-cu.html`, `public/admin.html` (`MKT_VND`, `VND_PER_CREDIT`).
+**Ngoại lệ cố ý:** `coalesce(amount_vnd, amount * 2500)` cho dòng **topup lịch
+sử** giữ nguyên 2500 — các giao dịch đó thật sự đã bán ở giá cũ, đổi là viết lại
+lịch sử. Xem `_patches/migration-pricing-v2.sql`.
+
+---
+
 ## 🧭 Marketing Autopilot + CMO Orchestrator Quân Sư
 
 **Branch:** `claude/marketing-autopilot-track-setup-vse38f`

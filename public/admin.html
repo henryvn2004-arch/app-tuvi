@@ -3121,7 +3121,10 @@ function filterLasos() {
 }
 
 // ── MARKETING (funnel chuyển đổi + nguồn traffic) ──
-const MKT_VND = 2500; // 1 Lượng ≈ 2.500đ (quy đổi doanh thu)
+// Neo quy đổi 1 Lượng ≈ VNĐ. GIỮ KHỚP `app_config['credits.vnd_per_credit']`
+// (RPC đọc qua credit_vnd()) và lib/billing/packages.ts. Đổi neo mà quên chỗ này
+// thì doanh thu quy đổi trên dashboard lệch so với panel Biên Lợi Nhuận.
+const MKT_VND = 1000;
 let _mktData = null;  // dữ liệu Marketing lần tải gần nhất (cho export CSV)
 function mktVnd(cr) { return (Math.max(0, cr || 0) * MKT_VND).toLocaleString('vi-VN') + 'đ'; }
 function mktISO(d) { return d.toISOString().slice(0, 10); }
@@ -3635,7 +3638,7 @@ async function loadRegistry() {
 
 // ── PRICING (nhóm theo category, cho phép 0/free, lưu tất cả) ──
 const CAT_LABELS = { 'chat': 'Trợ Lý (Rail)' }; // còn lại dùng nguyên category từ DB
-const VND_PER_CREDIT = 2500; // 1 Lượng ≈ 2.500đ (anchor gói custom)
+const VND_PER_CREDIT = 1000; // neo 1 Lượng ≈ VNĐ — khớp app_config credits.vnd_per_credit
 let _pricingRows = [];
 
 function fmtVnd(cr) { return (Math.max(0, cr || 0) * VND_PER_CREDIT).toLocaleString('vi-VN') + 'đ'; }

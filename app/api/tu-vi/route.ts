@@ -190,7 +190,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
   ${relatedHtml}
 </article>
 <script src="/footer.js"></script>
-<script src="/track.js?v=2" defer></script><script src="/nav.js?v=18" defer></script>
+<script src="/track.js?v=2" defer></script><script src="/nav.js?v=19" defer></script>
 </body></html>`;
 }
 
@@ -204,7 +204,7 @@ function buildNotFound() {
 <h1 style="color:#061A2E;font-family:Georgia,serif;margin-bottom:16px">Không tìm thấy trang</h1>
 <p style="color:#777;margin-bottom:24px">Trang tử vi này không tồn tại hoặc đã được cập nhật.</p>
 <a href="/" style="color:#1455A4">← Về Trang Chủ</a>
-<script src="/track.js?v=2" defer></script><script src="/nav.js?v=18" defer></script>
+<script src="/track.js?v=2" defer></script><script src="/nav.js?v=19" defer></script>
 </body></html>`;
 }
 

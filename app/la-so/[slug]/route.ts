@@ -225,7 +225,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
   </div>
 </div>
 <script src="/footer.js"></script>
-<script src="/track.js?v=2" defer></script><script src="/nav.js?v=18" defer></script>
+<script src="/track.js?v=2" defer></script><script src="/nav.js?v=19" defer></script>
 </body></html>`;
 }
 
@@ -276,7 +276,7 @@ ${commonHead}
 ${bcHTML}
 ${row.rendered_html}
 <script src="/footer.js"></script>
-<script src="/track.js?v=2" defer></script><script src="/nav.js?v=18" defer></script>
+<script src="/track.js?v=2" defer></script><script src="/nav.js?v=19" defer></script>
 </body></html>`;
   }
   const luanGiai: Record<string,string> = (row.luan_giai as Record<string,string>) || {};
@@ -293,7 +293,7 @@ ${bcHTML}
 <h1>${title}</h1>
 <div>${bodyHTML}</div>
 <script src="/footer.js"></script>
-<script src="/track.js?v=2" defer></script><script src="/nav.js?v=18" defer></script>
+<script src="/track.js?v=2" defer></script><script src="/nav.js?v=19" defer></script>
 </body></html>`;
 }
 
@@ -1391,7 +1391,7 @@ ${relatedArticles.length ? `<div style="background:#F9F4EB;border-top:2px solid 
 </div>` : ''}
 ${relatedHTML}
 <script src="/footer.js"></script>
-<script src="/track.js?v=2" defer></script><script src="/nav.js?v=18" defer></script>
+<script src="/track.js?v=2" defer></script><script src="/nav.js?v=19" defer></script>
 <script src="/share.js" defer></script>
 <script src="/pwa-push.js" defer></script>
 <script>

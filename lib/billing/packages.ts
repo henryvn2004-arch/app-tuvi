@@ -18,12 +18,30 @@ export interface CreditPackage {
   bonusLabel?: string;
 }
 
-// Khớp seed migration-credit-packages.sql. Dùng khi DB đọc hụt.
+/**
+ * Neo quy đổi 1 Lượng ≈ VNĐ, dùng cho GÓI NẠP TÙY CHỈNH (mức tiền tự nhập).
+ *
+ * Suy từ gói vào cửa: 99.000đ / 100 Lượng = 990đ → làm tròn 1.000đ, tức nạp tùy
+ * chỉnh luôn hơi đắt hơn gói rẻ nhất. CỐ Ý: gói có sẵn phải luôn lợi hơn, nếu
+ * không thì bậc giá mất nghĩa và không ai bấm gói nào.
+ *
+ * ĐỒNG BỘ với `app_config['credits.vnd_per_credit']` (RPC báo cáo đọc qua hàm
+ * `credit_vnd()`). Đổi một bên mà quên bên kia thì panel Biên Lợi Nhuận và giá
+ * nạp thật lệch nhau — xem `_patches/migration-pricing-v2.sql`.
+ *
+ * KHÔNG dùng cho topup LỊCH SỬ: các dòng đó có `amount_vnd` thật, hoặc rơi về
+ * ×2500 đúng với giá lúc chúng phát sinh.
+ */
+export const VND_PER_CREDIT = 1000;
+
+// Khớp seed migration-credit-packages.sql + migration-pricing-v2.sql.
+// Dùng khi DB đọc hụt — phải GIỮ KHỚP với DB, vì để lệch thì đúng lúc Supabase
+// chớp một nhịp người dùng trả 99.000đ mà chỉ nhận 50 Lượng thay vì 100.
 const FALLBACK: Record<string, CreditPackage> = {
-  '50':  { packageId: '50',  credits: 50,  amountVnd: 99_000,  amountUsd: '4.00',  label: 'Khởi Đầu',  bonusLabel: '+25%' },
-  '120': { packageId: '120', credits: 120, amountVnd: 199_000, amountUsd: '8.00',  label: 'Phổ Thông', bonusLabel: '+50%' },
-  '350': { packageId: '350', credits: 350, amountVnd: 499_000, amountUsd: '20.00', label: 'Cao Cấp',   bonusLabel: '+75%' },
-  '800': { packageId: '800', credits: 800, amountVnd: 999_000, amountUsd: '40.00', label: 'VIP',       bonusLabel: '+100%' },
+  '50':  { packageId: '50',  credits: 100,  amountVnd: 99_000,  amountUsd: '4.00',  label: 'Khởi Đầu',  bonusLabel: '4 lá số' },
+  '120': { packageId: '120', credits: 240,  amountVnd: 199_000, amountUsd: '8.00',  label: 'Phổ Thông', bonusLabel: '9 lá số' },
+  '350': { packageId: '350', credits: 700,  amountVnd: 499_000, amountUsd: '20.00', label: 'Cao Cấp',   bonusLabel: '28 lá số' },
+  '800': { packageId: '800', credits: 1600, amountVnd: 999_000, amountUsd: '40.00', label: 'VIP',       bonusLabel: '64 lá số' },
 };
 
 const TTL_MS = 60_000;
