@@ -95,4 +95,28 @@ as $$
   );
 $$;
 
+-- ⚠️ REVOKE PHẢI ĐỨNG TRƯỚC GRANT, VÀ KHÔNG ĐƯỢC BỎ.
+-- Postgres cấp sẵn EXECUTE cho PUBLIC trên mọi hàm mới, mà `anon` là thành viên
+-- của PUBLIC → hàm SECURITY DEFINER vừa tạo là đi vòng qua RLS cho bất kỳ ai cầm
+-- anon key (khoá đó nằm sẵn trong mã nguồn trang). Chỉ viết `grant ... to
+-- service_role` KHÔNG đóng cửa gì cả — nó chỉ thêm một quyền đã có sẵn.
+--
+-- Bản ĐẦU TIÊN của file này thiếu đúng dòng dưới đây, và `traffic_quality` đã ra
+-- prod ở trạng thái hở cho anon (ACL có `=X/postgres`). Bắt được nhờ đối chiếu
+-- với #336 — bộ dò `security_audit()` vừa vá y hệt lỗi này cho
+-- `marketing_signup_truth`, cũng vì được tạo ad-hoc qua MCP mà không theo quy ước.
+--
+-- Ba đích `public, anon, authenticated` đều BẮT BUỘC: `public` chính là grantee
+-- rỗng trong ACL; bỏ sót nó thì lệnh báo thành công mà quyền còn nguyên.
+revoke execute on function public.traffic_quality(timestamptz, timestamptz)
+  from public, anon, authenticated;
+
+-- Đường đi thật của mọi lời gọi: cron/route server bằng service key.
 grant execute on function public.traffic_quality(timestamptz, timestamptz) to service_role;
+
+-- ── Verify (đã chạy trên prod sau khi áp) ───────────────────────────────────
+--   • ACL còn đúng {postgres=X/postgres, service_role=X/postgres}.
+--   • `set local role anon` → gọi ném insufficient_privilege (khối DO bắt ngoại
+--     lệ, không bắt được thì raise FAIL).
+--   • service_role gọi vẫn ra kết quả bình thường.
+--   • `security_audit(24,20,20)` → `ham_ho_cho_anon` rỗng.

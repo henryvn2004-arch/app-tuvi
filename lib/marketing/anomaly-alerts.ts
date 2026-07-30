@@ -18,10 +18,30 @@ const SB_HEADERS = {
   Authorization: `Bearer ${SUPABASE_KEY}`,
 };
 
+/**
+ * ⚠️ BẮT BUỘC trên MỌI lượt đọc của file này. Next bọc `fetch` toàn cục và NHỚ
+ * kết quả GET kể cả trong route đã khai `dynamic = 'force-dynamic'` — repo này
+ * đã dính đúng bug đó một lần ở `/ket-qua/[id]` (link vừa gỡ vẫn render vì số
+ * cũ còn trong cache).
+ *
+ * Ở đây hậu quả nặng hơn hẳn: một BỘ DÒ đọc qua cache thì nó không canh hiện
+ * trạng nữa mà canh một bức ảnh cũ, và nó sẽ nói dối theo cả hai chiều — báo
+ * động chuyện đã hết, im lặng chuyện đang xảy ra.
+ *
+ * ĐÃ ĐO, KHÔNG PHẢI PHÒNG XA: 10:00 VN 30/07 cảnh báo bắn "Job Canh prod còn
+ * sống CHƯA HỀ có lượt chạy nào được ghi log", trong khi `cron_runs` lúc đó đã
+ * có 3 dòng `ok` (01:30 · 02:00 · 02:30Z). Lượt cron 00:01Z (bản build CŨ, chưa
+ * có job này trong sổ) đã nạp cache cho ĐÚNG URL đó; job merge lúc 01:14Z, chạy
+ * thật từ 01:30Z, nhưng lượt 03:00Z vẫn đọc lại bức ảnh trước 01:30Z. Cache của
+ * Vercel sống XUYÊN deploy nên bản build mới không làm nó mới lại.
+ */
+const SB_FRESH = { headers: SB_HEADERS, cache: 'no-store' } as const;
+
 async function callRpc<T>(fn: string, params: Record<string, unknown>): Promise<T> {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`, {
     method: 'POST',
     headers: SB_HEADERS,
+    cache: 'no-store',
     body: JSON.stringify(params),
   });
   if (!res.ok) throw new Error(`${fn}: ${await res.text()}`);
@@ -30,9 +50,14 @@ async function callRpc<T>(fn: string, params: Record<string, unknown>): Promise<
 
 async function getConfig<T>(key: string, fallback: T): Promise<T> {
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/app_config?key=eq.${encodeURIComponent(key)}&select=value`, {
-      headers: SB_HEADERS,
-    });
+    // Đọc qua cache ở ĐÂY còn hỏng theo một đường riêng: `getConfig` nạp cả
+    // NGƯỠNG lẫn map `anomaly_last_fired` (cooldown). Map cũ nghĩa là cảnh báo
+    // vừa gửi 20 phút trước bị coi như chưa gửi → gửi lại; hoặc ngược lại, dấu
+    // cooldown đã hết vẫn còn hiệu lực → nuốt cảnh báo thật.
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/app_config?key=eq.${encodeURIComponent(key)}&select=value`,
+      SB_FRESH,
+    );
     if (!res.ok) return fallback;
     const rows = await res.json();
     return rows?.[0]?.value ?? fallback;
@@ -57,7 +82,9 @@ interface Thresholds {
   channelErrorPct: number; // % lỗi 24h/kênh vượt thì cảnh báo (khớp ngưỡng "đỏ" trên card Sức Khỏe Kênh)
   channelMinSample: number; // tối thiểu số lượt trong 24h mới xét (né noise mẫu nhỏ)
   marginFloorVnd: number; // chỉ xét margin âm khi doanh thu chat trong ngày đủ lớn
-  dauDropPct: number; // DAU hôm nay thấp hơn TB 7 ngày trước bao nhiêu % thì cảnh báo
+  dauDropPct: number; // DAU hôm nay thấp hơn MEDIAN 7 ngày trước bao nhiêu % thì cảnh báo
+  dauMinBaseline: number; // baseline dưới mức này thì bỏ qua — mẫu quá nhỏ, ±50% là nhiễu
+  dauMinBaselineDays: number; // cần bấy nhiêu ngày ĐÃ ĐO ĐƯỢC bot mới dám so
   revenueDropPct: number; // doanh thu hôm nay thấp hơn TB/ngày 7 ngày trước bao nhiêu % thì cảnh báo
   cooldownHours: number; // tối thiểu giữa 2 lần cảnh báo CÙNG loại
   dayCheckHourVn: number; // giờ VN (24h) bắt đầu xét DAU/doanh thu sụt — đợi dữ liệu trong ngày tích đủ
@@ -70,7 +97,13 @@ const THRESHOLD_DEFAULTS: Thresholds = {
   channelErrorPct: 8,
   channelMinSample: 20,
   marginFloorVnd: 50_000,
-  dauDropPct: 30,
+  // 30% là quá nhạy cho cỡ mẫu này. Chuỗi DAU 8 ngày đo được (21·123·64·86·98·
+  // 111·74·47) dao động ±50% giữa hai ngày liền kề mà không có sự cố nào —
+  // ngưỡng 30% nghĩa là kêu gần như mỗi ngày, và một bộ dò kêu mỗi ngày thì
+  // chẳng mấy chốc bị ngó lơ, hỏng y như khi nó im lặng.
+  dauDropPct: 40,
+  dauMinBaseline: 20,
+  dauMinBaselineDays: 5,
   revenueDropPct: 40,
   cooldownHours: 20,
   dayCheckHourVn: 20,
@@ -81,6 +114,27 @@ const THRESHOLD_DEFAULTS: Thresholds = {
   // đã mất tiền rồi. Hỏng 3/3 lượt gần như chắc chắn là hỏng thật, không phải noise.
   toolHardFailSample: 3,
 };
+
+/**
+ * MEDIAN thay trung bình cộng — để một ngày dị thường chỉ còn là một phiếu.
+ * (23/07 phồng lên 123 uniq / 1.233 page_view vì Playwright còn chạy E2E thẳng
+ * vào prod, 407 `topup_start` từ đúng 1 anon_id.)
+ *
+ * ⚠️ ĐO RỒI MỚI BIẾT: median MỘT MÌNH KHÔNG dập được ca 29/07. Với đúng chuỗi
+ * baseline của prod [21·123·64·86·98·111·74] và hôm nay 47:
+ *     trung bình cộng = 82,4 → đọc thành sụt 43%
+ *     median          = 86   → đọc thành sụt 45%   ← NẶNG HƠN
+ * Vì ngày 21 (ngày bật tracking, chỉ có dữ liệu nửa ngày) kéo TB xuống, còn
+ * median thì đứng yên ở giữa. Đổi sang median là đúng về nguyên tắc nhưng KHÔNG
+ * phải thứ chặn được cảnh báo giả này — đừng đọc lại chỗ này rồi tưởng đã xong.
+ * Cửa chặn thật là `belowWindowMin` bên dưới.
+ */
+function median(xs: number[]): number {
+  if (!xs.length) return 0;
+  const s = [...xs].sort((a, b) => a - b);
+  const m = s.length >> 1;
+  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+}
 
 function vnHourNow(): number {
   return Number(
@@ -170,13 +224,13 @@ export async function checkAnomalies(): Promise<{ fired: FiredAlert[]; checked: 
   // xanh. Đây đúng là bộ ba đã để CMO Digest chết 14 ngày mà không ai biết.
   checked.push('job_health', 'env_preflight');
   try {
-    const { evaluateJobs, fetchPgcronRuns } = await import('@/lib/ops/jobs');
+    const { evaluateJobs, fetchPgcronRuns, CRON_RUNS_LIMIT } = await import('@/lib/ops/jobs');
     const { missingCriticalEnv } = await import('@/lib/ops/preflight');
 
     const runsRes = await fetch(
       `${SUPABASE_URL}/rest/v1/cron_runs?select=job_key,status,started_at,note` +
-        `&order=started_at.desc&limit=300`,
-      { headers: SB_HEADERS },
+        `&order=started_at.desc&limit=${CRON_RUNS_LIMIT}`,
+      SB_FRESH,
     );
     if (runsRes.ok) {
       // Gộp cả lịch sử pg_cron: job `auto-pipeline` không đi qua withCronLog nên
@@ -184,7 +238,33 @@ export async function checkAnomalies(): Promise<{ fired: FiredAlert[]; checked: 
       // vĩnh viễn và bắn cảnh báo sai mỗi ngày.
       const allRuns = [...(await runsRes.json()), ...(await fetchPgcronRuns())];
       for (const j of evaluateJobs(allRuns)) {
-        if (j.overdue && !inCooldown(`job_overdue:${j.key}`)) {
+        // Lượt chạy bị GIẾT NGANG: dòng nhịp tim `running` còn treo quá lâu
+        // (lib/cron/log.ts). Trước bản này, ca đó không để lại dòng nào trong
+        // cron_runs nên nó đội lốt "QUÁ HẠN" — hai lượt 500 thật ngày 29/07
+        // (anomaly-alerts 09:00Z, cron-master-write 10:00Z) đúng là ca này.
+        // Phân biệt được mới chẩn đúng: trượt lịch là việc của nhà cung cấp,
+        // chết giữa lượt là việc của mình.
+        if (j.stuck && !inCooldown(`job_stuck:${j.key}`)) {
+          fired.push({
+            key: `job_stuck:${j.key}`,
+            text:
+              `Job "${j.label}" CHẾT GIỮA LƯỢT — bắt đầu ${Math.round((Date.now() - new Date(j.lastRun!).getTime()) / 60000)} phút trước ` +
+              `mà chưa chốt (hết maxDuration / hết bộ nhớ / nền tảng 500). Soi runtime log Vercel quanh mốc đó.`,
+          });
+        }
+        // Lượt gần nhất kết thúc bằng lỗi. Đây từng là lỗ IM LẶNG HOÀN TOÀN:
+        // job bắn đúng lịch mà lượt nào cũng `error` thì `overdue` không kêu
+        // (có log mới) và `skipStreak` cũng không (error ≠ skip).
+        if (j.failing && !inCooldown(`job_failed:${j.key}`)) {
+          fired.push({
+            key: `job_failed:${j.key}`,
+            text: `Job "${j.label}" lượt gần nhất LỖI — lịch ${j.schedule}`,
+          });
+        }
+        // `!j.stuck`: một lượt treo quá 1.5× chu kỳ sẽ thoả CẢ HAI điều kiện.
+        // Bắn hai tin cho cùng một sự cố là cách nhanh nhất làm người ta mất
+        // tin vào bộ dò. `stuck` cụ thể hơn nên nó thắng.
+        if (j.overdue && !j.stuck && !inCooldown(`job_overdue:${j.key}`)) {
           fired.push({
             key: `job_overdue:${j.key}`,
             text: j.lastRun
@@ -312,22 +392,74 @@ export async function checkAnomalies(): Promise<{ fired: FiredAlert[]; checked: 
   // ── DAU/doanh thu sụt so với baseline — chỉ xét sau dayCheckHourVn giờ VN,
   // tránh báo giả lúc đầu ngày khi dữ liệu trong ngày chưa tích đủ ──
   if (vnHourNow() >= th.dayCheckHourVn) {
-    checked.push('dau_drop', 'revenue_drop');
+    checked.push('revenue_drop');
 
-    const engagement = await callRpc<{ days: { day: string; dau: number }[]; dau_today: number }>(
-      'dashboard_engagement',
+    // ── DAU sụt — đếm NGƯỜI THẬT, so bằng median, có sàn mẫu ──────────────
+    //
+    // Bản trước so `dashboard_engagement.dau_today` (đếm cả bot) với TRUNG BÌNH
+    // CỘNG 7 ngày trước (gồm mấy ngày CI bơm số). Cả ba vế đều mục — xem
+    // _patches/migration-dau-human.sql để có số đo.
+    //
+    // ⚠️ CỬA CHẶN QUAN TRỌNG NHẤT ở đây là `bot_flag_since`. Cột `is_bot` mới có
+    // dữ liệu thật từ 18:39 giờ VN 29/07, nên nếu đem DAU-người của hôm nay so
+    // với những ngày CHƯA lọc bot thì mẫu số bị thổi lên ~20% một phía và cảnh
+    // báo sẽ kêu MẠNH HƠN trước chứ không phải bớt đi. Chưa đủ ngày đã đo thì
+    // THÀ IM: một cảnh báo mà mình biết chắc là so sai thì không có giá trị nào.
+    const botFlagSince = await getConfig<string>('ops.bot_flag_since', '');
+    const eng = await callRpc<{ days: { day: string; dau_all: number; dau_human: number }[] }>(
+      'dau_human_daily',
       { p_days: 8 },
     );
-    const baselineDays = engagement.days.slice(0, -1).map((d) => d.dau);
-    const dauBaseline = baselineDays.length ? baselineDays.reduce((a, b) => a + b, 0) / baselineDays.length : 0;
-    if (dauBaseline >= 5) {
-      const dropPct = ((dauBaseline - engagement.dau_today) / dauBaseline) * 100;
-      const key = 'dau_drop';
-      if (dropPct >= th.dauDropPct && !inCooldown(key)) {
-        fired.push({
-          key,
-          text: `DAU hôm nay ${engagement.dau_today}, thấp hơn TB 7 ngày trước (${dauBaseline.toFixed(0)}) ${dropPct.toFixed(0)}%`,
-        });
+    const today = eng.days[eng.days.length - 1];
+    // So chuỗi 'YYYY-MM-DD' — cùng định dạng nên so từ điển là so ngày.
+    const usable = eng.days.slice(0, -1).filter((d) => !botFlagSince || d.day >= botFlagSince);
+
+    if (!today) {
+      checked.push('dau_drop(bỏ qua: RPC không trả ngày nào)');
+    } else if (usable.length < th.dauMinBaselineDays) {
+      checked.push(
+        `dau_drop(bỏ qua: chỉ có ${usable.length}/${th.dauMinBaselineDays} ngày đã đo được bot, từ ${botFlagSince || '?'})`,
+      );
+    } else {
+      const baseline = median(usable.map((d) => d.dau_human));
+      if (baseline < th.dauMinBaseline) {
+        checked.push(`dau_drop(bỏ qua: baseline ${baseline} < sàn ${th.dauMinBaseline} — mẫu quá nhỏ)`);
+      } else {
+        checked.push('dau_drop');
+        const dropPct = ((baseline - today.dau_human) / baseline) * 100;
+        // ĐIỀU KIỆN THỨ HAI, và là cửa chặn thật sự: hôm nay phải thấp hơn CẢ
+        // NGÀY THẤP NHẤT trong cửa sổ.
+        //
+        // Lý do đến từ số đo, không phải từ lý thuyết: chuỗi baseline thật
+        // [21·123·64·86·98·111·74] đã tự dao động từ 21 tới 123 mà không có sự
+        // cố nào. Báo động cho con số 47 trong khi chuỗi đó từng xuống 21 là
+        // báo sai theo đúng định nghĩa — 47 nằm gọn trong khoảng đã thấy. Chỉ
+        // khi hôm nay xuyên qua đáy của cửa sổ thì "sụt" mới là một điều mới.
+        //
+        // Với 7 ngày baseline, ngưỡng này tương đương ~1/8 khả năng kêu do nhiễu
+        // thuần — đủ chặt để tin, đủ lỏng để một sự cố thật không lọt.
+        const windowMin = Math.min(...usable.map((d) => d.dau_human));
+        const belowWindowMin = today.dau_human < windowMin;
+        const key = 'dau_drop';
+        if (dropPct >= th.dauDropPct && belowWindowMin && !inCooldown(key)) {
+          const botsToday = today.dau_all - today.dau_human;
+          fired.push({
+            key,
+            // Nói rõ "người thật" ngay trong câu: panel DAU/WAU/MAU của admin
+            // vẫn đếm cả bot (cố ý, xem migration), nên không ghi rõ thì đọc
+            // chéo hai bên sẽ tưởng một trong hai đang sai.
+            text:
+              `DAU người thật hôm nay ${today.dau_human}, thấp hơn median ${usable.length} ngày trước ` +
+              `(${baseline}) ${dropPct.toFixed(0)}% VÀ thấp hơn cả ngày thấp nhất trong cửa sổ (${windowMin})` +
+              (botsToday > 0 ? ` — đã loại ${botsToday} nguồn bot khỏi con số hôm nay` : ''),
+          });
+        } else if (dropPct >= th.dauDropPct) {
+          // Vượt ngưỡng % nhưng vẫn nằm trong khoảng đã thấy. Ghi lại để lần sau
+          // đọc log biết cửa chặn đã làm việc, chứ không phải check bị tắt.
+          checked.push(
+            `dau_drop(nén: sụt ${dropPct.toFixed(0)}% nhưng ${today.dau_human} chưa dưới đáy cửa sổ ${windowMin})`,
+          );
+        }
       }
     }
 

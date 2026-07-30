@@ -1765,14 +1765,23 @@ async function loadCron() {
     // Hai kiểu hỏng ÂM THẦM, không sinh dòng lỗi nào: job quá hạn, và job chạy
     // đều nhưng lượt nào cũng skip. Đánh dấu ngay trên hàng để không phải suy ra.
     const flags = [];
-    if (j.overdue) flags.push('<span class="badge badge-red" style="margin-left:.3rem">QUÁ HẠN</span>');
+    // CHẾT GIỮA LƯỢT: dòng nhịp tim `running` còn treo quá STALE_RUNNING_MINUTES
+    // (lib/cron/log.ts + lib/ops/jobs.ts). Khác hẳn QUÁ HẠN — cái này là lượt
+    // chạy của mình bị giết ngang, cái kia là nhà cung cấp không bắn.
+    if (j.stuck) flags.push('<span class="badge badge-red" style="margin-left:.3rem">CHẾT GIỮA LƯỢT</span>');
+    // `!j.stuck`: treo lâu thoả cả hai cờ, dán hai badge đỏ cho một sự cố chỉ
+    // làm hàng đó khó đọc.
+    if (j.overdue && !j.stuck) flags.push('<span class="badge badge-red" style="margin-left:.3rem">QUÁ HẠN</span>');
+    // Lượt cuối lỗi mà vẫn đúng lịch: trước đây hàng này trông hoàn toàn bình
+    // thường, chỉ có badge trạng thái nhỏ ở cột cuối.
+    if (j.failing) flags.push('<span class="badge badge-red" style="margin-left:.3rem">LƯỢT CUỐI LỖI</span>');
     // badge-pending (cam) chứ không phải badge-orange — class đó không tồn tại
     // trong admin.css, dùng vào là badge ra không màu.
     if (j.skipStreak >= 3) flags.push(`<span class="badge badge-pending" style="margin-left:.3rem">SKIP ×${j.skipStreak}</span>`);
     // Job vừa đăng ký, chưa tới lượt chạy đầu — nói rõ là "chờ", đừng để trống
     // rồi người đọc tự suy thành hỏng.
     if (j.awaitingFirstRun) flags.push('<span class="badge badge-grey" style="margin-left:.3rem">CHỜ LƯỢT ĐẦU</span>');
-    return `<tr${j.overdue ? ' style="background:color-mix(in srgb,var(--red) 6%,transparent)"' : ''}>
+    return `<tr${(j.overdue || j.stuck || j.failing) ? ' style="background:color-mix(in srgb,var(--red) 6%,transparent)"' : ''}>
       <td><span class="td-title">${escHtmlLocal(j.label)}</span>${flags.join('')}<div class="td-sub mono">${escHtmlLocal(j.key)}</div></td>
       <td><span class="badge ${SRC_BADGE[j.source]||'badge-grey'}">${j.source}</span></td>
       <td style="font-size:.74rem">${escHtmlLocal(j.schedule)}</td>

@@ -859,7 +859,16 @@ async function sendChat() {
       })
     });
     const data = await resp.json();
-    const reply = data.content || data.text || data.reply || 'Xin lỗi, có lỗi xảy ra.';
+    // `answer` PHẢI đứng đầu — đó là tên field THẬT mà `/api/lasotuvi?action=chat`
+    // trả về (`handleChat` kết bằng `ok({ answer: finalText || ... })`, và `ok()`
+    // trong lib/cors.ts trả phẳng chứ không bọc thêm tầng nào).
+    //
+    // 🐞 Thiếu nó thì cả ba nhánh dưới đều undefined → panel chat trong
+    // profile.html LUÔN hiện "Xin lỗi, có lỗi xảy ra." dù model đã trả lời xong,
+    // và người dùng không có cách nào biết là câu trả lời có thật. Ba nhánh
+    // `content`/`text`/`reply` giữ lại cho các shape cũ, nhưng không nhánh nào
+    // trong số đó khớp endpoint hiện tại.
+    const reply = data.answer || data.content || data.text || data.reply || 'Xin lỗi, có lỗi xảy ra.';
 
     typing.remove();
     _pChatState.messages.push({ role: 'assistant', content: reply });

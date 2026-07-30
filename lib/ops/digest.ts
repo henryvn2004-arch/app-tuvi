@@ -18,7 +18,7 @@
 //     S2 là chuông báo cháy, cái này là điểm danh.)
 // ============================================================
 
-import { evaluateJobs, fetchPgcronRuns, type CronRun } from './jobs';
+import { CRON_RUNS_LIMIT, evaluateJobs, fetchPgcronRuns, type CronRun } from './jobs';
 import { checkEnv } from './preflight';
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -30,11 +30,22 @@ const SB_HEADERS = {
   Authorization: `Bearer ${SUPABASE_KEY || ''}`,
 };
 
+/**
+ * ⚠️ `cache: 'no-store'` BẮT BUỘC trên mọi lượt đọc của file này — cùng lý do
+ * đã ghi dài ở `lib/marketing/anomaly-alerts.ts`: Next nhớ kết quả GET kể cả
+ * trong route `force-dynamic`, và một bản điểm danh đọc qua cache thì câu
+ * "12 job, tất cả chạy đúng lịch" không còn nghĩa gì — nó chỉ nói rằng ảnh cũ
+ * trông ổn. Digest 07:30 ngày 30/07 báo đúng câu đó, 2,5 giờ trước khi cảnh báo
+ * nói ngược lại về cùng một bảng.
+ */
+const SB_FRESH = { headers: SB_HEADERS, cache: 'no-store' } as const;
+
 async function rpc<T>(fn: string, params: Record<string, unknown>, fallback: T): Promise<T> {
   try {
     const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`, {
       method: 'POST',
       headers: SB_HEADERS,
+      cache: 'no-store',
       body: JSON.stringify(params),
     });
     return r.ok ? ((await r.json()) as T) : fallback;
@@ -70,8 +81,9 @@ export async function buildOpsDigest(): Promise<OpsDigest> {
     rpc<ToolRow[]>('tool_health', { p_hours: 24 }, []),
     rpc<ReconRow[]>('payment_reconcile', { p_days: 30 }, []),
     fetch(
-      `${SUPABASE_URL}/rest/v1/cron_runs?select=job_key,status,started_at,note&order=started_at.desc&limit=300`,
-      { headers: SB_HEADERS },
+      `${SUPABASE_URL}/rest/v1/cron_runs?select=job_key,status,started_at,note` +
+        `&order=started_at.desc&limit=${CRON_RUNS_LIMIT}`,
+      SB_FRESH,
     ).catch(() => null),
     // Job pg_cron (auto-pipeline) không ghi cron_runs — thiếu nguồn này thì nó
     // luôn hiện "chưa hề chạy" dù thực tế chạy đủ mỗi ngày.
@@ -103,16 +115,26 @@ export async function buildOpsDigest(): Promise<OpsDigest> {
   }
 
   // ── Job ──
-  const overdue = jobs.filter((j) => j.overdue);
+  // `stuck` loại khỏi `overdue` — cùng lý do như trong anomaly-alerts: một lượt
+  // treo lâu thoả cả hai, kể hai lần cho một sự cố làm digest đọc như đang có
+  // hai vấn đề.
+  const stuck = jobs.filter((j) => j.stuck);
+  const overdue = jobs.filter((j) => j.overdue && !j.stuck);
+  const failing = jobs.filter((j) => j.failing);
   const skipping = jobs.filter((j) => j.skipStreak >= 3);
-  if (!overdue.length && !skipping.length) {
+  if (!stuck.length && !overdue.length && !failing.length && !skipping.length) {
     lines.push(`\n⏰ JOB: ${jobs.length} job, tất cả chạy đúng lịch.`);
   } else {
-    issues += overdue.length + skipping.length;
-    lines.push(`\n⏰ JOB — ${overdue.length} quá hạn, ${skipping.length} skip liên tiếp:`);
+    issues += stuck.length + overdue.length + failing.length + skipping.length;
+    lines.push(
+      `\n⏰ JOB — ${stuck.length} chết giữa lượt, ${overdue.length} quá hạn, ` +
+        `${failing.length} lượt cuối lỗi, ${skipping.length} skip liên tiếp:`,
+    );
+    for (const j of stuck) lines.push(`   • ${j.label}: CHẾT GIỮA LƯỢT (nhịp tim còn treo)`);
     for (const j of overdue) {
       lines.push(`   • ${j.label}: ${j.lastRun ? 'trễ so với lịch ' + j.schedule : 'CHƯA HỀ có log'}`);
     }
+    for (const j of failing) lines.push(`   • ${j.label}: lượt gần nhất LỖI`);
     for (const j of skipping) lines.push(`   • ${j.label}: skip ${j.skipStreak} lượt liên tiếp`);
   }
 

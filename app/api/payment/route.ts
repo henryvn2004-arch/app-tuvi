@@ -15,7 +15,7 @@ import { hasSlugAccess } from '@/lib/billing/credits';
 import { freeGenGate, FREE_GEN_CAP_MESSAGE, railFreeRemaining } from '@/lib/billing/viral-budget';
 import { anonTrialStatus } from '@/lib/billing/anon-trial';
 import { getConfigValue } from '@/lib/config/appConfig';
-import { evaluateJobs, fetchPgcronRuns } from '@/lib/ops/jobs';
+import { CRON_RUNS_LIMIT, evaluateJobs, fetchPgcronRuns } from '@/lib/ops/jobs';
 import { checkEnv } from '@/lib/ops/preflight';
 import { logCronRun } from '@/lib/cron/log';
 import { tgSendMessage } from '@/lib/channels/telegram';
@@ -673,9 +673,16 @@ async function handleAdminCronRuns(request: NextRequest): Promise<Response> {
     // Trang này là trung tâm VẬN HÀNH của admin (track COO) — trả kèm sức khoẻ
     // tool để panel không phải gọi thêm một vòng API nữa.
     const [r, health24, health7d, alerts, pgcronRuns] = await Promise.all([
+      // `cache: 'no-store'` KHÔNG phải tuỳ chọn ở đây: Next nhớ kết quả GET kể
+      // cả trong route động, nên panel Vận Hành có thể vẽ lại một bức ảnh cũ
+      // của `cron_runs` và nói "mọi job đúng lịch" trong lúc một job đã chết —
+      // đúng ca đã đo ngày 30/07 (xem lib/marketing/anomaly-alerts.ts).
+      // Cửa sổ dùng CHUNG `CRON_RUNS_LIMIT` với cảnh báo + digest: ba con số
+      // khác nhau là ba nơi cùng nhìn một bảng mà kết luận lệch nhau.
       fetch(
-        `${SUPABASE_URL}/rest/v1/cron_runs?select=job_key,source,status,started_at,finished_at,duration_ms,note&order=started_at.desc&limit=300`,
-        { headers: SB_HEADERS },
+        `${SUPABASE_URL}/rest/v1/cron_runs?select=job_key,source,status,started_at,finished_at,duration_ms,note` +
+          `&order=started_at.desc&limit=${CRON_RUNS_LIMIT}`,
+        { headers: SB_HEADERS, cache: 'no-store' },
       ),
       // Sức khoẻ tool là THÔNG TIN THÊM: hỏng thì trả mảng rỗng chứ không được
       // làm sập cả trang Cron vốn đã chạy tốt từ trước.
@@ -718,7 +725,9 @@ async function opsAlerts(): Promise<unknown[]> {
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/events?event_type=eq.ops_alert&ts=gte.${encodeURIComponent(since)}` +
         `&select=ts,meta&order=ts.desc&limit=50`,
-      { headers: SB_HEADERS },
+      // no-store: cảnh báo mới bắn 5 phút trước phải hiện ra ngay, không đợi
+      // cache hết hạn — cùng lý do với cron_runs ở trên.
+      { headers: SB_HEADERS, cache: 'no-store' },
     );
     return res.ok ? await res.json() : [];
   } catch {
@@ -731,7 +740,7 @@ async function latestOpsDigest(): Promise<unknown | null> {
   try {
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/events?event_type=eq.ops_digest&select=ts,meta&order=ts.desc&limit=1`,
-      { headers: SB_HEADERS },
+      { headers: SB_HEADERS, cache: 'no-store' },
     );
     if (!res.ok) return null;
     const rows = (await res.json()) as unknown[];

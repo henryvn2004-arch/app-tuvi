@@ -85,12 +85,27 @@ export const JOBS: JobSpec[] = [
     schedule: '08:00 VN hằng ngày', sink: 'Telegram admin', trigger: true },
   { key: 'anomaly-alerts', label: 'Cảnh báo bất thường', source: 'vercel', everyMinutes: 3 * H,
     schedule: 'mỗi 3 giờ', sink: 'Telegram admin + events', trigger: true },
+  // Sinh ra sau sự cố 29/07 (Supabase bị hạ Pro→Free rồi pause, prod hỏng hơn
+  // một ngày mà không ai được báo). Xem lib/ops/health-check.ts.
+  { key: 'health-check', label: 'Canh prod còn sống', source: 'vercel', everyMinutes: 30,
+    schedule: 'mỗi 30 phút', sink: 'Telegram admin', trigger: true,
+    since: '2026-07-29' },
+  // `since` = ngày 3 cron này vào `vercel.json` (đo bằng dấu vết build đầu tiên
+  // trong `cron_runs`: 2026-07-26 08:32Z). BẮT BUỘC với job TUẦN: sau khi dọn
+  // 519 dòng rác build-time (migration-purge-fake-cron-runs.sql),
+  // `autopilot-nudge` còn ĐÚNG 0 dòng — lượt T6 gần nhất (24/07) diễn ra trước
+  // khi job tồn tại, lượt thật đầu tiên là 31/07. Thiếu `since` thì nó bị báo
+  // "CHƯA HỀ chạy" ngay, tức vừa gỡ một cảnh báo giả đã dựng lại cảnh báo giả
+  // khác — đúng cái bẫy mà chú thích của trường `since` đã cảnh báo.
   { key: 'autopilot-price', label: 'Autopilot — giá', source: 'vercel', everyMinutes: 7 * D,
-    schedule: 'T2 hằng tuần', sink: 'autopilot_actions', trigger: true },
+    schedule: 'T2 hằng tuần', sink: 'autopilot_actions', trigger: true,
+    since: '2026-07-26' },
   { key: 'autopilot-promo', label: 'Autopilot — khuyến mãi', source: 'vercel', everyMinutes: 7 * D,
-    schedule: 'T4 hằng tuần', sink: 'autopilot_actions', trigger: true },
+    schedule: 'T4 hằng tuần', sink: 'autopilot_actions', trigger: true,
+    since: '2026-07-26' },
   { key: 'autopilot-nudge', label: 'Autopilot — nhắc segment', source: 'vercel', everyMinutes: 7 * D,
-    schedule: 'T6 hằng tuần', sink: 'autopilot_actions', trigger: true },
+    schedule: 'T6 hằng tuần', sink: 'autopilot_actions', trigger: true,
+    since: '2026-07-26' },
   { key: 'content-pack', label: 'Content Pack TikTok', source: 'vercel', everyMinutes: 7 * D,
     schedule: 'CN hằng tuần', sink: 'Telegram admin', trigger: true,
     since: '2026-07-28' },
@@ -105,6 +120,23 @@ export interface CronRun {
   started_at: string;
   note?: string | null;
 }
+
+/**
+ * Số dòng `cron_runs` mỗi nơi phải nạp để `evaluateJobs` phán đúng. Dùng CHUNG
+ * cho cả 3 chỗ đọc (cảnh báo 3h/lượt · digest vận hành · panel admin) — ba con
+ * số chép tay là ba bộ dò nhìn ba cửa sổ khác nhau rồi kết luận khác nhau.
+ *
+ * VÌ SAO 1000 CHỨ KHÔNG PHẢI 300: cửa sổ là "N dòng gần nhất", nên MỘT job ồn
+ * ào đủ sức đẩy các job khác ra ngoài, và job bị đẩy ra thì `evaluateJobs` đọc
+ * thành "CHƯA HỀ chạy". Đo trên prod 30/07: 519/941 dòng là rác build-time
+ * (xem migration-purge-fake-cron-runs.sql) và 315 dòng nữa của riêng `cron-push`
+ * — 300 dòng gần nhất chỉ với tới 3 ngày trước, trong khi job TUẦN cần nhìn lại
+ * tới 10,5 ngày (1,5 × chu kỳ) mới biết nó có trễ hay không.
+ *
+ * 1000 là trần `db-max-rows` mặc định của Supabase PostgREST — xin hơn cũng chỉ
+ * nhận về 1000, nên đây là mức cao nhất còn trung thực.
+ */
+export const CRON_RUNS_LIMIT = 1000;
 
 /**
  * Lịch sử chạy pg_cron, trả về ĐÚNG shape `CronRun` để gộp thẳng vào mảng
@@ -142,7 +174,35 @@ export interface JobHealth extends JobSpec {
   skipStreak: number;
   /** Chưa có log nhưng CHƯA tới lượt chạy đầu tiên → cố ý không báo động. */
   awaitingFirstRun: boolean;
+  /**
+   * Lượt gần nhất KẾT THÚC bằng lỗi.
+   *
+   * Trước đây đây là một lỗ hổng im lặng hoàn toàn: một job bắn đúng lịch mà
+   * lượt nào cũng `error` thì `overdue` không kêu (có log mới), `skipStreak`
+   * cũng không (status là error chứ không phải skip) — nên nó hỏng đều đặn mà
+   * không cảnh báo nào chạm tới. Cùng họ với vụ CMO Digest chết 14 ngày.
+   */
+  failing: boolean;
+  /**
+   * Lượt gần nhất còn treo ở `running` quá lâu → gần như chắc chắn đã bị GIẾT
+   * NGANG (hết maxDuration, hết bộ nhớ, nền tảng 500) chứ không phải đang chạy.
+   *
+   * Đây là mặt còn lại của dòng nhịp tim trong lib/cron/log.ts. Có nó thì lượt
+   * chết mới phân biệt được với lượt không bắn; KHÔNG có nó thì dòng `running`
+   * treo lại làm `lastRun` luôn mới và bịt miệng `overdue` vĩnh viễn.
+   */
+  stuck: boolean;
 }
+
+/**
+ * Quá mốc này mà dòng `running` chưa được chốt thì coi như lượt chạy đã chết.
+ *
+ * 15 phút là dư dả tới mức không thể báo oan: job nặng nhất trong sổ
+ * (cron-master-write) đo được trung bình 21,9s, p90 26,1s, dài nhất 30,2s —
+ * tức trần này gấp ~30 lần lượt chạy dài nhất từng thấy. Trần Vercel cho một
+ * lượt gọi cũng thấp hơn nhiều, nên không có lượt chạy thật nào chạm tới đây.
+ */
+export const STALE_RUNNING_MINUTES = 15;
 
 /**
  * Đối chiếu sổ với log thật.
@@ -176,8 +236,12 @@ export function evaluateJobs(runs: CronRun[]): JobHealth[] {
     // Đếm skip LIÊN TIẾP từ lần chạy gần nhất trở về trước. Một job `skip` đều
     // đặn hết lần này tới lần khác KHÔNG phải "bình thường" — nó đang không làm
     // được việc của nó, chỉ là im lặng thay vì báo lỗi (đúng vụ CMO Digest).
+    // Bỏ qua dòng `running` ở đầu: trong mấy giây job đang chạy, nó không nói
+    // được gì về chuỗi skip trước đó, mà để nó chặn thì streak đọc thành 0 và
+    // cảnh báo skip biến mất đúng lúc job đang chạy.
     let skipStreak = 0;
     for (const r of rs) {
+      if (r.status === 'running') continue;
       if (r.status === 'skip') skipStreak++;
       else break;
     }
@@ -190,6 +254,9 @@ export function evaluateJobs(runs: CronRun[]): JobHealth[] {
     const awaitingFirstRun =
       !last && Number.isFinite(sinceMs) && now - sinceMs < spec.everyMinutes * 1.5 * 60000;
 
+    const stuck = last?.status === 'running' && now - lastMs > STALE_RUNNING_MINUTES * 60000;
+    const failing = last?.status === 'error';
+
     return {
       ...spec,
       lastRun: last?.started_at || null,
@@ -201,6 +268,8 @@ export function evaluateJobs(runs: CronRun[]): JobHealth[] {
       minutesLate: Number.isFinite(minutesLate) ? minutesLate : -1,
       skipStreak,
       awaitingFirstRun,
+      failing,
+      stuck,
     };
   });
 }

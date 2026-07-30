@@ -14,6 +14,7 @@
     { "path": "/api/cron/ops-digest",    "schedule": "30 0 * * *" },
     { "path": "/api/cron/cmo-digest",    "schedule": "0 1 * * *"  },
     { "path": "/api/cron/anomaly-alerts", "schedule": "0 */3 * * *" },
+    { "path": "/api/cron/health-check", "schedule": "0,30 * * * *" },
     { "path": "/api/cron/autopilot-price", "schedule": "0 1 * * 1" },
     { "path": "/api/cron/autopilot-promo", "schedule": "0 1 * * 3" },
     { "path": "/api/cron/autopilot-nudge", "schedule": "0 1 * * 5" },

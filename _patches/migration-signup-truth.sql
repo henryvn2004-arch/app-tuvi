@@ -47,6 +47,16 @@ as $$
   );
 $$;
 
+-- ⚠️ Xem đầy đủ lý do ở `migration-revoke-signup-truth.sql` (#336). Tóm tắt:
+-- Postgres cấp sẵn EXECUTE cho PUBLIC trên mọi hàm mới, `anon` là thành viên của
+-- PUBLIC, nên chỉ `grant ... to service_role` KHÔNG đóng cửa gì — hàm này từng ra
+-- prod ở trạng thái anon gọi được và đọc ra tổng số tài khoản đã đăng ký.
+--
+-- Dòng revoke được thêm lại vào ĐÂY, không chỉ ở file vá riêng: chạy lại bản gốc
+-- mà thiếu nó là mở lại đúng lỗ vừa vá.
+revoke execute on function public.marketing_signup_truth(timestamptz, timestamptz)
+  from public, anon, authenticated;
+
 grant execute on function public.marketing_signup_truth(timestamptz, timestamptz) to service_role;
 
 -- ── Vá lịch sử ────────────────────────────────────────────────────────────
