@@ -72,6 +72,16 @@ export interface ClientInfo {
   platform: ClientPlatform;
   /** semver, ví dụ "1.0.0" */
   version: string;
+  /**
+   * Định danh khách CHƯA ĐĂNG NHẬP (localStorage `tvmb_anon`, do track.js sinh).
+   * Dùng để cấp vài lượt rail dùng thử trước khi bắt đăng ký.
+   *
+   * KHÔNG phải danh tính đáng tin — client tự khai và xoá localStorage là có mã
+   * mới. Nó chỉ là lớp trần THÂN THIỆN (đếm đúng cho người dùng bình thường);
+   * lớp chống lạm dụng thật là trần theo IP/ngày + trần toàn hệ thống/ngày ở
+   * server. Đừng bao giờ dùng field này cho quyền hạn hay tính phí.
+   */
+  anon_id?: string;
 }
 
 // ── Kịch bản phi-lá-số (additive — Sprint 1.2) ──────────────
@@ -183,6 +193,11 @@ export interface DoneEvent {
      */
     price?: number;
     freeTurns?: number;
+    /**
+     * Số câu DÙNG THỬ còn lại của khách chưa đăng nhập. Chỉ có ở lượt anon —
+     * người đã đăng nhập thì field này vắng mặt (đừng suy ra 0 là "hết lượt").
+     */
+    anonTrialLeft?: number;
   };
   /** gợi ý câu hỏi tiếp theo do LLM sinh, bám câu trả lời vừa rồi (chip động) */
   suggestions?: string[];

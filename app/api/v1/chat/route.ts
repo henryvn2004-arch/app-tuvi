@@ -37,6 +37,7 @@ import {
   logTransaction,
 } from '@/lib/billing/credits';
 import { railFreeRemaining, railFreeConsume } from '@/lib/billing/viral-budget';
+import { anonTrialConsume, clientIpHash } from '@/lib/billing/anon-trial';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -88,26 +89,57 @@ export async function POST(request: NextRequest) {
   // khi trả lời xong (giữ userId ở đây để dùng lại trong stream).
   let chargeUserId: string | null = null;
   let freeTurnLeft = 0;
+  // Lượt DÙNG THỬ của khách chưa đăng nhập: null = không phải lượt anon.
+  let anonTrialLeft: number | null = null;
   // Giá rail = tool_pricing['rail-message'] (nguồn thật, admin sửa được);
   // fallback cfg.cost (app_config 'chat.cost') nếu chưa có row / đọc hụt.
   const railPrice = await getToolPrice('rail-message');
   const cost = railPrice != null ? railPrice : cfg.cost;
   if (!paywallDisabled() && cost > 0) {
     const token = extractToken(request);
-    if (!token) return jsonError('unauthorized', 'Cần đăng nhập để dùng tính năng này', 401);
-    const user = await getUserFromToken(token);
-    if (!user) return jsonError('unauthorized', 'Phiên đăng nhập không hợp lệ', 401);
-    // Lượt rail TẶNG (sau khi vẽ chân dung xong) tiêu trước Lượng — nếu còn
-    // lượt tặng thì không chặn dù ví rỗng. Đây đúng là tình huống nó sinh ra
-    // để cứu: quà đăng ký vừa đủ 1 lượt vẽ, vẽ xong là ví về 0.
-    freeTurnLeft = await railFreeRemaining(user.id);
-    const balance = await getBalance(user.id);
-    if (freeTurnLeft <= 0 && balance < cost) {
-      // Trả kèm `price` để client dịch được sang "còn N câu hỏi" / "cần thêm N
-      // câu" — nói bằng CÂU thì người dùng hiểu ngay, nói bằng Lượng thì không.
-      return jsonError('paywall', `Không đủ Lượng (cần ${cost}, còn ${balance})`, 402, { balance, price: cost });
+    if (!token) {
+      // ── KHÁCH CHƯA ĐĂNG NHẬP: cấp vài câu DÙNG THỬ ──────────
+      // Trước đây chỗ này 401 cứng, nên người vừa an sao xong (miễn phí) không
+      // hỏi được câu nào. Nay cho hỏi trước, tường đăng ký hiện SAU khi họ đã
+      // thấy giá trị — 25 Lượng quà đăng ký lúc đó mới thành phần thưởng cụ thể.
+      //
+      // CHẶN ẢNH ở lượt anon: ảnh đẩy input token lên nhiều lần so với câu chữ,
+      // mà cầu dao được tính theo LƯỢT. Cho ảnh vào thì một lượt có thể đắt gấp
+      // chục lần lượt khác và trần mất nghĩa.
+      const hasImages = (req.messages || []).some(
+        (m) => Array.isArray((m as { images?: unknown[] }).images) && ((m as { images?: unknown[] }).images as unknown[]).length > 0,
+      );
+      if (hasImages) {
+        return jsonError('unauthorized', 'Cần đăng nhập để gửi ảnh', 401);
+      }
+      const trial = await anonTrialConsume(req.client?.anon_id || '', clientIpHash(request));
+      if (!trial.allowed) {
+        // Mọi lý do (hết lượt / chạm trần IP / chạm trần ngày / tắt) đều trả CÙNG
+        // một mã cho client: lời mời đăng ký. Nói ra "hôm nay hệ thống hết ngân
+        // sách dùng thử" thì vừa khó hiểu vừa mời người ta thử lại lúc khác thay
+        // vì đăng ký ngay.
+        return jsonError('anon_trial_exhausted', 'Đăng nhập để hỏi tiếp', 401, {
+          anonTrial: { left: 0, reason: trial.reason },
+        });
+      }
+      anonTrialLeft = trial.left;
+      // Lượt anon KHÔNG tính phí và KHÔNG có chargeUserId → bỏ qua toàn bộ
+      // nhánh trừ Lượng bên dưới.
+    } else {
+      const user = await getUserFromToken(token);
+      if (!user) return jsonError('unauthorized', 'Phiên đăng nhập không hợp lệ', 401);
+      // Lượt rail TẶNG (sau khi vẽ chân dung xong) tiêu trước Lượng — nếu còn
+      // lượt tặng thì không chặn dù ví rỗng. Đây đúng là tình huống nó sinh ra
+      // để cứu: quà đăng ký vừa đủ 1 lượt vẽ, vẽ xong là ví về 0.
+      freeTurnLeft = await railFreeRemaining(user.id);
+      const balance = await getBalance(user.id);
+      if (freeTurnLeft <= 0 && balance < cost) {
+        // Trả kèm `price` để client dịch được sang "còn N câu hỏi" / "cần thêm N
+        // câu" — nói bằng CÂU thì người dùng hiểu ngay, nói bằng Lượng thì không.
+        return jsonError('paywall', `Không đủ Lượng (cần ${cost}, còn ${balance})`, 402, { balance, price: cost });
+      }
+      chargeUserId = user.id;
     }
-    chargeUserId = user.id;
   }
 
   const encoder = new TextEncoder();
@@ -144,9 +176,13 @@ export async function POST(request: NextRequest) {
               paywall = { blocked: false, balance: newBal, price: cost, freeTurns: freeTurnLeft };
             }
           }
+        } else if (anonTrialLeft != null) {
+          // Lượt DÙNG THỬ: không trừ gì, nhưng phải cho client biết còn mấy câu
+          // để đồng hồ hiện "còn N câu dùng thử".
+          paywall = { blocked: false, price: cost, anonTrialLeft };
         } else if (cost > 0) {
-          // Paywall tắt / chưa đăng nhập nhưng vẫn nên cho client biết giá, để
-          // đồng hồ đếm câu không phải đoán.
+          // Paywall tắt nhưng vẫn nên cho client biết giá, để đồng hồ đếm câu
+          // không phải đoán.
           paywall = { blocked: false, price: cost };
         }
         send(sse.done({ tools_used: toolsUsed, paywall, suggestions }));

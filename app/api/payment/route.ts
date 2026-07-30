@@ -13,6 +13,7 @@ import { getPackage, getPackages, VND_PER_CREDIT } from '@/lib/billing/packages'
 import { getToolPrice } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
 import { freeGenGate, FREE_GEN_CAP_MESSAGE, railFreeRemaining } from '@/lib/billing/viral-budget';
+import { anonTrialStatus } from '@/lib/billing/anon-trial';
 import { getConfigValue } from '@/lib/config/appConfig';
 import { evaluateJobs, fetchPgcronRuns } from '@/lib/ops/jobs';
 import { checkEnv } from '@/lib/ops/preflight';
@@ -1288,7 +1289,8 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-mcp') return handleAdminMcp(request);
   if (action === 'admin-env-status') return handleAdminEnvStatus(request);
   if (action === 'my-referral') return handleMyReferral(request, searchParams);
-  if (action === 'rail-status') return handleRailStatus(request);
+  if (action === 'rail-status') return handleRailStatus(request, searchParams);
+  if (action === 'signup-bonus') return handleSignupBonus();
   if (action === 'admin-viral') return handleAdminViral(request, searchParams);
   if (action === 'admin-content-pack') return handleAdminContentPack(request, searchParams);
   if (action === 'check-bank')  return handleCheckBank(searchParams);
@@ -1650,6 +1652,21 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
 // `action=balance` (endpoint đó nhận userId qua query, không xác thực — thêm mã
 // vào đó là phát mã của người khác cho bất kỳ ai đoán được userId).
 /**
+ * GET ?action=signup-bonus — số Lượng quà đăng ký (công khai, không cần auth).
+ *
+ * Để lời mời đăng ký nói được con số THẬT ("tặng 25 Lượng = 12 câu") mà không
+ * viết cứng vào client. Lấy mức THẤP NHẤT trong `credits.signup_bonus_variants`
+ * (mảng, từng dùng cho A/B) — hứa theo mức cao nhất là hứa hụt với người rơi vào
+ * biến thể thấp. Đúng cùng lý do đã buộc `/ket-qua` phải đọc config thay vì ghi
+ * "25 Lượng" vào HTML.
+ */
+async function handleSignupBonus(): Promise<Response> {
+  const variants = await getConfigValue<number[]>('credits.signup_bonus_variants', [25]);
+  const list = Array.isArray(variants) ? variants.map(Number).filter((n) => Number.isFinite(n) && n > 0) : [];
+  return ok({ bonus: list.length ? Math.min(...list) : null });
+}
+
+/**
  * GET ?action=rail-status — trạng thái ví cho ĐỒNG HỒ ĐẾM CÂU của rail chat.
  *
  * Vì sao cần một endpoint riêng: rail muốn hiện "còn N câu hỏi" NGAY khi mở,
@@ -1663,9 +1680,24 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
  * Trả kèm `lasoPrice` để tường hết-Lượng nói được bằng LÁ SỐ ("xem trọn 24 mục
  * — 25 Lượng") thay vì "nạp Lượng" chung chung.
  */
-async function handleRailStatus(request: NextRequest): Promise<Response> {
+async function handleRailStatus(request: NextRequest, sp: URLSearchParams): Promise<Response> {
   const userToken = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
-  if (!userToken) return err('Missing Authorization token', 401);
+  // KHÁCH CHƯA ĐĂNG NHẬP: trả số câu DÙNG THỬ còn lại thay vì 401, để đồng hồ
+  // rail hiện được ngay trước câu hỏi đầu tiên. Chỉ ĐỌC, không tiêu lượt nào.
+  // Không cần auth vì `anon_id` do client tự khai và chẳng mở ra quyền gì —
+  // biết được số câu thử của một anon_id lạ không giúp làm gì cả.
+  if (!userToken) {
+    const anonId = String(sp.get('anon') || '').slice(0, 64);
+    const t = await anonTrialStatus(anonId);
+    return ok({
+      anon: true,
+      anonTrialLeft: t.left,
+      anonTrialCap: t.cap,
+      railPrice: await getToolPrice('rail-message'),
+      lasoPrice: await getToolPrice('laso'),
+      vndPerCredit: await getConfigValue<number>('credits.vnd_per_credit', 1000),
+    });
+  }
   try {
     const user = await getUserFromToken(userToken);
     if (!user) return err('Invalid token', 401);

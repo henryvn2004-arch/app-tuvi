@@ -24,6 +24,21 @@ mục + `mountIcons()`), nạp trên gần như mọi trang, export ra `window.I
 - Còn nợ: ~1.865 emoji màu trong 132 file UI, dọn theo đợt (bảng ở `docs/ICONS.md §7`).
   `public/shell.js` có bộ ICONS thứ hai (28 icon, private) — nợ DRY, chưa gộp.
 
+### Dùng thử rail cho khách CHƯA đăng nhập — cầu dao 3 lớp
+`/api/v1/chat` KHÔNG còn 401 cứng khi thiếu token: khách vô danh được vài câu
+dùng thử (`lib/billing/anon-trial.ts` + RPC `anon_rail_trial_consume`).
+- **3 trần độc lập**, mỗi cái bịt một đường lách: `anon.rail_trial_turns` (trần
+  ĐỜI theo `anon_id`) · `anon.rail_ip_daily_cap` (bịt xoá-localStorage, phải NỚI
+  vì NAT nhà mạng) · `anon.rail_global_daily_cap` (cầu dao ngân sách).
+  **Đặt bất kỳ trần nào = 0 là TẮT hẳn.**
+- **Fail-CLOSED** — ngược `viral-budget.ts` (fail-OPEN) và ngược có lý do: cầu
+  dao ảnh gác người ĐÃ TRẢ TIỀN, còn đây là khách vô danh chưa trả gì.
+- **`client.anon_id` KHÔNG phải danh tính** — client tự khai. Đừng dùng cho
+  quyền hạn/tính phí. Trần theo IP + toàn hệ thống mới là lớp chống lạm dụng.
+- **Lượt anon CHẶN ảnh** (ảnh đội input token lên nhiều lần mà trần đếm theo
+  LƯỢT) và **tiêu quota ngay khi cấp phép**, không đợi model xong — đếm sau khi
+  thành công là mở đường gọi model rồi ngắt kết nối để khỏi bị tính.
+
 ### Giá trị 1 Lượng: neo ở MỘT chỗ
 `app_config['credits.vnd_per_credit']` (hiện **1.000đ**) là nguồn thật; RPC đọc
 qua hàm SQL `credit_vnd()`. Bản sao phía code phải giữ khớp:

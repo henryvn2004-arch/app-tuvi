@@ -908,12 +908,23 @@
   // Trạng thái ví cho rail. `price` để null nghĩa là CHƯA BIẾT giá → đồng hồ im
   // lặng thay vì đoán. Đoán giá rồi hiện sai số câu là nói sai với người dùng
   // ngay trên thứ họ dùng để quyết định.
-  var _rc = { balance: null, price: null, freeTurns: 0, lasoPrice: null, vndPerCredit: 1000, loaded: false };
+  var _rc = { balance: null, price: null, freeTurns: 0, lasoPrice: null, vndPerCredit: 1000, loaded: false,
+              anon: false, anonLeft: null, anonCap: 0 };
+
+  // anon_id do track.js sinh (localStorage 'tvmb_anon'). Chỉ để đếm lượt DÙNG
+  // THỬ cho khách chưa đăng nhập — KHÔNG phải danh tính, xoá localStorage là có
+  // mã mới. Chống lạm dụng thật nằm ở trần theo IP/ngày + trần toàn hệ thống
+  // phía server.
+  function anonId() {
+    try { return localStorage.getItem('tvmb_anon') || ''; } catch (e) { return ''; }
+  }
   var _askCount = 0;      // số câu người dùng đã hỏi trong phiên này
   var _upsellShown = false;
   var _cungAsked = [];    // các cung đã chạm tới, theo thứ tự hỏi
 
   function railTurnsLeft() {
+    // Khách chưa đăng nhập: đếm lượt DÙNG THỬ, không liên quan tới ví.
+    if (_rc.anon) return _rc.anonLeft;
     if (_rc.price == null || _rc.balance == null) return null;
     if (_rc.price <= 0) return Infinity;
     return _rc.freeTurns + Math.floor(_rc.balance / _rc.price);
@@ -921,11 +932,25 @@
 
   function loadRailStatus() {
     var token = getToken();
-    if (!token) { _rc.loaded = false; renderRailMeter(); return; }
-    fetch('/api/payment?action=rail-status', { headers: { Authorization: 'Bearer ' + token } })
+    var url = token
+      ? '/api/payment?action=rail-status'
+      : '/api/payment?action=rail-status&anon=' + encodeURIComponent(anonId());
+    var opts = token ? { headers: { Authorization: 'Bearer ' + token } } : {};
+    fetch(url, opts)
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (d) {
         if (!d) return;
+        if (d.anon) {
+          _rc.anon = true;
+          _rc.anonLeft = typeof d.anonTrialLeft === 'number' ? d.anonTrialLeft : null;
+          _rc.anonCap = d.anonTrialCap || 0;
+          _rc.lasoPrice = typeof d.lasoPrice === 'number' ? d.lasoPrice : null;
+          _rc.vndPerCredit = d.vndPerCredit || 1000;
+          _rc.loaded = true;
+          renderRailMeter();
+          return;
+        }
+        _rc.anon = false;
         _rc.balance = typeof d.balance === 'number' ? d.balance : null;
         _rc.price = typeof d.railPrice === 'number' ? d.railPrice : null;
         _rc.lasoPrice = typeof d.lasoPrice === 'number' ? d.lasoPrice : null;
@@ -946,23 +971,80 @@
     if (!ctx || n === null || n === Infinity) { el.style.display = 'none'; el.innerHTML = ''; return; }
     el.style.display = '';
     var cls = n === 0 ? ' out' : (n <= 3 ? ' low' : '');
-    var txt;
-    if (n === 0) {
+    var txt, act = '';
+    if (_rc.anon) {
+      // Khách chưa đăng nhập: nói rõ đây là lượt DÙNG THỬ, và lối đi tiếp là
+      // ĐĂNG KÝ (kèm con số cụ thể) chứ không phải nạp tiền — người chưa từng
+      // dùng thì mời nạp tiền là mời quá sớm.
+      txt = n === 0 ? 'Đã hết câu dùng thử' : 'Dùng thử: còn <b>' + n + '</b> câu';
+      act = '<a class="rm-a" href="#" data-act="anon-signup">Đăng ký nhận thêm</a>';
+    } else if (n === 0) {
       txt = 'Đã dùng hết lượt hỏi';
+      act = '<a class="rm-a" href="/topup.html">Nạp thêm</a>';
     } else if (_rc.freeTurns > 0) {
       txt = 'Còn <b>' + n + '</b> câu hỏi <span class="rm-sub">(' + _rc.freeTurns + ' lượt tặng)</span>';
+      if (n <= 3) act = '<a class="rm-a" href="/topup.html">Nạp thêm</a>';
     } else {
       txt = 'Còn <b>' + n + '</b> câu hỏi';
+      if (n <= 3) act = '<a class="rm-a" href="/topup.html">Nạp thêm</a>';
     }
     el.className = 'rail-meter' + cls;
-    el.innerHTML = '<span class="rm-t">' + txt + '</span>' +
-      (n <= 3 ? '<a class="rm-a" href="/topup.html">Nạp thêm</a>' : '');
+    el.innerHTML = '<span class="rm-t">' + txt + '</span>' + act;
+    var su = el.querySelector('[data-act="anon-signup"]');
+    if (su) su.addEventListener('click', function (ev) { ev.preventDefault(); openAnonSignupModal(); });
   }
 
   // Đọc lại ví từ event `done` của server — nguồn chính xác nhất, và không tốn
   // thêm một lượt mạng nào.
+  // ── Tường ĐĂNG KÝ cho khách dùng thử ──
+  // Khác hẳn tường hết-Lượng: người này CHƯA có tài khoản, nên lối đi tiếp là
+  // đăng ký (miễn phí) chứ không phải nạp tiền. Con số quà đăng ký lấy từ
+  // SERVER — hứa "25 Lượng" mà DB đổi thành số khác là hứa hụt ngay lần đầu,
+  // đúng lỗi đã gặp ở topup.html.
+  var _anonBonus = null; // Lượng quà đăng ký, đọc 1 lần
+  function openAnonSignupModal() {
+    if (document.querySelector('.sh-topup-modal')) return;
+    var thay = authorLabel();
+    var price = _rc.price;
+    function build(bonus) {
+      var câu = (bonus && price) ? Math.floor(bonus / price) : null;
+      var wrap = document.createElement('div');
+      wrap.className = 'sh-topup-modal';
+      wrap.innerHTML =
+        '<div class="stm-card">' +
+          '<button class="stm-x" aria-label="Đóng">✕</button>' +
+          '<img class="stm-ava" src="' + authorAva() + '" alt="">' +
+          '<div class="stm-t">Hết phần dùng thử rồi…</div>' +
+          '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn nói về lá số này. ' +
+            (câu ? 'Đăng ký (miễn phí) là được tặng <b>' + bonus + ' Lượng</b> — đủ hỏi thêm <b>' + câu + ' câu</b> nữa.'
+                 : 'Đăng ký miễn phí để được tặng Lượng và hỏi tiếp.') +
+            ' Lá số vẫn xem miễn phí, không mất gì.</div>' +
+          '<button class="stm-btn" type="button" data-act="do-signup">Đăng ký miễn phí →</button>' +
+          '<button class="stm-later" type="button">Để sau</button>' +
+        '</div>';
+      document.body.appendChild(wrap);
+      var close = function () { wrap.remove(); };
+      wrap.addEventListener('click', function (e) { if (e.target === wrap) close(); });
+      wrap.querySelector('.stm-x').addEventListener('click', close);
+      wrap.querySelector('.stm-later').addEventListener('click', close);
+      wrap.querySelector('[data-act="do-signup"]').addEventListener('click', function () {
+        close();
+        try { track('cta_click', { tool_id: ACTIVE, meta: { from: 'anon_trial_wall' } }); } catch (e) { /* ignore */ }
+        if (window.Auth && Auth.require) Auth.require(function () { loadRailStatus(); refreshHistoryUI && refreshHistoryUI(); });
+      });
+    }
+    if (_anonBonus != null) { build(_anonBonus); return; }
+    // Quà đăng ký nằm trong app_config `credits.signup_bonus_variants` (mảng) —
+    // lấy mức THẤP NHẤT để không hứa quá.
+    fetch('/api/payment?action=signup-bonus')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) { _anonBonus = (d && d.bonus) || null; build(_anonBonus); })
+      .catch(function () { build(null); });
+  }
+
   function applyPaywallInfo(pw) {
     if (!pw) return;
+    if (typeof pw.anonTrialLeft === 'number') { _rc.anon = true; _rc.anonLeft = pw.anonTrialLeft; }
     if (typeof pw.balance === 'number') _rc.balance = pw.balance;
     if (typeof pw.price === 'number') _rc.price = pw.price;
     if (typeof pw.freeTurns === 'number') _rc.freeTurns = pw.freeTurns;
@@ -1361,7 +1443,9 @@
     try {
       var headers = { 'Content-Type': 'application/json' };
       var token = getToken(); if (token) headers['Authorization'] = 'Bearer ' + token;
-      var body = { session_id: sessionId, stream: true, messages: messages.slice(-12), client: { platform: 'web', version: '1.0.0' } };
+      // anon_id đi kèm để server đếm lượt DÙNG THỬ khi chưa đăng nhập. Người đã
+      // đăng nhập vẫn gửi (vô hại — server bỏ qua vì có token).
+      var body = { session_id: sessionId, stream: true, messages: messages.slice(-12), client: { platform: 'web', version: '1.0.0', anon_id: anonId() } };
       if (ctx.birth) body.birth = ctx.birth;
       if (ctx.scenario) body.scenario = ctx.scenario;
       if (ctx.wrap) body.wrap = ctx.wrap;
@@ -1372,6 +1456,19 @@
       }
       var res = await fetch('/api/v1/chat', { method: 'POST', headers: headers, body: JSON.stringify(body) });
       if (res.status === 401) {
+        // Hết phần DÙNG THỬ (khách vô danh đã hỏi hết số câu được cấp) → tường
+        // ĐĂNG KÝ, không phải hộp đăng nhập trơ. Người này chưa có tài khoản nên
+        // phải cho họ thấy đăng ký đổi được gì.
+        var _isTrial = false;
+        try { var _ed = await res.clone().json(); _isTrial = _ed && _ed.code === 'anon_trial_exhausted'; } catch (e) { /* ignore */ }
+        if (_isTrial) {
+          _rc.anon = true; _rc.anonLeft = 0; renderRailMeter();
+          typing.innerHTML = '<p>Hết phần dùng thử. <a href="#" id="railSignupLink" style="color:var(--blue);font-weight:600">Đăng ký miễn phí</a> để được tặng Lượng và hỏi tiếp — lá số vẫn xem miễn phí.</p>';
+          var _sl = document.getElementById('railSignupLink');
+          if (_sl) _sl.addEventListener('click', function (ev) { ev.preventDefault(); openAnonSignupModal(); });
+          openAnonSignupModal();
+          streaming = false; setSend(true); messages.pop(); return;
+        }
         // Chưa đăng nhập → LƯU câu hỏi + đường quay lại (kèm ?auto=1 để tự lập
         // lại lá số) rồi mở đăng nhập. Email: đăng nhập tại chỗ → hỏi tiếp ngay.
         // OAuth: auth-callback đưa về đúng trang này, autoRun lập lại lá số,
