@@ -90,12 +90,22 @@ export const JOBS: JobSpec[] = [
   { key: 'health-check', label: 'Canh prod còn sống', source: 'vercel', everyMinutes: 30,
     schedule: 'mỗi 30 phút', sink: 'Telegram admin', trigger: true,
     since: '2026-07-29' },
+  // `since` = ngày 3 cron này vào `vercel.json` (đo bằng dấu vết build đầu tiên
+  // trong `cron_runs`: 2026-07-26 08:32Z). BẮT BUỘC với job TUẦN: sau khi dọn
+  // 519 dòng rác build-time (migration-purge-fake-cron-runs.sql),
+  // `autopilot-nudge` còn ĐÚNG 0 dòng — lượt T6 gần nhất (24/07) diễn ra trước
+  // khi job tồn tại, lượt thật đầu tiên là 31/07. Thiếu `since` thì nó bị báo
+  // "CHƯA HỀ chạy" ngay, tức vừa gỡ một cảnh báo giả đã dựng lại cảnh báo giả
+  // khác — đúng cái bẫy mà chú thích của trường `since` đã cảnh báo.
   { key: 'autopilot-price', label: 'Autopilot — giá', source: 'vercel', everyMinutes: 7 * D,
-    schedule: 'T2 hằng tuần', sink: 'autopilot_actions', trigger: true },
+    schedule: 'T2 hằng tuần', sink: 'autopilot_actions', trigger: true,
+    since: '2026-07-26' },
   { key: 'autopilot-promo', label: 'Autopilot — khuyến mãi', source: 'vercel', everyMinutes: 7 * D,
-    schedule: 'T4 hằng tuần', sink: 'autopilot_actions', trigger: true },
+    schedule: 'T4 hằng tuần', sink: 'autopilot_actions', trigger: true,
+    since: '2026-07-26' },
   { key: 'autopilot-nudge', label: 'Autopilot — nhắc segment', source: 'vercel', everyMinutes: 7 * D,
-    schedule: 'T6 hằng tuần', sink: 'autopilot_actions', trigger: true },
+    schedule: 'T6 hằng tuần', sink: 'autopilot_actions', trigger: true,
+    since: '2026-07-26' },
   { key: 'content-pack', label: 'Content Pack TikTok', source: 'vercel', everyMinutes: 7 * D,
     schedule: 'CN hằng tuần', sink: 'Telegram admin', trigger: true,
     since: '2026-07-28' },
@@ -107,6 +117,23 @@ export interface CronRun {
   started_at: string;
   note?: string | null;
 }
+
+/**
+ * Số dòng `cron_runs` mỗi nơi phải nạp để `evaluateJobs` phán đúng. Dùng CHUNG
+ * cho cả 3 chỗ đọc (cảnh báo 3h/lượt · digest vận hành · panel admin) — ba con
+ * số chép tay là ba bộ dò nhìn ba cửa sổ khác nhau rồi kết luận khác nhau.
+ *
+ * VÌ SAO 1000 CHỨ KHÔNG PHẢI 300: cửa sổ là "N dòng gần nhất", nên MỘT job ồn
+ * ào đủ sức đẩy các job khác ra ngoài, và job bị đẩy ra thì `evaluateJobs` đọc
+ * thành "CHƯA HỀ chạy". Đo trên prod 30/07: 519/941 dòng là rác build-time
+ * (xem migration-purge-fake-cron-runs.sql) và 315 dòng nữa của riêng `cron-push`
+ * — 300 dòng gần nhất chỉ với tới 3 ngày trước, trong khi job TUẦN cần nhìn lại
+ * tới 10,5 ngày (1,5 × chu kỳ) mới biết nó có trễ hay không.
+ *
+ * 1000 là trần `db-max-rows` mặc định của Supabase PostgREST — xin hơn cũng chỉ
+ * nhận về 1000, nên đây là mức cao nhất còn trung thực.
+ */
+export const CRON_RUNS_LIMIT = 1000;
 
 /**
  * Lịch sử chạy pg_cron, trả về ĐÚNG shape `CronRun` để gộp thẳng vào mảng
