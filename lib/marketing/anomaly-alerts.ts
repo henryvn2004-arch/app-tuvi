@@ -18,10 +18,30 @@ const SB_HEADERS = {
   Authorization: `Bearer ${SUPABASE_KEY}`,
 };
 
+/**
+ * ⚠️ BẮT BUỘC trên MỌI lượt đọc của file này. Next bọc `fetch` toàn cục và NHỚ
+ * kết quả GET kể cả trong route đã khai `dynamic = 'force-dynamic'` — repo này
+ * đã dính đúng bug đó một lần ở `/ket-qua/[id]` (link vừa gỡ vẫn render vì số
+ * cũ còn trong cache).
+ *
+ * Ở đây hậu quả nặng hơn hẳn: một BỘ DÒ đọc qua cache thì nó không canh hiện
+ * trạng nữa mà canh một bức ảnh cũ, và nó sẽ nói dối theo cả hai chiều — báo
+ * động chuyện đã hết, im lặng chuyện đang xảy ra.
+ *
+ * ĐÃ ĐO, KHÔNG PHẢI PHÒNG XA: 10:00 VN 30/07 cảnh báo bắn "Job Canh prod còn
+ * sống CHƯA HỀ có lượt chạy nào được ghi log", trong khi `cron_runs` lúc đó đã
+ * có 3 dòng `ok` (01:30 · 02:00 · 02:30Z). Lượt cron 00:01Z (bản build CŨ, chưa
+ * có job này trong sổ) đã nạp cache cho ĐÚNG URL đó; job merge lúc 01:14Z, chạy
+ * thật từ 01:30Z, nhưng lượt 03:00Z vẫn đọc lại bức ảnh trước 01:30Z. Cache của
+ * Vercel sống XUYÊN deploy nên bản build mới không làm nó mới lại.
+ */
+const SB_FRESH = { headers: SB_HEADERS, cache: 'no-store' } as const;
+
 async function callRpc<T>(fn: string, params: Record<string, unknown>): Promise<T> {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`, {
     method: 'POST',
     headers: SB_HEADERS,
+    cache: 'no-store',
     body: JSON.stringify(params),
   });
   if (!res.ok) throw new Error(`${fn}: ${await res.text()}`);
@@ -30,9 +50,14 @@ async function callRpc<T>(fn: string, params: Record<string, unknown>): Promise<
 
 async function getConfig<T>(key: string, fallback: T): Promise<T> {
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/app_config?key=eq.${encodeURIComponent(key)}&select=value`, {
-      headers: SB_HEADERS,
-    });
+    // Đọc qua cache ở ĐÂY còn hỏng theo một đường riêng: `getConfig` nạp cả
+    // NGƯỠNG lẫn map `anomaly_last_fired` (cooldown). Map cũ nghĩa là cảnh báo
+    // vừa gửi 20 phút trước bị coi như chưa gửi → gửi lại; hoặc ngược lại, dấu
+    // cooldown đã hết vẫn còn hiệu lực → nuốt cảnh báo thật.
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/app_config?key=eq.${encodeURIComponent(key)}&select=value`,
+      SB_FRESH,
+    );
     if (!res.ok) return fallback;
     const rows = await res.json();
     return rows?.[0]?.value ?? fallback;
@@ -199,13 +224,13 @@ export async function checkAnomalies(): Promise<{ fired: FiredAlert[]; checked: 
   // xanh. Đây đúng là bộ ba đã để CMO Digest chết 14 ngày mà không ai biết.
   checked.push('job_health', 'env_preflight');
   try {
-    const { evaluateJobs, fetchPgcronRuns } = await import('@/lib/ops/jobs');
+    const { evaluateJobs, fetchPgcronRuns, CRON_RUNS_LIMIT } = await import('@/lib/ops/jobs');
     const { missingCriticalEnv } = await import('@/lib/ops/preflight');
 
     const runsRes = await fetch(
       `${SUPABASE_URL}/rest/v1/cron_runs?select=job_key,status,started_at,note` +
-        `&order=started_at.desc&limit=300`,
-      { headers: SB_HEADERS },
+        `&order=started_at.desc&limit=${CRON_RUNS_LIMIT}`,
+      SB_FRESH,
     );
     if (runsRes.ok) {
       // Gộp cả lịch sử pg_cron: job `auto-pipeline` không đi qua withCronLog nên

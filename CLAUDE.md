@@ -5,6 +5,117 @@
 
 ---
 
+## 🚨 Vá cảnh báo 10:00 VN 30/07 — BỘ DÒ ĐANG NÓI DỐI (2026-07-30, PR mới)
+
+Cảnh báo Telegram nêu 4 mục. Điều tra ra: **1 mục đúng hoàn toàn, 2 mục đúng dữ
+liệu nhưng sai sự thật, 1 mục sai hẳn** — và trong lúc lần nguyên nhân thì lộ
+thêm một bug đang dội thông báo vào máy người dùng thật. Ghi lại vì cả 4 đều là
+lỗi của tầng GIÁM SÁT, tức loại lỗi làm mọi cảnh báo sau đó mất giá trị.
+
+### 1. 🔴 «health-check CHƯA HỀ có lượt chạy» — SAI HẲN. Bộ dò đọc qua CACHE.
+Lúc cảnh báo bắn (03:00Z), `cron_runs` đã có 3 dòng `ok` của job này (01:30 ·
+02:00 · 02:30Z). Căn nguyên: **mọi lượt GET đọc `cron_runs`/`app_config` đều
+thiếu `cache: 'no-store'`** — đúng bug repo đã dính một lần ở `/ket-qua/[id]`
+("Next bọc `fetch` toàn cục và nhớ kết quả kể cả khi `dynamic='force-dynamic'`").
+Dựng lại được nguyên chuỗi: lượt cron 00:01Z (bản build CŨ, chưa có job này
+trong sổ) nạp cache cho ĐÚNG URL đó → job merge 01:14Z (#343), chạy thật từ
+01:30Z → lượt 03:00Z vẫn đọc bức ảnh trước 01:30Z. **Cache Vercel sống XUYÊN
+deploy** nên bản build mới không làm nó mới lại.
+- Vá `cache:'no-store'` ở **cả 3 nơi** đọc: `anomaly-alerts.ts` · `ops/digest.ts`
+  · panel admin (`payment/route.ts`). Không vá đủ 3 thì hai bộ dò nhìn hai bức
+  ảnh khác nhau — đúng chuyện đã xảy ra: digest 07:30 báo *"12 job, tất cả chạy
+  đúng lịch"*, cảnh báo 10:00 báo 3 job có vấn đề, **cùng một bảng**.
+- **`CRON_RUNS_LIMIT = 1000` dùng chung** (`lib/ops/jobs.ts`) thay 3 con số 300
+  chép tay. Cửa sổ là "N dòng gần nhất" nên một job ồn ào đẩy được job khác ra
+  ngoài, mà job bị đẩy ra thì đọc thành *"CHƯA HỀ chạy"* — 300 dòng lúc đó chỉ
+  với tới 3 ngày trước, trong khi job TUẦN cần nhìn lại 10,5 ngày.
+
+### 2/3. 🟡 «autopilot giá/nhắc segment lượt gần nhất LỖI» — ĐÚNG DỮ LIỆU, SAI SỰ THẬT
+Dòng "lượt gần nhất" của cả hai là `Error: Dynamic server usage…` từ **27/07**,
+tức Next PRERENDER route lúc BUILD, không phải lịch cron gọi. Lượt THẬT gần nhất
+của `autopilot-price` là 27/07 01:00Z **`ok`**; `autopilot-nudge` chưa có lượt
+thật nào (vào `vercel.json` ngày 26/07, lượt T6 đầu tiên là 31/07).
+- **Quy mô rác: 519/941 dòng = 55% cả bảng** (`cron-daily-push` 218 · cmo-digest
+  64 · anomaly-alerts 63 · 3 autopilot 58 mỗi cái). Mỗi push — kể cả **preview
+  build của mỗi PR** — là một build, nên rác sinh theo cấp số.
+- Đã purge trên prod (`_patches/migration-purge-fake-cron-runs.sql`) + **xoá 3
+  dấu cooldown giả** trong `marketing.anomaly_last_fired`, nếu không thì 20 giờ
+  sau đó cảnh báo THẬT của đúng 3 job này bị nuốt.
+- Chặn tái phát ở `lib/cron/log.ts` (`withCronLog`): bỏ qua sạch khi
+  `NEXT_PHASE='phase-production-build'`, và nếu lỗi vẫn lọt thì **XOÁ** dòng nhịp
+  tim chứ không chốt thành `error`. Thêm luôn: **lượt 401 cũng không log** — 8
+  route cron đều phơi ra Internet, `withCronLog` bọc NGOÀI bước kiểm secret nên
+  một con bot quét URL cũng đẻ được một dòng `error` rồi thành cảnh báo giả.
+  ⚠️ CỐ Ý không hạ xuống `skip`: `skip` là trạng thái CÓ NGHĨA (chạy mà không có
+  việc) và 3 skip liên tiếp là một cảnh báo riêng — nhét rác vào đó chỉ đổi một
+  cảnh báo giả thành cảnh báo giả khác.
+- `since: '2026-07-26'` cho 3 job autopilot: sau khi purge, `autopilot-nudge`
+  còn 0 dòng → không có `since` thì vừa gỡ cảnh báo giả đã dựng lại cái khác.
+
+### 4. 🔓 «4 hàm SECURITY DEFINER cho anon gọi» — ĐÚNG. Vá xong.
+`credit_vnd` · `anon_rail_trial_status` · `anon_rail_trial_consume` ·
+`anon_rail_hits_prune`. Đã `set local role anon` xác nhận gọi được TRƯỚC khi vá:
+`credit_vnd`→1000, `trial_status`→`{cap:3,left:3,used:0}` của bất kỳ anon_id nào.
+Nguy hiểm thật là **`trial_consume` (hàm GHI)**: ai cũng đốt được trần ngày toàn
+hệ thống (200) và trần theo IP (30) của người khác — cùng loại lỗ
+`rail_free_grant` đã vá ở S0.
+- **Lượt thứ HAI liên tiếp bộ dò bắt được loại này** (hôm trước là
+  `marketing_signup_truth`). Căn nguyên không đổi: EXECUTE cho PUBLIC là DỰNG
+  SẴN của Postgres, `ALTER DEFAULT PRIVILEGES` không gỡ nổi → **mọi hàm mới đều
+  sinh ra hở**. 4 hàm này còn KHÔNG có trong repo (0 nơi gọi, 0 file migration) —
+  tạo ad-hoc qua MCP từ track "rail dùng thử cho khách chưa đăng nhập" (2 bảng
+  `anon_rail_*` đều 0 dòng, tính năng chưa deploy).
+- `_patches/migration-revoke-secdef-anon-rail.sql`, đã áp prod. `service_role`
+  giữ nguyên quyền; `dashboard_margin`/`viral_loop_funnel` gọi `credit_vnd` lồng
+  bên trong vẫn chạy (SECURITY DEFINER → quyền của CHỦ hàm).
+- **⚠️ Nhắn track anon-rail:** nếu đang định gọi 3 hàm `anon_rail_*` THẲNG từ
+  trình duyệt bằng anon key thì thiết kế đó tự nó đã hỏng (`p_anon_id` do client
+  tự khai, `p_ip_hash` không tính đúng được ở client ⇒ trần nào cũng vượt) —
+  chuyển sang gọi ở server bằng service key, đừng mở lại quyền.
+
+### 🐞 Bug lộ ra trong lúc chẩn (nặng nhất, KHÔNG nằm trong cảnh báo)
+**`/api/cron-push` chạy mỗi lần build VÀ ai gọi cũng được.** Đo được **315 dòng
+trong 7 ngày (~45 lượt/ngày) cho một job lịch NGÀY**, mỗi dòng
+`note='sent=2 · failed=0'` → thông báo web-push THẬT đã bay tới thiết bị người
+dùng hàng chục lần/ngày thay vì một lần mỗi sáng. Hai khuyết cộng lại:
+`export async function GET()` không nhận `request` và không đọc API động nào →
+Next 14 coi là route TĨNH và **THỰC THI trọn vẹn ngay trong `next build`** (đây
+là mặt còn lại của cùng một bug: 6 route kia đọc `request.headers` nên chỉ ném
+DynamicServerError, route này thì chạy thật); và nó là cron **DUY NHẤT không
+kiểm `CRON_SECRET`** — bất kỳ ai biết URL đều broadcast được.
+- Vá: `dynamic='force-dynamic'` + kiểm `Bearer CRON_SECRET`. Verify trên build
+  thật: `.next/server/app/api/cron-push` **không còn `.body`** (route tĩnh có
+  `.body` — nó là kết quả chạy lúc build đem cache). Vercel cron và nút "Chạy
+  ngay" của panel đều tự gắn header đó nên không chặn đường gọi hợp lệ nào.
+- **CỐ Ý KHÔNG xoá 315 dòng log này** (khác 519 dòng rác build): chúng là lượt
+  chạy THẬT, là bằng chứng của chính bug này.
+
+### Verify
+`tsc --noEmit` 0 lỗi · `eslint .` 0 lỗi (72 warning pre-existing) · `prettier
+--check .` sạch · **19 ca trên module thật** (biên dịch `lib/ops/jobs.ts` +
+`lib/cron/log.ts` rồi stub `fetch`): dựng lại đúng trạng thái prod sau purge →
+health-check hết `overdue`, autopilot-price hết `failing`, autopilot-nudge
+`awaitingFirstRun`; **3 ca ĐỐI CHỨNG vẫn kêu** (lỗi thật → `failing`, dòng
+`running` treo 90 phút → `stuck`, job trắng log mà `since` đã cũ → `overdue`);
+`withCronLog` build-phase → **0 lượt gọi Supabase**, prerender-error → POST→
+DELETE, 401 → POST→DELETE, lượt thật → POST→PATCH `status=ok`, lỗi 5xx thật →
+PATCH `status=error` · **route thật trên Next dev**: không header → 401, secret
+sai → 401, secret đúng → qua cửa · SQL verify trên prod: ACL 4 hàm còn đúng
+`{postgres,service_role}`, anon bị chặn cả 4 (khối `DO` bắt ngoại lệ),
+`security_audit().ham_ho_cho_anon` **rỗng**, 519 dòng đã xoá / 0 dòng còn khớp
+mẫu, cooldown map còn đúng 7 khoá.
+
+### CÒN LẠI
+- **Việc tay Henry:** không có việc bắt buộc. Chỉ cần để mắt bản digest 07:30 và
+  cảnh báo 3h/lượt trong 1–2 ngày tới — nếu đúng thì `health-check` và 2 job
+  autopilot phải IM, và `autopilot-nudge` có lượt thật đầu tiên **T6 31/07**.
+- Nợ đã biết, chưa làm: `cron-push` còn 315 dòng lịch sử làm cửa sổ hẹp lại
+  (tự khỏi sau ~2 tuần, `CRON_RUNS_LIMIT=1000` đã đủ che); và toàn repo vẫn còn
+  nhiều lượt GET Supabase khác thiếu `cache:'no-store'` — chỉ vá đường GIÁM SÁT
+  trong PR này, chưa rà hết các route nghiệp vụ.
+
+---
+
 ## 🧭 Marketing Autopilot + CMO Orchestrator Quân Sư
 
 **Branch:** `claude/marketing-autopilot-track-setup-vse38f`

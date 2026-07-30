@@ -102,6 +102,27 @@ export async function logCronRun(run: CronRunInput): Promise<number | null> {
   }
 }
 
+/**
+ * Xoá một dòng cron_runs. Best-effort.
+ *
+ * CHỈ dùng cho dòng nhịp tim của một lượt KHÔNG PHẢI LƯỢT CHẠY THẬT (prerender
+ * lúc build — xem `isBuildPrerenderError`). Không dùng để dọn log: lịch sử chạy
+ * là bằng chứng, xoá nó đi thì lần sau không chẩn được gì.
+ */
+async function deleteCronRun(id: number): Promise<void> {
+  const env = sbEnv();
+  if (!env) return;
+  try {
+    await fetch(`${env.url}/rest/v1/cron_runs?id=eq.${id}`, {
+      method: 'DELETE',
+      headers: sbHeaders(env.key, 'return=minimal'),
+      signal: AbortSignal.timeout(SB_TIMEOUT_MS),
+    });
+  } catch {
+    /* nuốt */
+  }
+}
+
 /** Cập nhật dòng nhịp tim thành trạng thái cuối. Best-effort như logCronRun. */
 export async function patchCronRun(id: number, fields: Partial<CronRunInput>): Promise<void> {
   const env = sbEnv();
@@ -184,6 +205,38 @@ async function runOnce(handler: () => Promise<Response>): Promise<Attempt> {
   }
 }
 
+/**
+ * Next đặt biến này trong lúc `next build` (PHASE_PRODUCTION_BUILD của
+ * `next/constants`). Dùng chuỗi thẳng thay vì import để không kéo hằng số nội bộ
+ * của Next vào runtime.
+ */
+const BUILD_PHASE = 'phase-production-build';
+
+/**
+ * Lượt "chạy" phát sinh do Next PRERENDER route lúc build, không phải do lịch.
+ *
+ * Route cron đọc `request.headers` mà thiếu `export const dynamic = 'force-dynamic'`
+ * sẽ ném `DynamicServerError` ngay trong bước build — và trước bản này, mỗi lần
+ * như thế đẻ một dòng `error` vào `cron_runs`. Mỗi push (kể cả preview của PR)
+ * là một build, nên nó sinh rác theo cấp số: đo trên prod 30/07 được **519/941
+ * dòng** là loại này (`migration-purge-fake-cron-runs.sql`).
+ *
+ * Hai hậu quả, cái sau nặng hơn cái trước:
+ *   1. `evaluateJobs` đọc dòng cuối cùng để phán `failing` → 2 job autopilot bị
+ *      báo "lượt gần nhất LỖI" suốt 3 ngày, trong khi lượt THẬT gần nhất của
+ *      autopilot-price (07-27 01:00Z) là `ok`. Cảnh báo đúng theo dữ liệu, sai
+ *      theo sự thật — loại tệ nhất, vì nó dạy người ta ngó lơ bộ dò.
+ *   2. Cửa sổ "N dòng gần nhất" bị rác chiếm chỗ, đẩy job thật ra ngoài
+ *      (xem `CRON_RUNS_LIMIT`).
+ *
+ * `export const dynamic` ở từng route vẫn là tuyến phòng thủ CHÍNH; đây là lưới
+ * hứng cho route thứ N+1 mà ai đó quên khai — quên là chuyện chắc chắn xảy ra,
+ * đã xảy ra 6 lần trên 6 route.
+ */
+function isBuildPrerenderError(note: string): boolean {
+  return /DynamicServerError|Dynamic server usage/i.test(note);
+}
+
 // Bọc 1 handler cron: ghi dòng nhịp tim, đo thời gian, đọc kết quả JSON
 // (ok:false → error), chốt log, rồi trả NGUYÊN response gốc. Mọi nhánh return
 // của handler đều được log 1 chỗ.
@@ -193,6 +246,11 @@ export async function withCronLog(
   handler: () => Promise<Response>,
   opts: WithCronLogOpts = {},
 ): Promise<Response> {
+  // Đang build thì đây KHÔNG phải một lượt chạy — chạy handler rồi trả về, đừng
+  // để lại vết nào. Bỏ qua sớm ở đây còn tiết kiệm 2 lượt gọi Supabase mỗi
+  // route cron mỗi build.
+  if (process.env.NEXT_PHASE === BUILD_PHASE) return runOnce(handler).then((a) => a.resp);
+
   const started_at = new Date().toISOString();
   const t0 = Date.now();
 
@@ -211,6 +269,31 @@ export async function withCronLog(
     const first = att.note;
     att = await runOnce(handler);
     att.note = `thử lại 1 lượt (lỗi đầu: ${first})${att.note ? ' · ' + att.note : ''}`;
+  }
+
+  // Lưới hứng cho ca `NEXT_PHASE` không được đặt (prerender ở ngữ cảnh khác):
+  // xoá luôn dòng nhịp tim thay vì chốt nó thành `error`. CỐ Ý không hạ xuống
+  // `skip` — `skip` là một trạng thái CÓ NGHĨA (job chạy mà không có việc) và
+  // 3 lượt skip liên tiếp là một cảnh báo riêng; nhét rác vào đó chỉ đổi một
+  // cảnh báo giả thành một cảnh báo giả khác.
+  if (isBuildPrerenderError(att.note)) {
+    if (runId != null) await deleteCronRun(runId);
+    return att.resp;
+  }
+
+  // Lượt bị TỪ CHỐI XÁC THỰC (401) cũng không phải một lượt chạy của job: mọi
+  // route cron đều kiểm `Bearer CRON_SECRET` NGAY ĐẦU handler, và `withCronLog`
+  // bọc ở NGOÀI bước đó — nên một con bot quét URL cũng đẻ được một dòng
+  // `error`, rồi `evaluateJobs` đọc dòng ấy thành «lượt gần nhất LỖI» và bắn
+  // cảnh báo. Đó đúng là hình dạng của 2 cảnh báo giả sáng 30/07, chỉ khác
+  // nguồn rác. 8 route cron đều phơi ra Internet nên đây là cửa vào có thật.
+  //
+  // KHÔNG che mất hỏng thật: nếu CRON_SECRET lệch (bị xoay, quên set) thì lượt
+  // thật cũng 401 và bảng sẽ TRẮNG log — `overdue` bắt đúng ca đó, và "job im
+  // lặng" là chẩn đoán chính xác hơn "job lỗi".
+  if (att.resp.status === 401) {
+    if (runId != null) await deleteCronRun(runId);
+    return att.resp;
   }
 
   const final = {
