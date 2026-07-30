@@ -85,6 +85,11 @@ export const JOBS: JobSpec[] = [
     schedule: '08:00 VN hằng ngày', sink: 'Telegram admin', trigger: true },
   { key: 'anomaly-alerts', label: 'Cảnh báo bất thường', source: 'vercel', everyMinutes: 3 * H,
     schedule: 'mỗi 3 giờ', sink: 'Telegram admin + events', trigger: true },
+  // Sinh ra sau sự cố 29/07 (Supabase bị hạ Pro→Free rồi pause, prod hỏng hơn
+  // một ngày mà không ai được báo). Xem lib/ops/health-check.ts.
+  { key: 'health-check', label: 'Canh prod còn sống', source: 'vercel', everyMinutes: 30,
+    schedule: 'mỗi 30 phút', sink: 'Telegram admin', trigger: true,
+    since: '2026-07-29' },
   { key: 'autopilot-price', label: 'Autopilot — giá', source: 'vercel', everyMinutes: 7 * D,
     schedule: 'T2 hằng tuần', sink: 'autopilot_actions', trigger: true },
   { key: 'autopilot-promo', label: 'Autopilot — khuyến mãi', source: 'vercel', everyMinutes: 7 * D,
