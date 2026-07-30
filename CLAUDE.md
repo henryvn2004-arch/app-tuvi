@@ -524,6 +524,65 @@ thấp 27,4 / giữa 26,5 / khá 24,1 / cao 22,0%.
 
 **Cả track: 84 → 1.150 danh xưng (×13,7), chi phí model thêm 0 đồng.**
 
+### ✅ Vòng sau — trục SÁT TINH, nhưng đổi ẢNH chứ không đổi danh xưng (PR mới)
+Trục này từng bị BỎ với lý do ghi thẳng trong code: *"chỉ đổi được mấy chữ trong
+danh xưng còn `attireEn` giữ nguyên nên ảnh y hệt"*. Henry: **"uh gắn đạo cụ
+riêng đi"** → làm, theo đúng cách đã cứu trục cung Thân là cấp cho nó một tín
+hiệu **THỊ GIÁC** riêng.
+- **`SAT_MARK`** (3 nhóm × `edge` + `markEn` + `source`) theo nhóm sát tinh đóng
+  **tại chính cung Quan Lộc** (không xét tam hợp, cùng nguyên tắc `CAREER_MODIFIERS`;
+  đọc ở cung mượn sao là đọc sát tinh của cung khác). Phân bố đo trên 8.640 lá
+  số: **sạch 58,7% · không-kiếp 15,1% · kình-đà 13,9% · hoả-linh 12,2%**.
+- **`markEn` CHIẾM MỘT CHIỀU KHÁC `propEn`** — đây là cả thiết kế: cung Thân sở
+  hữu **ĐỒ VẬT** bày quanh người, nhóm sát tinh sở hữu **DẤU TRÊN NGƯỜI + ÁNH
+  SÁNG** khung cảnh. **34,4% lá số trúng cả hai lớp**; nếu cả hai đều thêm đồ vật
+  thì bức ảnh bày bừa và hai lớp làm loãng nhau — tách chiều thì chúng cộng vào.
+- **KHÔNG vào danh xưng, và đó là quyết định có số đỡ:** danh xưng đang TB 24,5
+  ký tự trên trần 30, **chỉ 45% còn ≥5 ký tự trống**. Thêm dấu hiệu vào title chỉ
+  tới được 41,3% × 45% ≈ **19%** lá số mà ép sát trần cho tất cả. Nên trục này đi
+  theo tiền lệ `MENH_ROLE`: vào ảnh + `desc` + prompt truyện. **Nó mua độ khác
+  biệt của BỨC ẢNH (41,3% lá số có thêm một lớp thị giác), không mua thêm số
+  danh xưng** — đừng kỳ vọng sai chỗ.
+- **🐞 Hai lỗi bắt được bằng cách ĐỌC PROMPT GHÉP, không phải bằng cách đo:**
+  (a) `markEn` nhóm không-kiếp bản đầu dùng từ vựng ĐI ĐƯỜNG (*"a plain
+  travelling mantle"*) → đá đúng `propEn` của Thân cư Thiên Di (*"a road bundle
+  and a broad weathered hat"*): ghép lại thành bọc hành lý + mũ đi đường + áo đi
+  đường, ảnh trôi về "người lữ hành" chung chung và **mất sạch nghĩa TỪNG BỎ** —
+  đúng thứ nhóm này cần nói. (b) `weathered` trùng ở cả kình-đà và Thiên Di (188
+  lá số) → `calloused`. **Luật rút ra:** `markEn` không được mượn từ vựng của bất
+  kỳ `propEn` nào, và **tránh tả TRANG PHỤC** (đó là việc của `attireEn` +
+  `costumeGrammarEn`, chen vào là ghi đè cấp bậc). Đã cắm **bẫy tự động** quét
+  trùng từ giữa `markEn`/`propEn` để không tái phát.
+- **🐞 Lộ thêm một BUG CÓ SẴN nặng hơn cả trục này — danh xưng lặp chữ:**
+  *"Nữ lương y vân du **vân du**"* · *"Quan **trấn** phủ **trấn** phương xa"*.
+  Hậu tố cung Thân ghép vào danh xưng gốc vốn đã chứa đúng chữ đó. Cùng loại lỗi
+  với hai lần trùng title trước (#339, 4-bậc) và **cũng chỉ lộ khi đọc chuỗi
+  thật**. Sửa: điều kiện ghép hậu tố nay xét **cả TỪ**, không chỉ độ dài — dùng
+  chung ladder hạ dần sẵn có (đầy đủ → ngắn → bỏ). Gỡ được **45 danh xưng méo**
+  (1.458 → 1.413 trên lưới đo này); đó là **bỏ lỗi, không phải mất biến thể**.
+  ⚠️ Con số tuyệt đối phụ thuộc lưới lấy mẫu — **đừng so 1.413 với 1.150** ở trên
+  (hai lưới khác nhau: 6 ngày/tháng vs 7 ngày/tháng).
+- **Nguồn: RAG, cả hai sách** — `8.14b Sát tinh tọa thủ cung Quan Lộc` (mục
+  RIÊNG cho đúng trục này) · `4.2.19 Kình Dương` · `4.2.20 Đà La` ("tỳ vết…
+  rỗ sẹo" — nhóm duy nhất cổ thư tả bằng dấu trên THÂN THỂ, nên dễ vào ảnh nhất)
+  · `4.2.21 Hỏa, Linh` · `4.2.22 Không, Kiếp` · Vương Đình Chi *Sát diệu &
+  khuynh hướng nghề nghiệp* ("Có Thiên Không / Địa Không: Nên theo tôn giáo – tu
+  hành – triết học") + *Tứ Sát* + *Sát tinh & tính nóng vội*.
+- **Thứ tự ưu tiên khi trúng nhiều nhóm (5,9%):** không-kiếp > kình-đà > hoả-linh
+  — xếp theo mức làm ĐỔI BẢN CHẤT công danh: Không/Kiếp là nhóm duy nhất kéo
+  người ta RỜI HẲN chức phận nên lấn lượt; Kình/Đà để lại dấu vĩnh viễn trên
+  thân; Hỏa/Linh chỉ đổi NHỊP. Đo với thứ tự này ra 15,1/13,9/12,2% — trải đủ đều.
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier
+  --check .` sạch · engine test 181 pass · **đo 8.640 lá số, 0 lỗi trên 7 bất
+  biến**: có sát tinh ⇔ có lớp · nhóm chọn THỰC SỰ có sao ở Quan Lộc · ưu tiên
+  đúng thứ tự khai · 0 rò rỉ chéo giữa 3 nhóm · `markEn` vào prompt ảnh đủ 3.570
+  lá số · gọi lại cùng lá số ra y hệt · 0 danh xưng lặp chữ · prompt truyện có
+  khối `DẤU VẾT NGHỀ` · **0 trùng từ giữa `markEn` và `propEn`**.
+- **CÒN LẠI (việc tay Henry):** nhóm **kình-đà** là nhóm duy nhất đổi GƯƠNG MẶT
+  (*"a faint old scar traced along the brow or jaw"*) — tao chỉ verify tới tầng
+  prompt, phải gen thật mới biết model vẽ vết sẹo "mờ, cũ" hay vẽ quá tay thành
+  thương tích. Nếu quá tay thì sửa gọn một chuỗi trong `SAT_MARK`.
+
 ---
 
 ## 🎭 Chức phận theo CẶP chính tinh — 82 → 194 danh xưng (2026-07-29, cùng PR cache)

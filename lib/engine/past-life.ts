@@ -1609,7 +1609,7 @@ const THAN_ASPECT: Record<string, ThanAspect> = {
   },
   'Phúc Đức': {
     aspect: 'đời ngả về phúc thọ và việc họ hàng — lo phần gốc rễ hơn phần danh lợi trước mắt',
-    propEn: 'ritual implements nearby — an incense burner and a offering vessel',
+    propEn: 'ritual implements nearby — an incense burner and an offering vessel',
     source: 'Tân Biên, cung Phúc Đức: "Xem cung Phúc Đức để biết rõ sự thọ yểu, cùng là sự thịnh suy, tụ tán của họ hàng. Ngoài ra, còn được biết rõ về âm phần"',
     suffix: {
       vo: 'coi tế cờ', van: 'coi lễ nghi', quyen: 'coi tông miếu',
@@ -1621,6 +1621,115 @@ const THAN_ASPECT: Record<string, ThanAspect> = {
     },
   },
 };
+
+// ── DẤU VẾT NGHỀ theo NHÓM SÁT TINH tại Quan Lộc ────────────────────────
+//
+// VÌ SAO TRỤC NÀY TỪNG BỊ BỎ, VÀ VÌ SAO NAY LÀM (đọc trước khi sửa):
+// Bản đầu đo xong rồi BỎ, với lý do ghi thẳng ở THAN_ASPECT: nhóm sát tinh chỉ
+// đổi được mấy chữ trong danh xưng còn `attireEn` giữ nguyên nên ẢNH Y HỆT —
+// tăng số danh xưng mà cảm giác không đổi. Nay làm, nhưng làm ĐÚNG cách đã cứu
+// được trục cung Thân: cấp cho nó một tín hiệu THỊ GIÁC riêng.
+//
+// `markEn` CỐ Ý chiếm một CHIỀU KHÁC với `propEn` của cung Thân, không tranh
+// chỗ: cung Thân sở hữu ĐỒ VẬT bày quanh người (sổ sách, hành trang, đồ tế
+// khí), còn nhóm sát tinh sở hữu DẤU VẾT TRÊN NGƯỜI + THỨ ÁNH SÁNG của khung
+// cảnh. Nếu cả hai cùng thêm đồ vật thì 33% lá số (trúng cả hai) ra bức ảnh bày
+// bừa đủ thứ, và hai lớp làm loãng nhau. Tách chiều thì chúng cộng vào nhau.
+//
+// KHÔNG VÀO DANH XƯNG — đo trước khi quyết: danh xưng hiện trung bình 24,5 ký
+// tự trên trần 30, chỉ 45% còn ≥5 ký tự trống. Thêm dấu hiệu vào title thì chỉ
+// tới được 41,3% × 45% ≈ 19% lá số mà lại ép sát trần cho tất cả. Nên trục này
+// đi theo đúng tiền lệ MENH_ROLE: vào ảnh + `desc` + prompt truyện, không chen
+// vào danh xưng. Nó mua ĐỘ KHÁC BIỆT CỦA BỨC ẢNH (39,4% lá số có thêm một lớp
+// thị giác), không mua thêm số danh xưng — đừng kỳ vọng sai chỗ.
+//
+// Nhóm RỖNG (không sát tinh nào, 58,7%) là hợp lệ và có chủ ý, cùng lý do
+// Thân cư Mệnh để hậu tố rỗng: đường công danh không có vết thì thêm vết vào là
+// bịa. Quá nửa số lá số không có lớp này, và đó là đúng.
+interface SatMark {
+  /** Dấu vết nghề — vào `desc` + prompt truyện. */
+  edge: string;
+  /** Dấu trên người + ánh sáng khung cảnh, cho prompt ảnh. KHÔNG phải đồ vật
+   * (đồ vật là phần của cung Thân — xem chú thích trên). */
+  markEn: string;
+  source: string;
+}
+
+/** Thứ tự ưu tiên khi một lá số trúng nhiều nhóm (đo được 5,9%).
+ *
+ * Xếp theo mức làm ĐỔI BẢN CHẤT đường công danh, giảm dần: Không/Kiếp là nhóm
+ * duy nhất có thể kéo người ta RỜI HẲN chức phận ("chẳng được lâu bền", ngả về
+ * tu hành) nên nó lấn lượt; Kình/Đà để lại dấu vĩnh viễn trên thân; Hỏa/Linh
+ * chỉ đổi NHỊP (nóng, gấp, thăng giáng) nên nhường cả hai. Đo với thứ tự này
+ * ra 15,1 / 13,9 / 12,2% — trải đủ đều, không nhóm nào bị bóp còn rất ít. */
+const SAT_GROUP_ORDER = ['khong-kiep', 'kinh-da', 'hoa-linh'] as const;
+
+const SAT_GROUP_STARS: Record<(typeof SAT_GROUP_ORDER)[number], string[]> = {
+  'khong-kiep': ['Địa Không', 'Địa Kiếp'],
+  'kinh-da': ['Kình Dương', 'Đà La'],
+  'hoa-linh': ['Hỏa Tinh', 'Linh Tinh'],
+};
+
+const SAT_MARK: Record<(typeof SAT_GROUP_ORDER)[number], SatMark> = {
+  // Không/Kiếp: cổ thư nói thẳng là công danh có thể tới sớm mà không giữ được,
+  // và hướng ra là tôn giáo/tu hành. Dấu thị giác vì thế là dấu của người ĐÃ
+  // TỪNG BỎ một lần: một vật tín ngưỡng nhỏ, cái nhìn đã rời khỏi chỗ mình
+  // đứng, ánh sáng mỏng và lạnh.
+  //
+  // 🐞 BẢN ĐẦU dùng từ vựng ĐI ĐƯỜNG ("a plain travelling mantle") và nó đá
+  // ngay vào `propEn` của Thân cư Thiên Di ("a road bundle and a broad
+  // weathered hat") — chỉ lộ ra khi ĐỌC prompt ghép, không lộ khi đo. Ghép lại
+  // thành bọc hành lý + mũ đi đường + áo đi đường: bức ảnh trôi về "người lữ
+  // hành" chung chung và mất sạch nghĩa TỪNG BỎ, đúng thứ nhóm này cần nói.
+  // LUẬT rút ra: markEn không được mượn từ vựng của bất kỳ `propEn` nào, và
+  // TRÁNH tả TRANG PHỤC (đó là phần `attireEn` + `costumeGrammarEn` đã lo, chen
+  // vào là ghi đè cấp bậc).
+  'khong-kiep': {
+    edge: 'từng có lúc rời bỏ hết chức phận đang có, ngả về đường tu hành hay ẩn dật, rồi mới trở lại làm lại từ đầu',
+    markEn:
+      'the stillness of someone who once let everything go and then came back to it — a plain string of prayer beads at the wrist, ' +
+      'the gaze turned slightly away from the viewer as if attending to something else, ' +
+      'and thin cool light with faint mist, as though the scene were being remembered rather than witnessed',
+    source:
+      'Tân Biên 4.2.22 Không, Kiếp: "Kiếp, Không, Tỵ, Hợi, đồng vị, tảo đạt công danh… nhưng chẳng được lâu bền" · "công danh tiền tài như đám mây nổi, tụ tán thất thường" — và Vương Đình Chi, Lục Thập Tinh Hệ, Sát diệu & khuynh hướng nghề nghiệp: "Có Thiên Không / Địa Không: Nên theo tôn giáo – tu hành – triết học"',
+  },
+  // Kình/Đà: đây là nhóm duy nhất cổ thư tả bằng chính DẤU TRÊN THÂN THỂ ("tỳ
+  // vết", "rỗ sẹo", "thương tàn") — nên nó là nhóm dễ đưa vào ảnh nhất, và
+  // cũng là nhóm phải cẩn thận nhất: tả vừa đủ để thấy đã đi qua va chạm, KHÔNG
+  // tả thương tích hở hay tàn phế (bức tranh để người ta khoe, không phải để
+  // minh hoạ y thư).
+  'kinh-da': {
+    edge: 'con đường công danh đi qua va chạm và tranh đoạt thật, trên người còn dấu của những lần ấy',
+    markEn:
+      'the bearing of someone who came through real conflict — a faint old scar traced along the brow or jaw, ' +
+      'hands calloused and marked from years of handling weapons or tools, clothing well-mended rather than pristine, ' +
+      'lit by hard directional light that keeps the marks legible',
+    source:
+      'Tân Biên 4.2.20 Đà La: "trong mình thường có tỳ vết hay có nhiều rỗ sẹo" · 4.2.19 Kình Dương: "Kình Dương Tý, Ngọ, Mão, Dậu phi yểu chiết nhi hình thương" — và Vương Đình Chi, Lục Thập Tinh Hệ, Tứ Sát: "Liêm Phá phùng Tứ Sát, chủ xảo nghệ dẹp an thân… Nên học nghề kỹ thuật / tay nghề"',
+  },
+  // Hỏa/Linh: cổ thư đọc theo NHỊP — nóng, gấp, phất lên nhanh mà tán cũng
+  // nhanh. Chuyển sang ảnh bằng NGUỒN SÁNG (lửa) chứ không bằng vật, nên nó
+  // đổi cả tông màu của bức tranh mà không thêm đồ đạc nào.
+  'hoa-linh': {
+    edge: 'tính khí nóng và gấp, nghề phất lên rất nhanh rồi cũng tán rất nhanh, không mấy khi bằng phẳng',
+    markEn:
+      'heat present in the scene itself — firelight from a brazier or torch just out of frame throwing warm light across one side of the face, ' +
+      'a faint scorch mark on a sleeve edge, and the alert look of someone used to acting fast',
+    source:
+      'Tân Biên 4.2.21 Hỏa, Linh: "Hỏa, Linh tương ngộ đa trấn chư bang… là người có tài ba xuất chúng, thường hiển đạt về võ nghiệp" · 8.14b Sát tinh tọa thủ cung Quan Lộc: "thăng giáng thất thường, đã hoạnh phát tất hoạnh tán" — và Vương Đình Chi, Lục Thập Tinh Hệ: "Hỏa + Đà → hành động nhanh, liều"',
+  },
+};
+
+/** Nhóm sát tinh đóng TẠI Quan Lộc (không xét tam hợp — cùng nguyên tắc "xem
+ * sao tại chính cung" đã chốt ở portrait.ts và ở CAREER_MODIFIERS).
+ *
+ * Đọc từ CHÍNH cung Quan Lộc chứ không từ cung mượn sao: sát tinh ngồi ở Quan
+ * Lộc thì nó tác động vào công danh, bất kể chính tinh có phải đi mượn xung
+ * chiếu hay không. Lấy ở cung mượn là đọc sát tinh của một cung khác. */
+function pickSatGroup(quan: Rec | undefined): (typeof SAT_GROUP_ORDER)[number] | null {
+  const names = new Set(palaceStarObjs(quan).map((s) => s.ten));
+  return SAT_GROUP_ORDER.find((g) => SAT_GROUP_STARS[g].some((s) => names.has(s))) || null;
+}
 
 // ── TƯ CÁCH theo chính tinh chủ cung MỆNH ───────────────────────────────
 //
@@ -1968,6 +2077,13 @@ export interface OccupationResult extends Occupation {
   /** Tư cách (chính tinh chủ cung Mệnh) — vào prompt truyện, KHÔNG vào danh xưng. */
   role: string;
   roleSource: string;
+  /** Dấu vết nghề (nhóm sát tinh tại Quan Lộc) — vào prompt truyện. Rỗng khi
+   * Quan Lộc không có sát tinh nào (58,7% lá số, đúng thiết kế). */
+  edge: string;
+  edgeSource: string;
+  /** Dấu trên người + ánh sáng cho ảnh, suy từ nhóm sát tinh. Chiếm chiều KHÁC
+   * với `propEn` (đồ vật) để hai lớp cộng vào nhau chứ không tranh chỗ. */
+  markEn: string;
 }
 
 function computeOccupation(ls: Laso, gender: 'nam' | 'nu', thanCungName: string): OccupationResult {
@@ -2035,9 +2151,22 @@ function computeOccupation(ls: Laso, gender: 'nam' | 'nu', thanCungName: string)
   //
   // Rơi tới nhánh bỏ hẳn thì mảng đời vẫn vào truyện và vào ảnh qua
   // `aspect`/`propEn` — chỉ là không chen vào danh xưng.
-  const fits = (sfx: string) => !sfx || baseTitle.length + 1 + sfx.length <= TITLE_MAX_LEN;
-  if (!fits(suffix)) suffix = than.suffixShort[base.domain] || '';
-  if (!fits(suffix)) suffix = '';
+  // 🐞 CHỐNG LẶP CHỮ — bắt được khi quét prompt ghép, không phải khi đo phân bố
+  // (cùng loại lỗi với hai lần trùng title trước đây). Vài danh xưng gốc vốn đã
+  // chứa đúng chữ của hậu tố, ghép vào ra chuỗi lặp đọc như lỗi máy:
+  //   "Nữ lương y vân du" + hậu tố "vân du"  → "Nữ lương y vân du vân du"
+  //   "Quan trấn phủ"     + hậu tố "trấn phương xa" → "Quan trấn phủ trấn phương xa"
+  // Không phải cứ khác chuỗi là ghép được: phải khác cả TỪ. Dùng chung ladder
+  // hạ dần sẵn có (đầy đủ → ngắn → bỏ) thay vì thêm nhánh riêng.
+  const overlaps = (sfx: string) => {
+    if (!sfx) return false;
+    const has = new Set(baseTitle.toLowerCase().split(/\s+/));
+    return sfx.toLowerCase().split(/\s+/).some((w) => has.has(w));
+  };
+  const ok = (sfx: string) =>
+    !sfx || (baseTitle.length + 1 + sfx.length <= TITLE_MAX_LEN && !overlaps(sfx));
+  if (!ok(suffix)) suffix = than.suffixShort[base.domain] || '';
+  if (!ok(suffix)) suffix = '';
 
   // TƯ CÁCH (chính tinh chủ cung Mệnh) — chỉ vào prompt, không vào danh xưng.
   // Mệnh vô chính diệu thì mượn chính tinh cung xung chiếu, CÙNG cổ pháp 8.45
@@ -2046,6 +2175,11 @@ function computeOccupation(ls: Laso, gender: 'nam' | 'nu', thanCungName: string)
   const menhLead =
     pickQuanMajor(menhP, menhHanh) || pickQuanMajor(menhP?.xungChieuCung as Rec | undefined, menhHanh);
   const menhRole = menhLead ? MENH_ROLE[menhLead.ten] : undefined;
+
+  // DẤU VẾT NGHỀ (nhóm sát tinh tại Quan Lộc) — cũng chỉ vào prompt + ảnh,
+  // không vào danh xưng. Xem chú thích ở SAT_MARK để biết vì sao.
+  const satGroup = pickSatGroup(quan);
+  const satMark = satGroup ? SAT_MARK[satGroup] : undefined;
 
   return {
     ...base,
@@ -2067,6 +2201,9 @@ function computeOccupation(ls: Laso, gender: 'nam' | 'nu', thanCungName: string)
     aspectSource: than.source,
     role: menhRole?.role || '',
     roleSource: menhRole?.source || '',
+    edge: satMark?.edge || '',
+    edgeSource: satMark?.source || '',
+    markEn: satMark?.markEn || '',
   };
 }
 
@@ -2414,6 +2551,17 @@ export function formatCharacterForLLM(profile: PastLifeProfile): string {
       '  Đây là phần đời mà nhân vật nghiêng về — phải hiện ra trong truyện bằng CẢNH và VIỆC cụ thể, ' +
       'không phải nhắc suông một câu.',
   );
+  // DẤU VẾT NGHỀ (nhóm sát tinh tại Quan Lộc). Chỉ in khi CÓ — quá nửa lá số
+  // không có sát tinh nào ở Quan Lộc, và bảo LLM "đường công danh này không có
+  // vết gì" là mời nó đi tả cái không có.
+  if (o.edge) {
+    lines.push(
+      `DẤU VẾT NGHỀ (từ nhóm sát tinh đóng tại Quan Lộc): ${o.edge}.\n` +
+        `  Căn cứ: ${o.edgeSource}\n` +
+        '  Đây là chỗ trả giá của chức phận, phải thấy được trong truyện — nhưng là MỘT MẠCH chạy ngầm ' +
+        'qua nhiều hồi, KHÔNG phải một tai họa dồn vào một hồi rồi thôi.',
+    );
+  }
 
   const block = (label: string, r: PhuTheReadout, note: string) => {
     const parts: string[] = [];

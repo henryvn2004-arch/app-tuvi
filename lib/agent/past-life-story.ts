@@ -234,6 +234,15 @@ export function buildFinalPastLifeImagePrompt(
     // người CÙNG chức phận mà khác cung Thân ra hai bức ảnh khác nhau thật,
     // chứ không chỉ khác mấy chữ trong danh xưng.
     (o.propEn ? `Also visible in the scene: ${o.propEn}. ` : '') +
+    // Dấu vết nghề theo NHÓM SÁT TINH tại Quan Lộc. Chiếm chiều KHÁC với
+    // `propEn` có chủ ý — propEn là ĐỒ VẬT bày quanh người, còn đây là DẤU TRÊN
+    // NGƯỜI + ÁNH SÁNG khung cảnh. 33% lá số trúng cả hai lớp; nếu cả hai đều
+    // thêm đồ vật thì bức ảnh bày bừa và hai lớp làm loãng nhau, tách chiều thì
+    // chúng cộng vào nhau. Rỗng ở 58,7% lá số (Quan Lộc không sát tinh) —
+    // không thêm gì là đúng, xem SAT_MARK trong past-life.ts.
+    // Viết hoa chữ đầu tại ĐÂY chứ không trong bảng: mọi chuỗi trong SAT_MARK là
+    // mệnh đề rời (giống `propEn`), nơi dùng mới biết nó đứng đầu câu hay không.
+    (o.markEn ? `${o.markEn[0].toUpperCase()}${o.markEn.slice(1)}. ` : '') +
     `Background: ${o.backdropEn}, rendered with atmospheric perspective and kept secondary to the figure. ` +
     `SETTING RULE: ${era.sceneGrammarEn} ` +
     `${faceDescriptionEn} ` +
