@@ -139,7 +139,35 @@ export interface JobHealth extends JobSpec {
   skipStreak: number;
   /** Chưa có log nhưng CHƯA tới lượt chạy đầu tiên → cố ý không báo động. */
   awaitingFirstRun: boolean;
+  /**
+   * Lượt gần nhất KẾT THÚC bằng lỗi.
+   *
+   * Trước đây đây là một lỗ hổng im lặng hoàn toàn: một job bắn đúng lịch mà
+   * lượt nào cũng `error` thì `overdue` không kêu (có log mới), `skipStreak`
+   * cũng không (status là error chứ không phải skip) — nên nó hỏng đều đặn mà
+   * không cảnh báo nào chạm tới. Cùng họ với vụ CMO Digest chết 14 ngày.
+   */
+  failing: boolean;
+  /**
+   * Lượt gần nhất còn treo ở `running` quá lâu → gần như chắc chắn đã bị GIẾT
+   * NGANG (hết maxDuration, hết bộ nhớ, nền tảng 500) chứ không phải đang chạy.
+   *
+   * Đây là mặt còn lại của dòng nhịp tim trong lib/cron/log.ts. Có nó thì lượt
+   * chết mới phân biệt được với lượt không bắn; KHÔNG có nó thì dòng `running`
+   * treo lại làm `lastRun` luôn mới và bịt miệng `overdue` vĩnh viễn.
+   */
+  stuck: boolean;
 }
+
+/**
+ * Quá mốc này mà dòng `running` chưa được chốt thì coi như lượt chạy đã chết.
+ *
+ * 15 phút là dư dả tới mức không thể báo oan: job nặng nhất trong sổ
+ * (cron-master-write) đo được trung bình 21,9s, p90 26,1s, dài nhất 30,2s —
+ * tức trần này gấp ~30 lần lượt chạy dài nhất từng thấy. Trần Vercel cho một
+ * lượt gọi cũng thấp hơn nhiều, nên không có lượt chạy thật nào chạm tới đây.
+ */
+export const STALE_RUNNING_MINUTES = 15;
 
 /**
  * Đối chiếu sổ với log thật.
@@ -173,8 +201,12 @@ export function evaluateJobs(runs: CronRun[]): JobHealth[] {
     // Đếm skip LIÊN TIẾP từ lần chạy gần nhất trở về trước. Một job `skip` đều
     // đặn hết lần này tới lần khác KHÔNG phải "bình thường" — nó đang không làm
     // được việc của nó, chỉ là im lặng thay vì báo lỗi (đúng vụ CMO Digest).
+    // Bỏ qua dòng `running` ở đầu: trong mấy giây job đang chạy, nó không nói
+    // được gì về chuỗi skip trước đó, mà để nó chặn thì streak đọc thành 0 và
+    // cảnh báo skip biến mất đúng lúc job đang chạy.
     let skipStreak = 0;
     for (const r of rs) {
+      if (r.status === 'running') continue;
       if (r.status === 'skip') skipStreak++;
       else break;
     }
@@ -187,6 +219,9 @@ export function evaluateJobs(runs: CronRun[]): JobHealth[] {
     const awaitingFirstRun =
       !last && Number.isFinite(sinceMs) && now - sinceMs < spec.everyMinutes * 1.5 * 60000;
 
+    const stuck = last?.status === 'running' && now - lastMs > STALE_RUNNING_MINUTES * 60000;
+    const failing = last?.status === 'error';
+
     return {
       ...spec,
       lastRun: last?.started_at || null,
@@ -198,6 +233,8 @@ export function evaluateJobs(runs: CronRun[]): JobHealth[] {
       minutesLate: Number.isFinite(minutesLate) ? minutesLate : -1,
       skipStreak,
       awaitingFirstRun,
+      failing,
+      stuck,
     };
   });
 }

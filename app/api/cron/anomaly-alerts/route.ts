@@ -21,7 +21,18 @@ const CRON_SECRET = process.env.CRON_SECRET || '';
 const TG_CHAT_ID = process.env.ADMIN_TELEGRAM_CHAT_ID || '';
 
 export async function GET(request: NextRequest) {
-  return withCronLog('anomaly-alerts', 'vercel', () => handle(request));
+  // retry: bật ĐƯỢC ở đây vì lượt chạy này idempotent — thuần đọc RPC, và
+  // cooldown chỉ đóng dấu SAU khi Telegram gửi xong (commitAnomalyCooldown),
+  // nên chạy lại lượt hỏng không phát trùng cũng không nuốt cảnh báo.
+  //
+  // CỐ Ý KHÔNG bật cho cron-master-write / cron-khao-luan: chúng pop
+  // `topic_queue` rồi viết bài, một lượt hỏng giữa đường mà thử lại thành hai
+  // bài. Cũng KHÔNG bật cho các job cấp Lượng/quà.
+  //
+  // Nói thẳng giới hạn: retry chỉ cứu lỗi TRONG tiến trình (RPC chớp, Telegram
+  // 5xx). Lượt bị giết ngang thì không còn tiến trình nào để thử lại — ca đó
+  // do dòng nhịp tim + cảnh báo `job_stuck` lo.
+  return withCronLog('anomaly-alerts', 'vercel', () => handle(request), { retry: true });
 }
 
 async function handle(request: NextRequest) {
