@@ -161,6 +161,21 @@ async function handleBalance(sp: URLSearchParams): Promise<Response> {
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
+// ── GET: signup-bonus (CÔNG KHAI, không cần đăng nhập) ────────
+// Quà đăng ký sống trong `app_config` và đã đổi vài lần (A/B [20,30,40] → [25]).
+// Trang topup trước đây hoặc nói lửng lơ "tặng Lượng miễn phí", hoặc — nguy hiểm
+// hơn — viết cứng một con số sẽ lệch ngay lần chỉnh giá kế tiếp. Đây là con số
+// hứa với người CHƯA có tài khoản nên không thể yêu cầu token; chỉ lộ đúng mức
+// quà thấp nhất, không lộ gì khác của app_config.
+async function handleSignupBonus(): Promise<Response> {
+  const raw = await getConfigValue<unknown>('credits.signup_bonus_variants', null);
+  const variants = (Array.isArray(raw) ? raw : [raw])
+    .map((v) => Number(v))
+    .filter((n) => Number.isFinite(n) && n > 0);
+  // Không đọc được → null, để giao diện lùi về câu chung chung thay vì hứa sai.
+  return ok({ bonus: variants.length ? Math.min(...variants) : null });
+}
+
 // ── GET: check slug access ────────────────────────────────────
 async function handleCheck(sp: URLSearchParams): Promise<Response> {
   const slug   = sp.get('slug')   || '';
@@ -1280,6 +1295,7 @@ export async function GET(request: NextRequest) {
   const action = searchParams.get('action');
   if (action === 'balance')      return handleBalance(searchParams);
   if (action === 'check')        return handleCheck(searchParams);
+  if (action === 'signup-bonus') return handleSignupBonus();
   if (action === 'admin-users')  return handleAdminUsers(request, searchParams);
   if (action === 'admin-users-list') return handleAdminUsersList(request);
   if (action === 'admin-login-attempts') return handleAdminLoginAttempts(request);
