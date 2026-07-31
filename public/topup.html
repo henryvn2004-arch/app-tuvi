@@ -78,11 +78,12 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 .pkg-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--gold);color:#fff;font-size:.64rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:.28rem .75rem;border-radius:20px;white-space:nowrap}
 .pkg-icon{color:var(--gold);margin-bottom:.6rem;display:flex;justify-content:center}
 .pkg-icon [data-icon]{width:28px;height:28px}
-.pkg-name{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text-lt);margin-bottom:.5rem}
-.pkg-credits{font-family:'Noto Serif',serif;font-size:2.4rem;font-weight:700;color:var(--navy);line-height:1}
-.pkg-credits-unit{font-size:.8rem;font-weight:400;color:var(--text-lt);display:block;margin-top:.2rem}
-.pkg-price{font-size:1.05rem;color:var(--navy);margin:.85rem 0 .2rem;font-weight:700}
-.pkg-rate{font-size:.72rem;color:var(--text-lt);display:flex;align-items:center;justify-content:center;gap:.4rem;flex-wrap:wrap;min-height:1.15rem}
+.pkg-name{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text-lt);margin-bottom:.6rem}
+/* GIÁ là thứ người ta nhìn đầu tiên → to nhất, đứng trên. Số Lượng nhận được
+   là hệ quả, xuống dưới và nhỏ lại. */
+.pkg-price{font-family:'Noto Serif',serif;font-size:2rem;font-weight:700;color:var(--navy);line-height:1.05}
+.pkg-credits{font-size:1rem;font-weight:700;color:var(--gold);margin-top:.45rem}
+.pkg-rate{font-size:.72rem;color:var(--text-lt);display:flex;align-items:center;justify-content:center;gap:.4rem;flex-wrap:wrap;min-height:1.15rem;margin-top:.3rem}
 .pkg-save{background:#e8f7ee;color:var(--green);font-weight:700;padding:.1rem .45rem;border-radius:10px;font-size:.68rem}
 .pkg-note{font-size:.78rem;color:var(--text-mid);line-height:1.55;margin:.7rem 0 1rem;padding:.6rem .5rem;background:var(--bg-soft);border-radius:6px;flex:1;display:flex;align-items:center;justify-content:center}
 .btn-pkg{width:100%;padding:.9rem .6rem;border:none;border-radius:8px;font-size:.88rem;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s,opacity .2s;background:var(--navy);color:#fff;display:inline-flex;align-items:center;justify-content:center;gap:.45rem}
@@ -92,7 +93,8 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 .pkg-card.featured .btn-pkg:hover{background:#7d6230}
 .btn-pkg:disabled{opacity:.6;cursor:not-allowed}
 
-/* ── CUSTOM TOPUP (thứ yếu — gói có sẵn luôn lợi hơn nên KHÔNG để ngang hàng) ── */
+/* ── CUSTOM TOPUP (thứ yếu — gói là đường mặc định, đây là lối cho ai muốn
+      một số tiền cụ thể; đơn giá nay bằng bậc gói nên không thiệt) ── */
 .custom-card{background:#fff;border:1px solid var(--border-lt);border-radius:12px;padding:1.1rem 1.4rem;margin-bottom:2.5rem;display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap}
 .custom-label{flex:1;min-width:190px}
 .custom-label strong{display:block;font-size:.9rem;color:var(--navy);margin-bottom:.2rem}
@@ -126,7 +128,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 .cost-desc{font-size:.75rem;color:var(--text-lt);margin-top:.1rem}
 .cost-right{text-align:right;flex-shrink:0}
 .cost-credits{font-weight:700;color:var(--navy);font-size:.92rem}
-.cost-usd{font-size:.72rem;color:var(--text-lt);margin-top:.1rem}
+.cost-vnd{font-size:.72rem;color:var(--text-lt);margin-top:.1rem}
 .state-msg{display:flex;align-items:center;justify-content:center;gap:.5rem;padding:2rem;color:var(--text-lt);font-size:.85rem}
 .state-msg [data-icon]{width:16px;height:16px}
 .free-note{margin-top:1.25rem;padding-top:1rem;border-top:1px dashed var(--border-lt);font-size:.82rem;color:var(--text-mid);line-height:1.65;display:flex;gap:.55rem;align-items:flex-start}
@@ -380,25 +382,25 @@ function renderPackages() {
       + (featured ? '<div class="pkg-badge">Phổ biến nhất</div>' : '')
       + '<div class="pkg-icon">' + ic(PKG_ICONS[i] || 'sparkles') + '</div>'
       + '<div class="pkg-name">' + esc(p.label) + '</div>'
-      + '<div class="pkg-credits">' + p.credits + '<span class="pkg-credits-unit">Lượng</span></div>'
       + '<div class="pkg-price">' + vnd(p.amount_vnd) + '</div>'
+      + '<div class="pkg-credits">' + p.credits + ' Lượng</div>'
       + '<div class="pkg-rate">' + vnd(Math.round(rate)) + ' / Lượng'
       + (save >= 5 ? '<span class="pkg-save">rẻ hơn ' + save + '%</span>' : '') + '</div>'
       + '<div class="pkg-note">' + (p.bonus_label ? '≈ ' + esc(p.bonus_label) + ' đầy đủ' : 'Không hết hạn') + '</div>'
-      + '<button class="btn-pkg" id="btn-' + esc(p.package_id) + '" onclick="payPackage(\'' + esc(p.package_id) + '\')">'
+      // Giá đã to đùng ngay trên nút → nhắc lại trong nút là thừa. Giữ ngữ cảnh
+      // cho trình đọc màn hình bằng aria-label vì 4 nút giờ đọc giống hệt nhau.
+      + '<button class="btn-pkg" id="btn-' + esc(p.package_id) + '" onclick="payPackage(\'' + esc(p.package_id) + '\')"'
+      + ' aria-label="' + (isBank ? 'Chuyển khoản' : 'Thanh toán PayPal') + ' gói ' + esc(p.label) + ' — ' + vnd(p.amount_vnd) + '">'
       + ic(isBank ? 'qr-code' : 'credit-card')
-      + '<span>' + (isBank ? 'Chuyển khoản' : 'PayPal') + ' ' + vnd(p.amount_vnd) + '</span></button>'
+      + '<span>' + (isBank ? 'Chuyển khoản' : 'PayPal') + '</span></button>'
       + '</div>';
   }).join('');
   mount(document.getElementById('packages'));
 }
 
-/** Nhãn gốc của nút một gói — để khôi phục sau khi nhả trạng thái "đang kết nối". */
-function btnLabelFor(packageId) {
-  const verb = State.method === 'bank' ? 'Chuyển khoản' : 'PayPal';
-  if (packageId === 'custom') return verb;
-  const p = pkgList().filter(x => String(x.package_id) === String(packageId))[0];
-  return p ? verb + ' ' + vnd(p.amount_vnd) : verb;
+/** Nhãn gốc của nút — để khôi phục sau khi nhả trạng thái "đang kết nối". */
+function btnLabelFor() {
+  return State.method === 'bank' ? 'Chuyển khoản' : 'PayPal';
 }
 
 async function loadPackages() {
@@ -529,7 +531,7 @@ async function loadToolPricing() {
           + (t.description ? '<div class="cost-desc">' + esc(t.description) + '</div>' : '')
           + '</div></div>'
           + '<div class="cost-right"><div class="cost-credits">' + Number(t.credits) + ' Lượng</div>'
-          + '<div class="cost-usd">≈ ' + vnd(money) + '</div></div>'
+          + '<div class="cost-vnd">≈ ' + vnd(money) + '</div></div>'
           + '</div>';
       });
     });
@@ -608,7 +610,7 @@ function busyBtn(packageId, busy) {
   if (!btn) return;
   btn.disabled = busy;
   const span = btn.querySelector('span:not([data-icon])');
-  if (span) span.textContent = busy ? 'Đang kết nối…' : btnLabelFor(packageId);
+  if (span) span.textContent = busy ? 'Đang kết nối…' : btnLabelFor();
 }
 
 async function initiateTopup(packageId) {
