@@ -4,6 +4,7 @@ import { NextRequest } from 'next/server';
 import { ok, err, options } from '@/lib/cors';
 import { llmText } from '@/lib/llm/complete';
 import { withCronLog } from '@/lib/cron/log';
+import { BRAND_FORMAT_RULES, normalizeBrandFormat } from '@/lib/content/brand-rules';
 
 const SUPABASE_URL  = process.env.SUPABASE_URL!;
 const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY!;
@@ -85,11 +86,20 @@ async function writeArticle(topic: string, ctx: string) {
 Câu hỏi: ${topic}
 Tài liệu (BẮT BUỘC bám sát, không bịa ngoài tài liệu):\n${ctxBlock}
 Trả lời trực tiếp, ≤300 từ, không dùng bullet. Có 1 ví dụ thực tế.
+
+${BRAND_FORMAT_RULES}
+
+GIỌNG: ngôi thứ ba, KHÔNG gọi người đọc là "bạn". Chủ ngữ dùng "người ta / đương số /
+người trí". Kết bằng thế chủ động (Vậy nên · Tóm lại · Yếu chỉ là), không phán định mệnh.
 Trả về JSON thuần (KHÔNG backtick):
 {"title":"Tiêu đề có từ khóa","slug":"slug-ascii","excerpt":"Tóm tắt dưới 155 ký tự","category":"CHỌN 1 TRONG: hon-nhan|gia-dinh|tai-chinh|cong-viec|tinh-cach|van-han|dien-san|quan-he|benh-tat|con-cai","tags":["tag1","tag2"],"featured":false,"content":"markdown ≤300 từ"}`;
 
   const text = (await llmText({ prompt, maxTokens: 2000 })).trim().replace(/^```json\s*/i,'').replace(/```\s*$/,'').trim();
   const article = JSON.parse(text);
+
+  // Chốt CƠ HỌC, không trông chờ model nghe lời. Trang đã phát <h1> từ title rồi
+  // (khao-luan.html:109 + api/khao-luan/route.ts:136) nên để lọt một "# " là 2 thẻ H1.
+  article.content = normalizeBrandFormat(article.content, 'khao-luan');
 
   if (!VALID_KL_CATS.includes(article.category)) article.category = 'tinh-cach';
   const rawTags = Array.isArray(article.tags) ? article.tags as string[] : [];

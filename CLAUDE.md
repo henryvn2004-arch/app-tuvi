@@ -69,11 +69,57 @@ markdown `#` → `<h1>`. Bài mở bằng `#` là trang có 2 H1.
 ⚠️ **`eslint` KHÔNG chạy được trong container** — `node_modules` rỗng (0 gói), thiếu
 `@eslint/js`. Lỗi môi trường có sẵn, không phải do PR này; CI tự cài nên vẫn phủ.
 
+### 🔴 Vòng sau — "sửa tầng prompt" hoá ra sửa NHẦM CHỖ
+Henry bảo sửa tầng prompt. Audit thì **`lib/agent/prompts.ts` KHÔNG có lỗi nào**:
+- `XUNG_HO_RULE` (dòng 181–185) đã đúng sẵn: không rõ giới → **"quý vị"**, NAM → "anh",
+  NỮ → "chị", cấm thẳng "bạn/em" và cấm đoán giới. Còn có chốt khéo: luật CHỈ bật khi
+  context có dòng `Người xem:` → không lẫn giới tính của **bé trong đặt-tên-con**.
+- Tên cung đã chuẩn (Tử Tức 3 · Tử Nữ 0 · Nô Bộc 4 · Giao Hữu 0), trật tự từ đã chuẩn
+  (`cung X` 30 · `X cung` 0).
+- 39 chữ "bạn" trong `lib/` đều là **dương tính giả**: "bạn bè" / "bạn đời" / "bạn diễn"
+  (danh từ), hoặc đang nói với **MODEL** ("bạn PHẢI tự khoanh vùng"), hoặc chính là câu
+  CẤM "bạn". **Đếm chuỗi thô rồi kết luận là sai — phải đọc ngữ cảnh từng chỗ.**
+
+**Lỗi nằm ở prompt SINH NỘI DUNG, hai file hoàn toàn khác:**
+
+| | `cron-khao-luan` | `cron-master-write` |
+|---|---|---|
+| Prompt | **6 dòng**, chỉ "văn phong nho nhã" | đầy đủ, có nêu `##`/`**bold**` |
+| Bài | 324 | 306 |
+| Tên cung sai | 12 (3,7%) | 1 (0,3%) |
+| Trật tự từ sai | 66 (20,4%) | 8 (2,6%) |
+| **Mở bằng `#`** | 19 (5,9%) | **96 (31,4%)** |
+
+Prompt đầy đủ giúp rõ rệt ở tên cung + trật tự từ ⇒ **xác nhận nguyên nhân là prompt**.
+Nhưng `cron-master-write` **tệ hơn hẳn về H1** vì nó nêu "`##` cho mục chính" mà **không
+CẤM `#`** → model viết `# Tiêu đề` rồi mới `##`. `app/nghien-cuu/[slug]/route.ts:211`
+cũng phát `<h1>` từ title y như khao-luan ⇒ **tổng 115 trang đang phát 2 thẻ H1**, không
+phải 19 như ghi ở vòng trước.
+
+### Đã làm (vòng 2)
+- **`lib/content/brand-rules.ts`** — `BRAND_FORMAT_RULES` + `normalizeBrandFormat()` +
+  `checkBrandFormat()`, tiêm vào **cả 2** prompt sinh nội dung.
+  - **CỐ Ý chỉ chứa luật CƠ HỌC** (tên cung · trật tự từ · cấp tiêu đề · tên sao).
+    KHÔNG nhét luật giọng/độ dài: `khao_luan` là ghi chép ngôi 3 ~300 từ, `master_articles`
+    là thầy người Hoa kể chuyện 1200–1500 từ — **ép chung giọng là xoá khác biệt đang cố ý**.
+  - **Không chỉ dặn model mà SỬA CƠ HỌC**: `normalizeBrandFormat` tự hạ `#`→`##` và đổi tên
+    cung sai. Việc nào máy làm đúng 100% được thì đừng trông chờ model nghe lời; việc cần
+    hiểu nghĩa (bịa sao, rule-dump) mới chỉ `console.warn`.
+- **12 ca test trên module thật, 0 fail** — gồm 2 chốt quan trọng: `#` GIỮA DÒNG không bị
+  đụng (`C#`, hashtag), và **`Â`/`Ã` tiếng Việt hợp lệ KHÔNG bị báo mojibake** (đúng lỗi
+  dương tính giả tao mắc ở vòng 1).
+- Verify: `tsc --noEmit` **0 lỗi** (đã `npm ci` + build engine) · `eslint` **0 lỗi** ·
+  `prettier --check` sạch.
+
 ### CÒN LẠI
 - **Embedding mục CHƯA sinh** — container không có `OPENAI_API_KEY`. Dòng `kind='full'`
   đã dùng được ngay (prompt injection không cần embedding); `search_brand_voice()` trả rỗng
   cho tới khi chạy `node scripts/load-brand-voice.mjs` ở nơi có key.
-- B2 (brand-check gate) + B3 (claude-seo) + sửa tầng prompt: chưa làm.
+- **115 bài CŨ vẫn còn `#`** — luật mới chỉ áp cho bài SINH TỪ GIỜ. Muốn gỡ 2 thẻ H1 trên
+  115 trang đang live thì cần backfill `update … set content = regexp_replace(content,'^# ','## ')`.
+  Chưa chạy: đó là sửa nội dung đã publish, chờ Henry duyệt.
+- B2 (brand-check gate) + B3 (claude-seo): chưa làm. `checkBrandFormat()` đã là sẵn phần
+  tự động hoá được của B2.
 
 ---
 

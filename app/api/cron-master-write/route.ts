@@ -5,6 +5,7 @@ import { NextRequest } from 'next/server';
 import { ok, err, options } from '@/lib/cors';
 import { llmText } from '@/lib/llm/complete';
 import { withCronLog } from '@/lib/cron/log';
+import { BRAND_FORMAT_RULES, normalizeBrandFormat } from '@/lib/content/brand-rules';
 
 const SUPABASE_URL  = process.env.SUPABASE_URL!;
 const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY!;
@@ -227,9 +228,12 @@ KỸ THUẬT KỂ CHUYỆN — TUÂN THỦ NGHIÊM:
 FORMAT: 1200-1500 từ, markdown (## cho mục chính, **bold** cho điểm nhấn, > cho câu chiêm nghiệm đáng nhớ)
 KHÔNG đề cập AI, không học thuật cứng nhắc, không câu mở theo kiểu "Trong hành trình..."
 
+${BRAND_FORMAT_RULES}
+
 Chỉ trả về nội dung markdown, không bọc JSON, không backtick ngoài.`;
 
-  return callClaude(prompt, 5000);
+  const md = await callClaude(prompt, 5000);
+  return normalizeBrandFormat(md, 'master-write');
 }
 
 // ── Stage 2b: Extract metadata ─────────────────────────────────────────────────
