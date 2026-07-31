@@ -525,6 +525,59 @@ thấy GA4, dù prompt có bảo chạy CLI.
   nhãn/số/`% đo được` đúng công thức, landing page chứa HTML **bị escape** (không
   chèn được thẻ), ca `null` hiện hướng dẫn kiểm env.
 
+### ✅ Vòng sau — GA4 "Key events" luôn bằng 0: site chưa từng gửi event cho GA4 (2026-07-31, PR mới)
+Henry gửi ảnh app GA4: *"Nó ko có gì luôn ah"* — card **Key events = 0**, trend
+phẳng, Realtime *"No data available"*. Điều tra ra **GA4 không hề down**, và
+chính tấm ảnh đó có bằng chứng: ô cạnh bên ghi `Event count per user 4.77 ↑11.8%`
+— có số, còn tăng. Cái trống là một chuyện khác hẳn.
+- **Căn nguyên:** `grep gtag(` toàn repo chỉ ra `gtag('js')` + `gtag('config')` ở
+  `public/nav.js` và `lib/analytics/isr-tracking.ts` — **0 dòng `gtag('event',…)`
+  trong cả codebase**. GA4 vì thế chỉ có event TỰ ĐỘNG (`page_view`,
+  `session_start`, `first_visit`, `scroll`, `user_engagement` — khớp đúng con số
+  4,77/user). Mọi tín hiệu nghiệp vụ (`signup`, `topup_start`, `tool_run`,
+  `share`, `cta_click`…) đi `/api/track` vào bảng `events` Supabase và **chưa bao
+  giờ chảy sang GA4** ⇒ không có gì để đánh dấu key event ⇒ báo cáo conversion
+  của GA4 **vĩnh viễn 0**. Thiếu cầu nối, không phải sự cố.
+- **Vá — một chỗ duy nhất, `public/track.js`:** `event()` gửi song song
+  `gtag('event', …)`. Không phải sửa 89 trang vì mọi nơi đã gọi `Track.event`.
+  Bảng `events` nội bộ **vẫn là nguồn chuẩn** cho admin; GA4 chỉ là bản sao để
+  dùng công cụ Google. Lượt gửi GA4 đứng SAU `send()` và bọc `try/catch` — GA4
+  hỏng không được kéo theo beacon nội bộ.
+- **`page_view` CỐ Ý không gửi:** `gtag('config')` đã tự bắn một cái mỗi lần tải
+  trang; gửi thêm là đếm đôi — đúng lỗi đã dính một lần khi `GA4_TRACK_SNIPPET`
+  vô tình kèm thẻ `track.js` trên `/ket-qua`.
+- **Hàng đợi là bắt buộc, không phải phòng xa:** `track.js` nạp NGAY TRƯỚC
+  `nav.js`, cả hai `defer` nên chạy theo thứ tự tài liệu → lúc event đầu bắn thì
+  `window.gtag` CHƯA tồn tại. Xếp hàng rồi xả khi gtag xuất hiện; **không đẩy
+  thẳng vào `dataLayer`** vì event lọt vào trước `gtag('config')` có thể bị
+  gtag.js bỏ qua. Bỏ cuộc sau ~10s để trang không có GA4 (`admin.html`) không
+  treo timer vĩnh viễn.
+- `signup` → **`sign_up`** (tên GA4 khuyến nghị, rơi đúng báo cáo dựng sẵn);
+  `login`/`share` vốn đã trùng tên khuyến nghị. Tham số: chỉ giá trị vô hướng,
+  **trải phẳng `meta` một tầng** (đó là chỗ chứa phần có nghĩa nhất — `medium`
+  của share, `from`/`need` của topup_start), cắt chuỗi 100 ký tự, tối đa 24
+  tham số, loại tên sai luật GA4 và tiền tố dành riêng `ga_`/`google_`/
+  `firebase_`. **`anon_id`/`session_id` CỐ Ý bỏ** — GA4 tự có định danh riêng.
+- Bump `track.js?v=2→3` (27 chỗ / 20 file).
+- **Verify:** `tsc` 0 lỗi · `eslint track.js` sạch · `prettier --check .` sạch ·
+  `node --check` · **8 ca Playwright trên CHÍNH file `track.js` thật**: page_view
+  không sang GA4 mà beacon nội bộ vẫn có · event bắn trước khi gtag tồn tại vẫn
+  tới nơi sau khi xả hàng đợi · `signup→sign_up`, `login`/`share` giữ nguyên ·
+  meta trải phẳng, object lồng/`first`/`anon_id` bị loại · tên sai luật bị loại
+  + chuỗi 250 ký tự cắt còn 100 · trang không có GA4 → 0 lỗi console, beacon vẫn
+  chạy · `webdriver=true` → **không gửi cả GA4 lẫn beacon** (giữ nguyên chốt
+  chặn CI) · **1 ca trên trang THẬT `index.html` với `nav.js` THẬT**: event tới
+  `dataLayer` qua gtag của chính nav.js, và `config` đứng TRƯỚC `event` trong
+  hàng đợi. ⚠️ Playwright đặt `navigator.webdriver=true` mặc định nên `track.js`
+  tự no-op — phải `defineProperty` cho nó về `false` mới test được người thật
+  (test artifact, không phải bug).
+- **CÒN LẠI (việc tay Henry, không code được):** sau khi merge + deploy, vào
+  **GA4 → Admin → Events**, đợi event mới xuất hiện (thường vài giờ tới 24h) rồi
+  bật **"Mark as key event"** cho `sign_up` · `topup_success` · `tool_run`. Chưa
+  bật thì card Key events vẫn 0 dù dữ liệu đã sang. Realtime trống lúc sáng sớm
+  là **đúng thực tế**, không phải lỗi đo: `traffic_quality` 7 ngày cho 519 lượt
+  ghé nhưng chỉ **25 lượt tương tác thật** (~3–4 người/ngày).
+
 ---
 
 ## 🧭 Ba lớp danh xưng: Quan Lộc × Mệnh × Thân — 194 → 566 (2026-07-29, PR mới)
