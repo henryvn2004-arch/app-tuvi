@@ -64,13 +64,38 @@ kỳ trang nào — chỉ nav là được dựng.
   anon key rồi tự đếm).
 - Số công cụ miễn phí đếm từ dữ liệu (**21**, FAQ cũ ghi 28).
 
-### ⚠️ CÒN LẠI — việc Henry quyết (CỐ Ý không tự sửa)
-**Gói bán 624–990đ/Lượng nhưng nạp "số tiền khác" tính 2.500đ/Lượng** — đắt hơn
-2,5–4 lần (99.000đ mua gói được 100 Lượng, nạp lẻ chỉ 39). PR này chỉ làm trang
-**nói thật** (ghi rõ đơn giá từng đường + "các gói bên trên rẻ hơn"), KHÔNG đổi
-giá — server vẫn chốt 2.500đ trong `handleTopup`/`handleCreateBank`. Nếu 2.500đ
-là tàn dư bảng giá cũ thì cần chỉnh ở server. Ghi chú thêm: `chat.cost` dưới DB
-đang là **2** (không phải 5).
+### 💰 Vòng sau — BỎ đơn giá 2.500đ tàn dư, nạp lẻ nay BÁM bậc gói
+Phát hiện lúc dựng trang: gói bán **624–990đ/Lượng** nhưng nạp "số tiền khác"
+chia cứng **2.500đ/Lượng** — đắt hơn 2,5–4 lần (99.000đ mua gói được 100 Lượng,
+nạp lẻ chỉ **39**). Henry xác nhận *"nó là tàn dư đó, chỉnh lại cho hợp lý luôn
+đi"*.
+- **Căn nguyên là KIỂU dữ liệu, không phải con số.** 2.500đ lệch được chính vì
+  nó là một hằng số RIÊNG, không dính gì tới bảng gói — nên thay bằng một hằng
+  số khác thì lần sau lại lệch. `quoteCustomVnd()` (`lib/billing/packages.ts`)
+  **suy đơn giá TỪ `credit_packages`**: lấy bậc tốt nhất mà số tiền với tới
+  (đơn giá thấp nhất trong các gói có `amountVnd <= amount`); dưới gói nhỏ nhất
+  thì hưởng bậc vào cửa. Đổi giá gói dưới DB là đường nạp lẻ tự đi theo.
+- **Ba tính chất đã verify:** nạp lẻ KHÔNG BAO GIỜ thiệt hơn mua gói cùng số
+  tiền (99k→100 L, 199k→240 L, 499k→700 L, 999k→1600 L — khớp ĐÚNG gói); thêm
+  tiền không bao giờ nhận ít Lượng hơn (đơn điệu trên cả dải 50k–5tr); DB rỗng
+  → trả 0 để route báo lỗi, không cấp `NaN` Lượng.
+- Dùng `min` trên các gói với tới được (thay vì "gói đắt nhất ≤ số tiền") để vẫn
+  đúng kể cả khi admin khai một bậc gói không đơn điệu.
+- **Client PHẢI ra cùng kết quả** (xem trước tức thì, không đợi mạng) → có test
+  đối chiếu bản client (trích từ `topup.html` thật) với bản server (trích từ
+  `packages.ts` thật) trên **4.951 mức tiền**: khớp tuyệt đối. Sửa một bên thì
+  phải sửa cả hai — đã ghi thẳng vào comment cả hai chỗ.
+- **🐞 `FALLBACK` trong `packages.ts` cũng đang mang số cũ** (50/120/350/800
+  Lượng, DB thật 100/240/700/1600) → một nhịp Supabase chớp là user trả đủ tiền
+  mà nhận đúng một nửa. Đã sửa khớp prod.
+- **Cùng hằng số 2.500đ còn đang nói dối ở 2 chỗ HIỂN THỊ:** `cong-cu.html`
+  (`t.credits * 2500`) và `admin.html` (`VND_PER_CREDIT`) — đều báo giá công cụ
+  đắt hơn thực tế ~3 lần. Cả hai nay suy từ gói phổ biến.
+- **CỐ Ý KHÔNG đụng** `MKT_VND`/`dashboard_margin`/`marketing_revenue` (cũng quy
+  2.500đ): đó là quy ước ĐO DOANH THU cho Lượng đã tiêu, khác hẳn giá bán, và
+  đổi thì lệch toàn bộ báo cáo lịch sử. Nhưng đáng soi lại — nếu giá thật ~830đ
+  thì mấy panel đó đang thổi doanh thu lên ~3 lần.
+- Ghi chú thêm: `chat.cost` dưới DB đang là **2** (không phải 5).
 
 ---
 

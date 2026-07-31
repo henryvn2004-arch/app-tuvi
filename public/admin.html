@@ -3644,13 +3644,31 @@ async function loadRegistry() {
 
 // ── PRICING (nhóm theo category, cho phép 0/free, lưu tất cả) ──
 const CAT_LABELS = { 'chat': 'Trợ Lý (Rail)' }; // còn lại dùng nguyên category từ DB
-const VND_PER_CREDIT = 2500; // 1 Lượng ≈ 2.500đ (anchor gói custom)
+// đ cho 1 Lượng, suy từ gói phổ biến (gói thứ hai theo sort_order) chứ KHÔNG
+// viết cứng. Trước đây để cứng 2.500đ với chú thích "anchor gói custom" — cái
+// anchor đó là tàn dư bảng giá cũ, đã bỏ: giá nạp lẻ nay bám theo bậc gói.
+let VND_PER_CREDIT = 2500;
 let _pricingRows = [];
 
 function fmtVnd(cr) { return (Math.max(0, cr || 0) * VND_PER_CREDIT).toLocaleString('vi-VN') + 'đ'; }
 
-// Nav mở trang Pricing → nạp cả 3 khối.
-function loadPricingPage() { loadPricing(); loadPackages(); loadPromo(); }
+// Nav mở trang Pricing → nạp cả 3 khối. Lấy đơn giá TRƯỚC khi vẽ bảng giá công
+// cụ, không thì bảng hiện bằng mức dự phòng rồi mới đúng.
+async function loadPricingPage() {
+  await loadPackageRate();
+  loadPricing(); loadPackages(); loadPromo();
+}
+
+async function loadPackageRate() {
+  try {
+    const pkgs = (await sbGet('credit_packages?enabled=eq.true&order=sort_order.asc&select=credits,amount_vnd'))
+      .filter(p => Number(p.credits) > 0 && Number(p.amount_vnd) > 0);
+    if (pkgs.length) {
+      const ref = pkgs[1] || pkgs[0];
+      VND_PER_CREDIT = Number(ref.amount_vnd) / Number(ref.credits);
+    }
+  } catch (e) { /* giữ mức dự phòng */ }
+}
 
 async function loadPricing() {
   const body = document.getElementById('pricing-body');

@@ -225,7 +225,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
         <input type="number" class="custom-input" id="customInput" min="50000" max="5000000" step="1000" placeholder="100000" aria-label="Số tiền muốn nạp (VNĐ)" oninput="onCustomInput()">
         <span class="custom-suffix">đ</span>
       </div>
-      <span class="custom-preview" id="customPreview">= 40 Lượng</span>
+      <span class="custom-preview" id="customPreview">Tối thiểu 50.000đ</span>
       <button class="btn-custom" id="btnCustom" onclick="payCustom()"><span data-icon="landmark" id="btnCustomIcon"></span> <span id="btnCustomLabel">Chuyển khoản</span></button>
     </div>
   </section>
@@ -305,9 +305,11 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 const SUPABASE_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 
-// Đơn giá khi nạp SỐ TIỀN TỰ CHỌN. Server (`handleTopup` + `handleCreateBank`)
-// chốt đúng con số này — để lệch là trang hứa một đằng, trừ tiền một nẻo.
-const CUSTOM_VND_PER_CREDIT = 2500;
+// Đơn giá cuối cùng do SERVER chốt (`lib/billing/packages.ts` → `quoteCustomVnd`).
+// Bản dựng ở đây chỉ để xem trước tức thì, và PHẢI ra cùng kết quả — lệch là
+// trang hứa một đằng, trừ tiền một nẻo. Có test đối chiếu hai bản trên cùng
+// một dải số tiền.
+const CUSTOM_FALLBACK_RATE = 2500;
 
 // Gói dự phòng — KHỚP `credit_packages` trên prod. Bản cũ để số cũ (đúng một
 // nửa số Lượng thật) rồi trông chờ fetch ghi đè, nên trang chớp giá SAI trước
@@ -423,10 +425,6 @@ async function loadPackages() {
 
   const best = Math.min.apply(null, list.map(p => p.amount_vnd / p.credits));
   document.getElementById('hdrRate').textContent = 'chỉ từ ' + vnd(Math.round(best)) + ' / Lượng';
-  // Nói THẲNG là gói có sẵn lợi hơn. Mua lẻ đắt hơn gói 2–4 lần mà trang không
-  // hé răng thì người tin mình nhất lại là người trả nhiều nhất.
-  document.getElementById('customRateNote').textContent =
-    'Tối thiểu 50.000đ · ' + vnd(CUSTOM_VND_PER_CREDIT) + ' / Lượng — các gói bên trên rẻ hơn';
   onCustomInput();
 }
 
@@ -514,7 +512,7 @@ async function loadToolPricing() {
     // Quy đổi ra tiền theo ĐƠN GIÁ THẬT của gói phổ biến. Bản cũ nhân cứng
     // 2.500đ — đơn giá mua lẻ — nên báo đắt hơn thực tế tới 3 lần cho đúng
     // những người đã mua gói.
-    const perCredit = State.vndPerCredit || CUSTOM_VND_PER_CREDIT;
+    const perCredit = State.vndPerCredit || CUSTOM_FALLBACK_RATE;
 
     let html = '';
     sortedCats.forEach(cat => {
@@ -557,11 +555,34 @@ async function loadToolPricing() {
 }
 
 // ── Nạp số tiền tự chọn ──────────────────────────────────────
+/** BẢN SAO của `quoteCustomVnd` phía server — sửa một bên thì sửa cả hai. */
+function quoteCustom(vndAmount) {
+  const list = pkgList().filter(p => p.credits > 0 && p.amount_vnd > 0);
+  if (!list.length) {
+    return { credits: Math.floor(vndAmount / CUSTOM_FALLBACK_RATE), vndPerCredit: CUSTOM_FALLBACK_RATE, tierLabel: '' };
+  }
+  const rate = p => p.amount_vnd / p.credits;
+  const afford = list.filter(p => p.amount_vnd <= vndAmount);
+  const pool = afford.length ? afford : list;
+  const tier = pool.reduce((best, p) =>
+    (afford.length ? rate(p) < rate(best) : rate(p) > rate(best)) ? p : best);
+  const vndPerCredit = rate(tier);
+  return { credits: Math.floor(vndAmount / vndPerCredit), vndPerCredit, tierLabel: tier.label };
+}
+
 function onCustomInput() {
   const val = parseFloat(document.getElementById('customInput').value) || 0;
-  const credits = Math.floor(val / CUSTOM_VND_PER_CREDIT);
+  const q = quoteCustom(val);
   document.getElementById('customPreview').textContent =
-    val >= 50000 ? '= ' + credits + ' Lượng' : 'Tối thiểu 50.000đ';
+    val >= 50000 ? '= ' + q.credits + ' Lượng' : 'Tối thiểu 50.000đ';
+  const note = document.getElementById('customRateNote');
+  if (!note) return;
+  // Đơn giá nạp lẻ nay BÁM theo bậc gói, nên không còn câu "các gói rẻ hơn" —
+  // nói vậy bây giờ là sai. Hiện đúng bậc mà số tiền này đang hưởng.
+  note.textContent = val >= 50000
+    ? 'Tối thiểu 50.000đ · ' + vnd(Math.round(q.vndPerCredit)) + ' / Lượng'
+      + (q.tierLabel ? ' (bậc ' + q.tierLabel + ')' : '')
+    : 'Tối thiểu 50.000đ · đơn giá theo bậc gói, càng nạp nhiều càng rẻ';
 }
 
 /** Đọc ô số tiền tự chọn, kiểm theo ĐÚNG ngưỡng VNĐ mà server đang chốt. */

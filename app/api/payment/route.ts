@@ -9,7 +9,7 @@ export const maxDuration = 15;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
-import { getPackage, getPackages } from '@/lib/billing/packages';
+import { getPackage, getPackages, quoteCustomVnd } from '@/lib/billing/packages';
 import { getToolPrice } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
 import { freeGenGate, FREE_GEN_CAP_MESSAGE } from '@/lib/billing/viral-budget';
@@ -201,8 +201,9 @@ async function handleTopup(body: Record<string, unknown>): Promise<Response> {
   if (packageId === 'custom') {
     if (!customAmountVnd || customAmountVnd < 50_000 || customAmountVnd > 5_000_000)
       return err('Số tiền tùy chỉnh phải từ 50.000đ đến 5.000.000đ', 400);
-    // 1 Lượng = 2.500đ (no bonus, anchor pricing)
-    const credits = Math.floor(customAmountVnd / 2500);
+    // Đơn giá suy từ bậc gói (xem quoteCustomVnd) — KHÔNG chia cứng nữa.
+    const { credits } = await quoteCustomVnd(customAmountVnd);
+    if (credits <= 0) return err('Không quy đổi được số Lượng cho số tiền này', 500);
     // PayPal cần USD: convert VND → USD ở rate 25.000
     const usdAmount = Math.round((customAmountVnd / 25_000) * 100) / 100;
     pkg  = { amount: usdAmount.toFixed(2), credits, label: `Nap Tuy Chinh – ${credits} Luong` };
@@ -589,13 +590,14 @@ async function handleCreateBank(body: Record<string, unknown>): Promise<Response
       if (customAmountVnd < 50_000 || customAmountVnd > 5_000_000)
         return err('Custom amount must be 50.000đ – 5.000.000đ', 400);
       amountVND = customAmountVnd;
-      credits   = Math.floor(customAmountVnd / 2500);  // 1 Lượng = 2.500đ
+      credits   = (await quoteCustomVnd(customAmountVnd)).credits;  // đơn giá theo bậc gói
     } else {
       // Legacy USD path
       if (customAmountUsd < 5 || customAmountUsd > 500) return err('Custom amount must be 5-500 USD', 400);
       amountVND = Math.round(customAmountUsd * 25_000);
-      credits   = Math.floor(amountVND / 2500);
+      credits   = (await quoteCustomVnd(amountVND)).credits;
     }
+    if (credits <= 0) return err('Không quy đổi được số Lượng cho số tiền này', 500);
     label = `Nap ${credits} Luong`;
   } else {
     const pkgs  = await getPackages();
