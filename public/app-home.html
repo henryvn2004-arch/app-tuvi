@@ -85,7 +85,7 @@
 <script>window.SHELL_ACTIVE='home';</script>
 <script src="/tools-shared/hoang-dao.js?v=1"></script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=49"></script>
+<script src="/shell.js?v=50"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 var IC={
@@ -199,8 +199,10 @@ document.getElementById('homeCards').innerHTML=GROUPS.map(function(grp){
   card.style.display='';
 
   // Mồi rail: cá nhân hoá nếu đã có lá số, không thì theo ngày.
-  var birth=null; try{ birth=Shell.getRememberedBirth&&Shell.getRememberedBirth(); }catch(e){}
-  var hasBirth=!!(birth&&birth.dd);
+  // birth nhớ trong localStorage theo shape của TuviForm (ngay/thang/nam); rail
+  // thì chỉ hiểu shape contract (day/month/year) → PHẢI đổi, đừng truyền thẳng.
+  var birth=null; try{ birth=(Shell.getRememberedBirth&&Shell.birthToApi)?Shell.birthToApi(Shell.getRememberedBirth()):null; }catch(e){}
+  var hasBirth=!!birth;
   try{
     if(hasBirth){
       var nm=(birth.name||'').trim();

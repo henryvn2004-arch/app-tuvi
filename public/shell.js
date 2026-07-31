@@ -287,13 +287,51 @@
   var HIST_CAP = 40;
   var newId = function () { return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('s' + Date.now() + Math.random().toString(36).slice(2, 8)); };
   var curMeta = null; // {restore,title,createdAt} của thread đang mở
+  var ctxCalls = 0;   // số lần tool đã gọi setContext (0 = trang chưa dựng được gì)
   // Tool đã gộp: đọc kèm phiên lịch sử của tool cũ (la-so đã gộp vào luan-giai).
   var HIST_ALIAS = { 'luan-giai': ['la-so'] };
   function histKey(t) { return 'app_hist_v1_' + t; }
   function histLocal(t) { try { return JSON.parse(localStorage.getItem(histKey(t)) || '[]') || []; } catch (e) { return []; } }
   function histWrite(t, arr) { try { localStorage.setItem(histKey(t), JSON.stringify(arr.slice(0, HIST_CAP))); } catch (e) { /* quota */ } }
   function histLocalDelete(t, id) { histWrite(t, histLocal(t).filter(function (s) { return s.id !== id; })); }
-  function birthSnapshot() { try { return JSON.parse(localStorage.getItem('app_birth') || 'null'); } catch (e) { return null; } }
+  // ── Chuẩn hoá NGÀY SINH về MỘT shape (shape của TuviForm) ──
+  // Trong repo có 3 shape birth từng được lưu/truyền:
+  //   (a) TuviForm  — {hoten,ngay,thang,nam,gioHour,gioPhut,gioIdx,gioitinh} ← chuẩn hiện tại
+  //   (b) form cũ   — {name,dd,mm,yyyy,hh,pp,gender}   (trước khi 3 trang la-so/
+  //                   luan-giai/bat-tu chuyển sang TuviForm dùng chung)
+  //   (c) contract  — {name,day,month,year,hourBranch,gender} ← shape GỬI LÊN API
+  // Phiên lịch sử lưu trước lúc chuyển sang TuviForm mang shape (b); đọc thẳng
+  // bằng TuviForm.setData thì KHÔNG khớp field nào → form trống → trang không tự
+  // luận lại được → bấm vào phiên cũ "không hiện gì". Nên MỌI lượt ĐỌC birth đều
+  // đi qua đây; ghi vẫn ghi shape hiện tại.
+  function normBirth(b) {
+    if (!b || typeof b !== 'object') return b || null;
+    var o = {}, k;
+    for (k in b) if (Object.prototype.hasOwnProperty.call(b, k)) o[k] = b[k];
+    var num = function (v) { var n = parseInt(v, 10); return isNaN(n) ? undefined : n; };
+    if (o.ngay == null) o.ngay = num(b.dd != null ? b.dd : b.day);
+    if (o.thang == null) o.thang = num(b.mm != null ? b.mm : b.month);
+    if (o.nam == null) o.nam = num(b.yyyy != null ? b.yyyy : b.year);
+    if (o.gioHour == null && b.hh != null) o.gioHour = num(b.hh);
+    if (o.gioPhut == null && b.pp != null) o.gioPhut = num(b.pp);
+    // hourBranch = chỉ số địa chi 0..11 (KHÁC giờ 0..23) → giữ đúng đường gioIdx.
+    if (o.gioIdx == null && b.hourBranch != null && b.hourBranch >= 0) o.gioIdx = num(b.hourBranch);
+    if (!o.hoten && b.name) o.hoten = b.name;
+    if (!o.gioitinh && b.gender) o.gioitinh = b.gender;
+    if (o.namxem == null && b.namXem != null) o.namxem = num(b.namXem);
+    return o;
+  }
+  // Đổi sang shape contract để GỬI API (/api/v1/chat chỉ hiểu day/month/year/hourBranch).
+  function birthToApi(b) {
+    var n = normBirth(b);
+    if (!n || !n.ngay || !n.thang || !n.nam) return null;
+    var idx = n.gioIdx;
+    if (idx == null && n.gioHour != null) idx = Math.floor(((+n.gioHour + 1) % 24) / 2);
+    return { day: +n.ngay, month: +n.thang, year: +n.nam,
+      hourBranch: (idx == null ? -1 : +idx), gender: n.gioitinh === 'nu' ? 'nu' : 'nam',
+      name: n.hoten || undefined };
+  }
+  function birthSnapshot() { try { return normBirth(JSON.parse(localStorage.getItem('app_birth') || 'null')); } catch (e) { return null; } }
   // Chụp toàn bộ input/select/textarea (trừ rail + command palette) để khôi phục
   // form của bất kỳ tool nào mà KHÔNG cần liệt kê id từng tool.
   function snapshotForm() {
@@ -367,6 +405,22 @@
       cb(merged);
     });
   }
+  // Như histList nhưng GỘP cả tool cũ đã sáp nhập (HIST_ALIAS) — histFind vốn đã
+  // tra kèm alias, nhưng phần LIỆT KÊ thì chưa, nên phiên `la-so` cũ không bao
+  // giờ hiện ra để mà bấm. Mỗi bucket vẫn ghi vào key riêng của nó.
+  function histListAll(tool, cb) {
+    var tools = [tool].concat(HIST_ALIAS[tool] || []);
+    if (tools.length === 1) { histList(tool, cb); return; }
+    var latest = {};
+    tools.forEach(function (t) {
+      histList(t, function (list) {
+        latest[t] = list;
+        var all = [];
+        tools.forEach(function (x) { (latest[x] || []).forEach(function (s) { all.push(s); }); });
+        cb(histMerge(all, []));
+      });
+    });
+  }
   function histFind(tool, id, cb) {
     var tools = [tool].concat(HIST_ALIAS[tool] || []); // gồm cả tool cũ đã gộp
     var hit = null;
@@ -431,13 +485,42 @@
         sessionStorage.setItem('app_restore', JSON.stringify({ id: sess.id, toolId: ACTIVE }));
         sessionStorage.setItem('app_restore_data', JSON.stringify(sess));
       } catch (e) { /* ignore */ }
+      // Ghi lại đã CHUẨN HOÁ: phiên cũ lưu birth shape {dd,mm,yyyy} — để nguyên
+      // thì prefillForm/TuviForm.setData không nhận ra field nào (xem normBirth).
       if (sess.restore && sess.restore.birth) {
-        try { localStorage.setItem('app_birth', JSON.stringify(sess.restore.birth)); } catch (e) { /* ignore */ }
+        try { localStorage.setItem('app_birth', JSON.stringify(normBirth(sess.restore.birth))); } catch (e) { /* ignore */ }
       }
       // Reload về ?auto=1 SẠCH (bỏ mọi query cũ như ?restore) → tránh lặp khi
       // đến từ deep-link hub Tài khoản; tool tự tính lại center + setContext replay.
       location.href = location.pathname + '?auto=1';
     });
+  }
+  // ── Lưới an toàn: phiên đã bấm mà tool KHÔNG dựng lại được phần giữa ──
+  // Đường khôi phục chuẩn là: reload ?auto=1 → tool tự tính lại center → gọi
+  // setContext → setContext replay transcript. Nếu tool không tự chạy được
+  // (form đổi id, phiên thiếu ngày sinh, tool cần thao tác tay như gieo quẻ)
+  // thì KHÔNG có ai gọi setContext: trang đứng im hệt như chưa bấm gì, mà cờ
+  // trong sessionStorage còn nguyên → lượt chạy SAU đó bị nó chiếm chỗ và
+  // replay nhầm transcript cũ. Nên: mở lại hội thoại bằng chính dữ liệu đã lưu.
+  function restorePendingFallback() {
+    if (!HIST_ON || !ACTIVE || ctxCalls) return;
+    var m = null, d = null;
+    try {
+      m = JSON.parse(sessionStorage.getItem('app_restore') || 'null');
+      d = JSON.parse(sessionStorage.getItem('app_restore_data') || 'null');
+    } catch (e) { return; }
+    if (!m || !d || m.toolId !== ACTIVE || !d.id) return;
+    var r = d.restore || {};
+    Shell.setContext({ birth: r.birth ? birthToApi(r.birth) : null, scenario: r.scenario || null,
+      label: d.title || 'Phiên đã lưu' });
+    // Không đủ dữ liệu để hỏi tiếp (không có cả lá số lẫn kịch bản): cho xem lại
+    // hội thoại nhưng nói THẲNG là phải chạy lại tool, đừng để ô nhập trông như
+    // dùng được rồi bấm gửi không có gì xảy ra.
+    if (!ctx) {
+      var ta = document.getElementById('railInput'), sb = document.getElementById('railSend');
+      if (ta) { ta.disabled = true; ta.placeholder = 'Chạy lại công cụ để hỏi tiếp về phiên này.'; }
+      if (sb) sb.disabled = true;
+    }
   }
   // ── UI: panel lịch sử trong rail ──
   function histPanelHTML(list) {
@@ -450,7 +533,7 @@
     }).join('');
   }
   function renderHistInto(el) {
-    histList(ACTIVE, function (list) {
+    histListAll(ACTIVE, function (list) {
       el.innerHTML = '<div class="rh-head"><span>Lịch sử · ' + esc(toolLabel(ACTIVE)) + '</span><button class="rh-x" data-act="hist-close" aria-label="Đóng">×</button></div>' +
         '<div class="rh-list">' + histPanelHTML(list) + '</div>';
       wireHist(el);
@@ -461,7 +544,12 @@
       it.addEventListener('click', function (e) { if (e.target.getAttribute && e.target.getAttribute('data-del') != null) return; restoreSession(it.getAttribute('data-id')); });
     });
     el.querySelectorAll('[data-del]').forEach(function (b) {
-      b.addEventListener('click', function (e) { e.stopPropagation(); var id = b.getAttribute('data-del'); histLocalDelete(ACTIVE, id); histSrvDelete(id); renderHistInto(el); renderRecentAll(); });
+      // Xoá cả ở bucket tool cũ đã sáp nhập — danh sách nay gộp cả phiên của nó.
+      b.addEventListener('click', function (e) {
+        e.stopPropagation(); var id = b.getAttribute('data-del');
+        [ACTIVE].concat(HIST_ALIAS[ACTIVE] || []).forEach(function (t) { histLocalDelete(t, id); });
+        histSrvDelete(id); renderHistInto(el); renderRecentAll();
+      });
     });
     var x = el.querySelector('[data-act="hist-close"]'); if (x) x.addEventListener('click', function () { el.style.display = 'none'; });
   }
@@ -473,7 +561,7 @@
   // ── UI: "Phiên gần đây" ở empty-state (tool đặt <div id="shellRecent">) ──
   function renderRecent(el) {
     if (!el || !ACTIVE || !HIST_ON) { if (el) { el.style.display = 'none'; el.innerHTML = ''; } return; }
-    histList(ACTIVE, function (list) {
+    histListAll(ACTIVE, function (list) {
       if (!list.length) { el.style.display = 'none'; el.innerHTML = ''; return; }
       el.style.display = '';
       el.innerHTML = '<div class="recent-h">Phiên gần đây</div><div class="recent-list">' +
@@ -964,6 +1052,7 @@
       // tool Chân Dung Tiền Kiếp trả lời qua nhân vật thay vì luận thẳng).
       // Chỉ là CỜ, nội dung nhân vật do server tự tính lại từ birth.
       ctx = (o.birth || o.scenario) ? { birth: o.birth || null, scenario: o.scenario || null, wrap: o.wrap || null } : null;
+      ctxCalls++;
       // Funnel: tool đã tính ra kết quả + gắn ngữ cảnh = "đã dùng tool" (activation).
       try { track('tool_run', { tool_id: ACTIVE, slug: (o.scenario && o.scenario.type) || null }); } catch (e) { /* ignore */ }
       messages = [];
@@ -1030,7 +1119,9 @@
     // Bát Tự) — fd = TuviForm.getData() (hoten/ngay/thang/nam/gioHour/gioPhut/gioitinh)
     // + namxem riêng của trang (năm luận, ngoài field TuviForm). localStorage, không server.
     rememberBirth: function (fd) { try { localStorage.setItem('app_birth', JSON.stringify(fd)); } catch (e) { /* ignore */ } },
-    getRememberedBirth: function () { try { return JSON.parse(localStorage.getItem('app_birth') || 'null'); } catch (e) { return null; } },
+    getRememberedBirth: function () { return birthSnapshot(); },
+    // Đổi birth (shape bất kỳ) sang shape contract để gửi Shell.setContext({birth}).
+    birthToApi: function (b) { return birthToApi(b); },
     // Ngày sinh truyền THẲNG qua URL (?ngay=&thang=&nam=&gio=&gioitinh=&namxem=),
     // `gio` là giờ DƯƠNG 0–23 (không phải chỉ số địa chi) — khớp field gioHour của
     // TuviForm.setData, tránh nhánh gioIdx của nó.
@@ -1422,7 +1513,10 @@
     // đúng phiên (reload về ?auto=1 sạch trong restoreSession).
     if (HIST_ON) {
       var _rid = (location.search.match(/[?&]restore=([^&]+)/) || [])[1];
-      if (_rid) restoreSession(decodeURIComponent(_rid));
+      if (_rid) { restoreSession(decodeURIComponent(_rid)); return; }
+      // Chốt sau cùng cho lượt khôi phục: đợi tool tự dựng lại (đa số chạy đồng
+      // bộ ngay trong DOMContentLoaded, vài tool phải fetch trước) rồi mới đỡ.
+      setTimeout(restorePendingFallback, 2500);
     }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
