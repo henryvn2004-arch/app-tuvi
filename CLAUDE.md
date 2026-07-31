@@ -5,6 +5,78 @@
 
 ---
 
+## 🎙️ CMO SKILLS — B1 Brand Voice XONG, và 2 tiền đề của brief là SAI (2026-07-31, PR mới)
+
+Henry giao 3 việc: (1) brand voice guideline qua plugin `brand-voice`, (2) brand-check
+gate, (3) AI SEO qua `claude-seo`. Đo trước khi làm thì lộ 2 chuyện.
+
+### 🔴 Plugin claude.ai KHÔNG chạy trong container Claude Code
+`brand-voice` + `marketing` **đã bật** trên tài khoản, nhưng chúng là plugin **Cowork của
+claude.ai** — file skill KHÔNG có trong container này. Verify 3 đường: `ListSkills` rỗng ·
+0 thư mục plugin trên đĩa · `/mnt/skills` chỉ có bộ examples/public của Anthropic. Nên
+`guideline-generation` / `brand-voice-enforcement` **không gọi được ở đây**.
+- **Bất đối xứng cần nhớ:** `claude-seo` (`AgriciDaniel/claude-seo`, MIT, 12,9k★) là plugin
+  **theo REPO** → cài vào repo thì CHẠY ĐƯỢC trong Claude Code. Plugin Cowork thì không.
+- Henry chốt: tao tự viết guideline trong Claude Code, không đợi plugin.
+
+### 🔴 Hai lỗi "đã audit" KHÔNG nằm trong corpus
+Brief bảo fix `lỗi encoding` + `xưng hô lộn xộn` trong `khao_luan`. Đo thì:
+- **Encoding: 0 lỗi / 893 dòng** trên cả 5 bề mặt (`khao_luan` · `master_articles` ·
+  `tu_dien` · `van_dap.noi_dung` · `van_dap.script_final`). ⚠️ Lượt quét ĐẦU của tao báo
+  51 — **sai, do tự bắt `Â`/`Ã` vốn là chữ Việt hợp lệ**. Quét mojibake phải dùng mẫu
+  ĐÔI (`â€`, `Ã¡`, `Æ°`, `Ä‘`), đừng bắt ký tự đơn.
+- **Xưng hô: 248/324 bài (76,5%) KHÔNG xưng hô** với người đọc, chỉ **5 bài** trộn 2 kiểu.
+- ⇒ Hai lỗi này sống ở **tầng prompt run-time** (prose 47 tool sinh), không phải dữ liệu
+  lưu. **Doc nằm trong pgvector không tự fix được chúng** — phải sửa ở `lib/agent/prompts.ts`.
+  Henry đã duyệt đưa tầng prompt vào phạm vi.
+
+### Lỗi THẬT đo được (nền của guideline)
+| Lỗi | Số đo |
+|---|---|
+| Cung Tử Tức có **3 tên** | Tử Tức 12 · Tử Nữ 8 · Tử Tôn 1 |
+| Cung Nô Bộc có **2 tên** | Nô Bộc 11 · Giao Hữu 3 |
+| Trật tự từ không quy ước | `cung X` 135 · `X cung` 66 |
+| **19 bài phát 2 thẻ H1** | `#` 19 · `##` 269 · không có 36 |
+
+**2 thẻ H1 là lỗi SEO thật, không phải thẩm mỹ:** `public/khao-luan.html:109` và
+`app/api/khao-luan/route.ts:136` đã phát `<h1>` từ `title`, rồi `route.ts:17` đổi tiếp
+markdown `#` → `<h1>`. Bài mở bằng `#` là trang có 2 H1.
+
+### Đã làm
+- **`docs/BRAND-VOICE.md`** — NGUỒN CHUẨN. Trích từ 20 bài tốt nhất (**2 bài/chuyên mục ×
+  10 chuyên mục** — lấy top-20 toàn cục sẽ lệch hết về `hon-nhan`/`benh-tat`). 10 mục:
+  định vị · 5 đặc trưng giọng · xưng hô · giới tính · từ vựng chuẩn · cấu trúc · cấm ·
+  checklist QC · mẫu vàng.
+- **`_patches/migration-brand-voice.sql`** (✅ ĐÃ CHẠY prod): bảng `brand_voice_docs` +
+  `search_brand_voice()` + `get_brand_voice()`. RLS bật, **0 policy** = chỉ service key.
+  - **Bảng RIÊNG chứ không nhét vào `tuvi_docs`:** `tuvi_docs` là tri thức TỬ VI (để luận),
+    brand voice là luật VIẾT (để kiểm văn phong). Trộn chung thì RAG luận giải kéo nhầm
+    luật văn phong vào câu trả lời tử vi.
+  - **`get_brand_voice()` trả TRỌN doc** cho prompt injection. Style guide **phải vào
+    nguyên khối** — RAG lấy 6 mảnh rời ra "luật 7 và luật 12" mà thiếu luật 1, tệ hơn
+    không có. `search_brand_voice()` chỉ để tra lẻ từng luật.
+  - Chiều **1024** khớp `text-embedding-3-small` + `dimensions:1024` của
+    `lib/tools/registry.ts` → dùng chung một đường sinh embedding.
+- **`scripts/load-brand-voice.mjs`** — đồng bộ file → DB, cắt theo `##`, upsert theo
+  unique `(doc_key,version,kind,section)` nên nạp lại không đẻ bản trùng. `--dry-run` chạy
+  được không cần key.
+
+### Verify
+`md5(content)` trong DB = **`438c70f3…`** = md5 file → bản DB **byte-identical** với repo
+(`length()` 10.190 ký tự vs `wc -c` 12.984 byte là do UTF-8 tiếng Việt, không phải lệch) ·
+`get_brand_voice()` trả đúng 10.190 ký tự · RLS on / 0 policy · `--dry-run` cắt đúng 10 mục ·
+`prettier --check` sạch cả 3 file · `node --check` OK.
+⚠️ **`eslint` KHÔNG chạy được trong container** — `node_modules` rỗng (0 gói), thiếu
+`@eslint/js`. Lỗi môi trường có sẵn, không phải do PR này; CI tự cài nên vẫn phủ.
+
+### CÒN LẠI
+- **Embedding mục CHƯA sinh** — container không có `OPENAI_API_KEY`. Dòng `kind='full'`
+  đã dùng được ngay (prompt injection không cần embedding); `search_brand_voice()` trả rỗng
+  cho tới khi chạy `node scripts/load-brand-voice.mjs` ở nơi có key.
+- B2 (brand-check gate) + B3 (claude-seo) + sửa tầng prompt: chưa làm.
+
+---
+
 ## 💸 ĐO DOANH THU ĐANG BỊA 78% (2026-07-31, PR sau #350)
 
 Henry bảo đổi nốt hằng số 2.500đ trong `MKT_VND`/`dashboard_margin`/
