@@ -514,7 +514,7 @@ a { color: var(--blue); text-decoration: none; }
 <!-- ─── SCRIPTS ──────────────────────────────────────────── -->
 <script src="/auth.js"></script>
 <script src="/tuvi-paywall.js?v=9"></script>
-<script src="/nav.js?v=18"></script>
+<script src="/nav.js?v=19"></script>
 <script src="/referral.js?v=1"></script>
 <script src="/footer.js"></script>
 
@@ -611,9 +611,29 @@ const SUPABASE_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 
 let _tools = null;
+// đ cho 1 Lượng khi hiện giá công cụ. Suy từ gói phổ biến (gói thứ hai theo
+// sort_order) chứ KHÔNG viết cứng: bản trước nhân cứng 2.500đ — đơn giá của
+// bảng giá cũ — nên mọi công cụ bị báo đắt hơn thực tế tới 3 lần.
+let _vndPerCredit = 2500;
+
+async function loadPackageRate() {
+  try {
+    const res = await fetch(
+      SUPABASE_URL + '/rest/v1/credit_packages?enabled=eq.true&select=credits,amount_vnd&order=sort_order.asc',
+      { headers: { apikey: SUPABASE_ANON } }
+    );
+    const pkgs = (await res.json()).filter(p => Number(p.credits) > 0 && Number(p.amount_vnd) > 0);
+    if (pkgs.length) {
+      const ref = pkgs[1] || pkgs[0];
+      _vndPerCredit = Number(ref.amount_vnd) / Number(ref.credits);
+    }
+  } catch (e) { /* giữ mức dự phòng */ }
+}
 
 async function loadTools() {
   try {
+    // Lấy đơn giá TRƯỚC khi vẽ thẻ để không chớp một con số sai rồi mới sửa.
+    await loadPackageRate();
     const res = await fetch(
       SUPABASE_URL + '/rest/v1/tool_pricing?enabled=eq.true&select=tool_id,label,credits,icon,category,sort_order,is_free,description&order=sort_order.asc',
       { headers: { apikey: SUPABASE_ANON } }
@@ -696,7 +716,7 @@ function toolCardHtml(t) {
     ? '<span class="tool-price-free">Miễn Phí</span>'
     : '<div class="tool-price">' +
         '<div class="tool-price-credits">' + t.credits + ' Lượng</div>' +
-        '<div class="tool-price-vnd">' + formatVnd(t.credits * 2500) + '</div>' +
+        '<div class="tool-price-vnd">' + formatVnd(Math.ceil((t.credits * _vndPerCredit) / 1000) * 1000) + '</div>' +
       '</div>';
   return '<a href="' + url + '" class="tool-card' + featured + '">' +
     '<div class="tool-icon">' + iconHtml(t.icon) + '</div>' +

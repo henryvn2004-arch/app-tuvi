@@ -9,7 +9,7 @@ export const maxDuration = 15;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
-import { getPackage, getPackages } from '@/lib/billing/packages';
+import { getPackage, getPackages, quoteCustomVnd } from '@/lib/billing/packages';
 import { getToolPrice } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
 import { freeGenGate, FREE_GEN_CAP_MESSAGE } from '@/lib/billing/viral-budget';
@@ -161,6 +161,21 @@ async function handleBalance(sp: URLSearchParams): Promise<Response> {
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
+// ── GET: signup-bonus (CÔNG KHAI, không cần đăng nhập) ────────
+// Quà đăng ký sống trong `app_config` và đã đổi vài lần (A/B [20,30,40] → [25]).
+// Trang topup trước đây hoặc nói lửng lơ "tặng Lượng miễn phí", hoặc — nguy hiểm
+// hơn — viết cứng một con số sẽ lệch ngay lần chỉnh giá kế tiếp. Đây là con số
+// hứa với người CHƯA có tài khoản nên không thể yêu cầu token; chỉ lộ đúng mức
+// quà thấp nhất, không lộ gì khác của app_config.
+async function handleSignupBonus(): Promise<Response> {
+  const raw = await getConfigValue<unknown>('credits.signup_bonus_variants', null);
+  const variants = (Array.isArray(raw) ? raw : [raw])
+    .map((v) => Number(v))
+    .filter((n) => Number.isFinite(n) && n > 0);
+  // Không đọc được → null, để giao diện lùi về câu chung chung thay vì hứa sai.
+  return ok({ bonus: variants.length ? Math.min(...variants) : null });
+}
+
 // ── GET: check slug access ────────────────────────────────────
 async function handleCheck(sp: URLSearchParams): Promise<Response> {
   const slug   = sp.get('slug')   || '';
@@ -186,8 +201,9 @@ async function handleTopup(body: Record<string, unknown>): Promise<Response> {
   if (packageId === 'custom') {
     if (!customAmountVnd || customAmountVnd < 50_000 || customAmountVnd > 5_000_000)
       return err('Số tiền tùy chỉnh phải từ 50.000đ đến 5.000.000đ', 400);
-    // 1 Lượng = 2.500đ (no bonus, anchor pricing)
-    const credits = Math.floor(customAmountVnd / 2500);
+    // Đơn giá suy từ bậc gói (xem quoteCustomVnd) — KHÔNG chia cứng nữa.
+    const { credits } = await quoteCustomVnd(customAmountVnd);
+    if (credits <= 0) return err('Không quy đổi được số Lượng cho số tiền này', 500);
     // PayPal cần USD: convert VND → USD ở rate 25.000
     const usdAmount = Math.round((customAmountVnd / 25_000) * 100) / 100;
     pkg  = { amount: usdAmount.toFixed(2), credits, label: `Nap Tuy Chinh – ${credits} Luong` };
@@ -574,13 +590,14 @@ async function handleCreateBank(body: Record<string, unknown>): Promise<Response
       if (customAmountVnd < 50_000 || customAmountVnd > 5_000_000)
         return err('Custom amount must be 50.000đ – 5.000.000đ', 400);
       amountVND = customAmountVnd;
-      credits   = Math.floor(customAmountVnd / 2500);  // 1 Lượng = 2.500đ
+      credits   = (await quoteCustomVnd(customAmountVnd)).credits;  // đơn giá theo bậc gói
     } else {
       // Legacy USD path
       if (customAmountUsd < 5 || customAmountUsd > 500) return err('Custom amount must be 5-500 USD', 400);
       amountVND = Math.round(customAmountUsd * 25_000);
-      credits   = Math.floor(amountVND / 2500);
+      credits   = (await quoteCustomVnd(amountVND)).credits;
     }
+    if (credits <= 0) return err('Không quy đổi được số Lượng cho số tiền này', 500);
     label = `Nap ${credits} Luong`;
   } else {
     const pkgs  = await getPackages();
@@ -1280,6 +1297,7 @@ export async function GET(request: NextRequest) {
   const action = searchParams.get('action');
   if (action === 'balance')      return handleBalance(searchParams);
   if (action === 'check')        return handleCheck(searchParams);
+  if (action === 'signup-bonus') return handleSignupBonus();
   if (action === 'admin-users')  return handleAdminUsers(request, searchParams);
   if (action === 'admin-users-list') return handleAdminUsersList(request);
   if (action === 'admin-login-attempts') return handleAdminLoginAttempts(request);
