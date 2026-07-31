@@ -5,6 +5,75 @@
 
 ---
 
+## 🎨 Trang topup dựng lại + ĐƯỜNG ICON DÙNG CHUNG BỊ HỎNG (2026-07-31, PR #350)
+
+Henry: *"Sao page topup mày vẫn còn xài emoji nhỉ? Tao nhớ đã có session nói mày
+sửa hết cho nó consistent rồi mà."* Anh nhớ đúng — markup ĐÃ được chuyển sang
+`data-icon` từ trước. Vấn đề là **markup đó chưa bao giờ được dựng**.
+
+### 🔴 Căn nguyên: `mountIcons()` chạy TRƯỚC khi thân trang tồn tại
+`nav.js` gọi `mountIcons()` **đúng một lần, đồng bộ, ở ĐẦU `<body>`** — lúc phần
+thân trang chưa được parse. Nên mọi span `[data-icon]`/`[data-icon-emoji]` nằm
+dưới nav đều trượt lượt quét rồi rơi về nhánh dự phòng **in thẳng emoji ra màn
+hình**. Tức đợt chuyển sang Lucide trước đây gần như không có tác dụng trên bất
+kỳ trang nào — chỉ nav là được dựng.
+- Vá: quét lại một lượt khi DOM đóng (`mountIcons` bỏ qua phần tử đã có `<svg>`
+  nên chạy hai lần không tốn gì). **Đo trên 50 trang: 232 icon dựng thành SVG,
+  0 trang còn emoji thô** (trước đó riêng `kien-thuc-tuvi.html` lọt 22 emoji).
+- **Bài học:** sửa markup icon mà không kiểm bằng trình duyệt thì không biết nó
+  có dựng hay không — nhánh dự phòng in emoji khiến trang *trông vẫn có icon*.
+  Cách kiểm đúng: `[data-icon]` nào KHÔNG chứa `<svg>` sau khi tải xong.
+- 2 trang dựng icon SAU lượt quét (`la-ban-phong-thuy`, `xlook`) phải tự gọi
+  `window.mountIcons(container)` — mẫu này áp cho MỌI chỗ render động về sau.
+
+### Bảng icon (nav.js v13 → v14, 78 → 88 icon)
+- Thêm: `clock` `credit-card` `gift` `image` `info` `landmark` `qr-code` `scale`
+  `shield-check` `temple`. `image`/`temple` lấy ĐÚNG path `shell.js` đang dùng —
+  để sidebar Luận Đường và bảng giá không vẽ hai kiểu khác nhau.
+- Map thêm 31 glyph còn sót, gồm **8 ký tự dùng làm `tool_pricing.icon`**
+  (`☉ ⧇ ⚸ 🖼️ 🏯 🖌 💋 🧥`) vốn đổ thẳng ra trang Công Cụ + bảng chi phí.
+- `iconHtml()` **không trả glyph thô nữa** mà trả icon dự phòng: `tool_pricing.icon`
+  do admin gõ tay nên luôn có thể xuất hiện ký tự mới, và mỗi lần như vậy trước
+  đây là một con emoji lọt thẳng ra giao diện.
+- ⚠️ `cong-cu.html` vẫn giữ **bản chép riêng** của `EMOJI_TO_ICON` (dòng ~671) —
+  nợ DRY chưa gỡ, sửa bảng ở nav.js thì nhớ nó.
+
+### 🐞 Ba lỗi lộ ra khi làm trang topup
+1. **Nạp SỐ TIỀN TỰ CHỌN bằng chuyển khoản CHƯA TỪNG dùng được.**
+   `initiateBankTopup` đọc ô VNĐ rồi kiểm bằng ngưỡng **USD** (`< 5 || > 500`) và
+   gửi trường `customAmount` (đường USD cũ của server) → mọi số tiền hợp lệ đều
+   bị chặn tại client kèm *"Vui lòng nhập $5–$500"*. Nhánh PayPal cạnh bên thì
+   đúng (`customAmountVnd`) — lệch nhau lâu rồi mà không ai thấy vì lỗi nằm ở
+   nhánh ít test hơn.
+2. **Trang chớp giá SAI.** Card viết cứng 50/120/350/800 Lượng rồi trông chờ
+   fetch ghi đè, trong khi `credit_packages` thật là **100/240/700/1600** — sai
+   đúng một nửa, và fetch hỏng thì sai luôn. Nay dựng card TỪ dữ liệu.
+3. **Bảng chi phí báo đắt hơn thực tế tới 3 lần.** Quy đổi nhân cứng 2.500đ/Lượng
+   (đơn giá mua lẻ) trong khi mua gói chỉ **624–990đ/Lượng**.
+
+### Bố cục
+- Số dư / quà đăng ký dùng CHUNG một chỗ (loại trừ nhau), không còn hai khối rồi
+  ẩn bớt một cái để lại khoảng trống.
+- **Chọn phương thức MỘT lần** (segmented control) → mỗi gói 1 nút thay vì 2
+  (8 nút → 4). Mặc định **chuyển khoản QR** — người dùng VN gần như đều trả bằng
+  app ngân hàng, trong khi bản cũ để PayPal làm nút chính (đậm màu).
+- Quà đăng ký lấy từ server qua action mới **`signup-bonus`** (đọc
+  `credits.signup_bonus_variants`, CÔNG KHAI vì hứa với người chưa có tài khoản).
+  Đọc hỏng → lùi về câu chung chung, KHÔNG nêu con số.
+- Referral gộp về MỘT lượt `my-referral` (bản cũ tự hỏi PostgREST hai bảng bằng
+  anon key rồi tự đếm).
+- Số công cụ miễn phí đếm từ dữ liệu (**21**, FAQ cũ ghi 28).
+
+### ⚠️ CÒN LẠI — việc Henry quyết (CỐ Ý không tự sửa)
+**Gói bán 624–990đ/Lượng nhưng nạp "số tiền khác" tính 2.500đ/Lượng** — đắt hơn
+2,5–4 lần (99.000đ mua gói được 100 Lượng, nạp lẻ chỉ 39). PR này chỉ làm trang
+**nói thật** (ghi rõ đơn giá từng đường + "các gói bên trên rẻ hơn"), KHÔNG đổi
+giá — server vẫn chốt 2.500đ trong `handleTopup`/`handleCreateBank`. Nếu 2.500đ
+là tàn dư bảng giá cũ thì cần chỉnh ở server. Ghi chú thêm: `chat.cost` dưới DB
+đang là **2** (không phải 5).
+
+---
+
 ## 🚨 Vá cảnh báo 10:00 VN 30/07 — BỘ DÒ ĐANG NÓI DỐI (2026-07-30, PR mới)
 
 Cảnh báo Telegram nêu 4 mục. Điều tra ra: **1 mục đúng hoàn toàn, 2 mục đúng dữ
