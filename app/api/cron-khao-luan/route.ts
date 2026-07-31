@@ -1,9 +1,14 @@
 // app/api/cron-khao-luan/route.ts
-export const maxDuration = 60;
+// maxDuration 60 → 300: brand-check gate chèn thêm 1 lượt LLM soi bài, và khi
+// bài trượt thì thêm 1 lượt viết lại (~6k token). Giữ trần 60s là tự đẩy mình
+// vào timeout ngay lượt đầu có bài cần sửa. 300 = trần Node của Vercel Pro,
+// cũng là con số cron-master-write đang dùng.
+export const maxDuration = 300;
 import { NextRequest } from 'next/server';
 import { ok, err, options } from '@/lib/cors';
 import { llmText } from '@/lib/llm/complete';
 import { withCronLog } from '@/lib/cron/log';
+import { brandCheck } from '@/lib/content/brand-check';
 
 const SUPABASE_URL  = process.env.SUPABASE_URL!;
 const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY!;
@@ -105,14 +110,14 @@ async function handle(request: NextRequest) {
   const auth = request.headers.get('authorization');
   if (auth !== `Bearer ${process.env.CRON_SECRET}`) return err('Unauthorized', 401);
 
-  const results = { written: 0, saved: 0, errors: [] as string[] };
+  const results = { written: 0, saved: 0, blocked: 0, errors: [] as string[] };
   const startTime = Date.now();
 
   const topics = await popTopics(ARTICLES_PER_RUN);
   if (!topics.length) return ok({ message: 'No pending topics', results });
 
   for (const t of topics as {id:string;topic:string;type:string}[]) {
-    if (Date.now() - startTime > 55000) { await updateStatus(t.id, 'pending'); break; }
+    if (Date.now() - startTime > 240000) { await updateStatus(t.id, 'pending'); break; }
     // popTopics không lọc theo type (chỉ cron-master-write lọc type=eq.master-article) →
     // né cả 'tai-lieu' (tài liệu tham khảo, không phải chủ đề bài) LẪN 'master-article'
     // (chủ đề đã dành riêng cho Nghiên Cứu) để không viết nhầm blog từ topic của kênh khác.
@@ -124,6 +129,33 @@ async function handle(request: NextRequest) {
       let slug = article.slug || toSlug(article.title);
       if (await slugExists('khao_luan', slug)) slug = slug + '-' + Date.now().toString().slice(-4);
       article.slug = slug;
+
+      // ── BRAND-CHECK GATE — bước QC cuối cùng còn chặn được ──────────────────
+      // `khao_luan` không có cột publish_status: POST xong là bài LÊN THẲNG
+      // trang. Nên gate phải đứng ĐÚNG ở đây, ngay trước sbFetch bên dưới.
+      // Gate tự autofix phần máy móc và trả về `gate.content` đã sửa; ở mode
+      // 'warn' (mặc định) nó không chặn, chỉ ghi `content_qc_log`.
+      const gate = await brandCheck({
+        content: article.content,
+        title: article.title,
+        slug: article.slug,
+        profile: 'khao-luan',
+        payload: article,
+      });
+      article.content = gate.content;
+      if (!gate.pass) {
+        // Bài bị chặn đã được cất nguyên văn trong content_qc_log.payload —
+        // không insert, nhưng cũng không mất chữ. Topic đỗ ở 'qc_failed' để
+        // lượt cron sau không nhặt lại (popTopics chỉ lấy status='pending');
+        // muốn viết lại thì đặt tay về 'pending'.
+        results.blocked++;
+        results.errors.push(
+          `QC chặn "${t.topic.slice(0, 30)}": ${gate.violations.filter(v => v.severity === 'block').map(v => v.rule).join(', ')}`,
+        );
+        await updateStatus(t.id, 'qc_failed');
+        continue;
+      }
+
       const saved = await sbFetch('/khao_luan', {
         method:'POST', headers:{'Prefer':'resolution=ignore-duplicates'},
         body:JSON.stringify({slug:article.slug, title:article.title, excerpt:article.excerpt, category:article.category, tags:article.tags, featured:article.featured||false, content:article.content, master_id:masterId, created_at:new Date().toISOString()}),

@@ -5,6 +5,7 @@ import { NextRequest } from 'next/server';
 import { ok, err, options } from '@/lib/cors';
 import { llmText } from '@/lib/llm/complete';
 import { withCronLog } from '@/lib/cron/log';
+import { brandCheck } from '@/lib/content/brand-check';
 
 const SUPABASE_URL  = process.env.SUPABASE_URL!;
 const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY!;
@@ -308,7 +309,7 @@ async function handle(request: NextRequest) {
   const auth = request.headers.get('authorization');
   if (auth !== `Bearer ${process.env.CRON_SECRET}`) return err('Unauthorized', 401);
 
-  const results = { written: 0, saved: 0, errors: [] as string[] };
+  const results = { written: 0, saved: 0, blocked: 0, errors: [] as string[] };
   const startTime = Date.now();
 
   const topics = await popTopics(ARTICLES_PER_RUN) as TopicRow[];
@@ -348,7 +349,29 @@ async function handle(request: NextRequest) {
       if (await slugExists(slug)) slug = slug + '-' + Date.now().toString().slice(-5);
       article.slug = slug;
 
-      // Word count estimate
+      // ── BRAND-CHECK GATE — bước QC cuối cùng còn chặn được ──────────────────
+      // Profile 'nghien-cuu' KHÁC HẲN 'khao-luan': tùy bút này viết ngôi thứ
+      // NHẤT và ký tên thầy — đo trên prod 300/306 bài dùng "tôi", đó là định
+      // dạng chứ không phải lỗi. Gate ở đây chỉ siết phần dùng chung (tên cung,
+      // sao bịa, 2 thẻ H1, rule-dump) và bắt "bạn" → "quý vị" (85/306 bài).
+      const gate = await brandCheck({
+        content: article.content,
+        title: article.title,
+        slug: article.slug,
+        profile: 'nghien-cuu',
+        payload: article,
+      });
+      article.content = gate.content;
+      if (!gate.pass) {
+        results.blocked++;
+        results.errors.push(
+          `QC chặn "${t.topic.slice(0, 30)}": ${gate.violations.filter(v => v.severity === 'block').map(v => v.rule).join(', ')}`,
+        );
+        await updateStatus(t.id, 'qc_failed');
+        continue;
+      }
+
+      // Word count estimate — tính SAU gate vì gate có thể đã sửa nội dung.
       const wordCount = article.content.trim().split(/\s+/).length;
 
       // Save to master_articles
