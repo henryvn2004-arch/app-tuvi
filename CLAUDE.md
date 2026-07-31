@@ -5,6 +5,65 @@
 
 ---
 
+## 💸 ĐO DOANH THU ĐANG BỊA 78% (2026-07-31, PR sau #350)
+
+Henry bảo đổi nốt hằng số 2.500đ trong `MKT_VND`/`dashboard_margin`/
+`marketing_revenue`. Đo trước khi sửa thì ra chuyện lớn hơn hẳn con số:
+
+| | đ |
+|---|---:|
+| Doanh thu đang BÁO CÁO | **10.075.000** |
+| Tiền thật CHỨNG MINH được | **1.319.500** |
+| Không rõ (5 giao dịch PayPal / 3.160 Lượng) | ? |
+
+**~78% doanh thu đang báo cáo là suy ra từ `amount * 2500`, không phải tiền.**
+Vì `credit_transactions.amount_vnd` **NULL ở CẢ 9 dòng topup** — R3 ("ghi tiền
+thật cho giao dịch MỚI") chưa từng ghi được dòng nào, đơn giản vì từ lúc ship
+tới giờ chưa có ai nạp thêm.
+
+### 🔎 Đính chính một chẩn đoán sai của chính tao
+Tao đã nói với Henry là "panel Biên LN đang thổi lên ~3 lần". **Sai.**
+`dashboard_margin` KHÔNG dùng 2500 — nó đã đi qua `credit_vnd()` từ trước, hàm
+này trả **1000**, tức lệch ~1,2 lần. Chỗ thật sự còn cứng 2500 là
+`marketing_revenue` + 2 chỗ trong `admin.html`. **Đọc định nghĩa hàm trước khi
+kết luận, đừng suy từ tên biến.**
+
+### 2.500đ không phải số bịa — nó là giá của THỜI KỲ KHÁC
+Đơn hàng đầu (24/04) là **122.500đ cho 50 Lượng = 2.450đ/Lượng**. Nên 2.500đ
+từng ĐÚNG. Cái sai là (a) đem nó áp cho Lượng của hôm nay (gói đang bán
+624–990đ) và (b) để nó thành hằng số chép tay ở nhiều nơi.
+
+### Đã làm (`_patches/migration-revenue-truth.sql`, ✅ ĐÃ CHẠY prod)
+1. **Backfill TIỀN THẬT** cho 4 giao dịch tra được từ `bank_orders` (khớp
+   user + số Lượng + nhãn + cửa sổ 10 phút; đo được lệch thật 20–47 giây).
+   Lấy lại chính xác **1.319.500đ**. Dry-run trong transaction rồi `RAISE` để
+   rollback trước khi áp thật — đúng 4 dòng, không đụng dòng nào khác.
+2. **`credit_vnd()` suy từ `credit_packages`** (gói phổ biến = 829đ) thay vì
+   trả hằng số. ⚠️ Prod đang có `app_config['credits.vnd_per_credit'] = 1000`
+   chốt cứng — **đã XOÁ**, không thì nhánh suy-từ-gói không bao giờ chạy tới
+   (đúng y bệnh cũ, chỉ khác con số). Cơ chế ghi đè vẫn còn nếu cần chốt lại.
+3. **`marketing_revenue` tách `real_vnd` / `estimated_vnd` / `estimated_count`
+   / `vnd_per_credit`.** Gộp một cục thì không ai biết bao nhiêu phần trăm con
+   số đó đứng vững được. `dashboard_margin` trả thêm `vnd_per_credit` để
+   Dashboard và Marketing dùng chung một mốc.
+4. `admin.html`: `MKT_VND` + `vndOf` ăn theo RPC (đặt TRƯỚC mọi lượt vẽ — bắt
+   được lúc test là `renderMktSources` chạy trước nên bảng LTV hiện bằng mức dự
+   phòng); panel Doanh Thu hiện thẳng "Tiền thật đã đối chiếu" vs "Ước lượng ·
+   N giao dịch"; 5 nhãn tĩnh ghi "2.500đ" viết lại cho khỏi mâu thuẫn.
+
+**Sau khi vá:** tổng 3.939.140đ = **1.319.500 thật + 2.619.640 ước lượng**, và
+giao diện nói rõ đâu là đâu.
+
+### ⚠️ CÒN LẠI — việc tay Henry
+**5 giao dịch PayPal cũ (460/1000/200/500/1000 Lượng, tháng 4–5) không có số
+tiền ở BẤT CỨ ĐÂU trong DB** — tên gói cũ ("Pro", "Nhóm", "Cá Nhân", "Gia
+Đình") không còn trong `credit_packages`, và chúng thanh toán bằng USD. Muốn
+doanh thu chính xác tuyệt đối thì mở lịch sử PayPal, lấy số tiền thật rồi
+`update credit_transactions set amount_vnd = …, gateway='paypal'` cho 5 dòng
+đó. **CỐ Ý không bịa số cho chúng** — đó chính là lỗi vừa sửa.
+
+---
+
 ## 🎨 Trang topup dựng lại + ĐƯỜNG ICON DÙNG CHUNG BỊ HỎNG (2026-07-31, PR #350)
 
 Henry: *"Sao page topup mày vẫn còn xài emoji nhỉ? Tao nhớ đã có session nói mày
