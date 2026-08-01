@@ -108,6 +108,91 @@ const CUNG = [
   'Thiên Di', 'Tật Ách', 'Tài Bạch', 'Tử Tức', 'Phu Thê', 'Huynh Đệ',
 ];
 
+/**
+ * Câu hỏi ĐỜI SỐNG cho bề mặt /nghien-cuu.
+ *
+ * Vì sao không phải chủ đề học thuật ("Vì sao sao Thất Sát ở mỗi lá số lại cho
+ * kết quả khác nhau"): loại đó chỉ người ĐÃ học tử vi mới gõ, mà đó là một tập
+ * rất nhỏ. Bằng chứng ngay trong DB — `khao_luan` vốn phân loại theo mảng ĐỜI
+ * SỐNG (tinh-cach 71 · van-han 58 · tai-chinh 54 · cong-viec 31 · con-cai 24 ·
+ * hon-nhan 23…), còn `master_articles` thì toàn học thuật, và chính nhóm sau là
+ * nhóm không có một URL nào lọt top trang có hiển thị trên Search Console.
+ *
+ * ⚠️ RÀNG BUỘC KHI THÊM CÂU MỚI — đọc kỹ, đây là chỗ dễ hỏng nhất:
+ *
+ *   1. Phải giữ Ý ĐỊNH TỬ VI. "Có nên nghỉ việc không" thuần tuý sẽ đấu với
+ *      blog nghề nghiệp, và người gõ nó KHÔNG muốn đọc luận mệnh — có lên hạng
+ *      cũng chỉ tăng thoát trang. Câu đúng là câu người ta hỏi KHI ĐÃ tìm đến
+ *      mệnh lý: có nhắc lá số / cung / đại vận / số phận trong chính câu hỏi.
+ *   2. Phải có chỗ bám trong cổ thư (`tuvi_docs`, 1.254 chunk) — thường là một
+ *      cung cụ thể. Không có nguồn thì bài thành văn vo, đúng thứ Google gọi là
+ *      nội dung sản xuất hàng loạt ít giá trị.
+ *   3. KHÔNG nêu tên người thật, doanh nghiệp thật, sự kiện thời sự. Cổ thư
+ *      không có nguồn nào về một công ty cụ thể; gắn vào là bịa 100% kèm rủi ro
+ *      pháp lý. Đây là ranh giới giữ "ăn theo NỖI LO" và "ăn theo SỰ KIỆN".
+ *
+ * Danh sách này là LƯỚI AN TOÀN, không phải nguồn chính. Ở nhịp 21 bài/tuần nó
+ * chỉ đủ ~2 tuần trước khi quay vòng; nguồn bền vững là `keyword_ideas` (Google
+ * Suggest) từ 04/08 trở đi — chỗ có cách hỏi đời thường ở quy mô thật.
+ */
+const LIFE_QUESTIONS = [
+  // Tiền bạc
+  'Làm mãi vẫn không dư được đồng nào — lá số nói gì về người khó giữ tiền',
+  'Kiếm được nhiều nhưng tiêu cũng nhanh — vì sao có người cả đời không tích được của',
+  'Cho bạn bè vay tiền rồi mất luôn — có phải số mình hay mất của',
+  'Bao nhiêu tuổi thì tiền bạc mới vào đều — nhìn ở đâu trong lá số',
+  'Đầu tư gì cũng lỗ — lá số có báo trước chuyện này không',
+  'Cung Tài Bạch xấu có nhất định nghèo không',
+  // Công việc
+  'Có nên bỏ việc ổn định để ra làm riêng — lá số nhìn quyết định này thế nào',
+  'Đi làm chỗ nào cũng không hợp sếp — lá số nói gì về chuyện đó',
+  'Nên làm công ăn lương hay tự kinh doanh — cung Quan Lộc trả lời được tới đâu',
+  'Đổi nghề ở tuổi ngoài 35 có muộn không — nhìn theo đại vận',
+  'Làm việc chăm chỉ mà mãi không được thăng chức — lá số lý giải thế nào',
+  // Hôn nhân, tình duyên
+  'Vợ chồng hay cãi vặt — do không hợp tuổi hay do cung Phu Thê',
+  'Ngoài 30 vẫn chưa lập gia đình — muộn duyên nhìn ở đâu trong lá số',
+  'Yêu ai cũng dang dở — có phải số mình lận đận tình duyên',
+  'Người cũ quay lại — lá số nói gì về chuyện nối lại duyên xưa',
+  'Lấy người hơn tuổi hay kém tuổi thì hợp hơn — cổ pháp luận thế nào',
+  // Con cái
+  'Con không nghe lời, học hành sa sút — cung Tử Tức nói được gì',
+  'Muộn con — lá số có cho biết trước điều đó không',
+  'Cha mẹ và con cái xung khắc — vì sao cùng nhà mà không hợp nhau',
+  'Nên sinh con vào năm nào — chọn theo tuổi bố mẹ có cơ sở tới đâu',
+  // Gia đình
+  'Anh em ruột mà không nhìn mặt nhau — lá số có báo trước không',
+  'Sống chung với bố mẹ chồng luôn căng thẳng — nhìn từ cung Phụ Mẫu',
+  'Người phải gánh cả nhà từ nhỏ — lá số dạng đó trông thế nào',
+  // Quan hệ xã hội
+  'Hay bị lợi dụng lòng tốt — cung Nô Bộc luận thế nào',
+  'Bạn bè nhiều nhưng lúc khó không ai giúp — lá số lý giải ra sao',
+  'Người dễ gặp quý nhân và người mãi không gặp — khác nhau ở đâu',
+  // Sức khoẻ
+  'Người hay ốm vặt quanh năm — cung Tật Ách nói gì',
+  'Mất ngủ, lo âu kéo dài — lá số có liên quan gì không',
+  'Tuổi nào cần giữ sức khoẻ nhất — nhìn theo chuỗi đại vận',
+  // Nhà cửa, đất đai
+  'Mua nhà xong làm ăn đi xuống — có phải tại cung Điền Trạch',
+  'Người có số được thừa kế nhà đất — nhìn ở đâu trong lá số',
+  'Nên mua nhà hay tiếp tục đi thuê — lá số giúp được gì cho quyết định này',
+  // Tính cách
+  'Ngoài mặt mạnh mẽ, trong lòng yếu đuối — vì sao lá số hay mâu thuẫn thế',
+  'Người nóng tính có sửa được không — cổ pháp nói gì',
+  'Hay nghĩ nhiều, quyết định chậm — đó là tính hay là số',
+  'Vì sao có người luôn được lòng người khác mà không cần cố',
+  // Vận hạn
+  'Năm nào cũng thấy khó — hay là mình đang ở một đại vận xấu',
+  'Vì sao có giai đoạn làm gì cũng khó — đại vận nói gì về những năm bế tắc',
+  'Hạn xấu có thật sự tránh được không, hay chỉ là tự trấn an',
+  'Qua tuổi bao nhiêu thì đời bớt vất vả — nhìn theo chuỗi đại vận',
+  'Cùng một năm, sao người này gặp may mà người kia gặp hạn',
+  // Chung
+  'Vì sao hai người cùng ngày cùng giờ sinh lại khác số phận',
+  'Xem tử vi rồi biết trước vận xấu — biết để làm gì',
+  'Người không tin tử vi thì lá số có đúng với họ không',
+];
+
 interface Spoke {
   /** Khung câu, `{x}` thay bằng thực thể, `{year}` thay bằng năm. */
   pattern: string;
@@ -122,8 +207,6 @@ const SEASONAL_SPOKES: Spoke[] = [
   { pattern: 'Tử vi tuổi {x} — vận trình trọn đời', entities: CAN_CHI, surface: 'khao-luan' },
   { pattern: 'Sao {x} tọa thủ cung Mệnh nói lên điều gì', entities: CHINH_TINH, surface: 'khao-luan' },
   { pattern: 'Cung {x} trong lá số Tử Vi luận thế nào', entities: CUNG, surface: 'khao-luan' },
-  { pattern: 'Vì sao sao {x} ở mỗi lá số lại cho kết quả khác nhau', entities: CHINH_TINH, surface: 'nghien-cuu' },
-  { pattern: 'Đọc cung {x} thế nào cho đúng — những chỗ người mới hay hiểu sai', entities: CUNG, surface: 'nghien-cuu' },
 
   // Đầu năm (T11–T2 dương): mùa cao điểm nhất của toàn ngành.
   { pattern: 'Tuổi {x} năm {year} — vận hạn và những điều cần lưu ý', entities: CAN_CHI,
@@ -141,16 +224,11 @@ const SEASONAL_SPOKES: Spoke[] = [
   { pattern: 'Tuổi {x} cưới năm {year} có được không', entities: CAN_CHI,
     peakMonths: [2, 3, 4, 9, 10, 11], surface: 'khao-luan' },
 
-  // "Nỗi lo" — bản dùng được của ý tưởng ăn theo chủ đề đang nóng. Giữ NỖI LO,
-  // bỏ SỰ KIỆN: cổ thư có nguồn về cung Tài Bạch và đại vận, không có nguồn nào
-  // về một doanh nghiệp cụ thể nào. Gắn tên công ty có thật vào luận mệnh lý là
-  // bịa 100% và rước rủi ro pháp lý — cố ý không có khung nào như vậy ở đây.
-  { pattern: 'Cung Tài Bạch xấu có nhất định nghèo không', entities: [''], surface: 'nghien-cuu' },
-  { pattern: 'Vì sao có giai đoạn làm gì cũng khó — đại vận nói gì về những năm bế tắc',
-    entities: [''], surface: 'nghien-cuu' },
   { pattern: 'Tuổi {x} có phải hạn lớn về tiền bạc không', entities: ['30', '35', '41', '49', '53'],
     surface: 'khao-luan' },
-  { pattern: 'Vì sao hai người cùng ngày cùng giờ sinh lại khác số phận', entities: [''], surface: 'nghien-cuu' },
+
+  // Bề mặt /nghien-cuu ăn TOÀN BỘ từ LIFE_QUESTIONS bên dưới.
+  { pattern: '{x}', entities: LIFE_QUESTIONS, surface: 'nghien-cuu' },
 ];
 
 // ── Kiểu dữ liệu ──────────────────────────────────────────────────────────────
@@ -496,8 +574,12 @@ export async function runTopicTopup(
     seen.add(k);
     if (isDuplicate(it.keyword, existing)) { deduped++; continue; }
     fresh.push(it);
-    // Đưa dư gấp ~2 lần cho model chọn, nhưng không đổ cả nghìn dòng vào prompt.
-    if (fresh.length >= perSurface * 4) break;
+    // Trần gom là CHUNG cho cả hai bề mặt, mà số khung mỗi bên không cân: hiện
+    // có 6 khung khảo luận đấu 1 khung nghiên cứu. Trần chật thì bên ít khung
+    // bị lấn, không đủ 21 dòng (đo được: trần ×4 chỉ ra 18 bài nghiên cứu).
+    // ×8 cho cả hai bên đủ chỗ; danh sách vẫn chỉ là chuỗi ngắn nên prompt
+    // không phình đáng kể.
+    if (fresh.length >= perSurface * 8) break;
   }
   if (!fresh.length) {
     return { ...empty, deduped, note: 'mọi cụm gom được đều trùng bài đã có' };
