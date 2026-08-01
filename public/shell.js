@@ -20,21 +20,21 @@
       { id: 'xem-lam-an', label: 'Xem tuổi làm ăn',     href: '/app/xem-lam-an', icon: 'briefcase' },
       { id: 'tuong-hop',  label: 'Tương hợp tuổi',      href: '/app/tuong-hop',  icon: 'heart' },
       { id: 'sinh-con',   label: 'Xem tuổi sinh con',   href: '/app/sinh-con',   icon: 'baby' },
-      { id: 'chan-dung-vo-chong', label: 'Chân dung vợ chồng', href: '/app/chan-dung-vo-chong', icon: 'image', cost: 22 },
-      { id: 'chan-dung-tien-kiep', label: 'Chân dung tiền kiếp', href: '/app/chan-dung-tien-kiep', icon: 'temple', cost: 25 },
+      { id: 'chan-dung-vo-chong', label: 'Chân dung vợ chồng', href: '/app/chan-dung-vo-chong', icon: 'image' },
+      { id: 'chan-dung-tien-kiep', label: 'Chân dung tiền kiếp', href: '/app/chan-dung-tien-kiep', icon: 'temple' },
     ] },
     { group: 'Tử Bình', open: false, items: [
       { id: 'bat-tu',     label: 'Lá số Bát Tự',        href: '/app/bat-tu',     icon: 'rows' },
     ] },
     { group: 'Xem Tướng', open: false, items: [
-      { id: 'dien-tuong', label: 'Diện Tướng AI',       href: '/app/dien-tuong', icon: 'user', cost: 5 },
-      { id: 'nhan-tuong', label: 'Nhãn Tướng AI',       href: '/app/nhan-tuong', icon: 'eye', cost: 5 },
-      { id: 'thu-tuong',  label: 'Thủ Tướng AI',        href: '/app/thu-tuong',  icon: 'hand', cost: 5 },
-      { id: 'thanh-tuong', label: 'Thanh Tướng AI',     href: '/app/thanh-tuong', icon: 'mic', cost: 8 },
-      { id: 'thanh-tuong-pro', label: 'Thanh Tướng Pro', href: '/app/thanh-tuong-pro', icon: 'mic', cost: 10 },
+      { id: 'dien-tuong', label: 'Diện Tướng AI',       href: '/app/dien-tuong', icon: 'user' },
+      { id: 'nhan-tuong', label: 'Nhãn Tướng AI',       href: '/app/nhan-tuong', icon: 'eye' },
+      { id: 'thu-tuong',  label: 'Thủ Tướng AI',        href: '/app/thu-tuong',  icon: 'hand' },
+      { id: 'thanh-tuong', label: 'Thanh Tướng AI',     href: '/app/thanh-tuong', icon: 'mic' },
+      { id: 'thanh-tuong-pro', label: 'Thanh Tướng Pro', href: '/app/thanh-tuong-pro', icon: 'mic' },
     ] },
     { group: 'Phong Thủy', open: false, items: [
-      { id: 'phong-thuy', label: 'Phong Thủy Nội Thất',  href: '/app/phong-thuy', icon: 'leaf', cost: 40 },
+      { id: 'phong-thuy', label: 'Phong Thủy Nội Thất',  href: '/app/phong-thuy', icon: 'leaf' },
       { id: 'bat-trach',  label: 'Hướng Bát Trạch',     href: '/app/bat-trach',  icon: 'compass' },
     ] },
     { group: 'Chọn Ngày / Lịch', open: false, items: [
@@ -120,7 +120,7 @@
     if (window.Track) { flushTrack(); return; }
     if (document.getElementById('tvmb-track-js')) return;
     var s = document.createElement('script');
-    s.id = 'tvmb-track-js'; s.src = '/track.js?v=2'; s.async = true;
+    s.id = 'tvmb-track-js'; s.src = '/track.js?v=3'; s.async = true;
     s.onload = flushTrack;
     (document.head || document.documentElement).appendChild(s);
   }

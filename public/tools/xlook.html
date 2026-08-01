@@ -619,6 +619,8 @@ function showLoginRequired() {
     <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:8px;">Cần đăng nhập</div>
     <div style="font-size:12px;color:var(--text-lt);">Đăng nhập để quản lý tủ đồ cá nhân của bạn</div>
   </div>`;
+  // Dựng sau lượt quét icon của nav.js → phải tự gọi lại, không thì ra emoji thô.
+  if (window.mountIcons) window.mountIcons(document.getElementById('wardrobeGrid'));
 }
 
 // ── Init ───────────────────────────────────────────────────────────

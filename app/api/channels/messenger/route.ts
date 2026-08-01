@@ -23,6 +23,7 @@ import { verifyMetaSignature, verifyWebhookChallenge } from '@/lib/channels/meta
 import { messengerIO, messengerStore, messengerProfiles, msgrSendText, msgrClearSession } from '@/lib/channels/messenger';
 import { chatLogOutcome } from '@/lib/channels/store';
 import { consumeLinkToken, resolveLinkedUser, LINK_CMD } from '@/lib/channels/messengerLink';
+import { getRailPrice } from '@/lib/billing/pricing';
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -150,7 +151,7 @@ async function handleEvent(ev: MsgrMessaging, cfg: Awaited<ReturnType<typeof get
   const gate = await buildAccessGate({
     platform: PLATFORM,
     externalId: psid,
-    cost: cfg.cost,
+    cost: await getRailPrice(cfg.cost),
     freeCap: FREE_DAILY,
     freeCapMsg,
     noBalanceMsg,

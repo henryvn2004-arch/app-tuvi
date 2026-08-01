@@ -304,7 +304,7 @@
         <div class="panel">
           <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Doanh Thu Tiền Thật</div>
-            <span style="font-size:.72rem;color:var(--text-lt)">giao dịch cũ chưa lưu VNĐ → ước lượng ×2.500đ</span>
+            <span style="font-size:.72rem;color:var(--text-lt)" id="mkt-rev-note">giao dịch cũ chưa lưu VNĐ → suy theo đơn giá gói</span>
           </div>
           <div class="panel-body" id="mkt-revenue">
             <div class="loading"><span class="spin"></span>Đang tải...</div>
@@ -314,7 +314,7 @@
         <div class="panel">
           <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Nguồn Traffic (theo first-touch)</div>
-            <span style="font-size:.72rem;color:var(--text-lt)">Quy đổi doanh thu: 1 Lượng ≈ 2.500đ</span>
+            <span style="font-size:.72rem;color:var(--text-lt)" id="mkt-src-note">Quy đổi doanh thu theo đơn giá gói</span>
           </div>
           <div class="table-wrap" id="mkt-sources">
             <div class="loading"><span class="spin"></span>Đang tải...</div>
@@ -374,6 +374,22 @@
             <span style="font-size:.72rem;color:var(--text-lt)">% user của cohort còn hoạt động ở tuần thứ N</span>
           </div>
           <div class="table-wrap" id="mkt-cohorts">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>Hàng Đợi Bài Đăng (Mạng Xã Hội)</div>
+            <div class="panel-actions">
+              <span class="badge badge-grey" id="mq-state-badge">…</span>
+              <button class="btn btn-primary btn-sm" onclick="loadMediaQueue()">↻</button>
+            </div>
+          </div>
+          <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
+            M2 (track Media Pipeline) — cron dựng ảnh + viết caption mỗi sáng, bài nằm chờ ở đây tới khi bạn duyệt. Ảnh render bằng Satori nên <b>không tốn tiền model</b>. Duyệt xong bài vẫn CHƯA đăng: bước đăng là một job riêng, cố ý không có nút "đăng ngay" ở đây.
+          </div>
+          <div id="mq-list" style="padding:0 1rem 1rem">
             <div class="loading"><span class="spin"></span>Đang tải...</div>
           </div>
         </div>
@@ -458,7 +474,7 @@
           <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>Giá Công Cụ (Lượng)</div>
             <div class="panel-actions">
-              <span style="font-size:.72rem;color:var(--text-lt)">1 Lượng ≈ 2.500đ · hiệu lực ~1 phút (cache)</span>
+              <span style="font-size:.72rem;color:var(--text-lt)" id="pricing-rate-note">quy đổi theo đơn giá gói · hiệu lực ~1 phút (cache)</span>
               <button class="btn btn-gold btn-sm" onclick="saveAllPricing()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Lưu tất cả</button>
               <button class="btn btn-primary btn-sm" onclick="loadPricing()">↻</button>
             </div>
@@ -482,7 +498,7 @@
           </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Gói</th><th>Nhãn</th><th>Lượng</th><th>VNĐ</th><th>USD</th><th>Bonus</th><th>Bật</th><th></th></tr></thead>
+              <thead><tr><th>Gói</th><th>Nhãn</th><th>Lượng</th><th>VNĐ</th><th>USD</th><th>Bật</th><th></th></tr></thead>
               <tbody id="packages-body"><tr><td colspan="8" class="loading"><span class="spin"></span>Đang tải...</td></tr></tbody>
             </table>
           </div>
@@ -1967,8 +1983,9 @@ async function loadSysConfig() {
     </div>
     <div class="form-row full">
       <div class="form-group">
-        <label class="form-label">Giá Lượng / lượt chat (0 = miễn phí)</label>
+        <label class="form-label">Giá Lượng / lượt chat — DỰ PHÒNG (0 = miễn phí)</label>
         <input type="number" class="form-control" id="sc-cost" value="${jv(cfg['chat.cost'], 5)}" style="max-width:200px">
+        <div style="font-size:.72rem;color:var(--text-lt);margin-top:.4rem">Giá rail THẬT (web + Telegram/Messenger/WhatsApp) nằm ở tool <b>rail-message</b> trong <a href="#" onclick="goTo('registry');return false" style="color:var(--blue)">Tools Registry</a>. Ô này chỉ dùng khi đọc bảng đó hụt — giữ khớp để lúc lỗi không thu sai giá.</div>
       </div>
     </div>
     <div class="form-group">
@@ -2496,10 +2513,12 @@ async function loadStatsAndRecent() {
     const newUsersWeek = users.filter(u => new Date(u.created_at).getTime() >= weekAgo).length;
 
     // CHỈ topup thật (loại signup_bonus/admin_grant dương). Doanh thu = tiền thật
-    // (amount_vnd), fallback ước lượng ×2.500đ cho giao dịch cũ.
+    // (amount_vnd); giao dịch cũ chưa lưu tiền thì suy theo đơn giá gói phổ biến
+    // (MKT_VND, do `credit_vnd()` trả về) — KHÔNG còn chốt cứng 2.500đ của bảng
+    // giá cũ, vốn thổi doanh thu lên ~3 lần.
     const topups = txns.filter(t => t.type === 'topup');
     const totalCr = topups.reduce((s, t) => s + t.amount, 0);
-    const vndOf = t => t.amount_vnd != null ? t.amount_vnd : t.amount * 2500;
+    const vndOf = t => t.amount_vnd != null ? t.amount_vnd : t.amount * MKT_VND;
     const revenueVnd = topups.reduce((s, t) => s + vndOf(t), 0);
     const revenueWeekVnd = topups.filter(t => new Date(t.created_at).getTime() >= weekAgo).reduce((s, t) => s + vndOf(t), 0);
     const revenue = (revenueVnd / 1e6).toFixed(1) + 'tr';
@@ -2561,6 +2580,9 @@ async function loadDashboardV2() {
   try {
     const data = await apiGet('admin-dashboard-v2');
     if (data.error) throw new Error(data.error);
+    // Đồng bộ đơn giá quy đổi với server (credit_vnd() suy từ credit_packages)
+    // để ô "Doanh Thu" trên Dashboard và bảng LTV bên Marketing không lệch nhau.
+    if (data.margin && Number(data.margin.vnd_per_credit) > 0) MKT_VND = Number(data.margin.vnd_per_credit);
     renderDashChannelHealth(data.channelHealth || []);
     renderDashEngagement(data.engagement || {});
     renderDashContentProduction(data.content || {});
@@ -2754,11 +2776,11 @@ function renderDashMargin(m) {
   const marginLabel = marginPct == null ? '—' : marginPct.toFixed(0).replace('-', '−') + '%';
   let html = `
     <div class="eng-tiles" style="grid-template-columns:repeat(3,1fr)">
-      <div class="eng-tile"><div class="v tabular">${fmtVndFull(revenue)}</div><div class="l">Doanh thu (Lượng tiêu ×2.500đ)</div></div>
+      <div class="eng-tile"><div class="v tabular">${fmtVndFull(revenue)}</div><div class="l">Doanh thu (Lượng tiêu quy đổi)</div></div>
       <div class="eng-tile"><div class="v tabular">${fmtVndFull(cost)}</div><div class="l">Chi phí LLM (Anthropic)</div></div>
       <div class="eng-tile"><div class="v tabular" style="color:${marginColor}">${marginLabel}</div><div class="l">Biên LN</div></div>
     </div>
-    <div class="panel-sub" style="font-size:.68rem;color:var(--text-lt);margin-top:4px">"Doanh thu" = Lượng user tiêu qua rail chat (mọi kịch bản, kể cả lá số) quy đổi ×2.500đ — không phải tiền mặt nạp ngay lúc đó, mà từ số dư đã nạp trước. Chi phí tính theo token thật (input/output/cache) của model đang cấu hình, giá theo bảng giá Anthropic hiện hành.</div>
+    <div class="panel-sub" style="font-size:.68rem;color:var(--text-lt);margin-top:4px">"Doanh thu" = Lượng user tiêu qua rail chat (mọi kịch bản, kể cả lá số) quy đổi theo đơn giá gói phổ biến (credit_vnd(), suy từ credit_packages) — không phải tiền mặt nạp ngay lúc đó, mà từ số dư đã nạp trước. Chi phí tính theo token thật (input/output/cache) của model đang cấu hình, giá theo bảng giá Anthropic hiện hành.</div>
   `;
   if (byTool.length) {
     html += `<div class="table-wrap" style="margin-top:14px"><table>
@@ -3130,11 +3152,12 @@ function filterLasos() {
 }
 
 // ── MARKETING (funnel chuyển đổi + nguồn traffic) ──
-// Neo quy đổi 1 Lượng ≈ VNĐ. GIỮ KHỚP `app_config['credits.vnd_per_credit']`
-// (RPC đọc qua credit_vnd()) và lib/billing/packages.ts. Đổi neo mà quên chỗ này
-// thì doanh thu quy đổi trên dashboard lệch so với panel Biên Lợi Nhuận.
-const MKT_VND = 1000;
-let _mktData = null;  // dữ liệu Marketing lần tải gần nhất (cho export CSV)
+// Đơn giá quy đổi Lượng → đ. KHÔNG viết cứng nữa: `marketing_revenue` trả kèm
+// `vnd_per_credit` do `credit_vnd()` suy từ `credit_packages`, nên bảng LTV ở
+// đây, panel Biên LN và trang topup dùng CHUNG một mốc. Trước đây chốt 2.500đ —
+// đơn giá của bảng giá CŨ — nên LTV/doanh thu bị thổi lên ~3 lần.
+let MKT_VND = 829;   // mức dự phòng tới khi RPC trả về
+let _mktData = null; // dữ liệu Marketing lần tải gần nhất (cho export CSV)
 function mktVnd(cr) { return (Math.max(0, cr || 0) * MKT_VND).toLocaleString('vi-VN') + 'đ'; }
 function mktISO(d) { return d.toISOString().slice(0, 10); }
 
@@ -3158,6 +3181,14 @@ async function loadMarketing() {
     const d = await apiGet('admin-marketing', `&from=${fromEl.value}&to=${toEl.value}`);
     if (d.error) throw new Error(d.error);
     _mktData = d;
+    // Đơn giá thật phải vào TRƯỚC mọi lượt vẽ — renderMktSources tính LTV bằng
+    // mktVnd(), đặt sau là bảng LTV hiện bằng mức dự phòng.
+    if (d.revenue && Number(d.revenue.vnd_per_credit) > 0) MKT_VND = Number(d.revenue.vnd_per_credit);
+    const rateTxt = MKT_VND.toLocaleString('vi-VN') + 'đ';
+    const nRev = document.getElementById('mkt-rev-note');
+    if (nRev) nRev.textContent = 'giao dịch cũ chưa lưu VNĐ → suy theo ' + rateTxt + '/Lượng';
+    const nSrc = document.getElementById('mkt-src-note');
+    if (nSrc) nSrc.textContent = 'Quy đổi doanh thu: 1 Lượng ≈ ' + rateTxt;
     renderMktFunnel(d.funnel || {});
     renderMktGa4(d.ga4 || null);
     renderMktSources(d.sources || []);
@@ -3172,6 +3203,7 @@ async function loadMarketing() {
   }
   loadViral(fromEl.value, toEl.value);
   loadAutopilotLog();
+  loadMediaQueue();
 }
 
 // V2.4 (track Viral Loop) — phễu vòng lặp giới thiệu. Gọi RIÊNG khỏi
@@ -3260,6 +3292,87 @@ function renderMktViral(v) {
       · <b>Chi phí</b> là tiền LLM + ảnh của chính tool đó (<code>events.llm_usage</code>), chưa gồm chi phí hạ tầng.<br>
       · Ngưỡng tham chiếu đã chốt: K ≥ 0,5 và chi phí/user ≤ 6.000đ trong 2 tuần liên tiếp → cân nhắc nâng trần ngân sách; K &lt; 0,3 sau 3–4 tuần → 2 tool này không lan tự nhiên.
     </div>`;
+}
+
+// M2 (track Media Pipeline) — hàng đợi bài đăng chờ duyệt.
+async function loadMediaQueue() {
+  const badge = document.getElementById('mq-state-badge');
+  const host = document.getElementById('mq-list');
+  try {
+    const d = await apiGet('admin-media-queue');
+    if (d.error) throw new Error(d.error);
+    if (badge) {
+      // Nhãn nói đúng thực trạng: chưa có kênh nào tự đăng, mọi bài chờ tay.
+      badge.className = 'badge ' + (d.autopostEnabled ? 'badge-green' : 'badge-grey');
+      badge.textContent = d.autopostEnabled ? 'Tự đăng: BẬT' : 'Tự đăng: TẮT — duyệt tay';
+    }
+    renderMediaQueue(d.posts || []);
+  } catch (e) {
+    if (badge) { badge.className = 'badge badge-red'; badge.textContent = 'Lỗi'; }
+    if (host) host.innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
+  }
+}
+
+const MQ_STATUS = {
+  queued:     ['badge-grey',  'Chờ duyệt'],
+  approved:   ['badge-green', 'Đã duyệt'],
+  publishing: ['badge-grey',  'Đang đăng'],
+  live:       ['badge-green', 'Đã đăng'],
+  error:      ['badge-red',   'Lỗi'],
+  skipped:    ['badge-grey',  'Đã bỏ'],
+};
+
+function renderMediaQueue(posts) {
+  const host = document.getElementById('mq-list');
+  if (!host) return;
+  if (!posts.length) {
+    host.innerHTML = '<div class="empty">Chưa có bài nào trong hàng đợi. Cron <code>media-build</code> chạy 09:30 mỗi sáng.</div>';
+    return;
+  }
+  host.innerHTML = posts.map((p) => {
+    const a = p.media_assets || {};
+    const [cls, label] = MQ_STATUS[p.status] || ['badge-grey', p.status];
+    const pending = p.status === 'queued';
+    const tags = (p.hashtags || []).map((h) => '#' + h).join(' ');
+    return `
+    <div style="display:flex;gap:1rem;padding:.9rem 0;border-bottom:1px solid var(--border)">
+      <img src="${escHtmlLocal(a.url || '')}" alt="" loading="lazy"
+           style="width:120px;height:150px;object-fit:cover;border-radius:8px;background:var(--bg-alt);flex:none">
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.35rem">
+          <span class="badge ${cls}">${escHtmlLocal(label)}</span>
+          <span class="badge badge-grey">${escHtmlLocal(p.channel || '')}</span>
+          <span style="font-size:.7rem;color:var(--text-lt)">${escHtmlLocal((a.source_type || '').replace('_', ' '))}</span>
+        </div>
+        <textarea id="mq-cap-${p.id}" ${pending ? '' : 'disabled'}
+                  style="width:100%;min-height:74px;font-size:.78rem;padding:.5rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);resize:vertical"
+        >${escHtmlLocal(p.caption || '')}</textarea>
+        <div style="font-size:.7rem;color:var(--text-lt);margin:.3rem 0">${escHtmlLocal(tags)}</div>
+        <a href="${escHtmlLocal(p.link_url || '')}" target="_blank" rel="noopener"
+           style="font-size:.7rem;color:var(--text-lt);word-break:break-all">${escHtmlLocal(p.link_url || '')}</a>
+        ${pending ? `
+        <div style="display:flex;gap:.5rem;margin-top:.5rem">
+          <button class="btn btn-primary btn-sm" onclick="mediaDecide('${p.id}','approve')">Duyệt</button>
+          <button class="btn btn-outline btn-sm" onclick="mediaDecide('${p.id}','skip')">Bỏ</button>
+        </div>` : ''}
+        ${p.error ? `<div style="font-size:.7rem;color:var(--red);margin-top:.35rem">${escHtmlLocal(p.error)}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function mediaDecide(postId, decision) {
+  const el = document.getElementById('mq-cap-' + postId);
+  // Gửi kèm caption đang hiện: admin thường sửa vài chữ ngay trước khi duyệt.
+  const caption = el ? el.value.trim() : '';
+  try {
+    const d = await apiPost('admin-media-decide', { postId, decision, caption });
+    if (d.error) throw new Error(d.error);
+    toast(decision === 'approve' ? 'Đã duyệt' : 'Đã bỏ bài', 'success');
+    loadMediaQueue();
+  } catch (e) {
+    toast('Lỗi: ' + e.message, 'error');
+  }
 }
 
 // M0.6 (track Marketing Autopilot) — nhật ký hành động autopilot, THUẦN ĐỌC.
@@ -3480,10 +3593,21 @@ function renderMktRevenue(r) {
       <div style="font-size:.56rem;color:var(--text-lt);transform:rotate(-45deg);white-space:nowrap;margin-top:2px">${String(d.day).slice(5)}</div>
     </div>`;
   }).join('');
+  // Tách TIỀN THẬT khỏi phần SUY RA. Trước đây gộp một cục nên không ai biết
+  // bao nhiêu phần trăm con số đó đứng vững được — đo trên prod: 78% tổng doanh
+  // thu là ước lượng từ một hằng số, vì 5 giao dịch PayPal cũ chưa từng lưu số
+  // tiền. Số nào là tiền thật thì phải nói ra là tiền thật.
+  const real = r.real_vnd || 0, est = r.estimated_vnd || 0, estN = r.estimated_count || 0;
+  const rate = r.vnd_per_credit || 0;
   host.innerHTML = `
     <div style="display:flex;gap:1.5rem;align-items:baseline;margin-bottom:1rem;flex-wrap:wrap">
       <div><div class="stat-label">Tổng doanh thu</div><div style="font-family:'Noto Serif',serif;font-size:1.9rem;color:var(--green);font-weight:700;line-height:1">${fmtVndFull(total)}</div></div>
+      <div><div class="stat-label">Tiền thật đã đối chiếu</div><div style="font-family:'Noto Serif',serif;font-size:1.2rem;color:var(--navy);font-weight:700">${fmtVndFull(real)}</div></div>
+      ${estN ? `<div><div class="stat-label">Ước lượng · ${estN} giao dịch</div><div style="font-family:'Noto Serif',serif;font-size:1.2rem;color:var(--text-lt);font-weight:700">${fmtVndFull(est)}</div></div>` : ''}
     </div>
+    ${estN ? `<div style="font-size:.78rem;color:var(--text-lt);margin:-.5rem 0 1rem;line-height:1.6">
+      ${estN} giao dịch cũ chưa lưu số tiền thật → suy theo ${rate.toLocaleString('vi-VN')}đ/Lượng (đơn giá gói phổ biến).
+      Muốn chính xác thì đối chiếu lịch sử PayPal rồi điền <code>amount_vnd</code>.</div>` : ''}
     <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border-lt)">${gwHtml}</div>
     <div class="form-label" style="margin-bottom:.4rem">Theo ngày</div>
     <div style="display:flex;gap:5px;align-items:flex-end;overflow-x:auto;padding-bottom:1.4rem">${bars || '<span style="color:var(--text-lt)">—</span>'}</div>`;
@@ -3647,13 +3771,34 @@ async function loadRegistry() {
 
 // ── PRICING (nhóm theo category, cho phép 0/free, lưu tất cả) ──
 const CAT_LABELS = { 'chat': 'Trợ Lý (Rail)' }; // còn lại dùng nguyên category từ DB
-const VND_PER_CREDIT = 1000; // neo 1 Lượng ≈ VNĐ — khớp app_config credits.vnd_per_credit
+// đ cho 1 Lượng, suy từ gói phổ biến (gói thứ hai theo sort_order) chứ KHÔNG
+// viết cứng. Trước đây để cứng 2.500đ với chú thích "anchor gói custom" — cái
+// anchor đó là tàn dư bảng giá cũ, đã bỏ: giá nạp lẻ nay bám theo bậc gói.
+let VND_PER_CREDIT = 829;
 let _pricingRows = [];
 
 function fmtVnd(cr) { return (Math.max(0, cr || 0) * VND_PER_CREDIT).toLocaleString('vi-VN') + 'đ'; }
 
-// Nav mở trang Pricing → nạp cả 3 khối.
-function loadPricingPage() { loadPricing(); loadPackages(); loadPromo(); }
+// Nav mở trang Pricing → nạp cả 3 khối. Lấy đơn giá TRƯỚC khi vẽ bảng giá công
+// cụ, không thì bảng hiện bằng mức dự phòng rồi mới đúng.
+async function loadPricingPage() {
+  await loadPackageRate();
+  loadPricing(); loadPackages(); loadPromo();
+}
+
+async function loadPackageRate() {
+  try {
+    const pkgs = (await sbGet('credit_packages?enabled=eq.true&order=sort_order.asc&select=credits,amount_vnd'))
+      .filter(p => Number(p.credits) > 0 && Number(p.amount_vnd) > 0);
+    if (pkgs.length) {
+      const ref = pkgs[1] || pkgs[0];
+      VND_PER_CREDIT = Number(ref.amount_vnd) / Number(ref.credits);
+    }
+    const n = document.getElementById('pricing-rate-note');
+    if (n) n.textContent = '1 Lượng ≈ ' + Math.round(VND_PER_CREDIT).toLocaleString('vi-VN')
+      + 'đ (gói phổ biến) · hiệu lực ~1 phút (cache)';
+  } catch (e) { /* giữ mức dự phòng */ }
+}
 
 async function loadPricing() {
   const body = document.getElementById('pricing-body');
@@ -3743,7 +3888,6 @@ async function loadPackages() {
         <td><input type="number" class="price-input" id="pk-credits-${r.package_id}" value="${r.credits}"></td>
         <td><input type="number" class="price-input" style="width:100px" id="pk-vnd-${r.package_id}" value="${r.amount_vnd}"></td>
         <td><input type="number" step="0.01" class="price-input" style="width:75px" id="pk-usd-${r.package_id}" value="${r.amount_usd}"></td>
-        <td><input class="price-input" style="width:60px" id="pk-bonus-${r.package_id}" value="${(r.bonus_label || '').replace(/"/g, '&quot;')}"></td>
         <td style="text-align:center"><input type="checkbox" id="pk-en-${r.package_id}" ${r.enabled ? 'checked' : ''}></td>
         <td><button class="btn btn-primary btn-sm" id="pk-btn-${r.package_id}" onclick="savePackageRow('${r.package_id}')">Lưu</button></td>
       </tr>`).join('');
@@ -3759,7 +3903,6 @@ async function savePackageRow(id) {
     credits: parseInt(document.getElementById('pk-credits-' + id).value),
     amount_vnd: parseInt(document.getElementById('pk-vnd-' + id).value),
     amount_usd: parseFloat(document.getElementById('pk-usd-' + id).value),
-    bonus_label: document.getElementById('pk-bonus-' + id).value,
     enabled: document.getElementById('pk-en-' + id).checked,
   };
   try {

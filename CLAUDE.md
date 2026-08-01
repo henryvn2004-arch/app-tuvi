@@ -1,7 +1,406 @@
 # CLAUDE.md — Context cho Claude Code
 
 ## Project
-**tuviminhbao.com** — Tử Vi Đẩu Số app (Next.js 14, Supabase, Vercel)
+**tuviminhbao.com** — Tử Vi Đẩu Số app (Next.js 16, Supabase, Vercel)
+
+---
+
+## 📹 Track Media Pipeline — kênh phân phối, KHÔNG phải SEO (2026-08-01, PR #369)
+
+Henry: *"launch 3-4 tháng mà traffic thấp quá… SEO có phải kênh đầu tiên đúng
+không?"* Đo trước khi trả lời: **617/616.715 URL có impression (0,1%) · 18
+click/28 ngày, 11 trong đó về trang chủ · 10 từ khoá đọc được đều hạng 51–100 ·
+tháng 7: 7 đăng ký, 0đ doanh thu.** Ba tuần trước con số trang-có-impression là
+612, nay 617 — **tăng 5 trang trong 3 tuần**, đúng mốc đo đã đặt ở #361. Kết
+luận: nút thắt là **thẩm quyền tên miền**, không phải số lượng trang. NGỪNG gen
+trang. Henry chốt chuyển sang kênh chủ động.
+
+### 🔴 Phát hiện lớn nhất: pipeline media ĐÃ TỒN TẠI và đang ĐỨT ÂM THẦM
+```
+cron-khao-luan → pg_cron 07:00 → auto-pipeline → TTS ✅ → Railway mix 🔴 → YouTube 🔴
+```
+| `van_dap` | Bài | Mới nhất |
+|---|---:|---|
+| Video render xong, YouTube **lỗi** | **86** | 16/07 |
+| Có audio, chưa render video | **29** | **01/08** |
+| Đã lên YouTube | 15 | 10/04 |
+
+**85 video hoàn chỉnh nằm kho không đăng được**, máy vẫn đẻ thêm mỗi ngày.
+- **84/86 lỗi CÙNG một `invalid_grant`.** Đây là OAuth consent screen còn ở chế
+  độ **Testing** trong Google Cloud → refresh token **hết hạn sau 7 ngày**. Đã
+  chết đúng hai lần (22/04, 16/07). **Cấp token mới là vá triệu chứng** — phải
+  PUBLISH APP. Việc tay Henry, không code thay được.
+- `pg_cron` báo `succeeded` mỗi sáng vì nó chỉ đo "gọi HTTP xong", không đo kết
+  quả thật ⇒ tắc 16 ngày không ai biết. Cùng họ với bài học nhịp tim `withCronLog`.
+- 🔑 **Kho nguyên liệu đã có mà chưa dùng:** 130 file audio TTS (→ podcast RSS,
+  gần như 0đ) · `van_dap` đã có sẵn cột `tt_*`/`fb_*` chưa ai ghi vào.
+- ⚠️ `video_duration_sec` **NULL cả 100 dòng** → chưa biết có cắt Shorts được không.
+
+### ✅ M1 — cron `yt-drain` (`lib/media/yt-drain.ts`)
+Nối lại khâu cuối + **làm cho việc nó đứt nhìn thấy được**. 11h VN hằng ngày.
+- **Lỗi CHẶN → dừng cả lượt** (`invalid_grant`/`uploadLimitExceeded`/quota/403).
+  84 dòng `yt_error` giống hệt nhau chính là hậu quả của việc cứ thử mãi một thứ
+  đã hỏng: đốt quota, ghi đè dấu vết. Auth chết thì bài nào cũng chết.
+- **Nhỏ giọt 3/ngày**, trần cứng 6 (quota 10.000 ÷ 1.600/upload). Kho đã dính
+  `uploadLimitExceeded` 2 lần — ngưỡng chống spam của YouTube TÁCH khỏi quota API.
+- **Ngân sách thời gian 240s**, dừng giữa hai lượt: edge đặt `yt_status=
+  'uploading'` TRƯỚC khi upload, nên bị giết ngang để lại dòng treo vĩnh viễn.
+- Im lặng khi kho rỗng (khác CMO Digest luôn gửi) · report **nhắc thẳng nguyên
+  nhân gốc** để lần sau không đi cấp lại token rồi tắc tiếp.
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier
+  --check .` sạch · **23 ca trên module THẬT** (chỉ thay 1 dòng import alias, đã
+  `diff` xác nhận phần logic giữ nguyên byte): dừng sau ĐÚNG 1 lượt khi gặp
+  `invalid_grant`; **ca ĐỐI CHỨNG** lỗi riêng của một bài (`Cannot download
+  file: 404`) thì vẫn chạy đủ 3; trần 99 vẫn cắt còn 6; quá hạn giờ → 0 lượt.
+- ⚠️ **CHƯA test đầu-cuối route trên Next dev** — phần route chỉ là auth +
+  gọi hàm + gửi Telegram, `tsc` phủ.
+
+### 🔓 Nợ bảo mật phát hiện kèm (CHƯA sửa)
+Edge `youtube-upload` **hardcode `YOUTUBE_CLIENT_ID` + `YOUTUBE_CLIENT_SECRET`
+làm giá trị mặc định ngay trong source**. Nên rotate + chuyển hẳn sang env, cùng
+tiền lệ đã phải rotate service_role key Supabase.
+
+### ✅ M2 — xương sống + hàng đợi duyệt tay (PR sau #369)
+Henry chốt **duyệt tay trước, chưa auto-post**. Cron dựng ảnh + caption rồi DỪNG
+ở hàng đợi; PR này **không đăng đi đâu cả** (adapter kênh để M3).
+- **Migration `_patches/migration-media-posts.sql`** (✅ ĐÃ CHẠY prod — verify 9
+  cột `media_assets` + 15 cột `media_posts`, RLS bật, **0 policy** = chỉ service
+  key, 3 khoá config, `autopost_enabled=false`). Hai bảng tách theo câu hỏi
+  chúng trả lời: asset = "file này là gì", post = "lên kênh nào, tới đâu rồi".
+  Một asset → nhiều post. **Không mở rộng `van_dap`** dù nó sẵn cột `fb_*`/`tt_*`:
+  thêm kênh là thêm 3 cột, thêm định dạng lại 3 cột nữa.
+- **`/api/og/social` — Satori, 0đ.** Đo prod: `gpt-image-1` 1.658đ/lượt (~96%
+  chi phí một lượt chân dung); job chạy hằng ngày mà gọi model ảnh thì tiền đội
+  theo số bài. **URL CHÍNH LÀ FILE** — không cần bucket, và Instagram Graph API
+  vốn đòi ảnh phải có URL công khai nên điều kiện đó thoả sẵn.
+- **`lib/media/build.ts`** — trích câu bằng LUẬT (dùng lại luật `poster.js`:
+  câu TRỌN VẸN gần 95 ký tự, khoảng 45–155), caption LLM, **qua cổng brand-check
+  #356** với ĐÚNG hồ sơ giọng của từng nguồn (`khao-luan` ngôi 3 vs `nghien-cuu`
+  ngôi 1 — áp nhầm chặn 98% output, đã trả giá một lần). Trượt gate → BỎ bài.
+  Ràng buộc duy nhất `(source_type, source_id, variant)` + unique
+  `(asset_id, channel)` = chống dựng trùng và đăng trùng ở tầng DB.
+- **Thứ tự kiểm đặt chỗ rẻ trước:** không trích được câu / bài đã dựng rồi →
+  thoát TRƯỚC khi gọi LLM. Có test riêng đếm số lượt gọi LLM = 0.
+- Cron `media-build` 09:30 VN + panel **"Hàng Đợi Bài Đăng"** trong Marketing
+  (xem ảnh thật + sửa caption + Duyệt/Bỏ). **Cố ý KHÔNG có nút "đăng ngay"** —
+  một cú bấm nhầm không được phép đẩy nội dung lên trang công khai.
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi · `prettier --check .` sạch · 3 script
+  block admin OK · **27 ca trên module thật** (chỉ thay 3 dòng import, `diff`
+  xác nhận logic nguyên byte) · **7 ca Playwright trên chính hàm render trích từ
+  `admin.html`**: caption chứa `<script>`/`onerror` không chạy được, vẫn hiện
+  nguyên văn trong ô sửa.
+- 🐞 Một ca test đỏ hoá ra là **kỳ vọng của test sai, không phải code** — mẫu
+  markdown tao viết có cụm chữ không dấu kết câu nên dính vào câu sau, đúng như
+  nó phải thế. Đã kiểm riêng: `##` và `**` đều được gỡ đúng.
+- ⚠️ **CHƯA render được ảnh thật** — Satori nạp font từ Google Fonts, container
+  phiên chặn mọi host ngoài. Bố cục mới chỉ đọc bằng mắt trên code. **Việc tay
+  Henry: mở `/api/og/social?v=quote&k=Khảo%20Luận&q=<câu>&t=<tiêu đề>` sau khi
+  deploy** để soi khung chữ có tràn không.
+
+### Kế hoạch còn lại — `docs/MEDIA-PIPELINE-PLAN.md`
+M2 xương sống (`media_assets` + `media_posts` + adapter + admin duyệt) · M3
+Instagram/Threads · M4 video 9:16 · M5 podcast RSS + Telegram channel · M6 Zalo
+OA/Pinterest. **Henry chốt: duyệt tay trước, chưa auto-post.** Render ảnh bằng
+Satori (0đ), KHÔNG dùng model sinh ảnh. Cố ý không mở rộng cột `fb_*`/`tt_*`
+trong `van_dap` — thêm kênh là thêm 3 cột, đó là cái bẫy.
+
+---
+
+## 🧭 Track CMO skills — brand-check, từ khoá, SEO (2026-08-01, PR #356–#359)
+
+Henry giao 3 việc: (1) brand voice doc — **phiên khác đã chạy**, nằm ở
+`brand_voice_docs`; (2) brand-check gate trước publish; (3) AI SEO.
+
+### ⚠️ Plugin không nạp được vào container Claude Code
+`brand-voice` và `marketing` **đã bật** trên tài khoản claude.ai nhưng
+`~/.claude/skills` chỉ có skill built-in, và `claude plugin` ở container chỉ có
+`details/enable/disable/eval` — **không có `install`/`marketplace add`**.
+`claude-seo` thì **không có trong catalog** (chỉ tìm ra `searchfit-seo`).
+⇒ Mọi thứ dưới đây viết tay theo checklist §8 của brand voice doc, không chạy
+qua sub-skill. Đừng mất thời gian tìm lại cách cài trong phiên sau.
+
+### ✅ #356 — brand-check gate (`lib/content/brand-check.ts`)
+Chèn MỘT bước QC vào giữa 2 pipeline đang chạy, **không dựng pipeline mới**.
+Gate đứng ngay trước `POST` của `cron-khao-luan` / `cron-master-write` vì cả
+`khao_luan` lẫn `master_articles` **không có cột publish_status** — insert xong
+là bài lên thẳng trang.
+- **Tầng AUTO (regex)**: 0 lượt mạng, luật nằm sẵn trong TS nên chạy được kể cả
+  khi Supabase/LLM chết; `app_config['content.brand_check']` chỉ GHI ĐÈ.
+- **Tầng LLM**: 7 mục cần đọc hiểu, **fail-open** + `console.warn`.
+- Trình tự: autofix → check → 1 vòng LLM viết lại → check lại. Bản viết lại
+  **chỉ nhận khi thực sự ít lỗi hơn**.
+- **HAI PROFILE, không phải hai mức nghiêm khắc.** Đo prod: `khao_luan` 324 bài
+  (6 dùng "tôi") là ngôi 3; `master_articles` 306 bài (**300 dùng "tôi"**) là
+  tùy bút ngôi 1 ký tên thầy. Áp luật Khảo Luận sang Nghiên Cứu chặn 98% output.
+- Seed `mode='warn'` (tiền lệ shadow-mode M0.6). **Autofix VẪN áp ở warn** vì
+  chạy trước khi phân nhánh mode. Siết: `jsonb_set(value,'{mode}','"block"')`.
+- Bài bị chặn cất nguyên văn vào `content_qc_log.payload`; topic đỗ `qc_failed`.
+- 🐞 **`bạn cũng…` lọt gate**: nhánh loại trừ `cũ` (danh từ "bạn cũ") khớp luôn
+  tiền tố "cũng" vì thiếu ranh giới từ. Cụm cực phổ biến ⇒ lỗ rất rộng.
+- 🐞 **`mình` hạ xuống `warn`**: soi 6 mẩu thật lọt bộ lọc thì cả 6 đều phản
+  thân hợp lệ ("thu mình lại", "một mình phá vây"). Regex không tách được.
+  Cùng bài học: đếm thô báo 98/324 bài sai xưng hô, lọc đúng danh từ còn **14**.
+
+### ✅ #357 — Google Suggest → `keyword_ideas`
+GSC 28 ngày chỉ **đọc được tên của đúng 10 truy vấn** (842 hiển thị còn lại bị
+ẩn tên vì quá hiếm) ⇒ không có nguồn từ khoá để đặt title hay chọn chủ đề.
+- **Không dùng Keyword Planner**: cần developer token phải xin duyệt, cần OAuth
+  refresh token (**service account KHÔNG dùng được**, khác GA4/GSC), và không
+  chi tiêu quảng cáo thì chỉ trả **volume dạng dải**. **Henry đã chốt KHÔNG chạy
+  ads** ⇒ cột `volume` ở NULL vĩnh viễn, `best_position` là tín hiệu duy nhất.
+- Chạy trên Vercel, cất asset vào Supabase — **container Claude Code chặn mọi
+  host ngoài** (đã thử: `suggestqueries.google.com` và cả `tuviminhbao.com` đều
+  403 qua proxy). Cùng pattern GA4/GSC.
+- Tôn trọng endpoint không chính thức: tuần tự + nghỉ 350ms + trần 180 lượt +
+  `User-Agent` khai đúng danh tính bot (cố ý không giả trình duyệt).
+- 🐞 28 gốc × 10 hậu tố = **280 tổ hợp** nhưng trần 180 ⇒ 10 gốc cuối không bao
+  giờ tới lượt. Vá bằng **xoay vòng theo số tuần**.
+
+### ✅ #358 — gộp URL vận hạn · rút sitemap-pregen · vá trần hub
+**Số đo GSC 28 ngày (đường đọc: `events` where `event_type='cmo_digest'`,
+`meta->'gsc'` — cron ghi sẵn, không cần credential):**
+| | |
+|---|---:|
+| URL đã nộp sitemap | **616.715** |
+| Trang từng hiện trong kết quả | **612** (0,099%) |
+| Nhấp | **16** (11 về trang chủ) |
+
+- **Gộp 180 trang trùng**: `/tu-vi/van-han-tuoi-*` (mỏng, title tốt, có sitemap)
+  ↔ `/van-han/*` (dày, không sitemap). Chọn bản dày, 301 bản kia, mở `NAM_XEMS`
+  3→8 năm cho khớp `seo_pages`, nộp 576 URL, mang title tốt hơn sang.
+  🐞 `NAM_XEMS[1]` làm "năm chính" trong title hub — mở mảng ra 8 năm là nó
+  lặng lẽ thành 2024. Neo `currentNamXem()`.
+- **Rút `sitemap-pregen`** (587.328 URL → sitemapindex RỖNG, không 404).
+  ⚠️ **KHÔNG phải vì Google không index**: các trang `/la-so/*` xếp hạng
+  **1,4–3,5** hẳn hoi. Chúng chỉ khớp truy vấn NGÀY SINH CHÍNH XÁC — 842 hiển
+  thị, **0 nhấp**. Henry đã xoá sitemap trong GSC.
+- **Vá trần hub**: HAI trần chồng nhau (`or=(…)&limit=2000` + `.slice(0,60)`).
+  Fetch HTML thật của prod về đếm: chỉ **2/5 chuyên mục render, tổng 120 liên
+  kết cho 7.848 trang**. Nay hỏi từng chuyên mục + phân trang → 300 liên
+  kết/trang × 59 trang.
+- **Phân trang theo ĐƯỜNG DẪN** (`/kien-thuc-tuvi/trang/30`), KHÔNG `?page=`:
+  dạng này dùng đúng cơ chế "destination mang sẵn query" mà `/tu-vi/:slug` đã
+  chứng minh chạy trên prod.
+
+### 🪤 BẪY: `next dev` bỏ query của destination trong rewrite
+Next 16 + Turbopack ở **dev** làm mọi hub và mọi `/tu-vi/<slug>` **307 về trang
+chủ**. Tôi đã suýt báo đây là sự cố P0 do nâng Next 14→16.
+**PROD KHÔNG DÍNH** — fetch thật `www.tuviminhbao.com/kien-thuc-tuvi` → HTTP 200.
+Gặp 307 khi chạy dev thì đừng đi sửa nhầm chỗ.
+Mẹo: `web_fetch_vercel_url` của Vercel MCP **với tới được prod** dù container bị
+chặn mạng (preview thì không — khoá sau SSO).
+
+### ✅ #359 — 🔴 công thức Kim Lâu SAI trên prod
+Phát hiện khi chuẩn bị viết content, **không phải Henry báo**.
+```
+Code cũ : tuổi % 5, dư 1 hoặc 3
+Đúng    : tuổi ÂM % 9, dư 1 / 3 / 6 / 8
+```
+4 số dư mod 9 ứng đúng 4 loại **Thân·Thê·Tử·Lục Súc** — chính 4 loại tài liệu
+repo mô tả tool trả về. Bản mod-5 không thể sinh 4 loại ⇒ code lệch khỏi ý định
+đã ghi, là bug chứ không phải biến thể cổ pháp.
+**46% số tuổi 18–80 ra kết quả khác.** Nặng nhất: 16 tuổi (19·24·30·35·37·39·
+42·44·55·57·60·62·64·69·75·80) trước đây báo "Bình thường" trong khi thực tế
+phạm — người ta xem xong đi động thổ, cưới hỏi.
+Kết quả nay nêu đích danh loại + hại ai. `kimLauLoai` là trường THÊM nên 2 trang
+tiêu thụ không phải đổi.
+⚠️ **CHƯA đụng `isHoangOc`** (`t % 5 === 0`, trong khi Hoang Ốc là vòng **6
+trạng thái** Nhất Cát→Lục Hoang Ốc). Nghi sai nhưng chưa tra đủ chắc — sửa mò
+một công thức cổ pháp còn tệ hơn để nguyên.
+
+### ✅ #361 — trang trụ `/kim-lau` + vá tàn dư "chu kỳ 5"
+Henry chốt **"1 trang trụ mạnh làm đường dẫn"** → MỘT trang, không phải cụm.
+GSC có cầu thật ("cách tính kim lâu" hạng 92, "tính kim lâu làm nhà" 73) mà site
+0 trang (`seo_pages` 0, `master_articles` 0, `khao_luan` 1). Cụm nhiều trang
+mỏng đúng là thứ vừa gỡ ở #358 — toàn bộ nội dung 60 trang "tuổi X có phạm
+không" nằm gọn trong hai bảng tra của một trang.
+- Nội dung: công thức mod 9 + **ví dụ tính tay cố ý chọn năm sinh ra kết quả
+  PHẠM** (ví dụ "không phạm" thì không dạy được cách đọc số dư) · bảng 4 loại
+  kèm đối tượng bị hại · **bảng tra trọn năm sinh** 63 dòng cho năm hiện tại
+  (người ta biết năm sinh chứ không biết tuổi ta) · hoá giải · phân biệt Kim Lâu
+  / Hoang Ốc / Tam Tai · Article + FAQPage + BreadcrumbList.
+- **`lib/engine/kim-lau.ts` KHÔNG chép công thức** — `readFileSync` + `new
+  Function` nạp thẳng `public/tools-shared/kim-lau.js`, đúng tiền lệ
+  `lib/engine/laso.ts`. Trang trụ nói khác công cụ bên cạnh thì hỏng cả hai.
+- 301 `/tools/kim-lau.html` → `/kim-lau` + sửa 11 file link nội bộ trỏ thẳng URL
+  mới. **`redirects()` chạy TRƯỚC filesystem** nên bản HTML cũ trong `public/`
+  không còn được phục vụ (file vẫn nằm đó, mang chữ cũ — vô hại vì không tới
+  được, nhưng đừng gỡ redirect).
+- 🐞 **CTA của chính tôi vi phạm gate #356** ("Tra theo năm sinh **của bạn**").
+  Sửa copy chứ không nới test, và cho test dùng CHÍNH regex của gate.
+- 🐞 **Tàn dư #359: công thức đã sang mod 9 nhưng 3 chỗ vẫn NÓI "chu kỳ 5".**
+  Nặng nhất là `CHAT_SYSTEM_KIM_LAU` — rail đọc bảng mod-9 rồi giải thích bằng
+  luật mod-5. Và `extractKimLauContext` **không chuyển tiếp `kimLauLoai`** nên
+  rail chỉ nói "phạm Kim Lâu" trống trong khi bảng cạnh đó ghi "Kim Lâu Thê".
+  **Bài học: đổi công thức thì phải quét cả chỗ MÔ TẢ công thức** — prompt LLM
+  là một trong số đó và nó không được typecheck bắt.
+- **KHÔNG phải lỗi, đã đo để loại trừ:** `?v=1` của `tools-shared/kim-lau.js`
+  không bump ở #359. Đọc header thật prod: `max-age=0, must-revalidate` ⇒
+  revalidate mỗi lượt, bản mod-9 đã tới người dùng. Đừng đi bump.
+- **Mốc đo quyết định hướng đi:** sau 2–4 tuần đọc lại `pagesWithImpressions`
+  (hiện **612**). Bật lên rõ → mô hình chạy được, lúc đó gen trang cho chân dung
+  vợ chồng / tiền kiếp / tử bình mới có cơ sở. Vẫn im → vấn đề là **thẩm quyền
+  tên miền**, không phải số lượng trang; đừng viết thêm.
+- ⚠️ **`xem tuổi vợ chồng` / `xem tuổi làm ăn` ĐÃ CÓ trang SEO** (3.540 + 3.540,
+  6.500–7.500 ký tự, title đúng chuẩn *"Tuổi X Và Tuổi Y Có Hợp Nhau Không?"*).
+  Henry tưởng chưa có. Thiếu thật chỉ là chân dung vợ chồng, chân dung tiền
+  kiếp, tử bình.
+- Lượt quét Suggest đầu tiên: **T3 hằng tuần**. Chạy tay:
+  `curl -H "Authorization: Bearer $CRON_SECRET" .../api/cron/keyword-suggest`
+- Đọc `content_qc_log` vài ngày rồi cân nhắc siết gate sang `block`.
+
+---
+
+## 💸 ĐO DOANH THU ĐANG BỊA 78% (2026-07-31, PR sau #350)
+
+Henry bảo đổi nốt hằng số 2.500đ trong `MKT_VND`/`dashboard_margin`/
+`marketing_revenue`. Đo trước khi sửa thì ra chuyện lớn hơn hẳn con số:
+
+| | đ |
+|---|---:|
+| Doanh thu đang BÁO CÁO | **10.075.000** |
+| Tiền thật CHỨNG MINH được | **1.319.500** |
+| Không rõ (5 giao dịch PayPal / 3.160 Lượng) | ? |
+
+**~78% doanh thu đang báo cáo là suy ra từ `amount * 2500`, không phải tiền.**
+Vì `credit_transactions.amount_vnd` **NULL ở CẢ 9 dòng topup** — R3 ("ghi tiền
+thật cho giao dịch MỚI") chưa từng ghi được dòng nào, đơn giản vì từ lúc ship
+tới giờ chưa có ai nạp thêm.
+
+### 🔎 Đính chính một chẩn đoán sai của chính tao
+Tao đã nói với Henry là "panel Biên LN đang thổi lên ~3 lần". **Sai.**
+`dashboard_margin` KHÔNG dùng 2500 — nó đã đi qua `credit_vnd()` từ trước, hàm
+này trả **1000**, tức lệch ~1,2 lần. Chỗ thật sự còn cứng 2500 là
+`marketing_revenue` + 2 chỗ trong `admin.html`. **Đọc định nghĩa hàm trước khi
+kết luận, đừng suy từ tên biến.**
+
+### 2.500đ không phải số bịa — nó là giá của THỜI KỲ KHÁC
+Đơn hàng đầu (24/04) là **122.500đ cho 50 Lượng = 2.450đ/Lượng**. Nên 2.500đ
+từng ĐÚNG. Cái sai là (a) đem nó áp cho Lượng của hôm nay (gói đang bán
+624–990đ) và (b) để nó thành hằng số chép tay ở nhiều nơi.
+
+### Đã làm (`_patches/migration-revenue-truth.sql`, ✅ ĐÃ CHẠY prod)
+1. **Backfill TIỀN THẬT** cho 4 giao dịch tra được từ `bank_orders` (khớp
+   user + số Lượng + nhãn + cửa sổ 10 phút; đo được lệch thật 20–47 giây).
+   Lấy lại chính xác **1.319.500đ**. Dry-run trong transaction rồi `RAISE` để
+   rollback trước khi áp thật — đúng 4 dòng, không đụng dòng nào khác.
+2. **`credit_vnd()` suy từ `credit_packages`** (gói phổ biến = 829đ) thay vì
+   trả hằng số. ⚠️ Prod đang có `app_config['credits.vnd_per_credit'] = 1000`
+   chốt cứng — **đã XOÁ**, không thì nhánh suy-từ-gói không bao giờ chạy tới
+   (đúng y bệnh cũ, chỉ khác con số). Cơ chế ghi đè vẫn còn nếu cần chốt lại.
+3. **`marketing_revenue` tách `real_vnd` / `estimated_vnd` / `estimated_count`
+   / `vnd_per_credit`.** Gộp một cục thì không ai biết bao nhiêu phần trăm con
+   số đó đứng vững được. `dashboard_margin` trả thêm `vnd_per_credit` để
+   Dashboard và Marketing dùng chung một mốc.
+4. `admin.html`: `MKT_VND` + `vndOf` ăn theo RPC (đặt TRƯỚC mọi lượt vẽ — bắt
+   được lúc test là `renderMktSources` chạy trước nên bảng LTV hiện bằng mức dự
+   phòng); panel Doanh Thu hiện thẳng "Tiền thật đã đối chiếu" vs "Ước lượng ·
+   N giao dịch"; 5 nhãn tĩnh ghi "2.500đ" viết lại cho khỏi mâu thuẫn.
+
+**Sau khi vá:** tổng 3.939.140đ = **1.319.500 thật + 2.619.640 ước lượng**, và
+giao diện nói rõ đâu là đâu.
+
+### ⚠️ CÒN LẠI — việc tay Henry
+**5 giao dịch PayPal cũ (460/1000/200/500/1000 Lượng, tháng 4–5) không có số
+tiền ở BẤT CỨ ĐÂU trong DB** — tên gói cũ ("Pro", "Nhóm", "Cá Nhân", "Gia
+Đình") không còn trong `credit_packages`, và chúng thanh toán bằng USD. Muốn
+doanh thu chính xác tuyệt đối thì mở lịch sử PayPal, lấy số tiền thật rồi
+`update credit_transactions set amount_vnd = …, gateway='paypal'` cho 5 dòng
+đó. **CỐ Ý không bịa số cho chúng** — đó chính là lỗi vừa sửa.
+
+---
+
+## 🎨 Trang topup dựng lại + ĐƯỜNG ICON DÙNG CHUNG BỊ HỎNG (2026-07-31, PR #350)
+
+Henry: *"Sao page topup mày vẫn còn xài emoji nhỉ? Tao nhớ đã có session nói mày
+sửa hết cho nó consistent rồi mà."* Anh nhớ đúng — markup ĐÃ được chuyển sang
+`data-icon` từ trước. Vấn đề là **markup đó chưa bao giờ được dựng**.
+
+### 🔴 Căn nguyên: `mountIcons()` chạy TRƯỚC khi thân trang tồn tại
+`nav.js` gọi `mountIcons()` **đúng một lần, đồng bộ, ở ĐẦU `<body>`** — lúc phần
+thân trang chưa được parse. Nên mọi span `[data-icon]`/`[data-icon-emoji]` nằm
+dưới nav đều trượt lượt quét rồi rơi về nhánh dự phòng **in thẳng emoji ra màn
+hình**. Tức đợt chuyển sang Lucide trước đây gần như không có tác dụng trên bất
+kỳ trang nào — chỉ nav là được dựng.
+- Vá: quét lại một lượt khi DOM đóng (`mountIcons` bỏ qua phần tử đã có `<svg>`
+  nên chạy hai lần không tốn gì). **Đo trên 50 trang: 232 icon dựng thành SVG,
+  0 trang còn emoji thô** (trước đó riêng `kien-thuc-tuvi.html` lọt 22 emoji).
+- **Bài học:** sửa markup icon mà không kiểm bằng trình duyệt thì không biết nó
+  có dựng hay không — nhánh dự phòng in emoji khiến trang *trông vẫn có icon*.
+  Cách kiểm đúng: `[data-icon]` nào KHÔNG chứa `<svg>` sau khi tải xong.
+- 2 trang dựng icon SAU lượt quét (`la-ban-phong-thuy`, `xlook`) phải tự gọi
+  `window.mountIcons(container)` — mẫu này áp cho MỌI chỗ render động về sau.
+
+### Bảng icon (nav.js v13 → v14, 78 → 88 icon)
+- Thêm: `clock` `credit-card` `gift` `image` `info` `landmark` `qr-code` `scale`
+  `shield-check` `temple`. `image`/`temple` lấy ĐÚNG path `shell.js` đang dùng —
+  để sidebar Luận Đường và bảng giá không vẽ hai kiểu khác nhau.
+- Map thêm 31 glyph còn sót, gồm **8 ký tự dùng làm `tool_pricing.icon`**
+  (`☉ ⧇ ⚸ 🖼️ 🏯 🖌 💋 🧥`) vốn đổ thẳng ra trang Công Cụ + bảng chi phí.
+- `iconHtml()` **không trả glyph thô nữa** mà trả icon dự phòng: `tool_pricing.icon`
+  do admin gõ tay nên luôn có thể xuất hiện ký tự mới, và mỗi lần như vậy trước
+  đây là một con emoji lọt thẳng ra giao diện.
+- ⚠️ `cong-cu.html` vẫn giữ **bản chép riêng** của `EMOJI_TO_ICON` (dòng ~671) —
+  nợ DRY chưa gỡ, sửa bảng ở nav.js thì nhớ nó.
+
+### 🐞 Ba lỗi lộ ra khi làm trang topup
+1. **Nạp SỐ TIỀN TỰ CHỌN bằng chuyển khoản CHƯA TỪNG dùng được.**
+   `initiateBankTopup` đọc ô VNĐ rồi kiểm bằng ngưỡng **USD** (`< 5 || > 500`) và
+   gửi trường `customAmount` (đường USD cũ của server) → mọi số tiền hợp lệ đều
+   bị chặn tại client kèm *"Vui lòng nhập $5–$500"*. Nhánh PayPal cạnh bên thì
+   đúng (`customAmountVnd`) — lệch nhau lâu rồi mà không ai thấy vì lỗi nằm ở
+   nhánh ít test hơn.
+2. **Trang chớp giá SAI.** Card viết cứng 50/120/350/800 Lượng rồi trông chờ
+   fetch ghi đè, trong khi `credit_packages` thật là **100/240/700/1600** — sai
+   đúng một nửa, và fetch hỏng thì sai luôn. Nay dựng card TỪ dữ liệu.
+3. **Bảng chi phí báo đắt hơn thực tế tới 3 lần.** Quy đổi nhân cứng 2.500đ/Lượng
+   (đơn giá mua lẻ) trong khi mua gói chỉ **624–990đ/Lượng**.
+
+### Bố cục
+- Số dư / quà đăng ký dùng CHUNG một chỗ (loại trừ nhau), không còn hai khối rồi
+  ẩn bớt một cái để lại khoảng trống.
+- **Chọn phương thức MỘT lần** (segmented control) → mỗi gói 1 nút thay vì 2
+  (8 nút → 4). Mặc định **chuyển khoản QR** — người dùng VN gần như đều trả bằng
+  app ngân hàng, trong khi bản cũ để PayPal làm nút chính (đậm màu).
+- Quà đăng ký lấy từ server qua action mới **`signup-bonus`** (đọc
+  `credits.signup_bonus_variants`, CÔNG KHAI vì hứa với người chưa có tài khoản).
+  Đọc hỏng → lùi về câu chung chung, KHÔNG nêu con số.
+- Referral gộp về MỘT lượt `my-referral` (bản cũ tự hỏi PostgREST hai bảng bằng
+  anon key rồi tự đếm).
+- Số công cụ miễn phí đếm từ dữ liệu (**21**, FAQ cũ ghi 28).
+
+### 💰 Vòng sau — BỎ đơn giá 2.500đ tàn dư, nạp lẻ nay BÁM bậc gói
+Phát hiện lúc dựng trang: gói bán **624–990đ/Lượng** nhưng nạp "số tiền khác"
+chia cứng **2.500đ/Lượng** — đắt hơn 2,5–4 lần (99.000đ mua gói được 100 Lượng,
+nạp lẻ chỉ **39**). Henry xác nhận *"nó là tàn dư đó, chỉnh lại cho hợp lý luôn
+đi"*.
+- **Căn nguyên là KIỂU dữ liệu, không phải con số.** 2.500đ lệch được chính vì
+  nó là một hằng số RIÊNG, không dính gì tới bảng gói — nên thay bằng một hằng
+  số khác thì lần sau lại lệch. `quoteCustomVnd()` (`lib/billing/packages.ts`)
+  **suy đơn giá TỪ `credit_packages`**: lấy bậc tốt nhất mà số tiền với tới
+  (đơn giá thấp nhất trong các gói có `amountVnd <= amount`); dưới gói nhỏ nhất
+  thì hưởng bậc vào cửa. Đổi giá gói dưới DB là đường nạp lẻ tự đi theo.
+- **Ba tính chất đã verify:** nạp lẻ KHÔNG BAO GIỜ thiệt hơn mua gói cùng số
+  tiền (99k→100 L, 199k→240 L, 499k→700 L, 999k→1600 L — khớp ĐÚNG gói); thêm
+  tiền không bao giờ nhận ít Lượng hơn (đơn điệu trên cả dải 50k–5tr); DB rỗng
+  → trả 0 để route báo lỗi, không cấp `NaN` Lượng.
+- Dùng `min` trên các gói với tới được (thay vì "gói đắt nhất ≤ số tiền") để vẫn
+  đúng kể cả khi admin khai một bậc gói không đơn điệu.
+- **Client PHẢI ra cùng kết quả** (xem trước tức thì, không đợi mạng) → có test
+  đối chiếu bản client (trích từ `topup.html` thật) với bản server (trích từ
+  `packages.ts` thật) trên **4.951 mức tiền**: khớp tuyệt đối. Sửa một bên thì
+  phải sửa cả hai — đã ghi thẳng vào comment cả hai chỗ.
+- **🐞 `FALLBACK` trong `packages.ts` cũng đang mang số cũ** (50/120/350/800
+  Lượng, DB thật 100/240/700/1600) → một nhịp Supabase chớp là user trả đủ tiền
+  mà nhận đúng một nửa. Đã sửa khớp prod.
+- **Cùng hằng số 2.500đ còn đang nói dối ở 2 chỗ HIỂN THỊ:** `cong-cu.html`
+  (`t.credits * 2500`) và `admin.html` (`VND_PER_CREDIT`) — đều báo giá công cụ
+  đắt hơn thực tế ~3 lần. Cả hai nay suy từ gói phổ biến.
+- **CỐ Ý KHÔNG đụng** `MKT_VND`/`dashboard_margin`/`marketing_revenue` (cũng quy
+  2.500đ): đó là quy ước ĐO DOANH THU cho Lượng đã tiêu, khác hẳn giá bán, và
+  đổi thì lệch toàn bộ báo cáo lịch sử. Nhưng đáng soi lại — nếu giá thật ~830đ
+  thì mấy panel đó đang thổi doanh thu lên ~3 lần.
+- Ghi chú thêm: `chat.cost` dưới DB đang là **2** (không phải 5).
 
 ---
 
@@ -572,6 +971,59 @@ thấy GA4, dù prompt có bảo chạy CLI.
   digest vẫn chạy đủ RPC nội bộ · **Playwright render panel thật** light + dark:
   nhãn/số/`% đo được` đúng công thức, landing page chứa HTML **bị escape** (không
   chèn được thẻ), ca `null` hiện hướng dẫn kiểm env.
+
+### ✅ Vòng sau — GA4 "Key events" luôn bằng 0: site chưa từng gửi event cho GA4 (2026-07-31, PR mới)
+Henry gửi ảnh app GA4: *"Nó ko có gì luôn ah"* — card **Key events = 0**, trend
+phẳng, Realtime *"No data available"*. Điều tra ra **GA4 không hề down**, và
+chính tấm ảnh đó có bằng chứng: ô cạnh bên ghi `Event count per user 4.77 ↑11.8%`
+— có số, còn tăng. Cái trống là một chuyện khác hẳn.
+- **Căn nguyên:** `grep gtag(` toàn repo chỉ ra `gtag('js')` + `gtag('config')` ở
+  `public/nav.js` và `lib/analytics/isr-tracking.ts` — **0 dòng `gtag('event',…)`
+  trong cả codebase**. GA4 vì thế chỉ có event TỰ ĐỘNG (`page_view`,
+  `session_start`, `first_visit`, `scroll`, `user_engagement` — khớp đúng con số
+  4,77/user). Mọi tín hiệu nghiệp vụ (`signup`, `topup_start`, `tool_run`,
+  `share`, `cta_click`…) đi `/api/track` vào bảng `events` Supabase và **chưa bao
+  giờ chảy sang GA4** ⇒ không có gì để đánh dấu key event ⇒ báo cáo conversion
+  của GA4 **vĩnh viễn 0**. Thiếu cầu nối, không phải sự cố.
+- **Vá — một chỗ duy nhất, `public/track.js`:** `event()` gửi song song
+  `gtag('event', …)`. Không phải sửa 89 trang vì mọi nơi đã gọi `Track.event`.
+  Bảng `events` nội bộ **vẫn là nguồn chuẩn** cho admin; GA4 chỉ là bản sao để
+  dùng công cụ Google. Lượt gửi GA4 đứng SAU `send()` và bọc `try/catch` — GA4
+  hỏng không được kéo theo beacon nội bộ.
+- **`page_view` CỐ Ý không gửi:** `gtag('config')` đã tự bắn một cái mỗi lần tải
+  trang; gửi thêm là đếm đôi — đúng lỗi đã dính một lần khi `GA4_TRACK_SNIPPET`
+  vô tình kèm thẻ `track.js` trên `/ket-qua`.
+- **Hàng đợi là bắt buộc, không phải phòng xa:** `track.js` nạp NGAY TRƯỚC
+  `nav.js`, cả hai `defer` nên chạy theo thứ tự tài liệu → lúc event đầu bắn thì
+  `window.gtag` CHƯA tồn tại. Xếp hàng rồi xả khi gtag xuất hiện; **không đẩy
+  thẳng vào `dataLayer`** vì event lọt vào trước `gtag('config')` có thể bị
+  gtag.js bỏ qua. Bỏ cuộc sau ~10s để trang không có GA4 (`admin.html`) không
+  treo timer vĩnh viễn.
+- `signup` → **`sign_up`** (tên GA4 khuyến nghị, rơi đúng báo cáo dựng sẵn);
+  `login`/`share` vốn đã trùng tên khuyến nghị. Tham số: chỉ giá trị vô hướng,
+  **trải phẳng `meta` một tầng** (đó là chỗ chứa phần có nghĩa nhất — `medium`
+  của share, `from`/`need` của topup_start), cắt chuỗi 100 ký tự, tối đa 24
+  tham số, loại tên sai luật GA4 và tiền tố dành riêng `ga_`/`google_`/
+  `firebase_`. **`anon_id`/`session_id` CỐ Ý bỏ** — GA4 tự có định danh riêng.
+- Bump `track.js?v=2→3` (27 chỗ / 20 file).
+- **Verify:** `tsc` 0 lỗi · `eslint track.js` sạch · `prettier --check .` sạch ·
+  `node --check` · **8 ca Playwright trên CHÍNH file `track.js` thật**: page_view
+  không sang GA4 mà beacon nội bộ vẫn có · event bắn trước khi gtag tồn tại vẫn
+  tới nơi sau khi xả hàng đợi · `signup→sign_up`, `login`/`share` giữ nguyên ·
+  meta trải phẳng, object lồng/`first`/`anon_id` bị loại · tên sai luật bị loại
+  + chuỗi 250 ký tự cắt còn 100 · trang không có GA4 → 0 lỗi console, beacon vẫn
+  chạy · `webdriver=true` → **không gửi cả GA4 lẫn beacon** (giữ nguyên chốt
+  chặn CI) · **1 ca trên trang THẬT `index.html` với `nav.js` THẬT**: event tới
+  `dataLayer` qua gtag của chính nav.js, và `config` đứng TRƯỚC `event` trong
+  hàng đợi. ⚠️ Playwright đặt `navigator.webdriver=true` mặc định nên `track.js`
+  tự no-op — phải `defineProperty` cho nó về `false` mới test được người thật
+  (test artifact, không phải bug).
+- **CÒN LẠI (việc tay Henry, không code được):** sau khi merge + deploy, vào
+  **GA4 → Admin → Events**, đợi event mới xuất hiện (thường vài giờ tới 24h) rồi
+  bật **"Mark as key event"** cho `sign_up` · `topup_success` · `tool_run`. Chưa
+  bật thì card Key events vẫn 0 dù dữ liệu đã sang. Realtime trống lúc sáng sớm
+  là **đúng thực tế**, không phải lỗi đo: `traffic_quality` 7 ngày cho 519 lượt
+  ghé nhưng chỉ **25 lượt tương tác thật** (~3–4 người/ngày).
 
 ---
 

@@ -109,7 +109,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
   </div>
   <div class="grid">${cards}</div>
 </main>
-<script src="/track.js?v=2" defer></script><script src="/nav.js?v=20" defer></script>
+<script src="/track.js?v=3" defer></script><script src="/nav.js?v=20" defer></script>
 </body></html>`;
 }
 

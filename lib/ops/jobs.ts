@@ -112,6 +112,25 @@ export const JOBS: JobSpec[] = [
   { key: 'prune-anon-trial', label: 'Dọn nhật ký dùng thử', source: 'vercel', everyMinutes: D,
     schedule: '09:00 VN hằng ngày', sink: 'anon_rail_hits', trigger: true,
     since: '2026-07-30' },
+  // `since` = ngày merge: job chưa từng chạy nên không có dòng nào trong
+  // cron_runs; thiếu mốc này thì bộ dò lập tức kêu "CHƯA HỀ chạy" — đúng loại
+  // cảnh báo giả đã phải đi vá một lượt hôm 30/07.
+  { key: 'keyword-suggest', label: 'Quét từ khoá (Google Suggest)', source: 'vercel', everyMinutes: 7 * D,
+    schedule: 'T3 hằng tuần', sink: 'keyword_ideas', trigger: true,
+    since: '2026-08-01' },
+  { key: 'topic-topup', label: 'Nạp chủ đề tuần (2 bề mặt)', source: 'vercel', everyMinutes: 7 * D,
+    schedule: 'T4 hằng tuần', sink: 'topic_queue', trigger: true,
+    since: '2026-08-01' },
+  // Nối lại khâu CUỐI của pipeline media, vốn đứt âm thầm từ 16/07: 86 bài
+  // `van_dap` render xong mà `yt_status='error'`, 84 trong số đó cùng một
+  // `invalid_grant`. Trước đây lỗi chỉ nằm trong một cột DB nên không job nào
+  // canh — đúng loại hỏng mà sổ này sinh ra để bắt.
+  { key: 'yt-drain', label: 'Xả kho YouTube', source: 'vercel', everyMinutes: D,
+    schedule: '11:00 VN hằng ngày', sink: 'van_dap → YouTube', trigger: true,
+    since: '2026-08-01' },
+  { key: 'media-build', label: 'Dựng hàng đợi bài đăng', source: 'vercel', everyMinutes: D,
+    schedule: '09:30 VN hằng ngày', sink: 'media_assets + media_posts', trigger: true,
+    since: '2026-08-01' },
 ];
 
 export interface CronRun {

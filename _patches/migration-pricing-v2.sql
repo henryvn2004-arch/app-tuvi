@@ -29,13 +29,16 @@
 begin;
 
 -- ── 1. Giá tool ───────────────────────────────────────────────
+-- ⚠️ 2026-08-01: Henry chốt lại 3 mức sau khi PR này đã chạy migration lần đầu
+-- (laso 25→100, tu-binh 20→50, rail 2→5). File giữ ĐÚNG giá đang chạy trên
+-- prod, KHÔNG giữ giá của brief gốc — chạy lại file với số cũ là kéo giá lùi.
 -- CHỈ hạ nhóm tool CHỮ (vốn ~600đ/lượt). Nhóm ẢNH (chân dung, try-on,
 -- phong-thuy-render) GIỮ NGUYÊN số Lượng có chủ đích: đó là món DUY NHẤT có
 -- vốn thật đáng kể (1.658đ/ảnh), và việc gấp đôi Lượng/gói đã tự hạ giá thực
 -- của chúng một nửa rồi. Hạ tiếp là bào vào đúng chỗ tốn tiền.
-update public.tool_pricing set credits = 2,  updated_at = now() where tool_id = 'rail-message';   -- 5  → 2  (12 câu cho người mới thay vì 4-5)
-update public.tool_pricing set credits = 25, updated_at = now() where tool_id = 'laso';           -- 150→ 25 (= đúng quà đăng ký)
-update public.tool_pricing set credits = 20, updated_at = now() where tool_id = 'tu-binh';        -- 100→ 20
+update public.tool_pricing set credits = 5,  updated_at = now() where tool_id = 'rail-message';
+update public.tool_pricing set credits = 100, updated_at = now() where tool_id = 'laso';
+update public.tool_pricing set credits = 50, updated_at = now() where tool_id = 'tu-binh';
 update public.tool_pricing set credits = 15, updated_at = now() where tool_id in ('xem-tuoi', 'xem-lam-an');  -- 50 → 15
 update public.tool_pricing set credits = 8,  updated_at = now() where tool_id in ('dien-tuong', 'nhan-tuong', 'thu-tuong');  -- 10 → 8
 

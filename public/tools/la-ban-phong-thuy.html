@@ -316,6 +316,9 @@ function buildDirGrid() {
       <div class="btn-lbl">${d.id}</div>
       <div class="btn-deg">${d.deg}°</div>
     </div>`).join('');
+  // Lưới này dựng SAU khi nav.js quét icon → phải tự gọi lại, không thì 8 thẻ
+  // hướng rơi về nhánh dự phòng và in ra emoji thô.
+  if (window.mountIcons) window.mountIcons(grid);
 }
 
 function highlightDirGrid(id) {

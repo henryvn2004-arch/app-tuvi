@@ -9,7 +9,7 @@ export const maxDuration = 15;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
-import { getPackage, getPackages, VND_PER_CREDIT } from '@/lib/billing/packages';
+import { getPackage, getPackages, quoteCustomVnd } from '@/lib/billing/packages';
 import { getToolPrice } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
 import { freeGenGate, FREE_GEN_CAP_MESSAGE, railFreeRemaining } from '@/lib/billing/viral-budget';
@@ -162,6 +162,21 @@ async function handleBalance(sp: URLSearchParams): Promise<Response> {
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
+// ── GET: signup-bonus (CÔNG KHAI, không cần đăng nhập) ────────
+// Quà đăng ký sống trong `app_config` và đã đổi vài lần (A/B [20,30,40] → [25]).
+// Trang topup trước đây hoặc nói lửng lơ "tặng Lượng miễn phí", hoặc — nguy hiểm
+// hơn — viết cứng một con số sẽ lệch ngay lần chỉnh giá kế tiếp. Đây là con số
+// hứa với người CHƯA có tài khoản nên không thể yêu cầu token; chỉ lộ đúng mức
+// quà thấp nhất, không lộ gì khác của app_config.
+async function handleSignupBonus(): Promise<Response> {
+  const raw = await getConfigValue<unknown>('credits.signup_bonus_variants', null);
+  const variants = (Array.isArray(raw) ? raw : [raw])
+    .map((v) => Number(v))
+    .filter((n) => Number.isFinite(n) && n > 0);
+  // Không đọc được → null, để giao diện lùi về câu chung chung thay vì hứa sai.
+  return ok({ bonus: variants.length ? Math.min(...variants) : null });
+}
+
 // ── GET: check slug access ────────────────────────────────────
 async function handleCheck(sp: URLSearchParams): Promise<Response> {
   const slug   = sp.get('slug')   || '';
@@ -187,8 +202,9 @@ async function handleTopup(body: Record<string, unknown>): Promise<Response> {
   if (packageId === 'custom') {
     if (!customAmountVnd || customAmountVnd < 50_000 || customAmountVnd > 5_000_000)
       return err('Số tiền tùy chỉnh phải từ 50.000đ đến 5.000.000đ', 400);
-    // Nạp tùy chỉnh: không bonus, theo neo VND_PER_CREDIT (lib/billing/packages)
-    const credits = Math.floor(customAmountVnd / VND_PER_CREDIT);
+    // Đơn giá suy từ bậc gói (xem quoteCustomVnd) — KHÔNG chia cứng nữa.
+    const { credits } = await quoteCustomVnd(customAmountVnd);
+    if (credits <= 0) return err('Không quy đổi được số Lượng cho số tiền này', 500);
     // PayPal cần USD: convert VND → USD ở rate 25.000
     const usdAmount = Math.round((customAmountVnd / 25_000) * 100) / 100;
     pkg  = { amount: usdAmount.toFixed(2), credits, label: `Nap Tuy Chinh – ${credits} Luong` };
@@ -439,7 +455,6 @@ async function handleAdminSavePackage(request: NextRequest, body: Record<string,
   if (body.amount_vnd  != null) row.amount_vnd  = parseInt(String(body.amount_vnd));
   if (body.amount_usd  != null) row.amount_usd  = Number(body.amount_usd);
   if (body.label       != null) row.label       = String(body.label);
-  if (body.bonus_label != null) row.bonus_label = String(body.bonus_label);
   if (body.enabled     != null) row.enabled     = !!body.enabled;
   if (body.sort_order  != null) row.sort_order  = parseInt(String(body.sort_order));
   try {
@@ -575,13 +590,14 @@ async function handleCreateBank(body: Record<string, unknown>): Promise<Response
       if (customAmountVnd < 50_000 || customAmountVnd > 5_000_000)
         return err('Custom amount must be 50.000đ – 5.000.000đ', 400);
       amountVND = customAmountVnd;
-      credits   = Math.floor(customAmountVnd / VND_PER_CREDIT);
+      credits   = (await quoteCustomVnd(customAmountVnd)).credits;  // đơn giá theo bậc gói
     } else {
       // Legacy USD path
       if (customAmountUsd < 5 || customAmountUsd > 500) return err('Custom amount must be 5-500 USD', 400);
       amountVND = Math.round(customAmountUsd * 25_000);
-      credits   = Math.floor(amountVND / VND_PER_CREDIT);
+      credits   = (await quoteCustomVnd(amountVND)).credits;
     }
+    if (credits <= 0) return err('Không quy đổi được số Lượng cho số tiền này', 500);
     label = `Nap ${credits} Luong`;
   } else {
     const pkgs  = await getPackages();
@@ -1281,6 +1297,7 @@ export async function GET(request: NextRequest) {
   const action = searchParams.get('action');
   if (action === 'balance')      return handleBalance(searchParams);
   if (action === 'check')        return handleCheck(searchParams);
+  if (action === 'signup-bonus') return handleSignupBonus();
   if (action === 'admin-users')  return handleAdminUsers(request, searchParams);
   if (action === 'admin-users-list') return handleAdminUsersList(request);
   if (action === 'admin-login-attempts') return handleAdminLoginAttempts(request);
@@ -1302,6 +1319,7 @@ export async function GET(request: NextRequest) {
   if (action === 'signup-bonus') return handleSignupBonus();
   if (action === 'admin-viral') return handleAdminViral(request, searchParams);
   if (action === 'admin-content-pack') return handleAdminContentPack(request, searchParams);
+  if (action === 'admin-media-queue') return handleAdminMediaQueue(request, searchParams);
   if (action === 'check-bank')  return handleCheckBank(searchParams);
   return err('Invalid action.', 400);
 }
@@ -1572,6 +1590,83 @@ async function handleAdminContentPack(request: NextRequest, sp: URLSearchParams)
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
+// ── GET: admin-media-queue (M2, track Media Pipeline) — hàng đợi bài đăng
+// mạng xã hội chờ duyệt. Đọc kèm asset để admin xem ĐƯỢC ẢNH THẬT trước khi
+// bấm, không phải duyệt mù bằng cách đọc caption. ──
+async function handleAdminMediaQueue(request: NextRequest, sp: URLSearchParams): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const status = (sp.get('status') || '').trim();
+  const statusFilter = /^[a-z]+$/.test(status) ? `&status=eq.${status}` : '';
+  try {
+    const [rowsRes, cfgRes] = await Promise.all([
+      fetch(
+        `${SUPABASE_URL}/rest/v1/media_posts?select=id,created_at,channel,caption,hashtags,link_url,status,published_at,external_url,error,media_assets(url,width,height,source_type,meta)${statusFilter}&order=created_at.desc&limit=60`,
+        { headers: SB_HEADERS, cache: 'no-store' },
+      ),
+      fetch(`${SUPABASE_URL}/rest/v1/app_config?key=like.social.*&select=key,value`, {
+        headers: SB_HEADERS,
+        cache: 'no-store',
+      }),
+    ]);
+    const rows = rowsRes.ok ? await rowsRes.json() : [];
+    const cfgRows: { key: string; value: unknown }[] = cfgRes.ok ? await cfgRes.json() : [];
+    const cfg: Record<string, unknown> = {};
+    for (const r of cfgRows) cfg[r.key] = r.value;
+
+    return ok({
+      posts: rows,
+      autopostEnabled: cfg['social.autopost_enabled'] === true,
+      channels: cfg['social.channels'] || [],
+      buildDaily: cfg['social.build_daily'] ?? 0,
+    });
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+}
+
+// ── POST: admin-media-decide (M2) — duyệt hoặc bỏ một bài trong hàng đợi.
+// CỐ Ý chỉ có hai lối ra và KHÔNG có lối "đăng ngay": duyệt xong bài vẫn nằm
+// chờ bước đăng riêng. Một nút bấm nhầm không được phép đẩy thẳng nội dung lên
+// trang công khai. ──
+async function handleAdminMediaDecide(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const postId = String(body.postId || '').trim();
+  const decision = String(body.decision || '').trim();
+  if (!/^[0-9a-f-]{36}$/i.test(postId)) return err('postId không hợp lệ', 400);
+  if (decision !== 'approve' && decision !== 'skip') return err('decision phải là approve hoặc skip', 400);
+
+  const caption = typeof body.caption === 'string' ? body.caption.trim() : '';
+  const patch: Record<string, unknown> = {
+    status: decision === 'approve' ? 'approved' : 'skipped',
+    updated_at: new Date().toISOString(),
+  };
+  // Admin sửa lại caption ngay lúc duyệt — thường nhanh hơn là bỏ bài rồi chờ
+  // cron viết lại bản khác vào hôm sau.
+  if (caption) patch.caption = caption;
+
+  try {
+    // Chỉ đổi được bài ĐANG chờ: chặn việc lỡ tay duyệt lại bài đã đăng (`live`)
+    // hay đang đăng dở (`publishing`).
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/media_posts?id=eq.${postId}&status=in.(queued,approved,skipped)`, {
+      method: 'PATCH',
+      headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+      body: JSON.stringify(patch),
+    });
+    if (!res.ok) return err(await res.text());
+    const rows = (await res.json()) as unknown[];
+    if (!rows.length) return err('Không tìm thấy bài đang chờ với id đó', 404);
+    return ok({ updated: true, status: patch.status });
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+}
+
 // ── GET: admin-autopilot-log (M0.6, track Marketing Autopilot) — nhật ký
 // hành động autopilot (shadow/live) + trạng thái cấu hình hiện tại. THUẦN
 // ĐỌC — không có action bật/tắt qua API này có chủ đích (rủi ro cao, Henry
@@ -1660,21 +1755,6 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
 // vào link chia sẻ. CỐ Ý là endpoint có auth chứ không nhét referral_code vào
 // `action=balance` (endpoint đó nhận userId qua query, không xác thực — thêm mã
 // vào đó là phát mã của người khác cho bất kỳ ai đoán được userId).
-/**
- * GET ?action=signup-bonus — số Lượng quà đăng ký (công khai, không cần auth).
- *
- * Để lời mời đăng ký nói được con số THẬT ("tặng 25 Lượng = 12 câu") mà không
- * viết cứng vào client. Lấy mức THẤP NHẤT trong `credits.signup_bonus_variants`
- * (mảng, từng dùng cho A/B) — hứa theo mức cao nhất là hứa hụt với người rơi vào
- * biến thể thấp. Đúng cùng lý do đã buộc `/ket-qua` phải đọc config thay vì ghi
- * "25 Lượng" vào HTML.
- */
-async function handleSignupBonus(): Promise<Response> {
-  const variants = await getConfigValue<number[]>('credits.signup_bonus_variants', [25]);
-  const list = Array.isArray(variants) ? variants.map(Number).filter((n) => Number.isFinite(n) && n > 0) : [];
-  return ok({ bonus: list.length ? Math.min(...list) : null });
-}
-
 /**
  * GET ?action=rail-status — trạng thái ví cho ĐỒNG HỒ ĐẾM CÂU của rail chat.
  *
@@ -1876,6 +1956,7 @@ export async function POST(request: NextRequest) {
   if (action === 'admin-cron-trigger') return handleAdminCronTrigger(request, body);
   if (action === 'admin-channel-broadcast') return handleAdminChannelBroadcast(request, body);
   if (action === 'admin-nudge-user') return handleAdminNudgeUser(request, body);
+  if (action === 'admin-media-decide') return handleAdminMediaDecide(request, body);
   if (action === 'admin-khao-luan-topics') return handleAdminKhaoLuanTopics(request, body);
   if (action === 'admin-nghien-cuu-topics') return handleAdminNghienCuuTopics(request, body);
   if (action === 'admin-mcp-update') return handleAdminMcpUpdate(request, body);
