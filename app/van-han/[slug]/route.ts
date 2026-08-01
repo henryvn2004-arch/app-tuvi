@@ -24,7 +24,10 @@ const CAN_SLUGS = ['giap','at','binh','dinh','mau','ky','canh','tan','nham','quy
 const GIO_CHI   = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
 const GIO_SLUGS = ['ty','suu','dan','mao','thin','ti','ngo','mui','than','dau','tuat','hoi'];
 const GIO_HOURS = [23,1,3,5,7,9,11,13,15,17,19,21];
-const NAM_XEMS  = [2026, 2027, 2028];
+// 2023–2030: KHỚP ĐÚNG 8 năm mà `seo_pages` category 'van-han' đã phủ. Đây là
+// điều kiện để 301 toàn bộ họ `/tu-vi/van-han-tuoi-*` về đây mà không đẻ ra 404
+// — thiếu năm nào là 60 trang của năm đó chuyển hướng vào chỗ trống.
+const NAM_XEMS = [2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
 
 function esc(s: unknown) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -319,7 +322,10 @@ function buildL1(chiIdx: number, namXem: number): string {
   ];
 
   return pageShell({
-    title: `Tuổi ${chiName} Vận Hạn Năm ${namXem} — Tử Vi Đẩu Số`,
+    // Mẫu title lấy từ họ URL bị gộp vào (`/tu-vi/van-han-tuoi-*`): đưa "Vận
+    // Hạn" lên đầu và có chữ "Tuổi" — khớp cách gõ thật hơn bản cũ "Tuổi X Vận
+    // Hạn Năm Y". Gộp mà để rơi mất title tốt hơn thì gộp xong lại kém đi.
+    title: `Vận Hạn Tuổi ${chiName} Năm ${namXem} — Tử Vi Đẩu Số`,
     desc:  `Vận hạn năm ${namXem} cho người tuổi ${chiName} — phân tích cung mệnh, đại vận, cách cục theo từng giờ sinh và năm sinh. Miễn phí.`,
     url:   `${BASE}/van-han/tuoi-${chiSlug}-nam-${namXem}`,
     bc:    `<a href="/">Trang Chủ</a><span>›</span><a href="/van-han/">Vận Hạn</a><span>›</span><span>Tuổi ${esc(chiName)} Năm ${namXem}</span>`,
@@ -385,7 +391,7 @@ function buildL2(canIdx: number, chiIdx: number, namXem: number): string {
   ];
 
   return pageShell({
-    title:   `${canChi} Vận Hạn Năm ${namXem} — Tử Vi Đẩu Số`,
+    title:   `Vận Hạn Tuổi ${canChi} Năm ${namXem} — Tử Vi Đẩu Số`,
     desc:    `Vận hạn năm ${namXem} cho người sinh năm ${canChi} — cung mệnh, chính tinh, đại vận và cách cục đặc biệt theo từng giờ sinh.`,
     url:     `${BASE}/van-han/${canSlug}-${chiSlug}-nam-${namXem}`,
     bc:      `<a href="/">Trang Chủ</a><span>›</span><a href="/van-han/">Vận Hạn</a><span>›</span><a href="/van-han/tuoi-${chiSlug}-nam-${namXem}">Tuổi ${esc(chiName)} ${namXem}</a><span>›</span><span>${esc(canChi)}</span>`,

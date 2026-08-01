@@ -236,10 +236,44 @@ function buildRelated(related: any[], category: string): string {
   </div>`;
 }
 
+// ── Gộp họ URL vận hạn ─────────────────────────────────────────────────────────
+// Site đang có HAI họ URL cho cùng một chủ đề "vận hạn tuổi X năm Y":
+//   /tu-vi/van-han-tuoi-at-dau-nam-2026  (seo_pages, 480 trang, ~898 ký tự)
+//   /van-han/at-dau-nam-2026             (route riêng, nội dung dày: bảng theo
+//                                         từng giờ sinh + FAQ + liên kết liên quan)
+// Hai họ tự triệt nhau nên không họ nào lên được — GSC xác nhận: 0 URL /tu-vi/
+// hay /van-han/ nào lọt top pages. Chọn bản DÀY làm chuẩn, 301 bản mỏng về đó.
+//
+// Chỉ khác nhau đúng tiền tố `van-han-tuoi-`, nên phép đổi là cắt tiền tố. Vẫn
+// KIỂM hình dạng phần còn lại trước khi chuyển: 301 vào một URL không tồn tại là
+// biến 200 thành 404, tệ hơn hẳn việc cứ để nguyên hai bản.
+const VAN_HAN_NAM_MIN = 2023;
+const VAN_HAN_NAM_MAX = 2030;
+const RE_VAN_HAN_SEO = /^van-han-tuoi-([a-z]+-[a-z]+)-nam-(\d{4})$/;
+
+export function vanHanRedirectTarget(slug: string): string | null {
+  const m = RE_VAN_HAN_SEO.exec(slug);
+  if (!m) return null;
+  const nam = Number(m[2]);
+  if (nam < VAN_HAN_NAM_MIN || nam > VAN_HAN_NAM_MAX) return null;
+  return `/van-han/${m[1]}-nam-${nam}`;
+}
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const slug = searchParams.get('slug') || '';
   if (!slug) return NextResponse.redirect(new URL('/', BASE_URL));
+
+  // 301 (vĩnh viễn) — báo Google dồn mọi tín hiệu về bản chuẩn. Đặt TRƯỚC lượt
+  // đọc DB: trang nguồn vẫn còn trong seo_pages, không chặn ở đây thì nó tiếp
+  // tục render và tiếp tục cạnh tranh với chính bản chuẩn.
+  const vanHanTarget = vanHanRedirectTarget(slug);
+  if (vanHanTarget) {
+    return new NextResponse(null, {
+      status: 301,
+      headers: { Location: `${BASE_URL}${vanHanTarget}`, 'Cache-Control': 'public, max-age=86400' },
+    });
+  }
 
   try {
     const pageRes = await fetch(
