@@ -19,6 +19,7 @@ import { verifyMetaSignature, verifyWebhookChallenge } from '@/lib/channels/meta
 import { whatsappIO, whatsappStore, whatsappProfiles, waSendText, waClearSession } from '@/lib/channels/whatsapp';
 import { chatLogOutcome } from '@/lib/channels/store';
 import { consumeLinkToken, resolveLinkedUser, LINK_CMD } from '@/lib/channels/whatsappLink';
+import { getRailPrice } from '@/lib/billing/pricing';
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -141,7 +142,7 @@ async function handleMessage(msg: WaMessage, cfg: Awaited<ReturnType<typeof getC
   const gate = await buildAccessGate({
     platform: PLATFORM,
     externalId: from,
-    cost: cfg.cost,
+    cost: await getRailPrice(cfg.cost),
     freeCap: FREE_DAILY,
     freeCapMsg,
     noBalanceMsg,

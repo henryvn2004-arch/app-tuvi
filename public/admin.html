@@ -1967,8 +1967,9 @@ async function loadSysConfig() {
     </div>
     <div class="form-row full">
       <div class="form-group">
-        <label class="form-label">Giá Lượng / lượt chat (0 = miễn phí)</label>
+        <label class="form-label">Giá Lượng / lượt chat — DỰ PHÒNG (0 = miễn phí)</label>
         <input type="number" class="form-control" id="sc-cost" value="${jv(cfg['chat.cost'], 5)}" style="max-width:200px">
+        <div style="font-size:.72rem;color:var(--text-lt);margin-top:.4rem">Giá rail THẬT (web + Telegram/Messenger/WhatsApp) nằm ở tool <b>rail-message</b> trong <a href="#" onclick="goTo('registry');return false" style="color:var(--blue)">Tools Registry</a>. Ô này chỉ dùng khi đọc bảng đó hụt — giữ khớp để lúc lỗi không thu sai giá.</div>
       </div>
     </div>
     <div class="form-group">
