@@ -1,21 +1,37 @@
 // app/van-han/route.ts
-// Hub page: list tất cả 36 van-han pages
+// Hub page: list toàn bộ trang van-han cấp 1 (12 chi × 8 năm = 96 liên kết)
 export const revalidate = false;
 
 import { NextResponse } from 'next/server';
+import { currentNamXem } from '@/lib/engine/namxem';
 
 const BASE      = 'https://www.tuviminhbao.com';
 const CHI_NAMES = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
 const CHI_SLUGS = ['ty','suu','dan','mao','thin','ti','ngo','mui','than','dau','tuat','hoi'];
-const NAM_XEMS  = [2026, 2027, 2028];
+// 2023–2030: KHỚP ĐÚNG 8 năm mà `seo_pages` category 'van-han' đã phủ (60 can
+// chi × 8 năm = 480 trang). Trước đây chỉ 3 năm nên 5 năm còn lại của họ URL kia
+// không có đích để 301 về — gộp mà để hụt năm là biến 200 thành 404.
+const NAM_XEMS = [2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
 
 function esc(s: unknown) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
+/**
+ * Năm đứng tên trong title/description. Trước đây là `NAM_XEMS[1]` — vị trí thứ
+ * hai của mảng, chỉ đúng khi mảng có đúng 3 phần tử; mở mảng ra 8 năm là nó
+ * lặng lẽ thành 2024. Neo vào NĂM HIỆN TẠI giờ VN (nguồn chung
+ * `currentNamXem()`), kẹp vào dải để không bao giờ trỏ ra ngoài.
+ */
+function namChinh(): number {
+  const y = currentNamXem();
+  return Math.min(Math.max(y, NAM_XEMS[0]), NAM_XEMS[NAM_XEMS.length - 1]);
+}
+
 export async function GET() {
-  const title = `Vận Hạn Theo Tuổi — Tử Vi Đẩu Số ${NAM_XEMS[1]}`;
-  const desc  = `Xem vận hạn năm ${NAM_XEMS[1]} theo tuổi (can chi) — phân tích cung mệnh, đại vận, cách cục đặc biệt cho 12 tuổi theo Tử Vi Đẩu Số cổ pháp.`;
+  const nam = namChinh();
+  const title = `Vận Hạn Theo Tuổi — Tử Vi Đẩu Số ${nam}`;
+  const desc  = `Xem vận hạn năm ${nam} theo tuổi (can chi) — phân tích cung mệnh, đại vận, cách cục đặc biệt cho 12 tuổi theo Tử Vi Đẩu Số cổ pháp.`;
 
   const yearBlocks = NAM_XEMS.map(namXem => `
     <div class="year-section">

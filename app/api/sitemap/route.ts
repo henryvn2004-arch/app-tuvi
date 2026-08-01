@@ -158,9 +158,35 @@ export async function GET() {
   for (const r of masterArticleRows) if (r.slug) entries.push(urlEntry(`${BASE_URL}/nghien-cuu/${encodeURIComponent(r.slug)}`, r.created_at?.slice(0,10)||today, 'weekly', '0.75'));
   for (const r of (seoRows as any[])) {
     if (!r.slug) continue;
+    // Category 'van-han' đã được 301 sang họ /van-han/* (bản nội dung dày hơn)
+    // — xem `vanHanRedirectTarget` trong app/api/tu-vi/route.ts. Nộp URL chuyển
+    // hướng vào sitemap là bắt Google đi một nhịp thừa cho 480 URL, và giữ hai
+    // họ cùng tồn tại trong mắt nó đúng lúc mình đang cố gộp lại.
+    if (r.category === 'van-han') continue;
     const prio = SEO_PRIORITY[r.category] || '0.65';
-    const cf   = r.category === 'van-han' ? 'yearly' : 'monthly';
-    entries.push(urlEntry(`${BASE_URL}/tu-vi/${encodeURIComponent(r.slug)}`, r.created_at?.slice(0,10)||today, cf, prio));
+    entries.push(urlEntry(`${BASE_URL}/tu-vi/${encodeURIComponent(r.slug)}`, r.created_at?.slice(0,10)||today, 'monthly', prio));
+  }
+
+  // ── Họ /van-han/* — bản CHUẨN sau khi gộp ────────────────────────────────────
+  // Trước đây CHỈ có trang hub `/van-han` trong sitemap, còn 576 trang con thì
+  // không được nộp — tức bản dày nhất, đúng từ khoá nhất lại là bản Google không
+  // được mời vào. Sinh bằng thuật toán (không có bảng): 12 chi × 8 năm cấp 1,
+  // 60 can chi × 8 năm cấp 2. Danh sách phải KHỚP `NAM_XEMS` trong
+  // app/van-han/[slug]/route.ts — lệch là nộp URL 404.
+  const VH_NAMS = [2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
+  const VH_CHI  = ['ty','suu','dan','mao','thin','ti','ngo','mui','than','dau','tuat','hoi'];
+  const VH_CAN  = ['giap','at','binh','dinh','mau','ky','canh','tan','nham','quy'];
+  for (const nam of VH_NAMS) {
+    for (const chi of VH_CHI) {
+      entries.push(urlEntry(`${BASE_URL}/van-han/tuoi-${chi}-nam-${nam}`, today, 'monthly', '0.85'));
+    }
+    // Cặp can-chi hợp lệ: cùng tính chẵn/lẻ (Giáp Tý có thật, Giáp Sửu không) —
+    // đúng 60 tổ hợp của lục thập hoa giáp. Sinh đủ 120 là nộp 60 URL chết.
+    for (let i = 0; i < 60; i++) {
+      entries.push(
+        urlEntry(`${BASE_URL}/van-han/${VH_CAN[i % 10]}-${VH_CHI[i % 12]}-nam-${nam}`, today, 'monthly', '0.75'),
+      );
+    }
   }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

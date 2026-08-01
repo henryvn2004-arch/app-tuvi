@@ -30,8 +30,11 @@ User-agent: cohere-ai
 Allow: /
 
 # Sitemap
+# sitemap-pregen.xml ĐÃ RÚT: 587.328 URL /la-so/* sinh bằng thuật toán, đo trên
+# GSC 28 ngày ra 0 nhấp. Chúng vẫn được index và xếp hạng 1,4–3,5 nhưng chỉ khớp
+# truy vấn dạng ngày sinh chính xác — thứ gần như không ai gõ. Rút để dồn crawl
+# về ~35K trang có cầu thật. Chi tiết trong app/sitemap-pregen/route.ts.
 Sitemap: https://www.tuviminhbao.com/sitemap.xml
 Sitemap: https://www.tuviminhbao.com/sitemap-hubs.xml
-Sitemap: https://www.tuviminhbao.com/sitemap-pregen.xml
 Sitemap: https://www.tuviminhbao.com/sitemap-ngay-tot.xml
 
