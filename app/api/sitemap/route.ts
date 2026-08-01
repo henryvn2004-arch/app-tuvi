@@ -102,7 +102,9 @@ export async function GET() {
     { path:'/tools/han-nam.html',               cf:'monthly', p:'0.7' },
     { path:'/tools/hoang-dao.html',             cf:'daily',   p:'0.8' },
     { path:'/tools/khi-sac-ai.html',            cf:'monthly', p:'0.7' },
-    { path:'/tools/kim-lau.html',               cf:'monthly', p:'0.8' },
+    // Trang trụ cụm kim lâu (không phải trang tool nữa) — cầu đã xác nhận qua
+    // GSC nên để ngang các hub chuyên mục.
+    { path:'/kim-lau',                          cf:'monthly', p:'0.9' },
     { path:'/tools/kinh-dich.html',             cf:'monthly', p:'0.6' },
     { path:'/tools/luc-nham.html',              cf:'monthly', p:'0.6' },
     { path:'/tools/mau-sac-hop-menh.html',      cf:'monthly', p:'0.7' },

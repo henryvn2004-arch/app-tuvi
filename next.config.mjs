@@ -79,6 +79,10 @@ const nextConfig = {
   async redirects() {
     return [
       { source: '/app/xem-tuong', destination: '/app/dien-tuong', permanent: false },
+      // Gộp cụm kim lâu về MỘT URL. Trang trụ /kim-lau chứa đủ công cụ + công
+      // thức + bảng tra + hoá giải; để /tools/kim-lau.html sống song song là tự
+      // dựng lại đúng cặp URL triệt nhau vừa phải gỡ ở #358.
+      { source: '/tools/kim-lau.html', destination: '/kim-lau', permanent: true },
     ];
   },
 };

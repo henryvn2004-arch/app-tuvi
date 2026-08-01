@@ -1,5 +1,5 @@
 /* tools-shared/kim-lau.js — Module DÙNG CHUNG cho tool Kim Lâu / Tam Tai /
-   Hoang Ốc. Nguồn DUY NHẤT: cả trang standalone (/tools/kim-lau.html) lẫn
+   Hoang Ốc. Nguồn DUY NHẤT: cả trang standalone (/kim-lau) lẫn
    shell (/app/kim-lau) đều gọi module này → sửa 1 chỗ, 2 nơi cập nhật.
 
    Logic PORT từ bản inline cũ của tools/kim-lau.html. Hai chỗ ĐÃ ĐỔI HÀNH VI
@@ -39,7 +39,9 @@
 
   /** Trả tên loại Kim Lâu, hoặc null nếu không phạm. Tuổi ÂM (tuổi ta). */
   function kimLauLoai(t) { return KIM_LAU_LOAI[((t % 9) + 9) % 9] || null; }
-  function isKimLau(t) { return kimLauLoai(t) !== null; }
+  // (Bỏ `isKimLau` — mọi chỗ gọi nay dùng thẳng `kimLauLoai(t) !== null` để có
+  // luôn tên loại; giữ lại một hàm boolean song song chỉ tạo chỗ cho hai đường
+  // tính trôi khỏi nhau.)
   function isHoangOc(t) { return t > 0 && t % 5 === 0; }
   function isTamTai(bChi, yChi) { var g = TAM_TAI[bChi]; return g && g.includes(yChi); }
 
