@@ -10,15 +10,18 @@ const TuviPaywall = (() => {
   // ⚠️ FALLBACK-ONLY. Nguồn giá THẬT = bảng Supabase `tool_pricing` (đọc live ở
   // _price(); server /api/payment cũng enforce theo tool_pricing khi trừ). Map này
   // chỉ dùng khi fetch tool_pricing lỗi → giữ đồng bộ với DB để không lệch.
+  // (Đã đồng bộ lại với prod 2026-08-01: 7 dòng đã trôi khỏi DB, nặng nhất là
+  // `laso` ghi 150 trong khi DB là 25. `tuvi-chat` KHÔNG có trong tool_pricing
+  // và không nơi nào dùng — giá rail thật đọc từ app_config `chat.cost`.)
   const PRODUCTS = {
     'tuvi-chat':   { cost:   5, title: 'Tử Vi Chat' },
-    'laso':        { cost: 150, title: 'Luận Giải Lá Số' },
-    'tu-binh':     { cost: 100, title: 'Tử Bình Bát Tự' },
-    'xem-tuoi':    { cost:  50, title: 'Xem Tuổi Vợ Chồng' },
-    'xem-lam-an':  { cost:  50, title: 'Xem Tuổi Làm Ăn' },
-    'dien-tuong':  { cost:  10, title: 'Diện Tướng AI' },
-    'nhan-tuong':  { cost:  10, title: 'Nhãn Tướng AI' },
-    'thu-tuong':   { cost:  10, title: 'Thủ Tướng AI' },
+    'laso':        { cost: 25, title: 'Luận Giải Lá Số' },
+    'tu-binh':     { cost: 20, title: 'Tử Bình Bát Tự' },
+    'xem-tuoi':    { cost:  15, title: 'Xem Tuổi Vợ Chồng' },
+    'xem-lam-an':  { cost:  15, title: 'Xem Tuổi Làm Ăn' },
+    'dien-tuong':  { cost:  8, title: 'Diện Tướng AI' },
+    'nhan-tuong':  { cost:  8, title: 'Nhãn Tướng AI' },
+    'thu-tuong':   { cost:  8, title: 'Thủ Tướng AI' },
     'thanh-tuong': { cost:  12, title: 'Thanh Tướng AI' },
     'thanh-tuong-pro': { cost: 18, title: 'Thanh Tướng Pro' },
     'khi-sac':     { cost:  20, title: 'Khí Sắc — Vận Khí' },
