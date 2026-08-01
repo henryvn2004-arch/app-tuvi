@@ -60,6 +60,43 @@ Edge `youtube-upload` **hardcode `YOUTUBE_CLIENT_ID` + `YOUTUBE_CLIENT_SECRET`
 làm giá trị mặc định ngay trong source**. Nên rotate + chuyển hẳn sang env, cùng
 tiền lệ đã phải rotate service_role key Supabase.
 
+### ✅ M2 — xương sống + hàng đợi duyệt tay (PR sau #369)
+Henry chốt **duyệt tay trước, chưa auto-post**. Cron dựng ảnh + caption rồi DỪNG
+ở hàng đợi; PR này **không đăng đi đâu cả** (adapter kênh để M3).
+- **Migration `_patches/migration-media-posts.sql`** (✅ ĐÃ CHẠY prod — verify 9
+  cột `media_assets` + 15 cột `media_posts`, RLS bật, **0 policy** = chỉ service
+  key, 3 khoá config, `autopost_enabled=false`). Hai bảng tách theo câu hỏi
+  chúng trả lời: asset = "file này là gì", post = "lên kênh nào, tới đâu rồi".
+  Một asset → nhiều post. **Không mở rộng `van_dap`** dù nó sẵn cột `fb_*`/`tt_*`:
+  thêm kênh là thêm 3 cột, thêm định dạng lại 3 cột nữa.
+- **`/api/og/social` — Satori, 0đ.** Đo prod: `gpt-image-1` 1.658đ/lượt (~96%
+  chi phí một lượt chân dung); job chạy hằng ngày mà gọi model ảnh thì tiền đội
+  theo số bài. **URL CHÍNH LÀ FILE** — không cần bucket, và Instagram Graph API
+  vốn đòi ảnh phải có URL công khai nên điều kiện đó thoả sẵn.
+- **`lib/media/build.ts`** — trích câu bằng LUẬT (dùng lại luật `poster.js`:
+  câu TRỌN VẸN gần 95 ký tự, khoảng 45–155), caption LLM, **qua cổng brand-check
+  #356** với ĐÚNG hồ sơ giọng của từng nguồn (`khao-luan` ngôi 3 vs `nghien-cuu`
+  ngôi 1 — áp nhầm chặn 98% output, đã trả giá một lần). Trượt gate → BỎ bài.
+  Ràng buộc duy nhất `(source_type, source_id, variant)` + unique
+  `(asset_id, channel)` = chống dựng trùng và đăng trùng ở tầng DB.
+- **Thứ tự kiểm đặt chỗ rẻ trước:** không trích được câu / bài đã dựng rồi →
+  thoát TRƯỚC khi gọi LLM. Có test riêng đếm số lượt gọi LLM = 0.
+- Cron `media-build` 09:30 VN + panel **"Hàng Đợi Bài Đăng"** trong Marketing
+  (xem ảnh thật + sửa caption + Duyệt/Bỏ). **Cố ý KHÔNG có nút "đăng ngay"** —
+  một cú bấm nhầm không được phép đẩy nội dung lên trang công khai.
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi · `prettier --check .` sạch · 3 script
+  block admin OK · **27 ca trên module thật** (chỉ thay 3 dòng import, `diff`
+  xác nhận logic nguyên byte) · **7 ca Playwright trên chính hàm render trích từ
+  `admin.html`**: caption chứa `<script>`/`onerror` không chạy được, vẫn hiện
+  nguyên văn trong ô sửa.
+- 🐞 Một ca test đỏ hoá ra là **kỳ vọng của test sai, không phải code** — mẫu
+  markdown tao viết có cụm chữ không dấu kết câu nên dính vào câu sau, đúng như
+  nó phải thế. Đã kiểm riêng: `##` và `**` đều được gỡ đúng.
+- ⚠️ **CHƯA render được ảnh thật** — Satori nạp font từ Google Fonts, container
+  phiên chặn mọi host ngoài. Bố cục mới chỉ đọc bằng mắt trên code. **Việc tay
+  Henry: mở `/api/og/social?v=quote&k=Khảo%20Luận&q=<câu>&t=<tiêu đề>` sau khi
+  deploy** để soi khung chữ có tràn không.
+
 ### Kế hoạch còn lại — `docs/MEDIA-PIPELINE-PLAN.md`
 M2 xương sống (`media_assets` + `media_posts` + adapter + admin duyệt) · M3
 Instagram/Threads · M4 video 9:16 · M5 podcast RSS + Telegram channel · M6 Zalo

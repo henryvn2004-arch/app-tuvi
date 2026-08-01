@@ -125,6 +125,9 @@ export const JOBS: JobSpec[] = [
   { key: 'yt-drain', label: 'Xả kho YouTube', source: 'vercel', everyMinutes: D,
     schedule: '11:00 VN hằng ngày', sink: 'van_dap → YouTube', trigger: true,
     since: '2026-08-01' },
+  { key: 'media-build', label: 'Dựng hàng đợi bài đăng', source: 'vercel', everyMinutes: D,
+    schedule: '09:30 VN hằng ngày', sink: 'media_assets + media_posts', trigger: true,
+    since: '2026-08-01' },
 ];
 
 export interface CronRun {

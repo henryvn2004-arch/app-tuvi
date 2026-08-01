@@ -21,6 +21,7 @@
     { "path": "/api/cron/content-pack",  "schedule": "0 1 * * 0"  },
     { "path": "/api/cron/keyword-suggest", "schedule": "0 1 * * 2" },
     { "path": "/api/cron/topic-topup", "schedule": "0 1 * * 3" },
-    { "path": "/api/cron/yt-drain",    "schedule": "0 4 * * *"  }
+    { "path": "/api/cron/yt-drain",    "schedule": "0 4 * * *"  },
+    { "path": "/api/cron/media-build", "schedule": "30 2 * * *" }
   ]
 }
