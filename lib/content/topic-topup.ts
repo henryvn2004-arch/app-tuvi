@@ -32,8 +32,24 @@ import { getSearchConsoleSnapshot } from '@/lib/analytics/search-console';
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
 
-/** 3 bài/ngày × 7 ngày cho mỗi bề mặt. */
-export const DEFAULT_PER_SURFACE = 21;
+/**
+ * Số chủ đề nạp cho mỗi bề mặt mỗi tuần = (số lịch cron/ngày) × 1 bài/lượt × 7.
+ *
+ * ⚠️ HAI BỀ MẶT TIÊU KHÁC NHAU, đừng gộp về một con số. Cả hai cron đều lấy
+ * `ARTICLES_PER_RUN = 1`, nhưng `vercel.json` khai:
+ *   cron-khao-luan    3 lịch/ngày → 3 bài/ngày → 21/tuần
+ *   cron-master-write 5 lịch/ngày → 5 bài/ngày → 35/tuần
+ * Nạp đều 21 cho cả hai (bản đầu) thì bề mặt nghiên cứu cạn sau 4,2 ngày rồi
+ * chạy rỗng gần 3 ngày mỗi tuần — đúng sự cố hàng đợi khảo luận vừa dính suốt
+ * tuần trước. Sửa lịch cron thì phải sửa luôn con số ở đây.
+ */
+const PER_WEEK: Record<Surface, number> = {
+  'nghien-cuu': 35,
+  'khao-luan': 21,
+};
+
+/** Giữ lại cho chỗ gọi cũ / hiển thị; nay chỉ là mức của bề mặt khảo luận. */
+export const DEFAULT_PER_SURFACE = PER_WEEK['khao-luan'];
 
 // ── Hai bề mặt, hai ĐỊNH DẠNG khác hẳn nhau ───────────────────────────────────
 //
@@ -131,9 +147,11 @@ const CUNG = [
  *      không có nguồn nào về một công ty cụ thể; gắn vào là bịa 100% kèm rủi ro
  *      pháp lý. Đây là ranh giới giữ "ăn theo NỖI LO" và "ăn theo SỰ KIỆN".
  *
- * Danh sách này là LƯỚI AN TOÀN, không phải nguồn chính. Ở nhịp 21 bài/tuần nó
- * chỉ đủ ~2 tuần trước khi quay vòng; nguồn bền vững là `keyword_ideas` (Google
- * Suggest) từ 04/08 trở đi — chỗ có cách hỏi đời thường ở quy mô thật.
+ * Danh sách này là LƯỚI AN TOÀN, không phải nguồn chính. Ở nhịp 35 bài/tuần của
+ * bề mặt nghiên cứu, nó chỉ đủ ~1 tuần rưỡi trước khi quay vòng — nguồn bền
+ * vững là `keyword_ideas` (Google Suggest) từ 04/08 trở đi, chỗ có cách hỏi đời
+ * thường ở quy mô thật. Suggest mà hụt thì phải nới danh sách này, đừng hạ chỉ
+ * tiêu: hạ chỉ tiêu là để cron chạy rỗng.
  */
 const LIFE_QUESTIONS = [
   // Tiền bạc
@@ -191,6 +209,42 @@ const LIFE_QUESTIONS = [
   'Vì sao hai người cùng ngày cùng giờ sinh lại khác số phận',
   'Xem tử vi rồi biết trước vận xấu — biết để làm gì',
   'Người không tin tử vi thì lá số có đúng với họ không',
+
+  // ── Nới đợt 2 ───────────────────────────────────────────────────────────────
+  // Bề mặt nghiên cứu tiêu 35/tuần, mà 44 câu thì tuần thứ hai đã hụt: vòng
+  // xoay lấy lại phần lớn câu tuần trước, rồi bị chống trùng loại sạch vì lúc
+  // đó chúng đã thành bài thật. Nới lên ~74 để có ~2 tuần đệm trong lúc chờ
+  // `keyword_ideas` (Google Suggest) trở thành nguồn chính.
+  'Vay tiền làm ăn có nên không — lá số nói gì về người hợp và không hợp vay vốn',
+  'Lộc bất ngờ có thật không — lá số có dấu hiệu nào báo trước',
+  'Người giữ tiền giỏi khác người tiêu hoang ở chỗ nào trong lá số',
+  'Làm nghề tay trái lại khá hơn nghề chính — cung Quan Lộc lý giải ra sao',
+  'Hay bị đồng nghiệp chơi xấu — lá số nói gì về chuyện đó',
+  'Người hợp làm quản lý và người hợp làm chuyên môn khác nhau ở đâu',
+  'Mất việc giữa chừng — đó là hạn hay là bước ngoặt trong đại vận',
+  'Chồng hay đi sớm về khuya — cung Phu Thê có báo trước điều gì không',
+  'Ly hôn rồi có nên đi bước nữa — lá số nhìn chuyện này thế nào',
+  'Vì sao có người cưới muộn lại bền, cưới sớm lại đổ vỡ',
+  'Người thứ ba xuất hiện — cung Phu Thê có dấu hiệu gì trước đó',
+  'Con trai hay con gái hợp với mình hơn — cung Tử Tức luận thế nào',
+  'Con học giỏi mà lớn lên không thành đạt — lá số lý giải ra sao',
+  'Chia tài sản trong nhà sinh mâu thuẫn — cung Điền Trạch nói gì',
+  'Xa quê lập nghiệp hay ở gần bố mẹ — cung Thiên Di trả lời tới đâu',
+  'Người hay bị nói xấu sau lưng — lá số lý giải ra sao',
+  'Vì sao có người đi đâu cũng gặp người giúp đỡ',
+  'Bệnh vặt tái đi tái lại — cung Tật Ách có liên quan không',
+  'Người dễ gặp tai nạn — lá số có dấu hiệu nào không',
+  'Chuyển nhà có cần xem tuổi không — cổ pháp nói gì',
+  'Ở nhà thuê mãi không mua nổi nhà — cung Điền Trạch nói gì',
+  'Người hướng nội có thiệt thòi trên đường công danh không',
+  'Vì sao có người cả đời không dám liều một lần',
+  'Người hay cả nể — đó là phúc hay là hoạ theo lá số',
+  'Năm tuổi có thật sự xấu như người ta vẫn nói không',
+  'Xui liên tiếp một năm thì bao giờ mới hết — nhìn theo đại vận',
+  'Vì sao có người càng về già càng sướng, có người ngược lại',
+  'Đầu năm xem thấy hạn xấu — nên làm gì cho đúng',
+  'Lá số nam và lá số nữ đọc khác nhau ở chỗ nào',
+  'Không nhớ chính xác giờ sinh thì lá số còn dùng được không',
 ];
 
 interface Spoke {
@@ -468,7 +522,10 @@ interface ShapedTopic {
  * Đây là ranh giới quan trọng nhất của file: mất nó thì hệ thống quay về đúng
  * trạng thái sinh hàng loạt bài không ai tìm, chỉ khác là tự động hơn.
  */
-async function shapeTopics(items: DemandItem[], perSurface: number): Promise<ShapedTopic[]> {
+async function shapeTopics(
+  items: DemandItem[],
+  target: Record<Surface, number>,
+): Promise<ShapedTopic[]> {
   if (!items.length) return [];
 
   const list = items
@@ -498,7 +555,7 @@ LUẬT ĐẶT TIÊU ĐỀ:
 - Nếu cụm từ khoá có năm, giữ nguyên năm đó.
 
 Trả JSON: {"topics":[{"topic":"...","surface":"nghien-cuu|khao-luan"}]}
-Trả tối đa ${perSurface} tiêu đề cho MỖI bề mặt.`;
+Trả tối đa ${target['nghien-cuu']} tiêu đề [nghien-cuu] và ${target['khao-luan']} tiêu đề [khao-luan].`;
 
   const raw = await llmText({
     system,
@@ -546,7 +603,12 @@ async function pickMasters(count: number): Promise<string[]> {
 export async function runTopicTopup(
   opts: { perSurface?: number; dryRun?: boolean; now?: Date } = {},
 ): Promise<TopupResult> {
-  const perSurface = opts.perSurface ?? DEFAULT_PER_SURFACE;
+  // `opts.perSurface` là mức ÉP CHUNG cho cả hai bề mặt (dùng cho test và cho
+  // tham số `?per=` khi chạy tay). Không truyền thì mỗi bề mặt lấy mức riêng
+  // theo nhịp cron của nó.
+  const target: Record<Surface, number> = opts.perSurface
+    ? { 'nghien-cuu': opts.perSurface, 'khao-luan': opts.perSurface }
+    : { ...PER_WEEK };
   const now = opts.now ?? new Date();
   const empty: TopupResult = { inserted: 0, bySurface: {}, sources: {}, deduped: 0 };
 
@@ -576,16 +638,16 @@ export async function runTopicTopup(
     fresh.push(it);
     // Trần gom là CHUNG cho cả hai bề mặt, mà số khung mỗi bên không cân: hiện
     // có 6 khung khảo luận đấu 1 khung nghiên cứu. Trần chật thì bên ít khung
-    // bị lấn, không đủ 21 dòng (đo được: trần ×4 chỉ ra 18 bài nghiên cứu).
-    // ×8 cho cả hai bên đủ chỗ; danh sách vẫn chỉ là chuỗi ngắn nên prompt
-    // không phình đáng kể.
-    if (fresh.length >= perSurface * 8) break;
+    // bị lấn, không đủ chỉ tiêu (đo được: trần ×4 chỉ ra 18/21 bài nghiên cứu).
+    // ×8 TỔNG chỉ tiêu cho cả hai bên đủ chỗ; danh sách vẫn chỉ là chuỗi ngắn
+    // nên prompt không phình đáng kể.
+    if (fresh.length >= (target['nghien-cuu'] + target['khao-luan']) * 4) break;
   }
   if (!fresh.length) {
     return { ...empty, deduped, note: 'mọi cụm gom được đều trùng bài đã có' };
   }
 
-  const shaped = await shapeTopics(fresh, perSurface);
+  const shaped = await shapeTopics(fresh, target);
   if (!shaped.length) return { ...empty, deduped, note: 'LLM không trả được tiêu đề nào' };
 
   // Chống trùng LẦN HAI trên chính tiêu đề model vừa đặt: hai cụm khác nhau
@@ -593,7 +655,7 @@ export async function runTopicTopup(
   const picked: Record<Surface, string[]> = { 'nghien-cuu': [], 'khao-luan': [] };
   const running = [...existing];
   for (const s of shaped) {
-    if (picked[s.surface].length >= perSurface) continue;
+    if (picked[s.surface].length >= target[s.surface]) continue;
     if (isDuplicate(s.topic, running)) { deduped++; continue; }
     running.push(tokenize(s.topic));
     picked[s.surface].push(s.topic.trim());
