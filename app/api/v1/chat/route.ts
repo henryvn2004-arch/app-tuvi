@@ -26,7 +26,7 @@ import {
 import { buildToolDefs } from '@/lib/tools/registry';
 import { runAgent } from '@/lib/agent/run';
 import { getChatConfig } from '@/lib/config/appConfig';
-import { getToolPrice } from '@/lib/billing/pricing';
+import { getRailPrice } from '@/lib/billing/pricing';
 import { chatLogOutcome } from '@/lib/channels/store';
 import {
   paywallDisabled,
@@ -90,8 +90,8 @@ export async function POST(request: NextRequest) {
   let freeTurnLeft = 0;
   // Giá rail = tool_pricing['rail-message'] (nguồn thật, admin sửa được);
   // fallback cfg.cost (app_config 'chat.cost') nếu chưa có row / đọc hụt.
-  const railPrice = await getToolPrice('rail-message');
-  const cost = railPrice != null ? railPrice : cfg.cost;
+  // Dùng CHUNG một hàm với 3 bot để không kênh nào thu lệch giá.
+  const cost = await getRailPrice(cfg.cost);
   if (!paywallDisabled() && cost > 0) {
     const token = extractToken(request);
     if (!token) return jsonError('unauthorized', 'Cần đăng nhập để dùng tính năng này', 401);
