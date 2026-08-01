@@ -1317,6 +1317,7 @@ export async function GET(request: NextRequest) {
   if (action === 'my-referral') return handleMyReferral(request, searchParams);
   if (action === 'admin-viral') return handleAdminViral(request, searchParams);
   if (action === 'admin-content-pack') return handleAdminContentPack(request, searchParams);
+  if (action === 'admin-media-queue') return handleAdminMediaQueue(request, searchParams);
   if (action === 'check-bank')  return handleCheckBank(searchParams);
   return err('Invalid action.', 400);
 }
@@ -1587,6 +1588,83 @@ async function handleAdminContentPack(request: NextRequest, sp: URLSearchParams)
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
+// ── GET: admin-media-queue (M2, track Media Pipeline) — hàng đợi bài đăng
+// mạng xã hội chờ duyệt. Đọc kèm asset để admin xem ĐƯỢC ẢNH THẬT trước khi
+// bấm, không phải duyệt mù bằng cách đọc caption. ──
+async function handleAdminMediaQueue(request: NextRequest, sp: URLSearchParams): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const status = (sp.get('status') || '').trim();
+  const statusFilter = /^[a-z]+$/.test(status) ? `&status=eq.${status}` : '';
+  try {
+    const [rowsRes, cfgRes] = await Promise.all([
+      fetch(
+        `${SUPABASE_URL}/rest/v1/media_posts?select=id,created_at,channel,caption,hashtags,link_url,status,published_at,external_url,error,media_assets(url,width,height,source_type,meta)${statusFilter}&order=created_at.desc&limit=60`,
+        { headers: SB_HEADERS, cache: 'no-store' },
+      ),
+      fetch(`${SUPABASE_URL}/rest/v1/app_config?key=like.social.*&select=key,value`, {
+        headers: SB_HEADERS,
+        cache: 'no-store',
+      }),
+    ]);
+    const rows = rowsRes.ok ? await rowsRes.json() : [];
+    const cfgRows: { key: string; value: unknown }[] = cfgRes.ok ? await cfgRes.json() : [];
+    const cfg: Record<string, unknown> = {};
+    for (const r of cfgRows) cfg[r.key] = r.value;
+
+    return ok({
+      posts: rows,
+      autopostEnabled: cfg['social.autopost_enabled'] === true,
+      channels: cfg['social.channels'] || [],
+      buildDaily: cfg['social.build_daily'] ?? 0,
+    });
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+}
+
+// ── POST: admin-media-decide (M2) — duyệt hoặc bỏ một bài trong hàng đợi.
+// CỐ Ý chỉ có hai lối ra và KHÔNG có lối "đăng ngay": duyệt xong bài vẫn nằm
+// chờ bước đăng riêng. Một nút bấm nhầm không được phép đẩy thẳng nội dung lên
+// trang công khai. ──
+async function handleAdminMediaDecide(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const postId = String(body.postId || '').trim();
+  const decision = String(body.decision || '').trim();
+  if (!/^[0-9a-f-]{36}$/i.test(postId)) return err('postId không hợp lệ', 400);
+  if (decision !== 'approve' && decision !== 'skip') return err('decision phải là approve hoặc skip', 400);
+
+  const caption = typeof body.caption === 'string' ? body.caption.trim() : '';
+  const patch: Record<string, unknown> = {
+    status: decision === 'approve' ? 'approved' : 'skipped',
+    updated_at: new Date().toISOString(),
+  };
+  // Admin sửa lại caption ngay lúc duyệt — thường nhanh hơn là bỏ bài rồi chờ
+  // cron viết lại bản khác vào hôm sau.
+  if (caption) patch.caption = caption;
+
+  try {
+    // Chỉ đổi được bài ĐANG chờ: chặn việc lỡ tay duyệt lại bài đã đăng (`live`)
+    // hay đang đăng dở (`publishing`).
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/media_posts?id=eq.${postId}&status=in.(queued,approved,skipped)`, {
+      method: 'PATCH',
+      headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+      body: JSON.stringify(patch),
+    });
+    if (!res.ok) return err(await res.text());
+    const rows = (await res.json()) as unknown[];
+    if (!rows.length) return err('Không tìm thấy bài đang chờ với id đó', 404);
+    return ok({ updated: true, status: patch.status });
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+}
+
 // ── GET: admin-autopilot-log (M0.6, track Marketing Autopilot) — nhật ký
 // hành động autopilot (shadow/live) + trạng thái cấu hình hiện tại. THUẦN
 // ĐỌC — không có action bật/tắt qua API này có chủ đích (rủi ro cao, Henry
@@ -1822,6 +1900,7 @@ export async function POST(request: NextRequest) {
   if (action === 'admin-cron-trigger') return handleAdminCronTrigger(request, body);
   if (action === 'admin-channel-broadcast') return handleAdminChannelBroadcast(request, body);
   if (action === 'admin-nudge-user') return handleAdminNudgeUser(request, body);
+  if (action === 'admin-media-decide') return handleAdminMediaDecide(request, body);
   if (action === 'admin-khao-luan-topics') return handleAdminKhaoLuanTopics(request, body);
   if (action === 'admin-nghien-cuu-topics') return handleAdminNghienCuuTopics(request, body);
   if (action === 'admin-mcp-update') return handleAdminMcpUpdate(request, body);

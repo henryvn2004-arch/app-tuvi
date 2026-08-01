@@ -380,6 +380,22 @@
 
         <div class="panel">
           <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>Hàng Đợi Bài Đăng (Mạng Xã Hội)</div>
+            <div class="panel-actions">
+              <span class="badge badge-grey" id="mq-state-badge">…</span>
+              <button class="btn btn-primary btn-sm" onclick="loadMediaQueue()">↻</button>
+            </div>
+          </div>
+          <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
+            M2 (track Media Pipeline) — cron dựng ảnh + viết caption mỗi sáng, bài nằm chờ ở đây tới khi bạn duyệt. Ảnh render bằng Satori nên <b>không tốn tiền model</b>. Duyệt xong bài vẫn CHƯA đăng: bước đăng là một job riêng, cố ý không có nút "đăng ngay" ở đây.
+          </div>
+          <div id="mq-list" style="padding:0 1rem 1rem">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="16" r="1"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Autopilot — Nhật Ký Hành Động</div>
             <div class="panel-actions">
               <span class="badge badge-grey" id="ap-state-badge">…</span>
@@ -3187,6 +3203,7 @@ async function loadMarketing() {
   }
   loadViral(fromEl.value, toEl.value);
   loadAutopilotLog();
+  loadMediaQueue();
 }
 
 // V2.4 (track Viral Loop) — phễu vòng lặp giới thiệu. Gọi RIÊNG khỏi
@@ -3275,6 +3292,87 @@ function renderMktViral(v) {
       · <b>Chi phí</b> là tiền LLM + ảnh của chính tool đó (<code>events.llm_usage</code>), chưa gồm chi phí hạ tầng.<br>
       · Ngưỡng tham chiếu đã chốt: K ≥ 0,5 và chi phí/user ≤ 6.000đ trong 2 tuần liên tiếp → cân nhắc nâng trần ngân sách; K &lt; 0,3 sau 3–4 tuần → 2 tool này không lan tự nhiên.
     </div>`;
+}
+
+// M2 (track Media Pipeline) — hàng đợi bài đăng chờ duyệt.
+async function loadMediaQueue() {
+  const badge = document.getElementById('mq-state-badge');
+  const host = document.getElementById('mq-list');
+  try {
+    const d = await apiGet('admin-media-queue');
+    if (d.error) throw new Error(d.error);
+    if (badge) {
+      // Nhãn nói đúng thực trạng: chưa có kênh nào tự đăng, mọi bài chờ tay.
+      badge.className = 'badge ' + (d.autopostEnabled ? 'badge-green' : 'badge-grey');
+      badge.textContent = d.autopostEnabled ? 'Tự đăng: BẬT' : 'Tự đăng: TẮT — duyệt tay';
+    }
+    renderMediaQueue(d.posts || []);
+  } catch (e) {
+    if (badge) { badge.className = 'badge badge-red'; badge.textContent = 'Lỗi'; }
+    if (host) host.innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
+  }
+}
+
+const MQ_STATUS = {
+  queued:     ['badge-grey',  'Chờ duyệt'],
+  approved:   ['badge-green', 'Đã duyệt'],
+  publishing: ['badge-grey',  'Đang đăng'],
+  live:       ['badge-green', 'Đã đăng'],
+  error:      ['badge-red',   'Lỗi'],
+  skipped:    ['badge-grey',  'Đã bỏ'],
+};
+
+function renderMediaQueue(posts) {
+  const host = document.getElementById('mq-list');
+  if (!host) return;
+  if (!posts.length) {
+    host.innerHTML = '<div class="empty">Chưa có bài nào trong hàng đợi. Cron <code>media-build</code> chạy 09:30 mỗi sáng.</div>';
+    return;
+  }
+  host.innerHTML = posts.map((p) => {
+    const a = p.media_assets || {};
+    const [cls, label] = MQ_STATUS[p.status] || ['badge-grey', p.status];
+    const pending = p.status === 'queued';
+    const tags = (p.hashtags || []).map((h) => '#' + h).join(' ');
+    return `
+    <div style="display:flex;gap:1rem;padding:.9rem 0;border-bottom:1px solid var(--border)">
+      <img src="${escHtmlLocal(a.url || '')}" alt="" loading="lazy"
+           style="width:120px;height:150px;object-fit:cover;border-radius:8px;background:var(--bg-alt);flex:none">
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.35rem">
+          <span class="badge ${cls}">${escHtmlLocal(label)}</span>
+          <span class="badge badge-grey">${escHtmlLocal(p.channel || '')}</span>
+          <span style="font-size:.7rem;color:var(--text-lt)">${escHtmlLocal((a.source_type || '').replace('_', ' '))}</span>
+        </div>
+        <textarea id="mq-cap-${p.id}" ${pending ? '' : 'disabled'}
+                  style="width:100%;min-height:74px;font-size:.78rem;padding:.5rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);resize:vertical"
+        >${escHtmlLocal(p.caption || '')}</textarea>
+        <div style="font-size:.7rem;color:var(--text-lt);margin:.3rem 0">${escHtmlLocal(tags)}</div>
+        <a href="${escHtmlLocal(p.link_url || '')}" target="_blank" rel="noopener"
+           style="font-size:.7rem;color:var(--text-lt);word-break:break-all">${escHtmlLocal(p.link_url || '')}</a>
+        ${pending ? `
+        <div style="display:flex;gap:.5rem;margin-top:.5rem">
+          <button class="btn btn-primary btn-sm" onclick="mediaDecide('${p.id}','approve')">Duyệt</button>
+          <button class="btn btn-outline btn-sm" onclick="mediaDecide('${p.id}','skip')">Bỏ</button>
+        </div>` : ''}
+        ${p.error ? `<div style="font-size:.7rem;color:var(--red);margin-top:.35rem">${escHtmlLocal(p.error)}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function mediaDecide(postId, decision) {
+  const el = document.getElementById('mq-cap-' + postId);
+  // Gửi kèm caption đang hiện: admin thường sửa vài chữ ngay trước khi duyệt.
+  const caption = el ? el.value.trim() : '';
+  try {
+    const d = await apiPost('admin-media-decide', { postId, decision, caption });
+    if (d.error) throw new Error(d.error);
+    toast(decision === 'approve' ? 'Đã duyệt' : 'Đã bỏ bài', 'success');
+    loadMediaQueue();
+  } catch (e) {
+    toast('Lỗi: ' + e.message, 'error');
+  }
 }
 
 // M0.6 (track Marketing Autopilot) — nhật ký hành động autopilot, THUẦN ĐỌC.
