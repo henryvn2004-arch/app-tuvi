@@ -28,7 +28,7 @@
     { id:'ban-lam-viec', url:'/tools/ban-lam-viec.html',       icon:'🖥', name:'Phong Thủy Bàn Làm Việc',  cat:['phongthu','cong-viec'],         tags:['phong thủy','bàn làm việc','văn phòng'] },
     { id:'cua-hang',     url:'/tools/cua-hang-phong-thuy.html',icon:'🏪', name:'Phong Thủy Cửa Hàng',      cat:['phongthu','cong-viec','tai-chinh'], tags:['phong thủy','cửa hàng','kinh doanh'] },
     { id:'bat-trach',    url:'/tools/bat-trach.html',           icon:'🧿', name:'Hướng Bát Trạch',          cat:['phongthu','gia-dinh'],          tags:['bát trạch','hướng nhà','phong thủy'] },
-    { id:'kim-lau',      url:'/tools/kim-lau.html',             icon:'🏠', name:'Kim Lâu & Tam Tai',        cat:['phongthu','gia-dinh'],          tags:['kim lâu','tam tai','làm nhà','xây nhà'] },
+    { id:'kim-lau',      url:'/kim-lau',             icon:'🏠', name:'Kim Lâu & Tam Tai',        cat:['phongthu','gia-dinh'],          tags:['kim lâu','tam tai','làm nhà','xây nhà'] },
     { id:'mau-sac',      url:'/tools/mau-sac-hop-menh.html',   icon:'🎨', name:'Màu Sắc Hợp Mệnh',         cat:['phongthu','tinh-cach'],         tags:['màu sắc','ngũ hành','trang phục'] },
     // Chọn Ngày
     { id:'hoang-dao',    url:'/tools/hoang-dao.html',           icon:'⚡', name:'Giờ Hoàng Đạo',            cat:['ngaytot'],                      tags:['giờ hoàng đạo','giờ tốt','xuất hành'] },
