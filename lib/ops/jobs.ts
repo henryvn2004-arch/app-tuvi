@@ -109,6 +109,12 @@ export const JOBS: JobSpec[] = [
   { key: 'content-pack', label: 'Content Pack TikTok', source: 'vercel', everyMinutes: 7 * D,
     schedule: 'CN hằng tuần', sink: 'Telegram admin', trigger: true,
     since: '2026-07-28' },
+  // `since` = ngày merge: job chưa từng chạy nên không có dòng nào trong
+  // cron_runs; thiếu mốc này thì bộ dò lập tức kêu "CHƯA HỀ chạy" — đúng loại
+  // cảnh báo giả đã phải đi vá một lượt hôm 30/07.
+  { key: 'keyword-suggest', label: 'Quét từ khoá (Google Suggest)', source: 'vercel', everyMinutes: 7 * D,
+    schedule: 'T3 hằng tuần', sink: 'keyword_ideas', trigger: true,
+    since: '2026-08-01' },
 ];
 
 export interface CronRun {
