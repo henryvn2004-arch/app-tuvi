@@ -239,6 +239,36 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .stm-btn:hover{filter:brightness(1.06)}
 .stm-later{border:none;background:transparent;color:var(--text-lt);font-size:12.5px;cursor:pointer;font-family:inherit;padding:4px}
 .stm-later:hover{color:var(--text-mid)}
+/* Lối phụ trong tường hết-lượt: nạp Lượng để hỏi lẻ từng câu. Cố ý làm NHẠT hơn
+   nút chính (xem trọn 24 mục) — mua trọn bản mới là thứ đáng cho họ, hỏi lẻ chỉ
+   là lựa chọn còn lại. */
+.stm-alt{display:block;font-size:12.5px;color:var(--text-lt);text-decoration:none;margin-bottom:10px}
+.stm-alt:hover{color:var(--blue)}
+
+/* ── ĐỒNG HỒ ĐẾM CÂU (rail) ──
+   Đếm bằng CÂU chứ không bằng Lượng: "còn 24 Lượng" không ai biết nhiều hay ít,
+   "còn 12 câu hỏi" thì biết ngay. Ba mức: thường / ≤3 câu (cam) / hết (đỏ). */
+.rail-meter{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 13px 0;font-size:12px;color:var(--text-lt)}
+.rail-meter .rm-t b{color:var(--text-mid);font-weight:700}
+.rail-meter .rm-sub{opacity:.75}
+.rail-meter .rm-a{color:var(--blue);font-weight:600;text-decoration:none;white-space:nowrap}
+.rail-meter .rm-a:hover{text-decoration:underline}
+.rail-meter.low .rm-t b{color:var(--gold,#9A7B3A)}
+.rail-meter.out .rm-t{color:var(--red,#C0392B);font-weight:600}
+
+/* ── THẺ MỜI TRONG DÒNG HỘI THOẠI ──
+   Chèn sau câu thứ 3, gọi tên đúng cung người ta vừa hỏi. Trông như một thẻ
+   thông tin trong mạch chat, KHÔNG phải banner quảng cáo cắt ngang. */
+.rail-upsell{margin:12px 0 4px;padding:13px 14px;background:var(--gold-lt,#F9F4EB);border:1px solid var(--gold-soft,rgba(154,123,58,.3));border-radius:11px;animation:shFade .2s ease}
+.rail-upsell .ru-t{font-size:13px;color:var(--text);line-height:1.55;margin-bottom:5px}
+.rail-upsell .ru-t b{color:var(--navy)}
+.rail-upsell .ru-d{font-size:12.5px;color:var(--text-mid);line-height:1.6;margin-bottom:11px}
+.rail-upsell .ru-d b{color:var(--navy)}
+.rail-upsell .ru-list{color:var(--text-lt);font-style:italic}
+.rail-upsell .ru-f{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.rail-upsell .ru-btn{background:var(--navy);color:var(--gold-bright,#c9a84c);text-decoration:none;font-family:var(--serif);font-weight:600;font-size:13px;padding:9px 15px;border-radius:8px;white-space:nowrap}
+.rail-upsell .ru-btn:hover{background:var(--navy-mid,#0D3B5E)}
+.rail-upsell .ru-price{font-size:11.5px;color:var(--text-lt)}
 
 /* ── RESPONSIVE (max-width:900px) — PHẢI để CUỐI file: các rule .rail/.sb đặt
    sau media query (vd .rail{position:relative} cho panel lịch sử) sẽ override

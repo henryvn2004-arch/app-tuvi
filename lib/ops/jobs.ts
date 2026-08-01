@@ -109,6 +109,9 @@ export const JOBS: JobSpec[] = [
   { key: 'content-pack', label: 'Content Pack TikTok', source: 'vercel', everyMinutes: 7 * D,
     schedule: 'CN hằng tuần', sink: 'Telegram admin', trigger: true,
     since: '2026-07-28' },
+  { key: 'prune-anon-trial', label: 'Dọn nhật ký dùng thử', source: 'vercel', everyMinutes: D,
+    schedule: '09:00 VN hằng ngày', sink: 'anon_rail_hits', trigger: true,
+    since: '2026-07-30' },
   // `since` = ngày merge: job chưa từng chạy nên không có dòng nào trong
   // cron_runs; thiếu mốc này thì bộ dò lập tức kêu "CHƯA HỀ chạy" — đúng loại
   // cảnh báo giả đã phải đi vá một lượt hôm 30/07.

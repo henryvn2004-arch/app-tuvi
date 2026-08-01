@@ -498,7 +498,7 @@
           </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Gói</th><th>Nhãn</th><th>Lượng</th><th>VNĐ</th><th>USD</th><th>Bonus</th><th>Bật</th><th></th></tr></thead>
+              <thead><tr><th>Gói</th><th>Nhãn</th><th>Lượng</th><th>VNĐ</th><th>USD</th><th>Bật</th><th></th></tr></thead>
               <tbody id="packages-body"><tr><td colspan="8" class="loading"><span class="spin"></span>Đang tải...</td></tr></tbody>
             </table>
           </div>
@@ -3888,7 +3888,6 @@ async function loadPackages() {
         <td><input type="number" class="price-input" id="pk-credits-${r.package_id}" value="${r.credits}"></td>
         <td><input type="number" class="price-input" style="width:100px" id="pk-vnd-${r.package_id}" value="${r.amount_vnd}"></td>
         <td><input type="number" step="0.01" class="price-input" style="width:75px" id="pk-usd-${r.package_id}" value="${r.amount_usd}"></td>
-        <td><input class="price-input" style="width:60px" id="pk-bonus-${r.package_id}" value="${(r.bonus_label || '').replace(/"/g, '&quot;')}"></td>
         <td style="text-align:center"><input type="checkbox" id="pk-en-${r.package_id}" ${r.enabled ? 'checked' : ''}></td>
         <td><button class="btn btn-primary btn-sm" id="pk-btn-${r.package_id}" onclick="savePackageRow('${r.package_id}')">Lưu</button></td>
       </tr>`).join('');
@@ -3904,7 +3903,6 @@ async function savePackageRow(id) {
     credits: parseInt(document.getElementById('pk-credits-' + id).value),
     amount_vnd: parseInt(document.getElementById('pk-vnd-' + id).value),
     amount_usd: parseFloat(document.getElementById('pk-usd-' + id).value),
-    bonus_label: document.getElementById('pk-bonus-' + id).value,
     enabled: document.getElementById('pk-en-' + id).checked,
   };
   try {

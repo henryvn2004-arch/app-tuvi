@@ -141,7 +141,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
   ${articles.length === 0 ? '<div class="empty">Chưa có bài viết nào.</div>' : articleCards}
   ${totalPages > 1 ? `<div class="pagination">${prevPage}<span class="page-info">Trang ${page}/${totalPages}</span>${nextPage}</div>` : ''}
 </main>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=19" defer></script>
+<script src="/track.js?v=3" defer></script><script src="/nav.js?v=20" defer></script>
 </body></html>`;
 }
 

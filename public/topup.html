@@ -316,16 +316,11 @@ const CUSTOM_FALLBACK_RATE = 2500;
 // Gói dự phòng — KHỚP `credit_packages` trên prod. Bản cũ để số cũ (đúng một
 // nửa số Lượng thật) rồi trông chờ fetch ghi đè, nên trang chớp giá SAI trước
 // khi tải xong, và fetch hỏng thì hiển thị sai luôn.
-// ⚠️ `bonus_label` = số lá số ĐẦY ĐỦ gói mua được = credits ÷ giá `laso`
-// (`tool_pricing`). Nó KHÔNG tự tính lại khi đổi giá laso — đổi giá thì phải
-// sửa cả 4 dòng dưới DB lẫn ở đây. Bản trước viết khi laso=25 và đứng nguyên
-// lúc laso lên 100, nên trang thanh toán hứa GẤP 4 LẦN (999k ghi "64 lá số"
-// trong khi chỉ mua được 16). Làm tròn XUỐNG — đừng hứa dư.
 const FALLBACK_PACKAGES = [
-  { package_id: '50',  credits: 100,  amount_vnd: 99000,  label: 'Khởi Đầu',  bonus_label: '1 lá số'  },
-  { package_id: '120', credits: 240,  amount_vnd: 199000, label: 'Phổ Thông', bonus_label: '2 lá số'  },
-  { package_id: '350', credits: 700,  amount_vnd: 499000, label: 'Cao Cấp',   bonus_label: '7 lá số'  },
-  { package_id: '800', credits: 1600, amount_vnd: 999000, label: 'VIP',       bonus_label: '16 lá số' },
+  { package_id: '50',  credits: 100,  amount_vnd: 99000,  label: 'Khởi Đầu'  },
+  { package_id: '120', credits: 240,  amount_vnd: 199000, label: 'Phổ Thông' },
+  { package_id: '350', credits: 700,  amount_vnd: 499000, label: 'Cao Cấp'   },
+  { package_id: '800', credits: 1600, amount_vnd: 999000, label: 'VIP'       },
 ];
 const PKG_ICONS = ['leaf', 'star', 'gem', 'crown'];
 // Chưa có cột `featured` dưới DB → gói thứ HAI theo sort_order là gói được làm
@@ -391,7 +386,7 @@ function renderPackages() {
       + '<div class="pkg-credits">' + p.credits + ' Lượng</div>'
       + '<div class="pkg-rate">' + vnd(Math.round(rate)) + ' / Lượng'
       + (save >= 5 ? '<span class="pkg-save">rẻ hơn ' + save + '%</span>' : '') + '</div>'
-      + '<div class="pkg-note">' + (p.bonus_label ? '≈ ' + esc(p.bonus_label) + ' đầy đủ' : 'Không hết hạn') + '</div>'
+      + '<div class="pkg-note">Không hết hạn</div>'
       // Giá đã to đùng ngay trên nút → nhắc lại trong nút là thừa. Giữ ngữ cảnh
       // cho trình đọc màn hình bằng aria-label vì 4 nút giờ đọc giống hệt nhau.
       + '<button class="btn-pkg" id="btn-' + esc(p.package_id) + '" onclick="payPackage(\'' + esc(p.package_id) + '\')"'
@@ -411,14 +406,14 @@ function btnLabelFor() {
 async function loadPackages() {
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/credit_packages?enabled=eq.true&select=package_id,credits,amount_vnd,label,bonus_label&order=sort_order.asc`,
+      `${SUPABASE_URL}/rest/v1/credit_packages?enabled=eq.true&select=package_id,credits,amount_vnd,label&order=sort_order.asc`,
       { headers: { apikey: SUPABASE_ANON } }
     );
     const pkgs = await res.json();
     if (Array.isArray(pkgs) && pkgs.length) {
       const clean = pkgs.map(p => ({
         package_id: String(p.package_id), credits: Number(p.credits),
-        amount_vnd: Number(p.amount_vnd), label: p.label || '', bonus_label: p.bonus_label || '',
+        amount_vnd: Number(p.amount_vnd), label: p.label || '',
       })).filter(p => p.credits > 0 && p.amount_vnd > 0);
       if (clean.length) State.packages = clean;
     }

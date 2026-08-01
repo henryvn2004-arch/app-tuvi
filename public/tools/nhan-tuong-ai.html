@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=19" as="script">
+<link rel="preload" href="/nav.js?v=20" as="script">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Nhãn Tướng — Xem Tướng Mắt Bằng AI | Tử Vi Minh Bảo</title>
 <meta property="og:title" content="Nhãn Tướng — Xem Tướng Mắt Bằng AI | Tử Vi Minh Bảo"/>
@@ -99,13 +99,13 @@
   <div class="form-section" id="inputSection">
     <div class="section-eyebrow">Tải Ảnh Lên</div>
     <div class="privacy-notice">
-      <span>🔒</span>
+      <span><span class="ic" data-icon="lock"></span></span>
       <div><strong>Quyền riêng tư:</strong> Ảnh chỉ gửi đến Claude AI để phân tích, không lưu trên server. Chụp thẳng mặt, đủ sáng — hệ thống sẽ tự zoom vào vùng mắt để phân tích chi tiết hơn.</div>
     </div>
 
     <div class="input-tabs" style="margin-top:20px">
-      <button class="input-tab active" onclick="switchTab('upload',this)">📁 Tải Ảnh Lên</button>
-      <button class="input-tab" onclick="switchTab('camera',this)">📷 Chụp Ảnh</button>
+      <button class="input-tab active" onclick="switchTab('upload',this)"><span class="ic" data-icon="folder"></span> Tải Ảnh Lên</button>
+      <button class="input-tab" onclick="switchTab('camera',this)"><span class="ic" data-icon="camera"></span> Chụp Ảnh</button>
     </div>
 
     <div class="input-pane active" id="pane-upload">
@@ -126,14 +126,14 @@
     <div class="input-pane" id="pane-camera">
       <div style="text-align:center;padding:16px 20px">
         <div id="preCamTips">
-          <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px">📋 Trước khi chụp</div>
+          <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px"><span class="ic" data-icon="clipboard"></span> Trước khi chụp</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;max-width:320px;margin:0 auto;text-align:left;margin-bottom:14px">
             <div style="font-size:12px;color:var(--text-mid);display:flex;gap:5px"><span style="color:var(--green)">✓</span>Nhìn thẳng vào camera</div>
             <div style="font-size:12px;color:var(--text-mid);display:flex;gap:5px"><span style="color:var(--green)">✓</span>Ánh sáng đủ, không ngược sáng</div>
             <div style="font-size:12px;color:var(--text-mid);display:flex;gap:5px"><span style="color:var(--green)">✓</span>Mắt mở tự nhiên, không nheo</div>
             <div style="font-size:12px;color:var(--text-mid);display:flex;gap:5px"><span style="color:var(--red)">✗</span>Không đeo kính</div>
           </div>
-          <button class="camera-btn" id="openCamBtn" onclick="openCamera()"><span>📷</span> Mở Camera</button>
+          <button class="camera-btn" id="openCamBtn" onclick="openCamera()"><span><span class="ic" data-icon="camera"></span></span> Mở Camera</button>
         </div>
         <div id="camWrap" style="display:none;position:relative;width:300px;margin:0 auto">
           <video id="camVideo" style="width:300px;border-radius:12px;display:block" autoplay playsinline></video>
@@ -145,7 +145,7 @@
           </svg>
         </div>
         <div id="camBtns" style="display:none;margin-top:14px;gap:10px;justify-content:center;flex-wrap:wrap">
-          <button class="btn-submit" onclick="capturePhoto()" style="margin:0">📸 Chụp</button>
+          <button class="btn-submit" onclick="capturePhoto()" style="margin:0"><span class="ic" data-icon="camera"></span> Chụp</button>
           <button class="btn-prev" onclick="stopCamera()">✕ Huỷ</button>
         </div>
         <canvas id="camCanvas" style="display:none"></canvas>
@@ -158,7 +158,7 @@
         <img id="previewImg" class="preview-img" alt="Ảnh đã chọn">
         <canvas id="overlayCanvas" class="overlay-canvas"></canvas>
         <div class="preview-badge">✓ Ảnh đã chọn</div>
-        <div class="mp-badge" id="mpBadge">👁 Mắt đã xác định</div>
+        <div class="mp-badge" id="mpBadge"><span class="ic" data-icon="eye"></span> Mắt đã xác định</div>
       </div>
       <!-- Eye crop panels -->
       <div class="eye-panels" id="eyePanels" style="display:none">
@@ -176,7 +176,7 @@
 
     <div style="text-align:center;margin-top:20px">
       <button class="btn-submit" id="analyzeBtn" onclick="analyze()" disabled style="padding:14px 40px;font-size:15px">
-        👁 Phân Tích Nhãn Tướng
+        <span class="ic" data-icon="eye"></span> Phân Tích Nhãn Tướng
       </button>
     </div>
     <div class="error-msg" id="error-msg"></div>
@@ -634,6 +634,6 @@ async function _saveTuongReading(tool, resultText, imageData, mediaType) {
 </section>
 <script src="/testimonials.js"></script>
 <script src="/related-tools.js?v=2"></script>
-<script src="/nav.js?v=19" defer></script>
+<script src="/nav.js?v=20" defer></script>
 </body>
 </html>

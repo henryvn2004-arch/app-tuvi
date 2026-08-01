@@ -2,13 +2,13 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=19" as="script">
+<link rel="preload" href="/nav.js?v=20" as="script">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trang Điểm AI — Tử Vi Minh Bảo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css">
-<script src="/nav.js?v=19" defer></script>
+<script src="/nav.js?v=20" defer></script>
 <script src="/auth.js" defer></script>
 <script src="/tuvi-paywall.js?v=11" defer></script>
 <script src="/tools-shared/ai-loading-steps.js?v=1" defer></script>
@@ -291,7 +291,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg-soft); color: va
 
   <!-- Upload Card -->
   <div class="upload-card">
-    <div class="card-title"><span>📸</span> Chụp hoặc tải ảnh khuôn mặt</div>
+    <div class="card-title"><span><span class="ic" data-icon="camera"></span></span> Chụp hoặc tải ảnh khuôn mặt</div>
 
     <div class="upload-zone" id="uploadZone">
       <input type="file" accept="image/*" id="fileInput" capture="user">
@@ -314,7 +314,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg-soft); color: va
     </div>
 
     <button class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
-      💄 Phân tích phong cách
+      <span class="ic" data-icon="palette"></span> Phân tích phong cách
     </button>
   </div>
 
@@ -364,7 +364,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg-soft); color: va
 
     <!-- Color palette -->
     <div class="palette-card" id="paletteCard" style="display:none">
-      <div class="card-title" style="margin-bottom:12px"><span>🎨</span> Bảng màu gợi ý</div>
+      <div class="card-title" style="margin-bottom:12px"><span><span class="ic" data-icon="palette"></span></span> Bảng màu gợi ý</div>
       <div class="palette-row">
         <div class="palette-label">Môi</div>
         <div class="palette-swatches" id="lipSwatches"></div>
@@ -716,6 +716,6 @@ window.addEventListener('load', () => {
     </div>
   </div>
 </section>
-<script src="/nav.js?v=19" defer></script>
+<script src="/nav.js?v=20" defer></script>
 </body>
 </html>

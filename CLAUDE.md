@@ -404,6 +404,54 @@ nạp lẻ chỉ **39**). Henry xác nhận *"nó là tàn dư đó, chỉnh l�
 
 ---
 
+## 📐 QUY ƯỚC BẮT BUỘC (đọc trước khi viết UI mới)
+
+### Icon: KHÔNG dùng emoji màu — chi tiết ở `docs/ICONS.md`
+`public/nav.js` là bộ icon dùng chung (85 icon SVG Lucide + `EMOJI_TO_ICON` 159
+mục + `mountIcons()`), nạp trên gần như mọi trang, export ra `window.ICONS` /
+`window.iconHtml` / `window.mountIcons` / `window.EMOJI_TO_ICON`.
+- UI mới: `<span class="ic" data-icon="wallet"></span>` — **không** emoji màu.
+- HTML dựng động bằng `innerHTML` → phải gọi lại `window.mountIcons(el)`, vì
+  `mountIcons()` chỉ tự chạy MỘT lần lúc nav.js load.
+- Dữ liệu còn lưu emoji (`tool_pricing.icon`) → đưa qua `window.iconHtml(raw)`,
+  nó nhận cả emoji lẫn tên icon. Đừng viết map emoji riêng cho từng trang.
+- **GIỮ** ký tự đơn sắc theo font: `→ ← ✦ ★ ✓ ✗ ✕ ⚠ ☰` (riêng `→` có ~1.430 chỗ
+  trong CTA). Chúng ăn `currentColor`, là phần của nhận diện — đổi là phá theme.
+- **KHÔNG áp dụng** cho prompt gửi LLM (emoji ở đó là chỉ dẫn định dạng cho
+  model) và tin Telegram admin (Telegram không render SVG).
+- Thêm icon → sửa `ICONS` trong nav.js **và bump `nav.js?v=` trên cả 89 file**.
+- Còn nợ: ~1.865 emoji màu trong 132 file UI, dọn theo đợt (bảng ở `docs/ICONS.md §7`).
+- **`shell.js` có bộ ICONS thứ hai (28 icon) — CỐ Ý không gộp.** 0/27 trang shell
+  nạp `nav.js` (chrome riêng); thêm vào để lấy icon thì nav.js tự chèn nav bar
+  lên đầu `<body>` → phá layout 27 trang. Gộp thật phải tách `public/icons.js`
+  cho cả hai cùng nạp = chạm 116 file, chưa đáng khi shell chỉ còn 62 emoji.
+
+### Dùng thử rail cho khách CHƯA đăng nhập — cầu dao 3 lớp
+`/api/v1/chat` KHÔNG còn 401 cứng khi thiếu token: khách vô danh được vài câu
+dùng thử (`lib/billing/anon-trial.ts` + RPC `anon_rail_trial_consume`).
+- **3 trần độc lập**, mỗi cái bịt một đường lách: `anon.rail_trial_turns` (trần
+  ĐỜI theo `anon_id`) · `anon.rail_ip_daily_cap` (bịt xoá-localStorage, phải NỚI
+  vì NAT nhà mạng) · `anon.rail_global_daily_cap` (cầu dao ngân sách).
+  **Đặt bất kỳ trần nào = 0 là TẮT hẳn.**
+- **Fail-CLOSED** — ngược `viral-budget.ts` (fail-OPEN) và ngược có lý do: cầu
+  dao ảnh gác người ĐÃ TRẢ TIỀN, còn đây là khách vô danh chưa trả gì.
+- **`client.anon_id` KHÔNG phải danh tính** — client tự khai. Đừng dùng cho
+  quyền hạn/tính phí. Trần theo IP + toàn hệ thống mới là lớp chống lạm dụng.
+- **Lượt anon CHẶN ảnh** (ảnh đội input token lên nhiều lần mà trần đếm theo
+  LƯỢT) và **tiêu quota ngay khi cấp phép**, không đợi model xong — đếm sau khi
+  thành công là mở đường gọi model rồi ngắt kết nối để khỏi bị tính.
+
+### Giá trị 1 Lượng: neo ở MỘT chỗ
+`app_config['credits.vnd_per_credit']` (hiện **1.000đ**) là nguồn thật; RPC đọc
+qua hàm SQL `credit_vnd()`. Bản sao phía code phải giữ khớp:
+`lib/billing/packages.ts` `VND_PER_CREDIT`, `public/topup.html`,
+`public/cong-cu.html`, `public/admin.html` (`MKT_VND`, `VND_PER_CREDIT`).
+**Ngoại lệ cố ý:** `coalesce(amount_vnd, amount * 2500)` cho dòng **topup lịch
+sử** giữ nguyên 2500 — các giao dịch đó thật sự đã bán ở giá cũ, đổi là viết lại
+lịch sử. Xem `_patches/migration-pricing-v2.sql`.
+
+---
+
 ## 🚨 Vá cảnh báo 10:00 VN 30/07 — BỘ DÒ ĐANG NÓI DỐI (2026-07-30, PR mới)
 
 Cảnh báo Telegram nêu 4 mục. Điều tra ra: **1 mục đúng hoàn toàn, 2 mục đúng dữ
