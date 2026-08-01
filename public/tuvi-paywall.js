@@ -15,8 +15,8 @@ const TuviPaywall = (() => {
   // xem lib/billing/pricing.ts getRailPrice().)
   const PRODUCTS = {
     'tuvi-chat':   { cost:   5, title: 'Tử Vi Chat' },
-    'laso':        { cost: 25, title: 'Luận Giải Lá Số' },
-    'tu-binh':     { cost: 20, title: 'Tử Bình Bát Tự' },
+    'laso':        { cost: 100, title: 'Luận Giải Lá Số' },
+    'tu-binh':     { cost: 50, title: 'Tử Bình Bát Tự' },
     'xem-tuoi':    { cost:  15, title: 'Xem Tuổi Vợ Chồng' },
     'xem-lam-an':  { cost:  15, title: 'Xem Tuổi Làm Ăn' },
     'dien-tuong':  { cost:  8, title: 'Diện Tướng AI' },
