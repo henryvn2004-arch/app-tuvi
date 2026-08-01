@@ -118,6 +118,13 @@ export const JOBS: JobSpec[] = [
   { key: 'topic-topup', label: 'Nạp chủ đề tuần (2 bề mặt)', source: 'vercel', everyMinutes: 7 * D,
     schedule: 'T4 hằng tuần', sink: 'topic_queue', trigger: true,
     since: '2026-08-01' },
+  // Nối lại khâu CUỐI của pipeline media, vốn đứt âm thầm từ 16/07: 86 bài
+  // `van_dap` render xong mà `yt_status='error'`, 84 trong số đó cùng một
+  // `invalid_grant`. Trước đây lỗi chỉ nằm trong một cột DB nên không job nào
+  // canh — đúng loại hỏng mà sổ này sinh ra để bắt.
+  { key: 'yt-drain', label: 'Xả kho YouTube', source: 'vercel', everyMinutes: D,
+    schedule: '11:00 VN hằng ngày', sink: 'van_dap → YouTube', trigger: true,
+    since: '2026-08-01' },
 ];
 
 export interface CronRun {
