@@ -729,7 +729,7 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
         <button class="btn-analyze" id="analyze-btn" onclick="analyze()" disabled>
           <span style="font-size:18px;vertical-align:middle;margin-right:4px"><span class="ic" data-icon="sunrise"></span></span>
           Luận Khí Sắc
-          <span id="analyze-price" style="opacity:.75;font-size:.85em;margin-left:4px">(15 lượng)</span>
+          <span style="opacity:.75;font-size:.85em;margin-left:4px">(<span data-tvp-price="khi-sac">…</span> lượng)</span>
         </button>
       </div>
       <div class="error-msg" id="error-msg"></div>
@@ -1119,19 +1119,6 @@ function renderMarkdown(md) {
     .replace(/<p>(<[hul])/g,'$1')
     .replace(/(<\/[hul][^>]*>)<\/p>/g,'$1');
 }
-
-// ── Dynamic pricing (show actual credits from Supabase) ───────
-(async function() {
-  try {
-    const r = await fetch('https://dciwkfdqhhddeymlisey.supabase.co/rest/v1/tool_pricing?tool_id=eq.khi-sac&select=credits',
-      { headers: { 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I' }});
-    const rows = await r.json();
-    if (rows[0]?.credits) {
-      const el = document.getElementById('analyze-price');
-      if (el) el.textContent = '(' + rows[0].credits + ' lượng)';
-    }
-  } catch(e) {}
-})();
 
 // ── TuviPaywall init ──────────────────────────────────────────
 TuviPaywall.init({

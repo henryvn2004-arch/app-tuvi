@@ -26,6 +26,11 @@ jobs:
       - name: Prettier check
         run: npm run format:check
 
+      # Chặn tái phát giá chép cứng: giá chỉ sửa trong trang Admin, client đọc
+      # qua ToolPrices. Đồng bộ bằng tay đã sai bốn lần trong một ngày.
+      - name: Không có giá chép cứng
+        run: npm run check:prices
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10
