@@ -6,7 +6,9 @@
 export const maxDuration = 300;
 import { NextRequest } from 'next/server';
 import { ok, err, options } from '@/lib/cors';
-import { llmText } from '@/lib/llm/complete';
+import { llmTextFull } from '@/lib/llm/complete';
+import { logLlmUsage } from '@/lib/agent/usage';
+import { parseLlmJson } from '@/lib/llm/json';
 import { withCronLog } from '@/lib/cron/log';
 import { brandCheck } from '@/lib/content/brand-check';
 
@@ -91,7 +93,23 @@ async function pickAuthor(): Promise<string> {
   } catch { return MASTER_IDS[Math.floor(Math.random() * MASTER_IDS.length)]; }
 }
 
-async function writeArticle(topic: string, ctx: string) {
+/**
+ * Shape bài Vấn Đáp. Trước đây `JSON.parse` trả `any` nên không có gì kiểm —
+ * khai tường minh để tsc bắt được khi prompt và chỗ dùng trôi khỏi nhau.
+ * `tags` để `unknown[]` vì model rất hay trả về thứ khác mảng chuỗi; phần lọc
+ * ngay bên dưới mới là chỗ chuẩn hoá.
+ */
+interface KhaoLuanArticle {
+  title: string;
+  slug?: string;
+  excerpt?: string;
+  category: string;
+  tags: unknown;
+  featured?: boolean;
+  content: string;
+}
+
+async function writeArticle(topic: string, ctx: string): Promise<KhaoLuanArticle> {
   const ctxBlock = ctx || '(Dùng kiến thức Tử Vi Đẩu Số tổng quát)';
   const prompt = `Đóng vai nhà nghiên cứu Tử Vi, văn phong nho nhã, điềm đạm, súc tích.
 Câu hỏi: ${topic}
@@ -100,14 +118,35 @@ Trả lời trực tiếp, ≤300 từ, không dùng bullet. Có 1 ví dụ th�
 Trả về JSON thuần (KHÔNG backtick):
 {"title":"Tiêu đề có từ khóa","slug":"slug-ascii","excerpt":"Tóm tắt dưới 155 ký tự","category":"CHỌN 1 TRONG: hon-nhan|gia-dinh|tai-chinh|cong-viec|tinh-cach|van-han|dien-san|quan-he|benh-tat|con-cai","tags":["tag1","tag2"],"featured":false,"content":"markdown ≤300 từ"}`;
 
-  const text = (await llmText({ prompt, maxTokens: 2000 })).trim().replace(/^```json\s*/i,'').replace(/```\s*$/,'').trim();
-  const article = JSON.parse(text);
+  // Bản cũ tự tay bóc fence rồi `JSON.parse` trần — chính việc phải viết
+  // `.replace(/^```json/…)` là bằng chứng model CÓ bọc backtick trong thực tế,
+  // và bóc tay chỉ đỡ được đúng ca fence chuẩn: thêm một câu dẫn hay ghi chú
+  // cuối là hỏng cả lượt, chủ đề bị chốt `error`. Đo trên `topic_queue`: bề mặt
+  // này lỗi 47/232 ≈ 20%.
+  //
+  // `json: true` ép JSON hợp lệ ở TẦNG API (Gemini responseMimeType) — chặn tận
+  // gốc; `parseLlmJson` là lưới cho nhánh backup Anthropic (không có JSON mode).
+  const r = await llmTextFull({ prompt, maxTokens: 2000, json: true });
+  // best-effort: ghi sổ hỏng thì đừng làm hỏng lượt viết bài.
+  void logLlmUsage('cron-khao-luan', r.model, {
+    input_tokens: r.usage.input_tokens,
+    output_tokens: r.usage.output_tokens,
+    cache_creation_input_tokens: 0,
+    cache_read_input_tokens: 0,
+  });
+  const article = parseLlmJson(r.text) as KhaoLuanArticle | null;
+  if (!article) {
+    console.warn(
+      `[cron-khao-luan] parse hỏng (${r.text.length} ký tự). Đầu: ${r.text.slice(0, 120)}`,
+    );
+    throw new Error('khao-luan: không parse được JSON');
+  }
 
   if (!VALID_KL_CATS.includes(article.category)) article.category = 'tinh-cach';
-  const rawTags = Array.isArray(article.tags) ? article.tags as string[] : [];
-  article.tags = rawTags.filter((t: string) => VALID_KL_CATS.includes(t));
-  if (!article.tags.includes(article.category)) article.tags.unshift(article.category);
-  if (article.tags.length === 0) article.tags = [article.category];
+  const rawTags = Array.isArray(article.tags) ? (article.tags as unknown[]) : [];
+  const tags = rawTags.filter((t): t is string => typeof t === 'string' && VALID_KL_CATS.includes(t));
+  if (!tags.includes(article.category)) tags.unshift(article.category);
+  article.tags = tags.length ? tags : [article.category];
   return article;
 }
 
