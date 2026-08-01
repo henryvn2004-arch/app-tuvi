@@ -1,7 +1,130 @@
 # CLAUDE.md — Context cho Claude Code
 
 ## Project
-**tuviminhbao.com** — Tử Vi Đẩu Số app (Next.js 14, Supabase, Vercel)
+**tuviminhbao.com** — Tử Vi Đẩu Số app (Next.js 16, Supabase, Vercel)
+
+---
+
+## 🧭 Track CMO skills — brand-check, từ khoá, SEO (2026-08-01, PR #356–#359)
+
+Henry giao 3 việc: (1) brand voice doc — **phiên khác đã chạy**, nằm ở
+`brand_voice_docs`; (2) brand-check gate trước publish; (3) AI SEO.
+
+### ⚠️ Plugin không nạp được vào container Claude Code
+`brand-voice` và `marketing` **đã bật** trên tài khoản claude.ai nhưng
+`~/.claude/skills` chỉ có skill built-in, và `claude plugin` ở container chỉ có
+`details/enable/disable/eval` — **không có `install`/`marketplace add`**.
+`claude-seo` thì **không có trong catalog** (chỉ tìm ra `searchfit-seo`).
+⇒ Mọi thứ dưới đây viết tay theo checklist §8 của brand voice doc, không chạy
+qua sub-skill. Đừng mất thời gian tìm lại cách cài trong phiên sau.
+
+### ✅ #356 — brand-check gate (`lib/content/brand-check.ts`)
+Chèn MỘT bước QC vào giữa 2 pipeline đang chạy, **không dựng pipeline mới**.
+Gate đứng ngay trước `POST` của `cron-khao-luan` / `cron-master-write` vì cả
+`khao_luan` lẫn `master_articles` **không có cột publish_status** — insert xong
+là bài lên thẳng trang.
+- **Tầng AUTO (regex)**: 0 lượt mạng, luật nằm sẵn trong TS nên chạy được kể cả
+  khi Supabase/LLM chết; `app_config['content.brand_check']` chỉ GHI ĐÈ.
+- **Tầng LLM**: 7 mục cần đọc hiểu, **fail-open** + `console.warn`.
+- Trình tự: autofix → check → 1 vòng LLM viết lại → check lại. Bản viết lại
+  **chỉ nhận khi thực sự ít lỗi hơn**.
+- **HAI PROFILE, không phải hai mức nghiêm khắc.** Đo prod: `khao_luan` 324 bài
+  (6 dùng "tôi") là ngôi 3; `master_articles` 306 bài (**300 dùng "tôi"**) là
+  tùy bút ngôi 1 ký tên thầy. Áp luật Khảo Luận sang Nghiên Cứu chặn 98% output.
+- Seed `mode='warn'` (tiền lệ shadow-mode M0.6). **Autofix VẪN áp ở warn** vì
+  chạy trước khi phân nhánh mode. Siết: `jsonb_set(value,'{mode}','"block"')`.
+- Bài bị chặn cất nguyên văn vào `content_qc_log.payload`; topic đỗ `qc_failed`.
+- 🐞 **`bạn cũng…` lọt gate**: nhánh loại trừ `cũ` (danh từ "bạn cũ") khớp luôn
+  tiền tố "cũng" vì thiếu ranh giới từ. Cụm cực phổ biến ⇒ lỗ rất rộng.
+- 🐞 **`mình` hạ xuống `warn`**: soi 6 mẩu thật lọt bộ lọc thì cả 6 đều phản
+  thân hợp lệ ("thu mình lại", "một mình phá vây"). Regex không tách được.
+  Cùng bài học: đếm thô báo 98/324 bài sai xưng hô, lọc đúng danh từ còn **14**.
+
+### ✅ #357 — Google Suggest → `keyword_ideas`
+GSC 28 ngày chỉ **đọc được tên của đúng 10 truy vấn** (842 hiển thị còn lại bị
+ẩn tên vì quá hiếm) ⇒ không có nguồn từ khoá để đặt title hay chọn chủ đề.
+- **Không dùng Keyword Planner**: cần developer token phải xin duyệt, cần OAuth
+  refresh token (**service account KHÔNG dùng được**, khác GA4/GSC), và không
+  chi tiêu quảng cáo thì chỉ trả **volume dạng dải**. **Henry đã chốt KHÔNG chạy
+  ads** ⇒ cột `volume` ở NULL vĩnh viễn, `best_position` là tín hiệu duy nhất.
+- Chạy trên Vercel, cất asset vào Supabase — **container Claude Code chặn mọi
+  host ngoài** (đã thử: `suggestqueries.google.com` và cả `tuviminhbao.com` đều
+  403 qua proxy). Cùng pattern GA4/GSC.
+- Tôn trọng endpoint không chính thức: tuần tự + nghỉ 350ms + trần 180 lượt +
+  `User-Agent` khai đúng danh tính bot (cố ý không giả trình duyệt).
+- 🐞 28 gốc × 10 hậu tố = **280 tổ hợp** nhưng trần 180 ⇒ 10 gốc cuối không bao
+  giờ tới lượt. Vá bằng **xoay vòng theo số tuần**.
+
+### ✅ #358 — gộp URL vận hạn · rút sitemap-pregen · vá trần hub
+**Số đo GSC 28 ngày (đường đọc: `events` where `event_type='cmo_digest'`,
+`meta->'gsc'` — cron ghi sẵn, không cần credential):**
+| | |
+|---|---:|
+| URL đã nộp sitemap | **616.715** |
+| Trang từng hiện trong kết quả | **612** (0,099%) |
+| Nhấp | **16** (11 về trang chủ) |
+
+- **Gộp 180 trang trùng**: `/tu-vi/van-han-tuoi-*` (mỏng, title tốt, có sitemap)
+  ↔ `/van-han/*` (dày, không sitemap). Chọn bản dày, 301 bản kia, mở `NAM_XEMS`
+  3→8 năm cho khớp `seo_pages`, nộp 576 URL, mang title tốt hơn sang.
+  🐞 `NAM_XEMS[1]` làm "năm chính" trong title hub — mở mảng ra 8 năm là nó
+  lặng lẽ thành 2024. Neo `currentNamXem()`.
+- **Rút `sitemap-pregen`** (587.328 URL → sitemapindex RỖNG, không 404).
+  ⚠️ **KHÔNG phải vì Google không index**: các trang `/la-so/*` xếp hạng
+  **1,4–3,5** hẳn hoi. Chúng chỉ khớp truy vấn NGÀY SINH CHÍNH XÁC — 842 hiển
+  thị, **0 nhấp**. Henry đã xoá sitemap trong GSC.
+- **Vá trần hub**: HAI trần chồng nhau (`or=(…)&limit=2000` + `.slice(0,60)`).
+  Fetch HTML thật của prod về đếm: chỉ **2/5 chuyên mục render, tổng 120 liên
+  kết cho 7.848 trang**. Nay hỏi từng chuyên mục + phân trang → 300 liên
+  kết/trang × 59 trang.
+- **Phân trang theo ĐƯỜNG DẪN** (`/kien-thuc-tuvi/trang/30`), KHÔNG `?page=`:
+  dạng này dùng đúng cơ chế "destination mang sẵn query" mà `/tu-vi/:slug` đã
+  chứng minh chạy trên prod.
+
+### 🪤 BẪY: `next dev` bỏ query của destination trong rewrite
+Next 16 + Turbopack ở **dev** làm mọi hub và mọi `/tu-vi/<slug>` **307 về trang
+chủ**. Tôi đã suýt báo đây là sự cố P0 do nâng Next 14→16.
+**PROD KHÔNG DÍNH** — fetch thật `www.tuviminhbao.com/kien-thuc-tuvi` → HTTP 200.
+Gặp 307 khi chạy dev thì đừng đi sửa nhầm chỗ.
+Mẹo: `web_fetch_vercel_url` của Vercel MCP **với tới được prod** dù container bị
+chặn mạng (preview thì không — khoá sau SSO).
+
+### ✅ #359 — 🔴 công thức Kim Lâu SAI trên prod
+Phát hiện khi chuẩn bị viết content, **không phải Henry báo**.
+```
+Code cũ : tuổi % 5, dư 1 hoặc 3
+Đúng    : tuổi ÂM % 9, dư 1 / 3 / 6 / 8
+```
+4 số dư mod 9 ứng đúng 4 loại **Thân·Thê·Tử·Lục Súc** — chính 4 loại tài liệu
+repo mô tả tool trả về. Bản mod-5 không thể sinh 4 loại ⇒ code lệch khỏi ý định
+đã ghi, là bug chứ không phải biến thể cổ pháp.
+**46% số tuổi 18–80 ra kết quả khác.** Nặng nhất: 16 tuổi (19·24·30·35·37·39·
+42·44·55·57·60·62·64·69·75·80) trước đây báo "Bình thường" trong khi thực tế
+phạm — người ta xem xong đi động thổ, cưới hỏi.
+Kết quả nay nêu đích danh loại + hại ai. `kimLauLoai` là trường THÊM nên 2 trang
+tiêu thụ không phải đổi.
+⚠️ **CHƯA đụng `isHoangOc`** (`t % 5 === 0`, trong khi Hoang Ốc là vòng **6
+trạng thái** Nhất Cát→Lục Hoang Ốc). Nghi sai nhưng chưa tra đủ chắc — sửa mò
+một công thức cổ pháp còn tệ hơn để nguyên.
+
+### 📌 CÒN LẠI
+- **Hình dạng cụm content kim lâu CHƯA CHỐT.** GSC xác nhận có cầu ("cách tính
+  kim lâu" hạng 92, "tính kim lâu làm nhà" 73) mà site có **0 trang**
+  (`seo_pages` 0, `master_articles` 0, `khao_luan` 1). Tôi đề xuất **MỘT trang
+  trụ mạnh** (`/kim-lâu`: công cụ + công thức + bảng tra trọn tuổi/năm sinh +
+  4 loại + hoá giải + FAQ schema, kèm 301 từ `/tools/kim-lau.html`) thay vì cụm
+  nhiều trang mỏng — vì cụm mỏng đúng là thứ vừa gỡ. Henry chưa trả lời.
+- **Mốc đo quyết định hướng đi:** sau 2–4 tuần đọc lại `pagesWithImpressions`
+  (hiện **612**). Bật lên rõ → mô hình chạy được, lúc đó gen trang cho chân dung
+  vợ chồng / tiền kiếp / tử bình mới có cơ sở. Vẫn im → vấn đề là **thẩm quyền
+  tên miền**, không phải số lượng trang; đừng viết thêm.
+- ⚠️ **`xem tuổi vợ chồng` / `xem tuổi làm ăn` ĐÃ CÓ trang SEO** (3.540 + 3.540,
+  6.500–7.500 ký tự, title đúng chuẩn *"Tuổi X Và Tuổi Y Có Hợp Nhau Không?"*).
+  Henry tưởng chưa có. Thiếu thật chỉ là chân dung vợ chồng, chân dung tiền
+  kiếp, tử bình.
+- Lượt quét Suggest đầu tiên: **T3 hằng tuần**. Chạy tay:
+  `curl -H "Authorization: Bearer $CRON_SECRET" .../api/cron/keyword-suggest`
+- Đọc `content_qc_log` vài ngày rồi cân nhắc siết gate sang `block`.
 
 ---
 
