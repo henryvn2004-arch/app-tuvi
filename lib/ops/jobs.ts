@@ -115,6 +115,9 @@ export const JOBS: JobSpec[] = [
   { key: 'keyword-suggest', label: 'Quét từ khoá (Google Suggest)', source: 'vercel', everyMinutes: 7 * D,
     schedule: 'T3 hằng tuần', sink: 'keyword_ideas', trigger: true,
     since: '2026-08-01' },
+  { key: 'topic-topup', label: 'Nạp chủ đề tuần (2 bề mặt)', source: 'vercel', everyMinutes: 7 * D,
+    schedule: 'T4 hằng tuần', sink: 'topic_queue', trigger: true,
+    since: '2026-08-01' },
 ];
 
 export interface CronRun {

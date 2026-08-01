@@ -28,8 +28,15 @@ function toSlug(str: string) {
   return String(str||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[đĐ]/g,'d').replace(/[^a-z0-9\-]/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'').slice(0,80);
 }
 
+// ⚠️ `type=eq.khao-luan` KHÔNG được bỏ. Trước đây câu này không lọc `type` nên
+// nó hút BẤT KỲ dòng pending nào — kể cả topic `master-article` vốn dành cho
+// cron-master-write. Hai cron ăn chung một hàng đợi thì lịch chạy quyết định
+// ai giành được gì (khao-luan 03/11/15h, master-write 02/06/10/16/20h), và
+// topic master-article bị cướp sẽ ra bài Vấn Đáp 1.400 ký tự ngôi thứ BA thay
+// vì tuỳ bút 1.200–1.500 từ ngôi thứ NHẤT — sai bề mặt, sai định dạng, mất
+// luôn khỏi hàng đợi bên kia. `master-write` vốn đã lọc đúng; chỉ bên này hở.
 async function popTopics(count: number) {
-  const r = await sbFetch(`/topic_queue?status=eq.pending&order=priority.asc,created_at.asc&limit=${count}&select=id,topic,type,priority`);
+  const r = await sbFetch(`/topic_queue?status=eq.pending&type=eq.khao-luan&order=priority.asc,created_at.asc&limit=${count}&select=id,topic,type,priority`);
   if (!r.ok || !r.body?.length) return [];
   const ids = r.body.map((t: {id: string}) => t.id);
   await sbFetch(`/topic_queue?id=in.(${ids.join(',')})`, { method:'PATCH', body:JSON.stringify({status:'processing'}) });
