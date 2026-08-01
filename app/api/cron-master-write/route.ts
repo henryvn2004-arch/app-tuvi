@@ -3,7 +3,9 @@
 export const maxDuration = 300;
 import { NextRequest } from 'next/server';
 import { ok, err, options } from '@/lib/cors';
-import { llmText } from '@/lib/llm/complete';
+import { llmTextFull } from '@/lib/llm/complete';
+import { logLlmUsage } from '@/lib/agent/usage';
+import { parseLlmJson } from '@/lib/llm/json';
 import { withCronLog } from '@/lib/cron/log';
 import { brandCheck } from '@/lib/content/brand-check';
 
@@ -129,14 +131,30 @@ async function ragTuviDocs(embedding: number[]): Promise<string> {
 }
 
 // ── LLM call (Gemini-primary + Anthropic-backup qua helper chung) ───────────────
-async function callClaude(prompt: string, maxTokens = 2000): Promise<string> {
-  const raw = (await llmText({ prompt, maxTokens })).trim();
-  // Strip outer ```json...``` only, not any inner backticks in content
-  if (raw.startsWith('```')) {
-    const inner = raw.replace(/^```(?:json)?\s*/, '');
-    return inner.trimEnd().endsWith('```') ? inner.trimEnd().slice(0, -3).trimEnd() : inner;
-  }
-  return raw;
+//
+// ⚠️ Tên cũ là `callClaude` — SAI VÀ GÂY HIỂU NHẦM. Nó đi qua `llmText` tức là
+// định tuyến: `chat.standalone_provider` không set trên prod nên rơi về mặc
+// định `gemini` ⇒ pipeline này chạy **gemini-2.5-flash**, Sonnet chỉ là dự
+// phòng khi Gemini ném lỗi. Đổi tên thành `callLlm` để đọc code là biết đúng.
+//
+// Đổi `llmText` → `llmTextFull` + `logLlmUsage`: trước đây TOÀN BỘ chi phí viết
+// bài không nằm trong sổ nào (đo 30 ngày: `events.llm_usage` chỉ có 30 dòng, cùng
+// kỳ pipeline đẻ ~150 bài). Hai hệ quả: panel Biên LN thiếu hẳn khoản này, và
+// những lượt âm thầm rơi sang Sonnet — đắt hơn ~13 lần — không ai thấy.
+async function callLlm(
+  prompt: string,
+  maxTokens = 2000,
+  opts: { json?: boolean } = {},
+): Promise<string> {
+  const r = await llmTextFull({ prompt, maxTokens, json: opts.json });
+  // best-effort, KHÔNG await: ghi sổ hỏng thì cũng đừng làm hỏng lượt viết bài.
+  void logLlmUsage('cron-master-write', r.model, {
+    input_tokens: r.usage.input_tokens,
+    output_tokens: r.usage.output_tokens,
+    cache_creation_input_tokens: 0,
+    cache_read_input_tokens: 0,
+  });
+  return r.text.trim();
 }
 
 // ── Stage 1: Storyboard ────────────────────────────────────────────────────────
@@ -173,8 +191,36 @@ Trả về JSON một dòng (KHÔNG backtick, key_points tối đa 6 từ):
 {"hook":"câu mở cảnh cụ thể","sections":[{"heading":"tên mục ngắn","key_points":["ý ngắn","ý ngắn"]}],"closing":"hướng kết bài"}
 Cần đúng 4 sections.`;
 
-  const raw = await callClaude(prompt, 500);
-  return JSON.parse(raw) as Storyboard;
+  // 🔴 ĐÂY LÀ CHỖ LÀM MẤT CHỦ ĐỀ. Bản cũ: `JSON.parse(await callClaude(prompt,
+  // 500))` — không cờ `json`, không bóc fence, KHÔNG có nhánh dự phòng (khác
+  // `extractMetadata` ngay dưới, vốn được bọc try/catch). Ném lỗi ở đây là chủ
+  // đề bị chốt `error` và mất luôn. Bằng chứng cờ fence là vấn đề THẬT: chính
+  // `cron-khao-luan` phải tự tay `.replace(/^```json/…)` vì gặp hoài.
+  //
+  // Ba lớp vá, theo thứ tự rẻ → đắt:
+  //   1. `json: true` — ép JSON hợp lệ ở TẦNG API (Gemini responseMimeType),
+  //      chặn tận gốc thay vì đi dọn chuỗi.
+  //   2. maxTokens 500 → 1200. 4 section × key_points + hook + closing bằng
+  //      tiếng Việt (~2,5 token/từ) chạm sát 500; hết chỗ là JSON CỤT, mà JSON
+  //      cụt thì không lớp bóc nào cứu được. Output chỉ tính token thực dùng
+  //      nên nới trần gần như không tốn thêm.
+  //   3. `parseLlmJson` + thử lại 1 lượt kèm nhắc định dạng — lưới cho nhánh
+  //      backup Anthropic (API không có JSON mode).
+  const raw = await callLlm(prompt, 1200, { json: true });
+  const parsed = parseLlmJson(raw);
+  if (parsed && Array.isArray((parsed as Storyboard).sections)) return parsed as Storyboard;
+
+  console.warn(
+    `[cron-master-write] storyboard parse hỏng (${raw.length} ký tự) → thử lại. Đầu: ${raw.slice(0, 120)}`,
+  );
+  const retry = await callLlm(
+    `${prompt}\n\nCHỈ trả về đúng một object JSON hợp lệ, không lời dẫn, không backtick.`,
+    1200,
+    { json: true },
+  );
+  const parsed2 = parseLlmJson(retry);
+  if (parsed2 && Array.isArray((parsed2 as Storyboard).sections)) return parsed2 as Storyboard;
+  throw new Error('storyboard: không parse được JSON sau 2 lượt');
 }
 
 // ── Stage 2a: Write article content (plain markdown, no JSON) ─────────────────
@@ -230,7 +276,7 @@ KHÔNG đề cập AI, không học thuật cứng nhắc, không câu mở theo
 
 Chỉ trả về nội dung markdown, không bọc JSON, không backtick ngoài.`;
 
-  return callClaude(prompt, 5000);
+  return callLlm(prompt, 5000);
 }
 
 // ── Stage 2b: Extract metadata ─────────────────────────────────────────────────
@@ -253,8 +299,14 @@ Mở bài: ${preview}
 Tạo metadata JSON một dòng duy nhất (KHÔNG backtick, KHÔNG xuống dòng trong JSON):
 {"title":"tiêu đề hấp dẫn 50-75 ký tự","slug":"slug-ascii","excerpt":"tóm tắt gợi cảm xúc dưới 155 ký tự","category":"chiem-nghiem hoặc luan-la-so hoặc hoc-thuat","tags":["tag1","tag2","tag3"]}`;
 
-  const raw = await callClaude(prompt, 250);
-  return JSON.parse(raw) as Omit<MasterArticleOutput, 'content'>;
+  // 250 token cho title + slug + excerpt 155 ký tự + 3 tag bằng tiếng Việt là
+  // rất sát — nới lên 500. Chỗ này ĐÃ có nhánh dự phòng ở caller nên hỏng không
+  // mất chủ đề, nhưng rơi về dự phòng nghĩa là title thành chính chuỗi chủ đề,
+  // tức mất luôn cái tiêu đề tối ưu cho tìm kiếm.
+  const raw = await callLlm(prompt, 500, { json: true });
+  const parsed = parseLlmJson(raw);
+  if (!parsed) throw new Error('metadata: không parse được JSON');
+  return parsed as Omit<MasterArticleOutput, 'content'>;
 }
 
 async function writeArticle(
