@@ -441,11 +441,19 @@ dùng thử (`lib/billing/anon-trial.ts` + RPC `anon_rail_trial_consume`).
   LƯỢT) và **tiêu quota ngay khi cấp phép**, không đợi model xong — đếm sau khi
   thành công là mở đường gọi model rồi ngắt kết nối để khỏi bị tính.
 
-### Giá trị 1 Lượng: neo ở MỘT chỗ
-`app_config['credits.vnd_per_credit']` (hiện **1.000đ**) là nguồn thật; RPC đọc
-qua hàm SQL `credit_vnd()`. Bản sao phía code phải giữ khớp:
-`lib/billing/packages.ts` `VND_PER_CREDIT`, `public/topup.html`,
-`public/cong-cu.html`, `public/admin.html` (`MKT_VND`, `VND_PER_CREDIT`).
+### Giá trị 1 Lượng: SUY TỪ BẢNG GÓI, không còn hằng số neo
+**⚠️ `app_config['credits.vnd_per_credit']` ĐÃ BỊ GỠ** — đừng viết code đọc lại
+khoá đó. Nguồn thật giờ là bảng `credit_packages`: đơn giá = **gói bậc hai**
+(theo `sort_order`, tức mức phổ thông) = 199.000/240 = **829đ**. Hai nơi cài
+CÙNG một quy tắc, phải sửa kèm nhau:
+- SQL `credit_vnd()` — cho các RPC báo cáo.
+- `lib/billing/packages.ts` `vndPerCredit()` — cho route/rail. **Tự tính, KHÔNG
+  gọi RPC** (rail là đường nóng), đổi lại phải giữ đúng cùng quy tắc.
+
+**Vì sao ghi hẳn cảnh báo:** đọc khoá đã chết KHÔNG ném lỗi, nó im lặng rơi về
+mặc định `1000` trong khi giá thật là `829` — sai 20% trên đúng con số đang hiện
+cho người dùng, và không có gì báo. Đã dính đúng một lần.
+
 **Ngoại lệ cố ý:** `coalesce(amount_vnd, amount * 2500)` cho dòng **topup lịch
 sử** giữ nguyên 2500 — các giao dịch đó thật sự đã bán ở giá cũ, đổi là viết lại
 lịch sử. Xem `_patches/migration-pricing-v2.sql`.

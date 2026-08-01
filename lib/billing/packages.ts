@@ -123,3 +123,30 @@ export async function quoteCustomVnd(amountVnd: number): Promise<CustomQuote> {
 export function invalidatePackages() {
   cache = null;
 }
+
+/**
+ * Đơn giá quy đổi 1 Lượng ≈ VNĐ, dùng khi cần NÓI một con số tiền cho người
+ * dùng (vd đồng hồ rail: "Luận Giải 100 Lượng ≈ 82.900đ").
+ *
+ * DÙNG CHUNG quy tắc với hàm SQL `credit_vnd()`: lấy đơn giá của **gói thứ
+ * hai** theo thứ tự giá tăng dần — bậc phổ thông, mức đại diện nhất — rồi mới
+ * rơi về gói đầu, rồi 1000.
+ *
+ * ⚠️ TỰ TÍNH LẠI Ở ĐÂY, KHÔNG gọi RPC: `credit_vnd()` phục vụ các RPC báo cáo;
+ * gọi nó từ route chỉ để lấy một con số là thêm một lượt mạng vào đường nóng
+ * của rail. Đổi lại phải giữ ĐÚNG cùng quy tắc — lệch quy tắc thì trang admin
+ * và rail nói hai giá khác nhau cho cùng một Lượng.
+ *
+ * KHÔNG đọc `app_config['credits.vnd_per_credit']`: khoá đó đã bị gỡ khi đường
+ * đo doanh thu chuyển sang tiền thật. Đọc khoá đã chết thì im lặng rơi về mặc
+ * định 1000 trong khi giá thật là 829 — sai 20% mà không có gì báo.
+ */
+export async function vndPerCredit(): Promise<number> {
+  const pkgs = Object.values(await getPackages()).filter((p) => p.credits > 0 && p.amountVnd > 0);
+  if (!pkgs.length) return 1000;
+  // getPackages() không giữ `sort_order` → sắp theo amountVnd tăng dần, cùng
+  // thứ tự mà sort_order đang thể hiện (gói rẻ nhất trước).
+  const byPrice = [...pkgs].sort((a, b) => a.amountVnd - b.amountVnd);
+  const tier = byPrice[1] || byPrice[0];
+  return Math.round(tier.amountVnd / tier.credits);
+}
