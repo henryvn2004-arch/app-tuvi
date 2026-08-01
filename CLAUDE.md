@@ -107,13 +107,35 @@ tiêu thụ không phải đổi.
 trạng thái** Nhất Cát→Lục Hoang Ốc). Nghi sai nhưng chưa tra đủ chắc — sửa mò
 một công thức cổ pháp còn tệ hơn để nguyên.
 
-### 📌 CÒN LẠI
-- **Hình dạng cụm content kim lâu CHƯA CHỐT.** GSC xác nhận có cầu ("cách tính
-  kim lâu" hạng 92, "tính kim lâu làm nhà" 73) mà site có **0 trang**
-  (`seo_pages` 0, `master_articles` 0, `khao_luan` 1). Tôi đề xuất **MỘT trang
-  trụ mạnh** (`/kim-lâu`: công cụ + công thức + bảng tra trọn tuổi/năm sinh +
-  4 loại + hoá giải + FAQ schema, kèm 301 từ `/tools/kim-lau.html`) thay vì cụm
-  nhiều trang mỏng — vì cụm mỏng đúng là thứ vừa gỡ. Henry chưa trả lời.
+### ✅ #361 — trang trụ `/kim-lau` + vá tàn dư "chu kỳ 5"
+Henry chốt **"1 trang trụ mạnh làm đường dẫn"** → MỘT trang, không phải cụm.
+GSC có cầu thật ("cách tính kim lâu" hạng 92, "tính kim lâu làm nhà" 73) mà site
+0 trang (`seo_pages` 0, `master_articles` 0, `khao_luan` 1). Cụm nhiều trang
+mỏng đúng là thứ vừa gỡ ở #358 — toàn bộ nội dung 60 trang "tuổi X có phạm
+không" nằm gọn trong hai bảng tra của một trang.
+- Nội dung: công thức mod 9 + **ví dụ tính tay cố ý chọn năm sinh ra kết quả
+  PHẠM** (ví dụ "không phạm" thì không dạy được cách đọc số dư) · bảng 4 loại
+  kèm đối tượng bị hại · **bảng tra trọn năm sinh** 63 dòng cho năm hiện tại
+  (người ta biết năm sinh chứ không biết tuổi ta) · hoá giải · phân biệt Kim Lâu
+  / Hoang Ốc / Tam Tai · Article + FAQPage + BreadcrumbList.
+- **`lib/engine/kim-lau.ts` KHÔNG chép công thức** — `readFileSync` + `new
+  Function` nạp thẳng `public/tools-shared/kim-lau.js`, đúng tiền lệ
+  `lib/engine/laso.ts`. Trang trụ nói khác công cụ bên cạnh thì hỏng cả hai.
+- 301 `/tools/kim-lau.html` → `/kim-lau` + sửa 11 file link nội bộ trỏ thẳng URL
+  mới. **`redirects()` chạy TRƯỚC filesystem** nên bản HTML cũ trong `public/`
+  không còn được phục vụ (file vẫn nằm đó, mang chữ cũ — vô hại vì không tới
+  được, nhưng đừng gỡ redirect).
+- 🐞 **CTA của chính tôi vi phạm gate #356** ("Tra theo năm sinh **của bạn**").
+  Sửa copy chứ không nới test, và cho test dùng CHÍNH regex của gate.
+- 🐞 **Tàn dư #359: công thức đã sang mod 9 nhưng 3 chỗ vẫn NÓI "chu kỳ 5".**
+  Nặng nhất là `CHAT_SYSTEM_KIM_LAU` — rail đọc bảng mod-9 rồi giải thích bằng
+  luật mod-5. Và `extractKimLauContext` **không chuyển tiếp `kimLauLoai`** nên
+  rail chỉ nói "phạm Kim Lâu" trống trong khi bảng cạnh đó ghi "Kim Lâu Thê".
+  **Bài học: đổi công thức thì phải quét cả chỗ MÔ TẢ công thức** — prompt LLM
+  là một trong số đó và nó không được typecheck bắt.
+- **KHÔNG phải lỗi, đã đo để loại trừ:** `?v=1` của `tools-shared/kim-lau.js`
+  không bump ở #359. Đọc header thật prod: `max-age=0, must-revalidate` ⇒
+  revalidate mỗi lượt, bản mod-9 đã tới người dùng. Đừng đi bump.
 - **Mốc đo quyết định hướng đi:** sau 2–4 tuần đọc lại `pagesWithImpressions`
   (hiện **612**). Bật lên rõ → mô hình chạy được, lúc đó gen trang cho chân dung
   vợ chồng / tiền kiếp / tử bình mới có cơ sở. Vẫn im → vấn đề là **thẩm quyền
