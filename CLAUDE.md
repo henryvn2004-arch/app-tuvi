@@ -5,6 +5,70 @@
 
 ---
 
+## 📹 Track Media Pipeline — kênh phân phối, KHÔNG phải SEO (2026-08-01, PR #369)
+
+Henry: *"launch 3-4 tháng mà traffic thấp quá… SEO có phải kênh đầu tiên đúng
+không?"* Đo trước khi trả lời: **617/616.715 URL có impression (0,1%) · 18
+click/28 ngày, 11 trong đó về trang chủ · 10 từ khoá đọc được đều hạng 51–100 ·
+tháng 7: 7 đăng ký, 0đ doanh thu.** Ba tuần trước con số trang-có-impression là
+612, nay 617 — **tăng 5 trang trong 3 tuần**, đúng mốc đo đã đặt ở #361. Kết
+luận: nút thắt là **thẩm quyền tên miền**, không phải số lượng trang. NGỪNG gen
+trang. Henry chốt chuyển sang kênh chủ động.
+
+### 🔴 Phát hiện lớn nhất: pipeline media ĐÃ TỒN TẠI và đang ĐỨT ÂM THẦM
+```
+cron-khao-luan → pg_cron 07:00 → auto-pipeline → TTS ✅ → Railway mix 🔴 → YouTube 🔴
+```
+| `van_dap` | Bài | Mới nhất |
+|---|---:|---|
+| Video render xong, YouTube **lỗi** | **86** | 16/07 |
+| Có audio, chưa render video | **29** | **01/08** |
+| Đã lên YouTube | 15 | 10/04 |
+
+**85 video hoàn chỉnh nằm kho không đăng được**, máy vẫn đẻ thêm mỗi ngày.
+- **84/86 lỗi CÙNG một `invalid_grant`.** Đây là OAuth consent screen còn ở chế
+  độ **Testing** trong Google Cloud → refresh token **hết hạn sau 7 ngày**. Đã
+  chết đúng hai lần (22/04, 16/07). **Cấp token mới là vá triệu chứng** — phải
+  PUBLISH APP. Việc tay Henry, không code thay được.
+- `pg_cron` báo `succeeded` mỗi sáng vì nó chỉ đo "gọi HTTP xong", không đo kết
+  quả thật ⇒ tắc 16 ngày không ai biết. Cùng họ với bài học nhịp tim `withCronLog`.
+- 🔑 **Kho nguyên liệu đã có mà chưa dùng:** 130 file audio TTS (→ podcast RSS,
+  gần như 0đ) · `van_dap` đã có sẵn cột `tt_*`/`fb_*` chưa ai ghi vào.
+- ⚠️ `video_duration_sec` **NULL cả 100 dòng** → chưa biết có cắt Shorts được không.
+
+### ✅ M1 — cron `yt-drain` (`lib/media/yt-drain.ts`)
+Nối lại khâu cuối + **làm cho việc nó đứt nhìn thấy được**. 11h VN hằng ngày.
+- **Lỗi CHẶN → dừng cả lượt** (`invalid_grant`/`uploadLimitExceeded`/quota/403).
+  84 dòng `yt_error` giống hệt nhau chính là hậu quả của việc cứ thử mãi một thứ
+  đã hỏng: đốt quota, ghi đè dấu vết. Auth chết thì bài nào cũng chết.
+- **Nhỏ giọt 3/ngày**, trần cứng 6 (quota 10.000 ÷ 1.600/upload). Kho đã dính
+  `uploadLimitExceeded` 2 lần — ngưỡng chống spam của YouTube TÁCH khỏi quota API.
+- **Ngân sách thời gian 240s**, dừng giữa hai lượt: edge đặt `yt_status=
+  'uploading'` TRƯỚC khi upload, nên bị giết ngang để lại dòng treo vĩnh viễn.
+- Im lặng khi kho rỗng (khác CMO Digest luôn gửi) · report **nhắc thẳng nguyên
+  nhân gốc** để lần sau không đi cấp lại token rồi tắc tiếp.
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier
+  --check .` sạch · **23 ca trên module THẬT** (chỉ thay 1 dòng import alias, đã
+  `diff` xác nhận phần logic giữ nguyên byte): dừng sau ĐÚNG 1 lượt khi gặp
+  `invalid_grant`; **ca ĐỐI CHỨNG** lỗi riêng của một bài (`Cannot download
+  file: 404`) thì vẫn chạy đủ 3; trần 99 vẫn cắt còn 6; quá hạn giờ → 0 lượt.
+- ⚠️ **CHƯA test đầu-cuối route trên Next dev** — phần route chỉ là auth +
+  gọi hàm + gửi Telegram, `tsc` phủ.
+
+### 🔓 Nợ bảo mật phát hiện kèm (CHƯA sửa)
+Edge `youtube-upload` **hardcode `YOUTUBE_CLIENT_ID` + `YOUTUBE_CLIENT_SECRET`
+làm giá trị mặc định ngay trong source**. Nên rotate + chuyển hẳn sang env, cùng
+tiền lệ đã phải rotate service_role key Supabase.
+
+### Kế hoạch còn lại — `docs/MEDIA-PIPELINE-PLAN.md`
+M2 xương sống (`media_assets` + `media_posts` + adapter + admin duyệt) · M3
+Instagram/Threads · M4 video 9:16 · M5 podcast RSS + Telegram channel · M6 Zalo
+OA/Pinterest. **Henry chốt: duyệt tay trước, chưa auto-post.** Render ảnh bằng
+Satori (0đ), KHÔNG dùng model sinh ảnh. Cố ý không mở rộng cột `fb_*`/`tt_*`
+trong `van_dap` — thêm kênh là thêm 3 cột, đó là cái bẫy.
+
+---
+
 ## 🧭 Track CMO skills — brand-check, từ khoá, SEO (2026-08-01, PR #356–#359)
 
 Henry giao 3 việc: (1) brand voice doc — **phiên khác đã chạy**, nằm ở
