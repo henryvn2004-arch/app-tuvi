@@ -146,9 +146,12 @@
         preGenHtml += `</div></div>`;
       }
     } else if (phan === 14) {
-      // Tổng quan đại vận: bảng điểm tất cả đại vận (shell không có chart như
+      // Tổng quan đại vận: bảng điểm các đại vận (shell không có chart như
       // standalone → render danh sách deterministic để phần này không trống).
-      const dvs = _astrolabe.daiVans || [];
+      // Cắt 9 đại vận GIỐNG standalone (mọi chart/luận ở luan-giai.html đều
+      // .slice(0,9)): daiVans có 12 phần tử nhưng 3 cái cuối (93–122t) không
+      // được chấm điểm → hiện ra 3 dòng trống "—" chỉ làm nhiễu.
+      const dvs = (_astrolabe.daiVans || []).slice(0, 9);
       const cur = _astrolabe.daiVanHienTai;
       if (dvs.length) {
         preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">📊</span> Điểm các đại vận</div><div class="score-bars">`;
