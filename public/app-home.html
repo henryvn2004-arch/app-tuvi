@@ -86,7 +86,7 @@
 <script src="/tools-shared/hoang-dao.js?v=1"></script>
 <script src="/tool-prices.js?v=2"></script>
 <script src="/auth.js"></script>
-<script src="/shell.js?v=51"></script>
+<script src="/shell.js?v=52"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 var IC={
@@ -219,8 +219,10 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
   card.style.display='';
 
   // Mồi rail: cá nhân hoá nếu đã có lá số, không thì theo ngày.
-  var birth=null; try{ birth=Shell.getRememberedBirth&&Shell.getRememberedBirth(); }catch(e){}
-  var hasBirth=!!(birth&&birth.dd);
+  // birth nhớ trong localStorage theo shape của TuviForm (ngay/thang/nam); rail
+  // thì chỉ hiểu shape contract (day/month/year) → PHẢI đổi, đừng truyền thẳng.
+  var birth=null; try{ birth=(Shell.getRememberedBirth&&Shell.birthToApi)?Shell.birthToApi(Shell.getRememberedBirth()):null; }catch(e){}
+  var hasBirth=!!birth;
   try{
     if(hasBirth){
       var nm=(birth.name||'').trim();
