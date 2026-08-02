@@ -406,6 +406,27 @@ nạp lẻ chỉ **39**). Henry xác nhận *"nó là tàn dư đó, chỉnh l�
 
 ## 📐 QUY ƯỚC BẮT BUỘC (đọc trước khi viết UI mới)
 
+### 💰 Giá Lượng: CHỈ sửa trong Admin — client KHÔNG được chép số (2026-08-01, PR #373)
+Nguồn duy nhất: bảng `tool_pricing` + `credit_packages`, sửa trong **Tools
+Registry** của trang Admin, không cần deploy. Client đọc qua
+`public/tool-prices.js` (`ToolPrices.get/rows/packages/fillSlots`), cache
+sessionStorage 2 phút. Hiện giá ở UI = `<span data-tvp-price="<tool_id>">…</span>`.
+- **Đọc hụt → `null`, KHÔNG đoán.** Ô để `…`; paywall **từ chối chạy** và hiện
+  "Chưa đọc được bảng giá" thay vì trừ Lượng ở một mức người dùng chưa từng thấy
+  (hộp thoại xác nhận đã bỏ ở #366 nên số trên nút là thứ cuối cùng họ đọc).
+- **Chỉ `admin.html` được fetch thẳng** hai bảng đó — nó là trang SỬA giá.
+- `npm run check:prices` (chạy trong CI lint) chặn tái phát: chép số vào ô giá,
+  hoặc tự fetch bảng giá. Bộ dò đã được KIỂM bằng cách tái tạo đúng hai lỗi cũ.
+- **Vì sao gắt thế:** cùng một bệnh tái đi tái lại trong MỘT ngày — `/app` quảng
+  cáo Luận Giải 150 khi trừ 25 · nút Diện Tướng ghi 5 mà trừ 8 · trang nạp hứa
+  "64 lá số" khi mua được 16 · 9/10 trang `/tools/*` ghi sai (Phong Thủy 90 vs
+  50, Xem Tuổi 50 vs 15) · và bản dự phòng trôi lại ngay trong PR đi sửa nó.
+  Một con số CŨ nguy hiểm hơn hẳn một ô đang tải: ô đang tải thì người ta chờ,
+  số cũ thì người ta tin.
+- ⚠️ CỐ Ý không gom quà đăng ký / thưởng giới thiệu vào đây — chúng đến từ
+  `app_config`, khác nguồn. Nhét chung vào bộ dò thì nó kêu suốt rồi bị tắt.
+
+
 ### Icon: KHÔNG dùng emoji màu — chi tiết ở `docs/ICONS.md`
 `public/nav.js` là bộ icon dùng chung (85 icon SVG Lucide + `EMOJI_TO_ICON` 159
 mục + `mountIcons()`), nạp trên gần như mọi trang, export ra `window.ICONS` /
