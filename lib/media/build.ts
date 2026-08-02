@@ -15,7 +15,8 @@
 //  2. **Caption đi qua cổng brand-check (#356).** Caption là văn bản đối ngoại
 //     do LLM viết — đúng loại mà cổng đó sinh ra để chặn. Bài trượt gate thì BỎ
 //     QUA, không đăng bừa: một caption sai giọng trên trang công khai không rút
-//     lại được như một dòng DB.
+//     lại được như một dòng DB. Từ khi bỏ khâu duyệt tay, đây là lớp QC DUY NHẤT
+//     còn đứng giữa LLM và trang công khai — đừng nới nó ra.
 //
 //  3. **Hai hồ sơ giọng, không phải một.** `khao_luan` là ngôi thứ ba, còn
 //     `master_articles` là tuỳ bút ngôi thứ nhất ký tên thầy (đo trên prod:
@@ -204,8 +205,11 @@ async function usedSourceIds(sourceType: string): Promise<Set<string>> {
 }
 
 /**
- * Dựng tối đa `limit` bài đăng mới vào hàng đợi, trạng thái `queued`.
- * KHÔNG đăng đi đâu — đăng là việc của bước sau, và mặc định phải có người duyệt.
+ * Dựng tối đa `limit` bài đăng mới vào hàng đợi, trạng thái `queued` = CHỜ ĐĂNG
+ * (không còn nghĩa "chờ người duyệt" — khâu duyệt tay đã bỏ, xem `publish.ts`).
+ * Hàm này vẫn KHÔNG tự đăng: việc đó do `publishQueue()` làm ngay sau đó trong
+ * cùng lượt cron. Tách hai bước để một backlog còn tồn vẫn được xả ở lượt sau
+ * kể cả hôm đó không dựng thêm bài nào.
  */
 export async function buildMediaQueue(opts: { limit?: number } = {}): Promise<BuildResult> {
   const configured = await getConfigValue<number>('social.build_daily', DEFAULT_DAILY);

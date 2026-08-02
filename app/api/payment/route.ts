@@ -24,6 +24,7 @@ import { getGa4Breakdown } from '@/lib/analytics/ga4';
 import { getAdminUser } from '@/lib/admin/auth';
 import { generateContentSuggestions } from '@/lib/marketing/content-suggestions';
 import { generateContentPackText } from '@/lib/marketing/content-pack';
+import { SUPPORTED_CHANNELS } from '@/lib/media/publish';
 
 const PAYPAL_BASE = process.env.PAYPAL_MODE === 'live'
   ? 'https://api-m.paypal.com'
@@ -1590,9 +1591,11 @@ async function handleAdminContentPack(request: NextRequest, sp: URLSearchParams)
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
-// ── GET: admin-media-queue (M2, track Media Pipeline) — hàng đợi bài đăng
-// mạng xã hội chờ duyệt. Đọc kèm asset để admin xem ĐƯỢC ẢNH THẬT trước khi
-// bấm, không phải duyệt mù bằng cách đọc caption. ──
+// ── GET: admin-media-queue (M2+M3, track Media Pipeline) — NHẬT KÝ bài đăng
+// mạng xã hội. Khâu duyệt tay đã bỏ (Henry chốt: dựng xong đăng luôn), nên
+// panel này giờ là chỗ THEO DÕI chứ không phải chỗ phê duyệt: xem bài nào đã
+// lên, bài nào lỗi, và đăng lại được bài lỗi. Vẫn đọc kèm asset để nhìn thấy
+// ảnh thật đã đi ra ngoài, không phải đoán qua caption. ──
 async function handleAdminMediaQueue(request: NextRequest, sp: URLSearchParams): Promise<Response> {
   const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
   const admin = await verifyAdmin(token);
@@ -1621,16 +1624,21 @@ async function handleAdminMediaQueue(request: NextRequest, sp: URLSearchParams):
       autopostEnabled: cfg['social.autopost_enabled'] === true,
       channels: cfg['social.channels'] || [],
       buildDaily: cfg['social.build_daily'] ?? 0,
+      publishDaily: cfg['social.publish_daily'] ?? 0,
+      // Kênh được cấu hình mà chưa có adapter thì bài sẽ nằm lại mãi — nói ra ở
+      // đây để lỗi cấu hình lộ ngay trên panel thay vì im lặng trong DB.
+      supportedChannels: SUPPORTED_CHANNELS,
     });
   } catch (e: unknown) {
     return err((e as Error).message);
   }
 }
 
-// ── POST: admin-media-decide (M2) — duyệt hoặc bỏ một bài trong hàng đợi.
-// CỐ Ý chỉ có hai lối ra và KHÔNG có lối "đăng ngay": duyệt xong bài vẫn nằm
-// chờ bước đăng riêng. Một nút bấm nhầm không được phép đẩy thẳng nội dung lên
-// trang công khai. ──
+// ── POST: admin-media-decide (M3) — thao tác VẬN HÀNH trên một bài, KHÔNG
+// phải phê duyệt. Khâu duyệt đã bỏ; hai lối ra còn lại đều là để xử lý bài đã
+// hỏng: `retry` xếp lại hàng cho lượt cron sau đăng lại, `skip` dừng hẳn để nó
+// thôi chiếm chỗ. CỐ Ý vẫn KHÔNG có "đăng ngay" — đăng là việc của cron, một
+// cú bấm nhầm không được phép tự nó đẩy bài lên trang công khai. ──
 async function handleAdminMediaDecide(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
   const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
   const admin = await verifyAdmin(token);
@@ -1639,28 +1647,33 @@ async function handleAdminMediaDecide(request: NextRequest, body: Record<string,
   const postId = String(body.postId || '').trim();
   const decision = String(body.decision || '').trim();
   if (!/^[0-9a-f-]{36}$/i.test(postId)) return err('postId không hợp lệ', 400);
-  if (decision !== 'approve' && decision !== 'skip') return err('decision phải là approve hoặc skip', 400);
+  if (decision !== 'retry' && decision !== 'skip') return err('decision phải là retry hoặc skip', 400);
 
   const caption = typeof body.caption === 'string' ? body.caption.trim() : '';
   const patch: Record<string, unknown> = {
-    status: decision === 'approve' ? 'approved' : 'skipped',
+    status: decision === 'retry' ? 'queued' : 'skipped',
     updated_at: new Date().toISOString(),
   };
-  // Admin sửa lại caption ngay lúc duyệt — thường nhanh hơn là bỏ bài rồi chờ
-  // cron viết lại bản khác vào hôm sau.
+  // Sửa caption rồi đăng lại — thường là cách nhanh nhất chữa một bài lỗi vì
+  // nội dung, nhanh hơn bỏ đi rồi chờ cron viết bản khác hôm sau.
   if (caption) patch.caption = caption;
+  // Xếp lại hàng thì xoá dấu lỗi cũ, nếu không panel vẫn đỏ dù bài đã lên.
+  if (decision === 'retry') patch.error = null;
 
   try {
-    // Chỉ đổi được bài ĐANG chờ: chặn việc lỡ tay duyệt lại bài đã đăng (`live`)
-    // hay đang đăng dở (`publishing`).
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/media_posts?id=eq.${postId}&status=in.(queued,approved,skipped)`, {
-      method: 'PATCH',
-      headers: { ...SB_HEADERS, Prefer: 'return=representation' },
-      body: JSON.stringify(patch),
-    });
+    // KHÔNG đụng được bài đã lên (`live`) hay đang đăng dở (`publishing`):
+    // đăng lại một bài đã live là đăng trùng lên trang công khai.
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/media_posts?id=eq.${postId}&status=in.(queued,approved,error,skipped)`,
+      {
+        method: 'PATCH',
+        headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+        body: JSON.stringify(patch),
+      },
+    );
     if (!res.ok) return err(await res.text());
     const rows = (await res.json()) as unknown[];
-    if (!rows.length) return err('Không tìm thấy bài đang chờ với id đó', 404);
+    if (!rows.length) return err('Không tìm thấy bài đang chờ/lỗi với id đó (bài đã đăng thì không sửa được)', 404);
     return ok({ updated: true, status: patch.status });
   } catch (e: unknown) {
     return err((e as Error).message);

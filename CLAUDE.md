@@ -97,12 +97,73 @@ Henry chốt **duyệt tay trước, chưa auto-post**. Cron dựng ảnh + capt
   Henry: mở `/api/og/social?v=quote&k=Khảo%20Luận&q=<câu>&t=<tiêu đề>` sau khi
   deploy** để soi khung chữ có tràn không.
 
+### ✅ M3 — BỎ khâu duyệt tay, đăng thẳng Facebook Page (PR này)
+Henry đảo quyết định M2: *"ko cần duyệt đâu. Publish luôn. Tắt khâu duyệt trong
+admin đi. Gen xong post publish luôn."*
+- **🔴 Phát hiện trước khi sửa: KHÔNG có gì để "bật".** M2 dừng ở hàng đợi và
+  `approved` là **ngõ cụt** — 0 dòng code nào đẩy `media_posts` đi đâu. Bỏ khâu
+  duyệt mà không viết adapter thì bài chỉ đổi từ "chờ người" sang "chờ mãi mãi".
+  Nên PR này **viết mới `lib/media/publish.ts`** chứ không phải gỡ vài nút.
+- **Adapter Facebook Page** — `POST /{page-id}/photos` với `url` (Graph tự tải
+  ảnh) + caption. Gửi URL chứ không upload nhị phân: `/api/og/social` render
+  on-demand, URL công khai ổn định — cũng chính là điều kiện Instagram Graph API
+  đòi, nên asset dùng lại được ở M3 phần IG. Lưu `post_id` chứ **không phải `id`**
+  (id là tấm ảnh, mở ra không phải bài đăng).
+- **Ba chốt chép thẳng bài học `yt-drain`**, kho YouTube đã trả giá rồi: (1) lỗi
+  CHẶN (token/quyền/rate-limit) → **dừng cả lượt**, 84 dòng `yt_error` giống hệt
+  nhau là hậu quả của việc cứ thử mãi một cái cửa đã khoá; (2) **ngân sách thời
+  gian**, dừng giữa hai lượt; (3) báo cáo **nhắc thẳng nguyên nhân gốc** để lần
+  sau không đi cấp lại token rồi tắc tiếp.
+- **Giành lượt bằng PATCH có điều kiện** (`queued → publishing` kèm bộ lọc trạng
+  thái, xem có trả dòng nào không). `media_posts` KHÔNG có ràng buộc nào chặn
+  đăng lại cùng một dòng — unique `(asset_id, channel)` chỉ chặn tạo trùng, không
+  chặn publish trùng. Chốt chặn phải nằm ở đây.
+- **`social.autopost_enabled` GIỮ NGUYÊN, chỉ đổi mặc định sang `true`** (✅ đã
+  chạy prod, kèm `social.publish_daily=3`). Bỏ khâu duyệt ≠ bỏ luôn phanh: đây là
+  đường DUY NHẤT dừng tự đăng mà không cần deploy. `publish_daily` **tách khỏi**
+  `build_daily` — để chung thì hôm nào dựng 0 bài cũng là hôm không xả được
+  backlog.
+- **Brand-check giờ là lớp QC DUY NHẤT** còn đứng giữa LLM và trang công khai
+  (trước có thêm mắt Henry). Đã ghi cảnh báo đó vào `build.ts` — đừng nới gate.
+- Admin: panel đổi từ *hàng đợi duyệt* sang **nhật ký**; nút chỉ còn ở bài **lỗi**
+  (`retry` = sửa caption rồi xếp lại hàng · `skip` = bỏ hẳn). **Vẫn CỐ Ý không có
+  "đăng ngay"** — đăng là việc của cron. Bài `live` **không sửa được** từ UI:
+  đăng lại một bài đã live là đăng trùng lên trang công khai. Panel còn cảnh báo
+  kênh có trong `social.channels` mà **chưa có adapter** (nếu không, bài của kênh
+  đó nằm im trong DB không ai biết vì sao).
+- **Verify:** `tsc` 0 lỗi · `eslint` 0 lỗi (72 warning pre-existing) · `prettier
+  --check .` sạch · 3 script block admin OK · **44 ca trên module THẬT** (chỉ
+  rewrite đường dẫn alias `@/`, logic nguyên byte): đường thành công ghi đúng
+  `post_id`/`published_at` · công tắc tắt → **0 lượt gọi Graph** · lỗi quyền →
+  dừng sau ĐÚNG 1 lượt, bài còn lại KHÔNG bị đánh dấu lỗi oan · **ca ĐỐI CHỨNG**
+  lỗi riêng một bài (`Cannot download image`) vẫn chạy đủ 3 · trần 99 cắt còn 10
+  · quá hạn giờ → 0 lượt và **không để dòng `publishing` treo** · kênh lạ → báo
+  lỗi rõ chứ không im lặng · **dòng bị lượt khác cướp → bỏ qua, không đăng trùng**
+  · thiếu env → nêu đúng tên biến · **14 ca Playwright trên chính `admin.html`**:
+  hết sạch nút "Duyệt", ô caption chỉ mở cho bài lỗi, caption chứa
+  `<img onerror>` không chạy được mà vẫn hiện nguyên văn.
+- ⚠️ **CHƯA gọi được Graph API thật** — container phiên chặn host ngoài và không
+  có page token. Toàn bộ verify dừng ở tầng stub.
+
+### 🔑 VIỆC TAY HENRY — chưa làm thì lượt đăng đầu tiên sẽ LỖI
+Adapter cần **`pages_manage_posts`**, trong khi app Meta của repo dựng cho
+Messenger (`pages_messaging`) và còn ở **Development mode**.
+1. Meta App → Permissions: xin thêm `pages_manage_posts`, cấp lại **page token**.
+2. Vercel env: **`FB_PAGE_ID`** + **`FB_PAGE_ACCESS_TOKEN`** rồi Redeploy. (Code
+   có lùi về `MESSENGER_PAGE_*` nhưng **đừng trông vào đó**: `messengerLink.ts`
+   đang mặc định page id `1218919127970486` trong khi CLAUDE.md ghi
+   `122097706839369476` — hai số khác nhau, khai rõ env mới là chắc.)
+3. Chưa xong bước 1–2 thì cron vẫn chạy: bài đầu lỗi `OAuthException`, **dừng cả
+   lượt**, Telegram gửi đúng hướng dẫn này. Không có bài rác nào lên trang.
+- Dừng khẩn bất cứ lúc nào: `update app_config set value='false'::jsonb where
+  key='social.autopost_enabled';`
+
 ### Kế hoạch còn lại — `docs/MEDIA-PIPELINE-PLAN.md`
-M2 xương sống (`media_assets` + `media_posts` + adapter + admin duyệt) · M3
-Instagram/Threads · M4 video 9:16 · M5 podcast RSS + Telegram channel · M6 Zalo
-OA/Pinterest. **Henry chốt: duyệt tay trước, chưa auto-post.** Render ảnh bằng
-Satori (0đ), KHÔNG dùng model sinh ảnh. Cố ý không mở rộng cột `fb_*`/`tt_*`
-trong `van_dap` — thêm kênh là thêm 3 cột, đó là cái bẫy.
+M3 Instagram/Threads · M4 video 9:16 · M5 podcast RSS + Telegram channel · M6
+Zalo OA/Pinterest. **Henry đã đảo quyết định "duyệt tay trước": nay auto-post,
+xem M3 ở trên.** Render ảnh bằng Satori (0đ), KHÔNG dùng model sinh ảnh. Cố ý
+không mở rộng cột `fb_*`/`tt_*` trong `van_dap` — thêm kênh là thêm 3 cột, đó là
+cái bẫy.
 
 ---
 

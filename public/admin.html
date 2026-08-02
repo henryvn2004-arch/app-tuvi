@@ -387,7 +387,7 @@
             </div>
           </div>
           <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
-            M2 (track Media Pipeline) — cron dựng ảnh + viết caption mỗi sáng, bài nằm chờ ở đây tới khi bạn duyệt. Ảnh render bằng Satori nên <b>không tốn tiền model</b>. Duyệt xong bài vẫn CHƯA đăng: bước đăng là một job riêng, cố ý không có nút "đăng ngay" ở đây.
+            Track Media Pipeline — cron <code>media-build</code> 09:30 mỗi sáng dựng ảnh + viết caption rồi <b>đăng thẳng</b>, không còn khâu duyệt tay. Ảnh render bằng Satori nên <b>không tốn tiền model</b>. Đây là chỗ theo dõi bài đã ra ngoài; nút chỉ còn cho bài <b>lỗi</b> (sửa caption rồi xếp lại hàng, hoặc bỏ hẳn). Bài đã đăng thì không sửa được từ đây — muốn dừng tự đăng thì đặt <code>social.autopost_enabled=false</code>.
           </div>
           <div id="mq-list" style="padding:0 1rem 1rem">
             <div class="loading"><span class="spin"></span>Đang tải...</div>
@@ -3294,7 +3294,8 @@ function renderMktViral(v) {
     </div>`;
 }
 
-// M2 (track Media Pipeline) — hàng đợi bài đăng chờ duyệt.
+// Track Media Pipeline — nhật ký bài đăng. Khâu duyệt tay đã bỏ: cron dựng
+// xong đăng luôn, panel này chỉ theo dõi + chữa bài lỗi.
 async function loadMediaQueue() {
   const badge = document.getElementById('mq-state-badge');
   const host = document.getElementById('mq-list');
@@ -3302,11 +3303,14 @@ async function loadMediaQueue() {
     const d = await apiGet('admin-media-queue');
     if (d.error) throw new Error(d.error);
     if (badge) {
-      // Nhãn nói đúng thực trạng: chưa có kênh nào tự đăng, mọi bài chờ tay.
-      badge.className = 'badge ' + (d.autopostEnabled ? 'badge-green' : 'badge-grey');
-      badge.textContent = d.autopostEnabled ? 'Tự đăng: BẬT' : 'Tự đăng: TẮT — duyệt tay';
+      badge.className = 'badge ' + (d.autopostEnabled ? 'badge-green' : 'badge-red');
+      badge.textContent = d.autopostEnabled ? 'Tự đăng: BẬT' : 'Tự đăng: TẮT — bài nằm chờ';
     }
-    renderMediaQueue(d.posts || []);
+    // Kênh cấu hình mà chưa có adapter thì bài không bao giờ đi đâu cả. Nói ra
+    // ngay, đừng để nó lặng lẽ nằm trong DB.
+    const sup = d.supportedChannels || [];
+    const orphan = (d.channels || []).filter((c) => sup.indexOf(c) < 0);
+    renderMediaQueue(d.posts || [], orphan);
   } catch (e) {
     if (badge) { badge.className = 'badge badge-red'; badge.textContent = 'Lỗi'; }
     if (host) host.innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
@@ -3314,25 +3318,30 @@ async function loadMediaQueue() {
 }
 
 const MQ_STATUS = {
-  queued:     ['badge-grey',  'Chờ duyệt'],
-  approved:   ['badge-green', 'Đã duyệt'],
+  queued:     ['badge-grey',  'Chờ đăng'],
+  approved:   ['badge-grey',  'Chờ đăng'],
   publishing: ['badge-grey',  'Đang đăng'],
   live:       ['badge-green', 'Đã đăng'],
   error:      ['badge-red',   'Lỗi'],
   skipped:    ['badge-grey',  'Đã bỏ'],
 };
 
-function renderMediaQueue(posts) {
+function renderMediaQueue(posts, orphanChannels) {
   const host = document.getElementById('mq-list');
   if (!host) return;
+  const warn = (orphanChannels && orphanChannels.length)
+    ? `<div class="empty" style="color:var(--red);margin-bottom:.75rem">⚠️ Kênh <b>${escHtmlLocal(orphanChannels.join(', '))}</b> có trong <code>social.channels</code> nhưng CHƯA có adapter đăng — bài của kênh đó sẽ báo lỗi chứ không lên được.</div>`
+    : '';
   if (!posts.length) {
-    host.innerHTML = '<div class="empty">Chưa có bài nào trong hàng đợi. Cron <code>media-build</code> chạy 09:30 mỗi sáng.</div>';
+    host.innerHTML = warn + '<div class="empty">Chưa có bài nào. Cron <code>media-build</code> chạy 09:30 mỗi sáng: dựng bài rồi đăng luôn.</div>';
     return;
   }
-  host.innerHTML = posts.map((p) => {
+  host.innerHTML = warn + posts.map((p) => {
     const a = p.media_assets || {};
     const [cls, label] = MQ_STATUS[p.status] || ['badge-grey', p.status];
-    const pending = p.status === 'queued';
+    // Chỉ bài LỖI mới sửa được. Bài chờ đăng để yên cho cron; bài đã lên thì
+    // sửa ở đây chẳng đổi được gì trên trang công khai.
+    const fixable = p.status === 'error';
     const tags = (p.hashtags || []).map((h) => '#' + h).join(' ');
     return `
     <div style="display:flex;gap:1rem;padding:.9rem 0;border-bottom:1px solid var(--border)">
@@ -3344,17 +3353,18 @@ function renderMediaQueue(posts) {
           <span class="badge badge-grey">${escHtmlLocal(p.channel || '')}</span>
           <span style="font-size:.7rem;color:var(--text-lt)">${escHtmlLocal((a.source_type || '').replace('_', ' '))}</span>
         </div>
-        <textarea id="mq-cap-${p.id}" ${pending ? '' : 'disabled'}
+        <textarea id="mq-cap-${p.id}" ${fixable ? '' : 'disabled'}
                   style="width:100%;min-height:74px;font-size:.78rem;padding:.5rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);resize:vertical"
         >${escHtmlLocal(p.caption || '')}</textarea>
         <div style="font-size:.7rem;color:var(--text-lt);margin:.3rem 0">${escHtmlLocal(tags)}</div>
         <a href="${escHtmlLocal(p.link_url || '')}" target="_blank" rel="noopener"
            style="font-size:.7rem;color:var(--text-lt);word-break:break-all">${escHtmlLocal(p.link_url || '')}</a>
-        ${pending ? `
+        ${fixable ? `
         <div style="display:flex;gap:.5rem;margin-top:.5rem">
-          <button class="btn btn-primary btn-sm" onclick="mediaDecide('${p.id}','approve')">Duyệt</button>
-          <button class="btn btn-outline btn-sm" onclick="mediaDecide('${p.id}','skip')">Bỏ</button>
+          <button class="btn btn-primary btn-sm" onclick="mediaDecide('${p.id}','retry')">Đăng lại</button>
+          <button class="btn btn-outline btn-sm" onclick="mediaDecide('${p.id}','skip')">Bỏ hẳn</button>
         </div>` : ''}
+        ${p.external_url ? `<a href="${escHtmlLocal(p.external_url)}" target="_blank" rel="noopener" style="font-size:.7rem;display:inline-block;margin-top:.35rem">Xem bài đã đăng →</a>` : ''}
         ${p.error ? `<div style="font-size:.7rem;color:var(--red);margin-top:.35rem">${escHtmlLocal(p.error)}</div>` : ''}
       </div>
     </div>`;
@@ -3363,12 +3373,13 @@ function renderMediaQueue(posts) {
 
 async function mediaDecide(postId, decision) {
   const el = document.getElementById('mq-cap-' + postId);
-  // Gửi kèm caption đang hiện: admin thường sửa vài chữ ngay trước khi duyệt.
+  // Gửi kèm caption đang hiện: sửa vài chữ rồi đăng lại thường là cách chữa
+  // nhanh nhất một bài lỗi vì nội dung.
   const caption = el ? el.value.trim() : '';
   try {
     const d = await apiPost('admin-media-decide', { postId, decision, caption });
     if (d.error) throw new Error(d.error);
-    toast(decision === 'approve' ? 'Đã duyệt' : 'Đã bỏ bài', 'success');
+    toast(decision === 'retry' ? 'Đã xếp lại hàng — cron sẽ đăng ở lượt tới' : 'Đã bỏ bài', 'success');
     loadMediaQueue();
   } catch (e) {
     toast('Lỗi: ' + e.message, 'error');
