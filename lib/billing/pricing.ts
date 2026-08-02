@@ -57,6 +57,22 @@ export async function getToolPrice(toolId: string): Promise<number | null> {
   return row.credits;
 }
 
+/**
+ * Giá Lượng cho MỘT lượt rail, dùng chung cho MỌI kênh: web `/api/v1/chat` và
+ * 3 bot Telegram / Messenger / WhatsApp.
+ *
+ * Nguồn thật = `tool_pricing['rail-message']` (admin sửa, không cần deploy).
+ * `fallback` (app_config 'chat.cost') CHỈ dùng khi chưa có row hoặc đọc hụt.
+ *
+ * ⚠️ Trước đây web đọc bảng còn 3 bot đọc thẳng `cfg.cost`, hai đường chỉ tình
+ * cờ bằng nhau ở mức 2 — đổi giá dưới bảng là bot lặng lẽ thu một giá khác.
+ * Thêm kênh mới thì gọi hàm này, đừng đọc `cfg.cost` trực tiếp.
+ */
+export async function getRailPrice(fallback: number): Promise<number> {
+  const p = await getToolPrice('rail-message');
+  return p != null ? p : fallback;
+}
+
 /** Xoá cache (sau khi admin sửa giá, nếu cần áp ngay). */
 export function invalidatePricing() {
   cache = null;

@@ -32,6 +32,7 @@ import { waitUntil } from '@vercel/functions';
 import { getChatConfig } from '@/lib/config/appConfig';
 import { paywallDisabled, getBalance, deductCredits, logTransaction } from '@/lib/billing/credits';
 import { chatLogOutcome } from '@/lib/channels/store';
+import { getRailPrice } from '@/lib/billing/pricing';
 import {
   runConversation,
   type ChannelIO,
@@ -229,7 +230,7 @@ async function handleUpdate(update: TgUpdate): Promise<void> {
 
   // ── Cổng tính phí (trước khi tốn token LLM) ──────────────────
   const cfg = await getChatConfig();
-  const gate = await checkAccess(fromId, cfg.cost);
+  const gate = await checkAccess(fromId, await getRailPrice(cfg.cost));
   if (!gate.allowed) {
     await tgSendMessage(chatId, gate.message || ERR_MSG);
     return;

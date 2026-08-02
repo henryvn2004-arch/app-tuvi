@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=19" as="script">
+<link rel="preload" href="/nav.js?v=20" as="script">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="apple-touch-icon" href="/seal.webp">
 <meta name="description" content="Chụp ảnh khuôn mặt, AI phân tích khí sắc và thần thái theo nhân tướng học cổ pháp — dự đoán vận khí sức khỏe, tài lộc, tình duyên 1 đến 3 tháng tới."/>
@@ -727,9 +727,9 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
       <!-- Analyze button -->
       <div style="text-align:center;margin-top:24px">
         <button class="btn-analyze" id="analyze-btn" onclick="analyze()" disabled>
-          <span style="font-size:18px;vertical-align:middle;margin-right:4px">🌅</span>
+          <span style="font-size:18px;vertical-align:middle;margin-right:4px"><span class="ic" data-icon="sunrise"></span></span>
           Luận Khí Sắc
-          <span id="analyze-price" style="opacity:.75;font-size:.85em;margin-left:4px">(15 lượng)</span>
+          <span style="opacity:.75;font-size:.85em;margin-left:4px">(<span data-tvp-price="khi-sac">…</span> lượng)</span>
         </button>
       </div>
       <div class="error-msg" id="error-msg"></div>
@@ -847,7 +847,7 @@ body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text)
 <!-- ============ FOOTER + NAV INJECTION ============ -->
 <div id="nav-ph" style="height:60px;background:#061A2E"></div>
 <script src="/footer.js"></script>
-<script src="/tuvi-paywall.js"></script>
+<script src="/tuvi-paywall.js?v=11"></script>
 
 <!-- ============ TOOL SCRIPT ============ -->
 <script>
@@ -1120,19 +1120,6 @@ function renderMarkdown(md) {
     .replace(/(<\/[hul][^>]*>)<\/p>/g,'$1');
 }
 
-// ── Dynamic pricing (show actual credits from Supabase) ───────
-(async function() {
-  try {
-    const r = await fetch('https://dciwkfdqhhddeymlisey.supabase.co/rest/v1/tool_pricing?tool_id=eq.khi-sac&select=credits',
-      { headers: { 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I' }});
-    const rows = await r.json();
-    if (rows[0]?.credits) {
-      const el = document.getElementById('analyze-price');
-      if (el) el.textContent = '(' + rows[0].credits + ' lượng)';
-    }
-  } catch(e) {}
-})();
-
 // ── TuviPaywall init ──────────────────────────────────────────
 TuviPaywall.init({
   product: 'khi-sac',
@@ -1179,7 +1166,7 @@ document.addEventListener('DOMContentLoaded', () => {
   </div>
 </section>
 <script src="/testimonials.js"></script>
-<script src="/related-tools.js"></script>
-<script src="/nav.js?v=19" defer></script>
+<script src="/related-tools.js?v=2"></script>
+<script src="/nav.js?v=20" defer></script>
 </body>
 </html>

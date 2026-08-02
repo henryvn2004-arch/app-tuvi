@@ -939,12 +939,12 @@ select.form-input { cursor: pointer; }
             <div class="tvc-paywall-feature">Câu trả lời cá nhân hóa</div>
             <div class="tvc-paywall-feature">Dựa trên lá số thực tế</div>
           </div>
-          <div class="tvc-paywall-price">150 lượng</div>
+          <div class="tvc-paywall-price"><span data-tvp-price="laso">…</span> lượng</div>
           <div class="tvc-paywall-price-note">Bao gồm 24 phần luận giải + Vấn đáp không giới hạn</div>
           <button class="tvc-paywall-btn" onclick="initiatePayment()">
             Mở Khóa Luận Giải &amp; Vấn Đáp →
           </button>
-          <div class="tvc-paywall-secure">🔒 Trừ thẳng từ số dư · Truy cập vĩnh viễn</div>
+          <div class="tvc-paywall-secure"><span class="ic" data-icon="lock"></span> Trừ thẳng từ số dư · Truy cập vĩnh viễn</div>
         </div>
       </div>
     </div>
@@ -957,7 +957,7 @@ select.form-input { cursor: pointer; }
 
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tuvi-form.js?v=1"></script>
-<script src="/tuvi-paywall.js?v=9"></script>
+<script src="/tuvi-paywall.js?v=11"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
   // Load cach cuc DB
@@ -1571,7 +1571,7 @@ select.form-input { cursor: pointer; }
 
             <div style="display:flex;align-items:baseline;justify-content:center;gap:8px;margin-bottom:4px">
 
-              <div class="paywall-price">150 lượng</div>
+              <div class="paywall-price"><span data-tvp-price="laso">…</span> lượng</div>
 
             </div>
 
@@ -4182,7 +4182,7 @@ TuviPaywall.init({
 
 </div>
 
-<script src="/nav.js?v=19"></script>
+<script src="/nav.js?v=20"></script>
 <script src="/chatbot.js"></script>
 <script>
   window._tuviChatConfig = {

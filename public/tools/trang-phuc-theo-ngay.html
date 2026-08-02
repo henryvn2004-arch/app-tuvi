@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=19" as="script">
+<link rel="preload" href="/nav.js?v=20" as="script">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trang Phục Theo Ngày — Tử Vi Minh Bảo</title>
 <meta name="description" content="Tư vấn màu sắc trang phục theo can-chi ngày và bản mệnh — cổ pháp Ngũ Hành Nạp Âm.">
@@ -11,9 +11,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="/auth.js"></script>
-<script src="/tuvi-paywall.js"></script>
+<script src="/tuvi-paywall.js?v=11"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=1"></script>
-<script src="/nav.js?v=19" defer></script>
+<script src="/nav.js?v=20" defer></script>
 <style>
 :root {
   --navy:#061A2E; --navy-mid:#0D3B5E; --blue:#1455A4;
@@ -156,7 +156,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
   <div class="hero-badge">✦ Ngũ Hành Nạp Âm · Can Chi Ngày</div>
   <h1>Trang Phục <span>Theo Ngày</span></h1>
   <p>Nhập ngày đi sự kiện — AI tính can chi ngày, đối chiếu bản mệnh, gợi ý màu sắc + phong cách trang phục chuẩn cổ pháp</p>
-  <div class="hero-cost">⟐ 10 lượng · Can Chi Ngày × Nạp Âm Mệnh</div>
+  <div class="hero-cost">⟐ <span data-tvp-price="trang-phuc-theo-ngay">…</span> lượng · Can Chi Ngày × Nạp Âm Mệnh</div>
 </div>
 
 <div class="wrap">
@@ -186,10 +186,10 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
     <div class="form-group" style="margin-bottom:12px">
       <label class="form-label">Mục đích (chọn 1)</label>
       <div class="purpose-pills" id="purposePills">
-        <div class="pill active" onclick="setPurpose(this,'ra ngoài thông thường')">🌿 Thường ngày</div>
-        <div class="pill" onclick="setPurpose(this,'phỏng vấn xin việc, cần tạo ấn tượng chuyên nghiệp')">💼 Phỏng vấn</div>
-        <div class="pill" onclick="setPurpose(this,'hẹn hò, gặp người yêu, cần thu hút và lãng mạn')">💕 Hẹn hò</div>
-        <div class="pill" onclick="setPurpose(this,'gặp đối tác kinh doanh, ký kết hợp đồng')">🤝 Kinh doanh</div>
+        <div class="pill active" onclick="setPurpose(this,'ra ngoài thông thường')"><span class="ic" data-icon="leaf"></span> Thường ngày</div>
+        <div class="pill" onclick="setPurpose(this,'phỏng vấn xin việc, cần tạo ấn tượng chuyên nghiệp')"><span class="ic" data-icon="briefcase"></span> Phỏng vấn</div>
+        <div class="pill" onclick="setPurpose(this,'hẹn hò, gặp người yêu, cần thu hút và lãng mạn')"><span class="ic" data-icon="heart"></span> Hẹn hò</div>
+        <div class="pill" onclick="setPurpose(this,'gặp đối tác kinh doanh, ký kết hợp đồng')"><span class="ic" data-icon="handshake"></span> Kinh doanh</div>
         <div class="pill" onclick="setPurpose(this,'sự kiện quan trọng, tiệc tùng, cần nổi bật')">✨ Sự kiện</div>
         <div class="pill" onclick="setPurpose(this,'đi du lịch, thư giãn, cần thoải mái')">✈️ Du lịch</div>
       </div>
@@ -284,7 +284,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
           ondrop="event.preventDefault();this.classList.remove('drag');loadTryonFile(event.dataTransfer.files[0])">
           <input type="file" accept="image/*" onchange="loadTryonFile(this.files[0])" id="tryonInput">
           <div id="tryonPrompt">
-            <div style="font-size:32px;margin-bottom:8px;">👤</div>
+            <div style="font-size:32px;margin-bottom:8px;"><span class="ic" data-icon="user"></span></div>
             <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:4px;">Tải ảnh của bạn lên</div>
             <div style="font-size:11px;color:var(--text-lt);">Ảnh chụp toàn thân hoặc nửa người · JPG/PNG</div>
           </div>
@@ -298,12 +298,12 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
       <div id="tryonStep2" style="display:none;margin-top:12px;">
         <div style="font-size:12px;font-weight:600;color:var(--text-mid);margin-bottom:8px;">Phong cách:</div>
         <div class="style-btns">
-          <button class="style-btn active" onclick="setTryonStyle('cong-so',this)">💼 Công Sở</button>
-          <button class="style-btn" onclick="setTryonStyle('casual',this)">👕 Casual</button>
+          <button class="style-btn active" onclick="setTryonStyle('cong-so',this)"><span class="ic" data-icon="briefcase"></span> Công Sở</button>
+          <button class="style-btn" onclick="setTryonStyle('casual',this)"><span class="ic" data-icon="shirt"></span> Casual</button>
           <button class="style-btn" onclick="setTryonStyle('sang-trong',this)">✨ Sang Trọng</button>
-          <button class="style-btn" onclick="setTryonStyle('dao-pho',this)">🛍 Dạo Phố</button>
+          <button class="style-btn" onclick="setTryonStyle('dao-pho',this)"><span class="ic" data-icon="package"></span> Dạo Phố</button>
         </div>
-        <button class="btn-tryon" id="btnTryon" onclick="doTryon()">🪄 Thử Trang Phục Ngay</button>
+        <button class="btn-tryon" id="btnTryon" onclick="doTryon()"><span class="ic" data-icon="sparkles"></span> Thử Trang Phục Ngay</button>
       </div>
 
       <div id="tryonLoading" style="display:none;text-align:center;padding:24px 0;">
@@ -317,7 +317,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
         </div>
         <div style="display:flex;gap:8px;">
           <button onclick="downloadTryon()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;">⬇ Tải Ảnh</button>
-          <button onclick="resetTryon()" style="flex:1;padding:10px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;color:var(--text-mid);">🔄 Thử Lại</button>
+          <button onclick="resetTryon()" style="flex:1;padding:10px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;color:var(--text-mid);"><span class="ic" data-icon="rotate-cw"></span> Thử Lại</button>
         </div>
       </div>
     </div>
@@ -620,6 +620,6 @@ window.addEventListener('DOMContentLoaded',()=>{
     </div>
   </div>
 </section>
-<script src="/nav.js?v=19" defer></script>
+<script src="/nav.js?v=20" defer></script>
 </body>
 </html>

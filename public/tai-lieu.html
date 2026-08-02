@@ -90,7 +90,7 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 <script src="/auth.js"></script>
 </head>
 <body>
-<script src="/nav.js?v=19"></script>
+<script src="/nav.js?v=20"></script>
 
 <div class="breadcrumb" id="breadcrumb">
   <a href="/">Trang Chủ</a>
@@ -106,7 +106,7 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 
 <div id="state-error" class="state-wrap" style="display:none">
   <div>
-    <div style="font-size:40px;margin-bottom:16px">📄</div>
+    <div style="font-size:40px;margin-bottom:16px"><span class="ic" data-icon="file-text"></span></div>
     <div style="font-family:'Noto Serif',serif;font-size:22px;color:var(--navy);margin-bottom:10px">Không tìm thấy bài viết</div>
     <div style="font-size:14px;color:var(--text-lt);margin-bottom:24px">Bài viết không tồn tại hoặc đã bị xóa.</div>
     <a href="/resources.html" style="padding:10px 24px;background:var(--navy);color:#fff;border-radius:6px;font-size:13px;text-decoration:none">← Về Tài Liệu</a>
@@ -323,6 +323,6 @@ async function loadRelated(currentSlug, category, tags) {
 load();
 </script>
 <script src="/testimonials.js"></script>
-<script src="/related-tools.js"></script>
+<script src="/related-tools.js?v=2"></script>
 </body>
 </html>

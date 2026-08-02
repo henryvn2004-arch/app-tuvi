@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&display=swap" rel="stylesheet"/>
 <script src="/auth.js"></script>
-<script src="/tuvi-paywall.js"></script>
+<script src="/tuvi-paywall.js?v=11"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=1"></script>
 <style>
 :root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--gold-bright:#D4A843;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0;--red:#C0392B;--green:#1E6B3C;}
@@ -149,10 +149,10 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 <div id="nav-ph" style="height:60px;background:#061A2E"></div>
 
 <div class="hero">
-  <span style="font-size:44px;display:block;margin-bottom:10px;">🎨</span>
+  <span style="font-size:44px;display:block;margin-bottom:10px;"><span class="ic" data-icon="palette"></span></span>
   <h1>Màu Sắc Hợp Mệnh</h1>
   <p>Tư vấn màu sắc trang phục theo Ngũ Hành Nạp Âm và Bát Trạch. Quần, áo, giày, phụ kiện — đúng màu đúng mệnh, vận khí thăng tiến.</p>
-  <div class="hero-cost">⟐ 20 lượng · Ngũ Hành Nạp Âm + Bát Trạch</div>
+  <div class="hero-cost">⟐ <span data-tvp-price="mau-sac-hop-menh">…</span> lượng · Ngũ Hành Nạp Âm + Bát Trạch</div>
 </div>
 
 <div class="container">
@@ -164,7 +164,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
       <h2 class="ti-h2">Nạp Âm Ngũ Hành —<br>Hệ Thống Màu Sắc Theo Bản Mệnh</h2>
       <p class="ti-body">Nạp Âm Ngũ Hành (納音五行) là hệ thống tính mệnh từ Can Chi năm sinh, được hệ thống hóa đầy đủ nhất trong "Tam Mệnh Thông Hội" (三命通會) thời Minh. Mỗi cặp năm can chi ứng với một trong 60 Nạp Âm — từ "Hải Trung Kim" đến "Đại Hải Thủy" — và quy về 5 hành Kim, Mộc, Thủy, Hỏa, Thổ. Đây là nền tảng xác định màu sắc hợp mệnh chuẩn xác nhất.</p>
       <p class="ti-body">Nguyên lý tương sinh (Kim→Thủy→Mộc→Hỏa→Thổ→Kim) xác định màu phụ hợp; tương khắc (Kim khắc Mộc, Mộc khắc Thổ, Thổ khắc Thủy, Thủy khắc Hỏa, Hỏa khắc Kim) xác định màu nên tránh. Kết hợp thêm Quái số Bát Trạch để tinh chỉnh theo phương vị cá nhân.</p>
-      <div class="ti-cite">📖 Tam Mệnh Thông Hội (三命通會) — bộ sách mệnh lý thời Minh của Vạn Dân Anh, hệ thống hóa đầy đủ 60 Nạp Âm và ứng dụng ngũ hành.</div>
+      <div class="ti-cite"><span class="ic" data-icon="book-open"></span> Tam Mệnh Thông Hội (三命通會) — bộ sách mệnh lý thời Minh của Vạn Dân Anh, hệ thống hóa đầy đủ 60 Nạp Âm và ứng dụng ngũ hành.</div>
     </div>
     <div>
       <div class="ti-factors-title">Bài Tư Vấn Gồm 5 Phần</div>
@@ -173,7 +173,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
       <div class="ti-factor"><span class="ti-factor-num">③</span><div class="ti-factor-body"><div class="ti-factor-label">Màu Theo Dịp</div><div class="ti-factor-desc">Phỏng vấn, hẹn hò, gặp đối tác kinh doanh, đi làm hàng ngày — tối ưu theo bối cảnh</div></div></div>
       <div class="ti-factor"><span class="ti-factor-num">④</span><div class="ti-factor-body"><div class="ti-factor-label">Gợi Ý Phối Đồ</div><div class="ti-factor-desc">3 combo hoàn chỉnh với điểm phong thủy, mô tả phong cách và lý do theo Ngũ Hành</div></div></div>
       <div class="ti-factor"><span class="ti-factor-num">⑤</span><div class="ti-factor-body"><div class="ti-factor-label">Thử Trang Phục AI</div><div class="ti-factor-desc">Upload ảnh của bạn, chọn phong cách — Replicate AI render outfit đúng màu mệnh lên ảnh thật</div></div></div>
-      <div class="ti-note">💡 Màu sắc theo Nạp Âm áp dụng chủ yếu cho trang phục đi ra ngoài và các dịp quan trọng. Màu mặc ở nhà ít ảnh hưởng hơn.</div>
+      <div class="ti-note"><span class="ic" data-icon="lightbulb"></span> Màu sắc theo Nạp Âm áp dụng chủ yếu cho trang phục đi ra ngoài và các dịp quan trọng. Màu mặc ở nhà ít ảnh hưởng hơn.</div>
     </div>
   </div>
 </div>
@@ -204,11 +204,11 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 
   <div class="analyze-area">
     <div class="cost-row">
-      <span>Chi phí: <strong>20 lượng</strong></span>
+      <span>Chi phí: <strong><span data-tvp-price="mau-sac-hop-menh">…</span> lượng</strong></span>
       <span>Số dư: <span id="balDisplay" style="font-weight:700;">—</span> lượng</span>
     </div>
     <div class="error-box" id="errorBox"></div>
-    <button class="btn-analyze" id="btnAnalyze" onclick="doAnalyze()">🎨 Xem Màu Sắc Hợp Mệnh</button>
+    <button class="btn-analyze" id="btnAnalyze" onclick="doAnalyze()"><span class="ic" data-icon="palette"></span> Xem Màu Sắc Hợp Mệnh</button>
   </div>
 
   <div class="loading-overlay" id="loadingOverlay">
@@ -284,7 +284,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
           ondrop="event.preventDefault();document.getElementById('tryonUploadZone').classList.remove('drag');handleTryonDrop(event)">
           <input type="file" accept="image/*" onchange="onTryonFile(event)" id="tryonFileInput">
           <div id="tryonUploadPrompt">
-            <div style="font-size:36px;margin-bottom:8px;">👤</div>
+            <div style="font-size:36px;margin-bottom:8px;"><span class="ic" data-icon="user"></span></div>
             <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px;">Tải ảnh của bạn lên</div>
             <div style="font-size:12px;color:var(--text-lt);">Ảnh chụp thẳng người, đủ sáng · JPG/PNG</div>
           </div>
@@ -299,12 +299,12 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
       <div id="tryonStep2" style="display:none;margin-top:14px;">
         <div style="font-size:12px;font-weight:600;color:var(--text-mid);margin-bottom:8px;">Chọn phong cách trang phục:</div>
         <div class="style-btns">
-          <button class="style-btn active" id="sbCongSo" onclick="setStyle('cong-so',this)">💼 Công Sở</button>
-          <button class="style-btn" id="sbCasual"  onclick="setStyle('casual',this)">👕 Casual</button>
+          <button class="style-btn active" id="sbCongSo" onclick="setStyle('cong-so',this)"><span class="ic" data-icon="briefcase"></span> Công Sở</button>
+          <button class="style-btn" id="sbCasual"  onclick="setStyle('casual',this)"><span class="ic" data-icon="shirt"></span> Casual</button>
           <button class="style-btn" id="sbSangTrong" onclick="setStyle('sang-trong',this)">✨ Sang Trọng</button>
-          <button class="style-btn" id="sbDaoPho" onclick="setStyle('dao-pho',this)">🛍 Dạo Phố</button>
+          <button class="style-btn" id="sbDaoPho" onclick="setStyle('dao-pho',this)"><span class="ic" data-icon="package"></span> Dạo Phố</button>
         </div>
-        <button class="btn-tryon" id="btnTryon" onclick="doTryon()">🪄 Thử Trang Phục Ngay</button>
+        <button class="btn-tryon" id="btnTryon" onclick="doTryon()"><span class="ic" data-icon="sparkles"></span> Thử Trang Phục Ngay</button>
       </div>
 
       <!-- Loading -->
@@ -326,7 +326,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
         </div>
         <div style="display:flex;gap:8px;">
           <button onclick="downloadTryonResult()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif;">⬇ Tải Ảnh</button>
-          <button onclick="resetTryon()" style="flex:1;padding:10px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;font-family:Arial,sans-serif;color:var(--text-mid);">🔄 Thử Lại</button>
+          <button onclick="resetTryon()" style="flex:1;padding:10px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;font-family:Arial,sans-serif;color:var(--text-mid);"><span class="ic" data-icon="rotate-cw"></span> Thử Lại</button>
         </div>
       </div>
 
@@ -673,7 +673,7 @@ TuviPaywall.init({ product: 'mau-sac-hop-menh' });
   </div>
 </section>
 <script src="/testimonials.js"></script>
-<script src="/related-tools.js"></script>
-<script src="/nav.js?v=19" defer></script>
+<script src="/related-tools.js?v=2"></script>
+<script src="/nav.js?v=20" defer></script>
 </body>
 </html>

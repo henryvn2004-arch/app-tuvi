@@ -12,7 +12,8 @@ import { ok, err, options, parseBody } from '@/lib/cors';
 import { getPackage, getPackages, quoteCustomVnd } from '@/lib/billing/packages';
 import { getToolPrice } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
-import { freeGenGate, FREE_GEN_CAP_MESSAGE } from '@/lib/billing/viral-budget';
+import { freeGenGate, FREE_GEN_CAP_MESSAGE, railFreeRemaining } from '@/lib/billing/viral-budget';
+import { anonTrialStatus } from '@/lib/billing/anon-trial';
 import { getConfigValue } from '@/lib/config/appConfig';
 import { CRON_RUNS_LIMIT, evaluateJobs, fetchPgcronRuns } from '@/lib/ops/jobs';
 import { checkEnv } from '@/lib/ops/preflight';
@@ -454,7 +455,6 @@ async function handleAdminSavePackage(request: NextRequest, body: Record<string,
   if (body.amount_vnd  != null) row.amount_vnd  = parseInt(String(body.amount_vnd));
   if (body.amount_usd  != null) row.amount_usd  = Number(body.amount_usd);
   if (body.label       != null) row.label       = String(body.label);
-  if (body.bonus_label != null) row.bonus_label = String(body.bonus_label);
   if (body.enabled     != null) row.enabled     = !!body.enabled;
   if (body.sort_order  != null) row.sort_order  = parseInt(String(body.sort_order));
   try {
@@ -1315,8 +1315,11 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-mcp') return handleAdminMcp(request);
   if (action === 'admin-env-status') return handleAdminEnvStatus(request);
   if (action === 'my-referral') return handleMyReferral(request, searchParams);
+  if (action === 'rail-status') return handleRailStatus(request, searchParams);
+  if (action === 'signup-bonus') return handleSignupBonus();
   if (action === 'admin-viral') return handleAdminViral(request, searchParams);
   if (action === 'admin-content-pack') return handleAdminContentPack(request, searchParams);
+  if (action === 'admin-media-queue') return handleAdminMediaQueue(request, searchParams);
   if (action === 'check-bank')  return handleCheckBank(searchParams);
   return err('Invalid action.', 400);
 }
@@ -1587,6 +1590,83 @@ async function handleAdminContentPack(request: NextRequest, sp: URLSearchParams)
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
+// ── GET: admin-media-queue (M2, track Media Pipeline) — hàng đợi bài đăng
+// mạng xã hội chờ duyệt. Đọc kèm asset để admin xem ĐƯỢC ẢNH THẬT trước khi
+// bấm, không phải duyệt mù bằng cách đọc caption. ──
+async function handleAdminMediaQueue(request: NextRequest, sp: URLSearchParams): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const status = (sp.get('status') || '').trim();
+  const statusFilter = /^[a-z]+$/.test(status) ? `&status=eq.${status}` : '';
+  try {
+    const [rowsRes, cfgRes] = await Promise.all([
+      fetch(
+        `${SUPABASE_URL}/rest/v1/media_posts?select=id,created_at,channel,caption,hashtags,link_url,status,published_at,external_url,error,media_assets(url,width,height,source_type,meta)${statusFilter}&order=created_at.desc&limit=60`,
+        { headers: SB_HEADERS, cache: 'no-store' },
+      ),
+      fetch(`${SUPABASE_URL}/rest/v1/app_config?key=like.social.*&select=key,value`, {
+        headers: SB_HEADERS,
+        cache: 'no-store',
+      }),
+    ]);
+    const rows = rowsRes.ok ? await rowsRes.json() : [];
+    const cfgRows: { key: string; value: unknown }[] = cfgRes.ok ? await cfgRes.json() : [];
+    const cfg: Record<string, unknown> = {};
+    for (const r of cfgRows) cfg[r.key] = r.value;
+
+    return ok({
+      posts: rows,
+      autopostEnabled: cfg['social.autopost_enabled'] === true,
+      channels: cfg['social.channels'] || [],
+      buildDaily: cfg['social.build_daily'] ?? 0,
+    });
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+}
+
+// ── POST: admin-media-decide (M2) — duyệt hoặc bỏ một bài trong hàng đợi.
+// CỐ Ý chỉ có hai lối ra và KHÔNG có lối "đăng ngay": duyệt xong bài vẫn nằm
+// chờ bước đăng riêng. Một nút bấm nhầm không được phép đẩy thẳng nội dung lên
+// trang công khai. ──
+async function handleAdminMediaDecide(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const postId = String(body.postId || '').trim();
+  const decision = String(body.decision || '').trim();
+  if (!/^[0-9a-f-]{36}$/i.test(postId)) return err('postId không hợp lệ', 400);
+  if (decision !== 'approve' && decision !== 'skip') return err('decision phải là approve hoặc skip', 400);
+
+  const caption = typeof body.caption === 'string' ? body.caption.trim() : '';
+  const patch: Record<string, unknown> = {
+    status: decision === 'approve' ? 'approved' : 'skipped',
+    updated_at: new Date().toISOString(),
+  };
+  // Admin sửa lại caption ngay lúc duyệt — thường nhanh hơn là bỏ bài rồi chờ
+  // cron viết lại bản khác vào hôm sau.
+  if (caption) patch.caption = caption;
+
+  try {
+    // Chỉ đổi được bài ĐANG chờ: chặn việc lỡ tay duyệt lại bài đã đăng (`live`)
+    // hay đang đăng dở (`publishing`).
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/media_posts?id=eq.${postId}&status=in.(queued,approved,skipped)`, {
+      method: 'PATCH',
+      headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+      body: JSON.stringify(patch),
+    });
+    if (!res.ok) return err(await res.text());
+    const rows = (await res.json()) as unknown[];
+    if (!rows.length) return err('Không tìm thấy bài đang chờ với id đó', 404);
+    return ok({ updated: true, status: patch.status });
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+}
+
 // ── GET: admin-autopilot-log (M0.6, track Marketing Autopilot) — nhật ký
 // hành động autopilot (shadow/live) + trạng thái cấu hình hiện tại. THUẦN
 // ĐỌC — không có action bật/tắt qua API này có chủ đích (rủi ro cao, Henry
@@ -1675,6 +1755,60 @@ async function handleAdminDashboardV2(request: NextRequest): Promise<Response> {
 // vào link chia sẻ. CỐ Ý là endpoint có auth chứ không nhét referral_code vào
 // `action=balance` (endpoint đó nhận userId qua query, không xác thực — thêm mã
 // vào đó là phát mã của người khác cho bất kỳ ai đoán được userId).
+/**
+ * GET ?action=rail-status — trạng thái ví cho ĐỒNG HỒ ĐẾM CÂU của rail chat.
+ *
+ * Vì sao cần một endpoint riêng: rail muốn hiện "còn N câu hỏi" NGAY khi mở,
+ * trước khi người dùng hỏi câu nào — mà để tính N thì cần cả số dư, giá một lượt
+ * rail, và số lượt tặng. Ba thứ đó nằm ở ba nơi (`user_credits`, `tool_pricing`,
+ * RPC `rail_free_*`). Không có endpoint này thì `shell.js` phải nhúng anon key
+ * để đọc `tool_pricing`, hoặc tự viết cứng giá — mà viết cứng giá là nói sai với
+ * người dùng ngay lần đổi giá đầu tiên (đúng lỗi đã xảy ra ở topup.html: FAQ ghi
+ * 5 Lượng khi DB là 10).
+ *
+ * Trả kèm `lasoPrice` để tường hết-Lượng nói được bằng LÁ SỐ ("xem trọn 24 mục
+ * — 25 Lượng") thay vì "nạp Lượng" chung chung.
+ */
+async function handleRailStatus(request: NextRequest, sp: URLSearchParams): Promise<Response> {
+  const userToken = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  // KHÁCH CHƯA ĐĂNG NHẬP: trả số câu DÙNG THỬ còn lại thay vì 401, để đồng hồ
+  // rail hiện được ngay trước câu hỏi đầu tiên. Chỉ ĐỌC, không tiêu lượt nào.
+  // Không cần auth vì `anon_id` do client tự khai và chẳng mở ra quyền gì —
+  // biết được số câu thử của một anon_id lạ không giúp làm gì cả.
+  if (!userToken) {
+    const anonId = String(sp.get('anon') || '').slice(0, 64);
+    const t = await anonTrialStatus(anonId);
+    return ok({
+      anon: true,
+      anonTrialLeft: t.left,
+      anonTrialCap: t.cap,
+      railPrice: await getToolPrice('rail-message'),
+      lasoPrice: await getToolPrice('laso'),
+      vndPerCredit: await getConfigValue<number>('credits.vnd_per_credit', 1000),
+    });
+  }
+  try {
+    const user = await getUserFromToken(userToken);
+    if (!user) return err('Invalid token', 401);
+    const [balance, railPrice, lasoPrice, freeTurns, vndPerCredit] = await Promise.all([
+      getBalance(user.id),
+      getToolPrice('rail-message'),
+      getToolPrice('laso'),
+      railFreeRemaining(user.id),
+      getConfigValue<number>('credits.vnd_per_credit', 1000),
+    ]);
+    return ok({
+      balance,
+      railPrice: railPrice != null ? railPrice : null,
+      lasoPrice: lasoPrice != null ? lasoPrice : null,
+      freeTurns,
+      vndPerCredit,
+    });
+  } catch (e) {
+    return err(e instanceof Error ? e.message : 'rail-status failed', 500);
+  }
+}
+
 async function handleMyReferral(request: NextRequest, sp: URLSearchParams): Promise<Response> {
   const userToken = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
   if (!userToken) return err('Missing Authorization token', 401);
@@ -1822,6 +1956,7 @@ export async function POST(request: NextRequest) {
   if (action === 'admin-cron-trigger') return handleAdminCronTrigger(request, body);
   if (action === 'admin-channel-broadcast') return handleAdminChannelBroadcast(request, body);
   if (action === 'admin-nudge-user') return handleAdminNudgeUser(request, body);
+  if (action === 'admin-media-decide') return handleAdminMediaDecide(request, body);
   if (action === 'admin-khao-luan-topics') return handleAdminKhaoLuanTopics(request, body);
   if (action === 'admin-nghien-cuu-topics') return handleAdminNghienCuuTopics(request, body);
   if (action === 'admin-mcp-update') return handleAdminMcpUpdate(request, body);

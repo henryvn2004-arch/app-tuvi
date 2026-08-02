@@ -1,7 +1,253 @@
 # CLAUDE.md — Context cho Claude Code
 
 ## Project
-**tuviminhbao.com** — Tử Vi Đẩu Số app (Next.js 14, Supabase, Vercel)
+**tuviminhbao.com** — Tử Vi Đẩu Số app (Next.js 16, Supabase, Vercel)
+
+---
+
+## 📹 Track Media Pipeline — kênh phân phối, KHÔNG phải SEO (2026-08-01, PR #369)
+
+Henry: *"launch 3-4 tháng mà traffic thấp quá… SEO có phải kênh đầu tiên đúng
+không?"* Đo trước khi trả lời: **617/616.715 URL có impression (0,1%) · 18
+click/28 ngày, 11 trong đó về trang chủ · 10 từ khoá đọc được đều hạng 51–100 ·
+tháng 7: 7 đăng ký, 0đ doanh thu.** Ba tuần trước con số trang-có-impression là
+612, nay 617 — **tăng 5 trang trong 3 tuần**, đúng mốc đo đã đặt ở #361. Kết
+luận: nút thắt là **thẩm quyền tên miền**, không phải số lượng trang. NGỪNG gen
+trang. Henry chốt chuyển sang kênh chủ động.
+
+### 🔴 Phát hiện lớn nhất: pipeline media ĐÃ TỒN TẠI và đang ĐỨT ÂM THẦM
+```
+cron-khao-luan → pg_cron 07:00 → auto-pipeline → TTS ✅ → Railway mix 🔴 → YouTube 🔴
+```
+| `van_dap` | Bài | Mới nhất |
+|---|---:|---|
+| Video render xong, YouTube **lỗi** | **86** | 16/07 |
+| Có audio, chưa render video | **29** | **01/08** |
+| Đã lên YouTube | 15 | 10/04 |
+
+**85 video hoàn chỉnh nằm kho không đăng được**, máy vẫn đẻ thêm mỗi ngày.
+- **84/86 lỗi CÙNG một `invalid_grant`.** Đây là OAuth consent screen còn ở chế
+  độ **Testing** trong Google Cloud → refresh token **hết hạn sau 7 ngày**. Đã
+  chết đúng hai lần (22/04, 16/07). **Cấp token mới là vá triệu chứng** — phải
+  PUBLISH APP. Việc tay Henry, không code thay được.
+- `pg_cron` báo `succeeded` mỗi sáng vì nó chỉ đo "gọi HTTP xong", không đo kết
+  quả thật ⇒ tắc 16 ngày không ai biết. Cùng họ với bài học nhịp tim `withCronLog`.
+- 🔑 **Kho nguyên liệu đã có mà chưa dùng:** 130 file audio TTS (→ podcast RSS,
+  gần như 0đ) · `van_dap` đã có sẵn cột `tt_*`/`fb_*` chưa ai ghi vào.
+- ⚠️ `video_duration_sec` **NULL cả 100 dòng** → chưa biết có cắt Shorts được không.
+
+### ✅ M1 — cron `yt-drain` (`lib/media/yt-drain.ts`)
+Nối lại khâu cuối + **làm cho việc nó đứt nhìn thấy được**. 11h VN hằng ngày.
+- **Lỗi CHẶN → dừng cả lượt** (`invalid_grant`/`uploadLimitExceeded`/quota/403).
+  84 dòng `yt_error` giống hệt nhau chính là hậu quả của việc cứ thử mãi một thứ
+  đã hỏng: đốt quota, ghi đè dấu vết. Auth chết thì bài nào cũng chết.
+- **Nhỏ giọt 3/ngày**, trần cứng 6 (quota 10.000 ÷ 1.600/upload). Kho đã dính
+  `uploadLimitExceeded` 2 lần — ngưỡng chống spam của YouTube TÁCH khỏi quota API.
+- **Ngân sách thời gian 240s**, dừng giữa hai lượt: edge đặt `yt_status=
+  'uploading'` TRƯỚC khi upload, nên bị giết ngang để lại dòng treo vĩnh viễn.
+- Im lặng khi kho rỗng (khác CMO Digest luôn gửi) · report **nhắc thẳng nguyên
+  nhân gốc** để lần sau không đi cấp lại token rồi tắc tiếp.
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier
+  --check .` sạch · **23 ca trên module THẬT** (chỉ thay 1 dòng import alias, đã
+  `diff` xác nhận phần logic giữ nguyên byte): dừng sau ĐÚNG 1 lượt khi gặp
+  `invalid_grant`; **ca ĐỐI CHỨNG** lỗi riêng của một bài (`Cannot download
+  file: 404`) thì vẫn chạy đủ 3; trần 99 vẫn cắt còn 6; quá hạn giờ → 0 lượt.
+- ⚠️ **CHƯA test đầu-cuối route trên Next dev** — phần route chỉ là auth +
+  gọi hàm + gửi Telegram, `tsc` phủ.
+
+### 🔓 Nợ bảo mật phát hiện kèm (CHƯA sửa)
+Edge `youtube-upload` **hardcode `YOUTUBE_CLIENT_ID` + `YOUTUBE_CLIENT_SECRET`
+làm giá trị mặc định ngay trong source**. Nên rotate + chuyển hẳn sang env, cùng
+tiền lệ đã phải rotate service_role key Supabase.
+
+### ✅ M2 — xương sống + hàng đợi duyệt tay (PR sau #369)
+Henry chốt **duyệt tay trước, chưa auto-post**. Cron dựng ảnh + caption rồi DỪNG
+ở hàng đợi; PR này **không đăng đi đâu cả** (adapter kênh để M3).
+- **Migration `_patches/migration-media-posts.sql`** (✅ ĐÃ CHẠY prod — verify 9
+  cột `media_assets` + 15 cột `media_posts`, RLS bật, **0 policy** = chỉ service
+  key, 3 khoá config, `autopost_enabled=false`). Hai bảng tách theo câu hỏi
+  chúng trả lời: asset = "file này là gì", post = "lên kênh nào, tới đâu rồi".
+  Một asset → nhiều post. **Không mở rộng `van_dap`** dù nó sẵn cột `fb_*`/`tt_*`:
+  thêm kênh là thêm 3 cột, thêm định dạng lại 3 cột nữa.
+- **`/api/og/social` — Satori, 0đ.** Đo prod: `gpt-image-1` 1.658đ/lượt (~96%
+  chi phí một lượt chân dung); job chạy hằng ngày mà gọi model ảnh thì tiền đội
+  theo số bài. **URL CHÍNH LÀ FILE** — không cần bucket, và Instagram Graph API
+  vốn đòi ảnh phải có URL công khai nên điều kiện đó thoả sẵn.
+- **`lib/media/build.ts`** — trích câu bằng LUẬT (dùng lại luật `poster.js`:
+  câu TRỌN VẸN gần 95 ký tự, khoảng 45–155), caption LLM, **qua cổng brand-check
+  #356** với ĐÚNG hồ sơ giọng của từng nguồn (`khao-luan` ngôi 3 vs `nghien-cuu`
+  ngôi 1 — áp nhầm chặn 98% output, đã trả giá một lần). Trượt gate → BỎ bài.
+  Ràng buộc duy nhất `(source_type, source_id, variant)` + unique
+  `(asset_id, channel)` = chống dựng trùng và đăng trùng ở tầng DB.
+- **Thứ tự kiểm đặt chỗ rẻ trước:** không trích được câu / bài đã dựng rồi →
+  thoát TRƯỚC khi gọi LLM. Có test riêng đếm số lượt gọi LLM = 0.
+- Cron `media-build` 09:30 VN + panel **"Hàng Đợi Bài Đăng"** trong Marketing
+  (xem ảnh thật + sửa caption + Duyệt/Bỏ). **Cố ý KHÔNG có nút "đăng ngay"** —
+  một cú bấm nhầm không được phép đẩy nội dung lên trang công khai.
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi · `prettier --check .` sạch · 3 script
+  block admin OK · **27 ca trên module thật** (chỉ thay 3 dòng import, `diff`
+  xác nhận logic nguyên byte) · **7 ca Playwright trên chính hàm render trích từ
+  `admin.html`**: caption chứa `<script>`/`onerror` không chạy được, vẫn hiện
+  nguyên văn trong ô sửa.
+- 🐞 Một ca test đỏ hoá ra là **kỳ vọng của test sai, không phải code** — mẫu
+  markdown tao viết có cụm chữ không dấu kết câu nên dính vào câu sau, đúng như
+  nó phải thế. Đã kiểm riêng: `##` và `**` đều được gỡ đúng.
+- ⚠️ **CHƯA render được ảnh thật** — Satori nạp font từ Google Fonts, container
+  phiên chặn mọi host ngoài. Bố cục mới chỉ đọc bằng mắt trên code. **Việc tay
+  Henry: mở `/api/og/social?v=quote&k=Khảo%20Luận&q=<câu>&t=<tiêu đề>` sau khi
+  deploy** để soi khung chữ có tràn không.
+
+### Kế hoạch còn lại — `docs/MEDIA-PIPELINE-PLAN.md`
+M2 xương sống (`media_assets` + `media_posts` + adapter + admin duyệt) · M3
+Instagram/Threads · M4 video 9:16 · M5 podcast RSS + Telegram channel · M6 Zalo
+OA/Pinterest. **Henry chốt: duyệt tay trước, chưa auto-post.** Render ảnh bằng
+Satori (0đ), KHÔNG dùng model sinh ảnh. Cố ý không mở rộng cột `fb_*`/`tt_*`
+trong `van_dap` — thêm kênh là thêm 3 cột, đó là cái bẫy.
+
+---
+
+## 🧭 Track CMO skills — brand-check, từ khoá, SEO (2026-08-01, PR #356–#359)
+
+Henry giao 3 việc: (1) brand voice doc — **phiên khác đã chạy**, nằm ở
+`brand_voice_docs`; (2) brand-check gate trước publish; (3) AI SEO.
+
+### ⚠️ Plugin không nạp được vào container Claude Code
+`brand-voice` và `marketing` **đã bật** trên tài khoản claude.ai nhưng
+`~/.claude/skills` chỉ có skill built-in, và `claude plugin` ở container chỉ có
+`details/enable/disable/eval` — **không có `install`/`marketplace add`**.
+`claude-seo` thì **không có trong catalog** (chỉ tìm ra `searchfit-seo`).
+⇒ Mọi thứ dưới đây viết tay theo checklist §8 của brand voice doc, không chạy
+qua sub-skill. Đừng mất thời gian tìm lại cách cài trong phiên sau.
+
+### ✅ #356 — brand-check gate (`lib/content/brand-check.ts`)
+Chèn MỘT bước QC vào giữa 2 pipeline đang chạy, **không dựng pipeline mới**.
+Gate đứng ngay trước `POST` của `cron-khao-luan` / `cron-master-write` vì cả
+`khao_luan` lẫn `master_articles` **không có cột publish_status** — insert xong
+là bài lên thẳng trang.
+- **Tầng AUTO (regex)**: 0 lượt mạng, luật nằm sẵn trong TS nên chạy được kể cả
+  khi Supabase/LLM chết; `app_config['content.brand_check']` chỉ GHI ĐÈ.
+- **Tầng LLM**: 7 mục cần đọc hiểu, **fail-open** + `console.warn`.
+- Trình tự: autofix → check → 1 vòng LLM viết lại → check lại. Bản viết lại
+  **chỉ nhận khi thực sự ít lỗi hơn**.
+- **HAI PROFILE, không phải hai mức nghiêm khắc.** Đo prod: `khao_luan` 324 bài
+  (6 dùng "tôi") là ngôi 3; `master_articles` 306 bài (**300 dùng "tôi"**) là
+  tùy bút ngôi 1 ký tên thầy. Áp luật Khảo Luận sang Nghiên Cứu chặn 98% output.
+- Seed `mode='warn'` (tiền lệ shadow-mode M0.6). **Autofix VẪN áp ở warn** vì
+  chạy trước khi phân nhánh mode. Siết: `jsonb_set(value,'{mode}','"block"')`.
+- Bài bị chặn cất nguyên văn vào `content_qc_log.payload`; topic đỗ `qc_failed`.
+- 🐞 **`bạn cũng…` lọt gate**: nhánh loại trừ `cũ` (danh từ "bạn cũ") khớp luôn
+  tiền tố "cũng" vì thiếu ranh giới từ. Cụm cực phổ biến ⇒ lỗ rất rộng.
+- 🐞 **`mình` hạ xuống `warn`**: soi 6 mẩu thật lọt bộ lọc thì cả 6 đều phản
+  thân hợp lệ ("thu mình lại", "một mình phá vây"). Regex không tách được.
+  Cùng bài học: đếm thô báo 98/324 bài sai xưng hô, lọc đúng danh từ còn **14**.
+
+### ✅ #357 — Google Suggest → `keyword_ideas`
+GSC 28 ngày chỉ **đọc được tên của đúng 10 truy vấn** (842 hiển thị còn lại bị
+ẩn tên vì quá hiếm) ⇒ không có nguồn từ khoá để đặt title hay chọn chủ đề.
+- **Không dùng Keyword Planner**: cần developer token phải xin duyệt, cần OAuth
+  refresh token (**service account KHÔNG dùng được**, khác GA4/GSC), và không
+  chi tiêu quảng cáo thì chỉ trả **volume dạng dải**. **Henry đã chốt KHÔNG chạy
+  ads** ⇒ cột `volume` ở NULL vĩnh viễn, `best_position` là tín hiệu duy nhất.
+- Chạy trên Vercel, cất asset vào Supabase — **container Claude Code chặn mọi
+  host ngoài** (đã thử: `suggestqueries.google.com` và cả `tuviminhbao.com` đều
+  403 qua proxy). Cùng pattern GA4/GSC.
+- Tôn trọng endpoint không chính thức: tuần tự + nghỉ 350ms + trần 180 lượt +
+  `User-Agent` khai đúng danh tính bot (cố ý không giả trình duyệt).
+- 🐞 28 gốc × 10 hậu tố = **280 tổ hợp** nhưng trần 180 ⇒ 10 gốc cuối không bao
+  giờ tới lượt. Vá bằng **xoay vòng theo số tuần**.
+
+### ✅ #358 — gộp URL vận hạn · rút sitemap-pregen · vá trần hub
+**Số đo GSC 28 ngày (đường đọc: `events` where `event_type='cmo_digest'`,
+`meta->'gsc'` — cron ghi sẵn, không cần credential):**
+| | |
+|---|---:|
+| URL đã nộp sitemap | **616.715** |
+| Trang từng hiện trong kết quả | **612** (0,099%) |
+| Nhấp | **16** (11 về trang chủ) |
+
+- **Gộp 180 trang trùng**: `/tu-vi/van-han-tuoi-*` (mỏng, title tốt, có sitemap)
+  ↔ `/van-han/*` (dày, không sitemap). Chọn bản dày, 301 bản kia, mở `NAM_XEMS`
+  3→8 năm cho khớp `seo_pages`, nộp 576 URL, mang title tốt hơn sang.
+  🐞 `NAM_XEMS[1]` làm "năm chính" trong title hub — mở mảng ra 8 năm là nó
+  lặng lẽ thành 2024. Neo `currentNamXem()`.
+- **Rút `sitemap-pregen`** (587.328 URL → sitemapindex RỖNG, không 404).
+  ⚠️ **KHÔNG phải vì Google không index**: các trang `/la-so/*` xếp hạng
+  **1,4–3,5** hẳn hoi. Chúng chỉ khớp truy vấn NGÀY SINH CHÍNH XÁC — 842 hiển
+  thị, **0 nhấp**. Henry đã xoá sitemap trong GSC.
+- **Vá trần hub**: HAI trần chồng nhau (`or=(…)&limit=2000` + `.slice(0,60)`).
+  Fetch HTML thật của prod về đếm: chỉ **2/5 chuyên mục render, tổng 120 liên
+  kết cho 7.848 trang**. Nay hỏi từng chuyên mục + phân trang → 300 liên
+  kết/trang × 59 trang.
+- **Phân trang theo ĐƯỜNG DẪN** (`/kien-thuc-tuvi/trang/30`), KHÔNG `?page=`:
+  dạng này dùng đúng cơ chế "destination mang sẵn query" mà `/tu-vi/:slug` đã
+  chứng minh chạy trên prod.
+
+### 🪤 BẪY: `next dev` bỏ query của destination trong rewrite
+Next 16 + Turbopack ở **dev** làm mọi hub và mọi `/tu-vi/<slug>` **307 về trang
+chủ**. Tôi đã suýt báo đây là sự cố P0 do nâng Next 14→16.
+**PROD KHÔNG DÍNH** — fetch thật `www.tuviminhbao.com/kien-thuc-tuvi` → HTTP 200.
+Gặp 307 khi chạy dev thì đừng đi sửa nhầm chỗ.
+Mẹo: `web_fetch_vercel_url` của Vercel MCP **với tới được prod** dù container bị
+chặn mạng (preview thì không — khoá sau SSO).
+
+### ✅ #359 — 🔴 công thức Kim Lâu SAI trên prod
+Phát hiện khi chuẩn bị viết content, **không phải Henry báo**.
+```
+Code cũ : tuổi % 5, dư 1 hoặc 3
+Đúng    : tuổi ÂM % 9, dư 1 / 3 / 6 / 8
+```
+4 số dư mod 9 ứng đúng 4 loại **Thân·Thê·Tử·Lục Súc** — chính 4 loại tài liệu
+repo mô tả tool trả về. Bản mod-5 không thể sinh 4 loại ⇒ code lệch khỏi ý định
+đã ghi, là bug chứ không phải biến thể cổ pháp.
+**46% số tuổi 18–80 ra kết quả khác.** Nặng nhất: 16 tuổi (19·24·30·35·37·39·
+42·44·55·57·60·62·64·69·75·80) trước đây báo "Bình thường" trong khi thực tế
+phạm — người ta xem xong đi động thổ, cưới hỏi.
+Kết quả nay nêu đích danh loại + hại ai. `kimLauLoai` là trường THÊM nên 2 trang
+tiêu thụ không phải đổi.
+⚠️ **CHƯA đụng `isHoangOc`** (`t % 5 === 0`, trong khi Hoang Ốc là vòng **6
+trạng thái** Nhất Cát→Lục Hoang Ốc). Nghi sai nhưng chưa tra đủ chắc — sửa mò
+một công thức cổ pháp còn tệ hơn để nguyên.
+
+### ✅ #361 — trang trụ `/kim-lau` + vá tàn dư "chu kỳ 5"
+Henry chốt **"1 trang trụ mạnh làm đường dẫn"** → MỘT trang, không phải cụm.
+GSC có cầu thật ("cách tính kim lâu" hạng 92, "tính kim lâu làm nhà" 73) mà site
+0 trang (`seo_pages` 0, `master_articles` 0, `khao_luan` 1). Cụm nhiều trang
+mỏng đúng là thứ vừa gỡ ở #358 — toàn bộ nội dung 60 trang "tuổi X có phạm
+không" nằm gọn trong hai bảng tra của một trang.
+- Nội dung: công thức mod 9 + **ví dụ tính tay cố ý chọn năm sinh ra kết quả
+  PHẠM** (ví dụ "không phạm" thì không dạy được cách đọc số dư) · bảng 4 loại
+  kèm đối tượng bị hại · **bảng tra trọn năm sinh** 63 dòng cho năm hiện tại
+  (người ta biết năm sinh chứ không biết tuổi ta) · hoá giải · phân biệt Kim Lâu
+  / Hoang Ốc / Tam Tai · Article + FAQPage + BreadcrumbList.
+- **`lib/engine/kim-lau.ts` KHÔNG chép công thức** — `readFileSync` + `new
+  Function` nạp thẳng `public/tools-shared/kim-lau.js`, đúng tiền lệ
+  `lib/engine/laso.ts`. Trang trụ nói khác công cụ bên cạnh thì hỏng cả hai.
+- 301 `/tools/kim-lau.html` → `/kim-lau` + sửa 11 file link nội bộ trỏ thẳng URL
+  mới. **`redirects()` chạy TRƯỚC filesystem** nên bản HTML cũ trong `public/`
+  không còn được phục vụ (file vẫn nằm đó, mang chữ cũ — vô hại vì không tới
+  được, nhưng đừng gỡ redirect).
+- 🐞 **CTA của chính tôi vi phạm gate #356** ("Tra theo năm sinh **của bạn**").
+  Sửa copy chứ không nới test, và cho test dùng CHÍNH regex của gate.
+- 🐞 **Tàn dư #359: công thức đã sang mod 9 nhưng 3 chỗ vẫn NÓI "chu kỳ 5".**
+  Nặng nhất là `CHAT_SYSTEM_KIM_LAU` — rail đọc bảng mod-9 rồi giải thích bằng
+  luật mod-5. Và `extractKimLauContext` **không chuyển tiếp `kimLauLoai`** nên
+  rail chỉ nói "phạm Kim Lâu" trống trong khi bảng cạnh đó ghi "Kim Lâu Thê".
+  **Bài học: đổi công thức thì phải quét cả chỗ MÔ TẢ công thức** — prompt LLM
+  là một trong số đó và nó không được typecheck bắt.
+- **KHÔNG phải lỗi, đã đo để loại trừ:** `?v=1` của `tools-shared/kim-lau.js`
+  không bump ở #359. Đọc header thật prod: `max-age=0, must-revalidate` ⇒
+  revalidate mỗi lượt, bản mod-9 đã tới người dùng. Đừng đi bump.
+- **Mốc đo quyết định hướng đi:** sau 2–4 tuần đọc lại `pagesWithImpressions`
+  (hiện **612**). Bật lên rõ → mô hình chạy được, lúc đó gen trang cho chân dung
+  vợ chồng / tiền kiếp / tử bình mới có cơ sở. Vẫn im → vấn đề là **thẩm quyền
+  tên miền**, không phải số lượng trang; đừng viết thêm.
+- ⚠️ **`xem tuổi vợ chồng` / `xem tuổi làm ăn` ĐÃ CÓ trang SEO** (3.540 + 3.540,
+  6.500–7.500 ký tự, title đúng chuẩn *"Tuổi X Và Tuổi Y Có Hợp Nhau Không?"*).
+  Henry tưởng chưa có. Thiếu thật chỉ là chân dung vợ chồng, chân dung tiền
+  kiếp, tử bình.
+- Lượt quét Suggest đầu tiên: **T3 hằng tuần**. Chạy tay:
+  `curl -H "Authorization: Bearer $CRON_SECRET" .../api/cron/keyword-suggest`
+- Đọc `content_qc_log` vài ngày rồi cân nhắc siết gate sang `block`.
 
 ---
 
@@ -155,6 +401,75 @@ nạp lẻ chỉ **39**). Henry xác nhận *"nó là tàn dư đó, chỉnh l�
   đổi thì lệch toàn bộ báo cáo lịch sử. Nhưng đáng soi lại — nếu giá thật ~830đ
   thì mấy panel đó đang thổi doanh thu lên ~3 lần.
 - Ghi chú thêm: `chat.cost` dưới DB đang là **2** (không phải 5).
+
+---
+
+## 📐 QUY ƯỚC BẮT BUỘC (đọc trước khi viết UI mới)
+
+### 💰 Giá Lượng: CHỈ sửa trong Admin — client KHÔNG được chép số (2026-08-01, PR #373)
+Nguồn duy nhất: bảng `tool_pricing` + `credit_packages`, sửa trong **Tools
+Registry** của trang Admin, không cần deploy. Client đọc qua
+`public/tool-prices.js` (`ToolPrices.get/rows/packages/fillSlots`), cache
+sessionStorage 2 phút. Hiện giá ở UI = `<span data-tvp-price="<tool_id>">…</span>`.
+- **Đọc hụt → `null`, KHÔNG đoán.** Ô để `…`; paywall **từ chối chạy** và hiện
+  "Chưa đọc được bảng giá" thay vì trừ Lượng ở một mức người dùng chưa từng thấy
+  (hộp thoại xác nhận đã bỏ ở #366 nên số trên nút là thứ cuối cùng họ đọc).
+- **Chỉ `admin.html` được fetch thẳng** hai bảng đó — nó là trang SỬA giá.
+- `npm run check:prices` (chạy trong CI lint) chặn tái phát: chép số vào ô giá,
+  hoặc tự fetch bảng giá. Bộ dò đã được KIỂM bằng cách tái tạo đúng hai lỗi cũ.
+- **Vì sao gắt thế:** cùng một bệnh tái đi tái lại trong MỘT ngày — `/app` quảng
+  cáo Luận Giải 150 khi trừ 25 · nút Diện Tướng ghi 5 mà trừ 8 · trang nạp hứa
+  "64 lá số" khi mua được 16 · 9/10 trang `/tools/*` ghi sai (Phong Thủy 90 vs
+  50, Xem Tuổi 50 vs 15) · và bản dự phòng trôi lại ngay trong PR đi sửa nó.
+  Một con số CŨ nguy hiểm hơn hẳn một ô đang tải: ô đang tải thì người ta chờ,
+  số cũ thì người ta tin.
+- ⚠️ CỐ Ý không gom quà đăng ký / thưởng giới thiệu vào đây — chúng đến từ
+  `app_config`, khác nguồn. Nhét chung vào bộ dò thì nó kêu suốt rồi bị tắt.
+
+
+### Icon: KHÔNG dùng emoji màu — chi tiết ở `docs/ICONS.md`
+`public/nav.js` là bộ icon dùng chung (85 icon SVG Lucide + `EMOJI_TO_ICON` 159
+mục + `mountIcons()`), nạp trên gần như mọi trang, export ra `window.ICONS` /
+`window.iconHtml` / `window.mountIcons` / `window.EMOJI_TO_ICON`.
+- UI mới: `<span class="ic" data-icon="wallet"></span>` — **không** emoji màu.
+- HTML dựng động bằng `innerHTML` → phải gọi lại `window.mountIcons(el)`, vì
+  `mountIcons()` chỉ tự chạy MỘT lần lúc nav.js load.
+- Dữ liệu còn lưu emoji (`tool_pricing.icon`) → đưa qua `window.iconHtml(raw)`,
+  nó nhận cả emoji lẫn tên icon. Đừng viết map emoji riêng cho từng trang.
+- **GIỮ** ký tự đơn sắc theo font: `→ ← ✦ ★ ✓ ✗ ✕ ⚠ ☰` (riêng `→` có ~1.430 chỗ
+  trong CTA). Chúng ăn `currentColor`, là phần của nhận diện — đổi là phá theme.
+- **KHÔNG áp dụng** cho prompt gửi LLM (emoji ở đó là chỉ dẫn định dạng cho
+  model) và tin Telegram admin (Telegram không render SVG).
+- Thêm icon → sửa `ICONS` trong nav.js **và bump `nav.js?v=` trên cả 89 file**.
+- Còn nợ: ~1.865 emoji màu trong 132 file UI, dọn theo đợt (bảng ở `docs/ICONS.md §7`).
+- **`shell.js` có bộ ICONS thứ hai (28 icon) — CỐ Ý không gộp.** 0/27 trang shell
+  nạp `nav.js` (chrome riêng); thêm vào để lấy icon thì nav.js tự chèn nav bar
+  lên đầu `<body>` → phá layout 27 trang. Gộp thật phải tách `public/icons.js`
+  cho cả hai cùng nạp = chạm 116 file, chưa đáng khi shell chỉ còn 62 emoji.
+
+### Dùng thử rail cho khách CHƯA đăng nhập — cầu dao 3 lớp
+`/api/v1/chat` KHÔNG còn 401 cứng khi thiếu token: khách vô danh được vài câu
+dùng thử (`lib/billing/anon-trial.ts` + RPC `anon_rail_trial_consume`).
+- **3 trần độc lập**, mỗi cái bịt một đường lách: `anon.rail_trial_turns` (trần
+  ĐỜI theo `anon_id`) · `anon.rail_ip_daily_cap` (bịt xoá-localStorage, phải NỚI
+  vì NAT nhà mạng) · `anon.rail_global_daily_cap` (cầu dao ngân sách).
+  **Đặt bất kỳ trần nào = 0 là TẮT hẳn.**
+- **Fail-CLOSED** — ngược `viral-budget.ts` (fail-OPEN) và ngược có lý do: cầu
+  dao ảnh gác người ĐÃ TRẢ TIỀN, còn đây là khách vô danh chưa trả gì.
+- **`client.anon_id` KHÔNG phải danh tính** — client tự khai. Đừng dùng cho
+  quyền hạn/tính phí. Trần theo IP + toàn hệ thống mới là lớp chống lạm dụng.
+- **Lượt anon CHẶN ảnh** (ảnh đội input token lên nhiều lần mà trần đếm theo
+  LƯỢT) và **tiêu quota ngay khi cấp phép**, không đợi model xong — đếm sau khi
+  thành công là mở đường gọi model rồi ngắt kết nối để khỏi bị tính.
+
+### Giá trị 1 Lượng: neo ở MỘT chỗ
+`app_config['credits.vnd_per_credit']` (hiện **1.000đ**) là nguồn thật; RPC đọc
+qua hàm SQL `credit_vnd()`. Bản sao phía code phải giữ khớp:
+`lib/billing/packages.ts` `VND_PER_CREDIT`, `public/topup.html`,
+`public/cong-cu.html`, `public/admin.html` (`MKT_VND`, `VND_PER_CREDIT`).
+**Ngoại lệ cố ý:** `coalesce(amount_vnd, amount * 2500)` cho dòng **topup lịch
+sử** giữ nguyên 2500 — các giao dịch đó thật sự đã bán ở giá cũ, đổi là viết lại
+lịch sử. Xem `_patches/migration-pricing-v2.sql`.
 
 ---
 

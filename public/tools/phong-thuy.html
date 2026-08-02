@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&display=swap" rel="stylesheet"/>
 <script src="/auth.js"></script>
-<script src="/tuvi-paywall.js"></script>
+<script src="/tuvi-paywall.js?v=11"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=1"></script>
 <style>
 :root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--gold-bright:#D4A843;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0;--red:#C0392B;--green:#1E6B3C;}
@@ -158,10 +158,10 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 <div id="nav-ph" style="height:60px;background:#061A2E"></div>
 
 <div class="hero">
-  <span style="font-size:44px;display:block;margin-bottom:10px;">🧭</span>
+  <span style="font-size:44px;display:block;margin-bottom:10px;"><span class="ic" data-icon="compass"></span></span>
   <h1>Phong Thủy Nội Thất</h1>
   <p>Chụp ảnh phòng thực tế, nhận phân tích bố trí hợp bản mệnh theo Bát Trạch Minh Cảnh. Kèm sơ đồ trước/sau và shopping list vật phẩm phong thủy.</p>
-  <div class="hero-cost">⟐ 90 lượng · AI Vision + Bát Trạch + Ngũ Hành</div>
+  <div class="hero-cost">⟐ <span data-tvp-price="phong-thuy">…</span> lượng · AI Vision + Bát Trạch + Ngũ Hành</div>
 </div>
 
 <div class="container">
@@ -173,7 +173,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
       <h2 class="ti-h2">Khoa Học Bố Trí Không Gian —<br>Hợp Bản Mệnh Theo Bát Trạch</h2>
       <p class="ti-body">Bát Trạch Minh Cảnh (八宅明鏡) là kinh điển phong thủy thời Thanh thuộc trường phái Lý Khí (理氣), phân chia mỗi không gian thành 8 cung theo hướng la bàn và kết hợp với Quái số của chủ nhân để xác định các phương vị cát hung. Đây là phương pháp hệ thống hóa và ứng dụng được nhất trong phong thủy hiện đại.</p>
       <p class="ti-body">Mỗi người thuộc Đông Tứ Mệnh (Khảm-Chấn-Tốn-Ly) hoặc Tây Tứ Mệnh (Càn-Khôn-Cấn-Đoài), ứng với 4 phương cát: Sinh Khí (vượng nhất), Thiên Y (sức khỏe), Diên Niên (quan hệ), Phục Vị (bình ổn) — và 4 phương hung cần tránh đặt đồ vật quan trọng.</p>
-      <div class="ti-cite">📖 Bát Trạch Minh Cảnh (八宅明鏡) + Loan Đầu Kinh (巒頭經) — hai trụ cột của phong thủy Lý Khí ứng dụng vào không gian sống.</div>
+      <div class="ti-cite"><span class="ic" data-icon="book-open"></span> Bát Trạch Minh Cảnh (八宅明鏡) + Loan Đầu Kinh (巒頭經) — hai trụ cột của phong thủy Lý Khí ứng dụng vào không gian sống.</div>
     </div>
     <div>
       <div class="ti-factors-title">Bài Phân Tích Gồm 5 Phần</div>
@@ -182,7 +182,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
       <div class="ti-factor"><span class="ti-factor-num">③</span><div class="ti-factor-body"><div class="ti-factor-label">Sơ Đồ Bát Trạch 3×3</div><div class="ti-factor-desc">Lưới trực quan hiển thị chất lượng 8 cung theo màu sắc cát/hung của bản mệnh</div></div></div>
       <div class="ti-factor"><span class="ti-factor-num">④</span><div class="ti-factor-body"><div class="ti-factor-label">Đề Xuất Bố Trí</div><div class="ti-factor-desc">Di chuyển, giữ nguyên hoặc thêm vật phẩm — ưu tiên cao/trung/thấp kèm lý do cổ pháp</div></div></div>
       <div class="ti-factor"><span class="ti-factor-num">⑤</span><div class="ti-factor-body"><div class="ti-factor-label">Render AI (Replicate)</div><div class="ti-factor-desc">Visualize phòng sau tối ưu phong thủy với màu ngũ hành bản mệnh — thấy trước khi sắp xếp</div></div></div>
-      <div class="ti-note">💡 Chụp ảnh toàn cảnh phòng, bao gồm cửa chính và đồ vật chính. Ảnh rõ nét giúp AI nhận diện vị trí chính xác hơn.</div>
+      <div class="ti-note"><span class="ic" data-icon="lightbulb"></span> Chụp ảnh toàn cảnh phòng, bao gồm cửa chính và đồ vật chính. Ảnh rõ nét giúp AI nhận diện vị trí chính xác hơn.</div>
     </div>
   </div>
 </div>
@@ -254,11 +254,11 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 
   <div class="analyze-area">
     <div class="cost-row">
-      <span>Chi phí: <strong>90 lượng</strong></span>
+      <span>Chi phí: <strong><span data-tvp-price="phong-thuy">…</span> lượng</strong></span>
       <span>Số dư: <span id="balDisplay" style="font-weight:700;">—</span> lượng</span>
     </div>
     <div class="error-box" id="errorBox"></div>
-    <button class="btn-analyze" id="btnAnalyze" onclick="doAnalyze()">🧭 Phân Tích Phong Thủy</button>
+    <button class="btn-analyze" id="btnAnalyze" onclick="doAnalyze()"><span class="ic" data-icon="compass"></span> Phân Tích Phong Thủy</button>
   </div>
 
   <div class="loading-overlay" id="loadingOverlay">
@@ -340,7 +340,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
         </div>
         <div style="display:flex;gap:8px;">
           <button onclick="downloadRender()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif;">⬇ Tải Ảnh</button>
-          <button onclick="resetRender()" style="flex:1;padding:10px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;font-family:Arial,sans-serif;color:var(--text-mid);">🔄 Render Lại</button>
+          <button onclick="resetRender()" style="flex:1;padding:10px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;font-family:Arial,sans-serif;color:var(--text-mid);"><span class="ic" data-icon="rotate-cw"></span> Render Lại</button>
         </div>
       </div>
 
@@ -592,7 +592,7 @@ TuviPaywall.init({ product: 'phong-thuy' });
   </div>
 </section>
 <script src="/testimonials.js"></script>
-<script src="/related-tools.js"></script>
-<script src="/nav.js?v=19" defer></script>
+<script src="/related-tools.js?v=2"></script>
+<script src="/nav.js?v=20" defer></script>
 </body>
 </html>

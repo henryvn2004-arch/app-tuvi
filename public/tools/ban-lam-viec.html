@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&display=swap" rel="stylesheet"/>
 <script src="/auth.js"></script>
-<script src="/tuvi-paywall.js"></script>
+<script src="/tuvi-paywall.js?v=11"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=1"></script>
 <style>
 :root{--navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--gold-bright:#D4A843;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--border-lt:#E8E8E8;--bg:#FFFFFF;--bg-soft:#F5F4F0;--red:#C0392B;--green:#1E6B3C;}
@@ -149,7 +149,7 @@ h1,h2,h3,h4{font-family:'Noto Serif',serif;}
   <span class="hero-icon"><span class="ic-inline" data-icon-emoji="🖥" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">🖥</span></span>
   <h1>Phong Thủy Bàn Làm Việc</h1>
   <p>Chụp ảnh góc làm việc / học tập, nhận đề xuất bố trí hợp mệnh để tăng hiệu suất và tập trung.</p>
-  <div class="hero-cost">⟐ 90 lượng · AI Vision + Bát Trạch + Ngũ Hành</div>
+  <div class="hero-cost">⟐ <span data-tvp-price="ban-lam-viec">…</span> lượng · AI Vision + Bát Trạch + Ngũ Hành</div>
 </div>
 
 <div class="container">
@@ -161,7 +161,7 @@ h1,h2,h3,h4{font-family:'Noto Serif',serif;}
       <h2 class="ti-h2">Hướng Ngồi Sinh Khí —<br>Tối Ưu Hiệu Suất Theo Bản Mệnh</h2>
       <p class="ti-body">Trong Bát Trạch Minh Cảnh (八宅明鏡), hướng ngồi làm việc là yếu tố then chốt nhất của không gian sự nghiệp. Ngồi mặt hướng Sinh Khí — phương vị cát nhất của bản mệnh — kích hoạt vận khí trí tuệ, tăng khả năng tập trung và quyết đoán. Ngồi hướng hung như Ngũ Quỷ hay Tuyệt Mệnh tạo trở ngại vô hình, khó thăng tiến và dễ phạm sai lầm.</p>
       <p class="ti-body">Ngoài hướng ngồi, các yếu tố khác tác động trực tiếp đến vận khí làm việc: đèn đặt bên trái (Thanh Long kích văn khí), cây xanh góc Đông (Mộc hành sinh trí tuệ), màn hình không sát tường (cần không gian thở), gương không chiếu thẳng mặt (tán khí), và lưng ghế phải tựa tường vững — cổ nhân gọi là "hậu chẩm có cụm, tiền đường khai quảng".</p>
-      <div class="ti-cite">📖 Bát Trạch Minh Cảnh (八宅明鏡) — kinh điển phong thủy trường phái Lý Khí, hệ Đông Tây Tứ Trạch, thời Thanh.</div>
+      <div class="ti-cite"><span class="ic" data-icon="book-open"></span> Bát Trạch Minh Cảnh (八宅明鏡) — kinh điển phong thủy trường phái Lý Khí, hệ Đông Tây Tứ Trạch, thời Thanh.</div>
     </div>
     <div>
       <div class="ti-factors-title">Bài Phân Tích Gồm 5 Phần</div>
@@ -170,7 +170,7 @@ h1,h2,h3,h4{font-family:'Noto Serif',serif;}
       <div class="ti-factor"><span class="ti-factor-num">③</span><div class="ti-factor-body"><div class="ti-factor-label">Mẹo Tăng Tập Trung</div><div class="ti-factor-desc">3 mẹo cụ thể kích hoạt vận trí tuệ theo Ngũ Hành và mục đích sử dụng không gian</div></div></div>
       <div class="ti-factor"><span class="ti-factor-num">④</span><div class="ti-factor-body"><div class="ti-factor-label">Đề Xuất Điều Chỉnh</div><div class="ti-factor-desc">Thứ tự ưu tiên cao → thấp, kèm lý do theo cổ pháp Bát Trạch</div></div></div>
       <div class="ti-factor"><span class="ti-factor-num">⑤</span><div class="ti-factor-body"><div class="ti-factor-label">Render AI (Replicate)</div><div class="ti-factor-desc">Tạo ảnh không gian làm việc sau tối ưu phong thủy — thấy trước kết quả thực tế</div></div></div>
-      <div class="ti-note">💡 Chụp từ góc người ngồi — thấy được bàn, màn hình, đèn và nguồn sáng gần nhất. Ảnh rõ giúp AI nhận diện chính xác hướng ngồi.</div>
+      <div class="ti-note"><span class="ic" data-icon="lightbulb"></span> Chụp từ góc người ngồi — thấy được bàn, màn hình, đèn và nguồn sáng gần nhất. Ảnh rõ giúp AI nhận diện chính xác hướng ngồi.</div>
     </div>
   </div>
 </div>
@@ -244,11 +244,11 @@ h1,h2,h3,h4{font-family:'Noto Serif',serif;}
 
   <div class="analyze-area">
     <div class="cost-row">
-      <span>Chi phí: <strong>90 lượng</strong></span>
+      <span>Chi phí: <strong><span data-tvp-price="ban-lam-viec">…</span> lượng</strong></span>
       <span>Số dư: <span id="balDisplay" style="font-weight:700;">—</span> lượng</span>
     </div>
     <div class="error-box" id="errorBox"></div>
-    <button class="btn-analyze" id="btnAnalyze" onclick="doAnalyze()">🖥 Phân Tích Ngay</button>
+    <button class="btn-analyze" id="btnAnalyze" onclick="doAnalyze()"><span class="ic" data-icon="monitor"></span> Phân Tích Ngay</button>
   </div>
 
   <div class="loading-overlay" id="loadingOverlay">
@@ -315,7 +315,7 @@ h1,h2,h3,h4{font-family:'Noto Serif',serif;}
         </div>
         <div style="display:flex;gap:8px;">
           <button onclick="downloadRender()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif;">⬇ Tải Ảnh</button>
-          <button onclick="resetRender()" style="flex:1;padding:10px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;font-family:Arial,sans-serif;color:var(--text-mid);">🔄 Render Lại</button>
+          <button onclick="resetRender()" style="flex:1;padding:10px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;font-family:Arial,sans-serif;color:var(--text-mid);"><span class="ic" data-icon="rotate-cw"></span> Render Lại</button>
         </div>
       </div>
       <div class="render-err" id="renderErr"></div>
@@ -535,7 +535,7 @@ TuviPaywall.init({ product: 'ban-lam-viec' });
   </div>
 </section>
 <script src="/testimonials.js"></script>
-<script src="/related-tools.js"></script>
-<script src="/nav.js?v=19" defer></script>
+<script src="/related-tools.js?v=2"></script>
+<script src="/nav.js?v=20" defer></script>
 </body>
 </html>

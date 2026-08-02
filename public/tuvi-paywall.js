@@ -4,43 +4,43 @@
  * Must be loaded AFTER auth.js.
  */
 const TuviPaywall = (() => {
-  const SB_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
-  const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
-
-  // ⚠️ FALLBACK-ONLY. Nguồn giá THẬT = bảng Supabase `tool_pricing` (đọc live ở
-  // _price(); server /api/payment cũng enforce theo tool_pricing khi trừ). Map này
-  // chỉ dùng khi fetch tool_pricing lỗi → giữ đồng bộ với DB để không lệch.
+  // NHÃN hiển thị của từng công cụ. CỐ Ý KHÔNG có giá ở đây.
+  //
+  // Giá đọc từ `tool_pricing` qua ToolPrices (public/tool-prices.js) — nguồn
+  // DUY NHẤT, admin sửa không cần deploy. Map này từng mang thêm `cost` làm
+  // "bản dự phòng", và chính nó trôi khỏi DB rồi báo sai giá cho người dùng.
+  // Không đọc được giá thì HỎI LẠI, đừng đoán — xem _price().
   const PRODUCTS = {
-    'tuvi-chat':   { cost:   5, title: 'Tử Vi Chat' },
-    'laso':        { cost: 150, title: 'Luận Giải Lá Số' },
-    'tu-binh':     { cost: 100, title: 'Tử Bình Bát Tự' },
-    'xem-tuoi':    { cost:  50, title: 'Xem Tuổi Vợ Chồng' },
-    'xem-lam-an':  { cost:  50, title: 'Xem Tuổi Làm Ăn' },
-    'dien-tuong':  { cost:  10, title: 'Diện Tướng AI' },
-    'nhan-tuong':  { cost:  10, title: 'Nhãn Tướng AI' },
-    'thu-tuong':   { cost:  10, title: 'Thủ Tướng AI' },
-    'thanh-tuong': { cost:  12, title: 'Thanh Tướng AI' },
-    'thanh-tuong-pro': { cost: 18, title: 'Thanh Tướng Pro' },
-    'khi-sac':     { cost:  20, title: 'Khí Sắc — Vận Khí' },
-    'phong-thuy':          { cost:  50, title: 'Phong Thủy Nội Thất' },
-    'ban-lam-viec':        { cost:  40, title: 'Phong Thủy Bàn Làm Việc' },
-    'cua-hang-phong-thuy': { cost:  50, title: 'Phong Thủy Cửa Hàng & VP' },
-    'mau-sac-hop-menh':    { cost:  12, title: 'Màu Sắc Hợp Mệnh' },
-    'kieu-toc-phan-tich':  { cost:   8, title: 'Phân Tích Kiểu Tóc AI' },
-    'kieu-toc-tryon':      { cost:  25, title: 'Thử Kiểu Tóc AI' },
-    'trang-phuc-tryon':    { cost:  25, title: 'Thử Trang Phục AI' },
-    'phong-thuy-render':   { cost:  45, title: 'Render Phòng Phong Thủy AI' },
-    'trang-diem-phan-tich':{ cost:   8, title: 'Phân Tích Trang Điểm AI' },
-    'trang-diem-tryon':    { cost:  25, title: 'Thử Trang Điểm AI' },
-    'trang-phuc-theo-ngay':{ cost:  10, title: 'Trang Phục Theo Ngày' },
-    'da-lieu-ai':          { cost:  15, title: 'Da Liệu AI Toàn Diện' },
-    'personal-color':      { cost:   8, title: 'Personal Color AI' },
-    'personal-color-tryon':{ cost:  25, title: 'Personal Color Try-on' },
-    'dat-ten-con':         { cost:  20, title: 'Đặt Tên Con' },
-    'dat-ten-dn':          { cost:  20, title: 'Đặt Tên Doanh Nghiệp' },
-    'chon-ngay-tot':       { cost:  15, title: 'Chọn Ngày Tốt' },
-    'chan-dung-vo-chong':  { cost:  20, title: 'Chân Dung Vợ Chồng' },
-    'chan-dung-tien-kiep': { cost:  25, title: 'Chân Dung Tiền Kiếp' },
+    'tuvi-chat':           { title: 'Tử Vi Chat' },
+    'laso':                { title: 'Luận Giải Lá Số' },
+    'tu-binh':             { title: 'Tử Bình Bát Tự' },
+    'xem-tuoi':            { title: 'Xem Tuổi Vợ Chồng' },
+    'xem-lam-an':          { title: 'Xem Tuổi Làm Ăn' },
+    'dien-tuong':          { title: 'Diện Tướng AI' },
+    'nhan-tuong':          { title: 'Nhãn Tướng AI' },
+    'thu-tuong':           { title: 'Thủ Tướng AI' },
+    'thanh-tuong':         { title: 'Thanh Tướng AI' },
+    'thanh-tuong-pro':     { title: 'Thanh Tướng Pro' },
+    'khi-sac':             { title: 'Khí Sắc — Vận Khí' },
+    'phong-thuy':          { title: 'Phong Thủy Nội Thất' },
+    'ban-lam-viec':        { title: 'Phong Thủy Bàn Làm Việc' },
+    'cua-hang-phong-thuy': { title: 'Phong Thủy Cửa Hàng & VP' },
+    'mau-sac-hop-menh':    { title: 'Màu Sắc Hợp Mệnh' },
+    'kieu-toc-phan-tich':  { title: 'Phân Tích Kiểu Tóc AI' },
+    'kieu-toc-tryon':      { title: 'Thử Kiểu Tóc AI' },
+    'trang-phuc-tryon':    { title: 'Thử Trang Phục AI' },
+    'phong-thuy-render':   { title: 'Render Phòng Phong Thủy AI' },
+    'trang-diem-phan-tich':{ title: 'Phân Tích Trang Điểm AI' },
+    'trang-diem-tryon':    { title: 'Thử Trang Điểm AI' },
+    'trang-phuc-theo-ngay':{ title: 'Trang Phục Theo Ngày' },
+    'da-lieu-ai':          { title: 'Da Liệu AI Toàn Diện' },
+    'personal-color':      { title: 'Personal Color AI' },
+    'personal-color-tryon':{ title: 'Personal Color Try-on' },
+    'dat-ten-con':         { title: 'Đặt Tên Con' },
+    'dat-ten-dn':          { title: 'Đặt Tên Doanh Nghiệp' },
+    'chon-ngay-tot':       { title: 'Chọn Ngày Tốt' },
+    'chan-dung-vo-chong':  { title: 'Chân Dung Vợ Chồng' },
+    'chan-dung-tien-kiep': { title: 'Chân Dung Tiền Kiếp' },
   };
 
   const TOOL_TYPE = {
@@ -108,18 +108,60 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   }
 
   // ── Pricing ───────────────────────────────────────────────────
+  // Trả { cost, title }. `cost = null` nghĩa là CHƯA BIẾT GIÁ (đọc hụt) — nơi
+  // gọi phải dừng lại và nói thật, tuyệt đối không thay bằng số phỏng đoán.
+  // Bản cũ rơi về `PRODUCTS['dien-tuong']` khi product lạ, nên một id gõ sai là
+  // âm thầm tính tiền theo giá tool khác.
   async function _price() {
     const p = _cfg?.product;
-    const base = PRODUCTS[p] || PRODUCTS['dien-tuong'];
-    if (_cfg?.cost) return { cost: _cfg.cost, title: _cfg.title || base.title };
-    if (!_priceCache) {
-      try {
-        const r = await fetch(`${SB_URL}/rest/v1/tool_pricing?select=tool_id,credits&enabled=eq.true`, { headers: { apikey: SB_ANON } });
-        if (r.ok) { const rows = await r.json(); _priceCache = {}; rows.forEach(x => { _priceCache[x.tool_id] = x.credits; }); }
-      } catch(e) {}
-    }
-    const cost = (_priceCache && _priceCache[p] != null) ? _priceCache[p] : base.cost;
-    return { cost, title: _cfg?.title || base.title };
+    const title = _cfg?.title || PRODUCTS[p]?.title || p || 'Công cụ';
+    if (_cfg?.cost) return { cost: _cfg.cost, title };
+    await _ensurePrices();
+    if (window.ToolPrices) await window.ToolPrices.load();
+    const cost = window.ToolPrices ? window.ToolPrices.get(p) : null;
+    return { cost, title };
+  }
+
+  // Điền giá vào [data-tvp-price] — uỷ quyền cho ToolPrices (nguồn duy nhất).
+  // Giữ hàm này vì nhiều trang đã gọi TuviPaywall.fillPriceSlots().
+  async function fillPriceSlots(root) {
+    await _ensurePrices();
+    if (window.ToolPrices) await window.ToolPrices.fillSlots(root);
+  }
+
+  // Tự nạp tool-prices.js nếu trang chưa có. CỐ Ý làm ở đây thay vì đi thêm
+  // thẻ <script> vào 40+ trang: thêm tay thì sẽ sót, mà sót ở trang nào là
+  // trang đó mất giá.
+  function _ensurePrices() {
+    if (window.ToolPrices) return Promise.resolve();
+    return new Promise((resolve) => {
+      let el = document.getElementById('_tvmb_prices_js');
+      if (!el) {
+        el = document.createElement('script');
+        el.id = '_tvmb_prices_js';
+        el.src = '/tool-prices.js?v=2';
+        document.head.appendChild(el);
+      }
+      el.addEventListener('load', () => resolve());
+      el.addEventListener('error', () => resolve()); // nạp hỏng → coi như chưa biết giá
+    });
+  }
+
+  /** Giá của một product bất kỳ (không phụ thuộc _cfg). null = chưa biết. */
+  async function _priceOf(product) {
+    await _ensurePrices();
+    if (window.ToolPrices) await window.ToolPrices.load();
+    return window.ToolPrices ? window.ToolPrices.get(product) : null;
+  }
+
+  // Chưa đọc được bảng giá. CỐ Ý không chạy tiếp bằng một con số phỏng đoán:
+  // thà bảo người ta thử lại còn hơn trừ Lượng ở mức họ chưa từng thấy.
+  function _priceUnknown() {
+    _open(
+      '<div class="tpw-hd"><div class="tpw-hd-t">⊙ Chưa đọc được bảng giá</div><div class="tpw-hd-s">Chưa trừ Lượng nào của bạn</div></div>' +
+      '<div class="tpw-center"><div class="tpw-msg">Kết nối tới máy chủ giá đang trục trặc. Bạn thử lại sau giây lát nhé — chúng tôi không chạy công cụ khi chưa hiện được giá chính xác.</div></div>' +
+      '<div class="tpw-ft"><button class="tpw-btn cancel" onclick="TuviPaywall._close()">Đóng</button></div>'
+    );
   }
 
   // ── Overlay helper ────────────────────────────────────────────
@@ -137,31 +179,6 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   function _close() {
     if (_ov) { _ov.remove(); _ov = null; }
     document.body.style.overflow = '';
-  }
-
-  // ── Confirm dialog ────────────────────────────────────────────
-  function _confirm(cost, balance, title, onOk) {
-    const after = balance - cost;
-    _open(
-      '<div class="tpw-hd"><div class="tpw-hd-t">⊙ Xác nhận sử dụng Lượng</div><div class="tpw-hd-s">' + title + '</div></div>' +
-      '<div class="tpw-bd">' +
-        '<div class="tpw-r"><span class="tpw-rl">Chi phí</span><span class="tpw-rv r">−' + cost + ' lượng</span></div>' +
-        '<div class="tpw-r"><span class="tpw-rl">Số dư hiện tại</span><span class="tpw-rv o">' + balance + ' lượng</span></div>' +
-        '<hr class="tpw-div">' +
-        '<div class="tpw-r"><span class="tpw-rl"><strong>Còn lại</strong></span><span class="tpw-rv g">' + after + ' lượng</span></div>' +
-      '</div>' +
-      '<div class="tpw-ft">' +
-        '<button class="tpw-btn cancel" id="_tpw_cancel">Huỷ</button>' +
-        '<button class="tpw-btn ok" id="_tpw_ok">Xác Nhận →</button>' +
-      '</div>'
-    );
-    document.getElementById('_tpw_cancel').onclick = _close;
-    document.getElementById('_tpw_ok').onclick = async () => {
-      const b = document.getElementById('_tpw_ok');
-      if (b) { b.disabled = true; b.textContent = '…'; }
-      _close();
-      await onOk();
-    };
   }
 
   // ── Insufficient ──────────────────────────────────────────────
@@ -221,8 +238,11 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       return;
     }
 
-    // 2. Get pricing
+    // 2. Giá — chưa biết thì DỪNG. Bỏ hộp thoại xác nhận rồi nên con số trên
+    // nút là thứ cuối cùng người dùng đọc; chạy tiếp bằng một giá đoán là trừ
+    // Lượng cho một mức họ chưa từng nhìn thấy.
     const { cost, title } = await _price();
+    if (cost == null) { _priceUnknown(); return; }
 
     // 3. Re-access check (same slug = already paid)
     if (slug) {
@@ -243,38 +263,41 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
 
     if (balance < cost) { _insufficient(cost, balance); return; }
 
-    // 5. Confirm → deduct → callback
-    _confirm(cost, balance, title, async () => {
-      try {
-        const res = await fetch('/api/payment?action=deduct', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-          body: JSON.stringify({
-            amount: cost,
-            product: _cfg?.product || '',
-            toolType: TOOL_TYPE[_cfg?.product] || ('use_' + (_cfg?.product || 'unknown')),
-            slug: slug || '',
-            description: title,
-          }),
-        });
-        const data = await res.json();
+    // 5. Trừ → callback. KHÔNG hỏi xác nhận: giá đã ghi sẵn trên chính nút bấm
+    // và trong danh sách công cụ (và cả hai nay đọc từ `tool_pricing`, xem
+    // _fillPriceSlots) — hộp thoại chỉ lặp lại con số người dùng vừa đọc.
+    // Hộp thoại DUY NHẤT còn giữ là lúc KHÔNG ĐỦ Lượng (_insufficient, ở trên)
+    // và lúc chạm trần lượt tặng (_capReached) — hai ca người dùng cần biết vì
+    // sao không chạy được và đi đâu để nạp.
+    try {
+      const res = await fetch('/api/payment?action=deduct', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({
+          amount: cost,
+          product: _cfg?.product || '',
+          toolType: TOOL_TYPE[_cfg?.product] || ('use_' + (_cfg?.product || 'unknown')),
+          slug: slug || '',
+          description: title,
+        }),
+      });
+      const data = await res.json();
 
-        if (data.success || data.alreadyPaid) {
-          window.refreshNavCredits && window.refreshNavCredits();
-          _banner('✓ Đã trừ ' + cost + ' lượng · Còn lại ' + (data.balance ?? (balance - cost)) + ' lượng');
-          await callback();
-          return;
-        }
-        if (data.insufficientBalance) { _insufficient(cost, balance); return; }
-        // Chạm trần lượt dùng thử miễn phí trong ngày (cầu dao ngân sách ảnh
-        // free). KHÔNG phải lỗi và KHÔNG mất Lượng — server chặn trước khi trừ
-        // — nên nói tử tế, đừng ném alert 'Lỗi:' làm người ta tưởng hỏng.
-        if (data.capReached) { _capReached(data.message); return; }
-        alert('Lỗi: ' + (data.error || 'Vui lòng thử lại.'));
-      } catch(e) {
-        alert('Lỗi kết nối: ' + e.message);
+      if (data.success || data.alreadyPaid) {
+        window.refreshNavCredits && window.refreshNavCredits();
+        _banner('✓ Đã trừ ' + cost + ' lượng · Còn lại ' + (data.balance ?? (balance - cost)) + ' lượng');
+        await callback();
+        return;
       }
-    });
+      if (data.insufficientBalance) { _insufficient(cost, balance); return; }
+      // Chạm trần lượt dùng thử miễn phí trong ngày (cầu dao ngân sách ảnh
+      // free). KHÔNG phải lỗi và KHÔNG mất Lượng — server chặn trước khi trừ
+      // — nên nói tử tế, đừng ném alert 'Lỗi:' làm người ta tưởng hỏng.
+      if (data.capReached) { _capReached(data.message); return; }
+      alert('Lỗi: ' + (data.error || 'Vui lòng thử lại.'));
+    } catch(e) {
+      alert('Lỗi kết nối: ' + e.message);
+    }
   }
 
   // ── Lượt XEM LẠI miễn phí (2 tool chân dung cache theo lá số) ─────────
@@ -361,7 +384,8 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   async function ensureCredits(opts) {
     opts = opts || {};
     const product = opts.product;
-    const cost = opts.cost != null ? opts.cost : (PRODUCTS[product]?.cost ?? 1);
+    const cost = opts.cost != null ? opts.cost : await _priceOf(product);
+    if (cost == null) { _css(); _priceUnknown(); return { ok: false, reason: 'price_unknown' }; }
     _css();
     if (!window.Auth?.isLoggedIn()) return { ok: false, reason: 'login' };
     const userId = window.Auth.getUser()?.id || '';
@@ -376,7 +400,8 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   async function deductSilent(opts) {
     opts = opts || {};
     const product = opts.product;
-    const cost = opts.cost != null ? opts.cost : (PRODUCTS[product]?.cost ?? 1);
+    const cost = opts.cost != null ? opts.cost : await _priceOf(product);
+    if (cost == null) return { ok: false, reason: 'price_unknown' };
     if (!window.Auth?.isLoggedIn()) return { ok: false, reason: 'login' };
     const token = window.Auth.getSession()?.access_token || '';
     if (!token) return { ok: false, reason: 'login' };
@@ -407,9 +432,10 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     _cfg = config;
     _css();
     _price().catch(() => {}); // prefetch
+    fillPriceSlots().catch(() => {});
   }
 
-  return { init, requireCredits, requireCreditsCached, generateToolSlug, ensureCredits, deductSilent, getBalance, _banner, _close };
+  return { init, requireCredits, requireCreditsCached, generateToolSlug, ensureCredits, deductSilent, getBalance, fillPriceSlots, _banner, _close };
 })();
 
 // Export to global window so cross-script checks (e.g. tu-binh.html line 1537) work

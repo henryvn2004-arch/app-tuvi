@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/shell.css?v=14">
+<link rel="stylesheet" href="/shell.css?v=15">
 <link rel="stylesheet" href="/laso-chart.css?v=2">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:720px}
@@ -131,7 +131,7 @@
         <div class="who-row" id="xtWho"></div>
         <div class="jump" id="xtJump"></div>
         <div class="xt-unlock" id="xtUnlock" style="display:none">
-          <button class="btn-go" id="btnUnlock" onclick="initiateXemTuoiChuyenSau()">✦ Luận giải chuyên sâu bằng AI — 50 Lượng →</button>
+          <button class="btn-go" id="btnUnlock" onclick="initiateXemTuoiChuyenSau()">✦ Luận giải chuyên sâu bằng AI — <span data-tvp-price="xem-tuoi">…</span> Lượng →</button>
           <p>Viết riêng cho hai người này theo cổ pháp — tổng quan và từng chiều hòa hợp.</p>
         </div>
         <div class="xt-progress" id="xtProgress" style="display:none"></div>
@@ -163,8 +163,8 @@
 <script src="/tuong-hop.js?v=1"></script>
 <script src="/tuvi-form.js?v=1"></script>
 <script src="/auth.js"></script>
-<script src="/tuvi-paywall.js?v=9"></script>
-<script src="/shell.js?v=50"></script>
+<script src="/tuvi-paywall.js?v=11"></script>
+<script src="/shell.js?v=52"></script>
 <script>
 // ── MODE: 1 trang phục vụ 3 route — /app/xem-tuoi (vợ chồng), /app/xem-lam-an
 // (hợp tác làm ăn), /app/tuong-hop (hai người bất kỳ). Cùng bộ máy calcTuongHop;
@@ -394,6 +394,9 @@ var QUERIES=[
   function(r){ return 'đại vận '+((r.lsA.daiVanHienTai&&r.lsA.daiVanHienTai.diaChi)||'')+' '+((r.lsB.daiVanHienTai&&r.lsB.daiVanHienTai.diaChi)||'')+' vận hạn hiện tại'; },
 ];
 
+// Trang này phục vụ 2 mode (xem-tuoi / xem-lam-an) nên ô giá phải trỏ đúng
+// tool đang mở, đừng ghim cứng một id — hai mode có thể lệch giá bất cứ lúc nào.
+document.querySelectorAll('[data-tvp-price]').forEach(function(el){ el.setAttribute('data-tvp-price', MODE_KEY); });
 if(PAID_MODES[MODE_KEY])TuviPaywall.init({product:MODE_KEY, title: MODE.title});
 
 function toSlugAscii(str){

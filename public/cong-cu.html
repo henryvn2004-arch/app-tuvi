@@ -513,8 +513,9 @@ a { color: var(--blue); text-decoration: none; }
 
 <!-- ─── SCRIPTS ──────────────────────────────────────────── -->
 <script src="/auth.js"></script>
-<script src="/tuvi-paywall.js?v=9"></script>
-<script src="/nav.js?v=19"></script>
+<script src="/tool-prices.js?v=2"></script>
+<script src="/tuvi-paywall.js?v=11"></script>
+<script src="/nav.js?v=20"></script>
 <script src="/referral.js?v=1"></script>
 <script src="/footer.js"></script>
 
@@ -564,7 +565,7 @@ const TOOL_URLS = {
   'van-thang': '/tools/van-thang.html',
   // Free — Mệnh Lý
   'bat-trach': '/tools/bat-trach.html', 'nap-am': '/tools/nap-am.html',
-  'tuong-hop': '/tools/tuong-hop.html', 'kim-lau': '/tools/kim-lau.html',
+  'tuong-hop': '/tools/tuong-hop.html', 'kim-lau': '/kim-lau',
   'ngu-hanh-ten': '/tools/ngu-hanh-ten.html', 'tu-tru': '/tools/tu-tru.html',
   // Free — Lịch Số
   'hoang-dao': '/tools/hoang-dao.html', 'ngay-tot': '/tools/ngay-tot.html',
@@ -611,34 +612,26 @@ const SUPABASE_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 
 let _tools = null;
-// đ cho 1 Lượng khi hiện giá công cụ. Suy từ gói phổ biến (gói thứ hai theo
-// sort_order) chứ KHÔNG viết cứng: bản trước nhân cứng 2.500đ — đơn giá của
-// bảng giá cũ — nên mọi công cụ bị báo đắt hơn thực tế tới 3 lần.
-let _vndPerCredit = 2500;
+// đ cho 1 Lượng khi hiện giá công cụ — suy từ gói phổ biến (gói thứ hai theo
+// sort_order). `null` = chưa biết → GIẤU cột quy đổi thay vì nhân với một hằng
+// số: bản trước để 2.500đ (đơn giá bảng giá cũ) nên báo đắt gấp gần 3 lần.
+let _vndPerCredit = null;
 
 async function loadPackageRate() {
-  try {
-    const res = await fetch(
-      SUPABASE_URL + '/rest/v1/credit_packages?enabled=eq.true&select=credits,amount_vnd&order=sort_order.asc',
-      { headers: { apikey: SUPABASE_ANON } }
-    );
-    const pkgs = (await res.json()).filter(p => Number(p.credits) > 0 && Number(p.amount_vnd) > 0);
-    if (pkgs.length) {
-      const ref = pkgs[1] || pkgs[0];
-      _vndPerCredit = Number(ref.amount_vnd) / Number(ref.credits);
-    }
-  } catch (e) { /* giữ mức dự phòng */ }
+  if (!window.ToolPrices) return;
+  await window.ToolPrices.load();
+  const pkgs = window.ToolPrices.packages();
+  if (pkgs.length) {
+    const ref = pkgs[1] || pkgs[0];
+    _vndPerCredit = ref.amount_vnd / ref.credits;
+  }
 }
 
 async function loadTools() {
   try {
     // Lấy đơn giá TRƯỚC khi vẽ thẻ để không chớp một con số sai rồi mới sửa.
     await loadPackageRate();
-    const res = await fetch(
-      SUPABASE_URL + '/rest/v1/tool_pricing?enabled=eq.true&select=tool_id,label,credits,icon,category,sort_order,is_free,description&order=sort_order.asc',
-      { headers: { apikey: SUPABASE_ANON } }
-    );
-    _tools = await res.json();
+    _tools = window.ToolPrices ? window.ToolPrices.rows() : [];
     if (!_tools?.length) { document.getElementById('tabContent').innerHTML = '<div class="tools-loading">Không có dữ liệu.</div>'; return; }
 
     // Update free count badge
@@ -687,26 +680,19 @@ function renderToolGrid(tools, isFreeTab) {
   document.getElementById('tabContent').innerHTML = html;
 }
 
-// Map emoji from Supabase tool_pricing.icon → Lucide key (loaded via nav.js window.ICONS)
-const EMOJI_TO_ICON = {
-  '🔮':'sparkles','💑':'heart-handshake','🤝':'handshake','📊':'bar-chart-3','☀':'sun','☀️':'sun',
-  '⚗':'gem','📈':'trending-up','🗓':'calendar-days','🔄':'rotate-cw','🌀':'tornado',
-  '😊':'smile','🙂':'smile','👁':'eye','✋':'hand','🎤':'mic','🎙':'mic','🌅':'sunrise',
-  '🧭':'compass','🧿':'compass','🖥':'monitor','🏪':'store','🏠':'home','🏢':'building-2',
-  '🎨':'palette','💄':'palette','👗':'palette','👔':'palette','🧴':'palette',
-  '⚡':'sun','📅':'calendar','📌':'pin','⚖':'circle-dot','👶':'baby','🍼':'baby',
-  '❤':'heart','❤️':'heart','📜':'scroll-text','🔢':'hash','☯':'aperture',
-  '🃏':'wallet-cards','🂠':'spade','✍':'pen-line','✍️':'pen-line','🔯':'sparkles',
-  '💇':'scissors','✂':'scissors','✂️':'scissors'
-};
-function iconHtml(raw) {
-  if (!raw) raw = '🔮';
-  var key = EMOJI_TO_ICON[raw];
-  if (key && window.ICONS && window.ICONS[key]) return window.ICONS[key];
-  // Already a known icon key (not emoji)?
-  if (window.ICONS && window.ICONS[raw]) return window.ICONS[raw];
-  // Fallback: render whatever came (emoji char)
-  return raw;
+// Icon cho `tool_pricing.icon` — DÙNG bản global của nav.js (`window.iconHtml`,
+// `window.EMOJI_TO_ICON` 153 mục). Trước đây file này có bản EMOJI_TO_ICON RIÊNG
+// chỉ 48 mục, CHE mất bản global → tool nào có emoji ngoài 48 mục đó (🔒 💡 📷 👑
+// 🌿 🔥 …) rơi xuống nhánh dự phòng và hiện emoji thô ngay giữa lưới icon SVG.
+// Hai bản map thì bản nhỏ hơn âm thầm thắng — đúng lỗi "hai bản trôi khỏi nhau".
+// nav.js nạp TRƯỚC khối script này nên window.iconHtml luôn có.
+//
+// ⚠️ TÊN HÀM KHÔNG ĐƯỢC LÀ `iconHtml`: khai `function iconHtml` ở top-level của
+// classic script CHÍNH LÀ gán `window.iconHtml`, nên nó ghi đè bản của nav.js rồi
+// tự gọi chính mình → tràn stack, lưới tool trắng trơn.
+function toolIcon(raw) {
+  if (window.iconHtml) return window.iconHtml(raw);
+  return raw || ''; // nav.js chưa nạp được: đưa nguyên liệu thô, không dựng gì thêm
 }
 
 function toolCardHtml(t) {
@@ -716,10 +702,10 @@ function toolCardHtml(t) {
     ? '<span class="tool-price-free">Miễn Phí</span>'
     : '<div class="tool-price">' +
         '<div class="tool-price-credits">' + t.credits + ' Lượng</div>' +
-        '<div class="tool-price-vnd">' + formatVnd(Math.ceil((t.credits * _vndPerCredit) / 1000) * 1000) + '</div>' +
+        (_vndPerCredit ? '<div class="tool-price-vnd">' + formatVnd(Math.ceil((t.credits * _vndPerCredit) / 1000) * 1000) + '</div>' : '') +
       '</div>';
   return '<a href="' + url + '" class="tool-card' + featured + '">' +
-    '<div class="tool-icon">' + iconHtml(t.icon) + '</div>' +
+    '<div class="tool-icon">' + toolIcon(t.icon) + '</div>' +
     '<div class="tool-name">' + t.label + '</div>' +
     '<div class="tool-desc">' + (t.description || '') + '</div>' +
     '<div class="tool-footer">' + priceHtml +

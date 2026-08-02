@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=19" as="script">
+<link rel="preload" href="/nav.js?v=20" as="script">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Thanh Tướng — Xem Tướng Giọng Nói Bằng AI | Tử Vi Minh Bảo</title>
 <meta property="og:title" content="Thanh Tướng — Xem Tướng Giọng Nói Bằng AI | Tử Vi Minh Bảo"/>
@@ -120,7 +120,7 @@
   <div class="form-section" id="inputSection">
     <div class="section-eyebrow">Thu Âm Giọng Nói</div>
     <div class="privacy-notice">
-      <span>🔒</span>
+      <span><span class="ic" data-icon="lock"></span></span>
       <div><strong>Quyền riêng tư:</strong> Âm thanh được xử lý hoàn toàn trong trình duyệt. Chỉ gửi các chỉ số đo được (không gửi file audio) lên server để AI phân tích.</div>
     </div>
 
@@ -140,7 +140,7 @@
     <div class="record-wrap">
       <div class="countdown-badge" id="countdownBadge"></div>
       <button class="btn-record" id="recordBtn" onclick="toggleRecord()">
-        <span id="recordIcon">🎙</span>
+        <span id="recordIcon"><span class="ic" data-icon="mic"></span></span>
         <span id="recordLabel">Bắt Đầu Thu Âm</span>
       </button>
       <div class="status-msg" id="statusMsg">Nhấn để bắt đầu thu âm · Cho phép truy cập microphone khi trình duyệt hỏi</div>
@@ -165,7 +165,7 @@
 
     <div style="text-align:center;margin-top:20px">
       <button class="btn-submit" id="analyzeBtn" onclick="analyze()" disabled style="padding:14px 40px;font-size:15px">
-        🎵 Phân Tích Thanh Tướng
+        <span class="ic" data-icon="music"></span> Phân Tích Thanh Tướng
       </button>
     </div>
     <div class="error-msg" id="error-msg"></div>
@@ -193,32 +193,12 @@
     <div class="tool-cta-desc">Thanh tướng phản chiếu khí chất và nội tâm. Lá số Tử Vi phân tích vận trình từng giai đoạn — kết hợp cho bức tranh toàn diện nhất.</div>
     <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
         <a class="tool-cta-btn" href="/xem-tuoi.html" style="background:var(--navy);border-color:var(--gold)">
-          Xem Tuổi Vợ Chồng <span id="upsell-tuoi-price" style="opacity:.75;font-size:.85em">(50 lượng)</span> →
+          Xem Tuổi Vợ Chồng <span style="opacity:.75;font-size:.85em">(<span data-tvp-price="xem-tuoi">…</span> lượng)</span> →
         </a>
         <a class="tool-cta-btn" href="/luan-giai.html" style="background:transparent;color:var(--navy);border:2px solid var(--navy)">
-          Luận Giải Lá Số <span id="upsell-laso-price" style="opacity:.65;font-size:.85em">(150 lượng)</span> →
+          Luận Giải Lá Số <span style="opacity:.65;font-size:.85em">(<span data-tvp-price="laso">…</span> lượng)</span> →
         </a>
       </div>
-      <script>
-      // Dynamic pricing for upsell banner
-      (async function() {
-        try {
-          const r = await fetch('https://dciwkfdqhhddeymlisey.supabase.co/rest/v1/tool_pricing?tool_id=in.(xem-tuoi,laso)&select=tool_id,credits',
-            {headers:{'apikey':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I'}});
-          const rows = await r.json();
-          rows.forEach(row => {
-            if (row.tool_id === 'xem-tuoi') {
-              const el = document.getElementById('upsell-tuoi-price');
-              if (el) el.textContent = '(' + row.credits + ' lượng)';
-            }
-            if (row.tool_id === 'laso') {
-              const el = document.getElementById('upsell-laso-price');
-              if (el) el.textContent = '(' + row.credits + ' lượng)';
-            }
-          });
-        } catch(e) {}
-      })();
-      </script>
   </div>
 </div>
 
@@ -754,7 +734,7 @@ function renderMd(md) {
     .replace(/(<\/[hb][^>]*>)<\/p>/g,'$1');
 }
 </script>
-<script src="/tuvi-paywall.js"></script>
+<script src="/tuvi-paywall.js?v=11"></script>
 <script>
 // ── State persistence (survive OAuth redirect) ────────────────────
 function _saveStateForAuth() {
@@ -836,7 +816,7 @@ async function _saveTuongReading(tool, resultText, imageData, mediaType) {
   </div>
 </section>
 <script src="/testimonials.js"></script>
-<script src="/related-tools.js"></script>
-<script src="/nav.js?v=19" defer></script>
+<script src="/related-tools.js?v=2"></script>
+<script src="/nav.js?v=20" defer></script>
 </body>
 </html>
