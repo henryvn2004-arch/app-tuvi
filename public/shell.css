@@ -14,6 +14,10 @@
   --paper:#FBFAF7; --paper-2:#F4F2EC; --white:#fff;
   --sb-txt:#C9CFD8; --sb-txt-dim:#7d8794; --sb-line:rgba(255,255,255,.07);
   --serif:'Noto Serif',Georgia,serif; --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+  /* Chiều cao THẬT của .ws-top, shell.js đo lại khi header đổi kích thước.
+     Giá trị ở đây chỉ là mức dự phòng trước khi JS chạy. Thanh phụ dính
+     (.jump) neo theo biến này thay vì chép số cứng. */
+  --ws-top-h:69px;
   --shadow:0 1px 2px rgba(6,26,46,.04),0 4px 16px rgba(6,26,46,.06);
   --shadow-lg:0 24px 60px rgba(6,26,46,.28),0 6px 18px rgba(6,26,46,.16);
 }
@@ -283,6 +287,30 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
   .rail{position:fixed;right:0;top:0;bottom:0;width:100vw;max-width:none;z-index:60;transform:translateX(100%);transition:transform .25s;border-left:none}
   .rail.open{transform:none}
   .mobile-only{display:inline-flex}
+  /* ── Thanh tiêu đề tool (.ws-top) trên điện thoại ────────────────────────
+     Ở bề ngang 393px (iPhone), hàng ☰ + tiêu đề + 2–4 nút KHÔNG đủ chỗ. Vì
+     .ws-title không có min-width:0 nên nó co xuống min-content: MỖI CHỮ một
+     dòng ("Luận / giải / Tử / Vi"), chữ trong nút cũng gãy theo → header cao
+     hơn 320px, đẩy nội dung thật xuống dưới màn hình. Chữa bằng 3 luật:
+     (1) tiêu đề được co và cắt bằng ellipsis thay vì xuống dòng;
+     (2) nút KHÔNG gãy chữ, KHÔNG co (flex:0 0 auto);
+     (3) cụm nút xuống HẲN hàng thứ hai, cuộn ngang nếu vẫn thừa chỗ. */
+  .ws-top{padding:11px 14px;gap:8px 10px;flex-wrap:wrap}
+  /* flex-basis 0 (không phải auto): với auto, "kích thước giả định" của tiêu đề
+     là max-content của phụ đề (~300px) nên ở máy hẹp (≤360px) NÓ tự rớt xuống
+     hàng riêng, bỏ nút ☰ đứng trơ một hàng → header thành 3 hàng. */
+  .ws-title{flex:1 1 0;min-width:0}
+  /* CHỈ con trực tiếp: phụ đề vài trang có <span data-tvp-price> lồng bên
+     trong — cho nó display:block là nó tự xuống dòng, header lại cao thêm. */
+  .ws-title>b,.ws-title>span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ws-title>b{font-size:15.5px}
+  /* flex-basis 100% = LUÔN chiếm trọn hàng thứ hai. Để nó tự co vào hàng đầu
+     thì tiêu đề (flex-basis 0) bị bóp còn vài chục pixel — "Luận giải Tử…"
+     cụt ngủn còn khó đọc hơn cả lỗi đang sửa. Trang không có nút nào thì hàng
+     này cao 0, chỉ tốn đúng row-gap 8px. */
+  .ws-actions{flex:1 0 100%;max-width:100%;margin-left:0;gap:6px;overflow-x:auto;scrollbar-width:none}
+  .ws-actions::-webkit-scrollbar{display:none}
+  .ws-actions .btn{flex:0 0 auto;white-space:nowrap;padding:7px 10px}
   .backdrop{position:fixed;inset:0;background:rgba(6,26,46,.4);z-index:55;display:none}
   .backdrop.on{display:block}
   /* Bottom tab: hiện trên mobile, chừa chỗ cuối trang, ẩn khi drawer đang mở. */

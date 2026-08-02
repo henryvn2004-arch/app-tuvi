@@ -1705,6 +1705,27 @@
     } catch (e) { /* ignore */ }
   }
 
+  // ── CHIỀU CAO THANH TIÊU ĐỀ → biến CSS --ws-top-h ──
+  // .ws-top dính đỉnh khung workspace, nhưng CAO BAO NHIÊU thì tuỳ trang (số
+  // nút hành động) và tuỳ bề ngang (điện thoại cho cụm nút xuống hàng thứ 2).
+  // Trang nào có thanh phụ dính riêng — .jump (mục lục) của Luận Giải / Bát Tự
+  // / Xem Tuổi — phải neo theo con số THẬT; trước đây chép cứng 51px nên thanh
+  // mục lục nằm KHUẤT hẳn sau header ở MỌI bề ngang. Đo lại mỗi khi header đổi
+  // kích thước (nút "Chia sẻ" chèn thêm sau khi có kết quả, xoay ngang máy…).
+  function trackWsTopHeight() {
+    var top = document.querySelector('.ws-top');
+    if (!top) return;
+    var apply = function () {
+      var h = Math.round(top.getBoundingClientRect().height);
+      if (h > 0) document.documentElement.style.setProperty('--ws-top-h', h + 'px');
+    };
+    apply();
+    if (window.ResizeObserver) {
+      try { new ResizeObserver(apply).observe(top); return; } catch (e) { /* ignore */ }
+    }
+    window.addEventListener('resize', apply);
+  }
+
   // ── BOTTOM TAB BAR (mobile) ──
   // Chèn 1 lần vào body; CSS chỉ hiện ≤900px. Cho phép chạm 1 phát tới Trợ lý
   // (rail) và Công cụ (sidebar) thay vì chôn sau hamburger. Trang chủ / Tài
@@ -1783,6 +1804,7 @@
     renderSidebar();
     renderRail();
     renderTabbar();
+    trackWsTopHeight();
     registerNativePush();
     ensureCmdk();
     if (!document.getElementById('shell-backdrop')) {
