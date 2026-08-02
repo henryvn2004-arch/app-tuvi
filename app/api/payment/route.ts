@@ -15,7 +15,7 @@ import { hasSlugAccess } from '@/lib/billing/credits';
 import { freeGenGate, FREE_GEN_CAP_MESSAGE, railFreeRemaining } from '@/lib/billing/viral-budget';
 import { anonTrialStatus } from '@/lib/billing/anon-trial';
 import { getConfigValue } from '@/lib/config/appConfig';
-import { CRON_RUNS_LIMIT, evaluateJobs, fetchPgcronRuns } from '@/lib/ops/jobs';
+import { CRON_RUNS_LIMIT, evaluateJobs, fetchPgcronRuns, syncJobFirstSeen } from '@/lib/ops/jobs';
 import { checkEnv } from '@/lib/ops/preflight';
 import { logCronRun } from '@/lib/cron/log';
 import { tgSendMessage } from '@/lib/channels/telegram';
@@ -721,7 +721,7 @@ async function handleAdminCronRuns(request: NextRequest): Promise<Response> {
       // CỐ Ý chỉ gộp pg_cron cho phần ĐÁNH GIÁ, không nhét vào `runs` — bảng
       // "Cron & Jobs" bên dưới là log thô của cron_runs, trộn nguồn khác vào
       // sẽ thành một bảng không còn khớp với bất kỳ truy vấn SQL nào.
-      jobs: evaluateJobs([...runs, ...pgcronRuns]),
+      jobs: evaluateJobs([...runs, ...pgcronRuns], await syncJobFirstSeen()),
       env: checkEnv(),
       digest: await latestOpsDigest(),
       // S6: rà bảo mật. `rpcSafe` để panel không sập nếu RPC chưa được áp.

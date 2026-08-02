@@ -25,13 +25,21 @@ export interface JobSpec {
   sink: string;
   trigger?: boolean;
   /**
-   * Ngày job được đưa vào sổ (YYYY-MM-DD, giờ VN).
+   * Ngày job được đưa vào sổ (YYYY-MM-DD, giờ VN). GHI CHÚ cho người đọc.
    *
-   * ⚠️ THÊM JOB MỚI THÌ BẮT BUỘC ĐIỀN. Thiếu nó, job vừa merge xong đã bị
-   * `overdue` ngay lập tức vì chưa kịp tới lượt chạy đầu tiên — sáng 28/07
-   * `ops-digest` (deploy 08:00, lịch 07:30) và `content-pack` (deploy 08:26,
-   * lịch Chủ Nhật) cùng báo động sai kiểu này, chỉ vì trượt lịch vài chục phút
-   * và vài ngày.
+   * ⚠️ KHÔNG còn là thứ quyết định ân hạn của job mới — `jobFirstSeen` mới là.
+   * Lý do đổi: đây là một ngày GÕ TAY, và gõ SỚM hơn ngày merge thật thì bộ dò
+   * bắn báo động ngay lượt quét đầu tiên sau deploy. Đã cắn thật: `prune-anon-trial`
+   * khai `since: '2026-07-30'` nhưng code lên `main` lúc 01/08 21:57 VN — cảnh
+   * báo "QUÁ HẠN" bắn lúc 22:00, tức 3 PHÚT sau deploy, cho một job mà lượt chạy
+   * đầu tiên theo lịch còn cách đó 11 tiếng. Nó chạy `ok` sáng hôm sau.
+   *
+   * Điền vẫn tốt (người đọc panel cần biết job có từ bao giờ), nhưng điền sai
+   * không còn gây báo giả nữa: một khi `jobFirstSeen` đã ghi được mốc cho job
+   * thì ân hạn tính theo mốc đó, `since` chỉ còn là lối lùi.
+   *
+   * ⚠️ Đừng dùng `since` để "tắt" một cảnh báo phiền: nó không còn tác dụng đó
+   * nữa, và trước kia thì đó chính là cách tự tạo điểm mù.
    */
   since?: string;
   /**
@@ -109,9 +117,11 @@ export const JOBS: JobSpec[] = [
   { key: 'content-pack', label: 'Content Pack TikTok', source: 'vercel', everyMinutes: 7 * D,
     schedule: 'CN hằng tuần', sink: 'Telegram admin', trigger: true,
     since: '2026-07-28' },
+  // `since` từng ghi '2026-07-30' — SAI, code merge 01/08 21:57 VN (PR #347).
+  // Chính dòng này đẻ ra cảnh báo giả lúc 22:00 cùng ngày; xem chú thích `since`.
   { key: 'prune-anon-trial', label: 'Dọn nhật ký dùng thử', source: 'vercel', everyMinutes: D,
     schedule: '09:00 VN hằng ngày', sink: 'anon_rail_hits', trigger: true,
-    since: '2026-07-30' },
+    since: '2026-08-01' },
   // `since` = ngày merge: job chưa từng chạy nên không có dòng nào trong
   // cron_runs; thiếu mốc này thì bộ dò lập tức kêu "CHƯA HỀ chạy" — đúng loại
   // cảnh báo giả đã phải đi vá một lượt hôm 30/07.
@@ -183,6 +193,67 @@ export async function fetchPgcronRuns(limit = 100): Promise<CronRun[]> {
   }
 }
 
+/** Khoá `app_config` giữ mốc "lần đầu bộ dò nhìn thấy job này". */
+const FIRST_SEEN_KEY = 'ops.job_first_seen';
+
+/**
+ * Đọc mốc first-seen, TỰ GHI cho job nào chưa có, rồi trả về bản đồ đầy đủ.
+ *
+ * VÌ SAO CẦN: ân hạn cho job mới trước đây neo vào `since` — một ngày gõ tay
+ * trong code. Gõ sớm hơn ngày merge là bộ dò bắn báo động ngay lượt quét đầu
+ * tiên sau deploy, cho một job còn chưa tới lượt chạy. Đã xảy ra với
+ * `prune-anon-trial` (cảnh báo bắn 3 phút sau khi deploy). Mốc này thì máy tự
+ * ghi nên không sai được: nó luôn ≥ thời điểm job có mặt trong bản build đang
+ * chạy.
+ *
+ * CHỈ THÊM, KHÔNG BAO GIỜ SỬA khoá đã có — đó là điều khiến nó dùng được làm
+ * mốc. Ghi đè mỗi lượt quét thì mọi job trắng log sẽ vĩnh viễn "vừa mới thấy"
+ * và `overdue` không bao giờ kêu nữa, tức đổi một báo giả lấy một điểm mù, hệt
+ * cái bẫy dòng `running` treo của `withCronLog`.
+ *
+ * Idempotent: không có khoá mới thì KHÔNG gọi ghi. Best-effort toàn phần —
+ * hỏng thì trả về những gì đọc được (hoặc {}), để `evaluateJobs` lùi về đúng
+ * hành vi cũ là neo vào `since`.
+ */
+export async function syncJobFirstSeen(): Promise<Record<string, string>> {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_KEY;
+  if (!url || !key) return {};
+  const headers = { 'Content-Type': 'application/json', apikey: key, Authorization: `Bearer ${key}` };
+
+  let seen: Record<string, string> = {};
+  try {
+    const res = await fetch(`${url}/rest/v1/app_config?key=eq.${FIRST_SEEN_KEY}&select=value`, {
+      headers,
+      cache: 'no-store',
+    });
+    if (res.ok) {
+      const rows = await res.json();
+      const v = rows?.[0]?.value;
+      if (v && typeof v === 'object' && !Array.isArray(v)) seen = v as Record<string, string>;
+    }
+  } catch {
+    return {};
+  }
+
+  const missing = JOBS.filter((j) => !seen[j.key]);
+  if (!missing.length) return seen;
+
+  const now = new Date().toISOString();
+  const merged = { ...seen };
+  for (const j of missing) merged[j.key] = now;
+  try {
+    await fetch(`${url}/rest/v1/app_config`, {
+      method: 'POST',
+      headers: { ...headers, Prefer: 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify({ key: FIRST_SEEN_KEY, value: merged }),
+    });
+  } catch {
+    /* ghi hỏng → vẫn dùng `merged` cho lượt này; lượt sau ghi lại */
+  }
+  return merged;
+}
+
 export interface JobHealth extends JobSpec {
   lastRun: string | null;
   lastStatus: string | null;
@@ -233,8 +304,12 @@ export const STALE_RUNNING_MINUTES = 15;
  * `runs` gộp CẢ hai nguồn: bảng `cron_runs` (job Vercel) và RPC
  * `ops_pgcron_runs` (job pg_cron — xem `pgcronJob`). Truyền thiếu nguồn nào
  * thì job thuộc nguồn đó lại thành "chưa hề chạy", đúng cái bẫy vừa vá.
+ *
+ * `firstSeen` từ `syncJobFirstSeen()`. Bỏ trống thì hàm vẫn chạy đúng như bản
+ * cũ (neo ân hạn vào `since`) — cố ý giữ thuần và đồng bộ để 3 nơi gọi không
+ * phải đổi kiến trúc, và để test gọi được mà không cần mạng.
  */
-export function evaluateJobs(runs: CronRun[]): JobHealth[] {
+export function evaluateJobs(runs: CronRun[], firstSeen: Record<string, string> = {}): JobHealth[] {
   const byKey = new Map<string, CronRun[]>();
   for (const r of runs) {
     const arr = byKey.get(r.job_key) || [];
@@ -267,11 +342,27 @@ export function evaluateJobs(runs: CronRun[]): JobHealth[] {
 
     // Job vừa đưa vào sổ mà chưa có log thì CHƯA phải hỏng — nhiều khả năng
     // chỉ là chưa tới lượt chạy đầu tiên. Cho đúng một cửa sổ 1.5× chu kỳ kể
-    // từ ngày đăng ký, hết cửa sổ đó mà vẫn trắng log thì mới là bất thường.
+    // từ mốc đăng ký, hết cửa sổ đó mà vẫn trắng log thì mới là bất thường.
     // Giữ nguyên chủ ý gốc ("không log cũng cần biết"), chỉ bỏ phần kêu oan.
+    //
+    // Mốc: `firstSeen` (máy tự ghi) THAY THẾ `since` (gõ tay) khi đã có, chứ
+    // KHÔNG lấy cái muộn hơn giữa hai cái.
+    //
+    // Bản đầu của bản vá này lấy `max(since, firstSeen)` và test bắt được lỗ:
+    // như vậy thì sửa `since` sang một ngày TƯƠNG LAI là bịt được miệng bộ dò
+    // cho một job đã chết — tự tay tạo đúng loại điểm mù mà cả track S4 sinh ra
+    // để chống. `firstSeen` do máy ghi và không bao giờ bị sửa, nên một khi đã
+    // có thì nó là mốc đáng tin duy nhất; `since` chỉ còn là lối lùi cho quãng
+    // trước lượt đồng bộ đầu tiên (và cho test gọi hàm mà không cần mạng).
+    //
+    // Hệ quả ở lượt deploy ĐẦU TIÊN của cơ chế: mọi job đang trắng log được cấp
+    // lại một cửa sổ ân hạn tính từ bây giờ. Cố ý chấp nhận — đổi lại là không
+    // job nào bị kêu oan lúc vừa merge nữa.
     const sinceMs = spec.since ? Date.parse(spec.since + 'T00:00:00+07:00') : NaN;
+    const seenMs = firstSeen[spec.key] ? Date.parse(firstSeen[spec.key]) : NaN;
+    const anchorMs = Number.isFinite(seenMs) ? seenMs : sinceMs;
     const awaitingFirstRun =
-      !last && Number.isFinite(sinceMs) && now - sinceMs < spec.everyMinutes * 1.5 * 60000;
+      !last && Number.isFinite(anchorMs) && now - anchorMs < spec.everyMinutes * 1.5 * 60000;
 
     const stuck = last?.status === 'running' && now - lastMs > STALE_RUNNING_MINUTES * 60000;
     const failing = last?.status === 'error';
