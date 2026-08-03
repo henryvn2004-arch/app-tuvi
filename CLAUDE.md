@@ -312,6 +312,190 @@ không" nằm gọn trong hai bảng tra của một trang.
 
 ---
 
+## 🎙️ CMO SKILLS — B1 Brand Voice XONG, và 2 tiền đề của brief là SAI (2026-07-31, PR mới)
+
+Henry giao 3 việc: (1) brand voice guideline qua plugin `brand-voice`, (2) brand-check
+gate, (3) AI SEO qua `claude-seo`. Đo trước khi làm thì lộ 2 chuyện.
+
+### 🔴 Plugin claude.ai KHÔNG chạy trong container Claude Code
+`brand-voice` + `marketing` **đã bật** trên tài khoản, nhưng chúng là plugin **Cowork của
+claude.ai** — file skill KHÔNG có trong container này. Verify 3 đường: `ListSkills` rỗng ·
+0 thư mục plugin trên đĩa · `/mnt/skills` chỉ có bộ examples/public của Anthropic. Nên
+`guideline-generation` / `brand-voice-enforcement` **không gọi được ở đây**.
+- **Bất đối xứng cần nhớ:** `claude-seo` (`AgriciDaniel/claude-seo`, MIT, 12,9k★) là plugin
+  **theo REPO** → cài vào repo thì CHẠY ĐƯỢC trong Claude Code. Plugin Cowork thì không.
+- Henry chốt: tao tự viết guideline trong Claude Code, không đợi plugin.
+
+### 🔴 Hai lỗi "đã audit" KHÔNG nằm trong corpus
+Brief bảo fix `lỗi encoding` + `xưng hô lộn xộn` trong `khao_luan`. Đo thì:
+- **Encoding: 0 lỗi / 893 dòng** trên cả 5 bề mặt (`khao_luan` · `master_articles` ·
+  `tu_dien` · `van_dap.noi_dung` · `van_dap.script_final`). ⚠️ Lượt quét ĐẦU của tao báo
+  51 — **sai, do tự bắt `Â`/`Ã` vốn là chữ Việt hợp lệ**. Quét mojibake phải dùng mẫu
+  ĐÔI (`â€`, `Ã¡`, `Æ°`, `Ä‘`), đừng bắt ký tự đơn.
+- **Xưng hô: 248/324 bài (76,5%) KHÔNG xưng hô** với người đọc, chỉ **5 bài** trộn 2 kiểu.
+- ⇒ Hai lỗi này sống ở **tầng prompt run-time** (prose 47 tool sinh), không phải dữ liệu
+  lưu. **Doc nằm trong pgvector không tự fix được chúng** — phải sửa ở `lib/agent/prompts.ts`.
+  Henry đã duyệt đưa tầng prompt vào phạm vi.
+
+### Lỗi THẬT đo được (nền của guideline)
+| Lỗi | Số đo |
+|---|---|
+| Cung Tử Tức có **3 tên** | Tử Tức 12 · Tử Nữ 8 · Tử Tôn 1 |
+| Cung Nô Bộc có **2 tên** | Nô Bộc 11 · Giao Hữu 3 |
+| Trật tự từ không quy ước | `cung X` 135 · `X cung` 66 |
+| **19 bài phát 2 thẻ H1** | `#` 19 · `##` 269 · không có 36 |
+
+**2 thẻ H1 là lỗi SEO thật, không phải thẩm mỹ:** `public/khao-luan.html:109` và
+`app/api/khao-luan/route.ts:136` đã phát `<h1>` từ `title`, rồi `route.ts:17` đổi tiếp
+markdown `#` → `<h1>`. Bài mở bằng `#` là trang có 2 H1.
+
+### Đã làm
+- **`docs/BRAND-VOICE.md`** — NGUỒN CHUẨN. Trích từ 20 bài tốt nhất (**2 bài/chuyên mục ×
+  10 chuyên mục** — lấy top-20 toàn cục sẽ lệch hết về `hon-nhan`/`benh-tat`). 10 mục:
+  định vị · 5 đặc trưng giọng · xưng hô · giới tính · từ vựng chuẩn · cấu trúc · cấm ·
+  checklist QC · mẫu vàng.
+- **`_patches/migration-brand-voice.sql`** (✅ ĐÃ CHẠY prod): bảng `brand_voice_docs` +
+  `search_brand_voice()` + `get_brand_voice()`. RLS bật, **0 policy** = chỉ service key.
+  - **Bảng RIÊNG chứ không nhét vào `tuvi_docs`:** `tuvi_docs` là tri thức TỬ VI (để luận),
+    brand voice là luật VIẾT (để kiểm văn phong). Trộn chung thì RAG luận giải kéo nhầm
+    luật văn phong vào câu trả lời tử vi.
+  - **`get_brand_voice()` trả TRỌN doc** cho prompt injection. Style guide **phải vào
+    nguyên khối** — RAG lấy 6 mảnh rời ra "luật 7 và luật 12" mà thiếu luật 1, tệ hơn
+    không có. `search_brand_voice()` chỉ để tra lẻ từng luật.
+  - Chiều **1024** khớp `text-embedding-3-small` + `dimensions:1024` của
+    `lib/tools/registry.ts` → dùng chung một đường sinh embedding.
+- **`scripts/load-brand-voice.mjs`** — đồng bộ file → DB, cắt theo `##`, upsert theo
+  unique `(doc_key,version,kind,section)` nên nạp lại không đẻ bản trùng. `--dry-run` chạy
+  được không cần key.
+
+### Verify
+`md5(content)` trong DB = **`438c70f3…`** = md5 file → bản DB **byte-identical** với repo
+(`length()` 10.190 ký tự vs `wc -c` 12.984 byte là do UTF-8 tiếng Việt, không phải lệch) ·
+`get_brand_voice()` trả đúng 10.190 ký tự · RLS on / 0 policy · `--dry-run` cắt đúng 10 mục ·
+`prettier --check` sạch cả 3 file · `node --check` OK.
+⚠️ **`eslint` KHÔNG chạy được trong container** — `node_modules` rỗng (0 gói), thiếu
+`@eslint/js`. Lỗi môi trường có sẵn, không phải do PR này; CI tự cài nên vẫn phủ.
+
+### 🔴 Vòng sau — "sửa tầng prompt" hoá ra sửa NHẦM CHỖ
+Henry bảo sửa tầng prompt. Audit thì **`lib/agent/prompts.ts` KHÔNG có lỗi nào**:
+- `XUNG_HO_RULE` (dòng 181–185) đã đúng sẵn: không rõ giới → **"quý vị"**, NAM → "anh",
+  NỮ → "chị", cấm thẳng "bạn/em" và cấm đoán giới. Còn có chốt khéo: luật CHỈ bật khi
+  context có dòng `Người xem:` → không lẫn giới tính của **bé trong đặt-tên-con**.
+- Tên cung đã chuẩn (Tử Tức 3 · Tử Nữ 0 · Nô Bộc 4 · Giao Hữu 0), trật tự từ đã chuẩn
+  (`cung X` 30 · `X cung` 0).
+- 39 chữ "bạn" trong `lib/` đều là **dương tính giả**: "bạn bè" / "bạn đời" / "bạn diễn"
+  (danh từ), hoặc đang nói với **MODEL** ("bạn PHẢI tự khoanh vùng"), hoặc chính là câu
+  CẤM "bạn". **Đếm chuỗi thô rồi kết luận là sai — phải đọc ngữ cảnh từng chỗ.**
+
+**Lỗi nằm ở prompt SINH NỘI DUNG, hai file hoàn toàn khác:**
+
+| | `cron-khao-luan` | `cron-master-write` |
+|---|---|---|
+| Prompt | **6 dòng**, chỉ "văn phong nho nhã" | đầy đủ, có nêu `##`/`**bold**` |
+| Bài | 324 | 306 |
+| Tên cung sai | 12 (3,7%) | 1 (0,3%) |
+| Trật tự từ sai | 66 (20,4%) | 8 (2,6%) |
+| **Mở bằng `#`** | 19 (5,9%) | **96 (31,4%)** |
+
+Prompt đầy đủ giúp rõ rệt ở tên cung + trật tự từ ⇒ **xác nhận nguyên nhân là prompt**.
+Nhưng `cron-master-write` **tệ hơn hẳn về H1** vì nó nêu "`##` cho mục chính" mà **không
+CẤM `#`** → model viết `# Tiêu đề` rồi mới `##`. `app/nghien-cuu/[slug]/route.ts:211`
+cũng phát `<h1>` từ title y như khao-luan ⇒ **tổng 115 trang đang phát 2 thẻ H1**, không
+phải 19 như ghi ở vòng trước.
+
+### Đã làm (vòng 2)
+- **`lib/content/brand-rules.ts`** — `BRAND_FORMAT_RULES` + `normalizeBrandFormat()` +
+  `checkBrandFormat()`, tiêm vào **cả 2** prompt sinh nội dung.
+  - **CỐ Ý chỉ chứa luật CƠ HỌC** (tên cung · trật tự từ · cấp tiêu đề · tên sao).
+    KHÔNG nhét luật giọng/độ dài: `khao_luan` là ghi chép ngôi 3 ~300 từ, `master_articles`
+    là thầy người Hoa kể chuyện 1200–1500 từ — **ép chung giọng là xoá khác biệt đang cố ý**.
+  - **Không chỉ dặn model mà SỬA CƠ HỌC**: `normalizeBrandFormat` tự hạ `#`→`##` và đổi tên
+    cung sai. Việc nào máy làm đúng 100% được thì đừng trông chờ model nghe lời; việc cần
+    hiểu nghĩa (bịa sao, rule-dump) mới chỉ `console.warn`.
+- **12 ca test trên module thật, 0 fail** — gồm 2 chốt quan trọng: `#` GIỮA DÒNG không bị
+  đụng (`C#`, hashtag), và **`Â`/`Ã` tiếng Việt hợp lệ KHÔNG bị báo mojibake** (đúng lỗi
+  dương tính giả tao mắc ở vòng 1).
+- Verify: `tsc --noEmit` **0 lỗi** (đã `npm ci` + build engine) · `eslint` **0 lỗi** ·
+  `prettier --check` sạch.
+
+### ✅ Vòng 3 — backfill 115 bài + vendor claude-seo (Henry duyệt cả hai)
+- **Backfill ĐÃ CHẠY prod:** `regexp_replace(content,'^# ','## ','gm')` trên `khao_luan`
+  (19 dòng) + `master_articles` (96 dòng). Verify sau khi chạy: **0 bài còn mở bằng `#`**
+  ở cả hai bảng. Dry-run trước đó đã xác nhận `still_bad_after = 0`, không tác dụng phụ —
+  cờ `m` chỉ khớp `# ` ở ĐẦU DÒNG, không đụng `#` giữa câu.
+- **`claude-seo` vendor vào `.claude/`** (25 skill + 18 agent, 2,3M, MIT — LICENSE giữ tại
+  `.claude/skills/seo/LICENSE`). Bố cục **theo đúng `install.sh` upstream**: skill chính ở
+  `.claude/skills/seo/` có `scripts/`+`schema/`+`pdf/`+`bin/`+`hooks/` lồng bên trong, 24
+  sub-skill phẳng cạnh nó, agent ở `.claude/agents/`. Script Python gọi bằng đường dẫn
+  tương đối `scripts/*.py` **so với `.claude/skills/seo/`** → **đừng di chuyển thư mục đó,
+  22/25 skill sẽ gãy**.
+  - 🔴 **`.gitignore` đang chặn `.claude/`** → bản vendor sẽ KHÔNG commit, mỗi phiên mới lại
+    mất. Sửa `.claude/` → **`.claude/*`** rồi `!.claude/skills/` + `!.claude/agents/`.
+    **Phải dùng `.claude/*`**: với `.claude/` git không đi vào thư mục nên luật phủ định vô
+    hiệu. Verify cả 2 chiều: skill commit được, mà `settings.local.json` / `.credentials.json`
+    / `history.jsonl` vẫn bị chặn.
+  - **Bỏ CỐ Ý:** `screenshots/`(1,6M) `assets/` `tests/` `.devcontainer/` `.github/` (không
+    cần lúc chạy) và `extensions/`(516K — DataForSEO/Firecrawl/Banana đều cần key bên thứ
+    ba). Vì bỏ extensions nên thiếu `scripts/edit.py` + `scripts/presets.py`; chúng chỉ được
+    gọi bởi `seo/scripts/consistency_check.py`, **0 SKILL.md phụ thuộc** → không skill nào gãy.
+  - ⚠️ **Hook CỐ Ý không kích hoạt:** `seo/hooks/hooks.json` khai `PostToolUse` bắt MỌI
+    `Edit|Write` rồi **exit 2 để CHẶN** khi validate JSON-LD hỏng. Vendor dạng *skill* thì
+    `hooks.json` không tự nạp (chỉ plugin mới nạp) — đúng ý muốn: validator JSON-LD chặn mọi
+    lần sửa file trong repo Next.js này thì cản nhiều hơn giúp.
+  - Verify: 25/25 có `SKILL.md` frontmatter hợp lệ (`name`+`description`) · 18/18 agent có
+    `name:` · 29/31 script Python được gọi là có mặt (2 thiếu đã giải thích ở trên) ·
+    `prettier --check .` (QUÉT CẢ CÂY như CI) **sạch** · `npm run lint` **0 lỗi / 72 warning
+    = đúng mức pre-existing**, bản vendor không thêm cái nào · 234 file, 0 secret/local state.
+- Ghi chú: `docs/BRAND-VOICE.md` §6 nói "19 bài đang dính" — con số lúc viết; số ĐÚNG là
+  **115** (19 khao_luan + 96 master_articles), và nay đã backfill về 0.
+
+### 🔀 Vòng 4 — gộp với `brand-check.ts` vừa lên main (ĐỌC TRƯỚC KHI SỬA 2 FILE NÀY)
+Trong lúc làm PR này, `main` đi trước 10 commit và **đã có `lib/content/brand-check.ts`**
+(663 dòng — gate hậu kiểm 2 tầng auto+LLM, `content_qc_log`, tách profile
+`khao-luan`/`nghien-cuu`). Merge ra 3 xung đột, đều nằm giữa vùng vừa sửa.
+
+**Quan hệ hai hệ thống — đừng gộp làm một:**
+| | Vai | Chạy lúc |
+|---|---|---|
+| `brand-rules.ts` → `BRAND_FORMAT_RULES` | **PHÒNG** — tiêm luật vào prompt | TRƯỚC khi sinh |
+| `brand-check.ts` → `brandCheck()` | **CHỮA** — autofix · quét · nhờ LLM viết lại · chặn | SAU khi sinh |
+
+Giữ cả hai vì gate chạy sau và **mỗi bài trượt tốn thêm một lượt LLM viết lại** — dặn
+trước rẻ hơn sinh→bắt→sửa. Nhưng **đã GỠ `normalizeBrandFormat`/`checkBrandFormat`** khỏi
+`brand-rules.ts`: chúng trùng tầng auto của `brand-check.ts`, để hai bản luật song song thì
+chúng trôi khỏi nhau lúc nào không biết. **`brand-check.ts` là nguồn DUY NHẤT cho việc
+kiểm/sửa; `brand-rules.ts` chỉ còn đúng một hằng số đưa vào prompt.**
+
+- 🔑 **`brand-check.ts` đọc `brand_voice_docs`** — tức nó phụ thuộc CHÍNH migration/doc/loader
+  của PR này (main chưa có 3 file đó; bảng tồn tại trên prod chỉ vì tao tạo thẳng qua MCP).
+- `.gitignore`: giữ **cả hai** phủ định — `!.claude/settings.json` (của main, cho MCP ga4)
+  lẫn `!.claude/skills/` + `!.claude/agents/`.
+- Sau merge verify lại: `tsc` 0 lỗi · `lint` 0 lỗi/72 warning · `prettier --check .` sạch ·
+  md5 DB khớp md5 file (`76b6c280…`) sau khi sửa §6.
+
+### ⚠️ CI: workflow `pull_request` có lúc KHÔNG fire
+2 commit liên tiếp chỉ có Vercel + `smoke` chạy; lint/typecheck/test/lighthouse **không hề
+được tạo run** (10 workflow đều `active`, không có path filter). `smoke` vẫn chạy vì nó
+trigger bằng `deployment_status` ⇒ không phải hết quota. **Cách gỡ: Close rồi Reopen PR** —
+phát lại event `pull_request` và CI dựng lại đủ bộ. Commit rỗng KHÔNG kích được.
+**Bài học: PR "xanh" có thể chỉ là các check VẮNG MẶT, không phải pass — đếm đủ 7 check
+trước khi kết luận.**
+
+### CÒN LẠI
+- **Embedding mục CHƯA sinh** — container không có `OPENAI_API_KEY`. Dòng `kind='full'`
+  đã dùng được ngay (prompt injection không cần embedding); `search_brand_voice()` trả rỗng
+  cho tới khi chạy `node scripts/load-brand-voice.mjs` ở nơi có key.
+- **Tên cung sai vẫn còn trong bài CŨ** (`khao_luan` 12 · `master_articles` 1) — backfill vừa
+  rồi CHỈ sửa `#`, chưa đụng `Tử Nữ`/`Tử Tôn`/`Giao Hữu`. Bài SINH TỪ GIỜ đã sạch nhờ
+  `normalizeBrandFormat`. Muốn dọn nốt bài cũ thì chạy thêm một lượt update theo `CUNG_ALIASES`.
+- **B2 (brand-check gate) chưa nối vào pipeline** — `checkBrandFormat()` đã là sẵn phần tự
+  động hoá được, còn thiếu bước chặn trước khi publish.
+- **B3 mới xong phần CÀI** — chưa chạy skill nào. Việc đầu tiên nên làm theo brief:
+  semantic cluster map cho 8.958 trang `seo_pages` (`seo-cluster` + `seo-programmatic`),
+  rồi `seo-schema` / `seo-geo` / index monitor.
+
+---
+
 ## 💸 ĐO DOANH THU ĐANG BỊA 78% (2026-07-31, PR sau #350)
 
 Henry bảo đổi nốt hằng số 2.500đ trong `MKT_VND`/`dashboard_margin`/

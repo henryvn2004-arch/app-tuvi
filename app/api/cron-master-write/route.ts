@@ -8,6 +8,7 @@ import { logLlmUsage } from '@/lib/agent/usage';
 import { parseLlmJson } from '@/lib/llm/json';
 import { withCronLog } from '@/lib/cron/log';
 import { brandCheck } from '@/lib/content/brand-check';
+import { BRAND_FORMAT_RULES } from '@/lib/content/brand-rules';
 
 const SUPABASE_URL  = process.env.SUPABASE_URL!;
 const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY!;
@@ -273,6 +274,8 @@ KỸ THUẬT KỂ CHUYỆN — TUÂN THỦ NGHIÊM:
 
 FORMAT: 1200-1500 từ, markdown (## cho mục chính, **bold** cho điểm nhấn, > cho câu chiêm nghiệm đáng nhớ)
 KHÔNG đề cập AI, không học thuật cứng nhắc, không câu mở theo kiểu "Trong hành trình..."
+
+${BRAND_FORMAT_RULES}
 
 Chỉ trả về nội dung markdown, không bọc JSON, không backtick ngoài.`;
 
