@@ -73,6 +73,43 @@ rồi dán output vào chat.
 
 ---
 
+## 2b. MCP server Google Analytics (chính chủ) — phiên sau tự có
+
+Ngoài CLI, repo khai sẵn **MCP server chính chủ của Google** trong `.mcp.json`
+(tên server: `ga4`). Mỗi phiên Claude Code mở trong repo này sẽ **tự nạp**, không
+phải bấm ủy quyền lần nào — `.claude/settings.json` đã liệt kê nó trong
+`enabledMcpjsonServers`.
+
+**Điều kiện duy nhất: biến `GA4_SERVICE_ACCOUNT_JSON` phải có trong environment
+của Claude Code** (mục 2A ở trên). Nó dùng CHUNG đúng biến đó — không đẻ thêm
+credential nào. Thiếu biến thì server báo lỗi rõ ràng rồi thoát, không làm hỏng
+phiên.
+
+Đường đi: `.mcp.json` → `scripts/ga4-mcp.sh` → dựng file key tạm (`chmod 600`) →
+đặt `GOOGLE_APPLICATION_CREDENTIALS` + `GOOGLE_PROJECT_ID` (tự rút từ key) →
+`uvx analytics-mcp`. Nhận cả raw JSON lẫn base64, y như `parseServiceAccount()`
+trong `lib/analytics/ga4.ts`.
+
+9 tool: `get_account_summaries` · `get_property_details` · `list_google_ads_links`
+· `list_property_annotations` · `get_custom_dimensions_and_metrics` · `run_report`
+· `run_realtime_report` · `run_funnel_report` · `run_conversions_report`.
+
+> 🚨 **BẪY TÊN PACKAGE — đọc trước khi sửa `scripts/ga4-mcp.sh`.**
+> Repo của Google tên là `googleanalytics/google-analytics-mcp`, nhưng package
+> PyPI chính chủ tên **`analytics-mcp`**. Trên PyPI CÓ một package tên
+> `google-analytics-mcp` (trùng tên repo) nhưng là **của bên thứ ba**: tự xưng
+> "Google Analytics 4", bộ tool khác hẳn (`get_ga4_data`, `search_schema`…), và
+> **gửi telemetry**. Đi theo tên repo là cài nhầm — đã suýt dính một lần, và đây
+> là thứ sắp được trao service account đọc toàn bộ analytics của site.
+
+**Có MCP rồi thì còn cần `scripts/ga4.mjs` không?** Có, hai thứ bù nhau: MCP tiện
+cho Claude hỏi tương tác và với tới cả Admin API; CLI chạy được ở máy Henry bằng
+`--sa <file>` mà không cần dựng gì. **Cả hai đều KHÔNG thay thế env
+`GA4_SERVICE_ACCOUNT_JSON` trên Vercel** — badge "GA4" ở panel Funnel và
+`funnel.visitors` chạy server-side trên prod, MCP không với tới đó.
+
+---
+
 ## 3. Dùng
 
 ```bash

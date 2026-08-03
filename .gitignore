@@ -20,7 +20,11 @@ tuvi-engine/coverage/
 tsconfig.tsbuildinfo
 
 # Claude Code / harness local state
-.claude/
+# Ngoại lệ DUY NHẤT: settings.json phải theo repo thì MCP server `ga4` khai trong
+# .mcp.json mới được duyệt sẵn ở mọi phiên (container phiên clone lại từ đầu).
+# Mọi thứ khác trong .claude/ vẫn là state cục bộ — đừng commit.
+.claude/*
+!.claude/settings.json
 
 # Local data, generated outputs & scratch
 /qr/
