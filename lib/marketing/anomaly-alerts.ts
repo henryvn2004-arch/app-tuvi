@@ -224,7 +224,7 @@ export async function checkAnomalies(): Promise<{ fired: FiredAlert[]; checked: 
   // xanh. Đây đúng là bộ ba đã để CMO Digest chết 14 ngày mà không ai biết.
   checked.push('job_health', 'env_preflight');
   try {
-    const { evaluateJobs, fetchPgcronRuns, CRON_RUNS_LIMIT } = await import('@/lib/ops/jobs');
+    const { evaluateJobs, fetchPgcronRuns, syncJobFirstSeen, CRON_RUNS_LIMIT } = await import('@/lib/ops/jobs');
     const { missingCriticalEnv } = await import('@/lib/ops/preflight');
 
     const runsRes = await fetch(
@@ -237,7 +237,11 @@ export async function checkAnomalies(): Promise<{ fired: FiredAlert[]; checked: 
       // vắng mặt hoàn toàn trong cron_runs, chỉ dựa vào đó thì nó "chưa hề chạy"
       // vĩnh viễn và bắn cảnh báo sai mỗi ngày.
       const allRuns = [...(await runsRes.json()), ...(await fetchPgcronRuns())];
-      for (const j of evaluateJobs(allRuns)) {
+      // Đây là nơi GHI mốc first-seen: cron này chạy mỗi 3h nên job mới được
+      // ghi nhận sớm nhất, và nó cũng chính là nơi bắn cảnh báo — ghi ở đây thì
+      // mốc luôn tồn tại trước khi có ai kịp bị kêu oan.
+      const firstSeen = await syncJobFirstSeen();
+      for (const j of evaluateJobs(allRuns, firstSeen)) {
         // Lượt chạy bị GIẾT NGANG: dòng nhịp tim `running` còn treo quá lâu
         // (lib/cron/log.ts). Trước bản này, ca đó không để lại dòng nào trong
         // cron_runs nên nó đội lốt "QUÁ HẠN" — hai lượt 500 thật ngày 29/07
