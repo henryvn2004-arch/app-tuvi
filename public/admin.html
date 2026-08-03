@@ -351,6 +351,48 @@
 
         <div class="panel">
           <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>Tạo Link UTM (gắn cho quảng cáo)</div>
+          </div>
+          <div class="panel-body">
+            <div style="font-size:.72rem;color:var(--text-lt);margin-bottom:12px;line-height:1.5">Gắn UTM vào link quảng bá để bảng "Chiến Dịch" bên dưới đo được nguồn/campaign. Điền → <b>Tạo link</b> → dán vào bài quảng cáo, bio, tin nhắn… <b>Chưa chạy ads thì cứ Lưu để dành</b> — dữ liệu chỉ chảy khi có người bấm link đã gắn.</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:12px">
+              <label style="display:flex;flex-direction:column;gap:4px;font-size:.72rem;color:var(--text-lt);grid-column:1/-1">Trang đích (bắt buộc)
+                <input class="search-input" id="utm-base" list="utm-base-list" value="https://www.tuviminhbao.com/" placeholder="https://www.tuviminhbao.com/">
+                <datalist id="utm-base-list"><option value="https://www.tuviminhbao.com/"><option value="https://www.tuviminhbao.com/app"><option value="https://www.tuviminhbao.com/cong-cu"></datalist>
+              </label>
+              <label style="display:flex;flex-direction:column;gap:4px;font-size:.72rem;color:var(--text-lt)">Nguồn — utm_source (bắt buộc)
+                <input class="search-input" id="utm-source" list="utm-source-list" placeholder="facebook, tiktok, zalo…">
+                <datalist id="utm-source-list"><option value="facebook"><option value="tiktok"><option value="google"><option value="zalo"><option value="youtube"><option value="instagram"><option value="threads"><option value="email"></datalist>
+              </label>
+              <label style="display:flex;flex-direction:column;gap:4px;font-size:.72rem;color:var(--text-lt)">Kênh — utm_medium
+                <input class="search-input" id="utm-medium" list="utm-medium-list" placeholder="cpc, social, bio…">
+                <datalist id="utm-medium-list"><option value="cpc"><option value="paid-social"><option value="social"><option value="bio"><option value="email"><option value="referral"><option value="banner"></datalist>
+              </label>
+              <label style="display:flex;flex-direction:column;gap:4px;font-size:.72rem;color:var(--text-lt)">Chiến dịch — utm_campaign (bắt buộc)
+                <input class="search-input" id="utm-campaign" placeholder="tet-2027, ra-mat-app…">
+              </label>
+              <label style="display:flex;flex-direction:column;gap:4px;font-size:.72rem;color:var(--text-lt)">Từ khóa — utm_term (tùy chọn)
+                <input class="search-input" id="utm-term" placeholder="xem-boi, tu-vi…">
+              </label>
+              <label style="display:flex;flex-direction:column;gap:4px;font-size:.72rem;color:var(--text-lt)">Nội dung — utm_content (tùy chọn)
+                <input class="search-input" id="utm-content" placeholder="video-a, banner-b…">
+              </label>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
+              <button class="btn btn-gold btn-sm" onclick="utmBuild()">Tạo link</button>
+              <button class="btn btn-outline btn-sm" onclick="utmCopy()">📋 Copy</button>
+              <button class="btn btn-outline btn-sm" onclick="utmSave()">💾 Lưu để dành</button>
+            </div>
+            <input class="search-input" id="utm-out" readonly placeholder="Link gắn UTM sẽ hiện ở đây…" style="width:100%;font-family:monospace;font-size:.74rem" onclick="this.select()">
+            <div style="margin-top:14px">
+              <div style="font-size:.72rem;color:var(--text-lt);margin-bottom:6px">Link đã lưu (chỉ trên trình duyệt này)</div>
+              <div class="table-wrap" id="utm-saved"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>Chiến Dịch (UTM Campaign)</div>
           </div>
           <div class="table-wrap" id="mkt-campaigns">
@@ -3443,6 +3485,7 @@ async function loadMarketing() {
   loadAutopilotLog();
   loadMediaQueue();
   loadSeeding();
+  utmRenderSaved();
   _mktLoadedKey = fromEl.value + '|' + toEl.value;
 }
 
@@ -4054,6 +4097,70 @@ function renderMktCampaigns(rows) {
         <td style="text-align:right;color:var(--green)">${mktVnd(r.revenue_credits)}</td>
       </tr>`;
     }).join('')}</tbody>
+  </table>`;
+}
+
+// ── UTM Link Builder (thuần client) ────────────────────────────────────────
+// Ghép utm_* vào link quảng bá để bảng "Chiến Dịch" đo được nguồn/campaign.
+// KHÔNG đụng server, KHÔNG tự chạy ads — chỉ tạo + lưu link vào localStorage
+// của trình duyệt admin để dành cho lúc chạy quảng cáo.
+const UTM_LS = 'tvmb_admin_utm_links';
+function utmSlug(s) {
+  return (s || '').trim().toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '') // bỏ dấu tiếng Việt: "Tết" → "tet"
+    .replace(/đ/g, 'd')
+    .replace(/\s+/g, '-').replace(/[^a-z0-9._-]/g, '');
+}
+function utmBuild() {
+  const base = (document.getElementById('utm-base').value || '').trim();
+  if (!base) { toast('Nhập trang đích', 'error'); return ''; }
+  const src = utmSlug(document.getElementById('utm-source').value);
+  const camp = utmSlug(document.getElementById('utm-campaign').value);
+  if (!src || !camp) { toast('Cần ít nhất Nguồn + Chiến dịch', 'error'); return ''; }
+  let url;
+  try { url = new URL(base); } catch { toast('Link đích không hợp lệ', 'error'); return ''; }
+  const p = url.searchParams;
+  p.set('utm_source', src);
+  const med = utmSlug(document.getElementById('utm-medium').value);
+  if (med) p.set('utm_medium', med);
+  p.set('utm_campaign', camp);
+  const term = utmSlug(document.getElementById('utm-term').value);
+  const cont = utmSlug(document.getElementById('utm-content').value);
+  if (term) p.set('utm_term', term);
+  if (cont) p.set('utm_content', cont);
+  const out = url.toString();
+  document.getElementById('utm-out').value = out;
+  return out;
+}
+async function utmCopyText(txt) {
+  if (!txt) return;
+  try { await navigator.clipboard.writeText(txt); toast('Đã copy link', 'success'); }
+  catch { const el = document.getElementById('utm-out'); el.value = txt; el.select(); document.execCommand('copy'); toast('Đã copy link', 'success'); }
+}
+function utmCopy() { utmCopyText(document.getElementById('utm-out').value || utmBuild()); }
+function utmLoad() { try { return JSON.parse(localStorage.getItem(UTM_LS) || '[]'); } catch { return []; } }
+function utmSave() {
+  const out = utmBuild(); if (!out) return;
+  const list = utmLoad();
+  if (list.some(x => x.url === out)) { toast('Link này đã lưu', 'info'); return; }
+  list.unshift({ url: out, campaign: utmSlug(document.getElementById('utm-campaign').value), source: utmSlug(document.getElementById('utm-source').value), ts: Date.now() });
+  localStorage.setItem(UTM_LS, JSON.stringify(list.slice(0, 100)));
+  utmRenderSaved(); toast('Đã lưu', 'success');
+}
+function utmDel(i) { const list = utmLoad(); list.splice(i, 1); localStorage.setItem(UTM_LS, JSON.stringify(list)); utmRenderSaved(); }
+function utmCopyOne(i) { const it = utmLoad()[i]; if (it) utmCopyText(it.url); }
+function utmRenderSaved() {
+  const host = document.getElementById('utm-saved'); if (!host) return;
+  const list = utmLoad();
+  if (!list.length) { host.innerHTML = '<div class="empty" style="padding:12px">Chưa lưu link nào. Tạo link phía trên rồi bấm "Lưu để dành" cho lúc chạy ads.</div>'; return; }
+  host.innerHTML = `<table>
+    <thead><tr><th>Chiến dịch</th><th>Nguồn</th><th>Link</th><th></th></tr></thead>
+    <tbody>${list.map((it, i) => `<tr>
+      <td><strong>${it.campaign || '—'}</strong></td>
+      <td style="color:var(--text-lt)">${it.source || '—'}</td>
+      <td style="max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><span title="${it.url}" style="font-family:monospace;font-size:.72rem">${it.url}</span></td>
+      <td style="white-space:nowrap;text-align:right"><button class="btn btn-outline btn-sm" onclick="utmCopyOne(${i})">Copy</button> <button class="btn btn-ghost btn-sm" onclick="utmDel(${i})">Xóa</button></td>
+    </tr>`).join('')}</tbody>
   </table>`;
 }
 
