@@ -152,7 +152,7 @@
     '👑':'crown','🌙':'moon','🌐':'globe','✉':'mail','✉️':'mail','👓':'glasses','💪':'dumbbell','🌈':'rainbow','⚓':'anchor',
     '🎵':'music','🎶':'music','🎼':'music',
     '➡':'chevron-down','➡️':'chevron-down','⬆':'chevron-down','⬇':'chevron-down','⬅':'chevron-down','↗':'chevron-down','↘':'chevron-down','↙':'chevron-down','↖':'chevron-down',
-    '🏦':'landmark','🏛':'landmark','🏛️':'landmark','🎁':'gift','🎀':'gift',
+    '🏦':'landmark','🏛':'landmark','🏛️':'landmark','🎁':'gift','🎀':'gift','🎉':'gift','🎊':'gift',
     '⏳':'hourglass','⌛':'hourglass','⏰':'hourglass','⏱':'hourglass',
     '👥':'users','👪':'users','👨‍👩‍👧':'users','ℹ':'info','ℹ️':'info','💠':'info',
     '👤':'user','👦':'user','👧':'user','👕':'shirt','🎽':'shirt','🪄':'sparkles',
@@ -285,7 +285,7 @@
   // Conversion script — skip on chat page (social proof popup conflicts with chat UX)
   var _noConv = ['/tuvi-chat.html'];
   if (!document.getElementById('cv-script') && _noConv.indexOf(location.pathname) === -1) {
-    var cv=document.createElement('script'); cv.id='cv-script'; cv.src='/conversion.js?v=2'; document.body.appendChild(cv);
+    var cv=document.createElement('script'); cv.id='cv-script'; cv.src='/conversion.js?v=3'; document.body.appendChild(cv);
   }
   if (!document.getElementById('nav-css')) {
     var s=document.createElement('style'); s.id='nav-css'; s.textContent=css; document.head.appendChild(s);

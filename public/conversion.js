@@ -57,7 +57,7 @@ const POPUP_DATA = {
     cta: 'Khám Phá Công Cụ Mệnh Lý →',
     ctaHref: '/luan-giai.html',
     secondary: 'Để sau vậy',
-    urgency: '🔒 Theo cổ pháp · 紫微鬥數 · 子平八字 · 麻衣神相 · 八宅明鏡',
+    urgency: '<span class="ic-inline" data-icon="lock" data-icon-emoji="🔒" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔒</span> Theo cổ pháp · 紫微鬥數 · 子平八字 · 麻衣神相 · 八宅明鏡',
   },
   // Lá Số tool page — scarcity (đoạn cũ của homepage di chuyển về đây)
   '/luan-giai.html': {
@@ -67,7 +67,7 @@ const POPUP_DATA = {
     cta: 'Mở Khóa Luận Giải Đầy Đủ →',
     ctaHref: '#payment-section',
     secondary: 'Không, tôi chấp nhận bỏ lỡ',
-    urgency: '🔒 Phân tích cá nhân hoá · Theo cổ pháp · Bảo mật tuyệt đối',
+    urgency: '<span class="ic-inline" data-icon="lock" data-icon-emoji="🔒" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔒</span> Phân tích cá nhân hoá · Theo cổ pháp · Bảo mật tuyệt đối',
   },
   // Tử Bình Bát Tự
   '/tu-binh.html': {
@@ -77,7 +77,7 @@ const POPUP_DATA = {
     cta: 'Mở Khóa Luận Giải Đầy Đủ →',
     ctaHref: '#payment-section',
     secondary: 'Để sau vậy',
-    urgency: '🔒 Cổ pháp Tử Bình Chân Thuyên · Cá nhân hóa AI · Bảo mật tuyệt đối',
+    urgency: '<span class="ic-inline" data-icon="lock" data-icon-emoji="🔒" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔒</span> Cổ pháp Tử Bình Chân Thuyên · Cá nhân hóa AI · Bảo mật tuyệt đối',
   },
   '/xem-tuoi.html': {
     icon: '💑',
@@ -86,7 +86,7 @@ const POPUP_DATA = {
     cta: 'Xem Phân Tích Đầy Đủ →',
     ctaHref: '#payment-section',
     secondary: 'Thôi, tôi tự xử lý được',
-    urgency: '⚡ Kết quả ngay · Dựa trên lá số thực · Không phán chung chung',
+    urgency: '<span class="ic-inline" data-icon="zap" data-icon-emoji="⚡" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">⚡</span> Kết quả ngay · Dựa trên lá số thực · Không phán chung chung',
   },
   '/xem-lam-an.html': {
     icon: '🤝',
@@ -95,7 +95,7 @@ const POPUP_DATA = {
     cta: 'Xem Phân Tích Đầy Đủ →',
     ctaHref: '#payment-section',
     secondary: 'Không cần, tôi đã quyết rồi',
-    urgency: '⚡ Kết quả ngay · Dựa trên lá số thực · Không phán chung chung',
+    urgency: '<span class="ic-inline" data-icon="zap" data-icon-emoji="⚡" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">⚡</span> Kết quả ngay · Dựa trên lá số thực · Không phán chung chung',
   },
 };
 
@@ -107,7 +107,7 @@ const POPUP_DEFAULT = {
   cta: 'Xem Lá Số Cá Nhân →',
   ctaHref: '/luan-giai.html',
   secondary: 'Để sau vậy',
-  urgency: '🔒 Phân tích cá nhân hoá · Theo cổ pháp · Bảo mật tuyệt đối',
+  urgency: '<span class="ic-inline" data-icon="lock" data-icon-emoji="🔒" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔒</span> Phân tích cá nhân hoá · Theo cổ pháp · Bảo mật tuyệt đối',
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -276,14 +276,17 @@ function showToast() {
   const el = document.createElement('div');
   el.className = 'cv-toast';
   // Emoji avatar based on gender hint
-  const emoji = pair[0].startsWith('Anh') ? '👨' : '👩';
+  // Trước đây in thẳng 👨/👩. Giới tính đã nằm ở chữ "Anh/Chị" ngay cạnh
+  // nên dùng một icon dùng chung là đủ, không mất thông tin nào.
+  const emoji = '<span class="ic-inline" data-icon="user" data-icon-emoji="👤" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">👤</span>';
   el.innerHTML = `
     <div class="cv-toast-avatar">${emoji}</div>
     <div class="cv-toast-body">
       <div class="cv-toast-name">${pair[0]}</div>
       <div class="cv-toast-action">${action.action}</div>
-      <div class="cv-toast-time">📍 ${pair[1]} · ${relativeTime()}</div>
+      <div class="cv-toast-time"><span class="ic-inline" data-icon="pin" data-icon-emoji="📍" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📍</span> ${pair[1]} · ${relativeTime()}</div>
     </div>`;
+  if (window.mountIcons) window.mountIcons(el);
   wrap.appendChild(el);
 
   // Auto-hide
@@ -338,7 +341,7 @@ function showPopup() {
     <div class="cv-popup" role="dialog" aria-modal="true">
       <div class="cv-popup-top">
         <button class="cv-popup-close" aria-label="Đóng">✕</button>
-        <span class="cv-popup-icon">${data.icon}</span>
+        <span class="cv-popup-icon">${window.iconHtml ? window.iconHtml(data.icon) : data.icon}</span>
         <div class="cv-popup-headline">${data.headline}</div>
       </div>
       <div class="cv-popup-body">
@@ -349,6 +352,7 @@ function showPopup() {
       </div>
     </div>`;
 
+  if (window.mountIcons) window.mountIcons(overlay);
   document.body.appendChild(overlay);
   markPopupSeen();
 

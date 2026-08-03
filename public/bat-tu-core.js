@@ -58,7 +58,7 @@
 
   function renderCachCucCard(m) {
     const cls = !m.hopLe ? 'warn' : (m.override ? 'override' : '');
-    const badge = !m.hopLe ? '⚠ Bán cách' : (m.override ? '🔥 Ngoại cách (thay nội cách)' : '✨ Cách bổ trợ');
+    const badge = !m.hopLe ? '⚠ Bán cách' : (m.override ? '<span class="ic-inline" data-icon="flame" data-icon-emoji="🔥" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔥</span> Ngoại cách (thay nội cách)' : '<span class="ic-inline" data-icon="sparkles" data-icon-emoji="✨" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">✨</span> Cách bổ trợ');
     const reasons = (m.lyDo || []).map(r => '· ' + r).join('<br>');
     return `
       <div class="pregen-block ${cls}">
