@@ -60,11 +60,29 @@ const nextConfig = {
       { source: '/lam-dep',             destination: '/api/tu-vi-hub?cat=lam-dep'      },
       { source: '/dat-ten',             destination: '/api/tu-vi-hub?cat=dat-ten'      },
       { source: '/kien-thuc-tuvi',      destination: '/api/tu-vi-hub?cat=kien-thuc-tuvi' },
+      // Phân trang hub theo ĐƯỜNG DẪN, không dùng ?page=N.
+      // Lý do là độ chắc chắn, không phải thẩm mỹ: dạng này dùng ĐÚNG cơ chế
+      // "destination mang sẵn query" mà `/tu-vi/:slug` đã chứng minh chạy trên
+      // prod. Còn `?page=N` phải trông vào việc Next merge query TỪ NGOÀI vào
+      // destination — hành vi tôi không kiểm được từ container (prod chặn
+      // mạng, preview khoá sau SSO, và `next dev` thì bỏ luôn query của
+      // destination nên không dùng để kết luận được). Hỏng kiểu đó lại còn im
+      // lặng: mọi trang cứ hiện trang 1, không báo lỗi gì.
+      { source: '/phong-thuy/trang/:page',     destination: '/api/tu-vi-hub?cat=phong-thuy&page=:page'     },
+      { source: '/xem-tuong/trang/:page',      destination: '/api/tu-vi-hub?cat=xem-tuong&page=:page'      },
+      { source: '/chon-ngay/trang/:page',      destination: '/api/tu-vi-hub?cat=chon-ngay&page=:page'      },
+      { source: '/lam-dep/trang/:page',        destination: '/api/tu-vi-hub?cat=lam-dep&page=:page'        },
+      { source: '/dat-ten/trang/:page',        destination: '/api/tu-vi-hub?cat=dat-ten&page=:page'        },
+      { source: '/kien-thuc-tuvi/trang/:page', destination: '/api/tu-vi-hub?cat=kien-thuc-tuvi&page=:page' },
     ];
   },
   async redirects() {
     return [
       { source: '/app/xem-tuong', destination: '/app/dien-tuong', permanent: false },
+      // Gộp cụm kim lâu về MỘT URL. Trang trụ /kim-lau chứa đủ công cụ + công
+      // thức + bảng tra + hoá giải; để /tools/kim-lau.html sống song song là tự
+      // dựng lại đúng cặp URL triệt nhau vừa phải gỡ ở #358.
+      { source: '/tools/kim-lau.html', destination: '/kim-lau', permanent: true },
     ];
   },
 };

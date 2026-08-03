@@ -17,7 +17,7 @@
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="apple-touch-icon" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet"></noscript>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -79,7 +79,7 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 </style>
 <script src="/share.js"></script>
 <script src="/auth.js"></script>
-<script src="/nav.js?v=19"></script>
+<script src="/nav.js?v=20"></script>
 </head>
 <body>
 
@@ -97,7 +97,7 @@ body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--bg); color: 
 
 <div id="state-error" class="state-wrap" style="display:none">
   <div>
-    <div style="font-size:40px;margin-bottom:16px">📄</div>
+    <div style="font-size:40px;margin-bottom:16px"><span class="ic" data-icon="file-text"></span></div>
     <div style="font-family:'Noto Serif',serif;font-size:22px;color:var(--navy);margin-bottom:10px">Không tìm thấy bài viết</div>
     <div style="font-size:14px;color:var(--text-lt);margin-bottom:24px">Bài viết không tồn tại hoặc đã bị xóa.</div>
     <a href="/blog.html" style="padding:10px 24px;background:var(--navy);color:#fff;border-radius:6px;font-size:13px;text-decoration:none">← Về Vấn Đáp</a>
@@ -321,7 +321,7 @@ function render(d) {
 
 load();
 </script>
-<script src="/related-tools.js"></script>
+<script src="/related-tools.js?v=2"></script>
 <script src="/testimonials.js"></script>
 </body>
 </html>

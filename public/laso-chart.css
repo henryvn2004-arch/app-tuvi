@@ -55,7 +55,11 @@
 .laso-error{text-align:center;padding:20px;color:#C0392B;font-size:13px;background:#fff9f9;border:1px solid #fcc;border-radius:6px}
 
 @media(max-width:700px){
-  .laso-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  /* Lưới ép min-width 480px nên PHẢI có chỗ cuộn riêng. Trang standalone bọc
+     trong .laso-wrap, nhưng 3 trang shell nhét thẳng vào khung của chúng
+     (.chart-wrap ở /app + /app/luan-giai, .laso-one ở /app/xem-tuoi) → thiếu
+     luật này thì lưới đội ra ngoài và kéo CẢ khung workspace trôi ngang. */
+  .laso-wrap,.chart-wrap,.laso-one{overflow-x:auto;-webkit-overflow-scrolling:touch}
   .laso-grid{min-width:480px;font-size:10px}
   .cung-cell{min-height:100px;padding:4px 4px 20px}
   .cung-center{padding:8px}

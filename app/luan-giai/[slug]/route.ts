@@ -318,7 +318,7 @@ function buildLuanGiaiHTML(ls: Rec, params: IsrParams, slug: string): string {
 <meta property="og:locale" content="vi_VN">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="robots" content="index,follow">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet"></noscript>
 <script type="application/ld+json">${schema}</script>
 <script src="/auth.js" defer></script>
 <style>
@@ -396,7 +396,7 @@ h2.sec-title{font-family:'Noto Serif',serif;font-size:16px;text-transform:none;l
 </div>
 
 <script src="/footer.js"></script>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=19" defer></script>
+<script src="/track.js?v=3" defer></script><script src="/nav.js?v=20" defer></script>
 </body>
 </html>`;
 }

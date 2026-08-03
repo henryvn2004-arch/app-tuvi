@@ -408,7 +408,8 @@ ${_TIME()}
 
 Nguyên tắc:
 - ${FORMAT_RULE}
-- Ba hạn theo tuổi ta: Kim Lâu (chu kỳ 5 — kiêng cưới hỏi, xây dựng), Hoang Ốc (kiêng mua/xây nhà), Tam Tai (hạn 3 năm liền); giải thích năm nào phạm hạn nào, năm nào đẹp — DỰA ĐÚNG bảng đã cung cấp
+- Ba hạn theo tuổi ta: Kim Lâu (tuổi ta chia 9 dư 1/3/6/8 — kiêng cưới hỏi, xây dựng), Hoang Ốc (kiêng mua/xây nhà), Tam Tai (hạn 3 năm liền); giải thích năm nào phạm hạn nào, năm nào đẹp — DỰA ĐÚNG bảng đã cung cấp
+- Bốn số dư ứng bốn LOẠI Kim Lâu, mỗi loại hại một đối tượng khác nhau: dư 1 = Thân (hại chính gia chủ), dư 3 = Thê (hại người vợ), dư 6 = Tử (hại con cái), dư 8 = Lục Súc (hại vật nuôi, tài sản). Bảng đã ghi sẵn loại của từng năm — hãy GỌI ĐÍCH DANH loại và nói nó hại ai, vì đó là phần quyết định mức hệ trọng (Kim Lâu Thê thì nên hoãn cưới, Lục Súc thì nhẹ hơn hẳn). KHÔNG tự suy loại nếu bảng không ghi
 - Nêu cách hóa giải (mượn tuổi người hợp đứng chủ sự, chọn năm khác, chọn ngày giờ tốt) khi phạm; nói thẳng năm nên/tránh cho việc làm nhà, cưới hỏi
 - Đây là kiêng kỵ dân gian mang tính tham khảo; KHÔNG bịa thêm ngoài bảng
 
@@ -1035,9 +1036,14 @@ function extractGenericContext(data: any): string {
   return ctx;
 }
 
-// Shape từ module dùng chung tools-shared/kim-lau.js (nguồn chuẩn = trang
-// standalone): { nam, canChi, napAm, namHienTai, tuoiTaHienTai,
-// hienTai:{kimLau,hoangOc,tamTai}, rows:[{year,tuoiTa,canChi,kimLau,hoangOc,tamTai}] }.
+// Shape từ module dùng chung tools-shared/kim-lau.js (nguồn chuẩn = trang trụ
+// /kim-lau): { nam, canChi, napAm, namHienTai, tuoiTaHienTai,
+// hienTai:{kimLau,kimLauLoai,hoangOc,tamTai},
+// rows:[{year,tuoiTa,canChi,kimLau,kimLauLoai,hoangOc,tamTai}] }.
+// `kimLauLoai` ('Thân'|'Thê'|'Tử'|'Lục Súc'|null) vào từ #359. Phải chuyển tiếp
+// xuống prompt: thiếu nó thì rail chỉ nói được "phạm Kim Lâu" trống trong khi
+// bảng ngay cạnh đã ghi "Kim Lâu Thê — ảnh hưởng tới người vợ", và loại mới là
+// thứ quyết định người ta có hoãn cưới hay không.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractKimLauContext(data: any): string {
   if (!data) return '';
@@ -1046,14 +1052,14 @@ function extractKimLauContext(data: any): string {
   if (d.canChi) ctx += `Tuổi: ${d.canChi}${d.nam ? ` (${d.nam})` : ''} — nạp âm ${d.napAm || ''}\n`;
   if (d.namHienTai) ctx += `Năm hiện tại: ${d.namHienTai}, tuổi ta ${d.tuoiTaHienTai}\n`;
   if (d.hienTai) {
-    const now = [d.hienTai.kimLau && 'Kim Lâu', d.hienTai.hoangOc && 'Hoang Ốc', d.hienTai.tamTai && 'Tam Tai'].filter(Boolean);
+    const now = [d.hienTai.kimLau && ('Kim Lâu' + (d.hienTai.kimLauLoai ? ' ' + d.hienTai.kimLauLoai : '')), d.hienTai.hoangOc && 'Hoang Ốc', d.hienTai.tamTai && 'Tam Tai'].filter(Boolean);
     ctx += `Năm nay: ${now.length ? 'PHẠM ' + now.join(', ') : 'không phạm hạn nào (bình thường)'}\n`;
   }
   if (Array.isArray(d.rows) && d.rows.length) {
     ctx += '\nBảng 20 năm tới:\n';
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     d.rows.forEach((r: any) => {
-      const flags = [r.kimLau && 'Kim Lâu', r.hoangOc && 'Hoang Ốc', r.tamTai && 'Tam Tai'].filter(Boolean);
+      const flags = [r.kimLau && ('Kim Lâu' + (r.kimLauLoai ? ' ' + r.kimLauLoai : '')), r.hoangOc && 'Hoang Ốc', r.tamTai && 'Tam Tai'].filter(Boolean);
       ctx += `  ${r.year} (tuổi ta ${r.tuoiTa}, ${r.canChi}): ${flags.length ? 'PHẠM ' + flags.join(', ') : 'đẹp'}\n`;
     });
   }

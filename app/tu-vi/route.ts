@@ -109,7 +109,7 @@ export async function GET() {
 <link rel="canonical" href="${BASE}/tu-vi">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&display=swap" rel="stylesheet"></noscript>
 <script type="application/ld+json">${JSON.stringify({
   '@context':'https://schema.org','@type':'CollectionPage',
   name:'Tử Vi Minh Bảo — Tra Cứu Tử Vi Đẩu Số',
@@ -176,7 +176,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 <script src="/auth.js"></script>
 </head>
 <body>
-<script src="/nav.js?v=19"></script>
+<script src="/nav.js?v=20"></script>
 
 <div class="hero">
   <div class="hero-eyebrow">Tra Cứu</div>

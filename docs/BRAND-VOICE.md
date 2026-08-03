@@ -164,7 +164,8 @@ hoặc *Hóa Khoa*) và "Cứu Tỉnh sao" (vô nghĩa). Sao nào không chắc 
 1. **Mở bằng `##`, KHÔNG BAO GIỜ dùng `#`.**
    Lý do kỹ thuật, không phải thẩm mỹ: cả `public/khao-luan.html:109` lẫn
    `app/api/khao-luan/route.ts:136` đã phát `<h1>` từ `title`; markdown `#` bị đổi tiếp thành
-   `<h1>` (`route.ts:17`) ⇒ **trang có 2 thẻ H1**. Hiện 19 bài đang dính.
+   `<h1>` (`route.ts:17`) ⇒ **trang có 2 thẻ H1**. Đã đo 115 bài dính
+   (19 `khao_luan` + 96 `master_articles`) và backfill về 0 ngày 2026-08-03.
 2. Độ dài: **1.200–1.600 ký tự** (corpus: trung bình 1.380, cao nhất 2.858).
 3. 4–6 đoạn, mỗi đoạn 2–5 câu. Không đoạn một câu.
 4. `**đậm**` cho tên cung/sao lần đầu và cho 2–4 khái niệm chốt. Không đậm cả câu.

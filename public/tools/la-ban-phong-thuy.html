@@ -10,7 +10,7 @@
 <meta property="og:image" content="https://www.tuviminhbao.com/og-image.webp"/>
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet"></noscript>
 <style>
 :root{
   --navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;
@@ -179,7 +179,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
 <body>
 
 <div class="hero">
-  <h1>🧭 La Bàn Phong Thủy</h1>
+  <h1><span class="ic" data-icon="compass"></span> La Bàn Phong Thủy</h1>
   <p>Xác định hướng thực tế bằng cảm biến điện thoại — 8 hướng Bát Trạch</p>
 </div>
 
@@ -242,7 +242,7 @@ h1,h2,h3{font-family:'Noto Serif',serif;}
   </div>
 
   <div class="calibrate">
-    💡 Để calibrate: cầm điện thoại ngang, xoay nhẹ theo hình số 8 vài lần.<br>
+    <span class="ic" data-icon="lightbulb"></span> Để calibrate: cầm điện thoại ngang, xoay nhẹ theo hình số 8 vài lần.<br>
     Đặt điện thoại song song với cửa chính để đo hướng nhà.
   </div>
 
@@ -430,6 +430,6 @@ window.addEventListener('DOMContentLoaded', init);
     </div>
   </div>
 </section>
-<script src="/nav.js?v=19" defer></script>
+<script src="/nav.js?v=20" defer></script>
 </body>
 </html>

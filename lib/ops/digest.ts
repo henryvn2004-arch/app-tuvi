@@ -18,7 +18,7 @@
 //     S2 là chuông báo cháy, cái này là điểm danh.)
 // ============================================================
 
-import { CRON_RUNS_LIMIT, evaluateJobs, fetchPgcronRuns, type CronRun } from './jobs';
+import { CRON_RUNS_LIMIT, evaluateJobs, fetchPgcronRuns, syncJobFirstSeen, type CronRun } from './jobs';
 import { checkEnv } from './preflight';
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -91,7 +91,10 @@ export async function buildOpsDigest(): Promise<OpsDigest> {
   ]);
 
   const runs: CronRun[] = [...(runsRes && runsRes.ok ? await runsRes.json() : []), ...pgcronRuns];
-  const jobs = evaluateJobs(runs);
+  // Cùng bản đồ first-seen với cảnh báo 3h/lượt — hai bộ dò đọc hai mốc khác
+  // nhau thì digest 07:30 và cảnh báo 10:00 lại nói ngược nhau về CÙNG một job,
+  // đúng chuyện đã xảy ra hôm 30/07 khi chúng nhìn hai bản cache khác nhau.
+  const jobs = evaluateJobs(runs, await syncJobFirstSeen());
   const envs = checkEnv();
 
   const lines: string[] = [];

@@ -15,18 +15,16 @@ export interface CreditPackage {
   amountVnd: number;
   amountUsd: string; // chuỗi 2 chữ số thập phân cho PayPal (vd '4.00')
   label: string;
-  bonusLabel?: string;
 }
 
-// Dùng khi DB đọc hụt — phải KHỚP `credit_packages` trên prod. Bản trước còn
-// giữ số của seed đầu tiên (50/120/350/800 Lượng) trong khi DB đã là
-// 100/240/700/1600, tức một nhịp Supabase chớp là user trả đủ tiền mà nhận
-// đúng một nửa số Lượng.
+// Khớp seed migration-credit-packages.sql + migration-pricing-v2.sql.
+// Dùng khi DB đọc hụt — phải GIỮ KHỚP với DB, vì để lệch thì đúng lúc Supabase
+// chớp một nhịp người dùng trả 99.000đ mà chỉ nhận 50 Lượng thay vì 100.
 const FALLBACK: Record<string, CreditPackage> = {
-  '50':  { packageId: '50',  credits: 100,  amountVnd: 99_000,  amountUsd: '4.00',  label: 'Khởi Đầu',  bonusLabel: '4 lá số' },
-  '120': { packageId: '120', credits: 240,  amountVnd: 199_000, amountUsd: '8.00',  label: 'Phổ Thông', bonusLabel: '9 lá số' },
-  '350': { packageId: '350', credits: 700,  amountVnd: 499_000, amountUsd: '20.00', label: 'Cao Cấp',   bonusLabel: '28 lá số' },
-  '800': { packageId: '800', credits: 1600, amountVnd: 999_000, amountUsd: '40.00', label: 'VIP',       bonusLabel: '64 lá số' },
+  '50':  { packageId: '50',  credits: 100,  amountVnd: 99_000,  amountUsd: '4.00',  label: 'Khởi Đầu' },
+  '120': { packageId: '120', credits: 240,  amountVnd: 199_000, amountUsd: '8.00',  label: 'Phổ Thông' },
+  '350': { packageId: '350', credits: 700,  amountVnd: 499_000, amountUsd: '20.00', label: 'Cao Cấp' },
+  '800': { packageId: '800', credits: 1600, amountVnd: 999_000, amountUsd: '40.00', label: 'VIP' },
 };
 
 const TTL_MS = 60_000;
@@ -41,12 +39,12 @@ export async function getPackages(): Promise<Record<string, CreditPackage>> {
   if (SUPABASE_URL && SUPABASE_KEY) {
     try {
       const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/credit_packages?enabled=eq.true&select=package_id,credits,amount_vnd,amount_usd,label,bonus_label`,
+        `${SUPABASE_URL}/rest/v1/credit_packages?enabled=eq.true&select=package_id,credits,amount_vnd,amount_usd,label`,
         { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } },
       );
       if (res.ok) {
         const rows = (await res.json()) as {
-          package_id: string; credits: number; amount_vnd: number; amount_usd: string | number; label: string; bonus_label?: string;
+          package_id: string; credits: number; amount_vnd: number; amount_usd: string | number; label: string;
         }[];
         if (rows.length) {
           map = {};
@@ -57,7 +55,6 @@ export async function getPackages(): Promise<Record<string, CreditPackage>> {
               amountVnd: Number(r.amount_vnd),
               amountUsd: Number(r.amount_usd).toFixed(2),
               label: r.label,
-              bonusLabel: r.bonus_label || undefined,
             };
           }
         }
@@ -125,4 +122,31 @@ export async function quoteCustomVnd(amountVnd: number): Promise<CustomQuote> {
 
 export function invalidatePackages() {
   cache = null;
+}
+
+/**
+ * Đơn giá quy đổi 1 Lượng ≈ VNĐ, dùng khi cần NÓI một con số tiền cho người
+ * dùng (vd đồng hồ rail: "Luận Giải 100 Lượng ≈ 82.900đ").
+ *
+ * DÙNG CHUNG quy tắc với hàm SQL `credit_vnd()`: lấy đơn giá của **gói thứ
+ * hai** theo thứ tự giá tăng dần — bậc phổ thông, mức đại diện nhất — rồi mới
+ * rơi về gói đầu, rồi 1000.
+ *
+ * ⚠️ TỰ TÍNH LẠI Ở ĐÂY, KHÔNG gọi RPC: `credit_vnd()` phục vụ các RPC báo cáo;
+ * gọi nó từ route chỉ để lấy một con số là thêm một lượt mạng vào đường nóng
+ * của rail. Đổi lại phải giữ ĐÚNG cùng quy tắc — lệch quy tắc thì trang admin
+ * và rail nói hai giá khác nhau cho cùng một Lượng.
+ *
+ * KHÔNG đọc `app_config['credits.vnd_per_credit']`: khoá đó đã bị gỡ khi đường
+ * đo doanh thu chuyển sang tiền thật. Đọc khoá đã chết thì im lặng rơi về mặc
+ * định 1000 trong khi giá thật là 829 — sai 20% mà không có gì báo.
+ */
+export async function vndPerCredit(): Promise<number> {
+  const pkgs = Object.values(await getPackages()).filter((p) => p.credits > 0 && p.amountVnd > 0);
+  if (!pkgs.length) return 1000;
+  // getPackages() không giữ `sort_order` → sắp theo amountVnd tăng dần, cùng
+  // thứ tự mà sort_order đang thể hiện (gói rẻ nhất trước).
+  const byPrice = [...pkgs].sort((a, b) => a.amountVnd - b.amountVnd);
+  const tier = byPrice[1] || byPrice[0];
+  return Math.round(tier.amountVnd / tier.credits);
 }

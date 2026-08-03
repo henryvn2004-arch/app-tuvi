@@ -15,7 +15,7 @@
 <link rel="canonical" href="">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet"></noscript>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--navy:#061A2E;--blue:#1455A4;--gold:#9A7B3A;--gold-lt:#F9F4EB;--text:#1a1a1a;--text-mid:#444;--text-lt:#777;--border:#CCCCCC;--bg:#FFFFFF;--bg-soft:#F5F4F0}
@@ -61,7 +61,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 </head>
 <body>
 <script src="/auth.js"></script>
-<script src="/nav.js?v=19"></script>
+<script src="/nav.js?v=20"></script>
 
 
 <div class="breadcrumb">
@@ -78,7 +78,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 
 <div id="state-error" class="state-wrap" style="display:none">
   <div>
-    <div style="font-size:40px;margin-bottom:16px">📚</div>
+    <div style="font-size:40px;margin-bottom:16px"><span class="ic" data-icon="book-open"></span></div>
     <div style="font-family:'Noto Serif',serif;font-size:22px;color:var(--navy);margin-bottom:10px">Không tìm thấy tài liệu</div>
     <div style="font-size:14px;color:var(--text-lt);margin-bottom:24px">Tài liệu không tồn tại hoặc đang được cập nhật.</div>
     <a href="/resources.html" style="padding:10px 24px;background:var(--navy);color:#fff;border-radius:6px;font-size:13px;text-decoration:none">← Về Thư Viện</a>
@@ -236,6 +236,6 @@ function render(book) {
 load();
 </script>
 <script src="/testimonials.js"></script>
-<script src="/related-tools.js"></script>
+<script src="/related-tools.js?v=2"></script>
 </body>
 </html>

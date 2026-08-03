@@ -2,12 +2,12 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<script src="https://js.sentry-cdn.com/f884fb7e9d257df10ecb6dbe562141cb.min.js" crossorigin="anonymous"></script>
+<script src="https://js.sentry-cdn.com/f884fb7e9d257df10ecb6dbe562141cb.min.js" crossorigin="anonymous" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bảng Giá & Nạp Lượng — Tử Vi Minh Bảo</title>
 <meta name="description" content="Nạp lượng để sử dụng các công cụ Tử Vi Minh Bảo. Đăng ký nhận Lượng miễn phí. Không hết hạn.">
 <link rel="icon" type="image/webp" href="/seal.webp">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
 <style>
 :root{
   --navy:#061A2E;--navy-mid:#0D3B5E;--blue:#1455A4;
@@ -184,10 +184,11 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 </style>
 <script src="/track.js?v=3"></script>
 <script>try{window.Track&&window.Track.event&&window.Track.event('topup_start',{meta:{from:'topup_page'}})}catch(e){}</script>
+<script src="/tool-prices.js?v=2"></script>
 <script src="/auth.js"></script>
 </head>
 <body>
-<script src="/nav.js?v=19"></script>
+<script src="/nav.js?v=20"></script>
 
 <main class="wrap">
   <div class="page-header">
@@ -307,21 +308,12 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 const SUPABASE_URL  = 'https://dciwkfdqhhddeymlisey.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 
-// Đơn giá cuối cùng do SERVER chốt (`lib/billing/packages.ts` → `quoteCustomVnd`).
-// Bản dựng ở đây chỉ để xem trước tức thì, và PHẢI ra cùng kết quả — lệch là
-// trang hứa một đằng, trừ tiền một nẻo. Có test đối chiếu hai bản trên cùng
-// một dải số tiền.
-const CUSTOM_FALLBACK_RATE = 2500;
-
-// Gói dự phòng — KHỚP `credit_packages` trên prod. Bản cũ để số cũ (đúng một
-// nửa số Lượng thật) rồi trông chờ fetch ghi đè, nên trang chớp giá SAI trước
-// khi tải xong, và fetch hỏng thì hiển thị sai luôn.
-const FALLBACK_PACKAGES = [
-  { package_id: '50',  credits: 100,  amount_vnd: 99000,  label: 'Khởi Đầu',  bonus_label: '4 lá số'  },
-  { package_id: '120', credits: 240,  amount_vnd: 199000, label: 'Phổ Thông', bonus_label: '9 lá số'  },
-  { package_id: '350', credits: 700,  amount_vnd: 499000, label: 'Cao Cấp',   bonus_label: '28 lá số' },
-  { package_id: '800', credits: 1600, amount_vnd: 999000, label: 'VIP',       bonus_label: '64 lá số' },
-];
+// ⚠️ KHÔNG chép số gói vào đây. Nguồn duy nhất là `credit_packages` qua
+// ToolPrices (public/tool-prices.js) — admin sửa, không cần deploy. Bản dự
+// phòng cứng trước đây đã hai lần nói dối người mua (số Lượng sai một nửa,
+// rồi "64 lá số" trong khi mua được 16). Chưa đọc được giá thì trang hiện
+// khung chờ, KHÔNG hiện số phỏng đoán.
+const FALLBACK_PACKAGES = [];
 const PKG_ICONS = ['leaf', 'star', 'gem', 'crown'];
 // Chưa có cột `featured` dưới DB → gói thứ HAI theo sort_order là gói được làm
 // nổi (đúng gói mà bản cũ viết cứng), và cũng là gói dùng để quy đổi đ/Lượng
@@ -368,6 +360,15 @@ function setMethod(m) {
 // ── Gói nạp ──────────────────────────────────────────────────
 function renderPackages() {
   const list = pkgList();
+  // Chưa đọc được `credit_packages` → khung chờ. CỐ Ý không vẽ gói phỏng đoán:
+  // đây là trang thu tiền, hiện sai số Lượng còn tệ hơn hiện chậm.
+  if (!list.length) {
+    document.getElementById('packages').innerHTML =
+      '<div class="state-msg" style="grid-column:1/-1">'
+      + '<span data-icon="rotate-cw" class="spin"></span> Đang tải bảng giá…</div>';
+    mount(document.getElementById('packages'));
+    return;
+  }
   // "Rẻ hơn N%" so với gói có ĐƠN GIÁ CAO NHẤT trong chính bảng này — mốc tự
   // suy từ dữ liệu nên đổi giá dưới DB là con số tự đúng, không viết cứng.
   const rates = list.map(p => p.amount_vnd / p.credits);
@@ -386,7 +387,7 @@ function renderPackages() {
       + '<div class="pkg-credits">' + p.credits + ' Lượng</div>'
       + '<div class="pkg-rate">' + vnd(Math.round(rate)) + ' / Lượng'
       + (save >= 5 ? '<span class="pkg-save">rẻ hơn ' + save + '%</span>' : '') + '</div>'
-      + '<div class="pkg-note">' + (p.bonus_label ? '≈ ' + esc(p.bonus_label) + ' đầy đủ' : 'Không hết hạn') + '</div>'
+      + '<div class="pkg-note">Không hết hạn</div>'
       // Giá đã to đùng ngay trên nút → nhắc lại trong nút là thừa. Giữ ngữ cảnh
       // cho trình đọc màn hình bằng aria-label vì 4 nút giờ đọc giống hệt nhau.
       + '<button class="btn-pkg" id="btn-' + esc(p.package_id) + '" onclick="payPackage(\'' + esc(p.package_id) + '\')"'
@@ -404,22 +405,21 @@ function btnLabelFor() {
 }
 
 async function loadPackages() {
-  try {
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/credit_packages?enabled=eq.true&select=package_id,credits,amount_vnd,label,bonus_label&order=sort_order.asc`,
-      { headers: { apikey: SUPABASE_ANON } }
-    );
-    const pkgs = await res.json();
-    if (Array.isArray(pkgs) && pkgs.length) {
-      const clean = pkgs.map(p => ({
-        package_id: String(p.package_id), credits: Number(p.credits),
-        amount_vnd: Number(p.amount_vnd), label: p.label || '', bonus_label: p.bonus_label || '',
-      })).filter(p => p.credits > 0 && p.amount_vnd > 0);
-      if (clean.length) State.packages = clean;
-    }
-  } catch (e) { /* giữ FALLBACK_PACKAGES */ }
+  // Gói đọc qua ToolPrices — cùng một nguồn với giá công cụ, một lượt fetch cho
+  // cả trang, cache sessionStorage.
+  if (window.ToolPrices) {
+    await window.ToolPrices.load();
+    const pkgs = window.ToolPrices.packages();
+    if (pkgs.length) State.packages = pkgs;
+  }
 
   const list = pkgList();
+  if (!list.length) {
+    // Không đọc được: để trang ở khung chờ và thử lại một nhịp, thay vì bịa gói.
+    renderPackages();
+    setTimeout(loadPackages, 4000);
+    return;
+  }
   const ref = list[FEATURED_INDEX] || list[0];
   State.vndPerCredit = ref.amount_vnd / ref.credits;
   State.rateLabel = ref.label;
@@ -489,11 +489,8 @@ function checkCancelledPayment() {
 async function loadToolPricing() {
   const box = document.getElementById('costsContent');
   try {
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/tool_pricing?enabled=eq.true&select=tool_id,label,credits,icon,category,sort_order,is_free,description&order=sort_order.asc`,
-      { headers: { 'apikey': SUPABASE_ANON } }
-    );
-    const tools = await res.json();
+    if (window.ToolPrices) await window.ToolPrices.load();
+    const tools = window.ToolPrices ? window.ToolPrices.rows() : [];
     if (!tools?.length) { box.innerHTML = '<div class="state-msg">Không có dữ liệu.</div>'; return; }
 
     const groups = {};
@@ -511,10 +508,11 @@ async function loadToolPricing() {
     const isFree = t => t.is_free || Number(t.credits) === 0;
     const freeCount = tools.filter(isFree).length;
 
-    // Quy đổi ra tiền theo ĐƠN GIÁ THẬT của gói phổ biến. Bản cũ nhân cứng
-    // 2.500đ — đơn giá mua lẻ — nên báo đắt hơn thực tế tới 3 lần cho đúng
-    // những người đã mua gói.
-    const perCredit = State.vndPerCredit || CUSTOM_FALLBACK_RATE;
+    // Quy đổi ra tiền theo ĐƠN GIÁ THẬT của gói phổ biến. Chưa biết đơn giá
+    // (chưa đọc được `credit_packages`) thì BỎ cột quy đổi, không nhân với một
+    // hằng số: bản cũ nhân cứng 2.500đ — đơn giá của bảng giá đã bỏ — nên báo
+    // đắt hơn thực tế gần 3 lần.
+    const perCredit = State.vndPerCredit;
 
     let html = '';
     sortedCats.forEach(cat => {
@@ -523,7 +521,7 @@ async function loadToolPricing() {
       if (!rows.length) return;
       html += '<div class="cost-category">' + esc(cat) + '</div>';
       rows.forEach(t => {
-        const money = Math.ceil((Number(t.credits) * perCredit) / 1000) * 1000;
+        const money = perCredit ? Math.ceil((Number(t.credits) * perCredit) / 1000) * 1000 : null;
         html += '<div class="cost-row">'
           + '<div class="cost-left">'
           + '<div class="cost-icon-wrap">' + (window.iconHtml ? window.iconHtml(t.icon) : '') + '</div>'
@@ -531,7 +529,7 @@ async function loadToolPricing() {
           + (t.description ? '<div class="cost-desc">' + esc(t.description) + '</div>' : '')
           + '</div></div>'
           + '<div class="cost-right"><div class="cost-credits">' + Number(t.credits) + ' Lượng</div>'
-          + '<div class="cost-vnd">≈ ' + vnd(money) + '</div></div>'
+          + (money ? '<div class="cost-vnd">≈ ' + vnd(money) + '</div>' : '') + '</div>'
           + '</div>';
       });
     });
@@ -539,9 +537,10 @@ async function loadToolPricing() {
     box.innerHTML = html || '<div class="state-msg">Không có dữ liệu.</div>';
     mount(box);
 
-    document.getElementById('costsSubtitle').textContent =
-      'Cập nhật tự động khi có công cụ mới. Số tiền quy đổi theo gói ' + State.rateLabel
-      + ' (' + vnd(Math.round(perCredit)) + '/Lượng) — gói lớn hơn thì rẻ hơn nữa.';
+    document.getElementById('costsSubtitle').textContent = perCredit
+      ? 'Cập nhật tự động khi có công cụ mới. Số tiền quy đổi theo gói ' + State.rateLabel
+        + ' (' + vnd(Math.round(perCredit)) + '/Lượng) — gói lớn hơn thì rẻ hơn nữa.'
+      : 'Cập nhật tự động khi có công cụ mới.';
 
     if (freeCount > 0) {
       document.getElementById('freeNoteText').innerHTML =
@@ -560,9 +559,9 @@ async function loadToolPricing() {
 /** BẢN SAO của `quoteCustomVnd` phía server — sửa một bên thì sửa cả hai. */
 function quoteCustom(vndAmount) {
   const list = pkgList().filter(p => p.credits > 0 && p.amount_vnd > 0);
-  if (!list.length) {
-    return { credits: Math.floor(vndAmount / CUSTOM_FALLBACK_RATE), vndPerCredit: CUSTOM_FALLBACK_RATE, tierLabel: '' };
-  }
+  // Chưa biết bậc gói thì KHÔNG quy đổi. Bản cũ rơi về hằng số 2.500đ/Lượng —
+  // đơn giá của bảng giá đã bỏ từ lâu — nên báo ít hơn thực nhận gần 3 lần.
+  if (!list.length) return null;
   const rate = p => p.amount_vnd / p.credits;
   const afford = list.filter(p => p.amount_vnd <= vndAmount);
   const pool = afford.length ? afford : list;
@@ -576,9 +575,10 @@ function onCustomInput() {
   const val = parseFloat(document.getElementById('customInput').value) || 0;
   const q = quoteCustom(val);
   document.getElementById('customPreview').textContent =
-    val >= 50000 ? '= ' + q.credits + ' Lượng' : 'Tối thiểu 50.000đ';
+    !q ? '…' : val >= 50000 ? '= ' + q.credits + ' Lượng' : 'Tối thiểu 50.000đ';
   const note = document.getElementById('customRateNote');
   if (!note) return;
+  if (!q) { note.textContent = 'Đang tải bảng giá…'; return; }
   // Đơn giá nạp lẻ nay BÁM theo bậc gói, nên không còn câu "các gói rẻ hơn" —
   // nói vậy bây giờ là sai. Hiện đúng bậc mà số tiền này đang hưởng.
   note.textContent = val >= 50000

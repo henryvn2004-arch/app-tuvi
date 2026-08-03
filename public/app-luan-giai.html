@@ -8,9 +8,9 @@
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/shell.css?v=14">
-<link rel="stylesheet" href="/laso-chart.css?v=2">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/shell.css?v=16">
+<link rel="stylesheet" href="/laso-chart.css?v=3">
 <style>
 /* Center riêng của trang Luận giải */
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
@@ -26,7 +26,7 @@
 #lgPanel{display:none}
 .lg-body{max-width:860px}
 /* jump nav */
-.jump{position:sticky;top:51px;z-index:4;background:var(--paper);border-bottom:1px solid var(--line);padding:8px 0;margin:0 0 18px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.jump{position:sticky;top:var(--ws-top-h,69px);z-index:4;background:var(--paper);border-bottom:1px solid var(--line);padding:8px 0;margin:0 0 18px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
 .jump::-webkit-scrollbar{display:none}
 .jump a{white-space:nowrap;font-size:12px;color:var(--text-mid);border:1px solid var(--line-2);border-radius:20px;padding:4px 11px;cursor:pointer;background:var(--white)}
 .jump a.on{background:var(--navy);color:#fff;border-color:var(--navy)}
@@ -40,7 +40,7 @@
 .pbar{height:5px;border-radius:5px;background:var(--paper-2);margin-top:7px;overflow:hidden}
 .pbar i{display:block;height:100%;border-radius:5px}
 /* sections */
-.sec{margin-bottom:28px;scroll-margin-top:104px}
+.sec{margin-bottom:28px;scroll-margin-top:calc(var(--ws-top-h,69px) + 52px)}
 .sec-h{display:flex;align-items:center;gap:11px;margin-bottom:11px}
 .sec-n{width:26px;height:26px;flex:0 0 auto;border-radius:7px;background:var(--navy);color:var(--gold);font-family:var(--serif);font-size:13px;display:flex;align-items:center;justify-content:center;font-weight:600}
 .sec-h h3{font-family:var(--serif);font-size:18px;font-weight:600}
@@ -145,7 +145,7 @@
         <div class="chart-wrap" id="miniChart"></div>
         <div class="jump" id="lgJump"></div>
         <div class="lg-unlock" id="lgUnlock" style="display:none">
-          <button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau()">✦ Luận giải chuyên sâu bằng AI — 150 Lượng →</button>
+          <button class="btn-go" id="btnUnlock" onclick="initiateLuanGiaiChuyenSau()">✦ Luận giải chuyên sâu bằng AI — <span data-tvp-price="laso">…</span> Lượng →</button>
           <p>Viết riêng cho lá số này theo cổ pháp — 24 phần: cách cục, từng cung, đại vận và tiểu vận năm xem.</p>
         </div>
         <div class="lg-progress" id="lgProgress" style="display:none"></div>
@@ -162,12 +162,12 @@
 window.SHELL_INTRO={key:'luan-giai',title:'Luận giải Tử Vi',desc:'Lập lá số 12 cung theo cổ pháp, chấm điểm đại vận, tứ hóa - neo phán quyết vào con số, không phán chung chung. Mỗi phần có nút <b>✦ Hỏi trợ lý</b> để đào sâu.'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/laso-chart.js?v=2"></script>
-<script src="/luan-giai-core.js?v=3"></script>
+<script src="/luan-giai-core.js?v=4"></script>
 <script src="/tuvi-laso-format.js"></script>
 <script src="/tuvi-form.js?v=1"></script>
 <script src="/auth.js"></script>
-<script src="/tuvi-paywall.js?v=9"></script>
-<script src="/shell.js?v=49"></script>
+<script src="/tuvi-paywall.js?v=11"></script>
+<script src="/shell.js?v=53"></script>
 <script>
 // ── Form nhập (dùng chung TuviForm — có "Sinh ở ngoài Việt Nam?" + parity giờ
 // sinh lịch sử với standalone) ──
@@ -468,7 +468,7 @@ async function _loadNextPhanAI(){
   var box=document.getElementById('claude-content-'+p);
   if(box){ box.style.display='block'; box.innerHTML='<div class="phan-empty">Đang luận giải…</div>'; }
   // Cuộn tới đúng phần đang stream — không thì user tưởng trang đứng im (đã fix
-  // theo phản hồi Henry). .sec đã có scroll-margin-top:104px (bù .jump sticky).
+  // theo phản hồi Henry). .sec đã có scroll-margin-top neo theo --ws-top-h (bù header + .jump sticky).
   var secEl=document.getElementById('sec-'+p);
   if(secEl)secEl.scrollIntoView({behavior:'smooth',block:'start'});
   try{

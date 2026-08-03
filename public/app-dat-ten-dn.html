@@ -8,8 +8,8 @@
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/shell.css?v=14">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/shell.css?v=16">
 <style>
 .form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:600px}
 .form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
@@ -109,7 +109,7 @@
         <div class="note" id="resNote"></div>
         <div class="ask" data-ask="Gợi ý cho tôi 5 tên doanh nghiệp hợp mệnh chủ và ngành nghề, kèm ý nghĩa và ngũ hành từng tên.">✦ Hỏi trợ lý gợi ý tên hợp mệnh</div>
         <div class="dt-unlock" id="dtUnlock">
-          <button class="btn-go" id="btnUnlock" onclick="initiateDatTenDnChuyenSau()">✦ Gợi ý tên doanh nghiệp bằng AI — 20 Lượng →</button>
+          <button class="btn-go" id="btnUnlock" onclick="initiateDatTenDnChuyenSau()">✦ Gợi ý tên doanh nghiệp bằng AI — <span data-tvp-price="dat-ten-dn">…</span> Lượng →</button>
           <p>AI đọc ngũ hành nạp âm chủ + ngành nghề, gợi ý 12 tên chia 3 nhóm: Thuần Việt / Hán Việt / Kết Hợp.</p>
         </div>
         <div class="dt-result" id="dtResult"></div>
@@ -124,8 +124,8 @@
 window.SHELL_INTRO={key:'dat-ten-dn',title:'Đặt tên doanh nghiệp',desc:'Lấy ngũ hành nạp âm tuổi người chủ + ngành nghề làm nền, rồi hỏi <b>trợ lý AI</b> gợi ý tên công ty / thương hiệu hợp mệnh, dễ đọc dễ nhớ.'};</script>
 <script src="/can-chi.js?v=1"></script>
 <script src="/auth.js"></script>
-<script src="/tuvi-paywall.js?v=9"></script>
-<script src="/shell.js?v=49"></script>
+<script src="/tuvi-paywall.js?v=11"></script>
+<script src="/shell.js?v=53"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 var HANH_COLOR={'Mộc':'var(--green)','Hỏa':'var(--red)','Thổ':'var(--gold-soft)','Kim':'#8a8a8a','Thủy':'var(--blue)'};

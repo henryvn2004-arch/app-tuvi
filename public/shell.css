@@ -14,6 +14,10 @@
   --paper:#FBFAF7; --paper-2:#F4F2EC; --white:#fff;
   --sb-txt:#C9CFD8; --sb-txt-dim:#7d8794; --sb-line:rgba(255,255,255,.07);
   --serif:'Noto Serif',Georgia,serif; --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+  /* Chiều cao THẬT của .ws-top, shell.js đo lại khi header đổi kích thước.
+     Giá trị ở đây chỉ là mức dự phòng trước khi JS chạy. Thanh phụ dính
+     (.jump) neo theo biến này thay vì chép số cứng. */
+  --ws-top-h:69px;
   --shadow:0 1px 2px rgba(6,26,46,.04),0 4px 16px rgba(6,26,46,.06);
   --shadow-lg:0 24px 60px rgba(6,26,46,.28),0 6px 18px rgba(6,26,46,.16);
 }
@@ -239,6 +243,36 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .stm-btn:hover{filter:brightness(1.06)}
 .stm-later{border:none;background:transparent;color:var(--text-lt);font-size:12.5px;cursor:pointer;font-family:inherit;padding:4px}
 .stm-later:hover{color:var(--text-mid)}
+/* Lối phụ trong tường hết-lượt: nạp Lượng để hỏi lẻ từng câu. Cố ý làm NHẠT hơn
+   nút chính (xem trọn 24 mục) — mua trọn bản mới là thứ đáng cho họ, hỏi lẻ chỉ
+   là lựa chọn còn lại. */
+.stm-alt{display:block;font-size:12.5px;color:var(--text-lt);text-decoration:none;margin-bottom:10px}
+.stm-alt:hover{color:var(--blue)}
+
+/* ── ĐỒNG HỒ ĐẾM CÂU (rail) ──
+   Đếm bằng CÂU chứ không bằng Lượng: "còn 24 Lượng" không ai biết nhiều hay ít,
+   "còn 12 câu hỏi" thì biết ngay. Ba mức: thường / ≤3 câu (cam) / hết (đỏ). */
+.rail-meter{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 13px 0;font-size:12px;color:var(--text-lt)}
+.rail-meter .rm-t b{color:var(--text-mid);font-weight:700}
+.rail-meter .rm-sub{opacity:.75}
+.rail-meter .rm-a{color:var(--blue);font-weight:600;text-decoration:none;white-space:nowrap}
+.rail-meter .rm-a:hover{text-decoration:underline}
+.rail-meter.low .rm-t b{color:var(--gold,#9A7B3A)}
+.rail-meter.out .rm-t{color:var(--red,#C0392B);font-weight:600}
+
+/* ── THẺ MỜI TRONG DÒNG HỘI THOẠI ──
+   Chèn sau câu thứ 3, gọi tên đúng cung người ta vừa hỏi. Trông như một thẻ
+   thông tin trong mạch chat, KHÔNG phải banner quảng cáo cắt ngang. */
+.rail-upsell{margin:12px 0 4px;padding:13px 14px;background:var(--gold-lt,#F9F4EB);border:1px solid var(--gold-soft,rgba(154,123,58,.3));border-radius:11px;animation:shFade .2s ease}
+.rail-upsell .ru-t{font-size:13px;color:var(--text);line-height:1.55;margin-bottom:5px}
+.rail-upsell .ru-t b{color:var(--navy)}
+.rail-upsell .ru-d{font-size:12.5px;color:var(--text-mid);line-height:1.6;margin-bottom:11px}
+.rail-upsell .ru-d b{color:var(--navy)}
+.rail-upsell .ru-list{color:var(--text-lt);font-style:italic}
+.rail-upsell .ru-f{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.rail-upsell .ru-btn{background:var(--navy);color:var(--gold-bright,#c9a84c);text-decoration:none;font-family:var(--serif);font-weight:600;font-size:13px;padding:9px 15px;border-radius:8px;white-space:nowrap}
+.rail-upsell .ru-btn:hover{background:var(--navy-mid,#0D3B5E)}
+.rail-upsell .ru-price{font-size:11.5px;color:var(--text-lt)}
 
 /* ── RESPONSIVE (max-width:900px) — PHẢI để CUỐI file: các rule .rail/.sb đặt
    sau media query (vd .rail{position:relative} cho panel lịch sử) sẽ override
@@ -253,6 +287,30 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
   .rail{position:fixed;right:0;top:0;bottom:0;width:100vw;max-width:none;z-index:60;transform:translateX(100%);transition:transform .25s;border-left:none}
   .rail.open{transform:none}
   .mobile-only{display:inline-flex}
+  /* ── Thanh tiêu đề tool (.ws-top) trên điện thoại ────────────────────────
+     Ở bề ngang 393px (iPhone), hàng ☰ + tiêu đề + 2–4 nút KHÔNG đủ chỗ. Vì
+     .ws-title không có min-width:0 nên nó co xuống min-content: MỖI CHỮ một
+     dòng ("Luận / giải / Tử / Vi"), chữ trong nút cũng gãy theo → header cao
+     hơn 320px, đẩy nội dung thật xuống dưới màn hình. Chữa bằng 3 luật:
+     (1) tiêu đề được co và cắt bằng ellipsis thay vì xuống dòng;
+     (2) nút KHÔNG gãy chữ, KHÔNG co (flex:0 0 auto);
+     (3) cụm nút xuống HẲN hàng thứ hai, cuộn ngang nếu vẫn thừa chỗ. */
+  .ws-top{padding:11px 14px;gap:8px 10px;flex-wrap:wrap}
+  /* flex-basis 0 (không phải auto): với auto, "kích thước giả định" của tiêu đề
+     là max-content của phụ đề (~300px) nên ở máy hẹp (≤360px) NÓ tự rớt xuống
+     hàng riêng, bỏ nút ☰ đứng trơ một hàng → header thành 3 hàng. */
+  .ws-title{flex:1 1 0;min-width:0}
+  /* CHỈ con trực tiếp: phụ đề vài trang có <span data-tvp-price> lồng bên
+     trong — cho nó display:block là nó tự xuống dòng, header lại cao thêm. */
+  .ws-title>b,.ws-title>span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ws-title>b{font-size:15.5px}
+  /* flex-basis 100% = LUÔN chiếm trọn hàng thứ hai. Để nó tự co vào hàng đầu
+     thì tiêu đề (flex-basis 0) bị bóp còn vài chục pixel — "Luận giải Tử…"
+     cụt ngủn còn khó đọc hơn cả lỗi đang sửa. Trang không có nút nào thì hàng
+     này cao 0, chỉ tốn đúng row-gap 8px. */
+  .ws-actions{flex:1 0 100%;max-width:100%;margin-left:0;gap:6px;overflow-x:auto;scrollbar-width:none}
+  .ws-actions::-webkit-scrollbar{display:none}
+  .ws-actions .btn{flex:0 0 auto;white-space:nowrap;padding:7px 10px}
   .backdrop{position:fixed;inset:0;background:rgba(6,26,46,.4);z-index:55;display:none}
   .backdrop.on{display:block}
   /* Bottom tab: hiện trên mobile, chừa chỗ cuối trang, ẩn khi drawer đang mở. */

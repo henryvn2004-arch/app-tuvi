@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=19" as="script">
+<link rel="preload" href="/nav.js?v=20" as="script">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Chọn Ngày Tốt Theo Tuổi — Ngày Lành Tháng Tốt | Tử Vi Minh Bảo</title>
 <meta property="og:title" content="Chọn Ngày Tốt Theo Tuổi — Ngày Lành Tháng Tốt | Tử Vi Minh Bảo"/>
@@ -165,13 +165,13 @@
     </div>
 
     <div class="warn-box">
-      <span>📌</span>
+      <span><span class="ic" data-icon="pin"></span></span>
       <div>Kết quả là phân tích nguyên lý, <strong>không phải tra Thông Thư</strong>. Vui lòng đối chiếu với lịch vạn niên và tham khảo thêm trước khi quyết định ngày quan trọng.</div>
     </div>
 
     <div style="text-align:center">
       <button class="btn-submit" id="analyzeBtn" onclick="analyze()" disabled style="padding:14px 40px;font-size:15px">
-        📅 Gợi Ý Ngày Tốt
+        <span class="ic" data-icon="calendar"></span> Gợi Ý Ngày Tốt
       </button>
     </div>
     <div class="error-msg" id="error-msg"></div>
@@ -350,7 +350,7 @@ function renderMarkdown(md) {
     .replace(/<p><\/p>/g,'').replace(/<p>(<[hul])/g,'$1').replace(/(<\/[hul][^>]*>)<\/p>/g,'$1');
 }
 </script>
-<script src="/tuvi-paywall.js"></script>
+<script src="/tuvi-paywall.js?v=11"></script>
 <script>
 function _saveStateForAuth(){
   try {
@@ -400,13 +400,13 @@ TuviPaywall.init({
         <p>Lịch vạn niên — hay lịch âm dương — là hệ thống tính toán thời gian kết hợp chu kỳ Mặt Trời và Mặt Trăng, được sử dụng ở Việt Nam, Trung Quốc, Hàn Quốc, Nhật Bản hàng nghìn năm. Mỗi ngày trong lịch này không chỉ có Can Chi mà còn có <strong>sao chiếu</strong>, <strong>trực</strong> (12 trực: Kiến, Trừ, Mãn...), và nhiều thần sát khác — tất cả tạo nên "chất lượng" riêng của từng ngày.</p>
         <p>Chọn ngày tốt theo tuổi thêm một lớp cá nhân hóa: ngày tốt theo lịch chung chưa chắc hợp với tuổi cụ thể. Địa chi của ngày và địa chi năm sinh có thể tương hợp (lục hợp, tam hợp) hoặc tương xung — điều này quyết định ngày đó thuận hay không thuận cho người đó cụ thể.</p>
         <p>Trong thực tế, chọn ngày là một trong những ứng dụng phổ biến nhất của mệnh lý học trong đời sống Việt Nam — từ cưới hỏi, khai trương, xuất hành cho đến ký hợp đồng, nhập học. Hiểu nguyên lý giúp tra cứu có chủ ý hơn thay vì chỉ tuân theo kết quả một cách máy móc.</p>
-        <p class="kb-links">Xem thêm: <a href="/tools/ngay-tot.html">Ngày Tốt Trong Tháng</a>, <a href="/tools/hoang-dao.html">Giờ Hoàng Đạo</a>, <a href="/tools/kim-lau.html">Kim Lâu & Tam Tai</a></p>
+        <p class="kb-links">Xem thêm: <a href="/tools/ngay-tot.html">Ngày Tốt Trong Tháng</a>, <a href="/tools/hoang-dao.html">Giờ Hoàng Đạo</a>, <a href="/kim-lau">Kim Lâu & Tam Tai</a></p>
       </div>
     </div>
   </div>
 </section>
 <script src="/testimonials.js"></script>
-<script src="/related-tools.js"></script>
-<script src="/nav.js?v=19" defer></script>
+<script src="/related-tools.js?v=2"></script>
+<script src="/nav.js?v=20" defer></script>
 </body>
 </html>

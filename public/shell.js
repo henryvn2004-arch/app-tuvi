@@ -20,21 +20,21 @@
       { id: 'xem-lam-an', label: 'Xem tuổi làm ăn',     href: '/app/xem-lam-an', icon: 'briefcase' },
       { id: 'tuong-hop',  label: 'Tương hợp tuổi',      href: '/app/tuong-hop',  icon: 'heart' },
       { id: 'sinh-con',   label: 'Xem tuổi sinh con',   href: '/app/sinh-con',   icon: 'baby' },
-      { id: 'chan-dung-vo-chong', label: 'Chân dung vợ chồng', href: '/app/chan-dung-vo-chong', icon: 'image', cost: 22 },
-      { id: 'chan-dung-tien-kiep', label: 'Chân dung tiền kiếp', href: '/app/chan-dung-tien-kiep', icon: 'temple', cost: 25 },
+      { id: 'chan-dung-vo-chong', label: 'Chân dung vợ chồng', href: '/app/chan-dung-vo-chong', icon: 'image' },
+      { id: 'chan-dung-tien-kiep', label: 'Chân dung tiền kiếp', href: '/app/chan-dung-tien-kiep', icon: 'temple' },
     ] },
     { group: 'Tử Bình', open: false, items: [
       { id: 'bat-tu',     label: 'Lá số Bát Tự',        href: '/app/bat-tu',     icon: 'rows' },
     ] },
     { group: 'Xem Tướng', open: false, items: [
-      { id: 'dien-tuong', label: 'Diện Tướng AI',       href: '/app/dien-tuong', icon: 'user', cost: 5 },
-      { id: 'nhan-tuong', label: 'Nhãn Tướng AI',       href: '/app/nhan-tuong', icon: 'eye', cost: 5 },
-      { id: 'thu-tuong',  label: 'Thủ Tướng AI',        href: '/app/thu-tuong',  icon: 'hand', cost: 5 },
-      { id: 'thanh-tuong', label: 'Thanh Tướng AI',     href: '/app/thanh-tuong', icon: 'mic', cost: 8 },
-      { id: 'thanh-tuong-pro', label: 'Thanh Tướng Pro', href: '/app/thanh-tuong-pro', icon: 'mic', cost: 10 },
+      { id: 'dien-tuong', label: 'Diện Tướng AI',       href: '/app/dien-tuong', icon: 'user' },
+      { id: 'nhan-tuong', label: 'Nhãn Tướng AI',       href: '/app/nhan-tuong', icon: 'eye' },
+      { id: 'thu-tuong',  label: 'Thủ Tướng AI',        href: '/app/thu-tuong',  icon: 'hand' },
+      { id: 'thanh-tuong', label: 'Thanh Tướng AI',     href: '/app/thanh-tuong', icon: 'mic' },
+      { id: 'thanh-tuong-pro', label: 'Thanh Tướng Pro', href: '/app/thanh-tuong-pro', icon: 'mic' },
     ] },
     { group: 'Phong Thủy', open: false, items: [
-      { id: 'phong-thuy', label: 'Phong Thủy Nội Thất',  href: '/app/phong-thuy', icon: 'leaf', cost: 40 },
+      { id: 'phong-thuy', label: 'Phong Thủy Nội Thất',  href: '/app/phong-thuy', icon: 'leaf' },
       { id: 'bat-trach',  label: 'Hướng Bát Trạch',     href: '/app/bat-trach',  icon: 'compass' },
     ] },
     { group: 'Chọn Ngày / Lịch', open: false, items: [
@@ -219,6 +219,7 @@
         '<div class="rail-empty" id="railEmpty"><div class="ei"><img src="' + authorAva() + '" alt=""></div><b>Chưa có lá số nào</b>' +
         '<p>Lập lá số ở khung giữa, rồi hỏi tôi bất cứ điều gì —<br>vận sự nghiệp, tình duyên, năm nay, tháng tới…</p></div>' +
       '</div>' +
+      '<div class="rail-meter" id="railMeter" style="display:none"></div>' +
       '<div class="rail-sugg" id="railSugg" style="display:none"></div>' +
       '<div class="rail-thumbs" id="railThumbs" style="display:none"></div>' +
       '<div class="rail-in">' +
@@ -287,13 +288,51 @@
   var HIST_CAP = 40;
   var newId = function () { return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('s' + Date.now() + Math.random().toString(36).slice(2, 8)); };
   var curMeta = null; // {restore,title,createdAt} của thread đang mở
+  var ctxCalls = 0;   // số lần tool đã gọi setContext (0 = trang chưa dựng được gì)
   // Tool đã gộp: đọc kèm phiên lịch sử của tool cũ (la-so đã gộp vào luan-giai).
   var HIST_ALIAS = { 'luan-giai': ['la-so'] };
   function histKey(t) { return 'app_hist_v1_' + t; }
   function histLocal(t) { try { return JSON.parse(localStorage.getItem(histKey(t)) || '[]') || []; } catch (e) { return []; } }
   function histWrite(t, arr) { try { localStorage.setItem(histKey(t), JSON.stringify(arr.slice(0, HIST_CAP))); } catch (e) { /* quota */ } }
   function histLocalDelete(t, id) { histWrite(t, histLocal(t).filter(function (s) { return s.id !== id; })); }
-  function birthSnapshot() { try { return JSON.parse(localStorage.getItem('app_birth') || 'null'); } catch (e) { return null; } }
+  // ── Chuẩn hoá NGÀY SINH về MỘT shape (shape của TuviForm) ──
+  // Trong repo có 3 shape birth từng được lưu/truyền:
+  //   (a) TuviForm  — {hoten,ngay,thang,nam,gioHour,gioPhut,gioIdx,gioitinh} ← chuẩn hiện tại
+  //   (b) form cũ   — {name,dd,mm,yyyy,hh,pp,gender}   (trước khi 3 trang la-so/
+  //                   luan-giai/bat-tu chuyển sang TuviForm dùng chung)
+  //   (c) contract  — {name,day,month,year,hourBranch,gender} ← shape GỬI LÊN API
+  // Phiên lịch sử lưu trước lúc chuyển sang TuviForm mang shape (b); đọc thẳng
+  // bằng TuviForm.setData thì KHÔNG khớp field nào → form trống → trang không tự
+  // luận lại được → bấm vào phiên cũ "không hiện gì". Nên MỌI lượt ĐỌC birth đều
+  // đi qua đây; ghi vẫn ghi shape hiện tại.
+  function normBirth(b) {
+    if (!b || typeof b !== 'object') return b || null;
+    var o = {}, k;
+    for (k in b) if (Object.prototype.hasOwnProperty.call(b, k)) o[k] = b[k];
+    var num = function (v) { var n = parseInt(v, 10); return isNaN(n) ? undefined : n; };
+    if (o.ngay == null) o.ngay = num(b.dd != null ? b.dd : b.day);
+    if (o.thang == null) o.thang = num(b.mm != null ? b.mm : b.month);
+    if (o.nam == null) o.nam = num(b.yyyy != null ? b.yyyy : b.year);
+    if (o.gioHour == null && b.hh != null) o.gioHour = num(b.hh);
+    if (o.gioPhut == null && b.pp != null) o.gioPhut = num(b.pp);
+    // hourBranch = chỉ số địa chi 0..11 (KHÁC giờ 0..23) → giữ đúng đường gioIdx.
+    if (o.gioIdx == null && b.hourBranch != null && b.hourBranch >= 0) o.gioIdx = num(b.hourBranch);
+    if (!o.hoten && b.name) o.hoten = b.name;
+    if (!o.gioitinh && b.gender) o.gioitinh = b.gender;
+    if (o.namxem == null && b.namXem != null) o.namxem = num(b.namXem);
+    return o;
+  }
+  // Đổi sang shape contract để GỬI API (/api/v1/chat chỉ hiểu day/month/year/hourBranch).
+  function birthToApi(b) {
+    var n = normBirth(b);
+    if (!n || !n.ngay || !n.thang || !n.nam) return null;
+    var idx = n.gioIdx;
+    if (idx == null && n.gioHour != null) idx = Math.floor(((+n.gioHour + 1) % 24) / 2);
+    return { day: +n.ngay, month: +n.thang, year: +n.nam,
+      hourBranch: (idx == null ? -1 : +idx), gender: n.gioitinh === 'nu' ? 'nu' : 'nam',
+      name: n.hoten || undefined };
+  }
+  function birthSnapshot() { try { return normBirth(JSON.parse(localStorage.getItem('app_birth') || 'null')); } catch (e) { return null; } }
   // Chụp toàn bộ input/select/textarea (trừ rail + command palette) để khôi phục
   // form của bất kỳ tool nào mà KHÔNG cần liệt kê id từng tool.
   function snapshotForm() {
@@ -367,6 +406,22 @@
       cb(merged);
     });
   }
+  // Như histList nhưng GỘP cả tool cũ đã sáp nhập (HIST_ALIAS) — histFind vốn đã
+  // tra kèm alias, nhưng phần LIỆT KÊ thì chưa, nên phiên `la-so` cũ không bao
+  // giờ hiện ra để mà bấm. Mỗi bucket vẫn ghi vào key riêng của nó.
+  function histListAll(tool, cb) {
+    var tools = [tool].concat(HIST_ALIAS[tool] || []);
+    if (tools.length === 1) { histList(tool, cb); return; }
+    var latest = {};
+    tools.forEach(function (t) {
+      histList(t, function (list) {
+        latest[t] = list;
+        var all = [];
+        tools.forEach(function (x) { (latest[x] || []).forEach(function (s) { all.push(s); }); });
+        cb(histMerge(all, []));
+      });
+    });
+  }
   function histFind(tool, id, cb) {
     var tools = [tool].concat(HIST_ALIAS[tool] || []); // gồm cả tool cũ đã gộp
     var hit = null;
@@ -431,13 +486,42 @@
         sessionStorage.setItem('app_restore', JSON.stringify({ id: sess.id, toolId: ACTIVE }));
         sessionStorage.setItem('app_restore_data', JSON.stringify(sess));
       } catch (e) { /* ignore */ }
+      // Ghi lại đã CHUẨN HOÁ: phiên cũ lưu birth shape {dd,mm,yyyy} — để nguyên
+      // thì prefillForm/TuviForm.setData không nhận ra field nào (xem normBirth).
       if (sess.restore && sess.restore.birth) {
-        try { localStorage.setItem('app_birth', JSON.stringify(sess.restore.birth)); } catch (e) { /* ignore */ }
+        try { localStorage.setItem('app_birth', JSON.stringify(normBirth(sess.restore.birth))); } catch (e) { /* ignore */ }
       }
       // Reload về ?auto=1 SẠCH (bỏ mọi query cũ như ?restore) → tránh lặp khi
       // đến từ deep-link hub Tài khoản; tool tự tính lại center + setContext replay.
       location.href = location.pathname + '?auto=1';
     });
+  }
+  // ── Lưới an toàn: phiên đã bấm mà tool KHÔNG dựng lại được phần giữa ──
+  // Đường khôi phục chuẩn là: reload ?auto=1 → tool tự tính lại center → gọi
+  // setContext → setContext replay transcript. Nếu tool không tự chạy được
+  // (form đổi id, phiên thiếu ngày sinh, tool cần thao tác tay như gieo quẻ)
+  // thì KHÔNG có ai gọi setContext: trang đứng im hệt như chưa bấm gì, mà cờ
+  // trong sessionStorage còn nguyên → lượt chạy SAU đó bị nó chiếm chỗ và
+  // replay nhầm transcript cũ. Nên: mở lại hội thoại bằng chính dữ liệu đã lưu.
+  function restorePendingFallback() {
+    if (!HIST_ON || !ACTIVE || ctxCalls) return;
+    var m = null, d = null;
+    try {
+      m = JSON.parse(sessionStorage.getItem('app_restore') || 'null');
+      d = JSON.parse(sessionStorage.getItem('app_restore_data') || 'null');
+    } catch (e) { return; }
+    if (!m || !d || m.toolId !== ACTIVE || !d.id) return;
+    var r = d.restore || {};
+    Shell.setContext({ birth: r.birth ? birthToApi(r.birth) : null, scenario: r.scenario || null,
+      label: d.title || 'Phiên đã lưu' });
+    // Không đủ dữ liệu để hỏi tiếp (không có cả lá số lẫn kịch bản): cho xem lại
+    // hội thoại nhưng nói THẲNG là phải chạy lại tool, đừng để ô nhập trông như
+    // dùng được rồi bấm gửi không có gì xảy ra.
+    if (!ctx) {
+      var ta = document.getElementById('railInput'), sb = document.getElementById('railSend');
+      if (ta) { ta.disabled = true; ta.placeholder = 'Chạy lại công cụ để hỏi tiếp về phiên này.'; }
+      if (sb) sb.disabled = true;
+    }
   }
   // ── UI: panel lịch sử trong rail ──
   function histPanelHTML(list) {
@@ -450,7 +534,7 @@
     }).join('');
   }
   function renderHistInto(el) {
-    histList(ACTIVE, function (list) {
+    histListAll(ACTIVE, function (list) {
       el.innerHTML = '<div class="rh-head"><span>Lịch sử · ' + esc(toolLabel(ACTIVE)) + '</span><button class="rh-x" data-act="hist-close" aria-label="Đóng">×</button></div>' +
         '<div class="rh-list">' + histPanelHTML(list) + '</div>';
       wireHist(el);
@@ -461,7 +545,12 @@
       it.addEventListener('click', function (e) { if (e.target.getAttribute && e.target.getAttribute('data-del') != null) return; restoreSession(it.getAttribute('data-id')); });
     });
     el.querySelectorAll('[data-del]').forEach(function (b) {
-      b.addEventListener('click', function (e) { e.stopPropagation(); var id = b.getAttribute('data-del'); histLocalDelete(ACTIVE, id); histSrvDelete(id); renderHistInto(el); renderRecentAll(); });
+      // Xoá cả ở bucket tool cũ đã sáp nhập — danh sách nay gộp cả phiên của nó.
+      b.addEventListener('click', function (e) {
+        e.stopPropagation(); var id = b.getAttribute('data-del');
+        [ACTIVE].concat(HIST_ALIAS[ACTIVE] || []).forEach(function (t) { histLocalDelete(t, id); });
+        histSrvDelete(id); renderHistInto(el); renderRecentAll();
+      });
     });
     var x = el.querySelector('[data-act="hist-close"]'); if (x) x.addEventListener('click', function () { el.style.display = 'none'; });
   }
@@ -473,7 +562,7 @@
   // ── UI: "Phiên gần đây" ở empty-state (tool đặt <div id="shellRecent">) ──
   function renderRecent(el) {
     if (!el || !ACTIVE || !HIST_ON) { if (el) { el.style.display = 'none'; el.innerHTML = ''; } return; }
-    histList(ACTIVE, function (list) {
+    histListAll(ACTIVE, function (list) {
       if (!list.length) { el.style.display = 'none'; el.innerHTML = ''; return; }
       el.style.display = '';
       el.innerHTML = '<div class="recent-h">Phiên gần đây</div><div class="recent-list">' +
@@ -849,14 +938,267 @@
     } catch (e) { /* ignore */ }
   }
 
+  // ══════════════════════════════════════════════════════════════
+  // CONVERT TRONG RAIL — đếm bằng CÂU, mời bằng LÁ SỐ
+  // ══════════════════════════════════════════════════════════════
+  //
+  // Bối cảnh (đo prod 2026-07-30): người dùng an sao xong (miễn phí) là qua rail
+  // hỏi ngay — đó là khoảnh khắc quan tâm cao nhất trong cả phễu. Trước đây rail
+  // KHÔNG nói gì về số lượt còn lại, rồi đến lúc cạn thì bật một modal đòi tiền.
+  // Tức là bán đúng vào lúc người ta vừa mới bắt đầu tin.
+  //
+  // Bốn thay đổi, không cái nào cần thêm lượt LLM:
+  //   1. Đồng hồ tính bằng CÂU, không bằng Lượng ("còn 12 câu hỏi").
+  //   2. Thẻ mời sau câu thứ 3, gọi tên ĐÚNG CUNG theo chủ đề đã hỏi.
+  //   3. Tường hết-lượt liệt kê CỤ THỂ mục chưa đọc trong 24 mục.
+  //   4. Câu chữ nói bằng lá số, không bằng tiền.
+
+  // 24 mục của Luận Giải — KHỚP `PHAN_LABELS` trong luan-giai.html. Dùng để nói
+  // CỤ THỂ người ta đang bỏ lỡ cái gì; "nạp Lượng để xem thêm" thì không ai biết
+  // thêm là thêm gì.
+  var LG_PHAN = [
+    'Tổng Quan Lá Số',
+    'Cung Mệnh', 'Cung Phụ Mẫu', 'Cung Phúc Đức', 'Cung Điền Trạch',
+    'Cung Quan Lộc', 'Cung Nô Bộc', 'Cung Thiên Di', 'Cung Tật Ách',
+    'Cung Tài Bạch', 'Cung Tử Tức', 'Cung Phu Thê', 'Cung Huynh Đệ',
+    'Tổng quan đại vận',
+    'Đại Vận 1', 'Đại Vận 2', 'Đại Vận 3', 'Đại Vận 4', 'Đại Vận 5',
+    'Đại Vận 6', 'Đại Vận 7', 'Đại Vận 8', 'Đại Vận 9',
+    'Tiểu Vận năm nay',
+  ];
+
+  // Chủ đề câu hỏi → cung. Tra bằng TỪ KHOÁ, deterministic, 0 đồng — cố ý không
+  // nhờ LLM phân loại: thêm một lượt model cho mỗi câu hỏi là chi phí thật, mà
+  // thứ cần chỉ là gọi đúng tên một cung.
+  var TOPIC_CUNG = [
+    { cung: 'Cung Tài Bạch', kw: ['tiền', 'tài chính', 'giàu', 'lương', 'thu nhập', 'đầu tư', 'nợ', 'lỗ', 'lãi', 'buôn', 'kinh doanh'] },
+    { cung: 'Cung Quan Lộc', kw: ['công việc', 'sự nghiệp', 'nghề', 'thăng tiến', 'chức', 'công danh', 'thi', 'việc làm', 'sếp', 'nghỉ việc'] },
+    { cung: 'Cung Phu Thê', kw: ['vợ', 'chồng', 'hôn nhân', 'kết hôn', 'cưới', 'yêu', 'người ấy', 'tình duyên', 'ly hôn', 'bạn gái', 'bạn trai'] },
+    { cung: 'Cung Tử Tức', kw: ['con', 'con cái', 'sinh con', 'thai', 'hiếm muộn'] },
+    { cung: 'Cung Tật Ách', kw: ['bệnh', 'sức khỏe', 'tai nạn', 'mổ', 'ốm', 'thương tích'] },
+    { cung: 'Cung Phụ Mẫu', kw: ['cha', 'mẹ', 'bố', 'ba mẹ', 'phụ mẫu', 'song thân'] },
+    { cung: 'Cung Điền Trạch', kw: ['nhà', 'đất', 'bất động sản', 'mua nhà', 'xây nhà', 'chung cư'] },
+    { cung: 'Cung Thiên Di', kw: ['nước ngoài', 'xuất ngoại', 'đi xa', 'di cư', 'chuyển chỗ', 'du học', 'định cư'] },
+    { cung: 'Cung Nô Bộc', kw: ['bạn bè', 'đồng nghiệp', 'cấp dưới', 'nhân viên', 'đối tác'] },
+    { cung: 'Cung Huynh Đệ', kw: ['anh', 'chị', 'em ruột', 'huynh đệ', 'anh em'] },
+    { cung: 'Cung Phúc Đức', kw: ['phúc', 'tâm linh', 'bình an', 'tổ tiên', 'nghiệp'] },
+    { cung: 'Cung Mệnh', kw: ['tính cách', 'bản thân', 'con người tôi', 'mệnh của tôi', 'tôi là người'] },
+  ];
+  function detectCung(txt) {
+    var s = String(txt || '').toLowerCase();
+    for (var i = 0; i < TOPIC_CUNG.length; i++) {
+      var e = TOPIC_CUNG[i];
+      for (var j = 0; j < e.kw.length; j++) if (s.indexOf(e.kw[j]) >= 0) return e.cung;
+    }
+    return null;
+  }
+
+  // Trạng thái ví cho rail. `price` để null nghĩa là CHƯA BIẾT giá → đồng hồ im
+  // lặng thay vì đoán. Đoán giá rồi hiện sai số câu là nói sai với người dùng
+  // ngay trên thứ họ dùng để quyết định.
+  var _rc = { balance: null, price: null, freeTurns: 0, lasoPrice: null, vndPerCredit: 1000, loaded: false,
+              anon: false, anonLeft: null, anonCap: 0 };
+
+  // anon_id do track.js sinh (localStorage 'tvmb_anon'). Chỉ để đếm lượt DÙNG
+  // THỬ cho khách chưa đăng nhập — KHÔNG phải danh tính, xoá localStorage là có
+  // mã mới. Chống lạm dụng thật nằm ở trần theo IP/ngày + trần toàn hệ thống
+  // phía server.
+  function anonId() {
+    try { return localStorage.getItem('tvmb_anon') || ''; } catch (e) { return ''; }
+  }
+  var _askCount = 0;      // số câu người dùng đã hỏi trong phiên này
+  var _upsellShown = false;
+  var _cungAsked = [];    // các cung đã chạm tới, theo thứ tự hỏi
+
+  function railTurnsLeft() {
+    // Khách chưa đăng nhập: đếm lượt DÙNG THỬ, không liên quan tới ví.
+    if (_rc.anon) return _rc.anonLeft;
+    if (_rc.price == null || _rc.balance == null) return null;
+    if (_rc.price <= 0) return Infinity;
+    return _rc.freeTurns + Math.floor(_rc.balance / _rc.price);
+  }
+
+  function loadRailStatus() {
+    var token = getToken();
+    var url = token
+      ? '/api/payment?action=rail-status'
+      : '/api/payment?action=rail-status&anon=' + encodeURIComponent(anonId());
+    var opts = token ? { headers: { Authorization: 'Bearer ' + token } } : {};
+    fetch(url, opts)
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d) return;
+        if (d.anon) {
+          _rc.anon = true;
+          _rc.anonLeft = typeof d.anonTrialLeft === 'number' ? d.anonTrialLeft : null;
+          _rc.anonCap = d.anonTrialCap || 0;
+          _rc.lasoPrice = typeof d.lasoPrice === 'number' ? d.lasoPrice : null;
+          _rc.vndPerCredit = d.vndPerCredit || 1000;
+          _rc.loaded = true;
+          renderRailMeter();
+          return;
+        }
+        _rc.anon = false;
+        _rc.balance = typeof d.balance === 'number' ? d.balance : null;
+        _rc.price = typeof d.railPrice === 'number' ? d.railPrice : null;
+        _rc.lasoPrice = typeof d.lasoPrice === 'number' ? d.lasoPrice : null;
+        _rc.freeTurns = d.freeTurns || 0;
+        _rc.vndPerCredit = d.vndPerCredit || 1000;
+        _rc.loaded = true;
+        renderRailMeter();
+      })
+      .catch(function () { /* đồng hồ chỉ là trợ giúp — hỏng thì im lặng, không chặn hỏi */ });
+  }
+
+  // Đồng hồ đếm CÂU. "Còn 24 Lượng" là con số trừu tượng — không ai biết nhiều
+  // hay ít. "Còn 12 câu hỏi" thì biết ngay.
+  function renderRailMeter() {
+    var el = document.getElementById('railMeter');
+    if (!el) return;
+    var n = railTurnsLeft();
+    if (!ctx || n === null || n === Infinity) { el.style.display = 'none'; el.innerHTML = ''; return; }
+    el.style.display = '';
+    var cls = n === 0 ? ' out' : (n <= 3 ? ' low' : '');
+    var txt, act = '';
+    if (_rc.anon) {
+      // Khách chưa đăng nhập: nói rõ đây là lượt DÙNG THỬ, và lối đi tiếp là
+      // ĐĂNG KÝ (kèm con số cụ thể) chứ không phải nạp tiền — người chưa từng
+      // dùng thì mời nạp tiền là mời quá sớm.
+      txt = n === 0 ? 'Đã hết câu dùng thử' : 'Dùng thử: còn <b>' + n + '</b> câu';
+      act = '<a class="rm-a" href="#" data-act="anon-signup">Đăng ký nhận thêm</a>';
+    } else if (n === 0) {
+      txt = 'Đã dùng hết lượt hỏi';
+      act = '<a class="rm-a" href="/topup.html">Nạp thêm</a>';
+    } else if (_rc.freeTurns > 0) {
+      txt = 'Còn <b>' + n + '</b> câu hỏi <span class="rm-sub">(' + _rc.freeTurns + ' lượt tặng)</span>';
+      if (n <= 3) act = '<a class="rm-a" href="/topup.html">Nạp thêm</a>';
+    } else {
+      txt = 'Còn <b>' + n + '</b> câu hỏi';
+      if (n <= 3) act = '<a class="rm-a" href="/topup.html">Nạp thêm</a>';
+    }
+    el.className = 'rail-meter' + cls;
+    el.innerHTML = '<span class="rm-t">' + txt + '</span>' + act;
+    var su = el.querySelector('[data-act="anon-signup"]');
+    if (su) su.addEventListener('click', function (ev) { ev.preventDefault(); openAnonSignupModal(); });
+  }
+
+  // Đọc lại ví từ event `done` của server — nguồn chính xác nhất, và không tốn
+  // thêm một lượt mạng nào.
+  // ── Tường ĐĂNG KÝ cho khách dùng thử ──
+  // Khác hẳn tường hết-Lượng: người này CHƯA có tài khoản, nên lối đi tiếp là
+  // đăng ký (miễn phí) chứ không phải nạp tiền. Con số quà đăng ký lấy từ
+  // SERVER — hứa "25 Lượng" mà DB đổi thành số khác là hứa hụt ngay lần đầu,
+  // đúng lỗi đã gặp ở topup.html.
+  var _anonBonus = null; // Lượng quà đăng ký, đọc 1 lần
+  function openAnonSignupModal() {
+    if (document.querySelector('.sh-topup-modal')) return;
+    var thay = authorLabel();
+    var price = _rc.price;
+    function build(bonus) {
+      var câu = (bonus && price) ? Math.floor(bonus / price) : null;
+      var wrap = document.createElement('div');
+      wrap.className = 'sh-topup-modal';
+      wrap.innerHTML =
+        '<div class="stm-card">' +
+          '<button class="stm-x" aria-label="Đóng">✕</button>' +
+          '<img class="stm-ava" src="' + authorAva() + '" alt="">' +
+          '<div class="stm-t">Hết phần dùng thử rồi…</div>' +
+          '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn nói về lá số này. ' +
+            (câu ? 'Đăng ký (miễn phí) là được tặng <b>' + bonus + ' Lượng</b> — đủ hỏi thêm <b>' + câu + ' câu</b> nữa.'
+                 : 'Đăng ký miễn phí để được tặng Lượng và hỏi tiếp.') +
+            ' Lá số vẫn xem miễn phí, không mất gì.</div>' +
+          '<button class="stm-btn" type="button" data-act="do-signup">Đăng ký miễn phí →</button>' +
+          '<button class="stm-later" type="button">Để sau</button>' +
+        '</div>';
+      document.body.appendChild(wrap);
+      var close = function () { wrap.remove(); };
+      wrap.addEventListener('click', function (e) { if (e.target === wrap) close(); });
+      wrap.querySelector('.stm-x').addEventListener('click', close);
+      wrap.querySelector('.stm-later').addEventListener('click', close);
+      wrap.querySelector('[data-act="do-signup"]').addEventListener('click', function () {
+        close();
+        try { track('cta_click', { tool_id: ACTIVE, meta: { from: 'anon_trial_wall' } }); } catch (e) { /* ignore */ }
+        if (window.Auth && Auth.require) Auth.require(function () { loadRailStatus(); refreshHistoryUI && refreshHistoryUI(); });
+      });
+    }
+    if (_anonBonus != null) { build(_anonBonus); return; }
+    // Quà đăng ký nằm trong app_config `credits.signup_bonus_variants` (mảng) —
+    // lấy mức THẤP NHẤT để không hứa quá.
+    fetch('/api/payment?action=signup-bonus')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) { _anonBonus = (d && d.bonus) || null; build(_anonBonus); })
+      .catch(function () { build(null); });
+  }
+
+  function applyPaywallInfo(pw) {
+    if (!pw) return;
+    if (typeof pw.anonTrialLeft === 'number') { _rc.anon = true; _rc.anonLeft = pw.anonTrialLeft; }
+    if (typeof pw.balance === 'number') _rc.balance = pw.balance;
+    if (typeof pw.price === 'number') _rc.price = pw.price;
+    if (typeof pw.freeTurns === 'number') _rc.freeTurns = pw.freeTurns;
+    if (_rc.price != null && _rc.balance != null) _rc.loaded = true;
+    renderRailMeter();
+  }
+
+  function creditVnd(c) {
+    var v = Math.ceil((c * (_rc.vndPerCredit || 1000)) / 1000) * 1000;
+    return v.toLocaleString('vi-VN') + 'đ';
+  }
+
+  // Thẻ mời — chèn vào giữa dòng hội thoại SAU câu thứ 3, gọi tên đúng cung mà
+  // người ta vừa hỏi. Bán ở khoảnh khắc đã tỏ ý quan tâm, không phải lúc cạn ví.
+  function maybeShowUpsell() {
+    if (_upsellShown || !ctx || !ctx.birth) return;   // cần lá số thật mới mời Luận Giải
+    if (ACTIVE === 'luan-giai') return;               // đang ở chính tool đó rồi
+    if (_askCount < 3) return;
+    if (_rc.lasoPrice == null) return;                // chưa biết giá thì không hứa gì
+    _upsellShown = true;
+
+    var cung = null;
+    for (var i = _cungAsked.length - 1; i >= 0; i--) { if (_cungAsked[i]) { cung = _cungAsked[i]; break; } }
+    var rest = LG_PHAN.filter(function (p) { return p !== cung; });
+    var preview = rest.slice(0, 5).join(' · ');
+
+    var lead = cung
+      ? 'Mấy câu vừa rồi của bạn xoay quanh <b>' + esc(cung) + '</b>.'
+      : 'Bạn đang hỏi khá sâu về lá số này.';
+
+    var chat = document.getElementById('chat');
+    if (!chat) return;
+    var card = document.createElement('div');
+    card.className = 'rail-upsell';
+    card.innerHTML =
+      '<div class="ru-t">' + lead + '</div>' +
+      '<div class="ru-d">Bản <b>Luận Giải</b> soi trọn <b>' + LG_PHAN.length + ' mục</b> của chính lá số này — ' +
+        (cung ? esc(cung) + ' có mục riêng, cùng ' : '') + rest.length + ' mục còn lại: ' +
+        '<span class="ru-list">' + esc(preview) + '…</span></div>' +
+      '<div class="ru-f">' +
+        '<a class="ru-btn" href="/app/luan-giai">Xem trọn ' + LG_PHAN.length + ' mục — ' + _rc.lasoPrice + ' Lượng</a>' +
+        '<span class="ru-price">≈ ' + creditVnd(_rc.lasoPrice) + '</span>' +
+      '</div>';
+    chat.appendChild(card);
+    chat.scrollTop = chat.scrollHeight;
+    try { track('cta_click', { tool_id: ACTIVE, meta: { from: 'rail_upsell_shown', cung: cung || null } }); } catch (e) { /* ignore */ }
+    var btn = card.querySelector('.ru-btn');
+    if (btn) btn.addEventListener('click', function () {
+      try { track('cta_click', { tool_id: 'laso', meta: { from: 'rail_upsell', cung: cung || null } }); } catch (e) { /* ignore */ }
+    });
+  }
+
   // ── Modal HẾT LƯỢNG (giọng thầy) — bật khi rail nhận 402 ──
   function _viewerName() {
     try { var r = (curMeta && curMeta.restore) || {}; if (r.birth && r.birth.name) return String(r.birth.name).trim(); } catch (e) { /* ignore */ }
     return '';
   }
+  // Tường hết-lượt. CỐ Ý nói bằng LÁ SỐ chứ không bằng tiền: dẫn bằng thứ người
+  // ta nhận được (trọn 24 mục của CHÍNH lá số này, kể tên vài mục cụ thể), rồi
+  // mới tới giá. Bản cũ chỉ nói "phần Lượng trong ví đã cạn — nạp thêm", tức là
+  // đòi tiền mà không cho biết đang mua cái gì.
   function openTopupModal() {
     if (document.querySelector('.sh-topup-modal')) return;
     var nm = _viewerName(), thay = authorLabel();
+    var hasLaso = !!(ctx && ctx.birth) && ACTIVE !== 'luan-giai' && _rc.lasoPrice != null;
+    var preview = LG_PHAN.slice(1, 6).join(' · ');
     var wrap = document.createElement('div');
     wrap.className = 'sh-topup-modal';
     wrap.innerHTML =
@@ -864,12 +1206,19 @@
         '<button class="stm-x" aria-label="Đóng">✕</button>' +
         '<img class="stm-ava" src="' + authorAva() + '" alt="">' +
         '<div class="stm-t">Quẻ còn dở, xin phép dừng ở đây…</div>' +
-        '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn tỏ tường' + (nm ? ' cho ' + esc(nm) : '') +
-          ', nhưng phần Lượng trong ví đã cạn. Nạp thêm để thầy luận tiếp mạch còn dang dở nhé.</div>' +
-        '<a class="stm-btn" href="/topup.html">Nạp Lượng để hỏi tiếp →</a>' +
+        (hasLaso
+          ? '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn tỏ tường' + (nm ? ' cho ' + esc(nm) : '') +
+              '. Bản <b>Luận Giải</b> soi trọn <b>' + LG_PHAN.length + ' mục</b> của chính lá số này — ' +
+              esc(preview) + '… — thay vì hỏi lẻ từng câu.</div>' +
+            '<a class="stm-btn" href="/app/luan-giai">Xem trọn ' + LG_PHAN.length + ' mục — ' + _rc.lasoPrice + ' Lượng (≈ ' + creditVnd(_rc.lasoPrice) + ')</a>' +
+            '<a class="stm-alt" href="/topup.html">Hoặc nạp Lượng để hỏi tiếp từng câu →</a>'
+          : '<div class="stm-d">' + esc(thay) + ' còn nhiều điều muốn tỏ tường' + (nm ? ' cho ' + esc(nm) : '') +
+              ', nhưng phần Lượng trong ví đã cạn. Nạp thêm để thầy luận tiếp mạch còn dang dở nhé.</div>' +
+            '<a class="stm-btn" href="/topup.html">Nạp Lượng để hỏi tiếp →</a>') +
         '<button class="stm-later" type="button">Để sau</button>' +
       '</div>';
     document.body.appendChild(wrap);
+    try { track('cta_click', { tool_id: ACTIVE, meta: { from: hasLaso ? 'rail_wall_laso' : 'rail_wall_topup' } }); } catch (e) { /* ignore */ }
     var close = function () { wrap.remove(); };
     wrap.addEventListener('click', function (e) { if (e.target === wrap) close(); });
     wrap.querySelector('.stm-x').addEventListener('click', close);
@@ -964,6 +1313,7 @@
       // tool Chân Dung Tiền Kiếp trả lời qua nhân vật thay vì luận thẳng).
       // Chỉ là CỜ, nội dung nhân vật do server tự tính lại từ birth.
       ctx = (o.birth || o.scenario) ? { birth: o.birth || null, scenario: o.scenario || null, wrap: o.wrap || null } : null;
+      ctxCalls++;
       // Funnel: tool đã tính ra kết quả + gắn ngữ cảnh = "đã dùng tool" (activation).
       try { track('tool_run', { tool_id: ACTIVE, slug: (o.scenario && o.scenario.type) || null }); } catch (e) { /* ignore */ }
       messages = [];
@@ -978,6 +1328,10 @@
       document.getElementById('railSend').disabled = false;
       var att = document.getElementById('railAttach'); if (att) att.disabled = false;
       greet(o);
+      // Ngữ cảnh mới = phiên hỏi mới: đếm lại từ đầu và cho thẻ mời hiện lại.
+      _askCount = 0; _upsellShown = false; _cungAsked = [];
+      // Nạp ví để đồng hồ hiện "còn N câu" NGAY khi mở rail, chưa cần hỏi câu nào.
+      loadRailStatus();
       // KHÔI PHỤC phiên đã lưu (đi qua sessionStorage khi bấm 1 mục lịch sử):
       // thay transcript + sessionId, replay — KHÔNG gọi API, KHÔNG trừ Lượng.
       if (HIST_ON) try {
@@ -1030,7 +1384,9 @@
     // Bát Tự) — fd = TuviForm.getData() (hoten/ngay/thang/nam/gioHour/gioPhut/gioitinh)
     // + namxem riêng của trang (năm luận, ngoài field TuviForm). localStorage, không server.
     rememberBirth: function (fd) { try { localStorage.setItem('app_birth', JSON.stringify(fd)); } catch (e) { /* ignore */ } },
-    getRememberedBirth: function () { try { return JSON.parse(localStorage.getItem('app_birth') || 'null'); } catch (e) { return null; } },
+    getRememberedBirth: function () { return birthSnapshot(); },
+    // Đổi birth (shape bất kỳ) sang shape contract để gửi Shell.setContext({birth}).
+    birthToApi: function (b) { return birthToApi(b); },
     // Ngày sinh truyền THẲNG qua URL (?ngay=&thang=&nam=&gio=&gioitinh=&namxem=),
     // `gio` là giờ DƯƠNG 0–23 (không phải chỉ số địa chi) — khớp field gioHour của
     // TuviForm.setData, tránh nhánh gioIdx của nó.
@@ -1136,6 +1492,10 @@
       // Thread mới cùng ngữ cảnh: giữ restore/title, đổi id để không đè phiên cũ.
       curMeta = { restore: (curMeta && curMeta.restore) || { birth: birthSnapshot(), scenario: ctx.scenario || null }, title: (curMeta && curMeta.title) || 'Phiên', createdAt: Date.now() };
       ctxChips = ctxChipsOrig.slice(); greet({ greeting: 'Bắt đầu hội thoại mới. Bạn muốn hỏi gì về lá số này?' });
+      // Hội thoại mới → đếm lại câu, và cho thẻ mời có cơ hội hiện lại (một lần
+      // mỗi hội thoại, không phải một lần mỗi phiên trình duyệt).
+      _askCount = 0; _upsellShown = false; _cungAsked = [];
+      renderRailMeter();
     }
   }
 
@@ -1146,6 +1506,10 @@
     var imgs = pendingImages.slice();
     if (!text && !imgs.length) return;
     try { track('chat_msg', { tool_id: ACTIVE, slug: (ctx && ctx.scenario && ctx.scenario.type) || null, meta: { has_img: imgs.length > 0 } }); } catch (e) { /* ignore */ }
+    // Đếm câu + ghi nhận chủ đề (cho thẻ mời) TRƯỚC khi gọi API — chủ đề suy từ
+    // chính câu hỏi, không cần đợi câu trả lời.
+    _askCount++;
+    _cungAsked.push(detectCung(text));
     input.value = ''; autoGrow(input);
     var chat = document.getElementById('chat');
     var empty = document.getElementById('railEmpty'); if (empty) empty.remove();
@@ -1170,7 +1534,9 @@
     try {
       var headers = { 'Content-Type': 'application/json' };
       var token = getToken(); if (token) headers['Authorization'] = 'Bearer ' + token;
-      var body = { session_id: sessionId, stream: true, messages: messages.slice(-12), client: { platform: 'web', version: '1.0.0' } };
+      // anon_id đi kèm để server đếm lượt DÙNG THỬ khi chưa đăng nhập. Người đã
+      // đăng nhập vẫn gửi (vô hại — server bỏ qua vì có token).
+      var body = { session_id: sessionId, stream: true, messages: messages.slice(-12), client: { platform: 'web', version: '1.0.0', anon_id: anonId() } };
       if (ctx.birth) body.birth = ctx.birth;
       if (ctx.scenario) body.scenario = ctx.scenario;
       if (ctx.wrap) body.wrap = ctx.wrap;
@@ -1181,6 +1547,19 @@
       }
       var res = await fetch('/api/v1/chat', { method: 'POST', headers: headers, body: JSON.stringify(body) });
       if (res.status === 401) {
+        // Hết phần DÙNG THỬ (khách vô danh đã hỏi hết số câu được cấp) → tường
+        // ĐĂNG KÝ, không phải hộp đăng nhập trơ. Người này chưa có tài khoản nên
+        // phải cho họ thấy đăng ký đổi được gì.
+        var _isTrial = false;
+        try { var _ed = await res.clone().json(); _isTrial = _ed && _ed.code === 'anon_trial_exhausted'; } catch (e) { /* ignore */ }
+        if (_isTrial) {
+          _rc.anon = true; _rc.anonLeft = 0; renderRailMeter();
+          typing.innerHTML = '<p>Hết phần dùng thử. <a href="#" id="railSignupLink" style="color:var(--blue);font-weight:600">Đăng ký miễn phí</a> để được tặng Lượng và hỏi tiếp — lá số vẫn xem miễn phí.</p>';
+          var _sl = document.getElementById('railSignupLink');
+          if (_sl) _sl.addEventListener('click', function (ev) { ev.preventDefault(); openAnonSignupModal(); });
+          openAnonSignupModal();
+          streaming = false; setSend(true); messages.pop(); return;
+        }
         // Chưa đăng nhập → LƯU câu hỏi + đường quay lại (kèm ?auto=1 để tự lập
         // lại lá số) rồi mở đăng nhập. Email: đăng nhập tại chỗ → hỏi tiếp ngay.
         // OAuth: auth-callback đưa về đúng trang này, autoRun lập lại lá số,
@@ -1209,7 +1588,13 @@
         streaming = false; setSend(true); messages.pop(); return;
       }
       if (res.status === 402) {
-        typing.innerHTML = '<p>Bạn đã hết Lượng. <a href="/topup.html" style="color:var(--blue);font-weight:600">Nạp thêm</a> để hỏi trợ lý. Lá số vẫn xem miễn phí.</p>';
+        // Đồng bộ ví từ chính lỗi 402 (server trả balance + price) → đồng hồ về 0
+        // đúng lúc, không đợi lần tải sau.
+        try {
+          var _pd = await res.clone().json();
+          if (_pd) applyPaywallInfo({ balance: _pd.balance, price: _pd.price });
+        } catch (e) { /* ignore */ }
+        typing.innerHTML = '<p>Đã hết lượt hỏi. Lá số vẫn xem miễn phí — bạn có thể xem <a href="/app/luan-giai" style="color:var(--blue);font-weight:600">bản Luận Giải trọn ' + LG_PHAN.length + ' mục</a> hoặc <a href="/topup.html" style="color:var(--blue);font-weight:600">nạp thêm</a> để hỏi tiếp.</p>';
         openTopupModal();
         streaming = false; setSend(true); messages.pop(); return;
       }
@@ -1224,13 +1609,19 @@
           if (ev.name === 'text' && ev.data.delta) { acc += ev.data.delta; typing.innerHTML = mdLite(acc); chat.scrollTop = chat.scrollHeight; }
           else if (ev.name === 'status' && !acc) { typing.innerHTML = '<span class="typing" style="gap:6px">' + esc(ev.data.text || 'Đang xem…') + ' <i></i><i></i><i></i></span>'; }
           else if (ev.name === 'error') { acc = acc || ('Xin lỗi, gặp trục trặc: ' + esc(ev.data.message || '')); }
-          else if (ev.name === 'done' && ev.data && ev.data.suggestions && ev.data.suggestions.length) { ctxChips = ev.data.suggestions.slice(0, 4); }
+          else if (ev.name === 'done' && ev.data) {
+            if (ev.data.suggestions && ev.data.suggestions.length) ctxChips = ev.data.suggestions.slice(0, 4);
+            applyPaywallInfo(ev.data.paywall);
+          }
         }
       }
       if (!acc) acc = '(không có nội dung)';
       typing.innerHTML = mdLite(acc);
       messages.push({ role: 'assistant', content: acc });
       saveCurrent();
+      // Thẻ mời SAU khi câu trả lời đã hiện xong — chèn trước lúc đó thì nó đứng
+      // chen giữa lúc người ta đang đọc, thành quảng cáo cắt ngang.
+      maybeShowUpsell();
       // Đến từ link chia sẻ + đã hỏi thật lần đầu → ghi nhận 1 lượt chuyển đổi.
       if (_fromshareId && !_convFired) { _convFired = true; trackConvert(_fromshareId); }
     } catch (e) {
@@ -1314,6 +1705,27 @@
     } catch (e) { /* ignore */ }
   }
 
+  // ── CHIỀU CAO THANH TIÊU ĐỀ → biến CSS --ws-top-h ──
+  // .ws-top dính đỉnh khung workspace, nhưng CAO BAO NHIÊU thì tuỳ trang (số
+  // nút hành động) và tuỳ bề ngang (điện thoại cho cụm nút xuống hàng thứ 2).
+  // Trang nào có thanh phụ dính riêng — .jump (mục lục) của Luận Giải / Bát Tự
+  // / Xem Tuổi — phải neo theo con số THẬT; trước đây chép cứng 51px nên thanh
+  // mục lục nằm KHUẤT hẳn sau header ở MỌI bề ngang. Đo lại mỗi khi header đổi
+  // kích thước (nút "Chia sẻ" chèn thêm sau khi có kết quả, xoay ngang máy…).
+  function trackWsTopHeight() {
+    var top = document.querySelector('.ws-top');
+    if (!top) return;
+    var apply = function () {
+      var h = Math.round(top.getBoundingClientRect().height);
+      if (h > 0) document.documentElement.style.setProperty('--ws-top-h', h + 'px');
+    };
+    apply();
+    if (window.ResizeObserver) {
+      try { new ResizeObserver(apply).observe(top); return; } catch (e) { /* ignore */ }
+    }
+    window.addEventListener('resize', apply);
+  }
+
   // ── BOTTOM TAB BAR (mobile) ──
   // Chèn 1 lần vào body; CSS chỉ hiện ≤900px. Cho phép chạm 1 phát tới Trợ lý
   // (rail) và Công cụ (sidebar) thay vì chôn sau hamburger. Trang chủ / Tài
@@ -1392,6 +1804,7 @@
     renderSidebar();
     renderRail();
     renderTabbar();
+    trackWsTopHeight();
     registerNativePush();
     ensureCmdk();
     if (!document.getElementById('shell-backdrop')) {
@@ -1422,7 +1835,10 @@
     // đúng phiên (reload về ?auto=1 sạch trong restoreSession).
     if (HIST_ON) {
       var _rid = (location.search.match(/[?&]restore=([^&]+)/) || [])[1];
-      if (_rid) restoreSession(decodeURIComponent(_rid));
+      if (_rid) { restoreSession(decodeURIComponent(_rid)); return; }
+      // Chốt sau cùng cho lượt khôi phục: đợi tool tự dựng lại (đa số chạy đồng
+      // bộ ngay trong DOMContentLoaded, vài tool phải fetch trước) rồi mới đỡ.
+      setTimeout(restorePendingFallback, 2500);
     }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);

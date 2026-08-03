@@ -74,7 +74,7 @@ ${tags.length ? `<meta name="keywords" content="${escHtml(tags.join(', '))}">` :
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="apple-touch-icon" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet"></noscript>
 <script type="application/ld+json">${schemas}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -159,7 +159,7 @@ window._articleData = { category: ${JSON.stringify(article.category||'')}, tags:
 </script>
 <script src="/related-tools.js"></script>
 <script src="/testimonials.js"></script>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=19" defer></script>
+<script src="/track.js?v=3" defer></script><script src="/nav.js?v=20" defer></script>
 </body></html>`;
 }
 
@@ -173,7 +173,7 @@ function buildNotFound() {
 <h1 style="color:#061A2E;font-family:Georgia,serif;margin-bottom:16px">Không tìm thấy bài viết</h1>
 <p style="color:#777;margin-bottom:24px">Bài viết không tồn tại hoặc đã bị xóa.</p>
 <a href="/blog.html" style="color:#1455A4">← Về Khảo Luận</a>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=19" defer></script>
+<script src="/track.js?v=3" defer></script><script src="/nav.js?v=20" defer></script>
 </body></html>`;
 }
 

@@ -154,7 +154,7 @@ ${(row.tags||[]).length ? `<meta name="keywords" content="${esc(row.tags.join(',
 <link rel="canonical" href="${url}">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"></noscript>
 <script type="application/ld+json">${schema}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -218,7 +218,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
   </div>
 </article>
 <script src="/footer.js"></script>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=19" defer></script>
+<script src="/track.js?v=3" defer></script><script src="/nav.js?v=20" defer></script>
 </body></html>`;
 
   return new NextResponse(html, {

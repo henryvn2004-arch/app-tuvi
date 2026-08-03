@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<link rel="preload" href="/nav.js?v=19" as="script">
+<link rel="preload" href="/nav.js?v=20" as="script">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Tư Vấn Kiểu Tóc & Kính Mắt Hợp Tướng Mặt Bằng AI | Tử Vi Minh Bảo</title>
 <meta property="og:title" content="Tư Vấn Kiểu Tóc Hợp Tướng Mặt Bằng AI | Tử Vi Minh Bảo"/>
@@ -158,19 +158,19 @@
     <div style="margin-bottom:20px">
       <div style="font-size:13px;font-weight:600;color:var(--text-mid);margin-bottom:8px">Giới tính</div>
       <div class="gender-row">
-        <button class="gender-btn active" id="genderNam" onclick="setGender('nam',this)">👦 Nam</button>
-        <button class="gender-btn" id="genderNu" onclick="setGender('nu',this)">👧 Nữ</button>
+        <button class="gender-btn active" id="genderNam" onclick="setGender('nam',this)"><span class="ic" data-icon="user"></span> Nam</button>
+        <button class="gender-btn" id="genderNu" onclick="setGender('nu',this)"><span class="ic" data-icon="user"></span> Nữ</button>
       </div>
     </div>
 
     <div class="privacy-notice">
-      <span>🔒</span>
+      <span><span class="ic" data-icon="lock"></span></span>
       <div><strong>Quyền riêng tư:</strong> Ảnh chỉ gửi đến AI để phân tích, không lưu trên server của chúng tôi. Replicate xử lý và trả về ảnh kết quả, không lưu trữ lâu dài.</div>
     </div>
 
     <div class="input-tabs" style="margin-top:20px">
-      <button class="input-tab active" onclick="switchTab('upload',this)">📁 Tải Ảnh Lên</button>
-      <button class="input-tab" onclick="switchTab('camera',this)">📷 Chụp Ảnh</button>
+      <button class="input-tab active" onclick="switchTab('upload',this)"><span class="ic" data-icon="folder"></span> Tải Ảnh Lên</button>
+      <button class="input-tab" onclick="switchTab('camera',this)"><span class="ic" data-icon="camera"></span> Chụp Ảnh</button>
     </div>
 
     <!-- Upload pane -->
@@ -202,10 +202,10 @@
           <canvas id="camCanvas" style="display:none"></canvas>
         </div>
         <div id="camBtns" style="display:none;gap:12px;justify-content:center;margin-top:12px">
-          <button onclick="capturePhoto()" style="padding:10px 24px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">📸 Chụp</button>
+          <button onclick="capturePhoto()" style="padding:10px 24px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit"><span class="ic" data-icon="camera"></span> Chụp</button>
           <button onclick="stopCamera()" style="padding:10px 20px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;color:var(--text-mid)">Huỷ</button>
         </div>
-        <button id="openCamBtn" class="camera-btn" onclick="openCamera()">📷 Mở Camera</button>
+        <button id="openCamBtn" class="camera-btn" onclick="openCamera()"><span class="ic" data-icon="camera"></span> Mở Camera</button>
       </div>
     </div>
 
@@ -258,7 +258,7 @@
     <div id="resultTabsWrap" style="display:none">
       <div style="display:flex;gap:0;border-bottom:2px solid var(--border-lt);margin-bottom:16px">
         <button class="result-tab active" id="tab-hair" onclick="switchResultTab('hair',this)">✂️ Kiểu Tóc</button>
-        <button class="result-tab" id="tab-glasses" onclick="switchResultTab('glasses',this)">👓 Kính Mắt</button>
+        <button class="result-tab" id="tab-glasses" onclick="switchResultTab('glasses',this)"><span class="ic" data-icon="glasses"></span> Kính Mắt</button>
       </div>
 
       <!-- HAIR TAB -->
@@ -274,7 +274,7 @@
       </div>
 
       <div class="tip-box" id="tipBox" style="display:none;margin-top:12px">
-        <strong>💬 Lời khuyên: </strong><span id="tipText"></span>
+        <strong><span class="ic" data-icon="message-circle"></span> Lời khuyên: </strong><span id="tipText"></span>
       </div>
     </div>
 
@@ -297,7 +297,7 @@
         </div>
         <div class="tryon-actions">
           <button class="btn-download" onclick="downloadResult()">⬇ Tải Ảnh Kết Quả</button>
-          <button class="btn-retry" onclick="clearTryon()">🔄 Thử Kiểu Khác</button>
+          <button class="btn-retry" onclick="clearTryon()"><span class="ic" data-icon="rotate-cw"></span> Thử Kiểu Khác</button>
         </div>
       </div>
       <div class="error-msg" id="tryon-error-msg"></div>
@@ -306,7 +306,7 @@
     <!-- Analyze again -->
     <div id="resetWrap" style="display:none;margin-top:24px;text-align:center">
       <button onclick="resetAll()" style="padding:10px 28px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text-mid);cursor:pointer;font-family:inherit">
-        🔄 Phân tích ảnh khác
+        <span class="ic" data-icon="rotate-cw"></span> Phân tích ảnh khác
       </button>
     </div>
   </div>
@@ -905,7 +905,7 @@ async function _saveTryonReading(styleId, imageUrl) {
 
 (function() { _restoreStateAfterAuth(); })();
 </script>
-<script src="/tuvi-paywall.js"></script>
+<script src="/tuvi-paywall.js?v=11"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=1"></script>
 <script>
 // TuviPaywall được init per-action trong analyze() và selectStyle()
@@ -937,7 +937,7 @@ let _tryonLoadingCtl = null;
   </div>
 </section>
 <script src="/testimonials.js"></script>
-<script src="/related-tools.js"></script>
-<script src="/nav.js?v=19" defer></script>
+<script src="/related-tools.js?v=2"></script>
+<script src="/nav.js?v=20" defer></script>
 </body>
 </html>

@@ -104,7 +104,7 @@ function buildHTML(master: any, articles: any[], realArticleCount: number) {
 <link rel="canonical" href="${url}">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet"></noscript>
 <script type="application/ld+json">${schemas}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -189,7 +189,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
     </div>` : ''}
   </aside>
 </div>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=19" defer></script>
+<script src="/track.js?v=3" defer></script><script src="/nav.js?v=20" defer></script>
 </body></html>`;
 }
 
@@ -201,7 +201,7 @@ function buildNotFound() {
 </head><body style="font-family:sans-serif;text-align:center;padding:80px">
 <h1 style="color:#061A2E;font-family:Georgia,serif;margin-bottom:16px">Không tìm thấy tác giả</h1>
 <a href="/tac-gia" style="color:#1455A4">← Về danh sách tác giả</a>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=19" defer></script>
+<script src="/track.js?v=3" defer></script><script src="/nav.js?v=20" defer></script>
 </body></html>`;
 }
 

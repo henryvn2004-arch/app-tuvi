@@ -69,9 +69,28 @@ function esc(s: unknown) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
+interface HubPaging {
+  page: number;
+  totalPages: number;
+  totals: Record<string, number>;
+}
+
+/** Dải số trang quanh trang hiện tại + luôn có trang đầu/cuối, tránh in 59 số. */
+function pageWindow(page: number, totalPages: number): number[] {
+  const out = new Set<number>([1, totalPages]);
+  for (let p = page - 2; p <= page + 2; p++) if (p >= 1 && p <= totalPages) out.add(p);
+  return [...out].sort((a, b) => a - b);
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function buildHub(cat: string, meta: typeof CAT_META[string], pages: any[]) {
-  const url = `${BASE_URL}/${cat}`;
+function buildHub(cat: string, meta: typeof CAT_META[string], pages: any[], paging: HubPaging) {
+  const base = `${BASE_URL}/${cat}`;
+  /** Trang 1 = URL gốc (không có /trang/1) để khỏi đẻ ra hai URL cùng nội dung. */
+  const pageUrl = (p: number) => (p === 1 ? base : `${base}/trang/${p}`);
+  // Trang 2+ tự trỏ canonical về CHÍNH nó, không gộp về trang 1: gộp thì Google
+  // coi 58 trang kia là bản sao của trang 1 và bỏ qua toàn bộ liên kết trên đó —
+  // đúng thứ đang cần chúng mang.
+  const url = pageUrl(paging.page);
   const grouped: Record<string, typeof pages> = {};
   for (const p of pages) {
     const g = p.category || 'other';
@@ -79,18 +98,39 @@ function buildHub(cat: string, meta: typeof CAT_META[string], pages: any[]) {
     grouped[g].push(p);
   }
 
-  const gridHtml = Object.entries(grouped).map(([grpCat, grpPages]) => `
+  // Duyệt theo THỨ TỰ KHAI trong meta.cats, không theo thứ tự dữ liệu trả về:
+  // chuyên mục hết bài ở trang cuối vẫn giữ đúng chỗ, không nhảy lung tung giữa
+  // các trang.
+  const gridHtml = meta.cats
+    .filter((grpCat) => (grouped[grpCat] || []).length > 0)
+    .map((grpCat) => {
+      const grpPages = grouped[grpCat];
+      const total = paging.totals[grpCat] || grpPages.length;
+      return `
     <section class="hub-section">
-      <h2 class="hub-section-title">${esc(CAT_LABEL[grpCat] || grpCat)} <span class="hub-count">${grpPages.length} bài</span></h2>
+      <h2 class="hub-section-title">${esc(CAT_LABEL[grpCat] || grpCat)} <span class="hub-count">${total} bài</span></h2>
       <div class="hub-grid">
-        ${grpPages.slice(0,60).map(p => `
+        ${grpPages.map((p: any) => `
           <a class="hub-card" href="${BASE_URL}/tu-vi/${esc(p.slug)}">
             <div class="hub-card-title">${esc(p.h1 || p.title)}</div>
             <div class="hub-card-meta">${esc((p.meta_description||'').slice(0,80))}…</div>
           </a>`).join('')}
       </div>
-      ${grpPages.length > 60 ? `<p class="hub-more">Và ${grpPages.length - 60} bài viết khác trong chủ đề này.</p>` : ''}
-    </section>`).join('');
+    </section>`;
+    })
+    .join('');
+
+  const pagerHtml = paging.totalPages > 1 ? `
+    <nav class="hub-pager" aria-label="Phân trang">
+      ${paging.page > 1 ? `<a class="pg" href="${pageUrl(paging.page - 1)}" rel="prev">‹ Trước</a>` : ''}
+      ${pageWindow(paging.page, paging.totalPages).map((p) =>
+        p === paging.page
+          ? `<span class="pg pg-cur">${p}</span>`
+          : `<a class="pg" href="${pageUrl(p)}">${p}</a>`,
+      ).join('')}
+      ${paging.page < paging.totalPages ? `<a class="pg" href="${pageUrl(paging.page + 1)}" rel="next">Sau ›</a>` : ''}
+    </nav>
+    <p class="hub-more">Trang ${paging.page} / ${paging.totalPages}</p>` : '';
 
   const schema = JSON.stringify({
     '@context': 'https://schema.org',
@@ -113,7 +153,7 @@ function buildHub(cat: string, meta: typeof CAT_META[string], pages: any[]) {
 <link rel="canonical" href="${url}">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet"></noscript>
 <script type="application/ld+json">${schema}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -135,13 +175,17 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .hub-card:hover{border-color:var(--purple);box-shadow:0 2px 10px rgba(139,109,255,.12);transform:translateY(-1px)}
 .hub-card-title{font-size:13px;font-weight:500;color:var(--navy);margin-bottom:4px;line-height:1.4}
 .hub-card-meta{font-size:11px;color:#999;line-height:1.4}
-.hub-more{font-size:13px;color:#999;margin-top:10px;font-style:italic}
+.hub-more{font-size:13px;color:#999;margin-top:10px;font-style:italic;text-align:center}
+.hub-pager{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:32px}
+.pg{display:inline-block;min-width:34px;text-align:center;padding:7px 10px;border:1px solid var(--border);border-radius:6px;text-decoration:none;color:var(--navy);font-size:13px}
+.pg:hover{border-color:var(--purple)}
+.pg-cur{background:var(--navy);color:#fff;border-color:var(--navy)}
 @media(max-width:700px){.hub-hero,.breadcrumb{padding-left:16px;padding-right:16px}.hub-wrap{padding:24px 12px 60px}.hub-grid{grid-template-columns:1fr}.hub-hero h1{font-size:22px}}
 </style>
 <script src="/auth.js"></script>
 </head>
 <body>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=19"></script>
+<script src="/track.js?v=3" defer></script><script src="/nav.js?v=20"></script>
 <div class="breadcrumb"><a href="/">Trang Chủ</a> › <span>${esc(meta.h1)}</span></div>
 <div class="hub-hero">
   <div class="hub-hero-icon"><span class="ic-inline" data-icon-emoji="${meta.icon}" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">${meta.icon}</span></div>
@@ -149,23 +193,87 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
   <p>${esc(meta.desc)}</p>
   <a class="hub-hero-cta" href="/">Xem Tử Vi Của Bạn →</a>
 </div>
-<div class="hub-wrap">${gridHtml}</div>
+<div class="hub-wrap">${gridHtml}${pagerHtml}</div>
 <script src="/footer.js"></script>
 </body></html>`;
 }
 
+// Số liên kết hiển thị cho MỖI chuyên mục trên MỖI trang hub. Giữ đúng 60 như
+// bản cũ (mật độ hiển thị không đổi) — cái đổi là 60 tiếp theo nay đi sang trang
+// 2 chứ không biến mất.
+const PER_CAT = 60;
+
+/** Đếm chính xác số bài mỗi chuyên mục (`count=exact`, không tải dòng nào). */
+async function countCat(c: string): Promise<number> {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/seo_pages?category=eq.${encodeURIComponent(c)}&select=id&limit=1`,
+      {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          Prefer: 'count=exact',
+          Range: '0-0',
+        },
+        cache: 'no-store',
+      },
+    );
+    // content-range: "0-0/3540"
+    const total = Number((res.headers.get('content-range') || '').split('/')[1]);
+    return Number.isFinite(total) ? total : 0;
+  } catch {
+    return 0;
+  }
+}
+
+/** Lấy đúng một lát của MỘT chuyên mục. */
+async function fetchCatSlice(c: string, offset: number): Promise<unknown[]> {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/seo_pages?category=eq.${encodeURIComponent(c)}` +
+        `&select=slug,h1,title,meta_description,category&order=id.asc&limit=${PER_CAT}&offset=${offset}`,
+      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }, cache: 'no-store' },
+    );
+    if (!res.ok) return [];
+    const rows = await res.json();
+    return Array.isArray(rows) ? rows : [];
+  } catch {
+    return [];
+  }
+}
+
 export async function GET(request: NextRequest) {
-  const cat = new URL(request.url).searchParams.get('cat') || '';
+  const sp = new URL(request.url).searchParams;
+  const cat = sp.get('cat') || '';
   const meta = CAT_META[cat];
   if (!meta) return NextResponse.redirect(new URL('/', BASE_URL));
 
-  const catFilter = meta.cats.map(c => `category.eq.${c}`).join(',');
-  const r = await fetch(
-    `${SUPABASE_URL}/rest/v1/seo_pages?or=(${encodeURIComponent(catFilter)})&select=slug,h1,title,meta_description,category&order=category.asc,id.asc&limit=2000`,
-    { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
-  );
-  const pages = await r.json();
-  const html = buildHub(cat, meta, Array.isArray(pages) ? pages : []);
+  const page = Math.max(1, Math.floor(Number(sp.get('page')) || 1));
+  const offset = (page - 1) * PER_CAT;
+
+  // ── Truy vấn TỪNG chuyên mục, không gộp một trần chung ──────────────────────
+  // Bản cũ hỏi cả 5 chuyên mục trong MỘT lượt `or=(…)&limit=2000`, sắp theo
+  // category rồi id. Trần 2000 bị hai chuyên mục đầu ăn hết ⇒ ba chuyên mục sau
+  // render ĐÚNG 0 mục, tuần nào cũng vậy. Đo trên prod:
+  //   tu-vi-nam-sinh 120/120 · tuong-hop-hon-nhan 1.880/3.540
+  //   tuong-hop-lam-an 0/3.540 · van-han 0/480 · y-nghia-sao 0/168
+  // Hỏi riêng từng chuyên mục thì trần của mục này không thể nuốt mục kia.
+  const [counts, slices] = await Promise.all([
+    Promise.all(meta.cats.map(countCat)),
+    Promise.all(meta.cats.map((c) => fetchCatSlice(c, offset))),
+  ]);
+
+  const totals: Record<string, number> = {};
+  meta.cats.forEach((c, i) => (totals[c] = counts[i]));
+  const pages = slices.flat();
+
+  // Tổng số trang hub = theo chuyên mục ĐÔNG NHẤT. Đây mới là thứ khiến 7.080
+  // trang tương hợp có đường vào: trước đây hub phát đúng 120 liên kết cho
+  // 7.848 trang, phần còn lại chỉ có sitemap dẫn tới.
+  const totalPages = Math.max(1, ...meta.cats.map((c) => Math.ceil((totals[c] || 0) / PER_CAT)));
+  if (page > totalPages) return NextResponse.redirect(new URL(`/${cat}`, BASE_URL));
+
+  const html = buildHub(cat, meta, pages, { page, totalPages, totals });
   return new NextResponse(html, {
     status: 200,
     headers: {

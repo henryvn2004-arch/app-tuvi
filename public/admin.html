@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Admin — Tử Vi Minh Bảo</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&display=swap" rel="stylesheet"/>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="/admin.css?v=4"/>
 <script>(function(){try{var t=localStorage.getItem('tva_theme');if(t==='dark'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
@@ -380,6 +380,22 @@
 
         <div class="panel">
           <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>Hàng Đợi Bài Đăng (Mạng Xã Hội)</div>
+            <div class="panel-actions">
+              <span class="badge badge-grey" id="mq-state-badge">…</span>
+              <button class="btn btn-primary btn-sm" onclick="loadMediaQueue()">↻</button>
+            </div>
+          </div>
+          <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
+            Track Media Pipeline — cron <code>media-build</code> 09:30 mỗi sáng dựng ảnh + viết caption rồi <b>đăng thẳng</b>, không còn khâu duyệt tay. Ảnh render bằng Satori nên <b>không tốn tiền model</b>. Đây là chỗ theo dõi bài đã ra ngoài; nút chỉ còn cho bài <b>lỗi</b> (sửa caption rồi xếp lại hàng, hoặc bỏ hẳn). Bài đã đăng thì không sửa được từ đây — muốn dừng tự đăng thì đặt <code>social.autopost_enabled=false</code>.
+          </div>
+          <div id="mq-list" style="padding:0 1rem 1rem">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="16" r="1"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Autopilot — Nhật Ký Hành Động</div>
             <div class="panel-actions">
               <span class="badge badge-grey" id="ap-state-badge">…</span>
@@ -482,7 +498,7 @@
           </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Gói</th><th>Nhãn</th><th>Lượng</th><th>VNĐ</th><th>USD</th><th>Bonus</th><th>Bật</th><th></th></tr></thead>
+              <thead><tr><th>Gói</th><th>Nhãn</th><th>Lượng</th><th>VNĐ</th><th>USD</th><th>Bật</th><th></th></tr></thead>
               <tbody id="packages-body"><tr><td colspan="8" class="loading"><span class="spin"></span>Đang tải...</td></tr></tbody>
             </table>
           </div>
@@ -1967,8 +1983,9 @@ async function loadSysConfig() {
     </div>
     <div class="form-row full">
       <div class="form-group">
-        <label class="form-label">Giá Lượng / lượt chat (0 = miễn phí)</label>
+        <label class="form-label">Giá Lượng / lượt chat — DỰ PHÒNG (0 = miễn phí)</label>
         <input type="number" class="form-control" id="sc-cost" value="${jv(cfg['chat.cost'], 5)}" style="max-width:200px">
+        <div style="font-size:.72rem;color:var(--text-lt);margin-top:.4rem">Giá rail THẬT (web + Telegram/Messenger/WhatsApp) nằm ở tool <b>rail-message</b> trong <a href="#" onclick="goTo('registry');return false" style="color:var(--blue)">Tools Registry</a>. Ô này chỉ dùng khi đọc bảng đó hụt — giữ khớp để lúc lỗi không thu sai giá.</div>
       </div>
     </div>
     <div class="form-group">
@@ -3186,6 +3203,7 @@ async function loadMarketing() {
   }
   loadViral(fromEl.value, toEl.value);
   loadAutopilotLog();
+  loadMediaQueue();
 }
 
 // V2.4 (track Viral Loop) — phễu vòng lặp giới thiệu. Gọi RIÊNG khỏi
@@ -3274,6 +3292,98 @@ function renderMktViral(v) {
       · <b>Chi phí</b> là tiền LLM + ảnh của chính tool đó (<code>events.llm_usage</code>), chưa gồm chi phí hạ tầng.<br>
       · Ngưỡng tham chiếu đã chốt: K ≥ 0,5 và chi phí/user ≤ 6.000đ trong 2 tuần liên tiếp → cân nhắc nâng trần ngân sách; K &lt; 0,3 sau 3–4 tuần → 2 tool này không lan tự nhiên.
     </div>`;
+}
+
+// Track Media Pipeline — nhật ký bài đăng. Khâu duyệt tay đã bỏ: cron dựng
+// xong đăng luôn, panel này chỉ theo dõi + chữa bài lỗi.
+async function loadMediaQueue() {
+  const badge = document.getElementById('mq-state-badge');
+  const host = document.getElementById('mq-list');
+  try {
+    const d = await apiGet('admin-media-queue');
+    if (d.error) throw new Error(d.error);
+    if (badge) {
+      badge.className = 'badge ' + (d.autopostEnabled ? 'badge-green' : 'badge-red');
+      badge.textContent = d.autopostEnabled ? 'Tự đăng: BẬT' : 'Tự đăng: TẮT — bài nằm chờ';
+    }
+    // Kênh cấu hình mà chưa có adapter thì bài không bao giờ đi đâu cả. Nói ra
+    // ngay, đừng để nó lặng lẽ nằm trong DB.
+    const sup = d.supportedChannels || [];
+    const orphan = (d.channels || []).filter((c) => sup.indexOf(c) < 0);
+    renderMediaQueue(d.posts || [], orphan);
+  } catch (e) {
+    if (badge) { badge.className = 'badge badge-red'; badge.textContent = 'Lỗi'; }
+    if (host) host.innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
+  }
+}
+
+const MQ_STATUS = {
+  queued:     ['badge-grey',  'Chờ đăng'],
+  approved:   ['badge-grey',  'Chờ đăng'],
+  publishing: ['badge-grey',  'Đang đăng'],
+  live:       ['badge-green', 'Đã đăng'],
+  error:      ['badge-red',   'Lỗi'],
+  skipped:    ['badge-grey',  'Đã bỏ'],
+};
+
+function renderMediaQueue(posts, orphanChannels) {
+  const host = document.getElementById('mq-list');
+  if (!host) return;
+  const warn = (orphanChannels && orphanChannels.length)
+    ? `<div class="empty" style="color:var(--red);margin-bottom:.75rem">⚠️ Kênh <b>${escHtmlLocal(orphanChannels.join(', '))}</b> có trong <code>social.channels</code> nhưng CHƯA có adapter đăng — bài của kênh đó sẽ báo lỗi chứ không lên được.</div>`
+    : '';
+  if (!posts.length) {
+    host.innerHTML = warn + '<div class="empty">Chưa có bài nào. Cron <code>media-build</code> chạy 09:30 mỗi sáng: dựng bài rồi đăng luôn.</div>';
+    return;
+  }
+  host.innerHTML = warn + posts.map((p) => {
+    const a = p.media_assets || {};
+    const [cls, label] = MQ_STATUS[p.status] || ['badge-grey', p.status];
+    // Chỉ bài LỖI mới sửa được. Bài chờ đăng để yên cho cron; bài đã lên thì
+    // sửa ở đây chẳng đổi được gì trên trang công khai.
+    const fixable = p.status === 'error';
+    const tags = (p.hashtags || []).map((h) => '#' + h).join(' ');
+    return `
+    <div style="display:flex;gap:1rem;padding:.9rem 0;border-bottom:1px solid var(--border)">
+      <img src="${escHtmlLocal(a.url || '')}" alt="" loading="lazy"
+           style="width:120px;height:150px;object-fit:cover;border-radius:8px;background:var(--bg-alt);flex:none">
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.35rem">
+          <span class="badge ${cls}">${escHtmlLocal(label)}</span>
+          <span class="badge badge-grey">${escHtmlLocal(p.channel || '')}</span>
+          <span style="font-size:.7rem;color:var(--text-lt)">${escHtmlLocal((a.source_type || '').replace('_', ' '))}</span>
+        </div>
+        <textarea id="mq-cap-${p.id}" ${fixable ? '' : 'disabled'}
+                  style="width:100%;min-height:74px;font-size:.78rem;padding:.5rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);resize:vertical"
+        >${escHtmlLocal(p.caption || '')}</textarea>
+        <div style="font-size:.7rem;color:var(--text-lt);margin:.3rem 0">${escHtmlLocal(tags)}</div>
+        <a href="${escHtmlLocal(p.link_url || '')}" target="_blank" rel="noopener"
+           style="font-size:.7rem;color:var(--text-lt);word-break:break-all">${escHtmlLocal(p.link_url || '')}</a>
+        ${fixable ? `
+        <div style="display:flex;gap:.5rem;margin-top:.5rem">
+          <button class="btn btn-primary btn-sm" onclick="mediaDecide('${p.id}','retry')">Đăng lại</button>
+          <button class="btn btn-outline btn-sm" onclick="mediaDecide('${p.id}','skip')">Bỏ hẳn</button>
+        </div>` : ''}
+        ${p.external_url ? `<a href="${escHtmlLocal(p.external_url)}" target="_blank" rel="noopener" style="font-size:.7rem;display:inline-block;margin-top:.35rem">Xem bài đã đăng →</a>` : ''}
+        ${p.error ? `<div style="font-size:.7rem;color:var(--red);margin-top:.35rem">${escHtmlLocal(p.error)}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function mediaDecide(postId, decision) {
+  const el = document.getElementById('mq-cap-' + postId);
+  // Gửi kèm caption đang hiện: sửa vài chữ rồi đăng lại thường là cách chữa
+  // nhanh nhất một bài lỗi vì nội dung.
+  const caption = el ? el.value.trim() : '';
+  try {
+    const d = await apiPost('admin-media-decide', { postId, decision, caption });
+    if (d.error) throw new Error(d.error);
+    toast(decision === 'retry' ? 'Đã xếp lại hàng — cron sẽ đăng ở lượt tới' : 'Đã bỏ bài', 'success');
+    loadMediaQueue();
+  } catch (e) {
+    toast('Lỗi: ' + e.message, 'error');
+  }
 }
 
 // M0.6 (track Marketing Autopilot) — nhật ký hành động autopilot, THUẦN ĐỌC.
@@ -3789,7 +3899,6 @@ async function loadPackages() {
         <td><input type="number" class="price-input" id="pk-credits-${r.package_id}" value="${r.credits}"></td>
         <td><input type="number" class="price-input" style="width:100px" id="pk-vnd-${r.package_id}" value="${r.amount_vnd}"></td>
         <td><input type="number" step="0.01" class="price-input" style="width:75px" id="pk-usd-${r.package_id}" value="${r.amount_usd}"></td>
-        <td><input class="price-input" style="width:60px" id="pk-bonus-${r.package_id}" value="${(r.bonus_label || '').replace(/"/g, '&quot;')}"></td>
         <td style="text-align:center"><input type="checkbox" id="pk-en-${r.package_id}" ${r.enabled ? 'checked' : ''}></td>
         <td><button class="btn btn-primary btn-sm" id="pk-btn-${r.package_id}" onclick="savePackageRow('${r.package_id}')">Lưu</button></td>
       </tr>`).join('');
@@ -3805,7 +3914,6 @@ async function savePackageRow(id) {
     credits: parseInt(document.getElementById('pk-credits-' + id).value),
     amount_vnd: parseInt(document.getElementById('pk-vnd-' + id).value),
     amount_usd: parseFloat(document.getElementById('pk-usd-' + id).value),
-    bonus_label: document.getElementById('pk-bonus-' + id).value,
     enabled: document.getElementById('pk-en-' + id).checked,
   };
   try {

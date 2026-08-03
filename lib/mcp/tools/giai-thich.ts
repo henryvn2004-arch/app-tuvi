@@ -2,8 +2,11 @@
 // ============================================================
 // TOOL 3 — giai_thich_sao: định nghĩa/ý nghĩa ngắn của một sao (theo cung
 // nếu có), lấy từ NỘI DUNG CÓ SẴN của site: public/cach_cuc_all.json (965
-// mục, 307 mục 1-sao) — mỗi mục có tomTat/loai/cung/điều kiện. KHÔNG để LLM
-// server generate; không có dữ liệu thì trả "chưa có dữ liệu".
+// mục, 307 mục 1-sao) — mỗi mục có tomTat/loai/cung/điều kiện. Kèm thêm
+// public/tuong_mao_sao.json (mô tả hình dáng/khuôn mặt/sắc khí theo sao tại
+// cung Mệnh, trích Tử Vi Đẩu Số Tân Biên - Thái Thứ Lang) → field riêng
+// `tuong_mao` trong response, ADDITIVE — không đổi shape `ket_qua` cũ. KHÔNG
+// để LLM server generate; không có dữ liệu thì trả "chưa có dữ liệu".
 // ============================================================
 
 import { z } from 'zod';
@@ -15,6 +18,9 @@ type Rec = Record<string, unknown>;
 interface CachCucRaw {
   ten?: string; sao?: string[]; saoPhuTro?: string[]; cung?: string;
   loai?: string; doManh?: number; tomTat?: string; dieuKien?: string;
+}
+interface TuongMaoRaw {
+  sao?: string; cung?: string; dieuKien?: string | null; moTa?: string; nguon?: string;
 }
 
 let cache: CachCucRaw[] | null = null;
@@ -28,6 +34,19 @@ function loadCachCuc(): CachCucRaw[] {
   return cache;
 }
 
+let tuongMaoCache: TuongMaoRaw[] | null = null;
+function loadTuongMao(): TuongMaoRaw[] {
+  if (tuongMaoCache) return tuongMaoCache;
+  try {
+    tuongMaoCache = JSON.parse(
+      readFileSync(join(process.cwd(), 'public', 'tuong_mao_sao.json'), 'utf-8'),
+    ) as TuongMaoRaw[];
+  } catch {
+    tuongMaoCache = [];
+  }
+  return tuongMaoCache;
+}
+
 const schema = {
   sao: z.string().describe('Tên sao đầy đủ, ví dụ "Tử Vi", "Thất Sát", "Hóa Lộc", "Kình Dương"'),
   cung: z.string().optional().describe('Tên cung để lọc ý nghĩa theo cung (ví dụ "Mệnh", "Tài Bạch"). Bỏ trống để lấy chung.'),
@@ -36,7 +55,7 @@ const schema = {
 export const giaiThichTool: McpTool = {
   name: 'giai_thich_sao',
   description:
-    'Tra định nghĩa / ý nghĩa ngắn của một sao trong Tử Vi (tùy chọn theo cung), lấy từ kho nội dung có sẵn của tuviminhbao.com. Dùng khi người dùng hỏi "sao X là gì", "X ở cung Y nghĩa là sao". Trả về danh sách các nhận định ngắn (cách cục / ý nghĩa) liên quan tới sao đó. Nếu không có dữ liệu sẽ báo rõ.',
+    'Tra định nghĩa / ý nghĩa ngắn của một sao trong Tử Vi (tùy chọn theo cung), lấy từ kho nội dung có sẵn của tuviminhbao.com. Dùng khi người dùng hỏi "sao X là gì", "X ở cung Y nghĩa là sao", hoặc "sao X tướng mạo/hình dáng/khuôn mặt thế nào". Trả về danh sách các nhận định ngắn (cách cục / ý nghĩa) liên quan tới sao đó, kèm mô tả hình dáng/khuôn mặt/sắc khí (nếu có, thường ứng với cung Mệnh) trong field `tuong_mao`. Nếu không có dữ liệu sẽ báo rõ.',
   schema,
   // Không giới hạn quota (tra cứu kiến thức).
   run: (args) => {
@@ -57,10 +76,6 @@ export const giaiThichTool: McpTool = {
       if (byCung.length) hits = byCung; // lọc theo cung nếu có mục khớp, không thì giữ chung
     }
 
-    if (!hits.length) {
-      return { sao, cung: cung || null, ket_qua: [], message: `Chưa có dữ liệu định nghĩa cho sao "${sao}"${cung ? ` tại cung ${cung}` : ''}.` };
-    }
-
     // Ưu tiên: sao chính (sao[]) trước phụ tinh; doManh cao trước; cắt gọn.
     const ranked = hits
       .map((c) => ({ c, score: (inSao(c) ? 100 : 0) + (Number(c.doManh) || 0) }))
@@ -74,6 +89,22 @@ export const giaiThichTool: McpTool = {
         dieu_kien: c.dieuKien || null,
       }));
 
-    return { sao, cung: cung || null, ket_qua: ranked };
+    // Tướng mạo: mô tả hình dáng/khuôn mặt/sắc khí theo sao (thường ứng cung
+    // Mệnh — nếu người dùng lọc theo cung khác thì phần này rỗng, đúng bản
+    // chất "tướng mạo suy từ sao thủ Mệnh").
+    const tuongMaoAll = loadTuongMao();
+    let tmHits = tuongMaoAll.filter((t) => normVi(String(t.sao || '')) === saoN);
+    if (cung) tmHits = tmHits.filter((t) => normVi(String(t.cung || '')) === cungN);
+    const tuongMao = tmHits.map((t): Rec => ({
+      dieu_kien: t.dieuKien || null,
+      mo_ta: t.moTa || null,
+      nguon: t.nguon || null,
+    }));
+
+    if (!hits.length && !tuongMao.length) {
+      return { sao, cung: cung || null, ket_qua: [], tuong_mao: [], message: `Chưa có dữ liệu định nghĩa cho sao "${sao}"${cung ? ` tại cung ${cung}` : ''}.` };
+    }
+
+    return { sao, cung: cung || null, ket_qua: ranked, tuong_mao: tuongMao };
   },
 };

@@ -77,7 +77,7 @@ export async function GET() {
 <link rel="canonical" href="${BASE}/tu-dien">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&display=swap" rel="stylesheet"></noscript>
 <script type="application/ld+json">${JSON.stringify({
   '@context':'https://schema.org','@type':'CollectionPage',
   name:'Từ Điển Tử Vi Minh Bảo',
@@ -124,7 +124,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 </style>
 <script src="/auth.js"></script>
 </head><body>
-<script src="/track.js?v=3" defer></script><script src="/nav.js?v=19"></script>
+<script src="/track.js?v=3" defer></script><script src="/nav.js?v=20"></script>
 <div class="bc"><a href="/">Trang Chủ</a><span>›</span><span>Từ Điển</span></div>
 
 <div class="td-hero">

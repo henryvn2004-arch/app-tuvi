@@ -8,8 +8,8 @@
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/shell.css?v=14">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/shell.css?v=16">
 <style>
 .pt-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);max-width:680px;margin-bottom:16px}
 .pt-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:8px}
@@ -186,7 +186,7 @@
       </div>
 
       <div class="pt-card">
-        <div class="cost-row"><span>Chi phí: <strong>40 Lượng</strong></span></div>
+        <div class="cost-row"><span>Chi phí: <strong><span data-tvp-price="phong-thuy">…</span> Lượng</strong></span></div>
         <div class="error-box" id="errorBox"></div>
         <button class="btn-analyze" id="btnAnalyze" onclick="doAnalyze()">🧭 Phân Tích Phong Thủy</button>
       </div>
@@ -240,7 +240,7 @@
 
         <div class="pt-card" id="renderCard" style="display:none">
           <h2>🏠 Render Phòng Phong Thủy Bằng AI
-            <span style="font-size:10px;background:var(--gold-lt);color:var(--blue);padding:2px 8px;border-radius:10px;font-weight:600">30 Lượng</span>
+            <span style="font-size:10px;background:var(--gold-lt);color:var(--blue);padding:2px 8px;border-radius:10px;font-weight:600"><span data-tvp-price="phong-thuy-render">…</span> Lượng</span>
           </h2>
           <p class="sub">AI sẽ render lại ảnh phòng của bạn theo màu sắc ngũ hành và bố trí phong thủy tối ưu.</p>
 
@@ -279,8 +279,8 @@
 <script>window.SHELL_ACTIVE='phong-thuy';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'phong-thuy',title:'Phong Thủy Nội Thất',desc:'Chụp ảnh phòng — <b>AI</b> chấm điểm Bát Trạch trước/sau, sơ đồ bố trí, đề xuất và render phòng bằng AI.'};</script>
 <script src="/auth.js"></script>
-<script src="/tuvi-paywall.js?v=9"></script>
-<script src="/shell.js?v=49"></script>
+<script src="/tuvi-paywall.js?v=11"></script>
+<script src="/shell.js?v=53"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=1"></script>
 <script>
 function initPhongThuy(){
