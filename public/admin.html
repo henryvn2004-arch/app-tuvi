@@ -74,6 +74,12 @@
       <button class="nav-item" onclick="goTo('marketing')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 16.5 8.5 11.5 1 19"/><polyline points="17 6 23 6 23 12"/></svg></span><span>Funnel &amp; Nguồn</span>
       </button>
+      <button class="nav-item" onclick="goTo('retention')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span><span>Giữ Chân &amp; Doanh Thu</span>
+      </button>
+      <button class="nav-item" onclick="goTo('distribution')">
+        <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span><span>Phân Phối Nội Dung</span>
+      </button>
       <button class="nav-item" onclick="goTo('content')">
         <span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg></span><span>YouTube Studio</span>
       </button>
@@ -152,11 +158,31 @@
     </div>
   </div>
 
+  <div class="sb-backdrop" id="sb-backdrop" onclick="toggleSidebar(false)"></div>
+
   <div class="main">
     <div class="topbar">
+      <button class="sb-toggle" onclick="toggleSidebar()" aria-label="Mở menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
       <div class="topbar-title" id="topbar-title">Dashboard</div>
       <div class="topbar-meta" id="topbar-meta"></div>
     </div>
+
+      <!-- Bộ lọc ngày DÙNG CHUNG cho 3 trang marketing. Trước đây nó nằm
+           trong panel Funnel; tách trang mà để nguyên thì 2 trang kia
+           không đổi được khoảng ngày. Giữ nguyên id mkt-from/mkt-to nên
+           mọi chỗ đọc nó không phải sửa. -->
+      <div class="mkt-filterbar" id="mkt-filterbar" style="display:none">
+              <input type="date" class="search-input" id="mkt-from" style="width:150px" onchange="loadMarketing()">
+              <span style="color:var(--text-lt)">→</span>
+              <input type="date" class="search-input" id="mkt-to" style="width:150px" onchange="loadMarketing()">
+              <button class="btn btn-ghost btn-sm" onclick="mktRange(7)">7N</button>
+              <button class="btn btn-ghost btn-sm" onclick="mktRange(30)">30N</button>
+              <button class="btn btn-ghost btn-sm" onclick="mktRange(90)">90N</button>
+              <button class="btn btn-primary btn-sm" onclick="loadMarketing()">↻</button>
+              <button class="btn btn-gold btn-sm" onclick="mktExportCSV()">⬇ CSV</button>
+      </div>
 
     <div class="content">
 
@@ -288,16 +314,6 @@
         <div class="panel">
           <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 16.5 8.5 11.5 1 19"/><polyline points="17 6 23 6 23 12"/></svg>Funnel Chuyển Đổi</div>
-            <div class="panel-actions">
-              <input type="date" class="search-input" id="mkt-from" style="width:150px" onchange="loadMarketing()">
-              <span style="color:var(--text-lt)">→</span>
-              <input type="date" class="search-input" id="mkt-to" style="width:150px" onchange="loadMarketing()">
-              <button class="btn btn-ghost btn-sm" onclick="mktRange(7)">7N</button>
-              <button class="btn btn-ghost btn-sm" onclick="mktRange(30)">30N</button>
-              <button class="btn btn-ghost btn-sm" onclick="mktRange(90)">90N</button>
-              <button class="btn btn-primary btn-sm" onclick="loadMarketing()">↻</button>
-              <button class="btn btn-gold btn-sm" onclick="mktExportCSV()">⬇ CSV</button>
-            </div>
           </div>
           <div class="panel-body" id="mkt-funnel">
             <div class="loading"><span class="spin"></span>Đang tải...</div>
@@ -310,26 +326,6 @@
             <span style="font-size:.72rem;color:var(--text-lt)">GA4 thấy cả organic/ads/social · nội bộ chỉ thấy khách đã chạy track.js</span>
           </div>
           <div class="panel-body" id="mkt-ga4">
-            <div class="loading"><span class="spin"></span>Đang tải...</div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>Vòng Lặp Viral</div>
-            <span style="font-size:.72rem;color:var(--text-lt)">K-factor = lượt giới thiệu ăn được ÷ số người đã tạo kết quả</span>
-          </div>
-          <div class="panel-body" id="mkt-viral">
-            <div class="loading"><span class="spin"></span>Đang tải...</div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Doanh Thu Tiền Thật</div>
-            <span style="font-size:.72rem;color:var(--text-lt)" id="mkt-rev-note">giao dịch cũ chưa lưu VNĐ → suy theo đơn giá gói</span>
-          </div>
-          <div class="panel-body" id="mkt-revenue">
             <div class="loading"><span class="spin"></span>Đang tải...</div>
           </div>
         </div>
@@ -362,6 +358,41 @@
           </div>
         </div>
 
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Top Landing Pages</div></div>
+            <div class="table-wrap" id="mkt-paths"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+          </div>
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">↗ Top Referrers</div></div>
+            <div class="table-wrap" id="mkt-referrers"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── GIỮ CHÂN & DOANH THU ── -->
+      <div class="page" id="page-retention">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>Cohort Giữ Chân (theo tuần đăng ký)</div>
+            <span style="font-size:.72rem;color:var(--text-lt)">% user của cohort còn hoạt động ở tuần thứ N</span>
+          </div>
+          <div class="table-wrap" id="mkt-cohorts">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Doanh Thu Tiền Thật</div>
+            <span style="font-size:.72rem;color:var(--text-lt)" id="mkt-rev-note">giao dịch cũ chưa lưu VNĐ → suy theo đơn giá gói</span>
+          </div>
+          <div class="panel-body" id="mkt-revenue">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+
         <div class="panel">
           <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5.76.76 1.23 1.52 1.41 2.5"/></svg>Đề Xuất AI (Content/Campaign)</div>
@@ -376,31 +407,24 @@
 
         <div class="panel">
           <div class="panel-header">
-            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m22 8-6 4 6 4V8z"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>Content Pack TikTok (mồi phân phối)</div>
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="16" r="1"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Autopilot — Nhật Ký Hành Động</div>
             <div class="panel-actions">
-              <select id="cpack-days" class="search-input" style="width:auto">
-                <option value="7" selected>7 ngày</option>
-                <option value="30">30 ngày</option>
-                <option value="90">90 ngày</option>
-              </select>
-              <button class="btn btn-gold btn-sm" onclick="mktGenContentPack(this)"><span class="ic-inline" data-icon="film" data-icon-emoji="🎬" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎬</span> Sinh Content Pack</button>
+              <span class="badge badge-grey" id="ap-state-badge">…</span>
+              <button class="btn btn-primary btn-sm" onclick="loadAutopilotLog()">↻</button>
             </div>
           </div>
-          <div class="panel-body" id="mkt-contentpack">
-            <div class="empty">Kịch bản video ngắn 30–60 giây soạn sẵn cho các bản chân dung <b>đã được chính chủ chia sẻ công khai</b>, xếp theo lượt mở link. Cron tự gửi Telegram sáng Chủ Nhật; nút này sinh lại bất cứ lúc nào. Chỉ soạn — không tự đăng đi đâu.</div>
+          <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
+            M0.6 (track Marketing Autopilot) — tự chỉnh giá / khuyến mãi giữ chân / nhắc segment. MẶC ĐỊNH tắt (shadow-mode: cron vẫn chạy, chỉ TÍNH + LOG, không áp dụng thật). Bật thật bằng cách sửa <code>app_config['marketing.autopilot_enabled']</code> qua SQL — có chủ đích KHÔNG có nút bật ở đây (rủi ro cao, tránh bấm nhầm).
           </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>Cohort Giữ Chân (theo tuần đăng ký)</div>
-            <span style="font-size:.72rem;color:var(--text-lt)">% user của cohort còn hoạt động ở tuần thứ N</span>
-          </div>
-          <div class="table-wrap" id="mkt-cohorts">
+          <div class="table-wrap" id="ap-log">
             <div class="loading"><span class="spin"></span>Đang tải...</div>
           </div>
         </div>
 
+      </div>
+
+      <!-- ── PHÂN PHỐI NỘI DUNG ── -->
+      <div class="page" id="page-distribution">
         <div class="panel">
           <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>Hàng Đợi Bài Đăng (Mạng Xã Hội)</div>
@@ -438,30 +462,31 @@
 
         <div class="panel">
           <div class="panel-header">
-            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="16" r="1"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Autopilot — Nhật Ký Hành Động</div>
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m22 8-6 4 6 4V8z"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>Content Pack TikTok (mồi phân phối)</div>
             <div class="panel-actions">
-              <span class="badge badge-grey" id="ap-state-badge">…</span>
-              <button class="btn btn-primary btn-sm" onclick="loadAutopilotLog()">↻</button>
+              <select id="cpack-days" class="search-input" style="width:auto">
+                <option value="7" selected>7 ngày</option>
+                <option value="30">30 ngày</option>
+                <option value="90">90 ngày</option>
+              </select>
+              <button class="btn btn-gold btn-sm" onclick="mktGenContentPack(this)"><span class="ic-inline" data-icon="film" data-icon-emoji="🎬" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎬</span> Sinh Content Pack</button>
             </div>
           </div>
-          <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
-            M0.6 (track Marketing Autopilot) — tự chỉnh giá / khuyến mãi giữ chân / nhắc segment. MẶC ĐỊNH tắt (shadow-mode: cron vẫn chạy, chỉ TÍNH + LOG, không áp dụng thật). Bật thật bằng cách sửa <code>app_config['marketing.autopilot_enabled']</code> qua SQL — có chủ đích KHÔNG có nút bật ở đây (rủi ro cao, tránh bấm nhầm).
+          <div class="panel-body" id="mkt-contentpack">
+            <div class="empty">Kịch bản video ngắn 30–60 giây soạn sẵn cho các bản chân dung <b>đã được chính chủ chia sẻ công khai</b>, xếp theo lượt mở link. Cron tự gửi Telegram sáng Chủ Nhật; nút này sinh lại bất cứ lúc nào. Chỉ soạn — không tự đăng đi đâu.</div>
           </div>
-          <div class="table-wrap" id="ap-log">
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>Vòng Lặp Viral</div>
+            <span style="font-size:.72rem;color:var(--text-lt)">K-factor = lượt giới thiệu ăn được ÷ số người đã tạo kết quả</span>
+          </div>
+          <div class="panel-body" id="mkt-viral">
             <div class="loading"><span class="spin"></span>Đang tải...</div>
           </div>
         </div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
-          <div class="panel">
-            <div class="panel-header"><div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Top Landing Pages</div></div>
-            <div class="table-wrap" id="mkt-paths"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
-          </div>
-          <div class="panel">
-            <div class="panel-header"><div class="panel-title">↗ Top Referrers</div></div>
-            <div class="table-wrap" id="mkt-referrers"><div class="loading"><span class="spin"></span>Đang tải...</div></div>
-          </div>
-        </div>
       </div>
 
       <!-- ── LÁ SỐ ── -->
@@ -1374,6 +1399,7 @@ let _allUsers = [], _allCredits = [], _allLasos = [];
 let _currentPage = 'dashboard';
 
 const PAGE_TITLES = {
+  retention: 'Giữ Chân & Doanh Thu', distribution: 'Phân Phối Nội Dung',
   dashboard: 'Dashboard', users: 'Users', credits: 'Doanh Thu & Giao Dịch',
   lasos: 'Lá Số', pricing: 'Gói Nạp & Pricing', tools: 'Ví & Cấp Credits',
   marketing: 'Funnel & Nguồn', content: 'YouTube Studio', cron: 'Vận Hành — Sức Khỏe & Jobs',
@@ -1384,6 +1410,83 @@ const PAGE_TITLES = {
 };
 
 // ── AUTH ──
+//
+// Trước đây `_token` CHỈ nằm trong bộ nhớ JS: đóng tab hay F5 là mất sạch, nên
+// mỗi lần vào lại phải đăng nhập Google từ đầu. Đây là chỗ vá.
+//
+// ⚠️ ĐÁNH ĐỔI đã cân nhắc: giữ phiên đồng nghĩa với việc token admin nằm trong
+// localStorage, tức một lỗ XSS trên chính trang này sẽ lấy được. Ba thứ bù lại:
+//   1. Mỗi lần khôi phục vẫn hỏi SERVER (`oauth-verify` tra `admin_users`) chứ
+//      không tin token suông — gỡ tài khoản khỏi bảng đó là phiên chết ngay.
+//   2. Trần tuyệt đối 7 ngày kể từ lượt đăng nhập THẬT, hết hạn thì login lại
+//      dù refresh token còn sống.
+//   3. Đăng xuất xoá sạch.
+const SESS_KEY = 'tvadm_session';
+const SESS_MAX_DAYS = 7;
+/** Đổi token mới trước khi hết hạn ngần này (giây) — tránh 401 giữa chừng. */
+const REFRESH_LEAD_S = 300;
+let _refreshTimer = null;
+
+function storeSession(s) {
+  try {
+    const prev = readSession() || {};
+    localStorage.setItem(
+      SESS_KEY,
+      JSON.stringify({
+        access_token: s.access_token,
+        refresh_token: s.refresh_token || prev.refresh_token || '',
+        expires_at: s.expires_at || (s.expires_in ? Math.floor(Date.now() / 1000) + Number(s.expires_in) : 0),
+        // Mốc đăng nhập THẬT — giữ nguyên qua các lượt refresh để trần 7 ngày
+        // đo từ lúc người thật gõ mật khẩu / bấm Google, không bị đẩy lùi mãi.
+        login_at: prev.login_at || Date.now(),
+      }),
+    );
+  } catch (e) { /* localStorage bị chặn → phiên chỉ sống trong tab này */ }
+}
+
+function readSession() {
+  try { return JSON.parse(localStorage.getItem(SESS_KEY) || 'null'); } catch (e) { return null; }
+}
+
+function clearSession() {
+  try { localStorage.removeItem(SESS_KEY); } catch (e) {}
+  if (_refreshTimer) { clearTimeout(_refreshTimer); _refreshTimer = null; }
+}
+
+/** Đổi refresh token lấy access token mới. Trả session mới, hoặc null. */
+async function refreshAccessToken(refreshToken) {
+  if (!refreshToken) return null;
+  try {
+    const r = await fetch(`${SB_URL}/auth/v1/token?grant_type=refresh_token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', apikey: SB_ANON },
+      body: JSON.stringify({ refresh_token: refreshToken }),
+    });
+    if (!r.ok) return null;
+    const d = await r.json();
+    return d && d.access_token ? d : null;
+  } catch (e) { return null; }
+}
+
+/**
+ * Hẹn giờ đổi token TRƯỚC khi hết hạn. Access token của Supabase sống 1 giờ —
+ * không có bước này thì ngồi làm quá một tiếng là mọi lượt gọi API 401 giữa
+ * chừng mà không hiểu vì sao.
+ */
+function scheduleRefresh(expiresAtSec) {
+  if (_refreshTimer) clearTimeout(_refreshTimer);
+  if (!expiresAtSec) return;
+  const ms = (expiresAtSec - REFRESH_LEAD_S) * 1000 - Date.now();
+  _refreshTimer = setTimeout(async () => {
+    const s = readSession();
+    const fresh = await refreshAccessToken(s && s.refresh_token);
+    if (!fresh) return; // hỏng thì để lượt gọi API kế tiếp báo lỗi, không tự đá ra
+    _token = fresh.access_token;
+    storeSession(fresh);
+    scheduleRefresh(readSession().expires_at);
+  }, Math.max(30_000, ms));
+}
+
 function enterApp(email, role, team) {
   _adminRole = role || null;
   _adminTeam = team || null;
@@ -1408,6 +1511,10 @@ async function doLogin() {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Sai thông tin đăng nhập');
     _token = data.access_token;
+    // Route login trả nguyên session GoTrue nên có sẵn refresh_token.
+    clearSession();
+    storeSession(data);
+    scheduleRefresh((readSession() || {}).expires_at);
     enterApp(email, data.admin_role, data.admin_team);
   } catch(e) { err.textContent = e.message; }
 }
@@ -1418,32 +1525,85 @@ function doGoogleLogin() {
   window.location.href = `${SB_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(redirectTo)}`;
 }
 
+/**
+ * Hỏi server token này có thuộc một admin không, rồi vào app.
+ * `silent` = lượt KHÔI PHỤC phiên cũ (mở lại tab), không phải người vừa đăng
+ * nhập — server sẽ không bắn cảnh báo Telegram, nếu không thì mỗi lần mở tab
+ * lại dội một tin và cảnh báo đăng nhập thật mất hết giá trị.
+ */
+async function verifyAndEnter(accessToken, silent) {
+  const res = await fetch('/api/admin/oauth-verify', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ access_token: accessToken, silent: !!silent }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Không có quyền admin.');
+  _token = accessToken;
+  enterApp(data.email, data.admin_role, data.admin_team);
+}
+
 async function checkGoogleRedirect() {
   const hash = window.location.hash;
-  if (!hash || hash.indexOf('access_token') === -1) return;
+  if (!hash || hash.indexOf('access_token') === -1) return false;
   const params = new URLSearchParams(hash.slice(1));
   const accessToken = params.get('access_token');
   history.replaceState(null, '', window.location.pathname + window.location.search);
-  if (!accessToken) return;
+  if (!accessToken) return false;
   const err = document.getElementById('login-err');
   try {
-    const res = await fetch('/api/admin/oauth-verify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ access_token: accessToken }),
+    await verifyAndEnter(accessToken, false);
+    // GoTrue implicit flow trả refresh_token ngay trong hash — đây là thứ giữ
+    // được phiên qua nhiều ngày; access_token một mình chỉ sống 1 giờ.
+    clearSession();
+    storeSession({
+      access_token: accessToken,
+      refresh_token: params.get('refresh_token') || '',
+      expires_in: params.get('expires_in') || 3600,
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Không có quyền admin.');
-    _token = accessToken;
-    enterApp(data.email, data.admin_role, data.admin_team);
-  } catch(e) { if (err) err.textContent = e.message; }
+    scheduleRefresh((readSession() || {}).expires_at);
+    return true;
+  } catch(e) { if (err) err.textContent = e.message; return false; }
 }
-checkGoogleRedirect();
+
+/** Mở lại tab: thử dùng phiên đã lưu thay vì bắt đăng nhập lại. */
+async function restoreSession() {
+  const s = readSession();
+  if (!s || !s.refresh_token) return false;
+  // Trần tuyệt đối tính từ lượt đăng nhập THẬT.
+  if (s.login_at && Date.now() - s.login_at > SESS_MAX_DAYS * 86400000) {
+    clearSession();
+    return false;
+  }
+  let token = s.access_token;
+  const nowS = Math.floor(Date.now() / 1000);
+  if (!token || !s.expires_at || s.expires_at - nowS < REFRESH_LEAD_S) {
+    const fresh = await refreshAccessToken(s.refresh_token);
+    if (!fresh) { clearSession(); return false; }
+    token = fresh.access_token;
+    storeSession(fresh);
+  }
+  try {
+    await verifyAndEnter(token, true);
+    scheduleRefresh((readSession() || {}).expires_at);
+    return true;
+  } catch(e) {
+    // Không còn là admin, hoặc token hỏng → về màn đăng nhập, đừng giữ rác.
+    clearSession();
+    return false;
+  }
+}
+
+(async () => {
+  if (await checkGoogleRedirect()) return;
+  await restoreSession();
+})();
 
 function doLogout() {
   _token = null;
   _adminRole = null;
   _adminTeam = null;
+  clearSession();
   document.getElementById('login-page').style.display = 'flex';
   document.getElementById('app').style.display = 'none';
 }
@@ -1477,17 +1637,37 @@ function toggleTheme() {
 document.addEventListener('DOMContentLoaded', syncThemeLabel);
 
 // ── NAVIGATION ──
+/**
+ * Ngăn kéo sidebar trên điện thoại. Trên desktop sidebar luôn hiện nên class
+ * `open` không có tác dụng gì — chỉ media query ≤760px mới ẩn nó đi.
+ */
+function toggleSidebar(force) {
+  const sb = document.querySelector('.sidebar');
+  const bd = document.getElementById('sb-backdrop');
+  if (!sb) return;
+  const open = force === undefined ? !sb.classList.contains('open') : !!force;
+  sb.classList.toggle('open', open);
+  if (bd) bd.classList.toggle('on', open);
+}
+
 function goTo(page) {
   _currentPage = page;
+  // Chọn xong thì đóng ngăn kéo, nếu không nó che mất chính trang vừa mở.
+  toggleSidebar(false);
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelector(`[onclick="goTo('${page}')"]`)?.classList.add('active');
   document.getElementById('page-' + page)?.classList.add('active');
   document.getElementById('topbar-title').textContent = PAGE_TITLES[page] || page;
   document.getElementById('topbar-meta').textContent = new Date().toLocaleDateString('vi-VN', {weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  // Thanh lọc ngày dùng chung: chỉ hiện ở 3 trang thật sự đọc from/to.
+  const fb = document.getElementById('mkt-filterbar');
+  if (fb) fb.style.display = MKT_PAGES.indexOf(page) >= 0 ? '' : 'none';
   // Lazy load
   const loaders = { users: loadUsers, credits: loadCredits, lasos: loadLasos,
-                    pricing: loadPricingPage, tools: loadAdminUsers, marketing: loadMarketing,
+                    pricing: loadPricingPage, tools: loadAdminUsers,
+                    marketing: loadMarketingOnce, retention: loadMarketingOnce,
+                    distribution: loadMarketingOnce,
                     cron: loadCron, channels: loadChannels, seo: loadSeo,
                     cboard: loadContentBoard, khaoluan: loadKhaoLuan, nghiencuu: loadNghienCuu,
                     sysconfig: loadSysConfig, apikeys: loadApiKeys, registry: loadRegistry,
@@ -3212,6 +3392,22 @@ function mktRange(days) {
   loadMarketing();
 }
 
+/**
+ * Ba trang cùng ăn MỘT lượt `admin-marketing` (8 RPC + GA4). Chuyển qua lại
+ * giữa chúng mà gọi lại mỗi lần thì mỗi cú bấm menu tốn cả chùm truy vấn —
+ * chỉ tải lại khi khoảng ngày thật sự đổi (hoặc khi bấm nút ↻, gọi thẳng
+ * `loadMarketing`).
+ */
+const MKT_PAGES = ['marketing', 'retention', 'distribution'];
+let _mktLoadedKey = '';
+
+function loadMarketingOnce() {
+  const f = document.getElementById('mkt-from'), t = document.getElementById('mkt-to');
+  const key = (f && f.value || '') + '|' + (t && t.value || '');
+  if (key !== '|' && key === _mktLoadedKey) return;
+  loadMarketing();
+}
+
 async function loadMarketing() {
   // Lần đầu mở trang chưa có ngày → mặc định 30 ngày.
   const fromEl = document.getElementById('mkt-from'), toEl = document.getElementById('mkt-to');
@@ -3247,6 +3443,7 @@ async function loadMarketing() {
   loadAutopilotLog();
   loadMediaQueue();
   loadSeeding();
+  _mktLoadedKey = fromEl.value + '|' + toEl.value;
 }
 
 // V2.4 (track Viral Loop) — phễu vòng lặp giới thiệu. Gọi RIÊNG khỏi

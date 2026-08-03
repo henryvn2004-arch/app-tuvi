@@ -352,3 +352,64 @@ audio{height:32px;flex:1}
   .form-row{grid-template-columns:1fr}
   .content{padding:18px 16px}
 }
+
+/* ── Thanh lọc ngày dùng chung 3 trang marketing ─────────────────────────────
+   Trước đây nằm trong panel-actions của Funnel; tách 1 trang thành 3 thì hai
+   trang kia mất đường đổi khoảng ngày. Dính ngay dưới topbar để cuộn xa vẫn
+   với tới. */
+.mkt-filterbar{position:sticky;top:58px;z-index:45;display:flex;flex-wrap:wrap;align-items:center;gap:8px;
+  padding:10px 28px;background:var(--paper);border-bottom:1px solid var(--line)}
+
+/* ══ MOBILE ══════════════════════════════════════════════════════════════════
+   Trang admin này được dùng THẬT trên điện thoại. Bản trước chỉ thu sidebar
+   còn 62px icon — vẫn ăn 1/6 bề ngang máy 390px, và mọi bảng thì tràn ra
+   ngoài. Dưới đây theo đúng lối shell.css đã chạy: sidebar thành ngăn kéo
+   trượt + nền mờ, bảng cuộn ngang trong khung của nó. */
+.sb-toggle{display:none;background:none;border:1px solid var(--line);border-radius:8px;
+  padding:6px 9px;cursor:pointer;color:var(--text);line-height:0;flex:none}
+.sb-toggle svg{width:18px;height:18px}
+.sb-backdrop{position:fixed;inset:0;background:rgba(6,26,46,.45);z-index:90;display:none}
+.sb-backdrop.on{display:block}
+
+@media(max-width:760px){
+  /* Ngăn kéo: ẩn HẲN thay vì thu nhỏ — 62px icon trên máy 390px vẫn là 16% bề
+     ngang, mà đoán nghĩa icon không nhãn thì khó hơn mở ngăn kéo một chạm. */
+  .sidebar{width:264px;transform:translateX(-100%);transition:transform .25s}
+  .sidebar.open{transform:none}
+  .sidebar-logo-text,.sidebar-logo-sub,.sidebar-section-label,.nav-item span:not(.ni),
+  .sidebar-user,.sb-theme span,.btn-logout span{display:revert}
+  .nav-item{padding:9px 10px;justify-content:flex-start}
+  .nav-item .badge{display:revert}
+  .sb-theme,.btn-logout{justify-content:flex-start}
+  .main{margin-left:0}
+  .sb-toggle{display:inline-flex}
+
+  .topbar{padding:0 14px;height:52px;gap:10px}
+  .topbar-title{font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  /* Ngày tháng dài dòng không đáng một hàng trên máy hẹp. */
+  .topbar-meta{display:none}
+  .content{padding:14px 12px}
+  .mkt-filterbar{top:52px;padding:9px 12px;gap:6px}
+  /* Hai ô ngày chiếm trọn hàng đầu, cụm nút xuống hàng dưới. Để chúng chen
+     chung một hàng với 5 nút thì ô ngày bị bóp còn đúng cái icon lịch. */
+  .mkt-filterbar .search-input{flex:1 1 calc(50% - 26px);width:auto!important;min-width:0}
+  .mkt-filterbar .btn{flex:0 0 auto}
+
+  .panel-header{flex-wrap:wrap;gap:8px}
+  .panel-actions{flex-wrap:wrap}
+  .stats,.stats-row{grid-template-columns:repeat(2,1fr)}
+  .eng-tiles{grid-template-columns:repeat(2,1fr)}
+  .chan-row{grid-template-columns:repeat(2,1fr)}
+  .form-row{grid-template-columns:1fr}
+  /* Bảng rộng: cuộn NGANG trong khung của nó, không đẩy cả trang lệch. */
+  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .table-wrap table{min-width:560px}
+  /* iOS Safari tự phóng to khi focus field chữ nhỏ hơn 16px rồi KHÔNG thu lại
+     — trang thành ra lệch hẳn sau mỗi lần gõ. Phải !important vì nhiều ô đặt
+     font-size thẳng trong thuộc tính style (inline luôn thắng media query). */
+  input,select,textarea{font-size:16px!important}
+}
+
+@media(max-width:420px){
+  .stats,.stats-row,.eng-tiles,.chan-row{grid-template-columns:1fr}
+}

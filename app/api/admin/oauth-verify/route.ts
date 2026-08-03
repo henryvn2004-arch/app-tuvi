@@ -33,6 +33,11 @@ export async function POST(request: NextRequest) {
   const body = await parseBody(request);
   const token = String(body.access_token || '').trim();
   const ip = clientIp(request);
+  // Lượt KHÔI PHỤC phiên (mở lại tab bằng token đã lưu) — không phải người vừa
+  // đăng nhập. Vẫn kiểm quyền đầy đủ và VẪN ghi login_attempts để có dấu vết,
+  // chỉ bỏ chuông Telegram: mỗi lần mở tab một tin thì cảnh báo đăng nhập THẬT
+  // chìm nghỉm giữa hàng chục tin thường ngày.
+  const silent = body.silent === true;
   if (!token) return err('Thiếu access_token', 400);
 
   const ipFails = await countRecentFailures('ip', ip, WINDOW_MINUTES);
@@ -61,8 +66,8 @@ export async function POST(request: NextRequest) {
   }
 
   await Promise.allSettled([
-    alertAdminLogin(true, email, ip, 'qua Google'),
-    logLoginAttempt({ email, ip, success: true, method: 'google' }),
+    silent ? Promise.resolve() : alertAdminLogin(true, email, ip, 'qua Google'),
+    logLoginAttempt({ email, ip, success: true, method: silent ? 'google-resume' : 'google' }),
   ]);
   return ok({ email, admin_role: admin.role, admin_team: admin.team });
 }

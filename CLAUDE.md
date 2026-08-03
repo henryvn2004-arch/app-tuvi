@@ -5,6 +5,80 @@
 
 ---
 
+## 🧰 Admin: tách trang · mobile · GIỮ PHIÊN đăng nhập (2026-08-03, PR sau #393)
+
+Henry: *"mục Funnel & Nguồn nhiều nội dung quá, tách ra vài mục được ko"* ·
+*"chỉnh admin mobile friendly như shell, tao vào bằng mobile thường xuyên"* ·
+*"lưu session login lâu hơn, mỗi lần vào lại bắt login lại"*.
+
+### 🔴 (3) Căn nguyên KHÔNG phải token hết hạn — token CHƯA TỪNG được lưu
+`_token` chỉ là một biến trong bộ nhớ JS. F5 hay đóng tab là mất sạch, nên lần
+nào vào cũng phải đăng nhập Google lại. Không có gì "hết hạn" cả.
+- Vá: lưu `{access_token, refresh_token, expires_at, login_at}` vào
+  localStorage; mở lại tab thì `restoreSession()` dùng **refresh_token** xin
+  access token mới (access token GoTrue chỉ sống 1 giờ — lưu mình nó thì vẫn
+  phải login lại sau 60 phút).
+- **`scheduleRefresh()` — đổi token trước hạn 5 phút.** Không có bước này thì
+  ngồi làm quá một tiếng là mọi lượt gọi API 401 giữa chừng không rõ vì sao.
+- **Mỗi lần khôi phục VẪN hỏi server** (`oauth-verify` tra `admin_users`) chứ
+  không tin token suông → gỡ tài khoản khỏi bảng đó là phiên chết ngay.
+- **Cờ `silent`** cho lượt khôi phục: vẫn ghi `admin_login_attempts`
+  (`method='google-resume'`) nhưng KHÔNG bắn Telegram — mỗi lần mở tab một tin
+  thì cảnh báo đăng nhập THẬT chìm nghỉm.
+- ⚠️ **Đánh đổi đã cân nhắc:** token admin nằm trong localStorage → một lỗ XSS
+  trên chính trang này lấy được. Bù lại: verify server mỗi lần khôi phục ·
+  **trần tuyệt đối 7 ngày** kể từ lượt đăng nhập THẬT (`login_at` giữ nguyên
+  qua các lượt refresh, nếu không thì trần bị đẩy lùi vô hạn) · đăng xuất xoá
+  sạch.
+
+### (1) Tách `#page-marketing` 14 khối → 3 trang
+Phân theo CÂU HỎI mỗi panel trả lời, không theo thứ tự lịch sử:
+| Trang | Panel |
+|---|---|
+| **Funnel & Nguồn** (`marketing`) | Funnel · GA4 vs Nội Bộ · Nguồn Traffic · Đăng Ký Theo Ngày · Chiến Dịch UTM · Top Landing+Referrers |
+| **Giữ Chân & Doanh Thu** (`retention`) | Cohort · Doanh Thu Tiền Thật · Đề Xuất AI · Autopilot |
+| **Phân Phối Nội Dung** (`distribution`) | Hàng Đợi Bài Đăng · Seeding Group · Content Pack · Vòng Lặp Viral |
+- **Bộ lọc ngày tách thành thanh DÙNG CHUNG** dính dưới topbar (`#mkt-filterbar`),
+  hiện đúng 3 trang này. Trước nó nằm trong `panel-actions` của Funnel — tách
+  trang mà để nguyên thì 2 trang kia không đổi được khoảng ngày. **Giữ nguyên
+  id `mkt-from`/`mkt-to`** nên không chỗ đọc nào phải sửa.
+- **`loadMarketingOnce()`** — 3 trang cùng ăn MỘT lượt `admin-marketing`
+  (8 RPC + GA4); chuyển qua lại mà gọi lại thì mỗi cú bấm menu tốn cả chùm truy
+  vấn. Chỉ tải lại khi khoảng ngày đổi, hoặc bấm ↻.
+- 🐞 **Script tách suýt làm MẤT 2 panel**: "Top Landing Pages" + "Top Referrers"
+  nằm trong một `<div style="display:grid">` chứ không mang class `panel`, nên
+  vòng quét `<div class="panel">` bỏ qua và chúng biến mất khi dựng lại. Bắt
+  được nhờ **đối chiếu danh sách `panel-title` trước/sau**, không phải nhờ nhìn.
+  Bài học: cắt HTML theo class thì phải quét MỌI con cấp 1 rồi đếm lại.
+
+### (2) Mobile — theo đúng lối `shell.css` đã chạy
+Bản cũ chỉ có `@media(max-width:900px)` thu sidebar còn **62px icon**: trên máy
+390px vẫn ăn 16% bề ngang, mà đoán nghĩa icon không nhãn còn khó hơn mở ngăn kéo.
+- ≤760px: sidebar thành **ngăn kéo trượt** (`transform:translateX(-100%)` +
+  `.open`) + nền mờ, nút ☰ trong topbar, chọn mục xong tự đóng. 761–900px giữ
+  nguyên chế độ icon cũ cho tablet.
+- Bảng rộng **cuộn ngang trong khung của nó** (`.table-wrap{overflow-x:auto}`),
+  không đẩy cả trang lệch. Ngày tháng ở topbar ẩn trên máy hẹp.
+- **`input,select,textarea{font-size:16px!important}`** — iOS Safari tự phóng
+  to khi focus field <16px rồi KHÔNG thu lại. Phải `!important` vì nhiều ô đặt
+  `font-size` thẳng trong `style=` (inline luôn thắng media query) — test bắt
+  đúng chỗ này: ô của panel Seeding ra 12,48px.
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier
+  --check .` sạch · 4 script block admin OK · **47 ca Playwright trên CHÍNH
+  `public/admin.html` thật** (serve tĩnh + chặn API): 3 trang đủ 15 panel không
+  mất cái nào · thanh lọc ẩn/hiện đúng trang · **chuyển qua lại 3 trang → 0
+  lượt gọi lại `admin-marketing`** · phiên còn hạn → vào thẳng, gửi `silent` ·
+  access hết hạn → **refresh trước rồi verify bằng token MỚI** · quá 7 ngày →
+  bắt login lại và xoá phiên · **bị gỡ quyền admin → phiên chết ngay** · refresh
+  hỏng → về màn đăng nhập, không treo · đăng xuất xoá sạch · quay về từ Google
+  lưu CẢ `refresh_token` · mobile 390px: ngăn kéo trượt, **5 trang không trang
+  nào tràn ngang**, ô nhập ≥16px.
+- 🐞 Hai lỗi của TEST tự bắt (không phải code): `addInitScript` chạy khi origin
+  còn `about:blank` nên `localStorage` set ở đó không ăn; và `/api/*` cùng host
+  với trang tĩnh nên rơi vào nhánh `route.continue()` → stub không bao giờ chạy.
+
+---
+
 ## 📡 M3b — 3 kênh auto THẬT: Instagram · Threads · Telegram channel (2026-08-03, cùng PR)
 
 Henry: *"làm tiếp luôn đi"* sau khi chốt trợ lý seeding. Đây là vế **auto thật**
