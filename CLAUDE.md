@@ -5,6 +5,79 @@
 
 ---
 
+## 📡 M3b — 3 kênh auto THẬT: Instagram · Threads · Telegram channel (2026-08-03, cùng PR)
+
+Henry: *"làm tiếp luôn đi"* sau khi chốt trợ lý seeding. Đây là vế **auto thật**
+của track phân phối — không có người ở giữa, khác hẳn seeding group.
+
+- **`lib/media/publish.ts` thêm 3 adapter**, cắm vào ADAPTERS có sẵn nên mọi chốt
+  chặn của M3 (giành lượt bằng PATCH có điều kiện · ngân sách thời gian · trần
+  `social.publish_daily`) tự áp dụng, không viết lại.
+- **Dùng LẠI nguyên asset `/api/og/social`** — Instagram *bắt buộc* ảnh phải có
+  URL công khai, đúng điều kiện M2 đã thoả sẵn khi chọn "URL chính là file".
+- **Telegram là kênh DUY NHẤT chạy được ngay** (token bot đã có trên Vercel từ
+  track kênh chat). IG/Threads chờ việc tay.
+- **Threads có API + TOKEN RIÊNG** (`graph.threads.net`) — page token Facebook
+  KHÔNG dùng được. IG và Threads đều đăng ảnh **2 bước** (tạo container → hỏi
+  trạng thái → publish); publish ngay khi vừa tạo là lỗi "media not ready" ngẫu
+  nhiên tuỳ nền tảng tải ảnh nhanh hay chậm.
+
+### 🔑 Ba lỗi thiết kế lộ ra KHI mở từ 1 kênh lên 4 (đều đã vá)
+1. **Lỗi CHẶN dừng CẢ LƯỢT** — đúng khi có một kênh, sai hẳn khi có bốn: token
+   Instagram hết hạn sẽ chặn luôn Telegram đang sống. Nay chặn **theo KÊNH**
+   (`blockedChannels`), kênh khác chạy tiếp trong cùng lượt.
+2. **Bài gặp lỗi chặn bị đánh `error` vĩnh viễn** — mất bài chỉ vì một cái token.
+   Nay trả về `queued` (vẫn giữ dấu lỗi để panel giải thích được vì sao chưa đi).
+3. **"Thiếu env" không nằm trong nhóm lỗi chặn** → mỗi bài của kênh chưa cấu
+   hình thành một dòng `error` riêng; với 4 kênh là vài chục dòng lỗi mỗi sáng.
+   Thiếu env là trạng thái của CÁI CỬA → đưa vào `BLOCKING_PATTERNS`.
+
+### Chữ theo từng kênh (`CAPTION_STYLE`) — không phải chi tiết vụn
+**Threads cắt ở 500 ký tự** mà caption `build.ts` viết ra đã ~400 + link + thẻ →
+gửi thẳng là kênh đó lỗi mỗi ngày. Telegram `sendPhoto` trần **1024**, IG 2200.
+Khi phải cắt thì **cắt CAPTION, giữ link + hashtag** — link là thứ duy nhất đo
+được. **Instagram dùng link dạng trần** (bỏ query UTM): IG không cho link bấm
+được trong caption nên dán URL kèm UTM ở đó vừa xấu vừa không đo được gì.
+
+### ⚠️ Bẫy dễ quên nhất: `publish_daily` đếm theo LƯỢT ĐĂNG, `build_daily` theo BÀI
+Bật 4 kênh với `build_daily=3` là **12 lượt đăng/ngày**, trong khi `publish_daily`
+vẫn là 3 → hàng đợi dồn lên mỗi ngày mà **không có gì báo lỗi** (bài chỉ đơn giản
+chưa tới lượt). Panel "Hàng Đợi Bài Đăng" nay cảnh báo đúng chỗ này kèm sẵn câu
+SQL; `_patches/migration-media-channels.sql` ghi lại cho khỏi quên.
+
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier
+  --check .` sạch · 3 script block admin OK · **38 ca trên module THẬT
+  `publish.ts` + `telegram.ts`** (chỉ rewrite đường dẫn import, `diff` xác nhận
+  logic nguyên byte): IG đi đúng 2 bước và **hỏi trạng thái container TRƯỚC khi
+  publish** · container `ERROR` → **không gọi media_publish** · Threads gọi đúng
+  host riêng, **0 lượt chạm `graph.facebook.com`** · chữ Threads ≤500 mà **vẫn
+  giữ nguyên link** · IG **không dán UTM** nhưng vẫn nêu địa chỉ gõ lại được ·
+  Telegram lưu đúng `t.me/<username>/<message_id>` · **kênh hỏng KHÔNG kéo theo
+  kênh sống** (Telegram vẫn đăng khi IG token hết hạn, IG chỉ thử ĐÚNG 1 lần) ·
+  bài bị chặn giữ `queued` · **ca ĐỐI CHỨNG** lỗi riêng một bài vẫn chạy tiếp
+  cùng kênh và đánh `error` thật · thiếu env → **1 dòng lỗi chứ không phải mỗi
+  bài một dòng** · công tắc tắt → **0 lượt gọi ra ngoài** · báo cáo nêu hướng
+  dẫn RIÊNG từng kênh (không lẫn `pages_manage_posts` sang Threads) ·
+  **10 ca Playwright trên chính `renderMediaQueue` trong `admin.html`**.
+- ⚠️ **CHƯA gọi được API thật của kênh nào** — container phiên chặn host ngoài
+  và không có token. Toàn bộ verify dừng ở tầng stub.
+
+### 🔑 VIỆC TAY HENRY — làm Telegram trước, nó rẻ nhất
+1. **Telegram** (không phải xin quyền ai): thêm bot làm **admin channel** (bật
+   quyền đăng bài) → đặt `TELEGRAM_CHANNEL_ID` (`@ten_channel` hoặc id `-100…`)
+   → Redeploy → `update app_config set value='["facebook","telegram"]'::jsonb
+   where key='social.channels';`
+2. **Instagram**: tài khoản phải là **Business** + liên kết Page; xin
+   `instagram_content_publish`; đặt `IG_USER_ID` (id SỐ, không phải username) +
+   `IG_ACCESS_TOKEN`.
+3. **Threads**: cấp token riêng (`threads_basic` + `threads_content_publish`),
+   đặt `THREADS_USER_ID` + `THREADS_ACCESS_TOKEN`.
+4. **Nới `social.publish_daily`** = `build_daily` × số kênh — xem bẫy ở trên.
+- Chưa xong bước nào thì kênh đó tự đóng lại ở lượt đầu, bài **giữ nguyên hàng
+  đợi** (không mất), Telegram gửi đúng hướng dẫn của riêng kênh đó.
+
+---
+
 ## 🌱 Trợ lý seeding group — máy soạn, NGƯỜI dán (2026-08-03, PR này)
 
 Henry: *"dùng account facebook đi seeding vào các group, auto bot mỗi ngày vào

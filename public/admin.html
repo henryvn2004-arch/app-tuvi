@@ -3330,7 +3330,7 @@ async function loadMediaQueue() {
     // ngay, đừng để nó lặng lẽ nằm trong DB.
     const sup = d.supportedChannels || [];
     const orphan = (d.channels || []).filter((c) => sup.indexOf(c) < 0);
-    renderMediaQueue(d.posts || [], orphan);
+    renderMediaQueue(d.posts || [], orphan, d);
   } catch (e) {
     if (badge) { badge.className = 'badge badge-red'; badge.textContent = 'Lỗi'; }
     if (host) host.innerHTML = `<div class="empty">Lỗi: ${e.message}</div>`;
@@ -3346,12 +3346,21 @@ const MQ_STATUS = {
   skipped:    ['badge-grey',  'Đã bỏ'],
 };
 
-function renderMediaQueue(posts, orphanChannels) {
+function renderMediaQueue(posts, orphanChannels, cfg) {
   const host = document.getElementById('mq-list');
   if (!host) return;
-  const warn = (orphanChannels && orphanChannels.length)
+  let warn = (orphanChannels && orphanChannels.length)
     ? `<div class="empty" style="color:var(--red);margin-bottom:.75rem">⚠️ Kênh <b>${escHtmlLocal(orphanChannels.join(', '))}</b> có trong <code>social.channels</code> nhưng CHƯA có adapter đăng — bài của kênh đó sẽ báo lỗi chứ không lên được.</div>`
     : '';
+  // Trần đăng tính theo DÒNG (mỗi kênh một dòng), còn trần dựng tính theo BÀI.
+  // Bật thêm kênh mà quên nới `publish_daily` là hàng đợi phình lên mỗi ngày
+  // trong im lặng — không có gì báo lỗi, bài chỉ đơn giản không tới lượt.
+  const nCh = (cfg && cfg.channels || []).length;
+  const need = (Number(cfg && cfg.buildDaily) || 0) * nCh;
+  const pub = Number(cfg && cfg.publishDaily) || 0;
+  if (nCh > 1 && pub && need > pub) {
+    warn += `<div class="empty" style="color:var(--red);margin-bottom:.75rem">⚠️ <code>social.publish_daily=${pub}</code> nhưng mỗi ngày dựng <b>${cfg.buildDaily} bài × ${nCh} kênh = ${need} lượt đăng</b> — hàng đợi sẽ dồn lại. Nâng lên ${need}: <code>update app_config set value='${need}'::jsonb where key='social.publish_daily';</code></div>`;
+  }
   if (!posts.length) {
     host.innerHTML = warn + '<div class="empty">Chưa có bài nào. Cron <code>media-build</code> chạy 09:30 mỗi sáng: dựng bài rồi đăng luôn.</div>';
     return;

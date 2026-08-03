@@ -1,0 +1,55 @@
+-- _patches/migration-media-channels.sql
+-- ============================================================
+-- M3 (tiếp) — mở thêm kênh tự đăng: Instagram · Threads · Telegram channel.
+--
+-- ⚠️ FILE NÀY CỐ Ý KHÔNG TỰ BẬT KÊNH NÀO. Bật một kênh trước khi khai env của
+-- nó thì lượt cron kế tiếp báo lỗi ngay (adapter trả "Thiếu env …", tính là lỗi
+-- CHẶN nên kênh đó tự đóng lại và bài giữ nguyên hàng đợi — không mất bài,
+-- nhưng cũng chẳng để làm gì). Chạy đúng khối tương ứng SAU khi đã có env.
+--
+-- Thứ tự nên làm: **Telegram trước** — đó là kênh duy nhất không phải xin quyền
+-- ai, token bot đã nằm sẵn trên Vercel từ track kênh chat.
+-- ============================================================
+
+-- ── 1. Telegram channel ─────────────────────────────────────────────────────
+-- Việc tay: thêm bot làm ADMIN của channel (bật quyền đăng bài) → lấy id channel
+-- (`@ten_channel`, hoặc id số `-100…` nếu channel riêng tư) → đặt env
+-- TELEGRAM_CHANNEL_ID trên Vercel → Redeploy. Rồi mới chạy:
+--
+--   update public.app_config
+--      set value = '["facebook","telegram"]'::jsonb
+--    where key = 'social.channels';
+
+-- ── 2. Instagram ────────────────────────────────────────────────────────────
+-- Việc tay: tài khoản IG phải là **Business** và đã liên kết với Page; Meta App
+-- xin quyền `instagram_content_publish`; lấy IG user id (id số, KHÔNG phải
+-- username) → đặt IG_USER_ID + IG_ACCESS_TOKEN (dùng chung page token được).
+--
+--   update public.app_config
+--      set value = '["facebook","telegram","instagram"]'::jsonb
+--    where key = 'social.channels';
+
+-- ── 3. Threads ──────────────────────────────────────────────────────────────
+-- Việc tay: Threads có API và TOKEN RIÊNG — token Page của Facebook KHÔNG dùng
+-- được. Cấp token với `threads_basic` + `threads_content_publish` → đặt
+-- THREADS_USER_ID + THREADS_ACCESS_TOKEN.
+--
+--   update public.app_config
+--      set value = '["facebook","telegram","instagram","threads"]'::jsonb
+--    where key = 'social.channels';
+
+-- ── 4. 🔑 NỚI TRẦN ĐĂNG — bước dễ quên nhất ─────────────────────────────────
+-- `social.build_daily` đếm theo BÀI, còn `social.publish_daily` đếm theo LƯỢT
+-- ĐĂNG, mà mỗi bài đẻ một dòng cho MỖI kênh. Bật 4 kênh với build_daily=3
+-- nghĩa là 12 lượt đăng/ngày, trong khi publish_daily đang là 3 → hàng đợi dồn
+-- lên mỗi ngày mà KHÔNG có gì báo lỗi (bài chỉ đơn giản chưa tới lượt).
+-- Panel "Hàng Đợi Bài Đăng" trong admin có cảnh báo đúng chỗ này kèm sẵn câu
+-- SQL, nhưng ghi lại đây cho khỏi quên:
+--
+--   update public.app_config
+--      set value = '12'::jsonb          -- = build_daily × số kênh
+--    where key = 'social.publish_daily';
+
+-- ── Dừng khẩn bất cứ lúc nào (áp cho TẤT CẢ kênh) ───────────────────────────
+--   update public.app_config set value = 'false'::jsonb
+--    where key = 'social.autopost_enabled';
