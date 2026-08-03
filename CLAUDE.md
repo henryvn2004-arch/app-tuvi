@@ -111,15 +111,49 @@ phải 19 như ghi ở vòng trước.
 - Verify: `tsc --noEmit` **0 lỗi** (đã `npm ci` + build engine) · `eslint` **0 lỗi** ·
   `prettier --check` sạch.
 
+### ✅ Vòng 3 — backfill 115 bài + vendor claude-seo (Henry duyệt cả hai)
+- **Backfill ĐÃ CHẠY prod:** `regexp_replace(content,'^# ','## ','gm')` trên `khao_luan`
+  (19 dòng) + `master_articles` (96 dòng). Verify sau khi chạy: **0 bài còn mở bằng `#`**
+  ở cả hai bảng. Dry-run trước đó đã xác nhận `still_bad_after = 0`, không tác dụng phụ —
+  cờ `m` chỉ khớp `# ` ở ĐẦU DÒNG, không đụng `#` giữa câu.
+- **`claude-seo` vendor vào `.claude/`** (25 skill + 18 agent, 2,3M, MIT — LICENSE giữ tại
+  `.claude/skills/seo/LICENSE`). Bố cục **theo đúng `install.sh` upstream**: skill chính ở
+  `.claude/skills/seo/` có `scripts/`+`schema/`+`pdf/`+`bin/`+`hooks/` lồng bên trong, 24
+  sub-skill phẳng cạnh nó, agent ở `.claude/agents/`. Script Python gọi bằng đường dẫn
+  tương đối `scripts/*.py` **so với `.claude/skills/seo/`** → **đừng di chuyển thư mục đó,
+  22/25 skill sẽ gãy**.
+  - 🔴 **`.gitignore` đang chặn `.claude/`** → bản vendor sẽ KHÔNG commit, mỗi phiên mới lại
+    mất. Sửa `.claude/` → **`.claude/*`** rồi `!.claude/skills/` + `!.claude/agents/`.
+    **Phải dùng `.claude/*`**: với `.claude/` git không đi vào thư mục nên luật phủ định vô
+    hiệu. Verify cả 2 chiều: skill commit được, mà `settings.local.json` / `.credentials.json`
+    / `history.jsonl` vẫn bị chặn.
+  - **Bỏ CỐ Ý:** `screenshots/`(1,6M) `assets/` `tests/` `.devcontainer/` `.github/` (không
+    cần lúc chạy) và `extensions/`(516K — DataForSEO/Firecrawl/Banana đều cần key bên thứ
+    ba). Vì bỏ extensions nên thiếu `scripts/edit.py` + `scripts/presets.py`; chúng chỉ được
+    gọi bởi `seo/scripts/consistency_check.py`, **0 SKILL.md phụ thuộc** → không skill nào gãy.
+  - ⚠️ **Hook CỐ Ý không kích hoạt:** `seo/hooks/hooks.json` khai `PostToolUse` bắt MỌI
+    `Edit|Write` rồi **exit 2 để CHẶN** khi validate JSON-LD hỏng. Vendor dạng *skill* thì
+    `hooks.json` không tự nạp (chỉ plugin mới nạp) — đúng ý muốn: validator JSON-LD chặn mọi
+    lần sửa file trong repo Next.js này thì cản nhiều hơn giúp.
+  - Verify: 25/25 có `SKILL.md` frontmatter hợp lệ (`name`+`description`) · 18/18 agent có
+    `name:` · 29/31 script Python được gọi là có mặt (2 thiếu đã giải thích ở trên) ·
+    `prettier --check .` (QUÉT CẢ CÂY như CI) **sạch** · `npm run lint` **0 lỗi / 72 warning
+    = đúng mức pre-existing**, bản vendor không thêm cái nào · 234 file, 0 secret/local state.
+- Ghi chú: `docs/BRAND-VOICE.md` §6 nói "19 bài đang dính" — con số lúc viết; số ĐÚNG là
+  **115** (19 khao_luan + 96 master_articles), và nay đã backfill về 0.
+
 ### CÒN LẠI
 - **Embedding mục CHƯA sinh** — container không có `OPENAI_API_KEY`. Dòng `kind='full'`
   đã dùng được ngay (prompt injection không cần embedding); `search_brand_voice()` trả rỗng
   cho tới khi chạy `node scripts/load-brand-voice.mjs` ở nơi có key.
-- **115 bài CŨ vẫn còn `#`** — luật mới chỉ áp cho bài SINH TỪ GIỜ. Muốn gỡ 2 thẻ H1 trên
-  115 trang đang live thì cần backfill `update … set content = regexp_replace(content,'^# ','## ')`.
-  Chưa chạy: đó là sửa nội dung đã publish, chờ Henry duyệt.
-- B2 (brand-check gate) + B3 (claude-seo): chưa làm. `checkBrandFormat()` đã là sẵn phần
-  tự động hoá được của B2.
+- **Tên cung sai vẫn còn trong bài CŨ** (`khao_luan` 12 · `master_articles` 1) — backfill vừa
+  rồi CHỈ sửa `#`, chưa đụng `Tử Nữ`/`Tử Tôn`/`Giao Hữu`. Bài SINH TỪ GIỜ đã sạch nhờ
+  `normalizeBrandFormat`. Muốn dọn nốt bài cũ thì chạy thêm một lượt update theo `CUNG_ALIASES`.
+- **B2 (brand-check gate) chưa nối vào pipeline** — `checkBrandFormat()` đã là sẵn phần tự
+  động hoá được, còn thiếu bước chặn trước khi publish.
+- **B3 mới xong phần CÀI** — chưa chạy skill nào. Việc đầu tiên nên làm theo brief:
+  semantic cluster map cho 8.958 trang `seo_pages` (`seo-cluster` + `seo-programmatic`),
+  rồi `seo-schema` / `seo-geo` / index monitor.
 
 ---
 

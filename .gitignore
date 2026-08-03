@@ -20,7 +20,13 @@ tuvi-engine/coverage/
 tsconfig.tsbuildinfo
 
 # Claude Code / harness local state
-.claude/
+# Dùng `.claude/*` chứ KHÔNG phải `.claude/` — với `.claude/` git không đi vào
+# thư mục nên mọi luật phủ định bên dưới sẽ vô hiệu.
+.claude/*
+# Skill + agent vendor (claude-seo, MIT) PHẢI commit, nếu không mỗi phiên mới lại mất.
+# Local state (settings.local.json, .credentials.json…) vẫn bị chặn như cũ.
+!.claude/skills/
+!.claude/agents/
 
 # Local data, generated outputs & scratch
 /qr/
