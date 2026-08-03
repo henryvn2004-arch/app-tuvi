@@ -9,7 +9,7 @@ export const maxDuration = 15;
 
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
-import { getPackage, getPackages, quoteCustomVnd } from '@/lib/billing/packages';
+import { getPackage, getPackages, quoteCustomVnd, vndPerCredit } from '@/lib/billing/packages';
 import { getToolPrice } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
 import { freeGenGate, FREE_GEN_CAP_MESSAGE, railFreeRemaining } from '@/lib/billing/viral-budget';
@@ -1797,25 +1797,27 @@ async function handleRailStatus(request: NextRequest, sp: URLSearchParams): Prom
       anonTrialCap: t.cap,
       railPrice: await getToolPrice('rail-message'),
       lasoPrice: await getToolPrice('laso'),
-      vndPerCredit: await getConfigValue<number>('credits.vnd_per_credit', 1000),
+      vndPerCredit: await vndPerCredit(),
     });
   }
   try {
     const user = await getUserFromToken(userToken);
     if (!user) return err('Invalid token', 401);
-    const [balance, railPrice, lasoPrice, freeTurns, vndPerCredit] = await Promise.all([
+    // KHÔNG đặt tên biến trùng `vndPerCredit`: const trong cùng scope che luôn
+    // hàm import, nên chính lượt gọi ở dòng dưới rơi vào TDZ.
+    const [balance, railPrice, lasoPrice, freeTurns, vndRate] = await Promise.all([
       getBalance(user.id),
       getToolPrice('rail-message'),
       getToolPrice('laso'),
       railFreeRemaining(user.id),
-      getConfigValue<number>('credits.vnd_per_credit', 1000),
+      vndPerCredit(),
     ]);
     return ok({
       balance,
       railPrice: railPrice != null ? railPrice : null,
       lasoPrice: lasoPrice != null ? lasoPrice : null,
       freeTurns,
-      vndPerCredit,
+      vndPerCredit: vndRate,
     });
   } catch (e) {
     return err(e instanceof Error ? e.message : 'rail-status failed', 500);
