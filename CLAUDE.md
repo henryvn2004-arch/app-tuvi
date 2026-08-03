@@ -449,6 +449,38 @@ phải 19 như ghi ở vòng trước.
 - Ghi chú: `docs/BRAND-VOICE.md` §6 nói "19 bài đang dính" — con số lúc viết; số ĐÚNG là
   **115** (19 khao_luan + 96 master_articles), và nay đã backfill về 0.
 
+### 🔀 Vòng 4 — gộp với `brand-check.ts` vừa lên main (ĐỌC TRƯỚC KHI SỬA 2 FILE NÀY)
+Trong lúc làm PR này, `main` đi trước 10 commit và **đã có `lib/content/brand-check.ts`**
+(663 dòng — gate hậu kiểm 2 tầng auto+LLM, `content_qc_log`, tách profile
+`khao-luan`/`nghien-cuu`). Merge ra 3 xung đột, đều nằm giữa vùng vừa sửa.
+
+**Quan hệ hai hệ thống — đừng gộp làm một:**
+| | Vai | Chạy lúc |
+|---|---|---|
+| `brand-rules.ts` → `BRAND_FORMAT_RULES` | **PHÒNG** — tiêm luật vào prompt | TRƯỚC khi sinh |
+| `brand-check.ts` → `brandCheck()` | **CHỮA** — autofix · quét · nhờ LLM viết lại · chặn | SAU khi sinh |
+
+Giữ cả hai vì gate chạy sau và **mỗi bài trượt tốn thêm một lượt LLM viết lại** — dặn
+trước rẻ hơn sinh→bắt→sửa. Nhưng **đã GỠ `normalizeBrandFormat`/`checkBrandFormat`** khỏi
+`brand-rules.ts`: chúng trùng tầng auto của `brand-check.ts`, để hai bản luật song song thì
+chúng trôi khỏi nhau lúc nào không biết. **`brand-check.ts` là nguồn DUY NHẤT cho việc
+kiểm/sửa; `brand-rules.ts` chỉ còn đúng một hằng số đưa vào prompt.**
+
+- 🔑 **`brand-check.ts` đọc `brand_voice_docs`** — tức nó phụ thuộc CHÍNH migration/doc/loader
+  của PR này (main chưa có 3 file đó; bảng tồn tại trên prod chỉ vì tao tạo thẳng qua MCP).
+- `.gitignore`: giữ **cả hai** phủ định — `!.claude/settings.json` (của main, cho MCP ga4)
+  lẫn `!.claude/skills/` + `!.claude/agents/`.
+- Sau merge verify lại: `tsc` 0 lỗi · `lint` 0 lỗi/72 warning · `prettier --check .` sạch ·
+  md5 DB khớp md5 file (`76b6c280…`) sau khi sửa §6.
+
+### ⚠️ CI: workflow `pull_request` có lúc KHÔNG fire
+2 commit liên tiếp chỉ có Vercel + `smoke` chạy; lint/typecheck/test/lighthouse **không hề
+được tạo run** (10 workflow đều `active`, không có path filter). `smoke` vẫn chạy vì nó
+trigger bằng `deployment_status` ⇒ không phải hết quota. **Cách gỡ: Close rồi Reopen PR** —
+phát lại event `pull_request` và CI dựng lại đủ bộ. Commit rỗng KHÔNG kích được.
+**Bài học: PR "xanh" có thể chỉ là các check VẮNG MẶT, không phải pass — đếm đủ 7 check
+trước khi kết luận.**
+
 ### CÒN LẠI
 - **Embedding mục CHƯA sinh** — container không có `OPENAI_API_KEY`. Dòng `kind='full'`
   đã dùng được ngay (prompt injection không cần embedding); `search_brand_voice()` trả rỗng
