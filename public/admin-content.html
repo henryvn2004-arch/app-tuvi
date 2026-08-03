@@ -689,6 +689,29 @@ audio { height: 32px; flex: 1; }
   display: none;
 }
 </style>
+  <script src="/nav.js?v=22" data-icons-only></script>
+  <script>
+    /* Admin dựng lại DOM ở 200+ chỗ bằng innerHTML. mountIcons() chỉ tự quét lúc
+       nạp trang, nên gọi tay từng chỗ vừa dễ sót vừa không kiểm nổi. Quan sát DOM
+       một lần rồi dựng icon cho mọi nhánh mới chèn — mountIcons bỏ qua phần tử đã
+       có <svg> nên không lặp vô hạn: nó chèn <svg> vào span, lượt quan sát kế tiếp
+       nhìn thấy <svg> đó và không còn gì để làm. */
+    (function () {
+      function arm() {
+        if (!window.mountIcons || !window.MutationObserver || !document.body) return;
+        window.mountIcons(document.body);
+        new MutationObserver(function (muts) {
+          for (var i = 0; i < muts.length; i++) {
+            var added = muts[i].addedNodes;
+            for (var j = 0; j < added.length; j++)
+              if (added[j].nodeType === 1) window.mountIcons(added[j]);
+          }
+        }).observe(document.body, { childList: true, subtree: true });
+      }
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arm);
+      else arm();
+    })();
+  </script>
 </head>
 <body>
 
@@ -721,27 +744,27 @@ audio { height: 32px; flex: 1; }
   <nav class="sidebar-nav">
     <div class="nav-section">Nội dung</div>
     <a class="nav-item active" onclick="showView('dashboard')">
-      <span class="icon">📊</span> Dashboard
+      <span class="icon"><span class="ic-inline" data-icon="bar-chart-3" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📊</span></span> Dashboard
     </a>
     <a class="nav-item" onclick="showView('list')">
-      <span class="icon">📋</span> Danh sách
+      <span class="icon"><span class="ic-inline" data-icon="clipboard" data-icon-emoji="📋" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📋</span></span> Danh sách
     </a>
     <a class="nav-item" onclick="openCreateModal()">
-      <span class="icon">✏️</span> Tạo mới
+      <span class="icon"><span class="ic-inline" data-icon="pencil" data-icon-emoji="✏️" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">✏️</span></span> Tạo mới
     </a>
     <div class="nav-section" style="margin-top:12px">Pipeline</div>
     <a class="nav-item" onclick="showView('tts')">
-      <span class="icon">🔊</span> TTS Queue
+      <span class="icon"><span class="ic-inline" data-icon="volume-2" data-icon-emoji="🔊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔊</span></span> TTS Queue
     </a>
     <a class="nav-item" onclick="showView('youtube')">
       <span class="icon">▶️</span> YouTube Upload
     </a>
     <div class="nav-section" style="margin-top:12px">Cài đặt</div>
     <a class="nav-item" onclick="showView('settings')">
-      <span class="icon">⚙️</span> Cài đặt
+      <span class="icon"><span class="ic-inline" data-icon="settings" data-icon-emoji="⚙️" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">⚙️</span></span> Cài đặt
     </a>
     <a class="nav-item" href="/" style="margin-top:auto">
-      <span class="icon">🏠</span> Về trang chủ
+      <span class="icon"><span class="ic-inline" data-icon="home" data-icon-emoji="🏠" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🏠</span></span> Về trang chủ
     </a>
   </nav>
 </aside>
@@ -806,7 +829,7 @@ audio { height: 32px; flex: 1; }
                 </tr>
               </thead>
               <tbody id="recent-tbody">
-                <tr><td colspan="7"><div class="empty-state"><div class="icon">📭</div><p>Chưa có nội dung</p></div></td></tr>
+                <tr><td colspan="7"><div class="empty-state"><div class="icon"><span class="ic-inline" data-icon="inbox" data-icon-emoji="📭" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📭</span></div><p>Chưa có nội dung</p></div></td></tr>
               </tbody>
             </table>
           </div>
@@ -851,7 +874,7 @@ audio { height: 32px; flex: 1; }
                 </tr>
               </thead>
               <tbody id="list-tbody">
-                <tr><td colspan="7"><div class="empty-state"><div class="icon">📭</div><p>Đang tải...</p></div></td></tr>
+                <tr><td colspan="7"><div class="empty-state"><div class="icon"><span class="ic-inline" data-icon="inbox" data-icon-emoji="📭" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📭</span></div><p>Đang tải...</p></div></td></tr>
               </tbody>
             </table>
           </div>
@@ -863,17 +886,17 @@ audio { height: 32px; flex: 1; }
     <div id="view-tts" style="display:none">
       <div class="panel">
         <div class="panel-header">
-          <span class="panel-title">🔊 TTS Queue — Google Text-to-Speech</span>
+          <span class="panel-title"><span class="ic-inline" data-icon="volume-2" data-icon-emoji="🔊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔊</span> TTS Queue — Google Text-to-Speech</span>
           <button class="btn btn-primary btn-sm" onclick="processTTSQueue()">▶ Chạy queue</button>
         </div>
         <div class="panel-body">
           <div style="background:var(--gold-lt); border:1px solid var(--gold); border-radius:6px; padding:14px 16px; margin-bottom:20px; font-size:13px; color:var(--text-mid)">
-            <strong>📌 Cấu hình TTS:</strong> Hiện dùng <strong>Google Cloud TTS free tier</strong> (1M chars/tháng).
+            <strong><span class="ic-inline" data-icon="pin" data-icon-emoji="📌" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📌</span> Cấu hình TTS:</strong> Hiện dùng <strong>Google Cloud TTS free tier</strong> (1M chars/tháng).
             Giọng hỏi: <code>vi-VN-Wavenet-A</code> (nữ) · Giọng trả lời: <code>vi-VN-Wavenet-D</code> (nam, giả lập Nguyễn Ngọc Ngạn).
             <br>Khi có Vbee API → cập nhật trong Cài đặt.
           </div>
           <div id="tts-queue-list">
-            <div class="empty-state"><div class="icon">✅</div><p>Không có item nào chờ TTS</p></div>
+            <div class="empty-state"><div class="icon"><span class="ic-inline" data-icon="check-circle" data-icon-emoji="✅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">✅</span></div><p>Không có item nào chờ TTS</p></div>
           </div>
         </div>
       </div>
@@ -884,11 +907,11 @@ audio { height: 32px; flex: 1; }
       <div class="panel">
         <div class="panel-header">
           <span class="panel-title">▶️ YouTube Upload Queue</span>
-          <button class="btn btn-gold btn-sm" onclick="processYTQueue()">📤 Upload tất cả</button>
+          <button class="btn btn-gold btn-sm" onclick="processYTQueue()"><span class="ic-inline" data-icon="package" data-icon-emoji="📤" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📤</span> Upload tất cả</button>
         </div>
         <div class="panel-body">
           <div id="yt-queue-list">
-            <div class="empty-state"><div class="icon">📭</div><p>Không có video nào chờ upload</p></div>
+            <div class="empty-state"><div class="icon"><span class="ic-inline" data-icon="inbox" data-icon-emoji="📭" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📭</span></div><p>Không có video nào chờ upload</p></div>
           </div>
         </div>
       </div>
@@ -897,7 +920,7 @@ audio { height: 32px; flex: 1; }
     <!-- ── SETTINGS VIEW ── -->
     <div id="view-settings" style="display:none">
       <div class="panel">
-        <div class="panel-header"><span class="panel-title">⚙️ Cài đặt</span></div>
+        <div class="panel-header"><span class="panel-title"><span class="ic-inline" data-icon="settings" data-icon-emoji="⚙️" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">⚙️</span> Cài đặt</span></div>
         <div class="panel-body">
           <div class="form-row">
             <div class="form-group">
@@ -945,7 +968,7 @@ audio { height: 32px; flex: 1; }
                 placeholder="🔮 {title}&#10;&#10;Tử Vi Minh Bảo — luận giải lá số theo cổ pháp.&#10;🌐 tuviminhbao.com"></textarea>
             </div>
           </div>
-          <button class="btn btn-primary" onclick="saveSettings()">💾 Lưu cài đặt</button>
+          <button class="btn btn-primary" onclick="saveSettings()"><span class="ic-inline" data-icon="save" data-icon-emoji="💾" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">💾</span> Lưu cài đặt</button>
         </div>
       </div>
     </div>
@@ -957,16 +980,16 @@ audio { height: 32px; flex: 1; }
 <div class="modal-overlay" id="create-modal">
   <div class="modal">
     <div class="modal-header">
-      <span class="modal-title" id="modal-title">✏️ Tạo nội dung mới</span>
+      <span class="modal-title" id="modal-title"><span class="ic-inline" data-icon="pencil" data-icon-emoji="✏️" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">✏️</span> Tạo nội dung mới</span>
       <button class="modal-close" onclick="closeModal('create-modal')">✕</button>
     </div>
     <div class="modal-body">
 
       <!-- Tabs -->
       <div class="tabs">
-        <div class="tab active" id="tab-info" onclick="switchTab('info')">📝 Thông tin</div>
-        <div class="tab" id="tab-script" onclick="switchTab('script')">🎙 Kịch bản</div>
-        <div class="tab" id="tab-tts" onclick="switchTab('tts-tab')">🔊 TTS & Audio</div>
+        <div class="tab active" id="tab-info" onclick="switchTab('info')"><span class="ic-inline" data-icon="file-text" data-icon-emoji="📝" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📝</span> Thông tin</div>
+        <div class="tab" id="tab-script" onclick="switchTab('script')"><span class="ic-inline" data-icon="mic" data-icon-emoji="🎙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎙</span> Kịch bản</div>
+        <div class="tab" id="tab-tts" onclick="switchTab('tts-tab')"><span class="ic-inline" data-icon="volume-2" data-icon-emoji="🔊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔊</span> TTS & Audio</div>
         <div class="tab" id="tab-yt" onclick="switchTab('yt')">▶️ YouTube</div>
       </div>
 
@@ -1007,10 +1030,10 @@ audio { height: 32px; flex: 1; }
         <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap; align-items:center">
           <select class="form-control" id="khao-luan-select" style="max-width:360px; flex:1"
             onchange="previewKhaoLuan(this.value)">
-            <option value="">📚 Chọn bài từ Khảo Luận...</option>
+            <option value=""><span class="ic-inline" data-icon="book-open" data-icon-emoji="📚" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📚</span> Chọn bài từ Khảo Luận...</option>
           </select>
           <button class="btn btn-primary" onclick="importKhaoLuan()" id="btn-import-kl" disabled>
-            📥 Nhập vào script
+            <span class="ic-inline" data-icon="package" data-icon-emoji="📥" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📥</span> Nhập vào script
           </button>
           <span id="gen-status" style="font-size:12px; color:var(--text-lt); align-self:center"></span>
         </div>
@@ -1023,7 +1046,7 @@ audio { height: 32px; flex: 1; }
           <div class="script-toolbar">
             <button class="btn btn-outline btn-sm" onclick="addScriptLine('hoi')">+ Câu hỏi</button>
             <button class="btn btn-outline btn-sm" onclick="addScriptLine('tra_loi')">+ Trả lời</button>
-            <button class="btn btn-outline btn-sm" onclick="addScriptLineAI()">✨ Tiếp tục AI</button>
+            <button class="btn btn-outline btn-sm" onclick="addScriptLineAI()"><span class="ic-inline" data-icon="sparkles" data-icon-emoji="✨" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">✨</span> Tiếp tục AI</button>
             <span class="info" id="script-char-count">0 ký tự</span>
           </div>
           <div class="script-lines" id="script-lines">
@@ -1031,8 +1054,8 @@ audio { height: 32px; flex: 1; }
           </div>
         </div>
         <div style="margin-top:12px; display:flex; gap:10px">
-          <button class="btn btn-outline btn-sm" onclick="previewScript()">👁 Preview script</button>
-          <button class="btn btn-outline btn-sm" onclick="clearScript()">🗑 Xóa tất cả</button>
+          <button class="btn btn-outline btn-sm" onclick="previewScript()"><span class="ic-inline" data-icon="eye" data-icon-emoji="👁" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">👁</span> Preview script</button>
+          <button class="btn btn-outline btn-sm" onclick="clearScript()"><span class="ic-inline" data-icon="trash-2" data-icon-emoji="🗑" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🗑</span> Xóa tất cả</button>
         </div>
       </div>
 
@@ -1043,14 +1066,14 @@ audio { height: 32px; flex: 1; }
         </div>
         <div id="tts-preview-area">
           <div class="empty-state" style="padding:30px 0">
-            <div class="icon">🎙</div>
+            <div class="icon"><span class="ic-inline" data-icon="mic" data-icon-emoji="🎙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎙</span></div>
             <p>Chưa có audio. Chạy TTS để tạo.</p>
           </div>
         </div>
         <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap">
-          <button class="btn btn-primary" onclick="runTTS()" id="btn-run-tts">🔊 Chạy TTS</button>
-          <button class="btn btn-outline" onclick="mixAudio()" id="btn-mix" disabled>🎵 Mix + Lồng nhạc</button>
-          <button class="btn btn-outline" onclick="retryPendingTTS()" id="btn-retry-tts" style="display:none">🔄 Retry dòng lỗi</button>
+          <button class="btn btn-primary" onclick="runTTS()" id="btn-run-tts"><span class="ic-inline" data-icon="volume-2" data-icon-emoji="🔊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔊</span> Chạy TTS</button>
+          <button class="btn btn-outline" onclick="mixAudio()" id="btn-mix" disabled><span class="ic-inline" data-icon="music" data-icon-emoji="🎵" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎵</span> Mix + Lồng nhạc</button>
+          <button class="btn btn-outline" onclick="retryPendingTTS()" id="btn-retry-tts" style="display:none"><span class="ic-inline" data-icon="rotate-cw" data-icon-emoji="🔄" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔄</span> Retry dòng lỗi</button>
           <select class="form-control" id="tts-music-select" style="max-width:180px">
             <option value="">Không có nhạc</option>
             <option value="calm">Nhạc thiền</option>
@@ -1091,7 +1114,7 @@ audio { height: 32px; flex: 1; }
             </div>
           </div>
           <div style="margin-top:8px; display:flex; gap:10px">
-            <button class="btn btn-gold" onclick="scheduleYTUpload()" id="btn-yt-upload" disabled>📤 Lên lịch upload YouTube</button>
+            <button class="btn btn-gold" onclick="scheduleYTUpload()" id="btn-yt-upload" disabled><span class="ic-inline" data-icon="package" data-icon-emoji="📤" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📤</span> Lên lịch upload YouTube</button>
             <span id="yt-upload-status" style="font-size:12px; color:var(--text-lt); align-self:center"></span>
           </div>
         </div>
@@ -1100,7 +1123,7 @@ audio { height: 32px; flex: 1; }
     </div><!-- /modal-body -->
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="closeModal('create-modal')">Hủy</button>
-      <button class="btn btn-primary" onclick="saveItem()">💾 Lưu</button>
+      <button class="btn btn-primary" onclick="saveItem()"><span class="ic-inline" data-icon="save" data-icon-emoji="💾" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">💾</span> Lưu</button>
     </div>
   </div>
 </div>
@@ -1268,7 +1291,7 @@ function pipelineHTML(item) {
 function renderRecentTable(items) {
   const tbody = document.getElementById('recent-tbody');
   if (!items.length) {
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon">📭</div><p>Chưa có nội dung nào. <a href="#" onclick="openCreateModal()">Tạo mới →</a></p></div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon"><span class="ic-inline" data-icon="inbox" data-icon-emoji="📭" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📭</span></div><p>Chưa có nội dung nào. <a href="#" onclick="openCreateModal()">Tạo mới →</a></p></div></td></tr>`;
     return;
   }
   tbody.innerHTML = items.map(item => `
@@ -1292,7 +1315,7 @@ function renderRecentTable(items) {
 function renderListTable(items) {
   const tbody = document.getElementById('list-tbody');
   if (!items.length) {
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon">📭</div><p>Chưa có nội dung</p></div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon"><span class="ic-inline" data-icon="inbox" data-icon-emoji="📭" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📭</span></div><p>Chưa có nội dung</p></div></td></tr>`;
     return;
   }
   tbody.innerHTML = items.map((item, i) => `
@@ -1308,8 +1331,8 @@ function renderListTable(items) {
       <td style="font-size:12px; color:var(--text-lt)">${fmtDate(item.created_at)}</td>
       <td>
         <div style="display:flex; gap:6px">
-          <button class="btn btn-outline btn-sm" onclick="editItem('${item.id}')">✏️</button>
-          <button class="btn btn-outline btn-sm" onclick="runTTSForItem('${item.id}')">🔊</button>
+          <button class="btn btn-outline btn-sm" onclick="editItem('${item.id}')"><span class="ic-inline" data-icon="pencil" data-icon-emoji="✏️" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">✏️</span></button>
+          <button class="btn btn-outline btn-sm" onclick="runTTSForItem('${item.id}')"><span class="ic-inline" data-icon="volume-2" data-icon-emoji="🔊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔊</span></button>
           <button class="btn btn-outline btn-sm" onclick="openYTModal('${item.id}')">▶️</button>
         </div>
       </td>
@@ -1321,7 +1344,7 @@ function renderTTSQueue() {
   const pending = allItems.filter(i => i.tts_status === 'pending');
   const el = document.getElementById('tts-queue-list');
   if (!pending.length) {
-    el.innerHTML = `<div class="empty-state"><div class="icon">✅</div><p>Không có item nào chờ TTS</p></div>`;
+    el.innerHTML = `<div class="empty-state"><div class="icon"><span class="ic-inline" data-icon="check-circle" data-icon-emoji="✅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">✅</span></div><p>Không có item nào chờ TTS</p></div>`;
     return;
   }
   el.innerHTML = pending.map(item => `
@@ -1330,7 +1353,7 @@ function renderTTSQueue() {
         <div style="font-weight:600; font-size:13px">${escHtml(item.title)}</div>
         <div style="font-size:11px; color:var(--text-lt)">${(item.noi_dung || []).length} dòng thoại</div>
       </div>
-      <button class="btn btn-primary btn-sm" onclick="runTTSForItem('${item.id}')">🔊 Chạy TTS</button>
+      <button class="btn btn-primary btn-sm" onclick="runTTSForItem('${item.id}')"><span class="ic-inline" data-icon="volume-2" data-icon-emoji="🔊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔊</span> Chạy TTS</button>
     </div>
   `).join('');
 }
@@ -1339,7 +1362,7 @@ function renderYTQueue() {
   const ready = allItems.filter(i => i.video_status === 'done' && i.yt_status === 'pending');
   const el = document.getElementById('yt-queue-list');
   if (!ready.length) {
-    el.innerHTML = `<div class="empty-state"><div class="icon">📭</div><p>Không có video nào sẵn sàng để upload</p></div>`;
+    el.innerHTML = `<div class="empty-state"><div class="icon"><span class="ic-inline" data-icon="inbox" data-icon-emoji="📭" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📭</span></div><p>Không có video nào sẵn sàng để upload</p></div>`;
     return;
   }
   el.innerHTML = ready.map(item => `
@@ -1349,8 +1372,8 @@ function renderYTQueue() {
         <div style="font-size:11px; color:var(--text-lt)">${item.audio_final_url ? '✓ Audio ready' : '⚠ Chưa có audio'}</div>
       </div>
       <div style="display:flex; gap:8px">
-        <button class="btn btn-outline btn-sm" onclick="openYTModal('${item.id}')">⚙ Config YT</button>
-        <button class="btn btn-gold btn-sm" onclick="uploadToYT('${item.id}')">📤 Upload</button>
+        <button class="btn btn-outline btn-sm" onclick="openYTModal('${item.id}')"><span class="ic-inline" data-icon="settings" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">⚙</span> Config YT</button>
+        <button class="btn btn-gold btn-sm" onclick="uploadToYT('${item.id}')"><span class="ic-inline" data-icon="package" data-icon-emoji="📤" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📤</span> Upload</button>
       </div>
     </div>
   `).join('');
@@ -1456,7 +1479,7 @@ async function loadKhaoLuanList() {
     const data = await sbFetch('khao_luan?select=id,title,excerpt,category&order=created_at.desc&limit=100');
     khaoLuanCache = data || [];
     const sel = document.getElementById('khao-luan-select');
-    sel.innerHTML = '<option value="">📚 Chọn bài từ Khảo Luận...</option>';
+    sel.innerHTML = '<option value=""><span class="ic-inline" data-icon="book-open" data-icon-emoji="📚" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📚</span> Chọn bài từ Khảo Luận...</option>';
     khaoLuanCache.forEach(item => {
       const opt = document.createElement('option');
       opt.value = item.id;
@@ -1507,7 +1530,7 @@ async function importKhaoLuan() {
     switchTab('script');
 
     status.textContent = `✓ Đã nhập 1 đoạn (${lines[0].text.length} ký tự)`;
-    toast(`📥 Đã nhập bài "${item.title.substring(0,40)}..."`, 'success');
+    toast(`<span class="ic-inline" data-icon="package" data-icon-emoji="📥" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📥</span> Đã nhập bài "${item.title.substring(0,40)}..."`, 'success');
   } catch (e) {
     toast('Lỗi tải bài: ' + e.message, 'error');
     status.textContent = '';
@@ -1569,13 +1592,13 @@ async function generateScriptAI() {
     scriptLines = parsed.lines || [];
     renderScriptEditor();
     switchTab('script');
-    toast('✨ Đã sinh kịch bản', 'success');
+    toast('<span class="ic-inline" data-icon="sparkles" data-icon-emoji="✨" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">✨</span> Đã sinh kịch bản', 'success');
     status.textContent = `${scriptLines.length} dòng thoại`;
   } catch (e) {
     toast('Lỗi sinh kịch bản: ' + e.message, 'error');
   } finally {
     btn.disabled = false;
-    btn.innerHTML = '✨ Sinh kịch bản bằng AI';
+    btn.innerHTML = '<span class="ic-inline" data-icon="sparkles" data-icon-emoji="✨" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">✨</span> Sinh kịch bản bằng AI';
   }
 }
 
@@ -1660,14 +1683,14 @@ function updateTTSTab(item) {
     if (ytBtn) ytBtn.disabled = false;
     previewArea.innerHTML = `
       <div class="audio-preview">
-        <span class="audio-icon">🎵</span>
+        <span class="audio-icon"><span class="ic-inline" data-icon="music" data-icon-emoji="🎵" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎵</span></span>
         <div class="audio-info">
           <div class="name">Audio hoàn chỉnh</div>
           <div class="meta">Vbee · Nguyễn Ngọc Ngạn · MP3</div>
         </div>
         <audio controls src="${audioUrl}" style="flex:1; height:32px"></audio>
       </div>`;
-    toast('✅ TTS xong! Nghe thử rồi upload YouTube.', 'success');
+    toast('<span class="ic-inline" data-icon="check-circle" data-icon-emoji="✅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">✅</span> TTS xong! Nghe thử rồi upload YouTube.', 'success');
 
   } else if (item.tts_status === 'processing') {
     progressEl.style.display = '';
@@ -1676,7 +1699,7 @@ function updateTTSTab(item) {
 
   } else if (item.tts_status === 'error') {
     progressEl.style.display = 'none';
-    previewArea.innerHTML = `<div style="color:var(--red);font-size:13px;padding:12px">❌ Lỗi TTS: ${escHtml(item.tts_error || 'unknown')}</div>`;
+    previewArea.innerHTML = `<div style="color:var(--red);font-size:13px;padding:12px"><span class="ic-inline" data-icon="x-circle" data-icon-emoji="❌" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">❌</span> Lỗi TTS: ${escHtml(item.tts_error || 'unknown')}</div>`;
   }
 }
 
@@ -1752,7 +1775,7 @@ async function runTTS() {
     );
     const data = await resp.json();
     if (data.success) {
-      toast('🔊 Đã gửi Vbee. Đang chờ render...', 'success');
+      toast('<span class="ic-inline" data-icon="volume-2" data-icon-emoji="🔊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔊</span> Đã gửi Vbee. Đang chờ render...', 'success');
       document.getElementById('tts-progress').style.display = '';
       document.getElementById('tts-progress-label').textContent = 'Đang render audio — chờ 15-60s...';
       document.getElementById('tts-progress-fill').style.width = '15%';
@@ -1764,7 +1787,7 @@ async function runTTS() {
     toast('Lỗi kết nối: ' + e.message, 'error');
   } finally {
     btn.disabled = false;
-    btn.innerHTML = '🔊 Chạy TTS';
+    btn.innerHTML = '<span class="ic-inline" data-icon="volume-2" data-icon-emoji="🔊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔊</span> Chạy TTS';
   }
 }
 
@@ -1806,7 +1829,7 @@ function startTTSPoller(id) {
 async function runTTSForItem(id) {
   const item = allItems.find(i => i.id === id);
   if (!item) return;
-  toast(`🔊 Queuing TTS cho "${item.title}"...`, 'info');
+  toast(`<span class="ic-inline" data-icon="volume-2" data-icon-emoji="🔊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔊</span> Queuing TTS cho "${item.title}"...`, 'info');
   // TODO: POST /api/tts
 }
 
@@ -1830,7 +1853,7 @@ async function mixAudio() {
     });
     const data = await resp.json();
     if (data.success) {
-      toast('🎵 Mix xong! Video sẵn sàng upload YouTube.', 'success');
+      toast('<span class="ic-inline" data-icon="music" data-icon-emoji="🎵" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎵</span> Mix xong! Video sẵn sàng upload YouTube.', 'success');
       // Reload item để lấy video_url mới
       allItems = await getItems();
       const updated = allItems.find(i => i.id === currentEditId);
@@ -1844,7 +1867,7 @@ async function mixAudio() {
     toast('Lỗi mix: ' + e.message, 'error');
   } finally {
     btn.disabled = false;
-    btn.innerHTML = '🎵 Mix + Lồng nhạc';
+    btn.innerHTML = '<span class="ic-inline" data-icon="music" data-icon-emoji="🎵" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎵</span> Mix + Lồng nhạc';
   }
 }
 
@@ -1862,7 +1885,7 @@ async function retryPendingTTS() {
     );
     const data = await resp.json();
     if (data.ok) {
-      toast(`🔄 Retry xong: ${data.done}/${data.retried} dòng lấy được audio`, data.done > 0 ? 'success' : 'info');
+      toast(`<span class="ic-inline" data-icon="rotate-cw" data-icon-emoji="🔄" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔄</span> Retry xong: ${data.done}/${data.retried} dòng lấy được audio`, data.done > 0 ? 'success' : 'info');
       // Poll lại ngay
       startTTSPoller(currentEditId);
     } else {
@@ -1872,7 +1895,7 @@ async function retryPendingTTS() {
     toast('Lỗi: ' + e.message, 'error');
   } finally {
     btn.disabled = false;
-    btn.innerHTML = '🔄 Retry dòng lỗi';
+    btn.innerHTML = '<span class="ic-inline" data-icon="rotate-cw" data-icon-emoji="🔄" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔄</span> Retry dòng lỗi';
   }
 }
 
@@ -1907,8 +1930,8 @@ async function uploadToYT(id) {
     );
     const data = await resp.json();
     if (data.success) {
-      toast('🎬 Đã upload YouTube! ' + data.url, 'success');
-      if (statusEl) statusEl.innerHTML = '✅ Live: <a href="' + data.url + '" target="_blank" style="color:var(--blue)">' + data.url + '</a>';
+      toast('<span class="ic-inline" data-icon="film" data-icon-emoji="🎬" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎬</span> Đã upload YouTube! ' + data.url, 'success');
+      if (statusEl) statusEl.innerHTML = '<span class="ic-inline" data-icon="check-circle" data-icon-emoji="✅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">✅</span> Live: <a href="' + data.url + '" target="_blank" style="color:var(--blue)">' + data.url + '</a>';
       // Refresh list
       allItems = await getItems();
       renderRecentTable(allItems.slice(0, 10));
@@ -2034,6 +2057,7 @@ function toast(msg, type = 'info') {
   const el = document.createElement('div');
   el.className = `toast ${type}`;
   el.innerHTML = `<span>${msg}</span>`;
+  if (window.mountIcons) window.mountIcons(el); // msg có thể mang span [data-icon]
   c.appendChild(el);
   setTimeout(() => el.remove(), 3500);
 }

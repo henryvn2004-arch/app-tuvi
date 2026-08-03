@@ -84,9 +84,9 @@ function renderCenter(ls, fd) {
   return `<div class="cung-center"><div class="center-la-so">
     <div class="center-title">✦ ${esc((fd.name || '—').toUpperCase())} ✦</div>
     <hr class="center-divider">
-    <div class="center-row">📅 ${fd.dd}/${fd.mm}/${fd.yyyy} (Dương Lịch) · giờ ${esc(fd.gioChi || '')}</div>
-    <div class="center-row">📅 ${fd.amLich ? fd.amLich.day + '/' + fd.amLich.month + '/' + fd.amLich.year : ''} (Âm Lịch) · giờ ${esc(fd.gioChi || '')}</div>
-    <div class="center-row">🎂 ${ls.tuoiXem} tuổi (âm lịch)</div>
+    <div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${fd.dd}/${fd.mm}/${fd.yyyy} (Dương Lịch) · giờ ${esc(fd.gioChi || '')}</div>
+    <div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${fd.amLich ? fd.amLich.day + '/' + fd.amLich.month + '/' + fd.amLich.year : ''} (Âm Lịch) · giờ ${esc(fd.gioChi || '')}</div>
+    <div class="center-row"><span class="ic-inline" data-icon="cake" data-icon-emoji="🎂" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎂</span> ${ls.tuoiXem} tuổi (âm lịch)</div>
     <div class="center-row">⚧ Giới tính: ${fd.gioitinh === 'nam' ? 'Nam' : 'Nữ'}</div>
     <hr class="center-divider">
     <div class="center-row">Năm: <b style="color:var(--navy)">${esc(ls.canChiNam)}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${esc(NAP_AM_FULL[ls.canChiNam] || ls.napAm || '')}</b></div>
@@ -97,7 +97,7 @@ function renderCenter(ls, fd) {
     <div class="center-row">Tiểu hạn: <b style="color:#1E6B3C">${esc((tvCung && tvCung.diaChi) || '?')}</b> · ${esc((tvCung && tvCung.cungName) || '')}</div>
     <div class="center-row">Lưu đại hạn: <b style="color:var(--gold)">${esc((ldh && ldh.diaChi) || '?')}</b> · ${esc((ldh && ldh.cungName) || '')}</div>
     <hr class="center-divider">
-    <div class="center-row" style="font-size:10px;color:var(--text-lt)">🗓 Lập lá số: ${nowStr}</div>
+    <div class="center-row" style="font-size:10px;color:var(--text-lt)"><span class="ic-inline" data-icon="calendar-days" data-icon-emoji="🗓" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🗓</span> Lập lá số: ${nowStr}</div>
     <div class="center-row" style="font-size:10px;color:var(--text-lt)">© 2026 紫微明寶 | Tử Vi Minh Bảo</div>
   </div></div>`;
 }

@@ -489,7 +489,7 @@ sessionStorage 2 phút. Hiện giá ở UI = `<span data-tvp-price="<tool_id>">�
 
 
 ### Icon: KHÔNG dùng emoji màu — chi tiết ở `docs/ICONS.md`
-`public/nav.js` là bộ icon dùng chung (85 icon SVG Lucide + `EMOJI_TO_ICON` 159
+`public/nav.js` là bộ icon dùng chung (102 icon SVG Lucide + `EMOJI_TO_ICON` 242
 mục + `mountIcons()`), nạp trên gần như mọi trang, export ra `window.ICONS` /
 `window.iconHtml` / `window.mountIcons` / `window.EMOJI_TO_ICON`.
 - UI mới: `<span class="ic" data-icon="wallet"></span>` — **không** emoji màu.
@@ -502,11 +502,23 @@ mục + `mountIcons()`), nạp trên gần như mọi trang, export ra `window.I
 - **KHÔNG áp dụng** cho prompt gửi LLM (emoji ở đó là chỉ dẫn định dạng cho
   model) và tin Telegram admin (Telegram không render SVG).
 - Thêm icon → sửa `ICONS` trong nav.js **và bump `nav.js?v=` trên cả 89 file**.
-- Còn nợ: ~1.865 emoji màu trong 132 file UI, dọn theo đợt (bảng ở `docs/ICONS.md §7`).
-- **`shell.js` có bộ ICONS thứ hai (28 icon) — CỐ Ý không gộp.** 0/27 trang shell
-  nạp `nav.js` (chrome riêng); thêm vào để lấy icon thì nav.js tự chèn nav bar
-  lên đầu `<body>` → phá layout 27 trang. Gộp thật phải tách `public/icons.js`
-  cho cả hai cùng nạp = chạm 116 file, chưa đáng khi shell chỉ còn 62 emoji.
+- **Trang KHÔNG có nav bar** (27 trang shell + 2 trang admin) nạp CHÍNH `nav.js`
+  ở **chế độ chỉ-icon**: `<script src="/nav.js?v=22" data-icons-only></script>`
+  → chỉ cấp icon + CSS, KHÔNG dựng nav, KHÔNG chèn GA4/`conversion.js`/`auth.js`.
+  Nhờ vậy cả site dùng MỘT nguồn icon; `public/icons.js` không cần tồn tại.
+  `shell.js` vẫn giữ bộ 28 icon riêng cho sidebar của nó — khác mục đích, không gộp.
+- **`admin*.html` dùng MutationObserver** dựng icon cho mọi nhánh mới chèn (210
+  chỗ `innerHTML`, gọi tay là chắc chắn sót). `mountIcons` bỏ qua phần tử đã có
+  `<svg>` nên không lặp vô hạn.
+- 🪤 **HAI BẪY đã vấp thật, chỉ lộ khi mở bằng trình duyệt:**
+  1. **Đừng chèn span vào GIÁ TRỊ THUỘC TÍNH** (`placeholder="🔍 Tìm..."`) — dấu
+     nháy trong span đóng sớm thuộc tính, **vỡ thẻ**, phần còn lại tràn ra màn
+     hình. Bộ dò: `grep -nE '\b[a-zA-Z-]+="[^"]*<span class="ic-inline"'`.
+  2. **Đừng đổi emoji đi vào `textContent`** — sink đó in nguyên chuỗi HTML.
+     Chỉ đổi khi đích là `innerHTML`.
+- ⚠️ **Nhánh dự phòng của span in EMOJI THÔ**, không để trống — nên "trang trông
+  vẫn có icon" KHÔNG chứng minh icon đã dựng. Cách kiểm đúng duy nhất:
+  `[data-icon]` nào KHÔNG chứa `<svg>` sau khi tải xong.
 
 ### Dùng thử rail cho khách CHƯA đăng nhập — cầu dao 3 lớp
 `/api/v1/chat` KHÔNG còn 401 cứng khi thiếu token: khách vô danh được vài câu

@@ -95,7 +95,17 @@
     'waves': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12q2.5 2 5 0t5 0 5 0 5 0" /><path d="M2 19q2.5 2 5 0t5 0 5 0 5 0" /><path d="M2 5q2.5 2 5 0t5 0 5 0 5 0" /></svg>',
     'x': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>',
     'x-circle': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg>',
-    'zap': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" /></svg>'
+    'zap': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" /></svg>',
+    'volume-2': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" /><path d="M16 9a5 5 0 0 1 0 6" /><path d="M19.364 18.364a9 9 0 0 0 0-12.728" /></svg>',
+    'inbox': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12" /><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></svg>',
+    'pencil': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></svg>',
+    'save': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" /><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" /><path d="M7 3v4a1 1 0 0 0 1 1h7" /></svg>',
+    'film': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="M7 3v18" /><path d="M3 7.5h4" /><path d="M3 12h18" /><path d="M3 16.5h4" /><path d="M17 3v18" /><path d="M17 7.5h4" /><path d="M17 16.5h4" /></svg>',
+    'siren': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18v-6a5 5 0 1 1 10 0v6" /><path d="M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2z" /><path d="M21 12h1" /><path d="M18.5 4.5 18 5" /><path d="M2 12h1" /><path d="M12 2v1" /><path d="m4.929 4.929.707.707" /><path d="M12 12v6" /></svg>',
+    'trash-2': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 11v6" /><path d="M14 11v6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /><path d="M3 6h18" /><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg>',
+    'stethoscope': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2v2" /><path d="M5 2v2" /><path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /><path d="M8 15a6 6 0 0 0 12 0v-3" /><circle cx="20" cy="10" r="2" /></svg>',
+    'bot': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8" /><rect width="16" height="12" x="4" y="8" rx="2" /><path d="M2 14h2" /><path d="M20 14h2" /><path d="M15 13v2" /><path d="M9 13v2" /></svg>',
+    'flask-conical': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2" /><path d="M6.453 15h11.094" /><path d="M8.5 2h7" /></svg>',
   };
 
   function mountIcons(root) {
@@ -153,6 +163,11 @@
     '🎵':'music','🎶':'music','🎼':'music',
     '➡':'chevron-down','➡️':'chevron-down','⬆':'chevron-down','⬇':'chevron-down','⬅':'chevron-down','↗':'chevron-down','↘':'chevron-down','↙':'chevron-down','↖':'chevron-down',
     '🏦':'landmark','🏛':'landmark','🏛️':'landmark','🎁':'gift','🎀':'gift','🎉':'gift','🎊':'gift',
+    // Bổ sung cho đợt quét admin. 🧧 (lì xì) không có icon Lucide tương đương
+    // nên dùng chung 'gift' — cùng nghĩa quà tặng.
+    '🔊':'volume-2','🔉':'volume-2','🔈':'volume-2','📭':'inbox','📬':'inbox','📪':'inbox',
+    '✏️':'pencil','✏':'pencil','💾':'save','🎬':'film','🎥':'film','🚨':'siren',
+    '🗑':'trash-2','🗑️':'trash-2','🩺':'stethoscope','🤖':'bot','🧪':'flask-conical','🧧':'gift',
     '⏳':'hourglass','⌛':'hourglass','⏰':'hourglass','⏱':'hourglass',
     '👥':'users','👪':'users','👨‍👩‍👧':'users','ℹ':'info','ℹ️':'info','💠':'info',
     '👤':'user','👦':'user','👧':'user','👕':'shirt','🎽':'shirt','🪄':'sparkles',
@@ -269,6 +284,39 @@
     '.nav-dd-section{background:rgba(201,168,76,.1);color:#c9a84c;padding:7px 24px 4px}',
     '}'
   ].join('');
+
+  // ── CHẾ ĐỘ CHỈ-ICON ────────────────────────────────────────────
+  // 27 trang shell và 2 trang admin CỐ Ý không nạp nav.js: nav.js tự chèn thanh
+  // nav lên đầu <body>, mà mấy trang đó có chrome riêng. Hệ quả là chúng không
+  // có bộ icon nào cả — mọi span [data-icon] rơi về nội dung dự phòng và IN
+  // EMOJI THÔ ra màn hình.
+  //
+  // Thay vì đẻ bảng icon thứ hai trong shell.js (28 icon, tên khác hẳn, thiếu
+  // 11/15 icon cần dùng — đúng cái "hai bảng trôi khỏi nhau" đã cảnh báo),
+  // mấy trang đó nạp CHÍNH file này kèm `data-icons-only`:
+  //     <script src="/nav.js?v=22" data-icons-only></script>
+  // Lúc đó nav.js CHỈ cấp ICONS/iconHtml/mountIcons/EMOJI_TO_ICON + CSS icon,
+  // rồi dừng — KHÔNG dựng thanh nav, KHÔNG chèn GA4, KHÔNG chèn conversion.js,
+  // KHÔNG chèn auth.js. Một nguồn icon duy nhất cho cả site.
+  //
+  // Đọc qua `document.currentScript` chứ không qua biến toàn cục: thẻ script là
+  // thứ duy nhất chắc chắn đã tồn tại đúng lúc file này chạy, không phụ thuộc
+  // trang có nhớ khai cờ trước hay không.
+  var _self = document.currentScript;
+  if (_self && _self.hasAttribute('data-icons-only')) {
+    if (!document.getElementById('nav-css')) {
+      var s0 = document.createElement('style');
+      s0.id = 'nav-css';
+      s0.textContent = css;
+      document.head.appendChild(s0);
+    }
+    // Cùng lý do như lượt quét kép ở cuối file: script chạy trước khi thân trang
+    // được parse, nên phải quét lại khi DOM đóng.
+    mountIcons();
+    if (document.readyState === 'loading')
+      document.addEventListener('DOMContentLoaded', function () { mountIcons(); });
+    return;
+  }
 
   // GA4 — bỏ qua trình duyệt tự động (navigator.webdriver). Bộ E2E Playwright
   // chạy THẲNG vào prod mỗi lần push/PR nên mỗi lượt CI đổ hàng chục phiên vào
