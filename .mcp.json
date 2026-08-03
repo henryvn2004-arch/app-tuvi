@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "ga4": {
+      "command": "bash",
+      "args": ["-c", "cd \"${CLAUDE_PROJECT_DIR:-.}\" && exec bash scripts/ga4-mcp.sh"]
+    }
+  }
+}
