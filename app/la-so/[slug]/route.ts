@@ -284,7 +284,7 @@ ${row.rendered_html}
   const bodyHTML = sections.map(([,v]) => `<div style="margin-bottom:24px">${String(v||'').split('\n').map(l=>`<p>${l}</p>`).join('')}</div>`).join('');
   return `<!DOCTYPE html><html lang="vi"><head>
 ${commonHead}
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet"></noscript>
 <script src="/auth.js" defer></script>
 <style>body{font-family:'Be Vietnam Pro',sans-serif;max-width:760px;margin:0 auto;padding:0 20px 40px;color:#333}h1{font-family:'Noto Serif',serif;color:#061A2E;margin:32px 0 24px}p{margin-bottom:14px;line-height:1.8;color:#444}</style>
 </head><body>
@@ -1263,7 +1263,7 @@ function buildIsrHTML(ls: Rec, params: IsrParams, slug: string, relatedArticles:
 <link rel="canonical" href="${esc(url)}">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@0,400;0,700&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@0,400;0,700&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@0,400;0,700&display=swap" rel="stylesheet"></noscript>
 <script type="application/ld+json">${schema}</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
