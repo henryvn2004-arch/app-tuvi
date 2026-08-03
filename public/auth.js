@@ -465,7 +465,8 @@ function _showFreeCreditsWelcome() {
   const b = document.createElement('div');
   b.id = 'free-credits-banner';
   b.style.cssText = 'position:fixed;top:70px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1E6B3C,#155d32);color:#fff;padding:14px 28px;border-radius:10px;font-size:14px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.25);text-align:center;white-space:nowrap;animation:tpw-fade .3s ease';
-  b.innerHTML = '🎉 Chào mừng! Bạn đã nhận <strong>Lượng miễn phí</strong> — thử ngay Xem Tướng (5 Lượng/lần)';
+  b.innerHTML = '<span class="ic-inline" data-icon="gift" data-icon-emoji="🎉" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎉</span> Chào mừng! Bạn đã nhận <strong>Lượng miễn phí</strong> — thử ngay Xem Tướng (5 Lượng/lần)';
+  if (window.mountIcons) window.mountIcons(b);
   document.body.appendChild(b);
   setTimeout(() => { b.style.transition = 'opacity .6s'; b.style.opacity = '0'; }, 5000);
   setTimeout(() => b.remove(), 5700);

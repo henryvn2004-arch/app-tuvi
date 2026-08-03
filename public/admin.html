@@ -7,6 +7,29 @@
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="/admin.css?v=4"/>
 <script>(function(){try{var t=localStorage.getItem('tva_theme');if(t==='dark'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+  <script src="/nav.js?v=22" data-icons-only></script>
+  <script>
+    /* Admin dựng lại DOM ở 200+ chỗ bằng innerHTML. mountIcons() chỉ tự quét lúc
+       nạp trang, nên gọi tay từng chỗ vừa dễ sót vừa không kiểm nổi. Quan sát DOM
+       một lần rồi dựng icon cho mọi nhánh mới chèn — mountIcons bỏ qua phần tử đã
+       có <svg> nên không lặp vô hạn: nó chèn <svg> vào span, lượt quan sát kế tiếp
+       nhìn thấy <svg> đó và không còn gì để làm. */
+    (function () {
+      function arm() {
+        if (!window.mountIcons || !window.MutationObserver || !document.body) return;
+        window.mountIcons(document.body);
+        new MutationObserver(function (muts) {
+          for (var i = 0; i < muts.length; i++) {
+            var added = muts[i].addedNodes;
+            for (var j = 0; j < added.length; j++)
+              if (added[j].nodeType === 1) window.mountIcons(added[j]);
+          }
+        }).observe(document.body, { childList: true, subtree: true });
+      }
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arm);
+      else arm();
+    })();
+  </script>
 </head>
 <body>
 
@@ -343,7 +366,7 @@
           <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5.76.76 1.23 1.52 1.41 2.5"/></svg>Đề Xuất AI (Content/Campaign)</div>
             <div class="panel-actions">
-              <button class="btn btn-gold btn-sm" onclick="mktGenSuggestions(this)">✨ Sinh Đề Xuất</button>
+              <button class="btn btn-gold btn-sm" onclick="mktGenSuggestions(this)"><span class="ic-inline" data-icon="sparkles" data-icon-emoji="✨" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">✨</span> Sinh Đề Xuất</button>
             </div>
           </div>
           <div class="panel-body" id="mkt-suggestions">
@@ -360,7 +383,7 @@
                 <option value="30">30 ngày</option>
                 <option value="90">90 ngày</option>
               </select>
-              <button class="btn btn-gold btn-sm" onclick="mktGenContentPack(this)">🎬 Sinh Content Pack</button>
+              <button class="btn btn-gold btn-sm" onclick="mktGenContentPack(this)"><span class="ic-inline" data-icon="film" data-icon-emoji="🎬" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎬</span> Sinh Content Pack</button>
             </div>
           </div>
           <div class="panel-body" id="mkt-contentpack">
@@ -1008,7 +1031,7 @@
              sửa sau cũng được, tool hỏng thì mất khách ngay. -->
         <div class="panel" style="margin-bottom:1rem">
           <div class="panel-header">
-            <div class="panel-title">🩺 Sức Khỏe Tool</div>
+            <div class="panel-title"><span class="ic-inline" data-icon="stethoscope" data-icon-emoji="🩺" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🩺</span> Sức Khỏe Tool</div>
             <div class="panel-actions">
               <select id="th-range" onchange="renderToolHealth()" style="font-size:.72rem;padding:.2rem .4rem">
                 <option value="24">24 giờ</option>
@@ -1528,7 +1551,7 @@ function renderOpsDigest(row) {
   if (!host) return;
   if (!row) {
     host.innerHTML = `<div class="panel" style="margin-bottom:1rem">
-      <div class="panel-header"><div class="panel-title">🛠️ Digest Vận Hành</div></div>
+      <div class="panel-header"><div class="panel-title"><span class="ic-inline" data-icon="settings" data-icon-emoji="🛠️" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🛠️</span> Digest Vận Hành</div></div>
       <div style="padding:.8rem 1rem;font-size:.76rem;color:var(--text-lt)">
         Chưa có bản digest nào. Cron <code>ops-digest</code> chạy 07:30 VN hằng ngày —
         hoặc bấm “▶ Chạy ngay” ở bảng job bên dưới để dựng ngay một bản.
@@ -1540,7 +1563,7 @@ function renderOpsDigest(row) {
   host.innerHTML = `
     <div class="panel" style="margin-bottom:1rem">
       <div class="panel-header">
-        <div class="panel-title">🛠️ Digest Vận Hành</div>
+        <div class="panel-title"><span class="ic-inline" data-icon="settings" data-icon-emoji="🛠️" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🛠️</span> Digest Vận Hành</div>
         <div class="panel-actions">
           <span class="badge ${m.has_issues ? 'badge-red' : 'badge-green'}">
             ${m.has_issues ? 'có việc cần xem' : 'bình thường'}
@@ -1568,7 +1591,7 @@ function renderEnvPreflight(envs) {
   host.innerHTML = `
     <div class="panel" style="margin-bottom:1rem">
       <div class="panel-header">
-        <div class="panel-title">🔧 Cấu Hình Bắt Buộc</div>
+        <div class="panel-title"><span class="ic-inline" data-icon="settings" data-icon-emoji="🔧" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🔧</span> Cấu Hình Bắt Buộc</div>
         <div class="panel-actions"><span style="font-size:.72rem;color:var(--text-lt)">
           ${envs.length - missing.length}/${envs.length} biến đã đặt
         </span></div>
@@ -1625,7 +1648,7 @@ function renderSecurityAudit(a) {
   host.innerHTML = `
     <div class="panel" style="margin-bottom:1rem">
       <div class="panel-header">
-        <div class="panel-title">🛡️ Rà Bảo Mật</div>
+        <div class="panel-title"><span class="ic-inline" data-icon="shield-check" data-icon-emoji="🛡️" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🛡️</span> Rà Bảo Mật</div>
         <div class="panel-actions"><span class="badge ${hits.length ? (critHit ? 'badge-red' : 'badge-pending') : 'badge-green'}">
           ${hits.length ? hits.length + ' MỤC CẦN XEM' : 'SẠCH'}
         </span></div>
@@ -3674,7 +3697,7 @@ function renderApLog(rows) {
     rows.map(r => `<tr>
       <td style="white-space:nowrap;font-size:.76rem">${new Date(r.ts).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}</td>
       <td>${TYPE_LABEL[r.action_type] || r.action_type}</td>
-      <td><span class="badge ${r.mode === 'live' ? 'badge-gold' : 'badge-grey'}">${r.mode === 'live' ? '🤖 live' : '🧪 shadow'}</span></td>
+      <td><span class="badge ${r.mode === 'live' ? 'badge-gold' : 'badge-grey'}">${r.mode === 'live' ? '<span class="ic-inline" data-icon="bot" data-icon-emoji="🤖" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🤖</span> live' : '<span class="ic-inline" data-icon="flask-conical" data-icon-emoji="🧪" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🧪</span> shadow'}</span></td>
       <td class="mono" style="font-size:.76rem">${escHtmlLocal(r.target || '—')}</td>
       <td style="font-size:.74rem;color:var(--text-lt)">${r.before ? escHtmlLocal(JSON.stringify(r.before)) : '—'} → ${r.after ? escHtmlLocal(JSON.stringify(r.after)) : '—'}</td>
       <td style="font-size:.76rem;max-width:320px">${escHtmlLocal(r.reason || '')}</td>

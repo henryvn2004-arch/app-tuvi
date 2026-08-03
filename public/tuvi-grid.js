@@ -193,9 +193,9 @@ const TuviGrid = (() => {
       <div class="center-la-so">
         <div class="center-title">✦ ${hoten.toUpperCase()} ✦</div>
         <hr class="center-divider">
-        ${conv._dl ? `<div class="center-row">📅 ${conv._dl.day}/${conv._dl.month}/${conv._dl.year} (DL) · giờ ${conv.gioChi||''}</div>` : ''}
-        <div class="center-row">📅 ${conv.amLich ? conv.amLich.day+'/'+conv.amLich.month+'/'+conv.amLich.year : ''} (ÂL) · giờ ${conv.gioChi||''}</div>
-        <div class="center-row">🎂 ${ls.tuoiXem} tuổi (âm lịch)</div>
+        ${conv._dl ? `<div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${conv._dl.day}/${conv._dl.month}/${conv._dl.year} (DL) · giờ ${conv.gioChi||''}</div>` : ''}
+        <div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${conv.amLich ? conv.amLich.day+'/'+conv.amLich.month+'/'+conv.amLich.year : ''} (ÂL) · giờ ${conv.gioChi||''}</div>
+        <div class="center-row"><span class="ic-inline" data-icon="cake" data-icon-emoji="🎂" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎂</span> ${ls.tuoiXem} tuổi (âm lịch)</div>
         <div class="center-row">⚧ ${gioitinh === 'nam' ? 'Nam' : 'Nữ'}</div>
         <hr class="center-divider">
         <div class="center-row">Năm: <b style="color:var(--navy)">${ls.canChiNam}</b></div>
@@ -208,7 +208,7 @@ const TuviGrid = (() => {
         <div class="center-row">Tiểu hạn: <b style="color:#1E6B3C">${tvCung?.diaChi||'?'}</b> · ${tvCung?.cungName||''}</div>
         <div class="center-row">LĐH: <b style="color:var(--gold)">${ldh?.diaChi||'?'}</b> · ${ldh?.cungName||''}</div>
         <hr class="center-divider">
-        <div class="center-row" style="font-size:10px;color:var(--text-lt)">🗓 ${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}</div>
+        <div class="center-row" style="font-size:10px;color:var(--text-lt)"><span class="ic-inline" data-icon="calendar-days" data-icon-emoji="🗓" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🗓</span> ${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}</div>
         <div class="center-row" style="font-size:10px;color:var(--text-lt)">© 2026 紫微明寶 | Tử Vi Minh Bảo</div>
       </div>
     </div>`;
@@ -217,6 +217,9 @@ const TuviGrid = (() => {
     const gridEl = document.getElementById(gridElId);
     if (gridEl) {
       gridEl.innerHTML = buildGrid(ls, centerHtml);
+      // Ô giữa mang span [data-icon]; mountIcons() chỉ tự quét lúc nạp trang nên
+      // lá số dựng sau đó phải gọi lại, không thì span in EMOJI THÔ.
+      if (window.mountIcons) window.mountIcons(gridEl);
     }
 
     // Legend
@@ -251,9 +254,9 @@ const TuviGrid = (() => {
       <div class="center-la-so">
         <div class="center-title" style="color:${accentColor}">✦ ${hoten.toUpperCase()} ✦</div>
         <hr class="center-divider">
-        ${conv._dl ? `<div class="center-row">📅 ${conv._dl.day}/${conv._dl.month}/${conv._dl.year} DL · ${conv.gioChi||''}</div>` : ''}
-        <div class="center-row">📅 ${conv.amLich ? conv.amLich.day+'/'+conv.amLich.month+'/'+conv.amLich.year : ''} ÂL · ${conv.gioChi||''}</div>
-        <div class="center-row">🎂 ${ls.tuoiXem||''} tuổi · ${ls._gioitinh==='nu'?'Nữ':'Nam'}</div>
+        ${conv._dl ? `<div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${conv._dl.day}/${conv._dl.month}/${conv._dl.year} DL · ${conv.gioChi||''}</div>` : ''}
+        <div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${conv.amLich ? conv.amLich.day+'/'+conv.amLich.month+'/'+conv.amLich.year : ''} ÂL · ${conv.gioChi||''}</div>
+        <div class="center-row"><span class="ic-inline" data-icon="cake" data-icon-emoji="🎂" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎂</span> ${ls.tuoiXem||''} tuổi · ${ls._gioitinh==='nu'?'Nữ':'Nam'}</div>
         <hr class="center-divider">
         <div class="center-row">Năm: <b>${ls.canChiNam||''}</b></div>
         <div class="center-row">Mệnh: <b>${NAP_AM_FULL[ls.canChiNam]||ls.napAm||''}</b></div>

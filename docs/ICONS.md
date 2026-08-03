@@ -114,16 +114,32 @@ nhưng path khác nhau; 13 tên chỉ shell có (`grid` `rows` `doc` `clock` `bo
 > Không phải. `topup.html` **vốn đã nạp `nav.js`** nên `data-icon` dùng được từ
 > đầu; nó dùng emoji đơn giản vì chưa ai nối, không phải vì bị chặn.
 
-**Không gộp hai bộ, và đây là lý do đo được:** **0/27 trang shell nạp `nav.js`**
-— shell có chrome riêng (sidebar, cố ý không có nav bar trên). Thêm `nav.js` vào
-để lấy icon sẽ kèm theo việc nó **tự chèn nav bar lên đầu `<body>`** khi thiếu
-`#nav-ph`, tức phá layout 27 trang để đổi lấy vài icon.
+**✅ ĐÃ GIẢI QUYẾT — chế độ chỉ-icon của `nav.js`.** Mục này trước đây kết luận
+"chưa đáng gộp". Kết luận đó dựa trên giả định rằng trang shell chỉ còn vài
+emoji trang trí. Sai: đo bằng trình duyệt thì **27 trang shell + 2 trang admin
+không có `window.mountIcons`**, nên mọi span `[data-icon]` ở đó rơi về nội dung
+dự phòng và **in emoji thô** — kể cả 23 icon trong khối pre-gen Bát Tự/Luận Giải
+vốn đã có markup đúng từ lâu.
 
-Muốn gộp thật thì phải tách bộ icon ra `public/icons.js` riêng rồi cho **cả**
-nav.js lẫn shell.js nạp — chạm 116 file. Đo lại thấy chưa đáng: trang shell chỉ
-còn **62 emoji / 9 file**, trong khi phần cần dọn thật (`tools/*` 612 ·
-trang gốc 343) đều đã có `nav.js` sẵn. Làm khi nào shell cần tới bảng
-`EMOJI_TO_ICON` hoặc cần hơn 28 icon.
+Cách vá KHÔNG phải là gộp hai bảng, mà là cho mấy trang đó nạp **chính `nav.js`**
+kèm thuộc tính `data-icons-only`:
+
+```html
+<script src="/nav.js?v=22" data-icons-only></script>
+```
+
+Ở chế độ này `nav.js` CHỈ cấp `ICONS` / `iconHtml` / `mountIcons` /
+`EMOJI_TO_ICON` + CSS icon rồi `return` — **không dựng thanh nav, không chèn
+GA4, không chèn `conversion.js`, không chèn `auth.js`**. Cờ đọc qua
+`document.currentScript` chứ không qua biến toàn cục: thẻ script là thứ duy nhất
+chắc chắn tồn tại đúng lúc file chạy, không phụ thuộc trang có nhớ khai trước.
+
+Nhờ vậy **một nguồn icon duy nhất cho cả site**, không đẻ bảng thứ hai, và
+`public/icons.js` (~116 file) không cần tồn tại.
+
+`shell.js` **vẫn giữ bộ 28 icon riêng** cho chrome của chính nó — cố ý: đó là
+icon của sidebar shell, tên riêng, khuôn riêng, không ai khác dùng. Cái đã sửa
+là *trang shell giờ với được tới bộ icon chung*, không phải gộp hai bộ.
 
 ## 7. Còn bao nhiêu phải dọn
 
@@ -134,8 +150,8 @@ Bắt đầu 2026-07-30 với **1.865 emoji màu / 132 file UI** → còn **1.14
 | 1 | `topup.html` · `cong-cu.html` · bộ icon `nav.js` | ✅ xong |
 | 2 | `public/tools/*.html` — **113 chỗ / 26 file** | ✅ xong |
 | 3 | trang gốc `public/*.html` — **25 chỗ / 15 file** | ✅ xong |
-| 4 | `public/*.js` (`related-tools.js` 37 …) — chuỗi dựng động, phải thêm `mountIcons()` sau mỗi chỗ render | chưa |
-| 5 | `admin*.html` (~171) — nội bộ, ưu tiên thấp nhất | chưa |
+| 4 | `public/*.js` — chuỗi dựng động, phải thêm `mountIcons()` sau mỗi chỗ render | ✅ xong |
+| 5 | `admin*.html` + 27 trang shell — qua chế độ `data-icons-only` | ✅ xong |
 
 ### KHÔNG dọn — cố ý, đừng “sửa” lại
 
@@ -146,7 +162,7 @@ Bắt đầu 2026-07-30 với **1.865 emoji màu / 132 file UI** → còn **1.14
 | Map đồ vật phong thuỷ (`{mirror:'🪞', door:'🚪'…}`) | Cùng lý do: emoji là token của từng vật, không phải icon trang trí. |
 | Chấm màu `🔴 🟡 🔵` | **Màu chính là thông điệp** (đèn báo tốt/vừa/xấu). Icon đơn sắc ăn `currentColor` sẽ xoá đúng phần mang nghĩa. |
 | `alert()` / `confirm()` / `<title>` / `<meta>` | Không nhét được thẻ HTML vào. |
-| `app-*.html` (trang shell) | Không nạp `nav.js` nên `mountIcons` không chạy — đổi ở đó chỉ để lại `<span>` rỗng. Xem §6. |
+| `related-tools.js` · `tool-configs.js` (`icon:` trong dữ liệu) | Đã đi qua `window.iconHtml()` sẵn — đúng luật §3, không phải nợ. |
 
 ### Công cụ
 
@@ -158,6 +174,21 @@ Script quét nửa tự động ở `scripts/sweep-emoji.py` (dry-run mặc đ�
    nằm rỗng vĩnh viễn.
 3. **Emoji chưa có trong `EMOJI_TO_ICON` thì để nguyên + báo cáo**, không đoán
    tên icon.
+4. **KHÔNG đổi emoji nằm trong GIÁ TRỊ THUỘC TÍNH** (`placeholder="🔍 Tìm..."`).
+   Chèn `<span>` vào đó làm **vỡ thẻ**: dấu nháy trong span đóng sớm thuộc tính,
+   phần còn lại tràn ra thành text hiển thị. Đã vấp thật ở `admin-content.html`
+   (ô tìm kiếm + mẫu mô tả YouTube) và chỉ lộ khi mở bằng trình duyệt, không lộ
+   khi đọc diff.
+5. **KHÔNG đổi emoji đi vào `textContent`** — sink đó in nguyên chuỗi HTML ra
+   màn hình, tệ hơn hẳn emoji. Chỉ đổi khi đích là `innerHTML`.
+
+**Bộ dò tái phát** (chạy được ở bất kỳ đâu):
+
+```bash
+grep -nE '\b[a-zA-Z-]+="[^"]*<span class="ic-inline"' public/**/*.html
+```
+
+Ra dòng nào tức là có span lọt vào thuộc tính — phải trả về emoji trần.
 
 Đếm lại bất cứ lúc nào:
 

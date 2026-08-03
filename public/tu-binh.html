@@ -271,7 +271,7 @@ select.form-input { cursor: pointer; }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
-<script src="/auth.js"></script>
+<script src="/auth.js?v=2"></script>
 <script src="/share.js"></script>
 
 </head>
@@ -426,7 +426,7 @@ select.form-input { cursor: pointer; }
 <script src="/tuvi-form.js?v=1"></script>
 <script src="/tuvi-paywall.js?v=11"></script>
 <script src="/chatbot.js"></script>
-<script src="/nav.js?v=20"></script>
+<script src="/nav.js?v=22"></script>
 
 <script>
 (function() {
@@ -771,6 +771,9 @@ select.form-input { cursor: pointer; }
       </button>`;
     }
     items.innerHTML = html;
+    // 16 khối pre-gen mang span [data-icon-emoji]. mountIcons() chỉ tự quét lúc
+    // nạp trang; chèn sau đó mà không gọi lại thì span in EMOJI THÔ.
+    if (window.mountIcons) window.mountIcons(items);
   }
 
   function renderPhanBlocks() {

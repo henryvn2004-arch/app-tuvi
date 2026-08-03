@@ -1607,6 +1607,10 @@ select.form-input { cursor: pointer; }
 
 
       section.innerHTML = html + preGenHtml + chartHtml + divider + lockBox;
+      // preGenHtml mang span [data-icon-emoji]; mountIcons() của nav.js chỉ tự
+      // chạy lúc nạp + khi DOM đóng, còn khối này chèn SAU đó → không quét tới,
+      // span rơi về nội dung dự phòng và in EMOJI THÔ ra màn hình.
+      if (window.mountIcons) window.mountIcons(section);
       body.appendChild(section);
     }
 
@@ -2383,6 +2387,7 @@ ${dv.tuoiStart}-${dv.tuoiEnd}t`),
         <div class="phan-num">Phần ${_currentPhan} / ${TONG_PHAN} — ${PHAN_LABELS[_currentPhan]}</div>`
         + preGenHtml + chartHtml + divider
         + renderMarkdown(data.luanGiai);
+      if (window.mountIcons) window.mountIcons(section); // xem ghi chú ở chỗ chèn phần đầu
       // Store luận giải for this phan
       _luanGiaiStore[_currentPhan] = data.luanGiai || '';
 
@@ -4182,7 +4187,7 @@ TuviPaywall.init({
 
 </div>
 
-<script src="/nav.js?v=20"></script>
+<script src="/nav.js?v=22"></script>
 <script src="/chatbot.js"></script>
 <script>
   window._tuviChatConfig = {

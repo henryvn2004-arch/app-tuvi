@@ -158,12 +158,13 @@
   window.SHELL_INTRO=INTRO[key];
 })();
 </script>
-<script src="/laso-chart.js?v=2"></script>
+<script src="/laso-chart.js?v=3"></script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tuong-hop.js?v=1"></script>
 <script src="/tuvi-form.js?v=1"></script>
-<script src="/auth.js"></script>
+<script src="/auth.js?v=2"></script>
 <script src="/tuvi-paywall.js?v=11"></script>
+  <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=53"></script>
 <script>
 // ── MODE: 1 trang phục vụ 3 route — /app/xem-tuoi (vợ chồng), /app/xem-lam-an
@@ -339,6 +340,7 @@ function renderCompat(r,nameA,nameB,fdA,fdB){
     S.push(sec(idx,PHAN_LABELS[idx]||('Phần '+idx),'','<div class="card">'+factorRowHtml(m)+'</div><div class="claude-content" id="claude-content-'+idx+'" style="display:none"></div>'+ask('Luận sâu chiều "'+m.label+'" giữa '+nameA+' và '+nameB)));
   });
   document.getElementById('xtBody').innerHTML=pairH+S.join('');
+  if(window.mountIcons) window.mountIcons(document.getElementById('xtBody')); // ô giữa 2 lá số mang span [data-icon]
   document.getElementById('xtJump').innerHTML=PHAN_LABELS.map(function(l,i){return '<a data-i="'+i+'"'+(i===0?' class="on"':'')+'>'+esc(l)+'</a>'}).join('');
   bindJump();
   document.querySelectorAll('#xtBody [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
