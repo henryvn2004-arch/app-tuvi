@@ -17,7 +17,10 @@ export type LoginAttemptEntry = {
   email?: string;
   ip: string;
   success: boolean;
-  method: 'password' | 'google';
+  // `google-resume` = khôi phục phiên đã lưu khi mở lại tab (không phải người
+  // vừa bấm đăng nhập). Tách nhãn để lọc được khỏi lượt đăng nhập THẬT khi đọc
+  // nhật ký; cột `method` dưới DB là text tự do nên không cần migration.
+  method: 'password' | 'google' | 'google-resume';
   detail?: string;
 };
 
