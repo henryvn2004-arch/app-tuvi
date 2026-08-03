@@ -166,7 +166,7 @@
     // Bổ sung cho đợt quét admin. 🧧 (lì xì) không có icon Lucide tương đương
     // nên dùng chung 'gift' — cùng nghĩa quà tặng.
     '🔊':'volume-2','🔉':'volume-2','🔈':'volume-2','📭':'inbox','📬':'inbox','📪':'inbox',
-    '✏️':'pencil','✏':'pencil','💾':'save','🎬':'film','🎥':'film','🚨':'siren',
+    '✏️':'pencil','✏':'pencil','💾':'save','🎬':'film','🚨':'siren',
     '🗑':'trash-2','🗑️':'trash-2','🩺':'stethoscope','🤖':'bot','🧪':'flask-conical','🧧':'gift',
     '⏳':'hourglass','⌛':'hourglass','⏰':'hourglass','⏱':'hourglass',
     '👥':'users','👪':'users','👨‍👩‍👧':'users','ℹ':'info','ℹ️':'info','💠':'info',
