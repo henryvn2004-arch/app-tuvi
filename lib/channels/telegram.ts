@@ -87,6 +87,42 @@ export async function tgEditMessage(chatId: number | string, messageId: number, 
   }
 }
 
+/**
+ * Đăng ẢNH kèm chữ vào một chat/kênh (M3 — adapter Telegram channel).
+ *
+ * Gửi `photo` dạng URL để Telegram tự tải: ảnh do `/api/og/social` render
+ * on-demand, không có file nhị phân nào để upload. Trả `{messageId, username}`
+ * để dựng link `t.me/<username>/<id>` — kênh riêng tư không có username thì
+ * `username` rỗng và bài vẫn đăng bình thường, chỉ là không có link công khai.
+ *
+ * KHÁC `tgSendMessage`: hàm này KHÔNG nuốt lỗi. Nó là một bước đăng bài, lỗi
+ * phải nổi lên để `publishQueue` đánh dấu đúng trạng thái thay vì báo thành
+ * công cho một bài chưa hề lên kênh.
+ */
+export async function tgSendPhoto(
+  chatId: number | string,
+  photoUrl: string,
+  caption: string,
+): Promise<{ messageId: number; username: string }> {
+  if (!TG_TOKEN) throw new Error('Thiếu env TELEGRAM_BOT_TOKEN');
+  const r = await fetch(`${TG_API}/sendPhoto`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    // Trần caption của sendPhoto là 1024 ký tự — người gọi đã cắt sẵn, đây chỉ
+    // là lưới an toàn cuối để một chuỗi dài bất ngờ không làm hỏng cả lượt.
+    body: JSON.stringify({ chat_id: chatId, photo: photoUrl, caption: (caption || '').slice(0, 1024) }),
+  });
+  const j = (await r.json().catch(() => ({}))) as {
+    ok?: boolean;
+    description?: string;
+    result?: { message_id?: number; chat?: { username?: string } };
+  };
+  if (!j.ok || !j.result?.message_id) {
+    throw new Error(j.description || `Telegram HTTP ${r.status}`);
+  }
+  return { messageId: j.result.message_id, username: j.result.chat?.username || '' };
+}
+
 // ── Tải ẢNH người dùng gửi → base64 (cho runAgent luận nhân tướng/phong thủy) ──
 // Telegram 2 bước: getFile(file_id) → file_path; rồi tải nội dung từ
 // api.telegram.org/file/bot<token>/<path>. Trả ChatImage {data(base64,

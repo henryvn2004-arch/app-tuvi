@@ -1321,6 +1321,7 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-viral') return handleAdminViral(request, searchParams);
   if (action === 'admin-content-pack') return handleAdminContentPack(request, searchParams);
   if (action === 'admin-media-queue') return handleAdminMediaQueue(request, searchParams);
+  if (action === 'admin-seeding') return handleAdminSeeding(request);
   if (action === 'check-bank')  return handleCheckBank(searchParams);
   return err('Invalid action.', 400);
 }
@@ -1680,6 +1681,165 @@ async function handleAdminMediaDecide(request: NextRequest, body: Record<string,
   }
 }
 
+// ── GET: admin-seeding — trợ lý seeding group. Trả danh sách group (kèm nhịp
+// + mốc lần dán gần nhất) và các bài ĐÃ SOẠN đang chờ người dán.
+//
+// KHÔNG có action nào đăng bài ở đây, và đó là chủ đích chứ không phải thiếu:
+// Meta gỡ Groups API khỏi mọi phiên bản từ 22/04/2024 nên không còn đường hợp
+// lệ để máy đăng vào group. Panel này rút việc xuống còn Copy → Mở group →
+// dán. Xem đầu `lib/media/seeding.ts`. ──
+async function handleAdminSeeding(request: NextRequest): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  try {
+    const [groupsRes, draftsRes, cfgRes] = await Promise.all([
+      fetch(
+        `${SUPABASE_URL}/rest/v1/seeding_groups?select=id,name,url,platform,topic,angle,every_days,enabled,member_count,notes,last_posted_at&order=enabled.desc,last_posted_at.asc.nullsfirst&limit=200`,
+        { headers: SB_HEADERS, cache: 'no-store' },
+      ),
+      // Bài chờ dán lên trước; phần đã xử lý giữ lại một ít làm nhật ký.
+      fetch(
+        `${SUPABASE_URL}/rest/v1/seeding_drafts?select=id,created_at,group_id,source_type,title,quote,caption,hashtags,link_url,image_url,status,posted_at&order=status.asc,created_at.desc&limit=80`,
+        { headers: SB_HEADERS, cache: 'no-store' },
+      ),
+      fetch(`${SUPABASE_URL}/rest/v1/app_config?key=eq.seeding.daily_cap&select=key,value`, {
+        headers: SB_HEADERS,
+        cache: 'no-store',
+      }),
+    ]);
+    const groups = groupsRes.ok ? await groupsRes.json() : [];
+    const drafts = draftsRes.ok ? await draftsRes.json() : [];
+    const cfgRows: { key: string; value: unknown }[] = cfgRes.ok ? await cfgRes.json() : [];
+
+    return ok({ groups, drafts, dailyCap: cfgRows[0]?.value ?? 5 });
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+}
+
+// ── POST: admin-seeding-group — thêm/sửa/xoá một group trong sổ seeding. ──
+async function handleAdminSeedingGroup(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const op = String(body.op || 'save').trim();
+  const id = String(body.id || '').trim();
+  if (id && !/^[0-9a-f-]{36}$/i.test(id)) return err('id không hợp lệ', 400);
+
+  try {
+    if (op === 'delete') {
+      if (!id) return err('Thiếu id', 400);
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/seeding_groups?id=eq.${id}`, {
+        method: 'DELETE',
+        headers: { ...SB_HEADERS, Prefer: 'return=minimal' },
+      });
+      if (!res.ok) return err(await res.text());
+      return ok({ deleted: true });
+    }
+
+    const name = String(body.name || '').trim();
+    const url = String(body.url || '').trim();
+    if (!name) return err('Thiếu tên group', 400);
+    // Chỉ nhận URL http(s) — ô này đổ thẳng vào thẻ <a target="_blank">, nhận
+    // chuỗi tự do là mở cửa cho `javascript:` chạy trong trang admin.
+    if (!/^https?:\/\/[^\s]+$/i.test(url)) return err('URL group phải bắt đầu bằng http:// hoặc https://', 400);
+
+    const everyRaw = Number(body.everyDays);
+    // Kẹp trùng đúng ràng buộc CHECK dưới DB để lỗi hiện thành câu tiếng Việt
+    // thay vì một thông điệp Postgres thô.
+    const everyDays = Number.isFinite(everyRaw) ? Math.min(60, Math.max(1, Math.round(everyRaw))) : 7;
+    const memberRaw = Number(body.memberCount);
+
+    const row: Record<string, unknown> = {
+      name,
+      url,
+      platform: String(body.platform || 'facebook').trim() || 'facebook',
+      topic: String(body.topic || '').trim() || null,
+      angle: String(body.angle || '').trim() || null,
+      every_days: everyDays,
+      enabled: body.enabled !== false,
+      member_count: Number.isFinite(memberRaw) && memberRaw > 0 ? Math.round(memberRaw) : null,
+      notes: String(body.notes || '').trim() || null,
+      updated_at: new Date().toISOString(),
+    };
+
+    const res = id
+      ? await fetch(`${SUPABASE_URL}/rest/v1/seeding_groups?id=eq.${id}`, {
+          method: 'PATCH',
+          headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+          body: JSON.stringify(row),
+        })
+      : await fetch(`${SUPABASE_URL}/rest/v1/seeding_groups`, {
+          method: 'POST',
+          headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+          body: JSON.stringify(row),
+        });
+    if (!res.ok) {
+      const t = await res.text();
+      if (t.includes('seeding_groups_url_uniq')) return err('Group này đã có trong sổ rồi', 409);
+      return err(t);
+    }
+    const rows = (await res.json()) as unknown[];
+    if (!rows.length) return err('Không tìm thấy group với id đó', 404);
+    return ok({ saved: true });
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+}
+
+// ── POST: admin-seeding-draft — chốt số phận một bài đã soạn.
+//
+// `posted` = người thật đã dán bài vào group → đây MỚI là lúc đặt
+// `last_posted_at` cho group, vì nhịp seeding đo bằng bài thực sự ra ngoài chứ
+// không phải bài máy soạn ra. Bấm nhầm thì chỉ trượt một nhịp, không có gì lên
+// mạng ngoài ý muốn — panel này không có đường nào đăng được cả. ──
+async function handleAdminSeedingDraft(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const draftId = String(body.draftId || '').trim();
+  const decision = String(body.decision || '').trim();
+  if (!/^[0-9a-f-]{36}$/i.test(draftId)) return err('draftId không hợp lệ', 400);
+  if (decision !== 'posted' && decision !== 'skip') return err('decision phải là posted hoặc skip', 400);
+
+  const caption = typeof body.caption === 'string' ? body.caption.trim() : '';
+  const nowIso = new Date().toISOString();
+  const patch: Record<string, unknown> = {
+    status: decision === 'posted' ? 'posted' : 'skipped',
+    updated_at: nowIso,
+  };
+  if (decision === 'posted') patch.posted_at = nowIso;
+  // Giữ lại bản chữ đã sửa tay: lần sau đọc nhật ký mới biết cái gì thật sự
+  // được dán, chứ không phải bản LLM viết ra.
+  if (caption) patch.caption = caption;
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/seeding_drafts?id=eq.${draftId}&status=eq.ready`, {
+      method: 'PATCH',
+      headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+      body: JSON.stringify(patch),
+    });
+    if (!res.ok) return err(await res.text());
+    const rows = (await res.json()) as { group_id?: string }[];
+    if (!rows.length) return err('Không tìm thấy bài đang chờ với id đó (có thể đã xử lý rồi)', 404);
+
+    if (decision === 'posted' && rows[0].group_id) {
+      await fetch(`${SUPABASE_URL}/rest/v1/seeding_groups?id=eq.${rows[0].group_id}`, {
+        method: 'PATCH',
+        headers: { ...SB_HEADERS, Prefer: 'return=minimal' },
+        body: JSON.stringify({ last_posted_at: nowIso, updated_at: nowIso }),
+      });
+    }
+    return ok({ updated: true, status: patch.status });
+  } catch (e: unknown) {
+    return err((e as Error).message);
+  }
+}
+
 // ── GET: admin-autopilot-log (M0.6, track Marketing Autopilot) — nhật ký
 // hành động autopilot (shadow/live) + trạng thái cấu hình hiện tại. THUẦN
 // ĐỌC — không có action bật/tắt qua API này có chủ đích (rủi ro cao, Henry
@@ -1972,6 +2132,8 @@ export async function POST(request: NextRequest) {
   if (action === 'admin-channel-broadcast') return handleAdminChannelBroadcast(request, body);
   if (action === 'admin-nudge-user') return handleAdminNudgeUser(request, body);
   if (action === 'admin-media-decide') return handleAdminMediaDecide(request, body);
+  if (action === 'admin-seeding-group') return handleAdminSeedingGroup(request, body);
+  if (action === 'admin-seeding-draft') return handleAdminSeedingDraft(request, body);
   if (action === 'admin-khao-luan-topics') return handleAdminKhaoLuanTopics(request, body);
   if (action === 'admin-nghien-cuu-topics') return handleAdminNghienCuuTopics(request, body);
   if (action === 'admin-mcp-update') return handleAdminMcpUpdate(request, body);

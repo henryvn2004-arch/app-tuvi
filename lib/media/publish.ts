@@ -30,6 +30,7 @@
 
 import { getConfigValue } from '@/lib/config/appConfig';
 import { GRAPH_BASE } from '@/lib/channels/meta';
+import { tgSendPhoto } from '@/lib/channels/telegram';
 
 const SUPABASE_URL = process.env.SUPABASE_URL || '';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || '';
@@ -50,6 +51,10 @@ const DEFAULT_DAILY = 3;
  *   4 · 17 · 32 · 613 chạm giới hạn tần suất của app/page
  */
 const BLOCKING_PATTERNS = [
+  // Kênh chưa khai env là CỬA chưa mở, không phải bài hỏng. Không có dòng này
+  // thì mỗi bài của kênh chưa cấu hình lại thành một dòng `error` riêng — với
+  // 4 kênh là vài chục dòng lỗi mỗi sáng, và bài thì mất luôn khỏi hàng đợi.
+  'thiếu env',
   'oauthexception',
   'access token',
   'session has expired',
@@ -80,6 +85,8 @@ export interface PublishResult {
   remaining: number;
   /** Dòng kẹt `publishing` — dấu vết lượt bị giết ngang, cần người nhìn. */
   stuck: number;
+  /** Kênh đã đóng cửa trong lượt này (token/quyền/rate-limit). */
+  blockedChannels: string[];
 }
 
 function isBlocking(msg: string): boolean {
@@ -116,16 +123,55 @@ interface AdapterOut {
 }
 
 /**
- * Phần chữ đi kèm ảnh. Link mang sẵn UTM (dựng ở `build.ts`) — đó là thứ duy
- * nhất cho biết kênh nào thật sự kéo được người về, và bảng "Chiến dịch UTM"
- * trong admin đang trống vì chưa link nào gắn.
+ * Trần độ dài phần chữ của từng kênh. Không phải chi tiết vụn: Threads cắt ở
+ * **500 ký tự**, mà caption `build.ts` viết ra đã tới ~400 rồi cộng link + thẻ
+ * — gửi thẳng là kênh đó lỗi mỗi ngày. `linkStyle` cũng theo kênh: Instagram
+ * KHÔNG cho link bấm được trong caption, nên dán nguyên URL kèm UTM ở đó vừa
+ * xấu vừa không đo được gì.
  */
-function composeCaption(row: QueueRow): string {
-  const parts = [(row.caption || '').trim()];
-  if (row.link_url) parts.push(row.link_url);
+interface CaptionStyle {
+  maxLen: number;
+  linkStyle: 'full' | 'bare';
+}
+
+const CAPTION_STYLE: Record<string, CaptionStyle> = {
+  facebook: { maxLen: 5000, linkStyle: 'full' },
+  instagram: { maxLen: 2200, linkStyle: 'bare' },
+  threads: { maxLen: 500, linkStyle: 'full' },
+  telegram: { maxLen: 1024, linkStyle: 'full' }, // trần caption của sendPhoto
+};
+
+/** Bỏ query UTM, giữ host + đường dẫn — dạng người ta gõ lại được bằng tay. */
+function bareLink(url: string): string {
+  try {
+    const u = new URL(url);
+    return (u.host + u.pathname).replace(/\/$/, '');
+  } catch {
+    return '';
+  }
+}
+
+/**
+ * Phần chữ đi kèm ảnh. Link mang sẵn UTM (dựng ở `build.ts`) — đó là thứ duy
+ * nhất cho biết kênh nào thật sự kéo được người về.
+ *
+ * Khi phải cắt cho vừa trần, CẮT PHẦN CAPTION chứ không cắt đuôi: link và thẻ
+ * là thứ mang lại giá trị đo được, còn caption thiếu một câu cuối thì vẫn đọc
+ * được. Cắt từ cuối chuỗi gộp sẽ ăn mất đúng phần đáng giữ.
+ */
+function composeCaption(row: QueueRow, channel: string): string {
+  const style = CAPTION_STYLE[channel] || { maxLen: 2000, linkStyle: 'full' as const };
+  const rawLink = (row.link_url || '').trim();
+  const link = style.linkStyle === 'bare' ? bareLink(rawLink) : rawLink;
   const tags = (row.hashtags || []).filter(Boolean).map((h) => '#' + String(h).replace(/^#/, ''));
-  if (tags.length) parts.push(tags.join(' '));
-  return parts.filter(Boolean).join('\n\n');
+
+  const tail = [link, tags.join(' ')].filter(Boolean).join('\n\n');
+  const room = style.maxLen - (tail ? tail.length + 2 : 0);
+  let body = (row.caption || '').trim();
+  // Đuôi dài hơn cả trần (thẻ quá nhiều) → bỏ caption, giữ đuôi đã cắt.
+  if (room <= 0) return tail.slice(0, style.maxLen);
+  if (body.length > room) body = body.slice(0, room - 1).trimEnd() + '…';
+  return [body, tail].filter(Boolean).join('\n\n');
 }
 
 const FB_PAGE_ID = (process.env.FB_PAGE_ID || process.env.MESSENGER_PAGE_ID || '').replace(/\D/g, '');
@@ -155,7 +201,7 @@ async function publishFacebook(row: QueueRow): Promise<AdapterOut> {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         url: imageUrl,
-        caption: composeCaption(row),
+        caption: composeCaption(row, 'facebook'),
         published: true,
         access_token: FB_TOKEN,
       }),
@@ -180,8 +226,205 @@ async function publishFacebook(row: QueueRow): Promise<AdapterOut> {
   }
 }
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+interface GraphBody {
+  id?: string;
+  permalink?: string;
+  status_code?: string;
+  status?: string;
+  error?: { message?: string; code?: number };
+  error_message?: string;
+}
+
+async function readGraph(res: Response | null): Promise<{ body: GraphBody; error?: string }> {
+  if (!res) return { body: {}, error: 'không gọi được API (mạng hoặc thiếu token)' };
+  const body = (await res.json().catch(() => ({}))) as GraphBody;
+  if (body.error) {
+    const code = body.error.code ? ` (code ${body.error.code})` : '';
+    return { body, error: `${body.error.message || 'API error'}${code}` };
+  }
+  if (!res.ok) return { body, error: `HTTP ${res.status}` };
+  return { body };
+}
+
+/**
+ * Instagram và Threads đều đăng ẢNH theo HAI BƯỚC: tạo container rồi mới
+ * publish. Container xử lý BẤT ĐỒNG BỘ — publish ngay khi vừa tạo sẽ trả lỗi
+ * "media not ready" một cách ngẫu nhiên tuỳ lúc nền tảng tải ảnh nhanh hay
+ * chậm. Nên hỏi trạng thái tới khi xong; hỏng thì trả lý do thật của nền tảng
+ * thay vì để bước publish báo một lỗi khó hiểu.
+ */
+async function waitContainer(
+  base: string,
+  containerId: string,
+  token: string,
+  field: 'status_code' | 'status',
+): Promise<string | undefined> {
+  for (let i = 0; i < 8; i++) {
+    await sleep(i === 0 ? 1500 : 3000);
+    const res = await fetch(
+      `${base}/${containerId}?fields=${field},error_message&access_token=${encodeURIComponent(token)}`,
+      { cache: 'no-store' },
+    ).catch(() => null);
+    const { body, error } = await readGraph(res);
+    if (error) return error;
+    const st = String(body[field] || '').toUpperCase();
+    if (st === 'FINISHED') return undefined;
+    if (st === 'PUBLISHED') return undefined;
+    if (st === 'ERROR' || st === 'EXPIRED') {
+      return body.error_message || `container ${st.toLowerCase()}`;
+    }
+  }
+  return 'ảnh chưa xử lý xong sau ~24s — để lượt sau thử lại';
+}
+
+/** Đường dẫn công khai của bài, hỏi riêng vì bước publish chỉ trả về id. */
+async function permalinkOf(base: string, mediaId: string, token: string): Promise<string | undefined> {
+  const res = await fetch(`${base}/${mediaId}?fields=permalink&access_token=${encodeURIComponent(token)}`, {
+    cache: 'no-store',
+  }).catch(() => null);
+  const { body } = await readGraph(res);
+  return body.permalink || undefined;
+}
+
+const IG_USER_ID = (process.env.IG_USER_ID || '').replace(/\D/g, '');
+const IG_TOKEN = process.env.IG_ACCESS_TOKEN || process.env.FB_PAGE_ACCESS_TOKEN || '';
+
+/**
+ * Instagram Business — `/{ig-user-id}/media` → `/media_publish`.
+ *
+ * Dùng LẠI nguyên asset của Facebook: Instagram Graph API bắt buộc ảnh phải có
+ * URL công khai, mà `/api/og/social` vốn đã thoả điều kiện đó — đây chính là
+ * lý do M2 chọn "URL là file" thay vì upload vào bucket.
+ *
+ * ⚠️ Cần `instagram_content_publish` và một tài khoản IG **Business** đã liên
+ * kết với Page; token Page dùng chung được.
+ */
+async function publishInstagram(row: QueueRow): Promise<AdapterOut> {
+  if (!IG_USER_ID) return { error: 'Thiếu env IG_USER_ID' };
+  if (!IG_TOKEN) return { error: 'Thiếu env IG_ACCESS_TOKEN (hoặc FB_PAGE_ACCESS_TOKEN)' };
+  const imageUrl = row.media_assets?.url || '';
+  if (!imageUrl) return { error: 'Asset không có URL ảnh' };
+
+  try {
+    const created = await fetch(`${GRAPH_BASE}/${IG_USER_ID}/media`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        image_url: imageUrl,
+        caption: composeCaption(row, 'instagram'),
+        access_token: IG_TOKEN,
+      }),
+    }).catch(() => null);
+    const { body, error } = await readGraph(created);
+    if (error) return { error };
+    const creationId = body.id;
+    if (!creationId) return { error: 'Instagram không trả creation_id' };
+
+    const waitErr = await waitContainer(GRAPH_BASE, creationId, IG_TOKEN, 'status_code');
+    if (waitErr) return { error: waitErr };
+
+    const pub = await fetch(`${GRAPH_BASE}/${IG_USER_ID}/media_publish`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ creation_id: creationId, access_token: IG_TOKEN }),
+    }).catch(() => null);
+    const done = await readGraph(pub);
+    if (done.error) return { error: done.error };
+    const mediaId = done.body.id;
+    if (!mediaId) return { error: 'Instagram trả về rỗng, không có media id' };
+
+    return { externalId: mediaId, externalUrl: await permalinkOf(GRAPH_BASE, mediaId, IG_TOKEN) };
+  } catch (e) {
+    return { error: (e as Error).message };
+  }
+}
+
+const THREADS_BASE = 'https://graph.threads.net/v1.0';
+const THREADS_USER_ID = (process.env.THREADS_USER_ID || '').replace(/\D/g, '');
+const THREADS_TOKEN = process.env.THREADS_ACCESS_TOKEN || '';
+
+/**
+ * Threads — cùng hình dạng hai bước như Instagram nhưng **host riêng**
+ * (`graph.threads.net`) và **token riêng**: token Page của Facebook KHÔNG dùng
+ * được ở đây, phải cấp qua Threads API.
+ *
+ * Chữ bị cắt ở 500 ký tự (xem CAPTION_STYLE) — đây là kênh chặt nhất.
+ */
+async function publishThreads(row: QueueRow): Promise<AdapterOut> {
+  if (!THREADS_USER_ID) return { error: 'Thiếu env THREADS_USER_ID' };
+  if (!THREADS_TOKEN) return { error: 'Thiếu env THREADS_ACCESS_TOKEN' };
+  const imageUrl = row.media_assets?.url || '';
+  if (!imageUrl) return { error: 'Asset không có URL ảnh' };
+
+  try {
+    const created = await fetch(`${THREADS_BASE}/${THREADS_USER_ID}/threads`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        media_type: 'IMAGE',
+        image_url: imageUrl,
+        text: composeCaption(row, 'threads'),
+        access_token: THREADS_TOKEN,
+      }),
+    }).catch(() => null);
+    const { body, error } = await readGraph(created);
+    if (error) return { error };
+    const creationId = body.id;
+    if (!creationId) return { error: 'Threads không trả creation_id' };
+
+    const waitErr = await waitContainer(THREADS_BASE, creationId, THREADS_TOKEN, 'status');
+    if (waitErr) return { error: waitErr };
+
+    const pub = await fetch(`${THREADS_BASE}/${THREADS_USER_ID}/threads_publish`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ creation_id: creationId, access_token: THREADS_TOKEN }),
+    }).catch(() => null);
+    const done = await readGraph(pub);
+    if (done.error) return { error: done.error };
+    const mediaId = done.body.id;
+    if (!mediaId) return { error: 'Threads trả về rỗng, không có media id' };
+
+    return { externalId: mediaId, externalUrl: await permalinkOf(THREADS_BASE, mediaId, THREADS_TOKEN) };
+  } catch (e) {
+    return { error: (e as Error).message };
+  }
+}
+
+const TG_CHANNEL_ID = process.env.TELEGRAM_CHANNEL_ID || '';
+
+/**
+ * Telegram channel — kênh DUY NHẤT chạy được ngay hôm nay: token bot đã có sẵn
+ * trên Vercel từ track kênh chat, không phải xin quyền hay chờ Meta duyệt gì.
+ * Việc tay chỉ là thêm bot làm admin của channel rồi khai `TELEGRAM_CHANNEL_ID`.
+ *
+ * Một bước, không container: `sendPhoto` với `photo` là URL để Telegram tự tải.
+ */
+async function publishTelegram(row: QueueRow): Promise<AdapterOut> {
+  if (!TG_CHANNEL_ID) return { error: 'Thiếu env TELEGRAM_CHANNEL_ID' };
+  const imageUrl = row.media_assets?.url || '';
+  if (!imageUrl) return { error: 'Asset không có URL ảnh' };
+
+  try {
+    const { messageId, username } = await tgSendPhoto(TG_CHANNEL_ID, imageUrl, composeCaption(row, 'telegram'));
+    return {
+      externalId: String(messageId),
+      // Channel riêng tư không có username → không có link công khai để lưu,
+      // nhưng bài vẫn đã lên kênh. Đừng bịa một URL mở ra 404.
+      externalUrl: username ? `https://t.me/${username}/${messageId}` : undefined,
+    };
+  } catch (e) {
+    return { error: (e as Error).message };
+  }
+}
+
 const ADAPTERS: Record<string, (row: QueueRow) => Promise<AdapterOut>> = {
   facebook: publishFacebook,
+  instagram: publishInstagram,
+  threads: publishThreads,
+  telegram: publishTelegram,
 };
 
 /** Kênh đã có adapter thật — dùng để cảnh báo cấu hình trỏ vào chỗ chưa có. */
@@ -214,7 +457,14 @@ async function finish(id: string, patch: Record<string, unknown>): Promise<void>
  * hết giờ thì dừng sạch GIỮA hai lượt, không cắt ngang một lượt đang chạy.
  */
 export async function publishQueue(opts: { limit?: number; deadlineMs?: number } = {}): Promise<PublishResult> {
-  const result: PublishResult = { attempted: 0, published: [], failed: [], remaining: 0, stuck: 0 };
+  const result: PublishResult = {
+    attempted: 0,
+    published: [],
+    failed: [],
+    remaining: 0,
+    stuck: 0,
+    blockedChannels: [],
+  };
 
   result.stuck = await countRows('status=eq.publishing');
   result.remaining = await countRows(READY_FILTER);
@@ -241,11 +491,22 @@ export async function publishQueue(opts: { limit?: number; deadlineMs?: number }
   if (!res.ok) throw new Error(`media_posts: ${await res.text()}`);
   const rows = (await res.json()) as QueueRow[];
 
+  /**
+   * Kênh đã đóng cửa trong lượt này. Bài học `yt-drain` là "đừng thử mãi một
+   * cánh cửa đã khoá" — nhưng khi có NHIỀU kênh, cánh cửa khoá là của MỘT kênh,
+   * không phải của cả lượt. Dừng sạch ở đây nghĩa là token Instagram hết hạn
+   * cũng chặn luôn Telegram đang sống.
+   */
+  const blocked = new Set<string>();
+
   for (const row of rows) {
     if (Date.now() > deadlineMs) {
       result.stoppedReason = 'hết ngân sách thời gian của lượt cron — phần còn lại để lượt sau';
       break;
     }
+    // Bài của kênh đã khoá: để nguyên `queued` cho lượt sau, KHÔNG đánh dấu
+    // lỗi. Ghi lỗi hàng loạt chỉ tổ ghi đè dấu vết và làm cảnh báo mất giá trị.
+    if (blocked.has(row.channel)) continue;
 
     const meta = row.media_assets?.meta || {};
     const title = String(meta.title || '').trim() || '(không tiêu đề)';
@@ -277,15 +538,29 @@ export async function publishQueue(opts: { limit?: number; deadlineMs?: number }
     }
 
     const err = out.error || 'lỗi không rõ';
-    await finish(row.id, { status: 'error', error: err.slice(0, 500) });
+    const blocking = isBlocking(err);
+    await finish(row.id, {
+      // Lỗi CHẶN là trạng thái của cái cửa, nên bài KHÔNG hỏng: trả nó về hàng
+      // đợi để lượt sau đăng lại, chỉ giữ dấu lỗi cho panel nói được vì sao nó
+      // chưa đi. Đánh `error` ở đây là mất bài vĩnh viễn vì một cái token.
+      status: blocking ? 'queued' : 'error',
+      error: err.slice(0, 500),
+    });
     result.failed.push({ id: row.id, channel: row.channel, title, error: err });
 
-    if (isBlocking(err)) {
-      result.stoppedReason = `lỗi CHẶN — mọi bài còn lại sẽ hỏng y hệt, dừng lượt: ${err.slice(0, 300)}`;
-      break;
+    if (blocking) {
+      // Trạng thái của CÁI CỬA, không phải của bài → đóng kênh này lại, các
+      // kênh khác vẫn chạy tiếp trong cùng lượt.
+      blocked.add(row.channel);
     }
   }
 
+  result.blockedChannels = [...blocked];
+  if (blocked.size && !result.stoppedReason) {
+    result.stoppedReason =
+      `lỗi CHẶN ở kênh ${result.blockedChannels.join(', ')} — bài còn lại của (các) kênh đó ` +
+      'giữ nguyên trạng thái chờ, sẽ thử lại ở lượt sau';
+  }
   result.remaining = await countRows(READY_FILTER);
   return result;
 }
@@ -309,14 +584,30 @@ export function formatPublishReport(r: PublishResult): string {
 
   // Nhắc nguyên nhân gốc NGAY TRONG cảnh báo — cùng lý do `yt-drain` phải làm
   // thế: không có dòng này thì phản xạ tự nhiên là đi cấp lại token, vá được
-  // vài hôm rồi tắc y như cũ.
-  if (r.failed.some((f) => isBlocking(f.error || ''))) {
-    lines.push(
-      '\n🔑 Lỗi auth/quyền của Facebook: page token phải có `pages_manage_posts` ' +
-        '(app Meta hiện dựng cho Messenger, quyền `pages_messaging`, và còn ở Development mode). ' +
-        'Vào Meta App → Permissions xin thêm `pages_manage_posts`, cấp lại page token, ' +
-        'rồi đặt FB_PAGE_ID + FB_PAGE_ACCESS_TOKEN trên Vercel.',
-    );
+  // vài hôm rồi tắc y như cũ. Mỗi kênh một cửa riêng, nên hướng dẫn cũng phải
+  // theo kênh chứ không thể chỉ nói về Facebook.
+  for (const ch of r.blockedChannels) {
+    const fix = CHANNEL_SETUP[ch];
+    if (fix) lines.push(`\n🔑 ${ch}: ${fix}`);
   }
   return lines.join('\n');
 }
+
+/** Việc tay cần làm khi một kênh báo lỗi auth/quyền. */
+const CHANNEL_SETUP: Record<string, string> = {
+  facebook:
+    'page token phải có `pages_manage_posts` (app Meta của repo dựng cho Messenger với ' +
+    '`pages_messaging` và còn ở Development mode). Meta App → Permissions xin thêm quyền, ' +
+    'cấp lại page token, rồi đặt FB_PAGE_ID + FB_PAGE_ACCESS_TOKEN trên Vercel.',
+  instagram:
+    'cần quyền `instagram_content_publish` và một tài khoản Instagram **Business** đã liên kết ' +
+    'với Page. Đặt IG_USER_ID (id tài khoản IG Business, không phải username) + IG_ACCESS_TOKEN ' +
+    '(dùng chung page token được) trên Vercel.',
+  threads:
+    'Threads có API và TOKEN RIÊNG — token Page của Facebook KHÔNG dùng được. Vào ' +
+    'developers.facebook.com → Threads API, cấp token với `threads_basic` + ' +
+    '`threads_content_publish`, rồi đặt THREADS_USER_ID + THREADS_ACCESS_TOKEN trên Vercel.',
+  telegram:
+    'thêm bot làm ADMIN của channel (quyền đăng bài), rồi đặt TELEGRAM_CHANNEL_ID trên Vercel ' +
+    '(dạng `@ten_channel` hoặc id số `-100…`). Token bot dùng chung TELEGRAM_BOT_TOKEN đã có.',
+};
