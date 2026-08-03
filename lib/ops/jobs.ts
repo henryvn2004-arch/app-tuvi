@@ -141,6 +141,12 @@ export const JOBS: JobSpec[] = [
   { key: 'media-build', label: 'Dựng hàng đợi bài đăng', source: 'vercel', everyMinutes: D,
     schedule: '09:30 VN hằng ngày', sink: 'media_assets + media_posts', trigger: true,
     since: '2026-08-01' },
+  // Soạn bài seeding cho group — KHÔNG đăng (Groups API bị Meta gỡ 22/04/2024).
+  // `since` = ngày merge: job chưa từng chạy nên cron_runs trống, thiếu mốc này
+  // là bộ dò lập tức kêu "CHƯA HỀ chạy".
+  { key: 'seeding-build', label: 'Soạn bài seeding group', source: 'vercel', everyMinutes: D,
+    schedule: '08:30 VN hằng ngày', sink: 'seeding_drafts', trigger: true,
+    since: '2026-08-03' },
 ];
 
 export interface CronRun {

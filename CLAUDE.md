@@ -5,6 +5,89 @@
 
 ---
 
+## 🌱 Trợ lý seeding group — máy soạn, NGƯỜI dán (2026-08-03, PR này)
+
+Henry: *"dùng account facebook đi seeding vào các group, auto bot mỗi ngày vào
+seeding 20-30 bài"*, và khi tao nêu vấn đề thì chốt lại: *"tao muốn nó tự vào
+post luôn. Nó tự tìm group… mỗi ngày tự tìm group tương tự + post theo frequency
+tao set"*.
+
+### 🔴 ĐƯỜNG API ĐÃ CHẾT — đừng đi tìm lại
+**Meta gỡ Groups API khỏi MỌI phiên bản từ 22/04/2024**, xoá luôn permission
+`publish_to_groups` + `groups_access_member_info` (công bố 23/01/2024 cùng Graph
+API v19.0, hiệu lực sau 90 ngày). Buffer, Hootsuite, Sprinklr, RecurPost đều mất
+tính năng này — **không phải mình chưa xin được quyền, mà là quyền đó không còn
+tồn tại**. Lý do Meta nêu: chống spam.
+- ⛔ **Đã TỪ CHỐI viết bot tự đăng.** Đường duy nhất còn lại là lái account cá
+  nhân bằng trình duyệt giả lập người thật = lách chính biện pháp chống spam.
+  Rủi ro không phải mất một account mà là **`tuviminhbao.com` bị gắn cờ ở tầng
+  TÊN MIỀN** → Page (adapter M3 vừa xong), Instagram, và cả link do người thật
+  chia sẻ đều chết theo, rất khó gỡ. Phiên sau đừng dựng lại đường này.
+- **20–30 bài/ngày là mức spam KỂ CẢ khi đăng tay** — admin group ban trong vài
+  ngày. Nhịp mặc định vì thế là **7 ngày/group**, trần `seeding.daily_cap=5`.
+
+### ✅ Cái đã làm — tự động tới bước cuối, dừng đúng một cú bấm
+- **Migration `_patches/migration-seeding-groups.sql`** (✅ ĐÃ CHẠY prod — verify
+  13 cột `seeding_groups` + 15 cột `seeding_drafts`, RLS bật, **0 policy** = chỉ
+  service key, `seeding.daily_cap=5`).
+- **🔑 CỐ Ý KHÔNG dùng chung `media_posts`/`media_assets` của M2+M3** — hai cái
+  bẫy đã đo trước khi viết: (1) `publishQueue()` quét MỌI dòng `queued` rồi tìm
+  adapter theo `channel`, gặp channel lạ là đánh dấu `error` → nhét draft group
+  vào đó là mỗi sáng vài chục bài báo lỗi oan; (2) `usedSourceIds()` trong
+  `build.ts` lọc theo `source_type` **chứ không theo `variant`** → bài nào
+  seeding chạm vào sẽ biến mất khỏi hàng đợi đăng Page.
+- **`lib/media/seeding.ts`** — mỗi group một `angle` riêng đưa vào prompt, caption
+  **viết lại từ đầu cho từng group** (tốn thêm lượt LLM, nhưng người sinh hoạt ở
+  hai group là người nhận ra spam đầu tiên). Qua brand-check #356 như mọi văn bản
+  đối ngoại. Ảnh Satori qua `/api/og/social` → **0đ**.
+- **Ba chốt chặn dồn ứ/trùng lặp:** group còn bài `ready` chưa dán → KHÔNG soạn
+  thêm · unique `(group_id, source_type, source_id)` = một bài chỉ vào một group
+  MỘT lần (vẫn cho đi group khác — kho chỉ ~630 bài) · `usedThisRun` = hai group
+  cùng sáng không nhận cùng một bài.
+- **`last_posted_at` đặt khi người bấm "Đã dán", KHÔNG phải khi soạn xong** —
+  nhịp đo bằng bài thực sự ra ngoài; bài soạn ra mà không ai dán thì group đó
+  chưa hề được seed.
+- Cron `seeding-build` 08:30 VN (trước `media-build` 09:30) + panel **"Seeding
+  Group"** trong Marketing: sổ group (thêm/sửa/xoá, nhịp riêng từng group) +
+  hàng đợi **Copy → Mở group → Đã dán**. **CỐ Ý không có nút "Đăng"** và module
+  không import adapter nào — có test riêng canh đúng điều đó.
+- Link mang `utm_source=fbgroup&utm_campaign=<slug group>` → sau 2 tuần bảng
+  Chiến dịch UTM nói được group nào ra người thật, group nào bỏ.
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier
+  --check .` sạch · 3 script block admin OK · **41 ca trên module THẬT** (chỉ
+  rewrite đường dẫn import, `diff` xác nhận logic nguyên byte): sổ trống → **0
+  lượt LLM** · chưa tới lượt → **0 lượt LLM** · còn bài chưa dán → không chồng
+  thêm · bài đã soạn cho group đó → chọn bài KHÁC · 2 group không trùng bài ·
+  trần cắt đúng · `cap=0` tắt hẳn · brand-check chặn → **0 dòng ghi DB** ·
+  **module không chứa `graph.facebook` và không import `channels/meta`** ·
+  **22 ca Playwright trên chính code trong `admin.html`**: caption chứa
+  `<img onerror>` không chạy mà vẫn hiện nguyên văn · `javascript:` trong URL
+  group bị chặn ở cả href lẫn img src · bài đã dán khoá ô sửa · **không nút nào
+  tên "Đăng"** · Copy chép đúng caption **đã sửa tay** + link + hashtag ·
+  clipboard bị chặn → vẫn báo, không im lặng.
+- 🐞 Hai lỗi tự bắt khi test: `seedCopy` đọc một map chưa ai đặt → nút Copy mất
+  link và hashtag (làm hỏng luôn việc đo UTM); và href/src đổ thẳng từ DB nên
+  `javascript:` chạy được bằng chính phiên admin → thêm `sdSafeUrl()`.
+- ⚠️ **CHƯA chạy được đầu-cuối trên Next dev** — phần route chỉ là auth + gọi
+  hàm + gửi Telegram, `tsc` phủ. Cũng chưa có group thật nào trong sổ nên cron
+  sáng mai sẽ **im lặng** (đúng thiết kế, không phải lỗi).
+
+### 🔑 VIỆC TAY HENRY
+1. Mở Admin → Marketing → **Seeding Group**, thêm 5–10 group. Ô **"Góc tiếp cận"**
+   là thứ quyết định chất lượng: viết rõ nhóm này quan tâm gì (vd *"hội xây nhà,
+   quan tâm tuổi làm nhà và hướng bếp hơn là lý thuyết sao"*).
+2. Sáng hôm sau kiểm bài đầu tiên trước khi dán — caption do LLM viết, gate
+   brand-check là lớp QC duy nhất.
+3. Nhịp muốn đổi: sửa `every_days` từng group trong panel; trần chung:
+   `update app_config set value='3'::jsonb where key='seeding.daily_cap';`
+
+### Còn lại của track phân phối
+Đường auto THẬT (không cần người) là các kênh của chính mình: Page (M3, chờ
+`pages_manage_posts`), Instagram, Threads, Telegram channel, Pinterest, Zalo OA
+— xem `docs/MEDIA-PIPELINE-PLAN.md`.
+
+---
+
 ## 📹 Track Media Pipeline — kênh phân phối, KHÔNG phải SEO (2026-08-01, PR #369)
 
 Henry: *"launch 3-4 tháng mà traffic thấp quá… SEO có phải kênh đầu tiên đúng

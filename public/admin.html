@@ -396,6 +396,25 @@
 
         <div class="panel">
           <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h.01"/><path d="M3 12a9 9 0 1 0 9-9 9.7 9.7 0 0 0-6.3 2.4"/><path d="M12 7v5l3 3"/></svg>Seeding Group (Soạn Sẵn — Dán Tay)</div>
+            <div class="panel-actions">
+              <span class="badge badge-grey" id="sd-state-badge">…</span>
+              <button class="btn btn-primary btn-sm" onclick="loadSeeding()">↻</button>
+            </div>
+          </div>
+          <div class="panel-body" style="font-size:.76rem;color:var(--text-lt);padding-bottom:.5rem">
+            Cron <code>seeding-build</code> 08:30 mỗi sáng soạn sẵn bài cho các group <b>tới lượt</b>: chọn bài, trích câu, dựng ảnh Satori, viết caption <b>riêng cho từng group</b> theo góc tiếp cận đã khai, rồi qua brand-check. Việc còn lại là <b>Copy → Mở group → dán</b>.
+            <b>Không có nút đăng, và đó là chủ đích:</b> Meta gỡ Groups API khỏi mọi phiên bản từ 22/04/2024 (xoá luôn quyền <code>publish_to_groups</code>) nên không còn đường hợp lệ nào để máy đăng vào group — Buffer/Hootsuite cũng mất tính năng này. Lái tài khoản cá nhân bằng trình duyệt giả lập thì rủi ro là <b>tên miền bị gắn cờ spam</b>, kéo chết cả Page lẫn link người thật chia sẻ.
+            Bấm <b>“Đã dán”</b> mới tính là group đó được seed — đó là mốc để tính nhịp lượt sau.
+          </div>
+          <div id="sd-groups" style="padding:0 1rem 1rem">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+          <div id="sd-drafts" style="padding:0 1rem 1rem"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="16" r="1"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Autopilot — Nhật Ký Hành Động</div>
             <div class="panel-actions">
               <span class="badge badge-grey" id="ap-state-badge">…</span>
@@ -3204,6 +3223,7 @@ async function loadMarketing() {
   loadViral(fromEl.value, toEl.value);
   loadAutopilotLog();
   loadMediaQueue();
+  loadSeeding();
 }
 
 // V2.4 (track Viral Loop) — phễu vòng lặp giới thiệu. Gọi RIÊNG khỏi
@@ -3381,6 +3401,240 @@ async function mediaDecide(postId, decision) {
     if (d.error) throw new Error(d.error);
     toast(decision === 'retry' ? 'Đã xếp lại hàng — cron sẽ đăng ở lượt tới' : 'Đã bỏ bài', 'success');
     loadMediaQueue();
+  } catch (e) {
+    toast('Lỗi: ' + e.message, 'error');
+  }
+}
+
+// ── Trợ lý seeding group ─────────────────────────────────────────────────────
+// Panel này CỐ Ý không có nút đăng: Groups API bị Meta gỡ 22/04/2024, không còn
+// đường hợp lệ nào để máy đăng vào group. Máy soạn, người dán.
+let _sdGroups = [];
+
+/**
+ * URL đổ vào href/src PHẢI là http(s). Server đã chặn ở `admin-seeding-group`,
+ * nhưng dòng cũ hay một lượt sửa thẳng DB vẫn lọt tới đây — và `javascript:`
+ * trong href thì chạy bằng chính phiên admin.
+ */
+function sdSafeUrl(u) {
+  const s = String(u || '').trim();
+  return /^https?:\/\//i.test(s) ? s : '';
+}
+
+async function loadSeeding() {
+  const badge = document.getElementById('sd-state-badge');
+  try {
+    const d = await apiGet('admin-seeding');
+    if (d.error) throw new Error(d.error);
+    _sdGroups = d.groups || [];
+    const drafts = d.drafts || [];
+    const ready = drafts.filter((x) => x.status === 'ready').length;
+    if (badge) {
+      badge.className = 'badge ' + (ready ? 'badge-green' : 'badge-grey');
+      badge.textContent = ready ? ready + ' bài chờ dán' : 'Không có bài chờ';
+    }
+    renderSeedGroups(_sdGroups);
+    renderSeedDrafts(drafts, _sdGroups);
+  } catch (e) {
+    if (badge) { badge.className = 'badge badge-red'; badge.textContent = 'Lỗi'; }
+    const host = document.getElementById('sd-groups');
+    if (host) host.innerHTML = `<div class="empty">Lỗi: ${escHtmlLocal(e.message)}</div>`;
+  }
+}
+
+function sdDueLabel(g) {
+  if (!g.enabled) return ['badge-grey', 'Tắt'];
+  if (!g.last_posted_at) return ['badge-green', 'Chưa seed lần nào'];
+  const days = Math.floor((Date.now() - Date.parse(g.last_posted_at)) / 86400000);
+  if (days >= (g.every_days || 7)) return ['badge-green', 'Tới lượt'];
+  return ['badge-grey', 'Còn ' + ((g.every_days || 7) - days) + ' ngày'];
+}
+
+function renderSeedGroups(groups) {
+  const host = document.getElementById('sd-groups');
+  if (!host) return;
+  const form = `
+    <div style="border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-bottom:.9rem">
+      <div style="font-size:.78rem;font-weight:600;margin-bottom:.5rem" id="sd-form-title">Thêm group vào sổ</div>
+      <input type="hidden" id="sd-f-id">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.5rem">
+        <input id="sd-f-name" placeholder="Tên group" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+        <input id="sd-f-url" placeholder="https://www.facebook.com/groups/..." style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+        <input id="sd-f-topic" placeholder="Chủ đề (vd: phong thuỷ nhà cửa)" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+        <input id="sd-f-every" type="number" min="1" max="60" placeholder="Nhịp: 7 ngày/lần" style="padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+      </div>
+      <input id="sd-f-angle" placeholder="Góc tiếp cận riêng cho group này — thứ khiến bài ở đây khác bài ở group khác" style="width:100%;margin-top:.5rem;padding:.45rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.78rem">
+      <div style="display:flex;gap:.5rem;margin-top:.5rem;align-items:center">
+        <button class="btn btn-primary btn-sm" onclick="seedGroupSave()">Lưu group</button>
+        <button class="btn btn-outline btn-sm" onclick="seedGroupReset()">Xoá form</button>
+        <span style="font-size:.7rem;color:var(--text-lt)">Nhịp bền là 1 bài/group/tuần. Đặt dày hơn không ra thêm người đọc, chỉ ra thêm group ban.</span>
+      </div>
+    </div>`;
+
+  if (!groups.length) {
+    host.innerHTML = form + '<div class="empty">Sổ group còn trống. Thêm vài group vào đây, sáng mai cron sẽ soạn bài cho chúng.</div>';
+    return;
+  }
+
+  host.innerHTML = form + `
+    <div class="table-wrap"><table><thead><tr>
+      <th>Group</th><th>Chủ đề</th><th>Nhịp</th><th>Lần dán gần nhất</th><th>Trạng thái</th><th></th>
+    </tr></thead><tbody>` + groups.map((g) => {
+      const [cls, label] = sdDueLabel(g);
+      const last = g.last_posted_at ? new Date(g.last_posted_at).toLocaleDateString('vi-VN') : '—';
+      return `<tr>
+        <td><a href="${escHtmlLocal(sdSafeUrl(g.url))}" target="_blank" rel="noopener">${escHtmlLocal(g.name)}</a>
+            ${g.member_count ? `<div style="font-size:.68rem;color:var(--text-lt)">${g.member_count.toLocaleString('vi-VN')} thành viên</div>` : ''}</td>
+        <td style="font-size:.72rem;color:var(--text-lt)">${escHtmlLocal(g.topic || '—')}</td>
+        <td>${g.every_days} ngày</td>
+        <td style="font-size:.72rem">${last}</td>
+        <td><span class="badge ${cls}">${escHtmlLocal(label)}</span></td>
+        <td style="white-space:nowrap">
+          <button class="btn-mini" onclick="seedGroupEdit('${g.id}')">Sửa</button>
+          <button class="btn-mini" onclick="seedGroupDelete('${g.id}')">Xoá</button>
+        </td>
+      </tr>`;
+    }).join('') + '</tbody></table></div>';
+}
+
+function seedGroupReset() {
+  ['id', 'name', 'url', 'topic', 'every', 'angle'].forEach((k) => {
+    const el = document.getElementById('sd-f-' + k);
+    if (el) el.value = '';
+  });
+  const t = document.getElementById('sd-form-title');
+  if (t) t.textContent = 'Thêm group vào sổ';
+}
+
+function seedGroupEdit(id) {
+  const g = _sdGroups.find((x) => x.id === id);
+  if (!g) return;
+  const set = (k, v) => { const el = document.getElementById('sd-f-' + k); if (el) el.value = v == null ? '' : v; };
+  set('id', g.id); set('name', g.name); set('url', g.url);
+  set('topic', g.topic); set('every', g.every_days); set('angle', g.angle);
+  const t = document.getElementById('sd-form-title');
+  if (t) t.textContent = 'Sửa group: ' + g.name;
+  document.getElementById('sd-f-name').scrollIntoView({ block: 'center', behavior: 'smooth' });
+}
+
+async function seedGroupSave() {
+  const val = (k) => (document.getElementById('sd-f-' + k) || {}).value || '';
+  try {
+    const d = await apiPost('admin-seeding-group', {
+      op: 'save',
+      id: val('id'),
+      name: val('name').trim(),
+      url: val('url').trim(),
+      topic: val('topic').trim(),
+      angle: val('angle').trim(),
+      everyDays: Number(val('every')) || 7,
+    });
+    if (d.error) throw new Error(d.error);
+    toast('Đã lưu group', 'success');
+    seedGroupReset();
+    loadSeeding();
+  } catch (e) {
+    toast('Lỗi: ' + e.message, 'error');
+  }
+}
+
+async function seedGroupDelete(id) {
+  const g = _sdGroups.find((x) => x.id === id);
+  if (!confirm('Xoá "' + (g ? g.name : id) + '" khỏi sổ seeding? Các bài đã soạn cho group này cũng mất theo.')) return;
+  try {
+    const d = await apiPost('admin-seeding-group', { op: 'delete', id });
+    if (d.error) throw new Error(d.error);
+    toast('Đã xoá', 'success');
+    loadSeeding();
+  } catch (e) {
+    toast('Lỗi: ' + e.message, 'error');
+  }
+}
+
+const SD_STATUS = {
+  ready:   ['badge-green', 'Chờ dán'],
+  posted:  ['badge-grey',  'Đã dán'],
+  skipped: ['badge-grey',  'Đã bỏ'],
+};
+
+function renderSeedDrafts(drafts, groups) {
+  const host = document.getElementById('sd-drafts');
+  if (!host) return;
+  const byId = {};
+  groups.forEach((g) => { byId[g.id] = g; });
+
+  if (!drafts.length) {
+    host.innerHTML = '<div class="empty">Chưa có bài nào. Cron <code>seeding-build</code> chạy 08:30 mỗi sáng cho các group tới lượt.</div>';
+    return;
+  }
+
+  // Phần đuôi mỗi bài (link có UTM + hashtag) — nút Copy phải chép ĐÚNG thứ sẽ
+  // dán, không phải mỗi caption; thiếu link thì cả việc đo UTM thành vô nghĩa.
+  window._sdDraftTails = {};
+  drafts.forEach((p) => {
+    const tags = (p.hashtags || []).map((h) => '#' + h).join(' ');
+    window._sdDraftTails[p.id] = [p.link_url || '', tags].filter(Boolean).join('\n\n');
+  });
+
+  host.innerHTML = '<div style="font-size:.8rem;font-weight:600;margin:.5rem 0">Bài đã soạn</div>' + drafts.map((p) => {
+    const g = byId[p.group_id] || {};
+    const [cls, label] = SD_STATUS[p.status] || ['badge-grey', p.status];
+    // Chỉ bài CHỜ DÁN mới sửa được. Bài đã dán mà sửa ở đây thì chữ trên
+    // Facebook không đổi theo — chỉ làm nhật ký nói dối.
+    const open = p.status === 'ready';
+    const tags = (p.hashtags || []).map((h) => '#' + h).join(' ');
+    return `
+    <div style="display:flex;gap:1rem;padding:.9rem 0;border-bottom:1px solid var(--border)">
+      <img src="${escHtmlLocal(sdSafeUrl(p.image_url))}" alt="" loading="lazy"
+           style="width:110px;height:138px;object-fit:cover;border-radius:8px;background:var(--bg-alt);flex:none">
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.35rem;flex-wrap:wrap">
+          <span class="badge ${cls}">${escHtmlLocal(label)}</span>
+          <span class="badge badge-grey">${escHtmlLocal(g.name || 'group đã xoá')}</span>
+          <span style="font-size:.7rem;color:var(--text-lt)">${escHtmlLocal((p.source_type || '').replace('_', ' '))}</span>
+        </div>
+        <textarea id="sd-cap-${p.id}" ${open ? '' : 'disabled'}
+                  style="width:100%;min-height:96px;font-size:.78rem;padding:.5rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);resize:vertical"
+        >${escHtmlLocal(p.caption || '')}</textarea>
+        <div style="font-size:.7rem;color:var(--text-lt);margin:.3rem 0">${escHtmlLocal(tags)}</div>
+        <a href="${escHtmlLocal(sdSafeUrl(p.link_url))}" target="_blank" rel="noopener"
+           style="font-size:.7rem;color:var(--text-lt);word-break:break-all">${escHtmlLocal(p.link_url || '')}</a>
+        ${open ? `
+        <div style="display:flex;gap:.5rem;margin-top:.5rem;flex-wrap:wrap">
+          <button class="btn btn-primary btn-sm" onclick="seedCopy('${p.id}')">Copy bài</button>
+          ${sdSafeUrl(g.url) ? `<a class="btn btn-outline btn-sm" href="${escHtmlLocal(sdSafeUrl(g.url))}" target="_blank" rel="noopener">Mở group →</a>` : ''}
+          <button class="btn btn-outline btn-sm" onclick="seedDecide('${p.id}','posted')">Đã dán</button>
+          <button class="btn btn-outline btn-sm" onclick="seedDecide('${p.id}','skip')">Bỏ bài</button>
+        </div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/** Copy đúng thứ sẽ dán: caption đang hiện (kể cả vừa sửa tay) + link + hashtag. */
+async function seedCopy(draftId) {
+  const el = document.getElementById('sd-cap-' + draftId);
+  const tail = (window._sdDraftTails || {})[draftId] || '';
+  const text = [(el ? el.value.trim() : ''), tail].filter(Boolean).join('\n\n');
+  try {
+    await navigator.clipboard.writeText(text);
+    toast('Đã copy — mở group rồi dán', 'success');
+  } catch {
+    // Trình duyệt chặn clipboard (thiếu quyền/không https) → chọn sẵn chữ để
+    // người ta Ctrl+C, đừng để cú bấm rơi vào im lặng.
+    if (el) { el.focus(); el.select(); }
+    toast('Trình duyệt chặn clipboard — chữ đã được chọn sẵn, bấm Ctrl+C', 'error');
+  }
+}
+
+async function seedDecide(draftId, decision) {
+  const el = document.getElementById('sd-cap-' + draftId);
+  const caption = el ? el.value.trim() : '';
+  try {
+    const d = await apiPost('admin-seeding-draft', { draftId, decision, caption });
+    if (d.error) throw new Error(d.error);
+    toast(decision === 'posted' ? 'Đã ghi nhận — nhịp group tính lại từ hôm nay' : 'Đã bỏ bài', 'success');
+    loadSeeding();
   } catch (e) {
     toast('Lỗi: ' + e.message, 'error');
   }
