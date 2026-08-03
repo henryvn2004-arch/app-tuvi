@@ -31,6 +31,12 @@ jobs:
       - name: Không có giá chép cứng
         run: npm run check:prices
 
+      # Chặn tái phát bảng 64 quẻ sai mã hào: đã có lúc 49/64 quẻ mang mã của
+      # quẻ khác (77% lượt gieo ra sai lời đoán) mà không gì báo, vì nhánh "tìm
+      # quẻ gần nhất" nuốt hết. 64 chuỗi nhị phân thì mắt không soi được.
+      - name: Bảng 64 quẻ Kinh Dịch đúng mã hào
+        run: npm run check:hexagrams
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10
