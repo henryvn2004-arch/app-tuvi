@@ -94,6 +94,9 @@ export const HAN_VIET: Record<string, string> = {
   客: 'Khách', 名: 'Danh', 恶: 'Ác', 科: 'Khoa', 戴: 'Đới', 目: 'Mục', 军: 'Quân', 碎: 'Toái',
   攀: 'Phàn', 鞍: 'Yên', 丘: 'Khâu', 乡: 'Hương', 库: 'Khố', 藏: 'Tàng', 差: 'Sai', 推: 'Thôi',
   病: 'Bệnh', 折: 'Chiết', 足: 'Túc', 形: 'Hình', 钺: 'Việt', 点: 'Điểm', 戮: 'Lục', 衣: 'Y',
+  // 🐞 `屠` (Thiên Đồ Sát) do CHÍNH `scripts/check-terms.mjs` bắt được — nó
+  // hiếm nên không rơi vào lưới đo tay lúc dựng bảng.
+  屠: 'Đồ',
 };
 
 /** Phiên một chuỗi Hán sang Hán-Việt, cách nhau bằng dấu cách. */

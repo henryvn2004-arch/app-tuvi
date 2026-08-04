@@ -37,6 +37,11 @@ jobs:
       - name: Bảng 64 quẻ Kinh Dịch đúng mã hào
         run: npm run check:hexagrams
 
+      # Bảng dịch phải phủ đủ nguồn — bộ dò này đã bắt được 4 lỗi thật
+      # (2 chữ Hán lọt giao diện Kỳ Môn/Lục Nhâm, 1 ở Bát Tự, 1 chữ Anh ở Bản Đồ Sao).
+      - name: Check bảng dịch thuật ngữ cổ pháp
+        run: npm run check:terms
+
       # Bảng 384 hào từ dài 64 mục × 14 chuỗi. Thiếu một hào là người gieo trúng
       # quẻ đó nhận một ô TRỐNG — mắt không soi hết 64 quẻ được.
       - name: Bảng 384 hào từ đầy đủ
