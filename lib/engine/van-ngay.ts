@@ -164,6 +164,7 @@ export interface VanNgayResult {
   kieng: Array<{ ten: string; diem: number; vi: string }>;
   mau: { hanh: string; list: string[] };
   huong: { hyThan: string; taiThan: string };
+  tuan?: VanNgayTuanItem[];
   caNhan?: VanNgayCaNhan;
 }
 
@@ -205,6 +206,23 @@ function nhanDanhGia(info: NgayTotInfo): string {
 }
 
 /**
+ * 🐞 Bắt được khi ĐỌC output, không phải khi đo: `overallTinhChat` của engine
+ * chấm Tam Nương chỉ −2, nên một ngày trực cát + sao hoàng đạo vẫn ra "tốt"
+ * dù đang là Tam Nương → thẻ hiện huy hiệu "Ngày tốt" ngay bên trên câu
+ * "hoãn việc trọng đại" (4/8/2026 là một ca như vậy). Ngày kỵ cổ truyền là
+ * luật KIÊNG KHỞI SỰ, không phải một điểm trừ cộng dồn ⇒ hạ trần xuống "bình".
+ *
+ * NGUỒN DUY NHẤT của phép hạ trần này — thẻ, dải 7 ngày và tin push đều gọi
+ * vào đây, nếu không thì ô thứ nhất của dải sẽ tô màu khác huy hiệu ngay bên
+ * trên nó, trong cùng một màn hình.
+ */
+function tinhChatNgay(info: NgayTotInfo): 'tốt' | 'xấu' | 'bình' {
+  return info.overallTinhChat === 'tốt' && (info.kyTamNuong || info.kyNguyetKy || info.kyDuongCong)
+    ? 'bình'
+    : info.overallTinhChat;
+}
+
+/**
  * Tầng NGÀY — deterministic, giống nhau với mọi người, cache được theo ngày.
  */
 export function computeVanNgay(dd: number, mm: number, yy: number): VanNgayResult {
@@ -213,17 +231,7 @@ export function computeVanNgay(dd: number, mm: number, yy: number): VanNgayResul
   const canHanh = CAN_HANH[canIdx]!;
   const chiIdx = CHI.indexOf(info.chiNgay);
   const xungIdx = chiXung(chiIdx < 0 ? 0 : chiIdx);
-
-  // 🐞 Bắt được khi ĐỌC output, không phải khi đo: `overallTinhChat` của engine
-  // chấm Tam Nương chỉ −2, nên một ngày trực cát + sao hoàng đạo vẫn ra "tốt"
-  // dù đang là Tam Nương → thẻ hiện huy hiệu "Ngày tốt" ngay bên trên câu
-  // "hoãn việc trọng đại" (4/8/2026 là một ca như vậy). Ngày kỵ cổ truyền là
-  // luật KIÊNG KHỞI SỰ, không phải một điểm trừ cộng dồn ⇒ hạ trần xuống
-  // "bình". Hạ ở ĐÂY để huy hiệu, câu chốt và tin push cùng một con số.
-  const tinhChat: 'tốt' | 'xấu' | 'bình' =
-    info.overallTinhChat === 'tốt' && (info.kyTamNuong || info.kyNguyetKy || info.kyDuongCong)
-      ? 'bình'
-      : info.overallTinhChat;
+  const tinhChat = tinhChatNgay(info);
 
   const scores = scoreAllActivities(info);
   const sorted = [...scores].sort((a, b) => b.score - a.score);
@@ -275,6 +283,61 @@ export function computeVanNgay(dd: number, mm: number, yy: number): VanNgayResul
     mau: { hanh: canHanh, list: mauList },
     huong: { hyThan: HY_THAN[canIdx]!, taiThan: TAI_THAN[canIdx]! },
   };
+}
+
+// ─── Dải 7 ngày tới ───────────────────────────────────────────
+
+export interface VanNgayTuanItem {
+  d: number;
+  m: number;
+  y: number;
+  iso: string;            // YYYY-MM-DD — client bấm vào là xin đúng ngày này
+  thu: string;            // "T4" / "CN"
+  canChi: string;
+  tinhChat: 'tốt' | 'xấu' | 'bình';
+  ngayKy: boolean;
+  /** Ngày này xung CHÍNH tuổi người đang xem (chỉ có ở lượt POST kèm lá số). */
+  bixung?: boolean;
+}
+
+const THU_NGAN = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+
+/**
+ * Dải ngày để người ta lướt thấy tuần tới ra sao — móc quay lại rẻ nhất: nhìn
+ * một cái là biết hôm nào nên hẹn việc, và bấm vào là xem được ngày đó.
+ *
+ * CỐ Ý chỉ trả tính chất + can chi, KHÔNG trả trọn `computeVanNgay` cho cả 7
+ * ngày: dải này chỉ để tô màu, còn chi tiết thì bấm vào ngày đó mới xin —
+ * nhét cả 7 ngày đầy đủ vào payload làm nó phình ~7 lần cho phần gần như
+ * không ai đọc.
+ *
+ * @param chiNamSinh chi năm sinh người xem (để đánh dấu ngày xung tuổi họ)
+ */
+export function computeTuan(
+  dd: number, mm: number, yy: number,
+  days = 7,
+  chiNamSinh?: string,
+): VanNgayTuanItem[] {
+  const out: VanNgayTuanItem[] = [];
+  for (let i = 0; i < days; i++) {
+    // Cộng ngày bằng Date UTC để không dính lệch múi giờ / giờ mùa hè.
+    const dt = new Date(Date.UTC(yy, mm - 1, dd));
+    dt.setUTCDate(dt.getUTCDate() + i);
+    const y = dt.getUTCFullYear(), m = dt.getUTCMonth() + 1, d = dt.getUTCDate();
+    const info = computeNgayTot(d, m, y);
+    const chiIdx = CHI.indexOf(info.chiNgay);
+    const xung = CHI[chiXung(chiIdx < 0 ? 0 : chiIdx)]!;
+    out.push({
+      d, m, y,
+      iso: `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`,
+      thu: THU_NGAN[dt.getUTCDay()]!,
+      canChi: info.canChiNgay,
+      tinhChat: tinhChatNgay(info),
+      ngayKy: info.kyTamNuong || info.kyNguyetKy || info.kyDuongCong,
+      ...(chiNamSinh ? { bixung: chiNamSinh === xung } : {}),
+    });
+  }
+  return out;
 }
 
 // ─── Tầng CÁ NHÂN ─────────────────────────────────────────────
