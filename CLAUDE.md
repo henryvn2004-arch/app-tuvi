@@ -924,11 +924,22 @@ hỏng vào ngày đó. Đây là hạn sử dụng, không phải việc tối 
   ảnh + có cảnh báo · non-200 và data rỗng đều ném lỗi · **cost_vnd tính qua
   `logImageUsage` thật**: gpt-image-2 1.090đ, gpt-image-1 1.649đ, model lạ rơi về
   giá gpt-image-2.
-- ⚠️ **CHƯA gọi được API thật** — container chặn `api.openai.com` (403 qua proxy)
-  và không có `OPENAI_API_KEY`. Việc tay Henry: gen thử 1 lá số mỗi tool sau khi
-  deploy, soi ảnh (gpt-image-2 có tầng "reasoning" dựng bố cục trước khi vẽ nên
-  **phong cách có thể khác** — painterly pastel + 5 nền văn minh là thứ phải nhìn
-  mới biết còn giữ được không) và soi `events.meta.cost_vnd` xem có ~1.090đ không.
+- ✅ **ĐÃ gọi API thật và ĐÃ đối chiếu giá** (2026-08-04, sau #404). Container vẫn
+  chặn `api.openai.com`, nên đường chạy được là **route trên Vercel** —
+  `/api/admin/chan-dung-thu` (#404), nơi key vốn có sẵn. Đo trên lá số thật
+  (Nam 3/6/1998 giờ Sửu → *Đại danh y coi dưỡng sinh · Nhật Bản cổ*), 1024×1536:
+
+  | quality | token ảnh | chi phí THẬT | dự đoán từ bảng giá |
+  |---|---:|---:|---:|
+  | medium | 1.372 | **1.106đ** | 1.090đ |
+  | high | 5.488 | **4.193đ** | 4.190đ |
+
+  ⇒ bảng `IMAGE_MODEL_PRICING` (`$30/1M` image out) **đúng ở cả hai đầu**, và mức
+  rẻ hơn 33–34% so với gpt-image-1 là số có hoá đơn đỡ chứ không còn là ước tính.
+- **Henry đã chốt GIỮ `medium`** sau khi soi hai bức cạnh nhau. Không phải sửa gì:
+  2 route KHÔNG truyền `quality` nên vốn đã ăn mặc định `medium`. **`high` đắt gấp
+  3,8 lần** — khoản ảnh nhảy từ ~5% lên ~20% giá bán (tool 25 Lượng ≈ 20.700đ), và
+  cùng $15/tháng thì medium mua được ~8 lượt/ngày còn high chỉ ~2.
 - ⚠️ **Trần ảnh free `viral.free_gen_daily_cap=6` suy từ giá CŨ.** Cùng $15/tháng
   nay mua được ~8 lượt/ngày. CỐ Ý không tự nới — đó là cần gạt ngân sách của
   Henry, sửa bằng một câu SQL `app_config`, không cần deploy.
