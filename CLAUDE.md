@@ -1090,7 +1090,22 @@ kiểm/sửa; `brand-rules.ts` chỉ còn đúng một hằng số đưa vào pr
 - Sau merge verify lại: `tsc` 0 lỗi · `lint` 0 lỗi/72 warning · `prettier --check .` sạch ·
   md5 DB khớp md5 file (`76b6c280…`) sau khi sửa §6.
 
-### ⚠️ CI: workflow `pull_request` có lúc KHÔNG fire
+### 🔴 CI: workflow `pull_request` có lúc KHÔNG fire — CÁCH GỠ GHI DƯỚI ĐÂY LÀ SAI
+**Đính chính (2026-08-04, PR #412):** đã thử ĐỦ CẢ HAI đường trên cùng một PR,
+**không đường nào kích được** 4 workflow `pull_request` (lint · unit-test ·
+playwright · lighthouse):
+1. đẩy commit **có code thật** (không phải commit rỗng) → chỉ Vercel + `smoke`;
+2. **Close rồi Reopen PR** → vẫn chỉ Vercel + `smoke`.
+
+Workflow không có path filter, không có guard draft, `branches:[main,dev]` khớp
+đúng base — tức cấu hình không sai, đây là GitHub không phát event. Chưa có cách
+gỡ nào chắc chắn.
+- `playwright` và `lighthouse` có `workflow_dispatch` nên chạy tay được; `lint`
+  và `unit-test` thì KHÔNG.
+- ⇒ Khi gặp ca này, chạy đủ bộ tại chỗ rồi **nói thẳng trên PR là CI vắng mặt**.
+  Đừng để PR trông "xanh": xanh ở đây nghĩa là các check KHÔNG TỒN TẠI.
+
+### ⚠️ (ghi chép cũ) CI: workflow `pull_request` có lúc KHÔNG fire
 2 commit liên tiếp chỉ có Vercel + `smoke` chạy; lint/typecheck/test/lighthouse **không hề
 được tạo run** (10 workflow đều `active`, không có path filter). `smoke` vẫn chạy vì nó
 trigger bằng `deployment_status` ⇒ không phải hết quota. **Cách gỡ: Close rồi Reopen PR** —
