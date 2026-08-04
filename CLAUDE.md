@@ -5,6 +5,118 @@
 
 ---
 
+## 🀄 Track repo Trung Quốc → Mai Hoa + Kỳ Môn + ảnh 9:16 (2026-08-04, PR #408)
+
+Henry đưa 5 repo huyền học TQ, hỏi có tool nào hay mà site chưa có.
+
+### 🔴 4/5 repo là CÙNG MỘT THỨ — đừng đi tìm lại
+`ChenyuHeee/tao` · `tyw66/YJ64` · `Ovilia/biangua` · `jyiL/lunarPHP` đều chỉ là
+**bảng 64 quẻ Kinh Dịch** — thứ site đã có đủ. Ghi rõ để phiên sau khỏi đào lại:
+- `tao` (MIT) **phiên trước đã khai thác rồi** — `kinh-dich-hao.js:14` ghi thẳng
+  là đã đối chiếu bản bạch thoại của họ.
+- `YJ64` là **GPL-3.0** → không lấy code vào repo thương mại được.
+- ⚠️ `lunarPHP` **KHÔNG phải thư viện lịch** như tên gợi ý — README nói rõ nó là
+  "易经六十四卦排盘", `gua.json` fork từ `tc31/64divine`. Tên đánh lừa.
+- Mỏ thật là **`Brhiza/mingyu`** → npm **`mingyu-core` MIT** (deps `tyme4ts`,
+  `celestine`, `@soul-atelier/xuankong` đều MIT).
+
+### 🎯 Chỉnh lại khung "ưu tiên tool có ảnh" của Henry
+Hai tool ảnh đang chạy dùng `gpt-image-1` **1.658đ/lượt** và bị cầu dao
+`viral.free_gen_daily_cap=6/ngày` chặn ⇒ ảnh của site đang bị **phát khẩu phần**,
+nghịch hẳn viral. Track này nhắm loại ảnh khác: **biểu đồ deterministic, 0đ,
+không cầu dao, chia sẻ vô hạn**. Bộ lọc thứ hai: ảnh phải **đọc được trong 1 giây
+bởi người không biết gì** — chính bộ lọc này loại quá nửa danh sách.
+
+### ✅ S0 — `poster.js` nhận HÀM VẼ (nền của cả nhóm)
+Trước đây `poster.js` khoá cứng vào "ảnh chân dung + câu trích": vùng `IMG_H`
+chỉ nhận `<img>` ⇒ **không có đường nào biến biểu đồ thành ảnh tải về được**.
+Thêm chế độ `draw(ctx, box)`. Gradient fade CHỈ áp cho chế độ ảnh (hàm vẽ đã
+đứng trên nền navy). `clip()` giữ cả hai chế độ — với hàm vẽ nó là hàng rào để
+lỗi toạ độ bên trang không bôi lên khối chữ. Mở `Poster.THEME` để khỏi mỗi tool
+chép một bảng màu.
+- **Verify mạnh nhất của chặng này:** Playwright A/B trên CHÍNH hai bản
+  `poster.js` (cũ lấy từ git HEAD, mới từ working tree) → **PNG byte-identical**
+  ⇒ 2 tool chân dung không đổi hành vi. Bản cũ nhận `draw` thì ném `no_image`.
+- ⚠️ Hàm `draw` chạy **ĐỒNG BỘ** — trang phải tự nạp xong ảnh TRƯỚC khi gọi
+  `Poster.download`. Cố ý không cho `draw` trả Promise để hợp đồng đơn giản.
+
+### ✅ S1 — Mai Hoa Dịch Số (`/tools/mai-hoa.html` + `/app/mai-hoa`)
+- **Tách khỏi `/tools/kinh-dich` là CÓ LÝ DO, đừng gộp lại:** Kinh Dịch đọc hào
+  từ theo Khảo Biến Chiêm; Mai Hoa chỉ một hào động và **KHÔNG lấy hào từ làm
+  chính** mà xét ngũ hành Thể/Dụng. Hai phép đọc mâu thuẫn.
+- **Tool DUY NHẤT của site không đòi ngày sinh** — mọi tool khác đều chặn người
+  dùng ở form ngày sinh, chỗ rơi rụng lớn nhất.
+- Tái dùng bảng 64 quẻ + 384 hào từ + **cả 64 bức tranh quẻ** (mở thêm
+  `KinhDichTool.anhUrl`).
+- Công thức cổ pháp (khớp mingyu): thượng quái = tổng ÷ 8 dư, hạ quái = (tổng +
+  chi giờ) ÷ 8 dư, hào động = cùng tổng ÷ 6 dư; **dư 0 quy về 8 và về 6, KHÔNG
+  về 1**. Hỗ quái = hào 2-3-4 (hạ) + 3-4-5 (thượng). Quái chứa hào động là
+  **Dụng**, quái kia là **Thể** — và Thể/Dụng **giữ nguyên VỊ TRÍ** trên/dưới
+  qua hỗ và biến.
+- 🔑 **Dụng sinh Thể mới là tốt nhất** (ngoại cảnh nuôi mình), **Thể sinh Dụng là
+  hao**. Người mới học hay đảo ngược đúng chỗ này — prompt rail dặn thẳng.
+- **Verify: 264/264 khớp `mingyu-core`** trên module THẬT (144 ca gieo theo số ×
+  8 khung giờ + 120 mốc trải cả năm 2026), đối chiếu quái trên/dưới, hào động,
+  Thể, Dụng, quan hệ ngũ hành ở cả quẻ chính lẫn quẻ biến, cấu trúc hỗ/biến.
+  Nhánh gieo theo giờ khớp ⇒ **lịch âm của repo khớp lịch âm của họ**. + 22 ca
+  Playwright trên hai trang thật.
+- 🐞 Hai lỗi tự bắt: `gieoTheoSo(-5)` được nhận (`Math.abs` lặng lẽ gieo như 5
+  trong khi báo lỗi hứa "số nguyên dương" → trả quẻ người dùng không hề gieo);
+  nhánh gieo theo giờ không nêu bước chia 8/chia 6 trong khi nhánh số có nêu.
+
+### ✅ S2 — Kỳ Môn Độn Giáp (`/tools/ky-mon.html` + `/app/ky-mon`)
+- **CHẠY Ở SERVER** (`/api/qimen` → `lib/qimen/board.ts`), khác mọi tool free
+  khác. Lý do: định cục cần tiết khí thật + phù đầu + thượng/trung/hạ nguyên,
+  rồi chuyển bốn tầng bàn, tìm trực phù trực sử. Chép sang vanilla JS là gần như
+  chắc chắn sai ở đâu đó mà **bàn VẪN RA** — không cách nào phát hiện.
+- ⚠️ **`TimeManager.setTimezoneOffsetMinutesOverride(420)` BẮT BUỘC** —
+  `mingyu-core` mặc định +480 (Bắc Kinh); để nguyên thì mọi bàn khung 23–24h giờ
+  VN rơi sang can giờ ngày hôm sau, sai âm thầm.
+- ⚠️ Route GET **phải `dynamic='force-dynamic'`** — không thì Next coi là tĩnh và
+  chạy trọn trong `next build`, mọi người xem chung bàn của lúc build (đúng bug
+  `/api/cron-push` đã dính).
+- **Tầng dịch `lib/qimen/terms.ts` — hai cách cho hai loại thuật ngữ:** cấu trúc
+  (8 môn · 8 sao · 8 thần · 9 cung · can chi · tiết khí) dịch tay kèm NGHĨA;
+  cách cục (**123 tên, đo trên 4.380 bàn**) thì **phiên HÁN-VIỆT theo chữ** (bảng
+  145 chữ) — không phải chữa cháy, sách Kỳ Môn tiếng Việt vốn gọi đúng tên đó.
+  Bịa nghĩa cho một thuật ngữ cổ pháp còn tệ hơn để nguyên.
+- 🐞 **Lỗi tự bắt:** bảng `HAN_VIET` dựng từ chữ trong TÊN CÁCH CỤC nên thiếu hẳn
+  **địa chi và tiết khí** → giao diện ra `"Bính 午"`, `"Đại 暑"`. Bài học: bảng
+  dịch dựng từ một nguồn thì chỉ phủ nguồn đó. Đã cắm **bộ dò quét rò rỉ chữ Hán
+  trên toàn payload** — chạy 73 bàn trải cả năm, 0 chữ lọt.
+- 🔴 **Vá vấn đề ĐO ĐƯỢC:** engine chỉ cho hướng tốt ở **26,5% số bàn**, trung
+  bình **7,45/9 cung bị đánh hung** (366 bàn cả năm) vì nó gắn cờ hung cho bất kỳ
+  cung nào dính 1 trong 123 hung cách. Tức 3/4 lượt, tool nói "đi đâu cũng xấu".
+  Thêm **thang xếp hạng TƯƠNG ĐỐI** (cửa ±3 · sao/thần ±2 · Tam Kỳ +2 · mỗi cách
+  ±1). **KHÔNG ghi đè cát/hung của engine**, công thức hiện thẳng trên trang,
+  prompt rail bị CẤM gọi nó là cát cách. Trung cung không tham gia xếp hạng.
+- Bàn vẽ **Nam ở trên** theo Lạc Thư (4-9-2/3-5-7/8-1-6) — ngược bản đồ, có nhãn
+  cảnh báo, nếu không người ta đi nhầm hướng đối diện.
+- **Dấu hiệu bàn dựng đúng:** phân bố 8 cửa ra **đúng 11,1% mỗi cửa = 1/9**.
+- Verify: 20 ca Playwright trên trang thật + route thật.
+
+### ⏸️ S3 — CHƯA LÀM, và đây là số đo giải thích vì sao
+Định nâng `almanac` → hoàng đạo + ngày tốt + chọn ngày (3 tool một lượt), rồi
+`liuren`/`bazi`/`xuankong`. Đo `generateAlmanacSelection` trước khi viết:
+**payload 1,1 MB cho 15 ngày · 706 chữ Hán riêng biệt · 1.265 CỤM Hán riêng
+biệt**, phần lớn là **văn bản kiểm toán tính thiên văn** (`求根残差`, `二分求根`,
+`以平均朔望月估计望初值`…) — loại này phiên Hán-Việt ra là **vô nghĩa với người
+đọc**, khác hẳn tên cách cục Kỳ Môn.
+- **Có tầng cấu trúc sạch để bóc** (`lunarDate` `ganzhi` `dayOfficer`
+  `twelveStar` `twentyEightStar` `nineStar` `gods` `recommends` `avoids`
+  `pengZu` `clash` — mỗi trường <1KB), nhưng bảng dịch cho nó (宜/忌 · thần sát ·
+  Bành Tổ bách kỵ · nhị thập bát tú · kiến trừ · cửu tinh) cỡ **200–400 mục**,
+  tức MỘT CHẶNG ngang S2. Không rút gọn được.
+- ⚠️ **Phiên sau: chỉ dùng tầng cấu trúc, VỨT `moonPhaseEvidence` + `*Facts` +
+  `hours`** — chúng chiếm ~95% payload và không phải nội dung hoàng lịch.
+- `liuren`/`bazi`/`xuankong` chưa đo bề mặt dịch.
+
+### 🔑 VIỆC TAY HENRY — chưa làm thì 2 tool mới KHÔNG hiện trên trang Công Cụ
+Migration đã chạy prod nhưng **cố ý `enabled=false`** (cong-cu.html lọc
+`enabled=eq.true`; bật trước deploy là 404 cho người thật). Sau khi deploy:
+```sql
+update tool_pricing set enabled=true, updated_at=now() where tool_id in ('mai-hoa','ky-mon');
+```
 ## 📅 Thẻ "Vận hôm nay" — và 🔴 3 công cụ đang tính SAI CAN CHI NGÀY (2026-08-04, PR này)
 
 Henry: *"tool Vận ngày… nó là tool sẽ attract user vào xem hằng ngày, cần hấp dẫn

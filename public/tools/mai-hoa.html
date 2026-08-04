@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<link rel="preload" href="/nav.js?v=20" as="script">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Mai Hoa Dịch Số — Gieo Quẻ Bằng Số Hoặc Giờ | Tử Vi Minh Bảo</title>
+<meta property="og:title" content="Mai Hoa Dịch Số — Gieo Quẻ Bằng Số Hoặc Giờ | Tử Vi Minh Bảo"/>
+<meta property="og:description" content="Gieo quẻ Mai Hoa Dịch Số — nhập một con số bất kỳ hoặc gieo theo thời điểm. Nhận quẻ Thể, quẻ Dụng và luận ngũ hành sinh khắc qua ba chặng chính, hỗ, biến."/>
+<meta property="og:url" content="https://www.tuviminhbao.com/tools/mai-hoa.html"/>
+<meta property="og:image" content="https://www.tuviminhbao.com/og-image.webp"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Mai Hoa Dịch Số — Gieo Quẻ Bằng Số Hoặc Giờ | Tử Vi Minh Bảo"/>
+<meta name="twitter:description" content="Gieo quẻ Mai Hoa Dịch Số — nhập một con số bất kỳ hoặc gieo theo thời điểm. Nhận quẻ Thể, quẻ Dụng và luận ngũ hành sinh khắc qua ba chặng."/>
+<meta name="twitter:image" content="https://www.tuviminhbao.com/og-image.webp"/>
+<meta name="keywords" content="mai hoa dịch số, gieo quẻ mai hoa, thể dụng, mai hoa dịch số online, gieo quẻ bằng số"/>
+<meta name="description" content="Gieo quẻ Mai Hoa Dịch Số — nhập một con số bất kỳ hoặc gieo theo thời điểm. Nhận quẻ Thể, quẻ Dụng và luận ngũ hành sinh khắc qua ba chặng chính, hỗ, biến."/>
+<link rel="canonical" href="https://www.tuviminhbao.com/tools/mai-hoa.html">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<style>
+.mh-mode{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.mh-mode button{flex:1;min-width:150px;border:1px solid var(--border-lt,#E8E8E8);background:var(--bg-soft,#F5F4F0);color:var(--text-mid,#444);border-radius:8px;padding:11px 14px;font-size:13.5px;font-family:inherit;cursor:pointer;font-weight:600}
+.mh-mode button.on{background:var(--navy,#061A2E);color:#fff;border-color:var(--navy,#061A2E)}
+.mh-card{border:1px solid var(--border-lt,#E8E8E8);border-radius:12px;padding:22px 20px;background:var(--card,#fff)}
+.mh-doi{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center}
+.mh-quai{text-align:center}
+.mh-vai{font-size:9.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt,#777);margin-bottom:12px}
+.mh-quai-hao{display:flex;flex-direction:column;gap:7px;align-items:center;margin-bottom:12px}
+.mh-hao{display:flex;justify-content:center;width:96px}
+.mh-duong{display:block;width:96px;height:13px;border-radius:2px}
+.mh-am{display:flex;gap:10px;width:96px}
+.mh-am i{display:block;width:43px;height:13px;border-radius:2px}
+.mh-ten{font-size:24px;font-weight:700;color:var(--navy,#061A2E);margin-bottom:3px}
+.mh-phu{font-size:12px;color:var(--text-lt,#777)}
+.mh-giua{text-align:center;min-width:104px}
+.mh-mui{font-size:34px;line-height:1;margin-bottom:6px}
+.mh-qh{font-size:12.5px;color:var(--text-mid,#444);margin-bottom:8px}
+.mh-muc{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#fff;padding:4px 11px;border-radius:3px}
+.mh-luan{margin-top:18px;padding-top:16px;border-top:1px solid var(--border-lt,#E8E8E8);font-size:14.5px;line-height:1.75;color:var(--text-mid,#444)}
+.mh-changs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.mh-chang{border:1px solid var(--border-lt,#E8E8E8);border-radius:10px;padding:14px}
+.mh-chang-nhan{font-size:9.5px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--text-lt,#777);margin-bottom:6px}
+.mh-chang-que{font-size:17px;font-weight:700;color:var(--navy,#061A2E)}
+.mh-chang-y{font-size:11.5px;color:var(--text-lt,#777);margin:2px 0 9px}
+.mh-chang-qh{font-size:12px;margin-bottom:6px}
+.mh-chang-qh span{display:inline-block;color:#fff;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:3px;margin-right:5px}
+.mh-chang-td{font-size:11.5px;color:var(--text-lt,#777);line-height:1.5}
+.mh-chang-chu{margin-top:12px;font-size:11.5px;opacity:.62;line-height:1.55}
+.mh-buoc{margin-top:14px;font-size:12px;color:var(--text-lt,#777);line-height:1.6;padding:10px 12px;background:var(--bg-soft,#F5F4F0);border-radius:8px}
+.mh-hao-tu{margin-top:14px;padding:12px 14px;border-left:3px solid var(--gold,#c9a227);background:var(--bg-soft,#F5F4F0);border-radius:0 8px 8px 0}
+.mh-hao-tu .nhan{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;opacity:.65;margin-bottom:5px}
+.mh-hao-tu .han{font-family:"Noto Serif SC",serif;font-size:15.5px;line-height:1.6;margin-bottom:4px}
+.mh-hao-tu .viet{font-size:14px;line-height:1.65}
+.mh-anh{margin-top:18px;border:1px solid var(--border-lt,#E8E8E8);border-radius:10px;overflow:hidden}
+.mh-anh img{display:block;width:100%;height:auto}
+.mh-anh figcaption{padding:9px 12px;font-size:12.5px;opacity:.72}
+.mh-tai{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+@media(max-width:640px){.mh-doi{grid-template-columns:1fr;gap:18px}.mh-changs{grid-template-columns:1fr}}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Mai Hoa Dịch Số là gì?","acceptedAnswer":{"@type":"Answer","text":"Mai Hoa Dịch Số (梅花易數) là phép bói tương truyền của Thiệu Khang Tiết đời Tống. Khác với Kinh Dịch gieo bằng ba đồng tiền, Mai Hoa lập quẻ từ một con số hoặc từ chính thời điểm hỏi, ra đúng một hào động, rồi luận bằng quan hệ ngũ hành giữa quẻ Thể và quẻ Dụng."}},{"@type":"Question","name":"Quẻ Thể và quẻ Dụng khác nhau thế nào?","acceptedAnswer":{"@type":"Answer","text":"Quẻ Thể là mình, là việc mình đang hỏi. Quẻ Dụng là ngoại cảnh, là cái việc ấy gặp phải. Quẻ đơn chứa hào động là Dụng, quẻ đơn còn lại là Thể. Vì vậy Dụng sinh Thể mới là tốt nhất (ngoại cảnh nuôi mình), còn Thể sinh Dụng là hao tổn."}},{"@type":"Question","name":"Mai Hoa Dịch Số khác Kinh Dịch ở điểm nào?","acceptedAnswer":{"@type":"Answer","text":"Kinh Dịch gieo sáu lần, có thể ra nhiều hào động và đọc theo hào từ. Mai Hoa chỉ có một hào động, không lấy hào từ làm chính mà xét ngũ hành Thể–Dụng qua ba chặng: quẻ chính là hiện tại, hỗ quái là diễn biến giữa chừng, biến quái là kết cục."}},{"@type":"Question","name":"Gieo quẻ Mai Hoa bằng số nào cũng được à?","acceptedAnswer":{"@type":"Answer","text":"Đúng, miễn là con số nảy ra tự nhiên trong đầu lúc đang thành tâm nghĩ về việc muốn hỏi — cổ pháp gọi là gieo theo cơ. Giờ gieo cũng tham gia vào phép tính, nên cùng một con số gieo sáng và gieo tối sẽ ra hai quẻ khác nhau."}}]}
+</script>
+</head>
+<body>
+<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Miễn Phí</div>
+    <h1>Mai Hoa <em>Dịch Số</em><br>Gieo Bằng Số Hoặc Giờ</h1>
+    <p>Không cần ngày sinh. Nghĩ tới việc muốn hỏi, nhập một con số bất kỳ — hoặc gieo ngay theo thời điểm này. Nhận quẻ Thể, quẻ Dụng và luận ngũ hành qua ba chặng.</p>
+  </div>
+</div>
+
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Mai Hoa Dịch Số là gì?</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">Một Con Số<br>Cũng Đủ Lập Thành Quẻ</h2>
+          <p class="xt-body">Mai Hoa Dịch Số (梅花易數) tương truyền do Thiệu Khang Tiết đời Tống lập ra. Điểm khác biệt lớn nhất so với Kinh Dịch: không cần đồng tiền, không cần cỏ thi, không cần ngày sinh — chỉ cần một con số nảy ra trong đầu, hoặc chính thời điểm bạn đang hỏi.</p>
+          <p class="xt-body">Nhưng cách <em>đọc</em> mới là chỗ khác hẳn. Kinh Dịch đọc hào từ. Mai Hoa đọc <strong>quan hệ ngũ hành giữa quẻ Thể và quẻ Dụng</strong> — Thể là mình, Dụng là hoàn cảnh. Ai sinh ai, ai khắc ai, đó là toàn bộ câu trả lời.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">Năm Quan Hệ Thể — Dụng</div>
+          <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">Dụng sinh Thể</span><span class="xt-factor-desc">Đại cát — ngoại cảnh mang lợi về cho mình</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">②</span><span class="xt-factor-label">Thể Dụng tỉ hòa</span><span class="xt-factor-desc">Cát — cùng một khí, thuận, không ai cản ai</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">③</span><span class="xt-factor-label">Thể khắc Dụng</span><span class="xt-factor-desc">Tiểu cát — thắng được nhưng phải bỏ sức</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">④</span><span class="xt-factor-label">Thể sinh Dụng</span><span class="xt-factor-desc">Tiểu hung — mình hao đi, nhận lại mỏng</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">⑤</span><span class="xt-factor-label">Dụng khắc Thể</span><span class="xt-factor-desc">Đại hung — hoàn cảnh lấn mình, chớ đối đầu</span></div>
+          <div class="xt-note" style="margin-top:12px">
+            <span class="xt-note-icon"><span class="ic-inline" data-icon-emoji="💡" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#9A7B3A">💡</span></span>
+            <div>Người mới học hay nhớ ngược hai vế đầu. Nhớ thế này cho chắc: Thể là mình, mà cái gì <em>nuôi</em> mình thì tốt, cái gì <em>bị mình nuôi</em> thì mình hao.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <div class="form-section">
+    <div class="section-eyebrow">Lập Quẻ</div>
+    <div class="form-grid cols-1">
+      <div class="form-col">
+        <div class="form-col-title">Câu Hỏi (tuỳ chọn)</div>
+        <div class="form-group">
+          <input class="form-input" type="text" id="cauHoi" placeholder="VD: Việc chuyển chỗ làm này có nên không?" maxlength="100">
+        </div>
+
+        <div class="mh-mode" role="tablist">
+          <button type="button" id="modeGio" class="on" onclick="setMode('gio')">Gieo theo thời điểm này</button>
+          <button type="button" id="modeSo" onclick="setMode('so')">Gieo bằng một con số</button>
+        </div>
+
+        <div class="form-group" id="soWrap" style="display:none">
+          <label class="form-label" for="soInput">Con số nảy ra trong đầu</label>
+          <input class="form-input" type="number" id="soInput" placeholder="VD: 27" min="1" step="1" inputmode="numeric">
+          <div style="font-size:12px;color:var(--text-lt,#777);margin-top:6px">Bất kỳ số nguyên dương nào. Giờ gieo cũng tham gia vào phép tính, nên cùng một số gieo sáng và gieo tối ra hai quẻ khác nhau.</div>
+        </div>
+
+        <button class="btn-submit" id="goBtn" onclick="gieo()" style="width:100%;max-width:340px;display:block;margin:8px auto 0">✦ Lập Quẻ</button>
+      </div>
+    </div>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+
+  <!-- KẾT QUẢ -->
+  <div class="result-section" id="result-section">
+    <div id="cauHoiDisplay" style="font-size:13px;color:var(--text-lt);font-style:italic;margin-bottom:20px;text-align:center"></div>
+    <div id="mhCard"></div>
+    <div id="mhChangs"></div>
+    <div id="mhHaoTu"></div>
+    <div id="mhBuoc"></div>
+    <div id="mhAnh"></div>
+    <div class="mh-tai">
+      <button class="btn-secondary" id="taiBtn" onclick="taiAnh()">⬇ Tải Ảnh Chia Sẻ (9:16)</button>
+      <button class="btn-secondary" onclick="reset()">↺ Gieo Quẻ Khác</button>
+    </div>
+
+    <div style="margin-top:24px;padding:16px 20px;background:var(--bg-soft);border-radius:8px;border-left:3px solid var(--border)">
+      <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);margin-bottom:8px">Lưu Ý Đọc Quẻ</div>
+      <p style="font-size:13px;color:var(--text-mid);line-height:1.7;margin:0">Mai Hoa Dịch Số đọc <em>xu thế</em> của một việc cụ thể tại một thời điểm, không phải vận mệnh cả đời. Cùng một câu hỏi gieo lại vào lúc khác sẽ ra quẻ khác — cổ pháp dặn một việc chỉ gieo một lần, gieo đi gieo lại là tự làm loạn tâm mình.</p>
+    </div>
+  </div>
+
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Xem Sâu Hơn Một Bậc</div>
+    <div class="tool-cta-title">Quẻ Nói Việc, Lá Số Nói Người</div>
+    <div class="tool-cta-desc">Mai Hoa trả lời một việc đang phân vân ngay lúc này. Tử Vi Đẩu Số đọc vận trình dài hạn theo lá số cá nhân — hai hệ thống bổ trợ nhau, không mâu thuẫn.</div>
+    <a class="tool-cta-btn" href="/luan-giai.html">Xem Lá Số Tử Vi →</a>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
+
+<script src="/tuvi-ansao-engine.js"></script>
+<script src="/tools-shared/kinh-dich-hao.js?v=1"></script>
+<script src="/tools-shared/kinh-dich.js?v=5"></script>
+<script src="/tools-shared/mai-hoa.js?v=1"></script>
+<script src="/poster.js?v=2"></script>
+<script>
+// Lập quẻ + render DÙNG CHUNG module /tools-shared/mai-hoa.js với shell /app/mai-hoa.
+// Trang chỉ lo DOM.
+let _mode = 'gio';
+let _r = null;
+
+function setMode(m) {
+  _mode = m;
+  document.getElementById('modeGio').classList.toggle('on', m === 'gio');
+  document.getElementById('modeSo').classList.toggle('on', m === 'so');
+  document.getElementById('soWrap').style.display = m === 'so' ? 'block' : 'none';
+  if (m === 'so') document.getElementById('soInput').focus();
+}
+
+function gieo() {
+  const err = document.getElementById('error-msg');
+  err.classList.remove('show');
+  const g = _mode === 'so'
+    ? MaiHoaTool.gieoTheoSo(document.getElementById('soInput').value)
+    : MaiHoaTool.gieoTheoGio();
+  if (!g.ok) { err.textContent = g.error; err.classList.add('show'); return; }
+  _r = MaiHoaTool.resolve(g);
+  if (!_r.ok) { err.textContent = _r.error || 'Không lập được quẻ.'; err.classList.add('show'); return; }
+  render();
+}
+
+function render() {
+  const r = _r;
+  const cHoi = document.getElementById('cauHoi').value.trim();
+  document.getElementById('cauHoiDisplay').textContent = cHoi ? '"' + cHoi + '"' : '';
+  document.getElementById('mhCard').innerHTML = MaiHoaTool.cardHTML(r);
+  document.getElementById('mhChangs').innerHTML = MaiHoaTool.chungHTML(r);
+  document.getElementById('mhHaoTu').innerHTML = r.haoTu
+    ? '<div class="mh-hao-tu"><div class="nhan">' + r.haoTu.nhan + ' của quẻ chính — tham khảo thêm</div><div class="han">' + r.haoTu.han + '</div><div class="viet">' + r.haoTu.viet + '</div></div>'
+    : '';
+  document.getElementById('mhBuoc').innerHTML = '<div class="mh-buoc"><b>Cách ra quẻ:</b> ' + r.gieo.calc.moTa + ' Hào động là hào ' + r.dong + '.</div>';
+  const kw = r.chinh.que ? r.chinh.que.kw : 0;
+  document.getElementById('mhAnh').innerHTML = kw
+    ? '<figure class="mh-anh"><img src="' + KinhDichTool.anhUrl(r.chinh.li, kw) + '" alt="Tranh quẻ ' + r.chinh.que.q.n + '" loading="lazy" decoding="async" width="1024" height="1536"><figcaption>Quẻ chính · ' + r.chinh.que.q.n + ' ' + r.chinh.que.q.zh + '</figcaption></figure>'
+    : '';
+  document.getElementById('result-section').classList.add('active');
+  document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Tải ảnh 9:16. Tranh quẻ nạp TRƯỚC rồi mới dựng poster — hàm draw của Poster
+// chạy đồng bộ nên không tự đợi ảnh được. Tranh hỏng thì vẫn dựng, chỉ mất nền.
+function taiAnh() {
+  if (!_r || !window.Poster) return;
+  const btn = document.getElementById('taiBtn');
+  const old = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Đang dựng ảnh…';
+  MaiHoaTool.loadAnh(_r)
+    .then(function (img) {
+      const o = MaiHoaTool.posterOpts(_r, document.getElementById('cauHoi').value.trim());
+      o.draw = MaiHoaTool.posterDraw(_r, img);
+      return Poster.download(o, 'mai-hoa-' + (_r.chinh.que ? _r.chinh.que.q.n.toLowerCase().replace(/\s+/g, '-') : 'que') + '-tuviminhbao.png');
+    })
+    .then(function () {
+      if (window.Track) Track.event('poster_download', { tool_id: 'mai-hoa' });
+    })
+    .catch(function () {
+      const err = document.getElementById('error-msg');
+      err.textContent = 'Chưa dựng được ảnh. Thử lại sau ít giây.';
+      err.classList.add('show');
+    })
+    .then(function () {
+      btn.disabled = false;
+      btn.textContent = old;
+    });
+}
+
+function reset() {
+  _r = null;
+  document.getElementById('result-section').classList.remove('active');
+  ['mhCard', 'mhChangs', 'mhHaoTu', 'mhBuoc', 'mhAnh'].forEach(function (id) { document.getElementById(id).innerHTML = ''; });
+  window.scrollTo({ top: document.querySelector('.form-section').offsetTop - 80, behavior: 'smooth' });
+}
+</script>
+<section class="kb-section">
+  <div class="page">
+    <div class="kb-inner">
+      <div class="kb-eyebrow">Kiến Thức Cổ Pháp</div>
+      <h2 class="kb-title">Mai Hoa Dịch Số — Phép Xem Nhanh Của Thiệu Khang Tiết</h2>
+      <div class="kb-body">
+        <p>Mai Hoa Dịch Số gắn với tên tuổi <strong>Thiệu Ung</strong> (邵雍, tự Khang Tiết, 1011–1077) đời Bắc Tống. Giai thoại kể ông nhìn hai con chim sẻ tranh nhau trên cành mai mà đoán ra tối hôm sau có người tới bẻ hoa và ngã gãy đùi — cái tên "Mai Hoa" ra đời từ đó. Giai thoại thì khó kiểm chứng, nhưng tinh thần của phép này thì rõ: <em>vạn vật đều có thể lập thành quẻ</em>, không nhất thiết phải đồng tiền hay cỏ thi.</p>
+        <p>Cách lập quẻ dựa trên <strong>số tiên thiên của bát quái</strong>: Càn 1, Đoài 2, Ly 3, Chấn 4, Tốn 5, Khảm 6, Cấn 7, Khôn 8. Lấy số chia 8 lấy dư ra quẻ trên, cộng thêm số giờ chia 8 lấy dư ra quẻ dưới, cùng tổng ấy chia 6 lấy dư ra hào động. Chia hết thì quy về 8 và về 6 — không phải về 1. Gieo theo thời điểm thì thay con số bằng chi năm cộng tháng cộng ngày âm lịch.</p>
+        <p>Chỗ tinh tuý nằm ở phép đọc. Quẻ đơn nào chứa hào động là <strong>quẻ Dụng</strong> — ngoại cảnh, cái việc mình đang hỏi tới. Quẻ đơn còn lại là <strong>quẻ Thể</strong> — chính mình. Xét ngũ hành hai bên sinh khắc nhau ra sao thì biết việc thuận hay nghịch. Rồi lấy <strong>hỗ quái</strong> (hào 2-3-4 làm quẻ dưới, hào 3-4-5 làm quẻ trên) đọc khúc giữa, lấy <strong>biến quái</strong> đọc kết cục — ba chặng thành một mạch thời gian.</p>
+        <p>Vì lập quẻ nhanh và không đòi thông tin cá nhân, Mai Hoa thường được dùng cho những việc trước mắt: có nên đi chuyến này không, người kia có tới không, món đồ mất còn tìm lại được không. Những câu hỏi lớn về vận mệnh cả đời thì nên xem lá số, không nên gieo quẻ.</p>
+        <p class="kb-links">Xem thêm: <a href="/tools/kinh-dich.html">Gieo Quẻ Kinh Dịch 64 Quẻ</a>, <a href="/tools/luc-nham.html">Lục Nhâm Giản</a>, <a href="/tools/nap-am.html">Tra Nạp Âm</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+<script src="/testimonials.js"></script>
+<script src="/related-tools.js?v=2"></script>
+<script src="/nav.js?v=20" defer></script>
+</body>
+</html>

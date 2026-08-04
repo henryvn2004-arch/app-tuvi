@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kỳ Môn Độn Giáp — Bàn 9 cung — Tử Vi Minh Bảo</title>
+<meta name="description" content="Lập bàn Kỳ Môn Độn Giáp theo giờ — bát môn, cửu tinh, bát thần, tam kỳ trên chín cung. Hướng nào nên đi, hướng nào nên tránh. Hỏi trợ lý AI luận theo việc của bạn.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/shell.css?v=16">
+<style>
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:640px}
+.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:16px}
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:13px}
+.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.fg input{border:1px solid var(--line-2);border-radius:7px;padding:9px 11px;font-size:14px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
+.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif);display:block;margin:4px auto 0;width:100%;max-width:340px}
+.btn-go:disabled{opacity:.6;cursor:not-allowed}
+.km-meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.km-meta div{flex:1;min-width:130px;border:1px solid var(--line,#E8E8E8);border-radius:9px;padding:10px 12px;background:var(--white,#fff)}
+.km-meta span{display:block;font-size:9.5px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--text-lt,#777);margin-bottom:4px}
+.km-meta b{font-size:15px;color:#061A2E}
+.km-ban{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:660px}
+.km-o{border:1px solid var(--line,#E8E8E8);border-left:4px solid var(--km-mau,#8A8F98);border-radius:9px;padding:11px 10px;min-height:132px;background:var(--white,#fff)}
+.km-o.km-cat{background:rgba(47,125,82,.07)}
+.km-o.km-hung{background:rgba(163,59,42,.055)}
+.km-o.km-giua{opacity:.62}
+.km-o-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+.km-huong{font-size:10.5px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;color:var(--text-lt,#777)}
+.km-hang{font-size:10.5px;font-weight:700;color:var(--text-lt,#777)}
+.km-cua{font-size:18px;font-weight:700;margin-bottom:5px;font-family:var(--serif)}
+.km-cua.km-khong{font-size:12.5px;font-weight:400;color:var(--text-lt,#777)}
+.km-dong{font-size:12px;color:var(--text,#444);display:flex;gap:7px;flex-wrap:wrap;margin-bottom:5px}
+.km-can{font-size:12px;color:var(--text,#444);display:flex;gap:6px;align-items:baseline;margin-bottom:5px}
+.km-can b{font-weight:700}
+.km-can i{opacity:.62;font-style:italic}
+.km-ky{background:#C9A84C;color:#fff;font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:3px;font-style:normal}
+.km-cung{font-size:10.5px;color:var(--text-lt,#777)}
+.km-chu{margin-top:12px;font-size:11.5px;line-height:1.6;opacity:.68}
+.km-bang-wrap{overflow-x:auto;margin-top:20px}
+.km-bang{width:100%;border-collapse:collapse;font-size:13px;min-width:620px}
+.km-bang th{text-align:left;font-size:9.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--text-lt,#777);padding:8px 9px;border-bottom:1px solid var(--line,#E8E8E8)}
+.km-bang td{padding:9px;border-bottom:1px solid var(--line,#E8E8E8);vertical-align:top}
+.km-t-hang{font-weight:700;color:var(--text-lt,#777)}
+.km-t-cung{display:block;font-size:11px;color:var(--text-lt,#777)}
+.km-t-diem{font-weight:700;text-align:right}
+.km-pill{display:inline-block;color:#fff;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:3px}
+.km-ly{display:inline-block;border:1px solid;border-radius:3px;font-size:10.5px;padding:1px 6px;margin:2px 3px 0 0}
+.km-t-ly{font-size:12px;line-height:1.55}
+#resPanel{display:none;max-width:820px}
+.ask{margin-top:16px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--gold-soft);border:1px dashed var(--gold-soft);border-radius:8px;padding:7px 12px;cursor:pointer;background:var(--gold-lt);font-family:inherit}
+.km-tai{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+.km-tai button{font-size:12.5px;color:var(--blue);cursor:pointer;background:none;border:1px solid var(--line-2);border-radius:8px;padding:7px 12px;font-family:inherit}
+.km-tai button:disabled{opacity:.6;cursor:not-allowed}
+.km-err{margin-top:10px;font-size:12.5px;color:#B0392B}
+@media(max-width:640px){.km-o{min-height:118px;padding:9px 8px}.km-cua{font-size:15px}}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Kỳ Môn Độn Giáp</b><span>Bàn 9 cung · bát môn · cửu tinh · bát thần</span></div>
+      <div class="ws-actions">
+        <button class="btn" id="btnEdit" onclick="reset()" style="display:none">Lập lại</button>
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div id="shellRecent"></div>
+      <div class="form-card" id="birthPanel">
+        <h2>Lập bàn cho một thời điểm</h2>
+        <p class="sub">Bàn Kỳ Môn đổi theo từng canh giờ (hai tiếng một bàn). Để trống là lập cho chính lúc này. Nhận bàn chín cung với bát môn, cửu tinh, bát thần và tam kỳ, rồi hỏi trợ lý luận theo việc của bạn.</p>
+        <div class="fg">
+          <label>Việc muốn hỏi (tuỳ chọn)</label>
+          <input type="text" id="cauHoi" placeholder="VD: Chiều nay đi gặp đối tác nên đi hướng nào?" maxlength="100">
+        </div>
+        <div class="fg">
+          <label>Thời điểm (để trống = bây giờ)</label>
+          <input type="datetime-local" id="tInput">
+        </div>
+        <button class="btn-go" id="goBtn" onclick="lapBan()">✦ Lập Bàn Kỳ Môn</button>
+        <div class="km-err" id="kmErr" style="display:none"></div>
+      </div>
+
+      <div id="resPanel">
+        <div class="km-meta" id="kmMeta"></div>
+        <div id="kmBan"></div>
+        <div id="kmChiTiet"></div>
+        <div class="km-tai">
+          <button id="taiBtn" onclick="taiAnh()">⬇ Tải ảnh chia sẻ (9:16)</button>
+          <button onclick="reset()">↻ Lập bàn khác</button>
+        </div>
+        <div class="km-err" id="kmErr2" style="display:none"></div>
+        <div class="ask" data-ask="Luận giúp tôi bàn Kỳ Môn này theo đúng việc tôi hỏi: nên đi hướng nào, giờ này hợp làm gì, hướng nào phải tránh và vì sao?">✦ Hỏi trợ lý luận bàn theo việc của tôi</div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='ky-mon';window.SHELL_HISTORY=true;
+window.SHELL_INTRO={key:'ky-mon',title:'Kỳ Môn Độn Giáp',desc:'Đứng đầu <b>Tam Thức</b>. Lập bàn <b>chín cung</b> cho một canh giờ — bát môn, cửu tinh, bát thần, tam kỳ — để biết <b>nên đi hướng nào, hợp làm việc gì</b>, rồi hỏi <b>trợ lý AI</b> luận theo việc của bạn.'};</script>
+<script src="/tools-shared/ky-mon.js?v=1"></script>
+<script src="/poster.js?v=2"></script>
+<script src="/auth.js?v=2"></script>
+  <script src="/nav.js?v=22" data-icons-only></script>
+<script src="/shell.js?v=54"></script>
+<script>
+// Bàn dựng ở SERVER (/api/qimen). Trang chỉ gọi + vẽ, dùng chung module
+// /tools-shared/ky-mon.js với trang standalone /tools/ky-mon.html.
+let _b = null;
+
+function _err(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg || '';
+  el.style.display = msg ? 'block' : 'none';
+}
+
+function lapBan() {
+  _err('kmErr', '');
+  const btn = document.getElementById('goBtn');
+  btn.disabled = true;
+  const raw = document.getElementById('tInput').value;
+  const q = raw ? '?t=' + encodeURIComponent(new Date(raw).toISOString()) : '';
+  fetch('/api/qimen' + q, { headers: { accept: 'application/json' } })
+    .then(function (r) { return r.json(); })
+    .then(function (b) {
+      if (!b || !b.ok) throw new Error((b && b.error) || 'Không dựng được bàn.');
+      _b = b;
+      showResult();
+    })
+    .catch(function (e) { _err('kmErr', e.message || 'Không dựng được bàn Kỳ Môn.'); })
+    .then(function () { btn.disabled = false; });
+}
+
+function showResult() {
+  const b = _b;
+  const cHoi = document.getElementById('cauHoi').value.trim();
+  document.getElementById('kmMeta').innerHTML =
+    '<div><span>Cục</span><b>' + b.cuc + '</b></div>' +
+    '<div><span>Tiết khí</span><b>' + b.tietKhi + ' ' + b.nguyen + '</b></div>' +
+    '<div><span>Giờ · Ngày</span><b>' + b.canChi.gio + ' · ' + b.canChi.ngay + '</b></div>' +
+    '<div><span>Trực phù · Trực sử</span><b>' + b.trucPhu + ' · ' + b.trucSu + '</b></div>';
+  document.getElementById('kmBan').innerHTML = KyMonTool.boardHTML(b);
+  document.getElementById('kmChiTiet').innerHTML = KyMonTool.chiTietHTML(b);
+  document.getElementById('birthPanel').style.display = 'none';
+  document.getElementById('resPanel').style.display = 'block';
+  document.getElementById('btnEdit').style.display = '';
+  if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+
+  const d = Object.assign({}, b.rail, { cauHoi: cHoi });
+  const doNhat = b.cungs.filter(function (c) { return c.hang === 1; })[0];
+  Shell.setContext({
+    scenario: { type: 'ky-mon', data: d },
+    restore: { t: b.luc, cauHoi: cHoi },
+    label: 'Kỳ Môn · ' + b.cuc + ' · giờ ' + b.canChi.gio,
+    greeting: 'Bàn đã lập — **' + b.cuc + '**, tiết ' + b.tietKhi + ' ' + b.nguyen + ', trực phù **' + b.trucPhu + '**, trực sử **' + b.trucSu + '**.' + (doNhat ? ' Hướng xếp hạng cao nhất là **' + doNhat.huong + '**.' : '') + ' Tôi sẽ luận theo việc bạn hỏi.',
+    chips: ['Việc của tôi nên đi hướng nào?', 'Giờ này hợp làm việc gì nhất?', 'Hướng nào phải tránh và vì sao?', 'Trực phù trực sử nói lên điều gì?']
+  });
+
+  const lines = [];
+  if (cHoi) lines.push('Việc hỏi: "' + cHoi + '"');
+  lines.push(b.cuc + ' · tiết ' + b.tietKhi + ' ' + b.nguyen);
+  lines.push('Giờ ' + b.canChi.gio + ' ngày ' + b.canChi.ngay);
+  if (doNhat) lines.push('Hướng đỡ nhất: ' + doNhat.huong + ' — cửa ' + (doNhat.cua ? doNhat.cua.ten : '—'));
+  Shell.setShareable({ kind: 'text', toolId: 'ky-mon', title: 'Bàn Kỳ Môn · ' + b.cuc, text: lines.join('\n') });
+  document.querySelectorAll('#resPanel [data-ask]').forEach(function (el) {
+    el.addEventListener('click', function () { Shell.ask(el.getAttribute('data-ask')); });
+  });
+}
+
+function taiAnh() {
+  if (!_b || !window.Poster) return;
+  _err('kmErr2', '');
+  const btn = document.getElementById('taiBtn');
+  const old = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Đang dựng ảnh…';
+  const o = KyMonTool.posterOpts(_b);
+  o.draw = KyMonTool.posterDraw(_b);
+  Poster.download(o, 'ky-mon-tuviminhbao.png')
+    .then(function () { if (window.Track) Track.event('poster_download', { tool_id: 'ky-mon' }); })
+    .catch(function () { _err('kmErr2', 'Chưa dựng được ảnh. Thử lại sau ít giây.'); })
+    .then(function () { btn.disabled = false; btn.textContent = old; });
+}
+
+function reset() {
+  _b = null;
+  ['kmMeta', 'kmBan', 'kmChiTiet'].forEach(function (id) { document.getElementById(id).innerHTML = ''; });
+  document.getElementById('resPanel').style.display = 'none';
+  document.getElementById('birthPanel').style.display = 'block';
+  document.getElementById('btnEdit').style.display = 'none';
+  _err('kmErr', ''); _err('kmErr2', '');
+  Shell.setShareable(null);
+}
+
+// Khôi phục phiên: lập lại bàn của ĐÚNG thời điểm cũ, không phải bây giờ —
+// bàn Kỳ Môn đổi mỗi canh giờ nên mở lại phiên cũ mà lấy giờ hiện tại là ra
+// một bàn hoàn toàn khác với cái người dùng đã đọc.
+(function () {
+  function _restore() {
+    const r = window.Shell && Shell.pendingRestore && Shell.pendingRestore();
+    if (r && r.t) {
+      if (r.cauHoi) document.getElementById('cauHoi').value = r.cauHoi;
+      fetch('/api/qimen?t=' + encodeURIComponent(r.t))
+        .then(function (x) { return x.json(); })
+        .then(function (b) { if (b && b.ok) { _b = b; showResult(); } })
+        .catch(function () {});
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _restore);
+  else _restore();
+})();
+</script>
+</body>
+</html>

@@ -53,6 +53,8 @@
     ] },
     { group: 'Huyền Học', open: false, items: [
       { id: 'kinh-dich',  label: 'Kinh Dịch — Gieo quẻ', href: '/app/kinh-dich', icon: 'yin' },
+      { id: 'mai-hoa',    label: 'Mai Hoa Dịch Số',     href: '/app/mai-hoa',   icon: 'flower' },
+      { id: 'ky-mon',     label: 'Kỳ Môn Độn Giáp',     href: '/app/ky-mon',    icon: 'grid' },
       { id: 'luc-nham',   label: 'Lục Nhâm Giản',       href: '/app/luc-nham',   icon: 'compass' },
       { id: 'than-so-hoc', label: 'Thần số học',        href: '/app/than-so-hoc', icon: 'hash' },
     ] },
@@ -85,6 +87,8 @@
     building: '<rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M10 21v-3h4v3"/>',
     star: '<path d="m12 3 2.6 5.9 6.4.5-4.9 4.2 1.5 6.3L12 17l-5.6 3.4 1.5-6.3L3 9.9l6.4-.5z"/>',
     wave: '<path d="M2 12c2 0 2-6 4-6s2 12 4 12 2-12 4-12 2 6 4 6"/>',
+    // Hoa mai năm cánh — Mai Hoa Dịch Số (梅花易數) lấy tên từ cành mai.
+    flower: '<circle cx="12" cy="12" r="2.2"/><path d="M12 9.8V4.6"/><path d="M14.1 10.7l3.7-3.7"/><path d="M14.2 13.3l4.9 1.6"/><path d="M10.8 14l-3 4.2"/><path d="M9.8 12.4L4.6 10.7"/>',
     yin: '<circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9 9 9 0 0 1 0-18z"/><circle cx="12" cy="7.5" r="1"/><circle cx="12" cy="16.5" r="1"/>',
     hash: '<path d="M9 3 7 21M17 3l-2 18M4 8h16M3 16h16"/>',
     hand: '<path d="M8 13V5a1.5 1.5 0 0 1 3 0v6M11 11V3.5a1.5 1.5 0 0 1 3 0V11m0-4.5a1.5 1.5 0 0 1 3 0V12m0 .5V10a1.5 1.5 0 0 1 3 0v5.5c0 3.6-2 6.5-6 6.5h-1.5c-2.6 0-3.6-.9-5.2-3.4L5 15c-.7-1.1.5-2.4 1.7-1.7L8 14"/>',
