@@ -210,7 +210,13 @@ export async function GET(req: NextRequest) {
     // NHƯNG khi người gọi đưa `?scene=` thì ý định là VẼ ĐÈ bản cũ bằng sự việc
     // mới, nên bỏ qua chốt này — nếu không thì mọi lượt thử cảnh mới đều bị
     // chính bản cũ chặn lại và không hiểu vì sao không có gì đổi.
-    const veDe = !!sp.get('scene') || !!sp.get('motifs');
+    //
+    // `?vede=1` — vẽ đè có chủ đích, KHÔNG đổi mô-típ. Cần khi ĐỔI MODEL: bộ
+    // ảnh cũ vẫn đúng chỗ, đúng tên, chỉ là do model khác vẽ, nên chốt "đã có
+    // thì thôi" sẽ giữ nguyên chúng và bộ 64 bức lẫn hai nét vẽ mà không gì
+    // báo. Xoá tay file cũ rồi vẽ lại cũng được, nhưng xoá trước khi vẽ nghĩa
+    // là lượt vẽ hỏng thì mất trắng bản đang có.
+    const veDe = !!sp.get('scene') || !!sp.get('motifs') || sp.get('vede') === '1';
     const co = veDe ? null : await fetch(url, { method: 'HEAD', cache: 'no-store' }).catch(() => null);
     if (co?.ok) {
       boQua++;
