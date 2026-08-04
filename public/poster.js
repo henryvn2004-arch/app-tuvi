@@ -263,6 +263,138 @@
     ctx.fillText('tuviminhbao.com', tx, fy);
   }
 
+  // ── Poster "Vận ngày" — KHÔNG có vùng nghệ thuật ─────────────────────────
+  // Thẻ vận ngày không sinh ra bức ảnh nào VÀ cũng không có biểu đồ để vẽ, nên
+  // bản này bày chữ trên TOÀN khung thay vì chia đôi ảnh/chữ. Dùng lại nguyên
+  // bộ helper chữ + triện + chân trang để mọi ảnh ra ngoài đời cùng một nhà.
+  //
+  // ⚠️ CỐ Ý KHÔNG đi qua `build({draw})`: chế độ `draw` giữ nguyên bố cục
+  // ảnh-trên-chữ-dưới (vùng nghệ thuật cao IMG_H rồi mới tới tiêu đề/câu
+  // trích), hợp cho bàn Kỳ Môn / quẻ Mai Hoa. Vận ngày thì phần trên đó rỗng —
+  // dùng `draw` là tự chừa 1240px trống rồi nhồi hết chữ xuống 1/3 dưới.
+  var VERDICT_COLOR = { tốt: '#4C9A6A', xấu: '#C0563F', bình: '#8A7A45' };
+
+  function drawDayPoster(ctx, seal, o) {
+    ctx.fillStyle = NAVY;
+    ctx.fillRect(0, 0, W, H);
+
+    // Vầng sáng góc trên — cùng ngôn ngữ với thẻ trên web (.today-card .glow).
+    var glow = ctx.createRadialGradient(W - 120, 90, 0, W - 120, 90, 620);
+    glow.addColorStop(0, 'rgba(201,168,76,0.20)');
+    glow.addColorStop(1, 'rgba(201,168,76,0)');
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, W, 760);
+
+    ctx.textBaseline = 'alphabetic';
+    ctx.textAlign = 'left';
+    var maxW = W - PAD * 2;
+
+    // Nhãn thương hiệu
+    var y = 250;
+    ctx.fillStyle = GOLD;
+    ctx.fillRect(PAD, y - 9, 56, 3);
+    ctx.font = '600 24px ' + SANS;
+    drawTracked(ctx, 'TỬ VI MINH BẢO', PAD + 78, y, 5);
+
+    // Huy hiệu tốt/bình/xấu — đọc lướt 1 giây, giống hệt vai trò trên web.
+    y = 330;
+    ctx.font = '600 30px ' + SANS;
+    var label = o.verdictLabel || '';
+    var bw = ctx.measureText(label).width + 56;
+    ctx.fillStyle = VERDICT_COLOR[o.verdict] || VERDICT_COLOR['bình'];
+    if (ctx.roundRect) {
+      ctx.beginPath();
+      ctx.roundRect(PAD, y - 40, bw, 60, 30);
+      ctx.fill();
+    } else ctx.fillRect(PAD, y - 40, bw, 60);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillText(label, PAD + 28, y);
+
+    // Ngày + can chi
+    ctx.font = '700 74px ' + SERIF;
+    ctx.fillStyle = '#FFFFFF';
+    y = drawLines(ctx, clampLines(ctx, wrapAll(ctx, o.title, maxW), 2, maxW), PAD, 460, 88) - 88;
+
+    if (o.subtitle) {
+      ctx.font = '400 32px ' + SANS;
+      ctx.fillStyle = 'rgba(255,255,255,0.62)';
+      y += 58;
+      drawLines(ctx, clampLines(ctx, wrapAll(ctx, o.subtitle, maxW), 2, maxW), PAD, y, 44);
+      y += 44;
+    }
+
+    // Câu chốt
+    if (o.quote) {
+      ctx.font = 'italic 400 38px ' + SERIF;
+      var qx = PAD + 34,
+        qw = W - qx - PAD;
+      var qLines = clampLines(ctx, wrapAll(ctx, o.quote, qw), 3, qw);
+      var qTop = y + 96;
+      ctx.fillStyle = 'rgba(201,168,76,0.55)';
+      ctx.fillRect(PAD, qTop - 40, 4, qLines.length * 56 - 6);
+      ctx.fillStyle = GOLD_SOFT;
+      y = drawLines(ctx, qLines, qx, qTop, 56);
+    }
+
+    // Các dòng dữ kiện (nên / kiêng / giờ tốt / xung tuổi) — mỗi dòng một nhãn
+    // nhỏ + nội dung, cắt còn 1 dòng để bố cục không trôi theo độ dài chữ.
+    var rows = (o.rows || []).slice(0, 4);
+    // Căn GIỮA khối dữ kiện trong khoảng còn lại (dưới câu chốt → trên chân
+    // trang) thay vì neo cứng một toạ độ: số dòng thay đổi theo ngày (có ngày
+    // không kiêng việc nào), neo cứng thì hôm thừa hôm thiếu một khoảng trống
+    // to đúng giữa ảnh.
+    var ROW_H = 130,
+      TOP = y + 120,
+      BOT = 1700;
+    var ry = TOP + Math.max(0, (BOT - TOP - rows.length * ROW_H) / 2);
+    for (var i = 0; i < rows.length; i++) {
+      ctx.font = '600 23px ' + SANS;
+      ctx.fillStyle = 'rgba(255,255,255,0.42)';
+      drawTracked(ctx, String(rows[i][0]).toUpperCase(), PAD, ry, 3);
+      ctx.font = '400 36px ' + SANS;
+      ctx.fillStyle = '#FFFFFF';
+      drawLines(ctx, clampLines(ctx, wrapAll(ctx, rows[i][1], maxW), 1, maxW), PAD, ry + 52, 46);
+      ry += ROW_H;
+    }
+
+    // Chân trang neo CỨNG ở đáy — người ta nhìn góc dưới để biết ảnh từ đâu ra.
+    var fy = 1802;
+    var tx = PAD;
+    if (seal) {
+      var sh = 84,
+        sw = (seal.width / seal.height) * sh;
+      ctx.drawImage(seal, PAD, fy - 58, sw, sh);
+      tx = PAD + sw + 22;
+    }
+    ctx.font = '600 32px ' + SANS;
+    ctx.fillStyle = GOLD;
+    ctx.fillText('tuviminhbao.com', tx, fy);
+  }
+
+  function buildDay(opts) {
+    var o = opts || {};
+    return Promise.all([
+      loadImage('/seal.webp', false).catch(function () {
+        return null;
+      }),
+      ensureFonts(opts.fonts),
+    ]).then(function (r) {
+      var cv = document.createElement('canvas');
+      cv.width = W;
+      cv.height = H;
+      drawDayPoster(cv.getContext('2d'), r[0], o);
+      return new Promise(function (resolve, reject) {
+        try {
+          cv.toBlob(function (b) {
+            b ? resolve(b) : reject(new Error('toBlob_null'));
+          }, 'image/png');
+        } catch (e) {
+          reject(e);
+        }
+      });
+    });
+  }
+
   function toBlob(opts, paintArt) {
     return Promise.all([
       loadImage('/seal.webp', false).catch(function () {
@@ -334,9 +466,18 @@
     });
   }
 
+  function downloadDay(opts, filename) {
+    return buildDay(opts).then(function (b) {
+      saveBlob(b, filename);
+      return b;
+    });
+  }
+
   window.Poster = {
     build: build,
     download: download,
+    buildDay: buildDay,
+    downloadDay: downloadDay,
     pickQuote: pickQuote,
     saveBlob: saveBlob,
     WIDTH: W,

@@ -286,12 +286,43 @@ nhân hoá rồi không giao**.
   TS5011 mà tao bỏ qua), làm lint nhảy lên 119 lỗi. Dựng harness kiểu này thì
   `outDir` phải nằm NGOÀI cây repo và phải `git status` lại sau khi chạy.
 
+### ✅ Vòng sau — dải 7 ngày + poster 9:16 (PR sau #409)
+Henry: *"làm luôn đi"* với 2 móc quay lại còn treo.
+- **`computeTuan()`** — 7 ô: thứ · ngày · can chi · tốt/bình/xấu · ngày kỵ, và
+  **`bixung`** (ngày xung CHÍNH tuổi người xem) khi lượt POST có lá số. CỐ Ý chỉ
+  trả tính chất chứ KHÔNG trả trọn `computeVanNgay` cho cả 7 ngày — dải để tô
+  màu, chi tiết thì bấm vào mới xin; nhét đủ 7 ngày làm payload phình ~7 lần cho
+  phần gần như không ai đọc.
+- **Bấm một ô = xem vận ngày đó**, vẫn miễn phí, vẫn 0 lượt LLM. Lượt đó gửi
+  `tuan=0`/`tuan:false` → **dải VẪN neo ở hôm nay**; xin lại dải theo ngày đang
+  xem là mất luôn nghĩa "7 ngày TỚI".
+- **`tinhChatNgay()`** tách ra làm nguồn duy nhất của phép hạ trần ngày kỵ — nếu
+  không thì ô thứ nhất của dải tô màu khác huy hiệu ngay bên trên nó, trong cùng
+  một màn hình.
+- **`Poster.buildDay()`** — poster 9:16 TOÀN CHỮ (thẻ vận ngày không sinh ảnh
+  nào), dùng lại nguyên bộ helper chữ/triện/chân trang của poster chân dung để
+  hai loại ảnh ra ngoài đời trông cùng một nhà. `build()`/`drawPoster()` của
+  chân dung **không bị đụng một dòng nào** (`git diff` chỉ có dòng THÊM) và có ca
+  đối chứng dựng poster chân dung ra đúng 1080×1920.
+- **Nút "Ảnh" TÁCH khỏi nút "Chia sẻ"**, đúng tiền lệ `poster_download` của V3:
+  ảnh tải về không có link bấm được nên không bao giờ sinh `share_view`/
+  `cta_click` — gộp vào `share` là kéo K-factor tụt giả.
+- 🐞 **`style.display=''` KHÔNG hiện được nút "Về hôm nay"**: luật CSS của
+  `.today-back` là `display:none`, gán `''` chỉ xoá inline style rồi rơi về đúng
+  luật đó. Phải `'block'`. Các khối khác trong thẻ ẩn bằng `style="display:none"`
+  ngay trong HTML nên gán `''` ở đó lại đúng — hai cách ẩn, hai cách hiện.
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier`
+  sạch · engine test 181 pass · `node --check` poster.js + 3 khối app-home ·
+  **Playwright trên trang thật**: đúng 7 ô · ngày xấu tô đỏ · bấm ô khác → thẻ
+  đổi đúng can chi, **chỉ 1 lượt gọi API**, dải KHÔNG nhảy · "Về hôm nay" quay
+  lại đúng · **ca ĐỐI CHỨNG** người tuổi Ngọ (1990) → đúng 1 ô "xung" rơi vào
+  ngày Tý · poster tải về là **PNG thật 1080×1920** (đọc IHDR, không tin đuôi
+  file) · chặn `poster.js` → **nút Ảnh tự ẩn**, thẻ vẫn chạy · 390px không tràn.
+- Bump `poster.js?v=2` (5 trang) + `tools-shared/hoang-dao.js?v=2` (3 trang).
+
 ### CÒN LẠI
 - **`luc-nham.js`**: mới vá can ngày; công thức `startOffset = (canNgay*2)%12`
-  cho thần tướng **chưa verify** — khác hệ với 12 thần trực giờ, chưa tra đủ chắc
-  nên CỐ Ý không đụng (bài học `isHoangOc`: sửa mò cổ pháp còn tệ hơn để nguyên).
-- Chưa làm: dải **7 ngày tới** (xanh/vàng/đỏ) và thẻ chia sẻ 9:16 qua `poster.js`
-  — hai móc quay lại còn lại của track.
+  cho thần tướng **chưa verify** — ⚠️ **Henry đang sửa ở phiên khác**, đừng đụng.
 - Bảng **Tài thần** dùng ca quyết *"Giáp Ất Đông Bắc…"*; có một dị bản
   (Giáp-Cấn, Ất-Khôn…) lưu hành song song — đổi thì đổi ở `TAI_THAN`.
 
@@ -1112,6 +1143,16 @@ trigger bằng `deployment_status` ⇒ không phải hết quota. **Cách gỡ: 
 phát lại event `pull_request` và CI dựng lại đủ bộ. Commit rỗng KHÔNG kích được.
 **Bài học: PR "xanh" có thể chỉ là các check VẮNG MẶT, không phải pass — đếm đủ 7 check
 trước khi kết luận.**
+
+**🔁 Tái phát ở PR #410 (2026-08-04) — và close/reopen KHÔNG gỡ được.** Thử đủ ba
+lần đều chỉ ra `smoke` + Vercel: mở PR · close rồi reopen · đẩy commit RỖNG (SHA
+mới). Trong khi đó `pull_request` vẫn chạy bình thường cho PR khác cùng repo
+cùng lúc (dependabot 11:04, một nhánh session khác 10:53) ⇒ **hỏng riêng PR đó,
+không phải hỏng Actions**. Điểm chung nghi nhất: nhánh `claude/…-ji5aub` vừa
+được **dùng lại tên sau khi PR trước của chính nó đã merge** (reset từ main rồi
+force-push). **Thứ gỡ được: MERGE base (`origin/main`) vào nhánh rồi push** —
+commit merge làm CI dựng đủ 7 check ngay lượt đầu. Lần sau gặp lại thì đi thẳng
+bước này, đừng mất 3 lượt như tao.
 
 ### CÒN LẠI
 - **Embedding mục CHƯA sinh** — container không có `OPENAI_API_KEY`. Dòng `kind='full'`

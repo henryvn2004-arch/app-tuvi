@@ -60,6 +60,21 @@
 .tdo-list span::before{content:"✓";color:#7fc79a;font-weight:700;margin-right:7px}
 .tdo-list.no span::before{content:"✗";color:#e08b76}
 .tdo-empty{font-size:12px;color:rgba(255,255,255,.45);font-style:italic}
+/* Dải 7 ngày — nhìn 1 giây biết tuần tới hôm nào nên hẹn việc. Bấm vào một ô
+   là xem vận ngày đó (vẫn miễn phí, vẫn deterministic). */
+.today-week{margin-bottom:15px}
+.tw-row{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.tw-cell{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:7px 2px 6px;text-align:center;cursor:pointer;font-family:inherit;color:inherit;transition:.13s}
+.tw-cell:hover{background:rgba(255,255,255,.12)}
+.tw-cell.on{border-color:var(--gold);background:rgba(201,168,76,.16)}
+.tw-thu{font-size:10px;color:rgba(255,255,255,.5);font-weight:600}
+.tw-d{font-size:14px;font-weight:600;color:#fff;margin:2px 0 4px;font-family:var(--serif)}
+.tw-dot{width:100%;height:3px;border-radius:2px;background:#8A7A45}
+.tw-cell.v-tot .tw-dot{background:#4c9a6a}
+.tw-cell.v-xau .tw-dot{background:#c0563f}
+.tw-x{font-size:9px;color:#e08b76;margin-top:3px;line-height:1}
+.today-back{background:none;border:none;color:var(--gold-lt);font-size:12px;font-family:inherit;cursor:pointer;padding:0;margin-bottom:9px;display:none}
+.today-back:hover{text-decoration:underline}
 .today-cta{display:flex;gap:9px;flex-wrap:wrap}
 .today-ask{flex:1;min-width:190px;background:var(--red);color:#fff;border:none;border-radius:10px;padding:12px 16px;font-size:13.5px;font-weight:600;font-family:var(--serif);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px}
 .today-ask:hover{filter:brightness(1.08)}
@@ -82,7 +97,8 @@
         <div class="today-card" id="todayCard" style="display:none">
           <div class="glow"></div>
           <div class="today-hanh" id="todayHanh"></div>
-          <div class="today-eyebrow">Vận hôm nay</div>
+          <div class="today-eyebrow" id="todayEyebrow">Vận hôm nay</div>
+          <button class="today-back" id="todayBack" type="button">← Về hôm nay</button>
           <div class="today-date" id="todayDate">—</div>
           <div class="today-sub" id="todaySub">Số liệu ngày do cổ pháp tính chính xác — hỏi thầy để luận vận riêng cho bạn.</div>
           <div class="today-meta" id="todayMeta"></div>
@@ -102,9 +118,14 @@
             <div class="th-label">Giờ hoàng đạo — giờ tốt trong ngày</div>
             <div class="th-chips" id="todayHours"></div>
           </div>
+          <div class="today-week" id="todayWeek" style="display:none">
+            <div class="th-label">7 ngày tới — bấm để xem ngày đó</div>
+            <div class="tw-row" id="todayWeekRow"></div>
+          </div>
           <div class="today-cta">
             <button class="today-ask" id="todayAsk" type="button">✦ Hỏi thầy vận hôm nay</button>
             <button class="today-share" id="todayShare" type="button">⇪ Chia sẻ</button>
+            <button class="today-share" id="todayPoster" type="button">⤓ Ảnh</button>
           </div>
         </div>
         <div id="homeCards"></div>
@@ -116,7 +137,8 @@
 </div>
 
 <script>window.SHELL_ACTIVE='home';</script>
-<script src="/tools-shared/hoang-dao.js?v=1"></script>
+<script src="/tools-shared/hoang-dao.js?v=2"></script>
+<script src="/poster.js?v=2" defer></script>
 <script src="/tool-prices.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
@@ -251,28 +273,79 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
   }
   function el(id){ return document.getElementById(id); }
 
+  var _birth=null, _hasBirth=false, _today=null, _week=null, _viewing=null;
+
+  function iso(t){ return t.y+'-'+('0'+t.mo).slice(-2)+'-'+('0'+t.d).slice(-2); }
+
+  /* Xin dữ liệu MỘT ngày. `wantTuan` chỉ bật ở lượt đầu (neo dải ở hôm nay) —
+     bấm sang ngày khác mà xin lại cả dải thì dải nhảy theo ngày đang xem, mất
+     luôn ý nghĩa "7 ngày TỚI". */
+  function fetchDay(t,wantTuan){
+    var d=iso(t);
+    return (_hasBirth
+      ? fetch('/api/van-ngay',{method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({d:d,birth:_birth,tuan:!!wantTuan})})
+      : fetch('/api/van-ngay?d='+d+(wantTuan?'':'&tuan=0'))
+    ).then(function(r){ return r.ok?r.json():null; });
+  }
+
   function run(){
   var card=el('todayCard'); if(!card) return;
-  var td=vnToday();
-  var dstr=td.y+'-'+('0'+td.mo).slice(-2)+'-'+('0'+td.d).slice(-2);
+  _today=vnToday();
 
   // birth nhớ trong localStorage theo shape của TuviForm (ngay/thang/nam); rail
   // VÀ api chỉ hiểu shape contract (day/month/year) → PHẢI đổi, đừng truyền thẳng.
-  var birth=null; try{ birth=(Shell.getRememberedBirth&&Shell.birthToApi)?Shell.birthToApi(Shell.getRememberedBirth()):null; }catch(e){}
-  var hasBirth=!!(birth&&birth.day&&birth.month&&birth.year);
+  try{ _birth=(Shell.getRememberedBirth&&Shell.birthToApi)?Shell.birthToApi(Shell.getRememberedBirth()):null; }catch(e){}
+  _hasBirth=!!(_birth&&_birth.day&&_birth.month&&_birth.year);
 
-  var req=hasBirth
-    ? fetch('/api/van-ngay',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({d:dstr,birth:birth})})
-    : fetch('/api/van-ngay?d='+dstr);
+  fetchDay(_today,true)
+    .then(function(v){ if(v&&v.ok){ if(v.tuan)_week=v.tuan; render(v,_today,_birth,_hasBirth); }
+                       else fallback(_today,_birth,_hasBirth); })
+    .catch(function(){ fallback(_today,_birth,_hasBirth); });
 
-  req.then(function(res){ return res.ok?res.json():null; })
-     .then(function(v){ if(v&&v.ok) render(v,td,birth,hasBirth); else fallback(td,birth,hasBirth); })
-     .catch(function(){ fallback(td,birth,hasBirth); });
+  el('todayBack').onclick=function(){ goDay(_today); };
+  }
+
+  /* Chuyển thẻ sang một ngày khác trong dải. Vẫn MIỄN PHÍ, vẫn deterministic —
+     đây là chỗ người ta lướt thử "thứ Bảy này có được không". */
+  function goDay(t){
+    fetchDay(t,false).then(function(v){
+      if(!v||!v.ok) return;
+      render(v,t,_birth,_hasBirth);
+      try{ window.Track&&Track.event('tool_open',{tool_id:'van-ngay',meta:{day:iso(t)}}); }catch(e){}
+    }).catch(function(){});
+  }
+
+  function renderWeek(cur){
+    var host=el('todayWeek'), row=el('todayWeekRow');
+    if(!_week||!_week.length){ host.style.display='none'; return; }
+    row.innerHTML=_week.map(function(x){
+      var on=(x.d===cur.d&&x.m===cur.mo&&x.y===cur.y);
+      return '<button type="button" class="tw-cell'+(x.tinhChat==='tốt'?' v-tot':x.tinhChat==='xấu'?' v-xau':'')
+        +(on?' on':'')+'" data-iso="'+esc(x.iso)+'" title="'+esc(x.canChi+' · ngày '+x.tinhChat+(x.ngayKy?' · ngày kỵ':''))+'">'
+        +'<div class="tw-thu">'+esc(x.thu)+'</div><div class="tw-d">'+x.d+'/'+x.m+'</div>'
+        +'<div class="tw-dot"></div>'+(x.bixung?'<div class="tw-x">xung</div>':'')+'</button>';
+    }).join('');
+    host.style.display='';
+    Array.prototype.forEach.call(row.querySelectorAll('.tw-cell'),function(b){
+      b.onclick=function(){
+        var p=(b.getAttribute('data-iso')||'').split('-');
+        if(p.length===3) goDay({y:+p[0],mo:+p[1],d:+p[2]});
+      };
+    });
   }
 
   /* ── Vẽ thẻ đầy đủ ─────────────────────────────────────────────────────── */
   function render(v,td,birth,hasBirth){
     var card=el('todayCard');
+    _viewing=v;
+    var isToday=!_today||(td.d===_today.d&&td.mo===_today.mo&&td.y===_today.y);
+    el('todayEyebrow').textContent=isToday?'Vận hôm nay':'Vận ngày '+td.d+'/'+td.mo;
+    // 🐞 PHẢI đặt 'block', không phải '': luật CSS của .today-back là
+    // `display:none`, nên gán '' chỉ xoá inline style rồi rơi về đúng luật đó —
+    // nút không bao giờ hiện. (Các khối khác trong thẻ ẩn bằng inline
+    // style="display:none" nên gán '' ở đó lại đúng — khác nhau ở chỗ này.)
+    el('todayBack').style.display=isToday?'none':'block';
     el('todayDate').innerHTML=esc(v.ngay.thu)+' · '+td.d+'/'+td.mo+' — Ngày <span class="cc">'+esc(v.ngay.canChi)+'</span>';
 
     // Nhãn tốt/xấu thay chỗ nhãn "Hành Kim" cũ: hành ngày là thông tin tra cứu,
@@ -342,6 +415,7 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
       return '<span class="th-chip">'+esc(h.chi)+' · '+esc(h.range)+(h.viec?' <i>'+esc(h.viec)+'</i>':'')+'</span>';
     }).join('');
 
+    renderWeek(td);
     card.style.display='';
     wire(v,td,birth,hasBirth,hours);
   }
@@ -415,6 +489,42 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
       var full=txt+' '+url, done=function(){ var o=shareBtn.textContent; shareBtn.textContent='✓ Đã chép link'; setTimeout(function(){shareBtn.textContent=o;},1800); };
       if(navigator.clipboard){ navigator.clipboard.writeText(full).then(done,function(){}); }
       else { try{ var ta=document.createElement('textarea');ta.value=full;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();done(); }catch(e){} }
+    };
+
+    /* Ảnh 9:16 để đăng Story/TikTok. Người Việt chia sẻ ẢNH nhiều hơn chia sẻ
+       LINK, mà ảnh không mang thương hiệu thì lan đi rồi không về.
+       CỐ Ý là nút RIÊNG, không gộp vào "Chia sẻ": ảnh tải về không có link bấm
+       được nên không bao giờ sinh ra share_view/cta_click — gộp chung là kéo
+       K-factor tụt giả (đúng lý do `poster_download` là loại event riêng). */
+    var posterBtn=el('todayPoster');
+    // Đường lùi (API chết) không có đủ dữ kiện để dựng poster → ẩn nút hẳn thay
+    // vì để nó đó rồi bấm không ra gì.
+    posterBtn.style.display=(v.danhGia&&window.Poster&&Poster.downloadDay)?'':'none';
+    posterBtn.onclick=function(){
+      if(!window.Poster||!Poster.downloadDay||!v.danhGia) return;
+      var o=posterBtn.textContent; posterBtn.disabled=true; posterBtn.textContent='Đang dựng…';
+      var rows=[];
+      if(v.nen&&v.nen.length) rows.push(['Nên hôm nay', v.nen.map(function(x){return x.ten;}).join(' · ')]);
+      if(v.kieng&&v.kieng.length) rows.push(['Nên kiêng', v.kieng.map(function(x){return x.ten;}).join(' · ')]);
+      if(hours&&hours.length) rows.push(['Giờ tốt', hours.map(function(h){return h.chi+' '+h.range;}).join(' · ')]);
+      if(v.xung&&v.xung.chi) rows.push(['Xung tuổi', v.xung.chi]);
+      Poster.downloadDay({
+        verdict:v.danhGia.tinhChat,
+        verdictLabel:(v.danhGia.tinhChat==='tốt'?'Ngày tốt':v.danhGia.tinhChat==='xấu'?'Ngày xấu':'Ngày bình'),
+        title:v.ngay.thu+' · '+td.d+'/'+td.mo+' — Ngày '+v.ngay.canChi,
+        subtitle:v.ngay.am+' · hành '+v.ngay.canHanh+' · trực '+v.truc.ten+' · sao '+v.saoNgay.ten,
+        quote:v.danhGia.nhan,
+        rows:rows
+      },'van-ngay-'+td.y+'-'+td.mo+'-'+td.d+'.png').then(function(){
+        try{ window.Track&&Track.event('poster_download',{tool_id:'van-ngay'}); }catch(e){}
+      }).catch(function(){
+        // Dựng hỏng thì phải NÓI, đừng im lặng — người ta bấm mà không thấy gì
+        // là tưởng máy đứng.
+        posterBtn.textContent='✕ Không dựng được'; setTimeout(function(){posterBtn.textContent=o;},2200);
+      }).then(function(){
+        posterBtn.disabled=false;
+        if(posterBtn.textContent==='Đang dựng…') posterBtn.textContent=o;
+      });
     };
   }
   // Chạy SAU khi shell.boot() render rail (boot hoãn tới DOMContentLoaded).
