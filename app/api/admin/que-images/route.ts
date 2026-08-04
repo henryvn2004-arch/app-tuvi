@@ -162,7 +162,14 @@ export async function GET(req: NextRequest) {
         .map((s) => s.trim())
         .filter(Boolean),
     });
-    const path = `${PREFIX}/${String(p.phucHy).padStart(2, '0')}-kw${String(kw).padStart(2, '0')}.png`;
+    // `?tag=` → ghi ra tên file khác thay vì đè bản cũ. Cần cho việc SO SÁNH:
+    // muốn biết `quality=medium` có đủ không thì phải có cả hai bản cùng lúc mà
+    // nhìn, chứ vẽ đè lên rồi thì mất bản để đối chiếu. Lọc ký tự lạ vì chuỗi
+    // này đi thẳng vào đường dẫn lưu trữ.
+    const tag = (sp.get('tag') || '').replace(/[^a-z0-9-]/gi, '').slice(0, 24);
+    const path =
+      `${PREFIX}/${String(p.phucHy).padStart(2, '0')}-kw${String(kw).padStart(2, '0')}` +
+      `${tag ? '-' + tag : ''}.png`;
     const url = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`;
 
     // Đã có thì thôi — gọi lại route sau khi đứt giữa chừng không vẽ lại từ đầu.
@@ -212,7 +219,11 @@ export async function GET(req: NextRequest) {
     loi: ketQua.filter((r) => r.loi).length,
     dungCaLuot: chan,
     conLai: pick.length - ketQua.length,
-    chiPhiUocTinhVnd: daVe * 1658,
+    quality,
+    // Đo thật trên prod: medium ≈ 1.625đ/bức, high ≈ 6.313đ/bức (gấp 3,9 lần).
+    // Trước đây chốt cứng 1.658 nên lượt `high` báo rẻ hơn thực tế 4 lần — đúng
+    // loại "một con số chép tay rồi đứng im" mà repo đã dính nhiều lần.
+    chiPhiUocTinhVnd: daVe * (quality === 'high' ? 6313 : quality === 'low' ? 500 : 1625),
     anh: ketQua,
   });
 }
