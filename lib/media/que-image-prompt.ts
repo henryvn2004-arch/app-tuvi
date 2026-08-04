@@ -36,11 +36,19 @@ const TRIGRAM_NATURE: Record<string, TrigramNature> = {
   '000': { vi: 'Khôn — đất', han: '地', above: 'a broad soft loess plain receding into pale haze', below: 'level cultivated earth in warm ochre in the foreground' },
 };
 
-/** Sắc thái theo cát/bình/hung — đổi dáng NGƯỜI trong tranh, không đổi phong cách. */
-const MOOD_FIGURE: Record<string, string> = {
-  tot: 'a single serene court lady standing composed, sleeves falling still, gaze calm and level',
-  trung: 'a single court lady seated in quiet contemplation, one hand resting on a closed fan, gaze turned inward',
-  canh: 'a single court lady pausing mid-step and glancing back over one shoulder, robe caught in motion, expression watchful',
+/**
+ * Sắc thái cát/bình/hung → ÁNH SÁNG và MÙA, không phải dáng người.
+ *
+ * ⚠️ Bản đầu dùng `f` để chọn 1 trong 3 dáng "mỹ nữ cung đình". Sai hai đường:
+ * (a) 3 biến thể chia cho 64 bức nghĩa là trung bình 21 bức dùng chung một câu
+ * tả nhân vật — nhìn là thấy giống nhau; (b) ép mỹ nữ vào quẻ Sư (quân đội) hay
+ * quẻ Khốn (kiệt quệ) thì vừa gượng vừa sai nghĩa. Nay NHÂN VẬT do hào từ quyết
+ * định (xem `scene`), còn `f` chỉ còn lo bầu không khí — thứ nó thật sự nói được.
+ */
+const MOOD_LIGHT: Record<string, string> = {
+  tot: 'clear late-morning light, air still and luminous, colours at their fullest',
+  trung: 'even overcast daylight, neither bright nor grim, colours held in balance',
+  canh: 'thin failing light of late afternoon, air cooling, colours drawing towards grey',
 };
 
 /**
@@ -60,6 +68,14 @@ export interface QueImageInput {
   zh: string;
   /** Sắc thái: 'tot' | 'trung' | 'canh'. */
   sacThai: string;
+  /**
+   * SỰ VIỆC trong tranh, rút từ HÀO TỪ của chính quẻ đó — người nào, vật gì,
+   * đang làm gì. Đây là phần mang nội dung; thiếu nó thì tranh chỉ còn phong
+   * cảnh trống (đúng lỗi của lượt sinh đầu tiên).
+   *
+   * Bỏ trống → lùi về phong cảnh thuần từ hai quái, KHÔNG bịa nhân vật.
+   */
+  scene?: string;
 }
 
 export interface QueImagePrompt {
@@ -100,16 +116,19 @@ export function buildQueImagePrompt(q: QueImageInput): QueImagePrompt {
   const upper = TRIGRAM_NATURE[q.li.slice(3)];
   if (!lower || !upper) throw new Error(`que-image-prompt: mã hào không hợp lệ "${q.li}"`);
 
-  const figure = MOOD_FIGURE[q.sacThai] || MOOD_FIGURE.trung;
+  const light = MOOD_LIGHT[q.sacThai] || MOOD_LIGHT.trung;
   const canh = `${upper.above}, above ${lower.below}`;
   const hanTu = queHanName(q.li, q.zh);
+  const scene = (q.scene || '').trim();
 
   // Thứ tự khối cố ý: CHỦ ĐỀ trước, PHONG CÁCH sau, chữ/triện cuối. Model đọc
   // phần đầu nặng hơn — để phong cách lên đầu thì 64 bức na ná nhau vì phần
   // phân biệt (cảnh) bị đẩy xuống đuôi.
   const prompt = [
-    `A vertical hanging-scroll painting depicting: ${canh}. In the middle ground, ${figure}.`,
-    `The scene is quiet and uninhabited apart from this one figure. No text or lettering anywhere in the painted scene itself.`,
+    scene
+      ? `A vertical hanging-scroll painting. Setting: ${canh}. Depicted event: ${scene}. ${light}.`
+      : `A vertical hanging-scroll painting depicting: ${canh}. ${light}. An empty landscape with no people.`,
+    `No text or lettering anywhere in the painted scene itself, apart from the inscription and seal described below.`,
     GONGBI_STYLE,
     `In the upper corner, include a column of traditional Chinese calligraphy reading exactly "${hanTu}", brushed in classical regular script, vertically, as an authentic scroll inscription. Use traditional (not simplified) character forms.`,
     `Include a single carved red Chinese seal reading exactly "紫微明寶", naturally integrated as if it were the original painter's signature.`,

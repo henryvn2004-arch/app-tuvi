@@ -35,6 +35,8 @@ const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
 const BUCKET = 'portraits';
 const PREFIX = 'que-phuc-hy';
+/** Trần độ dài phần SỰ VIỆC nhận từ query — một cảnh thật chỉ cỡ 300 ký tự. */
+const MAX_SCENE = 700;
 
 interface QueRow {
   n: string;
@@ -117,12 +119,27 @@ export async function GET(req: NextRequest) {
     if (daVe >= budget) break;
 
     const q = QUE[kw - 1];
-    const p = buildQueImagePrompt({ kingWen: kw, li: q.li, ten: q.n, zh: q.zh, sacThai: q.f });
+    // `?scene=` cho phép thử SỰ VIỆC mới mà không phải deploy lại mỗi vòng.
+    // CỐ Ý chỉ nhận phần sự việc: khối phong cách, dòng thư pháp và triện
+    // 紫微明寶 dựng ở server, người gọi không ghi đè được — nếu không thì
+    // route thành cửa sinh ảnh tuỳ ý bằng tiền của mình.
+    const p = buildQueImagePrompt({
+      kingWen: kw,
+      li: q.li,
+      ten: q.n,
+      zh: q.zh,
+      sacThai: q.f,
+      scene: (sp.get('scene') || '').slice(0, MAX_SCENE),
+    });
     const path = `${PREFIX}/${String(p.phucHy).padStart(2, '0')}-kw${String(kw).padStart(2, '0')}.png`;
     const url = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`;
 
     // Đã có thì thôi — gọi lại route sau khi đứt giữa chừng không vẽ lại từ đầu.
-    const co = await fetch(url, { method: 'HEAD', cache: 'no-store' }).catch(() => null);
+    // NHƯNG khi người gọi đưa `?scene=` thì ý định là VẼ ĐÈ bản cũ bằng sự việc
+    // mới, nên bỏ qua chốt này — nếu không thì mọi lượt thử cảnh mới đều bị
+    // chính bản cũ chặn lại và không hiểu vì sao không có gì đổi.
+    const veDe = !!sp.get('scene');
+    const co = veDe ? null : await fetch(url, { method: 'HEAD', cache: 'no-store' }).catch(() => null);
     if (co?.ok) {
       boQua++;
       ketQua.push({ kingWen: kw, ten: p.ten, hanTu: p.hanTu, url });
