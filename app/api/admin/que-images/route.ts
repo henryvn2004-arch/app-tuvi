@@ -30,6 +30,7 @@ import { buildQueImagePrompt } from '@/lib/media/que-image-prompt';
 import { getConfigValue } from '@/lib/config/appConfig';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import sharp from 'sharp';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -56,6 +57,30 @@ function loadQue(): QueRow[] {
   if (!q || q.length !== 64) throw new Error(`bảng quẻ hỏng: đọc được ${q?.length ?? 0} dòng`);
   _que = q;
   return q;
+}
+
+/**
+ * Đóng TRIỆN THẬT (`public/seal.png`) vào góc dưới-trái sau khi model vẽ xong.
+ *
+ * VÌ SAO KHÔNG ĐỂ MODEL VẼ: bảo nó "vẽ con dấu đỏ ghi 紫微明寶" thì mỗi bức ra
+ * một con dấu khác nhau, chữ thường sai nét — 64 bức thành 64 con dấu, hỏng
+ * đúng cái việc mà con dấu sinh ra để làm là NHẬN DIỆN.
+ *
+ * `blend: 'multiply'` chứ không ghép thẳng: file triện nền TRẮNG, không có
+ * alpha (đã kiểm: 1024×1024, 3 kênh) nên ghép thẳng ra một ô trắng đè lên
+ * tranh. Multiply cho trắng biến mất và giữ nguyên sắc đỏ — cũng đúng cách mực
+ * dấu ăn vào giấy.
+ */
+async function dongTrien(pngB64: string): Promise<Buffer> {
+  const anh = Buffer.from(pngB64, 'base64');
+  const { width = 1024, height = 1536 } = await sharp(anh).metadata();
+  const canh = Math.round(Math.min(width, height) * 0.085); // ~87px trên bản 1024
+  const le = Math.round(canh * 0.7);
+  const trien = await sharp(join(process.cwd(), 'public/seal.png')).resize(canh, canh).toBuffer();
+  return sharp(anh)
+    .composite([{ input: trien, top: height - canh - le, left: le, blend: 'multiply' }])
+    .png()
+    .toBuffer();
 }
 
 /** Lỗi CHẶN — hỏng ở tầng tài khoản/cửa, thử bức tiếp theo cũng hỏng y hệt. */
@@ -130,6 +155,12 @@ export async function GET(req: NextRequest) {
       zh: q.zh,
       sacThai: q.f,
       scene: (sp.get('scene') || '').slice(0, MAX_SCENE),
+      // `?motifs=` — sáu sự việc theo thứ tự hào 1→6, ngăn bằng dấu `|`.
+      motifs: (sp.get('motifs') || '')
+        .slice(0, MAX_SCENE * 2)
+        .split('|')
+        .map((s) => s.trim())
+        .filter(Boolean),
     });
     const path = `${PREFIX}/${String(p.phucHy).padStart(2, '0')}-kw${String(kw).padStart(2, '0')}.png`;
     const url = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`;
@@ -138,7 +169,7 @@ export async function GET(req: NextRequest) {
     // NHƯNG khi người gọi đưa `?scene=` thì ý định là VẼ ĐÈ bản cũ bằng sự việc
     // mới, nên bỏ qua chốt này — nếu không thì mọi lượt thử cảnh mới đều bị
     // chính bản cũ chặn lại và không hiểu vì sao không có gì đổi.
-    const veDe = !!sp.get('scene');
+    const veDe = !!sp.get('scene') || !!sp.get('motifs');
     const co = veDe ? null : await fetch(url, { method: 'HEAD', cache: 'no-store' }).catch(() => null);
     if (co?.ok) {
       boQua++;
@@ -149,6 +180,7 @@ export async function GET(req: NextRequest) {
     try {
       const img = await generatePortraitImage({ prompt: p.prompt, size, quality });
       void logImageUsage('que-phuc-hy', 'gpt-image-1', img.usage);
+      const daDong = await dongTrien(img.b64);
 
       const up = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${path}`, {
         method: 'POST',
@@ -158,7 +190,9 @@ export async function GET(req: NextRequest) {
           'Content-Type': 'image/png',
           'x-upsert': 'true',
         },
-        body: Buffer.from(img.b64, 'base64'),
+        // `new Uint8Array(...)` chứ không đưa thẳng Buffer: kiểu `BodyInit` của
+        // fetch không nhận Buffer, dù lúc chạy vẫn được.
+        body: new Uint8Array(daDong),
       });
       if (!up.ok) throw new Error('lưu ảnh hỏng: ' + (await up.text().catch(() => '')).slice(0, 200));
 
