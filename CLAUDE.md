@@ -5,6 +5,101 @@
 
 ---
 
+## 🎴 Quẻ Phục Hy bằng hình — 64 tranh + cổ pháp đọc quẻ (2026-08-04, PR #399·400·402·406)
+
+Henry hỏi về "quẻ Phục Hy bằng hình" trên xemtuong.net. Truy ra tổ tiên cổ học
+thật: **軌革卦影** (bói bằng tranh, Phí Hiếu Tiên, đời Tống). Làm hẳn cho mình.
+
+### 🔑 Chỗ dễ nói sai nhất — và tao ĐÃ nói sai một lần
+*"Gieo ra hào động nào thì đọc hào từ đó"* **chỉ đúng khi có ĐÚNG MỘT hào động**.
+Cổ pháp **考變占** (Chu Hy, 《易學啟蒙》) rẽ theo **SỐ** hào động:
+
+| Động | Đọc |
+|---|---|
+| 0 | lời quẻ quẻ chính — KHÔNG đọc hào nào |
+| 1 | hào từ của chính hào đó |
+| 2 | cả hai hào, hào **TRÊN** làm chủ |
+| 3 | lời quẻ của **CẢ** chính lẫn biến |
+| 4 | 2 hào **KHÔNG động**, đọc ở **quẻ BIẾN**, hào **DƯỚI** làm chủ |
+| 5 | hào không động duy nhất, ở quẻ biến |
+| 6 | Càn→**Dụng Cửu**, Khôn→**Dụng Lục**, còn lại→lời quẻ quẻ biến |
+
+`kinh-dich-doc.js` (luật) tách khỏi `kinh-dich-hao.js` (384 hào từ + 64 lời quẻ,
+Hán phồn thể + bản Việt) — hai thứ không dính nhau. Verify **4096 ca** (64 quẻ ×
+64 kiểu hào động) + **448 lượt gieo trên trang thật**, 0 ô trống.
+
+### ⚠️ 384 hào từ tiếng Việt là TAO TỰ DỊCH, chưa ai review
+Henry chốt *"sau này có gì sai tao sẽ kêu sửa"*. Đây là chỗ DUY NHẤT của track mà
+máy không kiểm được đúng/sai — `check:hao` chỉ kiểm "có chữ hay không". Sửa là
+sửa data thuần, không đụng logic.
+
+### 🖼️ 64 bức tranh — mô-típ VIẾT TAY, không nhờ LLM lúc chạy
+`lib/media/que-motifs.ts` = 384 mô-típ, dịch hình của 384 hào từ. Vẽ MỘT lần dùng
+mãi ⇒ nhờ model diễn hào ra cảnh mỗi lượt thì hai lần dựng lại ra hai bộ cảnh
+khác nhau và **không ai soát được trước khi đốt tiền**.
+- **Giữ nguyên tính nguyên bản của hào** (Henry chốt): xe chở xác về, máu chảy
+  đen vàng, xẻo mũi chặt chân đều vào tranh. Tao từng tự làm nhẹ 2 hào, Henry
+  bác. **Không lượt nào bị bộ lọc nội dung OpenAI từ chối** — lo hão.
+- **Sáu tầng chiều cao = sáu hào** (dưới→trên = hào 1→6), trùng chiều đọc tranh
+  trục treo. Trang tô sáng tầng mà cổ pháp chỉ đọc → tranh là cách ĐỌC quẻ chứ
+  không phải đồ trang trí.
+- 🐞 Bản đầu chỉ bày tranh của quẻ mà luật đọc dùng ⇒ gieo 4 hào động ra bức của
+  quẻ KHÁC hẳn quẻ vừa gieo. Nay LUÔN bày quẻ chính, thêm quẻ biến khi cần.
+- 🪤 **Tên file mang HAI hệ chỉ số**: `<PhụcHy>-kw<KingWen>.png`. Phục Hy = nhị
+  phân, **hào 1 là bit THẤP NHẤT**. Lấy nhầm thì mỗi quẻ hiện tranh của quẻ khác
+  — mắt không phát hiện được. Chốt bằng phép so 64 URL client xin với 64 file
+  thật trong Storage: **khớp tuyệt đối**.
+
+### 💸 gpt-image-1 → gpt-image-2 (đo THẬT trên prod, 1024×1536 high)
+| | gpt-image-1 | gpt-image-2 |
+|---|---:|---:|
+| Token ảnh ra | 6.240 | **5.488** |
+| Giá thật/bức | 6.315đ | **~4.116đ** |
+| Thời gian/bức | 25–35s | **65–150s** |
+
+Cả bộ 64 bức: **~276.000đ**, 67 lượt model (3 lượt dôi là A/B chọn model).
+- **`gpt-image-1` bị OpenAI tắt 23/10/2026.** Nhưng đó KHÔNG phải lý do chọn
+  model cho việc này — ảnh vẽ một lần rồi nằm kho vĩnh viễn, sống lâu hơn model.
+  Ngày tắt chỉ ràng buộc 2 tool chân dung (gọi model mỗi lượt) — PR #401 lo.
+- Model đọc từ `app_config['que_images.gen'].model` (allowlist) chứ không env:
+  so được hai model cạnh nhau bằng `?tag=` trên CÙNG prompt, không cần deploy.
+- ⚠️ Bảng giá trong route ĐÚNG, nhưng `lib/agent/usage.ts` lúc đó chưa biết model
+  mới nên `events.cost_vnd` ghi cao hơn thật ~3%. PR #401 vá.
+
+### 🪤 Vận hành lượt vẽ hàng loạt — hai bẫy đã trả giá
+1. **Chạy song song KHÔNG nhanh hơn, chỉ đắt hơn.** Cho mỗi lượt vẽ 2 bức rồi
+   bắn 4 lượt song song ⇒ bức thứ hai của cả 4 lượt vượt trần `maxDuration=300s`
+   và bị giết giữa chừng (request đã bay, OpenAI vẫn có thể tính). Chuyển sang
+   **trần 1 bức/lượt, mỗi lượt gọi ĐÚNG một quẻ** — từ đó 0 bức nào mất.
+   Kiểm bằng cách đếm `llm_usage` vs số file trong kho: phải KHỚP.
+2. **MCP `web_fetch_vercel_url` timeout 60s ≠ route chết.** Route chạy tới 300s.
+   Tao đã suýt kết luận nhầm là hỏng vì soi kho quá sớm. **Đừng gọi lại** — gọi
+   lại là trả tiền hai lần. Soi `storage.objects` để biết thật.
+- `?vede=1` vẽ đè có chủ đích (KHÔNG đổi mô-típ, khác `?scene=`/`?motifs=`). Cần
+  khi đổi model: bản cũ vẫn đúng tên đúng chỗ nên chốt "đã có thì thôi" giữ
+  nguyên chúng, bộ 64 bức lẫn hai nét vẽ mà không gì báo.
+- **Quy trình chạy:** bật `enabled`, đặt `budget`/`quality`/`model` → gọi từng
+  quẻ → **TẮT `enabled` ngay sau khi xong**. Cổng là cờ DB (fail-CLOSED), cố ý
+  không phải secret trên URL — secret nằm lại trong log truy cập.
+
+### 3 guard trong CI lint
+`check:hexagrams` (mã hào) · `check:hao` (384 hào từ) · `check:motifs` (384
+mô-típ). Quẻ thiếu mô-típ **vẫn vẽ ra một bức đẹp**, chỉ là không khớp hào nào —
+lỗi đó chỉ lộ khi có người ngồi đối chiếu 64 bức với 384 hào từ.
+
+### Đã bàn, chốt GIỮ NGUYÊN
+`viral.free_gen_daily_cap=6` suy từ giá cũ; model mới rẻ hơn 34% nên cùng
+$15/tháng mua được ~8 lượt/ngày. Henry hỏi *"sao phải cap? user xài thì trả
+credit mà"* — trần chỉ áp lên người **CHƯA TỪNG NẠP** (Lượng của họ 100% là quà:
+25 đăng ký + tối đa 225 thưởng mời), ai đã nạp KHÔNG BAO GIỜ bị chặn. Đo được:
+**0/53 lượt dùng 2 tool ảnh là của người chưa nạp** (53 lượt đều của 1 tài khoản
+đã nạp = bản test), phơi nhiễm thật ~511 Lượng ≈ 22k đ (3 ví to nhất đều là
+`admin_grant`). Cầu dao chưa từng chạm. **Henry chốt để nguyên 6.** Nới:
+`update app_config set value='8'::jsonb where key='viral.free_gen_daily_cap';`
+(≤ 0 = tắt hẳn).
+
+---
+
 ## 🧰 Admin: tách trang · mobile · GIỮ PHIÊN đăng nhập (2026-08-03, PR sau #393)
 
 Henry: *"mục Funnel & Nguồn nhiều nội dung quá, tách ra vài mục được ko"* ·
