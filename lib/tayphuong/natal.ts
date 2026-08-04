@@ -108,8 +108,19 @@ export function lapBanDo(v: DauVaoNatal): BanDoSao {
     })
     .sort((x, y) => y.manh - x.manh);
 
-  const dem = (o: Record<string, string[]> | undefined, nhan: Record<string, string>) =>
-    Object.entries(o || {}).map(([k, arr]) => ({ ten: nhan[k] || k, so: (arr || []).length }));
+  // ⚠️ `summary` của celestine trả HAI dạng cho ba trường trông giống nhau:
+  // `elements`/`modalities` là MẢNG tên sao, còn `hemispheres` là SỐ sẵn.
+  // Bản đầu chỉ đếm `.length` ⇒ bán cầu ra `undefined` và đi thẳng vào prompt
+  // rail ("Bắc (trên) undefined"). `check:terms` không bắt được vì nó chỉ quét
+  // chữ Hán và từ vựng Anh của celestine — `undefined` không thuộc nhóm nào.
+  const dem = (
+    o: Record<string, string[] | number> | undefined,
+    nhan: Record<string, string>
+  ) =>
+    Object.entries(o || {}).map(([k, v]) => ({
+      ten: nhan[k] || k,
+      so: typeof v === 'number' ? v : (v || []).length,
+    }));
 
   return {
     noiSinh: { vido: v.vido, kinhdo: v.kinhdo, muiGio: v.muiGio },
@@ -147,7 +158,7 @@ export function lapBanDo(v: DauVaoNatal): BanDoSao {
     canBang: {
       hanh: dem(ch.summary?.elements, HANH_VI),
       the: dem(ch.summary?.modalities, THE_VI),
-      banCau: dem(ch.summary?.hemispheres as never, {
+      banCau: dem(ch.summary?.hemispheres, {
         north: 'Bắc (trên)', south: 'Nam (dưới)', east: 'Đông (trái)', west: 'Tây (phải)',
       }),
       nghich: ((ch.summary?.retrograde || []) as string[]).map((b) => docHanhTinh(b).ten || b),

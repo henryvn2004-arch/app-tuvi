@@ -192,6 +192,21 @@ console.log('__KQ__' + JSON.stringify(out));
   console.log('Quét chữ chưa dịch trong payload của các tool:\n');
   for (const [ten, r] of Object.entries(kq)) {
     bao(r.han.length === 0, `${ten.padEnd(12)} — chữ Hán lọt: ${r.han.join('') || 'không'}`);
+
+    // 🐞 Loại lỗi THỨ HAI, khác hẳn chữ chưa dịch: giá trị hỏng bị NỘI SUY vào
+    // chuỗi rail. Payload rail phải PHẲNG (`extractGenericContext` bỏ qua mọi
+    // object) nên nó toàn `${...}` — một trường sai kiểu là ra thẳng
+    // "Bắc (trên) undefined" trong prompt gửi LLM, mà `tsc` không bắt được vì
+    // nội suy chấp nhận mọi kiểu.
+    //   · ĐÃ BẮT THẬT: `summary.hemispheres` của celestine trả SỐ trong khi
+    //     `elements`/`modalities` trả MẢNG ⇒ đếm `.length` ra `undefined`.
+    //   · Cùng họ với bug `extractTuBinhContext` từng đẩy `[object Object]`
+    //     vào ngữ cảnh Tử Bình.
+    const hong = ['undefined', 'NaN', '[object Object]'].filter((w) => r.raw.includes(w));
+    bao(
+      hong.length === 0,
+      `${ten.padEnd(12)} — giá trị hỏng lọt chuỗi: ${hong.join(', ') || 'không'}`
+    );
     if (ten === 'ban-do-sao') {
       const sot = ANH_NGUON.filter((w) =>
         new RegExp(`\\b${w.replace(/[-]/g, '\\$&')}\\b`).test(r.raw)
@@ -208,9 +223,11 @@ console.log('__KQ__' + JSON.stringify(out));
 
 if (loi) {
   console.error(
-    `\n❌ ${loi} bảng dịch chưa phủ hết nguồn.\n` +
-      'Bổ sung mục còn thiếu vào `lib/hanviet.ts` hoặc bảng riêng của tool, ' +
-      'rồi chạy lại. ĐỪNG nới bộ dò — chính nó đã bắt được 3 lỗi thật.'
+    `\n❌ ${loi} mục không đạt.\n` +
+      '· Chữ chưa dịch → bổ sung vào `lib/hanviet.ts` hoặc bảng riêng của tool.\n' +
+      '· Giá trị hỏng → sửa chỗ DỰNG chuỗi rail, đừng lọc chuỗi ở đầu ra: ' +
+      '`undefined` ở đó nghĩa là một trường đọc sai kiểu từ engine nguồn.\n' +
+      'ĐỪNG nới bộ dò — nó đã bắt được 5 lỗi thật.'
   );
   process.exit(1);
 }
