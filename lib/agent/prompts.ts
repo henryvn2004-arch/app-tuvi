@@ -448,7 +448,12 @@ ${_TIME()}
 
 Nguyên tắc:
 - ${FORMAT_RULE}
-- Luận theo 4 CON SỐ đã tính sẵn — KHÔNG tự tính lại: Số Đường Đời (hành trình chính), Số Định Mệnh (tài năng bẩm sinh), Số Linh Hồn (khao khát nội tâm), Số Sứ Mệnh (cách hiện ra ngoài); nêu ý nghĩa từng số, chúng bổ trợ hay mâu thuẫn, ứng vào sự nghiệp/tình cảm
+- MỌI chỉ số dưới đây đã tính sẵn — **TUYỆT ĐỐI KHÔNG tự tính lại**, kể cả khi người hỏi đưa lại ngày sinh hay tên
+- ⚠️ Số Đường Đời của trang này tính theo phép **rút gọn NGÀY, THÁNG, NĂM RIÊNG rồi mới cộng** (đúng quy ước thần số học Việt và Hans Decoz). KHÔNG được giải thích bằng lối "cộng tất cả chữ số một lượt" — hai lối cho kết quả khác nhau ở 12% số ngày sinh, và nói lối kia là mâu thuẫn với chính con số đang hiện trên màn hình
+- Bốn số CỐT LÕI: Đường Đời (hành trình chính) · Định Mệnh (tài năng bẩm sinh) · Linh Hồn (khao khát nội tâm) · Sứ Mệnh (cách hiện ra ngoài). Nêu chúng bổ trợ hay mâu thuẫn nhau, ứng vào sự nghiệp/tình cảm
+- Các lớp BỔ SUNG, chỉ dùng khi câu hỏi chạm tới: Ngày Sinh · Thái Độ · Trưởng Thành · Năm Cá Nhân · Biểu Đồ Ngày Sinh (mũi tên mạnh/trống) · Bài Học Còn Thiếu · Đam Mê Tiềm Ẩn · Nợ Nghiệp Quật · Đỉnh Cao & Thử Thách. **Đừng đọc vanh vách cả bảng** — chọn đúng vài lớp trả lời được câu đang hỏi
+- Chỉ số nào ghi "(không có)" / "(không xác định)" thì nói thẳng là không có; KHÔNG bịa ra cho đủ mâm
+- Nợ nghiệp quật và mũi tên trống là điểm YẾU — nói thật, kèm lối gỡ; không bọc đường
 - Số bậc thầy (11/22/33) luận riêng; nói thẳng ưu/khuyết, không tâng bốc
 - Đây là numerology phương Tây (Pythagoras), không trộn lẫn tử vi
 
@@ -1098,6 +1103,22 @@ const GENERIC_LABELS: Record<string, string> = {
   menh: 'Ngũ hành bản mệnh', canBang: 'Cân bằng ngũ hành', tungChu: 'Ngũ hành từng chữ',
   soDuongDoi: 'Số Đường Đời (Life Path)', soDinhMenh: 'Số Định Mệnh',
   soLinhHon: 'Số Linh Hồn', soSuMenh: 'Số Sứ Mệnh',
+  // Thần số học — 7 chỉ số mở thêm 2026-08. Thiếu nhãn thì prompt in key thô
+  // ("muiTenTrong: …") và model rất dễ đọc trượt sang nghĩa khác.
+  soNgaySinh: 'Số Ngày Sinh (tài lẻ bẩm sinh)',
+  soThaiDo: 'Số Thái Độ (ấn tượng đầu tiên, mạnh ở 30–35 năm đầu)',
+  soTruongThanh: 'Số Trưởng Thành (đích nửa sau cuộc đời, từ ~35–40 tuổi)',
+  namXemThanSo: 'Năm đang xét', tuoiHienTai: 'Tuổi hiện tại',
+  namCaNhan: 'Năm cá nhân (bậc trong vòng 9 năm)',
+  bieuDoCo: 'Biểu đồ ngày sinh — số CÓ (kèm số lần lặp)',
+  bieuDoThieu: 'Biểu đồ ngày sinh — số THIẾU',
+  muiTenManh: 'Mũi tên MẠNH (đủ 3 số trên một hàng)',
+  muiTenTrong: 'Mũi tên TRỐNG (thiếu cả 3 số trên một hàng)',
+  baiHocConThieu: 'Bài học còn thiếu (chữ số vắng trong TÊN)',
+  damMeTiemAn: 'Đam mê tiềm ẩn (chữ số lặp nhiều nhất trong TÊN)',
+  noNghiepQuat: 'Nợ nghiệp quật (13/14/16/19)',
+  dinhCaoThuThach: 'Đỉnh Cao & Thử Thách 4 chặng đời',
+  changHienTai: 'Chặng đời người này ĐANG ở',
   cauHoi: 'Câu hỏi người gieo', queChinh: 'Quẻ chính', queBien: 'Quẻ biến', haoDong: 'Hào động',
   ngayDL: 'Ngày (dương lịch)', canChiNgay: 'Can chi ngày', canHanh: 'Ngũ hành can ngày',
   gioHoangDao: 'Giờ Hoàng Đạo (tốt)', gioHacDao: 'Giờ Hắc Đạo (xấu)',
