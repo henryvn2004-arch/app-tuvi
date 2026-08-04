@@ -1022,6 +1022,13 @@ const GENERIC_LABELS: Record<string, string> = {
   gioHoangDao: 'Giờ Hoàng Đạo (tốt)', gioHacDao: 'Giờ Hắc Đạo (xấu)',
   ngayTot: 'Ngày tốt', ngayLuuY: 'Ngày lưu ý (Dương Công Kị)', ngayKi: 'Ngày kị (Tam Nương/Nguyệt Kị)',
   canNgay: 'Can ngày', gio: 'Giờ xem', thanTuong: 'Thần tướng đang trực', catHung: 'Cát/Hung', luan: 'Ý nghĩa thần tướng',
+  // Thẻ "Vận hôm nay" (/app) — nguồn lib/engine/van-ngay.ts. Không có nhãn thì
+  // prompt in ra key thô ("truc: Định") và model dễ đọc trượt sang nghĩa khác.
+  amLich: 'Ngày âm lịch', thuTrongTuan: 'Thứ trong tuần',
+  truc: 'Trực (12 trực)', tu: 'Nhị thập bát tú', saoNgay: 'Sao trực nhật (hoàng/hắc đạo)',
+  tinhChatNgay: 'Tính chất chung của ngày', ngayKy: 'Ngày kỵ cổ truyền',
+  xungTuoi: 'Ngày này xung tuổi', vietNen: 'Việc nên làm', vietKieng: 'Việc nên kiêng',
+  mauHop: 'Màu hợp hành ngày', huongHyThan: 'Hướng Hỷ thần', huongTaiThan: 'Hướng Tài thần',
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractGenericContext(data: any): string {

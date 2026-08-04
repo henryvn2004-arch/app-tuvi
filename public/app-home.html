@@ -35,11 +35,31 @@
 .today-date{font-family:var(--serif);font-size:20px;font-weight:600;line-height:1.25;max-width:calc(100% - 92px)}
 .today-date .cc{color:var(--gold-lt)}
 .today-hanh{position:absolute;top:20px;right:22px;font-size:11px;font-weight:700;color:#2a1e05;background:linear-gradient(135deg,var(--gold-soft),var(--gold));border-radius:20px;padding:4px 12px;white-space:nowrap}
-.today-sub{font-size:12.5px;color:rgba(255,255,255,.72);margin:5px 0 15px;line-height:1.5;max-width:520px}
-.today-hours{margin-bottom:17px}
+/* Nhãn tốt/bình/xấu của ngày — màu là tín hiệu ĐỌC LƯỚT, đừng đổi thành vàng
+   hết: cả điểm của thẻ là nhìn 1 giây biết hôm nay có nên khởi sự không. */
+.today-hanh.v-tot{background:linear-gradient(135deg,#4c9a6a,#2f7a4d);color:#fff}
+.today-hanh.v-xau{background:linear-gradient(135deg,#c0563f,#a13a25);color:#fff}
+.today-sub{font-size:12.5px;color:rgba(255,255,255,.72);margin:5px 0 13px;line-height:1.5;max-width:540px}
+.today-meta{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 13px}
+.tm-item{font-size:11.5px;color:rgba(255,255,255,.74);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:3px 9px;white-space:nowrap}
+.tm-item b{color:var(--gold-lt);font-weight:600}
+.today-warn{display:flex;gap:8px;align-items:flex-start;font-size:12px;line-height:1.5;color:#ffd9cf;background:rgba(192,86,63,.18);border:1px solid rgba(192,86,63,.42);border-radius:9px;padding:8px 11px;margin-bottom:13px}
+.today-me{background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.28);border-radius:10px;padding:11px 13px;margin-bottom:14px}
+.today-me .tme-h{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:5px}
+.today-me .tme-b{font-size:12.5px;color:rgba(255,255,255,.88);line-height:1.55}
+.today-me .tme-b b{color:var(--gold-lt);font-weight:600}
+.today-cols{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:15px}
+@media(max-width:560px){.today-cols{grid-template-columns:1fr;gap:11px}}
+.today-hours{margin-bottom:15px}
 .th-label{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px;font-weight:600}
 .th-chips{display:flex;flex-wrap:wrap;gap:6px}
 .th-chip{font-size:12px;background:rgba(201,168,76,.14);border:1px solid rgba(201,168,76,.3);color:var(--gold-lt);border-radius:20px;padding:5px 11px;white-space:nowrap}
+.th-chip i{font-style:normal;color:rgba(255,255,255,.6);font-size:11px}
+.tdo-list{display:flex;flex-direction:column;gap:5px}
+.tdo-list span{font-size:12.5px;color:rgba(255,255,255,.85);line-height:1.45}
+.tdo-list span::before{content:"✓";color:#7fc79a;font-weight:700;margin-right:7px}
+.tdo-list.no span::before{content:"✗";color:#e08b76}
+.tdo-empty{font-size:12px;color:rgba(255,255,255,.45);font-style:italic}
 .today-cta{display:flex;gap:9px;flex-wrap:wrap}
 .today-ask{flex:1;min-width:190px;background:var(--red);color:#fff;border:none;border-radius:10px;padding:12px 16px;font-size:13.5px;font-weight:600;font-family:var(--serif);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px}
 .today-ask:hover{filter:brightness(1.08)}
@@ -65,6 +85,19 @@
           <div class="today-eyebrow">Vận hôm nay</div>
           <div class="today-date" id="todayDate">—</div>
           <div class="today-sub" id="todaySub">Số liệu ngày do cổ pháp tính chính xác — hỏi thầy để luận vận riêng cho bạn.</div>
+          <div class="today-meta" id="todayMeta"></div>
+          <div id="todayWarn"></div>
+          <div id="todayMe"></div>
+          <div class="today-cols" id="todayCols" style="display:none">
+            <div>
+              <div class="th-label">Nên làm hôm nay</div>
+              <div class="tdo-list" id="todayDo"></div>
+            </div>
+            <div>
+              <div class="th-label">Nên kiêng</div>
+              <div class="tdo-list no" id="todayDont"></div>
+            </div>
+          </div>
           <div class="today-hours">
             <div class="th-label">Giờ hoàng đạo — giờ tốt trong ngày</div>
             <div class="th-chips" id="todayHours"></div>
@@ -190,75 +223,195 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
 
 <script>
 /* ── VẬN HÔM NAY ─────────────────────────────────────────────────────────────
-   Thẻ hero theo ngày: can chi + giờ hoàng đạo (deterministic, MIỄN PHÍ, không
-   bịa số) — dùng chung HoangDaoTool. Mồi rail sang luận VẬN RIÊNG: nếu đã nhớ
-   lá số → gắn birth (thầy luận vận cá nhân, tính Lượng như mọi lượt rail); chưa
-   có → gắn kịch bản hoang-dao (luận theo ngày + mời lập lá số). Nút Chia sẻ đẩy
-   link /app ra ngoài = vòng khám phá. Gói/paywall GIỮ NGUYÊN. */
+   Thẻ hero theo ngày. Số liệu lấy từ `/api/van-ngay` (nguồn: engine ngày-tốt
+   đã có test) — deterministic, MIỄN PHÍ, KHÔNG một lượt LLM nào, không bịa số.
+
+   🔑 Vì sao gọi API chứ không tính ở client như bản cũ: bản cũ dùng
+   `HoangDaoTool` nên chỉ có can chi + giờ hoàng đạo, tức thẻ GIỐNG HỆT NHAU
+   với mọi người — không ai quay lại mỗi ngày để đọc thứ tờ lịch bloc cũng có.
+   Luật 12 trực / 28 tú / ngày kỵ / chấm điểm từng loại việc nằm trong
+   `tuvi-engine` (664 dòng, có test); port sang trình duyệt là tạo bản thứ hai
+   của cùng bộ luật rồi để hai bản trôi khỏi nhau.
+
+   HoangDaoTool GIỮ LẠI làm đường lùi: API hỏng thì thẻ vẫn hiện như bản cũ,
+   KHÔNG biến mất (nó là khối đầu trang chủ).
+
+   Mồi rail: đã nhớ lá số → gắn birth (thầy luận vận riêng, tính Lượng như mọi
+   lượt rail); chưa có → kịch bản hoang-dao. Gói/paywall GIỮ NGUYÊN. */
 (function(){
-  function run(){
-  var card=document.getElementById('todayCard'); if(!card) return;
+  var WD=['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
   function vnToday(){
     try{ var s=new Date().toLocaleString('en-CA',{timeZone:'Asia/Ho_Chi_Minh',year:'numeric',month:'2-digit',day:'2-digit'});
       var m=s.match(/(\d{4})-(\d{2})-(\d{2})/); if(m) return {y:+m[1],mo:+m[2],d:+m[3]}; }catch(e){}
     var t=new Date(); return {y:t.getFullYear(),mo:t.getMonth()+1,d:t.getDate()};
   }
-  var WD=['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
+  function el(id){ return document.getElementById(id); }
+
+  function run(){
+  var card=el('todayCard'); if(!card) return;
   var td=vnToday();
-  if(!window.HoangDaoTool){ return; }
-  var r=HoangDaoTool.compute(td.d,td.mo,td.y);
-  if(!r||!r.ok){ return; }
-  var cc=r.data.canChiNgay;
-  var wd=WD[new Date(td.y,td.mo-1,td.d).getDay()];
-  var hours=(r.data.gioHoangDao||'').split(' · ').slice(0,4).map(function(h){
-    var m=h.match(/^(\S+)\s*\(([^)]+)\)/); return m?{chi:m[1],time:m[2]}:{chi:h,time:''};
-  });
-  document.getElementById('todayDate').innerHTML=esc(wd)+' · '+td.d+'/'+td.mo+' — Ngày <span class="cc">'+esc(cc)+'</span>';
-  document.getElementById('todayHanh').textContent='Hành '+r.data.canHanh;
-  document.getElementById('todayHours').innerHTML=hours.map(function(h){
-    return '<span class="th-chip">'+esc(h.chi)+(h.time?' · '+esc(h.time):'')+'</span>'; }).join('');
-  card.style.display='';
+  var dstr=td.y+'-'+('0'+td.mo).slice(-2)+'-'+('0'+td.d).slice(-2);
 
-  // Mồi rail: cá nhân hoá nếu đã có lá số, không thì theo ngày.
   // birth nhớ trong localStorage theo shape của TuviForm (ngay/thang/nam); rail
-  // thì chỉ hiểu shape contract (day/month/year) → PHẢI đổi, đừng truyền thẳng.
+  // VÀ api chỉ hiểu shape contract (day/month/year) → PHẢI đổi, đừng truyền thẳng.
   var birth=null; try{ birth=(Shell.getRememberedBirth&&Shell.birthToApi)?Shell.birthToApi(Shell.getRememberedBirth()):null; }catch(e){}
-  var hasBirth=!!birth;
-  try{
-    if(hasBirth){
-      var nm=(birth.name||'').trim();
-      document.getElementById('todaySub').textContent='Lá số của bạn đã sẵn sàng — hỏi thầy để luận vận riêng hôm nay.';
-      Shell.setContext({
-        birth:birth,
-        label:'Vận hôm nay'+(nm?' · '+nm:''),
-        greeting:'Hôm nay là ngày **'+cc+'**'+(nm?', '+esc(nm):'')+'. Con muốn thầy soi vận hôm nay — công việc, tài lộc hay tình duyên?',
-        chips:['Hôm nay vận tôi thế nào?','Việc nên làm hôm nay?','Giờ nào tốt cho tôi hôm nay?','Tháng này của tôi ra sao?']
-      });
-    } else {
-      Shell.setContext({
-        scenario:{type:'hoang-dao',data:r.data},
-        label:'Vận ngày '+td.d+'/'+td.mo,
-        greeting:'Hôm nay là ngày **'+cc+'** (hành '+r.data.canHanh+'). Bạn định làm việc gì để tôi chọn giờ đẹp? Lập lá số để tôi luận vận riêng cho bạn.',
-        chips:['Hôm nay nên làm gì, tránh gì?','Giờ nào đẹp để xuất hành?','Lập lá số xem vận của tôi','Ngày mai có tốt không?']
-      });
+  var hasBirth=!!(birth&&birth.day&&birth.month&&birth.year);
+
+  var req=hasBirth
+    ? fetch('/api/van-ngay',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({d:dstr,birth:birth})})
+    : fetch('/api/van-ngay?d='+dstr);
+
+  req.then(function(res){ return res.ok?res.json():null; })
+     .then(function(v){ if(v&&v.ok) render(v,td,birth,hasBirth); else fallback(td,birth,hasBirth); })
+     .catch(function(){ fallback(td,birth,hasBirth); });
+  }
+
+  /* ── Vẽ thẻ đầy đủ ─────────────────────────────────────────────────────── */
+  function render(v,td,birth,hasBirth){
+    var card=el('todayCard');
+    el('todayDate').innerHTML=esc(v.ngay.thu)+' · '+td.d+'/'+td.mo+' — Ngày <span class="cc">'+esc(v.ngay.canChi)+'</span>';
+
+    // Nhãn tốt/xấu thay chỗ nhãn "Hành Kim" cũ: hành ngày là thông tin tra cứu,
+    // còn "hôm nay có nên khởi sự không" mới là thứ người ta mở thẻ để biết.
+    var badge=el('todayHanh');
+    badge.textContent=v.danhGia.tinhChat==='tốt'?'Ngày tốt':v.danhGia.tinhChat==='xấu'?'Ngày xấu':'Ngày bình';
+    badge.className='today-hanh'+(v.danhGia.tinhChat==='tốt'?' v-tot':v.danhGia.tinhChat==='xấu'?' v-xau':'');
+
+    el('todaySub').textContent=v.danhGia.nhan;
+
+    var meta=[
+      ['', v.ngay.am],
+      ['Hành ', v.ngay.canHanh],
+      ['Trực ', v.truc.ten],
+      ['Sao ', v.saoNgay.ten],
+      ['Tú ', v.tu.ten]
+    ].map(function(p){ return '<span class="tm-item">'+esc(p[0])+'<b>'+esc(p[1])+'</b></span>'; });
+    if(v.mau&&v.mau.list&&v.mau.list.length) meta.push('<span class="tm-item">Màu hợp <b>'+esc(v.mau.list.slice(0,2).join(', '))+'</b></span>');
+    if(v.huong) meta.push('<span class="tm-item">Tài thần <b>'+esc(v.huong.taiThan)+'</b></span>');
+    el('todayMeta').innerHTML=meta.join('');
+
+    // Xung tuổi + ngày kỵ — mục ai cũng đọc vì nó gọi tên trực tiếp một nhóm người.
+    var warns=[];
+    if(v.xung&&v.xung.chi){
+      var yrs=(v.xung.namSinh||[]).slice(-4).join(', ');
+      warns.push('Ngày này <b>xung tuổi '+esc(v.xung.chi)+'</b>'+(yrs?' (sinh '+esc(yrs)+')':'')+' — người tuổi này nên lùi việc lớn sang ngày khác.');
     }
-  }catch(e){ if(window.console)console.error('[today]',e); }
+    if(v.ngayKy&&v.ngayKy.length) warns.push('Trùng <b>'+esc(v.ngayKy.join(' + '))+'</b> — cổ pháp kiêng khởi sự.');
+    el('todayWarn').innerHTML=warns.length
+      ? '<div class="today-warn"><span>⚠</span><span>'+warns.join('<br>')+'</span></div>' : '';
 
-  document.getElementById('todayAsk').addEventListener('click',function(){
-    try{ Shell.ask(hasBirth?'Hôm nay vận của tôi thế nào? Nên làm gì, kiêng gì?':'Hôm nay là ngày gì, tôi nên làm gì và tránh gì?'); }catch(e){}
-  });
+    // Khối CÁ NHÂN — vế duy nhất khiến thẻ là "của bạn". Không có lá số thì để
+    // trống có chủ đích: chỗ trống đó chính là CTA lập lá số, đừng lấp bằng
+    // câu chung chung.
+    var me=el('todayMe');
+    if(v.caNhan){
+      var c=v.caNhan, bits=[];
+      bits.push('Ngày hôm nay rơi vào <b>cung '+esc(c.cungNhatHan)+'</b>'+(c.diaChiNhatHan?' ('+esc(c.diaChiNhatHan)+')':'')
+        +(c.chinhTinh&&c.chinhTinh.length?' — chính tinh <b>'+esc(c.chinhTinh.join(', '))+'</b>':' — vô chính diệu'));
+      if(c.bixung) bits.push('⚠ Ngày <b>xung chính tuổi bạn</b> — nên giữ nhịp, tránh quyết định lớn.');
+      var QH={'duoc-sinh':'hành ngày <b>sinh cho bản mệnh</b> — thuận, dễ được giúp',
+              'hoa':'hành ngày <b>cùng hành bản mệnh</b> — hòa, tự chủ được',
+              'sinh':'bản mệnh <b>sinh cho hành ngày</b> — hao lực, nên giữ sức',
+              'bi-khac':'hành ngày <b>khắc bản mệnh</b> — dễ vướng, làm chậm lại',
+              'khac':'bản mệnh <b>khắc hành ngày</b> — chủ động được, hơi tốn công'};
+      if(c.quanHeHanh&&QH[c.quanHeHanh]) bits.push(QH[c.quanHeHanh]+'.');
+      if(c.mauCaNhan&&c.mauCaNhan.length) bits.push('Màu hợp bản mệnh bạn: <b>'+esc(c.mauCaNhan.slice(0,3).join(', '))+'</b>.');
+      me.innerHTML='<div class="today-me"><div class="tme-h">Vận riêng của bạn</div><div class="tme-b">'+bits.join(' ')+'</div></div>';
+    } else {
+      me.innerHTML='<div class="today-me"><div class="tme-h">Vận riêng của bạn</div><div class="tme-b">'
+        +'Trên đây là vận CHUNG của ngày — giống nhau với mọi người. Lập lá số một lần để thấy hôm nay rơi vào cung nào của riêng bạn.</div></div>';
+    }
 
-  // Chia sẻ vận (vòng khám phá): điện thoại mở share sheet native; desktop chép link.
-  var shareBtn=document.getElementById('todayShare');
-  shareBtn.addEventListener('click',function(){
-    var url='https://tuviminhbao.com/app';
-    var hlist=hours.map(function(h){return h.chi+(h.time?' ('+h.time+')':'');}).join(', ');
-    var txt='Vận ngày '+td.d+'/'+td.mo+' — Ngày '+cc+' (hành '+r.data.canHanh+'). Giờ hoàng đạo: '+hlist+'. Xem vận của bạn tại Luận Đường:';
-    if(navigator.share){ navigator.share({title:'Vận hôm nay — Tử Vi Minh Bảo',text:txt,url:url}).catch(function(){}); return; }
-    var full=txt+' '+url, done=function(){ var o=shareBtn.textContent; shareBtn.textContent='✓ Đã chép link'; setTimeout(function(){shareBtn.textContent=o;},1800); };
-    if(navigator.clipboard){ navigator.clipboard.writeText(full).then(done,function(){}); }
-    else { try{ var ta=document.createElement('textarea');ta.value=full;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();done(); }catch(e){} }
-  });
+    // Nên / Kiêng — lấy thẳng điểm từng loại việc của engine, không tự xếp hạng.
+    var doEl=el('todayDo'), dontEl=el('todayDont');
+    doEl.innerHTML=(v.nen&&v.nen.length)
+      ? v.nen.map(function(x){ return '<span>'+esc(x.ten)+'</span>'; }).join('')
+      : '<div class="tdo-empty">Không có việc trọng đại nào được điểm cao hôm nay.</div>';
+    dontEl.innerHTML=(v.kieng&&v.kieng.length)
+      ? v.kieng.map(function(x){ return '<span>'+esc(x.ten)+'</span>'; }).join('')
+      : '<div class="tdo-empty">Không việc nào bị kiêng nặng.</div>';
+    el('todayCols').style.display='';
+
+    // Giờ tốt KÈM việc nên làm — giờ tốt mà không nói để làm gì thì không dùng được.
+    var hours=(v.gioTot||[]).slice(0,4);
+    el('todayHours').innerHTML=hours.map(function(h){
+      return '<span class="th-chip">'+esc(h.chi)+' · '+esc(h.range)+(h.viec?' <i>'+esc(h.viec)+'</i>':'')+'</span>';
+    }).join('');
+
+    card.style.display='';
+    wire(v,td,birth,hasBirth,hours);
+  }
+
+  /* ── Đường lùi: API hỏng → thẻ tối giản như bản cũ ─────────────────────── */
+  function fallback(td,birth,hasBirth){
+    if(!window.HoangDaoTool) return;
+    var r=HoangDaoTool.compute(td.d,td.mo,td.y); if(!r||!r.ok) return;
+    var wd=WD[new Date(td.y,td.mo-1,td.d).getDay()];
+    var hours=(r.data.gioHoangDao||'').split(' · ').slice(0,4).map(function(h){
+      var m=h.match(/^(\S+)\s*\(([^)]+)\)/); return m?{chi:m[1],range:m[2]}:{chi:h,range:''};
+    });
+    el('todayDate').innerHTML=esc(wd)+' · '+td.d+'/'+td.mo+' — Ngày <span class="cc">'+esc(r.data.canChiNgay)+'</span>';
+    el('todayHanh').textContent='Hành '+r.data.canHanh;
+    el('todayHours').innerHTML=hours.map(function(h){
+      return '<span class="th-chip">'+esc(h.chi)+(h.range?' · '+esc(h.range):'')+'</span>'; }).join('');
+    el('todayCard').style.display='';
+    wire({ngay:{canChi:r.data.canChiNgay,canHanh:r.data.canHanh},_flat:r.data},td,birth,hasBirth,hours);
+  }
+
+  /* ── Mồi rail + nút ────────────────────────────────────────────────────── */
+  function wire(v,td,birth,hasBirth,hours){
+    var cc=v.ngay.canChi;
+    try{
+      if(hasBirth){
+        var nm=(birth.name||'').trim();
+        Shell.setContext({
+          birth:birth,
+          label:'Vận hôm nay'+(nm?' · '+nm:''),
+          greeting:'Hôm nay là ngày **'+cc+'**'+(nm?', '+nm:'')+'. Con muốn thầy soi vận hôm nay — công việc, tài lộc hay tình duyên?',
+          chips:['Hôm nay vận tôi thế nào?','Việc nên làm hôm nay?','Giờ nào tốt cho tôi hôm nay?','Tháng này của tôi ra sao?']
+        });
+      } else {
+        // ⚠️ `extractGenericContext` BỎ QUA mọi giá trị là object → payload phải
+        // PHẲNG, nếu không rail nhận được đúng mấy dòng rồi luận chay.
+        var flat=v._flat||{
+          ngayDL:td.d+'/'+td.mo+'/'+td.y, amLich:v.ngay.am, thuTrongTuan:v.ngay.thu,
+          canChiNgay:cc, canHanh:v.ngay.canHanh,
+          truc:v.truc.ten+' ('+v.truc.tinhChat+')', tu:v.tu.ten+' ('+v.tu.tinhChat+')',
+          saoNgay:v.saoNgay.ten+' — '+v.saoNgay.yNghia+(v.saoNgay.hoangDao?' [hoàng đạo]':' [hắc đạo]'),
+          tinhChatNgay:v.danhGia.tinhChat, ngayKy:(v.ngayKy||[]).join(', '),
+          xungTuoi:v.xung?v.xung.chi:'',
+          vietNen:(v.nen||[]).map(function(x){return x.ten;}).join(', '),
+          vietKieng:(v.kieng||[]).map(function(x){return x.ten;}).join(', '),
+          gioHoangDao:(v.gioTot||[]).map(function(h){return h.chi+' ('+h.range+')';}).join(' · '),
+          mauHop:(v.mau&&v.mau.list||[]).join(', '),
+          huongHyThan:v.huong?v.huong.hyThan:'', huongTaiThan:v.huong?v.huong.taiThan:''
+        };
+        Shell.setContext({
+          scenario:{type:'hoang-dao',data:flat},
+          label:'Vận ngày '+td.d+'/'+td.mo,
+          greeting:'Hôm nay là ngày **'+cc+'** (hành '+v.ngay.canHanh+'). Bạn định làm việc gì để tôi chọn giờ đẹp? Lập lá số để tôi luận vận riêng cho bạn.',
+          chips:['Hôm nay nên làm gì, tránh gì?','Giờ nào đẹp để xuất hành?','Lập lá số xem vận của tôi','Ngày mai có tốt không?']
+        });
+      }
+    }catch(e){ if(window.console)console.error('[today]',e); }
+
+    var ask=el('todayAsk');
+    ask.onclick=function(){
+      try{ Shell.ask(hasBirth?'Hôm nay vận của tôi thế nào? Nên làm gì, kiêng gì?':'Hôm nay là ngày gì, tôi nên làm gì và tránh gì?'); }catch(e){}
+    };
+
+    // Chia sẻ vận (vòng khám phá): điện thoại mở share sheet native; desktop chép link.
+    var shareBtn=el('todayShare');
+    shareBtn.onclick=function(){
+      var url='https://tuviminhbao.com/app';
+      var hlist=hours.map(function(h){return h.chi+(h.range?' ('+h.range+')':'');}).join(', ');
+      var txt='Vận ngày '+td.d+'/'+td.mo+' — Ngày '+cc+' (hành '+v.ngay.canHanh+')'
+        +(v.danhGia?', '+v.danhGia.tinhChat:'')+'. Giờ hoàng đạo: '+hlist+'. Xem vận của bạn tại Luận Đường:';
+      if(navigator.share){ navigator.share({title:'Vận hôm nay — Tử Vi Minh Bảo',text:txt,url:url}).catch(function(){}); return; }
+      var full=txt+' '+url, done=function(){ var o=shareBtn.textContent; shareBtn.textContent='✓ Đã chép link'; setTimeout(function(){shareBtn.textContent=o;},1800); };
+      if(navigator.clipboard){ navigator.clipboard.writeText(full).then(done,function(){}); }
+      else { try{ var ta=document.createElement('textarea');ta.value=full;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();done(); }catch(e){} }
+    };
   }
   // Chạy SAU khi shell.boot() render rail (boot hoãn tới DOMContentLoaded).
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
