@@ -558,19 +558,23 @@ ${GIONG_NGUOI_RULES}
 === DỮ LIỆU NGÀY TỐT XẤU TRONG THÁNG ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
-const CHAT_SYSTEM_LUC_NHAM = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia Lục Nhâm (六壬) — bói theo thần tướng giờ/ngày theo cổ pháp, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
+const CHAT_SYSTEM_LUC_NHAM = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia ĐẠI LỤC NHÂM (大六壬) — lập khóa theo nguyệt tướng gia thời, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
 
 ${_TIME()}
 
 Nguyên tắc:
 - ${FORMAT_RULE}
-- Dữ liệu dưới đã tính SẴN thần tướng đang trực tại giờ hỏi (cát/hung) kèm ý nghĩa — dùng ĐÚNG thần tướng đã cho, KHÔNG đổi
-- Luận sâu ý nghĩa thần tướng đó cho việc người hỏi (gặp gỡ, cầu tài, ký kết, xuất hành…); nói thẳng nên/không nên, cách hóa giải nếu hung
-- Giữ tinh thần tham khảo, khuyên hành xử — không phán tuyệt đối
+- Khóa dưới đã lập SẴN đầy đủ: thiên bàn gia địa bàn · tứ khóa · tam truyền · phép thủ truyền · khóa thể · thần sát. Dùng ĐÚNG, TUYỆT ĐỐI không tự lập lại hay đổi một chi nào
+- 🔑 TRÌNH TỰ LUẬN CỦA MÔN NÀY, đi đúng thứ tự: (1) TAM TRUYỀN là xương sống — sơ truyền là đầu mối việc phát ra, trung truyền là diễn biến giữa chừng, mạt truyền là kết cục; (2) TỨ KHÓA cho biết thế đứng của mình (khóa 1–2 thuộc can ngày = người hỏi) và của đối phương/sự việc (khóa 3–4 thuộc chi ngày); (3) thiên tướng đi kèm mỗi truyền nói TÍNH CHẤT của giai đoạn đó
+- Quan hệ ngũ hành đã ghi sẵn từng chỗ — sinh là thuận/được giúp, khắc là trở lực, tỷ hòa là ngang nhau. Đọc thẳng, đừng tự suy lại
+- ⚠️ Truyền nào RƠI TUẦN KHÔNG thì giai đoạn đó hư, việc dễ hụt hoặc chậm — phải nêu ra, đây là chỗ người mới hay bỏ sót
+- Vượng/tướng là đang mạnh; hưu/tù/tử là đang yếu. Cùng một thiên tướng cát mà rơi vào tử thì lực rất mỏng
+- Phép thủ truyền và khóa thể là TÊN CỔ PHÁP — dùng đúng tên đã cho, KHÔNG bịa thêm nghĩa cho tên không có trong dữ liệu
+- Trả lời thẳng câu hỏi (thành/bại, nên tiến hay lui, chừng nào có kết quả) rồi mới dẫn chứng từ khóa; giữ tinh thần tham khảo, không phán tuyệt đối
 
 ${GIONG_NGUOI_RULES}
 
-=== DỮ LIỆU THẦN TƯỚNG LỤC NHÂM ===
+=== KHÓA ĐẠI LỤC NHÂM ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 // ── Vision: Xem tướng qua ảnh (native trong rail, thay vì API legacy) ──
@@ -1072,6 +1076,12 @@ const GENERIC_LABELS: Record<string, string> = {
   gioHoangDao: 'Giờ Hoàng Đạo (tốt)', gioHacDao: 'Giờ Hắc Đạo (xấu)',
   ngayTot: 'Ngày tốt', ngayLuuY: 'Ngày lưu ý (Dương Công Kị)', ngayKi: 'Ngày kị (Tam Nương/Nguyệt Kị)',
   canNgay: 'Can ngày', gio: 'Giờ xem', thanTuong: 'Thần tướng đang trực', catHung: 'Cát/Hung', luan: 'Ý nghĩa thần tướng',
+  // Đại Lục Nhâm — nguồn `/api/liuren` (mingyu-core).
+  canChiGio: 'Can chi giờ', truDem: 'Trú chiêm / Dạ chiêm',
+  nguyetTuongGiaThoi: 'Nguyệt tướng gia thời (cách quay thiên bàn)',
+  quyNhan: 'Vị Quý Nhân', tuanKhong: 'Tuần Không', canNgayKyCung: 'Can ngày ký cung',
+  phapThuTruyen: 'Phép thủ truyền', dangTruyen: 'Dạng tam truyền',
+  tuKhoa: 'TỨ KHÓA', tamTruyen: 'TAM TRUYỀN', khoaThe: 'Khóa thể', thanSat: 'Thần sát',
   // Thẻ "Vận hôm nay" (/app) — nguồn lib/engine/van-ngay.ts. Không có nhãn thì
   // prompt in ra key thô ("truc: Định") và model dễ đọc trượt sang nghĩa khác.
   amLich: 'Ngày âm lịch', thuTrongTuan: 'Thứ trong tuần',

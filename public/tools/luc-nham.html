@@ -113,18 +113,28 @@
   <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
   <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
 </footer>
-<script src="/tools-shared/luc-nham.js?v=1"></script>
+<script src="/tools-shared/luc-nham.js?v=2"></script>
+<script src="/tools-shared/dai-luc-nham.js?v=1"></script>
 <script>
-// Ô giữa dùng CHUNG /tools-shared/luc-nham.js với shell /app/luc-nham.
+// `luc-nham.js` nay CHỈ dùng để kiểm ngày và dựng tiêu đề (can chi ngày của nó
+// đã đúng sau #409). Phần thần tướng lấy từ /api/liuren — xem chú thích đầu
+// `dai-luc-nham.js` về vì sao KHÔNG dùng lại bánh xe thiên tướng cũ.
+function _khiTu(d,m,y,g){
+  // chi giờ → giờ giữa khung (Tý=0 → 00h, Sửu=1 → 02h…), rồi đóng dấu +07:00.
+  var hh=(g*2)%24;
+  return new Date(Date.UTC(+y,+m-1,+d,hh-7,0,0));
+}
 function calculate(){
-  var r=LucNhamTool.compute(document.getElementById('ngay').value,document.getElementById('thang').value,document.getElementById('nam').value,document.getElementById('gio').value);
+  var _d=document.getElementById('ngay').value,_m=document.getElementById('thang').value,
+      _y=document.getElementById('nam').value,_g=+document.getElementById('gio').value||0;
+  var r=LucNhamTool.compute(_d,_m,_y,_g);
   var err=document.getElementById('error-msg');err.classList.remove('active');
   if(!r.ok){err.textContent=r.error;err.classList.add('active');return;}
   document.getElementById('resTitle').textContent=r.titleText;
-  document.getElementById('activeBox').innerHTML=r.activeBoxHTML;
-  document.getElementById('thanWheel').innerHTML=r.thanWheelHTML;
+  document.getElementById('thanWheel').innerHTML='';
   document.getElementById('result-section').classList.add('active');
   document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
+  DaiLucNham.ve(document.getElementById('activeBox'),_khiTu(_d,_m,_y,_g));
 }
 (function(){var t=new Date();document.getElementById('ngay').value=t.getDate();document.getElementById('thang').value=t.getMonth()+1;document.getElementById('nam').value=t.getFullYear();var h=t.getHours();document.getElementById('gio').value=Math.floor(((h*60+60)%(24*60))/120)%12;})();
 </script>
