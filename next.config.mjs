@@ -28,6 +28,7 @@ const nextConfig = {
       { source: '/app/than-so-hoc',     destination: '/app-than-so-hoc.html' },
       { source: '/app/kinh-dich',       destination: '/app-kinh-dich.html'   },
       { source: '/app/mai-hoa',         destination: '/app-mai-hoa.html'     },
+      { source: '/app/ky-mon',          destination: '/app-ky-mon.html'      },
       { source: '/app/tai-khoan',       destination: '/app-tai-khoan.html'   },
       { source: '/app/hoang-dao',       destination: '/app-hoang-dao.html'   },
       { source: '/app/ngay-tot',        destination: '/app-ngay-tot.html'    },

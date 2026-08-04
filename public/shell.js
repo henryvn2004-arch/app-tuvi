@@ -54,6 +54,7 @@
     { group: 'Huyền Học', open: false, items: [
       { id: 'kinh-dich',  label: 'Kinh Dịch — Gieo quẻ', href: '/app/kinh-dich', icon: 'yin' },
       { id: 'mai-hoa',    label: 'Mai Hoa Dịch Số',     href: '/app/mai-hoa',   icon: 'flower' },
+      { id: 'ky-mon',     label: 'Kỳ Môn Độn Giáp',     href: '/app/ky-mon',    icon: 'grid' },
       { id: 'luc-nham',   label: 'Lục Nhâm Giản',       href: '/app/luc-nham',   icon: 'compass' },
       { id: 'than-so-hoc', label: 'Thần số học',        href: '/app/than-so-hoc', icon: 'hash' },
     ] },
