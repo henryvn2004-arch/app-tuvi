@@ -1037,6 +1037,16 @@ phát lại event `pull_request` và CI dựng lại đủ bộ. Commit rỗng K
 **Bài học: PR "xanh" có thể chỉ là các check VẮNG MẶT, không phải pass — đếm đủ 7 check
 trước khi kết luận.**
 
+**🔁 Tái phát ở PR #410 (2026-08-04) — và close/reopen KHÔNG gỡ được.** Thử đủ ba
+lần đều chỉ ra `smoke` + Vercel: mở PR · close rồi reopen · đẩy commit RỖNG (SHA
+mới). Trong khi đó `pull_request` vẫn chạy bình thường cho PR khác cùng repo
+cùng lúc (dependabot 11:04, một nhánh session khác 10:53) ⇒ **hỏng riêng PR đó,
+không phải hỏng Actions**. Điểm chung nghi nhất: nhánh `claude/…-ji5aub` vừa
+được **dùng lại tên sau khi PR trước của chính nó đã merge** (reset từ main rồi
+force-push). **Thứ gỡ được: MERGE base (`origin/main`) vào nhánh rồi push** —
+commit merge làm CI dựng đủ 7 check ngay lượt đầu. Lần sau gặp lại thì đi thẳng
+bước này, đừng mất 3 lượt như tao.
+
 ### CÒN LẠI
 - **Embedding mục CHƯA sinh** — container không có `OPENAI_API_KEY`. Dòng `kind='full'`
   đã dùng được ngay (prompt injection không cần embedding); `search_brand_voice()` trả rỗng
