@@ -164,21 +164,81 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
     return html;
   }
 
+  const _esc = (s) =>
+    String(s == null ? '' : s).replace(
+      /[&<>"']/g,
+      (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]
+    );
+
+  /**
+   * Gom các mục cổ pháp chỉ ra: luật đọc + lời quẻ / hào từ áp dụng.
+   *
+   * Vì sao KHÔNG chỉ hiện hết 6 hào: cổ pháp (考變占) rẽ theo SỐ hào động, có ca
+   * chỉ đọc lời quẻ, có ca đọc hào của quẻ BIẾN. Bày cả 6 hào ra là bỏ mất phần
+   * quan trọng nhất — biết ĐỌC CÁI NÀO. Xem `kinh-dich-doc.js`.
+   *
+   * Trả `[]` khi thiếu module phụ, để trang cũ chưa nạp đủ script không vỡ.
+   */
+  function loiDoc(r, currentLines) {
+    const Doc = root.KinhDichDoc || (typeof require === 'function' ? null : null);
+    const Hao = root.KinhDichHao || null;
+    if (!Doc || !Hao) return null;
+    const chon = Doc.chonLoiDoc(currentLines || []);
+    const muc = chon.doc
+      .map((m) => {
+        const kw = (m.nguon === 'bien' ? r.cIdx : r.pIdx) + 1;
+        if (kw < 1) return null;
+        const loi = Hao.layLoi(kw, m);
+        if (!loi) return null;
+        return { ...m, ...loi, queTen: (m.nguon === 'bien' ? r.cQue : r.que).n };
+      })
+      .filter(Boolean);
+    return { luat: chon.luat, soHaoDong: chon.soHaoDong, muc };
+  }
+
+  /** HTML khối "Cổ pháp chỉ đọc gì" — đặt dưới lưới quẻ. */
+  function docHTML(r, currentLines) {
+    const d = loiDoc(r, currentLines);
+    if (!d) return '';
+    const rows = d.muc
+      .map(
+        (m) => `<div class="kd-loi${m.chinh ? ' kd-chu' : ''}">
+      <div class="kd-loi-nhan">${_esc(m.nhan)} · ${_esc(m.queTen)}${m.nguon === 'bien' ? ' (quẻ biến)' : ''}${m.chinh && d.muc.length > 1 ? ' · làm chủ' : ''}</div>
+      <div class="kd-loi-han">${_esc(m.han)}</div>
+      <div class="kd-loi-viet">${_esc(m.viet)}</div>
+    </div>`
+      )
+      .join('');
+    return `<div class="kd-doc">
+    <div class="kd-doc-luat"><b>${d.soHaoDong} hào động</b> — ${_esc(d.luat)}</div>
+    ${rows}
+    <div class="kd-doc-nguon">Luật đọc theo <i>Khảo Biến Chiêm</i> (Chu Hy, <i>Dịch Học Khải Mông</i>) — số hào động quyết định đọc lời quẻ hay hào từ, ở quẻ chính hay quẻ biến.</div>
+  </div>`;
+  }
+
   // ── Dữ liệu thô cho rail (trợ lý luận sâu) ──
   function railData(r, cauHoi, currentLines) {
     const dongHao = (currentLines || [])
       .map((l, i) => (l.changing ? `hào ${i + 1} (${l.val})` : ''))
       .filter(Boolean)
       .join(', ');
+    const d = loiDoc(r, currentLines);
     return {
       cauHoi: cauHoi || '',
       queChinh: `${r.que.n} (${r.que.zh}) — ${r.que.m}`,
       queBien: r.cQue ? `${r.cQue.n} (${r.cQue.zh}) — ${r.cQue.m}` : '',
       haoDong: dongHao || 'không có hào động',
+      // Đưa ĐÚNG phần cổ pháp chỉ ra cho rail, kèm luật, để trợ lý luận bám vào
+      // đó thay vì tự chọn hào — nếu không thì chữ trên màn hình nói một đằng,
+      // trợ lý luận một nẻo.
+      luatDoc: d ? d.luat : '',
+      loiApDung: d
+        ? d.muc.map((m) => `${m.nhan} (${m.queTen}${m.nguon === 'bien' ? ', quẻ biến' : ''}): ${m.han} — ${m.viet}`)
+        : [],
     };
   }
 
-  const API = { QUE, findHexagram, resolve, gridHTML, railData };
+  const API = { QUE, findHexagram, resolve, gridHTML, docHTML, loiDoc, railData };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   else root.KinhDichTool = API;
 })(typeof window !== 'undefined' ? window : globalThis);

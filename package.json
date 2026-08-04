@@ -12,6 +12,7 @@
     "lint": "eslint .",
     "check:prices": "node scripts/check-no-hardcoded-prices.mjs",
     "check:hexagrams": "node scripts/check-hexagram-table.mjs",
+    "check:hao": "node scripts/check-hao-data.mjs",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
