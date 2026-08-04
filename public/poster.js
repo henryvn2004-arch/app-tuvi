@@ -377,7 +377,7 @@
       loadImage('/seal.webp', false).catch(function () {
         return null;
       }),
-      ensureFonts(),
+      ensureFonts(opts.fonts),
     ]).then(function (r) {
       var cv = document.createElement('canvas');
       cv.width = W;

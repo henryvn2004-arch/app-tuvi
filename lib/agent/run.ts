@@ -793,6 +793,7 @@ const SCENARIO_FIELD: Record<string, string> = {
   'hoang-dao': 'hoangDaoData',
   'ngay-tot': 'ngayTotData',
   'luc-nham': 'lucNhamData',
+  'ban-do-sao': 'banDoSaoData',
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function scenarioToBody(scenario: ScenarioInput, messages: ChatMessage[]): any {

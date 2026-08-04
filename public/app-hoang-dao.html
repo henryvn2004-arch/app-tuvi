@@ -78,6 +78,9 @@
             <div class="gio-grid" id="hdList"></div>
             <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#C0392B;margin:20px 0 8px">✗ Hắc Đạo — 6 Giờ Cần Tránh</div>
             <div class="gio-grid" id="hd2List"></div>
+            <!-- Hoàng lịch đầy đủ, nạp thêm từ /api/almanac. API chết thì khối
+                 này rỗng còn 12 giờ ở trên vẫn hiện (tính ngay tại máy). -->
+            <div id="hoangLich"></div>
           </div>
         </div>
         <div class="ask" data-ask="Ngày này tôi nên khai trương / xuất hành / ký kết vào giờ nào là đẹp nhất, tránh giờ nào? Luận giúp tôi.">✦ Hỏi trợ lý nên làm việc vào giờ nào</div>
@@ -92,13 +95,15 @@
 window.SHELL_INTRO={key:'hoang-dao',title:'Giờ Hoàng Đạo',desc:'Tra <b>12 giờ Hoàng Đạo/Hắc Đạo</b> trong ngày theo can chi — giờ tốt cho khai trương, xuất hành, ký kết. Rồi hỏi <b>trợ lý AI</b> nên làm việc gì vào giờ nào.'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tools-shared/hoang-dao.js?v=2"></script>
+<script src="/tools-shared/hoang-lich.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=54"></script>
+<script src="/shell.js?v=55"></script>
 <script>
 // Ô giữa dùng CHUNG /tools-shared/hoang-dao.js với /tools/hoang-dao.html.
 function calculate(){
-  var r=HoangDaoTool.compute(document.getElementById('ngay').value,document.getElementById('thang').value,document.getElementById('nam').value);
+  var _d=document.getElementById('ngay').value,_m=document.getElementById('thang').value,_y=document.getElementById('nam').value;
+  var r=HoangDaoTool.compute(_d,_m,_y);
   var err=document.getElementById('error-msg');err.classList.remove('active');
   if(!r.ok){err.textContent=r.error;err.classList.add('active');return;}
   document.getElementById('resTitle').textContent=r.titleText;
@@ -125,6 +130,20 @@ function calculate(){
     ].join('\n')
   });
   document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){el.addEventListener('click',function(){Shell.ask(el.getAttribute('data-ask'));});});
+
+  // Hoàng lịch đầy đủ về sau thì NÂNG CẤP ngữ cảnh rail. Cố ý đặt context một
+  // lần ngay ở trên rồi mới chồng lên: rail phải dùng được ngay cả khi
+  // /api/almanac chậm hoặc chết, chứ không ngồi chờ.
+  HoangLich.gan(document.getElementById('hoangLich'),+_d,+_m,+_y).then(function(hl){
+    var extra=HoangLich.railData(hl); if(!extra)return;
+    // ⚠️ `extractGenericContext` BỎ QUA mọi giá trị là object → payload phải PHẲNG.
+    Shell.setContext({
+      scenario:{type:'hoang-dao',data:Object.assign({},r.data,extra)},
+      label:'Giờ Hoàng Đạo · '+r.data.ngayDL,
+      greeting:'Ngày **'+r.data.ngayDL+'** ('+r.data.canChiNgay+') — trực **'+extra.truc+'**, sao **'+extra.nhiThapBatTu+'**. Đã có đủ giờ hoàng đạo, việc nên/kiêng và thần sát. Bạn định làm việc gì?',
+      chips:['Giờ nào tốt để khai trương?','Hôm nay nên làm gì, kiêng gì?','Ký hợp đồng giờ nào hợp?','Tuổi tôi có bị xung ngày này không?']
+    });
+  });
 }
 function showForm(){document.getElementById('resPanel').style.display='none';document.getElementById('birthPanel').style.display='block';document.getElementById('btnEdit').style.display='none';Shell.setShareable(null);}
 (function(){var t=new Date();document.getElementById('ngay').value=t.getDate();document.getElementById('thang').value=t.getMonth()+1;document.getElementById('nam').value=t.getFullYear();})();

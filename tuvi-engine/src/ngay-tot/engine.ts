@@ -5,9 +5,10 @@
 // toàn bộ metadata cần để gen page SEO.
 
 import { solarToLunar, dayCanChi } from '../lunar/convert.js';
+import { monthChiBySolarTerm } from '../lunar/solar-term.js';
 import type { DiaChi } from '../types.js';
 import {
-  CHI_LIST, TRUC_LIST, TRUC_TINH_CHAT, THANG_AM_TO_CHI,
+  CHI_LIST, TRUC_LIST, TRUC_TINH_CHAT,
   NHI_THAP_BAT_TU, TU_TINH_CHAT, TU_EPOCH,
   HOANG_HAC_SAO, THANG_CHI_TO_THANHLONG_DAY_CHI, THAN_12, THAN_12_HOANG_DAO,
   GIO_HOANG_DAO_BY_DAY_CHI,
@@ -42,7 +43,13 @@ export interface NgayTotInfo {
   // ─── Can chi ───────────────────────────────────────────────
   canChiNgay: string;    // "Giáp Tý"
   chiNgay: DiaChi;
-  chiThang: DiaChi;      // theo quy ước âm lịch
+  /**
+   * Chi của tháng TIẾT KHÍ (không phải tháng âm lịch, cũng không phải trụ
+   * tháng bát tự). Khác trụ tháng bát tự đúng ở NGÀY GIAO TIẾT: bát tự đổi
+   * trụ tại thời khắc giao tiết, còn lịch pháp coi trọn ngày đó đã thuộc
+   * tháng mới. Đây là đầu vào của 12 trực và sao trực nhật.
+   */
+  chiThang: DiaChi;
 
   // ─── 12 trực ───────────────────────────────────────────────
   truc: Truc;
@@ -145,7 +152,18 @@ export function computeNgayTot(dd: number, mm: number, yy: number): NgayTotInfo 
   const al = solarToLunar(dd, mm, yy);
   const canChiNgay = dayCanChi(dd, mm, yy);
   const chiNgay = canChiNgay.split(' ')[1]! as DiaChi;
-  const chiThang = THANG_AM_TO_CHI[al.month]!;
+  // 🔴 CHI THÁNG PHẢI THEO TIẾT KHÍ, KHÔNG PHẢI THÁNG ÂM.
+  // Bản cũ dùng `THANG_AM_TO_CHI[al.month]` ⇒ trực SAI trên 98/365 ngày của
+  // 2026 (26,8%), và `computeSaoNgay` sai kèm vì ăn cùng đầu vào này.
+  // Bằng chứng: 10/8/2026 lịch vạn niên Việt ghi trực THÀNH, bản cũ ra "Thu";
+  // tháng tiết khí cho đúng Thành. Tháng Dần mở từ LẬP XUÂN chứ không từ mùng
+  // 1 Tết — chính quy ước mà trụ tháng bát tự của site vẫn dùng.
+  //
+  // 🔑 Luật cổ "遇節則重" (gặp tiết thì trực LẶP một ngày) rơi ra MIỄN PHÍ, không
+  // phải viết thêm: qua tiết thì chi tháng tiến 1, mà trực = (chi ngày − chi
+  // tháng) nên hiệu giữ nguyên. Chính điều này xác nhận đây là cấu trúc gốc.
+  // Đo trên 4.018 ngày (2020–2030) đối chiếu `mingyu-core`: khớp 99,925%.
+  const chiThang = monthChiBySolarTerm(dd, mm, yy);
 
   const truc = computeTruc(chiNgay, chiThang);
   const tu = computeTu(dd, mm, yy);

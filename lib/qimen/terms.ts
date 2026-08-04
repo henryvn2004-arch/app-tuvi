@@ -22,6 +22,12 @@
  * Cát/hung thì đã có sẵn trong chính chuỗi (`吉格:` / `凶格:`) nên không phải
  * đoán — chỉ tách tiền tố.
  */
+import { HAN_VIET, phienAm, canChiViet } from '../hanviet';
+
+// Bảng phiên Hán-Việt nay nằm ở `lib/hanviet.ts` (dùng chung với Hoàng Lịch).
+// Re-export để mọi nơi đang import từ đây không phải sửa.
+export { HAN_VIET, phienAm, canChiViet };
+
 
 /** 8 cửa (八門) — trục quan trọng nhất khi chọn hướng/giờ hành sự. */
 export const CUA: Record<string, { ten: string; muc: 'cat' | 'hung' | 'binh'; nghia: string }> = {
@@ -87,19 +93,6 @@ export const NGUYEN: Record<string, string> = {
   上元: 'thượng nguyên', 中元: 'trung nguyên', 下元: 'hạ nguyên',
 };
 
-/**
- * Đổi một cặp can chi Hán ("丙午") sang tiếng Việt ("Bính Ngọ").
- *
- * 🐞 Vì sao có hàm RIÊNG chứ không dùng `phienAm`: bảng `HAN_VIET` dựng từ chữ
- * trong TÊN CÁCH CỤC, mà địa chi thì không xuất hiện ở đó — nên `phienAm` trả
- * ra "Bính 午", chữ Hán lọt thẳng ra giao diện. Bắt được khi gọi route thật.
- */
-export function canChiViet(han: string): string {
-  const s = String(han || '');
-  const out = Array.from(s).map((c) => CAN[c] || CHI[c] || HAN_VIET[c] || c);
-  return out.join(' ').trim();
-}
-
 /** Ất Bính Đinh = TAM KỲ, trục cát lợi nhất của môn này. */
 export const TAM_KY: Record<string, string> = {
   乙: 'Nhật Kỳ', 丙: 'Nguyệt Kỳ', 丁: 'Tinh Kỳ',
@@ -120,53 +113,6 @@ export const CUNG: Record<string, string> = {
   中五宫: 'Trung 5', 乾六宫: 'Càn 6', 兑七宫: 'Đoài 7', 艮八宫: 'Cấn 8',
   离九宫: 'Ly 9',
 };
-
-/**
- * Bảng phiên HÁN-VIỆT — phủ đúng 145 chữ đo được trong 123 tên cách cục trên
- * 4.380 bàn quét cả năm 2026. Thêm vài chữ dự phòng.
- *
- * Chữ nào KHÔNG có trong bảng thì giữ nguyên (xem `phienAm`) — thà lộ ra một
- * chữ Hán để lần sau bổ sung, còn hơn nuốt mất rồi tên cách cụt đi mà không ai
- * biết.
- */
-export const HAN_VIET: Record<string, string> = {
-  星: 'Tinh', 奇: 'Kỳ', 受: 'Thụ', 制: 'Chế', 时: 'Thời', 干: 'Can', 勃: 'Bột',
-  格: 'Cách', 己: 'Kỷ', 击: 'Kích', 刑: 'Hình', 月: 'Nguyệt', 日: 'Nhật',
-  伏: 'Phục', 太: 'Thái', 白: 'Bạch', 狱: 'Ngục', 入: 'Nhập', 自: 'Tự',
-  门: 'Môn', 迫: 'Bách', 地: 'Địa', 网: 'Võng', 四: 'Tứ', 张: 'Trương',
-  天: 'Thiên', 墓: 'Mộ', 乙: 'Ất', 岁: 'Tuế', 辛: 'Tân', 蛇: 'Xà', 螣: 'Đằng',
-  飞: 'Phi', 空: 'Không', 龙: 'Long', 遁: 'Độn', 生: 'Sinh', 宫: 'Cung',
-  朱: 'Chu', 雀: 'Tước', 江: 'Giang', 庚: 'Canh', 荧: 'Huỳnh', 骑: 'Kỵ',
-  青: 'Thanh', 罗: 'La', 壬: 'Nhâm', 丙: 'Bính', 牢: 'Lao', 小: 'Tiểu',
-  亭: 'Đình', 阴: 'Âm', 中: 'Trung', 返: 'Phản', 阳: 'Dương', 虎: 'Hổ',
-  伤: 'Thương', 魂: 'Hồn', 神: 'Thần', 丁: 'Đinh', 夭: 'Yểu', 矫: 'Kiểu',
-  冶: 'Dã', 炉: 'Lô', 猖: 'Xương', 狂: 'Cuồng', 戊: 'Mậu', 符: 'Phù',
-  逃: 'Đào', 走: 'Tẩu', 孛: 'Bột', 乱: 'Loạn', 来: 'Lai', 临: 'Lâm',
-  高: 'Cao', 投: 'Đầu', 合: 'Hợp', 惑: 'Hoặc', 癸: 'Quý', 织: 'Chức',
-  女: 'Nữ', 寻: 'Tầm', 牛: 'Ngưu', 万: 'Vạn', 事: 'Sự', 皆: 'Giai',
-  屯: 'Truân', 华: 'Hoa', 盖: 'Cái', 师: 'Sư', 玄: 'Huyền', 武: 'Vũ',
-  不: 'Bất', 明: 'Minh', 困: 'Khốn', 遭: 'Tao', 复: 'Phục', 见: 'Kiến',
-  大: 'Đại', 人: 'Nhân', 真: 'Chân', 诈: 'Trá', 为: 'Vi', 遮: 'Già',
-  蔽: 'Tế', 使: 'Sứ', 同: 'Đồng', 出: 'Xuất', 户: 'Hộ', 逢: 'Phùng',
-  鬼: 'Quỷ', 凶: 'Hung', 火: 'Hỏa', 三: 'Tam', 游: 'Du', 六: 'Lục',
-  仪: 'Nghi', 相: 'Tương', 佐: 'Tá', 首: 'Thủ', 雾: 'Vụ', 重: 'Trùng',
-  升: 'Thăng', 殿: 'Điện', 之: 'Chi', 勾: 'Câu', 化: 'Hóa', 直: 'Trực',
-  得: 'Đắc', 休: 'Hưu', 木: 'Mộc', 宝: 'Bảo', 鉴: 'Giám', 鸟: 'Điểu',
-  跌: 'Điệt', 穴: 'Huyệt', 灵: 'Linh', 云: 'Vân', 守: 'Thủ', 玉: 'Ngọc',
-  耀: 'Diệu', 光: 'Quang', 精: 'Tinh', 佑: 'Hựu', 浮: 'Phù',
-  // dự phòng cho chữ có thể xuất hiện ở năm khác
-  甲: 'Giáp', 开: 'Khai', 景: 'Cảnh', 死: 'Tử', 惊: 'Kinh', 杜: 'Đỗ',
-  水: 'Thủy', 金: 'Kim', 土: 'Thổ', 值: 'Trực', 九: 'Cửu', 五: 'Ngũ',
-};
-
-/** Phiên một chuỗi Hán sang Hán-Việt, cách nhau bằng dấu cách. */
-export function phienAm(han: string): string {
-  return Array.from(String(han || ''))
-    .map((c) => HAN_VIET[c] || c)
-    .join(' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
 
 /**
  * Tách một `reason` của mingyu thành mục đọc được.

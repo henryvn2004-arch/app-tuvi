@@ -125,6 +125,9 @@ export function buildChatContext(body: any): ChatContext {
   if (toolType === 'luc-nham') {
     return { systemForCall: CHAT_SYSTEM_LUC_NHAM(extractGenericContext(body.lucNhamData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
   }
+  if (toolType === 'ban-do-sao') {
+    return { systemForCall: CHAT_SYSTEM_BAN_DO_SAO(extractGenericContext(body.banDoSaoData), docs, persona), tools: buildTools(false), maxTokens: 1800, lasoDataForTools: null };
+  }
 
   if (toolType === 'xem-tuong') {
     return {
@@ -530,10 +533,14 @@ Nguyên tắc:
 - Dữ liệu dưới đã tính SẴN can chi ngày + giờ Hoàng Đạo (tốt) / Hắc Đạo (xấu) trong ngày — dùng ĐÚNG, KHÔNG tự tính lại
 - Luận: nên làm việc gì vào giờ nào (Thanh Long/Minh Đường/Kim Quỹ… hợp việc gì), tránh giờ nào; gắn với loại việc người hỏi nêu (khai trương, xuất hành, ký kết, cưới hỏi…)
 - Giờ Hoàng Đạo tốt cho MỌI người; nhắc muốn chuẩn theo riêng mình thì cần thêm lá số cá nhân
+- Khi có "Việc NÊN làm / NÊN KIÊNG": đó là mục NGHI/KỴ của hoàng lịch, ưu tiên TRA THẲNG chúng trước khi luận suy từ trực hay thần sát. Việc người hỏi nêu mà nằm trong mục KỴ thì phải nói thẳng là kiêng, đừng lách bằng cách chọn giờ đẹp
+- Trực · nhị thập bát tú · sao trực nhật · thần sát là các TẦNG KHÁC NHAU, không phải cách gọi khác của cùng một thứ. Trực nói tính chất chung của ngày; sao trực nhật quyết ngày hoàng/hắc đạo; thần sát là các sao lành dữ cùng trực trong ngày
+- Thần sát và Bành Tổ bách kỵ là TÊN CỔ PHÁP — dùng đúng tên đã cho, TUYỆT ĐỐI không bịa thêm nghĩa cho một tên không có trong dữ liệu
+- "Xung tuổi" là địa chi bị ngày xung; người có năm sinh mang chi đó thì nên tránh việc lớn trong ngày. Chỉ nêu khi người hỏi cho biết tuổi
 
 ${GIONG_NGUOI_RULES}
 
-=== DỮ LIỆU GIỜ HOÀNG ĐẠO TRONG NGÀY ===
+=== DỮ LIỆU HOÀNG LỊCH NGÀY ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 const CHAT_SYSTEM_NGAY_TOT = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia trạch nhật (chọn ngày tốt) theo lịch vạn niên cổ pháp, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
@@ -544,6 +551,9 @@ Nguyên tắc:
 - ${FORMAT_RULE}
 - Dữ liệu dưới đã liệt kê SẴN ngày tốt / ngày lưu ý (Dương Công Kị) / ngày kị (Tam Nương, Nguyệt Kị) theo âm lịch của tháng — dùng ĐÚNG, KHÔNG tự tính lại
 - Luận: gợi ý ngày đẹp trong tháng cho loại việc người hỏi (cưới hỏi, khởi công, khai trương, xuất hành…), giải thích vì sao tránh ngày kị
+- Khi có "Chi tiết từng ngày": mỗi dòng đã ghi sẵn trực · nhị thập bát tú · mục NÊN và KIÊNG của ngày đó. CHỌN NGÀY BẰNG CÁCH TRA MỤC NÊN/KIÊNG TRƯỚC — việc người hỏi nằm trong mục NÊN của ngày nào thì đó là căn cứ mạnh nhất; nằm trong mục KIÊNG thì loại ngày đó, đừng lách
+- Nêu ĐÍCH DANH vài ngày cụ thể kèm lý do rút từ dữ liệu, đừng trả lời chung chung kiểu "chọn ngày hoàng đạo là được"
+- Ngày kị cổ truyền (Tam Nương · Nguyệt Kị · Dương Công) là luật KIÊNG KHỞI SỰ, không phải điểm trừ cộng dồn — dính là loại, dù trực và sao có đẹp
 - Nhắc: ngày tốt theo lịch chung là điều kiện cần; hợp nhất với từng người cần xét thêm lá số cá nhân
 
 ${GIONG_NGUOI_RULES}
@@ -551,19 +561,47 @@ ${GIONG_NGUOI_RULES}
 === DỮ LIỆU NGÀY TỐT XẤU TRONG THÁNG ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
-const CHAT_SYSTEM_LUC_NHAM = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia Lục Nhâm (六壬) — bói theo thần tướng giờ/ngày theo cổ pháp, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
+const CHAT_SYSTEM_BAN_DO_SAO = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia CHIÊM TINH PHƯƠNG TÂY (natal astrology), phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
+
+${_TIME()}
+
+🔴 ĐÂY LÀ MÔN KHÁC HẲN TỬ VI — ĐỌC KỸ TRƯỚC KHI TRẢ LỜI:
+- TUYỆT ĐỐI KHÔNG trộn thuật ngữ Tử Vi / bát tự vào đây. Không "cung Mệnh", không "chính tinh", không "đại vận", không ngũ hành Kim Mộc Thủy Hỏa Thổ của mệnh lý Á Đông
+- "Nhà" ở đây là 12 nhà chiêm tinh, KHÁC 12 cung Tử Vi. "Nguyên tố" là Hỏa/Thổ/Khí/Thủy của chiêm tinh Tây, KHÁC ngũ hành
+- Nếu người hỏi đem so với lá số Tử Vi của họ: nói thẳng là hai hệ độc lập, không quy đổi được, và đừng cố bắc cầu
+
+Nguyên tắc:
+- ${FORMAT_RULE}
+- Bản đồ dưới đã tính SẴN vị trí thiên thể, 4 trục, 12 nhà, góc chiếu và hình thế — dùng ĐÚNG, KHÔNG tự tính lại, KHÔNG đổi cung của bất kỳ sao nào
+- 🔑 TRÌNH TỰ ĐỌC: (1) BỘ BA nền tảng — Mặt Trời (bản chất), Mặt Trăng (đời sống cảm xúc), cung Mọc (cách thể hiện ra ngoài); (2) sao nào NẰM Ở NHÀ NÀO cho biết năng lượng đó đổ vào lĩnh vực đời sống nào; (3) GÓC CHIẾU mạnh nhất mới là chỗ tạo nên nét riêng — cùng một Mặt Trời Song Tử mà góc chiếu khác nhau thì ra hai người khác hẳn
+- Góc "căng" (đối xung, vuông góc) KHÔNG phải điềm xấu — đó là chỗ sinh áp lực và cũng là chỗ sinh động lực. Góc "thuận" (tam hợp, lục hợp) là tài năng sẵn nhưng dễ bị bỏ phí. Nói cả hai mặt, đừng chia tốt/xấu
+- Sao NGHỊCH HÀNH nghĩa là năng lượng đó hướng vào trong, biểu hiện muộn hoặc kín — KHÔNG phải hỏng
+- Độ mạnh (%) của góc chiếu là mức khít; đọc góc mạnh trước, góc yếu chỉ nhắc khi liên quan trực tiếp câu hỏi
+- Chỉ luận từ dữ liệu đã cho. KHÔNG bịa thêm sao, góc hay hình thế không có trong bản đồ
+- Giữ tinh thần tham khảo, nói về xu hướng và cách ứng xử — không phán chuyện đã rồi
+
+${GIONG_NGUOI_RULES}
+
+=== BẢN ĐỒ SAO LÚC SINH ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+const CHAT_SYSTEM_LUC_NHAM = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia ĐẠI LỤC NHÂM (大六壬) — lập khóa theo nguyệt tướng gia thời, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
 
 ${_TIME()}
 
 Nguyên tắc:
 - ${FORMAT_RULE}
-- Dữ liệu dưới đã tính SẴN thần tướng đang trực tại giờ hỏi (cát/hung) kèm ý nghĩa — dùng ĐÚNG thần tướng đã cho, KHÔNG đổi
-- Luận sâu ý nghĩa thần tướng đó cho việc người hỏi (gặp gỡ, cầu tài, ký kết, xuất hành…); nói thẳng nên/không nên, cách hóa giải nếu hung
-- Giữ tinh thần tham khảo, khuyên hành xử — không phán tuyệt đối
+- Khóa dưới đã lập SẴN đầy đủ: thiên bàn gia địa bàn · tứ khóa · tam truyền · phép thủ truyền · khóa thể · thần sát. Dùng ĐÚNG, TUYỆT ĐỐI không tự lập lại hay đổi một chi nào
+- 🔑 TRÌNH TỰ LUẬN CỦA MÔN NÀY, đi đúng thứ tự: (1) TAM TRUYỀN là xương sống — sơ truyền là đầu mối việc phát ra, trung truyền là diễn biến giữa chừng, mạt truyền là kết cục; (2) TỨ KHÓA cho biết thế đứng của mình (khóa 1–2 thuộc can ngày = người hỏi) và của đối phương/sự việc (khóa 3–4 thuộc chi ngày); (3) thiên tướng đi kèm mỗi truyền nói TÍNH CHẤT của giai đoạn đó
+- Quan hệ ngũ hành đã ghi sẵn từng chỗ — sinh là thuận/được giúp, khắc là trở lực, tỷ hòa là ngang nhau. Đọc thẳng, đừng tự suy lại
+- ⚠️ Truyền nào RƠI TUẦN KHÔNG thì giai đoạn đó hư, việc dễ hụt hoặc chậm — phải nêu ra, đây là chỗ người mới hay bỏ sót
+- Vượng/tướng là đang mạnh; hưu/tù/tử là đang yếu. Cùng một thiên tướng cát mà rơi vào tử thì lực rất mỏng
+- Phép thủ truyền và khóa thể là TÊN CỔ PHÁP — dùng đúng tên đã cho, KHÔNG bịa thêm nghĩa cho tên không có trong dữ liệu
+- Trả lời thẳng câu hỏi (thành/bại, nên tiến hay lui, chừng nào có kết quả) rồi mới dẫn chứng từ khóa; giữ tinh thần tham khảo, không phán tuyệt đối
 
 ${GIONG_NGUOI_RULES}
 
-=== DỮ LIỆU THẦN TƯỚNG LỤC NHÂM ===
+=== KHÓA ĐẠI LỤC NHÂM ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 // ── Vision: Xem tướng qua ảnh (native trong rail, thay vì API legacy) ──
@@ -1065,6 +1103,27 @@ const GENERIC_LABELS: Record<string, string> = {
   gioHoangDao: 'Giờ Hoàng Đạo (tốt)', gioHacDao: 'Giờ Hắc Đạo (xấu)',
   ngayTot: 'Ngày tốt', ngayLuuY: 'Ngày lưu ý (Dương Công Kị)', ngayKi: 'Ngày kị (Tam Nương/Nguyệt Kị)',
   canNgay: 'Can ngày', gio: 'Giờ xem', thanTuong: 'Thần tướng đang trực', catHung: 'Cát/Hung', luan: 'Ý nghĩa thần tướng',
+  // Đại Lục Nhâm — nguồn `/api/liuren` (mingyu-core).
+  canChiGio: 'Can chi giờ', truDem: 'Trú chiêm / Dạ chiêm',
+  nguyetTuongGiaThoi: 'Nguyệt tướng gia thời (cách quay thiên bàn)',
+  quyNhan: 'Vị Quý Nhân', tuanKhong: 'Tuần Không', canNgayKyCung: 'Can ngày ký cung',
+  phapThuTruyen: 'Phép thủ truyền', dangTruyen: 'Dạng tam truyền',
+  tuKhoa: 'TỨ KHÓA', tamTruyen: 'TAM TRUYỀN', khoaThe: 'Khóa thể', thanSat: 'Thần sát',
+  // Phân tích bát tự — nguồn `/api/bazi-phan-tich` (mingyu-core).
+  nhatChu: 'Nhật chủ', vuongSuyNhatChu: 'Vượng suy nhật chủ', cachCuc: 'Cách cục',
+  thapThanTungTru: 'Thập thần từng trụ', tangCanThapThan: 'Thập thần của tàng can',
+  tuToa: 'Tự tọa (vòng trường sinh)', khongVong: 'Không vong',
+  nguyetLenhTuLenh: 'Nguyệt lệnh tư lệnh', vuongTuongNguHanh: 'Vượng tướng ngũ hành',
+  nguHanhThieu: 'Ngũ hành thiếu', dungThanNen: 'Dụng thần NÊN dùng',
+  dungThanKy: 'Dụng thần NÊN kỵ', menhCung: 'Mệnh cung', thaiNguyen: 'Thai nguyên',
+  thanSatChinh: 'Thần sát chính',
+  // Bản đồ sao (chiêm tinh Tây) — nguồn `/api/natal` (celestine).
+  heNha: 'Hệ chia nhà', trucChinh: 'Bốn trục (ASC · MC · DSC · IC)',
+  saoChinh: 'Vị trí 10 hành tinh', saoPhu: 'Tiểu hành tinh (phụ)',
+  giaoDiem: 'Giao điểm mặt trăng', gocChieuManh: 'Góc chiếu nổi bật',
+  hinhThe: 'Hình thế trong bản đồ', canBangHanh: 'Cân bằng nguyên tố',
+  canBangThe: 'Cân bằng thể', banCau: 'Phân bố bán cầu',
+  saoNghichHanh: 'Sao nghịch hành', dauNha: 'Đầu 12 nhà',
   // Thẻ "Vận hôm nay" (/app) — nguồn lib/engine/van-ngay.ts. Không có nhãn thì
   // prompt in ra key thô ("truc: Định") và model dễ đọc trượt sang nghĩa khác.
   amLich: 'Ngày âm lịch', thuTrongTuan: 'Thứ trong tuần',
@@ -1072,6 +1131,17 @@ const GENERIC_LABELS: Record<string, string> = {
   tinhChatNgay: 'Tính chất chung của ngày', ngayKy: 'Ngày kỵ cổ truyền',
   xungTuoi: 'Ngày này xung tuổi', vietNen: 'Việc nên làm', vietKieng: 'Việc nên kiêng',
   mauHop: 'Màu hợp hành ngày', huongHyThan: 'Hướng Hỷ thần', huongTaiThan: 'Hướng Tài thần',
+  // Hoàng lịch đầy đủ — nguồn `/api/almanac` (mingyu-core) qua
+  // `public/tools-shared/hoang-lich.js`. Thiếu nhãn thì prompt in key thô
+  // ("banhToBachKy: …") và model rất dễ đọc trượt sang nghĩa khác.
+  canChiThang: 'Can chi tháng (theo tiết khí)', canChiNam: 'Can chi năm',
+  nhiThapBatTu: 'Nhị thập bát tú', saoTrucNhat: 'Sao trực nhật (hoàng/hắc đạo)',
+  cuuTinh: 'Cửu tinh trực nhật', nenLam: 'Việc NÊN làm (nghi)',
+  nenKieng: 'Việc NÊN KIÊNG (kỵ)', thanSatCat: 'Thần sát CÁT trực nhật',
+  thanSatHung: 'Thần sát HUNG trực nhật', banhToBachKy: 'Bành Tổ bách kỵ',
+  satHuong: 'Hướng sát (nên tránh)',
+  ngayBinh: 'Ngày bình', ngayXau: 'Ngày xấu',
+  chiTietTung: 'Chi tiết từng ngày (trực · tú · nghi/kỵ)',
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractGenericContext(data: any): string {

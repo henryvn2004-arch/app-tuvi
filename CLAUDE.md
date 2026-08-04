@@ -117,6 +117,98 @@ Migration đã chạy prod nhưng **cố ý `enabled=false`** (cong-cu.html lọ
 ```sql
 update tool_pricing set enabled=true, updated_at=now() where tool_id in ('mai-hoa','ky-mon');
 ```
+## 🌌 Nâng 4 tool bằng mingyu-core + tool chiêm tinh Tây (2026-08-04, PR này)
+
+Henry: *"Làm almanac, liuren, bazi như mày nói (nâng cấp các tool hiện tại).
+Xong làm chiêm tinh tây"*.
+
+### 🔴 BA LỖI CỔ PHÁP TÌM RA KHI ĐỐI CHIẾU — không mục nào nằm trong đề bài
+| Chỗ | Sai gì | Quy mô |
+|---|---|---|
+| `tuvi-engine/src/ngay-tot` | 12 trực lấy chi tháng từ THÁNG ÂM | **98/365 ngày (26,8%)** |
+| ↳ kéo theo | sao trực nhật sai vì ăn chung đầu vào | cùng 98 ngày |
+| `tools/tu-tru.html` | **trụ GIỜ** dùng bảng ngũ HỔ độn (vốn cho trụ THÁNG) | **100% lá số** |
+| `tools/tu-tru.html` | **trụ THÁNG** lấy tháng dương, không theo tiết khí | **100%** |
+| `tools/tu-tru.html` | trụ NĂM không lùi cho người sinh trước Lập Xuân | 9,2% |
+
+- **Trực**: bằng chứng quyết định là 10/8/2026 — lịch vạn niên Việt ghi trực
+  **Thành**, bản cũ ra "Thu". Vá bằng `lunar/solar-term.ts` (port đúng công
+  thức đang cho trụ tháng bát tự đúng). 🔑 Luật cổ **遇節則重** (gặp tiết thì
+  trực lặp một ngày) **rơi ra MIỄN PHÍ** — qua tiết chi tháng tiến 1 mà trực =
+  hiệu hai chi. Chính điều đó xác nhận đây là cấu trúc gốc. Đo lại 4.018 ngày:
+  98/365 → **3/4018 (99,925%)**.
+- **Trụ giờ**: đối chứng bằng CA QUYẾT, độc lập mọi engine — ngũ THỬ độn "Giáp
+  Kỷ hoàn gia Giáp" cho `[0,2,4,6,8…]`, bảng `TSC` trong trang là `[2,4,6,8,0…]`
+  = đúng bảng ngũ HỔ độn. Nay trang **không còn tự tính tứ trụ**, hỏi
+  `/api/bazi-phan-tich` (route lập bằng chính engine của site). Đã gỡ hẳn `TSC`
+  và `toJDN` khỏi trang.
+- ⚠️ **12 thần GIỜ của repo thì ĐÚNG TUYỆT ĐỐI** (khớp từng giờ với nguồn Việt)
+  — chỉ tầng NGÀY hỏng. Đừng đi sửa nhầm chỗ.
+
+### 🔑 QUY TẮC KIẾN TRÚC CỦA CẢ TRACK: mingyu KHÔNG BAO GIỜ là nguồn của trường repo đã có
+Trực · 28 tú · can chi · giờ hoàng đạo · tứ trụ đều **lấy từ engine repo**;
+mingyu chỉ cấp phần repo KHÔNG có. Hai nguồn cho cùng một trường là đúng bệnh
+đã trả giá ở can chi ngày (#409).
+- Bát tự còn **ép ràng buộc LÚC CHẠY**: route đối chiếu tứ trụ hai engine mỗi
+  lượt, lệch thì **bỏ phần phân tích** (fail-closed) chứ không bày thập thần
+  của lá số khác lên trên tứ trụ đúng — loại sai đó không ai nhìn ra.
+  Đã đo 576 lá (1962–2006): khớp 100% cả 4 trụ.
+
+### Bốn chặng
+- **Hoàng lịch** (`lib/almanac/`, `/api/almanac`) — 112 nghi/kỵ dịch tay KÈM
+  NGHĨA (đây là việc người ta sắp làm, để Hán-Việt là vô dụng) · 144 thần sát
+  phiên theo chữ (cát/hung do mingyu gắn sẵn, không phải đoán) · 22 câu Bành Tổ
+  · cửu tinh · xung sát · thần niên. **34,4 KB → 2,96 KB/ngày.** Nâng *Giờ
+  Hoàng Đạo* + *Ngày Tốt*; cả hai là LỚP CHỒNG LÊN — API chết thì trang chạy y
+  như trước.
+- **Đại Lục Nhâm** (`lib/liuren/`, `/api/liuren`) — thay công thức thiên tướng
+  `(canNgay*2)%12` mà CLAUDE.md đã ghi là chưa verify được. ✅ Đối chứng vị Quý
+  Nhân với ca quyết 贵人歌 trên 1.464 quẻ. **Nhâm/Quý mingyu cho Tỵ/Mão còn dị
+  bản phổ biến ghi Mão/Tỵ** — giữ theo mingyu vì chỉ cách đó mới làm CẢ HAI
+  vòng Quý Nhân liền mạch quanh bàn; dị bản kia gãy vòng đúng ở Nhâm/Quý.
+  🔑 Ở đây **KHÔNG có đường lùi** như Giờ Hoàng Đạo: API chết thì báo thẳng chưa
+  lập được khóa. Hiện một thần tướng SAI mà trông rất tự tin còn tệ hơn.
+- **Bát tự** (`lib/bazi/`, `/api/bazi-phan-tich`) — thập thần · tàng can thập
+  thần · tự tọa · không vong · vượng suy · cách cục · dụng thần · thần sát.
+  🔴 **Chọn lọc thần sát**: mingyu trả TB **58 sao mỗi lá** (min 40, max 76) —
+  đổ hết ra đúng bệnh Kỳ Môn. Nay 30 sao được đọc thật đứng nhóm chính, phần
+  còn lại vẫn trả đủ ở nhóm phụ.
+- **Bản đồ sao** (`lib/tayphuong/`, `/api/natal`, `/app/ban-do-sao`) — TOOL MỚI,
+  engine `celestine` (MIT, đối chứng NASA/JPL/Swiss Ephemeris). Bánh xe canvas
+  **0đ, không qua model ảnh, không đụng `viral.free_gen_daily_cap`** — đúng
+  tiêu chí "ưu tiên tool có ảnh" của track. Tải về 9:16 qua chế độ `draw` của
+  `poster.js`. Bánh xe vẽ **cung Mọc bên TRÁI, ngược chiều kim đồng hồ**; vẽ
+  sai chiều thì nhìn vẫn đẹp mà mọi nhà đều lộn.
+  🔑 **Nói thẳng ĐÂY KHÔNG PHẢI TỬ VI** ở cả trang lẫn prompt (hai hệ cùng dùng
+  chữ "cung"/"nhà" nhưng chỉ thứ khác hẳn); nhóm sidebar để RIÊNG.
+
+### 🧹 Gom bảng phiên Hán-Việt về `lib/hanviet.ts`
+Kỳ Môn (157 chữ) + Hoàng Lịch (105) + Bát Tự (97) dùng CHUNG một bảng thay vì
+ba bản. **Verify: 200 bàn Kỳ Môn (1,26 MB) md5 TRÙNG KHÍT trước/sau refactor.**
+
+### 🪤 Bộ dò rò rỉ chữ Hán/Anh lại cứu hai lần
+`遥克比用`/`遥克涉害` lọt giao diện (docPhap chỉ tách tiền tố `返吟`) ·
+`True North Node`/`Mean Lilith` lọt (không nằm trong danh sách `planets`, chỉ
+có trong khía cạnh). **Bài học lặp lần thứ ba: bảng dịch dựng từ MỘT nguồn thì
+chỉ phủ nguồn đó.** Cắm bộ dò mỗi lần đấu vào nguồn chữ mới, đừng tin là đủ.
+
+### 🔑 VIỆC TAY HENRY
+```sql
+update tool_pricing set enabled=true, updated_at=now() where tool_id='ban-do-sao';
+```
+⚠️ **Trực đổi trên 26,8% số ngày** ⇒ nội dung 8.958 trang `/ngay-tot/*` và thẻ
+"Vận hôm nay" sẽ đổi theo sau deploy. Đó là fix chạy đúng, không phải hỏng.
+
+### CÒN LẠI
+- Rail `/app/bat-tu` chưa nhận tầng phân tích bát tự mới (đường đó đi qua
+  `computeTuBinh` ở server, thêm vào là đụng hot path).
+- Chưa có trang standalone SEO cho `ban-do-sao` (mới có trang shell).
+- `xuankong` (huyền không phi tinh) chưa đo, chưa làm.
+- Xin xăm vẫn vướng DATA chứ không phải dịch: mingyu chỉ có 92 thẻ 三山国王
+  (thần Quảng Đông), xăm Quan Âm/Quan Thánh bản Việt phải tự soạn.
+
+---
+
 ## 📅 Thẻ "Vận hôm nay" — và 🔴 3 công cụ đang tính SAI CAN CHI NGÀY (2026-08-04, PR này)
 
 Henry: *"tool Vận ngày… nó là tool sẽ attract user vào xem hằng ngày, cần hấp dẫn
@@ -1029,7 +1121,22 @@ kiểm/sửa; `brand-rules.ts` chỉ còn đúng một hằng số đưa vào pr
 - Sau merge verify lại: `tsc` 0 lỗi · `lint` 0 lỗi/72 warning · `prettier --check .` sạch ·
   md5 DB khớp md5 file (`76b6c280…`) sau khi sửa §6.
 
-### ⚠️ CI: workflow `pull_request` có lúc KHÔNG fire
+### 🔴 CI: workflow `pull_request` có lúc KHÔNG fire — CÁCH GỠ GHI DƯỚI ĐÂY LÀ SAI
+**Đính chính (2026-08-04, PR #412):** đã thử ĐỦ CẢ HAI đường trên cùng một PR,
+**không đường nào kích được** 4 workflow `pull_request` (lint · unit-test ·
+playwright · lighthouse):
+1. đẩy commit **có code thật** (không phải commit rỗng) → chỉ Vercel + `smoke`;
+2. **Close rồi Reopen PR** → vẫn chỉ Vercel + `smoke`.
+
+Workflow không có path filter, không có guard draft, `branches:[main,dev]` khớp
+đúng base — tức cấu hình không sai, đây là GitHub không phát event. Chưa có cách
+gỡ nào chắc chắn.
+- `playwright` và `lighthouse` có `workflow_dispatch` nên chạy tay được; `lint`
+  và `unit-test` thì KHÔNG.
+- ⇒ Khi gặp ca này, chạy đủ bộ tại chỗ rồi **nói thẳng trên PR là CI vắng mặt**.
+  Đừng để PR trông "xanh": xanh ở đây nghĩa là các check KHÔNG TỒN TẠI.
+
+### ⚠️ (ghi chép cũ) CI: workflow `pull_request` có lúc KHÔNG fire
 2 commit liên tiếp chỉ có Vercel + `smoke` chạy; lint/typecheck/test/lighthouse **không hề
 được tạo run** (10 workflow đều `active`, không có path filter). `smoke` vẫn chạy vì nó
 trigger bằng `deployment_status` ⇒ không phải hết quota. **Cách gỡ: Close rồi Reopen PR** —

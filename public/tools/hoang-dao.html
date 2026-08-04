@@ -93,6 +93,9 @@
         <div class="gio-grid" id="hdList"></div>
         <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#C0392B;margin:20px 0 8px">✗ Hắc Đạo — 6 Giờ Cần Tránh</div>
         <div class="gio-grid" id="hd2List"></div>
+        <!-- Phần hoàng lịch đầy đủ, nạp thêm từ /api/almanac. Rỗng nếu API
+             chết — 12 giờ ở trên vẫn hiện vì chúng tính ngay tại máy. -->
+        <div id="hoangLich"></div>
       </div>
     </div>
   </div>
@@ -108,10 +111,12 @@
   <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
 </footer>
 <script src="/tools-shared/hoang-dao.js?v=2"></script>
+<script src="/tools-shared/hoang-lich.js?v=1"></script>
 <script>
 // Ô giữa dùng CHUNG /tools-shared/hoang-dao.js với shell /app/hoang-dao.
 function calculate(){
-  var r=HoangDaoTool.compute(document.getElementById('ngay').value,document.getElementById('thang').value,document.getElementById('nam').value);
+  var d=document.getElementById('ngay').value,m=document.getElementById('thang').value,y=document.getElementById('nam').value;
+  var r=HoangDaoTool.compute(d,m,y);
   var err=document.getElementById('error-msg');err.classList.remove('active');
   if(!r.ok){err.textContent=r.error;err.classList.add('active');return;}
   document.getElementById('resTitle').textContent=r.titleText;
@@ -120,6 +125,8 @@ function calculate(){
   document.getElementById('hd2List').innerHTML=r.hd2ListHTML;
   document.getElementById('result-section').classList.add('active');
   document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
+  // Bổ sung hoàng lịch đầy đủ. CỐ Ý không await — 12 giờ phải hiện ngay.
+  HoangLich.gan(document.getElementById('hoangLich'),+d,+m,+y);
 }
 (function(){var t=new Date();document.getElementById('ngay').value=t.getDate();document.getElementById('thang').value=t.getMonth()+1;document.getElementById('nam').value=t.getFullYear();})();
 </script>
