@@ -131,8 +131,17 @@ export async function GET(req: NextRequest) {
   if (xau.length) return json({ ok: false, lyDo: `Số quẻ ngoài 1–64: ${xau.join(', ')}` }, 400);
 
   const budget = Math.max(0, Number(cfg.budget ?? 5));
-  const size = (cfg.size as '1024x1536') || '1024x1536';
-  const quality = (cfg.quality as 'medium') || 'medium';
+  // Ép kiểu về ĐÚNG hợp các giá trị hợp lệ chứ không `as 'medium'`: cái cast cũ
+  // nói dối rằng `quality` luôn là 'medium', nên mọi so sánh với 'high' bị `tsc`
+  // coi là vô nghĩa — và nó đã che một nhánh tính chi phí sai.
+  const SIZES = ['1024x1024', '1024x1536', '1536x1024'] as const;
+  const QUALITIES = ['low', 'medium', 'high'] as const;
+  type Size = (typeof SIZES)[number];
+  type Quality = (typeof QUALITIES)[number];
+  const size: Size = SIZES.includes(cfg.size as Size) ? (cfg.size as Size) : '1024x1536';
+  const quality: Quality = QUALITIES.includes(cfg.quality as Quality)
+    ? (cfg.quality as Quality)
+    : 'medium';
 
   const ketQua: { kingWen: number; ten: string; hanTu: string; url?: string; loi?: string }[] = [];
   let daVe = 0,
