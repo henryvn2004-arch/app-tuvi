@@ -100,14 +100,16 @@
 <script>window.SHELL_ACTIVE='ngay-tot';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'ngay-tot',title:'Ngày tốt trong tháng',desc:'Xem <b>lịch ngày tốt/xấu cả tháng</b> theo âm lịch (Tam Nương · Nguyệt Kị · Dương Công Kị), rồi hỏi <b>trợ lý AI</b> chọn ngày đẹp cho cưới hỏi, khởi công.'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
-<script src="/tools-shared/ngay-tot.js?v=1"></script>
+<script src="/tools-shared/ngay-tot.js?v=2"></script>
+<script src="/tools-shared/hoang-lich.js?v=1"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=54"></script>
 <script>
 // Ô giữa dùng CHUNG /tools-shared/ngay-tot.js với /tools/ngay-tot.html.
 function calculate(){
-  var r=NgayTotTool.compute(document.getElementById('thang').value,document.getElementById('nam').value);
+  var _m=+document.getElementById('thang').value,_y=+document.getElementById('nam').value;
+  var r=NgayTotTool.compute(_m,_y);
   var err=document.getElementById('error-msg');err.classList.remove('active');
   if(!r.ok){err.textContent=r.error;err.classList.add('active');return;}
   document.getElementById('resTitle').textContent=r.titleText;
@@ -133,6 +135,19 @@ function calculate(){
     ].join('\n')
   });
   document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){el.addEventListener('click',function(){Shell.ask(el.getAttribute('data-ask'));});});
+
+  // Hoàng lịch thật về sau thì nâng lưới VÀ nâng ngữ cảnh rail. Đặt context
+  // một lần ở trên trước để rail dùng được ngay khi /api/almanac chậm/chết.
+  HoangLich.napThang(document.getElementById('calBody'),_m,_y).then(function(ds){
+    var extra=HoangLich.railThang(ds); if(!extra)return;
+    // ⚠️ payload gửi rail phải PHẲNG — `extractGenericContext` bỏ qua object.
+    Shell.setContext({
+      scenario:{type:'ngay-tot',data:Object.assign({},r.data,extra)},
+      label:'Ngày tốt · tháng '+r.data.thang+'/'+r.data.nam,
+      greeting:'Đã xem lịch **tháng '+r.data.thang+'/'+r.data.nam+'** kèm trực, nhị thập bát tú và mục nghi/kỵ từng ngày. Bạn định làm việc gì để tôi chọn ngày đẹp nhất?',
+      chips:['Ngày nào đẹp để cưới hỏi?','Ngày nào tốt để khởi công/nhập trạch?','Khai trương nên chọn ngày nào?','Tháng này có ngày nào kiêng an táng?']
+    });
+  });
 }
 function _trimDayList(s){
   if(!s)return '—';

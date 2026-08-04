@@ -37,8 +37,11 @@ export const TRUC_TINH_CHAT: Record<Truc, 'cát' | 'hung' | 'bình'> = {
   'Bế': 'hung',     // kỵ khởi sự (chỉ tốt đắp đê, lấp lỗ)
 };
 
-// Tháng âm 1-12 → chi tháng (quy ước cổ truyền, bỏ qua tiết khí)
-// Tháng 1 âm = Dần (Lập Xuân), T2 = Mão, ..., T11 = Tý, T12 = Sửu
+// Tháng âm 1-12 → chi tháng.
+// ⚠️ KHÔNG DÙNG CHO 12 TRỰC / SAO TRỰC NHẬT — hai thứ đó ăn tháng TIẾT KHÍ
+// (`lunar/solar-term.ts` → `monthChiBySolarTerm`). Bảng này từng được dùng cho
+// trực và làm sai 26,8% số ngày; xem chú thích trong `ngay-tot/engine.ts`.
+// Giữ lại vì vẫn đúng cho việc gọi tên tháng âm lịch.
 export const THANG_AM_TO_CHI: Record<number, DiaChi> = {
   1: 'Dần', 2: 'Mão', 3: 'Thìn', 4: 'Tỵ', 5: 'Ngọ', 6: 'Mùi',
   7: 'Thân', 8: 'Dậu', 9: 'Tuất', 10: 'Hợi', 11: 'Tý', 12: 'Sửu',

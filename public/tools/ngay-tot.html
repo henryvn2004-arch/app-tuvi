@@ -115,17 +115,22 @@
   <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
   <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
 </footer>
-<script src="/tools-shared/ngay-tot.js?v=1"></script>
+<script src="/tools-shared/ngay-tot.js?v=2"></script>
+<script src="/tools-shared/hoang-lich.js?v=1"></script>
 <script>
 // Ô giữa dùng CHUNG /tools-shared/ngay-tot.js với shell /app/ngay-tot.
 function calculate(){
-  var r=NgayTotTool.compute(document.getElementById('thang').value,document.getElementById('nam').value);
+  var _m=+document.getElementById('thang').value,_y=+document.getElementById('nam').value;
+  var r=NgayTotTool.compute(_m,_y);
   var err=document.getElementById('error-msg');err.classList.remove('active');
   if(!r.ok){err.textContent=r.error;err.classList.add('active');return;}
   document.getElementById('resTitle').textContent=r.titleText;
   document.getElementById('calBody').innerHTML=r.calBodyHTML;
   document.getElementById('result-section').classList.add('active');
   document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
+  // Nâng lưới lịch bằng hoàng lịch thật (trực · sao · nghi/kỵ). API chết thì
+  // lưới cơ bản giữ nguyên, KHÔNG chờ.
+  HoangLich.napThang(document.getElementById('calBody'),_m,_y);
 }
 (function(){var t=new Date();document.getElementById('thang').value=t.getMonth()+1;document.getElementById('nam').value=t.getFullYear();})();
 </script>

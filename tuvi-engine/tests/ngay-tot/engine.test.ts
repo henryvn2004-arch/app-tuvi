@@ -173,3 +173,44 @@ describe('topDaysForActivity', () => {
     }
   });
 });
+
+// ============================================================
+// 12 TRỰC ĐI THEO THÁNG TIẾT KHÍ, KHÔNG PHẢI THÁNG ÂM
+// ============================================================
+// Bản cũ lấy chi tháng từ `THANG_AM_TO_CHI[amLich.month]` ⇒ sai trực trên
+// 98/365 ngày của năm 2026 (26,8%), kéo theo sai luôn sao trực nhật vì hai
+// hàm dùng chung một đầu vào. Nhóm test này khoá lại cả 3 tính chất phân biệt
+// được hai cách tính, để không ai lặng lẽ đổi ngược về tháng âm.
+describe('12 trực — mốc tháng là TIẾT KHÍ', () => {
+  it('10/8/2026 là trực Thành (lịch vạn niên Việt), không phải Thu', () => {
+    const info = computeNgayTot(10, 8, 2026);
+    expect(info.canChiNgay).toBe('Bính Thìn'); // chốt đúng ngày trước đã
+    expect(info.truc).toBe('Thành');
+  });
+
+  it('quanh Lập Thu 7/8/2026, chi tháng nhảy Mùi → Thân', () => {
+    expect(computeNgayTot(6, 8, 2026).chiThang).toBe('Mùi');
+    expect(computeNgayTot(7, 8, 2026).chiThang).toBe('Thân');
+    // ...trong khi tháng ÂM không hề đổi ở mốc này
+    expect(computeNgayTot(6, 8, 2026).amLich.month).toBe(computeNgayTot(7, 8, 2026).amLich.month);
+  });
+
+  it('luật 遇節則重: ngày giao tiết thì trực LẶP lại ngày hôm trước', () => {
+    // Hệ quả toán học của "trực = chi ngày − chi tháng": qua tiết, chi tháng
+    // tiến 1 nên hiệu đứng yên. Không có dòng code nào xử lý riêng.
+    expect(computeNgayTot(7, 8, 2026).truc).toBe(computeNgayTot(6, 8, 2026).truc);
+  });
+
+  it('trực LẶP đúng 12 lần/năm, rơi vào 12 ngày giao tiết', () => {
+    const days: { date: string; truc: string }[] = [];
+    for (let m = 1; m <= 12; m++) {
+      const last = new Date(Date.UTC(2026, m, 0)).getUTCDate();
+      for (let d = 1; d <= last; d++) days.push({ date: `${d}/${m}`, truc: computeNgayTot(d, m, 2026).truc });
+    }
+    const dup = days.filter((x, i) => i > 0 && x.truc === days[i - 1]!.truc).map((x) => x.date);
+    expect(dup).toEqual([
+      '5/1', '4/2', '5/3', '5/4', '5/5', '5/6',
+      '7/7', '7/8', '7/9', '8/10', '7/11', '7/12',
+    ]);
+  });
+});

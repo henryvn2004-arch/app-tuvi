@@ -530,10 +530,14 @@ Nguyên tắc:
 - Dữ liệu dưới đã tính SẴN can chi ngày + giờ Hoàng Đạo (tốt) / Hắc Đạo (xấu) trong ngày — dùng ĐÚNG, KHÔNG tự tính lại
 - Luận: nên làm việc gì vào giờ nào (Thanh Long/Minh Đường/Kim Quỹ… hợp việc gì), tránh giờ nào; gắn với loại việc người hỏi nêu (khai trương, xuất hành, ký kết, cưới hỏi…)
 - Giờ Hoàng Đạo tốt cho MỌI người; nhắc muốn chuẩn theo riêng mình thì cần thêm lá số cá nhân
+- Khi có "Việc NÊN làm / NÊN KIÊNG": đó là mục NGHI/KỴ của hoàng lịch, ưu tiên TRA THẲNG chúng trước khi luận suy từ trực hay thần sát. Việc người hỏi nêu mà nằm trong mục KỴ thì phải nói thẳng là kiêng, đừng lách bằng cách chọn giờ đẹp
+- Trực · nhị thập bát tú · sao trực nhật · thần sát là các TẦNG KHÁC NHAU, không phải cách gọi khác của cùng một thứ. Trực nói tính chất chung của ngày; sao trực nhật quyết ngày hoàng/hắc đạo; thần sát là các sao lành dữ cùng trực trong ngày
+- Thần sát và Bành Tổ bách kỵ là TÊN CỔ PHÁP — dùng đúng tên đã cho, TUYỆT ĐỐI không bịa thêm nghĩa cho một tên không có trong dữ liệu
+- "Xung tuổi" là địa chi bị ngày xung; người có năm sinh mang chi đó thì nên tránh việc lớn trong ngày. Chỉ nêu khi người hỏi cho biết tuổi
 
 ${GIONG_NGUOI_RULES}
 
-=== DỮ LIỆU GIỜ HOÀNG ĐẠO TRONG NGÀY ===
+=== DỮ LIỆU HOÀNG LỊCH NGÀY ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 const CHAT_SYSTEM_NGAY_TOT = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia trạch nhật (chọn ngày tốt) theo lịch vạn niên cổ pháp, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
@@ -544,6 +548,9 @@ Nguyên tắc:
 - ${FORMAT_RULE}
 - Dữ liệu dưới đã liệt kê SẴN ngày tốt / ngày lưu ý (Dương Công Kị) / ngày kị (Tam Nương, Nguyệt Kị) theo âm lịch của tháng — dùng ĐÚNG, KHÔNG tự tính lại
 - Luận: gợi ý ngày đẹp trong tháng cho loại việc người hỏi (cưới hỏi, khởi công, khai trương, xuất hành…), giải thích vì sao tránh ngày kị
+- Khi có "Chi tiết từng ngày": mỗi dòng đã ghi sẵn trực · nhị thập bát tú · mục NÊN và KIÊNG của ngày đó. CHỌN NGÀY BẰNG CÁCH TRA MỤC NÊN/KIÊNG TRƯỚC — việc người hỏi nằm trong mục NÊN của ngày nào thì đó là căn cứ mạnh nhất; nằm trong mục KIÊNG thì loại ngày đó, đừng lách
+- Nêu ĐÍCH DANH vài ngày cụ thể kèm lý do rút từ dữ liệu, đừng trả lời chung chung kiểu "chọn ngày hoàng đạo là được"
+- Ngày kị cổ truyền (Tam Nương · Nguyệt Kị · Dương Công) là luật KIÊNG KHỞI SỰ, không phải điểm trừ cộng dồn — dính là loại, dù trực và sao có đẹp
 - Nhắc: ngày tốt theo lịch chung là điều kiện cần; hợp nhất với từng người cần xét thêm lá số cá nhân
 
 ${GIONG_NGUOI_RULES}
@@ -1072,6 +1079,17 @@ const GENERIC_LABELS: Record<string, string> = {
   tinhChatNgay: 'Tính chất chung của ngày', ngayKy: 'Ngày kỵ cổ truyền',
   xungTuoi: 'Ngày này xung tuổi', vietNen: 'Việc nên làm', vietKieng: 'Việc nên kiêng',
   mauHop: 'Màu hợp hành ngày', huongHyThan: 'Hướng Hỷ thần', huongTaiThan: 'Hướng Tài thần',
+  // Hoàng lịch đầy đủ — nguồn `/api/almanac` (mingyu-core) qua
+  // `public/tools-shared/hoang-lich.js`. Thiếu nhãn thì prompt in key thô
+  // ("banhToBachKy: …") và model rất dễ đọc trượt sang nghĩa khác.
+  canChiThang: 'Can chi tháng (theo tiết khí)', canChiNam: 'Can chi năm',
+  nhiThapBatTu: 'Nhị thập bát tú', saoTrucNhat: 'Sao trực nhật (hoàng/hắc đạo)',
+  cuuTinh: 'Cửu tinh trực nhật', nenLam: 'Việc NÊN làm (nghi)',
+  nenKieng: 'Việc NÊN KIÊNG (kỵ)', thanSatCat: 'Thần sát CÁT trực nhật',
+  thanSatHung: 'Thần sát HUNG trực nhật', banhToBachKy: 'Bành Tổ bách kỵ',
+  satHuong: 'Hướng sát (nên tránh)',
+  ngayBinh: 'Ngày bình', ngayXau: 'Ngày xấu',
+  chiTietTung: 'Chi tiết từng ngày (trực · tú · nghi/kỵ)',
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractGenericContext(data: any): string {
