@@ -117,6 +117,186 @@ Migration đã chạy prod nhưng **cố ý `enabled=false`** (cong-cu.html lọ
 ```sql
 update tool_pricing set enabled=true, updated_at=now() where tool_id in ('mai-hoa','ky-mon');
 ```
+## 📅 Thẻ "Vận hôm nay" — và 🔴 3 công cụ đang tính SAI CAN CHI NGÀY (2026-08-04, PR này)
+
+Henry: *"tool Vận ngày… nó là tool sẽ attract user vào xem hằng ngày, cần hấp dẫn
+chút"*, kèm khảo sát tool bên TQ/ĐL.
+
+### 🔴 PHÁT HIỆN LỚN NHẤT — không nằm trong đề bài
+Đi verify thẻ thì lộ ra **can chi NGÀY sai trên 100% ngày** ở 3 chỗ, đều do cùng
+một hằng số chép tay `ANCHOR = 2434290` (lệch **19** vị trí trong vòng 60):
+
+| File | Hỏng cái gì |
+|---|---|
+| `tools-shared/hoang-dao.js` | thẻ /app + tool Giờ Hoàng Đạo |
+| `tools-shared/luc-nham.js` | can ngày → thần tướng đang trực |
+| `tools/tu-tru.html` | **NHẬT CHỦ** của bát tự (+ trụ giờ suy từ nó) |
+
+Ảnh chụp của Henry ghi *"Ngày Tân Mão"* — ngày 4/8/2026 thật là **Canh Tuất**.
+- **Nguồn đúng vốn đã có sẵn 2 bản**: `tuvi-engine/src/lunar/convert.ts` và
+  `public/tubinh-ansao-engine.js` đều dùng `(jd+9)%10 / (jd+1)%12` — tức công cụ
+  **Bát Tự chính vẫn đúng**, chỉ trang Tứ Trụ cũ sai ⇒ cùng một site trả **hai
+  nhật chủ khác nhau** cho cùng ngày sinh.
+- Vá bằng `(JDN + 49) % 60`, **bỏ hẳn hằng số neo** (chính nó gây ra lỗi) và ghi
+  neo kiểm chứng vào comment: **1/1/2000 = JDN 2451545 = Mậu Ngọ**.
+- 🐞 **Lỗi thứ HAI trong cùng file `hoang-dao.js`**: bảng `HD_OFFSET =
+  [0,2,1,2,2,3,...]` không khớp cổ pháp nào ⇒ giờ hoàng đạo lệch ca quyết
+  **1.667/2.000 ngày**. Thay bằng 起例 thật: Thanh Long khởi giờ
+  `(2 × chi ngày + 8) mod 12`, 11 thần đi thuận.
+- 🐞 **Lỗi thứ BA, trong engine**: `computeGio` gán tên thần bằng cách ĐẾM theo
+  thứ tự Tý→Hợi ("sao hoàng đạo đầu tiên gặp = Thanh Long"). Tập 6 giờ vẫn đúng
+  (nên điểm ngày/việc KHÔNG đổi) nhưng **TÊN** sai ở hầu hết ngày — mà tên thần
+  mới là thứ quyết định "giờ này nên làm gì". Nay dùng chung vòng `THAN_12`, và
+  bảng tra cũ giữ lại làm **đối chứng chạy mỗi lượt** (lệch là `throw`).
+- **Verify 3 nguồn ĐỘC LẬP khớp tuyệt đối trên 3.000 ngày**: hoang-dao.js ·
+  tuvi-engine · ca quyết 黄道吉时歌 (chép tay riêng trong test) — 0 lệch cả can
+  chi, cả tập giờ, cả tên thần. Nhật trụ tu-tru.html vs engine Bát Tự: 0/4.000.
+
+### Thẻ mới — vì sao đổi hẳn kiến trúc
+Bản cũ tính ở client bằng `HoangDaoTool` nên **chỉ có can chi + giờ hoàng đạo,
+tức GIỐNG HỆT NHAU với mọi người**. Không ai quay lại mỗi ngày để đọc thứ tờ
+lịch bloc cũng có, trong khi câu *"Lá số của bạn đã sẵn sàng"* thì đang **hứa cá
+nhân hoá rồi không giao**.
+- **`lib/engine/van-ngay.ts` + `GET/POST /api/van-ngay`** — gọi engine ngày-tốt
+  đã có test (12 trực · 28 tú · sao trực nhật · ngày kỵ · điểm 10 loại việc)
+  thay vì port 664 dòng luật sang trình duyệt (= bản thứ hai rồi trôi khỏi nhau).
+  GET cache CDN theo ngày; POST thêm tầng cá nhân. **0 lượt LLM, 0 tính tiền** —
+  thu phí ở mồi kéo người quay lại thì không ai mở lần thứ hai; lượt HỎI THẦY
+  vẫn tính Lượng như cũ.
+- Thẻ nay có: **huy hiệu tốt/bình/xấu** · trực/tú/sao · **xung tuổi + năm sinh**
+  · **nên 3 / kiêng 2** · giờ tốt **kèm việc nên làm** · màu hợp + hướng Tài thần
+  · **khối "Vận riêng của bạn"** = cung nhật hạn + chính tinh + quan hệ hành ngày
+  ↔ nạp âm mệnh. Chưa có lá số → khối đó **cố ý để trống làm CTA**, đừng lấp bằng
+  câu chung chung.
+- `resolveNhatHanIdx` tách khỏi `execTraNhatVan` làm **nguồn duy nhất** cho phép
+  "ngày này rơi vào cung nào" (thẻ cần cấu trúc, rail cần chuỗi). Regression:
+  output tool **byte-identical** old vs new trên 24 ca (94.911 byte).
+- 🐞 **Huy hiệu mâu thuẫn với chính câu bên dưới**: engine chấm Tam Nương chỉ −2
+  nên 4/8/2026 ra "Ngày tốt" ngay trên dòng "hoãn việc trọng đại". Ngày kỵ là
+  luật KIÊNG KHỞI SỰ chứ không phải điểm trừ cộng dồn ⇒ hạ trần xuống "bình",
+  hạ ở MỘT chỗ để huy hiệu + câu chốt + tin push cùng một con số.
+- **Push sáng** đổi từ *"Ngày Tân Mão"* (đúng-nhưng-rỗng, và còn sai) sang câu có
+  tín hiệu: ngày tốt/xấu · trực · việc hợp · xung tuổi. Lọc bỏ "an táng" khỏi
+  gợi ý của push (trên thẻ thì bình thường, bắn vào màn hình khoá thì rất khó đỡ).
+- ⚠️ `extractGenericContext` **BỎ QUA mọi giá trị là object** → payload scenario
+  gửi rail phải PHẲNG, nếu không rail nhận vài dòng rồi luận chay.
+- **Đường lùi giữ nguyên `HoangDaoTool`**: API chết thì thẻ vẫn hiện như bản cũ,
+  không biến mất (nó là khối đầu trang chủ).
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier`
+  sạch · engine test **181 pass** · 3 khối script admin/home `node --check` OK ·
+  **Playwright trên trang THẬT qua Next dev**: khách chưa có lá số → GET đúng 1
+  lần + khối cá nhân là CTA · đã nhớ lá số → POST đúng 1 lần + hiện đúng cung
+  Phúc Đức (**khớp độc lập với output của `execTraNhatVan`**) · **API chết →
+  thẻ VẪN hiện và can chi vẫn đúng** · 390px không tràn ngang · 2 trang tool vừa
+  vá render đúng, 0 lỗi JS.
+- 🪤 **Bẫy đã vấp:** chạy `tsc -p` với `paths` trỏ ngược về repo để dựng bản
+  regression → tsc **emit 30 file `.js` lẫn vào `lib/`** (chính là cảnh báo
+  TS5011 mà tao bỏ qua), làm lint nhảy lên 119 lỗi. Dựng harness kiểu này thì
+  `outDir` phải nằm NGOÀI cây repo và phải `git status` lại sau khi chạy.
+
+### CÒN LẠI
+- **`luc-nham.js`**: mới vá can ngày; công thức `startOffset = (canNgay*2)%12`
+  cho thần tướng **chưa verify** — khác hệ với 12 thần trực giờ, chưa tra đủ chắc
+  nên CỐ Ý không đụng (bài học `isHoangOc`: sửa mò cổ pháp còn tệ hơn để nguyên).
+- Chưa làm: dải **7 ngày tới** (xanh/vàng/đỏ) và thẻ chia sẻ 9:16 qua `poster.js`
+  — hai móc quay lại còn lại của track.
+- Bảng **Tài thần** dùng ca quyết *"Giáp Ất Đông Bắc…"*; có một dị bản
+  (Giáp-Cấn, Ất-Khôn…) lưu hành song song — đổi thì đổi ở `TAI_THAN`.
+
+---
+
+## 🎴 Quẻ Phục Hy bằng hình — 64 tranh + cổ pháp đọc quẻ (2026-08-04, PR #399·400·402·406)
+
+Henry hỏi về "quẻ Phục Hy bằng hình" trên xemtuong.net. Truy ra tổ tiên cổ học
+thật: **軌革卦影** (bói bằng tranh, Phí Hiếu Tiên, đời Tống). Làm hẳn cho mình.
+
+### 🔑 Chỗ dễ nói sai nhất — và tao ĐÃ nói sai một lần
+*"Gieo ra hào động nào thì đọc hào từ đó"* **chỉ đúng khi có ĐÚNG MỘT hào động**.
+Cổ pháp **考變占** (Chu Hy, 《易學啟蒙》) rẽ theo **SỐ** hào động:
+
+| Động | Đọc |
+|---|---|
+| 0 | lời quẻ quẻ chính — KHÔNG đọc hào nào |
+| 1 | hào từ của chính hào đó |
+| 2 | cả hai hào, hào **TRÊN** làm chủ |
+| 3 | lời quẻ của **CẢ** chính lẫn biến |
+| 4 | 2 hào **KHÔNG động**, đọc ở **quẻ BIẾN**, hào **DƯỚI** làm chủ |
+| 5 | hào không động duy nhất, ở quẻ biến |
+| 6 | Càn→**Dụng Cửu**, Khôn→**Dụng Lục**, còn lại→lời quẻ quẻ biến |
+
+`kinh-dich-doc.js` (luật) tách khỏi `kinh-dich-hao.js` (384 hào từ + 64 lời quẻ,
+Hán phồn thể + bản Việt) — hai thứ không dính nhau. Verify **4096 ca** (64 quẻ ×
+64 kiểu hào động) + **448 lượt gieo trên trang thật**, 0 ô trống.
+
+### ⚠️ 384 hào từ tiếng Việt là TAO TỰ DỊCH, chưa ai review
+Henry chốt *"sau này có gì sai tao sẽ kêu sửa"*. Đây là chỗ DUY NHẤT của track mà
+máy không kiểm được đúng/sai — `check:hao` chỉ kiểm "có chữ hay không". Sửa là
+sửa data thuần, không đụng logic.
+
+### 🖼️ 64 bức tranh — mô-típ VIẾT TAY, không nhờ LLM lúc chạy
+`lib/media/que-motifs.ts` = 384 mô-típ, dịch hình của 384 hào từ. Vẽ MỘT lần dùng
+mãi ⇒ nhờ model diễn hào ra cảnh mỗi lượt thì hai lần dựng lại ra hai bộ cảnh
+khác nhau và **không ai soát được trước khi đốt tiền**.
+- **Giữ nguyên tính nguyên bản của hào** (Henry chốt): xe chở xác về, máu chảy
+  đen vàng, xẻo mũi chặt chân đều vào tranh. Tao từng tự làm nhẹ 2 hào, Henry
+  bác. **Không lượt nào bị bộ lọc nội dung OpenAI từ chối** — lo hão.
+- **Sáu tầng chiều cao = sáu hào** (dưới→trên = hào 1→6), trùng chiều đọc tranh
+  trục treo. Trang tô sáng tầng mà cổ pháp chỉ đọc → tranh là cách ĐỌC quẻ chứ
+  không phải đồ trang trí.
+- 🐞 Bản đầu chỉ bày tranh của quẻ mà luật đọc dùng ⇒ gieo 4 hào động ra bức của
+  quẻ KHÁC hẳn quẻ vừa gieo. Nay LUÔN bày quẻ chính, thêm quẻ biến khi cần.
+- 🪤 **Tên file mang HAI hệ chỉ số**: `<PhụcHy>-kw<KingWen>.png`. Phục Hy = nhị
+  phân, **hào 1 là bit THẤP NHẤT**. Lấy nhầm thì mỗi quẻ hiện tranh của quẻ khác
+  — mắt không phát hiện được. Chốt bằng phép so 64 URL client xin với 64 file
+  thật trong Storage: **khớp tuyệt đối**.
+
+### 💸 gpt-image-1 → gpt-image-2 (đo THẬT trên prod, 1024×1536 high)
+| | gpt-image-1 | gpt-image-2 |
+|---|---:|---:|
+| Token ảnh ra | 6.240 | **5.488** |
+| Giá thật/bức | 6.315đ | **~4.116đ** |
+| Thời gian/bức | 25–35s | **65–150s** |
+
+Cả bộ 64 bức: **~276.000đ**, 67 lượt model (3 lượt dôi là A/B chọn model).
+- **`gpt-image-1` bị OpenAI tắt 23/10/2026.** Nhưng đó KHÔNG phải lý do chọn
+  model cho việc này — ảnh vẽ một lần rồi nằm kho vĩnh viễn, sống lâu hơn model.
+  Ngày tắt chỉ ràng buộc 2 tool chân dung (gọi model mỗi lượt) — PR #401 lo.
+- Model đọc từ `app_config['que_images.gen'].model` (allowlist) chứ không env:
+  so được hai model cạnh nhau bằng `?tag=` trên CÙNG prompt, không cần deploy.
+- ⚠️ Bảng giá trong route ĐÚNG, nhưng `lib/agent/usage.ts` lúc đó chưa biết model
+  mới nên `events.cost_vnd` ghi cao hơn thật ~3%. PR #401 vá.
+
+### 🪤 Vận hành lượt vẽ hàng loạt — hai bẫy đã trả giá
+1. **Chạy song song KHÔNG nhanh hơn, chỉ đắt hơn.** Cho mỗi lượt vẽ 2 bức rồi
+   bắn 4 lượt song song ⇒ bức thứ hai của cả 4 lượt vượt trần `maxDuration=300s`
+   và bị giết giữa chừng (request đã bay, OpenAI vẫn có thể tính). Chuyển sang
+   **trần 1 bức/lượt, mỗi lượt gọi ĐÚNG một quẻ** — từ đó 0 bức nào mất.
+   Kiểm bằng cách đếm `llm_usage` vs số file trong kho: phải KHỚP.
+2. **MCP `web_fetch_vercel_url` timeout 60s ≠ route chết.** Route chạy tới 300s.
+   Tao đã suýt kết luận nhầm là hỏng vì soi kho quá sớm. **Đừng gọi lại** — gọi
+   lại là trả tiền hai lần. Soi `storage.objects` để biết thật.
+- `?vede=1` vẽ đè có chủ đích (KHÔNG đổi mô-típ, khác `?scene=`/`?motifs=`). Cần
+  khi đổi model: bản cũ vẫn đúng tên đúng chỗ nên chốt "đã có thì thôi" giữ
+  nguyên chúng, bộ 64 bức lẫn hai nét vẽ mà không gì báo.
+- **Quy trình chạy:** bật `enabled`, đặt `budget`/`quality`/`model` → gọi từng
+  quẻ → **TẮT `enabled` ngay sau khi xong**. Cổng là cờ DB (fail-CLOSED), cố ý
+  không phải secret trên URL — secret nằm lại trong log truy cập.
+
+### 3 guard trong CI lint
+`check:hexagrams` (mã hào) · `check:hao` (384 hào từ) · `check:motifs` (384
+mô-típ). Quẻ thiếu mô-típ **vẫn vẽ ra một bức đẹp**, chỉ là không khớp hào nào —
+lỗi đó chỉ lộ khi có người ngồi đối chiếu 64 bức với 384 hào từ.
+
+### Đã bàn, chốt GIỮ NGUYÊN
+`viral.free_gen_daily_cap=6` suy từ giá cũ; model mới rẻ hơn 34% nên cùng
+$15/tháng mua được ~8 lượt/ngày. Henry hỏi *"sao phải cap? user xài thì trả
+credit mà"* — trần chỉ áp lên người **CHƯA TỪNG NẠP** (Lượng của họ 100% là quà:
+25 đăng ký + tối đa 225 thưởng mời), ai đã nạp KHÔNG BAO GIỜ bị chặn. Đo được:
+**0/53 lượt dùng 2 tool ảnh là của người chưa nạp** (53 lượt đều của 1 tài khoản
+đã nạp = bản test), phơi nhiễm thật ~511 Lượng ≈ 22k đ (3 ví to nhất đều là
+`admin_grant`). Cầu dao chưa từng chạm. **Henry chốt để nguyên 6.** Nới:
+`update app_config set value='8'::jsonb where key='viral.free_gen_daily_cap';`
+(≤ 0 = tắt hẳn).
 
 ---
 

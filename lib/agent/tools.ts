@@ -13,9 +13,10 @@ import {
   computeMonth, topDaysForActivity, ACTIVITY_META, ACTIVITY_LIST,
   type ActivityKey,
 } from '../../tuvi-engine/dist/ngay-tot/index.js';
-import { tinhNguyetHan, tinhNhatHan } from '../../tuvi-engine/dist/van-han/index.js';
+import { tinhNguyetHan } from '../../tuvi-engine/dist/van-han/index.js';
 import { solarToLunar } from '../../tuvi-engine/dist/lunar/convert.js';
 import { matchVanHanCombos, formatComboLines, type LayerCung } from './vanHanCombos';
+import { resolveNhatHanIdx } from '../engine/van-ngay';
 
 // ─── Hướng dẫn dùng tool (chèn vào system prompt) ──────────────
 export const TOOLS_INSTRUCTION = (hasLaso: boolean, hasProfiles = false) => `
@@ -254,36 +255,14 @@ export function execTraNhatVan(lasoData: any, input: any): string {
   const ngay = Number(input?.ngay), thang = Number(input?.thang), nam = Number(input?.nam);
   if (!ngay || !thang || !nam) return 'Thiếu tham số ngày, tháng hoặc năm.';
 
-  const lunar = solarToLunar(ngay, thang, nam);
-  const ngayAL = lunar.day, thangAL = lunar.month;
-
-  const tvs = lasoData?.tieuVanScores;
-  if (!Array.isArray(tvs) || !tvs.length) return 'Lá số này chưa có dữ liệu tiểu vận theo năm.';
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const tv = tvs.find((t: any) => Number(t.nam) === nam);
-  if (!tv) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const yrs = tvs.map((t: any) => Number(t.nam));
-    return `Năm ${nam} ngoài phạm vi lá số (chỉ có ${Math.min(...yrs)}–${Math.max(...yrs)}).`;
-  }
+  // Phép "ngày này rơi vào cung nào" dùng CHUNG với thẻ Vận Ngày
+  // (lib/engine/van-ngay.ts) — thẻ cần kết quả có cấu trúc, tool cần chuỗi cho
+  // model đọc; giữ hai bản tính song song thì sớm muộn chúng trôi khỏi nhau.
+  const rs = resolveNhatHanIdx(lasoData, ngay, thang, nam);
+  if (!rs.ok) return rs.error;
+  const { nhatHanIdx, nguyetHanIdx, tieuHanIdx, tv, ngayAL, thangAL } = rs;
 
   const palaces = lasoData.palaces || [];
-  const tieuHanIdx = _tieuHanIdxOf(palaces, tv.tieuHanCung);
-  if (tieuHanIdx === -1) return `Không tìm thấy cung tiểu hạn "${tv.tieuHanCung}" trong lá số.`;
-
-  // Ưu tiên dùng nguyetVanScores pre-computed; fallback về thangSinhAL/gioSinhIdx
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const preMonthsNhat = (lasoData.nguyetVanScores || []).find((e: any) => Number(e.nam) === nam)?.months;
-  let nguyetHanIdx: number;
-  if (Array.isArray(preMonthsNhat) && preMonthsNhat[thangAL - 1] != null) {
-    nguyetHanIdx = Number(preMonthsNhat[thangAL - 1]);
-  } else {
-    const thangSinhAL = Number(lasoData.thangSinhAL);
-    const gioSinhIdx  = lasoData.gioSinhIdx != null ? Number(lasoData.gioSinhIdx) : -1;
-    if (!thangSinhAL || gioSinhIdx === -1) return 'Lá số thiếu dữ liệu tháng sinh / giờ sinh.';
-    nguyetHanIdx = _mod12(tinhNguyetHan(tieuHanIdx, thangSinhAL, gioSinhIdx).cach1 + thangAL - 1);
-  }
-  const nhatHanIdx   = tinhNhatHan(nguyetHanIdx, ngayAL);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const luuNienIdx = palaces.findIndex((x: any) => x.cungName === tv.luuNienCung);

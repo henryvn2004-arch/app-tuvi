@@ -214,7 +214,13 @@ function calculate(){
   // Tứ trụ
   const yIdx=((nam-4)%60+60)%60; const pN={can:yIdx%10,chi:yIdx%12};
   const mChi=(thang+1)%12; const off=(mChi-2+12)%12; const pT={can:(TSC[pN.can]+off)%10,chi:mChi};
-  const jdn=toJDN(nam,thang,ngay); const ANCHOR=2434290; const diff=((jdn-ANCHOR)%60+600)%60;
+  // Nhật trụ: chỉ số vòng 60 (Giáp Tý = 0) = (JDN + 49) mod 60. Neo kiểm chứng:
+  // 1/1/2000 = JDN 2451545 = Mậu Ngọ. 🔴 Bản cũ dùng ANCHOR=2434290, sai 19 vị
+  // trí trên MỌI ngày → NHẬT CHỦ sai, tức trụ quan trọng nhất của bát tự sai,
+  // và trụ giờ (suy từ can ngày) sai theo. Công cụ Bát Tự chính
+  // (public/tubinh-ansao-engine.js) vốn đã dùng đúng công thức này — hai trang
+  // của cùng một site đang trả hai nhật chủ khác nhau cho cùng ngày sinh.
+  const jdn=toJDN(nam,thang,ngay); const diff=((jdn+49)%60+60)%60;
   const pNg={can:diff%10,chi:diff%12};
   const pG=chiGio>=0?{can:(TSC[pNg.can]+chiGio)%10,chi:chiGio}:null;
   const pillars=[
