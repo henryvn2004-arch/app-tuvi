@@ -788,6 +788,8 @@ const SCENARIO_FIELD: Record<string, string> = {
   'than-so-hoc': 'thanSoData',
   'bat-trach': 'batTrachData',
   'kinh-dich': 'kinhDichData',
+  'mai-hoa': 'maiHoaData',
+  'ky-mon': 'kyMonData',
   'hoang-dao': 'hoangDaoData',
   'ngay-tot': 'ngayTotData',
   'luc-nham': 'lucNhamData',

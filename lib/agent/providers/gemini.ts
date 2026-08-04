@@ -28,7 +28,7 @@ const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 // laso/luan-giai/bat-tu/xem-tuong/phong-thuy thì vẫn KHÔNG rơi vào đây.
 export const GEMINI_PROSE_SCENARIOS = new Set<string>([
   // Mệnh Lý / Huyền Học (đợt thí điểm đầu)
-  'nap-am', 'kim-lau', 'ngu-hanh-ten', 'than-so-hoc', 'bat-trach', 'kinh-dich',
+  'nap-am', 'kim-lau', 'ngu-hanh-ten', 'than-so-hoc', 'bat-trach', 'kinh-dich', 'mai-hoa', 'ky-mon',
   // Lịch số (deterministic, data cấp sẵn)
   'hoang-dao', 'ngay-tot', 'luc-nham',
   // Tương hợp / tử bình / sinh con / đặt tên (data-driven, không tool)

@@ -319,7 +319,21 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
     };
   }
 
-  const API = { QUE, findHexagram, resolve, gridHTML, docHTML, loiDoc, anhHTML, phucHyIndex, railData };
+  const API = {
+    QUE,
+    findHexagram,
+    resolve,
+    gridHTML,
+    docHTML,
+    loiDoc,
+    anhHTML,
+    phucHyIndex,
+    // Mở ra để Mai Hoa dùng lại ĐÚNG 64 bức tranh này. Không mở thì module kia
+    // phải chép lại cách dựng tên file (`<phụcHy>-kw<KingWen>.png`), và hai bản
+    // sẽ trôi khỏi nhau ngay lần đổi bucket đầu tiên.
+    anhUrl: _anhUrl,
+    railData,
+  };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   else root.KinhDichTool = API;
 })(typeof window !== 'undefined' ? window : globalThis);

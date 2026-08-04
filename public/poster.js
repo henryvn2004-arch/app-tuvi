@@ -9,10 +9,26 @@
  * KHÔNG TỐN THÊM TIỀN MODEL — toàn bộ dựng bằng <canvas> ở máy người dùng,
  * không gọi thêm lượt sinh ảnh nào.
  *
+ * HAI CHẾ ĐỘ CHO VÙNG NGHỆ THUẬT (phần trên, cao IMG_H):
+ *   `imageUrl` — dán một bức ảnh vào (2 tool chân dung).
+ *   `draw`     — GỌI LẠI hàm của trang để nó tự vẽ (tool bàn/quẻ).
+ *
+ * Vì sao có chế độ `draw`: ảnh do model sinh tốn 1.658đ/lượt và đang bị cầu dao
+ * `viral.free_gen_daily_cap` phát khẩu phần — tức đúng lúc lan mạnh nhất là lúc
+ * cửa đóng. Bàn Kỳ Môn, quẻ Mai Hoa, bàn Lục Hào thì vẽ được bằng chính canvas
+ * này: 0đ, không cầu dao, chia sẻ vô hạn. Trước bản này KHÔNG có đường nào biến
+ * một biểu đồ thành ảnh tải về được — nó đẹp trên màn hình rồi dừng ở đó.
+ *
  * Dùng:
  *   Poster.download({ imageUrl, title, subtitle, quote }, 'ten-file.png')
+ *   Poster.download({ draw: fn, title, subtitle, quote }, 'ten-file.png')
  *   Poster.build(opts) -> Promise<Blob>
  *   Poster.pickQuote([...nguồn theo thứ tự ưu tiên]) -> string
+ *
+ * Hợp đồng của `draw`: `draw(ctx, { x, y, w, h })` — vẽ ĐỒNG BỘ trong khung đó.
+ * Nền navy đã tô sẵn, ctx đã `clip()` vào khung nên vẽ tràn cũng không phá phần
+ * chữ bên dưới. Ném lỗi trong `draw` sẽ làm hỏng cả lượt dựng (đúng ý muốn: thà
+ * rơi về nhánh dự phòng của trang còn hơn tải về một tấm ảnh trống).
  */
 (function () {
   'use strict';
@@ -149,11 +165,14 @@
   }
 
   // ── dựng ảnh ─────────────────────────────────────────────────────────────
-  function ensureFonts() {
+  function ensureFonts(extra) {
     if (!document.fonts || !document.fonts.load) return Promise.resolve();
     // Nạp sẵn đúng các face sẽ vẽ. Face nghiêng của Noto Serif có thể chưa từng
     // được trang nào dùng tới → không tải sẵn thì canvas lặng lẽ rơi về Georgia.
     var want = ['700 62px ' + SERIF, 'italic 400 37px ' + SERIF, '600 24px ' + SANS, '400 30px ' + SANS];
+    // Tool biểu đồ vẽ ở cỡ chữ riêng (tên quái to, nhãn cung nhỏ) — face nào
+    // trang chưa từng dùng thì cũng phải nạp sẵn, cùng lý do với face nghiêng.
+    if (Array.isArray(extra)) want = want.concat(extra);
     return Promise.all(
       want.map(function (f) {
         return document.fonts.load(f).catch(function () {});
@@ -161,29 +180,33 @@
     ).catch(function () {});
   }
 
-  function drawPoster(ctx, img, seal, opts) {
+  function drawPoster(ctx, paintArt, seal, opts) {
     ctx.fillStyle = NAVY;
     ctx.fillRect(0, 0, W, H);
 
-    // Ảnh chân dung. PHẢI clip: drawImage không tự cắt theo khung, ảnh dọc
+    // PHẢI clip cả hai chế độ. Ảnh: drawImage không tự cắt theo khung, ảnh dọc
     // 2:3 phủ đủ bề ngang 9:16 thì cao hơn IMG_H, không clip là nó tràn xuống
     // đè nền khối chữ — nền chữ đổi màu theo từng bức, có bức mất sạch tương phản.
+    // Hàm vẽ của trang: clip là hàng rào để một lỗi toạ độ bên đó không bôi lên
+    // phần chữ của poster.
     ctx.save();
     ctx.beginPath();
     ctx.rect(0, 0, W, IMG_H);
     ctx.clip();
-    // Neo mép TRÊN (0): nhân vật đội mũ quan/mũ giáp, cắt từ giữa là cụt mũ —
-    // thứ nhìn ra ngay là hỏng. Phần dư cắt hết ở dưới, nơi chỉ có thân/nền.
-    drawCover(ctx, img, 0, 0, W, IMG_H, 0);
+    paintArt(ctx, { x: 0, y: 0, w: W, h: IMG_H });
     ctx.restore();
 
     // Dải chuyển từ ảnh xuống nền để chữ có chỗ đứng, không cắt ngang phũ phàng.
-    var g = ctx.createLinearGradient(0, IMG_H - FADE, 0, IMG_H);
-    g.addColorStop(0, 'rgba(6,26,46,0)');
-    g.addColorStop(0.55, 'rgba(6,26,46,0.72)');
-    g.addColorStop(1, NAVY);
-    ctx.fillStyle = g;
-    ctx.fillRect(0, IMG_H - FADE, W, FADE);
+    // CHỈ cho chế độ ảnh: hàm vẽ đã đứng trên chính nền navy này nên không có
+    // mép nào để làm mềm, phủ gradient lên chỉ làm tối mất đáy bàn/quẻ.
+    if (opts.fade !== false && !opts.draw) {
+      var g = ctx.createLinearGradient(0, IMG_H - FADE, 0, IMG_H);
+      g.addColorStop(0, 'rgba(6,26,46,0)');
+      g.addColorStop(0.55, 'rgba(6,26,46,0.72)');
+      g.addColorStop(1, NAVY);
+      ctx.fillStyle = g;
+      ctx.fillRect(0, IMG_H - FADE, W, FADE);
+    }
 
     ctx.textBaseline = 'alphabetic';
     ctx.textAlign = 'left';
@@ -240,19 +263,18 @@
     ctx.fillText('tuviminhbao.com', tx, fy);
   }
 
-  function buildOnce(opts, imgSrc, cors) {
+  function toBlob(opts, paintArt) {
     return Promise.all([
-      loadImage(imgSrc, cors),
       loadImage('/seal.webp', false).catch(function () {
         return null;
       }),
-      ensureFonts(),
+      ensureFonts(opts.fonts),
     ]).then(function (r) {
       var cv = document.createElement('canvas');
       cv.width = W;
       cv.height = H;
       var ctx = cv.getContext('2d');
-      drawPoster(ctx, r[0], r[1], opts);
+      drawPoster(ctx, paintArt, r[0], opts);
       return new Promise(function (resolve, reject) {
         // toBlob ném SecurityError nếu canvas bị "tainted" (ảnh khác origin nạp
         // mà thiếu header CORS) — nuốt lỗi ở đây thì nút Tải Ảnh im ru, nên để
@@ -268,13 +290,27 @@
     });
   }
 
+  // Chế độ ẢNH: nạp bức ảnh rồi phủ `cover` vào khung.
+  function buildFromImage(opts, imgSrc, cors) {
+    return loadImage(imgSrc, cors).then(function (img) {
+      return toBlob(opts, function (ctx, box) {
+        // Neo mép TRÊN (0): nhân vật đội mũ quan/mũ giáp, cắt từ giữa là cụt mũ —
+        // thứ nhìn ra ngay là hỏng. Phần dư cắt hết ở dưới, nơi chỉ có thân/nền.
+        drawCover(ctx, img, box.x, box.y, box.w, box.h, 0);
+      });
+    });
+  }
+
   function build(opts) {
-    if (!opts || !opts.imageUrl) return Promise.reject(new Error('no_image'));
-    return buildOnce(opts, opts.imageUrl, true).catch(function () {
+    if (!opts) return Promise.reject(new Error('no_opts'));
+    // Chế độ VẼ: không chạm mạng, nên cũng không có nhánh dự phòng CORS nào.
+    if (typeof opts.draw === 'function') return toBlob(opts, opts.draw);
+    if (!opts.imageUrl) return Promise.reject(new Error('no_image'));
+    return buildFromImage(opts, opts.imageUrl, true).catch(function () {
       // Ảnh Supabase Storage bình thường CÓ CORS nên đường thẳng chạy được;
       // đây là lối thoát khi không (hoặc canvas vẫn tainted): đi vòng qua proxy
       // cùng-origin, lúc đó chắc chắn không tainted.
-      return buildOnce(opts, '/api/portrait-image?u=' + encodeURIComponent(opts.imageUrl), false);
+      return buildFromImage(opts, '/api/portrait-image?u=' + encodeURIComponent(opts.imageUrl), false);
     });
   }
 
@@ -305,5 +341,9 @@
     saveBlob: saveBlob,
     WIDTH: W,
     HEIGHT: H,
+    // Bảng màu/chữ CỦA CHÍNH poster, mở ra để hàm `draw` của trang vẽ cùng tông.
+    // Không mở thì mỗi tool tự chép mã màu, rồi navy của bàn quẻ lệch navy của
+    // khối chữ ngay trong cùng một tấm ảnh.
+    THEME: { NAVY: NAVY, GOLD: GOLD, GOLD_SOFT: GOLD_SOFT, SERIF: SERIF, SANS: SANS },
   };
 })();

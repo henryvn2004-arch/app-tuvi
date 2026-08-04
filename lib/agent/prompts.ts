@@ -110,6 +110,12 @@ export function buildChatContext(body: any): ChatContext {
   if (toolType === 'kinh-dich') {
     return { systemForCall: CHAT_SYSTEM_KINH_DICH(extractGenericContext(body.kinhDichData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
   }
+  if (toolType === 'mai-hoa') {
+    return { systemForCall: CHAT_SYSTEM_MAI_HOA(extractMaiHoaContext(body.maiHoaData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
+  }
+  if (toolType === 'ky-mon') {
+    return { systemForCall: CHAT_SYSTEM_KY_MON(extractKyMonContext(body.kyMonData), docs, persona), tools: buildTools(false), maxTokens: 1800, lasoDataForTools: null };
+  }
   if (toolType === 'hoang-dao') {
     return { systemForCall: CHAT_SYSTEM_HOANG_DAO(extractGenericContext(body.hoangDaoData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
   }
@@ -476,6 +482,43 @@ Nguyên tắc:
 ${GIONG_NGUOI_RULES}
 
 === DỮ LIỆU QUẺ ĐÃ GIEO ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+const CHAT_SYSTEM_MAI_HOA = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia Mai Hoa Dịch Số (梅花易數) theo cổ pháp Thiệu Khang Tiết, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
+
+${_TIME()}
+
+Nguyên tắc:
+- ${FORMAT_RULE}
+- Quẻ đã được gieo và tính SẴN: quẻ Thể, quẻ Dụng, hào động, quan hệ ngũ hành ở cả ba chặng chính–hỗ–biến. Dùng ĐÚNG dữ liệu đã cho, KHÔNG tự tính lại và KHÔNG đổi Thể/Dụng
+- 🔑 LUẬN THEO THỂ–DỤNG, KHÔNG luận theo hào từ như Kinh Dịch: Mai Hoa lấy quan hệ NGŨ HÀNH giữa quẻ Thể (mình / việc đang hỏi) và quẻ Dụng (ngoại cảnh) làm gốc. Hào từ nếu có chỉ là chú thích thêm, không được lấy làm kết luận chính
+- Nhắc đúng nghĩa: **Dụng sinh Thể là tốt nhất** (ngoại cảnh nuôi mình), **Thể sinh Dụng là hao tổn** (mình nuôi ngoại cảnh) — người mới học hay đảo ngược đúng chỗ này, đừng theo họ
+- Đọc ba chặng như một mạch thời gian: quẻ chính là tình thế hiện tại, hỗ quái là khúc giữa mà người hỏi thường không lường trước, biến quái là chỗ việc đi tới. Chặng nào Thể bị Dụng khắc thì đó là nút thắt của chặng ấy — chỉ ra rõ
+- Lấy TƯỢNG của bát quái mà nói cho cụ thể (Càn: người trên, kim loại, tròn; Khảm: nước, hiểm, lo; Ly: lửa, văn thư, phô bày; Cấn: núi, dừng lại, nhà cửa…) thay vì chỉ nói ngũ hành khô khan
+- Nói thẳng cát/hung và nên/không nên; khuyên hành xử, không phán số phận tuyệt đối
+
+${GIONG_NGUOI_RULES}
+
+=== DỮ LIỆU QUẺ MAI HOA ĐÃ GIEO ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+const CHAT_SYSTEM_KY_MON = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia Kỳ Môn Độn Giáp (奇門遁甲) — đứng đầu Tam Thức — phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
+
+${_TIME()}
+
+Nguyên tắc:
+- ${FORMAT_RULE}
+- Bàn đã được LẬP SẴN và tính chính xác: cục, tiết khí, trực phù, trực sử, và cả chín cung với cửa/sao/thần/can. Dùng ĐÚNG dữ liệu đã cho, TUYỆT ĐỐI không tự an lại bàn, không đổi cửa hay sao của cung nào
+- 🔑 ĐỌC THEO ĐÚNG THỨ TỰ TRỌNG YẾU: **cửa (bát môn) nặng nhất** vì đây là môn chọn phương và chọn giờ hành sự; sau đó tới Tam Kỳ (Ất/Bính/Đinh), rồi sao thiên bàn và thần, cuối cùng mới tới cách cục
+- Trả lời câu hỏi thực dụng của Kỳ Môn: **giờ này nên đi hướng nào, hợp làm việc gì, tránh hướng nào** — chứ không luận vận mệnh cả đời (đó là việc của Tử Vi)
+- Ghép cửa với LOẠI VIỆC người hỏi: Sinh Môn hợp cầu tài, mua bán, khai trương; Khai Môn hợp khởi sự, gặp người có quyền, giấy tờ; Hưu Môn hợp cầu an, nhờ vả, hoà giải; Cảnh Môn hợp thi cử, tin tức, quảng bá; Đỗ Môn hợp việc kín; Thương/Tử/Kinh Môn thì khuyên tránh
+- ⚠️ Phần "hướng xếp hạng cao nhất" là XẾP HẠNG TƯƠNG ĐỐI do trang chấm điểm, KHÔNG phải cát cách của cổ pháp. Được phép dùng để trả lời "đỡ nhất là hướng nào", nhưng KHÔNG được gọi nó là cát cách hay hứa hẹn tốt lành
+- Bàn đổi theo TỪNG CANH GIỜ (hai tiếng một bàn) — nhắc người hỏi điều này khi họ định dùng cho một thời điểm khác
+- Nói thẳng nên/không nên; khuyên hành xử, không phán số phận tuyệt đối
+
+${GIONG_NGUOI_RULES}
+
+=== BÀN KỲ MÔN ĐÃ LẬP ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 const CHAT_SYSTEM_HOANG_DAO = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia trạch cát (chọn giờ tốt) theo cổ pháp — thông thạo 12 thần tướng Hoàng Đạo/Hắc Đạo, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
@@ -1040,6 +1083,56 @@ function extractGenericContext(data: any): string {
     const val = k === 'gioiTinh' ? (v === 'nu' ? 'Nữ' : 'Nam') : k === 'isMaster' ? (v ? 'Có' : 'Không') : v;
     ctx += `${label}: ${val}\n`;
   }
+  return ctx;
+}
+
+const MAI_HOA_LABELS: Record<string, string> = {
+  cauHoi: 'Câu hỏi người gieo', cachGieo: 'Cách gieo', buocTinh: 'Cách ra quẻ',
+  haoDong: 'Hào động', theDung: 'Thể — Dụng', ketLuan: 'Kết luận quẻ chính',
+  haoTu: 'Hào từ của hào động (tham khảo thêm)',
+};
+/**
+ * Riêng Mai Hoa KHÔNG dùng `extractGenericContext` được: ba chặng chính–hỗ–biến
+ * là một MẢNG, mà hàm generic bỏ qua mọi giá trị `typeof === 'object'` → rơi
+ * đúng phần quan trọng nhất của phép luận, và rơi trong im lặng.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function extractMaiHoaContext(data: any): string {
+  if (!data || typeof data !== 'object') return '';
+  let ctx = '';
+  for (const [k, v] of Object.entries(data)) {
+    if (v == null || v === '' || Array.isArray(v) || typeof v === 'object') continue;
+    ctx += `${MAI_HOA_LABELS[k] || k}: ${v}\n`;
+  }
+  if (Array.isArray(data.baChang) && data.baChang.length) {
+    ctx += `\nBa chặng (đọc theo thứ tự thời gian):\n`;
+    for (const c of data.baChang) ctx += `- ${c}\n`;
+  }
+  return ctx;
+}
+
+const KY_MON_LABELS: Record<string, string> = {
+  cauHoi: 'Việc người hỏi', cuc: 'Cục', tietKhi: 'Tiết khí', canChi: 'Can chi',
+  trucPhu: 'Trực phù (sao trực)', trucSu: 'Trực sử (cửa trực)',
+  huongDoNhat: 'Hướng xếp hạng cao nhất',
+};
+/** Cùng lý do với Mai Hoa: bàn 9 cung là MẢNG, hàm generic sẽ nuốt mất. */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function extractKyMonContext(data: any): string {
+  if (!data || typeof data !== 'object') return '';
+  let ctx = '';
+  for (const [k, v] of Object.entries(data)) {
+    if (v == null || v === '' || Array.isArray(v) || typeof v === 'object') continue;
+    ctx += `${KY_MON_LABELS[k] || k}: ${v}\n`;
+  }
+  const ds = (nhan: string, arr: unknown) => {
+    if (!Array.isArray(arr) || !arr.length) return;
+    ctx += `\n${nhan}:\n`;
+    for (const x of arr) ctx += `- ${x}\n`;
+  };
+  ds('Hướng engine chấm CÁT', data.huongTot);
+  ds('Hướng engine chấm nên TRÁNH', data.huongTranh);
+  ds('Chín cung trên bàn', data.banCung);
   return ctx;
 }
 

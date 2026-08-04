@@ -27,7 +27,9 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.110.8",
     "@vercel/functions": "^3.7.6",
+    "celestine": "^0.2.1",
     "mcp-handler": "^1.1.0",
+    "mingyu-core": "^0.1.23",
     "next": "^16.2.12",
     "pdf-parse": "^1.1.1",
     "react": "^19.2.8",
