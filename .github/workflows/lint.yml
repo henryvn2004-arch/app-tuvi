@@ -37,6 +37,11 @@ jobs:
       - name: Bảng 64 quẻ Kinh Dịch đúng mã hào
         run: npm run check:hexagrams
 
+      # Bảng 384 hào từ dài 64 mục × 14 chuỗi. Thiếu một hào là người gieo trúng
+      # quẻ đó nhận một ô TRỐNG — mắt không soi hết 64 quẻ được.
+      - name: Bảng 384 hào từ đầy đủ
+        run: npm run check:hao
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10
