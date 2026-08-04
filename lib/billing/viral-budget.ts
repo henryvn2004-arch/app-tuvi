@@ -2,11 +2,17 @@
 // ============================================================
 // CẦU DAO NGÂN SÁCH ẢNH FREE + LƯỢT RAIL TẶNG  (Viral Loop V2.2)
 //
-// Vì sao cần: 2 tool chân dung tốn ~$0.08–0.10 mỗi lượt gen THẬT (ảnh
-// gpt-image-1 + truyện LLM). Vòng lặp viral chỉ chạy được nếu người mới dùng
-// thử được MIỄN PHÍ bằng Lượng quà tặng — nghĩa là mỗi lượt đó là tiền túi
-// mình bỏ ra. Henry chốt trần **$15/tháng** cho khoản này: đây là THÍ NGHIỆM
-// CÓ KIỂM SOÁT, không phải scale.
+// Vì sao cần: 2 tool chân dung tốn tiền model THẬT mỗi lượt gen (ảnh
+// gpt-image-2 ~1.090đ + truyện LLM). Vòng lặp viral chỉ chạy được nếu người
+// mới dùng thử được MIỄN PHÍ bằng Lượng quà tặng — nghĩa là mỗi lượt đó là
+// tiền túi mình bỏ ra. Henry chốt trần **$15/tháng** cho khoản này: đây là
+// THÍ NGHIỆM CÓ KIỂM SOÁT, không phải scale.
+//
+// ⚠️ `viral.free_gen_daily_cap = 6` suy từ giá CŨ (~$0.09/lượt). Sang
+// gpt-image-2 một lượt còn ~$0.065 ⇒ **cùng $15/tháng nay mua được ~8 lượt/
+// ngày**. CỐ Ý KHÔNG tự nới: trần là cần gạt ngân sách của Henry, không phải
+// hằng số suy ra từ giá. Muốn nới thì một câu SQL trên `app_config`, không
+// cần deploy.
 //
 // Hai thứ trong file này:
 //  1. `freeGenGate` — chặn TRƯỚC khi trừ Lượng (và do đó trước khi gọi model)

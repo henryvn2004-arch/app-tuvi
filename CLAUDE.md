@@ -879,6 +879,62 @@ nạp lẻ chỉ **39**). Henry xác nhận *"nó là tàn dư đó, chỉnh l�
 
 ---
 
+## 🖼️ Sinh ảnh: gpt-image-1 → gpt-image-2 (2026-08-04, PR #401)
+
+`gpt-image-1` **bị OpenAI tắt 23/10/2026** (bản mini/1.5/chatgpt-image-latest thì
+01/12 — nguồn hay lẫn hai mốc này). `lib/image/openai-image.ts` là đường sinh ảnh
+DUY NHẤT của **Chân Dung Vợ Chồng + Chân Dung Tiền Kiếp**, tức 2 tool đang bán sẽ
+hỏng vào ngày đó. Đây là hạn sử dụng, không phải việc tối ưu.
+
+- **⚠️ Hai phiên chạm cùng file, KHÔNG trùng việc — đọc kỹ trước khi sửa tiếp:**
+  #400 (Quẻ Phục Hy) dựng **cơ chế** `opts.model` ghi đè từng lượt + trả `model`
+  về cho caller, nhưng **để nguyên mặc định `gpt-image-1`**. PR này lật mặc định
+  sang `gpt-image-2` và làm phần migrate thật. Hai đường ghi đè cố ý KHÁC mục
+  đích: `opts.model` = đổi cho một lượt (so hai model cạnh nhau ở chỗ rẻ), env
+  `OPENAI_IMAGE_MODEL` = pin cả site (lối lùi).
+- **Tham số y hệt** — `size` vẫn nhận `1024x1536`, `quality` vẫn `low|medium|high`,
+  `n`, `data[0].b64_json` không đổi ⇒ đổi đúng tên model là chạy.
+- **🐞 Tiền đề của Henry lệch một bậc chất lượng:** anh nói mình dùng **high**
+  ($0,25 → $0,165). Thật ra 2 route KHÔNG truyền `quality` nên ăn mặc định
+  **medium**. Đo lại đúng khổ đang dùng (1024×1536 medium): **1.649đ → 1.090đ,
+  rẻ hơn 34%**. Tỉ lệ trùng khớp nhưng số tuyệt đối nhỏ hơn ~4 lần. 1.649đ tính
+  ra khớp với **1.658đ đo thật trên prod** — chính con số đó xác nhận là medium.
+- **Giá token** (`lib/agent/usage.ts`): gpt-image-2 text $5 · image in $8 ·
+  **image out $30**/1M (gpt-image-1 là $5/$10/**$40**). GIỮ NGUYÊN dòng
+  gpt-image-1 trong bảng — env pin ngược lại thì chi phí vẫn tính đúng giá của nó.
+- **🔴 `output_format: 'png'` nay KHAI RÕ.** Có nguồn báo gpt-image-2 đổi mặc định
+  sang webp (nguồn khác nói vẫn png, và issue `openai/openai-node#1850` ghi nhận
+  xin webp vẫn trả PNG). Không cần biết bên nào đúng: cả 2 route upload với đuôi
+  `.png` + `Content-Type: image/png`, và ảnh đó đi thẳng vào `og:image` của trang
+  chia sẻ — mặc định đổi một nhịp là file nói dối kiểu của chính nó ở 3 nơi.
+- **Tên model hết bị chép tay.** Trước đây 2 route gọi `logImageUsage(..., 'gpt-
+  image-1', ...)` viết cứng, trong khi model thật do env quyết ⇒ pin env là bảng
+  chi phí ghi sai tên. Nay `generatePortraitImage` **trả `model` đã gọi thật**,
+  route log cái đó. Cùng họ bài học với giá Lượng ở #373: một số/tên chép ở hai
+  nơi thì sớm muộn cũng trôi khỏi nhau.
+- **Thêm `console.warn` khi có ảnh mà KHÔNG có usage** — nhánh này làm
+  `logImageUsage` bỏ qua im lặng, tức panel Biên LN mất khoản đắt nhất hệ thống
+  mà không ai hay (đúng bệnh GA4 base64 hỏng âm thầm hàng tháng).
+- **Lối lùi:** env `OPENAI_IMAGE_MODEL=gpt-image-1` (cần Redeploy) nếu tài khoản
+  chưa mở gpt-image-2.
+- **Verify:** `tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier`
+  sạch · `check:prices` sạch · **21 ca trên MODULE THẬT** (tsc + stub fetch):
+  request gửi đúng model/`output_format`/size/quality/n · trả đúng `model` ·
+  parse usage đúng · env pin → gửi VÀ trả đúng model bị pin · mất usage → vẫn ra
+  ảnh + có cảnh báo · non-200 và data rỗng đều ném lỗi · **cost_vnd tính qua
+  `logImageUsage` thật**: gpt-image-2 1.090đ, gpt-image-1 1.649đ, model lạ rơi về
+  giá gpt-image-2.
+- ⚠️ **CHƯA gọi được API thật** — container chặn `api.openai.com` (403 qua proxy)
+  và không có `OPENAI_API_KEY`. Việc tay Henry: gen thử 1 lá số mỗi tool sau khi
+  deploy, soi ảnh (gpt-image-2 có tầng "reasoning" dựng bố cục trước khi vẽ nên
+  **phong cách có thể khác** — painterly pastel + 5 nền văn minh là thứ phải nhìn
+  mới biết còn giữ được không) và soi `events.meta.cost_vnd` xem có ~1.090đ không.
+- ⚠️ **Trần ảnh free `viral.free_gen_daily_cap=6` suy từ giá CŨ.** Cùng $15/tháng
+  nay mua được ~8 lượt/ngày. CỐ Ý không tự nới — đó là cần gạt ngân sách của
+  Henry, sửa bằng một câu SQL `app_config`, không cần deploy.
+
+---
+
 ## 📐 QUY ƯỚC BẮT BUỘC (đọc trước khi viết UI mới)
 
 ### 💰 Giá Lượng: CHỈ sửa trong Admin — client KHÔNG được chép số (2026-08-01, PR #373)
