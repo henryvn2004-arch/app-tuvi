@@ -142,15 +142,29 @@ export const GIO_HOANG_DAO_BY_DAY_CHI: Record<DiaChi, readonly DiaChi[]> = {
   'Hợi':  ['Sửu', 'Thìn', 'Ngọ', 'Mùi', 'Tuất', 'Hợi'],
 };
 
-// Tên 6 sao hoàng đạo (cát) — gán theo thứ tự xuất hiện trong giờ hoàng đạo
+// Tên 6 sao hoàng đạo (cát) / 6 sao hắc đạo (hung) — giữ để tra nhanh nhóm.
 export const HOANG_DAO_SAO_NAMES = [
   'Thanh Long', 'Minh Đường', 'Kim Quỹ', 'Thiên Đức', 'Ngọc Đường', 'Tư Mệnh',
 ] as const;
-
-// Tên 6 sao hắc đạo (hung) — gán theo thứ tự xuất hiện trong giờ hắc đạo
 export const HAC_DAO_SAO_NAMES = [
   'Thiên Hình', 'Châu Tước', 'Bạch Hổ', 'Thiên Lao', 'Huyền Vũ', 'Câu Trận',
 ] as const;
+
+// ─── 12 THẦN TRỰC GIỜ — thứ tự CỐ ĐỊNH của vòng ────────────
+// Vòng quay đúng thứ tự cổ pháp; 6 vị ở index 0,1,4,5,7,10 là hoàng đạo.
+// Thanh Long khởi ở giờ (2 × chi ngày + 8) mod 12 ("青龙起例": ngày Tý khởi giờ
+// Thân, ngày Sửu khởi giờ Tuất, ngày Dần khởi giờ Tý…), 11 vị sau đi thuận.
+//
+// ⚠️ Trước đây `computeGio` gán tên bằng cách ĐẾM theo thứ tự Tý→Hợi
+// ("sao hoàng đạo thứ nhất gặp được = Thanh Long"). Tập 6 giờ hoàng đạo vẫn
+// đúng (nên tính chất ngày/điểm việc KHÔNG đổi), nhưng TÊN thần trực từng giờ
+// sai ở phần lớn các ngày — vd ngày Tuất, giờ Dần bị gọi là Thanh Long trong
+// khi vòng thật cho Tư Mệnh. Tên thần là thứ quyết định "giờ này nên làm gì".
+export const THAN_12 = [
+  'Thanh Long', 'Minh Đường', 'Thiên Hình', 'Châu Tước', 'Kim Quỹ', 'Thiên Đức',
+  'Bạch Hổ', 'Ngọc Đường', 'Thiên Lao', 'Huyền Vũ', 'Tư Mệnh', 'Câu Trận',
+] as const;
+export const THAN_12_HOANG_DAO = [true, true, false, false, true, true, false, true, false, false, true, false] as const;
 
 // ─── NGÀY KỴ (âm lịch) ──────────────────────────────────────
 // TAM NƯƠNG: mùng 3, 7, 13, 18, 22, 27 ÂM LỊCH — kỵ làm việc lớn

@@ -26,7 +26,10 @@
   function compute(ngay, thang, nam, gioChi) {
     ngay = parseInt(ngay); thang = parseInt(thang); nam = parseInt(nam); gioChi = parseInt(gioChi) || 0;
     if (!ngay || ngay < 1 || ngay > 31 || !thang || !nam) return { ok: false, error: 'Vui lòng nhập ngày tháng năm.' };
-    var jdn = toJDN(nam, thang, ngay), ANCHOR = 2434290, diff = ((jdn - ANCHOR) % 60 + 600) % 60;
+    // Chỉ số vòng 60 (Giáp Tý = 0) = (JDN + 49) mod 60. Neo kiểm chứng:
+    // 1/1/2000 = JDN 2451545 = Mậu Ngọ. 🔴 Bản cũ dùng ANCHOR = 2434290, sai 19
+    // vị trí trên MỌI ngày → can ngày sai → thần tướng đang trực sai theo.
+    var diff = ((toJDN(nam, thang, ngay) + 49) % 60 + 60) % 60;
     var canNgay = diff % 10;
     var startOffset = (canNgay * 2) % 12;
     var activeIdx = (gioChi - startOffset + 12) % 12;

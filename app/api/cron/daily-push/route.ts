@@ -19,29 +19,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { withCronLog } from '@/lib/cron/log';
 import { parseFirebaseServiceAccount, sendFcmPush } from '@/lib/channels/push';
+import { computeVanNgay, todayVN } from '@/lib/engine/van-ngay';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY!;
 const CRON_SECRET = process.env.CRON_SECRET || '';
 const FIREBASE_SA = process.env.FIREBASE_SERVICE_ACCOUNT || '';
 
-const CAN = ['Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý'];
-const CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
-
-// Can chi ngày dương lịch (JDN, anchor Giáp Tý) — cùng công thức HoangDaoTool.
-function dayCanChi(y: number, m: number, d: number): string {
-  const a = Math.floor((14 - m) / 12), yr = y + 4800 - a, mn = m + 12 * a - 3;
-  const jdn = d + Math.floor((153 * mn + 2) / 5) + 365 * yr + Math.floor(yr / 4) - Math.floor(yr / 100) + Math.floor(yr / 400) - 32045;
-  const diff = ((jdn - 2434290) % 60 + 600) % 60;
-  return CAN[diff % 10] + ' ' + CHI[diff % 12];
-}
-function todayVN(): { y: number; m: number; d: number } {
-  const s = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
-  const mm = s.match(/(\d{4})-(\d{2})-(\d{2})/);
-  if (mm) return { y: +mm[1], m: +mm[2], d: +mm[3] };
-  const t = new Date();
-  return { y: t.getUTCFullYear(), m: t.getUTCMonth() + 1, d: t.getUTCDate() };
-}
+// Can chi + tính chất ngày lấy CHUNG một nguồn với thẻ "Vận hôm nay"
+// (lib/engine/van-ngay.ts → engine ngày-tốt). Trước đây file này chép riêng
+// công thức JDN và todayVN — hai bản của cùng một phép tính.
 
 export async function GET(request: NextRequest) {
   return withCronLog('cron-daily-push', 'vercel', () => handle(request));
@@ -70,10 +57,26 @@ async function handle(request: NextRequest) {
   if (error) return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
   if (!tokens || !tokens.length) return NextResponse.json({ ok: true, sent: 0, note: 'no tokens' });
 
+  // Tin push CHỈ mang can chi ngày ("Ngày Tân Mão") thì không có lý do nào để
+  // mở — nó đúng nhưng rỗng. Nay nêu thẳng tín hiệu quyết định: ngày tốt/xấu,
+  // việc nên làm, hoặc cảnh báo xung tuổi. Vẫn 0 lượt LLM.
   const t = todayVN();
-  const cc = dayCanChi(t.y, t.m, t.d);
-  const title = 'Vận hôm nay ☾';
-  const body = `Ngày ${cc}. Chạm để xem giờ tốt và luận vận riêng cho bạn.`;
+  const v = computeVanNgay(t.d, t.m, t.y);
+  const title = v.danhGia.tinhChat === 'tốt' ? 'Hôm nay là ngày tốt ☾'
+    : v.danhGia.tinhChat === 'xấu' ? 'Hôm nay nên thận trọng ☾'
+      : 'Vận hôm nay ☾';
+  const parts: string[] = [`Ngày ${v.ngay.canChi} · trực ${v.truc.ten}`];
+  if (v.ngayKy.length) parts.push(`trùng ${v.ngayKy.join(' + ')}`);
+  else {
+    // Bỏ "an táng" khỏi gợi ý của TIN PUSH: trên thẻ nó nằm trong bảng chọn
+    // ngày nên đọc bình thường, còn bắn thẳng vào màn hình khoá mỗi sáng thì
+    // thành một lời chúc rất khó đỡ. Thẻ vẫn giữ đủ.
+    const goi = v.nen.filter((x) => !/an táng/i.test(x.ten)).slice(0, 2);
+    if (goi.length) parts.push(`hợp ${goi.map((x) => x.ten.toLowerCase()).join(', ')}`);
+  }
+  if (v.xung.chi) parts.push(`xung tuổi ${v.xung.chi}`);
+  const body = `${parts.join(' · ')}. Chạm để xem vận riêng của bạn.`;
+  const cc = v.ngay.canChi;
 
   let result: Awaited<ReturnType<typeof sendFcmPush>>;
   try {

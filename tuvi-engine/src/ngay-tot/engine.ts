@@ -9,8 +9,8 @@ import type { DiaChi } from '../types.js';
 import {
   CHI_LIST, TRUC_LIST, TRUC_TINH_CHAT, THANG_AM_TO_CHI,
   NHI_THAP_BAT_TU, TU_TINH_CHAT, TU_EPOCH,
-  HOANG_HAC_SAO, THANG_CHI_TO_THANHLONG_DAY_CHI,
-  GIO_HOANG_DAO_BY_DAY_CHI, HOANG_DAO_SAO_NAMES, HAC_DAO_SAO_NAMES,
+  HOANG_HAC_SAO, THANG_CHI_TO_THANHLONG_DAY_CHI, THAN_12, THAN_12_HOANG_DAO,
+  GIO_HOANG_DAO_BY_DAY_CHI,
   TAM_NUONG_AL, NGUYET_KY_AL, DUONG_CONG_KY,
   type Truc, type Tu,
 } from './constants.js';
@@ -117,23 +117,25 @@ function computeSaoNgay(chiNgay: DiaChi, chiThang: DiaChi) {
 }
 
 function computeGio(chiNgay: DiaChi): GioInfo[] {
-  // Lookup 6 giờ hoàng đạo từ bảng hardcoded (verified via xemlicham.com)
+  const dayIdx = CHI_LIST.indexOf(chiNgay);
+  // Thanh Long khởi tại giờ (2 × chi ngày + 8) mod 12, 11 thần sau đi thuận.
+  const thanhLongGio = (dayIdx * 2 + 8) % 12;
+  // Bảng tra 6 giờ hoàng đạo (verified via xemlicham.com) giữ lại làm ĐỐI CHỨNG:
+  // vòng 12 thần phải cho ra đúng tập đó, lệch là một trong hai sai.
   const hoangDaoSet = new Set(GIO_HOANG_DAO_BY_DAY_CHI[chiNgay]);
-  let hoangCounter = 0;
-  let hacCounter = 0;
   const result: GioInfo[] = [];
   for (let i = 0; i < 12; i++) {
     const chi = CHI_LIST[i]!;
-    const isHoang = hoangDaoSet.has(chi);
-    const sao = isHoang
-      ? HOANG_DAO_SAO_NAMES[hoangCounter++]!
-      : HAC_DAO_SAO_NAMES[hacCounter++]!;
+    const thanIdx = ((i - thanhLongGio) % 12 + 12) % 12;
     result.push({
       chi,
       range: HOUR_RANGES[chi],
-      sao,
-      hoangDao: isHoang,
+      sao: THAN_12[thanIdx]!,
+      hoangDao: THAN_12_HOANG_DAO[thanIdx]!,
     });
+    if (THAN_12_HOANG_DAO[thanIdx] !== hoangDaoSet.has(chi)) {
+      throw new Error(`Vòng 12 thần lệch bảng giờ hoàng đạo tại ngày ${chiNgay}, giờ ${chi}`);
+    }
   }
   return result;
 }
