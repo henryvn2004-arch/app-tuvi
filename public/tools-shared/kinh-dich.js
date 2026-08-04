@@ -216,6 +216,87 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
   </div>`;
   }
 
+  // ── Tranh quẻ ("Quẻ Phục Hy bằng hình") ──────────────────────────────────
+  // 64 bức vẽ sẵn, cất ở Supabase Storage. Tên file mang CẢ hai chỉ số:
+  // `<phụcHy 2 chữ số>-kw<KingWen 2 chữ số>.png`.
+  const ANH_GOC =
+    'https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/public/portraits/que-phuc-hy';
+
+  /** Chỉ số Phục Hy (tiên thiên) = nhị phân, hào 1 là bit THẤP NHẤT, dương=1. */
+  function phucHyIndex(li) {
+    let n = 0;
+    for (let i = 0; i < 6; i++) if (li[i] === '1') n += 1 << i;
+    return n;
+  }
+
+  function _anhUrl(li, kingWen) {
+    const p = String(phucHyIndex(li)).padStart(2, '0');
+    const k = String(kingWen).padStart(2, '0');
+    return `${ANH_GOC}/${p}-kw${k}.png`;
+  }
+
+  /**
+   * Khối tranh quẻ.
+   *
+   * 🔑 VÌ SAO KHÔNG CHỈ DÁN CÁI ẢNH: bức tranh được dựng thành SÁU TẦNG chiều
+   * cao, tầng dưới cùng là hào 1, tầng trên cùng là hào 6 — mỗi tầng vẽ đúng sự
+   * việc của hào đó. Mà cổ pháp thì chỉ đọc MỘT VÀI hào. Dán ảnh trơn thì nó
+   * thành đồ trang trí; phải chỉ ra người gieo cần nhìn TẦNG NÀO thì tranh mới
+   * là một cách đọc quẻ.
+   *
+   * Vẽ ảnh của MỌI quẻ mà luật đọc thực sự dùng: 4–6 hào động thì lời nằm ở quẻ
+   * BIẾN, lúc đó bày tranh quẻ chính mà không bày tranh quẻ biến là chỉ sai chỗ.
+   */
+  function anhHTML(r, currentLines) {
+    const d = loiDoc(r, currentLines);
+    // LUÔN bày tranh quẻ CHÍNH — đó là quẻ người ta vừa gieo ra. Chỉ bày quẻ
+    // biến khi luật đọc thật sự dùng tới nó (4–6 hào động).
+    //
+    // 🐞 Bản đầu chỉ bày quẻ mà luật đọc dùng, nên gieo 4 hào động ra một bức
+    // tranh của quẻ KHÁC hẳn quẻ vừa gieo, không lời nào giải thích. Test bắt
+    // được. Không có module luật đọc thì vẫn bày quẻ chính — bức tranh tự nó đã
+    // là một cách nhìn quẻ, chỉ mất phần đánh dấu tầng.
+    const nguonDung = new Set(['chinh']);
+    if (d) d.muc.forEach((m) => nguonDung.add(m.nguon));
+
+    const khoi = [];
+    [
+      { nguon: 'chinh', que: r.que, idx: r.pIdx, nhan: 'Quẻ Chính' },
+      { nguon: 'bien', que: r.cQue, idx: r.cIdx, nhan: 'Quẻ Biến' },
+    ].forEach((v) => {
+      if (!v.que || !nguonDung.has(v.nguon)) return;
+      // Tầng nào đang được đọc — CHỈ tính mục hào của ĐÚNG quẻ này. Mục "lời
+      // quẻ" không trỏ vào tầng nào, cả bức là câu trả lời.
+      const tang = new Set(
+        (d ? d.muc : [])
+          .filter((m) => m.nguon === v.nguon && m.loai === 'hao' && m.hao)
+          .map((m) => m.hao)
+      );
+      const dai = [];
+      for (let h = 6; h >= 1; h--) {
+        const on = tang.has(h);
+        dai.push(
+          `<div class="kd-tang${on ? ' kd-tang-on' : ''}"><span>${on ? 'hào ' + h : h}</span></div>`
+        );
+      }
+      khoi.push(`<figure class="kd-anh">
+      <div class="kd-anh-khung">
+        <img src="${_anhUrl(v.que.li, v.idx + 1)}" alt="Tranh quẻ ${_esc(v.que.n)}"
+             loading="lazy" decoding="async" width="1024" height="1536">
+        <div class="kd-tangs" aria-hidden="true">${dai.join('')}</div>
+      </div>
+      <figcaption>${_esc(v.nhan)} · ${_esc(v.que.n)} ${_esc(v.que.zh)}${
+        tang.size ? ` — đọc ở tầng ${[...tang].sort((a, b) => a - b).join(' và ')}` : ''
+      }</figcaption>
+    </figure>`);
+    });
+
+    if (!khoi.length) return '';
+    return `<div class="kd-anhs">${khoi.join('')}
+    <div class="kd-anh-chu">Tranh dựng theo lời quẻ và 384 hào từ: bức chia làm sáu tầng, tầng dưới cùng là hào 1, tầng trên cùng là hào 6 — mỗi tầng vẽ đúng sự việc của hào đó. Tầng được tô sáng là phần cổ pháp chỉ đọc.</div>
+  </div>`;
+  }
+
   // ── Dữ liệu thô cho rail (trợ lý luận sâu) ──
   function railData(r, cauHoi, currentLines) {
     const dongHao = (currentLines || [])
@@ -238,7 +319,7 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
     };
   }
 
-  const API = { QUE, findHexagram, resolve, gridHTML, docHTML, loiDoc, railData };
+  const API = { QUE, findHexagram, resolve, gridHTML, docHTML, loiDoc, anhHTML, phucHyIndex, railData };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   else root.KinhDichTool = API;
 })(typeof window !== 'undefined' ? window : globalThis);
