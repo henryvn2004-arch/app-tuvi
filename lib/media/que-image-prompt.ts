@@ -76,6 +76,19 @@ export interface QueImageInput {
    * Bỏ trống → lùi về phong cảnh thuần từ hai quái, KHÔNG bịa nhân vật.
    */
   scene?: string;
+  /**
+   * SÁU sự việc, theo thứ tự hào 1 → hào 6. Ưu tiên hơn `scene`.
+   *
+   * 🔑 VÌ SAO XẾP DỌC DƯỚI→TRÊN: hào vốn đã là không gian — hào 1 gọi là "sơ"
+   * (dưới cùng), hào 6 gọi là "thượng" (trên cùng) — mà tranh trục treo Trung
+   * Hoa đọc đúng chiều đó (phép tam viễn). Hình thức bức tranh trùng khít cấu
+   * trúc quẻ, nên đây không phải mẹo xếp hình mà là dịch đúng cái quẻ ra tranh.
+   *
+   * Lời dặn bố cục dựng Ở ĐÂY chứ không để người gọi tự viết: cùng một khung
+   * cho cả 64 bức thì bộ tranh mới nhất quán, và cách ép model không bỏ sót
+   * mô-típ là thứ phải sửa MỘT chỗ khi tìm ra cách tốt hơn.
+   */
+  motifs?: string[];
 }
 
 export interface QueImagePrompt {
@@ -120,18 +133,45 @@ export function buildQueImagePrompt(q: QueImageInput): QueImagePrompt {
   const canh = `${upper.above}, above ${lower.below}`;
   const hanTu = queHanName(q.li, q.zh);
   const scene = (q.scene || '').trim();
+  const motifs = (q.motifs || []).map((s) => s.trim()).filter(Boolean);
+
+  // Ép model đặt ĐỦ mô-típ: đánh số, neo vào dải chiều cao cụ thể, và nói
+  // thẳng là không được gộp/bỏ. Đo thực tế lượt trước (chỉ mô tả bằng "lowest /
+  // just above / midway…") thì quẻ Bí RỤNG hào 1 và hào 5 — chữ chỉ vị trí
+  // tương đối không đủ, phải cho toạ độ.
+  const BANDS = [
+    'in the lowest sixth of the picture (nearest the viewer)',
+    'in the second band up from the bottom',
+    'in the third band, just below the middle',
+    'in the fourth band, just above the middle',
+    'in the fifth band, in the upper distance',
+    'in the highest sixth of the picture (farthest away)',
+  ];
+  const khoiMotif = motifs.length
+    ? [
+        `The composition is a single continuous landscape divided into six clearly separated depth levels — terraces, ledges and receding planes — read from the bottom of the scroll upward. Place EXACTLY these six incidents, one in each level, all six visible:`,
+        ...motifs.slice(0, 6).map((m, i) => `${i + 1}. ${BANDS[i]}: ${m}`),
+        `All six must appear. Do not omit, merge or duplicate any of them. Each is small within the landscape but distinct and unmistakable. They are separate moments in one place, not one crowd.`,
+      ].join('\n')
+    : '';
 
   // Thứ tự khối cố ý: CHỦ ĐỀ trước, PHONG CÁCH sau, chữ/triện cuối. Model đọc
   // phần đầu nặng hơn — để phong cách lên đầu thì 64 bức na ná nhau vì phần
   // phân biệt (cảnh) bị đẩy xuống đuôi.
   const prompt = [
-    scene
-      ? `A vertical hanging-scroll painting. Setting: ${canh}. Depicted event: ${scene}. ${light}.`
-      : `A vertical hanging-scroll painting depicting: ${canh}. ${light}. An empty landscape with no people.`,
-    `No text or lettering anywhere in the painted scene itself, apart from the inscription and seal described below.`,
+    khoiMotif
+      ? `A vertical hanging-scroll painting. Setting: ${canh}. ${light}.\n\n${khoiMotif}`
+      : scene
+        ? `A vertical hanging-scroll painting. Setting: ${canh}. Depicted event: ${scene}. ${light}.`
+        : `A vertical hanging-scroll painting depicting: ${canh}. ${light}. An empty landscape with no people.`,
+    `No text or lettering anywhere in the painted scene itself, apart from the inscription described below.`,
     GONGBI_STYLE,
     `In the upper corner, include a column of traditional Chinese calligraphy reading exactly "${hanTu}", brushed in classical regular script, vertically, as an authentic scroll inscription. Use traditional (not simplified) character forms.`,
-    `Include a single carved red Chinese seal reading exactly "紫微明寶", naturally integrated as if it were the original painter's signature.`,
+    // ⚠️ KHÔNG bảo model vẽ triện. Nó vẽ mỗi bức một kiểu, chữ sai, và 64 bức
+    // ra 64 con dấu khác nhau — hỏng đúng thứ mà con dấu sinh ra để làm.
+    // Triện THẬT (`public/seal.png`) được ghép vào sau khi sinh xong, xem
+    // `app/api/admin/que-images/route.ts`. Dặn thẳng để nó chừa chỗ trống.
+    `Leave the lower-left corner clear of detail — no seal, no stamp, no signature, no red square anywhere in the image.`,
   ].join('\n\n');
 
   return { kingWen: q.kingWen, phucHy: phucHyIndex(q.li), ten: q.ten, hanTu, canh, prompt };
