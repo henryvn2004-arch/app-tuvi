@@ -27,6 +27,7 @@ import { NextRequest } from 'next/server';
 import { generatePortraitImage } from '@/lib/image/openai-image';
 import { logImageUsage } from '@/lib/agent/usage';
 import { buildQueImagePrompt } from '@/lib/media/que-image-prompt';
+import { QUE_MOTIFS } from '@/lib/media/que-motifs';
 import { getConfigValue } from '@/lib/config/appConfig';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -101,6 +102,7 @@ export async function GET(req: NextRequest) {
     budget?: number;
     size?: string;
     quality?: string;
+    model?: string;
   }>('que_images.gen', { enabled: false });
 
   if (!cfg?.enabled) {
@@ -143,6 +145,30 @@ export async function GET(req: NextRequest) {
     ? (cfg.quality as Quality)
     : 'medium';
 
+  // Model đọc từ config chứ không từ env: `gpt-image-1` đã bị OpenAI khai tử
+  // trong 2026 (thay bằng `gpt-image-2`), nên bộ 64 bức này chắc chắn phải đổi
+  // model ít nhất một lần. Để ở config thì so được hai model cạnh nhau bằng
+  // `?tag=`, trên CÙNG một prompt, mà không phải deploy giữa hai lượt.
+  // Allowlist chứ không nhận chuỗi tự do: giá trị này đi thẳng vào body gọi
+  // OpenAI, và mỗi model là một mức giá khác nhau — gõ nhầm tên thì hoặc lỗi cả
+  // lượt, hoặc âm thầm chạy ở mức giá không ai tính trước.
+  const GIA_VND: Record<string, Record<Quality, number>> = {
+    // Đo thật trên prod ở 1024×1536.
+    'gpt-image-1': { low: 500, medium: 1625, high: 6313 },
+    // Bảng giá công bố ở 1024×1536, quy 25.000đ/USD. CHƯA đo thật — con số này
+    // là ƯỚC TÍNH cho tới khi có hoá đơn đối chiếu.
+    'gpt-image-2': { low: 500, medium: 1625, high: 4125 },
+  };
+  const model = cfg.model && GIA_VND[cfg.model] ? cfg.model : 'gpt-image-1';
+
+  // `?motifs=` — sáu sự việc theo thứ tự hào 1→6, ngăn bằng dấu `|`. Đọc MỘT
+  // lần ngoài vòng lặp: nó áp cho cả lượt, không phải cho từng quẻ.
+  const motifsTay = (sp.get('motifs') || '')
+    .slice(0, MAX_SCENE * 2)
+    .split('|')
+    .map((s) => s.trim())
+    .filter(Boolean);
+
   const ketQua: { kingWen: number; ten: string; hanTu: string; url?: string; loi?: string }[] = [];
   let daVe = 0,
     boQua = 0,
@@ -164,12 +190,11 @@ export async function GET(req: NextRequest) {
       zh: q.zh,
       sacThai: q.f,
       scene: (sp.get('scene') || '').slice(0, MAX_SCENE),
-      // `?motifs=` — sáu sự việc theo thứ tự hào 1→6, ngăn bằng dấu `|`.
-      motifs: (sp.get('motifs') || '')
-        .slice(0, MAX_SCENE * 2)
-        .split('|')
-        .map((s) => s.trim())
-        .filter(Boolean),
+      // Mặc định lấy sáu mô-típ đã viết sẵn trong `que-motifs.ts` (dịch hình của
+      // 384 hào từ). `?motifs=` chỉ để THỬ một bộ khác mà không phải deploy —
+      // 64 quẻ × 6 dòng thì không nhét vừa một cú GET, nên đường chính phải là
+      // file dữ liệu, không phải query.
+      motifs: motifsTay.length ? motifsTay : QUE_MOTIFS[kw] || [],
     });
     // `?tag=` → ghi ra tên file khác thay vì đè bản cũ. Cần cho việc SO SÁNH:
     // muốn biết `quality=medium` có đủ không thì phải có cả hai bản cùng lúc mà
@@ -194,8 +219,8 @@ export async function GET(req: NextRequest) {
     }
 
     try {
-      const img = await generatePortraitImage({ prompt: p.prompt, size, quality });
-      void logImageUsage('que-phuc-hy', 'gpt-image-1', img.usage);
+      const img = await generatePortraitImage({ prompt: p.prompt, size, quality, model });
+      void logImageUsage('que-phuc-hy', img.model, img.usage);
       const daDong = await dongTrien(img.b64);
 
       const up = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${path}`, {
@@ -229,10 +254,11 @@ export async function GET(req: NextRequest) {
     dungCaLuot: chan,
     conLai: pick.length - ketQua.length,
     quality,
-    // Đo thật trên prod: medium ≈ 1.625đ/bức, high ≈ 6.313đ/bức (gấp 3,9 lần).
-    // Trước đây chốt cứng 1.658 nên lượt `high` báo rẻ hơn thực tế 4 lần — đúng
-    // loại "một con số chép tay rồi đứng im" mà repo đã dính nhiều lần.
-    chiPhiUocTinhVnd: daVe * (quality === 'high' ? 6313 : quality === 'low' ? 500 : 1625),
+    model,
+    // Bảng giá theo TỪNG model (xem `GIA_VND` ở trên) chứ không một dãy số chốt
+    // cứng: đổi model mà bảng giá đứng im thì báo cáo chi phí nói dối ngay lượt
+    // đầu — đúng loại "một con số chép tay rồi đứng im" repo đã dính nhiều lần.
+    chiPhiUocTinhVnd: daVe * GIA_VND[model][quality],
     anh: ketQua,
   });
 }

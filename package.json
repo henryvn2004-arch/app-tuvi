@@ -21,7 +21,8 @@
     "test:e2e:report": "playwright show-report",
     "test:smoke": "playwright test --config=playwright.smoke.config.ts",
     "test:smoke:ui": "playwright test --config=playwright.smoke.config.ts --ui",
-    "lhci": "lhci autorun"
+    "lhci": "lhci autorun",
+    "check:motifs": "node scripts/check-que-motifs.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.8",
