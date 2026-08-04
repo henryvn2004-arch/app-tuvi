@@ -42,6 +42,11 @@ jobs:
       - name: Bảng 384 hào từ đầy đủ
         run: npm run check:hao
 
+      # Bộ 64 bức tranh vẽ MỘT LẦN, mỗi bức ~4.000đ. Quẻ thiếu mô-típ vẫn vẽ ra
+      # một bức đẹp — chỉ là không khớp hào nào. Phải chặn TRƯỚC khi đốt tiền.
+      - name: Bảng mô-típ tranh 64 quẻ đầy đủ
+        run: npm run check:motifs
+
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 10

@@ -14,17 +14,29 @@ export interface GeneratePortraitOpts {
   prompt: string;
   size?: '1024x1024' | '1024x1536' | '1536x1024';
   quality?: 'low' | 'medium' | 'high';
+  /**
+   * Ghi đè model cho ĐÚNG lượt gọi này. Cần vì `gpt-image-1` đã bị OpenAI khai
+   * tử trong 2026 (thay bằng `gpt-image-2`), mà đổi model là đổi NÉT VẼ — hai
+   * tool chân dung đang bán không được phép đổi nét lặng lẽ. Nên đường đổi phải
+   * là từng lượt gọi, thử được ở chỗ rẻ trước, chứ không phải một biến env bật
+   * lên là cả site vẽ khác đi.
+   */
+  model?: string;
 }
 
 export interface GeneratePortraitResult {
   b64: string;
   /** Token usage thật từ OpenAI (0 nếu API không trả — vẫn ghi log được, chỉ cost=0). */
   usage: { text_tokens: number; image_input_tokens: number; image_output_tokens: number };
+  /** Model THỰC SỰ đã gọi — để log ghi đúng tên chứ không chép lại hằng số ở chỗ gọi. */
+  model: string;
 }
 
 /** Trả về base64 PNG (không kèm data: prefix) + usage token thật. Ném lỗi nếu API thất bại. */
 export async function generatePortraitImage(opts: GeneratePortraitOpts): Promise<GeneratePortraitResult> {
   if (!OPENAI_KEY) throw new Error('openai-image: thiếu OPENAI_API_KEY');
+
+  const model = opts.model || OPENAI_IMAGE_MODEL;
 
   const r = await fetch(OPENAI_IMAGES_URL, {
     method: 'POST',
@@ -33,7 +45,7 @@ export async function generatePortraitImage(opts: GeneratePortraitOpts): Promise
       Authorization: `Bearer ${OPENAI_KEY}`,
     },
     body: JSON.stringify({
-      model: OPENAI_IMAGE_MODEL,
+      model,
       prompt: opts.prompt,
       size: opts.size || '1024x1024',
       quality: opts.quality || 'medium',
@@ -54,6 +66,7 @@ export async function generatePortraitImage(opts: GeneratePortraitOpts): Promise
   if (!b64) throw new Error('openai-image: không nhận được ảnh.');
   return {
     b64,
+    model,
     usage: {
       text_tokens: j?.usage?.input_tokens_details?.text_tokens || 0,
       image_input_tokens: j?.usage?.input_tokens_details?.image_tokens || 0,
