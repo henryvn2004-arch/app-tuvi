@@ -2,9 +2,11 @@
 // ============================================================
 // M2 (track Media Pipeline) — render ảnh ĐĂNG MẠNG XÃ HỘI bằng Satori.
 //
-// VÌ SAO SATORI CHỨ KHÔNG PHẢI MODEL SINH ẢNH: đo trên prod, mỗi lượt
-// `gpt-image-1` tốn 1.658đ — khoản đắt nhất hệ thống (~96% chi phí một lượt
-// chân dung). Một pipeline chạy hằng ngày mà gọi model ảnh thì tiền đội lên
+// VÌ SAO SATORI CHỨ KHÔNG PHẢI MODEL SINH ẢNH: mỗi lượt sinh ảnh tốn ~1.090đ
+// (`gpt-image-2`; `gpt-image-1` trước đó đo được 1.658đ trên prod) — vẫn là
+// khoản đắt nhất hệ thống, ~95% chi phí một lượt chân dung. Đổi model rẻ hơn
+// KHÔNG lật lại kết luận này: một pipeline chạy hằng ngày mà gọi model ảnh thì
+// tiền vẫn đội lên
 // theo số bài. Satori render ngay trong edge runtime, **0đ**, và ra chữ tiếng
 // Việt sắc nét hơn hẳn model ảnh (model hay viết sai dấu).
 //

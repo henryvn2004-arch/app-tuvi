@@ -333,7 +333,7 @@ async function handleImage(userId: string, birth: BirthParams, key: string, eraI
   try {
     const imgRes = await generatePortraitImage({ prompt: finalPrompt, size: '1024x1536' });
     imageB64 = imgRes.b64;
-    void logImageUsage('chan-dung-tien-kiep', 'gpt-image-1', imgRes.usage);
+    void logImageUsage('chan-dung-tien-kiep', imgRes.model, imgRes.usage);
   } catch (e) {
     return err('Lỗi sinh ảnh: ' + (e instanceof Error ? e.message : 'không rõ'), 500);
   }

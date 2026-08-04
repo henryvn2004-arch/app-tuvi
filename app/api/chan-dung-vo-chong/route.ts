@@ -400,7 +400,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   try {
     const imgRes = await generatePortraitImage({ prompt: finalPrompt, size: '1024x1536' });
     imageB64 = imgRes.b64;
-    void logImageUsage('chan-dung-vo-chong', 'gpt-image-1', imgRes.usage);
+    void logImageUsage('chan-dung-vo-chong', imgRes.model, imgRes.usage);
   } catch (e) {
     return err('Lỗi sinh ảnh: ' + (e instanceof Error ? e.message : 'không rõ'), 500);
   }

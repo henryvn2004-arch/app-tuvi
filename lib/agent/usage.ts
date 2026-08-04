@@ -11,8 +11,8 @@
 // không cần bảng riêng. Cùng file còn logLlmParseFail() ghi bản thô khi output
 // LLM không parse được (event_type='llm_parse_fail') — chẩn đoán, không phải chi phí.
 //
-// logImageUsage() — thêm cho route "Chân Dung Vợ Chồng" (gpt-image-1, text-to-
-// image): cấu trúc giá 3 loại token (text input / image input / image output)
+// logImageUsage() — cho 2 route chân dung (gpt-image-*, text-to-image):
+// cấu trúc giá 3 loại token (text input / image input / image output)
 // KHÁC hẳn LlmUsage 2 chiều (input/output) của Anthropic/Gemini text, nên tách
 // riêng calcImageCostVnd thay vì ép vào MODEL_PRICING chung.
 // ============================================================
@@ -63,10 +63,14 @@ function calcCostVnd(model: string, u: LlmUsage): number {
   return Math.round(usd * USD_TO_VND);
 }
 
-// ─── Ảnh (gpt-image-1) ──────────────────────────────────────────
-// Giá 3 loại token riêng (KHÔNG giống LlmUsage 2 chiều ở trên): text input
-// $5/1M, image input $10/1M (không dùng ở route hiện tại — text-to-image,
-// không có ảnh đầu vào), image output $40/1M. Nguồn: bảng giá OpenAI hiện hành.
+// ─── Ảnh (gpt-image-*) ──────────────────────────────────────────
+// Giá 3 loại token riêng (KHÔNG giống LlmUsage 2 chiều ở trên): text input,
+// image input (không dùng ở route hiện tại — text-to-image, không có ảnh đầu
+// vào), image output. Nguồn: bảng giá OpenAI hiện hành, USD/1M token.
+//
+// GIỮ `gpt-image-1` dù đã đổi sang `gpt-image-2`: tên model do CHÍNH lượt gọi
+// trả về (xem `lib/image/openai-image.ts`), nên nếu env pin ngược lại thì chi
+// phí vẫn tính đúng giá của nó chứ không lặng lẽ tính nhầm giá model mới.
 export interface ImageUsage {
   text_tokens: number;
   image_input_tokens: number;
@@ -74,9 +78,10 @@ export interface ImageUsage {
 }
 
 const IMAGE_MODEL_PRICING: Record<string, { textInput: number; imageInput: number; imageOutput: number }> = {
+  'gpt-image-2': { textInput: 5, imageInput: 8, imageOutput: 30 },
   'gpt-image-1': { textInput: 5, imageInput: 10, imageOutput: 40 },
 };
-const DEFAULT_IMAGE_PRICING = IMAGE_MODEL_PRICING['gpt-image-1'];
+const DEFAULT_IMAGE_PRICING = IMAGE_MODEL_PRICING['gpt-image-2'];
 
 function calcImageCostVnd(model: string, u: ImageUsage): number {
   const p = IMAGE_MODEL_PRICING[model] || DEFAULT_IMAGE_PRICING;
@@ -84,7 +89,7 @@ function calcImageCostVnd(model: string, u: ImageUsage): number {
   return Math.round(usd * USD_TO_VND);
 }
 
-/** Log chi phí sinh ảnh (gpt-image-1) — cùng bảng/event_type với logLlmUsage
+/** Log chi phí sinh ảnh (gpt-image-*) — cùng bảng/event_type với logLlmUsage
  * nên gộp chung vào bucket tool_id trên dashboard_margin "by_tool" (không cần
  * RPC/panel riêng). Best-effort, không throw. */
 export async function logImageUsage(toolId: string, model: string, usage: ImageUsage): Promise<void> {
