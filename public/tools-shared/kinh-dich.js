@@ -236,26 +236,38 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
   }
 
   /**
+   * Câu MỞ của một hào từ — chính là cái CẢNH được vẽ trong tranh; câu sau
+   * thường là lời khuyên rút ra, không phải hình. Lấy phần đầu để chú thích đọc
+   * lướt được; hào từ ĐẦY ĐỦ vẫn nằm ở khối "cổ pháp chỉ đọc" bên dưới nên
+   * không mất chữ nào.
+   */
+  function _canhVe(viet) {
+    const s = String(viet == null ? '' : viet).trim();
+    const i = s.indexOf('. ');
+    const dau = i > 0 ? s.slice(0, i + 1) : s;
+    return dau.length > 130 ? dau.slice(0, 128).replace(/\s+\S*$/, '') + '…' : dau;
+  }
+
+  /**
    * Khối tranh quẻ.
    *
-   * 🔑 VÌ SAO KHÔNG CHỈ DÁN CÁI ẢNH: bức tranh được dựng thành SÁU TẦNG chiều
-   * cao, tầng dưới cùng là hào 1, tầng trên cùng là hào 6 — mỗi tầng vẽ đúng sự
-   * việc của hào đó. Mà cổ pháp thì chỉ đọc MỘT VÀI hào. Dán ảnh trơn thì nó
-   * thành đồ trang trí; phải chỉ ra người gieo cần nhìn TẦNG NÀO thì tranh mới
-   * là một cách đọc quẻ.
+   * ẢNH ĐỂ NGUYÊN — không kẻ tầng, không phủ nhãn lên mặt tranh. Nhiều người
+   * lưu bức tranh về vì nó đẹp, mà lưới chia sáu tầng thì đi theo file ra ngoài.
+   * Phần "hào nào ứng với cái gì" chuyển xuống danh sách chú thích dưới tranh.
    *
    * Vẽ ảnh của MỌI quẻ mà luật đọc thực sự dùng: 4–6 hào động thì lời nằm ở quẻ
    * BIẾN, lúc đó bày tranh quẻ chính mà không bày tranh quẻ biến là chỉ sai chỗ.
    */
   function anhHTML(r, currentLines) {
     const d = loiDoc(r, currentLines);
+    const Hao = root.KinhDichHao || null;
     // LUÔN bày tranh quẻ CHÍNH — đó là quẻ người ta vừa gieo ra. Chỉ bày quẻ
     // biến khi luật đọc thật sự dùng tới nó (4–6 hào động).
     //
     // 🐞 Bản đầu chỉ bày quẻ mà luật đọc dùng, nên gieo 4 hào động ra một bức
     // tranh của quẻ KHÁC hẳn quẻ vừa gieo, không lời nào giải thích. Test bắt
     // được. Không có module luật đọc thì vẫn bày quẻ chính — bức tranh tự nó đã
-    // là một cách nhìn quẻ, chỉ mất phần đánh dấu tầng.
+    // là một cách nhìn quẻ, chỉ mất phần đánh dấu hào đang đọc.
     const nguonDung = new Set(['chinh']);
     if (d) d.muc.forEach((m) => nguonDung.add(m.nguon));
 
@@ -265,36 +277,41 @@ QUE.forEach((q,i) => { LINE_TO_IDX[q.li] = i; });
       { nguon: 'bien', que: r.cQue, idx: r.cIdx, nhan: 'Quẻ Biến' },
     ].forEach((v) => {
       if (!v.que || !nguonDung.has(v.nguon)) return;
-      // Tầng nào đang được đọc — CHỈ tính mục hào của ĐÚNG quẻ này. Mục "lời
-      // quẻ" không trỏ vào tầng nào, cả bức là câu trả lời.
-      const tang = new Set(
+      // Hào nào đang được đọc — CHỈ tính mục hào của ĐÚNG quẻ này. Mục "lời
+      // quẻ" không trỏ vào hào nào, cả bức là câu trả lời.
+      const dangDoc = new Set(
         (d ? d.muc : [])
           .filter((m) => m.nguon === v.nguon && m.loai === 'hao' && m.hao)
           .map((m) => m.hao)
       );
-      const dai = [];
-      for (let h = 6; h >= 1; h--) {
-        const on = tang.has(h);
-        dai.push(
-          `<div class="kd-tang${on ? ' kd-tang-on' : ''}"><span>${on ? 'hào ' + h : h}</span></div>`
-        );
-      }
+      const loi = Hao && Hao.HAO ? Hao.HAO[v.idx] : null;
+      const dsHao =
+        loi && loi.hv
+          ? `<ol class="kd-anh-hao">${loi.hv
+              .map((t, i) => {
+                const on = dangDoc.has(i + 1);
+                return `<li${on ? ' class="kd-hao-doc"' : ''}><b>Hào ${i + 1}</b> ${_esc(
+                  _canhVe(t)
+                )}${on ? '<i class="kd-hao-tag">đang đọc</i>' : ''}</li>`;
+              })
+              .join('')}</ol>`
+          : '';
       khoi.push(`<figure class="kd-anh">
       <div class="kd-anh-khung">
         <img src="${_anhUrl(v.que.li, v.idx + 1)}" alt="Tranh quẻ ${_esc(v.que.n)}"
              loading="lazy" decoding="async" width="1024" height="1536">
-        <div class="kd-tangs" aria-hidden="true">${dai.join('')}</div>
       </div>
-      <figcaption>${_esc(v.nhan)} · ${_esc(v.que.n)} ${_esc(v.que.zh)}${
-        tang.size ? ` — đọc ở tầng ${[...tang].sort((a, b) => a - b).join(' và ')}` : ''
-      }</figcaption>
+      <figcaption>
+        <b>${_esc(v.nhan)} · ${_esc(v.que.n)} ${_esc(v.que.zh)}</b>${
+          loi && loi.qv ? `<span class="kd-anh-que">${_esc(loi.qv)}</span>` : ''
+        }
+      </figcaption>
+      ${dsHao}
     </figure>`);
     });
 
     if (!khoi.length) return '';
-    return `<div class="kd-anhs">${khoi.join('')}
-    <div class="kd-anh-chu">Tranh dựng theo lời quẻ và 384 hào từ: bức chia làm sáu tầng, tầng dưới cùng là hào 1, tầng trên cùng là hào 6 — mỗi tầng vẽ đúng sự việc của hào đó. Tầng được tô sáng là phần cổ pháp chỉ đọc.</div>
-  </div>`;
+    return `<div class="kd-anhs">${khoi.join('')}</div>`;
   }
 
   // ── Dữ liệu thô cho rail (trợ lý luận sâu) ──
