@@ -125,6 +125,9 @@
         <div class="hanh-boxes" id="hanhBoxes"></div>
         <div id="hanhBars"></div>
         <div id="dungThan" style="margin-top:12px;padding:14px 16px;background:var(--bg-soft);border-radius:8px;font-size:13px;color:var(--text-mid);line-height:1.7"></div>
+        <!-- Phân tích sâu từ /api/bazi-phan-tich. Rỗng nếu route không trả
+             (hoặc hai engine lệch tứ trụ → route cố ý bỏ phần này). -->
+        <div id="btPhanTich"></div>
       </div>
     </div>
     <div class="res-block" style="margin-bottom:24px">
@@ -186,8 +189,8 @@ const CHI_DESC={
   'Hợi':'Rộng lượng, tự do, trực giác mạnh. Năng lượng kết thúc chu kỳ và tái sinh.'
 };
 const PILLAR_ROLE=['Trụ Năm — gốc rễ, tổ tiên, hoàn cảnh gia đình','Trụ Tháng — môi trường lớn lên, sự nghiệp, anh chị em','Trụ Ngày ★ — bản thân, hôn nhân (Nhật Chủ)','Trụ Giờ — con cái, tương lai, sự nghiệp về sau'];
-const TSC=[2,4,6,8,0,2,4,6,8,0];
-function toJDN(y,m,d){const a=Math.floor((14-m)/12),yr=y+4800-a,mn=m+12*a-3;return d+Math.floor((153*mn+2)/5)+365*yr+Math.floor(yr/4)-Math.floor(yr/100)+Math.floor(yr/400)-32045;}
+// (Đã gỡ `TSC` và `toJDN`: trang không còn tự tính tứ trụ — chính hai thứ đó
+//  gây ra trụ giờ/tháng sai 100%. Xem chú thích trong `calculate()`.)
 
 function getThienSat(can,chi,dayNgay,yearChi,thangDL){
   const tags=[];
@@ -200,7 +203,56 @@ function getThienSat(can,chi,dayNgay,yearChi,thangDL){
   return tags;
 }
 
-function calculate(){
+// ── Phân tích sâu (thập thần · tự tọa · dụng thần · thần sát) ──
+// Nguồn: /api/bazi-phan-tich (mingyu-core). CỐ Ý chỉ bày phần repo KHÔNG tự
+// tính được; tứ trụ và ngũ hành ở trên vẫn là của engine site.
+function _esc(x){return String(x==null?'':x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function renderPhanTich(api){
+  const host=document.getElementById('btPhanTich');
+  const p=api&&api.phanTich;
+  if(!p){host.innerHTML='';return;}
+  const H=t=>`<div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);margin:18px 0 8px">${_esc(t)}</div>`;
+  const chip=(t,m)=>{const c=m==='cat'?'#1E6B3C;background:#eaf4ed;border-color:#c3e0cc':m==='hung'?'#C0392B;background:#fef0ef;border-color:#f5c0bc':'#6b5b2e;background:#faf5e6;border-color:#e6dcbf';
+    return `<span style="display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;margin:2px 3px 2px 0;border:1px solid;color:${c}">${_esc(t)}</span>`;};
+  const o=[];
+  o.push(H('Nhật chủ & cách cục'));
+  o.push(`<div style="font-size:13px;color:var(--text-mid);line-height:1.8">`+
+    `<b>Nhật chủ:</b> ${_esc(p.nhatChu.can)} — hành ${_esc(p.nhatChu.hanh)}, ${_esc(p.nhatChu.amDuong)}<br>`+
+    (p.vuongSuy?`<b>Vượng suy:</b> ${_esc(p.vuongSuy.ten)} — ${_esc(p.vuongSuy.nghia)}<br>`:'')+
+    (p.cachCuc?`<b>Cách cục:</b> ${_esc(p.cachCuc)}<br>`:'')+
+    `<b>Nguyệt lệnh tư lệnh:</b> ${_esc(p.nguyetLenh)} &nbsp;|&nbsp; <b>Mệnh cung:</b> ${_esc(p.menhCung)} &nbsp;|&nbsp; <b>Thai nguyên:</b> ${_esc(p.thaiNguyen)}<br>`+
+    `<b>Ngũ hành thiếu:</b> ${_esc(p.nguHanhThieu.join(', ')||'không thiếu hành nào')}</div>`);
+
+  o.push(H('Thập thần từng trụ'));
+  o.push('<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px">'+
+    p.thapThan.map((x,i)=>`<div style="padding:9px 10px;border:1px solid var(--border-lt);border-radius:6px">`+
+      `<div style="font-size:10px;color:var(--text-lt)">Trụ ${_esc(x.tru)}</div>`+
+      `<div style="font-size:14px;font-weight:700;color:var(--navy)">${_esc(x.ten)}</div>`+
+      `<div style="font-size:10.5px;color:var(--text-lt);line-height:1.4">${_esc(x.nghia)}</div>`+
+      `<div style="font-size:10.5px;color:var(--text-mid);margin-top:4px">Tàng can: ${_esc((p.tangCanThapThan[i]?.items||[]).map(t=>t.ten).join(', ')||'—')}</div>`+
+      `<div style="font-size:10.5px;color:var(--text-mid)">Tự tọa: ${_esc(p.tuToa[i]?.ten||'')}</div></div>`).join('')+'</div>');
+
+  o.push(H('Dụng thần sơ bộ'));
+  o.push(`<div style="font-size:13px;color:var(--text-mid);line-height:1.8">`+
+    `<b>Nên dùng:</b> ${_esc(p.dungThan.nen.join(', ')||'—')}<br>`+
+    `<b>Nên kỵ:</b> ${_esc(p.dungThan.ky.join(', ')||'—')}</div>`);
+
+  if(p.thanSatChinh.length){
+    o.push(H('Thần sát chính'));
+    o.push('<div>'+p.thanSatChinh.map(x=>chip(x.ten+' ('+x.tru+')',x.muc)).join('')+'</div>');
+    o.push('<div style="font-size:11.5px;color:var(--text-lt);line-height:1.7;margin-top:8px">'+
+      p.thanSatChinh.map(x=>`<div><b>${_esc(x.ten)}</b> — ${_esc(x.nghia)}</div>`).join('')+'</div>');
+  }
+  if(p.thanSatPhu.length){
+    o.push(H('Thần sát phụ ('+p.thanSatPhu.length+')'));
+    o.push('<div style="font-size:11px;color:var(--text-lt);line-height:1.8">'+
+      _esc(p.thanSatPhu.map(x=>x.ten).join(' · '))+'</div>');
+    o.push('<div style="font-size:11px;color:var(--text-lt);margin-top:6px;font-style:italic">Cổ pháp liệt kê rất nhiều sao (trung bình gần 60 sao mỗi lá). Nhóm trên là các sao được đọc thường xuyên nhất; nhóm này để tham khảo, không nên đọc dàn trải.</div>');
+  }
+  host.innerHTML=o.join('');
+}
+
+async function calculate(){
   const ngay=parseInt(document.getElementById('ngay').value);
   const thang=parseInt(document.getElementById('thang').value);
   const nam=parseInt(document.getElementById('nam').value);
@@ -211,18 +263,41 @@ function calculate(){
   if(!ngay||ngay<1||ngay>31||!thang||thang<1||thang>12||!nam||nam<1900||nam>2010){
     err.textContent='Vui lòng nhập ngày/tháng/năm hợp lệ (1900–2010).';err.classList.add('active');return;
   }
-  // Tứ trụ
-  const yIdx=((nam-4)%60+60)%60; const pN={can:yIdx%10,chi:yIdx%12};
-  const mChi=(thang+1)%12; const off=(mChi-2+12)%12; const pT={can:(TSC[pN.can]+off)%10,chi:mChi};
-  // Nhật trụ: chỉ số vòng 60 (Giáp Tý = 0) = (JDN + 49) mod 60. Neo kiểm chứng:
-  // 1/1/2000 = JDN 2451545 = Mậu Ngọ. 🔴 Bản cũ dùng ANCHOR=2434290, sai 19 vị
-  // trí trên MỌI ngày → NHẬT CHỦ sai, tức trụ quan trọng nhất của bát tự sai,
-  // và trụ giờ (suy từ can ngày) sai theo. Công cụ Bát Tự chính
-  // (public/tubinh-ansao-engine.js) vốn đã dùng đúng công thức này — hai trang
-  // của cùng một site đang trả hai nhật chủ khác nhau cho cùng ngày sinh.
-  const jdn=toJDN(nam,thang,ngay); const diff=((jdn+49)%60+60)%60;
-  const pNg={can:diff%10,chi:diff%12};
-  const pG=chiGio>=0?{can:(TSC[pNg.can]+chiGio)%10,chi:chiGio}:null;
+  // 🔴 TỨ TRỤ LẤY TỪ ENGINE CỦA SITE, KHÔNG CÒN TỰ TÍNH TẠI TRANG.
+  //
+  // Bản cũ tự tính và SAI có hệ thống — đã đo trên 2.196 ca (1950–2010) đối
+  // chiếu `public/tubinh-ansao-engine.js` (engine bát tự chính của site):
+  //   · trụ GIỜ   sai 100% — trang dùng bảng NGŨ HỔ ĐỘN (vốn để tính trụ
+  //     THÁNG) cho trụ giờ. Ca quyết ngũ THỬ độn "Giáp Kỷ hoàn gia Giáp" cho
+  //     can giờ Tý = (can ngày × 2) mod 10 = [0,2,4,6,8,…], còn bảng `TSC`
+  //     trong trang là [2,4,6,8,0,…] — lệch đúng 2 vị trí ở MỌI lá số.
+  //   · trụ THÁNG sai 100% — lấy tháng DƯƠNG lịch làm chi tháng, không theo
+  //     tiết khí.
+  //   · trụ NĂM   sai 9,2%  — không lùi năm cho người sinh trước Lập Xuân.
+  //   · trụ NGÀY  đúng 100% (đã vá ở #409).
+  //
+  // Nay hỏi `/api/bazi-phan-tich` — route đó lập tứ trụ bằng CHÍNH engine ấy,
+  // nên trang Tứ Trụ và công cụ Bát Tự không còn trả hai kết quả khác nhau.
+  const _probeGio = chiGio >= 0 ? chiGio : 6; // không biết giờ → dò bằng giờ Ngọ
+  // (cố ý KHÔNG dùng giờ Tý làm mốc dò: giờ Tý vắt qua nửa đêm nên còn dịch cả
+  //  ngày trụ, sẽ làm sai chính ba trụ mà ta muốn giữ)
+  document.getElementById('result-section').classList.add('active');
+  document.getElementById('resTitle').textContent='Đang lập tứ trụ…';
+  let _api;
+  try{
+    const _r=await fetch(`/api/bazi-phan-tich?d=${ngay}&m=${thang}&y=${nam}&gio=${_probeGio}&gt=nam`);
+    _api=_r.ok?await _r.json():null;
+  }catch(e){ _api=null; }
+  if(!_api||!_api.ok){
+    document.getElementById('result-section').classList.remove('active');
+    err.textContent='Chưa lập được tứ trụ lúc này — vui lòng thử lại.';err.classList.add('active');return;
+  }
+  const _iCan=t=>CAN.indexOf(t.can), _iChi=t=>CHI.indexOf(t.chi);
+  const _T=_api.tuTru;
+  const pN={can:_iCan(_T[0]),chi:_iChi(_T[0])};
+  const pT={can:_iCan(_T[1]),chi:_iChi(_T[1])};
+  const pNg={can:_iCan(_T[2]),chi:_iChi(_T[2])};
+  const pG=chiGio>=0?{can:_iCan(_T[3]),chi:_iChi(_T[3])}:null;
   const pillars=[
     {idx:0,p:pN},{idx:1,p:pT},{idx:2,p:pNg,isDay:true},...(pG?[{idx:3,p:pG}]:[])
   ];
@@ -263,6 +338,8 @@ function calculate(){
     `<strong>Vượng nhất:</strong> <span style="color:${H_COLOR[strong]}">${strong} (${hCount[strong]})</span> &nbsp;|&nbsp; `+
     `<strong>Yếu nhất:</strong> <span style="color:${H_COLOR[weak]}">${weak} (${hCount[weak]})</span><br>`+
     `<span style="color:var(--text-lt);font-size:12px">Sơ bộ: cân nhắc bổ sung hành <strong>${weak}</strong> qua màu sắc, nghề nghiệp hoặc phong thủy liên quan ${weak}. Phân tích Dụng Thần đầy đủ cần xét thêm quan hệ sinh khắc giữa các trụ.</span>`;
+
+  renderPhanTich(_api);
 
   // Ý nghĩa từng trụ
   document.getElementById('pmGrid').innerHTML=pillars.map(({idx,p,isDay})=>{

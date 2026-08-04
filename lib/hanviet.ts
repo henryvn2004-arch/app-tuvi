@@ -80,6 +80,20 @@ export const HAN_VIET: Record<string, string> = {
   狠: 'Ngoan', 俱: 'Câu', 冲: 'Xung', 狗: 'Cẩu', 道: 'Đạo', 位: 'Vị',
   薄: 'Bạc', 绝: 'Tuyệt', 纯: 'Thuần', 丧: 'Tang', 哭: 'Khốc', 退: 'Thoái',
   了: 'Liễu', 戾: 'Lệ', 交: 'Giao',
+
+  // ─── 97 chữ bổ sung cho tên THẦN SÁT của Bát Tự ─────────────
+  贵: 'Quý', 禄: 'Lộc', 庭: 'Đình', 厄: 'Ách', 剑: 'Kiếm', 锋: 'Phong', 尸: 'Thi', 祖: 'Tổ',
+  雷: 'Lôi', 霆: 'Đình', 极: 'Cực', 文: 'Văn', 昌: 'Xương', 国: 'Quốc', 印: 'Ấn', 学: 'Học',
+  馆: 'Quán', 秀: 'Tú', 舆: 'Dư', 童: 'Đồng', 宅: 'Trạch', 吟: 'Ngâm', 呻: 'Thân', 杀: 'Sát',
+  斧: 'Phủ', 劈: 'Phách', 鸱: 'Si', 枭: 'Kiêu', 隔: 'Cách', 角: 'Giác', 红: 'Hồng', 鸾: 'Loan',
+  绞: 'Giảo', 无: 'Vô', 成: 'Thành', 旌: 'Tinh', 贯: 'Quán', 索: 'Sách', 厨: 'Trù', 截: 'Tiệt',
+  路: 'Lộ', 桃: 'Đào', 花: 'Hoa', 疾: 'Tật', 良: 'Lương', 扶: 'Phù', 缢: 'Ải', 披: 'Phi', 麻: 'Ma',
+  卷: 'Quyển', 舌: 'Thiệt', 词: 'Từ', 流: 'Lưu', 霞: 'Hà', 刃: 'Nhận', 十: 'Thập', 暴: 'Bạo',
+  食: 'Thực', 带: 'Đới', 转: 'Chuyển', 公: 'Công', 栏: 'Lan', 杆: 'Can', 外: 'Ngoại', 头: 'Đầu',
+  财: 'Tài', 羊: 'Dương', 艳: 'Diễm', 廉: 'Liêm', 瞽: 'Cổ', 寡: 'Quả', 宿: 'Tú', 吊: 'Điếu',
+  客: 'Khách', 名: 'Danh', 恶: 'Ác', 科: 'Khoa', 戴: 'Đới', 目: 'Mục', 军: 'Quân', 碎: 'Toái',
+  攀: 'Phàn', 鞍: 'Yên', 丘: 'Khâu', 乡: 'Hương', 库: 'Khố', 藏: 'Tàng', 差: 'Sai', 推: 'Thôi',
+  病: 'Bệnh', 折: 'Chiết', 足: 'Túc', 形: 'Hình', 钺: 'Việt', 点: 'Điểm', 戮: 'Lục', 衣: 'Y',
 };
 
 /** Phiên một chuỗi Hán sang Hán-Việt, cách nhau bằng dấu cách. */

@@ -1082,6 +1082,14 @@ const GENERIC_LABELS: Record<string, string> = {
   quyNhan: 'Vị Quý Nhân', tuanKhong: 'Tuần Không', canNgayKyCung: 'Can ngày ký cung',
   phapThuTruyen: 'Phép thủ truyền', dangTruyen: 'Dạng tam truyền',
   tuKhoa: 'TỨ KHÓA', tamTruyen: 'TAM TRUYỀN', khoaThe: 'Khóa thể', thanSat: 'Thần sát',
+  // Phân tích bát tự — nguồn `/api/bazi-phan-tich` (mingyu-core).
+  nhatChu: 'Nhật chủ', vuongSuyNhatChu: 'Vượng suy nhật chủ', cachCuc: 'Cách cục',
+  thapThanTungTru: 'Thập thần từng trụ', tangCanThapThan: 'Thập thần của tàng can',
+  tuToa: 'Tự tọa (vòng trường sinh)', khongVong: 'Không vong',
+  nguyetLenhTuLenh: 'Nguyệt lệnh tư lệnh', vuongTuongNguHanh: 'Vượng tướng ngũ hành',
+  nguHanhThieu: 'Ngũ hành thiếu', dungThanNen: 'Dụng thần NÊN dùng',
+  dungThanKy: 'Dụng thần NÊN kỵ', menhCung: 'Mệnh cung', thaiNguyen: 'Thai nguyên',
+  thanSatChinh: 'Thần sát chính',
   // Thẻ "Vận hôm nay" (/app) — nguồn lib/engine/van-ngay.ts. Không có nhãn thì
   // prompt in ra key thô ("truc: Định") và model dễ đọc trượt sang nghĩa khác.
   amLich: 'Ngày âm lịch', thuTrongTuan: 'Thứ trong tuần',
