@@ -110,6 +110,7 @@ export type ScenarioType =
   | 'ky-mon'
   | 'hoang-dao'
   | 'ngay-tot'
+  | 'ban-do-sao'
   | 'luc-nham';
 
 export interface ScenarioInput {
@@ -282,7 +283,7 @@ export function validateChatRequest(body: unknown):
     const s = b.scenario as Record<string, unknown>;
     // NGUỒN DUY NHẤT phải khớp ScenarioType union trên — xưa thiếu xem-tuong/
     // phong-thuy nên rail 2 tool vision bị chặn 400. Giữ đủ mọi type ở đây.
-    const types: ScenarioType[] = ['xem-tuoi', 'xem-lam-an', 'tuong-hop', 'tu-binh', 'xem-tuoi-sinh-con', 'chon-ngay-tot', 'dat-ten-con', 'dat-ten-dn', 'xem-tuong', 'phong-thuy', 'nap-am', 'kim-lau', 'ngu-hanh-ten', 'than-so-hoc', 'bat-trach', 'kinh-dich', 'mai-hoa', 'ky-mon', 'hoang-dao', 'ngay-tot', 'luc-nham'];
+    const types: ScenarioType[] = ['xem-tuoi', 'xem-lam-an', 'tuong-hop', 'tu-binh', 'xem-tuoi-sinh-con', 'chon-ngay-tot', 'dat-ten-con', 'dat-ten-dn', 'xem-tuong', 'phong-thuy', 'nap-am', 'kim-lau', 'ngu-hanh-ten', 'than-so-hoc', 'bat-trach', 'kinh-dich', 'mai-hoa', 'ky-mon', 'hoang-dao', 'ngay-tot', 'luc-nham', 'ban-do-sao'];
     if (!types.includes(s.type as ScenarioType)) {
       return { ok: false, error: 'scenario.type không hợp lệ' };
     }

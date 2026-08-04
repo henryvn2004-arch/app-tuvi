@@ -125,6 +125,9 @@ export function buildChatContext(body: any): ChatContext {
   if (toolType === 'luc-nham') {
     return { systemForCall: CHAT_SYSTEM_LUC_NHAM(extractGenericContext(body.lucNhamData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
   }
+  if (toolType === 'ban-do-sao') {
+    return { systemForCall: CHAT_SYSTEM_BAN_DO_SAO(extractGenericContext(body.banDoSaoData), docs, persona), tools: buildTools(false), maxTokens: 1800, lasoDataForTools: null };
+  }
 
   if (toolType === 'xem-tuong') {
     return {
@@ -556,6 +559,30 @@ Nguyên tắc:
 ${GIONG_NGUOI_RULES}
 
 === DỮ LIỆU NGÀY TỐT XẤU TRONG THÁNG ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+const CHAT_SYSTEM_BAN_DO_SAO = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia CHIÊM TINH PHƯƠNG TÂY (natal astrology), phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
+
+${_TIME()}
+
+🔴 ĐÂY LÀ MÔN KHÁC HẲN TỬ VI — ĐỌC KỸ TRƯỚC KHI TRẢ LỜI:
+- TUYỆT ĐỐI KHÔNG trộn thuật ngữ Tử Vi / bát tự vào đây. Không "cung Mệnh", không "chính tinh", không "đại vận", không ngũ hành Kim Mộc Thủy Hỏa Thổ của mệnh lý Á Đông
+- "Nhà" ở đây là 12 nhà chiêm tinh, KHÁC 12 cung Tử Vi. "Nguyên tố" là Hỏa/Thổ/Khí/Thủy của chiêm tinh Tây, KHÁC ngũ hành
+- Nếu người hỏi đem so với lá số Tử Vi của họ: nói thẳng là hai hệ độc lập, không quy đổi được, và đừng cố bắc cầu
+
+Nguyên tắc:
+- ${FORMAT_RULE}
+- Bản đồ dưới đã tính SẴN vị trí thiên thể, 4 trục, 12 nhà, góc chiếu và hình thế — dùng ĐÚNG, KHÔNG tự tính lại, KHÔNG đổi cung của bất kỳ sao nào
+- 🔑 TRÌNH TỰ ĐỌC: (1) BỘ BA nền tảng — Mặt Trời (bản chất), Mặt Trăng (đời sống cảm xúc), cung Mọc (cách thể hiện ra ngoài); (2) sao nào NẰM Ở NHÀ NÀO cho biết năng lượng đó đổ vào lĩnh vực đời sống nào; (3) GÓC CHIẾU mạnh nhất mới là chỗ tạo nên nét riêng — cùng một Mặt Trời Song Tử mà góc chiếu khác nhau thì ra hai người khác hẳn
+- Góc "căng" (đối xung, vuông góc) KHÔNG phải điềm xấu — đó là chỗ sinh áp lực và cũng là chỗ sinh động lực. Góc "thuận" (tam hợp, lục hợp) là tài năng sẵn nhưng dễ bị bỏ phí. Nói cả hai mặt, đừng chia tốt/xấu
+- Sao NGHỊCH HÀNH nghĩa là năng lượng đó hướng vào trong, biểu hiện muộn hoặc kín — KHÔNG phải hỏng
+- Độ mạnh (%) của góc chiếu là mức khít; đọc góc mạnh trước, góc yếu chỉ nhắc khi liên quan trực tiếp câu hỏi
+- Chỉ luận từ dữ liệu đã cho. KHÔNG bịa thêm sao, góc hay hình thế không có trong bản đồ
+- Giữ tinh thần tham khảo, nói về xu hướng và cách ứng xử — không phán chuyện đã rồi
+
+${GIONG_NGUOI_RULES}
+
+=== BẢN ĐỒ SAO LÚC SINH ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 const CHAT_SYSTEM_LUC_NHAM = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia ĐẠI LỤC NHÂM (大六壬) — lập khóa theo nguyệt tướng gia thời, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
@@ -1090,6 +1117,13 @@ const GENERIC_LABELS: Record<string, string> = {
   nguHanhThieu: 'Ngũ hành thiếu', dungThanNen: 'Dụng thần NÊN dùng',
   dungThanKy: 'Dụng thần NÊN kỵ', menhCung: 'Mệnh cung', thaiNguyen: 'Thai nguyên',
   thanSatChinh: 'Thần sát chính',
+  // Bản đồ sao (chiêm tinh Tây) — nguồn `/api/natal` (celestine).
+  heNha: 'Hệ chia nhà', trucChinh: 'Bốn trục (ASC · MC · DSC · IC)',
+  saoChinh: 'Vị trí 10 hành tinh', saoPhu: 'Tiểu hành tinh (phụ)',
+  giaoDiem: 'Giao điểm mặt trăng', gocChieuManh: 'Góc chiếu nổi bật',
+  hinhThe: 'Hình thế trong bản đồ', canBangHanh: 'Cân bằng nguyên tố',
+  canBangThe: 'Cân bằng thể', banCau: 'Phân bố bán cầu',
+  saoNghichHanh: 'Sao nghịch hành', dauNha: 'Đầu 12 nhà',
   // Thẻ "Vận hôm nay" (/app) — nguồn lib/engine/van-ngay.ts. Không có nhãn thì
   // prompt in ra key thô ("truc: Định") và model dễ đọc trượt sang nghĩa khác.
   amLich: 'Ngày âm lịch', thuTrongTuan: 'Thứ trong tuần',

@@ -30,7 +30,7 @@ export const GEMINI_PROSE_SCENARIOS = new Set<string>([
   // Mệnh Lý / Huyền Học (đợt thí điểm đầu)
   'nap-am', 'kim-lau', 'ngu-hanh-ten', 'than-so-hoc', 'bat-trach', 'kinh-dich', 'mai-hoa', 'ky-mon',
   // Lịch số (deterministic, data cấp sẵn)
-  'hoang-dao', 'ngay-tot', 'luc-nham',
+  'hoang-dao', 'ngay-tot', 'luc-nham', 'ban-do-sao',
   // Tương hợp / tử bình / sinh con / đặt tên (data-driven, không tool)
   'xem-tuoi', 'xem-lam-an', 'tuong-hop', 'tu-binh',
   'xem-tuoi-sinh-con', 'chon-ngay-tot', 'dat-ten-con', 'dat-ten-dn',

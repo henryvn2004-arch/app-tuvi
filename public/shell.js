@@ -58,6 +58,11 @@
       { id: 'luc-nham',   label: 'Lục Nhâm Giản',       href: '/app/luc-nham',   icon: 'compass' },
       { id: 'than-so-hoc', label: 'Thần số học',        href: '/app/than-so-hoc', icon: 'hash' },
     ] },
+    // Nhóm RIÊNG, cố ý không nhét vào "Huyền Học": chiêm tinh Tây khác hệ hẳn
+    // với cổ pháp Á Đông, để lẫn thì người dùng tưởng đọc được chéo nhau.
+    { group: 'Chiêm Tinh Tây', open: false, items: [
+      { id: 'ban-do-sao', label: 'Bản đồ sao lúc sinh',  href: '/app/ban-do-sao', icon: 'star' },
+    ] },
     { group: 'Tài khoản', open: true, items: [
       { id: 'vi-luong',   label: 'Ví Lượng',            href: '/app/tai-khoan#credits', icon: 'wallet', balance: true },
       { id: 'ho-so',      label: 'Hồ sơ của tôi',       href: '/app/tai-khoan', icon: 'user' },
