@@ -17,9 +17,20 @@
  * vì về mặt kiểu dữ liệu thì một chữ Hán lọt ra vẫn là `string` hợp lệ.
  */
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, rmSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+
+// `lib/almanac/day.ts` nạp `tuvi-engine/dist` (thư mục gitignore). Thiếu nó thì
+// node ném `ERR_MODULE_NOT_FOUND` với đường dẫn trong /tmp — đọc xong vẫn không
+// biết phải làm gì. Nói thẳng ra.
+if (!existsSync(join(process.cwd(), 'tuvi-engine/dist/ngay-tot/index.js'))) {
+  console.error(
+    '❌ Chưa có `tuvi-engine/dist` — bộ dò này gọi engine THẬT nên cần bản build.\n' +
+      '   Chạy: cd tuvi-engine && npm ci && npm run build'
+  );
+  process.exit(1);
+}
 
 const HAN = /[\u3400-\u4dbf\u4e00-\u9fff]/g;
 
