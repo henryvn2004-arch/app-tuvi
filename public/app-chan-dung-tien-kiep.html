@@ -437,7 +437,7 @@ function _ensurePoster() {
     var s = document.getElementById('_poster_js');
     if (!s) {
       s = document.createElement('script');
-      s.id = '_poster_js'; s.src = '/poster.js?v=1';
+      s.id = '_poster_js'; s.src = '/poster.js?v=2';
       document.head.appendChild(s);
     }
     s.addEventListener('load', function () { resolve(); });
