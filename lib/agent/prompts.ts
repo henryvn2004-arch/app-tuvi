@@ -110,6 +110,9 @@ export function buildChatContext(body: any): ChatContext {
   if (toolType === 'kinh-dich') {
     return { systemForCall: CHAT_SYSTEM_KINH_DICH(extractGenericContext(body.kinhDichData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
   }
+  if (toolType === 'mai-hoa') {
+    return { systemForCall: CHAT_SYSTEM_MAI_HOA(extractMaiHoaContext(body.maiHoaData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
+  }
   if (toolType === 'hoang-dao') {
     return { systemForCall: CHAT_SYSTEM_HOANG_DAO(extractGenericContext(body.hoangDaoData), docs, persona), tools: buildTools(false), maxTokens: 1500, lasoDataForTools: null };
   }
@@ -476,6 +479,24 @@ Nguyên tắc:
 ${GIONG_NGUOI_RULES}
 
 === DỮ LIỆU QUẺ ĐÃ GIEO ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+const CHAT_SYSTEM_MAI_HOA = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia Mai Hoa Dịch Số (梅花易數) theo cổ pháp Thiệu Khang Tiết, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
+
+${_TIME()}
+
+Nguyên tắc:
+- ${FORMAT_RULE}
+- Quẻ đã được gieo và tính SẴN: quẻ Thể, quẻ Dụng, hào động, quan hệ ngũ hành ở cả ba chặng chính–hỗ–biến. Dùng ĐÚNG dữ liệu đã cho, KHÔNG tự tính lại và KHÔNG đổi Thể/Dụng
+- 🔑 LUẬN THEO THỂ–DỤNG, KHÔNG luận theo hào từ như Kinh Dịch: Mai Hoa lấy quan hệ NGŨ HÀNH giữa quẻ Thể (mình / việc đang hỏi) và quẻ Dụng (ngoại cảnh) làm gốc. Hào từ nếu có chỉ là chú thích thêm, không được lấy làm kết luận chính
+- Nhắc đúng nghĩa: **Dụng sinh Thể là tốt nhất** (ngoại cảnh nuôi mình), **Thể sinh Dụng là hao tổn** (mình nuôi ngoại cảnh) — người mới học hay đảo ngược đúng chỗ này, đừng theo họ
+- Đọc ba chặng như một mạch thời gian: quẻ chính là tình thế hiện tại, hỗ quái là khúc giữa mà người hỏi thường không lường trước, biến quái là chỗ việc đi tới. Chặng nào Thể bị Dụng khắc thì đó là nút thắt của chặng ấy — chỉ ra rõ
+- Lấy TƯỢNG của bát quái mà nói cho cụ thể (Càn: người trên, kim loại, tròn; Khảm: nước, hiểm, lo; Ly: lửa, văn thư, phô bày; Cấn: núi, dừng lại, nhà cửa…) thay vì chỉ nói ngũ hành khô khan
+- Nói thẳng cát/hung và nên/không nên; khuyên hành xử, không phán số phận tuyệt đối
+
+${GIONG_NGUOI_RULES}
+
+=== DỮ LIỆU QUẺ MAI HOA ĐÃ GIEO ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 const CHAT_SYSTEM_HOANG_DAO = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia trạch cát (chọn giờ tốt) theo cổ pháp — thông thạo 12 thần tướng Hoàng Đạo/Hắc Đạo, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
@@ -1032,6 +1053,31 @@ function extractGenericContext(data: any): string {
     const label = GENERIC_LABELS[k] || k;
     const val = k === 'gioiTinh' ? (v === 'nu' ? 'Nữ' : 'Nam') : k === 'isMaster' ? (v ? 'Có' : 'Không') : v;
     ctx += `${label}: ${val}\n`;
+  }
+  return ctx;
+}
+
+const MAI_HOA_LABELS: Record<string, string> = {
+  cauHoi: 'Câu hỏi người gieo', cachGieo: 'Cách gieo', buocTinh: 'Cách ra quẻ',
+  haoDong: 'Hào động', theDung: 'Thể — Dụng', ketLuan: 'Kết luận quẻ chính',
+  haoTu: 'Hào từ của hào động (tham khảo thêm)',
+};
+/**
+ * Riêng Mai Hoa KHÔNG dùng `extractGenericContext` được: ba chặng chính–hỗ–biến
+ * là một MẢNG, mà hàm generic bỏ qua mọi giá trị `typeof === 'object'` → rơi
+ * đúng phần quan trọng nhất của phép luận, và rơi trong im lặng.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function extractMaiHoaContext(data: any): string {
+  if (!data || typeof data !== 'object') return '';
+  let ctx = '';
+  for (const [k, v] of Object.entries(data)) {
+    if (v == null || v === '' || Array.isArray(v) || typeof v === 'object') continue;
+    ctx += `${MAI_HOA_LABELS[k] || k}: ${v}\n`;
+  }
+  if (Array.isArray(data.baChang) && data.baChang.length) {
+    ctx += `\nBa chặng (đọc theo thứ tự thời gian):\n`;
+    for (const c of data.baChang) ctx += `- ${c}\n`;
   }
   return ctx;
 }
