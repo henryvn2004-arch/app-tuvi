@@ -128,10 +128,10 @@ window.SHELL_INTRO={key:'mai-hoa',title:'Mai Hoa Dịch Số',desc:'Không cần
 <script src="/tools-shared/kinh-dich-hao.js?v=1"></script>
 <script src="/tools-shared/kinh-dich.js?v=5"></script>
 <script src="/tools-shared/mai-hoa.js?v=1"></script>
-<script src="/poster.js?v=2"></script>
+<script src="/poster.js?v=4"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=55"></script>
+<script src="/shell.js?v=56"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/mai-hoa.js với trang standalone
 // /tools/mai-hoa.html. Trang chỉ lo DOM + nối rail.
@@ -217,6 +217,8 @@ function taiAnh() {
     .then(function (img) {
       const o = MaiHoaTool.posterOpts(_r, document.getElementById('cauHoi').value.trim());
       o.draw = MaiHoaTool.posterDraw(_r, img);
+      o.qrUrl = Poster.qrLink('mai-hoa', '/app/mai-hoa');
+      o.qrCaption = 'Quét mã — gieo quẻ của bạn';
       return Poster.download(o, 'mai-hoa-' + (_r.chinh.que ? _r.chinh.que.q.n.toLowerCase().replace(/\s+/g, '-') : 'que') + '-tuviminhbao.png');
     })
     .then(function () { if (window.Track) Track.event('poster_download', { tool_id: 'mai-hoa' }); })

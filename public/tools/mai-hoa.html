@@ -162,7 +162,7 @@
 <script src="/tools-shared/kinh-dich-hao.js?v=1"></script>
 <script src="/tools-shared/kinh-dich.js?v=5"></script>
 <script src="/tools-shared/mai-hoa.js?v=1"></script>
-<script src="/poster.js?v=2"></script>
+<script src="/poster.js?v=4"></script>
 <script>
 // Lập quẻ + render DÙNG CHUNG module /tools-shared/mai-hoa.js với shell /app/mai-hoa.
 // Trang chỉ lo DOM.
@@ -219,6 +219,8 @@ function taiAnh() {
     .then(function (img) {
       const o = MaiHoaTool.posterOpts(_r, document.getElementById('cauHoi').value.trim());
       o.draw = MaiHoaTool.posterDraw(_r, img);
+      o.qrUrl = Poster.qrLink('mai-hoa', '/app/mai-hoa');
+      o.qrCaption = 'Quét mã — gieo quẻ của bạn';
       return Poster.download(o, 'mai-hoa-' + (_r.chinh.que ? _r.chinh.que.q.n.toLowerCase().replace(/\s+/g, '-') : 'que') + '-tuviminhbao.png');
     })
     .then(function () {

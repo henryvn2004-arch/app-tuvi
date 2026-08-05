@@ -138,7 +138,7 @@ window.SHELL_INTRO={key:'chan-dung-vo-chong',title:'Chân Dung Vợ Chồng',des
 <script src="/tuvi-paywall.js?v=11"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=55"></script>
+<script src="/shell.js?v=56"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=1"></script>
 <script>
 var _currentSlug = '';
@@ -350,7 +350,7 @@ function _ensurePoster() {
     var s = document.getElementById('_poster_js');
     if (!s) {
       s = document.createElement('script');
-      s.id = '_poster_js'; s.src = '/poster.js?v=2';
+      s.id = '_poster_js'; s.src = '/poster.js?v=4';
       document.head.appendChild(s);
     }
     s.addEventListener('load', function () { resolve(); });
@@ -368,6 +368,8 @@ function _posterOpts() {
     // Hoàn cảnh gặp gỡ trước phần mô tả ngoại hình: câu kể một khung cảnh đọc
     // hấp dẫn hơn câu tả mũi tả mắt, mà đây là ảnh để người ta đăng lên khoe.
     quote: Poster.pickQuote([d.meetingContext, d.description, d.phuTheLuanGiai]),
+    qrUrl: Poster.qrLink('chan-dung-vo-chong', '/app/chan-dung-vo-chong'),
+    qrCaption: 'Quét mã — xem chân dung của bạn',
   };
 }
 

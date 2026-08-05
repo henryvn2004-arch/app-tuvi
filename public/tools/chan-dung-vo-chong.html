@@ -332,7 +332,7 @@ function _ensurePoster() {
     let s = document.getElementById('_poster_js');
     if (!s) {
       s = document.createElement('script');
-      s.id = '_poster_js'; s.src = '/poster.js?v=2';
+      s.id = '_poster_js'; s.src = '/poster.js?v=4';
       document.head.appendChild(s);
     }
     s.addEventListener('load', () => resolve());
@@ -350,6 +350,8 @@ function _posterOpts() {
     // Hoàn cảnh gặp gỡ trước phần mô tả ngoại hình: câu kể một khung cảnh đọc
     // hấp dẫn hơn câu tả mũi tả mắt, mà đây là ảnh để người ta đăng lên khoe.
     quote: Poster.pickQuote([d.meetingContext, d.description, d.phuTheLuanGiai]),
+    qrUrl: Poster.qrLink('chan-dung-vo-chong', '/app/chan-dung-vo-chong'),
+    qrCaption: 'Quét mã — xem chân dung của bạn',
   };
 }
 
