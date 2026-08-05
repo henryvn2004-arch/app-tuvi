@@ -371,3 +371,54 @@ không phải phụ.
 | 5 | Xoay service key | ⏳ Henry tự kiểm rồi báo lại — **không chặn** phần còn lại của S0 |
 | 6 | Kênh báo động | ⏳ Chưa chốt — đề xuất **tách riêng** khỏi digest marketing, quyết ở S5 |
 | 7 | Budget canary | ⏳ Chưa chốt — quyết ở S2 |
+
+---
+
+## 7. Routine "Báo cáo COO hằng ngày 07:00 VN" trên Claude Code
+
+Henry yêu cầu 2026-08-05: *"tạo 1 cái routine — Báo cáo COO hằng ngày lúc 7h
+sáng. Routine trên claude code này nhé. (Telegram thì nó vẫn gửi tao rồi)"*
+
+### Vì sao KHÔNG phải là bản sao của digest Telegram
+
+| | Digest Telegram (`ops-digest`) | Routine Claude Code |
+|---|---|---|
+| Giờ | 07:30 VN | **07:00 VN** |
+| Cách dựng | Thuần dữ liệu, **không LLM** (cố ý — xem đầu `lib/ops/digest.ts`) | Có LLM: đọc số **rồi phán** nặng/nhẹ, so baseline |
+| Khi thấy lạ | Chỉ in ra | **Đào tiếp được** — hỏi thẳng DB |
+
+Hai cái **bù nhau, không thay nhau**: digest là nhịp tim máy móc không bao giờ
+sai lệch, routine là người đọc. Giữ cả hai.
+
+### ⚠️ Bẫy thứ tự đã tính trước
+
+Routine chạy **07:00**, cron `ops-digest` chạy **07:30** → tại thời điểm routine
+chạy, event `ops_digest` mới nhất trong `events` là **của HÔM QUA**. Nên prompt
+CẤM đọc event đó và bắt tính LIVE từ RPC. Đọc nhầm là báo cáo số cũ 24 giờ mà
+trông vẫn như số mới.
+
+### Nguồn dữ liệu (đã chạy thử 2026-08-05, cả 3 đều trả số thật)
+
+| Khối | Nguồn | Baseline lúc lập |
+|---|---|---|
+| 🩺 Tool | `tool_health(24)` | 2 tool chạy, **0 lỗi hệ thống** |
+| ⏰ Job | `cron_runs` + `ops_pgcron_runs(20)` | 18 job, lượt cuối đều `ok` |
+| 💰 Tiền | `payment_reconcile(30)` | **44 Lượng treo** — 2 lượt test của chính Henry, đã biết, KHÔNG cần hoàn |
+| 🔒 Bảo mật | `security_audit(300,5,10)` | cả 5 mảng **rỗng** |
+
+**44 Lượng phải là baseline chứ không phải báo động.** Không neo con số này thì
+routine kêu y hệt nhau mỗi sáng về một chuyện đã kết luận xong — và một bộ dò
+kêu nhầm mỗi ngày thì chẳng mấy chốc bị ngó lơ, hỏng đúng như khi nó im lặng.
+
+### Trạng thái: ⏳ CHƯA TẠO ĐƯỢC — cần Henry tự tạo
+
+`create_trigger` (MCP claude-code-remote) trả **`requires approval`** trong phiên
+này, và phiên chạy nền không chạy được luồng duyệt. Hai ghi chú cho lần sau:
+- `connectors: ["Supabase"]` → **org này không cho** (`connectors parameter is not
+  available for this organization`). Bỏ hẳn tham số đó.
+- **KHÔNG dùng `CronCreate`** — nó chỉ sống trong phiên và **tự hết hạn sau 7
+  ngày**. Báo cáo hằng ngày mà dùng nó thì tuần sau tự tắt không ai hay.
+
+Cấu hình: cron **`0 0 * * *` (UTC = 07:00 VN)** · `create_new_session_on_fire:
+true` · `notifications: {"push": true}` · prompt lấy nguyên văn từ
+`docs/coo-daily-routine-prompt.md`.
