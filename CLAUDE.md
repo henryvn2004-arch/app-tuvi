@@ -5,6 +5,90 @@
 
 ---
 
+## 📸 Vận hôm nay: poster đủ thông tin · QR đo được · nhập lá số tại chỗ (2026-08-05, PR này)
+
+Henry soi thẻ Vận hôm nay, hỏi 3 việc: (1) ảnh tải về thiếu thông tin so với
+thẻ; (2) nhúng được link vào ảnh để track không; (3) *"làm sao mày biết được lá
+số của user hay thế?"* + có nên thêm bước cho user nhập/sửa lá số.
+
+### (3) Trả lời trước vì nó là chỗ hổng thật
+**Không có phép màu nào:** `Shell.getRememberedBirth()` đọc
+`localStorage['app_birth']` — ghi từ lần user chạy BẤT KỲ tool nào có form ngày
+sinh. Tức **theo MÁY, không theo tài khoản**: đổi máy / mở ẩn danh / xoá cache
+là khối "Vận riêng của bạn" trống lại, kể cả người đã đăng nhập.
+- 🔴 **Và trạng thái trống là chữ CHẾT** — nó BẢO người ta *"lập lá số một lần"*
+  mà không có chỗ nào bấm. Đúng chỗ đáy phễu của khối cá nhân.
+- 🔴 Trạng thái CÓ lá số cũng hổng ngược lại: thẻ luận vận riêng mà **không hé
+  lộ đang dựa trên lá số nào** → sai một trường (hoặc máy dùng chung) thì người
+  xem không hiểu vì sao và **không có đường sửa**.
+- ✅ Nay: trống → nút **"✦ Nhập lá số của bạn"** mở `TuviForm` compact NGAY TRONG
+  thẻ; có rồi → dòng *"Theo lá số: Henry · Nam · 03/06/1998 · giờ Sửu"* + nút
+  **"Đổi lá số"** (form điền sẵn). **CỐ Ý không đá sang trang khác** — mỗi lần
+  chuyển trang ở đáy phễu là một lần rơi.
+- `showName:false` cho form này (bớt một trường là bớt một cớ bỏ ngang), nhưng
+  lúc lưu **giữ lại `hoten` cũ** — ghi đè trắng thì rail mất cách xưng hô tên.
+- Lưu xong xin lại **CẢ dải 7 ngày** (`tuan:true`): `bixung` từng ô phụ thuộc
+  tuổi người xem, giữ dải cũ là để lại 7 ô tính cho "người chưa có lá số".
+
+### (2) PNG KHÔNG mang được link bấm — và metadata PNG là ngõ cụt
+tEXt/iTXt bị Facebook/Instagram/TikTok **bóc sạch khi nén lại** ⇒ nhúng vào đó
+là nhúng vào chỗ không ai đọc. Đường DUY NHẤT chạm được là **mã QR**.
+- **Tự cài bộ sinh QR trong `poster.js`** (byte mode · sửa lỗi M · version 1–10,
+  ~250 dòng): 0 lượt mạng, 0đ, không phụ thuộc dịch vụ QR ngoài (dịch vụ ngoài
+  chết là ảnh mất mã mà không ai hay).
+- URL đi qua **`Shell.viralUrl()`** (mở mới từ `withViralParams`) nên mã QR mang
+  **`ref=` của chính người tải ảnh** — ai quét mã rồi đăng ký thì người chia sẻ
+  được thưởng, đúng cơ chế V2.1. UTM tách riêng **`poster`/`image`** khỏi
+  `share`/`link`: gộp chung thì không bao giờ biết ĐƯỜNG ẢNH có kéo người thật
+  về hay không, mà đó chính là câu hỏi.
+- 🪤 **Hai lỗi tự bắt khi đối chiếu, cả hai đều làm mã sai IM LẶNG** (ảnh vẫn ra
+  một hình QR trông rất thật): (a) điểm phạt N4 dùng `floor(|pct−50|/5)` trong
+  khi bản chuẩn là `|ceil(pct/5) − 10|` → chọn nhầm mask; (b) **hai bản format
+  info bị đặt HOÁN VỊ** (bản dọc ↔ bản ngang) → lệch 8–12 module.
+- **Verify:** ma trận **khớp byte-for-byte gói `qrcode` (npm) trên 420 chuỗi**
+  trải version 1→10 (gồm chuỗi có dấu tiếng Việt) ở tầng module, + **127 ca chạy
+  lại trong TRÌNH DUYỆT trên chính `poster.js`**, + **đọc NGƯỢC mã đã VẼ ra**
+  bằng cách lấy mẫu pixel tâm từng ô: 0 lệch, vùng lặng 4 module sạch.
+
+### (1) Poster thiếu gì — và vì sao nó thiếu
+Bản cũ chỉ có: huy hiệu · tiêu đề · 4 mục subtitle · câu chốt · 4 dòng dữ kiện.
+**Rơi mất:** tú · màu hợp · tài thần · năm sinh tuổi xung · ngày kỵ · **cả khối
+"Vận riêng của bạn"** · và **việc nên làm kèm từng giờ tốt** (giờ đẹp mà không
+nói để làm gì thì không dùng được).
+- Căn nguyên bố cục: bản cũ **neo cứng toạ độ** rồi căn giữa khối dữ kiện → hôm
+  ít nội dung thì hở một mảng trống to giữa ảnh, hôm nhiều thì đè chân trang.
+  Nay **đo trước – vẽ sau**: khối nào không còn chỗ thì bỏ theo thứ tự ưu tiên,
+  phần dư chia đều vào các khe (trần 34px/khe để không loãng).
+- Dòng "Giờ tốt" cho xuống **2 dòng khi còn chỗ, ép 1 dòng khi chật** — ép cứng
+  1 dòng thì 4 khung giờ kèm việc bị cắt đuôi, mà đó là dữ kiện dùng được nhất.
+- ⚠️ **Khối "Vận riêng của bạn" NAY CÓ trên ảnh chia sẻ.** Nó không lộ ngày sinh
+  (chỉ cung nhật hạn + chính tinh + quan hệ hành + màu) và chính nó là thứ khiến
+  tấm ảnh là của người này chứ không phải tờ lịch bloc ai cũng có. Chưa có lá số
+  → **không có khối**, cố ý không lấp bằng câu chung chung.
+- `_meText` dựng SONG SONG lúc render thẻ (bản chữ thuần, không thẻ `<b>` vì
+  canvas không dựng được HTML) — một nguồn, hai bên không nói khác nhau.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier --check .` sạch
+· `check:prices` sạch · engine test 185 pass · **11 ca Playwright trên file
+THẬT**: QR (3 ca như trên) · poster ra **PNG 1080×1920 đọc từ IHDR** · nội dung
+dài gấp nhiều lần vẫn **không một pixel nào lấn dải đệm 1602–1624** · không có
+`qrUrl` vẫn dựng được · trên **trang `app-home.html` thật**: chưa có lá số → nút
+bấm được và form mở TRONG trang · nhập xong → lưu `app_birth` + đúng 1 lượt POST
+kèm `birth` + `tuan:true` + khối cá nhân hiện · đã có lá số → form điền sẵn,
+sửa năm xong **`hoten` không bị xoá** · payload poster đủ tú/màu/tài thần/xung/
+ngày kỵ/vận riêng/giờ-kèm-việc + `utm_source=poster` · chưa có lá số → `me` rỗng
+· 390px không tràn ngang.
+
+### CÒN LẠI
+- **Poster 2 tool chân dung (`drawPoster`) CHƯA có QR** — cố ý không đụng trong
+  PR này (bản đó từng verify byte-identical, thêm QR là đổi hành vi ảnh đang
+  chạy). Đó mới là poster lan mạnh nhất; gắn QR vào là việc gọn, một lượt sau.
+- Bump `poster.js?v=2→3` (10 trang) · `shell.js?v=55→56` (30 trang, tiện gom
+  luôn `app.html` đang lạc ở `v=53`).
+
+---
+
 ## 🔢 Track repo thần số học → vá 3 lỗi + mở 4→11 chỉ số (2026-08-05, PR #414)
 
 Henry: *"trên GitHub có repo nào làm thần số học ko? Cái nào ngon rating cao

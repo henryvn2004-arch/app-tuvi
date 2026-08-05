@@ -48,6 +48,28 @@
 .today-me .tme-h{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:5px}
 .today-me .tme-b{font-size:12.5px;color:rgba(255,255,255,.88);line-height:1.55}
 .today-me .tme-b b{color:var(--gold-lt);font-weight:600}
+/* Dòng "lá số đang dùng" + nút Đổi — trước đây thẻ luận vận riêng mà KHÔNG nói
+   nó đang dựa trên lá số nào, nên lá số sai thì không có đường nào sửa. */
+.tme-src{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:9px;padding-top:9px;border-top:1px solid rgba(201,168,76,.22);font-size:11.5px;color:rgba(255,255,255,.55)}
+.tme-src b{color:rgba(255,255,255,.8);font-weight:600}
+.tme-edit{background:none;border:1px solid rgba(201,168,76,.45);color:var(--gold-lt);border-radius:20px;padding:2px 11px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit}
+.tme-edit:hover{background:rgba(201,168,76,.16)}
+.tme-cta{margin-top:10px;background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#2a1e05;border:none;border-radius:8px;padding:8px 16px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}
+/* Form nhập lá số ngay trong thẻ. CỐ Ý không đá người dùng sang trang khác:
+   chỗ này là đáy phễu của khối cá nhân, mỗi lần chuyển trang là một lần rơi. */
+.tme-form{margin-top:11px}
+.tme-form .frow{display:flex;gap:9px;flex-wrap:wrap;align-items:flex-end;margin-bottom:9px}
+.tme-form .fg{display:flex;flex-direction:column;gap:4px}
+.tme-form .fg label{font-size:9.5px;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:.04em;text-transform:uppercase}
+.tme-form .fg input,.tme-form .fg select{border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:6px 8px;font-size:12.5px;font-family:inherit;color:#fff;background:rgba(255,255,255,.08);outline:none}
+.tme-form .fg option{color:#111;background:#fff}
+.tme-form .fg input:focus,.tme-form .fg select:focus{border-color:var(--gold)}
+.tme-form .tvf-gio-am-wrap,.tme-form .tvf-compact-foreign{font-size:11px;color:rgba(255,255,255,.55)}
+.tme-form .tvf-tooltip-wrap{display:none}
+.tme-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tme-save{background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#2a1e05;border:none;border-radius:8px;padding:8px 18px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}
+.tme-cancel{background:none;border:none;color:rgba(255,255,255,.5);font-size:12px;cursor:pointer;font-family:inherit;text-decoration:underline}
+.tme-err{font-size:11.5px;color:#ffb4a0}
 .today-cols{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:15px}
 @media(max-width:560px){.today-cols{grid-template-columns:1fr;gap:11px}}
 .today-hours{margin-bottom:15px}
@@ -138,11 +160,12 @@
 
 <script>window.SHELL_ACTIVE='home';</script>
 <script src="/tools-shared/hoang-dao.js?v=2"></script>
-<script src="/poster.js?v=2" defer></script>
+<script src="/tuvi-form.js?v=1"></script>
+<script src="/poster.js?v=3" defer></script>
 <script src="/tool-prices.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=55"></script>
+<script src="/shell.js?v=56"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 var IC={
@@ -273,7 +296,21 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
   }
   function el(id){ return document.getElementById(id); }
 
+  /* Địa chỉ mã QR in trong ảnh tải về. Đi qua Shell.viralUrl để dùng CHUNG một
+     nguồn mã giới thiệu với nút Chia sẻ — chép tay ở đây thì sớm muộn hai bên
+     trôi khỏi nhau. Shell chưa nạp xong / chưa đăng nhập → vẫn ra link chạy
+     được, chỉ là không quy về ai. */
+  function qrLink(){
+    var base='https://tuviminhbao.com/app';
+    try{ if(window.Shell&&Shell.viralUrl) return Shell.viralUrl(base,'van-ngay',{source:'poster',medium:'image'}); }catch(e){}
+    return base+'?utm_source=poster&utm_medium=image&utm_campaign=van-ngay';
+  }
+
   var _birth=null, _hasBirth=false, _today=null, _week=null, _viewing=null;
+  // Bản CHỮ THUẦN của khối "Vận riêng của bạn" — poster vẽ trên canvas nên
+  // không dùng lại được chuỗi có thẻ <b>; dựng song song ngay lúc render để hai
+  // bên không bao giờ nói khác nhau.
+  var _meText='';
 
   function iso(t){ return t.y+'-'+('0'+t.mo).slice(-2)+'-'+('0'+t.d).slice(-2); }
 
@@ -381,23 +418,39 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
     // trống có chủ đích: chỗ trống đó chính là CTA lập lá số, đừng lấp bằng
     // câu chung chung.
     var me=el('todayMe');
+    _meText='';
     if(v.caNhan){
-      var c=v.caNhan, bits=[];
+      var c=v.caNhan, bits=[], plain=[];
+      var head='Ngày hôm nay rơi vào cung '+c.cungNhatHan+(c.diaChiNhatHan?' ('+c.diaChiNhatHan+')':'')
+        +(c.chinhTinh&&c.chinhTinh.length?' — chính tinh '+c.chinhTinh.join(', '):' — vô chính diệu');
       bits.push('Ngày hôm nay rơi vào <b>cung '+esc(c.cungNhatHan)+'</b>'+(c.diaChiNhatHan?' ('+esc(c.diaChiNhatHan)+')':'')
         +(c.chinhTinh&&c.chinhTinh.length?' — chính tinh <b>'+esc(c.chinhTinh.join(', '))+'</b>':' — vô chính diệu'));
-      if(c.bixung) bits.push('⚠ Ngày <b>xung chính tuổi bạn</b> — nên giữ nhịp, tránh quyết định lớn.');
+      plain.push(head);
+      if(c.bixung){ bits.push('⚠ Ngày <b>xung chính tuổi bạn</b> — nên giữ nhịp, tránh quyết định lớn.'); plain.push('Ngày xung chính tuổi bạn — nên giữ nhịp, tránh quyết định lớn.'); }
       var QH={'duoc-sinh':'hành ngày <b>sinh cho bản mệnh</b> — thuận, dễ được giúp',
               'hoa':'hành ngày <b>cùng hành bản mệnh</b> — hòa, tự chủ được',
               'sinh':'bản mệnh <b>sinh cho hành ngày</b> — hao lực, nên giữ sức',
               'bi-khac':'hành ngày <b>khắc bản mệnh</b> — dễ vướng, làm chậm lại',
               'khac':'bản mệnh <b>khắc hành ngày</b> — chủ động được, hơi tốn công'};
-      if(c.quanHeHanh&&QH[c.quanHeHanh]) bits.push(QH[c.quanHeHanh]+'.');
-      if(c.mauCaNhan&&c.mauCaNhan.length) bits.push('Màu hợp bản mệnh bạn: <b>'+esc(c.mauCaNhan.slice(0,3).join(', '))+'</b>.');
-      me.innerHTML='<div class="today-me"><div class="tme-h">Vận riêng của bạn</div><div class="tme-b">'+bits.join(' ')+'</div></div>';
+      if(c.quanHeHanh&&QH[c.quanHeHanh]){ bits.push(QH[c.quanHeHanh]+'.'); plain.push(QH[c.quanHeHanh].replace(/<\/?b>/g,'')+'.'); }
+      if(c.mauCaNhan&&c.mauCaNhan.length){ bits.push('Màu hợp bản mệnh bạn: <b>'+esc(c.mauCaNhan.slice(0,3).join(', '))+'</b>.'); plain.push('Màu hợp bản mệnh: '+c.mauCaNhan.slice(0,3).join(', ')+'.'); }
+      _meText=plain.join(' ');
+      // Nói RÕ thẻ đang dựa trên lá số nào + cho đường sửa. Trước đây khối này
+      // luận vận riêng mà không hé lộ nguồn, nên lá số sai (hoặc của người khác
+      // dùng nhờ máy) thì người xem không hiểu vì sao và không sửa được.
+      var srcLine='';
+      try{ srcLine=(Shell.birthSummary&&birth)?Shell.birthSummary(birth):''; }catch(e){}
+      me.innerHTML='<div class="today-me"><div class="tme-h">Vận riêng của bạn</div><div class="tme-b">'+bits.join(' ')+'</div>'
+        +'<div class="tme-src"><span>Theo lá số: <b>'+esc(srcLine||'đã lưu trên máy này')+'</b></span>'
+        +'<button class="tme-edit" id="tmeEdit" type="button">Đổi lá số</button></div>'
+        +'<div id="tmeFormHost"></div></div>';
     } else {
       me.innerHTML='<div class="today-me"><div class="tme-h">Vận riêng của bạn</div><div class="tme-b">'
-        +'Trên đây là vận CHUNG của ngày — giống nhau với mọi người. Lập lá số một lần để thấy hôm nay rơi vào cung nào của riêng bạn.</div></div>';
+        +'Trên đây là vận CHUNG của ngày — giống nhau với mọi người. Nhập ngày sinh một lần để thấy hôm nay rơi vào cung nào của riêng bạn.</div>'
+        +'<button class="tme-cta" id="tmeEdit" type="button">✦ Nhập lá số của bạn</button>'
+        +'<div id="tmeFormHost"></div></div>';
     }
+    wireBirthForm(td);
 
     // Nên / Kiêng — lấy thẳng điểm từng loại việc của engine, không tự xếp hạng.
     var doEl=el('todayDo'), dontEl=el('todayDont');
@@ -418,6 +471,58 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
     renderWeek(td);
     card.style.display='';
     wire(v,td,birth,hasBirth,hours);
+  }
+
+  /* ── Nhập / đổi lá số NGAY TRONG THẺ ────────────────────────────────────
+     Trước đây khối "Vận riêng của bạn" khi trống chỉ là một câu chữ chết: nó
+     BẢO người ta lập lá số mà không có chỗ nào bấm. Còn khi có lá số thì lại
+     không nói đang dùng lá số nào — sai một trường là hỏng cả khối mà không có
+     đường sửa.
+
+     Lá số nhớ trong localStorage (`app_birth`, do Shell.rememberBirth ghi khi
+     người dùng chạy bất kỳ tool nào có form ngày sinh) → THEO MÁY, không theo
+     tài khoản: đổi máy hay mở ẩn danh là khối này trống lại. Đó là lý do phải
+     có đường nhập ngay tại đây. */
+  function wireBirthForm(td){
+    var btn=el('tmeEdit'), host=el('tmeFormHost');
+    if(!btn||!host) return;
+    btn.onclick=function(){
+      if(!window.TuviForm){ try{ location.href='/app/la-so'; }catch(e){} return; }
+      btn.style.display='none';
+      host.innerHTML='<div class="tme-form"><div id="tmeFields"></div>'
+        +'<div class="tme-actions"><button class="tme-save" id="tmeSave" type="button">Xem vận riêng của tôi →</button>'
+        +'<button class="tme-cancel" id="tmeCancel" type="button">Hủy</button>'
+        +'<span class="tme-err" id="tmeErr"></span></div></div>';
+      var prev=null;
+      try{ prev=Shell.getRememberedBirth&&Shell.getRememberedBirth(); }catch(e){}
+      // Bỏ ô Họ và tên: đây là chỗ đổi lấy MỘT thông tin (ngày sinh) để mở khóa
+      // khối cá nhân — thêm trường là thêm cớ để bỏ ngang.
+      TuviForm.render('tmeFields',{mode:'compact',showName:false,gioitinh:(prev&&prev.gioitinh)||'nam'});
+      if(prev) try{ TuviForm.setData(prev); TuviForm._update(''); }catch(e){}
+      el('tmeCancel').onclick=function(){ host.innerHTML=''; btn.style.display=''; };
+      el('tmeSave').onclick=function(){
+        var fd=null; try{ fd=TuviForm.getData(); }catch(e){}
+        if(!fd||!fd.ngay||!fd.thang||!fd.nam){ el('tmeErr').textContent='Thiếu ngày/tháng/năm sinh.'; return; }
+        // Giữ lại họ tên đã lưu từ tool khác — form này không hỏi tên, ghi đè
+        // trắng thì rail mất cách xưng hô đúng tên.
+        if(prev&&prev.hoten&&!fd.hoten) fd.hoten=prev.hoten;
+        try{ Shell.rememberBirth(fd); }catch(e){}
+        try{ _birth=Shell.birthToApi(fd); }catch(e){ _birth=null; }
+        _hasBirth=!!(_birth&&_birth.day&&_birth.month&&_birth.year);
+        if(!_hasBirth){ el('tmeErr').textContent='Ngày sinh chưa hợp lệ.'; return; }
+        el('tmeSave').disabled=true; el('tmeSave').textContent='Đang lập…';
+        // Xin lại CẢ dải 7 ngày: `bixung` của từng ô phụ thuộc tuổi người xem,
+        // giữ dải cũ là để lại 7 ô tính cho "người chưa có lá số".
+        fetchDay(_today,true).then(function(v){
+          if(v&&v.ok){ if(v.tuan)_week=v.tuan; render(v,_today,_birth,_hasBirth); }
+          else { host.innerHTML=''; btn.style.display=''; }
+          try{ window.Track&&Track.event('tool_run',{tool_id:'van-ngay',meta:{from:'today_card_birth'}}); }catch(e){}
+        }).catch(function(){
+          el('tmeSave').disabled=false; el('tmeSave').textContent='Xem vận riêng của tôi →';
+          el('tmeErr').textContent='Không lập được, thử lại sau.';
+        });
+      };
+    };
   }
 
   /* ── Đường lùi: API hỏng → thẻ tối giản như bản cũ ─────────────────────── */
@@ -506,15 +611,34 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
       var rows=[];
       if(v.nen&&v.nen.length) rows.push(['Nên hôm nay', v.nen.map(function(x){return x.ten;}).join(' · ')]);
       if(v.kieng&&v.kieng.length) rows.push(['Nên kiêng', v.kieng.map(function(x){return x.ten;}).join(' · ')]);
-      if(hours&&hours.length) rows.push(['Giờ tốt', hours.map(function(h){return h.chi+' '+h.range;}).join(' · ')]);
-      if(v.xung&&v.xung.chi) rows.push(['Xung tuổi', v.xung.chi]);
+      // Giờ tốt KÈM việc nên làm — trên web đã kèm, poster mà cắt đi thì người
+      // đọc ảnh có giờ đẹp mà không biết để làm gì.
+      if(hours&&hours.length) rows.push(['Giờ tốt', hours.map(function(h){return h.chi+' '+h.range+(h.viec?' ('+h.viec+')':'');}).join(' · ')]);
+      // Cảnh báo: đúng hai dòng web đang hiện trong khung đỏ.
+      var warn=[];
+      if(v.xung&&v.xung.chi){
+        var yrs=(v.xung.namSinh||[]).slice(-4).join(', ');
+        warn.push('Xung tuổi '+v.xung.chi+(yrs?' (sinh '+yrs+')':''));
+      }
+      if(v.ngayKy&&v.ngayKy.length) warn.push('Trùng '+v.ngayKy.join(' + ')+' — cổ pháp kiêng khởi sự');
+      // Dòng tra cứu ĐỦ như thẻ: thêm tú, màu hợp, tài thần (bản cũ bỏ cả ba).
+      var sub=[v.ngay.am,'hành '+v.ngay.canHanh,'trực '+v.truc.ten,'sao '+v.saoNgay.ten,'tú '+v.tu.ten];
+      if(v.mau&&v.mau.list&&v.mau.list.length) sub.push('màu hợp '+v.mau.list.slice(0,2).join(', '));
+      if(v.huong&&v.huong.taiThan) sub.push('tài thần '+v.huong.taiThan);
       Poster.downloadDay({
         verdict:v.danhGia.tinhChat,
         verdictLabel:(v.danhGia.tinhChat==='tốt'?'Ngày tốt':v.danhGia.tinhChat==='xấu'?'Ngày xấu':'Ngày bình'),
         title:v.ngay.thu+' · '+td.d+'/'+td.mo+' — Ngày '+v.ngay.canChi,
-        subtitle:v.ngay.am+' · hành '+v.ngay.canHanh+' · trực '+v.truc.ten+' · sao '+v.saoNgay.ten,
+        subtitle:sub.join(' · '),
         quote:v.danhGia.nhan,
-        rows:rows
+        warn:warn,
+        me:_meText,
+        rows:rows,
+        // Mã QR mang utm RIÊNG (poster/image) + mã giới thiệu của chính người
+        // tải ảnh → ai quét mã mà đăng ký thì người chia sẻ được thưởng, và
+        // panel Vòng Lặp Viral tách được đường ẢNH khỏi đường LINK.
+        qrUrl:qrLink(),
+        qrCaption:'Quét mã — xem vận ngày của riêng bạn'
       },'van-ngay-'+td.y+'-'+td.mo+'-'+td.d+'.png').then(function(){
         try{ window.Track&&Track.event('poster_download',{tool_id:'van-ngay'}); }catch(e){}
       }).catch(function(){

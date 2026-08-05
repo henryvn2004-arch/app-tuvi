@@ -164,11 +164,15 @@
   // "Vòng Lặp Viral" tách được K-factor từng tool; ?ref= để người mở link đăng
   // ký thì người chia sẻ được thưởng. Chưa đăng nhập (hoặc chưa kịp có mã) thì
   // vẫn chia sẻ được, chỉ là không quy về ai — KHÔNG chặn luồng chia sẻ.
-  function withViralParams(url, toolId) {
+  // `opts.source`/`opts.medium` để tách ĐƯỜNG lan: link chia sẻ là share/link,
+  // còn mã QR in trong ảnh tải về là poster/image. Gộp chung thì không bao giờ
+  // biết ảnh có kéo được người thật về hay không — mà đó chính là câu hỏi.
+  function withViralParams(url, toolId, opts) {
     try {
+      var o = opts || {};
       var u = new URL(url);
-      u.searchParams.set('utm_source', 'share');
-      u.searchParams.set('utm_medium', 'link');
+      u.searchParams.set('utm_source', o.source || 'share');
+      u.searchParams.set('utm_medium', o.medium || 'link');
       if (toolId) u.searchParams.set('utm_campaign', toolId);
       if (_refCode) u.searchParams.set('ref', _refCode);
       return u.toString();
@@ -1394,6 +1398,9 @@
     // + namxem riêng của trang (năm luận, ngoài field TuviForm). localStorage, không server.
     rememberBirth: function (fd) { try { localStorage.setItem('app_birth', JSON.stringify(fd)); } catch (e) { /* ignore */ } },
     getRememberedBirth: function () { return birthSnapshot(); },
+    // Gắn UTM + mã giới thiệu vào một URL bất kỳ (dùng cho mã QR in trong ảnh
+    // tải về — ảnh không mang link bấm được nên QR là đường đo duy nhất).
+    viralUrl: function (url, toolId, opts) { return withViralParams(url, toolId, opts); },
     // Đổi birth (shape bất kỳ) sang shape contract để gửi Shell.setContext({birth}).
     birthToApi: function (b) { return birthToApi(b); },
     // Ngày sinh truyền THẲNG qua URL (?ngay=&thang=&nam=&gio=&gioitinh=&namxem=),
