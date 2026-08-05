@@ -80,12 +80,41 @@ sửa năm xong **`hoten` không bị xoá** · payload poster đủ tú/màu/t�
 ngày kỵ/vận riêng/giờ-kèm-việc + `utm_source=poster` · chưa có lá số → `me` rỗng
 · 390px không tràn ngang.
 
-### CÒN LẠI
-- **Poster 2 tool chân dung (`drawPoster`) CHƯA có QR** — cố ý không đụng trong
-  PR này (bản đó từng verify byte-identical, thêm QR là đổi hành vi ảnh đang
-  chạy). Đó mới là poster lan mạnh nhất; gắn QR vào là việc gọn, một lượt sau.
-- Bump `poster.js?v=2→3` (10 trang) · `shell.js?v=55→56` (30 trang, tiện gom
+### ✅ Vòng sau — QR cho CẢ `drawPoster` (Henry: *"gắn QR luôn đi"*)
+Nay **10/10 poster của site đều mang mã QR**: 2 tool chân dung (shell +
+standalone) · Mai Hoa · Kỳ Môn · Bản Đồ Sao · Vận hôm nay.
+- **`Poster.qrLink(toolId, path)` là NGUỒN DUY NHẤT dựng địa chỉ mã** — trang
+  `/app` có Shell thì đi qua `Shell.viralUrl` để mang `ref=`; trang standalone
+  `/tools/*` không có Shell nên **chỉ có UTM, không có mã giới thiệu** (vẫn đo
+  được đường ảnh, chỉ không quy về người chia sẻ). Chép tay URL ở từng trang là
+  chắc chắn trôi khỏi nhau — đã gom cả `app-home.html` về dùng chung hàm này.
+- 🔑 **Tính chất phải giữ: KHÔNG truyền `qrUrl` → ảnh y HỆT bản cũ.** Verify
+  bằng A/B trên chính hai bản `poster.js` (cũ lấy từ git HEAD, mới từ working
+  tree) → **PNG md5 trùng khít trên 3 ca**. Mọi thay đổi bố cục đều nằm sau
+  `if (opts.qrUrl)`.
+- 🪤 **Chỗ suýt hỏng, chỉ lộ khi tính tay:** ca xấu nhất (tiêu đề 2 dòng + dòng
+  phụ + câu trích 3 dòng) đẩy dòng cuối xuống **y=1692**, tức đè lên ô QR. Nay
+  trần số dòng câu trích **tính theo chỗ còn lại** (`floor((QR_TOP−12−qTop)/54)+1`)
+  chứ không cố định 3 — có test lấy mẫu pixel dải đệm ngay trên ô mã.
+- 🪤 **Cỡ ô quyết định BỀ DÀY MỘT MODULE, không phải "cho đẹp":** URL tool chân
+  dung dài hơn (đường dẫn + campaign + `ref`) nên rơi vào version cao hơn ⇒ ở ô
+  160px mỗi module chỉ còn **2px**, nén lại một lượt là nhoè. Nới **190px** để
+  giữ 3px/module cho cả ca URL dài nhất. (Poster vận ngày ô 208px, URL ngắn hơn
+  → 4px/module.)
+- **Verify vòng này:** 17 ca Playwright — A/B byte-identical · mã vẽ ra **đọc
+  ngược đúng từng module** ở cả hai cỡ ô · ca xấu nhất không đè · `qrLink` ra
+  đúng URL ở cả 3 nhánh (có Shell / không Shell / **Shell ném lỗi → không kéo
+  sập lượt dựng ảnh**) · bộ dò tĩnh bắt trang nào quên truyền `qrUrl`. `tsc` 0
+  lỗi · `lint` 0 lỗi · `prettier` sạch · `check:prices` sạch · engine 185 pass.
+- Bump `poster.js?v=2→4` (10 trang) · `shell.js?v=55→56` (30 trang, tiện gom
   luôn `app.html` đang lạc ở `v=53`).
+
+### CÒN LẠI
+- Trang standalone `/tools/*` **không có mã giới thiệu trong QR** (không nạp
+  `shell.js`). Muốn có thì phải cho chúng đọc `my-referral` — thêm một lượt
+  mạng vào đường tải ảnh, chưa đáng khi CTA chính vẫn đổ về `/app`.
+- Chưa quét thử mã bằng điện thoại thật — mới chứng minh tới tầng pixel (đọc
+  ngược từng module, vùng lặng sạch).
 
 ---
 

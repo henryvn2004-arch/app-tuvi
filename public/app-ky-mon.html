@@ -111,7 +111,7 @@
 <script>window.SHELL_ACTIVE='ky-mon';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'ky-mon',title:'Kỳ Môn Độn Giáp',desc:'Đứng đầu <b>Tam Thức</b>. Lập bàn <b>chín cung</b> cho một canh giờ — bát môn, cửu tinh, bát thần, tam kỳ — để biết <b>nên đi hướng nào, hợp làm việc gì</b>, rồi hỏi <b>trợ lý AI</b> luận theo việc của bạn.'};</script>
 <script src="/tools-shared/ky-mon.js?v=1"></script>
-<script src="/poster.js?v=3"></script>
+<script src="/poster.js?v=4"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=56"></script>
@@ -188,6 +188,8 @@ function taiAnh() {
   btn.textContent = 'Đang dựng ảnh…';
   const o = KyMonTool.posterOpts(_b);
   o.draw = KyMonTool.posterDraw(_b);
+  o.qrUrl = Poster.qrLink('ky-mon', '/app/ky-mon');
+  o.qrCaption = 'Quét mã — lập bàn của bạn';
   Poster.download(o, 'ky-mon-tuviminhbao.png')
     .then(function () { if (window.Track) Track.event('poster_download', { tool_id: 'ky-mon' }); })
     .catch(function () { _err('kmErr2', 'Chưa dựng được ảnh. Thử lại sau ít giây.'); })

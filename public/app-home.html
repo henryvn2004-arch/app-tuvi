@@ -161,7 +161,7 @@
 <script>window.SHELL_ACTIVE='home';</script>
 <script src="/tools-shared/hoang-dao.js?v=2"></script>
 <script src="/tuvi-form.js?v=1"></script>
-<script src="/poster.js?v=3" defer></script>
+<script src="/poster.js?v=4" defer></script>
 <script src="/tool-prices.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
@@ -296,15 +296,10 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
   }
   function el(id){ return document.getElementById(id); }
 
-  /* Địa chỉ mã QR in trong ảnh tải về. Đi qua Shell.viralUrl để dùng CHUNG một
-     nguồn mã giới thiệu với nút Chia sẻ — chép tay ở đây thì sớm muộn hai bên
-     trôi khỏi nhau. Shell chưa nạp xong / chưa đăng nhập → vẫn ra link chạy
-     được, chỉ là không quy về ai. */
-  function qrLink(){
-    var base='https://tuviminhbao.com/app';
-    try{ if(window.Shell&&Shell.viralUrl) return Shell.viralUrl(base,'van-ngay',{source:'poster',medium:'image'}); }catch(e){}
-    return base+'?utm_source=poster&utm_medium=image&utm_campaign=van-ngay';
-  }
+  /* Địa chỉ mã QR in trong ảnh tải về — dùng CHUNG `Poster.qrLink` với mọi
+     poster khác, nó tự đi qua Shell.viralUrl để mang mã giới thiệu. Chép tay
+     riêng ở đây thì sớm muộn hai bên trôi khỏi nhau. */
+  function qrLink(){ return Poster.qrLink('van-ngay','/app'); }
 
   var _birth=null, _hasBirth=false, _today=null, _week=null, _viewing=null;
   // Bản CHỮ THUẦN của khối "Vận riêng của bạn" — poster vẽ trên canvas nên

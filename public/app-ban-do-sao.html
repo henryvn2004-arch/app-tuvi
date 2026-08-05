@@ -92,7 +92,7 @@
 <script>window.SHELL_ACTIVE='ban-do-sao';window.SHELL_HISTORY=true;
 window.SHELL_INTRO={key:'ban-do-sao',title:'Bản Đồ Sao Lúc Sinh',desc:'Lập <b>bản đồ sao</b> theo chiêm tinh phương Tây — cung Mọc, 12 nhà, vị trí 10 hành tinh và các góc chiếu. Tải <b>bánh xe bản đồ</b> về để chia sẻ, rồi hỏi <b>trợ lý AI</b> đọc giúp.'};</script>
 <script src="/tools-shared/ban-do-sao.js?v=1"></script>
-<script src="/poster.js?v=3"></script>
+<script src="/poster.js?v=4"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=56"></script>
@@ -183,7 +183,9 @@ function taiAnh(){
     title:'Bản Đồ Sao',
     subtitle:_b.sinh,
     quote:'Mặt Trời '+(mt.cung||'')+' · Cung Mọc '+(asc.cung||''),
-    draw:BanDoSao.posterDraw(_b)
+    draw:BanDoSao.posterDraw(_b),
+    qrUrl:Poster.qrLink('ban-do-sao','/app/ban-do-sao'),
+    qrCaption:'Quét mã — lập bản đồ sao của bạn'
   },'ban-do-sao-tuviminhbao.png')
     .then(function(){if(window.Track)Track.event('poster_download',{tool_id:'ban-do-sao'});})
     .catch(function(){e.textContent='Chưa dựng được ảnh. Thử lại sau ít giây.';e.classList.add('active');})

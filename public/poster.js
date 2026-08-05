@@ -20,8 +20,8 @@
  * một biểu đồ thành ảnh tải về được — nó đẹp trên màn hình rồi dừng ở đó.
  *
  * Dùng:
- *   Poster.download({ imageUrl, title, subtitle, quote }, 'ten-file.png')
- *   Poster.download({ draw: fn, title, subtitle, quote }, 'ten-file.png')
+ *   Poster.download({ imageUrl, title, subtitle, quote, qrUrl }, 'ten-file.png')
+ *   Poster.download({ draw: fn, title, subtitle, quote, qrUrl }, 'ten-file.png')
  *   Poster.build(opts) -> Promise<Blob>
  *   Poster.pickQuote([...nguồn theo thứ tự ưu tiên]) -> string
  *   Poster.downloadDay({ verdict, title, subtitle, quote, warn[], me, rows[][], qrUrl }, 'ten.png')
@@ -477,6 +477,34 @@
     return { build: build };
   })();
 
+  // Địa chỉ mã QR — MỘT nguồn cho mọi trang, đừng chép tay ở từng trang.
+  // Trang /app có Shell → đi qua `Shell.viralUrl` để mã mang luôn `ref=` của
+  // người tải ảnh (ai quét rồi đăng ký thì người chia sẻ được thưởng). Trang
+  // standalone không có Shell → vẫn ra link chạy được và vẫn đo được bằng UTM,
+  // chỉ là không quy về ai.
+  function qrLink(toolId, path) {
+    var base = 'https://tuviminhbao.com' + (path || '/app');
+    try {
+      if (window.Shell && window.Shell.viralUrl)
+        return window.Shell.viralUrl(base, toolId, { source: 'poster', medium: 'image' });
+    } catch (e) {
+      /* rơi xuống bản không có mã giới thiệu */
+    }
+    return (
+      base + '?utm_source=poster&utm_medium=image' + (toolId ? '&utm_campaign=' + encodeURIComponent(toolId) : '')
+    );
+  }
+
+  // Ô QR ở chân trang poster CHÂN DUNG (poster vận ngày dùng cỡ riêng, to hơn,
+  // vì nó không phải chừa chỗ cho vùng ảnh).
+  // ⚠️ Cỡ ô quyết định BỀ DÀY MỘT MODULE, mà đó mới là thứ máy quét đọc được:
+  // URL của tool chân dung dài hơn (đường dẫn + campaign + mã giới thiệu) nên
+  // rơi vào version cao hơn, tức nhiều module hơn trên cùng bề ngang. Ở ô 160
+  // mỗi module chỉ còn 2px — nền tảng nén lại một lượt là nhoè. 190 giữ được
+  // 3px/module cho cả ca URL dài nhất.
+  var QR_BOX = 190,
+    QR_TOP = 1678;
+
   // Vẽ QR vào ô vuông `box` — nền SÁNG bắt buộc: máy quét đọc theo tương phản,
   // vẽ module tối lên nền navy là mã hầu như không bắt được.
   function drawQR(ctx, text, x, y, box) {
@@ -576,15 +604,23 @@
       var qx = PAD + 34,
         qw = W - qx - PAD;
       ctx.font = 'italic 400 37px ' + SERIF;
+      var qTop = y + 64;
       // Tối đa 3 dòng: dòng thứ 4 sẽ đụng triện ở chân trang khi tiêu đề dài 2
       // dòng. QUOTE_MAX (155 ký tự) chọn để 3 dòng gần như luôn đủ chỗ.
-      var qLines = clampLines(ctx, wrapAll(ctx, opts.quote, qw), 3, qw);
-      var qTop = y + 64;
+      // Có mã QR thì hạ trần theo chỗ còn lại — ca xấu nhất (tiêu đề 2 dòng +
+      // dòng phụ + trích 3 dòng) đẩy dòng cuối xuống 1692, tức đè lên mã.
+      var qMax = 3;
+      if (opts.qrUrl) qMax = Math.max(1, Math.min(3, Math.floor((QR_TOP - 12 - qTop) / 54) + 1));
+      var qLines = clampLines(ctx, wrapAll(ctx, opts.quote, qw), qMax, qw);
       ctx.fillStyle = 'rgba(201,168,76,0.55)';
       ctx.fillRect(PAD, qTop - 38, 4, qLines.length * 54 - 6);
       ctx.fillStyle = GOLD_SOFT;
       drawLines(ctx, qLines, qx, qTop, 54);
     }
+
+    // Mã QR — đường DUY NHẤT một tấm ảnh dẫn ngược được về site và ĐO được.
+    // Vẽ trước chân trang để biết còn bao nhiêu bề ngang cho dòng chữ.
+    var hasQR = opts.qrUrl ? drawQR(ctx, opts.qrUrl, W - PAD - QR_BOX, QR_TOP, QR_BOX) : false;
 
     // Chân trang: triện + tên miền. Neo CỨNG ở đáy, không trôi theo độ dài chữ
     // trên — người ta nhìn góc dưới để biết ảnh từ đâu ra.
@@ -599,6 +635,11 @@
     ctx.font = '600 32px ' + SANS;
     ctx.fillStyle = GOLD;
     ctx.fillText('tuviminhbao.com', tx, fy);
+    if (hasQR) {
+      ctx.font = '400 25px ' + SANS;
+      ctx.fillStyle = 'rgba(255,255,255,0.46)';
+      ctx.fillText(opts.qrCaption || 'Quét mã để tự xem', PAD, fy + 50);
+    }
   }
 
   // ── Poster "Vận ngày" — KHÔNG có vùng nghệ thuật ─────────────────────────
@@ -923,6 +964,7 @@
     buildDay: buildDay,
     downloadDay: downloadDay,
     pickQuote: pickQuote,
+    qrLink: qrLink,
     saveBlob: saveBlob,
     // Mở ra để test đối chiếu ma trận QR với thư viện chuẩn — KHÔNG dùng ở trang.
     qrMatrix: QR.build,

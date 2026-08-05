@@ -400,7 +400,7 @@ function _ensurePoster() {
     let s = document.getElementById('_poster_js');
     if (!s) {
       s = document.createElement('script');
-      s.id = '_poster_js'; s.src = '/poster.js?v=3';
+      s.id = '_poster_js'; s.src = '/poster.js?v=4';
       document.head.appendChild(s);
     }
     s.addEventListener('load', () => resolve());
@@ -417,6 +417,8 @@ function _posterOpts() {
     // Lời Kết trước: đó là câu chốt của cả truyện, tách ra đứng một mình vẫn
     // có nghĩa. Mô tả nhân vật là lớp đỡ, cuối cùng mới bới trong 5 hồi.
     quote: Poster.pickQuote([d.ketLuan, d.moTaNhanVat, (d.acts || []).map(a => a.text || '').join(' ')]),
+    qrUrl: Poster.qrLink('chan-dung-tien-kiep', '/app/chan-dung-tien-kiep'),
+    qrCaption: 'Quét mã — xem tiền kiếp của bạn',
   };
 }
 

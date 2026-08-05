@@ -136,7 +136,7 @@
 </footer>
 
 <script src="/tools-shared/ky-mon.js?v=1"></script>
-<script src="/poster.js?v=3"></script>
+<script src="/poster.js?v=4"></script>
 <script>
 // Bàn dựng ở SERVER (/api/qimen). Trang chỉ gọi + vẽ, dùng chung module
 // /tools-shared/ky-mon.js với shell /app/ky-mon.
@@ -184,6 +184,8 @@ function taiAnh() {
   btn.textContent = 'Đang dựng ảnh…';
   const o = KyMonTool.posterOpts(_b);
   o.draw = KyMonTool.posterDraw(_b);
+  o.qrUrl = Poster.qrLink('ky-mon', '/app/ky-mon');
+  o.qrCaption = 'Quét mã — lập bàn của bạn';
   Poster.download(o, 'ky-mon-tuviminhbao.png')
     .then(function () { if (window.Track) Track.event('poster_download', { tool_id: 'ky-mon' }); })
     .catch(function () {
