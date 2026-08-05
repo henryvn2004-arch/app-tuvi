@@ -91,6 +91,13 @@ interface Thresholds {
   toolErrorPct: number; // % lỗi HỆ THỐNG 24h/tool vượt thì cảnh báo (khớp ngưỡng đỏ panel Sức Khỏe Tool)
   toolMinSample: number; // tối thiểu số lượt "lẽ ra phải chạy được" trong 24h mới xét
   toolHardFailSample: number; // tool hỏng SẠCH (100%) thì chỉ cần chừng này lượt là báo ngay
+  toolSpendVnd24h: number; // chi phí model 24h của MỘT tool vượt mức này thì cảnh báo
+  /**
+   * Tool được miễn kiểm chi phí — job vẽ hàng loạt CÓ CHỦ ĐÍCH, tốn nhiều tiền
+   * một lần rồi thôi. Để trong config chứ không hardcode: danh sách này sẽ dài
+   * ra theo thời gian và không đáng phải deploy mỗi lần.
+   */
+  toolSpendExempt: string[];
 }
 
 const THRESHOLD_DEFAULTS: Thresholds = {
@@ -113,6 +120,20 @@ const THRESHOLD_DEFAULTS: Thresholds = {
   // Kiếp) có thể cả ngày chỉ vài lượt, đợi đủ 10 mẫu mới báo thì người thứ 3-4
   // đã mất tiền rồi. Hỏng 3/3 lượt gần như chắc chắn là hỏng thật, không phải noise.
   toolHardFailSample: 3,
+  // 50.000đ/tool/24h — suy từ số đo THẬT, không phải số tròn cho đẹp:
+  //   • toàn bộ chi phí vận hành một tuần bình thường ≈ 13.700đ (≈ 2.000đ/ngày
+  //     cho TẤT CẢ tool cộng lại);
+  //   • tool đắt nhất bán cho người dùng là 2 tool chân dung ~1.700đ/lượt, mà
+  //     `viral.free_gen_daily_cap=6` chặn ở 6 lượt tặng/ngày ⇒ trần hợp lệ của
+  //     một tool trong một ngày cỡ 10.000đ.
+  // Vậy 50.000đ là ~5 lần cái trần hợp lệ cao nhất — đủ rộng để không kêu oan,
+  // mà cú đốt 325.160đ hôm 04/08 vẫn vượt gấp 6,5 lần.
+  toolSpendVnd24h: 50_000,
+  // `que-phuc-hy` = job admin vẽ 64 bức tranh quẻ Kinh Dịch (app/api/admin/
+  // que-images). Nó tốn 325.160đ trong một buổi chiều 04/08 và đó là ĐÚNG kế
+  // hoạch: vẽ một lần, ảnh nằm kho vĩnh viễn. Cổng của nó là cờ `que_images.gen
+  // .enabled` (fail-CLOSED, mặc định tắt) chứ không phải cầu dao Lượng.
+  toolSpendExempt: ['que-phuc-hy'],
 };
 
 /**
@@ -389,6 +410,52 @@ export async function checkAnomalies(): Promise<{ fired: FiredAlert[]; checked: 
       fired.push({
         key,
         text: `Biên LN chat ÂM hôm nay: doanh thu ${margin.chat_revenue_vnd.toLocaleString('vi-VN')}đ, chi phí ${margin.chat_cost_vnd.toLocaleString('vi-VN')}đ (${marginPct.toFixed(0)}%)`,
+      });
+    }
+  }
+
+  // ── Chi phí model của MỘT tool vượt trần trong 24h ───────────────────────
+  //
+  // Lỗ hổng này lộ ra ngày 04/08: 325.160đ chảy qua trong 6 tiếng rưỡi mà KHÔNG
+  // cảnh báo nào bật. Lần đó là chi tiêu đúng kế hoạch (vẽ 64 bức tranh quẻ),
+  // nhưng bộ dò im không phải vì nó biết thế — mà vì **không có phép kiểm nào
+  // canh tiền**. `margin_negative` ở trên chỉ đo bucket `chat`; mọi chi phí
+  // theo tool nằm ngoài tầm nó. Một vòng lặp hỏng hay một cờ quên tắt sẽ đi qua
+  // im lặng y hệt.
+  //
+  // CỬA SỔ TRƯỢT 24H, không phải "từ nửa đêm VN" như phép kiểm margin: một cú
+  // đốt bắt đầu lúc 22h bị cắt làm đôi qua hai ngày, và mỗi nửa có thể nằm dưới
+  // trần trong khi tổng thì vượt xa. Đây là loại hỏng cần bắt bằng tổng liên
+  // tục, không phải theo mốc lịch.
+  //
+  // Đổi lại là MỘT lượt gọi RPC nữa mỗi 3 giờ — cố ý không gộp vào lượt
+  // `dashboard_margin` phía trên vì lượt đó neo vào nửa đêm VN có chủ đích cho
+  // phép kiểm biên lợi nhuận; kéo nó sang cửa sổ trượt là đổi hành vi một cảnh
+  // báo đang chạy đúng để tiết kiệm một request.
+  checked.push('tool_spend');
+  const spend = await callRpc<{ by_tool?: { tool_id: string; requests: number; cost_vnd: number }[] }>(
+    'dashboard_margin',
+    { p_from: new Date(now - 24 * 3600 * 1000).toISOString(), p_to: new Date(now).toISOString() },
+  );
+  for (const t of spend.by_tool || []) {
+    if (th.toolSpendExempt.includes(t.tool_id)) {
+      // Ghi ra `checked` chứ không bỏ qua lặng lẽ: một tool được miễn kiểm mà
+      // không ai thấy nó được miễn thì chính chỗ miễn đó thành điểm mù tiếp theo.
+      if (t.cost_vnd >= th.toolSpendVnd24h) {
+        checked.push(`tool_spend(miễn: ${t.tool_id} ${Math.round(t.cost_vnd).toLocaleString('vi-VN')}đ/24h)`);
+      }
+      continue;
+    }
+    const key = `tool_spend:${t.tool_id}`;
+    if (t.cost_vnd >= th.toolSpendVnd24h && !inCooldown(key)) {
+      fired.push({
+        key,
+        text:
+          `💸 Tool ${t.tool_id} tiêu ${Math.round(t.cost_vnd).toLocaleString('vi-VN')}đ tiền model trong 24h ` +
+          `(${t.requests} lượt) — vượt trần ${th.toolSpendVnd24h.toLocaleString('vi-VN')}đ` +
+          (t.requests > 0
+            ? `\n   ↳ TB ${Math.round(t.cost_vnd / t.requests).toLocaleString('vi-VN')}đ/lượt`
+            : ''),
       });
     }
   }
