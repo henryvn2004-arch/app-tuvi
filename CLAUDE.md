@@ -5,6 +5,99 @@
 
 ---
 
+## 🔢 Track repo thần số học → vá 3 lỗi + mở 4→11 chỉ số (2026-08-05, PR #414)
+
+Henry: *"trên GitHub có repo nào làm thần số học ko? Cái nào ngon rating cao
+mang về upgrade cho tool hiện tại được ko?"*
+
+### 🔴 KHÔNG repo nào dùng được — đừng đi tìm lại
+| Repo | ★ | Chặn ở đâu |
+|---|---:|---|
+| `shizhilya/yuan` | **149** | **Không có LICENSE** = all rights reserved. Mà cũng KHÔNG phải thư viện thần số học — agent skill TQ gộp 6 môn, numerology chỉ là 1 module |
+| `evoluteur/motivational-numerology` | 95 | **AGPLv3** (lây qua MẠNG ⇒ dùng là phải mở mã cả site) + diễn giải chép từ sách *Motivational Numerology* của Sally Faubion ⇒ **hai lớp** bản quyền |
+| `google/gematria` | 94 | ⚠️ **TRÙNG TÊN THUẦN TUÝ** — "Machine learning for machine code" của Google. Phiên sau đừng mở |
+| `minhphuc010194/NumerologyWebApp` (VN) | 20 | Không có LICENSE. Nghe hấp dẫn vì có sẵn chữ tiếng Việt |
+| npm (`numerology-core`, `theomath`, `numeroljs`…) | — | MIT nhưng **0–5 lượt tải/tuần**, mỏng hơn bản repo đang có |
+
+- 🔑 **Bài học lớn nhất của track: CẢ HAI repo top đều dùng ĐÚNG công thức SAI
+  mà mình đi vá.** `evoluteur` nối chuỗi tháng+ngày+năm rồi mới rút gọn (và
+  thiếu hẳn Master 33); `yuan` ghi thẳng trong `spec.json`:
+  `生命路径数 = reduce_number(sum(digits(normalized_birthdate)))`. Mang về cái
+  nào cũng là **bê nguyên bug 12,06% vào site thay vì vá nó**.
+  ⇒ **Sao đo độ phổ biến của CODE, không đo độ đúng của CỔ PHÁP.**
+- ⚠️ `evoluteur` gắn topic `forecast` + `predictions` mà **không có một phép
+  tính theo thời gian nào**. Nhãn đánh lừa, cùng bẫy `lunarPHP` ở track trên.
+- **Công thức KHÔNG ai sở hữu** (tri thức dân gian) — chỉ *code* và *câu chữ
+  diễn giải* bị bản quyền. Nên đường đi đúng: đọc để biết CÓ NHỮNG CHỈ SỐ NÀO,
+  rồi tự cài + tự viết diễn giải tiếng Việt.
+
+### 🔴 3 lỗi tìm ra khi đối chiếu — không mục nào nằm trong đề bài
+| Chỗ | Sai gì | Quy mô |
+|---|---|---|
+| Số Đường Đời | cộng TẤT CẢ chữ số một lượt thay vì rút gọn ngày/tháng/năm RIÊNG rồi mới cộng | **12,06%** số ngày sinh (đo 28.124 ngày) |
+| ↳ kéo theo | **2.469 ngày được cấp Master GIẢ** — riêng 33 phát nhầm 1.134 lần trong khi 33 thật chỉ 42 ngày (**sai ~27 lần**); 922 ngày MẤT Master thật | |
+| Tên tiếng Việt | `[^A-Z]` **XOÁ** ký tự có dấu chứ không bỏ dấu | ~100% người Việt gõ đúng chính tả |
+| Linh Hồn = 0 | hiện vòng tròn "0" kèm **nguyên văn diễn giải số 9** (`MEANINGS[0]` undefined → fallback `[9]`) | ca tên không có nguyên âm |
+
+- **Nguồn quyết định là nguồn VIỆT, không phải Decoz**: các trang thần số học VN
+  đều dạy *"rút gọn tổng ngày, tổng tháng, tổng năm… sau đó cộng 3 số đó lại"*.
+  Đây là quy ước người xem của site kỳ vọng. Cộng-một-lượt còn phá cấu trúc
+  **3 Chu Kỳ** mà Đỉnh Cao/Thử Thách dựng lên ⇒ không phải "biến thể cổ pháp".
+- 🐞 **Lỗi tên tiếng Việt IM LẶNG nên nguy hiểm nhất:** `"Lê Đình Đức"` →
+  `"L NH C"` (mất 5/9 chữ), `"Đỗ Thuỳ Dương"` → `" THU DNG"` (**bay mất cả họ**).
+  Chuỗi còn ký tự nên qua được validate → trả kết quả sai chứ không báo lỗi.
+  Vá bằng NFD + **`đ/Đ→d/D` đổi TAY** (NFD KHÔNG tách được đ vì nó là chữ cái
+  riêng, không phải d + dấu — bỏ bước này là "Đức" mất luôn chữ đầu).
+
+### ✅ Mở 4 → 11 chỉ số (deterministic, 0 lượt LLM, 0đ)
+Thêm Số Ngày Sinh · Thái Độ · Trưởng Thành · **Biểu Đồ Ngày Sinh** (lưới 3×3
+Pythagoras + 8 mũi tên mạnh/trống) · Bài Học Còn Thiếu · Đam Mê Tiềm Ẩn ·
+**Nợ Nghiệp Quật** 13/14/16/19 · **Năm Cá Nhân** · **Đỉnh Cao & Thử Thách**
+4 chặng kèm mốc tuổi (`36 − ĐườngĐời`, mỗi chặng sau 9 năm).
+- **Nợ Nghiệp Quật phải dò trên TỔNG THÔ** — rút gọn xong thì dấu vết biến mất.
+- **Năm Cá Nhân là chỉ số DUY NHẤT đổi theo thời gian** ⇒ móc kéo người quay
+  lại hằng năm. Dùng `vnYear()` như các tool tools-shared khác, không hardcode.
+- `reduce()` giữ Master, `reduce1()` về 1 chữ số — **Thử Thách và Năm Cá Nhân
+  phải dùng `reduce1`**, giữ 11 lại sẽ làm hiệu `|a−b|` và chu kỳ 9 năm sai.
+- 7 số của `evoluteur` **đều đã nằm trong 11 chỉ số này** (Divine Purpose của
+  họ = Số Trưởng Thành của mình, công thức y hệt). Thứ duy nhất họ hơn là 11
+  ngôn ngữ giao diện — bản dịch UI, không phải nội dung huyền học.
+
+### 🪤 Bẫy đã vấp / phải nhớ
+- **Đổi công thức thì phải quét cả chỗ MÔ TẢ công thức** (lặp lại lần thứ hai
+  sau vụ Kim Lâu #361): `CHAT_SYSTEM_THAN_SO` đang nói *"4 CON SỐ"*, FAQ JSON-LD
+  + bài SEO đang dạy lối cộng-một-lượt kèm ví dụ **15/8/1990 = 33**. Prompt LLM
+  **không được typecheck bắt**. Nay ví dụ sửa thành kết quả đúng (**= 6**) và
+  dùng chính nó giải thích vì sao lối kia sai.
+- ⚠️ `data` gửi rail phải **PHẲNG** — `extractGenericContext` bỏ IM LẶNG mọi giá
+  trị `object`. Chỉ số nào là danh sách thì dẹp thành chuỗi trong module.
+- 🐞 **Lỗi chỉ lộ khi ĐỌC output, không phải khi đo:** nhãn thử thách in hai lần
+  (*"Thử thách 2: Thử thách 2 — …"*) ở cả 4 chặng, vì bảng `CHALLENGE` tự mang
+  tiền tố mà phần render cũng in nhãn. 85.948 assertion vẫn xanh.
+- Hai lần test đỏ khác đều là **kỳ vọng của TEST sai, không phải code**: `&` bị
+  escape thành `&amp;` trong `innerHTML`; và `innerText` trả **chữ HOA** vì mục
+  có `text-transform:uppercase`.
+- **Verify:** 85.948 assertion trên module THẬT (4.774 lá số — mốc tuổi 4 chặng
+  liền mạch không hở/chồng, thử thách luôn 0–8, 0 rò `undefined`/`NaN`,
+  deterministic) · 4 ca Playwright trên 2 trang thật (tên có dấu, **có dấu ≡
+  không dấu byte-identical**, 390px không tràn, payload rail phẳng + bắt đúng
+  Nợ 13/4) · `tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier`
+  sạch · engine test 185 pass · CI xanh **đủ 7 check**.
+
+### CÒN LẠI
+- ⚠️ **Số Đường Đời đổi trên ~12% người xem sau deploy**, ai từng được báo
+  Master 33 phần lớn về số thường. **Fix chạy đúng, không phải hỏng** — cùng
+  loại với vụ 12 trực đổi 26,8% số ngày.
+- Không có việc tay: tool đã `enabled=true`, không đụng schema, không thêm env.
+- **Tên chỉ số theo quy ước VN phổ biến hơi lệch, CỐ Ý chưa đổi:** `soSuMenh`
+  (từ phụ âm) thường được gọi là **Nhân Cách**, còn "Sứ Mệnh" hay dùng cho số
+  từ TOÀN BỘ tên. Phụ đề trên trang đã nói rõ nguồn suy ra nên không sai lệch;
+  đổi key sẽ đụng cả prompt lẫn bản chia sẻ đã lưu.
+- Chưa làm: **tương hợp thần số học giữa hai người** (tool MỚI, không phải nâng
+  cấp tool này).
+
+---
+
 ## 🀄 Track repo Trung Quốc → Mai Hoa + Kỳ Môn + ảnh 9:16 (2026-08-04, PR #408)
 
 Henry đưa 5 repo huyền học TQ, hỏi có tool nào hay mà site chưa có.
