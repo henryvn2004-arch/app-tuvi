@@ -3469,7 +3469,7 @@ async function loadMarketing() {
     if (nRev) nRev.textContent = 'giao dịch cũ chưa lưu VNĐ → suy theo ' + rateTxt + '/Lượng';
     const nSrc = document.getElementById('mkt-src-note');
     if (nSrc) nSrc.textContent = 'Quy đổi doanh thu: 1 Lượng ≈ ' + rateTxt;
-    renderMktFunnel(d.funnel || {});
+    renderMktFunnel(d.funnel || {}, d.trafficQuality || null);
     renderMktGa4(d.ga4 || null);
     renderMktSources(d.sources || []);
     renderMktAcq(d.acquisition || []);
@@ -3989,7 +3989,7 @@ function renderMktGa4(g) {
   </div>`;
 }
 
-function renderMktFunnel(f) {
+function renderMktFunnel(f, tq) {
   // Bậc funnel chính (thang theo visitors) + conv% so với bậc trước.
   const svgIc = (p) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px;margin-right:.3rem;opacity:.75">${p}</svg>`;
   const steps = [
@@ -4027,7 +4027,48 @@ function renderMktFunnel(f) {
   </div>`;
   const overall = (f.visitors > 0) ? ((f.paid || 0) / f.visitors * 100).toFixed(2) + '%' : '—';
   document.getElementById('mkt-funnel').innerHTML = rows + secondary +
-    `<div style="margin-top:.75rem;font-size:.72rem;color:var(--text-lt)">Chuyển đổi tổng visit → paid: <strong style="color:var(--text)">${overall}</strong></div>`;
+    `<div style="margin-top:.75rem;font-size:.72rem;color:var(--text-lt)">Chuyển đổi tổng visit → paid: <strong style="color:var(--text)">${overall}</strong></div>`
+    + renderTrafficQuality(tq, f.paid || 0);
+}
+
+// Dải chất lượng lưu lượng, đứng dưới phễu. Đọc từ RPC `traffic_quality` — CÙNG
+// nguồn mà CMO digest Telegram đang luận, cố ý không tự đếm lại ở đây.
+//
+// Vì sao cần: bậc "Khách ghé" đếm THÔ. Đo prod 05/08/2026 trên 30 ngày:
+// 1.005 danh tính, trong đó **871 vào đúng một lượt rồi biến mất** (0 user_id,
+// 0 đăng ký, 0 nạp tiền) và chỉ 83 có tương tác thật. Lấy 1.005 làm mẫu số rồi
+// đọc ra "chuyển đổi 0,10%" là một kết luận sai về sản phẩm dựa trên phép chia sai.
+//
+// ⚠️ Số nội bộ, KHÔNG phải tập con của thanh "Khách ghé" ở trên khi thanh đó
+// đang hiển thị GA4 — vì thế nó đứng thành dải riêng có nhãn nguồn, không nhét
+// chung dòng.
+function renderTrafficQuality(tq, paid) {
+  if (!tq || tq.total == null) return '';
+  const eng = tq.engaged || 0, drive = tq.drive_by || 0, brow = tq.browsed || 0, bot = tq.known_bot || 0;
+  const tot = tq.total || 0;
+  const pct = (n) => tot > 0 ? Math.round((n / tot) * 100) : 0;
+  const seg = (n, color, label) => n <= 0 ? '' :
+    `<div style="width:${pct(n)}%;background:${color}" title="${label}: ${n.toLocaleString()} (${pct(n)}%)"></div>`;
+  // Mẫu số ĐÃ LỌC. Đây là con số nên đọc, và nói rõ nó đã lọc.
+  const convEng = eng > 0 ? ((paid || 0) / eng * 100).toFixed(2) + '%' : null;
+  const ua = tq.ua_coverage || {};
+  // with_ua = 0 nghĩa là CHƯA đo được User-Agent, không phải "không có bot".
+  const botNote = (ua.with_ua === 0)
+    ? ' · <span style="color:var(--gold)">chưa thu được User-Agent nào — bot = 0 ở đây là “chưa đo”, không phải “không có”</span>'
+    : '';
+  return `<div style="margin-top:.9rem;padding-top:.8rem;border-top:1px solid var(--border-lt)">
+    <div class="stat-label" style="margin-bottom:.35rem" title="RPC traffic_quality — cùng nguồn với CMO digest gửi Telegram">Chất lượng lưu lượng (đo nội bộ, ${tot.toLocaleString()} danh tính)</div>
+    <div style="display:flex;height:10px;border-radius:5px;overflow:hidden;background:var(--border-lt)">
+      ${seg(eng, 'var(--green)', 'Tương tác thật')}${seg(brow, 'var(--blue)', 'Xem vài trang')}${seg(drive, 'var(--text-lt)', 'Ghé 1 lượt rồi đi')}${seg(bot, 'var(--red)', 'Bot theo User-Agent')}
+    </div>
+    <div style="margin-top:.45rem;font-size:.7rem;color:var(--text-lt);line-height:1.55">
+      <strong style="color:var(--green)">${eng.toLocaleString()}</strong> tương tác thật
+      · <strong style="color:var(--text-mid)">${brow.toLocaleString()}</strong> xem vài trang
+      · <strong style="color:var(--text-mid)">${drive.toLocaleString()}</strong> ghé 1 lượt rồi đi
+      · <strong style="color:var(--text-mid)">${bot.toLocaleString()}</strong> bot${botNote}
+      ${convEng ? `<br>Chuyển đổi trên mẫu số ĐÃ LỌC (paid ÷ tương tác thật): <strong style="color:var(--text)">${convEng}</strong>` : ''}
+    </div>
+  </div>`;
 }
 
 function renderMktSources(rows) {
@@ -4244,6 +4285,16 @@ function mktExportCSV() {
   rows.push(['visitors', 'signups', 'activated', 'topup_intent', 'paid', 'returned']);
   rows.push([f.visitors || 0, f.signups || 0, f.activated || 0, f.topup_intent || 0, f.paid || 0, f.returned || 0]);
   rows.push([]);
+  // Khối RIÊNG chứ không thêm cột vào bảng funnel: `visitors` ở trên là số đang
+  // hiện trên thanh (GA4 khi có), còn đây là phân loại NỘI BỘ — nhét chung hàng
+  // là mời người đọc cộng trừ hai nguồn khác nhau.
+  const tq = _mktData.trafficQuality;
+  if (tq && tq.total != null) {
+    rows.push(['# Chất lượng lưu lượng (nội bộ, RPC traffic_quality)']);
+    rows.push(['total', 'engaged', 'browsed', 'drive_by', 'known_bot']);
+    rows.push([tq.total || 0, tq.engaged || 0, tq.browsed || 0, tq.drive_by || 0, tq.known_bot || 0]);
+    rows.push([]);
+  }
   rows.push(['# Sources']);
   rows.push(['source', 'signups', 'paid', 'conv_pct', 'revenue_credits', 'revenue_vnd', 'ltv_vnd']);
   (_mktData.sources || []).forEach(r => {

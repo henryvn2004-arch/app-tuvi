@@ -1503,16 +1503,28 @@ async function handleAdminMarketing(request: NextRequest, sp: URLSearchParams): 
   };
 
   try {
-    const [funnel, sources, acquisition, campaigns, traffic, revenue, cohorts, ga4] = await Promise.all([
-      callRpc('marketing_funnel'),
-      callRpc('marketing_sources'),
-      callRpc('marketing_acquisition'),
-      callRpc('marketing_campaigns'),
-      callRpc('marketing_traffic'),
-      callRpc('marketing_revenue'),
-      callCohorts(),
-      getGa4Breakdown(from.toISOString().slice(0, 10), to.toISOString().slice(0, 10)),
-    ]);
+    const [funnel, sources, acquisition, campaigns, traffic, revenue, cohorts, ga4, trafficQuality] =
+      await Promise.all([
+        callRpc('marketing_funnel'),
+        callRpc('marketing_sources'),
+        callRpc('marketing_acquisition'),
+        callRpc('marketing_campaigns'),
+        callRpc('marketing_traffic'),
+        callRpc('marketing_revenue'),
+        callCohorts(),
+        getGa4Breakdown(from.toISOString().slice(0, 10), to.toISOString().slice(0, 10)),
+        // Phân loại chất lượng lưu lượng — CÙNG RPC mà CMO digest đã dùng, cố ý
+        // KHÔNG viết một phép đếm "khách thật" thứ hai ở đây: `traffic_quality`
+        // đã định nghĩa `engaged` và digest đang luận trên đó, hai định nghĩa
+        // song song thì sớm muộn cũng trôi khỏi nhau (bệnh đã trả giá ở #409).
+        //
+        // best-effort như GA4: đây là LỚP CHỒNG LÊN phễu, hỏng thì mất một dòng
+        // chú thích chứ không được kéo sập cả trang Marketing.
+        callRpc('traffic_quality').catch((e) => {
+          console.warn('[admin-marketing] traffic_quality lỗi:', (e as Error).message);
+          return null;
+        }),
+      ]);
     // GA4 sessions THẬT thay 'visitors' nội bộ (page_view) khi đã cấu hình env —
     // nội bộ chỉ thấy traffic chạm track.js, thiếu organic/ads/social GA4 đo được.
     // `internalVisitors` giữ lại số nội bộ để panel GA4 so hai bên (chênh lệch
@@ -1526,6 +1538,7 @@ async function handleAdminMarketing(request: NextRequest, sp: URLSearchParams): 
     }
     return ok({
       funnel, sources, acquisition, campaigns, traffic, revenue, cohorts, cohortWeeks,
+      trafficQuality,
       ga4: ga4 ? { ...ga4, internalVisitors } : null,
       from: from.toISOString(), to: to.toISOString(),
     });
