@@ -425,15 +425,30 @@ Hai ghi chú cho lần sau:
 - **KHÔNG dùng `CronCreate`** — nó chỉ sống trong phiên và **tự hết hạn sau 7
   ngày**. Báo cáo hằng ngày mà dùng nó thì tuần sau tự tắt không ai hay.
 
-### Chốt cuối: hai báo cáo đi hai đường khác nhau
+### Chốt cuối: cả hai báo cáo dựng lại theo kiểu bind phiên
 
-| | Đường | Vì sao |
+| | Prompt | Lịch |
 |---|---|---|
-| **COO** (07:00) | bind vào một phiên cố định | Henry muốn đọc được trên app iPhone |
-| **CMO** (08:10) | **giữ nguyên routine cũ** đang chạy ở phiên khác | Nó vẫn chạy tốt — đổi chỉ để cho đồng bộ là tự chuốc rủi ro |
+| **COO** | `docs/coo-daily-routine-prompt.md` | 07:00 VN |
+| **CMO** | `docs/cmo-daily-routine-prompt.md` | 08:10 VN |
 
-⚠️ Routine tạo thử bằng form web (cả COO lẫn CMO) **phải xoá/pause**, nếu không
-mỗi sáng nhận hai bản trùng.
+Ban đầu chốt **giữ nguyên routine CMO cũ** vì "nó vẫn chạy tốt". Đảo lại sau khi
+soi kỹ, và lý do không phải cho đồng bộ:
+
+1. **Prompt của bản cũ không sửa được, vĩnh viễn** — `update_trigger` từ chối vì
+   nó bind vào phiên không thuộc phiên gọi. Đã đụng tường này một lần (muốn thêm
+   bước đọc GA4, cuối cùng phải đi đường vòng là sửa *cron* để ghi GA4 vào DB).
+2. **Bản cũ ra đời trước track COO nên không có bước kiểm `ts` còn tươi.** Cron
+   `cmo-digest` chết một sáng thì nó đọc dòng của hôm qua rồi trình bày như số
+   hôm nay, im lặng. **Một báo cáo đọc số cũ trông y hệt một báo cáo khoẻ** —
+   đúng loại hỏng cả track này sinh ra để chặn, mà lại nằm ngay trong bản Henry
+   đọc mỗi sáng.
+
+⚠️ **Không xoá bản cũ trước.** Chạy song song vài hôm, đọc hai bản cạnh nhau, đủ
+tin rồi mới pause — verify-rồi-mới-thay, không phải thay-rồi-cầu-may.
+
+⚠️ Routine tạo thử bằng **form web** (cả COO lẫn CMO) thì **phải xoá/pause**:
+chúng đẻ phiên mới nên không hiện trên app, và để đó là mỗi sáng nhận bản trùng.
 
 Cấu hình: cron **`0 0 * * *` (UTC = 07:00 VN)** · `notifications: {"push": true}`
 · prompt lấy nguyên văn từ `docs/coo-daily-routine-prompt.md`.
