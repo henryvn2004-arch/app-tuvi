@@ -1,3 +1,6 @@
 {
-  "enabledMcpjsonServers": ["ga4"]
+  "enabledMcpjsonServers": ["ga4"],
+  "permissions": {
+    "allow": ["mcp__Claude_Code_Remote__send_later"]
+  }
 }
