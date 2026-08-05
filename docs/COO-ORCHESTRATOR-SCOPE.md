@@ -410,15 +410,57 @@ trông vẫn như số mới.
 routine kêu y hệt nhau mỗi sáng về một chuyện đã kết luận xong — và một bộ dò
 kêu nhầm mỗi ngày thì chẳng mấy chốc bị ngó lơ, hỏng đúng như khi nó im lặng.
 
-### Trạng thái: ⏳ CHƯA TẠO ĐƯỢC — cần Henry tự tạo
+### Trạng thái: ⏳ còn MỘT bước tay — tạo từ phiên tương tác
 
-`create_trigger` (MCP claude-code-remote) trả **`requires approval`** trong phiên
-này, và phiên chạy nền không chạy được luồng duyệt. Hai ghi chú cho lần sau:
+`create_trigger` (MCP claude-code-remote) trả **`requires approval`** — đã thử 4
+lần, luôn chặn. **Phiên nền không có chỗ hiện nút duyệt**, và người dùng gật
+trong chat KHÔNG gỡ được: đây là cổng ở tầng harness, không phải quyền tài khoản.
+
+⇒ Việc còn lại phải chạy từ **một phiên Claude Code tương tác** (terminal hoặc
+Desktop), trỏ `persistent_session_id` vào phiên muốn nhận báo cáo.
+
+Hai ghi chú cho lần sau:
 - `connectors: ["Supabase"]` → **org này không cho** (`connectors parameter is not
   available for this organization`). Bỏ hẳn tham số đó.
 - **KHÔNG dùng `CronCreate`** — nó chỉ sống trong phiên và **tự hết hạn sau 7
   ngày**. Báo cáo hằng ngày mà dùng nó thì tuần sau tự tắt không ai hay.
 
-Cấu hình: cron **`0 0 * * *` (UTC = 07:00 VN)** · `create_new_session_on_fire:
-true` · `notifications: {"push": true}` · prompt lấy nguyên văn từ
-`docs/coo-daily-routine-prompt.md`.
+### Chốt cuối: hai báo cáo đi hai đường khác nhau
+
+| | Đường | Vì sao |
+|---|---|---|
+| **COO** (07:00) | bind vào một phiên cố định | Henry muốn đọc được trên app iPhone |
+| **CMO** (08:10) | **giữ nguyên routine cũ** đang chạy ở phiên khác | Nó vẫn chạy tốt — đổi chỉ để cho đồng bộ là tự chuốc rủi ro |
+
+⚠️ Routine tạo thử bằng form web (cả COO lẫn CMO) **phải xoá/pause**, nếu không
+mỗi sáng nhận hai bản trùng.
+
+Cấu hình: cron **`0 0 * * *` (UTC = 07:00 VN)** · `notifications: {"push": true}`
+· prompt lấy nguyên văn từ `docs/coo-daily-routine-prompt.md`.
+
+### 🔴 Kiểu bind phiên — đánh đổi đo được, KHÔNG phải tuỳ thích
+
+Henry tạo routine bằng form web rồi hỏi vì sao nó **không hiện trong app Claude
+trên iPhone**, trong khi *Báo cáo CMO* cũ thì có. Đã thử **hai routine, cùng kết
+quả**, nên đây là tính chất chứ không phải trục trặc:
+
+| | Bắn vào **phiên có sẵn** | **Phiên MỚI** mỗi lượt |
+|---|---|---|
+| Tạo bằng | chỉ MCP `create_trigger` | form web · Desktop · `/schedule` |
+| Hiện trên app mobile | ✅ (là một hội thoại thật) | ❌ |
+| `notifications` (push) | ❌ **server từ chối tham số** | ✅ |
+| Sửa prompt sau này | ❌ nếu bind phiên của người/phiên khác | ✅ |
+
+**Hai thứ Henry muốn nằm ở hai cột khác nhau** — xem được trên điện thoại và
+nhận push là loại trừ nhau, không cấu hình nào có cả hai. Ghi ra vì lần đầu tao
+tư vấn "phiên mới cho gọn" mà không biết chính cái bind kia mới đẻ ra khả năng
+xem trên app.
+
+⚠️ **Kiểu bind CHỐT LÚC TẠO, không sửa được.** `update_trigger` chỉ nhận `name`
+· `cron_expression` · `enabled` · `model` · `prompt` · `run_once_at` — **không có
+tham số nào cho binding**. Muốn đổi thì phải xoá và tạo lại.
+
+⚠️ **`create_trigger` không gọi được từ phiên nền** (`requires approval`, mà phiên
+non-interactive thì không có chỗ bấm duyệt). Muốn kiểu bind-phiên thì phải chạy
+từ **một phiên tương tác** (terminal/Desktop), dùng `persistent_session_id` trỏ
+vào phiên muốn nhận báo cáo.
