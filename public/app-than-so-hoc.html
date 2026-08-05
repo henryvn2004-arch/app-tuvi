@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Thần số học — Tử Vi Minh Bảo</title>
-<meta name="description" content="Tính 4 con số cốt lõi Thần Số Học (Đường Đời, Định Mệnh, Linh Hồn, Sứ Mệnh) theo ngày sinh và tên — hệ Pythagoras. Hỏi trợ lý AI luận sâu.">
+<meta name="description" content="Tính 11 chỉ số Thần Số Học: Đường Đời, Định Mệnh, Linh Hồn, Sứ Mệnh, Ngày Sinh, Thái Độ, Trưởng Thành, biểu đồ ngày sinh, nợ nghiệp quật, năm cá nhân, đỉnh cao & thử thách. Hỏi trợ lý AI luận sâu.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -46,7 +46,7 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Thần số học</b><span>4 con số cốt lõi theo Pythagoras</span></div>
+      <div class="ws-title"><b>Thần số học</b><span>11 chỉ số theo hệ Pythagoras</span></div>
       <div class="ws-actions">
         <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa</button>
         <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
@@ -57,21 +57,21 @@
       <div id="shellRecent"></div>
       <div class="form-card" id="birthPanel">
         <h2>Ngày sinh & tên đầy đủ</h2>
-        <p class="sub">Tính 4 con số cốt lõi (Đường Đời · Định Mệnh · Linh Hồn · Sứ Mệnh) theo hệ Pythagoras, rồi hỏi trợ lý luận sâu tính cách, sự nghiệp, tình cảm.</p>
+        <p class="sub">Tính đầy đủ <b>11 chỉ số</b> theo hệ Pythagoras — 4 số cốt lõi, biểu đồ ngày sinh &amp; mũi tên, nợ nghiệp quật, năm cá nhân, đỉnh cao &amp; thử thách theo giai đoạn — rồi hỏi trợ lý luận sâu.</p>
         <div class="frow">
           <div class="fg" style="width:74px"><label>Ngày</label><input type="number" id="ngay" placeholder="15" min="1" max="31"></div>
           <div class="fg" style="width:74px"><label>Tháng</label><input type="number" id="thang" placeholder="6" min="1" max="12"></div>
           <div class="fg" style="width:90px"><label>Năm</label><input type="number" id="nam" placeholder="1990"></div>
-          <div class="fg" style="flex:1;min-width:160px"><label>Họ tên (không dấu, A–Z)</label><input type="text" id="ten" placeholder="Nguyen Van An"></div>
+          <div class="fg" style="flex:1;min-width:160px"><label>Họ tên đầy đủ</label><input type="text" id="ten" placeholder="Nguyễn Văn An"></div>
         </div>
-        <div class="hint">Nhập tên khai sinh, không dấu, chỉ dùng ký tự A–Z.</div>
+        <div class="hint">Nhập tên khai sinh đầy đủ — <b>gõ có dấu hay không dấu đều được</b>, kết quả như nhau.</div>
         <button class="btn-go" id="btnGo" onclick="calculate()">Tính thần số →</button>
         <div class="err" id="error-msg"></div>
       </div>
 
       <div id="resPanel">
         <div class="res-block"><div id="numResults"></div></div>
-        <div class="ask" data-ask="Luận giúp tôi 4 con số này: tính cách, điểm mạnh yếu, sự nghiệp và tình cảm hợp.">✦ Hỏi trợ lý luận sâu thần số</div>
+        <div class="ask" data-ask="Luận giúp tôi bản đồ thần số này: 4 số cốt lõi bổ trợ hay mâu thuẫn nhau, biểu đồ ngày sinh mạnh yếu chỗ nào, và tôi đang ở chặng nào của đời.">✦ Hỏi trợ lý luận sâu thần số</div>
       </div>
     </div>
   </main>
@@ -80,8 +80,8 @@
 </div>
 
 <script>window.SHELL_ACTIVE='than-so-hoc';window.SHELL_HISTORY=true;
-window.SHELL_INTRO={key:'than-so-hoc',title:'Thần số học',desc:'Tính <b>4 con số cốt lõi</b> (Đường Đời · Định Mệnh · Linh Hồn · Sứ Mệnh) theo hệ Pythagoras, rồi hỏi <b>trợ lý AI</b> luận sâu tính cách, sự nghiệp, tình cảm.'};</script>
-<script src="/tools-shared/than-so-hoc.js?v=1"></script>
+window.SHELL_INTRO={key:'than-so-hoc',title:'Thần số học',desc:'Tính <b>11 chỉ số</b> theo hệ Pythagoras — 4 số cốt lõi, <b>biểu đồ ngày sinh</b> &amp; mũi tên, <b>nợ nghiệp quật</b>, <b>năm cá nhân</b>, đỉnh cao &amp; thử thách theo giai đoạn — rồi hỏi <b>trợ lý AI</b> luận sâu.'};</script>
+<script src="/tools-shared/than-so-hoc.js?v=2"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=55"></script>
@@ -104,11 +104,14 @@ function calculate(){
   Shell.setContext({
     scenario:{type:'than-so-hoc',data:r.data},
     label:'Thần số học · '+r.data.ten,
-    greeting:'Đã tính 4 con số cho **'+r.data.ten+'** (Đường Đời **'+r.data.soDuongDoi+'**, Định Mệnh '+r.data.soDinhMenh+', Linh Hồn '+r.data.soLinhHon+', Sứ Mệnh '+r.data.soSuMenh+'). Bạn muốn tôi luận gì trước?',
-    chips:['Số Đường Đời nói gì về tôi?','Nghề nghiệp nào hợp?','Tình cảm hợp số mấy?','4 con số này bổ trợ hay mâu thuẫn?']
+    greeting:'Đã lập bản đồ thần số cho **'+r.data.ten+'** (Đường Đời **'+r.data.soDuongDoi+'**, Định Mệnh '+r.data.soDinhMenh+', Linh Hồn '+r.data.soLinhHon+', Sứ Mệnh '+r.data.soSuMenh+') — kèm biểu đồ ngày sinh, nợ nghiệp quật và đỉnh cao/thử thách theo giai đoạn. Bạn muốn tôi luận gì trước?',
+    chips:['Số Đường Đời nói gì về tôi?','Năm '+r.data.namXemThanSo+' của tôi nên làm gì?','Tôi đang ở chặng nào, thử thách gì?','Biểu đồ ngày sinh tôi thiếu gì?','Nghề nghiệp nào hợp?']
   });
   var _tsLines=['Thần số học — '+r.data.ten+' ('+r.data.dob+')'];
   _tsLines.push('Đường Đời: '+r.data.soDuongDoi+' · Định Mệnh: '+r.data.soDinhMenh+' · Linh Hồn: '+r.data.soLinhHon+' · Sứ Mệnh: '+r.data.soSuMenh);
+  _tsLines.push('Ngày Sinh: '+r.data.soNgaySinh+' · Thái Độ: '+r.data.soThaiDo+(r.data.soTruongThanh?' · Trưởng Thành: '+r.data.soTruongThanh:''));
+  _tsLines.push('Năm cá nhân '+r.data.namXemThanSo+': '+r.data.namCaNhan+'/9 · Biểu đồ thiếu: '+r.data.bieuDoThieu);
+  if(r.data.noNghiepQuat!=='(không có)')_tsLines.push('Nợ nghiệp quật: '+r.data.noNghiepQuat);
   Shell.setShareable({kind:'text',toolId:'than-so-hoc',title:'Thần số học của '+r.data.ten,text:_tsLines.join('\n')});
   document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
 }
