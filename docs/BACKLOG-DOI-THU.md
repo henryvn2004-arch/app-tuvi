@@ -179,12 +179,31 @@ không trả về cung Tật Ách / Tài Bạch / Phu Thê / Tử Tức / Điề
 được xem, và prompt cũng không nêu tên cung mà đại vận/tiểu hạn đang đóng (cung
 hạn hay rơi đúng vào mấy cung vừa chặn). Hai lớp, vì một lớp lời dặn thì lách được.
 
-### T2/T3. Gói Cha Mẹ · Gói Kinh doanh 🔴 L
+### T2/T3. Gói Cha Mẹ · Gói Kinh doanh ✅ XONG (phần NỘI DUNG) ⭐
 Họ có **3 biến thể hội viên**: thường / `親子白金` / `業務白金`. Bản kinh doanh
 bán cho **dân sale & bảo hiểm**: đặc chất nghề của bạn · **sổ nhân mạch công sở**
 (sếp/cấp dưới/đồng nghiệp) · **phân tích toàn bộ khách hàng** · chỉ dấu chốt sale.
-⇒ Đây là **B2B trá hình**, và là phân khúc chịu chi nhất. Nhưng là gói thuê bao
-⇒ phụ thuộc S1, đừng làm trước.
+⇒ Đây là **B2B trá hình**, và là phân khúc chịu chi nhất.
+
+**⚠️ ĐÃ ĐỔI HÌNH THỨC, cố ý:** hai mục này vốn là **bậc thuê bao** nên phụ thuộc
+S1, mà S1 lại chờ R1 chứng minh có người quay lại. Dựng hạ tầng thuê bao lúc này
+là dựng đường thu tiền định kỳ cho thứ chưa ai dùng lần hai. Nên đã làm **phần
+nội dung của hai gói dưới dạng hai tool bán lẻ bằng Lượng**. S1 ra đời thì hai
+tool này thành ruột của gói, engine không phải sửa.
+
+**Đã làm:**
+- **T2 `/app/day-con` "Dạy Con Theo Lá Số"** (15 Lượng) — `lib/engine/day-con.ts`.
+  Khác `nguoi-khac(con-cai)` ở câu hỏi: bên kia là *sống chung cho êm*, bên này
+  là *dạy kiểu nào thì vào*. Mặt đáng tiền nhất là **cung Phụ Mẫu** — đứa trẻ
+  nhìn cha mẹ thế nào, tức phía bên kia của chính người hỏi. Ô "điều đang lo"
+  (6 lựa chọn) đổi giọng cả bản luận.
+- **T3 `/app/nhan-mach` "Sổ Nhân Mạch"** (20 Lượng) — `lib/engine/nhan-mach.ts`.
+  Đây mới là phần B2B: 2–8 người từ **sổ lá số (U4)** → lỗ hổng đội (kiểu không
+  ai có) · cặp giẫm chân / bù nhau · thứ tự tiếp cận. **Thứ tự xếp theo VẬN NĂM,
+  KHÔNG phải mức quan trọng** — nói thẳng trên trang và trong prompt.
+⚖️ **Ranh giới đạo đức hai lớp** như T1: dùng chung `KHONG_DOC`; T2 cố ý không
+gọi bảng nghề (chốt nghề cho đứa 10 tuổi là chỗ nguy hiểm nhất), T3 không trả
+điểm tổng mỗi người nên **không có gì để xếp hạng**; prompt cấm thêm một lần nữa.
 
 ### T4. Đèn cầu an online 🟡 M
 **Mảng duy nhất trong danh mục họ có biên gần 100%:** không cần cổ pháp phức tạp,

@@ -112,6 +112,7 @@ export type ScenarioType =
   | 'ngay-tot'
   | 'ban-do-sao'
   | 'cong-so'
+  | 'nhan-mach'
   | 'luc-nham';
 
 export interface ScenarioInput {
@@ -153,7 +154,7 @@ export interface ChatRequestV1 {
    * tự tính lại từ birth (computePastLife deterministic) — vừa an toàn, vừa
    * chắc chắn trùng nhân vật đang hiện trên màn hình.
    */
-  wrap?: 'past-life' | 'past-life-bond' | 'nguoi-khac';
+  wrap?: 'past-life' | 'past-life-bond' | 'nguoi-khac' | 'day-con';
   /**
    * Quan hệ với người trong lá số — chỉ dùng với `wrap: 'nguoi-khac'`.
    *
@@ -162,6 +163,14 @@ export interface ChatRequestV1 {
    * system, đúng như chú thích của `wrap` ở trên.
    */
   wrapQuanHe?: string;
+  /**
+   * Điều cha mẹ đang lo — chỉ dùng với `wrap: 'day-con'`.
+   *
+   * Cũng là ENUM (`resolveMoiLo`, danh sách trắng 6 giá trị). Cố ý KHÔNG gộp
+   * vào `wrapQuanHe`: hai trường hai danh sách trắng khác nhau, gộp lại là sớm
+   * muộn có giá trị của bên này lọt qua cửa của bên kia.
+   */
+  wrapMoiLo?: string;
   /**
    * Lá số của NGƯỜI THỨ HAI — chỉ dùng với `wrap: 'past-life-bond'`.
    *
@@ -301,12 +310,16 @@ export function validateChatRequest(body: unknown):
     b.wrap != null &&
     b.wrap !== 'past-life' &&
     b.wrap !== 'past-life-bond' &&
-    b.wrap !== 'nguoi-khac'
+    b.wrap !== 'nguoi-khac' &&
+    b.wrap !== 'day-con'
   ) {
     return { ok: false, error: 'wrap không hợp lệ' };
   }
   if (b.wrapQuanHe != null && typeof b.wrapQuanHe !== 'string') {
     return { ok: false, error: 'wrapQuanHe không hợp lệ' };
+  }
+  if (b.wrapMoiLo != null && typeof b.wrapMoiLo !== 'string') {
+    return { ok: false, error: 'wrapMoiLo không hợp lệ' };
   }
   if (b.wrapBirthB != null && typeof b.wrapBirthB !== 'object') {
     return { ok: false, error: 'wrapBirthB không hợp lệ' };
@@ -316,7 +329,7 @@ export function validateChatRequest(body: unknown):
     const s = b.scenario as Record<string, unknown>;
     // NGUỒN DUY NHẤT phải khớp ScenarioType union trên — xưa thiếu xem-tuong/
     // phong-thuy nên rail 2 tool vision bị chặn 400. Giữ đủ mọi type ở đây.
-    const types: ScenarioType[] = ['xem-tuoi', 'xem-lam-an', 'tuong-hop', 'tu-binh', 'xem-tuoi-sinh-con', 'chon-ngay-tot', 'dat-ten-con', 'dat-ten-dn', 'xem-tuong', 'phong-thuy', 'nap-am', 'kim-lau', 'ngu-hanh-ten', 'than-so-hoc', 'bat-trach', 'kinh-dich', 'mai-hoa', 'ky-mon', 'hoang-dao', 'ngay-tot', 'luc-nham', 'ban-do-sao', 'cong-so'];
+    const types: ScenarioType[] = ['xem-tuoi', 'xem-lam-an', 'tuong-hop', 'tu-binh', 'xem-tuoi-sinh-con', 'chon-ngay-tot', 'dat-ten-con', 'dat-ten-dn', 'xem-tuong', 'phong-thuy', 'nap-am', 'kim-lau', 'ngu-hanh-ten', 'than-so-hoc', 'bat-trach', 'kinh-dich', 'mai-hoa', 'ky-mon', 'hoang-dao', 'ngay-tot', 'luc-nham', 'ban-do-sao', 'cong-so', 'nhan-mach'];
     if (!types.includes(s.type as ScenarioType)) {
       return { ok: false, error: 'scenario.type không hợp lệ' };
     }

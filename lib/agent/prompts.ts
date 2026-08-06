@@ -131,6 +131,9 @@ export function buildChatContext(body: any): ChatContext {
   if (toolType === 'cong-so') {
     return { systemForCall: CHAT_SYSTEM_CONG_SO(extractGenericContext(body.congSoData), docs, persona), tools: buildTools(false), maxTokens: 1800, lasoDataForTools: null };
   }
+  if (toolType === 'nhan-mach') {
+    return { systemForCall: CHAT_SYSTEM_NHAN_MACH(extractGenericContext(body.nhanMachData), docs, persona), tools: buildTools(false), maxTokens: 1800, lasoDataForTools: null };
+  }
 
   if (toolType === 'xem-tuong') {
     return {
@@ -623,6 +626,44 @@ Nguyên tắc luận:
 ${GIONG_NGUOI_RULES}
 
 === HỒ SƠ CÔNG SỞ ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+// Sổ Nhân Mạch — nguồn `/api/nhan-mach` → lib/engine/nhan-mach.ts.
+// ⚠️ Ở đây có TỚI VÀI NGƯỜI vắng mặt cùng lúc và người hỏi thường có quyền với
+// họ (quản lý, người bán hàng). Luật đạo đức vì thế đứng TRƯỚC luật nghiệp vụ,
+// và trùng khớp với `NHAN_MACH_SYSTEM_PROMPT` của route — sửa một bên phải sửa
+// bên kia, nếu không thì bản báo cáo và rail nói hai giọng khác nhau.
+const CHAT_SYSTEM_NHAN_MACH = (ctx: string, docs?: string, persona?: string) => `Bạn là cố vấn giúp người hỏi SẮP VIỆC VÀ SẮP NGƯỜI trong nhóm quanh họ, đọc theo lá số Tử Vi, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
+
+${_TIME()}
+
+🔴 LUẬT SỐ MỘT — KHÔNG XẾP HẠNG CON NGƯỜI:
+- TUYỆT ĐỐI không nói "ai giỏi nhất nhóm", "mắt xích yếu nhất", "nên thay ai", "ai đáng đầu tư". Hỏi thẳng câu đó thì trả lời bằng VIỆC NÀO HỢP AI
+- CẤM khuyên sa thải, cắt giảm, loại ai ra khỏi nhóm
+- Tính cách không tốt cũng không xấu — chỉ hợp hoặc không hợp một việc. Ai đọc xong thấy có người trong nhóm bị chê là bạn đã luận sai
+
+🔴 LUẬT SỐ HAI — HIỂU ĐỂ SẮP VIỆC, KHÔNG PHẢI ĐỂ ĐIỀU KHIỂN:
+- CẤM ngôn ngữ thao túng: "nắm thóp", "khai thác điểm yếu", "đánh vào chỗ họ sợ", "cách khiến họ phải đồng ý". Được nói cách TRÌNH BÀY cho hợp người nghe — đó là lịch sự, không phải mưu mẹo
+- Những người trong sổ KHÔNG có mặt và không đồng ý được xem. CẤM luận SỨC KHOẺ, BỆNH TẬT, TIỀN RIÊNG, HÔN NHÂN, CON CÁI của bất kỳ ai trong đó — kể cả khi người hỏi năn nỉ
+- CẤM viết như thể bạn đã gặp họ hay biết chuyện đời họ. Bạn chỉ đang đọc lá số
+
+🔴 LUẬT SỐ BA — KHÔNG PHONG THÁNH CHO CÁCH CHIA BỐN KIỂU:
+- Bốn tên "Khai sáng / Lãnh đạo / Hỗ trợ / Hợp tác" là NHÃN của trang; phần cổ pháp là TỨ TƯỢNG áp lên 14 chính tinh
+- CẤM gọi là "trắc nghiệm", "khoa học", "đã kiểm định", "thống kê", CẤM đối chiếu DISC / MBTI / Big Five
+- Ai được ghi "pha hai kiểu" thì nói thẳng là pha, KHÔNG ép vào một ô
+
+Nguyên tắc luận:
+- ${FORMAT_RULE}
+- Sổ dưới đã tính SẴN: kiểu từng người, phân bố nhóm, chỗ trống của nhóm, cặp dễ giẫm chân / dễ bù, thứ tự tiếp cận. Dùng ĐÚNG, KHÔNG tự đổi kiểu ai
+- 🔑 Điểm vận năm là điểm THUẬN/NGHỊCH CỦA MỘT NĂM, KHÔNG phải điểm con người. Nói rõ điều đó mỗi khi nhắc tới
+- 🔑 "Thứ tự tiếp cận" xếp theo VẬN NĂM của từng người, KHÔNG phải theo mức quan trọng. Đọc nó thành bảng ưu tiên khách hàng là sai
+- Gọi đúng TÊN từng người trong sổ. CẤM bịa thêm người không có trong sổ
+- Kết bằng VIỆC LÀM ĐƯỢC TUẦN NÀY gắn với một cái tên cụ thể, không kết bằng lời mô tả tính cách
+- Chỉ luận từ dữ liệu đã cho. KHÔNG bịa thêm sao, cung, cách cục hay con số nào
+
+${GIONG_NGUOI_RULES}
+
+=== SỔ NHÂN MẠCH ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 const CHAT_SYSTEM_LUC_NHAM = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia ĐẠI LỤC NHÂM (大六壬) — lập khóa theo nguyệt tướng gia thời, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
@@ -1226,6 +1267,29 @@ const GENERIC_LABELS: Record<string, string> = {
   trichDanCoThu: 'Trích dẫn Tân Biên làm căn cứ',
   sacThaiQuanLoc: 'Sắc thái từ phụ tinh và tứ hoá đóng tại cung Quan Lộc',
   luatDocSacThai: 'LUẬT đọc sắc thái phụ tinh (đọc sai chỗ này là ra mâu thuẫn)',
+  // Sổ Nhân Mạch — nguồn `/api/nhan-mach` → lib/engine/nhan-mach.ts.
+  soNguoiTrongSo: 'Số người trong sổ', danhSachNguoi: 'Từng người (vai · kiểu · vận năm)',
+  phanBoKieu: 'Phân bố bốn kiểu trong nhóm', kieuCuaBan: 'Kiểu của chính người hỏi',
+  kieuDoiDangThieu: 'Kiểu KHÔNG ai trong nhóm có (chỗ trống của nhóm)',
+  kieuDangDu: 'Kiểu chiếm quá nửa nhóm', kieuNenTimThem: 'Kiểu nên tìm thêm (luật bù âm–dương)',
+  capDeGiamChan: 'Cặp cùng kiểu — dễ giẫm chân nếu giao cùng loại việc',
+  capDeBuNhau: 'Cặp khác tính âm/dương — bù nhau được',
+  thuTuTiepCan: 'Thứ tự gợi ý tiếp cận (theo VẬN NĂM từng người, KHÔNG phải mức quan trọng)',
+  nguoiNayTrongLaSoBan: 'Từng người ứng với cung nào trong lá số người hỏi',
+  // Dạy Con — nguồn `/api/day-con` → lib/engine/day-con.ts.
+  moiLoChaMe: 'Điều cha mẹ đang lo (NGƯỜI DÙNG TỰ KHAI)',
+  dieuChaMeCan: 'Thứ cha mẹ thật sự cần nghe', kieuTre: 'Kiểu người của đứa trẻ',
+  kieuTuTuong: 'Tứ tượng gốc của kiểu', kieuMotCau: 'Một câu tóm kiểu',
+  dongLucTre: 'Động lực gốc của đứa trẻ', tuoiTre: 'Tuổi (tuổi mụ)',
+  cachTiepThu: 'Cách con tiếp thu', cachGiaoViec: 'Cách giao bài / giao việc',
+  cachDongVien: 'Kiểu động viên có tác dụng',
+  kyLuatPhanTacDung: 'Kiểu kỷ luật PHẢN TÁC DỤNG',
+  choHayHieuNham: 'Chỗ người lớn hay hiểu nhầm đứa trẻ',
+  thuConCanHoc: 'Thứ con cần được dạy thêm (BÀI HỌC, không phải lời chê)',
+  dauHieuNhanBiet: 'Dấu hiệu quan sát được ở nhà',
+  changHoc: 'Các chặng của quãng đi học (điểm là THUẬN/NGHỊCH của quãng, KHÔNG phải điểm học lực)',
+  kieuChaMe: 'Kiểu người của cha/mẹ', cungTuTucChaMe: 'Cung Tử Tức trong lá số cha/mẹ',
+  kieuConTrongMatChaMe: 'Kiểu mà cung Tử Tức của cha/mẹ nghiêng về',
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractGenericContext(data: any): string {

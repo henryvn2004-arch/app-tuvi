@@ -40,6 +40,8 @@ export const HISTORY_TABLE = {
   'chan-dung-tien-kiep': 'past_life_portraits',
   'duyen-no-tien-kiep': 'past_life_bonds',
   'nguoi-khac': 'nguoi_khac_reports',
+  'day-con': 'day_con_reports',
+  'nhan-mach': 'nhan_mach_reports',
 } as const;
 
 export type PortraitToolId = keyof typeof HISTORY_TABLE;

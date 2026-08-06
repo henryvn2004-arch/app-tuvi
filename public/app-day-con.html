@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dạy Con Theo Lá Số — Tử Vi Minh Bảo</title>
+<meta name="description" content="Nhập lá số của con — nhận cách con tiếp thu, cách ra bài để con chịu làm, kiểu kỷ luật phản tác dụng, và chỗ cha mẹ với con hay va nhau.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/shell.css?v=16">
+<style>
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
+.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
+.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
+.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
+.btn-go:disabled{opacity:.6;cursor:not-allowed}
+.err{color:var(--red);font-size:13px;margin-top:8px;display:none}
+.err.active{display:block}
+.res-block{border:1px solid #E8E8E8;border-radius:10px;margin-bottom:16px;background:#fff;overflow:hidden;max-width:880px}
+.res-block-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#F5F4F0;border-bottom:1px solid #E8E8E8}
+.res-block-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#061A2E}
+.res-block-body{padding:18px;color:#2a2118}
+#loading{display:none;text-align:center;padding:30px 10px;color:var(--text-lt)}
+.dc-lo{max-width:520px}
+.dc-self{margin-top:14px;font-size:12.5px}
+.dc-self summary{cursor:pointer;color:#7A5F26;font-weight:600}
+.dc-self .inner{margin-top:10px;border:1px solid var(--line-2);border-radius:10px;padding:12px 13px;background:var(--paper)}
+.dc-self p.hint{font-size:11.5px;color:var(--text-lt);margin-bottom:9px}
+.dc-hero{text-align:center;padding:2px 6px 14px}
+.dc-name{font-family:var(--serif);font-size:22px;line-height:1.4;color:#061A2E;font-weight:700}
+.dc-role{font-size:12.5px;color:var(--text-lt);margin-top:3px}
+.dc-badges{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+.dc-badge{display:inline-block;padding:5px 13px;border-radius:999px;background:#F3EAD6;color:#7A5F26;font-size:12px;font-weight:700}
+.dc-badge.alt{background:#EFEBE3;color:#5a5145;font-weight:600}
+.dc-birth{margin-top:9px;font-size:11.5px;color:var(--text-lt)}
+.dc-para{font-size:13.5px;line-height:1.88;color:#2a2118;margin:0 0 12px}
+.dc-para:last-child{margin-bottom:0}
+.dc-sub{font-size:10px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#7A5F26;margin:16px 0 7px}
+.dc-sub:first-child{margin-top:0}
+.dc-chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:4px}
+.dc-chip{font-size:11.5px;padding:4px 10px;border-radius:999px;background:#FBF8F1;border:1px solid #EADFC8;color:#5a5145}
+/* Hai cột NÊN / TRÁNH cạnh nhau — cha mẹ đọc so sánh, không đọc nối tiếp. */
+.dc-two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.dc-two{grid-template-columns:1fr}}
+.dc-col h4{font-family:var(--serif);font-size:14px;font-weight:700;margin-bottom:9px}
+.dc-col.yes h4{color:#1E6B3C}
+.dc-col.no h4{color:#A8342A}
+.dc-item{border-left:2px solid #E0D6C0;padding:0 0 12px 13px;position:relative}
+.dc-col.yes .dc-item{border-left-color:#BFD9C7}
+.dc-col.no .dc-item{border-left-color:#E7C4BF}
+.dc-item:last-child{padding-bottom:0}
+.dc-item .viec{font-size:13px;line-height:1.7;color:#2a2118}
+.dc-item .vidu{font-size:12.5px;line-height:1.7;color:#5a5145;font-style:italic;margin-top:4px}
+.dc-motcau{margin-top:16px;padding:14px 16px;background:#FBF8F1;border:1px solid #EADFC8;border-radius:10px;font-family:var(--serif);font-size:15px;line-height:1.75;color:#061A2E;font-weight:700}
+.dc-basis{margin-top:14px;font-size:12.5px}
+.dc-basis summary{cursor:pointer;color:#7A5F26;font-weight:600}
+.dc-basis ul{margin:9px 0 0 18px;color:#5a5145;line-height:1.8}
+.dc-how{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+@media(max-width:760px){.dc-how{grid-template-columns:1fr}}
+.dc-howcard{border:1px solid #EFE7D6;border-radius:9px;padding:12px 13px;background:#FDFBF6}
+.dc-howcard h5{font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#7A5F26;margin-bottom:6px}
+.dc-howcard p{font-size:12.8px;line-height:1.75;color:#2a2118;margin:0}
+.dc-howcard.warn{background:#FDF6F4;border-color:#EFD9D4}
+.dc-howcard.warn h5{color:#A8342A}
+.dc-chang{display:flex;flex-direction:column;gap:9px}
+.dc-changrow{display:flex;gap:11px;align-items:baseline;font-size:13px;line-height:1.65;padding:9px 11px;border-radius:8px;background:#FBF8F1;border:1px solid #EFE7D6}
+.dc-changrow.now{background:#F3EAD6;border-color:#E0CFA4}
+.dc-changrow b{font-family:var(--serif);white-space:nowrap;color:#061A2E}
+.dc-changrow span.n{color:#5a5145;font-size:12.5px}
+#histList{display:flex;flex-direction:column;gap:6px;margin-top:4px;font-size:12.5px;color:#5a5145}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Dạy Con Theo Lá Số</b><span>Đứa này cần thúc hay cần để yên</span></div>
+      <div class="ws-actions">
+        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Xem Bé Khác</button>
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div class="form-card" id="birthPanel">
+        <h2>Ngày sinh của con</h2>
+        <p class="sub">Không phải để xem đời con sau này ra sao — mà để biết dạy đứa này kiểu nào thì vào.</p>
+
+        <div class="frow dc-lo">
+          <div class="fg" style="flex:1">
+            <label for="moiLo">Điều bạn đang lo</label>
+            <select id="moiLo" onchange="onMoiLoChange()">
+              <option value="hoc-hanh">Học hành sa sút, ngồi vào bàn không nổi</option>
+              <option value="buong-binh">Bướng, cãi lại, nói không nghe</option>
+              <option value="nhut-nhat">Rụt rè, ngại đám đông, ít bạn</option>
+              <option value="chon-duong">Sắp phải chọn trường / chọn ngành</option>
+              <option value="khong-noi-chuyen">Con không chịu nói chuyện với mình nữa</option>
+              <option value="hieu-them" selected>Không có gì gấp, chỉ muốn hiểu con hơn</option>
+            </select>
+          </div>
+        </div>
+        <p class="sub" id="loHint" style="margin-top:-4px"></p>
+
+        <!-- data-uc-noseed: ô này là lá số CỦA CON. Sổ lá số vẫn cho BẤM chọn
+             vào đây, nhưng KHÔNG được tự mồi lá số của chính người dùng — mồi
+             vào rồi họ bấm luôn là ra bản "dạy con" viết về chính họ. -->
+        <div id="formHost" data-uc-noseed></div>
+
+        <details class="dc-self" id="selfWrap">
+          <summary id="selfSummary">Thêm lá số của bạn — cha hoặc mẹ (không bắt buộc)</summary>
+          <div class="inner">
+            <p class="hint">Có lá số của bạn thì bản luận có thêm mục <b>“Hai bên với nhau”</b> — chỗ cha mẹ và con hay va, và cách giảm va. Bỏ trống vẫn xem được đầy đủ phần còn lại.</p>
+            <div id="formHostSelf"></div>
+          </div>
+        </details>
+
+        <div class="frow" style="margin-bottom:0;margin-top:14px">
+          <button class="btn-go" id="btnGo" onclick="analyze()">Xem Cách Dạy Con — <span data-tvp-price="day-con">…</span> Lượng →</button>
+        </div>
+        <div class="err" id="error-msg"></div>
+      </div>
+
+      <div id="resPanel" style="display:none">
+        <div class="res-block">
+          <div class="res-block-header"><span class="res-block-title">Con Là Người Thế Nào</span></div>
+          <div class="res-block-body">
+            <div id="loading"><div id="loadingSteps"></div></div>
+            <div id="card" style="display:none">
+              <div class="dc-hero">
+                <div class="dc-name" id="dcName"></div>
+                <div class="dc-role" id="dcRole"></div>
+                <div class="dc-badges" id="dcBadges"></div>
+                <div class="dc-birth" id="birthLine" style="display:none"></div>
+              </div>
+              <p class="dc-para" id="conNguoi"></p>
+              <div class="dc-sub">Dấu hiệu nhận ra ở nhà</div>
+              <div class="dc-chips" id="dauHieuChips"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="res-block" id="loBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title" id="loTitle">Điều Bạn Đang Lo</span></div>
+          <div class="res-block-body"><p class="dc-para" id="loLang"></p></div>
+        </div>
+
+        <div class="res-block" id="howBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Vào Con Bằng Cách Nào</span></div>
+          <div class="res-block-body">
+            <p class="dc-para" id="vaoBangGi"></p>
+            <p class="dc-para" id="khoaLai" style="display:none"></p>
+            <div class="dc-how" id="howCards"></div>
+          </div>
+        </div>
+
+        <div class="res-block" id="doBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Làm Gì Từ Tối Nay</span></div>
+          <div class="res-block-body">
+            <div class="dc-two">
+              <div class="dc-col yes"><h4>Nên</h4><div id="nenLam"></div></div>
+              <div class="dc-col no"><h4>Thôi</h4><div id="tranhLam"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="res-block" id="changBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Các Chặng Đi Học</span></div>
+          <div class="res-block-body">
+            <div class="dc-chang" id="changList"></div>
+            <p class="dc-para" id="changNay" style="margin-top:13px"></p>
+            <p style="font-size:11.5px;color:#7a705f;line-height:1.7;margin-top:9px">Điểm ở đây là mức <b>thuận / nghịch của quãng</b>, không phải điểm học lực và không phải điểm của đứa trẻ.</p>
+          </div>
+        </div>
+
+        <div class="res-block" id="withBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Hai Bên Với Nhau</span></div>
+          <div class="res-block-body">
+            <p class="dc-para" id="voiChaMe"></p>
+            <div class="dc-chips" id="voiChips"></div>
+          </div>
+        </div>
+
+        <div class="res-block" id="endBlock" style="display:none">
+          <div class="res-block-body">
+            <div class="dc-motcau" id="motCau"></div>
+            <details class="dc-basis" id="basisBlock" style="display:none">
+              <summary>Cơ sở trong lá số</summary>
+              <ul id="basisList"></ul>
+            </details>
+          </div>
+        </div>
+
+        <div class="res-block" style="background:#FBF3DE;border-color:#e8d9b0">
+          <div class="res-block-body" style="font-size:12.5px;line-height:1.68;color:#5a5145">
+            💡 Bản này phác hoạ từ các dữ liệu trong lá số Tử Vi, kết hợp kinh nghiệm nghiên cứu của tiền nhân để lại. Phần <b>cách dạy</b> là quy chiếu của trang, không phải chữ trong cổ thư. Mang tính tham khảo.<br><br>
+            ⚖️ Đây là khung <b>hiểu để dạy cho đúng người</b>. Đứa trẻ chưa trưởng thành và không có mặt ở đây, nên bản luận cố ý <b>không đoán đỗ trượt, không chốt nghề, không đọc sức khoẻ hay chuyện tình duyên</b> của con. Tính khí gốc không tốt cũng không xấu — chỉ hợp hoặc không hợp cách người lớn đang làm.
+          </div>
+        </div>
+
+        <div class="res-block" id="histBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Đã Xem Trước Đó</span></div>
+          <div class="res-block-body"><div id="histList"></div></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='day-con';
+window.SHELL_INTRO={key:'day-con',title:'Dạy Con Theo Lá Số',desc:'Đưa lá số của con vào đây để biết <b>con tiếp thu kiểu nào</b>, <b>ra bài thế nào thì con chịu làm</b>, <b>kiểu kỷ luật nào phản tác dụng</b>, và <b>chỗ cha mẹ với con hay va nhau</b>. Đọc theo cung Mệnh, Phúc Đức, Phụ Mẫu, Thiên Di, Quan Lộc.'};</script>
+<script src="/laso-chart.js?v=3"></script>
+<script src="/tuvi-form.js?v=1"></script>
+<script src="/tuvi-paywall.js?v=14"></script>
+<script src="/auth.js?v=2"></script>
+  <script src="/nav.js?v=22" data-icons-only></script>
+<script src="/shell.js?v=60"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=1"></script>
+<script>
+
+var _currentSlug = '';
+var _last = null;
+var _lastSelf = null;
+var DC_STEPS = [
+  { label: 'Lập lá số & phân kiểu người', ms: 1300 },
+  { label: 'Đọc Mệnh · Phúc Đức · Phụ Mẫu · Thiên Di · Quan Lộc', ms: 2200 },
+  { label: 'Viết hướng dẫn nuôi dạy', ms: 0 },
+];
+var _loadingCtl = null;
+
+var LO_HINT = {
+  'hoc-hanh': 'Bạn sẽ nhận: cách ra bài và cách bày bàn học hợp với kiểu tiếp thu của con, thay vì ép thêm giờ.',
+  'buong-binh': 'Bạn sẽ nhận: phần nào là tính khí gốc phải dẫn, phần nào là do cách người lớn đang nói — sửa được ngay.',
+  'nhut-nhat': 'Bạn sẽ nhận: đứa này cần được đẩy ra hay cần được để yên. Hai kiểu trẻ khác nhau mà nhìn bên ngoài giống nhau.',
+  'chon-duong': 'Bạn sẽ nhận: chất việc hợp với con và cách hỏi để con tự nói ra — không phải một cái tên ngành.',
+  'khong-noi-chuyen': 'Bạn sẽ nhận: chuyện gì con còn chịu nghe, và cách mở lời nào khiến con đóng lại ngay.',
+  'hieu-them': 'Bạn sẽ nhận: một bản mô tả con người đứa trẻ này, đủ để nhận ra nó trong đời thường.',
+};
+
+function onMoiLoChange() {
+  var v = document.getElementById('moiLo').value;
+  document.getElementById('loHint').textContent = LO_HINT[v] || '';
+}
+
+// Form CỦA CON dùng prefix mặc định; form cha/mẹ dùng prefix 'self' — hai bản
+// độc lập nhờ `prefix` của TuviForm, không chép tay.
+TuviForm.render('formHost', { mode: 'compact', prefix: '', gioitinh: 'nam', showName: true });
+TuviForm.render('formHostSelf', { mode: 'compact', prefix: 'self', gioitinh: 'nam', showName: false });
+
+// 🔑 Lá số shell đang nhớ là lá số CỦA NGƯỜI DÙNG → điền vào form 'self', KHÔNG
+// điền vào form chính (form chính là của CON). Gọi `Shell.prefillForm()` như các
+// tool anh em sẽ đổ lá số của chính họ vào ô "con" rồi người ta bấm luôn.
+try {
+  var _remembered = window.Shell && Shell.getRememberedBirth ? Shell.getRememberedBirth() : null;
+  if (_remembered) {
+    TuviForm.setData(_remembered, 'self');
+    var s = (window.Shell && Shell.birthSummary) ? Shell.birthSummary(_remembered) : '';
+    if (s) document.getElementById('selfSummary').textContent = 'Đối chiếu với lá số của bạn: ' + s;
+  }
+} catch (e) { /* không có shell / chưa nhớ gì — phần này không bắt buộc */ }
+
+onMoiLoChange();
+
+// Không có dòng này thì `_cfg.product` rỗng ⇒ paywall không tra được giá, hiện
+// hộp "chưa đọc được bảng giá" và tool KHÔNG chạy.
+TuviPaywall.init({ product: 'day-con', slug: function () { return _currentSlug; } });
+
+function showError(msg) {
+  var e = document.getElementById('error-msg');
+  if (msg) { e.textContent = msg; e.classList.add('active'); } else { e.classList.remove('active'); }
+}
+
+function _birthOf(prefix) {
+  var f = TuviForm.getData(prefix);
+  if (!f.ngay || !f.thang || !f.nam) return null;
+  return {
+    day: f.ngay, month: f.thang, year: f.nam,
+    hourBranch: f.gioIdx, gender: f.gioitinh, isLunar: false,
+    name: (f.hoten || '').trim() || undefined,
+  };
+}
+
+/** Query cho `action=cache-status` — đúng tên tham số route đọc. */
+function _cacheQuery(b, self, lo) {
+  var q = 'd=' + (b.day || 0) + '&m=' + (b.month || 0) + '&y=' + (b.year || 0) +
+    '&h=' + (b.hourBranch == null ? -1 : b.hourBranch) +
+    '&g=' + (b.gender === 'nu' ? 'nu' : 'nam') +
+    '&lunar=' + (b.isLunar ? '1' : '0') + '&lo=' + encodeURIComponent(lo);
+  if (self) {
+    q += '&pd=' + (self.day || 0) + '&pm=' + (self.month || 0) + '&py=' + (self.year || 0) +
+      '&ph=' + (self.hourBranch == null ? -1 : self.hourBranch) +
+      '&pg=' + (self.gender === 'nu' ? 'nu' : 'nam') +
+      '&plunar=' + (self.isLunar ? '1' : '0');
+  }
+  return q;
+}
+
+async function analyze() {
+  showError('');
+  var b = _birthOf('');
+  if (!b) { showError('Vui lòng nhập đầy đủ ngày tháng năm sinh của bé.'); return; }
+  var lo = document.getElementById('moiLo').value;
+  var self = _birthOf('self');
+  _last = b; _lastSelf = self;
+
+  _currentSlug = TuviPaywall.generateToolSlug('day-con-' + lo + '-' + b.day + b.month + b.year);
+  await TuviPaywall.requireCreditsCachedQuery(
+    '/api/day-con', _cacheQuery(b, self, lo), _currentSlug,
+    async function (freeRerun) { await _doGenerate(freeRerun, lo); },
+    '✓ Bạn đã xem bản này rồi — mở lại, không trừ Lượng');
+}
+
+async function _doGenerate(freeRerun, lo) {
+  document.getElementById('birthPanel').style.display = 'none';
+  document.getElementById('resPanel').style.display = 'block';
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('card').style.display = 'none';
+  ['loBlock', 'howBlock', 'doBlock', 'changBlock', 'withBlock', 'endBlock', 'basisBlock'].forEach(function (id) {
+    document.getElementById(id).style.display = 'none';
+  });
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', DC_STEPS);
+  _loadingCtl.start();
+
+  var token = window.Auth?.getSession()?.access_token || '';
+  try {
+    var res = await fetch('/api/day-con', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify({
+        birth: _last,
+        birthParent: _lastSelf || undefined,
+        name: _last.name || '',
+        moiLo: lo,
+        slug: _currentSlug,
+      }),
+    });
+    var data = await res.json();
+    // Đường miễn phí bị server từ chối (cache vừa hết / đoán nhầm) → quay lại
+    // paywall thay vì ném một lỗi khó hiểu.
+    if (res.status === 402 && freeRerun) {
+      _loadingCtl && _loadingCtl.stop();
+      showForm();
+      document.getElementById('loading').style.display = 'none';
+      await TuviPaywall.requireCredits(_currentSlug, async function () { await _doGenerate(false, lo); });
+      return;
+    }
+    if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
+    render(data);
+    _loadingCtl && _loadingCtl.finish();
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('card').style.display = 'block';
+    document.getElementById('btnEdit').style.display = '';
+    if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+    _loadHistory();
+
+    // Rail nạp lá số CỦA CON (để hỏi sâu về bé) + lá số cha/mẹ qua `wrapBirthB`
+    // nếu có. Lớp vỏ phía server có luật ĐÈ lên luật xưng hô — nếu không, rail
+    // sẽ gọi người đang chat theo giới tính của đứa trẻ.
+    var ten = data.ten || 'con';
+    Shell.setContext({
+      birth: _last,
+      wrap: 'day-con',
+      wrapMoiLo: lo,
+      wrapBirthB: _lastSelf || undefined,
+      label: 'Dạy con theo lá số',
+      greeting: 'Đây là bản hướng dẫn nuôi dạy **' + ten + '**. Bạn muốn hỏi thêm tình huống nào?',
+      chips: [
+        'Tối nay ' + ten + ' lại không chịu học, tôi nên mở lời thế nào?',
+        'Vì sao lá số lại luận ra tính khí này?',
+        'Hai mẹ con hay va nhau ở chỗ nào?',
+        'Việc gì nên để ' + ten + ' tự làm, việc gì phải kèm?',
+      ],
+    });
+  } catch (e) {
+    _loadingCtl && _loadingCtl.stop();
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('resPanel').style.display = 'none';
+    document.getElementById('birthPanel').style.display = 'block';
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+  }
+}
+
+// esc() dùng chung từ /laso-chart.js (đã load ở trên) — không khai lại.
+
+function _mucHtml(list) {
+  return (list || []).map(function (m) {
+    return '<div class="dc-item"><div class="viec">' + esc(m.viec || '') + '</div>' +
+      (m.vidu ? '<div class="vidu">' + esc(m.vidu) + '</div>' : '') + '</div>';
+  }).join('');
+}
+
+function render(data) {
+  var kieu = data.kieu || {};
+  var hoc = data.hoc || {};
+  document.getElementById('dcName').textContent = data.ten || 'Con';
+  document.getElementById('dcRole').textContent =
+    (data.gioiTinh === 'nu' ? 'Bé gái' : 'Bé trai') + (data.tuoi ? ' · ' + data.tuoi + ' tuổi (tuổi mụ)' : '');
+
+  var badges = [];
+  if (kieu.ten) badges.push('<span class="dc-badge">' + esc(kieu.ten) + '</span>');
+  if (data.lai && data.kieuPhu) {
+    badges.push('<span class="dc-badge alt">pha thêm ' + esc(data.kieuPhu.ten) + '</span>');
+  }
+  if (kieu.motCau) badges.push('<span class="dc-badge alt">' + esc(kieu.motCau) + '</span>');
+  document.getElementById('dcBadges').innerHTML = badges.join('');
+
+  var bl = document.getElementById('birthLine');
+  var bs = (window.Shell && Shell.birthSummary) ? Shell.birthSummary : null;
+  var line = bs ? bs(_last) : '';
+  if (line) { bl.textContent = 'Lá số: ' + line; bl.style.display = 'block'; }
+  else { bl.style.display = 'none'; }
+
+  document.getElementById('conNguoi').textContent = data.conNguoi || '';
+  document.getElementById('dauHieuChips').innerHTML = (hoc.dauHieu || []).map(function (c) {
+    return '<span class="dc-chip">' + esc(c) + '</span>';
+  }).join('');
+
+  if (data.loLang) {
+    document.getElementById('loLang').textContent = data.loLang;
+    if (data.moiLo && data.moiLo.label) document.getElementById('loTitle').textContent = data.moiLo.label;
+    document.getElementById('loBlock').style.display = 'block';
+  }
+
+  if (data.vaoBangGi || hoc.tiepThu) {
+    document.getElementById('vaoBangGi').textContent = data.vaoBangGi || '';
+    var kl = document.getElementById('khoaLai');
+    if (data.khoaLai) { kl.textContent = data.khoaLai; kl.style.display = 'block'; }
+    var cards = [
+      ['Cách con tiếp thu', hoc.tiepThu, ''],
+      ['Ra bài / giao việc', hoc.giaoViec, ''],
+      ['Động viên kiểu này mới vào', hoc.dongVien, ''],
+      ['Kỷ luật kiểu này phản tác dụng', hoc.kyLuatHong, 'warn'],
+      ['Chỗ người lớn hay hiểu nhầm', hoc.hieuNham, ''],
+      ['Thứ con cần được dạy thêm', hoc.canHoc, ''],
+    ].filter(function (c) { return c[1]; }).map(function (c) {
+      return '<div class="dc-howcard ' + c[2] + '"><h5>' + esc(c[0]) + '</h5><p>' + esc(c[1]) + '</p></div>';
+    }).join('');
+    document.getElementById('howCards').innerHTML = cards;
+    document.getElementById('howBlock').style.display = 'block';
+  }
+
+  var nen = _mucHtml(data.nenLam), tranh = _mucHtml(data.tranhLam);
+  if (nen || tranh) {
+    document.getElementById('nenLam').innerHTML = nen;
+    document.getElementById('tranhLam').innerHTML = tranh;
+    document.getElementById('doBlock').style.display = 'block';
+  }
+
+  var ch = data.changHoc || [];
+  if (ch.length) {
+    document.getElementById('changList').innerHTML = ch.map(function (c) {
+      return '<div class="dc-changrow' + (c.dangChay ? ' now' : '') + '">' +
+        '<b>' + c.tuoiStart + '–' + c.tuoiEnd + ' tuổi</b>' +
+        '<span class="n">' + esc(c.nhan) +
+        (c.namStart ? ' · ' + c.namStart + '–' + c.namEnd : '') +
+        (c.diem == null ? '' : ' · ' + c.diem + '/10') +
+        (c.dangChay ? ' · đang ở chặng này' : '') + '</span></div>';
+    }).join('');
+    document.getElementById('changNay').textContent = data.changNay || '';
+    document.getElementById('changBlock').style.display = 'block';
+  }
+
+  // Khối "hai bên" CHỈ hiện khi có lá số cha/mẹ. Không có thì ẩn hẳn — lấp bằng
+  // câu chung chung là hứa một thứ không dựa trên dữ kiện nào.
+  var vc = data.voiChaMeCoSo;
+  if (data.voiChaMe && vc) {
+    document.getElementById('voiChaMe').textContent = data.voiChaMe;
+    var chips = ['Kiểu của bạn: ' + vc.kieuChaMe];
+    chips.push('Cung Tử Tức của bạn' + (vc.muon ? ' (mượn xung chiếu)' : '') +
+      ((vc.sao || []).length ? ': ' + vc.sao.join(', ') : ''));
+    chips.push(vc.cungTinh ? 'Cùng tính âm/dương — dễ va' : 'Khác tính âm/dương — dễ bù');
+    document.getElementById('voiChips').innerHTML = chips.map(function (c) {
+      return '<span class="dc-chip">' + esc(c) + '</span>';
+    }).join('');
+    document.getElementById('withBlock').style.display = 'block';
+  }
+
+  if (data.motCau) document.getElementById('motCau').textContent = data.motCau;
+  document.getElementById('endBlock').style.display = 'block';
+
+  var rows = [];
+  (data.matDoc || []).forEach(function (m) {
+    rows.push('<li><b>' + esc(m.nhan) + '</b> — cung ' + esc(m.cung) +
+      (m.muon ? ' (mượn xung chiếu)' : '') + ': ' +
+      esc((m.sao || []).join(', ') || 'không có chính tinh') +
+      ((m.cachCuc || []).length ? ' · ' + esc(m.cachCuc.join('; ')) : '') + '</li>');
+  });
+  if (data.than && data.than.cung) rows.push('<li><b>Cung an Thân</b> — ' + esc(data.than.cung) + '</li>');
+  if (data.vanNam) {
+    rows.push('<li><b>Vận năm ' + data.vanNam.nam + '</b> — ' +
+      (data.vanNam.diem == null ? 'chưa chấm' : data.vanNam.diem + '/10') +
+      (data.vanNam.huong ? ', đà ' + esc(data.vanNam.huong) : '') + '</li>');
+  }
+  if (rows.length) {
+    document.getElementById('basisList').innerHTML = rows.join('');
+    document.getElementById('basisBlock').style.display = 'block';
+  }
+}
+
+function showForm() {
+  document.getElementById('resPanel').style.display = 'none';
+  document.getElementById('birthPanel').style.display = 'block';
+  document.getElementById('btnEdit').style.display = 'none';
+}
+
+async function _loadHistory() {
+  try {
+    var token = window.Auth?.getSession()?.access_token || '';
+    if (!token) return;
+    var r = await fetch('/api/day-con?action=history', { headers: { Authorization: 'Bearer ' + token } });
+    var d = await r.json();
+    if (!d.success || !(d.items || []).length) return;
+    document.getElementById('histList').innerHTML = d.items.map(function (it) {
+      return '<div>· ' + esc(it.ten || 'Không đặt tên') + ' — ' + esc(it.moi_lo_label || '') +
+        (it.kieu_ten ? ' · ' + esc(it.kieu_ten) : '') + '</div>';
+    }).join('');
+    document.getElementById('histBlock').style.display = 'block';
+  } catch (e) { /* lịch sử hỏng không phải lý do làm hỏng kết quả vừa xem */ }
+}
+</script>
+</body>
+</html>

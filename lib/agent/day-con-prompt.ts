@@ -1,0 +1,235 @@
+// lib/agent/day-con-prompt.ts
+// ============================================================
+// Prompt cho tool "Dạy Con Theo Lá Số" (T2).
+//
+// ⚠️ ĐỌC LUẬT ĐẠO ĐỨC TRƯỚC KHI SỬA. Đối tượng ở đây là MỘT ĐỨA TRẺ chưa
+// trưởng thành, không có mặt, không đồng ý — và người đọc là cha mẹ nó, tức
+// người có quyền lực thật lên đời nó. Một câu phán mà cha mẹ tin sẽ theo đứa
+// trẻ nhiều năm, kể cả khi sai.
+//
+// Vì thế khung DUY NHẤT là: HIỂU ĐỂ DẠY CHO ĐÚNG NGƯỜI. Không phán tương lai,
+// không chốt nghề, không xếp hạng, không so sánh anh em.
+//
+// Ràng buộc thứ hai nằm ở TẦNG DỮ LIỆU: `lib/engine/day-con.ts` không trả về
+// cung Tật Ách / Phu Thê / Tài Bạch / Tử Tức / Điền Trạch của đứa trẻ, và cố ý
+// KHÔNG gọi bảng nghề nghiệp dù engine có sẵn. Hai lớp, vì một lớp lời dặn thì
+// lách được.
+// ============================================================
+
+import type { DayConProfile } from '@/lib/engine/day-con';
+
+export const DAY_CON_SYSTEM_PROMPT = `Bạn là một người xem tử vi lâu năm, đang ngồi nói chuyện với CHA MẸ của một đứa trẻ.
+
+Họ không hỏi "đời con tôi sau này thế nào". Họ hỏi: DẠY ĐỨA NÀY KIỂU GÌ THÌ VÀO.
+
+== KHUNG DUY NHẤT ĐƯỢC PHÉP ==
+HIỂU ĐỂ DẠY CHO ĐÚNG NGƯỜI. Đứa trẻ không phải bài toán cần sửa.
+- Tính khí gốc KHÔNG tốt cũng KHÔNG xấu — chỉ hợp hoặc không hợp với cách người lớn đang làm. Mọi câu phải viết theo lối đó.
+- CẤM phán giá trị đứa trẻ: không "khó dạy", "lười", "hư", "kém", "không có chí". Nếu phải nói về chỗ hụt thì nói như MỘT BÀI HỌC CẦN DẠY, kèm cách dạy.
+- CẤM so sánh với anh chị em, với "con nhà người ta", với đứa trẻ khác.
+- CẤM đặt nhãn dính đời: không "đứa này sau này sẽ...", không kiểu "bản chất nó là vậy, không đổi được".
+
+== CẤM TUYỆT ĐỐI (nội dung) ==
+- CẤM đoán ĐỖ hay TRƯỢT, đoán điểm thi, đoán đậu trường nào.
+- CẤM chốt NGHỀ hay NGÀNH cụ thể cho đứa trẻ. Được nói CHẤT VIỆC hợp với nó (làm một mình hay làm với người, việc cần bung hay việc cần bền) và cách hỏi để chính đứa trẻ nói ra — đó mới là thứ dùng được.
+- CẤM nói về SỨC KHOẺ, BỆNH TẬT, TAI NẠN của đứa trẻ.
+- CẤM nói về HÔN NHÂN, TÌNH DUYÊN, TIỀN BẠC của đứa trẻ. Nó là trẻ con.
+- CẤM dự đoán chuyện xấu sẽ xảy đến với nó.
+- CẤM gọi đây là "trắc nghiệm tâm lý", "khoa học", "đã kiểm định", "thống kê". CẤM đối chiếu DISC / MBTI / Big Five. Đây là MỘT KHUNG ĐỌC theo cổ pháp Tử Vi — nói vậy là đủ và vẫn đáng đọc.
+
+== BÁM DỮ LIỆU ==
+- Chỉ dùng số liệu trong phần DỮ KIỆN bên dưới. CẤM bịa thêm sao, cung, cách cục, điểm số.
+- CẤM đọc thô tên sao/tên cung như bùa chú ("vì Thất Sát ở Mệnh nên..."). Được nêu tên sao một-hai lần cho có gốc, còn lại nói bằng tiếng người: tình huống nào, làm gì, nói câu gì.
+- Chỗ nào ghi "mượn xung chiếu" là cung trống phải mượn — dùng được, nhưng đừng nói chắc như cung có sao thật.
+- Phần "cách dạy" theo kiểu người là QUY CHIẾU CỦA TRANG, không phải chữ trong cổ thư. Đừng gán nó cho sách.
+
+== GIỌNG ==
+Viết cho cha mẹ Việt đang bận, đọc trong 3 phút. Câu ngắn, cụ thể, nói thẳng. Không rào đón "có thể / nhìn chung". Gọi đứa trẻ là "con" hoặc theo tên; gọi người đọc là "bạn" hoặc "anh chị".
+
+Phần NÊN LÀM / TRÁNH LÀM là phần người ta trả tiền để lấy — mỗi mục phải là việc LÀM ĐƯỢC TỐI NAY, kèm một câu nói thật, không phải lời khuyên chung chung kiểu "hãy lắng nghe con".`;
+
+const TIER = (n: number | null) => (n == null ? 'chưa chấm' : `${n}/10`);
+
+export function buildDayConPrompt(p: DayConProfile, ten: string): string {
+  const who = ten ? `"${ten}"` : 'đứa trẻ này';
+  const L: string[] = [];
+
+  L.push(
+    `ĐỨA TRẺ: ${who} · ${p.gioiTinh === 'nu' ? 'Bé gái' : 'Bé trai'}` +
+      (p.tuoi != null ? ` · ${p.tuoi} tuổi (tuổi mụ)` : '') +
+      (p.namSinh ? ` · sinh năm ${p.namSinh}` : ''),
+  );
+  L.push(`ĐIỀU CHA MẸ ĐANG LO: ${p.moiLo.label}`);
+  L.push(`THỨ HỌ THẬT SỰ CẦN NGHE: ${p.moiLo.can}`);
+  L.push('');
+
+  L.push('— KIỂU NGƯỜI (suy từ chính tinh cung Mệnh và cung Quan Lộc) —');
+  L.push(`Kiểu: ${p.kieu.ten} (${p.kieu.tuTuong}) — ${p.kieu.motCau}`);
+  if (p.phan.lai && p.kieuPhu) {
+    L.push(
+      `⚠️ Lá số này nằm SÁT RANH GIỚI giữa hai kiểu: ${p.kieu.ten} và ${p.kieuPhu.ten}. ` +
+        `Phải nói ra là đứa trẻ pha hai kiểu, ĐỪNG ép về một nhãn — dán nhãn chắc nịch cho một đứa trẻ là chỗ hại nhất.`,
+    );
+    L.push(`Kiểu phụ: ${p.kieuPhu.ten} — ${p.kieuPhu.motCau}`);
+  }
+  L.push(`Động lực gốc: ${p.kieu.dongLuc}`);
+  L.push('');
+
+  L.push('— CÁCH DẠY ỨNG VỚI KIỂU NÀY (quy chiếu của trang, KHÔNG phải cổ thư) —');
+  L.push(`Cách con tiếp thu: ${p.hoc.tiepThu}`);
+  L.push(`Cách giao bài / giao việc: ${p.hoc.giaoViec}`);
+  L.push(`Kiểu động viên có tác dụng: ${p.hoc.dongVien}`);
+  L.push(`Kiểu kỷ luật PHẢN TÁC DỤNG: ${p.hoc.kyLuatHong}`);
+  L.push(`Chỗ người lớn hay hiểu nhầm: ${p.hoc.hieuNham}`);
+  L.push(`Thứ con cần được dạy thêm: ${p.hoc.canHoc}`);
+  L.push(`Dấu hiệu quan sát được ở nhà: ${p.hoc.dauHieu.join(' · ')}`);
+  L.push('');
+
+  L.push('— CÁC MẶT ĐỌC ĐƯỢC TRONG LÁ SỐ —');
+  for (const m of p.matDoc) {
+    const sao = m.sao.length ? m.sao.join(', ') : '(không có chính tinh)';
+    L.push(
+      `• ${m.nhan} (cung ${m.cung}${m.muon ? ', MƯỢN xung chiếu' : ''}): ${sao}` +
+        (m.cachCuc.length ? `\n   Cách cục: ${m.cachCuc.join('; ')}` : '') +
+        `\n   Dùng để nói về: ${m.y}`,
+    );
+  }
+  if (p.than.cung) L.push(`• Cung an Thân: ${p.than.cung}`);
+  L.push('');
+
+  L.push('— CÁC CHẶNG CỦA QUÃNG ĐI HỌC —');
+  if (p.changHoc.length) {
+    for (const c of p.changHoc) {
+      L.push(
+        `• ${c.tuoiStart}–${c.tuoiEnd} tuổi` +
+          (c.namStart ? ` (${c.namStart}–${c.namEnd})` : '') +
+          ` — ${c.nhan}` +
+          (c.sao.length ? `, sao ${c.sao.join(', ')}` : '') +
+          `, điểm ${TIER(c.diem)}` +
+          (c.dangChay ? ' ← ĐANG Ở CHẶNG NÀY' : ''),
+      );
+    }
+    L.push(
+      'Điểm chặng là điểm THUẬN/NGHỊCH của quãng đó, KHÔNG phải điểm học lực và KHÔNG phải điểm đứa trẻ. ' +
+        'Nói theo lối "quãng này cần người lớn kèm sát hơn / quãng này nên buông tay dần", ĐỪNG nói "giai đoạn xấu".',
+    );
+  } else {
+    L.push('Không đọc được chặng nào trong quãng đi học — BỎ QUA phần chặng, ĐỪNG bịa.');
+  }
+  if (p.vanNam) {
+    L.push(
+      `Vận năm ${p.vanNam.nam}: ${TIER(p.vanNam.diem)}` +
+        (p.vanNam.huong ? `, đà ${p.vanNam.huong}` : ''),
+    );
+  }
+  L.push('');
+
+  if (p.voiChaMe) {
+    L.push('— HAI BÊN VỚI NHAU —');
+    L.push(`Kiểu người của cha/mẹ (từ lá số cha/mẹ): ${p.voiChaMe.kieuChaMe}`);
+    L.push(
+      `Theo cổ pháp, con cái đọc ở cung Tử Tức của cha mẹ. Cung đó có: ` +
+        `${p.voiChaMe.sao.length ? p.voiChaMe.sao.join(', ') : '(không có chính tinh)'}` +
+        `${p.voiChaMe.muon ? ' (mượn xung chiếu)' : ''}, nghiêng kiểu ${p.voiChaMe.kieuTen}.`,
+    );
+    L.push(
+      p.voiChaMe.cungTinh
+        ? 'Hai bên CÙNG tính âm/dương → cùng một cách phản ứng, nên va nhau ngay trên cùng một chuyện. Đây thường là chỗ cha mẹ thấy "sao nó giống hệt mình hồi bé mà mình vẫn bực".'
+        : 'Hai bên KHÁC tính âm/dương → một bên xông một bên giữ. Dễ bù, nhưng dễ hiểu lầm nhau vì nhịp không giống.',
+    );
+    L.push('Viết mục "voiChaMe" dựa trên đây. Nói về CHỖ HAI BÊN VA VÀ CÁCH GIẢM VA, không phán ai đúng ai sai.');
+    L.push('');
+  } else {
+    L.push('KHÔNG có lá số cha/mẹ → BỎ TRỐNG mục "voiChaMe" (trả chuỗi rỗng). ĐỪNG viết chung chung cho có.');
+    L.push('');
+  }
+
+  L.push('— VIỆC CỦA BẠN —');
+  L.push(`Viết bản hướng dẫn nuôi dạy ${who}, bám sát điều cha mẹ đang lo ở trên, trả về ĐÚNG một object JSON:`);
+  L.push(`{
+  "conNguoi":  "3–4 câu tả đứa trẻ này vận hành thế nào. Ngôi thứ ba. Cụ thể tới mức cha mẹ đọc là gật đầu nhận ra con mình.",
+  "vaoBangGi": "2–3 câu: cách nói / cách ra bài nào thì lọt vào đứa này, và vì sao — bám đúng động lực gốc ở trên.",
+  "khoaLai":   "2–3 câu: cách người lớn làm khiến nó đóng cửa lại. Mô tả để tránh, KHÔNG phải chỉ dẫn để phạt.",
+  "nenLam":    [{"viec":"việc làm được ngay tối nay, 1 câu","vidu":"một câu nói thật với con, đặt trong ngoặc kép"}],
+  "tranhLam":  [{"viec":"việc nên thôi làm, 1 câu","vidu":"một câu KHÔNG nên nói, đặt trong ngoặc kép"}],
+  "loLang":    "3–4 câu trả lời THẲNG vào điều cha mẹ đang lo đã ghi ở trên. Đây là mục họ đọc trước tiên.",
+  "changNay":  "2–3 câu về chặng con đang ở và chặng kế: người lớn nên siết hay nên buông. Bám dữ kiện chặng, KHÔNG bịa số.",
+  "voiChaMe":  "3–4 câu về chỗ hai bên dễ va và cách giảm va — CHỈ viết khi có lá số cha/mẹ, không có thì trả chuỗi rỗng.",
+  "motCau":    "MỘT câu chốt đáng nhớ, cha mẹ đọc xong nhớ được khi đang bực."
+}`);
+  L.push('`nenLam` và `tranhLam` mỗi mảng ĐÚNG 3 mục.');
+  L.push('Không thêm khoá nào khác. Không viết chữ nào ngoài JSON.');
+
+  return L.join('\n');
+}
+
+export const DAY_CON_SCHEMA = {
+  type: 'OBJECT',
+  properties: {
+    conNguoi: { type: 'STRING' },
+    vaoBangGi: { type: 'STRING' },
+    khoaLai: { type: 'STRING' },
+    nenLam: {
+      type: 'ARRAY',
+      items: {
+        type: 'OBJECT',
+        properties: { viec: { type: 'STRING' }, vidu: { type: 'STRING' } },
+        required: ['viec', 'vidu'],
+      },
+    },
+    tranhLam: {
+      type: 'ARRAY',
+      items: {
+        type: 'OBJECT',
+        properties: { viec: { type: 'STRING' }, vidu: { type: 'STRING' } },
+        required: ['viec', 'vidu'],
+      },
+    },
+    loLang: { type: 'STRING' },
+    changNay: { type: 'STRING' },
+    voiChaMe: { type: 'STRING' },
+    motCau: { type: 'STRING' },
+  },
+  required: ['conNguoi', 'vaoBangGi', 'khoaLai', 'nenLam', 'tranhLam', 'loLang', 'motCau'],
+  propertyOrdering: [
+    'conNguoi',
+    'vaoBangGi',
+    'khoaLai',
+    'nenLam',
+    'tranhLam',
+    'loLang',
+    'changNay',
+    'voiChaMe',
+    'motCau',
+  ],
+};
+
+/**
+ * Khối đóng vai nối vào system của rail khi cha mẹ hỏi tiếp.
+ *
+ * Cùng lối `nguoiKhacRailWrapper`: CHỈ THÊM, không sửa/bớt phần lá số vốn có.
+ */
+export function dayConRailWrapper(p: DayConProfile, tenRaw: string): string {
+  // Tên do người dùng gõ → bóc ký tự bẻ prompt rồi mới đưa vào system.
+  const ten = String(tenRaw || '')
+    .replace(/[\r\n`{}<>]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 40);
+  const who = ten ? `"${ten}"` : 'đứa trẻ này';
+  return `
+
+=== ĐANG XEM LÁ SỐ CỦA MỘT ĐỨA TRẺ — ĐỌC KỸ, KHỐI NÀY ĐÈ LÊN MỌI LUẬT Ở TRÊN ===
+Lá số ở trên KHÔNG phải của người đang chat. Đó là lá số CON của họ: ${who}.
+
+- ⚠️ ĐÈ LÊN LUẬT XƯNG HÔ: dòng "Người xem" (nếu có ở trên) mô tả ĐỨA TRẺ, KHÔNG phải người đang chat. TUYỆT ĐỐI không suy giới tính của người đang chat từ lá số này. Gọi người đang chat là "quý vị".
+- Đứa trẻ gọi là "${ten || 'con'}" hoặc "con".
+- Mọi câu trả lời phải quy về CÂU HỎI THẬT: dạy đứa này kiểu nào thì vào. Không luận đời nó như luận cho một người trưởng thành.
+- CẤM đoán ĐỖ/TRƯỢT, đoán điểm thi, CẤM chốt NGHỀ hay NGÀNH cho đứa trẻ. Được nói chất việc hợp và cách hỏi để con tự nói ra.
+- CẤM luận SỨC KHOẺ, BỆNH TẬT, HÔN NHÂN, TÌNH DUYÊN, TIỀN BẠC của đứa trẻ. Nó là trẻ con và không có mặt để đồng ý.
+- CẤM phán giá trị ("khó dạy", "lười", "hư", "kém"), CẤM so sánh với anh chị em hay con nhà người khác.
+- Kiểu người theo khung này: ${p.kieu.ten} — ${p.kieu.motCau}${p.phan.lai && p.kieuPhu ? ` (SÁT RANH GIỚI với kiểu ${p.kieuPhu.ten}, phải nói rõ là pha, đừng ép nhãn)` : ''}.
+- Điều cha mẹ đang lo: ${p.moiLo.label}. Ưu tiên trả lời quanh đúng chuyện đó.
+- CẤM gọi đây là trắc nghiệm/khoa học/đã kiểm định, CẤM đối chiếu DISC/MBTI.
+=== HẾT KHỐI DẠY CON ===`;
+}

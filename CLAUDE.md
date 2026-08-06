@@ -5,7 +5,111 @@
 
 ---
 
-## 💸 Duyên Nợ Tiền Kiếp trừ tiền HAI LẦN — 3 lỗi chồng nhau (2026-08-06, PR này)
+## 👶👥 T2 "Dạy Con" + T3 "Sổ Nhân Mạch" (2026-08-06, PR này)
+
+Henry: *"Ok. Làm tiếp t2/t3 đi"* — mục cuối của nhóm T trong `BACKLOG-DOI-THU.md`.
+
+### ⚠️ ĐÍNH CHÍNH PHẠM VI, đọc trước khi làm tiếp
+Backlog mô tả T2/T3 là **hai bậc thuê bao** (`親子白金` / `業務白金`) và ghi rõ
+*"phụ thuộc S1, đừng làm trước"* — mà S1 lại chờ R1 chứng minh có người quay
+lại. Dựng hạ tầng thuê bao lúc này là dựng đường thu tiền định kỳ cho thứ chưa
+ai dùng lần hai. Nên PR này làm **phần NỘI DUNG của hai gói dưới dạng hai tool
+bán lẻ bằng Lượng như mọi tool khác**. Nếu sau này S1 ra đời, hai tool này thành
+ruột của gói — engine không phải sửa gì.
+
+### T2 — `/app/day-con` "Dạy Con Theo Lá Số" · 15 Lượng
+Khác `nguoi-khac` với quan hệ `con-cai` ở CÂU HỎI: bên kia là *sống chung cho
+êm*, bên này là **dạy kiểu nào thì vào**.
+- `lib/engine/day-con.ts` — 5 mặt đọc (Mệnh · Phúc Đức · **Phụ Mẫu** · Thiên Di
+  · Quan Lộc) + `KIEU_HOC` (4 kiểu × 7 trường nuôi dạy, **tự viết**, không phải
+  cổ thư — trang nói rõ) + **chặng đi học** (đại vận chạm quãng 6–24 tuổi) +
+  cung Tử Tức của cha mẹ.
+- 🔑 **Cung PHỤ MẪU là mặt đáng tiền nhất và không tool nào khác đọc**: nó nói
+  *đứa trẻ nhìn cha mẹ thế nào* — tức nói về phía bên kia của chính người hỏi.
+- Ô **"điều bạn đang lo"** (6 lựa chọn) đổi giọng cả bản luận — cùng đòn rẻ mà
+  hiệu quả nhất đã chép từ click108 ở tool Công Sở.
+
+### T3 — `/app/nhan-mach` "Sổ Nhân Mạch" · 20 Lượng
+Đây mới là phần B2B của `業務白金`, và là thứ T1 KHÔNG làm được: **đọc cả nhóm**.
+- `lib/engine/nhan-mach.ts` — 2–8 người từ **sổ lá số (U4)**, mỗi người một vai
+  → phân bố 4 kiểu · **kiểu KHÔNG ai có** (lỗ hổng đội) · cặp *giẫm chân* (cùng
+  kiểu) / *bù nhau* (khác tính âm–dương) · thứ tự tiếp cận.
+- 🔑 **Chỉ hai loại cặp có căn cứ tra được mới nêu.** Cặp khác kiểu nhưng CÙNG
+  tính (Khai sáng + Lãnh đạo) cố ý bỏ — không có gì để nói mà vẫn chiếm chỗ.
+- ⚠️ **Thứ tự tiếp cận xếp theo VẬN NĂM, không phải mức quan trọng** — nói thẳng
+  trên trang VÀ trong prompt. Đọc nhầm thành bảng ưu tiên khách hàng là hỏng.
+- **Trần 8 người** vì trên đó phần cặp bùng nổ (28 cặp) và bản đọc thành danh bạ.
+- Trang **tự quản sổ** (ô chọn + vai + xoá) nên hai ô nhập CỐ Ý không đặt id
+  chứa `formHost` — `user-charts.js` dò theo mẫu đó rồi tự gắn thêm một thanh
+  chip nữa, thành hai bộ điều khiển cho cùng một dữ liệu.
+
+### ⚖️ Ranh giới đạo đức — HAI LỚP, y như T1
+Cả hai đọc lá số người **không có mặt**; T3 còn đọc vài người một lúc và người
+hỏi thường có quyền với họ.
+- **Lớp dữ liệu**: dùng CHUNG `KHONG_DOC` của `nguoi-khac.ts` (Tật Ách · Tài Bạch
+  · Phu Thê · Tử Tức · Điền Trạch). T2 còn **cố ý KHÔNG gọi bảng nghề nghiệp**
+  dù engine có sẵn — chốt nghề cho đứa 10 tuổi là thứ nguy hiểm nhất nó làm được.
+  T3 **không trả điểm tổng mỗi người** ⇒ không có gì để xếp hạng.
+- **Lớp prompt**: T2 cấm đoán đỗ/trượt, cấm chốt ngành, cấm so sánh anh em, cấm
+  "khó dạy". T3 cấm xếp hạng người, cấm khuyên sa thải, cấm ngôn ngữ chốt sale
+  kiểu thao túng.
+- 🪤 **Ca test suýt báo đỏ oan**: bản kiểm "prompt không nhắc cung cấm" bắt được
+  `Tử Tức` — nhưng đó là cung Tử Tức trong lá số **CHA MẸ**, chỗ cổ pháp đọc con
+  cái, và cha mẹ chính là người tự đưa lá số mình vào. `KHONG_DOC` cấm các cung
+  đó **của đứa trẻ**. Kiểm phải phân biệt CUNG CỦA AI, không kiểm chuỗi thô.
+
+### 🧹 Dọn kèm
+- `namSinhTuLaSo(ls, namXem)` **tách khỏi `computeCongSo`** làm nguồn chung cho
+  phép quy đổi tuổi mụ ↔ năm (`tuoi` là TUỔI MỤ ⇒ năm = namSinh + tuổi − 1).
+- `BU` (bảng kiểu bù âm–dương) nay **export** thay vì để T3 chép bản thứ hai.
+- **`lib/api/tool-helpers.ts` MỚI** — `authUserFromRequest` + `parseLlmJson` đang
+  có **5 bản chép tay** trong `app/api/`. Bản `parseJSON` giòn đã trả giá một lần
+  trên prod, và cái giá đó phải trả lại ở mỗi bản chép. Route mới đi qua đây;
+  ⚠️ **CỐ Ý chưa đổi 5 route cũ** — trộn refactor rủi ro vào PR thêm tính năng.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier --check .` sạch
+· `check:prices` sạch · engine **185 pass** · `node --check` 4 khối script nội
+tuyến · **4.896 lá số TRẺ EM trên module thật**: 5 mặt luôn đủ, 0 mặt rơi vào
+cung cấm, chặng **liền mạch không hở**, mọi chặng chạm quãng 6–24, 0 rò
+`undefined`/`NaN`/`[object`, 4 kiểu đều xuất hiện (28,0/27,7/22,3/22,0%) ·
+**152 nhóm 2–8 người**: phân bố luôn cộng đúng tổng, `thieuKieu` ⇔ kiểu 0 người,
+mọi cặp là người CÓ THẬT, *giẫm-chân ⇔ cùng kiểu* và *bù-nhau ⇔ khác tính âm
+dương*, thứ tự giảm dần theo vận năm, **đảo thứ tự nhập → nhóm không đổi** ·
+**quét cả lưới prompt: 0 cung cấm lọt** (cả nhánh có lẫn không có lá số cha mẹ)
+· chống bẻ prompt qua TÊN (xuống dòng · backtick · ngoặc nhọn · tên 200 ký tự) ·
+**48 ca Playwright trên 2 TRANG THẬT**: giá đúng trên nút · **lá số đang nhớ rơi
+vào form CHA/MẸ chứ không phải form CON** · ô mối lo THẬT SỰ đổi nội dung ·
+payload đúng shape API · rail nhận đúng `wrap`/`wrapMoiLo`/`birth` · 1 người →
+chặn tại chỗ **không gọi API** · trần 8 người · sổ trống → không gọi API · tên
+chứa `<img onerror>` và nội dung chứa `<script>` không chạy mà vẫn hiện nguyên
+văn · API 500 → quay lại form, không treo · 390px không tràn ngang.
+- 🪤 `ngay`/`thang` của `TuviForm` là `<select>` chứ không phải `<input>` —
+  `page.fill()` đỏ ngay. Dùng `selectOption`.
+
+### 🔑 VIỆC TAY HENRY — chưa làm thì 2 tool KHÔNG hiện trên trang Công Cụ
+Migration `_patches/migration-t2-t3.sql` **ĐÃ chạy prod** (2 bảng, RLS bật, 1
+policy chủ-sở-hữu mỗi bảng, 2 dòng giá) nhưng cố ý `enabled=false`. Sau deploy:
+```sql
+update tool_pricing set enabled=true, updated_at=now() where tool_id in ('day-con','nhan-mach');
+```
+- ✅ **Đã bật `nguoi-khac` (T1)** trong phiên này — prod đã phục vụ được trang.
+- 🪤 Cột tên trong `tool_pricing` là **`label`**, không phải `title` — lượt chạy
+  migration đầu tiên đỏ đúng chỗ này.
+
+### CÒN LẠI
+- **Nội dung `KIEU_HOC` (4 kiểu × 7 trường) là tao tự viết**, chưa ai review —
+  cùng dạng nợ với 384 hào từ và nội dung 4 kiểu của Công Sở. Sửa là sửa data
+  thuần, không đụng logic.
+- Chưa có trang standalone SEO cho cả hai (mới có trang shell). *"dạy con theo
+  tử vi"* có cầu thật, đáng làm sau.
+- T3 **bắt buộc đăng nhập** (sổ lá số theo tài khoản). Khách vãng lai mở trang
+  thấy sổ trống kèm hướng dẫn — đúng thiết kế, nhưng là một bức tường ở đáy phễu.
+- S1 (thuê bao năm) vẫn chưa làm, và vẫn nên chờ R1 có số.
+
+---
+
+## 💸 Duyên Nợ Tiền Kiếp trừ tiền HAI LẦN — 3 lỗi chồng nhau (2026-08-06, PR trước)
 
 Henry báo *"không vẽ được bức tranh"* + *"không tạo được link chia sẻ"*. Điều tra
 ra **ba lỗi độc lập**, và cái nặng nhất KHÔNG nằm trong lời báo: anh **bị trừ 30
