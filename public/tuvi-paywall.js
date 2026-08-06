@@ -105,7 +105,21 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
 .tpw-btn.topup:hover{background:#7d6230}
 .tpw-msg{font-size:13px;color:#444;line-height:1.65;margin-bottom:14px}
 .tpw-center{padding:18px 22px;text-align:center}
-.tpw-banner{position:fixed;top:72px;left:50%;transform:translateX(-50%);background:#1E6B3C;color:#fff;padding:9px 22px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.18);white-space:nowrap;pointer-events:none;animation:tpw-fade .25s ease}`;
+.tpw-banner{position:fixed;top:72px;left:50%;transform:translateX(-50%);background:#1E6B3C;color:#fff;padding:9px 22px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.18);white-space:nowrap;pointer-events:none;animation:tpw-fade .25s ease}
+.tpw-hint{margin-top:7px;font-size:12.5px;line-height:1.55;color:#6b6b6b;font-family:inherit}
+.tpw-hint b{color:#061A2E;font-weight:700}
+.tpw-hint.low{color:#8a3a2c}
+.tpw-hint.low b{color:#C0392B}
+.tpw-hint a{color:#9A7B3A;font-weight:700;text-decoration:none;border-bottom:1px solid rgba(154,123,58,.45);cursor:pointer}
+.tpw-hint a:hover{border-bottom-color:#9A7B3A}
+.tpw-lock{position:relative;margin-top:14px;border:1px solid #e7e0d0;border-radius:12px;overflow:hidden;background:#fff;animation:tpw-up .25s ease}
+.tpw-lock-blur{padding:18px 20px 26px;user-select:none;pointer-events:none;filter:blur(4px);opacity:.65}
+.tpw-lock-blur i{display:block;height:11px;border-radius:6px;background:linear-gradient(90deg,#cfc7b4,#ece6da);margin-bottom:10px}
+.tpw-lock-veil{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16px;background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.92))}
+.tpw-lock-t{font-family:'Noto Serif',Georgia,serif;font-size:15px;font-weight:700;color:#061A2E;margin-bottom:4px}
+.tpw-lock-s{font-size:12.5px;color:#666;margin-bottom:13px;line-height:1.55}
+.tpw-lock-x{background:none;border:none;color:#999;font-size:12px;font-family:inherit;cursor:pointer;margin-top:9px;text-decoration:underline}
+.tpw-lock-x:hover{color:#666}`;
     document.head.appendChild(s);
   }
 
@@ -170,6 +184,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   let _ov = null;
   function _open(inner) {
     _close();
+    _closeLock();  // không bày hai kiểu "chưa mở được" cùng lúc
     _css();
     _ov = document.createElement('div');
     _ov.className = 'tpw-overlay';
@@ -183,15 +198,160 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     document.body.style.overflow = '';
   }
 
+  // ── W3: dòng "còn bao nhiêu · tốn bao nhiêu" ngay dưới nút ────────────
+  //
+  // Bám vào các ô giá `[data-tvp-price]` VỐN ĐÃ nằm trong nút chạy tool, nên
+  // không phải rải markup vào 42 trang, và chỗ gắn đúng ngay nơi mắt người
+  // dùng đang nhìn ở giây trước khi bấm.
+  //
+  // CHỈ bám vào <button>. Ô giá nằm trong LINK CHÉO ("Xem Tuổi Vợ Chồng (15
+  // lượng) →" trỏ sang trang khác) mà cũng treo số dư thì vừa nhiễu vừa nói về
+  // một hành động không sắp xảy ra.
+  const _hintAnchors = {};   // product → nút chạy tool đó trên trang này
+
+  function mountCostHints(root) {
+    const scope = root || document;
+    scope.querySelectorAll('[data-tvp-price]').forEach((slot) => {
+      const product = slot.getAttribute('data-tvp-price');
+      if (!product) return;
+      const btn = slot.closest('button');
+      if (!btn || btn.hasAttribute('data-tvp-nohint') || !btn.parentNode) return;
+      _hintAnchors[product] = btn;
+      if (!btn._tpwHint || !btn._tpwHint.isConnected) {
+        const el = document.createElement('div');
+        el.className = 'tpw-hint';
+        el.style.display = 'none';
+        btn._tpwHint = el;
+        btn.insertAdjacentElement('afterend', el);
+      }
+    });
+    return refreshCostHints();
+  }
+
+  /** Vẽ lại mọi dòng gợi ý theo số dư hiện tại. Gọi được bất cứ lúc nào. */
+  async function refreshCostHints() {
+    const products = Object.keys(_hintAnchors);
+    if (!products.length) return;
+    let balance = null;
+    try { balance = await getBalance(); } catch (e) { balance = null; }
+    for (const p of products) {
+      const btn  = _hintAnchors[p];
+      const hint = btn && btn._tpwHint;
+      if (!hint || !hint.isConnected) continue;
+      let cost = null;
+      try { cost = await _priceOf(p); } catch (e) { cost = null; }
+      // Đọc hụt giá → KHÔNG hiện gì. Cùng luật fail-closed với _priceUnknown:
+      // một ô trống thì người ta chờ, một con số đoán thì người ta tin.
+      if (cost == null) { hint.style.display = 'none'; hint.innerHTML = ''; continue; }
+      hint.style.display = '';
+      if (balance == null) {
+        hint.className = 'tpw-hint';
+        hint.innerHTML = 'Thao tác này tốn <b>' + cost + ' Lượng</b> · ' +
+          '<a onclick="TuviPaywall._login()">đăng nhập</a> để xem số dư';
+      } else if (balance < cost) {
+        hint.className = 'tpw-hint low';
+        hint.innerHTML = 'Bạn còn <b>' + balance + ' Lượng</b> · thao tác này tốn <b>' + cost +
+          '</b> — thiếu ' + (cost - balance) + ', ' +
+          '<a href="/topup.html" onclick="' + _topupClick('hint', cost - balance) + '">nạp thêm →</a>';
+      } else {
+        hint.className = 'tpw-hint';
+        hint.innerHTML = 'Bạn còn <b>' + balance + ' Lượng</b> · thao tác này tốn <b>' + cost + '</b>';
+      }
+    }
+  }
+
+  function _login() {
+    if (window.showAuthModal) window.showAuthModal(() => refreshCostHints());
+    else if (window.Auth?.require) window.Auth.require(() => refreshCostHints());
+  }
+
+  // `window.refreshNavCredits` là tín hiệu "số dư vừa đổi" dùng chung cả site
+  // (auth.js gọi sau khi đăng nhập, paywall gọi sau khi trừ). Nối vào đó là có
+  // MỘT điểm duy nhất, khỏi rải lời gọi refresh khắp nơi rồi sót chỗ.
+  //
+  // Dùng accessor chứ không gán đè: thứ tự nạp script giữa các trang KHÔNG
+  // giống nhau (có trang auth.js đứng sau paywall) — gán đè thì trang đó mất
+  // hook mà không có gì báo.
+  let _hooked = false;
+  function _hookBalanceRefresh() {
+    if (_hooked) return;
+    _hooked = true;
+    let inner = window.refreshNavCredits;
+    try {
+      Object.defineProperty(window, 'refreshNavCredits', {
+        configurable: true,
+        get() {
+          return function () {
+            try { if (typeof inner === 'function') inner.apply(this, arguments); } catch (e) {}
+            refreshCostHints().catch(() => {});
+          };
+        },
+        set(fn) { inner = fn; },
+      });
+    } catch (e) { /* trình duyệt chặn → vẫn còn lượt refresh theo mốc thời gian */ }
+  }
+
+  // ── W2: khoá MỀM tại chỗ, thay hộp thoại chặn màn hình ────────────────
+  //
+  // Cùng một sự từ chối, hai cảm giác khác hẳn: modal phủ kín màn hình là
+  // "cửa đóng"; mấy dòng chữ mờ ngay chỗ kết quả sắp hiện là "sắp lấy được rồi".
+  //
+  // ⚠️ KHÔNG phát không gì cả — mấy thanh mờ là CHỮ GIẢ, tool vẫn chưa chạy.
+  // "Tính thử miễn phí" thật là việc khác (W1 trong backlog), tốn công gấp mấy
+  // lần và phải đụng từng tool một.
+  //
+  // Không tìm được chỗ neo → trả false, nơi gọi rơi về modal như cũ. Đây là
+  // lý do không trang nào trong 42 trang gãy vì thay đổi này.
+  let _lockEl = null;
+  function _closeLock() { if (_lockEl) { _lockEl.remove(); _lockEl = null; } }
+
+  function _softLock(inner) {
+    const declared = document.querySelector('[data-tvp-lock]');
+    const btn = _hintAnchors[(_cfg && _cfg.product) || ''] || null;
+    const after = btn && (btn._tpwHint && btn._tpwHint.isConnected ? btn._tpwHint : btn);
+    if (!declared && (!after || !after.parentNode)) return false;
+    _css();
+    _closeLock();
+    _lockEl = document.createElement('div');
+    _lockEl.className = 'tpw-lock';
+    _lockEl.innerHTML =
+      '<div class="tpw-lock-blur" aria-hidden="true">' +
+        '<i style="width:96%"></i><i style="width:88%"></i><i style="width:93%"></i>' +
+        '<i style="width:70%"></i><i style="width:91%"></i><i style="width:58%"></i>' +
+      '</div>' +
+      '<div class="tpw-lock-veil">' + inner + '</div>';
+    if (declared) declared.appendChild(_lockEl);
+    else after.insertAdjacentElement('afterend', _lockEl);
+    try { _lockEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
+    return true;
+  }
+
+  // Chuỗi onclick dùng chung cho mọi nút nạp — trước đây chép tay ở 2 chỗ và
+  // đã lệch nhau (chỗ đóng modal, chỗ không).
+  function _topupClick(from, need) {
+    return "try{window.Track&&window.Track.event&&window.Track.event('topup_start'," +
+      "{meta:{from:'" + from + "'" + (need != null ? ',need:' + need : '') + "}})}catch(e){};" +
+      'TuviPaywall._close();TuviPaywall._closeLock()';
+  }
+
   // ── Insufficient ──────────────────────────────────────────────
   function _insufficient(cost, balance) {
     const need = cost - balance;
+    const shown =
+      _softLock(
+        '<div class="tpw-lock-t">⊙ Còn thiếu ' + need + ' Lượng</div>' +
+        '<div class="tpw-lock-s">Bạn còn <b>' + balance + '</b> · thao tác này tốn <b>' + cost + '</b>' +
+        '<br>Nạp thêm là mở ra ngay.</div>' +
+        '<a class="tpw-btn topup" href="/topup.html" onclick="' + _topupClick('paywall', need) + '">Nạp Lượng →</a>' +
+        '<button class="tpw-lock-x" onclick="TuviPaywall._closeLock()">Để sau</button>'
+      );
+    if (shown) { refreshCostHints().catch(() => {}); return; }
     _open(
       '<div class="tpw-hd"><div class="tpw-hd-t">⊙ Không đủ Lượng</div><div class="tpw-hd-s">Cần thêm ' + need + ' lượng</div></div>' +
       '<div class="tpw-center">' +
         '<div class="tpw-msg">Số dư: <strong>' + balance + ' lượng</strong> · Cần: <strong>' + cost + ' lượng</strong><br>' +
         '<span style="font-size:12px;color:#999">Nạp thêm credits để tiếp tục.</span></div>' +
-        '<a class="tpw-btn topup" href="/topup.html" onclick="try{window.Track&&window.Track.event&&window.Track.event(\'topup_start\',{meta:{from:\'paywall\',need:' + need + '}})}catch(e){};TuviPaywall._close()">Nạp Credits →</a>' +
+        '<a class="tpw-btn topup" href="/topup.html" onclick="' + _topupClick('paywall', need) + '">Nạp Credits →</a>' +
       '</div>' +
       '<div class="tpw-ft"><button class="tpw-btn cancel" onclick="TuviPaywall._close()">Đóng</button></div>'
     );
@@ -217,6 +377,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   // ── MAIN: requireCredits ──────────────────────────────────────
   async function requireCredits(slug, callback) {
     _css();
+    _closeLock();  // lượt bấm mới → gỡ tấm khoá mềm của lượt trước
 
     // 1. Login check — use window.Auth from auth.js
     if (!window.Auth?.isLoggedIn()) {
@@ -374,11 +535,17 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   // đẻ thêm bộ class/CSS riêng cho một thông báo.
   function _capReached(msg) {
     const text = msg || 'Hôm nay số lượt dùng thử miễn phí đã hết. Bạn quay lại vào ngày mai nhé.';
+    const topup = '<a class="tpw-btn topup" href="/topup.html" onclick="' + _topupClick('free_cap') + '">Nạp Lượng →</a>';
+    if (_softLock(
+      '<div class="tpw-lock-t">⊙ Hết lượt tặng hôm nay</div>' +
+      '<div class="tpw-lock-s">' + _esc(text) + '<br>Chưa trừ Lượng nào của bạn.</div>' +
+      topup +
+      '<button class="tpw-lock-x" onclick="TuviPaywall._closeLock()">Để mai</button>'
+    )) return;
     _open(
       '<div class="tpw-hd"><div class="tpw-hd-t">⊙ Hết lượt tặng hôm nay</div><div class="tpw-hd-s">Chưa trừ Lượng nào của bạn</div></div>' +
       '<div class="tpw-center">' +
-        '<div class="tpw-msg">' + _esc(text) + '</div>' +
-        '<a class="tpw-btn topup" href="/topup.html" onclick="try{window.Track&&window.Track.event&&window.Track.event(\'topup_start\',{meta:{from:\'free_cap\'}})}catch(e){};TuviPaywall._close()">Nạp Lượng →</a>' +
+        '<div class="tpw-msg">' + _esc(text) + '</div>' + topup +
       '</div>' +
       '<div class="tpw-ft"><button class="tpw-btn cancel" onclick="TuviPaywall._close()">Để mai</button></div>'
     );
@@ -457,9 +624,19 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     _css();
     _price().catch(() => {}); // prefetch
     fillPriceSlots().catch(() => {});
+    mountCostHints().catch(() => {});
+    _hookBalanceRefresh();
+    // auth.js khôi phục phiên không đồng bộ với init của trang → lượt vẽ đầu
+    // có thể rơi vào nhánh "chưa đăng nhập". Vẽ lại một lượt cho chắc.
+    setTimeout(() => { refreshCostHints().catch(() => {}); }, 1500);
   }
 
-  return { init, requireCredits, requireCreditsCached, requireCreditsCachedQuery, generateToolSlug, ensureCredits, deductSilent, getBalance, fillPriceSlots, _banner, _close };
+  return {
+    init, requireCredits, requireCreditsCached, requireCreditsCachedQuery,
+    generateToolSlug, ensureCredits, deductSilent, getBalance, fillPriceSlots,
+    mountCostHints, refreshCostHints,
+    _banner, _close, _closeLock, _login,
+  };
 })();
 
 // Export to global window so cross-script checks (e.g. tu-binh.html line 1537) work

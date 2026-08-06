@@ -43,8 +43,8 @@ Công sức: **S** < 1 ngày · **M** 2–4 ngày · **L** > 1 tuần.
 | **P5** | Thử nâng giá theo bậc (A/B) — bắt đầu ở 2 tool chân dung | M | 🟡 |
 | **P6** | Xem lại trần ảnh free 6/ngày sau khi đổi giá | S | 🟡 |
 | **W1** | `Tính thử miễn phí` → chặn ở phần luận sâu (không chặn trước cửa) | L | 🟢 |
-| **W2** | Bản xem trước che chữ thay vì modal chặn | M | 🟢 |
-| **W3** | Hiện "còn X Lượng · thao tác này tốn Y" ngay trên nút | S | 🟢 |
+| **W2** | ~~Bản xem trước che chữ thay vì modal chặn~~ | M | ✅ XONG |
+| **W3** | ~~Hiện "còn X Lượng · thao tác này tốn Y" ngay trên nút~~ | S | ✅ XONG |
 | **T1** | **Lá số NGƯỜI KHÁC** (sếp/đồng nghiệp/người thân) — cẩm nang ứng xử | M | 🟢 |
 | **T2** | Gói Cha Mẹ: cây gia phả + mệnh con + tương tác cha-con | L | 🔴 |
 | **T3** | Gói Kinh doanh/Sale: nhân mạch công sở + phân tích khách hàng | L | 🔴 |
@@ -139,13 +139,23 @@ bấm**, trang chỉ có hai nút `免費試算` → `付費鑑定`. Người d�
 hay), chặn đúng chỗ tò mò nhất. Đây là **mục có tác động lớn nhất trong cả
 backlog** và cũng là mục tốn công nhất — đụng gần như mọi trang tool + paywall.
 
-### W2. Che chữ thay vì modal 🟢 M
+### W2. Che chữ thay vì modal ✅ XONG
 Modal chặn = "cửa đóng". Che mờ = "gần lấy được rồi". Cùng một hành vi, hai cảm
 giác khác hẳn.
+**Đã làm:** `_softLock()` trong `tuvi-paywall.js` — thiếu Lượng / chạm trần lượt
+tặng nay dựng tấm khoá MỀM ngay tại khối CTA (mấy thanh chữ mờ + thẻ khoá + nút
+nạp) thay cho hộp thoại phủ kín màn hình. ⚠️ Chữ mờ là chữ GIẢ — **không phát
+không gì cả**, tool vẫn chưa chạy (đó là W1). Không tìm được chỗ neo → rơi về
+modal cũ, nên 42 trang không trang nào vỡ.
 
-### W3. Hiện số dư ngay trên nút 🟢 S
+### W3. Hiện số dư ngay trên nút ✅ XONG
 "Bạn còn 12 Lượng · thao tác này tốn 25" ngay trên nút, trước khi bấm. Hiện tại
 người ta bấm rồi mới biết thiếu.
+**Đã làm:** `mountCostHints()` bám vào các ô `[data-tvp-price]` VỐN ĐÃ nằm trong
+nút chạy tool → 0 markup mới cho 11 trang shell. Thiếu Lượng thì dòng đó đổi màu
++ kèm lối nạp. Chưa đăng nhập → chỉ nói giá. Đọc hụt bảng giá → **không hiện gì**
+(fail-closed). Tiện thể thêm ô giá cho 4 nút đắt nhất vốn không ghi giá:
+phong thủy · 2 chân dung · duyên nợ.
 
 ---
 
@@ -310,7 +320,7 @@ Xếp theo **tác động ÷ công sức**, và **không mục nào phụ thuộ
 | 1 | **M1 + M2** — đóng gói theo nỗi lo + đặt tên theo câu hỏi | Rẻ nhất, đụng ít code nhất, chạm thẳng chỗ đang tắc, ăn thêm SEO |
 | 2 | **T6** — dựng nốt Duyên nợ tiền kiếp | Engine đã xong và đang nằm không; mỗi lượt kéo 2 người |
 | 3 | **U4** — sổ lá số theo tài khoản | Vừa vá lỗi thật đã ghi trong CLAUDE.md, vừa là nền của T1 và S1 |
-| 4 | **W3 + W2** — hiện số dư trên nút + che chữ thay vì modal | Vài giờ, không rủi ro, sửa đúng khoảnh khắc người ta bỏ đi |
+| 4 | ~~**W3 + W2**~~ ✅ — hiện số dư trên nút + che chữ thay vì modal | Vài giờ, không rủi ro, sửa đúng khoảnh khắc người ta bỏ đi |
 | 5 | **T1** — lá số người khác | Dùng hằng tuần, và mỗi lượt nạp thêm một lá số vào hệ thống |
 
 **W1** (tính thử miễn phí) tác động lớn hơn tất cả, nhưng tốn công nhất và đụng
