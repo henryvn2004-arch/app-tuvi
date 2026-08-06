@@ -211,7 +211,11 @@ export async function runAgent(
     // Bát Tự 1 người: đẩy "Người xem" (tên+giới tính từ birth) vào system → xưng
     // hô đúng (luật XƯNG_HO_RULE trong CHAT_SYSTEM_TU_BINH). Các scenario 2 người
     // (xem-tuoi/tương-hợp) đã có tên đôi bên trong context nên bỏ qua.
-    if (req.birth && scenario.type === 'tu-binh') {
+    // Tử Vi Công Sở cũng là scenario 1 NGƯỜI và trang gửi kèm birth → cùng cần
+    // dòng "Người xem" để rail xưng hô đúng. Dữ liệu hồ sơ thì KHÔNG tính lại ở
+    // đây: trang đã lấy `railData` từ CHÍNH `/api/cong-so` (cùng một hàm
+    // `computeCongSo`), nên rail và ô giữa vốn đã không thể lệch nhau.
+    if (req.birth && (scenario.type === 'tu-binh' || scenario.type === 'cong-so')) {
       const nx = nguoiXemLine(req.birth.name, req.birth.gender);
       if (nx) system += '\n\n' + nx;
     }
@@ -814,6 +818,7 @@ const SCENARIO_FIELD: Record<string, string> = {
   'ngay-tot': 'ngayTotData',
   'luc-nham': 'lucNhamData',
   'ban-do-sao': 'banDoSaoData',
+  'cong-so': 'congSoData',
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function scenarioToBody(scenario: ScenarioInput, messages: ChatMessage[]): any {
