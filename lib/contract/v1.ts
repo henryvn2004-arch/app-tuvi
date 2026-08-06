@@ -152,7 +152,20 @@ export interface ChatRequestV1 {
    * tự tính lại từ birth (computePastLife deterministic) — vừa an toàn, vừa
    * chắc chắn trùng nhân vật đang hiện trên màn hình.
    */
-  wrap?: 'past-life';
+  wrap?: 'past-life' | 'past-life-bond';
+  /**
+   * Lá số của NGƯỜI THỨ HAI — chỉ dùng với `wrap: 'past-life-bond'`.
+   *
+   * Vì sao phải có: mối duyên (và nền văn minh chung của cả hai) suy từ QUAN HỆ
+   * giữa hai lá số. Thiếu lá số này thì rail chỉ tính được nhân vật một người,
+   * mà nền văn minh của bản một người do `pickEraForLaso` bốc riêng — tức rail
+   * sẽ kể một thế giới KHÁC với thế giới đang hiện trên màn hình. Người dùng
+   * nhìn ra ngay, và đó là loại mâu thuẫn phá sạch lòng tin vào cả tool.
+   *
+   * Vẫn chỉ là DỮ LIỆU LÁ SỐ (ngày/tháng/năm/giờ/giới), không phải prose — cửa
+   * prompt-injection vẫn đóng như chú thích của `wrap` ở trên.
+   */
+  wrapBirthB?: BirthParams;
   client: ClientInfo;
 }
 
@@ -275,8 +288,11 @@ export function validateChatRequest(body: unknown):
     return { ok: false, error: 'Thiếu client.platform / client.version' };
   }
 
-  if (b.wrap != null && b.wrap !== 'past-life') {
+  if (b.wrap != null && b.wrap !== 'past-life' && b.wrap !== 'past-life-bond') {
     return { ok: false, error: 'wrap không hợp lệ' };
+  }
+  if (b.wrapBirthB != null && typeof b.wrapBirthB !== 'object') {
+    return { ok: false, error: 'wrapBirthB không hợp lệ' };
   }
 
   if (b.scenario != null) {

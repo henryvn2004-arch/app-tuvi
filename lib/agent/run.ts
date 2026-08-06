@@ -39,6 +39,8 @@ import {
 import { logLlmUsage, type LlmUsage } from '@/lib/agent/usage';
 import { computePastLife } from '@/lib/engine/past-life';
 import { pastLifeRailWrapper } from '@/lib/agent/past-life-story';
+import { computePastLifeBond } from '@/lib/engine/past-life-bond';
+import { bondRailWrapper } from '@/lib/agent/past-life-bond-story';
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!;
@@ -270,6 +272,24 @@ export async function runAgent(
       } catch (e) {
         // Hỏng lớp vỏ thì vẫn trả lời được như luận giải thường — không chặn lượt.
         console.error('[runAgent] pastLifeRailWrapper lỗi:', (e as Error)?.message);
+      }
+    }
+
+    // Rail của tool Duyên Nợ Tiền Kiếp — cần CẢ HAI lá số, xem `wrapBirthB`.
+    // Gọi với chính người xem là A: engine đã verify đảo A/B ra kết quả y hệt
+    // (950 cặp) và nền văn minh chung độc lập thứ tự, nên nhân vật + mối duyên
+    // ở đây trùng đúng bản trang vừa hiện. `selfIsA = true` để lớp vỏ biết bên
+    // nào là người đang hỏi — nó có luật cứng cấm luận sâu về người còn lại.
+    if (req.wrap === 'past-life-bond' && ctx.ls && req.birth && req.wrapBirthB) {
+      try {
+        const g = req.birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
+        const gB = req.wrapBirthB.gender === 'nu' ? ('nu' as const) : ('nam' as const);
+        const rB = computeLaso(req.wrapBirthB);
+        if (rB.ok && rB.ls) {
+          system += '\n\n' + bondRailWrapper(computePastLifeBond(ctx.ls, g, rB.ls, gB), true);
+        }
+      } catch (e) {
+        console.error('[runAgent] bondRailWrapper lỗi:', (e as Error)?.message);
       }
     }
 

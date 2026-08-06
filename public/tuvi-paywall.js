@@ -41,6 +41,7 @@ const TuviPaywall = (() => {
     'chon-ngay-tot':       { title: 'Chọn Ngày Tốt' },
     'chan-dung-vo-chong':  { title: 'Chân Dung Vợ Chồng' },
     'chan-dung-tien-kiep': { title: 'Chân Dung Tiền Kiếp' },
+    'duyen-no-tien-kiep': { title: 'Duyên Nợ Tiền Kiếp' },
   };
 
   const TOOL_TYPE = {
@@ -65,6 +66,7 @@ const TuviPaywall = (() => {
     'chon-ngay-tot': 'use_chon_ngay_tot',
     'chan-dung-vo-chong': 'use_chan_dung_vo_chong',
     'chan-dung-tien-kiep': 'use_chan_dung_tien_kiep',
+    'duyen-no-tien-kiep': 'use_duyen_no_tien_kiep',
   };
 
   let _cfg        = null;
@@ -312,22 +314,33 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
   // tiền và đi đường paywall như cũ. Đoán nhầm sang "miễn phí" thì server cũng
   // chặn lại bằng 402, người dùng lãnh một lỗi khó hiểu — thà hỏi tiền rồi
   // server tự bỏ qua còn hơn.
-  async function _isFreeRerun(endpoint, birth) {
+  // Hỏi endpoint xem lượt này có phải XEM LẠI thứ user đã trả tiền không.
+  // Tách phần "gửi query" ra khỏi phần "dựng query" vì tool nhận HAI lá số
+  // (Duyên Nợ Tiền Kiếp) không mô tả được bằng một object `birth`.
+  //
+  // FAIL-CLOSED ở mọi nhánh: mạng lỗi / chưa đăng nhập / server trả lạ → coi
+  // như PHẢI TRẢ. Đoán nhầm thành "đã trả" là phát không hàng.
+  async function _isFreeRerunQ(endpoint, query) {
     try {
       const token = window.Auth?.getSession()?.access_token || '';
-      if (!token || !birth) return false;
-      const q =
-        'd=' + (birth.day || 0) + '&m=' + (birth.month || 0) + '&y=' + (birth.year || 0) +
-        '&h=' + (birth.hourBranch == null ? -1 : birth.hourBranch) +
-        '&g=' + (birth.gender === 'nu' ? 'nu' : 'nam') +
-        '&lunar=' + (birth.isLunar ? '1' : '0');
-      const r = await fetch(endpoint + '?action=cache-status&' + q, {
+      if (!token || !query) return false;
+      const r = await fetch(endpoint + '?action=cache-status&' + query, {
         headers: { Authorization: 'Bearer ' + token },
       });
       if (!r.ok) return false;
       const d = await r.json();
       return !!(d && d.free);
     } catch (e) { return false; }
+  }
+
+  async function _isFreeRerun(endpoint, birth) {
+    if (!birth) return false;
+    const q =
+      'd=' + (birth.day || 0) + '&m=' + (birth.month || 0) + '&y=' + (birth.year || 0) +
+      '&h=' + (birth.hourBranch == null ? -1 : birth.hourBranch) +
+      '&g=' + (birth.gender === 'nu' ? 'nu' : 'nam') +
+      '&lunar=' + (birth.isLunar ? '1' : '0');
+    return _isFreeRerunQ(endpoint, q);
   }
 
   /**
@@ -337,9 +350,20 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
    * quay lại đường trả phí nếu server vẫn đòi (402).
    */
   async function requireCreditsCached(endpoint, birth, slug, callback) {
-    if (await _isFreeRerun(endpoint, birth)) {
+    return _cachedFlow(_isFreeRerun(endpoint, birth), slug, callback,
+      '✓ Bạn đã tạo kết quả cho lá số này — mở lại, không trừ Lượng');
+  }
+
+  /** Bản nhận QUERY tự dựng — cho tool có nhiều hơn một lá số. */
+  async function requireCreditsCachedQuery(endpoint, query, slug, callback, banner) {
+    return _cachedFlow(_isFreeRerunQ(endpoint, query), slug, callback,
+      banner || '✓ Bạn đã tạo kết quả cho cặp lá số này — mở lại, không trừ Lượng');
+  }
+
+  async function _cachedFlow(freeP, slug, callback, bannerText) {
+    if (await freeP) {
       _css();
-      _banner('✓ Bạn đã tạo kết quả cho lá số này — mở lại, không trừ Lượng');
+      _banner(bannerText);
       await callback(true);
       return;
     }
@@ -435,7 +459,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     fillPriceSlots().catch(() => {});
   }
 
-  return { init, requireCredits, requireCreditsCached, generateToolSlug, ensureCredits, deductSilent, getBalance, fillPriceSlots, _banner, _close };
+  return { init, requireCredits, requireCreditsCached, requireCreditsCachedQuery, generateToolSlug, ensureCredits, deductSilent, getBalance, fillPriceSlots, _banner, _close };
 })();
 
 // Export to global window so cross-script checks (e.g. tu-binh.html line 1537) work
