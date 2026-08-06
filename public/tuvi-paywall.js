@@ -139,7 +139,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       if (!el) {
         el = document.createElement('script');
         el.id = '_tvmb_prices_js';
-        el.src = '/tool-prices.js?v=2';
+        el.src = '/tool-prices.js?v=3';
         document.head.appendChild(el);
       }
       el.addEventListener('load', () => resolve());
