@@ -171,7 +171,7 @@ window.SHELL_INTRO={key:'duyen-no-tien-kiep',title:'Duyên Nợ Tiền Kiếp',d
 <script src="/tuvi-paywall.js?v=12"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=57"></script>
+<script src="/shell.js?v=58"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=1"></script>
 <script>
 
@@ -221,6 +221,15 @@ function retryResultImage() {
 // để cả hai cùng 'nam' thì phần lớn lượt phải sửa tay một ô.
 TuviForm.render('formHostA', { mode: 'compact', prefix: 'a', gioitinh: 'nam', showName: true });
 TuviForm.render('formHostB', { mode: 'compact', prefix: 'b', gioitinh: 'nu', showName: true });
+
+// Điền sẵn ô ĐẦU bằng lá số shell đang nhớ — các tool anh em đều làm việc này
+// qua `Shell.prefillForm()`, nhưng hàm đó chỉ nhắm form prefix mặc định nên
+// trang hai form phải tự gọi. CHỈ ô đầu: ô thứ hai là NGƯỜI KHÁC, không có gì
+// để đoán, điền bừa vào đó là xui người ta xem duyên nợ với chính mình.
+try {
+  var _remembered = window.Shell && Shell.getRememberedBirth ? Shell.getRememberedBirth() : null;
+  if (_remembered) TuviForm.setData(_remembered, 'a');
+} catch (e) { /* không có shell / chưa nhớ gì — bỏ qua */ }
 
 function showError(msg) {
   var e = document.getElementById('error-msg');
