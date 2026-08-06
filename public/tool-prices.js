@@ -24,7 +24,10 @@ window.ToolPrices = (function () {
   var SB_ANON =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaXdrZmRxaGhkZGV5bWxpc2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMzQ2MzksImV4cCI6MjA4ODgxMDYzOX0._3aXoe0hO-46J1gASUiNv__tWjSzLZFTL0M3-47L26I';
 
-  var CACHE_KEY = 'tvmb_prices_v1';
+  // ⚠️ BUMP KHOÁ khi đổi tập cột lấy về — bản cache cũ nằm trong sessionStorage
+  // của người đang mở tab, thiếu cột mới mà vẫn còn hạn ⇒ trang dựng ra bằng dữ
+  // liệu cụt trong tối đa 2 phút mà không có gì báo. (v2: thêm need_tags/question)
+  var CACHE_KEY = 'tvmb_prices_v2';
   var TTL_MS = 120000; // 2 phút — đủ để đi hết một phiên duyệt, đủ ngắn để admin đổi giá thấy ngay
 
   var _inflight = null;
@@ -73,7 +76,9 @@ window.ToolPrices = (function () {
     _inflight = Promise.all([
       // Lấy TRỌN dòng: trang Công Cụ và bảng chi phí ở trang nạp cần cả nhãn /
       // icon / phân loại. Một lượt fetch cho cả ba nơi thay vì ba lượt riêng.
-      _get('tool_pricing?enabled=eq.true&select=tool_id,label,credits,icon,category,sort_order,is_free,description&order=sort_order.asc'),
+      _get(
+        'tool_pricing?enabled=eq.true&select=tool_id,label,credits,icon,category,sort_order,is_free,description,need_tags,question&order=sort_order.asc'
+      ),
       _get('credit_packages?enabled=eq.true&select=package_id,credits,amount_vnd,label&order=sort_order.asc'),
     ])
       .then(function (res) {
