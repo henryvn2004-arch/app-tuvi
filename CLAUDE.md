@@ -5,6 +5,129 @@
 
 ---
 
+## 🛡️ Routine COO biết soi bảo mật → bắt ngay 2 lỗ RLS (2026-08-06, PR #423)
+
+Henry nhờ tạo Routine "Báo cáo COO hằng ngày 07:00 VN", rồi bảo *"viết lại prompt
+cho nó comprehensive đi. Check cả các lỗ hổng bảo mật"*. Lượt chạy **ĐẦU TIÊN**
+của prompt mới bắt được 2 policy cấp quyền GHI không giới hạn cho anon.
+
+### 🔑 Cấu hình Routine — ba lý do KHÔNG bind vào phiên đang mở
+Đã thử bind phiên trước, hỏng cả ba đường, ghi lại để đừng làm lại:
+1. **Không có push.** Server **từ chối tham số `notifications`** với routine bind
+   phiên ⇒ báo cáo chỉ nằm im trong hội thoại đó, phải tự mở ra đọc. Muốn "sáng
+   dậy thấy trên điện thoại" thì BẮT BUỘC là phiên-mới-mỗi-lần-chạy.
+2. **Container phiên từ xa bị thu hồi** sau một thời gian không hoạt động →
+   routine vẫn bắn đúng giờ nhưng bắn vào phiên đã chết, **im lặng vĩnh viễn
+   không có gì báo**.
+3. **`create_trigger` gọi từ phiên KHÔNG mang theo connector** trừ khi chính
+   phiên đó đang giữ ⇒ lượt chạy mất Supabase, chỉ ra được bản "không đọc được".
+- ⚠️ **"Bind vào phiên" nói về nơi báo cáo ĐỔ VÀO, không phải nơi routine SỐNG.**
+  Routine nằm trên server (khác `CronCreate` — cái đó mới sống trong phiên và tự
+  hết hạn sau 7 ngày). Xoá routine = đập cái đồng hồ báo thức, phiên còn mở cũng
+  vô ích. Henry đã xoá nhầm đúng một lần vì hiểu ngược chỗ này.
+- Chốt: **claude.ai → Routines**, cron `0 0 * * *` (UTC = 07:00 VN),
+  **phiên mới mỗi lần chạy + Push + connector Supabase**. Prompt là khối
+  ```text``` trong `docs/coo-daily-routine-prompt.md`.
+- 🪤 UI cho chọn giờ theo múi giờ **của người dùng** → điền 07:00; đòi cron thô
+  → điền `0 0 * * *`. Điền nhầm hệ là lệch đúng 7 tiếng. Kiểm bằng `next run`.
+
+### 🔴 `security_audit()` KHÔNG soi policy RLS — đó là điểm mù đã trả giá
+Prompt cũ soi 3 nguồn và **tin hoàn toàn vào `security_audit`** cho phần bảo mật.
+Mà hàm đó chỉ soi **hàm RPC hở cho anon**; cả hai lỗ dưới đây là **policy trên
+BẢNG**, nằm ngoài tầm nó. Bộ dò một chân hỏng thì không có gì phát hiện.
+- Nay thêm **6 truy vấn nền**: hàm SECURITY DEFINER cho anon (**đối chứng độc
+  lập** của `ham_ho_cho_anon`) · bảng tắt RLS · **policy cấp quyền cho
+  `anon`/`public`** ← chính nó bắt cả 2 lỗ · bucket public · phân bố giao dịch
+  Lượng 24h · đăng nhập admin.
+- **Luật đối chứng:** hai nguồn phải KHỚP; lệch nhau thì báo động ngang mức có lỗ
+  hổng thật, vì nghĩa là một trong hai đang mù. Lượt chạy đầu ra lệch một hàm
+  (`public.is_admin`) và routine **tự giải quyết đúng** — đọc source thấy
+  `security_audit` CỐ Ý loại trừ nó (`p.proname <> 'is_admin'`, boolean helper
+  dùng trong mọi policy, không lộ dữ liệu) — chứ không hô hoán.
+
+### 🔴 Hai lỗ tìm được — và CẢ HAI đều ĐANG GÁNH VIỆC THẬT
+Gỡ policy trước khi sửa code là gãy prod. Đây là phần soi repo trước khi động vào:
+
+| Policy | Ai sống nhờ nó | Gỡ thẳng thì gãy |
+|---|---|---|
+| `laso_public anon update` (public·UPDATE·`qual=true`, không `WITH CHECK`) | `save-laso/route.ts` ghi bằng `SUPABASE_ANON_KEY`, `.update()` khi slug đã tồn tại | lưu đè lá số hỏng — la-so · luan-giai · bat-tu · tu-binh |
+| `van_dap "anon full access for now"` (public·**ALL**·`qual=true`) | 2 trang admin ghi thẳng PostgREST; `roles=public` phủ luôn `authenticated` nên JWT admin cũng đi qua đúng policy này | Content Board mất quyền tạo/sửa bài |
+
+- **`laso_public`:** route đổi sang `SUPABASE_SERVICE_KEY` — có tiền lệ ngay
+  trong repo, `upload-laso-image/route.ts` **đã** dùng service key trên CHÍNH
+  bảng đó. Anon key giữ riêng cho `auth.getUser` (hai vai khác nhau). Đối chiếu
+  trước khi chốt: 4 chỗ client chạm `laso_public` qua PostgREST đều là `select=`.
+  2 policy INSERT anon **CỐ Ý giữ** — gỡ cùng lúc thì gãy không biết vì cái nào.
+- 🔑 **`van_dap` — chỗ suýt làm hỏng: policy đó gánh CẢ ĐƯỜNG ĐỌC.** Policy còn
+  lại (`anon read published`) chỉ cho đọc bài ĐÃ XUẤT BẢN ⇒ chuyển mỗi phần ghi
+  là trang Nội Dung **mất sạch bản nháp/bản chờ mà không có lỗi nào hiện ra**,
+  bảng chỉ đơn giản ngắn đi. Nên phải gom **cả 5** lượt chạm (3 đọc + 2 ghi),
+  không phải 2. Thêm `admin-van-dap` (GET `stats|list|one`) +
+  `admin-van-dap-save` (POST → PATCH khi có id) — `verifyAdmin` + service key.
+- **Client giữ NGUYÊN chữ ký 4 hàm cũ**, kể cả tính chất **NÉM LỖI** của
+  `sbFetch` — các nhánh `catch` quanh đó đang dựa vào để hiện toast; đổi sang
+  trả rỗng im lặng là hỏng âm thầm. `sbFetch` giữ lại cho 2 lượt đọc `khao_luan`.
+- **`public/admin-content.html` XOÁ** — trang mồ côi (0 file link tới; code
+  `van_dap` chép trùng nguyên khối trong `admin.html:4657+`), và là chỗ **DUY
+  NHẤT** ghi `van_dap` bằng anon THUẦN. 4 script trong `scripts/` chỉ nhắc tên nó
+  trong `SKIP_FILES` nên không gãy.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier --check .` sạch
+· 4 script block `admin.html` `node --check` OK · **route THẬT trên Next dev +
+stub Supabase**: 3 nhánh quyền đều 403, 4 nhánh admin 200 đúng dữ liệu, id ký tự
+lạ → 400, thiếu item → 400, và **12/12 lượt gọi PostgREST đi bằng SERVICE key,
+0 lượt anon** (đọc từ log stub, không suy từ code) · **9 ca Playwright trên
+CHÍNH `public/admin.html`**: 4 hàm giữ đúng hợp đồng, lọc `status` đúng, save
+mới→POST / save sửa→gửi id, **0 lượt chạm PostgREST**, API lỗi→ném lên caller,
+0 lỗi JS · CI đủ 7 check xanh.
+- 🪤 **Bẫy của TEST, không phải code:** `let _token` ở top-level script là
+  **binding TỪ VỰNG, KHÔNG nằm trên `window`** → `window._token='GOOD'` đặt ra
+  một biến khác và mọi lượt gửi `Bearer null`. Phải gán thẳng `_token=...`. Suýt
+  đọc thành lỗi sản phẩm; phải in header ra mới thấy.
+- 🪤 `npm ci` TRƯỚC khi `tsc`: container mặc định `node_modules` rỗng nên lượt
+  `tsc` đầu ra **661 lỗi giả** ở khắp `app/`.
+- ⚠️ **CHƯA gọi được Supabase thật** — container chặn host ngoài, không có key.
+  Toàn bộ verify đường DB dừng ở tầng stub.
+
+### 🔑 VIỆC TAY HENRY — SAI THỨ TỰ LÀ TỰ TAY LÀM HỎNG PROD
+1. Merge + **đợi deploy xong**.
+2. **RỒI MỚI** chạy `_patches/migration-laso-public-rls.sql` **và**
+   `_patches/migration-van-dap-rls.sql` (cả hai đều có câu kiểm trước/sau).
+3. Kiểm: lưu thử một lá số · mở Admin → Nội Dung xem **còn hiện bài
+   `draft`/`ready`** không, thử sửa + tạo bài.
+- Bước 3 là phép thử quyết định: bảng chỉ ra bài `published` nghĩa là SQL chạy
+  trước khi code lên prod.
+
+### CÒN LẠI — audit 6 bucket storage
+`portraits` · `laso-images` · `hair-templates` · `samples` đều public **đúng
+thiết kế** (og:image + Instagram Graph API đòi URL công khai; ảnh mẫu; 1 file
+PDF). Hai cái còn lại chưa xong:
+- 🟡 **`wardrobe-items`** — ảnh quần áo người dùng tự chụp, bucket `public=true`
+  trong khi bảng `wardrobe_items` khoá theo `auth.uid()`. **Chuyển private ĐƯỢC,
+  không gãy gì ở ngoài**: cả 3 chỗ gọi `flux-kontext-pro` truyền `input_image`
+  dạng **base64 data URI**, không hề chạm bucket; `image_url` chỉ làm `<img src>`
+  trong tủ đồ của chính chủ. Nhưng mức phơi nhiễm phụ thuộc **anon có LIỆT KÊ
+  được `storage.objects` không** (đường dẫn `<user-uuid>/<epoch-ms>.jpg` không
+  đoán mò được) — chưa đo được vì phiên đó mất Supabase MCP.
+  🪤 **Bẫy đã dò sẵn nếu chuyển private:** `handleWardrobeDelete` lấy đường dẫn
+  bằng `image_url.split('/wardrobe-items/')[1]`, mà URL ký có dạng
+  `/object/sign/wardrobe-items/<path>?token=…` ⇒ phép cắt trả về `<path>?token=…`
+  → **xoá file âm thầm hỏng** (dòng DB mất, file ở lại kho vĩnh viễn). Phải cắt
+  bỏ query trước.
+- ⚠️ **`van-dap-media`** — bucket public mà `grep` toàn repo (`app` `lib` `public`
+  `scripts` `_patches` `supabase`) ra **0 kết quả**. Nhiều khả năng tàn dư
+  pipeline video đời đầu. Bucket public không ai dùng là bề mặt tấn công thuần.
+- Hai câu SQL chỉ-đọc để chốt cả hai (chạy lúc nào cũng được):
+```sql
+select policyname, roles::text, cmd, qual from pg_policies
+ where schemaname='storage' and tablename='objects' order by policyname;
+select bucket_id, count(*), max(created_at) from storage.objects
+ where bucket_id in ('van-dap-media','wardrobe-items') group by bucket_id;
+```
+
+---
+
 ## 📸 Vận hôm nay: poster đủ thông tin · QR đo được · nhập lá số tại chỗ (2026-08-05, PR này)
 
 Henry soi thẻ Vận hôm nay, hỏi 3 việc: (1) ảnh tải về thiếu thông tin so với
