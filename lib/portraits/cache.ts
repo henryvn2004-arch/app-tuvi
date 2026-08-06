@@ -38,6 +38,7 @@ const SB_HEADERS = {
 export const HISTORY_TABLE = {
   'chan-dung-vo-chong': 'spouse_portraits',
   'chan-dung-tien-kiep': 'past_life_portraits',
+  'duyen-no-tien-kiep': 'past_life_bonds',
 } as const;
 
 export type PortraitToolId = keyof typeof HISTORY_TABLE;

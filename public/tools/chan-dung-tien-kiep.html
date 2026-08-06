@@ -167,7 +167,7 @@
 </footer>
 
 <script src="/tuvi-form.js"></script>
-<script src="/tuvi-paywall.js?v=11"></script>
+<script src="/tuvi-paywall.js?v=12"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=1"></script>
 <script>
 
@@ -400,7 +400,7 @@ function _ensurePoster() {
     let s = document.getElementById('_poster_js');
     if (!s) {
       s = document.createElement('script');
-      s.id = '_poster_js'; s.src = '/poster.js?v=4';
+      s.id = '_poster_js'; s.src = '/poster.js?v=5';
       document.head.appendChild(s);
     }
     s.addEventListener('load', () => resolve());

@@ -22,6 +22,7 @@
       { id: 'sinh-con',   label: 'Xem tuổi sinh con',   href: '/app/sinh-con',   icon: 'baby' },
       { id: 'chan-dung-vo-chong', label: 'Chân dung vợ chồng', href: '/app/chan-dung-vo-chong', icon: 'image' },
       { id: 'chan-dung-tien-kiep', label: 'Chân dung tiền kiếp', href: '/app/chan-dung-tien-kiep', icon: 'temple' },
+      { id: 'duyen-no-tien-kiep', label: 'Duyên nợ tiền kiếp', href: '/app/duyen-no-tien-kiep', icon: 'heart-handshake' },
     ] },
     { group: 'Tử Bình', open: false, items: [
       { id: 'bat-tu',     label: 'Lá số Bát Tự',        href: '/app/bat-tu',     icon: 'rows' },
@@ -100,6 +101,9 @@
     mic: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/>',
     image: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.8"/><path d="m21 15-5-5-9 9"/>',
     temple: '<path d="m12 3 8 5H4z"/><path d="M3 8h18"/><path d="M6 8v9M18 8v9"/><path d="M10 17v-5h4v5"/><path d="M3 21h18"/>',
+    // Lấy ĐÚNG path của nav.js (bộ icon dùng chung) — sidebar và trang Công Cụ
+    // phải vẽ cùng một glyph cho cùng một công cụ.
+    'heart-handshake': '<path d="M19.414 14.414C21 12.828 22 11.5 22 9.5a5.5 5.5 0 0 0-9.591-3.676.6.6 0 0 1-.818.001A5.5 5.5 0 0 0 2 9.5c0 2.3 1.5 4 3 5.5l5.535 5.362a2 2 0 0 0 2.879.052 2.12 2.12 0 0 0-.004-3 2.124 2.124 0 1 0 3-3 2.124 2.124 0 0 0 3.004 0 2 2 0 0 0 0-2.828l-1.881-1.882a2.41 2.41 0 0 0-3.409 0l-1.71 1.71a2 2 0 0 1-2.828 0 2 2 0 0 1 0-2.828l2.823-2.762"/>',
   };
   function svg(name, cls) {
     return '<svg class="' + (cls || 'ic') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">' + (ICONS[name] || ICONS.dot) + '</svg>';
@@ -1325,7 +1329,11 @@
       // wrap: vỏ bọc kể chuyện cho luồng lá số (hiện chỉ 'past-life' — rail
       // tool Chân Dung Tiền Kiếp trả lời qua nhân vật thay vì luận thẳng).
       // Chỉ là CỜ, nội dung nhân vật do server tự tính lại từ birth.
-      ctx = (o.birth || o.scenario) ? { birth: o.birth || null, scenario: o.scenario || null, wrap: o.wrap || null } : null;
+      // wrapBirthB: lá số NGƯỜI THỨ HAI, chỉ dùng cho wrap 'past-life-bond'
+      // (tool Duyên Nợ Tiền Kiếp). Mối duyên và nền văn minh chung suy từ QUAN
+      // HỆ giữa hai lá số — thiếu vế này thì rail kể một thế giới khác hẳn thế
+      // giới đang hiện trên màn hình.
+      ctx = (o.birth || o.scenario) ? { birth: o.birth || null, scenario: o.scenario || null, wrap: o.wrap || null, wrapBirthB: o.wrapBirthB || null } : null;
       ctxCalls++;
       // Funnel: tool đã tính ra kết quả + gắn ngữ cảnh = "đã dùng tool" (activation).
       try { track('tool_run', { tool_id: ACTIVE, slug: (o.scenario && o.scenario.type) || null }); } catch (e) { /* ignore */ }
@@ -1556,6 +1564,7 @@
       if (ctx.birth) body.birth = ctx.birth;
       if (ctx.scenario) body.scenario = ctx.scenario;
       if (ctx.wrap) body.wrap = ctx.wrap;
+      if (ctx.wrapBirthB) body.wrapBirthB = ctx.wrapBirthB;
       // Văn phong thầy: gửi top-level (luồng lá số) + trong scenario (luồng kịch bản).
       if (_author) {
         body.authorName = _author.name; body.authorStyle = _author.style;

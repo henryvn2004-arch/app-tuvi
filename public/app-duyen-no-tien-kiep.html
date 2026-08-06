@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duyên Nợ Tiền Kiếp — Tử Vi Minh Bảo</title>
+<meta name="description" content="Hai lá số — kiếp trước hai người là gì của nhau. Loại duyên nợ suy từ cổ pháp, câu chuyện 4 hồi và một bức tranh vẽ cả hai.">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/shell.css?v=16">
+<style>
+.form-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);max-width:860px}
+.form-card h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:3px}
+.form-card p.sub{font-size:12.5px;color:var(--text-lt);margin-bottom:14px}
+.frow{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase}
+.fg input,.fg select{border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--paper);outline:none}
+.fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,85,164,.12)}
+.btn-go{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--serif)}
+.btn-go:disabled{opacity:.6;cursor:not-allowed}
+.err{color:var(--red);font-size:13px;margin-top:8px;display:none}
+.err.active{display:block}
+.res-block{border:1px solid #E8E8E8;border-radius:10px;margin-bottom:16px;background:#fff;overflow:hidden;max-width:880px}
+.res-block-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#F5F4F0;border-bottom:1px solid #E8E8E8}
+.res-block-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#061A2E}
+.res-block-body{padding:18px;color:#2a2118}
+#loading{display:none;text-align:center;padding:30px 10px;color:var(--text-lt)}
+/* Hai ô nhập đứng cạnh nhau — người dùng phải thấy ngay tool này cần HAI lá số,
+   không phải một. Xuống một cột ở máy hẹp. */
+.dn-two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:760px){.dn-two{grid-template-columns:1fr}}
+.dn-side{border:1px solid var(--line-2);border-radius:10px;padding:13px 14px;background:var(--paper)}
+.dn-side h3{font-family:var(--serif);font-size:14px;font-weight:700;margin-bottom:2px;color:#061A2E}
+.dn-side p{font-size:11.5px;color:var(--text-lt);margin-bottom:10px}
+.dn-hero{text-align:center;padding:2px 6px 16px}
+.dn-kind{display:inline-block;padding:5px 14px;border-radius:999px;background:#F3EAD6;color:#7A5F26;font-size:12px;font-weight:700;letter-spacing:.3px;margin-bottom:9px}
+.dn-tuade{font-family:var(--serif);font-size:21px;line-height:1.45;color:#061A2E;font-weight:700;margin-bottom:5px}
+.dn-gist{font-size:12.5px;color:var(--text-lt);max-width:520px;margin:0 auto}
+.dn-era{display:inline-block;margin-top:9px;padding:4px 11px;border-radius:999px;background:#EFEBE3;color:#5a5145;font-size:11px;font-weight:700}
+.dn-birth{margin-top:9px;font-size:11.5px;color:var(--text-lt)}
+/* Ảnh KHỔ NGANG (1536x1024) — khác hai tool chân dung một người (khổ dọc). Hai
+   nhân vật đứng cạnh nhau cần bề ngang; ép khung dọc là cắt mất một người. */
+.dn-imgwrap{margin-bottom:16px}
+.dn-imgwrap img{width:100%;border-radius:12px;box-shadow:0 8px 24px rgba(6,26,46,.2);display:block;background:#EFEBE3}
+.dn-imgph{width:100%;aspect-ratio:3/2;border-radius:12px;background:#EFEBE3;display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;color:var(--text-lt);padding:14px}
+.dn-actions{display:flex;gap:8px;margin-top:10px}
+.dn-actions .btn{flex:1;text-align:center}
+.dn-pair{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:14px}
+.dn-person{flex:1;min-width:190px;border:1px solid #EADFC8;border-radius:10px;padding:10px 13px;background:#FBF8F1;text-align:center}
+.dn-person .nm{font-family:var(--serif);font-size:15px;font-weight:700;color:#061A2E}
+.dn-person .oc{font-size:11.5px;color:#7A5F26;margin-top:2px}
+.dn-person .of{font-size:10.5px;color:var(--text-lt);margin-top:3px}
+.dn-mota p{font-size:13.5px;line-height:1.88;color:#2a2118;margin:0}
+.dn-act{border-left:2px solid #E0D6C0;padding:0 0 18px 16px;position:relative}
+.dn-act:last-child{padding-bottom:0}
+.dn-act::before{content:'';position:absolute;left:-6px;top:4px;width:10px;height:10px;border-radius:50%;background:#C8B084}
+.dn-act-head{display:flex;gap:8px;flex-wrap:wrap;align-items:baseline;margin-bottom:5px}
+.dn-act-title{font-family:var(--serif);font-size:15px;font-weight:700;color:#061A2E}
+.dn-act-stage{font-size:11px;color:var(--text-lt)}
+.dn-act p{font-size:13.5px;line-height:1.85;color:#2a2118;margin:0}
+.dn-ketluan{margin-top:16px;padding:13px 15px;background:#FBF8F1;border:1px solid #EADFC8;border-radius:10px;font-size:13.5px;line-height:1.82;color:#3a3226}
+.dn-basis{margin-top:14px;font-size:12.5px}
+.dn-basis summary{cursor:pointer;color:#7A5F26;font-weight:600}
+.dn-basis ul{margin:9px 0 0 18px;color:#5a5145;line-height:1.75}
+#histList{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+#histList img{width:84px;height:56px;object-fit:cover;border-radius:8px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sb" id="shell-sidebar"></aside>
+
+  <main class="ws" id="ws">
+    <div class="ws-top">
+      <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
+      <div class="ws-title"><b>Duyên Nợ Tiền Kiếp</b><span>Kiếp trước hai người là gì của nhau</span></div>
+      <div class="ws-actions">
+        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Làm Lại</button>
+        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+      </div>
+    </div>
+    <div class="ws-body">
+      <div id="introHost"></div>
+      <div class="form-card" id="birthPanel">
+        <h2>Nhập ngày sinh của hai người (dương lịch)</h2>
+        <p class="sub">Quan hệ giữa hai lá số theo cổ pháp quyết định loại duyên nợ — không bốc thăm, và đổi thứ tự nhập vẫn ra đúng một kết quả.</p>
+
+        <div class="dn-two">
+          <div class="dn-side">
+            <h3>Người thứ nhất</h3>
+            <p>Thường là bạn</p>
+            <div id="formHostA"></div>
+          </div>
+          <div class="dn-side">
+            <h3>Người thứ hai</h3>
+            <p>Người bạn muốn xem duyên nợ</p>
+            <div id="formHostB"></div>
+          </div>
+        </div>
+
+        <div class="frow" style="margin-bottom:0;margin-top:14px">
+          <button class="btn-go" id="btnGo" onclick="analyze()">Xem Duyên Nợ →</button>
+        </div>
+        <div class="err" id="error-msg"></div>
+      </div>
+
+      <div id="resPanel" style="display:none">
+        <div class="res-block">
+          <div class="res-block-header"><span class="res-block-title">Mối Duyên Kiếp Trước</span></div>
+          <div class="res-block-body">
+            <div id="loading"><div id="loadingSteps"></div></div>
+            <div id="card" style="display:none">
+              <div class="dn-hero">
+                <div class="dn-kind" id="bondKind"></div>
+                <div class="dn-tuade" id="tuaDe"></div>
+                <div class="dn-gist" id="bondGist"></div>
+                <div class="dn-era" id="eraLine" style="display:none"></div>
+                <div class="dn-birth" id="birthLine" style="display:none"></div>
+              </div>
+              <div class="dn-imgwrap">
+                <div class="dn-imgph" id="imgPlaceholder">Đang vẽ bức tranh hai người…<br>(khoảng 30–60 giây)</div>
+                <img id="resultImg" alt="Tranh duyên nợ tiền kiếp" style="display:none">
+                <div id="imgLoadStatus" style="display:none;margin-top:8px;font-size:12px;color:var(--text-lt);text-align:center"></div>
+                <div class="dn-actions" id="imgActions" style="display:none">
+                  <button class="btn" id="btnDownload" onclick="downloadResult()">⬇ Tải Ảnh Đăng Story</button>
+                </div>
+              </div>
+              <div class="dn-pair" id="pairBlock"></div>
+              <div class="dn-mota" id="moTaBlock"><p id="moTaMoiDuyen"></p></div>
+              <details class="dn-basis" id="basisBlock" style="display:none">
+                <summary>Cơ sở trong hai lá số</summary>
+                <ul id="basisList"></ul>
+              </details>
+            </div>
+          </div>
+        </div>
+
+        <div class="res-block" id="storyBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Mối Duyên — 4 Hồi</span></div>
+          <div class="res-block-body">
+            <div id="actList"></div>
+            <div class="dn-ketluan" id="ketLuan" style="display:none"></div>
+          </div>
+        </div>
+
+        <div class="res-block" style="background:#FBF3DE;border-color:#e8d9b0">
+          <div class="res-block-body" style="font-size:12.5px;line-height:1.6;color:#5a5145">
+            💡 Mối duyên và câu chuyện phía trên được phác hoạ dựa trên quan hệ giữa hai lá số Tử Vi, kết hợp với kinh nghiệm nghiên cứu của tiền nhân để lại. Mang tính tham khảo và giải trí.
+          </div>
+        </div>
+
+        <div class="res-block" id="histBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Đã Xem Trước Đó</span></div>
+          <div class="res-block-body"><div id="histList"></div></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<script>window.SHELL_ACTIVE='duyen-no-tien-kiep';
+window.SHELL_INTRO={key:'duyen-no-tien-kiep',title:'Duyên Nợ Tiền Kiếp',desc:'Đưa <b>hai lá số</b> vào cùng một thế giới phong kiến Á Đông rồi xem <b>kiếp trước hai người là gì của nhau</b> — loại duyên nợ suy từ <b>địa chi cung Mệnh</b>, <b>ngũ hành nạp âm</b> và <b>chính tinh</b>, kèm câu chuyện 4 hồi và một bức tranh vẽ cả hai.'};</script>
+<script src="/laso-chart.js?v=3"></script>
+<script src="/tuvi-form.js?v=1"></script>
+<script src="/tuvi-paywall.js?v=12"></script>
+<script src="/auth.js?v=2"></script>
+  <script src="/nav.js?v=22" data-icons-only></script>
+<script src="/shell.js?v=57"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=1"></script>
+<script>
+
+var _currentSlug = '';
+var _resultImgUrl = '';
+var _lastA = null;
+var _lastB = null;
+var _lastStory = null;
+var DN_STEPS = [
+  { label: 'Lập hai lá số & dựng hai nhân vật', ms: 1400 },
+  { label: 'Đối chiếu địa chi, ngũ hành, chính tinh', ms: 2400 },
+  { label: 'Viết câu chuyện mối duyên', ms: 0 },
+];
+var _loadingCtl = null;
+var _imgRetryTimer = null;
+
+function setResultImage(url) {
+  var img = document.getElementById('resultImg');
+  var status = document.getElementById('imgLoadStatus');
+  function showWaiting() {
+    if (!status) return;
+    status.innerHTML = 'Ảnh đang tải, có thể hơi chậm — vui lòng đợi hoặc <button type="button" class="btn" style="padding:2px 10px;font-size:12px;margin-left:4px" onclick="retryResultImage()">Tải lại</button>';
+    status.style.display = 'block';
+  }
+  function hideWaiting() { if (status) status.style.display = 'none'; }
+  clearTimeout(_imgRetryTimer);
+  img.onload = function () {
+    hideWaiting();
+    clearTimeout(_imgRetryTimer);
+    document.getElementById('imgPlaceholder').style.display = 'none';
+    img.style.display = 'block';
+    document.getElementById('imgActions').style.display = 'flex';
+  };
+  img.onerror = function () { showWaiting(); };
+  img.src = url;
+  _imgRetryTimer = setTimeout(function () {
+    if (!img.complete || img.naturalWidth === 0) showWaiting();
+  }, 6000);
+}
+function retryResultImage() {
+  if (!_resultImgUrl) return;
+  setResultImage(_resultImgUrl + (_resultImgUrl.indexOf('?') >= 0 ? '&' : '?') + 'retry=' + Date.now());
+}
+
+// Hai bản form ĐỘC LẬP nhờ `prefix` của TuviForm — không phải hai bản chép tay.
+// Người thứ hai mặc định giới NỮ: cặp hay được nhập nhất là nam–nữ, và bản đầu
+// để cả hai cùng 'nam' thì phần lớn lượt phải sửa tay một ô.
+TuviForm.render('formHostA', { mode: 'compact', prefix: 'a', gioitinh: 'nam', showName: true });
+TuviForm.render('formHostB', { mode: 'compact', prefix: 'b', gioitinh: 'nu', showName: true });
+
+function showError(msg) {
+  var e = document.getElementById('error-msg');
+  if (msg) { e.textContent = msg; e.classList.add('active'); } else { e.classList.remove('active'); }
+}
+
+function _birthOf(prefix) {
+  var f = TuviForm.getData(prefix);
+  if (!f.ngay || !f.thang || !f.nam) return null;
+  return {
+    day: f.ngay, month: f.thang, year: f.nam,
+    hourBranch: f.gioIdx, gender: f.gioitinh, isLunar: false,
+    name: (f.hoten || '').trim() || undefined,
+  };
+}
+
+/** Query cho `action=cache-status` — hai lá số, đúng tên tham số route đọc. */
+function _cacheQuery(a, b) {
+  var one = function (p, x) {
+    return p + 'd=' + (x.day || 0) + '&' + p + 'm=' + (x.month || 0) + '&' + p + 'y=' + (x.year || 0) +
+      '&' + p + 'h=' + (x.hourBranch == null ? -1 : x.hourBranch) +
+      '&' + p + 'g=' + (x.gender === 'nu' ? 'nu' : 'nam') +
+      '&' + p + 'l=' + (x.isLunar ? '1' : '0');
+  };
+  return one('a', a) + '&' + one('b', b);
+}
+
+async function analyze() {
+  showError('');
+  var a = _birthOf('a');
+  var b = _birthOf('b');
+  if (!a) { showError('Vui lòng nhập đầy đủ ngày tháng năm sinh của người thứ nhất.'); return; }
+  if (!b) { showError('Vui lòng nhập đầy đủ ngày tháng năm sinh của người thứ hai.'); return; }
+  _lastA = a; _lastB = b;
+
+  _currentSlug = TuviPaywall.generateToolSlug(
+    'duyen-no-' + a.day + a.month + a.year + '-' + b.day + b.month + b.year);
+  await TuviPaywall.requireCreditsCachedQuery(
+    '/api/duyen-no-tien-kiep', _cacheQuery(a, b), _currentSlug,
+    async function (freeRerun) { await _doGenerate(freeRerun); },
+    '✓ Bạn đã xem duyên nợ của cặp lá số này — mở lại, không trừ Lượng');
+}
+
+async function _doGenerate(freeRerun) {
+  document.getElementById('birthPanel').style.display = 'none';
+  document.getElementById('resPanel').style.display = 'block';
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('card').style.display = 'none';
+  document.getElementById('storyBlock').style.display = 'none';
+  document.getElementById('eraLine').style.display = 'none';
+  document.getElementById('birthLine').style.display = 'none';
+  document.getElementById('basisBlock').style.display = 'none';
+  document.getElementById('imgLoadStatus').style.display = 'none';
+  document.getElementById('imgActions').style.display = 'none';
+  document.getElementById('resultImg').style.display = 'none';
+  document.getElementById('imgPlaceholder').style.display = 'flex';
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', DN_STEPS);
+  _loadingCtl.start();
+
+  var token = window.Auth?.getSession()?.access_token || '';
+  var call = function (phase) {
+    return fetch('/api/duyen-no-tien-kiep', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify({
+        birthA: _lastA, birthB: _lastB,
+        nameA: _lastA.name || '', nameB: _lastB.name || '',
+        phase: phase, slug: _currentSlug,
+      }),
+    });
+  };
+
+  // Hai pha SONG SONG — truyện hiện trước để đọc, tranh chèn vào sau.
+  var storyP = call('story');
+  var imageP = call('image');
+
+  try {
+    var res = await storyP;
+    var data = await res.json();
+    if (res.status === 402 && freeRerun) {
+      imageP.catch(function () {});
+      _loadingCtl && _loadingCtl.stop();
+      showForm();
+      document.getElementById('loading').style.display = 'none';
+      await TuviPaywall.requireCredits(_currentSlug, async function () { await _doGenerate(false); });
+      return;
+    }
+    if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
+    _lastStory = data;
+    renderStory(data);
+    _loadingCtl && _loadingCtl.finish();
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('card').style.display = 'block';
+    document.getElementById('btnEdit').style.display = '';
+    if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+
+    // Rail nạp lá số của NGƯỜI THỨ NHẤT (người đang dùng máy). Prompt phía
+    // server có luật cứng cấm luận sâu về người thứ hai — không có lá số của
+    // họ trong ngữ cảnh, nói bừa là bịa.
+    var nvA = (data.nhanVatA || {}).ten || 'nhân vật thứ nhất';
+    var nvB = (data.nhanVatB || {}).ten || 'nhân vật thứ hai';
+    Shell.setContext({
+      birth: _lastA,
+      wrap: 'past-life-bond',
+      // PHẢI gửi kèm lá số người thứ hai: mối duyên và nền văn minh chung suy
+      // từ QUAN HỆ giữa hai lá số. Chỉ gửi `birth` rồi dùng wrap 'past-life'
+      // thì server bốc nền văn minh riêng cho một người — rail sẽ kể một thế
+      // giới KHÁC thế giới vừa hiện trên màn hình.
+      wrapBirthB: _lastB,
+      label: 'Duyên nợ tiền kiếp',
+      greeting: 'Mối duyên giữa **' + nvA + '** và **' + nvB + '** đến đây là hết phần chính. Bạn muốn hỏi gì thêm?',
+      chips: [
+        'Vì sao lại luận ra mối duyên này?',
+        nvA + ' là người thế nào?',
+        'Hai người dễ va nhau ở chỗ nào?',
+        'Kiếp này gặp lại thì nên giữ khoảng cách ra sao?',
+      ],
+    });
+  } catch (e) {
+    _loadingCtl && _loadingCtl.stop();
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('resPanel').style.display = 'none';
+    document.getElementById('birthPanel').style.display = 'block';
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+    imageP.catch(function () {});
+    return;
+  }
+
+  try {
+    var ires = await imageP;
+    var idata = await ires.json();
+    if (!ires.ok || !idata.success) throw new Error(idata.error || 'Lỗi ' + ires.status);
+    _resultImgUrl = idata.imageUrl;
+    setResultImage(idata.imageUrl);
+    publishShareable(idata.imageUrl);
+    _loadHistory();
+  } catch (e2) {
+    document.getElementById('imgPlaceholder').textContent = 'Không vẽ được bức tranh lần này. Phần câu chuyện phía dưới vẫn đầy đủ.';
+    publishShareable('');
+  }
+}
+
+// esc() dùng chung từ /laso-chart.js (đã load ở trên) — không khai lại.
+
+function renderStory(data) {
+  var bond = data.bond || {};
+  document.getElementById('bondKind').textContent = bond.label || 'Mối duyên';
+  document.getElementById('tuaDe').textContent = data.tuaDe || bond.label || '';
+  document.getElementById('bondGist').textContent = bond.gist || '';
+
+  var e = data.era || {};
+  var el = document.getElementById('eraLine');
+  if (e.label) {
+    el.textContent = e.label + (e.ageLabel ? ' · ' + e.ageLabel : '');
+    el.style.display = 'inline-block';
+  } else { el.style.display = 'none'; }
+
+  // Hai dòng lá số — người nhận link chia sẻ phải biết bản này của cặp nào.
+  var bl = document.getElementById('birthLine');
+  var bs = (window.Shell && Shell.birthSummary) ? Shell.birthSummary : null;
+  if (bs) {
+    var sa = bs(_lastA), sb = bs(_lastB);
+    if (sa || sb) { bl.textContent = 'Lá số: ' + sa + '  ·  ' + sb; bl.style.display = 'block'; }
+    else { bl.style.display = 'none'; }
+  } else { bl.style.display = 'none'; }
+
+  var A = data.nhanVatA || {}, B = data.nhanVatB || {};
+  document.getElementById('pairBlock').innerHTML = [A, B].map(function (p) {
+    return '<div class="dn-person">' +
+      '<div class="nm">' + esc(p.ten || '') + '</div>' +
+      '<div class="oc">' + esc(p.danhXung || '') + '</div>' +
+      '<div class="of">' + (p.gioiTinh === 'nu' ? 'Nữ' : 'Nam') + '</div>' +
+    '</div>';
+  }).join('');
+
+  document.getElementById('moTaMoiDuyen').textContent = data.moTaMoiDuyen || '';
+  document.getElementById('moTaBlock').style.display = data.moTaMoiDuyen ? '' : 'none';
+
+  // Khối cơ sở ĐÓNG SẴN (<details>): kết luận kiểu "kiếp trước hai người ở hai
+  // bờ chiến tuyến" là câu nặng, phải có chỗ chỉ ra nó suy từ đâu. Nhưng để mở
+  // sẵn thì thuật ngữ tử vi đập vào mắt ngay trên câu chuyện — đúng thứ đã phải
+  // gỡ khỏi trang Chân Dung Tiền Kiếp. Đóng lại là giữ được cả hai.
+  var sig = bond.signals || [];
+  if (sig.length) {
+    document.getElementById('basisList').innerHTML = sig.map(function (s) {
+      return '<li><b>' + esc(s.label) + ':</b> ' + esc(s.detail) + '</li>';
+    }).join('');
+    document.getElementById('basisBlock').style.display = 'block';
+  }
+
+  document.getElementById('actList').innerHTML = (data.acts || []).map(function (a) {
+    return '<div class="dn-act">' +
+      '<div class="dn-act-head">' +
+        '<span class="dn-act-title">' + esc(a.title) + '</span>' +
+        '<span class="dn-act-stage">' + esc(a.stage) + '</span>' +
+      '</div><p>' + esc(a.text) + '</p></div>';
+  }).join('');
+
+  var kl = document.getElementById('ketLuan');
+  if (data.ketLuan) { kl.textContent = data.ketLuan; kl.style.display = 'block'; }
+  else { kl.style.display = 'none'; }
+  document.getElementById('storyBlock').style.display = 'block';
+}
+
+function publishShareable(imageUrl) {
+  var d = _lastStory;
+  if (!d) return;
+  var bond = d.bond || {};
+  var A = d.nhanVatA || {}, B = d.nhanVatB || {};
+  var blocks = [];
+  blocks.push({
+    header: 'Duyên Nợ Tiền Kiếp',
+    image: imageUrl || undefined,
+    text: [bond.label, d.tuaDe].filter(Boolean).join(' — ') + '\n' +
+      [A.ten, B.ten].filter(Boolean).join('  ·  ') + '\n\n' + (d.moTaMoiDuyen || ''),
+  });
+  var storyText = (d.acts || []).map(function (a) {
+    return a.title + ' (' + a.stage + ')\n' + a.text;
+  }).join('\n\n');
+  if (storyText) blocks.push({ header: 'Mối Duyên — 4 Hồi', text: storyText });
+  if (d.ketLuan) blocks.push({ header: 'Lời Kết', text: d.ketLuan });
+
+  Shell.setShareable({
+    kind: imageUrl ? 'image' : 'text',
+    toolId: 'duyen-no-tien-kiep',
+    birth: _lastA,
+    title: [A.ten, B.ten].filter(Boolean).join(' & ') || 'Duyên nợ tiền kiếp',
+    imageUrl: imageUrl || undefined,
+    blocks: blocks,
+  });
+
+  _mountInviteCta();
+}
+
+function _mountInviteCta() {
+  var host = document.getElementById('resPanel');
+  if (!host) return;
+  var go = function () {
+    if (window.InviteCta) window.InviteCta.mount(host, { toolId: 'duyen-no-tien-kiep', toolLabel: 'lượt xem' });
+  };
+  if (window.InviteCta) return go();
+  if (document.getElementById('_ivc_js')) return;
+  var s = document.createElement('script');
+  s.id = '_ivc_js'; s.src = '/invite-cta.js?v=1'; s.async = true; s.onload = go;
+  document.head.appendChild(s);
+}
+
+function _ensurePoster() {
+  if (window.Poster) return Promise.resolve();
+  return new Promise(function (resolve, reject) {
+    var s = document.getElementById('_poster_js');
+    if (!s) {
+      s = document.createElement('script');
+      s.id = '_poster_js'; s.src = '/poster.js?v=5';
+      document.head.appendChild(s);
+    }
+    s.addEventListener('load', function () { resolve(); });
+    s.addEventListener('error', function () { reject(new Error('poster_js')); });
+  });
+}
+
+function _posterOpts() {
+  var d = _lastStory || {};
+  var bond = d.bond || {};
+  var A = d.nhanVatA || {}, B = d.nhanVatB || {};
+  return {
+    imageUrl: _resultImgUrl,
+    // 🔑 Ảnh tool này KHỔ NGANG. Để mặc định `cover` thì khung 9:16 cắt mất
+    // ~200px mỗi bên — đúng hai gương mặt. `contain` chừa dải navy, giữ đủ hai
+    // người (xem drawContain trong poster.js).
+    imageFit: 'contain',
+    title: [A.ten, B.ten].filter(Boolean).join(' & ') || 'Duyên nợ tiền kiếp',
+    subtitle: [bond.label, (d.era || {}).label].filter(Boolean).join(' · '),
+    quote: Poster.pickQuote([d.ketLuan, d.moTaMoiDuyen, ((d.acts || []).map(function (a) { return a.text || ''; }).join(' '))]),
+    qrUrl: Poster.qrLink('duyen-no-tien-kiep', '/app/duyen-no-tien-kiep'),
+    qrCaption: 'Quét mã — xem duyên nợ của bạn',
+  };
+}
+
+async function downloadResult() {
+  if (!_resultImgUrl) return;
+  var btn = document.getElementById('btnDownload');
+  var label = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = 'Đang dựng ảnh…'; }
+  try {
+    await _ensurePoster();
+    await Poster.download(_posterOpts(), 'duyen-no-tien-kiep-tuviminhbao.png');
+    if (window.Track) Track.event('poster_download', { tool_id: 'duyen-no-tien-kiep' });
+  } catch (e) {
+    await _downloadRaw();
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = label; }
+  }
+}
+
+// Dựng poster hỏng thì vẫn phải đưa được ảnh cho người ta — rơi về file thô.
+// CỐ Ý không gọi gì trong Poster ở đây: nhánh này chạy đúng lúc poster.js nạp
+// không được, tức lúc Poster không tồn tại.
+async function _downloadRaw() {
+  if (!_resultImgUrl) return;
+  try {
+    var res = await fetch(_resultImgUrl);
+    var blob = await res.blob();
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'duyen-no-tien-kiep.png';
+    a.click(); URL.revokeObjectURL(url);
+  } catch (e) { window.open(_resultImgUrl, '_blank'); }
+}
+
+function showForm() {
+  document.getElementById('resPanel').style.display = 'none';
+  document.getElementById('birthPanel').style.display = 'block';
+  document.getElementById('btnEdit').style.display = 'none';
+  Shell.setShareable(null);
+}
+
+async function _loadHistory() {
+  try {
+    var token = window.Auth?.getSession()?.access_token || '';
+    if (!token) return;
+    var res = await fetch('/api/duyen-no-tien-kiep?action=history', { headers: { Authorization: 'Bearer ' + token } });
+    var data = await res.json();
+    if (!data.success || !data.items?.length) return;
+    document.getElementById('histList').innerHTML = data.items.map(function (it) {
+      return '<img src="' + it.image_url + '" title="' + esc(it.bond_label || '') + '" onclick="window.open(\'' + it.image_url + '\',\'_blank\')">';
+    }).join('');
+    document.getElementById('histBlock').style.display = 'block';
+  } catch (e) {}
+}
+
+TuviPaywall.init({ product: 'duyen-no-tien-kiep', slug: function () { return _currentSlug; } });
+</script>
+</body>
+</html>
