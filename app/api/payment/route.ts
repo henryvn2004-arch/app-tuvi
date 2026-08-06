@@ -1047,6 +1047,82 @@ async function handleAdminContentBoard(request: NextRequest): Promise<Response> 
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
+// ── GET/POST: admin-van-dap ──
+// Trang Nội Dung (admin.html) TRƯỚC ĐÂY đọc/ghi bảng `van_dap` THẲNG qua
+// PostgREST bằng anon key, nên bảng buộc phải mở policy
+// `"anon full access for now"` (role `public`, cmd `ALL`, `qual = true`) — tức
+// ai cũng xoá/sửa được mọi dòng kho Khảo Luận + pipeline video. Gom cả ĐỌC lẫn
+// GHI về đây (verifyAdmin + service key) để policy đó gỡ được.
+// ⚠️ Phải gom CẢ ĐƯỜNG ĐỌC, không chỉ đường ghi: policy còn lại
+// (`anon read published`) chỉ cho đọc bài ĐÃ XUẤT BẢN, nên bảng admin mất sạch
+// bản nháp nếu chỉ chuyển phần ghi.
+const VAN_DAP_ID_RE = /^[A-Za-z0-9_-]{1,64}$/;
+
+async function handleAdminVanDap(request: NextRequest, sp: URLSearchParams): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const mode = sp.get('mode') || 'list';
+  try {
+    if (mode === 'stats') {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/van_dap?select=publish_status,tts_status,yt_status&limit=5000`,
+        { headers: SB_HEADERS, cache: 'no-store' }
+      );
+      if (!res.ok) return err(await res.text());
+      return ok({ rows: await res.json() });
+    }
+
+    if (mode === 'one') {
+      const id = sp.get('id') || '';
+      if (!VAN_DAP_ID_RE.test(id)) return err('Bad id', 400);
+      const select = 'id,tts_status,tts_error,noi_dung,audio_hoi_url,audio_tl_url,tts_provider';
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/van_dap?id=eq.${encodeURIComponent(id)}&select=${select}`,
+        { headers: SB_HEADERS, cache: 'no-store' }
+      );
+      if (!res.ok) return err(await res.text());
+      return ok({ rows: await res.json() });
+    }
+
+    // mode=list — giữ đúng bộ lọc/sắp xếp mà trang vẫn dùng.
+    let q = 'van_dap?order=created_at.desc&limit=5000';
+    const status = sp.get('status') || '';
+    const chuDe = sp.get('chu_de') || '';
+    if (status) q += `&publish_status=eq.${encodeURIComponent(status)}`;
+    if (chuDe) q += `&chu_de=eq.${encodeURIComponent(chuDe)}`;
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${q}`, { headers: SB_HEADERS, cache: 'no-store' });
+    if (!res.ok) return err(await res.text());
+    return ok({ rows: await res.json() });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+async function handleAdminVanDapSave(request: NextRequest, body: Record<string, unknown>): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const id = body.id ? String(body.id) : '';
+  const item = body.item;
+  if (!item || typeof item !== 'object' || Array.isArray(item)) return err('Missing item', 400);
+  if (id && !VAN_DAP_ID_RE.test(id)) return err('Bad id', 400);
+
+  try {
+    const url = id
+      ? `${SUPABASE_URL}/rest/v1/van_dap?id=eq.${encodeURIComponent(id)}`
+      : `${SUPABASE_URL}/rest/v1/van_dap`;
+    const res = await fetch(url, {
+      method: id ? 'PATCH' : 'POST',
+      headers: { ...SB_HEADERS, Prefer: 'return=representation' },
+      body: JSON.stringify(item),
+    });
+    if (!res.ok) return err(await res.text());
+    const text = await res.text();
+    return ok({ rows: text ? JSON.parse(text) : [] });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
 // ── GET: admin-khao-luan ──
 async function handleAdminKhaoLuan(request: NextRequest): Promise<Response> {
   const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
@@ -1311,6 +1387,7 @@ export async function GET(request: NextRequest) {
   if (action === 'admin-channels') return handleAdminChannels(request);
   if (action === 'admin-seo')      return handleAdminSeo(request);
   if (action === 'admin-content-board') return handleAdminContentBoard(request);
+  if (action === 'admin-van-dap') return handleAdminVanDap(request, searchParams);
   if (action === 'admin-khao-luan') return handleAdminKhaoLuan(request);
   if (action === 'admin-nghien-cuu') return handleAdminNghienCuu(request);
   if (action === 'admin-mcp') return handleAdminMcp(request);
@@ -2131,6 +2208,7 @@ export async function POST(request: NextRequest) {
   if (action === 'admin-cron-trigger') return handleAdminCronTrigger(request, body);
   if (action === 'admin-channel-broadcast') return handleAdminChannelBroadcast(request, body);
   if (action === 'admin-nudge-user') return handleAdminNudgeUser(request, body);
+  if (action === 'admin-van-dap-save') return handleAdminVanDapSave(request, body);
   if (action === 'admin-media-decide') return handleAdminMediaDecide(request, body);
   if (action === 'admin-seeding-group') return handleAdminSeedingGroup(request, body);
   if (action === 'admin-seeding-draft') return handleAdminSeedingDraft(request, body);

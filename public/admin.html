@@ -4673,8 +4673,24 @@ async function sbFetch(path, opts = {}) {
   return text ? JSON.parse(text) : null;
 }
 
+// van_dap KHÔNG còn đi thẳng PostgREST bằng anon key. Cả ĐỌC lẫn GHI nay qua
+// /api/payment (verifyAdmin + service key) để bảng gỡ được policy
+// "anon full access for now" (role public, cmd ALL) — anon vốn xoá/sửa được
+// mọi dòng. Hai helper dưới GIỮ NGUYÊN hợp đồng cũ của sbFetch: trả mảng dòng,
+// và NÉM lỗi (các nhánh catch quanh đây đang dựa vào đó để hiện toast).
+async function vdGet(params = '') {
+  const r = await apiGet('admin-van-dap', params);
+  if (!r || r.error) throw new Error((r && r.error) || 'Không đọc được van_dap');
+  return r.rows || [];
+}
+async function vdSave(item, id = null) {
+  const r = await apiPost('admin-van-dap-save', id ? { id, item } : { item });
+  if (!r || r.error) throw new Error((r && r.error) || 'Không lưu được van_dap');
+  return r.rows || [];
+}
+
 async function getStats() {
-  const data = await sbFetch('van_dap?select=publish_status,tts_status,yt_status');
+  const data = await vdGet('&mode=stats');
   if (!data) return {};
   return {
     total: data.length,
@@ -4686,26 +4702,14 @@ async function getStats() {
 }
 
 async function getItems(filters = {}) {
-  let q = 'van_dap?order=created_at.desc';
-  if (filters.status) q += `&publish_status=eq.${filters.status}`;
-  if (filters.chu_de) q += `&chu_de=eq.${filters.chu_de}`;
-  return sbFetch(q) || [];
+  let q = '&mode=list';
+  if (filters.status) q += `&status=${encodeURIComponent(filters.status)}`;
+  if (filters.chu_de) q += `&chu_de=${encodeURIComponent(filters.chu_de)}`;
+  return (await vdGet(q)) || [];
 }
 
 async function saveItemToDB(item, id = null) {
-  if (id) {
-    return sbFetch(`van_dap?id=eq.${id}`, {
-      method: 'PATCH',
-      prefer: 'return=representation',
-      body: JSON.stringify(item)
-    });
-  } else {
-    return sbFetch('van_dap', {
-      method: 'POST',
-      prefer: 'return=representation',
-      body: JSON.stringify(item)
-    });
-  }
+  return vdSave(item, id);
 }
 
 // ────────────────────────────────────────────────
@@ -5314,7 +5318,7 @@ function startTTSPoller(id) {
   _ttsPoller = setInterval(async () => {
     attempts++;
     try {
-      const data = await sbFetch(`van_dap?id=eq.${id}&select=id,tts_status,tts_error,noi_dung,audio_hoi_url,audio_tl_url,tts_provider`);
+      const data = await vdGet(`&mode=one&id=${encodeURIComponent(id)}`);
       const item = data?.[0];
       if (!item) return;
 
