@@ -153,7 +153,15 @@ export interface ChatRequestV1 {
    * tự tính lại từ birth (computePastLife deterministic) — vừa an toàn, vừa
    * chắc chắn trùng nhân vật đang hiện trên màn hình.
    */
-  wrap?: 'past-life' | 'past-life-bond';
+  wrap?: 'past-life' | 'past-life-bond' | 'nguoi-khac';
+  /**
+   * Quan hệ với người trong lá số — chỉ dùng với `wrap: 'nguoi-khac'`.
+   *
+   * Vẫn là ENUM: server chạy qua `resolveQuanHe` (danh sách trắng 8 giá trị),
+   * chuỗi lạ rơi về mặc định. Không có đường nào cho client đẩy prose vào
+   * system, đúng như chú thích của `wrap` ở trên.
+   */
+  wrapQuanHe?: string;
   /**
    * Lá số của NGƯỜI THỨ HAI — chỉ dùng với `wrap: 'past-life-bond'`.
    *
@@ -289,8 +297,16 @@ export function validateChatRequest(body: unknown):
     return { ok: false, error: 'Thiếu client.platform / client.version' };
   }
 
-  if (b.wrap != null && b.wrap !== 'past-life' && b.wrap !== 'past-life-bond') {
+  if (
+    b.wrap != null &&
+    b.wrap !== 'past-life' &&
+    b.wrap !== 'past-life-bond' &&
+    b.wrap !== 'nguoi-khac'
+  ) {
     return { ok: false, error: 'wrap không hợp lệ' };
+  }
+  if (b.wrapQuanHe != null && typeof b.wrapQuanHe !== 'string') {
+    return { ok: false, error: 'wrapQuanHe không hợp lệ' };
   }
   if (b.wrapBirthB != null && typeof b.wrapBirthB !== 'object') {
     return { ok: false, error: 'wrapBirthB không hợp lệ' };

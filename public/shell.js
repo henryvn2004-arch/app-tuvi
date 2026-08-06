@@ -24,6 +24,7 @@
       { id: 'chan-dung-vo-chong', label: 'Chân dung vợ chồng', href: '/app/chan-dung-vo-chong', icon: 'image' },
       { id: 'chan-dung-tien-kiep', label: 'Chân dung tiền kiếp', href: '/app/chan-dung-tien-kiep', icon: 'temple' },
       { id: 'duyen-no-tien-kiep', label: 'Duyên nợ tiền kiếp', href: '/app/duyen-no-tien-kiep', icon: 'heart-handshake' },
+      { id: 'nguoi-khac', label: 'Lá số người khác', href: '/app/nguoi-khac', icon: 'user' },
     ] },
     { group: 'Tử Bình', open: false, items: [
       { id: 'bat-tu',     label: 'Lá số Bát Tự',        href: '/app/bat-tu',     icon: 'rows' },
@@ -169,7 +170,7 @@
     var el = document.getElementById('tvmb-charts-js');
     if (el) { el.addEventListener('load', go); return; }
     var s = document.createElement('script');
-    s.id = 'tvmb-charts-js'; s.src = '/user-charts.js?v=1'; s.async = true;
+    s.id = 'tvmb-charts-js'; s.src = '/user-charts.js?v=2'; s.async = true;
     s.addEventListener('load', go);
     (document.head || document.documentElement).appendChild(s);
   }
