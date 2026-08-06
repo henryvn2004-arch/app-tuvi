@@ -25,6 +25,8 @@
       { id: 'chan-dung-tien-kiep', label: 'Chân dung tiền kiếp', href: '/app/chan-dung-tien-kiep', icon: 'temple' },
       { id: 'duyen-no-tien-kiep', label: 'Duyên nợ tiền kiếp', href: '/app/duyen-no-tien-kiep', icon: 'heart-handshake' },
       { id: 'nguoi-khac', label: 'Lá số người khác', href: '/app/nguoi-khac', icon: 'user' },
+      { id: 'day-con', label: 'Dạy con theo lá số', href: '/app/day-con', icon: 'baby' },
+      { id: 'nhan-mach', label: 'Sổ nhân mạch', href: '/app/nhan-mach', icon: 'users' },
     ] },
     { group: 'Tử Bình', open: false, items: [
       { id: 'bat-tu',     label: 'Lá số Bát Tự',        href: '/app/bat-tu',     icon: 'rows' },

@@ -489,12 +489,31 @@ const HUONG_VI: Record<string, string> = {
   flat: 'đi ngang',
 };
 
-const BU: Record<KieuId, KieuId> = {
+export const BU: Record<KieuId, KieuId> = {
   'khai-sang': 'hop-tac',
   'hop-tac': 'khai-sang',
   'lanh-dao': 'ho-tro',
   'ho-tro': 'lanh-dao',
 };
+
+/**
+ * Năm sinh suy từ chính lá số.
+ *
+ * 🪤 Lá số KHÔNG có trường `namXem` (chỉ có `tuoiXem`) — lấy nó ra là
+ * `undefined` rồi mọi năm hiện trên trang thành 0, IM LẶNG. Suy từ
+ * `tieuVanScores`: mỗi ô đã mang CẶP (nam, tuoi) nên không phải giả định gì về
+ * quy ước tuổi. `tuoi` ở đây là TUỔI MỤ ⇒ năm = namSinh + tuổi − 1; quên trừ 1
+ * là mọi mốc lệch đúng một năm mà nhìn không ra.
+ *
+ * Tách ra khỏi `computeCongSo` để tool Dạy Con dùng CHUNG — hai bản của cùng
+ * một phép quy đổi tuổi thì sớm muộn cũng trôi khỏi nhau.
+ */
+export function namSinhTuLaSo(ls: Laso, namXem: number): number | null {
+  const tvs = (ls.tieuVanScores as Rec[]) || [];
+  const moc = tvs.find((t) => typeof t.nam === 'number' && typeof t.tuoi === 'number');
+  if (moc) return (moc.nam as number) - (moc.tuoi as number) + 1;
+  return typeof ls.tuoiXem === 'number' ? namXem - (ls.tuoiXem as number) + 1 : null;
+}
 
 // ── 5. Gợi ngành nghề cụ thể ────────────────────────────────
 // Đọc chức phận ở cung Quan Lộc qua `resolveCareerBase` (past-life.ts) — CÙNG
@@ -740,17 +759,7 @@ export function computeCongSo(ls: Laso, trangThai: TrangThai = 'nhan-vien', namX
   let start = dvs.findIndex((d) => (d.tuoiEnd as number) >= 25);
   if (start < 0) start = Math.min(2, Math.max(0, dvs.length - 4));
   const dvHienTai = ls.daiVanHienTai as Rec | undefined;
-  // 🪤 Lá số KHÔNG có trường `namXem` (chỉ có `tuoiXem`) — lấy nó ra là
-  // `undefined` rồi mọi năm hiện trên trang thành 0, im lặng. Suy năm sinh từ
-  // chính `tieuVanScores`: mỗi ô đã mang CẶP (nam, tuoi) nên không phải giả
-  // định gì về quy ước tuổi. `tuoi` ở đây là TUỔI MỤ, nên năm = namSinh + tuổi
-  // − 1; quên trừ 1 là cả bốn chặng lệch đúng một năm mà nhìn không ra.
-  const mocTuoi = tvs.find((t) => typeof t.nam === 'number' && typeof t.tuoi === 'number');
-  const namSinh = mocTuoi
-    ? (mocTuoi.nam as number) - (mocTuoi.tuoi as number) + 1
-    : typeof ls.tuoiXem === 'number'
-      ? nam - (ls.tuoiXem as number) + 1
-      : null;
+  const namSinh = namSinhTuLaSo(ls, nam);
 
   const loTrinh: NacDaiVan[] = dvs.slice(start, start + 4).map((dv, i) => {
     const p = palaces(ls)[dv.cungIdx as number];

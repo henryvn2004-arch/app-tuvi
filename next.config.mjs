@@ -39,6 +39,8 @@ const nextConfig = {
       { source: '/app/chan-dung-tien-kiep', destination: '/app-chan-dung-tien-kiep.html' },
       { source: '/app/duyen-no-tien-kiep', destination: '/app-duyen-no-tien-kiep.html' },
       { source: '/app/nguoi-khac', destination: '/app-nguoi-khac.html' },
+      { source: '/app/day-con', destination: '/app-day-con.html' },
+      { source: '/app/nhan-mach', destination: '/app-nhan-mach.html' },
       { source: '/xem-tuoi',            destination: '/xem-tuoi.html'        },
       { source: '/xem-lam-an',          destination: '/xem-lam-an.html'      },
       { source: '/la-so',               destination: '/la-so.html'           },
