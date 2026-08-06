@@ -43,6 +43,8 @@ const TuviPaywall = (() => {
     'chan-dung-tien-kiep': { title: 'Chân Dung Tiền Kiếp' },
     'duyen-no-tien-kiep': { title: 'Duyên Nợ Tiền Kiếp' },
     'nguoi-khac': { title: 'Lá Số Người Khác' },
+    'day-con': { title: 'Dạy Con Theo Lá Số' },
+    'nhan-mach': { title: 'Sổ Nhân Mạch' },
   };
 
   const TOOL_TYPE = {
@@ -69,6 +71,8 @@ const TuviPaywall = (() => {
     'chan-dung-tien-kiep': 'use_chan_dung_tien_kiep',
     'duyen-no-tien-kiep': 'use_duyen_no_tien_kiep',
     'nguoi-khac': 'use_nguoi_khac',
+    'day-con': 'use_day_con',
+    'nhan-mach': 'use_nhan_mach',
   };
 
   let _cfg        = null;

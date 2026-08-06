@@ -43,6 +43,8 @@ import { computePastLifeBond } from '@/lib/engine/past-life-bond';
 import { bondRailWrapper } from '@/lib/agent/past-life-bond-story';
 import { computeNguoiKhac, resolveQuanHe } from '@/lib/engine/nguoi-khac';
 import { nguoiKhacRailWrapper } from '@/lib/agent/nguoi-khac-prompt';
+import { computeDayCon, resolveMoiLo } from '@/lib/engine/day-con';
+import { dayConRailWrapper } from '@/lib/agent/day-con-prompt';
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!;
@@ -317,6 +319,24 @@ export async function runAgent(
         system += '\n\n' + nguoiKhacRailWrapper(p, String(req.birth.name || ''));
       } catch (e) {
         console.error('[runAgent] nguoiKhacRailWrapper lỗi:', (e as Error)?.message);
+      }
+    }
+
+    // Rail của tool Dạy Con. Cùng thế với `nguoi-khac`: `req.birth` là lá số
+    // ĐỨA TRẺ chứ không phải người đang chat, nên lớp vỏ cũng phải đè
+    // `XUNG_HO_RULE`. `wrapBirthB` là lá số CHA/MẸ (tuỳ chọn).
+    if (req.wrap === 'day-con' && ctx.ls && req.birth) {
+      try {
+        const g = req.birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
+        let lsChaMe = null;
+        if (req.wrapBirthB) {
+          const rB = computeLaso(req.wrapBirthB);
+          if (rB.ok && rB.ls) lsChaMe = rB.ls;
+        }
+        const p = computeDayCon(ctx.ls, g, resolveMoiLo(req.wrapMoiLo), lsChaMe);
+        system += '\n\n' + dayConRailWrapper(p, String(req.birth.name || ''));
+      } catch (e) {
+        console.error('[runAgent] dayConRailWrapper lỗi:', (e as Error)?.message);
       }
     }
 
@@ -842,6 +862,7 @@ const SCENARIO_FIELD: Record<string, string> = {
   'luc-nham': 'lucNhamData',
   'ban-do-sao': 'banDoSaoData',
   'cong-so': 'congSoData',
+  'nhan-mach': 'nhanMachData',
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function scenarioToBody(scenario: ScenarioInput, messages: ChatMessage[]): any {
