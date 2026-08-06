@@ -151,6 +151,28 @@
     (document.head || document.documentElement).appendChild(s);
   }
 
+  // SỔ LÁ SỐ theo tài khoản (U4) — nạp ĐỘNG và CHỈ khi đã đăng nhập.
+  //
+  // Vì sao không đưa thẻ <script> vào 7 trang có form: thêm tay thì sẽ sót, mà
+  // sót trang nào là trang đó âm thầm không có sổ. Vì sao chỉ khi đăng nhập:
+  // khách vãng lai không có sổ, nạp thêm một file cho họ là tốn băng thông đổi
+  // lấy một thứ không dùng được.
+  //
+  // ⚠️ Toàn bộ phần này là LỚP THÊM. `rememberBirth`/`getRememberedBirth`/
+  // `prefillForm` vẫn chạy đồng bộ trên localStorage y như trước — sổ hỏng,
+  // mạng chết hay file không nạp được thì trang vẫn hoạt động nguyên vẹn.
+  function ensureUserChartsJs() {
+    if (!getToken()) return;
+    var go = function () { try { window.UserCharts.mount(); } catch (e) { /* ignore */ } };
+    if (window.UserCharts) return go();
+    var el = document.getElementById('tvmb-charts-js');
+    if (el) { el.addEventListener('load', go); return; }
+    var s = document.createElement('script');
+    s.id = 'tvmb-charts-js'; s.src = '/user-charts.js?v=1'; s.async = true;
+    s.addEventListener('load', go);
+    (document.head || document.documentElement).appendChild(s);
+  }
+
   // Mã giới thiệu CỦA CHÍNH người đang đăng nhập — nạp sẵn để lúc bấm "Chia sẻ"
   // gắn được ?ref= vào link mà không phải chờ thêm một vòng mạng.
   var _refCode = null, _refCodeBusy = false;
@@ -1404,7 +1426,14 @@
     // Nhớ thông tin sinh để chuyển tay giữa các tool trong shell (Lá số ↔ Luận giải ↔
     // Bát Tự) — fd = TuviForm.getData() (hoten/ngay/thang/nam/gioHour/gioPhut/gioitinh)
     // + namxem riêng của trang (năm luận, ngoài field TuviForm). localStorage, không server.
-    rememberBirth: function (fd) { try { localStorage.setItem('app_birth', JSON.stringify(fd)); } catch (e) { /* ignore */ } },
+    // localStorage GIỮ NGUYÊN là đường ghi chính và ĐỒNG BỘ — mọi tool đọc lại
+    // ngay ở lượt sau bằng getRememberedBirth(). Phần ghi lên sổ tài khoản là
+    // BẮN-VÀ-QUÊN nằm sau: không await, không chặn, hỏng thì thôi. Đảo thứ tự
+    // hai việc này là biến một hàm đồng bộ thành phụ thuộc mạng.
+    rememberBirth: function (fd) {
+      try { localStorage.setItem('app_birth', JSON.stringify(fd)); } catch (e) { /* ignore */ }
+      try { if (window.UserCharts) window.UserCharts.save(fd, ''); } catch (e) { /* ignore */ }
+    },
     getRememberedBirth: function () { return birthSnapshot(); },
     // Gắn UTM + mã giới thiệu vào một URL bất kỳ (dùng cho mã QR in trong ảnh
     // tải về — ảnh không mang link bấm được nên QR là đường đo duy nhất).
@@ -1820,6 +1849,9 @@
     // Viral: bắt ?ref= (người tới từ link chia sẻ) + nạp sẵn mã của chính mình.
     ensureReferralJs();
     loadRefCode();
+    // Sổ lá số — đặt SAU prefillForm của trang (trang gọi ở init của chính nó,
+    // đồng bộ) nên không có lượt nào đá nhau: sổ chỉ điền khi form còn trống.
+    ensureUserChartsJs();
     try { track('tool_open', { tool_id: ACTIVE || 'app' }); } catch (e) { /* ignore */ }
     // Nối phiên từ link chia sẻ: tải snapshot rồi reload ?auto=1 (boot dừng ở đây).
     if (consumeFromShare()) return;
