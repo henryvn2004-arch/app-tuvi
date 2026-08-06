@@ -5,7 +5,15 @@ import { createClient } from '@supabase/supabase-js';
 import { ok, err, options, parseBody } from '@/lib/cors';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
-const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY!;
+// GHI bằng service key, KHÔNG phải anon key. Trước đây route này ghi bằng anon
+// nên bảng laso_public buộc phải mở policy `UPDATE cho public, qual=true` —
+// tức bất kỳ ai cũng PATCH thẳng được mọi dòng qua PostgREST, không cần đi qua
+// route này. Cùng lối `upload-laso-image/route.ts` vốn đã dùng service key trên
+// CHÍNH bảng này. Đổi xong thì policy anon kia mới gỡ được mà không gãy chỗ lưu.
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY!;
+// Anon key giữ lại CHỈ để xác thực token người dùng: `auth.getUser` phải chạy ở
+// tư cách anon, đưa service key vào đó là lẫn hai vai và không có lợi gì.
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY!;
 
 // toolType (vd 'tu-binh') thêm tiền tố để mỗi sản phẩm lưu vào slug RIÊNG,
 // tránh đè lẫn nhau khi CÙNG một lá số (canChiNam+ngày sinh+giờ) được dùng cho
@@ -31,10 +39,11 @@ export async function POST(request: NextRequest) {
   const authToken = (request.headers.get('authorization') || '').replace('Bearer ', '').trim();
 
   try {
-    const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+    const sb = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
     if (authToken) {
-      const { data: { user } } = await sb.auth.getUser(authToken);
+      const sbAuth = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const { data: { user } } = await sbAuth.auth.getUser(authToken);
       if (user) userId = user.id;
     }
 
