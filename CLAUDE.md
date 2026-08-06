@@ -5,7 +5,122 @@
 
 ---
 
-## 📸 Vận hôm nay: poster đủ thông tin · QR đo được · nhập lá số tại chỗ (2026-08-05, PR này)
+## 💼 Track click108 → tool MỚI "Tử Vi Công Sở" (2026-08-06, PR này)
+
+Henry: *"cách mà trang click108 nó kết hợp tử vi với tâm lý học, quản trị học là
+thế nào thế?"* → khảo sát → *"làm luôn đi"*.
+
+### 🔴 ĐÍNH CHÍNH QUAN TRỌNG — KHÔNG PHẢI DISC, LÀ TỨ TƯỢNG KINH DỊCH
+Vòng khảo sát ĐẦU tao chỉ đọc được qua bản tóm tắt của công cụ tìm kiếm (proxy
+chặn host ngoài) và đã kết luận nhầm rằng 張盛舒 mượn khung DISC. Henry mở
+network policy → đọc được trang gốc → **sai**. Nguyên văn của chính ông ta
+(`sam.click108.com.tw/blog/?p=657`, mục `作品連載 · 紫微領導學`):
+
+> 陽性主星共計八顆，包括開創型（**老陽**）的七殺、破軍、廉貞、貪狼，以及領導型
+> （**少陰**）的紫微、天府、武曲、天相… 陰性主星共計六顆，包括支援型（**少陽**）
+> 的太陽、巨門、天機，以及合作型（**老陰**）的太陰、天梁、天同
+
+Cái "ánh xạ DISC" là **overlay của một blogger pixnet**, không phải khung gốc.
+🔑 **Bài học: bản tóm tắt của search engine trộn nguồn gốc với nguồn bình luận
+mà không nói cho biết.** Gặp claim quan trọng thì phải đọc trang gốc.
+
+### Khung thật của họ (đã đọc primary source)
+- **4 kiểu = tứ tượng áp lên 14 chính tinh tại cung MỆNH.** Trùng khít bộ sao
+  kinh điển: 殺破狼+廉 · 紫府武相 · 機巨陽 · 同梁陰.
+- **Mỗi kiểu điền đúng 5 ô cố định**: 本命驅力 (động lực gốc) · 命格特質 ·
+  關鍵問題 (câu hỏi chạy ngầm) · 領導型態 · 適合職場. Đây là thứ đáng học nhất —
+  không viết văn tuỳ hứng.
+- **2X3法則** = 2 lý thuyết (3 cung nhân sự `疾厄/命/部屬`; đại vận ảnh hưởng bản
+  mệnh) × 3 việc (tìm người bù · dựng đội · chuyển giao kế nhiệm).
+- **時與位** (Kinh Dịch): tính cách không tốt/xấu, chỉ hợp/không hợp bối cảnh.
+- **造命功課**: mỗi kiểu 4 bài học khi lần đầu cầm quân — phần bán được tiền vì
+  nó là việc LÀM ĐƯỢC, không phải lời mô tả.
+- Sản phẩm `紫微事業命盤` **NT$420** và là **#1 mục 網友熱推** — tool nghề nghiệp
+  là thứ bán chạy nhất của họ. Catalog xếp theo **CÂU HỎI ĐỜI SỐNG**, không theo
+  môn (site mình đang xếp theo môn).
+- 🔑 **Đòn rẻ nhất, hiệu quả nhất, đã chép**: ngoài ngày sinh còn hỏi
+  **事業現況** (5 lựa chọn) — một `<select>` đổi giọng cả báo cáo.
+
+### ⛔ Phần KHÔNG chép, và vì sao
+Ông tự viết *"2012 là năm KHOA HỌC MỆNH LÝ ra đời"*, tự ví mình là **佛洛伊德
+phương Đông**, gọi site mình là **唯一標準**. Không có nghiên cứu đối chứng nào.
+1.152 là số TỔ HỢP (144 lá số × 8 đại vận), không phải cỡ mẫu.
+⇒ Trang + prompt của mình **CẤM** chữ "khoa học / thống kê / trắc nghiệm đã kiểm
+định" và **cấm đối chiếu DISC/MBTI**. Nói "một khung đọc" thì đúng và vẫn bán được.
+
+### ✅ Tool mới `/app/cong-so` — `lib/engine/cong-so.ts` + `/api/cong-so`
+Miễn phí, **0 lượt LLM, 0đ**: tra bảng + đọc lại số engine đã tính. Rail vẫn
+tính `chat.cost` như mọi tool.
+- **🔑 PHÂN KIỂU BẰNG TOẠ ĐỘ, KHÔNG GÁN NHÃN CỨNG.** Đo 10.368 lá số trên MODULE
+  THẬT: **16,2% Mệnh vô chính diệu** (mượn xung chiếu) · **49,8% Mệnh có ≥2 chính
+  tinh**, trong đó **27,6% LẪN HAI NHÓM**.
+  🔑 **Phát hiện quyết định thiết kế: các cặp lẫn nhóm CHỈ có hai kiểu** —
+  khai-sáng+lãnh-đạo (14,1%) và hỗ-trợ+hợp-tác (13,5%), **KHÔNG lá số nào lẫn
+  qua ranh giới âm/dương**. Nên trục Âm/Dương chia đúng 50,0/50,0 và không bao
+  giờ mơ hồ; chỉ trục lão/thiếu mới cần phân xử. (Số này không có trong sách họ.)
+- **Ba luật đã cân, đo cùng bộ**: sao đầu tiên 28,6/27,6/22,4/21,4 (tuỳ thứ tự
+  engine trả → tuỳ tiện) · sao sáng nhất 28,6/25,6/24,4/21,4 · ✅ **toạ độ
+  27,0/26,8/23,2/23,0** (đều nhất) kèm **13,2% sát ranh → gọi thẳng "kiểu lai"**.
+  Ép nhãn cho nhóm đó là nói chắc điều mình không chắc.
+- **6 khối**: kiểu người + toạ độ · **radar 12 mặt** (dùng thẳng `cungScores`,
+  12 cung × 6 chiều engine đã có) · **4 chặng 40 năm** (`daiVans[].scoring.tong`,
+  kèm "thuận đà / ngược đà" = so âm-dương đại vận với kiểu bản mệnh) · bản mệnh
+  vs vận năm nay · **ghép đội** · lời riêng theo 5 tình trạng nghề.
+- ⚠️ **Ghép đội đọc theo CỔ PHÁP**: cấp trên = **Phụ Mẫu**, đồng sự = **Huynh
+  Đệ**, cấp dưới = **Nô Bộc**. 張盛舒 đọc cấp trên ở **Tật Ách** — đó là biến thể
+  của một tác giả, không kiểm chứng được, **cố ý không dùng**.
+- **Nội dung tự viết**, không dịch chữ của họ (bản quyền). `MENH_ROLE` của
+  `past-life.ts` nay **export** để dùng CHUNG — hai bảng mô tả cùng 14 chính tinh
+  sẽ trôi khỏi nhau, và trích dẫn chỉ đúng ở một bên.
+- **Poster 9:16 vẽ BIỂU ĐỒ TOẠ ĐỘ chứ không vẽ radar**: radar 12 nhãn li ti, qua
+  một lượt nén của mạng xã hội là mất chữ; bốn ô có tên còn đọc được ở thumbnail.
+
+### 🐞 Hai lỗi tự bắt khi chạy THẬT (không phải khi đọc code)
+1. **Lá số KHÔNG có trường `namXem`** (chỉ có `tuoiXem`) → mọi năm trên lộ trình
+   ra **0**, im lặng. Nay suy năm sinh từ chính `tieuVanScores` (mỗi ô mang sẵn
+   cặp `nam`+`tuoi`) nên không phải giả định quy ước tuổi. ⚠️ `tuoi` là **TUỔI
+   MỤ** → năm = namSinh + tuổi − 1; quên trừ 1 là cả bốn chặng lệch một năm.
+2. **`tieuVanScores[].direction` là chuỗi TIẾNG ANH** (`up`/`down`/`flat`) và nó
+   nằm trong payload API → ra thẳng giao diện được. Đúng loại rò rỉ bộ dò đã bắt
+   hai lần ở Kỳ Môn và Bản Đồ Sao. Đã dịch tại một chỗ (`HUONG_VI`).
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier --check .` sạch
+· `check:prices` sạch · engine test **185 pass** · `node --check` module + 2 khối
+script nội tuyến · **10.368 lá số trên module THẬT**: phân bố 4 kiểu khớp đúng
+dự đoán, 0 lỗi trên 7 bất biến (radar luôn 12 mục điểm 0–10 · lộ trình luôn đúng
+4 chặng **liền mạch không hở** · ghép đội luôn 3 vai · kiểu phụ không bao giờ
+trùng kiểu chính · 0 rò `undefined`/`NaN`/`[object` · rail luôn phẳng) ·
+**12 ca trên prompt THẬT** (`buildChatContext`): chọn đúng nhánh, có đủ luật cấm
+phong thánh/cấm DISC-MBTI, **0 key thô lọt prompt**, 0 rò chuỗi kỹ thuật, + ca
+ĐỐI CHỨNG scenario lạ bị từ chối · **10 ca Playwright trên TRANG THẬT qua Next
+dev**: đúng 1 lượt gọi API · ô tình trạng nghề THẬT SỰ đổi nội dung · **chấm toạ
+độ rơi đúng góc phần tư** (lấy mẫu pixel — bẫy đảo trục Y màn hình) · radar có
+nét · poster là **PNG thật 1080×1920 đọc từ IHDR** · rail gửi đúng
+`scenario.type='cong-so'` + `birth`, payload phẳng · tên chứa `<img onerror>`
+không chạy · chặn `poster.js` → trang vẫn sống · 390px không tràn ngang.
+
+### 🔑 VIỆC TAY HENRY — chưa làm thì tool KHÔNG hiện trên trang Công Cụ
+```sql
+update tool_pricing set enabled=true, updated_at=now() where tool_id='cong-so';
+```
+(Migration `_patches/migration-cong-so.sql` **CHƯA chạy prod** — chạy nó trước.)
+Muốn thu phí thay vì để free: `update tool_pricing set credits=15, is_free=false
+where tool_id='cong-so';` — cố ý để free vì đây là tool ĐẦU PHỄU.
+
+### CÒN LẠI
+- **Chưa có trang standalone SEO** `/tools/cong-so.html` (mới có trang shell).
+  Truy vấn "tính cách nghề nghiệp theo tử vi" có cầu thật, đáng làm sau.
+- **Nội dung 4 kiểu × 5 trường là tao tự viết**, chưa ai review — cùng dạng nợ
+  với 384 hào từ. Sửa là sửa data thuần trong `KIEU`, không đụng logic.
+- Chưa lấy được **9 大天賦 / 12 大能量** của họ (nằm sau paywall NT$420). Không
+  chặn gì: 12 mặt của mình suy từ 12 cung, độc lập.
+- Chưa dùng `PAIR_OCCUPATION_TABLE` (24 cặp chính tinh) để gợi **ngành nghề cụ
+  thể** — mới dùng `cachCucTungCung['Quan Lộc']`. Đây là chỗ nâng cấp rõ nhất.
+
+---
+
+## 📸 Vận hôm nay: poster đủ thông tin · QR đo được · nhập lá số tại chỗ (2026-08-05, PR #418)
 
 Henry soi thẻ Vận hôm nay, hỏi 3 việc: (1) ảnh tải về thiếu thông tin so với
 thẻ; (2) nhúng được link vào ảnh để track không; (3) *"làm sao mày biết được lá

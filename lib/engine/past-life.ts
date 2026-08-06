@@ -1740,7 +1740,10 @@ function pickSatGroup(quan: Rec | undefined): (typeof SAT_GROUP_ORDER)[number] |
 // mã hoá CẤP qua bậc (Quan Lộc), nhét thêm tư cách vào là tự mâu thuẫn: bậc
 // cao ra "Đại nguyên soái" mà Mệnh lại nói "hợp làm tham mưu" thì đọc thành
 // hai câu đá nhau. Để riêng thì hai lớp bổ nghĩa cho nhau thay vì tranh chỗ.
-const MENH_ROLE: Record<string, { role: string; source: string }> = {
+// Xuất ra ngoài để tool Tử Vi Công Sở (`lib/engine/cong-so.ts`) tra CHUNG bảng
+// này thay vì chép một bản thứ hai — hai bản mô tả cùng 14 chính tinh sẽ trôi
+// khỏi nhau lúc nào không ai biết, và trích dẫn thì chỉ đúng ở một bên.
+export const MENH_ROLE: Record<string, { role: string; source: string }> = {
   'Thất Sát': {
     role: 'đứng đầu, tự gánh lấy trách nhiệm chứ không chịu làm kẻ dưới trướng',
     source: 'Vương Đình Chi, Lục Thập Tinh Hệ: "Quản lý rất mạnh. Có thể độc lập gánh vác một phương. Dù làm ngành nào cũng dễ ở vị trí chủ quản – lãnh đạo"',

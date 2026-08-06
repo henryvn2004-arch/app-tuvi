@@ -1,0 +1,456 @@
+/* global Poster */
+// ============================================================
+// tools-shared/cong-so.js — Tử Vi Công Sở (dùng chung)
+//
+// NGUỒN DUY NHẤT cho phần vẽ + render của tool. Trang shell `/app/cong-so`
+// nạp file này; trang standalone (nếu làm sau) nạp CÙNG file, không chép lại —
+// hai bản render sẽ trôi khỏi nhau, đúng bệnh đã phải đi vá ở batch-2.
+//
+// Mọi con số do `/api/cong-so` trả về. Module này KHÔNG tự tính điểm, KHÔNG tự
+// phân kiểu — nó chỉ vẽ.
+// ============================================================
+(function () {
+  'use strict';
+
+  var KIEU_MAU = {
+    'khai-sang': '#B03A2E',
+    'lanh-dao': '#1455A4',
+    'ho-tro': '#B7791F',
+    'hop-tac': '#2C7A5A',
+  };
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function dpiFit(canvas, w, h) {
+    var r = window.devicePixelRatio || 1;
+    canvas.width = w * r;
+    canvas.height = h * r;
+    canvas.style.height = h + 'px';
+    var ctx = canvas.getContext('2d');
+    ctx.setTransform(r, 0, 0, r, 0, 0);
+    return ctx;
+  }
+
+  // ── Biểu đồ TOẠ ĐỘ (4 góc phần tư) ─────────────────────────
+  // Đây là hình đọc được trong một giây bởi người không biết gì về tử vi: bốn ô
+  // có tên, một chấm chỉ chỗ đứng. Chính nó là thứ mang lên poster.
+  //
+  // ⚠️ Trục Y trên MÀN HÌNH ngược trục Y toán học: yNorm càng lớn ("xông") thì
+  // càng phải vẽ LÊN TRÊN. Quên đảo dấu là bốn nhãn vẫn đúng chỗ mà cái chấm
+  // rơi vào ô đối diện — sai im lặng, nhìn không ra.
+  function veToaDo(ctx, box, ho, opt) {
+    opt = opt || {};
+    var fg = opt.fg || '#1A1A1A';
+    var line = opt.line || 'rgba(0,0,0,.16)';
+    var dim = opt.dim || 'rgba(0,0,0,.45)';
+    var pad = Math.round(Math.min(box.w, box.h) * 0.13);
+    var x0 = box.x + pad,
+      y0 = box.y + pad;
+    var s = Math.min(box.w, box.h) - pad * 2;
+    var cx = x0 + s / 2,
+      cy = y0 + s / 2;
+
+    var quads = [
+      { id: 'khai-sang', ten: 'Khai sáng', qx: 1, qy: 1 },
+      { id: 'lanh-dao', ten: 'Lãnh đạo', qx: 1, qy: -1 },
+      { id: 'ho-tro', ten: 'Hỗ trợ', qx: -1, qy: 1 },
+      { id: 'hop-tac', ten: 'Hợp tác', qx: -1, qy: -1 },
+    ];
+
+    quads.forEach(function (q) {
+      var rx = q.qx > 0 ? cx : x0;
+      var ry = q.qy > 0 ? y0 : cy; // qy>0 = "xông" = nửa TRÊN màn hình
+      ctx.fillStyle = q.id === ho.kieu.id ? hexA(KIEU_MAU[q.id], 0.14) : hexA(KIEU_MAU[q.id], 0.04);
+      ctx.fillRect(rx, ry, s / 2, s / 2);
+    });
+
+    ctx.strokeStyle = line;
+    ctx.lineWidth = 1;
+    ctx.strokeRect(x0, y0, s, s);
+    ctx.beginPath();
+    ctx.moveTo(cx, y0);
+    ctx.lineTo(cx, y0 + s);
+    ctx.moveTo(x0, cy);
+    ctx.lineTo(x0 + s, cy);
+    ctx.stroke();
+
+    var fs = Math.max(11, Math.round(s * 0.052));
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    quads.forEach(function (q) {
+      var lx = cx + (q.qx * s) / 4;
+      var ly = cy - (q.qy * s) / 4;
+      var on = q.id === ho.kieu.id;
+      ctx.font = (on ? '700 ' : '400 ') + fs + 'px ' + (opt.serif || 'Georgia, serif');
+      ctx.fillStyle = on ? KIEU_MAU[q.id] : dim;
+      ctx.fillText(q.ten, lx, ly);
+    });
+
+    // Nhãn trục — nói bằng tiếng người, không bằng thuật ngữ tứ tượng.
+    var af = Math.max(9, Math.round(s * 0.038));
+    ctx.font = af + 'px ' + (opt.sans || 'system-ui, sans-serif');
+    ctx.fillStyle = dim;
+    ctx.fillText('xông pha', cx, y0 - af * 0.9);
+    ctx.fillText('trầm ổn', cx, y0 + s + af * 0.9);
+    ctx.save();
+    ctx.translate(x0 - af * 0.9, cy);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText('nhường', 0, 0);
+    ctx.restore();
+    ctx.save();
+    ctx.translate(x0 + s + af * 0.9, cy);
+    ctx.rotate(Math.PI / 2);
+    ctx.fillText('tranh', 0, 0);
+    ctx.restore();
+
+    // Chấm vị trí — bán kính vẽ theo nửa cạnh, kẹp trong khung.
+    var px = cx + (ho.phan.xNorm * s) / 2;
+    var py = cy - (ho.phan.yNorm * s) / 2;
+    var r = Math.max(5, Math.round(s * 0.028));
+    ctx.beginPath();
+    ctx.arc(px, py, r * 2.2, 0, Math.PI * 2);
+    ctx.fillStyle = hexA(KIEU_MAU[ho.kieu.id], 0.22);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(px, py, r, 0, Math.PI * 2);
+    ctx.fillStyle = KIEU_MAU[ho.kieu.id];
+    ctx.fill();
+    ctx.strokeStyle = opt.dot || '#fff';
+    ctx.lineWidth = Math.max(2, r * 0.35);
+    ctx.stroke();
+    ctx.fillStyle = fg;
+  }
+
+  function hexA(hex, a) {
+    var n = parseInt(hex.slice(1), 16);
+    return 'rgba(' + ((n >> 16) & 255) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
+  }
+
+  // ── Radar 12 chiều ─────────────────────────────────────────
+  function veRadar(ctx, box, ho, opt) {
+    opt = opt || {};
+    var fg = opt.fg || '#1A1A1A';
+    var dim = opt.dim || 'rgba(0,0,0,.45)';
+    var grid = opt.line || 'rgba(0,0,0,.13)';
+    var items = ho.radar;
+    var n = items.length;
+    var cx = box.x + box.w / 2;
+    var cy = box.y + box.h / 2;
+    // Chừa chỗ cho nhãn quanh vòng — không chừa thì chữ bị cắt ở mép canvas.
+    var R = Math.min(box.w, box.h) / 2 - Math.max(46, Math.min(box.w, box.h) * 0.17);
+    if (R <= 10) return;
+
+    var ang = function (i) {
+      return (Math.PI * 2 * i) / n - Math.PI / 2;
+    };
+
+    ctx.lineWidth = 1;
+    [0.25, 0.5, 0.75, 1].forEach(function (t) {
+      ctx.beginPath();
+      for (var i = 0; i < n; i++) {
+        var a = ang(i);
+        var x = cx + Math.cos(a) * R * t;
+        var y = cy + Math.sin(a) * R * t;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = grid;
+      ctx.stroke();
+    });
+    for (var i = 0; i < n; i++) {
+      var a = ang(i);
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + Math.cos(a) * R, cy + Math.sin(a) * R);
+      ctx.strokeStyle = grid;
+      ctx.stroke();
+    }
+
+    ctx.beginPath();
+    items.forEach(function (it, i) {
+      var t = Math.max(0, Math.min(1, it.diem / 10));
+      var a = ang(i);
+      var x = cx + Math.cos(a) * R * t;
+      var y = cy + Math.sin(a) * R * t;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.closePath();
+    ctx.fillStyle = hexA(KIEU_MAU[ho.kieu.id], 0.2);
+    ctx.fill();
+    ctx.strokeStyle = KIEU_MAU[ho.kieu.id];
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    var fs = Math.max(9, Math.round(R * 0.115));
+    ctx.font = fs + 'px ' + (opt.sans || 'system-ui, sans-serif');
+    ctx.textBaseline = 'middle';
+    items.forEach(function (it, i) {
+      var a = ang(i);
+      var lx = cx + Math.cos(a) * (R + fs * 1.5);
+      var ly = cy + Math.sin(a) * (R + fs * 1.1);
+      var c = Math.cos(a);
+      ctx.textAlign = Math.abs(c) < 0.25 ? 'center' : c > 0 ? 'left' : 'right';
+      ctx.fillStyle = it.namNay ? KIEU_MAU[ho.kieu.id] : dim;
+      ctx.fillText(it.nhan, lx, ly);
+      // Chấm điểm ngay trên đỉnh — để đọc được con số mà không cần bảng.
+      var t = Math.max(0, Math.min(1, it.diem / 10));
+      ctx.beginPath();
+      ctx.arc(cx + Math.cos(a) * R * t, cy + Math.sin(a) * R * t, 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = KIEU_MAU[ho.kieu.id];
+      ctx.fill();
+    });
+    ctx.fillStyle = fg;
+    ctx.textAlign = 'left';
+  }
+
+  function veToaDoCanvas(canvas, ho) {
+    if (!canvas || !ho) return;
+    var w = canvas.parentElement ? canvas.parentElement.clientWidth : 420;
+    w = Math.max(240, Math.min(w, 460));
+    var ctx = dpiFit(canvas, w, w);
+    ctx.clearRect(0, 0, w, w);
+    veToaDo(ctx, { x: 0, y: 0, w: w, h: w }, ho, {});
+  }
+
+  function veRadarCanvas(canvas, ho) {
+    if (!canvas || !ho) return;
+    var w = canvas.parentElement ? canvas.parentElement.clientWidth : 460;
+    w = Math.max(280, Math.min(w, 520));
+    var ctx = dpiFit(canvas, w, w);
+    ctx.clearRect(0, 0, w, w);
+    veRadar(ctx, { x: 0, y: 0, w: w, h: w }, ho, {});
+  }
+
+  // ── Poster 9:16 ────────────────────────────────────────────
+  // Vẽ biểu đồ toạ độ trên nền navy. CỐ Ý chọn toạ độ chứ không chọn radar:
+  // radar 12 nhãn nhỏ li ti, qua một lượt nén của mạng xã hội là không đọc
+  // được; bốn ô có tên thì còn đọc được ở cỡ thumbnail.
+  function posterDraw(ho) {
+    return function (ctx, box) {
+      var T = (typeof Poster !== 'undefined' && Poster.THEME) || {};
+      var gold = T.GOLD || '#C9A227';
+      var serif = T.SERIF || 'Georgia, serif';
+      var sans = T.SANS || 'system-ui, sans-serif';
+
+      ctx.textAlign = 'center';
+      ctx.fillStyle = gold;
+      ctx.font = '600 30px ' + sans;
+      ctx.fillText('KIỂU NGƯỜI Ở CHỖ LÀM', box.x + box.w / 2, box.y + 74);
+
+      ctx.fillStyle = '#fff';
+      ctx.font = '700 76px ' + serif;
+      ctx.fillText(ho.kieu.ten, box.x + box.w / 2, box.y + 158);
+
+      ctx.fillStyle = 'rgba(255,255,255,.72)';
+      ctx.font = '28px ' + sans;
+      ctx.fillText(ho.kieu.tuTuong, box.x + box.w / 2, box.y + 206);
+
+      var side = Math.min(box.w - 150, box.h - 400);
+      veToaDo(
+        ctx,
+        { x: box.x + (box.w - side) / 2, y: box.y + 250, w: side, h: side },
+        ho,
+        { fg: '#fff', dim: 'rgba(255,255,255,.62)', line: 'rgba(255,255,255,.22)', dot: '#0B1B33', serif: serif, sans: sans }
+      );
+
+      ctx.textAlign = 'center';
+      ctx.fillStyle = 'rgba(255,255,255,.9)';
+      ctx.font = '30px ' + sans;
+      var y = box.y + 250 + side + 56;
+      wrapCenter(ctx, ho.kieu.motCau, box.x + box.w / 2, y, box.w - 160, 42, 2);
+      ctx.textAlign = 'left';
+    };
+  }
+
+  function wrapCenter(ctx, text, cx, y, maxW, lh, maxLines) {
+    var words = String(text || '').split(/\s+/);
+    var lines = [];
+    var cur = '';
+    for (var i = 0; i < words.length; i++) {
+      var t = cur ? cur + ' ' + words[i] : words[i];
+      if (ctx.measureText(t).width > maxW && cur) {
+        lines.push(cur);
+        cur = words[i];
+        if (lines.length >= maxLines) break;
+      } else cur = t;
+    }
+    if (lines.length < maxLines && cur) lines.push(cur);
+    lines.forEach(function (l, i) {
+      ctx.fillText(l, cx, y + i * lh);
+    });
+  }
+
+  // ── Render HTML kết quả ────────────────────────────────────
+  function bangHTML(ho) {
+    var mau = KIEU_MAU[ho.kieu.id];
+    var k = ho.kieu;
+    var h = [];
+
+    h.push(
+      '<div class="cs-head" style="border-left:4px solid ' + mau + '">' +
+        '<div class="cs-kieu" style="color:' + mau + '">' + esc(k.ten) + '</div>' +
+        '<div class="cs-tt">' + esc(k.tuTuong) + ' · ' + esc(k.saoNhom.join(' · ')) + '</div>' +
+        '<div class="cs-mot">' + esc(k.motCau) + '</div>' +
+        (ho.phan.lai && ho.kieuPhu
+          ? '<div class="cs-lai">⚠ <b>Kiểu lai.</b> Toạ độ của bạn nằm sát ranh giới nên nghiêng <b>' +
+            esc(k.ten) + '</b> nhưng pha khá rõ <b>' + esc(ho.kieuPhu.ten) +
+            '</b>. Đọc cả hai phần, đừng ép mình vào một ô.</div>'
+          : '') +
+        '</div>'
+    );
+
+    h.push(
+      '<div class="cs-grid">' +
+        card('Cái thúc bạn đi', esc(k.dongLuc)) +
+        card('Nhận ra ở chỗ làm', esc(k.datChat)) +
+        card('Câu hỏi chạy ngầm trong đầu', '<ul class="cs-ul"><li>' + k.cauHoi.map(esc).join('</li><li>') + '</li></ul>') +
+        card('Khi được giao quyền', esc(k.kieuDan)) +
+        card('Môi trường hợp', esc(k.moiTruongHop)) +
+        card('Môi trường kỵ', esc(k.moiTruongKy)) +
+        '</div>'
+    );
+
+    h.push(
+      '<div class="cs-two">' +
+        '<div class="cs-box cs-ok"><b>Mạnh nhất</b><p>' + esc(k.manh) + '</p></div>' +
+        '<div class="cs-box cs-no"><b>Chỗ hay vấp</b><p>' + esc(k.yeu) + '</p></div>' +
+        '</div>'
+    );
+
+    // Lời theo tình trạng nghề — đặt CAO trên trang vì đây là phần người ta
+    // thấy "nói đúng mình" nhất, và nó phụ thuộc ô người dùng vừa tự khai.
+    h.push(
+      '<div class="cs-sec"><h3>Cho người đang ở vị trí: ' + esc(ho.trangThaiLabel) + '</h3>' +
+        '<p class="cs-lead">' + esc(ho.loiTrangThai) + '</p></div>'
+    );
+
+    h.push(
+      '<div class="cs-sec"><h3>Bốn việc phải học khi bắt đầu cầm người</h3>' +
+        '<ol class="cs-ol"><li>' + k.baiHoc.map(esc).join('</li><li>') + '</li></ol></div>'
+    );
+
+    // Radar
+    var top = ho.radar.slice().sort(function (a, b) { return b.diem - a.diem; });
+    h.push(
+      '<div class="cs-sec"><h3>Mười hai mặt của đời đi làm</h3>' +
+        '<p class="cs-note">Điểm do engine chấm trên chính lá số của bạn (thang 10). ' +
+        'Đây là <b>thế mạnh tương đối giữa các mặt</b> của riêng bạn, không phải điểm so với người khác.</p>' +
+        '<div class="cs-canvas-wrap"><canvas id="csRadar"></canvas></div>' +
+        '<table class="cs-tb"><thead><tr><th>Mặt</th><th>Điểm</th><th>Nó nói về</th></tr></thead><tbody>' +
+        top
+          .map(function (r) {
+            var badge = r.namNay
+              ? '<span class="cs-badge">' +
+                (r.namNay === 'ca-hai' ? 'năm nay chiếu kép' : r.namNay === 'tieu-han' ? 'tiểu hạn năm nay' : 'lưu niên năm nay') +
+                '</span>'
+              : '';
+            return (
+              '<tr><td><b>' + esc(r.nhan) + '</b> ' + badge + '<div class="cs-sub">cung ' + esc(r.cung) +
+              (r.sao.length ? ' · ' + esc(r.sao.join(', ')) : ' · vô chính diệu') + '</div></td>' +
+              '<td class="cs-num">' + esc(r.diem) + '</td><td class="cs-sm">' + esc(r.y) + '</td></tr>'
+            );
+          })
+          .join('') +
+        '</tbody></table></div>'
+    );
+
+    // Lộ trình
+    h.push(
+      '<div class="cs-sec"><h3>Bốn mươi năm đi làm, chia làm bốn chặng</h3>' +
+        '<p class="cs-note">Bốn đại vận liên tiếp phủ quãng đi làm. Điểm là điểm đại vận do engine chấm; ' +
+        '“thuận đà / ngược đà” là so tính âm–dương của đại vận với kiểu bản mệnh của bạn.</p>' +
+        '<div class="cs-lo">' +
+        ho.loTrinh
+          .map(function (n) {
+            return (
+              '<div class="cs-nac' + (n.dangChay ? ' now' : '') + '">' +
+              '<div class="cs-nac-top"><b>' + esc(n.nac) + '</b>' + (n.dangChay ? '<span class="cs-badge">đang ở đây</span>' : '') + '</div>' +
+              '<div class="cs-sub">' + esc(n.tuoiStart) + '–' + esc(n.tuoiEnd) + ' tuổi' +
+              (n.namStart ? ' · ' + esc(n.namStart) + '–' + esc(n.namEnd) : '') +
+              ' · cung ' + esc(n.cung) + (n.diem != null ? ' · <b>' + esc(n.diem) + '/10</b> ' + esc(n.flag) : '') + '</div>' +
+              '<div class="cs-sub">' + (n.sao.length ? esc(n.sao.join(', ')) + (n.muon ? ' (mượn xung chiếu)' : '') : 'vô chính diệu') +
+              (n.hopMenh === null ? '' : n.hopMenh ? ' · <span class="cs-ok-t">thuận đà</span>' : ' · <span class="cs-no-t">ngược đà</span>') + '</div>' +
+              '<p>' + esc(n.luan) + '</p></div>'
+            );
+          })
+          .join('') +
+        '</div></div>'
+    );
+
+    // Ghép đội
+    h.push(
+      '<div class="cs-sec"><h3>Ghép đội — ai đỡ được bạn</h3>' +
+        '<p class="cs-note">Đọc theo cổ pháp: <b>Phụ Mẫu</b> là bề trên, <b>Huynh Đệ</b> là người ngang hàng, ' +
+        '<b>Nô Bộc</b> là thuộc hạ và bạn nghề. Luật bù là âm ghép dương.</p>' +
+        '<div class="cs-grid">' +
+        ho.doi
+          .map(function (d) {
+            return card(
+              esc(d.vai) + ' <span class="cs-sub">(cung ' + esc(d.cung) + ')</span>',
+              '<div class="cs-sub" style="margin-bottom:6px">' +
+                (d.sao.length ? esc(d.sao.join(', ')) + (d.muon ? ' (mượn xung chiếu)' : '') : 'vô chính diệu') +
+                '</div>' + esc(d.goiY)
+            );
+          })
+          .join('') +
+        '</div></div>'
+    );
+
+    // Cơ sở
+    h.push(
+      '<div class="cs-sec"><h3>Cơ sở trong lá số</h3><div class="cs-basis">' +
+        row('Chính tinh cung Mệnh', (ho.phan.saoMenh.join(', ') || 'vô chính diệu') + (ho.phan.muonMenh ? ' — mượn cung xung chiếu' : '')) +
+        row('Chính tinh cung Quan Lộc', (ho.phan.saoQuan.join(', ') || 'vô chính diệu') + (ho.phan.muonQuan ? ' — mượn cung xung chiếu' : '')) +
+        row('Toạ độ', 'tranh ↔ nhường: ' + ho.phan.x + ' · xông ↔ trầm: ' + ho.phan.y) +
+        (ho.phan.vaiTro ? row('Tư cách theo cung Mệnh', ho.phan.vaiTro.role) : '') +
+        (ho.quanLoc.cachCuc.length ? row('Cách cục tại cung Quan Lộc', ho.quanLoc.cachCuc.join(' · ')) : '') +
+        (ho.vanNam
+          ? row(
+              'Vận năm ' + ho.vanNam.nam,
+              (ho.vanNam.diem != null ? ho.vanNam.diem + '/10 · ' : '') +
+                'tiểu hạn ở cung ' + (ho.vanNam.tieuHanCung || '—') + ' · lưu niên ở cung ' + (ho.vanNam.luuNienCung || '—')
+            )
+          : '') +
+        row('Nguồn cách chia bốn kiểu', ho.kieu.source) +
+        '</div></div>'
+    );
+
+    return h.join('');
+  }
+
+  function card(t, body) {
+    return '<div class="cs-card"><b>' + t + '</b><div>' + body + '</div></div>';
+  }
+  function row(k, v) {
+    return '<div class="cs-row"><span>' + esc(k) + '</span><div>' + esc(v) + '</div></div>';
+  }
+
+  // ── Gọi API ────────────────────────────────────────────────
+  function lap(p) {
+    var q = new URLSearchParams({
+      d: p.ngay, m: p.thang, y: p.nam, gio: p.gio,
+      gt: p.gioiTinh === 'nu' ? 'nu' : 'nam',
+      am: p.amLich ? '1' : '0',
+      tt: p.trangThai || 'nhan-vien',
+    });
+    return fetch('/api/cong-so?' + q.toString())
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { return j && j.ok ? j : null; })
+      .catch(function () { return null; });
+  }
+
+  window.CongSoTool = {
+    lap: lap,
+    bangHTML: bangHTML,
+    veToaDoCanvas: veToaDoCanvas,
+    veRadarCanvas: veRadarCanvas,
+    posterDraw: posterDraw,
+    MAU: KIEU_MAU,
+  };
+})();

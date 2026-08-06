@@ -16,6 +16,7 @@
     ] },
     { group: 'Tử Vi', open: true, items: [
       { id: 'luan-giai',  label: 'Luận giải Tử Vi',     href: '/app/luan-giai',  icon: 'grid' },
+      { id: 'cong-so',    label: 'Tử Vi Công Sở',       href: '/app/cong-so',    icon: 'briefcase' },
       { id: 'xem-tuoi',   label: 'Xem tuổi vợ chồng',   href: '/app/xem-tuoi',   icon: 'users' },
       { id: 'xem-lam-an', label: 'Xem tuổi làm ăn',     href: '/app/xem-lam-an', icon: 'briefcase' },
       { id: 'tuong-hop',  label: 'Tương hợp tuổi',      href: '/app/tuong-hop',  icon: 'heart' },

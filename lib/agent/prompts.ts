@@ -128,6 +128,9 @@ export function buildChatContext(body: any): ChatContext {
   if (toolType === 'ban-do-sao') {
     return { systemForCall: CHAT_SYSTEM_BAN_DO_SAO(extractGenericContext(body.banDoSaoData), docs, persona), tools: buildTools(false), maxTokens: 1800, lasoDataForTools: null };
   }
+  if (toolType === 'cong-so') {
+    return { systemForCall: CHAT_SYSTEM_CONG_SO(extractGenericContext(body.congSoData), docs, persona), tools: buildTools(false), maxTokens: 1800, lasoDataForTools: null };
+  }
 
   if (toolType === 'xem-tuong') {
     return {
@@ -588,6 +591,35 @@ Nguyên tắc:
 ${GIONG_NGUOI_RULES}
 
 === BẢN ĐỒ SAO LÚC SINH ===
+${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
+
+const CHAT_SYSTEM_CONG_SO = (ctx: string, docs?: string, persona?: string) => `Bạn là cố vấn NGHỀ NGHIỆP đọc lá số Tử Vi, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
+
+${_TIME()}
+
+🔴 LUẬT SỐ MỘT — NÓI BẰNG NGÔN NGỮ CÔNG VIỆC, KHÔNG BẰNG THUẬT NGỮ MỆNH LÝ:
+- Ở phần TRẢ LỜI CHÍNH: nói "kiểu người", "môi trường hợp", "chặng nghề", "người bổ khuyết". KHÔNG mở miệng là "cung Quan Lộc hóa Kỵ", "Thất Sát thủ Mệnh"
+- CHỈ nêu tên cung / tên sao KHI người ta hỏi "vì sao", "dựa vào đâu" — lúc đó nói thẳng và nói đủ. Đó là khoảnh khắc bán được bản Luận Giải đầy đủ, đừng né
+- Người hỏi ở đây đang tìm việc để làm, không tìm bài giảng tử vi
+
+🔴 LUẬT SỐ HAI — KHÔNG ĐƯỢC PHONG THÁNH CHO CÁCH CHIA BỐN KIỂU:
+- Bốn tên "Khai sáng / Lãnh đạo / Hỗ trợ / Hợp tác" là NHÃN HIỆN ĐẠI của trang, cổ thư không gọi thế. Cách chia dựa trên TỨ TƯỢNG (lão dương · thiếu âm · thiếu dương · lão âm) áp lên 14 chính tinh — phần này mới là cổ pháp
+- TUYỆT ĐỐI KHÔNG gọi nó là "trắc nghiệm", "khoa học", "đã được kiểm định", "thống kê trên N người", và KHÔNG đối chiếu với DISC / MBTI / Big Five. Không có nghiên cứu nào đứng sau nó
+- Nếu hồ sơ ghi "Kiểu lai": nói thẳng là người này nằm sát ranh giới, đọc cả hai kiểu, KHÔNG ép vào một ô
+
+Nguyên tắc luận:
+- ${FORMAT_RULE}
+- Hồ sơ dưới đã tính SẴN toàn bộ: kiểu người, toạ độ hai trục, điểm 12 mặt, bốn chặng 40 năm, ghép đội. Dùng ĐÚNG, KHÔNG tự chấm lại điểm, KHÔNG tự đổi kiểu
+- 🔑 ĐIỂM 12 MẶT LÀ THẾ MẠNH TƯƠNG ĐỐI TRONG CHÍNH NGƯỜI NÀY, không phải điểm so với người khác. Nói "mặt nào nổi hơn mặt nào của bạn", TUYỆT ĐỐI không nói "bạn hơn người thường"
+- 🔑 KHÔNG CÓ KIỂU NÀO HƠN KIỂU NÀO. Mỗi kiểu chỉ hợp/không hợp một hoàn cảnh — cổ pháp gọi là "thời" và "vị". Ai đọc xong thấy mình thuộc kiểu kém hơn là bạn đã luận sai
+- 🔑 "Thuận đà / ngược đà" ở phần bốn chặng là so tính âm–dương của đại vận với kiểu bản mệnh. Ngược đà KHÔNG phải xui — đó là quãng phải ĐỔI CÁCH LÀM, và thường là quãng học được nhiều nhất
+- Trường "Bạn đang ở vị trí nào" là người dùng TỰ KHAI, không suy từ lá số. Bám lấy nó: lời khuyên cho một nhân viên và cho một người đã làm chủ khác hẳn nhau
+- Kết bằng VIỆC LÀM ĐƯỢC, không kết bằng lời mô tả tính cách. Người ta trả tiền cho câu "làm gì tiếp", không trả tiền cho câu "bạn là người thế này"
+- Chỉ luận từ dữ liệu đã cho. KHÔNG bịa thêm sao, cung, cách cục hay con số nào không có trong hồ sơ
+
+${GIONG_NGUOI_RULES}
+
+=== HỒ SƠ CÔNG SỞ ===
 ${ctx}${docs ? '\n\n=== TÀI LIỆU THAM KHẢO ===\n' + docs : ''}`;
 
 const CHAT_SYSTEM_LUC_NHAM = (ctx: string, docs?: string, persona?: string) => `Bạn là chuyên gia ĐẠI LỤC NHÂM (大六壬) — lập khóa theo nguyệt tướng gia thời, phụng sự trang Tử Vi Minh Bảo.${persona ? '\n' + persona : ''}
@@ -1163,6 +1195,23 @@ const GENERIC_LABELS: Record<string, string> = {
   satHuong: 'Hướng sát (nên tránh)',
   ngayBinh: 'Ngày bình', ngayXau: 'Ngày xấu',
   chiTietTung: 'Chi tiết từng ngày (trực · tú · nghi/kỵ)',
+  // Tử Vi Công Sở — nguồn `/api/cong-so` → lib/engine/cong-so.ts.
+  kieu: 'Kiểu người ở chỗ làm', tuTuong: 'Tứ tượng gốc của kiểu',
+  kieuLai: 'Có phải kiểu lai (nằm sát ranh giới) không',
+  toaDo: 'Toạ độ hai trục (tranh↔nhường · xông↔trầm)',
+  chinhTinhMenh: 'Chính tinh cung Mệnh', chinhTinhQuanLoc: 'Chính tinh cung Quan Lộc',
+  vaiTroTheoMenh: 'Tư cách suy từ chính tinh cung Mệnh',
+  dongLuc: 'Động lực gốc', kieuDanDat: 'Cách dẫn người khi được giao quyền',
+  moiTruongHop: 'Môi trường HỢP', moiTruongKy: 'Môi trường KỴ',
+  baiHocTaoMenh: 'Bốn bài học khi bắt đầu cầm người',
+  trangThaiNgheNghiep: 'Vị trí hiện tại (NGƯỜI DÙNG TỰ KHAI, không suy từ lá số)',
+  loiTheoTrangThai: 'Lời riêng cho vị trí hiện tại đó',
+  diemCaoNhat: 'Ba mặt mạnh nhất (thang 10, tương đối trong chính người này)',
+  diemThapNhat: 'Ba mặt yếu nhất (thang 10, tương đối trong chính người này)',
+  cachCucQuanLoc: 'Cách cục tại cung Quan Lộc',
+  loTrinh40Nam: 'Bốn chặng 40 năm đi làm', vanNamNay: 'Vận năm nay',
+  ghepDoi: 'Kiểu người ở ba cung nhân sự (Phụ Mẫu · Huynh Đệ · Nô Bộc)',
+  kieuNenTimDeBu: 'Kiểu NÊN TÌM để bù khuyết cho mình',
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractGenericContext(data: any): string {

@@ -30,6 +30,7 @@ const nextConfig = {
       { source: '/app/mai-hoa',         destination: '/app-mai-hoa.html'     },
       { source: '/app/ky-mon',          destination: '/app-ky-mon.html'      },
       { source: '/app/ban-do-sao',      destination: '/app-ban-do-sao.html'  },
+      { source: '/app/cong-so',         destination: '/app-cong-so.html'     },
       { source: '/app/tai-khoan',       destination: '/app-tai-khoan.html'   },
       { source: '/app/hoang-dao',       destination: '/app-hoang-dao.html'   },
       { source: '/app/ngay-tot',        destination: '/app-ngay-tot.html'    },
