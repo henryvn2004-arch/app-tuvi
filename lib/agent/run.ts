@@ -41,6 +41,8 @@ import { computePastLife } from '@/lib/engine/past-life';
 import { pastLifeRailWrapper } from '@/lib/agent/past-life-story';
 import { computePastLifeBond } from '@/lib/engine/past-life-bond';
 import { bondRailWrapper } from '@/lib/agent/past-life-bond-story';
+import { computeNguoiKhac, resolveQuanHe } from '@/lib/engine/nguoi-khac';
+import { nguoiKhacRailWrapper } from '@/lib/agent/nguoi-khac-prompt';
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!;
@@ -294,6 +296,27 @@ export async function runAgent(
         }
       } catch (e) {
         console.error('[runAgent] bondRailWrapper lỗi:', (e as Error)?.message);
+      }
+    }
+
+    // Rail của tool Lá Số Người Khác. Ở đây `req.birth` là lá số NGƯỜI KHÁC,
+    // không phải người đang chat — nên lớp vỏ có một luật ĐÈ LÊN `XUNG_HO_RULE`
+    // (dòng "Người xem" do `nguoiXemLine` sinh sẽ mang tên/giới của người trong
+    // lá số; không đè thì rail xưng hô với người chat theo giới của người kia).
+    // `wrapBirthB` là lá số CỦA NGƯỜI CHAT, tuỳ chọn — có thì mở thêm phần
+    // "người này với bạn", không có thì phần đó rỗng.
+    if (req.wrap === 'nguoi-khac' && ctx.ls && req.birth) {
+      try {
+        const g = req.birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
+        let lsBan = null;
+        if (req.wrapBirthB) {
+          const rB = computeLaso(req.wrapBirthB);
+          if (rB.ok && rB.ls) lsBan = rB.ls;
+        }
+        const p = computeNguoiKhac(ctx.ls, g, resolveQuanHe(req.wrapQuanHe), lsBan);
+        system += '\n\n' + nguoiKhacRailWrapper(p, String(req.birth.name || ''));
+      } catch (e) {
+        console.error('[runAgent] nguoiKhacRailWrapper lỗi:', (e as Error)?.message);
       }
     }
 

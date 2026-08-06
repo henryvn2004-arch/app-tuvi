@@ -220,9 +220,15 @@ window.UserCharts = (function () {
   //     (Duyên Nợ Tiền Kiếp) bị đổ cùng một người vào cả hai ô ⇒ người dùng bấm
   //     luôn là xem duyên nợ của mình với CHÍNH MÌNH. Sổ chỉ biết "lá số của
   //     bạn"; ô thứ hai là người khác, không có gì để đoán.
+  //  3. Form mang `data-uc-noseed` thì KHÔNG mồi. Tool "Lá Số Người Khác" có ô
+  //     chính là lá số NGƯỜI KHÁC — mồi lá số của chính người dùng vào đó rồi
+  //     họ bấm luôn là ra bản cẩm nang ứng xử với chính mình. Vẫn cho BẤM chọn
+  //     từ sổ (đó đúng là tính năng: chọn "Sếp Hùng" là điền xong), chỉ không
+  //     TỰ điền.
   function _maybeSeedForm(items) {
     if (!items.length) return;
     var first = findForms()[0];
+    if (first && first.host.hasAttribute('data-uc-noseed')) first = null;
     if (first && formIsEmpty(first.prefix)) {
       try {
         window.TuviForm.setData(items[0].birth, first.prefix);

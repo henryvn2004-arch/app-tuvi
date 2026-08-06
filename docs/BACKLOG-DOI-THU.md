@@ -45,7 +45,7 @@ Công sức: **S** < 1 ngày · **M** 2–4 ngày · **L** > 1 tuần.
 | **W1** | `Tính thử miễn phí` → chặn ở phần luận sâu (không chặn trước cửa) | L | 🟢 |
 | **W2** | ~~Bản xem trước che chữ thay vì modal chặn~~ | M | ✅ XONG |
 | **W3** | ~~Hiện "còn X Lượng · thao tác này tốn Y" ngay trên nút~~ | S | ✅ XONG |
-| **T1** | **Lá số NGƯỜI KHÁC** (sếp/đồng nghiệp/người thân) — cẩm nang ứng xử | M | 🟢 |
+| **T1** | ~~**Lá số NGƯỜI KHÁC**~~ (sếp/đồng nghiệp/người thân) — cẩm nang ứng xử | M | ✅ XONG |
 | **T2** | Gói Cha Mẹ: cây gia phả + mệnh con + tương tác cha-con | L | 🔴 |
 | **T3** | Gói Kinh doanh/Sale: nhân mạch công sở + phân tích khách hàng | L | 🔴 |
 | **T4** | **Đèn cầu an online** (có hạn 1 năm → tái tục) | M | 🟡 |
@@ -161,7 +161,7 @@ phong thủy · 2 chân dung · duyên nợ.
 
 ## T — Tool mới
 
-### T1. Lá số NGƯỜI KHÁC 🟢 M ⭐
+### T1. Lá số NGƯỜI KHÁC ✅ XONG ⭐
 Tính năng lõi của gói bạch kim: **nhập lá số người thân/đồng nghiệp/sếp để biết
 tính khí và cách ứng xử**, không phải để xem "có hợp không".
 **Vì sao mạnh nhất trong nhóm T:**
@@ -170,6 +170,14 @@ tính khí và cách ứng xử**, không phải để xem "có hợp không".
    (xem một lần rồi thôi).
 3. **Mỗi lượt là thêm một lá số nhập vào hệ thống** — đúng thứ vòng lặp viral
    đang thiếu.
+
+**Đã làm:** `/app/nguoi-khac` — `lib/engine/nguoi-khac.ts` (8 quan hệ, 5 mặt đọc
+được, kiểu người tái dùng `phanKieu` của Công Sở) + `lib/agent/nguoi-khac-prompt.ts`
++ `/api/nguoi-khac` một pha. 15 Lượng.
+⚖️ **Ranh giới đạo đức là ràng buộc THIẾT KẾ, không phải lời dặn:** engine CỐ Ý
+không trả về cung Tật Ách / Tài Bạch / Phu Thê / Tử Tức / Điền Trạch của người
+được xem, và prompt cũng không nêu tên cung mà đại vận/tiểu hạn đang đóng (cung
+hạn hay rơi đúng vào mấy cung vừa chặn). Hai lớp, vì một lớp lời dặn thì lách được.
 
 ### T2/T3. Gói Cha Mẹ · Gói Kinh doanh 🔴 L
 Họ có **3 biến thể hội viên**: thường / `親子白金` / `業務白金`. Bản kinh doanh
@@ -321,7 +329,7 @@ Xếp theo **tác động ÷ công sức**, và **không mục nào phụ thuộ
 | 2 | **T6** — dựng nốt Duyên nợ tiền kiếp | Engine đã xong và đang nằm không; mỗi lượt kéo 2 người |
 | 3 | **U4** — sổ lá số theo tài khoản | Vừa vá lỗi thật đã ghi trong CLAUDE.md, vừa là nền của T1 và S1 |
 | 4 | ~~**W3 + W2**~~ ✅ — hiện số dư trên nút + che chữ thay vì modal | Vài giờ, không rủi ro, sửa đúng khoảnh khắc người ta bỏ đi |
-| 5 | **T1** — lá số người khác | Dùng hằng tuần, và mỗi lượt nạp thêm một lá số vào hệ thống |
+| 5 | ~~**T1**~~ ✅ — lá số người khác | Dùng hằng tuần, và mỗi lượt nạp thêm một lá số vào hệ thống |
 
 **W1** (tính thử miễn phí) tác động lớn hơn tất cả, nhưng tốn công nhất và đụng
 mọi trang tool ⇒ để sau khi 1–5 xong.

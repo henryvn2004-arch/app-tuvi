@@ -38,6 +38,7 @@ const nextConfig = {
       { source: '/app/chan-dung-vo-chong', destination: '/app-chan-dung-vo-chong.html' },
       { source: '/app/chan-dung-tien-kiep', destination: '/app-chan-dung-tien-kiep.html' },
       { source: '/app/duyen-no-tien-kiep', destination: '/app-duyen-no-tien-kiep.html' },
+      { source: '/app/nguoi-khac', destination: '/app-nguoi-khac.html' },
       { source: '/xem-tuoi',            destination: '/xem-tuoi.html'        },
       { source: '/xem-lam-an',          destination: '/xem-lam-an.html'      },
       { source: '/la-so',               destination: '/la-so.html'           },

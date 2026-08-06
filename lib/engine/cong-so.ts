@@ -260,7 +260,7 @@ export const KIEU_IDS = Object.keys(KIEU) as KieuId[];
 // ── Helper đọc lá số ────────────────────────────────────────
 const palaces = (ls: Laso): Rec[] => ((ls.palaces as Rec[]) || []);
 
-function palaceByName(ls: Laso, name: string): Rec | undefined {
+export function palaceByName(ls: Laso, name: string): Rec | undefined {
   return palaces(ls).find((p) => p.cungName === name);
 }
 
@@ -275,7 +275,7 @@ function majors(p: Rec | undefined): StarObj[] {
  * 16,2% lá số có Mệnh vô chính diệu, tức bỏ qua bước này là một phần sáu người
  * xem không phân được kiểu.
  */
-function majorsOrBorrow(ls: Laso, p: Rec | undefined): { stars: StarObj[]; muon: boolean } {
+export function majorsOrBorrow(ls: Laso, p: Rec | undefined): { stars: StarObj[]; muon: boolean } {
   const own = majors(p);
   if (own.length) return { stars: own, muon: false };
   const xung = p?.xungChieuCung as Rec | undefined;
@@ -288,12 +288,12 @@ function majorsOrBorrow(ls: Laso, p: Rec | undefined): { stars: StarObj[]; muon:
   return { stars: [], muon: false };
 }
 
-const starLabel = (s: StarObj) => s.ten + (s.brightness ? ` (${s.brightness})` : '') + (s.hoa ? ` [Hóa ${s.hoa}]` : '');
+export const starLabel = (s: StarObj) => s.ten + (s.brightness ? ` (${s.brightness})` : '') + (s.hoa ? ` [Hóa ${s.hoa}]` : '');
 
 /** Kiểu của một CUNG bất kỳ (dùng cho Phụ Mẫu / Nô Bộc / Huynh Đệ ở phần ghép
  * đội). Ở đây gán nhãn đơn giản theo đa số vì chỉ cần một nhãn để nói chuyện,
  * không cần toạ độ. */
-function kieuCuaCung(ls: Laso, name: string): { kieu: KieuId | null; sao: StarObj[]; muon: boolean } {
+export function kieuCuaCung(ls: Laso, name: string): { kieu: KieuId | null; sao: StarObj[]; muon: boolean } {
   const { stars, muon } = majorsOrBorrow(ls, palaceByName(ls, name));
   let bx = 0;
   let by = 0;
