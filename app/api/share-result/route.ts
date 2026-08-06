@@ -34,25 +34,12 @@ export async function POST(request: NextRequest) {
   const toolId = String(b.toolId || 'app').slice(0, 40);
   const title = String(b.title || 'Kết quả Luận Đường').slice(0, 160);
 
-  let imageUrl: string | null = null;
-  let textContent: string | null = null;
-  if (kind === 'image') {
-    imageUrl = String(b.imageUrl || '').slice(0, 500);
-    if (!/^https:\/\//.test(imageUrl)) return err('imageUrl không hợp lệ', 400);
-    // text đi kèm ảnh là TÙY CHỌN — mô tả/luận giải quanh kết quả (vd Chân Dung
-    // Vợ Chồng: tính cách + hoàn cảnh gặp gỡ + luận giải cung Phu Thê), để trang
-    // /ket-qua hiện ĐỦ nội dung workspace chứ không chỉ mỗi tấm ảnh.
-    const t = String(b.text || '').trim().slice(0, 6000);
-    if (t) textContent = t;
-  } else {
-    textContent = String(b.text || '').trim().slice(0, 4000);
-    if (!textContent) return err('Chưa có nội dung để chia sẻ', 400);
-  }
-
   // blocks: mảng "thẻ" tùy chọn để trang /ket-qua render lại y hệt card
   // (.res-block) của workspace — mỗi phần tử chỉ mang TEXT/URL thô, được
   // escape khi render (không phải HTML). Giới hạn số lượng + độ dài để chống
   // nhồi rác qua endpoint công khai này.
+  // Phân tích TRƯỚC hai nhánh kind vì nhánh `text` cần biết có blocks hay không
+  // mới quyết định được là "rỗng thật" — xem ghi chú ngay dưới.
   let blocks: Array<{ header: string | null; image: string | null; text: string | null }> | null = null;
   if (Array.isArray(b.blocks) && b.blocks.length) {
     const parsed = (b.blocks as unknown[]).slice(0, 8).map((raw) => {
@@ -64,6 +51,28 @@ export async function POST(request: NextRequest) {
       return { header, image, text };
     }).filter((blk) => blk.header || blk.image || blk.text);
     if (parsed.length) blocks = parsed;
+  }
+
+  const blocksHaveText = Boolean(blocks && blocks.some((blk) => blk.text || blk.header));
+
+  let imageUrl: string | null = null;
+  let textContent: string | null = null;
+  if (kind === 'image') {
+    imageUrl = String(b.imageUrl || '').slice(0, 500);
+    if (!/^https:\/\//.test(imageUrl)) return err('imageUrl không hợp lệ', 400);
+    // text đi kèm ảnh là TÙY CHỌN — mô tả/luận giải quanh kết quả (vd Chân Dung
+    // Vợ Chồng: tính cách + hoàn cảnh gặp gỡ + luận giải cung Phu Thê), để trang
+    // /ket-qua hiện ĐỦ nội dung workspace chứ không chỉ mỗi tấm ảnh.
+    const t = String(b.text || '').trim().slice(0, 6000);
+    if (t) textContent = t;
+  } else {
+    textContent = String(b.text || '').trim().slice(0, 4000) || null;
+    // ⚠️ `blocks` MỘT MÌNH là nội dung hợp lệ — /ket-qua render blocks trước,
+    // `text_content` chỉ là đường lùi. Trước đây nhánh này đòi bằng được `text`
+    // nên tool nào chia sẻ bằng blocks mà không kèm text đều ăn 400. Đã cắn
+    // thật: Duyên Nợ Tiền Kiếp lúc vẽ ảnh hỏng rơi về kind='text' + blocks,
+    // và người dùng nhận "Không tạo được link chia sẻ" ngay sau khi đã trả tiền.
+    if (!textContent && !blocksHaveText) return err('Chưa có nội dung để chia sẻ', 400);
   }
 
   try {
