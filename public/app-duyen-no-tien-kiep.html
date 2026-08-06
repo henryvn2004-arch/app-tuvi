@@ -265,8 +265,13 @@ async function analyze() {
   if (!b) { showError('Vui lòng nhập đầy đủ ngày tháng năm sinh của người thứ hai.'); return; }
   _lastA = a; _lastB = b;
 
+  // ⚠️ TIỀN TỐ PHẢI LÀ ĐÚNG `tool_id`, không được rút gọn. `hasRecentToolPayment`
+  // (lib/billing/credits.ts) — lưới an toàn chống "đã trả tiền mà vẫn ăn 402" —
+  // lọc `slug=like.<tool_id>*`. Rút gọn thành 'duyen-no-' làm lưới đó KHÔNG BAO
+  // GIỜ khớp, nên chỉ cần `hasSlugAccess` hụt một nhịp là user mất tiền mà
+  // không nhận được hàng. Đã xảy ra thật: một lượt bị trừ 30 Lượng hai lần.
   _currentSlug = TuviPaywall.generateToolSlug(
-    'duyen-no-' + a.day + a.month + a.year + '-' + b.day + b.month + b.year);
+    'duyen-no-tien-kiep-' + a.day + a.month + a.year + '-' + b.day + b.month + b.year);
   await TuviPaywall.requireCreditsCachedQuery(
     '/api/duyen-no-tien-kiep', _cacheQuery(a, b), _currentSlug,
     async function (freeRerun) { await _doGenerate(freeRerun); },
@@ -305,6 +310,12 @@ async function _doGenerate(freeRerun) {
   // Hai pha SONG SONG — truyện hiện trước để đọc, tranh chèn vào sau.
   var storyP = call('story');
   var imageP = call('image');
+  // Gắn handler NGAY: `imageP` chỉ được `await` sau khi truyện xong, nên nếu
+  // pha ảnh hỏng TRƯỚC (mất mạng, request bị cắt) thì trong quãng chờ đó nó là
+  // một rejection không ai bắt → trình duyệt bắn `unhandledrejection`, lọt vào
+  // bộ thu lỗi như một sự cố thật. Bản `.catch` này chỉ dập tiếng ồn; `await
+  // imageP` bên dưới VẪN ném và vẫn được nhánh phục hồi xử lý.
+  imageP.catch(function () {});
 
   try {
     var res = await storyP;
@@ -367,9 +378,55 @@ async function _doGenerate(freeRerun) {
     publishShareable(idata.imageUrl);
     _loadHistory();
   } catch (e2) {
+    // ⚠️ Lượt gọi ảnh HỎNG Ở TRÌNH DUYỆT không có nghĩa là server chưa vẽ xong.
+    // Ảnh mất ~50–150 giây; trên di động (khoá màn hình, đổi sóng, chuyển tab)
+    // fetch bị cắt trong khi hàm trên server VẪN CHẠY TỚI CÙNG rồi ghi cache.
+    // Đã xảy ra thật: người dùng thấy "không vẽ được" trong khi bức tranh nằm
+    // sẵn trong kho 50 giây sau đó. Nên trước khi chịu thua, hỏi lại cache.
+    document.getElementById('imgPlaceholder').textContent = 'Mất kết nối lúc tải tranh — đang thử lấy lại…';
+    var got = await _thuLayLaiTranh();
+    if (got) {
+      _resultImgUrl = got;
+      setResultImage(got);
+      publishShareable(got);
+      _loadHistory();
+      return;
+    }
     document.getElementById('imgPlaceholder').textContent = 'Không vẽ được bức tranh lần này. Phần câu chuyện phía dưới vẫn đầy đủ.';
     publishShareable('');
   }
+}
+
+/**
+ * Hỏi `cache-status` tới khi server báo ĐỦ CẢ HAI PHA rồi mới xin lại ảnh.
+ * CỐ Ý không POST thẳng: pha ảnh chưa vào cache thì một lượt POST nữa là một
+ * lượt GỌI MODEL nữa — tốn tiền thật để lấy đúng bức tranh đang được vẽ dở.
+ * Lượt POST sau khi đã có cache chỉ đọc lại, không sinh ảnh, không trừ thêm.
+ */
+async function _thuLayLaiTranh() {
+  var token = window.Auth?.getSession()?.access_token || '';
+  var q = _cacheQuery(_lastA, _lastB);
+  for (var i = 0; i < 18; i++) {           // 18 × 5s ≈ 90 giây, phủ ca chậm nhất
+    await new Promise(function (r) { setTimeout(r, 5000); });
+    try {
+      var st = await fetch('/api/duyen-no-tien-kiep?action=cache-status&' + q,
+        { headers: { Authorization: 'Bearer ' + token } });
+      var sd = await st.json();
+      if (!sd || !sd.cached) continue;
+      var rr = await fetch('/api/duyen-no-tien-kiep', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+        body: JSON.stringify({
+          birthA: _lastA, birthB: _lastB,
+          nameA: _lastA.name || '', nameB: _lastB.name || '',
+          phase: 'image', slug: _currentSlug,
+        }),
+      });
+      var rd = await rr.json();
+      if (rr.ok && rd.success && rd.imageUrl) return rd.imageUrl;
+    } catch (e) { /* mạng chập chờn — vòng sau thử tiếp */ }
+  }
+  return '';
 }
 
 // esc() dùng chung từ /laso-chart.js (đã load ở trên) — không khai lại.
@@ -458,6 +515,12 @@ function publishShareable(imageUrl) {
     birth: _lastA,
     title: [A.ten, B.ten].filter(Boolean).join(' & ') || 'Duyên nợ tiền kiếp',
     imageUrl: imageUrl || undefined,
+    // `text` là đường lùi của /ket-qua khi không dựng được blocks. Nhánh
+    // KHÔNG CÓ ẢNH bắt buộc phải có nó: chia sẻ dạng 'text' mà bỏ trống thì
+    // server từ chối và người dùng nhận "Không tạo được link chia sẻ".
+    text: [bond.label, d.tuaDe].filter(Boolean).join(' — ') + '\n' +
+      [A.ten, B.ten].filter(Boolean).join('  ·  ') +
+      (d.moTaMoiDuyen ? '\n\n' + d.moTaMoiDuyen : ''),
     blocks: blocks,
   });
 

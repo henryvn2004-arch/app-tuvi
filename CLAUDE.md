@@ -5,6 +5,83 @@
 
 ---
 
+## 💸 Duyên Nợ Tiền Kiếp trừ tiền HAI LẦN — 3 lỗi chồng nhau (2026-08-06, PR này)
+
+Henry báo *"không vẽ được bức tranh"* + *"không tạo được link chia sẻ"*. Điều tra
+ra **ba lỗi độc lập**, và cái nặng nhất KHÔNG nằm trong lời báo: anh **bị trừ 30
+Lượng hai lần cho một lượt xem**.
+
+### 🔑 Bằng chứng đầu tiên phải lấy: model KHÔNG hỏng
+`portrait_cache` có dòng pha `image` ghi lúc **12:30:03**, ảnh PNG **1536×1024
+thật** nằm trong Storage. Tức server vẽ xong bình thường — **trình duyệt bỏ cuộc
+trước**. Đừng đi sửa prompt/model khi chưa soi cache và Storage.
+
+### 🔴 Lỗi 1 — tiền tố slug rút gọn làm CHẾT lưới an toàn thanh toán
+`hasRecentToolPayment` (`lib/billing/credits.ts`) lọc `slug=like.<tool_id>*` —
+đây là lưới đỡ duy nhất chống *"đã trả tiền mà vẫn ăn 402"*. Trang dựng slug
+`'duyen-no-' + …` trong khi `tool_id` là **`duyen-no-tien-kiep`** ⇒ slug NGẮN HƠN
+tool_id ⇒ `LIKE` không bao giờ khớp (verify bằng SQL trên chính 2 dòng giao dịch
+thật: `khop_fallback = false`). Mất lưới, chỉ cần `hasSlugAccess` hụt một nhịp là
+402 ngay sau khi vừa trừ tiền.
+- 🔑 **Luật: slug PHẢI bắt đầu bằng ĐÚNG `tool_id`, được dài hơn, cấm ngắn hơn.**
+  Quét cả site: chỉ 3 route dùng `toolPaymentDenied`, hai cái kia (`chan-dung-*`)
+  khai đúng — lỗi gói gọn ở tool này.
+- **Hậu quả đo được**: story qua (200), image bị 402 → trang báo lỗi → Henry bấm
+  lại → trừ lần hai. Hai slug cách nhau 2,5 giây, `-30` mỗi lần.
+
+### 🔴 Lỗi 2 — `hasSlugAccess` thiếu `cache:'no-store'`, và có đường TỰ ĐẦU ĐỘC
+Đúng nợ CLAUDE.md đã ghi ở track cảnh báo 30/07 (*"còn nhiều lượt GET Supabase
+khác thiếu `cache:'no-store'`, chưa rà hết các route nghiệp vụ"*) — nay nó cắn
+vào đường TRẢ TIỀN. Chỗ này còn tệ hơn cache thường: **`handleDeduct` gọi CHÍNH
+`hasSlugAccess` với ĐÚNG URL đó ngay TRƯỚC khi ghi giao dịch** → bản rỗng bị Next
+nhớ lại → route tool hỏi cùng URL và nhận lại bản rỗng ⇒ vừa trả tiền xong vẫn
+402. Đã thêm `no-store` cho cả 3 lượt GET trong `credits.ts`.
+
+### 🔴 Lỗi 3 — chia sẻ 400, và nó là HỆ QUẢ của lỗi vẽ ảnh
+Vẽ hỏng → `publishShareable('')` → `kind:'text'` kèm `blocks` nhưng **không có
+`text`**; route `share-result` nhánh `text` đòi bằng được `text` → **400** →
+*"Không tạo được link chia sẻ"*. Vẽ được thì đi nhánh `image` (ở đó `text` là tuỳ
+chọn) nên **lỗi này chỉ lộ đúng lúc ảnh hỏng**.
+- Vá **hai đầu**: route nay nhận `blocks` một mình là nội dung hợp lệ (trang
+  `/ket-qua` vốn render blocks trước, `text_content` chỉ là đường lùi); client
+  cũng gửi kèm `text` để không phụ thuộc một phía.
+
+### ✅ Đường phục hồi ảnh — vá đúng thứ người dùng thấy
+Ảnh mất 50–150 giây; trên di động (khoá màn hình, đổi sóng, chuyển tab) fetch bị
+cắt trong khi hàm server VẪN CHẠY TỚI CÙNG rồi ghi cache. Nay khi lượt ảnh hỏng ở
+client, trang **hỏi `cache-status` mỗi 5 giây (tối đa 90 giây)**, đủ CẢ HAI PHA
+mới POST lại để đọc cache.
+- 🔑 **CỐ Ý không POST lại thẳng**: pha ảnh chưa vào cache thì một lượt POST nữa
+  là một lượt **GỌI MODEL** nữa — tốn tiền thật để lấy đúng bức tranh đang vẽ dở.
+  Có ca ĐỐI CHỨNG canh đúng tính chất này.
+- 🐞 Bắt kèm: `imageP` bị bỏ rơi trong lúc `await storyP` → ảnh hỏng trước truyện
+  là một `unhandledrejection` lọt vào bộ thu lỗi như sự cố thật. Gắn `.catch`
+  giữ chỗ; `await imageP` bên dưới vẫn ném và vẫn được nhánh phục hồi xử lý.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier --check .` sạch
+· `check:prices` sạch · engine **185 pass** · `node --check` 2 khối script nội
+tuyến · **6 ca trên ROUTE THẬT `share-result`** qua Next dev + stub PostgREST:
+payload y hệt bản ảnh-hỏng nay 200, blocks chỉ có header cũng 200, + **3 ca ĐỐI
+CHỨNG vẫn phải 400** (rỗng hẳn · blocks toàn rác · `imageUrl` là `javascript:`),
+và kiểm dòng THỰC SỰ lưu chứ không chỉ nhìn mã trả về · **render thật
+`/ket-qua/<id>`**: bản chia sẻ chỉ-có-blocks mở ra **đủ chữ** (tiêu đề + 2 khối)
+· **5 ca Playwright trên TRANG THẬT**: ảnh hỏng → tự lấy lại được, hết câu "Không
+vẽ được", POST pha ảnh **đúng 2 lần**, có hỏi cache-status trước khi POST lại,
+0 lỗi JS · **ca ĐỐI CHỨNG**: cache chưa sẵn → **tuyệt đối không POST lại**.
+- 🪤 Một ca đỏ là **lỗi TEST**: ảnh giả 16 byte nên `img.onload` không chạy, mà
+  `setResultImage` chỉ đặt `display:block` trong `onload`. Phải dùng PNG hợp lệ.
+- 🪤 `.single()` của supabase-js gửi `Accept: application/vnd.pgrst.object+json`
+  và chờ MỘT OBJECT — stub trả mảng là trang ra 404, dễ tưởng nhầm là lỗi code.
+
+### 🔑 VIỆC TAY HENRY
+- **Đang bị trừ thừa 30 Lượng** (2 dòng `use_duyen_no_tien_kiep` lúc 12:29:08 và
+  12:29:10). CỐ Ý không tự hoàn — hoàn tiền là sửa sổ giao dịch, để Henry quyết.
+- Bức tranh của lượt đó **vẫn còn nguyên trong kho**; mở lại tool với đúng cặp lá
+  số là ra ngay và **không trừ Lượng** (cache đủ 2 pha + đã sở hữu).
+
+---
+
 ## 💼 Track click108 → tool MỚI "Tử Vi Công Sở" (2026-08-06, PR này)
 
 Henry: *"cách mà trang click108 nó kết hợp tử vi với tâm lý học, quản trị học là
