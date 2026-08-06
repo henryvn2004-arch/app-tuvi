@@ -122,7 +122,7 @@
                 <div class="dn-birth" id="birthLine" style="display:none"></div>
               </div>
               <div class="dn-imgwrap">
-                <div class="dn-imgph" id="imgPlaceholder">Đang vẽ bức tranh hai người…<br>(khoảng 30–60 giây)</div>
+                <div class="dn-imgph" id="imgPlaceholder">Đang vẽ bức tranh hai người…<br>(khoảng 45–60 giây)</div>
                 <img id="resultImg" alt="Tranh duyên nợ tiền kiếp" style="display:none">
                 <div id="imgLoadStatus" style="display:none;margin-top:8px;font-size:12px;color:var(--text-lt);text-align:center"></div>
                 <div class="dn-actions" id="imgActions" style="display:none">
@@ -172,7 +172,7 @@ window.SHELL_INTRO={key:'duyen-no-tien-kiep',title:'Duyên Nợ Tiền Kiếp',d
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=59"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=1"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=2"></script>
 <script>
 
 var _currentSlug = '';
@@ -187,6 +187,7 @@ var DN_STEPS = [
 ];
 var _loadingCtl = null;
 var _imgRetryTimer = null;
+var _imgWait = null;      // đồng hồ chờ trong khung ảnh — PHẢI stop ở mọi nhánh thoát
 
 function setResultImage(url) {
   var img = document.getElementById('resultImg');
@@ -291,6 +292,14 @@ async function _doGenerate(freeRerun) {
   document.getElementById('imgActions').style.display = 'none';
   document.getElementById('resultImg').style.display = 'none';
   document.getElementById('imgPlaceholder').style.display = 'flex';
+  // Pha ảnh chạy tiếp ~50 giây SAU khi truyện đã hiện và bảng bước đã tắt —
+  // không có đồng hồ chạy thì khung ảnh nhìn như treo. Bọc `if` vì bản
+  // ai-loading-steps.js còn nằm trong cache trình duyệt có thể chưa có hàm này;
+  // thiếu thì rơi về dòng chữ tĩnh như cũ, không ném lỗi.
+  _imgWait = AiLoadingSteps.mountWait
+    ? AiLoadingSteps.mountWait('imgPlaceholder', { label: 'Đang vẽ bức tranh hai người…' })
+    : null;
+  _imgWait && _imgWait.start();
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', DN_STEPS);
   _loadingCtl.start();
 
@@ -323,6 +332,7 @@ async function _doGenerate(freeRerun) {
     if (res.status === 402 && freeRerun) {
       imageP.catch(function () {});
       _loadingCtl && _loadingCtl.stop();
+      _imgWait && _imgWait.stop();   // quay về form trả tiền → lượt này bỏ, dừng đồng hồ
       showForm();
       document.getElementById('loading').style.display = 'none';
       await TuviPaywall.requireCredits(_currentSlug, async function () { await _doGenerate(false); });
@@ -361,6 +371,7 @@ async function _doGenerate(freeRerun) {
     });
   } catch (e) {
     _loadingCtl && _loadingCtl.stop();
+    _imgWait && _imgWait.stop();   // truyện hỏng → ẩn cả khung ảnh, đừng để đồng hồ chạy ngầm
     document.getElementById('loading').style.display = 'none';
     document.getElementById('resPanel').style.display = 'none';
     document.getElementById('birthPanel').style.display = 'block';
@@ -373,6 +384,7 @@ async function _doGenerate(freeRerun) {
     var ires = await imageP;
     var idata = await ires.json();
     if (!ires.ok || !idata.success) throw new Error(idata.error || 'Lỗi ' + ires.status);
+    _imgWait && _imgWait.stop();
     _resultImgUrl = idata.imageUrl;
     setResultImage(idata.imageUrl);
     publishShareable(idata.imageUrl);
@@ -383,8 +395,12 @@ async function _doGenerate(freeRerun) {
     // fetch bị cắt trong khi hàm trên server VẪN CHẠY TỚI CÙNG rồi ghi cache.
     // Đã xảy ra thật: người dùng thấy "không vẽ được" trong khi bức tranh nằm
     // sẵn trong kho 50 giây sau đó. Nên trước khi chịu thua, hỏi lại cache.
-    document.getElementById('imgPlaceholder').textContent = 'Mất kết nối lúc tải tranh — đang thử lấy lại…';
+    // GIỮ đồng hồ chạy tiếp: server nhiều khả năng vẫn đang vẽ, nên tắt chỉ báo
+    // ở đây là nói dối theo hướng ngược lại. Chỉ đổi lời cho đúng thực tế.
+    if (_imgWait) _imgWait.note('Mất kết nối lúc tải tranh — đang thử lấy lại…');
+    else document.getElementById('imgPlaceholder').textContent = 'Mất kết nối lúc tải tranh — đang thử lấy lại…';
     var got = await _thuLayLaiTranh();
+    _imgWait && _imgWait.stop();
     if (got) {
       _resultImgUrl = got;
       setResultImage(got);

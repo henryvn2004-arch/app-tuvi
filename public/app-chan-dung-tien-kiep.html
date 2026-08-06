@@ -100,7 +100,7 @@
               </div>
               <div class="cdtk-top">
                 <div class="cdtk-imgwrap">
-                  <div class="cdtk-imgph" id="imgPlaceholder">Đang vẽ chân dung…<br>(khoảng 30–60 giây)</div>
+                  <div class="cdtk-imgph" id="imgPlaceholder">Đang vẽ chân dung…<br>(khoảng 45–60 giây)</div>
                   <img id="resultImg" alt="Chân dung tiền kiếp" style="display:none">
                   <div id="imgLoadStatus" style="display:none;margin-top:8px;font-size:12px;color:var(--text-lt);text-align:center"></div>
                   <div class="cdtk-actions" id="imgActions" style="display:none">
@@ -149,7 +149,7 @@ window.SHELL_INTRO={key:'chan-dung-tien-kiep',title:'Chân Dung Tiền Kiếp',d
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=59"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=1"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=2"></script>
 <script>
 
 var _currentSlug = '';
@@ -162,6 +162,7 @@ var CDTK_STEPS = [
   { label: 'Viết câu chuyện cuộc đời', ms: 0 },
 ];
 var _loadingCtl = null;
+var _imgWait = null;      // đồng hồ chờ trong khung ảnh — PHẢI stop ở mọi nhánh thoát
 var _imgRetryTimer = null;
 
 var ROLE_BADGE = {
@@ -235,6 +236,12 @@ async function _doGenerate(freeRerun) {
   document.getElementById('imgActions').style.display = 'none';
   document.getElementById('resultImg').style.display = 'none';
   document.getElementById('imgPlaceholder').style.display = 'flex';
+  // Pha ảnh chạy tiếp ~50 giây SAU khi truyện đã hiện và bảng bước đã tắt.
+  // Bọc `if` phòng bản ai-loading-steps.js cũ còn trong cache trình duyệt.
+  _imgWait = AiLoadingSteps.mountWait
+    ? AiLoadingSteps.mountWait('imgPlaceholder', { label: 'Đang vẽ chân dung…' })
+    : null;
+  _imgWait && _imgWait.start();
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDTK_STEPS);
   _loadingCtl.start();
 
@@ -299,6 +306,7 @@ async function _doGenerate(freeRerun) {
     });
   } catch (e) {
     _loadingCtl && _loadingCtl.stop();
+    _imgWait && _imgWait.stop();   // truyện hỏng → ẩn cả khung ảnh, đừng để đồng hồ chạy ngầm
     document.getElementById('loading').style.display = 'none';
     document.getElementById('resPanel').style.display = 'none';
     document.getElementById('birthPanel').style.display = 'block';
@@ -311,11 +319,13 @@ async function _doGenerate(freeRerun) {
     var ires = await imageP;
     var idata = await ires.json();
     if (!ires.ok || !idata.success) throw new Error(idata.error || 'Lỗi ' + ires.status);
+    _imgWait && _imgWait.stop();
     _resultImgUrl = idata.imageUrl;
     setResultImage(idata.imageUrl);
     publishShareable(idata.imageUrl);
     _loadHistory();
   } catch (e2) {
+    _imgWait && _imgWait.stop();
     document.getElementById('imgPlaceholder').textContent = 'Không vẽ được chân dung lần này. Phần câu chuyện phía dưới vẫn đầy đủ.';
     publishShareable('');
   }

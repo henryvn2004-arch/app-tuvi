@@ -74,11 +74,86 @@ vẽ được", POST pha ảnh **đúng 2 lần**, có hỏi cache-status trư�
 - 🪤 `.single()` của supabase-js gửi `Accept: application/vnd.pgrst.object+json`
   và chờ MỘT OBJECT — stub trả mảng là trang ra 404, dễ tưởng nhầm là lỗi code.
 
-### 🔑 VIỆC TAY HENRY
-- **Đang bị trừ thừa 30 Lượng** (2 dòng `use_duyen_no_tien_kiep` lúc 12:29:08 và
-  12:29:10). CỐ Ý không tự hoàn — hoàn tiền là sửa sổ giao dịch, để Henry quyết.
-- Bức tranh của lượt đó **vẫn còn nguyên trong kho**; mở lại tool với đúng cặp lá
-  số là ra ngay và **không trừ Lượng** (cache đủ 2 pha + đã sở hữu).
+### ✅ Đã xử lý sau khi merge (Henry chốt "fix 2 việc treo")
+- **Hoàn 30 Lượng** đã chạy prod: qua RPC `add_credits` (đúng lối
+  `handleAdminGrant`), **KHÔNG sửa thẳng `user_credits.balance`** — sổ giao dịch
+  phải giải thích được số dư. 7.068 → **7.098**, ròng lượt đó còn `-30`. Dòng
+  `type='refund'` gắn đúng slug bị trừ thừa để báo cáo doanh thu không đọc nhầm
+  thành nạp tiền.
+- **Mở lại lấy tranh**: đã kiểm đúng 3 điều kiện code xét — 2 pha đều có cache
+  hợp lệ · `userOwnsLaso` khớp · payload cache mang sẵn `imageUrl` ⇒ `free=true`.
+
+### 🔑 Hai ảnh KHÁC NHAU — lượt trừ thừa còn đốt thêm một lượt model
+`past_life_bonds` có 2 dòng, `…400073.png` và `…405032.png`, và `events` có **2
+dòng `llm_usage` ảnh**. Tức thiệt hại của lỗi slug không dừng ở 30 Lượng: nó gọi
+model thêm một lần (~1.100đ) và bức thứ hai không ai từng thấy.
+
+---
+
+## ⏳ Ảnh chậm gấp đôi vì ĐỔI MODEL, không phải hồi quy (2026-08-06, cùng PR)
+
+Henry: *"sao ảnh lại mất lâu thế? tool chân dung tiền kiếp đâu có lâu như vậy"*.
+
+### Bằng chứng: CÙNG một tool, hai model
+| Tool | Ngày | Model | Ảnh chậm hơn truyện |
+|---|---|---|---|
+| Chân Dung Vợ Chồng | 01/08 | gpt-image-1 | **21,9s** |
+| Chân Dung Vợ Chồng | 04/08 | **gpt-image-2** | **46,1s** |
+
+Đo trên `events.llm_usage` (khoảng cách mốc log pha ảnh vs pha truyện — hai pha
+chạy song song). 11 lượt gpt-image-1 nằm trong **15–26s**; gpt-image-2 **46,1s**.
+Model đổi **04/08**; `chan-dung-tien-kiep` chạy lần cuối **01/08** ⇒ Henry đang so
+với ký ức của model cũ. **Không tool nào nhanh hơn tool nào.**
+
+- ⚠️ **Đính chính số CLAUDE.md đang ghi**: dải "65–150 giây" là đo ở
+  `quality=high` của lượt vẽ 64 bức quẻ. Ba tool chân dung **không truyền
+  `quality`** nên ăn mặc định **medium** → thực đo **46–57 giây**.
+- Xác nhận cấu hình: `OPENAI_IMAGE_MODEL` mặc định `gpt-image-2`, `quality` mặc
+  định `medium`, và **cả 3 tool người dùng đều không truyền `quality`** (chỉ 2
+  route admin `chan-dung-thu`/`que-images` mới truyền). **Henry chốt GIỮ NGUYÊN.**
+- Cần gạt nếu cần nhanh: env `OPENAI_IMAGE_MODEL=gpt-image-1` + Redeploy → ~22s,
+  nhưng đắt hơn 34% và **OpenAI tắt gpt-image-1 ngày 23/10/2026**.
+
+### ✅ Chỉ báo chờ — `AiLoadingSteps.mountWait()`
+🔴 **Chỗ hổng thật, không phải chuyện thẩm mỹ:** tool 2 pha tắt bảng bước ngay khi
+truyện xong, rồi để pha ảnh chạy tiếp ~40 giây với đúng **một dòng chữ TĨNH**
+trong khung ảnh. Không gì nhúc nhích ⇒ người dùng đọc thành "treo" và **bấm lại
+— mà bấm lại là một lượt GỌI MODEL nữa**. Đúng chuỗi đã làm Henry mất 60 Lượng.
+- Thêm hàm DÙNG CHUNG vào `tools-shared/ai-loading-steps.js` (spinner + thanh
+  tiến trình + đếm giây + câu "thường mất 45–60 giây"), cắm vào 3 trang có khung
+  ảnh tĩnh. Hai tool Vợ Chồng chạy 1 pha nên bảng bước vốn ở lại suốt — chỉ sửa
+  nhãn bước cuối cho có kỳ vọng thời lượng.
+- 🔑 **Thanh chặn trần 96%**: thanh đầy trong khi việc CHƯA xong còn tệ hơn không
+  có thanh — người ta tin là xong rồi và bỏ đi.
+- 🔑 **Quá hẹn thì ĐỔI LỜI chứ không đứng im** ("vẫn đang vẽ, đừng đóng trang").
+- Nhánh ảnh hỏng **CỐ Ý giữ đồng hồ chạy** suốt vòng phục hồi — server nhiều khả
+  năng vẫn đang vẽ, tắt chỉ báo ở đó là nói dối theo hướng ngược lại.
+- Gọi `mountWait` qua `if (AiLoadingSteps.mountWait)`: bản JS cũ còn trong cache
+  trình duyệt thì rơi về dòng chữ tĩnh như cũ, không ném lỗi. Bump `?v=1→2` (16 file).
+
+### Verify (vòng chỉ báo)
+`tsc` 0 lỗi · `lint` 0 lỗi · `prettier` sạch · `check:prices` sạch · **JS và
+JSON-LD của 5 trang đều hợp lệ** (kiểm tách hai loại — `node --check` trên khối
+`ld+json` là sai công cụ, đã vấp một lần) · **10 ca Playwright**: đồng hồ NHÍCH
+thật, thanh chạy, nói đúng thời lượng, ảnh về thì nhường chỗ, 0 lỗi JS ·
+**4 ca hợp đồng `mountWait`**: `stop()` dọn hẳn interval · quá hẹn đổi lời ·
+thanh chặn đúng 96%.
+- 🪤 Một ca của tao **đỗ GIẢ**: nhánh hỏng thay lời bằng câu không chứa số giây
+  nên phép so `before === after` không chứng minh được gì. Phải kiểm THẲNG
+  `stop()` ở tầng hợp đồng. Bài học: assertion phải nhìn vào thứ ĐANG ĐỔI.
+- 🪤 **`git checkout --ours` khi giải xung đột `stash pop` là con dao cụt**: nó
+  lấy TRỌN bản upstream, tức xoá luôn phần đã auto-merge sạch của mình trong
+  chính file đó. Tao mất hết sửa đổi ở 5 file và chỉ biết vì có kiểm lại bằng
+  `grep -c`. Đường đúng: `git apply -3` bản diff của stash rồi giải từng hunk.
+  **Sau mỗi lần giải xung đột phải ĐẾM LẠI dấu hiệu của cả hai bên**, đừng tin
+  là "hết `<<<<<<<` nghĩa là xong".
+
+### CÒN LẠI
+- **Đường phục hồi ảnh mới chỉ có ở Duyên Nợ**, chưa port sang 2 tool chân dung
+  (cùng lỗi "trình duyệt bỏ cuộc trong khi server vẫn vẽ"). Port là chép
+  `_thuLayLaiTranh` + nhánh `catch`, không đụng kiến trúc.
+- Muốn dứt điểm quãng chờ thì phải đổi pha ảnh sang "đặt hàng rồi hỏi lại"
+  (POST nhận ngay mã, client poll cache) — đụng cả 3 tool, chưa làm.
 
 ---
 
