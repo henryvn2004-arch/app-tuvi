@@ -614,6 +614,9 @@ Nguyên tắc luận:
 - 🔑 KHÔNG CÓ KIỂU NÀO HƠN KIỂU NÀO. Mỗi kiểu chỉ hợp/không hợp một hoàn cảnh — cổ pháp gọi là "thời" và "vị". Ai đọc xong thấy mình thuộc kiểu kém hơn là bạn đã luận sai
 - 🔑 "Thuận đà / ngược đà" ở phần bốn chặng là so tính âm–dương của đại vận với kiểu bản mệnh. Ngược đà KHÔNG phải xui — đó là quãng phải ĐỔI CÁCH LÀM, và thường là quãng học được nhiều nhất
 - Trường "Bạn đang ở vị trí nào" là người dùng TỰ KHAI, không suy từ lá số. Bám lấy nó: lời khuyên cho một nhân viên và cho một người đã làm chủ khác hẳn nhau
+- 🔑 KHI HỎI VỀ NGÀNH NGHỀ: thứ cổ thư nói là **CHẤT VIỆC** (đối mặt hay bàn giấy, cầm người hay cầm nghề, đo bằng số hay đo bằng uy tín). Danh sách ngành hiện đại là QUY CHIẾU CỦA TRANG, không phải lời của sách — nói rõ chỗ này nếu người hỏi truy. Người ta đang làm ngành KHÔNG có trong danh sách thì đối chiếu chất việc, TUYỆT ĐỐI không phán "bạn đang làm sai nghề"
+- Ba trục ra gợi ý là ĐỘC LẬP, đừng trộn: lĩnh vực ← cung Quan Lộc · vai trò ← kiểu người (cung Mệnh) · quy mô ← bậc chức phận. Ai hỏi "vì sao ngành này" thì chỉ đúng trục đó ra
+- "Chức phận theo lối cổ" (kiểu "quan trấn phủ", "cự phú buôn vàng bạc") là NGÔN NGỮ NỘI BỘ để bạn hiểu chất việc — CẤM đọc thô cho người dùng ở phần trả lời chính. Diễn nó ra tiếng người hiện đại
 - Kết bằng VIỆC LÀM ĐƯỢC, không kết bằng lời mô tả tính cách. Người ta trả tiền cho câu "làm gì tiếp", không trả tiền cho câu "bạn là người thế này"
 - Chỉ luận từ dữ liệu đã cho. KHÔNG bịa thêm sao, cung, cách cục hay con số nào không có trong hồ sơ
 
@@ -1212,6 +1215,17 @@ const GENERIC_LABELS: Record<string, string> = {
   loTrinh40Nam: 'Bốn chặng 40 năm đi làm', vanNamNay: 'Vận năm nay',
   ghepDoi: 'Kiểu người ở ba cung nhân sự (Phụ Mẫu · Huynh Đệ · Nô Bộc)',
   kieuNenTimDeBu: 'Kiểu NÊN TÌM để bù khuyết cho mình',
+  linhVucHop: 'LĨNH VỰC hợp (suy từ chức phận cung Quan Lộc)',
+  chatViecHop: 'CHẤT VIỆC hợp — đây mới là phần cổ thư nói',
+  nganhGoiY: 'Ngành hiện đại mang chất việc đó (quy chiếu của trang, KHÔNG phải cổ thư)',
+  vaiTroTrongNganh: 'VAI nên nhận trong ngành (suy từ kiểu người, cung Mệnh)',
+  quyMoGanhDuoc: 'QUY MÔ gánh được (suy từ bậc chức phận)',
+  saoQuyetDinhNganh: 'Sao (hoặc CẶP sao đồng cung) quyết định lĩnh vực',
+  bacChucPhan: 'Bậc chức phận + từng khoản cộng trừ',
+  chucPhanTheoCoThu: 'Chức phận diễn theo lối cổ (dùng làm căn cứ, KHÔNG đọc thô cho người dùng)',
+  trichDanCoThu: 'Trích dẫn Tân Biên làm căn cứ',
+  sacThaiQuanLoc: 'Sắc thái từ phụ tinh và tứ hoá đóng tại cung Quan Lộc',
+  luatDocSacThai: 'LUẬT đọc sắc thái phụ tinh (đọc sai chỗ này là ra mâu thuẫn)',
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractGenericContext(data: any): string {

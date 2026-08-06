@@ -323,6 +323,41 @@
         '</div>'
     );
 
+    // NGÀNH NGHỀ — đặt ngay sau khối kiểu người vì "tôi hợp làm gì" là câu
+    // người ta mở tool để hỏi. Ba trục hiện tách bạch để đọc được vì sao ra
+    // gợi ý này: lĩnh vực (cung Quan Lộc) × vai trò (kiểu người) × quy mô (bậc).
+    var ng = ho.nganh;
+    h.push(
+      '<div class="cs-sec"><h3>Bạn hợp làm gì</h3>' +
+        '<div class="cs-linhvuc" style="border-color:' + mau + '">' +
+        '<div class="cs-lv-ten">' + esc(ng.linhVuc) + '</div>' +
+        '<div class="cs-lv-chat">' + esc(ng.chatViec) + '</div>' +
+        '<ul class="cs-nganh">' + ng.nganh.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
+        '</div>' +
+        '<div class="cs-grid" style="margin-top:11px">' +
+        card('Vai bạn nên nhận trong ngành đó', esc(ng.vaiTro)) +
+        card('Quy mô gánh được — bậc ' + esc(ng.bac), esc(ng.quyMo)) +
+        '</div>' +
+        // ⚠️ Sắc thái phụ tinh THU HẸP TRONG lĩnh vực, KHÔNG thay lĩnh vực. Không
+        // nói rõ chỗ này thì nó đọc thành mâu thuẫn ngay trên màn hình: lĩnh vực
+        // ghi "chăm sóc thân thể" mà ngay dưới ghi "ngả hẳn về đường văn chương".
+        // Đọc đúng thì đó là nhánh giảng dạy / nghiên cứu / viết chuyên môn CỦA
+        // chính ngành đó — và đấy mới là chi tiết đáng tiền.
+        (ng.sacThai.length
+          ? '<div class="cs-card" style="margin-bottom:11px"><b>Trong lĩnh vực đó, bạn nghiêng về nhánh nào</b>' +
+            '<div style="font-size:12px;color:var(--text-lt);line-height:1.65;margin-bottom:7px">' +
+            'Phụ tinh đóng tại cung Quan Lộc <b>thu hẹp bên trong</b> lĩnh vực trên, không thay nó. ' +
+            'Ví dụ nghiêng “chữ nghĩa” trong ngành y là nhánh giảng dạy, nghiên cứu, viết chuyên môn — vẫn là ngành y.' +
+            '</div>' +
+            '<ul class="cs-ul"><li>' + ng.sacThai.map(esc).join('</li><li>') + '</li></ul></div>'
+          : '') +
+        '<p class="cs-note">Đây là gợi ý HƯỚNG, không phải chỉ định nghề. Cổ thư nói về <b>chất việc</b> ' +
+        '(đối mặt hay bàn giấy, cầm người hay cầm nghề); danh sách ngành hiện đại ở trên là phần trang quy chiếu ra. ' +
+        'Không có tên ngành bạn đang làm trong danh sách <b>không</b> có nghĩa là bạn đang làm sai — hãy đối chiếu ' +
+        '<i>chất việc</i> thay vì đối chiếu tên ngành.</p>' +
+        '</div>'
+    );
+
     // Lời theo tình trạng nghề — đặt CAO trên trang vì đây là phần người ta
     // thấy "nói đúng mình" nhất, và nó phụ thuộc ô người dùng vừa tự khai.
     h.push(
@@ -409,6 +444,10 @@
         row('Chính tinh cung Quan Lộc', (ho.phan.saoQuan.join(', ') || 'vô chính diệu') + (ho.phan.muonQuan ? ' — mượn cung xung chiếu' : '')) +
         row('Toạ độ', 'tranh ↔ nhường: ' + ho.phan.x + ' · xông ↔ trầm: ' + ho.phan.y) +
         (ho.phan.vaiTro ? row('Tư cách theo cung Mệnh', ho.phan.vaiTro.role) : '') +
+        row('Sao quyết định lĩnh vực', ho.nganh.sao + (ho.nganh.laCap ? ' — đọc theo CẶP đồng cung' : '') + (ho.nganh.muon ? ' — mượn cung xung chiếu' : '')) +
+        row('Bậc chức phận', ho.nganh.bac + ' · điểm ' + ho.nganh.bacDiem + (ho.nganh.bacChiTiet.length ? ' (' + ho.nganh.bacChiTiet.join(', ') + ')' : '')) +
+        row('Chức phận theo lối cổ', ho.nganh.chucPhanCo) +
+        row('Trích dẫn cổ thư', ho.nganh.nguon) +
         (ho.quanLoc.cachCuc.length ? row('Cách cục tại cung Quan Lộc', ho.quanLoc.cachCuc.join(' · ')) : '') +
         (ho.vanNam
           ? row(

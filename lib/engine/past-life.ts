@@ -2089,7 +2089,36 @@ export interface OccupationResult extends Occupation {
   markEn: string;
 }
 
-function computeOccupation(ls: Laso, gender: 'nam' | 'nu', thanCungName: string): OccupationResult {
+/** Phần LÕI của việc đọc chức phận ở cung Quan Lộc — không dính gì tới danh
+ * xưng, hậu tố cung Thân hay prompt ảnh.
+ *
+ * Tách ra để tool Tử Vi Công Sở (`lib/engine/cong-so.ts`) gợi NGÀNH NGHỀ hiện
+ * đại từ CÙNG một đường tra: bảng cặp `PAIR_OCCUPATION_TABLE` (24 cặp chính
+ * tinh, khớp đúng cách chương Quan Lộc của Tân Biên luận theo CẶP) → rơi về
+ * bảng đơn khi không phải cặp. Chép một bản thứ hai thì hai bên sẽ trôi khỏi
+ * nhau, mà trích dẫn cổ thư thì chỉ đúng ở một bên. */
+export interface CareerBase {
+  /** Nhóm nghề — trục quyết định NGÀNH. */
+  domain: Occupation['domain'];
+  /** Một câu chức phận (viết theo lối cổ, dùng làm căn cứ chứ không hiện thô). */
+  desc: string;
+  /** Trích dẫn Tân Biên — hiện ở khối "Cơ sở trong lá số". */
+  source: string;
+  tier: OccTier;
+  tierLabel: string;
+  tierScore: number;
+  tierBreakdown: string[];
+  /** Sao chủ, hoặc tên CẶP khi hai chính tinh đồng cung. */
+  star: string;
+  /** Có tra được bảng CẶP không (tức chức phận đọc từ hai sao, không phải một). */
+  laCap: boolean;
+  /** Quan Lộc vô chính diệu → mượn chính tinh cung xung chiếu (cổ pháp 8.45). */
+  borrowed: boolean;
+  /** Sắc thái từ phụ tinh + tứ hóa đóng TẠI Quan Lộc. */
+  notes: string[];
+}
+
+export function resolveCareerBase(ls: Laso): CareerBase {
   const palaces = (ls.palaces as Rec[]) || [];
   const quan = palaces.find((p) => p.cungName === 'Quan Lộc') as Rec | undefined;
   // Hành của mệnh lấy từ cục (vd "Kim tứ cục" → Kim) — cùng cách portrait.ts dùng.
@@ -2136,6 +2165,52 @@ function computeOccupation(ls: Laso, gender: 'nam' | 'nu', thanCungName: string)
   for (const s of quanStars) {
     if (s.hoa && HOA_NOTES[s.hoa]) notes.push(`${s.ten} hóa ${s.hoa} → ${HOA_NOTES[s.hoa]}`);
   }
+
+  return {
+    domain: base.domain,
+    desc: base.desc,
+    source: base.source,
+    tier: tierInfo.tier,
+    tierLabel: TIER_LABEL[tierInfo.tier],
+    tierScore: tierInfo.score,
+    tierBreakdown: tierInfo.breakdown,
+    // Cặp thì nêu CẢ HAI sao — chức phận suy từ cả cặp, ghi mỗi sao chủ là nói
+    // sai căn cứ.
+    star: pairEntry ? `${pk.replace('+', ' + ')} đồng cung` : lead?.ten || '(vô chính diệu)',
+    laCap: !!pairEntry,
+    borrowed,
+    notes,
+  };
+}
+
+function computeOccupation(ls: Laso, gender: 'nam' | 'nu', thanCungName: string): OccupationResult {
+  const palaces = (ls.palaces as Rec[]) || [];
+  const quan = palaces.find((p) => p.cungName === 'Quan Lộc') as Rec | undefined;
+  const menhHanh = String(ls.cuc || '').trim().split(/\s+/)[0] || '';
+
+  // NGUỒN DUY NHẤT của phép đọc chức phận — xem `resolveCareerBase`.
+  const cb = resolveCareerBase(ls);
+  const tierInfo = { tier: cb.tier, score: cb.tierScore, breakdown: cb.tierBreakdown };
+  const pairEntry = cb.laCap;
+  const borrowed = cb.borrowed;
+  const notes = cb.notes;
+
+  // Bản ghi đầy đủ (có `titleNam`/`titleNu`/`attireEn`) chỉ tool tiền kiếp cần,
+  // nên tra lại ở đây thay vì bắt `resolveCareerBase` mang theo.
+  let lead = pickQuanMajor(quan, menhHanh);
+  let sourcePalace = quan;
+  if (!lead) {
+    const xung = quan?.xungChieuCung as Rec | undefined;
+    lead = pickQuanMajor(xung, menhHanh);
+    if (lead) sourcePalace = xung;
+  }
+  const pk = pairKey(palaceStarObjs(sourcePalace, true));
+  const pairRec = pk ? PAIR_OCCUPATION_TABLE[pk] : undefined;
+  const base = pairRec
+    ? pairRec[tierInfo.tier]
+    : lead
+      ? OCCUPATION_TABLE[lead.ten][tierInfo.tier]
+      : DEFAULT_OCCUPATION;
 
   // MẢNG (cung Thân) → hậu tố danh xưng + đạo cụ cho ảnh. Thân cư Mệnh thì
   // hậu tố rỗng, danh xưng giữ nguyên bản gốc — xem chú thích ở THAN_ASPECT.
@@ -2190,7 +2265,7 @@ function computeOccupation(ls: Laso, gender: 'nam' | 'nu', thanCungName: string)
     // Cặp thì nêu CẢ HAI sao — chức phận suy từ cả cặp, ghi mỗi sao chủ là nói
     // sai căn cứ. Bỏ độ sáng ở nhánh cặp vì đó là độ sáng của riêng sao chủ,
     // gắn vào tên cặp sẽ đọc thành độ sáng của cả hai.
-    star: pairEntry ? `${pk.replace('+', ' + ')} đồng cung` : lead?.ten || '(vô chính diệu)',
+    star: cb.star,
     brightness: pairEntry ? undefined : lead?.brightness,
     tier: tierInfo.tier,
     tierLabel: TIER_LABEL[tierInfo.tier],

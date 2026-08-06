@@ -46,7 +46,7 @@
 // ============================================================
 
 import type { Laso } from '@/lib/engine/laso';
-import { MENH_ROLE } from '@/lib/engine/past-life';
+import { MENH_ROLE, resolveCareerBase, type CareerBase } from '@/lib/engine/past-life';
 import { currentNamXem } from '@/lib/engine/namxem';
 
 type Rec = Record<string, unknown>;
@@ -496,7 +496,130 @@ const BU: Record<KieuId, KieuId> = {
   'ho-tro': 'lanh-dao',
 };
 
-// ── 5. Lời khuyên theo tình trạng nghề ──────────────────────
+// ── 5. Gợi ngành nghề cụ thể ────────────────────────────────
+// Đọc chức phận ở cung Quan Lộc qua `resolveCareerBase` (past-life.ts) — CÙNG
+// một đường tra với tool Chân Dung Tiền Kiếp, tức dùng được bảng CẶP chính
+// tinh `PAIR_OCCUPATION_TABLE`. Chính chương Quan Lộc của Tân Biên luận theo
+// CẶP ("Vũ + Phủ" là chức tài chánh, "Vũ + Tham" là kinh doanh, "Vũ" đơn thủ
+// mới là võ nghiệp) nên đọc theo cặp là bám sát sách hơn đọc sao đơn.
+// Đo trên 10.368 lá số: 49,6% lá số tra được bảng cặp, cả 24 cặp đều xuất hiện.
+//
+// 🔑 BA TRỤC ĐỘC LẬP, KHÔNG VIẾT MA TRẬN:
+//   LĨNH VỰC ← domain (7 nhóm, từ cung Quan Lộc)  → "làm ở ngành nào"
+//   VAI TRÒ  ← kiểu người (4 nhóm, từ cung Mệnh)  → "làm việc gì trong ngành đó"
+//   QUY MÔ   ← bậc chức phận (4 bậc engine chấm)  → "gánh tới đâu"
+// Viết 7 + 4 + 4 = 15 khối thay vì 112 ô ma trận, và mỗi trục sửa được riêng.
+//
+// ⚠️ Đây là GỢI Ý HƯỚNG, không phải chỉ định nghề. Danh sách ngành cố ý nêu
+// nhiều lựa chọn trong cùng một chất việc — cổ thư nói về TÍNH CHẤT công việc
+// (đối mặt hay bàn giấy, cầm người hay cầm nghề), nó không biết ngành nghề
+// hiện đại nào tồn tại. Thu về đúng một nghề là bịa thêm phần sách không nói.
+
+interface NganhDef {
+  linhVuc: string;
+  /** Chất việc mà nhóm này hợp — phần suy được từ cổ thư. */
+  chatViec: string;
+  /** Ngành hiện đại mang chất việc đó. Phần này là quy chiếu của trang. */
+  nganh: string[];
+}
+
+const DOMAIN_NGANH: Record<CareerBase['domain'], NganhDef> = {
+  vo: {
+    linhVuc: 'Việc đối mặt trực diện, quyết nhanh, chịu được rủi ro',
+    chatViec: 'Việc có đối thủ rõ ràng, có thắng thua đo được, và phải quyết trong lúc thông tin chưa đủ.',
+    nganh: ['An ninh · quân đội · thi hành pháp luật', 'Thể thao và huấn luyện thi đấu', 'Cấp cứu · phòng cháy · ứng phó sự cố', 'Vận hành hiện trường (công trường, nhà máy, kho vận)', 'Bán hàng săn khách lớn, mở thị trường mới', 'Khởi nghiệp giai đoạn đầu, mảng phải mở từ số không'],
+  },
+  van: {
+    linhVuc: 'Việc sống bằng chữ nghĩa, tri thức và lời nói',
+    chatViec: 'Việc mà giá trị nằm ở chỗ hiểu sâu rồi diễn đạt cho người khác hiểu theo.',
+    nganh: ['Giáo dục · đào tạo · huấn luyện doanh nghiệp', 'Nghiên cứu · phân tích · tư vấn chuyên môn', 'Báo chí · xuất bản · biên tập', 'Sáng tạo nội dung, truyền thông, quảng cáo', 'Luật · công chứng · pháp chế', 'Biên phiên dịch, nghề chữ nghĩa tự do'],
+  },
+  quyen: {
+    linhVuc: 'Việc cầm trịch tổ chức và điều phối người',
+    chatViec: 'Việc mà kết quả đến từ chỗ sắp đúng người vào đúng chỗ, chứ không từ chỗ tự tay làm.',
+    nganh: ['Quản trị doanh nghiệp · vận hành', 'Hành chính công · tổ chức đoàn thể', 'Quản lý dự án · quản lý sản phẩm', 'Nhân sự · phát triển tổ chức', 'Chuỗi cung ứng · điều phối đa bên', 'Quản lý chất lượng, kiểm soát nội bộ'],
+  },
+  thuong: {
+    linhVuc: 'Việc xoay quanh dòng tiền và hàng hoá',
+    chatViec: 'Việc mà thước đo cuối cùng là con số, và người giỏi là người thấy được cơ hội trước khi nó rõ.',
+    nganh: ['Kinh doanh · thương mại · phân phối', 'Tài chính · ngân hàng · đầu tư', 'Kế toán · kiểm toán · thuế', 'Bán lẻ · thương mại điện tử', 'Bất động sản · môi giới', 'Logistics · xuất nhập khẩu'],
+  },
+  y: {
+    linhVuc: 'Việc chăm sóc thân thể và tinh thần người khác',
+    chatViec: 'Việc mà người ta tìm tới lúc yếu nhất, nên cái bán được là sự tin cậy chứ không phải kỹ thuật.',
+    nganh: ['Y · dược · điều dưỡng', 'Tâm lý · trị liệu · tham vấn', 'Dinh dưỡng · y học cổ truyền · phục hồi chức năng', 'Chăm sóc sức khoẻ, thẩm mỹ, spa', 'Huấn luyện thể chất cá nhân', 'Công tác xã hội, chăm sóc người cao tuổi'],
+  },
+  nghe: {
+    linhVuc: 'Việc sống bằng tay nghề và chuyên môn sâu',
+    chatViec: 'Việc mà người ta trả tiền cho KỸ NĂNG của riêng bạn, không trả cho chức danh bạn đang giữ.',
+    nganh: ['Kỹ thuật · cơ khí · xây dựng', 'Công nghệ thông tin · phần mềm · dữ liệu', 'Thiết kế (đồ hoạ, nội thất, công nghiệp)', 'Chế tác, thủ công mỹ nghệ, ẩm thực', 'Nghệ thuật ứng dụng (nhiếp ảnh, dựng phim, âm thanh)', 'Nghề tự do có thương hiệu cá nhân'],
+  },
+  tu: {
+    linhVuc: 'Việc lấy ý nghĩa làm thước đo hơn là lấy tiền',
+    chatViec: 'Việc mà bạn chịu được mức đãi ngộ thấp hơn nếu tin là nó đáng làm — và mất động lực rất nhanh nếu không tin.',
+    nganh: ['Nghiên cứu nhân văn · triết học · lịch sử', 'Tổ chức thiện nguyện · phi lợi nhuận', 'Tham vấn tinh thần, đồng hành tâm lý', 'Văn hoá · di sản · bảo tàng', 'Giảng dạy chuyên đề, viết lách tự do', 'Nghề tự chủ thời gian, ít ràng buộc tổ chức'],
+  },
+};
+
+/** VAI TRÒ trong ngành — theo KIỂU người (cung Mệnh), độc lập với lĩnh vực. */
+const VAI_THEO_KIEU: Record<KieuId, string> = {
+  'khai-sang': 'Nhận phần CHƯA CÓ ĐƯỜNG: mở thị trường mới, lập mảng từ số không, gỡ khủng hoảng. Chỗ đã có quy trình sẵn thì bạn ngồi không yên.',
+  'lanh-dao': 'Nhận phần PHẢI SẮP LẠI: dựng hệ thống, chuẩn hoá cách làm, cầm đội đã có việc. Bạn mạnh khi có người để phân vai, không mạnh khi phải tự cày một mình.',
+  'ho-tro': 'Nhận phần PHẢI GIẢI THÍCH: tham mưu, tư vấn, đào tạo, đối ngoại, thiết kế giải pháp. Chỗ không ai hỏi tới ý kiến bạn là chỗ bạn héo.',
+  'hop-tac': 'Nhận phần PHẢI BỀN: vận hành, kiểm soát chất lượng, giữ quan hệ khách hàng dài hạn, nghiệp vụ đòi tỉ mỉ. Chỗ phải tranh phần công khai không hợp bạn.',
+};
+
+/** QUY MÔ gánh được — theo bậc chức phận engine chấm ở cung Quan Lộc. */
+const QUY_MO_THEO_BAC: Record<string, string> = {
+  cao: 'Đủ sức đứng tên: làm chủ, cầm một mảng lớn, hoặc dựng thương hiệu cá nhân. Chọn chỗ có trần cao — trần thấp là bạn sẽ đập đầu vào nó rất sớm.',
+  kha: 'Hợp cầm một phần việc rõ ràng trong tổ chức có tên tuổi. Ra riêng vẫn được, nhưng nên đi sau khi đã có sẵn mối và có người cùng gánh.',
+  giua: 'Hợp làm trong bộ máy đã chạy hơn là tự dựng bộ máy. Muốn ra riêng thì tìm người bù khuyết trước, đừng ra một mình.',
+  thap: 'Đừng gánh một mình ở giai đoạn này. Chọn nơi có hệ thống đỡ lưng, đi lên bằng một chuyên môn hẹp mà sâu — đó là đường chắc nhất cho bạn.',
+};
+
+export interface NganhGoiY {
+  linhVuc: string;
+  chatViec: string;
+  nganh: string[];
+  vaiTro: string;
+  quyMo: string;
+  /** Bậc chức phận + điểm, hiện ở khối cơ sở. */
+  bac: string;
+  bacDiem: number;
+  bacChiTiet: string[];
+  /** Sao (hoặc CẶP sao) quyết định lĩnh vực. */
+  sao: string;
+  laCap: boolean;
+  muon: boolean;
+  /** Câu chức phận theo lối cổ + trích dẫn Tân Biên — để nói được "dựa vào đâu". */
+  chucPhanCo: string;
+  nguon: string;
+  /** Sắc thái từ phụ tinh + tứ hoá tại Quan Lộc. */
+  sacThai: string[];
+}
+
+function goiYNganh(ls: Laso, kieu: KieuId): NganhGoiY {
+  const cb = resolveCareerBase(ls);
+  const d = DOMAIN_NGANH[cb.domain];
+  return {
+    linhVuc: d.linhVuc,
+    chatViec: d.chatViec,
+    nganh: d.nganh,
+    vaiTro: VAI_THEO_KIEU[kieu],
+    quyMo: QUY_MO_THEO_BAC[cb.tier] || QUY_MO_THEO_BAC.giua,
+    bac: cb.tierLabel,
+    bacDiem: cb.tierScore,
+    bacChiTiet: cb.tierBreakdown,
+    sao: cb.star,
+    laCap: cb.laCap,
+    muon: cb.borrowed,
+    chucPhanCo: cb.desc,
+    nguon: cb.source,
+    sacThai: cb.notes,
+  };
+}
+
+// ── 6. Lời khuyên theo tình trạng nghề ──────────────────────
 const LOI_THEO_TRANG_THAI: Record<TrangThai, Record<KieuId, string>> = {
   'nhan-vien': {
     'khai-sang':
@@ -564,7 +687,8 @@ export interface CongSoProfile {
   vanNam: { nam: number; diem: number | null; huong: string | null; tieuHanCung: string | null; luuNienCung: string | null } | null;
   doi: GhepDoi[];
   loiTrangThai: string;
-  /** Ngành hợp — lấy từ cách cục cung Quan Lộc mà engine đã gắn sẵn. */
+  /** Gợi ngành nghề cụ thể — đọc chức phận cung Quan Lộc theo CẶP chính tinh. */
+  nganh: NganhGoiY;
   quanLoc: { sao: string[]; muon: boolean; diem: number | null; cachCuc: string[] };
 }
 
@@ -700,6 +824,7 @@ export function computeCongSo(ls: Laso, trangThai: TrangThai = 'nhan-vien', namX
     vanNam,
     doi,
     loiTrangThai: LOI_THEO_TRANG_THAI[trangThai][phan.kieu],
+    nganh: goiYNganh(ls, phan.kieu),
     quanLoc: {
       sao: quanB.stars.map(starLabel),
       muon: quanB.muon,
@@ -759,6 +884,17 @@ export function railData(p: CongSoProfile): Record<string, string | number | boo
     loiTheoTrangThai: p.loiTrangThai,
     diemCaoNhat: top.slice(0, 3).map((r) => `${r.nhan} ${r.diem}/10`).join(', '),
     diemThapNhat: top.slice(-3).reverse().map((r) => `${r.nhan} ${r.diem}/10`).join(', '),
+    linhVucHop: p.nganh.linhVuc,
+    chatViecHop: p.nganh.chatViec,
+    nganhGoiY: p.nganh.nganh.join(' · '),
+    vaiTroTrongNganh: p.nganh.vaiTro,
+    quyMoGanhDuoc: p.nganh.quyMo,
+    saoQuyetDinhNganh: p.nganh.sao + (p.nganh.laCap ? ' (đọc theo CẶP đồng cung)' : '') + (p.nganh.muon ? ' (mượn xung chiếu)' : ''),
+    bacChucPhan: `${p.nganh.bac} (điểm ${p.nganh.bacDiem}: ${p.nganh.bacChiTiet.join(', ') || '—'})`,
+    chucPhanTheoCoThu: p.nganh.chucPhanCo,
+    trichDanCoThu: p.nganh.nguon,
+    sacThaiQuanLoc: p.nganh.sacThai.join(' | ') || '—',
+    luatDocSacThai: 'Sắc thái phụ tinh THU HẸP BÊN TRONG lĩnh vực trên, KHÔNG thay lĩnh vực. Nghiêng "chữ nghĩa" trong ngành y nghĩa là nhánh giảng dạy / nghiên cứu / viết chuyên môn của ngành y — đừng đọc thành đổi sang nghề viết.',
     cachCucQuanLoc: p.quanLoc.cachCuc.join(' | ') || '—',
     loTrinh40Nam: p.loTrinh
       .map((n) => `${n.nac} (${n.tuoiStart}–${n.tuoiEnd} tuổi, cung ${n.cung}${n.diem != null ? `, ${n.diem}/10` : ''}${n.dangChay ? ', ĐANG Ở CHẶNG NÀY' : ''})`)

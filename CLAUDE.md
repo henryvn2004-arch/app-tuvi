@@ -62,10 +62,39 @@ tính `chat.cost` như mọi tool.
   engine trả → tuỳ tiện) · sao sáng nhất 28,6/25,6/24,4/21,4 · ✅ **toạ độ
   27,0/26,8/23,2/23,0** (đều nhất) kèm **13,2% sát ranh → gọi thẳng "kiểu lai"**.
   Ép nhãn cho nhóm đó là nói chắc điều mình không chắc.
-- **6 khối**: kiểu người + toạ độ · **radar 12 mặt** (dùng thẳng `cungScores`,
-  12 cung × 6 chiều engine đã có) · **4 chặng 40 năm** (`daiVans[].scoring.tong`,
-  kèm "thuận đà / ngược đà" = so âm-dương đại vận với kiểu bản mệnh) · bản mệnh
-  vs vận năm nay · **ghép đội** · lời riêng theo 5 tình trạng nghề.
+- **7 khối**: kiểu người + toạ độ · **gợi NGÀNH NGHỀ** (xem dưới) · **radar 12
+  mặt** (dùng thẳng `cungScores`, 12 cung × 6 chiều engine đã có) · **4 chặng
+  40 năm** (`daiVans[].scoring.tong`, kèm "thuận đà / ngược đà" = so âm-dương
+  đại vận với kiểu bản mệnh) · bản mệnh vs vận năm nay · **ghép đội** · lời
+  riêng theo 5 tình trạng nghề.
+
+### ✅ Gợi ngành nghề — dùng CHUNG `PAIR_OCCUPATION_TABLE` (vòng sau)
+Henry: *"dùng PAIR_OCCUPATION_TABLE gợi ngành nghề cụ thể luôn đi"*.
+- **Tách `resolveCareerBase(ls)` ra khỏi `computeOccupation`** (past-life.ts) làm
+  NGUỒN DUY NHẤT của phép đọc chức phận cung Quan Lộc; tool tiền kiếp gọi lại
+  chính nó. Chép bản thứ hai thì hai bên trôi khỏi nhau mà trích dẫn cổ thư chỉ
+  đúng ở một bên. **Verify refactor: A/B `computePastLife` bản git HEAD vs bản
+  mới trên 4.032 lá số → 0 lệch.**
+- 🔑 **BA TRỤC ĐỘC LẬP, KHÔNG VIẾT MA TRẬN**: lĩnh vực ← `domain` (7 nhóm, cung
+  Quan Lộc) × vai trò ← kiểu người (4, cung Mệnh) × quy mô ← bậc chức phận (4,
+  engine chấm). Viết **7+4+4 = 15 khối** thay vì 112 ô, mỗi trục sửa riêng được.
+  Đo được **59/112 tổ hợp** thật sự xuất hiện — không phải 112 vì Mệnh và Quan
+  Lộc cách nhau CỐ ĐỊNH 4 cung nên hai trục không độc lập hoàn toàn.
+- **49,6% lá số tra được bảng CẶP** (24/24 cặp đều xuất hiện) — tức một nửa số
+  người được luận theo cặp chính tinh đồng cung, đúng lối chương Quan Lộc Tân
+  Biên luận. Phân bố lĩnh vực: văn 28,4 · quyền 16,7 · thương 15,6 · võ 13,8 ·
+  nghề 13,6 · y 10,8 · **tu 1,1%** (hiếm là đúng, không phải hỏng).
+- ⚠️ **Trang PHẢI nói rõ ranh giới**: cổ thư nói **CHẤT VIỆC**, còn danh sách
+  ngành hiện đại là **quy chiếu của trang**. Người đang làm ngành không có trong
+  danh sách thì đối chiếu chất việc — cấm phán "bạn đang làm sai nghề".
+- 🐞 **Lỗi đọc-thành-mâu-thuẫn, chỉ lộ khi nhìn output thật**: sắc thái phụ tinh
+  ghi *"ngả hẳn về đường văn chương"* ngay dưới lĩnh vực *"chăm sóc thân thể"*.
+  Sắc thái **THU HẸP BÊN TRONG** lĩnh vực chứ không thay nó (chữ nghĩa trong
+  ngành y = nhánh giảng dạy/nghiên cứu/viết chuyên môn). Đã nói thẳng luật đó
+  trên trang **và** trong prompt (`luatDocSacThai`).
+- Chức phận lối cổ ("quan trấn phủ", "cự phú") là **ngôn ngữ nội bộ** — chỉ hiện
+  ở khối "Cơ sở trong lá số", prompt CẤM đọc thô ở phần trả lời chính. Có test
+  canh đúng chỗ này.
 - ⚠️ **Ghép đội đọc theo CỔ PHÁP**: cấp trên = **Phụ Mẫu**, đồng sự = **Huynh
   Đệ**, cấp dưới = **Nô Bộc**. 張盛舒 đọc cấp trên ở **Tật Ách** — đó là biến thể
   của một tác giả, không kiểm chứng được, **cố ý không dùng**.
@@ -93,12 +122,18 @@ dự đoán, 0 lỗi trên 7 bất biến (radar luôn 12 mục điểm 0–10 �
 trùng kiểu chính · 0 rò `undefined`/`NaN`/`[object` · rail luôn phẳng) ·
 **12 ca trên prompt THẬT** (`buildChatContext`): chọn đúng nhánh, có đủ luật cấm
 phong thánh/cấm DISC-MBTI, **0 key thô lọt prompt**, 0 rò chuỗi kỹ thuật, + ca
-ĐỐI CHỨNG scenario lạ bị từ chối · **10 ca Playwright trên TRANG THẬT qua Next
-dev**: đúng 1 lượt gọi API · ô tình trạng nghề THẬT SỰ đổi nội dung · **chấm toạ
-độ rơi đúng góc phần tư** (lấy mẫu pixel — bẫy đảo trục Y màn hình) · radar có
-nét · poster là **PNG thật 1080×1920 đọc từ IHDR** · rail gửi đúng
+ĐỐI CHỨNG scenario lạ bị từ chối · **A/B refactor: `computePastLife` cũ vs mới
+0 lệch trên 4.032 lá số** · **12 ca Playwright trên TRANG THẬT qua Next dev**:
+đúng 1 lượt gọi API · ô tình trạng nghề THẬT SỰ đổi nội dung · **chấm toạ độ rơi
+đúng góc phần tư** (lấy mẫu pixel — bẫy đảo trục Y màn hình) · radar có nét ·
+poster là **PNG thật 1080×1920 đọc từ IHDR** · rail gửi đúng
 `scenario.type='cong-so'` + `birth`, payload phẳng · tên chứa `<img onerror>`
-không chạy · chặn `poster.js` → trang vẫn sống · 390px không tràn ngang.
+không chạy · chặn `poster.js` → trang vẫn sống · 390px không tràn ngang ·
+**khối ngành: ≥5 ngành, vai trò khớp đúng kiểu người, nêu được trích dẫn Tân
+Biên, và chức phận lối cổ KHÔNG lọt lên phần gợi ý chính**.
+- 🪤 Một ca test đỏ là **kỳ vọng của TEST sai, không phải code**: nó neo theo
+  THỨ TỰ tiêu đề (`.cs-sec h3` nth(0)) nên thêm khối mới là đỏ oan. Đã đổi sang
+  neo theo NỘI DUNG.
 
 ### 🔑 VIỆC TAY HENRY — chưa làm thì tool KHÔNG hiện trên trang Công Cụ
 ```sql
@@ -115,8 +150,10 @@ where tool_id='cong-so';` — cố ý để free vì đây là tool ĐẦU PHỄ
   với 384 hào từ. Sửa là sửa data thuần trong `KIEU`, không đụng logic.
 - Chưa lấy được **9 大天賦 / 12 大能量** của họ (nằm sau paywall NT$420). Không
   chặn gì: 12 mặt của mình suy từ 12 cung, độc lập.
-- Chưa dùng `PAIR_OCCUPATION_TABLE` (24 cặp chính tinh) để gợi **ngành nghề cụ
-  thể** — mới dùng `cachCucTungCung['Quan Lộc']`. Đây là chỗ nâng cấp rõ nhất.
+- **Danh sách ngành hiện đại (7 nhóm × 6 ngành) là quy chiếu tao tự đặt** — cùng
+  dạng nợ với nội dung 4 kiểu. Sửa là sửa `DOMAIN_NGANH`, không đụng logic.
+- Lĩnh vực **`tu` chỉ 1,1%** nên gần như không ai đọc phần đó; nếu sau này thấy
+  nó lạc quẻ thì gộp vào `van` là xong, không phá gì.
 
 ---
 
