@@ -150,6 +150,7 @@ window.SHELL_INTRO={key:'chan-dung-tien-kiep',title:'Chân Dung Tiền Kiếp',d
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=59"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=2"></script>
+<script src="/tools-shared/portrait-recover.js?v=1"></script>
 <script>
 
 var _currentSlug = '';
@@ -260,6 +261,12 @@ async function _doGenerate(freeRerun) {
   // Hai pha SONG SONG — truyện hiện trước, ảnh chèn vào sau (xem route.ts).
   var storyP = call('story');
   var imageP = call('image');
+  // Gắn handler NGAY: `imageP` chỉ được `await` sau khi truyện xong, nên nếu pha
+  // ảnh hỏng TRƯỚC (mất mạng, request bị cắt) thì trong quãng chờ đó nó là một
+  // rejection không ai bắt → trình duyệt bắn `unhandledrejection`, lọt vào bộ
+  // thu lỗi như một sự cố thật. Bản `.catch` này chỉ dập tiếng ồn; `await
+  // imageP` bên dưới VẪN ném và vẫn được nhánh phục hồi xử lý.
+  imageP.catch(function () {});
 
   try {
     var res = await storyP;
@@ -315,16 +322,36 @@ async function _doGenerate(freeRerun) {
     return;
   }
 
+  var _ires = null;   // giữ Response để phân biệt "mất kết nối" với "server trả lỗi đàng hoàng"
   try {
-    var ires = await imageP;
-    var idata = await ires.json();
-    if (!ires.ok || !idata.success) throw new Error(idata.error || 'Lỗi ' + ires.status);
+    _ires = await imageP;
+    var idata = await _ires.json();
+    if (!_ires.ok || !idata.success) throw new Error(idata.error || 'Lỗi ' + _ires.status);
     _imgWait && _imgWait.stop();
     _resultImgUrl = idata.imageUrl;
     setResultImage(idata.imageUrl);
     publishShareable(idata.imageUrl);
     _loadHistory();
   } catch (e2) {
+    // Server trả lỗi ĐÀNG HOÀNG là câu trả lời dứt khoát — chỉ thử lại khi mất
+    // kết nối / gateway bỏ cuộc, tức hàm trên server có thể vẫn đang vẽ.
+    if (PortraitRecover.nenThuLai(_ires)) {
+      // GIỮ đồng hồ chạy: tắt chỉ báo ở đây là nói dối theo hướng ngược lại.
+      if (_imgWait) _imgWait.note('Mất kết nối lúc tải tranh — đang thử lấy lại…');
+      var rd = await PortraitRecover.wait({
+        endpoint: '/api/chan-dung-tien-kiep',
+        query: PortraitRecover.birthQuery(_lastBirth),
+        body: { birth: _lastBirth, phase: 'image', slug: _currentSlug },
+      });
+      _imgWait && _imgWait.stop();
+      if (rd && rd.imageUrl) {
+        _resultImgUrl = rd.imageUrl;
+        setResultImage(rd.imageUrl);
+        publishShareable(rd.imageUrl);
+        _loadHistory();
+        return;
+      }
+    }
     _imgWait && _imgWait.stop();
     document.getElementById('imgPlaceholder').textContent = 'Không vẽ được chân dung lần này. Phần câu chuyện phía dưới vẫn đầy đủ.';
     publishShareable('');

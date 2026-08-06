@@ -173,6 +173,7 @@ window.SHELL_INTRO={key:'duyen-no-tien-kiep',title:'Duyên Nợ Tiền Kiếp',d
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=59"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=2"></script>
+<script src="/tools-shared/portrait-recover.js?v=1"></script>
 <script>
 
 var _currentSlug = '';
@@ -380,69 +381,46 @@ async function _doGenerate(freeRerun) {
     return;
   }
 
+  var _ires = null;   // giữ Response để phân biệt "mất kết nối" với "server trả lỗi đàng hoàng"
   try {
-    var ires = await imageP;
-    var idata = await ires.json();
-    if (!ires.ok || !idata.success) throw new Error(idata.error || 'Lỗi ' + ires.status);
+    _ires = await imageP;
+    var idata = await _ires.json();
+    if (!_ires.ok || !idata.success) throw new Error(idata.error || 'Lỗi ' + _ires.status);
     _imgWait && _imgWait.stop();
     _resultImgUrl = idata.imageUrl;
     setResultImage(idata.imageUrl);
     publishShareable(idata.imageUrl);
     _loadHistory();
   } catch (e2) {
-    // ⚠️ Lượt gọi ảnh HỎNG Ở TRÌNH DUYỆT không có nghĩa là server chưa vẽ xong.
-    // Ảnh mất ~50–150 giây; trên di động (khoá màn hình, đổi sóng, chuyển tab)
-    // fetch bị cắt trong khi hàm trên server VẪN CHẠY TỚI CÙNG rồi ghi cache.
-    // Đã xảy ra thật: người dùng thấy "không vẽ được" trong khi bức tranh nằm
-    // sẵn trong kho 50 giây sau đó. Nên trước khi chịu thua, hỏi lại cache.
-    // GIỮ đồng hồ chạy tiếp: server nhiều khả năng vẫn đang vẽ, nên tắt chỉ báo
-    // ở đây là nói dối theo hướng ngược lại. Chỉ đổi lời cho đúng thực tế.
-    if (_imgWait) _imgWait.note('Mất kết nối lúc tải tranh — đang thử lấy lại…');
-    else document.getElementById('imgPlaceholder').textContent = 'Mất kết nối lúc tải tranh — đang thử lấy lại…';
-    var got = await _thuLayLaiTranh();
-    _imgWait && _imgWait.stop();
-    if (got) {
-      _resultImgUrl = got;
-      setResultImage(got);
-      publishShareable(got);
-      _loadHistory();
-      return;
-    }
-    document.getElementById('imgPlaceholder').textContent = 'Không vẽ được bức tranh lần này. Phần câu chuyện phía dưới vẫn đầy đủ.';
-    publishShareable('');
-  }
-}
-
-/**
- * Hỏi `cache-status` tới khi server báo ĐỦ CẢ HAI PHA rồi mới xin lại ảnh.
- * CỐ Ý không POST thẳng: pha ảnh chưa vào cache thì một lượt POST nữa là một
- * lượt GỌI MODEL nữa — tốn tiền thật để lấy đúng bức tranh đang được vẽ dở.
- * Lượt POST sau khi đã có cache chỉ đọc lại, không sinh ảnh, không trừ thêm.
- */
-async function _thuLayLaiTranh() {
-  var token = window.Auth?.getSession()?.access_token || '';
-  var q = _cacheQuery(_lastA, _lastB);
-  for (var i = 0; i < 18; i++) {           // 18 × 5s ≈ 90 giây, phủ ca chậm nhất
-    await new Promise(function (r) { setTimeout(r, 5000); });
-    try {
-      var st = await fetch('/api/duyen-no-tien-kiep?action=cache-status&' + q,
-        { headers: { Authorization: 'Bearer ' + token } });
-      var sd = await st.json();
-      if (!sd || !sd.cached) continue;
-      var rr = await fetch('/api/duyen-no-tien-kiep', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
-        body: JSON.stringify({
+    // Server trả lỗi ĐÀNG HOÀNG là câu trả lời dứt khoát — đừng bắt người dùng
+    // nhìn spinner thêm 90 giây rồi vẫn nhận đúng câu báo lỗi đó. Chỉ thử lại
+    // khi mất kết nối / gateway bỏ cuộc, tức server có thể vẫn đang vẽ.
+    if (PortraitRecover.nenThuLai(_ires)) {
+      // GIỮ đồng hồ chạy tiếp: tắt chỉ báo ở đây là nói dối theo hướng ngược lại.
+      if (_imgWait) _imgWait.note('Mất kết nối lúc tải tranh — đang thử lấy lại…');
+      else document.getElementById('imgPlaceholder').textContent = 'Mất kết nối lúc tải tranh — đang thử lấy lại…';
+      var rd = await PortraitRecover.wait({
+        endpoint: '/api/duyen-no-tien-kiep',
+        query: _cacheQuery(_lastA, _lastB),
+        body: {
           birthA: _lastA, birthB: _lastB,
           nameA: _lastA.name || '', nameB: _lastB.name || '',
           phase: 'image', slug: _currentSlug,
-        }),
+        },
       });
-      var rd = await rr.json();
-      if (rr.ok && rd.success && rd.imageUrl) return rd.imageUrl;
-    } catch (e) { /* mạng chập chờn — vòng sau thử tiếp */ }
+      _imgWait && _imgWait.stop();
+      if (rd && rd.imageUrl) {
+        _resultImgUrl = rd.imageUrl;
+        setResultImage(rd.imageUrl);
+        publishShareable(rd.imageUrl);
+        _loadHistory();
+        return;
+      }
+    }
+    _imgWait && _imgWait.stop();
+    document.getElementById('imgPlaceholder').textContent = 'Không vẽ được bức tranh lần này. Phần câu chuyện phía dưới vẫn đầy đủ.';
+    publishShareable('');
   }
-  return '';
 }
 
 // esc() dùng chung từ /laso-chart.js (đã load ở trên) — không khai lại.

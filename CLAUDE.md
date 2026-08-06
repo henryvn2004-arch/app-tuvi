@@ -148,10 +148,28 @@ thanh chặn đúng 96%.
   **Sau mỗi lần giải xung đột phải ĐẾM LẠI dấu hiệu của cả hai bên**, đừng tin
   là "hết `<<<<<<<` nghĩa là xong".
 
+### ✅ Port phục hồi sang 2 tool chân dung — và tách module dùng chung (cùng PR)
+Henry: *"làm đi"*. Thay vì chép `_thuLayLaiTranh` sang 4 file, tách hẳn
+**`public/tools-shared/portrait-recover.js`** (`birthQuery` · `nenThuLai` ·
+`wait`) rồi cho CẢ Duyên Nợ dùng lại — bản chép riêng trong Duyên Nợ đã GỠ.
+- 🔑 **Siết thêm một điểm so với bản Duyên Nợ đang chạy: chỉ phục hồi khi lỗi có
+  thể là "server vẫn đang chạy"** — fetch NÉM (mất kết nối) hoặc **502/503/504**
+  (edge bỏ cuộc, hàm còn sống). Server trả lỗi ĐÀNG HOÀNG (402 chưa trả tiền,
+  500 sinh ảnh hỏng) là câu trả lời DỨT KHOÁT ⇒ phục hồi chỉ tổ bắt người dùng
+  nhìn spinner thêm 90 giây rồi vẫn nhận đúng câu báo lỗi đó. Có ca ĐỐI CHỨNG.
+- **Vợ Chồng chạy MỘT pha** nên mất kết nối là mất trắng cả lượt → phải bọc cả
+  lượt gọi, tách `try` truyền-tải riêng khỏi `try` nghiệp vụ. Bảng bước CỐ Ý vẫn
+  chạy suốt vòng phục hồi.
+- 🐞 Bắt kèm: cả 2 file Chân Dung Tiền Kiếp cũng dính lỗi `imageP` bị bỏ rơi →
+  `unhandledrejection` (đúng lỗi đã vá ở Duyên Nợ mà chưa port). **Chỉ lộ vì test
+  bắt `pageerror`**, không lộ khi đọc code.
+- **Verify:** `tsc`/`lint`/`prettier`/`check:prices` sạch · JS + JSON-LD của 5
+  trang hợp lệ · **17 ca Playwright trên TRANG THẬT**: CDTK và CDVC đều tự lấy
+  lại được ảnh, POST đúng 2 lần · **ĐỐI CHỨNG lỗi-server-rõ-ràng → 0 lượt hỏi
+  cache, không chờ vô ích** · **ĐỐI CHỨNG tiền: cache chưa sẵn → tuyệt đối không
+  POST lại** · 0 lỗi JS · Duyên Nợ chạy lại sau refactor không hồi quy.
+
 ### CÒN LẠI
-- **Đường phục hồi ảnh mới chỉ có ở Duyên Nợ**, chưa port sang 2 tool chân dung
-  (cùng lỗi "trình duyệt bỏ cuộc trong khi server vẫn vẽ"). Port là chép
-  `_thuLayLaiTranh` + nhánh `catch`, không đụng kiến trúc.
 - Muốn dứt điểm quãng chờ thì phải đổi pha ảnh sang "đặt hàng rồi hỏi lại"
   (POST nhận ngay mã, client poll cache) — đụng cả 3 tool, chưa làm.
 
