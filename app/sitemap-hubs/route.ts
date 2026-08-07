@@ -1,5 +1,19 @@
 // app/sitemap-hubs/route.ts
-// Hub pages: /menh-kho/[year] (67) + /menh-kho/[year]/[mm]-[dd] (~24,471) = ~24,538 URLs
+// Hub pages: /menh-kho/[year] (51) + /menh-kho/[year]/[mm]-[dd] (18.628) = 18.679 URL.
+//
+// ⚠️ ĐỌC TRƯỚC KHI "DỌN" FILE NÀY — day hub nay đã bị `noindex` (xem
+// lib/seo/index-policy.ts), nên nhìn qua thì để chúng trong sitemap là sai
+// nguyên tắc và rất dễ bị gỡ đi cho "sạch". ĐỪNG.
+//
+// 🔑 Bài học #358, đã trả giá một lần: **rút khỏi sitemap KHÔNG deindex**.
+// Muốn Google GỠ một trang thì nó phải CRAWL LẠI để đọc thẻ `noindex`, và
+// sitemap là đường mời crawl nhanh nhất mình có. Gỡ khỏi sitemap CÙNG LÚC đặt
+// noindex = trang biến khỏi lời mời nhưng ở lại trong index, có khi hàng tháng.
+// Hub NĂM (51) thì CỐ Ý vẫn index — đó là đường duy nhất Google còn bò xuống.
+//
+// ⏭️ VIỆC TIẾP: khi GSC (Pages → lọc theo sitemap này) báo "Excluded by
+// 'noindex'" đã phủ gần hết 18.628 day hub, thì mới rút chúng khỏi file này và
+// để lại đúng 51 hub năm.
 export const revalidate = false;
 
 import { NextResponse } from 'next/server';
