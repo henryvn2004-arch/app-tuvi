@@ -10,6 +10,7 @@ export const maxDuration = 30;     // allow 30s for engine on cold start
 import { NextRequest, NextResponse } from 'next/server';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import { NOINDEX_FOLLOW } from '@/lib/seo/index-policy';
 
 // ⚠️ Module-level: must run before any request so that if loadEngine() sets
 // globalThis.window = globalThis, Next.js URL parsing (getLocationOrigin)
@@ -144,6 +145,7 @@ function buildPregenHTML(row: Record<string,unknown>, slug: string): string {
 <meta property="og:type" content="article">
 <meta property="og:url" content="${url}">
 <link rel="canonical" href="${url}">
+${NOINDEX_FOLLOW}
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1261,6 +1263,7 @@ function buildIsrHTML(ls: Rec, params: IsrParams, slug: string, relatedArticles:
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="${esc(ogUrl)}">
 <link rel="canonical" href="${esc(url)}">
+${NOINDEX_FOLLOW}
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@0,400;0,700&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@0,400;0,700&display=swap" rel="stylesheet"></noscript>
