@@ -69,7 +69,7 @@ Công sức: **S** < 1 ngày · **M** 2–4 ngày · **L** > 1 tuần.
 | **H3** | Khoá học tử vi online | L | 🔴 |
 | **M1** | ~~**Đóng gói `/cong-cu` theo NỖI LO**~~ | M | ✅ XONG |
 | **M2** | ~~Đặt tên sản phẩm theo CÂU HỎI người ta gõ~~ | S | ✅ XONG |
-| **M3** | **Nhiệm vụ onboarding chia nhỏ** (Zalo/SĐT/email → mỗi việc một phần thưởng) | M | 🟢 |
+| **M3** | ~~**Nhiệm vụ onboarding chia nhỏ**~~ (mỗi việc một phần thưởng) | M | ✅ XONG |
 | **M4** | Trang SEO = trang BÁN được, không chỉ trang đọc | L | 🟡 |
 | **M5** | Kênh phân phối bên thứ ba (Zalo OA / báo / partner) | M | 🟡 |
 | **R1** | ~~Vận hôm nay → nhắc hằng ngày qua push~~ (kênh đã nối lại) | M | ✅ XONG |
@@ -390,12 +390,27 @@ Tên mục thật trên trang họ: *"Tương lai mờ mịt, phải nhẫn tớ
 này hợp đổi nghề?"* · *"Con thi đại học hay cao đẳng nghề?"*
 ⇒ Đây cũng chính là **từ khoá người ta gõ vào Google** — ăn luôn cả SEO.
 
-### M3. Nhiệm vụ onboarding chia nhỏ 🟢 M
+### M3. Nhiệm vụ onboarding chia nhỏ ✅ XONG (07/08)
 **Họ:** liên kết LINE **+NT$100** · xác minh SĐT **+NT$80** · xác minh email
 **+NT$80** · làm đủ 3 việc → **tặng đèn cầu an**.
 **Mình:** phát thẳng 25 Lượng, đổi lại **không lấy được gì**.
 ⇒ Cùng số tiền, họ mua được SĐT + email + **một kênh nhắn tin đi thẳng vào máy
 người dùng**. Với mình kênh đó là **Zalo/Telegram** (đã có hạ tầng).
+
+### Đã làm gì — chi tiết ở CLAUDE.md
+Cái giá đang trả và cái nhận về, đo trước khi viết dòng nào: 48 người đã nhận 25
+Lượng (1.200 Lượng phát ra), đổi lại có **3** liên kết kênh chat · **2** lượt bật
+thông báo · **2** dòng sổ lá số của ĐÚNG một người · **0** lượt mời bạn.
+
+🔑 **KHÔNG cắt 25 Lượng quà đăng ký ra chia nhỏ** — cắt thì người mới cầm 5 Lượng
+và không chạy nổi tool nào (rẻ nhất 5, phần lớn 15–30), tức siết đúng đầu phễu
+vốn đã hỏng. Nhiệm vụ là phần **CỘNG THÊM**: 3 việc × 10 = **+30 Lượng**.
+
+Ba việc chọn theo thứ ĐANG thiếu: **lưu lá số** · **bật thông báo** · **liên kết
+MỘT kênh chat bất kỳ**. Bỏ "xác minh email" (Supabase đã xác minh lúc đăng ký) và
+"xác minh SĐT" (phải mua dịch vụ OTP cho 60 người). Việc **mời bạn** chỉ được bày
+mức thưởng 15 Lượng sẵn có, KHÔNG cộng thêm — trả hai lần cho một việc là mở
+đường farm.
 
 ### M4. Trang SEO phải bán được 🟡 L
 Họ có **713 đơn vị mệnh lý Nhật** trên subdomain riêng — kho programmatic mà

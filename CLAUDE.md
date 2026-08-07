@@ -5,7 +5,146 @@
 
 ---
 
-## 🔔 R1a — NỐI LẠI kênh nhắc hằng ngày (2026-08-07, PR này)
+## 🎯 M3 — Nhiệm vụ onboarding: đổi CÙNG khoản tiền lấy được gì (2026-08-07, PR này)
+
+Henry: *"ok. A. skip P1. làm M3"*, rồi bổ sung đúng chỗ tao suýt khoá cứng:
+*"cái liên kết telegram, mày thêm liên kết whatsap và facebook nữa, vì đã có 2
+liên kết đó rồi, sau này có liên kết zalo nữa"*.
+
+### 🔴 Cái giá đang trả, và cái nhận về
+48 người đã nhận **25 Lượng** quà đăng ký (1.200 Lượng phát ra). Sau 4 tháng:
+
+| Thứ đáng lẽ thu được | Có |
+|---|---:|
+| Liên kết kênh chat (`chat_links`) | **3** |
+| Bật thông báo (`push_subscriptions`) | **2** |
+| Lá số lưu trên tài khoản (`user_charts`) | **2 dòng, 1 người** |
+| Lượt mời bạn (`referrals`) | **0** |
+
+Dòng cuối đáng chú ý nhất: cả track viral V2 đã dựng xong mã giới thiệu + link +
+thưởng 15 Lượng, **vẫn 0 lượt**. Phát tiền mà không hỏi lại gì thì không nhận
+lại gì.
+
+### 🔑 KHÔNG cắt 25 Lượng ra chia nhỏ — đó là cái bẫy hiển nhiên
+Cắt thì người mới cầm 5 Lượng và **không chạy nổi tool nào** (rẻ nhất 5, phần lớn
+15–30) ⇒ siết đúng đầu phễu vốn đã hỏng (60 tài khoản → 3 người trả tiền). Nhiệm
+vụ là phần **CỘNG THÊM**: 3 việc × 10 = **+30 Lượng ≈ thêm một lượt Dạy Con**.
+Lượng không phải tiền mặt — mình tự đúc; chi phí thật là lượt gọi model lúc họ
+tiêu, mà **làm cho họ tiêu chính là mục đích**. Cầu dao ảnh free
+(`viral.free_gen_daily_cap`) vẫn gác phần đắt tiền nên đúc thêm không thủng.
+
+### Ba việc, chọn theo thứ ĐANG thiếu
+**Lưu lá số** (không có lá số thì nửa site chết) · **bật thông báo** (kênh vừa
+nối lại hôm qua) · **liên kết MỘT kênh chat bất kỳ**.
+- ⚠️ **Phép kiểm `chat_links` KHÔNG lọc `platform`** — prod đã có Telegram +
+  WhatsApp + Messenger, Zalo OA đang chờ duyệt. Bản đầu tao khoá cứng vào
+  Telegram; Henry bắt đúng chỗ đó. Kênh mới cắm vào là tự tính, không sửa lại.
+- ⛔ Bỏ **xác minh email** (Supabase đã xác minh lúc đăng ký — trả tiền cho thứ
+  đã có) và **xác minh SĐT** (phải mua cả một nhà cung cấp OTP cho 60 người).
+- ⛔ **Mời bạn chỉ được BÀY mức thưởng 15 Lượng sẵn có, không cộng thêm** — trả
+  hai lần cho một việc là mở đường farm.
+
+### Cách dựng
+- **Chống nhận hai lần nằm ở KHOÁ CHÍNH `(user_id, task_key)`**, không phải ở cờ
+  trong mã ứng dụng — cùng mẹo `portrait_cache`: để DB từ chối, đừng để mã nhớ
+  hộ. RPC `onboarding_task_claim` gói cả `insert … on conflict do nothing` +
+  `add_credits` + ghi `credit_transactions` trong MỘT transaction.
+- ⚠️ **Thứ tự chèn-dấu-TRƯỚC-rồi-mới-cộng-tiền là CỐ Ý**: hai chiều hỏng không
+  đối xứng — cộng trước mà lỗi ⇒ cộng hai lần (phát không tiền); chèn dấu trước
+  mà lỗi ⇒ thiếu một lần, đọc `onboarding_tasks` ra là đối soát được.
+- **Trần 200 Lượng/nhiệm vụ ngay trong RPC.** `app_config` sửa được bằng SQL nên
+  một cú gõ thừa số 0 là phát cả gia tài; chốt ở tầng DB để lỗi đó dừng trước ví.
+  Trần kiểm TRƯỚC bước chống-trùng — giá vô lý là lỗi lập trình, phải kêu to.
+- **SERVER TỰ KIỂM, KHÔNG TIN CLIENT** — tra thẳng bảng đã sinh ra bằng chứng.
+  **FAIL-CLOSED**: đọc hụt → coi như chưa xong. Ngược hẳn `viral-budget.ts`
+  (fail-OPEN) và ngược có lý do: bên kia gác người ĐÃ TRẢ TIỀN nên chặn oan là
+  tệ nhất; bên này đang PHÁT tiền nên phát nhầm mới là tệ nhất.
+- **Tự cộng khi phát hiện xong, KHÔNG có nút "Nhận"** — mỗi nút bấm là một chỗ
+  rơi. Nhưng **phải hiện ra** (`justGranted` → dòng "vừa cộng +N Lượng"): cộng
+  lén thì không ai biết mà cũng chẳng khuyến khích được ai.
+- **POST chứ không GET**: lượt gọi này cộng Lượng. Để ở GET là mời trình
+  duyệt/CDN prefetch một endpoint phát tiền.
+- **Đồng bộ lại khi quay lại tab** (chặn 20 giây) — đây mới là ca thường gặp
+  nhất: bấm "Liên kết" → sang profile → nối Telegram → quay về.
+- Thẻ **tự ẩn khi xong cả ba**; khách chưa đăng nhập **không bao giờ thấy** và
+  trang KHÔNG gọi API lần nào.
+
+### 🐞 Hai lỗi tự bắt khi đi kiểm đường dẫn, không phải khi đọc code
+1. **Cả hai nút tao đặt đầu tiên đều HƯ**: `/app/so-la-so` không tồn tại (sổ lá
+   số là thanh chip do `user-charts.js` chèn, không có trang riêng), và
+   `/profile.html#kenh` vô nghĩa vì profile đổi tab bằng **cú bấm JS, không đọc
+   hash**. Vá: thêm `openTabFromHash()` vào `account-core.js` (`#ketnoi` mở thẳng
+   tab Kết Nối — hữu ích cho mọi liên kết từ nơi khác, không riêng M3), và nhiệm
+   vụ lá số đổi sang `href` RỖNG = mở ô nhập **ngay trong thẻ Vận hôm nay** trên
+   chính trang này. `Shell.rememberBirth` vốn đã tự ghi lên sổ tài khoản.
+2. **`esc()` của `app-home.html` chỉ thoát `& < >`, KHÔNG thoát dấu nháy** — mà
+   tao đang nhét chuỗi từ server vào GIÁ TRỊ THUỘC TÍNH. Bỏ hẳn đường đó: gắn nút
+   theo **CHỈ SỐ** (số do chính mình sinh ra, không cần thoát) rồi tra ngược.
+
+### 🔍 Bắt kèm — lỗi CÓ SẴN trên 58 trang, CỐ Ý KHÔNG vá ở đây
+`profile.html` ném `Identifier 'SUPA_URL' has already been declared`. Đối chứng
+A/B với bản dựng từ `git HEAD`: **y hệt ở cả hai bên** ⇒ không phải do PR này.
+Căn nguyên: 58 trang nạp CẢ `/auth.js?v=2` (thẻ của trang) LẪN `/auth.js` (do
+`nav.js` tự chèn), vì chốt canh của nav.js đọc `typeof window.Auth==='undefined'`
+đúng lúc bản kia còn đang tải → một bản chết hẳn. Trang `/app` thoát vì chế độ
+`data-icons-only` `return` sớm TRƯỚC đoạn chèn đó.
+- **Không vá trong PR này**: một dòng trong file nạp trên 89 trang, trộn vào PR
+  thêm tính năng đúng là thứ repo tự dặn tránh. Bài kiểm **lọc riêng** nó ra nên
+  vẫn bắt được lỗi MỚI. Vá đúng chỗ: đổi chốt canh của `nav.js` sang dò
+  `script[src*="auth.js"]` thay vì dò một id chỉ chính nó đặt.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices` + `check:groups` sạch · engine **185 pass** · `node --check` 3
+khối script nội tuyến.
+- **Bất biến trên RPC THẬT** (chạy trong transaction rồi rollback, verify 0 dòng
+  sót): nhận lần đầu **+10** · nhận lại **0** · **nhận lại với GIÁ KHÁC (50) vẫn
+  0** (không cộng bù) · số dư lệch **đúng 10** · đúng 1 dòng giao dịch + 1 dòng
+  nhiệm vụ · trần 200 chặn được 9999.
+- **37 ca Playwright trên TRANG THẬT** `/app` và `account-core.js` THẬT: khách
+  chưa đăng nhập → **0 lượt gọi API, thẻ không hiện** · 0/3 → đủ 3 việc, đếm
+  đúng "0/3 · còn +30 Lượng" · 2/3 → đúng 2 dấu tích, báo "vừa cộng +20", chỉ
+  việc chưa xong mới còn nút · xong cả ba → **thẻ ẩn hẳn** · nút `href` rỗng →
+  **KHÔNG rời trang**, form mở ngay trong thẻ · nút có `href` → tới đúng
+  `/profile.html#ketnoi` · nhãn chứa `<img onerror>` + `<script>` **không chạy**
+  mà vẫn hiện nguyên văn · quay lại tab trong 20 giây → không gọi lại · 390px
+  không tràn ngang · **ĐỐI CHỨNG** profile không có hash → vẫn tab mặc định.
+- 🪤 **Hai ca đỏ, cả hai là lỗi TEST**: (a) glob `**/action=onboarding-sync**`
+  không khớp vì trước `action=` là dấu `?` chứ không phải `/` — phải dùng hàm
+  khớp URL; (b) stub `VanNgayResult` tao viết tay cho gọn thì **thiếu `saoNgay`**
+  → `render()` NÉM giữa chừng, rơi vào `.catch` chạy `fallback()`; thẻ vẫn hiện
+  và can chi vẫn đúng nên **nhìn qua tưởng chạy tốt**, chỉ khối cá nhân im lặng
+  biến mất. **Stub thiếu trường thì bài kiểm đo nhầm đường lùi thay vì đường
+  chính** — lấy shape thẳng từ interface của engine.
+
+### ✅ Đã chạy prod — hết việc tay
+`_patches/migration-onboarding-tasks.sql` đã áp (bảng + RPC + `app_config
+['onboarding.task_rewards'] = {10,10,10}`). Chỉnh mức thưởng bằng SQL, không cần
+deploy; đặt một khoá về **0 là tắt hẳn** nhiệm vụ đó.
+- 🪤 **Lượt deploy RPC đầu tao gõ chữ KHÔNG DẤU** (`'Nhiem vu: '`) trong khi file
+  repo có dấu — mà chuỗi đó đi thẳng vào `credit_transactions.description` nên
+  người ta đọc được. Đúng bệnh "bản đang chạy khác bản trong repo" vừa mắc hôm
+  qua với edge function. Đã `create or replace` lại bằng nguyên văn và verify
+  bằng cách đọc ngược mô tả trong sổ giao dịch.
+- 🪤 Cột chú thích của `app_config` tên là **`note`**, không phải `description`
+  (đó là cột của `credit_transactions`) — lượt chạy đầu đỏ đúng chỗ đó.
+
+### CÒN LẠI
+- **Chưa có người thật nào làm nhiệm vụ** — mẫu 60 tài khoản. Con số cần nhìn sau
+  1–2 tuần là ba cột `chat_links` / `push_subscriptions` / `user_charts` có nhảy
+  khỏi mức 3/2/2 hay không. **Đừng kỳ vọng doanh thu nhảy** — mục này mua KÊNH
+  LIÊN LẠC, không mua đơn hàng.
+- **`push_subscriptions` hiện có 2 dòng và cả hai `user_id` NULL** ⇒ nhiệm vụ
+  "bật thông báo" chưa tính được cho hai người đó. Bước tự lành của R1a (đồng bộ
+  lại dòng dưới DB mỗi ngày kèm `Authorization`) sẽ điền `user_id` trong vòng
+  24 giờ kể từ lượt ghé tiếp theo của họ — không phải làm gì thêm.
+- Nhiệm vụ **mời bạn** cố ý không nằm trong thẻ. Nếu sau này thấy `referrals` vẫn
+  0 thì vấn đề là chỗ MỜI (widget `invite-cta.js` chỉ hiện khi hết Lượng), không
+  phải mức thưởng.
+
+---
+
+## 🔔 R1a — NỐI LẠI kênh nhắc hằng ngày (2026-08-07, PR trước)
 
 Henry duyệt sau khi tao báo: mục R1 của backlog (*"nhắc đúng lúc, cá nhân hoá
 theo lá số, và một lý do để mở ra"*) **giả định một tệp người nhận không tồn
