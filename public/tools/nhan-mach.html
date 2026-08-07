@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<link rel="preload" href="/nav.js?v=22" as="script">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Sổ Nhân Mạch — Đọc Cả Đội Cùng Lúc Theo Lá Số | Tử Vi Minh Bảo</title>
+<meta property="og:title" content="Sổ Nhân Mạch — Đọc Cả Đội Cùng Lúc Theo Lá Số"/>
+<meta property="og:description" content="Đưa 2–8 người vào một chỗ: nhóm này thiếu kiểu người nào, ai với ai dễ giẫm chân, ai bù được cho ai, và tuần này nên gặp ai trước."/>
+<meta property="og:url" content="https://www.tuviminhbao.com/tools/nhan-mach.html"/>
+<meta property="og:image" content="https://www.tuviminhbao.com/og-image.webp"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Sổ Nhân Mạch — Đọc Cả Đội Cùng Lúc Theo Lá Số"/>
+<meta name="twitter:description" content="Không đọc từng người rồi cộng lại — đọc cả nhóm để thấy chỗ trống mà từng bản luận riêng lẻ không lộ ra."/>
+<meta name="twitter:image" content="https://www.tuviminhbao.com/og-image.webp"/>
+<meta name="keywords" content="sổ nhân mạch, xem tử vi cả nhóm, ghép đội theo tử vi, tử vi quản trị nhân sự, sắp việc cho hợp người, danh sách khách hàng theo lá số">
+<meta name="description" content="Đưa 2–8 người vào một chỗ: nhóm này thiếu kiểu người nào, ai với ai dễ giẫm chân, ai bù được cho ai, và tuần này nên gặp ai trước.">
+<link rel="canonical" href="https://www.tuviminhbao.com/tools/nhan-mach.html">
+<link rel="icon" type="image/webp" href="/seal.webp">
+<link rel="stylesheet" href="/tools/tools.css">
+<style>
+.nm-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.nm-p{border:1px solid var(--border-lt,#E8E8E8);border-radius:10px;padding:15px 16px;background:var(--card,#fff)}
+.nm-p .t{font-family:var(--serif,serif);font-size:15.5px;font-weight:700;color:var(--navy,#061A2E);margin-bottom:4px}
+.nm-p .c{font-size:11.5px;color:var(--text-lt,#777);margin-bottom:8px}
+.nm-p .d{font-size:13.2px;line-height:1.72;color:var(--text-mid,#444)}
+.nm-warn{border-left:3px solid #A8342A;background:#FDF6F4;border-radius:0 10px 10px 0;padding:14px 16px;margin-top:16px;font-size:13.3px;line-height:1.75;color:var(--text-mid,#444)}
+.cs-faq{margin-top:14px}
+.cs-faq details{border-bottom:1px solid var(--border-lt,#E8E8E8);padding:13px 0}
+.cs-faq summary{cursor:pointer;font-weight:600;font-size:14.5px;color:var(--navy,#061A2E);line-height:1.6}
+.cs-faq p{font-size:13.5px;line-height:1.78;color:var(--text-mid,#444);margin:9px 0 0}
+@media(max-width:640px){.nm-pair{grid-template-columns:1fr}}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Trang chủ","item":"https://www.tuviminhbao.com/"},{"@type":"ListItem","position":2,"name":"Công cụ","item":"https://www.tuviminhbao.com/cong-cu"},{"@type":"ListItem","position":3,"name":"Sổ Nhân Mạch","item":"https://www.tuviminhbao.com/tools/nhan-mach.html"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Sổ Nhân Mạch khác gì với xem lá số từng người?","acceptedAnswer":{"@type":"Answer","text":"Đọc từng người rồi cộng lại không lộ ra chỗ trống của nhóm. Công cụ này đọc cả nhóm cùng lúc nên trả lời được những câu chỉ có nghĩa ở cấp nhóm: kiểu người nào không ai trong đội có, ai với ai dễ giẫm chân vì cùng một kiểu, và ai bù được cho ai."}},{"@type":"Question","name":"Vì sao giới hạn 8 người?","acceptedAnswer":{"@type":"Answer","text":"Trên tám người thì số cặp bùng nổ — tám người đã là hai mươi tám cặp — và bản đọc biến thành một cuốn danh bạ không ai đọc hết. Trần này là lựa chọn để giữ bản luận còn dùng được, không phải giới hạn kỹ thuật."}},{"@type":"Question","name":"Thứ tự tiếp cận có phải bảng xếp hạng mức quan trọng không?","acceptedAnswer":{"@type":"Answer","text":"Không, và đây là chỗ dễ đọc nhầm nhất. Thứ tự xếp theo vận năm của từng người — ai đang ở năm thuận thì dễ mở chuyện mới hơn — chứ không phải theo mức quan trọng hay tiềm năng. Đọc nhầm thành bảng ưu tiên khách hàng là hỏng cả mục đích của nó."}},{"@type":"Question","name":"Có xếp hạng nhân sự hay khuyên thay người không?","acceptedAnswer":{"@type":"Answer","text":"Không. Công cụ cố ý không trả điểm tổng cho từng người, nên không có gì để xếp hạng, và bản luận bị cấm khuyên sa thải hay thay người. Đây là khung sắp việc cho hợp người, không phải bảng chấm điểm nhân sự."}},{"@type":"Question","name":"Có cần đăng nhập không?","acceptedAnswer":{"@type":"Answer","text":"Có. Công cụ đọc từ sổ lá số lưu theo tài khoản, dùng chung với các công cụ khác — thêm một người vào sổ một lần rồi dùng mãi, và sổ không mất khi bạn đổi máy."}}]}
+</script>
+</head>
+<body>
+<div id="nav-ph" style="height:60px;background:#061A2E"></div>
+
+<div class="hero-tool">
+  <div class="page">
+    <div class="eyebrow">Công Cụ Luận Giải</div>
+    <h1>Sổ <em>Nhân Mạch</em><br>Đọc Cả Đội Cùng Lúc</h1>
+    <p>Xem tử vi cả nhóm cùng lúc thay vì từng người: đưa <strong>2–8 người</strong> vào một chỗ — đội của bạn, hoặc danh sách khách. Nhóm này thiếu kiểu người nào, ai với ai dễ giẫm chân, ai bù được cho ai, và tuần này nên gặp ai trước.</p>
+  </div>
+</div>
+
+<div class="page">
+  <div class="tool-intro">
+    <div class="xt-section">
+      <div class="xt-eyebrow">Vì sao phải đọc cả nhóm</div>
+      <div class="xt-grid-2">
+        <div>
+          <h2 class="xt-h2">Đọc Từng Người Rồi Cộng Lại<br>Không Lộ Ra Chỗ Trống</h2>
+          <p class="xt-body">Bạn có thể xem lá số từng người trong đội, mỗi bản đều đúng, và vẫn không thấy được vấn đề. Vì thứ hay giết một đội không nằm trong bất kỳ ai — nó nằm ở <strong>chỗ nhóm thiếu</strong>: bốn người cùng giỏi mở đường mà không ai chịu giữ guồng, hoặc cả nhóm toàn người cẩn thận nên không ai dám bước trước.</p>
+          <p class="xt-body">Ba câu hỏi dưới đây <em>chỉ có nghĩa ở cấp nhóm</em>, không bản luận cá nhân nào trả lời được: <strong>kiểu người nào không ai trong đội có</strong>, <strong>hai người nào đang làm cùng một việc mà không ai nhận ra</strong>, và <strong>ai đặt cạnh ai thì bù được cho nhau</strong>.</p>
+        </div>
+        <div class="xt-factors">
+          <div class="xt-factor-title">Bản Đọc Gồm</div>
+          <div class="xt-factor-item"><span class="xt-factor-num">①</span><span class="xt-factor-label">Nhóm này hình gì</span><span class="xt-factor-desc">Phân bố bốn kiểu người trong đội</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">②</span><span class="xt-factor-label">Chỗ trống của nhóm</span><span class="xt-factor-desc">Kiểu không ai có, và ai đang phải gánh</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">③</span><span class="xt-factor-label">Từng người</span><span class="xt-factor-desc">Cách làm việc và cách mở lời với họ</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">④</span><span class="xt-factor-label">Cặp cần để ý</span><span class="xt-factor-desc">Giẫm chân nhau · bù được cho nhau</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">⑤</span><span class="xt-factor-label">Thứ tự tiếp cận</span><span class="xt-factor-desc">Theo vận năm — KHÔNG phải mức quan trọng</span></div>
+          <div class="xt-factor-item"><span class="xt-factor-num">⑥</span><span class="xt-factor-label">Làm gì tuần này</span><span class="xt-factor-desc">Vài việc cụ thể, không phải lời chung chung</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="xt-section">
+    <div class="xt-eyebrow">Cặp cần để ý</div>
+    <h2 class="xt-h2">Chỉ Hai Loại Cặp Được Nêu</h2>
+    <p class="xt-body">Một nhóm tám người có hai mươi tám cặp. Nêu hết là chôn vùi thứ đáng đọc dưới một đống chữ. Nên công cụ <strong>chỉ nêu hai loại cặp có căn cứ tra được</strong> trong lá số:</p>
+    <div class="nm-pair">
+      <div class="nm-p">
+        <div class="t">Giẫm chân nhau</div>
+        <div class="c">Hai người CÙNG một kiểu</div>
+        <div class="d">Cùng nhìn ra một việc, cùng muốn cầm việc đó, cùng bỏ qua đúng những chỗ giống nhau. Va nhau không phải vì ghét nhau mà vì đứng chồng lên nhau — và đó là loại va khó gọi tên nhất.</div>
+      </div>
+      <div class="nm-p">
+        <div class="t">Bù được cho nhau</div>
+        <div class="c">Khác kiểu và khác tính âm–dương</div>
+        <div class="d">Chỗ người này mỏng thì người kia dày. Đặt cạnh nhau trong một việc thì mỗi người che được điểm hở của người kia — nhưng cũng dễ thấy nhau khó hiểu nếu không ai nói rõ ra.</div>
+      </div>
+    </div>
+    <p class="xt-body" style="margin-top:14px">Cặp <em>khác kiểu nhưng cùng tính</em> (chẳng hạn Khai sáng đi với Lãnh đạo) <strong>cố ý bị bỏ</strong> — không có gì để nói mà vẫn chiếm chỗ trong bản đọc.</p>
+  </div>
+
+  <div class="xt-section">
+    <div class="xt-eyebrow">Chỗ dễ đọc nhầm nhất</div>
+    <h2 class="xt-h2">Thứ Tự Tiếp Cận Không Phải Bảng Xếp Hạng</h2>
+    <div class="nm-warn">
+      <strong>Danh sách thứ tự xếp theo VẬN NĂM của từng người</strong> — ai đang ở năm thuận thì dễ mở chuyện mới hơn — <strong>chứ không phải theo mức quan trọng, tiềm năng hay giá trị</strong> của họ. Đọc nhầm nó thành bảng ưu tiên khách hàng là làm hỏng đúng mục đích của công cụ. Điều này được nói rõ cả trên trang kết quả lẫn trong chỉ dẫn gửi cho phần luận giải.
+    </div>
+    <p class="xt-body" style="margin-top:16px">Cùng lý do đó, công cụ <strong>không trả điểm tổng cho bất kỳ ai</strong>. Không có điểm thì không có gì để đem ra xếp hạng — và bản luận bị cấm khuyên sa thải, cấm gợi ý thay người, cấm ngôn ngữ chốt sale kiểu thao túng. Đây là khung <em>sắp việc cho hợp người</em>, không phải bảng chấm điểm nhân sự.</p>
+  </div>
+
+  <div class="tool-cta">
+    <div class="tool-cta-eyebrow">Cần Đăng Nhập · Sổ Lá Số Theo Tài Khoản</div>
+    <div class="tool-cta-title">Đọc Cả Sổ Nhân Mạch</div>
+    <div class="tool-cta-desc">Thêm người vào sổ một lần rồi dùng mãi — sổ dùng chung với các công cụ khác và không mất khi bạn đổi máy. Mỗi người gán một vai: sếp, đồng nghiệp, cấp dưới, đối tác, khách.</div>
+    <a class="tool-cta-btn" href="/app/nhan-mach">Mở Sổ Nhân Mạch →</a>
+  </div>
+
+  <div class="xt-section">
+    <div class="xt-eyebrow">Câu hỏi thường gặp</div>
+    <h2 class="xt-h2">Hỏi Đáp</h2>
+    <div class="cs-faq">
+      <details open><summary>Sổ Nhân Mạch khác gì với xem lá số từng người?</summary><p>Đọc từng người rồi cộng lại không lộ ra chỗ trống của nhóm. Ba câu “kiểu nào không ai có”, “ai giẫm chân ai”, “ai bù cho ai” chỉ có nghĩa ở cấp nhóm.</p></details>
+      <details><summary>Vì sao giới hạn 8 người?</summary><p>Trên tám người thì số cặp bùng nổ — tám người đã là hai mươi tám cặp — và bản đọc thành cuốn danh bạ. Trần này để giữ bản luận còn dùng được.</p></details>
+      <details><summary>Thứ tự tiếp cận có phải bảng xếp hạng mức quan trọng không?</summary><p><strong>Không.</strong> Xếp theo vận năm từng người, không phải mức quan trọng. Đọc nhầm thành bảng ưu tiên khách hàng là hỏng mục đích công cụ.</p></details>
+      <details><summary>Có xếp hạng nhân sự hay khuyên thay người không?</summary><p>Không. Không có điểm tổng nên không có gì để xếp hạng, và bản luận bị cấm khuyên sa thải hay thay người.</p></details>
+      <details><summary>Có cần đăng nhập không?</summary><p>Có — công cụ đọc từ sổ lá số lưu theo tài khoản, nên sổ không mất khi bạn đổi máy hay xoá cache trình duyệt.</p></details>
+    </div>
+  </div>
+</div>
+
+<section class="kb-section">
+  <div class="page">
+    <div class="kb-inner">
+      <div class="kb-eyebrow">Kiến Thức Cổ Pháp</div>
+      <h2 class="kb-title">Bốn Kiểu Người Và Trục Âm Dương</h2>
+      <div class="kb-body">
+        <p>Bốn kiểu — <strong>Khai sáng</strong>, <strong>Lãnh đạo</strong>, <strong>Hỗ trợ</strong>, <strong>Hợp tác</strong> — là tứ tượng Kinh Dịch áp lên 14 chính tinh tại cung Mệnh, trùng khít với các bộ sao kinh điển. Khai sáng và Lãnh đạo thuộc nhóm dương, Hỗ trợ và Hợp tác thuộc nhóm âm.</p>
+        <p>Chính trục âm–dương đó quyết định cặp nào <em>bù</em> được cho nhau. Đo trên hơn mười nghìn lá số cho thấy các cặp chính tinh lẫn nhóm chỉ xảy ra <strong>trong cùng một tính âm hoặc dương</strong>, không có lá số nào lẫn qua ranh giới ấy — nên trục này chia đôi rất sạch và gần như không bao giờ mơ hồ.</p>
+        <p class="kb-links">Xem thêm: <a href="/tools/cong-so.html">Tử Vi Công Sở</a>, <a href="/tools/nguoi-khac.html">Lá Số Người Khác</a>, <a href="/tools/day-con.html">Dạy Con Theo Lá Số</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-top"><div><div class="footer-brand"><img src="/seal.webp" alt=""><div class="footer-brand-text"><div class="name">Tử Vi Minh Bảo</div><div class="zh">紫微明寶</div></div></div><p class="footer-tagline">Tri mệnh lý – Thuận thế hành</p></div></div>
+  <div class="footer-bottom"><span>© 2026 tuviminhbao.com</span><img src="/seal.webp" alt=""></div>
+</footer>
+
+<script src="/nav.js?v=22"></script>
+</body>
+</html>
