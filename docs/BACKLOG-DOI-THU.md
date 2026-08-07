@@ -130,7 +130,7 @@ phải tính lại. Một câu SQL, không cần deploy.
 
 ## W — Paywall & chuyển đổi
 
-### W1. Tính thử miễn phí → chặn ở phần luận sâu ✅ XONG (3 tool cẩm nang) ⭐
+### W1. Tính thử miễn phí → chặn ở phần luận sâu ✅ XONG (5 tool) ⭐
 **Bằng chứng ở tầng code:** 29/71 trang sản phẩm của họ **giấu giá tới sau khi
 bấm**, trang chỉ có hai nút `免費試算` → `付費鑑定`. Người dùng Dcard mô tả:
 *"che một đống đoạn mờ để câu"*.
@@ -154,8 +154,30 @@ thật**, bày tầng deterministic rồi mới khoá phần chữ.
   ĐƯỜNG TIỀN, không theo bố cục**. Có test đọc mã canh renderMeta không đọc một
   khoá chữ nào.
 
-**Chưa làm:** 2 tool chân dung — ở đó giá trị chính LÀ bức ảnh, cho xem trước
-là cho không hàng. Phải nghĩ cách khác.
+**✅ W1b — đã mở sang 2 tool chân dung.** Vòng trước ghi *"giá trị chính LÀ bức
+ảnh, cho xem trước là cho không hàng"* — **sai một nửa**: D1 đo được cả hai tool
+rơi ~90% ngay ở bước BẤM NÚT, tức trước cả paywall. Và preview vẫn **0đ**: cả
+hai route đã ghi sẵn *"cả hai chỉ ăn dữ liệu deterministic từ computePastLife()"*.
+| Tool | Mở | Chạy | Rơi |
+|---|---:|---:|---:|
+| Chân Dung Vợ Chồng | 10 | 1 | **90%** |
+| Chân Dung Tiền Kiếp | 5 | 1 | **80%** |
+- **Tiền kiếp bày**: danh xưng (1 trong 1.150) · nền văn minh + nhãn thời đại ·
+  khung 5 hồi kèm nhãn đỉnh-cao/biến-cố · **Cơ Sở Trong Lá Số**. Khoá: bức
+  tranh, mô tả nhân vật, chữ 5 hồi, lời kết.
+- **Vợ chồng bày**: cung Phu Thê + **bảng hình thể** (mỗi nét kèm SAO quyết định
+  nó, sát tinh đánh dấu "phá cách"). Khoá: bức tranh, mô tả, hoàn cảnh gặp gỡ,
+  luận giải.
+- 🔑 **Khối "Cơ Sở Trong Lá Số" của tiền kiếp SỐNG LẠI — nhưng chỉ ở lượt chưa
+  trả tiền.** Nó từng bị gỡ vì thuật ngữ tử vi làm hỏng mạch truyện; quyết định
+  đó giữ nguyên (`renderProse` ẩn nó đi). Ở lượt chưa trả tiền vai của nó ngược
+  lại: đây là bằng chứng DUY NHẤT người ta có.
+- ⚠️ **KHÔNG bày `spouseAge`**: mốc tuổi neo vào `Math.random()` nên số ở lượt
+  tính thử sẽ khác số sau khi trả tiền. Bày rồi đổi ngay sau khi thu tiền là tự
+  tay phá thứ W1 sinh ra để xây. Có ca test canh đúng chỗ này.
+- **Chưa làm:** 2 trang standalone `/tools/chan-dung-*.html` vẫn là tường cũ —
+  chúng không nạp `shell.js` nên không nằm trong phễu D1, và CTA từ link chia sẻ
+  vốn đổ về `/app`.
 
 ### W2. Che chữ thay vì modal ✅ XONG
 Modal chặn = "cửa đóng". Che mờ = "gần lấy được rồi". Cùng một hành vi, hai cảm
