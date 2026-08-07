@@ -14,6 +14,7 @@ import { getToolPrice } from '@/lib/billing/pricing';
 import { hasSlugAccess } from '@/lib/billing/credits';
 import { freeGenGate, FREE_GEN_CAP_MESSAGE, railFreeRemaining } from '@/lib/billing/viral-budget';
 import { anonTrialStatus } from '@/lib/billing/anon-trial';
+import { syncOnboardingTasks } from '@/lib/onboarding/tasks';
 import { getConfigValue } from '@/lib/config/appConfig';
 import { CRON_RUNS_LIMIT, evaluateJobs, fetchPgcronRuns, syncJobFirstSeen } from '@/lib/ops/jobs';
 import { checkEnv } from '@/lib/ops/preflight';
@@ -2061,6 +2062,33 @@ async function handleMyReferral(request: NextRequest, sp: URLSearchParams): Prom
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
+// ── POST: onboarding-sync (M3) ─────────────────────────────────
+// Headers: Authorization: Bearer <user_token>. Trả trạng thái 3 nhiệm vụ và
+// CỘNG NGAY phần vừa hoàn thành (xem lib/onboarding/tasks.ts).
+//
+// Vì sao POST chứ không GET: lượt gọi này CÓ tác dụng phụ — nó cộng Lượng vào
+// ví. Để ở GET là mời trình duyệt/CDN prefetch nó, mà prefetch một endpoint
+// phát tiền là loại lỗi rất khó nhìn ra.
+//
+// Vì sao BẮT BUỘC auth: phần thưởng gắn vào một tài khoản cụ thể; nhận `userId`
+// qua body như `action=balance` đang làm là để bất kỳ ai đoán được id cũng kích
+// được lượt cộng Lượng cho người khác.
+//
+// Trả kèm `balance` để trang cập nhật số dư trong CÙNG một lượt mạng thay vì
+// phải hỏi `action=balance` ngay sau đó.
+async function handleOnboardingSync(request: NextRequest): Promise<Response> {
+  const userToken = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  if (!userToken) return err('Missing Authorization token', 401);
+  try {
+    const user = await getUserFromToken(userToken);
+    if (!user) return err('Invalid token', 401);
+    const state = await syncOnboardingTasks(user.id);
+    return ok({ ...state, balance: await getBalance(user.id) });
+  } catch (e) {
+    return err(e instanceof Error ? e.message : 'onboarding-sync failed', 500);
+  }
+}
+
 // ── POST: referral-register ────────────────────────────────────
 // Body: { refCode: string }   Headers: Authorization: Bearer <user_token>
 // Frontend gọi sau khi user mới đăng ký xong + có ?ref=CODE trong URL/sessionStorage.
@@ -2176,5 +2204,6 @@ export async function POST(request: NextRequest) {
   if (action === 'admin-users-set-active') return handleAdminUsersSetActive(request, body);
   if (action === 'create-bank')       return handleCreateBank(body);
   if (action === 'referral-register') return handleReferralRegister(request, body);
+  if (action === 'onboarding-sync')   return handleOnboardingSync(request);
   return err('Invalid action.', 400);
 }

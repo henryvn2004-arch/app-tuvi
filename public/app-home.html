@@ -102,6 +102,35 @@
 .today-ask:hover{filter:brightness(1.08)}
 .today-share{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:12px 16px;font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
 .today-share:hover{background:rgba(255,255,255,.14)}
+/* ── NHIỆM VỤ MỞ KHOÁ LƯỢNG (M3) ───────────────────────────────────────────
+   CỐ Ý để nền SÁNG, ngược hẳn thẻ Vận hôm nay (navy): hai khối nằm sát nhau,
+   cùng tông là đọc thành một khối dài và mắt trượt qua. */
+.task-card{background:#fff;border:1px solid var(--gold-soft);border-radius:14px;padding:16px 18px;margin-bottom:22px}
+.tsk-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.tsk-h{font-family:var(--serif);font-size:15.5px;font-weight:600;color:var(--navy)}
+.tsk-count{font-size:11.5px;font-weight:700;color:var(--gold-soft);white-space:nowrap}
+.tsk-sub{font-size:12.5px;color:var(--text-mid);line-height:1.5;margin-bottom:12px}
+.tsk-sub b{color:var(--navy)}
+.tsk-got{font-size:12.5px;font-weight:600;color:#2f7a4d;background:#e8f7ee;border:1px solid #a9dcbd;border-radius:8px;padding:8px 11px;margin-bottom:12px;line-height:1.45}
+.tsk-list{display:flex;flex-direction:column;gap:9px}
+.tsk-row{display:flex;align-items:flex-start;gap:11px;padding:10px 12px;border:1px solid var(--border-lt);border-radius:10px}
+.tsk-row.done{border-color:#cfe8da;background:#f6fbf8}
+.tsk-tick{flex:0 0 auto;width:19px;height:19px;border-radius:50%;border:2px solid var(--border-lt);margin-top:1px}
+.tsk-row.done .tsk-tick{border-color:#2f7a4d;background:#2f7a4d;position:relative}
+.tsk-row.done .tsk-tick::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;line-height:1}
+.tsk-body{flex:1;min-width:0}
+.tsk-t{font-size:13.5px;font-weight:600;color:var(--navy);line-height:1.35}
+.tsk-row.done .tsk-t{color:var(--text-mid)}
+.tsk-d{font-size:12px;color:var(--text-mid);line-height:1.5;margin-top:3px}
+.tsk-pay{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.tsk-amt{font-size:11.5px;font-weight:700;color:var(--gold-soft);white-space:nowrap}
+.tsk-row.done .tsk-amt{color:#2f7a4d}
+.tsk-go{background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#2a1e05;border:none;border-radius:8px;padding:6px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+.tsk-go:hover{filter:brightness(1.06)}
+@media(max-width:520px){
+  .tsk-row{flex-wrap:wrap}
+  .tsk-pay{flex-direction:row;align-items:center;width:100%;justify-content:space-between;margin-left:30px}
+}
 </style>
 </head>
 <body>
@@ -150,6 +179,10 @@
             <button class="today-share" id="todayPoster" type="button">⤓ Ảnh</button>
           </div>
         </div>
+        <!-- M3 — nhiệm vụ onboarding. Dựng hoàn toàn bằng JS và CHỈ khi đã đăng
+             nhập + còn việc chưa làm; khách vãng lai không bao giờ thấy khối
+             này (họ chưa có ví để mà cộng vào). -->
+        <div class="task-card" id="taskCard" style="display:none"></div>
         <div id="homeCards"></div>
       </div>
     </div>
@@ -288,6 +321,11 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
   // không dùng lại được chuỗi có thẻ <b>; dựng song song ngay lúc render để hai
   // bên không bao giờ nói khác nhau.
   var _meText='';
+  // Can chi năm sinh của người xem, do ENGINE trả về (`caNhan.canChiNam`) chứ
+  // không suy lại ở client — quy đổi năm → can chi là cổ pháp, có bản thứ hai ở
+  // đây là có ngày hai bản trôi khỏi nhau. Nhiệm vụ "bật thông báo" cần nó để
+  // lời mời nêu đúng tuổi.
+  var _canChiNam='';
 
   function iso(t){ return t.y+'-'+('0'+t.mo).slice(-2)+'-'+('0'+t.d).slice(-2); }
 
@@ -338,6 +376,12 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
     .catch(function(){ fallback(_today,_birth,_hasBirth); });
 
   el('todayBack').onclick=function(){ goDay(_today); };
+
+  /* Nhiệm vụ (M3) — chạy SONG SONG với lượt lấy vận ngày, không nối đuôi: thẻ
+     Vận hôm nay là nội dung chính của màn hình này và không được chờ một lượt
+     mạng khác. Hoãn 1,2 giây để `Auth` kịp khôi phục phiên — hỏi token quá sớm
+     thì người đã đăng nhập lại bị coi là khách. */
+  setTimeout(syncTasks,1200);
   }
 
   /* Chuyển thẻ sang một ngày khác trong dải. Vẫn MIỄN PHÍ, vẫn deterministic —
@@ -468,6 +512,7 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
     renderWeek(td);
     card.style.display='';
     wire(v,td,birth,hasBirth,hours);
+    try{ _canChiNam=(v&&v.caNhan&&v.caNhan.canChiNam)||_canChiNam; }catch(e){}
     maybeAskPush(v,isToday,birth);
   }
 
@@ -548,6 +593,10 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
           if(v&&v.ok){ if(v.tuan)_week=v.tuan; render(v,_today,_birth,_hasBirth); }
           else { host.innerHTML=''; btn.style.display=''; }
           try{ window.Track&&Track.event('tool_run',{tool_id:'van-ngay',meta:{from:'today_card_birth'}}); }catch(e){}
+          // Vừa lưu lá số → nhiệm vụ `luu_la_so` xong. `Shell.rememberBirth`
+          // ghi lên sổ tài khoản theo lối BẮN-VÀ-QUÊN nên phải chờ một nhịp,
+          // không thì server hỏi `user_charts` trước khi dòng kịp vào.
+          setTimeout(function(){ _tskLast=0; syncTasks(); },1800);
         }).catch(function(){
           el('tmeSave').disabled=false; el('tmeSave').textContent='Xem vận riêng của tôi →';
           el('tmeErr').textContent='Không lập được, thử lại sau.';
@@ -682,6 +731,112 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
       });
     };
   }
+  /* ══ M3 — NHIỆM VỤ MỞ KHOÁ LƯỢNG ═══════════════════════════════════════════
+     Đo prod 07/08: 48 người đã nhận 25 Lượng quà đăng ký, đổi lại có 3 liên kết
+     kênh chat · 2 lượt bật thông báo · 2 dòng sổ lá số của ĐÚNG một người · 0
+     lượt mời bạn. Phát tiền mà không hỏi lại gì thì không nhận lại gì.
+
+     🔑 Quà đăng ký 25 Lượng GIỮ NGUYÊN, nhiệm vụ là phần CỘNG THÊM. Cắt 25 ra
+     chia nhỏ thì người mới cầm 5 Lượng và không chạy nổi tool nào (rẻ nhất 5,
+     phần lớn 15–30) — đó là siết đúng đầu phễu vốn đã hỏng.
+
+     Server tự kiểm và tự cộng (lib/onboarding/tasks.ts). Trang này chỉ VẼ và
+     dẫn người ta tới đúng chỗ làm — không tự quyết ai xong việc gì. */
+  var _tskBusy=false, _tskLast=0, _tskGot=0, _tskDefs=[];
+
+  function tskToken(){
+    try{ var s=window.Auth&&Auth.getSession&&Auth.getSession(); return s?s.access_token:''; }catch(e){ return ''; }
+  }
+
+  function syncTasks(){
+    var tk=tskToken();
+    // Chưa đăng nhập → im lặng tuyệt đối. Họ chưa có ví để mà cộng vào, và mời
+    // làm nhiệm vụ trước khi có tài khoản là dựng thêm một bức tường.
+    if(!tk||_tskBusy) return;
+    _tskBusy=true; _tskLast=Date.now();
+    fetch('/api/payment?action=onboarding-sync',{method:'POST',headers:{Authorization:'Bearer '+tk}})
+      .then(function(r){ return r.ok?r.json():null; })
+      .then(function(d){ if(d&&d.tasks) renderTasks(d); })
+      .catch(function(){ /* hỏng thì thẻ không hiện — không chặn gì của trang */ })
+      .then(function(){ _tskBusy=false; });
+  }
+
+  function renderTasks(d){
+    var host=el('taskCard'); if(!host) return;
+    // Xong cả ba → biến mất hẳn. Giữ lại một thẻ toàn dấu tích là chiếm chỗ
+    // vĩnh viễn trên màn hình đầu để khoe một việc đã cũ.
+    if(d.allDone){ host.style.display='none'; return; }
+
+    var done=0; for(var i=0;i<d.tasks.length;i++) if(d.tasks[i].done) done++;
+    _tskGot+=(+d.granted||0);
+
+    var h='<div class="tsk-top"><div class="tsk-h">Mở khoá thêm Lượng</div>'
+      + '<div class="tsk-count">'+done+'/'+d.tasks.length+' · còn +'+(+d.pending||0)+' Lượng</div></div>'
+      // Nói THẲNG con số và quy ra thứ mua được. Hứa lửng lơ kiểu "làm nhiệm vụ
+      // để nhận thưởng" là mất niềm tin ngay lần đầu.
+      + '<div class="tsk-sub">Làm nốt là được cộng thẳng vào ví — <b>+'+(+d.pending||0)
+      + ' Lượng</b>, đủ thêm một lượt luận.</div>';
+
+    if(_tskGot>0) h+='<div class="tsk-got">✓ Vừa cộng <b>+'+_tskGot+' Lượng</b> vào ví bạn.</div>';
+
+    // 🪤 `esc()` của trang chỉ thoát `& < >`, KHÔNG thoát dấu nháy — nên tuyệt
+    // đối không nhét chuỗi từ server vào GIÁ TRỊ THUỘC TÍNH ở đây. Gắn nút theo
+    // CHỈ SỐ (số do chính mình sinh ra, không cần thoát gì) rồi tra ngược trong
+    // `_tskDefs`. An toàn kể cả khi sau này nhãn nhiệm vụ sửa được từ Admin.
+    _tskDefs=d.tasks;
+    h+='<div class="tsk-list">';
+    for(var j=0;j<d.tasks.length;j++){
+      var t=d.tasks[j];
+      h+='<div class="tsk-row'+(t.done?' done':'')+'"><div class="tsk-tick"></div>'
+       + '<div class="tsk-body"><div class="tsk-t">'+esc(t.title)+'</div>'
+       + (t.done?'':'<div class="tsk-d">'+esc(t.desc)+'</div>')+'</div>'
+       + '<div class="tsk-pay"><div class="tsk-amt">'+(t.done?'+':'')+(+t.credits||0)+' Lượng</div>'
+       + (t.done?'':'<button class="tsk-go" type="button" data-i="'+j+'">'+esc(t.cta)+'</button>')
+       + '</div></div>';
+    }
+    h+='</div>';
+    host.innerHTML=h;
+    host.style.display='';
+
+    var btns=host.querySelectorAll('.tsk-go');
+    for(var k=0;k<btns.length;k++) btns[k].onclick=tskGo;
+  }
+
+  function tskGo(){
+    var t=_tskDefs[+this.getAttribute('data-i')]; if(!t) return;
+    var key=t.key, href=t.href||'';
+    // `href` rỗng = việc làm được NGAY TẠI TRANG NÀY. Đá người ta sang trang
+    // khác để làm đúng việc đang có sẵn ở đây là tự thêm một chỗ rơi.
+    if(href){ try{ location.href=href; }catch(e){} return; }
+    if(key==='luu_la_so'){
+      var b=el('tmeEdit');
+      if(b){ try{ b.scrollIntoView({behavior:'smooth',block:'center'}); }catch(e){} b.click(); }
+      return;
+    }
+    if(key==='bat_thong_bao'){
+      var nam=(_birth&&+_birth.year)||0, cc=_canChiNam;
+      // `askPushPermission` tự bỏ qua khi vừa hỏi 3 ngày trước / đã bị chặn vĩnh
+      // viễn / iOS tab thường. Ở đây là NGƯỜI DÙNG CHỦ ĐỘNG bấm, nên báo lại một
+      // câu khi nó im — im lặng sau một cú bấm đọc thành nút hỏng.
+      function ask(){
+        try{ window.askPushPermission(nam,cc); }catch(e){}
+        setTimeout(function(){ syncTasks(); },2500);
+      }
+      if(window.askPushPermission) return ask();
+      var s=document.createElement('script');
+      s.src='/pwa-push.js?v=2'; s.onload=ask; s.onerror=function(){};
+      document.head.appendChild(s);
+    }
+  }
+
+  /* Quay lại tab thì đồng bộ lại — đây mới là ca thường gặp nhất: bấm "Liên
+     kết" → sang profile → nối Telegram → quay về. Không có bước này thì nhiệm
+     vụ vẫn hiện là chưa làm cho tới lần tải trang sau. Chặn 20 giây để đổi tab
+     qua lại không thành một tràng gọi API. */
+  document.addEventListener('visibilitychange',function(){
+    if(document.visibilityState==='visible'&&Date.now()-_tskLast>20000) syncTasks();
+  });
+
   // Chạy SAU khi shell.boot() render rail (boot hoãn tới DOMContentLoaded).
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
 })();
