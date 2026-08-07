@@ -24,6 +24,7 @@ import {
 import { PHU_THE_LUAN_GIAI_SYSTEM_PROMPT, buildPhuTheLuanGiaiPrompt } from '@/lib/agent/phu-the-luan-giai';
 import { generatePortraitImage } from '@/lib/image/openai-image';
 import type { BirthParams } from '@/lib/contract/v1';
+import { authUserFromRequest, parseLlmJson } from '@/lib/api/tool-helpers';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import {
   lookupPortraitCache,
@@ -40,32 +41,6 @@ const TOOL_ID = 'chan-dung-vo-chong';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
-
-// ── Auth (giống pattern authUser trong app/api/phong-thuy/route.ts) ──────
-async function getUserFromToken(token: string) {
-  const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-    headers: { Authorization: `Bearer ${token}`, apikey: SUPABASE_KEY },
-  });
-  if (!res.ok) return null;
-  const u = await res.json();
-  return u?.id ? u : null;
-}
-
-async function authUser(request: NextRequest): Promise<{ error: string; status: number } | { user: { id: string } }> {
-  const auth = request.headers.get('Authorization');
-  if (!auth?.startsWith('Bearer ')) return { error: 'Unauthorized', status: 401 };
-  const user = await getUserFromToken(auth.slice(7));
-  if (!user?.id) return { error: 'Unauthorized', status: 401 };
-  return { user };
-}
-
-function parseJSON(text: string): unknown {
-  try {
-    return JSON.parse(text.replace(/```json|```/g, '').trim());
-  } catch {
-    return null;
-  }
-}
 
 /**
  * W1b — lượt TÍNH THỬ: chạy tầng deterministic rồi dừng.
@@ -112,7 +87,7 @@ async function runPreview(request: NextRequest) {
 
 // ── Generate ──────────────────────────────────────────────────────────
 async function handleGenerate(request: NextRequest, body: Record<string, unknown>) {
-  const auth = await authUser(request);
+  const auth = await authUserFromRequest(request);
   if ('error' in auth) return err(auth.error, auth.status);
 
   const birth = body.birth as BirthParams | undefined;
@@ -278,7 +253,7 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
   } catch {
     return err('Lỗi AI mô tả chân dung. Vui lòng thử lại.', 500);
   }
-  const parsed = parseJSON(raw) as {
+  const parsed = parseLlmJson(raw) as {
     imagePrompt?: string;
     description?: string;
     meetingContext?: string;
@@ -502,12 +477,12 @@ async function handleGenerate(request: NextRequest, body: Record<string, unknown
 
 // ── History ───────────────────────────────────────────────────────────
 async function handleHistory(request: NextRequest) {
-  const auth = await authUser(request);
+  const auth = await authUserFromRequest(request);
   if ('error' in auth) return err(auth.error, auth.status);
 
   const r = await fetch(
     `${SUPABASE_URL}/rest/v1/spouse_portraits?user_id=eq.${auth.user.id}&select=id,created_at,image_url,description,meeting_context,phu_the_luan_giai,spouse_gender,spouse_age&order=created_at.desc&limit=20`,
-    { headers: { Authorization: `Bearer ${SUPABASE_KEY}`, apikey: SUPABASE_KEY } },
+    { cache: 'no-store', headers: { Authorization: `Bearer ${SUPABASE_KEY}`, apikey: SUPABASE_KEY } },
   );
   if (!r.ok) return err('Lỗi tải lịch sử.', 500);
   const items = await r.json();
@@ -520,7 +495,7 @@ async function handleHistory(request: NextRequest) {
 // sinh gì, không trừ gì. Server vẫn tự kiểm lại y hệt lúc POST — endpoint này
 // chỉ để khỏi hiện hộp thoại đòi tiền cho một lượt vốn không mất tiền.
 async function handleCacheStatus(request: NextRequest, sp: URLSearchParams) {
-  const auth = await authUser(request);
+  const auth = await authUserFromRequest(request);
   if ('error' in auth) return err(auth.error, auth.status);
 
   const key = lasoKey(birthFromQuery(sp));
@@ -542,7 +517,7 @@ async function runPost(request: NextRequest) {
   // Hoàn Lượng nếu hỏng vì lỗi HỆ THỐNG (S3 track COO). userId lấy lại từ token
   // ở đây thay vì luồn ra từ handleGenerate — rẻ hơn nhiều so với chi phí một
   // lượt sinh ảnh, và giữ handleGenerate không phải đổi chữ ký.
-  const auth = await authUser(request);
+  const auth = await authUserFromRequest(request);
   if ('user' in auth) {
     return refundIfSystemFailure(res, {
       toolId: 'chan-dung-vo-chong',

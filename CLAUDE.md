@@ -141,6 +141,154 @@ deploy; đặt một khoá về **0 là tắt hẳn** nhiệm vụ đó.
 - Nhiệm vụ **mời bạn** cố ý không nằm trong thẻ. Nếu sau này thấy `referrals` vẫn
   0 thì vấn đề là chỗ MỜI (widget `invite-cta.js` chỉ hiện khi hết Lượng), không
   phải mức thưởng.
+## 🔤 Font lạc bầy + nhãn radar bị cắt ở Công Sở (2026-08-07, PR #445)
+
+Henry: *"tool tử vi công sở có vẻ đang dùng font khác với các tool còn lại ah?
+… với lại cái chart radar chữ bị to nên bị che mất"*. **Cả hai đều đúng, và là
+hai lỗi ĐỘC LẬP.**
+
+### 🔴 1. Thẻ nạp font nằm ở TỪNG TRANG, nên quên là im lặng lệch
+`shell.css` khai `--serif:'Noto Serif',Georgia,serif` — nhưng bộ 3 thẻ `<link>`
+kéo Noto Serif về lại nằm trong `<head>` của **từng trang**. `app-cong-so.html`
+thiếu hẳn, nên mọi chỗ dùng `var(--serif)` (tiêu đề mục · tên kiểu người · nút ·
+số trong bảng) lặng lẽ rơi về **Georgia**.
+- 🔑 **Không có gì báo**: CSS vẫn hợp lệ, font lùi vẫn là serif, trang vẫn đẹp —
+  chỉ khác chữ so với 33 trang kia. Loại lỗi chỉ lộ khi đặt hai trang cạnh nhau.
+- Quét cả 35 trang shell: **đúng 2 trang thiếu** — `app-cong-so.html` và
+  `app-ban-do-sao.html`, hai tool MỚI NHẤT (chép từ khuôn không có khối đó). Vá
+  cả hai; để lại một trang là lần sau đi tìm lại từ đầu.
+- ⚠️ **Thêm trang shell mới thì PHẢI chép cả 3 dòng preconnect/preload này**, đừng
+  tin là `shell.css` lo hết.
+
+### 🔴 2. Radar chừa lề CỐ ĐỊNH cho nhãn có bề rộng THAY ĐỔI
+`veRadar` lấy cỡ chữ **theo bán kính** (`R*0.115` ⇒ **20px** ở khổ 520) rồi chừa
+lề cứng `max(46, side*0.17)`. Lề đó hẹp hơn bề rộng chữ THẬT của nhãn dài nhất
+("Đồng sự ngang hàng", "Nền tảng hậu phương") ⇒ đuôi nhãn tràn khỏi canvas và bị
+cắt cụt. Đo được: **51 điểm mực chạm mép** ở 1440px, **38** ở 390px.
+- Vá bằng cách **đảo thứ tự tính**: chốt cỡ chữ theo KHỔ VẼ (9–12px) → gãy nhãn
+  dài xuống tối đa 2 dòng (chọn chỗ ngắt cho hai dòng CÂN NHAU nhất, không ngắt
+  tham lam) → rồi **giải ngược bán kính từ bề rộng ĐO ĐƯỢC** của từng nhãn theo
+  góc của nó. Bán kính tự co vừa đủ ⇒ đổi chữ nhãn hay đổi khổ canvas đều không
+  cắt được nữa. Nhân tiện vòng radar **to lên** vì nhãn 2 dòng hẹp hơn 1 dòng.
+- 🔑 **Quy ước rút ra: nhãn quanh biểu đồ thì ĐO rồi mới chốt bán kính, đừng chừa
+  một con số.** Lề cố định chỉ đúng với đúng bộ chữ lúc viết nó.
+- `veToaDo` (hình lên poster) **không đụng** — `posterDraw` gọi `veToaDo` chứ
+  không gọi `veRadar`, nên ảnh chia sẻ giữ nguyên.
+- Bump `tools-shared/cong-so.js?v=1→2`.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices` + `check:groups` sạch · engine **185 pass** · `node --check`.
+- **72 ca trên MODULE THẬT** (6 khổ canvas × 4 kiểu người × 3 bộ điểm cực đoan;
+  nhãn đọc THẲNG từ `RADAR_CUNG` của engine chứ không chép tay): lấy mẫu pixel
+  vành ngoài canvas → **0 ca có mực chạm mép**, 0 ca ra khung trắng.
+- **4 khổ màn (1440 · 1024 · 768 · 390) trên TRANG THẬT**, canvas dựng trong đúng
+  khuôn DOM kết quả nên ăn CSS thật: 0 nhãn bị cắt · trang nạp VÀ ÁP được
+  stylesheet Noto Serif · không tràn ngang · 0 lỗi JS.
+- 🪤 **ĐỐI CHỨNG nạp đè bản cũ lấy từ git HEAD**: radar cắt 51/38 điểm và **0
+  lượt gọi Google Fonts** ⇒ cả hai lỗi có thật, bài kiểm không đỗ giả.
+- 🪤 **`document.fonts.check()` KHÔNG dùng để kiểm font được** — nó trả `true` cả
+  khi family không tồn tại (vì luôn có font lùi), nên bản kiểm đầu xanh ở CẢ HAI
+  phía. Phải hỏi *stylesheet có được nạp và áp không*. Và `cssRules` của sheet
+  khác origin thì trình duyệt chặn → hỏi vào đó là ca nào cũng `false`.
+
+### CÒN LẠI
+- Container phiên chặn `fonts.googleapis.com` nên bài kiểm phục vụ một CSS
+  `@font-face` giả để chứng minh đường nạp thông; **chưa nhìn Noto Serif render
+  thật** ở đây.
+- 🐞 **Nợ có sẵn, KHÔNG thuộc PR này**: `/api/cong-so` trên `next dev` ném
+  `document is not defined` (bộ nạp engine vanilla thiếu mock `document` ở
+  đường này) ⇒ chạy tool đầu-cuối trên dev không được. Prod không dính (route
+  chạy bình thường). Đáng vá riêng.
+
+---
+
+## 🔒 Tấm khoá tính thử CẮT MẤT NÚT MỞ (2026-08-07, PR trước)
+
+Henry gửi ảnh chụp trên laptop: *"cái box nó nhỏ quá, ko thấy dc cái button,
+cũng ko scroll lên scroll xuống dc trong cái box đó"*.
+
+### 🔴 Lỗi CẤU TRÚC, không phải thiếu padding
+`.tpw-lock-veil` để `position:absolute; inset:0` ⇒ **toàn bộ chữ thật** (tiêu đề
+· danh sách khối khoá · số dư · **NÚT**) nằm NGOÀI luồng. Chiều cao khung do 6
+vạch mờ TRANG TRÍ quyết định (192px). Danh sách 6 khối khoá đẩy nội dung lên
+~240px → tràn → `overflow:hidden` cắt đúng cái nút, mà absolute thì cũng không
+cuộn được. **Đo được: nút tràn 24px.**
+- Chỗ này ĐÃ vá một lần bằng cách nới padding vạch mờ (`.tpw-prev .tpw-lock-blur
+  {padding:26px 20px 40px}`, có chú thích ngay trên nó). Vá triệu chứng: thêm
+  một dòng item là vỡ lại — và đó chính là chuyện vừa xảy ra.
+- 🔑 Người dùng nhìn thấy **một tấm khoá không có đường mở**. Đây là bậc CUỐI
+  của phễu W1, tức chỗ đắt nhất để hỏng.
+
+### Cách vá — đảo vai hai lớp
+Vạch mờ thành dải trang trí có **chiều cao riêng** (`height:106px`); lớp chữ về
+**trong luồng** và là thứ quyết định chiều cao. Lớp chữ chồng lên ĐUÔI dải mờ
+bằng `margin-top` âm + `padding-top` bù, nên vẫn ra cảm giác "có chữ bị che"
+nhưng tiêu đề và danh sách luôn nằm trên nền đã đặc. **Không ca nội dung nào cắt
+được nữa** — kể cả 12 item tiêu đề dài.
+- Nhân tiện: danh sách khối khoá cho vào khung nền giấy có viền (trước là chữ
+  trần trên vạch mờ, đọc rất mệt), nút rộng tối thiểu 240px và full-width dưới
+  520px.
+- Sửa ở `tuvi-paywall.js` nên **cả 5 tool đang dùng `lockPreview` cùng đổi**
+  (nguoi-khac · day-con · nhan-mach · 2 tool chân dung), và tường TỪ CHỐI
+  (`_softLock`, dùng ở mọi tool trả phí) cũng hết nguy cơ cắt nút.
+- Bump `tuvi-paywall.js?v=17` — **gộp luôn drift có sẵn**: 20 trang standalone
+  đang ở `v=13` còn 25 trang shell ở `v=16`.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices` sạch · `node --check` paywall.
+- **T8 — 5 TRANG THẬT × 3 khổ màn (1440 · 1024 · 390)**: nút nằm TRỌN trong
+  khung · nút thấy được · **không phải cuộn trong khung** · hiện đủ 6 khối khoá
+  · không tràn ngang · 0 lỗi JS. **Ca cực đoan 12 item tiêu đề dài** ở cả 1440
+  lẫn 390: vẫn không cắt, khung tự cao lên.
+- 🪤 **Ca ĐỐI CHỨNG bản CŨ lấy từ git HEAD** (nạp đè `tuvi-paywall.js` bằng
+  `page.route`): **đúng là bị cắt** ⇒ bài kiểm không đỗ giả.
+- 🪤 CSS nằm trong template literal của JS — dấu ` trong chú thích đóng chuỗi
+  sớm, `node --check` đỏ ngay. Chú thích trong khối CSS đó không được dùng
+  backtick.
+
+### CÒN LẠI
+- Mới sửa tấm khoá. **Các tool CHƯA có tính thử thì vẫn chưa có** — mở thêm là
+  việc riêng (mỗi tool cần tách `runPreview` + `renderMeta`/`renderProse` theo
+  đúng khuôn W1/W1b).
+
+---
+
+## 🧩 CSS CỦA TRANG ĐÈ VỠ FORM DÙNG CHUNG (2026-08-07, cùng PR)
+
+Henry gửi ảnh `/app/cong-so` trên laptop màn lớn: hàng NGÀY · THÁNG · NĂM · GIỜ
+· PHÚT chồng chéo lên nhau, "Giờ âm" đè lên ô Phút.
+
+### 🔴 Một dòng CSS, và nó là cả một LOẠI lỗi
+`app-cong-so.html` có `.fg select{min-width:200px}` — viết cho ô riêng của trang
+(`#trangThai`, "Bạn đang ở vị trí nào"). Nhưng **`TuviForm` dựng markup của nó
+vào ĐÚNG khuôn `.frow`/`.fg` mà trang cấp** (đó là giao ước sẵn có: trang lo
+CSS, component lo markup). Nên luật ấy trúng luôn **5 select của TuviForm** —
+ngày · tháng · giờ · phút · giới tính — bơm mỗi cái lên 200px trong ô rộng
+74–90px. Đo được: `#ngay` w=200 trong ô 74px.
+- 🔑 Loại lỗi này **không đọc code nào bắt được**: cả trang lẫn component đều
+  đúng khi đọc riêng, chỉ vỡ khi hai bên gặp nhau trong trình duyệt.
+- Vá: đổi sang `#trangThai{min-width:200px}` — nhắm ĐÚNG ô của trang. Kèm chú
+  thích ngay tại chỗ nói vì sao không được nhắm `.fg select`.
+
+### Quy ước rút ra
+**CSS của trang nhắm ô nhập PHẢI scope theo id/lớp RIÊNG của trang, không nhắm
+`.fg input` / `.fg select` chung** khi trang đó có mount `TuviForm`. Muốn đổi
+dáng cả form thì sửa trong `tuvi-form.js`.
+
+### Verify — T9, bộ quét dựng thật rồi ĐO
+Không tin vào grep: quét **CẢ 25 trang shell + 20 trang standalone × 3 khổ màn
+(1440 · 1024 · 390)**, mỗi trang dựng thật rồi đo 4 bất biến — ô nhập không
+tràn khỏi ô chứa · ô chứa không tràn · hàng không tràn khỏi khung · **không hai
+ô nào đè lên nhau**.
+- Trước khi vá: **đúng một trang đỏ** (`app-cong-so`), ở cả 3 khổ. Sau khi vá:
+  **70 lượt kiểm đều xanh, 0 trang vỡ.**
+- 🪤 **Đã red-team**: đặt lại dòng CSS cũ → T9 đỏ đúng trang đó ở cả 3 khổ ⇒ bộ
+  quét thật sự bắt được, không xanh vì lý do khác.
+- ⚠️ Chữ "Dựng hồ sơ" trong ảnh Henry gửi trông như bị tách dấu — **nguồn không
+  sai** (đã quét NFD toàn bộ `public/`: 0 ký tự tổ hợp ngoài mấy regex bỏ dấu
+  hợp lệ), render lại ở đây ra đúng. Đó là font fallback trên máy Henry.
 
 ---
 
@@ -578,6 +726,87 @@ script nội tuyến.
   sở" là đọc lại từ engine nên tự đúng. Ảnh hưởng ~2,7% số cặp (tỉ lệ ân nhân).
 - Phần CHỮ do LLM viết vẫn chỉ gọi tên nhân vật, **cố ý không nhắc ngày sinh** —
   mapping là việc của khung trang, nhét vào truyện là phá giọng kể.
+
+---
+
+## 🔒 Trả nợ kỹ thuật: parser LLM giòn · `no-store` · 4 trang SEO (2026-08-07, PR này)
+
+Henry đưa lại chính danh sách "nợ kỹ thuật, không gấp" tao viết ở lượt trước:
+*"fix mấy lỗi này trước đi"*. Đo trước khi sửa thì **hai trong bốn mục không hề
+"không gấp"** — chúng đang sống trên đường tiền và đường xác thực.
+
+### 🔴 Parser LLM giòn — 2 route đang BÁN vẫn chạy bản đã trả giá
+`parseLlmJson` (bóc từng khối `{...}` cân bằng) sinh ra chính vì bản giòn
+`JSON.parse(strip fences)` đã làm hỏng **một lượt đã tính tiền** trên prod. Ba
+route được vá lẻ, **`chan-dung-vo-chong` (20 Lượng) và `phong-thuy` thì không** —
+đúng hai chỗ chưa ai đụng lại từ hồi đó. Nay **7/7 route đi qua
+`lib/api/tool-helpers.ts`**, 0 bản chép tay.
+- 🐞 Lộ thêm một lỗi kiểu bị GIẤU: bản chép tay ở `phong-thuy` trả `any` ngầm
+  nên `tsc` không thấy gì; đổi sang `parseLlmJson` (trả `unknown`) là đỏ ngay.
+  **Bản chép tay không chỉ trôi khỏi nhau — nó còn tắt luôn bộ kiểm kiểu.**
+
+### 🔴 `no-store`: cửa xác thực của `/api/payment` đang thiếu
+Không phải chuyện hiệu năng. `getUserFromToken` ở đây gác **toàn bộ**
+`/api/payment` **gồm cả nhánh admin** — một phản hồi bị Next nhớ lại nghĩa là
+phiên đã huỷ / quyền vừa bị gỡ **vẫn qua cửa**. Vá cùng `lib/billing/credits.ts`
++ 69 lượt GET khác (70 tổng).
+- **`scripts/check-supabase-no-store.mjs` — bộ dò cắm vào CI lint.** Đây mới là
+  phần đáng giá: bug này đã cắn **ba lần**, lần nào cũng im lặng (bản chia sẻ đã
+  gỡ vẫn render · bộ giám sát báo job "CHƯA HỀ chạy" · **trừ tiền xong vẫn nhận
+  402 → người dùng bấm lại → trừ LẦN HAI**). Rà tay lần bốn thì lần năm lại sót.
+- **Miễn trừ có LÝ DO ghi thẳng trong bộ dò**, không phải allowlist câm: 3 route
+  SEO/sitemap dùng `s-maxage` + `stale-while-revalidate` — ở đó cache là TÍNH
+  NĂNG. Nhận cả `no-store` khai inline lẫn qua hằng số cùng file (`SB_FRESH`).
+- 🔑 **Verify bộ dò bằng cách DỰNG LẠI ĐÚNG BUG CŨ**: gỡ `no-store` khỏi
+  `credits.ts` → bộ dò bắt đúng dòng 45 → khôi phục → xanh. Bộ dò chưa từng bắt
+  được gì thì không chứng minh được nó biết bắt.
+
+### 4 trang SEO standalone — và cái cổng phải qua trước khi viết
+`#358` đã chốt **"NGỪNG gen trang"**, nút thắt là thẩm quyền tên miền chứ không
+phải số lượng trang. Nên phải đo lại trước: `pagesWithImpressions` **612 → 665
+trong 7 ngày**, so với **+5 trong 3 tuần** ở lần đo trước ⇒ mốc quyết định trong
+`#361` đã bật, đủ điều kiện viết tiếp.
+- `cong-so` · `day-con` · `nguoi-khac` · `nhan-mach` — dùng lại `tools.css` sẵn
+  có, mỗi trang 2 khối JSON-LD, **một `<h1>` duy nhất** (đúng nợ 115 trang 2 H1
+  đã backfill), FAQ `<details>` hiện trên trang.
+- 🐞 **Ca test đỏ là lỗi THẬT của tao**: chữ trong `FAQPage` schema tao viết tắt
+  đi so với `<summary>` hiện trên trang. Google phạt đúng chỗ khai FAQ mà nội
+  dung không nhìn thấy được. Nay ép khớp **nguyên văn**.
+- 🐞 Một ca đỏ khác là **lỗi TEST**: bộ dò link chết chỉ tra file trong `public/`
+  nên báo oan mọi rewrite của Next. Phải khai danh sách đường dẫn do Next phục vụ.
+- **Lộ ra 16 trang standalone CHƯA TỪNG có trong sitemap**, gồm `mai-hoa` và
+  `ky-mon` — hai trang dựng riêng để làm SEO. Đã thêm 13 (bỏ `kim-lau.html` vì
+  nó 301 sang `/kim-lau`, nộp cả hai là tự cạnh tranh với chính mình).
+
+### 🪤 Gộp `main` giữa chừng — 5 xung đột, và bài học `--ours` lại đúng
+`main` đi trước 6 commit (W1b · duyên nợ 5 lá số · master grouping · R1a). Xung
+đột nằm ĐÚNG vùng vừa sửa: hai route bị main thêm lại **bản chép tay của chính
+helper tao đang gỡ**, `lint.yml`/`package.json` thì mỗi bên thêm một bộ dò.
+- Giải bằng tay từng khối: giữ **cả hai** bộ dò (`check:nostore` + `check:groups`
+  — hai bug khác nhau), giữ **tính năng mới của main** (`runPreview` W1b, nhánh
+  `faces` N-người) nhưng **bỏ bản chép tay** và cho chúng dùng parser chung.
+- **Đếm lại dấu hiệu CẢ HAI bên sau khi giải** (đúng bài học `git checkout
+  --ours` đã mất 5 file): `runPreview` vẫn **0/7 ký hiệu cấm** + ca ĐỐI CHỨNG
+  đường trả tiền vẫn có `toolPaymentDenied` và `llmTextFull` · `faces` N-người
+  còn đủ 10 chỗ · `ai-loading-steps` 19/19 file ở `v=2` · `shell.js` 35/35 ở
+  `v=62`. Hết `<<<<<<<` **không** nghĩa là xong.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier --check .` sạch
+· `check:prices` · `check:groups` · **`check:nostore`** sạch · engine **185 pass**
+· `node --check` 4 khối script nội tuyến · **44 assertion trên `tool-helpers`
+THẬT**: 7 dạng output model mà bản giòn HỎNG thì bản chung bóc đúng (câu dẫn ·
+ghi chú cuối · cả hai · `{}` rác trong lời dẫn · fence lồng), + ca ĐỐI CHỨNG
+JSON cụt/rỗng vẫn phải trả `null` · **56 assertion trên 4 trang SEO**: đúng 1
+`<h1>` · canonical/og/twitter khớp · **FAQ schema khớp NGUYÊN VĂN `<summary>`** ·
+0 link chết · tiêu đề ≤ 63 ký tự · có từ khoá đích.
+
+### CÒN LẠI
+- 4 trang mới **chưa có link vào từ trang đã index** — mới có sitemap + liên kết
+  chéo giữa chính chúng. `cong-cu` vẫn cố ý trỏ `/app`.
+- `isHoangOc` (`tools-shared/kim-lau.js:45`) là `t % 5 === 0` trong khi Hoang Ốc
+  là vòng **6 trạng thái**. Nghi sai từ `#359`, **vẫn chưa tra đủ chắc để sửa** —
+  sửa mò một công thức cổ pháp còn tệ hơn để nguyên.
 
 ---
 

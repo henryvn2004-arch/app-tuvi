@@ -10,21 +10,8 @@ export const runtime = 'nodejs';
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmText, type LlmImage } from '@/lib/llm/complete';
+import { authUserFromRequest, parseLlmJson } from '@/lib/api/tool-helpers';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
-
-const SUPABASE_URL  = process.env.SUPABASE_URL!;
-const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY!;
-
-// ── Supabase helpers ─────────────────────────────────────────────
-
-async function getUserFromToken(token: string) {
-  const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-    headers: { 'Authorization': `Bearer ${token}`, 'apikey': SUPABASE_KEY },
-  });
-  if (!res.ok) return null;
-  const u = await res.json();
-  return u?.id ? u : null;
-}
 
 // ── LLM helper (Gemini-primary + Anthropic-backup qua lib/llm/complete) ──────
 // Nhận messages theo shape Anthropic (content = string | [{type:'image'|'text'}])
@@ -43,10 +30,6 @@ async function claude(messages: any[], system: string, maxTokens = 1800): Promis
     }
   }
   return llmText({ system, prompt, images, maxTokens });
-}
-
-function parseJSON(text: string) {
-  try { return JSON.parse(text.replace(/```json|```/g, '').trim()); } catch { return null; }
 }
 
 // ── Gua reference ────────────────────────────────────────────────
@@ -172,14 +155,9 @@ function getNapAmFull(year: number): string {
 // có dedup theo slug) trước khi gọi endpoint này — y hệt pattern handlePhongThuyRender
 // / handleTrangPhucTryon bên dưới. Trước đây hàm này TỰ trừ thêm lần 2 qua RPC
 // deduct_credits → double-charge thật (vd phong-thuy: 40đ client + 90đ server = 130đ).
-async function authUser(request: NextRequest) {
-  const auth = request.headers.get('Authorization');
-  if (!auth?.startsWith('Bearer ')) return { error: 'Unauthorized', status: 401 };
-  const token = auth.slice(7);
-  const user = await getUserFromToken(token);
-  if (!user?.id) return { error: 'Unauthorized', status: 401 };
-  return { user, token };
-}
+// Bản cũ ở đây còn trả kèm `token` — không nơi nào đọc tới, đã bỏ khi gom về
+// `authUserFromRequest` (bản dùng chung, có `cache:'no-store'`).
+const authUser = authUserFromRequest;
 
 // ── Vision + Feng Shui shared handler ────────────────────────────
 
@@ -212,7 +190,12 @@ async function handleVisionTool(
     ],
   }], 'Bạn là chuyên gia phân tích không gian. Chỉ trả về JSON hợp lệ, không có text khác.');
 
-  const detected = parseJSON(visionText) || { detectedItems: [], observations: 'Không thể nhận diện.' };
+  // `parseLlmJson` trả `unknown` (bản chép tay cũ ở đây trả `any` ngầm nên lỗi
+  // kiểu này bị giấu). Ép về đúng shape `analysisUserPrompt` nhận; nhánh rơi về
+  // giá trị mặc định giữ nguyên như cũ.
+  const detected =
+    (parseLlmJson(visionText) as Record<string, unknown> | null) ||
+    ({ detectedItems: [], observations: 'Không thể nhận diện.' } as Record<string, unknown>);
 
   // Analysis
   const analysisText = await claude(
@@ -220,7 +203,7 @@ async function handleVisionTool(
     analysisSystemPrompt,
     2000,
   );
-  const analysis = parseJSON(analysisText) || { beforeScore: 40, afterScore: 72, recommendations: [], shoppingList: [], generalAdvice: analysisText };
+  const analysis = parseLlmJson(analysisText) || { beforeScore: 40, afterScore: 72, recommendations: [], shoppingList: [], generalAdvice: analysisText };
 
   return ok({ success: true, detected, analysis });
 }
@@ -350,7 +333,7 @@ Trả về JSON:
 }`,
   }], 'Bạn là chuyên gia phong thủy và thời trang. Tư vấn màu sắc dựa trên Ngũ Hành Nạp Âm và Bát Trạch. Chỉ trả về JSON hợp lệ.', 1600);
 
-  const styleGuide = parseJSON(styleText) || {
+  const styleGuide = parseLlmJson(styleText) || {
     napAmHanh, napAmFull, canChi, guaNum, guaName: guaData?.name || '',
     summary: `Người mệnh ${napAmHanh} hợp với các tông màu ${colorData.primary.slice(0,2).join(', ')}.`,
     clothing: { topColors: colorData.primary, bottomColors: colorData.secondary, outerColors: colorData.primary.slice(0,2), shoeColors: colorData.secondary, bagColors: colorData.primary.slice(0,2), accessoryColors: colorData.secondary, avoidColors: colorData.avoid },
@@ -392,10 +375,8 @@ async function handlePhongThuyRender(request: NextRequest, body: Record<string, 
   if (!replKey) return err('Replicate API key chưa cấu hình.', 500);
 
   // Auth check only (TuviPaywall handles deduction client-side)
-  const authHeader = request.headers.get('Authorization');
-  if (!authHeader?.startsWith('Bearer ')) return err('Unauthorized', 401);
-  const user = await getUserFromToken(authHeader.slice(7));
-  if (!user?.id) return err('Unauthorized', 401);
+  const auth = await authUserFromRequest(request);
+  if ('error' in auth) return err(auth.error, auth.status);
 
   const { imageBase64, imageType, guaNumber, roomType, topRecs } = body as {
     imageBase64?: string; imageType?: string; guaNumber?: number;
@@ -509,10 +490,8 @@ async function handleTrangPhucTryon(request: NextRequest, body: Record<string, u
   if (!replKey) return err('Replicate API key chưa cấu hình.', 500);
 
   // Auth check only (no deduct — TuviPaywall handled client-side)
-  const authHeader = request.headers.get('Authorization');
-  if (!authHeader?.startsWith('Bearer ')) return err('Unauthorized', 401);
-  const user = await getUserFromToken(authHeader.slice(7));
-  if (!user?.id) return err('Unauthorized', 401);
+  const auth = await authUserFromRequest(request);
+  if ('error' in auth) return err(auth.error, auth.status);
 
   const { imageBase64, imageType, napAmHanh, gioiTinh, style } = body as Record<string, string>;
   if (!imageBase64) return err('Missing image', 400);

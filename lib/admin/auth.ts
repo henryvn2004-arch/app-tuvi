@@ -18,7 +18,7 @@ export async function getAdminUser(email: string): Promise<AdminUser | null> {
   if (!email) return null;
   const res = await fetch(
     `${SUPABASE_URL}/rest/v1/admin_users?email=eq.${encodeURIComponent(email)}&active=eq.true&select=email,role,team&limit=1`,
-    { headers: SB_HEADERS }
+    { cache: 'no-store', headers: SB_HEADERS }
   );
   if (!res.ok) return null;
   const rows = await res.json();
@@ -28,7 +28,7 @@ export async function getAdminUser(email: string): Promise<AdminUser | null> {
 /** Đổi 1 Supabase access_token → {id,email} qua GoTrue /auth/v1/user. */
 export async function getUserFromSupabaseToken(token: string): Promise<{ id: string; email?: string } | null> {
   if (!token) return null;
-  const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+  const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, { cache: 'no-store',
     headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${token}` },
   });
   if (!res.ok) return null;

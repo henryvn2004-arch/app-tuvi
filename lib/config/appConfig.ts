@@ -103,7 +103,7 @@ export async function getChatConfig(): Promise<ChatConfig> {
         .join(',');
       const res = await fetch(
         `${SUPABASE_URL}/rest/v1/app_config?key=in.(${encodeURIComponent(keys)})&select=key,value`,
-        {
+        { cache: 'no-store',
           headers: {
             apikey: SUPABASE_KEY,
             Authorization: `Bearer ${SUPABASE_KEY}`,

@@ -102,6 +102,24 @@ export async function GET() {
     { path:'/tools/han-nam.html',               cf:'monthly', p:'0.7' },
     { path:'/tools/hoang-dao.html',             cf:'daily',   p:'0.8' },
     { path:'/tools/khi-sac-ai.html',            cf:'monthly', p:'0.7' },
+    // ── Trang standalone TỪNG BỊ SÓT khỏi sitemap ────────────────────────
+    // Chúng đã tồn tại và có nội dung SEO đầy đủ nhưng chưa bao giờ được nộp,
+    // tức phần việc viết trang coi như phí một nửa. `kim-lau.html` CỐ Ý không
+    // có ở đây: nó đã 301 về trang trụ `/kim-lau` (đã khai bên trên) — thêm vào
+    // là tự nộp một URL chuyển hướng.
+    { path:'/tools/chan-dung-tien-kiep.html',   cf:'monthly', p:'0.8' },
+    { path:'/tools/chan-dung-vo-chong.html',    cf:'monthly', p:'0.8' },
+    { path:'/tools/cong-so.html',               cf:'monthly', p:'0.8' },
+    { path:'/tools/da-lieu-ai.html',            cf:'monthly', p:'0.7' },
+    { path:'/tools/day-con.html',               cf:'monthly', p:'0.8' },
+    { path:'/tools/kieu-toc-ai.html',           cf:'monthly', p:'0.7' },
+    { path:'/tools/ky-mon.html',                cf:'monthly', p:'0.6' },
+    { path:'/tools/mai-hoa.html',               cf:'monthly', p:'0.6' },
+    { path:'/tools/nguoi-khac.html',            cf:'monthly', p:'0.8' },
+    { path:'/tools/nhan-mach.html',             cf:'monthly', p:'0.7' },
+    { path:'/tools/personal-color.html',        cf:'monthly', p:'0.7' },
+    { path:'/tools/trang-diem-ai.html',         cf:'monthly', p:'0.7' },
+    { path:'/tools/trang-phuc-theo-ngay.html',  cf:'monthly', p:'0.7' },
     // Trang trụ cụm kim lâu (không phải trang tool nữa) — cầu đã xác nhận qua
     // GSC nên để ngang các hub chuyên mục.
     { path:'/kim-lau',                          cf:'monthly', p:'0.9' },

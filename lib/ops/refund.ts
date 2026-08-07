@@ -45,7 +45,7 @@ async function getRefundConfig(): Promise<RefundConfig> {
   try {
     const r = await fetch(
       `${SUPABASE_URL}/rest/v1/app_config?key=eq.ops.auto_refund&select=value&limit=1`,
-      { headers: SB_HEADERS },
+      { cache: 'no-store', headers: SB_HEADERS },
     );
     if (!r.ok) return DEFAULTS;
     const rows = (await r.json()) as { value?: Partial<RefundConfig> }[];
@@ -63,7 +63,7 @@ async function refundedToday(): Promise<number> {
     const r = await fetch(
       `${SUPABASE_URL}/rest/v1/credit_transactions` +
         `?type=eq.${REFUND_TYPE}&created_at=gte.${encodeURIComponent(since)}&select=amount`,
-      { headers: SB_HEADERS },
+      { cache: 'no-store', headers: SB_HEADERS },
     );
     if (!r.ok) return Number.POSITIVE_INFINITY; // đọc hụt → coi như chạm trần, không hoàn
     const rows = (await r.json()) as { amount: number }[];
@@ -79,7 +79,7 @@ async function alreadyRefunded(slug: string): Promise<boolean> {
     const r = await fetch(
       `${SUPABASE_URL}/rest/v1/credit_transactions` +
         `?slug=eq.${encodeURIComponent(slug)}&type=eq.${REFUND_TYPE}&select=id&limit=1`,
-      { headers: SB_HEADERS },
+      { cache: 'no-store', headers: SB_HEADERS },
     );
     if (!r.ok) return true; // đọc hụt → coi như đã hoàn, tránh hoàn hai lần
     return ((await r.json()) as unknown[]).length > 0;
@@ -95,7 +95,7 @@ async function chargedFor(userId: string, slug: string): Promise<number> {
       `${SUPABASE_URL}/rest/v1/credit_transactions` +
         `?user_id=eq.${encodeURIComponent(userId)}&slug=eq.${encodeURIComponent(slug)}` +
         `&amount=lt.0&select=amount&order=created_at.desc&limit=1`,
-      { headers: SB_HEADERS },
+      { cache: 'no-store', headers: SB_HEADERS },
     );
     if (!r.ok) return 0;
     const rows = (await r.json()) as { amount: number }[];
