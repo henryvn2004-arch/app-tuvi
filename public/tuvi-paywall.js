@@ -118,20 +118,36 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
 .tpw-hint.low b{color:#C0392B}
 .tpw-hint a{color:#9A7B3A;font-weight:700;text-decoration:none;border-bottom:1px solid rgba(154,123,58,.45);cursor:pointer}
 .tpw-hint a:hover{border-bottom-color:#9A7B3A}
+/* 🔑 TẤM KHOÁ TỰ CAO THEO NỘI DUNG — đọc trước khi sửa lại bố cục này.
+   Bản đầu để .tpw-lock-veil ở position:absolute + inset:0, tức TOÀN BỘ chữ
+   thật (tiêu đề · danh sách khối khoá · số dư · NÚT) nằm NGOÀI luồng, và chiều
+   cao khung do mấy vạch mờ TRANG TRÍ quyết định. Danh sách dài hơn mấy vạch đó
+   là tràn ra, overflow:hidden cắt mất đúng cái NÚT, mà absolute thì cũng
+   không cuộn được — người dùng nhìn thấy một tấm khoá không có đường mở.
+   Đã vá một lần bằng cách nới padding vạch mờ; thêm một dòng item là vỡ lại.
+   Nay ngược lại: vạch mờ là dải trang trí có chiều cao RIÊNG, lớp chữ nằm
+   TRONG luồng và là thứ quyết định chiều cao. Không ca nội dung nào cắt được nữa. */
 .tpw-lock{position:relative;margin-top:14px;border:1px solid #e7e0d0;border-radius:12px;overflow:hidden;background:#fff;animation:tpw-up .25s ease}
-.tpw-lock-blur{padding:18px 20px 26px;user-select:none;pointer-events:none;filter:blur(4px);opacity:.65}
+.tpw-lock-blur{height:106px;box-sizing:border-box;padding:18px 20px 0;overflow:hidden;user-select:none;pointer-events:none;filter:blur(4px);opacity:.5}
 .tpw-lock-blur i{display:block;height:11px;border-radius:6px;background:linear-gradient(90deg,#cfc7b4,#ece6da);margin-bottom:10px}
-.tpw-lock-veil{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16px;background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.92))}
+/* Chồng lên ĐUÔI dải mờ để vẫn ra cảm giác "có chữ bị che", nhưng phần chồng
+   chỉ là lớp phủ trắng dần — chữ thật bắt đầu ở chỗ nền ĐÃ đặc, nên tiêu đề và
+   danh sách không bao giờ nằm trên vạch mờ. */
+.tpw-lock-veil{position:relative;margin-top:-52px;display:flex;flex-direction:column;align-items:center;text-align:center;padding:52px 18px 20px;background:linear-gradient(180deg,rgba(255,255,255,.25) 0,#fff 46px)}
 .tpw-lock-t{font-family:'Noto Serif',Georgia,serif;font-size:15px;font-weight:700;color:#061A2E;margin-bottom:4px}
 .tpw-lock-s{font-size:12.5px;color:#666;margin-bottom:13px;line-height:1.55}
+.tpw-lock .tpw-btn{max-width:100%}
 .tpw-lock-x{background:none;border:none;color:#999;font-size:12px;font-family:inherit;cursor:pointer;margin-top:9px;text-decoration:underline}
 .tpw-lock-x:hover{color:#666}
-/* W1 — tường "đã tính thử": liệt kê ĐÚNG tên khối đang khoá. Cao hơn tường từ
-   chối nên phần mờ phía sau phải dày hơn, nếu không chữ tràn ra ngoài khung. */
-.tpw-prev .tpw-lock-blur{padding:26px 20px 40px}
-.tpw-prev-list{list-style:none;margin:2px 0 11px;padding:0;font-size:12.5px;line-height:1.85;color:#4a4234;text-align:left;max-width:340px}
+/* W1 — tường "đã tính thử": liệt kê ĐÚNG tên khối đang khoá, nên nó cao hơn
+   tường từ chối và chính nó là ca làm vỡ bố cục cũ. */
+.tpw-prev .tpw-lock-veil{padding-top:56px}
+.tpw-prev .tpw-lock-t{font-size:16px;margin-bottom:9px}
+.tpw-prev-list{list-style:none;margin:0 auto 14px;padding:11px 16px;font-size:12.5px;line-height:1.9;color:#4a4234;text-align:left;max-width:400px;background:#FBF8F1;border:1px solid #EFE7D6;border-radius:9px}
 .tpw-prev-list li{position:relative;padding-left:17px}
-.tpw-prev-list li::before{content:'⊙';position:absolute;left:0;color:#C9A84C;font-size:11px}`;
+.tpw-prev-list li::before{content:'⊙';position:absolute;left:0;color:#C9A84C;font-size:11px}
+.tpw-prev .tpw-btn{min-width:240px;padding-left:26px;padding-right:26px}
+@media(max-width:520px){.tpw-prev .tpw-btn{min-width:0;width:100%}}`;
     document.head.appendChild(s);
   }
 
