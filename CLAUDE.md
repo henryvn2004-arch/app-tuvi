@@ -5,7 +5,88 @@
 
 ---
 
-## 🖼️ W1b — TÍNH THỬ MIỄN PHÍ cho 2 TOOL CHÂN DUNG (2026-08-07, PR này)
+## 👥 Duyên Nợ Tiền Kiếp: 2 → tối đa 5 lá số (2026-08-07, PR này)
+
+Henry: *"Làm dc nhiều lá số ko nhỉ? Cho user add thêm. Default là 2 đúng rồi
+nhưng mà có option để add thêm."* → chốt **1 truyện + 1 tranh cho CẢ NHÓM**,
+**trần 5**, mặc định vẫn 2.
+
+### 🔴 Ba chỗ khoá cứng ở con số 2 (không phải "thêm ô nhập" là xong)
+- **Ảnh**: prompt ghi thẳng `EXACTLY TWO figures`, `LEFT/RIGHT FIGURE`, và cả 7
+  dàn cảnh `BOND_SCENE_EN` viết theo thế HAI người ("đứng sát vai", "đối mặt qua
+  một khoảng trống", "thầy nửa bước trước trò nửa bước sau"). Không cái nào nống
+  lên 3+ được.
+- **Truyện**: 4 hồi kể về MỘT mối quan hệ. Ba người thì không có "một" mối nào.
+- **Khoá cache**: `normalizeBondPair` sắp đúng hai lá số.
+
+### 🔑 BẤT BIẾN CHI PHỐI CẢ PR: n=2 KHÔNG ĐƯỢC ĐỔI MỘT BYTE
+Đó là đường đang bán và phần lớn lượt dùng. Nên `n === 2` vẫn đi qua ĐÚNG các
+hàm cũ, và có **test A/B với bản biên dịch từ git HEAD**: prompt truyện · prompt
+ảnh cuối · prompt tả mặt · cả hai system prompt · khoá cache · nền văn minh —
+**trùng khít trên 690–872 ca**. Không có bất biến này thì mọi thay đổi cho nhóm
+đều là một canh bạc trên tool chính.
+
+### Cách dựng
+- **`computeGroupBond(members)`** — nền chung cho N (`pickSharedEraForGroup`,
+  sắp seed rồi hash, n=2 ra y hệt bản cũ) · N profile · **đủ N(N−1)/2 cặp** ·
+  một **cặp TRỤC**. Mỗi cặp đi qua CHÍNH `computePastLifeBond` chứ không chép
+  lại luật — một định nghĩa duy nhất cho "mối duyên".
+- ⚠️ **`SPINE_WEIGHT` là lựa chọn CỦA TRANG, không phải cổ pháp** (cổ pháp không
+  nói duyên nào "mạnh hơn"). Xếp theo mức gánh được một truyện 4 hồi. Mọi giá
+  trị PHẢI khác nhau, không thì trục truyện nhảy khi thêm bớt người. Không hiện
+  con số này ra cho người đọc.
+- **Khoá cache nhóm tương thích ngược**: `lasoKey(sorted[0], 'bond|' + khoá
+  những người sau)` — với n=2 rút về đúng công thức cũ. Lệch một ký tự là toàn
+  bộ `portrait_cache` mồ côi, người đã trả tiền bị tính lại **và** đốt thêm một
+  lượt model.
+- **Lưới cặp hiện trên trang + trong bản chia sẻ** (deterministic, 0đ). Nhóm 2
+  người CỐ Ý không hiện — cặp duy nhất đã nằm ngay đầu trang, bày lại là nói hai
+  lần.
+- **Trần 5 nằm ở ENGINE** (`MAX_BOND_MEMBERS`), route re-export. Chặn ở một tầng
+  duy nhất thì một đường gọi mới quên kiểm là mở toang phần tốn CPU nhất.
+- **Chi phí gần như PHẲNG**: 1 lượt LLM + 1 lượt ảnh bất kể N. Giá giữ nguyên
+  một mức (sửa trong Admin nếu muốn) — nhóm càng đông càng lợi cho viral.
+- **Rail**: `wrapBirths[]` mới trong contract (`wrapBirthB` vẫn chạy cho lượt 2
+  người). `groupRailWrapper` có luật cứng phủ **TẤT CẢ** những người còn lại +
+  cấm xếp hạng thành viên — nhóm đông thì càng dễ bị hỏi sâu về người khác, mà
+  rail chỉ có lá số người đang ngồi đây.
+- **Giao diện**: nút "+ Thêm người" tới 5, nút ✕ **chỉ từ người thứ ba** (2 là
+  mức tối thiểu của tool). Bỏ ô giữa thì **dựng lại từ đầu** và bê dữ liệu sang
+  — prefix của `TuviForm` gắn vào id phần tử, gỡ ô giữa mà giữ nguyên ô sau là
+  nhãn "Người thứ ba/tư" trôi lệch khỏi ô nhập thật.
+- Client vẫn gửi kèm `birthA/birthB` và server vẫn trả `nhanVatA/B`: bản cũ còn
+  trong cache trình duyệt lẫn dòng cache cũ đều phải đọc được trong lúc deploy.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices` sạch · engine **185 pass** · `node --check` 2 khối script nội tuyến.
+- **T5 — 872 cặp A/B với bản biên dịch từ git HEAD**: khoá cache · thứ tự sắp ·
+  `selfIsA` · nền văn minh **0 lệch**; `computeGroupBond(N=2)` trùng khít
+  `computePastLifeBond`. **1.200 hoán vị nhóm 3–5**: khoá · thứ tự · nền **0 lệch**.
+- **T6 — 690 cặp**: 3 prompt + 2 system prompt của bản 2 người **trùng khít**.
+  45 nhóm 3–5: đủ N(N−1)/2 cặp, prompt gọi đủ tên, đúng số khối FIGURE, mỗi
+  người đúng đoạn tả mặt của mình, **0 rò thuật ngữ tử vi vào prompt ảnh**.
+- **T7 — 38 ca Playwright trên TRANG THẬT** (ca 2 / 3 / 5 người, stub API cố ý
+  **ĐẢO NGƯỢC** thứ tự để đúng ca xấu nhất của mapping): mặc định đúng 2 ô ·
+  payload gửi đúng N lá số · mỗi thẻ nhân vật nêu ĐÚNG lá số đẻ ra nó · lưới cặp
+  đủ 1/3/10 ô và nhóm 2 người không hiện · chip hỏi đúng nhân vật của ô nhập thứ
+  nhất · bản chia sẻ đủ N dòng lá số kèm tên nhân vật + khối lưới cặp · bấm thêm
+  quá tay dừng ở 5 và nút khoá lại · bỏ ô giữa thì dữ liệu không trôi và nhãn
+  dựng lại đúng · 0 lỗi JS.
+- **Trần ở engine**: 1 người → chặn, 6 và 20 người → chặn, 5 → 10 cặp.
+
+### CÒN LẠI
+- **Chưa gen ảnh THẬT cho nhóm 3–5** — mới verify tới tầng prompt. Chỗ nhiều khả
+  năng phải chỉnh là `GROUP_SCENE_EN` và câu "evenly spaced left to right" nếu
+  model dựng người chồng lên nhau hoặc làm nhoè mặt ở nhóm 5.
+- **Bảng lịch sử vẫn chỉ 2 cột nhân vật** → nhóm ghi cặp TRỤC. Cố ý không mở
+  cột: một migration + việc tay đổi lấy vài chữ trên dải ảnh nhỏ cuối trang.
+- Giá vẫn một mức cho mọi N. Nếu thấy nhóm đông chiếm nhiều lượt thì cân nhắc
+  tính theo đầu người — nhưng `tool_pricing` một tool một giá, phải sửa code.
+
+---
+
+## 🖼️ W1b — TÍNH THỬ MIỄN PHÍ cho 2 TOOL CHÂN DUNG (2026-08-07, PR trước)
 
 Henry: *"Ok làm đi"*. Mục này **do chính số của D1 chỉ ra**, không phải thứ tự
 backlog — và nó lật ngược một câu backlog tự viết ở vòng W1 (*"2 tool chân dung

@@ -178,12 +178,32 @@ export interface PastLifeBond {
  * hai người bạn cùng bấm sẽ nhận hai kết quả mâu thuẫn nhau và mất tin ngay.
  */
 export function pickSharedEra(lsA: Laso, gA: 'nam' | 'nu', lsB: Laso, gB: 'nam' | 'nu'): Era {
-  const seedOf = (ls: Laso, g: string) => [ls.canChiNam, ls.menhDC, ls.thanDC, ls.napAm, ls.cuc, g].join('|');
-  const pair = [seedOf(lsA, gA), seedOf(lsB, gB)].sort();
-  // Hai lá số y hệt nhau thì nền chung = đúng nền của chính lá số đó, không
+  return pickSharedEraForGroup([
+    { ls: lsA, gender: gA },
+    { ls: lsB, gender: gB },
+  ]);
+}
+
+const eraSeedOf = (ls: Laso, g: string) =>
+  [ls.canChiNam, ls.menhDC, ls.thanDC, ls.napAm, ls.cuc, g].join('|');
+
+/**
+ * Bản N NGƯỜI của `pickSharedEra`.
+ *
+ * 🔑 BẤT BIẾN PHẢI GIỮ: với N = 2 nó ra ĐÚNG nền mà bản cũ ra. Cùng công thức
+ * (sắp seed rồi nối bằng '||', salt 'bond|'), nên không lá số cặp nào đang chạy
+ * bị đổi thế giới sau bản này — có test A/B canh.
+ *
+ * Sắp seed trước khi ghép vẫn là điểm mấu chốt: nhóm ba người nhập theo sáu thứ
+ * tự khác nhau phải ra CÙNG một nền, nếu không thì mỗi người trong nhóm chụp
+ * màn hình gửi nhau là lộ ngay.
+ */
+export function pickSharedEraForGroup(members: { ls: Laso; gender: 'nam' | 'nu' }[]): Era {
+  const seeds = members.map((m) => eraSeedOf(m.ls, m.gender)).sort();
+  // Mọi lá số y hệt nhau thì nền chung = đúng nền của chính lá số đó, không
   // phải một nền thứ ba lạ hoắc.
-  if (pair[0] === pair[1]) return pickEraForLaso(lsA, gA);
-  return ERAS[ERA_IDS[stableHash('bond|' + pair.join('||')) % ERA_IDS.length]];
+  if (seeds.every((s) => s === seeds[0])) return pickEraForLaso(members[0].ls, members[0].gender);
+  return ERAS[ERA_IDS[stableHash('bond|' + seeds.join('||')) % ERA_IDS.length]];
 }
 
 const TIER_RANK: Record<string, number> = { cao: 3, giua: 2, thap: 1 };
@@ -203,8 +223,12 @@ export function computePastLifeBond(
   genderA: 'nam' | 'nu',
   lsB: Laso,
   genderB: 'nam' | 'nu',
+  /** Nền văn minh ép sẵn — chỉ dùng khi cặp này nằm trong một NHÓM lớn hơn,
+   *  lúc đó nền chung phải tính trên cả nhóm chứ không phải trên riêng hai
+   *  người này. Bỏ trống thì tự tính như cũ (đường của tool 2 người). */
+  eraOverride?: Era,
 ): PastLifeBond {
-  const era = pickSharedEra(lsA, genderA, lsB, genderB);
+  const era = eraOverride || pickSharedEra(lsA, genderA, lsB, genderB);
   const a = computePastLife(lsA, genderA, era);
   const b = computePastLife(lsB, genderB, era);
 
@@ -320,6 +344,125 @@ export function computePastLifeBond(
   }
 
   return { type: BOND_TYPES[kind], signals, era, a, b, giver };
+}
+
+// ── NHÓM (3–5 người) ────────────────────────────────────────────────────
+// Mối duyên trong cổ pháp là quan hệ TỪNG CẶP, nên nhóm N người ra N(N−1)/2
+// mối duyên chứ không có một "mối duyên của cả nhóm". Phần dưới đây KHÔNG bịa
+// ra một loại duyên tập thể — nó bày đủ lưới cặp, rồi chọn một cặp làm XƯƠNG
+// SỐNG để câu chuyện có trục, đúng cách một truyện nhiều nhân vật vẫn phải có
+// một mối quan hệ trung tâm.
+
+/**
+ * Trần số người một lượt.
+ *
+ * Trên 5 thì (a) số cặp bùng nổ và khối "cơ sở" đọc thành danh bạ — đúng bài
+ * học đã ghi ở `nhan-mach.ts` — và (b) model bắt đầu làm nhoè hoặc trộn các
+ * gương mặt trong CÙNG một khung, mà mặt là thứ người dùng soi đầu tiên.
+ *
+ * Đặt ở ENGINE chứ không chỉ ở route: chặn ở một tầng duy nhất thì một đường
+ * gọi mới quên kiểm là mở toang phần tốn CPU nhất (N(N−1)/2 lượt dựng cặp).
+ */
+export const MAX_BOND_MEMBERS = 5;
+
+export interface GroupMember {
+  ls: Laso;
+  gender: 'nam' | 'nu';
+}
+
+export interface GroupPair {
+  /** Chỉ số trong mảng nhóm (mảng đã được chuẩn hoá thứ tự ở bond-key). */
+  i: number;
+  j: number;
+  type: BondType;
+  signals: BondSignal[];
+  /** Bên CHO trong duyên lệch: 'i' hoặc 'j'. null nếu ngang hàng. */
+  giver: 'i' | 'j' | null;
+}
+
+export interface GroupBond {
+  era: Era;
+  profiles: PastLifeProfile[];
+  /** Đủ N(N−1)/2 cặp, thứ tự (0,1) (0,2) … — dùng cho khối "cơ sở". */
+  pairs: GroupPair[];
+  /** Cặp trung tâm của câu chuyện. Với N=2 chính là cặp duy nhất. */
+  spine: GroupPair;
+}
+
+/**
+ * Thứ tự ưu tiên khi chọn cặp TRỤC.
+ *
+ * ⚠️ Đây là lựa chọn CỦA TRANG, không phải cổ pháp — xếp theo mức ràng buộc và
+ * mức kịch tính, tức theo khả năng gánh được một câu chuyện 4 hồi. Cổ pháp
+ * không nói mối duyên nào "mạnh hơn" mối duyên nào. Không dùng con số này ở bất
+ * cứ chỗ nào hiện ra cho người đọc.
+ *
+ * Mọi giá trị PHẢI khác nhau: bằng nhau thì thứ tự cặp quyết định, mà thứ tự đó
+ * là chi tiết cài đặt — trục truyện sẽ nhảy khi thêm bớt người.
+ */
+const SPINE_WEIGHT: Record<BondKind, number> = {
+  'oan-gia': 7,
+  'doi-dau': 6,
+  'phu-the': 5,
+  'thay-tro': 4,
+  'an-nhan': 3,
+  'kim-lan': 2,
+  'ban-huu': 1,
+};
+
+/**
+ * Nhóm 2–5 lá số → một thế giới chung, N nhân vật, đủ lưới cặp, một cặp trục.
+ *
+ * 🔑 Với N=2 kết quả TRÙNG KHÍT bản `computePastLifeBond` (cùng nền, cùng loại
+ * duyên, cùng signals, cùng giver) — cặp duy nhất chính là cặp trục. Nhóm chỉ
+ * là lớp bọc, không phải phép luận thứ hai chạy song song rồi trôi khỏi bản kia.
+ */
+export function computeGroupBond(members: GroupMember[]): GroupBond {
+  if (members.length < 2) throw new Error('Cần ít nhất hai lá số.');
+  if (members.length > MAX_BOND_MEMBERS) {
+    throw new Error(`Tối đa ${MAX_BOND_MEMBERS} lá số một lượt.`);
+  }
+  const era = pickSharedEraForGroup(members);
+  const profiles = members.map((m) => computePastLife(m.ls, m.gender, era));
+
+  const pairs: GroupPair[] = [];
+  for (let i = 0; i < members.length; i++) {
+    for (let j = i + 1; j < members.length; j++) {
+      // Đi qua CHÍNH `computePastLifeBond` chứ không chép lại luật: một định
+      // nghĩa duy nhất cho "mối duyên", sửa một chỗ là cả hai đường cùng đổi.
+      const b = computePastLifeBond(members[i].ls, members[i].gender, members[j].ls, members[j].gender, era);
+      pairs.push({
+        i,
+        j,
+        type: b.type,
+        signals: b.signals,
+        giver: b.giver === 'a' ? 'i' : b.giver === 'b' ? 'j' : null,
+      });
+    }
+  }
+
+  let spine = pairs[0];
+  for (const p of pairs) {
+    if (SPINE_WEIGHT[p.type.kind] > SPINE_WEIGHT[spine.type.kind]) spine = p;
+  }
+  return { era, profiles, pairs, spine };
+}
+
+/**
+ * Một cặp trong nhóm, đóng gói lại đúng hình dạng `PastLifeBond`.
+ *
+ * Nhờ hàm này mà đường 2 người dùng lại NGUYÊN các hàm dựng prompt cũ — prompt
+ * trùng khít từng byte với bản trước khi có tính năng nhóm, có test canh.
+ */
+export function groupPairAsBond(group: GroupBond, pair: GroupPair): PastLifeBond {
+  return {
+    type: pair.type,
+    signals: pair.signals,
+    era: group.era,
+    a: group.profiles[pair.i],
+    b: group.profiles[pair.j],
+    giver: pair.giver === 'i' ? 'a' : pair.giver === 'j' ? 'b' : null,
+  };
 }
 
 /** Khối mô tả mối duyên cho prompt viết truyện. Hai nhân vật dùng lại nguyên
