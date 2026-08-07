@@ -884,6 +884,30 @@
     return parts.join(' · ');
   }
 
+  /**
+   * Khối "Lá số dùng để luận" của bản chia sẻ.
+   *
+   * Tool MỘT lá số truyền `birth` như cũ. Tool NHIỀU lá số (Duyên Nợ Tiền Kiếp)
+   * truyền `births: [{label, birth}, ...]` — nếu chỉ nêu một cái thì người nhận
+   * link tưởng bản luận chỉ nói về người đó. `label` là chỗ nói luôn phần nào
+   * của kết quả gắn với lá số nào.
+   */
+  function shareBirthLines(o) {
+    var arr = Array.isArray(o.births) ? o.births : null;
+    if (arr && arr.length) {
+      return arr
+        .map(function (it) {
+          var line = birthSummaryLine(it && it.birth ? it.birth : it);
+          if (!line) return '';
+          var lb = it && it.label ? String(it.label).trim() : '';
+          return lb ? lb + ': ' + line : line;
+        })
+        .filter(Boolean)
+        .join('\n');
+    }
+    return birthSummaryLine(o.birth || (ctx && ctx.birth) || null);
+  }
+
   // Tool gọi Shell.setShareable({kind:'image'|'text', title, imageUrl?, text?})
   // ngay sau khi có kết quả → nút "Chia sẻ" tự hiện trong .ws-actions (nếu
   // trang có toolbar đó), không cần tool tự vẽ nút/markup riêng. Khác
@@ -1515,7 +1539,7 @@
       // Lá số của CHÍNH lượt này: tool truyền thẳng (o.birth) hoặc lấy từ ngữ
       // cảnh tool đã set. CỐ Ý không đụng birthSnapshot()/localStorage — lá số
       // còn sót từ tool khác sẽ gắn nhầm chủ nhân cho bản chia sẻ.
-      var bLine = birthSummaryLine(o.birth || (ctx && ctx.birth) || null);
+      var bLine = shareBirthLines(o);
       if (bLine) {
         if (blocks) blocks.unshift({ header: 'Lá số dùng để luận', text: bLine });
         else if (kind === 'text') text = bLine + '\n\n' + (text || '');

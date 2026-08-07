@@ -53,6 +53,11 @@
 .dn-person .nm{font-family:var(--serif);font-size:15px;font-weight:700;color:#061A2E}
 .dn-person .oc{font-size:11.5px;color:#7A5F26;margin-top:2px}
 .dn-person .of{font-size:10.5px;color:var(--text-lt);margin-top:3px}
+/* Dòng "nhân vật này dựng từ lá số nào". Thứ tự hai thẻ đi theo thứ tự đã CHUẨN
+   HOÁ ở server, không theo thứ tự nhập — không có dòng này thì người đọc mặc
+   định thẻ đầu là mình, và sai khoảng một nửa số lượt. */
+.dn-person .ls{font-size:10.5px;line-height:1.5;color:var(--text-lt);margin-top:6px;padding-top:6px;border-top:1px dashed #EADFC8}
+.dn-person .ls b{color:#5a5145;font-weight:700}
 .dn-mota p{font-size:13.5px;line-height:1.88;color:#2a2118;margin:0}
 .dn-act{border-left:2px solid #E0D6C0;padding:0 0 18px 16px;position:relative}
 .dn-act:last-child{padding-bottom:0}
@@ -171,7 +176,7 @@ window.SHELL_INTRO={key:'duyen-no-tien-kiep',title:'Duyên Nợ Tiền Kiếp',d
 <script src="/tuvi-paywall.js?v=16"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=60"></script>
+<script src="/shell.js?v=61"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=2"></script>
 <script src="/tools-shared/portrait-recover.js?v=1"></script>
 <script>
@@ -246,6 +251,37 @@ function _birthOf(prefix) {
     hourBranch: f.gioIdx, gender: f.gioitinh, isLunar: false,
     name: (f.hoten || '').trim() || undefined,
   };
+}
+
+/**
+ * Nhân vật này dựng từ lá số nào.
+ *
+ * 🔑 KHÔNG suy được bằng vị trí: server chuẩn hoá thứ tự hai lá số (xem
+ * `lib/portraits/bond-key.ts`) nên `nhanVatA` là người nhập THỨ HAI ở khoảng
+ * một nửa số lượt. Nối bằng chính dữ liệu ngày sinh server trả kèm (`laSo`),
+ * rồi lấy lại ô nhập tương ứng để có TÊN người dùng đã gõ — server cố ý không
+ * trả tên (payload nằm trong cache dùng chung).
+ */
+function _localBirthOf(nv) {
+  var ls = nv && nv.laSo;
+  if (!ls) return null;   // payload cũ còn trong cache — chưa có mapping, ẩn dòng đi
+  var h = function (x) { return Number(x == null ? -1 : x); };
+  var same = function (b) {
+    return b && Number(b.day) === Number(ls.day) && Number(b.month) === Number(ls.month) &&
+      Number(b.year) === Number(ls.year) && h(b.hourBranch) === h(ls.hourBranch) &&
+      (b.gender === 'nu' ? 'nu' : 'nam') === (ls.gender === 'nu' ? 'nu' : 'nam') &&
+      Boolean(b.isLunar) === Boolean(ls.isLunar);
+  };
+  if (same(_lastA)) return _lastA;
+  if (same(_lastB)) return _lastB;
+  return ls;   // không khớp ô nào (không nên xảy ra) — vẫn nêu được ngày sinh
+}
+
+/** Một dòng "lá số nào" cho nhân vật — chuỗi DÙNG CHUNG với bản chia sẻ. */
+function _lsLine(nv) {
+  var b = _localBirthOf(nv);
+  var bs = (window.Shell && Shell.birthSummary) ? Shell.birthSummary : null;
+  return (b && bs) ? bs(b) : '';
 }
 
 /** Query cho `action=cache-status` — hai lá số, đúng tên tham số route đọc. */
@@ -353,6 +389,12 @@ async function _doGenerate(freeRerun) {
     // họ trong ngữ cảnh, nói bừa là bịa.
     var nvA = (data.nhanVatA || {}).ten || 'nhân vật thứ nhất';
     var nvB = (data.nhanVatB || {}).ten || 'nhân vật thứ hai';
+    // Chip hỏi về nhân vật phải nhắm ĐÚNG nhân vật của người đang ngồi đây (ô
+    // nhập thứ nhất). `nhanVatA` là người kia ở khoảng một nửa số lượt, mà rail
+    // có luật cứng cấm luận sâu về người thứ hai — chip trỏ nhầm là mời người
+    // dùng bấm vào đúng câu hỏi mà rail buộc phải từ chối.
+    var nvSelf = (_localBirthOf(data.nhanVatA) === _lastA) ? nvA
+      : (_localBirthOf(data.nhanVatB) === _lastA ? nvB : nvA);
     Shell.setContext({
       birth: _lastA,
       wrap: 'past-life-bond',
@@ -365,7 +407,7 @@ async function _doGenerate(freeRerun) {
       greeting: 'Mối duyên giữa **' + nvA + '** và **' + nvB + '** đến đây là hết phần chính. Bạn muốn hỏi gì thêm?',
       chips: [
         'Vì sao lại luận ra mối duyên này?',
-        nvA + ' là người thế nào?',
+        nvSelf + ' là người thế nào?',
         'Hai người dễ va nhau ở chỗ nào?',
         'Kiếp này gặp lại thì nên giữ khoảng cách ra sao?',
       ],
@@ -438,21 +480,29 @@ function renderStory(data) {
     el.style.display = 'inline-block';
   } else { el.style.display = 'none'; }
 
+  var A = data.nhanVatA || {}, B = data.nhanVatB || {};
+
   // Hai dòng lá số — người nhận link chia sẻ phải biết bản này của cặp nào.
+  // Xếp theo THỨ TỰ HAI NHÂN VẬT bên dưới (không phải thứ tự nhập): cả trang
+  // nói về hai người theo một thứ tự duy nhất thì mới đối chiếu được.
   var bl = document.getElementById('birthLine');
   var bs = (window.Shell && Shell.birthSummary) ? Shell.birthSummary : null;
   if (bs) {
-    var sa = bs(_lastA), sb = bs(_lastB);
+    var sa = bs(_localBirthOf(A) || _lastA), sb = bs(_localBirthOf(B) || _lastB);
     if (sa || sb) { bl.textContent = 'Lá số: ' + sa + '  ·  ' + sb; bl.style.display = 'block'; }
     else { bl.style.display = 'none'; }
   } else { bl.style.display = 'none'; }
 
-  var A = data.nhanVatA || {}, B = data.nhanVatB || {};
   document.getElementById('pairBlock').innerHTML = [A, B].map(function (p) {
+    // Có mapping thì dòng lá số THAY dòng giới tính — nó đã mang sẵn giới tính,
+    // và nhân vật luôn cùng giới với lá số dựng ra nó.
+    var ls = _lsLine(p);
     return '<div class="dn-person">' +
       '<div class="nm">' + esc(p.ten || '') + '</div>' +
       '<div class="oc">' + esc(p.danhXung || '') + '</div>' +
-      '<div class="of">' + (p.gioiTinh === 'nu' ? 'Nữ' : 'Nam') + '</div>' +
+      (ls
+        ? '<div class="ls"><b>Dựng từ lá số</b><br>' + esc(ls) + '</div>'
+        : '<div class="of">' + (p.gioiTinh === 'nu' ? 'Nữ' : 'Nam') + '</div>') +
     '</div>';
   }).join('');
 
@@ -490,6 +540,10 @@ function publishShareable(imageUrl) {
   if (!d) return;
   var bond = d.bond || {};
   var A = d.nhanVatA || {}, B = d.nhanVatB || {};
+  var pairLine = function (p) {
+    var ls = _lsLine(p);
+    return (p.ten || '') + (ls ? ' — lá số: ' + ls : '');
+  };
   var blocks = [];
   blocks.push({
     header: 'Duyên Nợ Tiền Kiếp',
@@ -507,13 +561,22 @@ function publishShareable(imageUrl) {
     kind: imageUrl ? 'image' : 'text',
     toolId: 'duyen-no-tien-kiep',
     birth: _lastA,
+    // Tool này dựng từ HAI lá số — `birth` một mình làm khối đầu của trang chia
+    // sẻ chỉ nêu một cái, người nhận link tưởng bản luận chỉ của người đó.
+    // `births` có nhãn nên khối đó nói luôn nhân vật nào từ lá số nào.
+    births: [
+      { label: A.ten || 'Nhân vật thứ nhất', birth: _localBirthOf(A) || _lastA },
+      { label: B.ten || 'Nhân vật thứ hai', birth: _localBirthOf(B) || _lastB },
+    ],
     title: [A.ten, B.ten].filter(Boolean).join(' & ') || 'Duyên nợ tiền kiếp',
     imageUrl: imageUrl || undefined,
     // `text` là đường lùi của /ket-qua khi không dựng được blocks. Nhánh
     // KHÔNG CÓ ẢNH bắt buộc phải có nó: chia sẻ dạng 'text' mà bỏ trống thì
     // server từ chối và người dùng nhận "Không tạo được link chia sẻ".
+    // Đường lùi này KHÔNG có khối "Lá số dùng để luận" đứng trên (khối đó chỉ
+    // dựng khi có blocks) — nên phần mapping phải nằm ngay trong chữ.
     text: [bond.label, d.tuaDe].filter(Boolean).join(' — ') + '\n' +
-      [A.ten, B.ten].filter(Boolean).join('  ·  ') +
+      [A, B].map(pairLine).filter(Boolean).join('\n') +
       (d.moTaMoiDuyen ? '\n\n' + d.moTaMoiDuyen : ''),
     blocks: blocks,
   });
