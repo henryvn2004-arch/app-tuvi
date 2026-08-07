@@ -1,8 +1,16 @@
 // app/api/cron/daily-push/route.ts
-// Cron gửi push "Vận hôm nay" cho app NATIVE (FCM) — kênh riêng, KHÔNG đụng
-// web-push cũ (/api/cron-push → edge send-daily-push → push_subscriptions).
-// Đọc push_tokens, tính can chi ngày (deterministic, đúng nguồn với thẻ web),
-// gửi FCM HTTP v1 bằng service account trong FIREBASE_SERVICE_ACCOUNT.
+// Cron gửi push "Vận hôm nay" cho app NATIVE (FCM). Đọc push_tokens, gửi FCM
+// HTTP v1 bằng service account trong FIREBASE_SERVICE_ACCOUNT.
+//
+// ⚠️ HIỆN ĐANG NO-OP: `push_tokens` = 0 dòng và job này CHƯA GHI ĐƯỢC MỘT LƯỢT
+// NÀO vào `cron_runs` kể từ lúc ship. Token FCM chỉ sinh ra trong app Capacitor
+// (`registerNativePush` ở shell.js trả về ngay khi không có window.Capacitor),
+// mà app native thì chưa phát hành. Đường ĐANG PHỤC VỤ người thật là web-push:
+// /api/cron-push → edge `send-daily-push` → push_subscriptions.
+//
+// KÊNH riêng, NHƯNG NỘI DUNG DÙNG CHUNG với web-push qua
+// `lib/push/daily-message.ts` — nếu app native ra mắt thì hai kênh vẫn nói đúng
+// một câu về cùng một ngày.
 //
 // Trơ nếu chưa cấu hình: thiếu FIREBASE_SERVICE_ACCOUNT hoặc 0 token → no-op.
 // Bảo vệ: chỉ chạy khi Vercel cron (Authorization: Bearer CRON_SECRET) hoặc
@@ -19,7 +27,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { withCronLog } from '@/lib/cron/log';
 import { parseFirebaseServiceAccount, sendFcmPush } from '@/lib/channels/push';
-import { computeVanNgay, todayVN } from '@/lib/engine/van-ngay';
+import { buildDailyPushMessage } from '@/lib/push/daily-message';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY!;
@@ -57,35 +65,19 @@ async function handle(request: NextRequest) {
   if (error) return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
   if (!tokens || !tokens.length) return NextResponse.json({ ok: true, sent: 0, note: 'no tokens' });
 
-  // Tin push CHỈ mang can chi ngày ("Ngày Tân Mão") thì không có lý do nào để
-  // mở — nó đúng nhưng rỗng. Nay nêu thẳng tín hiệu quyết định: ngày tốt/xấu,
-  // việc nên làm, hoặc cảnh báo xung tuổi. Vẫn 0 lượt LLM.
-  const t = todayVN();
-  const v = computeVanNgay(t.d, t.m, t.y);
-  const title = v.danhGia.tinhChat === 'tốt' ? 'Hôm nay là ngày tốt ☾'
-    : v.danhGia.tinhChat === 'xấu' ? 'Hôm nay nên thận trọng ☾'
-      : 'Vận hôm nay ☾';
-  const parts: string[] = [`Ngày ${v.ngay.canChi} · trực ${v.truc.ten}`];
-  if (v.ngayKy.length) parts.push(`trùng ${v.ngayKy.join(' + ')}`);
-  else {
-    // Bỏ "an táng" khỏi gợi ý của TIN PUSH: trên thẻ nó nằm trong bảng chọn
-    // ngày nên đọc bình thường, còn bắn thẳng vào màn hình khoá mỗi sáng thì
-    // thành một lời chúc rất khó đỡ. Thẻ vẫn giữ đủ.
-    const goi = v.nen.filter((x) => !/an táng/i.test(x.ten)).slice(0, 2);
-    if (goi.length) parts.push(`hợp ${goi.map((x) => x.ten.toLowerCase()).join(', ')}`);
-  }
-  if (v.xung.chi) parts.push(`xung tuổi ${v.xung.chi}`);
-  const body = `${parts.join(' · ')}. Chạm để xem vận riêng của bạn.`;
-  const cc = v.ngay.canChi;
+  // Nội dung lấy từ NGUỒN DUY NHẤT dùng chung với web-push (lib/push/
+  // daily-message.ts) — hai kênh mà dựng chữ riêng thì sớm muộn nói khác nhau
+  // về cùng một ngày, và không ai phát hiện vì hiếm khi có người nhận cả hai.
+  const msg = buildDailyPushMessage();
 
   let result: Awaited<ReturnType<typeof sendFcmPush>>;
   try {
-    result = await sendFcmPush(sa, tokens.map((row) => (row as { token: string }).token), title, body, { url: '/app', kind: 'daily' });
+    result = await sendFcmPush(sa, tokens.map((row) => (row as { token: string }).token), msg.title, msg.body, { url: msg.url, kind: 'daily' });
   } catch (e) {
     return NextResponse.json({ ok: false, error: String(e) }, { status: 500 });
   }
   if (result.dead.length) {
     await sb.from('push_tokens').update({ enabled: false }).in('token', result.dead);
   }
-  return NextResponse.json({ ok: true, sent: result.sent, failed: result.failed, disabled: result.dead.length, day: cc });
+  return NextResponse.json({ ok: true, sent: result.sent, failed: result.failed, disabled: result.dead.length, day: msg.canChi });
 }
