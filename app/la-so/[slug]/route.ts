@@ -1393,7 +1393,7 @@ ${relatedHTML}
 <script src="/footer.js"></script>
 <script src="/track.js?v=3" defer></script><script src="/nav.js?v=20" defer></script>
 <script src="/share.js" defer></script>
-<script src="/pwa-push.js" defer></script>
+<script src="/pwa-push.js?v=2" defer></script>
 <script>
 window.addEventListener('load', function () {
   if (window.ShareButtons) {

@@ -139,6 +139,14 @@ export interface VanNgayCaNhan {
   mauCaNhan: string[];
   /** Ngày có xung với chi năm sinh của chính người này không. */
   bixung: boolean;
+  /**
+   * Can chi NĂM SINH ("Mậu Dần"). Trang dùng để lưu kèm lượt đăng ký nhận nhắc,
+   * nhờ đó kênh gửi biết ngày nào xung tuổi người này mà không phải lập lại lá
+   * số cho từng người. CỐ Ý lấy từ đây chứ không để trang tự suy từ năm sinh:
+   * quy đổi năm → can chi là cổ pháp, có bản thứ hai ở client là có ngày hai
+   * bản trôi khỏi nhau.
+   */
+  canChiNam: string;
 }
 
 export interface VanNgayResult {
@@ -437,5 +445,6 @@ export function computeVanNgayCaNhan(
     napAmHanh,
     mauCaNhan,
     bixung: !!chiNamSinh && chiNamSinh === day.xung.chi,
+    canChiNam: String(lasoData.canChiNam || ''),
   };
 }
