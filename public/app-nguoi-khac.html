@@ -356,6 +356,10 @@ async function analyze() {
   document.getElementById('card').style.display = 'block';
   document.getElementById('btnEdit').style.display = '';
   renderMeta(prev);
+  // D1 — bậc "đã tính thử" của phễu theo tool. Bắn ở ĐÂY chứ không ở lúc bấm
+  // nút: bấm rồi mà lá số hỏng thì không có gì để xem, tính vào phễu là thổi
+  // mẫu số lên rồi tỉ lệ mở nhìn tệ hơn thực tế.
+  try { if (window.Track) window.Track.event('preview_shown', { tool_id: 'nguoi-khac' }); } catch (e) { /* đo hỏng không chặn gì */ }
   if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
 
   // Đã trả tiền cho đúng lá số này từ trước → mở thẳng, không dựng tường.

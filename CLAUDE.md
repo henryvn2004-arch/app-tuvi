@@ -5,7 +5,95 @@
 
 ---
 
-## 🔓 W1 — TÍNH THỬ MIỄN PHÍ: bấm nút là tool CHẠY THẬT (2026-08-06, PR này)
+## 📉 D1 — Phễu theo tool, và 🔴 BA HỆ TÊN TOOL ĐANG LỆCH NHAU (2026-08-07, PR này)
+
+Henry: *"Ok D1 trước đi"* — mục backlog *"tool nào có người xem mà không ai
+mua"*. Sau W1 nó còn cấp hơn: không có nó thì W1 vừa ship xong mà không biết có
+tác dụng gì.
+
+### 🔴 Phát hiện chính, KHÔNG nằm trong đề bài
+Ba nơi gọi tên tool bằng ba hệ khác nhau, và chúng **không khớp**:
+
+| Khái niệm | `events.tool_id` (shell) | `tool_pricing.tool_id` | `credit_transactions.type` |
+|---|---|---|---|
+| Luận Giải | `luan-giai` | `laso` | `use_laso` |
+| Bát Tự | `bat-tu` | `tu-binh` | `use_tubinh` |
+| Chọn Ngày | `chon-ngay` | `chon-ngay-tot` | `use_chon_ngay_tot` |
+| Đặt Tên | `dat-ten` | `dat-ten-con` | `use_dat_ten_con` |
+| Đặt Tên DN | `dat-ten-dn` | `dat-ten-dn` | `use_dat_ten_doanh_nghiep` |
+
+**Bản đầu tiên tao viết join thô và nó ra: `luan-giai` — 24 người mở, 0 người
+mua.** Trong khi `use_laso` đã bán **1.500 Lượng cho 3 người**. Tức panel sinh
+ra để chống quyết định sai thì suýt tự đẻ ra một quyết định sai.
+- Vá bằng `tool_canon()` — quy mọi biến thể về `tool_pricing.tool_id` (id mà giá
+  và nhãn treo vào). Còn có **`type` lẫn cả gạch ngang lẫn gạch dưới** trong
+  cùng một bảng (`use_chan_dung_vo_chong` vs `use_chan-dung-tien-kiep`) — đúng
+  cái bẫy `viral-budget.ts` đã phải học khi đếm lượt gen free.
+- **`tool_funnel_lac()` — bộ dò id lạc**, hiện thẳng trên panel. Chính nó bắt
+  được tên lệch thứ tư (`dat-ten-doanh-nghiep`) ngay lượt chạy đầu tiên. Không
+  có bộ dò thì mỗi tool mới đặt tên lệch lại âm thầm tụt khỏi bảng.
+
+### 🔑 `topup_start` KHÔNG dùng được cho bậc "định mua"
+Đo prod: **552/553** lượt của nó đến từ chính trang nạp (`from=topup_page`),
+**0 lượt mang `tool_id`**. Vì thế mới phải thêm hai loại event mới —
+`preview_shown` (tính thử ra kết quả) và `unlock_click` (bấm nút mở bản đầy đủ).
+- `unlock_click` bắn từ **`lockPreview` trong `tuvi-paywall.js`**, không phải
+  từng trang: mọi tool dựng tường qua hàm đó là tự có bậc này.
+- `preview_shown` bắn từ trang, **sau khi renderMeta**, không phải lúc bấm nút —
+  bấm rồi mà lá số hỏng thì không có gì để xem, tính vào phễu là thổi mẫu số.
+
+### Panel "Phễu Theo Tool" (trang Marketing)
+Mở → chạy → tính thử → bấm mở → mua → Lượng. **Mọi cột đếm NGƯỜI** (đăng nhập
+thì theo tài khoản, không thì theo trình duyệt — cùng quy ước
+`dashboard_engagement`, hai panel đếm khác nhau là không so được).
+- Tô đỏ tool **trả phí** có **≥3 người mở mà 0 người mua**. Ngưỡng 3 vì một tool
+  1 người mở 0 người mua chưa nói lên gì — gắn cờ đỏ cho nó là dạy người đọc bỏ
+  qua cờ đỏ. Tool **miễn phí** không bao giờ bị tô (nó có bán gì đâu).
+- Tool chưa làm W1 thì hai cột tính thử/bấm mở để **gạch ngang, KHÔNG hiện 0%** —
+  0% đọc thành "ai cũng bỏ đi".
+- Action RIÊNG `admin-tool-funnel` chứ không nhét vào `admin-marketing` (chỗ đó
+  đã gánh 8 RPC + GA4), cùng tiền lệ `admin-viral`.
+- ⚠️ Quy ước khoảng ngày **nửa mở `[from, to)` và client cộng sẵn một ngày vào
+  `to`** — y hệt mọi RPC marketing khác. Hai RPC cùng trang mà hiểu khác nhau về
+  mốc cuối là hai bảng lệch đúng một ngày, kiểu lệch không ai nhìn ra.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier --check .` sạch
+· `check:prices` sạch · engine **185 pass** · `node --check` 4 khối script admin
+· bộ kiểm cấu trúc W1 vẫn xanh.
+**16 ca Playwright trên CHÍNH `renderToolFunnel` trong `admin.html`**: cờ đỏ chỉ
+bật đúng ca (trả phí + đủ mẫu + 0 mua), **3 ca ĐỐI CHỨNG không được bật** (đã có
+người mua · tool miễn phí · dưới ngưỡng mẫu) · tool có W1 hiện đúng tỉ lệ 4/9 =
+44% · tool chưa có W1 ra gạch ngang · nhãn chứa `<img onerror>` không chạy mà
+vẫn hiện nguyên văn · danh sách id lạc kèm hướng dẫn sửa · dark mode · rỗng →
+câu tử tế.
+**12 ca trên 3 TRANG THẬT**: `preview_shown` bắn đúng tool sau lượt tính thử,
+`unlock_click` **chưa bắn** lúc đó, bấm mở mới bắn, 0 lỗi JS.
+- 🪤 Playwright đặt `navigator.webdriver=true` nên `track.js` tự no-op — phải
+  `defineProperty` cho nó về `false` mới đo được đường của người thật.
+
+### Số đo ngay khi bật (2026-04-01 → 08-07)
+| Tool | Mở | Chạy | Mua | Lượng |
+|---|---:|---:|---:|---:|
+| Luận Giải | 24 | 24 | 3 | 1.500 |
+| Chân Dung Vợ Chồng | 10 | 1 | 1 | 788 |
+| Chân Dung Tiền Kiếp | 5 | 1 | 1 | 425 |
+| Tử Bình | 3 | 2 | 2 | 1.050 |
+⚠️ **Chân Dung Vợ Chồng: 10 người mở, 1 người CHẠY.** Rơi 90% ở bước bấm nút —
+đó là tool đắt thứ hai và là tool viral chính. Đây đúng là loại câu hỏi D1 sinh
+ra để đặt, và nó cũng là lý do W1 nên mở rộng sang 2 tool chân dung.
+
+### CÒN LẠI
+- Hai cột tính thử/bấm mở **mới có số từ hôm nay** — 3 tool W1 vừa ship. Tỉ lệ
+  bấm-mở cần vài chục lượt mới đọc được.
+- Chưa tách phễu theo **kênh** (organic vs share vs quảng bá). Cần join thêm
+  `user_attribution`, và chỉ có nghĩa khi lưu lượng lớn hơn nhiều.
+- `tool_canon()` là **bảng chép tay** — thêm tool mà tên ba nơi không khớp thì
+  phải thêm dòng. Bộ dò id lạc là lưới đỡ, nhưng nó chỉ kêu SAU khi có dữ liệu.
+
+---
+
+## 🔓 W1 — TÍNH THỬ MIỄN PHÍ: bấm nút là tool CHẠY THẬT (2026-08-06, PR trước)
 
 Henry: *"Ok w1 đi"* — mục backlog tự đánh giá là **tác động lớn nhất cả
 backlog**. W2 trước đó mới làm nửa hình thức: tấm khoá mềm hiện ra nhưng **chữ

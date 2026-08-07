@@ -397,6 +397,12 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     const btn = _lockEl.querySelector('button.tpw-btn');
     if (btn) {
       btn.addEventListener('click', function () {
+        // D1 — bậc "bấm mở" của phễu theo tool. Đặt Ở ĐÂY chứ không ở từng
+        // trang: mọi tool dựng tường qua hàm này là tự có bậc đó, không phải
+        // nhớ rải thêm một lời gọi mỗi lần thêm tool.
+        try {
+          if (window.Track) window.Track.event('unlock_click', { tool_id: product, meta: { cost: cost } });
+        } catch (e) { /* đo hỏng không được chặn lượt mua */ }
         const slug = typeof o.slug === 'function' ? o.slug() : o.slug || '';
         requireCredits(slug, function () { return o.onUnlock(); });
       });
