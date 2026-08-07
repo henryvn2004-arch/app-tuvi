@@ -213,7 +213,7 @@
 window.SHELL_INTRO={key:'nhan-mach',title:'Sổ Nhân Mạch',desc:'Đưa <b>cả đội</b> hoặc <b>danh sách khách</b> vào một chỗ để biết <b>nhóm thiếu kiểu người nào</b>, <b>ai với ai dễ giẫm chân</b>, và <b>tuần này nên gặp ai trước</b>. Khác công cụ Lá Số Người Khác ở chỗ nó đọc cả nhóm cùng lúc.'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tuvi-form.js?v=1"></script>
-<script src="/tuvi-paywall.js?v=15"></script>
+<script src="/tuvi-paywall.js?v=16"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=61"></script>
@@ -450,6 +450,10 @@ async function analyze() {
   document.getElementById('card').style.display = 'block';
   document.getElementById('btnEdit').style.display = '';
   renderMeta(prev);
+  // D1 — bậc "đã tính thử" của phễu theo tool. Bắn ở ĐÂY chứ không ở lúc bấm
+  // nút: bấm rồi mà lá số hỏng thì không có gì để xem, tính vào phễu là thổi
+  // mẫu số lên rồi tỉ lệ mở nhìn tệ hơn thực tế.
+  try { if (window.Track) window.Track.event('preview_shown', { tool_id: 'nhan-mach' }); } catch (e) { /* đo hỏng không chặn gì */ }
   if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
 
   document.getElementById('lockBlock').style.display = 'block';

@@ -521,6 +521,16 @@
 
         <div class="panel">
           <div class="panel-header">
+            <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>Phễu Theo Tool</div>
+            <span style="font-size:.72rem;color:var(--text-lt)">Tool nào có người xem mà không ai mua</span>
+          </div>
+          <div class="panel-body" id="mkt-toolfunnel">
+            <div class="loading"><span class="spin"></span>Đang tải...</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
             <div class="panel-title"><svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>Vòng Lặp Viral</div>
             <span style="font-size:.72rem;color:var(--text-lt)">K-factor = lượt giới thiệu ăn được ÷ số người đã tạo kết quả</span>
           </div>
@@ -3482,11 +3492,73 @@ async function loadMarketing() {
     ['mkt-ga4','mkt-sources','mkt-acq','mkt-campaigns','mkt-paths','mkt-referrers','mkt-cohorts','mkt-revenue'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
   }
   loadViral(fromEl.value, toEl.value);
+  loadToolFunnel(fromEl.value, toEl.value);
   loadAutopilotLog();
   loadMediaQueue();
   loadSeeding();
   utmRenderSaved();
   _mktLoadedKey = fromEl.value + '|' + toEl.value;
+}
+
+// D1 — PHỄU THEO TOOL. Trả lời "tool nào có người xem mà không ai mua".
+// Gọi RIÊNG khỏi admin-marketing (8 RPC + GA4), cùng tiền lệ với loadViral.
+async function loadToolFunnel(from, to) {
+  const host = document.getElementById('mkt-toolfunnel');
+  if (!host) return;
+  try {
+    const d = await apiGet('admin-tool-funnel', `&from=${from}&to=${to}`);
+    if (d.error) throw new Error(d.error);
+    renderToolFunnel(host, d.rows || [], d.lac || []);
+  } catch (e) {
+    host.innerHTML = `<div class="empty">Lỗi: ${escHtmlLocal(e.message)}</div>`;
+  }
+}
+
+function renderToolFunnel(host, rows, lac) {
+  if (!rows.length) {
+    host.innerHTML = '<div class="empty">Chưa có lượt mở tool nào trong khoảng này.</div>';
+    return;
+  }
+  const pct = (a, b) => (b > 0 ? Math.round((a * 100) / b) + '%' : '—');
+  // Cảnh báo CHỈ khi có đủ mẫu: một tool 1 người mở 0 người mua chưa nói lên gì,
+  // gắn cờ đỏ cho nó là dạy người đọc bỏ qua cờ đỏ.
+  const NGUONG = 3;
+  const body = rows.map(r => {
+    const free = Number(r.gia) === 0;
+    const kho = !free && Number(r.mo) >= NGUONG && Number(r.mua) === 0;
+    // Có tính thử (W1) → cột "thử → bấm mở" mới có nghĩa; tool chưa có W1 thì
+    // để gạch ngang chứ KHÔNG hiện 0% (0% đọc thành "ai cũng bỏ đi").
+    const coThu = Number(r.thu) > 0;
+    return `<tr${kho ? ' style="background:rgba(192,57,43,.06)"' : ''}>
+      <td><b>${escHtmlLocal(r.nhan || r.tool_id)}</b>${kho ? ' <span class="badge badge-red">chưa ai mua</span>' : ''}
+        <div style="font-size:.7rem;color:var(--text-lt)">${escHtmlLocal(r.tool_id)} · ${free ? 'miễn phí' : r.gia + ' Lượng'}</div></td>
+      <td style="text-align:right">${r.mo}</td>
+      <td style="text-align:right">${r.chay}<div style="font-size:.68rem;color:var(--text-lt)">${pct(r.chay, r.mo)}</div></td>
+      <td style="text-align:right">${coThu ? r.thu : '—'}</td>
+      <td style="text-align:right">${coThu ? r.bam_mo + '<div style="font-size:.68rem;color:var(--text-lt)">' + pct(r.bam_mo, r.thu) + '</div>' : '—'}</td>
+      <td style="text-align:right">${free ? '—' : r.mua + '<div style="font-size:.68rem;color:var(--text-lt)">' + pct(r.mua, r.mo) + '</div>'}</td>
+      <td style="text-align:right">${free ? '—' : Number(r.luong).toLocaleString('vi-VN')}</td>
+    </tr>`;
+  }).join('');
+
+  const lacHtml = lac.length
+    ? `<div style="margin-top:12px;font-size:.72rem;color:var(--text-lt);line-height:1.7">
+         <b>Id không có trong bảng giá:</b> ${lac.map(x => escHtmlLocal(x.tool_id) + ' (' + x.nguon + ', ' + x.so_luot + ')').join(' · ')}<br>
+         Trang không bán gì thì bỏ qua; còn lại là <b>tên lệch giữa ba hệ</b> — thêm một dòng vào <code>tool_canon()</code>.
+       </div>`
+    : '';
+
+  host.innerHTML = `<div class="table-wrap"><table class="tbl">
+      <thead><tr>
+        <th>Tool</th><th style="text-align:right">Mở</th><th style="text-align:right">Chạy</th>
+        <th style="text-align:right">Tính thử</th><th style="text-align:right">Bấm mở</th>
+        <th style="text-align:right">Mua</th><th style="text-align:right">Lượng</th>
+      </tr></thead><tbody>${body}</tbody></table></div>
+    <div style="margin-top:10px;font-size:.72rem;color:var(--text-lt);line-height:1.7">
+      Mọi cột đếm <b>người</b> (đã đăng nhập tính theo tài khoản, chưa thì theo trình duyệt) — trừ cột Lượng.
+      Cột <b>Tính thử</b> / <b>Bấm mở</b> chỉ có ở tool đã làm W1; tool khác để gạch ngang chứ không phải 0.
+      Dòng tô đỏ = tool trả phí có <b>≥${NGUONG} người mở mà chưa ai mua</b>.
+    </div>${lacHtml}`;
 }
 
 // V2.4 (track Viral Loop) — phễu vòng lặp giới thiệu. Gọi RIÊNG khỏi

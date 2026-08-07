@@ -42,15 +42,15 @@ Công sức: **S** < 1 ngày · **M** 2–4 ngày · **L** > 1 tuần.
 | **P4** | Neo giá: hiện "tổng giá trị" khi gộp gói | S | 🟡 |
 | **P5** | Thử nâng giá theo bậc (A/B) — bắt đầu ở 2 tool chân dung | M | 🟡 |
 | **P6** | Xem lại trần ảnh free 6/ngày sau khi đổi giá | S | 🟡 |
-| **W1** | `Tính thử miễn phí` → chặn ở phần luận sâu (không chặn trước cửa) | L | 🟢 |
+| **W1** | ~~`Tính thử miễn phí` → chặn ở phần luận sâu~~ | L | ✅ XONG |
 | **W2** | ~~Bản xem trước che chữ thay vì modal chặn~~ | M | ✅ XONG |
 | **W3** | ~~Hiện "còn X Lượng · thao tác này tốn Y" ngay trên nút~~ | S | ✅ XONG |
 | **T1** | ~~**Lá số NGƯỜI KHÁC**~~ (sếp/đồng nghiệp/người thân) — cẩm nang ứng xử | M | ✅ XONG |
-| **T2** | Gói Cha Mẹ: cây gia phả + mệnh con + tương tác cha-con | L | 🔴 |
-| **T3** | Gói Kinh doanh/Sale: nhân mạch công sở + phân tích khách hàng | L | 🔴 |
+| **T2** | ~~Gói Cha Mẹ~~ → tool **Dạy Con Theo Lá Số** | M | ✅ XONG |
+| **T3** | ~~Gói Kinh doanh/Sale~~ → tool **Sổ Nhân Mạch** (đọc cả nhóm) | M | ✅ XONG |
 | **T4** | **Đèn cầu an online** (có hạn 1 năm → tái tục) | M | 🟡 |
 | **T5** | Xin keo / thỉnh thần online | M | 🟡 |
-| **T6** | **Duyên nợ tiền kiếp 2 người** (engine XONG, tool chưa dựng) | M | 🟢 |
+| **T6** | ~~**Duyên nợ tiền kiếp 2 người**~~ | M | ✅ XONG |
 | **T7** | Cửu tinh / Tam nguyên khí học | M | 🔴 |
 | **T8** | Quỷ Cốc Tử suy mệnh | M | 🔴 |
 | **T9** | Bộ bài Tây: Tarot · Lenormand · Rune · Luân xa | L | 🔴 |
@@ -61,20 +61,20 @@ Công sức: **S** < 1 ngày · **M** 2–4 ngày · **L** > 1 tuần.
 | **U1** | **Đa phái tử vi** (Trung Châu · Tam Hợp · Tứ Hoá Phi Tinh · Khâm Thiên) | L | 🔴 |
 | **U2** | Nhúng cổ tịch tra tại chỗ | L | 🔴 |
 | **U3** | Lá số nhiều tầng: lưu nguyệt · lưu nhật · lưu thời | M | 🟡 |
-| **U4** | **Sổ lá số** — lưu nhiều lá số, đồng bộ tài khoản (không theo máy) | M | 🟢 |
+| **U4** | ~~**Sổ lá số** — đồng bộ tài khoản~~ | M | ✅ XONG |
 | **S1** | Gói **Hội viên năm** — vận riêng hằng ngày + tool chữ không giới hạn | L | 🔴 |
 | **S2** | Ưu đãi hội viên khi mua lẻ (họ giảm 33%) | S | 🔴 |
 | **H1** | **Chợ tư vấn thầy thật**, ăn hoa hồng | L | 🔴 |
 | **H2** | Đặt lịch xem trực tiếp (1 thầy, thủ công, hotline/Zalo) | S | 🟡 |
 | **H3** | Khoá học tử vi online | L | 🔴 |
-| **M1** | **Đóng gói `/cong-cu` theo NỖI LO, không theo BỘ MÔN** | M | 🟢 |
-| **M2** | Đặt tên sản phẩm theo CÂU HỎI người ta gõ | S | 🟢 |
+| **M1** | ~~**Đóng gói `/cong-cu` theo NỖI LO**~~ | M | ✅ XONG |
+| **M2** | ~~Đặt tên sản phẩm theo CÂU HỎI người ta gõ~~ | S | ✅ XONG |
 | **M3** | **Nhiệm vụ onboarding chia nhỏ** (Zalo/SĐT/email → mỗi việc một phần thưởng) | M | 🟢 |
 | **M4** | Trang SEO = trang BÁN được, không chỉ trang đọc | L | 🟡 |
 | **M5** | Kênh phân phối bên thứ ba (Zalo OA / báo / partner) | M | 🟡 |
 | **R1** | Vận hôm nay → nhắc hằng ngày qua push/Zalo | M | 🟢 |
 | **R2** | Chuỗi ngày ghé thăm | S | 🟡 |
-| **D1** | Đo tỉ lệ **xem → mua** theo từng tool | S | 🟢 |
+| **D1** | ~~Đo tỉ lệ **xem → mua** theo từng tool~~ | S | ✅ XONG |
 | **D2** | Hạ tầng A/B giá | M | 🟡 |
 
 ---
@@ -350,8 +350,21 @@ nhân hoá theo lá số, và một lý do để mở ra**.
 
 ## D — Đo lường
 
-**D1 🟢 S** — hiện chưa trả lời được *"tool nào có người xem mà không ai mua"*.
-Có `tool_open`/`tool_run`/`topup_start` rồi, thiếu ghép thành tỉ lệ theo tool.
+**D1 ✅ XONG** — panel **"Phễu Theo Tool"** trong Marketing: mở → chạy → tính
+thử → bấm mở → mua → Lượng, đếm theo NGƯỜI, tô đỏ tool trả phí có ≥3 người mở
+mà chưa ai mua.
+- 🔴 **Phát hiện chính khi làm: BA HỆ TÊN TOOL đang lệch nhau trên prod** —
+  `events.tool_id` (shell) vs `tool_pricing.tool_id` vs `credit_transactions.type`.
+  `luan-giai` / `laso` / `use_laso` là cùng một tool. Join thô thì Luận Giải hiện
+  ra *"24 người mở, 0 người mua"* trong khi nó đã bán **1.500 Lượng cho 3 người**
+  — kết luận sai dẫn tới quyết định sai, đúng thứ D1 sinh ra để chặn.
+  Vá bằng `tool_canon()`; kèm **bộ dò id lạc** hiện thẳng trên panel, và chính
+  nó bắt được tên lệch thứ tư (`dat-ten-doanh-nghiep`) ngay lượt chạy đầu.
+- `topup_start` **không thay được** cho bậc "định mua": đo prod **552/553** lượt
+  của nó đến từ chính trang nạp, không mang tool nào. Vì thế mới thêm
+  `preview_shown` + `unlock_click`.
+⚠️ **Còn thiếu:** hai cột tính thử/bấm mở chỉ có ở 3 tool đã làm W1; tool khác
+để gạch ngang chứ KHÔNG hiện 0% (0% đọc thành "ai cũng bỏ đi").
 **D2 🟡 M** — hạ tầng A/B giá, tiền đề bắt buộc của P5.
 
 ---

@@ -1319,6 +1319,7 @@ export async function GET(request: NextRequest) {
   if (action === 'rail-status') return handleRailStatus(request, searchParams);
   if (action === 'signup-bonus') return handleSignupBonus();
   if (action === 'admin-viral') return handleAdminViral(request, searchParams);
+  if (action === 'admin-tool-funnel') return handleAdminToolFunnel(request, searchParams);
   if (action === 'admin-content-pack') return handleAdminContentPack(request, searchParams);
   if (action === 'admin-media-queue') return handleAdminMediaQueue(request, searchParams);
   if (action === 'admin-seeding') return handleAdminSeeding(request);
@@ -1553,6 +1554,35 @@ async function handleAdminViral(request: NextRequest, sp: URLSearchParams): Prom
     });
     if (!res.ok) throw new Error(`viral_loop_funnel: ${await res.text()}`);
     return ok({ viral: await res.json(), from: from.toISOString(), to: to.toISOString() });
+  } catch (e: unknown) { return err((e as Error).message); }
+}
+
+// ── GET: admin-tool-funnel (D1 — panel "Phễu Theo Tool") ─────────
+// Trả lời đúng một câu hỏi: TOOL NÀO CÓ NGƯỜI XEM MÀ KHÔNG AI MUA.
+//
+// CỐ Ý là action RIÊNG chứ không nhét vào `admin-marketing`: chỗ đó đã gánh 8
+// RPC + một lượt GA4, thêm nữa là mỗi lần mở trang Marketing lại chậm thêm cho
+// một panel không phải ai cũng đọc. Cùng tiền lệ với `admin-viral`.
+async function handleAdminToolFunnel(request: NextRequest, sp: URLSearchParams): Promise<Response> {
+  const token = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+  const admin = await verifyAdmin(token);
+  if (!admin) return err('Unauthorized', 403);
+
+  const to = sp.get('to') ? new Date(sp.get('to') as string) : new Date();
+  const from = sp.get('from') ? new Date(sp.get('from') as string) : new Date(Date.now() - 30 * 864e5);
+  if (isNaN(from.getTime()) || isNaN(to.getTime())) return err('Invalid date range', 400);
+  const toExcl = new Date(to.getTime() + 864e5);
+  const body = JSON.stringify({ p_from: from.toISOString(), p_to: toExcl.toISOString() });
+
+  const rpc = async (fn: string) => {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`, { method: 'POST', headers: SB_HEADERS, body });
+    if (!r.ok) throw new Error(`${fn}: ${await r.text()}`);
+    return r.json();
+  };
+
+  try {
+    const [rows, lac] = await Promise.all([rpc('tool_funnel'), rpc('tool_funnel_lac')]);
+    return ok({ rows, lac, from: from.toISOString(), to: to.toISOString() });
   } catch (e: unknown) { return err((e as Error).message); }
 }
 
