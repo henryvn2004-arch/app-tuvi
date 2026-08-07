@@ -5,6 +5,88 @@
 
 ---
 
+## 🕘 "Phiên gần đây": nhãn mô tả LÁ SỐ trong khi cái phân biệt là HỘI THOẠI (2026-08-07, PR này)
+
+Henry gửi ảnh `/app/luan-giai` trên iPhone: *"Chắc phải tìm cách display cái mục
+Phiên gần đây lại sao cho hợp lý. Chứ càng về sau càng nhiều phiên thì nó cứ dài
+ra ah?"*
+
+### 🔴 ĐÍNH CHÍNH tiền đề: nó KHÔNG dài ra — đã chặn ở 6 dòng từ đầu
+`shell.js` vốn `list.slice(0, 6)`, lưu tối đa 40 (`HIST_CAP`). Chạy 100 phiên vẫn
+đúng 6 dòng. Lỗi thật là **6 dòng đó vừa tốn chỗ vừa không nói được gì**, và nó tệ
+dần theo thời gian không phải vì DÀI THÊM mà vì càng ngày càng **GIỐNG NHAU**.
+
+### 🔑 Căn nguyên: nhãn mô tả LÁ SỐ, còn thứ phân biệt các phiên là CUỘC HỘI THOẠI
+`app-luan-giai.html` dựng title = `'Luận giải '+tên+' · '+ngày+' · năm '+namxem`.
+Trên chính trang Luận Giải thì `"Luận giải "` thừa (đang đứng ở đó) và
+`" · năm 2026"` thừa (mặc định, giống nhau cả 6 dòng) ⇒ **21/33 ký tự = 64% là
+boilerplate**, phần khác nhau chỉ còn tên + ngày, mà tên thì bị cắt cụt.
+- Ảnh của Henry có **3 dòng chữ y hệt** `Luận giải DT · 9/5/1984 · năm 2026`.
+  Đọc `saveCurrent()`: phiên **chỉ được lưu khi đã có ít nhất một lượt hỏi–đáp**
+  (`if (!msgs.length) return`) ⇒ đó là **3 cuộc trò chuyện KHÁC NHAU** về cùng một
+  lá số, không phải rác trùng lặp. Nhãn không nói được điều đó nên trông như lặp →
+  không ai bấm → 6 dòng chiếm 40% màn hình đầu để phục vụ ~0 cú bấm.
+- ⇒ Thứ phân biệt chúng LUÔN TỒN TẠI và đã nằm sẵn trong record: **câu hỏi đầu**.
+
+### Lỗi kèm: chiếm 40% màn hình đầu, và nằm TRÊN form
+`#shellRecent` đặt trước `.form-card` ở **cả 27 trang tool**. Mỗi dòng ~43px
+(padding 9 + font 12.8 + gap 6) → 6 dòng + tiêu đề ≈ **284px** ≈ 40% chiều cao
+dùng được của iPhone, cộng thẻ intro phía trên thì cái form — thứ người ta vào
+trang để dùng — bị đẩy hẳn xuống dưới màn hình đầu.
+
+### Ba bề mặt cùng nói một thứ trong một màn hình
+`Phiên gần đây` (trên form) · **`Sổ lá số`** (chip trong form) · **`Lịch sử`**
+(panel trong rail, đã có xoá). `restoreSession()` reload `?auto=1` → **tính lại
+center rồi mới replay transcript** ⇒ phần "lá số" của nó trùng khít chip Sổ lá số
+ngay bên dưới; giá trị RIÊNG duy nhất là **đoạn hội thoại** — đúng thứ nhãn không
+hề nhắc tới.
+
+### Cách vá (Henry chốt phương án B sau khi xem 7 hướng)
+- **Dòng chính = câu hỏi đầu của phiên**, tên/ngày sinh tụt xuống dòng phụ.
+- **Chỉ hiện 2 dòng**, phần còn lại sau nút `Tất cả (N) ›` → **mở panel Lịch sử
+  CÓ SẴN** trong rail (chỗ đó đã có xoá, không phải viết mới).
+- **Gộp đếm theo lá số**: `DT · 9/5/1984 · 3 phiên` thay vì bày 3 dòng trông y hệt.
+- ⚠️ **Dòng phụ dựng TỪ `restore.birth`, KHÔNG cắt chuỗi title**: tiền tố title là
+  chữ mỗi tool tự viết, còn nhãn tool trong sidebar đọc từ `tool_pricing.label` —
+  hai bên khác hoa/thường (`Luận giải` vs `Luận Giải`) nên cắt theo chuỗi sẽ trượt
+  IM LẶNG, để lại đúng phần thừa mình định bỏ.
+- ⚠️ **Khoá gộp CỐ Ý bỏ TÊN**: cùng một người hay bị gõ hai kiểu — ảnh của Henry có
+  `TL` và `Thuy Lưu` cùng ngày `30/8/1983`. Tính tên vào khoá là đếm ra hai lá số.
+- **Mở rail TRƯỚC rồi mới mở panel** khi bấm `Tất cả`: trên mobile rail nằm ngoài
+  màn hình, chỉ bật panel thôi thì bấm xong không thấy gì xảy ra.
+- `min-width:0` trên `.ri-m` là BẮT BUỘC — thiếu nó thì `text-overflow` của con
+  không chạy, câu hỏi dài phình dòng thay vì cắt bằng ba chấm.
+- Sửa **`shell.js` + `shell.css`** ⇒ 27 trang tool tự đổi. Không migration, không
+  đụng API, không đụng `restoreSession`. Bump `shell.js?v=64` · `shell.css?v=17`
+  (35 trang; `git diff` xác nhận HTML **chỉ có đúng 2 dòng version mỗi file**).
+
+### Verify
+`typecheck` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices` + `check:groups` + `check:nostore` sạch · engine **185 pass** ·
+`node --check`.
+- **34 ca Playwright trên TRANG THẬT** `/app/luan-giai` + `/app/phong-thuy` với
+  `shell.js` THẬT, seed đúng 6 phiên trong ảnh Henry: đúng 2 dòng · dòng chính là
+  câu hỏi · **0 lượt lọt chữ "Luận giải"/"năm 2026"** · gộp đúng `3 phiên` và lá số
+  1 phiên thì KHÔNG hiện số đếm · cao **129px** · 390px và 1440px không tràn ngang.
+- 🪤 **ĐỐI CHỨNG nạp đè bản cũ lấy từ git HEAD**: 6 dòng, **2 dòng chữ y hệt nhau**,
+  cao **265px** ⇒ lỗi có thật và bản mới cắt được ~nửa, bài kiểm không đỗ giả.
+- Ca biên: 2 phiên → **không dựng nút "Tất cả"** · phiên không có lá số (tool ảnh)
+  → 1 dòng, **không dựng dòng phụ rỗng** · câu hỏi dài 270 ký tự → ellipsis, vẫn 1
+  dòng · câu hỏi chứa `<img onerror>` + `<script>` **không chạy** mà vẫn hiện nguyên
+  văn · bấm `Tất cả` → rail mở + panel liệt kê **đủ 6 phiên kèm nút xoá** · bấm một
+  dòng → đúng `?auto=1` + đúng id trong `sessionStorage`.
+
+### CÒN LẠI
+- **Nợ CÓ SẴN, cố ý không vá ở đây:** `--gold-lt` không được khai lại trong khối
+  `[data-theme="dark"]` nên mọi `:hover` dùng nó (`.chip`, `.row`, `.intro-card`,
+  `.recent-item`) ra nền kem sáng + chữ sáng ở dark mode. Có sẵn từ trước, nằm trên
+  4 thành phần dùng chung — trộn vào PR này là đúng thứ repo tự dặn tránh. Nút
+  `.recent-all` mới CỐ Ý dùng `--paper-2` (có khai lại ở dark) để không nhân thêm.
+- Con số cần nhìn sau 1–2 tuần: có ai bấm `Tất cả (N)` không. Không ai bấm nghĩa là
+  2 dòng đã đủ và phần còn lại chỉ nên sống trong rail.
+
+---
+
 ## 🎯 M3 — Nhiệm vụ onboarding: đổi CÙNG khoản tiền lấy được gì (2026-08-07, PR này)
 
 Henry: *"ok. A. skip P1. làm M3"*, rồi bổ sung đúng chỗ tao suýt khoá cứng:

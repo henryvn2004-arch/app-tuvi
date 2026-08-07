@@ -197,11 +197,17 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .rh-del:hover{background:var(--paper-2);color:var(--red)}
 /* "Phiên gần đây" ở khối nhập (empty-state) */
 #shellRecent{margin-top:14px}
-.recent-h{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-lt);margin-bottom:8px;font-weight:600}
+.recent-h{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-lt);margin-bottom:8px;font-weight:600}
+.recent-all{font:inherit;text-transform:none;letter-spacing:0;color:var(--text-lt);background:none;border:0;padding:2px 5px;margin:-2px -5px;border-radius:6px;cursor:pointer;flex:0 0 auto}
+.recent-all:hover{color:var(--text);background:var(--paper-2)}
 .recent-list{display:flex;flex-direction:column;gap:6px}
 .recent-item{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;border:1px solid var(--line);background:var(--white);border-radius:9px;padding:9px 12px;cursor:pointer;font-family:inherit}
 .recent-item:hover{border-color:var(--gold-soft);background:var(--gold-lt)}
+/* min-width:0 là thứ BẮT BUỘC để text-overflow của con chạy được trong flex —
+   thiếu nó thì câu hỏi dài đẩy phình dòng thay vì bị cắt bằng dấu ba chấm. */
+.recent-item .ri-m{min-width:0;display:flex;flex-direction:column;gap:2px}
 .recent-item .ri-t{font-size:12.8px;color:var(--text);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.recent-item .ri-b{font-size:11px;color:var(--text-lt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .recent-item .ri-s{font-size:11px;color:var(--text-lt);flex:0 0 auto}
 
 /* ── MODAL CHIA SẺ PHIÊN ── */
