@@ -57,6 +57,43 @@ nhưng tiêu đề và danh sách luôn nằm trên nền đã đặc. **Không 
 
 ---
 
+## 🧩 CSS CỦA TRANG ĐÈ VỠ FORM DÙNG CHUNG (2026-08-07, cùng PR)
+
+Henry gửi ảnh `/app/cong-so` trên laptop màn lớn: hàng NGÀY · THÁNG · NĂM · GIỜ
+· PHÚT chồng chéo lên nhau, "Giờ âm" đè lên ô Phút.
+
+### 🔴 Một dòng CSS, và nó là cả một LOẠI lỗi
+`app-cong-so.html` có `.fg select{min-width:200px}` — viết cho ô riêng của trang
+(`#trangThai`, "Bạn đang ở vị trí nào"). Nhưng **`TuviForm` dựng markup của nó
+vào ĐÚNG khuôn `.frow`/`.fg` mà trang cấp** (đó là giao ước sẵn có: trang lo
+CSS, component lo markup). Nên luật ấy trúng luôn **5 select của TuviForm** —
+ngày · tháng · giờ · phút · giới tính — bơm mỗi cái lên 200px trong ô rộng
+74–90px. Đo được: `#ngay` w=200 trong ô 74px.
+- 🔑 Loại lỗi này **không đọc code nào bắt được**: cả trang lẫn component đều
+  đúng khi đọc riêng, chỉ vỡ khi hai bên gặp nhau trong trình duyệt.
+- Vá: đổi sang `#trangThai{min-width:200px}` — nhắm ĐÚNG ô của trang. Kèm chú
+  thích ngay tại chỗ nói vì sao không được nhắm `.fg select`.
+
+### Quy ước rút ra
+**CSS của trang nhắm ô nhập PHẢI scope theo id/lớp RIÊNG của trang, không nhắm
+`.fg input` / `.fg select` chung** khi trang đó có mount `TuviForm`. Muốn đổi
+dáng cả form thì sửa trong `tuvi-form.js`.
+
+### Verify — T9, bộ quét dựng thật rồi ĐO
+Không tin vào grep: quét **CẢ 25 trang shell + 20 trang standalone × 3 khổ màn
+(1440 · 1024 · 390)**, mỗi trang dựng thật rồi đo 4 bất biến — ô nhập không
+tràn khỏi ô chứa · ô chứa không tràn · hàng không tràn khỏi khung · **không hai
+ô nào đè lên nhau**.
+- Trước khi vá: **đúng một trang đỏ** (`app-cong-so`), ở cả 3 khổ. Sau khi vá:
+  **70 lượt kiểm đều xanh, 0 trang vỡ.**
+- 🪤 **Đã red-team**: đặt lại dòng CSS cũ → T9 đỏ đúng trang đó ở cả 3 khổ ⇒ bộ
+  quét thật sự bắt được, không xanh vì lý do khác.
+- ⚠️ Chữ "Dựng hồ sơ" trong ảnh Henry gửi trông như bị tách dấu — **nguồn không
+  sai** (đã quét NFD toàn bộ `public/`: 0 ký tự tổ hợp ngoài mấy regex bỏ dấu
+  hợp lệ), render lại ở đây ra đúng. Đó là font fallback trên máy Henry.
+
+---
+
 ## 👥 Duyên Nợ Tiền Kiếp: 2 → tối đa 5 lá số (2026-08-07, PR trước)
 
 Henry: *"Làm dc nhiều lá số ko nhỉ? Cho user add thêm. Default là 2 đúng rồi
