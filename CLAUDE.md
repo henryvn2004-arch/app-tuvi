@@ -5,7 +5,89 @@
 
 ---
 
-## 📉 D1 — Phễu theo tool, và 🔴 BA HỆ TÊN TOOL ĐANG LỆCH NHAU (2026-08-07, PR này)
+## 🧑‍🤝‍🧑 Duyên Nợ Tiền Kiếp: nhân vật nào là lá số nào (2026-08-07, PR này)
+
+Henry: *"phần luận giải phải bổ sung thêm là nhân vật nào gắn với lá số nào để
+user biết"* — kèm một link chia sẻ thật.
+
+### 🔴 Không chỉ THIẾU thông tin — thứ tự đang GỢI Ý SAI
+Trang bày hai thẻ nhân vật cạnh nhau, không nói thẻ nào của ai ⇒ người đọc mặc
+định thẻ đầu là mình. Nhưng `normalizeBondPair` (`lib/portraits/bond-key.ts`)
+**sắp lại hai lá số theo khoá băm** để hai chiều nhập ra cùng một kết quả — nên
+`nhanVatA` là người nhập **THỨ HAI** ở **45,9%** số cặp (đo 1.533 cặp trên chính
+hàm đó). Tức gần một nửa số lượt, trang ngầm nói ngược.
+- Bản chia sẻ còn hụt hơn: khối "Lá số dùng để luận" do `shell.js` tự chèn chỉ
+  lấy `o.birth` = **một** lá số, trong khi tool dựng từ hai.
+
+### Cách vá — nối bằng DỮ LIỆU, không nối bằng vị trí
+- **Server trả `nhanVatA.laSo` / `nhanVatB.laSo`** (`birthRef`): ngày/tháng/năm ·
+  giờ · lịch · giới. `withLaso()` gắn ở CẢ payload mới LẪN payload lấy từ cache
+  — `pair` đã chuẩn hoá nên bản cũ trong `portrait_cache` cũng có mapping ngay,
+  không phải chờ cache hết hạn.
+- ⚠️ **CỐ Ý KHÔNG trả TÊN người nhập.** `portrait_cache` dùng chung toàn hệ
+  thống ⇒ tên của người chạy trước sẽ hiện cho người chạy sau. Ngày sinh thì
+  không rò gì: muốn chạm tới dòng cache đó phải tự nhập đúng cả hai lá số.
+  Client tự dò `laSo` về đúng ô nhập của mình để lấy lại tên đã gõ.
+- **Ba bề mặt cùng một thứ tự**: thẻ nhân vật (dòng "Dựng từ lá số" THAY dòng
+  giới tính — nó đã mang sẵn giới), dòng hero, và bản chia sẻ.
+- **`Shell.setShareable` nhận thêm `births: [{label, birth}]`** — khối lá số của
+  trang chia sẻ nay nêu đủ hai dòng, mỗi dòng gắn tên nhân vật. Tool một lá số
+  truyền `birth` như cũ, không đổi gì.
+- **Chip rail** đổi sang hỏi về nhân vật của **ô nhập thứ nhất**: rail chỉ nạp
+  lá số người đang ngồi đây và có luật cứng cấm luận sâu về người thứ hai —
+  chip trỏ nhầm là mời người ta bấm đúng câu mà rail buộc phải từ chối.
+
+### 🐞 Bắt kèm: "Cơ sở trong hai lá số" đang NÓI NGƯỢC NGŨ HÀNH
+Không nằm trong lời báo, mà nằm đúng khối dùng để chứng minh mình không bịa.
+`hanhRelation` trả `'a-sinh-b'` khi `NH_SINH[b] === a`, tức **A sinh B** — nhưng
+câu chữ ghi `${lsB} sinh ${lsA}`. **Hai dòng `sinh` bị hoán vị cho nhau**
+(cặp `khắc` thì vốn đúng). Ví dụ cụ thể: a=Mộc, b=Hỏa → cổ pháp là *Mộc sinh
+Hỏa*, trang in *"Hỏa sinh Mộc"*.
+- Kéo theo: `giver` của nhánh **ân nhân** cũng đảo (`'a-sinh-b' ? 'b' : 'a'`) —
+  bên SINH mới là bên CHO. Sai chiều thì **truyện và bức tranh đều dựng ngược
+  vai**: người được cứu thành người ra tay (`formatBondForLLM` và `sceneFor`
+  đều ăn `giver`).
+- Nhân tiện bỏ chữ **"người trước / người sau"** trong khối này — sau khi thứ tự
+  bị chuẩn hoá thì không ai đọc ra được nó chỉ ai. Nay gọi thẳng tên nhân vật.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier --check .` sạch
+· `check:prices` sạch · engine **185 pass** · `node --check` shell.js + 2 khối
+script nội tuyến.
+- **T1 — 1.533 cặp trên `normalizeBondPair` THẬT**: **45,9% bị đảo** (chứng minh
+  lỗi có thật, không phải lo hão), khoá cặp và thứ tự chuẩn hoá **0 lệch** giữa
+  hai chiều nhập.
+- **T2 — 15 ca Playwright trên TRANG THẬT + `shell.js` THẬT** (stub API, ca cố ý
+  dựng đúng tình huống server ĐẢO): thẻ 1 nêu đúng lá số người nhập thứ hai và
+  **không dính** lá số người kia · thẻ 2 ngược lại · dòng hero xếp cùng thứ tự
+  hai thẻ · chip hỏi đúng nhân vật của người thứ nhất và **không** hỏi người thứ
+  hai · bấm nút Chia sẻ THẬT → khối lá số gửi lên `/api/share-result` có **đủ
+  hai dòng kèm tên nhân vật**, `text` đường lùi cũng mang mapping · **ca ĐỐI
+  CHỨNG payload CŨ không có `laSo`** → rơi về dòng giới tính, không vỡ · 0 lỗi JS.
+- **T3 — 1.001 cặp trên `computePastLifeBond` THẬT** (530 cặp bị đảo): mapping
+  *lá số → nhân vật* **0 lệch** khi đảo thứ tự nhập ⇒ người thứ hai mở cùng cặp
+  (kể cả lấy từ cache) thấy đúng nhân vật gắn đúng lá số.
+- **T4 — 837 cặp**, đối chứng bằng bảng ngũ hành **chép tay riêng trong test**
+  (import bảng của chính module đang kiểm thì hai bên cùng sai vẫn báo xanh):
+  323 câu `sinh` + 323 câu `khắc` **0 câu sai cổ pháp**, 0 câu gọi sai tên, 29/29
+  ca ân nhân đặt đúng chiều. 🪤 **Đã red-team**: dựng lại bản cũ trong bản biên
+  dịch → T4 bắt đúng **196 câu sinh sai + 29/29 ân nhân ngược**, tức bài kiểm
+  không đỗ giả.
+- 🪤 Bẫy Playwright: handler `page.route` đăng ký **SAU CÙNG được ưu tiên** — bản
+  đầu để catch-all `**/api/**` sau route riêng nên stub riêng không bao giờ chạy,
+  trang báo "Lỗi 200". Catch-all phải đứng TRƯỚC.
+- Bump `shell.js?v=60→61` (35 trang).
+
+### CÒN LẠI
+- **Lượt đã sinh TRƯỚC bản này giữ nguyên chiều ân nhân cũ** — truyện và tranh
+  đã nằm trong `portrait_cache`/`past_life_bonds`, không dựng lại. Chỉ khối "cơ
+  sở" là đọc lại từ engine nên tự đúng. Ảnh hưởng ~2,7% số cặp (tỉ lệ ân nhân).
+- Phần CHỮ do LLM viết vẫn chỉ gọi tên nhân vật, **cố ý không nhắc ngày sinh** —
+  mapping là việc của khung trang, nhét vào truyện là phá giọng kể.
+
+---
+
+## 📉 D1 — Phễu theo tool, và 🔴 BA HỆ TÊN TOOL ĐANG LỆCH NHAU (2026-08-07, PR trước)
 
 Henry: *"Ok D1 trước đi"* — mục backlog *"tool nào có người xem mà không ai
 mua"*. Sau W1 nó còn cấp hơn: không có nó thì W1 vừa ship xong mà không biết có
