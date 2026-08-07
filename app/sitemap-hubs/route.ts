@@ -3,6 +3,7 @@
 export const revalidate = false;
 
 import { NextResponse } from 'next/server';
+import { lastmodLine, revOf } from '@/lib/seo/lastmod';
 
 const BASE  = 'https://www.tuviminhbao.com';
 const YEARS = Array.from({ length: 51 }, (_, i) => 1960 + i); // 1960–2010, khớp với route handler
@@ -13,25 +14,28 @@ function daysInMonth(m: number, y: number) {
 }
 function pad(n: number) { return String(n).padStart(2, '0'); }
 
-function url(loc: string, cf: string, pri: string) {
-  return `  <url>\n    <loc>${loc}</loc>\n    <changefreq>${cf}</changefreq>\n    <priority>${pri}</priority>\n  </url>`;
+// `changefreq`/`priority` đã GỠ — Google bỏ qua cả hai. Xem lib/seo/lastmod.ts.
+function url(loc: string, lastmod?: string | null) {
+  return `  <url>\n    <loc>${loc}</loc>${lastmodLine(lastmod)}\n  </url>`;
 }
 
 export async function GET() {
   const lines: string[] = [];
 
+  // Trang sinh bằng thuật toán, không có dòng DB nào để hỏi ngày sửa. Mốc nội
+  // dung khai tập trung ở `CONTENT_REV['menh-kho']` — hiện `null` ⇒ không phát
+  // lastmod. Bump ở ĐÓ khi template `app/menh-kho/**` hoặc `NAM_XEM` đổi.
+  const rev = revOf('menh-kho');
+
   for (const year of YEARS) {
     // Year hub
-    lines.push(url(`${BASE}/menh-kho/${year}`, 'yearly', '0.7'));
+    lines.push(url(`${BASE}/menh-kho/${year}`, rev));
 
     // Day hubs
     for (let m = 1; m <= 12; m++) {
       const dim = daysInMonth(m, year);
       for (let d = 1; d <= dim; d++) {
-        lines.push(url(
-          `${BASE}/menh-kho/${year}/${pad(m)}-${pad(d)}`,
-          'yearly', '0.5'
-        ));
+        lines.push(url(`${BASE}/menh-kho/${year}/${pad(m)}-${pad(d)}`, rev));
       }
     }
   }
