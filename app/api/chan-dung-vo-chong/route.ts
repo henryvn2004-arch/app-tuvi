@@ -16,6 +16,7 @@ import { computeLaso, formatLaSoV2 } from '@/lib/engine/laso';
 import {
   computeSpouseMorphology,
   formatMorphologyForLLM,
+  morphRows,
   getPhuTheReadout,
   formatPhuTheForLLM,
   getPhuTheChinhTinhElement,
@@ -40,6 +41,49 @@ const TOOL_ID = 'chan-dung-vo-chong';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY!;
+
+/**
+ * W1b — lượt TÍNH THỬ: chạy tầng deterministic rồi dừng.
+ *
+ * Hàm RIÊNG chứ không phải một cờ trong handleGenerate, đúng lý do đã ghi ở 3
+ * tool cẩm nang: đây là chốt chặn thanh toán của một tool đang bán: trộn hai
+ * đường vào một hàm rồi tin vào một câu `if` là cách nhanh nhất để một hôm nào
+ * đó đường trả tiền lọt qua cửa. Trong này KHÔNG có `toolPaymentDenied`,
+ * `llmTextFull`, `generatePortraitImage`, `insertHistoryRow`,
+ * `putCachedPortrait`, `railFreeGrant`, `refundIfSystemFailure`.
+ *
+ * KHÔNG đòi đăng nhập — xem lý do ở app/api/chan-dung-tien-kiep/route.ts.
+ *
+ * Bày ra: cung Phu Thê (chính tinh/phụ tinh/cách cục/ý nghĩa) + BẢNG HÌNH THỂ
+ * suy từ sao (khuôn mặt, mắt, mũi, vóc dáng… kèm sao nào quyết định nét nào).
+ * Khoá: đoạn mô tả văn xuôi, hoàn cảnh gặp gỡ, luận giải Phu Thê, và bức tranh
+ * — tức đúng phần tốn tiền model.
+ *
+ * ⚠️ CỐ Ý KHÔNG trả `spouseAge`: mốc tuổi neo vào `pickMarriageAgeAnchor` có
+ * `Math.random()`, nên số ở lượt tính thử sẽ KHÁC số ở lượt trả tiền. Bày một
+ * con số rồi đổi nó ngay sau khi thu tiền là tự tay phá thứ W1 sinh ra để xây.
+ */
+async function runPreview(request: NextRequest) {
+  const body = await parseBody(request);
+  const birth = body.birth as BirthParams | undefined;
+  if (!birth) return err('Thiếu thông tin ngày sinh.', 400);
+
+  const lasoRes = computeLaso(birth);
+  if (!lasoRes.ok || !lasoRes.ls) return err(lasoRes.error || 'Không lập được lá số.', 400);
+
+  const userGender = birth.gender === 'nu' ? 'nu' : 'nam';
+  const morph = computeSpouseMorphology(lasoRes.ls, userGender);
+  return ok({
+    success: true,
+    preview: true,
+    spouseGender: morph.spouseGender,
+    coreStar: morph.coreStar,
+    coreBrightness: morph.coreBrightness || '',
+    coreIsSatTinh: morph.coreIsSatTinh,
+    morph: morphRows(morph),
+    phuThe: getPhuTheReadout(lasoRes.ls),
+  });
+}
 
 // ── Generate ──────────────────────────────────────────────────────────
 async function handleGenerate(request: NextRequest, body: Record<string, unknown>) {
@@ -494,6 +538,11 @@ export async function GET(request: NextRequest) {
 
 // S1 (track COO) — bọc để tự ghi lượt chạy thành công/hỏng vào `events`.
 // Chỉ QUAN SÁT: ngoại lệ vẫn ném lại nguyên vẹn, Response trả về không đổi.
+//
+// Rẽ sang lượt tính thử NGAY TẠI ĐÂY, trước cả withToolOutcome — xem chú thích
+// cùng loại ở app/api/chan-dung-tien-kiep/route.ts.
 export async function POST(request: NextRequest) {
+  const url = new URL(request.url);
+  if (url.searchParams.get('preview') === '1') return runPreview(request);
   return withToolOutcome('chan-dung-vo-chong', () => runPost(request));
 }

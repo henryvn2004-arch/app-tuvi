@@ -33,8 +33,7 @@ async function handle(request: NextRequest) {
     let delivered = false;
     if (TG_CHAT_ID) {
       const head = digest.hasIssues ? '🛠️ Vận Hành — CÓ VIỆC CẦN XEM' : '🛠️ Vận Hành — bình thường';
-      await tgSendMessage(TG_CHAT_ID, `${head} · ${day}\n\n${digest.text}`);
-      delivered = true;
+      delivered = await tgSendMessage(TG_CHAT_ID, `${head} · ${day}\n\n${digest.text}`);
     }
     await logOpsDigest(digest, delivered);
 
@@ -42,7 +41,11 @@ async function handle(request: NextRequest) {
       ok: true,
       hasIssues: digest.hasIssues,
       sent: delivered,
-      note: TG_CHAT_ID ? undefined : 'đã dựng + ghi log, CHƯA đẩy — thiếu ADMIN_TELEGRAM_CHAT_ID',
+      note: TG_CHAT_ID
+        ? delivered
+          ? undefined
+          : 'đã dựng + ghi log, Telegram TỪ CHỐI gửi — xem log server để biết lý do (chat_id sai? bot bị chặn/gỡ?)'
+        : 'đã dựng + ghi log, CHƯA đẩy — thiếu ADMIN_TELEGRAM_CHAT_ID',
     });
   } catch (e: unknown) {
     return NextResponse.json({ ok: false, error: (e as Error).message }, { status: 500 });

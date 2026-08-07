@@ -36,13 +36,58 @@ export function normalizeBondPair(
   b2: BirthParams,
   n2: string,
 ): BondPair {
-  const k1 = lasoKey(b1);
-  const k2 = lasoKey(b2);
-  // k1 === k2 (hai lá số y hệt) → giữ nguyên thứ tự, không có gì để sắp.
-  const swap = k1 > k2;
-  const [birthA, birthB] = swap ? [b2, b1] : [b1, b2];
-  const [nameA, nameB] = swap ? [n2, n1] : [n1, n2];
-  // Khoá của A (đã sắp) + khoá của B, nên hai chiều nhập ra cùng một chuỗi.
-  const key = lasoKey(birthA, 'bond|' + (swap ? k1 : k2));
-  return { birthA, birthB, nameA, nameB, selfIsA: !swap, key };
+  const g = normalizeBondGroup([
+    { birth: b1, name: n1 },
+    { birth: b2, name: n2 },
+  ]);
+  return {
+    birthA: g.members[0].birth,
+    birthB: g.members[1].birth,
+    nameA: g.members[0].name,
+    nameB: g.members[1].name,
+    selfIsA: g.selfIndex === 0,
+    key: g.key,
+  };
+}
+
+// ── NHÓM (2–5 lá số) ────────────────────────────────────────────────────
+
+export interface GroupMemberInput {
+  birth: BirthParams;
+  name: string;
+}
+
+export interface BondGroup {
+  /** Các lá số ĐÃ SẮP — thứ tự này là thứ tự nhân vật ở mọi bề mặt. */
+  members: GroupMemberInput[];
+  /** Vị trí của người nhập ĐẦU TIÊN sau khi sắp (người đang ngồi trước máy). */
+  selfIndex: number;
+  /** Khoá cache của NHÓM — cùng nhóm luôn ra cùng khoá, bất kể thứ tự nhập. */
+  key: string;
+}
+
+/**
+ * Chuẩn hoá thứ tự một nhóm 2–5 lá số.
+ *
+ * 🔑 TƯƠNG THÍCH NGƯỢC LÀ RÀNG BUỘC CỨNG: với đúng hai lá số, khoá sinh ra ở
+ * đây phải TRÙNG KHÍT khoá của bản cũ (`lasoKey(birthA, 'bond|' + khoá của B)`).
+ * Lệch một ký tự là toàn bộ `portrait_cache` đang có thành mồ côi — người đã
+ * trả tiền cho một cặp sẽ bị tính tiền lại, và mỗi lượt đó còn đốt thêm một
+ * lượt gọi model. Có test A/B canh đúng điều này.
+ *
+ * Nhóm ≥3 nối thêm khoá của những người còn lại vào cùng chuỗi salt, nên nhóm
+ * nhập theo thứ tự nào cũng ra một khoá.
+ */
+export function normalizeBondGroup(input: GroupMemberInput[]): BondGroup {
+  const keyed = input.map((m, idx) => ({ ...m, k: lasoKey(m.birth), idx }));
+  // Sắp theo khoá lá số; hai lá số y hệt thì giữ nguyên thứ tự nhập (sort ổn
+  // định trong JS), không có gì để phân xử.
+  const sorted = keyed.slice().sort((x, y) => (x.k < y.k ? -1 : x.k > y.k ? 1 : 0));
+  const selfIndex = sorted.findIndex((m) => m.idx === 0);
+  const key = lasoKey(sorted[0].birth, 'bond|' + sorted.slice(1).map((m) => m.k).join('|'));
+  return {
+    members: sorted.map((m) => ({ birth: m.birth, name: m.name })),
+    selfIndex: selfIndex < 0 ? 0 : selfIndex,
+    key,
+  };
 }

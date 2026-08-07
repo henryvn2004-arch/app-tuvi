@@ -43,6 +43,13 @@
 .cdvc-pt-list{margin:0;padding-left:20px;font-size:13.5px;line-height:1.8;color:#2a2118}
 .cdvc-pt-list li{margin-bottom:5px}
 .cdvc-pt-list b{color:#061A2E}
+.cdvc-morph{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:4px}
+.cdvc-morph td{padding:7px 0;border-bottom:1px solid #F0EEE9;vertical-align:top;line-height:1.65}
+.cdvc-morph tr:last-child td{border-bottom:none}
+.cdvc-morph td.k{width:34%;color:var(--text-lt);font-size:12.5px;padding-right:10px}
+.cdvc-morph td.v{color:#2a2118}
+.cdvc-morph .src{display:block;font-size:11px;color:#9A7B3A;margin-top:2px}
+.cdvc-note{margin-top:12px;font-size:12px;color:var(--text-lt);line-height:1.6}
 </style>
 </head>
 <body>
@@ -72,6 +79,7 @@
       </div>
 
       <div id="resPanel" style="display:none">
+        <div id="loading"><div id="loadingSteps"></div></div>
         <div class="res-block" id="phuTheBlock" style="display:none">
           <div class="res-block-header"><span class="res-block-title">Cung Phu Thê Trong Lá Số Của Bạn</span></div>
           <div class="res-block-body">
@@ -87,12 +95,17 @@
             </div>
           </div>
         </div>
-        <div class="res-block">
+        <div class="res-block" id="morphBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Hình Thể Suy Từ Sao Tại Phu Thê</span></div>
+          <div class="res-block-body">
+            <div class="cdvc-pt-row" id="morphCore"></div>
+            <table class="cdvc-morph"><tbody id="morphRows"></tbody></table>
+            <div class="cdvc-note">Bảng trên là tra bảng cổ pháp trên chính lá số của bạn — chưa qua AI.</div>
+          </div>
+        </div>
+        <div class="res-block" id="portraitBlock" style="display:none">
           <div class="res-block-header"><span class="res-block-title">Chân Dung Người Phối Ngẫu</span></div>
           <div class="res-block-body">
-            <div id="loading">
-              <div id="loadingSteps"></div>
-            </div>
             <div id="card">
               <div>
                 <img id="resultImg" alt="Chân dung người phối ngẫu">
@@ -120,6 +133,11 @@
           <div class="res-block-header"><span class="res-block-title">Luận Giải Cung Phu Thê</span></div>
           <div class="res-block-body" id="luanGiaiText" style="font-size:13.5px;line-height:1.85;color:#2a2118"></div>
         </div>
+        <!-- W1b — tường đứng ở CUỐI: hai khối chữ + ảnh phía trên đang ẩn ở
+             lượt tính thử, mở xong tường biến mất và mọi thứ về đúng chỗ. -->
+        <div class="res-block" id="lockBlock" style="display:none">
+          <div class="res-block-body" id="lockHost" data-tvp-lock style="padding-top:6px"></div>
+        </div>
         <div class="res-block" id="histBlock" style="display:none">
           <div class="res-block-header"><span class="res-block-title">Đã Vẽ Trước Đó</span></div>
           <div class="res-block-body"><div id="histList"></div></div>
@@ -138,7 +156,7 @@ window.SHELL_INTRO={key:'chan-dung-vo-chong',title:'Chân Dung Vợ Chồng',des
 <script src="/tuvi-paywall.js?v=16"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=60"></script>
+<script src="/shell.js?v=62"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=2"></script>
 <script src="/tools-shared/portrait-recover.js?v=1"></script>
 <script>
@@ -194,6 +212,21 @@ function showError(msg) {
   if (msg) { e.textContent = msg; e.classList.add('active'); } else { e.classList.remove('active'); }
 }
 
+// ── W1b: bấm nút là CHẠY THẬT, miễn phí ────────────────────────────────────
+//
+// Trước đây bấm nút là gặp paywall ngay — tức phải trả 20 Lượng mới biết engine
+// có thật sự đọc lá số của mình hay không. Đo được trên prod (panel Phễu Theo
+// Tool): 10 người mở tool, 1 người bấm chạy. Rơi 90% TRƯỚC cả paywall.
+//
+// Nay: chạy tầng deterministic (0 lượt LLM, 0 lượt sinh ảnh, 0đ), bày cung Phu
+// Thê + bảng hình thể suy từ sao, rồi mới dựng tường trên đúng phần tốn tiền.
+var CDVC_KHOA = [
+  'Bức chân dung người phối ngẫu',
+  'Mô tả ngoại hình & phong thái, diễn giải theo từng sao',
+  'Hoàn cảnh gặp gỡ nhiều khả năng nhất',
+  'Luận giải cung Phu Thê đầy đủ',
+];
+
 async function analyze() {
   showError('');
   var fdIn = TuviForm.getData();
@@ -201,23 +234,79 @@ async function analyze() {
   if (!dd || !mm || !yyyy) { showError('Vui lòng nhập đầy đủ ngày tháng năm sinh.'); return; }
 
   _lastBirth = { day: dd, month: mm, year: yyyy, hourBranch: gioAmIdx, gender: gender, isLunar: false };
-
   _currentSlug = TuviPaywall.generateToolSlug('chan-dung-vo-chong-' + dd + '-' + mm + '-' + yyyy);
-  // Kết quả được cache theo LÁ SỐ (xem lib/portraits/cache.ts): đã trả cho lá
-  // số này rồi thì mở lại không mất Lượng, và không hiện hộp thoại đòi tiền.
-  await TuviPaywall.requireCreditsCached('/api/chan-dung-vo-chong', _lastBirth, _currentSlug,
-    async function (freeRerun) { await _doGenerate(freeRerun); });
+
+  _openPanel();
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDVC_STEPS.slice(0, 1));
+  _loadingCtl.start();
+  var prev;
+  try {
+    var r = await fetch('/api/chan-dung-vo-chong?preview=1', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ birth: _lastBirth }),
+    });
+    prev = await r.json();
+    if (!r.ok || !prev.success) throw new Error(prev.error || 'Lỗi ' + r.status);
+  } catch (e) {
+    _loadingCtl && _loadingCtl.stop();
+    _closePanel();
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+    return;
+  }
+  _loadingCtl && _loadingCtl.finish();
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('btnEdit').style.display = '';
+  renderMeta(prev);
+  // D1 — bậc "đã tính thử" của phễu theo tool. Bắn ở ĐÂY chứ không ở lúc bấm
+  // nút: bấm rồi mà lá số hỏng thì không có gì để xem, tính vào phễu là thổi
+  // mẫu số lên rồi tỉ lệ mở nhìn tệ hơn thực tế.
+  try { if (window.Track) window.Track.event('preview_shown', { tool_id: 'chan-dung-vo-chong' }); } catch (e) { /* đo hỏng không chặn gì */ }
+  if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+
+  // Đã trả tiền cho đúng lá số này từ trước → mở thẳng, không dựng tường.
+  var free = false;
+  try {
+    free = await TuviPaywall.isFreeRerun('/api/chan-dung-vo-chong', PortraitRecover.birthQuery(_lastBirth));
+  } catch (e) { free = false; }
+  if (free) {
+    TuviPaywall._banner('✓ Bạn đã tạo kết quả cho lá số này — mở lại, không trừ Lượng');
+    await _doGenerate(true);
+    return;
+  }
+  document.getElementById('lockBlock').style.display = 'block';
+  await TuviPaywall.lockPreview({
+    host: document.getElementById('lockHost'),
+    title: '⊙ Còn bức chân dung và phần luận chưa mở',
+    items: CDVC_KHOA,
+    cta: 'Vẽ chân dung & mở bản đầy đủ',
+    slug: function () { return _currentSlug; },
+    onUnlock: function () { return _doGenerate(false); },
+  });
 }
 
-async function _doGenerate(freeRerun) {
+function _openPanel() {
   document.getElementById('birthPanel').style.display = 'none';
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('loading').style.display = 'block';
+  ['phuTheBlock', 'morphBlock', 'portraitBlock', 'luanGiaiBlock', 'lockBlock'].forEach(function (id) {
+    document.getElementById(id).style.display = 'none';
+  });
   document.getElementById('card').style.display = 'none';
-  document.getElementById('phuTheBlock').style.display = 'none';
-  document.getElementById('luanGiaiBlock').style.display = 'none';
   document.getElementById('imgLoadStatus').style.display = 'none';
-  _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDVC_STEPS);
+}
+
+function _closePanel() {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('resPanel').style.display = 'none';
+  document.getElementById('birthPanel').style.display = 'block';
+}
+
+async function _doGenerate(freeRerun) {
+  document.getElementById('lockBlock').style.display = 'none';
+  TuviPaywall._closeLock();
+  document.getElementById('loading').style.display = 'block';
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDVC_STEPS.slice(1));
   _loadingCtl.start();
 
   try {
@@ -253,7 +342,8 @@ async function _doGenerate(freeRerun) {
     // lần hỏi) → quay lại đường trả phí thay vì ném một lỗi khó hiểu.
     if (res.status === 402 && freeRerun) {
       _loadingCtl && _loadingCtl.stop();
-      showForm();
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('lockBlock').style.display = 'block';
       await TuviPaywall.requireCredits(_currentSlug, async function () { await _doGenerate(false); });
       return;
     }
@@ -261,25 +351,12 @@ async function _doGenerate(freeRerun) {
 
     _resultImgUrl = data.imageUrl;
     _lastData = data;
-    setResultImage(data.imageUrl);
-    document.getElementById('descTitle').textContent = data.spouseGender === 'nu' ? 'Người Vợ' : 'Người Chồng';
-    document.getElementById('descText').textContent = data.description;
-    var meetingBlock = document.getElementById('meetingBlock');
-    if (data.meetingContext) {
-      document.getElementById('meetingText').textContent = data.meetingContext;
-      meetingBlock.style.display = 'block';
-    } else { meetingBlock.style.display = 'none'; }
-    var luanGiaiBlock = document.getElementById('luanGiaiBlock');
-    if (data.phuTheLuanGiai) {
-      document.getElementById('luanGiaiText').innerHTML = mdBoldParas(data.phuTheLuanGiai);
-      luanGiaiBlock.style.display = 'block';
-    } else { luanGiaiBlock.style.display = 'none'; }
+    renderMeta(data);
+    renderProse(data);
     _loadingCtl && _loadingCtl.finish();
     document.getElementById('loading').style.display = 'none';
-    document.getElementById('card').style.display = 'flex';
     document.getElementById('btnEdit').style.display = '';
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
-    renderPhuThe(data.phuThe);
     _loadHistory();
 
     Shell.setContext({
@@ -322,11 +399,13 @@ async function _doGenerate(freeRerun) {
     // Xem xong mà hết Lượng → chỗ xin mời bạn (V2.3). Tự ẩn nếu còn đủ Lượng.
     _mountInviteCta();
   } catch (e) {
+    // 🔑 KHÔNG quẳng người ta về form trống như bản trước. Họ đang nhìn phần
+    // tính thử — thứ vừa xem xong và có thể vừa trả tiền cho phần sau — xoá đi
+    // là xoá luôn cái đó. Giữ nguyên màn hình, dựng lại tường, báo bằng banner.
     _loadingCtl && _loadingCtl.stop();
     document.getElementById('loading').style.display = 'none';
-    document.getElementById('resPanel').style.display = 'none';
-    document.getElementById('birthPanel').style.display = 'block';
-    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+    document.getElementById('lockBlock').style.display = 'block';
+    TuviPaywall._banner('Chưa vẽ được lần này: ' + (e.message || 'lỗi kết nối') + '. Bạn thử lại giúp.');
   }
 }
 
@@ -335,6 +414,51 @@ function mdBoldParas(text) {
   return String(text || '').split(/\n{2,}/).map(function (p) {
     return '<p style="margin:0 0 12px">' + esc(p.trim()).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') + '</p>';
   }).join('');
+}
+
+// ── Tách render theo ĐƯỜNG TIỀN, không theo bố cục (W1b) ────────────────────
+//   renderMeta  = thứ engine tra bảng ra, 0đ  → vẽ ngay ở lượt tính thử
+//   renderProse = thứ model viết/vẽ, tốn tiền → chỉ vẽ sau khi đã trả
+// Gộp một hàm là sớm muộn có một khối chữ lọt vào lượt miễn phí mà không ai
+// để ý.
+function renderMeta(data) {
+  renderPhuThe(data.phuThe);
+  // Bảng hình thể CHỈ có trong payload tính thử — bản trả tiền (và bản nằm
+  // trong portrait_cache từ trước) không mang nó. Lượt tính thử luôn chạy
+  // TRƯỚC nên khối đã dựng sẵn; ở đây bỏ qua thay vì xoá trắng nó đi.
+  if (!data.morph) return;
+  var core = data.coreStar
+    ? '<b>Chính tinh chủ:</b> ' + esc(data.coreStar) +
+      (data.coreBrightness ? ' (' + esc(data.coreBrightness) + ')' : '') +
+      (data.coreIsSatTinh ? ' — sát tinh, phá cách ngay từ gốc' : '')
+    : '';
+  document.getElementById('morphCore').innerHTML = core;
+  document.getElementById('morphRows').innerHTML = data.morph.map(function (r) {
+    var src = r.star
+      ? '<span class="src">' + (r.isCore ? 'theo chính tinh ' : 'theo phụ tinh ') + esc(r.star) +
+        (r.isSat ? ' (sát tinh — phá cách)' : '') + '</span>'
+      : '';
+    return '<tr><td class="k">' + esc(r.label) + '</td><td class="v">' + esc(r.value) + src + '</td></tr>';
+  }).join('');
+  document.getElementById('morphBlock').style.display = 'block';
+}
+
+function renderProse(data) {
+  setResultImage(data.imageUrl);
+  document.getElementById('descTitle').textContent = data.spouseGender === 'nu' ? 'Người Vợ' : 'Người Chồng';
+  document.getElementById('descText').textContent = data.description;
+  var meetingBlock = document.getElementById('meetingBlock');
+  if (data.meetingContext) {
+    document.getElementById('meetingText').textContent = data.meetingContext;
+    meetingBlock.style.display = 'block';
+  } else { meetingBlock.style.display = 'none'; }
+  var luanGiaiBlock = document.getElementById('luanGiaiBlock');
+  if (data.phuTheLuanGiai) {
+    document.getElementById('luanGiaiText').innerHTML = mdBoldParas(data.phuTheLuanGiai);
+    luanGiaiBlock.style.display = 'block';
+  } else { luanGiaiBlock.style.display = 'none'; }
+  document.getElementById('portraitBlock').style.display = 'block';
+  document.getElementById('card').style.display = 'flex';
 }
 
 function renderPhuThe(pt) {
@@ -428,6 +552,10 @@ function showForm() {
   document.getElementById('resPanel').style.display = 'none';
   document.getElementById('birthPanel').style.display = 'block';
   document.getElementById('btnEdit').style.display = 'none';
+  // Gỡ tường của lượt trước: bấm "Vẽ Lại" mà để nó nằm lại thì lá số mới hiện
+  // ra kèm bức tường tính theo lá số cũ.
+  document.getElementById('lockBlock').style.display = 'none';
+  TuviPaywall._closeLock();
   Shell.setShareable(null);
 }
 

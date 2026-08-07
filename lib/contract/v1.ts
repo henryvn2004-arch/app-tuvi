@@ -184,6 +184,15 @@ export interface ChatRequestV1 {
    * prompt-injection vẫn đóng như chú thích của `wrap` ở trên.
    */
   wrapBirthB?: BirthParams;
+  /**
+   * Lá số của NHỮNG NGƯỜI CÒN LẠI — chỉ dùng với `wrap: 'past-life-bond'` khi
+   * lượt đó có từ 3 người trở lên. `wrapBirthB` vẫn chạy như cũ cho lượt 2
+   * người, nên bản client cũ còn trong cache trình duyệt không gãy.
+   *
+   * Cũng chỉ là DỮ LIỆU LÁ SỐ, không phải prose — cửa prompt-injection vẫn đóng.
+   * Server tự chặn ở `MAX_BOND_MEMBERS`, không tin số lượng client gửi lên.
+   */
+  wrapBirths?: BirthParams[];
   client: ClientInfo;
 }
 
@@ -323,6 +332,9 @@ export function validateChatRequest(body: unknown):
   }
   if (b.wrapBirthB != null && typeof b.wrapBirthB !== 'object') {
     return { ok: false, error: 'wrapBirthB không hợp lệ' };
+  }
+  if (b.wrapBirths != null && !Array.isArray(b.wrapBirths)) {
+    return { ok: false, error: 'wrapBirths không hợp lệ' };
   }
 
   if (b.scenario != null) {

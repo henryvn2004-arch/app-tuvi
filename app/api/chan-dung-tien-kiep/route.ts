@@ -70,6 +70,79 @@ function buildProfile(birth: BirthParams, eraId?: string): BuiltProfile {
   return { ok: true, ls: lasoRes.ls, profile: computePastLife(lasoRes.ls, gender, era) };
 }
 
+/**
+ * Phần deterministic của kết quả — thứ engine TRA BẢNG ra, 0 lượt LLM, 0đ.
+ *
+ * Dùng ở HAI nơi và phải giống hệt nhau: lượt tính thử miễn phí (W1) và lượt
+ * trả tiền. Tách ra làm một hàm thay vì chép hai bản, vì lệch nhau là người
+ * dùng thấy danh xưng/nền văn minh đổi ngay lúc vừa trả tiền — mất niềm tin
+ * đúng khoảnh khắc tệ nhất.
+ */
+function metaOf(profile: PastLifeProfile) {
+  return {
+    // Danh xưng chính = chức phận do BẢNG TRA chốt (Tể tướng / Thái y / Quan
+    // án…) — ngắn, cụ thể, người dùng kể lại được. biDanh (LLM) chỉ là vế phụ
+    // hiển thị nhỏ bên dưới (Henry phản hồi: danh xưng dài kiểu mô tả thì đọc
+    // xong không nhớ nổi để mà kể cho bạn bè).
+    danhXung: profile.occupation.title,
+    characterName: profile.characterName,
+    occupation: {
+      title: profile.occupation.title,
+      desc: profile.occupation.desc,
+      star: profile.occupation.star,
+      brightness: profile.occupation.brightness || '',
+      borrowed: profile.occupation.borrowed,
+      notes: profile.occupation.notes,
+      tier: profile.occupation.tier,
+      tierLabel: profile.occupation.tierLabel,
+      tierBreakdown: profile.occupation.tierBreakdown,
+      source: profile.occupation.source,
+    },
+    menh: profile.readouts.menh,
+    thanCungName: profile.thanCungName,
+    portraitAge: profile.arc.portraitAge,
+    era: { id: profile.era.id, label: profile.era.label, ageLabel: profile.era.ageLabel },
+  };
+}
+
+/**
+ * W1b — lượt TÍNH THỬ: chạy tầng deterministic rồi dừng.
+ *
+ * Hàm RIÊNG chứ không phải một cờ trong runPost, đúng lý do đã ghi ở 3 tool
+ * cẩm nang: đây là chốt chặn thanh toán của một tool đang bán: trộn hai đường
+ * vào một hàm rồi tin vào một câu `if` là cách nhanh nhất để một hôm nào đó
+ * đường trả tiền lọt qua cửa. Trong này KHÔNG có `toolPaymentDenied`,
+ * `llmTextFull`, `generatePortraitImage`, `insertHistoryRow`,
+ * `putCachedPortrait`, `railFreeGrant`, `refundIfSystemFailure`.
+ *
+ * KHÔNG đòi đăng nhập — cả điểm của W1 là bỏ tường trước khi người ta thấy
+ * chất lượng, mà màn đăng nhập cũng là một bức tường. Chi phí chỉ là CPU lập
+ * lá số.
+ *
+ * Bày ra: danh xưng · tên nhân vật · nền văn minh · 5 hồi (nhãn giai đoạn +
+ * vai trò kịch, KHÔNG có chữ) · cơ sở trong lá số. Khoá: mô tả nhân vật, chữ
+ * của 5 hồi, lời kết, bức tranh — tức đúng phần tốn tiền model.
+ */
+async function runPreview(request: NextRequest) {
+  const body = await parseBody(request);
+  const birth = body.birth as BirthParams | undefined;
+  if (!birth) return err('Thiếu thông tin ngày sinh.', 400);
+
+  const built = buildProfile(birth, body.era ? String(body.era) : undefined);
+  if (!built.ok) return err(built.error, 400);
+  const { profile } = built;
+
+  return ok({
+    success: true,
+    preview: true,
+    ...metaOf(profile),
+    // Khung 5 hồi: nhãn giai đoạn + vai trò kịch do ENGINE chốt (đỉnh cao /
+    // biến cố rơi vào hồi nào là suy từ 9 đại vận). Cố ý KHÔNG kèm title/text —
+    // đó là phần LLM viết, tức phần đang bán.
+    acts: profile.arc.acts.map((a) => ({ index: a.index, stage: a.stage, role: a.role })),
+  });
+}
+
 // ── Pha 1: truyện ───────────────────────────────────────────────────────
 interface StoryAct {
   title?: string;
@@ -196,32 +269,13 @@ async function handleStory(birth: BirthParams, userId: string, key: string, eraI
 
   const payload = {
     success: true,
-    // Danh xưng chính = chức phận do BẢNG TRA chốt (Tể tướng / Thái y / Quan
-    // án…) — ngắn, cụ thể, người dùng kể lại được. biDanh chỉ là vế phụ hiển
-    // thị nhỏ bên dưới (Henry phản hồi: danh xưng dài kiểu mô tả thì đọc xong
-    // không nhớ nổi để mà kể cho bạn bè).
-    danhXung: profile.occupation.title,
+    // Phần deterministic đi qua metaOf() — CÙNG hàm lượt tính thử dùng, nên
+    // danh xưng/nền văn minh không thể đổi giữa hai lượt.
+    ...metaOf(profile),
     biDanh: String(parsed.biDanh || ''),
-    characterName: profile.characterName,
     moTaNhanVat: String(parsed.moTaNhanVat || ''),
     acts,
     ketLuan: parsed.ketLuan || '',
-    occupation: {
-      title: profile.occupation.title,
-      desc: profile.occupation.desc,
-      star: profile.occupation.star,
-      brightness: profile.occupation.brightness || '',
-      borrowed: profile.occupation.borrowed,
-      notes: profile.occupation.notes,
-      tier: profile.occupation.tier,
-      tierLabel: profile.occupation.tierLabel,
-      tierBreakdown: profile.occupation.tierBreakdown,
-      source: profile.occupation.source,
-    },
-    menh: profile.readouts.menh,
-    thanCungName: profile.thanCungName,
-    portraitAge: profile.arc.portraitAge,
-    era: { id: profile.era.id, label: profile.era.label, ageLabel: profile.era.ageLabel },
   };
   // Pha `story` KHÔNG có dòng lịch sử riêng (`past_life_portraits` chỉ ghi ở
   // pha `image`) → `row: null`.
@@ -424,6 +478,12 @@ export async function GET(request: NextRequest) {
 
 // S1 (track COO) — bọc để tự ghi lượt chạy thành công/hỏng vào `events`.
 // Chỉ QUAN SÁT: ngoại lệ vẫn ném lại nguyên vẹn, Response trả về không đổi.
+//
+// Rẽ sang lượt tính thử NGAY TẠI ĐÂY, trước cả withToolOutcome: lượt tính thử
+// không phải một lượt chạy tool (không sinh gì, không trừ gì) — ghi nó vào sổ
+// lượt chạy là thổi mẫu số của tỉ lệ hỏng.
 export async function POST(request: NextRequest) {
+  const url = new URL(request.url);
+  if (url.searchParams.get('preview') === '1') return runPreview(request);
   return withToolOutcome('chan-dung-tien-kiep', () => runPost(request));
 }

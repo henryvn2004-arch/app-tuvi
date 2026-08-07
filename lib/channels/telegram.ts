@@ -40,21 +40,40 @@ export async function tgSendChatAction(chatId: number | string, action = 'typing
 }
 
 /** Gửi tin nhắn, tự cắt nếu vượt 4096 ký tự. Plain text (không parse_mode
- *  để tránh lỗi 400 khi markdown của LLM không hợp lệ với Telegram). */
-export async function tgSendMessage(chatId: number | string, text: string): Promise<void> {
-  if (!TG_TOKEN) return;
+ *  để tránh lỗi 400 khi markdown của LLM không hợp lệ với Telegram).
+ *
+ *  Trả về `true` CHỈ KHI Telegram xác nhận nhận đủ MỌI đoạn. Bản cũ trả
+ *  `void` và không kiểm `response.ok` — một lỗi HTTP (chat_id sai, bot bị
+ *  chặn/gỡ khỏi chat, token hết hạn...) không ném exception (fetch không
+ *  throw khi status 4xx/5xx) nên bị nuốt im lặng, khiến caller tưởng đã gửi
+ *  trong khi Telegram đã từ chối. Vẫn KHÔNG throw ra ngoài (best-effort —
+ *  một lượt gửi hỏng không được phép làm sập luồng gọi nó), chỉ đổi từ
+ *  "im lặng coi như xong" sang "trả về đúng sự thật + log lỗi để chẩn". */
+export async function tgSendMessage(chatId: number | string, text: string): Promise<boolean> {
+  if (!TG_TOKEN) {
+    console.error('[tgSendMessage] thiếu env TELEGRAM_BOT_TOKEN, không gửi được');
+    return false;
+  }
   const chunks = splitText(text || '…', TG_MSG_LIMIT);
+  let ok = true;
   for (const chunk of chunks) {
     try {
-      await fetch(`${TG_API}/sendMessage`, {
+      const r = await fetch(`${TG_API}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ chat_id: chatId, text: chunk, disable_web_page_preview: true }),
       });
-    } catch {
-      /* best-effort */
+      if (!r.ok) {
+        const body = await r.text().catch(() => '');
+        console.error(`[tgSendMessage] Telegram từ chối (HTTP ${r.status}) chat_id=${chatId}: ${body.slice(0, 500)}`);
+        ok = false;
+      }
+    } catch (e) {
+      console.error(`[tgSendMessage] lỗi mạng khi gửi tới chat_id=${chatId}:`, e);
+      ok = false;
     }
   }
+  return ok;
 }
 
 /** Gửi tin nhắn, TRẢ VỀ message_id để edit dần (tiến trình / câu trả lời). */

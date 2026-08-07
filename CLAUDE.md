@@ -5,7 +5,437 @@
 
 ---
 
-## 📉 D1 — Phễu theo tool, và 🔴 BA HỆ TÊN TOOL ĐANG LỆCH NHAU (2026-08-07, PR này)
+## 🔔 R1a — NỐI LẠI kênh nhắc hằng ngày (2026-08-07, PR này)
+
+Henry duyệt sau khi tao báo: mục R1 của backlog (*"nhắc đúng lúc, cá nhân hoá
+theo lá số, và một lý do để mở ra"*) **giả định một tệp người nhận không tồn
+tại**. Đo trước khi viết một dòng nào:
+
+| | |
+|---|---:|
+| Tài khoản | 60 |
+| Đăng ký web-push (`push_subscriptions`) | **2** |
+| Token FCM (`push_tokens`) | **0** |
+| Lượt `cron-daily-push` từng ghi sổ | **0** |
+| Liên kết Telegram | 1 (của Henry) |
+
+### 🔴 BA lỗi chồng nhau — không cái nào là "viết tin nhắn hay hơn"
+
+**1. `public/sw.js` KHÔNG có handler `push`.** Đây là lỗi nặng nhất và im lặng
+nhất. `pwa-push.js` khai `userVisibleOnly: true` — tức đã HỨA với trình duyệt
+rằng mỗi lượt push sẽ hiện một thông báo. Không có handler thì Chrome tự bù bằng
+thông báo mặc định của NÓ (*"Trang này đã được cập nhật ở chế độ nền"*), chạm vào
+không đi đâu.
+- 🔑 **Nên kênh này "chạy thành công" suốt hai tháng trên giấy tờ**: edge function
+  báo `sent=2`, cột `last_sent` cập nhật đúng 00:00Z mỗi sáng. **"Gửi xong" và
+  "hiện được" là HAI việc — log của bên gửi không chứng minh được vế thứ hai.**
+
+**2. Nội dung LẶP NGUYÊN VĂN mỗi sáng.** Edge function tra một bảng chép tay 24
+dòng (`VAN_HAN`) theo **can chi NĂM SINH** ⇒ mỗi người đúng MỘT câu, mãi mãi, và
+câu đó không nói gì về ngày hôm nay. Người đăng ký từ 12/06 đã nhận cùng một câu
+**~56 lần**.
+
+**3. Không có đường bật ở nơi có người thật.** `pwa-push.js` chỉ được nạp bởi
+`/la-so/[slug]` — 438K trang SEO mà GSC đo **0 nhấp/28 ngày**. Khu `/app` không
+có gì. ⚠️ **Đính chính bản báo cáo đầu của tao**: tao nói "không trang nào nạp
+`pwa-push.js`" vì chỉ `grep` trong `public/`; nó CÓ được nạp, chỉ là ở đúng chỗ
+không ai tới.
+
+**4 (bắt kèm). `/app` KHÔNG đăng ký service worker.** `nav.js` ở chế độ
+`data-icons-only` `return` sớm — TRƯỚC đoạn đăng ký SW ở cuối file. Mà
+`navigator.serviceWorker.ready` là Promise **không bao giờ resolve** khi chưa có
+đăng ký nào ⇒ bản cũ `await` thẳng vào đó là treo im lặng, không lỗi, không dấu
+vết. Nay `pwa-push.js` tự đăng ký + có hạn giờ 8 giây.
+
+### Cách vá
+- **`lib/push/daily-message.ts` — NGUỒN DUY NHẤT của nội dung**, dùng chung cho
+  cả web-push lẫn FCM. Vẫn **0 lượt LLM, 0đ** (tra bảng engine ngày-tốt, cùng
+  nguồn với thẻ "Vận hôm nay" ⇒ tin nhắn và thẻ không bao giờ nói khác nhau).
+- **Đảo vai Next ↔ edge**: Next DỰNG nội dung, edge CHỈ ĐI PHÁT. Engine là TS
+  trong repo, edge là Deno tách biệt — chép engine sang đó là dựng bản thứ hai
+  rồi trôi khỏi nhau (đúng bẫy can chi ngày). Ngược lại phần ký VAPID + mã hoá
+  payload thì để nguyên bên Deno: gói `web-push` đã chạy tốt, tự cài lại bằng
+  crypto thô trong Node là ~150 dòng ECDH dễ sai thầm lặng.
+- **Tương thích HAI CHIỀU, không có thứ tự deploy nào làm hỏng**: edge cũ nhận
+  body mới → bỏ qua; edge mới không có body → lùi về một câu chung (KHÔNG lùi về
+  bảng cũ).
+- **Cá nhân hoá bằng phép so chuỗi**: Next trả kèm `xungChi`, edge so với địa chi
+  năm sinh đã lưu → thêm dòng *"⚠ Hôm nay xung tuổi X"*. Không phải lập lại lá số
+  cho từng người ở tầng gửi.
+- **`canChiNam` THÊM vào `VanNgayCaNhan`** thay vì để trang tự suy từ năm sinh:
+  quy đổi năm → can chi là cổ pháp, có bản thứ hai ở client là có ngày hai bản
+  trôi khỏi nhau.
+- **Hỏi quyền SAU khi đã giao giá trị**, 6 giây sau khi thẻ dựng xong, và **chỉ
+  với người đã có lá số** (chỉ họ mới nhận được phần đáng giá nhất là cảnh báo
+  xung tuổi). Xin quyền lúc vào trang là cách chắc nhất bị bấm "Chặn" — mà "Chặn"
+  trên trình duyệt là **VĨNH VIỄN**, không có đường hỏi lại.
+- **`tag: 'van-ngay'` cố định** → lượt sau THAY lượt trước. Nhắc hằng ngày mà dồn
+  7 thông báo trên màn hình khoá là cách nhanh nhất bị tắt.
+- **Tự lành**: đã bật rồi thì mỗi ngày đồng bộ lại dòng dưới DB một lần — dòng đó
+  bị xoá khi trình duyệt trả 410, và người đăng nhập SAU khi đăng ký thì `user_id`
+  vẫn đang NULL (cả 2 dòng trên prod đều NULL).
+- **3 event mới** (`push_optin_shown` · `push_optin_result` · `push_open`) — TÁCH
+  nhau vì mỗi bậc hỏng theo một kiểu khác hẳn: không ai thấy lời mời (đặt sai
+  chỗ) · thấy mà không bật (câu chữ) · bật mà không mở (nội dung rỗng — đúng bệnh
+  vừa vá). Gộp lại thì cả ba trông giống nhau: một con số 0.
+- **`.deno.ts` là QUY ƯỚC MỚI**: `tsconfig.json` loại `**/*.deno.ts` khỏi `tsc`.
+  Mã Deno dùng `Deno.*` + import `npm:`/`jsr:` nên nằm trong lượt typecheck của
+  Next là 8 lỗi chắc chắn. Bản edge function nay có mặt trong repo
+  (`_patches/edge-send-daily-push.deno.ts`) — trước đó nó CHỈ tồn tại trên
+  dashboard Supabase, nên không ai đọc lại được lúc đi tìm nguyên nhân.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices` + `check:groups` sạch · engine **185 pass** · `node --check`
+sw.js + pwa-push.js + 3 khối script nội tuyến.
+- **13 bất biến trên MODULE THẬT, 365 ngày**: luôn có tiêu đề/thân · 0 rò
+  `undefined`/`NaN`/`[object`/`null` · 0 tin gợi ý "an táng" · thân ≤160 ký tự
+  (dài nhất 115) · `xungChi` khớp ĐÚNG engine · **7 ngày liên tiếp ra 7 câu KHÁC
+  nhau** và cả năm **364 câu phân biệt** (canh đúng lỗi vừa vá — bản cũ có 24 câu
+  cố định vĩnh viễn) · deterministic · ĐỐI CHỨNG ngày kỵ thì nêu "trùng …" chứ
+  không gợi ý việc.
+- **47 ca Playwright trên FILE THẬT**: chạy NGUYÊN VĂN nguồn `sw.js` trong một
+  global giả (`new Function('self','caches', src)`) — có đủ 2 handler · 3 lượt
+  push ra 3 thông báo · **ĐỐI CHỨNG payload không phải JSON và push rỗng vẫn phải
+  HIỆN**, không im lặng · có tab sẵn thì điều hướng tab đó, không có thì mở tab
+  mới. Trên `pwa-push.js` thật: tự đăng ký SW · gửi `Authorization` khi đã đăng
+  nhập · ghi CẢ ca hỏng (`denied` / `error`) · **5 ca PHẢI IM LẶNG** (vừa hỏi 3
+  ngày trước · đã bị chặn vĩnh viễn · **iOS tab thường không có `Notification`** ·
+  đã bật rồi · vừa đồng bộ 1 tiếng trước) · **SW không bao giờ sẵn sàng → KHÔNG
+  treo**. Trên **trang `/app` THẬT**: chưa tới 6 giây chưa mời · sau đó mời và
+  nêu đúng can chi từ engine · ĐỐI CHỨNG chưa có lá số thì KHÔNG mời · `push_open`
+  bắn khi vào từ thông báo và KHÔNG bắn khi vào thẳng · 390px không tràn ngang.
+- 🪤 **Ba ca đỏ, cả ba là lỗi TEST chứ không phải code**: (a) đếm dồn qua hai
+  lượt bấm thông báo nên `opened === 0` đỏ oan — phải chốt số đo giữa chừng;
+  (b) catch-all `**/api/**` đăng ký SAU nên nuốt luôn stub `/api/van-ngay` (đúng
+  bẫy đã ghi ở track Duyên Nợ — **catch-all phải đứng TRƯỚC**); (c) stub tầng SW
+  bằng `serviceWorkers:'block'` thì `ready` không bao giờ resolve.
+- 🐞 **Một lỗi THẬT do test bắt**: `push_open` gọi `Track` khi `shell.js` còn
+  đang nạp `track.js` bất đồng bộ → `ReferenceError` rơi vào `catch` và event im
+  lặng biến mất. Chỉ lộ vì `push_optin_shown` (bắn 6 giây sau) thì có mà
+  `push_open` thì không. Nay xếp hàng chờ.
+
+### 🔑 VIỆC TAY HENRY — chưa làm thì tin nhắc vẫn là bản cũ
+Sau khi deploy, deploy lại edge function `send-daily-push` bằng nội dung
+`_patches/edge-send-daily-push.deno.ts` (Supabase Dashboard → Edge Functions,
+hoặc Claude làm qua MCP). Không làm cũng KHÔNG hỏng gì — service worker đã hiện
+được thông báo, chỉ là chữ vẫn lặp lại như cũ.
+
+### CÒN LẠI
+- **iOS chỉ nhận web push khi đã "Thêm vào màn hình chính"** — không có cách nào
+  lách. Người dùng iPhone mở bằng Safari thường sẽ không thấy lời mời (đã có ca
+  test canh việc đó thoát êm thay vì ném lỗi).
+- **Chưa gửi thử một lượt push THẬT tới máy thật** — mới verify tới tầng handler
+  và tầng nội dung. Chỗ duy nhất còn chưa chứng minh được là chuỗi VAPID/mã hoá
+  của edge function, mà phần đó không đổi.
+- Quy mô nhỏ: 2 người đang đăng ký. Con số cần nhìn sau 1–2 tuần là
+  **`push_optin_shown` → `push_optin_result=granted` → `push_open`**; tỉ lệ bật
+  dưới ~15% thì vấn đề nằm ở câu chữ lời mời, còn bật cao mà không ai mở thì vấn
+  đề nằm ở nội dung tin nhắc.
+- Kênh **Telegram** (bot đã chạy thật) vẫn chưa được dùng để nhắc — đó là đường
+  duy nhất không phụ thuộc quyền thông báo của trình duyệt, nhưng phải mời liên
+  kết trước nên là một bậc rơi khác.
+
+---
+
+## 🗂️ Ba bề mặt đọc chung MỘT cách xếp công cụ (2026-08-07, PR #441)
+
+Henry: *"hình như mới chỉ grouping theo nỗi lo trên website cho tool standalone,
+chứ trong shell chưa làm… thiết kế sao để cái grouping này là master grouping,
+sẽ consistent ở mọi chỗ và sau này chỉnh thì chỉnh 1 chỗ này thôi… có tạo tool
+mới, thì dựa trên use case tool sẽ auto dc group vào 1 group nào đó luôn"*.
+
+### 🔴 BA mảng chép tay, không khớp nhau
+| Bề mặt | Xếp theo | Số công cụ |
+|---|---|---:|
+| `/cong-cu` | nhu cầu (6 nhóm) | 58 |
+| Dashboard `/app` | bộ môn | **34** |
+| Sidebar Luận Đường | bộ môn | **34** |
+Cùng một sản phẩm nói hai kiểu với cùng một người, và **24 công cụ tàng hình**
+trong khu /app mà không có gì báo.
+
+### Cách dựng
+- **Bảng `tool_groups`** (`key · title · subtitle · icon · sort_order · enabled ·
+  default_categories`) + cột `app_path`/`page_path` trên `tool_pricing`. Sửa
+  trong Admin, **không cần deploy**, ba bề mặt tự đổi trong ≤2 phút.
+- **Tự xếp nhóm cho tool MỚI qua `default_categories`** — công cụ chưa khai
+  `need_tags` thì suy từ `category`. ⚠️ **CỐ Ý KHÔNG đoán từ tên/mô tả**: đoán
+  bằng từ khoá thì sai IM LẶNG, mà nhóm sai còn tệ hơn không nhóm.
+- 🐞 **Tao đặt bảng mặc định vào `app_config` trước, và đó là lỗi thiết kế**:
+  `app_config` chỉ có policy `admin_read` ⇒ trình duyệt KHÔNG đọc được. Luật chạy
+  đúng ở server mà chết ở đúng nơi cần nó là giao diện. Chuyển vào chính
+  `tool_groups`.
+- **`scripts/check-no-hardcoded-groups.mjs`** chặn tái phát (3 luật, chạy trong
+  CI lint). 🪤 Bản đầu báo nhầm `TAM_HOP_GROUPS` (bảng tam hợp địa chi của
+  engine) → siết lại: phải là mảng của OBJECT có khoá kiểu nhóm. Bộ dò kêu oan
+  vài lần là người ta tắt nó đi.
+- **Sidebar fail-safe**: nhớ bản nav gần nhất trong localStorage, đọc hụt bảng
+  thì dựng lại từ đó — nhưng **CỐ Ý không nhớ GIÁ** (giá cũ nguy hiểm hơn ô đang
+  tải, đúng luật `check:prices`).
+
+### 🔴 Bài học đắt nhất: DỮ LIỆU đi SAU giao diện, không bao giờ đi trước
+Tao áp 10 khoá nhóm mới lên prod trong khi bản đang chạy còn lọc theo 6 khoá cũ
+⇒ **cả 58 công cụ rơi vào "Khác" trong ~4 phút**. Lùi ngay, verify 0 khoá mới
+còn sót. Vì thế chia **HAI LƯỢT**: lượt 1 code (giao diện đọc DB, giữ nguyên 6
+nhóm cũ — có test A/B chứng minh lưới công cụ **không đổi một ô**), lượt 2 thuần
+SQL đổi sang 10 nhóm, lùi được bằng một lệnh.
+
+### Kết quả
+6 → **10 nhóm theo TÌNH HUỐNG**. Nhóm to nhất từ 38% xuống **21%**. Ba nhóm CỐ Ý
+không mở (Tài chính · Tâm lý · Sức khoẻ) vì không có công cụ nào chuyên về chúng
+— mở ra là hứa thứ không giao.
+
+---
+
+## 👥 Duyên Nợ Tiền Kiếp: 2 → tối đa 5 lá số (2026-08-07, PR trước)
+
+Henry: *"Làm dc nhiều lá số ko nhỉ? Cho user add thêm. Default là 2 đúng rồi
+nhưng mà có option để add thêm."* → chốt **1 truyện + 1 tranh cho CẢ NHÓM**,
+**trần 5**, mặc định vẫn 2.
+
+### 🔴 Ba chỗ khoá cứng ở con số 2 (không phải "thêm ô nhập" là xong)
+- **Ảnh**: prompt ghi thẳng `EXACTLY TWO figures`, `LEFT/RIGHT FIGURE`, và cả 7
+  dàn cảnh `BOND_SCENE_EN` viết theo thế HAI người ("đứng sát vai", "đối mặt qua
+  một khoảng trống", "thầy nửa bước trước trò nửa bước sau"). Không cái nào nống
+  lên 3+ được.
+- **Truyện**: 4 hồi kể về MỘT mối quan hệ. Ba người thì không có "một" mối nào.
+- **Khoá cache**: `normalizeBondPair` sắp đúng hai lá số.
+
+### 🔑 BẤT BIẾN CHI PHỐI CẢ PR: n=2 KHÔNG ĐƯỢC ĐỔI MỘT BYTE
+Đó là đường đang bán và phần lớn lượt dùng. Nên `n === 2` vẫn đi qua ĐÚNG các
+hàm cũ, và có **test A/B với bản biên dịch từ git HEAD**: prompt truyện · prompt
+ảnh cuối · prompt tả mặt · cả hai system prompt · khoá cache · nền văn minh —
+**trùng khít trên 690–872 ca**. Không có bất biến này thì mọi thay đổi cho nhóm
+đều là một canh bạc trên tool chính.
+
+### Cách dựng
+- **`computeGroupBond(members)`** — nền chung cho N (`pickSharedEraForGroup`,
+  sắp seed rồi hash, n=2 ra y hệt bản cũ) · N profile · **đủ N(N−1)/2 cặp** ·
+  một **cặp TRỤC**. Mỗi cặp đi qua CHÍNH `computePastLifeBond` chứ không chép
+  lại luật — một định nghĩa duy nhất cho "mối duyên".
+- ⚠️ **`SPINE_WEIGHT` là lựa chọn CỦA TRANG, không phải cổ pháp** (cổ pháp không
+  nói duyên nào "mạnh hơn"). Xếp theo mức gánh được một truyện 4 hồi. Mọi giá
+  trị PHẢI khác nhau, không thì trục truyện nhảy khi thêm bớt người. Không hiện
+  con số này ra cho người đọc.
+- **Khoá cache nhóm tương thích ngược**: `lasoKey(sorted[0], 'bond|' + khoá
+  những người sau)` — với n=2 rút về đúng công thức cũ. Lệch một ký tự là toàn
+  bộ `portrait_cache` mồ côi, người đã trả tiền bị tính lại **và** đốt thêm một
+  lượt model.
+- **Lưới cặp hiện trên trang + trong bản chia sẻ** (deterministic, 0đ). Nhóm 2
+  người CỐ Ý không hiện — cặp duy nhất đã nằm ngay đầu trang, bày lại là nói hai
+  lần.
+- **Trần 5 nằm ở ENGINE** (`MAX_BOND_MEMBERS`), route re-export. Chặn ở một tầng
+  duy nhất thì một đường gọi mới quên kiểm là mở toang phần tốn CPU nhất.
+- **Chi phí gần như PHẲNG**: 1 lượt LLM + 1 lượt ảnh bất kể N. Giá giữ nguyên
+  một mức (sửa trong Admin nếu muốn) — nhóm càng đông càng lợi cho viral.
+- **Rail**: `wrapBirths[]` mới trong contract (`wrapBirthB` vẫn chạy cho lượt 2
+  người). `groupRailWrapper` có luật cứng phủ **TẤT CẢ** những người còn lại +
+  cấm xếp hạng thành viên — nhóm đông thì càng dễ bị hỏi sâu về người khác, mà
+  rail chỉ có lá số người đang ngồi đây.
+- **Giao diện**: nút "+ Thêm người" tới 5, nút ✕ **chỉ từ người thứ ba** (2 là
+  mức tối thiểu của tool). Bỏ ô giữa thì **dựng lại từ đầu** và bê dữ liệu sang
+  — prefix của `TuviForm` gắn vào id phần tử, gỡ ô giữa mà giữ nguyên ô sau là
+  nhãn "Người thứ ba/tư" trôi lệch khỏi ô nhập thật.
+- Client vẫn gửi kèm `birthA/birthB` và server vẫn trả `nhanVatA/B`: bản cũ còn
+  trong cache trình duyệt lẫn dòng cache cũ đều phải đọc được trong lúc deploy.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices` sạch · engine **185 pass** · `node --check` 2 khối script nội tuyến.
+- **T5 — 872 cặp A/B với bản biên dịch từ git HEAD**: khoá cache · thứ tự sắp ·
+  `selfIsA` · nền văn minh **0 lệch**; `computeGroupBond(N=2)` trùng khít
+  `computePastLifeBond`. **1.200 hoán vị nhóm 3–5**: khoá · thứ tự · nền **0 lệch**.
+- **T6 — 690 cặp**: 3 prompt + 2 system prompt của bản 2 người **trùng khít**.
+  45 nhóm 3–5: đủ N(N−1)/2 cặp, prompt gọi đủ tên, đúng số khối FIGURE, mỗi
+  người đúng đoạn tả mặt của mình, **0 rò thuật ngữ tử vi vào prompt ảnh**.
+- **T7 — 38 ca Playwright trên TRANG THẬT** (ca 2 / 3 / 5 người, stub API cố ý
+  **ĐẢO NGƯỢC** thứ tự để đúng ca xấu nhất của mapping): mặc định đúng 2 ô ·
+  payload gửi đúng N lá số · mỗi thẻ nhân vật nêu ĐÚNG lá số đẻ ra nó · lưới cặp
+  đủ 1/3/10 ô và nhóm 2 người không hiện · chip hỏi đúng nhân vật của ô nhập thứ
+  nhất · bản chia sẻ đủ N dòng lá số kèm tên nhân vật + khối lưới cặp · bấm thêm
+  quá tay dừng ở 5 và nút khoá lại · bỏ ô giữa thì dữ liệu không trôi và nhãn
+  dựng lại đúng · 0 lỗi JS.
+- **Trần ở engine**: 1 người → chặn, 6 và 20 người → chặn, 5 → 10 cặp.
+
+### CÒN LẠI
+- **Chưa gen ảnh THẬT cho nhóm 3–5** — mới verify tới tầng prompt. Chỗ nhiều khả
+  năng phải chỉnh là `GROUP_SCENE_EN` và câu "evenly spaced left to right" nếu
+  model dựng người chồng lên nhau hoặc làm nhoè mặt ở nhóm 5.
+- **Bảng lịch sử vẫn chỉ 2 cột nhân vật** → nhóm ghi cặp TRỤC. Cố ý không mở
+  cột: một migration + việc tay đổi lấy vài chữ trên dải ảnh nhỏ cuối trang.
+- Giá vẫn một mức cho mọi N. Nếu thấy nhóm đông chiếm nhiều lượt thì cân nhắc
+  tính theo đầu người — nhưng `tool_pricing` một tool một giá, phải sửa code.
+
+---
+
+## 🖼️ W1b — TÍNH THỬ MIỄN PHÍ cho 2 TOOL CHÂN DUNG (2026-08-07, PR trước)
+
+Henry: *"Ok làm đi"*. Mục này **do chính số của D1 chỉ ra**, không phải thứ tự
+backlog — và nó lật ngược một câu backlog tự viết ở vòng W1 (*"2 tool chân dung
+chưa có tính thử… ở đó giá trị chính LÀ bức ảnh, cho xem trước là cho không
+hàng"*).
+
+### 🔴 Câu đó SAI một nửa, và D1 đo ra chỗ sai
+| Tool | Mở | Chạy | Rơi |
+|---|---:|---:|---:|
+| Chân Dung Vợ Chồng | 10 | 1 | **90%** |
+| Chân Dung Tiền Kiếp | 5 | 1 | **80%** |
+| Luận Giải (đối chứng) | 24 | 24 | 0% |
+
+Rơi ở **bước bấm nút** — chưa tới paywall, chưa tới chất lượng ảnh. Người ta mở
+trang, thấy form ngày sinh + nút trừ 20–25 Lượng, rồi bỏ đi.
+
+### 🔑 Và preview vẫn **0đ** — chính chú thích đầu route đã nói sẵn
+`app/api/chan-dung-tien-kiep/route.ts` mở đầu bằng *"cả hai [pha] chỉ ăn dữ liệu
+deterministic từ `computePastLife()`"*. Tức tầng đắt tiền nằm ở LLM + `gpt-image`,
+còn danh xưng / nền văn minh / khung 5 hồi / bảng hình thể là **tra bảng thuần**.
+⇒ Không cần nghĩ "cách khác" như backlog đề nghị: đúng khuôn W1 là chạy được.
+
+### Bày gì / khoá gì
+- **Tiền kiếp** bày: danh xưng (1 trong 1.150) · nền văn minh + nhãn thời đại ·
+  dòng lá số · khung 5 hồi kèm nhãn **đỉnh-cao/biến-cố** · **Cơ Sở Trong Lá Số**.
+  Khoá: bức tranh · mô tả nhân vật · chữ của 5 hồi · lời kết · bí danh.
+- **Vợ chồng** bày: cung Phu Thê (chính tinh/phụ tinh/cách cục/ý nghĩa) + **bảng
+  hình thể** — mỗi nét kèm SAO quyết định nó, sát tinh đánh dấu *"phá cách"*.
+  Khoá: bức tranh · mô tả · hoàn cảnh gặp gỡ · luận giải Phu Thê.
+
+### 🔑 Ba quyết định đáng nhớ
+1. **Khối "Cơ Sở Trong Lá Số" của tiền kiếp SỐNG LẠI — nhưng CHỈ ở lượt chưa trả
+   tiền.** Nó từng bị gỡ hẳn (Henry: thuật ngữ tử vi lẫn vào phần đọc chính khiến
+   nó nghe như bản luận giải chứ không phải một câu chuyện) — quyết định đó GIỮ
+   NGUYÊN, `renderProse` ẩn nó đi. Ở lượt chưa trả tiền vai của nó **ngược lại**:
+   đây là bằng chứng DUY NHẤT người ta có để tin engine đọc đúng lá số mình.
+2. ⚠️ **KHÔNG bày `spouseAge`.** `pickMarriageAgeAnchor` có `Math.random()` nên
+   số ở lượt tính thử sẽ KHÁC số sau khi trả tiền. Bày một con số rồi đổi nó ngay
+   sau khi thu tiền là tự tay phá thứ W1 sinh ra để xây. Có ca test canh.
+3. **Nhãn hình thể `MORPH_FIELD_LABELS` + `morphRows()` EXPORT từ engine**, không
+   để trang chép bản thứ hai: thêm một field là giao diện im lặng hiện `bodyBuild`
+   thay vì "Vóc dáng", và tri thức "sao nào là lục sát" không rò ra client.
+
+### Giữ nguyên khuôn W1
+`runPreview()` là **hàm RIÊNG**, rẽ nhánh ngay tại `POST` **trước cả
+`withToolOutcome`** (lượt tính thử không phải một lượt chạy tool — ghi vào sổ là
+thổi mẫu số tỉ lệ hỏng). Không auth. `renderMeta`/`renderProse` tách theo **ĐƯỜNG
+TIỀN, không theo bố cục**. Lỗi ở lượt trả tiền **không quẳng về form trống** nữa.
+**0 dòng sửa trong `tuvi-paywall.js`** — `lockPreview`/`isFreeRerun` W1 dựng đã đủ,
+nên không phải bump `?v=`.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier --check .` sạch
+· `check:prices` sạch · engine **185 pass** · `node --check` 4 khối script.
+**40 bất biến ĐỌC THẲNG MÃ NGUỒN**: `runPreview` không chứa một trong 9 ký hiệu
+cấm (thêm `generatePortraitImage` so với W1) · không đòi auth · nhưng PHẢI chạy
+engine thật · **4 ca ĐỐI CHỨNG đường trả tiền PHẢI có** chốt thanh toán + model
+ảnh + ghi cache + auth · rẽ nhánh trước `withToolOutcome` · `renderMeta` không
+đọc một khoá chữ nào và `renderProse` đọc đủ.
+**12 bất biến trên MODULE THẬT, 2.880 lá số**: luôn có danh xưng (636 danh xưng
+khác nhau) · luôn 5 nền văn minh · luôn đúng 5 hồi và mọi hồi có nhãn · 0 rò
+`undefined`/`NaN`/`[object` ở cả hai payload · nhãn hình thể luôn tiếng Việt
+(không lọt khoá thô) · **cờ `isSat` khớp đúng bộ lục sát tinh**.
+**79 ca Playwright trên 2 TRANG THẬT**: bấm nút → **0 lượt `action=deduct`**, POST
+duy nhất là `preview=1`, không modal chặn · bày đủ danh xưng/nền/khung 5 hồi/cơ
+sở lá số/bảng hình thể · **quét toàn bộ text kết quả: 0 câu chữ model lọt** ·
+tường liệt kê đúng tên khối khoá + số dư + giá · `preview_shown` bắn đúng tool và
+`unlock_click` CHƯA bắn · bấm mở → có `deduct`, có POST đường trả tiền, có
+`unlock_click`, tường biến mất, chữ + tranh hiện, **phần miễn phí còn nguyên** ·
+**khách CHƯA đăng nhập vẫn tính thử được** · đã trả tiền từ trước → mở thẳng,
+không tường, không trừ Lượng · thiếu Lượng → *"còn thiếu N"*, **không bị quẳng về
+form** · 390px không tràn ngang.
+- 🪤 Ca đỏ duy nhất là **lỗi TEST**: `/api/track` gửi khoá `type`, không phải
+  `event_type` — bản kiểm đọc nhầm khoá nên báo "không bắn event".
+
+### CÒN LẠI
+- **2 trang standalone `/tools/chan-dung-*.html` vẫn là tường cũ.** Chúng không
+  nạp `shell.js` nên không nằm trong phễu D1, và CTA từ link chia sẻ vốn đổ về
+  `/app` — nhưng ai đáp xuống từ tìm kiếm thì vẫn gặp bản cũ.
+- Hai cột tính thử/bấm mở của 2 tool này **mới có số từ hôm nay**. Con số cần
+  nhìn là tỉ lệ **mở → tính thử** có nhảy khỏi mức 10–20% hay không.
+
+---
+
+## 🧑‍🤝‍🧑 Duyên Nợ Tiền Kiếp: nhân vật nào là lá số nào (2026-08-07, PR trước)
+
+Henry: *"phần luận giải phải bổ sung thêm là nhân vật nào gắn với lá số nào để
+user biết"* — kèm một link chia sẻ thật.
+
+### 🔴 Không chỉ THIẾU thông tin — thứ tự đang GỢI Ý SAI
+Trang bày hai thẻ nhân vật cạnh nhau, không nói thẻ nào của ai ⇒ người đọc mặc
+định thẻ đầu là mình. Nhưng `normalizeBondPair` (`lib/portraits/bond-key.ts`)
+**sắp lại hai lá số theo khoá băm** để hai chiều nhập ra cùng một kết quả — nên
+`nhanVatA` là người nhập **THỨ HAI** ở **45,9%** số cặp (đo 1.533 cặp trên chính
+hàm đó). Tức gần một nửa số lượt, trang ngầm nói ngược.
+- Bản chia sẻ còn hụt hơn: khối "Lá số dùng để luận" do `shell.js` tự chèn chỉ
+  lấy `o.birth` = **một** lá số, trong khi tool dựng từ hai.
+
+### Cách vá — nối bằng DỮ LIỆU, không nối bằng vị trí
+- **Server trả `nhanVatA.laSo` / `nhanVatB.laSo`** (`birthRef`): ngày/tháng/năm ·
+  giờ · lịch · giới. `withLaso()` gắn ở CẢ payload mới LẪN payload lấy từ cache
+  — `pair` đã chuẩn hoá nên bản cũ trong `portrait_cache` cũng có mapping ngay,
+  không phải chờ cache hết hạn.
+- ⚠️ **CỐ Ý KHÔNG trả TÊN người nhập.** `portrait_cache` dùng chung toàn hệ
+  thống ⇒ tên của người chạy trước sẽ hiện cho người chạy sau. Ngày sinh thì
+  không rò gì: muốn chạm tới dòng cache đó phải tự nhập đúng cả hai lá số.
+  Client tự dò `laSo` về đúng ô nhập của mình để lấy lại tên đã gõ.
+- **Ba bề mặt cùng một thứ tự**: thẻ nhân vật (dòng "Dựng từ lá số" THAY dòng
+  giới tính — nó đã mang sẵn giới), dòng hero, và bản chia sẻ.
+- **`Shell.setShareable` nhận thêm `births: [{label, birth}]`** — khối lá số của
+  trang chia sẻ nay nêu đủ hai dòng, mỗi dòng gắn tên nhân vật. Tool một lá số
+  truyền `birth` như cũ, không đổi gì.
+- **Chip rail** đổi sang hỏi về nhân vật của **ô nhập thứ nhất**: rail chỉ nạp
+  lá số người đang ngồi đây và có luật cứng cấm luận sâu về người thứ hai —
+  chip trỏ nhầm là mời người ta bấm đúng câu mà rail buộc phải từ chối.
+
+### 🐞 Bắt kèm: "Cơ sở trong hai lá số" đang NÓI NGƯỢC NGŨ HÀNH
+Không nằm trong lời báo, mà nằm đúng khối dùng để chứng minh mình không bịa.
+`hanhRelation` trả `'a-sinh-b'` khi `NH_SINH[b] === a`, tức **A sinh B** — nhưng
+câu chữ ghi `${lsB} sinh ${lsA}`. **Hai dòng `sinh` bị hoán vị cho nhau**
+(cặp `khắc` thì vốn đúng). Ví dụ cụ thể: a=Mộc, b=Hỏa → cổ pháp là *Mộc sinh
+Hỏa*, trang in *"Hỏa sinh Mộc"*.
+- Kéo theo: `giver` của nhánh **ân nhân** cũng đảo (`'a-sinh-b' ? 'b' : 'a'`) —
+  bên SINH mới là bên CHO. Sai chiều thì **truyện và bức tranh đều dựng ngược
+  vai**: người được cứu thành người ra tay (`formatBondForLLM` và `sceneFor`
+  đều ăn `giver`).
+- Nhân tiện bỏ chữ **"người trước / người sau"** trong khối này — sau khi thứ tự
+  bị chuẩn hoá thì không ai đọc ra được nó chỉ ai. Nay gọi thẳng tên nhân vật.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier --check .` sạch
+· `check:prices` sạch · engine **185 pass** · `node --check` shell.js + 2 khối
+script nội tuyến.
+- **T1 — 1.533 cặp trên `normalizeBondPair` THẬT**: **45,9% bị đảo** (chứng minh
+  lỗi có thật, không phải lo hão), khoá cặp và thứ tự chuẩn hoá **0 lệch** giữa
+  hai chiều nhập.
+- **T2 — 15 ca Playwright trên TRANG THẬT + `shell.js` THẬT** (stub API, ca cố ý
+  dựng đúng tình huống server ĐẢO): thẻ 1 nêu đúng lá số người nhập thứ hai và
+  **không dính** lá số người kia · thẻ 2 ngược lại · dòng hero xếp cùng thứ tự
+  hai thẻ · chip hỏi đúng nhân vật của người thứ nhất và **không** hỏi người thứ
+  hai · bấm nút Chia sẻ THẬT → khối lá số gửi lên `/api/share-result` có **đủ
+  hai dòng kèm tên nhân vật**, `text` đường lùi cũng mang mapping · **ca ĐỐI
+  CHỨNG payload CŨ không có `laSo`** → rơi về dòng giới tính, không vỡ · 0 lỗi JS.
+- **T3 — 1.001 cặp trên `computePastLifeBond` THẬT** (530 cặp bị đảo): mapping
+  *lá số → nhân vật* **0 lệch** khi đảo thứ tự nhập ⇒ người thứ hai mở cùng cặp
+  (kể cả lấy từ cache) thấy đúng nhân vật gắn đúng lá số.
+- **T4 — 837 cặp**, đối chứng bằng bảng ngũ hành **chép tay riêng trong test**
+  (import bảng của chính module đang kiểm thì hai bên cùng sai vẫn báo xanh):
+  323 câu `sinh` + 323 câu `khắc` **0 câu sai cổ pháp**, 0 câu gọi sai tên, 29/29
+  ca ân nhân đặt đúng chiều. 🪤 **Đã red-team**: dựng lại bản cũ trong bản biên
+  dịch → T4 bắt đúng **196 câu sinh sai + 29/29 ân nhân ngược**, tức bài kiểm
+  không đỗ giả.
+- 🪤 Bẫy Playwright: handler `page.route` đăng ký **SAU CÙNG được ưu tiên** — bản
+  đầu để catch-all `**/api/**` sau route riêng nên stub riêng không bao giờ chạy,
+  trang báo "Lỗi 200". Catch-all phải đứng TRƯỚC.
+- Bump `shell.js?v=60→61` (35 trang).
+
+### CÒN LẠI
+- **Lượt đã sinh TRƯỚC bản này giữ nguyên chiều ân nhân cũ** — truyện và tranh
+  đã nằm trong `portrait_cache`/`past_life_bonds`, không dựng lại. Chỉ khối "cơ
+  sở" là đọc lại từ engine nên tự đúng. Ảnh hưởng ~2,7% số cặp (tỉ lệ ân nhân).
+- Phần CHỮ do LLM viết vẫn chỉ gọi tên nhân vật, **cố ý không nhắc ngày sinh** —
+  mapping là việc của khung trang, nhét vào truyện là phá giọng kể.
+
+---
+
+## 📉 D1 — Phễu theo tool, và 🔴 BA HỆ TÊN TOOL ĐANG LỆCH NHAU (2026-08-07, PR trước)
 
 Henry: *"Ok D1 trước đi"* — mục backlog *"tool nào có người xem mà không ai
 mua"*. Sau W1 nó còn cấp hơn: không có nó thì W1 vừa ship xong mà không biết có

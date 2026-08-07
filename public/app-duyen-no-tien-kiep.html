@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Duyên Nợ Tiền Kiếp — Tử Vi Minh Bảo</title>
-<meta name="description" content="Hai lá số — kiếp trước hai người là gì của nhau. Loại duyên nợ suy từ cổ pháp, câu chuyện 4 hồi và một bức tranh vẽ cả hai.">
+<meta name="description" content="Hai đến năm lá số — kiếp trước những người này là gì của nhau. Loại duyên nợ suy từ cổ pháp, câu chuyện 4 hồi và một bức tranh vẽ cả nhóm.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,6 +35,24 @@
 .dn-side{border:1px solid var(--line-2);border-radius:10px;padding:13px 14px;background:var(--paper)}
 .dn-side h3{font-family:var(--serif);font-size:14px;font-weight:700;margin-bottom:2px;color:#061A2E}
 .dn-side p{font-size:11.5px;color:var(--text-lt);margin-bottom:10px}
+.dn-side-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.dn-rm{border:none;background:none;color:var(--text-lt);font-size:16px;line-height:1;cursor:pointer;padding:2px 4px}
+.dn-rm:hover{color:var(--red)}
+.dn-addrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
+.dn-add{border:1px dashed var(--line-2);background:var(--paper);border-radius:8px;padding:8px 14px;font-size:13px;font-family:inherit;color:#7A5F26;font-weight:600;cursor:pointer}
+.dn-add:hover{border-color:#C8B084;background:#FBF8F1}
+.dn-add:disabled{opacity:.5;cursor:not-allowed}
+.dn-addnote{font-size:11.5px;color:var(--text-lt)}
+/* Lưới mối duyên từng cặp — phần deterministic, 0 lượt LLM. Với nhóm đông nó là
+   chỗ DUY NHẤT nói đủ N(N−1)/2 quan hệ; truyện chỉ kể quanh cặp trục. */
+.dn-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.dn-cap{border:1px solid #EADFC8;border-radius:9px;padding:9px 12px;background:#FBF8F1}
+.dn-cap.truc{border-color:#C8B084;background:#F7F0E0}
+.dn-cap-top{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.dn-cap-who{font-family:var(--serif);font-size:13.5px;font-weight:700;color:#061A2E}
+.dn-cap-kind{font-size:11px;font-weight:700;color:#7A5F26;background:#F3EAD6;border-radius:999px;padding:2px 9px}
+.dn-cap-truc{font-size:10px;font-weight:700;color:#8a6d2f;letter-spacing:.05em;text-transform:uppercase}
+.dn-cap-gist{font-size:12px;line-height:1.6;color:#5a5145;margin-top:4px}
 .dn-hero{text-align:center;padding:2px 6px 16px}
 .dn-kind{display:inline-block;padding:5px 14px;border-radius:999px;background:#F3EAD6;color:#7A5F26;font-size:12px;font-weight:700;letter-spacing:.3px;margin-bottom:9px}
 .dn-tuade{font-family:var(--serif);font-size:21px;line-height:1.45;color:#061A2E;font-weight:700;margin-bottom:5px}
@@ -53,6 +71,11 @@
 .dn-person .nm{font-family:var(--serif);font-size:15px;font-weight:700;color:#061A2E}
 .dn-person .oc{font-size:11.5px;color:#7A5F26;margin-top:2px}
 .dn-person .of{font-size:10.5px;color:var(--text-lt);margin-top:3px}
+/* Dòng "nhân vật này dựng từ lá số nào". Thứ tự hai thẻ đi theo thứ tự đã CHUẨN
+   HOÁ ở server, không theo thứ tự nhập — không có dòng này thì người đọc mặc
+   định thẻ đầu là mình, và sai khoảng một nửa số lượt. */
+.dn-person .ls{font-size:10.5px;line-height:1.5;color:var(--text-lt);margin-top:6px;padding-top:6px;border-top:1px dashed #EADFC8}
+.dn-person .ls b{color:#5a5145;font-weight:700}
 .dn-mota p{font-size:13.5px;line-height:1.88;color:#2a2118;margin:0}
 .dn-act{border-left:2px solid #E0D6C0;padding:0 0 18px 16px;position:relative}
 .dn-act:last-child{padding-bottom:0}
@@ -77,7 +100,7 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Duyên Nợ Tiền Kiếp</b><span>Kiếp trước hai người là gì của nhau</span></div>
+      <div class="ws-title"><b>Duyên Nợ Tiền Kiếp</b><span>Kiếp trước những người này là gì của nhau</span></div>
       <div class="ws-actions">
         <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Làm Lại</button>
         <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
@@ -86,20 +109,14 @@
     <div class="ws-body">
       <div id="introHost"></div>
       <div class="form-card" id="birthPanel">
-        <h2>Nhập ngày sinh của hai người (dương lịch)</h2>
-        <p class="sub">Quan hệ giữa hai lá số theo cổ pháp quyết định loại duyên nợ — không bốc thăm, và đổi thứ tự nhập vẫn ra đúng một kết quả.</p>
+        <h2>Nhập ngày sinh (dương lịch)</h2>
+        <p class="sub">Quan hệ giữa các lá số theo cổ pháp quyết định loại duyên nợ — không bốc thăm, và đổi thứ tự nhập vẫn ra đúng một kết quả.</p>
 
-        <div class="dn-two">
-          <div class="dn-side">
-            <h3>Người thứ nhất</h3>
-            <p>Thường là bạn</p>
-            <div id="formHostA"></div>
-          </div>
-          <div class="dn-side">
-            <h3>Người thứ hai</h3>
-            <p>Người bạn muốn xem duyên nợ</p>
-            <div id="formHostB"></div>
-          </div>
+        <div class="dn-two" id="personGrid"></div>
+
+        <div class="dn-addrow">
+          <button type="button" class="btn dn-add" id="btnAddPerson" onclick="addPerson()">+ Thêm người</button>
+          <span class="dn-addnote" id="addNote"></span>
         </div>
 
         <div class="frow" style="margin-bottom:0;margin-top:14px">
@@ -122,7 +139,7 @@
                 <div class="dn-birth" id="birthLine" style="display:none"></div>
               </div>
               <div class="dn-imgwrap">
-                <div class="dn-imgph" id="imgPlaceholder">Đang vẽ bức tranh hai người…<br>(khoảng 45–60 giây)</div>
+                <div class="dn-imgph" id="imgPlaceholder">Đang vẽ bức tranh…<br>(khoảng 45–60 giây)</div>
                 <img id="resultImg" alt="Tranh duyên nợ tiền kiếp" style="display:none">
                 <div id="imgLoadStatus" style="display:none;margin-top:8px;font-size:12px;color:var(--text-lt);text-align:center"></div>
                 <div class="dn-actions" id="imgActions" style="display:none">
@@ -130,9 +147,10 @@
                 </div>
               </div>
               <div class="dn-pair" id="pairBlock"></div>
+              <div class="dn-grid" id="capGrid" style="display:none"></div>
               <div class="dn-mota" id="moTaBlock"><p id="moTaMoiDuyen"></p></div>
               <details class="dn-basis" id="basisBlock" style="display:none">
-                <summary>Cơ sở trong hai lá số</summary>
+                <summary>Cơ sở trong lá số</summary>
                 <ul id="basisList"></ul>
               </details>
             </div>
@@ -149,7 +167,7 @@
 
         <div class="res-block" style="background:#FBF3DE;border-color:#e8d9b0">
           <div class="res-block-body" style="font-size:12.5px;line-height:1.6;color:#5a5145">
-            💡 Mối duyên và câu chuyện phía trên được phác hoạ dựa trên quan hệ giữa hai lá số Tử Vi, kết hợp với kinh nghiệm nghiên cứu của tiền nhân để lại. Mang tính tham khảo và giải trí.
+            💡 Mối duyên và câu chuyện phía trên được phác hoạ dựa trên quan hệ giữa các lá số Tử Vi, kết hợp với kinh nghiệm nghiên cứu của tiền nhân để lại. Mang tính tham khảo và giải trí.
           </div>
         </div>
 
@@ -165,24 +183,26 @@
 </div>
 
 <script>window.SHELL_ACTIVE='duyen-no-tien-kiep';
-window.SHELL_INTRO={key:'duyen-no-tien-kiep',title:'Duyên Nợ Tiền Kiếp',desc:'Đưa <b>hai lá số</b> vào cùng một thế giới phong kiến Á Đông rồi xem <b>kiếp trước hai người là gì của nhau</b> — loại duyên nợ suy từ <b>địa chi cung Mệnh</b>, <b>ngũ hành nạp âm</b> và <b>chính tinh</b>, kèm câu chuyện 4 hồi và một bức tranh vẽ cả hai.'};</script>
+window.SHELL_INTRO={key:'duyen-no-tien-kiep',title:'Duyên Nợ Tiền Kiếp',desc:'Đưa <b>hai tới năm lá số</b> vào cùng một thế giới phong kiến Á Đông rồi xem <b>kiếp trước họ là gì của nhau</b> — loại duyên nợ suy từ <b>địa chi cung Mệnh</b>, <b>ngũ hành nạp âm</b> và <b>chính tinh</b>, kèm câu chuyện 4 hồi và một bức tranh vẽ cả nhóm.'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tuvi-form.js?v=1"></script>
 <script src="/tuvi-paywall.js?v=16"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=60"></script>
+<script src="/shell.js?v=62"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=2"></script>
 <script src="/tools-shared/portrait-recover.js?v=1"></script>
 <script>
 
 var _currentSlug = '';
 var _resultImgUrl = '';
-var _lastA = null;
-var _lastB = null;
+var _lastBirths = [];      // lá số ĐÃ NHẬP, theo thứ tự ô trên form (chưa chuẩn hoá)
 var _lastStory = null;
+var MAX_NGUOI = 5;         // khớp MAX_BOND_MEMBERS ở server — server vẫn tự chặn
+var _slots = [];           // các prefix form đang dựng: ['a','b',...]
+var SLOT_KEYS = ['a', 'b', 'c', 'd', 'e'];
 var DN_STEPS = [
-  { label: 'Lập hai lá số & dựng hai nhân vật', ms: 1400 },
+  { label: 'Lập lá số & dựng nhân vật', ms: 1400 },
   { label: 'Đối chiếu địa chi, ngũ hành, chính tinh', ms: 2400 },
   { label: 'Viết câu chuyện mối duyên', ms: 0 },
 ];
@@ -218,15 +238,72 @@ function retryResultImage() {
   setResultImage(_resultImgUrl + (_resultImgUrl.indexOf('?') >= 0 ? '&' : '?') + 'retry=' + Date.now());
 }
 
-// Hai bản form ĐỘC LẬP nhờ `prefix` của TuviForm — không phải hai bản chép tay.
-// Người thứ hai mặc định giới NỮ: cặp hay được nhập nhất là nam–nữ, và bản đầu
-// để cả hai cùng 'nam' thì phần lớn lượt phải sửa tay một ô.
-TuviForm.render('formHostA', { mode: 'compact', prefix: 'a', gioitinh: 'nam', showName: true });
-TuviForm.render('formHostB', { mode: 'compact', prefix: 'b', gioitinh: 'nu', showName: true });
+// Mỗi người một bản form ĐỘC LẬP nhờ `prefix` của TuviForm — không phải mấy bản
+// chép tay. MẶC ĐỊNH hai người (đó là cách tool được dùng nhiều nhất); thêm
+// người là tuỳ chọn, tối đa MAX_NGUOI.
+var SLOT_TITLE = ['Người thứ nhất', 'Người thứ hai', 'Người thứ ba', 'Người thứ tư', 'Người thứ năm'];
+var SLOT_SUB = ['Thường là bạn', 'Người bạn muốn xem duyên nợ', '', '', ''];
+
+function _renderSlot(idx) {
+  var key = SLOT_KEYS[idx];
+  var div = document.createElement('div');
+  div.className = 'dn-side';
+  div.id = 'slot-' + key;
+  // Nút bỏ CHỈ có từ người thứ ba: hai người là mức tối thiểu của tool, cho bỏ
+  // xuống một người là dựng ra một trạng thái không chạy được.
+  div.innerHTML =
+    '<div class="dn-side-top"><div><h3>' + esc(SLOT_TITLE[idx]) + '</h3>' +
+    '<p>' + esc(SLOT_SUB[idx] || 'Thêm vào nhóm') + '</p></div>' +
+    (idx >= 2 ? '<button type="button" class="dn-rm" title="Bỏ người này" onclick="removePerson(\'' + key + '\')">✕</button>' : '') +
+    '</div><div id="formHost-' + key + '"></div>';
+  document.getElementById('personGrid').appendChild(div);
+  // Người thứ hai mặc định giới NỮ: cặp hay được nhập nhất là nam–nữ, và bản đầu
+  // để cả hai cùng 'nam' thì phần lớn lượt phải sửa tay một ô.
+  TuviForm.render('formHost-' + key, {
+    mode: 'compact', prefix: key, gioitinh: idx === 1 ? 'nu' : 'nam', showName: true,
+  });
+  _slots.push(key);
+}
+
+function _syncAddRow() {
+  var btn = document.getElementById('btnAddPerson');
+  var note = document.getElementById('addNote');
+  btn.disabled = _slots.length >= MAX_NGUOI;
+  note.textContent = _slots.length >= MAX_NGUOI
+    ? 'Tối đa ' + MAX_NGUOI + ' người một lượt.'
+    : 'Mặc định hai người. Thêm được tối đa ' + MAX_NGUOI + ' — cả nhóm vào chung một câu chuyện và một bức tranh.';
+}
+
+function addPerson() {
+  if (_slots.length >= MAX_NGUOI) return;
+  _renderSlot(_slots.length);
+  _syncAddRow();
+}
+
+function removePerson(key) {
+  var i = _slots.indexOf(key);
+  if (i < 2) return;   // hai ô đầu không bỏ được
+  // Dựng lại TỪ ĐẦU thay vì gỡ một thẻ giữa chừng: prefix của TuviForm gắn vào
+  // id phần tử, gỡ ô giữa mà giữ nguyên các ô sau là nhãn "Người thứ ba/tư"
+  // trôi lệch khỏi ô nhập thật. Giữ lại dữ liệu đã gõ của những ô còn lại.
+  var keep = _slots.filter(function (k) { return k !== key; })
+    .map(function (k) { return TuviForm.getData(k); });
+  document.getElementById('personGrid').innerHTML = '';
+  _slots = [];
+  for (var j = 0; j < keep.length; j++) {
+    _renderSlot(j);
+    TuviForm.setData(keep[j], SLOT_KEYS[j]);
+  }
+  _syncAddRow();
+}
+
+_renderSlot(0);
+_renderSlot(1);
+_syncAddRow();
 
 // Điền sẵn ô ĐẦU bằng lá số shell đang nhớ — các tool anh em đều làm việc này
 // qua `Shell.prefillForm()`, nhưng hàm đó chỉ nhắm form prefix mặc định nên
-// trang hai form phải tự gọi. CHỈ ô đầu: ô thứ hai là NGƯỜI KHÁC, không có gì
+// trang nhiều form phải tự gọi. CHỈ ô đầu: các ô sau là NGƯỜI KHÁC, không có gì
 // để đoán, điền bừa vào đó là xui người ta xem duyên nợ với chính mình.
 try {
   var _remembered = window.Shell && Shell.getRememberedBirth ? Shell.getRememberedBirth() : null;
@@ -248,24 +325,64 @@ function _birthOf(prefix) {
   };
 }
 
-/** Query cho `action=cache-status` — hai lá số, đúng tên tham số route đọc. */
-function _cacheQuery(a, b) {
+/**
+ * Nhân vật này dựng từ lá số nào.
+ *
+ * 🔑 KHÔNG suy được bằng vị trí: server chuẩn hoá thứ tự hai lá số (xem
+ * `lib/portraits/bond-key.ts`) nên `nhanVatA` là người nhập THỨ HAI ở khoảng
+ * một nửa số lượt. Nối bằng chính dữ liệu ngày sinh server trả kèm (`laSo`),
+ * rồi lấy lại ô nhập tương ứng để có TÊN người dùng đã gõ — server cố ý không
+ * trả tên (payload nằm trong cache dùng chung).
+ */
+function _localBirthOf(nv) {
+  var ls = nv && nv.laSo;
+  if (!ls) return null;   // payload cũ còn trong cache — chưa có mapping, ẩn dòng đi
+  var h = function (x) { return Number(x == null ? -1 : x); };
+  var same = function (b) {
+    return b && Number(b.day) === Number(ls.day) && Number(b.month) === Number(ls.month) &&
+      Number(b.year) === Number(ls.year) && h(b.hourBranch) === h(ls.hourBranch) &&
+      (b.gender === 'nu' ? 'nu' : 'nam') === (ls.gender === 'nu' ? 'nu' : 'nam') &&
+      Boolean(b.isLunar) === Boolean(ls.isLunar);
+  };
+  for (var k = 0; k < _lastBirths.length; k++) if (same(_lastBirths[k])) return _lastBirths[k];
+  return ls;   // không khớp ô nào (không nên xảy ra) — vẫn nêu được ngày sinh
+}
+
+/** Danh sách nhân vật của một payload. Bản mới trả `nhanVats`; dòng cache sinh
+ *  TRƯỚC bản nhóm chỉ có `nhanVatA`/`nhanVatB` — vẫn phải đọc được. */
+function _nhanVats(d) {
+  if (d && Array.isArray(d.nhanVats) && d.nhanVats.length) return d.nhanVats;
+  return [d && d.nhanVatA, d && d.nhanVatB].filter(Boolean);
+}
+
+/** Một dòng "lá số nào" cho nhân vật — chuỗi DÙNG CHUNG với bản chia sẻ. */
+function _lsLine(nv) {
+  var b = _localBirthOf(nv);
+  var bs = (window.Shell && Shell.birthSummary) ? Shell.birthSummary : null;
+  return (b && bs) ? bs(b) : '';
+}
+
+/** Query cho `action=cache-status` — N lá số, đúng tên tham số route đọc. */
+function _cacheQuery(births) {
   var one = function (p, x) {
     return p + 'd=' + (x.day || 0) + '&' + p + 'm=' + (x.month || 0) + '&' + p + 'y=' + (x.year || 0) +
       '&' + p + 'h=' + (x.hourBranch == null ? -1 : x.hourBranch) +
       '&' + p + 'g=' + (x.gender === 'nu' ? 'nu' : 'nam') +
       '&' + p + 'l=' + (x.isLunar ? '1' : '0');
   };
-  return one('a', a) + '&' + one('b', b);
+  return births.map(function (b, i) { return one(SLOT_KEYS[i], b); }).join('&');
 }
 
 async function analyze() {
   showError('');
-  var a = _birthOf('a');
-  var b = _birthOf('b');
-  if (!a) { showError('Vui lòng nhập đầy đủ ngày tháng năm sinh của người thứ nhất.'); return; }
-  if (!b) { showError('Vui lòng nhập đầy đủ ngày tháng năm sinh của người thứ hai.'); return; }
-  _lastA = a; _lastB = b;
+  var births = [];
+  for (var i = 0; i < _slots.length; i++) {
+    var b = _birthOf(_slots[i]);
+    if (!b) { showError('Vui lòng nhập đầy đủ ngày tháng năm sinh của ' + SLOT_TITLE[i].toLowerCase() + '.'); return; }
+    births.push(b);
+  }
+  if (births.length < 2) { showError('Cần ít nhất hai lá số.'); return; }
+  _lastBirths = births;
 
   // ⚠️ TIỀN TỐ PHẢI LÀ ĐÚNG `tool_id`, không được rút gọn. `hasRecentToolPayment`
   // (lib/billing/credits.ts) — lưới an toàn chống "đã trả tiền mà vẫn ăn 402" —
@@ -273,11 +390,11 @@ async function analyze() {
   // GIỜ khớp, nên chỉ cần `hasSlugAccess` hụt một nhịp là user mất tiền mà
   // không nhận được hàng. Đã xảy ra thật: một lượt bị trừ 30 Lượng hai lần.
   _currentSlug = TuviPaywall.generateToolSlug(
-    'duyen-no-tien-kiep-' + a.day + a.month + a.year + '-' + b.day + b.month + b.year);
+    'duyen-no-tien-kiep-' + births.map(function (x) { return '' + x.day + x.month + x.year; }).join('-'));
   await TuviPaywall.requireCreditsCachedQuery(
-    '/api/duyen-no-tien-kiep', _cacheQuery(a, b), _currentSlug,
+    '/api/duyen-no-tien-kiep', _cacheQuery(births), _currentSlug,
     async function (freeRerun) { await _doGenerate(freeRerun); },
-    '✓ Bạn đã xem duyên nợ của cặp lá số này — mở lại, không trừ Lượng');
+    '✓ Bạn đã xem duyên nợ của nhóm lá số này — mở lại, không trừ Lượng');
 }
 
 async function _doGenerate(freeRerun) {
@@ -298,7 +415,7 @@ async function _doGenerate(freeRerun) {
   // ai-loading-steps.js còn nằm trong cache trình duyệt có thể chưa có hàm này;
   // thiếu thì rơi về dòng chữ tĩnh như cũ, không ném lỗi.
   _imgWait = AiLoadingSteps.mountWait
-    ? AiLoadingSteps.mountWait('imgPlaceholder', { label: 'Đang vẽ bức tranh hai người…' })
+    ? AiLoadingSteps.mountWait('imgPlaceholder', { label: 'Đang vẽ bức tranh cả nhóm…' })
     : null;
   _imgWait && _imgWait.start();
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', DN_STEPS);
@@ -310,8 +427,12 @@ async function _doGenerate(freeRerun) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
       body: JSON.stringify({
-        birthA: _lastA, birthB: _lastB,
-        nameA: _lastA.name || '', nameB: _lastB.name || '',
+        births: _lastBirths,
+        names: _lastBirths.map(function (b) { return b.name || ''; }),
+        // Hai trường cũ vẫn gửi kèm cho lượt 2 người — nếu bản server cũ còn
+        // đang phục vụ trong lúc deploy thì lượt đó vẫn chạy chứ không lỗi 400.
+        birthA: _lastBirths[0], birthB: _lastBirths[1],
+        nameA: _lastBirths[0].name || '', nameB: (_lastBirths[1] || {}).name || '',
         phase: phase, slug: _currentSlug,
       }),
     });
@@ -351,22 +472,34 @@ async function _doGenerate(freeRerun) {
     // Rail nạp lá số của NGƯỜI THỨ NHẤT (người đang dùng máy). Prompt phía
     // server có luật cứng cấm luận sâu về người thứ hai — không có lá số của
     // họ trong ngữ cảnh, nói bừa là bịa.
-    var nvA = (data.nhanVatA || {}).ten || 'nhân vật thứ nhất';
-    var nvB = (data.nhanVatB || {}).ten || 'nhân vật thứ hai';
+    var nvList = _nhanVats(data);
+    var nvNames = nvList.map(function (p) { return p.ten || ''; }).filter(Boolean);
+    // Chip hỏi về nhân vật phải nhắm ĐÚNG nhân vật của người đang ngồi đây (ô
+    // nhập thứ nhất). Thứ tự nhân vật đã bị server chuẩn hoá nên không suy được
+    // bằng vị trí, mà rail có luật cứng cấm luận sâu về những người còn lại —
+    // chip trỏ nhầm là mời người dùng bấm đúng câu mà rail buộc phải từ chối.
+    var me = _lastBirths[0];
+    var nvSelf = nvNames[0] || 'nhân vật của bạn';
+    for (var q = 0; q < nvList.length; q++) {
+      if (_localBirthOf(nvList[q]) === me) { nvSelf = nvList[q].ten || nvSelf; break; }
+    }
     Shell.setContext({
-      birth: _lastA,
+      birth: _lastBirths[0],
       wrap: 'past-life-bond',
-      // PHẢI gửi kèm lá số người thứ hai: mối duyên và nền văn minh chung suy
-      // từ QUAN HỆ giữa hai lá số. Chỉ gửi `birth` rồi dùng wrap 'past-life'
+      // PHẢI gửi kèm lá số những người kia: mối duyên và nền văn minh chung suy
+      // từ QUAN HỆ giữa các lá số. Chỉ gửi `birth` rồi dùng wrap 'past-life'
       // thì server bốc nền văn minh riêng cho một người — rail sẽ kể một thế
       // giới KHÁC thế giới vừa hiện trên màn hình.
-      wrapBirthB: _lastB,
+      wrapBirthB: _lastBirths[1],
+      // Nhóm ≥3: gửi hết những người còn lại. Thiếu ai thì rail dựng một nhóm
+      // KHÁC nhóm đang hiện trên màn hình — mâu thuẫn người dùng nhìn ra ngay.
+      wrapBirths: _lastBirths.slice(1),
       label: 'Duyên nợ tiền kiếp',
-      greeting: 'Mối duyên giữa **' + nvA + '** và **' + nvB + '** đến đây là hết phần chính. Bạn muốn hỏi gì thêm?',
+      greeting: 'Mối duyên giữa **' + nvNames.join('**, **') + '** đến đây là hết phần chính. Bạn muốn hỏi gì thêm?',
       chips: [
         'Vì sao lại luận ra mối duyên này?',
-        nvA + ' là người thế nào?',
-        'Hai người dễ va nhau ở chỗ nào?',
+        nvSelf + ' là người thế nào?',
+        (nvNames.length > 2 ? 'Trong nhóm này ai dễ va nhau nhất?' : 'Hai người dễ va nhau ở chỗ nào?'),
         'Kiếp này gặp lại thì nên giữ khoảng cách ra sao?',
       ],
     });
@@ -401,10 +534,12 @@ async function _doGenerate(freeRerun) {
       else document.getElementById('imgPlaceholder').textContent = 'Mất kết nối lúc tải tranh — đang thử lấy lại…';
       var rd = await PortraitRecover.wait({
         endpoint: '/api/duyen-no-tien-kiep',
-        query: _cacheQuery(_lastA, _lastB),
+        query: _cacheQuery(_lastBirths),
         body: {
-          birthA: _lastA, birthB: _lastB,
-          nameA: _lastA.name || '', nameB: _lastB.name || '',
+          births: _lastBirths,
+          names: _lastBirths.map(function (b) { return b.name || ''; }),
+          birthA: _lastBirths[0], birthB: _lastBirths[1],
+          nameA: _lastBirths[0].name || '', nameB: (_lastBirths[1] || {}).name || '',
           phase: 'image', slug: _currentSlug,
         },
       });
@@ -438,23 +573,49 @@ function renderStory(data) {
     el.style.display = 'inline-block';
   } else { el.style.display = 'none'; }
 
-  // Hai dòng lá số — người nhận link chia sẻ phải biết bản này của cặp nào.
+  var nvs = _nhanVats(data);
+
+  // Dòng lá số — người nhận link chia sẻ phải biết bản này của những ai.
+  // Xếp theo THỨ TỰ NHÂN VẬT bên dưới (không phải thứ tự nhập): cả trang nói
+  // về nhóm theo một thứ tự duy nhất thì mới đối chiếu được.
   var bl = document.getElementById('birthLine');
   var bs = (window.Shell && Shell.birthSummary) ? Shell.birthSummary : null;
   if (bs) {
-    var sa = bs(_lastA), sb = bs(_lastB);
-    if (sa || sb) { bl.textContent = 'Lá số: ' + sa + '  ·  ' + sb; bl.style.display = 'block'; }
+    var lines = nvs.map(function (p, i) { return bs(_localBirthOf(p) || _lastBirths[i]); }).filter(Boolean);
+    if (lines.length) { bl.textContent = 'Lá số: ' + lines.join('  ·  '); bl.style.display = 'block'; }
     else { bl.style.display = 'none'; }
   } else { bl.style.display = 'none'; }
 
-  var A = data.nhanVatA || {}, B = data.nhanVatB || {};
-  document.getElementById('pairBlock').innerHTML = [A, B].map(function (p) {
+  document.getElementById('pairBlock').innerHTML = nvs.map(function (p) {
+    // Có mapping thì dòng lá số THAY dòng giới tính — nó đã mang sẵn giới tính,
+    // và nhân vật luôn cùng giới với lá số dựng ra nó.
+    var ls = _lsLine(p);
     return '<div class="dn-person">' +
       '<div class="nm">' + esc(p.ten || '') + '</div>' +
       '<div class="oc">' + esc(p.danhXung || '') + '</div>' +
-      '<div class="of">' + (p.gioiTinh === 'nu' ? 'Nữ' : 'Nam') + '</div>' +
+      (ls
+        ? '<div class="ls"><b>Dựng từ lá số</b><br>' + esc(ls) + '</div>'
+        : '<div class="of">' + (p.gioiTinh === 'nu' ? 'Nữ' : 'Nam') + '</div>') +
     '</div>';
   }).join('');
+
+  // Lưới mối duyên từng cặp. Nhóm 2 người CỐ Ý không hiện: cặp duy nhất đã nằm
+  // ngay trên đầu trang (huy hiệu + tựa đề), bày lại là nói hai lần.
+  var cg = document.getElementById('capGrid');
+  var caps = data.capDuyen || [];
+  if (caps.length > 1) {
+    cg.innerHTML = caps.map(function (c) {
+      var na = (nvs[c.a] || {}).ten || '', nb = (nvs[c.b] || {}).ten || '';
+      return '<div class="dn-cap' + (c.truc ? ' truc' : '') + '">' +
+        '<div class="dn-cap-top">' +
+          '<span class="dn-cap-who">' + esc(na) + ' — ' + esc(nb) + '</span>' +
+          '<span class="dn-cap-kind">' + esc(c.label || '') + '</span>' +
+          (c.truc ? '<span class="dn-cap-truc">trục của câu chuyện</span>' : '') +
+        '</div>' +
+        '<div class="dn-cap-gist">' + esc(c.gist || '') + '</div></div>';
+    }).join('');
+    cg.style.display = 'flex';
+  } else { cg.style.display = 'none'; }
 
   document.getElementById('moTaMoiDuyen').textContent = data.moTaMoiDuyen || '';
   document.getElementById('moTaBlock').style.display = data.moTaMoiDuyen ? '' : 'none';
@@ -489,14 +650,31 @@ function publishShareable(imageUrl) {
   var d = _lastStory;
   if (!d) return;
   var bond = d.bond || {};
-  var A = d.nhanVatA || {}, B = d.nhanVatB || {};
+  var nvs = _nhanVats(d);
+  var tenAll = nvs.map(function (p) { return p.ten || ''; }).filter(Boolean);
+  var pairLine = function (p) {
+    var ls = _lsLine(p);
+    return (p.ten || '') + (ls ? ' — lá số: ' + ls : '');
+  };
   var blocks = [];
   blocks.push({
     header: 'Duyên Nợ Tiền Kiếp',
     image: imageUrl || undefined,
     text: [bond.label, d.tuaDe].filter(Boolean).join(' — ') + '\n' +
-      [A.ten, B.ten].filter(Boolean).join('  ·  ') + '\n\n' + (d.moTaMoiDuyen || ''),
+      tenAll.join('  ·  ') + '\n\n' + (d.moTaMoiDuyen || ''),
   });
+  // Nhóm ≥3: lưới cặp vào bản chia sẻ luôn — truyện chỉ kể quanh cặp trục, nếu
+  // không nêu thì người nhận link không biết những người kia dính nhau thế nào.
+  var caps = d.capDuyen || [];
+  if (caps.length > 1) {
+    blocks.push({
+      header: 'Các Mối Duyên Trong Nhóm',
+      text: caps.map(function (c) {
+        return ((nvs[c.a] || {}).ten || '') + ' — ' + ((nvs[c.b] || {}).ten || '') +
+          ': ' + (c.label || '') + (c.truc ? ' (trục của câu chuyện)' : '') + '\n' + (c.gist || '');
+      }).join('\n\n'),
+    });
+  }
   var storyText = (d.acts || []).map(function (a) {
     return a.title + ' (' + a.stage + ')\n' + a.text;
   }).join('\n\n');
@@ -506,14 +684,22 @@ function publishShareable(imageUrl) {
   Shell.setShareable({
     kind: imageUrl ? 'image' : 'text',
     toolId: 'duyen-no-tien-kiep',
-    birth: _lastA,
-    title: [A.ten, B.ten].filter(Boolean).join(' & ') || 'Duyên nợ tiền kiếp',
+    birth: _lastBirths[0],
+    // Tool này dựng từ NHIỀU lá số — `birth` một mình làm khối đầu của trang chia
+    // sẻ chỉ nêu một cái, người nhận link tưởng bản luận chỉ của người đó.
+    // `births` có nhãn nên khối đó nói luôn nhân vật nào từ lá số nào.
+    births: nvs.map(function (p, i) {
+      return { label: p.ten || 'Nhân vật thứ ' + (i + 1), birth: _localBirthOf(p) || _lastBirths[i] };
+    }),
+    title: tenAll.join(' & ') || 'Duyên nợ tiền kiếp',
     imageUrl: imageUrl || undefined,
     // `text` là đường lùi của /ket-qua khi không dựng được blocks. Nhánh
     // KHÔNG CÓ ẢNH bắt buộc phải có nó: chia sẻ dạng 'text' mà bỏ trống thì
     // server từ chối và người dùng nhận "Không tạo được link chia sẻ".
+    // Đường lùi này KHÔNG có khối "Lá số dùng để luận" đứng trên (khối đó chỉ
+    // dựng khi có blocks) — nên phần mapping phải nằm ngay trong chữ.
     text: [bond.label, d.tuaDe].filter(Boolean).join(' — ') + '\n' +
-      [A.ten, B.ten].filter(Boolean).join('  ·  ') +
+      nvs.map(pairLine).filter(Boolean).join('\n') +
       (d.moTaMoiDuyen ? '\n\n' + d.moTaMoiDuyen : ''),
     blocks: blocks,
   });
@@ -551,14 +737,14 @@ function _ensurePoster() {
 function _posterOpts() {
   var d = _lastStory || {};
   var bond = d.bond || {};
-  var A = d.nhanVatA || {}, B = d.nhanVatB || {};
+  var tenAll = _nhanVats(d).map(function (p) { return p.ten || ''; }).filter(Boolean);
   return {
     imageUrl: _resultImgUrl,
     // 🔑 Ảnh tool này KHỔ NGANG. Để mặc định `cover` thì khung 9:16 cắt mất
     // ~200px mỗi bên — đúng hai gương mặt. `contain` chừa dải navy, giữ đủ hai
     // người (xem drawContain trong poster.js).
     imageFit: 'contain',
-    title: [A.ten, B.ten].filter(Boolean).join(' & ') || 'Duyên nợ tiền kiếp',
+    title: tenAll.join(' & ') || 'Duyên nợ tiền kiếp',
     subtitle: [bond.label, (d.era || {}).label].filter(Boolean).join(' · '),
     quote: Poster.pickQuote([d.ketLuan, d.moTaMoiDuyen, ((d.acts || []).map(function (a) { return a.text || ''; }).join(' '))]),
     qrUrl: Poster.qrLink('duyen-no-tien-kiep', '/app/duyen-no-tien-kiep'),

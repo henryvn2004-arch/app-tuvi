@@ -39,6 +39,12 @@ jobs:
       - name: GET Supabase đều có no-store
         run: npm run check:nostore
 
+      # Chặn tái phát cách xếp công cụ chép tay: từng có BA mảng không khớp
+      # nhau (/cong-cu xếp theo nhu cầu 58 công cụ, /app xếp theo bộ môn 34
+      # công cụ), và thêm công cụ mới là phải nhớ sửa tay ba chỗ.
+      - name: Không có nhóm/đường dẫn công cụ chép cứng
+        run: npm run check:groups
+
       # Chặn tái phát bảng 64 quẻ sai mã hào: đã có lúc 49/64 quẻ mang mã của
       # quẻ khác (77% lượt gieo ra sai lời đoán) mà không gì báo, vì nhánh "tìm
       # quẻ gần nhất" nuốt hết. 64 chuỗi nhị phân thì mắt không soi được.

@@ -162,10 +162,10 @@
 <script src="/tools-shared/hoang-dao.js?v=2"></script>
 <script src="/tuvi-form.js?v=1"></script>
 <script src="/poster.js?v=5" defer></script>
-<script src="/tool-prices.js?v=3"></script>
+<script src="/tool-prices.js?v=4"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
-<script src="/shell.js?v=60"></script>
+<script src="/shell.js?v=62"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 var IC={
@@ -192,88 +192,64 @@ var IC={
   temple:'<path d="m12 3 8 5H4z"/><path d="M3 8h18"/><path d="M6 8v9M18 8v9"/><path d="M10 17v-5h4v5"/><path d="M3 21h18"/>',
   briefcase:'<rect x="2.5" y="7" width="19" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M2.5 12.5h19"/>'
 };
-/* `p` = tool_id trong `tool_pricing` — NGUỒN GIÁ DUY NHẤT (admin sửa, không
-   cần deploy). Phần lớn trùng slug URL, chỉ 5 cái lệch: luan-giai→laso,
-   bat-tu→tu-binh, sinh-con→xem-tuoi-sinh-con, chon-ngay→chon-ngay-tot,
-   dat-ten→dat-ten-con — đây chính là id mà `TuviPaywall.init` dùng để trừ
-   Lượng, nên chỗ hiện giá và chỗ trừ ăn cùng một khoá.
+/* ── DANH MỤC CÔNG CỤ — dựng TỪ DỮ LIỆU, không còn mảng chép tay ──────────
+   Trước đây chỗ này là mảng `GROUPS` 34 dòng xếp theo BỘ MÔN, trong khi
+   `/cong-cu` xếp theo NHU CẦU với 58 công cụ — cùng một sản phẩm nói hai kiểu
+   với cùng một người, và thêm công cụ mới là phải sửa tay cả hai.
+
+   Nay: nhóm lấy từ bảng `tool_groups`, công cụ lấy từ `tool_pricing`, đường dẫn
+   lấy từ cột `app_path`. Công cụ CHƯA có trang trong Luận Đường thì `app_path`
+   NULL ⇒ không hiện ở đây (đúng thiết kế, không phải sót) nhưng vẫn hiện ở
+   `/cong-cu` qua `page_path`.
 
    ⚠️ KHÔNG chép số giá vào đây. Chưa đọc được thì thẻ hiện "…" — xem
    public/tool-prices.js. */
-var GROUPS=[
-  { g:'Tử Vi', items:[
-    { i:'grid', t:'Luận giải Tử Vi', d:'Lập lá số 12 cung rồi luận sâu cách cục, đại vận, tứ hóa', h:'/app/luan-giai', p:'laso' },
-    { i:'briefcase', t:'Tử Vi Công Sở', d:'Kiểu người của bạn ở chỗ làm, 12 mặt đời đi làm, 4 chặng 40 năm, ghép đội với ai', h:'/app/cong-so', p:'cong-so' },
-    { i:'heart', t:'Xem tuổi vợ chồng', d:'So hòa hợp hai lá số theo 8 chiều', h:'/app/xem-tuoi', p:'xem-tuoi' },
-    { i:'handshake', t:'Xem tuổi làm ăn', d:'So hợp hai người khi bắt tay hợp tác', h:'/app/xem-lam-an', p:'xem-lam-an' },
-    { i:'users', t:'Tương hợp tuổi', d:'So hợp hai người bất kỳ: bạn, người thân, đối tác', h:'/app/tuong-hop', p:'tuong-hop' },
-    { i:'baby', t:'Xem tuổi sinh con', d:'Năm sinh con hợp tuổi bố mẹ theo địa chi', h:'/app/sinh-con', p:'xem-tuoi-sinh-con' },
-    { i:'image', t:'Chân dung vợ chồng', d:'AI vẽ chân dung người phối ngẫu suy từ cung Phu Thê', h:'/app/chan-dung-vo-chong', p:'chan-dung-vo-chong' },
-    { i:'temple', t:'Chân dung tiền kiếp', d:'Lá số của bạn nếu sinh vào thời xưa — chân dung + một đời người qua 9 đại vận', h:'/app/chan-dung-tien-kiep', p:'chan-dung-tien-kiep' },
-    { i:'heart-handshake', t:'Duyên nợ tiền kiếp', d:'Hai lá số — kiếp trước hai người là gì của nhau, kèm một bức tranh vẽ cả hai', h:'/app/duyen-no-tien-kiep', p:'duyen-no-tien-kiep' },
-    { i:'user', t:'Lá số người khác', d:'Sếp, đồng nghiệp, người thân — họ vận hành thế nào, nên nói gì, tránh nói gì', h:'/app/nguoi-khac', p:'nguoi-khac' },
-    { i:'baby', t:'Dạy con theo lá số', d:'Con tiếp thu kiểu nào, ra bài thế nào thì chịu làm, kỷ luật kiểu nào phản tác dụng', h:'/app/day-con', p:'day-con' },
-    { i:'users', t:'Sổ nhân mạch', d:'Cả đội hoặc danh sách khách: nhóm thiếu kiểu người nào, ai với ai dễ giẫm chân', h:'/app/nhan-mach', p:'nhan-mach' },
-  ]},
-  { g:'Tử Bình', items:[
-    { i:'rows', t:'Lá số Bát Tự', d:'Tứ trụ Tử Bình: nhật can, dụng thần, cách cục', h:'/app/bat-tu', p:'tu-binh' },
-  ]},
-  { g:'Xem Tướng', items:[
-    { i:'face', t:'Diện Tướng AI', d:'Phân tích khuôn mặt qua ảnh theo Ma Y Thần Tướng', h:'/app/dien-tuong', p:'dien-tuong' },
-    { i:'eye', t:'Nhãn Tướng AI', d:'Phân tích đôi mắt qua ảnh theo Nhãn Pháp cổ truyền', h:'/app/nhan-tuong', p:'nhan-tuong' },
-    { i:'hand', t:'Thủ Tướng AI', d:'Phân tích lòng bàn tay qua ảnh theo cổ pháp Đông Tây', h:'/app/thu-tuong', p:'thu-tuong' },
-    { i:'mic', t:'Thanh Tướng AI', d:'Ghi âm giọng nói, phân tích theo Ngũ Âm cổ pháp', h:'/app/thanh-tuong', p:'thanh-tuong' },
-    { i:'mic', t:'Thanh Tướng Pro', d:'4 bài đo giọng chuyên sâu, 12 chỉ số âm học', h:'/app/thanh-tuong-pro', p:'thanh-tuong-pro' },
-  ]},
-  { g:'Phong Thủy', items:[
-    { i:'compass', t:'Phong Thủy Nội Thất', d:'Chụp ảnh phòng — AI chấm điểm Bát Trạch trước/sau, đề xuất bố trí', h:'/app/phong-thuy', p:'phong-thuy' },
-    { i:'home', t:'Hướng Bát Trạch', d:'Cung phi & hướng nhà, bếp, giường hợp mệnh', h:'/app/bat-trach', p:'bat-trach' },
-  ]},
-  { g:'Chọn Ngày / Lịch', items:[
-    { i:'cal', t:'Chọn ngày tốt', d:'Ngày giờ hợp tuổi cho việc trọng đại', h:'/app/chon-ngay', p:'chon-ngay-tot' },
-    { i:'cal', t:'Kim Lâu & Tam Tai', d:'Tuổi làm nhà, cưới hỏi có phạm không', h:'/app/kim-lau', p:'kim-lau' },
-    { i:'cal', t:'Ngày tốt trong tháng', d:'Lịch ngày tốt/xấu cả tháng theo âm lịch', h:'/app/ngay-tot', p:'ngay-tot' },
-    { i:'clock', t:'Giờ hoàng đạo', d:'12 giờ tốt/xấu trong ngày theo can chi', h:'/app/hoang-dao', p:'hoang-dao' },
-  ]},
-  { g:'Đặt Tên', items:[
-    { i:'tag', t:'Đặt tên con', d:'Tên hợp mệnh theo can chi & ngũ hành', h:'/app/dat-ten', p:'dat-ten-con' },
-    { i:'tag', t:'Đặt tên doanh nghiệp', d:'Tên công ty, thương hiệu hợp mệnh chủ & ngành', h:'/app/dat-ten-dn', p:'dat-ten-dn' },
-    { i:'leaf', t:'Ngũ hành tên', d:'Tên có hợp mệnh nạp âm không, bồi hay khắc', h:'/app/ngu-hanh-ten', p:'ngu-hanh-ten' },
-  ]},
-  { g:'Mệnh Lý', items:[
-    { i:'leaf', t:'Nạp âm ngũ hành', d:'Hành bản mệnh theo năm sinh, hợp màu, hướng, tuổi', h:'/app/nap-am', p:'nap-am' },
-  ]},
-  { g:'Huyền Học', items:[
-    { i:'yinyang', t:'Kinh Dịch — Gieo quẻ', d:'Chu Dịch 64 quẻ, quẻ chính, hào động, quẻ biến', h:'/app/kinh-dich', p:'kinh-dich' },
-    { i:'flower', t:'Mai Hoa Dịch Số', d:'Gieo bằng số hoặc giờ — Thể, Dụng, ba chặng chính hỗ biến', h:'/app/mai-hoa', p:'mai-hoa' },
-    { i:'grid', t:'Kỳ Môn Độn Giáp', d:'Bàn 9 cung theo giờ — bát môn, cửu tinh, hướng nên đi', h:'/app/ky-mon', p:'ky-mon' },
-    { i:'star', t:'Bản đồ sao lúc sinh', d:'Chiêm tinh Tây — cung Mọc, 12 nhà, góc chiếu; tải bánh xe về chia sẻ', h:'/app/ban-do-sao', p:'ban-do-sao' },
-    { i:'yinyang', t:'Lục Nhâm Giản', d:'12 thần tướng theo giờ/ngày, cát hung', h:'/app/luc-nham', p:'luc-nham' },
-    { i:'hash', t:'Thần số học', d:'Số chủ đạo theo ngày sinh, tính cách, sự nghiệp', h:'/app/than-so-hoc', p:'than-so-hoc' },
-  ]},
-];
 function svg(n){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">'+(IC[n]||IC.grid)+'</svg>'; }
-/* prices = bảng đọc từ `tool_pricing`, hoặc null khi đọc hỏng → rơi về `it.c`. */
-function renderHomeCards(prices){
-  document.getElementById('homeCards').innerHTML=GROUPS.map(function(grp){
-    var cards=grp.items.map(function(it){
-      var cost=(prices && it.p && prices[it.p]!=null) ? prices[it.p] : null;
-      return '<a class="tcard'+(it.ext?' ext':'')+'" href="'+it.h+'"'+(it.ext?' target="_blank" rel="noopener"':'')+'>'+
-        '<div class="ic">'+svg(it.i)+'</div>'+
-        '<div class="tx"><b>'+esc(it.t)+'</b><span>'+esc(it.d)+'</span></div>'+
+/* Dựng thẻ từ danh mục đã đọc. `d` = kết quả ToolPrices.load(), hoặc bản
+   navFallback (danh mục đọc được lần gần nhất, KHÔNG kèm giá) khi mạng hỏng —
+   dashboard trống thì người dùng mất đường vào mọi công cụ. */
+function renderHomeCards(d){
+  var host=document.getElementById('homeCards');
+  if(!host) return;
+  var groups=(d && d.groups)||[];
+  var rows=(d && d.rows)||[];
+  var prices=(d && d.tools)||null;
+  /* Chỉ công cụ CÓ trang trong Luận Đường mới lên dashboard. */
+  var inApp=rows.filter(function(r){ return r && r.app_path; });
+  if(!groups.length || !inApp.length){
+    host.innerHTML='<div class="grp-title">Đang tải danh mục…</div>';
+    return;
+  }
+  var seen={}, html='';
+  function block(title, items){
+    if(!items.length) return '';
+    var cards=items.map(function(it){
+      var cost=(prices && prices[it.tool_id]!=null) ? prices[it.tool_id] : null;
+      return '<a class="tcard" href="'+esc(it.app_path)+'">'+
+        '<div class="ic">'+(window.iconHtml?window.iconHtml(it.icon):svg('grid'))+'</div>'+
+        '<div class="tx"><b>'+esc(it.label)+'</b><span>'+esc(it.question||it.description||'')+'</span></div>'+
         (cost==null?'<span class="cost">…</span>'
           :cost>0?'<span class="cost">'+cost+' Lượng</span>'
           :'<span class="cost free">Miễn Phí</span>')+
         '</a>';
     }).join('');
-    return '<div class="grp-title">'+esc(grp.g)+'</div><div class="cards">'+cards+'</div>';
-  }).join('');
+    return '<div class="grp-title">'+esc(title)+'</div><div class="cards">'+cards+'</div>';
+  }
+  groups.forEach(function(g){
+    var items=inApp.filter(function(r){
+      return window.ToolPrices && ToolPrices.groupsOf(r, groups).indexOf(g.key)>=0;
+    });
+    items.forEach(function(r){ seen[r.tool_id]=1; });
+    html+=block(g.title, items);
+  });
+  /* Công cụ không rơi vào nhóm nào vẫn phải NHÌN THẤY — tàng hình thì không ai
+     phát hiện ra là đã gán sai nhóm. */
+  html+=block('Khác', inApp.filter(function(r){ return !seen[r.tool_id]; }));
+  host.innerHTML=html;
+  if(window.mountIcons) window.mountIcons(host);
 }
-/* Vẽ khung ngay (giá hiện "…"), điền số khi đọc được bảng giá. Cache
-   sessionStorage của ToolPrices làm bước "…" chỉ xuất hiện ở lượt tải ĐẦU của
-   phiên, không phải mỗi lần vào trang. */
-renderHomeCards(null);
-if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(d.tools); });
+renderHomeCards(window.ToolPrices ? ToolPrices.navFallback() : null);
+if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(d); });
 </script>
 
 <script>
@@ -330,6 +306,26 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
   function run(){
   var card=el('todayCard'); if(!card) return;
   _today=vnToday();
+
+  // Bậc cuối của phễu nhắc: có người BẬT rồi có người MỞ không. Đọc `from=push`
+  // chứ không đọc `utm_source`: UTM chỉ ghi first-touch, nên người đã ghé site
+  // từ trước — đúng nhóm duy nhất nhận được thông báo — sẽ không bao giờ hiện
+  // ở bảng nguồn. Hai thứ khác nhau, cả hai đều nằm trong link.
+  //
+  // 🪤 PHẢI xếp hàng chờ: `shell.js` nạp `track.js` KHÔNG ĐỒNG BỘ, nên lúc hàm
+  // này chạy thì `window.Track` chưa tồn tại. Bản đầu gọi thẳng → ReferenceError
+  // rơi vào catch và event im lặng biến mất; test bắt được vì `push_optin_shown`
+  // (bắn 6 giây sau) thì có mà `push_open` thì không.
+  if(/[?&]from=push\b/.test(location.search)) emitWhenReady('push_open');
+  function emitWhenReady(type){
+    var n=0;
+    (function tick(){
+      try{
+        if(window.Track&&window.Track.event){ window.Track.event(type,{tool_id:'van-ngay'}); return; }
+      }catch(e){}
+      if(++n<50) setTimeout(tick,100);
+    })();
+  }
 
   // birth nhớ trong localStorage theo shape của TuviForm (ngay/thang/nam); rail
   // VÀ api chỉ hiểu shape contract (day/month/year) → PHẢI đổi, đừng truyền thẳng.
@@ -472,6 +468,40 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
     renderWeek(td);
     card.style.display='';
     wire(v,td,birth,hasBirth,hours);
+    maybeAskPush(v,isToday,birth);
+  }
+
+  /* ── Mời bật nhắc hằng ngày ─────────────────────────────────────────────
+     Hỏi SAU khi thẻ đã dựng xong, KHÔNG phải lúc vào trang. Xin quyền trước
+     khi người ta thấy mình được gì là cách chắc nhất bị bấm "Chặn" — mà
+     "Chặn" trên trình duyệt là VĨNH VIỄN, không có đường hỏi lại.
+
+     Ba điều kiện, mỗi cái bịt một kiểu hỏi sai chỗ:
+       • `isToday` — đang xem ngày khác thì lời mời "mỗi sáng" lệch ngữ cảnh.
+       • có `caNhan` — người đã lưu lá số. Chỉ họ mới nhận được phần đáng giá
+         nhất của tin nhắc (ngày nào xung chính tuổi mình); mời người chưa có
+         lá số là hứa một thứ nhạt hơn hẳn.
+       • trễ 6 giây — đủ để đọc xong thẻ. Bật lên ngay khi thẻ vừa hiện thì
+         hộp thoại che đúng thứ vừa thuyết phục họ.
+
+     Nạp `pwa-push.js` ĐÚNG LÚC CẦN (không nhét vào <head>): trang này là màn
+     hình đầu của /app, mỗi file thêm vào đường tải là một nhịp chậm cho mọi
+     người, kể cả người sẽ không bao giờ thấy lời mời. */
+  var _pushAsked=false;
+  function maybeAskPush(v,isToday,birth){
+    if(_pushAsked||!isToday||!v||!v.caNhan) return;
+    _pushAsked=true;
+    var nam=(birth&&+birth.year)||0;
+    setTimeout(function(){
+      function go(){
+        if(!window.askPushPermission) return;
+        try{ window.askPushPermission(nam, (v.caNhan&&v.caNhan.canChiNam)||''); }catch(e){}
+      }
+      if(window.askPushPermission) return go();
+      var s=document.createElement('script');
+      s.src='/pwa-push.js?v=2'; s.onload=go; s.onerror=function(){};
+      document.head.appendChild(s);
+    },6000);
   }
 
   /* ── Nhập / đổi lá số NGAY TRONG THẺ ────────────────────────────────────

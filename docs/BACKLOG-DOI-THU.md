@@ -72,7 +72,7 @@ Công sức: **S** < 1 ngày · **M** 2–4 ngày · **L** > 1 tuần.
 | **M3** | **Nhiệm vụ onboarding chia nhỏ** (Zalo/SĐT/email → mỗi việc một phần thưởng) | M | 🟢 |
 | **M4** | Trang SEO = trang BÁN được, không chỉ trang đọc | L | 🟡 |
 | **M5** | Kênh phân phối bên thứ ba (Zalo OA / báo / partner) | M | 🟡 |
-| **R1** | Vận hôm nay → nhắc hằng ngày qua push/Zalo | M | 🟢 |
+| **R1** | ~~Vận hôm nay → nhắc hằng ngày qua push~~ (kênh đã nối lại) | M | ✅ XONG |
 | **R2** | Chuỗi ngày ghé thăm | S | 🟡 |
 | **D1** | ~~Đo tỉ lệ **xem → mua** theo từng tool~~ | S | ✅ XONG |
 | **D2** | Hạ tầng A/B giá | M | 🟡 |
@@ -130,7 +130,7 @@ phải tính lại. Một câu SQL, không cần deploy.
 
 ## W — Paywall & chuyển đổi
 
-### W1. Tính thử miễn phí → chặn ở phần luận sâu ✅ XONG (3 tool cẩm nang) ⭐
+### W1. Tính thử miễn phí → chặn ở phần luận sâu ✅ XONG (5 tool) ⭐
 **Bằng chứng ở tầng code:** 29/71 trang sản phẩm của họ **giấu giá tới sau khi
 bấm**, trang chỉ có hai nút `免費試算` → `付費鑑定`. Người dùng Dcard mô tả:
 *"che một đống đoạn mờ để câu"*.
@@ -154,8 +154,30 @@ thật**, bày tầng deterministic rồi mới khoá phần chữ.
   ĐƯỜNG TIỀN, không theo bố cục**. Có test đọc mã canh renderMeta không đọc một
   khoá chữ nào.
 
-**Chưa làm:** 2 tool chân dung — ở đó giá trị chính LÀ bức ảnh, cho xem trước
-là cho không hàng. Phải nghĩ cách khác.
+**✅ W1b — đã mở sang 2 tool chân dung.** Vòng trước ghi *"giá trị chính LÀ bức
+ảnh, cho xem trước là cho không hàng"* — **sai một nửa**: D1 đo được cả hai tool
+rơi ~90% ngay ở bước BẤM NÚT, tức trước cả paywall. Và preview vẫn **0đ**: cả
+hai route đã ghi sẵn *"cả hai chỉ ăn dữ liệu deterministic từ computePastLife()"*.
+| Tool | Mở | Chạy | Rơi |
+|---|---:|---:|---:|
+| Chân Dung Vợ Chồng | 10 | 1 | **90%** |
+| Chân Dung Tiền Kiếp | 5 | 1 | **80%** |
+- **Tiền kiếp bày**: danh xưng (1 trong 1.150) · nền văn minh + nhãn thời đại ·
+  khung 5 hồi kèm nhãn đỉnh-cao/biến-cố · **Cơ Sở Trong Lá Số**. Khoá: bức
+  tranh, mô tả nhân vật, chữ 5 hồi, lời kết.
+- **Vợ chồng bày**: cung Phu Thê + **bảng hình thể** (mỗi nét kèm SAO quyết định
+  nó, sát tinh đánh dấu "phá cách"). Khoá: bức tranh, mô tả, hoàn cảnh gặp gỡ,
+  luận giải.
+- 🔑 **Khối "Cơ Sở Trong Lá Số" của tiền kiếp SỐNG LẠI — nhưng chỉ ở lượt chưa
+  trả tiền.** Nó từng bị gỡ vì thuật ngữ tử vi làm hỏng mạch truyện; quyết định
+  đó giữ nguyên (`renderProse` ẩn nó đi). Ở lượt chưa trả tiền vai của nó ngược
+  lại: đây là bằng chứng DUY NHẤT người ta có.
+- ⚠️ **KHÔNG bày `spouseAge`**: mốc tuổi neo vào `Math.random()` nên số ở lượt
+  tính thử sẽ khác số sau khi trả tiền. Bày rồi đổi ngay sau khi thu tiền là tự
+  tay phá thứ W1 sinh ra để xây. Có ca test canh đúng chỗ này.
+- **Chưa làm:** 2 trang standalone `/tools/chan-dung-*.html` vẫn là tường cũ —
+  chúng không nạp `shell.js` nên không nằm trong phễu D1, và CTA từ link chia sẻ
+  vốn đổ về `/app`.
 
 ### W2. Che chữ thay vì modal ✅ XONG
 Modal chặn = "cửa đóng". Che mờ = "gần lấy được rồi". Cùng một hành vi, hai cảm
@@ -297,7 +319,7 @@ trả cho tư vấn thật không** trước khi dựng cả cái chợ.
 
 ## M — Đóng gói & marketing
 
-### M1. Đóng gói theo NỖI LO 🟢 M ⭐⭐
+### M1. Đóng gói theo NỖI LO ✅ XONG (PR #425, mở rộng ở #441)
 **Đối chiếu thẳng:**
 
 | | click108 | tuviminhbao |
@@ -309,7 +331,7 @@ Người mua không quan tâm mình dùng môn gì — họ gõ *"năm nay có n
 không"*. **Cùng engine, chỉ đổi cách gói và cách đặt tên** ⇒ đây là thay đổi
 marketing, gần như không đụng logic. **Tỉ lệ tác động/công sức cao nhất backlog.**
 
-### M2. Đặt tên theo câu hỏi 🟢 S
+### M2. Đặt tên theo câu hỏi ✅ XONG (PR #425)
 Tên mục thật trên trang họ: *"Tương lai mờ mịt, phải nhẫn tới tuổi hưu?"* ·
 *"Hai người hết chuyện nói, mối này có nên tiếp?"* · *"Áp lực công việc lớn, dạo
 này hợp đổi nghề?"* · *"Con thi đại học hay cao đẳng nghề?"*
@@ -338,13 +360,22 @@ click108 là **kênh mệnh lý ĐỘC QUYỀN của Yahoo Đài Loan** và là 
 
 ## R — Giữ chân
 
-### R1. Vận hôm nay → nhắc hằng ngày 🟢 M ⭐
+### R1. Vận hôm nay → nhắc hằng ngày ✅ XONG (nhưng KHÔNG như đề bài)
 Đọc phần đánh giá của họ thì thấy **lý do gia hạn gần như luôn là "vận hôm nay"**,
 không phải báo cáo lớn: *"ngày nào ra khỏi nhà cũng xem"*, *"giờ tốt màu tốt"*,
 *"mỗi ngày đều đăng nhập"*.
 ⇒ Móc quay lại KHÔNG nằm ở sản phẩm đắt tiền, nó nằm ở **mẩu nhỏ hằng ngày**.
-Mình đã có thẻ Vận hôm nay + dải 7 ngày + push. Còn thiếu: **nhắc đúng lúc, cá
-nhân hoá theo lá số, và một lý do để mở ra**.
+
+🔴 **Đề bài viết "Mình đã có thẻ Vận hôm nay + dải 7 ngày + push" — vế "push" là
+SAI.** Đo trước khi làm: 2 lượt đăng ký web-push, 0 token FCM, và ba lỗi chồng
+nhau khiến kênh chưa từng hoạt động (service worker không có handler để HIỆN
+thông báo · nội dung lặp nguyên văn mỗi sáng · không có đường bật ở nơi có người
+thật). Nên việc phải làm trước không phải "nhắc đúng lúc" mà là **nối lại kênh**.
+Chi tiết ở CLAUDE.md mục R1a.
+
+**Còn lại của R1 (chưa làm, chờ số):** cá nhân hoá sâu hơn một dòng xung tuổi —
+chỉ đáng làm nếu tỉ lệ mở từ thông báo (`push_open` / `push_optin_result=granted`)
+cho thấy có người thật đọc. Zalo OA vẫn chưa đăng ký được.
 
 ---
 

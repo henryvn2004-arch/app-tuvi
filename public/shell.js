@@ -10,69 +10,64 @@
   'use strict';
 
   // ── NGUỒN DUY NHẤT: danh sách công cụ (render cả sidebar lẫn Cmd+K) ──
-  var TOOLS = [
-    { group: 'Luận Đường', open: true, items: [
-      { id: 'home',       label: 'Tổng quan',           href: '/app',            icon: 'home' },
-    ] },
-    { group: 'Tử Vi', open: true, items: [
-      { id: 'luan-giai',  label: 'Luận giải Tử Vi',     href: '/app/luan-giai',  icon: 'grid' },
-      { id: 'cong-so',    label: 'Tử Vi Công Sở',       href: '/app/cong-so',    icon: 'briefcase' },
-      { id: 'xem-tuoi',   label: 'Xem tuổi vợ chồng',   href: '/app/xem-tuoi',   icon: 'users' },
-      { id: 'xem-lam-an', label: 'Xem tuổi làm ăn',     href: '/app/xem-lam-an', icon: 'briefcase' },
-      { id: 'tuong-hop',  label: 'Tương hợp tuổi',      href: '/app/tuong-hop',  icon: 'heart' },
-      { id: 'sinh-con',   label: 'Xem tuổi sinh con',   href: '/app/sinh-con',   icon: 'baby' },
-      { id: 'chan-dung-vo-chong', label: 'Chân dung vợ chồng', href: '/app/chan-dung-vo-chong', icon: 'image' },
-      { id: 'chan-dung-tien-kiep', label: 'Chân dung tiền kiếp', href: '/app/chan-dung-tien-kiep', icon: 'temple' },
-      { id: 'duyen-no-tien-kiep', label: 'Duyên nợ tiền kiếp', href: '/app/duyen-no-tien-kiep', icon: 'heart-handshake' },
-      { id: 'nguoi-khac', label: 'Lá số người khác', href: '/app/nguoi-khac', icon: 'user' },
-      { id: 'day-con', label: 'Dạy con theo lá số', href: '/app/day-con', icon: 'baby' },
-      { id: 'nhan-mach', label: 'Sổ nhân mạch', href: '/app/nhan-mach', icon: 'users' },
-    ] },
-    { group: 'Tử Bình', open: false, items: [
-      { id: 'bat-tu',     label: 'Lá số Bát Tự',        href: '/app/bat-tu',     icon: 'rows' },
-    ] },
-    { group: 'Xem Tướng', open: false, items: [
-      { id: 'dien-tuong', label: 'Diện Tướng AI',       href: '/app/dien-tuong', icon: 'user' },
-      { id: 'nhan-tuong', label: 'Nhãn Tướng AI',       href: '/app/nhan-tuong', icon: 'eye' },
-      { id: 'thu-tuong',  label: 'Thủ Tướng AI',        href: '/app/thu-tuong',  icon: 'hand' },
-      { id: 'thanh-tuong', label: 'Thanh Tướng AI',     href: '/app/thanh-tuong', icon: 'mic' },
-      { id: 'thanh-tuong-pro', label: 'Thanh Tướng Pro', href: '/app/thanh-tuong-pro', icon: 'mic' },
-    ] },
-    { group: 'Phong Thủy', open: false, items: [
-      { id: 'phong-thuy', label: 'Phong Thủy Nội Thất',  href: '/app/phong-thuy', icon: 'leaf' },
-      { id: 'bat-trach',  label: 'Hướng Bát Trạch',     href: '/app/bat-trach',  icon: 'compass' },
-    ] },
-    { group: 'Chọn Ngày / Lịch', open: false, items: [
-      { id: 'chon-ngay',  label: 'Chọn ngày tốt',       href: '/app/chon-ngay',  icon: 'calendar' },
-      { id: 'kim-lau',    label: 'Kim Lâu & Tam Tai',   href: '/app/kim-lau',    icon: 'calcheck' },
-      { id: 'ngay-tot',   label: 'Ngày tốt trong tháng', href: '/app/ngay-tot',  icon: 'calcheck' },
-      { id: 'hoang-dao',  label: 'Giờ hoàng đạo',       href: '/app/hoang-dao',  icon: 'clock' },
-    ] },
-    { group: 'Đặt Tên', open: false, items: [
-      { id: 'dat-ten',    label: 'Đặt tên con',         href: '/app/dat-ten',    icon: 'tag' },
-      { id: 'dat-ten-dn', label: 'Đặt tên doanh nghiệp', href: '/app/dat-ten-dn', icon: 'building' },
-      { id: 'ngu-hanh-ten', label: 'Ngũ hành tên',      href: '/app/ngu-hanh-ten', icon: 'star' },
-    ] },
-    { group: 'Mệnh Lý', open: false, items: [
-      { id: 'nap-am',     label: 'Nạp âm ngũ hành',     href: '/app/nap-am',     icon: 'wave' },
-    ] },
-    { group: 'Huyền Học', open: false, items: [
-      { id: 'kinh-dich',  label: 'Kinh Dịch — Gieo quẻ', href: '/app/kinh-dich', icon: 'yin' },
-      { id: 'mai-hoa',    label: 'Mai Hoa Dịch Số',     href: '/app/mai-hoa',   icon: 'flower' },
-      { id: 'ky-mon',     label: 'Kỳ Môn Độn Giáp',     href: '/app/ky-mon',    icon: 'grid' },
-      { id: 'luc-nham',   label: 'Lục Nhâm Giản',       href: '/app/luc-nham',   icon: 'compass' },
-      { id: 'than-so-hoc', label: 'Thần số học',        href: '/app/than-so-hoc', icon: 'hash' },
-    ] },
-    // Nhóm RIÊNG, cố ý không nhét vào "Huyền Học": chiêm tinh Tây khác hệ hẳn
-    // với cổ pháp Á Đông, để lẫn thì người dùng tưởng đọc được chéo nhau.
-    { group: 'Chiêm Tinh Tây', open: false, items: [
-      { id: 'ban-do-sao', label: 'Bản đồ sao lúc sinh',  href: '/app/ban-do-sao', icon: 'star' },
-    ] },
-    { group: 'Tài khoản', open: true, items: [
-      { id: 'vi-luong',   label: 'Ví Lượng',            href: '/app/tai-khoan#credits', icon: 'wallet', balance: true },
-      { id: 'ho-so',      label: 'Hồ sơ của tôi',       href: '/app/tai-khoan', icon: 'user' },
-    ] },
-  ];
+  // ── DANH SÁCH CÔNG CỤ — dựng TỪ DỮ LIỆU, không còn mảng chép tay ──
+  //
+  // Trước đây đây là một mảng 34 công cụ xếp theo BỘ MÔN, và `/cong-cu` giữ một
+  // mảng KHÁC xếp theo NHU CẦU với 58 công cụ. Cùng một sản phẩm nói hai kiểu
+  // với cùng một người, và thêm công cụ mới là phải sửa tay ba chỗ.
+  //
+  // Nay nhóm lấy từ bảng `tool_groups`, công cụ lấy từ `tool_pricing`, đường dẫn
+  // lấy từ cột `app_path`. Chỉ hai nhóm dưới đây là CỐ ĐỊNH vì chúng không phải
+  // công cụ: lối về trang tổng quan, và khu tài khoản (có ô số dư).
+  var FIXED_TOP = { group: 'Luận Đường', open: true, items: [
+    { id: 'home', label: 'Tổng quan', href: '/app', icon: 'home' },
+  ] };
+  var FIXED_BOTTOM = { group: 'Tài khoản', open: true, items: [
+    { id: 'vi-luong', label: 'Ví Lượng', href: '/app/tai-khoan#credits', icon: 'wallet', balance: true },
+    { id: 'ho-so',    label: 'Hồ sơ của tôi', href: '/app/tai-khoan', icon: 'user' },
+  ] };
+
+  // Bắt đầu bằng CHỈ hai nhóm cố định. Dữ liệu về thì `applyCatalog` chèn các
+  // nhóm công cụ vào giữa rồi vẽ lại. Sidebar không bao giờ rỗng hoàn toàn —
+  // mất điều hướng còn tệ hơn một danh sách đến chậm nửa giây.
+  var TOOLS = [FIXED_TOP, FIXED_BOTTOM];
+
+  /** Dựng lại TOOLS từ danh mục (`d` = ToolPrices.load() hoặc navFallback). */
+  function applyCatalog(d) {
+    var groups = (d && d.groups) || [];
+    var rows = (d && d.rows) || [];
+    var inApp = rows.filter(function (r) { return r && r.app_path; });
+    if (!groups.length || !inApp.length) return false;
+
+    var seen = {};
+    var out = [FIXED_TOP];
+    groups.forEach(function (g) {
+      var items = inApp.filter(function (r) {
+        return window.ToolPrices && ToolPrices.groupsOf(r, groups).indexOf(g.key) >= 0;
+      });
+      if (!items.length) return;
+      items.forEach(function (r) { seen[r.tool_id] = 1; });
+      out.push({ group: g.title, open: false, items: items.map(toItem) });
+    });
+    // Công cụ không rơi vào nhóm nào vẫn phải NHÌN THẤY — tàng hình thì không
+    // ai phát hiện ra là đã gán sai nhóm.
+    var rest = inApp.filter(function (r) { return !seen[r.tool_id]; });
+    if (rest.length) out.push({ group: 'Khác', open: false, items: rest.map(toItem) });
+    out.push(FIXED_BOTTOM);
+    TOOLS = out;
+    return true;
+  }
+
+  /** Một dòng `tool_pricing` → một mục sidebar. `id` phải là SLUG của đường dẫn
+   *  (không phải tool_id) vì `SHELL_ACTIVE` của mỗi trang khai theo slug. */
+  function toItem(r) {
+    return {
+      id: String(r.app_path || '').replace(/^\/app\/?/, '') || 'home',
+      label: r.label,
+      href: r.app_path,
+      icon: r.icon || 'grid',
+    };
+  }
 
   var ICONS = {
     grid: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/>',
@@ -207,6 +202,37 @@
       if (_refCode) u.searchParams.set('ref', _refCode);
       return u.toString();
     } catch (e) { return url; }
+  }
+
+  // Nạp `tool-prices.js` nếu trang chưa có. CÙNG id với bản của tuvi-paywall.js
+  // nên hai bên không bao giờ nạp thành hai thẻ.
+  function ensureToolPrices() {
+    if (window.ToolPrices) return Promise.resolve();
+    return new Promise(function (resolve) {
+      var el = document.getElementById('_tvmb_prices_js');
+      if (!el) {
+        el = document.createElement('script');
+        el.id = '_tvmb_prices_js';
+        el.src = '/tool-prices.js?v=4';
+        document.head.appendChild(el);
+      }
+      el.addEventListener('load', function () { resolve(); });
+      el.addEventListener('error', function () { resolve(); });
+    });
+  }
+
+  // Dựng menu: lấy ngay bản đọc được LẦN TRƯỚC (localStorage) để sidebar có
+  // nội dung từ khung hình đầu, rồi mới hỏi mạng và vẽ lại nếu có gì đổi.
+  // Mạng hỏng mà sidebar trống là mất đường đi khắp app — tệ hơn hẳn một danh
+  // sách hơi cũ. Giá thì KHÔNG lấy từ lối lùi này (xem tool-prices.js).
+  function loadCatalog() {
+    return ensureToolPrices().then(function () {
+      if (!window.ToolPrices) return;
+      if (applyCatalog(ToolPrices.navFallback())) { renderSidebar(); buildCmds(); }
+      return ToolPrices.load().then(function (d) {
+        if (d && applyCatalog(d)) { renderSidebar(); buildCmds(); }
+      });
+    });
   }
 
   // ── RENDER SIDEBAR ──
@@ -884,6 +910,30 @@
     return parts.join(' · ');
   }
 
+  /**
+   * Khối "Lá số dùng để luận" của bản chia sẻ.
+   *
+   * Tool MỘT lá số truyền `birth` như cũ. Tool NHIỀU lá số (Duyên Nợ Tiền Kiếp)
+   * truyền `births: [{label, birth}, ...]` — nếu chỉ nêu một cái thì người nhận
+   * link tưởng bản luận chỉ nói về người đó. `label` là chỗ nói luôn phần nào
+   * của kết quả gắn với lá số nào.
+   */
+  function shareBirthLines(o) {
+    var arr = Array.isArray(o.births) ? o.births : null;
+    if (arr && arr.length) {
+      return arr
+        .map(function (it) {
+          var line = birthSummaryLine(it && it.birth ? it.birth : it);
+          if (!line) return '';
+          var lb = it && it.label ? String(it.label).trim() : '';
+          return lb ? lb + ': ' + line : line;
+        })
+        .filter(Boolean)
+        .join('\n');
+    }
+    return birthSummaryLine(o.birth || (ctx && ctx.birth) || null);
+  }
+
   // Tool gọi Shell.setShareable({kind:'image'|'text', title, imageUrl?, text?})
   // ngay sau khi có kết quả → nút "Chia sẻ" tự hiện trong .ws-actions (nếu
   // trang có toolbar đó), không cần tool tự vẽ nút/markup riêng. Khác
@@ -1515,7 +1565,7 @@
       // Lá số của CHÍNH lượt này: tool truyền thẳng (o.birth) hoặc lấy từ ngữ
       // cảnh tool đã set. CỐ Ý không đụng birthSnapshot()/localStorage — lá số
       // còn sót từ tool khác sẽ gắn nhầm chủ nhân cho bản chia sẻ.
-      var bLine = birthSummaryLine(o.birth || (ctx && ctx.birth) || null);
+      var bLine = shareBirthLines(o);
       if (bLine) {
         if (blocks) blocks.unshift({ header: 'Lá số dùng để luận', text: bLine });
         else if (kind === 'text') text = bLine + '\n\n' + (text || '');
@@ -1692,11 +1742,18 @@
   }
 
   // ── COMMAND PALETTE ──
+  // Dựng LẠI được: danh mục công cụ nay đến từ mạng, nên bảng lệnh phải theo
+  // kịp — nếu không thì Ctrl+K vẫn chỉ có hai nhóm cố định suốt cả phiên.
   var CMDS = [];
-  TOOLS.forEach(function (g) { g.items.forEach(function (it) { if (it.balance || it.id === 'ho-so') return; CMDS.push({ g: 'Công cụ', i: it.icon || 'grid', t: it.label, href: it.href, s: '' }); }); });
-  CMDS.push({ g: 'Hành động', i: 'bolt', t: 'Đổi nền sáng / tối', act: 'theme' });
-  CMDS.push({ g: 'Hành động', i: 'bolt', t: 'Nạp Lượng', href: '/topup' });
+  function buildCmds() {
+    CMDS.length = 0;
+    TOOLS.forEach(function (g) { g.items.forEach(function (it) { if (it.balance || it.id === 'ho-so') return; CMDS.push({ g: 'Công cụ', i: it.icon || 'grid', t: it.label, href: it.href, s: '' }); }); });
+    CMDS.push({ g: 'Hành động', i: 'bolt', t: 'Đổi nền sáng / tối', act: 'theme' });
+    CMDS.push({ g: 'Hành động', i: 'bolt', t: 'Nạp Lượng', href: '/topup' });
+    cShown = CMDS;
+  }
   var cSel = 0, cShown = CMDS;
+  buildCmds();
   function cmdIcon(n) { return '<svg class="ri" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">' + (ICONS[n] || ICONS.grid) + '</svg>'; }
   function cRender() {
     var el = document.getElementById('cmdkList'); if (!el) return;
@@ -1863,6 +1920,7 @@
     try { _fromshareId = sessionStorage.getItem('app_fromshare_id') || null; if (_fromshareId) sessionStorage.removeItem('app_fromshare_id'); } catch (e) { /* ignore */ }
     pickAuthor();
     renderSidebar();
+    loadCatalog();
     renderRail();
     renderTabbar();
     trackWsTopHeight();
