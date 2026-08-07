@@ -117,9 +117,20 @@ export function buildDayConPrompt(p: DayConProfile, ten: string): string {
     L.push('Không đọc được chặng nào trong quãng đi học — BỎ QUA phần chặng, ĐỪNG bịa.');
   }
   if (p.vanNam) {
+    const v = p.vanNam;
+    const bit = [
+      v.khung ? `khung đại vận ${v.khung.tuoiStart}–${v.khung.tuoiEnd} tuổi: ${TIER(v.khung.diem)}` : '',
+      v.tieuHanCung ? `tiểu hạn nhập cung ${v.tieuHanCung}` : '',
+      v.luuNienCung ? `lưu niên đại hạn vào cung ${v.luuNienCung}` : '',
+      v.catSat ? `cát ${v.catSat.cat} / sát ${v.catSat.sat} (${v.catSat.canCan})` : '',
+    ].filter(Boolean);
+    if (bit.length) L.push(`Vận năm ${v.nam}: ${bit.join('; ')}`);
+    // Cùng luật với `execTraVanHan`: năm KHÔNG có điểm riêng, đại vận chỉ giới
+    // hạn biên độ. Không dặn thì model tự chấm một con số cho năm rồi nói chắc.
     L.push(
-      `Vận năm ${p.vanNam.nam}: ${TIER(p.vanNam.diem)}` +
-        (p.vanNam.huong ? `, đà ${p.vanNam.huong}` : ''),
+      'Riêng NĂM thì KHÔNG có điểm — đừng gán "điểm/10" cho năm. Điểm trên là của KHUNG đại vận, ' +
+        'nó chỉ nới hay bó BIÊN ĐỘ (khung cao thì cái tốt của năm bung rõ, cái khó nhẹ bớt; khung thấp thì ngược lại). ' +
+        'Tốt/xấu của năm đọc ở cung tiểu hạn + lưu niên và cán cân cát/sát.',
     );
   }
   L.push('');
