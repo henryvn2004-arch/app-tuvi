@@ -23,7 +23,7 @@ import { computeLaso, renderLasoCard } from '@/lib/engine/laso';
 import { computeTuBinh } from '@/lib/engine/tubinh';
 import { computeSinhCon, computeChonNgay, computeDatTen, computeDatTenDn } from '@/lib/engine/diachi';
 // Template prompt + context formatter dùng CHUNG với /api/lasotuvi (một bộ não).
-import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint, nguoiXemLine } from '@/lib/agent/prompts';
+import { CHAT_SYSTEM_LASO, CHAT_SYSTEM_GENERAL, extractLasoContext, buildChatContext, focusHint, nguoiXemLine, RAIL_MAX_TOKENS } from '@/lib/agent/prompts';
 import { TOOLS_INSTRUCTION } from '@/lib/agent/tools';
 import { type ChatConfig } from '@/lib/config/appConfig';
 import {
@@ -136,10 +136,19 @@ type ProviderOutcome = { ok: true; result: AgentResult } | { ok: false; midStrea
 // ── Agent loop ──────────────────────────────────────────────
 export async function runAgent(
   req: ChatRequestV1,
-  cfg: ChatConfig,
+  cfgIn: ChatConfig,
   send: (s: string) => void,
   profiles: ProfilePort | null = null,
 ): Promise<AgentResult> {
+  // Trần token của MỘT lượt rail. 🔴 Trước đây runAgent dùng THẲNG cfg.maxTokens
+  // (app_config['chat.max_tokens'], prod = 3000) và BỎ QUA con số mà
+  // buildChatContext trả về — nên mọi trần per-prompt chỉ có tác dụng cho route
+  // legacy /api/lasotuvi, còn rail thật sự chạy tới 3000. Đo trên `events`: một
+  // lượt rail `cong-so` THẬT trả về 1.982 token output cho một câu hỏi. Nay lấy
+  // min(cfg, per-prompt) → con số per-prompt mới thật sự chặn, và admin vẫn
+  // siết thêm được bằng cách HẠ chat.max_tokens (không nâng ngược lên được —
+  // độ dài rail là quyết định sản phẩm, nằm ở code).
+  let railMaxTokens = RAIL_MAX_TOKENS;
   // Seed ctx với birth đang xem (req.birth) → "lưu lá số này tên X" chạy được cả
   // khi lượt này không gọi lại lap_la_so. profiles bật 3 tool sổ (kênh chat).
   const ctx = newToolContext(null, { profiles, birth: req.birth ?? null });
@@ -212,6 +221,7 @@ export async function runAgent(
     }
     const bc = buildChatContext(scenarioToBody(scn, req.messages as ChatMessage[]));
     system = bc.systemForCall;
+    railMaxTokens = Math.min(railMaxTokens, bc.maxTokens);
     // Bát Tự 1 người: đẩy "Người xem" (tên+giới tính từ birth) vào system → xưng
     // hô đúng (luật XƯNG_HO_RULE trong CHAT_SYSTEM_TU_BINH). Các scenario 2 người
     // (xem-tuoi/tương-hợp) đã có tên đôi bên trong context nên bỏ qua.
@@ -255,8 +265,8 @@ export async function runAgent(
       ? `Phong cách: Bạn đang thể hiện phong cách của ${req.authorName} — ${req.authorStyle}`
       : '';
     const toneParts = [
-      cfg.systemPrompt
-        ? `TÔNG/PHONG CÁCH (tùy chỉnh — CHỈ đổi giọng văn, KHÔNG đổi hình dạng/độ dài/luật luận bên dưới):\n${cfg.systemPrompt}`
+      cfgIn.systemPrompt
+        ? `TÔNG/PHONG CÁCH (tùy chỉnh — CHỈ đổi giọng văn, KHÔNG đổi hình dạng/độ dài/luật luận bên dưới):\n${cfgIn.systemPrompt}`
         : '',
       authorPersona,
     ].filter(Boolean);
@@ -363,6 +373,10 @@ export async function runAgent(
 
     tools = buildToolDefs(!!profiles);
   }
+
+  // Chốt cfg cho cả lượt: trần token là min(DB, per-prompt). Clone chứ không
+  // sửa tại chỗ — cfgIn có thể dùng chung giữa các request.
+  const cfg: ChatConfig = { ...cfgIn, maxTokens: Math.min(cfgIn.maxTokens, railMaxTokens) };
 
   // Có ảnh trong bất kỳ tin user nào → bật hướng dẫn luận ảnh (vision).
   const hasImages = (req.messages as ChatMessage[]).some(
