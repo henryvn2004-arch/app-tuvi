@@ -122,7 +122,7 @@
                 <div class="dn-birth" id="birthLine" style="display:none"></div>
               </div>
               <div class="dn-imgwrap">
-                <div class="dn-imgph" id="imgPlaceholder">Đang vẽ bức tranh hai người…<br>(khoảng 30–60 giây)</div>
+                <div class="dn-imgph" id="imgPlaceholder">Đang vẽ bức tranh hai người…<br>(khoảng 45–60 giây)</div>
                 <img id="resultImg" alt="Tranh duyên nợ tiền kiếp" style="display:none">
                 <div id="imgLoadStatus" style="display:none;margin-top:8px;font-size:12px;color:var(--text-lt);text-align:center"></div>
                 <div class="dn-actions" id="imgActions" style="display:none">
@@ -172,7 +172,8 @@ window.SHELL_INTRO={key:'duyen-no-tien-kiep',title:'Duyên Nợ Tiền Kiếp',d
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=60"></script>
-<script src="/tools-shared/ai-loading-steps.js?v=1"></script>
+<script src="/tools-shared/ai-loading-steps.js?v=2"></script>
+<script src="/tools-shared/portrait-recover.js?v=1"></script>
 <script>
 
 var _currentSlug = '';
@@ -187,6 +188,7 @@ var DN_STEPS = [
 ];
 var _loadingCtl = null;
 var _imgRetryTimer = null;
+var _imgWait = null;      // đồng hồ chờ trong khung ảnh — PHẢI stop ở mọi nhánh thoát
 
 function setResultImage(url) {
   var img = document.getElementById('resultImg');
@@ -291,6 +293,14 @@ async function _doGenerate(freeRerun) {
   document.getElementById('imgActions').style.display = 'none';
   document.getElementById('resultImg').style.display = 'none';
   document.getElementById('imgPlaceholder').style.display = 'flex';
+  // Pha ảnh chạy tiếp ~50 giây SAU khi truyện đã hiện và bảng bước đã tắt —
+  // không có đồng hồ chạy thì khung ảnh nhìn như treo. Bọc `if` vì bản
+  // ai-loading-steps.js còn nằm trong cache trình duyệt có thể chưa có hàm này;
+  // thiếu thì rơi về dòng chữ tĩnh như cũ, không ném lỗi.
+  _imgWait = AiLoadingSteps.mountWait
+    ? AiLoadingSteps.mountWait('imgPlaceholder', { label: 'Đang vẽ bức tranh hai người…' })
+    : null;
+  _imgWait && _imgWait.start();
   _loadingCtl = AiLoadingSteps.mount('loadingSteps', DN_STEPS);
   _loadingCtl.start();
 
@@ -323,6 +333,7 @@ async function _doGenerate(freeRerun) {
     if (res.status === 402 && freeRerun) {
       imageP.catch(function () {});
       _loadingCtl && _loadingCtl.stop();
+      _imgWait && _imgWait.stop();   // quay về form trả tiền → lượt này bỏ, dừng đồng hồ
       showForm();
       document.getElementById('loading').style.display = 'none';
       await TuviPaywall.requireCredits(_currentSlug, async function () { await _doGenerate(false); });
@@ -361,6 +372,7 @@ async function _doGenerate(freeRerun) {
     });
   } catch (e) {
     _loadingCtl && _loadingCtl.stop();
+    _imgWait && _imgWait.stop();   // truyện hỏng → ẩn cả khung ảnh, đừng để đồng hồ chạy ngầm
     document.getElementById('loading').style.display = 'none';
     document.getElementById('resPanel').style.display = 'none';
     document.getElementById('birthPanel').style.display = 'block';
@@ -369,64 +381,46 @@ async function _doGenerate(freeRerun) {
     return;
   }
 
+  var _ires = null;   // giữ Response để phân biệt "mất kết nối" với "server trả lỗi đàng hoàng"
   try {
-    var ires = await imageP;
-    var idata = await ires.json();
-    if (!ires.ok || !idata.success) throw new Error(idata.error || 'Lỗi ' + ires.status);
+    _ires = await imageP;
+    var idata = await _ires.json();
+    if (!_ires.ok || !idata.success) throw new Error(idata.error || 'Lỗi ' + _ires.status);
+    _imgWait && _imgWait.stop();
     _resultImgUrl = idata.imageUrl;
     setResultImage(idata.imageUrl);
     publishShareable(idata.imageUrl);
     _loadHistory();
   } catch (e2) {
-    // ⚠️ Lượt gọi ảnh HỎNG Ở TRÌNH DUYỆT không có nghĩa là server chưa vẽ xong.
-    // Ảnh mất ~50–150 giây; trên di động (khoá màn hình, đổi sóng, chuyển tab)
-    // fetch bị cắt trong khi hàm trên server VẪN CHẠY TỚI CÙNG rồi ghi cache.
-    // Đã xảy ra thật: người dùng thấy "không vẽ được" trong khi bức tranh nằm
-    // sẵn trong kho 50 giây sau đó. Nên trước khi chịu thua, hỏi lại cache.
-    document.getElementById('imgPlaceholder').textContent = 'Mất kết nối lúc tải tranh — đang thử lấy lại…';
-    var got = await _thuLayLaiTranh();
-    if (got) {
-      _resultImgUrl = got;
-      setResultImage(got);
-      publishShareable(got);
-      _loadHistory();
-      return;
-    }
-    document.getElementById('imgPlaceholder').textContent = 'Không vẽ được bức tranh lần này. Phần câu chuyện phía dưới vẫn đầy đủ.';
-    publishShareable('');
-  }
-}
-
-/**
- * Hỏi `cache-status` tới khi server báo ĐỦ CẢ HAI PHA rồi mới xin lại ảnh.
- * CỐ Ý không POST thẳng: pha ảnh chưa vào cache thì một lượt POST nữa là một
- * lượt GỌI MODEL nữa — tốn tiền thật để lấy đúng bức tranh đang được vẽ dở.
- * Lượt POST sau khi đã có cache chỉ đọc lại, không sinh ảnh, không trừ thêm.
- */
-async function _thuLayLaiTranh() {
-  var token = window.Auth?.getSession()?.access_token || '';
-  var q = _cacheQuery(_lastA, _lastB);
-  for (var i = 0; i < 18; i++) {           // 18 × 5s ≈ 90 giây, phủ ca chậm nhất
-    await new Promise(function (r) { setTimeout(r, 5000); });
-    try {
-      var st = await fetch('/api/duyen-no-tien-kiep?action=cache-status&' + q,
-        { headers: { Authorization: 'Bearer ' + token } });
-      var sd = await st.json();
-      if (!sd || !sd.cached) continue;
-      var rr = await fetch('/api/duyen-no-tien-kiep', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
-        body: JSON.stringify({
+    // Server trả lỗi ĐÀNG HOÀNG là câu trả lời dứt khoát — đừng bắt người dùng
+    // nhìn spinner thêm 90 giây rồi vẫn nhận đúng câu báo lỗi đó. Chỉ thử lại
+    // khi mất kết nối / gateway bỏ cuộc, tức server có thể vẫn đang vẽ.
+    if (PortraitRecover.nenThuLai(_ires)) {
+      // GIỮ đồng hồ chạy tiếp: tắt chỉ báo ở đây là nói dối theo hướng ngược lại.
+      if (_imgWait) _imgWait.note('Mất kết nối lúc tải tranh — đang thử lấy lại…');
+      else document.getElementById('imgPlaceholder').textContent = 'Mất kết nối lúc tải tranh — đang thử lấy lại…';
+      var rd = await PortraitRecover.wait({
+        endpoint: '/api/duyen-no-tien-kiep',
+        query: _cacheQuery(_lastA, _lastB),
+        body: {
           birthA: _lastA, birthB: _lastB,
           nameA: _lastA.name || '', nameB: _lastB.name || '',
           phase: 'image', slug: _currentSlug,
-        }),
+        },
       });
-      var rd = await rr.json();
-      if (rr.ok && rd.success && rd.imageUrl) return rd.imageUrl;
-    } catch (e) { /* mạng chập chờn — vòng sau thử tiếp */ }
+      _imgWait && _imgWait.stop();
+      if (rd && rd.imageUrl) {
+        _resultImgUrl = rd.imageUrl;
+        setResultImage(rd.imageUrl);
+        publishShareable(rd.imageUrl);
+        _loadHistory();
+        return;
+      }
+    }
+    _imgWait && _imgWait.stop();
+    document.getElementById('imgPlaceholder').textContent = 'Không vẽ được bức tranh lần này. Phần câu chuyện phía dưới vẫn đầy đủ.';
+    publishShareable('');
   }
-  return '';
 }
 
 // esc() dùng chung từ /laso-chart.js (đã load ở trên) — không khai lại.
