@@ -36,7 +36,7 @@ Công sức: **S** < 1 ngày · **M** 2–4 ngày · **L** > 1 tuần.
 
 | ID | Việc | Công | Khi nào |
 |---|---|---|---|
-| **P1** | Tách Lượng làm 2 loại: mua = vĩnh viễn, tặng = có hạn | M | 🟢 |
+| **P1** | Tách Lượng làm 2 loại: mua = vĩnh viễn, tặng = có hạn | M | ⏸️ HOÃN |
 | **P2** | ~~Bậc thưởng nạp tăng dần, hiện % thưởng trên trang nạp~~ | S | ✅ ĐÃ CÓ |
 | **P3** | Bán kèm giảm giá tại màn thanh toán, **giới hạn 1 món** | M | 🟡 |
 | **P4** | Neo giá: hiện "tổng giá trị" khi gộp gói | S | 🟡 |
@@ -94,6 +94,31 @@ một ⇒ không được vế nào.
 **Đụng gì:** `credit_transactions` + `user_credits` + `deduct_credits` (tiêu
 Lượng tặng trước, Lượng mua sau). **Chỉ áp cho Lượng cấp MỚI** — đặt hạn cho
 Lượng người ta đã cầm là phá lòng tin.
+
+### ⏸️ HOÃN (07/08, Henry chốt) — đo trước rồi mới thấy nó chưa tới lúc
+Bốn thứ đo được, mỗi thứ tự nó đã đủ để lùi:
+
+1. **Vế "mua = vĩnh viễn" ĐÃ đúng sẵn và đã hứa ra miệng** — mọi thẻ gói trên
+   `topup.html` ghi *"Không hết hạn"*, mà hệ thống vốn không có cơ chế hết hạn
+   nào. Nửa này của P1 không mua thêm gì.
+2. **Chính P1 cấm áp hồi tố** ⇒ **19.716 Lượng đang lưu hành giữ nguyên vĩnh
+   viễn** ⇒ P1 không đổi gì cho bất kỳ ai đang tồn tại; nó chỉ có hiệu lực với
+   Lượng cấp về sau.
+3. 🔑 **Con số quyết định: 35/46 ví còn số dư (76%) CHƯA TỪNG tiêu một Lượng
+   nào**, đang ôm 10.975 Lượng. Hạn dùng sinh ra để **tạo áp lực tiêu**, nhưng
+   76% số ví không đang chần chừ tiêu — họ **chưa từng mở cửa lần nào**. Đặt hạn
+   cho người chưa bao giờ dùng thì không tạo ra sự vội vàng, chỉ lấy lại thứ họ
+   vốn không đụng. Thứ kéo họ về là **một lý do để mở ra** (R1a · M3).
+4. **Giá phải trả có thật:** `deduct_credits` hiện là MỘT câu `UPDATE` nguyên tử
+   với chốt `balance >= p_amount`. Tách hai túi = viết lại thành tiêu-lô-theo-hạn
+   + bảng lô + cron quét hết hạn + rà mọi nơi đọc `balance`. Đây là hàm nguy
+   hiểm nhất hệ thống và đường tiền đã trả giá một lần (Duyên Nợ trừ 2 lần).
+
+⇒ **P1 là GIÀN GIÁO cho M3, không phải cải tiến tự đứng được** — mà giàn giáo
+thì dựng khi đã biết toà nhà hình gì. Làm M3 trước (không hạn dùng), đo xem có
+ai làm nhiệm vụ không. **Điều kiện mở lại P1:** M3 chạy thật VÀ tệp Lượng tặng
+phình lên tới mức thành nợ — lúc đó mới có dữ liệu để chọn ĐÚNG con số hạn, thay
+vì chọn bừa hôm nay rồi phải sửa.
 
 ### P2. Bậc thưởng nạp tăng dần ✅ ĐÃ CÓ TỪ TRƯỚC (không phải việc mới)
 **Họ:** 300 → 0% · 600 → 8,3% · 1.200 → 8,3% · 3.000 → 10% · 3.600 → 11,1% ·
