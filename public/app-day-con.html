@@ -474,6 +474,23 @@ async function _doGenerate(freeRerun, lo) {
         'Việc gì nên để ' + ten + ' tự làm, việc gì phải kèm?',
       ],
     });
+
+    // Chia sẻ CHỈ gắn ở đường đã mở khoá (renderProse), không gắn ở lượt tính
+    // thử — bản chia sẻ mà rỗng phần chữ thì người mở link không hiểu đang xem
+    // gì. `Shell.setShareable` tự chèn khối lá số từ `ctx.birth` phía trên.
+    Shell.setShareable({
+      kind: 'text',
+      toolId: 'day-con',
+      title: 'Dạy con theo lá số — ' + ten,
+      text: [
+        ten + ' nghiêng về kiểu ' + data.kieu.ten + ' (' + data.kieu.tuTuong + ')',
+        data.kieu.motCau,
+        data.moiLo && data.moiLo.label ? 'Điều đang lo: ' + data.moiLo.label : '',
+        data.hoc && data.hoc.giaoViec ? 'Giao việc: ' + data.hoc.giaoViec : '',
+        data.hoc && data.hoc.kyLuatHong ? 'Kỷ luật phản tác dụng: ' + data.hoc.kyLuatHong : '',
+        data.motCau ? '— ' + data.motCau : '',
+      ].filter(Boolean).join('\n'),
+    });
   } catch (e) {
     // Giữ nguyên phần tính thử đang hiện — quẳng người ta về form trống là xoá
     // luôn thứ họ vừa xem (và có thể vừa trả tiền cho phần sau).
@@ -573,9 +590,21 @@ function renderMeta(data) {
   });
   if (data.than && data.than.cung) rows.push('<li><b>Cung an Thân</b> — ' + esc(data.than.cung) + '</li>');
   if (data.vanNam) {
-    rows.push('<li><b>Vận năm ' + data.vanNam.nam + '</b> — ' +
-      (data.vanNam.diem == null ? 'chưa chấm' : data.vanNam.diem + '/10') +
-      (data.vanNam.huong ? ', đà ' + esc(data.vanNam.huong) : '') + '</li>');
+    // ⚠️ Đọc CẢ hai dạng payload: bản đã nằm trong `portrait_cache` từ trước
+    // mang `diem`/`huong` (điểm nội suy + nhãn "đà" — xem chú thích trong
+    // lib/engine/day-con.ts), bản mới mang `khung`/`catSat`.
+    var v = data.vanNam, bit = [];
+    if (v.khung) {
+      bit.push('khung đại vận ' + v.khung.tuoiStart + '–' + v.khung.tuoiEnd + ' tuổi' +
+        (v.khung.diem == null ? '' : ': ' + v.khung.diem + '/10'));
+    } else if (v.diem != null) {
+      bit.push(v.diem + '/10');
+    }
+    if (v.tieuHanCung) bit.push('tiểu hạn cung ' + esc(v.tieuHanCung));
+    if (v.luuNienCung) bit.push('lưu niên cung ' + esc(v.luuNienCung));
+    if (v.catSat) bit.push('cát ' + v.catSat.cat + ' / sát ' + v.catSat.sat + ' — ' + esc(v.catSat.canCan));
+    else if (v.huong) bit.push('đà ' + esc(v.huong));
+    rows.push('<li><b>Vận năm ' + v.nam + '</b> — ' + (bit.join(' · ') || 'chưa chấm') + '</li>');
   }
   if (rows.length) {
     document.getElementById('basisList').innerHTML = rows.join('');
@@ -627,6 +656,8 @@ function showForm() {
   document.getElementById('resPanel').style.display = 'none';
   document.getElementById('birthPanel').style.display = 'block';
   document.getElementById('btnEdit').style.display = 'none';
+  // Quay về form thì gỡ nút Chia sẻ — bản vừa xem không còn trên màn hình nữa.
+  Shell.setShareable(null);
 }
 
 async function _loadHistory() {
