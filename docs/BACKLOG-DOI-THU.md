@@ -46,11 +46,11 @@ Công sức: **S** < 1 ngày · **M** 2–4 ngày · **L** > 1 tuần.
 | **W2** | ~~Bản xem trước che chữ thay vì modal chặn~~ | M | ✅ XONG |
 | **W3** | ~~Hiện "còn X Lượng · thao tác này tốn Y" ngay trên nút~~ | S | ✅ XONG |
 | **T1** | ~~**Lá số NGƯỜI KHÁC**~~ (sếp/đồng nghiệp/người thân) — cẩm nang ứng xử | M | ✅ XONG |
-| **T2** | Gói Cha Mẹ: cây gia phả + mệnh con + tương tác cha-con | L | 🔴 |
-| **T3** | Gói Kinh doanh/Sale: nhân mạch công sở + phân tích khách hàng | L | 🔴 |
+| **T2** | ~~Gói Cha Mẹ~~ → tool `day-con` "Dạy Con Theo Lá Số" | L | ✅ XONG |
+| **T3** | ~~Gói Kinh doanh/Sale~~ → tool `nhan-mach` "Sổ Nhân Mạch" | L | ✅ XONG |
 | **T4** | **Đèn cầu an online** (có hạn 1 năm → tái tục) | M | 🟡 |
 | **T5** | Xin keo / thỉnh thần online | M | 🟡 |
-| **T6** | **Duyên nợ tiền kiếp 2 người** (engine XONG, tool chưa dựng) | M | 🟢 |
+| **T6** | ~~**Duyên nợ tiền kiếp 2 người**~~ — tool đã dựng trên engine sẵn có | M | ✅ XONG |
 | **T7** | Cửu tinh / Tam nguyên khí học | M | 🔴 |
 | **T8** | Quỷ Cốc Tử suy mệnh | M | 🔴 |
 | **T9** | Bộ bài Tây: Tarot · Lenormand · Rune · Luân xa | L | 🔴 |
@@ -61,14 +61,14 @@ Công sức: **S** < 1 ngày · **M** 2–4 ngày · **L** > 1 tuần.
 | **U1** | **Đa phái tử vi** (Trung Châu · Tam Hợp · Tứ Hoá Phi Tinh · Khâm Thiên) | L | 🔴 |
 | **U2** | Nhúng cổ tịch tra tại chỗ | L | 🔴 |
 | **U3** | Lá số nhiều tầng: lưu nguyệt · lưu nhật · lưu thời | M | 🟡 |
-| **U4** | **Sổ lá số** — lưu nhiều lá số, đồng bộ tài khoản (không theo máy) | M | 🟢 |
+| **U4** | ~~**Sổ lá số**~~ — lưu nhiều lá số, đồng bộ tài khoản (không theo máy) | M | ✅ XONG |
 | **S1** | Gói **Hội viên năm** — vận riêng hằng ngày + tool chữ không giới hạn | L | 🔴 |
 | **S2** | Ưu đãi hội viên khi mua lẻ (họ giảm 33%) | S | 🔴 |
 | **H1** | **Chợ tư vấn thầy thật**, ăn hoa hồng | L | 🔴 |
 | **H2** | Đặt lịch xem trực tiếp (1 thầy, thủ công, hotline/Zalo) | S | 🟡 |
 | **H3** | Khoá học tử vi online | L | 🔴 |
-| **M1** | **Đóng gói `/cong-cu` theo NỖI LO, không theo BỘ MÔN** | M | 🟢 |
-| **M2** | Đặt tên sản phẩm theo CÂU HỎI người ta gõ | S | 🟢 |
+| **M1** | ~~**Đóng gói `/cong-cu` theo NỖI LO, không theo BỘ MÔN**~~ | M | ✅ XONG |
+| **M2** | ~~Đặt tên sản phẩm theo CÂU HỎI người ta gõ~~ | S | ✅ XONG |
 | **M3** | **Nhiệm vụ onboarding chia nhỏ** (Zalo/SĐT/email → mỗi việc một phần thưởng) | M | 🟢 |
 | **M4** | Trang SEO = trang BÁN được, không chỉ trang đọc | L | 🟡 |
 | **M5** | Kênh phân phối bên thứ ba (Zalo OA / báo / partner) | M | 🟡 |
@@ -344,14 +344,26 @@ Xếp theo **tác động ÷ công sức**, và **không mục nào phụ thuộ
 
 | # | Việc | Vì sao |
 |---|---|---|
-| 1 | **M1 + M2** — đóng gói theo nỗi lo + đặt tên theo câu hỏi | Rẻ nhất, đụng ít code nhất, chạm thẳng chỗ đang tắc, ăn thêm SEO |
-| 2 | **T6** — dựng nốt Duyên nợ tiền kiếp | Engine đã xong và đang nằm không; mỗi lượt kéo 2 người |
-| 3 | **U4** — sổ lá số theo tài khoản | Vừa vá lỗi thật đã ghi trong CLAUDE.md, vừa là nền của T1 và S1 |
+| 1 | ~~**M1 + M2**~~ ✅ — đóng gói theo nỗi lo + đặt tên theo câu hỏi | Rẻ nhất, đụng ít code nhất, chạm thẳng chỗ đang tắc, ăn thêm SEO |
+| 2 | ~~**T6**~~ ✅ — dựng nốt Duyên nợ tiền kiếp | Engine đã xong và đang nằm không; mỗi lượt kéo 2 người |
+| 3 | ~~**U4**~~ ✅ — sổ lá số theo tài khoản | Vừa vá lỗi thật đã ghi trong CLAUDE.md, vừa là nền của T1 và S1 |
 | 4 | ~~**W3 + W2**~~ ✅ — hiện số dư trên nút + che chữ thay vì modal | Vài giờ, không rủi ro, sửa đúng khoảnh khắc người ta bỏ đi |
 | 5 | ~~**T1**~~ ✅ — lá số người khác | Dùng hằng tuần, và mỗi lượt nạp thêm một lá số vào hệ thống |
 
-**W1** (tính thử miễn phí) tác động lớn hơn tất cả, nhưng tốn công nhất và đụng
-mọi trang tool ⇒ để sau khi 1–5 xong.
+**🎉 Cả 5 mục đã xong**, cộng thêm T2/T3 (nội dung hai gói, dạng tool bán lẻ).
+
+### Chọn 5 tiếp theo — xếp lại sau khi đợt trên xong
+
+| # | Việc | Vì sao chọn nó bây giờ |
+|---|---|---|
+| 1 | **D1** — đo tỉ lệ *xem → mua* theo từng tool | 🔑 Đợt vừa rồi thêm **6 tool mới** mà **không có cách nào biết tool nào bán được**. Công S. Mọi quyết định dưới đây đều cần số này trước. |
+| 2 | **R1** — Vận hôm nay → nhắc hằng ngày | Móc quay lại duy nhất đang có; **S1 chờ đúng nó** để chứng minh có người quay lại |
+| 3 | **P2** — bậc thưởng nạp tăng dần | Công S, đụng trang nạp, không rủi ro |
+| 4 | **M3** — nhiệm vụ onboarding chia nhỏ | Ví mới có 25 Lượng mà tool mới giá 15–20 ⇒ gần như chỉ đủ một lượt |
+| 5 | **W1** — tính thử miễn phí, chặn ở phần luận sâu | Tác động lớn nhất, nhưng công L và đụng mọi trang tool ⇒ vẫn để cuối |
+
+⚠️ **S1 (hội viên năm) vẫn KHÔNG nên làm trước R1.** Dựng đường thu tiền định kỳ
+cho thứ chưa đo được có ai quay lại lần hai hay không là dựng nhầm thứ tự.
 
 ---
 
