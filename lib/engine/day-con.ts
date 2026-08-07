@@ -36,6 +36,10 @@ import {
   starLabel,
   kieuCuaCung,
   namSinhTuLaSo,
+  resolveVanNam,
+  vanNamLine,
+  LUAT_VAN_NAM,
+  type VanNam,
 } from './cong-so';
 import { KHONG_DOC } from './nguoi-khac';
 
@@ -275,45 +279,10 @@ export interface DayConProfile {
   voiChaMe: VoiChaMe | null;
 }
 
-/**
- * Vận của MỘT năm. 🔑 CỐ Ý KHÔNG có trường "điểm của năm".
- *
- * `tieuVanScores[].mainScore` trông như điểm của năm nhưng KHÔNG phải: nó là
- * `interpolate(splinePts, tuoi)` — nội suy Catmull-Rom giữa các mốc
- * `daiVans[].scoring.tong`, tức đường LÀM MƯỢT để vẽ biểu đồ nến. Nó không đọc
- * MỘT ngôi sao nào của tiểu hạn hay lưu niên năm đó. Hệ quả đo được: năm đầu
- * của một đại vận tốt bị kéo tụt về phía đại vận trước — lá số 9/5/1984 vào đại
- * vận 43–52 chấm **8,7/10** mà đường mượt năm 2026 chỉ **6,7**, lệch 2,0 điểm.
- * Trên 912 lá số, 8,4% lệch từ 1,5 điểm trở lên (lớn nhất 3,6).
- *
- * Đây đúng là luật `execTraVanHan` (`lib/agent/tools.ts`) đã chốt và rail vẫn
- * đang nói với người dùng: *"TIỂU VẬN KHÔNG có điểm riêng… KHÔNG tự gán
- * 'điểm/10' cho năm"*. Đại vận là tầng DUY NHẤT có điểm/10 thật, nên chỉ trả
- * điểm của KHUNG đại vận và nói rõ đó là khung.
- */
-export interface VanNam {
-  nam: number;
-  /** Khung đại vận chứa năm này — tầng duy nhất có điểm/10 thật. */
-  khung: { tuoiStart: number; tuoiEnd: number; diem: number | null } | null;
-  tieuHanCung: string | null;
-  luuNienCung: string | null;
-  /** Cán cân cát/sát của năm, gộp sao 3 cung hạn (đại vận + tiểu hạn + lưu niên). */
-  catSat: { cat: number; sat: number; canCan: string } | null;
-}
+/* `VanNam` · `resolveVanNam` · `CAN_CAN` nay nằm ở `cong-so.ts` — dùng CHUNG
+   cho cả 4 tool. Trước đây mỗi tool một bản chép, và cả bốn bản cùng sai một
+   kiểu (lấy `mainScore` làm điểm của năm). */
 
-/**
- * 🪤 `tieuVanScores[].direction` KHÔNG phải "đà" (xu hướng điểm) — nó là dấu của
- * `catCount − satCount`, tức CÁN CÂN cát/sát. Đọc nó thành "đà đang lên / đi
- * ngang" là dịch sai nghĩa: đo trên 912 lá số, nó lệch với xu hướng thật của
- * `mainScore` **67,7%** số ca; riêng ca `flat` thì **65,3%** là điểm vẫn đang
- * chạy chứ không hề "đi ngang" (lá số 9/5/1984: `flat` trong khi đường vận leo
- * 6,7 → 8,5 suốt bốn năm). Nay gọi đúng tên thứ nó đo.
- */
-const CAN_CAN: Record<string, string> = {
-  up: 'cát nhiều hơn sát',
-  down: 'sát nhiều hơn cát',
-  flat: 'cát sát cân nhau',
-};
 
 /** Nhãn chặng theo TUỔI thật, không theo thứ tự đại vận: mốc đại vận dịch theo
  *  CỤC (thuỷ nhị cục khởi tuổi 2, hoả lục cục khởi tuổi 6) nên lấy chỉ số cứng
@@ -390,34 +359,7 @@ export function computeDayCon(
       };
     });
 
-  const tvs = (ls.tieuVanScores as Rec[]) || [];
-  const tvNam = tvs.find((t) => t.nam === nam);
-  // Lấy đại vận theo `dvIdx` của CHÍNH năm đó, không lấy `daiVanHienTai`: hai
-  // cái chỉ trùng nhau khi năm xem đúng là năm nay.
-  const dvNam = ((ls.daiVans as Rec[]) || [])[Number(tvNam?.dvIdx)];
-  const dvNamSc = dvNam?.scoring as Rec | undefined;
-  const vanNam: VanNam | null = tvNam
-    ? {
-        nam,
-        khung: dvNam
-          ? {
-              tuoiStart: Number(dvNam.tuoiStart) || 0,
-              tuoiEnd: Number(dvNam.tuoiEnd) || 0,
-              diem: typeof dvNamSc?.tong === 'number' ? (dvNamSc.tong as number) : null,
-            }
-          : null,
-        tieuHanCung: (tvNam.tieuHanCung as string) || null,
-        luuNienCung: (tvNam.luuNienCung as string) || null,
-        catSat:
-          typeof tvNam.catCount === 'number' && typeof tvNam.satCount === 'number'
-            ? {
-                cat: tvNam.catCount as number,
-                sat: tvNam.satCount as number,
-                canCan: CAN_CAN[String(tvNam.direction || '')] || 'cát sát cân nhau',
-              }
-            : null,
-      }
-    : null;
+  const vanNam = resolveVanNam(ls, nam);
 
   let voiChaMe: VoiChaMe | null = null;
   if (lsChaMe) {
@@ -512,22 +454,11 @@ export function railData(p: DayConProfile): Record<string, string | number | boo
   }
   if (p.vanNam) {
     // ⚠️ Payload rail phải PHẲNG — `extractGenericContext` bỏ IM LẶNG mọi giá
-    // trị là object, nên dẹp thành chuỗi ngay tại đây. Và nói rõ điểm là của
-    // KHUNG đại vận: rail có luật cấm gán điểm cho năm, đưa một số trống nghĩa
-    // vào là mời nó phá chính luật đó.
-    const v = p.vanNam;
-    d.vanNamNay =
-      `${v.nam}: ` +
-      [
-        v.khung
-          ? `khung đại vận ${v.khung.tuoiStart}–${v.khung.tuoiEnd} tuổi ${v.khung.diem == null ? 'chưa chấm' : v.khung.diem + '/10'}`
-          : '',
-        v.tieuHanCung ? `tiểu hạn cung ${v.tieuHanCung}` : '',
-        v.luuNienCung ? `lưu niên cung ${v.luuNienCung}` : '',
-        v.catSat ? `cát ${v.catSat.cat}/sát ${v.catSat.sat} — ${v.catSat.canCan}` : '',
-      ]
-        .filter(Boolean)
-        .join('; ');
+    // trị là object, nên dẹp thành chuỗi qua `vanNamLine` — dùng CHUNG với
+    // prompt để hai chỗ không bao giờ nói khác nhau. `LUAT_VAN_NAM` chặn rail
+    // tự chấm một con số cho năm (cùng luật `execTraVanHan`).
+    d.vanNamNay = vanNamLine(p.vanNam);
+    d.luatVanNam = LUAT_VAN_NAM;
   }
   if (p.voiChaMe) {
     d.kieuChaMe = p.voiChaMe.kieuChaMe;

@@ -16,6 +16,7 @@
 // ============================================================
 
 import type { NguoiKhacProfile } from '@/lib/engine/nguoi-khac';
+import { vanNamLine, LUAT_VAN_NAM } from '@/lib/engine/cong-so';
 
 export const NGUOI_KHAC_SYSTEM_PROMPT = `Bạn là một người xem tử vi lâu năm, đang viết một BẢN CẨM NANG ỨNG XỬ cho người đến hỏi.
 
@@ -105,10 +106,8 @@ export function buildNguoiKhacPrompt(p: NguoiKhacProfile, ten: string): string {
     L.push('Không đọc được đại vận đang chạy — ĐỪNG bịa, bỏ qua phần thời điểm hoặc nói theo vận năm.');
   }
   if (p.vanNam) {
-    L.push(
-      `Vận năm ${p.vanNam.nam}: ${TIER(p.vanNam.diem)}` +
-        (p.vanNam.huong ? `, đà ${p.vanNam.huong}` : ''),
-    );
+    L.push(`Vận năm ${vanNamLine(p.vanNam)}`);
+    L.push(LUAT_VAN_NAM);
   }
   L.push('');
 

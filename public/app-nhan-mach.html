@@ -525,6 +525,26 @@ async function _doGenerate() {
         'Tuần này nên gặp ai trước và mở lời thế nào?',
       ],
     });
+
+    // Chia sẻ CHỈ gắn ở đường đã mở khoá (sau renderProse).
+    // ⚠️ Sổ này chứa lá số của TỚI 8 người vắng mặt. Bản chia sẻ vì thế CỐ Ý chỉ
+    // mang phần ĐỘI (phân bố kiểu, chỗ trống, cặp dễ giẫm chân) và KHÔNG nêu tên
+    // ai kèm nhận xét cá nhân — engine vốn đã không chấm điểm tổng từng người,
+    // bản chia sẻ không được là đường vòng để dựng lại một bảng xếp hạng.
+    Shell.setShareable({
+      kind: 'text',
+      toolId: 'nhan-mach',
+      title: 'Sổ nhân mạch — đọc nhóm ' + data.soNguoi + ' người',
+      text: [
+        'Nhóm ' + data.soNguoi + ' người.',
+        (data.phanBo || []).filter(function (b) { return b.soNguoi; })
+          .map(function (b) { return b.ten + ': ' + b.soNguoi; }).join(' · '),
+        (data.thieuKieu || []).length
+          ? 'Đội đang thiếu kiểu: ' + data.thieuKieu.map(function (k) { return k.ten; }).join(', ')
+          : 'Đội có đủ bốn kiểu.',
+        data.nenTimThem ? 'Nên tìm thêm kiểu: ' + data.nenTimThem.ten : '',
+      ].filter(Boolean).join('\n'),
+    });
   } catch (e) {
     // Giữ nguyên phần tính thử đang hiện — quẳng người ta về form trống là xoá
     // luôn thứ họ vừa xem (và có thể vừa trả tiền cho phần sau).
@@ -568,7 +588,11 @@ function renderMeta(data) {
       '<div class="r">' + esc((t.vai || {}).label || '') +
       ((t.kieu || {}).ten ? ' · kiểu ' + esc(t.kieu.ten) : '') +
       (t.lai && t.kieuPhu ? ' (pha ' + esc(t.kieuPhu.ten) + ')' : '') +
-      (t.vanNam && t.vanNam.diem != null ? ' · vận năm ' + t.vanNam.diem + '/10' : '') + '</div>' +
+      // ⚠️ Payload CŨ trong cache mang `diem` (điểm nội suy); bản mới mang
+      // `khung` = điểm ĐẠI VẬN thật. Nêu rõ là khung, đừng để đọc thành điểm năm.
+      (t.vanNam && t.vanNam.khung && t.vanNam.khung.diem != null
+        ? ' · khung đại vận ' + t.vanNam.khung.diem + '/10'
+        : (t.vanNam && t.vanNam.diem != null ? ' · vận năm ' + t.vanNam.diem + '/10' : '')) + '</div>' +
       '<div class="w"></div><div class="q"></div></div>';
   }).join('');
   if (ppl) {
@@ -592,6 +616,14 @@ function renderMeta(data) {
   var tt = (data.thuTuTiepCan || []);
   if (tt.length) {
     document.getElementById('thuTu').innerHTML = tt.map(function (t, i) {
+      // Bản mới: `khungDiem` (điểm đại vận thật) + `canCan` (cát−sát của năm).
+      // Bản CŨ trong cache: `diem`/`huong` — vẫn phải đọc được.
+      if (t.khungDiem != null || t.canCan != null) {
+        var d = [];
+        if (t.khungDiem != null) d.push('khung đại vận ' + t.khungDiem + '/10');
+        if (t.canCan != null) d.push('cát−sát ' + (t.canCan > 0 ? '+' : '') + t.canCan);
+        return (i + 1) + '. <b>' + esc(t.ten) + '</b> — ' + d.join(' · ');
+      }
       return (i + 1) + '. <b>' + esc(t.ten) + '</b>' +
         (t.diem == null ? ' — chưa chấm vận năm' : ' — vận năm ' + t.diem + '/10' + (t.huong ? ' (' + esc(t.huong) + ')' : ''));
     }).join('<br>');
@@ -651,6 +683,8 @@ function showForm() {
   document.getElementById('resPanel').style.display = 'none';
   document.getElementById('birthPanel').style.display = 'block';
   document.getElementById('btnEdit').style.display = 'none';
+  // Quay về form thì gỡ nút Chia sẻ — bản vừa xem không còn trên màn hình nữa.
+  Shell.setShareable(null);
 }
 
 async function _loadHistory() {
