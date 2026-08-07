@@ -121,6 +121,47 @@ function buildBond(pair: BondPair): BuiltBond {
   return { ok: true, lsA: rA.ls, lsB: rB.ls, bond: computePastLifeBond(rA.ls, gA, rB.ls, gB) };
 }
 
+/**
+ * Lá số nào đẻ ra nhân vật nào — client cần để nói THẲNG cho người đọc.
+ *
+ * 🔑 Không suy được từ thứ tự nhập: `normalizeBondPair` sắp lại hai lá số nên
+ * `nhanVatA` là người nhập thứ hai ở khoảng một nửa số lượt. Trang chỉ bày hai
+ * thẻ nhân vật cạnh nhau thì người đọc mặc định thẻ đầu là mình — và sai một
+ * nửa số lần.
+ *
+ * ⚠️ CỐ Ý KHÔNG kèm TÊN người nhập: payload này nằm trong `portrait_cache`
+ * DÙNG CHUNG toàn hệ thống, tên của người chạy trước sẽ hiện ra cho người chạy
+ * sau. Ngày sinh thì không rò gì — muốn chạm tới dòng cache đó phải tự nhập
+ * đúng cả hai lá số, tức đã có sẵn thông tin này trong tay.
+ */
+function birthRef(b: BirthParams) {
+  return {
+    day: Number(b.day),
+    month: Number(b.month),
+    year: Number(b.year),
+    hourBranch: Number(b.hourBranch ?? -1),
+    isLunar: Boolean(b.isLunar),
+    gender: b.gender === 'nu' ? 'nu' : 'nam',
+  };
+}
+
+/**
+ * Gắn `laSo` vào hai nhân vật của một payload.
+ *
+ * Dùng cho CẢ payload vừa dựng LẪN payload lấy từ cache: dòng cache ghi trước
+ * bản này không có trường đó, mà `pair` đã chuẩn hoá nên `birthA` luôn là nhân
+ * vật A — gắn lại ở đây là bản cũ cũng có mapping, không phải chờ hết hạn cache.
+ */
+function withLaso(payload: Record<string, unknown>, pair: BondPair): Record<string, unknown> {
+  const one = (nv: unknown, b: BirthParams) =>
+    nv && typeof nv === 'object' ? { ...(nv as Record<string, unknown>), laSo: birthRef(b) } : nv;
+  return {
+    ...payload,
+    nhanVatA: one(payload.nhanVatA, pair.birthA),
+    nhanVatB: one(payload.nhanVatB, pair.birthB),
+  };
+}
+
 /** Phần dữ liệu deterministic trả kèm ở CẢ hai pha — client dựng khung ngay
  *  khi pha nào về trước, không phải đợi đủ hai lượt. */
 function bondMeta(bond: PastLifeBond) {
@@ -245,14 +286,17 @@ async function handleStory(pair: BondPair, userId: string) {
     text: String(parsed.acts?.[i]?.text || ''),
   }));
 
-  const payload = {
-    success: true,
-    ...bondMeta(bond),
-    tuaDe: String(parsed.tuaDe || ''),
-    moTaMoiDuyen: String(parsed.moTaMoiDuyen || ''),
-    acts,
-    ketLuan: parsed.ketLuan || '',
-  };
+  const payload = withLaso(
+    {
+      success: true,
+      ...bondMeta(bond),
+      tuaDe: String(parsed.tuaDe || ''),
+      moTaMoiDuyen: String(parsed.moTaMoiDuyen || ''),
+      acts,
+      ketLuan: parsed.ketLuan || '',
+    },
+    pair,
+  );
   // Pha `story` KHÔNG có dòng lịch sử riêng (chỉ pha `image` ghi) → `row: null`.
   void putCachedPortrait(TOOL_ID, 'story', pair.key, { payload, row: null }, userId);
   return ok(payload);
@@ -342,7 +386,7 @@ async function handleImage(pair: BondPair, userId: string) {
 
   void railFreeTurnsPerGen().then((n) => railFreeGrant(userId, n)).catch(() => {});
 
-  const payload = { success: true, imageUrl, ...bondMeta(bond) };
+  const payload = withLaso({ success: true, imageUrl, ...bondMeta(bond) }, pair);
   void putCachedPortrait(TOOL_ID, 'image', pair.key, { payload, row: historyRow }, userId);
   return ok(payload);
 }
@@ -440,7 +484,7 @@ async function runPost(request: NextRequest) {
       insertHistoryRow(TOOL_ID, { ...cached.row, user_id: auth.user.id, laso_key: pair.key });
       void railFreeTurnsPerGen().then((n) => railFreeGrant(auth.user.id, n)).catch(() => {});
     }
-    return ok({ ...cached.payload, cached: true, freeRerun: free });
+    return ok({ ...withLaso(cached.payload, pair), cached: true, freeRerun: free });
   }
 
   const res =

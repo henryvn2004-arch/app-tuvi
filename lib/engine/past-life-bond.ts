@@ -224,12 +224,21 @@ export function computePastLifeBond(
   };
   signals.push({ label: 'Địa chi cung Mệnh', detail: CHI_TEXT[chi] });
 
+  // 🔴 Hai dòng `sinh` TRƯỚC ĐÂY BỊ HOÁN VỊ CHO NHAU: `hanhRelation` trả
+  // 'a-sinh-b' khi `NH_SINH[b] === a`, tức A sinh B — mà câu chữ lại ghi
+  // "${lsB} sinh ${lsA}". Khối này là chỗ DUY NHẤT chứng minh với người đọc
+  // rằng kết quả không bịa, nên nói ngược ngũ hành ở đây là hỏng đúng chỗ đắt
+  // nhất. (`khac` thì vốn đã đúng — chỉ cặp `sinh` bị chép nhầm.)
+  //
+  // Và gọi thẳng TÊN NHÂN VẬT thay cho "người trước / người sau": thứ tự hai lá
+  // số đã được chuẩn hoá ở `lib/portraits/bond-key.ts` nên "người trước" không
+  // còn là người nhập trước — không ai đọc ra được nó chỉ ai.
   const HANH_TEXT: Record<HanhRel, string> = {
     dong: 'Nạp âm cùng một hành — đồng khí tương cầu',
-    'a-sinh-b': `Nạp âm ${lsB.napAmHanh} sinh ${lsA.napAmHanh} — người sau nuôi dưỡng người trước`,
-    'b-sinh-a': `Nạp âm ${lsA.napAmHanh} sinh ${lsB.napAmHanh} — người trước nuôi dưỡng người sau`,
-    'a-khac-b': `Nạp âm ${lsA.napAmHanh} khắc ${lsB.napAmHanh} — một bên kìm bên kia`,
-    'b-khac-a': `Nạp âm ${lsB.napAmHanh} khắc ${lsA.napAmHanh} — một bên kìm bên kia`,
+    'a-sinh-b': `Nạp âm ${lsA.napAmHanh} sinh ${lsB.napAmHanh} — ${a.characterName} nuôi dưỡng ${b.characterName}`,
+    'b-sinh-a': `Nạp âm ${lsB.napAmHanh} sinh ${lsA.napAmHanh} — ${b.characterName} nuôi dưỡng ${a.characterName}`,
+    'a-khac-b': `Nạp âm ${lsA.napAmHanh} khắc ${lsB.napAmHanh} — ${a.characterName} kìm ${b.characterName}`,
+    'b-khac-a': `Nạp âm ${lsB.napAmHanh} khắc ${lsA.napAmHanh} — ${b.characterName} kìm ${a.characterName}`,
     neutral: 'Nạp âm hai người không sinh không khắc',
   };
   signals.push({ label: 'Ngũ hành nạp âm', detail: HANH_TEXT[hanh] });
@@ -300,7 +309,10 @@ export function computePastLifeBond(
     // mới đủ nói "người này từng nâng người kia". Chỉ mỗi nạp âm sinh thì hai
     // người lạ bất kỳ cũng dính, mất hết ý nghĩa.
     kind = 'an-nhan';
-    giver = hanh === 'a-sinh-b' ? 'b' : 'a';
+    // Bên SINH là bên CHO (ân nhân). Dòng này cũng từng đảo — 'a-sinh-b' nghĩa
+    // là A nuôi B, nên ân nhân là A. Đặt sai chiều thì truyện và bức tranh đều
+    // dựng ngược vai: người được cứu thành người ra tay.
+    giver = hanh === 'a-sinh-b' ? 'a' : 'b';
   } else if (khac && star === 'hai-sao-cung') {
     kind = 'doi-dau';
   } else {
