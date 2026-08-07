@@ -56,7 +56,15 @@ const nextConfig = {
       { source: '/auth-callback',       destination: '/auth-callback.html'   },
       { source: '/tai-lieu/:slug',      destination: '/tai-lieu.html'        },
       { source: '/tai-lieu/sach/:slug', destination: '/sach-detail.html'     },
+      // /sitemap.xml nay là SITEMAPINDEX trỏ 6 file con ngay dưới đây — chia
+      // theo nhóm để LỌC ĐƯỢC trong GSC, không phải để crawl nhanh hơn.
       { source: '/sitemap.xml',         destination: '/api/sitemap'          },
+      { source: '/sitemap-trang.xml',   destination: '/sitemap-trang'        },
+      { source: '/sitemap-noi-dung.xml', destination: '/sitemap-noi-dung'    },
+      { source: '/sitemap-seo.xml',     destination: '/sitemap-seo'          },
+      { source: '/sitemap-van-han.xml', destination: '/sitemap-van-han'      },
+      { source: '/sitemap-la-so.xml',   destination: '/sitemap-la-so'        },
+      { source: '/sitemap-la-so-pregen.xml', destination: '/sitemap-la-so-pregen' },
       { source: '/sitemap-ngay-tot.xml', destination: '/sitemap-ngay-tot'    },
       { source: '/sitemap-hubs.xml',    destination: '/sitemap-hubs'         },
       { source: '/sitemap-pregen.xml',  destination: '/sitemap-pregen'       },
