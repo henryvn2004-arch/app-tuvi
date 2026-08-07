@@ -582,7 +582,7 @@ a { color: var(--blue); text-decoration: none; }
 
 <!-- ─── SCRIPTS ──────────────────────────────────────────── -->
 <script src="/auth.js?v=2"></script>
-<script src="/tool-prices.js?v=3"></script>
+<script src="/tool-prices.js?v=4"></script>
 <script src="/tuvi-paywall.js?v=16"></script>
 <script src="/nav.js?v=22"></script>
 <script src="/referral.js?v=1"></script>
@@ -592,65 +592,13 @@ a { color: var(--blue); text-decoration: none; }
 // ─────────────────────────────────────────────────────────────
 // Tool URL mapping (tool_id → page path)
 // ─────────────────────────────────────────────────────────────
-const TOOL_URLS = {
-  // Luận Giải
-  'laso':              '/luan-giai.html',
-  'tu-binh':           '/tu-binh.html',
-  'xem-tuoi':          '/xem-tuoi.html',
-  'xem-lam-an':        '/xem-lam-an.html',
-  'xem-tuoi-sinh-con': '/tools/xem-tuoi-sinh-con.html',
-  'chan-dung-vo-chong': '/tools/chan-dung-vo-chong.html',
-  'chan-dung-tien-kiep': '/tools/chan-dung-tien-kiep.html',
-  'duyen-no-tien-kiep':  '/app/duyen-no-tien-kiep',
-  'nguoi-khac':          '/app/nguoi-khac',
-  'day-con':             '/app/day-con',
-  'nhan-mach':           '/app/nhan-mach',
-  // Phong Thủy
-  'phong-thuy':           '/tools/phong-thuy.html',
-  'ban-lam-viec':         '/tools/ban-lam-viec.html',
-  'cua-hang-phong-thuy':  '/tools/cua-hang-phong-thuy.html',
-  'phong-thuy-render':    '/tools/phong-thuy-render.html',
-  // Xem Tướng
-  'dien-tuong':       '/tools/tuong-mat-ai.html',
-  'nhan-tuong':       '/tools/nhan-tuong-ai.html',
-  'thu-tuong':        '/tools/thu-tuong-ai.html',
-  'thanh-tuong':      '/tools/thanh-tuong-ai.html',
-  'thanh-tuong-pro':  '/tools/thanh-tuong-pro.html',
-  'khi-sac':          '/tools/khi-sac-ai.html',
-  // Đặt Tên & Ngày
-  'dat-ten-con':      '/tools/dat-ten-con.html',
-  'dat-ten-dn':       '/tools/dat-ten-doanh-nghiep.html',
-  'chon-ngay-tot':    '/tools/chon-ngay-tot.html',
-  // Phong Cách AI
-  'da-lieu-ai':            '/tools/da-lieu-ai.html',
-  'kieu-toc-phan-tich':    '/tools/kieu-toc-ai.html',
-  'kieu-toc-tryon':        '/tools/kieu-toc-ai.html',
-  'mau-sac-hop-menh':      '/tools/mau-sac-hop-menh.html',
-  'personal-color':        '/tools/personal-color.html',
-  'personal-color-tryon':  '/tools/personal-color.html',
-  'trang-diem-phan-tich':  '/tools/trang-diem-ai.html',
-  'trang-diem-tryon':      '/tools/trang-diem-ai.html',
-  'trang-phuc-tryon':      '/tools/trang-phuc-tryon.html',
-  'trang-phuc-theo-ngay':  '/tools/trang-phuc-theo-ngay.html',
-  // Free — Tử Vi
-  'an-sao': '/tools/an-sao.html', 'sao-nam': '/tools/sao-nam.html',
-  'cach-cuc': '/tools/cach-cuc.html', 'dai-van': '/tools/dai-van.html',
-  'van-thang': '/tools/van-thang.html',
-  // Free — Mệnh Lý
-  'bat-trach': '/tools/bat-trach.html', 'nap-am': '/tools/nap-am.html',
-  'tuong-hop': '/tools/tuong-hop.html', 'kim-lau': '/kim-lau',
-  'ngu-hanh-ten': '/tools/ngu-hanh-ten.html', 'tu-tru': '/tools/tu-tru.html',
-  // Free — Lịch Số
-  'hoang-dao': '/tools/hoang-dao.html', 'ngay-tot': '/tools/ngay-tot.html',
-  'luc-nham': '/tools/luc-nham.html', 'han-nam': '/tools/han-nam.html',
-  // Free — Bói Bài + Huyền Học
-  'tarot': '/tools/tarot.html', 'oracle': '/tools/oracle.html',
-  'boi-bai-tay': '/tools/boi-bai-tay.html',
-  'kinh-dich': '/tools/kinh-dich.html', 'mai-hoa': '/tools/mai-hoa.html',
-  'ky-mon': '/tools/ky-mon.html', 'ban-do-sao': '/app/ban-do-sao',
-  'cong-so': '/app/cong-so',
-  'than-so-hoc': '/tools/than-so-hoc.html',
-};
+// Đường dẫn công cụ nay là DỮ LIỆU (`tool_pricing.page_path` / `app_path`).
+// Bản chép tay cũ ở đây còn ẩn luôn công cụ nào thiếu trong map, nên thêm công
+// cụ trong Admin xong nó vẫn không hiện ở đâu cho tới khi có người sửa file.
+function toolUrl(t) {
+  return (window.ToolPrices && window.ToolPrices.pagePath(t)) || '';
+}
+
 
 // Tab grouping — MIRRORS the top nav (nav.js) so panel & menu stay consistent.
 // DB category (tool_pricing.category) → tab. Unknown categories fall back to 'cong-cu'.
@@ -679,32 +627,18 @@ function tabOf(t) {
 }
 
 // ─────────────────────────────────────────────────────────────
-// NHÓM NHU CẦU — xếp theo "người mua đang lo gì", không theo "môn học là gì"
+// NHÓM NHU CẦU — nguồn chuẩn nằm ở BẢNG `tool_groups`, không phải file này
 // ─────────────────────────────────────────────────────────────
-// Nguồn phân nhóm là CỘT `tool_pricing.need_tags` (một hoặc hai khoá, phân cách
-// dấu phẩy) chứ không phải bảng cứng trong file này — sửa nhóm cho một công cụ
-// là một câu UPDATE trong Admin, không cần deploy. Thứ tự dưới đây quyết định
-// thứ tự xuất hiện trên trang; `_patches/migration-tool-needs.sql` là bản gán
-// ban đầu và cũng là chỗ ghi lại vì sao từng công cụ nằm ở nhóm nào.
+// Trước đây danh sách nhóm là một mảng chép tay ngay tại đây, còn `/app` giữ
+// một mảng KHÁC xếp theo bộ môn — cùng một sản phẩm nói hai kiểu với cùng một
+// người. Nay cả ba bề mặt (`/cong-cu`, dashboard `/app`, sidebar Luận Đường)
+// đọc chung `ToolPrices.groups()` + `ToolPrices.groupsOf()`.
 //
-// ⚠️ Khoá ở đây PHẢI khớp khoá trong DB. Công cụ mang khoá lạ (hoặc bỏ trống)
-// rơi vào nhóm "Khác" ở cuối — CỐ Ý không để nó biến mất, vì một công cụ tàng
-// hình thì không ai phát hiện ra là đã gán sai.
-const NEED_GROUPS = [
-  { key: 'cong-viec',  icon: 'briefcase',      title: 'Công việc & tiền bạc',  sub: 'Đổi việc, làm ăn, đường thăng tiến' },
-  { key: 'tinh-duyen', icon: 'heart',          title: 'Tình duyên & gia đạo',  sub: 'Cưới hỏi, bạn đời, con cái' },
-  { key: 'viec-lon',   icon: 'calendar',       title: 'Việc lớn sắp làm',      sub: 'Chọn ngày, làm nhà, khai trương' },
-  { key: 'hom-nay',    icon: 'sun',            title: 'Hôm nay & sắp tới',     sub: 'Vận ngày, vận tháng, gieo một quẻ' },
-  { key: 'hieu-minh',  icon: 'user',           title: 'Hiểu chính mình',       sub: 'Lá số, bát tự, tướng mạo, con số' },
-  { key: 'dang-ve',    icon: 'sparkles',       title: 'Dáng vẻ & phong cách',  sub: 'Màu hợp mệnh, tóc, trang phục' },
-];
-const NEED_KEYS = new Set(NEED_GROUPS.map(g => g.key));
-
-function needsOf(t) {
-  return String(t.need_tags || '')
-    .split(',')
-    .map(s => s.trim())
-    .filter(s => NEED_KEYS.has(s));
+// Công cụ chưa khai `need_tags` KHÔNG biến mất: `groupsOf` suy nhóm từ
+// `category`, và nếu category cũng lạ thì nó rơi vào "Khác" ở cuối trang — cố
+// ý để nhìn thấy được, vì một công cụ tàng hình thì không ai biết là gán sai.
+function groupsOf(t) {
+  return window.ToolPrices ? window.ToolPrices.groupsOf(t) : [];
 }
 
 // Featured tool IDs — gold border for visual hierarchy (no commercial badge)
@@ -748,9 +682,9 @@ async function loadTools() {
     // nhắn của rail, không phải công cụ có trang) đang nằm đúng dạng đó trong tab
     // "Công Cụ". Cảnh báo ra console để công cụ MỚI thiếu URL thì lộ ngay, chứ
     // không im lặng biến mất.
-    const missing = _tools.filter(t => !TOOL_URLS[t.tool_id]).map(t => t.tool_id);
-    if (missing.length) console.warn('[cong-cu] thiếu TOOL_URLS, đã ẩn:', missing.join(', '));
-    _tools = _tools.filter(t => TOOL_URLS[t.tool_id]);
+    const missing = _tools.filter(t => !toolUrl(t)).map(t => t.tool_id);
+    if (missing.length) console.warn('[cong-cu] thiếu page_path/app_path, đã ẩn:', missing.join(', '));
+    _tools = _tools.filter(t => toolUrl(t));
 
     // Số công cụ trong tiêu đề đọc TỪ DỮ LIỆU. Số viết cứng trong HTML chỉ để
     // crawler và lượt tải đầu có cái mà đọc — nó đã kịp lệch một lần (ghi 47
@@ -784,8 +718,8 @@ function renderNeedView() {
   const seen = new Set();
   let html = '';
 
-  NEED_GROUPS.forEach(g => {
-    const items = _tools.filter(t => needsOf(t).includes(g.key));
+  (window.ToolPrices ? window.ToolPrices.groups() : []).forEach(g => {
+    const items = _tools.filter(t => groupsOf(t).includes(g.key));
     if (!items.length) return;
     items.forEach(t => seen.add(t.tool_id));
     html += needBlockHtml(g, items);
@@ -794,7 +728,7 @@ function renderNeedView() {
   const rest = _tools.filter(t => !seen.has(t.tool_id));
   if (rest.length) {
     html += needBlockHtml(
-      { key: 'khac', icon: 'layout-grid', title: 'Khác', sub: 'Chưa xếp vào nhóm nào' },
+      { key: 'khac', icon: 'layout-grid', title: 'Khác', subtitle: 'Chưa xếp vào nhóm nào' },
       rest
     );
   }
@@ -807,9 +741,9 @@ function renderNeedView() {
 function needBlockHtml(g, items) {
   return '<div class="need-block" id="need-' + g.key + '">' +
     '<div class="need-head">' +
-      '<span class="nh-ic" data-icon="' + g.icon + '"></span>' +
-      '<span class="need-title">' + g.title + '</span>' +
-      '<span class="need-sub">' + g.sub + ' · ' + items.length + ' công cụ</span>' +
+      '<span class="nh-ic" data-icon="' + esc(g.icon || 'layout-grid') + '"></span>' +
+      '<span class="need-title">' + esc(g.title) + '</span>' +
+      '<span class="need-sub">' + esc(g.subtitle || '') + ' · ' + items.length + ' công cụ</span>' +
     '</div>' +
     '<div class="tools-grid">' + items.map(t => toolCardHtml(t, true)).join('') + '</div>' +
   '</div>';
@@ -871,7 +805,7 @@ function toolIcon(raw) {
 // xuống dòng phụ. Ở lối xem theo bộ môn thì ngược lại (tên môn là thứ người ta
 // đang tìm). Cùng một bộ dữ liệu, chỉ đổi thứ đặt lên trước.
 function toolCardHtml(t, byNeed) {
-  const url = TOOL_URLS[t.tool_id] || '#';
+  const url = toolUrl(t) || '#';
   const featured = FEATURED.has(t.tool_id) ? ' featured' : '';
   const priceHtml = t.is_free
     ? '<span class="tool-price-free">Miễn Phí</span>'

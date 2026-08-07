@@ -200,23 +200,26 @@ where t.tool_id = v.id;
 -- `category` cũng lạ nốt thì vào "Khác" ở cuối trang VÀ hiện trong bộ dò của
 -- panel admin — cố ý không để nó biến mất, vì một công cụ tàng hình thì không
 -- ai phát hiện ra là đã gán sai.
-insert into public.app_config (key, value, updated_at) values (
-  'tools.category_default_group',
-  jsonb_build_object(
-    'Bói Bài',        'hoi-nhanh',
-    'Chiêm Tinh Tây', 'ban-than',
-    'Công Cụ Tử Vi',  'ban-than',
-    'Đặt Tên & Ngày', 'chon-ngay',
-    'Huyền Học',      'hoi-nhanh',
-    'Lịch Số',        'chon-ngay',
-    'Luận Giải',      'ban-than',
-    'Mệnh Lý',        'ban-than',
-    'Phong Cách AI',  'dien-mao',
-    'Phong Thủy',     'nha-cua',
-    'Xem Tướng',      'tuong-mao'
-  ),
-  now()
-) on conflict (key) do update set value = excluded.value, updated_at = now();
+--
+-- ⚠️ Luật này phải nằm ở bảng CÔNG KHAI. Bản đầu tao đặt vào `app_config` và
+-- sai: bảng đó chỉ có policy đọc cho admin (`app_config_admin_read`), nên trình
+-- duyệt người dùng không bao giờ đọc được — luật chạy đúng ở server mà chết ở
+-- đúng nơi cần nó là giao diện.
+alter table public.tool_groups add column if not exists default_categories text;
+
+comment on column public.tool_groups.default_categories is
+  'Danh sách `tool_pricing.category` (phân cách dấu phẩy) rơi vào nhóm này khi công cụ CHƯA khai need_tags. need_tags khai rõ thì luôn thắng. Một category chỉ nên xuất hiện ở MỘT nhóm.';
+
+update public.tool_groups set default_categories = v.cats
+from (values
+  ('ban-than',  'Luận Giải,Công Cụ Tử Vi,Mệnh Lý,Chiêm Tinh Tây'),
+  ('nha-cua',   'Phong Thủy'),
+  ('chon-ngay', 'Đặt Tên & Ngày,Lịch Số'),
+  ('hoi-nhanh', 'Huyền Học,Bói Bài'),
+  ('tuong-mao', 'Xem Tướng'),
+  ('dien-mao',  'Phong Cách AI')
+) as v(key, cats)
+where tool_groups.key = v.key;
 
 commit;
 
