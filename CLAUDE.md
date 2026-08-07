@@ -5,6 +5,78 @@
 
 ---
 
+## 🌗 Dark mode: MÀU THƯƠNG HIỆU LÀ MẶT NỀN, đừng dùng làm chữ (2026-08-07, cùng PR)
+
+Henry: *"Ok sửa luôn đi"* mục nợ `--gold-lt` tao ghi ở vòng trên. Đo ra thì cái
+nợ đó chỉ là **một mẩu**: khối `:root[data-theme="dark"]` của `shell.css` khai lại
+`--text/--line/--paper/--white/--shadow` nhưng **không khai lại một màu thương
+hiệu nào**, nên mọi màu đó dùng làm CHỮ đều chìm.
+
+| Màu | Làm chữ | Contrast trên thẻ dark `#161d27` |
+|---|---:|---|
+| `--navy` `#061A2E` | **71 chỗ / 17 file** | **1,04:1** — vô hình hoàn toàn |
+| `--red` `#C0392B` | 50 / 31 | 3,12:1 |
+| `--blue` `#1455A4` | 19 / 14 | 2,31:1 |
+| `--green` `#1E6B3C` | 15 / 5 | 2,60:1 |
+
+### 🔑 Căn nguyên: TOKEN HAI VAI — và vì thế KHÔNG được khai lại ở dark
+`--navy` vừa là **mặt nền** sidebar/thẻ hero vừa là **màu chữ tiêu đề**. `--red` là
+**nền nút CTA** (`.btn-go` ~30 trang · `.btn.pri` · `.send` của rail) *và* màu chữ
+lỗi. Khai lại chúng ở dark là sidebar hoá sáng, nút CTA đổi màu. ⇒ Phải **TÁCH VAI**:
+- Giữ `--navy/--red/--blue/--green` = MẶT NỀN, không đụng.
+- Thêm `--heading` · `--tx-red` · `--tx-blue` · `--tx-green` cho CHỮ, **giá trị
+  light TRÙNG KHÍT màu gốc** ⇒ light mode không đổi một pixel, dark có bản sáng.
+- `--gold-lt` cũng hai vai: 53 chỗ làm **nền**, nhưng **6 chỗ trong `app-home.html`
+  làm CHỮ** trên thẻ "Vận hôm nay" — thẻ đó navy **cố định cả hai theme**. Đổi mù
+  là 6 chỗ đó tụt **16,04 → 1,07:1**. Tách ra `--gold-on-navy` (không theo theme).
+
+### Chọn `--gold-lt` dark bằng ΔE, KHÔNG bằng contrast-ratio
+`#241f14` — **ΔE 16,2** so với thẻ, trong khi hover ở light mode chỉ **ΔE 6,1**;
+và là ứng viên duy nhất giữ `--text-lt` ở AA (4,51). Contrast-ratio nền-vs-nền ra
+**1,03** nghe như "không phân biệt được" nhưng đó là **thước đo sai cho hai MẶT
+PHẲNG khác hue**: nó chỉ đo độ sáng. Trùng giá trị `admin.css` đã chọn từ trước.
+
+### 🪤 Ba cái bẫy, cả ba chỉ lộ khi ĐO chứ không khi đọc code
+1. **`app-tai-khoan.html` là ĐẢO SÁNG** — port từ `profile.html`, tự khai trọn bảng
+   màu sáng trong `.acct-scope` (15 mặt nền `#fff`) và **không có bản dark**. Bộ đổi
+   token của tao sửa 12 chỗ ở đó ⇒ chữ SÁNG trên nền TRẮNG. Đã **hoàn nguyên cả
+   file** rồi ghim `.acct-scope{background:var(--bg)}` cho khớp chính bảng màu của
+   nó. Dark thật cho trang đó là việc riêng — phải soi lại cả 15 mặt nền.
+2. **Bộ dò "đảo sáng" của tao bỏ qua OAN 2 chỗ**: `.rail-upsell` khai
+   `background:var(--gold-lt,#F9F4EB)` — cái **fallback** `#F9F4EB` làm bộ dò tưởng
+   là nền sáng cố định. Nền nó THEO THEME. Phải vá tay 2 chỗ con.
+3. **Hai bản vá của chính tao đá nhau**: đổi `h2` của trang Tài khoản sang
+   `--heading` (sáng ở dark) rồi lại ghim trang thành đảo SÁNG ⇒ chữ sáng trên nền
+   trắng, 1,05 → 1,25. Trả `h2` về `--navy`.
+
+### Verify — đo trong TRÌNH DUYỆT trên cả 35 trang, không tin grep
+- **A) LIGHT mode phải không đổi**: so màu chữ tính được của **5.022 phần tử** giữa
+  bản mới và **worktree ở `git HEAD`** → **0 lệch ngoài ý muốn**, đúng **1 chỗ đổi
+  có khai trước (`.step-counter` `#444`→`--text-mid` `#4a4a4a`, lệch 6/255)**.
+- **B) DARK mode**: leo cây cha lấy nền hiệu dụng rồi chấm contrast thật trên
+  **4.133 phần tử có chữ**: **vô hình (<2:1) 16 → 0** · dưới AA 403 → 375.
+- 🪤 **Bản đầu của bài kiểm A/B SAI**: chỉ tráo `shell.css` mà giữ HTML mới ⇒ biến
+  mới thành `undefined` → rơi về màu thừa kế → báo "40 chỗ lệch" **oan**. Đối chứng
+  phải là **CẢ CÂY** (dùng `git worktree`), không phải một file.
+- 🪤 Ca T8 của vòng trước hoá **flaky**: trang tải lại `?auto=1` tự tiêu thụ
+  `app_restore` lúc boot nên test đọc ra `null` tuỳ lúc. Chặn lượt tải đó bằng trang
+  trắng để phép đo tất định. Và ca ĐỐI CHỨNG phải neo `origin/main`, **không neo
+  `HEAD`** — stack thêm commit là `HEAD` dịch, đối chứng tự so với chính mình.
+- `typecheck` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+  `check:prices`/`check:groups`/`check:nostore` sạch · engine 185 pass.
+
+### CÒN LẠI
+- **375 chỗ vẫn dưới AA ở dark**, phần lớn là `--gold-soft` làm chữ (**47 chỗ,
+  4,25:1**). CỐ Ý không đụng: ở **light** nó đang là **3,64:1** — tức dark còn khá
+  hơn light, không phải hồi quy; và nó kiêm luôn màu VIỀN nên đổi là lan khắp nơi.
+- **Trang Tài khoản ghim sáng**, chưa có dark thật (32 chỗ).
+- Bộ đo chỉ thấy **trạng thái ĐẦU** của mỗi trang (form, chưa có kết quả) nên phần
+  kết quả luận giải chưa được quét.
+- `admin.css` có `--gold-lt` riêng cùng giá trị `#241f14` — hai file hai bảng màu,
+  cố ý không gộp.
+
+---
+
 ## 🕘 "Phiên gần đây": nhãn mô tả LÁ SỐ trong khi cái phân biệt là HỘI THOẠI (2026-08-07, PR này)
 
 Henry gửi ảnh `/app/luan-giai` trên iPhone: *"Chắc phải tìm cách display cái mục

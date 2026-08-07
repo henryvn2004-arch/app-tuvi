@@ -26,11 +26,11 @@
 .task-pip.active{background:var(--red)}
 .task-pip.done{background:var(--green)}
 .task-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px}
-.task-num{font-size:11px;font-weight:800;letter-spacing:2px;color:var(--red);text-transform:uppercase}
+.task-num{font-size:11px;font-weight:800;letter-spacing:2px;color:var(--tx-red);text-transform:uppercase}
 .task-time{font-size:12px;color:var(--text-lt);font-weight:600}
-.task-title{font-family:var(--serif);font-size:19px;color:var(--navy);margin:0 0 10px;font-weight:700}
+.task-title{font-family:var(--serif);font-size:19px;color:var(--heading);margin:0 0 10px;font-weight:700}
 .task-instruction{font-size:12.5px;color:var(--text-mid);margin-bottom:16px;line-height:1.6;padding:10px 14px;background:var(--gold-lt);border-left:3px solid var(--gold);border-radius:4px}
-.task-text{font-family:var(--serif);font-size:18px;line-height:1.8;color:var(--navy);text-align:center;padding:18px 10px;background:var(--paper);border-radius:8px;border:1px solid var(--border-lt);margin-bottom:14px;min-height:70px;white-space:pre-line}
+.task-text{font-family:var(--serif);font-size:18px;line-height:1.8;color:var(--heading);text-align:center;padding:18px 10px;background:var(--paper);border-radius:8px;border:1px solid var(--border-lt);margin-bottom:14px;min-height:70px;white-space:pre-line}
 .task-text.vowel{font-size:56px;letter-spacing:12px;font-weight:700}
 .record-wrap{text-align:center;padding:10px 0 4px}
 .btn-record{display:inline-flex;align-items:center;gap:10px;padding:13px 30px;background:var(--navy);color:#fff;border:none;border-radius:50px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;letter-spacing:.5px}
@@ -39,7 +39,7 @@
 .btn-record.processing{background:#888;cursor:not-allowed;animation:none}
 .btn-record:disabled{opacity:.6;cursor:not-allowed}
 @keyframes pulse-red{0%,100%{box-shadow:0 0 0 0 rgba(192,57,43,0.4)}50%{box-shadow:0 0 0 12px rgba(192,57,43,0)}}
-.countdown-badge{display:none;font-size:50px;font-weight:700;color:var(--red);margin:8px 0;font-family:var(--serif)}
+.countdown-badge{display:none;font-size:50px;font-weight:700;color:var(--tx-red);margin:8px 0;font-family:var(--serif)}
 .countdown-badge.visible{display:block}
 .timer-bar-wrap{height:4px;background:var(--border-lt);border-radius:2px;margin:12px 24px;overflow:hidden;display:none}
 .timer-bar-wrap.visible{display:block}
@@ -57,7 +57,7 @@
 .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
 .feature-item{padding:11px 13px;background:var(--paper);border-radius:8px;border-left:3px solid var(--gold)}
 .feature-name{font-size:10.5px;font-weight:700;letter-spacing:1px;color:var(--text-lt);text-transform:uppercase;margin-bottom:4px}
-.feature-value{font-family:var(--serif);font-size:17px;color:var(--navy);font-weight:700;margin-bottom:4px}
+.feature-value{font-family:var(--serif);font-size:17px;color:var(--heading);font-weight:700;margin-bottom:4px}
 .feature-interp{font-size:11.5px;color:var(--text-mid);line-height:1.5}
 .feature-bar-wrap{height:4px;background:var(--border-lt);border-radius:2px;margin-top:6px;overflow:hidden}
 .feature-bar{height:100%;background:var(--navy);border-radius:2px;transition:width .4s}
@@ -69,8 +69,8 @@
 .loading-dots::after{content:'…';display:inline-block;animation:dots 1.5s steps(4,end) infinite}
 @keyframes dots{0%,20%{content:''}40%{content:'.'}60%{content:'..'}80%,100%{content:'…'}}
 .dt-result{margin-top:8px}
-.dt-result h2{font-family:var(--serif);font-size:17px;font-weight:600;margin:18px 0 10px;color:var(--navy)}
-.dt-result h3{font-family:var(--serif);font-size:14.5px;font-weight:600;margin:14px 0 8px;color:var(--navy)}
+.dt-result h2{font-family:var(--serif);font-size:17px;font-weight:600;margin:18px 0 10px;color:var(--heading)}
+.dt-result h3{font-family:var(--serif);font-size:14.5px;font-weight:600;margin:14px 0 8px;color:var(--heading)}
 .dt-result p{color:var(--text-mid);line-height:1.75;margin-bottom:12px;font-size:13.5px}
 .dt-result strong{color:var(--text)}
 .dt-result em{color:var(--gold-soft);font-style:italic}

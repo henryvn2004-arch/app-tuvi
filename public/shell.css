@@ -6,9 +6,21 @@
    Cặp với shell.js (render sidebar/rail/cmdk + chat SSE + Shell API).
    ============================================================ */
 :root{
+  /* ── MÀU THƯƠNG HIỆU = MẶT NỀN. Đừng dùng chúng làm màu CHỮ. ──
+     Mỗi màu dưới đây gánh một MẶT PHẲNG cố định: --navy là nền sidebar và thẻ
+     hero, --red là nền nút CTA (.btn-go/.btn.pri/.send), --green/--blue là nền
+     huy hiệu và thanh điểm. Vì gánh mặt nền nên chúng KHÔNG được khai lại ở
+     dark — khai lại là nút CTA đổi màu, sidebar hoá sáng.
+     ⇒ Cần chữ màu thương hiệu thì dùng bộ --heading / --tx-* bên dưới. Bộ đó
+     có giá trị light TRÙNG KHÍT màu gốc (nên light mode không đổi một pixel)
+     và có bản sáng ở dark. Dùng thẳng --navy làm chữ thì ở dark ra 1,04:1. */
   --navy:#061A2E; --navy-2:#0A2540; --navy-3:#0D3B5E;
   --gold:#C9A84C; --gold-soft:#9A7B3A; --gold-lt:#F9F4EB;
   --blue:#1455A4; --red:#C0392B; --green:#1E6B3C;
+  --heading:#061A2E; --tx-blue:#1455A4; --tx-red:#C0392B; --tx-green:#1E6B3C;
+  /* Chữ kem trên thẻ NAVY CỐ ĐỊNH (.today-card giữ nguyên nền navy ở cả hai
+     theme). CỐ Ý không khai lại ở dark — theo theme là chữ tối trên nền navy. */
+  --gold-on-navy:#F9F4EB;
   --text:#1a1a1a; --text-mid:#4a4a4a; --text-lt:#7a7a7a; --ink:#1a1a1a; --ink-mid:#4a4a4a; --ink-lt:#7a7a7a;
   --line:#E6E3DC; --line-2:#D8D4CB; --border-lt:#E8E8E8;
   --paper:#FBFAF7; --paper-2:#F4F2EC; --white:#fff;
@@ -25,6 +37,12 @@
   --text:#e9e6df; --text-mid:#b7b3a9; --text-lt:#8a867c; --ink:#e9e6df; --ink-mid:#b7b3a9; --ink-lt:#8a867c;
   --line:#2a2f38; --line-2:#333944; --border-lt:#2a2f38;
   --paper:#0f141b; --paper-2:#141b24; --white:#161d27;
+  /* Nền tô nhẹ sắc vàng. Chọn #241f14 vì ΔE 16,2 so với thẻ (--white #161d27)
+     — trong khi hover ở light mode chỉ ΔE 6,1 — mà vẫn giữ --text-lt ở 4,51:1.
+     Đo bằng ΔE chứ không bằng contrast-ratio: hai MẶT PHẲNG khác hue cùng độ
+     sáng cho contrast 1,03 nhưng mắt vẫn phân biệt rõ. Trùng giá trị admin.css. */
+  --gold-lt:#241f14;
+  --heading:#e9e6df; --tx-blue:#7FB0EE; --tx-red:#F08A7A; --tx-green:#5FBF87;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 18px rgba(0,0,0,.35);
   --shadow-lg:0 24px 60px rgba(0,0,0,.6),0 6px 18px rgba(0,0,0,.5);
 }
@@ -73,6 +91,10 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .btn.pri{background:var(--red);border-color:var(--red);color:#fff}
 .btn:disabled{opacity:.5;cursor:not-allowed}
 .ws-body{padding:18px 22px 44px}
+/* Liên kết chưa được trang nào tạo kiểu: mặc định #0000EE của trình duyệt
+   chìm trên nền tối. Chỉ áp ở dark, và chỉ cho <a> KHÔNG có class, để không
+   đè lên màu liên kết mà trang cố ý đặt. */
+:root[data-theme="dark"] .ws-body a:not([class]){color:var(--tx-blue)}
 
 /* ── RAIL ── */
 .rail{background:var(--white);border-left:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden}
@@ -194,7 +216,7 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .rh-sub{font-size:11px;color:var(--text-lt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
 .rh-del{flex:0 0 auto;width:24px;height:24px;border:none;background:transparent;color:var(--text-lt);font-size:17px;line-height:1;cursor:pointer;border-radius:6px;opacity:0}
 .rh-item:hover .rh-del{opacity:1}
-.rh-del:hover{background:var(--paper-2);color:var(--red)}
+.rh-del:hover{background:var(--paper-2);color:var(--tx-red)}
 /* "Phiên gần đây" ở khối nhập (empty-state) */
 #shellRecent{margin-top:14px}
 .recent-h{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-lt);margin-bottom:8px;font-weight:600}
@@ -243,7 +265,7 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .stm-x{position:absolute;top:10px;right:10px;width:26px;height:26px;border:none;background:transparent;color:var(--text-lt);font-size:18px;line-height:1;cursor:pointer;border-radius:6px}
 .stm-x:hover{background:var(--paper-2);color:var(--text)}
 .stm-ava{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);margin-bottom:12px}
-.stm-t{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.stm-t{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--heading);margin-bottom:8px}
 .stm-d{font-size:13.5px;color:var(--text-mid);line-height:1.6;margin-bottom:18px}
 .stm-btn{display:block;background:var(--red,#C0392B);color:#fff;text-decoration:none;font-family:var(--serif);font-weight:600;font-size:15px;padding:12px 20px;border-radius:10px;margin-bottom:8px}
 .stm-btn:hover{filter:brightness(1.06)}
@@ -253,7 +275,7 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
    nút chính (xem trọn 24 mục) — mua trọn bản mới là thứ đáng cho họ, hỏi lẻ chỉ
    là lựa chọn còn lại. */
 .stm-alt{display:block;font-size:12.5px;color:var(--text-lt);text-decoration:none;margin-bottom:10px}
-.stm-alt:hover{color:var(--blue)}
+.stm-alt:hover{color:var(--tx-blue)}
 
 /* ── ĐỒNG HỒ ĐẾM CÂU (rail) ──
    Đếm bằng CÂU chứ không bằng Lượng: "còn 24 Lượng" không ai biết nhiều hay ít,
@@ -261,7 +283,7 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
 .rail-meter{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 13px 0;font-size:12px;color:var(--text-lt)}
 .rail-meter .rm-t b{color:var(--text-mid);font-weight:700}
 .rail-meter .rm-sub{opacity:.75}
-.rail-meter .rm-a{color:var(--blue);font-weight:600;text-decoration:none;white-space:nowrap}
+.rail-meter .rm-a{color:var(--tx-blue);font-weight:600;text-decoration:none;white-space:nowrap}
 .rail-meter .rm-a:hover{text-decoration:underline}
 .rail-meter.low .rm-t b{color:var(--gold,#9A7B3A)}
 .rail-meter.out .rm-t{color:var(--red,#C0392B);font-weight:600}
@@ -271,9 +293,9 @@ body{font-family:var(--sans);background:var(--paper-2);color:var(--text);font-si
    thông tin trong mạch chat, KHÔNG phải banner quảng cáo cắt ngang. */
 .rail-upsell{margin:12px 0 4px;padding:13px 14px;background:var(--gold-lt,#F9F4EB);border:1px solid var(--gold-soft,rgba(154,123,58,.3));border-radius:11px;animation:shFade .2s ease}
 .rail-upsell .ru-t{font-size:13px;color:var(--text);line-height:1.55;margin-bottom:5px}
-.rail-upsell .ru-t b{color:var(--navy)}
+.rail-upsell .ru-t b{color:var(--heading)}
 .rail-upsell .ru-d{font-size:12.5px;color:var(--text-mid);line-height:1.6;margin-bottom:11px}
-.rail-upsell .ru-d b{color:var(--navy)}
+.rail-upsell .ru-d b{color:var(--heading)}
 .rail-upsell .ru-list{color:var(--text-lt);font-style:italic}
 .rail-upsell .ru-f{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
 .rail-upsell .ru-btn{background:var(--navy);color:var(--gold-bright,#c9a84c);text-decoration:none;font-family:var(--serif);font-weight:600;font-size:13px;padding:9px 15px;border-radius:8px;white-space:nowrap}
