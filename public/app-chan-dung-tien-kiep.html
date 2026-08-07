@@ -57,6 +57,12 @@
 .cdtk-ketluan{margin-top:16px;padding:13px 15px;background:#FBF8F1;border:1px solid #EADFC8;border-radius:10px;font-size:13.5px;line-height:1.82;color:#3a3226}
 #histList{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 #histList img{width:56px;height:56px;object-fit:cover;border-radius:8px;cursor:pointer}
+.cdtk-basis{font-size:13.5px;line-height:1.8;color:#2a2118}
+.cdtk-basis .row{padding:7px 0;border-bottom:1px solid #F0EEE9}
+.cdtk-basis .row:last-child{border-bottom:none}
+.cdtk-basis .k{font-size:12.5px;color:var(--text-lt);display:block}
+.cdtk-basis .src{margin-top:10px;font-size:12px;color:#7A5F26;background:#FBF8F1;border:1px solid #EADFC8;border-radius:8px;padding:9px 11px;line-height:1.65}
+.cdtk-act.locked p{color:var(--text-lt);font-style:italic}
 </style>
 </head>
 <body>
@@ -99,7 +105,7 @@
                 <div class="cdtk-birth" id="birthLine" style="display:none"></div>
               </div>
               <div class="cdtk-top">
-                <div class="cdtk-imgwrap">
+                <div class="cdtk-imgwrap" id="imgWrap" style="display:none">
                   <div class="cdtk-imgph" id="imgPlaceholder">Đang vẽ chân dung…<br>(khoảng 45–60 giây)</div>
                   <img id="resultImg" alt="Chân dung tiền kiếp" style="display:none">
                   <div id="imgLoadStatus" style="display:none;margin-top:8px;font-size:12px;color:var(--text-lt);text-align:center"></div>
@@ -107,7 +113,7 @@
                     <button class="btn" id="btnDownload" onclick="downloadResult()">⬇ Tải Ảnh Đăng Story</button>
                   </div>
                 </div>
-                <div class="cdtk-mirror" id="moTaBlock">
+                <div class="cdtk-mirror" id="moTaBlock" style="display:none">
                   <div class="cdtk-eyebrow" id="moTaTitle">Mô tả nhân vật</div>
                   <p id="moTaNhanVat"></p>
                 </div>
@@ -116,12 +122,32 @@
           </div>
         </div>
 
+        <!-- W1b — CƠ SỞ TRONG LÁ SỐ, chỉ hiện ở lượt tính thử.
+             Khối này từng bị gỡ khỏi bản trả tiền (Henry: thuật ngữ tử vi lẫn
+             vào phần đọc chính khiến nó nghe như bản luận giải chứ không phải
+             một câu chuyện) — quyết định đó GIỮ NGUYÊN, renderProse ẩn nó đi.
+             Nhưng ở lượt CHƯA trả tiền thì vai của nó ngược lại: đây là bằng
+             chứng duy nhất người ta có để tin engine thật sự đọc lá số mình. -->
+        <div class="res-block" id="basisBlock" style="display:none">
+          <div class="res-block-header"><span class="res-block-title">Cơ Sở Trong Lá Số</span></div>
+          <div class="res-block-body">
+            <div class="cdtk-basis" id="basisBody"></div>
+          </div>
+        </div>
+
         <div class="res-block" id="storyBlock" style="display:none">
           <div class="res-block-header"><span class="res-block-title">Một Đời Người — 5 Hồi</span></div>
           <div class="res-block-body">
             <div id="actList"></div>
+            <div id="actsLocked" style="display:none;margin-top:12px;font-size:12.5px;color:var(--text-lt);line-height:1.7">Khung 5 hồi ở trên do lá số của bạn quyết định — chữ của từng hồi nằm trong bản đầy đủ.</div>
             <div class="cdtk-ketluan" id="ketLuan" style="display:none"></div>
           </div>
+        </div>
+
+        <!-- Tường đứng ở CUỐI ở lượt tính thử: khối chữ phía trên đang ẩn, mở
+             xong tường biến mất và mọi thứ về đúng chỗ. -->
+        <div class="res-block" id="lockBlock" style="display:none">
+          <div class="res-block-body" id="lockHost" data-tvp-lock style="padding-top:6px"></div>
         </div>
 
         <div class="res-block" style="background:#FBF3DE;border-color:#e8d9b0">
@@ -207,6 +233,22 @@ function showError(msg) {
   if (msg) { e.textContent = msg; e.classList.add('active'); } else { e.classList.remove('active'); }
 }
 
+// ── W1b: bấm nút là CHẠY THẬT, miễn phí ────────────────────────────────────
+//
+// Trước đây bấm nút là gặp paywall ngay — tức phải trả 25 Lượng mới biết engine
+// có thật sự đọc lá số của mình hay không. Đo được trên prod (panel Phễu Theo
+// Tool): 5 người mở tool, 1 người bấm chạy.
+//
+// Nay: chạy tầng deterministic (0 lượt LLM, 0 lượt sinh ảnh, 0đ) — danh xưng,
+// nền văn minh, khung 5 hồi, cơ sở trong lá số — rồi mới dựng tường trên đúng
+// phần tốn tiền.
+var CDTK_KHOA = [
+  'Bức chân dung nhân vật',
+  'Mô tả khí chất & cốt cách',
+  'Chữ của cả 5 hồi truyện',
+  'Lời kết',
+];
+
 async function analyze() {
   showError('');
   var fdIn = TuviForm.getData();
@@ -219,23 +261,85 @@ async function analyze() {
   _lastBirth = { day: dd, month: mm, year: yyyy, hourBranch: gioAmIdx, gender: gender, isLunar: false,
     name: (fdIn.hoten || '').trim() || undefined };
   _currentSlug = TuviPaywall.generateToolSlug('chan-dung-tien-kiep-' + dd + '-' + mm + '-' + yyyy);
-  // Kết quả được cache theo LÁ SỐ (xem lib/portraits/cache.ts): đã trả cho lá
-  // số này rồi thì mở lại không mất Lượng, và không hiện hộp thoại đòi tiền.
-  await TuviPaywall.requireCreditsCached('/api/chan-dung-tien-kiep', _lastBirth, _currentSlug,
-    async function (freeRerun) { await _doGenerate(freeRerun); });
+
+  _openPanel();
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDTK_STEPS.slice(0, 2));
+  _loadingCtl.start();
+  var prev;
+  try {
+    var r = await fetch('/api/chan-dung-tien-kiep?preview=1', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ birth: _lastBirth }),
+    });
+    prev = await r.json();
+    if (!r.ok || !prev.success) throw new Error(prev.error || 'Lỗi ' + r.status);
+  } catch (e) {
+    _loadingCtl && _loadingCtl.stop();
+    _closePanel();
+    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+    return;
+  }
+  _loadingCtl && _loadingCtl.finish();
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('card').style.display = 'block';
+  document.getElementById('btnEdit').style.display = '';
+  renderMeta(prev);
+  // D1 — bậc "đã tính thử" của phễu theo tool. Bắn ở ĐÂY chứ không ở lúc bấm
+  // nút: bấm rồi mà lá số hỏng thì không có gì để xem, tính vào phễu là thổi
+  // mẫu số lên rồi tỉ lệ mở nhìn tệ hơn thực tế.
+  try { if (window.Track) window.Track.event('preview_shown', { tool_id: 'chan-dung-tien-kiep' }); } catch (e) { /* đo hỏng không chặn gì */ }
+  if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
+
+  // Đã trả tiền cho đúng lá số này từ trước → mở thẳng, không dựng tường.
+  var free = false;
+  try {
+    free = await TuviPaywall.isFreeRerun('/api/chan-dung-tien-kiep', PortraitRecover.birthQuery(_lastBirth));
+  } catch (e) { free = false; }
+  if (free) {
+    TuviPaywall._banner('✓ Bạn đã tạo kết quả cho lá số này — mở lại, không trừ Lượng');
+    await _doGenerate(true);
+    return;
+  }
+  document.getElementById('lockBlock').style.display = 'block';
+  await TuviPaywall.lockPreview({
+    host: document.getElementById('lockHost'),
+    title: '⊙ Còn bức chân dung và câu chuyện chưa mở',
+    items: CDTK_KHOA,
+    cta: 'Mở chân dung & trọn câu chuyện',
+    slug: function () { return _currentSlug; },
+    onUnlock: function () { return _doGenerate(false); },
+  });
 }
 
-async function _doGenerate(freeRerun) {
+function _openPanel() {
   document.getElementById('birthPanel').style.display = 'none';
   document.getElementById('resPanel').style.display = 'block';
   document.getElementById('loading').style.display = 'block';
   document.getElementById('card').style.display = 'none';
-  document.getElementById('storyBlock').style.display = 'none';
-  document.getElementById('eraLine').style.display = 'none';
-  document.getElementById('birthLine').style.display = 'none';
+  ['storyBlock', 'basisBlock', 'lockBlock', 'imgWrap', 'moTaBlock', 'eraLine', 'birthLine',
+   'imgLoadStatus', 'imgActions', 'resultImg'].forEach(function (id) {
+    document.getElementById(id).style.display = 'none';
+  });
+}
+
+function _closePanel() {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('resPanel').style.display = 'none';
+  document.getElementById('birthPanel').style.display = 'block';
+}
+
+async function _doGenerate(freeRerun) {
+  // CỐ Ý giữ nguyên phần đã bày ở lượt tính thử (#card, #basisBlock) — xoá nó
+  // đi để hiện spinner là bắt người vừa trả tiền nhìn màn hình trắng lại từ
+  // đầu, đúng thứ W1 sinh ra để bỏ.
+  document.getElementById('lockBlock').style.display = 'none';
+  TuviPaywall._closeLock();
+  document.getElementById('loading').style.display = 'block';
   document.getElementById('imgLoadStatus').style.display = 'none';
   document.getElementById('imgActions').style.display = 'none';
   document.getElementById('resultImg').style.display = 'none';
+  document.getElementById('imgWrap').style.display = '';
   document.getElementById('imgPlaceholder').style.display = 'flex';
   // Pha ảnh chạy tiếp ~50 giây SAU khi truyện đã hiện và bảng bước đã tắt.
   // Bọc `if` phòng bản ai-loading-steps.js cũ còn trong cache trình duyệt.
@@ -243,7 +347,9 @@ async function _doGenerate(freeRerun) {
     ? AiLoadingSteps.mountWait('imgPlaceholder', { label: 'Đang vẽ chân dung…' })
     : null;
   _imgWait && _imgWait.start();
-  _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDTK_STEPS);
+  // Hai bước đầu (lập lá số · chia 5 hồi) ĐÃ chạy ở lượt tính thử — chiếu lại
+  // là nói dối về việc máy đang làm gì.
+  _loadingCtl = AiLoadingSteps.mount('loadingSteps', CDTK_STEPS.slice(2));
   _loadingCtl.start();
 
   var token = window.Auth?.getSession()?.access_token || '';
@@ -277,14 +383,17 @@ async function _doGenerate(freeRerun) {
     if (res.status === 402 && freeRerun) {
       imageP.catch(function () {});
       _loadingCtl && _loadingCtl.stop();
-      showForm();
+      _imgWait && _imgWait.stop();
       document.getElementById('loading').style.display = 'none';
+      document.getElementById('imgWrap').style.display = 'none';
+      document.getElementById('lockBlock').style.display = 'block';
       await TuviPaywall.requireCredits(_currentSlug, async function () { await _doGenerate(false); });
       return;
     }
     if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
     _lastStory = data;
-    renderStory(data);
+    renderMeta(data);
+    renderProse(data);
     _loadingCtl && _loadingCtl.finish();
     document.getElementById('loading').style.display = 'none';
     document.getElementById('card').style.display = 'block';
@@ -312,12 +421,15 @@ async function _doGenerate(freeRerun) {
       ],
     });
   } catch (e) {
+    // 🔑 KHÔNG quẳng người ta về form trống như bản trước. Họ đang nhìn phần
+    // tính thử — thứ vừa xem xong và có thể vừa trả tiền cho phần sau — xoá đi
+    // là xoá luôn cái đó. Giữ nguyên màn hình, dựng lại tường, báo bằng banner.
     _loadingCtl && _loadingCtl.stop();
     _imgWait && _imgWait.stop();   // truyện hỏng → ẩn cả khung ảnh, đừng để đồng hồ chạy ngầm
     document.getElementById('loading').style.display = 'none';
-    document.getElementById('resPanel').style.display = 'none';
-    document.getElementById('birthPanel').style.display = 'block';
-    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+    document.getElementById('imgWrap').style.display = 'none';
+    document.getElementById('lockBlock').style.display = 'block';
+    TuviPaywall._banner('Chưa mở được lần này: ' + (e.message || 'lỗi kết nối') + '. Bạn thử lại giúp.');
     imageP.catch(function () {});
     return;
   }
@@ -371,15 +483,20 @@ function renderEraLine(data) {
   el.style.display = 'inline-block';
 }
 
-function renderStory(data) {
+// ── Tách render theo ĐƯỜNG TIỀN, không theo bố cục (W1b) ────────────────────
+//   renderMeta  = thứ engine tra bảng ra, 0đ  → vẽ ngay ở lượt tính thử
+//   renderProse = thứ model viết/vẽ, tốn tiền → chỉ vẽ sau khi đã trả
+// Gộp một hàm là sớm muộn có một khối chữ lọt vào lượt miễn phí mà không ai
+// để ý.
+function renderMeta(data) {
   document.getElementById('danhXung').textContent = data.danhXung || '';
   // Hero CỐ Ý chỉ còn: chức phận (to) + tên nhân vật & vế bí danh (nhỏ).
-  // Phần "chính tinh nào tại cung nào" đã dời hẳn xuống khối "Cơ Sở Trong Lá
-  // Số" — Henry phản hồi: để thuật ngữ tử vi lẫn vào phần đọc chính khiến nó
-  // nghe như bản luận giải chứ không phải một câu chuyện.
+  // Phần "chính tinh nào tại cung nào" nằm ở khối "Cơ Sở Trong Lá Số" — Henry
+  // phản hồi: để thuật ngữ tử vi lẫn vào phần đọc chính khiến nó nghe như bản
+  // luận giải chứ không phải một câu chuyện.
   var sub = [];
   if (data.characterName) sub.push(data.characterName);
-  if (data.biDanh) sub.push(data.biDanh);
+  if (data.biDanh) sub.push(data.biDanh);   // biDanh do LLM viết → chỉ có ở lượt trả tiền
   document.getElementById('danhXungSub').textContent = sub.join(' — ');
   renderEraLine(data);
   // Lá số đã nhập, hiện ngay đầu kết quả: người xem (và người nhận link chia
@@ -389,6 +506,28 @@ function renderStory(data) {
   var bs = (window.Shell && Shell.birthSummary) ? Shell.birthSummary(_lastBirth) : '';
   if (bs) { bl.textContent = 'Lá số: ' + bs; bl.style.display = 'block'; }
   else { bl.style.display = 'none'; }
+
+  // Khung 5 hồi: nhãn giai đoạn + vai trò kịch do ENGINE chốt. Ở lượt tính thử
+  // chưa có `title`/`text` (LLM viết) nên hiện đúng khung, không bịa chữ thay.
+  var acts = data.acts || [];
+  var locked = acts.some(function (a) { return !a.text; });
+  document.getElementById('actList').innerHTML = acts.map(function (a) {
+    var badge = ROLE_BADGE[a.role];
+    return '<div class="cdtk-act' + (badge ? ' ' + badge.cls : '') + (a.text ? '' : ' locked') + '">' +
+      '<div class="cdtk-act-head">' +
+        '<span class="cdtk-act-title">' + esc(a.title || a.stage) + '</span>' +
+        (a.title ? '<span class="cdtk-act-age">' + esc(a.stage) + '</span>' : '') +
+        (badge ? '<span class="cdtk-badge ' + badge.cls + '">' + badge.label + '</span>' : '') +
+      '</div>' + (a.text ? '<p>' + esc(a.text) + '</p>' : '') + '</div>';
+  }).join('');
+  // Nói MỘT lần ở cuối danh sách, không lặp dưới từng hồi: năm dòng y hệt nhau
+  // đọc thành nhiễu và làm loãng đúng thứ khối này đang khoe (khung 5 hồi).
+  document.getElementById('actsLocked').style.display = locked ? 'block' : 'none';
+  document.getElementById('storyBlock').style.display = 'block';
+  renderBasis(data);
+}
+
+function renderProse(data) {
   document.getElementById('moTaTitle').textContent =
     'Mô tả ' + (data.characterName || 'nhân vật');
   document.getElementById('moTaNhanVat').textContent = data.moTaNhanVat || '';
@@ -396,20 +535,37 @@ function renderStory(data) {
   // trên một đoạn rỗng. Truyện vẫn hiển thị bình thường.
   document.getElementById('moTaBlock').style.display = data.moTaNhanVat ? '' : 'none';
 
-  document.getElementById('actList').innerHTML = (data.acts || []).map(function (a) {
-    var badge = ROLE_BADGE[a.role];
-    return '<div class="cdtk-act' + (badge ? ' ' + badge.cls : '') + '">' +
-      '<div class="cdtk-act-head">' +
-        '<span class="cdtk-act-title">' + esc(a.title) + '</span>' +
-        '<span class="cdtk-act-age">' + esc(a.stage) + '</span>' +
-        (badge ? '<span class="cdtk-badge ' + badge.cls + '">' + badge.label + '</span>' : '') +
-      '</div><p>' + esc(a.text) + '</p></div>';
-  }).join('');
-
   var kl = document.getElementById('ketLuan');
   if (data.ketLuan) { kl.textContent = data.ketLuan; kl.style.display = 'block'; }
   else { kl.style.display = 'none'; }
-  document.getElementById('storyBlock').style.display = 'block';
+  // Cơ sở lá số lui về hậu trường khi đã có truyện — xem lý do ở markup.
+  document.getElementById('basisBlock').style.display = 'none';
+}
+
+// Bằng chứng "engine đã đọc đúng lá số của bạn", CHỈ dùng ở lượt chưa trả tiền.
+function renderBasis(data) {
+  var o = data.occupation || {};
+  var rows = [];
+  if (o.star) {
+    rows.push(['Chính tinh tại cung Quan Lộc',
+      o.star + (o.brightness ? ' (' + o.brightness + ')' : '') +
+      (o.borrowed ? ' — vô chính diệu, mượn cung xung chiếu' : '')]);
+  }
+  if (o.tierLabel) rows.push(['Bậc chức phận engine chấm', o.tierLabel]);
+  if (data.thanCungName) rows.push(['Cung an Thân', data.thanCungName]);
+  var menh = data.menh || {};
+  if ((menh.chinhTinh || []).length) rows.push(['Chính tinh tại cung Mệnh', menh.chinhTinh.join(', ')]);
+  if ((menh.phuTinh || []).length) rows.push(['Phụ tinh tại cung Mệnh', menh.phuTinh.slice(0, 10).join(', ')]);
+  if (data.portraitAge) rows.push(['Tuổi nhân vật trong tranh', data.portraitAge + ' tuổi']);
+  if (!rows.length) { document.getElementById('basisBlock').style.display = 'none'; return; }
+
+  var html = rows.map(function (r) {
+    return '<div class="row"><span class="k">' + esc(r[0]) + '</span>' + esc(r[1]) + '</div>';
+  }).join('');
+  if (o.desc) html += '<div class="row"><span class="k">Chức phận suy ra</span>' + esc(o.desc) + '</div>';
+  if (o.source) html += '<div class="src">' + esc(o.source) + '</div>';
+  document.getElementById('basisBody').innerHTML = html;
+  document.getElementById('basisBlock').style.display = 'block';
 }
 
 // Dựng trang /ket-qua chia sẻ được — CỐ Ý cho người xem link đọc trọn cả ảnh
@@ -531,6 +687,10 @@ function showForm() {
   document.getElementById('resPanel').style.display = 'none';
   document.getElementById('birthPanel').style.display = 'block';
   document.getElementById('btnEdit').style.display = 'none';
+  // Gỡ tường của lượt trước: bấm "Làm Lại" mà để nó nằm lại thì lá số mới hiện
+  // ra kèm bức tường tính theo lá số cũ.
+  document.getElementById('lockBlock').style.display = 'none';
+  TuviPaywall._closeLock();
   Shell.setShareable(null);
 }
 

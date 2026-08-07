@@ -5,6 +5,91 @@
 
 ---
 
+## 🖼️ W1b — TÍNH THỬ MIỄN PHÍ cho 2 TOOL CHÂN DUNG (2026-08-07, PR này)
+
+Henry: *"Ok làm đi"*. Mục này **do chính số của D1 chỉ ra**, không phải thứ tự
+backlog — và nó lật ngược một câu backlog tự viết ở vòng W1 (*"2 tool chân dung
+chưa có tính thử… ở đó giá trị chính LÀ bức ảnh, cho xem trước là cho không
+hàng"*).
+
+### 🔴 Câu đó SAI một nửa, và D1 đo ra chỗ sai
+| Tool | Mở | Chạy | Rơi |
+|---|---:|---:|---:|
+| Chân Dung Vợ Chồng | 10 | 1 | **90%** |
+| Chân Dung Tiền Kiếp | 5 | 1 | **80%** |
+| Luận Giải (đối chứng) | 24 | 24 | 0% |
+
+Rơi ở **bước bấm nút** — chưa tới paywall, chưa tới chất lượng ảnh. Người ta mở
+trang, thấy form ngày sinh + nút trừ 20–25 Lượng, rồi bỏ đi.
+
+### 🔑 Và preview vẫn **0đ** — chính chú thích đầu route đã nói sẵn
+`app/api/chan-dung-tien-kiep/route.ts` mở đầu bằng *"cả hai [pha] chỉ ăn dữ liệu
+deterministic từ `computePastLife()`"*. Tức tầng đắt tiền nằm ở LLM + `gpt-image`,
+còn danh xưng / nền văn minh / khung 5 hồi / bảng hình thể là **tra bảng thuần**.
+⇒ Không cần nghĩ "cách khác" như backlog đề nghị: đúng khuôn W1 là chạy được.
+
+### Bày gì / khoá gì
+- **Tiền kiếp** bày: danh xưng (1 trong 1.150) · nền văn minh + nhãn thời đại ·
+  dòng lá số · khung 5 hồi kèm nhãn **đỉnh-cao/biến-cố** · **Cơ Sở Trong Lá Số**.
+  Khoá: bức tranh · mô tả nhân vật · chữ của 5 hồi · lời kết · bí danh.
+- **Vợ chồng** bày: cung Phu Thê (chính tinh/phụ tinh/cách cục/ý nghĩa) + **bảng
+  hình thể** — mỗi nét kèm SAO quyết định nó, sát tinh đánh dấu *"phá cách"*.
+  Khoá: bức tranh · mô tả · hoàn cảnh gặp gỡ · luận giải Phu Thê.
+
+### 🔑 Ba quyết định đáng nhớ
+1. **Khối "Cơ Sở Trong Lá Số" của tiền kiếp SỐNG LẠI — nhưng CHỈ ở lượt chưa trả
+   tiền.** Nó từng bị gỡ hẳn (Henry: thuật ngữ tử vi lẫn vào phần đọc chính khiến
+   nó nghe như bản luận giải chứ không phải một câu chuyện) — quyết định đó GIỮ
+   NGUYÊN, `renderProse` ẩn nó đi. Ở lượt chưa trả tiền vai của nó **ngược lại**:
+   đây là bằng chứng DUY NHẤT người ta có để tin engine đọc đúng lá số mình.
+2. ⚠️ **KHÔNG bày `spouseAge`.** `pickMarriageAgeAnchor` có `Math.random()` nên
+   số ở lượt tính thử sẽ KHÁC số sau khi trả tiền. Bày một con số rồi đổi nó ngay
+   sau khi thu tiền là tự tay phá thứ W1 sinh ra để xây. Có ca test canh.
+3. **Nhãn hình thể `MORPH_FIELD_LABELS` + `morphRows()` EXPORT từ engine**, không
+   để trang chép bản thứ hai: thêm một field là giao diện im lặng hiện `bodyBuild`
+   thay vì "Vóc dáng", và tri thức "sao nào là lục sát" không rò ra client.
+
+### Giữ nguyên khuôn W1
+`runPreview()` là **hàm RIÊNG**, rẽ nhánh ngay tại `POST` **trước cả
+`withToolOutcome`** (lượt tính thử không phải một lượt chạy tool — ghi vào sổ là
+thổi mẫu số tỉ lệ hỏng). Không auth. `renderMeta`/`renderProse` tách theo **ĐƯỜNG
+TIỀN, không theo bố cục**. Lỗi ở lượt trả tiền **không quẳng về form trống** nữa.
+**0 dòng sửa trong `tuvi-paywall.js`** — `lockPreview`/`isFreeRerun` W1 dựng đã đủ,
+nên không phải bump `?v=`.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier --check .` sạch
+· `check:prices` sạch · engine **185 pass** · `node --check` 4 khối script.
+**40 bất biến ĐỌC THẲNG MÃ NGUỒN**: `runPreview` không chứa một trong 9 ký hiệu
+cấm (thêm `generatePortraitImage` so với W1) · không đòi auth · nhưng PHẢI chạy
+engine thật · **4 ca ĐỐI CHỨNG đường trả tiền PHẢI có** chốt thanh toán + model
+ảnh + ghi cache + auth · rẽ nhánh trước `withToolOutcome` · `renderMeta` không
+đọc một khoá chữ nào và `renderProse` đọc đủ.
+**12 bất biến trên MODULE THẬT, 2.880 lá số**: luôn có danh xưng (636 danh xưng
+khác nhau) · luôn 5 nền văn minh · luôn đúng 5 hồi và mọi hồi có nhãn · 0 rò
+`undefined`/`NaN`/`[object` ở cả hai payload · nhãn hình thể luôn tiếng Việt
+(không lọt khoá thô) · **cờ `isSat` khớp đúng bộ lục sát tinh**.
+**79 ca Playwright trên 2 TRANG THẬT**: bấm nút → **0 lượt `action=deduct`**, POST
+duy nhất là `preview=1`, không modal chặn · bày đủ danh xưng/nền/khung 5 hồi/cơ
+sở lá số/bảng hình thể · **quét toàn bộ text kết quả: 0 câu chữ model lọt** ·
+tường liệt kê đúng tên khối khoá + số dư + giá · `preview_shown` bắn đúng tool và
+`unlock_click` CHƯA bắn · bấm mở → có `deduct`, có POST đường trả tiền, có
+`unlock_click`, tường biến mất, chữ + tranh hiện, **phần miễn phí còn nguyên** ·
+**khách CHƯA đăng nhập vẫn tính thử được** · đã trả tiền từ trước → mở thẳng,
+không tường, không trừ Lượng · thiếu Lượng → *"còn thiếu N"*, **không bị quẳng về
+form** · 390px không tràn ngang.
+- 🪤 Ca đỏ duy nhất là **lỗi TEST**: `/api/track` gửi khoá `type`, không phải
+  `event_type` — bản kiểm đọc nhầm khoá nên báo "không bắn event".
+
+### CÒN LẠI
+- **2 trang standalone `/tools/chan-dung-*.html` vẫn là tường cũ.** Chúng không
+  nạp `shell.js` nên không nằm trong phễu D1, và CTA từ link chia sẻ vốn đổ về
+  `/app` — nhưng ai đáp xuống từ tìm kiếm thì vẫn gặp bản cũ.
+- Hai cột tính thử/bấm mở của 2 tool này **mới có số từ hôm nay**. Con số cần
+  nhìn là tỉ lệ **mở → tính thử** có nhảy khỏi mức 10–20% hay không.
+
+---
+
 ## 📉 D1 — Phễu theo tool, và 🔴 BA HỆ TÊN TOOL ĐANG LỆCH NHAU (2026-08-07, PR này)
 
 Henry: *"Ok D1 trước đi"* — mục backlog *"tool nào có người xem mà không ai

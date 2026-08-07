@@ -555,13 +555,40 @@ export function formatPhuTheForLLM(r: PhuTheReadout): string {
   return formatPalaceReadoutForLLM(r, 'Phu Thê');
 }
 
+/** Nhãn tiếng Việt của từng field hình thể. EXPORT vì lượt "tính thử miễn phí"
+ * (W1) bày thẳng bảng này ra giao diện — trang mà chép bản thứ hai thì thêm một
+ * field ở đây là giao diện im lặng hiện `bodyBuild` thay vì "Vóc dáng". */
+export const MORPH_FIELD_LABELS: Record<string, string> = {
+  faceShape: 'Hình dáng khuôn mặt', forehead: 'Trán', eyebrows: 'Lông mày', eyes: 'Mắt',
+  nose: 'Mũi', lips: 'Môi', chin: 'Cằm', cheekbones: 'Gò má', skin: 'Da',
+  bodyBuild: 'Vóc dáng', height: 'Chiều cao', expression: 'Biểu cảm', aura: 'Phong thái/khí chất',
+};
+
+/** Bảng hình thể dạng DÒNG, để bày thẳng ra giao diện ở lượt tính thử (W1).
+ * Cùng nguồn `fields`/`attribution` với `formatMorphologyForLLM` — khác mỗi
+ * đích đến (một bên là prompt, một bên là màn hình), nên tri thức "sao nào là
+ * sát tinh" vẫn nằm nguyên trong engine chứ không rò ra trang. */
+export function morphRows(
+  m: PalaceMorphology,
+): { key: string; label: string; value: string; star: string; isCore: boolean; isSat: boolean }[] {
+  return Object.entries(m.fields)
+    .filter(([, v]) => v)
+    .map(([k, v]) => {
+      const src = m.attribution[k];
+      return {
+        key: k,
+        label: MORPH_FIELD_LABELS[k] || k,
+        value: String(v),
+        star: src ? src.starTen : '',
+        isCore: Boolean(src?.isCore),
+        isSat: Boolean(src && !src.isCore && LUC_SAT_TINH.has(src.starTen)),
+      };
+    });
+}
+
 // Format gọn cho prompt LLM (Vietnamese) — chỉ liệt kê field có giá trị.
 export function formatMorphologyForLLM(m: PalaceMorphology, cungName = 'Phu Thê'): string {
-  const LABELS: Record<string, string> = {
-    faceShape: 'Hình dáng khuôn mặt', forehead: 'Trán', eyebrows: 'Lông mày', eyes: 'Mắt',
-    nose: 'Mũi', lips: 'Môi', chin: 'Cằm', cheekbones: 'Gò má', skin: 'Da',
-    bodyBuild: 'Vóc dáng', height: 'Chiều cao', expression: 'Biểu cảm', aura: 'Phong thái/khí chất',
-  };
+  const LABELS = MORPH_FIELD_LABELS;
   const coreLabel = m.coreBrightness ? `${m.coreStar} (${m.coreBrightness})` : m.coreStar;
   // Kèm SAO NÀO quyết định mỗi field — để route.ts yêu cầu LLM diễn giải ĐÚNG
   // "chính tinh X định khung..., phụ tinh Y tô điểm/phá cách nét Z" (Henry yêu
