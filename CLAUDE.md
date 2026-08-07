@@ -60,10 +60,76 @@ cắt cụt. Đo được: **51 điểm mực chạm mép** ở 1440px, **38** �
 - Container phiên chặn `fonts.googleapis.com` nên bài kiểm phục vụ một CSS
   `@font-face` giả để chứng minh đường nạp thông; **chưa nhìn Noto Serif render
   thật** ở đây.
-- 🐞 **Nợ có sẵn, KHÔNG thuộc PR này**: `/api/cong-so` trên `next dev` ném
-  `document is not defined` (bộ nạp engine vanilla thiếu mock `document` ở
-  đường này) ⇒ chạy tool đầu-cuối trên dev không được. Prod không dính (route
-  chạy bình thường). Đáng vá riêng.
+
+---
+
+## 🧩 `npm run dev` thiếu bước dựng engine — và nó hỏng theo kiểu ĐÁNH LỪA (2026-08-07, PR sau)
+
+Henry: *"vá đi"* mục "nợ có sẵn" tao ghi ở vòng trên.
+
+### 🔴 ĐÍNH CHÍNH: chẩn đoán cũ của tao SAI, không có bug nào trong mã
+Tao ghi *"`/api/cong-so` trên `next dev` ném `document is not defined` — bộ nạp
+engine vanilla thiếu mock `document`"*. **Sai.** Đọc lại đúng khối log của lượt
+hỏng thì nguyên nhân nằm 12 dòng PHÍA TRÊN triệu chứng:
+```
+Module not found: Can't resolve '../../tuvi-engine/dist/lunar/convert.js'
+```
+Tức **`tuvi-engine` chưa được dựng** — phiên đó tao mới `npm ci` ở gốc, chưa
+`cd tuvi-engine && npm ci && npm run build` (đúng bước setup CLAUDE.md đã ghi).
+Cả hai file engine vanilla **không hề dùng `document`** (đã grep: 0 lượt).
+
+### 🪤 Vì sao dễ chẩn sai — ba lớp che nhau, đo được cả ba
+Gỡ `tuvi-engine/dist` rồi dựng lại đúng tình huống:
+
+| | dist thiếu | sau khi vá |
+|---|---:|---:|
+| `/api/payment` (route THẬT SỰ hỏng) | 500 | 200 |
+| `/api/cong-so` (**không liên quan**) | 500 | 200 |
+| `/api/auth/session` (**không liên quan**) | 500 | 401 |
+| `document is not defined` trong log | 7 | 0 |
+
+1. Route thật sự hỏng là `/api/payment` (→ `lib/agent/tools.ts` import thẳng
+   `../../tuvi-engine/dist/**`), và nó BÁO ĐÚNG nguyên nhân.
+2. Nhưng Next dev sau đó **trả 500 cho cả route không dính dáng gì**.
+3. Và bộ overlay lỗi của Next dev ném `ReferenceError: document is not defined`
+   trong ngữ cảnh Node — **đè lên dòng nguyên nhân thật**.
+⇒ Người đọc log thấy "document is not defined" ở một route vô can, đi tìm nhầm
+chỗ. **Bài học: đọc TRỌN khối log quanh lỗi, đừng dừng ở dòng ném ra.**
+
+### 🔴 Lỗ hổng THẬT tìm ra khi lần lại: `dev` không có hook, `build` thì có
+| | dựng `tuvi-engine`? |
+|---|---|
+| `npm run build` (và Vercel deploy) | ✅ qua `prebuild` |
+| `npm run dev` | ❌ **không có `predev`** |
+| `npm run typecheck` | ❌ (tsc cũng cần `dist`) |
+
+Nên máy vừa clone chạy `npm ci && npm run dev` chắc chắn rơi vào đúng cái bẫy
+trên. Prod không bao giờ dính vì `prebuild` lo sẵn — đó là lý do lỗi này sống
+lâu mà không ai thấy.
+
+### Cách vá
+`scripts/ensure-engine-built.mjs` + `predev` / `pretypecheck`.
+- **Canh ĐÚNG file mà `tools.ts` import** (`dist/lunar/convert.js`), không canh
+  mỗi thư mục `dist`: một lượt build hỏng nửa chừng vẫn để lại `dist` rỗng.
+- **Tự dựng khi thiếu** (kèm `npm ci` nếu `tuvi-engine/node_modules` cũng thiếu)
+  thay vì chỉ mắng — máy vừa clone không phải làm gì thêm.
+- **Đường nhanh là một lượt `stat`**: đã dựng rồi thì thoát ngay, đo được
+  **52ms**, nên không làm chậm `npm run dev` hằng ngày.
+- Dựng hỏng thì in thẳng câu lệnh chạy tay + nói trước cái bẫy ở trên, rồi
+  `exit 1` — thà chặn còn hơn để dev server lên rồi 500 lung tung.
+- **KHÔNG đụng `prebuild`** — đường deploy đang chạy đúng, sửa vào đó là rủi ro
+  không đổi lấy gì.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices` + `check:groups` sạch · engine 185 pass.
+- **Dựng lại đúng tình huống hỏng** (gỡ `tuvi-engine/dist` + xoá `.next`): tái
+  hiện **y hệt** bảng số ở trên ⇒ chẩn đoán mới có bằng chứng, không phải suy.
+- **3 ca trên script thật**: dist có → thoát 0 trong **52ms**, 0 dòng ra · dist
+  thiếu → tự `npm ci` + build, dựng lại được `dist/lunar/convert.js`, exit 0 ·
+  **đầu-cuối `npm run dev` từ trạng thái máy-vừa-clone** → `predev` chạy trước,
+  3 route trên đều lành, **0 lượt** `document is not defined`, **0 lượt**
+  `Can't resolve`.
 
 ---
 
