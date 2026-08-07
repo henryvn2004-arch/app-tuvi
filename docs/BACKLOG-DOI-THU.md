@@ -130,14 +130,32 @@ phải tính lại. Một câu SQL, không cần deploy.
 
 ## W — Paywall & chuyển đổi
 
-### W1. Tính thử miễn phí → chặn ở phần luận sâu 🟢 L
+### W1. Tính thử miễn phí → chặn ở phần luận sâu ✅ XONG (3 tool cẩm nang) ⭐
 **Bằng chứng ở tầng code:** 29/71 trang sản phẩm của họ **giấu giá tới sau khi
 bấm**, trang chỉ có hai nút `免費試算` → `付費鑑定`. Người dùng Dcard mô tả:
 *"che một đống đoạn mờ để câu"*.
 **Mình đang ngược:** chặn TRƯỚC khi người ta thấy chất lượng.
-**Việc:** cho chạy tool ra kết quả cấu trúc (lá số, bảng, 2–3 đoạn luận thật
-hay), chặn đúng chỗ tò mò nhất. Đây là **mục có tác động lớn nhất trong cả
-backlog** và cũng là mục tốn công nhất — đụng gần như mọi trang tool + paywall.
+
+**Đã làm cho `nguoi-khac` · `day-con` · `nhan-mach`:** bấm nút là **tool chạy
+thật**, bày tầng deterministic rồi mới khoá phần chữ.
+- 🔑 **Chỗ khiến nó gần như 0đ:** tầng deterministic của ba tool này là **tra
+  bảng thuần** — kiểu người, toạ độ, 5 mặt đọc, 6 thẻ cách dạy, chặng đi học,
+  phân bố nhóm, cặp giẫm-chân/bù-nhau, thứ tự tiếp cận. **0 lượt LLM.** Chỉ
+  phần chữ mới tốn tiền, và chỉ phần đó bị khoá.
+- `runPreview()` là **hàm RIÊNG** trong mỗi route, rẽ nhánh ngay tại `POST`
+  trước cả `withToolOutcome`. Không `toolPaymentDenied`, không `llmTextFull`,
+  không ghi lịch sử / cache / lượt rail. Trộn hai đường vào một hàm rồi tin vào
+  một câu `if` là cách nhanh nhất để một hôm nào đó đường trả tiền lọt cửa.
+- **KHÔNG đòi đăng nhập** — cả điểm của W1 là bỏ tường trước khi người ta thấy
+  chất lượng, mà màn đăng nhập cũng là một bức tường.
+- `TuviPaywall.lockPreview()` — tường liệt kê **ĐÚNG TÊN** những khối đang khoá
+  thay vì mấy vạch mờ vô nghĩa của W2 (W2 là lời TỪ CHỐI, cái này là lời MỜI).
+- Mỗi trang tách `render()` thành `renderMeta()` / `renderProse()` — **tách theo
+  ĐƯỜNG TIỀN, không theo bố cục**. Có test đọc mã canh renderMeta không đọc một
+  khoá chữ nào.
+
+**Chưa làm:** 2 tool chân dung — ở đó giá trị chính LÀ bức ảnh, cho xem trước
+là cho không hàng. Phải nghĩ cách khác.
 
 ### W2. Che chữ thay vì modal ✅ XONG
 Modal chặn = "cửa đóng". Che mờ = "gần lấy được rồi". Cùng một hành vi, hai cảm

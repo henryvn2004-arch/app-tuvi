@@ -193,6 +193,32 @@ async function buildReport(
   return ok(payload);
 }
 
+/**
+ * W1 — TÍNH THỬ MIỄN PHÍ. Xem chú thích dài ở `app/api/nguoi-khac/route.ts`:
+ * hàm RIÊNG chứ không phải một cờ trong `runPost`, 0 lượt LLM, không chạm
+ * thanh toán / lịch sử / cache, không đòi đăng nhập.
+ */
+async function runPreview(request: NextRequest) {
+  const body = await parseBody(request);
+  const birth = body.birth as BirthParams | undefined;
+  if (!validBirth(birth)) return err('Thiếu thông tin ngày sinh của bé.', 400);
+
+  const r = computeLaso(birth);
+  if (!r.ok || !r.ls) return err(r.error || 'Không lập được lá số.', 400);
+  let lsChaMe: Laso | null = null;
+  if (validBirth(body.birthParent)) {
+    const rb = computeLaso(body.birthParent as BirthParams);
+    if (rb.ok && rb.ls) lsChaMe = rb.ls;
+  }
+  const gender = birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
+  const p = computeDayCon(r.ls, gender, resolveMoiLo(String(body.moiLo || '')), lsChaMe);
+  return ok({
+    success: true,
+    preview: true,
+    ...meta(p, String(body.name || '').trim().slice(0, 60)),
+  });
+}
+
 async function runPost(request: NextRequest) {
   const auth = await authUserFromRequest(request);
   if ('error' in auth) return err(auth.error, auth.status);
@@ -304,5 +330,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const url = new URL(request.url);
+  if (url.searchParams.get('preview') === '1') return runPreview(request);
   return withToolOutcome(TOOL_ID, () => runPost(request));
 }

@@ -253,6 +253,43 @@ async function buildReport(
   return ok(payload);
 }
 
+/**
+ * W1 — TÍNH THỬ MIỄN PHÍ.
+ *
+ * Trả về ĐÚNG tầng deterministic (`meta`): kiểu người, toạ độ, 5 mặt đọc, đại
+ * vận, vận năm. Toàn bộ là tra bảng — **0 lượt LLM, 0đ**. Phần chữ (thứ tốn
+ * tiền) không nằm ở đây và không có đường nào lấy được từ đây.
+ *
+ * 🔑 HÀM RIÊNG, KHÔNG phải một cờ trong `runPost`. Đây là chốt chặn thanh toán
+ * của một tool đang bán: trộn hai đường vào một hàm rồi tin vào một câu `if` là
+ * cách nhanh nhất để một hôm nào đó đường trả tiền lọt qua cửa. Ở đây KHÔNG có
+ * `toolPaymentDenied`, KHÔNG có `llmTextFull`, KHÔNG ghi lịch sử, KHÔNG ghi
+ * cache, KHÔNG tặng lượt rail — có test canh đúng từng điều đó.
+ *
+ * KHÔNG đòi đăng nhập: cả điểm của W1 là cho người ta thấy chất lượng TRƯỚC
+ * mọi bức tường, mà màn đăng nhập cũng là một bức tường.
+ */
+async function runPreview(request: NextRequest) {
+  const body = await parseBody(request);
+  const birth = body.birth as BirthParams | undefined;
+  if (!validBirth(birth)) return err('Thiếu thông tin ngày sinh của người cần xem.', 400);
+
+  const r = computeLaso(birth);
+  if (!r.ok || !r.ls) return err(r.error || 'Không lập được lá số.', 400);
+  let lsBan: Laso | null = null;
+  if (validBirth(body.birthSelf)) {
+    const rb = computeLaso(body.birthSelf as BirthParams);
+    if (rb.ok && rb.ls) lsBan = rb.ls;
+  }
+  const gender = birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
+  const p = computeNguoiKhac(r.ls, gender, resolveQuanHe(String(body.quanHe || '')), lsBan);
+  return ok({
+    success: true,
+    preview: true,
+    ...meta(p, String(body.name || '').trim().slice(0, 60)),
+  });
+}
+
 async function runPost(request: NextRequest) {
   const auth = await authUser(request);
   if ('error' in auth) return err(auth.error, auth.status);
@@ -365,5 +402,9 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  // Rẽ nhánh NGAY tại cửa, trước cả `withToolOutcome`: lượt tính thử không sinh
+  // gì để mà đo kết quả, và cũng không được dính vào sổ theo dõi hoàn tiền.
+  const url = new URL(request.url);
+  if (url.searchParams.get('preview') === '1') return runPreview(request);
   return withToolOutcome(TOOL_ID, () => runPost(request));
 }

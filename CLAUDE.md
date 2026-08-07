@@ -5,7 +5,92 @@
 
 ---
 
-## 👶👥 T2 "Dạy Con" + T3 "Sổ Nhân Mạch" (2026-08-06, PR này)
+## 🔓 W1 — TÍNH THỬ MIỄN PHÍ: bấm nút là tool CHẠY THẬT (2026-08-06, PR này)
+
+Henry: *"Ok w1 đi"* — mục backlog tự đánh giá là **tác động lớn nhất cả
+backlog**. W2 trước đó mới làm nửa hình thức: tấm khoá mềm hiện ra nhưng **chữ
+mờ là chữ GIẢ**, tool vẫn chưa hề chạy.
+
+### Đảo chiều: chặn TRƯỚC → cho xem RỒI mới chặn
+Trước: bấm nút → paywall → phải trả tiền mới biết tool có đúng không.
+Nay: bấm nút → **tool chạy thật** → bày tầng cấu trúc → tường chỉ đứng trên
+phần chữ.
+
+### 🔑 Chỗ khiến W1 gần như 0đ — và nó là cả thiết kế
+Tầng deterministic của 3 tool cẩm nang (`nguoi-khac` · `day-con` · `nhan-mach`)
+là **tra bảng thuần**: kiểu người, toạ độ hai trục, 5 mặt đọc, **6 thẻ cách
+dạy** (`KIEU_HOC`), chặng đi học, phân bố nhóm, **cặp giẫm-chân/bù-nhau**, thứ
+tự tiếp cận, cơ sở lá số. **0 lượt LLM, 0đ.** Chỉ phần CHỮ mới tốn tiền.
+⇒ Không có đường farm tiền model, vì lượt tính thử không gọi model.
+
+### `runPreview()` là HÀM RIÊNG, không phải một cờ trong `runPost`
+Rẽ nhánh ngay tại `POST`, **trước cả `withToolOutcome`**. Trong đó KHÔNG có
+`toolPaymentDenied`, `llmTextFull`, `insertHistoryRow`, `putCachedPortrait`,
+`railFreeGrant`, `refundIfSystemFailure`.
+- **Vì sao không dùng cờ:** đây là chốt chặn thanh toán của tool đang bán. Trộn
+  hai đường vào một hàm rồi tin vào một câu `if` là cách nhanh nhất để một hôm
+  nào đó đường trả tiền lọt qua cửa.
+- **KHÔNG đòi đăng nhập.** Cả điểm của W1 là bỏ tường trước khi người ta thấy
+  chất lượng — mà màn đăng nhập cũng là một bức tường. Chi phí chỉ là CPU lập
+  lá số, ngang mấy tool free vốn đã mở công khai.
+
+### `TuviPaywall.lockPreview()` — khác `_softLock` ở đúng một điểm
+`_softLock` (W2) là lời **TỪ CHỐI** (thiếu Lượng / chạm trần) nên mấy vạch mờ
+sau nó là chữ giả cho có. `lockPreview` là lời **MỜI**: người dùng chưa bị từ
+chối gì, nên nó liệt kê **ĐÚNG TÊN** những khối đang khoá. Fail-closed y hệt:
+đọc hụt bảng giá → KHÔNG dựng tường.
+
+### Mỗi trang tách `render()` → `renderMeta()` / `renderProse()`
+**Tách theo ĐƯỜNG TIỀN, không theo bố cục.** Gộp một hàm là sớm muộn có một
+khối chữ lọt vào lượt miễn phí mà không ai để ý.
+- Thứ tự DOM đặt sao cho **lượt tính thử luôn thấy tường ở CUỐI**: khối chữ nằm
+  xen giữa nhưng đang `display:none`, mở xong tường biến mất và mọi thứ về đúng
+  chỗ. Không phải sắp lại hai lần.
+- **Bóc "Cơ sở trong lá số" khỏi `<details>` ở cuối trang** thành khối mở sẵn:
+  W1 đổi vai của nó — đây LÀ bằng chứng duy nhất người chưa trả tiền có để đánh
+  giá tool.
+- 🔑 `nhan-mach` điền chữ vào **ĐÚNG thẻ người đã dựng** ở lượt tính thử (dò
+  `data-ten`) thay vì dựng lại danh sách: dựng lại thì thứ tự trôi theo thứ tự
+  model trả về, mà nó không cam kết gì.
+- Lỗi ở lượt trả tiền **KHÔNG quẳng người ta về form trống nữa** — họ đang nhìn
+  phần tính thử và có thể vừa trả tiền cho phần sau; giữ màn hình, dựng lại
+  tường, báo bằng banner.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier --check .` sạch
+· `check:prices` sạch · engine **185 pass** · `node --check` 6 khối script nội
+tuyến · engine test T2/T3 vẫn xanh (4.896 lá số + 152 nhóm).
+**24 bất biến ĐỌC THẲNG MÃ NGUỒN 3 route**: `runPreview` không chứa một trong 8
+ký hiệu cấm, + **ca ĐỐI CHỨNG `runPost` PHẢI có** chốt thanh toán và lượt gọi
+model (không thì bản kiểm xanh vì lý do sai), + rẽ nhánh nằm trước
+`withToolOutcome`, + `renderMeta` không đọc một khoá chữ nào và `renderProse`
+đọc đủ.
+**30 ca Playwright trên 3 TRANG THẬT**: bấm nút → **0 lượt `action=deduct`**,
+POST duy nhất là `preview=1`, không modal chặn · bày đủ kiểu người / cơ sở lá
+số / 6 thẻ cách dạy / cặp giẫm-chân · **quét toàn bộ text kết quả: 0 câu chữ
+model lọt** · tường liệt kê đúng tên khối khoá + số dư + giá · bấm mở → có
+`deduct`, có POST đường trả tiền, tường biến mất, chữ hiện đủ, **phần miễn phí
+vẫn còn nguyên** · **khách CHƯA đăng nhập vẫn tính thử được** và tường mời đăng
+nhập thay vì nói số dư · đã trả tiền từ trước → mở thẳng, không tường, không
+trừ Lượng · thiếu Lượng → tường "còn thiếu N", **không bị quẳng về form** ·
+`nhan-mach` mở xong **thứ tự người không đổi** · 390px không tràn ngang.
+- 🪤 Một ca đỏ là **lỗi TEST**: bản kiểm "rẽ nhánh trước `withToolOutcome`" dò
+  vị trí chuỗi, mà CHÚ THÍCH của `nguoi-khac` có nhắc chữ `withToolOutcome`.
+  Phải bỏ chú thích trước khi dò.
+
+### CÒN LẠI
+- **2 tool chân dung chưa có tính thử** — ở đó giá trị chính LÀ bức ảnh, cho
+  xem trước là cho không hàng. Phải nghĩ cách khác (hé tên nhân vật + nền văn
+  minh mà giấu ảnh + truyện?), và cách đó tốn một lượt LLM nên không còn 0đ.
+- Chưa đo được **tỉ lệ bấm "Mở bản đầy đủ"** sau khi xem tính thử — đó chính là
+  con số nói W1 có ăn hay không. Cần một event riêng (`preview_shown` /
+  `preview_unlock`) rồi ghép trong panel Marketing.
+- Lượt tính thử **không giới hạn** và không đăng nhập. Chi phí là CPU lập lá số
+  nên chấp nhận được, nhưng nếu có ngày bị quét thì cần trần theo IP.
+
+---
+
+## 👶👥 T2 "Dạy Con" + T3 "Sổ Nhân Mạch" (2026-08-06, PR trước)
 
 Henry: *"Ok. Làm tiếp t2/t3 đi"* — mục cuối của nhóm T trong `BACKLOG-DOI-THU.md`.
 
