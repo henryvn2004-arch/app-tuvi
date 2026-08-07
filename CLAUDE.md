@@ -5,6 +5,80 @@
 
 ---
 
+## 🌓 Dark mode cho trang Tài khoản — gỡ nốt cái đảo sáng (2026-08-07, PR sau)
+
+Henry: *"Ok làm tiếp đi"* mục "Trang Tài khoản ghim sáng" tao để lại ở vòng trên.
+Vòng đó tao **ghim** nó thành đảo sáng vì bộ đổi token làm hỏng 12 chỗ ở đây; nay
+gỡ hẳn cái ghim.
+
+### 🔴 ĐÍNH CHÍNH con số của chính tao: không phải "32 chỗ / 15 mặt nền"
+Trang có **BA khối `<style>`** — khối chính + `#tab-lichsu` + `#tab-ketnoi` nhét
+giữa markup — nên lượt đếm trước chỉ nhìn khối đầu. Đo lại: **45 giá trị màu chép
+cứng**, trong đó 15 mặt nền `#fff` + 12 chip trạng thái + 3 chỗ skeleton.
+
+### 🔑 Dark phải giải TẠI TRANG, không thừa hưởng được
+`.acct-scope` **tự khai trọn bảng màu**, che bảng của `shell.css` ⇒ khối
+`:root[data-theme="dark"]` của shell không với tới. Nên phải có
+`:root[data-theme="dark"] .acct-scope{…}` riêng. Và **đúng cái bẫy hai vai lặp
+lại**: `--navy` là nền thẻ hero/`card-top`/`modal-header`/nút, `--gold` là nền
+avatar/nút vàng — khai lại là mấy mặt đó hoá sáng, chữ `#fff` trên chúng chết
+theo. ⇒ giữ `--navy`/`--gold` làm MẶT NỀN, chỗ dùng làm CHỮ chuyển sang
+`--heading` (thừa hưởng từ shell, đã có bản dark) và `--tx-gold` (khai mới).
+
+### 🪤 Bốn chỗ tao gộp token làm ĐỔI MÀU Ở LIGHT — phải trả lại
+Gộp cho gọn thì tiện, nhưng giá trị light không trùng: `.conn-hero` nền `#fffdf7`
+(tao gộp vào `--gold-lt` `#F9F4EB`) · viền `#d9c48a` (gộp `--chip-gold-line`
+`#e8d9b0`) · `.conn-pill` `#e8f7ee`/`#1e7d43` (gộp `--chip-green`/`--green`) ·
+`.conn-revoke` viền `#e2b6b0` (gộp `--chip-red-line`). Đã tách token riêng
+(`--hero-tint` · `--hero-line` · `--pill-green*` · `--revoke-line`) để giữ
+nguyên pixel. 🔑 **Gộp token chỉ được khi giá trị light TRÙNG KHÍT — không thì
+"dọn dẹp" chính là một thay đổi giao diện lén.**
+
+### 🐞 Lỗi phép đo contrast KHÔNG bắt được: ô nhập không khai `background`
+`.form-row input` và `.chat-input` chưa bao giờ khai nền ⇒ ăn **mặc định TRẮNG
+của trình duyệt**. Ở dark, `color:var(--text)` `#e9e6df` rơi trên nền trắng =
+gần như vô hình. Bộ chấm contrast leo cây cha tìm nền nên nó đọc ra nền của thẻ
+cha, **không thấy nền do UA cấp** ⇒ chấm ra điểm đẹp. Bắt được bằng bộ dò thứ
+hai: quét `backgroundColor` tính được của MỌI phần tử ở dark, cái nào luminance
+> 0,6 mà diện tích > 400px² thì kêu. Khai thẳng `background:var(--surface)`
+(light vẫn `#FFFFFF` ⇒ không đổi pixel). 🔑 **Đo chữ chưa đủ — phải đo cả MẶT
+NỀN, vì nền do trình duyệt cấp không nằm trong cây CSS của mình.**
+
+### Verify — đo trong trình duyệt, đối chứng `origin/main` bằng `git worktree`
+Trang này gần như trống nếu chưa đăng nhập (thẻ do JS dựng, API bị chặn) nên bơm
+**fixture dựng đủ 15 thành phần** (thẻ lá số, xem tuổi 3 mức điểm, chat, tướng,
+alert, skeleton, luận giải, modal, chip lịch sử, thẻ kết nối) rồi mới đo —
+không có nó thì chỉ quét được 126 phần tử màn đầu và mọi mặt nền đều lọt.
+
+| | origin/main | bản mới |
+|---|---:|---:|
+| phần tử có chữ | 207 | 207 |
+| dưới AA 4,5:1 | **64** | **10** |
+| vô hình < 2:1 | 2 | 1 |
+| mặt nền sáng sót ở dark | — | **0** (còn 4 là nền thương hiệu cố ý) |
+
+- **LIGHT: 0 lệch ngoài ý muốn**, đúng **1 chỗ khai trước** —
+  `textarea.chat-input` trước ăn màu đen mặc định của trình duyệt (`#000`) trong
+  khi cả trang dùng `--text` `#1a1a1a`; nay khớp lại, lệch 26/255.
+- **10 chỗ còn dưới AA đều BẰNG ĐÚNG light** (kiểm từng chỗ) ⇒ nợ có sẵn ở cả
+  hai theme, không phải hồi quy của dark: chữ `#fff` trên nền thương hiệu
+  WhatsApp `#25D366` (1,98) · Telegram `#229ED9` (3,02) · Messenger `#0084FF`
+  (3,66) · vàng `--gold` (3,99). **0 chỗ nào dark tệ hơn light.**
+- `typecheck` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+  `check:prices`/`check:groups`/`check:nostore` sạch · engine 185 pass.
+- **Không bump `?v=`**: chỉ sửa CSS nội tuyến trong chính file HTML, mà HTML trả
+  `max-age=0, must-revalidate` nên tới người dùng ngay.
+
+### CÒN LẠI
+- **10 chỗ trên là nợ MÀU THƯƠNG HIỆU, không phải nợ dark** — muốn đạt AA thì
+  phải đổi chữ nút WhatsApp/Telegram/Messenger sang màu đậm hoặc bỏ màu nền
+  thương hiệu, tức đụng nhận diện của bên thứ ba. Cố ý để nguyên.
+- Phép đo vẫn chạy trên **fixture tao tự dựng**, không phải dữ liệu thật của một
+  tài khoản đã đăng nhập. Thành phần nào có sẵn trong markup thì đo thật, còn
+  hình dạng dữ liệu thật (tên dài, nhiều badge) chưa soi.
+
+---
+
 ## 🌗 Dark mode: MÀU THƯƠNG HIỆU LÀ MẶT NỀN, đừng dùng làm chữ (2026-08-07, cùng PR)
 
 Henry: *"Ok sửa luôn đi"* mục nợ `--gold-lt` tao ghi ở vòng trên. Đo ra thì cái
@@ -69,7 +143,7 @@ PHẲNG khác hue**: nó chỉ đo độ sáng. Trùng giá trị `admin.css` đ
 - **375 chỗ vẫn dưới AA ở dark**, phần lớn là `--gold-soft` làm chữ (**47 chỗ,
   4,25:1**). CỐ Ý không đụng: ở **light** nó đang là **3,64:1** — tức dark còn khá
   hơn light, không phải hồi quy; và nó kiêm luôn màu VIỀN nên đổi là lan khắp nơi.
-- **Trang Tài khoản ghim sáng**, chưa có dark thật (32 chỗ).
+- ~~Trang Tài khoản ghim sáng~~ → **đã có dark thật**, xem mục ngay dưới.
 - Bộ đo chỉ thấy **trạng thái ĐẦU** của mỗi trang (form, chưa có kết quả) nên phần
   kết quả luận giải chưa được quét.
 - `admin.css` có `--gold-lt` riêng cùng giá trị `#241f14` — hai file hai bảng màu,
