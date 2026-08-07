@@ -130,6 +130,24 @@
     return 'rgba(' + ((n >> 16) & 255) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
   }
 
+  // Gãy nhãn thành TỐI ĐA 2 dòng, chọn chỗ ngắt cho hai dòng CÂN NHAU nhất
+  // thay vì ngắt tham lam: "Đường / công danh" gọn hơn "Đường công / danh",
+  // mà bề rộng của dòng dài nhất mới là thứ quyết định bán kính bên dưới.
+  function wrap2(ctx, text, maxW) {
+    var s = String(text || '');
+    if (ctx.measureText(s).width <= maxW) return [s];
+    var words = s.split(' ');
+    if (words.length < 2) return [s];
+    var best = null;
+    for (var k = 1; k < words.length; k++) {
+      var a = words.slice(0, k).join(' ');
+      var b = words.slice(k).join(' ');
+      var m = Math.max(ctx.measureText(a).width, ctx.measureText(b).width);
+      if (!best || m < best.m) best = { m: m, lines: [a, b] };
+    }
+    return best.lines;
+  }
+
   // ── Radar 12 chiều ─────────────────────────────────────────
   function veRadar(ctx, box, ho, opt) {
     opt = opt || {};
@@ -140,13 +158,44 @@
     var n = items.length;
     var cx = box.x + box.w / 2;
     var cy = box.y + box.h / 2;
-    // Chừa chỗ cho nhãn quanh vòng — không chừa thì chữ bị cắt ở mép canvas.
-    var R = Math.min(box.w, box.h) / 2 - Math.max(46, Math.min(box.w, box.h) * 0.17);
-    if (R <= 10) return;
+    var side = Math.min(box.w, box.h);
 
     var ang = function (i) {
       return (Math.PI * 2 * i) / n - Math.PI / 2;
     };
+
+    // ── Cỡ chữ + bán kính: ĐO nhãn rồi mới chốt, không chừa lề cố định ──
+    // Bản cũ lấy cỡ chữ theo bán kính (R*0.115 ⇒ 20px ở khổ 520) rồi chừa một
+    // lề cứng max(46, side*0.17) cho nhãn. Lề đó hẹp hơn bề rộng chữ THẬT của
+    // những nhãn dài nhất ("Đồng sự ngang hàng", "Nền tảng hậu phương") nên
+    // đuôi nhãn tràn khỏi canvas và bị cắt cụt. Nay: chốt cỡ chữ theo KHỔ vẽ,
+    // gãy nhãn dài xuống 2 dòng, rồi giải ngược R từ bề rộng đo được — bán
+    // kính tự co lại vừa đủ, không nhãn nào chạm mép dù nhãn có đổi.
+    var fs = Math.max(9, Math.min(12, Math.round(side * 0.021)));
+    ctx.font = fs + 'px ' + (opt.sans || 'system-ui, sans-serif');
+    var lh = fs * 1.25;
+
+    var labs = items.map(function (it) {
+      return wrap2(ctx, it.nhan, side * 0.145);
+    });
+    var labW = labs.map(function (ls) {
+      return ls.reduce(function (m, s) {
+        return Math.max(m, ctx.measureText(s).width);
+      }, 0);
+    });
+
+    var R = side / 2 - fs * 2;
+    for (var q = 0; q < n; q++) {
+      var aq = ang(q);
+      var cq = Math.abs(Math.cos(aq));
+      var sq = Math.abs(Math.sin(aq));
+      // Nhãn trên/dưới căn giữa nên chỉ ăn NỬA bề rộng về mỗi phía.
+      var halfW = cq < 0.25 ? labW[q] / 2 : labW[q];
+      var halfH = ((labs[q].length - 1) * lh) / 2 + fs * 0.7;
+      if (cq > 0.02) R = Math.min(R, (box.w / 2 - 3 - halfW) / cq - fs * 1.5);
+      if (sq > 0.02) R = Math.min(R, (box.h / 2 - 3 - halfH) / sq - fs * 1.1);
+    }
+    if (R <= 10) return;
 
     ctx.lineWidth = 1;
     [0.25, 0.5, 0.75, 1].forEach(function (t) {
@@ -187,8 +236,6 @@
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    var fs = Math.max(9, Math.round(R * 0.115));
-    ctx.font = fs + 'px ' + (opt.sans || 'system-ui, sans-serif');
     ctx.textBaseline = 'middle';
     items.forEach(function (it, i) {
       var a = ang(i);
@@ -197,7 +244,11 @@
       var c = Math.cos(a);
       ctx.textAlign = Math.abs(c) < 0.25 ? 'center' : c > 0 ? 'left' : 'right';
       ctx.fillStyle = it.namNay ? KIEU_MAU[ho.kieu.id] : dim;
-      ctx.fillText(it.nhan, lx, ly);
+      var lines = labs[i];
+      var y0 = ly - ((lines.length - 1) * lh) / 2;
+      lines.forEach(function (s, k) {
+        ctx.fillText(s, lx, y0 + k * lh);
+      });
       // Chấm điểm ngay trên đỉnh — để đọc được con số mà không cần bảng.
       var t = Math.max(0, Math.min(1, it.diem / 10));
       ctx.beginPath();
