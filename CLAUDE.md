@@ -697,13 +697,10 @@ văn · API 500 → quay lại form, không treo · 390px không tràn ngang.
 - 🪤 `ngay`/`thang` của `TuviForm` là `<select>` chứ không phải `<input>` —
   `page.fill()` đỏ ngay. Dùng `selectOption`.
 
-### 🔑 VIỆC TAY HENRY — chưa làm thì 2 tool KHÔNG hiện trên trang Công Cụ
-Migration `_patches/migration-t2-t3.sql` **ĐÃ chạy prod** (2 bảng, RLS bật, 1
-policy chủ-sở-hữu mỗi bảng, 2 dòng giá) nhưng cố ý `enabled=false`. Sau deploy:
-```sql
-update tool_pricing set enabled=true, updated_at=now() where tool_id in ('day-con','nhan-mach');
-```
-- ✅ **Đã bật `nguoi-khac` (T1)** trong phiên này — prod đã phục vụ được trang.
+### ✅ Đã bật trên prod — hết việc tay
+Migration `_patches/migration-t2-t3.sql` đã chạy (2 bảng, RLS bật, 1 policy
+chủ-sở-hữu mỗi bảng, 2 dòng giá), và `day-con` · `nhan-mach` · `nguoi-khac` nay
+đều `enabled=true` (verify 07/08: 59/59 tool bật, không tool nào còn tắt).
 - 🪤 Cột tên trong `tool_pricing` là **`label`**, không phải `title` — lượt chạy
   migration đầu tiên đỏ đúng chỗ này.
 
@@ -1019,13 +1016,10 @@ Biên, và chức phận lối cổ KHÔNG lọt lên phần gợi ý chính**.
   THỨ TỰ tiêu đề (`.cs-sec h3` nth(0)) nên thêm khối mới là đỏ oan. Đã đổi sang
   neo theo NỘI DUNG.
 
-### 🔑 VIỆC TAY HENRY — chưa làm thì tool KHÔNG hiện trên trang Công Cụ
-```sql
-update tool_pricing set enabled=true, updated_at=now() where tool_id='cong-so';
-```
-(Migration `_patches/migration-cong-so.sql` **CHƯA chạy prod** — chạy nó trước.)
-Muốn thu phí thay vì để free: `update tool_pricing set credits=15, is_free=false
-where tool_id='cong-so';` — cố ý để free vì đây là tool ĐẦU PHỄU.
+### ✅ Đã bật trên prod — hết việc tay
+`cong-so` nay `enabled=true`, `is_free=true`, `credits=0` (verify 07/08).
+Muốn thu phí: `update tool_pricing set credits=15, is_free=false where
+tool_id='cong-so';` — cố ý để free vì đây là tool ĐẦU PHỄU.
 
 ### CÒN LẠI
 - **Chưa có trang standalone SEO** `/tools/cong-so.html` (mới có trang shell).
@@ -1353,12 +1347,10 @@ biệt**, phần lớn là **văn bản kiểm toán tính thiên văn** (`求�
   `hours`** — chúng chiếm ~95% payload và không phải nội dung hoàng lịch.
 - `liuren`/`bazi`/`xuankong` chưa đo bề mặt dịch.
 
-### 🔑 VIỆC TAY HENRY — chưa làm thì 2 tool mới KHÔNG hiện trên trang Công Cụ
-Migration đã chạy prod nhưng **cố ý `enabled=false`** (cong-cu.html lọc
-`enabled=eq.true`; bật trước deploy là 404 cho người thật). Sau khi deploy:
-```sql
-update tool_pricing set enabled=true, updated_at=now() where tool_id in ('mai-hoa','ky-mon');
-```
+### ✅ Đã bật trên prod — hết việc tay
+Migration đã chạy, `mai-hoa` · `ky-mon` nay `enabled=true` (verify 07/08). Luật
+vẫn giữ cho tool MỚI về sau: `cong-cu.html` lọc `enabled=eq.true`, nên bật
+TRƯỚC khi deploy là 404 cho người thật — luôn bật SAU.
 ## 🌌 Nâng 4 tool bằng mingyu-core + tool chiêm tinh Tây (2026-08-04, PR này)
 
 Henry: *"Làm almanac, liuren, bazi như mày nói (nâng cấp các tool hiện tại).
@@ -1434,12 +1426,10 @@ ba bản. **Verify: 200 bàn Kỳ Môn (1,26 MB) md5 TRÙNG KHÍT trước/sau r
 có trong khía cạnh). **Bài học lặp lần thứ ba: bảng dịch dựng từ MỘT nguồn thì
 chỉ phủ nguồn đó.** Cắm bộ dò mỗi lần đấu vào nguồn chữ mới, đừng tin là đủ.
 
-### 🔑 VIỆC TAY HENRY
-```sql
-update tool_pricing set enabled=true, updated_at=now() where tool_id='ban-do-sao';
-```
+### ✅ Đã bật trên prod — hết việc tay
+`ban-do-sao` nay `enabled=true` (verify 07/08).
 ⚠️ **Trực đổi trên 26,8% số ngày** ⇒ nội dung 8.958 trang `/ngay-tot/*` và thẻ
-"Vận hôm nay" sẽ đổi theo sau deploy. Đó là fix chạy đúng, không phải hỏng.
+"Vận hôm nay" đã đổi theo sau deploy. Đó là fix chạy đúng, không phải hỏng.
 
 ### CÒN LẠI
 - Rail `/app/bat-tu` chưa nhận tầng phân tích bát tự mới (đường đó đi qua
