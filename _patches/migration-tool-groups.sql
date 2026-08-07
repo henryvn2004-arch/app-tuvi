@@ -18,9 +18,16 @@
 --   `tool_pricing.need_tags`  — công cụ nào thuộc nhóm nào (tối đa 2 nhóm).
 --   `tool_pricing.app_path`   — trang trong Luận Đường (/app/...), NULL = chưa có.
 --   `tool_pricing.page_path`  — trang độc lập (/tools/...), NULL = chưa có.
---   `app_config['tools.category_default_group']`
+--   `tool_groups.default_categories`
 --                             — nhóm MẶC ĐỊNH suy từ `category`, để công cụ mới
 --                               thêm vào là tự có nhóm thay vì rơi ra ngoài.
+--
+-- 🔁 HAI LƯỢT DEPLOY (Henry chốt):
+--   LƯỢT 1 = file này. Đổi NGUỒN ĐỌC, giữ nguyên 6 nhóm người dùng đang thấy.
+--   LƯỢT 2 = `_patches/migration-tool-groups-10-nhom.sql`. Đổi sang 10 nhóm
+--            theo tình huống — THUẦN SQL, không deploy, lùi bằng một câu lệnh.
+--   Chạy ngược thứ tự là đẩy toàn bộ công cụ vào nhóm "Khác" ngay lập tức;
+--   đã trả giá đúng chỗ đó một lần.
 --
 -- Mọi trang đọc chung bộ dữ liệu này qua `public/tool-prices.js`. Đổi cách xếp
 -- = một câu UPDATE trong Admin, KHÔNG cần deploy, và cả ba bề mặt đổi theo.
@@ -56,20 +63,21 @@ drop policy if exists tool_groups_admin_write on public.tool_groups;
 create policy tool_groups_admin_write on public.tool_groups
   for all using (public.is_admin((auth.jwt() ->> 'email')));
 
--- 10 nhóm theo TÌNH HUỐNG NGƯỜI DÙNG, không theo bộ môn.
+-- ⚠️ LƯỢT 1 seed đúng 6 nhóm mà bản `NEED_GROUPS` chép tay ĐANG dùng — cách
+-- xếp người dùng thấy KHÔNG đổi một chữ nào ở lượt này, chỉ đổi NGUỒN ĐỌC.
+-- Việc đổi sang 10 nhóm theo tình huống là LƯỢT 2, nằm ở
+-- `_patches/migration-tool-groups-10-nhom.sql` — thuần SQL, không deploy, lùi
+-- được bằng một câu lệnh.
+--
 -- `icon` phải là khoá có thật trong bảng ICONS của public/nav.js — icon lạ thì
 -- giao diện rơi về icon dự phòng chứ không vỡ, nhưng vẫn là sai thầm lặng.
 insert into public.tool_groups (key, title, subtitle, icon, sort_order) values
-  ('ban-than',  'Hiểu bản thân',             'Tính cách, điểm mạnh yếu, cả đời mình ra sao',      'user',          10),
-  ('su-nghiep', 'Sự nghiệp & đồng nghiệp',   'Đổi việc, thăng tiến, làm ăn chung, đội nhóm',      'briefcase',     20),
-  ('tinh-cam',  'Tình cảm & hôn nhân',       'Hợp tuổi, bạn đời, duyên nợ',                       'heart',         30),
-  ('con-cai',   'Con cái & nuôi dạy',        'Sinh con, đặt tên, dạy con kiểu nào thì vào',        'baby',          40),
-  ('nha-cua',   'Nhà cửa & không gian sống', 'Hướng nhà, bố trí phòng, cửa hàng',                  'home',          50),
-  ('chon-ngay', 'Chọn ngày & giờ tốt',       'Cưới hỏi, làm nhà, khai trương, ký kết',             'calendar-days', 60),
-  ('van-han',   'Vận hạn theo thời gian',    'Năm nay, tháng này, mười năm tới',                   'trending-up',   70),
-  ('hoi-nhanh', 'Hỏi nhanh một việc',        'Đang phân vân — gieo một quẻ, rút một lá',           'sparkles',      80),
-  ('tuong-mao', 'Tướng mạo & thần thái',     'Gương mặt, mắt, tay, giọng nói, sắc khí',            'smile',         90),
-  ('dien-mao',  'Diện mạo & phong cách',     'Màu hợp mệnh, tóc, trang điểm, trang phục',          'palette',      100)
+  ('cong-viec',  'Công việc & tiền bạc', 'Đổi việc, làm ăn, đường thăng tiến', 'briefcase', 10),
+  ('tinh-duyen', 'Tình duyên & gia đạo', 'Cưới hỏi, bạn đời, con cái',         'heart',     20),
+  ('viec-lon',   'Việc lớn sắp làm',     'Chọn ngày, làm nhà, khai trương',    'calendar',  30),
+  ('hom-nay',    'Hôm nay & sắp tới',    'Vận ngày, vận tháng, gieo một quẻ',  'sun',       40),
+  ('hieu-minh',  'Hiểu chính mình',      'Lá số, bát tự, tướng mạo, con số',   'user',      50),
+  ('dang-ve',    'Dáng vẻ & phong cách', 'Màu hợp mệnh, tóc, trang phục',      'sparkles',  60)
 on conflict (key) do update
   set title = excluded.title, subtitle = excluded.subtitle,
       icon = excluded.icon, sort_order = excluded.sort_order,
@@ -151,49 +159,7 @@ from (values
 ) as v(id, app, page)
 where t.tool_id = v.id;
 
--- ── 3. Gán nhóm cho 58 công cụ đang bật ─────────────────────────────────────
--- 🔴 KHỐI NÀY CHỈ ĐƯỢC CHẠY SAU KHI GIAO DIỆN MỚI ĐÃ DEPLOY.
---
--- Đã trả giá một lần: chạy nó trước, trong khi prod vẫn phục vụ bản `/cong-cu`
--- lọc theo 6 khoá CŨ (`cong-viec` · `tinh-duyen` · `viec-lon` · `hom-nay` ·
--- `hieu-minh` · `dang-ve`), thì `needsOf()` không khớp khoá nào ⇒ **toàn bộ 58
--- công cụ rơi vào nhóm "Khác"** ngay lập tức. Bảng `tool_groups` và hai cột
--- đường dẫn ở trên thì AN TOÀN chạy trước — chúng chỉ THÊM, bản cũ không đọc.
---
--- ⇒ Thứ tự đúng: (1) + (2) + (4) chạy trước → merge & deploy giao diện → mới
---    chạy (3). Khoá phải khớp `tool_groups.key`. Công cụ đứng ở 2 nhóm khi nó
---    thật sự trả lời hai câu hỏi khác nhau (Luận Giải vừa là "hiểu mình" vừa là
---    "sự nghiệp"), KHÔNG phải để lấp cho nhóm trông đầy.
-update public.tool_pricing t set need_tags = v.tags
-from (values
-  ('laso','ban-than,su-nghiep'), ('tu-binh','ban-than,su-nghiep'), ('tu-tru','ban-than'),
-  ('an-sao','ban-than'), ('sao-nam','ban-than'), ('cach-cuc','ban-than'),
-  ('nap-am','ban-than'), ('ngu-hanh-ten','ban-than'), ('than-so-hoc','ban-than'),
-  ('ban-do-sao','ban-than'), ('chan-dung-tien-kiep','ban-than'),
-  ('dien-tuong','tuong-mao'), ('nhan-tuong','tuong-mao'), ('thu-tuong','tuong-mao'),
-  ('thanh-tuong','tuong-mao'), ('thanh-tuong-pro','tuong-mao'), ('khi-sac','tuong-mao'),
-  ('cong-so','su-nghiep'), ('nhan-mach','su-nghiep'), ('nguoi-khac','su-nghiep'),
-  ('xem-lam-an','su-nghiep'), ('dat-ten-dn','su-nghiep'),
-  ('ban-lam-viec','su-nghiep,nha-cua'), ('cua-hang-phong-thuy','su-nghiep,nha-cua'),
-  ('xem-tuoi','tinh-cam'), ('tuong-hop','tinh-cam'), ('chan-dung-vo-chong','tinh-cam'),
-  ('duyen-no-tien-kiep','tinh-cam'),
-  ('xem-tuoi-sinh-con','con-cai'), ('dat-ten-con','con-cai'), ('day-con','con-cai'),
-  ('phong-thuy','nha-cua'), ('phong-thuy-render','nha-cua'), ('bat-trach','nha-cua'),
-  ('chon-ngay-tot','chon-ngay'), ('ngay-tot','chon-ngay'), ('hoang-dao','chon-ngay'),
-  ('kim-lau','chon-ngay,nha-cua'),
-  ('han-nam','van-han'), ('van-thang','van-han'), ('dai-van','van-han,su-nghiep'),
-  ('kinh-dich','hoi-nhanh'), ('mai-hoa','hoi-nhanh'), ('luc-nham','hoi-nhanh'),
-  ('ky-mon','hoi-nhanh,su-nghiep'), ('tarot','hoi-nhanh'), ('oracle','hoi-nhanh'),
-  ('boi-bai-tay','hoi-nhanh'),
-  ('mau-sac-hop-menh','dien-mao,ban-than'), ('personal-color','dien-mao'),
-  ('personal-color-tryon','dien-mao'), ('kieu-toc-phan-tich','dien-mao'),
-  ('kieu-toc-tryon','dien-mao'), ('trang-diem-phan-tich','dien-mao'),
-  ('trang-diem-tryon','dien-mao'), ('trang-phuc-theo-ngay','dien-mao'),
-  ('trang-phuc-tryon','dien-mao'), ('da-lieu-ai','dien-mao')
-) as v(id, tags)
-where t.tool_id = v.id;
-
--- ── 4. Công cụ MỚI tự có nhóm ───────────────────────────────────────────────
+-- ── 3. Công cụ MỚI tự có nhóm ───────────────────────────────────────────────
 -- Máy KHÔNG đọc được "use case" của một công cụ mới. Thứ làm được chắc chắn:
 -- suy nhóm từ `category` — cột người thêm công cụ vẫn phải khai. Khai
 -- `need_tags` thì cái đó THẮNG; không khai thì rơi vào nhóm mặc định dưới đây;
@@ -212,21 +178,22 @@ comment on column public.tool_groups.default_categories is
 
 update public.tool_groups set default_categories = v.cats
 from (values
-  ('ban-than',  'Luận Giải,Công Cụ Tử Vi,Mệnh Lý,Chiêm Tinh Tây'),
-  ('nha-cua',   'Phong Thủy'),
-  ('chon-ngay', 'Đặt Tên & Ngày,Lịch Số'),
-  ('hoi-nhanh', 'Huyền Học,Bói Bài'),
-  ('tuong-mao', 'Xem Tướng'),
-  ('dien-mao',  'Phong Cách AI')
+  ('viec-lon',  'Phong Thủy,Đặt Tên & Ngày'),
+  ('hom-nay',   'Huyền Học,Bói Bài,Lịch Số'),
+  ('hieu-minh', 'Luận Giải,Công Cụ Tử Vi,Mệnh Lý,Chiêm Tinh Tây,Xem Tướng'),
+  ('dang-ve',   'Phong Cách AI')
 ) as v(key, cats)
 where tool_groups.key = v.key;
 
 commit;
 
--- ── Verify ──────────────────────────────────────────────────────────────────
--- select count(*) from tool_groups where enabled;                       -- 10
--- select count(*) from tool_pricing where enabled and need_tags is null; -- 0 (trừ rail-message)
--- Công cụ mang khoá nhóm KHÔNG có trong tool_groups (phải rỗng):
---   select t.tool_id, x.tag from tool_pricing t,
---     lateral unnest(string_to_array(t.need_tags, ',')) as x(tag)
---    where t.enabled and trim(x.tag) not in (select key from tool_groups);
+-- ── Verify (đã chạy trên prod) ──────────────────────────────────────────────
+-- select count(*) from tool_groups where enabled;                        -- 6
+-- Khoá need_tags không khớp tool_groups (phải 0):
+--   select count(*) from tool_pricing t,
+--     lateral unnest(string_to_array(coalesce(t.need_tags,''),',')) x(tag)
+--    where t.enabled and trim(x.tag)<>'' and trim(x.tag) not in (select key from tool_groups);
+-- Category chưa có nhóm mặc định (phải rỗng ⇒ công cụ mới không rơi ra ngoài):
+--   select distinct category from tool_pricing where enabled and tool_id<>'rail-message'
+--     and category not in (select trim(c) from tool_groups g,
+--       lateral unnest(string_to_array(coalesce(g.default_categories,''),',')) c where trim(c)<>'');
