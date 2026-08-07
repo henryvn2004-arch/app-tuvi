@@ -72,7 +72,7 @@ Công sức: **S** < 1 ngày · **M** 2–4 ngày · **L** > 1 tuần.
 | **M3** | **Nhiệm vụ onboarding chia nhỏ** (Zalo/SĐT/email → mỗi việc một phần thưởng) | M | 🟢 |
 | **M4** | Trang SEO = trang BÁN được, không chỉ trang đọc | L | 🟡 |
 | **M5** | Kênh phân phối bên thứ ba (Zalo OA / báo / partner) | M | 🟡 |
-| **R1** | Vận hôm nay → nhắc hằng ngày qua push/Zalo | M | 🟢 |
+| **R1** | ~~Vận hôm nay → nhắc hằng ngày qua push~~ (kênh đã nối lại) | M | ✅ XONG |
 | **R2** | Chuỗi ngày ghé thăm | S | 🟡 |
 | **D1** | ~~Đo tỉ lệ **xem → mua** theo từng tool~~ | S | ✅ XONG |
 | **D2** | Hạ tầng A/B giá | M | 🟡 |
@@ -319,7 +319,7 @@ trả cho tư vấn thật không** trước khi dựng cả cái chợ.
 
 ## M — Đóng gói & marketing
 
-### M1. Đóng gói theo NỖI LO 🟢 M ⭐⭐
+### M1. Đóng gói theo NỖI LO ✅ XONG (PR #425, mở rộng ở #441)
 **Đối chiếu thẳng:**
 
 | | click108 | tuviminhbao |
@@ -331,7 +331,7 @@ Người mua không quan tâm mình dùng môn gì — họ gõ *"năm nay có n
 không"*. **Cùng engine, chỉ đổi cách gói và cách đặt tên** ⇒ đây là thay đổi
 marketing, gần như không đụng logic. **Tỉ lệ tác động/công sức cao nhất backlog.**
 
-### M2. Đặt tên theo câu hỏi 🟢 S
+### M2. Đặt tên theo câu hỏi ✅ XONG (PR #425)
 Tên mục thật trên trang họ: *"Tương lai mờ mịt, phải nhẫn tới tuổi hưu?"* ·
 *"Hai người hết chuyện nói, mối này có nên tiếp?"* · *"Áp lực công việc lớn, dạo
 này hợp đổi nghề?"* · *"Con thi đại học hay cao đẳng nghề?"*
@@ -360,13 +360,22 @@ click108 là **kênh mệnh lý ĐỘC QUYỀN của Yahoo Đài Loan** và là 
 
 ## R — Giữ chân
 
-### R1. Vận hôm nay → nhắc hằng ngày 🟢 M ⭐
+### R1. Vận hôm nay → nhắc hằng ngày ✅ XONG (nhưng KHÔNG như đề bài)
 Đọc phần đánh giá của họ thì thấy **lý do gia hạn gần như luôn là "vận hôm nay"**,
 không phải báo cáo lớn: *"ngày nào ra khỏi nhà cũng xem"*, *"giờ tốt màu tốt"*,
 *"mỗi ngày đều đăng nhập"*.
 ⇒ Móc quay lại KHÔNG nằm ở sản phẩm đắt tiền, nó nằm ở **mẩu nhỏ hằng ngày**.
-Mình đã có thẻ Vận hôm nay + dải 7 ngày + push. Còn thiếu: **nhắc đúng lúc, cá
-nhân hoá theo lá số, và một lý do để mở ra**.
+
+🔴 **Đề bài viết "Mình đã có thẻ Vận hôm nay + dải 7 ngày + push" — vế "push" là
+SAI.** Đo trước khi làm: 2 lượt đăng ký web-push, 0 token FCM, và ba lỗi chồng
+nhau khiến kênh chưa từng hoạt động (service worker không có handler để HIỆN
+thông báo · nội dung lặp nguyên văn mỗi sáng · không có đường bật ở nơi có người
+thật). Nên việc phải làm trước không phải "nhắc đúng lúc" mà là **nối lại kênh**.
+Chi tiết ở CLAUDE.md mục R1a.
+
+**Còn lại của R1 (chưa làm, chờ số):** cá nhân hoá sâu hơn một dòng xung tuổi —
+chỉ đáng làm nếu tỉ lệ mở từ thông báo (`push_open` / `push_optin_result=granted`)
+cho thấy có người thật đọc. Zalo OA vẫn chưa đăng ký được.
 
 ---
 

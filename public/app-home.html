@@ -307,6 +307,26 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
   var card=el('todayCard'); if(!card) return;
   _today=vnToday();
 
+  // Bậc cuối của phễu nhắc: có người BẬT rồi có người MỞ không. Đọc `from=push`
+  // chứ không đọc `utm_source`: UTM chỉ ghi first-touch, nên người đã ghé site
+  // từ trước — đúng nhóm duy nhất nhận được thông báo — sẽ không bao giờ hiện
+  // ở bảng nguồn. Hai thứ khác nhau, cả hai đều nằm trong link.
+  //
+  // 🪤 PHẢI xếp hàng chờ: `shell.js` nạp `track.js` KHÔNG ĐỒNG BỘ, nên lúc hàm
+  // này chạy thì `window.Track` chưa tồn tại. Bản đầu gọi thẳng → ReferenceError
+  // rơi vào catch và event im lặng biến mất; test bắt được vì `push_optin_shown`
+  // (bắn 6 giây sau) thì có mà `push_open` thì không.
+  if(/[?&]from=push\b/.test(location.search)) emitWhenReady('push_open');
+  function emitWhenReady(type){
+    var n=0;
+    (function tick(){
+      try{
+        if(window.Track&&window.Track.event){ window.Track.event(type,{tool_id:'van-ngay'}); return; }
+      }catch(e){}
+      if(++n<50) setTimeout(tick,100);
+    })();
+  }
+
   // birth nhớ trong localStorage theo shape của TuviForm (ngay/thang/nam); rail
   // VÀ api chỉ hiểu shape contract (day/month/year) → PHẢI đổi, đừng truyền thẳng.
   try{ _birth=(Shell.getRememberedBirth&&Shell.birthToApi)?Shell.birthToApi(Shell.getRememberedBirth()):null; }catch(e){}
@@ -448,6 +468,40 @@ if(window.ToolPrices) ToolPrices.load().then(function(d){ if(d) renderHomeCards(
     renderWeek(td);
     card.style.display='';
     wire(v,td,birth,hasBirth,hours);
+    maybeAskPush(v,isToday,birth);
+  }
+
+  /* ── Mời bật nhắc hằng ngày ─────────────────────────────────────────────
+     Hỏi SAU khi thẻ đã dựng xong, KHÔNG phải lúc vào trang. Xin quyền trước
+     khi người ta thấy mình được gì là cách chắc nhất bị bấm "Chặn" — mà
+     "Chặn" trên trình duyệt là VĨNH VIỄN, không có đường hỏi lại.
+
+     Ba điều kiện, mỗi cái bịt một kiểu hỏi sai chỗ:
+       • `isToday` — đang xem ngày khác thì lời mời "mỗi sáng" lệch ngữ cảnh.
+       • có `caNhan` — người đã lưu lá số. Chỉ họ mới nhận được phần đáng giá
+         nhất của tin nhắc (ngày nào xung chính tuổi mình); mời người chưa có
+         lá số là hứa một thứ nhạt hơn hẳn.
+       • trễ 6 giây — đủ để đọc xong thẻ. Bật lên ngay khi thẻ vừa hiện thì
+         hộp thoại che đúng thứ vừa thuyết phục họ.
+
+     Nạp `pwa-push.js` ĐÚNG LÚC CẦN (không nhét vào <head>): trang này là màn
+     hình đầu của /app, mỗi file thêm vào đường tải là một nhịp chậm cho mọi
+     người, kể cả người sẽ không bao giờ thấy lời mời. */
+  var _pushAsked=false;
+  function maybeAskPush(v,isToday,birth){
+    if(_pushAsked||!isToday||!v||!v.caNhan) return;
+    _pushAsked=true;
+    var nam=(birth&&+birth.year)||0;
+    setTimeout(function(){
+      function go(){
+        if(!window.askPushPermission) return;
+        try{ window.askPushPermission(nam, (v.caNhan&&v.caNhan.canChiNam)||''); }catch(e){}
+      }
+      if(window.askPushPermission) return go();
+      var s=document.createElement('script');
+      s.src='/pwa-push.js?v=2'; s.onload=go; s.onerror=function(){};
+      document.head.appendChild(s);
+    },6000);
   }
 
   /* ── Nhập / đổi lá số NGAY TRONG THẺ ────────────────────────────────────
