@@ -1,9 +1,18 @@
 /**
- * tool-prices.js — GIÁ LƯỢNG: nguồn DUY NHẤT cho toàn bộ phía client.
+ * tool-prices.js — DANH MỤC CÔNG CỤ + GIÁ LƯỢNG: nguồn DUY NHẤT cho phía client.
  *
- * Nguồn thật là hai bảng Supabase, sửa trong trang Admin, KHÔNG cần deploy:
- *   • `tool_pricing`     — giá từng công cụ
+ * Nguồn thật là ba bảng Supabase, sửa trong trang Admin, KHÔNG cần deploy:
+ *   • `tool_pricing`     — giá, nhãn, icon, nhóm (`need_tags`), đường dẫn trang
  *   • `credit_packages`  — các gói nạp
+ *   • `tool_groups`      — ĐỊNH NGHĨA nhóm: tên, phụ đề, icon, thứ tự
+ *
+ * ⚠️ LUẬT THỨ HAI (thêm ở bản master grouping): KHÔNG chép DANH SÁCH NHÓM hay
+ * ĐƯỜNG DẪN công cụ vào bất kỳ file nào khác. Trước đây cách xếp công cụ nằm ở
+ * BA mảng chép tay và chúng không khớp nhau — `/cong-cu` xếp theo nhu cầu với
+ * 58 công cụ, còn `/app` (dashboard + sidebar) xếp theo bộ môn với 34 công cụ.
+ * Cùng một sản phẩm nói hai kiểu với cùng một người, và thêm công cụ mới là
+ * phải sửa tay ba chỗ; quên một chỗ thì công cụ đó tàng hình mà không có gì báo
+ * (đã xảy ra với `Tử Vi Công Sở`).
  *
  * ⚠️ LUẬT: KHÔNG chép số giá vào bất kỳ file nào khác. Trước đây mỗi trang giữ
  * một bản dự phòng riêng "cho chắc", và chính mấy bản đó trôi khỏi DB rồi nói
@@ -26,9 +35,16 @@ window.ToolPrices = (function () {
 
   // ⚠️ BUMP KHOÁ khi đổi tập cột lấy về — bản cache cũ nằm trong sessionStorage
   // của người đang mở tab, thiếu cột mới mà vẫn còn hạn ⇒ trang dựng ra bằng dữ
-  // liệu cụt trong tối đa 2 phút mà không có gì báo. (v2: thêm need_tags/question)
-  var CACHE_KEY = 'tvmb_prices_v2';
+  // liệu cụt trong tối đa 2 phút mà không có gì báo. (v2: thêm need_tags/question
+  // · v3: thêm app_path/page_path + bảng tool_groups)
+  var CACHE_KEY = 'tvmb_prices_v3';
   var TTL_MS = 120000; // 2 phút — đủ để đi hết một phiên duyệt, đủ ngắn để admin đổi giá thấy ngay
+
+  // Bản đọc được LẦN GẦN NHẤT, sống qua phiên (localStorage, khác cache 2 phút
+  // ở trên). CHỈ dùng cho điều hướng: sidebar của Luận Đường mà trống thì người
+  // dùng mất đường đi khắp app, tệ hơn hẳn một danh sách hơi cũ. Giá thì KHÔNG
+  // bao giờ lấy từ đây — luật "đọc hụt thì trả null, không đoán" giữ nguyên.
+  var NAV_KEY = 'tvmb_nav_v3';
 
   var _inflight = null;
   var _data = null; // { tools: {id: credits}, packages: [...] }
@@ -74,16 +90,18 @@ window.ToolPrices = (function () {
     }
 
     _inflight = Promise.all([
-      // Lấy TRỌN dòng: trang Công Cụ và bảng chi phí ở trang nạp cần cả nhãn /
-      // icon / phân loại. Một lượt fetch cho cả ba nơi thay vì ba lượt riêng.
+      // Lấy TRỌN dòng: trang Công Cụ, dashboard và sidebar đều cần nhãn / icon /
+      // nhóm / đường dẫn. Một lượt fetch cho mọi nơi thay vì mỗi nơi một lượt.
       _get(
-        'tool_pricing?enabled=eq.true&select=tool_id,label,credits,icon,category,sort_order,is_free,description,need_tags,question&order=sort_order.asc'
+        'tool_pricing?enabled=eq.true&select=tool_id,label,credits,icon,category,sort_order,is_free,description,need_tags,question,app_path,page_path&order=sort_order.asc'
       ),
       _get('credit_packages?enabled=eq.true&select=package_id,credits,amount_vnd,label&order=sort_order.asc'),
+      _get('tool_groups?enabled=eq.true&select=key,title,subtitle,icon,sort_order,default_categories&order=sort_order.asc'),
     ])
       .then(function (res) {
         var toolRows = res[0];
         var pkgRows = res[1];
+        var groupRows = Array.isArray(res[2]) ? res[2] : [];
         // Giá công cụ là phần bắt buộc; thiếu nó thì coi như đọc hụt cả cụm.
         if (!Array.isArray(toolRows)) return null;
         var tools = {};
@@ -104,8 +122,9 @@ window.ToolPrices = (function () {
                 return p.credits > 0 && p.amount_vnd > 0;
               })
           : [];
-        _data = { tools: tools, rows: toolRows, packages: packages };
+        _data = { tools: tools, rows: toolRows, packages: packages, groups: groupRows };
         _writeCache(_data);
+        _writeNav(_data);
         return _data;
       })
       .catch(function () {
@@ -135,6 +154,112 @@ window.ToolPrices = (function () {
     return (_data && _data.packages) || [];
   }
 
+  // ── Nhóm công cụ ──────────────────────────────────────────────────────────
+  /** Định nghĩa nhóm, đã sắp theo `sort_order`. Rỗng nếu chưa đọc được. */
+  function groups() {
+    return (_data && _data.groups) || [];
+  }
+
+  /**
+   * Nhóm của một dòng công cụ, theo thứ tự ưu tiên:
+   *   1. `need_tags` khai rõ (lọc bỏ khoá không có trong `tool_groups`)
+   *   2. nhóm mặc định suy từ `category`
+   *   3. `[]` — nơi gọi tự xếp vào "Khác"
+   *
+   * Bậc 2 chính là phần làm cho công cụ MỚI tự có chỗ đứng: người thêm công cụ
+   * trong Admin vẫn phải khai `category`, nên chỉ cần không khai gì thêm là nó
+   * đã nằm đúng một nhóm hợp lý thay vì rơi ra ngoài. Máy KHÔNG đoán nhóm từ
+   * tên hay mô tả — đoán bằng từ khoá thì sai âm thầm, loại lỗi tệ nhất.
+   */
+  // `list` — bộ nhóm để đối chiếu. Mặc định lấy bộ đã nạp; nơi gọi PHẢI truyền
+  // vào khi đang dựng từ `navFallback()`, vì lúc đó `load()` trả null nên
+  // `groups()` rỗng ⇒ không khoá nào khớp ⇒ mọi công cụ rơi hết vào "Khác".
+  // (Đúng lỗi bản đầu đã dính, test bắt được.)
+  function groupsOf(row, list) {
+    if (!row) return [];
+    var gs = list && list.length ? list : groups();
+    var known = {};
+    gs.forEach(function (g) {
+      known[g.key] = true;
+    });
+    var explicit = String(row.need_tags || '')
+      .split(',')
+      .map(function (s) {
+        return s.trim();
+      })
+      .filter(function (s) {
+        return s && known[s];
+      });
+    if (explicit.length) return explicit;
+
+    var cat = String(row.category || '').trim();
+    if (!cat) return [];
+    var hit = gs.filter(function (g) {
+      return String(g.default_categories || '')
+        .split(',')
+        .map(function (s) {
+          return s.trim();
+        })
+        .indexOf(cat) >= 0;
+    });
+    return hit.length ? [hit[0].key] : [];
+  }
+
+  /** Đường dẫn trong Luận Đường, hoặc '' nếu công cụ chưa có trang shell. */
+  function appPath(row) {
+    return (row && row.app_path) || '';
+  }
+
+  /** Đường dẫn trang độc lập; chưa có thì rơi về trang shell. */
+  function pagePath(row) {
+    return (row && (row.page_path || row.app_path)) || '';
+  }
+
+  // ── Lối lùi cho ĐIỀU HƯỚNG (xem chú thích ở NAV_KEY) ──────────────────────
+  function _writeNav(d) {
+    try {
+      localStorage.setItem(
+        NAV_KEY,
+        JSON.stringify({
+          at: Date.now(),
+          groups: d.groups || [],
+          // Chỉ giữ đúng phần cần để dựng menu — KHÔNG giữ `credits`, để không
+          // ai vô tình lấy giá từ bản có thể đã cũ.
+          rows: (d.rows || []).map(function (r) {
+            return {
+              tool_id: r.tool_id,
+              label: r.label,
+              icon: r.icon,
+              category: r.category,
+              need_tags: r.need_tags,
+              description: r.description,
+              question: r.question,
+              app_path: r.app_path,
+              page_path: r.page_path,
+            };
+          }),
+        })
+      );
+    } catch (e) {
+      /* hết quota / chế độ riêng tư — mất lối lùi thôi, không sao */
+    }
+  }
+
+  /**
+   * Bản danh mục đọc được LẦN GẦN NHẤT — CHỈ dùng để dựng điều hướng khi
+   * `load()` trả null. Không kèm giá. Trả `null` nếu chưa từng đọc được lần nào
+   * (người hoàn toàn mới + mạng hỏng) — lúc đó nơi gọi phải chấp nhận menu rỗng
+   * chứ đừng bịa ra một danh sách.
+   */
+  function navFallback() {
+    try {
+      var o = JSON.parse(localStorage.getItem(NAV_KEY) || 'null');
+      return o && Array.isArray(o.rows) && o.rows.length ? o : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
   /**
    * Điền mọi <span data-tvp-price="<tool_id>"> trong `root`.
    * Chưa biết giá → để nguyên chữ đang có (mặc định trong markup là `…`), KHÔNG
@@ -160,5 +285,16 @@ window.ToolPrices = (function () {
     fillSlots();
   }
 
-  return { load: load, get: get, rows: rows, packages: packages, fillSlots: fillSlots };
+  return {
+    load: load,
+    get: get,
+    rows: rows,
+    packages: packages,
+    fillSlots: fillSlots,
+    groups: groups,
+    groupsOf: groupsOf,
+    appPath: appPath,
+    pagePath: pagePath,
+    navFallback: navFallback,
+  };
 })();
