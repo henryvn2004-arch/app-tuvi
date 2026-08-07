@@ -5,7 +5,69 @@
 
 ---
 
-## 🔒 Tấm khoá tính thử CẮT MẤT NÚT MỞ (2026-08-07, PR này)
+## 🔤 Font lạc bầy + nhãn radar bị cắt ở Công Sở (2026-08-07, PR #445)
+
+Henry: *"tool tử vi công sở có vẻ đang dùng font khác với các tool còn lại ah?
+… với lại cái chart radar chữ bị to nên bị che mất"*. **Cả hai đều đúng, và là
+hai lỗi ĐỘC LẬP.**
+
+### 🔴 1. Thẻ nạp font nằm ở TỪNG TRANG, nên quên là im lặng lệch
+`shell.css` khai `--serif:'Noto Serif',Georgia,serif` — nhưng bộ 3 thẻ `<link>`
+kéo Noto Serif về lại nằm trong `<head>` của **từng trang**. `app-cong-so.html`
+thiếu hẳn, nên mọi chỗ dùng `var(--serif)` (tiêu đề mục · tên kiểu người · nút ·
+số trong bảng) lặng lẽ rơi về **Georgia**.
+- 🔑 **Không có gì báo**: CSS vẫn hợp lệ, font lùi vẫn là serif, trang vẫn đẹp —
+  chỉ khác chữ so với 33 trang kia. Loại lỗi chỉ lộ khi đặt hai trang cạnh nhau.
+- Quét cả 35 trang shell: **đúng 2 trang thiếu** — `app-cong-so.html` và
+  `app-ban-do-sao.html`, hai tool MỚI NHẤT (chép từ khuôn không có khối đó). Vá
+  cả hai; để lại một trang là lần sau đi tìm lại từ đầu.
+- ⚠️ **Thêm trang shell mới thì PHẢI chép cả 3 dòng preconnect/preload này**, đừng
+  tin là `shell.css` lo hết.
+
+### 🔴 2. Radar chừa lề CỐ ĐỊNH cho nhãn có bề rộng THAY ĐỔI
+`veRadar` lấy cỡ chữ **theo bán kính** (`R*0.115` ⇒ **20px** ở khổ 520) rồi chừa
+lề cứng `max(46, side*0.17)`. Lề đó hẹp hơn bề rộng chữ THẬT của nhãn dài nhất
+("Đồng sự ngang hàng", "Nền tảng hậu phương") ⇒ đuôi nhãn tràn khỏi canvas và bị
+cắt cụt. Đo được: **51 điểm mực chạm mép** ở 1440px, **38** ở 390px.
+- Vá bằng cách **đảo thứ tự tính**: chốt cỡ chữ theo KHỔ VẼ (9–12px) → gãy nhãn
+  dài xuống tối đa 2 dòng (chọn chỗ ngắt cho hai dòng CÂN NHAU nhất, không ngắt
+  tham lam) → rồi **giải ngược bán kính từ bề rộng ĐO ĐƯỢC** của từng nhãn theo
+  góc của nó. Bán kính tự co vừa đủ ⇒ đổi chữ nhãn hay đổi khổ canvas đều không
+  cắt được nữa. Nhân tiện vòng radar **to lên** vì nhãn 2 dòng hẹp hơn 1 dòng.
+- 🔑 **Quy ước rút ra: nhãn quanh biểu đồ thì ĐO rồi mới chốt bán kính, đừng chừa
+  một con số.** Lề cố định chỉ đúng với đúng bộ chữ lúc viết nó.
+- `veToaDo` (hình lên poster) **không đụng** — `posterDraw` gọi `veToaDo` chứ
+  không gọi `veRadar`, nên ảnh chia sẻ giữ nguyên.
+- Bump `tools-shared/cong-so.js?v=1→2`.
+
+### Verify
+`tsc` 0 lỗi · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices` + `check:groups` sạch · engine **185 pass** · `node --check`.
+- **72 ca trên MODULE THẬT** (6 khổ canvas × 4 kiểu người × 3 bộ điểm cực đoan;
+  nhãn đọc THẲNG từ `RADAR_CUNG` của engine chứ không chép tay): lấy mẫu pixel
+  vành ngoài canvas → **0 ca có mực chạm mép**, 0 ca ra khung trắng.
+- **4 khổ màn (1440 · 1024 · 768 · 390) trên TRANG THẬT**, canvas dựng trong đúng
+  khuôn DOM kết quả nên ăn CSS thật: 0 nhãn bị cắt · trang nạp VÀ ÁP được
+  stylesheet Noto Serif · không tràn ngang · 0 lỗi JS.
+- 🪤 **ĐỐI CHỨNG nạp đè bản cũ lấy từ git HEAD**: radar cắt 51/38 điểm và **0
+  lượt gọi Google Fonts** ⇒ cả hai lỗi có thật, bài kiểm không đỗ giả.
+- 🪤 **`document.fonts.check()` KHÔNG dùng để kiểm font được** — nó trả `true` cả
+  khi family không tồn tại (vì luôn có font lùi), nên bản kiểm đầu xanh ở CẢ HAI
+  phía. Phải hỏi *stylesheet có được nạp và áp không*. Và `cssRules` của sheet
+  khác origin thì trình duyệt chặn → hỏi vào đó là ca nào cũng `false`.
+
+### CÒN LẠI
+- Container phiên chặn `fonts.googleapis.com` nên bài kiểm phục vụ một CSS
+  `@font-face` giả để chứng minh đường nạp thông; **chưa nhìn Noto Serif render
+  thật** ở đây.
+- 🐞 **Nợ có sẵn, KHÔNG thuộc PR này**: `/api/cong-so` trên `next dev` ném
+  `document is not defined` (bộ nạp engine vanilla thiếu mock `document` ở
+  đường này) ⇒ chạy tool đầu-cuối trên dev không được. Prod không dính (route
+  chạy bình thường). Đáng vá riêng.
+
+---
+
+## 🔒 Tấm khoá tính thử CẮT MẤT NÚT MỞ (2026-08-07, PR trước)
 
 Henry gửi ảnh chụp trên laptop: *"cái box nó nhỏ quá, ko thấy dc cái button,
 cũng ko scroll lên scroll xuống dc trong cái box đó"*.
