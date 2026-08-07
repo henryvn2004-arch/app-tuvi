@@ -39,8 +39,8 @@ import {
 import { logLlmUsage, type LlmUsage } from '@/lib/agent/usage';
 import { computePastLife } from '@/lib/engine/past-life';
 import { pastLifeRailWrapper } from '@/lib/agent/past-life-story';
-import { computePastLifeBond } from '@/lib/engine/past-life-bond';
-import { bondRailWrapper } from '@/lib/agent/past-life-bond-story';
+import { computeGroupBond, groupPairAsBond } from '@/lib/engine/past-life-bond';
+import { bondRailWrapper, groupRailWrapper, MAX_BOND_MEMBERS } from '@/lib/agent/past-life-bond-story';
 import { computeNguoiKhac, resolveQuanHe } from '@/lib/engine/nguoi-khac';
 import { nguoiKhacRailWrapper } from '@/lib/agent/nguoi-khac-prompt';
 import { computeDayCon, resolveMoiLo } from '@/lib/engine/day-con';
@@ -288,13 +288,34 @@ export async function runAgent(
     // (950 cặp) và nền văn minh chung độc lập thứ tự, nên nhân vật + mối duyên
     // ở đây trùng đúng bản trang vừa hiện. `selfIsA = true` để lớp vỏ biết bên
     // nào là người đang hỏi — nó có luật cứng cấm luận sâu về người còn lại.
-    if (req.wrap === 'past-life-bond' && ctx.ls && req.birth && req.wrapBirthB) {
+    // Lượt NHÓM (3–5 người) gửi `wrapBirths`; lượt 2 người vẫn gửi `wrapBirthB`
+    // như cũ, nên bản client còn trong cache trình duyệt không gãy.
+    const bondOthers: BirthParams[] =
+      req.wrap === 'past-life-bond'
+        ? Array.isArray(req.wrapBirths) && req.wrapBirths.length
+          ? req.wrapBirths.slice(0, MAX_BOND_MEMBERS - 1)
+          : req.wrapBirthB
+            ? [req.wrapBirthB]
+            : []
+        : [];
+    if (req.wrap === 'past-life-bond' && ctx.ls && req.birth && bondOthers.length) {
       try {
-        const g = req.birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
-        const gB = req.wrapBirthB.gender === 'nu' ? ('nu' as const) : ('nam' as const);
-        const rB = computeLaso(req.wrapBirthB);
-        if (rB.ok && rB.ls) {
-          system += '\n\n' + bondRailWrapper(computePastLifeBond(ctx.ls, g, rB.ls, gB), true);
+        const gOf = (b: BirthParams) => (b.gender === 'nu' ? ('nu' as const) : ('nam' as const));
+        // Người xem LUÔN là phần tử đầu — engine đã verify đảo thứ tự ra kết quả
+        // y hệt và nền văn minh chung độc lập thứ tự, nên nhân vật + mối duyên ở
+        // đây trùng đúng bản trang vừa hiện, mà lớp vỏ vẫn biết ai đang hỏi.
+        const members = [{ ls: ctx.ls, gender: gOf(req.birth) }];
+        for (const b of bondOthers) {
+          const r = computeLaso(b);
+          if (r.ok && r.ls) members.push({ ls: r.ls, gender: gOf(b) });
+        }
+        if (members.length >= 2) {
+          const group = computeGroupBond(members);
+          system +=
+            '\n\n' +
+            (members.length === 2
+              ? bondRailWrapper(groupPairAsBond(group, group.spine), true)
+              : groupRailWrapper(group, 0));
         }
       } catch (e) {
         console.error('[runAgent] bondRailWrapper lỗi:', (e as Error)?.message);
