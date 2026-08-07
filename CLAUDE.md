@@ -5,6 +5,93 @@
 
 ---
 
+## 🗺️ Sitemap: `lastmod` đang NÓI DỐI 647 URL mỗi ngày (2026-08-07, PR này)
+
+Henry: *"Bạn tao chuyên gia SEO nói là sitemap mà nhiều URLs quá thì chia nhỏ ra
+thành nhiều sitemap submit lên google sẽ crawl nhanh hơn."*
+
+### 🔴 ĐÍNH CHÍNH tiền đề: chia nhỏ KHÔNG làm Google crawl nhanh hơn
+Nguyên văn Mueller: *"Google's systems handle both small sitemap files and big
+sitemap files in the same way… there's **no technical advantage** by splitting
+them"*, và size/số file *"generally won't affect the crawling"*. Lợi ích DUY NHẤT
+là **GIÁM SÁT** — lọc báo cáo GSC theo từng sitemap để biết nhóm nào không được
+index. Mà site này **đã chia rồi** (3 file, `sitemap-ngay-tot.xml` vốn đã là
+sitemapindex 18 con) và tổng chỉ **38.147 URL**, còn xa trần 50.000/file.
+
+| Sitemap | URL nộp (GSC) | % |
+|---|---:|---:|
+| `sitemap-hubs.xml` (menh-kho) | **18.679** | 49,0 |
+| `sitemap.xml` | 10.986 | 28,8 |
+| `sitemap-ngay-tot.xml` | 8.482 | 22,2 |
+| Trang từng có impression | **665** | **1,7** |
+
+### 🔴 Lỗi THẬT — `lastmod` tự phá tín hiệu của chính mình
+`app/api/sitemap/route.ts` đóng dấu `new Date()` làm `lastmod` cho **70 trang
+tĩnh + 576 trang van-han, MỖI NGÀY**. Đo trên route thật: **647/655 URL mang ngày
+hôm nay**. `lastmod` là trường **DUY NHẤT** Google còn đọc (`changefreq`/
+`priority` bị bỏ qua) — và nó chỉ được đọc KHI ĐÚNG; đóng dấu hôm nay dạy crawler
+bỏ qua `lastmod` của **CẢ SITE**, kéo theo 8.478 trang `seo_pages` có
+`created_at` thật cũng mất tín hiệu theo. Mueller gọi đúng hành vi này là *"just
+lazy"*. `sitemap-hubs` và `sitemap-ngay-tot/*` thì **0 lastmod** hoàn toàn.
+
+### Cách vá — `lib/seo/lastmod.ts`, luật **KHÔNG BIẾT ⇒ KHÔNG PHÁT**
+Thiếu `lastmod` là **trung tính** (trường tuỳ chọn); `lastmod` sai là **nhiễu
+độc**. Nên: dòng DB → `updated_at ?? created_at` thật; trang tĩnh + menh-kho +
+van-han → **bỏ hẳn thẻ**; `ngay-tot` → `CONTENT_REV = 2026-08-04` (mốc engine sửa
+12 trực, đổi 26,8% số ngày — mốc có thật, ghi trong chính CLAUDE.md).
+- ⚠️ **Chỉ 2 bảng có `updated_at`** (`tu_dien`, `sach_library`). Hỏi cột không
+  tồn tại thì PostgREST trả 400 → lượt đó ra mảng rỗng → **mất im lặng cả một họ
+  URL** khỏi sitemap. Phải tách bằng cờ `hasUpdatedAt`.
+- Gỡ `changefreq`/`priority` khỏi cả 4 sitemap.
+
+### 🪤 Ba cái bẫy đã vấp
+1. **Suýt thay lời nói dối này bằng lời nói dối khác:** định lấy `git log` làm mốc
+   nội dung, nhưng **git trong container là bản SHALLOW** — commit cũ nhất
+   (2026-08-04) chỉ là mốc cắt của bản clone, không phải ngày sửa. **Kiểm
+   `.git/shallow` trước khi tin bất kỳ ngày commit nào.**
+2. **`git worktree` + symlink `node_modules` KHÔNG chạy được với Turbopack**
+   (*"Symlink points out of the filesystem root"*). Đường đi được: commit trước
+   rồi `git checkout HEAD~1 -- <file>` ngay trong cây đang chạy — Next dev tự
+   hot-reload, xong `checkout HEAD --` trả lại.
+3. 🔴 **Ca quan trọng nhất của bài kiểm ĐỖ GIẢ trên bản cũ.** Bộ parse đòi `<loc>`
+   liền `<lastmod>`, mà bản cũ chèn `changefreq`/`priority` vào giữa ⇒ map ra
+   RỖNG ⇒ *"0 URL đóng dấu hôm nay"* đúng một cách vô nghĩa. Sửa: tách theo khối
+   `<url>` + đo THẲNG trên chuỗi thô. **Assertion phải nhìn vào thứ ĐANG ĐỔI.**
+
+### Verify
+`tsc` 0 · `lint` 0 lỗi (72 warning pre-existing) · `prettier` sạch ·
+`check:prices`/`check:groups`/`check:nostore` sạch · engine **185 pass**.
+- **A/B danh sách trang tĩnh** (chỗ sửa tay, rủi ro hồi quy cao nhất): **70 = 70,
+  0 thiếu, 0 thừa, đúng thứ tự**.
+- **30 ca trên ROUTE THẬT** qua Next dev + stub PostgREST: 0 URL đóng dấu hôm nay
+  · `updated_at` thắng `created_at` · **ĐỐI CHỨNG dòng thiếu ngày → bỏ thẻ chứ
+  không rơi về hôm nay** · `seo_pages` category `van-han` vẫn bị loại · van-han
+  đủ 576 · hubs đúng **18.679** (khớp số GSC) · ngay-tot 2021 đúng 497 · 0
+  `changefreq`/`priority`.
+- 🪤 **ĐỐI CHỨNG bản cũ**: **647/655 URL đóng dấu hôm nay**, 14 ca đỏ ⇒ lỗi có
+  thật và bài kiểm bắt được.
+- **Không bump `?v=`** — chỉ sửa route server, không đụng asset client.
+
+### CÒN LẠI — hai đòn Henry CHƯA duyệt (đã trình, chọn "chỉ làm A")
+- **B — chia `sitemap.xml` thành index theo nhóm** (seo-pages · van-han ·
+  khao-luan · nghien-cuu · tu-dien · tools). Làm vì **ĐO ĐƯỢC** trong GSC, không
+  phải vì tốc độ.
+- **C — `noindex` 18.679 `menh-kho/[năm]/[ngày]` + 1.444 `la-so` pregen.** Đây là
+  đòn DUY NHẤT có thể đổi chất lượng nhận diện tên miền. Bằng chứng bloat:
+  `/menh-kho/1999/03-11` 17 impression vị trí **1,41**, **0 nhấp**;
+  `/la-so/ky-mao-12-03-1999-gio-suu-nu-2027` **162 impression, vị trí 1,41, 0
+  nhấp** — dòng nhiều impression nhất cả site. Truy vấn kéo chúng lên là `"1983"`,
+  `"1976 12"`, `"13 7 2001"`.
+- 🔑 **Rút khỏi sitemap KHÔNG deindex.** Bằng chứng: pregen bị rút từ #358 mà
+  `/la-so/*` vẫn ăn impression đều. Muốn gỡ thật phải `noindex`.
+- 🔴 **Mâu thuẫn CÓ SẴN chưa vá:** `robots.txt` tuyên bố "sitemap-pregen ĐÃ RÚT"
+  nhưng **1.444 URL `laso_pregen` vẫn nằm trong `sitemap.xml`** (đọc từ bảng, chứ
+  không phải từ file đã rút). Rút một cửa mà để cửa kia mở.
+- **IndexNow không dùng được cho Google** (chỉ Bing/Yandex), và Google đã bỏ
+  endpoint ping sitemap từ 6/2023.
+
+---
+
 ## 🌓 Dark mode cho trang Tài khoản — gỡ nốt cái đảo sáng (2026-08-07, PR sau)
 
 Henry: *"Ok làm tiếp đi"* mục "Trang Tài khoản ghim sáng" tao để lại ở vòng trên.
