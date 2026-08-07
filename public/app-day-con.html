@@ -242,7 +242,7 @@
 window.SHELL_INTRO={key:'day-con',title:'Dạy Con Theo Lá Số',desc:'Đưa lá số của con vào đây để biết <b>con tiếp thu kiểu nào</b>, <b>ra bài thế nào thì con chịu làm</b>, <b>kiểu kỷ luật nào phản tác dụng</b>, và <b>chỗ cha mẹ với con hay va nhau</b>. Đọc theo cung Mệnh, Phúc Đức, Phụ Mẫu, Thiên Di, Quan Lộc.'};</script>
 <script src="/laso-chart.js?v=3"></script>
 <script src="/tuvi-form.js?v=1"></script>
-<script src="/tuvi-paywall.js?v=15"></script>
+<script src="/tuvi-paywall.js?v=16"></script>
 <script src="/auth.js?v=2"></script>
   <script src="/nav.js?v=22" data-icons-only></script>
 <script src="/shell.js?v=60"></script>
@@ -372,6 +372,10 @@ async function analyze() {
   document.getElementById('card').style.display = 'block';
   document.getElementById('btnEdit').style.display = '';
   renderMeta(prev);
+  // D1 — bậc "đã tính thử" của phễu theo tool. Bắn ở ĐÂY chứ không ở lúc bấm
+  // nút: bấm rồi mà lá số hỏng thì không có gì để xem, tính vào phễu là thổi
+  // mẫu số lên rồi tỉ lệ mở nhìn tệ hơn thực tế.
+  try { if (window.Track) window.Track.event('preview_shown', { tool_id: 'day-con' }); } catch (e) { /* đo hỏng không chặn gì */ }
   if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
 
   var free = false;

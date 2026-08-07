@@ -29,6 +29,13 @@ const ALLOWED = new Set([
   // tải về không mang link bấm được nên không bao giờ sinh ra share_view/
   // cta_click tương ứng — nhét chung vào chỉ làm K tụt giả.
   'poster_download',
+  // W1 + D1 — hai bậc còn thiếu của phễu THEO TOOL:
+  //   preview_shown = lượt tính thử miễn phí đã ra kết quả
+  //   unlock_click  = bấm nút "Mở bản đầy đủ" trên tấm tường
+  // Không có hai cái này thì không trả lời được "tool nào có người xem mà
+  // không ai mua", mà đó đúng là câu D1 đặt ra. `topup_start` KHÔNG thay được:
+  // đo trên prod 552/553 lượt của nó đến từ chính trang nạp, không mang tool.
+  'preview_shown', 'unlock_click',
 ]);
 
 // Coi là "vừa đăng ký" nếu tài khoản tạo trong 15 phút gần đây (né tính nhầm
